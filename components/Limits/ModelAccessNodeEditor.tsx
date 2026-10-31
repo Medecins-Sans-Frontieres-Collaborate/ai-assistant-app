@@ -98,7 +98,7 @@ export const ModelAccessNodeEditor: FC<ModelAccessNodeEditorProps> = ({
   return (
     <div className="space-y-4">
       <div>
-        <label className={ADMIN_LABEL}>
+        <div className={ADMIN_LABEL}>
           {t('modelAccess.defaultLabel')}
           <span className="ml-2 flex flex-wrap items-center gap-2">
             <select
@@ -106,6 +106,7 @@ export const ModelAccessNodeEditor: FC<ModelAccessNodeEditorProps> = ({
               value={mode}
               onChange={(e) => setMode(e.target.value as DefaultMode)}
               disabled={disabled}
+              aria-label={t('modelAccess.defaultLabel')}
             >
               <option value="inherit">{t('modelAccess.defaultInherit')}</option>
               <option value="unlimited">
@@ -145,7 +146,7 @@ export const ModelAccessNodeEditor: FC<ModelAccessNodeEditorProps> = ({
               </span>
             )}
           </span>
-        </label>
+        </div>
         <p className={ADMIN_HINT}>
           {mode === 'inherit'
             ? t('modelAccess.inheritedFrom', {
@@ -157,7 +158,7 @@ export const ModelAccessNodeEditor: FC<ModelAccessNodeEditorProps> = ({
               })}
         </p>
         {collision && (
-          <p className={ADMIN_HINT} role="alert">
+          <p className={ADMIN_HINT} role="status">
             <span className={ADMIN_CHIP_WARN}>
               {t('modelAccess.collisionChip')}
             </span>{' '}
