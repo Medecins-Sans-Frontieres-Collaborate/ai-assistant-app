@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 ツール呼び出し/日",
       "m365MailReadsPerDay": "メール参照/日",
       "m365MailDraftsPerDay": "メール下書き/日",
-      "m365MailDeepScansPerDay": "メールディープスキャン/日"
+      "m365MailDeepScansPerDay": "メールディープスキャン/日",
+      "m365DigestRunsPerDay": "1日あたりのダイジェスト実行回数"
     },
     "valueModeLabel": "制限タイプ",
     "valueAmountLabel": "上限値",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "1日に利用できるMicrosoft 365ツール（カレンダー、連絡先、タスク、Teams）の呼び出し回数です。上限を超えると、チャット失敗の代わりに「明日もう一度お試しください」と返されます。",
       "m365MailReadsPerDay": "1日にできるメール検索やメッセージ／スレッドの閲覧回数です。上限を超えると「明日もう一度お試しください」と返されます。",
       "m365MailDraftsPerDay": "アシスタントが1日に作成できる下書きメール数 — それぞれ個別に確認されます。厳しい上限となります。",
-      "m365MailDeepScansPerDay": "1日にできる複合メール解析（ダイジェスト、詳細検索、コミットメント）。各解析は内部の読取回数にかかわらず1ユニットとしてカウントされます。"
+      "m365MailDeepScansPerDay": "1日にできる複合メール解析（ダイジェスト、詳細検索、コミットメント）。各解析は内部の読取回数にかかわらず1ユニットとしてカウントされます。",
+      "m365DigestRunsPerDay": "Microsoft 365の1日あたりのダイジェスト実行回数です。1回の実行で多数のGraphリードと分析モデルコールを含みます。期間ピッカーで再実行が容易なため、初期設定は厳しくなっています。"
     },
     "scopeFamily": "ファミリー",
     "scopeModel": "モデル",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "朝の仕分け",
-        "description": "受信済み／対応待ち／本日のカレンダー — まとめて確認"
+        "description": "前回の勤務日以降に受信した内容、対応待ちの事項、招待やアップデートなどのダイジェストです。月曜日には金曜日と週末分も含みます。"
       },
       "chipsSettingLabel": "Microsoft 365 プレイブックを提案",
       "chipsSettingHint": "該当する場合（例：会議の書き起こしをインポート後など）に、メッセージボックス上部にプレイブック提案を表示します。",
-      "dismissChip": "{title} を閉じる"
+      "dismissChip": "{title} を閉じる",
+      "dailyDigest": {
+        "title": "デイリーダイジェスト",
+        "description": "最近のメール、Teams、カレンダーを、「あなたが対応すべきもの」「あなたが待っているもの」「更新情報」と「参考情報」に分類します — 期間を選択してください"
+      }
+    },
+    "digest": {
+      "title": "デイリーダイジェスト",
+      "intro": "指定した期間で受信した内容をスキャンし、「返信が必要なもの」「あなたへの依頼」「あなたが待っているもの」「スケジュール」「企業やプロジェクトの更新」「参考情報」に分類します。何も送信・変更はされません。",
+      "periodLabel": "期間",
+      "preset": {
+        "lastWorkday": "前回の勤務日以降",
+        "1d": "直近24時間",
+        "3d": "直近3日間",
+        "7d": "直近7日間",
+        "14d": "直近14日間",
+        "custom": "カスタム範囲"
+      },
+      "lastWorkdayHint": "本日以前の直近の平日開始から集計されます — 月曜の場合、金曜と週末を含みます。",
+      "from": "開始",
+      "to": "終了",
+      "customInvalid": "最大{{days}}日までの、順序通りの範囲を選択してください。",
+      "sourcesLabel": "情報源",
+      "sourceNoConsent": "この情報源の権限が許可されていません。",
+      "sourceHint": {
+        "mail": "受信トレイの封筒とプレビュー。送信済みアイテムで返信済みかどうかを判定します。",
+        "chat": "最新のTeamsチャット、未返信の@メンション。",
+        "channel": "下記で選択したチャンネル内の投稿。",
+        "calendar": "未返信の招待状、あなたが主催し他者が未返信の会議。"
+      },
+      "channelsLabel": "チャンネル（{count} / {max}）",
+      "removeChannel": "{name}を削除",
+      "channelsSlow": "チャンネルごとに読み込みが追加されます。数が増えるとダイジェスト処理が遅くなります。",
+      "channelsMax": "最大{max}チャンネルに達しました。",
+      "channelsNeeded": "1つ以上のチャンネルを選択するか、他の情報源を追加してください。",
+      "teamLabel": "チーム",
+      "loadingTeams": "チームを読み込み中…",
+      "pickTeam": "チャンネルを表示するチームを選択してください",
+      "loadingChannels": "チャンネルを読み込み中…",
+      "noChannels": "このチームにはチャンネルがありません。",
+      "privacyNote": "件名、送信者、および短いプレビューのみ読み取ります。メッセージ本文と添付ファイルはMicrosoft 365に残ります。項目はご自身のデータの概要です。",
+      "cancel": "キャンセル",
+      "run": "ダイジェストを実行",
+      "starting": "開始中…",
+      "startFailed": "ダイジェストを開始できませんでした。",
+      "userMessage": "デイリーダイジェスト — {period}；情報源：{sources}",
+      "working": "Microsoft 365の通信をスキャンしています…",
+      "failed": "ダイジェストが失敗しました。",
+      "failedPrefix": "デイリーダイジェスト失敗：",
+      "expired": "このダイジェスト実行は期限切れです。最新の結果を得るには再実行してください。",
+      "runAgain": "再実行",
+      "changePeriod": "期間を変更",
+      "period": {
+        "lastWorkday": "前回の勤務日以降",
+        "lastDays": "{count, plural, one {直近1日} other {直近#日間}}"
+      },
+      "source": {
+        "mail": "メール",
+        "chat": "Teamsチャット",
+        "channel": "Teamsチャンネル",
+        "calendar": "カレンダー"
+      },
+      "sourceStatus": {
+        "ok": "完了",
+        "partial": "一部完了",
+        "skipped": "スキップ",
+        "unavailable": "権限なし",
+        "error": "失敗"
+      },
+      "degraded": "分析モデルが利用できないため、カテゴリーはルールのみに基づいています。",
+      "withheld": "{count, plural, one {# 件が} other {# 件が}}セーフティ画面で保留されました。",
+      "empty": "この期間とソースにはレポートする内容がありません。",
+      "actionItems": "アクション項目",
+      "createTasks": "{count, plural, =0 {To Do に追加} one {To Do に # 件のタスクを追加} other {To Do に # 件のタスクを追加}}",
+      "taskCreated": "To Do に追加されました",
+      "tasksCreated": "{count, plural, one {# 件のタスク} other {# 件のタスク}}が「{list}」リストに追加されました。",
+      "tasksFailed": "タスクを作成できませんでした。",
+      "category": {
+        "needsReply": "返信が必要",
+        "askedOfMe": "自分への依頼",
+        "waitingOnOthers": "他者待ち",
+        "scheduling": "スケジューリング",
+        "companyUpdates": "会社・プロジェクトの更新",
+        "fyi": "FYI",
+        "bulk": "自動・一括"
+      },
+      "companyUpdatesHint": "重要、緊急度は低いことが多い",
+      "markDone": "{title} を完了としてマーク",
+      "badge": {
+        "unanswered": "未回答",
+        "mentioned": "あなたがメンションされました",
+        "important": "高重要度"
+      },
+      "askAbout": "詳細を確認",
+      "askPrompt": "上記ダイジェストの {source} アイテム「{title}」（{from}、{when}）について：何を尋ねられており、どのような回答が適切ですか？",
+      "open": {
+        "mail": "Outlook で開く",
+        "chat": "Teams で開く",
+        "channel": "Teams で開く",
+        "calendar": "Outlook で開く"
+      },
+      "footnote": "カテゴリーはご自身のシグナル（未回答、メンション、ブロードキャスト）とAI分類から生成されます。操作前にご確認ください。何も送信されていません。",
+      "age": {
+        "now": "たった今",
+        "hours": "{count}時間前",
+        "days": "{count}日前"
+      },
+      "waitForReply": "ダイジェストを開始する前に、現在の返信が完了するのをお待ちください。"
     }
   },
   "share": {

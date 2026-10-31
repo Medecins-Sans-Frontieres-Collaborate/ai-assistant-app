@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 poziva alata dnevno",
       "m365MailReadsPerDay": "Čitanje pošte dnevno",
       "m365MailDraftsPerDay": "Draftovi pošte dnevno",
-      "m365MailDeepScansPerDay": "Dubinske pretrage pošte dnevno"
+      "m365MailDeepScansPerDay": "Dubinske pretrage pošte dnevno",
+      "m365DigestRunsPerDay": "Dnevnih pokretanja sažetka po danu"
     },
     "valueModeLabel": "Tip ograničenja",
     "valueAmountLabel": "Vrednost ograničenja",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "Pozivi Microsoft 365 alata (kalendar, kontakti, zadaci, Teams) po danu. Kada pređete limit, alati vraćaju prijateljsku poruku „pokušajte ponovo sutra“ umesto da chat ne uspe.",
       "m365MailReadsPerDay": "Pretrage pošte i čitanja poruka/niti po danu. Kada pređete limit, alati za poštu vraćaju poruku „pokušajte ponovo sutra“.",
       "m365MailDraftsPerDay": "Broj email nacrta koje asistent može napraviti dnevno — svaki posebno potvrđen. Svesno ograničeno.",
-      "m365MailDeepScansPerDay": "Složene analize pošte (sažeci, dubinsko pretraživanje, obaveze) po danu. Svako skeniranje je jedna budžetska jedinica bez obzira na broj unutrašnjih čitanja."
+      "m365MailDeepScansPerDay": "Složene analize pošte (sažeci, dubinsko pretraživanje, obaveze) po danu. Svako skeniranje je jedna budžetska jedinica bez obzira na broj unutrašnjih čitanja.",
+      "m365DigestRunsPerDay": "Microsoft 365 dnevni sažetak po danu. Jedno pokretanje obuhvata desetine Graph čitanja i dva poziva analiznog modela; izbor perioda omogućava lako ponovno pokretanje, pa je podrazumevana granica stroga."
     },
     "scopeFamily": "Porodica",
     "scopeModel": "Model",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Jutarnja trijaža",
-        "description": "Šta je stiglo, šta vas čeka, i današnji kalendar — jednom briefingu"
+        "description": "Digest od poslednjeg radnog dana — šta je pristiglo, šta čeka na vas, pozivi i ažuriranja; u ponedeljak obuhvata petak i vikend."
       },
       "chipsSettingLabel": "Predloži Microsoft 365 playbooks",
       "chipsSettingHint": "Prikazujte predloge priručnika iznad okvira za poruke kada su primenljivi (npr. nakon uvoza transkripta sastanka).",
-      "dismissChip": "Odbaci {title}"
+      "dismissChip": "Odbaci {title}",
+      "dailyDigest": {
+        "title": "Dnevni sažetak",
+        "description": "Sortirajte nedavne mejlove, Teams i kalendar prema onome što zahteva vašu pažnju, šta čekate, ažuriranjima i FYI — izaberite period"
+      }
+    },
+    "digest": {
+      "title": "Dnevni sažetak",
+      "intro": "Pregledava što vam je stiglo u izabranom periodu i sortira u ono što zahteva odgovor, šta je traženo od vas, šta čekate, zakazivanje, ažuriranja kompanije i projekta, i FYI. Ništa se ne šalje niti menja.",
+      "periodLabel": "Period",
+      "preset": {
+        "lastWorkday": "Od poslednjeg radnog dana",
+        "1d": "Poslednjih 24 sata",
+        "3d": "Poslednja 3 dana",
+        "7d": "Poslednjih 7 dana",
+        "14d": "Poslednjih 14 dana",
+        "custom": "Prilagođen opseg"
+      },
+      "lastWorkdayHint": "Od početka najnovijeg radnog dana pre danas — u ponedeljak to obuhvata petak i vikend.",
+      "from": "Od",
+      "to": "Do",
+      "customInvalid": "Izaberite uzastopni opseg od najviše {days} dana.",
+      "sourcesLabel": "Izvori",
+      "sourceNoConsent": "Dozvola za ovaj izvor nije odobrena.",
+      "sourceHint": {
+        "mail": "Koverte iz prijemnog sandučeta i pregledi; vaša Poslana pošta definiše šta se smatra odgovoreno.",
+        "chat": "Nedavni Teams četovi, sa @pominjanjima na koja niste odgovorili.",
+        "channel": "Objave na kanalima koje odaberete dole.",
+        "calendar": "Pozivi koji čekaju vašu potvrdu i vaši sastanci na koje drugi nisu odgovorili."
+      },
+      "channelsLabel": "Kanali ({count} od {max})",
+      "removeChannel": "Ukloni {name}",
+      "channelsSlow": "Svaki kanal dodaje čitanja; više kanala produžava vreme za sažetak.",
+      "channelsMax": "Dostigli ste maksimalan broj kanala: {max}.",
+      "channelsNeeded": "Izaberite barem jedan kanal ili dodajte drugi izvor.",
+      "teamLabel": "Tim",
+      "loadingTeams": "Učitavanje timova…",
+      "pickTeam": "Izaberite tim da prikažete njegove kanale",
+      "loadingChannels": "Učitavanje kanala…",
+      "noChannels": "Nema pronađenih kanala u ovom timu.",
+      "privacyNote": "Čitaju se samo teme, pošiljaoci i kratki pregledi; tela poruka i priloge ostaju u Microsoft 365. Stavke su sažeci vaših podataka.",
+      "cancel": "Otkaži",
+      "run": "Pokreni sažetak",
+      "starting": "Pokrećem…",
+      "startFailed": "Sažetak nije mogao biti pokrenut.",
+      "userMessage": "Dnevni sažetak — {period}; izvori: {sources}",
+      "working": "Skeniram vaše Microsoft 365 komunikacije…",
+      "failed": "Sažetak nije uspeo.",
+      "failedPrefix": "Dnevni sažetak nije uspeo:",
+      "expired": "Ovo pokretanje sažetka je isteklo. Pokrenite ga ponovo za novi sažetak.",
+      "runAgain": "Pokreni ponovo",
+      "changePeriod": "Promeni period",
+      "period": {
+        "lastWorkday": "od poslednjeg radnog dana",
+        "lastDays": "{count, plural, one {poslednji dan} other {poslednjih # dana}}"
+      },
+      "source": {
+        "mail": "Mejl",
+        "chat": "Teams četovi",
+        "channel": "Teams kanali",
+        "calendar": "Kalendar"
+      },
+      "sourceStatus": {
+        "ok": "završeno",
+        "partial": "delimično",
+        "skipped": "preskočeno",
+        "unavailable": "bez dozvole",
+        "error": "neuspešno"
+      },
+      "degraded": "Model analize nije bio dostupan, pa kategorije dolaze isključivo iz pravila.",
+      "withheld": "{count, plural, one {# stavka je} other {# stavki je}} zadržano zbog bezbednosnih filtera.",
+      "empty": "Nema izveštaja za ovaj period i ove izvore.",
+      "actionItems": "Akcione stavke",
+      "createTasks": "{count, plural, =0 {Dodaj u To Do} one {Dodaj # zadatak u To Do} other {Dodaj # zadatka u To Do}}",
+      "taskCreated": "dodato u To Do",
+      "tasksCreated": "{count, plural, one {# zadatak} other {# zadatka}} dodato u listu \"{list}\".",
+      "tasksFailed": "Zadaci nisu mogli da se kreiraju.",
+      "category": {
+        "needsReply": "Potrebno je da odgovorim",
+        "askedOfMe": "Traženo od mene",
+        "waitingOnOthers": "Čekam druge",
+        "scheduling": "Zakazivanje",
+        "companyUpdates": "Ažuriranja kompanije i projekta",
+        "fyi": "Za informaciju (FYI)",
+        "bulk": "Automatizovano i masovno"
+      },
+      "companyUpdatesHint": "važno, retko hitno",
+      "markDone": "Označi {title} kao obrađeno",
+      "badge": {
+        "unanswered": "neodgovoreno",
+        "mentioned": "spomenuli su vas",
+        "important": "visoka važnost"
+      },
+      "askAbout": "Pitaj o ovome",
+      "askPrompt": "O stavci {source} \"{title}\" od {from} ({when}) u gornjem sažetku: šta je traženo i kakav bi bio dobar odgovor?",
+      "open": {
+        "mail": "Otvori u Outlook-u",
+        "chat": "Otvori u Teams-u",
+        "channel": "Otvori u Teams-u",
+        "calendar": "Otvori u Outlook-u"
+      },
+      "footnote": "Kategorije su određene prema sopstvenim signalima (neodgovoreno, spomenuto, emitovano) i AI klasifikaciji; proverite pre preduzimanja akcije. Ništa nije poslato.",
+      "age": {
+        "now": "upravo sada",
+        "hours": "pre {count}h",
+        "days": "pre {count}d"
+      },
+      "waitForReply": "Sačekajte da trenutni odgovor završi pre nego što započnete digest."
     }
   },
   "share": {

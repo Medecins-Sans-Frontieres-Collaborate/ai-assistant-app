@@ -5722,7 +5722,8 @@
       "m365ToolCallsPerDay": "Lượt gọi công cụ Microsoft 365 mỗi ngày",
       "m365MailReadsPerDay": "Lượt đọc thư mỗi ngày",
       "m365MailDraftsPerDay": "Bản nháp thư mỗi ngày",
-      "m365MailDeepScansPerDay": "Quét sâu thư mỗi ngày"
+      "m365MailDeepScansPerDay": "Quét sâu thư mỗi ngày",
+      "m365DigestRunsPerDay": "Số lần chạy tổng hợp mỗi ngày"
     },
     "valueModeLabel": "Loại giới hạn",
     "valueAmountLabel": "Giá trị giới hạn",
@@ -5800,7 +5801,8 @@
       "m365ToolCallsPerDay": "Số lần gọi công cụ Microsoft 365 (lịch, danh bạ, tác vụ, Teams) mỗi ngày. Khi vượt giới hạn, công cụ sẽ trả về kết quả \"vui lòng thử lại vào ngày mai\" thay vì làm gián đoạn cuộc trò chuyện.",
       "m365MailReadsPerDay": "Số lượt tìm kiếm thư và đọc tin nhắn/chủ đề mỗi ngày. Khi vượt giới hạn, công cụ thư sẽ trả về \"vui lòng thử lại vào ngày mai\".",
       "m365MailDraftsPerDay": "Số bản nháp email trợ lý có thể tạo mỗi ngày — mỗi bản cần xác nhận riêng. Hạn mức được đặt nghiêm ngặt.",
-      "m365MailDeepScansPerDay": "Số lượt phân tích thư tổng hợp (tóm tắt, tìm kiếm sâu, cam kết) mỗi ngày. Mỗi lượt quét tính là một đơn vị ngân sách, bất kể số lần đọc bên trong."
+      "m365MailDeepScansPerDay": "Số lượt phân tích thư tổng hợp (tóm tắt, tìm kiếm sâu, cam kết) mỗi ngày. Mỗi lượt quét tính là một đơn vị ngân sách, bất kể số lần đọc bên trong.",
+      "m365DigestRunsPerDay": "Số lần chạy tổng hợp Microsoft 365 mỗi ngày. Một lần chạy gồm hàng chục lượt đọc Graph cùng hai lần gọi phân tích; bộ chọn khoảng thời gian giúp dễ yêu cầu chạy lại, do đó giới hạn mặc định khá chặt."
     },
     "scopeFamily": "Nhóm",
     "scopeModel": "Mô hình",
@@ -6535,11 +6537,118 @@
       },
       "morningTriage": {
         "title": "Sàng lọc buổi sáng",
-        "description": "Có gì mới, việc nào đang chờ bạn, và lịch hôm nay — một bản tóm tắt"
+        "description": "Tổng hợp kể từ ngày làm việc trước — những gì đã đến, những việc đang chờ bạn, lời mời và cập nhật; vào thứ Hai sẽ bao gồm cả thứ Sáu và cuối tuần."
       },
       "chipsSettingLabel": "Đề xuất quy trình Microsoft 365",
       "chipsSettingHint": "Hiển thị gợi ý playbook phía trên hộp soạn khi phù hợp (ví dụ: sau khi nhập bản ghi họp).",
-      "dismissChip": "Bỏ qua {title}"
+      "dismissChip": "Bỏ qua {title}",
+      "dailyDigest": {
+        "title": "Tổng hợp hằng ngày",
+        "description": "Sắp xếp thư mới, Teams và lịch vào các mục cần bạn xử lý, đang chờ phản hồi, cập nhật và FYI — chọn khoảng thời gian"
+      }
+    },
+    "digest": {
+      "title": "Tổng hợp hằng ngày",
+      "intro": "Quét những gì bạn nhận được trong khoảng thời gian đã chọn và phân loại thành các mục cần phản hồi, các yêu cầu gửi đến bạn, việc đang chờ, lịch trình, cập nhật công ty/dự án và thông báo FYI. Không gửi đi hay thay đổi gì.",
+      "periodLabel": "Khoảng thời gian",
+      "preset": {
+        "lastWorkday": "Từ ngày làm việc trước",
+        "1d": "24 giờ qua",
+        "3d": "3 ngày qua",
+        "7d": "7 ngày qua",
+        "14d": "14 ngày qua",
+        "custom": "Khoảng tùy chọn"
+      },
+      "lastWorkdayHint": "Từ đầu ngày làm việc gần nhất trước hôm nay — nếu là thứ Hai thì gồm cả thứ Sáu và cuối tuần.",
+      "from": "Từ",
+      "to": "Đến",
+      "customInvalid": "Chọn một khoảng liên tục tối đa {days} ngày.",
+      "sourcesLabel": "Nguồn",
+      "sourceNoConsent": "Chưa cấp quyền truy cập nguồn này.",
+      "sourceHint": {
+        "mail": "Phong bì hộp thư đến và bản xem trước; mục Đã gửi quyết định thư nào được coi là đã trả lời.",
+        "chat": "Tin nhắn Teams gần đây, với các @mention bạn chưa trả lời.",
+        "channel": "Bài đăng trong các kênh bạn chọn phía dưới.",
+        "calendar": "Lời mời đang chờ bạn trả lời và các cuộc họp bạn tổ chức nhưng người khác chưa phản hồi."
+      },
+      "channelsLabel": "Kênh ({count} trên {max})",
+      "removeChannel": "Xóa {name}",
+      "channelsSlow": "Mỗi kênh đều tăng lượt đọc; càng nhiều kênh thì tổng hợp càng lâu.",
+      "channelsMax": "Đã đạt tối đa {max} kênh.",
+      "channelsNeeded": "Chọn ít nhất một kênh hoặc thêm một nguồn khác.",
+      "teamLabel": "Nhóm",
+      "loadingTeams": "Đang tải nhóm…",
+      "pickTeam": "Chọn nhóm để liệt kê kênh",
+      "loadingChannels": "Đang tải kênh…",
+      "noChannels": "Không tìm thấy kênh nào trong nhóm này.",
+      "privacyNote": "Chỉ đọc tiêu đề, người gửi và bản xem trước ngắn; nội dung và tệp đính kèm vẫn ở Microsoft 365. Các mục đều tóm tắt dữ liệu của bạn.",
+      "cancel": "Hủy",
+      "run": "Chạy tổng hợp",
+      "starting": "Đang bắt đầu…",
+      "startFailed": "Không thể bắt đầu tổng hợp.",
+      "userMessage": "Tổng hợp hằng ngày — {period}; nguồn: {sources}",
+      "working": "Đang quét liên lạc Microsoft 365 của bạn…",
+      "failed": "Tổng hợp thất bại.",
+      "failedPrefix": "Tổng hợp hằng ngày thất bại:",
+      "expired": "Kết quả tổng hợp này đã hết hạn. Hãy chạy lại để có bản mới.",
+      "runAgain": "Chạy lại",
+      "changePeriod": "Đổi khoảng thời gian",
+      "period": {
+        "lastWorkday": "từ ngày làm việc trước",
+        "lastDays": "{count, plural, one {ngày qua} other {# ngày qua}}"
+      },
+      "source": {
+        "mail": "Thư",
+        "chat": "Teams chat",
+        "channel": "Teams channel",
+        "calendar": "Lịch"
+      },
+      "sourceStatus": {
+        "ok": "hoàn thành",
+        "partial": "một phần",
+        "skipped": "bỏ qua",
+        "unavailable": "không có quyền",
+        "error": "thất bại"
+      },
+      "degraded": "Mô hình phân tích không khả dụng, các danh mục chỉ dựa trên quy tắc.",
+      "withheld": "{count, plural, one {# mục đã} other {# mục đã}} bị ẩn bởi bộ lọc an toàn.",
+      "empty": "Không có nội dung báo cáo cho giai đoạn và nguồn này.",
+      "actionItems": "Mục hành động",
+      "createTasks": "{count, plural, =0 {Thêm vào To Do} one {Thêm # nhiệm vụ vào To Do} other {Thêm # nhiệm vụ vào To Do}}",
+      "taskCreated": "đã thêm vào To Do",
+      "tasksCreated": "{count, plural, one {# nhiệm vụ} other {# nhiệm vụ}} đã thêm vào danh sách \"{list}\".",
+      "tasksFailed": "Không thể tạo nhiệm vụ.",
+      "category": {
+        "needsReply": "Cần phản hồi",
+        "askedOfMe": "Yêu cầu cho tôi",
+        "waitingOnOthers": "Đang chờ người khác",
+        "scheduling": "Lên lịch",
+        "companyUpdates": "Cập nhật công ty và dự án",
+        "fyi": "FYI",
+        "bulk": "Tự động và hàng loạt"
+      },
+      "companyUpdatesHint": "quan trọng, hiếm khi khẩn cấp",
+      "markDone": "Đánh dấu {title} đã xử lý",
+      "badge": {
+        "unanswered": "chưa trả lời",
+        "mentioned": "đề cập đến bạn",
+        "important": "quan trọng cao"
+      },
+      "askAbout": "Hỏi về mục này",
+      "askPrompt": "Về mục {source} \"{title}\" từ {from} ({when}) trong bảng tổng hợp trên: đang yêu cầu điều gì, và phản hồi tốt sẽ là gì?",
+      "open": {
+        "mail": "Mở bằng Outlook",
+        "chat": "Mở bằng Teams",
+        "channel": "Mở bằng Teams",
+        "calendar": "Mở bằng Outlook"
+      },
+      "footnote": "Các danh mục dựa trên tín hiệu cá nhân (chưa trả lời, đã đề cập, phát sóng) và phân loại AI; hãy kiểm tra trước khi thực hiện. Không có gì được gửi đi.",
+      "age": {
+        "now": "vừa xong",
+        "hours": "{count}g trước",
+        "days": "{count}ng trước"
+      },
+      "waitForReply": "Vui lòng chờ phản hồi hiện tại kết thúc trước khi bắt đầu tổng hợp."
     }
   },
   "share": {

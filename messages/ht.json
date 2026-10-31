@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Apèl zouti Microsoft 365 pa jou",
       "m365MailReadsPerDay": "Lekti imel pa jou",
       "m365MailDraftsPerDay": "Boukonn imel pa jou",
-      "m365MailDeepScansPerDay": "Skan fon imel pa jou"
+      "m365MailDeepScansPerDay": "Skan fon imel pa jou",
+      "m365DigestRunsPerDay": "Rapò chak jou pa jou"
     },
     "valueModeLabel": "Kalite limit",
     "valueAmountLabel": "Montan limit",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "Apèl zouti Microsoft 365 (kalandriye, moun, travay, Teams) pa jou. Si w depase limit la, zouti yo ap retounen yon mesaj “rekòmanse demen” olye yo echwe konvèsasyon an.",
       "m365MailReadsPerDay": "Rechèch imel ak lekti mesaj/sijè pa jou. Si w depase limit la, zouti imel yo ap retounen yon mesaj “rekòmanse demen”.",
       "m365MailDraftsPerDay": "Brouyon imèl asistan an ka kreye chak jou — chak youn konfime separeman. Limit la byen sere.",
-      "m365MailDeepScansPerDay": "Analiz imel konpoze (rezime, rechèch pwofon, angajman) pa jou. Chak analiz konte kòm yon inite bidjè kèlkeswa kantite lekti andedan l."
+      "m365MailDeepScansPerDay": "Analiz imel konpoze (rezime, rechèch pwofon, angajman) pa jou. Chak analiz konte kòm yon inite bidjè kèlkeswa kantite lekti andedan l.",
+      "m365DigestRunsPerDay": "Microsoft 365 rapò chak jou pa jou. Chak egzekisyon vle di plizyè lekti Graph plis de apèl modèl analiz; chwa peryòd la fè fasil repase, se poutèt sa limit la sere pa default."
     },
     "scopeFamily": "Fanmi",
     "scopeModel": "Modèl",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Triaj maten",
-        "description": "Sa ki rive, sa k’ap tann ou, ak kalandriye jodi a — yon sèl rale"
+        "description": "Yon dijesyon depi dènye jou travay la — sa ki rive, sa k ap tann ou, envitasyon ak mizajou; lendi li kouvri vandredi ak wikenn nan"
       },
       "chipsSettingLabel": "Sijere playbook Microsoft 365",
       "chipsSettingHint": "Montre sijesyon plan aksyon pi wo bwat mesaj la lè yo apwopriye (pa egzanp apre enpòte yon transkip lis reyinyon).",
-      "dismissChip": "Fèmen {title}"
+      "dismissChip": "Fèmen {title}",
+      "dailyDigest": {
+        "title": "Rapò chak jou",
+        "description": "Klasifye imèl, mesaj Teams, ak kalandriye resan selon sa ki mande atansyon, sa w ap tann, mizajou ak FYI — chwazi peryòd la"
+      }
+    },
+    "digest": {
+      "title": "Rapò chak jou",
+      "intro": "Li analize sa ou resevwa pandan peryòd la epi klase yo: sa ki mande repons, sa yo mande ou fè, sa w ap tann, randevou, nouvèl konpayi ak pwojè, ak FYI. Pa gen anyen ki voye oswa modifye.",
+      "periodLabel": "Peryòd",
+      "preset": {
+        "lastWorkday": "Depi dènye jou travay",
+        "1d": "Dènye 24 èdtan",
+        "3d": "Dènye 3 jou",
+        "7d": "Dènye 7 jou",
+        "14d": "Dènye 14 jou",
+        "custom": "Ranje pèsonalize"
+      },
+      "lastWorkdayHint": "Depi kòmansman dènye jou travay anvan jodi a — sou yon lendi sa kouvri vandredi ak fen semèn lan.",
+      "from": "Soti",
+      "to": "Jiska",
+      "customInvalid": "Chwazi yon ranje ki pa depase {days} jou.",
+      "sourcesLabel": "Sous",
+      "sourceNoConsent": "Otorizasyon pa bay pou sous sa a.",
+      "sourceHint": {
+        "mail": "Mesaj nan bwat resepsyon ak aperçu; Atik ou voye yo detèmine sa ki konsidere kòm reponn.",
+        "chat": "Dènye konvèsasyon Teams kote gen @mentions ou poko reponn.",
+        "channel": "Piblikasyon nan chanèl ou chwazi anba la.",
+        "calendar": "Envitasyon w ap tann repons ou ak reyinyon ou kote lòt moun poko reponn."
+      },
+      "channelsLabel": "Chanèl ({count} sou {max})",
+      "removeChannel": "Retire {name}",
+      "channelsSlow": "Chak chanèl ajoute plis lekti; plis chanèl, plis tan pou rapò a fini.",
+      "channelsMax": "Ou rive nan maksimum {max} chanèl.",
+      "channelsNeeded": "Chwazi omwen yon chanèl, oswa ajoute yon lòt sous.",
+      "teamLabel": "Ekip",
+      "loadingTeams": "Y ap chaje ekip yo…",
+      "pickTeam": "Chwazi yon ekip pou lis chanèl li yo",
+      "loadingChannels": "Y ap chaje chanèl yo…",
+      "noChannels": "Pa gen chanèl nan ekip sa a.",
+      "privacyNote": "Sèlman sije, ekspeditè ak kout aperçu ap li; kò mesaj ak atachman rete nan Microsoft 365. Atik yo se rezime done pa w yo.",
+      "cancel": "Anile",
+      "run": "Egzekite rapò",
+      "starting": "Kòmanse…",
+      "startFailed": "Pa t kapab kòmanse rapò a.",
+      "userMessage": "Rapò chak jou — {period}; sous: {sources}",
+      "working": "Y ap analize kominikasyon ou nan Microsoft 365…",
+      "failed": "Rapò a echwe.",
+      "failedPrefix": "Rapò chak jou echwe:",
+      "expired": "Egzekisyon rapò sa a ekspire. Kouri li ankò pou jwenn yon nouvo.",
+      "runAgain": "Kouri ankò",
+      "changePeriod": "Chanje peryòd",
+      "period": {
+        "lastWorkday": "depi dènye jou travay",
+        "lastDays": "{count, plural, one {dènye jou} other {dènye # jou}}"
+      },
+      "source": {
+        "mail": "Imèl",
+        "chat": "Konvèsasyon Teams",
+        "channel": "Chanèl Teams",
+        "calendar": "Kalendriye"
+      },
+      "sourceStatus": {
+        "ok": "konplè",
+        "partial": "pasyèl",
+        "skipped": "sote",
+        "unavailable": "pa gen pèmisyon",
+        "error": "echwe"
+      },
+      "degraded": "Modèl analiz la pa disponib, se règ sèlman ki bay kategori yo.",
+      "withheld": "{count, plural, one {# atik te} other {# atik yo te}} bloke pa ekran sekirite yo.",
+      "empty": "Pa gen anyen pou rapòte pou peryòd ak sous sa yo.",
+      "actionItems": "Pwen aksyon",
+      "createTasks": "{count, plural, =0 {Ajoute nan To Do} one {Ajoute # tach nan To Do} other {Ajoute # tach nan To Do}}",
+      "taskCreated": "ajoute nan To Do",
+      "tasksCreated": "{count, plural, one {# tach} other {# tach}} ajoute nan lis \"{list}\" la.",
+      "tasksFailed": "Tach yo pa t kapab kreye.",
+      "category": {
+        "needsReply": "Bezwen repons mwen",
+        "askedOfMe": "M mande",
+        "waitingOnOthers": "Ret tann sou lòt moun",
+        "scheduling": "Planifikasyon",
+        "companyUpdates": "Mizajou konpayi ak pwojè",
+        "fyi": "FYI",
+        "bulk": "Otomatize ak an mas"
+      },
+      "companyUpdatesHint": "enpòtan, raman ijan",
+      "markDone": "Mete {title} kòm trete",
+      "badge": {
+        "unanswered": "san repons",
+        "mentioned": "mansyone ou",
+        "important": "enpòtans segondè"
+      },
+      "askAbout": "Mande sou sa",
+      "askPrompt": "Konsènan atik {source} \"{title}\" soti bò {from} ({when}) nan rezime anlè a: kisa yap mande, epi kisa ki ta yon bon repons?",
+      "open": {
+        "mail": "Louvri nan Outlook",
+        "chat": "Louvri nan Teams",
+        "channel": "Louvri nan Teams",
+        "calendar": "Louvri nan Outlook"
+      },
+      "footnote": "Kategori yo soti nan pwòp siyal ou yo (san repons, mansyone, difize) ak klasifikasyon AI; verifye avan ou aji. Pa gen anyen ki te voye.",
+      "age": {
+        "now": "kounye a",
+        "hours": "sa gen {count}h",
+        "days": "sa gen {count}j"
+      },
+      "waitForReply": "Tanpri tann repons aktyèl la fini avan ou kòmanse yon dijesyon."
     }
   },
   "share": {

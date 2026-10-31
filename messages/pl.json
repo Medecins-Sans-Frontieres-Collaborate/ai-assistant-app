@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Wywołania narzędzi Microsoft 365 dziennie",
       "m365MailReadsPerDay": "Odczyty wiadomości dziennie",
       "m365MailDraftsPerDay": "Szkice wiadomości dziennie",
-      "m365MailDeepScansPerDay": "Głębokie skanowanie wiadomości dziennie"
+      "m365MailDeepScansPerDay": "Głębokie skanowanie wiadomości dziennie",
+      "m365DigestRunsPerDay": "Dzienne uruchomienia podsumowań"
     },
     "valueModeLabel": "Typ limitu",
     "valueAmountLabel": "Wartość limitu",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Wywołania narzędzi Microsoft 365 (kalendarz, kontakty, zadania, Teams) dziennie. Po przekroczeniu limitu narzędzia zwrócą uprzejmy komunikat „spróbuj ponownie jutro” zamiast powodować błąd rozmowy.",
       "m365MailReadsPerDay": "Wyszukiwania poczty i odczytywanie wiadomości/wątków dziennie. Po przekroczeniu limitu narzędzia pocztowe zwrócą komunikat „spróbuj ponownie jutro”.",
       "m365MailDraftsPerDay": "Szkice e-mail, które asystent może utworzyć dziennie — każdy zatwierdzany osobno. Limit celowo niski.",
-      "m365MailDeepScansPerDay": "Złożone analizy poczty (streszczenia, głębokie wyszukiwanie, zobowiązania) dziennie. Każde skanowanie to jedna jednostka budżetowa bez względu na liczbę wewnętrznych odczytów."
+      "m365MailDeepScansPerDay": "Złożone analizy poczty (streszczenia, głębokie wyszukiwanie, zobowiązania) dziennie. Każde skanowanie to jedna jednostka budżetowa bez względu na liczbę wewnętrznych odczytów.",
+      "m365DigestRunsPerDay": "Liczba dziennych uruchomień podsumowania Microsoft 365. Jedno uruchomienie to kilkadziesiąt odczytów Graph oraz dwa wywołania modeli analitycznych; wybór okresu pozwala łatwo ponawiać zadania, dlatego domyślny limit jest niski."
     },
     "scopeFamily": "Rodzina",
     "scopeModel": "Model",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Poranna odprawa",
-        "description": "Co przyszło, na co czekasz i dzisiejszy kalendarz — jedno podsumowanie"
+        "description": "Podsumowanie od ostatniego dnia pracy — co przyszło, co czeka na Ciebie, zaproszenia i aktualizacje; w poniedziałek obejmuje piątek i weekend."
       },
       "chipsSettingLabel": "Sugeruj playbooki Microsoft 365",
       "chipsSettingHint": "Pokazuj sugestie playbooków nad polem wiadomości, gdy mają zastosowanie (np. po zaimportowaniu transkrypcji spotkania).",
-      "dismissChip": "Odrzuć {title}"
+      "dismissChip": "Odrzuć {title}",
+      "dailyDigest": {
+        "title": "Codzienne podsumowanie",
+        "description": "Sortuje pocztę, Teams i kalendarz na to, co wymaga Twojej uwagi, na co czekasz, aktualizacje i FYI — wybierz okres"
+      }
+    },
+    "digest": {
+      "title": "Codzienne podsumowanie",
+      "intro": "Przeszukuje przychodzące w wybranym okresie wiadomości i przyporządkowuje je do kategorii: wymagające odpowiedzi, zadania dla Ciebie, to na co czekasz, terminy, aktualizacje firmowe i projektowe oraz FYI. Nic nie jest wysyłane ani zmieniane.",
+      "periodLabel": "Okres",
+      "preset": {
+        "lastWorkday": "Od ostatniego dnia roboczego",
+        "1d": "Ostatnie 24 godziny",
+        "3d": "Ostatnie 3 dni",
+        "7d": "Ostatnie 7 dni",
+        "14d": "Ostatnie 14 dni",
+        "custom": "Zakres niestandardowy"
+      },
+      "lastWorkdayHint": "Od początku ostatniego dnia roboczego przed dzisiaj — w poniedziałek obejmuje piątek i weekend.",
+      "from": "Od",
+      "to": "Do",
+      "customInvalid": "Wybierz uporządkowany zakres maksymalnie {days} dni.",
+      "sourcesLabel": "Źródła",
+      "sourceNoConsent": "Brak uprawnień dla tego źródła.",
+      "sourceHint": {
+        "mail": "Koperty skrzynki odbiorczej i podglądy; folder Wysłane decyduje, co uznaje się za odpowiedziane.",
+        "chat": "Ostatnie czaty Teams, z @wzmiankami, na które nie odpowiedziałeś.",
+        "channel": "Wpisy w wybranych poniżej kanałach.",
+        "calendar": "Zaproszenia oczekujące na odpowiedź i Twoje spotkania, na które inni nie odpowiedzieli."
+      },
+      "channelsLabel": "Kanały ({count} z {max})",
+      "removeChannel": "Usuń {name}",
+      "channelsSlow": "Każdy kanał zwiększa liczbę odczytów; więcej kanałów wydłuża generowanie podsumowania.",
+      "channelsMax": "Osiągnięto maksymalną liczbę kanałów: {max}.",
+      "channelsNeeded": "Wybierz co najmniej jeden kanał lub dodaj inne źródło.",
+      "teamLabel": "Zespół",
+      "loadingTeams": "Ładowanie zespołów…",
+      "pickTeam": "Wybierz zespół, aby wyświetlić jego kanały",
+      "loadingChannels": "Ładowanie kanałów…",
+      "noChannels": "Nie znaleziono kanałów w tym zespole.",
+      "privacyNote": "Odczytywane są jedynie tematy, nadawcy i krótkie podglądy; treści wiadomości i załączniki pozostają w Microsoft 365. Elementy to podsumowania Twoich własnych danych.",
+      "cancel": "Anuluj",
+      "run": "Uruchom podsumowanie",
+      "starting": "Uruchamianie…",
+      "startFailed": "Nie udało się uruchomić podsumowania.",
+      "userMessage": "Codzienne podsumowanie — {period}; źródła: {sources}",
+      "working": "Skanowanie Twoich danych Microsoft 365…",
+      "failed": "Podsumowanie nie powiodło się.",
+      "failedPrefix": "Błąd codziennego podsumowania:",
+      "expired": "To uruchomienie podsumowania wygasło. Uruchom je ponownie, aby otrzymać aktualizację.",
+      "runAgain": "Uruchom ponownie",
+      "changePeriod": "Zmień okres",
+      "period": {
+        "lastWorkday": "od ostatniego dnia roboczego",
+        "lastDays": "{count, plural, one {ostatni dzień} other {ostatnie # dni}}"
+      },
+      "source": {
+        "mail": "Poczta",
+        "chat": "Czaty Teams",
+        "channel": "Kanały Teams",
+        "calendar": "Kalendarz"
+      },
+      "sourceStatus": {
+        "ok": "ukończono",
+        "partial": "częściowo",
+        "skipped": "pominięto",
+        "unavailable": "brak uprawnień",
+        "error": "niepowodzenie"
+      },
+      "degraded": "Model analizy był niedostępny, więc kategorie pochodzą wyłącznie z reguł.",
+      "withheld": "{count, plural, one {# element został} other {# elementów zostało}} wstrzymanych przez filtry bezpieczeństwa.",
+      "empty": "Brak raportu za ten okres i z tych źródeł.",
+      "actionItems": "Zadania do wykonania",
+      "createTasks": "{count, plural, =0 {Dodaj do To Do} one {Dodaj # zadanie do To Do} other {Dodaj # zadań do To Do}}",
+      "taskCreated": "dodano do To Do",
+      "tasksCreated": "{count, plural, one {# zadanie} other {# zadań}} dodano do listy „{list}”.",
+      "tasksFailed": "Nie można utworzyć zadań.",
+      "category": {
+        "needsReply": "Wymaga mojej odpowiedzi",
+        "askedOfMe": "Prośba do mnie",
+        "waitingOnOthers": "Oczekuje na innych",
+        "scheduling": "Planowanie",
+        "companyUpdates": "Aktualności firmowe i projektowe",
+        "fyi": "Do wiadomości (FYI)",
+        "bulk": "Zautomatyzowane i hurtowe"
+      },
+      "companyUpdatesHint": "ważne, rzadko pilne",
+      "markDone": "Oznacz {title} jako załatwione",
+      "badge": {
+        "unanswered": "bez odpowiedzi",
+        "mentioned": "wzmianka o Tobie",
+        "important": "wysoki priorytet"
+      },
+      "askAbout": "Zapytaj o to",
+      "askPrompt": "Dotyczy elementu {source} „{title}” od {from} ({when}) w powyższym zestawieniu: o co chodzi i jaka byłaby dobra odpowiedź?",
+      "open": {
+        "mail": "Otwórz w Outlooku",
+        "chat": "Otwórz w Teams",
+        "channel": "Otwórz w Teams",
+        "calendar": "Otwórz w Outlooku"
+      },
+      "footnote": "Kategorie pochodzą z Twoich własnych sygnałów (bez odpowiedzi, wzmianka, rozsyłka) oraz klasyfikacji AI; zweryfikuj przed podjęciem działań. Nic nie zostało wysłane.",
+      "age": {
+        "now": "przed chwilą",
+        "hours": "{count}h temu",
+        "days": "{count}d temu"
+      },
+      "waitForReply": "Poczekaj na zakończenie obecnej odpowiedzi przed rozpoczęciem podsumowania."
     }
   },
   "share": {

@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Wicitaanka Microsoft 365 ee maalintii",
       "m365MailReadsPerDay": "Akhriska iimaylada maalintii",
       "m365MailDraftsPerDay": "Qoraalka drafts ee iimayl maalintii",
-      "m365MailDeepScansPerDay": "Baaritaannada qoto-dheer ee iimayl maalintii"
+      "m365MailDeepScansPerDay": "Baaritaannada qoto-dheer ee iimayl maalintii",
+      "m365DigestRunsPerDay": "Tirada maalinlaha ah ee digest-ka Microsoft 365"
     },
     "valueModeLabel": "Nooca xadka",
     "valueAmountLabel": "Tirada xadka",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "Wicitaannada qalabka Microsoft 365 (calendar, people, tasks, Teams) maalintii. Haddii xadka la dhaafo, qalabka waxa ay soo celiyaan natiijo ah \"isku day berrito\" halkii ay ku fashilmi lahaayeen sheekada.",
       "m365MailReadsPerDay": "Baadhista iimaylada iyo akhrinta fariimaha/xadhkaha maalintii. Haddii xadka la dhaafo, qalabka iyo warqadaha waxay soo celiyaan \"isku day berrito.\"",
       "m365MailDraftsPerDay": "Qoraallada email ee kaaliyuhu samayn karo maalintii — mid kasta waa in si gaar ah loo xaqiijiyaa. Si ula kac ah xadidan.",
-      "m365MailDeepScansPerDay": "Falanqaynta wadajirka ah ee iimaylada (warbixino, baadhis qoto dheer, ballanqaadyo) maalintii. Baadhis walba waa hal unug xisaabeed, si kasta oo faahfaahin ah oo ay leedahay."
+      "m365MailDeepScansPerDay": "Falanqaynta wadajirka ah ee iimaylada (warbixino, baadhis qoto dheer, ballanqaadyo) maalintii. Baadhis walba waa hal unug xisaabeed, si kasta oo faahfaahin ah oo ay leedahay.",
+      "m365DigestRunsPerDay": "Digest-ka maalinlaha Microsoft 365 ee la ordo maalintii. Hal orod waxay tahay akhrisyo faro badan oo Graph ah iyo wacitaan laba jeer oo analysis-model ah; xulashada muddada waxay ka dhigtaa in la codsado orod cusub mid fudud, sidaas darteed xadka caadiga ah waa xaddidan yahay."
     },
     "scopeFamily": "Qoys",
     "scopeModel": "Moodel",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Kala-soocida subaxda",
-        "description": "Waxyaabaha soo galay, waxa kula sugaya, iyo jadwalka maanta — warbixin hal mar ah"
+        "description": "Soo koobis wixii yimid tan iyo maalintii shaqadii u dambeysay — waxa kuu cusub, wixii ku sugan adiga, casuumaadaha iyo cusbooneysiinta; Isniinta waxay daboolaysaa Jimcaha iyo dhammaadka usbuuca."
       },
       "chipsSettingLabel": "Soo jeedi playbooks-yada Microsoft 365",
       "chipsSettingHint": "Tus talooyin Playbook kor ku xiga sanduuqa fariinta marka ay khuseeyaan (tusaale, marka la keeno qoraal kulan).",
-      "dismissChip": "Ka saar {title}"
+      "dismissChip": "Ka saar {title}",
+      "dailyDigest": {
+        "title": "Digest maalinle ah",
+        "description": "Kala saar e-mailadii ugu dambeeyay, Teams iyo jadwalka waxa aad u baahan tahay, waxa lagaa sugayo, warbixinnada iyo xogta – dooro muddada"
+      }
+    },
+    "digest": {
+      "title": "Digest maalinle ah",
+      "intro": "Waxay baaraysaa waxa kuu yimid mudada la xushay waxayna u kala saartaa waxa jawaab loo baahan yahay, waxa lagaa dalbaday, waxa aad sugayso, jadwal, warbixinno shirkadeed iyo mashruuc, iyo xogta. Waxba lama diro ama lama beddelo.",
+      "periodLabel": "Muddada",
+      "preset": {
+        "lastWorkday": "Laga bilaabo maalintii shaqo ee ugu dambeysay",
+        "1d": "24 saac ee u danbeeyay",
+        "3d": "3 maalmood ee u danbeeyay",
+        "7d": "7 maalmood ee u danbeeyay",
+        "14d": "14 maalmood ee u danbeeyay",
+        "custom": "Xulashada muddada aad dooneyso"
+      },
+      "lastWorkdayHint": "Laga bilaabo bilowgii maalintii shaqo ee ugu dhowayd ka hor maanta — Isniintuna waxay daboolaysaa Jimcaha iyo dhammaan usbuuca dhamaadkiisa.",
+      "from": "Laga bilaabo",
+      "to": "Ilaa",
+      "customInvalid": "Dooro muddada isku xiran ee ugu badnaan {days} maalmood.",
+      "sourcesLabel": "Ilo",
+      "sourceNoConsent": "Oggolaansho looma oggolaan ilahan.",
+      "sourceHint": {
+        "mail": "Sanduuqa soo gala iyo muuqaalada gaagaaban; Qodobbada aad dirtay ayaa go'aamiya waxa loo aqoonsanayo in laga jawaabay.",
+        "chat": "Wadahadaladii Teams ee ugu dambeeyay iyo @mentions aanad wali ka jawaabin.",
+        "channel": "Qoraallada kanaalada aad hoos ka xulato.",
+        "calendar": "Martiqaadyada sugaya jawaabtaada iyo shirarkaaga kuwa aan la hubin inay dadka kale jawaab ka bixin."
+      },
+      "channelsLabel": "Kanaalada ({count} mida {max})",
+      "removeChannel": "Ka saar {name}",
+      "channelsSlow": "Kanaal kasta wuxuu kordhiyaa akhrisyo; kanaalo badan waxay ka dhigaan digest-ka mid waqti badan qaata.",
+      "channelsMax": "Tirada ugu badan ee kanaalada ({max}) waa la gaaray.",
+      "channelsNeeded": "Dooro ugu yaraan hal kanaal, ama ku dar ilo kale.",
+      "teamLabel": "Koox",
+      "loadingTeams": "Kooxo la rarayo…",
+      "pickTeam": "Dooro koox si aad u aragto kanaaladooda",
+      "loadingChannels": "Kanaalada la rarayo…",
+      "noChannels": "Kanaalo lagama helin kooxdaan.",
+      "privacyNote": "Kaliya cinwaannada, dirayaasha iyo muuqaalada gaagaaban ayaa la akhriyaa; Jiritaanka fariimaha iyo lifaaqyadu waxay ku jiraan Microsoft 365. Qodobbadu waa kooban xogtaada gaarka ah.",
+      "cancel": "Jooji",
+      "run": "Orod digest",
+      "starting": "Wuu bilaabanayaa…",
+      "startFailed": "Digest-ka lama bilaabi karin.",
+      "userMessage": "Digest maalinle ah — {period}; ilo: {sources}",
+      "working": "Waxa la baarayaa isgaarsiintaada Microsoft 365…",
+      "failed": "Digest-ku wuu guuldareystay.",
+      "failedPrefix": "Digest maalinlaha ah wuu guuldareystay:",
+      "expired": "Digest-kan wuu dhacay. Dib ugu orod si aad u hesho mid cusub.",
+      "runAgain": "Dib u orod",
+      "changePeriod": "Bedel muddada",
+      "period": {
+        "lastWorkday": "laga bilaabo maalintii shaqo ee ugu dambeysay",
+        "lastDays": "{count, plural, one {maalintii u dambeysay} other {#{ } maalmood ee u dambeysay}}"
+      },
+      "source": {
+        "mail": "E-mail",
+        "chat": "Wadahadalada Teams",
+        "channel": "Kanaalada Teams",
+        "calendar": "Kalandarka"
+      },
+      "sourceStatus": {
+        "ok": "dhameystiran",
+        "partial": "qayb ah",
+        "skipped": "la dhaafay",
+        "unavailable": "ogolaansho la'aan",
+        "error": "wuu fashilmay"
+      },
+      "degraded": "Moodelka falanqaynta lama helin, sidaa darteed qeybaha waxay ka yimaadeen xeerar kaliya.",
+      "withheld": "{count, plural, one {# shay ayaa} other {# shay ayaa}} looga hakiyey shaandheeyeyaasha badbaadada.",
+      "empty": "Ma jiraan wax warbixin ah muddadan iyo ilooyinkan.",
+      "actionItems": "Arrimaha la qabanayo",
+      "createTasks": "{count, plural, =0 {Kudar Liiska To Do} one {Kudar # hawl Liiska To Do} other {Kudar # hawlood Liiska To Do}}",
+      "taskCreated": "waa lagu daray To Do",
+      "tasksCreated": "{count, plural, one {# hawl} other {# hawlood}} ayaa lagu daray liiska \"{list}\".",
+      "tasksFailed": "Lama abuuri karin hawsha/yaasha.",
+      "category": {
+        "needsReply": "Waxay u baahan tahay jawaabteyda",
+        "askedOfMe": "Iga la codsaday",
+        "waitingOnOthers": "Sugayaal dadka kale",
+        "scheduling": "Jadwaleyn",
+        "companyUpdates": "Warar cusub oo shirkadda iyo mashruuca la xiriira",
+        "fyi": "Ogow (FYI)",
+        "bulk": "Automated iyo badan"
+      },
+      "companyUpdatesHint": "muhim ah, marar dhif ah degdeg ah",
+      "markDone": "Calaamadee {title} in la qabtay",
+      "badge": {
+        "unanswered": "lama jawaabin",
+        "mentioned": "waxaa lagugu sheegay",
+        "important": "muhim sare"
+      },
+      "askAbout": "Wax ka weydii tan",
+      "askPrompt": "Ku saabsan shayga {source} \"{title}\" laga soo diray {from} ({when}) ee xusuusta sare: maxaa la weydiinayaa, jawi fiican maxaa noqon kara?",
+      "open": {
+        "mail": "Fur Outlook",
+        "chat": "Fur Teams",
+        "channel": "Fur Teams",
+        "calendar": "Fur Outlook"
+      },
+      "footnote": "Qeybaha waxay ka yimaadaan calaamadahaaga (lama jawaabin, lagugu sheegay, ku faafiyey) iyo kala soocidda AI; ka fiirso ka hor intaadan falin. Looma dirin cidna.",
+      "age": {
+        "now": "hadda",
+        "hours": "{count}saac kahor",
+        "days": "{count}maalin kahor"
+      },
+      "waitForReply": "Sug jawaabta hadda socota inay dhamaato ka hor inta aadan bilaabin soo koobis."
     }
   },
   "share": {

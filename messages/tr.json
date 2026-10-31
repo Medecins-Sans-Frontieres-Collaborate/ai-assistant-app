@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Günde Microsoft 365 araç çağrıları",
       "m365MailReadsPerDay": "Günde e-posta okuma",
       "m365MailDraftsPerDay": "Günde e-posta taslakları",
-      "m365MailDeepScansPerDay": "Günde e-posta derin taramaları"
+      "m365MailDeepScansPerDay": "Günde e-posta derin taramaları",
+      "m365DigestRunsPerDay": "Günlük özeti çalışma sayısı"
     },
     "valueModeLabel": "Sınır türü",
     "valueAmountLabel": "Sınır miktarı",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 araç çağrıları (takvim, kişiler, görevler, Teams) günlük limiti. Limit aşılırsa, araçlar sohbeti başarısız kılmak yerine dostça bir 'yarın tekrar deneyin' sonucu döndürür.",
       "m365MailReadsPerDay": "Günlük e-posta aramaları ve mesaj/konu okumaları. Limit aşılırsa, e-posta araçları 'yarın tekrar deneyin' sonucu döndürür.",
       "m365MailDraftsPerDay": "Yardımcının günde oluşturabileceği e-posta taslakları — her biri tek tek onaylanır. Kasıtlı olarak sıkı tutulmuştur.",
-      "m365MailDeepScansPerDay": "Bileşik e-posta analizleri (özetler, derin arama, taahhütler) günlük limiti. Her tarama, içine kaç okuma girerse girsin bir bütçe birimidir."
+      "m365MailDeepScansPerDay": "Bileşik e-posta analizleri (özetler, derin arama, taahhütler) günlük limiti. Her tarama, içine kaç okuma girerse girsin bir bütçe birimidir.",
+      "m365DigestRunsPerDay": "Microsoft 365 günlük özeti çalışma sayısı. Bir çalışma, onlarca Graph okuması ve iki analiz modeli çağrısı içerir; dönem seçicisi tekrar çalıştırmaları kolaylaştırır, bu yüzden varsayılan sınır sıkıdır."
     },
     "scopeFamily": "Aile",
     "scopeModel": "Model",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Sabah triyajı",
-        "description": "Neler geldi, hangi işler sizde bekliyor ve bugünün takvimi — tek bir bilgilendirme"
+        "description": "Son iş gününden bu yana gelenler, bekleyenler, davetiyeler ve güncellemeler — Pazartesi günü Cuma ve hafta sonunu da kapsar."
       },
       "chipsSettingLabel": "Microsoft 365 playbook'larını öner",
       "chipsSettingHint": "Uygulandığında (ör. bir toplantı transkriptini içe aktardıktan sonra) mesaj kutusunun üzerinde playbook önerilerini göster.",
-      "dismissChip": "{title} öğesini kapat"
+      "dismissChip": "{title} öğesini kapat",
+      "dailyDigest": {
+        "title": "Günlük özet",
+        "description": "Son e-postaları, Teams ve takvimi size gerekli olanlar, beklediğinizler, güncellemeler ve bilgilendirmeler şeklinde sıralayın — dönemi seçin"
+      }
+    },
+    "digest": {
+      "title": "Günlük özet",
+      "intro": "Seçilen dönemde size ulaşanları tarar ve yanıt gerektirenler, sizden istenenler, bekledikleriniz, planlamalar, şirket ve proje güncellemeleri ile bilgilendirmeler olarak sıralar. Hiçbir şey gönderilmez veya değiştirilmez.",
+      "periodLabel": "Dönem",
+      "preset": {
+        "lastWorkday": "Son iş gününden itibaren",
+        "1d": "Son 24 saat",
+        "3d": "Son 3 gün",
+        "7d": "Son 7 gün",
+        "14d": "Son 14 gün",
+        "custom": "Özel aralık"
+      },
+      "lastWorkdayHint": "Bugünden önceki en son iş gününün başlangıcından itibaren — Pazartesi günleri Cuma ve hafta sonunu kapsar.",
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "customInvalid": "En fazla {days} gün olacak sıralı bir aralık seçin.",
+      "sourcesLabel": "Kaynaklar",
+      "sourceNoConsent": "Bu kaynak için izin verilmedi.",
+      "sourceHint": {
+        "mail": "Gelen kutusu zarfları ve önizlemeleri; Yanıtlananlar, Gönderilen Öğeler'inize göre belirlenir.",
+        "chat": "Yanıtlamadığınız @bahsedilmeler dahil son Teams sohbetleri.",
+        "channel": "Aşağıda seçtiğiniz kanallardaki gönderiler.",
+        "calendar": "Yanıtınızı bekleyen davetler ve sizin toplantılarınızdan diğerlerinin yanıtlamadığılar."
+      },
+      "channelsLabel": "Kanallar ({count} / {max})",
+      "removeChannel": "{name} kanalını kaldır",
+      "channelsSlow": "Her kanal ek okuma yapar; daha fazla kanal özeti daha uzun sürer.",
+      "channelsMax": "En fazla {max} kanal seçildi.",
+      "channelsNeeded": "En az bir kanal seçin veya başka bir kaynak ekleyin.",
+      "teamLabel": "Takım",
+      "loadingTeams": "Takımlar yükleniyor…",
+      "pickTeam": "Kanallarını listelemek için bir takım seçin",
+      "loadingChannels": "Kanallar yükleniyor…",
+      "noChannels": "Bu takımda kanal bulunamadı.",
+      "privacyNote": "Yalnızca konu, gönderici ve kısa önizlemeler okunur; mesaj gövdeleri ve ekler Microsoft 365'te kalır. Öğeler yalnızca kendi verinizin özetidir.",
+      "cancel": "İptal",
+      "run": "Özeti çalıştır",
+      "starting": "Başlıyor…",
+      "startFailed": "Özeti başlatılamadı.",
+      "userMessage": "Günlük özet — {period}; kaynaklar: {sources}",
+      "working": "Microsoft 365 iletişiminiz taranıyor…",
+      "failed": "Özet başarısız oldu.",
+      "failedPrefix": "Günlük özet başarısız oldu:",
+      "expired": "Bu özet çalışması sona erdi. Yenisi için tekrar çalıştırın.",
+      "runAgain": "Tekrar çalıştır",
+      "changePeriod": "Dönemi değiştir",
+      "period": {
+        "lastWorkday": "son iş gününden beri",
+        "lastDays": "{count, plural, one {son gün} other {son # gün}}"
+      },
+      "source": {
+        "mail": "E-posta",
+        "chat": "Teams sohbetleri",
+        "channel": "Teams kanalları",
+        "calendar": "Takvim"
+      },
+      "sourceStatus": {
+        "ok": "tamamlandı",
+        "partial": "kısmi",
+        "skipped": "atlandı",
+        "unavailable": "izin yok",
+        "error": "başarısız"
+      },
+      "degraded": "Analiz modeli kullanılamadı, bu nedenle kategoriler yalnızca kurallardan geliyor.",
+      "withheld": "{count, plural, one {# öğe} other {# öğe}} güvenlik kontrolleri tarafından tutuldu.",
+      "empty": "Bu dönem ve kaynaklar için rapor edilecek bir şey yok.",
+      "actionItems": "Yapılacaklar",
+      "createTasks": "{count, plural, =0 {To Do'ya ekle} one {# görevi To Do'ya ekle} other {# görevi To Do'ya ekle}}",
+      "taskCreated": "To Do'ya eklendi",
+      "tasksCreated": "{count, plural, one {# görev} other {# görev}} \"{list}\" listesine eklendi.",
+      "tasksFailed": "Görevler oluşturulamadı.",
+      "category": {
+        "needsReply": "Yanıtım gerekli",
+        "askedOfMe": "Bana soruldu",
+        "waitingOnOthers": "Diğerlerini bekliyor",
+        "scheduling": "Zamanlama",
+        "companyUpdates": "Şirket ve proje güncellemeleri",
+        "fyi": "Bilgilendirme",
+        "bulk": "Otomatik ve toplu"
+      },
+      "companyUpdatesHint": "önemli, nadiren acil",
+      "markDone": "{title} öğesini işlendi olarak işaretle",
+      "badge": {
+        "unanswered": "yanıtsız",
+        "mentioned": "sizi bahsetti",
+        "important": "yüksek önem"
+      },
+      "askAbout": "Bunu sor",
+      "askPrompt": "Yukarıdaki özetteki {source} kaynağındaki \"{title}\" başlıklı, {from} tarafından ({when}): ne soruluyor ve iyi bir yanıt nasıl olur?",
+      "open": {
+        "mail": "Outlook'ta aç",
+        "chat": "Teams'de aç",
+        "channel": "Teams'de aç",
+        "calendar": "Outlook'ta aç"
+      },
+      "footnote": "Kategoriler kendi sinyalleriniz (yanıtsız, bahsedilen, duyuru) ve AI sınıflandırmasına dayanır; işlem yapmadan önce doğrulayın. Hiçbir şey gönderilmedi.",
+      "age": {
+        "now": "az önce",
+        "hours": "{count} saat önce",
+        "days": "{count} gün önce"
+      },
+      "waitForReply": "Bir özet başlatmadan önce mevcut yanıtın tamamlanmasını bekleyin."
     }
   },
   "share": {

@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Chiamate agli strumenti Microsoft 365 al giorno",
       "m365MailReadsPerDay": "Email lette al giorno",
       "m365MailDraftsPerDay": "Bozze email al giorno",
-      "m365MailDeepScansPerDay": "Scansioni approfondite email al giorno"
+      "m365MailDeepScansPerDay": "Scansioni approfondite email al giorno",
+      "m365DigestRunsPerDay": "Esecuzioni del digest giornaliero al giorno"
     },
     "valueModeLabel": "Tipo di limite",
     "valueAmountLabel": "Quantità limite",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Chiamate agli strumenti Microsoft 365 (calendario, persone, attività, Teams) al giorno. Oltre il limite, gli strumenti restituiscono un messaggio amichevole \"riprova domani\" invece di interrompere la chat.",
       "m365MailReadsPerDay": "Ricerche e letture di messaggi/conversazioni email al giorno. Oltre il limite, gli strumenti email restituiscono \"riprova domani\".",
       "m365MailDraftsPerDay": "Bozze di email che l'assistente può creare al giorno — ognuna confermata singolarmente. Limite volutamente stretto.",
-      "m365MailDeepScansPerDay": "Analisi email composite (sommari, ricerche approfondite, impegni) al giorno. Ogni analisi vale una unità, indipendentemente dalle letture interne."
+      "m365MailDeepScansPerDay": "Analisi email composite (sommari, ricerche approfondite, impegni) al giorno. Ogni analisi vale una unità, indipendentemente dalle letture interne.",
+      "m365DigestRunsPerDay": "Esecuzioni del digest giornaliero Microsoft 365 al giorno. Un’esecuzione comporta decine di letture Graph più due chiamate al modello di analisi; il selettore del periodo rende facile richiedere nuove esecuzioni, quindi il valore predefinito è limitato."
     },
     "scopeFamily": "Famiglia",
     "scopeModel": "Modello",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Triage mattutino",
-        "description": "Cosa è arrivato, cosa aspetta da te, e il calendario di oggi — un solo briefing"
+        "description": "Un riepilogo dal giorno lavorativo precedente: cosa è arrivato, cosa aspetta una risposta da parte tua, inviti e aggiornamenti; il lunedì copre il venerdì e il fine settimana."
       },
       "chipsSettingLabel": "Suggerisci playbook Microsoft 365",
       "chipsSettingHint": "Mostra suggerimenti per i playbook sopra la casella dei messaggi quando sono pertinenti (es. dopo l'importazione del verbale di una riunione).",
-      "dismissChip": "Ignora {title}"
+      "dismissChip": "Ignora {title}",
+      "dailyDigest": {
+        "title": "Digest giornaliero",
+        "description": "Ordina le email, le chat Teams e il calendario recenti in ciò che ti riguarda, ciò che aspetti, aggiornamenti e solo informazione — seleziona il periodo"
+      }
+    },
+    "digest": {
+      "title": "Digest giornaliero",
+      "intro": "Analizza cosa hai ricevuto nel periodo e lo classifica in ciò che richiede una risposta, ciò che ti è stato chiesto, ciò che stai aspettando, pianificazioni, aggiornamenti aziendali e di progetto, e solo informazione. Nulla viene inviato o modificato.",
+      "periodLabel": "Periodo",
+      "preset": {
+        "lastWorkday": "Dall’ultimo giorno lavorativo",
+        "1d": "Ultime 24 ore",
+        "3d": "Ultimi 3 giorni",
+        "7d": "Ultimi 7 giorni",
+        "14d": "Ultimi 14 giorni",
+        "custom": "Intervallo personalizzato"
+      },
+      "lastWorkdayHint": "Dall’inizio del giorno feriale più recente prima di oggi — di lunedì copre venerdì e il weekend.",
+      "from": "Da",
+      "to": "A",
+      "customInvalid": "Seleziona un intervallo ordinato di massimo {days} giorni.",
+      "sourcesLabel": "Fonti",
+      "sourceNoConsent": "Permesso non concesso per questa fonte.",
+      "sourceHint": {
+        "mail": "Buste in entrata e anteprime; gli Elementi Inviati stabiliscono cosa è considerato risposto.",
+        "chat": "Chat Teams recenti, con @mentions alle quali non hai risposto.",
+        "channel": "Post nei canali che scegli qui sotto.",
+        "calendar": "Inviti in attesa di tua risposta e riunioni a cui gli altri non hanno risposto."
+      },
+      "channelsLabel": "Canali ({count} su {max})",
+      "removeChannel": "Rimuovi {name}",
+      "channelsSlow": "Ogni canale aggiunge letture; più canali fanno durare di più l’elaborazione del digest.",
+      "channelsMax": "È stato raggiunto il massimo di {max} canali.",
+      "channelsNeeded": "Seleziona almeno un canale, oppure aggiungi un’altra fonte.",
+      "teamLabel": "Team",
+      "loadingTeams": "Caricamento dei team…",
+      "pickTeam": "Seleziona un team per elencare i suoi canali",
+      "loadingChannels": "Caricamento dei canali…",
+      "noChannels": "Nessun canale trovato in questo team.",
+      "privacyNote": "Vengono letti solo oggetto, mittente e brevi anteprime; i contenuti dei messaggi e gli allegati restano su Microsoft 365. Gli elementi sono riepiloghi dei tuoi dati.",
+      "cancel": "Annulla",
+      "run": "Esegui digest",
+      "starting": "Avvio…",
+      "startFailed": "Impossibile avviare il digest.",
+      "userMessage": "Digest giornaliero — {period}; fonti: {sources}",
+      "working": "Analisi delle comunicazioni Microsoft 365…",
+      "failed": "Il digest non è riuscito.",
+      "failedPrefix": "Digest giornaliero non riuscito:",
+      "expired": "Questa esecuzione del digest è scaduta. Esegui di nuovo per ottenere una versione aggiornata.",
+      "runAgain": "Esegui di nuovo",
+      "changePeriod": "Cambia periodo",
+      "period": {
+        "lastWorkday": "dall’ultimo giorno lavorativo",
+        "lastDays": "{count, plural, one {ultimo giorno} other {ultimi # giorni}}"
+      },
+      "source": {
+        "mail": "Mail",
+        "chat": "Chat Teams",
+        "channel": "Canali Teams",
+        "calendar": "Calendario"
+      },
+      "sourceStatus": {
+        "ok": "completo",
+        "partial": "parziale",
+        "skipped": "saltato",
+        "unavailable": "nessuna autorizzazione",
+        "error": "non riuscito"
+      },
+      "degraded": "Il modello di analisi non era disponibile, quindi le categorie derivano solo dalle regole.",
+      "withheld": "{count, plural, one {# elemento è stato} other {# elementi sono stati}} trattenuti dai filtri di sicurezza.",
+      "empty": "Nulla da segnalare per questo periodo e queste fonti.",
+      "actionItems": "Azioni da intraprendere",
+      "createTasks": "{count, plural, =0 {Aggiungi a To Do} one {Aggiungi # attività a To Do} other {Aggiungi # attività a To Do}}",
+      "taskCreated": "aggiunto a To Do",
+      "tasksCreated": "{count, plural, one {# attività} other {# attività}} aggiunta alla lista \"{list}\".",
+      "tasksFailed": "Impossibile creare le attività.",
+      "category": {
+        "needsReply": "Serve una mia risposta",
+        "askedOfMe": "Richiesto a me",
+        "waitingOnOthers": "In attesa di altri",
+        "scheduling": "Pianificazione",
+        "companyUpdates": "Aggiornamenti aziendali e di progetto",
+        "fyi": "Per conoscenza",
+        "bulk": "Automatizzato e massivo"
+      },
+      "companyUpdatesHint": "importante, raramente urgente",
+      "markDone": "Segna {title} come gestito",
+      "badge": {
+        "unanswered": "senza risposta",
+        "mentioned": "ti ha menzionato",
+        "important": "alta importanza"
+      },
+      "askAbout": "Chiedi informazioni",
+      "askPrompt": "Sull’elemento {source} \"{title}\" da {from} ({when}) nel riepilogo sopra: cosa viene richiesto e quale sarebbe una buona risposta?",
+      "open": {
+        "mail": "Apri in Outlook",
+        "chat": "Apri in Teams",
+        "channel": "Apri in Teams",
+        "calendar": "Apri in Outlook"
+      },
+      "footnote": "Le categorie derivano da segnali personali (senza risposta, menzionato, broadcast) e da classificazione AI; verifica prima di agire. Nulla è stato inviato.",
+      "age": {
+        "now": "proprio ora",
+        "hours": "{count}h fa",
+        "days": "{count}g fa"
+      },
+      "waitForReply": "Attendere che la risposta attuale sia completata prima di avviare un riepilogo."
     }
   },
   "share": {

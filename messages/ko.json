@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 도구 일일 호출 수",
       "m365MailReadsPerDay": "메일 일일 읽기 수",
       "m365MailDraftsPerDay": "메일 일일 초안 수",
-      "m365MailDeepScansPerDay": "메일 일일 심층 검사 수"
+      "m365MailDeepScansPerDay": "메일 일일 심층 검사 수",
+      "m365DigestRunsPerDay": "일일 다이제스트 실행 횟수"
     },
     "valueModeLabel": "제한 유형",
     "valueAmountLabel": "제한 수량",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 도구 호출(캘린더, 연락처, 작업, Teams) 일일 제한입니다. 한도를 초과하면 채팅이 실패하는 대신 ‘내일 다시 시도하세요’라는 안내가 표시됩니다.",
       "m365MailReadsPerDay": "메일 검색 및 메시지/스레드 열람의 일일 제한입니다. 한도를 초과하면 메일 도구에서 ‘내일 다시 시도하세요’라는 안내가 제공됩니다.",
       "m365MailDraftsPerDay": "어시스턴트가 하루에 생성할 수 있는 이메일 초안 수(각각 개별 확인 필요). 일부러 엄격하게 설정됨.",
-      "m365MailDeepScansPerDay": "종합 메일 분석(다이제스트, 심층 검색, 약속 확인) 일일 제한입니다. 각 분석은 내부 읽기 횟수와 관계없이 1회로 계산됩니다."
+      "m365MailDeepScansPerDay": "종합 메일 분석(다이제스트, 심층 검색, 약속 확인) 일일 제한입니다. 각 분석은 내부 읽기 횟수와 관계없이 1회로 계산됩니다.",
+      "m365DigestRunsPerDay": "Microsoft 365의 일일 다이제스트 실행 횟수입니다. 한 번 실행하면 여러 번의 Graph 읽기와 두 번의 분석 모델 호출이 이루어집니다. 기간 선택기를 통해 재실행 요청이 쉽게 이루어질 수 있으므로 기본값이 엄격하게 설정되어 있습니다."
     },
     "scopeFamily": "패밀리",
     "scopeModel": "모델",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "아침 업무 정리",
-        "description": "받은 메일, 내가 해야 할 일, 오늘 일정 — 한 번에 요약"
+        "description": "전 근무일 이후의 요약 — 들어온 내용, 처리해야 할 일, 초대 및 업데이트 사항; 월요일에는 금요일과 주말 내용을 포함합니다."
       },
       "chipsSettingLabel": "Microsoft 365 플레이북 제안",
       "chipsSettingHint": "적용 가능한 경우(예: 회의 기록을 가져온 후) 메시지 상자 위에 플레이북 제안을 표시합니다.",
-      "dismissChip": "{title} 닫기"
+      "dismissChip": "{title} 닫기",
+      "dailyDigest": {
+        "title": "일일 다이제스트",
+        "description": "최근 메일, Teams, 일정 정보를 필요, 대기 중, 업데이트 및 참고 사항으로 분류합니다 — 기간을 선택하세요"
+      }
+    },
+    "digest": {
+      "title": "일일 다이제스트",
+      "intro": "지정한 기간에 도착한 내용을 검사하여 답변이 필요한 것, 요청 받은 것, 대기 중인 것, 일정, 회사 및 프로젝트 업데이트, 참고용으로 분류합니다. 아무 것도 전송되거나 변경되지 않습니다.",
+      "periodLabel": "기간",
+      "preset": {
+        "lastWorkday": "마지막 근무일 이후",
+        "1d": "지난 24시간",
+        "3d": "지난 3일",
+        "7d": "지난 7일",
+        "14d": "지난 14일",
+        "custom": "사용자 지정 범위"
+      },
+      "lastWorkdayHint": "오늘 이전 가장 최근 평일의 시작부터—월요일에는 금요일과 주말이 포함됩니다.",
+      "from": "시작",
+      "to": "종료",
+      "customInvalid": "최대 {days}일 내의 순서를 유지한 범위를 선택하세요.",
+      "sourcesLabel": "소스",
+      "sourceNoConsent": "이 소스에 대한 권한이 없습니다.",
+      "sourceHint": {
+        "mail": "받은편지함 봉투와 미리보기; 보낸 편지함으로 답변 여부를 결정합니다.",
+        "chat": "최근 Teams 채팅, 답변하지 않은 @멘션 포함.",
+        "channel": "아래에서 선택한 채널의 게시글.",
+        "calendar": "답변을 기다리는 초대와, 다른 사람이 아직 응답하지 않은 회의."
+      },
+      "channelsLabel": "채널 ({count} / {max})",
+      "removeChannel": "{name} 제거",
+      "channelsSlow": "채널마다 추가로 읽기가 필요하므로, 채널이 많아질수록 처리 시간이 길어집니다.",
+      "channelsMax": "최대 {max}개의 채널에 도달했습니다.",
+      "channelsNeeded": "최소 한 개의 채널을 선택하거나 다른 소스를 추가하세요.",
+      "teamLabel": "팀",
+      "loadingTeams": "팀 불러오는 중…",
+      "pickTeam": "팀을 선택하여 채널 목록을 확인하세요",
+      "loadingChannels": "채널 불러오는 중…",
+      "noChannels": "이 팀에서 채널을 찾을 수 없습니다.",
+      "privacyNote": "제목, 발신자, 짧은 미리보기만 읽으며 메시지 본문과 첨부파일은 Microsoft 365에 그대로 남아 있습니다. 항목은 사용자 데이터의 요약입니다.",
+      "cancel": "취소",
+      "run": "다이제스트 실행",
+      "starting": "시작 중…",
+      "startFailed": "다이제스트를 시작할 수 없습니다.",
+      "userMessage": "일일 다이제스트 — {period}; 소스: {sources}",
+      "working": "Microsoft 365 커뮤니케이션을 스캔 중…",
+      "failed": "다이제스트 실행에 실패했습니다.",
+      "failedPrefix": "일일 다이제스트 실패:",
+      "expired": "이 다이제스트 실행이 만료되었습니다. 새로 실행하여 최신 결과를 받아보세요.",
+      "runAgain": "다시 실행",
+      "changePeriod": "기간 변경",
+      "period": {
+        "lastWorkday": "마지막 근무일 이후",
+        "lastDays": "{count, plural, one {지난 하루} other {지난 #일}}"
+      },
+      "source": {
+        "mail": "메일",
+        "chat": "Teams 채팅",
+        "channel": "Teams 채널",
+        "calendar": "캘린더"
+      },
+      "sourceStatus": {
+        "ok": "완료됨",
+        "partial": "부분 완료",
+        "skipped": "건너뜀",
+        "unavailable": "권한 없음",
+        "error": "실패함"
+      },
+      "degraded": "분석 모델을 사용할 수 없어, 카테고리는 규칙만으로 분류되었습니다.",
+      "withheld": "{count, plural, one {#개 항목이} other {#개 항목이}} 안전 필터에 의해 보류되었습니다.",
+      "empty": "이 기간과 소스에는 보고할 내용이 없습니다.",
+      "actionItems": "실행 항목",
+      "createTasks": "{count, plural, =0 {할 일에 추가} one {할 일에 #개 작업 추가} other {할 일에 #개 작업 추가}}",
+      "taskCreated": "할 일에 추가됨",
+      "tasksCreated": "{count, plural, one {#개 작업} other {#개 작업}} \"{list}\" 목록에 추가되었습니다.",
+      "tasksFailed": "작업을 생성할 수 없습니다.",
+      "category": {
+        "needsReply": "내 답장이 필요함",
+        "askedOfMe": "나에게 요청됨",
+        "waitingOnOthers": "다른 사람 기다림",
+        "scheduling": "일정 조정",
+        "companyUpdates": "회사 및 프로젝트 업데이트",
+        "fyi": "참고 (FYI)",
+        "bulk": "자동 및 대량"
+      },
+      "companyUpdatesHint": "중요하지만 긴급하지 않음",
+      "markDone": "{title} 처리 완료로 표시",
+      "badge": {
+        "unanswered": "미답변",
+        "mentioned": "언급됨",
+        "important": "높은 중요도"
+      },
+      "askAbout": "이 항목 문의",
+      "askPrompt": "상기 다이제스트의 {source} 항목 \"{title}\" ({when}, {from})에 대해: 요청 내용과 바람직한 답변은 무엇인가요?",
+      "open": {
+        "mail": "Outlook에서 열기",
+        "chat": "Teams에서 열기",
+        "channel": "Teams에서 열기",
+        "calendar": "Outlook에서 열기"
+      },
+      "footnote": "카테고리는 본인의 신호(미답변, 언급, 브로드캐스트)와 AI 분류에 따라 생성됩니다. 실행 전에 반드시 확인하세요. 아무것도 전송되지 않습니다.",
+      "age": {
+        "now": "방금",
+        "hours": "{count}시간 전",
+        "days": "{count}일 전"
+      },
+      "waitForReply": "현재 답장이 끝날 때까지 요약을 시작하지 마세요."
     }
   },
   "share": {

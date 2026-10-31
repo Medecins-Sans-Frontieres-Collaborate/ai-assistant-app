@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Ipe irinṣẹ Microsoft 365 lojoojumọ",
       "m365MailReadsPerDay": "Kíkà imeeli lojoojumọ",
       "m365MailDraftsPerDay": "Ìkọ ìfojúsọna imeeli lojoojumọ",
-      "m365MailDeepScansPerDay": "Ìṣáyẹlẹkun imeeli lojoojumọ"
+      "m365MailDeepScansPerDay": "Ìṣáyẹlẹkun imeeli lojoojumọ",
+      "m365DigestRunsPerDay": "Iṣiṣẹ ajọpọ ojoojúmọ̀ lóde ọjọ́ kọọkan"
     },
     "valueModeLabel": "Iru ààlà",
     "valueAmountLabel": "Ìye ààlà",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "Awọn ipe irinṣẹ Microsoft 365 (kalẹnda, eniyan, iṣẹ-ṣiṣe, Teams) fun ọjọ kan. Ti o ba ju iye lọ, irinṣẹ yoo fesi pẹlu “gbiyanju lola” dipo ki ija sọrọ ba kuna.",
       "m365MailReadsPerDay": "Ṣiṣawari imeeli ati kika ifiranṣẹ/thread fun ọjọ kan. Ti o ba ju iye lọ, irinṣẹ imeeli yoo sọ “gbiyanju lola”.",
       "m365MailDraftsPerDay": "Àwọn àtẹjáde imeeli tí iranlọwọ le dá ṣẹda fun ọjọ kan — ọkọọkan gbọdọ jẹrisi. A ti fi dínkù mọ́n.",
-      "m365MailDeepScansPerDay": "Itupalẹ imeeli to pọ (digest, wiwa jinlẹ, ileri) fun ọjọ kan. Kọọkan jẹ ẹgbẹ kan ni isuna, laibikita iye kika inu rẹ."
+      "m365MailDeepScansPerDay": "Itupalẹ imeeli to pọ (digest, wiwa jinlẹ, ileri) fun ọjọ kan. Kọọkan jẹ ẹgbẹ kan ni isuna, laibikita iye kika inu rẹ.",
+      "m365DigestRunsPerDay": "Microsoft 365 ṣiṣe ajọpọ ojoojúmọ̀ lóde ọjọ́ kọọkan. Iṣiṣẹ kan jẹ́ ọpọlọpọ ka Graph pọ̀ síi pẹ̀lú ipe awoṣe ìtúpalẹ̀ méjì; asayan àkókò fàájì fun ṣiṣe tútù, nítorí náà a fi ọna tó kù han gẹ́gẹ́ bí aṣàyàn àtajọ."
     },
     "scopeFamily": "Ìdílé",
     "scopeModel": "Àpẹẹrẹ",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Ìtẹ̀síwájú òwúrọ̀",
-        "description": "Kí ni wọlé, kí ni ń dúró dé ẹ, àti kalẹ́ńdà òní — ìjúwe ọ̀kan ṣoṣo"
+        "description": "Àkótán lati ọjọ iṣẹ to kọja — ohun ti wọlé, ohun ti n dúró de rẹ, ìpe ati imudojuiwọn; ní ọjọ́ Ajé, ó bo ọjọ́ Ẹtì àti ipari ọsẹ́."
       },
       "chipsSettingLabel": "Ṣàpèjúwe àwọn playbook Microsoft 365",
       "chipsSettingHint": "Fi awọn iṣeduro playbook han loke apoti ifiranṣẹ nigbati o ba yẹ (fun apẹẹrẹ, lẹ́yìn tí a bá gbe akọsilẹ ipade wọlé).",
-      "dismissChip": "Pa {title} rẹ"
+      "dismissChip": "Pa {title} rẹ",
+      "dailyDigest": {
+        "title": "Ajọpọ ojoojúmọ̀",
+        "description": "Tó ìméèlì tuntun, Teams àti kalẹ́ńdà sí ohun tó nílò ìtọ́kasi rẹ, ohun tí o ń dúró de, imudojúìwọ̀n àti FYI — yàn àkókò tó fẹ́"
+      }
+    },
+    "digest": {
+      "title": "Ajọpọ ojoojúmọ̀",
+      "intro": "Á ṣàyẹ̀wò ohun tí ó tọ́ ọ lẹ́nu àkókò náà, á sì ṣàtòpinpin sí ohun tí ó nílò ìdáhùn, ohun tí a béèrè lọ́wọ́ rẹ, ohun tí o ń dúró de, ìṣètò ipade, ìṣàlẹ̀ ilé iṣẹ́ àti agbéròbọ̀ iṣẹ́, àti FYI. Kò sí ohun tí a fi ránṣẹ́ tàbí yípadà.",
+      "periodLabel": "Àkókò",
+      "preset": {
+        "lastWorkday": "Látì ọjọ́ iṣẹ́ tó kẹhin",
+        "1d": "Wákàtí 24 tó kọjá",
+        "3d": "Ọjọ́ mẹta tó kọjá",
+        "7d": "Ọjọ́ méje tó kọjá",
+        "14d": "Ọjọ́ mẹ́rìnlá tó kọjá",
+        "custom": "Àkókò àdani"
+      },
+      "lastWorkdayHint": "Látì ìbẹ̀rẹ̀ ọjọ́ iṣẹ́ tó kẹhin ṣáájú òní — lórí Mọnde àmọ̀ọlá rẹ̀ tó bo Furaidé àti ipari ọ̀sẹ̀.",
+      "from": "Látì",
+      "to": "Sí",
+      "customInvalid": "Yàn àkókò tó tóbi jùbọ̀ kan ju {days} ọjọ́ lọ.",
+      "sourcesLabel": "Orísun",
+      "sourceNoConsent": "A kò fúnni ní àṣẹ fún orísun yìí.",
+      "sourceHint": {
+        "mail": "Àpótíwọlé àti àpẹẹrẹ; Ìpín ṣíṣe rẹ̀ nínú 'Sent Items' ni yóò pinnu ohun tí a gbà lẹ́hìn.",
+        "chat": "Ìjíròrò tuntun lórí Teams, pẹ̀lú @mentions tí o kò tí ì dáhùn.",
+        "channel": "Ìpòsí ọ̀rọ̀ nínú ikanni tí o yàn ní isalẹ.",
+        "calendar": "Ìpè ipade tí ń dúró de ìdáhùn rẹ àti ipade rẹ̀ tí elòmíràn kò tí ì dáhùn."
+      },
+      "channelsLabel": "Àwọn ikanni ({count} nínú {max})",
+      "removeChannel": "Yọ {name} kúrò",
+      "channelsSlow": "Ikanni kọọkan ń túbọ̀ pọ̀ sí i; ọpọlọpọ ikanni máa fà kí iṣiṣẹ ajọpọ péjú.",
+      "channelsMax": "Tí de opoiye to pọ̀ jùlọ ({max}) ikanni.",
+      "channelsNeeded": "Yàn o kere tan ikanni kan, tàbí ṣàfikún orísun míiran.",
+      "teamLabel": "Ẹgbẹ́",
+      "loadingTeams": "N ń kópa àwọn ẹgbẹ́...",
+      "pickTeam": "Yàn ẹgbẹ́ kan láti fi àtòjọ ikanni rẹ han",
+      "loadingChannels": "N ń kópa àwọn ikanni...",
+      "noChannels": "Kò sí ikanni kankan nínú ẹgbẹ́ yìí.",
+      "privacyNote": "Kiki akọle, ẹni tí ránṣẹ́ àti àkótán kékèké ni a kà; ara ifiranṣẹ àti àfikún wà nínú Microsoft 365. Ìtònà ni àwọn nǹkan yìí jẹ́ fun data tirẹ.",
+      "cancel": "Fagilé",
+      "run": "Ṣiṣẹ ajọpọ",
+      "starting": "Àtẹ̀jáde ń bẹ̀rẹ̀...",
+      "startFailed": "A kò le bẹ̀rẹ̀ ajọpọ náà.",
+      "userMessage": "Ajọpọ ojoojúmọ̀ — {period}; orísun: {sources}",
+      "working": "N ń ṣàyẹ̀wò àwọn ìbánisọ̀rọ̀ rẹ nínú Microsoft 365...",
+      "failed": "Ajọpọ náà ṣẹ̀sùn.",
+      "failedPrefix": "Ajọpọ ojoojúmọ̀ ṣẹ̀sùn:",
+      "expired": "Ajọpọ yìí ti parí. Ṣiṣẹ lẹẹkansi láti gba tuntun.",
+      "runAgain": "Ṣiṣẹ lẹẹkansi",
+      "changePeriod": "Ṣàtúnṣe àkókò",
+      "period": {
+        "lastWorkday": "látì ọjọ́ iṣẹ́ to kẹhin",
+        "lastDays": "{count, plural, one {ọjọ́ to kọjá} other {ọjọ́ # to kọjá}}"
+      },
+      "source": {
+        "mail": "Ìméèlì",
+        "chat": "Ìjíròrò Teams",
+        "channel": "Ikanni Teams",
+        "calendar": "Kalẹnda"
+      },
+      "sourceStatus": {
+        "ok": "parí",
+        "partial": "ìpín",
+        "skipped": "fo kọjá",
+        "unavailable": "aibọwọsi",
+        "error": "kọja"
+      },
+      "degraded": "Akọmọṣinṣin ayẹwo ko si, nitorina awọn ẹka wa lati awọn ilana nikan.",
+      "withheld": "{count, plural, one {# nkan ni} other {# awọn nkan ni}} dá duro nipasẹ àyẹ̀wò ààbò.",
+      "empty": "Kò sí iroyin fun àkókò yii ati àwọn orisun wọ̀nyí.",
+      "actionItems": "Awọn nkan ìṣe",
+      "createTasks": "{count, plural, =0 {Fi kun si To Do} one {Fi iṣẹ́ # kun si To Do} other {Fi iṣẹ́ # kun si To Do}}",
+      "taskCreated": "fi kun si To Do",
+      "tasksCreated": "{count, plural, one {# iṣẹ́} other {# àwọn iṣẹ́}} ti fi kun akojọ \"{list}\".",
+      "tasksFailed": "A kò le dáda iṣẹ́ wọ̀lú.",
+      "category": {
+        "needsReply": "Nilo idahun mi",
+        "askedOfMe": "Béèrè lọwọ mi",
+        "waitingOnOthers": "Nduro de elomiran",
+        "scheduling": "Ilana iṣeto",
+        "companyUpdates": "Ìmúdáṣẹ́ṣẹ́ ilé iṣẹ́ àti agbese",
+        "fyi": "Fun Itọkasi Rẹ",
+        "bulk": "Iṣe aifọwọyi àti púpò"
+      },
+      "companyUpdatesHint": "pataki, jẹ́ pé di ẹsẹ ṣẹlẹ",
+      "markDone": "Samisi {title} gẹ́gẹ́ bí ti pari",
+      "badge": {
+        "unanswered": "ko dahun",
+        "mentioned": "darukọ rẹ",
+        "important": "pataki pupọ"
+      },
+      "askAbout": "Béèrè nípa èyí",
+      "askPrompt": "Nípa nkan {source} \"{title}\" lati ọdọ {from} ({when}) ninu ijẹrisi loke: kini a n béèrè, ati kini idahun to dara jẹ?",
+      "open": {
+        "mail": "Ṣii ninu Outlook",
+        "chat": "Ṣii ninu Teams",
+        "channel": "Ṣii ninu Teams",
+        "calendar": "Ṣii ninu Outlook"
+      },
+      "footnote": "Àwọn ẹka wa lati awọn ifihan tirẹ (ko dahun, darukọ, sọ) ati ikọ́ ẹkọ́ AI; jọwọ jẹrisi ṣaaju iṣe. Kò sí ohun tí a fi ranṣẹ́.",
+      "age": {
+        "now": "ní ṣíṣe yìí",
+        "hours": "{count}w sẹ́yìn",
+        "days": "{count}ọ sẹ́yìn"
+      },
+      "waitForReply": "Duro ki idahun lọwọlọwọ pari ki o to bẹrẹ àkótán."
     }
   },
   "share": {

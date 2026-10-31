@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 antso fitaovana isan'andro",
       "m365MailReadsPerDay": "Mamaky mailaka isan'andro",
       "m365MailDraftsPerDay": "Draft mailaka isan'andro",
-      "m365MailDeepScansPerDay": "Famotopotorana lalina mailaka isan'andro"
+      "m365MailDeepScansPerDay": "Famotopotorana lalina mailaka isan'andro",
+      "m365DigestRunsPerDay": "Famintinana isan'andro isan'andro"
     },
     "valueModeLabel": "Karazan'ny fetra",
     "valueAmountLabel": "Habetsahan'ny fetra",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "Antso fitaovana Microsoft 365 (kalendrie, olona, asa, Teams) isan'andro. Raha mihoatra ny fetra, dia hafatra \"miezaha indray rahampitso\" no ho averin'ny fitaovana fa tsy hanimba ny resaka.",
       "m365MailReadsPerDay": "Fikarohana sy famakiana mailaka/sotekan-dresaka isan'andro. Raha mihoatra ny fetra, dia hafatra \"miezaha indray rahampitso\" no ho averin'ny fitaovana mailaka.",
       "m365MailDraftsPerDay": "Dikasary mailaka azon'ny mpanampy foronina isan'andro — tsirairay dia voamarina. Tena voafaritra henjana.",
-      "m365MailDeepScansPerDay": "Fanadihadiana mailaka mifangaro (famintinana, fikarohana lalina, fanoloran-tena) isan'andro. Isaky ny scan iray dia iray ny teti-bola, na firy na firy ny famakiana anatiny."
+      "m365MailDeepScansPerDay": "Fanadihadiana mailaka mifangaro (famintinana, fikarohana lalina, fanoloran-tena) isan'andro. Isaky ny scan iray dia iray ny teti-bola, na firy na firy ny famakiana anatiny.",
+      "m365DigestRunsPerDay": "Famintinana isan'andro Microsoft 365 isan'andro. Ny famintinana iray dia ahitana famakiana Graph maromaro sy antso modely fanadihadiana roa; mora atao indray ny fangatahana amin'ny alàlan'ny safidy vanim-potoana, ka tery ny fatra mahazatra."
     },
     "scopeFamily": "Fianakaviana",
     "scopeModel": "Modely",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Fandaminana maraina",
-        "description": "Izay tonga, izay miandry aminao, ary tetiandro anio — tatitra iray"
+        "description": "Digest hatramin'ny andro fiasana farany — ny tonga, ny miandry anao, fanasana sy fanavaozam-baovao; amin'ny alatsinainy dia mandrakotra ny zoma sy ny faran'ny herinandro."
       },
       "chipsSettingLabel": "Manolotra Microsoft 365 playbooks",
       "chipsSettingHint": "Asehoy eo ambonin'ny boaty hafatra ny soso-kevitra playbook rehefa misy (ohatra, rehefa avy nanafatra transcript-n'ny fivoriana).",
-      "dismissChip": "Esory {title}"
+      "dismissChip": "Esory {title}",
+      "dailyDigest": {
+        "title": "Famintinana isan'andro",
+        "description": "Handamina mailaka, resaka ao amin'ny Teams ary kalandrie farany teo araka izay mila fandraisanao andraikitra, miandry anao, fanavaozana, sy FYI — misafidiana vanim-potoana"
+      }
+    },
+    "digest": {
+      "title": "Famintinana isan'andro",
+      "intro": "Hijery izay voaray mandritra ny vanim-potoana, ary handamina azy ho izay mila valiny, izay nangatahina taminao, izay mbola andrasana, fandaharam-potoana, fanavaozam-baovao avy amin’ny orinasanao sy tetikasa, ary FYI. Tsy misy andefasana na fanovana zavatra.",
+      "periodLabel": "Vanim-potoana",
+      "preset": {
+        "lastWorkday": "Hatramin'ny andro fiasana farany",
+        "1d": "Ora 24 farany",
+        "3d": "Andro 3 farany",
+        "7d": "Andro 7 farany",
+        "14d": "Andro 14 farany",
+        "custom": "Elanelana manokana"
+      },
+      "lastWorkdayHint": "Hatramin'ny fiandohan'ny andro fiasana farany vao haingana alohan'ny anio — amin'ny Alatsinainy dia ahitana ny Zoma sy faran'ny herinandro.",
+      "from": "Hatramin'ny",
+      "to": "Hatramin'ny",
+      "customInvalid": "Misafidiana elanelana voalamina tsy mihoatra ny {days} andro.",
+      "sourcesLabel": "Loharano",
+      "sourceNoConsent": "Tsy nahazoan-dalana ity loharano ity.",
+      "sourceHint": {
+        "mail": "Taratasim-pandefasana sy topy maso avy amin'ny Inbox; ny Sent Items no manapa-kevitra izay razona ho valiana.",
+        "chat": "Resadresaka Teams farany, misy @mentions tsy mbola navalinao.",
+        "channel": "Hafatra amin'ny fantsona fidinao etsy ambany.",
+        "calendar": "Fanasa miandry ny valinteninao sy ny fivoriana izay mbola tsy namaly ny hafa."
+      },
+      "channelsLabel": "Fantsona ({count} amin'ny {max})",
+      "removeChannel": "Esory {name}",
+      "channelsSlow": "Manampy famakiana ny fantsona tsirairay; mampihena ny hafainganan’ny famintinana ny fantsona maro.",
+      "channelsMax": "Voafetra amin'ny fantsona {max} ambony indrindra.",
+      "channelsNeeded": "Safidio farafahakeliny fantsona iray, na ampio loharano hafa.",
+      "teamLabel": "Ekipa",
+      "loadingTeams": "Manokatra ekipa…",
+      "pickTeam": "Safidio ny ekipa hijerena ny fantsony",
+      "loadingChannels": "Manokatra fantsona…",
+      "noChannels": "Tsy misy fantsona hita ao amin'ity ekipa ity.",
+      "privacyNote": "Lohahevitra, mpandefa, sy topy maso fohy ihany no vakina; mijanona ao amin'ny Microsoft 365 ny vatan'ny hafatra sy ireo rakitra manampy. Famintinana an-tsoratra amin'ny angon-drakitrao manokana no hita.",
+      "cancel": "Foano",
+      "run": "Alefaso ny famintinana",
+      "starting": "Manomboka…",
+      "startFailed": "Tsy afaka nanomboka ny famintinana.",
+      "userMessage": "Famintinana isan'andro — {period}; loharano: {sources}",
+      "working": "Mandinika ny fifandraisanao ao amin'ny Microsoft 365…",
+      "failed": "Tsy nahomby ny famintinana.",
+      "failedPrefix": "Tsy nahomby ny famintinana isan'andro:",
+      "expired": "Lany daty ity famintinana ity. Avereno mba hahazoana vaovao farany.",
+      "runAgain": "Avereno indray",
+      "changePeriod": "Ovay ny vanim-potoana",
+      "period": {
+        "lastWorkday": "hatramin'ny andro fiasana farany",
+        "lastDays": "{count, plural, one {andro farany} other {andro # farany}}"
+      },
+      "source": {
+        "mail": "Mailaka",
+        "chat": "Resaka Teams",
+        "channel": "Fantsona Teams",
+        "calendar": "Kalandrie"
+      },
+      "sourceStatus": {
+        "ok": "vita",
+        "partial": "ampahany",
+        "skipped": "nofisaka",
+        "unavailable": "tsy manana fahazoan-dàlana",
+        "error": "tsy nahomby"
+      },
+      "degraded": "Tsy azo nampiasaina ny modely fanadihadiana, ka avy amin’ny fitsipika fotsiny ny sokajy.",
+      "withheld": "{count, plural, one {Nahalain'ny efijery fiarovana ilay zavatra} other {Nahalain'ny efijery fiarovana ireo zavatra #}}.",
+      "empty": "Tsy misy tatitra amin'ity vanim-potoana sy loharano ireo.",
+      "actionItems": "Zavatra hatao",
+      "createTasks": "{count, plural, =0 {Ampidiro ao amin'ny To Do} one {Ampio asa # ao amin'ny To Do} other {Ampio asa # ao amin'ny To Do}}",
+      "taskCreated": "napetraka ao amin'ny To Do",
+      "tasksCreated": "{count, plural, one {Asa #} other {Asa #}} napetraka ao amin'ny lisitra \"{list}\".",
+      "tasksFailed": "Tsy afaka namorona ireo asa.",
+      "category": {
+        "needsReply": "Mila valiny avy amiko",
+        "askedOfMe": "Nangatahina tamiko",
+        "waitingOnOthers": "Miandry ny hafa",
+        "scheduling": "Fandaharam-potoana",
+        "companyUpdates": "Vaovao farany momba ny orinasa sy tetikasa",
+        "fyi": "FYI",
+        "bulk": "Ho azy sy betsaka"
+      },
+      "companyUpdatesHint": "manan-danja, zara raha maika",
+      "markDone": "Mariho fa efa voakarakara i {title}",
+      "badge": {
+        "unanswered": "tsy mbola voavalina",
+        "mentioned": "noresahina ianao",
+        "important": "manan-danja be"
+      },
+      "askAbout": "Anontanio momba ity",
+      "askPrompt": "Momba ilay entana {source} \"{title}\" avy amin'i {from} ({when}) ao amin'ny digest etsy ambony: inona no angatahana, ary inona no valiny tsara mety ho izy?",
+      "open": {
+        "mail": "Sokafy ao amin'ny Outlook",
+        "chat": "Sokafy ao amin'ny Teams",
+        "channel": "Sokafy ao amin'ny Teams",
+        "calendar": "Sokafy ao amin'ny Outlook"
+      },
+      "footnote": "Avy amin'ny mari-pamantarana manokana (tsy voavalina, noresahina, nandefa) sy fanasokajin'ny AI ny sokajy; ataovy azo antoka aloha alohan'ny hanaovana fihetsika. Tsy nisy nalefa.",
+      "age": {
+        "now": "vao izao",
+        "hours": "{count}h lasa",
+        "days": "{count}a lasa"
+      },
+      "waitForReply": "Andraso ho vita ny valiny amin'izao vao manomboka digest."
     }
   },
   "share": {

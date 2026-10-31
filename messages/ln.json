@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Ba appels ya Microsoft 365 tool na mokolo",
       "m365MailReadsPerDay": "Ba lecture ya email na mokolo",
       "m365MailDraftsPerDay": "Ba drafts ya email na mokolo",
-      "m365MailDeepScansPerDay": "Ba deep scan ya email na mokolo"
+      "m365MailDeepScansPerDay": "Ba deep scan ya email na mokolo",
+      "m365DigestRunsPerDay": "Nbongo ya mokuse ya mokolo na mokolo"
     },
     "valueModeLabel": "Motindo ya mingambo",
     "valueAmountLabel": "Motango ya mingambo",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "Bazali mibondeli ya baoutil Microsoft 365 (calendrier, bato, misala, Teams) mokolo na mokolo. Soki ekoleka ndelo, baoutil ekopesa sango ya « meka lisusu lobi » na esika ya kokwasisa chat.",
       "m365MailReadsPerDay": "Koluka mpe kotala baranseli to ba thread mokolo mobimba. Soki ekoleka ndelo, baoutil ya email ekopesa sango « meka lisusu lobi ».",
       "m365MailDraftsPerDay": "Bilongwa ya email assistant akoki kosala mokolo moko — moko na moko ekopesama ndingisa liboso. Ezali na ndelo makasi.",
-      "m365MailDeepScansPerDay": "Analyse ya baranseli ya email mokolo moko (digest, koluka makasi, commitments). Scan moko ezali unité moko ata bonene na yango."
+      "m365MailDeepScansPerDay": "Analyse ya baranseli ya email mokolo moko (digest, koluka makasi, commitments). Scan moko ezali unité moko ata bonene na yango.",
+      "m365DigestRunsPerDay": "Microsoft 365 ebongisaka mokuse ya mokolo na mokolo. Eloko moko ezali kopesa ba-Graph mingi mpe mibeko mibale ya modèlé d'analyse; pondu ya tango esalaka komipesa lisusu mpasi te, yango wana motungisi ya liboso ezali makasi."
     },
     "scopeFamily": "Famille",
     "scopeModel": "Modèle",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Triage ya ntɔngɔ",
-        "description": "Nini ekoti, nini ezali kozela yo, na calendrier ya lelo — briefing moko"
+        "description": "Digest banda mokolo ya mosala oyo eleki — makambo eye ezali koya, oyo ezosenga yo, bantinvite mpe sango ya sika; na mokolo ya lundi ekosangisa mokolo ya misato mpe week-end."
       },
       "chipsSettingLabel": "Pesa toli ya ba playbook ya Microsoft 365",
       "chipsSettingHint": "Lakisa toli ya playbook likolo ya sanduku ya nsango soki esengi (ndakisa sima ya kotambwisa rapport ya réunion).",
-      "dismissChip": "Kolongola {title}"
+      "dismissChip": "Kolongola {title}",
+      "dailyDigest": {
+        "title": "Nkasa ya mokolo na mokolo",
+        "description": "Bongisa bandakisa ya misolo, Teams mpe kalandriye na ba priorité : oyo esengeli osala, oyo ozali kozela, sika na sika, mpe FYI — poná tango"
+      }
+    },
+    "digest": {
+      "title": "Nkasa ya mokolo na mokolo",
+      "intro": "Etali biloko nyonso ekomaki epayi na yo na tango wana mpe ebongisi yango na oyo esengeli eyana eyano, oyo wasengami, oyo ozali kozela, planification, sika ya kompani mpe projet, mpe FYI. Eloko moko eko kende te, ekobongwana te.",
+      "periodLabel": "Tango",
+      "preset": {
+        "lastWorkday": "Bandakisa banda mokolo misala esílí",
+        "1d": "Masolo ya mikolo 1 eleki",
+        "3d": "Masolo ya mikolo 3 eleki",
+        "7d": "Masolo ya mikolo 7 eleki",
+        "14d": "Masolo ya mikolo 14 eleki",
+        "custom": "Intervalle oyo opesi yo moko"
+      },
+      "lastWorkdayHint": "Bandakiseli banda litatoli ya mokolo ya misala oyo eleki liboso ya lelo — soki lelo ezali lundi, ekosambisa yango mpo na mokolo ya mposo na week-end.",
+      "from": "Kobanda",
+      "to": "Kotia na suka",
+      "customInvalid": "Poná intervalle ya mikolo {days} te koleka, na ndenge etali.",
+      "sourcesLabel": "Bisika ya moto",
+      "sourceNoConsent": "Lopesi ndingisa te mpo na esika oyo.",
+      "sourceHint": {
+        "mail": "Bamituna ya boite de réception na bilembo; Sent Items na yo nde ebongisaka oyo ebongwaná lokola eyano.",
+        "chat": "Bamituna ya sika ya Teams, na ba @mentions oyo osalaki eyano te.",
+        "channel": "Ba post na ba channels oyo osí ponaki awa na nse.",
+        "calendar": "Bapeleli oyo bazali kozela eyano na yo mpe mitanda na yo oyo bamosusu basalaki eyano te."
+      },
+      "channelsLabel": "Ba channels ({count} ya {max})",
+      "removeChannel": "Longola {name}",
+      "channelsSlow": "Channel moko ekotisaka kotanga; koleka ba channels ebalusi nyonso.",
+      "channelsMax": "Maximum ya ba channels {max} ekokwamá.",
+      "channelsNeeded": "Poná kala moko wana channel, to yembisa esika mosusu.",
+      "teamLabel": "Équipe",
+      "loadingTeams": "Kozwa ba équipes...",
+      "pickTeam": "Poná équipe mpo emonisa ba channels na yango",
+      "loadingChannels": "Kozwa ba channels...",
+      "noChannels": "Ba channel moko te na équipe oyo.",
+      "privacyNote": "Basoni, batindaka mpe balongola ba preview na ndakisa; message corps mpe attachments babimaka kaka na Microsoft 365. Maloba ezali ndenge ya misisa ya ba donnée na yo moko.",
+      "cancel": "Kofuta",
+      "run": "Sambisa nkasa",
+      "starting": "Ekozali kobanda...",
+      "startFailed": "Nkasa ekokaki kobanda te.",
+      "userMessage": "Nkasa ya mokolo na mokolo — {period}; bisika: {sources}",
+      "working": "Ezalaki kotala bandinga ya Microsoft 365 na yo...",
+      "failed": "Nkasa ebungi.",
+      "failedPrefix": "Nkasa ya mokolo na mokolo ebungi:",
+      "expired": "Nkasa oyo esili, sala lisusu mpo ozua sika.",
+      "runAgain": "Sambisa lisusu",
+      "changePeriod": "Bongola tango",
+      "period": {
+        "lastWorkday": "banda mokolo ya misala eleki",
+        "lastDays": "{count, plural, one {mokolo eleki} other {mikolo # eleki}}"
+      },
+      "source": {
+        "mail": "Email",
+        "chat": "Ba chat ya Teams",
+        "channel": "Ba channel ya Teams",
+        "calendar": "Kalendare"
+      },
+      "sourceStatus": {
+        "ok": "esili",
+        "partial": "etondi naino te",
+        "skipped": "elongwé",
+        "unavailable": "ndako te ya nzela",
+        "error": "ezangi"
+      },
+      "degraded": "Model ya kosolola ezalaki te, yango wana baparti ewuti kaka na mibeko.",
+      "withheld": "{count, plural, one {eloko moko elongwé} other {biloko {#} elongwé}} na mibeko ya bokebi.",
+      "empty": "Eloko moko te ya kotala na tango oyo mpe na bitene oyo.",
+      "actionItems": "Mambo ya kosala",
+      "createTasks": "{count, plural, =0 {Bakisa na To Do} one {Bakisa mosala # na To Do} other {Bakisa misala # na To Do}}",
+      "taskCreated": "ebakisami na To Do",
+      "tasksCreated": "{count, plural, one {mosala #} other {misala #}} ebakisami na liste \"{list}\".",
+      "tasksFailed": "Misala ekokaki te kobimisama.",
+      "category": {
+        "needsReply": "Esengeli napesa eyano",
+        "askedOfMe": "Batuni ngai",
+        "waitingOnOthers": "Ndenge bazali kozela bato mosusu",
+        "scheduling": "Kosambisa tango",
+        "companyUpdates": "Sango ya liboso ya kompani mpe projet",
+        "fyi": "Ya koyeba",
+        "bulk": "Automatise mpe mingi"
+      },
+      "companyUpdatesHint": "important, ekoki kozala urgente te mingi",
+      "markDone": "Kokoma {title} lokola esilaki",
+      "badge": {
+        "unanswered": "eyano ezali te",
+        "mentioned": "babolaki yo",
+        "important": "monene ya ntina"
+      },
+      "askAbout": "Tuna likambo oyo",
+      "askPrompt": "Na likambo ya {source} \"{title}\" uta {from} ({when}) na digest ya likolo: nini ezali kotunama, mpe eyano malamu ekoki kozala nini?",
+      "open": {
+        "mail": "Fungola na Outlook",
+        "chat": "Fungola na Teams",
+        "channel": "Fungola na Teams",
+        "calendar": "Fungola na Outlook"
+      },
+      "footnote": "Baparti ewuti na bilembo na yo moko (eyano ezali te, babolaki yo, babengisi) elongo na klasifike ya AI; tanga naino liboso osala. Eloko moko esalamaki te.",
+      "age": {
+        "now": "sikoyo kaka",
+        "hours": "sima ya {count}h",
+        "days": "sima ya {count}d"
+      },
+      "waitForReply": "Zela ete biyano ya sikoyo esila liboso ya kobanda digest."
     }
   },
   "share": {

@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "ናይ Microsoft 365 መሳርሒታት ዝጥቀሱ ብሕደግ",
       "m365MailReadsPerDay": "ናይ ሜይል ምንባብ ብሕደግ",
       "m365MailDraftsPerDay": "ናይ ሜይል ማእከላይ ጽሑፍ ብሕደግ",
-      "m365MailDeepScansPerDay": "ናይ ሜይል ብዝተስተዋዅነ ፍለጥ ብሕደግ"
+      "m365MailDeepScansPerDay": "ናይ ሜይል ብዝተስተዋዅነ ፍለጥ ብሕደግ",
+      "m365DigestRunsPerDay": "ዕለታዊ ዝተደገመ ማህደር ፍርዲ"
     },
     "valueModeLabel": "ዓይነት መድረ",
     "valueAmountLabel": "መጠን መድረ",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "ንሓደ መዓልቲ ዝተፈቀደ ምጥቃም Microsoft 365 መገልገሲ ቅጥዒ (ቫይል, ሰባት, ተግባራት, Teams)። ብቐጻሊ ባዕሉ ቅፅዕ፡ መገልገሲ ደገ ክበል ዓይኒ “ሕጂ ፈጺሙ፡ ክሳብ ጽባሕ ደግሞ ፈትኑ” ይብላ።",
       "m365MailReadsPerDay": "ምፍታን ናይ ኢሜል እና ምንባብ ሜል/መንገዲ በዓል መዓልቲ። ቅጥዒ ኣተዉ ኣብ ዚ ተጠቂሙ፡ መገልገሲ ደገ 'ክሳብ ጽባሕ ደገም ፈትኑ' ይርከብ።",
       "m365MailDraftsPerDay": "ንመዓልቲ ኣዝዩ ዘለዎ ኢሜል ፅሑፋታት ኣስተኻኺላ፡ ካብ ሓደ ሓደ ዝተረጋገጹ። ብዝምልከት ኣግንዑ።",
-      "m365MailDeepScansPerDay": "ብሓባር ዝተፈጠሩ ምምርኣይ መንጸባር ኢሜል (digest, deep search, commitments) በዓል መዓልቲ። ካብ ናይቲ ዝተረኸበ ዝግበር ውሽጢ አይተለየን።"
+      "m365MailDeepScansPerDay": "ብሓባር ዝተፈጠሩ ምምርኣይ መንጸባር ኢሜል (digest, deep search, commitments) በዓል መዓልቲ። ካብ ናይቲ ዝተረኸበ ዝግበር ውሽጢ አይተለየን።",
+      "m365DigestRunsPerDay": "Microsoft 365 ዕለታዊ ዝተደገመ ማህደር ፍርዲ ብናይ ዕለት፡ ኣንድ ፍርዲ ውስተ ዓይነት ዝኣተወ ብብርሀነት ይኸውን፡ እንተማሃበር ፋይን ብዘይ ወጻኢ ይተሓበሩ፣ ፍርዲ ኣብ ሕጂ ከተምርጡን ኣብ ቀዳማይ ምውናስ ቀሊል ክህልዉዎ ይዘይ፣ ዚኣኸውን ዘይምልከት ዘለዎ።"
     },
     "scopeFamily": "ህይወታዊ ቤት",
     "scopeModel": "ሞዴል",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "ጸባይለይ ምርመራ",
-        "description": "መጻአ፣ ዝተስተወ ዘሎ፣ ዕለታዊ ቫዳ — ሓዋራይ ሪፖርት"
+        "description": "Digest ካብ መወዳእታ ስራሕ ሓሚኡ — ዝመጸነዮ፡ እምበኻ ዝጸብቕ፡ ግዝፀትን ሓደስታን፡ ኣብ ሰኑይ፡ ዓሚጎም ኣብ ዓርቢን ፋይዳን ሳዑድን ይሰርሕ."
       },
       "chipsSettingLabel": "Microsoft 365 ቀዳምቲ መርሒ ምምልእ",
       "chipsSettingHint": "ዝሓለፉ ኣብ መልእኽቲ ሳንደቕ ላዕሊ ምምልካት ኣብ ግዝኣቶም ዝርከቡ ግዜ (ምሳሌ፡ ምድሓደም meeting transcript ድማ).",
-      "dismissChip": "{title} ኣትውልውሉ"
+      "dismissChip": "{title} ኣትውልውሉ",
+      "dailyDigest": {
+        "title": "ዕለታዊ ማህደር",
+        "description": "ንሓደሽቲ መደብ፣ Teamsን ውዕለትን ንትደኣሞ የሚዳነ፡ ዝበዝሐን፣ ዝበጽሐን፣ ሕደራትን FYIን ከተምርጹ ዕለት ዝምልከት።"
+      }
+    },
+    "digest": {
+      "title": "ዕለታዊ ማህደር",
+      "intro": "ኣብ ውድብ ዘልኹን ሓደ ግዜ ምህሮ እዩ፣ ዝሽዋድኩን፣ ዝተሰዋደለኩን፣ ዝትተኣናኩን፣ ኣቓዓዊ እውን ወንዝዙን ዝኣኸውን፣ FYIን። ናይ መልእኽቲ ተለንክቲ ኣይተላእኽን ኣይተለወጠን።",
+      "periodLabel": "ዝወሰነ ግዜ",
+      "preset": {
+        "lastWorkday": "ካብ መደበያ ስራሕ ውድብ",
+        "1d": "ኣብ 24 ሰዓት ዝበሃዉ",
+        "3d": "ኣብ 3 መዓልቲ ዝበሃዉ",
+        "7d": "ኣብ 7 መዓልቲ ዝበሃዉ",
+        "14d": "ኣብ 14 መዓልቲ ዝበሃዉ",
+        "custom": "ባህሪ ዘይመለከት ዝምልከት"
+      },
+      "lastWorkdayHint": "ካብ ምጀመር ኣድሕኪ መደበያ ስራሕ ከም ሓደ ዕለት ከዚ ይሕሸባ፣ ባህሪ ናይ ሶስት ሰንበትን ኣብ ሰኑይ።",
+      "from": "ካብ",
+      "to": "ናብ",
+      "customInvalid": "ብትኽክል ዘይተሰርዐ ዘልኩን ግዜ ከዘለ {days} መዓልቲ ምርጽ።",
+      "sourcesLabel": "ምንጪያት",
+      "sourceNoConsent": "ብኢለና ዝተፈቀደለን ምንጪ።",
+      "sourceHint": {
+        "mail": "ኣዳራሽ ማእዋዥን ቅድሚ-ማሳያትን፣ ናይ Sent Items ዋህዮኡ ዝተመለሱ ይዘይ።",
+        "chat": "ኣብ ዝበሃዉ Teams ቻታት፣ @mention ዘይተመልስኩን።",
+        "channel": "ኣብ ቻነላት ከተምርጹ ይህሉዎ።",
+        "calendar": "ኣዲር ትሰምዓበካ፣ ኣብ ምዕራፍ ዝኾነ፣ ናይ ቀጻሊ ሰብ ዝሽዋድካ።"
+      },
+      "channelsLabel": "ቻነላት ({count} ካብ {max})",
+      "removeChannel": "ወፀን {name}",
+      "channelsSlow": "ኣብ ቻነል ናይ ምንባብ ይጨምር፡ ብዙሕ ቻነላት ትኽዋንት ይዕረፉ።",
+      "channelsMax": "ካልኣይ {max} ቻነላት ተደሚጡ።",
+      "channelsNeeded": "ቢወስድ ሓደ ቻነል ኣብ ዝምልከት፣ ወይ ሓሳብ ኣዲስ ምንጪ ኣብ ብርሃነት።",
+      "teamLabel": "ቡድን",
+      "loadingTeams": "ቡድናት ኣይካኣን…",
+      "pickTeam": "ቡድን ምርጽ ንቻነላት ምዝርጋብ",
+      "loadingChannels": "ቻነላት ኣይካኣን…",
+      "noChannels": "ኣብዚ ቡድን ቻነላት ኣይተረኽቡን።",
+      "privacyNote": "ናይ ሒደታት፣ እንታውን ኣብሲ ቅድሚ-ማሳያት ይተባህቲ፣ ንመልእኽቲን ናይ ዓበይቲ ፋይልን ኣብ Microsoft 365 ይተረሓሕ። ዕለታዊ ማህደር ናይ ሓደ ውስጥ ግዜ ይሕሸባ።",
+      "cancel": "ሰርሕ",
+      "run": "ማህደር ፍርዲ ምስራሕ",
+      "starting": "እዩ ዝጀመረ…",
+      "startFailed": "ማህደር ፍርዲ ኣይተጀመረን።",
+      "userMessage": "ዕለታዊ ማህደር — {period}; ምንጪያት: {sources}",
+      "working": "ኣብ Microsoft 365 ምህሮ ዘለኻ ይህሸባ…",
+      "failed": "ማህደር ፍርዲ ኣይተሳነን።",
+      "failedPrefix": "ዕለታዊ ማህደር ኣይተሳነን፡",
+      "expired": "እዚ ፍርዲ ማህደር ጸኒሕ። ኣብ ሓደ ግዜ ማህደር ኣዕልጡ።",
+      "runAgain": "ኣብ ሓደ ግዜ ፍርዲ ምስራሕ",
+      "changePeriod": "ዝወሰነ ግዜ ምቕያር",
+      "period": {
+        "lastWorkday": "ካብ ዝቐረበ መደበያ ስራሕ",
+        "lastDays": "{count, plural, one {ዝቐረበ መዓልቲ} other {ዝቐረቡ # መዓልታት}}"
+      },
+      "source": {
+        "mail": "መደብ",
+        "chat": "Teams ቻታት",
+        "channel": "Teams ቻነላት",
+        "calendar": "ካልንደር"
+      },
+      "sourceStatus": {
+        "ok": "ተጠናቀቐ",
+        "partial": "ክፍል",
+        "skipped": "ተረፈ",
+        "unavailable": "ፍቓድ የለን",
+        "error": "ኣልተሳካን"
+      },
+      "degraded": "ኣኬዳ ትንክት ኣይተሰርሓን፣ ምድብታት ብመግባት ብሓደ ሕጋውቲ እዩ ዝመጸ።",
+      "withheld": "{count, plural, one {# ነገር ተኣታተበ} other {# ነገራት ተኣታተበ}} ብ መዳን መስክ ተደፍሐ።",
+      "empty": "ብዝተሓለፈ ዘመንን ብእዚ ምንጪ ምልክታትን ዘይነገረ።",
+      "actionItems": "እተሓሳብ ስራሕታት",
+      "createTasks": "{count, plural, =0 {ብ To Do ይጨናና} one {# ስራሕ ብ To Do ይጨናና} other {# ስራሕታት ብ To Do ይጨናና}}",
+      "taskCreated": "ብ To Do ተጨናነ",
+      "tasksCreated": "{count, plural, one {# ስራሕ} other {# ስራሕታት}} ብ ዝተባህተ \"{list}\" ዝርዝር ተጨናኑ።",
+      "tasksFailed": "ስራሕታት ኣልተፈጠሩን።",
+      "category": {
+        "needsReply": "ምርምላል የሕውናይ",
+        "askedOfMe": "ኣኔ ዝተጠይቀ",
+        "waitingOnOthers": "ንካልኣን ዝተሰዓነ",
+        "scheduling": "ምስካድ",
+        "companyUpdates": "ሓደጋ ኩባንያን ፕሮጀክትን",
+        "fyi": "FYI",
+        "bulk": "ኣውቶማቲክን ዘሕለፍቲን"
+      },
+      "companyUpdatesHint": "ጽቡቕ የሓሳብ፣ ብዙሕ ዘይድለን",
+      "markDone": "{title} ከይተሓለፈ ይህኽል",
+      "badge": {
+        "unanswered": "ዘይተመለሰ",
+        "mentioned": "ንኹሉ ተጠቀምካ",
+        "important": "ክቡር ኣንፈት"
+      },
+      "askAbout": "ናይ እዞም ጠይቅ",
+      "askPrompt": "ናይ {source} ነገር \"{title}\" ካብ {from} ({when}) ብዚ ዝሕሸው መዳሕን፡ ምንታይ ይሓርድ፡ እንታይ ምርምላል ጽቡቕ ከምዚ ይኽእል?",
+      "open": {
+        "mail": "ብ Outlook ክፈት",
+        "chat": "ብ Teams ክፈት",
+        "channel": "ብ Teams ክፈት",
+        "calendar": "ብ Outlook ክፈት"
+      },
+      "footnote": "ምድብታት ካብ ምልክታትካ (ዘይተመለሰ፣ ተጠቃሚ፣ ተተዋዊ)ን ወዲ AI ትንክት ምብልሕ፣ ኣብ ትሕቲ፡ ቅድመ ምንቅስቓስ ይምረጡ። ዐቢት ኣይተላኸን።",
+      "age": {
+        "now": "ኣሓሳስ እዚ",
+        "hours": "{count}ኣ. ቅድሚ",
+        "days": "{count}መዓልቲ ቅድሚ"
+      },
+      "waitForReply": "ኣብሓት ሓድሽ ዝርከብ ምውህባ ዝተወደበ መልሲ ይጨኒ፡ ኣይትጀምር እስኪ digest ትሓዘ."
     }
   },
   "share": {

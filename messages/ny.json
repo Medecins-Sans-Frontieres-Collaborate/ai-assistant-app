@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 tool calls pa tsiku",
       "m365MailReadsPerDay": "Mail omwe akuwerengedwa pa tsiku",
       "m365MailDraftsPerDay": "Mail zotsatira pa tsiku",
-      "m365MailDeepScansPerDay": "Mail deep scans pa tsiku"
+      "m365MailDeepScansPerDay": "Mail deep scans pa tsiku",
+      "m365DigestRunsPerDay": "Digest yatsiku ndi yatsiku"
     },
     "valueModeLabel": "Mtundu wa malire",
     "valueAmountLabel": "Kuchuluka kwa malire",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 tool calls (calendar, people, tasks, Teams) tsiku lililonse. Mukapitirira malire, zida zimabweretsa \"yesaninso mawa\" m'malo mokulephera kulankhula pa chat.",
       "m365MailReadsPerDay": "Kufufuza maimelo ndi kuwerenga mauthenga/ma thread patsiku. Mukapitirira malire, zida za imelo zidzabweretsa \"yesaninso mawa\".",
       "m365MailDraftsPerDay": "Ma email drafts omwe wothandizira akhoza kupanga patsiku — iliyonse imatsimikiziridwa payekha. Malire anaundana mwadala.",
-      "m365MailDeepScansPerDay": "Ma composite mail analyses (digests, deep search, commitments) patsiku. Scan iliyonse ndi budget unit imodzi, mosasamala za ma reads ake."
+      "m365MailDeepScansPerDay": "Ma composite mail analyses (digests, deep search, commitments) patsiku. Scan iliyonse ndi budget unit imodzi, mosasamala za ma reads ake.",
+      "m365DigestRunsPerDay": "Microsoft 365 digest yatsiku ndi yatsiku. Run imodzi imaphatikizapo ma Graph reads ambiri ndi kuitana ku analysis-model kawiri; kusankha nthawi kumapangitsa kuti run izipemphedwa zotsika mtengo, choncho default ndi yokhuta."
     },
     "scopeFamily": "Banja",
     "scopeModel": "Mtundu",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Triage ya m'mawa",
-        "description": "Zomwe zalowa, zomwe zikukudikirani, ndi kalendala ya lero — chidziwitso chimodzi"
+        "description": "Digest kuyambira tsiku lapitali la ntchito — zomwe zabwera, zomwe zikudikirira inu, ma invitations ndi zoyambira; pa Lolemba zimaphatikiza Lachisanu ndi sabata yonse."
       },
       "chipsSettingLabel": "Limbikitsani Microsoft 365 playbooks",
       "chipsSettingHint": "Onetsani malingaliro a playbook pamwamba pa bokosi la uthenga ngati akugwira ntchito (monga mutatengera transcript ya msonkhano).",
-      "dismissChip": "Chotsani {title}"
+      "dismissChip": "Chotsani {title}",
+      "dailyDigest": {
+        "title": "Digest yatsiku",
+        "description": "Sanja ma imelo aposachedwa, ma Teams ndi kalendala malinga ndi zomwe zimafuna inu, zomwe mukudikirira, zatsopano ndi FYI — sankhani nthawi"
+      }
+    },
+    "digest": {
+      "title": "Digest yatsiku",
+      "intro": "Imayang'ana zomwe zafika kwa inu mu nthawi yosankhayi ndikuzisanja kuti: zofuna mayankho, zomwe inu mwafunsidwa, zomwe mukudikirira, za nthawi, zosintha za kampani ndi projekiti, komanso FYI. Palibe zomwe zikutumizidwa kapena kusintha.",
+      "periodLabel": "Nthawi",
+      "preset": {
+        "lastWorkday": "Kuyambira tsiku la ntchito laposachedwa",
+        "1d": "Maola 24 apitawo",
+        "3d": "M'ma masiku 3 apitawo",
+        "7d": "Masiku 7 apitawo",
+        "14d": "Masiku 14 apitawo",
+        "custom": "Mtundu wa nthawi"
+      },
+      "lastWorkdayHint": "Kuyambira tsiku la ntchito laposachedwa lisanafike lero — pa Lolemba zimaphatikizapo Lachisanu ndi sabata.",
+      "from": "Kuyambira",
+      "to": "Mpaka",
+      "customInvalid": "Sankhani nthawi yotsatizana ya masiku osapitirira {days}.",
+      "sourcesLabel": "Magwero",
+      "sourceNoConsent": "Chilolezo sichaperekedwa pa gwero ili.",
+      "sourceHint": {
+        "mail": "Ma envelope a inbox ndi preview; Sent Items anu amatsimikiza zomwe zayankhidwa.",
+        "chat": "Ma Teams chats aposachedwa, ndi @mentions omwe simunawayankhe.",
+        "channel": "Ma post mu ma channel omwe musankha pansipa.",
+        "calendar": "Mwa ma invitation omwe akudikira mayankho anu ndi msonkhano wanu omwe ena sanayankhe."
+      },
+      "channelsLabel": "Ma Channel ({count} mwa {max})",
+      "removeChannel": "Chotsani {name}",
+      "channelsSlow": "Channel iliyonse imawonjezera kuwerenga; kuchuluka kwa channel kumapangitsa digest kutenga nthawi yaitali.",
+      "channelsMax": "Mafikira ambiri a ma channel {max} afika.",
+      "channelsNeeded": "Sankhani channel imodzi kapena onjezani gwero lina.",
+      "teamLabel": "Tim",
+      "loadingTeams": "Tikutsegula ma tim...",
+      "pickTeam": "Sankhani tim kuti muwone ma channel ake",
+      "loadingChannels": "Tikutsegula ma channel...",
+      "noChannels": "Palibe channel zomwe zapezeka mu tim iyi.",
+      "privacyNote": "Zomwe zikuwerengedwa ndi mutu, wotumiza ndi preview; message bodies ndi ma attachment zikhalabe mu Microsoft 365. Zinthu izi ndi mwachidule wa deta yanu.",
+      "cancel": "Fufutani",
+      "run": "Yendetsani digest",
+      "starting": "Ikuyamba...",
+      "startFailed": "Digest yoyamba yanu sizingathe.",
+      "userMessage": "Digest yatsiku — {period}; magwero: {sources}",
+      "working": "Ikuyendera kuti iwerenge zomwe mukulankhula mu Microsoft 365...",
+      "failed": "Digest yapanga zolakwika.",
+      "failedPrefix": "Digest yatsiku yatseka:",
+      "expired": "Digest iyi iyatha. Yendetsani kachiwiri kuti mupeze yatsopano.",
+      "runAgain": "Yendetsani kachiwiri",
+      "changePeriod": "Sinthani nthawi",
+      "period": {
+        "lastWorkday": "kuyambira tsiku la ntchito laposachedwa",
+        "lastDays": "{count, plural, one {tsiku lapitawo} other {masiku # apitawo}}"
+      },
+      "source": {
+        "mail": "Imelo",
+        "chat": "Ma chat a Teams",
+        "channel": "Ma channel a Teams",
+        "calendar": "Kalendala"
+      },
+      "sourceStatus": {
+        "ok": "zatha",
+        "partial": "zachigawo",
+        "skipped": "zapopita",
+        "unavailable": "palibe chilolezo",
+        "error": "zalephera"
+      },
+      "degraded": "Chitsanzo cha kusanthula sichinapezeke, choncho magulu adachokera ku malamulo okha.",
+      "withheld": "{count, plural, one {# chinthu chinapatsidwa kaye} other {# zinthu zinapatsidwa kaye}} ndi zosefa za chitetezo.",
+      "empty": "Palibe choti lipotoledwe pa nthawi ino ndi kuchokera kuzinthu izi.",
+      "actionItems": "Zinthu zochitira",
+      "createTasks": "{count, plural, =0 {Onjezerani ku To Do} one {Onjezerani ntchito # ku To Do} other {Onjezerani ntchito # ku To Do}}",
+      "taskCreated": "zaonjezedwa ku To Do",
+      "tasksCreated": "{count, plural, one {ntchito #} other {ntchito #}} zaonjezedwa mu mndandanda wa \"{list}\".",
+      "tasksFailed": "Sizinathekere kupanga ntchitozi.",
+      "category": {
+        "needsReply": "Ikufunika yankho langa",
+        "askedOfMe": "Ndinafunsidwa",
+        "waitingOnOthers": "Ikudikira ena",
+        "scheduling": "Kuikapo nthawi",
+        "companyUpdates": "Zosintha za kampani ndi projekiti",
+        "fyi": "FYI",
+        "bulk": "Zokha ndi zambiri"
+      },
+      "companyUpdatesHint": "zofunika, zimakhala sizachangu",
+      "markDone": "Onetsani {title} ngati zachita",
+      "badge": {
+        "unanswered": "sadayankhidwe",
+        "mentioned": "anakuponya",
+        "important": "kufunika kwambiri"
+      },
+      "askAbout": "Funsani za izi",
+      "askPrompt": "Za chinthu cha {source} \"{title}\" kuchokera kwa {from} ({when}) m'digest pamwambapa: chiyani chikufunsidwa, ndipo yankho labwino lingakhale chiyani?",
+      "open": {
+        "mail": "Tsegulani mu Outlook",
+        "chat": "Tsegulani mu Teams",
+        "channel": "Tsegulani mu Teams",
+        "calendar": "Tsegulani mu Outlook"
+      },
+      "footnote": "Magulu amachokera ku zizindikiro zanu (sadakuyankhidwe, wakuponya, kutumiza kwa onse) kuwonjezera ku AI classification; tsimikizani musanapangepo kanthu. Palibe chotumizidwa.",
+      "age": {
+        "now": "tsopano",
+        "hours": "{count}h zapitazo",
+        "days": "{count}d zapitazo"
+      },
+      "waitForReply": "Dikirani mpaka yankho likaliza kuti muyambe digest."
     }
   },
   "share": {

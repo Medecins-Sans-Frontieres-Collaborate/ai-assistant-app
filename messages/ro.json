@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Apeluri instrumente Microsoft 365 pe zi",
       "m365MailReadsPerDay": "Citiri e-mail pe zi",
       "m365MailDraftsPerDay": "Ciorne e-mail pe zi",
-      "m365MailDeepScansPerDay": "Scanări detaliate e-mail pe zi"
+      "m365MailDeepScansPerDay": "Scanări detaliate e-mail pe zi",
+      "m365DigestRunsPerDay": "Raport zilnic pe zi"
     },
     "valueModeLabel": "Tip limită",
     "valueAmountLabel": "Valoare limită",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Apeluri ale instrumentelor Microsoft 365 (calendar, persoane, sarcini, Teams) pe zi. Dacă se depășește limita, instrumentele vor returna un mesaj prietenos „încercați din nou mâine” în loc să eșueze conversația.",
       "m365MailReadsPerDay": "Căutări e-mail și citiri de mesaje/fire pe zi. Peste limită, instrumentele mail returnează un mesaj „încercați din nou mâine”.",
       "m365MailDraftsPerDay": "Schimburi de e-mailuri pe care asistentul le poate crea zilnic — fiecare confirmat individual. Limită restrânsă intenționat.",
-      "m365MailDeepScansPerDay": "Analize compuse de e-mail (sumare, căutare detaliată, angajamente) pe zi. Fiecare scanare reprezintă o unitate din buget, indiferent de numărul de citiri interne."
+      "m365MailDeepScansPerDay": "Analize compuse de e-mail (sumare, căutare detaliată, angajamente) pe zi. Fiecare scanare reprezintă o unitate din buget, indiferent de numărul de citiri interne.",
+      "m365DigestRunsPerDay": "Rapoartele zilnice Microsoft 365 pe zi. Un raport implică zeci de citiri Graph și două apeluri pentru analiza modelului; selectorul de perioadă permite reexecutări ușor de cerut, astfel că limita implicită este strictă."
     },
     "scopeFamily": "Familie",
     "scopeModel": "Model",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Triere de dimineață",
-        "description": "Ce a sosit, ce așteaptă de la dvs. și calendarul zilei — totul într-un sumar"
+        "description": "Un rezumat de la ultima zi de lucru — ce a sosit, ce vă așteaptă, invitații și actualizări; lunea acoperă vineri și weekendul."
       },
       "chipsSettingLabel": "Sugerează playbook-uri Microsoft 365",
       "chipsSettingHint": "Afișează sugestii de playbook deasupra casetei de mesaj când se aplică (de exemplu, după importarea unei transcrieri de întâlnire).",
-      "dismissChip": "Respinge {title}"
+      "dismissChip": "Respinge {title}",
+      "dailyDigest": {
+        "title": "Raport zilnic",
+        "description": "Sortează e-mailurile, mesajele Teams și calendarul recente după ce necesită atenția ta, ce aștepți, actualizări și pentru informare — alege perioada"
+      }
+    },
+    "digest": {
+      "title": "Raport zilnic",
+      "intro": "Analizează mesajele primite în perioada aleasă și le sortează în: ce necesită răspuns, ce ți s-a cerut, la ce aștepți un răspuns, programări, actualizări ale companiei și proiectelor, și pentru informare. Nu se trimite nimic și nu se modifică datele.",
+      "periodLabel": "Perioadă",
+      "preset": {
+        "lastWorkday": "De la ultima zi lucrătoare",
+        "1d": "Ultimele 24 de ore",
+        "3d": "Ultimele 3 zile",
+        "7d": "Ultimele 7 zile",
+        "14d": "Ultimele 14 zile",
+        "custom": "Interval personalizat"
+      },
+      "lastWorkdayHint": "De la începutul ultimei zile lucrătoare înainte de azi — luni acoperă vineri și weekendul.",
+      "from": "De la",
+      "to": "Până la",
+      "customInvalid": "Alege un interval ordonat de cel mult {days} zile.",
+      "sourcesLabel": "Surse",
+      "sourceNoConsent": "Permisiunea nu a fost acordată pentru această sursă.",
+      "sourceHint": {
+        "mail": "Plicuri și previzualizări din inbox; elementele din 'Trimise' decid ce este considerat răspuns.",
+        "chat": "Conversații Teams recente, cu @mențiuni la care nu ai răspuns.",
+        "channel": "Postări în canalele selectate mai jos.",
+        "calendar": "Invitații care așteaptă răspunsul tău și întâlniri la care alții nu au răspuns."
+      },
+      "channelsLabel": "Canale ({count} din {max})",
+      "removeChannel": "Elimină {name}",
+      "channelsSlow": "Fiecare canal adaugă citiri; mai multe canale cresc timpul de generare a raportului.",
+      "channelsMax": "A fost atins numărul maxim de {max} canale.",
+      "channelsNeeded": "Alege cel puțin un canal sau adaugă o altă sursă.",
+      "teamLabel": "Echipă",
+      "loadingTeams": "Se încarcă echipele…",
+      "pickTeam": "Alege o echipă pentru a-i afișa canalele",
+      "loadingChannels": "Se încarcă canalele…",
+      "noChannels": "Nu s-au găsit canale în această echipă.",
+      "privacyNote": "Sunt citite doar subiectele, expeditorii și scurte previzualizări; conținutul mesajelor și atașamentele rămân în Microsoft 365. Elementele sunt rezumate ale datelor tale.",
+      "cancel": "Anulează",
+      "run": "Rulare raport",
+      "starting": "Se pornește…",
+      "startFailed": "Raportul nu a putut fi pornit.",
+      "userMessage": "Raport zilnic — {period}; surse: {sources}",
+      "working": "Se scanează comunicațiile din Microsoft 365…",
+      "failed": "Raportul a eșuat.",
+      "failedPrefix": "Raportul zilnic a eșuat:",
+      "expired": "Acest raport a expirat. Rulează din nou pentru unul actualizat.",
+      "runAgain": "Rulează din nou",
+      "changePeriod": "Schimbă perioada",
+      "period": {
+        "lastWorkday": "de la ultima zi lucrătoare",
+        "lastDays": "{count, plural, one {ultima zi} other {ultimele # zile}}"
+      },
+      "source": {
+        "mail": "E-mail",
+        "chat": "Conversații Teams",
+        "channel": "Canale Teams",
+        "calendar": "Calendar"
+      },
+      "sourceStatus": {
+        "ok": "complet",
+        "partial": "parțial",
+        "skipped": "omis",
+        "unavailable": "fără permisiune",
+        "error": "eșuat"
+      },
+      "degraded": "Modelul de analiză nu a fost disponibil, astfel că categoriile provin doar din reguli.",
+      "withheld": "{count, plural, one {# articol a fost} other {# articole au fost}} reținute de filtrele de siguranță.",
+      "empty": "Nimic de raportat pentru această perioadă și aceste surse.",
+      "actionItems": "Sarcini de acțiune",
+      "createTasks": "{count, plural, =0 {Adaugă în To Do} one {Adaugă # sarcină în To Do} other {Adaugă # sarcini în To Do}}",
+      "taskCreated": "adăugat în To Do",
+      "tasksCreated": "{count, plural, one {# sarcină} other {# sarcini}} adăugate în lista \"{list}\".",
+      "tasksFailed": "Nu s-au putut crea sarcinile.",
+      "category": {
+        "needsReply": "Necesită răspunsul meu",
+        "askedOfMe": "Solicitate de la mine",
+        "waitingOnOthers": "Aștept de la alții",
+        "scheduling": "Programare",
+        "companyUpdates": "Actualizări companie și proiect",
+        "fyi": "Doar informare",
+        "bulk": "Automat și în masă"
+      },
+      "companyUpdatesHint": "important, rareori urgent",
+      "markDone": "Marchează {title} ca gestionat",
+      "badge": {
+        "unanswered": "fără răspuns",
+        "mentioned": "te-a menționat",
+        "important": "importanță mare"
+      },
+      "askAbout": "Întreabă despre acest lucru",
+      "askPrompt": "Despre elementul {source} „{title}” de la {from} ({when}) din sumarul de mai sus: ce se solicită și cum ar arăta un răspuns potrivit?",
+      "open": {
+        "mail": "Deschide în Outlook",
+        "chat": "Deschide în Teams",
+        "channel": "Deschide în Teams",
+        "calendar": "Deschide în Outlook"
+      },
+      "footnote": "Categoriile provin din semnalele proprii (fără răspuns, menționat, difuzare) plus clasificarea AI; verifică înainte de a acționa. Nu s-a trimis nimic.",
+      "age": {
+        "now": "chiar acum",
+        "hours": "acum {count}h",
+        "days": "acum {count}z"
+      },
+      "waitForReply": "Așteptați finalizarea răspunsului curent înainte de a începe un rezumat."
     }
   },
   "share": {

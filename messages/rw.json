@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 tool calls ku munsi",
       "m365MailReadsPerDay": "Ibikorwa byo gusoma email ku munsi",
       "m365MailDraftsPerDay": "Ibigereranyo bya email ku munsi",
-      "m365MailDeepScansPerDay": "Gusuzuma emails byimbitse ku munsi"
+      "m365MailDeepScansPerDay": "Gusuzuma emails byimbitse ku munsi",
+      "m365DigestRunsPerDay": "Digest ya buri munsi iboneka buri munsi"
     },
     "valueModeLabel": "Ubwoko bw'umupaka",
     "valueAmountLabel": "Ingano yumupaka",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "Ukoresha ibikoresho bya Microsoft 365 (kalendari, abantu, imirimo, Teams) ku munsi. Nurenga urugero, ibikoresho bisubiza 'gerageza ejo' aho kunanirwa.",
       "m365MailReadsPerDay": "Gushakisha no gusoma ubutumwa/biganiro ku munsi. Nurenga urugero, ibikoresho by'ubutumwa bisubiza 'gerageza ejo'.",
       "m365MailDraftsPerDay": "Imyiteguro y'ubutumwa bwandikirwa buri munsi—buri kimwe kimenyeshwa ukwacyo. Umubare ugenzurwa cyane.",
-      "m365MailDeepScansPerDay": "Isesengura ryimbitse ry'ubutumwa (digests, deep search, commitments) ku munsi. Buri scan ifatwa nk'ingengo y'imari imwe, utitaye ku mubare w'ubusoma buyirimo."
+      "m365MailDeepScansPerDay": "Isesengura ryimbitse ry'ubutumwa (digests, deep search, commitments) ku munsi. Buri scan ifatwa nk'ingengo y'imari imwe, utitaye ku mubare w'ubusoma buyirimo.",
+      "m365DigestRunsPerDay": "Digest ya Microsoft 365 ya buri munsi. Igikorwa kimwe kirimo gusoma Graph kenshi n'inshuro ebyiri zo gukoresha analysis-model; gufata igihe n'ubundi bituma gahunda zo gusubiramo zizagara byoroshye, bityo umubare wemewe ni muto."
     },
     "scopeFamily": "Urugo",
     "scopeModel": "Model",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Gutoranya ibisabwa mu gitondo",
-        "description": "Ibyinjiye, ibikigukeneyeho, na kalendari y'uyu munsi — raporo imwe"
+        "description": "Digest kuva ku munsi w'akazi waherukaga — ibyagezeho, ibikiri kugutegereza, ubutumire n'amakuru mashya; ku wa Munsi ikubiyemo ibyo ku wa Gatanu n'iminsi y'agahumeko."
       },
       "chipsSettingLabel": "Tanga ibyifuzo bya Microsoft 365 playbooks",
       "chipsSettingHint": "Garagaza inama za playbook hejuru ya message box igihe zibaye zikenewe (nko nyuma yo kwinjiza transcript y’inama).",
-      "dismissChip": "Hisha {title}"
+      "dismissChip": "Hisha {title}",
+      "dailyDigest": {
+        "title": "Digest ya buri munsi",
+        "description": "Shungura email ziheruka, Teams n'irangaminsi ukurikije ibyo ukeneye, ibyo utegereje, amakuru mashya n'amabwiriza — hitamo igihe"
+      }
+    },
+    "digest": {
+      "title": "Digest ya buri munsi",
+      "intro": "Gusuzuma ibyo wahawe muri icyo gihe bigashyirwa mu byasaba igisubizo, ibyagusanze, ibyo utegereje, gahunda, amakuru y'ikigo n'umushinga, n'amabwiriza. Nta kintu gishya cyangwa gihindurwa.",
+      "periodLabel": "Igihe",
+      "preset": {
+        "lastWorkday": "Bivuye ku munsi wa nyuma w'akazi",
+        "1d": "Amasaha 24 ashize",
+        "3d": "Iminsi 3 ishize",
+        "7d": "Iminsi 7 ishize",
+        "14d": "Iminsi 14 ishize",
+        "custom": "Igihe ushaka"
+      },
+      "lastWorkdayHint": "Uhereye ku itangira ry'umunsi wa nyuma w'akazi mbere y'uyu munsi — ku wa mbere birimo n'umugoroba wo ku wa gatanu n'impera y'icyumweru.",
+      "from": "Uhereye",
+      "to": "Ugeza",
+      "customInvalid": "Hitamo igihe kigizwe n'iminsi igera kuri {days} kandi ishyizwe mu rwego.",
+      "sourcesLabel": "Inkomoko",
+      "sourceNoConsent": "Uruhushya ntirwahawe iyi nkomoko.",
+      "sourceHint": {
+        "mail": "Envelopes ziheruka mu Inbox na previews; Sent Items zawe zerekana ibisubijwe.",
+        "chat": "Imiyoboro ya Teams iheruka, hamwe n'aho wabonye @mentions utarasubiza.",
+        "channel": "Ibyanditswe mu miyoboro wahisemo hepfo.",
+        "calendar": "Ubutumire busaba igisubizo cyawe n'inama zawe abandi batarasubiza."
+      },
+      "channelsLabel": "Imiyoboro ({count} kuri {max})",
+      "removeChannel": "Kura {name}",
+      "channelsSlow": "Buri muyoboro wongera gusoma; uko wiyongeraho imiyoboro, digest irinda gufata igihe kinini.",
+      "channelsMax": "Imiyoboro ntarengwa {max} imaze kugerwaho.",
+      "channelsNeeded": "Hitamo nibura umwe, cyangwaongera indi nkomoko.",
+      "teamLabel": "Itsinda",
+      "loadingTeams": "Birimo gufungura amatsinda…",
+      "pickTeam": "Hitamo itsinda kugira ngo urondore imiyoboro",
+      "loadingChannels": "Birimo gufungura imiyoboro…",
+      "noChannels": "Nta muyoboro wabonetse muri iri tsinda.",
+      "privacyNote": "Hasomwa gusa umutwe w'ubutumwa, uwatwohereje n'igice kigufi cy'amakuru; imibiri y'ubutumwa n'ibifatika bigumira muri Microsoft 365. Ibyo bigaragaza ishusho rusange y'ibyawe.",
+      "cancel": "Hagarika",
+      "run": "Tangira digest",
+      "starting": "Birimo gutangira…",
+      "startFailed": "Digest ntishoboye gutangira.",
+      "userMessage": "Digest ya buri munsi — {period}; inkomoko: {sources}",
+      "working": "Birimo gusuzuma itumanaho ryawe muri Microsoft 365…",
+      "failed": "Digest ntiyagenze neza.",
+      "failedPrefix": "Digest ya buri munsi yananiranye:",
+      "expired": "Digest yabaye imaze igihe. Ongera uyikore kugirango ubone nshya.",
+      "runAgain": "Subiramo",
+      "changePeriod": "Hindura igihe",
+      "period": {
+        "lastWorkday": "kuva ku munsi wa nyuma w'akazi",
+        "lastDays": "{count, plural, one {umunsi ushize} other {iminsi # ishize}}"
+      },
+      "source": {
+        "mail": "Email",
+        "chat": "Imiyoboro ya Teams",
+        "channel": "Imiyoboro ya Teams",
+        "calendar": "Kalendari"
+      },
+      "sourceStatus": {
+        "ok": "cyuzuye",
+        "partial": "igice",
+        "skipped": "byasimbuwe",
+        "unavailable": "nta burenganzira",
+        "error": "byanze"
+      },
+      "degraded": "Moderi y'isuzuma ntiyaboneka, byemejwe n'amategeko gusa.",
+      "withheld": "{count, plural, one {# kimwe cyafanzwe} other {# bimwe byafanzwe}} n'ubwirinzi.",
+      "empty": "Nta makuru yo gutanga muri iki gihe no kuri aya masoko.",
+      "actionItems": "Inshingano",
+      "createTasks": "{count, plural, =0 {Ongeramo muri To Do} one {Ongeramo # inshingano muri To Do} other {Ongeramo # inshingano muri To Do}}",
+      "taskCreated": "byongewe muri To Do",
+      "tasksCreated": "{count, plural, one {# inshingano} other {# inshingano}} byongewe kuri lisiti \"{list}\".",
+      "tasksFailed": "Inshingano ntizikoze.",
+      "category": {
+        "needsReply": "Bisaba igisubizo",
+        "askedOfMe": "Biransabwe",
+        "waitingOnOthers": "Ndategereje abandi",
+        "scheduling": "Gushiraho gahunda",
+        "companyUpdates": "Amakuru kuri sosiyete n'umushinga",
+        "fyi": "FYI",
+        "bulk": "Byikora kandi byinshi"
+      },
+      "companyUpdatesHint": "bikomeye, bikunda kutihutirwa",
+      "markDone": "Shyira {title} nk'icyakozwe",
+      "badge": {
+        "unanswered": "ntigisubijwe",
+        "mentioned": "bakuvuzeho",
+        "important": "bifite akamaro"
+      },
+      "askAbout": "Baza kuri ibi",
+      "askPrompt": "Kuri {source} \"{title}\" yatanzwe na {from} ({when}) muri digest: ni iki kibazwa, kandi igisubizo cyiza cyaba ikihe?",
+      "open": {
+        "mail": "Fungura muri Outlook",
+        "chat": "Fungura muri Teams",
+        "channel": "Fungura muri Teams",
+        "calendar": "Fungura muri Outlook"
+      },
+      "footnote": "Ibyiciro biva ku bimenyetso byawe (ntigisubijwe, bakuvuzeho, broadcast) hamwe n'iyashyizweho na AI; menya neza mbere yo gukora. Nta cyoherejwe.",
+      "age": {
+        "now": "ubu nyine",
+        "hours": "Imyaka {count}h ishize",
+        "days": "Imyaka {count}d ishize"
+      },
+      "waitForReply": "Tegereza igisubizo kiriho kirangire mbere yo gutangiza digest."
     }
   },
   "share": {

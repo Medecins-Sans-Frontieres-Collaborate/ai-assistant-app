@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Počet volání nástrojů Microsoft 365 za den",
       "m365MailReadsPerDay": "Čtení pošty za den",
       "m365MailDraftsPerDay": "Návrhy pošty za den",
-      "m365MailDeepScansPerDay": "Hloubkové skeny pošty za den"
+      "m365MailDeepScansPerDay": "Hloubkové skeny pošty za den",
+      "m365DigestRunsPerDay": "Denní počet spuštění souhrnu"
     },
     "valueModeLabel": "Typ limitu",
     "valueAmountLabel": "Množství limitu",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Počet denních volání nástrojů Microsoft 365 (kalendář, lidé, úkoly, Teams). Při překročení limitu vrací nástroje místo chyby přívětivou zprávu „zkuste to zítra znovu“.",
       "m365MailReadsPerDay": "Denní vyhledávání v e-mailech a čtení zpráv/vláken. Při překročení limitu vrátí poštovní nástroje zprávu „zkuste to zítra znovu“.",
       "m365MailDraftsPerDay": "Návrhy e-mailů, které může asistent denně vytvořit — každý je zvlášť potvrzen. Omezení je záměrně přísné.",
-      "m365MailDeepScansPerDay": "Složené analýzy e-mailů (souhrny, hluboké vyhledávání, závazky) za den. Každý sken je jedna jednotka, nezávisle na počtu vnitřních čtení."
+      "m365MailDeepScansPerDay": "Složené analýzy e-mailů (souhrny, hluboké vyhledávání, závazky) za den. Každý sken je jedna jednotka, nezávisle na počtu vnitřních čtení.",
+      "m365DigestRunsPerDay": "Microsoft 365 denný souhrn spuštění za den. Jedno spuštění znamená desítky čtení Graph a dvě volání analýzy modelu; výběr období umožňuje snadné opakování, proto je výchozí limit přísný."
     },
     "scopeFamily": "Rodina",
     "scopeModel": "Model",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Ranní třídění",
-        "description": "Co přišlo, co na vás čeká a dnešní kalendář — jedno shrnutí"
+        "description": "Souhrn od posledního pracovního dne — co přišlo, co čeká na vás, pozvánky a aktualizace; v pondělí zahrnuje pátek a víkend."
       },
       "chipsSettingLabel": "Navrhovat Microsoft 365 playbooky",
       "chipsSettingHint": "Zobrazit návrhy Playbooku nad polem zprávy, pokud jsou relevantní (např. po importu přepisu schůzky).",
-      "dismissChip": "Zavřít {title}"
+      "dismissChip": "Zavřít {title}",
+      "dailyDigest": {
+        "title": "Denní souhrn",
+        "description": "Seřaďte nedávné e-maily, Teams a kalendář podle toho, co potřebuje vaši reakci, na co čekáte, aktualizací a informací — vyberte období"
+      }
+    },
+    "digest": {
+      "title": "Denní souhrn",
+      "intro": "Prohlédne, co vás v daném období oslovilo, a roztřídí to na položky vyžadující odpověď, požadavky na vás, položky na které čekáte, plánování, firemní a projektové aktualizace a informativní zprávy. Nic není odesláno ani změněno.",
+      "periodLabel": "Období",
+      "preset": {
+        "lastWorkday": "Od posledního pracovního dne",
+        "1d": "Posledních 24 hodin",
+        "3d": "Poslední 3 dny",
+        "7d": "Posledních 7 dní",
+        "14d": "Posledních 14 dní",
+        "custom": "Vlastní rozsah"
+      },
+      "lastWorkdayHint": "Od začátku posledního všedního dne před dneškem — v pondělí zahrnuje pátek a víkend.",
+      "from": "Od",
+      "to": "Do",
+      "customInvalid": "Vyberte uspořádaný rozsah maximálně {days} dní.",
+      "sourcesLabel": "Zdroje",
+      "sourceNoConsent": "Tento zdroj nemá udělené oprávnění.",
+      "sourceHint": {
+        "mail": "Obálky a náhledy v doručené poště; položky v Odeslaných určují, co je označeno jako zodpovězené.",
+        "chat": "Nedávné Teams zprávy s @zmínkami, na které jste neodpověděli.",
+        "channel": "Příspěvky ve kanálech, které si vyberete níže.",
+        "calendar": "Pozvánky čekající na vaši reakci a schůzky, na které dosud neodpověděli ostatní."
+      },
+      "channelsLabel": "Kanály ({count} z {max})",
+      "removeChannel": "Odebrat {name}",
+      "channelsSlow": "Každý kanál přidává čtení; více kanálů znamená delší zpracování souhrnu.",
+      "channelsMax": "Byl dosažen maximální počet {max} kanálů.",
+      "channelsNeeded": "Vyberte alespoň jeden kanál nebo přidejte další zdroj.",
+      "teamLabel": "Tým",
+      "loadingTeams": "Načítání týmů…",
+      "pickTeam": "Vyberte tým pro zobrazení jeho kanálů",
+      "loadingChannels": "Načítání kanálů…",
+      "noChannels": "V tomto týmu nebyly nalezeny žádné kanály.",
+      "privacyNote": "Čteny jsou pouze předměty, odesílatelé a krátké náhledy; těla zpráv a přílohy zůstávají v Microsoft 365. Položky jsou souhrny vašich vlastních dat.",
+      "cancel": "Zrušit",
+      "run": "Spustit souhrn",
+      "starting": "Spouštím…",
+      "startFailed": "Souhrn nelze spustit.",
+      "userMessage": "Denní souhrn — {period}; zdroje: {sources}",
+      "working": "Prohledávám vaši komunikaci v Microsoft 365…",
+      "failed": "Souhrn selhal.",
+      "failedPrefix": "Denní souhrn selhal:",
+      "expired": "Toto spuštění souhrnu vypršelo. Spusťte jej znovu pro aktuální přehled.",
+      "runAgain": "Spustit znovu",
+      "changePeriod": "Změnit období",
+      "period": {
+        "lastWorkday": "od posledního pracovního dne",
+        "lastDays": "{count, plural, one {poslední den} other {posledních # dní}}"
+      },
+      "source": {
+        "mail": "Pošta",
+        "chat": "Teams zprávy",
+        "channel": "Teams kanály",
+        "calendar": "Kalendář"
+      },
+      "sourceStatus": {
+        "ok": "dokončeno",
+        "partial": "částečně",
+        "skipped": "přeskočeno",
+        "unavailable": "bez oprávnění",
+        "error": "neúspěšné"
+      },
+      "degraded": "Analytický model nebyl dostupný, kategorie jsou proto pouze podle pravidel.",
+      "withheld": "{count, plural, one {# položka byla} other {# položek bylo}} zadrženo bezpečnostními kontrolami.",
+      "empty": "Za toto období a z těchto zdrojů nejsou k dispozici žádné informace.",
+      "actionItems": "Akční položky",
+      "createTasks": "{count, plural, =0 {Přidat do To Do} one {Přidat # úkol do To Do} other {Přidat # úkolů do To Do}}",
+      "taskCreated": "přidáno do To Do",
+      "tasksCreated": "{count, plural, one {# úkol} other {# úkolů}} přidán do seznamu \"{list}\".",
+      "tasksFailed": "Úkoly se nepodařilo vytvořit.",
+      "category": {
+        "needsReply": "Vyžaduje mou odpověď",
+        "askedOfMe": "Žádost o moji akci",
+        "waitingOnOthers": "Čeká se na ostatní",
+        "scheduling": "Plánování",
+        "companyUpdates": "Firemní a projektové novinky",
+        "fyi": "Pro informaci",
+        "bulk": "Automatické a hromadné"
+      },
+      "companyUpdatesHint": "důležité, málokdy urgentní",
+      "markDone": "Označit {title} za vyřízené",
+      "badge": {
+        "unanswered": "bez odpovědi",
+        "mentioned": "zmínil vás",
+        "important": "vysoká důležitost"
+      },
+      "askAbout": "Zjistit více",
+      "askPrompt": "K položce {source} \"{title}\" od {from} ({when}) výše v přehledu: na co se ptá a jaká by byla vhodná odpověď?",
+      "open": {
+        "mail": "Otevřít v Outlooku",
+        "chat": "Otevřít v Teams",
+        "channel": "Otevřít v Teams",
+        "calendar": "Otevřít v Outlooku"
+      },
+      "footnote": "Kategorie vycházejí z vašich vlastních signálů (bez odpovědi, zmínky, hromadné) a z AI klasifikace; před akcí ověřte. Nic nebylo odesláno.",
+      "age": {
+        "now": "právě teď",
+        "hours": "před {count}h",
+        "days": "před {count}d"
+      },
+      "waitForReply": "Počkejte, až aktuální odpověď bude dokončena, než začnete vytvářet souhrn."
     }
   },
   "share": {

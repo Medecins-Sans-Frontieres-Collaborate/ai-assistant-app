@@ -5722,7 +5722,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 每日工具调用次数",
       "m365MailReadsPerDay": "每日邮件读取次数",
       "m365MailDraftsPerDay": "每日邮件草稿次数",
-      "m365MailDeepScansPerDay": "每日邮件深度扫描次数"
+      "m365MailDeepScansPerDay": "每日邮件深度扫描次数",
+      "m365DigestRunsPerDay": "每日摘要运行次数"
     },
     "valueModeLabel": "限额类型",
     "valueAmountLabel": "限额数量",
@@ -5800,7 +5801,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 工具每天调用次数（日历、联系人、任务、Teams）。超出限制后，工具会返回友好的“请明天重试”提示，而不会导致对话失败。",
       "m365MailReadsPerDay": "每天的邮件搜索及邮件/会话读取次数。超出限制后，邮件工具会返回“请明天重试”提示。",
       "m365MailDraftsPerDay": "助手每天可创建的邮件草稿数——每个均需单独确认，配额有限。",
-      "m365MailDeepScansPerDay": "每天的综合邮件分析（摘要、深度搜索、承诺）。每次分析计为一个预算单位，与内部读取次数无关。"
+      "m365MailDeepScansPerDay": "每天的综合邮件分析（摘要、深度搜索、承诺）。每次分析计为一个预算单位，与内部读取次数无关。",
+      "m365DigestRunsPerDay": "Microsoft 365 每日摘要运行次数。一次运行包含多次 Graph 读取和两次分析模型调用；周期选择器让复运行变得容易，因此默认限制较严。"
     },
     "scopeFamily": "系列",
     "scopeModel": "模型",
@@ -6535,11 +6537,118 @@
       },
       "morningTriage": {
         "title": "早间梳理",
-        "description": "新收到的、待您处理的、以及当天日程——一份简报"
+        "description": "自上一个工作日以来的摘要——新收到的信息、待处理事项、邀请和更新；如为周一，则涵盖上周五及周末内容"
       },
       "chipsSettingLabel": "建议 Microsoft 365 剧本",
       "chipsSettingHint": "在消息框上方显示适用的操作手册建议（例如，导入会议记录后）。",
-      "dismissChip": "关闭 {title}"
+      "dismissChip": "关闭 {title}",
+      "dailyDigest": {
+        "title": "每日摘要",
+        "description": "将最近的邮件、Teams 和日历整理为待您处理、待回复、更新和仅供参考——可选择时间段"
+      }
+    },
+    "digest": {
+      "title": "每日摘要",
+      "intro": "扫描您在指定时间内收到的信息，并分类为待回复、分配给您的任务、您在等待的事项、日程安排、公司和项目更新，以及仅供参考。不会发送或更改任何内容。",
+      "periodLabel": "时间段",
+      "preset": {
+        "lastWorkday": "自上个工作日以来",
+        "1d": "过去 24 小时",
+        "3d": "过去 3 天",
+        "7d": "过去 7 天",
+        "14d": "过去 14 天",
+        "custom": "自定义范围"
+      },
+      "lastWorkdayHint": "从今天之前最近的工作日开始——如遇周一，则涵盖上周五及周末。",
+      "from": "起始",
+      "to": "结束",
+      "customInvalid": "请选择不超过 {days} 天的有序范围。",
+      "sourcesLabel": "来源",
+      "sourceNoConsent": "未授权访问该来源。",
+      "sourceHint": {
+        "mail": "收件箱信封及预览；已回复邮件以发件箱为准。",
+        "chat": "最近的 Teams 聊天及您未回复的 @提及。",
+        "channel": "您在下方选择的频道帖子。",
+        "calendar": "待您回复的邀请及他人未回复的会议。"
+      },
+      "channelsLabel": "频道（{count} / {max}）",
+      "removeChannel": "移除 {name}",
+      "channelsSlow": "每增加一个频道都会增加读取次数；频道越多，摘要生成越慢。",
+      "channelsMax": "已达到最多 {max} 个频道。",
+      "channelsNeeded": "请至少选择一个频道，或添加其他来源。",
+      "teamLabel": "团队",
+      "loadingTeams": "正在加载团队…",
+      "pickTeam": "请选择团队以列出其频道",
+      "loadingChannels": "正在加载频道…",
+      "noChannels": "该团队下未找到频道。",
+      "privacyNote": "只读取主题、发件人和简短预览；正文和附件保留在 Microsoft 365 中。项为您个人数据摘要。",
+      "cancel": "取消",
+      "run": "运行摘要",
+      "starting": "正在启动…",
+      "startFailed": "无法启动摘要。",
+      "userMessage": "每日摘要 — {period}；来源：{sources}",
+      "working": "正在扫描您的 Microsoft 365 通讯…",
+      "failed": "摘要失败。",
+      "failedPrefix": "每日摘要失败：",
+      "expired": "本次摘要已过期。如需最新内容，请重新运行。",
+      "runAgain": "重新运行",
+      "changePeriod": "修改时间段",
+      "period": {
+        "lastWorkday": "自上个工作日以来",
+        "lastDays": "{count, plural, one {过去 1 天} other {过去 # 天}}"
+      },
+      "source": {
+        "mail": "邮件",
+        "chat": "Teams 聊天",
+        "channel": "Teams 频道",
+        "calendar": "日历"
+      },
+      "sourceStatus": {
+        "ok": "已完成",
+        "partial": "部分完成",
+        "skipped": "已跳过",
+        "unavailable": "无权限",
+        "error": "失败"
+      },
+      "degraded": "分析模型不可用，仅依据规则归类。",
+      "withheld": "{count, plural, one {# 项被} other {# 项被}}安全筛选屏蔽。",
+      "empty": "该期间与这些来源无内容可报告。",
+      "actionItems": "待办事项",
+      "createTasks": "{count, plural, =0 {添加到 To Do} one {将 # 个任务添加到 To Do} other {将 # 个任务添加到 To Do}}",
+      "taskCreated": "已添加到 To Do",
+      "tasksCreated": "{count, plural, one {# 个任务} other {# 个任务}}已添加到“{list}”列表。",
+      "tasksFailed": "无法创建任务。",
+      "category": {
+        "needsReply": "需要我回复",
+        "askedOfMe": "请求我处理",
+        "waitingOnOthers": "等待他人",
+        "scheduling": "日程安排",
+        "companyUpdates": "公司及项目更新",
+        "fyi": "供参考",
+        "bulk": "自动及批量"
+      },
+      "companyUpdatesHint": "重要，但少有紧急",
+      "markDone": "将{title}标记为已处理",
+      "badge": {
+        "unanswered": "未回复",
+        "mentioned": "提及了你",
+        "important": "高重要性"
+      },
+      "askAbout": "咨询此项",
+      "askPrompt": "关于上述摘要中来自{from}（{when}）的 {source} 项“{title}”：询问内容是什么，理想的回复是什么？",
+      "open": {
+        "mail": "在 Outlook 中打开",
+        "chat": "在 Teams 中打开",
+        "channel": "在 Teams 中打开",
+        "calendar": "在 Outlook 中打开"
+      },
+      "footnote": "分类基于信号（未回复、提及、广播）与 AI 分类，请操作前自行核实。未发送任何内容。",
+      "age": {
+        "now": "刚刚",
+        "hours": "{count}小时前",
+        "days": "{count}天前"
+      },
+      "waitForReply": "请等待当前回复完成后再开始摘要。"
     }
   },
   "share": {

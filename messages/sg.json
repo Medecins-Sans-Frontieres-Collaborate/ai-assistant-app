@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Appel ti outil Microsoft 365 par jour",
       "m365MailReadsPerDay": "Lecture ti courrier par jour",
       "m365MailDraftsPerDay": "Bê ti rédaction ti courrier par jour",
-      "m365MailDeepScansPerDay": "Bê ti scan approfondi ti courrier par jour"
+      "m365MailDeepScansPerDay": "Bê ti scan approfondi ti courrier par jour",
+      "m365DigestRunsPerDay": "Zinga na mbëtï na téne na yeke pasi"
     },
     "valueModeLabel": "Zoni tî nzoni",
     "valueAmountLabel": "Zöngö tî nzoni",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "M365 tool sô hudu bï tî kalendä, molenge, zwä, Teams bï lönji. Sô yeke na mbi kïri, tool a teni \"bo sô mâle\" da, ndakü kombere tângbô.",
       "m365MailReadsPerDay": "Söngö tî mail na nzönî/ngangu bï lönji. Sô mbi kïri, tool tî mail a teni \"bo sô mâle\" da.",
       "m365MailDraftsPerDay": "Mail draft sô assistant a kunna bï lönji na yeke gï. Yëngö sô mbeni bi ködä.",
-      "m365MailDeepScansPerDay": "Analiz tî mail sô gbû (digest, deep search, commitments) bï lönji. Analiz sî kötä mbi kïri ndö, tool sô na lo ape."
+      "m365MailDeepScansPerDay": "Analiz tî mail sô gbû (digest, deep search, commitments) bï lönji. Analiz sî kötä mbi kïri ndö, tool sô na lo ape.",
+      "m365DigestRunsPerDay": "Microsoft 365 zinga na mbëtï na téne na yeke pasi. Yeke pasi e lingbi kété na ndokua na Graph na yeke gbanga mo na mbînda analysis-model; mo na period picker na yeke maboko, ngangu na default na yeke ngbanga."
     },
     "scopeFamily": "Famili",
     "scopeModel": "Modèle",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Triage na mbëtï",
-        "description": "Mba zo kodro, mba bé zî na lo, na calendrier ti lo le ti lo kêtê — brîfin yê mô."
+        "description": "Digest tî saa bako na bâa—mbênî tî mo yeke, mbênî ti mo la ti bâa, invite na updates; na Monde, digest na bara na Vendredi na week-end."
       },
       "chipsSettingLabel": "Zî playbooks ti Microsoft 365",
       "chipsSettingHint": "Fâara playbook tî nzönî na mo sô âmbênî sô ngbê, mo yeke na mbi bale mo kêtê yângâ (ex: bêndê sô mo ti lo transcript tî réunion).",
-      "dismissChip": "Kûâ {title}"
+      "dismissChip": "Kûâ {title}",
+      "dailyDigest": {
+        "title": "Zinga na mbëtï na téne",
+        "description": "Gbéngö mail, Teams na calendar mo na yeke na ko na yeke bé ti mo, mo na yeke bé mo sé sï, na ngangu na sï na mo na yeke Sï na FYI — ko period"
+      }
+    },
+    "digest": {
+      "title": "Zinga na mbëtï na téne",
+      "intro": "Na yeke gbéngö na mo na yeke na period na yeke ndokua mo na yeke bé ti mo na yeke bé a sï, mo na yeke bé a sï ti mo, mo na yeke bé mo sé sï, na scheduling, company na project updates na FYI. A zinga ayeke na yeke kéré na ayeke sï.",
+      "periodLabel": "Period",
+      "preset": {
+        "lastWorkday": "Képe na yeke sï na tî mo",
+        "1d": "Zinga na mbëtï 24h",
+        "3d": "Zinga na mbëtï 3 na lï",
+        "7d": "Zinga na mbëtï 7 na lï",
+        "14d": "Zinga na mbëtï 14 na lï",
+        "custom": "Ngangu na yeke sï"
+      },
+      "lastWorkdayHint": "Képe na yeke sï na weekday mo nyini — na Monday na yeke Friday na weekend.",
+      "from": "Na",
+      "to": "Ôko",
+      "customInvalid": "Ko ngangu na yeke ndokua na yeke té {days} na lï.",
+      "sourcesLabel": "Sources",
+      "sourceNoConsent": "Mo na yeke maboko na source ti mo.",
+      "sourceHint": {
+        "mail": "Inbox envelopes na previews; Sent Items ti mo na yeke bé mo sï.",
+        "chat": "Teams chats na yeke ngbakê mo, na @mentions mo na yeke bé mo sï.",
+        "channel": "Posts na channels mo na yeke bé ti mo ka.",
+        "calendar": "Invitation na yeke bé mo sï na gbangu ti mo na yeke bé bé ti mo sï."
+      },
+      "channelsLabel": "Channels ({count} na {max})",
+      "removeChannel": "Kpunga {name}",
+      "channelsSlow": "Channel na yeke duma na yeke ndokua; na ngbanga na channels na yeke ndokua na téne na yeke tîa a ti",
+      "channelsMax": "Na yeke max {max} channels na yeke bé.",
+      "channelsNeeded": "Ko yeke channel na ôko, mo ko source na yeke bé.",
+      "teamLabel": "Team",
+      "loadingTeams": "Na yeke ndokua teams...",
+      "pickTeam": "Ko yeke team na na yeke channels ti mo",
+      "loadingChannels": "Na yeke ndokua channels...",
+      "noChannels": "Channel ayeke na team ti mo.",
+      "privacyNote": "A yeke ndokua mo na subject, senders na previews na yeke bé; message bodies na attachments na yeke na Microsoft 365. Item na yeke summary ti data ti mo.",
+      "cancel": "Funga",
+      "run": "Na yeke téne",
+      "starting": "Na yeke kété...",
+      "startFailed": "Na yeke téne ayeke na kété.",
+      "userMessage": "Zinga na mbëtï na téne — {period}; sources: {sources}",
+      "working": "Na yeke gbéngö communications Microsoft 365 ti mo...",
+      "failed": "Na yeke téne ayeke.",
+      "failedPrefix": "Zinga na mbëtï na téne ayeke:",
+      "expired": "Na yeke téne ayeke na yeke ndokua. Na yeke téne na ngangu na na yeke bé.",
+      "runAgain": "Na yeke téne na ngangu",
+      "changePeriod": "Ko period",
+      "period": {
+        "lastWorkday": "képé na yeke sï na tî mo",
+        "lastDays": "{count, plural, one {yeke lï na sï} other {yeke # na lï}}"
+      },
+      "source": {
+        "mail": "Mail",
+        "chat": "Teams chats",
+        "channel": "Teams channels",
+        "calendar": "Kalende"
+      },
+      "sourceStatus": {
+        "ok": "yamuso",
+        "partial": "ngbangui",
+        "skipped": "bînga",
+        "unavailable": "ngé kwé na yeke",
+        "error": "afinga"
+      },
+      "degraded": "Modeli ti análise ayeke, na kategori ti lo na règle gusa.",
+      "withheld": "{count, plural, one {# item ti yeke} other {# items ti yeke}} ti ayeke na écran ti sécurité.",
+      "empty": "Tene ala ti fadere na periyode mbi na mbundu na.",
+      "actionItems": "Fadere ti abara",
+      "createTasks": "{count, plural, =0 {Gbazila na To Do} one {Gbazila # abara na To Do} other {Gbazila # abara na To Do}}",
+      "taskCreated": "ayeke na To Do",
+      "tasksCreated": "{count, plural, one {# abara} other {# abara}} ti ayeke na list \"{list}\".",
+      "tasksFailed": "Abara ayeke ala.",
+      "category": {
+        "needsReply": "Balé na mbí",
+        "askedOfMe": "Mbí ti ndiyo",
+        "waitingOnOthers": "Balé na bángo",
+        "scheduling": "Kalende",
+        "companyUpdates": "Sonde ti kompani na project",
+        "fyi": "FYI",
+        "bulk": "Automatique na gbundu"
+      },
+      "companyUpdatesHint": "so ti yeke, so ti urgence",
+      "markDone": "Kaba {title} ti ayeke",
+      "badge": {
+        "unanswered": "ayeke ala",
+        "mentioned": "balé na mbi",
+        "important": "so ti yeke"
+      },
+      "askAbout": "Kü balé na gué",
+      "askPrompt": "Na {source} item \"{title}\" ti {from} ({when}) na digest a mbi: mi balé mbi, na mi kombéné ala a mbi?",
+      "open": {
+        "mail": "Akwé na Outlook",
+        "chat": "Akwé na Teams",
+        "channel": "Akwé na Teams",
+        "calendar": "Akwé na Outlook"
+      },
+      "footnote": "Kategorí ti na signál mbi (ayeke ala, balé mbi, broadcast) na AI classifikásion; bala na abara. Té alingo ayeke.",
+      "age": {
+        "now": "ngü da",
+        "hours": "{count}h ti ago",
+        "days": "{count}d ti ago"
+      },
+      "waitForReply": "Tîmbî nî lo na yî tî bata na lo, sô na bâa na ngû da digest."
     }
   },
   "share": {

@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Llamadas de herramientas de Microsoft 365 por día",
       "m365MailReadsPerDay": "Lecturas de correo por día",
       "m365MailDraftsPerDay": "Borradores de correo por día",
-      "m365MailDeepScansPerDay": "Análisis profundos de correo por día"
+      "m365MailDeepScansPerDay": "Análisis profundos de correo por día",
+      "m365DigestRunsPerDay": "Ejecuciones diarias del resumen por día"
     },
     "valueModeLabel": "Tipo de límite",
     "valueAmountLabel": "Cantidad límite",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Llamadas a herramientas de Microsoft 365 (calendario, personas, tareas, Teams) por día. Si se supera el límite, las herramientas mostrarán un mensaje amistoso de “inténtelo de nuevo mañana” en vez de fallar el chat.",
       "m365MailReadsPerDay": "Búsquedas de correo y lecturas de mensajes/hilos por día. Si se supera el límite, las herramientas de correo mostrarán un mensaje de “inténtelo de nuevo mañana”.",
       "m365MailDraftsPerDay": "Borradores de correo electrónico que el asistente puede crear por día — cada uno confirmado individualmente. Deliberadamente limitado.",
-      "m365MailDeepScansPerDay": "Análisis compuestos de correo (resúmenes, búsquedas avanzadas, compromisos) por día. Cada análisis cuenta como una unidad presupuestaria, sin importar el número de lecturas internas."
+      "m365MailDeepScansPerDay": "Análisis compuestos de correo (resúmenes, búsquedas avanzadas, compromisos) por día. Cada análisis cuenta como una unidad presupuestaria, sin importar el número de lecturas internas.",
+      "m365DigestRunsPerDay": "Ejecuciones del resumen diario de Microsoft 365 por día. Cada ejecución implica docenas de lecturas de Graph y dos llamadas al modelo de análisis; el selector de periodo facilita solicitar re-ejecuciones, por lo que el valor predeterminado es limitado."
     },
     "scopeFamily": "Familia",
     "scopeModel": "Modelo",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Triage matutino",
-        "description": "Qué ha llegado, qué espera por usted, y el calendario de hoy — un solo informe"
+        "description": "Un resumen desde el último día laboral: lo que llegó, lo que está pendiente para usted, invitaciones y actualizaciones; los lunes incluye el viernes y el fin de semana."
       },
       "chipsSettingLabel": "Sugerir playbooks de Microsoft 365",
       "chipsSettingHint": "Mostrar sugerencias de playbooks sobre el cuadro de mensaje cuando correspondan (por ejemplo, después de importar una transcripción de reunión).",
-      "dismissChip": "Descartar {title}"
+      "dismissChip": "Descartar {title}",
+      "dailyDigest": {
+        "title": "Resumen diario",
+        "description": "Clasifica el correo, Teams y calendario recientes en lo que requiere atención, lo que estás esperando, actualizaciones y FYI — selecciona el periodo"
+      }
+    },
+    "digest": {
+      "title": "Resumen diario",
+      "intro": "Revisa lo que recibiste en el periodo y lo clasifica en lo que necesita respuesta, lo que te pidieron, lo que estás esperando, agenda, actualizaciones de la empresa y proyectos, y FYI. Nada se envía o modifica.",
+      "periodLabel": "Periodo",
+      "preset": {
+        "lastWorkday": "Desde el último día laboral",
+        "1d": "Últimas 24 horas",
+        "3d": "Últimos 3 días",
+        "7d": "Últimos 7 días",
+        "14d": "Últimos 14 días",
+        "custom": "Rango personalizado"
+      },
+      "lastWorkdayHint": "Desde el inicio del día hábil más reciente antes de hoy — en lunes cubre viernes y el fin de semana.",
+      "from": "Desde",
+      "to": "Hasta",
+      "customInvalid": "Elija un rango ordenado de máximo {days} días.",
+      "sourcesLabel": "Fuentes",
+      "sourceNoConsent": "Permiso no concedido para esta fuente.",
+      "sourceHint": {
+        "mail": "Sobres y vistas previas de la bandeja de entrada; tus Elementos enviados determinan lo que se considera respondido.",
+        "chat": "Chats recientes de Teams, con menciones (@) que no has respondido.",
+        "channel": "Publicaciones en los canales que seleccionas abajo.",
+        "calendar": "Invitaciones pendientes de tu respuesta y reuniones tuyas sin respuesta de otros."
+      },
+      "channelsLabel": "Canales ({count} de {max})",
+      "removeChannel": "Quitar {name}",
+      "channelsSlow": "Cada canal suma lecturas; más canales hacen que el resumen tarde más.",
+      "channelsMax": "Se ha alcanzado el máximo de {max} canales.",
+      "channelsNeeded": "Seleccione al menos un canal o agregue otra fuente.",
+      "teamLabel": "Equipo",
+      "loadingTeams": "Cargando equipos…",
+      "pickTeam": "Seleccione un equipo para listar sus canales",
+      "loadingChannels": "Cargando canales…",
+      "noChannels": "No se encontraron canales en este equipo.",
+      "privacyNote": "Solo se leen asuntos, remitentes y breves vistas previas; los cuerpos de los mensajes y los archivos adjuntos permanecen en Microsoft 365. Los elementos son resúmenes de sus propios datos.",
+      "cancel": "Cancelar",
+      "run": "Ejecutar resumen",
+      "starting": "Iniciando…",
+      "startFailed": "No se pudo iniciar el resumen.",
+      "userMessage": "Resumen diario — {period}; fuentes: {sources}",
+      "working": "Escaneando sus comunicaciones de Microsoft 365…",
+      "failed": "El resumen falló.",
+      "failedPrefix": "El resumen diario falló:",
+      "expired": "Esta ejecución del resumen ha expirado. Ejecútelo de nuevo para obtener uno actualizado.",
+      "runAgain": "Ejecutar nuevamente",
+      "changePeriod": "Cambiar periodo",
+      "period": {
+        "lastWorkday": "desde el último día laboral",
+        "lastDays": "{count, plural, one {último día} other {últimos # días}}"
+      },
+      "source": {
+        "mail": "Correo",
+        "chat": "Chats de Teams",
+        "channel": "Canales de Teams",
+        "calendar": "Calendario"
+      },
+      "sourceStatus": {
+        "ok": "completo",
+        "partial": "parcial",
+        "skipped": "omitido",
+        "unavailable": "sin permiso",
+        "error": "fallido"
+      },
+      "degraded": "El modelo de análisis no estuvo disponible, por lo que las categorías provienen solo de reglas.",
+      "withheld": "{count, plural, one {# elemento fue} other {# elementos fueron}} retenidos por las pantallas de seguridad.",
+      "empty": "Nada que informar para este periodo y estas fuentes.",
+      "actionItems": "Elementos de acción",
+      "createTasks": "{count, plural, =0 {Agregar a To Do} one {Agregar # tarea a To Do} other {Agregar # tareas a To Do}}",
+      "taskCreated": "agregado a To Do",
+      "tasksCreated": "{count, plural, one {# tarea} other {# tareas}} agregadas a la lista \"{list}\".",
+      "tasksFailed": "No se pudieron crear las tareas.",
+      "category": {
+        "needsReply": "Requiere mi respuesta",
+        "askedOfMe": "Me lo han pedido",
+        "waitingOnOthers": "En espera de otros",
+        "scheduling": "Agendando",
+        "companyUpdates": "Actualizaciones de empresa y proyectos",
+        "fyi": "FYI",
+        "bulk": "Automatizado y masivo"
+      },
+      "companyUpdatesHint": "importante, rara vez urgente",
+      "markDone": "Marcar {title} como gestionado",
+      "badge": {
+        "unanswered": "sin respuesta",
+        "mentioned": "te mencionaron",
+        "important": "alta importancia"
+      },
+      "askAbout": "Preguntar sobre esto",
+      "askPrompt": "Sobre el elemento {source} \"{title}\" de {from} ({when}) en el resumen anterior: ¿qué se está pidiendo y cuál sería una buena respuesta?",
+      "open": {
+        "mail": "Abrir en Outlook",
+        "chat": "Abrir en Teams",
+        "channel": "Abrir en Teams",
+        "calendar": "Abrir en Outlook"
+      },
+      "footnote": "Las categorías provienen de sus propias señales (sin respuesta, mencionados, difusión) más la clasificación de IA; verifique antes de actuar. No se envió nada.",
+      "age": {
+        "now": "justo ahora",
+        "hours": "hace {count}h",
+        "days": "hace {count}d"
+      },
+      "waitForReply": "Espere a que termine la respuesta actual antes de iniciar un resumen."
     }
   },
   "share": {

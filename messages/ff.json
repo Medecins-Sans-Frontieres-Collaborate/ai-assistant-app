@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Naatal tool Microsoft 365 booyre",
       "m365MailReadsPerDay": "Janngirde email booyre",
       "m365MailDraftsPerDay": "Draft email booyre",
-      "m365MailDeepScansPerDay": "Jayaanu email booyre"
+      "m365MailDeepScansPerDay": "Jayaanu email booyre",
+      "m365DigestRunsPerDay": "Digest jooni ñalaw taara"
     },
     "valueModeLabel": "Noone gannugol",
     "valueAmountLabel": "Sari gannugol",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "Leeɓtol Microsoft 365 (janngirde, yimɓe, keertine, Teams) kala ñalngu. So e kesol, leeɓe mbaawi 'reftir e ñalngu seuɗi' e nder heen, ngoongii njiilaw waawi seɗa.",
       "m365MailReadsPerDay": "Njiilaw e huutoraawe imeli kala ñalngu. So e kesol, imeli mbaawi 'reftir e ñalngu seuɗi'.",
       "m365MailDraftsPerDay": "Cargal imeli ko yaltu so gollal jooɗii e ñalngu, kala gootol jogii noddine mum. Ko fayande.",
-      "m365MailDeepScansPerDay": "Dolli analise buum imeli (dige, njiilaw nguurndu, ballal) kala ñalngu. Kala analise kaŋko ɗiɗi ko unit e budget."
+      "m365MailDeepScansPerDay": "Dolli analise buum imeli (dige, njiilaw nguurndu, ballal) kala ñalngu. Kala analise kaŋko ɗiɗi ko unit e budget.",
+      "m365DigestRunsPerDay": "Microsoft 365 digest jooni ñalaw taara. Jooni e walii Graph reads e analysis-model ñaari; period picker moƴƴa jangkooma, kono default noon moƴƴi."
     },
     "scopeFamily": "Sarɗi",
     "scopeModel": "Moodel",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Triage balɗe hoɗnde",
-        "description": "Hol ko aranii, hol ko ngoni jukki e aɗa, e kalande balɗe — cippol gooto."
+        "description": "Digest glad naange yiɓɓe yaa ñaamu leydi — ɗum waɗi, ɗum yetti ina waawi, jokkuɗi e fedde; ko Monday, ɗum yeyda Friday e weekend."
       },
       "chipsSettingLabel": "Fiil Microsoft 365 playbooks",
       "chipsSettingHint": "Hollu ɗaɓɓitere playbook ka geseere binndaaji so ɓe welta (misal, so tawii e nafoore maantore yimɓe).",
-      "dismissChip": "Salo {title}"
+      "dismissChip": "Salo {title}",
+      "dailyDigest": {
+        "title": "Digest jooni ñalaw",
+        "description": "Miɗaƴe laawol mail, Teams e kalender ɓurnde fii moƴƴan ke, moƴƴa laawol, e cuuraa e FYI — de fa period."
+      }
+    },
+    "digest": {
+      "title": "Digest jooni ñalaw",
+      "intro": "Miɗaƴe ɗuum e period e laawol moƴƴan ke njoonu, moƴƴa laawol, laawol moƴƴan ke jooɗi e moƴƴa, kalender, updates e kompani e proyectos, e FYI. Hani moƴƴa send walla tanndu.",
+      "periodLabel": "Period",
+      "preset": {
+        "lastWorkday": "Desde laawol ñalaw",
+        "1d": "Ñalaw 24 joom",
+        "3d": "Ñalaw 3 joom",
+        "7d": "Ñalaw 7 joom",
+        "14d": "Ñalaw 14 joom",
+        "custom": "Yiyde period"
+      },
+      "lastWorkdayHint": "Leñol laawol ñalaw moƴƴi — Monday moƴƴi Friday e weekend.",
+      "from": "Le",
+      "to": "Ko",
+      "customInvalid": "Yiyde period moƴƴi {days} jokku.",
+      "sourcesLabel": "Durtagol",
+      "sourceNoConsent": "Haani maa danndani hurnde ɗuum.",
+      "sourceHint": {
+        "mail": "Inbox envelopes e previews; Sent Items maa moƴƴi ɗum woni njoonu.",
+        "chat": "Teams chats ñaari lefi e @mentions moƴƴa njoonu.",
+        "channel": "Posts e channels maa yiyde fii.",
+        "calendar": "Invitations moƴƴan ke njoonu e meetings maa moƴƴa njoonu."
+      },
+      "channelsLabel": "Channels ({count} ngalda {max})",
+      "removeChannel": "Yiɗi {name}",
+      "channelsSlow": "Channel kala moƴƴi reads; channels ɓurnde moƴƴan digest jooni ñalaw.",
+      "channelsMax": "Maximal {max} channels ardi.",
+      "channelsNeeded": "Yiyde channel goɗɗo, walla moƴƴa durtagol.",
+      "teamLabel": "Team",
+      "loadingTeams": "Ñaari teams…",
+      "pickTeam": "Yiyde team fii channels maa",
+      "loadingChannels": "Ñaari channels…",
+      "noChannels": "E team ɗuum channel wala.",
+      "privacyNote": "Subjects, senders e previews goɗɗo waɗi; body e attachments ɗoo jooɗi Microsoft 365. Items ɗoo summary data maa.",
+      "cancel": "Kansu",
+      "run": "Start digest",
+      "starting": "Starti…",
+      "startFailed": "Digest jooni ñalaw moƴƴa starti.",
+      "userMessage": "Digest jooni ñalaw — {period}; durtagol: {sources}",
+      "working": "Miɗaƴe Microsoft 365 communications maa…",
+      "failed": "Digest moƴƴa.",
+      "failedPrefix": "Digest jooni ñalaw moƴƴa:",
+      "expired": "Digest jooni ñalaw moƴƴa. Starti maayo moƴƴa.",
+      "runAgain": "Starti mayo",
+      "changePeriod": "Tottude period",
+      "period": {
+        "lastWorkday": "desde laawol ñalaw",
+        "lastDays": "{count, plural, one {ñalaw goɗɗo} other {ñalaw # joom}}"
+      },
+      "source": {
+        "mail": "Mail",
+        "chat": "Teams chats",
+        "channel": "Teams channels",
+        "calendar": "Kalandar"
+      },
+      "sourceStatus": {
+        "ok": "jogii",
+        "partial": "janngirde",
+        "skipped": "njippatee",
+        "unavailable": "almaa hulnde",
+        "error": "bamtaa"
+      },
+      "degraded": "Model ndemngal ndaarananaa, kadi fasaruude cilol gurtata.",
+      "withheld": "{count, plural, one {# ngol danyiima} other {# be danyiima}} waɗataanu ɓeen ndiyam ceede safara.",
+      "empty": "Kadi neɗɗo waawataa hollu nde wakkati e ɓeen ceertu woni.",
+      "actionItems": "Golle waɗude",
+      "createTasks": "{count, plural, =0 {Suɓo e To Do} one {Suɓo # golle e To Do} other {Suɓo # golle e To Do}}",
+      "taskCreated": "suɓii e To Do",
+      "tasksCreated": "{count, plural, one {# golle} other {# golle}} suɓii e sari \"{list}\".",
+      "tasksFailed": "Waawataa suɓo golle ɗi.",
+      "category": {
+        "needsReply": "Njaaɓtu am yetto",
+        "askedOfMe": "Laawde am",
+        "waitingOnOthers": "Dof e neɗɗo fof",
+        "scheduling": "Ñaamɗini",
+        "companyUpdates": "Laawol soodooji e projé",
+        "fyi": "FYI",
+        "bulk": "Otomat e daalu"
+      },
+      "companyUpdatesHint": "kofe, tan kaŋki",
+      "markDone": "Taga {title} e njiyngol",
+      "badge": {
+        "unanswered": "njaytanii",
+        "mentioned": "jogu maa",
+        "important": "jogordu balɗe"
+      },
+      "askAbout": "Laaw alaa e ɗem",
+      "askPrompt": "Laawol {source} nde \"{title}\" e {from} ({when}) ngal digest: Holi ɗum laawde, holi ko jeyre jawdiima?",
+      "open": {
+        "mail": "Uddi e Outlook",
+        "chat": "Uddi e Teams",
+        "channel": "Uddi e Teams",
+        "calendar": "Uddi e Outlook"
+      },
+      "footnote": "Cilol ɓeen ina heɓi e coreeji maa (njaytanii, jogu maa, faale) e AI; danyi walla dabbiti fiemun. Labbii neen sendataani.",
+      "age": {
+        "now": "taƴi jooni",
+        "hours": "{count}h ɓan",
+        "days": "{count}b ɓan"
+      },
+      "waitForReply": "Hañi reply ngol woni ina joddi, kadi, fuɗɗi digest."
     }
   },
   "share": {

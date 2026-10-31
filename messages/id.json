@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Panggilan alat Microsoft 365 per hari",
       "m365MailReadsPerDay": "Pembacaan email per hari",
       "m365MailDraftsPerDay": "Draft email per hari",
-      "m365MailDeepScansPerDay": "Deep scan email per hari"
+      "m365MailDeepScansPerDay": "Deep scan email per hari",
+      "m365DigestRunsPerDay": "Ringkasan harian per hari"
     },
     "valueModeLabel": "Jenis batas",
     "valueAmountLabel": "Jumlah batas",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Permintaan alat Microsoft 365 (kalender, orang, tugas, Teams) per hari. Jika melewati batas, alat akan menampilkan hasil ramah 'coba lagi besok' daripada gagal dalam percakapan.",
       "m365MailReadsPerDay": "Pencarian email dan pembacaan pesan/percakapan per hari. Jika melewati batas, alat email akan menampilkan hasil 'coba lagi besok'.",
       "m365MailDraftsPerDay": "Draft email yang dapat dibuat asisten per hari — masing-masing dikonfirmasi secara individual. Dibatasi secara ketat.",
-      "m365MailDeepScansPerDay": "Analisis email komposit (ringkasan, pencarian mendalam, komitmen) per hari. Setiap pemindaian dihitung satu unit anggaran tanpa melihat jumlah pembacaan di dalamnya."
+      "m365MailDeepScansPerDay": "Analisis email komposit (ringkasan, pencarian mendalam, komitmen) per hari. Setiap pemindaian dihitung satu unit anggaran tanpa melihat jumlah pembacaan di dalamnya.",
+      "m365DigestRunsPerDay": "Microsoft 365 ringkasan harian per hari. Satu jalankan terdiri dari puluhan pembacaan Graph dan dua panggilan model analisis; pemilih periode membuat permintaan ulang menjadi mudah, sehingga batas default ketat."
     },
     "scopeFamily": "Keluarga",
     "scopeModel": "Model",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Prioritas pagi",
-        "description": "Apa saja yang masuk, apa yang menunggu Anda, dan jadwal hari ini — satu ringkasan"
+        "description": "Ringkasan sejak hari kerja terakhir — apa saja yang masuk, apa yang menunggu Anda, undangan dan pembaruan; pada hari Senin mencakup Jumat dan akhir pekan."
       },
       "chipsSettingLabel": "Sarankan playbook Microsoft 365",
       "chipsSettingHint": "Tampilkan saran playbook di atas kotak pesan saat relevan (misalnya setelah mengimpor transkrip rapat).",
-      "dismissChip": "Tutup {title}"
+      "dismissChip": "Tutup {title}",
+      "dailyDigest": {
+        "title": "Ringkasan harian",
+        "description": "Urutkan email, Teams, dan kalender terbaru menjadi yang membutuhkan Anda, yang sedang Anda tunggu, pembaruan, dan FYI — pilih periode"
+      }
+    },
+    "digest": {
+      "title": "Ringkasan harian",
+      "intro": "Memindai semua yang masuk dalam periode ini dan mengelompokkan menjadi yang perlu dibalas, permintaan kepada Anda, yang sedang Anda tunggu, penjadwalan, pembaruan perusahaan dan proyek, serta FYI. Tidak ada yang dikirim atau diubah.",
+      "periodLabel": "Periode",
+      "preset": {
+        "lastWorkday": "Sejak hari kerja terakhir",
+        "1d": "24 jam terakhir",
+        "3d": "3 hari terakhir",
+        "7d": "7 hari terakhir",
+        "14d": "14 hari terakhir",
+        "custom": "Rentang khusus"
+      },
+      "lastWorkdayHint": "Dimulai dari awal hari biasa terakhir sebelum hari ini — pada hari Senin mencakup hari Jumat dan akhir pekan.",
+      "from": "Dari",
+      "to": "Sampai",
+      "customInvalid": "Pilih rentang berurutan maksimal {days} hari.",
+      "sourcesLabel": "Sumber",
+      "sourceNoConsent": "Izin tidak diberikan untuk sumber ini.",
+      "sourceHint": {
+        "mail": "Amplop dan pratinjau inbox; Sent Items Anda menentukan mana yang sudah dibalas.",
+        "chat": "Obrolan Teams terbaru, dengan @mention yang belum Anda balas.",
+        "channel": "Posting di channel yang Anda pilih di bawah.",
+        "calendar": "Undangan yang menunggu balasan Anda dan rapat Anda yang belum dijawab oleh peserta lain."
+      },
+      "channelsLabel": "Channel ({count} dari {max})",
+      "removeChannel": "Hapus {name}",
+      "channelsSlow": "Setiap channel menambah pembacaan; semakin banyak channel membuat ringkasan lebih lama.",
+      "channelsMax": "Maksimal {max} channel telah tercapai.",
+      "channelsNeeded": "Pilih minimal satu channel atau tambahkan sumber lain.",
+      "teamLabel": "Tim",
+      "loadingTeams": "Memuat tim…",
+      "pickTeam": "Pilih tim untuk melihat daftar channelnya",
+      "loadingChannels": "Memuat channel…",
+      "noChannels": "Tidak ditemukan channel di tim ini.",
+      "privacyNote": "Hanya subjek, pengirim, dan pratinjau singkat yang dibaca; isi pesan dan lampiran tetap di Microsoft 365. Semua item adalah ringkasan data Anda sendiri.",
+      "cancel": "Batal",
+      "run": "Jalankan ringkasan",
+      "starting": "Memulai…",
+      "startFailed": "Ringkasan tidak dapat dimulai.",
+      "userMessage": "Ringkasan harian — {period}; sumber: {sources}",
+      "working": "Memindai komunikasi Microsoft 365 Anda…",
+      "failed": "Ringkasan gagal.",
+      "failedPrefix": "Ringkasan harian gagal:",
+      "expired": "Ringkasan ini telah kedaluwarsa. Jalankan kembali untuk mendapatkan ringkasan baru.",
+      "runAgain": "Jalankan lagi",
+      "changePeriod": "Ubah periode",
+      "period": {
+        "lastWorkday": "sejak hari kerja terakhir",
+        "lastDays": "{count, plural, one {hari terakhir} other {# hari terakhir}}"
+      },
+      "source": {
+        "mail": "Email",
+        "chat": "Obrolan Teams",
+        "channel": "Channel Teams",
+        "calendar": "Kalender"
+      },
+      "sourceStatus": {
+        "ok": "lengkap",
+        "partial": "sebagian",
+        "skipped": "diabaikan",
+        "unavailable": "tidak ada izin",
+        "error": "gagal"
+      },
+      "degraded": "Model analisis tidak tersedia, sehingga kategori hanya berasal dari aturan.",
+      "withheld": "{count, plural, one {# item ditahan} other {# item ditahan}} oleh penyaringan keamanan.",
+      "empty": "Tidak ada laporan untuk periode dan sumber ini.",
+      "actionItems": "Item tindakan",
+      "createTasks": "{count, plural, =0 {Tambahkan ke To Do} one {Tambahkan # tugas ke To Do} other {Tambahkan # tugas ke To Do}}",
+      "taskCreated": "ditambahkan ke To Do",
+      "tasksCreated": "{count, plural, one {# tugas} other {# tugas}} ditambahkan ke daftar \"{list}\".",
+      "tasksFailed": "Tidak dapat membuat tugas-tugas.",
+      "category": {
+        "needsReply": "Butuh balasan saya",
+        "askedOfMe": "Diminta dari saya",
+        "waitingOnOthers": "Menunggu orang lain",
+        "scheduling": "Penjadwalan",
+        "companyUpdates": "Pembaruan perusahaan dan proyek",
+        "fyi": "Untuk informasi",
+        "bulk": "Otomatis dan massal"
+      },
+      "companyUpdatesHint": "penting, jarang mendesak",
+      "markDone": "Tandai {title} telah ditangani",
+      "badge": {
+        "unanswered": "belum dijawab",
+        "mentioned": "menyebut Anda",
+        "important": "kepentingan tinggi"
+      },
+      "askAbout": "Tanyakan tentang ini",
+      "askPrompt": "Tentang item {source} \"{title}\" dari {from} ({when}) dalam ringkasan di atas: apa yang diminta, dan bagaimana respons yang baik?",
+      "open": {
+        "mail": "Buka di Outlook",
+        "chat": "Buka di Teams",
+        "channel": "Buka di Teams",
+        "calendar": "Buka di Outlook"
+      },
+      "footnote": "Kategori berasal dari sinyal Anda sendiri (belum dijawab, disebut, broadcast) dan klasifikasi AI; verifikasi sebelum bertindak. Tidak ada yang dikirim.",
+      "age": {
+        "now": "baru saja",
+        "hours": "{count} jam lalu",
+        "days": "{count} hari lalu"
+      },
+      "waitForReply": "Tunggu hingga balasan saat ini selesai sebelum memulai ringkasan."
     }
   },
   "share": {

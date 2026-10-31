@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Izingcingo zethuluzi le-Microsoft 365 ngosuku",
       "m365MailReadsPerDay": "Ukufunda i-imeyili ngosuku",
       "m365MailDraftsPerDay": "Amadrafti e-imeyili ngosuku",
-      "m365MailDeepScansPerDay": "Ukuhlolwa okujulile kwe-imeyili ngosuku"
+      "m365MailDeepScansPerDay": "Ukuhlolwa okujulile kwe-imeyili ngosuku",
+      "m365DigestRunsPerDay": "Izikhathi zokwenza i-daily digest ngosuku"
     },
     "valueModeLabel": "Uhlobo lomkhawulo",
     "valueAmountLabel": "Inani lomkhawulo",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "Izingcingo zamathuluzi e-Microsoft 365 (ikalenda, abantu, imisebenzi, Teams) ngosuku. Uma kudlula umkhawulo, amathuluzi abuyisa umphumela othi 'zama futhi kusasa' esikhundleni sokuwohloka kwe-chat.",
       "m365MailReadsPerDay": "Ukusesha i-imeyili nokufunda imilayezo/izingxoxo ngosuku. Uma kudlula umkhawulo, amathuluzi e-imeyili abuyisa umphumela othi 'zama futhi kusasa'.",
       "m365MailDraftsPerDay": "Izimpelesi ze-imeyili i-assistant engazidala ngosuku — ngayinye iqinisekiswa eyodwa. Kuncishisiwe ngamabomu.",
-      "m365MailDeepScansPerDay": "Ukuhlaziywa kwe-imeyili okuhlanganisiwe (ama-digest, usesho olunzulu, izifungo) ngosuku. Ukusesha ngakunye kubalwa kanye noma ngabe kunokufunda okuthize ngaphakathi."
+      "m365MailDeepScansPerDay": "Ukuhlaziywa kwe-imeyili okuhlanganisiwe (ama-digest, usesho olunzulu, izifungo) ngosuku. Ukusesha ngakunye kubalwa kanye noma ngabe kunokufunda okuthize ngaphakathi.",
+      "m365DigestRunsPerDay": "I-Microsoft 365 daily digest yenziwa ngosuku. Ukuqhuba okukodwa kufaka ukufunda okuningi ku-Graph kanye nezicelomodel ezibili zokuhlaziya; ukukhetha isikhathi kwenza kube lula ukuphinda, ngakho-ke okuzenzakalelayo kuqinile."
     },
     "scopeFamily": "Umndeni",
     "scopeModel": "Imodeli",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Ukuhlunga kwasekuseni",
-        "description": "Okufikile, okulindele wena, nekhalenda lanamuhla — umbiko owodwa"
+        "description": "Uhlaziyo lwakamuva kusukela ngosuku lokugcina lomsebenzi — okungene, okulindele wena, izimemo nezibuyekezo; uma kuwumsebenzi kaMsombuluko kufaka uLwesihlanu nempelasonto."
       },
       "chipsSettingLabel": "Phakamisa ama-playbook e-Microsoft 365",
       "chipsSettingHint": "Bonisa izincomo ze-playbook ngaphezulu kwebhokisi yemilayezo uma zisebenza (isb. ngemuva kokungenisa umbhalo womhlangano).",
-      "dismissChip": "Khipha {title}"
+      "dismissChip": "Khipha {title}",
+      "dailyDigest": {
+        "title": "Daily digest",
+        "description": "Hlela i-imeyili, ama-Teams kanye nekhalenda kwakamuva ngokuthi kudinga wena, okulindelekile, izibuyekezo ne-FYI — khetha isikhathi"
+      }
+    },
+    "digest": {
+      "title": "Daily digest",
+      "intro": "Hlola okukuqhamukele ngaleso sikhathi bese kuhlela okulindele impendulo, okuceliwe, okulindelekile, uhlelo, izibuyekezo zenkampani neprojekthi, kanye ne-FYI. Akuthunyelwa noma kushintshwa lutho.",
+      "periodLabel": "Isikhathi",
+      "preset": {
+        "lastWorkday": "Kusukela ngosuku lwokusebenza lokugcina",
+        "1d": "Amahora angu-24 adlule",
+        "3d": "Izinsuku ezingu-3 ezedlule",
+        "7d": "Izinsuku ezingu-7 ezedlule",
+        "14d": "Izinsuku ezingu-14 ezedlule",
+        "custom": "Uhla olwenziwe ngendlela yakho"
+      },
+      "lastWorkdayHint": "Kusukela ekuqaleni kosuku lwokusebenza olusondele kunazo zonke ngaphambi kwanamuhla — ngoMsombuluko kufaka uLwesihlanu namaholide.",
+      "from": "Kusuka",
+      "to": "Kuya",
+      "customInvalid": "Khetha uhla olulandelanayo olugcine {days} izinsuku.",
+      "sourcesLabel": "Imithombo",
+      "sourceNoConsent": "Imvume ayikanikezwa kule mthombo.",
+      "sourceHint": {
+        "mail": "Ama-imeyili angenayo nokubukwayo; izinto ozithumele zibonisa okuphenduliwe.",
+        "chat": "Izingxoxo zakamuva ze-Teams, nama-@mentions ongekaphenduli.",
+        "channel": "Okuthunyelwe kumachannel owakhethile ngezansi.",
+        "calendar": "Izimemo ezilindele impendulo yakho nemihlangano yakho abanye abangakayiphenduli."
+      },
+      "channelsLabel": "Amachannel ({count} ku-{max})",
+      "removeChannel": "Susa {name}",
+      "channelsSlow": "I-channel ngalinye lengeza ukufunda; amaningi enza kubambezeleke i-digest.",
+      "channelsMax": "Sifinyelele ku-{max} amachannel aphezulu.",
+      "channelsNeeded": "Khetha okungenani i-channel eyodwa, noma engeza enye imithombo.",
+      "teamLabel": "Ithimu",
+      "loadingTeams": "Kulayishwa amathimu...",
+      "pickTeam": "Khetha ithimu ukubonisa amachannel ayo",
+      "loadingChannels": "Kulayishwa amachannel...",
+      "noChannels": "Awatholakali amachannel kulethimu.",
+      "privacyNote": "Kupheqa kuphela izihloko, abathumeli nabuka okuncane; imibhalo yangaphakathi nezithasiselo zihlala ku-Microsoft 365. Izinto ezikwi-digest zingamafingqo wedatha yakho.",
+      "cancel": "Khansela",
+      "run": "Qalisa i-digest",
+      "starting": "Kuqalwa...",
+      "startFailed": "I-digest ayikwazanga ukuqala.",
+      "userMessage": "Daily digest — {period}; imithombo: {sources}",
+      "working": "Kuqashwa izixhumanisi zakho ku-Microsoft 365...",
+      "failed": "I-digest yehlulekile.",
+      "failedPrefix": "I-daily digest yehlulekile:",
+      "expired": "Le digest isidlulile isikhathi. Qalisa futhi ukuze uthole entsha.",
+      "runAgain": "Qalisa futhi",
+      "changePeriod": "Shintsha isikhathi",
+      "period": {
+        "lastWorkday": "kusukela ngosuku lokusebenza lokugcina",
+        "lastDays": "{count, plural, one {usuku lokugcina} other {izinsuku ezingu-# ezedlule}}"
+      },
+      "source": {
+        "mail": "I-imeyili",
+        "chat": "Izingxoxo ze-Teams",
+        "channel": "Amachannel e-Teams",
+        "calendar": "Ikhalenda"
+      },
+      "sourceStatus": {
+        "ok": "kuphelile",
+        "partial": "kulinganiselwe",
+        "skipped": "kwedlulwe",
+        "unavailable": "awunasemvume",
+        "error": "kwahlulekile"
+      },
+      "degraded": "Imodeli yokuhlaziya ayitholakali, ngakho izigaba zivela kuphela emithethweni.",
+      "withheld": "{count, plural, one {# into ibanjelwe} other {# izinto zibanjiwe}} yizihluzo zokuphepha.",
+      "empty": "Akukho okumele kubikwe kule nkathi nalamathandazo.",
+      "actionItems": "Izinto ezenziwayo",
+      "createTasks": "{count, plural, =0 {Engeza ku-To Do} one {Engeza umsebenzi oyodwa ku-To Do} other {Engeza imisebenzi engu-# ku-To Do}}",
+      "taskCreated": "kufakwe ku-To Do",
+      "tasksCreated": "{count, plural, one {umsebenzi oyodwa} other {imisebenzi engu-#}} kufakwe ohlwini lwama-\"{list}\".",
+      "tasksFailed": "Imisebenzi ayikwazanga ukudalwa.",
+      "category": {
+        "needsReply": "Kudinga impendulo yami",
+        "askedOfMe": "Kucelwe kimi",
+        "waitingOnOthers": "Kulungiselelwe abanye",
+        "scheduling": "Ukubekisa isikhathi",
+        "companyUpdates": "Izaziso zenkampani neprojekthi",
+        "fyi": "FYI",
+        "bulk": "Okuzenzakalelayo nokubunjiwe"
+      },
+      "companyUpdatesHint": "kubalulekile, akuvamisile ukuba kubhenywa",
+      "markDone": "Phawula u-{title} ukuthi usuphathwe",
+      "badge": {
+        "unanswered": "awuphendulwanga",
+        "mentioned": "ukhulunywa ngawe",
+        "important": "kubalulekile kakhulu"
+      },
+      "askAbout": "Buza ngokuhlobene nalesi",
+      "askPrompt": "Mayelana nento ye-{source} ethi \"{title}\" evela ku-{from} ({when}) ku-digest engenhla: yini ecelwa, futhi ukuphendula okuhle kungaba yini?",
+      "open": {
+        "mail": "Vula ku-Outlook",
+        "chat": "Vula ku-Teams",
+        "channel": "Vula ku-Teams",
+        "calendar": "Vula ku-Outlook"
+      },
+      "footnote": "Izigaba zivela kozibikezelo zakho (awuphendulwanga, ukhulumwe, kwaziswa) kanye nokwahlukaniswa kwe-AI; qinisekisa ngaphambi kokwenza. Akukho okuthunyelwe.",
+      "age": {
+        "now": "manje nje",
+        "hours": "{count}h edlule",
+        "days": "{count}d edlule"
+      },
+      "waitForReply": "Linda impendulo yamanje iphele ngaphambi kokuthi uqale ukuhlanganisa."
     }
   },
   "share": {

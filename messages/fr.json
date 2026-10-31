@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Appels d’outils Microsoft 365 par jour",
       "m365MailReadsPerDay": "Lectures de courriels par jour",
       "m365MailDraftsPerDay": "Brouillons de courriels par jour",
-      "m365MailDeepScansPerDay": "Analyses approfondies de courriels par jour"
+      "m365MailDeepScansPerDay": "Analyses approfondies de courriels par jour",
+      "m365DigestRunsPerDay": "Exécutions du digest quotidien par jour"
     },
     "valueModeLabel": "Type de limite",
     "valueAmountLabel": "Quantité limite",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Appels aux outils Microsoft 365 (calendrier, contacts, tâches, Teams) par jour. Au-delà de la limite, les outils renvoient un message convivial « réessayez demain » au lieu d’interrompre la conversation.",
       "m365MailReadsPerDay": "Recherches de mails et lectures de messages/threads par jour. Au-delà de la limite, les outils de messagerie renvoient un message « réessayez demain ».",
       "m365MailDraftsPerDay": "Brouillons d’e-mails que l’assistant peut créer par jour — chacun est confirmé individuellement. Limite volontairement stricte.",
-      "m365MailDeepScansPerDay": "Analyses composites de mails (synthèses, recherche avancée, engagements) par jour. Chaque analyse compte pour une unité, quel que soit le nombre de lectures internes."
+      "m365MailDeepScansPerDay": "Analyses composites de mails (synthèses, recherche avancée, engagements) par jour. Chaque analyse compte pour une unité, quel que soit le nombre de lectures internes.",
+      "m365DigestRunsPerDay": "Exécutions du digest quotidien Microsoft 365 par jour. Une exécution correspond à plusieurs lectures Graph plus deux appels au modèle d’analyse ; le sélecteur de période permet d'effectuer facilement des relances, donc la limite par défaut est stricte."
     },
     "scopeFamily": "Famille",
     "scopeModel": "Modèle",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Triage du matin",
-        "description": "Nouveaux messages, éléments en attente, agenda du jour — un seul briefing"
+        "description": "Un résumé depuis le dernier jour ouvrable — ce qui est arrivé, ce qui attend votre intervention, les invitations et les mises à jour ; le lundi, il couvre le vendredi et le week-end."
       },
       "chipsSettingLabel": "Suggérer les playbooks Microsoft 365",
       "chipsSettingHint": "Afficher des suggestions de playbooks au-dessus de la boîte de message lorsqu'elles s'appliquent (par ex. après l'importation d'une transcription de réunion).",
-      "dismissChip": "Ignorer {title}"
+      "dismissChip": "Ignorer {title}",
+      "dailyDigest": {
+        "title": "Digest quotidien",
+        "description": "Trier les mails, Teams et calendrier récents selon ce qui requiert votre attention, ce que vous attendez, les mises à jour et pour information — sélectionnez la période"
+      }
+    },
+    "digest": {
+      "title": "Digest quotidien",
+      "intro": "Analyse ce que vous avez reçu pendant la période choisie et classe selon ce qui nécessite une réponse, ce qu'on vous a demandé, ce que vous attendez, les événements, les mises à jour d’entreprise ou de projet, et pour information. Rien n'est envoyé ni modifié.",
+      "periodLabel": "Période",
+      "preset": {
+        "lastWorkday": "Depuis le dernier jour ouvré",
+        "1d": "Dernières 24 heures",
+        "3d": "Derniers 3 jours",
+        "7d": "Derniers 7 jours",
+        "14d": "Derniers 14 jours",
+        "custom": "Plage personnalisée"
+      },
+      "lastWorkdayHint": "Depuis le début du dernier jour ouvré avant aujourd’hui — le lundi inclut le vendredi et le week-end.",
+      "from": "De",
+      "to": "À",
+      "customInvalid": "Choisissez une plage ordonnée de maximum {days} jours.",
+      "sourcesLabel": "Sources",
+      "sourceNoConsent": "Autorisation non accordée pour cette source.",
+      "sourceHint": {
+        "mail": "Enveloppes et aperçus de boîte de réception ; vos éléments envoyés déterminent ce qui est considéré comme répondu.",
+        "chat": "Chats Teams récents, avec les @mentions auxquelles vous n'avez pas répondu.",
+        "channel": "Messages dans les canaux sélectionnés ci-dessous.",
+        "calendar": "Invitations en attente de réponse et vos réunions auxquelles les autres n'ont pas répondu."
+      },
+      "channelsLabel": "Canaux ({count} sur {max})",
+      "removeChannel": "Supprimer {name}",
+      "channelsSlow": "Chaque canal ajoute des lectures ; plus de canaux rallonge l’exécution du digest.",
+      "channelsMax": "Nombre maximal de {max} canaux atteint.",
+      "channelsNeeded": "Sélectionnez au moins un canal ou ajoutez une autre source.",
+      "teamLabel": "Équipe",
+      "loadingTeams": "Chargement des équipes…",
+      "pickTeam": "Sélectionnez une équipe pour afficher ses canaux",
+      "loadingChannels": "Chargement des canaux…",
+      "noChannels": "Aucun canal trouvé dans cette équipe.",
+      "privacyNote": "Seuls les objets, expéditeurs et courts aperçus sont lus ; les corps des messages et pièces jointes restent dans Microsoft 365. Les éléments sont des résumés de vos propres données.",
+      "cancel": "Annuler",
+      "run": "Lancer le digest",
+      "starting": "Démarrage…",
+      "startFailed": "Le digest n’a pas pu démarrer.",
+      "userMessage": "Digest quotidien — {period} ; sources : {sources}",
+      "working": "Analyse de vos communications Microsoft 365…",
+      "failed": "Le digest a échoué.",
+      "failedPrefix": "Échec du digest quotidien :",
+      "expired": "Cette exécution du digest a expiré. Relancez-le pour en obtenir un nouveau.",
+      "runAgain": "Relancer",
+      "changePeriod": "Changer la période",
+      "period": {
+        "lastWorkday": "depuis le dernier jour ouvré",
+        "lastDays": "{count, plural, one {dernier jour} other {derniers # jours}}"
+      },
+      "source": {
+        "mail": "Mail",
+        "chat": "Chats Teams",
+        "channel": "Canaux Teams",
+        "calendar": "Calendrier"
+      },
+      "sourceStatus": {
+        "ok": "terminé",
+        "partial": "partiel",
+        "skipped": "passé",
+        "unavailable": "aucune autorisation",
+        "error": "échec"
+      },
+      "degraded": "Le modèle d’analyse était indisponible ; les catégories proviennent uniquement des règles.",
+      "withheld": "{count, plural, one {# élément a été} other {# éléments ont été}} filtrés par les protections de sécurité.",
+      "empty": "Rien à signaler pour cette période et ces sources.",
+      "actionItems": "Points à traiter",
+      "createTasks": "{count, plural, =0 {Ajouter à To Do} one {Ajouter # tâche à To Do} other {Ajouter # tâches à To Do}}",
+      "taskCreated": "ajouté à To Do",
+      "tasksCreated": "{count, plural, one {# tâche} other {# tâches}} ajoutées à la liste « {list} ».",
+      "tasksFailed": "Impossible de créer les tâches.",
+      "category": {
+        "needsReply": "Nécessite ma réponse",
+        "askedOfMe": "Me concernant",
+        "waitingOnOthers": "En attente des autres",
+        "scheduling": "Planification",
+        "companyUpdates": "Actualités de l’organisme et du projet",
+        "fyi": "Pour information",
+        "bulk": "Automatisé et en masse"
+      },
+      "companyUpdatesHint": "important, rarement urgent",
+      "markDone": "Marquer {title} comme traité",
+      "badge": {
+        "unanswered": "sans réponse",
+        "mentioned": "vous a mentionné",
+        "important": "haute importance"
+      },
+      "askAbout": "Demander à propos",
+      "askPrompt": "À propos de l’élément {source} « {title} » de {from} ({when}) dans le résumé ci-dessus : qu’est-ce qui est demandé et quelle serait une bonne réponse ?",
+      "open": {
+        "mail": "Ouvrir dans Outlook",
+        "chat": "Ouvrir dans Teams",
+        "channel": "Ouvrir dans Teams",
+        "calendar": "Ouvrir dans Outlook"
+      },
+      "footnote": "Les catégories proviennent de vos propres signaux (sans réponse, mention, diffusion) ainsi que de la classification IA ; vérifiez avant d’agir. Rien n’a été envoyé.",
+      "age": {
+        "now": "à l’instant",
+        "hours": "il y a {count}h",
+        "days": "il y a {count}j"
+      },
+      "waitForReply": "Veuillez attendre la fin de la réponse actuelle avant de commencer un résumé."
     }
   },
   "share": {

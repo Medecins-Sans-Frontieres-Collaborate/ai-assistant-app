@@ -5675,7 +5675,8 @@
       "m365ToolCallsPerDay": "Kiran ƙa'idar Microsoft 365 a rana",
       "m365MailReadsPerDay": "Karanta imel a rana",
       "m365MailDraftsPerDay": "Rubutun imel a rana",
-      "m365MailDeepScansPerDay": "Cikakken duba imel a rana"
+      "m365MailDeepScansPerDay": "Cikakken duba imel a rana",
+      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na kullum a rana"
     },
     "valueModeLabel": "Irin iyaka",
     "valueAmountLabel": "Adadin iyaka",
@@ -5753,7 +5754,8 @@
       "m365ToolCallsPerDay": "Kiran kayan aikin Microsoft 365 (kalanda, mutane, aiki, Teams) a rana. Idan an wuce iyaka, kayan aikin za su nuna sakon “gwada gobe” maimakon chat ɗin ya gaza.",
       "m365MailReadsPerDay": "Binciken imel da karanta saƙonni/lambobin zance a rana. Idan an wuce iyaka, kayan aikin imel za su nuna “gwada gobe”.",
       "m365MailDraftsPerDay": "Kirkiran rubutattun imel ɗin da mataimakin zai iya yi a rana — kowannensu ana tabbatarwa dabam. An yi da gangan don kar a wuce gona da iri.",
-      "m365MailDeepScansPerDay": "Cikakkun nazarin imel (taƙaitawa, bincike mai zurfi, alƙawari) a rana. Kowanne bincike guda yana ɗauke da tamkar ɗaya daga cikin kasafin, ko da yawan karatunsu a ciki."
+      "m365MailDeepScansPerDay": "Cikakkun nazarin imel (taƙaitawa, bincike mai zurfi, alƙawari) a rana. Kowanne bincike guda yana ɗauke da tamkar ɗaya daga cikin kasafin, ko da yawan karatunsu a ciki.",
+      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na Microsoft 365 a rana. Gudun guda yana kunshe da karanta Graph da dama tare da kira na analysis-model guda biyu; zaɓin lokacin yana sauƙaƙa maidowa, saboda haka an sa iyaka a bisa tsoho."
     },
     "scopeFamily": "Dangi",
     "scopeModel": "Samfuri",
@@ -6488,11 +6490,118 @@
       },
       "morningTriage": {
         "title": "Tantance safiya",
-        "description": "Me ya shigo, me ke jiran ka, da jadawalin yau — bayanin gaba ɗaya"
+        "description": "Takaitaccen bayani tun daga ranar aiki ta ƙarshe — abubuwan da suka shigo, waɗanda ke jiran amsarka, gayyata da sabunta bayanai; a ranar Litinin ya haɗa da na Juma'a da ƙarshen mako."
       },
       "chipsSettingLabel": "Ba da shawarar Microsoft 365 playbooks",
       "chipsSettingHint": "Nuna shawarwarin playbook a saman akwatin saƙo idan ya dace (misali bayan shigo da rubutun taro).",
-      "dismissChip": "Ƙi {title}"
+      "dismissChip": "Ƙi {title}",
+      "dailyDigest": {
+        "title": "Takaitaccen rahoto na kullum",
+        "description": "Tsara imel ɗin da ya zo kwanan nan, tattaunawar Teams da kalanda zuwa abin da ke buƙatar ka/ki, abin da kake jira, sabunta bayanai da FYI — zaɓi lokacin"
+      }
+    },
+    "digest": {
+      "title": "Takaitaccen rahoto na kullum",
+      "intro": "Yana dubawa abin da ya iso naka a cikin lokacin, kuma yana tsara shi zuwa abin da ke bukatar amsa, abin da aka nema daga gare ka/ki, abin da kake jira, jadawali, sabunta bayanan kamfani da aiki, da FYI. Ba a aika ko canja komai ba.",
+      "periodLabel": "Lokaci",
+      "preset": {
+        "lastWorkday": "Tun daga ranar aiki ta ƙarshe",
+        "1d": "Awanni 24 da suka wuce",
+        "3d": "Kwanaki 3 da suka wuce",
+        "7d": "Kwanaki 7 da suka wuce",
+        "14d": "Kwanaki 14 da suka wuce",
+        "custom": "Zaɓin rana na musamman"
+      },
+      "lastWorkdayHint": "Daga farkon ranar aiki mafi kusa kafin yau — idan yau Litinin ne, zai haɗa da Juma’a da ƙarshen mako.",
+      "from": "Daga",
+      "to": "Zuƙ",
+      "customInvalid": "Zaɓi rana masu jere ba fiye da {days} ba.",
+      "sourcesLabel": "Tushen bayanai",
+      "sourceNoConsent": "Ba a ba da izini ga wannan tushe ba.",
+      "sourceHint": {
+        "mail": "Envelopes da samfotin inbox; Abubuwan da ka aiko a Sent Items suna ayyana abin da aka amsa.",
+        "chat": "Tattaunawar Teams na baya-bayan nan, da @mentions da ba ka/ki amsa ba.",
+        "channel": "Sakon da aka sanya a tashoshin da ka zaɓa a kasa.",
+        "calendar": "Gayyata da ke jiran amsarka da tarurruka naka da wasu ba su amsa ba."
+      },
+      "channelsLabel": "Tashoshi ({count} daga {max})",
+      "removeChannel": "Cire {name}",
+      "channelsSlow": "Kowane tasha na ƙara karantawa; ƙarin tashoshi na sa rahoto ya ɗauki lokaci.",
+      "channelsMax": "An kai iyakar tashoshi {max}.",
+      "channelsNeeded": "Zaɓi aƙalla tasha ɗaya, ko ƙara wani tushe.",
+      "teamLabel": "Ƙungiya",
+      "loadingTeams": "Ana loda ƙungiyoyi…",
+      "pickTeam": "Zaɓi ƙungiya don nuna tashoshinta",
+      "loadingChannels": "Ana loda tashoshi…",
+      "noChannels": "Ba a samu tashoshi a wannan ƙungiyar ba.",
+      "privacyNote": "Ana karanta batutuwa, masu aiko da saƙonni da samfoti kaɗan kawai; jikin saƙonni da abubuwan haɗe-haɗe zauna a cikin Microsoft 365. Kayan yana taƙaita bayananka kawai.",
+      "cancel": "Soke",
+      "run": "Gudanar da rahoto",
+      "starting": "Ana farawa…",
+      "startFailed": "Ba a iya farawa rahoton ba.",
+      "userMessage": "Takaitaccen rahoto na kullum — {period}; tushe: {sources}",
+      "working": "Ana duba sadarwar ka/ki na Microsoft 365…",
+      "failed": "Rahoton ya kasa.",
+      "failedPrefix": "Takaitaccen rahoto ya kasa:",
+      "expired": "Wannan rahoton ya ƙare. Gudanar da shi daga farko don samun sabo.",
+      "runAgain": "Sake gudanarwa",
+      "changePeriod": "Sauya lokaci",
+      "period": {
+        "lastWorkday": "tun daga ranar aiki ta ƙarshe",
+        "lastDays": "{count, plural, one {rana ta ƙarshe} other {kwanaki # da suka wuce}}"
+      },
+      "source": {
+        "mail": "Imel",
+        "chat": "Tattaunawar Teams",
+        "channel": "Tashoshin Teams",
+        "calendar": "Kalanda"
+      },
+      "sourceStatus": {
+        "ok": "kammala",
+        "partial": "bangare",
+        "skipped": "an wuce",
+        "unavailable": "ba da izini",
+        "error": "ba a yi nasara ba"
+      },
+      "degraded": "Samfurin nazari bai samu ba, don haka kashi-kashin sun fito daga dokoki kaɗai.",
+      "withheld": "{count, plural, one {# abu aka} other {# abubuwa aka}} dakatar da su ta matakan tsaro.",
+      "empty": "Babu abin da za a bayar rahoto a wannan lokacin da wadannan tushe.",
+      "actionItems": "Abubuwan aiki",
+      "createTasks": "{count, plural, =0 {Ƙara zuwa To Do} one {Ƙara # aiki zuwa To Do} other {Ƙara # ayyuka zuwa To Do}}",
+      "taskCreated": "an ƙara zuwa To Do",
+      "tasksCreated": "{count, plural, one {# aiki} other {# ayyuka}} an ƙara zuwa jerin \"{list}\".",
+      "tasksFailed": "Ba a iya ƙirƙirar ayyukan ba.",
+      "category": {
+        "needsReply": "Nayi bukatar amsa",
+        "askedOfMe": "An tambaye ni",
+        "waitingOnOthers": "Ina jiran wasu",
+        "scheduling": "Tsara lokaci",
+        "companyUpdates": "Sabbin bayanai na kamfani da ayyuka",
+        "fyi": "Don sani",
+        "bulk": "na atomatik da yawa"
+      },
+      "companyUpdatesHint": "muhimmin, mai wuya gaggawa",
+      "markDone": "Alama {title} kamar an kammala",
+      "badge": {
+        "unanswered": "ba a amsa ba",
+        "mentioned": "an ambaci ka",
+        "important": "muhimmanci mai yawa"
+      },
+      "askAbout": "Tambayi game da wannan",
+      "askPrompt": "Game da abu {source} \"{title}\" daga {from} ({when}) a cikin keɓaɓɓen rahoton da ke sama: me ake tambaya, kuma menene amsa mai kyau?",
+      "open": {
+        "mail": "Buɗe a Outlook",
+        "chat": "Buɗe a Teams",
+        "channel": "Buɗe a Teams",
+        "calendar": "Buɗe a Outlook"
+      },
+      "footnote": "Kashi-kashi sun fito daga alamun ka (ba a amsa, an ambata, an watsa) da kuma rarrabuwa ta AI; tabbatar kafin ka dauki mataki. Ba a tura komai ba.",
+      "age": {
+        "now": "yanzu-yanzu",
+        "hours": "{count}h da suka wuce",
+        "days": "{count}d da suka wuce"
+      },
+      "waitForReply": "Jira amsa yanzu ta gama kafin fara takaitaccen bayani."
     }
   },
   "share": {

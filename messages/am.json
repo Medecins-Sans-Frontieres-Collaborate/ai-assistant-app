@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 የመሳሪያ ጥሪዎች በቀን",
       "m365MailReadsPerDay": "የኢሜይል ንባቦች በቀን",
       "m365MailDraftsPerDay": "የኢሜይል ረቂቅ በቀን",
-      "m365MailDeepScansPerDay": "የኢሜይል ደርድር በቀን"
+      "m365MailDeepScansPerDay": "የኢሜይል ደርድር በቀን",
+      "m365DigestRunsPerDay": "ዕንድነት በዕለት የሚሰራው ማጠቃለያ"
     },
     "valueModeLabel": "የገደብ አይነት",
     "valueAmountLabel": "የገደብ መጠን",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "የMicrosoft 365 መሳሪያ ጥሪዎች (የካሌንደር፣ ሰዎች፣ ተግባራት፣ Teams) በቀን። ከገደቡ በላይ መሳሪያዎቹ \"እባክዎ ነገ ይደግሙ\" ተመናበት የሚሰጥ ይመልሳሉ፣ ውይይቱም አይቋረጥም።",
       "m365MailReadsPerDay": "የኢሜይል ፍለጋና መልእክት/ክፍል ንባቦች በቀን። ከገደቡ በላይ፣ የኢሜይል መሳሪያዎች \"እባክዎ ነገ ይደግሙ\" ይመልሳሉ።",
       "m365MailDraftsPerDay": "የአጋሩ በቀን ሊፈጥሩት የሚችሉ የኢሜይል ረቂቅ። እያንዳንዳቸው በተናጽፎ ይረጋገጣሉ። በትክክል የተጠበቀ።",
-      "m365MailDeepScansPerDay": "የተደበቀ የኢሜይል አስተ تحليل (ዳይጀስት፣ ጥልቅ ፍለጋ፣ ተግባራት) በቀን። እያንዳንዱ ፍለጋ አንድ ጀብዱ ነው፤ የውስጥ ንባቦች አይቀመጡበትም።"
+      "m365MailDeepScansPerDay": "የተደበቀ የኢሜይል አስተ تحليل (ዳይጀስት፣ ጥልቅ ፍለጋ፣ ተግባራት) በቀን። እያንዳንዱ ፍለጋ አንድ ጀብዱ ነው፤ የውስጥ ንባቦች አይቀመጡበትም።",
+      "m365DigestRunsPerDay": "Microsoft 365 ዕለታዊ ማጠቃለያ በዕለት የሚሰራው፡ አንድ ማጠቃለያ ብዙ የGraph እየተነበበ ከመድረክ ተጠቃሚዎች ተጠቃሚዎችን ያካትታል፣ እና ሁለት የትንበያ-ሞዴል ጥሪዎች አሉ፡ የፈተናው የወቅት መለያያ እንደገና ማድረግ አሳካኝ ያደርገዋል፣ ስለዚህ የችሎታው ድፍረት አጠቃላይ ነው።"
     },
     "scopeFamily": "ቤተሰብ",
     "scopeModel": "ሞዴል",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "የጡዋት መወሰኛ",
-        "description": "ምን ገባ፣ ምን በእርስዎ ላይ ይጠበቃል፣ የዛሬው ቀን መቁጠሪያ — አንድ ማግናባቢ"
+        "description": "ከመጨረሻው የስራ ቀን ጀምሮ ዲጄስት — የገቡ, የሚጠብቁ የሚሻሉ ማስጠንቀቂያዎች እና አዳዲስ መረጃዎች; በሰኞ የአርብና በየሳምንቱ መጨረሻ የደረሱን ያካትታል።"
       },
       "chipsSettingLabel": "የMicrosoft 365 playbooks ይጠይቁ",
       "chipsSettingHint": "ሚስጥሮች ሲያገለግሉ እንደ ምሳሌ የስብሰባ ጽሁፍ ከሚሰቀል በኋላ የplaybook ጥቆማዎችን በመልዕክት ቦታው ላይ አሳይ።",
-      "dismissChip": "{title} አስወግድ"
+      "dismissChip": "{title} አስወግድ",
+      "dailyDigest": {
+        "title": "ዕለታዊ ማጠቃለያ",
+        "description": "የቅርብ ውጤት ፖስታ፣ Teams እና ካሌንደርን ወደ የእርስዎ ፍላጎት፣ የትኛውን ትኛው ይጠበቅበታል፣ ማደስ እና FYI — የወቅቱ ይምረጡ።"
+      }
+    },
+    "digest": {
+      "title": "ዕለታዊ ማጠቃለያ",
+      "intro": "በተመረጠው ወቅት ወደ እርስዎ የደረሰውን ፈጥን ይቃኘል እና ወደ። ይሠራዋል፡ የሚፈልጉት ፍላጎት፣ የእርስዎን የተጠየቀው፣ የሚጠበቅበት፣ ክፍለ ጊዜ፣ የኩባና እና ፕሮጀክት አዳዲስ፣ እና FYI ይመደብ። ምንም ነገር አይላከም ወይም አይቀየምም።",
+      "periodLabel": "ወቅት",
+      "preset": {
+        "lastWorkday": "ከመጨረሻው የስራ ቀን በኋላ",
+        "1d": "የፊትለፊት 24 ሰዓታት",
+        "3d": "የፊትለፊት 3 ቀናት",
+        "7d": "የፊትለፊት 7 ቀናት",
+        "14d": "የፊትለፊት 14 ቀናት",
+        "custom": "በግል ክልል"
+      },
+      "lastWorkdayHint": "ከዛሬ በላይ የቆይተ ቀን መጀመሪያ ቀን ጀምሮ — በሰኞ የአርብና የመጨረሻ ሳምንት ቀናትን ያካትታል።",
+      "from": "ከ",
+      "to": "ወደ",
+      "customInvalid": "በተመደበ ቅደም ትክክል የቢያንስ {days} ቀናት ይምረጡ።",
+      "sourcesLabel": "ምንጮች",
+      "sourceNoConsent": "በዚህ ምንጭ ፍቃድ አልተሰጠም።",
+      "sourceHint": {
+        "mail": "የግብዣ ፖስታ እና አጭር ቅድመ እይታ፤ የእርስዎ የታዩ ነገሮች የተመለሱ እንደሆኑ ይገለጻሉ።",
+        "chat": "የቅርብ የTeams ቻትዎች፣ እና @mentions ላይ የላሉ የተመለሱ አይደሉም።",
+        "channel": "በታች የምትምረጡት ቻናሎች የተጻፉ ልጥፎች።",
+        "calendar": "እርስዎ ሊመለሱ የተጠበቁ አስገባቢዎች እና ሌሎች ሊመለሱ የተጠበቁ ስብሰባዎች።"
+      },
+      "channelsLabel": "ቻናሎች ({count} ከ {max})",
+      "removeChannel": "{name} ያስወግዱ",
+      "channelsSlow": "ቻናል እያካትቷ የሚነበብ ይጨምራል፤ ቻናሎቹን መጨመር ማጠቃለያን ብዙ ጊዜ ያስወጣል።",
+      "channelsMax": "ከፍተኛው {max} ቻናሎች ተደርሷል።",
+      "channelsNeeded": "ቢያንስ አንድ ቻናል ይምረጡ፣ ወይም ሌላ ምንጭ ያክሉ።",
+      "teamLabel": "ቡድን",
+      "loadingTeams": "ቡድኖችን እየተጫኑ ነው...",
+      "pickTeam": "ቻናሎቹን ለማየት ቡድን ይምረጡ",
+      "loadingChannels": "ቻናሎችን እየተጫኑ ነው...",
+      "noChannels": "በዚህ ቡድን ውስጥ ቻናሎች አልተገኙም።",
+      "privacyNote": "የሚነበቡት የርዕስ፣ መላኪዎች እና አጭር ቅድመ እይታዎች ብቻ ናቸው። የመልእክት ሰነዶችና ቅጥቅጦች Microsoft 365 ውስጥ ይቆያሉ። እቃዎቹ የእርስዎን ውሂብ ጥቅም ላይ የተዋሉ ማጠቃለያዎች ናቸው።",
+      "cancel": "ይቅር",
+      "run": "ማጠቃለያን ያስጀምሩ",
+      "starting": "በመጀመር ላይ...",
+      "startFailed": "ማጠቃለያው ማስጀመር አልተቻለም።",
+      "userMessage": "ዕለታዊ ማጠቃለያ — {period}; ምንጮች፡ {sources}",
+      "working": "Microsoft 365 ግንኙነቶችዎን እየተመርምሩ ነው...",
+      "failed": "ማጠቃለያው አልተሳካም።",
+      "failedPrefix": "ዕለታዊ ማጠቃለያ አልተሳካም፡",
+      "expired": "የዚህ ማጠቃለያ ፈተና ጊዜው አልፏል። አዲስ ለማግኘት ድጋፍ ያድርጉ።",
+      "runAgain": "እንደገና ያስጀምሩ",
+      "changePeriod": "ወቅት ያስተካክሉ",
+      "period": {
+        "lastWorkday": "ከመጨረሻው የስራ ቀን በኋላ",
+        "lastDays": "{count, plural, one {የፊትለፊት ቀን} other {የፊትለፊት # ቀናት}}"
+      },
+      "source": {
+        "mail": "ፖስታ",
+        "chat": "Teams ቻትዎች",
+        "channel": "Teams ቻናሎች",
+        "calendar": "የዕለቱ መመዝገቢያ"
+      },
+      "sourceStatus": {
+        "ok": "ተጠናቋል",
+        "partial": "በከፊል",
+        "skipped": "ተወግዷል",
+        "unavailable": "ፍቃድ የለም",
+        "error": "አልተሳካም"
+      },
+      "degraded": "የትንተናው ሞዴል አልተገኘም፣ ስለዚህ ምድቦች በደንቦች ብቻ የተዘጋጁ ናቸው።",
+      "withheld": "{count, plural, one {# እቃ ታገዷል} other {# እቃዎች ታገዱ}} በደህንነት መመለከቻዎቹ ተከልክሏል።",
+      "empty": "ለዚህ ጊዜ እና ምንጮቹ ምንም ሪፖርት የለም።",
+      "actionItems": "የሚደረጉ እቃዎች",
+      "createTasks": "{count, plural, =0 {ወደ To Do ያክሉ} one {# ተግባር ወደ To Do ያክሉ} other {# ተግባሮች ወደ To Do ያክሉ}}",
+      "taskCreated": "ወደ To Do ታከለ",
+      "tasksCreated": "{count, plural, one {# ተግባር} other {# ተግባሮች}} ወደ \"{list}\" ዝርዝር ታከሉ።",
+      "tasksFailed": "ተግባሮቹን ማመንጨት አልተቻለም።",
+      "category": {
+        "needsReply": "መልስ የሚፈልግ",
+        "askedOfMe": "በመጠየቅ የተጠየቀ",
+        "waitingOnOthers": "በሌሎች ላይ ይጠባበቃል",
+        "scheduling": "መቅደም ወይም ማቅረብ",
+        "companyUpdates": "የድርጅትና ፕሮጀክት አዳዲስ መረጃዎች",
+        "fyi": "ለእባክዎ",
+        "bulk": "አውቶማቲክና በሙሉ"
+      },
+      "companyUpdatesHint": "አስፈላጊ፣ ብዙውን ጊዜ አጭር በሆነ ጊዜ አያስፈልግም",
+      "markDone": "{title} እንደታደሰ ምልክት ያድርጉ",
+      "badge": {
+        "unanswered": "ያልተመለሰ",
+        "mentioned": "እርስዎን ተዘምኗል",
+        "important": "ውስጥ ጠቃሚ"
+      },
+      "askAbout": "ስለዚህ ይጠይቁ",
+      "askPrompt": "በላይ ያለው ቅጽበት ውስጥ ከ{from} ({when}) የመጣው የ{source} ንጥል \"{title}\" ስለ፡ ምን ተጠየቀ? ጥሩ እንዴት መልስ ሊሆን ይገባል?",
+      "open": {
+        "mail": "በOutlook ውስጥ ይክፈቱ",
+        "chat": "በTeams ውስጥ ይክፈቱ",
+        "channel": "በTeams ውስጥ ይክፈቱ",
+        "calendar": "በOutlook ውስጥ ይክፈቱ"
+      },
+      "footnote": "ምድቦች ከራስዎ ግዛት (ያልተመለሱ፣ ተጠቅመዋል፣ ተላልፏል) እና AI መዋቅር ይሆናሉ፤ ሲደርስ ከመተግበርዎ በፊት ያረጋግጡ። ምንም አልተልከም።",
+      "age": {
+        "now": "አሁን በቅርቡ",
+        "hours": "{count}ሰ. በፊት",
+        "days": "{count}ቀን በፊት"
+      },
+      "waitForReply": "ዲጄስትን መጀመር ከመቻሉ በፊት የአሁኑን ምላሽ እንዲጨርስ ይጠብቁ።"
     }
   },
   "share": {

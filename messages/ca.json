@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Trucades a eines de Microsoft 365 per dia",
       "m365MailReadsPerDay": "Lectures de correus per dia",
       "m365MailDraftsPerDay": "Esborranys de correus per dia",
-      "m365MailDeepScansPerDay": "Anàlisis profundes de correus per dia"
+      "m365MailDeepScansPerDay": "Anàlisis profundes de correus per dia",
+      "m365DigestRunsPerDay": "Execucions diàries del resum per dia"
     },
     "valueModeLabel": "Tipus de límit",
     "valueAmountLabel": "Quantitat límit",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Sol·licituds a eines de Microsoft 365 (calendari, contactes, tasques, Teams) al dia. Si se supera el límit, les eines tornaran un resultat amable de “torna-ho a provar demà” en lloc de fallar el xat.",
       "m365MailReadsPerDay": "Cerques de correu i lectures de missatges/converses al dia. Superat el límit, les eines de correu et donaran el resultat \"torna-ho a provar demà\".",
       "m365MailDraftsPerDay": "Esborranys de correu electrònic que l'assistent pot crear cada dia — cadascun confirmat individualment. Límit intencionadament restrictiu.",
-      "m365MailDeepScansPerDay": "Anàlisis de correu compostes (resums, cerques profundes, compromisos) al dia. Cada anàlisi compta com una unitat del pressupost, independentment de les lectures internes."
+      "m365MailDeepScansPerDay": "Anàlisis de correu compostes (resums, cerques profundes, compromisos) al dia. Cada anàlisi compta com una unitat del pressupost, independentment de les lectures internes.",
+      "m365DigestRunsPerDay": "Execucions del resum diari de Microsoft 365 per dia. Cada execució implica desenes de lectures Graph i dues trucades als models d'anàlisi; l’eina de selecció de període fa que repetir execucions sigui fàcil, per això el valor predeterminat és restrictiu."
     },
     "scopeFamily": "Família",
     "scopeModel": "Model",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Triage del matí",
-        "description": "Què ha arribat, què espera resposta teva i l’agenda d’avui — tot en un resum"
+        "description": "Un resum des de l’últim dia feiner: el que ha arribat, el que està pendent de vosaltres, invitacions i actualitzacions; els dilluns cobreix el divendres i el cap de setmana."
       },
       "chipsSettingLabel": "Suggereix playbooks de Microsoft 365",
       "chipsSettingHint": "Mostra suggeriments de playbooks a sobre del quadre de missatge quan siguin aplicables (per exemple, després d'importar la transcripció d'una reunió).",
-      "dismissChip": "Descarta {title}"
+      "dismissChip": "Descarta {title}",
+      "dailyDigest": {
+        "title": "Resum diari",
+        "description": "Organitza el correu recent, Teams i el calendari segons el que requereix la teva atenció, el que esperes, actualitzacions i FYI — tria el període"
+      }
+    },
+    "digest": {
+      "title": "Resum diari",
+      "intro": "Revisa el que has rebut en el període seleccionat i ho classifica entre allò que cal respondre, peticions que t’han fet, allò que esperes, programacions, novetats d’empresa i projectes, i FYI. No s'envia ni es modifica res.",
+      "periodLabel": "Període",
+      "preset": {
+        "lastWorkday": "Des de l’últim dia laborable",
+        "1d": "Últimes 24 hores",
+        "3d": "Últims 3 dies",
+        "7d": "Últims 7 dies",
+        "14d": "Últims 14 dies",
+        "custom": "Rang personalitzat"
+      },
+      "lastWorkdayHint": "Des de l'inici del darrer dia laborable anterior a avui — els dilluns cobreix divendres i el cap de setmana.",
+      "from": "Des de",
+      "to": "Fins a",
+      "customInvalid": "Tria un interval ordenat de com a màxim {days} dies.",
+      "sourcesLabel": "Fonts",
+      "sourceNoConsent": "Permís no concedit per a aquesta font.",
+      "sourceHint": {
+        "mail": "Sobres i previsualitzacions de la safata d'entrada; els Elements Enviats determinen què es considera respost.",
+        "chat": "Xats recents de Teams, amb @mencions que no has respost.",
+        "channel": "Publicacions als canals que seleccionis a continuació.",
+        "calendar": "Invitacions pendents de la teva resposta i reunions que altres encara no han respost."
+      },
+      "channelsLabel": "Canals ({count} de {max})",
+      "removeChannel": "Elimina {name}",
+      "channelsSlow": "Cada canal afegeix lectures; més canals fan que el resum trigui més.",
+      "channelsMax": "S’ha assolit el màxim de {max} canals.",
+      "channelsNeeded": "Tria almenys un canal o afegeix una altra font.",
+      "teamLabel": "Equip",
+      "loadingTeams": "S'estan carregant els equips…",
+      "pickTeam": "Selecciona un equip per veure els seus canals",
+      "loadingChannels": "S'estan carregant els canals…",
+      "noChannels": "No s'han trobat canals en aquest equip.",
+      "privacyNote": "Només es llegeixen els assumptes, remitent i previsualitzacions curtes; els cossos dels missatges i els annexos romanen a Microsoft 365. Els elements són resums de les teves pròpies dades.",
+      "cancel": "Cancel·la",
+      "run": "Executa el resum",
+      "starting": "S'està iniciant…",
+      "startFailed": "No s'ha pogut iniciar el resum.",
+      "userMessage": "Resum diari — {period}; fonts: {sources}",
+      "working": "S'estan escanejant les teves comunicacions de Microsoft 365…",
+      "failed": "El resum ha fallat.",
+      "failedPrefix": "Resum diari amb error:",
+      "expired": "Aquesta execució del resum ha expirat. Torna-la a executar per obtenir-ne un de nou.",
+      "runAgain": "Torna a executar",
+      "changePeriod": "Canvia el període",
+      "period": {
+        "lastWorkday": "des de l’últim dia laborable",
+        "lastDays": "{count, plural, one {últim dia} other {últims # dies}}"
+      },
+      "source": {
+        "mail": "Correu",
+        "chat": "Xats de Teams",
+        "channel": "Canals de Teams",
+        "calendar": "Calendari"
+      },
+      "sourceStatus": {
+        "ok": "complet",
+        "partial": "parcial",
+        "skipped": "omès",
+        "unavailable": "sense permís",
+        "error": "ha fallat"
+      },
+      "degraded": "El model d'anàlisi no estava disponible, així que les categories provenen només de regles.",
+      "withheld": "{count, plural, one {S'ha retingut # element} other {S'han retingut # elements}} pels filtres de seguretat.",
+      "empty": "No hi ha res a informar en aquest període i aquestes fonts.",
+      "actionItems": "Accions pendents",
+      "createTasks": "{count, plural, =0 {Afegeix a Tasques} one {Afegeix # tasca a Tasques} other {Afegeix # tasques a Tasques}}",
+      "taskCreated": "afegit a Tasques",
+      "tasksCreated": "{count, plural, one {# tasca} other {# tasques}} afegides a la llista \"{list}\".",
+      "tasksFailed": "No s'han pogut crear les tasques.",
+      "category": {
+        "needsReply": "Cal que respongui",
+        "askedOfMe": "M'han demanat",
+        "waitingOnOthers": "Esperant resposta d'altri",
+        "scheduling": "Planificació",
+        "companyUpdates": "Actualitzacions d'empresa i projectes",
+        "fyi": "Per a la teva informació",
+        "bulk": "Automatitzat i massiu"
+      },
+      "companyUpdatesHint": "important, rara vegada urgent",
+      "markDone": "Marca {title} com a gestionat",
+      "badge": {
+        "unanswered": "sense resposta",
+        "mentioned": "t'han mencionat",
+        "important": "alta importància"
+      },
+      "askAbout": "Pregunta sobre això",
+      "askPrompt": "Sobre l'element {source} \"{title}\" de {from} ({when}) al resum anterior: què es demana i quina seria una bona resposta?",
+      "open": {
+        "mail": "Obre a Outlook",
+        "chat": "Obre a Teams",
+        "channel": "Obre a Teams",
+        "calendar": "Obre a Outlook"
+      },
+      "footnote": "Les categories provenen dels teus propis senyals (sense resposta, menció, difusió) i de la classificació d'IA; verifica abans d'actuar. No s'ha enviat res.",
+      "age": {
+        "now": "ara mateix",
+        "hours": "fa {count}h",
+        "days": "fa {count}d"
+      },
+      "waitForReply": "Espereu que acabi la resposta actual abans de començar un resum."
     }
   },
   "share": {

@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365-tooloproepen per dag",
       "m365MailReadsPerDay": "E-mails lezen per dag",
       "m365MailDraftsPerDay": "E-mailconcepten per dag",
-      "m365MailDeepScansPerDay": "Diepgaande e-mailscans per dag"
+      "m365MailDeepScansPerDay": "Diepgaande e-mailscans per dag",
+      "m365DigestRunsPerDay": "Dagelijkse samenvattingen per dag"
     },
     "valueModeLabel": "Limiettype",
     "valueAmountLabel": "Limietbedrag",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Microsoft 365-toolacties (agenda, personen, taken, Teams) per dag. Na overschrijding geeft de tool een vriendelijke melding 'probeer het morgen opnieuw' in plaats van de chat te laten falen.",
       "m365MailReadsPerDay": "E-mailzoekopdrachten en het lezen van berichten/threads per dag. Na overschrijding geeft de tool een melding 'probeer het morgen opnieuw'.",
       "m365MailDraftsPerDay": "E-mailconcepten die de assistent per dag mag aanmaken — elk exemplaar wordt afzonderlijk bevestigd. Bewust beperkt.",
-      "m365MailDeepScansPerDay": "Samengestelde mailanalyses (overzichten, diepzoeken, toezeggingen) per dag. Elke scan telt als één eenheid, ongeacht het aantal interne leesacties."
+      "m365MailDeepScansPerDay": "Samengestelde mailanalyses (overzichten, diepzoeken, toezeggingen) per dag. Elke scan telt als één eenheid, ongeacht het aantal interne leesacties.",
+      "m365DigestRunsPerDay": "Microsoft 365 dagelijkse samenvattingen per dag. Eén uitvoering bevat tientallen Graph-lezingen plus twee analysemodel-aanroepen; de periodekiezer maakt het eenvoudig om opnieuw uit te voeren, dus de standaardlimiet is streng."
     },
     "scopeFamily": "Familie",
     "scopeModel": "Model",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Ochtendtriage",
-        "description": "Wat is binnengekomen, wat wacht op jou en de agenda van vandaag — één briefing"
+        "description": "Een overzicht sinds de laatste werkdag — wat er is binnengekomen, wat op uw reactie wacht, uitnodigingen en updates; op maandag bevat het vrijdag en het weekend."
       },
       "chipsSettingLabel": "Microsoft 365-playbooks voorstellen",
       "chipsSettingHint": "Toon playbook-suggesties boven het tekstvak wanneer deze van toepassing zijn (bijvoorbeeld na het importeren van een vergaderverslag).",
-      "dismissChip": "{title} sluiten"
+      "dismissChip": "{title} sluiten",
+      "dailyDigest": {
+        "title": "Dagelijkse samenvatting",
+        "description": "Sorteer recente e-mail, Teams en agenda op wat uw aandacht nodig heeft, waar u op wacht, updates en ter informatie — kies de periode"
+      }
+    },
+    "digest": {
+      "title": "Dagelijkse samenvatting",
+      "intro": "Scant wat u in de gekozen periode heeft ontvangen en sorteert dit op wat een reactie vraagt, wat aan u is gevraagd, waar u op wacht, planning, bedrijfs- en projectupdates en ter informatie. Er wordt niets verzonden of gewijzigd.",
+      "periodLabel": "Periode",
+      "preset": {
+        "lastWorkday": "Sinds de laatste werkdag",
+        "1d": "Afgelopen 24 uur",
+        "3d": "Afgelopen 3 dagen",
+        "7d": "Afgelopen 7 dagen",
+        "14d": "Afgelopen 14 dagen",
+        "custom": "Aangepast bereik"
+      },
+      "lastWorkdayHint": "Vanaf het begin van de meest recente werkdag vóór vandaag — op maandag omvat dit vrijdag en het weekend.",
+      "from": "Van",
+      "to": "Tot",
+      "customInvalid": "Kies een opeenvolgend bereik van maximaal {days} dagen.",
+      "sourcesLabel": "Bronnen",
+      "sourceNoConsent": "Geen toestemming verleend voor deze bron.",
+      "sourceHint": {
+        "mail": "Inboxomslagen en previews; uw verzonden items bepalen wat als beantwoord telt.",
+        "chat": "Recente Teams-chats, met @vermeldingen waarop u nog niet heeft geantwoord.",
+        "channel": "Berichten in de kanalen die u hieronder selecteert.",
+        "calendar": "Uitnodigingen waarop u nog moet reageren en uw vergaderingen die anderen nog niet hebben beantwoord."
+      },
+      "channelsLabel": "Kanalen ({count} van {max})",
+      "removeChannel": "{name} verwijderen",
+      "channelsSlow": "Elke extra kanaal vereist meer lezingen; meer kanalen maken de samenvatting langzamer.",
+      "channelsMax": "Maximum van {max} kanalen bereikt.",
+      "channelsNeeded": "Selecteer ten minste één kanaal, of voeg een andere bron toe.",
+      "teamLabel": "Team",
+      "loadingTeams": "Teams laden…",
+      "pickTeam": "Kies een team om zijn kanalen te tonen",
+      "loadingChannels": "Kanalen laden…",
+      "noChannels": "Geen kanalen gevonden in dit team.",
+      "privacyNote": "Alleen onderwerpen, afzenders en korte previews worden gelezen; berichtinhouden en bijlagen blijven in Microsoft 365. Items zijn samenvattingen van uw eigen gegevens.",
+      "cancel": "Annuleren",
+      "run": "Samenvatting uitvoeren",
+      "starting": "Bezig met starten…",
+      "startFailed": "De samenvatting kon niet worden gestart.",
+      "userMessage": "Dagelijkse samenvatting — {period}; bronnen: {sources}",
+      "working": "Bezig met scannen van uw Microsoft 365-communicatie…",
+      "failed": "Fout bij de samenvatting.",
+      "failedPrefix": "Dagelijkse samenvatting mislukt:",
+      "expired": "Deze samenvatting is verlopen. Voer opnieuw uit voor een actuele versie.",
+      "runAgain": "Opnieuw uitvoeren",
+      "changePeriod": "Periode wijzigen",
+      "period": {
+        "lastWorkday": "sinds de laatste werkdag",
+        "lastDays": "{count, plural, one {afgelopen dag} other {afgelopen # dagen}}"
+      },
+      "source": {
+        "mail": "E-mail",
+        "chat": "Teams-chats",
+        "channel": "Teams-kanalen",
+        "calendar": "Agenda"
+      },
+      "sourceStatus": {
+        "ok": "voltooid",
+        "partial": "gedeeltelijk",
+        "skipped": "overgeslagen",
+        "unavailable": "geen toestemming",
+        "error": "mislukt"
+      },
+      "degraded": "Het analysmodel was niet beschikbaar, dus categorieën zijn alleen op regels gebaseerd.",
+      "withheld": "{count, plural, one {# item werd} other {# items werden}} geblokkeerd door de veiligheidsfilters.",
+      "empty": "Niets te melden voor deze periode en bronnen.",
+      "actionItems": "Actiepunten",
+      "createTasks": "{count, plural, =0 {Toevoegen aan To Do} one {Voeg # taak toe aan To Do} other {Voeg # taken toe aan To Do}}",
+      "taskCreated": "toegevoegd aan To Do",
+      "tasksCreated": "{count, plural, one {# taak} other {# taken}} toegevoegd aan de lijst \"{list}\".",
+      "tasksFailed": "Kon de taken niet aanmaken.",
+      "category": {
+        "needsReply": "Vereist mijn antwoord",
+        "askedOfMe": "Aan mij gevraagd",
+        "waitingOnOthers": "Wacht op anderen",
+        "scheduling": "Plannen",
+        "companyUpdates": "Bedrijfs- en projectupdates",
+        "fyi": "Ter info",
+        "bulk": "Geautomatiseerd en bulk"
+      },
+      "companyUpdatesHint": "belangrijk, zelden urgent",
+      "markDone": "Markeer {title} als afgehandeld",
+      "badge": {
+        "unanswered": "onbeantwoord",
+        "mentioned": "noemde u",
+        "important": "hoge prioriteit"
+      },
+      "askAbout": "Vraag hierover",
+      "askPrompt": "Over het {source}-item \"{title}\" van {from} ({when}) in het bovenstaande overzicht: wat wordt er gevraagd en wat zou een goed antwoord zijn?",
+      "open": {
+        "mail": "Openen in Outlook",
+        "chat": "Openen in Teams",
+        "channel": "Openen in Teams",
+        "calendar": "Openen in Outlook"
+      },
+      "footnote": "Categorieën zijn gebaseerd op uw eigen signalen (onbeantwoord, genoemd, uitgestuurd) plus AI-classificatie; controleer voordat u actie onderneemt. Er is niets verzonden.",
+      "age": {
+        "now": "zojuist",
+        "hours": "{count}u geleden",
+        "days": "{count}d geleden"
+      },
+      "waitForReply": "Wacht tot het huidige antwoord is afgerond voordat u een overzicht start."
     }
   },
   "share": {

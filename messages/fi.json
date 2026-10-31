@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 -työkalukäytöt päivässä",
       "m365MailReadsPerDay": "Sähköpostien luku päivässä",
       "m365MailDraftsPerDay": "Sähköpostiluonnokset päivässä",
-      "m365MailDeepScansPerDay": "Sähköpostien syvätarkistukset päivässä"
+      "m365MailDeepScansPerDay": "Sähköpostien syvätarkistukset päivässä",
+      "m365DigestRunsPerDay": "Päivittäiset yhteenvetoraportit per päivä"
     },
     "valueModeLabel": "Rajoituksen tyyppi",
     "valueAmountLabel": "Rajoituksen määrä",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Microsoft 365 -työkalukutsut (kalenteri, henkilöt, tehtävät, Teams) per päivä. Kun raja ylittyy, työkalut palauttavat ystävällisen “yritä uudelleen huomenna” -viestin sen sijaan, että keskustelu epäonnistuisi.",
       "m365MailReadsPerDay": "Sähköpostihakujen ja viestien/keskustelujen luku per päivä. Kun raja ylittyy, sähköpostityökalut palauttavat “yritä uudelleen huomenna” -viestin.",
       "m365MailDraftsPerDay": "Sähköpostiluonnokset, joita assistentti voi luoda päivässä — jokainen vahvistetaan erikseen. Raja on tarkoituksella tiukka.",
-      "m365MailDeepScansPerDay": "Yhdistetyt sähköpostianalyysit (koosteet, syvähaut, sitoumukset) päivässä. Jokainen skannaus vie yhden budjettiyksikön riippumatta sisäisistä luennoista."
+      "m365MailDeepScansPerDay": "Yhdistetyt sähköpostianalyysit (koosteet, syvähaut, sitoumukset) päivässä. Jokainen skannaus vie yhden budjettiyksikön riippumatta sisäisistä luennoista.",
+      "m365DigestRunsPerDay": "Microsoft 365 -päivittäiset yhteenvetoraportit per päivä. Yksi ajo sisältää kymmeniä Graph-lukuja ja kaksi analyysimallikutsua; ajanjakson valinta tekee uusinnat helpoiksi, joten oletus on tiukka."
     },
     "scopeFamily": "Perhe",
     "scopeModel": "Malli",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Aamun triage",
-        "description": "Saapuneet, sinulta odottavat ja tämän päivän kalenteri — yksi briiffaus"
+        "description": "Yhteenveto edellisen työpäivän jälkeen — saapuneet viestit, odottavat tehtävät, kutsut ja päivitykset; maanantaisin kattaa myös perjantain ja viikonlopun"
       },
       "chipsSettingLabel": "Ehdota Microsoft 365 -toimintapolkuja",
       "chipsSettingHint": "Näytä playbook-ehdotukset viestikentän yläpuolella, kun ne ovat käytettävissä (esim. kokousmuistion tuonnin jälkeen).",
-      "dismissChip": "Hylkää {title}"
+      "dismissChip": "Hylkää {title}",
+      "dailyDigest": {
+        "title": "Päivittäinen yhteenveto",
+        "description": "Järjestä viimeisimmät sähköpostit, Teams ja kalenteri: toimenpiteitä vaativat, odottamasi, päivitykset ja tiedoksi — valitse ajanjakso"
+      }
+    },
+    "digest": {
+      "title": "Päivittäinen yhteenveto",
+      "intro": "Käy läpi ajanjaksolla tulleet viestit ja lajittelee ne: edellyttääkö vastausta, onko sinulta pyydetty, odottamasi asiat, aikataulutukset, yritys- ja projektipäivitykset sekä tiedoksi. Mitään ei lähetetä tai muuteta.",
+      "periodLabel": "Ajanjakso",
+      "preset": {
+        "lastWorkday": "Viimeisestä työpäivästä lähtien",
+        "1d": "Viimeiset 24 tuntia",
+        "3d": "Viimeiset 3 päivää",
+        "7d": "Viimeiset 7 päivää",
+        "14d": "Viimeiset 14 päivää",
+        "custom": "Mukautettu aikaväli"
+      },
+      "lastWorkdayHint": "Alkaen viimeisen arkipäivän alusta ennen tätä päivää — maanantaina tämä kattaa perjantain ja viikonlopun.",
+      "from": "Alkaen",
+      "to": "Päättyen",
+      "customInvalid": "Valitse enintään {days} päivän järjestyksessä oleva aikaväli.",
+      "sourcesLabel": "Lähteet",
+      "sourceNoConsent": "Tälle lähteelle ei ole annettu lupaa.",
+      "sourceHint": {
+        "mail": "Saapuneet-kansion kirjekuoret ja esikatselut; lähetetyt määrittävät, mitkä lasketaan vastatuiksi.",
+        "chat": "Viimeisimmät Teams-keskustelut, joissa on @mainintoja joihin et ole vastannut.",
+        "channel": "Julkaisut alla valitsemissasi kanavissa.",
+        "calendar": "Kutsut, jotka odottavat vastaustasi, sekä kokoukset joissa muut eivät ole vastanneet."
+      },
+      "channelsLabel": "Kanavat ({count}/{max})",
+      "removeChannel": "Poista {name}",
+      "channelsSlow": "Jokainen kanava lisää lukuja; useampi kanava hidastaa yhteenvetoa.",
+      "channelsMax": "Kanavien enimmäismäärä {max} saavutettu.",
+      "channelsNeeded": "Valitse vähintään yksi kanava tai lisää toinen lähde.",
+      "teamLabel": "Tiimi",
+      "loadingTeams": "Ladataan tiimejä…",
+      "pickTeam": "Valitse tiimi näyttääksesi sen kanavat",
+      "loadingChannels": "Ladataan kanavia…",
+      "noChannels": "Tässä tiimissä ei löytynyt kanavia.",
+      "privacyNote": "Vain aiheet, lähettäjät ja lyhyet esikatselut luetaan; viestien sisällöt ja liitteet pysyvät Microsoft 365:ssä. Kohteet ovat omista tiedoistasi tehtyjä yhteenvetoja.",
+      "cancel": "Peruuta",
+      "run": "Käynnistä yhteenveto",
+      "starting": "Käynnistetään…",
+      "startFailed": "Yhteenvetoa ei voitu käynnistää.",
+      "userMessage": "Päivittäinen yhteenveto — {period}; lähteet: {sources}",
+      "working": "Skannataan Microsoft 365 -viestintääsi…",
+      "failed": "Yhteenveto epäonnistui.",
+      "failedPrefix": "Päivittäinen yhteenveto epäonnistui:",
+      "expired": "Tämä yhteenveto on vanhentunut. Suorita uudelleen saadaksesi tuoreen.",
+      "runAgain": "Suorita uudelleen",
+      "changePeriod": "Vaihda ajanjaksoa",
+      "period": {
+        "lastWorkday": "viimeisestä työpäivästä",
+        "lastDays": "{count, plural, one {viimeinen päivä} other {viimeiset # päivää}}"
+      },
+      "source": {
+        "mail": "Sähköposti",
+        "chat": "Teams-keskustelut",
+        "channel": "Teams-kanavat",
+        "calendar": "Kalenteri"
+      },
+      "sourceStatus": {
+        "ok": "valmis",
+        "partial": "osittainen",
+        "skipped": "ohitettu",
+        "unavailable": "ei oikeuksia",
+        "error": "epäonnistui"
+      },
+      "degraded": "Analyysimalli ei ollut käytettävissä, joten kategoriat perustuvat vain sääntöihin.",
+      "withheld": "{count, plural, one {# kohde pidätettiin} other {# kohdetta pidätettiin}} turvasuodattimien toimesta.",
+      "empty": "Tältä ajalta ja näistä lähteistä ei ole raportoitavaa.",
+      "actionItems": "Toimintakohteet",
+      "createTasks": "{count, plural, =0 {Lisää Tehtävälistaan} one {Lisää # tehtävä Tehtävälistaan} other {Lisää # tehtävää Tehtävälistaan}}",
+      "taskCreated": "lisätty Tehtävälistaan",
+      "tasksCreated": "{count, plural, one {# tehtävä} other {# tehtävää}} lisätty \"{list}\"-listaan.",
+      "tasksFailed": "Tehtäviä ei voitu luoda.",
+      "category": {
+        "needsReply": "Tarvitsee vastaukseni",
+        "askedOfMe": "Pyydetty minulta",
+        "waitingOnOthers": "Odottaa muilta",
+        "scheduling": "Aikataulutus",
+        "companyUpdates": "Yritys- ja projektipäivitykset",
+        "fyi": "Tiedoksi",
+        "bulk": "Automaattinen ja massapostitus"
+      },
+      "companyUpdatesHint": "tärkeä, harvoin kiireellinen",
+      "markDone": "Merkitse {title} käsitellyksi",
+      "badge": {
+        "unanswered": "vastaamatta",
+        "mentioned": "mainitsi sinut",
+        "important": "korkea tärkeys"
+      },
+      "askAbout": "Kysy tästä",
+      "askPrompt": "Yllä olevassa koosteessa oleva {source}-kohde \"{title}\" käyttäjältä {from} ({when}): mitä siinä kysytään ja millainen olisi hyvä vastaus?",
+      "open": {
+        "mail": "Avaa Outlookissa",
+        "chat": "Avaa Teamsissa",
+        "channel": "Avaa Teamsissa",
+        "calendar": "Avaa Outlookissa"
+      },
+      "footnote": "Kategoriat perustuvat omiin signaaleihisi (vastaamatta, mainittu, laajalevitteinen) sekä tekoälyluokitukseen; varmista ennen toimintaa. Mitään ei lähetetty.",
+      "age": {
+        "now": "juuri nyt",
+        "hours": "{count} t sitten",
+        "days": "{count} pv sitten"
+      },
+      "waitForReply": "Odota, että nykyinen vastaus valmistuu ennen yhteenvedon aloittamista."
     }
   },
   "share": {

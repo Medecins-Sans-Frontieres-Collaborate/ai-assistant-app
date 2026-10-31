@@ -5691,7 +5691,8 @@
       "m365ToolCallsPerDay": "Miito ya zana za Microsoft 365 kwa siku",
       "m365MailReadsPerDay": "Usomaji wa barua kwa siku",
       "m365MailDraftsPerDay": "Rasimu za barua kwa siku",
-      "m365MailDeepScansPerDay": "Uchambuzi wa kina wa barua kwa siku"
+      "m365MailDeepScansPerDay": "Uchambuzi wa kina wa barua kwa siku",
+      "m365DigestRunsPerDay": "Digest za kila siku kwa siku"
     },
     "valueModeLabel": "Aina ya kikomo",
     "valueAmountLabel": "Kiwango cha kikomo",
@@ -5769,7 +5770,8 @@
       "m365ToolCallsPerDay": "Idadi ya miito ya zana za Microsoft 365 (kalenda, watu, kazi, Teams) kwa siku. Ukizidisha kikomo, zana zitarudisha ujumbe wa kirafiki wa \"jaribu tena kesho\" badala ya kushindwa mazungumzo.",
       "m365MailReadsPerDay": "Utafutaji wa barua na usomaji wa ujumbe/mitiririko kwa siku. Ukizidisha kikomo, zana za barua zitarudisha \"jaribu tena kesho\".",
       "m365MailDraftsPerDay": "Rasimu za barua pepe ambazo msaidizi anaweza kuunda kwa siku — kila moja inathibitishwa kando. Kikomo hiki ni makusudi kuwa kidogo.",
-      "m365MailDeepScansPerDay": "Uchanganuzi wa barua pepe uliounganishwa (mwhtasari, utafutaji wa kina, ahadi) kwa siku. Kila uchunguzi huhesabiwa kama kitengo kimoja, bila kujali idadi ya usomaji wake wa ndani."
+      "m365MailDeepScansPerDay": "Uchanganuzi wa barua pepe uliounganishwa (mwhtasari, utafutaji wa kina, ahadi) kwa siku. Kila uchunguzi huhesabiwa kama kitengo kimoja, bila kujali idadi ya usomaji wake wa ndani.",
+      "m365DigestRunsPerDay": "Digest za Microsoft 365 za kila siku kwa siku. Digest moja inajumuisha kusoma kwa Graph mara nyingi pamoja na miito miwili ya modeli ya uchambuzi; chaguo la kipindi hufanya kurudia kuwa rahisi kuomba, hivyo kizingiti cha kawaida ni kidogo."
     },
     "scopeFamily": "Familia",
     "scopeModel": "Mfano",
@@ -6504,11 +6506,118 @@
       },
       "morningTriage": {
         "title": "Upangaji wa asubuhi",
-        "description": "Nini kimeingia, nini kinakungoja, na kalenda ya leo — maelezo ya haraka"
+        "description": "Muhtasari tangu siku ya mwisho ya kazi — yaliyoingia, yaliyosubiriwa kwako, mwaliko na masasisho; Jumatatu inachukua Ijumaa na wikendi."
       },
       "chipsSettingLabel": "Pendekeza Playbooks za Microsoft 365",
       "chipsSettingHint": "Onyesha mapendekezo ya playbook juu ya kisanduku cha ujumbe inapofaa (mfano baada ya kuingiza muhtasari wa kikao).",
-      "dismissChip": "Futa {title}"
+      "dismissChip": "Futa {title}",
+      "dailyDigest": {
+        "title": "Digest ya kila siku",
+        "description": "Panga barua pepe, Teams na kalenda za hivi karibuni katika kinachokuhitaji, unachongojea, taarifa na FYI — chagua kipindi"
+      }
+    },
+    "digest": {
+      "title": "Digest ya kila siku",
+      "intro": "Inachanganua kilichokufikia katika kipindi na kupanga katika kinachohitaji jibu, ulichotakiwa, unachongojea, kupanga ratiba, taarifa za kampuni na mradi, na FYI. Hakuna kinachotumwa au kubadilishwa.",
+      "periodLabel": "Kipindi",
+      "preset": {
+        "lastWorkday": "Tangu siku ya kazi iliyopita",
+        "1d": "Masaa 24 yaliyopita",
+        "3d": "Siku 3 zilizopita",
+        "7d": "Siku 7 zilizopita",
+        "14d": "Siku 14 zilizopita",
+        "custom": "Kipindi maalum"
+      },
+      "lastWorkdayHint": "Kuanzia mwanzo wa siku ya kazi iliyopita kabla ya leo — Jumatatu inajumuisha Ijumaa na wikendi.",
+      "from": "Kutoka",
+      "to": "Mpaka",
+      "customInvalid": "Chagua kipindi kilichopangwa isiyozidi {days} siku.",
+      "sourcesLabel": "Vyanzo",
+      "sourceNoConsent": "Ruhusa haijatolewa kwa chanzo hiki.",
+      "sourceHint": {
+        "mail": "Bahasha za kikasha na muhtasari; Sent Items zako huamua vilivyojibiwa.",
+        "chat": "Mazungumzo ya hivi karibuni kwenye Teams, na @mentions ambazo hujajibu.",
+        "channel": "Machapisho katika chaneli unazochagua hapa chini.",
+        "calendar": "Mialiko inayosubiri majibu yako na mikutano yako ambayo wengine hawajajibu."
+      },
+      "channelsLabel": "Chaneli ({count} kati ya {max})",
+      "removeChannel": "Ondoa {name}",
+      "channelsSlow": "Kila chaneli inaongeza kusoma; chaneli nyingi zinachelewesha digest.",
+      "channelsMax": "Umefikia kiwango cha juu cha chaneli {max}.",
+      "channelsNeeded": "Chagua angalau chaneli moja, au ongeza chanzo kingine.",
+      "teamLabel": "Timu",
+      "loadingTeams": "Inapakia timu…",
+      "pickTeam": "Chagua timu ili uone chaneli zake",
+      "loadingChannels": "Inapakia chaneli…",
+      "noChannels": "Hakuna chaneli zimepatikana kwenye timu hii.",
+      "privacyNote": "Ni mada, watumaji na muhtasari mfupi tu husomwa; miili ya ujumbe na viambatisho hubaki kwenye Microsoft 365. Kipengee ni muhtasari wa data yako mwenyewe.",
+      "cancel": "Ghairi",
+      "run": "Endesha digest",
+      "starting": "Inaanza…",
+      "startFailed": "Digest imeshindwa kuanzishwa.",
+      "userMessage": "Digest ya kila siku — {period}; vyanzo: {sources}",
+      "working": "Inachanganua mawasiliano yako ya Microsoft 365…",
+      "failed": "Digest imeshindwa.",
+      "failedPrefix": "Digest ya kila siku imeshindwa:",
+      "expired": "Digest hii imekwisha muda wake. Iendeshe tena ili kupata mpya.",
+      "runAgain": "Endesha tena",
+      "changePeriod": "Badilisha kipindi",
+      "period": {
+        "lastWorkday": "tangu siku ya kazi iliyopita",
+        "lastDays": "{count, plural, one {siku iliyopita} other {siku # zilizopita}}"
+      },
+      "source": {
+        "mail": "Barua pepe",
+        "chat": "Mazungumzo ya Teams",
+        "channel": "Chaneli za Teams",
+        "calendar": "Kalenda"
+      },
+      "sourceStatus": {
+        "ok": "imekamilika",
+        "partial": "sehemu",
+        "skipped": "ilipitwa",
+        "unavailable": "hakuna ruhusa",
+        "error": "imefeli"
+      },
+      "degraded": "Mfumo wa uchambuzi haukupatikana, hivyo makundi yametolewa na sheria pekee.",
+      "withheld": "{count, plural, one {kipengele kimoja} other {vipengele #}} vimezuiwa na skrini za usalama.",
+      "empty": "Hakuna cha kuripoti kwa kipindi hiki na vyanzo hivi.",
+      "actionItems": "Vipengele vya kuchukua hatua",
+      "createTasks": "{count, plural, =0 {Ongeza kwenye To Do} one {Ongeza kazi # kwenye To Do} other {Ongeza kazi # kwenye To Do}}",
+      "taskCreated": "imeongezwa kwenye To Do",
+      "tasksCreated": "{count, plural, one {kazi #} other {kazi #}} zimeongezwa kwenye orodha \"{list}\".",
+      "tasksFailed": "Haikuwezekana kuunda kazi.",
+      "category": {
+        "needsReply": "Inahitaji jibu langu",
+        "askedOfMe": "Imeniulizwa",
+        "waitingOnOthers": "Inasubiri wengine",
+        "scheduling": "Ratiba",
+        "companyUpdates": "Taarifa za kampuni na mradi",
+        "fyi": "Kwa taarifa yako (FYI)",
+        "bulk": "Kiotomatiki na nyingi"
+      },
+      "companyUpdatesHint": "muhimu, mara chache ya dharura",
+      "markDone": "Weka {title} kuwa imeshughulikiwa",
+      "badge": {
+        "unanswered": "haijajibiwa",
+        "mentioned": "umetajwa",
+        "important": "umuhimu wa juu"
+      },
+      "askAbout": "Uliza kuhusu hili",
+      "askPrompt": "Kuhusu kipengele cha {source} \"{title}\" kutoka {from} ({when}) katika muhtasari hapo juu: nini kinaulizwa, na jibu zuri lingekuwa nini?",
+      "open": {
+        "mail": "Fungua kwenye Outlook",
+        "chat": "Fungua kwenye Teams",
+        "channel": "Fungua kwenye Teams",
+        "calendar": "Fungua kwenye Outlook"
+      },
+      "footnote": "Makundi hutokana na ishara zako binafsi (haijajibiwa, umetajwa, matangazo) pamoja na upangaji wa AI; hakikisha kabla ya kuchukua hatua. Hakuna kilichotumwa.",
+      "age": {
+        "now": "sasa hivi",
+        "hours": "{count}h zilizopita",
+        "days": "{count}d zilizopita"
+      },
+      "waitForReply": "Subiri majibu ya sasa yakamilike kabla ya kuanzisha muhtasari."
     }
   },
   "share": {
