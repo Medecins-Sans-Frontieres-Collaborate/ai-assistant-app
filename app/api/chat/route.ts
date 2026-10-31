@@ -41,10 +41,12 @@ import { HEARTBEAT_ACTIVITY_KEY, emitAgentActivity } from '@/lib/streamMarkers';
  * Budget for everything BEFORE the model handler stage (file download +
  * extraction, RAG, tool router, …). The whole-request guard is this plus
  * the model timeout, so a user who asks to wait longer for the model never
- * eats into the pre-stage budget. Was a flat 300 s with a 90 s handler
- * stage before issue #130 — the sum is unchanged at the default.
+ * eats into the pre-stage budget. Sized to the longest pre-model stage
+ * (ToolRouterEnricher, 240 s — code interpreter / document trim) plus
+ * slack, so an enricher degrades through its own timeout path before the
+ * whole request is declared timed out.
  */
-const PRE_MODEL_BUDGET_MS = 210_000;
+const PRE_MODEL_BUDGET_MS = 250_000;
 
 /**
  * Keepalive cadence while the pipeline is silent (no activity marker).
@@ -53,9 +55,14 @@ const PRE_MODEL_BUDGET_MS = 210_000;
  * the user sees a frozen loader. The heartbeat is a real activity marker
  * (HEARTBEAT_ACTIVITY_KEY), so a plain "Thinking…" loader also gains the
  * elapsed counter; the client ignores it while a more specific activity
- * is showing.
+ * is showing. The heartbeat runs for the WHOLE response, not just the
+ * pre-model stages: a reasoning model can accept the request and then send
+ * nothing for minutes, and a multi-round tool loop goes quiet between
+ * rounds. Markers are only ever written between whole handler chunks (the
+ * pipe loop below awaits each write), so they can never land inside a
+ * metadata block.
  */
-const HEARTBEAT_INTERVAL_MS = 15_000;
+const HEARTBEAT_INTERVAL_MS = 10_000;
 const HEARTBEAT_QUIET_MS = 20_000;
 
 /**
@@ -326,12 +333,39 @@ export async function POST(req: NextRequest): Promise<Response> {
       context.modelTimeoutMs ?? STAGE_TIMEOUTS.StandardChatHandler;
     const timeoutMs = PRE_MODEL_BUDGET_MS + modelTimeoutMs;
 
+    // Request-level cancellation: when the guard below fires, or the
+    // client goes away (Stop button, tab closed, network dropped), the
+    // pipeline is told to stop — the running stage's upstream call is
+    // aborted and no later stage (in particular the model) starts on a
+    // request nobody is waiting for. The model handler keeps listening
+    // after it returned its Response (see ChatPipeline), so a disconnect
+    // during generation aborts the upstream model/tool-loop call too
+    // instead of leaving a zombie turn that is metered and may still run
+    // approved side effects.
+    const requestAbort = new AbortController();
+    const onClientAbort = () => {
+      if (requestAbort.signal.aborted) return;
+      console.log('[Unified Chat] Client disconnected; aborting pipeline');
+      requestAbort.abort(new Error('Client disconnected'));
+    };
+    if (req.signal.aborted) onClientAbort();
+    else req.signal.addEventListener('abort', onClientAbort, { once: true });
+
+    // Keepalive while nothing has been written for HEARTBEAT_QUIET_MS
+    // (streaming only — the non-streaming path has nothing to write to).
+    const heartbeat = context.stream
+      ? setInterval(() => {
+          if (requestAbort.signal.aborted) return;
+          if (Date.now() - lastMarkerAt < HEARTBEAT_QUIET_MS) return;
+          void emitActivity(HEARTBEAT_ACTIVITY_KEY);
+        }, HEARTBEAT_INTERVAL_MS)
+      : null;
+    const stopHeartbeat = () => {
+      if (heartbeat) clearInterval(heartbeat);
+      req.signal.removeEventListener('abort', onClientAbort);
+    };
+
     const executePipeline = async () => {
-      // Request-level cancellation: when the guard below fires, the
-      // pipeline is told to stop — the running stage's upstream call is
-      // aborted and no later stage (in particular the model) starts on a
-      // request the client has already been told failed.
-      const requestAbort = new AbortController();
       let guardTimer: ReturnType<typeof setTimeout> | null = null;
       const timeoutPromise = new Promise<never>((_, reject) => {
         guardTimer = setTimeout(() => {
@@ -344,23 +378,12 @@ export async function POST(req: NextRequest): Promise<Response> {
           reject(error);
         }, timeoutMs);
       });
-      // Keepalive while the stages are silent (streaming only — the
-      // non-streaming path has nothing to write to). Stops the moment the
-      // pipeline returns, i.e. before any handler bytes are piped, so it
-      // can never interleave with model output.
-      const heartbeat = context.stream
-        ? setInterval(() => {
-            if (Date.now() - lastMarkerAt < HEARTBEAT_QUIET_MS) return;
-            void emitActivity(HEARTBEAT_ACTIVITY_KEY);
-          }, HEARTBEAT_INTERVAL_MS)
-        : null;
       try {
         return await Promise.race([
           pipeline.execute(context, { signal: requestAbort.signal }),
           timeoutPromise,
         ]);
       } finally {
-        if (heartbeat) clearInterval(heartbeat);
         if (guardTimer) clearTimeout(guardTimer);
       }
     };
@@ -368,7 +391,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     // ── Non-streaming: classic single-response behavior ────────────────
     if (!context.stream) {
       try {
-        const result = await executePipeline();
+        const result = await executePipeline().finally(stopHeartbeat);
         const errorResponse = buildPipelineErrorResponse(result);
         if (errorResponse) return errorResponse;
         return result.response!;
@@ -436,10 +459,24 @@ export async function POST(req: NextRequest): Promise<Response> {
 
         console.log('[Unified Chat] Piping handler stream to client');
         const reader = result.response.body.getReader();
+        // Client gone mid-generation: stop draining the handler stream
+        // (its cancel() hook — where one exists — aborts upstream) in
+        // addition to the request-level abort above.
+        const cancelReader = () => {
+          void reader.cancel(requestAbort.signal.reason).catch(() => {});
+        };
+        if (requestAbort.signal.aborted) cancelReader();
+        else
+          requestAbort.signal.addEventListener('abort', cancelReader, {
+            once: true,
+          });
         try {
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
+            // Handler bytes count as liveness — the heartbeat only fills
+            // genuine silences (reasoning TTFB, between tool rounds).
+            lastMarkerAt = Date.now();
             await streamWriter.write(value);
           }
         } catch (pipeErr) {
@@ -448,6 +485,8 @@ export async function POST(req: NextRequest): Promise<Response> {
           console.error('[Unified Chat] Stream pipe error:', pipeErr);
           aborted = true;
           await abortWriter(pipeErr);
+        } finally {
+          requestAbort.signal.removeEventListener('abort', cancelReader);
         }
       } catch (err) {
         // Pipeline threw before any handler bytes were piped — report
@@ -459,6 +498,7 @@ export async function POST(req: NextRequest): Promise<Response> {
           streamErrorExtra(err),
         );
       } finally {
+        stopHeartbeat();
         if (!aborted) {
           await closeWriter();
         }
