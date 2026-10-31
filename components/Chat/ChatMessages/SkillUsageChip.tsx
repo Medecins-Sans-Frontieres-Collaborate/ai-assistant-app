@@ -43,7 +43,11 @@ export const SkillUsageChip: FC<SkillUsageChipProps> = ({ toolCalls }) => {
   const label = (line: SkillUsageLine): string | null => {
     switch (line.kind) {
       case 'skill':
-        return `${line.name} (${t(line.via)})`;
+        return `${line.name} (${t(line.via)}${
+          line.version ? `, ${t(line.version)}` : ''
+        })`;
+      case 'consent':
+        return `${line.name} (${t('needsApproval')})`;
       case 'unavailable':
         return `${line.id} (${t('unavailable')})`;
       case 'references':
