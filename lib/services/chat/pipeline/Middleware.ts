@@ -1649,13 +1649,13 @@ export async function createLimitsMiddleware(
 
     // Precompute which fallback targets this caller is blocked from, so a
     // DeploymentNotFound retry cannot silently reroute to a model an admin
-    // denied them. `isModelBlocked` checks the model cell AND (when the
-    // model declares one) its family cell — the same conjunctive resolution
-    // `checkGate` uses at send time and `/api/models` uses in the picker
-    // (docs/LIMITS_USER_FACING_UX.md §8.1) — so a family-level
-    // `model.allowed=false` keeps every member out of the fallback chain,
-    // not just a model individually named in policy. Pure resolution — no
-    // storage, no per-model round trip.
+    // denied them. `isModelBlocked` resolves the ONE merged model + family
+    // availability cell (resolveModelGate) — the same resolution `checkGate`
+    // uses at send time and `/api/models` uses in the picker (docs/LIMITS.md
+    // "Model approval") — so a family-level `model.allowed=false` keeps
+    // every member out of the fallback chain unless a model rule overrides
+    // it, exactly as the send decides. Pure resolution — no storage, no
+    // per-model round trip.
     const blockedModelIds = policy
       ? getFallbackChain().filter((id) =>
           isModelBlocked(
