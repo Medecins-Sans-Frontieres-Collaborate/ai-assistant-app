@@ -51,7 +51,7 @@ export async function readSkillThreadState(
   userKey: string,
   conversationId: string,
   signal?: AbortSignal,
-): Promise<{ state: SkillThreadState; etag: string } | null> {
+): Promise<{ state: SkillThreadState | null; etag: string } | null> {
   const blob = await downloadBlob(
     storage,
     skillThreadStatePath(userKey, conversationId),
@@ -59,11 +59,20 @@ export async function readSkillThreadState(
     { maxBytes: 256 * 1024, abortSignal: signal },
   );
   if (!blob) return null;
-  const parsed = StateSchema.safeParse(
-    JSON.parse(blob.buffer.toString('utf8')),
-  );
-  if (!parsed.success || parsed.data.expiresAt <= Date.now()) return null;
-  return { state: parsed.data, etag: blob.etag };
+  // An expired or unreadable record is treated as "nothing known" but its
+  // etag is kept so the next write replaces it instead of failing CAS
+  // (If-None-Match on an existing blob) on every turn until the sweep.
+  let state: SkillThreadState | null = null;
+  try {
+    const parsed = StateSchema.safeParse(
+      JSON.parse(blob.buffer.toString('utf8')),
+    );
+    if (parsed.success && parsed.data.expiresAt > Date.now())
+      state = parsed.data;
+  } catch {
+    state = null;
+  }
+  return { state, etag: blob.etag };
 }
 
 /** Best effort: a lost race means another replica recorded a superset. */
