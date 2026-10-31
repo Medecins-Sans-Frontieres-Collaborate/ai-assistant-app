@@ -13,6 +13,11 @@ import {
   PolicyPutBody,
   toPolicyPutDelegation,
 } from '@/client/hooks/settings/useLimitsAdmin';
+import {
+  collectClientGroupIds,
+  seedGroupNames,
+  useGroupNames,
+} from '@/client/hooks/useGroupNames';
 
 import {
   LimitDelegation,
@@ -53,6 +58,7 @@ import {
   PolicyResponse,
   emptyDelegation,
   emptyOverride,
+  groupMembershipWarning,
 } from '@/components/Limits/types';
 
 /** `cost` exists only while `useLimitsCost().calculator` is on. */
@@ -166,6 +172,9 @@ export const GlobalLimitsPanel: FC = () => {
   });
 
   const applyServer = (data: PolicyResponse) => {
+    // Stored group names into the shared client cache before the cards
+    // render, so group overrides and grants show names with no lookup.
+    seedGroupNames(data.policy?.groupLabels);
     setEtag(data.etag);
     setDraft(draftFrom(data));
     setDirty(false);
@@ -310,6 +319,15 @@ export const GlobalLimitsPanel: FC = () => {
   // counter from zero org-wide and, for the cache TTL, lets replicas debit
   // different documents. Worth saying before Save, not after.
   const savedTimezone = policyQuery.data?.policy?.timezone ?? 'UTC';
+  const membershipWarning = groupMembershipWarning(
+    policyQuery.data?.groupMembership,
+  );
+  const groupNames = useGroupNames(
+    collectClientGroupIds({
+      overrides: draft.overrides,
+      jurisdictions: draft.delegations.map((d) => d.jurisdiction),
+    }),
+  );
   const timezoneChanged =
     policyQuery.data?.policy !== undefined &&
     policyQuery.data?.policy !== null &&
@@ -402,6 +420,27 @@ export const GlobalLimitsPanel: FC = () => {
         {draft.mode === 'observe' && (
           <p className={`mt-3 ${ADMIN_BANNER_WARN}`}>{t('observeNotice')}</p>
         )}
+        {membershipWarning && policyQuery.data?.groupMembership && (
+          <p className={`mt-3 ${ADMIN_BANNER_WARN}`} role="alert">
+            {t(
+              membershipWarning === 'structural'
+                ? 'groupMembershipDegradedStructural'
+                : 'groupMembershipDegradedRetryable',
+              {
+                reason:
+                  policyQuery.data.groupMembership.lastFailure?.reason ?? '',
+              },
+            )}
+            {policyQuery.data.groupMembership.degradedUsers > 0 && (
+              <>
+                {' '}
+                {t('groupMembershipDegradedUsers', {
+                  count: policyQuery.data.groupMembership.degradedUsers,
+                })}
+              </>
+            )}
+          </p>
+        )}
         {timezoneChanged && (
           <p className={`mt-3 ${ADMIN_BANNER_WARN}`} role="note">
             {t('timezoneChangeWarning', {
@@ -485,7 +524,12 @@ export const GlobalLimitsPanel: FC = () => {
                   globalDefaults={draft.defaults}
                   defaultExpanded={newOverrideIds.has(override.id)}
                   variant={override.delegationId ? 'scoped' : 'global'}
-                  appliesTo={appliesToLine(t, override.scope, override.targets)}
+                  appliesTo={appliesToLine(
+                    t,
+                    override.scope,
+                    override.targets,
+                    groupNames,
+                  )}
                   delegationOptions={delegationOptions}
                   verdicts={
                     delegation
