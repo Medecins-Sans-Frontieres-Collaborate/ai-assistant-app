@@ -501,9 +501,10 @@ describe('resolveAllLimits', () => {
     const all = resolveAllLimits(null, principal());
     const limited = Object.values(all).filter((r) => !isUnlimited(r));
     // Only the keys that encode behaviour the app ALREADY has today —
-    // plus feature.m365.toolCallsPerDay, whose non-null default cannot
-    // change existing behaviour because the toolset ships flag-gated dark.
+    // plus the feature.m365.* keys, whose non-null defaults cannot change
+    // existing behaviour because the toolset and the digest ship flag-gated dark.
     expect(limited.map((r) => r.limitKey).sort()).toEqual([
+      'feature.m365.digestRunsPerDay',
       'feature.m365.mail.deepScansPerDay',
       'feature.m365.mail.draftsPerDay',
       'feature.m365.mail.readsPerDay',
