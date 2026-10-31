@@ -54,6 +54,13 @@ import { emitAgentActivity } from '@/lib/streamMarkers';
  */
 
 export const MAX_TOOL_ROUNDS = 5;
+/**
+ * Per tool call wall-clock budget. A connector that hangs would otherwise
+ * stall the turn until the pipeline stage timer fires — which the client
+ * reports as "the model did not start responding", untrue and misleading.
+ * A tool that overruns is recorded as a failed call and the model is told.
+ */
+export const TOOL_CALL_BUDGET_MS = 120_000;
 const LIST_TOOLS_BUDGET_MS = 10_000;
 
 export interface ServerWithTools {
@@ -176,6 +183,12 @@ export interface ToolLoopCoreOptions<TMessage> {
   builtinExecutors?: Record<string, BuiltinExecutor>;
   /** Internal read-only tool rounds are separate from connector approval rounds. */
   maxImmediateRounds?: number;
+  /**
+   * Request-level cancellation (stage timeout, request guard, client gone).
+   * Checked before every tool dispatch and model round so an abandoned turn
+   * stops executing (and metering) instead of running to completion unseen.
+   */
+  signal?: AbortSignal;
 }
 
 export async function listToolsForServers(
@@ -285,6 +298,15 @@ export async function runToolLoopCore<TMessage>(
         if (text) controller.enqueue(encoder.encode(text));
       };
       const aggregate = { prompt: 0, completion: 0, total: 0 };
+      const checkAborted = () => options.signal?.throwIfAborted();
+      const budgeted = <T>(promise: Promise<T>) =>
+        withBudget(promise, TOOL_CALL_BUDGET_MS).catch((error: unknown) => {
+          if (error instanceof Error && error.message === 'MCP budget exceeded')
+            throw new Error(
+              `Tool call did not finish within ${TOOL_CALL_BUDGET_MS / 1000} seconds`,
+            );
+          throw error;
+        });
 
       try {
         // ── LIST_TOOLS (cache makes resume rounds cheap)
@@ -502,24 +524,27 @@ export async function runToolLoopCore<TMessage>(
                   ? null
                   : await connectMcp(server);
               try {
+                checkAborted();
                 const result = connection
-                  ? await connection.callTool(call.toolName, args)
-                  : await (options.builtinExecutors?.[server.id] ??
-                      options.builtinExecutor)!
-                      .callTool(call.toolName, args, {
-                        // Composite tools stream progress ("scanning 214
-                        // messages…") through the loop's activity channel.
-                        emitActivity: (detail) =>
-                          write(
-                            emitAgentActivity('chat.activity.m365Progress', {
-                              detail,
-                            }),
-                          ),
-                      })
-                      .then((r) => ({
-                        text: r.resultText,
-                        isError: r.isError,
-                      }));
+                  ? await budgeted(connection.callTool(call.toolName, args))
+                  : await budgeted(
+                      (options.builtinExecutors?.[server.id] ??
+                        options.builtinExecutor)!
+                        .callTool(call.toolName, args, {
+                          // Composite tools stream progress ("scanning 214
+                          // messages…") through the loop's activity channel.
+                          emitActivity: (detail) =>
+                            write(
+                              emitAgentActivity('chat.activity.m365Progress', {
+                                detail,
+                              }),
+                            ),
+                        })
+                        .then((r) => ({
+                          text: r.resultText,
+                          isError: r.isError,
+                        })),
+                    );
                 write(
                   toolResultToRecordMarker(
                     call,
@@ -627,6 +652,7 @@ export async function runToolLoopCore<TMessage>(
                   : await executor.listTools();
             }
           }
+          checkAborted();
           round = await options.strategy.runModelRound(
             messages,
             serversWithTools.map((entry) => ({
@@ -684,10 +710,17 @@ export async function runToolLoopCore<TMessage>(
               argumentsJson: call.argumentsJson,
             };
             const startedAt = Date.now();
-            const outcome = await executor.callTool(
-              resolved.toolName,
-              parseToolArguments(call.argumentsJson),
-            );
+            checkAborted();
+            const outcome = await budgeted(
+              executor.callTool(
+                resolved.toolName,
+                parseToolArguments(call.argumentsJson),
+              ),
+            ).catch((error: unknown) => ({
+              resultText:
+                error instanceof Error ? error.message : 'Tool call failed',
+              isError: true,
+            }));
             write(
               toolResultToRecordMarker(
                 pending,
@@ -734,22 +767,28 @@ export async function runToolLoopCore<TMessage>(
           );
           for (const call of approvalCalls) {
             const resolved = fromModelToolName(call.name, serversWithTools);
-            if (
-              !resolved ||
-              options.loopRound >= (options.maxRounds ?? MAX_TOOL_ROUNDS)
-            ) {
-              // The model invented a tool name; surface it as failed rather
-              // than asking the user to approve something undispatchable.
+            const pastCap =
+              options.loopRound >= (options.maxRounds ?? MAX_TOOL_ROUNDS);
+            if (!resolved || pastCap) {
+              // Either the model invented a tool name, or it asked for a
+              // connector tool after the round cap (its tools were withheld,
+              // but a skills-only round can still echo a remembered name).
+              // Surface it as failed — truthfully labelled — rather than
+              // asking the user to approve something undispatchable.
               write(
                 toolResultToRecordMarker(
                   {
                     id: call.id,
-                    serverId: 'unknown',
-                    toolName: call.name,
+                    serverId: resolved?.server.id ?? 'unknown',
+                    toolName: resolved?.toolName ?? call.name,
                     argumentsJson: call.argumentsJson,
                   },
-                  'unknown',
-                  { errorMessage: 'Unknown tool' },
+                  resolved?.server.label ?? 'unknown',
+                  {
+                    errorMessage: pastCap
+                      ? 'Tool round limit reached for this message; the call was not executed.'
+                      : 'Unknown tool',
+                  },
                   0,
                 ),
               );
@@ -813,6 +852,16 @@ export async function runToolLoopCore<TMessage>(
         }
         controller.close();
       } catch (error) {
+        if (options.signal?.aborted) {
+          // Request cancelled (client gone, stage timeout already reported
+          // by the route). Nobody is reading — end quietly.
+          try {
+            controller.close();
+          } catch {
+            // already closed
+          }
+          return;
+        }
         // The real cause lives HERE only — the client gets a generic,
         // code-tagged message, so without this log a mid-loop failure is
         // undiagnosable.
