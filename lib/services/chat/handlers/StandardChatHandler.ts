@@ -421,7 +421,10 @@ export class StandardChatHandler extends BasePipelineStage {
             }
           }
 
-          if (context.agentSkillsEnabled) {
+          // Skill tools: persona turns offer agent-enabled organization
+          // skills (docs/SKILLS_DESIGN.md §5.4); standard tool-capable
+          // turns let the model load any visible skill itself (§5.6).
+          if (context.agentSkillsEnabled || context.standardSkillTools) {
             const executor = await createSkillToolExecutor({
               userMail: context.user.mail ?? undefined,
               forcedIds: context.forcedSkillIds,
@@ -439,6 +442,13 @@ export class StandardChatHandler extends BasePipelineStage {
                 context.user.region,
                 context.hostedRegion,
               ),
+              ...(context.standardSkillTools
+                ? {
+                    scope: { mode: 'standard' as const },
+                    personalSkills: context.userSkills,
+                    excludeIds: context.standardSkillTools.excludeIds,
+                  }
+                : { scope: context.skillScope ?? { mode: 'agent' as const } }),
             });
             if (executor) {
               resolvedMcpServers.push(buildSkillServer());
