@@ -174,12 +174,17 @@ export async function sweepSkillMaintenance(
  * due sources are synced one per sweep. Lazy import keeps the sync module
  * (network fetches) out of the chat path's module graph.
  */
+let refreshInFlight = false;
 async function refreshSkillSources(storage: BlobStorage): Promise<void> {
+  if (refreshInFlight) return;
+  refreshInFlight = true;
   try {
     const { autoSyncSkillSources } = await import('./skillSourceSync');
     await autoSyncSkillSources(storage);
   } catch (error) {
     console.warn('[skills] Source refresh skipped', error);
+  } finally {
+    refreshInFlight = false;
   }
 }
 
@@ -195,9 +200,9 @@ export function startSkillMaintenance(storage: BlobStorage): void {
   if (inFlight || Date.now() - lastRun < 60_000) return;
   inFlight = true;
   lastRun = Date.now();
+  void refreshSkillSources(storage);
   void sweepSkillMaintenance(storage)
     .catch((error) => console.warn('[skills] Maintenance unavailable', error))
-    .then(() => refreshSkillSources(storage))
     .finally(() => {
       inFlight = false;
     });
