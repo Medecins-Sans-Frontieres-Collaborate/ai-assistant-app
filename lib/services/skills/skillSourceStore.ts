@@ -27,6 +27,18 @@ export interface SkillSourcesRead {
   document: SkillSourcesDocument;
   /** null when the document does not exist yet (first write creates it). */
   etag: string | null;
+  /**
+   * The stored document failed validation. Readers see no sources; writers
+   * must refuse rather than replace it (an operator has to look).
+   */
+  corrupt?: boolean;
+}
+
+export class SkillSourcesCorruptError extends Error {
+  constructor() {
+    super('Skill sources document is invalid; refusing to overwrite it');
+    this.name = 'SkillSourcesCorruptError';
+  }
 }
 
 export async function readSkillSources(
@@ -43,14 +55,20 @@ export async function readSkillSources(
     },
   );
   if (!blob) return { document: EMPTY, etag: null };
-  const parsed = SkillSourcesDocumentSchema.safeParse(
-    JSON.parse(blob.buffer.toString('utf8')),
-  );
+  let parsed: ReturnType<typeof SkillSourcesDocumentSchema.safeParse>;
+  try {
+    parsed = SkillSourcesDocumentSchema.safeParse(
+      JSON.parse(blob.buffer.toString('utf8')),
+    );
+  } catch (error) {
+    console.error('[skills] Skill sources document is not JSON', error);
+    return { document: EMPTY, etag: blob.etag, corrupt: true };
+  }
   if (!parsed.success) {
     // A corrupt document must not be silently replaced: surface it and let
-    // an admin fix storage. Reads degrade to "no sources".
+    // an operator fix storage. Reads degrade to "no sources".
     console.error('[skills] Skill sources document is invalid', parsed.error);
-    return { document: EMPTY, etag: blob.etag };
+    return { document: EMPTY, etag: blob.etag, corrupt: true };
   }
   return { document: parsed.data, etag: blob.etag };
 }
@@ -85,7 +103,8 @@ export async function mutateSkillSource(
   signal?: AbortSignal,
 ): Promise<SkillSource | null> {
   for (let attempt = 0; attempt < 4; attempt++) {
-    const { document, etag } = await readSkillSources(storage, signal);
+    const { document, etag, corrupt } = await readSkillSources(storage, signal);
+    if (corrupt) throw new SkillSourcesCorruptError();
     const current = document.sources.find((source) => source.id === sourceId);
     if (!current) return null;
     const next = update(current);
