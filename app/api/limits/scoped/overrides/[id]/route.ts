@@ -4,6 +4,11 @@ import { NextRequest } from 'next/server';
 import { statusCodeOf } from '@/lib/services/agentAccess/blobCas';
 import { LimitsService } from '@/lib/services/limits/LimitsService';
 import {
+  collectGroupIds,
+  pruneGroupLabels,
+  refreshGroupLabels,
+} from '@/lib/services/limits/groupLabels';
+import {
   LimitsConflictError,
   PolicyMutationOutcome,
   PolicyUnreadableError,
@@ -195,6 +200,12 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
   /** Whether the FIRST round saw the override — a later miss means it vanished. */
   let sawExisting: boolean | undefined;
 
+  // Outside the CAS loop so a retry does not re-ask Graph; best effort.
+  const freshLabels =
+    body.scope === 'group'
+      ? await refreshGroupLabels(request, body.targets, undefined)
+      : undefined;
+
   const mutate = (
     current: LimitsPolicy | null,
     etag: string | null,
@@ -294,11 +305,27 @@ export async function PUT(request: NextRequest, { params }: RouteContext) {
     written = next;
     raises = countRaises(current, next);
 
+    const overrides = existing
+      ? current.overrides.map((o) => (o.id === id ? next : o))
+      : [...current.overrides, next];
+    // Names for the ids this write introduces (resolved ONCE before the CAS
+    // loop, below) merged over the stored ones, pruned to what the document
+    // still references. Display-only; see lib/services/limits/groupLabels.ts.
+    const groupLabels = pruneGroupLabels(
+      { ...current.groupLabels, ...freshLabels },
+      collectGroupIds({
+        overrides,
+        delegations: current.delegations,
+        modelAccess: current.modelAccess,
+      }),
+    );
+    const { groupLabels: _dropped, ...rest } = current;
+    void _dropped;
+
     return {
-      ...current,
-      overrides: existing
-        ? current.overrides.map((o) => (o.id === id ? next : o))
-        : [...current.overrides, next],
+      ...rest,
+      overrides,
+      ...(groupLabels ? { groupLabels } : {}),
       updatedBy: userMail,
       updatedAt: now,
     };
