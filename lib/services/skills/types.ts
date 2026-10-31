@@ -66,6 +66,20 @@ export const SKILL_LIMITS = {
   maxAgentLoads: 3,
   maxAgentSearches: 4,
   maxAgentSkillRounds: 3,
+  /**
+   * Model-facing catalog budget for `load_skill` (characters of the JSON
+   * list, roughly 3k tokens). Entries are id-sorted and descriptions cut at
+   * `toolCatalogDescriptionChars`; whatever does not fit is left out and
+   * counted, never silently dropped.
+   */
+  toolCatalogMaxChars: 12_000,
+  toolCatalogDescriptionChars: 400,
+  /** External catalog subscriptions (docs/SKILLS_DESIGN.md §12). */
+  maxSkillSources: 10,
+  maxSourceSkills: 50,
+  sourceIndexMaxBytes: 256 * 1024,
+  sourceSkillMdMaxBytes: 256 * 1024,
+  sourceSyncIntervalMs: 6 * 60 * 60 * 1000,
 } as const;
 
 /**
@@ -85,13 +99,22 @@ export const SkillIdSchema = z
 
 /**
  * How a skill reaches a turn (docs/SKILLS_DESIGN.md §5):
- * - 'auto'   — routed by the tool router when the turn matches the
- *              description, or explicitly selected/pinned by the user.
+ * - 'auto'   — advertised to the model (load_skill catalog) or routed by
+ *              the tool router when the turn matches the description, and
+ *              explicitly selectable/pinnable by the user.
  * - 'always' — injected on every turn where the skill is visible.
+ * - 'manual' — explicit use only: never advertised, routed, or offered to
+ *              the model; users request or pin it. The Agent Skills
+ *              `disable-model-invocation: true` maps here.
  * - 'off'    — authored but inactive; still visible in admin.
- * Explicit use (forcedSkillIds) works for 'auto' and 'always', never 'off'.
+ * Explicit use (forcedSkillIds) works for everything but 'off'.
  */
-export const SkillActivationSchema = z.enum(['auto', 'always', 'off']);
+export const SkillActivationSchema = z.enum([
+  'auto',
+  'always',
+  'manual',
+  'off',
+]);
 export type SkillActivation = z.infer<typeof SkillActivationSchema>;
 
 /**
@@ -131,6 +154,20 @@ export const SkillDocumentSchema = z.object({
 export type SkillDocument = z.infer<typeof SkillDocumentSchema>;
 
 /**
+ * Provenance of a skill synced from an external catalog
+ * (docs/SKILLS_DESIGN.md §12). Content fields are replaced on every sync;
+ * admin-chosen delivery fields (activation, applyToAgents, requireConsent)
+ * are preserved.
+ */
+export const SkillSourceRefSchema = z.object({
+  sourceId: z.string().min(1),
+  /** The catalog entry's `version`, used to skip unchanged skills. */
+  version: z.string().optional(),
+  syncedAt: z.string(),
+});
+export type SkillSourceRef = z.infer<typeof SkillSourceRefSchema>;
+
+/**
  * A stored skill (read schema, permissive). Admin-authored (org skills) or
  * compiled (built-ins, which admin records override by id — see
  * builtinSkills.ts).
@@ -152,9 +189,19 @@ export const SkillSchema = z.object({
    * by default; never permits user-authored skills or replaces persona prompts.
    */
   applyToAgents: z.boolean().default(false),
+  /**
+   * The "ask" effect (docs/SKILLS_DESIGN.md §5.5): the skill is advertised
+   * but never applied without the user's say-so. An automatic selection
+   * becomes a suggestion in the skills record; a model `load_skill` call
+   * pauses for approval like a connector write. Explicit use (requested or
+   * pinned) is the consent. Optional on read so stored records keep parsing.
+   */
+  requireConsent: z.boolean().optional(),
   /** Markdown instructions, injected verbatim when the skill activates. */
   instructions: z.string().min(1),
   documents: z.array(SkillDocumentSchema).default([]),
+  /** Set only on skills synced from an external catalog (§12). */
+  source: SkillSourceRefSchema.optional(),
   /**
    * Agent Skills frontmatter we preserve but never interpret (`license`,
    * `compatibility`, `metadata.*`, `allowed-tools`) — round-trips on export
@@ -189,9 +236,11 @@ export const SkillForeignFrontmatterSchema = z
             'name',
             'description',
             'metadata',
+            'disable-model-invocation',
             'metadata.msf-activation',
             'metadata.msf-display-name',
             'metadata.msf-apply-to-agents',
+            'metadata.msf-require-consent',
           ].includes(key),
         'Reserved or unsafe skill frontmatter key',
       ),
@@ -215,6 +264,7 @@ export const SkillWriteFieldsSchema = z
       .max(SKILL_LIMITS.descriptionMaxLength),
     activation: SkillActivationSchema,
     applyToAgents: z.boolean().default(false),
+    requireConsent: z.boolean().default(false),
     instructions: z
       .string()
       .trim()
@@ -233,6 +283,7 @@ export type SkillWriteFields = z.infer<typeof SkillWriteFieldsSchema>;
 /** Personal skills have no documents, agent permissions, or server-owned fields. */
 export const UserSkillSchema = SkillWriteFieldsSchema.omit({
   applyToAgents: true,
+  requireConsent: true,
 })
   .extend({ enabled: z.boolean().default(true) })
   .strict();
@@ -290,3 +341,54 @@ export interface CatalogSkill {
   /** Only server-composed personal entries carry this marker. */
   personal?: boolean;
 }
+
+/* --- External catalog subscriptions (docs/SKILLS_DESIGN.md §12) ------- */
+
+/** Per-entry outcome of the last sync, kept for the admin list. */
+export const SkillSourceEntryStateSchema = z.object({
+  id: SkillIdSchema,
+  version: z.string().optional(),
+  status: z.enum(['synced', 'skipped', 'conflict', 'invalid']),
+  detail: z.string().optional(),
+});
+export type SkillSourceEntryState = z.infer<typeof SkillSourceEntryStateSchema>;
+
+/**
+ * One subscribed HTTP catalog: a base URL whose `index.json` lists skills
+ * and the files to download for each. Global-admin configuration; the
+ * synced skills become ordinary organization skills carrying `source`.
+ */
+export const SkillSourceSchema = z.object({
+  id: z.string().min(1),
+  url: z.string().url(),
+  label: z.string().max(100).optional(),
+  addedBy: z.string(),
+  addedAt: z.string(),
+  lastSyncAt: z.string().optional(),
+  lastSyncStatus: z.enum(['ok', 'error']).optional(),
+  lastError: z.string().max(500).optional(),
+  entries: z.array(SkillSourceEntryStateSchema).default([]),
+  /** Replica lease for automatic syncs (epoch ms). */
+  syncLeaseUntil: z.number().optional(),
+});
+export type SkillSource = z.infer<typeof SkillSourceSchema>;
+
+export const SkillSourcesDocumentSchema = z.object({
+  version: z.literal(1),
+  sources: z.array(SkillSourceSchema).max(SKILL_LIMITS.maxSkillSources),
+});
+export type SkillSourcesDocument = z.infer<typeof SkillSourcesDocumentSchema>;
+
+/** The catalog index shape (`<base>/index.json`), OpenCode-compatible. */
+export const SkillSourceIndexSchema = z.object({
+  skills: z
+    .array(
+      z.object({
+        name: z.string().min(1).max(SKILL_LIMITS.idMaxLength),
+        version: z.string().max(100).optional(),
+        files: z.array(z.string().min(1).max(512)).max(64),
+      }),
+    )
+    .max(SKILL_LIMITS.maxSourceSkills),
+});
+export type SkillSourceIndex = z.infer<typeof SkillSourceIndexSchema>;
