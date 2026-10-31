@@ -40,11 +40,10 @@ import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
 import type { M365ErrorKind } from '@/lib/services/m365/graphApi';
+import { MetricsService } from '@/lib/services/observability/MetricsService';
 import { normalizeMail } from '@/lib/services/shared/principalMatching';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
-
-const SCOPES = ['Group.Read.All'];
 
 /**
  * Graph failure kinds a later attempt can plausibly clear. Everything else
@@ -74,8 +73,19 @@ function isRetryableGraphFailure(error: unknown): boolean {
 }
 
 const CACHE_TTL_MS = 10 * 60 * 1000;
+/** Retryable failures (throttle, 5xx, network): re-ask soon. */
 const FAILURE_TTL_MS = 60 * 1000;
+/**
+ * Structural failures (consent never granted, forbidden, dead refresh
+ * token): nothing about them clears in a minute. Re-asking every 60 s per
+ * user per replica only produced a failing token mint and a warning line
+ * per minute per active user for as long as the gap lasted, so they are
+ * remembered as long as a successful answer would be.
+ */
+const STRUCTURAL_FAILURE_TTL_MS = CACHE_TTL_MS;
 const MAX_CACHE_ENTRIES = 2000;
+/** The stats summary line is written at most this often (and only on change). */
+const STATS_LOG_INTERVAL_MS = 5 * 60 * 1000;
 
 interface CacheEntry {
   groupIds: string[];
@@ -144,6 +154,11 @@ function readEntry(
     map.delete(key);
     return null;
   }
+  // Re-insert on every hit so Map order is recency order: the overflow
+  // eviction in writeCache then drops the least-recently-USED user, not the
+  // one who merely signed in first.
+  map.delete(key);
+  map.set(key, entry);
   return entry;
 }
 
@@ -170,6 +185,109 @@ function writeCache(
   const entry: CacheEntry = { groupIds, expiresAt: Date.now() + ttl, degraded };
   cacheById.set(userId, entry);
   if (mail) cacheByMail.set(mail, entry);
+}
+
+// ---------------------------------------------------------------------------
+// Observability
+// ---------------------------------------------------------------------------
+
+export interface GroupMembershipStats {
+  /** Resolutions answered from the cache (incl. view-as overrides). */
+  hits: number;
+  /** Resolutions that went to Graph. */
+  misses: number;
+  failuresRetryable: number;
+  failuresStructural: number;
+  /** Users past the getMemberGroups ceiling served by the paged walk. */
+  oversizeFallbacks: number;
+  /** Live users on this replica whose last lookup failed retryably. */
+  degradedUsers: number;
+  /** Live cache entries on this replica. */
+  cachedUsers: number;
+  /** Most recent failure, for the admin banner — replica-local. */
+  lastFailure: {
+    at: string;
+    kind: 'retryable' | 'structural';
+    reason: string;
+  } | null;
+}
+
+const stats = {
+  hits: 0,
+  misses: 0,
+  failuresRetryable: 0,
+  failuresStructural: 0,
+  oversizeFallbacks: 0,
+  lastFailure: null as GroupMembershipStats['lastFailure'],
+};
+let statsDirty = false;
+let lastStatsLogAt = 0;
+
+function count(
+  outcome: Parameters<typeof MetricsService.recordGroupMembership>[0],
+): void {
+  switch (outcome) {
+    case 'hit':
+      stats.hits += 1;
+      break;
+    case 'miss':
+      stats.misses += 1;
+      break;
+    case 'failure_retryable':
+      stats.failuresRetryable += 1;
+      break;
+    case 'failure_structural':
+      stats.failuresStructural += 1;
+      break;
+    case 'oversize_fallback':
+      stats.oversizeFallbacks += 1;
+      break;
+  }
+  statsDirty = true;
+  try {
+    MetricsService.recordGroupMembership(outcome);
+  } catch {
+    // Metrics must never affect a lookup.
+  }
+}
+
+function liveCounts(): { degradedUsers: number; cachedUsers: number } {
+  const now = Date.now();
+  let degradedUsers = 0;
+  let cachedUsers = 0;
+  for (const entry of cacheById.values()) {
+    if (entry.expiresAt < now) continue;
+    cachedUsers += 1;
+    if (entry.degraded) degradedUsers += 1;
+  }
+  return { degradedUsers, cachedUsers };
+}
+
+/**
+ * Replica-local counters for the limits admin GET (banner) and the periodic
+ * summary line. A structural failure here is what a consent regression or
+ * a revoked app permission looks like from inside the app.
+ */
+export function getGroupMembershipStats(): GroupMembershipStats {
+  return { ...stats, ...liveCounts() };
+}
+
+/**
+ * One `[group-membership] stats` line per STATS_LOG_INTERVAL_MS when
+ * anything changed — the aggregate a log query can chart without parsing
+ * the per-user audit lines. Called from the resolve path, so it costs
+ * nothing on an idle replica and needs no timer.
+ */
+function maybeLogStats(now: number): void {
+  if (!statsDirty || now - lastStatsLogAt < STATS_LOG_INTERVAL_MS) return;
+  lastStatsLogAt = now;
+  statsDirty = false;
+  const live = liveCounts();
+  console.log(
+    `[group-membership] stats hits=${stats.hits} misses=${stats.misses} ` +
+      `failuresRetryable=${stats.failuresRetryable} failuresStructural=${stats.failuresStructural} ` +
+      `oversizeFallbacks=${stats.oversizeFallbacks} degradedUsers=${live.degradedUsers} cachedUsers=${live.cachedUsers}`,
+  );
 }
 
 /** Sync cache read for the limits principal builder. [] when cold. */
@@ -241,34 +359,36 @@ export async function resolveUserGroupIds(
   }
   clearViewAsOverride(userId, mail);
 
+  const now = Date.now();
   const cached = readCache(cacheById, userId);
-  if (cached !== null) return cached;
+  if (cached !== null) {
+    count('hit');
+    maybeLogStats(now);
+    return cached;
+  }
 
   const running = inFlight.get(userId);
   if (running) return running;
+  count('miss');
   const fetchPromise = (async () => {
     try {
       // Lazy import: this module is reached from the sync principal-building
       // paths (limits routeGuard, agent access), which are imported by half
-      // the server. A static graphApi import would drag next-auth into
-      // every one of those module graphs (and their tests) for a call that
-      // only happens here.
-      const { graphJson } = await import('@/lib/services/m365/graphApi');
-      const data = await graphJson<{ value?: unknown[] }>(
-        req,
-        SCOPES,
-        '/me/getMemberGroups',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ securityEnabledOnly: false }),
-        },
-      );
-      const groupIds = (data.value ?? []).filter(
-        (id): id is string => typeof id === 'string' && id.length > 0,
-      );
-      writeCache(userId, mail, groupIds, CACHE_TTL_MS, false);
-      return groupIds;
+      // the server. A static graphApi import (behind groupDirectory) would
+      // drag next-auth into every one of those module graphs (and their
+      // tests) for a call that only happens here.
+      const { fetchMemberGroupIds } =
+        await import('@/lib/services/m365/groupDirectory');
+      const result = await fetchMemberGroupIds(req, { kind: 'me' });
+      if (result.oversizeFallback) {
+        count('oversize_fallback');
+        console.warn(
+          `[group-membership] getMemberGroups refused for user=${sanitizeForLog(userId)}; ` +
+            `served ${result.groupIds.length} ids via transitiveMemberOf truncated=${result.truncated}`,
+        );
+      }
+      writeCache(userId, mail, result.groupIds, CACHE_TTL_MS, false);
+      return result.groupIds;
     } catch (error) {
       // Degraded evaluation (fourth pass A1): group clauses evaluate false
       // for this user until the negative cache expires, while user/domain
@@ -281,18 +401,37 @@ export async function resolveUserGroupIds(
       // logged just as loudly (the kind rides the audit line, so a missing
       // tenant grant is still traceable) but leaves `degraded` false, so
       // group-scoped rules go back to denying instead of softening for the
-      // lifetime of the gap.
+      // lifetime of the gap — and it is remembered for the full TTL, so the
+      // line below is written once per window, not once a minute.
       const retryable = isRetryableGraphFailure(error);
+      const kind =
+        error instanceof Error && error.name === 'M365Error'
+          ? String((error as Error & { kind?: unknown }).kind ?? 'unknown')
+          : 'network';
+      const reason =
+        error instanceof Error ? error.message.slice(0, 120) : 'unknown';
       console.warn(
         `[agent-access-audit] group-membership degraded user=${sanitizeForLog(userId)} ` +
-          `retryable=${retryable} ` +
-          `reason=${sanitizeForLog(error instanceof Error ? error.message.slice(0, 120) : 'unknown')}`,
+          `retryable=${retryable} kind=${sanitizeForLog(kind)} ` +
+          `reason=${sanitizeForLog(reason)}`,
       );
-      // Negative-cache briefly so a consent gap doesn't hammer Graph.
-      writeCache(userId, mail, [], FAILURE_TTL_MS, retryable);
+      count(retryable ? 'failure_retryable' : 'failure_structural');
+      stats.lastFailure = {
+        at: new Date().toISOString(),
+        kind: retryable ? 'retryable' : 'structural',
+        reason: sanitizeForLog(`${kind}: ${reason}`),
+      };
+      writeCache(
+        userId,
+        mail,
+        [],
+        retryable ? FAILURE_TTL_MS : STRUCTURAL_FAILURE_TTL_MS,
+        retryable,
+      );
       return [];
     } finally {
       inFlight.delete(userId);
+      maybeLogStats(Date.now());
     }
   })();
   inFlight.set(userId, fetchPromise);
@@ -306,4 +445,12 @@ export function clearGroupMembershipCache(): void {
   inFlight.clear();
   viewAsById.clear();
   viewAsByMail.clear();
+  stats.hits = 0;
+  stats.misses = 0;
+  stats.failuresRetryable = 0;
+  stats.failuresStructural = 0;
+  stats.oversizeFallbacks = 0;
+  stats.lastFailure = null;
+  statsDirty = false;
+  lastStatsLogAt = 0;
 }

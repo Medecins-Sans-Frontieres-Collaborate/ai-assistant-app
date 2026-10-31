@@ -37,6 +37,12 @@ const errorCounter = meter.createCounter('errors.count', {
   unit: 'errors',
 });
 
+const groupMembershipCounter = meter.createCounter('group_membership.lookups', {
+  description:
+    'Entra group-membership cache outcomes (hit, miss, failure_retryable, failure_structural, oversize_fallback)',
+  unit: 'lookups',
+});
+
 // Histograms for distributions
 const requestDurationHistogram = meter.createHistogram('request.duration', {
   description: 'Request duration distribution',
@@ -186,6 +192,24 @@ export class MetricsService {
     console.log(
       `[Metrics] File processed: ${fileType} (${context.fileSize} bytes) for ${context.user.mail}`,
     );
+  }
+
+  /**
+   * One group-membership cache outcome (lib/services/m365/groupMembership.ts).
+   * Structural failures (consent, forbidden) are the signal a consent
+   * regression shows up as; a steady `failure_retryable` stream is Graph
+   * throttling or an outage. No user attributes: the counter is per replica
+   * and the audit line already carries the (sanitized) user.
+   */
+  static recordGroupMembership(
+    outcome:
+      | 'hit'
+      | 'miss'
+      | 'failure_retryable'
+      | 'failure_structural'
+      | 'oversize_fallback',
+  ) {
+    groupMembershipCounter.add(1, { outcome });
   }
 
   /**

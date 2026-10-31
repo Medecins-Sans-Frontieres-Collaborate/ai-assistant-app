@@ -103,14 +103,34 @@ function attributeTarget(prefix: string, value: string | null | undefined) {
   return normalized ? `${prefix}:${normalized}` : null;
 }
 
+/** The profile fields the `attribute` scope is built from. */
+export interface AttributeProfile {
+  department?: string | null;
+  companyName?: string | null;
+  officeId?: string | null;
+}
+
+/**
+ * `attribute` targets for a profile — the one encoding both the session
+ * principal and the admin preview (which reads the same fields from the
+ * directory for someone else) must share, or the preview lies.
+ */
+export function attributesFor(profile: AttributeProfile): string[] {
+  return [
+    attributeTarget(ATTRIBUTE_PREFIXES.department, profile.department),
+    attributeTarget(ATTRIBUTE_PREFIXES.company, profile.companyName),
+    attributeTarget(ATTRIBUTE_PREFIXES.office, profile.officeId),
+  ].filter((v): v is string => v !== null);
+}
+
 export function buildPrincipal(session: Session | null): Principal {
   const user = session?.user;
   const mail = normalizeMail(user?.mail);
-  const attributes = [
-    attributeTarget(ATTRIBUTE_PREFIXES.department, user?.department),
-    attributeTarget(ATTRIBUTE_PREFIXES.company, user?.companyName),
-    attributeTarget(ATTRIBUTE_PREFIXES.office, user?.officeId),
-  ].filter((v): v is string => v !== null);
+  const attributes = attributesFor({
+    department: user?.department,
+    companyName: user?.companyName,
+    officeId: user?.officeId,
+  });
 
   return {
     userId: user?.id ?? '',

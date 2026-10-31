@@ -34,6 +34,22 @@ export interface Principal {
   groupIds: string[];
 }
 
+/**
+ * Entra group object ids are GUIDs. Write paths refuse anything else under
+ * the `group` scope: a pasted display name would be stored, never match a
+ * membership id, and look exactly like a rule that works. Compared after
+ * canonicalization (trim + lowercase), which is how targets are stored.
+ */
+export const ENTRA_GROUP_ID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+
+export function isEntraGroupId(value: string | null | undefined): boolean {
+  return (
+    typeof value === 'string' &&
+    ENTRA_GROUP_ID_RE.test(value.trim().toLowerCase())
+  );
+}
+
 /** Lowercased + trimmed, or undefined when absent/blank. */
 export function normalizeMail(
   mail: string | null | undefined,
