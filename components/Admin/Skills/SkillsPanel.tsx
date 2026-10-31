@@ -49,6 +49,7 @@ import {
 } from '@/components/Admin/adminClasses';
 
 import { SkillDocuments } from './SkillDocuments';
+import { SkillSources } from './SkillSources';
 
 /**
  * Admin → Skills (docs/SKILLS_DESIGN.md §4): list, editor, SKILL.md
@@ -72,10 +73,11 @@ const EMPTY_FIELDS: SkillWriteFields = {
   description: '',
   activation: 'auto',
   applyToAgents: false,
+  requireConsent: false,
   instructions: '',
 };
 
-const ACTIVATIONS: SkillActivation[] = ['auto', 'always', 'off'];
+const ACTIVATIONS: SkillActivation[] = ['auto', 'always', 'manual', 'off'];
 
 export const SkillsPanel: FC = () => {
   const t = useTranslations('skillsAdmin');
@@ -118,6 +120,7 @@ export const SkillsPanel: FC = () => {
         description: entry.skill.description,
         activation: entry.skill.activation,
         applyToAgents: entry.skill.applyToAgents,
+        requireConsent: entry.skill.requireConsent ?? false,
         instructions: entry.skill.instructions,
         ...(entry.skill.foreignFrontmatter
           ? { foreignFrontmatter: entry.skill.foreignFrontmatter }
@@ -150,6 +153,7 @@ export const SkillsPanel: FC = () => {
         description: parsed.skill.description,
         activation: parsed.skill.activation,
         applyToAgents: parsed.skill.applyToAgents,
+        requireConsent: parsed.skill.requireConsent ?? false,
         instructions: parsed.skill.instructions,
         ...(parsed.skill.foreignFrontmatter
           ? { foreignFrontmatter: parsed.skill.foreignFrontmatter }
@@ -167,7 +171,10 @@ export const SkillsPanel: FC = () => {
         etag: null,
         existingId: null,
         builtin: false,
-        fields: bundle.skill,
+        fields: {
+          ...bundle.skill,
+          requireConsent: bundle.skill.requireConsent ?? false,
+        },
         files: bundle.resources.map(
           (resource) =>
             new File([new Uint8Array(resource.bytes)], resource.path),
@@ -198,6 +205,7 @@ export const SkillsPanel: FC = () => {
       instructions: entry.skill.instructions,
       activation: entry.skill.activation,
       applyToAgents: entry.skill.applyToAgents,
+      requireConsent: entry.skill.requireConsent ?? false,
       foreignFrontmatter: entry.skill.foreignFrontmatter,
     });
     const blob = new Blob([markdown], { type: 'text/markdown' });
@@ -409,6 +417,19 @@ export const SkillsPanel: FC = () => {
                       {t('customizedChip')}
                     </span>
                   )}
+                  {entry.skill.requireConsent && (
+                    <span className={ADMIN_CHIP_NEUTRAL}>
+                      {t('consentChip')}
+                    </span>
+                  )}
+                  {entry.skill.source && (
+                    <span
+                      className={ADMIN_CHIP_NEUTRAL}
+                      title={t('sourceChipHint')}
+                    >
+                      {t('sourceChip')}
+                    </span>
+                  )}
                 </div>
                 <p className={`${ADMIN_MUTED} mt-1 truncate`}>
                   {entry.skill.description}
@@ -460,6 +481,7 @@ export const SkillsPanel: FC = () => {
         ))}
         {entries.length === 0 && <p className={ADMIN_MUTED}>{t('empty')}</p>}
       </div>
+      <SkillSources />
     </div>
   );
 };
@@ -580,6 +602,20 @@ const SkillEditor: FC<{
           {t('applyToAgents')}
         </label>
         <p className={ADMIN_HINT}>{t('applyToAgentsHint')}</p>
+      </div>
+      <div>
+        <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <input
+            type="checkbox"
+            className={ADMIN_CHECKBOX}
+            checked={draft.fields.requireConsent}
+            onChange={(event) =>
+              setField('requireConsent', event.target.checked)
+            }
+          />
+          {t('requireConsent')}
+        </label>
+        <p className={ADMIN_HINT}>{t('requireConsentHint')}</p>
       </div>
 
       <div className="flex gap-2">
