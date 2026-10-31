@@ -389,7 +389,19 @@ export function createResponsesStreamProcessor(
           console.error('Responses stream processing error:', error);
           if (!controllerClosed) {
             controllerClosed = true;
-            controller.error(error);
+            // Same in-band contract as the inner iteration path above.
+            try {
+              appendMetadataToStream(controller, {
+                streamError: {
+                  code: 'UPSTREAM_STREAM_FAILED',
+                  message:
+                    'The model stopped responding before the answer was finished.',
+                },
+              });
+              controller.close();
+            } catch {
+              controller.error(error);
+            }
           }
         }
       })();
