@@ -26,6 +26,12 @@ import {
 } from '@/lib/services/chat/pipeline';
 import { FileProcessor } from '@/lib/services/chat/processors/FileProcessor';
 import { ImageProcessor } from '@/lib/services/chat/processors/ImageProcessor';
+import {
+  ProviderErrorKind,
+  classifyProviderError,
+  describeProviderError,
+  providerErrorCode,
+} from '@/lib/services/chat/providerErrors';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 
 import { devTrace } from '@/lib/utils/server/debug/devTrace';
@@ -93,20 +99,48 @@ function pickReportableError(errors: Error[]): Error {
 }
 
 /**
+ * A raw provider/SDK error that escaped a handler stage (StandardChatHandler
+ * pushes the thrown error as-is), classified by CAUSE — see
+ * lib/services/chat/providerErrors.ts. PipelineErrors already carry their
+ * own code and are never reclassified; a handler-stage timeout keeps its
+ * MODEL_TIMEOUT treatment.
+ */
+function classifyReportable(
+  error: Error,
+): ReturnType<typeof classifyProviderError> | null {
+  if (error instanceof PipelineError) return null;
+  const classified = classifyProviderError(error);
+  // The classifier's catch-all is "unknown, retryable"; a plain Error from
+  // our own code (a thrown validation message, say) must still read as an
+  // internal failure, so only PROVIDER-shaped causes get a model code.
+  return classified.kind === 'unknown' && classified.status === undefined
+    ? null
+    : classified;
+}
+
+/**
  * The code the client is told. A model-handler timeout is reported as
  * MODEL_TIMEOUT so the client can tell it apart from any other stage's
- * PIPELINE_TIMEOUT (which a longer model wait cannot fix).
+ * PIPELINE_TIMEOUT (which a longer model wait cannot fix). A raw provider
+ * error gets its cause's code (MODEL_RATE_LIMITED, MODEL_CONTEXT_TOO_LONG,
+ * MODEL_CONTENT_FILTERED, …) instead of a blanket INTERNAL_ERROR.
  */
 function reportableErrorCode(error: Error): ErrorCode {
   if (isModelHandlerTimeout(error)) return ErrorCode.MODEL_TIMEOUT;
-  return error instanceof PipelineError ? error.code : ErrorCode.INTERNAL_ERROR;
+  if (error instanceof PipelineError) return error.code;
+  const classified = classifyReportable(error);
+  return classified
+    ? (providerErrorCode(classified.kind) as ErrorCode)
+    : ErrorCode.INTERNAL_ERROR;
 }
 
 /**
  * User-facing message for a reportable error. The pipeline's own timeout
  * text ("Stage StandardChatHandler exceeded timeout of 90000ms") is a log
  * line, not something to show a person; the client renders localized copy
- * from the code, and non-streaming callers get a plain sentence.
+ * from the code, and non-streaming callers get a plain sentence. Raw
+ * provider errors get a client-safe sentence for their cause rather than
+ * the SDK's message (which can carry request ids and deployment names).
  */
 function describeReportableError(error: Error): string {
   if (isModelHandlerTimeout(error)) {
@@ -115,7 +149,29 @@ function describeReportableError(error: Error): string {
       ? `The model did not start responding within ${seconds} seconds.`
       : 'The model did not start responding in time.';
   }
+  const classified = classifyReportable(error);
+  if (classified) return describeProviderError(classified.kind);
   return error.message;
+}
+
+/**
+ * Extra streamError fields for a classified provider failure: the cause
+ * `kind`, and `retry: true` when the cause is transient — nothing has
+ * reached the client yet at this point, so a fallback-model resend loses
+ * nothing and is the right next move. Permanent causes (context too long,
+ * content filter, auth, quota, bad request) get no retry hint and the
+ * client shows the explanation instead of silently re-sending.
+ */
+function providerStreamErrorExtra(error: Error): {
+  kind?: ProviderErrorKind;
+  retry?: boolean;
+} {
+  const classified = classifyReportable(error);
+  if (!classified) return {};
+  return {
+    kind: classified.kind,
+    ...(classified.retryable ? { retry: true } : {}),
+  };
 }
 
 /**
@@ -190,13 +246,15 @@ export async function POST(req: NextRequest): Promise<Response> {
   const writeStreamError = async (
     message: string,
     code?: string,
-    extra?: { fileUrl?: string },
+    extra?: { fileUrl?: string; kind?: ProviderErrorKind; retry?: boolean },
   ): Promise<void> => {
     const payload = `\n\n<<<METADATA_START>>>${JSON.stringify({
       streamError: {
         message,
         ...(code ? { code } : {}),
         ...(extra?.fileUrl ? { fileUrl: extra.fileUrl } : {}),
+        ...(extra?.kind ? { kind: extra.kind } : {}),
+        ...(extra?.retry ? { retry: true } : {}),
       },
     })}<<<METADATA_END>>>`;
     try {
@@ -212,10 +270,18 @@ export async function POST(req: NextRequest): Promise<Response> {
    * SDK internals. `fileUrl` is the user's own `/api/file/…` reference,
    * needed client-side to flag/strip an expired attachment.
    */
-  const streamErrorExtra = (err: unknown): { fileUrl?: string } | undefined =>
-    err instanceof PipelineError && typeof err.metadata?.fileUrl === 'string'
-      ? { fileUrl: err.metadata.fileUrl }
-      : undefined;
+  const streamErrorExtra = (
+    err: unknown,
+  ):
+    | { fileUrl?: string; kind?: ProviderErrorKind; retry?: boolean }
+    | undefined => {
+    if (err instanceof PipelineError) {
+      return typeof err.metadata?.fileUrl === 'string'
+        ? { fileUrl: err.metadata.fileUrl }
+        : undefined;
+    }
+    return err instanceof Error ? providerStreamErrorExtra(err) : undefined;
+  };
 
   const abortWriter = async (err: unknown): Promise<void> => {
     try {
