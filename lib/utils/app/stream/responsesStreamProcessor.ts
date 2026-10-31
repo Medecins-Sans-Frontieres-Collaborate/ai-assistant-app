@@ -11,6 +11,7 @@ import {
   RoundFinish,
   StreamContinuation,
   continuationActivityKey,
+  isGenericStreamFailureKind,
   normalizeResponsesIncomplete,
 } from '@/lib/services/chat/streamContinuation';
 
@@ -478,15 +479,16 @@ export function createResponsesStreamProcessor(
                     (codeInterpreterRan && generatedFiles.length === 0) ||
                     allContent.trim().length === 0);
                 streamError = {
-                  code:
-                    failureKind === 'unknown' ||
-                    failureKind === 'incomplete_stream'
-                      ? 'RESPONSES_STREAM_FAILED'
-                      : providerErrorCode(failureKind),
+                  // Generic causes keep this path's historical code.
+                  code: isGenericStreamFailureKind(failureKind)
+                    ? 'RESPONSES_STREAM_FAILED'
+                    : providerErrorCode(failureKind),
                   kind: failureKind,
                   message: allContent.trim()
                     ? 'The model stopped before finishing this response. The partial answer is shown below.'
-                    : describeProviderError(failureKind),
+                    : isGenericStreamFailureKind(failureKind)
+                      ? 'The model stopped before finishing this response.'
+                      : describeProviderError(failureKind),
                   ...(retry ? { retry: true } : {}),
                 };
               }

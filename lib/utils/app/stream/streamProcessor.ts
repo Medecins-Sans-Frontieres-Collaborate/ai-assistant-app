@@ -1,6 +1,5 @@
 import {
   classifyProviderError,
-  describeProviderError,
   providerErrorCode,
 } from '@/lib/services/chat/providerErrors';
 import {
@@ -10,6 +9,7 @@ import {
   RoundFinish,
   StreamContinuation,
   continuationActivityKey,
+  midStreamFailureMessage,
   normalizeOpenAIFinish,
 } from '@/lib/services/chat/streamContinuation';
 import { RAGService } from '@/lib/services/ragService';
@@ -252,9 +252,10 @@ export function createAzureOpenAIStreamProcessor(
               streamError = {
                 code: providerErrorCode(classified.kind),
                 kind: classified.kind,
-                message: allContent.trim()
-                  ? 'The model stopped responding before the answer was finished.'
-                  : describeProviderError(classified.kind),
+                message: midStreamFailureMessage(
+                  classified.kind,
+                  allContent.trim().length > 0,
+                ),
                 // No text reached the client: the partial is nothing, so a
                 // fallback-model resend is the right next move.
                 ...(allContent.trim() ? {} : { retry: true }),

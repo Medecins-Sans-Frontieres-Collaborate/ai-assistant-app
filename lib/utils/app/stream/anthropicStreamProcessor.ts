@@ -1,6 +1,5 @@
 import {
   classifyProviderError,
-  describeProviderError,
   providerErrorCode,
 } from '@/lib/services/chat/providerErrors';
 import {
@@ -10,6 +9,7 @@ import {
   RoundFinish,
   StreamContinuation,
   continuationActivityKey,
+  midStreamFailureMessage,
   normalizeAnthropicStop,
 } from '@/lib/services/chat/streamContinuation';
 
@@ -228,9 +228,10 @@ export function createAnthropicStreamProcessor(
               streamError = {
                 code: providerErrorCode(classified.kind),
                 kind: classified.kind,
-                message: allContent.trim()
-                  ? 'The model stopped responding before the answer was finished.'
-                  : describeProviderError(classified.kind),
+                message: midStreamFailureMessage(
+                  classified.kind,
+                  allContent.trim().length > 0,
+                ),
                 ...(allContent.trim() ? {} : { retry: true }),
               };
               break;
