@@ -417,11 +417,12 @@ export const SkillsPanel: FC = () => {
                       {t('customizedChip')}
                     </span>
                   )}
-                  {entry.skill.requireConsent && (
-                    <span className={ADMIN_CHIP_NEUTRAL}>
-                      {t('consentChip')}
-                    </span>
-                  )}
+                  {entry.skill.requireConsent &&
+                    entry.skill.activation === 'auto' && (
+                      <span className={ADMIN_CHIP_NEUTRAL}>
+                        {t('consentChip')}
+                      </span>
+                    )}
                   {entry.skill.source && (
                     <span
                       className={ADMIN_CHIP_NEUTRAL}
@@ -609,13 +610,18 @@ const SkillEditor: FC<{
             type="checkbox"
             className={ADMIN_CHECKBOX}
             checked={draft.fields.requireConsent}
+            disabled={draft.fields.activation !== 'auto'}
             onChange={(event) =>
               setField('requireConsent', event.target.checked)
             }
           />
           {t('requireConsent')}
         </label>
-        <p className={ADMIN_HINT}>{t('requireConsentHint')}</p>
+        <p className={ADMIN_HINT}>
+          {draft.fields.activation === 'auto'
+            ? t('requireConsentHint')
+            : t('requireConsentDisabledHint')}
+        </p>
       </div>
 
       <div className="flex gap-2">

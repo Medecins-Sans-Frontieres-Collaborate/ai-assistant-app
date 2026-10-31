@@ -40,7 +40,9 @@ export const SkillSources: FC = () => {
   const [url, setUrl] = useState('');
   const [label, setLabel] = useState('');
 
+  // Local admins get a 403: render nothing at all (no flash while pending).
   if (query.error instanceof SkillSourcesForbidden) return null;
+  if (!query.isSuccess && !query.error) return null;
   const sources = query.data?.sources ?? [];
 
   const handleAdd = async () => {
@@ -152,11 +154,8 @@ export const SkillSources: FC = () => {
         </div>
       </div>
 
-      {query.isLoading && <p className={ADMIN_MUTED}>{t('loading')}</p>}
-      {query.error && !(query.error instanceof SkillSourcesForbidden) && (
-        <p className={ADMIN_MUTED}>{t('loadError')}</p>
-      )}
-      {!query.isLoading && sources.length === 0 && (
+      {query.error && <p className={ADMIN_MUTED}>{t('loadError')}</p>}
+      {query.isSuccess && sources.length === 0 && (
         <p className={ADMIN_MUTED}>{t('empty')}</p>
       )}
 
@@ -205,7 +204,7 @@ export const SkillSources: FC = () => {
               <button
                 type="button"
                 className={ADMIN_BTN_SECONDARY}
-                disabled={sync.isPending}
+                disabled={sync.isPending && sync.variables?.id === source.id}
                 onClick={() => handleSync(source)}
               >
                 <span className="flex items-center gap-1.5">
