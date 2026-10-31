@@ -1,5 +1,9 @@
 import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest';
 
+// Model-call retries (lib/services/chat/modelRetry.ts) never sleep in tests.
+process.env.MODEL_RETRY_BASE_DELAY_MS = '0';
+process.env.MODEL_RETRY_MAX_DELAY_MS = '0';
+
 // Mock localStorage for Zustand persist middleware
 // Node.js environment doesn't have localStorage, but Zustand's persist middleware requires it
 const localStorageMock = {

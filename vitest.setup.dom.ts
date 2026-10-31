@@ -3,6 +3,10 @@ import React from 'react';
 import '@testing-library/jest-dom/vitest';
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 
+// Model-call retries (lib/services/chat/modelRetry.ts) never sleep in tests.
+process.env.MODEL_RETRY_BASE_DELAY_MS = '0';
+process.env.MODEL_RETRY_MAX_DELAY_MS = '0';
+
 // Mock next-auth to prevent module resolution errors in test environment
 vi.mock('next-auth', () => ({
   default: () => ({
