@@ -76,10 +76,10 @@ describe('agent skill executor', () => {
   });
   it('refuses a revoked skill after listing and rejects personal references', async () => {
     const executor = (await createSkillToolExecutor({}))!;
-    vi.mocked(readSkill).mockResolvedValue({
-      skill: { ...skill, applyToAgents: false },
-      etag: 'v2',
-    });
+    // Revocation lands in the access snapshot before the model's call.
+    vi.mocked(getVisibleSkills).mockResolvedValue([
+      entry({ ...skill, applyToAgents: false }),
+    ]);
     expect(
       (await executor.callTool('load_skill', { id: 'gdpr' })).isError,
     ).toBe(true);
@@ -154,7 +154,8 @@ describe('agent skill executor', () => {
         },
       ],
     };
-    vi.mocked(readSkill).mockResolvedValue({ skill: inline, etag: 'v1' });
+    // Documents ride the access snapshot record, which `resolve()` reads.
+    vi.mocked(getVisibleSkills).mockResolvedValue([entry(inline)]);
     const executor = (await createSkillToolExecutor({}))!;
     await executor.callTool('load_skill', { id: 'gdpr' });
     expect(vi.mocked(retrieveSkillReferences).mock.calls[0][4]).toBe(true);
@@ -418,6 +419,19 @@ describe('skill executor — scopes, consent, and record output (§5.5/§5.6)', 
       forcedIds: ['careful'],
     }))!;
     expect(await enumOf(foundryForced)).toEqual(['careful', 'open']);
+  });
+
+  it('standard scope never preloads: always skills are advertised, not pushed as tool results', async () => {
+    vi.mocked(getVisibleSkills).mockResolvedValue([
+      org('open'),
+      org('standing', { activation: 'always' }),
+    ]);
+    const executor = (await createSkillToolExecutor({
+      scope: { mode: 'standard' },
+    }))!;
+    expect(await executor.preload!()).toEqual([]);
+    expect(executor.continuationState!().loads).toBe(0);
+    expect(await enumOf(executor)).toEqual(['open', 'standing']);
   });
 
   it('record output summarizes a load without the instruction body', async () => {

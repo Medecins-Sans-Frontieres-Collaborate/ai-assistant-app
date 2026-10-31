@@ -158,6 +158,47 @@ describe('syncSkillSource', () => {
     ).toMatch(/reference file/);
   });
 
+  it('clamps a new sourced skill: never always, never agent-enabled, consent honoured', async () => {
+    const fetchImpl = fakeFetch({
+      [INDEX]: JSON.stringify({
+        skills: [{ name: 'loud', files: ['SKILL.md'] }],
+      }),
+      'https://skills.example.org/catalog/loud/SKILL.md': `---\nname: loud\ndescription: d\nmetadata:\n  msf-activation: always\n  msf-apply-to-agents: "true"\n  msf-require-consent: "true"\n---\n\nBody.\n`,
+    });
+    await syncSkillSource({} as never, current.id, { fetchImpl });
+    const written = vi.mocked(writeSkill).mock.calls[0][1] as Skill;
+    expect(written).toMatchObject({
+      activation: 'auto',
+      applyToAgents: false,
+      requireConsent: true,
+    });
+  });
+
+  it('rejects a SKILL.md that redirects off the source origin', async () => {
+    const { fetchPublicUrl } =
+      await import('@/lib/utils/server/net/publicUrlGuard');
+    vi.mocked(fetchPublicUrl).mockImplementationOnce(async (url, options) => ({
+      response: await (options?.fetchImpl ?? fetch)(url),
+      resolvedUrl: url,
+    }));
+    vi.mocked(fetchPublicUrl).mockImplementationOnce(async (url, options) => ({
+      response: await (options?.fetchImpl ?? fetch)(url),
+      resolvedUrl: 'https://evil.example/x/SKILL.md',
+    }));
+    const fetchImpl = fakeFetch({
+      [INDEX]: JSON.stringify({
+        skills: [{ name: 'gdpr', files: ['SKILL.md'] }],
+      }),
+      'https://skills.example.org/catalog/gdpr/SKILL.md': SKILL_MD('gdpr'),
+    });
+    const { source: result } = await syncSkillSource({} as never, current.id, {
+      fetchImpl,
+    });
+    expect(result?.entries[0]).toMatchObject({ id: 'gdpr', status: 'invalid' });
+    expect(result?.entries[0].detail).toMatch(/origin/);
+    expect(writeSkill).not.toHaveBeenCalled();
+  });
+
   it('never overwrites an admin-created or foreign-sourced skill', async () => {
     vi.mocked(readSkill).mockImplementation(async (_s, id) => ({
       skill: {
@@ -228,6 +269,34 @@ describe('syncSkillSource', () => {
     await syncSkillSource({} as never, current.id, { fetchImpl: unchanged });
     expect(writeSkill).not.toHaveBeenCalled();
     expect(unchanged).toHaveBeenCalledTimes(1);
+
+    // Same content refetched (force) → still no write, no updatedAt bump.
+    const identical = fakeFetch({
+      [INDEX]: JSON.stringify({
+        skills: [{ name: 'gdpr', version: '1.0.0', files: ['SKILL.md'] }],
+      }),
+      'https://skills.example.org/catalog/gdpr/SKILL.md': `---\nname: gdpr\ndescription: old\n---\n\nOLD\n`,
+    });
+    vi.mocked(readSkill).mockResolvedValueOnce({
+      skill: {
+        version: 1,
+        id: 'gdpr',
+        name: 'Gdpr',
+        description: 'old',
+        instructions: 'OLD',
+        activation: 'always',
+        applyToAgents: true,
+        documents: [],
+        updatedAt: 'x',
+        source: { sourceId: current.id, version: '1.0.0', syncedAt: 'x' },
+      } as Skill,
+      etag: '"e1"',
+    });
+    await syncSkillSource({} as never, current.id, {
+      fetchImpl: identical,
+      force: true,
+    });
+    expect(writeSkill).not.toHaveBeenCalled();
 
     const bumped = fakeFetch({
       [INDEX]: JSON.stringify({
