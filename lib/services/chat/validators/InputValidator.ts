@@ -626,6 +626,15 @@ const ChatBodySchema = z
       .max(3, 'Too many forced skills (max 3)')
       .optional(),
     pinnedSkillIds: z.array(SkillReferenceIdSchema).max(3).optional(),
+    // Version pins for requested skills (docs/SKILLS_DESIGN.md §5.7): the
+    // server only ever uses them to pick an OLDER stored version of a skill
+    // the caller can already see, so they are safe to take from the client.
+    skillVersions: z
+      .record(SkillReferenceIdSchema, z.string().datetime())
+      .refine((pins) => Object.keys(pins).length <= 3, {
+        message: 'Too many skill version pins (max 3)',
+      })
+      .optional(),
     userSkills: UserSkillsRequestSchema.optional(),
   })
   .strict()
