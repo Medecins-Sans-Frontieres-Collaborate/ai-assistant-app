@@ -97,8 +97,12 @@ export function useChatActions({
 
       if (messageIndex === -1) return;
 
+      // An edited question keeps its skill requests but not the pinned
+      // versions: those replay the body that answered the OLD text
+      // (docs/SKILLS_DESIGN.md §5.7).
+      const { appliedSkillVersions: _stale, ...replacement } = editedMessage;
       const updatedMessages = currentConversation.messages.map((entry, idx) =>
-        idx === messageIndex ? editedMessage : entry,
+        idx === messageIndex ? replacement : entry,
       );
 
       // Editing a message inside the summarized region would otherwise keep
