@@ -426,8 +426,8 @@ interface ChatStore {
   ) => { isQuotaDenial: boolean; denial: LimitDenialMetadata | null };
   /** Queue a message to send once the current stream in its conversation settles. */
   queueSend: (entry: QueuedSend) => void;
-  /** Drop one queued message (by message id) and return it, or null. */
-  removeQueuedSend: (messageId: string) => QueuedSend | null;
+  /** Drop one queued message (by reference) and return it, or null. */
+  removeQueuedSend: (entry: QueuedSend) => QueuedSend | null;
   /** Take the oldest queued message for a conversation, or null. */
   shiftQueuedSend: (conversationId: string) => QueuedSend | null;
   setCurrentMessage: (message: Message | undefined) => void;
@@ -825,16 +825,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   queueSend: (entry) =>
     set((state) => ({ queuedSends: [...state.queuedSends, entry] })),
 
-  removeQueuedSend: (messageId) => {
-    const entry =
-      get().queuedSends.find((item) => item.message.id === messageId) ?? null;
-    if (entry) {
-      set((state) => ({
-        queuedSends: state.queuedSends.filter(
-          (item) => item.message.id !== messageId,
-        ),
-      }));
-    }
+  removeQueuedSend: (entry) => {
+    if (!get().queuedSends.includes(entry)) return null;
+    set((state) => ({
+      queuedSends: state.queuedSends.filter((item) => item !== entry),
+    }));
     return entry;
   },
 
