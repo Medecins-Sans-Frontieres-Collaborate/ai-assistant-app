@@ -62,7 +62,12 @@ export function catalogModelsForAdmin(
   liveModels: readonly OpenAIModel[],
 ): OpenAIModel[] {
   const byId = new Map<string, OpenAIModel>();
-  for (const model of Object.values(OpenAIModels)) byId.set(model.id, model);
+  // Catalog kill-switched models (`isDisabled`) are not offered to anyone,
+  // so there is nothing to approve; a stored rule for one still surfaces
+  // through buildModelAccessTree's unknown-node path.
+  for (const model of Object.values(OpenAIModels)) {
+    if (!model.isDisabled) byId.set(model.id, model);
+  }
   for (const model of liveModels) {
     if (!model.id) continue;
     byId.set(model.id, { ...byId.get(model.id), ...model });
@@ -300,24 +305,23 @@ function draftPolicy(
   };
 }
 
-/**
- * What a person on no list gets for this node, resolved exactly as the send
- * resolves it (merged gate; request cells conjunctive, the tightest shown).
- * `series` is the model's family, for a model node.
- */
-export function effectiveAccessFor(
+interface NodeResolution {
+  allowed: boolean;
+  source: string;
+  /** The tightest numeric request cap, or null for none. */
+  requests: number | null;
+}
+
+function resolveNode(
   dim: ModelAccessDimension,
-  series: string | undefined,
+  family: string | undefined,
   defaults: readonly LimitEntry[],
   rules: readonly ModelAccessRule[],
-): EffectiveAccess {
+): NodeResolution | null {
   const allowedDef = getLimitDefinition('model.allowed');
   const requestsDef = getLimitDefinition('model.requests');
-  if (!allowedDef || !requestsDef)
-    return { state: { kind: 'unlimited' }, origin: 'catalog' };
+  if (!allowedDef || !requestsDef) return null;
   const policy = draftPolicy(defaults, rules);
-  const family = dim.modelId ? series : dim.series;
-
   const gate = resolveModelGate(
     allowedDef,
     policy,
@@ -325,52 +329,86 @@ export function effectiveAccessFor(
     dim.modelId,
     family,
   );
-
-  const own = ruleFor(rules, dim);
-  const familyRule =
-    dim.modelId && family ? ruleFor(rules, { series: family }) : undefined;
-  const origin: AccessOrigin =
-    own?.defaultAccess !== undefined
-      ? 'model'
-      : familyRule?.defaultAccess !== undefined
-        ? 'family'
-        : gate.source !== 'catalog'
-          ? 'defaults'
-          : isExternalByCatalog(
-                dim.modelId ? { modelId: dim.modelId } : { series: family },
-              )
-            ? 'catalogExternal'
-            : 'catalog';
-  // A family node's own rule is "this node", not "its family".
-  const nodeOrigin: AccessOrigin =
-    !dim.modelId && origin === 'family' ? 'model' : origin;
-
-  if (gate.value === false)
-    return { state: { kind: 'unavailable' }, origin: nodeOrigin };
-
   const cells = dim.modelId
     ? resolveModelCells(requestsDef, policy, EVERYONE_ELSE, dim.modelId, family)
     : [resolveLimit(requestsDef, policy, EVERYONE_ELSE, undefined, dim.series)];
   const numeric = cells
     .map((cell) => cell.value)
     .filter((value): value is number => typeof value === 'number');
-  if (numeric.length === 0)
-    return { state: { kind: 'unlimited' }, origin: nodeOrigin };
-  // Requests may come from a different layer than availability; when a cap
-  // binds and nothing in the approval rules set it, the global defaults did.
-  const requestsOrigin: AccessOrigin =
-    own?.defaultAccess !== undefined && own.defaultAccess !== false
-      ? 'model'
-      : familyRule?.defaultAccess !== undefined &&
-          familyRule.defaultAccess !== false
-        ? 'family'
-        : 'defaults';
   return {
-    state: { kind: 'limited', requests: Math.min(...numeric) },
-    origin:
-      nodeOrigin === 'catalogExternal' || nodeOrigin === 'catalog'
-        ? requestsOrigin
-        : nodeOrigin,
+    allowed: gate.value !== false,
+    source: gate.source,
+    requests: numeric.length === 0 ? null : Math.min(...numeric),
+  };
+}
+
+function stateOf(node: NodeResolution): AccessState {
+  if (!node.allowed) return { kind: 'unavailable' };
+  if (node.requests === null) return { kind: 'unlimited' };
+  return { kind: 'limited', requests: node.requests };
+}
+
+const sameState = (a: AccessState, b: AccessState) =>
+  a.kind === b.kind &&
+  (a.kind !== 'limited' || b.kind !== 'limited' || a.requests === b.requests);
+
+/**
+ * What a person on no list gets for this node, resolved exactly as the send
+ * resolves it (merged gate; request cells conjunctive, the tightest shown),
+ * and WHERE that answer comes from. `series` is the model's family, for a
+ * model node.
+ *
+ * Origin is attributed by ablation, not by which rule exists: the family
+ * rule is the origin only when removing its default changes the answer or
+ * where it comes from. A model-qualified global default can outrank a
+ * family rule, and then "its family" would be a lie.
+ */
+export function effectiveAccessFor(
+  dim: ModelAccessDimension,
+  series: string | undefined,
+  defaults: readonly LimitEntry[],
+  rules: readonly ModelAccessRule[],
+): EffectiveAccess {
+  const family = dim.modelId ? series : dim.series;
+  const full = resolveNode(dim, family, defaults, rules);
+  if (!full) return { state: { kind: 'unlimited' }, origin: 'catalog' };
+  const state = stateOf(full);
+
+  const own = ruleFor(rules, dim);
+  if (own?.defaultAccess !== undefined) return { state, origin: 'model' };
+
+  const familyRule =
+    dim.modelId && family ? ruleFor(rules, { series: family }) : undefined;
+  if (familyRule?.defaultAccess !== undefined) {
+    const { defaultAccess: _dropped, ...stripped } = familyRule;
+    const without = resolveNode(
+      dim,
+      family,
+      defaults,
+      upsertRule(rules, { series: family }, stripped),
+    );
+    // Changed answer OR changed provenance: a family block that merely
+    // restates the catalog's still decided (global beats catalog).
+    if (
+      without &&
+      (!sameState(stateOf(without), state) || without.source !== full.source)
+    ) {
+      return { state, origin: 'family' };
+    }
+  }
+
+  // No approval rule speaks for this node: a request cap can only come from
+  // the stored global defaults; availability from them or from the catalog.
+  if (state.kind === 'limited' || full.source !== 'catalog') {
+    return { state, origin: 'defaults' };
+  }
+  return {
+    state,
+    origin: isExternalByCatalog(
+      dim.modelId ? { modelId: dim.modelId } : { series: family },
+    )
+      ? 'catalogExternal'
+      : 'catalog',
   };
 }
 
