@@ -5,7 +5,7 @@ import React, { FC, useMemo, useState } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
 
-import type { LimitEntry } from '@/lib/services/limits/types';
+import type { LimitEntry, ModelAccessRule } from '@/lib/services/limits/types';
 
 import {
   buildQualifierCatalog,
@@ -61,6 +61,8 @@ interface CostCalculatorProps {
    * (scoped mode) the union of the scoped admin's own override entries.
    */
   caps: LimitEntry[];
+  /** The Models tab's rules in the draft (global mode); they shape caps too. */
+  modelAccess?: ModelAccessRule[];
   mode: 'global' | 'scoped';
 }
 
@@ -83,7 +85,11 @@ const TD_NUM =
  * mix as $0 rows and mark the result incomplete; they are never renormalized
  * away. Rendered only behind `useLimitsCost().calculator`, lazily.
  */
-export const CostCalculator: FC<CostCalculatorProps> = ({ caps, mode }) => {
+export const CostCalculator: FC<CostCalculatorProps> = ({
+  caps,
+  modelAccess,
+  mode,
+}) => {
   const t = useTranslations('limits');
   const locale = useLocale();
   const { pricing } = useLimitsCost();
@@ -122,11 +128,11 @@ export const CostCalculator: FC<CostCalculatorProps> = ({ caps, mode }) => {
 
   const run = useMemo(() => {
     try {
-      return runCalculator(state, models, caps, pricing);
+      return runCalculator(state, models, caps, pricing, modelAccess);
     } catch {
       return { issues: [{ field: 'mix' }] as CalculatorIssue[] };
     }
-  }, [state, models, caps, pricing]);
+  }, [state, models, caps, pricing, modelAccess]);
 
   const numberFormat = useMemo(
     () => new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }),
