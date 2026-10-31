@@ -229,6 +229,9 @@ describe('/api/chat - Integration Tests', () => {
       );
       expect(response.headers.get('Cache-Control')).toBe('no-cache');
       expect(response.headers.get('X-Accel-Buffering')).toBe('no');
+      // Without nosniff the browser's MIME sniffer buffers the first ~1 KB
+      // of a text/plain body, swallowing the pre-model activity markers.
+      expect(response.headers.get('X-Content-Type-Options')).toBe('nosniff');
       expect(response.body).toBeDefined();
     });
 
