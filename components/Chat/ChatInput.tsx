@@ -68,6 +68,7 @@ import { ConnectorPinTray } from '@/components/Chat/ChatInput/ConnectorPinTray';
 import { ExtractionTray } from '@/components/Chat/ChatInput/ExtractionTray';
 import { InputControlsBar } from '@/components/Chat/ChatInput/InputControlsBar';
 import { InterpreterModeBadge } from '@/components/Chat/ChatInput/InterpreterModeBadge';
+import { M365DigestLauncherModal } from '@/components/Chat/ChatInput/M365DigestLauncherModal';
 import { M365PlaybookChips } from '@/components/Chat/ChatInput/M365PlaybookChips';
 import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
@@ -610,6 +611,7 @@ export const ChatInput = ({
         {/* Playbook suggestions — self-gating (flag, user toggle and each
             playbook's precondition are all checked inside). */}
         <M365PlaybookChips />
+        <M365DigestLauncherModal />
 
         <div className="items-center pt-4">
           <div className="flex justify-center items-center space-x-2 px-2 md:px-4">
