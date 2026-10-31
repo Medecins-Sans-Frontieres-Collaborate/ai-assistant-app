@@ -269,9 +269,12 @@ export function classifyProviderError(raw: unknown): ClassifiedProviderError {
       !looksLikeNetworkFailure(error, message))
   )
     return finish('context_overflow');
+  // Mirrors config/models.ts isDeploymentNotFoundError so the retry policy
+  // and the fallback chain agree: a missing deployment is never retried.
   if (
     code === 'DeploymentNotFound' ||
-    (status === 404 && DEPLOYMENT_NOT_FOUND_RE.test(message))
+    ((status === 404 || code === '404') &&
+      DEPLOYMENT_NOT_FOUND_RE.test(message))
   )
     return finish('deployment_not_found');
 
