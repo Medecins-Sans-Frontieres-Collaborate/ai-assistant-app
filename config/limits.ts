@@ -323,6 +323,19 @@ export const LIMIT_DEFINITIONS: readonly LimitDefinition[] = [
     labelKey: 'm365MailDeepScansPerDay',
   },
   {
+    key: 'feature.m365.digestRunsPerDay',
+    kind: 'counter',
+    unit: 'runs',
+    window: 'day',
+    perModel: false,
+    // One digest = dozens of Graph reads + two utility-model calls; the
+    // period picker makes re-runs cheap to request, so the cap is tight.
+    defaultValue: 6,
+    category: 'tools',
+    enforcedAt: 'app/api/m365/digest/route.ts',
+    labelKey: 'm365DigestRunsPerDay',
+  },
+  {
     key: 'feature.codeInterpreter.runsPerDay',
     kind: 'counter',
     unit: 'runs',
