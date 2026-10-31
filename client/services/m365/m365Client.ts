@@ -145,15 +145,34 @@ export async function searchEntraGroups(
   return data.groups;
 }
 
-/** Fresh display names for stored group ids — resolved on editor open. */
+/** Server cap on one name-resolution call; longer lists are chunked. */
+const GROUP_LOOKUP_CHUNK = 500;
+
+/**
+ * Fresh display names for stored group ids — resolved on editor open, one
+ * POST per ≤500 ids (never one request per id). Ids the directory does not
+ * know are simply absent from the result.
+ */
 export async function lookupEntraGroups(
   ids: string[],
 ): Promise<M365GroupEntry[]> {
-  if (ids.length === 0) return [];
-  const data = await requestJson<{ groups: M365GroupEntry[] }>(
-    `/api/m365/groups?ids=${encodeURIComponent(ids.join(','))}`,
-  );
-  return data.groups;
+  const unique = [...new Set(ids.map((id) => id.trim()).filter(Boolean))];
+  if (unique.length === 0) return [];
+  const groups: M365GroupEntry[] = [];
+  for (let start = 0; start < unique.length; start += GROUP_LOOKUP_CHUNK) {
+    const data = await requestJson<{ groups: M365GroupEntry[] }>(
+      '/api/m365/groups',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ids: unique.slice(start, start + GROUP_LOOKUP_CHUNK),
+        }),
+      },
+    );
+    groups.push(...data.groups);
+  }
+  return groups;
 }
 
 export async function listSiteDrives(siteId: string): Promise<M365DriveInfo[]> {
