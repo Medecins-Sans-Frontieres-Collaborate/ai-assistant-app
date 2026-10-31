@@ -255,10 +255,16 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
               {dirty && (
                 <p className={`mb-2 ${ADMIN_MUTED}`}>{t('previewUnsaved')}</p>
               )}
-              {(result.notEvaluated?.length ?? 0) > 0 && (
+              {result.directoryStatus === 'not-found' ? (
                 <p className={`mb-2 ${ADMIN_MUTED}`}>
-                  {t('previewNotEvaluated')}
+                  {t('previewDirectoryNotFound')}
                 </p>
+              ) : (
+                (result.notEvaluated?.length ?? 0) > 0 && (
+                  <p className={`mb-2 ${ADMIN_MUTED}`}>
+                    {t('previewNotEvaluated')}
+                  </p>
+                )
               )}
               {withUsage && result.usageUnavailable && (
                 <p className={`mb-2 ${ADMIN_MUTED}`}>

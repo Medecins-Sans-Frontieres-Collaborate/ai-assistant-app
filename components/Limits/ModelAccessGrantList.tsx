@@ -1,14 +1,13 @@
 'use client';
 
 import { IconTrash } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useGroupNames } from '@/client/hooks/useGroupNames';
 import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
-import { lookupEntraGroups } from '@/client/services/m365/m365Client';
 import type { ModelAccessGrant } from '@/lib/services/limits/types';
 
 import {
@@ -50,17 +49,12 @@ export const ModelAccessGrantList: FC<ModelAccessGrantListProps> = ({
 
   // Group grants persist Entra object ids; show their names like the group
   // picker's chips do, falling back to the id while (or if) the lookup does
-  // not answer.
+  // not answer. The shared cache is seeded from the policy's stored labels,
+  // so most nodes render names with no request at all.
   const groupIds = kind === 'groups' ? grants.map((g) => g.target) : [];
-  const groupNames = useQuery({
-    queryKey: ['model-access-group-names', ...groupIds],
-    queryFn: () => lookupEntraGroups(groupIds),
-    enabled: groupIds.length > 0,
-    staleTime: 5 * 60 * 1000,
-    retry: 0,
-  });
+  const groupNames = useGroupNames(groupIds);
   const labelFor = (target: string) => {
-    const name = groupNames.data?.find((g) => g.id === target)?.name;
+    const name = groupNames[target];
     return name ? (
       <>
         {name} <span className={ADMIN_MUTED}>({target.slice(0, 8)}…)</span>
