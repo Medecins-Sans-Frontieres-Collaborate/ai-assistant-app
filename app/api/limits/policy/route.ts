@@ -171,16 +171,6 @@ export async function PUT(request: NextRequest) {
         duplicateDimension,
       );
     }
-    const defaultCells = new Set(parsed.data.defaults.map(defaultCellKey));
-    const collision = expandModelAccess(modelAccessBody).defaults.find(
-      (entry) => defaultCells.has(defaultCellKey(entry)),
-    );
-    if (collision) {
-      return badRequestResponse(
-        'A model approval default is also set in the global defaults; set it in one place',
-        defaultCellKey(collision),
-      );
-    }
   }
 
   const ifMatchEtag = request.headers.get('if-match');
@@ -274,6 +264,19 @@ export async function PUT(request: NextRequest) {
     // stored rather than erasing it (same guard shape as delegations).
     const modelAccess: ModelAccessRule[] =
       modelAccessBody ?? stored?.policy.modelAccess ?? [];
+    // Against the rules that WILL be stored — a client that omitted the key
+    // keeps the stored ones, and must not slip a global default under one
+    // of their node defaults either.
+    const defaultCells = new Set(parsed.data.defaults.map(defaultCellKey));
+    const collision = expandModelAccess(modelAccess).defaults.find((entry) =>
+      defaultCells.has(defaultCellKey(entry)),
+    );
+    if (collision) {
+      return badRequestResponse(
+        'A model approval default is also set in the global defaults; set it in one place',
+        defaultCellKey(collision),
+      );
+    }
 
     const policy: LimitsPolicy = {
       version: 1,
