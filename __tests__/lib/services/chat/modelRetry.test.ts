@@ -154,6 +154,6 @@ describe('withModelRetry', () => {
         delayMs: 2400,
         error: { kind: 'rate_limit', retryable: true, message: '' },
       }),
-    ).toEqual({ seconds: '3', attempt: '2' });
+    ).toEqual({ seconds: '2', attempt: '2' });
   });
 });

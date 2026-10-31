@@ -353,6 +353,11 @@ describe('StandardChatService', () => {
           modelId: expect.any(String),
           onUsage: expect.any(Function),
         }), // usageContext for token tracking
+        expect.objectContaining({
+          continuation: expect.objectContaining({
+            resume: expect.any(Function),
+          }),
+        }), // mid-answer recovery hook
       );
     });
 
