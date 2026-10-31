@@ -169,6 +169,20 @@ export async function sweepSkillMaintenance(
   }
 }
 
+/**
+ * Source refresh rides the maintenance cadence (docs/SKILLS_DESIGN.md §12):
+ * due sources are synced one per sweep. Lazy import keeps the sync module
+ * (network fetches) out of the chat path's module graph.
+ */
+async function refreshSkillSources(storage: BlobStorage): Promise<void> {
+  try {
+    const { autoSyncSkillSources } = await import('./skillSourceSync');
+    await autoSyncSkillSources(storage);
+  } catch (error) {
+    console.warn('[skills] Source refresh skipped', error);
+  }
+}
+
 /** Opportunistic sweeps are rate-limited per replica and independent of chat latency. */
 export function startSkillMaintenance(storage: BlobStorage): void {
   // Automatic work requires bounded pagination. Legacy adapters can invoke
@@ -183,6 +197,7 @@ export function startSkillMaintenance(storage: BlobStorage): void {
   lastRun = Date.now();
   void sweepSkillMaintenance(storage)
     .catch((error) => console.warn('[skills] Maintenance unavailable', error))
+    .then(() => refreshSkillSources(storage))
     .finally(() => {
       inFlight = false;
     });
