@@ -25,9 +25,18 @@ export class AgentSkillEnricher extends BasePipelineStage {
     );
   }
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
-    const skills = (
-      await getVisibleSkills(context.user.mail ?? undefined)
-    ).filter(({ skill }) => skill.applyToAgents);
+    // The user's Settings toggle (docs/SKILLS_DESIGN.md §5.1a): off means
+    // no automatic selection — only explicitly requested skills and admin
+    // `always` skills reach the agent. Mirrors SkillEnricher on the
+    // standard path; the executor applies the same filter at run time.
+    const autoEnabled = context.skillsAuto !== false;
+    const forced = new Set(context.forcedSkillIds ?? []);
+    const skills = (await getVisibleSkills(context.user.mail ?? undefined))
+      .filter(({ skill }) => skill.applyToAgents)
+      .filter(
+        ({ skill }) =>
+          autoEnabled || skill.activation === 'always' || forced.has(skill.id),
+      );
     const supportsTools =
       context.executionStrategy === 'agent' ||
       !!(context.agentMode && context.model.agentId) ||
