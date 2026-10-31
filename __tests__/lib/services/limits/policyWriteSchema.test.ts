@@ -14,12 +14,75 @@ import {
   entrySchema,
   formatIssues,
   jurisdictionPredicateWriteSchema,
+  modelAccessRuleSchema,
   overrideSchema,
+  putBodySchema,
   scopedOverrideBodySchema,
 } from '@/lib/services/limits/policyWriteSchema';
 import { JurisdictionPredicateSchema } from '@/lib/services/limits/types';
 
 import { describe, expect, it } from 'vitest';
+
+describe('modelAccessRuleSchema', () => {
+  it('accepts a rule with one dimension, canonicalizes grants and the block list, dedupes by target', () => {
+    const parsed = modelAccessRuleSchema.parse({
+      series: 'Claude',
+      defaultAccess: false,
+      groups: [{ target: ' G-1 ' }, { target: 'g-1', requests: 5 }],
+      domains: [{ target: 'OCP.msf.org', requests: null }],
+      allow: [{ target: 'Alice@MSF.org', requests: 20 }],
+      deny: [' Mallory@msf.org ', 'mallory@msf.org'],
+    });
+    expect(parsed).toEqual({
+      series: 'Claude',
+      defaultAccess: false,
+      groups: [{ target: 'g-1', requests: null }],
+      domains: [{ target: 'ocp.msf.org', requests: null }],
+      allow: [{ target: 'alice@msf.org', requests: 20 }],
+      deny: ['mallory@msf.org'],
+    });
+  });
+
+  it('refuses no dimension, both dimensions, a zero cap, an unknown key, and allow ∩ deny', () => {
+    const base = { groups: [], domains: [], allow: [], deny: [] };
+    expect(modelAccessRuleSchema.safeParse({ ...base }).success).toBe(false);
+    expect(
+      modelAccessRuleSchema.safeParse({ ...base, modelId: 'o3', series: 'gpt' })
+        .success,
+    ).toBe(false);
+    expect(
+      modelAccessRuleSchema.safeParse({
+        ...base,
+        modelId: 'o3',
+        defaultAccess: 0,
+      }).success,
+    ).toBe(false);
+    expect(
+      modelAccessRuleSchema.safeParse({
+        ...base,
+        modelId: 'o3',
+        allow: [{ target: 'a@x.org', requests: 0 }],
+      }).success,
+    ).toBe(false);
+    expect(
+      modelAccessRuleSchema.safeParse({ ...base, modelId: 'o3', extra: 1 })
+        .success,
+    ).toBe(false);
+    expect(
+      modelAccessRuleSchema.safeParse({
+        ...base,
+        modelId: 'o3',
+        allow: [{ target: 'A@x.org' }],
+        deny: ['a@x.org'],
+      }).success,
+    ).toBe(false);
+  });
+
+  it('putBodySchema leaves modelAccess undefined when the key is absent (stale-client guard)', () => {
+    const parsed = putBodySchema.parse({ defaults: [], overrides: [] });
+    expect(parsed.modelAccess).toBeUndefined();
+  });
+});
 
 describe('canonicalList', () => {
   it('trims, lowercases, dedupes and drops blanks; idempotent', () => {

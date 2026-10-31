@@ -5,6 +5,7 @@
  */
 import { checkGate } from '@/lib/services/limits/enforcement';
 import {
+  DENY_PRIORITY,
   describeModelAccessOverrideId,
   expandModelAccess,
   isModelAccessOverrideId,
@@ -159,7 +160,10 @@ describe('expandModelAccess', () => {
     // Global tier, never delegated, never a ceiling.
     for (const override of overrides) {
       expect(override.delegationId).toBeUndefined();
-      expect(override.priority).toBe(0);
+      // Grants rank 0; the block list ranks above them (DENY_PRIORITY).
+      expect(override.priority).toBe(
+        override.id.endsWith('|deny|all') ? DENY_PRIORITY : 0,
+      );
       expect(override.entries.every((e) => e.ceiling === false)).toBe(true);
     }
   });
@@ -277,7 +281,7 @@ describe('resolver reads the effective policy', () => {
     );
   });
 
-  it('the block list beats a domain or group grant (user layer) and a model grant beats a family block for that person', () => {
+  it('the block list beats every grant for that person — domain, group and even a model-level allow (priority ranks before specificity)', () => {
     const policy = policyWith([
       rule({
         series: 'claude',
@@ -292,9 +296,9 @@ describe('resolver reads the effective policy', () => {
     ]);
     // Family-wide block for alice…
     expect(isModelBlocked(policy, alice, 'claude-opus-5', 'claude')).toBe(true);
-    // …except the one model she is explicitly allowed (model > family at the user layer).
+    // …and the model's own allow list does NOT undo it: blocked is blocked.
     expect(isModelBlocked(policy, alice, 'claude-sonnet-5', 'claude')).toBe(
-      false,
+      true,
     );
     const gate = resolveModelGate(
       MODEL_ALLOWED,
@@ -303,7 +307,7 @@ describe('resolver reads the effective policy', () => {
       'claude-sonnet-5',
       'claude',
     );
-    expect(gate.overrideId).toBe('model-access:model:claude-sonnet-5|allow|5');
+    expect(gate.overrideId).toBe('model-access:family:claude|deny|all');
     // Everyone else in the domain keeps the family grant.
     const dave: Principal = {
       userId: 'd',

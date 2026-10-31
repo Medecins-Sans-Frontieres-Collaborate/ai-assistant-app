@@ -256,3 +256,44 @@ describe('signed skill continuation state', () => {
     vi.unstubAllEnvs();
   });
 });
+
+describe('agent skill executor — user auto toggle', () => {
+  const entry = (id: string, activation: 'auto' | 'always') => ({
+    builtin: false,
+    overridden: false,
+    skill: {
+      id,
+      name: id,
+      description: 'd',
+      version: 1,
+      activation,
+      applyToAgents: true,
+      documents: [],
+      instructions: 'body',
+      updatedAt: '',
+    } as unknown as Skill,
+  });
+  beforeEach(() => {
+    vi.mocked(orgSkillsAvailable).mockReturnValue(true);
+    vi.mocked(getVisibleSkills).mockResolvedValue([
+      entry('auto-only', 'auto'),
+      entry('standing', 'always'),
+      entry('requested', 'auto'),
+    ]);
+  });
+  it('with auto off, the catalog holds only requested and admin-always skills', async () => {
+    const executor = (await createSkillToolExecutor({
+      autoEnabled: false,
+      forcedIds: ['requested'],
+    }))!;
+    const [load] = await executor.listTools();
+    expect(load.name).toBe('load_skill');
+    const ids = (load.inputSchema as { properties: { id: { enum: string[] } } })
+      .properties.id.enum;
+    expect(ids.sort()).toEqual(['requested', 'standing']);
+  });
+  it('with auto off and nothing requested or standing, offers no skill tools at all', async () => {
+    vi.mocked(getVisibleSkills).mockResolvedValue([entry('auto-only', 'auto')]);
+    expect(await createSkillToolExecutor({ autoEnabled: false })).toBeNull();
+  });
+});

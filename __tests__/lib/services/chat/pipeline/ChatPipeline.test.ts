@@ -612,3 +612,52 @@ describe('ChatPipeline - model timeout (issue #130)', () => {
     expect(ran).toBe(false);
   });
 });
+
+describe('ChatPipeline - request abort after the model stage returned', () => {
+  it('keeps forwarding the request-level abort to the model handler stage signal', async () => {
+    let handlerSignal: AbortSignal | undefined;
+    const handler: PipelineStage = {
+      name: 'StandardChatHandler',
+      shouldRun: () => true,
+      execute: async (context) => {
+        handlerSignal = context.stageSignal;
+        // The handler returns a Response whose body is produced AFTER the
+        // stage resolved (the route pipes it); the upstream model call was
+        // opened with stageSignal.
+        return { ...context, response: new Response('body') };
+      },
+    };
+    const pipeline = new ChatPipeline([handler], {
+      StandardChatHandler: 1000,
+    });
+    const requestAbort = new AbortController();
+
+    await pipeline.execute(createTestChatContext(), {
+      signal: requestAbort.signal,
+    });
+    expect(handlerSignal?.aborted).toBe(false);
+
+    // Client disconnects during generation → the model stream is cancelled.
+    requestAbort.abort(new Error('Client disconnected'));
+    expect(handlerSignal?.aborted).toBe(true);
+  });
+
+  it('stops forwarding to a non-handler stage once it has returned', async () => {
+    let stageSignal: AbortSignal | undefined;
+    const enricher: PipelineStage = {
+      name: 'SomeEnricher',
+      shouldRun: () => true,
+      execute: async (context) => {
+        stageSignal = context.stageSignal;
+        return context;
+      },
+    };
+    const pipeline = new ChatPipeline([enricher], { SomeEnricher: 1000 });
+    const requestAbort = new AbortController();
+    await pipeline.execute(createTestChatContext(), {
+      signal: requestAbort.signal,
+    });
+    requestAbort.abort();
+    expect(stageSignal?.aborted).toBe(false);
+  });
+});
