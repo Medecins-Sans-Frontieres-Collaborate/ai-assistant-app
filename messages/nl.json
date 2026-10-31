@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "seconden",
     "chipAutoHideHint": "Tussen {min} en {max} seconden.",
     "byWorkflow": "Per workflow",
-    "byWorkflowNote": "Onderdeel van bovenstaande totalen, apart weergegeven — geen extra gebruik. Grants-runs tellen mee voor de rapportage van uw organisatie en uw tokenbudget, maar niet in dit lokale totaal."
+    "byWorkflowNote": "Onderdeel van bovenstaande totalen, apart weergegeven — geen extra gebruik. Grants-runs tellen mee voor de rapportage van uw organisatie en uw tokenbudget, maar niet in dit lokale totaal.",
+    "chipLabelTitle": "Chiplabel",
+    "chipLabelHint": "De uitsplitsing toont altijd emissies en kosten naast elkaar; dit bepaalt alleen wat er op de samengevouwen chip staat.",
+    "chipLabelEmissions": "Emissies",
+    "chipLabelCost": "Kosten",
+    "chipLabelBoth": "Beide",
+    "costTile": "Geschatte kosten",
+    "costDisclosure": "Kosten volgens lijstprijzen per {asOf} (Global Standard-tarief, geen korting voor gecachte invoer): een bovengrens, geen rekening. Webzoekopdrachten, code-uitvoering, transcriptie, spraak, vertaling en documentindexering zijn niet inbegrepen.",
+    "costUnpriced": "{count, plural, one {# aanvraag zonder lijstprijs wordt} other {# aanvragen zonder lijstprijs worden}} niet opgenomen."
   },
   "extraction": {
     "toggleLabel": "Gestructureerde gegevens extraheren",
@@ -4564,7 +4572,16 @@
         "auto": "Auto",
         "hidden": "Verbergen"
       },
-      "visibilityHint": "De chip wordt automatisch getoond wanneer de schatting wordt bijgewerkt of wanneer u eroverheen beweegt. U kunt dit later aanpassen in Instellingen › Gebruik & Impact."
+      "visibilityHint": "De chip wordt automatisch getoond wanneer de schatting wordt bijgewerkt of wanneer u eroverheen beweegt. U kunt dit later aanpassen in Instellingen › Gebruik & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Geschatte kosten {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Geen lijstprijs voor de aanvragen in deze rij",
+        "unpriced": "{count, plural, one {# aanvraag zonder lijstprijs wordt} other {# aanvragen zonder lijstprijs worden}} niet in de kosten opgenomen.",
+        "noPriceData": "Er worden geen kosten getoond: het model van dit gesprek heeft geen lijstprijs (eigen bronnen, lokale runtimes en agents worden niet geprijsd).",
+        "note": "Kosten volgens lijstprijzen per {asOf} (Global Standard-tarief, geen korting voor gecachte invoer): een bovengrens, geen rekening. Webzoekopdrachten, code-uitvoering, transcriptie, spraak, vertaling en documentindexering zijn niet inbegrepen."
+      }
     },
     "workflow": {
       "title": "Deze werkruimte (geschat)",

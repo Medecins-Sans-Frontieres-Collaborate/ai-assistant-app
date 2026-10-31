@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "secondes",
     "chipAutoHideHint": "Entre {min} et {max} secondes.",
     "byWorkflow": "Par flux de travail",
-    "byWorkflowNote": "Fait partie des totaux ci-dessus, affiché séparément — il ne s'agit pas d'une utilisation supplémentaire. Les exécutions de subventions sont comptées dans le reporting de votre organisation et dans votre budget de jetons, mais pas dans ce total local."
+    "byWorkflowNote": "Fait partie des totaux ci-dessus, affiché séparément — il ne s'agit pas d'une utilisation supplémentaire. Les exécutions de subventions sont comptées dans le reporting de votre organisation et dans votre budget de jetons, mais pas dans ce total local.",
+    "chipLabelTitle": "Libellé de la puce",
+    "chipLabelHint": "La répartition montre toujours les émissions et le coût côte à côte ; ceci définit simplement le texte affiché sur la puce réduite.",
+    "chipLabelEmissions": "Émissions",
+    "chipLabelCost": "Coût",
+    "chipLabelBoth": "Les deux",
+    "costTile": "Coût estimé",
+    "costDisclosure": "Coût selon les prix catalogue au {asOf} (tarif Standard Global, sans réduction sur l’entrée en cache) : valeur haute, non une facture. Recherche web, exécution de code, transcription, parole, traduction et indexation de documents ne sont pas inclus.",
+    "costUnpriced": "{count, plural, one {# demande sans prix catalogue n’est} other {# demandes sans prix catalogue ne sont}} pas incluses."
   },
   "extraction": {
     "toggleLabel": "Extraire des données structurées",
@@ -4564,7 +4572,16 @@
         "auto": "Automatique",
         "hidden": "Masquer"
       },
-      "visibilityHint": "Le mode automatique affiche la pastille lorsque l’estimation est mise à jour ou au survol. Vous pouvez modifier ce réglage dans Paramètres › Utilisation & Impact."
+      "visibilityHint": "Le mode automatique affiche la pastille lorsque l’estimation est mise à jour ou au survol. Vous pouvez modifier ce réglage dans Paramètres › Utilisation & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Coût estimé : {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Pas de prix catalogue pour les demandes de cette ligne",
+        "unpriced": "{count, plural, one {# demande sans prix catalogue n’est} other {# demandes sans prix catalogue ne sont}} pas incluses dans le coût.",
+        "noPriceData": "Aucun coût affiché : le modèle de cette conversation n’a pas de prix catalogue (sources propres, exécutions locales et agents ne sont pas tarifés).",
+        "note": "Coût selon les prix catalogue au {asOf} (tarif Standard Global, sans réduction sur l’entrée en cache) : valeur haute, non une facture. Recherche web, exécution de code, transcription, parole, traduction et indexation de documents ne sont pas inclus."
+      }
     },
     "workflow": {
       "title": "Cet espace de travail (estimation)",

@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "secunde",
     "chipAutoHideHint": "Între {min} și {max} secunde.",
     "byWorkflow": "Pe flux de lucru",
-    "byWorkflowNote": "Parte din totalurile de mai sus, prezentate separat — nu este utilizare suplimentară. Rulările pentru granturi sunt incluse în raportarea organizației și în bugetul dvs. de tokeni, dar nu și în acest total local."
+    "byWorkflowNote": "Parte din totalurile de mai sus, prezentate separat — nu este utilizare suplimentară. Rulările pentru granturi sunt incluse în raportarea organizației și în bugetul dvs. de tokeni, dar nu și în acest total local.",
+    "chipLabelTitle": "Etichetă chip",
+    "chipLabelHint": "Defalcarea afișează întotdeauna emisiile și costul una lângă alta; aceasta alege doar ce citește chip-ul restrâns.",
+    "chipLabelEmissions": "Emisii",
+    "chipLabelCost": "Cost",
+    "chipLabelBoth": "Ambele",
+    "costTile": "Cost estimat",
+    "costDisclosure": "Cost la prețurile de listă de la {asOf} (tarif Global Standard, fără discount pentru input-uri cache): un prag maxim, nu o factură. Căutarea web, execuția codului, transcrierea, vorbirea, traducerea și indexarea documentelor nu sunt incluse.",
+    "costUnpriced": "{count, plural, one {# cerere fără preț de listă nu este} other {# cereri fără preț de listă nu sunt}} incluse."
   },
   "extraction": {
     "toggleLabel": "Extrage date structurate",
@@ -4564,7 +4572,16 @@
         "auto": "Automat",
         "hidden": "Ascunde"
       },
-      "visibilityHint": "Modul automat afișează insigna când estimarea se actualizează sau la trecerea mouse-ului peste. Poți schimba această opțiune oricând din Setări › Utilizare & Impact."
+      "visibilityHint": "Modul automat afișează insigna când estimarea se actualizează sau la trecerea mouse-ului peste. Poți schimba această opțiune oricând din Setări › Utilizare & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Cost estimat {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Nu există preț de listă pentru cererile din acest rând",
+        "unpriced": "{count, plural, one {# cerere fără preț de listă nu este} other {# cereri fără preț de listă nu sunt}} incluse în cost.",
+        "noPriceData": "Nu se afișează costul: modelul acestei conversații nu are preț de listă (surse proprii, runtime-uri locale și agenți nu au preț).",
+        "note": "Cost la prețurile de listă de la {asOf} (tarif Global Standard, fără discount pentru input-uri cache): un prag maxim, nu o factură. Căutarea web, execuția codului, transcrierea, vorbirea, traducerea și indexarea documentelor nu sunt incluse."
+      }
     },
     "workflow": {
       "title": "Acest spațiu de lucru (estimat)",

@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "saniye",
     "chipAutoHideHint": "{min} ile {max} saniye arasında.",
     "byWorkflow": "İş akışına göre",
-    "byWorkflowNote": "Yukarıdaki toplamların bir parçası olup ayrıca gösterilir — ek kullanım değildir. Hibe çalışmalarınız kurumunuzun raporlamasına ve token bütçenize yansıtılır, ancak bu yerel toplamda sayılmaz."
+    "byWorkflowNote": "Yukarıdaki toplamların bir parçası olup ayrıca gösterilir — ek kullanım değildir. Hibe çalışmalarınız kurumunuzun raporlamasına ve token bütçenize yansıtılır, ancak bu yerel toplamda sayılmaz.",
+    "chipLabelTitle": "Çip etiketi",
+    "chipLabelHint": "Ayrıntılı gösterim her zaman emisyonları ve maliyeti yan yana gösterir; bu seçim, yalnızca daraltılmış çipin ne gösterdiğini belirler.",
+    "chipLabelEmissions": "Emisyonlar",
+    "chipLabelCost": "Maliyet",
+    "chipLabelBoth": "İkisi",
+    "costTile": "Tahmini maliyet",
+    "costDisclosure": "{asOf} tarihindeki liste fiyatlarıyla maliyet (Global Standard oranı, önbellekli girdilere indirim yok): bu bir üst sınırdır, fatura değildir. Web araması, kod çalıştırma, transkripsiyon, konuşma, çeviri ve belge indeksleme dahil değildir.",
+    "costUnpriced": "{count, plural, one {# istek için liste fiyatı yok ve dahil edilmedi} other {# istek için liste fiyatı yok ve dahil edilmedi}}"
   },
   "extraction": {
     "toggleLabel": "Yapılandırılmış veriyi çıkar",
@@ -4564,7 +4572,16 @@
         "auto": "Otomatik",
         "hidden": "Gizle"
       },
-      "visibilityHint": "Otomatik, çip güncellendiğinde veya üzerine geldiğinizde gösterir. Bunu Ayarlar › Kullanım ve Etki bölümünden tekrar değiştirebilirsiniz."
+      "visibilityHint": "Otomatik, çip güncellendiğinde veya üzerine geldiğinizde gösterir. Bunu Ayarlar › Kullanım ve Etki bölümünden tekrar değiştirebilirsiniz.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Tahmini maliyet {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Bu satırdaki istekler için liste fiyatı yok",
+        "unpriced": "{count, plural, one {# istek için liste fiyatı yok ve maliyete dahil edilmedi} other {# istek için liste fiyatı yok ve maliyete dahil edilmedi}}",
+        "noPriceData": "Maliyet gösterilmiyor: bu konuşmanın modelinin liste fiyatı yok (kendi kaynakları, yerel çalışma ortamları ve ajanlar fiyatlandırılmamıştır).",
+        "note": "{asOf} tarihindeki liste fiyatlarıyla maliyet (Global Standard oranı, önbellekli girdilere indirim yok): bu bir üst sınırdır, fatura değildir. Web araması, kod çalıştırma, transkripsiyon, konuşma, çeviri ve belge indeksleme dahil değildir."
+      }
     },
     "workflow": {
       "title": "Bu çalışma alanı (tahmini)",

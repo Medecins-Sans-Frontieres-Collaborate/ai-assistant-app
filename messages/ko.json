@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "초",
     "chipAutoHideHint": "{min}초에서 {max}초 사이.",
     "byWorkflow": "워크플로우별",
-    "byWorkflowNote": "위의 합계에 포함된 일부를 별도로 표시한 것으로, 추가 사용이 아닙니다. 승인된 실행은 귀하의 조직 보고 및 토큰 예산에는 포함되지만, 이 로컬 총계에는 포함되지 않습니다."
+    "byWorkflowNote": "위의 합계에 포함된 일부를 별도로 표시한 것으로, 추가 사용이 아닙니다. 승인된 실행은 귀하의 조직 보고 및 토큰 예산에는 포함되지만, 이 로컬 총계에는 포함되지 않습니다.",
+    "chipLabelTitle": "칩 레이블",
+    "chipLabelHint": "항목별 내역에는 항상 배출량과 비용이 나란히 표시됩니다. 이 설정은 축소된 칩에 표시될 항목만 선택합니다.",
+    "chipLabelEmissions": "배출량",
+    "chipLabelCost": "비용",
+    "chipLabelBoth": "둘 다",
+    "costTile": "예상 비용",
+    "costDisclosure": "{asOf} 기준 목록가(Global Standard rate, 입력 캐시 할인 미적용)로 산정된 비용입니다. 청구 금액이 아니라 최대치입니다. 웹 검색, 코드 실행, 전사, 음성, 번역, 문서 색인은 포함되지 않습니다.",
+    "costUnpriced": "{count, plural, one {목록가가 없는 요청 #건이} other {목록가가 없는 요청 #건이}} 포함되지 않았습니다."
   },
   "extraction": {
     "toggleLabel": "구조화 데이터 추출",
@@ -4564,7 +4572,16 @@
         "auto": "자동",
         "hidden": "숨김"
       },
-      "visibilityHint": "자동은 추정치가 업데이트되거나 마우스를 올릴 때 칩을 표시합니다. 이 설정은 환경설정 › 사용량 및 영향에서 다시 변경할 수 있습니다."
+      "visibilityHint": "자동은 추정치가 업데이트되거나 마우스를 올릴 때 칩을 표시합니다. 이 설정은 환경설정 › 사용량 및 영향에서 다시 변경할 수 있습니다.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "예상 비용 {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "이 행의 요청에는 목록가가 없습니다.",
+        "unpriced": "{count, plural, one {목록가가 없는 요청 #건이} other {목록가가 없는 요청 #건이}} 비용에 포함되지 않았습니다.",
+        "noPriceData": "비용이 표시되지 않습니다: 이 대화의 모델에는 목록가가 없습니다(자체 소스, 로컬 런타임, agent는 가격이 매겨지지 않음).",
+        "note": "{asOf} 기준 목록가(Global Standard rate, 입력 캐시 할인 미적용)로 산정된 비용입니다. 청구 금액이 아니라 최대치입니다. 웹 검색, 코드 실행, 전사, 음성, 번역, 문서 색인은 포함되지 않습니다."
+      }
     },
     "workflow": {
       "title": "이 작업 공간(추정)",

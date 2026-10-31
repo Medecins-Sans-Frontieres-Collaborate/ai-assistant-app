@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "segond",
     "chipAutoHideHint": "Ant {min} ak {max} segond.",
     "byWorkflow": "Pa workflow",
-    "byWorkflowNote": "Pati nan total ki anlè yo, montre separeman — pa itilize anplis. Egzekisyon Grant yo konte pou rapò òganizasyon w la ak bidjè token ou, men yo pa ladan total lokal sa a."
+    "byWorkflowNote": "Pati nan total ki anlè yo, montre separeman — pa itilize anplis. Egzekisyon Grant yo konte pou rapò òganizasyon w la ak bidjè token ou, men yo pa ladan total lokal sa a.",
+    "chipLabelTitle": "Tit etikèt chip",
+    "chipLabelHint": "Detay yo toujou montre emisyon ak pri kote pa kote; sa a sèlman chwazi sa chip rekli a montre.",
+    "chipLabelEmissions": "Emisyon",
+    "chipLabelCost": "Pri",
+    "chipLabelBoth": "Toude",
+    "costTile": "Pri estime",
+    "costDisclosure": "Pri sou lis jan li ye nan {asOf} (To Global Standard, pa gen rabè pou antre kach): yon limit siperyè, pa yon bòdwo. Rechèch sou entènèt, ekzekisyon kòd, transkripsyon, pale, tradiksyon ak endèks dokiman pa enkli.",
+    "costUnpriced": "{count, plural, one {# demann san pri sou lis pa} other {# demann san pri sou lis yo pa}} enkli."
   },
   "extraction": {
     "toggleLabel": "Extra done estriktire",
@@ -4548,7 +4556,16 @@
         "auto": "Otomatik",
         "hidden": "Kache"
       },
-      "visibilityHint": "Otomatik ap montre chip la lè estimasyon an ap mete ajou oswa ou pase sourit sou li. Ou ka chanje sa ankò nan Anviwònman › Itilizasyon & Enpak."
+      "visibilityHint": "Otomatik ap montre chip la lè estimasyon an ap mete ajou oswa ou pase sourit sou li. Ou ka chanje sa ankò nan Anviwònman › Itilizasyon & Enpak.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Pri estime: {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Pa gen pri sou lis pou demann ki nan liy sa a",
+        "unpriced": "{count, plural, one {# demann san pri sou lis pa} other {# demann san pri sou lis yo pa}} enkli nan pri a.",
+        "noPriceData": "Pa gen pri ki parèt: modèl konvèsasyon sa a pa gen pri sou lis (resous pwòp yo, ekzekisyon lokal yo ak ajan pa gen pri).",
+        "note": "Pri sou lis jan li ye nan {asOf} (To Global Standard, pa gen rabè pou antre kach): yon limit siperyè, pa yon bòdwo. Rechèch sou entènèt, ekzekisyon kòd, transkripsyon, pale, tradiksyon ak endèks dokiman pa enkli."
+      }
     },
     "workflow": {
       "title": "Espas travay sa a (evalye)",

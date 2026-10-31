@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "sekuntia",
     "chipAutoHideHint": "{min}–{max} sekuntia.",
     "byWorkflow": "Työnkulun mukaan",
-    "byWorkflowNote": "Yllä esitettyjen kokonaisuuksien osa, näytetään erikseen – ei lisäkäyttöä. Grants-ajot lasketaan organisaationne raportointiin ja token-budjettiin, mutta eivät tähän paikalliseen kokonaisuuteen."
+    "byWorkflowNote": "Yllä esitettyjen kokonaisuuksien osa, näytetään erikseen – ei lisäkäyttöä. Grants-ajot lasketaan organisaationne raportointiin ja token-budjettiin, mutta eivät tähän paikalliseen kokonaisuuteen.",
+    "chipLabelTitle": "Siruetiketti",
+    "chipLabelHint": "Eritely näyttää aina päästöt ja kustannukset rinnakkain; tämä määrittää vain tiivistetyn sirun tekstin.",
+    "chipLabelEmissions": "Päästöt",
+    "chipLabelCost": "Kustannus",
+    "chipLabelBoth": "Molemmat",
+    "costTile": "Arvioitu kustannus",
+    "costDisclosure": "Kustannus listahinnoilla {asOf} (globaali vakiotaksa, ei välimuistialennusta): yläraja, ei lasku. Verkkohaku, koodin suoritus, transkriptio, puhe, käännös ja asiakirjojen indeksointi eivät sisälly.",
+    "costUnpriced": "{count, plural, one {# pyyntö ilman listahintaa ei ole} other {# pyyntöä ilman listahintaa eivät ole}} huomioitu."
   },
   "extraction": {
     "toggleLabel": "Luo jäsenneltyä dataa",
@@ -4564,7 +4572,16 @@
         "auto": "Automaattisesti",
         "hidden": "Piilota"
       },
-      "visibilityHint": "Automaattinen näyttää sirun, kun arvio päivittyy tai viet hiiren sen päälle. Voit muuttaa tätä asetuksissa kohdasta Käyttö ja vaikutus."
+      "visibilityHint": "Automaattinen näyttää sirun, kun arvio päivittyy tai viet hiiren sen päälle. Voit muuttaa tätä asetuksissa kohdasta Käyttö ja vaikutus.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Arvioitu kustannus {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Tällä rivillä ei ole pyyntöjen listahintaa",
+        "unpriced": "{count, plural, one {# pyyntö ilman listahintaa ei ole} other {# pyyntöä ilman listahintaa eivät ole}} huomioitu kustannuksessa.",
+        "noPriceData": "Kustannusta ei näytetä: tämän keskustelun mallilla ei ole listahintaa (omat lähteet, paikalliset suoritukset ja agentit eivät ole hinnoiteltuja).",
+        "note": "Kustannus listahinnoilla {asOf} (globaali vakiotaksa, ei välimuistialennusta): yläraja, ei lasku. Verkkohaku, koodin suoritus, transkriptio, puhe, käännös ja asiakirjojen indeksointi eivät sisälly."
+      }
     },
     "workflow": {
       "title": "Tämä työtila (arvio)",

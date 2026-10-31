@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "sekonde",
     "chipAutoHideHint": "Kati na {min} na {max} sekonde.",
     "byWorkflow": "Na ndenge ya workflow",
-    "byWorkflowNote": "Eza kati na total oyo likoló, ezali komonama se na ndenge na yango— ezali lisusu elongi te. Ba runs ya Grant etalelaka rapor oyo ya organisation na yo mpe budget ya token, kasi ezali te na total oyo ya esika oyo."
+    "byWorkflowNote": "Eza kati na total oyo likoló, ezali komonama se na ndenge na yango— ezali lisusu elongi te. Ba runs ya Grant etalelaka rapor oyo ya organisation na yo mpe budget ya token, kasi ezali te na total oyo ya esika oyo.",
+    "chipLabelTitle": "Libanda ya chip",
+    "chipLabelHint": "Kobolola ekomonisa ntango nyonso émissions mpe motuya penepene; oyo elakisa kaka nini ekokomanaka na chip esili kokitaka.",
+    "chipLabelEmissions": "Emissions",
+    "chipLabelCost": "Motuya",
+    "chipLabelBoth": "Oyo nyonso mibale",
+    "costTile": "Motuya ekotami",
+    "costDisclosure": "Motuya na nzelanzela ya motuya elongobani wuto {asOf} (Global Standard rate, rabais ya input esalami te): ndonga ya likolo, ezali te bill. Recherche na internet, kosala code, transcription, maloba, kobongola ndenge mpe kobongisa bailaka te.",
+    "costUnpriced": "{count, plural, one {# senga ezanga motuya elongobani} other {# basenga bazangi motuya elongobani}} elongobami te."
   },
   "extraction": {
     "toggleLabel": "Kolongola donnee na forme ya mobongisi",
@@ -4548,7 +4556,16 @@
         "auto": "Auto",
         "hidden": "Kobomba"
       },
-      "visibilityHint": "Auto ekolakisa chip soki ba estimate ebongwani to soki okomiti na yango. Okoki kobongola yango lisusu na Paramètres › Usage & Impact."
+      "visibilityHint": "Auto ekolakisa chip soki ba estimate ebongwani to soki okomiti na yango. Okoki kobongola yango lisusu na Paramètres › Usage & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Motuya ekotami {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Motuya elongobani te mpo na senga oyo ezali na molongo oyo",
+        "unpriced": "{count, plural, one {# senga ezanga motuya elongobani} other {# basenga bazangi motuya elongobani}} elongobami te na motuya.",
+        "noPriceData": "Motuya emonisami te: model ya boyokanisi oyo ezali na motuya elongobani te (biloko na biso moko, misala ya mboka mpe baserveur ya mboka elongobani te).",
+        "note": "Motuya na nzelanzela ya motuya elongobani wuto {asOf} (Global Standard rate, rabais ya input esalami te): ndonga ya likolo, ezali te bill. Recherche na internet, kosala code, transcription, maloba, kobongola ndenge mpe kobongisa bailaka te."
+      }
     },
     "workflow": {
       "title": "Esika mosala oyo (epesami motuya)",

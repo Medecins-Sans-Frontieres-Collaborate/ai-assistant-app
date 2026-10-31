@@ -4371,7 +4371,16 @@
         "auto": "Auto",
         "hidden": "Hide"
       },
-      "visibilityHint": "Auto shows the chip when the estimate updates or you hover it. Change this again in Settings › Usage & Impact."
+      "visibilityHint": "Auto shows the chip when the estimate updates or you hover it. Change this again in Settings › Usage & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Estimated cost {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "No list price for the requests in this row",
+        "unpriced": "{count, plural, one {# request without a list price is} other {# requests without a list price are}} not included in the cost.",
+        "noPriceData": "No cost is shown: this conversation’s model has no list price (own sources, local runtimes and agents are not priced).",
+        "note": "Cost at list prices as of {asOf} (Global Standard rate, no cached-input discount): an upper bound, not a bill. Web search, code execution, transcription, speech, translation and document indexing are not included."
+      }
     },
     "workflow": {
       "title": "This workspace (estimated)",
@@ -4430,7 +4439,15 @@
     "chipAutoHideUnit": "seconds",
     "chipAutoHideHint": "Between {min} and {max} seconds.",
     "byWorkflow": "By workflow",
-    "byWorkflowNote": "Part of the totals above, shown separately — not extra usage. Grants runs are counted toward your organisation's reporting and your token budget, but not in this local total."
+    "byWorkflowNote": "Part of the totals above, shown separately — not extra usage. Grants runs are counted toward your organisation's reporting and your token budget, but not in this local total.",
+    "chipLabelTitle": "Chip label",
+    "chipLabelHint": "The breakdown always shows emissions and cost side by side; this only picks what the collapsed chip reads.",
+    "chipLabelEmissions": "Emissions",
+    "chipLabelCost": "Cost",
+    "chipLabelBoth": "Both",
+    "costTile": "Estimated cost",
+    "costDisclosure": "Cost at list prices as of {asOf} (Global Standard rate, no cached-input discount): an upper bound, not a bill. Web search, code execution, transcription, speech, translation and document indexing are not included.",
+    "costUnpriced": "{count, plural, one {# request without a list price is} other {# requests without a list price are}} not included."
   },
   "connectors": {
     "title": "Connectors",

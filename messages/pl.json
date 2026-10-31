@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "sekundach",
     "chipAutoHideHint": "Od {min} do {max} sekund.",
     "byWorkflow": "Według procesu",
-    "byWorkflowNote": "Część powyższych sum, pokazana osobno — bez dodatkowego zużycia. Uruchomienia grantowe są liczone do raportów Twojej organizacji i budżetu tokenów, ale nie w tej lokalnej sumie."
+    "byWorkflowNote": "Część powyższych sum, pokazana osobno — bez dodatkowego zużycia. Uruchomienia grantowe są liczone do raportów Twojej organizacji i budżetu tokenów, ale nie w tej lokalnej sumie.",
+    "chipLabelTitle": "Etykieta na chipie",
+    "chipLabelHint": "Podsumowanie zawsze pokazuje emisje i koszt obok siebie; to wybiera tylko tekst na zwiniętym chipie.",
+    "chipLabelEmissions": "Emisje",
+    "chipLabelCost": "Koszt",
+    "chipLabelBoth": "Oba",
+    "costTile": "Szacowany koszt",
+    "costDisclosure": "Koszt według cen katalogowych na dzień {asOf} (stawka Global Standard, bez rabatu za pamięć podręczną): wartość maksymalna, nie rachunek. Wyszukiwanie internetowe, wykonywanie kodu, transkrypcja, mowa, tłumaczenie i indeksowanie dokumentów nie są wliczone.",
+    "costUnpriced": "{count, plural, one {# żądanie bez ceny katalogowej nie zostało} other {# żądania bez ceny katalogowej nie zostały}} uwzględnione."
   },
   "extraction": {
     "toggleLabel": "Wyodrębnij dane strukturalne",
@@ -4564,7 +4572,16 @@
         "auto": "Automatycznie",
         "hidden": "Ukryj"
       },
-      "visibilityHint": "Opcja „Automatycznie” pokazuje wskaźnik, gdy szacowanie jest aktualizowane lub po najechaniu kursorem. Możesz to zmienić ponownie w Ustawieniach › Użycie i wpływ."
+      "visibilityHint": "Opcja „Automatycznie” pokazuje wskaźnik, gdy szacowanie jest aktualizowane lub po najechaniu kursorem. Możesz to zmienić ponownie w Ustawieniach › Użycie i wpływ.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Szacowany koszt {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Brak ceny katalogowej dla żądań w tym wierszu",
+        "unpriced": "{count, plural, one {# żądanie nie ma ceny katalogowej i} other {# żądania nie mają ceny katalogowej i}} nie zostały uwzględnione w koszcie.",
+        "noPriceData": "Koszt nie jest wyświetlany: model tej rozmowy nie posiada ceny katalogowej (własne źródła, lokalne środowiska i agenci nie są wyceniani).",
+        "note": "Koszt według cen katalogowych na dzień {asOf} (stawka Global Standard, bez rabatu za pamięć podręczną): wartość maksymalna, nie rachunek. Wyszukiwanie internetowe, wykonywanie kodu, transkrypcja, mowa, tłumaczenie i indeksowanie dokumentów nie są wliczone."
+      }
     },
     "workflow": {
       "title": "To środowisko pracy (szacowane)",

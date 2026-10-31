@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "sekunde",
     "chipAutoHideHint": "Kati ya {min} na {max} sekunde.",
     "byWorkflow": "Kwa mpangilio wa kazi",
-    "byWorkflowNote": "Sehemu ya jumla hapo juu, inaonyeshwa kando — si matumizi ya ziada. Utekelezaji wa ruzuku unahesabiwa kwenye taarifa ya shirika lako na bajeti yako ya tokeni, lakini si kwenye jumla hii ya hapa."
+    "byWorkflowNote": "Sehemu ya jumla hapo juu, inaonyeshwa kando — si matumizi ya ziada. Utekelezaji wa ruzuku unahesabiwa kwenye taarifa ya shirika lako na bajeti yako ya tokeni, lakini si kwenye jumla hii ya hapa.",
+    "chipLabelTitle": "Lebo ya chipu",
+    "chipLabelHint": "Mgawanyo huonyesha uzalishaji na gharama pamoja; hii huchagua tu kinachoonekana kwenye chipu iliyofupishwa.",
+    "chipLabelEmissions": "Uzalishaji",
+    "chipLabelCost": "Gharama",
+    "chipLabelBoth": "Vyote",
+    "costTile": "Gharama inayokadiriwa",
+    "costDisclosure": "Gharama kwa bei za orodha kufikia {asOf} (Kiwango cha Global Standard, hakuna punguzo la ingizo lililohifadhiwa): kiwango cha juu, si bili. Utafutaji wa wavuti, utekelezaji wa msimbo, unukuu, sauti, tafsiri na kuweka faharisi nyaraka havijajumuishwa.",
+    "costUnpriced": "{count, plural, one {# ombi bila bei ya orodha halijumuishwi.} other {# maombi bila bei ya orodha hayajumuishwi.}}"
   },
   "extraction": {
     "toggleLabel": "Dondoa data iliyo na muundo",
@@ -4564,7 +4572,16 @@
         "auto": "Otomatiki",
         "hidden": "Ficha"
       },
-      "visibilityHint": "Otomatiki itaonyesha chipu wakati makadirio yanasasishwa au unapobonya juu yake. Badilisha hili tena kwenye Mipangilio › Matumizi & Athari."
+      "visibilityHint": "Otomatiki itaonyesha chipu wakati makadirio yanasasishwa au unapobonya juu yake. Badilisha hili tena kwenye Mipangilio › Matumizi & Athari.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Gharama inayokadiriwa {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Hakuna bei ya orodha kwa maombi kwenye safu hii",
+        "unpriced": "{count, plural, one {# ombi bila bei ya orodha halijumuishwi} other {# maombi bila bei ya orodha hayajumuishwi}} kwenye gharama.",
+        "noPriceData": "Hakuna gharama inayoonyeshwa: mfano wa mazungumzo haya hauna bei ya orodha (vyanzo binafsi, matumizi ya ndani na mawakala havina bei).",
+        "note": "Gharama kwa bei za orodha kufikia {asOf} (Kiwango cha Global Standard, hakuna punguzo la ingizo lililohifadhiwa): kiwango cha juu, si bili. Utafutaji wa wavuti, utekelezaji wa msimbo, unukuu, sauti, tafsiri na kuweka faharisi nyaraka havijajumuishwa."
+      }
     },
     "workflow": {
       "title": "Sehemu hii ya kazi (kadirio)",

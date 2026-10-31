@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "amasegonda",
     "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda.",
     "byWorkflow": "Ku murongo w’akazi",
-    "byWorkflowNote": "Igice cy’umubare rusange uri hejuru, cyerekanywe ukwacyo — si imikoreshereze y’inyongera. Imikoreshereze y’ubufasha ibarirwa muri raporo y’umuryango wawe no mu mubare w’utumenyetso mwemerewe, ariko ntibarwa muri uyu mubare w’aho uri."
+    "byWorkflowNote": "Igice cy’umubare rusange uri hejuru, cyerekanywe ukwacyo — si imikoreshereze y’inyongera. Imikoreshereze y’ubufasha ibarirwa muri raporo y’umuryango wawe no mu mubare w’utumenyetso mwemerewe, ariko ntibarwa muri uyu mubare w’aho uri.",
+    "chipLabelTitle": "Izina rya chip",
+    "chipLabelHint": "Igaragaraza buri gihe ibisohoka n'igiciro bitandukanye; ibi ni ibyo usoma kuri chip ifunitse.",
+    "chipLabelEmissions": "Ibisohoka",
+    "chipLabelCost": "Igiciro",
+    "chipLabelBoth": "Byombi",
+    "costTile": "Igiciro cyabaruwe",
+    "costDisclosure": "Igiciro ku biteganijwe guhera {asOf} (Igipimo Mpuzamahanga, nta kunoza kwinjiza): ni igice ntarengwa, si fagitire. Gushakisha kuri internet, kwandika no gushyira mu majwi, kuvuga, guhindura n'ubika inyandiko ntibibarwa.",
+    "costUnpriced": "{count, plural, one {# isabwa idafite igiciro iri} other {# bisabwa bitagira igiciro biri}} ntibyabaruwe."
   },
   "extraction": {
     "toggleLabel": "Sohora amakuru ateguye",
@@ -4548,7 +4556,16 @@
         "auto": "Byikora",
         "hidden": "Bihishe"
       },
-      "visibilityHint": "Ibyikora, chip iragaragara iyo igipimo kivuguruwe cyangwa iyo uyikoreyeho. Ushobora kubihindura nanone muri Settings › Usage & Impact."
+      "visibilityHint": "Ibyikora, chip iragaragara iyo igipimo kivuguruwe cyangwa iyo uyikoreyeho. Ushobora kubihindura nanone muri Settings › Usage & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Igiciro cyabaruwe ni {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Nta giciro kiri kuri uru murongo",
+        "unpriced": "{count, plural, one {# isabwa idafite igiciro iri} other {# bisabwa bitagira igiciro biri}} ntibyabaruwe mu giciro.",
+        "noPriceData": "Nta giciro kigaragajwe: icyitegererezo cy'iki kiganiro nta giciro gifite (amasoko yacyo bwite, imikorere yegereyeho n'abakozi ntibigira igiciro).",
+        "note": "Igiciro ku biteganijwe guhera {asOf} (Igipimo Mpuzamahanga, nta kunoza kwinjiza): ni igice ntarengwa, si fagitire. Gushakisha kuri internet, kwandika no gushyira mu majwi, kuvuga, guhindura n'ubika inyandiko ntibibarwa."
+      }
     },
     "workflow": {
       "title": "Ubu butangamo akazi (ikigereranyo)",

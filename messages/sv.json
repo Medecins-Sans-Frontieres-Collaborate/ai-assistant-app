@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "sekunder",
     "chipAutoHideHint": "Mellan {min} och {max} sekunder.",
     "byWorkflow": "Per arbetsflöde",
-    "byWorkflowNote": "Del av summorna ovan, visas separat — inte extra användning. Beviljade körningar räknas mot din organisations rapportering och tokenbudget, men inte i denna lokala summa."
+    "byWorkflowNote": "Del av summorna ovan, visas separat — inte extra användning. Beviljade körningar räknas mot din organisations rapportering och tokenbudget, men inte i denna lokala summa.",
+    "chipLabelTitle": "Chip-etikett",
+    "chipLabelHint": "Uppdelningen visar alltid utsläpp och kostnad sida vid sida; detta avgör endast vad den hopfällda chippen visar.",
+    "chipLabelEmissions": "Utsläpp",
+    "chipLabelCost": "Kostnad",
+    "chipLabelBoth": "Båda",
+    "costTile": "Uppskattad kostnad",
+    "costDisclosure": "Kostnad enligt listpriser per {asOf} (Global Standard rate, ingen rabatt för cachad indata): en övre gräns, ingen faktura. Webbsökning, kodkörning, transkribering, tal, översättning och dokumentindexering ingår ej.",
+    "costUnpriced": "{count, plural, one {# förfrågan utan listpris är} other {# förfrågningar utan listpris är}} inte inkluderade."
   },
   "extraction": {
     "toggleLabel": "Extrahera strukturerad data",
@@ -4564,7 +4572,16 @@
         "auto": "Auto",
         "hidden": "Dölj"
       },
-      "visibilityHint": "Auto visar chipet när uppskattningen uppdateras eller när du hovrar över det. Du kan ändra detta igen under Inställningar › Användning & påverkan."
+      "visibilityHint": "Auto visar chipet när uppskattningen uppdateras eller när du hovrar över det. Du kan ändra detta igen under Inställningar › Användning & påverkan.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Uppskattad kostnad {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Inget listpris för förfrågningarna i denna rad",
+        "unpriced": "{count, plural, one {# förfrågan utan listpris är} other {# förfrågningar utan listpris är}} inte inkluderade i kostnaden.",
+        "noPriceData": "Ingen kostnad visas: modellen för denna konversation har inget listpris (egna källor, lokala miljöer och agenter är inte prissatta).",
+        "note": "Kostnad enligt listpriser per {asOf} (Global Standard rate, ingen rabatt för cachad indata): en övre gräns, ingen faktura. Webbsökning, kodkörning, transkribering, tal, översättning och dokumentindexering ingår ej."
+      }
     },
     "workflow": {
       "title": "Detta arbetsutrymme (uppskattat)",

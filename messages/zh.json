@@ -2793,7 +2793,15 @@
     "chipAutoHideUnit": "秒",
     "chipAutoHideHint": "介于 {min} 到 {max} 秒之间。",
     "byWorkflow": "按工作流程",
-    "byWorkflowNote": "上方总计中的一部分，单独展示——不是额外使用量。资助运行计入您所在机构的报告和 token 配额中，但不计入本地总数。"
+    "byWorkflowNote": "上方总计中的一部分，单独展示——不是额外使用量。资助运行计入您所在机构的报告和 token 配额中，但不计入本地总数。",
+    "chipLabelTitle": "芯片标签",
+    "chipLabelHint": "分项始终并列显示碳排放和费用，此项仅选择折叠芯片显示内容。",
+    "chipLabelEmissions": "碳排放",
+    "chipLabelCost": "费用",
+    "chipLabelBoth": "全部",
+    "costTile": "预计费用",
+    "costDisclosure": "费用以 {asOf} 当天的列表价格计算（全球标准费率，无缓存输入折扣）：为上限估算，非账单。网页搜索、代码执行、转录、语音、翻译和文档索引未计入。",
+    "costUnpriced": "{count, plural, one {# 个无列表价的请求} other {# 个无列表价的请求}}未计入。"
   },
   "extraction": {
     "toggleLabel": "提取结构化数据",
@@ -4595,7 +4603,16 @@
         "auto": "自动",
         "hidden": "隐藏"
       },
-      "visibilityHint": "自动：在估算更新或鼠标悬停时显示信息条。可在 设置 › 使用与影响 中再次更改。"
+      "visibilityHint": "自动：在估算更新或鼠标悬停时显示信息条。可在 设置 › 使用与影响 中再次更改。",
+      "labelBoth": "{grams} 克 · {cost}",
+      "costAria": "预计费用 {cost}。",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "该行请求无列表价格",
+        "unpriced": "{count, plural, one {# 个无列表价的请求} other {# 个无列表价的请求}}未计入费用。",
+        "noPriceData": "未显示费用：本对话模型无列表价格（自有来源、本地运行时及代理不计价）。",
+        "note": "费用以 {asOf} 当天的列表价格计算（全球标准费率，无缓存输入折扣）：为上限估算，非账单。网页搜索、代码执行、转录、语音、翻译和文档索引未计入。"
+      }
     },
     "workflow": {
       "title": "此工作区（预估）",

@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "segons",
     "chipAutoHideHint": "Entre {min} i {max} segons.",
     "byWorkflow": "Per flux de treball",
-    "byWorkflowNote": "Forma part dels totals anteriors, mostrat per separat — no és ús addicional. Les execucions de les subvencions es compten per a l’informe de la vostra organització i el pressupost de tokens, però no en aquest total local."
+    "byWorkflowNote": "Forma part dels totals anteriors, mostrat per separat — no és ús addicional. Les execucions de les subvencions es compten per a l’informe de la vostra organització i el pressupost de tokens, però no en aquest total local.",
+    "chipLabelTitle": "Etiqueta del xip",
+    "chipLabelHint": "La desglossament sempre mostra emissions i cost costat a costat; això només escull què llegeix el xip comprimit.",
+    "chipLabelEmissions": "Emissions",
+    "chipLabelCost": "Cost",
+    "chipLabelBoth": "Ambdós",
+    "costTile": "Cost estimat",
+    "costDisclosure": "Cost segons preus de llista a data de {asOf} (tarifa Estàndard Global, sense descompte per entrada en memòria cau): és un límit superior, no una factura. Cerca web, execució de codi, transcripció, veu, traducció i indexació de documents no estan inclosos.",
+    "costUnpriced": "{count, plural, one {# sol·licitud sense preu de llista no s'} other {# sol·licituds sense preu de llista no s'}}inclouen."
   },
   "extraction": {
     "toggleLabel": "Extreu dades estructurades",
@@ -4564,7 +4572,16 @@
         "auto": "Automàtic",
         "hidden": "Amaga"
       },
-      "visibilityHint": "El mode automàtic mostra el xip quan s’actualitza l’estimació o en passar-hi el cursor. Pots canviar això de nou a Configuració › Ús i Impacte."
+      "visibilityHint": "El mode automàtic mostra el xip quan s’actualitza l’estimació o en passar-hi el cursor. Pots canviar això de nou a Configuració › Ús i Impacte.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Cost estimat {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "No hi ha preu de llista per a les sol·licituds d’aquesta fila",
+        "unpriced": "{count, plural, one {# sol·licitud sense preu de llista no s'} other {# sol·licituds sense preu de llista no s'}}inclouen en el cost.",
+        "noPriceData": "No es mostra cap cost: el model d’aquesta conversa no té preu de llista (fonts pròpies, execució local i agents no tenen preu assignat).",
+        "note": "Cost segons preus de llista a data de {asOf} (tarifa Estàndard Global, sense descompte per entrada en memòria cau): és un límit superior, no una factura. Cerca web, execució de codi, transcripció, veu, traducció i indexació de documents no estan inclosos."
+      }
     },
     "workflow": {
       "title": "Aquest espai de treball (estimació)",

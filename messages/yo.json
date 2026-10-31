@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "ìṣẹ́jú ààyá",
     "chipAutoHideHint": "Láàrin {min} sí {max} ìṣẹ́jú ààyá.",
     "byWorkflow": "Gẹ́gẹ́ bí iṣẹ́",
-    "byWorkflowNote": "Apá kan ninu apapọ ti o wa lókè, à fihan pàtàkì — ẹ̀rọ míì kì í kópa. Àwọn ìjùmọ̀ṣe Grant ni wọ́n fi kà fún ìròyìn àjọ rẹ àti ìṣètò àkóónú rẹ, ṣùgbọ́n wọ́n kò kà nínú àpapọ̀ abẹ́là yìí."
+    "byWorkflowNote": "Apá kan ninu apapọ ti o wa lókè, à fihan pàtàkì — ẹ̀rọ míì kì í kópa. Àwọn ìjùmọ̀ṣe Grant ni wọ́n fi kà fún ìròyìn àjọ rẹ àti ìṣètò àkóónú rẹ, ṣùgbọ́n wọ́n kò kà nínú àpapọ̀ abẹ́là yìí.",
+    "chipLabelTitle": "Akọlé chip",
+    "chipLabelHint": "Ìyapa náà máa ṣe àfihàn èébùn àti owó lẹ́gbẹ̀ẹ́ ara wọn; èyí yìí nikan ló yàn ohun tí chip tó ti dínkù ka.",
+    "chipLabelEmissions": "Èébùn",
+    "chipLabelCost": "Owó",
+    "chipLabelBoth": "Méjèèjì",
+    "costTile": "Ìye owó tótọ́ láìpẹ́",
+    "costDisclosure": "Ìye owó ní owó àtòjọ gẹ́gẹ́ bíi {asOf} (Oṣùpá Àgbáyé, kò sí ìdin owó ìwọlé fún input tó fàálà): iye tó pọ̀ jù, kì í ṣe ìwé ọnà. Wiwá lórí wẹ́bù, ṣiṣe kóòdù, àtúnyẹ̀wò, èdè, ìtumọ̀ àti ìtòsí àkọọ́lẹ̀ kò wà nínú rẹ.",
+    "costUnpriced": "{count, plural, one {# ìbéèrè láìsí owó àtòjọ kò} other {# àwọn ìbéèrè láìsí owó àtòjọ kò}} wà nínú."
   },
   "extraction": {
     "toggleLabel": "Yọ data eto jade",
@@ -4548,7 +4556,16 @@
         "auto": "Laifọwọyi",
         "hidden": "Pa mọ́"
       },
-      "visibilityHint": "‘Auto’ máa fi chip hàn nígbà tí àfikún bá ti yẹ̀ wò tàbí tí o bá fi àmì sí lórí rẹ. O le yí e pada yìí ní Eto › Lílò & Ìpapọ̀."
+      "visibilityHint": "‘Auto’ máa fi chip hàn nígbà tí àfikún bá ti yẹ̀ wò tàbí tí o bá fi àmì sí lórí rẹ. O le yí e pada yìí ní Eto › Lílò & Ìpapọ̀.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Ìye owó tótọ́ láìpẹ́ {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Kò sí owó àtòjọ fún àwọn ìbéèrè tó wà nínú ìlà yìí",
+        "unpriced": "{count, plural, one {# ìbéèrè láìsí owó àtòjọ kò} other {# àwọn ìbéèrè láìsí owó àtòjọ kò}} wà nínú ìṣirò owó.",
+        "noPriceData": "Kò sí owó tó hàn: àpẹrẹ àjíròrò yìí kò ní owó àtòjọ (orísun tirẹ̀, iṣẹ́ ìjọba agbègbè àti aṣojú kò ní owó àtòjọ).",
+        "note": "Ìye owó ní owó àtòjọ gẹ́gẹ́ bíi {asOf} (Oṣùpá Àgbáyé, kò sí ìdin owó ìwọlé fún input tó fàálà): iye tó pọ̀ jù, kì í ṣe ìwé ọnà. Wiwá lórí wẹ́bù, ṣiṣe kóòdù, àtúnyẹ̀wò, èdè, ìtumọ̀ àti ìtòsí àkọọ́lẹ̀ kò wà nínú rẹ."
+      }
     },
     "workflow": {
       "title": "Ibi iṣẹ́ yìí (àfikún)",

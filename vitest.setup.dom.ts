@@ -895,6 +895,15 @@ const mockMessages: Record<string, unknown> = {
       'Includes ~{grams} g CO2e ({requests} requests) estimated from chats that predate tracking',
     disclosure: 'Estimates based on assumptions v{version} - since {since}.',
     reset: 'Reset usage stats',
+    chipLabelTitle: 'Chip label',
+    chipLabelHint: 'Picks what the collapsed chip reads.',
+    chipLabelEmissions: 'Emissions',
+    chipLabelCost: 'Cost',
+    chipLabelBoth: 'Both',
+    costTile: 'Estimated cost',
+    costDisclosure:
+      'Cost at list prices as of {asOf} (Global Standard rate): an upper bound, not a bill.',
+    costUnpriced: '{count} requests without a list price are not included.',
   },
   emissions: {
     tier: {
@@ -943,6 +952,17 @@ const mockMessages: Record<string, unknown> = {
       },
       visibilityHint:
         'Auto shows the chip when the estimate updates or you hover it.',
+      labelBoth: '{grams} g · {cost}',
+      costAria: 'Estimated cost {cost}.',
+      cost: {
+        lessThan: '< {amount}',
+        rowUnpriced: 'No list price for the requests in this row',
+        unpriced:
+          '{count} requests without a list price are not included in the cost.',
+        noPriceData:
+          'No cost is shown: this conversation\u2019s model has no list price.',
+        note: 'Cost at list prices as of {asOf} (Global Standard rate): an upper bound, not a bill.',
+      },
     },
   },
   modelSelect: {

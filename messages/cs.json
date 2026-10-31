@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "sekundách",
     "chipAutoHideHint": "Mezi {min} a {max} sekundami.",
     "byWorkflow": "Podle pracovního postupu",
-    "byWorkflowNote": "Část výše uvedených součtů, zobrazená zvlášť — nejedná se o dodatečnou spotřebu. Spuštění grantů se započítávají do hlášení vaší organizace a rozpočtu tokenů, ale nejsou zahrnuta v tomto místním součtu."
+    "byWorkflowNote": "Část výše uvedených součtů, zobrazená zvlášť — nejedná se o dodatečnou spotřebu. Spuštění grantů se započítávají do hlášení vaší organizace a rozpočtu tokenů, ale nejsou zahrnuta v tomto místním součtu.",
+    "chipLabelTitle": "Štítek čipu",
+    "chipLabelHint": "Rozpis vždy ukazuje emise a cenu vedle sebe; toto určuje pouze text na sbaleném čipu.",
+    "chipLabelEmissions": "Emise",
+    "chipLabelCost": "Cena",
+    "chipLabelBoth": "Obojí",
+    "costTile": "Odhadovaná cena",
+    "costDisclosure": "Cena dle ceníku k {asOf} (globální standardní sazba, bez slevy za cachovaný vstup): horní hranice, nikoli faktura. Vyhledávání na webu, spouštění kódu, přepis, řeč, překlad a indexace dokumentů nejsou zahrnuty.",
+    "costUnpriced": "{count, plural, one {# požadavek bez ceny není} other {# požadavků bez ceny není}} zahrnuto."
   },
   "extraction": {
     "toggleLabel": "Extrahovat strukturovaná data",
@@ -4564,7 +4572,16 @@
         "auto": "Automaticky",
         "hidden": "Skrýt"
       },
-      "visibilityHint": "Při volbě Automaticky se čip zobrazí, když se odhad aktualizuje nebo na něj najedete myší. Toto nastavení můžete kdykoli změnit v Nastavení › Využití a dopad."
+      "visibilityHint": "Při volbě Automaticky se čip zobrazí, když se odhad aktualizuje nebo na něj najedete myší. Toto nastavení můžete kdykoli změnit v Nastavení › Využití a dopad.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Odhadovaná cena {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "U požadavků v tomto řádku není uvedena cena",
+        "unpriced": "{count, plural, one {# požadavek bez ceny není} other {# požadavků bez ceny není}} zahrnuto do ceny.",
+        "noPriceData": "Cena není zobrazena: model tohoto rozhovoru nemá uvedenou cenu (vlastní zdroje, lokální prostředí a agenti nejsou oceňováni).",
+        "note": "Cena dle ceníku k {asOf} (globální standardní sazba, bez slevy za cachovaný vstup): horní hranice, nikoli faktura. Vyhledávání na webu, spouštění kódu, přepis, řeč, překlad a indexace dokumentů nejsou zahrnuty."
+      }
     },
     "workflow": {
       "title": "Tento pracovní prostor (odhadováno)",

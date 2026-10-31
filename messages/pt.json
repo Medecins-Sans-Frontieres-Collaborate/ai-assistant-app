@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "segundos",
     "chipAutoHideHint": "Entre {min} e {max} segundos.",
     "byWorkflow": "Por fluxo de trabalho",
-    "byWorkflowNote": "Parte dos totais acima, apresentada separadamente — não é uso extra. Execuções de subvenções são contabilizadas no relatório da sua organização e no seu orçamento de tokens, mas não neste total local."
+    "byWorkflowNote": "Parte dos totais acima, apresentada separadamente — não é uso extra. Execuções de subvenções são contabilizadas no relatório da sua organização e no seu orçamento de tokens, mas não neste total local.",
+    "chipLabelTitle": "Rótulo do chip",
+    "chipLabelHint": "A divisão sempre mostra emissões e custo lado a lado; isto só define o que o chip colapsado exibe.",
+    "chipLabelEmissions": "Emissões",
+    "chipLabelCost": "Custo",
+    "chipLabelBoth": "Ambos",
+    "costTile": "Custo estimado",
+    "costDisclosure": "Custo conforme preços de lista em {asOf} (Taxa Padrão Global, sem desconto para entrada em cache): apenas um limite superior, não uma fatura. Busca na web, execução de código, transcrição, fala, tradução e indexação de documentos não estão incluídos.",
+    "costUnpriced": "{count, plural, one {# solicitação sem preço de lista não está} other {# solicitações sem preço de lista não estão}} incluídas."
   },
   "extraction": {
     "toggleLabel": "Extrair dados estruturados",
@@ -4564,7 +4572,16 @@
         "auto": "Automático",
         "hidden": "Ocultar"
       },
-      "visibilityHint": "O modo Automático exibe o chip quando a estimativa é atualizada ou ao passar o mouse sobre ele. Você pode alterar essa configuração em Configurações › Uso e Impacto."
+      "visibilityHint": "O modo Automático exibe o chip quando a estimativa é atualizada ou ao passar o mouse sobre ele. Você pode alterar essa configuração em Configurações › Uso e Impacto.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Custo estimado {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Sem preço de lista para as solicitações nesta linha",
+        "unpriced": "{count, plural, one {# solicitação sem preço de lista não está} other {# solicitações sem preço de lista não estão}} incluídas no custo.",
+        "noPriceData": "Nenhum custo mostrado: o modelo desta conversa não possui preço de lista (fontes próprias, execuções locais e agentes não têm preço).",
+        "note": "Custo conforme preços de lista em {asOf} (Taxa Padrão Global, sem desconto para entrada em cache): apenas um limite superior, não uma fatura. Busca na web, execução de código, transcrição, fala, tradução e indexação de documentos não estão incluídos."
+      }
     },
     "workflow": {
       "title": "Este espaço de trabalho (estimativa)",

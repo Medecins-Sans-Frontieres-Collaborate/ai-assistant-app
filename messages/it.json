@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "secondi",
     "chipAutoHideHint": "Tra {min} e {max} secondi.",
     "byWorkflow": "Per flusso di lavoro",
-    "byWorkflowNote": "Fanno parte dei totali sopra indicati, visualizzati separatamente — non è uso aggiuntivo. Le esecuzioni di Grant sono conteggiate per la reportistica dell’organizzazione e il budget di token, ma non nel totale locale."
+    "byWorkflowNote": "Fanno parte dei totali sopra indicati, visualizzati separatamente — non è uso aggiuntivo. Le esecuzioni di Grant sono conteggiate per la reportistica dell’organizzazione e il budget di token, ma non nel totale locale.",
+    "chipLabelTitle": "Etichetta chip",
+    "chipLabelHint": "La ripartizione mostra sempre emissioni e costo fianco a fianco; questo seleziona solo ciò che appare sul chip compresso.",
+    "chipLabelEmissions": "Emissioni",
+    "chipLabelCost": "Costo",
+    "chipLabelBoth": "Entrambi",
+    "costTile": "Costo stimato",
+    "costDisclosure": "Costo ai prezzi di listino al {asOf} (tariffa Global Standard, senza sconto per input in cache): un limite superiore, non una fattura. Ricerca web, esecuzione di codice, trascrizione, sintesi vocale, traduzione e indicizzazione documenti non sono inclusi.",
+    "costUnpriced": "{count, plural, one {# richiesta senza prezzo di listino non è} other {# richieste senza prezzo di listino non sono}} incluse."
   },
   "extraction": {
     "toggleLabel": "Estrai dati strutturati",
@@ -4564,7 +4572,16 @@
         "auto": "Auto",
         "hidden": "Nascondi"
       },
-      "visibilityHint": "La modalità automatica mostra il chip quando la stima si aggiorna o quando ci passi sopra con il mouse. Puoi modificarlo di nuovo in Impostazioni › Utilizzo e Impatto."
+      "visibilityHint": "La modalità automatica mostra il chip quando la stima si aggiorna o quando ci passi sopra con il mouse. Puoi modificarlo di nuovo in Impostazioni › Utilizzo e Impatto.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Costo stimato {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Nessun prezzo di listino per le richieste in questa riga",
+        "unpriced": "{count, plural, one {# richiesta senza prezzo di listino non è} other {# richieste senza prezzo di listino non sono}} incluse nel costo.",
+        "noPriceData": "Nessun costo mostrato: il modello della conversazione non ha un prezzo di listino (fonti proprie, runtime locali e agenti non sono prezzati).",
+        "note": "Costo ai prezzi di listino al {asOf} (tariffa Global Standard, senza sconto per input in cache): un limite superiore, non una fattura. Ricerca web, esecuzione di codice, trascrizione, sintesi vocale, traduzione e indicizzazione documenti non sono inclusi."
+      }
     },
     "workflow": {
       "title": "Questo workspace (stimato)",

@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "amasegonda",
     "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda.",
     "byWorkflow": "Bitegekanijwe",
-    "byWorkflowNote": "Igice gihuye n'ibiri hejuru, kigaragazwa ukwaco — si ukoresho ngirakamaro. Ibiganiro vya grants bibarwa ku vyegeranyo vy’ishirahamwe hamwe n’umupimo wawe w’utumenyetso, ariko ntibigira uruhara muri aka gatoya ka hano."
+    "byWorkflowNote": "Igice gihuye n'ibiri hejuru, kigaragazwa ukwaco — si ukoresho ngirakamaro. Ibiganiro vya grants bibarwa ku vyegeranyo vy’ishirahamwe hamwe n’umupimo wawe w’utumenyetso, ariko ntibigira uruhara muri aka gatoya ka hano.",
+    "chipLabelTitle": "Chip label",
+    "chipLabelHint": "Ibisobanuro ntibihora vyerekana emissions hamwe n'igiciro; hano hitora ivyo chip yegeranye isoma.",
+    "chipLabelEmissions": "Emissions",
+    "chipLabelCost": "Igiciro",
+    "chipLabelBoth": "Vyompi",
+    "costTile": "Igiciro kigenwe",
+    "costDisclosure": "Igiciro kuri liste uko vyari {asOf} (Global Standard rate, nta cached-input discount): igiciro ntarengwa, si facture. Web search, code execution, transcription, speech, translation na document indexing ntivyashizwe.",
+    "costUnpriced": "{count, plural, one {# igisabwa kidafise igiciro kiriko} other {# ibisabwa bidafise igiciro kiriko}} ntivyashyizwe."
   },
   "extraction": {
     "toggleLabel": "Kuyungurura amakuru ateguye",
@@ -4548,7 +4556,16 @@
         "auto": "Vyikora",
         "hidden": "Ntibigaragara"
       },
-      "visibilityHint": "Auto ishusha chip iyo umwimbu uhindutse canke iyo uyitoye. Ushobora guhindura ivyo muri Settings › Usage & Impact."
+      "visibilityHint": "Auto ishusha chip iyo umwimbu uhindutse canke iyo uyitoye. Ushobora guhindura ivyo muri Settings › Usage & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Igiciro kigenwe ni {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Nta giciro kiri ku bisabwa biri muri iyi murongo",
+        "unpriced": "{count, plural, one {# igisabwa kidafise igiciro kiriko} other {# ibisabwa bidafise igiciro kiriko}} ntivyashyizwe mu giciro.",
+        "noPriceData": "Nta giciro kingana kiragaragazwa: model y'iki kiganiro nta giciro ifise (inkomoko bwite, local runtimes n'abakozi ntibisamiye igiciro).",
+        "note": "Igiciro kuri liste uko vyari {asOf} (Global Standard rate, nta cached-input discount): igiciro ntarengwa, si facture. Web search, code execution, transcription, speech, translation na document indexing ntivyashizwe."
+      }
     },
     "workflow": {
       "title": "Ikaratasi iyi (vyibaze)",

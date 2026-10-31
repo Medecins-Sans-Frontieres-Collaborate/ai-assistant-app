@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "segondra",
     "chipAutoHideHint": "Eo anelanelan'ny {min} sy {max} segondra.",
     "byWorkflow": "Araka ny fikirakirana",
-    "byWorkflowNote": "Anisan'ny totaly etsy ambony, aseho misaraka — tsy fandraisana fanampiny. Voaisa anatin'ny tatitra sy tetibola token'ny fikambananareo ireo fitsidihana 'grants', saingy tsy tafiditra ato amin'ity totaly eto an-toerana ity."
+    "byWorkflowNote": "Anisan'ny totaly etsy ambony, aseho misaraka — tsy fandraisana fanampiny. Voaisa anatin'ny tatitra sy tetibola token'ny fikambananareo ireo fitsidihana 'grants', saingy tsy tafiditra ato amin'ity totaly eto an-toerana ity.",
+    "chipLabelTitle": "Chip label",
+    "chipLabelHint": "Foana ny fisehoan’ny antsipiriany dia mampiseho ny entona sy ny vidiny miaraka; ity dia misafidy fotsiny izay aseho amin’ny chip voakendry.",
+    "chipLabelEmissions": "Entona",
+    "chipLabelCost": "Vidiny",
+    "chipLabelBoth": "Samy roa",
+    "costTile": "Vidiny vinavinaina",
+    "costDisclosure": "Vidiny amin’ny lisitra voatanisa amin’ny {asOf} (Global Standard rate, tsy misy fihenam-bidy cached-input): ambony indrindra, fa tsy faktiora. Tsy tafiditra ny fikarohana web, fanaovana code, fandikàna feo sy lahatsoratra, fandikana teny ary fanasokajiana antontan-taratasy.",
+    "costUnpriced": "{count, plural, one {# fangatahana tsy misy vidiny voatanisa no} other {# fangatahana tsy misy vidiny voatanisa no}} tsy tafiditra."
   },
   "extraction": {
     "toggleLabel": "Alaivo ny angona voaendrika",
@@ -4548,7 +4556,16 @@
         "auto": "Auto",
         "hidden": "Afeno"
       },
-      "visibilityHint": "Asehon'ny Auto ny chip rehefa misy fanavaozana amin'ny vinavina na rehefa soratana amin'izay ianao. Azonao ovaina indray eto: Settings › Usage & Impact."
+      "visibilityHint": "Asehon'ny Auto ny chip rehefa misy fanavaozana amin'ny vinavina na rehefa soratana amin'izay ianao. Azonao ovaina indray eto: Settings › Usage & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Vidiny vinavinaina {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Tsy misy vidiny voatanisa amin’ny fangatahana ao amin’ity andalana ity",
+        "unpriced": "{count, plural, one {# fangatahana tsy misy vidiny voatanisa no} other {# fangatahana tsy misy vidiny voatanisa no}} tsy tafiditra amin’ny kajy vidiny.",
+        "noPriceData": "Tsy aseho ny vidiny: tsy misy vidiny voatanisa amin’ny modely amin’ity fifanakalozan-kevitra ity (tsy voavidy ireo loharano manokana, fandehanan-draharaha eo an-toerana sy agent).",
+        "note": "Vidiny amin’ny lisitra voatanisa amin’ny {asOf} (Global Standard rate, tsy misy fihenam-bidy cached-input): ambony indrindra, fa tsy faktiora. Tsy tafiditra ny fikarohana web, fanaovana code, fandikàna feo sy lahatsoratra, fandikana teny ary fanasokajiana antontan-taratasy."
+      }
     },
     "workflow": {
       "title": "Ity sehatra ity (tombanana)",

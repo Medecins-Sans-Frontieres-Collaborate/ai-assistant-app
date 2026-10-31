@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "sekundi",
     "chipAutoHideHint": "Između {min} i {max} sekundi.",
     "byWorkflow": "Po workflow-u",
-    "byWorkflowNote": "Deo ukupnih vrednosti prikazanih iznad, prikazan odvojeno — ne predstavlja dodatnu upotrebu. Grant pokretanja se računaju u izveštaje vaše organizacije i vaš token budžet, ali ne i u ovaj lokalni zbir."
+    "byWorkflowNote": "Deo ukupnih vrednosti prikazanih iznad, prikazan odvojeno — ne predstavlja dodatnu upotrebu. Grant pokretanja se računaju u izveštaje vaše organizacije i vaš token budžet, ali ne i u ovaj lokalni zbir.",
+    "chipLabelTitle": "Oznaka čipa",
+    "chipLabelHint": "Prikaz uvek pokazuje emisije i cenu; ovo određuje šta piše na sažetoj oznaci.",
+    "chipLabelEmissions": "Emisije",
+    "chipLabelCost": "Cena",
+    "chipLabelBoth": "Oba",
+    "costTile": "Procenjena cena",
+    "costDisclosure": "Cena prema važećem cenovniku na dan {asOf} (Globalna standardna tarifa, bez popusta za keširane ulaze): predstavlja gornju granicu, nije račun. Pretraga na webu, izvršavanje koda, transkripcija, govor, prevod i indeksiranje dokumenata nisu uključeni.",
+    "costUnpriced": "{count, plural, one {# zahtev bez cene nije} other {# zahteva bez cene nisu}} uračunati."
   },
   "extraction": {
     "toggleLabel": "Ekstrahuj strukturirane podatke",
@@ -4548,7 +4556,16 @@
         "auto": "Automatski",
         "hidden": "Sakrij"
       },
-      "visibilityHint": "Automatski prikazuje oznaku kada se procena osveži ili pređete mišem preko nje. Ovo možete ponovo promeniti u Podešavanja › Upotreba i uticaj."
+      "visibilityHint": "Automatski prikazuje oznaku kada se procena osveži ili pređete mišem preko nje. Ovo možete ponovo promeniti u Podešavanja › Upotreba i uticaj.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Procenjena cena {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Nema cene za zahteve u ovom redu",
+        "unpriced": "{count, plural, one {# zahtev bez cene nije} other {# zahteva bez cene nisu}} uračunati u cenu.",
+        "noPriceData": "Nema prikazane cene: model ove konverzacije nema definisanu cenu (vlastiti izvori, lokalni runtime-i i agenti nisu cenjeni).",
+        "note": "Cena prema važećem cenovniku na dan {asOf} (Globalna standardna tarifa, bez popusta za keširane ulaze): predstavlja gornju granicu, nije račun. Pretraga na webu, izvršavanje koda, transkripcija, govor, prevod i indeksiranje dokumenata nisu uključeni."
+      }
     },
     "workflow": {
       "title": "Ovaj workspace (procena)",

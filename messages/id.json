@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "detik",
     "chipAutoHideHint": "Antara {min} dan {max} detik.",
     "byWorkflow": "Menurut alur kerja",
-    "byWorkflowNote": "Bagian dari total di atas, ditampilkan terpisah — bukan penggunaan tambahan. Jalankan grant dihitung dalam pelaporan organisasi dan anggaran token Anda, namun tidak termasuk dalam total lokal ini."
+    "byWorkflowNote": "Bagian dari total di atas, ditampilkan terpisah — bukan penggunaan tambahan. Jalankan grant dihitung dalam pelaporan organisasi dan anggaran token Anda, namun tidak termasuk dalam total lokal ini.",
+    "chipLabelTitle": "Label chip",
+    "chipLabelHint": "Rincian selalu menampilkan emisi dan biaya berdampingan; ini hanya memilih apa yang terbaca pada chip terlipat.",
+    "chipLabelEmissions": "Emisi",
+    "chipLabelCost": "Biaya",
+    "chipLabelBoth": "Keduanya",
+    "costTile": "Perkiraan biaya",
+    "costDisclosure": "Biaya berdasarkan harga daftar per {asOf} (tarif Global Standard, tanpa diskon input cache): batas atas, bukan tagihan. Pencarian web, eksekusi kode, transkripsi, suara, terjemahan, dan pengindeksan dokumen tidak termasuk.",
+    "costUnpriced": "{count, plural, one {# permintaan tanpa harga daftar} other {# permintaan tanpa harga daftar}} tidak termasuk."
   },
   "extraction": {
     "toggleLabel": "Ekstrak data terstruktur",
@@ -4564,7 +4572,16 @@
         "auto": "Otomatis",
         "hidden": "Sembunyikan"
       },
-      "visibilityHint": "Otomatis akan menampilkan chip saat estimasi diperbarui atau saat Anda mengarahkan kursor. Ubah pengaturan ini kembali di Pengaturan › Penggunaan & Dampak."
+      "visibilityHint": "Otomatis akan menampilkan chip saat estimasi diperbarui atau saat Anda mengarahkan kursor. Ubah pengaturan ini kembali di Pengaturan › Penggunaan & Dampak.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Perkiraan biaya {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Tidak ada harga daftar untuk permintaan di baris ini",
+        "unpriced": "{count, plural, one {# permintaan tanpa harga daftar} other {# permintaan tanpa harga daftar}} tidak termasuk dalam biaya.",
+        "noPriceData": "Tidak ada biaya yang ditampilkan: model percakapan ini tidak memiliki harga daftar (sumber sendiri, local runtimes, dan agen tidak diberi harga).",
+        "note": "Biaya berdasarkan harga daftar per {asOf} (tarif Global Standard, tanpa diskon input cache): batas atas, bukan tagihan. Pencarian web, eksekusi kode, transkripsi, suara, terjemahan, dan pengindeksan dokumen tidak termasuk."
+      }
     },
     "workflow": {
       "title": "Workspace ini (perkiraan)",

@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "hawndu",
     "chipAutoHideHint": "He {min} e {max} hawndu.",
     "byWorkflow": "Fayde workflow",
-    "byWorkflowNote": "Kofal e ton ndiyam sabu, golli e hoore mum — min njaha suudu use. Wanneeji grant ndiyam koo e ngeemnde organisation maa e tawa e token, ngal kawtal ngol wawan caaɗaani."
+    "byWorkflowNote": "Kofal e ton ndiyam sabu, golli e hoore mum — min njaha suudu use. Wanneeji grant ndiyam koo e ngeemnde organisation maa e tawa e token, ngal kawtal ngol wawan caaɗaani.",
+    "chipLabelTitle": "Tiitoonde Chip",
+    "chipLabelHint": "Farfaare nde daaniima e yiiltol e njaajeendi; ɗuum rewataa ko nde chip juutina wolla.",
+    "chipLabelEmissions": "Yiiltol",
+    "chipLabelCost": "Njaajeendi",
+    "chipLabelBoth": "Feewnde",
+    "costTile": "Njaajeendi to njaajeendi",
+    "costDisclosure": "Njaajeendi njoɓdi nandiral {asOf} (rate Global Standard, waawut njaajeendi cashed-input): njaajeendi balɗe, waawut loowo. Finnde web, code execution, transcription, speech, translation e document indexing wonaa e mum.",
+    "costUnpriced": "{count, plural, one {# jokkorde waawi njaajeendi njoɓdi nandiral} other {# jokkordeji waawi njaajeendi njoɓdi nandiral}} hokkanii."
   },
   "extraction": {
     "toggleLabel": "Fowndo ɗiɗi e jamfa",
@@ -4548,7 +4556,16 @@
         "auto": "Auto",
         "hidden": "Mballu"
       },
-      "visibilityHint": "Auto on holli chip so tawii njoɓɗo rewtii walla so a woodi duunde ko. Aɗa waawi topptude ɗum kadi e Settings › Usage & Impact."
+      "visibilityHint": "Auto on holli chip so tawii njoɓɗo rewtii walla so a woodi duunde ko. Aɗa waawi topptude ɗum kadi e Settings › Usage & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Killi to njaajeendi {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Hibii njaajeendi njaajeendi njoɓdi nandiral e ɓeyngu goo",
+        "unpriced": "{count, plural, one {# jokkorde waawi njaajeendi njoɓdi nandiral} other {# jokkordeji waawi njaajeendi njoɓdi nandiral}} hokkanii e njaajeendi.",
+        "noPriceData": "Hibii njaajeendi ngoni: njoɓdi nandiral njoɓdi njoɓaani (lowre mum, duniyankaani nda agentji njoɓaani njaajeendi).",
+        "note": "Njaajeendi njoɓdi nandiral {asOf} (rate Global Standard, waawut njaajeendi cashed-input): njaajeendi balɗe, waawut loowo. Finnde web, code execution, transcription, speech, translation e document indexing wonaa e mum."
+      }
     },
     "workflow": {
       "title": "Wormegol ngol (caggal ndaare)",

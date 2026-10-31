@@ -2762,7 +2762,15 @@
     "chipAutoHideUnit": "Sekunden",
     "chipAutoHideHint": "Zwischen {min} und {max} Sekunden.",
     "byWorkflow": "Nach Workflow",
-    "byWorkflowNote": "Teil der obigen Gesamtwerte, separat dargestellt – keine zusätzliche Nutzung. Grant-Durchläufe werden für das Reporting Ihrer Organisation und Ihr Token-Budget gezählt, aber nicht in dieser lokalen Summe."
+    "byWorkflowNote": "Teil der obigen Gesamtwerte, separat dargestellt – keine zusätzliche Nutzung. Grant-Durchläufe werden für das Reporting Ihrer Organisation und Ihr Token-Budget gezählt, aber nicht in dieser lokalen Summe.",
+    "chipLabelTitle": "Chip-Beschriftung",
+    "chipLabelHint": "Die Aufschlüsselung zeigt immer Emissionen und Kosten nebeneinander; dies legt nur fest, was im komprimierten Chip angezeigt wird.",
+    "chipLabelEmissions": "Emissionen",
+    "chipLabelCost": "Kosten",
+    "chipLabelBoth": "Beides",
+    "costTile": "Geschätzte Kosten",
+    "costDisclosure": "Kosten zu Listenpreisen mit Stand {asOf} (Global-Standard-Tarif, kein Rabatt für zwischengespeicherte Eingaben): ein Höchstbetrag, keine Rechnung. Websuche, Code-Ausführung, Transkription, Sprache, Übersetzung und Dokumentenindexierung sind nicht enthalten.",
+    "costUnpriced": "{count, plural, one {# Anfrage ohne Listenpreis wird} other {# Anfragen ohne Listenpreis werden}} nicht berücksichtigt."
   },
   "extraction": {
     "toggleLabel": "Strukturierte Daten extrahieren",
@@ -4564,7 +4572,16 @@
         "auto": "Automatisch",
         "hidden": "Ausblenden"
       },
-      "visibilityHint": "Automatisch zeigt den Chip an, wenn die Schätzung aktualisiert wird oder Sie mit der Maus darüber fahren. Dies kann in den Einstellungen › Nutzung & Auswirkungen erneut geändert werden."
+      "visibilityHint": "Automatisch zeigt den Chip an, wenn die Schätzung aktualisiert wird oder Sie mit der Maus darüber fahren. Dies kann in den Einstellungen › Nutzung & Auswirkungen erneut geändert werden.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Geschätzte Kosten {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Kein Listenpreis für die Anfragen in dieser Zeile",
+        "unpriced": "{count, plural, one {# Anfrage ohne Listenpreis wird} other {# Anfragen ohne Listenpreis werden}} bei den Kosten nicht berücksichtigt.",
+        "noPriceData": "Keine Kosten angezeigt: Das Modell dieses Gesprächs hat keinen Listenpreis (eigene Quellen, lokale Laufzeiten und Agents werden nicht bepreist).",
+        "note": "Kosten zu Listenpreisen mit Stand {asOf} (Global-Standard-Tarif, kein Rabatt für zwischengespeicherte Eingaben): ein Höchstbetrag, keine Rechnung. Websuche, Code-Ausführung, Transkription, Sprache, Übersetzung und Dokumentenindexierung sind nicht enthalten."
+      }
     },
     "workflow": {
       "title": "Dieser Arbeitsbereich (geschätzt)",

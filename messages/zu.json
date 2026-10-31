@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "amasekhondi",
     "chipAutoHideHint": "Phakathi kuka-{min} no-{max} amasekhondi.",
     "byWorkflow": "Ngokwe-workflow",
-    "byWorkflowNote": "Ingxenye yemiphumela engenhla, ekhishwe ngokuhlukile — akusiyona enye ukusetshenziswa. Ukugijima kwe-grant kubizwa kubikwa kwenhlangano yakho kanye nesabelomali sakho samathokheni, kodwa akukho kuleli zinga lendawo."
+    "byWorkflowNote": "Ingxenye yemiphumela engenhla, ekhishwe ngokuhlukile — akusiyona enye ukusetshenziswa. Ukugijima kwe-grant kubizwa kubikwa kwenhlangano yakho kanye nesabelomali sakho samathokheni, kodwa akukho kuleli zinga lendawo.",
+    "chipLabelTitle": "Ilebula ye-chip",
+    "chipLabelHint": "Ukuhlukaniswa kuhlala kukhombisa ukuputshuka kwemvelo nezindleko ndawonye; lokhu kukhetha kuphela lokho okuboniswa i-chip.",
+    "chipLabelEmissions": "Ukuputshuka kwemvelo",
+    "chipLabelCost": "Izindleko",
+    "chipLabelBoth": "Zonke ezimbili",
+    "costTile": "Izindleko ezilinganisiwe",
+    "costDisclosure": "Izindleko zentengo ehleliwe kusukela ngo-{asOf} (Izinga Lomhlaba Wonke, akukho isaphulelo sokufakwa okuphindayo): isilinganiso esiphezulu, hhayi i-invoyisi. Ukusesha kwewebhu, ukugijima kwekhodi, ukurekhoda, inkulumo, ukuhumusha nokufakwa kwemibhalo akufakiwe.",
+    "costUnpriced": "{count, plural, one {# isicelo elingenayo intengo alifakwanga} other {# izicelo ezingekho intengo azifakwanga}}."
   },
   "extraction": {
     "toggleLabel": "Khipha idatha ehlelekile",
@@ -4548,7 +4556,16 @@
         "auto": "Okuzenzakalelayo",
         "hidden": "Fihla"
       },
-      "visibilityHint": "Okwenziwa ngokuzenzakalelayo kubonisa i-chip uma inani libuyekezwa noma uma ubeka igundane phezu kwayo. Ungashintsha lokhu futhi kokuthi Izilungiselelo › Ukusetshenziswa & Umthelela."
+      "visibilityHint": "Okwenziwa ngokuzenzakalelayo kubonisa i-chip uma inani libuyekezwa noma uma ubeka igundane phezu kwayo. Ungashintsha lokhu futhi kokuthi Izilungiselelo › Ukusetshenziswa & Umthelela.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Izindleko ezilinganisiwe {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Azikho izindleko ezitholakalayo zezicelo ezikule row",
+        "noPriceData": "Azikho izindleko ezikhonjisiwe: imodeli yango lengxoxo ayinayo intengo ohlwini (imithombo yangasese, ukusetshenziswa kwendawo nama-agent akahlawuliswa).",
+        "note": "Izindleko zentengo ehleliwe kusukela ngo-{asOf} (Izinga Lomhlaba Wonke, akukho isaphulelo sokufakwa okuphindayo): isilinganiso esiphezulu, hhayi i-invoyisi. Ukusesha kwewebhu, ukugijima kwekhodi, ukurekhoda, inkulumo, ukuhumusha nokufakwa kwemibhalo akufakiwe.",
+        "unpriced": "{count, plural, one {# isicelo elingenayo intengo alifakwanga} other {# izicelo ezingekho intengo azifakwanga}} kumali."
+      }
     },
     "workflow": {
       "title": "Le workspace (okulinganiselwe)",

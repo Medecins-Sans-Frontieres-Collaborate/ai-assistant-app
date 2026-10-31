@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "ilbiriqsi",
     "chipAutoHideHint": "U dhaxaysa {min} iyo {max} ilbiriqsi.",
     "byWorkflow": "Sida socodka shaqada",
-    "byWorkflowNote": "Qeyb ka mid ah wadarta kor ku xusan, si gooni ah loo muujiyay — isticmaalka dheeraad ah ma aha. Socodyada deeqaha waxaa loo tiriyaa warbixinta ururkiinna iyo miisaaniyadda tokens-ka, laakin kuma jiraan wadarta halkan maxalliga ah."
+    "byWorkflowNote": "Qeyb ka mid ah wadarta kor ku xusan, si gooni ah loo muujiyay — isticmaalka dheeraad ah ma aha. Socodyada deeqaha waxaa loo tiriyaa warbixinta ururkiinna iyo miisaaniyadda tokens-ka, laakin kuma jiraan wadarta halkan maxalliga ah.",
+    "chipLabelTitle": "Sumadda chip-ka",
+    "chipLabelHint": "Faahfaahintu had iyo jeer waxay muujinaysaa qiiqa iyo qiimaha isla garab; tani waxay kaliya qaadanaysaa waxa ay akhridaan chip-ka la soo gaabiyay.",
+    "chipLabelEmissions": "Qiiqa",
+    "chipLabelCost": "Qiimaha",
+    "chipLabelBoth": "Labadaba",
+    "costTile": "Qiimaha la qiyaasay",
+    "costDisclosure": "Qiimaha ayaa ah mid ku saleysan liis qiimo sida {asOf} (Heerka Caalamiga ah ee Standard, qiimo dhimis ma jiro waxyaabo keydsan): waa xadka ugu sarreeya, looma arko biil. Raadinta web, fulinta koodh, qoraal qoraal ah, hadal, tarjumaad iyo tusmada dukumentiyadu kuma jiraan.",
+    "costUnpriced": "{count, plural, one {# codsi aan qiimo liis lahayn lama darin} other {# codsiyo aan qiimo liis lahayn lama darin}} lama darin."
   },
   "extraction": {
     "toggleLabel": "Ka saar xog habaysan",
@@ -4548,7 +4556,16 @@
         "auto": "Toos",
         "hidden": "Qari"
       },
-      "visibilityHint": "Toos wuxuu muujiyaa chip-ka marka qiyaasta la cusbooneysiiyo ama aad dul istaagto. Waxaad tan markale ka beddeli kartaa Dejinta › Isticmaalka & Saameynta."
+      "visibilityHint": "Toos wuxuu muujiyaa chip-ka marka qiyaasta la cusbooneysiiyo ama aad dul istaagto. Waxaad tan markale ka beddeli kartaa Dejinta › Isticmaalka & Saameynta.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Qiimaha la qiyaasay {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Lama hayo qiime liiska ah codsiyada safkan",
+        "unpriced": "{count, plural, one {# codsi aan qiimo liis lahayn lama darin} other {# codsiyo aan qiimo liis lahayn lama darin}} qiimaha kuma jiraan.",
+        "noPriceData": "Lama soo bandhigin qiimo: moodeelka wada hadalkan ma laha qiime liis (ilaha gaarka ah, nidaamyada maxalliga ah iyo wakiilladu lama qiimeeyo).",
+        "note": "Qiimaha ayaa ah mid ku saleysan liis qiimo sida {asOf} (Heerka Caalamiga ah ee Standard, qiimo dhimis ma jiro waxyaabo keydsan): waa xadka ugu sarreeya, looma arko biil. Raadinta web, fulinta koodh, qoraal qoraal ah, hadal, tarjumaad iyo tusmada dukumentiyadu kuma jiraan."
+      }
     },
     "workflow": {
       "title": "Meesha shaqadan (qiyaas ah)",

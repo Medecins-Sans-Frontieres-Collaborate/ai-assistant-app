@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "sekônde",
     "chipAutoHideHint": "Lâ sô {min} na {max} sekônde.",
     "byWorkflow": "Na workflow",
-    "byWorkflowNote": "Tî bara totâ mbi wala, a yeke na tî biani—sô a köta usage. Run ti grants a zî ti laporan ti organisation na ti budget ti token, tî wala a köta na tî totâ lokal."
+    "byWorkflowNote": "Tî bara totâ mbi wala, a yeke na tî biani—sô a köta usage. Run ti grants a zî ti laporan ti organisation na ti budget ti token, tî wala a köta na tî totâ lokal.",
+    "chipLabelTitle": "Label tî chip",
+    "chipLabelHint": "Breakdown tî yeke mo na fe ti emissions na gbɛnɛ tî kɔlɛ tî mo na mo; label tî chip ti ga yeke na mo.",
+    "chipLabelEmissions": "Emissions",
+    "chipLabelCost": "Gbɛnɛ",
+    "chipLabelBoth": "Mo du",
+    "costTile": "Gbɛnɛ ti yeke",
+    "costDisclosure": "Gbɛnɛ tî kɔlɛ tî yeke na {asOf} (Global Standard rate, mo na discount tî cached-input): ti te mbule mbula, mo tî bill. Web search, code execution, transcription, speech, translation na document indexing ala na fa wa.",
+    "costUnpriced": "{count, plural, one {# moto ti ala na ni kɔlɛ ti yeke ti fa wa} other {# moto ti ala na ni kɔlɛ ti yeke ti fa wa}} mo yeke wa."
   },
   "extraction": {
     "toggleLabel": "Hâ lâ tî data ti yângâ",
@@ -4548,7 +4556,16 @@
         "auto": "Auto",
         "hidden": "Hida"
       },
-      "visibilityHint": "Auto ape na chip sô ti estimá ti dzî na bê ti loo sè mbi yângâ ti yéké. O yeke fâla tî cîni na Settings › Usage & Impact."
+      "visibilityHint": "Auto ape na chip sô ti estimá ti dzî na bê ti loo sè mbi yângâ ti yéké. O yeke fâla tî cîni na Settings › Usage & Impact.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Gbɛnɛ ti yeke {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "La moto ti ala na ni kɔlɛ ti sari na row tî bucɔ tî yeke ti fa wa",
+        "unpriced": "{count, plural, one {# moto ti ala na ni kɔlɛ ti yeke ti fa wa} other {# moto ti ala na ni kɔlɛ ti yeke ti fa wa}} mo yeke na ti gbɛnɛ.",
+        "noPriceData": "Gbɛnɛ ala na fa: model tî konversio ane ala na ni kɔlɛ (source tî mbirî, runtime tî local na agent ala na kɔlɛ).",
+        "note": "Gbɛnɛ tî kɔlɛ tî yeke na {asOf} (Global Standard rate, mo na discount tî cached-input): ti te mbule mbula, mo tî bill. Web search, code execution, transcription, speech, translation na document indexing ala na fa wa."
+      }
     },
     "workflow": {
       "title": "Workplace âli (sômbéni)",

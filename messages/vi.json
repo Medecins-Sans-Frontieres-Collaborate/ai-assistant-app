@@ -2793,7 +2793,15 @@
     "chipAutoHideUnit": "giây",
     "chipAutoHideHint": "Từ {min} đến {max} giây.",
     "byWorkflow": "Theo quy trình",
-    "byWorkflowNote": "Một phần của tổng số trên, hiển thị riêng — không phải sử dụng thêm. Các lần chạy tại khoá tài trợ được tính vào báo cáo của tổ chức bạn và ngân sách token, nhưng không tính vào tổng cục bộ này."
+    "byWorkflowNote": "Một phần của tổng số trên, hiển thị riêng — không phải sử dụng thêm. Các lần chạy tại khoá tài trợ được tính vào báo cáo của tổ chức bạn và ngân sách token, nhưng không tính vào tổng cục bộ này.",
+    "chipLabelTitle": "Nhãn chip",
+    "chipLabelHint": "Bảng phân tích luôn hiển thị phát thải và chi phí song song; mục này chỉ chọn nội dung hiển thị của chip đã thu gọn.",
+    "chipLabelEmissions": "Phát thải",
+    "chipLabelCost": "Chi phí",
+    "chipLabelBoth": "Cả hai",
+    "costTile": "Chi phí ước tính",
+    "costDisclosure": "Chi phí theo giá niêm yết tại thời điểm {asOf} (tỉ giá Chuẩn Toàn Cầu, không áp dụng giảm giá đầu vào được lưu sẵn): là mức chi phí cao nhất, không phải hóa đơn. Tìm kiếm web, thực thi mã, chuyển âm, giọng nói, dịch thuật và lập chỉ mục tài liệu không được tính vào.",
+    "costUnpriced": "{count, plural, one {# yêu cầu không có giá niêm yết} other {# yêu cầu không có giá niêm yết}} không được tính vào."
   },
   "extraction": {
     "toggleLabel": "Trích xuất dữ liệu có cấu trúc",
@@ -4595,7 +4603,16 @@
         "auto": "Tự động",
         "hidden": "Ẩn"
       },
-      "visibilityHint": "Chế độ Tự động sẽ hiển thị chip khi ước tính được cập nhật hoặc khi bạn di chuột vào. Bạn có thể thay đổi lại trong Cài đặt › Sử dụng & Tác động."
+      "visibilityHint": "Chế độ Tự động sẽ hiển thị chip khi ước tính được cập nhật hoặc khi bạn di chuột vào. Bạn có thể thay đổi lại trong Cài đặt › Sử dụng & Tác động.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Chi phí ước tính {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Không có giá niêm yết cho các yêu cầu trong hàng này",
+        "unpriced": "{count, plural, one {# yêu cầu không có giá niêm yết} other {# yêu cầu không có giá niêm yết}} không được tính vào chi phí.",
+        "noPriceData": "Không hiển thị chi phí: mô hình cuộc hội thoại này không có giá niêm yết (nguồn riêng, thời gian chạy cục bộ và agent không được định giá).",
+        "note": "Chi phí theo giá niêm yết tại thời điểm {asOf} (tỉ giá Chuẩn Toàn Cầu, không áp dụng giảm giá đầu vào được lưu sẵn): là mức chi phí cao nhất, không phải hóa đơn. Tìm kiếm web, thực thi mã, chuyển âm, giọng nói, dịch thuật và lập chỉ mục tài liệu không được tính vào."
+      }
     },
     "workflow": {
       "title": "Không gian làm việc này (ước tính)",

@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "masekondi",
     "chipAutoHideHint": "Pakatikati pa {min} ndi {max} masekondi.",
     "byWorkflow": "Mwa njira yogwirira ntchito",
-    "byWorkflowNote": "Gawo la ndalama zomwe zili pamwambapa, zikusonyezedwa payekha — osati kugwiritsa ntchito kwina. Mayeso a Grants amawerengedwa ku lipoti la bungwe lanu komanso pa malire a token anu, koma osaphatikizidwa mu chiwerengero cha pano."
+    "byWorkflowNote": "Gawo la ndalama zomwe zili pamwambapa, zikusonyezedwa payekha — osati kugwiritsa ntchito kwina. Mayeso a Grants amawerengedwa ku lipoti la bungwe lanu komanso pa malire a token anu, koma osaphatikizidwa mu chiwerengero cha pano.",
+    "chipLabelTitle": "Chip label",
+    "chipLabelHint": "Kugawanitsa nthawi zonse kumasonyeza kuchoka kwa mpweya ndi mtengo palimodzi; izi ndizomwe chip ikakhala wochepa imawonetsa.",
+    "chipLabelEmissions": "Kuchoka kwa mpweya",
+    "chipLabelCost": "Mtengo",
+    "chipLabelBoth": "Zonse",
+    "costTile": "Mtengo wozikidwa",
+    "costDisclosure": "Mtengo kugwiritsa ntchito mitengo yakunja pa {asOf} (Global Standard rate, palibe kuchotsera ya cached-input): ndi malire apamwamba, si bili. Kusaka pa web, kuchita code, transcription, speech, translation komanso indexing wa zikalata sizikuphatikizidwa.",
+    "costUnpriced": "{count, plural, one {# pempho popanda mtengo suli} other {# mapempho opanda mtengo sathandizidwa}} mu mtengo."
   },
   "extraction": {
     "toggleLabel": "Tengani deta yamakonzedwe",
@@ -4548,7 +4556,16 @@
         "auto": "Mwakokhazikika",
         "hidden": "Bisani"
       },
-      "visibilityHint": "Auto imasonyeza chip ikangotuluka chiwerengero chatsopano kapena mukayika mbewa pa chip. Muthanso kusintha izi mu Zikhazikiko › Kugwiritsa ndi Zotsatira."
+      "visibilityHint": "Auto imasonyeza chip ikangotuluka chiwerengero chatsopano kapena mukayika mbewa pa chip. Muthanso kusintha izi mu Zikhazikiko › Kugwiritsa ndi Zotsatira.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Mtengo wozikidwa {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Palibe mtengo wa zomwe mukupempha mu mzerewu",
+        "unpriced": "{count, plural, one {# pempho popanda mtengo suli} other {# mapempho opanda mtengo sathandizidwa}} mu mtengo.",
+        "noPriceData": "Mtengo sulikuwonetsedwa: chitsanzo cha mauthenga anu mulibe mtengo (zinthu zanu, ntchito zamlokal komanso ma agent alibe mtengo).",
+        "note": "Mtengo kugwiritsa ntchito mitengo yakunja pa {asOf} (Global Standard rate, palibe kuchotsera ya cached-input): ndi malire apamwamba, si bili. Kusaka pa web, kuchita code, transcription, speech, translation komanso indexing wa zikalata sizikuphatikizidwa."
+      }
     },
     "workflow": {
       "title": "Malo ogwirira ntchito awa (zowerengeka)",

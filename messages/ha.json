@@ -2746,7 +2746,15 @@
     "chipAutoHideUnit": "daƙiƙu",
     "chipAutoHideHint": "Tsakanin {min} da {max} daƙiƙu.",
     "byWorkflow": "Ta tsarin aiki",
-    "byWorkflowNote": "Sashe ne daga jimillar da ke sama, an nuna daban—ba ƙarin amfani ba. Ana kirga gudun tallafi cikin rahoton kungiyarku da kasafin lambobinku, amma ba a kirga shi a wannan jimillar ta gida ba."
+    "byWorkflowNote": "Sashe ne daga jimillar da ke sama, an nuna daban—ba ƙarin amfani ba. Ana kirga gudun tallafi cikin rahoton kungiyarku da kasafin lambobinku, amma ba a kirga shi a wannan jimillar ta gida ba.",
+    "chipLabelTitle": "Lakabin chip",
+    "chipLabelHint": "Bambance-bambancen kullum suna nuna fitar iskar da kuma kudi tare; wannan yana zaɓar abin da aka rubuta a taƙaitaccen chip.",
+    "chipLabelEmissions": "Fitar iska",
+    "chipLabelCost": "Kudi",
+    "chipLabelBoth": "Duka biyu",
+    "costTile": "Jimlar kudin da aka kiyasta",
+    "costDisclosure": "Kudin a farashin jerin kamar na {asOf} (Farashin Matsayin Duniya, ba tare da rangwamen bayanan da aka adana ba): iyakar kima ne, ba takardar biyan kuɗi ba. Bincike a yanar gizo, aiwatar da lamba, fassara, magana, fassarar magana da kimanta takardu ba a haɗa su ba.",
+    "costUnpriced": "{count, plural, one {# buƙata ba tare da farashi ba ba} other {# buƙatu ba tare da farashi ba ba}} ba a haɗa ba."
   },
   "extraction": {
     "toggleLabel": "Ciro bayani tsari",
@@ -4548,7 +4556,16 @@
         "auto": "Ta atomatik",
         "hidden": "Boye"
       },
-      "visibilityHint": "Ta atomatik zai nuna gunkin idan an sabunta hasashe ko ka matsa sama da shi. Za ka iya canza wannan daga Saituna › Amfani & Tasiri."
+      "visibilityHint": "Ta atomatik zai nuna gunkin idan an sabunta hasashe ko ka matsa sama da shi. Za ka iya canza wannan daga Saituna › Amfani & Tasiri.",
+      "labelBoth": "{grams} g · {cost}",
+      "costAria": "Kudin da aka kiyasta {cost}.",
+      "cost": {
+        "lessThan": "< {amount}",
+        "rowUnpriced": "Ba a ƙayyade farashi don buƙatun da ke wannan jerin ba",
+        "unpriced": "{count, plural, one {# buƙata ba tare da farashi ba ba} other {# buƙatu ba tare da farashi ba ba}} a haɗa cikin lissafin kudin.",
+        "noPriceData": "Ba a nuna kudin ba: Samfurin wannan tattaunawar ba shi da farashi a jerin (tushen kai, yanayin gida da wakilai ba a ƙididdige farashinsu ba).",
+        "note": "Kudin a farashin jerin kamar na {asOf} (Farashin Matsayin Duniya, ba tare da rangwamen bayanan da aka adana ba): iyakar kima ne, ba takardar biyan kuɗi ba. Bincike a yanar gizo, aiwatar da lamba, fassara, magana, fassarar magana da kimanta takardu ba a haɗa su ba."
+      }
     },
     "workflow": {
       "title": "Wannan wurin aiki (kimantawa)",
