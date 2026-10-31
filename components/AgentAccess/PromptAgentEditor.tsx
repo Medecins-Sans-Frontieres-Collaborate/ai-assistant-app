@@ -5,6 +5,10 @@ import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
+import { useSkillsAdmin } from '@/client/hooks/settings/useSkillsAdmin';
+
+import type { PromptAgentSkillAccess } from '@/lib/services/agentAccess/types';
+
 import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
 import { OpenAIModels } from '@/types/openai';
@@ -87,6 +91,18 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
     existing?.agent.systemPrompt ?? '',
   );
   const [modelId, setModelId] = useState(existing?.agent.modelId ?? '');
+  // Skill scope (docs/SKILLS_DESIGN.md §5.4). The catalog list comes from
+  // the admin skills endpoint; a local admin sees built-ins plus their own.
+  const [skillAccess, setSkillAccess] = useState<PromptAgentSkillAccess>(
+    existing?.agent.skillAccess ?? 'inherit',
+  );
+  const [skillIds, setSkillIds] = useState<string[]>(
+    existing?.agent.skillIds ?? [],
+  );
+  const skillsQuery = useSkillsAdmin().query;
+  const skillOptions = (skillsQuery.data?.skills ?? []).filter(
+    (entry) => entry.skill.activation !== 'off',
+  );
   const [isSaving, setIsSaving] = useState(false);
   const [isConflict, setIsConflict] = useState(false);
   const [saveError, setSaveError] = useState<'generic' | 'unknownModel' | null>(
@@ -134,6 +150,8 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
           description: description.trim(),
           systemPrompt: systemPrompt.trim(),
           modelId,
+          skillAccess,
+          skillIds: skillAccess === 'selected' ? skillIds : [],
         }),
       });
       if (response.status === 409) {
@@ -257,6 +275,70 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
             ))}
           </select>
         </div>
+
+        <fieldset>
+          <legend className="mb-1 block text-sm font-medium text-black dark:text-white">
+            {t('agentSkillsLabel')}
+          </legend>
+          <p className="mb-2 text-xs text-gray-600 dark:text-gray-400">
+            {t('agentSkillsHelp')}
+          </p>
+          <div className="space-y-1">
+            {(['inherit', 'selected', 'none'] as const).map((mode) => (
+              <label
+                key={mode}
+                className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
+              >
+                <input
+                  type="radio"
+                  name={`${baseId}-skill-access`}
+                  value={mode}
+                  checked={skillAccess === mode}
+                  onChange={() => setSkillAccess(mode)}
+                />
+                {t(`agentSkills.${mode}`)}
+              </label>
+            ))}
+          </div>
+          {skillAccess === 'selected' && (
+            <div className="mt-2 max-h-48 space-y-1 overflow-y-auto rounded-md border border-gray-200 p-2 dark:border-gray-700">
+              {skillOptions.length === 0 && (
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  {t('agentSkillsNone')}
+                </p>
+              )}
+              {skillOptions.map((entry) => (
+                <label
+                  key={entry.skill.id}
+                  className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300"
+                >
+                  <input
+                    type="checkbox"
+                    className="mt-1"
+                    checked={skillIds.includes(entry.skill.id)}
+                    disabled={
+                      !skillIds.includes(entry.skill.id) &&
+                      skillIds.length >= 20
+                    }
+                    onChange={(e) =>
+                      setSkillIds((current) =>
+                        e.target.checked
+                          ? [...current, entry.skill.id]
+                          : current.filter((id) => id !== entry.skill.id),
+                      )
+                    }
+                  />
+                  <span>
+                    {entry.skill.name}{' '}
+                    <code className="text-xs text-gray-500">
+                      {entry.skill.id}
+                    </code>
+                  </span>
+                </label>
+              ))}
+            </div>
+          )}
+        </fieldset>
       </div>
 
       {isConflict && (
