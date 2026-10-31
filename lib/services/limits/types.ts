@@ -228,6 +228,63 @@ export const LimitOverrideSchema = z
   .passthrough();
 export type LimitOverride = z.infer<typeof LimitOverrideSchema>;
 
+/**
+ * MODEL APPROVAL (docs/LIMITS.md "Model approval"): one grant on an access
+ * list — WHO (a group object id, a domain, or a mail, by list) and their
+ * terms: `requests` per day, `null` = unlimited.
+ */
+export const ModelAccessGrantSchema = z
+  .object({
+    target: z.string().max(320),
+    requests: z
+      .number()
+      .int()
+      .nonnegative()
+      .max(1_000_000_000)
+      .nullable()
+      .default(null),
+  })
+  .passthrough();
+export type ModelAccessGrant = z.infer<typeof ModelAccessGrantSchema>;
+
+/**
+ * The default for everyone not on a list: `null` = unlimited, a number =
+ * limited to that many requests per day, `false` = unavailable. ABSENT =
+ * inherit — a model from its family, a family from the global defaults and
+ * then the compiled catalog (external models: unavailable).
+ */
+export const ModelAccessDefaultSchema = z.union([
+  z.number().int().nonnegative().max(1_000_000_000),
+  z.null(),
+  z.literal(false),
+]);
+export type ModelAccessDefault = z.infer<typeof ModelAccessDefaultSchema>;
+
+/**
+ * One model's or one family's approval rule. Exactly one of `modelId` /
+ * `series` (the write schema enforces it). Stored as its own section rather
+ * than compiled into `defaults`/`overrides`: the admin view needs the
+ * structure back, and the lists would otherwise eat the 200-override budget.
+ * The RESOLVER expands rules into ordinary candidates (modelAccess.ts), so
+ * enforcement, the picker and the preview see one precedence model.
+ */
+export const ModelAccessRuleSchema = z
+  .object({
+    modelId: z.string().optional(),
+    series: z.string().optional(),
+    defaultAccess: ModelAccessDefaultSchema.optional(),
+    /** Entra group object ids. */
+    groups: z.array(ModelAccessGrantSchema).max(500).default([]),
+    /** Bare email domains. */
+    domains: z.array(ModelAccessGrantSchema).max(500).default([]),
+    /** Allow list: mails. */
+    allow: z.array(ModelAccessGrantSchema).max(500).default([]),
+    /** Block list: mails. Beats every grant for the same person. */
+    deny: z.array(z.string().max(320)).max(500).default([]),
+  })
+  .passthrough();
+export type ModelAccessRule = z.infer<typeof ModelAccessRuleSchema>;
+
 export const LimitsModeSchema = z.enum(['observe', 'enforce']);
 export type LimitsMode = z.infer<typeof LimitsModeSchema>;
 
@@ -240,6 +297,8 @@ export const LimitsPolicySchema = z
     /** Global defaults. A key absent here falls back to the compiled catalog. */
     defaults: z.array(LimitEntrySchema).default([]),
     overrides: z.array(LimitOverrideSchema).default([]),
+    /** Model approval rules (docs/LIMITS.md "Model approval"). */
+    modelAccess: z.array(ModelAccessRuleSchema).max(500).default([]),
     /** Scoped-admin grants (docs/LIMITS_SCOPED_ADMINS_DESIGN.md). */
     delegations: z.array(LimitDelegationSchema).default([]),
     /**
