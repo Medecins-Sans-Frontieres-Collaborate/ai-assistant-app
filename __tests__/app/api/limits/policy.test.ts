@@ -83,7 +83,7 @@ describe('PUT /api/limits/policy — model approval rules', () => {
   const claudeRule = {
     series: 'claude',
     defaultAccess: false,
-    groups: [{ target: 'g-research', requests: 40 }],
+    groups: [{ target: '11111111-2222-3333-4444-555555555555', requests: 40 }],
     domains: [],
     allow: [{ target: 'Alice@msf.org', requests: null }],
     deny: ['mallory@msf.org'],
