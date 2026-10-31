@@ -602,8 +602,6 @@ export const ChatInput = ({
         {(selectedConversation?.pinnedMcpServerId || connectorPinTrayOpen) && (
           <ConnectorPinTray />
         )}
-        <SkillBadges />
-
         {/* M365 agent source-access preflight (renders only when an M365
             file-backed agent is selected AND some sources are denied) */}
         <M365AgentAccessBanner botId={selectedConversation?.bot} />
@@ -743,14 +741,16 @@ export const ChatInput = ({
                   <EmissionsChip conversation={selectedConversation} />
                 </div>
 
-                {/* Capability indicators (attached agent + active
-                    connectors) — left-aligned mirror of the emissions chip,
+                {/* Capability bubbles (skills, attached agent, active
+                    connectors) — one row of small icon bubbles, labels on
+                    hover/focus, left-aligned mirror of the emissions chip,
                     ABOVE the pill: inside it the badges overlapped the
                     placeholder text. Anchored to the pill container, so they
                     follow the input in the empty-chat (centered) layout too.
-                    Both render nothing when inactive, so the default
+                    Each renders nothing when inactive, so the default
                     conversation adds zero chrome. */}
                 <div className="absolute bottom-full mb-2 left-2 z-[9999] flex items-center gap-1.5">
+                  <SkillBadges />
                   <AgentChip />
                   <ConnectorActivityBadge />
                 </div>
