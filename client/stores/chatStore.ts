@@ -470,6 +470,10 @@ interface ChatStore {
     stream: ReadableStream<Uint8Array>,
     streamParser: StreamParser,
     showLoadingTimeout: NodeJS.Timeout | null,
+    options?: {
+      /** Read-inactivity watchdog (ms); 0/undefined disables it. */
+      stallMs?: number;
+    },
   ) => Promise<{
     finalContent: string;
     threadId?: string;
@@ -507,6 +511,15 @@ interface ChatStore {
     error: unknown,
     conversation?: Conversation,
     searchMode?: SearchMode,
+    options?: {
+      /**
+       * `false` forbids the silent fallback-model resend regardless of the
+       * error class: an approval resend (the pending tool round would be
+       * dropped and a fresh turn run on another model) and failures AFTER
+       * a stream completed (re-sending would duplicate a successful turn).
+       */
+      allowFallback?: boolean;
+    },
   ) => void;
 
   // Retry-related actions
@@ -615,6 +628,51 @@ interface ChatStore {
   updateTranscriptionProgress: (completed: number, total: number) => void;
   setTranscriptionReconnecting: (isReconnecting: boolean) => void;
 }
+
+/**
+ * Failures that would fail identically on ANY model — never worth a silent
+ * fallback-model resend. Shared by the first attempt (handleSendError) and
+ * the fallback chain so the two paths cannot drift: 4xx other than a model
+ * rate limit (our own per-user limits ride 429 too, see isRateLimitError),
+ * and a server-reported in-band stream failure the server did not flag as
+ * retry-worthy (the stream was already underway — tool calls may have run).
+ */
+export const isNonRetryableSendError = (error: unknown): boolean =>
+  (error instanceof ApiError &&
+    error.isClientError() &&
+    (error.status !== 429 || error.isRateLimitError())) ||
+  (error instanceof StreamInterruptedError && !error.retry);
+
+/**
+ * Browser network-failure strings are not for humans: Firefox throws
+ * NS_ERROR_* codes (e.g. NS_ERROR_NET_PARTIAL_TRANSFER when the server
+ * aborts mid-stream), Chrome says "Failed to fetch", Safari "Load failed".
+ * Reword them all; with partial state, point at the partial result instead.
+ */
+const OPAQUE_NETWORK_ERROR_RE =
+  /network ?error|fetch failed|failed to fetch|load failed|NS_ERROR|error in body stream/i;
+export const rewordOpaqueNetworkError = (
+  message: string,
+  hasPartialState: boolean,
+): string =>
+  OPAQUE_NETWORK_ERROR_RE.test(message)
+    ? hasPartialState
+      ? 'The agent stopped responding before finishing. Some tool calls may have completed — see the partial result.'
+      : 'The connection was interrupted before the response finished. Check your connection and try again.'
+    : message;
+
+/**
+ * Client-side read-inactivity watchdog. The server writes a keepalive
+ * marker whenever it has been silent for ~20 s, so a cloud stream that
+ * delivers NOTHING for this long is dead (Wi-Fi gone, cellular stall, proxy
+ * cut) even though the browser has not errored the fetch yet — on some
+ * stacks that takes 10+ minutes, with the loader spinning throughout.
+ * Local runtimes get no watchdog: they send no heartbeat and a cold model
+ * load can legitimately take longer than this.
+ */
+export const STREAM_STALL_MS = 90_000;
+export const STREAM_STALLED_CODE = 'STREAM_STALLED';
+export const STREAM_OFFLINE_CODE = 'STREAM_OFFLINE';
 
 export const useChatStore = create<ChatStore>((set, get) => ({
   // Initial state
@@ -761,11 +819,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   requestStop: () => {
     const { abortController } = get();
+    // Flag BEFORE aborting: the abort path keeps the partial answer only
+    // for a user-initiated stop (internal abort-and-resend flows must not
+    // leave a stray partial message behind).
+    set({ stopRequested: true });
     if (abortController) {
       console.log('[chatStore] Aborting stream...');
       abortController.abort();
     }
-    set({ stopRequested: true });
   },
 
   resetStop: () => set({ stopRequested: false }),
@@ -833,6 +894,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     })),
 
   sendMessage: async (message, conversation, searchMode) => {
+    // One stream at a time. The composer is locked while streaming, but
+    // "Generate response" in ANOTHER conversation (or a programmatic send)
+    // could start a second stream: both would write the shared streaming
+    // slices and the first one's teardown would wipe the second's state.
+    if (get().isStreaming) {
+      console.warn(
+        '[chatStore.sendMessage] Ignored: a response is already streaming',
+      );
+      toast.error('Wait for the current response to finish, or stop it first.');
+      return;
+    }
     console.log('[chatStore.sendMessage] Message toneId:', message.toneId);
     // Log messages - convert entries to display messages for logging
     const flatMessages = flattenEntriesForAPI(conversation.messages);
@@ -842,6 +914,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     );
 
     let showLoadingTimeout: NodeJS.Timeout | null = null;
+    // Set once the stream has fully arrived: an exception after that point
+    // (local persistence, usage bookkeeping) must not re-send the turn.
+    let streamSettled = false;
 
     try {
       // Use analyzer to determine loading message key (for translation in UI)
@@ -872,7 +947,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         usage,
         toolCalls,
         consentRequests,
-      } = await get().processStream(stream, streamParser, showLoadingTimeout);
+      } = await get().processStream(stream, streamParser, showLoadingTimeout, {
+        stallMs: isLocalModel(conversation.model) ? 0 : STREAM_STALL_MS,
+      });
+      streamSettled = true;
 
       // Record real token usage for the local Usage & impact stats. Keyed by
       // the payload's served model/region — never the conversation's model
@@ -996,7 +1074,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         clearTimeout(showLoadingTimeout);
       }
 
-      get().handleSendError(error, conversation, searchMode);
+      get().handleSendError(error, conversation, searchMode, {
+        allowFallback: !streamSettled,
+      });
     }
   },
 
@@ -1634,6 +1714,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     stream: ReadableStream<Uint8Array>,
     streamParser: StreamParser,
     showLoadingTimeout: NodeJS.Timeout | null,
+    options?: { stallMs?: number },
   ): Promise<{
     finalContent: string;
     threadId?: string;
@@ -1656,6 +1737,59 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     consentRequests?: ConsentRequest[];
   }> => {
     const reader = stream.getReader();
+
+    // Read-inactivity watchdog (see STREAM_STALL_MS). A stalled read is
+    // surfaced as a NON-retryable interruption: the partial answer and tool
+    // records are kept and shown, no fallback-model resend. The browser's
+    // `offline` event ends the wait immediately — the socket is gone, there
+    // is nothing to wait for.
+    const stallMs = options?.stallMs ?? 0;
+    const readChunk = (): Promise<ReadableStreamReadResult<Uint8Array>> => {
+      if (!stallMs) return reader.read();
+      return new Promise((resolve, reject) => {
+        let settled = false;
+        const win = typeof window !== 'undefined' ? window : undefined;
+        const cleanup = () => {
+          clearTimeout(timer);
+          win?.removeEventListener('offline', onOffline);
+        };
+        const fail = (message: string, code: string) => {
+          if (settled) return;
+          settled = true;
+          cleanup();
+          void reader.cancel().catch(() => {});
+          reject(new StreamInterruptedError(message, code));
+        };
+        const onOffline = () =>
+          fail(
+            'Your device went offline before the response finished. Reconnect and try again.',
+            STREAM_OFFLINE_CODE,
+          );
+        const timer = setTimeout(
+          () =>
+            fail(
+              'The connection went quiet and the response did not finish. Check your connection and try again.',
+              STREAM_STALLED_CODE,
+            ),
+          stallMs,
+        );
+        win?.addEventListener('offline', onOffline);
+        reader.read().then(
+          (result) => {
+            if (settled) return;
+            settled = true;
+            cleanup();
+            resolve(result);
+          },
+          (error: unknown) => {
+            if (settled) return;
+            settled = true;
+            cleanup();
+            reject(error);
+          },
+        );
+      });
+    };
 
     // Coalesce burst chunks into one paint per frame (~60fps). Falls back
     // to sync `set` when requestAnimationFrame isn't available (SSR/tests).
@@ -1693,8 +1827,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       ).requestAnimationFrame(flush);
     };
 
+    // The parser's `action` is sticky (the latest marker seen), so track
+    // what was applied: a label is (re)shown only when the activity CHANGES,
+    // and cleared only when visible text actually grows — a marker chunk's
+    // own whitespace must not count as new text.
+    let appliedActivity: string | null = null;
+    let visibleTextLength = 0;
+
     while (true) {
-      const { done, value } = await reader.read();
+      const { done, value } = await readChunk();
 
       if (done) {
         break;
@@ -1703,7 +1844,26 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       const result = streamParser.processChunk(value, { stream: true });
 
       // Activity updates bypass the rAF batch — rare and need to land fast.
-      if (result.action && !result.hasReceivedContent) {
+      // Applied even after text has streamed: in a multi-round turn the
+      // model may answer, then call tools / search again, and the header
+      // must say so instead of freezing on "Thinking…". New text clears the
+      // label again (below).
+      const activitySignature = result.action
+        ? `${result.action}|${JSON.stringify(result.actionParams ?? {})}`
+        : null;
+      const newActivity =
+        activitySignature !== null && activitySignature !== appliedActivity;
+      if (newActivity) {
+        appliedActivity = activitySignature;
+        // A pending (rAF-deferred) text patch may still carry an older
+        // "clear the label" — drop it so it cannot overwrite this newer
+        // label when it flushes.
+        // (Cast: TS narrows the closure-assigned `pendingPatch` to never.)
+        const pending = pendingPatch as PendingPatch | null;
+        if (pending) {
+          delete pending.loadingMessage;
+          delete pending.loadingMessageParams;
+        }
         set({
           loadingMessage: result.action,
           loadingMessageParams: result.actionParams,
@@ -1767,23 +1927,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
 
       const currentState = get();
+      // Text arriving means the model is writing: drop the activity label.
+      // A label set by a later tool round (no new text) stays until the
+      // next text chunk.
+      const trimmedLength = result.displayText.trim().length;
+      const textGrew = trimmedLength > visibleTextLength;
+      visibleTextLength = Math.max(visibleTextLength, trimmedLength);
       const shouldClearLoading =
-        result.hasReceivedContent && currentState.loadingMessage !== null;
+        textGrew && !newActivity && currentState.loadingMessage !== null;
 
       if (
         result.contentChanged ||
         result.citationsChanged ||
         shouldClearLoading
       ) {
-        const patch: PendingPatch = {
-          streamingContent: result.displayText,
-          loadingMessage: result.hasReceivedContent
-            ? null
-            : currentState.loadingMessage,
-          loadingMessageParams: result.hasReceivedContent
-            ? undefined
-            : currentState.loadingMessageParams,
-        };
+        // Only carry the label keys when actually clearing: a deferred
+        // patch restating the CURRENT label would clobber an activity
+        // marker that lands before the frame flushes.
+        const patch: PendingPatch = { streamingContent: result.displayText };
+        if (shouldClearLoading) {
+          patch.loadingMessage = null;
+          patch.loadingMessageParams = undefined;
+        }
         if (result.citationsChanged) {
           patch.citations = result.citations;
         }
@@ -2050,16 +2215,50 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     error: unknown,
     conversation?: Conversation,
     searchMode?: SearchMode,
+    options?: { allowFallback?: boolean },
   ) => {
     // Check if this is an abort error (user clicked stop)
     if (error instanceof Error && error.name === 'AbortError') {
       console.log('[chatStore] Request was aborted by user');
+      // A user-initiated Stop keeps what has arrived so far — the text,
+      // tool records and consent cards — as a plain assistant message:
+      // two minutes of answer must not vanish because the user had enough.
+      // Internal abort-and-resend flows (e.g. "Summarize from headlines")
+      // abort without stopRequested and keep nothing.
+      const {
+        stopRequested,
+        streamingToolCalls: stoppedToolCalls,
+        streamingConsentRequests: stoppedConsentRequests,
+        streamingContent: stoppedContent,
+      } = get();
+      if (
+        stopRequested &&
+        conversation &&
+        (stoppedContent.trim().length > 0 || stoppedToolCalls.length > 0)
+      ) {
+        void get().finalizeMessage(
+          {
+            role: 'assistant',
+            content: stoppedContent,
+            messageType: MessageType.TEXT,
+            toolCalls:
+              stoppedToolCalls.length > 0 ? stoppedToolCalls : undefined,
+            consentRequests:
+              stoppedConsentRequests.length > 0
+                ? (stoppedConsentRequests as Message['consentRequests'])
+                : undefined,
+          },
+          conversation,
+        );
+      }
       set({
         isStreaming: false,
         streamingContent: '',
         streamingConversationId: null,
         loadingMessage: null,
         streamingInterimSearch: null,
+        streamingToolCalls: [],
+        streamingConsentRequests: [],
         abortController: null,
         stopRequested: false,
         error: null, // Don't show error for user-initiated stops
@@ -2119,19 +2318,30 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // EXCEPT when the server flagged `retry`: the partial is a broken
     // promise (a generated file that doesn't exist, or no content at all),
     // so a fallback retry is forced — keeping it would be worse.
-    const isStreamInterrupted =
-      error instanceof StreamInterruptedError && !error.retry;
     // The 429 exemption exists for MODEL-level rate limits (an Azure TPM
     // ceiling), which another model genuinely can absorb. Our own per-USER
     // limits — the burst limiter and admin usage limits — are keyed on the
     // user, so every fallback model hits them identically: retrying the chain
     // just fires N doomed requests and delays the message the user needs to
     // see. Identified by error code, since status cannot tell them apart.
-    const isNonRetryableClientError =
-      (error instanceof ApiError &&
-        error.isClientError() &&
-        (error.status !== 429 || error.isRateLimitError())) ||
-      isStreamInterrupted;
+    const isNonRetryableClientError = isNonRetryableSendError(error);
+    const forcedRetry = error instanceof StreamInterruptedError && error.retry;
+
+    // Capture partial stream state BEFORE deciding on a fallback resend:
+    // tool calls and consent prompts that completed before the failure must
+    // be shown to the user so the failure has context — and a turn that
+    // already ran tools must NOT be silently re-run on another model (the
+    // tools would run twice and the partial answer would vanish). That is
+    // exactly what an opaque network break mid-tool-loop looks like.
+    const {
+      streamingToolCalls: partialToolCalls,
+      streamingConsentRequests: partialConsentRequests,
+      streamingContent: partialContent,
+    } = get();
+    const hasPartialState =
+      partialToolCalls.length > 0 ||
+      partialConsentRequests.length > 0 ||
+      partialContent.trim().length > 0;
     const modelId = conversation?.model?.id ?? '';
     const isNonFallbackModel =
       conversation?.model?.isOrganizationAgent ||
@@ -2149,7 +2359,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const { preferSelectedModel } = useSettingsStore.getState();
 
     if (
+      options?.allowFallback !== false &&
       !isNonRetryableClientError &&
+      (!hasPartialState || forcedRetry) &&
       !isNonFallbackModel &&
       !isRetrying &&
       !preferSelectedModel &&
@@ -2168,19 +2380,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       get().retryWithFallbackModel(conversation, searchMode);
       return;
     }
-
-    // Capture partial stream state before we wipe it — tool calls and
-    // consent prompts that completed before the failure should still be
-    // shown to the user so the failure has context.
-    const {
-      streamingToolCalls: partialToolCalls,
-      streamingConsentRequests: partialConsentRequests,
-      streamingContent: partialContent,
-    } = get();
-    const hasPartialState =
-      partialToolCalls.length > 0 ||
-      partialConsentRequests.length > 0 ||
-      partialContent.trim().length > 0;
 
     // Extract user-friendly error message
     let errorMessage = 'Failed to send message';
@@ -2276,20 +2475,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
     }
 
-    // Browser network-failure strings are not for humans: Firefox throws
-    // NS_ERROR_* codes (e.g. NS_ERROR_NET_PARTIAL_TRANSFER when the server
-    // aborts mid-stream), Chrome says "Failed to fetch", Safari "Load
-    // failed". Reword them all; with partial state, point at the partial
-    // result instead.
-    const isOpaqueNetworkError =
-      /network ?error|fetch failed|failed to fetch|load failed|NS_ERROR|error in body stream/i.test(
-        errorMessage,
-      );
-    if (isOpaqueNetworkError) {
-      errorMessage = hasPartialState
-        ? 'The agent stopped responding before finishing. Some tool calls may have completed — see the partial result.'
-        : 'The connection was interrupted before the response finished. Check your connection and try again.';
-    }
+    errorMessage = rewordOpaqueNetworkError(errorMessage, hasPartialState);
 
     // Persist the partial assistant message so the tool summary survives
     // the failure, instead of vanishing with the streaming slices.
@@ -2354,6 +2540,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     searchMode?: SearchMode,
     attemptedModelIds: string[] = [conversation.model.id],
   ) => {
+    // Set once the fallback stream has fully arrived — a failure after that
+    // point must not cascade to the next chain model (see sendMessage).
+    let streamSettled = false;
     const fallbackModel = getFallbackModel(
       attemptedModelIds,
       [],
@@ -2434,7 +2623,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         usage,
         toolCalls,
         consentRequests,
-      } = await get().processStream(stream, streamParser, showLoadingTimeout);
+      } = await get().processStream(stream, streamParser, showLoadingTimeout, {
+        stallMs: isLocalModel(fallbackModel) ? 0 : STREAM_STALL_MS,
+      });
+      streamSettled = true;
 
       // Record real token usage for the local Usage & impact stats. Keyed by
       // the payload's served model/region — never the conversation's model
@@ -2575,17 +2767,25 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
 
       // Try the next model in the fallback chain, unless this failure would
-      // hit every model the same way (4xx other than rate limiting). A
-      // per-user rate/usage limit is exactly such a failure despite being a
-      // 429 — see the matching check in the send path.
-      const isNonRetryableClientError =
-        retryError instanceof ApiError &&
-        retryError.isClientError() &&
-        (retryError.status !== 429 || retryError.isRateLimitError());
+      // hit every model the same way — same classifier as the first attempt
+      // (4xx other than model rate limiting, server-reported in-band stream
+      // failures), plus: a stream that already completed is never re-sent,
+      // and a partial answer with tool calls is kept rather than re-run.
+      const {
+        streamingToolCalls: chainPartialToolCalls,
+        streamingContent: chainPartialContent,
+      } = get();
+      const chainHasPartialState =
+        chainPartialToolCalls.length > 0 ||
+        chainPartialContent.trim().length > 0;
+      const forcedRetry =
+        retryError instanceof StreamInterruptedError && retryError.retry;
       const nextAttemptedIds = [...attemptedModelIds, fallbackModel.id];
 
       if (
-        !isNonRetryableClientError &&
+        !streamSettled &&
+        !isNonRetryableSendError(retryError) &&
+        (!chainHasPartialState || forcedRetry) &&
         getFallbackModel(nextAttemptedIds, [], dynamicFallbackOpts())
       ) {
         toast.dismiss(toastId);
@@ -2607,6 +2807,27 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         errorMessage = retryError.getUserMessage();
       } else if (retryError instanceof Error) {
         errorMessage = retryError.message;
+      }
+      errorMessage = rewordOpaqueNetworkError(
+        errorMessage,
+        chainHasPartialState,
+      );
+      // Keep the partial answer (tool records included) so the failure has
+      // context, exactly as the first attempt does.
+      if (chainHasPartialState) {
+        void get().finalizeMessage(
+          {
+            role: 'assistant',
+            content: chainPartialContent,
+            messageType: MessageType.TEXT,
+            error: true,
+            toolCalls:
+              chainPartialToolCalls.length > 0
+                ? chainPartialToolCalls
+                : undefined,
+          },
+          conversation,
+        );
       }
       const retryErrorCode =
         retryError instanceof ApiError
@@ -3081,7 +3302,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         usage,
         toolCalls,
         consentRequests,
-      } = await get().processStream(stream, streamParser, showLoadingTimeout);
+      } = await get().processStream(stream, streamParser, showLoadingTimeout, {
+        stallMs: isLocalModel(conversation.model) ? 0 : STREAM_STALL_MS,
+      });
 
       // Local models are excluded from the aggregate: tokenUsageStats drives
       // the Usage & Impact emissions view, and inference on the user's own
@@ -3144,7 +3367,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         return { submittingApprovals: submitting, failedApprovals: failed };
       });
 
-      get().handleSendError(error, conversation);
+      // Never fall back to another model here: the resend would drop the
+      // pending tool round (no approvalResponses) and run a fresh turn on a
+      // different model. Surface the failure; the card offers a manual retry.
+      get().handleSendError(error, conversation, undefined, {
+        allowFallback: false,
+      });
     }
   },
 }));
