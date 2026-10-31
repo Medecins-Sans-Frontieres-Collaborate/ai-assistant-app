@@ -73,6 +73,31 @@ function buildApprovalResponseItems(
  * The Foundry Agent Service exposes its API through the OpenAI Responses
  * SDK (project.getOpenAIClient → conversations + responses).
  */
+
+/**
+ * Ends an agent stream CLEANLY with an in-band `streamError` block (see
+ * app/api/chat/route.ts). `controller.error()` would abort the HTTP
+ * response mid-transfer; the browser reports that as an opaque network
+ * failure and the client store's fallback chain re-sends the turn on a
+ * different MODEL — silently dropping the agent the user chose.
+ */
+function endWithStreamError(
+  controller: ReadableStreamDefaultController,
+  code: string,
+  message: string,
+): void {
+  try {
+    appendMetadataToStream(controller, { streamError: { code, message } });
+    controller.close();
+  } catch {
+    try {
+      controller.error(new Error(message));
+    } catch {
+      // already closed
+    }
+  }
+}
+
 export class AIFoundryAgentHandler {
   private tracer = trace.getTracer('ai-foundry-agent-handler');
 
@@ -108,6 +133,8 @@ export class AIFoundryAgentHandler {
       signal?: AbortSignal;
       agentSkillsEnabled?: boolean;
       forcedSkillIds?: string[];
+      /** User's skills auto-selection toggle (docs/SKILLS_DESIGN.md §5.1a). */
+      skillsAuto?: boolean;
       hostedRegion?: 'EU' | 'US';
       emitMarker?: (marker: string) => void;
     },
@@ -438,6 +465,7 @@ export class AIFoundryAgentHandler {
                 userMail: user.mail ?? undefined,
                 region: auxiliaryRegion(user.region, options.hostedRegion),
                 forcedIds: options.forcedSkillIds,
+                autoEnabled: options.skillsAuto !== false,
                 signal: upstreamAbort.signal,
                 citations: sharedCitationRegistry.entries,
               });
@@ -454,7 +482,12 @@ export class AIFoundryAgentHandler {
                     'This Foundry agent has no verified load_skill function registered. Its normal tools remain unchanged.',
                 }),
               );
-            if (skillExecutor) {
+            // An approval resume continues the SAME logical turn: the
+            // catalog message and the forced/always preloads are already in
+            // the Foundry conversation from the first request — adding them
+            // again would duplicate skill bodies in the thread (and burn the
+            // executor's load budget) on every resume.
+            if (skillExecutor && !hasApprovals) {
               const items = [];
               // Metadata discovery only: bodies remain in tool results, and
               // the agent's persona/instructions are never replaced.
@@ -857,10 +890,13 @@ export class AIFoundryAgentHandler {
                       );
                       controllerClosed = true;
                       void cleanupEphemeralConversation();
-                      controller.error(
-                        new Error(
-                          'Agent returned an empty response. Please try again.',
-                        ),
+                      // In-band failure: aborting the socket would reach the
+                      // browser as an opaque network error, which the client
+                      // retries on a FALLBACK MODEL — i.e. without this agent.
+                      endWithStreamError(
+                        controller,
+                        'AGENT_EMPTY_RESPONSE',
+                        'Agent returned an empty response. Please try again.',
                       );
                       return;
                     }
@@ -885,10 +921,10 @@ export class AIFoundryAgentHandler {
                     const errorEvent = event as any;
                     controllerClosed = true;
                     void cleanupEphemeralConversation();
-                    controller.error(
-                      new Error(
-                        `Agent error: ${errorEvent.response?.error?.message || 'Unknown error'}`,
-                      ),
+                    endWithStreamError(
+                      controller,
+                      'AGENT_RUN_FAILED',
+                      `Agent error: ${errorEvent.response?.error?.message || 'Unknown error'}`,
                     );
                   }
                 }
@@ -910,7 +946,16 @@ export class AIFoundryAgentHandler {
                 // try to error an again-closed controller.
                 void cleanupEphemeralConversation();
                 if (!upstreamAbort.signal.aborted && !controllerClosed) {
-                  controller.error(error);
+                  console.error(
+                    '[AIFoundryAgentHandler] Agent stream failed mid-run:',
+                    error instanceof Error ? error.message : error,
+                  );
+                  controllerClosed = true;
+                  endWithStreamError(
+                    controller,
+                    'AGENT_RUN_FAILED',
+                    'The agent stopped responding before finishing. Please try again.',
+                  );
                 }
               }
             },
