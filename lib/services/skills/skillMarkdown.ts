@@ -260,7 +260,8 @@ export function parseSkillMarkdown(content: string): ParseSkillResult {
       instructions,
       activation,
       applyToAgents,
-      requireConsent,
+      // Omitted when false so a parsed record round-trips byte-for-byte.
+      ...(requireConsent ? { requireConsent: true } : {}),
       foreignFrontmatter:
         Object.keys(foreignFrontmatter).length > 0
           ? foreignFrontmatter
