@@ -1,6 +1,6 @@
 'use client';
 
-import { IconPlus } from '@tabler/icons-react';
+import { IconPlus, IconRobot } from '@tabler/icons-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FC, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -19,6 +19,7 @@ import {
   translationLanguageLabel,
 } from '@/lib/utils/shared/translation/languages';
 
+import { AccessPill } from './AccessPill';
 import { CanonicalKeyChip } from './CanonicalKeyChip';
 import { CatalogOauthSection } from './CatalogOauthSection';
 import { ConnectorEditor } from './ConnectorEditor';
@@ -33,6 +34,7 @@ import { M365AgentsSection } from './M365AgentsSection';
 import { OrgAgentsSection } from './OrgAgentsSection';
 import { PromptAgentEditor } from './PromptAgentEditor';
 import { RuleEditor } from './RuleEditor';
+import { formatAdminTimestamp } from './formatAdminTimestamp';
 import {
   AdminConnectorsResponse,
   AdminGuidesResponse,
@@ -48,6 +50,7 @@ import {
   CLIENT_PROMPT_AGENT_SOURCE,
   MergedAgentRow,
   clientCanonicalAgentKey,
+  isAgentListSource,
 } from './types';
 
 import { Link } from '@/lib/navigation';
@@ -321,8 +324,17 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
    */
   // Per-admin hidden agents (presentational only — see the hook).
   const hiddenAgents = useHiddenAdminAgents();
+  // The list below is Foundry + prompt agents only. Knowledge and Microsoft
+  // 365 agents arrive from discovery under the SAME canonical key their
+  // sections edit, so showing them here too was one agent twice; rules for
+  // connectors, guides, datasets… belong to their own areas. `rows` itself
+  // stays complete for the delegation picker.
+  const agentListRows = useMemo(
+    () => rows.filter((row) => isAgentListSource(row.source)),
+    [rows],
+  );
   const { visible: visibleRows, hiddenCount: hiddenRowCount } =
-    hiddenAgents.partition(rows, (row) => row.canonicalKey);
+    hiddenAgents.partition(agentListRows, (row) => row.canonicalKey);
 
   const connectorRows = useMemo(() => {
     const rulesByKey = new Map(
@@ -844,17 +856,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                               count: String(entry.meta.featureCount),
                             })}
                           </span>
-                          <span
-                            className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                              isRestricted
-                                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                                : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                            }`}
-                          >
-                            {isRestricted
-                              ? t('accessRestricted')
-                              : t('accessEveryone')}
-                          </span>
+                          <AccessPill restricted={isRestricted} />
                           <button
                             type="button"
                             className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -894,7 +896,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                         <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                           {t('updatedByLine', {
                             user: entry.meta.updatedBy,
-                            date: entry.meta.updatedAt,
+                            date: formatAdminTimestamp(entry.meta.updatedAt),
                           })}
                         </p>
 
@@ -1059,17 +1061,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                               )
                               .join(' · ')}
                           </span>
-                          <span
-                            className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                              isRestricted
-                                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                                : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                            }`}
-                          >
-                            {isRestricted
-                              ? t('accessRestricted')
-                              : t('accessEveryone')}
-                          </span>
+                          <AccessPill restricted={isRestricted} />
                           <button
                             type="button"
                             className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -1122,7 +1114,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                         <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                           {t('updatedByLine', {
                             user: entry.guide.updatedBy,
-                            date: entry.guide.updatedAt,
+                            date: formatAdminTimestamp(entry.guide.updatedAt),
                           })}
                         </p>
 
@@ -1281,17 +1273,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                             <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
                               {entry.connector.authStyle}
                             </span>
-                            <span
-                              className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                                isRestricted
-                                  ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                                  : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                              }`}
-                            >
-                              {isRestricted
-                                ? t('accessRestricted')
-                                : t('accessEveryone')}
-                            </span>
+                            <AccessPill restricted={isRestricted} />
                             <button
                               type="button"
                               className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -1341,7 +1323,9 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                           <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                             {t('updatedByLine', {
                               user: entry.connector.updatedBy,
-                              date: entry.connector.updatedAt,
+                              date: formatAdminTimestamp(
+                                entry.connector.updatedAt,
+                              ),
                             })}
                           </p>
 
@@ -1431,6 +1415,18 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
           </div>
         ) : (
           <>
+            {/* Same heading shape as the two sections below, so the page reads
+                as three labelled groups rather than a list with appendices. */}
+            <div className="mb-2 flex items-center gap-2">
+              <IconRobot size={18} className="text-violet-600" />
+              <h3 className="text-sm font-semibold text-black dark:text-white">
+                {t('foundryAgentsHeading')}
+              </h3>
+            </div>
+            <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
+              {t('foundryAgentsDescription')}
+            </p>
+
             {/* Any admin may create a prompt agent — including local admins
                 with zero delegated keys (the create auto-delegates to them). */}
             <button
@@ -1440,7 +1436,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
               onClick={() => setIsCreatingAgent((creating) => !creating)}
             >
               <IconPlus size={16} />
-              {t('addAgent')}
+              {t('addPromptAgent')}
             </button>
 
             {isCreatingAgent && (
@@ -1461,7 +1457,9 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
             />
             {visibleRows.length === 0 ? (
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                {rows.length === 0 ? t('noAgents') : t('allAgentsHidden')}
+                {agentListRows.length === 0
+                  ? t('noAgents')
+                  : t('allAgentsHidden')}
               </p>
             ) : (
               <ul className="space-y-2">
@@ -1504,17 +1502,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                           </p>
                           <CanonicalKeyChip canonicalKey={row.canonicalKey} />
                         </div>
-                        <span
-                          className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                            isRestricted
-                              ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                              : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                          }`}
-                        >
-                          {isRestricted
-                            ? t('accessRestricted')
-                            : t('accessEveryone')}
-                        </span>
+                        <AccessPill restricted={isRestricted} />
                         {isHiddenRow && <HiddenBadge />}
                         <HideAgentButton
                           hidden={isHiddenRow}
@@ -1523,6 +1511,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                         />
                         <button
                           type="button"
+                          aria-expanded={editingKey === row.canonicalKey}
                           className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
                           onClick={() =>
                             setEditingKey(
@@ -1534,7 +1523,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                         >
                           {editingKey === row.canonicalKey
                             ? t('cancel')
-                            : t('edit')}
+                            : t('editAccess')}
                         </button>
                         {row.promptAgent && (
                           <>
@@ -1574,7 +1563,9 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                         <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                           {t('updatedByLine', {
                             user: row.stored.rule.updatedBy,
-                            date: row.stored.rule.updatedAt,
+                            date: formatAdminTimestamp(
+                              row.stored.rule.updatedAt,
+                            ),
                           })}
                         </p>
                       )}
