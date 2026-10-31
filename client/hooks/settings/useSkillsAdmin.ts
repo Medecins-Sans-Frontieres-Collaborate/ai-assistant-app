@@ -7,7 +7,11 @@
  */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { Skill, SkillWriteFields } from '@/lib/services/skills/types';
+import type {
+  Skill,
+  SkillSource,
+  SkillWriteFields,
+} from '@/lib/services/skills/types';
 
 import { unwrapApiData } from './useAgentAccessAdmin';
 
@@ -102,4 +106,95 @@ export function useSkillsAdmin() {
   });
 
   return { query, save, remove };
+}
+
+/* --- Skill sources (docs/SKILLS_DESIGN.md §12) ---------------------- */
+
+const SOURCES_QUERY_KEY = ['admin-skill-sources'];
+
+export class SkillSourcesForbidden extends Error {
+  constructor() {
+    super('Skill sources are managed by global admins');
+    this.name = 'SkillSourcesForbidden';
+  }
+}
+
+async function throwForSourceStatus(response: Response): Promise<never> {
+  if (response.status === 403) throw new SkillSourcesForbidden();
+  if (response.status === 409) throw new SkillSaveConflict();
+  let message = `Skill source request failed: ${response.status}`;
+  try {
+    const body = (await response.json()) as { error?: unknown };
+    if (typeof body.error === 'string') message = body.error;
+  } catch {
+    // Non-JSON error body: keep the status message.
+  }
+  throw new Error(message);
+}
+
+/**
+ * External catalog subscriptions. The list query fails with
+ * SkillSourcesForbidden for local admins, which the panel uses to hide the
+ * section; every mutation invalidates both the sources and the skills list
+ * (a sync changes skills).
+ */
+export function useSkillSources() {
+  const queryClient = useQueryClient();
+  const invalidate = () => {
+    void queryClient.invalidateQueries({ queryKey: SOURCES_QUERY_KEY });
+    void queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+  };
+
+  const query = useQuery<{ sources: SkillSource[] }>({
+    queryKey: SOURCES_QUERY_KEY,
+    queryFn: async () => {
+      const response = await fetch('/api/agent-access/skill-sources');
+      if (!response.ok) await throwForSourceStatus(response);
+      return unwrapApiData<{ sources: SkillSource[] }>(await response.json());
+    },
+    retry: (count, error) =>
+      !(error instanceof SkillSourcesForbidden) && count < 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const add = useMutation({
+    mutationFn: async (input: { url: string; label?: string }) => {
+      const response = await fetch('/api/agent-access/skill-sources', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(input),
+      });
+      if (!response.ok) await throwForSourceStatus(response);
+      return unwrapApiData<{ source: SkillSource }>(await response.json());
+    },
+    onSettled: invalidate,
+  });
+
+  const sync = useMutation({
+    mutationFn: async (input: { id: string; force?: boolean }) => {
+      const response = await fetch(
+        `/api/agent-access/skill-sources/${encodeURIComponent(input.id)}/sync${
+          input.force ? '?force=true' : ''
+        }`,
+        { method: 'POST' },
+      );
+      if (!response.ok) await throwForSourceStatus(response);
+      return unwrapApiData<{ source: SkillSource }>(await response.json());
+    },
+    onSettled: invalidate,
+  });
+
+  const remove = useMutation({
+    mutationFn: async (input: { id: string }) => {
+      const response = await fetch(
+        `/api/agent-access/skill-sources?id=${encodeURIComponent(input.id)}`,
+        { method: 'DELETE' },
+      );
+      if (!response.ok && response.status !== 404)
+        await throwForSourceStatus(response);
+    },
+    onSettled: invalidate,
+  });
+
+  return { query, add, sync, remove };
 }
