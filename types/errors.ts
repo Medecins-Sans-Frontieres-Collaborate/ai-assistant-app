@@ -45,6 +45,13 @@ export enum ErrorCode {
   MODEL_TIMEOUT = 'MODEL_TIMEOUT',
   MODEL_RATE_LIMITED = 'MODEL_RATE_LIMITED',
   MODEL_CONTEXT_TOO_LONG = 'MODEL_CONTEXT_TOO_LONG',
+  /** The provider's content safety filter stopped the prompt or the answer. */
+  MODEL_CONTENT_FILTERED = 'MODEL_CONTENT_FILTERED',
+  /** The output budget was exhausted without a usable answer. */
+  MODEL_OUTPUT_LIMIT = 'MODEL_OUTPUT_LIMIT',
+  MODEL_AUTH_FAILED = 'MODEL_AUTH_FAILED',
+  MODEL_QUOTA_EXCEEDED = 'MODEL_QUOTA_EXCEEDED',
+  MODEL_INVALID_REQUEST = 'MODEL_INVALID_REQUEST',
 
   // File Processing
   FILE_PROCESSING_FAILED = 'FILE_PROCESSING_FAILED',
