@@ -45,10 +45,19 @@ export function partitionSkillToolCalls(calls: readonly ToolCallRecord[]): {
 }
 
 export type SkillUsageVia = 'requested' | 'auto' | 'pinned';
+/** How the body of a requested skill was chosen on regeneration (§5.7). */
+export type SkillUsageVersion = 'original' | 'updated';
 
 export type SkillUsageLine =
   /** A skill delivered into the prompt and how it got there. */
-  | { kind: 'skill'; name: string; via: SkillUsageVia }
+  | {
+      kind: 'skill';
+      name: string;
+      via: SkillUsageVia;
+      version?: SkillUsageVersion;
+    }
+  /** A routed match the user must approve before it applies (§5.5). */
+  | { kind: 'consent'; name: string }
   /** An explicitly requested id that did not resolve (unknown, hidden, off). */
   | { kind: 'unavailable'; id: string }
   /** Reference passages retrieved for the active skills' documents. */
@@ -60,7 +69,9 @@ export type SkillUsageLine =
   /** Any other reported text (degraded routing, document notices). */
   | { kind: 'note'; text: string };
 
-const SKILL_LINE_RE = /^(.+?) \((requested|auto|pinned)\)$/;
+const SKILL_LINE_RE =
+  /^(.+?) \((requested|auto|pinned)(?:, (as originally run|updated since))?\)$/;
+const CONSENT_LINE_RE = /^(.+?) \(needs approval\)$/;
 const UNAVAILABLE_LINE_RE = /^(.+?) \(unavailable\)$/;
 const REFERENCES_RE = /^(\d+) reference passages? retrieved\.?$/;
 
@@ -93,7 +104,18 @@ export function summarizeSkillToolCalls(
             kind: 'skill',
             name: skill[1],
             via: skill[2] as SkillUsageVia,
+            ...(skill[3]
+              ? {
+                  version:
+                    skill[3] === 'as originally run' ? 'original' : 'updated',
+                }
+              : {}),
           });
+          continue;
+        }
+        const consent = CONSENT_LINE_RE.exec(text);
+        if (consent) {
+          lines.push({ kind: 'consent', name: consent[1] });
           continue;
         }
         const unavailable = UNAVAILABLE_LINE_RE.exec(text);
