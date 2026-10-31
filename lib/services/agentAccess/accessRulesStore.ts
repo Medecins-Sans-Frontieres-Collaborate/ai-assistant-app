@@ -1099,6 +1099,37 @@ export function writeSkillHistoryEntry(
   return skillEntity.writeHistory(storage, entry);
 }
 
+/**
+ * The exact version of a skill as it stood at `updatedAt`, from the
+ * immutable history (docs/SKILLS_DESIGN.md §5.7): history entries are keyed
+ * by the same timestamp the record carried, so this is one blob read. Null
+ * when no such version exists (never written, swept, or a tombstone).
+ */
+export async function readSkillHistoryVersion(
+  storage: BlobStorage,
+  id: string,
+  updatedAt: string,
+  signal?: AbortSignal,
+): Promise<Skill | null> {
+  if (!/^\d{4}-\d{2}-\d{2}T[0-9:.]+Z$/.test(updatedAt)) return null;
+  const blob = await downloadBlob(
+    storage,
+    historyBlobPath(canonicalAgentKey(SKILL_SOURCE, id), updatedAt),
+    'agentAccess.readSkillHistoryVersion',
+    {
+      abortSignal: signal ?? AbortSignal.timeout(5000),
+      maxBytes: 1024 * 1024,
+    },
+  );
+  if (!blob) return null;
+  const parsed = SkillHistoryEntrySchema.safeParse(
+    JSON.parse(blob.buffer.toString('utf8')),
+  );
+  if (!parsed.success || parsed.data.action !== 'upsert' || !parsed.data.skill)
+    return null;
+  return parsed.data.skill.id === id ? parsed.data.skill : null;
+}
+
 /* --- Form templates ------------------------------------------------- */
 
 /* Channel profiles (channel drafter) — thin wrappers, like form templates. */
