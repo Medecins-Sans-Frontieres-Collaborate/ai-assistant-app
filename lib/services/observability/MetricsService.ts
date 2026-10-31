@@ -37,6 +37,12 @@ const errorCounter = meter.createCounter('errors.count', {
   unit: 'errors',
 });
 
+const modelRetryCounter = meter.createCounter('model_call.retries', {
+  description:
+    'In-turn model call recoveries by provider error kind and outcome (retry, give_up, resume, continue, trim)',
+  unit: 'events',
+});
+
 const groupMembershipCounter = meter.createCounter('group_membership.lookups', {
   description:
     'Entra group-membership cache outcomes (hit, miss, failure_retryable, failure_structural, oversize_fallback)',
@@ -201,6 +207,19 @@ export class MetricsService {
    * throttling or an outage. No user attributes: the counter is per replica
    * and the audit line already carries the (sanitized) user.
    */
+  /**
+   * One in-turn model-call recovery event (lib/services/chat/modelRetry.ts,
+   * streamContinuation.ts). `kind` is the provider error class that caused
+   * it; `outcome` is what the loop did about it. A rising `give_up` count
+   * for `rate_limit` is the capacity signal to watch.
+   */
+  static recordModelRecovery(
+    outcome: 'retry' | 'give_up' | 'resume' | 'continue' | 'trim',
+    kind: string,
+  ) {
+    modelRetryCounter.add(1, { outcome, kind });
+  }
+
   static recordGroupMembership(
     outcome:
       | 'hit'
