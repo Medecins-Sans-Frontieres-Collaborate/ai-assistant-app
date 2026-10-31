@@ -70,10 +70,32 @@ const DEFAULTS: Required<RetryPolicyOptions> = {
   random: Math.random,
 };
 
+/**
+ * Operational overrides (read at policy creation): MODEL_RETRY_MAX_ATTEMPTS,
+ * MODEL_RETRY_BASE_DELAY_MS, MODEL_RETRY_MAX_DELAY_MS. The test setup files
+ * zero the delays so suites never sleep through a backoff.
+ */
+function envDefaults(): Partial<RetryPolicyOptions> {
+  const read = (name: string): number | undefined => {
+    const raw = process.env[name];
+    if (raw === undefined || raw === '') return undefined;
+    const value = Number(raw);
+    return Number.isFinite(value) && value >= 0 ? value : undefined;
+  };
+  const maxAttempts = read('MODEL_RETRY_MAX_ATTEMPTS');
+  const baseDelayMs = read('MODEL_RETRY_BASE_DELAY_MS');
+  const maxDelayMs = read('MODEL_RETRY_MAX_DELAY_MS');
+  return {
+    ...(maxAttempts !== undefined && maxAttempts >= 1 ? { maxAttempts } : {}),
+    ...(baseDelayMs !== undefined ? { baseDelayMs } : {}),
+    ...(maxDelayMs !== undefined ? { maxDelayMs } : {}),
+  };
+}
+
 export function createRetryPolicy(
   options: RetryPolicyOptions = {},
 ): RetryPolicy {
-  const config = { ...DEFAULTS, ...options };
+  const config = { ...DEFAULTS, ...envDefaults(), ...options };
   let attempts = 1;
   let totalDelay = 0;
   return {
