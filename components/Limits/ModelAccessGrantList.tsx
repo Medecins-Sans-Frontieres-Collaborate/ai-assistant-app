@@ -1,12 +1,14 @@
 'use client';
 
 import { IconTrash } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
+import { lookupEntraGroups } from '@/client/services/m365/m365Client';
 import type { ModelAccessGrant } from '@/lib/services/limits/types';
 
 import {
@@ -46,6 +48,28 @@ export const ModelAccessGrantList: FC<ModelAccessGrantListProps> = ({
   const tPeople = useTranslations('peopleSuggest');
   const peopleSuggest = useM365PeopleSuggest();
 
+  // Group grants persist Entra object ids; show their names like the group
+  // picker's chips do, falling back to the id while (or if) the lookup does
+  // not answer.
+  const groupIds = kind === 'groups' ? grants.map((g) => g.target) : [];
+  const groupNames = useQuery({
+    queryKey: ['model-access-group-names', ...groupIds],
+    queryFn: () => lookupEntraGroups(groupIds),
+    enabled: groupIds.length > 0,
+    staleTime: 5 * 60 * 1000,
+    retry: 0,
+  });
+  const labelFor = (target: string) => {
+    const name = groupNames.data?.find((g) => g.id === target)?.name;
+    return name ? (
+      <>
+        {name} <span className={ADMIN_MUTED}>({target.slice(0, 8)}…)</span>
+      </>
+    ) : (
+      target
+    );
+  };
+
   const add = (added: string[]) => {
     const have = new Set(grants.map((g) => g.target.toLowerCase()));
     const fresh = added
@@ -73,7 +97,7 @@ export const ModelAccessGrantList: FC<ModelAccessGrantListProps> = ({
               className="flex flex-wrap items-center gap-2 text-sm text-black dark:text-white"
             >
               <span className="min-w-[160px] flex-1 break-all">
-                {grant.target}
+                {labelFor(grant.target)}
               </span>
               <select
                 className={ADMIN_FIELD}
