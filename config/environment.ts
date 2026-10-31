@@ -336,6 +336,12 @@ const serverEnvSchema = z.object({
   SKILLS_DATA_REGION: z.enum(['EU', 'US']).default('EU'),
   SKILLS_SEARCH_ENDPOINT_EU: z.string().url().optional(),
   SKILLS_SEARCH_ENDPOINT_US: z.string().url().optional(),
+  /**
+   * Model-driven skill loading on standard tool-capable turns
+   * (docs/SKILLS_DESIGN.md §5.6): the main model sees a description
+   * catalog and loads skills itself. Off = the pre-turn router path only.
+   */
+  SKILLS_TOOL_DELIVERY: booleanString(true),
 
   // Usage limits (docs/LIMITS.md) have no env gate: the UI is gated by the
   // client-side `usageLimits` LaunchDarkly flag, and the server side is inert
