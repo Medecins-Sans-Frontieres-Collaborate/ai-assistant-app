@@ -227,13 +227,22 @@ export function useChatActions({
   // the queued text goes back to the composer so the user sees the error
   // first and decides, instead of a second message stacking on a failure.
   const isStreaming = useChatStore((s) => s.isStreaming);
+  // The automatic fallback-model chain drops isStreaming between attempts;
+  // the queue must wait for the whole chain, not the first attempt.
+  const isRetrying = useChatStore((s) => s.isRetrying);
   const streamError = useChatStore((s) => s.error);
   const queuedCount = useChatStore((s) => s.queuedSends.length);
   const selectedConversationId = useConversationStore(
     (s) => s.selectedConversationId,
   );
   useEffect(() => {
-    if (isStreaming || queuedCount === 0 || !selectedConversationId) return;
+    if (
+      isStreaming ||
+      isRetrying ||
+      queuedCount === 0 ||
+      !selectedConversationId
+    )
+      return;
     const next = useChatStore
       .getState()
       .shiftQueuedSend(selectedConversationId);
@@ -248,6 +257,7 @@ export function useChatActions({
     handleSend(next.message, next.searchMode, next.initialActiveFiles);
   }, [
     isStreaming,
+    isRetrying,
     queuedCount,
     selectedConversationId,
     streamError,
