@@ -114,6 +114,9 @@ export async function* runFoundrySkillLoop(
         call_id: call.call_id,
         output: result.resultText,
       });
+      // The browser record carries a summary, never the instruction body.
+      const shown =
+        executor.recordOutput?.(call.name, args, result) ?? result.resultText;
       yield {
         type: 'skill.tool_record',
         marker: emitToolCallRecord({
@@ -122,8 +125,8 @@ export async function* runFoundrySkillLoop(
           server_label: 'Skills',
           arguments: call.arguments,
           status: result.isError ? 'failed' : 'completed',
-          output: result.resultText,
-          error: result.isError ? result.resultText : null,
+          output: shown,
+          error: result.isError ? shown : null,
         }),
       };
     }
