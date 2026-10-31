@@ -763,7 +763,11 @@
       "applyingSkill": "Aplicando habilidad: {skills}…",
       "applyingSkills": "Aplicando habilidades: {skills}…",
       "readingSkillReferences": "Leyendo documentos de referencia de habilidades…",
-      "selectingSkills": "Seleccionando habilidades…"
+      "selectingSkills": "Seleccionando habilidades…",
+      "retryingModel": "El modelo está ocupado — reintentando en {seconds}s (intento {attempt})…",
+      "resumingResponse": "Se perdió la conexión con el modelo — reanudando desde donde se interrumpió…",
+      "continuingResponse": "La respuesta alcanzó el límite de longitud — continuando…",
+      "trimmingContext": "La conversación es demasiado larga para el modelo — recortando el historial antiguo y reintentando…"
     },
     "toolSummary": {
       "usedTools": "Se usó {count, plural, one {# herramienta} other {# herramientas}}",
@@ -900,7 +904,20 @@
       "agentLoad": "cargada por el agente",
       "agentSearch": "documentos buscados por el agente"
     },
-    "skillsManualHint": "La selección automática está desactivada en Configuración. Úselo una vez para el siguiente mensaje o ancle una habilidad para usarla durante toda esta conversación."
+    "skillsManualHint": "La selección automática está desactivada en Configuración. Úselo una vez para el siguiente mensaje o ancle una habilidad para usarla durante toda esta conversación.",
+    "queuedMessage": {
+      "label": "En cola",
+      "attachmentOnly": "Adjunto",
+      "cancel": "Cancelar mensaje en cola"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "La respuesta fue detenida por el filtro de seguridad de contenido. Reformule la solicitud o elimine la parte que pudo haberla activado.",
+      "MODEL_CONTEXT_TOO_LONG": "Esta conversación es demasiado larga para el modelo seleccionado, incluso después de recortar el historial antiguo. Inicie una nueva conversación, elimine algunos adjuntos o elija un modelo con una ventana de contexto mayor.",
+      "MODEL_OUTPUT_LIMIT": "El modelo agotó su presupuesto de salida sin generar una respuesta. Intente con un esfuerzo de razonamiento menor o una solicitud más corta.",
+      "MODEL_RATE_LIMITED": "El modelo está recibiendo demasiadas solicitudes en este momento. Se volvió a intentar automáticamente; por favor, inténtelo de nuevo en un momento.",
+      "MODEL_QUOTA_EXCEEDED": "La cuota de capacidad del modelo está agotada. Pruebe con otro modelo o inténtelo más tarde.",
+      "MODEL_AUTH_FAILED": "La aplicación no pudo autenticarse con el servicio del modelo. Esto es un problema de configuración — por favor, contacte al soporte."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",

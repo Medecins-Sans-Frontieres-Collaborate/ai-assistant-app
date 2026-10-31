@@ -763,7 +763,11 @@
       "applyingSkill": "Skill wird angewendet: {skills}…",
       "applyingSkills": "Skills werden angewendet: {skills}…",
       "readingSkillReferences": "Skill-Referenzdokumente werden gelesen…",
-      "selectingSkills": "Fähigkeiten werden ausgewählt…"
+      "selectingSkills": "Fähigkeiten werden ausgewählt…",
+      "retryingModel": "Modell ist beschäftigt — erneuter Versuch in {seconds}s (Versuch {attempt})…",
+      "resumingResponse": "Verbindung zum Modell unterbrochen — fahre fort, wo aufgehört wurde…",
+      "continuingResponse": "Antwort hat das Längenlimit erreicht — fahre fort…",
+      "trimmingContext": "Unterhaltung zu lang für das Modell — älteren Verlauf kürzen und erneut versuchen…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# Tool verwendet} other {# Tools verwendet}}",
@@ -900,7 +904,20 @@
       "agentLoad": "vom Agent geladen",
       "agentSearch": "vom Agent durchsuchte Dokumente"
     },
-    "skillsManualHint": "Die automatische Auswahl ist in den Einstellungen deaktiviert. Verwenden Sie eine Fähigkeit einmal für die nächste Nachricht oder heften Sie sie an, um sie während des gesamten Gesprächs zu nutzen."
+    "skillsManualHint": "Die automatische Auswahl ist in den Einstellungen deaktiviert. Verwenden Sie eine Fähigkeit einmal für die nächste Nachricht oder heften Sie sie an, um sie während des gesamten Gesprächs zu nutzen.",
+    "queuedMessage": {
+      "label": "Warteschlange",
+      "attachmentOnly": "Anhang",
+      "cancel": "Nachricht aus Warteschlange entfernen"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Die Antwort wurde vom Inhaltsfilter gestoppt. Formulieren Sie die Anfrage um oder entfernen Sie den möglicherweise auslösenden Teil.",
+      "MODEL_CONTEXT_TOO_LONG": "Diese Unterhaltung ist für das gewählte Modell zu lang, selbst nach Kürzen des Verlaufs. Starten Sie eine neue Unterhaltung, entfernen Sie einige Anhänge oder wählen Sie ein Modell mit größerem Kontextfenster.",
+      "MODEL_OUTPUT_LIMIT": "Das Modell hat sein gesamtes Ausgabekontingent verbraucht, ohne eine Antwort zu liefern. Versuchen Sie einen geringeren Bearbeitungsaufwand oder eine kürzere Anfrage.",
+      "MODEL_RATE_LIMITED": "Das Modell erhält derzeit zu viele Anfragen. Es wurde automatisch erneut versucht; bitte versuchen Sie es in Kürze erneut.",
+      "MODEL_QUOTA_EXCEEDED": "Das Kapazitätskontingent des Modells ist erschöpft. Versuchen Sie ein anderes Modell oder versuchen Sie es später erneut.",
+      "MODEL_AUTH_FAILED": "Die App konnte sich nicht beim Modelldienst authentifizieren. Dies ist ein Konfigurationsproblem — bitte wenden Sie sich an den Support."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",

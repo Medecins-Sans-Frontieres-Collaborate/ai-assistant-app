@@ -875,7 +875,11 @@
       "applyingSkill": "Ikugwiritsa ntchito luso: {skills}…",
       "applyingSkills": "Ikugwiritsa ntchito maluso: {skills}…",
       "readingSkillReferences": "Ikukuwerenga zolemba zothandizira luso…",
-      "selectingSkills": "Kusankha luso…"
+      "selectingSkills": "Kusankha luso…",
+      "retryingModel": "Chitsanzo chachitika — chiyesedwanso mu {seconds}s (chiyeso {attempt})…",
+      "resumingResponse": "Kulumikizana ndi chitsanzo kwatayika — kusiya pomwe kunatsiriza…",
+      "continuingResponse": "Yankho lafika malire a utali — likupitilira…",
+      "trimmingContext": "Kukambirana kwatalika kwambiri kwa chitsanzo — kuchotsa mbiri yakale ndikuyesedwanso…"
     },
     "toolSummary": {
       "usedTools": "Zida zogwiritsidwa ntchito {count, plural, one {# chida} other {# zida}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "zatsegulidwa ndi agent",
       "agentSearch": "zolemba zasakidwa ndi agent"
     },
-    "skillsManualHint": "Kusankhidwa kwa ntchito zokha kwazimitsidwa mu Zikhazikiko. Gwiritsani ntchito kamodzi pa uthenga wotsatira, kapena pangani pin ntchito kuti igwiritsidwe mu zokambirana zonsezi."
+    "skillsManualHint": "Kusankhidwa kwa ntchito zokha kwazimitsidwa mu Zikhazikiko. Gwiritsani ntchito kamodzi pa uthenga wotsatira, kapena pangani pin ntchito kuti igwiritsidwe mu zokambirana zonsezi.",
+    "queuedMessage": {
+      "label": "Kuyikira mndandanda",
+      "attachmentOnly": "Zowonjezera",
+      "cancel": "Fufuta uthenga woyikiridwa mndandanda"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Yankho yasiyidwa ndi chitsanzo choteteza zomwe zili. Sinthani pempho lanu, kapena chotsani gawo lomwe lingayambitse vutoli.",
+      "MODEL_CONTEXT_TOO_LONG": "Kukambirana kwatalika kwambiri kwa chitsanzo chosankhidwa, ngakhale atachotsa mbiri yakale. Yambirani kukambirana kwatsopano, chotsani zina mwazowonjezera, kapena sankhani chitsanzo chokhala ndi malo akulu a context window.",
+      "MODEL_OUTPUT_LIMIT": "Chitsanzo chagwiritsa ntchito zonse zomwe chachitanira kupanga yankho koma chatumiza yankho. Yesani ntchito yocheperako kapena pempho lalifupi.",
+      "MODEL_RATE_LIMITED": "Chitsanzo chikulandira mapempho ambiri panopa. Chiyesedwanso zokha; chonde yesani pakapita nthawi.",
+      "MODEL_QUOTA_EXCEEDED": "Chitsanzo chafika malire a mphamvu yake. Yesani chitsanzo china, kapena yesani nthawi ina.",
+      "MODEL_AUTH_FAILED": "App siyathe kukonza kulumikizana ndi chitsanzo. Iyi ndi vuto la makonzedwe — chonde lemberani support."
+    }
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",

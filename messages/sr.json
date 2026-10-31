@@ -875,7 +875,11 @@
       "applyingSkill": "Primena veštine: {skills}…",
       "applyingSkills": "Primena veština: {skills}…",
       "readingSkillReferences": "Čitam referentna dokumenta za veštine…",
-      "selectingSkills": "Biranje veština…"
+      "selectingSkills": "Biranje veština…",
+      "retryingModel": "Model je zauzet — pokušavam ponovo za {seconds}s (pokušaj {attempt})…",
+      "resumingResponse": "Veza sa modelom je prekinuta — nastavljamo odakle je stalo…",
+      "continuingResponse": "Odgovor je dostigao ograničenje dužine — nastavljamo…",
+      "trimmingContext": "Razgovor je predug za model — skraćujem stariju istoriju i pokušavam ponovo…"
     },
     "toolSummary": {
       "usedTools": "Korišćen{count, plural, one {# alat} other {# alata}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "učitano od strane agenta",
       "agentSearch": "dokumenta pretražio agent"
     },
-    "skillsManualHint": "Automatski izbor je isključen u Podešavanjima. Upotrebite veštinu jednom za sledeću poruku ili je zakačite da bi se koristila tokom celog razgovora."
+    "skillsManualHint": "Automatski izbor je isključen u Podešavanjima. Upotrebite veštinu jednom za sledeću poruku ili je zakačite da bi se koristila tokom celog razgovora.",
+    "queuedMessage": {
+      "label": "U redu za slanje",
+      "attachmentOnly": "Prilog",
+      "cancel": "Otkaži poruku u redu"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Odgovor je zaustavljen zbog filtera bezbednosti sadržaja. Preformulišite zahtev ili uklonite deo koji je možda izazvao filter.",
+      "MODEL_CONTEXT_TOO_LONG": "Ovaj razgovor je predug za izabrani model, čak i nakon skraćivanja starije istorije. Započnite novi razgovor, uklonite neke priloge ili izaberite model sa većim kontekstom.",
+      "MODEL_OUTPUT_LIMIT": "Model je potrošio celu dozvoljenu izlaznu vrednost bez odgovora. Probajte sa manjim nivoom zaključivanja ili kraćim zahtevom.",
+      "MODEL_RATE_LIMITED": "Model prima previše zahteva trenutno. Pokušano je automatski; pokušajte ponovo za trenutak.",
+      "MODEL_QUOTA_EXCEEDED": "Model je dostigao kapacitet. Probajte drugi model ili pokušajte kasnije.",
+      "MODEL_AUTH_FAILED": "Aplikacija nije uspela da se autentifikuje na model servis. Ovo je problem sa konfiguracijom — obratite se podršci."
+    }
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",

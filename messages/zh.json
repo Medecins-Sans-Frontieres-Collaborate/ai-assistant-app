@@ -848,7 +848,11 @@
       "applyingSkill": "正在应用技能：{skills}…",
       "applyingSkills": "正在应用技能：{skills}…",
       "readingSkillReferences": "正在读取技能参考文档…",
-      "selectingSkills": "正在选择技能…"
+      "selectingSkills": "正在选择技能…",
+      "retryingModel": "模型繁忙 — {seconds}秒后重试（第{attempt}次）…",
+      "resumingResponse": "与模型的连接中断 — 正在恢复先前内容…",
+      "continuingResponse": "答案达到长度限制 — 正在继续…",
+      "trimmingContext": "对话内容过长 — 正在裁剪较早历史并重试…"
     },
     "toolSummary": {
       "usedTools": "已用 {count, plural, one {# 个工具} other {# 个工具}}",
@@ -985,7 +989,20 @@
       "agentLoad": "由代理加载",
       "agentSearch": "由代理检索文档"
     },
-    "skillsManualHint": "设置中已关闭自动选择。可选择在下条消息中使用一次，或固定某个技能以在本次对话中持续使用。"
+    "skillsManualHint": "设置中已关闭自动选择。可选择在下条消息中使用一次，或固定某个技能以在本次对话中持续使用。",
+    "queuedMessage": {
+      "label": "队列中",
+      "attachmentOnly": "附件",
+      "cancel": "取消排队消息"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "回复被内容安全过滤器拦截。请重新表述请求，或移除可能引发拦截的部分。",
+      "MODEL_CONTEXT_TOO_LONG": "该对话内容过长，所选模型无法处理，即使已裁剪旧历史。请开始新对话、移除部分附件，或选择具有更大上下文窗口的模型。",
+      "MODEL_OUTPUT_LIMIT": "模型已用尽输出配额但未生成答案。请尝试降低推理强度或缩短请求内容。",
+      "MODEL_RATE_LIMITED": "模型当前请求过多。已自动重试，请稍后再试。",
+      "MODEL_QUOTA_EXCEEDED": "模型容量配额已用尽。请尝试其他模型或稍后再试。",
+      "MODEL_AUTH_FAILED": "应用无法通过模型服务认证。配置出现问题——请联系支持人员。"
+    }
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",

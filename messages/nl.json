@@ -782,7 +782,11 @@
       "applyingSkill": "Skill toepassen: {skills}…",
       "applyingSkills": "Skills toepassen: {skills}…",
       "readingSkillReferences": "Referentiedocumenten van skills inlezen…",
-      "selectingSkills": "Vaardigheden kiezen…"
+      "selectingSkills": "Vaardigheden kiezen…",
+      "retryingModel": "Model bezig — probeer opnieuw over {seconds}s (poging {attempt})…",
+      "resumingResponse": "Verbinding met het model verbroken — hervatten waar het was gestopt…",
+      "continuingResponse": "Antwoord bereikte de limiet — gaat verder…",
+      "trimmingContext": "Gesprek te lang voor het model — oudere geschiedenis wordt verwijderd en opnieuw geprobeerd…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# tool gebruikt} other {# tools gebruikt}}",
@@ -919,7 +923,20 @@
       "agentLoad": "geladen door agent",
       "agentSearch": "documenten gezocht door agent"
     },
-    "skillsManualHint": "Automatische selectie staat uit in Instellingen. Gebruik eenmalig voor het volgende bericht, of pin een vaardigheid om deze in het hele gesprek te gebruiken."
+    "skillsManualHint": "Automatische selectie staat uit in Instellingen. Gebruik eenmalig voor het volgende bericht, of pin een vaardigheid om deze in het hele gesprek te gebruiken.",
+    "queuedMessage": {
+      "label": "In wachtrij",
+      "attachmentOnly": "Bijlage",
+      "cancel": "Wachtrijbericht annuleren"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Het antwoord is gestopt door het inhoudsfilter. Herschrijf uw verzoek of verwijder het deel dat dit mogelijk heeft veroorzaakt.",
+      "MODEL_CONTEXT_TOO_LONG": "Dit gesprek is te lang voor het geselecteerde model, zelfs na het inkorten van de geschiedenis. Start een nieuw gesprek, verwijder enkele bijlagen of kies een model met een groter contextvenster.",
+      "MODEL_OUTPUT_LIMIT": "Het model heeft zijn volledige output-budget gebruikt zonder een antwoord te geven. Probeer een lagere redeneerkracht of een korter verzoek.",
+      "MODEL_RATE_LIMITED": "Het model ontvangt momenteel te veel verzoeken. Er is automatisch opnieuw geprobeerd; probeer het zo meteen opnieuw.",
+      "MODEL_QUOTA_EXCEEDED": "De capaciteitsquota van het model zijn bereikt. Probeer een ander model of probeer het later opnieuw.",
+      "MODEL_AUTH_FAILED": "De app kon niet verifiëren bij de modelservice. Dit is een configuratiefout — neem contact op met support."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",

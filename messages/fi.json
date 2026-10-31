@@ -792,7 +792,11 @@
       "applyingSkill": "Otetaan käyttöön taito: {skills}…",
       "applyingSkills": "Otetaan käyttöön taidot: {skills}…",
       "readingSkillReferences": "Luetaan taitojen viitedokumentteja…",
-      "selectingSkills": "Valitaan taitoja…"
+      "selectingSkills": "Valitaan taitoja…",
+      "retryingModel": "Malli on varattu — yritetään uudelleen {seconds}s kuluttua (yritys {attempt})…",
+      "resumingResponse": "Yhteys malliin katkesi — jatketaan siitä, mihin jäätiin…",
+      "continuingResponse": "Vastaus saavutti pituusrajan — jatketaan…",
+      "trimmingContext": "Keskustelu on liian pitkä mallille — vanhempaa historiaa poistetaan ja yritetään uudelleen…"
     },
     "toolSummary": {
       "usedTools": "Käytetty {count, plural, one {# työkalu} other {# työkalua}}",
@@ -929,7 +933,20 @@
       "agentLoad": "agentti latasi",
       "agentSearch": "agentti haki dokumentteja"
     },
-    "skillsManualHint": "Automaattinen valinta on pois päältä asetuksissa. Käytä kerran seuraavan viestin kohdalla tai kiinnitä taito käyttääksesi sitä koko keskustelun ajan."
+    "skillsManualHint": "Automaattinen valinta on pois päältä asetuksissa. Käytä kerran seuraavan viestin kohdalla tai kiinnitä taito käyttääksesi sitä koko keskustelun ajan.",
+    "queuedMessage": {
+      "label": "Jonossa",
+      "attachmentOnly": "Liite",
+      "cancel": "Peruuta jonotettu viesti"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Sisällönsuodatin pysäytti vastauksen. Muotoile pyyntö uudelleen tai poista mahdollisesti suodatuksen laukaissut osa.",
+      "MODEL_CONTEXT_TOO_LONG": "Tämä keskustelu on valitulle mallille liian pitkä, vaikka aiempaa historiaa on lyhennetty. Aloita uusi keskustelu, poista joitakin liitteitä tai valitse malli, jolla on suurempi konteksti-ikkuna.",
+      "MODEL_OUTPUT_LIMIT": "Malli käytti koko tulosbudjettinsa tuottamatta vastausta. Kokeile pienempää päättelytehoa tai lyhyempää pyyntöä.",
+      "MODEL_RATE_LIMITED": "Malliin lähetetään tällä hetkellä liikaa pyyntöjä. Järjestelmä yritti automaattisesti uudelleen; yritä hetken kuluttua uudelleen.",
+      "MODEL_QUOTA_EXCEEDED": "Mallin kapasiteettikiintiö on täynnä. Kokeile toista mallia tai yritä myöhemmin uudelleen.",
+      "MODEL_AUTH_FAILED": "Sovellus ei voinut tunnistautua mallipalveluun. Kyseessä on määritysongelma — ota yhteyttä tukeen."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",

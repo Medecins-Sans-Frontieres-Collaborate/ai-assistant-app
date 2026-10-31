@@ -875,7 +875,11 @@
       "applyingSkill": "Manatanteraka fahaiza-manao: {skills}…",
       "applyingSkills": "Manatanteraka fahaiza-manao: {skills}…",
       "readingSkillReferences": "Mamaky antontan-taratasy fahaiza-manao…",
-      "selectingSkills": "Misafidy fahaiza-manao…"
+      "selectingSkills": "Misafidy fahaiza-manao…",
+      "retryingModel": "Modely mandeha be — hanandrana indray ao anatin'ny {seconds}s (fiezahana faha-{attempt})…",
+      "resumingResponse": "Tapaka ny fifandraisana amin'ny modely — manohy avy amin'izay nijanona…",
+      "continuingResponse": "Tafahoatra ny halavan'ny valiny — manohy…",
+      "trimmingContext": "Lava loatra ny resaka ho an'ny modely — manaisotra tantara taloha sy manandrana indray…"
     },
     "toolSummary": {
       "usedTools": "Fitaovana nampiasaina {count, plural, one {#} other {#}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "nataon’ny agent",
       "agentSearch": "antontan-taratasy notadiavin’ny agent"
     },
-    "skillsManualHint": "Tsy mandeha ho azy ny fisafidianana ao amin'ny Fikirana. Ampiasao indray mandeha amin'ny hafatra manaraka, na aparitaho mandritra ity resaka ity ny fahaiza-manao iray."
+    "skillsManualHint": "Tsy mandeha ho azy ny fisafidianana ao amin'ny Fikirana. Ampiasao indray mandeha amin'ny hafatra manaraka, na aparitaho mandritra ity resaka ity ny fahaiza-manao iray.",
+    "queuedMessage": {
+      "label": "Eo am-pilaharana",
+      "attachmentOnly": "Rakitra mifatotra",
+      "cancel": "Foano ny hafatra an-dalana"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Najanon'ny sivana momba ny atiny ny valiny. Hazavao amin'ny fomba hafa azafady, na esory ilay mety nampiteraka izany.",
+      "MODEL_CONTEXT_TOO_LONG": "Lava loatra ity resaka ity ho an'ny modely voafidy, na dia efa nesorina aza ny tantara taloha. Manomboka resaka vaovao, esory ny rakitra, na mifidiana modely afaka mandray tantara lava kokoa.",
+      "MODEL_OUTPUT_LIMIT": "Lany tanteraka ny fetra famoahan'ny modely nefa tsy nisy valiny azo. Andramo ahena ny fahasarotan'ny fangatahana na fohazy.",
+      "MODEL_RATE_LIMITED": "Maro loatra izao ny fangatahana raisin'ny modely. Niezaka ho azy indray izy; andramo azafady afaka kelikely.",
+      "MODEL_QUOTA_EXCEEDED": "Tapitra ny fetran'ny fahafahan'ny modely. Andramo modely hafa, na avereno manandrana amin'ny manaraka.",
+      "MODEL_AUTH_FAILED": "Tsy afaka nampifandray amin'ny tolotra modely ny app. Olana amin'ny fikirakirana izany — mifandraisa amin'ny fanohanana azafady."
+    }
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",

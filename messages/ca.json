@@ -792,7 +792,11 @@
       "applyingSkill": "S'està aplicant la habilitat: {skills}…",
       "applyingSkills": "S'estan aplicant les habilitats: {skills}…",
       "readingSkillReferences": "Llegint documents de referència de la habilitat…",
-      "selectingSkills": "S'estan seleccionant les habilitats…"
+      "selectingSkills": "S'estan seleccionant les habilitats…",
+      "retryingModel": "Model ocupat — tornant a intentar-ho en {seconds}s (intent {attempt})…",
+      "resumingResponse": "S'ha perdut la connexió amb el model — reprenent des d'on s'havia quedat…",
+      "continuingResponse": "La resposta ha assolit el límit de longitud — continuant…",
+      "trimmingContext": "Conversa massa llarga per al model — es retalla l'historial antic i es torna a intentar…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# eina utilitzada} other {# eines utilitzades}}",
@@ -929,7 +933,20 @@
       "agentLoad": "carregada per l’agent",
       "agentSearch": "documents cercats per l’agent"
     },
-    "skillsManualHint": "La selecció automàtica està desactivada a Configuració. Utilitzeu una habilitat per al proper missatge o fixeuneu-ne una per utilitzar-la durant tota aquesta conversa."
+    "skillsManualHint": "La selecció automàtica està desactivada a Configuració. Utilitzeu una habilitat per al proper missatge o fixeuneu-ne una per utilitzar-la durant tota aquesta conversa.",
+    "queuedMessage": {
+      "label": "A la cua",
+      "attachmentOnly": "Adjunt",
+      "cancel": "Cancel·la el missatge en cua"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "La resposta ha estat aturada pel filtre de seguretat de contingut. Reformula la sol·licitud o elimina la part que pot haver-lo activat.",
+      "MODEL_CONTEXT_TOO_LONG": "Aquesta conversa és massa llarga per al model seleccionat, fins i tot després de retallar l'historial antic. Comença una conversa nova, elimina alguns adjunts o tria un model amb una finestra de context més gran.",
+      "MODEL_OUTPUT_LIMIT": "El model ha utilitzat tot el límit de sortida sense produir una resposta. Prova amb un esforç de raonament menor o una sol·licitud més curta.",
+      "MODEL_RATE_LIMITED": "El model rep massa sol·licituds en aquest moment. S'ha tornat a intentar automàticament; torna-ho a provar d'aquí a un moment.",
+      "MODEL_QUOTA_EXCEEDED": "La quota de capacitat del model està exhaurida. Prova un altre model o intenta-ho més tard.",
+      "MODEL_AUTH_FAILED": "L'aplicació no ha pogut autenticar-se amb el servei del model. Això és un problema de configuració — contacta amb el suport."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",

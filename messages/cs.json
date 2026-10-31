@@ -817,7 +817,11 @@
       "applyingSkill": "Aplikuji dovednost: {skills}…",
       "applyingSkills": "Aplikuji dovednosti: {skills}…",
       "readingSkillReferences": "Čtu referenční dokumenty k dovednostem…",
-      "selectingSkills": "Výběr dovedností…"
+      "selectingSkills": "Výběr dovedností…",
+      "retryingModel": "Model je zaneprázdněný — opakuji za {seconds}s (pokus {attempt})…",
+      "resumingResponse": "Spojení s modelem bylo přerušeno — pokračuji tam, kde bylo zastaveno…",
+      "continuingResponse": "Odpověď dosáhla délkového limitu — pokračuji…",
+      "trimmingContext": "Konverzace je na model příliš dlouhá — zkracuji starší historii a opakuji pokus…"
     },
     "toolSummary": {
       "usedTools": "Použito {count, plural, one {# nástroj} few {# nástroje} other {# nástrojů}}",
@@ -954,7 +958,20 @@
       "agentLoad": "načteno agentem",
       "agentSearch": "dokumenty vyhledané agentem"
     },
-    "skillsManualHint": "Automatický výběr je vypnutý v nastavení. Použijte jednorázově pro další zprávu nebo připněte dovednost, aby byla používána v celém tomto rozhovoru."
+    "skillsManualHint": "Automatický výběr je vypnutý v nastavení. Použijte jednorázově pro další zprávu nebo připněte dovednost, aby byla používána v celém tomto rozhovoru.",
+    "queuedMessage": {
+      "label": "Ve frontě",
+      "attachmentOnly": "Příloha",
+      "cancel": "Zrušit zprávu ve frontě"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Odpověď byla zastavena filtrem bezpečnosti obsahu. Zkuste přeformulovat dotaz nebo odstraňte část, která mohla filtr spustit.",
+      "MODEL_CONTEXT_TOO_LONG": "Tato konverzace je pro vybraný model příliš dlouhá i po zkrácení historie. Začněte novou konverzaci, odeberte některé přílohy, nebo vyberte model s větším kontextovým oknem.",
+      "MODEL_OUTPUT_LIMIT": "Model vyčerpal svůj výstupní limit, aniž by vytvořil odpověď. Zkuste nižší úroveň uvažování nebo kratší dotaz.",
+      "MODEL_RATE_LIMITED": "Model právě přijímá příliš mnoho požadavků. Proběhl automatický opakovaný pokus; zkuste to prosím za chvíli znovu.",
+      "MODEL_QUOTA_EXCEEDED": "Kapacitní kvóta modelu byla vyčerpána. Zkuste jiný model nebo to zkuste později.",
+      "MODEL_AUTH_FAILED": "Aplikaci se nepodařilo ověřit u služby modelu. Jedná se o problém s nastavením — kontaktujte prosím podporu."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",

@@ -815,7 +815,11 @@
       "applyingSkill": "Se aplică abilitatea: {skills}…",
       "applyingSkills": "Se aplică abilitățile: {skills}…",
       "readingSkillReferences": "Se citesc documentele de referință pentru abilități…",
-      "selectingSkills": "Se selectează abilități…"
+      "selectingSkills": "Se selectează abilități…",
+      "retryingModel": "Modelul este ocupat — se retry în {seconds}s (încercarea {attempt})…",
+      "resumingResponse": "Conexiunea cu modelul s-a întrerupt — reluăm de unde a rămas…",
+      "continuingResponse": "Răspunsul a atins limita de lungime — continuăm…",
+      "trimmingContext": "Conversația este prea lungă pentru model — se elimină istoricul mai vechi și se retry…"
     },
     "toolSummary": {
       "usedTools": "Folosit {count, plural, one {# instrument} other {# instrumente}}",
@@ -952,7 +956,20 @@
       "agentLoad": "încărcat de agent",
       "agentSearch": "documente căutate de agent"
     },
-    "skillsManualHint": "Selecția automată este dezactivată în Setări. Utilizați o dată pentru următorul mesaj sau fixați o abilitate pentru a o folosi pe tot parcursul acestei conversații."
+    "skillsManualHint": "Selecția automată este dezactivată în Setări. Utilizați o dată pentru următorul mesaj sau fixați o abilitate pentru a o folosi pe tot parcursul acestei conversații.",
+    "queuedMessage": {
+      "label": "În așteptare",
+      "attachmentOnly": "Atașament",
+      "cancel": "Anulează mesajul în așteptare"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Răspunsul a fost oprit de filtrul de siguranță a conținutului. Reformulați cererea sau eliminați partea care ar fi putut declanșa filtrul.",
+      "MODEL_CONTEXT_TOO_LONG": "Această conversație este prea lungă pentru modelul selectat, chiar și după eliminarea istoricului mai vechi. Începeți o nouă conversație, eliminați unele atașamente sau alegeți un model cu o fereastră de context mai mare.",
+      "MODEL_OUTPUT_LIMIT": "Modelul a folosit tot bugetul de output fără a produce un răspuns. Încercați cu un efort de raționament mai mic sau cu o cerere mai scurtă.",
+      "MODEL_RATE_LIMITED": "Modelul primește prea multe cereri acum. S-a încercat automat; vă rugăm să încercați din nou în scurt timp.",
+      "MODEL_QUOTA_EXCEEDED": "Cota de capacitate a modelului este epuizată. Încercați alt model sau reveniți mai târziu.",
+      "MODEL_AUTH_FAILED": "Aplicația nu s-a putut autentifica cu serviciul modelului. Aceasta este o problemă de configurare — contactați suportul."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",

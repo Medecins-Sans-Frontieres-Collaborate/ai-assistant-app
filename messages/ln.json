@@ -875,7 +875,11 @@
       "applyingSkill": "Kosalela skill: {skills}…",
       "applyingSkills": "Kosalela ba skill: {skills}…",
       "readingSkillReferences": "Kozua ba ndakisa ya skill…",
-      "selectingSkills": "Botali maponi ya mayele…"
+      "selectingSkills": "Botali maponi ya mayele…",
+      "retryingModel": "Model ezali na mosala mingi — kobosana lisusu na {seconds}s (esayo ya {attempt})…",
+      "resumingResponse": "Connection na model ekitaki — tokotindela epai esilaki…",
+      "continuingResponse": "Eyano ekomi na ndelo ya boyokani — ezali kokoba…",
+      "trimmingContext": "Lisolo ezali molai mingi mpo na model — ezali kolongola masolo ya kala mpe kobosana lisusu…"
     },
     "toolSummary": {
       "usedTools": "Outils esalelamaki: {count, plural, one {# outil} other {# ba outils}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "ebongisami na agent",
       "agentSearch": "ba ndakisa basalelamaki na agent"
     },
-    "skillsManualHint": "Kopona ya automatique ezali te na Paramètres. Salela mbala moko na sango elandi, to pindá mayele moko mpo esalela na nsuka ya lisungi oyo."
+    "skillsManualHint": "Kopona ya automatique ezali te na Paramètres. Salela mbala moko na sango elandi, to pindá mayele moko mpo esalela na nsuka ya lisungi oyo.",
+    "queuedMessage": {
+      "label": "Eteli",
+      "attachmentOnly": "Ekangiseli",
+      "cancel": "Kolongola sango eteli"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Eyano esilaki na filtre ya sécurité ya contenu. Yoka sango lisusu, to longa eteni oyo ekoki kosala likambo oyo.",
+      "MODEL_CONTEXT_TOO_LONG": "Lisolo oyo ezali molai mingi mpo na model pona sélecté, atako masolo ya kala elongolamaki. Banda lisusu na lisolo ya sika, longa ba attachments, to zwa model oyo azali na contexte window monene.",
+      "MODEL_OUTPUT_LIMIT": "Model esili ko salela mbongo na ye nyonso ya output ata azongisaki eyano te. Sala motuna mokuse to salela motuna ya boyebisi malamu te.",
+      "MODEL_RATE_LIMITED": "Model ezali kozwa batunaka mingi mingi sik’oyo. Ezali komibongisa ye moko; s’il vous plaît, meka lisusu sima moke.",
+      "MODEL_QUOTA_EXCEEDED": "Quota ya capacité ya model esili. Meka model mosusu, to teka sima moke.",
+      "MODEL_AUTH_FAILED": "Application ekoki te koyeba na service ya model. Problème ya configuration — s’il vous plaît, kontakte support."
+    }
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",

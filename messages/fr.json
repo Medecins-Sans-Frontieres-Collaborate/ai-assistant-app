@@ -763,7 +763,11 @@
       "applyingSkill": "Application de la compétence : {skills}…",
       "applyingSkills": "Application des compétences : {skills}…",
       "readingSkillReferences": "Lecture des documents de référence sur les compétences…",
-      "selectingSkills": "Sélection des compétences…"
+      "selectingSkills": "Sélection des compétences…",
+      "retryingModel": "Modèle occupé — nouvelle tentative dans {seconds}s (essai {attempt})…",
+      "resumingResponse": "La connexion au modèle a été interrompue — reprise à l'endroit où elle s'est arrêtée…",
+      "continuingResponse": "La réponse a atteint la limite de longueur — poursuite en cours…",
+      "trimmingContext": "Conversation trop longue pour le modèle — suppression de l'historique le plus ancien et nouvelle tentative…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# outil utilisé} other {# outils utilisés}}",
@@ -900,7 +904,20 @@
       "agentLoad": "chargée par l'agent",
       "agentSearch": "documents recherchés par l'agent"
     },
-    "skillsManualHint": "La sélection automatique est désactivée dans les paramètres. Utilisez une fois pour le prochain message, ou épinglez une compétence pour l'utiliser durant toute cette conversation."
+    "skillsManualHint": "La sélection automatique est désactivée dans les paramètres. Utilisez une fois pour le prochain message, ou épinglez une compétence pour l'utiliser durant toute cette conversation.",
+    "queuedMessage": {
+      "label": "En attente",
+      "attachmentOnly": "Pièce jointe",
+      "cancel": "Annuler le message en attente"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "La réponse a été bloquée par le filtre de sécurité du contenu. Reformulez la demande ou retirez la partie susceptible de l'avoir déclenché.",
+      "MODEL_CONTEXT_TOO_LONG": "Cette conversation est trop longue pour le modèle sélectionné, même après la suppression de l'historique le plus ancien. Démarrez une nouvelle conversation, retirez des pièces jointes ou choisissez un modèle avec une fenêtre de contexte plus grande.",
+      "MODEL_OUTPUT_LIMIT": "Le modèle a utilisé tout son budget de sortie sans produire de réponse. Essayez un raisonnement moins poussé ou une demande plus courte.",
+      "MODEL_RATE_LIMITED": "Le modèle reçoit trop de requêtes actuellement. Une nouvelle tentative a été effectuée automatiquement ; veuillez réessayer dans un instant.",
+      "MODEL_QUOTA_EXCEEDED": "Le quota de capacité du modèle est atteint. Essayez un autre modèle ou réessayez plus tard.",
+      "MODEL_AUTH_FAILED": "L’application n’a pas pu s’authentifier auprès du service du modèle. Il s’agit d’un problème de configuration — veuillez contacter le support."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",

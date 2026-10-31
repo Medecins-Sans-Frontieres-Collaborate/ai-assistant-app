@@ -875,7 +875,11 @@
       "applyingSkill": "ምግባር skill: {skills}...",
       "applyingSkills": "ምግባር skills: {skills}...",
       "readingSkillReferences": "ምንባብ ሓበሬታ ሰርክ መዳን...",
-      "selectingSkills": "ክብሉ ክናበር እዩ…"
+      "selectingSkills": "ክብሉ ክናበር እዩ…",
+      "retryingModel": "ሞዴል ተስተኻኺ — ኣብ {seconds}s እዚ ደግመን ይፈትን (እተሰርሕ {attempt})…",
+      "resumingResponse": "ሓበሬታ ናይ ሞዴል ተሕርነቕ — ከዚ ዝተረፈ’ዩ ደገመ ይቀጥል…",
+      "continuingResponse": "እተመልኣኹ መርገጻ ብግዜ ሓደ ደረፍ ሓለፈ — ይቀጥል…",
+      "trimmingContext": "ዝወዝዝ ዓይነት ዝበዝነ ናይ ሞዴል ሓበሬታ — ናይ ቀደም ታሪኽ ይሕርም ደግመን ይፈትን…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳርሒ} other {# መሳርሒታት} } ተጠቒሙ",
@@ -1012,7 +1016,20 @@
       "agentLoad": "ኣብ agent ዝተግበሩ",
       "agentSearch": "ሰነዶታት ብ agent ዝተወሰዱ"
     },
-    "skillsManualHint": "ሓሳብ ኣብ ቅድሚ ኣይተሰረዙን። ንብቲ መልእኽቲ ናይ ሓደ ግዜ ጭን ወይ ትክክል ናይ ኣዚ ባይ ትምህርት ሓሳብ ምርጫ ምሕባ የኽንስ።"
+    "skillsManualHint": "ሓሳብ ኣብ ቅድሚ ኣይተሰረዙን። ንብቲ መልእኽቲ ናይ ሓደ ግዜ ጭን ወይ ትክክል ናይ ኣዚ ባይ ትምህርት ሓሳብ ምርጫ ምሕባ የኽንስ።",
+    "queuedMessage": {
+      "label": "ዝተዓዝዞ",
+      "attachmentOnly": "ኣታችመንት",
+      "cancel": "መልእኽቲ ዝተዓዝዞ ክትተው"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "መልሓስ ብሓደሽቲ ዝተደሓደሰ ተስፋፋሂ ተዕገበ። ቐደምናትካ ንድሒፍ፡ ወይ ዝኽተም ክምትቀርብ እቲ ክፍሊ ክትወሰድ።",
+      "MODEL_CONTEXT_TOO_LONG": "ነዚ ውዑይ ዘይክእል ብሞዴል ተመረፀ፡ ቀደም ታሪኽ ተሓውሲ ኢዩ ድኣ። ሓድሽ ውዑይ ጀምር፡ ናይ attachment አንቀሳፍ፡ ወይ ሞዴል ዝበዝነ context window ምርጽ።",
+      "MODEL_OUTPUT_LIMIT": "ሞዴል መውጽን ግዕዝ ኣጠፍኩዎ ያበ መልሓስ ኣይኣላን። ናጻ reasoning effort ውድኣ፡ ወይ ዝንኣ መለእኽቲ ሞኽር።",
+      "MODEL_RATE_LIMITED": "ሞዴል ብዚኣ ዘይበዝነ ምድላው የቐምጸ። ብኣጋጢሙ ደግመን ተፈቱ። ንኦፋ ዝሓለፈ ደገመን ሞኽር።",
+      "MODEL_QUOTA_EXCEEDED": "ናይ ሞዴል ኣብዚ ኣቃው ተሪፍኩዎ። ሞዴል ካልኣይ ምርጽ፡ ወይ ደገመን ቶም።",
+      "MODEL_AUTH_FAILED": "ኣፕ ብሞዴል ሰርቪስ ክትተረጋገጽ ኣይተተኣምረን። ስርዓት ፍቓድ ጸጋዕ ይኹና። ንደገወል ግዛ፡ ውድሓን ሰርቪስ ንምርካብ።"
+    }
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",

@@ -875,7 +875,11 @@
       "applyingSkill": "Mi yahi skill: {skills}...",
       "applyingSkills": "Mi yahi skills: {skills}...",
       "readingSkillReferences": "Mi jangu skill reference documents...",
-      "selectingSkills": "Nana funani koyɗe…"
+      "selectingSkills": "Nana funani koyɗe…",
+      "retryingModel": "Model ngoodi — nguruɗo nder {seconds}s (gollal {attempt})…",
+      "resumingResponse": "Jokkondiral e model hokkani — nguuru moɓbu e laɓtunde makko…",
+      "continuingResponse": "Jawliijo rewti maso — ummbude kaɗi…",
+      "trimmingContext": "Gilat ngal yewta laawol model — yottude ɓurnde jawliiko ñande e nguruɗo…"
     },
     "toolSummary": {
       "usedTools": "Njoɓɗo {count, plural, one {# nguurndam} other {# nguurndeeji}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "agent mo jahii",
       "agentSearch": "documents agent mo njahi"
     },
-    "skillsManualHint": "Suɓo yimitte e Teelte. Waɗ yontondiral gooto e junngidole, walla fabo so tawii aɗa heɓi tokku e hito e wannan jawdi."
+    "skillsManualHint": "Suɓo yimitte e Teelte. Waɗ yontondiral gooto e junngidole, walla fabo so tawii aɗa heɓi tokku e hito e wannan jawdi.",
+    "queuedMessage": {
+      "label": "Dogol",
+      "attachmentOnly": "Kuulol",
+      "cancel": "Fofondan dogol jawliiko"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Jawliijo woodani e filtari konten. Waɗ rephrase jawlii, walla momtu jooni moɗɗo wandaa tarto.",
+      "MODEL_CONTEXT_TOO_LONG": "Gilat ngal yewta laawol model jooni, kadi e yottude jawliiko ñande. Fuɗɗo gilat fuu, momtu kuulol, walla fuɗɗo model joodani window context woodani.",
+      "MODEL_OUTPUT_LIMIT": "Model windani output fuu mo, waawa waɗde jawliijo. Fuɗɗo reasoning effort kisa walla jawliijo rullu.",
+      "MODEL_RATE_LIMITED": "Model njoɓata jawlii ɓurndi. Fuɗɗani re-njoɓani, miyet fuɗɗo sa'an.",
+      "MODEL_QUOTA_EXCEEDED": "Quota moodel woodani. Fuɗɗo model leydi, walla fuɗɗo harre leydi.",
+      "MODEL_AUTH_FAILED": "App waawani yoogude e service model. Ko problem configuration — mbuɗo support."
+    }
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",

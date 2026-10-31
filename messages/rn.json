@@ -875,7 +875,11 @@
       "applyingSkill": "Gushira mu bikorwa ubumenyi: {skills}...",
       "applyingSkills": "Gushira mu bikorwa ubumenyi: {skills}...",
       "readingSkillReferences": "Ndusoma inyandiko zerekeye ubumenyi...",
-      "selectingSkills": "Hariko ndahitamo ubumenyi…"
+      "selectingSkills": "Hariko ndahitamo ubumenyi…",
+      "retryingModel": "Model iriko irakoreshwa cane — turasubira kugerageza inyuma y'isegonda {seconds} (ukugerageza {attempt})…",
+      "resumingResponse": "Umuyagankuru wacitse kuri model — turabandanya aho vyahagarariye…",
+      "continuingResponse": "Inyishu igeze ku gipimo ntarengwa c'uburebure — turabandanya…",
+      "trimmingContext": "Ikiganiro kirarengeye ubushobozi bwa model — turakuramwo ivyaranze mu ntango tukagerageza gusubira…"
     },
     "toolSummary": {
       "usedTools": "Ibikoresho {count, plural, one {# cakoreshejwe} other {# vyakoreshejwe}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "vyashizweko n'uwukora",
       "agentSearch": "inyandiko zarashakwe n'uwukora"
     },
-    "skillsManualHint": "Guhitamwo bihanitse vyakuwe muri Ivyashizweho. Koresha rimwe ku butumwa bukurikira, canke ufate ubumenyi kugirango ubukoreshe muri iyi biganiro yose."
+    "skillsManualHint": "Guhitamwo bihanitse vyakuwe muri Ivyashizweho. Koresha rimwe ku butumwa bukurikira, canke ufate ubumenyi kugirango ubukoreshe muri iyi biganiro yose.",
+    "queuedMessage": {
+      "label": "Birindiriye",
+      "attachmentOnly": "Ifichanyamakuru",
+      "cancel": "Hagarika ubutumwa burindiriye"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Inyishu yarahagaritswe n'ubwirinzi bw'ibiri mu nkuru. Vugurura ico wasavye, canke ukuramwo igice gishobora kuba cateye ikibazo.",
+      "MODEL_CONTEXT_TOO_LONG": "Iki kiganiro kirarengeye ubushobozi bwa model wahisemwo, no nyuma yo gukuramwo ingene vyatanguye. Tangura ikindi kiganiro, gukuramwo bimwe mu bifatirizo, canke uhitemwo model ifise ubushobozi bunini.",
+      "MODEL_OUTPUT_LIMIT": "Model yarakoresheje ubushobozi bwose yahawe ariko ntiyatanze inyishu. Gerageza igipimo kiri hasi canke ubaze uteruye incuro nto.",
+      "MODEL_RATE_LIMITED": "Model iriko iraronka ibisabwa vyinshi cane. Vyasubitswe vyikora; gira ico usubira nyuma y'akanya gato.",
+      "MODEL_QUOTA_EXCEEDED": "Ubushobozi bwa model bwararangiye. Gerageza model iyindi, canke subira ugerageze hanyuma.",
+      "MODEL_AUTH_FAILED": "Porogaramu ntiyashoboye kwemezwa kuri serivisi ya model. Ni ikibazo c'ubushirizamwo — nyamuneka hamagara abajejwe gufasha."
+    }
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",

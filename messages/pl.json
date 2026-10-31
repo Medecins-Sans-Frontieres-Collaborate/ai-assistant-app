@@ -814,7 +814,11 @@
       "applyingSkill": "Stosowanie umiejętności: {skills}…",
       "applyingSkills": "Stosowanie umiejętności: {skills}…",
       "readingSkillReferences": "Czytanie dokumentów referencyjnych umiejętności…",
-      "selectingSkills": "Wybieranie umiejętności…"
+      "selectingSkills": "Wybieranie umiejętności…",
+      "retryingModel": "Model zajęty — ponowna próba za {seconds}s (podejście {attempt})…",
+      "resumingResponse": "Połączenie z modelem zostało przerwane — wznawiam odpowiedź…",
+      "continuingResponse": "Odpowiedź przekroczyła limit długości — kontynuuję…",
+      "trimmingContext": "Rozmowa jest zbyt długa dla modelu — usuwam starszą historię i ponawiam próbę…"
     },
     "toolSummary": {
       "usedTools": "Użyto {count, plural, one {# narzędzie} few {# narzędzia} many {# narzędzi} other {# narzędzi}}",
@@ -951,7 +955,20 @@
       "agentLoad": "załadowane przez agenta",
       "agentSearch": "dokumenty przeszukane przez agenta"
     },
-    "skillsManualHint": "Automatyczny wybór jest wyłączony w Ustawieniach. Użyj jednorazowo przy następnej wiadomości lub przypnij umiejętność, aby korzystać z niej przez całą rozmowę."
+    "skillsManualHint": "Automatyczny wybór jest wyłączony w Ustawieniach. Użyj jednorazowo przy następnej wiadomości lub przypnij umiejętność, aby korzystać z niej przez całą rozmowę.",
+    "queuedMessage": {
+      "label": "W kolejce",
+      "attachmentOnly": "Załącznik",
+      "cancel": "Anuluj wiadomość z kolejki"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Odpowiedź została zablokowana przez filtr bezpieczeństwa treści. Przeformułuj zapytanie lub usuń fragment, który mógł to wywołać.",
+      "MODEL_CONTEXT_TOO_LONG": "Ta rozmowa jest zbyt długa dla wybranego modelu, nawet po usunięciu starszej historii. Rozpocznij nową rozmowę, usuń niektóre załączniki albo wybierz model z większym oknem kontekstu.",
+      "MODEL_OUTPUT_LIMIT": "Model wykorzystał cały budżet odpowiedzi bez wygenerowania odpowiedzi. Spróbuj z mniejszym nakładem rozumowania lub krótszym zapytaniem.",
+      "MODEL_RATE_LIMITED": "Model otrzymuje obecnie zbyt wiele żądań. Próba została automatycznie ponowiona; spróbuj ponownie za chwilę.",
+      "MODEL_QUOTA_EXCEEDED": "Limit pojemności modelu został wyczerpany. Spróbuj innego modelu lub ponów próbę później.",
+      "MODEL_AUTH_FAILED": "Aplikacji nie udało się uwierzytelnić w usłudze modelu. To problem z konfiguracją — skontaktuj się z pomocą techniczną."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",

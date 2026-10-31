@@ -875,7 +875,11 @@
       "applyingSkill": "Gushyira mu bikorwa ubumenyi: {skills}...",
       "applyingSkills": "Gushyira mu bikorwa ubumenyi: {skills}...",
       "readingSkillReferences": "Gusoma inyandiko z’inkomoko ku bumenyi...",
-      "selectingSkills": "Hahitamo ubumenyi…"
+      "selectingSkills": "Hahitamo ubumenyi…",
+      "retryingModel": "Model irimo gukora cyane — igusubirishamo mu {seconds}s (igerageza rya {attempt})…",
+      "resumingResponse": "Umuyoboro uganisha kuri model waracitse — turi gukomeza aho byari bigeze…",
+      "continuingResponse": "Igisubizo kigeze ku rugero rw'uburebure ntarengwa — turakomeza…",
+      "trimmingContext": "Ikiganiro kirarambuye cyane kuri model — turagabanya ayo mateka hashaje tukongera kugerageza…"
     },
     "toolSummary": {
       "usedTools": "Hakozweho {count, plural, one {igikoresho 1} other {ibikoresho #}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "byapakuruwe n’umukozi",
       "agentSearch": "inyandiko zashakishijwe n’umukozi"
     },
-    "skillsManualHint": "Guhitamo byikora birazimye muri Settings. Koresha inshuro imwe ku butumwa bukurikira, cyangwa shyiraho ubuhanga bwihariye kugira ngo bukomeze gukoreshwa muri iki kiganiro."
+    "skillsManualHint": "Guhitamo byikora birazimye muri Settings. Koresha inshuro imwe ku butumwa bukurikira, cyangwa shyiraho ubuhanga bwihariye kugira ngo bukomeze gukoreshwa muri iki kiganiro.",
+    "queuedMessage": {
+      "label": "Birategereje",
+      "attachmentOnly": "Inyongera",
+      "cancel": "Hagarika ubutumwa butegereje koherezwa"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Igisubizo cyahagaritswe na filitre y'umutekano w'ibikubiyemo. Ongera wandike ubusabe mu yandi magambo, cyangwa ukuramo igice cyabiteye.",
+      "MODEL_CONTEXT_TOO_LONG": "Iki kiganiro kirarambuye cyane kuri model mwahisemo, no nyuma yo kugabanya amateka hashaje. Tangira ikindi kiganiro, ukuramo bimwe mu byo washyizemo, cyangwa uhitemo model ifite ubushobozi bwo kwakira byinshi.",
+      "MODEL_OUTPUT_LIMIT": "Model yakoresheje ubushobozi bwayo bwose bwo gutanga igisubizo ariko ntisubiza. Gerageza ugire ubusabe bugufi cyangwa ubusabe bwihuse.",
+      "MODEL_RATE_LIMITED": "Model iri kwakira ubusabe bwinshi cyane nonaha. Byageragejwe kongera, nyamuneka ongera ugerageze nyuma y’akanya gato.",
+      "MODEL_QUOTA_EXCEEDED": "Ubushobozi model yemerewe burarangiye. Gerageza indi model, cyangwa ugerageze nyuma.",
+      "MODEL_AUTH_FAILED": "Porogaramu ntishoboye kwemezwa kuri serivisi ya model. Ni ikibazo mu ishyirwaho rya gahunda — nyamuneka hamagara ubufasha."
+    }
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",

@@ -875,7 +875,11 @@
       "applyingSkill": "Yeke na bara skill: {skills}…",
       "applyingSkills": "Yeke na bara skills: {skills}…",
       "readingSkillReferences": "Yeke na gbanga na skill reference documents…",
-      "selectingSkills": "Ti bini ti yeke sala…"
+      "selectingSkills": "Ti bini ti yeke sala…",
+      "retryingModel": "Model atene — akangbi ti {seconds}s (liko ti {attempt})...",
+      "resumingResponse": "Kombili na model azo — azolinga na nzoni...",
+      "continuingResponse": "Mawakili ti doro ya answer azo — azolinga...",
+      "trimmingContext": "Kombili tene awa lenge na model — abakisa ti gbaza ti mo na liko..."
     },
     "toolSummary": {
       "usedTools": "Tool {count, plural, one {# ya kötï} other {# ya kötï}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "ngbala na agent",
       "agentSearch": "documents ku agent yeke na mara"
     },
-    "skillsManualHint": "Poko so ti yeke na Settings. Mbi kama na yeke mo ti wa na ni, to pin na skill ti yeke na wa na makara ti nzoni so alingo."
+    "skillsManualHint": "Poko so ti yeke na Settings. Mbi kama na yeke mo ti wa na ni, to pin na skill ti yeke na wa na makara ti nzoni so alingo.",
+    "queuedMessage": {
+      "label": "Soro",
+      "attachmentOnly": "Bagu",
+      "cancel": "Gbeni soro ti message"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Wen ti model faho ti content safety filter. Binga ti damine ti mo, oba guinea ti part a ti mo faho na filter.",
+      "MODEL_CONTEXT_TOO_LONG": "Kombili tene awa lenge na model a yeke ti teni, abakisa ti gbaza ti mo, awe. Bera kombili tene, gbeni bagu, oba guinea na model a ti tena ti context a yeke ti mingi.",
+      "MODEL_OUTPUT_LIMIT": "Model ale ti doro na output budget ti mo, a ala ti answer. Binga reasoning effort a ti wa, oba guinea ti damine a yeke ti ngolo.",
+      "MODEL_RATE_LIMITED": "Model azo ti mingi ti damine na wa. A kangbi auto — binga ti wa na la.",
+      "MODEL_QUOTA_EXCEEDED": "Quota ti model a ti capacity ale. Binga model a ti wa, oba guinea na la.",
+      "MODEL_AUTH_FAILED": "App wa ala ti authentication na model service. A ye ti configuration problem — binga ti moussupport."
+    }
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",

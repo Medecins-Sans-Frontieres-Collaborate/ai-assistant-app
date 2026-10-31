@@ -940,7 +940,11 @@
         "findingLocations": "Identifying locations…",
         "updatingMap": "Updating the map…"
       },
-      "m365Progress": "Microsoft 365: {detail}"
+      "m365Progress": "Microsoft 365: {detail}",
+      "retryingModel": "Model busy — retrying in {seconds}s (attempt {attempt})…",
+      "resumingResponse": "Connection to the model dropped — resuming where it left off…",
+      "continuingResponse": "Answer hit the length limit — continuing…",
+      "trimmingContext": "Conversation too long for the model — trimming older history and retrying…"
     },
     "toolSummary": {
       "usedTools": "Used {count, plural, one {# tool} other {# tools}}",
@@ -1032,7 +1036,20 @@
     "ttsError": "Error generating audio. Please try again.",
     "ttsEquationPlaceholder": "equation",
     "unsupportedMessageType": "Error rendering message: Unsupported message type",
-    "createTodoTasks": "Create To Do tasks from this response"
+    "createTodoTasks": "Create To Do tasks from this response",
+    "queuedMessage": {
+      "label": "Queued",
+      "attachmentOnly": "Attachment",
+      "cancel": "Cancel queued message"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "The response was stopped by the content safety filter. Rephrase the request, or remove the part that may have triggered it.",
+      "MODEL_CONTEXT_TOO_LONG": "This conversation is too long for the selected model, even after trimming older history. Start a new conversation, remove some attachments, or pick a model with a larger context window.",
+      "MODEL_OUTPUT_LIMIT": "The model used its whole output budget without producing an answer. Try a lower reasoning effort or a shorter request.",
+      "MODEL_RATE_LIMITED": "The model is receiving too many requests right now. It was retried automatically; please try again in a moment.",
+      "MODEL_QUOTA_EXCEEDED": "The model's capacity quota is exhausted. Try another model, or try again later.",
+      "MODEL_AUTH_FAILED": "The app could not authenticate with the model service. This is a configuration problem — please contact support."
+    }
   },
   "transcript": {
     "originalTranscript": "Original Transcript",

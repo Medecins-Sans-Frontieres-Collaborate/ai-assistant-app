@@ -875,7 +875,11 @@
       "applyingSkill": "N lo ọgbọn: {skills}…",
       "applyingSkills": "N lo awọn ọgbọn: {skills}…",
       "readingSkillReferences": "N ka awọn iwe itọkasi ọgbọn…",
-      "selectingSkills": "Yan awọn iṣẹ…"
+      "selectingSkills": "Yan awọn iṣẹ…",
+      "retryingModel": "Àwọ̀nṣàpẹẹrẹ n ṣiṣẹ́ — yóò tún gbìyànjú ní {seconds}s (ààyè ìdánwò keji {attempt})…",
+      "resumingResponse": "Àṣàpẹẹrẹ ti dá àjọsọpọ̀ dúró — ń bọ̀ síbi tí ó dá lẹ́kunrẹ́rẹ́…",
+      "continuingResponse": "Idáhùn ti pé ipò ààrí rẹ̀ — ń tẹ̀síwájú…",
+      "trimmingContext": "Ìbáṣepọ̀ pẹ̀ ju àwọ̀nṣàpẹẹrẹ lọ — ń yọ ìtàn atijọ̀ kúrò, yóò tún gbìyànjú…"
     },
     "toolSummary": {
       "usedTools": "Lo {count, plural, one {# ohun ìṣàkóso} other {# àwọn ohun ìṣàkóso}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "ageni gbe e",
       "agentSearch": "ageni wa awọn iwe"
     },
-    "skillsManualHint": "Àṣàyàn aifọwọyi wa ni pipa ninu Eto. Lo lẹ́kan fún ifiranṣẹ tó ń bọ, tàbí dí amọja kan mọ́lẹ̀ kí o máa lo ní gbogbo ibarẹ̀ yìí."
+    "skillsManualHint": "Àṣàyàn aifọwọyi wa ni pipa ninu Eto. Lo lẹ́kan fún ifiranṣẹ tó ń bọ, tàbí dí amọja kan mọ́lẹ̀ kí o máa lo ní gbogbo ibarẹ̀ yìí.",
+    "queuedMessage": {
+      "label": "Ti dórí kúrò",
+      "attachmentOnly": "Ìkópọ̀",
+      "cancel": "Fagilé ifiranṣẹ́ tó wà lórí pẹ̀lú"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Ìdáhùn ni àyẹwo akoonu dá dúró. Ṣàyípadà ìbéèrè rẹ, tàbí yọ apá tí ó le fa àyẹwo náà.",
+      "MODEL_CONTEXT_TOO_LONG": "Ìbáṣepọ̀ yi gun ju ti àwọ̀nṣàpẹẹrẹ tí o yan lọ, àfi tí a ba yọ ìtàn atijọ̀. Bẹrẹ ìbáṣepọ̀ tuntun, yọ diẹ ninu àwọn àmúṣàyà, tàbí yan àpọ̀nà tí ó tobi síi.",
+      "MODEL_OUTPUT_LIMIT": "Àpọ̀nà sáyẹwo ti fi gbogbo àǹfààní rẹ̀ ṣe ẹ̀ṣà láì dáhùn. Gbìyànjú pẹ̀lú ìbéèrè kékèké tàbí dínà àyípadà lọ.",
+      "MODEL_RATE_LIMITED": "Àwọ̀nṣàpẹẹrẹ ń gba ìbéèrè jù lọ ní báyìí. Ti gbìyànjú laifọwọyi; jọwọ gbìyànjú lẹ́ẹ̀kàn sí i lẹ́yìn ìgbà díẹ.",
+      "MODEL_QUOTA_EXCEEDED": "Kòtà àwọ̀nṣàpẹẹrẹ ti parí. Gbìyànjú àwọ̀nṣàpẹẹrẹ mìíràn, tàbí gbìyànjú nígbà míì.",
+      "MODEL_AUTH_FAILED": "Ìṣàkóso àpamọ́ app kọ̀ láti fà áwọ̀nṣàpẹẹrẹ sílẹ̀. Èyí jẹ́ iṣòro amúṣiṣẹpọ — jọwọ kan si ìtẹ́wọ́gbà."
+    }
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",

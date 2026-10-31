@@ -760,7 +760,11 @@
       "applyingSkill": "ዘዴ እየተሰረዘ፡ {skills}...",
       "applyingSkills": "ዘዴዎች እየተሰረዙ፡ {skills}...",
       "readingSkillReferences": "የዘዴ ማጣሪያ ሰነዶችን በመነበብ...",
-      "selectingSkills": "ክህሎቶችን በማሰራጨት ላይ…"
+      "selectingSkills": "ክህሎቶችን በማሰራጨት ላይ…",
+      "retryingModel": "ሞዴሉ ተግባራዊ ነው — በ {seconds} ሴኮንድ ውስጥ እንደገና ሞከርን (አድርጎ {attempt})…",
+      "resumingResponse": "ከሞዴሉ ጋር ግንኙነቱ ቆልፏል — ከተቋረጠበት ቦታ ቀጥሏል…",
+      "continuingResponse": "መልስ የርዝመት ግስጋሴን ደረሰ — ቀጥሏል…",
+      "trimmingContext": "ውይይቱ ለሞዴሉ ከፍተኛ ነው — የቆዩትን ታሪክ ቀውጥ እና እንደገና ሞከር…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳሪያ} other {# መሳሪያዎች}} ተጠቅመዋል",
@@ -897,7 +901,20 @@
       "agentLoad": "በagent ተጫነ",
       "agentSearch": "በagent የተወደዱ ሰነዶች"
     },
-    "skillsManualHint": "በሴቲንግስ ላይ ራስ-ሰር መምረጥ ተዘግቷል። ለቀጣይ መልእክት አንድ ጊዜ ይጠቀሙ፣ ወይም ችሎታን ለዚህ ውይይት ሁሉ ይጠቁሙ።"
+    "skillsManualHint": "በሴቲንግስ ላይ ራስ-ሰር መምረጥ ተዘግቷል። ለቀጣይ መልእክት አንድ ጊዜ ይጠቀሙ፣ ወይም ችሎታን ለዚህ ውይይት ሁሉ ይጠቁሙ።",
+    "queuedMessage": {
+      "label": "ተሰብስቦ ተያይዞ",
+      "attachmentOnly": "ቅድመ ያስታውቆ የቀረበ",
+      "cancel": "ተሰብስቦ ተያይዞ መልእክት ሰርዝ"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "መልሱ በይዞታ ቅድመ መሳሪያ ተወከለ። ጥያቄውን ደግመው ይግጠሙ፣ ወይም ተፈጥሯቸው የሚገምቱትን አካል ያስወግዱ።",
+      "MODEL_CONTEXT_TOO_LONG": "ውይይቱ በተመረጠው ሞዴል ውስጥ ለመስጠት ከፍተኛ ነው፣ ከቆዩት ታሪክ በኋላም። አዲስ ውይይት ይጀምሩ፣ ቅድመ ያስታውቆ የቀረበውን ያስወግዱ፣ ወይም የበለጠ የርዝመት ማጠቃለያ ሞዴል ይመርጡ።",
+      "MODEL_OUTPUT_LIMIT": "ሞዴሉ ሙሉ output በጀቱን አጠናቀቀ፣ መልስ አልሰጠም። የታቀደ reasoning effort ወይም አነስተኛ ጥያቄ ይይዙ።",
+      "MODEL_RATE_LIMITED": "ሞዴሉ አብዛኛውን ጥያቄዎች አገናኞበት። ሞከር በራሱ ተደጋጋሚ ተካፋፍ፣ እባክዎ ከትንሹ ጊዜ በኋላ ይሞክሩ።",
+      "MODEL_QUOTA_EXCEEDED": "የሞዴሉ ችሎታ quota ተጠናቀቀ። ሌላ ሞዴል ይሞክሩ፣ ወይም ከትንሹ ጊዜ በኋላ ይሞክሩ።",
+      "MODEL_AUTH_FAILED": "መተግበሪያው ከሞዴል አገልግሎት ጋር ማረጋጋት አልተቻለም። ይህ የማዋቀር ችግር ነው — እባክዎ ድጋፍ ያግኙ።"
+    }
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",

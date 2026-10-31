@@ -875,7 +875,11 @@
       "applyingSkill": "Aqoon gaar ah ayaa la isticmaalayaa: {skills}...",
       "applyingSkills": "Aqoonta la isticmaalayo: {skills}...",
       "readingSkillReferences": "Akhriyayaa dukumentiyada tixraaca ee aqoonta...",
-      "selectingSkills": "Xulashada xirfadaha…"
+      "selectingSkills": "Xulashada xirfadaha…",
+      "retryingModel": "Qaabka wuu mashquulsan yahay — dib ayaa loo isku dayayaa {seconds}s (iskudayga {attempt})…",
+      "resumingResponse": "Xiriirka qaabka ayaa go'ay — dib ayaa looga sii wadayaa halkii uu ka joogay…",
+      "continuingResponse": "Jawaabtu waxay gaartay xadka dhererka — waa la sii wadayaa…",
+      "trimmingContext": "Wadahadalku aad buu u dheer yahay qaabka — taariikhda hore waa la tirtirayaa dibna waa loo isku dayayaa…"
     },
     "toolSummary": {
       "usedTools": "Waxaa la isticmaalay {count, plural, one {# qalab} other {# qalabyo}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "waxa uu wakiilku xambaarsaday",
       "agentSearch": "dukumentiyada uu wakiilku raadiyay"
     },
-    "skillsManualHint": "Xulashada otomaatiga ah waa deman tahay ee Dejinta. Isticmaal hal mar farriinta xigta, ama ku lifaaq xirfadda si aad ugu isticmaasho wada sheekaysigan oo dhan."
+    "skillsManualHint": "Xulashada otomaatiga ah waa deman tahay ee Dejinta. Isticmaal hal mar farriinta xigta, ama ku lifaaq xirfadda si aad ugu isticmaasho wada sheekaysigan oo dhan.",
+    "queuedMessage": {
+      "label": "Sugaya",
+      "attachmentOnly": "Lifaaq",
+      "cancel": "Baaji fariinta la sugayo"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Jawaabtu waxaa joojiyey xeerka badbaadada nuxurka. Fadlan u qor codsiga si kale, ama ka saar qaybta laga yaabo in ay keentay joojinta.",
+      "MODEL_CONTEXT_TOO_LONG": "Wadahadalkan aad buu ugu dheer yahay qaabka la xushay, xataa kadib markii taariikh hore la jaray. Bilow wadahadal cusub, ka saar lifaaqyo qaar, ama dooro qaab leh daaqad macno oo weyn.",
+      "MODEL_OUTPUT_LIMIT": "Qaabku wuxuu isticmaalay xisaabtiisa wax-soo-saarka oo dhan isagoo aan jawaab keenin. Isku day dadaal falanqayn hoose ama codsi gaaban.",
+      "MODEL_RATE_LIMITED": "Qaabka waxaa hadda gaaraya codsiyo aad u badan. Si toos ah ayaa dib loogu celiyey; fadlan isku day mar kale daqiiqad kadib.",
+      "MODEL_QUOTA_EXCEEDED": "Awoodda qaabka waa dhammaatay. Isku day qaab kale, ama isku day mar dambe.",
+      "MODEL_AUTH_FAILED": "App-ka uma suurtogelin in uu is-aqoonsiiyo adeegga qaabka. Tani waa arrin xagga la-habaynta ah — fadlan la xiriir taageerada."
+    }
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",

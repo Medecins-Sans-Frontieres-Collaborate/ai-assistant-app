@@ -875,7 +875,11 @@
       "applyingSkill": "Kufaka ikhono: {skills}…",
       "applyingSkills": "Kufaka amakhono: {skills}…",
       "readingSkillReferences": "Kufundwa imibhalo yesithenjwa samakhono…",
-      "selectingSkills": "Kukhethwa amakhono…"
+      "selectingSkills": "Kukhethwa amakhono…",
+      "retryingModel": "Imodeli imatasa — kuzophindwa ngemizuzwana engu-{seconds}s (uzama okwesithathu {attempt})...",
+      "resumingResponse": "Uxhumano nemodeli luphele — kuliqhubeka lapho kugcine khona...",
+      "continuingResponse": "Impendulo ifinyelele umkhawulo wobude — kuyaqhubeka...",
+      "trimmingContext": "Ingxoxo ende kakhulu yemodeli — kusikwa umlando wakudala bese kuqalwa futhi..."
     },
     "toolSummary": {
       "usedTools": "Kusetshenzisiwe {count, plural, one {# ithuluzi} other {# amathuluzi}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "kufakwe umenzeli",
       "agentSearch": "imibhalo ifunwe umenzeli"
     },
-    "skillsManualHint": "Ukuzikhethela okuzenzakalelayo kuvaliwe Ezilungisezweni. Sebenzisa kanye umlayezo olandelayo, noma mni izibalo ukuze zisetshenziswe kulo ngxoxo."
+    "skillsManualHint": "Ukuzikhethela okuzenzakalelayo kuvaliwe Ezilungisezweni. Sebenzisa kanye umlayezo olandelayo, noma mni izibalo ukuze zisetshenziswe kulo ngxoxo.",
+    "queuedMessage": {
+      "label": "Kulindelwe",
+      "attachmentOnly": "Okuhambisana",
+      "cancel": "Khansela umlayezo olindile"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Impendulo imisiwe ngenxa yokuhlungwa kokuqukethwe okubhekele ukuphepha. Bhala kabusha isicelo, noma susa ingxenye engahle iveze inkinga.",
+      "MODEL_CONTEXT_TOO_LONG": "Le ngxoxo inde kakhulu kunemodeli ekhethiwe, ngisho nasekuhlungeni umlando wakudala. Qala ingxoxo entsha, susa ezinye izithasiselo, noma khetha imodeli enendawo enkulu yomongo.",
+      "MODEL_OUTPUT_LIMIT": "Imodeli isisebenzise wonke amandla ayo wokuphendula ingakhiphanga mpendulo. Zama ukunciphisa ubunzima bokucabanga noma wenze isicelo esifushane.",
+      "MODEL_RATE_LIMITED": "Imodeli ithola izicelo eziningi ngesikhathi esifanayo. Iphinde yazama ngokuzenzakalelayo; sicela uzame futhi kungakapheli isikhathi.",
+      "MODEL_QUOTA_EXCEEDED": "Umkhawulo wemodeli uphelile. Zama enye imodeli, noma uzame futhi ngemuva kwesikhathi.",
+      "MODEL_AUTH_FAILED": "Uhlelo alukwazanga ukuzazisa kusevisi yemodeli. Le yinkinga yokumiswa kohlelo — sicela uthinte ukwesekwa."
+    }
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",

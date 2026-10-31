@@ -817,7 +817,11 @@
       "applyingSkill": "Beceri uygulanıyor: {skills}…",
       "applyingSkills": "Beceriler uygulanıyor: {skills}…",
       "readingSkillReferences": "Beceri referans belgeleri okunuyor…",
-      "selectingSkills": "Yetenekler seçiliyor…"
+      "selectingSkills": "Yetenekler seçiliyor…",
+      "retryingModel": "Model meşgul — {seconds}s içinde tekrar denenecek (deneme {attempt})…",
+      "resumingResponse": "Model ile bağlantı kesildi — kaldığı yerden devam ediliyor…",
+      "continuingResponse": "Yanıt uzunluk sınırına ulaştı — devam ediliyor…",
+      "trimmingContext": "Sohbet modeli için çok uzun — eski geçmiş kısaltılıyor ve tekrar deneniyor…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# araç kullanıldı} other {# araç kullanıldı}}",
@@ -954,7 +958,20 @@
       "agentLoad": "ajan tarafından yüklendi",
       "agentSearch": "ajan tarafından belgeler arandı"
     },
-    "skillsManualHint": "Otomatik seçim Ayarlar'da kapalı. Bir sonraki mesaj için bir kez kullanabilir veya bir yeteneği sabitleyerek bu görüşme boyunca kullanabilirsiniz."
+    "skillsManualHint": "Otomatik seçim Ayarlar'da kapalı. Bir sonraki mesaj için bir kez kullanabilir veya bir yeteneği sabitleyerek bu görüşme boyunca kullanabilirsiniz.",
+    "queuedMessage": {
+      "label": "Kuyrukta",
+      "attachmentOnly": "Ek",
+      "cancel": "Kuyruktaki mesajı iptal et"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Yanıt, içerik güvenliği filtresi tarafından durduruldu. İsteğinizi yeniden ifade edin veya bunu tetiklemiş olabilecek kısmı kaldırın.",
+      "MODEL_CONTEXT_TOO_LONG": "Bu sohbet, seçilen model için çok uzun; eski geçmiş kısaltıldıktan sonra bile uygun değil. Yeni bir sohbet başlatın, bazı ekleri kaldırın veya daha geniş bağlam penceresine sahip bir model seçin.",
+      "MODEL_OUTPUT_LIMIT": "Model, yanıt üretmeden çıktı sınırını kullandı. Daha düşük bir akıl yürütme seviyesi veya daha kısa bir istek deneyin.",
+      "MODEL_RATE_LIMITED": "Model şu anda çok fazla istek alıyor. Otomatik olarak tekrar denendi; lütfen kısa bir süre sonra tekrar deneyin.",
+      "MODEL_QUOTA_EXCEEDED": "Modelin kapasite kotası doldu. Başka bir model deneyin veya daha sonra tekrar deneyin.",
+      "MODEL_AUTH_FAILED": "Uygulama, model servisiyle kimlik doğrulaması yapamadı. Bu bir yapılandırma sorunu — lütfen destek ile iletişime geçin."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",

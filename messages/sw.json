@@ -817,7 +817,11 @@
       "applyingSkill": "Inatumia ujuzi: {skills}...",
       "applyingSkills": "Inatumia ujuzi: {skills}...",
       "readingSkillReferences": "Inasoma nyaraka za marejeo ya ujuzi...",
-      "selectingSkills": "Inachagua ujuzi…"
+      "selectingSkills": "Inachagua ujuzi…",
+      "retryingModel": "Mfumo uko na shughuli nyingi — inajaribu tena ndani ya sekunde {seconds} (jaribio la {attempt})…",
+      "resumingResponse": "Uunganisho na mfumo umekatika — inaendelea kutoka mahali ilipoacha…",
+      "continuingResponse": "Jibu limefikia kikomo cha urefu — inaendelea…",
+      "trimmingContext": "Mazungumzo ni marefu sana kwa mfumo — inapunguza historia ya zamani na inajaribu tena…"
     },
     "toolSummary": {
       "usedTools": "Imetumika {count, plural, one {# zana} other {# zana}}",
@@ -954,7 +958,20 @@
       "agentLoad": "imewekwa na wakala",
       "agentSearch": "nyaraka zilizopekuliwa na wakala"
     },
-    "skillsManualHint": "Uteuzi wa moja kwa moja umezimwa kwenye Mipangilio. Tumia mara moja kwa ujumbe unaofuata, au weka skill ili itumike kwenye mazungumzo haya yote."
+    "skillsManualHint": "Uteuzi wa moja kwa moja umezimwa kwenye Mipangilio. Tumia mara moja kwa ujumbe unaofuata, au weka skill ili itumike kwenye mazungumzo haya yote.",
+    "queuedMessage": {
+      "label": "Imesubiri",
+      "attachmentOnly": "Kiambatisho",
+      "cancel": "Ghairi ujumbe uliosubiri"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Majibu yamesimamishwa na kichujio cha usalama wa maudhui. Tafadhali rejesha ombi, au ondoa sehemu inayoweza kuwa imesababisha hilo.",
+      "MODEL_CONTEXT_TOO_LONG": "Mazungumzo haya ni marefu sana kwa mfumo uliochaguliwa, hata baada ya kupunguza historia ya zamani. Anza mazungumzo mapya, ondoa baadhi ya viambatisho, au chagua mfumo wenye dirisha kubwa la muktadha.",
+      "MODEL_OUTPUT_LIMIT": "Mfumo umetumia bajeti yote ya majibu bila kutoa jibu. Jaribu kwa kiwango cha chini cha hoja au ombi fupi zaidi.",
+      "MODEL_RATE_LIMITED": "Mfumo unapokea maombi mengi sana kwa sasa. Imejaribiwa tena kiotomatiki; tafadhali jaribu tena baada ya muda.",
+      "MODEL_QUOTA_EXCEEDED": "Kiwango cha uwezo wa mfumo kimeisha. Jaribu mfumo mwingine, au jaribu tena baadaye.",
+      "MODEL_AUTH_FAILED": "App haikuweza kuthibitisha na huduma ya mfumo. Hili ni tatizo la usanidi — tafadhali wasiliana na msaada."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",

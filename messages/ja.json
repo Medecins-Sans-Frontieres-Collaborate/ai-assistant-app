@@ -817,7 +817,11 @@
       "applyingSkill": "スキルを適用中: {skills}…",
       "applyingSkills": "スキルを適用中: {skills}…",
       "readingSkillReferences": "スキル参照文書を読んでいます…",
-      "selectingSkills": "スキルを選択中…"
+      "selectingSkills": "スキルを選択中…",
+      "retryingModel": "モデルが混雑しています — {seconds}秒後に再試行します（{attempt}回目）…",
+      "resumingResponse": "モデルとの接続が切断されました — 続きから再開します…",
+      "continuingResponse": "回答が上限に達しました — 続行します…",
+      "trimmingContext": "会話が長すぎるため、古い履歴を削除して再試行します…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# 件のツールを使用} other {# 件のツールを使用}}",
@@ -954,7 +958,20 @@
       "agentLoad": "エージェントによってロード",
       "agentSearch": "エージェントによる文書検索"
     },
-    "skillsManualHint": "設定で自動選択がオフになっています。次のメッセージのみ使用するか、スキルをピン止めしてこの会話全体で使用してください。"
+    "skillsManualHint": "設定で自動選択がオフになっています。次のメッセージのみ使用するか、スキルをピン止めしてこの会話全体で使用してください。",
+    "queuedMessage": {
+      "label": "キューに追加済み",
+      "attachmentOnly": "添付ファイル",
+      "cancel": "キュー内メッセージをキャンセル"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "返答がコンテンツ安全フィルターで停止されました。リクエストの言い回しを変えるか、該当部分を削除してください。",
+      "MODEL_CONTEXT_TOO_LONG": "この会話は、選択したモデルの許容範囲を超えています。新しい会話を開始するか、添付ファイルを減らすか、より大きな文脈ウィンドウのモデルを選択してください。",
+      "MODEL_OUTPUT_LIMIT": "モデルが出力上限に達し、回答できませんでした。推論レベルを下げるか、リクエストを短くしてください。",
+      "MODEL_RATE_LIMITED": "現在、モデルへのリクエストが集中しています。自動で再試行されましたので、少し経ってから再度お試しください。",
+      "MODEL_QUOTA_EXCEEDED": "モデルの利用枠が上限に達しました。別のモデルを試すか、しばらくしてから再度お試しください。",
+      "MODEL_AUTH_FAILED": "アプリがモデルサービスと認証できませんでした。設定に問題がありますので、サポートへご連絡ください。"
+    }
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",

@@ -784,7 +784,11 @@
       "applyingSkill": "Menerapkan keahlian: {skills}…",
       "applyingSkills": "Menerapkan keahlian: {skills}…",
       "readingSkillReferences": "Membaca dokumen referensi keahlian…",
-      "selectingSkills": "Memilih keterampilan…"
+      "selectingSkills": "Memilih keterampilan…",
+      "retryingModel": "Model sedang sibuk — mencoba ulang dalam {seconds}s (percobaan ke-{attempt})…",
+      "resumingResponse": "Koneksi ke model terputus — melanjutkan dari posisi terakhir…",
+      "continuingResponse": "Jawaban mencapai batas panjang — melanjutkan…",
+      "trimmingContext": "Percakapan terlalu panjang untuk model — memangkas riwayat lama dan mencoba ulang…"
     },
     "toolSummary": {
       "usedTools": "Digunakan {count, plural, one {# alat} other {# alat}}",
@@ -921,7 +925,20 @@
       "agentLoad": "dimuat oleh agen",
       "agentSearch": "dokumen dicari oleh agen"
     },
-    "skillsManualHint": "Pemilihan otomatis dimatikan di Pengaturan. Gunakan sekali untuk pesan berikutnya, atau sematkan sebuah skill untuk menggunakannya selama percakapan ini."
+    "skillsManualHint": "Pemilihan otomatis dimatikan di Pengaturan. Gunakan sekali untuk pesan berikutnya, atau sematkan sebuah skill untuk menggunakannya selama percakapan ini.",
+    "queuedMessage": {
+      "label": "Antrian",
+      "attachmentOnly": "Lampiran",
+      "cancel": "Batalkan pesan dalam antrian"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Respons dihentikan oleh filter keamanan konten. Silakan ubah permintaan atau hapus bagian yang mungkin memicunya.",
+      "MODEL_CONTEXT_TOO_LONG": "Percakapan ini terlalu panjang untuk model yang dipilih, meski riwayat lama sudah dipangkas. Mulai percakapan baru, hapus beberapa lampiran, atau pilih model dengan kapasitas konteks lebih besar.",
+      "MODEL_OUTPUT_LIMIT": "Model telah menggunakan seluruh batas output tanpa menghasilkan jawaban. Coba gunakan tingkat penalaran lebih rendah atau permintaan lebih singkat.",
+      "MODEL_RATE_LIMITED": "Model sedang menerima terlalu banyak permintaan. Sistem telah mencoba ulang secara otomatis; silakan coba lagi sebentar lagi.",
+      "MODEL_QUOTA_EXCEEDED": "Kuota kapasitas model telah habis. Coba gunakan model lain atau coba lagi nanti.",
+      "MODEL_AUTH_FAILED": "Aplikasi tidak dapat melakukan autentikasi dengan layanan model. Ini adalah masalah konfigurasi — silakan hubungi dukungan."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",

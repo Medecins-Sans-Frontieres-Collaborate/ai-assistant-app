@@ -818,7 +818,11 @@
       "applyingSkill": "Đang áp dụng kỹ năng: {skills}…",
       "applyingSkills": "Đang áp dụng các kỹ năng: {skills}…",
       "readingSkillReferences": "Đang đọc tài liệu tham khảo kỹ năng…",
-      "selectingSkills": "Đang chọn kỹ năng…"
+      "selectingSkills": "Đang chọn kỹ năng…",
+      "retryingModel": "Mô hình đang bận — sẽ thử lại sau {seconds}s (lần thử {attempt})…",
+      "resumingResponse": "Kết nối với mô hình bị ngắt — sẽ tiếp tục từ chỗ dừng…",
+      "continuingResponse": "Câu trả lời đã đạt giới hạn độ dài — đang tiếp tục…",
+      "trimmingContext": "Cuộc trò chuyện quá dài với mô hình — đang cắt bớt lịch sử cũ và thử lại…"
     },
     "toolSummary": {
       "usedTools": "Đã sử dụng {count, plural, one {# công cụ} other {# công cụ}}",
@@ -955,7 +959,20 @@
       "agentLoad": "được agent tải lên",
       "agentSearch": "tài liệu được agent tìm kiếm"
     },
-    "skillsManualHint": "Tự động chọn đã tắt trong Cài đặt. Sử dụng một lần cho tin nhắn tiếp theo hoặc ghim kỹ năng để dùng xuyên suốt cuộc trò chuyện này."
+    "skillsManualHint": "Tự động chọn đã tắt trong Cài đặt. Sử dụng một lần cho tin nhắn tiếp theo hoặc ghim kỹ năng để dùng xuyên suốt cuộc trò chuyện này.",
+    "queuedMessage": {
+      "label": "Đang chờ",
+      "attachmentOnly": "Tệp đính kèm",
+      "cancel": "Hủy tin nhắn đang chờ"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Phản hồi đã bị dừng bởi bộ lọc an toàn nội dung. Vui lòng diễn đạt lại yêu cầu hoặc bỏ phần có thể gây ra vấn đề.",
+      "MODEL_CONTEXT_TOO_LONG": "Cuộc trò chuyện này quá dài với mô hình đã chọn, kể cả sau khi cắt bớt lịch sử. Hãy bắt đầu cuộc trò chuyện mới, xóa bớt tệp đính kèm hoặc chọn mô hình có cửa sổ ngữ cảnh lớn hơn.",
+      "MODEL_OUTPUT_LIMIT": "Mô hình đã dùng hết mức đầu ra nhưng chưa tạo được câu trả lời. Hãy thử giảm mức độ suy luận hoặc rút ngắn yêu cầu.",
+      "MODEL_RATE_LIMITED": "Mô hình đang nhận quá nhiều yêu cầu cùng lúc. Hệ thống đã tự động thử lại; vui lòng thử lại sau một lúc.",
+      "MODEL_QUOTA_EXCEEDED": "Mô hình đã hết hạn mức sử dụng. Hãy thử mô hình khác hoặc thử lại sau.",
+      "MODEL_AUTH_FAILED": "Ứng dụng không thể xác thực với dịch vụ mô hình. Đây là lỗi cấu hình — vui lòng liên hệ bộ phận hỗ trợ."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",

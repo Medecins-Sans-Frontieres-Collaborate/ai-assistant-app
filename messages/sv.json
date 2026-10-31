@@ -817,7 +817,11 @@
       "applyingSkill": "Tillämpa färdighet: {skills}…",
       "applyingSkills": "Tillämpa färdigheter: {skills}…",
       "readingSkillReferences": "Läser referensdokument om färdigheter…",
-      "selectingSkills": "Väljer färdigheter..."
+      "selectingSkills": "Väljer färdigheter...",
+      "retryingModel": "Modellen är upptagen — försöker igen om {seconds}s (försök {attempt})…",
+      "resumingResponse": "Anslutningen till modellen bröts — återupptar där det slutade…",
+      "continuingResponse": "Svaret nådde längdgränsen — fortsätter…",
+      "trimmingContext": "Konversationen är för lång för modellen — klipper äldre historik och försöker igen…"
     },
     "toolSummary": {
       "usedTools": "Använt {count, plural, one {# verktyg} other {# verktyg}}",
@@ -954,7 +958,20 @@
       "agentLoad": "inläst av agent",
       "agentSearch": "dokument sökta av agent"
     },
-    "skillsManualHint": "Automatiskt val är avstängt i Inställningar. Använd en gång för nästa meddelande eller fäst en färdighet för att använda den under hela denna konversation."
+    "skillsManualHint": "Automatiskt val är avstängt i Inställningar. Använd en gång för nästa meddelande eller fäst en färdighet för att använda den under hela denna konversation.",
+    "queuedMessage": {
+      "label": "I kö",
+      "attachmentOnly": "Bilaga",
+      "cancel": "Avbryt köat meddelande"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Svaret stoppades av innehållssäkerhetsfiltret. Formulera om begäran eller ta bort delen som kan ha utlöst det.",
+      "MODEL_CONTEXT_TOO_LONG": "Denna konversation är för lång för den valda modellen, även efter att äldre historik klippts bort. Starta en ny konversation, ta bort några bilagor eller välj en modell med större kontextfönster.",
+      "MODEL_OUTPUT_LIMIT": "Modellen använde hela sitt utdatautrymme utan att ge ett svar. Testa med lägre resonemangsinsats eller en kortare begäran.",
+      "MODEL_RATE_LIMITED": "Modellen får för många förfrågningar just nu. Omförsöktes automatiskt; försök igen om en stund.",
+      "MODEL_QUOTA_EXCEEDED": "Modellens kapacitetskvot är förbrukad. Prova en annan modell eller försök senare.",
+      "MODEL_AUTH_FAILED": "Appen kunde inte autentisera mot modelltjänsten. Detta är ett konfigurationsproblem — kontakta supporten."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",

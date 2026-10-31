@@ -763,7 +763,11 @@
       "applyingSkill": "Aplicando habilidade: {skills}…",
       "applyingSkills": "Aplicando habilidades: {skills}…",
       "readingSkillReferences": "Lendo documentos de referência de habilidades…",
-      "selectingSkills": "Selecionando habilidades…"
+      "selectingSkills": "Selecionando habilidades…",
+      "retryingModel": "Modelo ocupado — tentando novamente em {seconds}s (tentativa {attempt})…",
+      "resumingResponse": "Conexão com o modelo perdida — retomando de onde parou…",
+      "continuingResponse": "Resposta atingiu o limite de comprimento — continuando…",
+      "trimmingContext": "Conversa muito longa para o modelo — cortando o histórico mais antigo e tentando novamente…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ferramenta utilizada} other {# ferramentas utilizadas}}",
@@ -900,7 +904,20 @@
       "agentLoad": "carregado pelo agente",
       "agentSearch": "documentos pesquisados pelo agente"
     },
-    "skillsManualHint": "A seleção automática está desativada nas Configurações. Use uma vez para a próxima mensagem ou fixe uma habilidade para utilizá-la durante toda esta conversa."
+    "skillsManualHint": "A seleção automática está desativada nas Configurações. Use uma vez para a próxima mensagem ou fixe uma habilidade para utilizá-la durante toda esta conversa.",
+    "queuedMessage": {
+      "label": "Na fila",
+      "attachmentOnly": "Anexo",
+      "cancel": "Cancelar mensagem na fila"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "A resposta foi interrompida pelo filtro de segurança de conteúdo. Reformule o pedido ou remova a parte que possa ter causado isso.",
+      "MODEL_CONTEXT_TOO_LONG": "Esta conversa é muito longa para o modelo selecionado, mesmo após cortar o histórico antigo. Inicie uma nova conversa, remova alguns anexos ou escolha um modelo com maior capacidade de contexto.",
+      "MODEL_OUTPUT_LIMIT": "O modelo utilizou todo o orçamento de saída sem produzir uma resposta. Tente um esforço de raciocínio menor ou um pedido mais curto.",
+      "MODEL_RATE_LIMITED": "O modelo está recebendo muitos pedidos no momento. A tentativa foi automática; tente novamente em breve.",
+      "MODEL_QUOTA_EXCEEDED": "A cota de capacidade do modelo está esgotada. Experimente outro modelo ou tente mais tarde.",
+      "MODEL_AUTH_FAILED": "O aplicativo não conseguiu autenticar com o serviço do modelo. Trata-se de um problema de configuração — por favor, entre em contato com o suporte."
+    }
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",

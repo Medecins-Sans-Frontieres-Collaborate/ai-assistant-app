@@ -875,7 +875,11 @@
       "applyingSkill": "Ap aplike konpetans: {skills}...",
       "applyingSkills": "Ap aplike konpetans yo: {skills}...",
       "readingSkillReferences": "Ap li dokiman referans konpetans yo...",
-      "selectingSkills": "Chwazi konpetans…"
+      "selectingSkills": "Chwazi konpetans…",
+      "retryingModel": "Modèl okipe — n ap eseye ankò nan {seconds}s (tantativ {attempt})…",
+      "resumingResponse": "Koneksyon ak modèl la pèdi — n ap rekòmanse kote li te rete a…",
+      "continuingResponse": "Repons lan rive limit longè — n ap kontinye…",
+      "trimmingContext": "Konvèsasyon an twò long pou modèl la — n ap retire pi ansyen istwa epi eseye ankò…"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# zouti itilize} other {# zouti yo itilize}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "chaje pa ajan",
       "agentSearch": "dokiman chèche pa ajan"
     },
-    "skillsManualHint": "Seleksyon otomatik la fèmen nan Anviwònman. Sèvi avè l yon sèl fwa pou pwochen mesaj la, oswa fikse yon konpetans pou itilize li pandan tout konvèsasyon sa a."
+    "skillsManualHint": "Seleksyon otomatik la fèmen nan Anviwònman. Sèvi avè l yon sèl fwa pou pwochen mesaj la, oswa fikse yon konpetans pou itilize li pandan tout konvèsasyon sa a.",
+    "queuedMessage": {
+      "label": "Anpil",
+      "attachmentOnly": "Pjès annèks",
+      "cancel": "Anile mesaj ki nan fil la"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Repons lan sispann pa filtè sekirite kontni. Reekri demann lan oswa retire pati ki ka koze pwoblèm lan.",
+      "MODEL_CONTEXT_TOO_LONG": "Konvèsasyon sa a twò long pou modèl chwazi a, menm apre retire istwa ki pi ansyen an. Kòmanse yon nouvo konvèsasyon, retire kèk pjès annèks, oswa chwazi yon modèl ki gen plis kapasite kontèks.",
+      "MODEL_OUTPUT_LIMIT": "Modèl la itilize tout bidjè repons li san li pa pwodui okenn repons. Eseye ak yon demann pi kout oswa ak mwens efò rezònman.",
+      "MODEL_RATE_LIMITED": "Modèl la resevwa twòp demann kounye a. Li te re-eseye otomatikman; souple eseye ankò apre yon ti tan.",
+      "MODEL_QUOTA_EXCEEDED": "Kantite kapasite modèl la depase. Eseye yon lòt modèl oswa eseye ankò pita.",
+      "MODEL_AUTH_FAILED": "Aplikasyon an pa ka otantifye ak sèvis modèl la. Sa a gen rapò ak konfigirasyon — tanpri kontakte sipò teknik."
+    }
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",

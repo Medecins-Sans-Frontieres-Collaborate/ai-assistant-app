@@ -875,7 +875,11 @@
       "applyingSkill": "Ana amfani da fasaha: {skills}...",
       "applyingSkills": "Ana amfani da fasahohi: {skills}...",
       "readingSkillReferences": "Ana karanta takardun bayanin fasaha...",
-      "selectingSkills": "Ana zabar fasaha…"
+      "selectingSkills": "Ana zabar fasaha…",
+      "retryingModel": "Samfurin yana aiki — ana ƙoƙarin sake gwadawa a cikin {seconds}s (ƙoƙari na {attempt})…",
+      "resumingResponse": "An yanke haɗin zuwa samfurin — ana cigaba daga inda aka tsaya…",
+      "continuingResponse": "Amsa ta kai iyakar tsawo — ana cigaba…",
+      "trimmingContext": "Hira ta yi tsawo fiye da abin da samfurin ke iya ɗauka — ana kange tsohuwar tarihi da ƙoƙarin sake gwadawa…"
     },
     "toolSummary": {
       "usedTools": "An yi amfani da {count, plural, one {# kayan aiki} other {# kayan aiki}}",
@@ -1012,7 +1016,20 @@
       "agentLoad": "wakili ya loda",
       "agentSearch": "wakili ya bincika takardu"
     },
-    "skillsManualHint": "Zaɓin kai tsaye yana kashe a Saituna. Yi amfani da shi sau ɗaya don saƙon na gaba, ko kunshi ƙwarewar da za ka so a duk wannan tattaunawar."
+    "skillsManualHint": "Zaɓin kai tsaye yana kashe a Saituna. Yi amfani da shi sau ɗaya don saƙon na gaba, ko kunshi ƙwarewar da za ka so a duk wannan tattaunawar.",
+    "queuedMessage": {
+      "label": "An jera",
+      "attachmentOnly": "Abin haɗe",
+      "cancel": "Soke saƙon da aka jera"
+    },
+    "streamErrors": {
+      "MODEL_CONTENT_FILTERED": "Matatar tsaro ta dakatar da amsar. Da fatan za a sake fasalta bukatar, ko cire abin da zai iya haifar da haka.",
+      "MODEL_CONTEXT_TOO_LONG": "Wannan hirar ta yi tsawo fiye da abin da samfurin da aka zaɓa zai iya ɗauka, ko bayan an rage tsohuwar tarihi. Fara sabon hira, cire wasu abubuwa, ko zaɓi samfurin da ke da babban taga na mahallin magana.",
+      "MODEL_OUTPUT_LIMIT": "Samfurin ya ƙare da duk damar amsarsa ba tare da ba da amsa ba. Gwada rage matakin zurfin nazari ko ka taƙaita abin da kake tambaya.",
+      "MODEL_RATE_LIMITED": "Ana aika wa samfurin da buƙatu da yawa a lokaci guda. An sake gwadawa ta atomatik; don Allah a gwada baya maɗan lokaci kaɗan.",
+      "MODEL_QUOTA_EXCEEDED": "An ƙare da damar amfani da samfurin. Gwada wani samfurin, ko kuma a sake gwadawa daga baya.",
+      "MODEL_AUTH_FAILED": "Manhaja ba ta samu izinin haɗawa da sabis ɗin samfurin ba. Wannan matsalar saitawa ce — don Allah a tuntuɓi goyon bayan fasaha."
+    }
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
