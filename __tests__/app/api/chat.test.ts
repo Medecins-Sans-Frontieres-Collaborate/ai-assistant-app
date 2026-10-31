@@ -623,8 +623,9 @@ describe('/api/chat - Integration Tests', () => {
 
   describe('Error Handling', () => {
     it('should handle and format errors properly', async () => {
-      // Mock handler to throw an error
-      mockCreateFn.mockRejectedValueOnce(new Error('OpenAI API Error'));
+      // A failure that persists through the in-place retry budget (the
+      // model call is retried up to 4 times; delays are zeroed in tests).
+      mockCreateFn.mockRejectedValue(new Error('OpenAI API Error'));
 
       const request = createChatRequest({
         model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
@@ -644,6 +645,28 @@ describe('/api/chat - Integration Tests', () => {
       const data = await parseJsonResponse(response);
       expect(data.error).toBeDefined();
       expect(data.message).toBeDefined();
+      expect(mockCreateFn.mock.calls.length).toBeGreaterThan(1);
+    });
+
+    it('recovers from a one-off model failure by retrying in place', async () => {
+      mockCreateFn.mockRejectedValueOnce(new Error('OpenAI API Error'));
+
+      const response = await POST(
+        createChatRequest({
+          model: {
+            id: 'gpt-5.2-chat',
+            name: 'GPT-5.2 Chat',
+            tokenLimit: 16000,
+          },
+          messages: [
+            { role: 'user', content: 'Hello', messageType: MessageType.TEXT },
+          ],
+          stream: false,
+        }),
+      );
+
+      expect(response.status).toBe(200);
+      expect(mockCreateFn).toHaveBeenCalledTimes(2);
     });
 
     it('should handle PipelineError with correct status codes', async () => {
