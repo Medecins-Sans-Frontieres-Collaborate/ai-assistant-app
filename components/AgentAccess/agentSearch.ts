@@ -1,7 +1,25 @@
+import type { M365AgentSource } from '@/lib/services/agentAccess/types';
+
 import type { AdminStoredRule } from './types';
 
 /** Public, already-authorized metadata to search, with no additional requests. */
 export type AgentSearchMetadata = unknown;
+
+/**
+ * Counts content-bearing sources for both display and search. Failed/missing
+ * sources are excluded; legacy indexed records without chunk counts are trusted.
+ * This measures indexed content only, never a user's underlying file permission.
+ */
+export function countM365ContentSources(
+  sources: readonly M365AgentSource[],
+): number {
+  return sources.filter(
+    (source) =>
+      source.status !== 'error' &&
+      source.status !== 'missing' &&
+      (source.indexedChunks ?? (source.status === 'indexed' ? 1 : 0)) > 0,
+  ).length;
+}
 
 /** Uses the same audience distinctions as the row, including empty restrictions. */
 export function agentAudienceSearchLabel(
