@@ -5,6 +5,7 @@ import { FC, ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { CanonicalKeyChip } from './CanonicalKeyChip';
+import { useAdminAgentTranslations } from './useAdminAgentTranslations';
 
 interface AgentTechnicalDetailsProps {
   canonicalKey: string;
@@ -19,7 +20,7 @@ export const AgentTechnicalDetails: FC<AgentTechnicalDetailsProps> = ({
   source,
   children,
 }) => {
-  const tAccess = useTranslations('agentAccess');
+  const tAccess = useAdminAgentTranslations();
   const tCopy = useTranslations('transcript');
 
   return (

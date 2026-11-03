@@ -59,6 +59,7 @@ import {
   clientCanonicalAgentKey,
   isAgentListSource,
 } from './types';
+import { useAdminAgentTranslations } from './useAdminAgentTranslations';
 
 import { Link } from '@/lib/navigation';
 
@@ -122,7 +123,7 @@ interface AgentAccessPanelProps {
 }
 
 export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
-  const t = useTranslations('agentAccess');
+  const t = useAdminAgentTranslations();
   const tCommon = useTranslations('common');
   const tSearch = useTranslations('m365.files');
   const queryClient = useQueryClient();

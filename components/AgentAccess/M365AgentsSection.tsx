@@ -73,6 +73,7 @@ import {
   M365DocumentCapCeilings,
   clientCanonicalAgentKey,
 } from './types';
+import { useAdminAgentTranslations } from './useAdminAgentTranslations';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
@@ -1458,7 +1459,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   searchQuery = '',
   onDataChanged,
 }) => {
-  const t = useTranslations('agentAccess');
+  const t = useAdminAgentTranslations();
   const tSearch = useTranslations('m365.files');
   const tFiles = useTranslations('analyticsAdmin.health.total');
   const queryClient = useQueryClient();
@@ -1868,6 +1869,9 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
           {visibleAgents.map((entry) => {
             const stored = rulesByKey.get(entry.canonicalKey) ?? null;
             const sources = entry.agent.sources;
+            const sourceNames = sources
+              .filter((source) => !source.error)
+              .map((source) => source.title);
             // Content-bearing = has chunks and is not broken. A legacy
             // `indexed` record without chunk counts is trusted; a record
             // still carrying a transient `indexing`/`pending` status from
@@ -1967,18 +1971,17 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                           {entry.agent.description}
                         </p>
                       )}
-                      <p
-                        className="line-clamp-1 text-xs text-gray-600 dark:text-gray-300"
-                        title={sources
-                          .map((source) => source.title)
-                          .join(' · ')}
-                      >
-                        {sources
-                          .slice(0, 2)
-                          .map((source) => source.title)
-                          .join(' · ')}
-                        {sources.length > 2 ? ` +${sources.length - 2}` : ''}
-                      </p>
+                      {sourceNames.length > 0 && (
+                        <p
+                          className="line-clamp-1 text-xs text-gray-600 dark:text-gray-300"
+                          title={sourceNames.join(' · ')}
+                        >
+                          {sourceNames.slice(0, 2).join(' · ')}
+                          {sourceNames.length > 2
+                            ? ` +${sourceNames.length - 2}`
+                            : ''}
+                        </p>
+                      )}
                     </>
                   }
                   audience={

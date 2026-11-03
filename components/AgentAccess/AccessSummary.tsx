@@ -3,11 +3,10 @@
 import { IconUserOff, IconUsers, IconUsersGroup } from '@tabler/icons-react';
 import { FC, useState } from 'react';
 
-import { useTranslations } from 'next-intl';
-
 import { useGroupNames } from '@/client/hooks/useGroupNames';
 
 import type { AdminStoredRule } from './types';
+import { useAdminAgentTranslations } from './useAdminAgentTranslations';
 
 interface AccessSummaryProps {
   /** Absent rules mean no additional app-level restriction. */
@@ -23,7 +22,7 @@ const PREVIEW_LIMIT = 3;
  * This is presentation only and does not imply Azure or file permissions.
  */
 export const AccessSummary: FC<AccessSummaryProps> = ({ access }) => {
-  const t = useTranslations('agentAccess');
+  const t = useAdminAgentTranslations();
   const [expanded, setExpanded] = useState(false);
   const restricted = access?.type === 'restricted';
   const groupIds = restricted ? (access.allowGroups ?? []) : [];

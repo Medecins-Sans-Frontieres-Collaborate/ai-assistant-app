@@ -48,6 +48,7 @@ import {
   OrgAgentDraft,
   clientCanonicalAgentKey,
 } from './types';
+import { useAdminAgentTranslations } from './useAdminAgentTranslations';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
@@ -812,7 +813,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
   searchQuery = '',
   onDataChanged,
 }) => {
-  const t = useTranslations('agentAccess');
+  const t = useAdminAgentTranslations();
   const tSearch = useTranslations('m365.files');
   const queryClient = useQueryClient();
   const [isCreating, setIsCreating] = useState(false);

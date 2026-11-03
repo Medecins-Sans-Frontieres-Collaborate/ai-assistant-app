@@ -10,6 +10,8 @@ import type { FC } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useAdminAgentTranslations } from './useAdminAgentTranslations';
+
 /** Origin and backing are distinct: a files agent may use M365 or uploaded files. */
 export type AdminAgentKind = 'foundry' | 'prompt' | 'files' | 'knowledge';
 
@@ -23,7 +25,7 @@ export const AgentTypeLabel: FC<AgentTypeLabelProps> = ({
   kind,
   sourceLabel,
 }) => {
-  const t = useTranslations('agentAccess');
+  const t = useAdminAgentTranslations();
   const tFiles = useTranslations('analyticsAdmin.health.total');
   const icons = {
     foundry: IconCloud,
