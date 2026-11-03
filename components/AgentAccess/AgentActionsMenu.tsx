@@ -78,7 +78,12 @@ export const AgentActionsMenu: FC<AgentActionsMenuProps> = ({
         triggerRef={triggerRef}
         isOpen={open}
         onClose={close}
-        align="right"
+        align={
+          typeof document !== 'undefined' &&
+          document.documentElement.dir === 'rtl'
+            ? 'left'
+            : 'right'
+        }
       >
         <div
           ref={menuRef}
