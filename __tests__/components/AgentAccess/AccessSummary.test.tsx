@@ -12,7 +12,13 @@ vi.mock('@/client/hooks/useGroupNames', () => ({
 describe('AccessSummary', () => {
   it('shows implicit and explicit everyone without listing stale targets', () => {
     const { rerender } = render(<AccessSummary />);
-    expect(screen.getByText(/Everyone/)).toHaveAttribute('title');
+    expect(screen.getByText('All eligible users')).toHaveAttribute(
+      'title',
+      'App access rules only. Source permissions still apply.',
+    );
+    expect(screen.getByText('All eligible users')).not.toHaveClass(
+      'bg-green-100',
+    );
     rerender(
       <AccessSummary
         access={{
@@ -57,10 +63,8 @@ describe('AccessSummary', () => {
         }}
       />,
     );
-    expect(
-      screen.getByText(/nobody will be able to use this agent/),
-    ).toBeInTheDocument();
-    expect(screen.queryByText(/Everyone/)).not.toBeInTheDocument();
+    expect(screen.getByText('No allowed audience')).toBeInTheDocument();
+    expect(screen.queryByText('All eligible users')).not.toBeInTheDocument();
   });
 
   it('brackets the preview boundary and reveals every full unresolved group ID', () => {
