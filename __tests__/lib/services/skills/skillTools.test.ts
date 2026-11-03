@@ -3,7 +3,7 @@ import { uploadJson } from '@/lib/services/agentAccess/blobCas';
 import { mintContinuationToken } from '@/lib/services/limits/continuationToken';
 import {
   getVisibleSkills,
-  skillsFeatureEnabled,
+  orgSkillsAvailable,
 } from '@/lib/services/skills/skillCatalog';
 import { retrieveSkillReferences } from '@/lib/services/skills/skillReferences';
 import {
@@ -17,7 +17,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/lib/services/skills/skillCatalog', () => ({
   getVisibleSkills: vi.fn(),
-  skillsFeatureEnabled: vi.fn(() => true),
+  orgSkillsAvailable: vi.fn(() => true),
 }));
 vi.mock('@/lib/services/agentAccess/accessRulesStore', () => ({
   readSkill: vi.fn(),
@@ -42,7 +42,7 @@ const entry = (s: Skill) => ({ skill: s, builtin: false, overridden: false });
 describe('agent skill executor', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(skillsFeatureEnabled).mockReturnValue(true);
+    vi.mocked(orgSkillsAvailable).mockReturnValue(true);
     vi.mocked(getVisibleSkills).mockResolvedValue([
       entry(skill),
       entry({ ...skill, id: 'off-agent', applyToAgents: false }),
@@ -76,10 +76,10 @@ describe('agent skill executor', () => {
   });
   it('refuses a revoked skill after listing and rejects personal references', async () => {
     const executor = (await createSkillToolExecutor({}))!;
-    vi.mocked(readSkill).mockResolvedValue({
-      skill: { ...skill, applyToAgents: false },
-      etag: 'v2',
-    });
+    // Revocation lands in the access snapshot before the model's call.
+    vi.mocked(getVisibleSkills).mockResolvedValue([
+      entry({ ...skill, applyToAgents: false }),
+    ]);
     expect(
       (await executor.callTool('load_skill', { id: 'gdpr' })).isError,
     ).toBe(true);
@@ -154,7 +154,8 @@ describe('agent skill executor', () => {
         },
       ],
     };
-    vi.mocked(readSkill).mockResolvedValue({ skill: inline, etag: 'v1' });
+    // Documents ride the access snapshot record, which `resolve()` reads.
+    vi.mocked(getVisibleSkills).mockResolvedValue([entry(inline)]);
     const executor = (await createSkillToolExecutor({}))!;
     await executor.callTool('load_skill', { id: 'gdpr' });
     expect(vi.mocked(retrieveSkillReferences).mock.calls[0][4]).toBe(true);
@@ -254,5 +255,191 @@ describe('signed skill continuation state', () => {
       ).rounds,
     ).toBe(3);
     vi.unstubAllEnvs();
+  });
+});
+
+describe('agent skill executor — user auto toggle', () => {
+  const entry = (id: string, activation: 'auto' | 'always') => ({
+    builtin: false,
+    overridden: false,
+    skill: {
+      id,
+      name: id,
+      description: 'd',
+      version: 1,
+      activation,
+      applyToAgents: true,
+      documents: [],
+      instructions: 'body',
+      updatedAt: '',
+    } as unknown as Skill,
+  });
+  beforeEach(() => {
+    vi.mocked(orgSkillsAvailable).mockReturnValue(true);
+    vi.mocked(getVisibleSkills).mockResolvedValue([
+      entry('auto-only', 'auto'),
+      entry('standing', 'always'),
+      entry('requested', 'auto'),
+    ]);
+  });
+  it('with auto off, the catalog holds only requested and admin-always skills', async () => {
+    const executor = (await createSkillToolExecutor({
+      autoEnabled: false,
+      forcedIds: ['requested'],
+    }))!;
+    const [load] = await executor.listTools();
+    expect(load.name).toBe('load_skill');
+    const ids = (load.inputSchema as { properties: { id: { enum: string[] } } })
+      .properties.id.enum;
+    expect(ids.sort()).toEqual(['requested', 'standing']);
+  });
+  it('with auto off and nothing requested or standing, offers no skill tools at all', async () => {
+    vi.mocked(getVisibleSkills).mockResolvedValue([entry('auto-only', 'auto')]);
+    expect(await createSkillToolExecutor({ autoEnabled: false })).toBeNull();
+  });
+});
+
+describe('skill executor — scopes, consent, and record output (§5.5/§5.6)', () => {
+  const org = (id: string, overrides: Partial<Skill> = {}) => ({
+    builtin: false,
+    overridden: false,
+    skill: {
+      ...skill,
+      id,
+      name: id,
+      instructions: `BODY OF ${id}`,
+      ...overrides,
+    } as Skill,
+  });
+  beforeEach(() => {
+    vi.mocked(orgSkillsAvailable).mockReturnValue(true);
+    vi.mocked(getVisibleSkills).mockResolvedValue([
+      org('open'),
+      org('careful', { requireConsent: true }),
+      org('by-request', { activation: 'manual' }),
+      org('no-agents', { applyToAgents: false }),
+    ]);
+    vi.mocked(readSkill).mockImplementation(async (_storage, id) => ({
+      skill: {
+        ...skill,
+        id,
+        name: id,
+        instructions: `BODY OF ${id}`,
+        applyToAgents: id !== 'no-agents',
+        activation: id === 'by-request' ? 'manual' : 'auto',
+        requireConsent: id === 'careful',
+      } as Skill,
+      etag: 'v1',
+    }));
+  });
+  const enumOf = async (
+    executor: NonNullable<Awaited<ReturnType<typeof createSkillToolExecutor>>>,
+  ) => {
+    const [load] = await executor.listTools();
+    return (
+      load.inputSchema as { properties: { id: { enum: string[] } } }
+    ).properties.id.enum.sort();
+  };
+
+  it('standard scope advertises every visible non-manual skill plus personal skills, and loads a personal body', async () => {
+    const executor = (await createSkillToolExecutor({
+      scope: { mode: 'standard' },
+      personalSkills: [
+        {
+          id: 'mine',
+          name: 'Mine',
+          description: 'd',
+          activation: 'auto',
+          instructions: 'PERSONAL BODY',
+          enabled: true,
+        },
+      ],
+    }))!;
+    expect(await enumOf(executor)).toEqual([
+      'careful',
+      'no-agents',
+      'open',
+      'user:mine',
+    ]);
+    const result = await executor.callTool('load_skill', { id: 'user:mine' });
+    expect(result.isError).toBe(false);
+    expect(result.resultText).toContain('PERSONAL BODY');
+    // Manual skills are never advertised, but an explicit request admits one.
+    const forced = (await createSkillToolExecutor({
+      scope: { mode: 'standard' },
+      forcedIds: ['by-request'],
+      excludeIds: ['open'],
+    }))!;
+    expect(await enumOf(forced)).toEqual([
+      'by-request',
+      'careful',
+      'no-agents',
+    ]);
+  });
+
+  it('selected scope offers exactly the persona list and refuses the rest at load time', async () => {
+    const executor = (await createSkillToolExecutor({
+      scope: { mode: 'selected', ids: ['no-agents'] },
+    }))!;
+    expect(await enumOf(executor)).toEqual(['no-agents']);
+    expect(
+      (await executor.callTool('load_skill', { id: 'no-agents' })).isError,
+    ).toBe(false);
+    expect(
+      (await executor.callTool('load_skill', { id: 'open' })).isError,
+    ).toBe(true);
+    expect(
+      await createSkillToolExecutor({ scope: { mode: 'none' } }),
+    ).toBeNull();
+  });
+
+  it('consent-gated skills need approval unless requested, and are hidden where no approval is possible', async () => {
+    const executor = (await createSkillToolExecutor({}))!;
+    expect(executor.requiresApproval?.('load_skill', { id: 'careful' })).toBe(
+      true,
+    );
+    expect(executor.requiresApproval?.('load_skill', { id: 'open' })).toBe(
+      false,
+    );
+    expect(
+      executor.requiresApproval?.('search_skill_documents', { query: 'x' }),
+    ).toBe(false);
+    const requested = (await createSkillToolExecutor({
+      forcedIds: ['careful'],
+    }))!;
+    expect(requested.requiresApproval?.('load_skill', { id: 'careful' })).toBe(
+      false,
+    );
+    const foundry = (await createSkillToolExecutor({
+      consentSupported: false,
+    }))!;
+    expect(await enumOf(foundry)).toEqual(['open']);
+    const foundryForced = (await createSkillToolExecutor({
+      consentSupported: false,
+      forcedIds: ['careful'],
+    }))!;
+    expect(await enumOf(foundryForced)).toEqual(['careful', 'open']);
+  });
+
+  it('standard scope never preloads: always skills are advertised, not pushed as tool results', async () => {
+    vi.mocked(getVisibleSkills).mockResolvedValue([
+      org('open'),
+      org('standing', { activation: 'always' }),
+    ]);
+    const executor = (await createSkillToolExecutor({
+      scope: { mode: 'standard' },
+    }))!;
+    expect(await executor.preload!()).toEqual([]);
+    expect(executor.continuationState!().loads).toBe(0);
+    expect(await enumOf(executor)).toEqual(['open', 'standing']);
+  });
+
+  it('record output summarizes a load without the instruction body', async () => {
+    const executor = (await createSkillToolExecutor({}))!;
+    const result = await executor.callTool('load_skill', { id: 'open' });
+    const shown = executor.recordOutput!('load_skill', { id: 'open' }, result);
+    expect(result.resultText).toContain('BODY OF open');
+    expect(shown).not.toContain('BODY OF');
+    expect(shown).toMatch(/open/);
   });
 });

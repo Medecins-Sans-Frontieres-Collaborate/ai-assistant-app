@@ -10,7 +10,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const access = vi.hoisted(() => vi.fn());
 vi.mock('@/auth', () => ({ auth: vi.fn() }));
 vi.mock('@/lib/services/skills/skillCatalog', () => ({
-  skillsFeatureEnabled: () => true,
+  orgSkillsAvailable: () => true,
 }));
 vi.mock('@/lib/services/m365/groupMembership', () => ({
   resolveUserGroupIds: vi.fn(),

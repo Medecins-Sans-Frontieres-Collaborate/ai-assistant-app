@@ -7,10 +7,9 @@ import {
   IconChevronRight,
   IconFile,
   IconFolder,
-  IconPlayerPause,
+  IconPlayerStop,
   IconPlus,
   IconRefresh,
-  IconTrash,
   IconX,
 } from '@tabler/icons-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -35,6 +34,7 @@ import { OpenAIModels } from '@/types/openai';
 
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 
+import { AccessPill } from './AccessPill';
 import { CanonicalKeyChip } from './CanonicalKeyChip';
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
 import {
@@ -2041,15 +2041,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         />
                       )}
                   </div>
-                  <span
-                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                      isRestricted
-                        ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                        : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                    }`}
-                  >
-                    {isRestricted ? t('accessRestricted') : t('accessEveryone')}
-                  </span>
+                  <AccessPill restricted={isRestricted} />
                   {hiddenAgents.isHidden(entry.canonicalKey) && <HiddenBadge />}
                   <HideAgentButton
                     hidden={hiddenAgents.isHidden(entry.canonicalKey)}
@@ -2081,8 +2073,8 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         }
                         className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-red-700 hover:bg-red-50 dark:border-gray-700 dark:text-red-400 dark:hover:bg-red-900/20"
                       >
-                        <IconPlayerPause size={14} />
-                        {t('m365AgentIndexCancel')}
+                        <IconPlayerStop size={14} />
+                        {t('m365AgentIndexStop')}
                       </button>
                     </>
                   ) : hasBeenIndexed ? (
@@ -2123,6 +2115,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                   )}
                   <button
                     type="button"
+                    aria-expanded={editingRuleKey === entry.canonicalKey}
                     onClick={() =>
                       setEditingRuleKey(
                         editingRuleKey === entry.canonicalKey
@@ -2132,10 +2125,13 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                     }
                     className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                   >
-                    {t('editAccess')}
+                    {editingRuleKey === entry.canonicalKey
+                      ? t('cancel')
+                      : t('editAccess')}
                   </button>
                   <button
                     type="button"
+                    aria-expanded={editingId === entry.agent.id}
                     onClick={() =>
                       setEditingId(
                         editingId === entry.agent.id ? null : entry.agent.id,
@@ -2143,37 +2139,44 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                     }
                     className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                   >
-                    {t('editAgent')}
+                    {editingId === entry.agent.id
+                      ? t('cancel')
+                      : t('editAgent')}
                   </button>
                   <button
                     type="button"
-                    aria-label={t('deleteAgent')}
-                    onClick={() => setConfirmDeleteId(entry.agent.id)}
-                    className="shrink-0 rounded-md border border-gray-200 p-1.5 text-red-600 hover:bg-red-50 dark:border-gray-700 dark:hover:bg-red-900/20"
+                    className="shrink-0 rounded-md border border-red-200 px-3 py-1 text-sm text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-900/20"
+                    onClick={() =>
+                      setConfirmDeleteId(
+                        confirmDeleteId === entry.agent.id
+                          ? null
+                          : entry.agent.id,
+                      )
+                    }
                   >
-                    <IconTrash size={15} />
+                    {t('deleteAgent')}
                   </button>
                 </div>
 
                 {confirmDeleteId === entry.agent.id && (
-                  <div className="mt-2 flex items-center justify-between rounded-md bg-red-50 p-2 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-300">
-                    <span>{t('m365AgentDeleteConfirm')}</span>
-                    <span className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setConfirmDeleteId(null)}
-                        className="rounded-md px-2 py-0.5 hover:bg-red-100 dark:hover:bg-red-900/40"
-                      >
-                        {t('cancel')}
-                      </button>
+                  <div className="mt-2 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-700 dark:bg-red-900/20 dark:text-red-300">
+                    <p>{t('m365AgentDeleteConfirm')}</p>
+                    <div className="mt-2 flex gap-2">
                       <button
                         type="button"
                         onClick={() => void handleDelete(entry)}
-                        className="rounded-md bg-red-600 px-2 py-0.5 font-medium text-white hover:bg-red-700"
+                        className="rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700"
                       >
-                        {t('deleteAgent')}
+                        {t('confirmDeleteAgent')}
                       </button>
-                    </span>
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDeleteId(null)}
+                        className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                      >
+                        {t('cancel')}
+                      </button>
+                    </div>
                   </div>
                 )}
 

@@ -1,5 +1,6 @@
 import { RAGService } from '@/lib/services/ragService';
 
+import { parseMetadataFromContent } from '@/lib/utils/app/metadata';
 import { createAzureOpenAIStreamProcessor } from '@/lib/utils/app/stream/streamProcessor';
 
 import { Citation } from '@/types/rag';
@@ -236,7 +237,14 @@ describe('Azure OpenAI Stream Processor', () => {
 
     const stream = createAzureOpenAIStreamProcessor(errorResponse);
 
-    await expect(readStreamContent(stream)).rejects.toThrow('Stream error');
+    // Mid-stream upstream failures end CLEANLY with an in-band streamError
+    // (never a socket abort, which the client treats as a retryable
+    // network error and silently re-sends on a fallback model).
+    // Raw body: readStreamContent strips the metadata block on purpose.
+    const content = await new Response(stream).text();
+    const parsed = parseMetadataFromContent(content);
+    expect(parsed.streamError?.code).toBe('UPSTREAM_STREAM_FAILED');
+    expect(parsed.streamError?.message).toMatch(/stopped responding/);
   });
 
   it('handles RAG service citation processing errors', async () => {
@@ -256,8 +264,9 @@ describe('Azure OpenAI Stream Processor', () => {
       mockRAGService,
     );
 
-    await expect(readStreamContent(stream)).rejects.toThrow(
-      'Citation processing error',
+    const content = await new Response(stream).text();
+    expect(parseMetadataFromContent(content).streamError?.code).toBe(
+      'UPSTREAM_STREAM_FAILED',
     );
   });
 });

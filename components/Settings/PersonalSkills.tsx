@@ -65,7 +65,11 @@ export function PersonalSkills() {
       setError(parsed.errors.join('\n'));
       return;
     }
-    const { applyToAgents: _ignored, ...skill } = parsed.skill;
+    const {
+      applyToAgents: _ignored,
+      requireConsent: _consent,
+      ...skill
+    } = parsed.skill;
     review({ ...skill, enabled: true });
   };
   const importFile = async (file: File) => {
@@ -80,7 +84,11 @@ export function PersonalSkills() {
       } else {
         const parsed = parseSkillMarkdown(await file.text());
         if (!parsed.ok) throw new Error(parsed.errors.join('\n'));
-        const { applyToAgents: _ignored, ...skill } = parsed.skill;
+        const {
+          applyToAgents: _ignored,
+          requireConsent: _consent,
+          ...skill
+        } = parsed.skill;
         review({ ...skill, enabled: true });
       }
     } catch (error) {
@@ -257,7 +265,7 @@ export function PersonalSkills() {
                 })
               }
             >
-              {(['auto', 'always', 'off'] as const).map((value) => (
+              {(['auto', 'always', 'manual', 'off'] as const).map((value) => (
                 <option key={value} value={value}>
                   {fields(`activation.${value}`)}
                 </option>

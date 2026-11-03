@@ -30,6 +30,7 @@ vi.mock('@/client/hooks/useM365Enabled', () => ({
     meetingsEnabled: true,
     toolsEnabled: true,
     playbooksEnabled,
+    digestEnabled: true,
   }),
 }));
 

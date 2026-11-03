@@ -12,6 +12,10 @@ import { FC, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useAgentAccessGroupsEnabled } from '@/client/hooks/useAgentAccessGroupsEnabled';
+import {
+  collectClientGroupIds,
+  useGroupNames,
+} from '@/client/hooks/useGroupNames';
 import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
 import {
@@ -132,6 +136,9 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
   globalOverrides = [],
 }) => {
   const t = useTranslations('limits');
+  const groupNames = useGroupNames(
+    collectClientGroupIds({ jurisdictions: [delegation.jurisdiction] }),
+  );
   const tPeople = useTranslations('peopleSuggest');
   const peopleSuggest = useM365PeopleSuggest();
   const groupsEnabled = useAgentAccessGroupsEnabled();
@@ -261,7 +268,7 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
           </span>
           {!expanded && (
             <span className={`w-full ${ADMIN_MUTED}`}>
-              {jurisdictionLine(t, delegation.jurisdiction)}
+              {jurisdictionLine(t, delegation.jurisdiction, groupNames)}
             </span>
           )}
         </button>

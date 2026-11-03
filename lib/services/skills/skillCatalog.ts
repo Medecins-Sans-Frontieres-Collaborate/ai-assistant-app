@@ -18,12 +18,14 @@ import { CatalogSkill, SKILL_LIMITS, Skill } from './types';
 import { env } from '@/config/environment';
 
 /**
- * Whether the skills feature is on for this deployment. Skills ride the
- * agent-access storage, rule, and admin machinery, so both gates must hold
- * — SKILLS_ENABLED alone has nothing to stand on.
+ * Whether ORGANIZATION skills (admin-authored records, access rules, the
+ * admin area) are available: they ride the agent-access storage and rule
+ * machinery. Skills as a feature are always on — without this, the catalog
+ * is the compiled built-ins plus the user's personal skills
+ * (docs/SKILLS_DESIGN.md §4).
  */
-export function skillsFeatureEnabled(): boolean {
-  return env.SKILLS_ENABLED && env.AGENT_ACCESS_CONTROL_ENABLED;
+export function orgSkillsAvailable(): boolean {
+  return env.AGENT_ACCESS_CONTROL_ENABLED;
 }
 
 /**
@@ -58,8 +60,7 @@ export function buildSkillCatalog(storedSkills: Skill[]): CatalogSkill[] {
 }
 
 /**
- * The catalog a USER may see: feature-gated, 'off' records dropped, access
- * rules applied. Callers that evaluate group-restricted rules reliably must
+ * The catalog a USER may see: 'off' records dropped, access rules applied. Callers that evaluate group-restricted rules reliably must
  * warm the group cache first (resolveUserGroupIds in routes); a degraded
  * lookup yields 'unavailable' and the skill is treated as not visible —
  * fail closed, the guides contract.
@@ -67,7 +68,11 @@ export function buildSkillCatalog(storedSkills: Skill[]): CatalogSkill[] {
 export async function getVisibleSkills(
   userMail: string | undefined,
 ): Promise<CatalogSkill[]> {
-  if (!skillsFeatureEnabled()) return [];
+  // No agent-access storage: built-ins only, org-wide (nothing to filter by).
+  if (!orgSkillsAvailable())
+    return buildSkillCatalog([]).filter(
+      (entry) => entry.skill.activation !== 'off',
+    );
 
   const service = AgentAccessService.getInstance();
   await service.ensureFresh();
@@ -156,6 +161,12 @@ export interface ActiveSkillsResolution {
    * (docs/SKILLS_DESIGN.md §10).
    */
   droppedForcedIds: string[];
+  /**
+   * Routed selections withheld because the skill requires the user's
+   * consent (§5.5): suggested in the record, applied only when the user
+   * requests or pins the skill.
+   */
+  consentRequired: Skill[];
 }
 
 /**
@@ -181,6 +192,7 @@ export function resolveActiveSkills(
   const active: ActiveSkill[] = [];
   const activeIds = new Set<string>();
   const droppedForcedIds: string[] = [];
+  const consentRequired: Skill[] = [];
 
   for (const id of forcedSkillIds.slice(0, SKILL_LIMITS.maxForcedPerTurn)) {
     if (activeIds.has(id)) continue;
@@ -201,6 +213,11 @@ export function resolveActiveSkills(
     const skill = visibleById.get(id);
     if (!skill || skill.activation !== 'auto' || activeIds.has(id)) continue;
     if (routedCount >= SKILL_LIMITS.maxAutoPerTurn) break;
+    if (skill.requireConsent) {
+      // The router may propose it; only the user can apply it.
+      consentRequired.push(skill);
+      continue;
+    }
     active.push({ skill, via: 'routed' });
     activeIds.add(id);
     routedCount += 1;
@@ -216,5 +233,5 @@ export function resolveActiveSkills(
     activeIds.add(entry.skill.id);
   }
 
-  return { active, droppedForcedIds };
+  return { active, droppedForcedIds, consentRequired };
 }

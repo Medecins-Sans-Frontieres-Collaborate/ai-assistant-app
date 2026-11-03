@@ -54,6 +54,12 @@ export class StreamInterruptedError extends Error {
      * Files tray and strip the dead reference from the conversation.
      */
     public readonly fileUrl?: string,
+    /**
+     * Provider failure class from the server's classification
+     * (lib/services/chat/providerErrors.ts). Lets the store reason about
+     * the CAUSE: a content-filter stop must never be re-sent elsewhere.
+     */
+    public readonly kind?: string,
   ) {
     super(message);
     this.name = 'StreamInterruptedError';
@@ -92,6 +98,7 @@ export class StreamParser {
     code?: string;
     retry?: boolean;
     fileUrl?: string;
+    kind?: string;
   };
   private extractedMcpPlan?: import('@/types/mcp').McpPlan;
   private hasReceivedContent: boolean = false;
@@ -541,7 +548,13 @@ export class StreamParser {
    * though the HTTP stream itself completed.
    */
   getStreamError():
-    | { message: string; code?: string; retry?: boolean; fileUrl?: string }
+    | {
+        message: string;
+        code?: string;
+        retry?: boolean;
+        fileUrl?: string;
+        kind?: string;
+      }
     | undefined {
     return this.extractedStreamError;
   }

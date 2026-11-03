@@ -66,6 +66,16 @@ function classifyDenial(denial: LimitDenialMetadata | null): DenialShape {
   return { kind: 'unknown' };
 }
 
+/** Error codes with their own localized copy under chat.streamErrors. */
+const STREAM_ERROR_COPY_CODES = new Set([
+  'MODEL_CONTENT_FILTERED',
+  'MODEL_CONTEXT_TOO_LONG',
+  'MODEL_OUTPUT_LIMIT',
+  'MODEL_RATE_LIMITED',
+  'MODEL_QUOTA_EXCEEDED',
+  'MODEL_AUTH_FAILED',
+]);
+
 interface ChatErrorProps {
   error: string | null;
   /**
@@ -270,10 +280,16 @@ export const ChatError: React.FC<ChatErrorProps> = ({
             duration: durationLabel(timeout.seconds),
           })
     : null;
+  // Cause-specific model failures (lib/services/chat/providerErrors.ts)
+  // render localized copy; every other code shows the server sentence.
+  const streamErrorCopy =
+    errorCode && STREAM_ERROR_COPY_CODES.has(errorCode)
+      ? t(`chat.streamErrors.${errorCode}`)
+      : null;
   const effectiveError =
     errorCode === 'FILE_NOT_FOUND'
       ? t('chat.attachedFileExpired')
-      : (timeoutCopy ?? denialCopy ?? error);
+      : (timeoutCopy ?? denialCopy ?? streamErrorCopy ?? error);
 
   // Truncate so the card stays readable; full text stays on the title attr.
   const renderedError = (() => {

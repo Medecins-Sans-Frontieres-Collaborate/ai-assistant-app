@@ -247,7 +247,18 @@ export class ChatPipeline {
           throw error;
         } finally {
           cancelTimeout();
-          options.signal?.removeEventListener('abort', onRequestAbort);
+          // The model handler stages return a Response whose body is
+          // generated AFTER the stage resolved (the route pipes it). Their
+          // stageSignal is what the upstream SDK call was opened with, so
+          // keep forwarding the request-level abort to it for the life of
+          // the response: a client disconnect then cancels the model
+          // stream / tool loop instead of leaving it running unobserved.
+          // (The listener is `once`, so nothing leaks past one fire.)
+          const outlivesStage =
+            isModelHandlerStage(stage.name) && !!context.response;
+          if (!outlivesStage) {
+            options.signal?.removeEventListener('abort', onRequestAbort);
+          }
         }
 
         if (

@@ -4,9 +4,12 @@ import { useSkillSelection } from '@/client/hooks/settings/useSkillSelection';
 
 import { SKILL_LIMITS } from '@/lib/services/skills/types';
 
+import { useSettingsStore } from '@/client/stores/settingsStore';
+
 /** Capabilities-tray controls: use once or pin to this conversation. */
 export function SkillControls() {
   const t = useTranslations('chat');
+  const autoEnabled = useSettingsStore((state) => state.skillsAutoEnabled);
   const {
     query,
     pinned,
@@ -29,7 +32,11 @@ export function SkillControls() {
         {t('addSkill')}
       </h3>
       <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">
-        {agentAttached ? t('skillsAgentToolsHint') : t('skillsAutomaticHint')}
+        {agentAttached
+          ? t('skillsAgentToolsHint')
+          : autoEnabled
+            ? t('skillsAutomaticHint')
+            : t('skillsManualHint')}
       </p>
       <ul className="mt-2 divide-y divide-gray-200 dark:divide-gray-700">
         {(query.data ?? []).map((skill) => {
@@ -52,28 +59,42 @@ export function SkillControls() {
                   {skill.description}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  aria-label={`${t('skillUseOnce')}: ${skill.name}`}
-                  aria-pressed={isRequested}
-                  disabled={disabled || full || isPinned}
-                  onClick={() => toggleOnce(skill.id)}
-                  className={buttonClass}
+              {skill.activation === 'always' && !agentAttached ? (
+                // Standing skills are applied on every message by an admin;
+                // there is nothing to request or pin, but users should see
+                // the standing set rather than wonder why guidance appears.
+                // Agents never receive injected skills (only tools), so in
+                // agent mode an 'always' skill is requestable like any other.
+                <span
+                  title={t('skillAlwaysOnHint')}
+                  className="rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs text-violet-900 dark:border-violet-800 dark:bg-violet-950/40 dark:text-violet-200"
                 >
-                  {t('skillUseOnce')}
-                </button>
-                <button
-                  type="button"
-                  aria-label={`${t('skillPin')}: ${skill.name}`}
-                  aria-pressed={isPinned}
-                  disabled={!isPinned && (disabled || full)}
-                  onClick={() => togglePin(skill.id)}
-                  className={buttonClass}
-                >
-                  {t('skillPin')}
-                </button>
-              </div>
+                  {t('skillAlwaysOn')}
+                </span>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    aria-label={`${t('skillUseOnce')}: ${skill.name}`}
+                    aria-pressed={isRequested}
+                    disabled={disabled || full || isPinned}
+                    onClick={() => toggleOnce(skill.id)}
+                    className={buttonClass}
+                  >
+                    {t('skillUseOnce')}
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={`${t('skillPin')}: ${skill.name}`}
+                    aria-pressed={isPinned}
+                    disabled={!isPinned && (disabled || full)}
+                    onClick={() => togglePin(skill.id)}
+                    className={buttonClass}
+                  >
+                    {t('skillPin')}
+                  </button>
+                </div>
+              )}
             </li>
           );
         })}

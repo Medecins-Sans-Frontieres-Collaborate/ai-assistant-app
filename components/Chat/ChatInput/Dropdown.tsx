@@ -4,6 +4,7 @@ import {
   IconBrandWindows,
   IconCalendarEvent,
   IconCamera,
+  IconChecklist,
   IconCirclePlus,
   IconCode,
   IconFileMusic,
@@ -43,7 +44,7 @@ import useEnhancedOutsideClick from '@/client/hooks/ui/useEnhancedOutsideClick';
 import { useIsMobile } from '@/client/hooks/ui/useIsMobile';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
-import { fillComposerWithPlaybook } from '@/client/services/m365/playbooks/playbookLauncher';
+import { launchPlaybook } from '@/client/services/m365/playbooks/playbookLauncher';
 import { M365_PLAYBOOKS } from '@/client/services/m365/playbooks/playbookRegistry';
 import {
   M365_BUILTIN_SERVER_ID,
@@ -167,6 +168,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     translationEnabled: m365TranslationFlag,
     meetingsEnabled: m365MeetingsFlag,
     playbooksEnabled: m365PlaybooksFlag,
+    digestEnabled: m365DigestFlag,
     toolsEnabled: m365ToolsFlag,
   } = useM365Enabled();
   const isM365FilesEnabled = m365FilesFlag && m365Connected;
@@ -175,6 +177,14 @@ const Dropdown: React.FC<DropdownProps> = ({
   const isM365MeetingsEnabled = m365MeetingsFlag && m365Connected;
   const isM365ToolsEnabled = m365ToolsFlag && m365Connected;
   const isM365PlaybooksEnabled = m365PlaybooksFlag && m365Connected;
+  // Digest-kind playbooks need the digest flag too; prompt-kind ones don't.
+  const visibleM365Playbooks = useMemo(
+    () =>
+      M365_PLAYBOOKS.filter(
+        (playbook) => playbook.kind !== 'digest' || m365DigestFlag,
+      ),
+    [m365DigestFlag],
+  );
   const setTranscriptionStatus = useChatInputStore(
     (state) => state.setTranscriptionStatus,
   );
@@ -914,15 +924,24 @@ const Dropdown: React.FC<DropdownProps> = ({
               },
               category: 'tools' as const,
             },
-            ...M365_PLAYBOOKS.map((playbook) => ({
+            ...visibleM365Playbooks.map((playbook) => ({
               id: `m365Playbook-${playbook.id}`,
-              icon: (
-                <IconRoute size={18} className="text-blue-500 flex-shrink-0" />
-              ),
+              icon:
+                playbook.kind === 'digest' ? (
+                  <IconChecklist
+                    size={18}
+                    className="text-blue-500 flex-shrink-0"
+                  />
+                ) : (
+                  <IconRoute
+                    size={18}
+                    className="text-blue-500 flex-shrink-0"
+                  />
+                ),
               label: tM365(`playbooks.${playbook.titleKey}`),
               infoTooltip: tM365(`playbooks.${playbook.descriptionKey}`),
               onClick: () => {
-                void fillComposerWithPlaybook(playbook.id);
+                void launchPlaybook(playbook.id);
                 closeDropdown();
               },
               category: 'tools' as const,
@@ -1165,6 +1184,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       isM365TranslationEnabled,
       isM365MeetingsEnabled,
       isM365PlaybooksEnabled,
+      visibleM365Playbooks,
       searchMode,
       interpreterMode,
       selectedToneId,

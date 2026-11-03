@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const state = vi.hoisted(() => ({ fetchedAt: 100_000 }));
 vi.mock('@/config/environment', () => ({
-  env: { SKILLS_ENABLED: true, AGENT_ACCESS_CONTROL_ENABLED: true },
+  env: { AGENT_ACCESS_CONTROL_ENABLED: true },
 }));
 vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
   AgentAccessService: {

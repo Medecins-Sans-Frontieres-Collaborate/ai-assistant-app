@@ -13,6 +13,11 @@ import {
   PolicyPutBody,
   toPolicyPutDelegation,
 } from '@/client/hooks/settings/useLimitsAdmin';
+import {
+  collectClientGroupIds,
+  seedGroupNames,
+  useGroupNames,
+} from '@/client/hooks/useGroupNames';
 
 import {
   LimitDelegation,
@@ -20,6 +25,7 @@ import {
   LimitOverride,
   LimitsFailMode,
   LimitsMode,
+  ModelAccessRule,
 } from '@/lib/services/limits/types';
 
 import { AdminTabs } from '@/components/Admin/AdminTabs';
@@ -39,6 +45,7 @@ import { DelegationsTab } from '@/components/Limits/DelegationsTab';
 import { EffectiveLimitsPreview } from '@/components/Limits/EffectiveLimitsPreview';
 import { GlobalDefaultsSection } from '@/components/Limits/GlobalDefaultsSection';
 import { useLimitsCost } from '@/components/Limits/LimitsCostContext';
+import { ModelAccessTab } from '@/components/Limits/ModelAccessTab';
 import { OverrideEditor } from '@/components/Limits/OverrideEditor';
 import { RelevantRulesPopover } from '@/components/Limits/RelevantRulesPopover';
 import {
@@ -51,13 +58,16 @@ import {
   PolicyResponse,
   emptyDelegation,
   emptyOverride,
+  groupMembershipWarning,
 } from '@/components/Limits/types';
 
 /** `cost` exists only while `useLimitsCost().calculator` is on. */
-type PanelTab = 'defaults' | 'overrides' | 'delegations' | 'cost';
+type PanelTab = 'defaults' | 'models' | 'overrides' | 'delegations' | 'cost';
 
 interface Draft {
   defaults: LimitEntry[];
+  /** Model approval rules (docs/LIMITS.md "Model approval"); always sent. */
+  modelAccess: ModelAccessRule[];
   overrides: LimitOverride[];
   /**
    * ⚠ Must be present on every PUT. The server refuses a body lacking the
@@ -75,6 +85,7 @@ interface Draft {
 
 const EMPTY_DRAFT: Draft = {
   defaults: [],
+  modelAccess: [],
   overrides: [],
   delegations: [],
   mode: 'observe',
@@ -88,6 +99,7 @@ function draftFrom(data: PolicyResponse): Draft {
   return data.policy
     ? {
         defaults: data.policy.defaults,
+        modelAccess: data.policy.modelAccess ?? [],
         overrides: data.policy.overrides,
         delegations: data.policy.delegations ?? [],
         mode: data.policy.mode,
@@ -160,6 +172,9 @@ export const GlobalLimitsPanel: FC = () => {
   });
 
   const applyServer = (data: PolicyResponse) => {
+    // Stored group names into the shared client cache before the cards
+    // render, so group overrides and grants show names with no lookup.
+    seedGroupNames(data.policy?.groupLabels);
     setEtag(data.etag);
     setDraft(draftFrom(data));
     setDirty(false);
@@ -304,6 +319,15 @@ export const GlobalLimitsPanel: FC = () => {
   // counter from zero org-wide and, for the cache TTL, lets replicas debit
   // different documents. Worth saying before Save, not after.
   const savedTimezone = policyQuery.data?.policy?.timezone ?? 'UTC';
+  const membershipWarning = groupMembershipWarning(
+    policyQuery.data?.groupMembership,
+  );
+  const groupNames = useGroupNames(
+    collectClientGroupIds({
+      overrides: draft.overrides,
+      jurisdictions: draft.delegations.map((d) => d.jurisdiction),
+    }),
+  );
   const timezoneChanged =
     policyQuery.data?.policy !== undefined &&
     policyQuery.data?.policy !== null &&
@@ -396,6 +420,27 @@ export const GlobalLimitsPanel: FC = () => {
         {draft.mode === 'observe' && (
           <p className={`mt-3 ${ADMIN_BANNER_WARN}`}>{t('observeNotice')}</p>
         )}
+        {membershipWarning && policyQuery.data?.groupMembership && (
+          <p className={`mt-3 ${ADMIN_BANNER_WARN}`} role="alert">
+            {t(
+              membershipWarning === 'structural'
+                ? 'groupMembershipDegradedStructural'
+                : 'groupMembershipDegradedRetryable',
+              {
+                reason:
+                  policyQuery.data.groupMembership.lastFailure?.reason ?? '',
+              },
+            )}
+            {policyQuery.data.groupMembership.degradedUsers > 0 && (
+              <>
+                {' '}
+                {t('groupMembershipDegradedUsers', {
+                  count: policyQuery.data.groupMembership.degradedUsers,
+                })}
+              </>
+            )}
+          </p>
+        )}
         {timezoneChanged && (
           <p className={`mt-3 ${ADMIN_BANNER_WARN}`} role="note">
             {t('timezoneChangeWarning', {
@@ -412,6 +457,7 @@ export const GlobalLimitsPanel: FC = () => {
       <AdminTabs
         tabs={[
           { id: 'defaults', label: t('tab.defaults') },
+          { id: 'models', label: t('tab.models') },
           { id: 'overrides', label: t('tab.overrides') },
           { id: 'delegations', label: t('tab.delegations') },
           ...(calculator
@@ -433,6 +479,15 @@ export const GlobalLimitsPanel: FC = () => {
           <GlobalDefaultsSection
             entries={draft.defaults}
             onChange={(defaults) => patch({ defaults })}
+            disabled={saving}
+          />
+        )}
+        {tab === 'models' && (
+          <ModelAccessTab
+            rules={draft.modelAccess}
+            defaults={draft.defaults}
+            onChange={(modelAccess) => patch({ modelAccess })}
+            mode={draft.mode}
             disabled={saving}
           />
         )}
@@ -469,7 +524,12 @@ export const GlobalLimitsPanel: FC = () => {
                   globalDefaults={draft.defaults}
                   defaultExpanded={newOverrideIds.has(override.id)}
                   variant={override.delegationId ? 'scoped' : 'global'}
-                  appliesTo={appliesToLine(t, override.scope, override.targets)}
+                  appliesTo={appliesToLine(
+                    t,
+                    override.scope,
+                    override.targets,
+                    groupNames,
+                  )}
                   delegationOptions={delegationOptions}
                   verdicts={
                     delegation
@@ -555,7 +615,11 @@ export const GlobalLimitsPanel: FC = () => {
           />
         )}
         {tab === 'cost' && calculator && (
-          <CostCalculatorLazy caps={draft.defaults} mode="global" />
+          <CostCalculatorLazy
+            caps={draft.defaults}
+            modelAccess={draft.modelAccess}
+            mode="global"
+          />
         )}
       </div>
 

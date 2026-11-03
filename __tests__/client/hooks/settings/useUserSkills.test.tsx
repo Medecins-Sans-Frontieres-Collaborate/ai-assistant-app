@@ -8,7 +8,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 describe('merged skill picker catalog', () => {
   afterEach(() => vi.unstubAllGlobals());
-  function setup(enabled: boolean) {
+  function setup(autoEnabled: boolean) {
     const client = new QueryClient({
       defaultOptions: { queries: { retry: false } },
     });
@@ -17,7 +17,6 @@ describe('merged skill picker catalog', () => {
         JSON.stringify({
           success: true,
           data: {
-            enabled,
             skills: [
               {
                 id: 'report',
@@ -32,6 +31,7 @@ describe('merged skill picker catalog', () => {
     );
     vi.stubGlobal('fetch', fetch);
     useSettingsStore.setState({
+      skillsAutoEnabled: autoEnabled,
       userSkills: [
         {
           id: 'report',
@@ -71,7 +71,7 @@ describe('merged skill picker catalog', () => {
     expect(result.current.data?.[1]).not.toHaveProperty('instructions');
     expect(result.current.data?.[1].personal).toBe(true);
   });
-  it('does not expose personal skills when the deployment feature is disabled', async () => {
+  it('does not expose personal skills while automatic selection is off (they are never sent)', async () => {
     const { result } = setup(false);
     await waitFor(() => expect(result.current.data).toBeDefined());
     expect(result.current.data?.some((skill) => skill.personal)).toBe(false);

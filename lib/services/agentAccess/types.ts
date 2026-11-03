@@ -216,6 +216,22 @@ export type AgentAccessHistoryEntry = z.infer<
  * permissive per the schema-evolution rule: new fields must be
  * optional/defaulted so previously-stored blobs keep parsing.
  */
+/**
+ * Which skills a persona may offer through the read-only skill tools
+ * (docs/SKILLS_DESIGN.md §5.4): every organization skill marked available
+ * to agents (`inherit`, the default), none at all, or an explicit list the
+ * admin attached to this persona (`selected`, which does not require the
+ * per-skill agent flag). Access rules still apply to the user.
+ */
+export const PromptAgentSkillAccessSchema = z.enum([
+  'inherit',
+  'none',
+  'selected',
+]);
+export type PromptAgentSkillAccess = z.infer<
+  typeof PromptAgentSkillAccessSchema
+>;
+
 export const PromptAgentSchema = z.object({
   version: z.literal(1),
   /** Server-generated `prompt-<hex>`; immutable — canonical keys hang off it. */
@@ -224,6 +240,9 @@ export const PromptAgentSchema = z.object({
   description: z.string().default(''),
   systemPrompt: z.string().min(1),
   modelId: z.string().min(1),
+  /** Optional on read so stored personas keep parsing; absent = 'inherit'. */
+  skillAccess: PromptAgentSkillAccessSchema.optional(),
+  skillIds: z.array(z.string().min(1).max(64)).max(20).optional(),
   createdBy: z.string(),
   createdAt: z.string(),
   updatedBy: z.string(),

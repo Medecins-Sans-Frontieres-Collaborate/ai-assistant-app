@@ -13,6 +13,10 @@ import {
   useDeleteScopedOverride,
   useSaveScopedOverride,
 } from '@/client/hooks/settings/useLimitsAdmin';
+import {
+  collectClientGroupIds,
+  useGroupNames,
+} from '@/client/hooks/useGroupNames';
 
 import { LimitOverride } from '@/lib/services/limits/types';
 import { LIMITS_ERROR_CODES } from '@/lib/services/limits/wire';
@@ -100,6 +104,12 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
   const save = useSaveScopedOverride();
   const remove = useDeleteScopedOverride();
   const [draft, setDraft] = useState<LimitOverride>(override);
+  const groupNames = useGroupNames(
+    collectClientGroupIds({
+      overrides: [draft],
+      jurisdictions: [delegation.jurisdiction],
+    }),
+  );
   const [dirty, setDirty] = useState(false);
   const [rejected, setRejected] = useState<string[]>([]);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -245,7 +255,7 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
         disabled={disabled}
         defaultExpanded={isNew}
         variant="scoped"
-        appliesTo={appliesToLine(t, draft.scope, draft.targets)}
+        appliesTo={appliesToLine(t, draft.scope, draft.targets, groupNames)}
         verdicts={verdicts}
         rejectedTargets={rejected}
         chips={
@@ -318,7 +328,11 @@ export const ScopedOverrideCard: FC<ScopedOverrideCardProps> = ({
         )}
         <span className={ADMIN_MUTED}>
           {t('confinedTo', {
-            jurisdiction: jurisdictionLine(t, delegation.jurisdiction),
+            jurisdiction: jurisdictionLine(
+              t,
+              delegation.jurisdiction,
+              groupNames,
+            ),
           })}
         </span>
       </div>

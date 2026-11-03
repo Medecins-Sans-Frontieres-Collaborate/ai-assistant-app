@@ -1,6 +1,6 @@
 'use client';
 
-import { IconRobot, IconX } from '@tabler/icons-react';
+import { IconRobot } from '@tabler/icons-react';
 import React from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -18,15 +18,18 @@ import {
   isAgentShapedModelId,
 } from '@/lib/utils/app/agentAttachment';
 
+import { CapabilityBubble } from '@/components/Chat/ChatInput/CapabilityBubble';
+
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 
 /**
- * Compact badge in the composer showing the agent attached to this
- * conversation — the sibling of ConnectorActivityBadge, same pill language,
- * same "renders nothing when inactive" rule, so the empty conversation adds
- * zero chrome. Click opens the capabilities tray (where the model semantics
- * are spelled out); the × detaches in place, restoring the remembered model
- * when a Foundry attachment had swapped it.
+ * Bubble in the composer's capability row showing the agent attached to
+ * this conversation — the sibling of ConnectorActivityBadge and the skill
+ * bubbles, same icon-first shape (name on hover/focus), same "renders
+ * nothing when inactive" rule, so the empty conversation adds zero chrome.
+ * Click opens the capabilities tray (where the model semantics are spelled
+ * out); the × detaches in place, restoring the remembered model when a
+ * Foundry attachment had swapped it.
  */
 export const AgentChip: React.FC = () => {
   const t = useTranslations('agentAttach');
@@ -59,8 +62,7 @@ export const AgentChip: React.FC = () => {
       ? 'own-model'
       : 'your-model';
 
-  const handleDetach = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleDetach = () => {
     const fallbackModel =
       models.find((m) => m.id === defaultModelId) ?? models[0];
     updateConversation(
@@ -70,31 +72,14 @@ export const AgentChip: React.FC = () => {
   };
 
   return (
-    <button
-      type="button"
-      onClick={() => setTrayOpen(!trayOpen)}
-      aria-expanded={trayOpen}
+    <CapabilityBubble
+      icon={<IconRobot size={14} className="text-violet-500" />}
+      label={name}
       title={`${name} — ${t(`semantics.${semantics}`)}`}
-      className="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-    >
-      <IconRobot size={14} className="text-violet-500" aria-hidden="true" />
-      <span className="max-w-[7rem] truncate">{name}</span>
-      <span
-        role="button"
-        tabIndex={0}
-        onClick={handleDetach}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleDetach(e as unknown as React.MouseEvent);
-          }
-        }}
-        aria-label={t('detach')}
-        title={t('detach')}
-        className="-mr-0.5 rounded-full p-0.5 text-gray-500 hover:bg-gray-300 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-gray-100"
-      >
-        <IconX size={11} aria-hidden="true" />
-      </span>
-    </button>
+      ariaExpanded={trayOpen}
+      onClick={() => setTrayOpen(!trayOpen)}
+      onRemove={handleDetach}
+      removeLabel={t('detach')}
+    />
   );
 };

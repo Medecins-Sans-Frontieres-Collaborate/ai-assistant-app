@@ -1,5 +1,10 @@
 'use client';
 
+import {
+  DIGEST_DEFAULT_PRESET,
+  type DigestPeriodPreset,
+  isDigestPreset,
+} from '@/lib/services/m365/digest/digestWindow';
 import { normalizeUserSkills } from '@/lib/services/skills/userSkills';
 
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
@@ -12,9 +17,12 @@ import { ToolApprovalRule } from '@/lib/utils/shared/chat/toolApprovalRules';
 import { DEFAULT_CHANNEL_SET_ID } from '@/lib/utils/shared/drafter/channels/channelSets';
 import {
   EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+  EMISSIONS_CHIP_LABEL_MODE_DEFAULT,
   EMISSIONS_CHIP_VISIBILITY_DEFAULT,
+  EmissionsChipLabelMode,
   EmissionsChipVisibility,
   clampEmissionsChipAutoHideMs,
+  isEmissionsChipLabelMode,
   isEmissionsChipVisibility,
 } from '@/lib/utils/shared/emissions';
 import {
@@ -40,6 +48,11 @@ import {
   isValidPort,
 } from '@/types/localRuntime';
 import type { M365PickerLocation, M365SaveDestination } from '@/types/m365';
+import {
+  DIGEST_SOURCE_KINDS,
+  type DigestChannelRef,
+  type DigestSourceKind,
+} from '@/types/m365Digest';
 import {
   DEFAULT_MODEL_ORDER,
   ModelListSource,
@@ -254,6 +267,12 @@ interface SettingsStore {
   prompts: Prompt[];
   /** Browser-local personal skills; never stored by admin APIs. */
   userSkills: import('@/lib/services/skills/types').UserSkill[];
+  /**
+   * Let the assistant apply skills automatically (docs/SKILLS_DESIGN.md
+   * §5.1). Off: no automatic selection and no personal skills are sent;
+   * requested/pinned skills and admin `always` skills still apply.
+   */
+  skillsAutoEnabled: boolean;
   tones: Tone[];
   customAgents: CustomAgent[];
   customAgentSources: AgentSource[];
@@ -494,6 +513,7 @@ interface SettingsStore {
   setUserSkills: (
     skills: import('@/lib/services/skills/types').UserSkill[],
   ) => void;
+  setSkillsAutoEnabled: (enabled: boolean) => void;
   addPrompt: (prompt: Prompt) => void;
   updatePrompt: (id: string, updates: Partial<Prompt>) => void;
   deletePrompt: (id: string) => void;
@@ -769,6 +789,13 @@ interface SettingsStore {
   setEmissionsChipAutoHideMs: (ms: number) => void;
 
   /**
+   * What the collapsed chip reads: emissions (default), cost, or both. The
+   * popover always carries both figures (docs/CHAT_COST_CHIP.md).
+   */
+  emissionsChipLabelMode: EmissionsChipLabelMode;
+  setEmissionsChipLabelMode: (mode: EmissionsChipLabelMode) => void;
+
+  /**
    * Pacing of the map workflow's time-lapse. Persisted rather than kept as
    * workspace view state: how fast is comfortable to read is a property of
    * the person watching, not of the map they happen to have open.
@@ -872,6 +899,17 @@ interface SettingsStore {
    */
   m365PlaybookChipsEnabled: boolean;
   setM365PlaybookChipsEnabled: (enabled: boolean) => void;
+  /**
+   * Daily digest defaults (docs/M365_DAILY_DIGEST.md): the period preset
+   * the launcher opens with, the sources ticked, and the Teams channels to
+   * scan (≤10, picked in the launcher). Persisted.
+   */
+  m365DigestPreset: DigestPeriodPreset;
+  setM365DigestPreset: (preset: DigestPeriodPreset) => void;
+  m365DigestSources: DigestSourceKind[];
+  setM365DigestSources: (sources: DigestSourceKind[]) => void;
+  m365DigestChannels: DigestChannelRef[];
+  setM365DigestChannels: (channels: DigestChannelRef[]) => void;
   /**
    * Runtime-only mirror of the LaunchDarkly `m365Tools` gate, set by
    * AppInitializer so chatStore (vanilla, no hook access) can gate what
@@ -998,6 +1036,7 @@ export const useSettingsStore = create<SettingsStore>()(
       models: [],
       prompts: [],
       userSkills: [],
+      skillsAutoEnabled: true,
       tones: [],
       customAgents: [],
       customAgentSources: [],
@@ -1086,6 +1125,7 @@ export const useSettingsStore = create<SettingsStore>()(
       // Emissions chip shown persistently by default
       emissionsChipVisibility: EMISSIONS_CHIP_VISIBILITY_DEFAULT,
       emissionsChipAutoHideMs: EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+      emissionsChipLabelMode: EMISSIONS_CHIP_LABEL_MODE_DEFAULT,
 
       mapTimelapse: DEFAULT_MAP_TIMELAPSE,
 
@@ -1100,6 +1140,9 @@ export const useSettingsStore = create<SettingsStore>()(
       m365ToolsUserEnabled: true,
       m365SharedMailboxes: [],
       m365PlaybookChipsEnabled: true,
+      m365DigestPreset: DIGEST_DEFAULT_PRESET,
+      m365DigestSources: ['mail', 'chat', 'channel', 'calendar'],
+      m365DigestChannels: [],
       m365ToolsFlagEnabled: false,
       m365SaveDestination: null,
       m365SaveSkipPicker: false,
@@ -1151,6 +1194,7 @@ export const useSettingsStore = create<SettingsStore>()(
       setPrompts: (prompts) => set({ prompts }),
       setUserSkills: (skills) =>
         set({ userSkills: normalizeUserSkills(skills) }),
+      setSkillsAutoEnabled: (enabled) => set({ skillsAutoEnabled: enabled }),
 
       addPrompt: (prompt) =>
         set((state) => ({
@@ -1908,6 +1952,13 @@ export const useSettingsStore = create<SettingsStore>()(
       setEmissionsChipAutoHideMs: (ms) =>
         set({ emissionsChipAutoHideMs: clampEmissionsChipAutoHideMs(ms) }),
 
+      setEmissionsChipLabelMode: (mode) =>
+        set({
+          emissionsChipLabelMode: isEmissionsChipLabelMode(mode)
+            ? mode
+            : EMISSIONS_CHIP_LABEL_MODE_DEFAULT,
+        }),
+
       // Clamped on write as well as on read: the sliders are bounded, but a
       // hand-edited localStorage value must not produce a frozen sweep.
       setMapTimelapse: (settings) =>
@@ -1966,6 +2017,22 @@ export const useSettingsStore = create<SettingsStore>()(
         }),
       setM365PlaybookChipsEnabled: (enabled) =>
         set({ m365PlaybookChipsEnabled: enabled }),
+      setM365DigestPreset: (preset) =>
+        set({
+          m365DigestPreset: isDigestPreset(preset)
+            ? preset
+            : DIGEST_DEFAULT_PRESET,
+        }),
+      setM365DigestSources: (sources) =>
+        set({
+          m365DigestSources: [
+            ...new Set(
+              sources.filter((kind) => DIGEST_SOURCE_KINDS.includes(kind)),
+            ),
+          ],
+        }),
+      setM365DigestChannels: (channels) =>
+        set({ m365DigestChannels: channels.slice(0, 10) }),
       setM365ToolsFlagEnabled: (enabled) =>
         set({ m365ToolsFlagEnabled: enabled }),
 
@@ -2047,6 +2114,7 @@ export const useSettingsStore = create<SettingsStore>()(
           preferSelectedModel: false,
           emissionsChipVisibility: EMISSIONS_CHIP_VISIBILITY_DEFAULT,
           emissionsChipAutoHideMs: EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+          emissionsChipLabelMode: EMISSIONS_CHIP_LABEL_MODE_DEFAULT,
           mapTimelapse: DEFAULT_MAP_TIMELAPSE,
           confirmStopFromButton: true,
           confirmStopFromKeyboard: true,
@@ -2066,11 +2134,14 @@ export const useSettingsStore = create<SettingsStore>()(
           m365SaveSkipPicker: false,
           m365PickerLocation: null,
           m365PlaybookChipsEnabled: true,
+          m365DigestPreset: DIGEST_DEFAULT_PRESET,
+          m365DigestSources: ['mail', 'chat', 'channel', 'calendar'],
+          m365DigestChannels: [],
         }),
     }),
     {
       name: 'settings-storage',
-      version: 71, // v71: browser-local personal skills
+      version: 74, // v74: m365Digest* (daily digest defaults)
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2084,6 +2155,7 @@ export const useSettingsStore = create<SettingsStore>()(
         customDisplayName: state.customDisplayName,
         prompts: state.prompts,
         userSkills: state.userSkills,
+        skillsAutoEnabled: state.skillsAutoEnabled,
         tones: state.tones,
         customAgents: state.customAgents,
         customAgentSources: state.customAgentSources,
@@ -2168,6 +2240,7 @@ export const useSettingsStore = create<SettingsStore>()(
         preferSelectedModel: state.preferSelectedModel,
         emissionsChipVisibility: state.emissionsChipVisibility,
         emissionsChipAutoHideMs: state.emissionsChipAutoHideMs,
+        emissionsChipLabelMode: state.emissionsChipLabelMode,
         mapTimelapse: state.mapTimelapse,
         confirmStopFromButton: state.confirmStopFromButton,
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
@@ -2183,6 +2256,9 @@ export const useSettingsStore = create<SettingsStore>()(
         m365ToolsUserEnabled: state.m365ToolsUserEnabled,
         m365SharedMailboxes: state.m365SharedMailboxes,
         m365PlaybookChipsEnabled: state.m365PlaybookChipsEnabled,
+        m365DigestPreset: state.m365DigestPreset,
+        m365DigestSources: state.m365DigestSources,
+        m365DigestChannels: state.m365DigestChannels,
         m365SaveDestination: state.m365SaveDestination,
         m365SaveSkipPicker: state.m365SaveSkipPicker,
         m365PickerLocation: state.m365PickerLocation,
@@ -2886,6 +2962,49 @@ export const useSettingsStore = create<SettingsStore>()(
           );
         }
 
+        // Version 72 → 73: what the collapsed impact chip reads. Defaults to
+        // emissions — the behavior these users already have; cost is opt-in.
+        if (version < 73) {
+          if (!isEmissionsChipLabelMode(state.emissionsChipLabelMode)) {
+            state.emissionsChipLabelMode = EMISSIONS_CHIP_LABEL_MODE_DEFAULT;
+          }
+        }
+
+        // Version 73 → 74: daily digest defaults. Validated, not trusted:
+        // the channel list in particular round-trips through localStorage.
+        if (version < 74) {
+          if (!isDigestPreset(state.m365DigestPreset)) {
+            state.m365DigestPreset = DIGEST_DEFAULT_PRESET;
+          }
+          const sources = Array.isArray(state.m365DigestSources)
+            ? [
+                ...new Set(
+                  (state.m365DigestSources as unknown[]).filter(
+                    (kind): kind is DigestSourceKind =>
+                      typeof kind === 'string' &&
+                      (DIGEST_SOURCE_KINDS as readonly string[]).includes(kind),
+                  ),
+                ),
+              ]
+            : [];
+          state.m365DigestSources =
+            sources.length > 0
+              ? sources
+              : ['mail', 'chat', 'channel', 'calendar'];
+          state.m365DigestChannels = Array.isArray(state.m365DigestChannels)
+            ? (state.m365DigestChannels as unknown[])
+                .filter(
+                  (entry): entry is DigestChannelRef =>
+                    !!entry &&
+                    typeof entry === 'object' &&
+                    typeof (entry as DigestChannelRef).teamId === 'string' &&
+                    typeof (entry as DigestChannelRef).channelId === 'string' &&
+                    typeof (entry as DigestChannelRef).name === 'string',
+                )
+                .slice(0, 10)
+            : [];
+        }
+
         // Whatever version it came from, the per-set rows are only kept as
         // clean string arrays (the workspace iterates them on load).
         state.lastChannelIdsBySet = coerceChannelIdsBySet(
@@ -3044,6 +3163,10 @@ export const useSettingsStore = create<SettingsStore>()(
             state.formTemplates = [];
           }
           state.userSkills = normalizeUserSkills(state.userSkills);
+          // v72: default on; anything but a boolean is treated as unset.
+          if (typeof state.skillsAutoEnabled !== 'boolean') {
+            state.skillsAutoEnabled = true;
+          }
           // Defensive (hand-edited storage): see coerceAppliedRetirements.
           state.modelRetirementsApplied = coerceAppliedRetirements(
             state.modelRetirementsApplied,

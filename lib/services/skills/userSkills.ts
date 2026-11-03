@@ -43,7 +43,11 @@ export function personalSkillCatalog(
 
 /** Personal bundles may inline text references only; binary assets require organization storage. */
 export function personalSkillFromBundle(bundle: SkillBundle): UserSkill {
-  const { applyToAgents: _ignored, ...fields } = bundle.skill;
+  const {
+    applyToAgents: _ignored,
+    requireConsent: _consent,
+    ...fields
+  } = bundle.skill;
   let instructions = fields.instructions;
   for (const resource of bundle.resources) {
     if (

@@ -203,3 +203,41 @@ describe('serializeSkillMarkdown round-trip', () => {
     expect(markdown).toMatch(/^---\nname: my-skill\n/);
   });
 });
+
+describe('Agent Skills interchange: invocation and consent flags', () => {
+  it('maps disable-model-invocation to manual activation and round-trips it', () => {
+    const parsed = expectOk(
+      `---\nname: manual-only\ndescription: d\ndisable-model-invocation: true\n---\n\nBody.\n`,
+    );
+    expect(parsed.activation).toBe('manual');
+    expect(parsed.requireConsent).toBeUndefined();
+    const reparsed = expectOk(serializeSkillMarkdown(parsed));
+    expect(reparsed.activation).toBe('manual');
+    expect(serializeSkillMarkdown(parsed)).toContain(
+      'disable-model-invocation: true',
+    );
+  });
+
+  it('lets msf-activation win over the standard flag and rejects a non-boolean flag', () => {
+    const parsed = expectOk(
+      `---\nname: a\ndescription: d\ndisable-model-invocation: true\nmetadata:\n  msf-activation: auto\n---\n\nBody.\n`,
+    );
+    expect(parsed.activation).toBe('auto');
+    expect(
+      expectErrors(
+        `---\nname: a\ndescription: d\ndisable-model-invocation: maybe\n---\n\nBody.\n`,
+      ).join(' '),
+    ).toMatch(/disable-model-invocation/);
+  });
+
+  it('reads OpenCode autoinvoke=false as manual and msf-require-consent as consent', () => {
+    const parsed = expectOk(
+      `---\nname: a\ndescription: d\nmetadata:\n  opencode/autoinvoke: false\n  msf-require-consent: "true"\n---\n\nBody.\n`,
+    );
+    expect(parsed.activation).toBe('manual');
+    expect(parsed.requireConsent).toBe(true);
+    const markdown = serializeSkillMarkdown(parsed);
+    expect(markdown).toContain('msf-require-consent');
+    expect(expectOk(markdown).requireConsent).toBe(true);
+  });
+});

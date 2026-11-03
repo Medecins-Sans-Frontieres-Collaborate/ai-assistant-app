@@ -29,6 +29,7 @@ export function appliesToLine(
   t: LimitsTranslate,
   scope: OverrideScope,
   targets: readonly string[],
+  groupNames?: Record<string, string>,
 ): string {
   const scopeLabel = t(`scope.${scope}`);
   if (targets.length === 0) {
@@ -37,7 +38,13 @@ export function appliesToLine(
       targets: t('appliesToNone'),
     });
   }
-  const { shown, more } = summarizeTargets(targets);
+  // Group ids mean nothing to a reader: show the resolved name when one is
+  // known (policy labels or the shared client cache), the id otherwise.
+  const display =
+    scope === 'group' && groupNames
+      ? targets.map((id) => groupNames[id] ?? id)
+      : targets;
+  const { shown, more } = summarizeTargets(display);
   const list =
     more > 0
       ? t('appliesToMore', { targets: shown.join(', '), more })
@@ -46,13 +53,15 @@ export function appliesToLine(
 }
 
 /**
- * Jurisdiction in one line, buckets joined by " · ": domains and users are
- * listed (truncated), groups and attributes are counted — group ids mean
- * nothing to a reader and attribute lists get long.
+ * Jurisdiction in one line, buckets joined by " · ": domains, users and
+ * attributes are listed (truncated); groups are listed when every id has a
+ * known display name and counted otherwise — GUID prefixes mean nothing
+ * to a reader.
  */
 export function jurisdictionLine(
   t: LimitsTranslate,
   predicates: readonly JurisdictionPredicate[],
+  groupNames?: Record<string, string>,
 ): string {
   const summary = summarizeJurisdiction(predicates);
   const parts: string[] = [];
@@ -73,14 +82,21 @@ export function jurisdictionLine(
   listed('domain', summary.domains);
   listed('user', summary.users);
   if (summary.groups.length > 0) {
-    parts.push(
-      t('appliesTo', {
-        scope: t('scope.group'),
-        targets: t('jurisdictionGroupCount', {
-          count: summary.groups.length,
+    // Named groups are listed like domains; with no names at all the count
+    // is more honest than a row of GUID prefixes.
+    const named = groupNames ? summary.groups.map((id) => groupNames[id]) : [];
+    if (named.length > 0 && named.every((name) => !!name)) {
+      listed('group', named as string[]);
+    } else {
+      parts.push(
+        t('appliesTo', {
+          scope: t('scope.group'),
+          targets: t('jurisdictionGroupCount', {
+            count: summary.groups.length,
+          }),
         }),
-      }),
-    );
+      );
+    }
   }
   listed('attribute', summary.attributes);
   return parts.length > 0 ? parts.join(' · ') : t('jurisdictionMatchesNobody');

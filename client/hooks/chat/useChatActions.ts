@@ -1,4 +1,5 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 import { createDefaultConversation } from '@/lib/utils/app/conversationInit';
 import {
@@ -16,10 +17,32 @@ import {
 } from '@/types/chat';
 import { SearchMode } from '@/types/searchMode';
 
-import { useChatStore } from '@/client/stores/chatStore';
+import { useChatInputStore } from '@/client/stores/chatInputStore';
+import { QueuedSend, useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { v4 as uuidv4 } from 'uuid';
+
+/** Put a queued message's text back into the composer (appended if it has text). */
+function restoreQueuedToComposer(entry: QueuedSend): void {
+  const text =
+    typeof entry.message.content === 'string'
+      ? entry.message.content
+      : Array.isArray(entry.message.content)
+        ? entry.message.content
+            .map((part) =>
+              part && typeof part === 'object' && 'text' in part
+                ? String((part as { text?: string }).text ?? '')
+                : '',
+            )
+            .filter(Boolean)
+            .join('\n')
+        : '';
+  if (!text) return;
+  useChatInputStore
+    .getState()
+    .setTextFieldValue((prev) => (prev ? `${prev}\n${text}` : text));
+}
 
 interface UseChatActionsProps {
   updateConversation: (id: string, updates: any) => void;
@@ -74,8 +97,12 @@ export function useChatActions({
 
       if (messageIndex === -1) return;
 
+      // An edited question keeps its skill requests but not the pinned
+      // versions: those replay the body that answered the OLD text
+      // (docs/SKILLS_DESIGN.md §5.7).
+      const { appliedSkillVersions: _stale, ...replacement } = editedMessage;
       const updatedMessages = currentConversation.messages.map((entry, idx) =>
-        idx === messageIndex ? editedMessage : entry,
+        idx === messageIndex ? replacement : entry,
       );
 
       // Editing a message inside the summarized region would otherwise keep
@@ -109,6 +136,34 @@ export function useChatActions({
       let currentConversation = conversationState.conversations.find(
         (c) => c.id === conversationState.selectedConversationId,
       );
+
+      // A message sent while THIS conversation is still streaming is
+      // queued and goes out when the stream settles (drained by the
+      // effect below) — the composer never has to be babysat. A stream in
+      // ANOTHER conversation still refuses: two live streams would share
+      // the streaming slices.
+      const chatState = useChatStore.getState();
+      if (chatState.isStreaming) {
+        if (
+          currentConversation &&
+          chatState.streamingConversationId === currentConversation.id
+        ) {
+          chatState.queueSend({
+            message,
+            conversationId: currentConversation.id,
+            searchMode,
+            initialActiveFiles,
+          });
+          toast.success(
+            'Queued — it will be sent when the current response finishes.',
+          );
+        } else {
+          toast.error(
+            'Wait for the current response to finish, or stop it first.',
+          );
+        }
+        return;
+      }
 
       // If no conversation exists, create one first
       if (!currentConversation) {
@@ -171,6 +226,53 @@ export function useChatActions({
     },
     [updateConversation, sendMessage],
   );
+
+  // Drain the queue once the stream settles. A FAILED turn does not drain:
+  // the queued text goes back to the composer so the user sees the error
+  // first and decides, instead of a second message stacking on a failure.
+  const isStreaming = useChatStore((s) => s.isStreaming);
+  // The automatic fallback-model chain drops isStreaming between attempts;
+  // the queue must wait for the whole chain, not the first attempt.
+  const isRetrying = useChatStore((s) => s.isRetrying);
+  const streamError = useChatStore((s) => s.error);
+  const queuedCount = useChatStore((s) => s.queuedSends.length);
+  const selectedConversationId = useConversationStore(
+    (s) => s.selectedConversationId,
+  );
+  useEffect(() => {
+    if (
+      isStreaming ||
+      isRetrying ||
+      queuedCount === 0 ||
+      !selectedConversationId
+    )
+      return;
+    const next = useChatStore
+      .getState()
+      .shiftQueuedSend(selectedConversationId);
+    if (!next) return;
+    if (streamError) {
+      restoreQueuedToComposer(next);
+      toast(
+        'The queued message was not sent because the response failed. Its text is back in the composer.',
+      );
+      return;
+    }
+    handleSend(next.message, next.searchMode, next.initialActiveFiles);
+  }, [
+    isStreaming,
+    isRetrying,
+    queuedCount,
+    selectedConversationId,
+    streamError,
+    handleSend,
+  ]);
+
+  /** Cancel one queued message and put its text back in the composer. */
+  const cancelQueuedSend = useCallback((queued: QueuedSend) => {
+    const entry = useChatStore.getState().removeQueuedSend(queued);
+    if (entry) restoreQueuedToComposer(entry);
+  }, []);
 
   const handleSelectPrompt = useCallback(
     (prompt: string) => {
@@ -299,6 +401,7 @@ export function useChatActions({
   return {
     handleEditMessage,
     handleSend,
+    cancelQueuedSend,
     handleSelectPrompt,
     handleRegenerate,
     handleGenerateResponse,

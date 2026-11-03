@@ -99,11 +99,18 @@ describe('M365 playbook preconditions', () => {
     },
   );
 
-  it('exposes exactly the two v1 playbooks with i18n keys', () => {
+  it('exposes the playbooks with i18n keys and kinds', () => {
     expect(M365_PLAYBOOKS.map((p) => p.id)).toEqual([
       'meetingFollowThrough',
       'morningTriage',
+      'dailyDigest',
     ]);
+    expect(getPlaybookMeta('meetingFollowThrough')?.kind).toBe('prompt');
+    // Morning triage opens the digest since the last workday: a Monday
+    // covers Friday + the weekend instead of one calendar day.
+    expect(getPlaybookMeta('morningTriage')?.kind).toBe('digest');
+    expect(getPlaybookMeta('morningTriage')?.digestPreset).toBe('lastWorkday');
+    expect(getPlaybookMeta('dailyDigest')?.kind).toBe('digest');
     expect(getPlaybookMeta('morningTriage')?.titleKey).toBe(
       'morningTriage.title',
     );
@@ -229,34 +236,18 @@ describe('playbook prompt loading', () => {
     expect(prompt.toLowerCase()).toContain('not a failure');
   });
 
-  it('lazy-loads the morning triage prompt with its staged contract', async () => {
-    const prompt = await loadPlaybookPrompt('morningTriage');
-
-    expect(prompt).toContain('STAGE 1');
-    expect(prompt).toContain('STAGE 2');
-    expect(prompt).toContain('READ-ONLY');
-    expect(prompt).toContain('drafted from:');
-    expect(prompt.toLowerCase()).toContain('ambiguit');
-    expect(prompt).toContain('WAIT');
-    expect(prompt).toContain('mail_digest');
-    expect(prompt).toContain('mail_awaiting_my_reply');
-    expect(prompt).toContain('calendar_list_events');
-    // Flagged/withheld mail is surfaced as a count, never dropped.
-    expect(prompt).toContain('flagged');
-    expect(prompt).toContain('withheld');
+  it('digest playbooks have no prompt body', async () => {
+    // Morning triage and the daily digest open the launcher instead of
+    // filling the composer — there is nothing to lazy-load.
+    await expect(loadPlaybookPrompt('morningTriage')).resolves.toBeNull();
+    await expect(loadPlaybookPrompt('dailyDigest')).resolves.toBeNull();
   });
 
-  it('neither prompt promises to send anything', () => {
+  it('the prompt playbook never promises to send anything', async () => {
     // Every mail artifact is a DRAFT — a playbook that sends would break the
     // write-confirmation posture the whole design rests on.
-    return Promise.all([
-      loadPlaybookPrompt('meetingFollowThrough'),
-      loadPlaybookPrompt('morningTriage'),
-    ]).then(([meeting, triage]) => {
-      expect(meeting).toContain('mail_create_reply_draft');
-      expect(meeting).not.toContain('mail_send');
-      expect(triage).toContain('mail_create_reply_draft');
-      expect(triage).not.toContain('mail_send');
-    });
+    const meeting = await loadPlaybookPrompt('meetingFollowThrough');
+    expect(meeting).toContain('mail_create_reply_draft');
+    expect(meeting).not.toContain('mail_send');
   });
 });

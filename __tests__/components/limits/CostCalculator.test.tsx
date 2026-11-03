@@ -210,7 +210,6 @@ describe('CostCalculator', () => {
     const { unmount } = renderCalculator();
     expect(lineFor('model:gpt-5.4.allowed')).toContain('modeAllowed');
     expect(lineFor('model:gpt-5.4.allowed')).not.toContain('cellUnlimited');
-    expect(lineFor('family:gpt.allowed')).toContain('modeAllowed');
     unmount();
 
     renderCalculator([

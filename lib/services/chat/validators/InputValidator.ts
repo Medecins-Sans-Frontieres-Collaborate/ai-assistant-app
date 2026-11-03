@@ -618,11 +618,23 @@ const ChatBodySchema = z
     // Explicit skill use (docs/SKILLS_DESIGN.md §5.1). Id charset mirrors
     // the Agent Skills name rules (SkillIdSchema); resolution against the
     // caller's visible catalog happens in SkillEnricher.
+    // User preference (docs/SKILLS_DESIGN.md §5.1): false only REDUCES what
+    // the turn receives, so it is safe to take from the client.
+    skillsAuto: z.boolean().optional(),
     forcedSkillIds: z
       .array(SkillReferenceIdSchema)
       .max(3, 'Too many forced skills (max 3)')
       .optional(),
     pinnedSkillIds: z.array(SkillReferenceIdSchema).max(3).optional(),
+    // Version pins for requested skills (docs/SKILLS_DESIGN.md §5.7): the
+    // server only ever uses them to pick an OLDER stored version of a skill
+    // the caller can already see, so they are safe to take from the client.
+    skillVersions: z
+      .record(SkillReferenceIdSchema, z.string().datetime())
+      .refine((pins) => Object.keys(pins).length <= 3, {
+        message: 'Too many skill version pins (max 3)',
+      })
+      .optional(),
     userSkills: UserSkillsRequestSchema.optional(),
   })
   .strict()

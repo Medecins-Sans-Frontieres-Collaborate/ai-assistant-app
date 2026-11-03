@@ -14,12 +14,80 @@ import {
   entrySchema,
   formatIssues,
   jurisdictionPredicateWriteSchema,
+  modelAccessRuleSchema,
   overrideSchema,
+  putBodySchema,
   scopedOverrideBodySchema,
 } from '@/lib/services/limits/policyWriteSchema';
 import { JurisdictionPredicateSchema } from '@/lib/services/limits/types';
 
 import { describe, expect, it } from 'vitest';
+
+describe('modelAccessRuleSchema', () => {
+  it('accepts a rule with one dimension, canonicalizes grants and the block list, dedupes by target', () => {
+    const parsed = modelAccessRuleSchema.parse({
+      series: 'Claude',
+      defaultAccess: false,
+      groups: [
+        { target: ' 0F3A9C2B-0000-4000-8000-000000000001 ' },
+        { target: '0f3a9c2b-0000-4000-8000-000000000001', requests: 5 },
+      ],
+      domains: [{ target: 'OCP.msf.org', requests: null }],
+      allow: [{ target: 'Alice@MSF.org', requests: 20 }],
+      deny: [' Mallory@msf.org ', 'mallory@msf.org'],
+    });
+    expect(parsed).toEqual({
+      series: 'Claude',
+      defaultAccess: false,
+      groups: [
+        { target: '0f3a9c2b-0000-4000-8000-000000000001', requests: null },
+      ],
+      domains: [{ target: 'ocp.msf.org', requests: null }],
+      allow: [{ target: 'alice@msf.org', requests: 20 }],
+      deny: ['mallory@msf.org'],
+    });
+  });
+
+  it('refuses no dimension, both dimensions, a zero cap, an unknown key, and allow ∩ deny', () => {
+    const base = { groups: [], domains: [], allow: [], deny: [] };
+    expect(modelAccessRuleSchema.safeParse({ ...base }).success).toBe(false);
+    expect(
+      modelAccessRuleSchema.safeParse({ ...base, modelId: 'o3', series: 'gpt' })
+        .success,
+    ).toBe(false);
+    expect(
+      modelAccessRuleSchema.safeParse({
+        ...base,
+        modelId: 'o3',
+        defaultAccess: 0,
+      }).success,
+    ).toBe(false);
+    expect(
+      modelAccessRuleSchema.safeParse({
+        ...base,
+        modelId: 'o3',
+        allow: [{ target: 'a@x.org', requests: 0 }],
+      }).success,
+    ).toBe(false);
+    expect(
+      modelAccessRuleSchema.safeParse({ ...base, modelId: 'o3', extra: 1 })
+        .success,
+    ).toBe(false);
+    expect(
+      modelAccessRuleSchema.safeParse({
+        ...base,
+        modelId: 'o3',
+        allow: [{ target: 'A@x.org' }],
+        deny: ['a@x.org'],
+      }).success,
+    ).toBe(false);
+  });
+
+  it('putBodySchema leaves modelAccess undefined when the key is absent (stale-client guard)', () => {
+    const parsed = putBodySchema.parse({ defaults: [], overrides: [] });
+    expect(parsed.modelAccess).toBeUndefined();
+  });
+});
 
 describe('canonicalList', () => {
   it('trims, lowercases, dedupes and drops blanks; idempotent', () => {
@@ -146,5 +214,67 @@ describe('override targets are stored canonical (review 2026-09-12)', () => {
       'ada@example.org',
       'bob@x.org',
     ]);
+  });
+});
+
+describe('group targets are Entra object ids (write-time)', () => {
+  const GUID = '0f3a9c2b-0000-4000-8000-000000000001';
+  const override = {
+    id: 'lim-0000000000a1',
+    scope: 'group',
+    targets: [' 0F3A9C2B-0000-4000-8000-000000000001 '],
+    entries: [],
+  };
+
+  it('accepts a GUID (any case, padded) on an override and stores it canonical', () => {
+    expect(overrideSchema.parse(override).targets).toEqual([GUID]);
+  });
+
+  it('refuses a display name on a group override, a group predicate, a scoped body and a model-access grant — with the `targets`/`groups` path', () => {
+    const name = 'Health team';
+    const bad = overrideSchema.safeParse({ ...override, targets: [name] });
+    expect(bad.success).toBe(false);
+    if (!bad.success) {
+      expect(bad.error.issues[0].path).toEqual(['targets']);
+      expect(bad.error.issues[0].message).toMatch(/object ids/);
+    }
+    expect(
+      jurisdictionPredicateWriteSchema.safeParse({
+        scope: 'group',
+        targets: [name],
+      }).success,
+    ).toBe(false);
+    expect(
+      scopedOverrideBodySchema.safeParse({
+        id: 'lim-0000000000a1',
+        scope: 'group',
+        targets: [name],
+        entries: [],
+      }).success,
+    ).toBe(false);
+    const grant = modelAccessRuleSchema.safeParse({
+      series: 'claude',
+      groups: [{ target: name }],
+    });
+    expect(grant.success).toBe(false);
+    if (!grant.success) {
+      expect(grant.error.issues[0].path).toEqual(['groups']);
+    }
+  });
+
+  it('leaves the other scopes alone', () => {
+    expect(
+      overrideSchema.safeParse({
+        ...override,
+        scope: 'user',
+        targets: ['a@x.org'],
+      }).success,
+    ).toBe(true);
+    expect(
+      jurisdictionPredicateWriteSchema.safeParse({
+        scope: 'attribute',
+        targets: ['department:health'],
+      }).success,
+    ).toBe(true);
   });
 });

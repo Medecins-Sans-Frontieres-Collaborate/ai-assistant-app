@@ -8,6 +8,7 @@ import { SKILL_LIMITS } from '@/lib/services/skills/types';
 
 import { devTrace } from '@/lib/utils/server/debug/devTrace';
 
+import type { AuxiliaryFailureReason } from '@/types/chat';
 import {
   Message,
   ToolRouterRequest,
@@ -68,6 +69,67 @@ const TRIM_CLASSIFY_SCHEMA = {
  * Determines which tools are needed for a given message using gpt-5.4-nano.
  * Uses a lightweight model to intelligently decide when web search is beneficial.
  */
+/**
+ * The auxiliary classifier every routing decision rides (tool routing,
+ * document-trim classification, skills-only selection). It must be
+ * deployed in EVERY Foundry account a region can pin to — a missing
+ * deployment degrades every decision in that region to "no tools".
+ */
+export const AUXILIARY_ROUTER_MODEL = 'gpt-5.4-nano';
+
+/** Thrown when a region-pinned call has no regional client to run on. */
+export class AuxiliaryEndpointMissingError extends Error {
+  constructor(public readonly region: 'US' | 'EU') {
+    super(
+      `No ${region} auxiliary model endpoint configured. Set AZURE_AI_FOUNDRY_ENDPOINT_${region} (or AZURE_OPENAI_ENDPOINT_${region}), or declare AZURE_DEFAULT_REGION=${region} when the default endpoints live there.`,
+    );
+    this.name = 'AuxiliaryEndpointMissingError';
+  }
+}
+
+/**
+ * Classifies a failed auxiliary call so the log line names the remedy
+ * instead of a bare SDK message. A 404 on a region-pinned call almost
+ * always means the account behind that region has no
+ * AUXILIARY_ROUTER_MODEL deployment; 401/403 means the app identity lacks
+ * a data-plane role on that account.
+ */
+export function describeAuxiliaryFailure(
+  error: unknown,
+  region?: 'US' | 'EU',
+): { reason: AuxiliaryFailureReason; message: string } {
+  const where = region
+    ? `the ${region} auxiliary endpoint`
+    : 'the default endpoint';
+  if (error instanceof AuxiliaryEndpointMissingError) {
+    return { reason: 'endpoint_missing', message: error.message };
+  }
+  const status =
+    typeof error === 'object' && error !== null && 'status' in error
+      ? Number((error as { status?: unknown }).status)
+      : undefined;
+  const text = error instanceof Error ? error.message : String(error);
+  if (status === 404 || /DeploymentNotFound/i.test(text)) {
+    return {
+      reason: 'deployment_missing',
+      message: `${AUXILIARY_ROUTER_MODEL} is not deployed on ${where} (${text}). Deploy it in that account.`,
+    };
+  }
+  if (status === 401 || status === 403) {
+    return {
+      reason: 'unauthorized',
+      message: `The app identity cannot call ${where} (${status}): grant it a Cognitive Services data-plane role on that account. (${text})`,
+    };
+  }
+  if (
+    (error instanceof Error && /abort/i.test(error.name)) ||
+    /timed? ?out|APIConnectionTimeoutError/i.test(text)
+  ) {
+    return { reason: 'timeout', message: `${where} timed out: ${text}` };
+  }
+  return { reason: 'provider', message: `${where} failed: ${text}` };
+}
+
 export class ToolRouterService {
   private tracer = trace.getTracer('tool-router-service');
 
@@ -76,13 +138,29 @@ export class ToolRouterService {
     private regionalClient?: (region: 'US' | 'EU') => OpenAI | undefined,
   ) {}
 
-  /** Explicit regional requests never fall back to the unpinned default client. */
+  private warnedUsFallback = false;
+
+  /**
+   * EU-pinned requests never fall back to the unpinned default client — EU
+   * is the residency-constrained direction. A US pin without a US client
+   * uses the default set, exactly as chat does for US users
+   * (resolveChatRegion → null → default clients); US data may flow to the
+   * default endpoints wherever they live.
+   */
   private clientFor(region?: 'US' | 'EU'): OpenAI {
     if (!region) return this.openAIClient;
     const client = this.regionalClient?.(region);
-    if (!client)
-      throw new Error(`No ${region} auxiliary model endpoint configured`);
-    return client;
+    if (client) return client;
+    if (region === 'US') {
+      if (!this.warnedUsFallback) {
+        this.warnedUsFallback = true;
+        console.warn(
+          '[ToolRouterService] No US auxiliary endpoint configured; US-pinned routing uses the default endpoint.',
+        );
+      }
+      return this.openAIClient;
+    }
+    throw new AuxiliaryEndpointMissingError(region);
   }
 
   /**
@@ -96,7 +174,12 @@ export class ToolRouterService {
     skillCatalog: SkillRoutingEntry[];
     signal?: AbortSignal;
     region?: 'US' | 'EU';
-  }): Promise<Pick<ToolRouterResponse, 'relevantSkills' | 'degraded'>> {
+  }): Promise<
+    Pick<
+      ToolRouterResponse,
+      'relevantSkills' | 'degraded' | 'degradedReason' | 'degradedRegion'
+    >
+  > {
     const catalog = request.skillCatalog.slice(
       0,
       SKILL_LIMITS.maxRouterCatalog,
@@ -108,7 +191,7 @@ export class ToolRouterService {
         request.region,
       ).chat.completions.create(
         {
-          model: 'gpt-5.4-nano',
+          model: AUXILIARY_ROUTER_MODEL,
           messages: [
             {
               role: 'system',
@@ -156,11 +239,16 @@ export class ToolRouterService {
         relevantSkills: selectedSkillIds(result.relevantSkills, catalog),
       };
     } catch (error) {
+      const failure = describeAuxiliaryFailure(error, request.region);
       console.error(
-        '[ToolRouterService] Skill selection unavailable:',
-        error instanceof Error ? error.message : String(error),
+        `[ToolRouterService] Skill selection unavailable (${failure.reason}): ${failure.message}`,
       );
-      return { relevantSkills: [], degraded: true };
+      return {
+        relevantSkills: [],
+        degraded: true,
+        degradedReason: failure.reason,
+        degradedRegion: request.region,
+      };
     }
   }
 
@@ -205,7 +293,7 @@ When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit
         request.region,
       ).chat.completions.create(
         {
-          model: 'gpt-5.4-nano',
+          model: AUXILIARY_ROUTER_MODEL,
           messages: [
             { role: 'system' as const, content: systemPrompt },
             ...recentMessages.map((msg, index) => ({
@@ -597,7 +685,7 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               request.region,
             ).chat.completions.create(
               {
-                model: 'gpt-5.4-nano',
+                model: AUXILIARY_ROUTER_MODEL,
                 messages: conversationMessages,
                 reasoning_effort: 'minimal',
                 // +60 headroom for the (usually empty) additionalSearchQueries
@@ -641,10 +729,16 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               result.relevantSkills,
               catalog,
             );
-            if (catalog.length && !Array.isArray(result.relevantSkills)) {
-              throw new Error(
-                'Missing skill selection in tool router response',
+            // A missing/unusable skill selection must not cancel the tools
+            // decision in the same response: search and code execution
+            // stand, and only the skill side is reported as degraded.
+            const skillSelectionDegraded =
+              catalog.length > 0 && !Array.isArray(result.relevantSkills);
+            if (skillSelectionDegraded) {
+              console.warn(
+                '[ToolRouterService] Skill selection missing from the tool router response; tools decision kept, skills treated as degraded',
               );
+              span.setAttribute('tool_router.skills_degraded', true);
             }
             if (catalog.length)
               span.setAttribute('tool_router.skills', relevantSkills);
@@ -714,6 +808,7 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               return {
                 tools,
                 relevantSkills,
+                ...(skillSelectionDegraded ? { skillSelectionDegraded } : {}),
                 searchQuery: primaryQuery,
                 searchQueries,
                 searchRecency:
@@ -744,6 +839,7 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
             return {
               tools: [] as ToolType[],
               relevantSkills,
+              ...(skillSelectionDegraded ? { skillSelectionDegraded } : {}),
               reasoning: 'No tools needed',
             };
           } catch (error) {
@@ -753,19 +849,24 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
             // search" — which is a real regression, not just a transient
             // failure. Mark it on the span so it surfaces in telemetry,
             // and log with enough detail to diagnose without re-running.
-            const errMessage =
-              error instanceof Error ? error.message : String(error);
+            const failure = describeAuxiliaryFailure(error, request.region);
+            const errMessage = failure.message;
             console.error(
-              `[ToolRouterService] Falling back to no-tools (web_search disabled). Cause: ${errMessage}`,
+              `[ToolRouterService] Falling back to no-tools (web_search disabled) — ${failure.reason}: ${errMessage}`,
             );
             // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
             devTrace('tool-router-error', { error: errMessage.slice(0, 300) });
             span.recordException(error as Error);
             span.setAttribute('tool_router.fallback', 'error');
             span.setAttribute('tool_router.fallback_reason', errMessage);
+            span.setAttribute('tool_router.fallback_kind', failure.reason);
+            if (request.region)
+              span.setAttribute('tool_router.region', request.region);
             return {
               tools: [],
               degraded: true,
+              degradedReason: failure.reason,
+              degradedRegion: request.region,
               reasoning: 'Error determining tools, proceeding without search',
             };
           }

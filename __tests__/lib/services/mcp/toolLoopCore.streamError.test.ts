@@ -59,6 +59,7 @@ describe('runToolLoopCore mid-stream failure', () => {
     const parsed = parseMetadataFromContent(text);
     expect(parsed.streamError).toEqual({
       code: 'TOOL_LOOP_FAILED',
+      kind: 'unknown',
       message: expect.stringContaining('interrupted'),
     });
     // The provider error must never reach the wire…

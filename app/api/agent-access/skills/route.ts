@@ -31,7 +31,7 @@ import {
   BUILTIN_SKILL_IDS,
   getBuiltinSkill,
 } from '@/lib/services/skills/builtinSkills';
-import { skillsFeatureEnabled } from '@/lib/services/skills/skillCatalog';
+import { orgSkillsAvailable } from '@/lib/services/skills/skillCatalog';
 import {
   discardSkillFiles,
   storeSkillFiles,
@@ -62,8 +62,8 @@ import { env } from '@/config/environment';
 
 /**
  * GET/POST/PUT/DELETE /api/agent-access/skills — admin CRUD for skills
- * (docs/SKILLS_DESIGN.md §4, §11). 404 while either gate (agent access,
- * SKILLS_ENABLED) is off. Any admin (global or local) may create; edits and
+ * (docs/SKILLS_DESIGN.md §4, §11). 404 while agent access control (the
+ * storage org skills ride) is off. Any admin (global or local) may create; edits and
  * deletes are authorized per canonical key (`skill::<id>`), exactly like
  * guides.
  *
@@ -82,7 +82,7 @@ import { env } from '@/config/environment';
  */
 
 function skillsRouteEnabled(service: AgentAccessService): boolean {
-  return service.isEnabled() && skillsFeatureEnabled();
+  return service.isEnabled() && orgSkillsAvailable();
 }
 
 function conflictResponse(service: AgentAccessService) {
@@ -439,6 +439,9 @@ export async function PUT(request: NextRequest) {
       version: 1,
       ...parsed.data,
       documents: existing.skill.documents,
+      // A sourced skill stays attached to its source when an admin adjusts
+      // its flags (§12: admin-governed flags survive refreshes).
+      ...(existing.skill.source ? { source: existing.skill.source } : {}),
       createdBy: existing.skill.createdBy,
       createdAt: existing.skill.createdAt,
       updatedBy: userMail,

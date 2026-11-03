@@ -1,6 +1,6 @@
 import { readSkill } from '@/lib/services/agentAccess/accessRulesStore';
 import { resolveAdminStatus } from '@/lib/services/agentAccess/adminAuth';
-import { skillsFeatureEnabled } from '@/lib/services/skills/skillCatalog';
+import { orgSkillsAvailable } from '@/lib/services/skills/skillCatalog';
 import { authorizeSkillDocuments } from '@/lib/services/skills/skillDocumentAuth';
 
 import { auth } from '@/auth';
@@ -8,7 +8,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/auth', () => ({ auth: vi.fn() }));
 vi.mock('@/lib/services/skills/skillCatalog', () => ({
-  skillsFeatureEnabled: vi.fn(() => true),
+  orgSkillsAvailable: vi.fn(() => true),
 }));
 vi.mock('@/lib/services/agentAccess/adminAuth', async (importOriginal) => ({
   ...(await importOriginal<
@@ -32,7 +32,7 @@ vi.mock('@/lib/services/agentAccess/accessRulesStore', () => ({
 describe('resource admin gate', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(skillsFeatureEnabled).mockReturnValue(true);
+    vi.mocked(orgSkillsAvailable).mockReturnValue(true);
     vi.mocked(auth).mockResolvedValue({
       user: { mail: 'admin@msf.org' },
     } as never);
@@ -63,8 +63,8 @@ describe('resource admin gate', () => {
       (await authorizeSkillDocuments('platform-help')).response?.status,
     ).toBe(403);
   });
-  it('is absent when the feature is disabled', async () => {
-    vi.mocked(skillsFeatureEnabled).mockReturnValue(false);
+  it('is absent without agent-access storage', async () => {
+    vi.mocked(orgSkillsAvailable).mockReturnValue(false);
     expect((await authorizeSkillDocuments('gdpr')).response?.status).toBe(404);
     expect(auth).not.toHaveBeenCalled();
   });

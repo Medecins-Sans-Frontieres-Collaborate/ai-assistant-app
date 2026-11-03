@@ -435,7 +435,7 @@ function renderPanel(
 async function openEditorFor(displayName: string): Promise<HTMLElement> {
   const row = (await screen.findByText(displayName)).closest('li');
   expect(row).not.toBeNull();
-  fireEvent.click(within(row as HTMLElement).getByText('Edit'));
+  fireEvent.click(within(row as HTMLElement).getByText('Edit access'));
   return row as HTMLElement;
 }
 
@@ -496,7 +496,7 @@ describe('AgentAccessPanel', () => {
     ).toBeInTheDocument();
     expect(
       within(sales as HTMLElement).getByText(
-        'Last updated by admin@example.org on 2026-07-17T10:00:00.000Z',
+        /Last updated by admin@example\.org on /,
       ),
     ).toBeInTheDocument();
 
@@ -714,6 +714,49 @@ describe('AgentAccessPanel', () => {
     ).toEqual(['msf.org', 'new-domain.org', 'second.org']);
   });
 
+  it('lists knowledge and M365 agents only in their sections, and never lists non-agent rules as agents', async () => {
+    // Discovery emits the knowledge agent under the key its section edits.
+    agentsResponse = [
+      ...discoveredAgents,
+      {
+        id: 'o1',
+        name: 'MSF Communications',
+        agentName: 'msf_communications',
+        source: 'org-agent',
+      },
+      {
+        id: 'm1',
+        name: 'HR Handbook (M365)',
+        agentName: 'm365-0123456789ab',
+        source: 'm365-agent',
+      },
+    ];
+    rulesResponse = [
+      restrictedRule,
+      {
+        canonicalKey: 'mcp-connector::conn-1',
+        etag: '"etag-conn"',
+        rule: {
+          ...restrictedRule.rule,
+          source: 'mcp-connector',
+          agentName: 'conn-1',
+        },
+      },
+    ];
+    renderPanel();
+
+    await screen.findByText('Helpdesk Agent');
+    // Once each: the section row, not a second copy in the merged list.
+    expect(await screen.findAllByText('MSF Communications')).toHaveLength(1);
+    expect(screen.getAllByText('HR Handbook (M365)')).toHaveLength(1);
+    expect(screen.queryByText('conn-1')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Not discoverable by you'),
+    ).not.toBeInTheDocument();
+    // The merged list has its own heading like the sections.
+    expect(screen.getByText('Foundry and prompt agents')).toBeInTheDocument();
+  });
+
   it('renders a prompt-agent row with badge and Edit agent / Delete actions', async () => {
     agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
     promptAgentsResponse = [storedPromptAgent];
@@ -745,7 +788,7 @@ describe('AgentAccessPanel', () => {
   it('creates a prompt agent: POST body from the form, agent-backed models filtered out of the picker', async () => {
     renderPanel();
 
-    fireEvent.click(await screen.findByText('Add agent'));
+    fireEvent.click(await screen.findByText('Add prompt agent'));
     expect(screen.getByText('New prompt agent')).toBeInTheDocument();
 
     fireEvent.change(screen.getByPlaceholderText('e.g. Travel Advisor'), {
@@ -779,6 +822,8 @@ describe('AgentAccessPanel', () => {
       description: '',
       systemPrompt: 'You are a concierge.',
       modelId: 'gpt-5.2',
+      skillAccess: 'inherit',
+      skillIds: [],
     });
     // Create-only: no If-Match rides along.
     expect(agentPostCalls[0].headers['If-Match']).toBeUndefined();
@@ -795,7 +840,7 @@ describe('AgentAccessPanel', () => {
     try {
       renderPanel();
 
-      fireEvent.click(await screen.findByText('Add agent'));
+      fireEvent.click(await screen.findByText('Add prompt agent'));
       fireEvent.change(screen.getByPlaceholderText('e.g. Travel Advisor'), {
         target: { value: 'Concierge' },
       });
@@ -835,7 +880,7 @@ describe('AgentAccessPanel', () => {
     rulesResponse = [];
     renderPanel();
 
-    expect(await screen.findByText('Add agent')).toBeInTheDocument();
+    expect(await screen.findByText('Add prompt agent')).toBeInTheDocument();
     // Nothing is delegated to them yet, so the list itself is empty.
     expect(screen.getByText('No agents to manage.')).toBeInTheDocument();
   });
@@ -874,6 +919,8 @@ describe('AgentAccessPanel', () => {
       description: 'Helps plan travel',
       systemPrompt: 'You are a travel advisor.',
       modelId: 'gpt-5.2',
+      skillAccess: 'inherit',
+      skillIds: [],
     });
   });
 
@@ -1003,7 +1050,9 @@ describe('AgentAccessPanel', () => {
   it('associates a label with every editor control and exposes the Add agent expanded state', async () => {
     renderPanel();
 
-    const addButton = await screen.findByRole('button', { name: 'Add agent' });
+    const addButton = await screen.findByRole('button', {
+      name: 'Add prompt agent',
+    });
     expect(addButton).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(addButton);
     expect(addButton).toHaveAttribute('aria-expanded', 'true');

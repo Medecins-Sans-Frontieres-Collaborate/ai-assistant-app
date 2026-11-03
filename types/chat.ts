@@ -112,6 +112,12 @@ export interface ExtractionResultContent {
 export interface Message extends MessageToolArtifacts {
   /** Stable id for referencing messages (optional until migration runs) */
   id?: string;
+  /**
+   * Microsoft 365 daily digest carried by this assistant message
+   * (docs/M365_DAILY_DIGEST.md): the job while it runs, the result once
+   * done. `content` holds the markdown twin for follow-up turns.
+   */
+  digest?: import('./m365Digest').DigestMessageState;
   role: Role;
   content:
     | string
@@ -129,6 +135,13 @@ export interface Message extends MessageToolArtifacts {
   promptId?: string | null; // Saved prompt that was used
   /** Browser-only one-shot skill references, replayed for retry/regeneration. */
   requestedSkillIds?: string[];
+  /**
+   * Skill id → `updatedAt` of the organization skill version that ran for
+   * this message, read back from the turn's `use_skills` record. Regeneration
+   * sends them as `skillVersions` so the same body is replayed
+   * (docs/SKILLS_DESIGN.md §5.7).
+   */
+  appliedSkillVersions?: Record<string, string>;
   promptVariables?: { [key: string]: string }; // Variable values used in the prompt
   artifactContext?: {
     // Artifact being edited when message was sent
@@ -223,6 +236,8 @@ export type ChatInputSubmitTypes = 'TEXT' | 'IMAGE' | 'FILE' | 'MULTI_FILE';
  * Used when the user regenerates responses - each regeneration creates a new version.
  */
 export interface AssistantMessageVersion extends MessageToolArtifacts {
+  /** See Message.digest. */
+  digest?: import('./m365Digest').DigestMessageState;
   content:
     | string
     | Array<TextMessageContent | FileMessageContent>
@@ -414,8 +429,19 @@ export interface ChatBody {
   forcedSkillIds?: string[];
   /** Subset of forcedSkillIds persisted on the conversation, for attribution. */
   pinnedSkillIds?: string[];
+  /**
+   * Version pins for requested skills on regeneration (§5.7): the server
+   * replays the pinned stored version when it still exists, else the
+   * current one with a visible note. Never widens access.
+   */
+  skillVersions?: Record<string, string>;
   /** Enabled browser-local personal skills; validated as untrusted user instructions. */
   userSkills?: import('@/lib/services/skills/types').UserSkill[];
+  /**
+   * The user's Settings toggle for automatic skill selection (default on).
+   * False only reduces what the turn receives — docs/SKILLS_DESIGN.md §5.1a.
+   */
+  skillsAuto?: boolean;
 }
 
 /**
@@ -626,6 +652,14 @@ export interface FilePreview {
 // Tool Router Types
 export type ToolType = 'web_search' | 'code_interpreter';
 
+/** Why an auxiliary routing call (ToolRouterService) could not produce a decision. */
+export type AuxiliaryFailureReason =
+  | 'endpoint_missing'
+  | 'deployment_missing'
+  | 'unauthorized'
+  | 'timeout'
+  | 'provider';
+
 export interface ToolRouterResponse {
   tools: ToolType[];
   /** Validated ids from the request's access-filtered skill catalog. */
@@ -685,6 +719,21 @@ export interface ToolRouterResponse {
    * indistinguishable from "no tools needed".
    */
   degraded?: boolean;
+  /**
+   * Why the classifier degraded (ToolRouterService.describeAuxiliaryFailure)
+   * and which region-pinned endpoint failed, when the call was pinned. The
+   * enricher names the region in the activity marker so an EU-only outage
+   * is distinguishable from a global one.
+   */
+  degradedReason?: AuxiliaryFailureReason;
+  degradedRegion?: 'US' | 'EU';
+  /**
+   * The tools decision stands but the skill selection in the same response
+   * was unusable. Kept apart from `degraded` so a skills-only problem never
+   * cancels web search or code execution; SkillEnricher treats it as
+   * degraded routing (keeps the base platform help, reports the outage).
+   */
+  skillSelectionDegraded?: boolean;
   reasoning?: string; // Optional reasoning for debugging
 }
 

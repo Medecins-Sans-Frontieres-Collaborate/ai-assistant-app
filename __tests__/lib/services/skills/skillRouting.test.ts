@@ -91,13 +91,15 @@ describe('skill routing contracts', () => {
       if (mode === 'failure') create.mockRejectedValue(new Error('timeout'));
       if (mode === 'malformed')
         create.mockResolvedValue({ choices: [{ message: { content: '{' } }] });
-      expect(
-        await router.determineSkills({
-          messages: [],
-          currentMessage: 'Help',
-          skillCatalog,
-        }),
-      ).toEqual({ relevantSkills: [], degraded: true });
+      const result = await router.determineSkills({
+        messages: [],
+        currentMessage: 'Help',
+        skillCatalog,
+      });
+      expect(result).toMatchObject({ relevantSkills: [], degraded: true });
+      // The failure is classified (ToolRouterService.describeAuxiliaryFailure)
+      // so the log line and the activity marker can name the remedy.
+      expect(typeof result.degradedReason).toBe('string');
     },
   );
 

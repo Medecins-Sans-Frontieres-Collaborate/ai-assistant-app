@@ -25,6 +25,12 @@ export const formatGrams = (grams: number): string =>
 export interface ImpactRow {
   label: string;
   grams: number;
+  /**
+   * Pre-formatted list-price USD for the same requests, rendered as a second
+   * value column (docs/CHAT_COST_CHIP.md). Null = this row has no priced
+   * requests ("—"); omitted on every row = no cost column at all.
+   */
+  usd?: string | null;
   /** Secondary line under the value (e.g. "Agentic translation · 4 calls"). */
   detail?: string;
   /** Renders dimmer, for a row that splits a row above it. */
@@ -62,6 +68,7 @@ export const ImpactReadout: FC<ImpactReadoutProps> = ({
   const t = useTranslations();
   const visibility = useSettingsStore((s) => s.emissionsChipVisibility);
   const setVisibility = useSettingsStore((s) => s.setEmissionsChipVisibility);
+  const hasUsd = rows.some((row) => row.usd !== undefined);
 
   return (
     <>
@@ -82,13 +89,29 @@ export const ImpactReadout: FC<ImpactReadoutProps> = ({
                 {row.label}
               </span>
               <span
-                className={`shrink-0 ${
+                className={`flex shrink-0 items-baseline gap-3 ${
                   row.muted
                     ? 'text-gray-600 dark:text-gray-400'
                     : 'text-gray-900 dark:text-gray-100'
                 }`}
               >
-                {t('emissions.chip.label', { grams: formatGrams(row.grams) })}
+                <span>
+                  {t('emissions.chip.label', {
+                    grams: formatGrams(row.grams),
+                  })}
+                </span>
+                {hasUsd && (
+                  <span
+                    className="min-w-[3.25rem] text-end tabular-nums"
+                    aria-label={
+                      row.usd == null
+                        ? t('emissions.chip.cost.rowUnpriced')
+                        : undefined
+                    }
+                  >
+                    {row.usd ?? '—'}
+                  </span>
+                )}
               </span>
             </div>
             {row.detail && (

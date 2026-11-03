@@ -1,14 +1,14 @@
 'use client';
 
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { useAgentAccessGroupsEnabled } from '@/client/hooks/useAgentAccessGroupsEnabled';
+import { rememberGroupName, useGroupNames } from '@/client/hooks/useGroupNames';
 
 import {
   M365GroupEntry,
   M365_SEARCH_DEBOUNCE_MS,
   M365_SEARCH_MIN_CHARS,
-  lookupEntraGroups,
   searchEntraGroups,
 } from '@/client/services/m365/m365Client';
 
@@ -58,29 +58,11 @@ export const GroupSearchPicker: FC<GroupSearchPickerProps> = ({
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<M365GroupEntry[]>([]);
   const [searchState, setSearchState] = useState<SearchState>('idle');
-  const [namesById, setNamesById] = useState<Record<string, string>>({});
-  const lookedUpRef = useRef(false);
-
-  // Fresh names for chips loaded from storage, resolved once per mount —
-  // names never persist, so drifted group renames are always current here.
-  useEffect(() => {
-    if (lookedUpRef.current || values.length === 0) return;
-    lookedUpRef.current = true;
-    let cancelled = false;
-    void lookupEntraGroups(values)
-      .then((groups) => {
-        if (cancelled || groups.length === 0) return;
-        setNamesById((prev) => ({
-          ...prev,
-          ...Object.fromEntries(groups.map((g) => [g.id, g.name])),
-        }));
-      })
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Names for chips loaded from storage come from the shared client cache
+  // (seeded from the policy's stored labels, one batched lookup for the
+  // rest), so every picker on the page shares one request instead of one
+  // each — and a rename shows up on the next lookup, never from storage.
+  const namesById = useGroupNames(values);
 
   // Sub-minimum queries are reset in the change handler (not the effect) so
   // the effect never sets state synchronously; it only schedules the search.
@@ -118,7 +100,7 @@ export const GroupSearchPicker: FC<GroupSearchPickerProps> = ({
   }, [query]);
 
   const addGroup = (group: M365GroupEntry) => {
-    setNamesById((prev) => ({ ...prev, [group.id]: group.name }));
+    rememberGroupName(group.id, group.name);
     if (!values.includes(group.id)) {
       onChange([...values, group.id]);
     }

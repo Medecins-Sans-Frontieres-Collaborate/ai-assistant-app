@@ -1,11 +1,13 @@
-import { IconLeaf } from '@tabler/icons-react';
+import { IconCoin, IconLeaf } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useEffect, useRef, useState } from 'react';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
+import { useConversationCost } from '@/client/hooks/chat/useConversationCost';
 import { useConversationEmissions } from '@/client/hooks/chat/useConversationEmissions';
 
+import { formatUsdLabel } from '@/lib/utils/shared/chat/requestCost';
 import {
   EmissionsChipVisibility,
   clampEmissionsChipAutoHideMs,
@@ -13,6 +15,7 @@ import {
 
 import { Conversation } from '@/types/chat';
 
+import { CostFootnote } from '@/components/Emissions/CostFootnote';
 import {
   ImpactReadout,
   ImpactRow,
@@ -27,15 +30,24 @@ interface EmissionsChipProps {
 
 /**
  * Floating chip anchored bottom-right of the chat column showing the current
- * conversation's cumulative estimated CO2e. Hover/tap opens a breakdown
- * popover whose disclaimer states these are request-based estimates from
- * averages and assumptions — never measurements. Icon-only on mobile.
+ * conversation's cumulative estimated CO2e — and, in the same popover, its
+ * estimated list-price cost for the same requests (docs/CHAT_COST_CHIP.md).
+ * Hover/tap opens a breakdown whose disclaimers state these are
+ * request-based estimates from averages, list prices and assumptions — never
+ * measurements or bills. Icon-only on mobile.
+ *
+ * One chip, not two: cost rides as a second column in the impact rows and the
+ * collapsed label reads emissions unless the user picks otherwise in
+ * Settings › Usage & Impact, so the addition costs nothing in noise.
  */
 export const EmissionsChip: FC<EmissionsChipProps> = ({ conversation }) => {
   const t = useTranslations();
-  const { showUsageImpact } = useFlags();
+  const locale = useLocale();
+  const { showUsageImpact, showUsageCost } = useFlags();
   const summary = useConversationEmissions(conversation);
+  const cost = useConversationCost(conversation);
   const visibility = useSettingsStore((s) => s.emissionsChipVisibility);
+  const labelMode = useSettingsStore((s) => s.emissionsChipLabelMode);
   const autoHideMs = useSettingsStore((s) => s.emissionsChipAutoHideMs);
   const [isOpen, setIsOpen] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
@@ -106,30 +118,106 @@ export const EmissionsChip: FC<EmissionsChipProps> = ({ conversation }) => {
   // figure (the actionable number for long-lived conversations, where the
   // lifetime total is a big static value); otherwise the conversation total.
   const showsToday = summary.todayRequests > 0;
-  const collapsedLabel = formatGrams(
+  const collapsedGrams = formatGrams(
     showsToday ? summary.todayG : summary.totalG,
   );
 
+  // Same fail-open rule as the impact flag; the cost column also needs a
+  // summary (agent conversations have none).
+  const costShown = showUsageCost !== false && cost !== null;
+  const usd = (value: number) =>
+    formatUsdLabel(value, locale, (amount) =>
+      t('emissions.chip.cost.lessThan', { amount }),
+    );
+  // A row's dollar cell is null when none of its requests could be priced.
+  const priced = costShown && cost.pricedRequests > 0;
+  const usdCell = (value: number, present: boolean): string | null =>
+    priced && present ? usd(value) : null;
+
   const rows: ImpactRow[] = [
     ...(showsToday
-      ? [{ label: t('emissions.chip.today'), grams: summary.todayG }]
+      ? [
+          {
+            label: t('emissions.chip.today'),
+            grams: summary.todayG,
+            ...(costShown
+              ? { usd: usdCell(cost.todayUsd, cost.todayRequests > 0) }
+              : {}),
+          },
+        ]
       : []),
-    { label: t('emissions.chip.total'), grams: summary.totalG },
+    {
+      label: t('emissions.chip.total'),
+      grams: summary.totalG,
+      ...(costShown ? { usd: usdCell(cost.totalUsd, true) } : {}),
+    },
     ...(summary.hasEstimated && summary.measuredG > 0
-      ? [{ label: t('emissions.chip.measured'), grams: summary.measuredG }]
+      ? [
+          {
+            label: t('emissions.chip.measured'),
+            grams: summary.measuredG,
+            ...(costShown
+              ? { usd: usdCell(cost.measuredUsd, cost.measuredUsd > 0) }
+              : {}),
+          },
+        ]
       : []),
     ...(summary.hasEstimated
-      ? [{ label: t('emissions.chip.estimated'), grams: summary.estimatedG }]
+      ? [
+          {
+            label: t('emissions.chip.estimated'),
+            grams: summary.estimatedG,
+            ...(costShown
+              ? { usd: usdCell(cost.estimatedUsd, cost.hasEstimated) }
+              : {}),
+          },
+        ]
       : []),
     ...(summary.lastRequestG != null
       ? [
           {
             label: t('emissions.chip.lastRequest'),
             grams: summary.lastRequestG,
+            ...(costShown
+              ? {
+                  usd: usdCell(
+                    cost.lastRequestUsd ?? 0,
+                    cost.lastRequestUsd != null,
+                  ),
+                }
+              : {}),
           },
         ]
       : []),
   ];
+
+  // Collapsed label: emissions unless the user asked for cost and there is a
+  // priced figure to show — a cost-only chip must never read "$0.00" for a
+  // conversation whose model simply has no list price.
+  const collapsedUsd = priced
+    ? usd(showsToday ? cost.todayUsd : cost.totalUsd)
+    : null;
+  const effectiveMode = collapsedUsd === null ? 'emissions' : labelMode;
+  const collapsedLabel =
+    effectiveMode === 'cost'
+      ? collapsedUsd
+      : effectiveMode === 'both'
+        ? t('emissions.chip.labelBoth', {
+            grams: collapsedGrams,
+            cost: collapsedUsd ?? '',
+          })
+        : t('emissions.chip.label', { grams: collapsedGrams });
+  const ariaLabel =
+    t(
+      showsToday ? 'emissions.chip.ariaLabelToday' : 'emissions.chip.ariaLabel',
+      {
+        grams: collapsedGrams,
+      },
+    ) +
+    (collapsedUsd !== null && effectiveMode !== 'emissions'
+      ? ` ${t('emissions.chip.costAria', { cost: collapsedUsd })}`
+      : '');
+  const Icon = effectiveMode === 'cost' ? IconCoin : IconLeaf;
 
   return (
     <div
@@ -167,27 +255,22 @@ export const EmissionsChip: FC<EmissionsChipProps> = ({ conversation }) => {
             rows={rows}
             equivalentsFrom={summary.totalG}
             disclaimerKey="emissions.chip.disclaimer"
-          />
+          >
+            {costShown && <CostFootnote summary={cost} />}
+          </ImpactReadout>
         </div>
       )}
       <button
         type="button"
         onClick={() => setIsOpen((open) => !open)}
         aria-expanded={isOpen}
-        aria-label={t(
-          showsToday
-            ? 'emissions.chip.ariaLabelToday'
-            : 'emissions.chip.ariaLabel',
-          { grams: collapsedLabel },
-        )}
+        aria-label={ariaLabel}
         className={`flex h-9 items-center gap-1.5 rounded-full bg-gray-300 px-2.5 text-xs font-medium text-gray-800 shadow-md transition-shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-gray-700 dark:text-gray-200 dark:focus:ring-offset-gray-900 ${
           isVisible ? '' : 'pointer-events-none'
         }`}
       >
-        <IconLeaf size={16} aria-hidden="true" />
-        <span className="hidden md:inline">
-          {t('emissions.chip.label', { grams: collapsedLabel })}
-        </span>
+        <Icon size={16} aria-hidden="true" />
+        <span className="hidden md:inline">{collapsedLabel}</span>
       </button>
     </div>
   );

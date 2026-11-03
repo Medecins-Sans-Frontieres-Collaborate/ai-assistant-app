@@ -18,6 +18,17 @@ export interface BuiltinExecutor {
   readonly instructions: string;
   /** Read-only tools allowed to execute inside a request instead of pausing. */
   readonly immediate?: boolean;
+  /**
+   * Per-call override of `immediate`: when true the call pauses for the
+   * user's approval like a connector tool (skills with the "ask" effect).
+   */
+  requiresApproval?(name: string, args: unknown): boolean;
+  /**
+   * Browser-facing summary of a result. The model still receives the full
+   * text; the TOOL_CALL_RECORD carries this instead, so large or sensitive
+   * payloads (skill instruction bodies) never reach the client.
+   */
+  recordOutput?(name: string, args: unknown, result: BuiltinToolResult): string;
   remainingRounds?(): number;
   completeRound?(): void;
   /** Declarations needed only for providers validating historical tool blocks. */
