@@ -269,6 +269,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
           agentName: agent.agentName,
           displayName: agent.name || agent.agentName,
           description: agent.description,
+          discovery: agent,
           discoverable: true,
           stored: null,
           promptAgent: null,
@@ -381,7 +382,9 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
             hidden: isHiddenForSearch(row.canonicalKey)
               ? t('hiddenBadge')
               : undefined,
-            discovery: row.discoverable ? undefined : t('notDiscoverable'),
+            discoveryStatus: row.discoverable
+              ? undefined
+              : t('notDiscoverable'),
           }),
         ]),
       ),
