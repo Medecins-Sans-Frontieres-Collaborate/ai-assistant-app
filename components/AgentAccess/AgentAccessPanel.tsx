@@ -40,7 +40,11 @@ import { M365AgentsSection } from './M365AgentsSection';
 import { OrgAgentsSection } from './OrgAgentsSection';
 import { PromptAgentEditor } from './PromptAgentEditor';
 import { RuleEditor } from './RuleEditor';
-import { agentSearchDocument, matchesAgentSearch } from './agentSearch';
+import {
+  agentAudienceSearchLabel,
+  agentSearchDocument,
+  matchesAgentSearch,
+} from './agentSearch';
 import { formatAdminTimestamp } from './formatAdminTimestamp';
 import {
   AdminConnectorsResponse,
@@ -366,14 +370,18 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
               row.source === CLIENT_PROMPT_AGENT_SOURCE
                 ? ['native', t('nativeLabel'), 'prompt', t('promptAgentBadge')]
                 : ['foundry'],
-            accessLabel:
-              row.stored?.rule.access.type === 'restricted'
-                ? t('accessRestricted')
-                : t('allEligibleUsers'),
+            accessLabel: agentAudienceSearchLabel(row.stored?.rule.access, {
+              everyone: t('allEligibleUsers'),
+              restricted: t('accessRestricted'),
+              none: t('noAllowedAudience'),
+            }),
             groupNames: (row.stored?.rule.access.allowGroups ?? []).map(
               (id) => searchGroupNames[id],
             ),
-            hidden: isHiddenForSearch(row.canonicalKey),
+            hidden: isHiddenForSearch(row.canonicalKey)
+              ? t('hiddenBadge')
+              : undefined,
+            discovery: row.discoverable ? undefined : t('notDiscoverable'),
           }),
         ]),
       ),

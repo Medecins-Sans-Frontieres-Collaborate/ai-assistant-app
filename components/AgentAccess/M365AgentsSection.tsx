@@ -59,7 +59,11 @@ import {
   selectUnpreparedScannedPdfs,
 } from './M365SourcePlanView';
 import { RuleEditor } from './RuleEditor';
-import { agentSearchDocument, matchesAgentSearch } from './agentSearch';
+import {
+  agentAudienceSearchLabel,
+  agentSearchDocument,
+  matchesAgentSearch,
+} from './agentSearch';
 import { formatAdminTimestamp } from './formatAdminTimestamp';
 import {
   AdminM365AgentsResponse,
@@ -1730,15 +1734,18 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                 'm365',
                 'Microsoft 365',
               ],
-              accessLabel:
-                access?.type === 'restricted'
-                  ? t('accessRestricted')
-                  : t('allEligibleUsers'),
+              accessLabel: agentAudienceSearchLabel(access, {
+                everyone: t('allEligibleUsers'),
+                restricted: t('accessRestricted'),
+                none: t('noAllowedAudience'),
+              }),
               groupNames: (access?.allowGroups ?? []).map(
                 (id) => searchGroupNames[id],
               ),
               job: jobs[entry.agent.id],
-              hidden: isHiddenForSearch(entry.canonicalKey),
+              hidden: isHiddenForSearch(entry.canonicalKey)
+                ? t('hiddenBadge')
+                : undefined,
             }),
           ];
         }),
