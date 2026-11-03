@@ -45,4 +45,23 @@ describe('AgentActionsMenu', () => {
     expect(trigger).toHaveFocus();
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
   });
+
+  it('focuses without scrolling and allows scrolling inside the portal', () => {
+    const focus = vi.spyOn(HTMLElement.prototype, 'focus');
+    try {
+      render(
+        <AgentActionsMenu name="Handbook">
+          <button>Hide</button>
+        </AgentActionsMenu>,
+      );
+      fireEvent.click(screen.getByRole('button', { name: 'More: Handbook' }));
+      expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+      fireEvent.scroll(screen.getByRole('menu'));
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+      fireEvent.scroll(window);
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    } finally {
+      focus.mockRestore();
+    }
+  });
 });
