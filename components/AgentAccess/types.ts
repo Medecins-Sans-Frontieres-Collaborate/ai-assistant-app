@@ -620,8 +620,9 @@ export const CLIENT_NON_AGENT_RULE_SOURCES: ReadonlySet<string> = new Set([
 
 /** Foundry sources (ARM paths) and prompt agents: what the merged list is for. */
 export function isAgentListSource(source: string): boolean {
+  const normalizedSource = source.trim().toLowerCase();
   return (
-    !CLIENT_SECTIONED_AGENT_SOURCES.has(source) &&
-    !CLIENT_NON_AGENT_RULE_SOURCES.has(source)
+    !CLIENT_SECTIONED_AGENT_SOURCES.has(normalizedSource) &&
+    !CLIENT_NON_AGENT_RULE_SOURCES.has(normalizedSource)
   );
 }

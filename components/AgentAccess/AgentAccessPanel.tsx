@@ -370,7 +370,8 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
           agentSearchDocument({
             ...row,
             kind:
-              row.source === CLIENT_PROMPT_AGENT_SOURCE
+              row.promptAgent !== null ||
+              row.source.trim().toLowerCase() === CLIENT_PROMPT_AGENT_SOURCE
                 ? ['native', t('nativeLabel'), 'prompt', t('promptAgentBadge')]
                 : ['foundry'],
             accessLabel: agentAudienceSearchLabel(row.stored?.rule.access, {
@@ -1554,7 +1555,9 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
               <ul className={`${rowStyles.list} space-y-2`}>
                 {visibleRows.map((row) => {
                   const isPromptAgent =
-                    row.source === CLIENT_PROMPT_AGENT_SOURCE;
+                    row.promptAgent !== null ||
+                    row.source.trim().toLowerCase() ===
+                      CLIENT_PROMPT_AGENT_SOURCE;
                   const isHiddenRow = hiddenAgents.isHidden(row.canonicalKey);
                   return (
                     <li
