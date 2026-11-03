@@ -1,4 +1,6 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import type { ComponentProps } from 'react';
 
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
@@ -39,13 +41,43 @@ const existing: AdminStoredPromptAgent = {
   },
 };
 
+/** Renders the real skills query with an isolated cache, as the app does. */
+function renderEditor(props: ComponentProps<typeof PromptAgentEditor>) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false, gcTime: 0 } },
+  });
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <PromptAgentEditor {...props} />
+    </QueryClientProvider>,
+  );
+}
+
 describe('PromptAgentEditor prompt length', () => {
-  const fetchMock = vi.fn();
+  const fetchMock =
+    vi.fn<(url: string, init?: RequestInit) => Promise<Response>>();
 
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubGlobal('fetch', fetchMock);
-    fetchMock.mockResolvedValue(new Response('{}', { status: 200 }));
+    fetchMock.mockImplementation(async (url, init) => {
+      if (url === '/api/agent-access/skills' && !init?.method) {
+        return new Response(
+          JSON.stringify({
+            success: true,
+            data: { skills: [], skillsUnavailable: false, fetchedAt: 1 },
+          }),
+          { status: 200 },
+        );
+      }
+      if (
+        url === '/api/agent-access/prompt-agents' &&
+        (init?.method === 'POST' || init?.method === 'PUT')
+      ) {
+        return new Response('{}', { status: 200 });
+      }
+      throw new Error(`Unexpected request: ${init?.method ?? 'GET'} ${url}`);
+    });
   });
 
   afterEach(() => {
@@ -61,14 +93,12 @@ describe('PromptAgentEditor prompt length', () => {
     '$method retains and submits all $length characters',
     async ({ length, method }) => {
       const onSaved = vi.fn();
-      render(
-        <PromptAgentEditor
-          existing={method === 'POST' ? null : existing}
-          onSaved={onSaved}
-          onCancel={vi.fn()}
-          onConflictReload={vi.fn()}
-        />,
-      );
+      renderEditor({
+        existing: method === 'POST' ? null : existing,
+        onSaved,
+        onCancel: vi.fn(),
+        onConflictReload: vi.fn(),
+      });
       const input = screen.getByLabelText('agentSystemPromptLabel');
       const systemPrompt = 'x'.repeat(length - 4) + '\nEND';
 
@@ -89,27 +119,36 @@ describe('PromptAgentEditor prompt length', () => {
       fireEvent.click(screen.getByRole('button', { name: 'save' }));
 
       await waitFor(() => expect(onSaved).toHaveBeenCalledOnce());
-      const [, request] = fetchMock.mock.calls[0];
-      expect(request.method).toBe(method);
-      expect(JSON.parse(request.body).systemPrompt).toBe(systemPrompt);
+      const writes = fetchMock.mock.calls.filter(
+        ([url]) => url === '/api/agent-access/prompt-agents',
+      );
+      expect(writes).toHaveLength(1);
+      const [, request] = writes[0];
+      expect(request?.method).toBe(method);
+      expect(JSON.parse(request?.body as string).systemPrompt).toBe(
+        systemPrompt,
+      );
     },
   );
 
   it('disables save for an over-limit stored prompt without truncating it', () => {
     const systemPrompt = 'x'.repeat(PROMPT_AGENT_MAX_PROMPT_CHARS + 1);
-    render(
-      <PromptAgentEditor
-        existing={{ ...existing, agent: { ...existing.agent, systemPrompt } }}
-        onSaved={vi.fn()}
-        onCancel={vi.fn()}
-        onConflictReload={vi.fn()}
-      />,
-    );
+    renderEditor({
+      existing: { ...existing, agent: { ...existing.agent, systemPrompt } },
+      onSaved: vi.fn(),
+      onCancel: vi.fn(),
+      onConflictReload: vi.fn(),
+    });
 
     expect(screen.getByLabelText('agentSystemPromptLabel')).toHaveValue(
       systemPrompt,
     );
     expect(screen.getByRole('button', { name: 'save' })).toBeDisabled();
-    expect(fetchMock).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'save' }));
+    expect(
+      fetchMock.mock.calls.filter(
+        ([url]) => url === '/api/agent-access/prompt-agents',
+      ),
+    ).toHaveLength(0);
   });
 });
