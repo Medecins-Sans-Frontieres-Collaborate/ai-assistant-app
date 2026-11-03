@@ -9,6 +9,10 @@ interface CanonicalKeyChipProps {
   canonicalKey: string;
   /** Extra label before the key ("Key" by default). */
   label?: string;
+  /** Accessible copy action for non-key identifiers. */
+  copyLabel?: string;
+  /** Display the entire value in expanded technical details. */
+  wrap?: boolean;
 }
 
 /**
@@ -19,6 +23,8 @@ interface CanonicalKeyChipProps {
 export const CanonicalKeyChip: FC<CanonicalKeyChipProps> = ({
   canonicalKey,
   label,
+  copyLabel,
+  wrap = false,
 }) => {
   const t = useTranslations('agentAccess');
   const [copied, setCopied] = useState(false);
@@ -54,11 +60,11 @@ export const CanonicalKeyChip: FC<CanonicalKeyChipProps> = ({
   };
 
   return (
-    <span className="inline-flex max-w-full items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+    <span className="inline-flex max-w-full items-start gap-1 text-xs text-gray-600 dark:text-gray-300">
       <span className="shrink-0">{label ?? t('canonicalKeyLabel')}:</span>
       <code
         ref={codeRef}
-        className="min-w-0 truncate rounded bg-gray-100 px-1 py-0.5 font-mono text-[11px] text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+        className={`min-w-0 rounded bg-gray-100 px-1 py-0.5 font-mono text-[11px] text-gray-700 dark:bg-gray-800 dark:text-gray-300 ${wrap ? 'whitespace-normal [overflow-wrap:anywhere]' : 'truncate'}`}
         title={canonicalKey}
       >
         {canonicalKey}
@@ -66,9 +72,9 @@ export const CanonicalKeyChip: FC<CanonicalKeyChipProps> = ({
       <button
         type="button"
         onClick={() => void copy()}
-        aria-label={t('copyKey')}
-        title={t('copyKey')}
-        className="shrink-0 rounded p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+        aria-label={copyLabel ?? t('copyKey')}
+        title={copyLabel ?? t('copyKey')}
+        className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded text-gray-600 hover:bg-gray-100 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
       >
         {copied ? (
           <IconCheck size={12} className="text-green-600" />
