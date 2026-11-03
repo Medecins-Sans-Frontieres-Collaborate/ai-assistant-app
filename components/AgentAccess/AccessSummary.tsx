@@ -1,5 +1,6 @@
 'use client';
 
+import { IconUserOff, IconUsers, IconUsersGroup } from '@tabler/icons-react';
 import { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -43,47 +44,58 @@ export const AccessSummary: FC<AccessSummaryProps> = ({ access }) => {
   );
 
   return (
-    <div className="mt-2 min-w-0 text-xs text-gray-700 dark:text-gray-300">
+    <div className="min-w-0 text-xs text-gray-700 dark:text-gray-300">
       {!restricted ? (
-        <p title={t('everyoneDescription')}>
-          <span className="font-medium">{t('accessTypeLabel')}:</span>{' '}
-          {t('accessEveryone')}
+        <p title={t('accessScopeHint')} className="flex items-center gap-1.5">
+          <IconUsersGroup aria-hidden="true" size={15} className="shrink-0" />
+          {t('allEligibleUsers')}
         </p>
       ) : audiences.length === 0 ? (
-        <p className="break-words text-amber-800 dark:text-amber-300">
-          {t('restrictedEmptyWarning')}
+        <p
+          title={t('restrictedEmptyWarning')}
+          className="flex items-center gap-1.5"
+        >
+          <IconUserOff aria-hidden="true" size={15} className="shrink-0" />
+          {t('noAllowedAudience')}
         </p>
       ) : (
-        <dl className="space-y-1">
-          {audiences.map((audience) => (
-            <div
-              key={audience.label}
-              className="flex flex-wrap items-baseline gap-x-2 gap-y-1"
-            >
-              <dt className="font-medium">
-                {audience.label} ({audience.values.length}):
-              </dt>
-              <dd className="flex min-w-0 flex-wrap gap-x-2 gap-y-1">
-                {(expanded
-                  ? audience.values
-                  : audience.values.slice(0, PREVIEW_LIMIT)
-                ).map((value) => (
-                  <span
-                    key={value}
-                    title={value}
-                    dir="auto"
-                    className="min-w-0 max-w-full [overflow-wrap:anywhere]"
-                  >
-                    {audience.groups ? (groupNames[value] ?? value) : value}
-                  </span>
-                ))}
-                {!expanded && audience.values.length > PREVIEW_LIMIT && (
-                  <span>+{audience.values.length - PREVIEW_LIMIT}</span>
-                )}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <div className="flex items-start gap-1.5">
+          <IconUsers aria-hidden="true" size={15} className="mt-0.5 shrink-0" />
+          <dl className="min-w-0 space-y-1">
+            {audiences.map((audience) => (
+              <div
+                key={audience.label}
+                className="flex flex-wrap items-baseline gap-x-2 gap-y-1"
+              >
+                <dt className="font-medium">
+                  {audience.label}
+                  {audience.values.length > 1
+                    ? ` (${audience.values.length})`
+                    : ''}
+                  :
+                </dt>
+                <dd className="flex min-w-0 flex-wrap gap-x-2 gap-y-1">
+                  {(expanded
+                    ? audience.values
+                    : audience.values.slice(0, PREVIEW_LIMIT)
+                  ).map((value) => (
+                    <span
+                      key={value}
+                      title={value}
+                      dir="auto"
+                      className="min-w-0 max-w-full [overflow-wrap:anywhere]"
+                    >
+                      {audience.groups ? (groupNames[value] ?? value) : value}
+                    </span>
+                  ))}
+                  {!expanded && audience.values.length > PREVIEW_LIMIT && (
+                    <span>+{audience.values.length - PREVIEW_LIMIT}</span>
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       )}
       {hasMore && (
         <button
