@@ -23,6 +23,7 @@ import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 import { OpenAIModels } from '@/types/openai';
 
 import { AccessSummary } from './AccessSummary';
+import { AgentListStatus } from './AgentListStatus';
 import { AgentTechnicalDetails } from './AgentTechnicalDetails';
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
 import {
@@ -830,7 +831,8 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
       return unwrapApiData<AdminOrgAgentsResponse>(await response.json());
     },
     retry: 1,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus:
+      !isCreating && editingId === null && editingRuleKey === null,
   });
 
   const indexesQuery = useQuery<{ indexes: string[] }>({
@@ -924,7 +926,10 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
     (entry) => entry.canonicalKey,
   );
   const staticAgentIds = agentsQuery.data?.staticAgentIds ?? [];
-  const canCreate = agentsQuery.data?.canCreate !== false;
+  const listingUnavailable = agentsQuery.data?.orgAgentsUnavailable === true;
+  const listingReady =
+    !agentsQuery.isPending && !agentsQuery.isError && !listingUnavailable;
+  const canCreate = agentsQuery.data?.canCreate === true;
   const indexNames = indexesQuery.data?.indexes ?? [];
 
   return (
@@ -943,11 +948,12 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
         <button
           type="button"
           aria-expanded={isCreating}
+          disabled={!listingReady}
           onClick={() => {
             setOverridePrefill(null);
             setIsCreating((creating) => !creating);
           }}
-          className="mb-3 flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+          className="mb-3 flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-black hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
         >
           <IconPlus size={16} />
           {t('addOrgAgent')}
@@ -982,11 +988,15 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
         </div>
       )}
 
-      {agentsQuery.data?.orgAgentsUnavailable && (
-        <p className="mb-2 text-xs text-amber-700 dark:text-amber-400">
-          {t('orgAgentsUnavailableWarning')}
-        </p>
-      )}
+      <AgentListStatus
+        pending={agentsQuery.isPending}
+        fetching={agentsQuery.isFetching}
+        failed={agentsQuery.isError}
+        unavailableMessage={
+          listingUnavailable ? t('orgAgentsUnavailableWarning') : undefined
+        }
+        onRetry={() => void agentsQuery.refetch()}
+      />
 
       <ShowHiddenToggle
         hiddenCount={hiddenStatic.hiddenCount + hiddenStored.hiddenCount}
@@ -995,11 +1005,13 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
       />
       {hiddenStored.visible.length === 0 &&
       hiddenStatic.visible.length === 0 ? (
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {agents.length === 0 && staticAgents.length === 0
-            ? t('noOrgAgents')
-            : t('allAgentsHidden')}
-        </p>
+        listingReady && (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {agents.length === 0 && staticAgents.length === 0
+              ? t('noOrgAgents')
+              : t('allAgentsHidden')}
+          </p>
+        )
       ) : (
         <ul className="space-y-2">
           {hiddenStatic.visible.map((entry) => {
@@ -1060,11 +1072,12 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                       <button
                         type="button"
                         title={t('orgAgentBuiltinHint')}
+                        disabled={!listingReady}
                         onClick={() => {
                           setOverridePrefill(entry);
                           setIsCreating(true);
                         }}
-                        className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                        className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                       >
                         {t('orgAgentOverrideAction')}
                       </button>

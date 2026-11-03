@@ -35,6 +35,7 @@ import { OpenAIModels } from '@/types/openai';
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 
 import { AccessSummary } from './AccessSummary';
+import { AgentListStatus } from './AgentListStatus';
 import { AgentTechnicalDetails } from './AgentTechnicalDetails';
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
 import {
@@ -1483,7 +1484,10 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
       return unwrapApiData<AdminM365AgentsResponse>(await response.json());
     },
     retry: 1,
-    refetchOnWindowFocus: false,
+    // Recover idle lists on return without remounting an unsaved editor when
+    // another admin's write changes the record's etag.
+    refetchOnWindowFocus:
+      !isCreating && editingId === null && editingRuleKey === null,
     enabled: agentsEnabled,
   });
 
@@ -1691,6 +1695,9 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   if (!agentsEnabled) return null;
 
   const agents = agentsQuery.data?.m365Agents ?? [];
+  const listingUnavailable = agentsQuery.data?.m365AgentsUnavailable === true;
+  const listingReady =
+    !agentsQuery.isPending && !agentsQuery.isError && !listingUnavailable;
   const { visible: visibleAgents, hiddenCount } = hiddenAgents.partition(
     agents,
     (entry) => entry.canonicalKey,
@@ -1723,8 +1730,9 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
       <button
         type="button"
         aria-expanded={isCreating}
+        disabled={!listingReady}
         onClick={() => setIsCreating((creating) => !creating)}
-        className="mb-3 flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+        className="mb-3 flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-black hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
       >
         <IconPlus size={16} />
         {t('addM365Agent')}
@@ -1754,11 +1762,15 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
         </div>
       )}
 
-      {agentsQuery.data?.m365AgentsUnavailable && (
-        <p className="mb-2 text-xs text-amber-700 dark:text-amber-400">
-          {t('m365AgentsUnavailableWarning')}
-        </p>
-      )}
+      <AgentListStatus
+        pending={agentsQuery.isPending}
+        fetching={agentsQuery.isFetching}
+        failed={agentsQuery.isError}
+        unavailableMessage={
+          listingUnavailable ? t('m365AgentsUnavailableWarning') : undefined
+        }
+        onRetry={() => void agentsQuery.refetch()}
+      />
       {/* Indexing runs with THIS admin's Graph token: a disconnected account
           or a dead session blocks every source action, so say it once, up
           front, with the way out — not as a toast after the click. */}
@@ -1779,9 +1791,11 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
         onToggle={hiddenAgents.setShowHidden}
       />
       {visibleAgents.length === 0 ? (
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {agents.length === 0 ? t('noM365Agents') : t('allAgentsHidden')}
-        </p>
+        listingReady && (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {agents.length === 0 ? t('noM365Agents') : t('allAgentsHidden')}
+          </p>
+        )
       ) : (
         <ul className="space-y-2">
           {visibleAgents.map((entry) => {
