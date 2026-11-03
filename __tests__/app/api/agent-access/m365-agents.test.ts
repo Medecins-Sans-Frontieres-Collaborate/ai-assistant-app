@@ -278,6 +278,54 @@ describe('/api/agent-access/m365-agents', () => {
     expect(mockStore.writeM365Agent).not.toHaveBeenCalled();
   });
 
+  it.each([
+    { cachedDelegation: true, expectedStatus: 200 },
+    { cachedDelegation: false, expectedStatus: 403 },
+  ])(
+    'a failed management listing with cachedDelegation=$cachedDelegation returns $expectedStatus',
+    async ({ cachedDelegation, expectedStatus }) => {
+      const { resolveAdminStatus } = await vi.importActual<
+        typeof import('@/lib/services/agentAccess/adminAuth')
+      >('@/lib/services/agentAccess/adminAuth');
+      mockAdminAuth.resolveAdminStatus.mockImplementation(resolveAdminStatus);
+      mockAuth.mockResolvedValue({
+        ...session,
+        user: {
+          id: 'delegate-user',
+          mail: 'delegate@example.org',
+          name: 'Delegate',
+        },
+      });
+      mockService.getSnapshot.mockReturnValue({
+        config: cachedDelegation
+          ? {
+              version: 1,
+              localAdmins: [
+                {
+                  email: 'delegate@example.org',
+                  agentKeys: ['m365-agent::m365-abcdefabcdef'],
+                },
+              ],
+            }
+          : null,
+      });
+      mockStore.readConfig.mockResolvedValue(null);
+      mockStore.listAllM365Agents.mockRejectedValueOnce(
+        new Error('M365 record storage unavailable'),
+      );
+
+      const response = await GET();
+      expect(response.status).toBe(expectedStatus);
+      if (cachedDelegation) {
+        const body = await parseJsonResponse(response);
+        expect(body.data.m365AgentsUnavailable).toBe(true);
+        expect(body.data.m365Agents).toEqual([]);
+      }
+      // Management visibility does not depend on the caller's Graph access.
+      expect(mockPlanner.planSources).not.toHaveBeenCalled();
+    },
+  );
+
   it('404s everyone while the feature is disabled', async () => {
     mockService.isEnabled.mockReturnValue(false);
     const response = await GET();
