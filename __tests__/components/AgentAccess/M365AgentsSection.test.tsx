@@ -168,13 +168,17 @@ function installFetch(scenario: Scenario) {
   return { calls };
 }
 
-function renderSection() {
+function renderSection(searchQuery = '') {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
   const view = render(
     <QueryClientProvider client={queryClient}>
-      <M365AgentsSection rules={[]} onDataChanged={() => {}} />
+      <M365AgentsSection
+        rules={[]}
+        searchQuery={searchQuery}
+        onDataChanged={() => {}}
+      />
     </QueryClientProvider>,
   );
   return { ...view, queryClient };
@@ -194,6 +198,28 @@ afterEach(() => {
 });
 
 describe('M365AgentsSection — management visibility diagnostics', () => {
+  it('searches aggregated document counts without treating zero failures as failed status', async () => {
+    const agent = baseAgent([
+      {
+        ...indexedSource,
+        counts: { ...indexedSource.counts, indexed: 75, failed: 0 },
+      },
+    ]);
+    installFetch({ listings: [[agent]] });
+    const view = renderSection('75 documents');
+    expect(await screen.findByText('HR Handbook')).toBeInTheDocument();
+    view.rerender(
+      <QueryClientProvider client={view.queryClient}>
+        <M365AgentsSection
+          rules={[]}
+          searchQuery="failed"
+          onDataChanged={() => {}}
+        />
+      </QueryClientProvider>,
+    );
+    expect(screen.queryByText('HR Handbook')).not.toBeInTheDocument();
+    expect(screen.getByText('No matches for “failed”')).toBeInTheDocument();
+  });
   it('does not mount the section or fetch its listing when the capability flag is false', () => {
     mockM365Flags.agentsEnabled = false;
     const { calls } = installFetch({
