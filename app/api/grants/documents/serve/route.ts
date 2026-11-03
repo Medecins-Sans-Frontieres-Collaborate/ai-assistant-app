@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    if (!(await canUseGrants(session.user))) {
+    if (!(await canUseGrants(request, session))) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

@@ -11,12 +11,19 @@ import '@testing-library/jest-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 let mockFlags: Record<string, unknown> = {};
+let mockGrantsAccess = false;
 
 // The admin workflow policy hook is react-query backed; these tests render
 // without a QueryClientProvider, and the policy is not what they exercise.
 vi.mock('@/client/hooks/workflows/useWorkflowPolicy', () => ({
   useWorkflowPolicy: () => ({
     isWorkflowEnabled: () => true,
+    isLoading: false,
+  }),
+}));
+vi.mock('@/client/hooks/grants/useGrantsAccess', () => ({
+  useGrantsAccess: () => ({
+    hasGrantsAccess: mockGrantsAccess,
     isLoading: false,
   }),
 }));
@@ -136,6 +143,13 @@ describe('WorkflowTabs', () => {
       expect(
         screen.getByRole('tab', { name: TRANSLATION }),
       ).toBeInTheDocument();
+    });
+
+    it('adds the Grants tab only for grants group members', () => {
+      mockGrantsAccess = true;
+      render(<WorkflowTabs />);
+      expect(screen.getAllByRole('tab')).toHaveLength(8);
+      mockGrantsAccess = false;
     });
 
     it('marks Chat active on an untyped conversation', () => {

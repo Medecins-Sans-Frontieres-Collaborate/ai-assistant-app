@@ -35,14 +35,13 @@ import { useParams } from 'next/navigation';
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useForeignConversationImport } from '@/client/hooks/conversation/useForeignConversationImport';
 import { useNewConversation } from '@/client/hooks/conversation/useNewConversation';
+import { useGrantsAccess } from '@/client/hooks/grants/useGrantsAccess';
 import { useAgentBrowserAvailability } from '@/client/hooks/settings/useAvailableAgents';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useFolderManagement } from '@/client/hooks/ui/useFolderManagement';
 import { useUI } from '@/client/hooks/ui/useUI';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 import { useWorkflowPolicy } from '@/client/hooks/workflows/useWorkflowPolicy';
-
-import { canAccessGrants } from '@/lib/services/grants/access';
 
 import { createWorkflowConversation } from '@/lib/utils/app/conversationInit';
 import {
@@ -108,12 +107,12 @@ export const Sidebar = memo(function Sidebar() {
   const params = useParams();
   const locale = params?.locale || 'en';
   const { data: session } = useSession();
-  // Grants is allowlist-restricted; its workflow entry is hidden for
-  // everyone else (the server APIs enforce access regardless).
-  const showGrants = canAccessGrants(session?.user);
   // Admin workflow policy: a workflow switched off by an admin is hidden for
-  // everyone, on top of the flag and the grants rule (server enforces too).
+  // everyone, on top of the flag (server enforces too).
   const { isWorkflowEnabled } = useWorkflowPolicy();
+  // Grants uses Entra group membership; its entry is hidden for
+  // everyone else (the server APIs enforce access regardless).
+  const { hasGrantsAccess } = useGrantsAccess();
   const { showChatbar, toggleChatbar, setIsSettingsOpen, theme } = useUI();
   const {
     conversations,
@@ -625,7 +624,7 @@ export const Sidebar = memo(function Sidebar() {
                     {CONVERSATION_WORKFLOW_TYPES.filter(
                       (type) =>
                         isWorkflowEnabled(type) &&
-                        (type !== 'grants' || showGrants),
+                        (type !== 'grants' || hasGrantsAccess),
                     ).map((type) => {
                       const meta = WORKFLOW_META[type];
                       const Icon = meta.icon;

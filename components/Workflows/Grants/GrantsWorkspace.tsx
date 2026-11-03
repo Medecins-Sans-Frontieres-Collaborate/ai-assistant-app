@@ -18,10 +18,9 @@ import {
   IconTrash,
   IconX,
 } from '@tabler/icons-react';
-import { useSession } from 'next-auth/react';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 
-import { canAccessGrants } from '@/lib/services/grants/access';
+import { useGrantsAccess } from '@/client/hooks/grants/useGrantsAccess';
 
 import { GrantsWorkflowState, GrantsWorkflowStep } from '@/types/workflow';
 
@@ -295,9 +294,8 @@ function isGreenInitiativeDocType(t?: string): boolean {
  * re-fetched from the server when the conversation reopens.
  */
 export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
-  // Access control — restrict the whole page to allowlisted users.
-  const { data: session, status: sessionStatus } = useSession();
-  const hasGrantsAccess = canAccessGrants(session?.user);
+  // Access control — restrict the whole page to grants group members.
+  const { hasGrantsAccess, isLoading: accessLoading } = useGrantsAccess();
 
   // State management
   const [uiState, setUiState] = useState<UIState>('document-management');
@@ -1237,8 +1235,8 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   // -------------------------------------------------------------------------
   // Render
   // -------------------------------------------------------------------------
-  // Access gate — block direct-URL access for non-allowlisted users.
-  if (sessionStatus !== 'loading' && !hasGrantsAccess) {
+  // Access gate — block direct-URL access for non-members.
+  if (!accessLoading && !hasGrantsAccess) {
     return (
       <div className="mx-auto flex h-full max-w-7xl items-center justify-center overflow-y-auto p-6">
         <div className="max-w-md rounded-lg border border-gray-200 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-800">
