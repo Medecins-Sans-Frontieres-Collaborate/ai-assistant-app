@@ -25,10 +25,10 @@ export const AgentTechnicalDetails: FC<AgentTechnicalDetailsProps> = ({
 
   return (
     <details className="mt-2 min-w-0 text-xs text-gray-600 dark:text-gray-300">
-      <summary className="w-fit cursor-pointer rounded-md py-2 focus-visible:outline focus-visible:outline-2">
+      <summary className="min-h-11 w-fit cursor-pointer rounded-md py-3 focus-visible:outline focus-visible:outline-2">
         {t('technicalDetails')}
       </summary>
-      <div className="min-w-0 space-y-2 pt-1">
+      <div className="flex min-w-0 flex-col items-start gap-2 pt-1">
         {source && (
           <CanonicalKeyChip
             canonicalKey={source}
