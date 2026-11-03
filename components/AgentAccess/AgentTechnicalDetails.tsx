@@ -19,14 +19,13 @@ export const AgentTechnicalDetails: FC<AgentTechnicalDetailsProps> = ({
   source,
   children,
 }) => {
-  const t = useTranslations('agentsTab.agentSources');
   const tAccess = useTranslations('agentAccess');
   const tCopy = useTranslations('transcript');
 
   return (
-    <details className="mt-2 min-w-0 text-xs text-gray-600 dark:text-gray-300">
-      <summary className="min-h-11 w-fit cursor-pointer rounded-md py-3 focus-visible:outline focus-visible:outline-2">
-        {t('technicalDetails')}
+    <details className="mt-1 min-w-0 text-xs text-gray-600 dark:text-gray-300">
+      <summary className="min-h-8 w-fit cursor-pointer rounded-md py-1.5 focus-visible:outline focus-visible:outline-2 [@media(pointer:coarse)]:min-h-11">
+        {tAccess('detailsLabel')}
       </summary>
       <div className="flex min-w-0 flex-col items-start gap-2 pt-1">
         {source && (
