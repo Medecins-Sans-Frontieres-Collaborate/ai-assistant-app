@@ -278,6 +278,30 @@ export function isEmissionsChipVisibility(
 }
 
 /**
+ * What the COLLAPSED chip reads (docs/CHAT_COST_CHIP.md). The popover always
+ * carries both figures; this only decides which one earns the pixel.
+ *
+ * - `emissions` — "2.1 g CO₂e" (default: the status quo).
+ * - `cost`      — "$0.03".
+ * - `both`      — "2.1 g · $0.03".
+ */
+export type EmissionsChipLabelMode = 'emissions' | 'cost' | 'both';
+
+export const EMISSIONS_CHIP_LABEL_MODE_DEFAULT: EmissionsChipLabelMode =
+  'emissions';
+
+export const EMISSIONS_CHIP_LABEL_MODE_OPTIONS: readonly EmissionsChipLabelMode[] =
+  ['emissions', 'cost', 'both'] as const;
+
+export function isEmissionsChipLabelMode(
+  value: unknown,
+): value is EmissionsChipLabelMode {
+  return EMISSIONS_CHIP_LABEL_MODE_OPTIONS.includes(
+    value as EmissionsChipLabelMode,
+  );
+}
+
+/**
  * Long enough to read the figure after a response settles, short enough that
  * the chip stops being furniture.
  */

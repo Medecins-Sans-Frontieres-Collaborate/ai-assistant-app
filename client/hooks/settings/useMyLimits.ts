@@ -56,8 +56,15 @@ export interface MyLimitsResponse {
   /** Present on `?as=` admin previews only. */
   preview?: boolean;
   subject?: string | null;
-  /** Override layers the preview cannot evaluate (attribute, group). */
+  /** Override layers the preview could not evaluate (attribute, group). */
   notEvaluated?: string[];
+  /**
+   * Preview only: how the subject's attribute + group layers were obtained.
+   * `resolved` from the directory, `not-found` when no directory user has
+   * the mail (layers evaluated as empty), `unavailable` when Graph could
+   * not answer (then `notEvaluated` lists both).
+   */
+  directoryStatus?: 'resolved' | 'not-found' | 'unavailable';
   /** The caller is a SCOPED admin and the subject is inside their scope. */
   scopedPreview?: boolean;
   /** Present when `usage=1` was asked for and the counters could be read. */

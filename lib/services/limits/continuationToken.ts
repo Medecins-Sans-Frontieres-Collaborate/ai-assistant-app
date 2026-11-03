@@ -55,10 +55,21 @@ export function mintContinuationToken(
   userId: string,
   approvalRequestId: string,
   now: number = Date.now(),
+  state?: Record<string, unknown>,
 ): string | null {
   const secret = signingSecret();
   if (!secret || !userId || !approvalRequestId) return null;
   const expiresAt = now + CONTINUATION_TOKEN_TTL_MS;
+  if (state) {
+    const payload = Buffer.from(JSON.stringify(state)).toString('base64url');
+    if (payload.length > 3000) return null;
+    const digest = createHmac('sha256', secret)
+      .update(
+        ['v2', userId, approvalRequestId, String(expiresAt), payload].join('|'),
+      )
+      .digest('base64url');
+    return `v2.${expiresAt}.${payload}.${digest}`;
+  }
   return `${VERSION}.${expiresAt}.${signature(secret, userId, approvalRequestId, expiresAt)}`;
 }
 
@@ -72,6 +83,26 @@ export function verifyContinuationToken(
   const secret = signingSecret();
   if (!secret || !userId || !approvalRequestId || !token) return false;
   const parts = token.split('.');
+  if (parts.length === 4 && parts[0] === 'v2') {
+    const expiresAt = Number(parts[1]);
+    if (
+      !Number.isSafeInteger(expiresAt) ||
+      expiresAt <= now ||
+      parts[2].length > 3000
+    )
+      return false;
+    const expected = Buffer.from(
+      createHmac('sha256', secret)
+        .update(
+          ['v2', userId, approvalRequestId, String(expiresAt), parts[2]].join(
+            '|',
+          ),
+        )
+        .digest('base64url'),
+    );
+    const given = Buffer.from(parts[3]);
+    return expected.length === given.length && timingSafeEqual(expected, given);
+  }
   if (parts.length !== 3 || parts[0] !== VERSION) return false;
   const expiresAt = Number(parts[1]);
   if (!Number.isSafeInteger(expiresAt) || expiresAt <= now) return false;
@@ -80,6 +111,26 @@ export function verifyContinuationToken(
   );
   const given = Buffer.from(parts[2]);
   return expected.length === given.length && timingSafeEqual(expected, given);
+}
+
+/** Returns only server-authenticated continuation state, never unsigned client data. */
+export function readContinuationState(
+  userId: string,
+  approvalRequestId: string,
+  token: string | undefined,
+): Record<string, unknown> | null {
+  if (
+    !verifyContinuationToken(userId, approvalRequestId, token) ||
+    !token?.startsWith('v2.')
+  )
+    return null;
+  try {
+    return JSON.parse(
+      Buffer.from(token.split('.')[2], 'base64url').toString('utf8'),
+    ) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
 }
 
 /**

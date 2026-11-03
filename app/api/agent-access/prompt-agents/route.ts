@@ -23,8 +23,10 @@ import {
   PROMPT_AGENT_SOURCE,
   PromptAgent,
   PromptAgentHistoryEntry,
+  PromptAgentSkillAccessSchema,
   canonicalAgentKey,
 } from '@/lib/services/agentAccess/types';
+import { SkillIdSchema } from '@/lib/services/skills/types';
 
 import {
   badRequestResponse,
@@ -40,6 +42,7 @@ import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 import { OpenAIModels } from '@/types/openai';
 
 import { auth } from '@/auth';
+import { PROMPT_AGENT_MAX_PROMPT_CHARS } from '@/lib/constants/promptAgents';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
@@ -75,8 +78,13 @@ const DELEGATION_CAS_ATTEMPTS = 3;
 const agentFieldsSchema = z.object({
   name: z.string().trim().min(1).max(100),
   description: z.string().trim().max(300).default(''),
-  systemPrompt: z.string().trim().min(1).max(10000),
+  systemPrompt: z.string().trim().min(1).max(PROMPT_AGENT_MAX_PROMPT_CHARS),
   modelId: z.string().trim().min(1).max(100),
+  // Skill scope (docs/SKILLS_DESIGN.md §5.4); ids are validated against the
+  // Agent Skills name rules, existence is checked at run time (a deleted
+  // skill is simply not offered).
+  skillAccess: PromptAgentSkillAccessSchema.default('inherit'),
+  skillIds: z.array(SkillIdSchema).max(20).default([]),
 });
 
 const putBodySchema = agentFieldsSchema.extend({
@@ -358,6 +366,9 @@ export async function POST(request: NextRequest) {
       description: parsed.data.description,
       systemPrompt: parsed.data.systemPrompt,
       modelId: parsed.data.modelId,
+      skillAccess: parsed.data.skillAccess,
+      skillIds:
+        parsed.data.skillAccess === 'selected' ? parsed.data.skillIds : [],
       createdBy: userMail,
       createdAt: now,
       updatedBy: userMail,
@@ -494,6 +505,9 @@ export async function PUT(request: NextRequest) {
       description: parsed.data.description,
       systemPrompt: parsed.data.systemPrompt,
       modelId: parsed.data.modelId,
+      skillAccess: parsed.data.skillAccess,
+      skillIds:
+        parsed.data.skillAccess === 'selected' ? parsed.data.skillIds : [],
       updatedBy: userMail,
       updatedAt: now,
     };

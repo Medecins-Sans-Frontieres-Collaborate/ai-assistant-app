@@ -81,6 +81,13 @@ export interface BlobStorage {
    * @returns Promise resolving to the full blob names, unordered
    */
   listBlobs(prefix: string): Promise<string[]>;
+  /** Bounded listing for background maintenance; optional on legacy/test adapters. */
+  listBlobsPage?(
+    prefix: string,
+    continuation?: string,
+    limit?: number,
+    signal?: AbortSignal,
+  ): Promise<{ names: string[]; continuation?: string }>;
   /**
    * Generates a SAS URL for accessing the blob with read permissions.
    * Used for batch transcription API which requires a publicly accessible URL.
@@ -400,6 +407,30 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       },
       { label: 'blob.listBlobs' },
     );
+  }
+  /** Reads one bounded Azure listing page rather than materializing an entire prefix. */
+  async listBlobsPage(
+    prefix: string,
+    continuation?: string,
+    limit = 10,
+    signal?: AbortSignal,
+  ): Promise<{ names: string[]; continuation?: string }> {
+    const container = this.blobServiceClient.getContainerClient(
+      this.containerName as string,
+    );
+    const pages = container
+      .listBlobsFlat({ prefix, abortSignal: signal })
+      .byPage({
+        continuationToken: continuation,
+        maxPageSize: Math.max(1, Math.min(limit, 100)),
+      });
+    const page = await pages.next();
+    return page.done
+      ? { names: [] }
+      : {
+          names: (page.value.segment.blobItems ?? []).map((blob) => blob.name),
+          continuation: page.value.continuationToken || undefined,
+        };
   }
 
   async getBlobSize(blobName: string): Promise<number> {

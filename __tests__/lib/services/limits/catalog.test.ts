@@ -18,8 +18,9 @@ describe('limit catalog', () => {
     // Every non-unlimited default must encode behaviour the app ALREADY has,
     // so merging the feature cannot change what any user experiences.
     expect(configured.map((d) => d.key).sort()).toEqual([
-      // New flag-gated feature: a non-null default cannot change behaviour
-      // any user already has, because the toolset ships dark.
+      // New flag-gated features: a non-null default cannot change behaviour
+      // any user already has, because the toolset (and the digest) ship dark.
+      'feature.m365.digestRunsPerDay',
       'feature.m365.mail.deepScansPerDay',
       'feature.m365.mail.draftsPerDay',
       'feature.m365.mail.readsPerDay',

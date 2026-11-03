@@ -260,8 +260,8 @@ describe('draft-based cells', () => {
     const cells = cellsByModelIdFor(EXAMPLE_10, [TERRA], INDEX);
     const names = cells[TERRA].map(counterCellName);
     expect(names).toEqual([
+      // ONE merged availability gate (model + family), as the send resolves it.
       `model:${TERRA}.allowed`,
-      'family:gpt.allowed',
       `model:${TERRA}.requests`,
       'family:gpt.requests',
       'chat.messagesPerDay',
@@ -275,6 +275,33 @@ describe('draft-based cells', () => {
     expect(byName['family:gpt.requests']).toBe(500);
     expect(byName['chat.messagesPerDay']).toBe(30);
     expect(byName['chat.tokensPerDay']).toBeNull();
+  });
+
+  it('reads the model approval rules like enforcement: external family unavailable by catalog until a rule grants it, with its request terms', () => {
+    const blocked = cellsByModelIdFor([], [CLAUDE], INDEX);
+    const blockedByName = Object.fromEntries(
+      blocked[CLAUDE].map((c) => [counterCellName(c), c]),
+    );
+    expect(blockedByName[`model:${CLAUDE}.allowed`]).toMatchObject({
+      value: false,
+      source: 'catalog',
+    });
+
+    const granted = cellsByModelIdFor([], [CLAUDE], INDEX, [
+      {
+        series: 'claude',
+        defaultAccess: 50,
+        groups: [],
+        domains: [],
+        allow: [],
+        deny: [],
+      },
+    ]);
+    const byName = Object.fromEntries(
+      granted[CLAUDE].map((c) => [counterCellName(c), c.value]),
+    );
+    expect(byName[`model:${CLAUDE}.allowed`]).toBe(true);
+    expect(byName['family:claude.requests']).toBe(50);
   });
 
   it('finds the series from the static registry when the index is off', () => {

@@ -15,6 +15,7 @@
  */
 
 export { RAGEnricher } from './RAGEnricher';
+export { SkillCatalogEnricher, SkillEnricher } from './SkillEnricher';
 export { ToolRouterEnricher } from './ToolRouterEnricher';
 export { AgentEnricher } from './AgentEnricher';
 export { ExtractionEnricher } from './ExtractionEnricher';

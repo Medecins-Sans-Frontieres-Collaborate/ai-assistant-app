@@ -15,9 +15,12 @@ import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useUserSkills } from '@/client/hooks/settings/useUserSkills';
+
 import { M365_BUILTIN_SERVER_ID } from '@/lib/services/m365/tools/toolCatalog';
 
 import { formatToolArguments } from '@/lib/utils/shared/chat/formatToolArguments';
+import { SKILL_TOOL_SERVER_ID } from '@/lib/utils/shared/chat/skillToolCalls';
 import {
   evaluateToolApprovalRules,
   isAlwaysConfirmTool,
@@ -302,6 +305,30 @@ const TasksBatchPayload: FC<{
 };
 
 /**
+ * Names a consent-gated skill (docs/SKILLS_DESIGN.md §5.5) from the user's
+ * visible catalog. A separate component so the catalog query mounts only
+ * for skill cards.
+ */
+const SkillLoadSummary: FC<{
+  skillId: string | null;
+  part: 'title' | 'description';
+}> = ({ skillId, part }) => {
+  const t = useTranslations('chat.consent');
+  const { data } = useUserSkills();
+  const meta = skillId
+    ? data?.find((skill) => skill.id === skillId)
+    : undefined;
+  if (part === 'title')
+    return <>{t('applySkillTitle', { skill: meta?.name ?? skillId ?? '' })}</>;
+  if (!meta?.description) return null;
+  return (
+    <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">
+      {meta.description}
+    </p>
+  );
+};
+
+/**
  * Consent card for MCP tool-approval prompts. Renders the function call,
  * approve/deny buttons (with a dropdown for "always" preferences), and a
  * keyboard shortcut. State is sourced from chatStore (in-memory) layered
@@ -326,6 +353,23 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
   // still win, but approve rules and per-conversation "always approve"
   // preferences are ignored for them — no auto-approve, no "always" menu.
   const alwaysConfirm = isAlwaysConfirmTool(request.server_id, toolName);
+  // A consent-gated skill load (docs/SKILLS_DESIGN.md §5.5) is organization
+  // guidance the model wants to apply, not an external action: name the
+  // skill instead of showing a raw function call.
+  const skillLoad =
+    request.server_id === SKILL_TOOL_SERVER_ID && toolName === 'load_skill';
+  const skillId = skillLoad
+    ? (() => {
+        try {
+          const parsed = JSON.parse(request.tool_arguments ?? '{}') as {
+            id?: unknown;
+          };
+          return typeof parsed.id === 'string' ? parsed.id : null;
+        } catch {
+          return null;
+        }
+      })()
+    : null;
 
   // Per-item toggles are v1-scoped to first-party `tasks_create`: it is the
   // only HOMOGENEOUS batch write in the catalog. Heterogeneous writes (a
@@ -648,16 +692,20 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
       ? parseMailToolArguments(request.tool_arguments)
       : null;
 
-  const titleNode = toolName
-    ? t.rich('runToolTitle', {
-        tool: toolName,
-        code: (chunks) => (
-          <code className="rounded bg-gray-200/70 px-1 py-0.5 font-mono text-[0.85em] text-gray-900 dark:bg-gray-800 dark:text-gray-100">
-            {chunks}
-          </code>
-        ),
-      })
-    : t('runToolGeneric');
+  const titleNode = skillLoad ? (
+    <SkillLoadSummary skillId={skillId} part="title" />
+  ) : toolName ? (
+    t.rich('runToolTitle', {
+      tool: toolName,
+      code: (chunks) => (
+        <code className="rounded bg-gray-200/70 px-1 py-0.5 font-mono text-[0.85em] text-gray-900 dark:bg-gray-800 dark:text-gray-100">
+          {chunks}
+        </code>
+      ),
+    })
+  ) : (
+    t('runToolGeneric')
+  );
 
   return (
     <div className="my-3 flex max-w-prose items-start gap-2 border-l-2 border-blue-400/70 py-1.5 pl-3 not-prose dark:border-blue-500/60">
@@ -676,7 +724,9 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
           )}
         </p>
 
-        {mailArgs && toolName ? (
+        {skillLoad ? (
+          <SkillLoadSummary skillId={skillId} part="description" />
+        ) : mailArgs && toolName ? (
           <MailToolPayload args={mailArgs} />
         ) : batch && toolName ? (
           <TasksBatchPayload
@@ -705,7 +755,9 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
         <div className="mt-2" aria-live="polite" aria-atomic="true">
           {approvalState === 'idle' && alwaysConfirm && (
             <p className="mb-1.5 text-xs text-gray-500 dark:text-gray-400">
-              {tM365Tools('alwaysConfirmNote')}
+              {skillLoad
+                ? t('skillConsentNote')
+                : tM365Tools('alwaysConfirmNote')}
             </p>
           )}
           {approvalState === 'idle' && allTasksUnchecked && (
@@ -836,15 +888,20 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                   >
                     {t('denyOnce')}
                   </button>
-                  <button
-                    type="button"
-                    role="menuitem"
-                    onClick={handleDenyEverywhere}
-                    disabled={!toolName}
-                    className="flex w-full items-center px-3 py-1.5 text-left text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 dark:text-red-400 dark:hover:bg-red-900/20"
-                  >
-                    {t('neverAllowEverywhere')}
-                  </button>
+                  {/* A "never" rule matches by tool name; for skills that
+                      would silence EVERY consent-gated skill, so it is not
+                      offered there. */}
+                  {!skillLoad && (
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={handleDenyEverywhere}
+                      disabled={!toolName}
+                      className="flex w-full items-center px-3 py-1.5 text-left text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                    >
+                      {t('neverAllowEverywhere')}
+                    </button>
+                  )}
                 </div>
               )}
               <span className="text-xs text-gray-400 dark:text-gray-500">

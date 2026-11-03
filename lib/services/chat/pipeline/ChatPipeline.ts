@@ -33,6 +33,13 @@ export const STAGE_TIMEOUTS: Record<string, number> = {
   // Reformulation LLM + query embedding + hybrid search over the shared
   // m365-agents index.
   M365AgentEnricher: 20000, // 20s for knowledge base search
+  // Catalog read is a ≤60s-cached admin-blob listing; 10s covers a cold
+  // refresh. On timeout the stage skips and the base prompt keeps its
+  // platform sections (status quo), so degradation is content-neutral.
+  SkillEnricher: 10000,
+  SkillReferenceEnricher: 15000,
+  AgentSkillEnricher: 10000,
+  SkillCatalogEnricher: 10000,
   // Web search (reasoning agent + Bing grounding) and the document-trim
   // pipeline (LLM edit plan + sandbox execution + one bounded corrective
   // pass) both run long; 240s leaves the route's 300s ceiling room for
@@ -240,7 +247,18 @@ export class ChatPipeline {
           throw error;
         } finally {
           cancelTimeout();
-          options.signal?.removeEventListener('abort', onRequestAbort);
+          // The model handler stages return a Response whose body is
+          // generated AFTER the stage resolved (the route pipes it). Their
+          // stageSignal is what the upstream SDK call was opened with, so
+          // keep forwarding the request-level abort to it for the life of
+          // the response: a client disconnect then cancels the model
+          // stream / tool loop instead of leaving it running unobserved.
+          // (The listener is `once`, so nothing leaks past one fire.)
+          const outlivesStage =
+            isModelHandlerStage(stage.name) && !!context.response;
+          if (!outlivesStage) {
+            options.signal?.removeEventListener('abort', onRequestAbort);
+          }
         }
 
         if (

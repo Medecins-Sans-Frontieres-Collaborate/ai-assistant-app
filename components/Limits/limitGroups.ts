@@ -82,6 +82,7 @@ export const LIMIT_GROUPS: readonly LimitGroup[] = [
       'feature.m365.mail.readsPerDay',
       'feature.m365.mail.draftsPerDay',
       'feature.m365.mail.deepScansPerDay',
+      'feature.m365.digestRunsPerDay',
     ],
     consequenceKey: 'mcp',
   },

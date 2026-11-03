@@ -9,7 +9,7 @@ import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import { buildPlaybookContext } from '@/client/services/m365/playbooks/playbookContext';
-import { fillComposerWithPlaybook } from '@/client/services/m365/playbooks/playbookLauncher';
+import { launchPlaybook } from '@/client/services/m365/playbooks/playbookLauncher';
 import {
   M365PlaybookId,
   getEligiblePlaybooks,
@@ -34,7 +34,7 @@ export const M365PlaybookChips: FC = () => {
   // No `m365.playbooks.dismissChip` key exists yet, and messages/en.json is
   // owned elsewhere — the shared root-level "close" label carries the
   // dismiss affordance until one is added.
-  const { playbooksEnabled } = useM365Enabled();
+  const { playbooksEnabled, digestEnabled } = useM365Enabled();
   const m365Connected = useSettingsStore((s) => s.m365Connected);
   const chipsEnabled = useSettingsStore((s) => s.m365PlaybookChipsEnabled);
   const filePreviews = useChatInputStore((s) => s.filePreviews);
@@ -53,7 +53,9 @@ export const M365PlaybookChips: FC = () => {
   if (!playbooksEnabled || !chipsEnabled) return null;
 
   const visible = eligible.filter(
-    (playbook) => !dismissedIds.includes(playbook.id),
+    (playbook) =>
+      !dismissedIds.includes(playbook.id) &&
+      (playbook.kind !== 'digest' || digestEnabled),
   );
   if (visible.length === 0) return null;
 
@@ -68,7 +70,7 @@ export const M365PlaybookChips: FC = () => {
           >
             <button
               type="button"
-              onClick={() => void fillComposerWithPlaybook(playbook.id)}
+              onClick={() => void launchPlaybook(playbook.id)}
               title={t(playbook.descriptionKey)}
               className="inline-flex items-center gap-1 rounded-full px-1 py-0.5 transition-colors hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:bg-blue-800/50"
             >

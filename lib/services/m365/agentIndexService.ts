@@ -401,10 +401,21 @@ export function chunkDocument(
   text: string,
   chunkChars: number = CHUNK_CHARS,
   overlap: number = CHUNK_OVERLAP,
+  failOnTruncation = false,
 ): LocatedChunk[] {
   const normalized = text.replace(/\r\n/g, '\n');
   const { stripped, pageStarts } = stripPageMarkers(normalized);
-  return chunkSpans(stripped, chunkChars, overlap)
+  const spans = chunkSpans(stripped, chunkChars, overlap);
+  if (
+    failOnTruncation &&
+    stripped.trim() &&
+    (spans.at(-1)?.end ?? 0) < stripped.length
+  ) {
+    throw new Error(
+      'Document exceeds the maximum searchable chunk count after page normalization; split it into smaller references',
+    );
+  }
+  return spans
     .map((span) => ({
       chunk: stripped.slice(span.start, span.end).trim(),
       locator: locatorForSpan(span, pageStarts),

@@ -31,6 +31,7 @@ import {
   POST,
   PUT,
 } from '@/app/api/agent-access/prompt-agents/route';
+import { PROMPT_AGENT_MAX_PROMPT_CHARS } from '@/lib/constants/promptAgents';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockAuth = vi.hoisted(() => vi.fn());
@@ -385,8 +386,11 @@ describe('/api/agent-access/prompt-agents', () => {
       ['missing systemPrompt', { ...postBody, systemPrompt: undefined }],
       ['whitespace-only systemPrompt', { ...postBody, systemPrompt: ' \t ' }],
       [
-        'systemPrompt over 10000 chars',
-        { ...postBody, systemPrompt: 'x'.repeat(10001) },
+        'systemPrompt over the authoring limit',
+        {
+          ...postBody,
+          systemPrompt: 'x'.repeat(PROMPT_AGENT_MAX_PROMPT_CHARS + 1),
+        },
       ],
       ['missing modelId', { ...postBody, modelId: undefined }],
       ['modelId over 100 chars', { ...postBody, modelId: 'x'.repeat(101) }],
@@ -618,6 +622,77 @@ describe('/api/agent-access/prompt-agents', () => {
 
       expect(response.status).toBe(200);
       expect(serviceInvalidate).toHaveBeenCalled();
+    });
+  });
+
+  describe('long prompts', () => {
+    it.each(['POST', 'PUT'] as const)(
+      '%s saves long prompts without truncating the record, response or history',
+      async (method) => {
+        // Bracket the old cap, the supplied brand/style prompt's size, and
+        // the new boundary. A tail marker detects silent truncation.
+        for (const length of [10_001, 48_082, PROMPT_AGENT_MAX_PROMPT_CHARS]) {
+          const systemPrompt = 'x'.repeat(length - 4) + '\nEND';
+          const response =
+            method === 'POST'
+              ? await POST(postRequest({ ...postBody, systemPrompt }))
+              : await PUT(
+                  putRequest(
+                    { ...putBody, systemPrompt },
+                    { 'if-match': '"e-a"' },
+                  ),
+                );
+          const data = await parseJsonResponse(response);
+
+          expect(response.status).toBe(200);
+          expect(data.data.promptAgent.systemPrompt).toBe(systemPrompt);
+          expect(writePromptAgent).toHaveBeenLastCalledWith(
+            expect.anything(),
+            expect.objectContaining({ systemPrompt }),
+            method === 'POST' ? null : '"e-a"',
+          );
+          expect(writePromptAgentHistoryEntry).toHaveBeenLastCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+              promptAgent: expect.objectContaining({ systemPrompt }),
+            }),
+          );
+        }
+      },
+    );
+
+    it.each(['POST', 'PUT'] as const)(
+      '%s rejects prompts one character over the limit without writing',
+      async (method) => {
+        const systemPrompt = 'x'.repeat(PROMPT_AGENT_MAX_PROMPT_CHARS + 1);
+        const response =
+          method === 'POST'
+            ? await POST(postRequest({ ...postBody, systemPrompt }))
+            : await PUT(
+                putRequest(
+                  { ...putBody, systemPrompt },
+                  { 'if-match': '"e-a"' },
+                ),
+              );
+
+        expect(response.status).toBe(400);
+        expect(writePromptAgent).not.toHaveBeenCalled();
+        expect(writePromptAgentHistoryEntry).not.toHaveBeenCalled();
+      },
+    );
+
+    it('returns the complete long prompt when an admin reloads the listing', async () => {
+      const systemPrompt =
+        'x'.repeat(PROMPT_AGENT_MAX_PROMPT_CHARS - 4) + '\nEND';
+      vi.mocked(listAllPromptAgents).mockResolvedValue([
+        storedAgent(makeAgent({ systemPrompt }), '"fresh-a"'),
+      ]);
+
+      const response = await GET();
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data.data.promptAgents[0].agent.systemPrompt).toBe(systemPrompt);
     });
   });
 

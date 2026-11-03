@@ -1,6 +1,6 @@
 'use client';
 
-import { IconPlus } from '@tabler/icons-react';
+import { IconPlus, IconRobot, IconSearch } from '@tabler/icons-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FC, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -12,6 +12,7 @@ import {
   unwrapApiData,
   useAgentAccessAdmin,
 } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { useGroupNames } from '@/client/hooks/useGroupNames';
 import { useHiddenAdminAgents } from '@/client/hooks/useHiddenAdminAgents';
 
 import {
@@ -19,7 +20,13 @@ import {
   translationLanguageLabel,
 } from '@/lib/utils/shared/translation/languages';
 
-import { CanonicalKeyChip } from './CanonicalKeyChip';
+import { AccessPill } from './AccessPill';
+import { AccessSummary } from './AccessSummary';
+import { AgentActionsMenu } from './AgentActionsMenu';
+import rowStyles from './AgentRow.module.css';
+import { AgentRowHeader } from './AgentRowHeader';
+import { AgentTechnicalDetails } from './AgentTechnicalDetails';
+import { AgentTypeLabel } from './AgentTypeLabel';
 import { CatalogOauthSection } from './CatalogOauthSection';
 import { ConnectorEditor } from './ConnectorEditor';
 import { GuideEditor } from './GuideEditor';
@@ -33,6 +40,12 @@ import { M365AgentsSection } from './M365AgentsSection';
 import { OrgAgentsSection } from './OrgAgentsSection';
 import { PromptAgentEditor } from './PromptAgentEditor';
 import { RuleEditor } from './RuleEditor';
+import {
+  agentAudienceSearchLabel,
+  agentSearchDocument,
+  matchesAgentSearch,
+} from './agentSearch';
+import { formatAdminTimestamp } from './formatAdminTimestamp';
 import {
   AdminConnectorsResponse,
   AdminGuidesResponse,
@@ -48,7 +61,9 @@ import {
   CLIENT_PROMPT_AGENT_SOURCE,
   MergedAgentRow,
   clientCanonicalAgentKey,
+  isAgentListSource,
 } from './types';
+import { useAdminAgentTranslations } from './useAdminAgentTranslations';
 
 import { Link } from '@/lib/navigation';
 
@@ -112,7 +127,9 @@ interface AgentAccessPanelProps {
 }
 
 export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
-  const t = useTranslations('agentAccess');
+  const t = useAdminAgentTranslations();
+  const tCommon = useTranslations('common');
+  const tSearch = useTranslations('m365.files');
   const queryClient = useQueryClient();
   const {
     me,
@@ -225,6 +242,14 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
   >(null);
   const [isDeletingGuide, setIsDeletingGuide] = useState(false);
   const [editingKey, setEditingKey] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchGroupNames = useGroupNames(
+    (rulesQuery.data?.rules ?? [])
+      .filter((entry) =>
+        isAgentListSource(entry.rule.source.trim().toLowerCase()),
+      )
+      .flatMap((entry) => entry.rule.access.allowGroups ?? []),
+  );
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [editingAgentKey, setEditingAgentKey] = useState<string | null>(null);
   const [confirmDeleteKey, setConfirmDeleteKey] = useState<string | null>(null);
@@ -245,6 +270,8 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
           source: agent.source,
           agentName: agent.agentName,
           displayName: agent.name || agent.agentName,
+          description: agent.description,
+          discovery: agent,
           discoverable: true,
           stored: null,
           promptAgent: null,
@@ -276,12 +303,14 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
       if (existing) {
         existing.promptAgent = entry;
         existing.displayName = entry.agent.name;
+        existing.description = entry.agent.description;
       } else {
         map.set(entry.canonicalKey, {
           canonicalKey: entry.canonicalKey,
           source: CLIENT_PROMPT_AGENT_SOURCE,
           agentName: entry.agent.id,
           displayName: entry.agent.name,
+          description: entry.agent.description,
           discoverable: false,
           stored: null,
           promptAgent: entry,
@@ -321,8 +350,62 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
    */
   // Per-admin hidden agents (presentational only — see the hook).
   const hiddenAgents = useHiddenAdminAgents();
-  const { visible: visibleRows, hiddenCount: hiddenRowCount } =
-    hiddenAgents.partition(rows, (row) => row.canonicalKey);
+  const { isHidden: isHiddenForSearch } = hiddenAgents;
+  // The list below is Foundry + prompt agents only. Knowledge and Microsoft
+  // 365 agents arrive from discovery under the SAME canonical key their
+  // sections edit, so showing them here too was one agent twice; rules for
+  // connectors, guides, datasets… belong to their own areas. `rows` itself
+  // stays complete for the delegation picker.
+  const agentListRows = useMemo(
+    () => rows.filter((row) => isAgentListSource(row.source)),
+    [rows],
+  );
+  const { visible: unfilteredVisibleRows, hiddenCount: hiddenRowCount } =
+    hiddenAgents.partition(agentListRows, (row) => row.canonicalKey);
+  const searchDocuments = useMemo(
+    () =>
+      new Map(
+        agentListRows.map((row) => [
+          row.canonicalKey,
+          agentSearchDocument({
+            ...row,
+            kind:
+              row.promptAgent !== null ||
+              row.source.trim().toLowerCase() === CLIENT_PROMPT_AGENT_SOURCE
+                ? ['native', t('nativeLabel'), 'prompt', t('promptAgentBadge')]
+                : ['foundry'],
+            accessLabel: agentAudienceSearchLabel(row.stored?.rule.access, {
+              everyone: t('allEligibleUsers'),
+              restricted: t('accessRestricted'),
+              none: t('noAllowedAudience'),
+            }),
+            groupNames: (row.stored?.rule.access.allowGroups ?? []).map(
+              (id) => searchGroupNames[id],
+            ),
+            hidden: isHiddenForSearch(row.canonicalKey)
+              ? t('hiddenBadge')
+              : undefined,
+            discoveryStatus: row.discoverable
+              ? undefined
+              : t('notDiscoverable'),
+          }),
+        ]),
+      ),
+    [agentListRows, searchGroupNames, t, isHiddenForSearch],
+  );
+  const visibleRows = unfilteredVisibleRows.filter(
+    (row) =>
+      matchesAgentSearch(
+        searchDocuments.get(row.canonicalKey) ?? '',
+        searchQuery,
+      ) ||
+      [
+        editingKey,
+        editingAgentKey,
+        confirmDeleteKey,
+        deleteConflictKey,
+      ].includes(row.canonicalKey),
+  );
 
   const connectorRows = useMemo(() => {
     const rulesByKey = new Map(
@@ -596,7 +679,11 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
   };
 
   const refetchRules = async () => {
-    await queryClient.invalidateQueries({ queryKey: ['agent-access-rules'] });
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['agent-access-rules'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-m365-agents'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-org-agents'] }),
+    ]);
   };
 
   const handleSaved = async () => {
@@ -736,6 +823,19 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
         <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
           {t('description')}
         </p>
+        {activeTab === 'agents' && (
+          <label className="mb-5 flex items-center gap-2 rounded-lg border border-gray-300 px-3 text-gray-600 focus-within:border-gray-600 dark:border-gray-600 dark:text-gray-300">
+            <IconSearch aria-hidden="true" size={18} />
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              aria-label={tCommon('search')}
+              placeholder={tCommon('search')}
+              className="min-h-11 w-full min-w-0 bg-transparent text-sm text-gray-800 outline-none dark:text-gray-200"
+            />
+          </label>
+        )}
 
         {activeTab === 'localAdmins' && isGlobalAdmin ? (
           <LocalAdminsSection rows={rows} />
@@ -844,17 +944,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                               count: String(entry.meta.featureCount),
                             })}
                           </span>
-                          <span
-                            className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                              isRestricted
-                                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                                : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                            }`}
-                          >
-                            {isRestricted
-                              ? t('accessRestricted')
-                              : t('accessEveryone')}
-                          </span>
+                          <AccessPill restricted={isRestricted} />
                           <button
                             type="button"
                             className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -894,7 +984,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                         <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                           {t('updatedByLine', {
                             user: entry.meta.updatedBy,
-                            date: entry.meta.updatedAt,
+                            date: formatAdminTimestamp(entry.meta.updatedAt),
                           })}
                         </p>
 
@@ -1059,17 +1149,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                               )
                               .join(' · ')}
                           </span>
-                          <span
-                            className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                              isRestricted
-                                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                                : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                            }`}
-                          >
-                            {isRestricted
-                              ? t('accessRestricted')
-                              : t('accessEveryone')}
-                          </span>
+                          <AccessPill restricted={isRestricted} />
                           <button
                             type="button"
                             className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -1122,7 +1202,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                         <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                           {t('updatedByLine', {
                             user: entry.guide.updatedBy,
-                            date: entry.guide.updatedAt,
+                            date: formatAdminTimestamp(entry.guide.updatedAt),
                           })}
                         </p>
 
@@ -1281,17 +1361,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                             <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
                               {entry.connector.authStyle}
                             </span>
-                            <span
-                              className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                                isRestricted
-                                  ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                                  : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                              }`}
-                            >
-                              {isRestricted
-                                ? t('accessRestricted')
-                                : t('accessEveryone')}
-                            </span>
+                            <AccessPill restricted={isRestricted} />
                             <button
                               type="button"
                               className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -1341,7 +1411,9 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                           <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                             {t('updatedByLine', {
                               user: entry.connector.updatedBy,
-                              date: entry.connector.updatedAt,
+                              date: formatAdminTimestamp(
+                                entry.connector.updatedAt,
+                              ),
                             })}
                           </p>
 
@@ -1431,6 +1503,18 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
           </div>
         ) : (
           <>
+            {/* Same heading shape as the two sections below, so the page reads
+                as three labelled groups rather than a list with appendices. */}
+            <div className="mb-2 flex items-center gap-2">
+              <IconRobot size={18} className="text-violet-600" />
+              <h3 className="text-sm font-semibold text-black dark:text-white">
+                {t('foundryAgentsHeading')}
+              </h3>
+            </div>
+            <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
+              {t('foundryAgentsDescription')}
+            </p>
+
             {/* Any admin may create a prompt agent — including local admins
                 with zero delegated keys (the create auto-delegates to them). */}
             <button
@@ -1440,7 +1524,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
               onClick={() => setIsCreatingAgent((creating) => !creating)}
             >
               <IconPlus size={16} />
-              {t('addAgent')}
+              {t('addPromptAgent')}
             </button>
 
             {isCreatingAgent && (
@@ -1461,123 +1545,149 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
             />
             {visibleRows.length === 0 ? (
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                {rows.length === 0 ? t('noAgents') : t('allAgentsHidden')}
+                {searchQuery.trim() && unfilteredVisibleRows.length > 0
+                  ? tSearch('noResults', { query: searchQuery })
+                  : agentListRows.length === 0
+                    ? t('noAgents')
+                    : t('allAgentsHidden')}
               </p>
             ) : (
-              <ul className="space-y-2">
+              <ul className={`${rowStyles.list} space-y-2`}>
                 {visibleRows.map((row) => {
-                  const isRestricted =
-                    row.stored?.rule.access.type === 'restricted';
                   const isPromptAgent =
-                    row.source === CLIENT_PROMPT_AGENT_SOURCE;
+                    row.promptAgent !== null ||
+                    row.source.trim().toLowerCase() ===
+                      CLIENT_PROMPT_AGENT_SOURCE;
                   const isHiddenRow = hiddenAgents.isHidden(row.canonicalKey);
                   return (
                     <li
                       key={row.canonicalKey}
                       className="rounded-lg border border-gray-200 dark:border-gray-700 p-3"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="truncate text-sm font-medium text-black dark:text-white">
-                              {row.displayName}
-                            </span>
-                            {isPromptAgent && (
-                              <span className="shrink-0 rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                                {t('promptAgentBadge')}
+                      <AgentRowHeader
+                        identity={
+                          <>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="min-w-0 [overflow-wrap:anywhere] text-sm font-medium text-black dark:text-white">
+                                {row.displayName}
                               </span>
-                            )}
-                            {!row.discoverable && (
-                              <span
-                                className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
-                                title={t('notDiscoverableHint')}
+                              {isHiddenRow && <HiddenBadge />}
+                              {!row.discoverable && (
+                                <span
+                                  className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
+                                  title={t('notDiscoverableHint')}
+                                >
+                                  {t('notDiscoverable')}
+                                </span>
+                              )}
+                            </div>
+                            <AgentTypeLabel
+                              kind={isPromptAgent ? 'prompt' : 'foundry'}
+                              sourceLabel={
+                                isPromptAgent
+                                  ? undefined
+                                  : row.source.split('/').filter(Boolean).at(-1)
+                              }
+                            />
+                            {row.description && (
+                              <p
+                                className="line-clamp-2 text-xs text-gray-600 dark:text-gray-300"
+                                title={row.description}
                               >
-                                {t('notDiscoverable')}
-                              </span>
+                                {row.description}
+                              </p>
                             )}
-                          </div>
-                          <p
-                            className="truncate text-xs text-gray-500 dark:text-gray-400"
-                            title={row.source}
-                          >
-                            {t('sourceLabel')}: {row.source}
-                          </p>
-                          <CanonicalKeyChip canonicalKey={row.canonicalKey} />
-                        </div>
-                        <span
-                          className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                            isRestricted
-                              ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                              : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                          }`}
-                        >
-                          {isRestricted
-                            ? t('accessRestricted')
-                            : t('accessEveryone')}
-                        </span>
-                        {isHiddenRow && <HiddenBadge />}
-                        <HideAgentButton
-                          hidden={isHiddenRow}
-                          onHide={() => hiddenAgents.hide(row.canonicalKey)}
-                          onUnhide={() => hiddenAgents.unhide(row.canonicalKey)}
-                        />
-                        <button
-                          type="button"
-                          className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                          onClick={() =>
-                            setEditingKey(
-                              editingKey === row.canonicalKey
-                                ? null
-                                : row.canonicalKey,
-                            )
-                          }
-                        >
-                          {editingKey === row.canonicalKey
-                            ? t('cancel')
-                            : t('edit')}
-                        </button>
-                        {row.promptAgent && (
+                          </>
+                        }
+                        audience={
+                          <AccessSummary access={row.stored?.rule.access} />
+                        }
+                        actions={
                           <>
                             <button
                               type="button"
+                              aria-expanded={editingKey === row.canonicalKey}
                               className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
                               onClick={() =>
-                                setEditingAgentKey(
-                                  editingAgentKey === row.canonicalKey
+                                setEditingKey(
+                                  editingKey === row.canonicalKey
                                     ? null
                                     : row.canonicalKey,
                                 )
                               }
                             >
-                              {editingAgentKey === row.canonicalKey
+                              {editingKey === row.canonicalKey
                                 ? t('cancel')
-                                : t('editAgent')}
+                                : t('editAccess')}
                             </button>
-                            <button
-                              type="button"
-                              className="shrink-0 rounded-md border border-red-200 dark:border-red-900 px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
-                              onClick={() =>
-                                setConfirmDeleteKey(
-                                  confirmDeleteKey === row.canonicalKey
-                                    ? null
-                                    : row.canonicalKey,
-                                )
-                              }
-                            >
-                              {t('deleteAgent')}
-                            </button>
+                            {row.promptAgent && (
+                              <button
+                                type="button"
+                                className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                                onClick={() =>
+                                  setEditingAgentKey(
+                                    editingAgentKey === row.canonicalKey
+                                      ? null
+                                      : row.canonicalKey,
+                                  )
+                                }
+                              >
+                                {editingAgentKey === row.canonicalKey
+                                  ? t('cancel')
+                                  : t('editAgent')}
+                              </button>
+                            )}
+                            <AgentActionsMenu name={row.displayName}>
+                              <HideAgentButton
+                                hidden={isHiddenRow}
+                                onHide={() =>
+                                  hiddenAgents.hide(row.canonicalKey)
+                                }
+                                onUnhide={() =>
+                                  hiddenAgents.unhide(row.canonicalKey)
+                                }
+                              />
+                              {row.promptAgent && (
+                                <button
+                                  type="button"
+                                  className="shrink-0 rounded-md border border-red-200 dark:border-red-900 px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                  onClick={() =>
+                                    setConfirmDeleteKey(
+                                      confirmDeleteKey === row.canonicalKey
+                                        ? null
+                                        : row.canonicalKey,
+                                    )
+                                  }
+                                >
+                                  {t('deleteAgent')}
+                                </button>
+                              )}
+                            </AgentActionsMenu>
                           </>
-                        )}
-                      </div>
+                        }
+                      />
 
-                      {row.stored && (
-                        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-                          {t('updatedByLine', {
-                            user: row.stored.rule.updatedBy,
-                            date: row.stored.rule.updatedAt,
-                          })}
-                        </p>
-                      )}
+                      <AgentTechnicalDetails
+                        canonicalKey={row.canonicalKey}
+                        source={row.source}
+                      >
+                        {row.promptAgent && (
+                          <p>
+                            {t('agentModelLabel')}:{' '}
+                            {row.promptAgent.agent.modelId}
+                          </p>
+                        )}
+                        {row.stored && (
+                          <p className="[overflow-wrap:anywhere] text-xs text-gray-600 dark:text-gray-300">
+                            {t('updatedByLine', {
+                              user: row.stored.rule.updatedBy,
+                              date: formatAdminTimestamp(
+                                row.stored.rule.updatedAt,
+                              ),
+                            })}
+                          </p>
+                        )}
+                      </AgentTechnicalDetails>
 
                       {editingKey === row.canonicalKey && (
                         <RuleEditor
@@ -1652,6 +1762,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                 and RuleEditor stay CAS-consistent with the rest of the
                 panel. Renders nothing when the m365Agents flag is off. */}
             <M365AgentsSection
+              searchQuery={searchQuery}
               rules={rulesQuery.data?.rules ?? []}
               onDataChanged={() => {
                 void invalidatePromptAgentData();
@@ -1663,6 +1774,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                 without a deploy; every save validated against the live
                 search index). Same shared-rules wiring as the M365 block. */}
             <OrgAgentsSection
+              searchQuery={searchQuery}
               rules={rulesQuery.data?.rules ?? []}
               onDataChanged={() => {
                 void invalidatePromptAgentData();

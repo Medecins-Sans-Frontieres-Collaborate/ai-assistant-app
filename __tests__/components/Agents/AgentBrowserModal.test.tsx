@@ -132,7 +132,7 @@ describe('AgentBrowserModal', () => {
     limitsState.models = {};
     setServers([]);
     useSettingsStore.setState({ agentBrowserUsage: {} });
-    useUIStore.setState({ agentBrowserOpen: true });
+    useUIStore.setState({ agentBrowserOpen: true, isSettingsOpen: false });
   });
 
   it('explains a failed discovery and offers Retry instead of "No agents"', () => {
@@ -177,7 +177,7 @@ describe('AgentBrowserModal', () => {
   it('shows the loaded rows with a footer while Foundry discovery is still running', () => {
     availableState.isDiscoveryLoading = true;
     render(<AgentBrowserModal />);
-    expect(screen.getByText('Looking for Foundry agents…')).toBeInTheDocument();
+    expect(screen.getByText('Looking for more agents…')).toBeInTheDocument();
     expect(screen.getAllByRole('option').length).toBeGreaterThan(0);
   });
 
@@ -185,7 +185,7 @@ describe('AgentBrowserModal', () => {
     availableState.isDiscoveryError = true;
     render(<AgentBrowserModal />);
     expect(
-      screen.getByText("Foundry agents couldn't be loaded."),
+      screen.getByText("Some agents couldn't be loaded."),
     ).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
     expect(availableState.retry).toHaveBeenCalledTimes(1);
@@ -235,6 +235,52 @@ describe('AgentBrowserModal', () => {
     expect(updateConversation).toHaveBeenCalledWith('conv-1', {
       bot: 'prompt-beta',
     });
+  });
+
+  it('Shift+Enter starts a new chat with the highlighted agent even with a conversation selected', () => {
+    render(<AgentBrowserModal />);
+
+    fireEvent.keyDown(screen.getByRole('combobox'), {
+      key: 'Enter',
+      shiftKey: true,
+    });
+
+    expect(addConversation).toHaveBeenCalled();
+    expect(updateConversation).not.toHaveBeenCalledWith('conv-1', {
+      bot: 'orgr-alpha',
+    });
+  });
+
+  it('an attached agent shows a non-interactive Attached label instead of a button', () => {
+    selectedConversation = {
+      id: 'conv-1',
+      model: { id: 'gpt-5.2' },
+      bot: 'orgr-alpha',
+    } as never;
+    render(<AgentBrowserModal />);
+
+    const row = screen.getByText('Alpha Agent').closest('li') as HTMLElement;
+    expect(within(row).getByText('Attached')).toBeInTheDocument();
+    expect(within(row).queryByText('Add to this chat')).toBeNull();
+  });
+
+  it('activating a needs-reauth connector row opens Settings instead of silently doing nothing', () => {
+    setServers([
+      {
+        id: 's1',
+        name: 'GitHub',
+        enabled: true,
+        authMode: 'oauth',
+        oauth: { needsReauth: true },
+      },
+    ]);
+    render(<AgentBrowserModal />);
+
+    fireEvent.click(screen.getByText('GitHub'));
+
+    expect(useUIStore.getState().isSettingsOpen).toBe(true);
+    expect(useUIStore.getState().agentBrowserOpen).toBe(false);
+    expect(updateConversation).not.toHaveBeenCalled();
   });
 
   it('Escape clears the query first, then closes', () => {

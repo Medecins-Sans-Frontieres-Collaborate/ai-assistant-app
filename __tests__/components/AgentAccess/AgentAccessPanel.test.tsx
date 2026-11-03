@@ -20,6 +20,7 @@ import { AgentAccessPanel } from '@/components/AgentAccess/AgentAccessPanel';
 import type {
   AdminConfigResponse,
   AdminStoredConnector,
+  AdminStoredM365Agent,
   AdminStoredPromptAgent,
   AdminStoredRule,
   DiscoveredAgentSummary,
@@ -155,6 +156,7 @@ let putCalls: { headers: Record<string, string>; body: unknown }[];
 let deleteStatus: number;
 let deleteCalls: { url: string; headers: Record<string, string> }[];
 let agentsResponse: DiscoveredAgentSummary[];
+let m365Sources: AdminStoredM365Agent['agent']['sources'];
 let promptAgentsResponse: AdminStoredPromptAgent[];
 let agentPostStatus: number;
 let agentPostCalls: { headers: Record<string, string>; body: unknown }[];
@@ -341,7 +343,7 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
               chatModelId: null,
               embeddingModelId: 'text-embedding',
               ragConfig: { topK: 10 },
-              sources: [],
+              sources: m365Sources,
               createdBy: 'admin@example.org',
               createdAt: '2026-07-29T00:00:00.000Z',
               updatedBy: 'admin@example.org',
@@ -435,7 +437,7 @@ function renderPanel(
 async function openEditorFor(displayName: string): Promise<HTMLElement> {
   const row = (await screen.findByText(displayName)).closest('li');
   expect(row).not.toBeNull();
-  fireEvent.click(within(row as HTMLElement).getByText('Edit'));
+  fireEvent.click(within(row as HTMLElement).getByText('Edit access'));
   return row as HTMLElement;
 }
 
@@ -450,6 +452,7 @@ describe('AgentAccessPanel', () => {
     deleteStatus = 200;
     deleteCalls = [];
     agentsResponse = discoveredAgents;
+    m365Sources = [];
     promptAgentsResponse = [];
     agentPostStatus = 200;
     agentPostCalls = [];
@@ -480,23 +483,109 @@ describe('AgentAccessPanel', () => {
     vi.unstubAllGlobals();
   });
 
-  it('renders merged rows: discovered agents, access badges, and a "not discoverable" badge for rule-only rows', async () => {
+  it('searches across agent sections using source names, type, audiences and hidden identifiers without new requests', async () => {
+    m365Sources = [
+      {
+        sourceId: 'src-1',
+        driveId: 'drive-1',
+        itemId: 'item-1',
+        title: 'Handbook.pdf',
+        webUrl: 'https://example.org/library',
+        kind: 'file',
+        status: 'indexed',
+        recursive: false,
+        excludedItemIds: [],
+      },
+    ];
+    renderPanel();
+    await screen.findByText('Helpdesk Agent');
+    await screen.findByText('HR Handbook (M365)');
+    await screen.findByText('MSF Communications');
+    const search = screen.getByRole('searchbox', { name: 'Search' });
+    const requestCount = fetchMock.mock.calls.length;
+    fireEvent.change(search, { target: { value: 'HANDBOOK.PDF' } });
+    expect(screen.getByText('HR Handbook (M365)')).toBeInTheDocument();
+    expect(screen.queryByText('Sales Agent')).not.toBeInTheDocument();
+    expect(screen.queryByText('MSF Communications')).not.toBeInTheDocument();
+    fireEvent.change(search, { target: { value: 'native files' } });
+    expect(screen.getByText('HR Handbook (M365)')).toBeInTheDocument();
+    fireEvent.change(search, { target: { value: 'proj-a::sales' } });
+    expect(screen.getByText('Sales Agent')).toBeInTheDocument();
+    expect(screen.queryByText('HR Handbook (M365)')).not.toBeInTheDocument();
+    fireEvent.change(search, { target: { value: 'msf.org' } });
+    expect(screen.getByText('Sales Agent')).toBeInTheDocument();
+    expect(screen.queryByText('Helpdesk Agent')).not.toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(requestCount);
+    fireEvent.change(search, { target: { value: '' } });
+    expect(screen.getByText('Helpdesk Agent')).toBeInTheDocument();
+  });
+
+  it('retains and searches extra authorized Foundry discovery metadata', async () => {
+    agentsResponse = [
+      Object.assign({}, discoveredAgents[0], {
+        deploymentModel: 'foundry-specific-deployment',
+        description: 'Réponse clinique',
+      }),
+    ];
+    renderPanel();
+    await screen.findByText('Helpdesk Agent');
+    fireEvent.change(screen.getByRole('searchbox'), {
+      target: { value: 'foundry-specific-deployment' },
+    });
+    expect(screen.getByText('Helpdesk Agent')).toBeInTheDocument();
+    fireEvent.change(screen.getByRole('searchbox'), {
+      target: { value: 'reponse clinique' },
+    });
+    expect(screen.getByText('Helpdesk Agent')).toBeInTheDocument();
+  });
+
+  it('keeps hidden agents excluded from search until explicitly revealed', async () => {
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    useSettingsStore.setState({
+      hiddenAdminAgentKeys: [storedPromptAgent.canonicalKey],
+    });
+    renderPanel();
+    await screen.findByText('Helpdesk Agent');
+    fireEvent.change(screen.getByRole('searchbox'), {
+      target: { value: 'Travel Advisor' },
+    });
+    expect(screen.queryByText('Travel Advisor')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Show' }));
+    expect(screen.getByText('Travel Advisor')).toBeInTheDocument();
+    useSettingsStore.setState({ hiddenAdminAgentKeys: [] });
+  });
+
+  it('preserves open access editors and their drafts while filtering', async () => {
+    renderPanel();
+    const row = await openEditorFor('Sales Agent');
+    const input = within(row).getByPlaceholderText('person@example.org');
+    fireEvent.change(input, { target: { value: 'unsaved@example.org' } });
+    fireEvent.change(screen.getByRole('searchbox'), {
+      target: { value: 'does-not-match' },
+    });
+    expect(screen.getByDisplayValue('unsaved@example.org')).toBeInTheDocument();
+    fireEvent.click(within(row).getAllByRole('button', { name: 'Cancel' })[0]);
+    expect(screen.queryByText('Sales Agent')).not.toBeInTheDocument();
+  });
+
+  it('renders merged rows with actual allowed audiences and a "not discoverable" badge for rule-only rows', async () => {
     renderPanel();
 
     // Discovered agent without a rule → implicit Everyone.
     const helpdesk = (await screen.findByText('Helpdesk Agent')).closest('li');
     expect(
-      within(helpdesk as HTMLElement).getByText('Everyone'),
+      within(helpdesk as HTMLElement).getByText('All eligible users'),
     ).toBeInTheDocument();
 
     // Discovered agent with a restricted rule.
     const sales = screen.getByText('Sales Agent').closest('li');
     expect(
-      within(sales as HTMLElement).getByText('Restricted'),
+      within(sales as HTMLElement).getByText('msf.org'),
     ).toBeInTheDocument();
     expect(
       within(sales as HTMLElement).getByText(
-        'Last updated by admin@example.org on 2026-07-17T10:00:00.000Z',
+        /Last updated by admin@example\.org on /,
       ),
     ).toBeInTheDocument();
 
@@ -511,6 +600,55 @@ describe('AgentAccessPanel', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('refreshes both management listings after saving access rules', async () => {
+    const invalidateSpy = vi.spyOn(QueryClient.prototype, 'invalidateQueries');
+    try {
+      renderPanel();
+      const row = await openEditorFor('Sales Agent');
+      fireEvent.click(within(row).getByRole('button', { name: 'Save' }));
+      await waitFor(() => {
+        for (const key of [
+          'agent-access-rules',
+          'agent-access-m365-agents',
+          'agent-access-org-agents',
+        ]) {
+          expect(invalidateSpy).toHaveBeenCalledWith(
+            expect.objectContaining({ queryKey: [key] }),
+          );
+        }
+      });
+    } finally {
+      invalidateSpy.mockRestore();
+    }
+  });
+
+  it('refreshes management listings after saving local-admin delegations', async () => {
+    const invalidateSpy = vi.spyOn(QueryClient.prototype, 'invalidateQueries');
+    try {
+      renderPanel('localAdmins');
+      const label = (await screen.findByText('HR Handbook (M365)')).closest(
+        'label',
+      )!;
+      fireEvent.click(within(label).getByRole('checkbox'));
+      fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+      await waitFor(() => {
+        for (const key of [
+          'agent-access-config',
+          'agent-access-me',
+          'agent-access-rules',
+          'agent-access-m365-agents',
+          'agent-access-org-agents',
+        ]) {
+          expect(invalidateSpy).toHaveBeenCalledWith(
+            expect.objectContaining({ queryKey: [key] }),
+          );
+        }
+      });
+    } finally {
+      invalidateSpy.mockRestore();
+    }
+  });
+
   it('restricted editor shows domain/user chip inputs and an editable Groups section', async () => {
     renderPanel();
     const row = await openEditorFor('Sales Agent');
@@ -518,7 +656,9 @@ describe('AgentAccessPanel', () => {
     expect(within(row).getByText('Allowed domains')).toBeInTheDocument();
     expect(within(row).getByText('Allowed users')).toBeInTheDocument();
     // Stored domain chip; users list is empty so its placeholder shows.
-    expect(within(row).getByText('msf.org')).toBeInTheDocument();
+    expect(
+      within(row).getByRole('button', { name: 'Remove msf.org' }),
+    ).toBeInTheDocument();
     expect(
       within(row).getByPlaceholderText('person@example.org'),
     ).toBeInTheDocument();
@@ -704,7 +844,9 @@ describe('AgentAccessPanel', () => {
     expect(within(row).getByText('new-domain.org')).toBeInTheDocument();
     expect(within(row).getByText('second.org')).toBeInTheDocument();
     // Only the original stored chip — the re-pasted duplicate was dropped.
-    expect(within(row).getAllByText(/msf\.org/i)).toHaveLength(1);
+    expect(
+      within(row).getAllByRole('button', { name: /Remove msf\.org/i }),
+    ).toHaveLength(1);
 
     fireEvent.click(within(row).getByText('Save'));
     await waitFor(() => expect(putCalls).toHaveLength(1));
@@ -714,20 +856,127 @@ describe('AgentAccessPanel', () => {
     ).toEqual(['msf.org', 'new-domain.org', 'second.org']);
   });
 
+  it('lists knowledge and M365 agents only in their sections, and never lists non-agent rules as agents', async () => {
+    // Discovery emits the knowledge agent under the key its section edits.
+    agentsResponse = [
+      ...discoveredAgents,
+      {
+        id: 'o1',
+        name: 'MSF Communications',
+        agentName: 'msf_communications',
+        source: 'org-agent',
+      },
+      {
+        id: 'm1',
+        name: 'HR Handbook (M365)',
+        agentName: 'm365-0123456789ab',
+        source: 'm365-agent',
+      },
+    ];
+    rulesResponse = [
+      restrictedRule,
+      {
+        canonicalKey: 'mcp-connector::conn-1',
+        etag: '"etag-conn"',
+        rule: {
+          ...restrictedRule.rule,
+          source: 'mcp-connector',
+          agentName: 'conn-1',
+        },
+      },
+    ];
+    renderPanel();
+
+    await screen.findByText('Helpdesk Agent');
+    // Once each: the section row, not a second copy in the merged list.
+    expect(await screen.findAllByText('MSF Communications')).toHaveLength(1);
+    expect(screen.getAllByText('HR Handbook (M365)')).toHaveLength(1);
+    expect(screen.queryByText('conn-1')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Not discoverable by you'),
+    ).not.toBeInTheDocument();
+    // The merged list has its own heading like the sections.
+    expect(screen.getByText('Foundry and prompt agents')).toBeInTheDocument();
+  });
+
+  it('shows a delegated M365 agent once, with access and source editing for a local admin', async () => {
+    meResponse = {
+      isGlobalAdmin: false,
+      isLocalAdmin: true,
+      editableAgentKeys: ['m365-agent::m365-0123456789ab'],
+    };
+    agentsResponse = [
+      {
+        id: 'm365-0123456789ab',
+        name: 'HR Handbook (M365)',
+        agentName: 'm365-0123456789ab',
+        source: 'm365-agent',
+        type: 'm365',
+      },
+    ];
+    rulesResponse = [
+      {
+        ...restrictedRule,
+        canonicalKey: 'm365-agent::m365-0123456789ab',
+        rule: {
+          ...restrictedRule.rule,
+          source: 'm365-agent',
+          agentName: 'm365-0123456789ab',
+        },
+      },
+    ];
+    m365Sources = [
+      {
+        sourceId: 'src-handbook',
+        driveId: 'drive-1',
+        itemId: 'file-1',
+        kind: 'file',
+        title: 'Handbook.pdf',
+        webUrl: 'https://example.org/Handbook.pdf',
+        status: 'indexed',
+        recursive: false,
+        excludedItemIds: [],
+      },
+    ];
+    renderPanel();
+
+    const names = await screen.findAllByText('HR Handbook (M365)');
+    expect(names).toHaveLength(1);
+    const row = names[0].closest('li')!;
+    expect(
+      within(row).getByRole('button', { name: 'Edit access' }),
+    ).toBeEnabled();
+    fireEvent.click(within(row).getByRole('button', { name: 'Edit agent' }));
+    expect(
+      await within(row).findByText(/m365AgentSources \(1\)/),
+    ).toBeInTheDocument();
+    expect(within(row).getAllByText('Handbook.pdf')).toHaveLength(2);
+  });
+
   it('renders a prompt-agent row with badge and Edit agent / Delete actions', async () => {
     agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
     promptAgentsResponse = [storedPromptAgent];
     renderPanel();
 
     const row = (await screen.findByText('Travel Advisor')).closest('li');
+    const details = row!.querySelector('details')!;
+    expect(details).not.toHaveAttribute('open');
+    fireEvent.click(details.querySelector('summary')!);
+    // jsdom does not implement the browser's native details toggle.
+    details.open = true;
     expect(row).not.toBeNull();
     expect(
-      within(row as HTMLElement).getByText('Prompt agent'),
+      within(row as HTMLElement).getByText('Native · Prompt agent'),
     ).toBeInTheDocument();
     expect(
       within(row as HTMLElement).getByText('Edit agent'),
     ).toBeInTheDocument();
-    expect(within(row as HTMLElement).getByText('Delete')).toBeInTheDocument();
+    fireEvent.click(
+      within(row as HTMLElement).getByRole('button', { name: /^More:/ }),
+    );
+    expect(
+      screen.getByRole('menuitem', { name: 'Delete' }),
+    ).toBeInTheDocument();
     // Discovered through /api/agents too, so no amber badge.
     expect(
       within(row as HTMLElement).queryByText('Not discoverable by you'),
@@ -745,7 +994,7 @@ describe('AgentAccessPanel', () => {
   it('creates a prompt agent: POST body from the form, agent-backed models filtered out of the picker', async () => {
     renderPanel();
 
-    fireEvent.click(await screen.findByText('Add agent'));
+    fireEvent.click(await screen.findByText('Add prompt agent'));
     expect(screen.getByText('New prompt agent')).toBeInTheDocument();
 
     fireEvent.change(screen.getByPlaceholderText('e.g. Travel Advisor'), {
@@ -779,6 +1028,8 @@ describe('AgentAccessPanel', () => {
       description: '',
       systemPrompt: 'You are a concierge.',
       modelId: 'gpt-5.2',
+      skillAccess: 'inherit',
+      skillIds: [],
     });
     // Create-only: no If-Match rides along.
     expect(agentPostCalls[0].headers['If-Match']).toBeUndefined();
@@ -795,7 +1046,7 @@ describe('AgentAccessPanel', () => {
     try {
       renderPanel();
 
-      fireEvent.click(await screen.findByText('Add agent'));
+      fireEvent.click(await screen.findByText('Add prompt agent'));
       fireEvent.change(screen.getByPlaceholderText('e.g. Travel Advisor'), {
         target: { value: 'Concierge' },
       });
@@ -835,7 +1086,7 @@ describe('AgentAccessPanel', () => {
     rulesResponse = [];
     renderPanel();
 
-    expect(await screen.findByText('Add agent')).toBeInTheDocument();
+    expect(await screen.findByText('Add prompt agent')).toBeInTheDocument();
     // Nothing is delegated to them yet, so the list itself is empty.
     expect(screen.getByText('No agents to manage.')).toBeInTheDocument();
   });
@@ -874,6 +1125,8 @@ describe('AgentAccessPanel', () => {
       description: 'Helps plan travel',
       systemPrompt: 'You are a travel advisor.',
       modelId: 'gpt-5.2',
+      skillAccess: 'inherit',
+      skillIds: [],
     });
   });
 
@@ -883,7 +1136,10 @@ describe('AgentAccessPanel', () => {
     renderPanel();
 
     const row = (await screen.findByText('Travel Advisor')).closest('li');
-    fireEvent.click(within(row as HTMLElement).getByText('Delete'));
+    fireEvent.click(
+      within(row as HTMLElement).getByRole('button', { name: /^More:/ }),
+    );
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Delete' }));
     // Nothing sent until the inline confirm.
     expect(agentDeleteCalls).toHaveLength(0);
     fireEvent.click(within(row as HTMLElement).getByText('Yes, delete'));
@@ -905,7 +1161,10 @@ describe('AgentAccessPanel', () => {
     renderPanel();
 
     const row = (await screen.findByText('Travel Advisor')).closest('li');
-    fireEvent.click(within(row as HTMLElement).getByText('Delete'));
+    fireEvent.click(
+      within(row as HTMLElement).getByRole('button', { name: /^More:/ }),
+    );
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Delete' }));
     fireEvent.click(within(row as HTMLElement).getByText('Yes, delete'));
 
     expect(
@@ -1003,7 +1262,9 @@ describe('AgentAccessPanel', () => {
   it('associates a label with every editor control and exposes the Add agent expanded state', async () => {
     renderPanel();
 
-    const addButton = await screen.findByRole('button', { name: 'Add agent' });
+    const addButton = await screen.findByRole('button', {
+      name: 'Add prompt agent',
+    });
     expect(addButton).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(addButton);
     expect(addButton).toHaveAttribute('aria-expanded', 'true');
@@ -1060,8 +1321,9 @@ describe('AgentAccessPanel', () => {
     expect(row).not.toBeNull();
 
     fireEvent.click(
-      within(row as HTMLElement).getByRole('button', { name: 'Hide' }),
+      within(row as HTMLElement).getByRole('button', { name: /^More:/ }),
     );
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Hide' }));
     expect(screen.queryByText('Travel Advisor')).not.toBeInTheDocument();
     expect(useSettingsStore.getState().hiddenAdminAgentKeys).toEqual([
       storedPromptAgent.canonicalKey,
@@ -1074,8 +1336,9 @@ describe('AgentAccessPanel', () => {
       within(revealed as HTMLElement).getByText('Hidden'),
     ).toBeInTheDocument();
     fireEvent.click(
-      within(revealed as HTMLElement).getByRole('button', { name: 'Unhide' }),
+      within(revealed as HTMLElement).getByRole('button', { name: /^More:/ }),
     );
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Unhide' }));
     expect(useSettingsStore.getState().hiddenAdminAgentKeys).toEqual([]);
     expect(screen.queryByText('Hidden')).not.toBeInTheDocument();
   });
@@ -1303,7 +1566,7 @@ describe('AgentAccessPanel', () => {
       // Missing mock keys fall back to the key name.
       expect(within(row).getByText('orgAgentBuiltinBadge')).toBeInTheDocument();
       // No rule stored under org-agent::msf_communications → implicit Everyone.
-      expect(within(row).getByText('Everyone')).toBeInTheDocument();
+      expect(within(row).getByText('All eligible users')).toBeInTheDocument();
       // Read-only settings: no edit/delete affordances on a built-in row.
       expect(
         within(row).queryByRole('button', { name: 'Delete agent' }),

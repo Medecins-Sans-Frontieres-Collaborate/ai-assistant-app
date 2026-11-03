@@ -21,6 +21,7 @@ import {
 
 import { AssistantMessage } from '@/components/Chat/ChatMessages/AssistantMessage';
 import ChatMessageText from '@/components/Chat/ChatMessages/ChatMessageText';
+import { DigestCard } from '@/components/Chat/ChatMessages/DigestCard';
 import { ExtractionResultRenderer } from '@/components/Chat/ChatMessages/ExtractionResultRenderer';
 import { FileContent } from '@/components/Chat/ChatMessages/FileContent';
 import { ImageContent } from '@/components/Chat/ChatMessages/ImageContent';
@@ -177,6 +178,33 @@ export const ChatMessage: FC<Props> = ({
 
     return { images, files, text };
   };
+
+  // Render the Daily digest card (docs/M365_DAILY_DIGEST.md): the card
+  // drives the job and shows the result; `content` is its markdown twin.
+  if (message.digest && message.role === 'assistant' && selectedConversation) {
+    return (
+      <div className="group text-gray-800 dark:text-gray-100">
+        <AssistantMessage
+          content={typeof message.content === 'string' ? message.content : ''}
+          message={message}
+          messageIsStreaming={messageIsStreaming}
+          messageIndex={messageIndex}
+          selectedConversation={selectedConversation}
+          // Regenerating would ask the model to invent a digest and hide the
+          // card behind a version; "Run again" on the card is the real redo.
+          onRegenerate={undefined}
+          versionInfo={versionInfo}
+          onPreviousVersion={onPreviousVersion}
+          onNextVersion={onNextVersion}
+        >
+          <DigestCard
+            state={message.digest}
+            conversationId={selectedConversation.id}
+          />
+        </AssistantMessage>
+      </div>
+    );
+  }
 
   // Render transcript viewer for transcription messages
   if (message.transcript && message.role === 'assistant') {

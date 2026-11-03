@@ -1,0 +1,43 @@
+.list {
+  container: agent-list / inline-size;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.actions > button,
+.actions > div > button {
+  min-height: 2.25rem;
+  max-width: 100%;
+  white-space: normal;
+}
+
+@container agent-list (min-width: 760px) {
+  .header {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: 1rem;
+  }
+
+  .actions {
+    justify-content: end;
+    max-width: 24rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .actions > button,
+  .actions > div > button {
+    min-height: 44px;
+  }
+}

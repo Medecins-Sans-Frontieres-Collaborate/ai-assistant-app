@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import { isGlobalAdmin } from '@/lib/services/agentAccess/adminAuth';
+import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { LimitsService } from '@/lib/services/limits/LimitsService';
 import { resolveLimitsAdminStatus } from '@/lib/services/limits/limitsAdminAuth';
 import {
@@ -13,16 +14,18 @@ import {
   resolveModelAvailability,
 } from '@/lib/services/limits/modelAvailability';
 import { periodKindForWindow, resetAt } from '@/lib/services/limits/periods';
-import { buildPrincipal } from '@/lib/services/limits/principal';
+import { attributesFor, buildPrincipal } from '@/lib/services/limits/principal';
 import {
   LimitTier,
   ResolvedLimit,
   activeDelegationIds,
   counterCellName,
+  effectiveDefaults,
   matchingOverrides,
   resolveAllLimits,
   resolveLimit,
   resolveModelCells,
+  resolveModelGate,
 } from '@/lib/services/limits/resolver';
 import { canPreviewMail } from '@/lib/services/limits/scopedVerdicts';
 import { SURFACE_CELL_SUFFIX } from '@/lib/services/limits/tokenDebit';
@@ -30,6 +33,10 @@ import { LimitEntry, LimitsPolicy } from '@/lib/services/limits/types';
 import { UsageCell, lookupUsage } from '@/lib/services/limits/usageLookup';
 import { readUsage } from '@/lib/services/limits/usageStore';
 import { LIMITS_ERROR_CODES, MeLimit } from '@/lib/services/limits/wire';
+import {
+  fetchMemberGroupIds,
+  lookupDirectoryUser,
+} from '@/lib/services/m365/groupDirectory';
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import { isValidEmail } from '@/lib/services/m365/tools/shared';
 import {
@@ -52,7 +59,9 @@ import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { auth } from '@/auth';
 import {
+  CATALOG_MODEL_DEFAULTS,
   LIMIT_DEFINITIONS,
+  LimitDefinition,
   getLimitDefinition,
   isValidDimension,
 } from '@/config/limits';
@@ -74,9 +83,11 @@ import {
  * be able to see why their 500 became 100). Global admins may preview
  * anyone. Scoped admins (docs/LIMITS_SCOPED_ADMINS_DESIGN.md §6c) may
  * preview mails whose domain is in their delegations' domains or that are
- * listed as jurisdiction users; anything else — including a jurisdiction
- * anchored only on groups/attributes, where membership of an arbitrary mail
- * is unknowable here — answers 403 `LIMITS_PREVIEW_OUT_OF_SCOPE`. When the
+ * listed as jurisdiction users, or — for a jurisdiction anchored on
+ * groups/attributes — whose directory record puts them inside one of the
+ * caller's delegations; anything else answers 403
+ * `LIMITS_PREVIEW_OUT_OF_SCOPE` (`undecidable` only when the directory
+ * itself could not be reached). When the
  * policy cannot be read the scope check cannot run, and the answer is 503
  * `LIMITS_POLICY_UNAVAILABLE`, never a 403 that would read as revocation.
  *
@@ -88,10 +99,12 @@ import {
  * admins keep the snapshot — they are not gated on it and see the whole
  * panel from the policy GET, which already reads directly.
  *
- * The preview can only evaluate the user and domain layers:
- * department/company/office attributes live on the target's session, not in
- * any directory this route can read, so an `attribute` override is reported
- * as not-evaluated rather than silently ignored.
+ * The preview evaluates ALL FOUR layers: user and domain from the mail, and
+ * attribute + group from the directory record read with the caller's own
+ * delegated token (User.Read.All + Group.Read.All; see
+ * `resolvePreviewSubject`). Only when the directory cannot be reached are
+ * `attribute` and `group` reported in `notEvaluated` rather than silently
+ * treated as empty; `directoryStatus` says which case it was.
  *
  * The preview ALSO carries QUALIFIED rows (docs/LIMITS_COST_INSIGHTS_DESIGN.md
  * §4b): for every model id / series the policy mentions on a `perModel` key
@@ -406,6 +419,12 @@ const PER_MODEL_COUNTER_RE = new RegExp(
 interface Qualifiers {
   modelIds: string[];
   series: string[];
+  /**
+   * Series the CATALOG alone mentions (external families unavailable until
+   * granted): they get the availability row only, never counter rows built
+   * from unqualified defaults the policy never aimed at them.
+   */
+  catalogOnlySeries: Set<string>;
 }
 
 /**
@@ -449,13 +468,17 @@ function mentionedQualifiers(
     const key = s.toLowerCase();
     if (!series.has(key)) series.set(key, s);
   };
-  const note = (entry: LimitEntry) => {
+  const note = (entry: Pick<LimitEntry, 'limitKey' | 'modelId' | 'series'>) => {
     if (!PER_MODEL_KEYS.has(entry.limitKey)) return;
     if (entry.modelId) noteModelId(entry.modelId);
     else if (entry.series) noteSeries(entry.series);
   };
   if (policy) {
-    policy.defaults.forEach(note);
+    // Effective, not stored: the model approval rules expand into defaults
+    // and overrides the resolver competes (resolver.ts), so their qualifiers
+    // must get rows too or the preview shows a model as allowed that the
+    // send refuses.
+    effectiveDefaults(policy).forEach(note);
     for (const override of matchingOverrides(policy, principal, active)) {
       override.entries.forEach(note);
     }
@@ -466,7 +489,46 @@ function mentionedQualifiers(
     if (match[1] === 'model') noteModelId(match[2]);
     else noteSeries(match[2]);
   }
-  return { modelIds: [...modelIds.values()], series: [...series.values()] };
+  // The catalog's own qualified defaults (external models unavailable until
+  // granted) bite with no rule mentioning them — the preview must show that
+  // block, not an unqualified "allowed". Family entries only: one row per
+  // external family says it; a row per external model would be noise.
+  const catalogOnlySeries = new Set<string>();
+  for (const d of CATALOG_MODEL_DEFAULTS) {
+    if (!d.series || d.modelId) continue;
+    if (!series.has(d.series.toLowerCase())) {
+      noteSeries(d.series);
+      catalogOnlySeries.add(d.series.toLowerCase());
+    }
+  }
+  return {
+    modelIds: [...modelIds.values()],
+    series: [...series.values()],
+    catalogOnlySeries,
+  };
+}
+
+/**
+ * The merged gate answer presented as the MODEL's row: the family qualifier
+ * it competed with is dropped so the row keys on `modelId` alone, like every
+ * other model row the client reads.
+ */
+function modelGateRow(
+  def: LimitDefinition,
+  policy: LimitsPolicy | null,
+  principal: Principal,
+  modelId: string,
+  active: ReadonlySet<string>,
+): ResolvedLimit {
+  const { series: _family, ...row } = resolveModelGate(
+    def,
+    policy,
+    principal,
+    modelId,
+    OpenAIModels[modelId as OpenAIModelID]?.series,
+    active,
+  );
+  return row;
 }
 
 function resolveQualifiedRows(
@@ -475,7 +537,7 @@ function resolveQualifiedRows(
   usage: Readonly<Record<string, UsageCell>> | undefined,
 ): ResolvedLimit[] {
   const active = activeDelegationIds(policy, principal);
-  const { modelIds, series } = mentionedQualifiers(
+  const { modelIds, series, catalogOnlySeries } = mentionedQualifiers(
     policy,
     principal,
     active,
@@ -484,11 +546,19 @@ function resolveQualifiedRows(
   const rows: ResolvedLimit[] = [];
   for (const def of PER_MODEL_DEFINITIONS) {
     for (const modelId of modelIds) {
+      // A GATE row answers what the send answers: the merged model + family
+      // cell (resolver.ts resolveModelGate), with the family taken from the
+      // static catalog as Middleware does. Counters stay per cell.
       rows.push(
-        resolveLimit(def, policy, principal, modelId, undefined, active),
+        def.unit === 'boolean'
+          ? modelGateRow(def, policy, principal, modelId, active)
+          : resolveLimit(def, policy, principal, modelId, undefined, active),
       );
     }
     for (const s of series) {
+      if (def.unit !== 'boolean' && catalogOnlySeries.has(s.toLowerCase())) {
+        continue;
+      }
       rows.push(resolveLimit(def, policy, principal, undefined, s, active));
     }
   }
@@ -537,6 +607,56 @@ function collectLimits(
     });
 }
 
+/**
+ * How the previewed person's `attribute` and `group` layers were obtained.
+ * `resolved`: read from the directory with the caller's delegated token
+ * (User.Read.All + Group.Read.All, tenant-consented). `not-found`: no
+ * directory user has that mail, so there is nothing to be a member of — the
+ * layers are evaluated (as empty) and the person would not be able to sign
+ * in anyway. `unavailable`: Graph could not answer; the two layers are then
+ * reported in `notEvaluated`, never silently treated as empty.
+ */
+export type PreviewDirectoryStatus = 'resolved' | 'not-found' | 'unavailable';
+
+interface PreviewSubject {
+  status: PreviewDirectoryStatus;
+  attributes: string[];
+  groupIds: string[];
+}
+
+/**
+ * The previewed person as the policy will see them. Office comes from the
+ * mail domain exactly as auth.ts derives it at sign-in; department and
+ * company from the directory record, encoded by the same helper the session
+ * principal uses, so a preview and a real request agree.
+ */
+async function resolvePreviewSubject(
+  request: NextRequest,
+  mail: string,
+): Promise<PreviewSubject> {
+  try {
+    const user = await lookupDirectoryUser(request, mail);
+    if (!user) return { status: 'not-found', attributes: [], groupIds: [] };
+    const attributes = attributesFor({
+      department: user.department,
+      companyName: user.companyName,
+      officeId: OfficeResolver.findOfficeByEmail(mail)?.id ?? null,
+    });
+    const { groupIds } = await fetchMemberGroupIds(request, {
+      kind: 'user',
+      userId: user.id,
+    });
+    return { status: 'resolved', attributes, groupIds };
+  } catch (error) {
+    console.warn(
+      `[limits-admin] preview directory lookup unavailable subject=${sanitizeForLog(mail)} reason=${sanitizeForLog(
+        error instanceof Error ? error.message.slice(0, 160) : 'unknown',
+      )}`,
+    );
+    return { status: 'unavailable', attributes: [], groupIds: [] };
+  }
+}
+
 /** Direct storage read for the scoped preview gate; `null` = no document. */
 async function readStoredPolicy(): Promise<LimitsPolicy | null> {
   const result = await readPolicy(createLimitsBlobStorage());
@@ -560,6 +680,7 @@ export async function GET(request: NextRequest) {
       }
 
       const global = isGlobalAdmin(session.user);
+      let subject: PreviewSubject | undefined;
       if (!global) {
         // The scope check needs the CURRENT policy (see header); without it
         // the honest answer is "unavailable", not "forbidden".
@@ -583,17 +704,52 @@ export async function GET(request: NextRequest) {
           status.delegationIds.includes(d.id),
         );
         const verdict = canPreviewMail(mine, mail);
-        if (verdict !== 'allowed') {
+        if (verdict === 'outside') {
           return errorResponse(
-            verdict === 'undecidable'
-              ? 'Your delegation is anchored on groups or attributes; previews by mail are not possible'
-              : 'This person is outside your scope',
+            'This person is outside your scope',
             403,
             verdict,
             LIMITS_ERROR_CODES.PREVIEW_OUT_OF_SCOPE,
           );
         }
+        if (verdict === 'undecidable') {
+          // A group/attribute-anchored jurisdiction: by mail alone the
+          // answer is unknowable, but the directory can say whether this
+          // person is inside one of the caller's delegations. Only an
+          // UNAVAILABLE directory keeps the old "cannot be decided" 403;
+          // a resolved person who is not inside is plainly outside.
+          subject = await resolvePreviewSubject(request, mail);
+          if (subject.status === 'unavailable') {
+            return errorResponse(
+              'Your delegation is anchored on groups or attributes and the directory could not be reached; retry',
+              403,
+              verdict,
+              LIMITS_ERROR_CODES.PREVIEW_OUT_OF_SCOPE,
+            );
+          }
+          const insideVia = activeDelegationIds(policy, {
+            userId: '',
+            mail,
+            domain: domainOfMail(mail),
+            attributes: subject.attributes,
+            groupIds: subject.groupIds,
+          });
+          if (!mine.some((d) => insideVia.has(d.id))) {
+            return errorResponse(
+              'This person is outside your scope',
+              403,
+              'outside',
+              LIMITS_ERROR_CODES.PREVIEW_OUT_OF_SCOPE,
+            );
+          }
+        }
       }
+
+      // Directory resolution of the previewed person (see the helper): the
+      // caller's own delegated token reads the attributes and transitive
+      // membership the policy will match against, so the preview evaluates
+      // every layer the real request does.
+      subject ??= await resolvePreviewSubject(request, mail);
 
       const preview: Principal = {
         // Stays '' for resolution: matchesPrincipal never reads it, and the
@@ -601,11 +757,8 @@ export async function GET(request: NextRequest) {
         userId: '',
         mail,
         domain: domainOfMail(mail),
-        attributes: [],
-        // Documented limitation: an arbitrary previewed mail's group
-        // membership cannot be resolved with the CALLER's delegated Graph
-        // token, so group overrides stay in `notEvaluated` below.
-        groupIds: [],
+        attributes: subject.attributes,
+        groupIds: subject.groupIds,
       };
 
       let usage: Record<string, UsageCell> | undefined;
@@ -625,10 +778,12 @@ export async function GET(request: NextRequest) {
         subject: mail,
         mode: policy?.mode ?? 'observe',
         policyUnavailable,
-        // Layers this preview cannot evaluate, stated rather than implied:
-        // attributes are session-derived, and group membership can only be
-        // resolved with the TARGET user's own delegated token.
-        notEvaluated: ['attribute', 'group'],
+        // Layers this preview could not evaluate, stated rather than
+        // implied: empty when the directory answered (or has no such
+        // person), both when it could not be reached.
+        notEvaluated:
+          subject.status === 'unavailable' ? ['attribute', 'group'] : [],
+        directoryStatus: subject.status,
         limits: collectLimits(policy, preview, {
           includeUnlimited: true,
           provenance: true,

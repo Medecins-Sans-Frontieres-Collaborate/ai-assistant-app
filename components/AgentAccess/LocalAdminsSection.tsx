@@ -136,11 +136,18 @@ export const LocalAdminsSection: FC<LocalAdminsSectionProps> = ({ rows }) => {
       }
       toast.success(t('configSaveSuccess'));
       setIsDirty(false);
-      await queryClient.invalidateQueries({
-        queryKey: ['agent-access-config'],
-      });
-      // Delegations changed — admin status of affected users may too.
-      await queryClient.invalidateQueries({ queryKey: ['agent-access-me'] });
+      // Delegations affect both rule visibility and management listings.
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['agent-access-config'] }),
+        queryClient.invalidateQueries({ queryKey: ['agent-access-me'] }),
+        queryClient.invalidateQueries({ queryKey: ['agent-access-rules'] }),
+        queryClient.invalidateQueries({
+          queryKey: ['agent-access-m365-agents'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['agent-access-org-agents'],
+        }),
+      ]);
     } catch {
       setSaveError(true);
     } finally {

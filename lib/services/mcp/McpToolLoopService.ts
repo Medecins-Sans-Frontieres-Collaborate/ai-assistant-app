@@ -1,4 +1,9 @@
+import { shrinkTranscriptForOverflow } from '@/lib/services/chat/contextOverflowRecovery';
 import { ModelHandler } from '@/lib/services/chat/handlers/ModelHandler';
+import {
+  continuationNudge,
+  normalizeOpenAIFinish,
+} from '@/lib/services/chat/streamContinuation';
 
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 
@@ -65,6 +70,8 @@ export interface McpToolLoopOptions {
   userMessageText?: string;
   /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
   builtinExecutor?: ToolLoopCoreOptions<OpenAIMessage>['builtinExecutor'];
+  builtinExecutors?: ToolLoopCoreOptions<OpenAIMessage>['builtinExecutors'];
+  maxImmediateRounds?: number;
   /**
    * Aborts every model round (pipeline stage timeout / request guard,
    * issue #130) so a turn the client was already told failed does not
@@ -118,6 +125,22 @@ function buildOpenAIStrategy(
       ];
     },
 
+    appendContinuation(messages, partialText, reason) {
+      return [
+        ...messages,
+        { role: 'assistant', content: partialText },
+        { role: 'user', content: continuationNudge(reason) },
+      ];
+    },
+
+    shrinkForOverflow(messages) {
+      // A real user message is role:'user' (tool results are role:'tool').
+      return shrinkTranscriptForOverflow(
+        messages,
+        (message) => message.role === 'user',
+      );
+    },
+
     async runModelRound(
       messages,
       serversWithTools: ServerWithTools[],
@@ -129,10 +152,13 @@ function buildOpenAIStrategy(
       const openAITools = serversWithTools.flatMap(({ server, tools }) =>
         mcpToolsToOpenAITools(server.id, tools),
       );
-      // Past the round cap the model gets no tools: unlike Anthropic, an
-      // OpenAI transcript with tool messages but no tools declared is legal.
-      if (openAITools.length > 0 && allowToolUse) {
+      // Past the round cap the tools STAY declared and tool_choice 'none'
+      // forbids further calls: the prompt prefix (system + tool schemas)
+      // is then byte-identical to earlier rounds and stays cache-eligible,
+      // and the model can still refer to the tools it used by name.
+      if (openAITools.length > 0) {
         params.tools = openAITools;
+        if (!allowToolUse) params.tool_choice = 'none';
       }
 
       const completionStream = (await options.handler.executeRequest(
@@ -150,6 +176,7 @@ function buildOpenAIStrategy(
 
       return {
         finishedWithToolUse: accumulator.finishReason === 'tool_calls',
+        finish: normalizeOpenAIFinish(accumulator.finishReason),
         calls: accumulator.toolCalls(),
         usage: accumulator.usage
           ? {
@@ -182,5 +209,8 @@ export async function runMcpToolLoop(
     existingPlan: options.existingPlan,
     userMessageText: options.userMessageText,
     builtinExecutor: options.builtinExecutor,
+    builtinExecutors: options.builtinExecutors,
+    maxImmediateRounds: options.maxImmediateRounds,
+    signal: options.signal,
   });
 }

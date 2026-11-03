@@ -9,6 +9,7 @@ import {
   clearGroupMembershipCache,
   getCachedGroupIdsForMail,
   getCachedGroupIdsForUser,
+  getGroupMembershipStats,
   isGroupMembershipDegraded,
   isGroupMembershipDegradedForUser,
   resolveUserGroupIds,
@@ -177,5 +178,91 @@ describe('degradation reporting', () => {
     graphJsonMock.mockResolvedValue({ value: ['g1'] });
     await resolveUserGroupIds(req, session);
     expect(isGroupMembershipDegradedForUser('oid-1')).toBe(false);
+  });
+});
+
+describe('failure TTLs, oversize fallback and stats', () => {
+  class FakeM365ErrorWithStatus extends Error {
+    constructor(
+      message: string,
+      readonly kind: string,
+      readonly status: number,
+    ) {
+      super(message);
+      this.name = 'M365Error';
+    }
+  }
+
+  it('remembers a STRUCTURAL failure for the full cache TTL (no per-minute re-ask), a retryable one for 60 s', async () => {
+    vi.useFakeTimers();
+    try {
+      vi.spyOn(console, 'warn').mockImplementation(() => {});
+      graphJsonMock.mockRejectedValue(
+        new FakeM365Error('consent', 'consent_missing'),
+      );
+      await resolveUserGroupIds(req, session);
+      expect(graphJsonMock).toHaveBeenCalledTimes(1);
+      vi.advanceTimersByTime(61_000);
+      await resolveUserGroupIds(req, session);
+      expect(graphJsonMock).toHaveBeenCalledTimes(1); // still cached
+      vi.advanceTimersByTime(10 * 60_000);
+      await resolveUserGroupIds(req, session);
+      expect(graphJsonMock).toHaveBeenCalledTimes(2); // TTL passed
+
+      clearGroupMembershipCache();
+      graphJsonMock.mockRejectedValue(
+        new FakeM365Error('throttled', 'rate_limited'),
+      );
+      await resolveUserGroupIds(req, session);
+      vi.advanceTimersByTime(61_000);
+      await resolveUserGroupIds(req, session);
+      expect(graphJsonMock).toHaveBeenCalledTimes(4); // retried after a minute
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('serves a user past the getMemberGroups ceiling through the paged walk and caches the result', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    graphJsonMock
+      .mockRejectedValueOnce(
+        new FakeM365ErrorWithStatus('too many', 'graph_error', 400),
+      )
+      .mockResolvedValueOnce({ value: [{ id: 'g1' }, { id: 'g2' }] });
+    expect(await resolveUserGroupIds(req, session)).toEqual(['g1', 'g2']);
+    expect(getCachedGroupIdsForUser('oid-1')).toEqual(['g1', 'g2']);
+    expect(isGroupMembershipDegradedForUser('oid-1')).toBe(false);
+    expect(getGroupMembershipStats().oversizeFallbacks).toBe(1);
+  });
+
+  it('counts hits, misses and failures by kind, and reports live degraded users', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    graphJsonMock.mockResolvedValueOnce({ value: ['g1'] });
+    await resolveUserGroupIds(req, session);
+    await resolveUserGroupIds(req, session);
+    graphJsonMock.mockRejectedValueOnce(
+      new FakeM365Error('throttled', 'rate_limited'),
+    );
+    await resolveUserGroupIds(req, {
+      user: { id: 'oid-2', mail: 'b@contoso.com' },
+    } as never);
+    graphJsonMock.mockRejectedValueOnce(
+      new FakeM365Error('forbidden', 'forbidden'),
+    );
+    await resolveUserGroupIds(req, {
+      user: { id: 'oid-3', mail: 'c@contoso.com' },
+    } as never);
+
+    const stats = getGroupMembershipStats();
+    expect(stats).toMatchObject({
+      hits: 1,
+      misses: 3,
+      failuresRetryable: 1,
+      failuresStructural: 1,
+      degradedUsers: 1,
+      cachedUsers: 3,
+    });
+    expect(stats.lastFailure).toMatchObject({ kind: 'structural' });
+    expect(stats.lastFailure?.reason).toContain('forbidden');
   });
 });

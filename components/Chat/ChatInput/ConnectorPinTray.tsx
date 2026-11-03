@@ -32,6 +32,7 @@ import {
   isAgentShapedModelId,
 } from '@/lib/utils/app/agentAttachment';
 
+import { SkillControls } from '@/components/Chat/ChatInput/SkillControls';
 import { ToolModeControls } from '@/components/Chat/ChatInput/ToolModeControls';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
@@ -447,6 +448,7 @@ export const ConnectorPinTray: FC = () => {
       {/* Tools — web search & code interpreter as Off/Auto/Always (the
           model picker's former sections; Phase 2 consolidation). */}
       <ToolModeControls />
+      <SkillControls />
 
       {/* Footer: the lock reason wins over the pin/cost hints — a locked
           tray sends no tools, so neither hint applies. */}

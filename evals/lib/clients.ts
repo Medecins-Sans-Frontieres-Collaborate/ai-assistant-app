@@ -73,6 +73,10 @@ export function getEvalClients(): EvalClients {
   clients = {
     azureOpenAI: new AzureOpenAI({
       endpoint: azureOpenAIEndpoint,
+      // Suppress the SDK's AZURE_OPENAI_API_KEY default: this client uses
+      // Entra auth even when the local env also contains a service key.
+      apiKey: '',
+      baseURL: '',
       azureADTokenProvider: tokenProvider,
       apiVersion: envString('OPENAI_API_VERSION', '2025-04-01-preview'),
     }),

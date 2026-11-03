@@ -67,7 +67,13 @@ export class M365Error extends Error {
 export const GRAPH_ID_REGEX = /^[A-Za-z0-9!$_.,=-]{1,512}$/;
 
 export function isValidGraphId(id: string | null | undefined): id is string {
-  return typeof id === 'string' && GRAPH_ID_REGEX.test(id);
+  return (
+    typeof id === 'string' &&
+    GRAPH_ID_REGEX.test(id) &&
+    // Dot segments pass the charset but URL normalisation collapses them.
+    id !== '.' &&
+    id !== '..'
+  );
 }
 
 /**

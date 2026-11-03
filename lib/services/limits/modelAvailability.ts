@@ -11,8 +11,9 @@
  *
  * Both entry points mirror `enforcement.ts` cell for cell:
  *  - `isModelBlocked`   ⇔ `checkGate('model.allowed', modelId, series)`:
- *    the model cell AND the family cell, either one `false` blocks; a model
- *    with no valid cells falls back to the unqualified resolution.
+ *    ONE merged gate cell (`resolveModelGate`) in which the model and family
+ *    qualifiers compete, so a model rule overrides its family's at the same
+ *    layer; a model with no valid qualifier gets the unqualified answer.
  *  - `resolveModelAvailability` ⇔ the counter set `createLimitsMiddleware`
  *    reserves (`meteredCells('chat.messagesPerDay')` plus
  *    `meteredCells('model.requests', modelId, series)`) UNION the pre-flight
@@ -34,6 +35,7 @@ import {
   isBlocked,
   resolveLimit,
   resolveModelCells,
+  resolveModelGate,
 } from '@/lib/services/limits/resolver';
 import { LimitsPolicy, PeriodKind } from '@/lib/services/limits/types';
 import { Principal } from '@/lib/services/shared/principalMatching';
@@ -68,28 +70,21 @@ export interface UsageWindows {
 }
 
 /**
- * The gate cells `checkGate` evaluates for a per-model key: the conjunctive
- * model + family cells, or the bare resolution when the model yields no
- * valid cell (no id passes the dimension check and no series) — a per-model
- * key with no model context still has a global answer.
+ * The gate cell `checkGate` evaluates for a per-model key: the merged
+ * model + family gate (resolver.ts resolveModelGate), which is also the
+ * unqualified answer when the model yields no valid qualifier.
  */
-function gateCells(
+function gateCell(
   def: LimitDefinition,
   policy: LimitsPolicy | null,
   principal: Principal,
   modelId: string | undefined,
   series: string | undefined,
   active?: ReadonlySet<string>,
-): ResolvedLimit[] {
-  const cells = def.perModel
-    ? resolveModelCells(def, policy, principal, modelId, series, active)
-    : [resolveLimit(def, policy, principal, undefined, undefined, active)];
-  if (cells.length === 0) {
-    cells.push(
-      resolveLimit(def, policy, principal, undefined, undefined, active),
-    );
-  }
-  return cells;
+): ResolvedLimit {
+  return def.perModel
+    ? resolveModelGate(def, policy, principal, modelId, series, active)
+    : resolveLimit(def, policy, principal, undefined, undefined, active);
 }
 
 /** `meteredCells` without the storage-bearing module: numeric counter cells only. */
@@ -114,9 +109,10 @@ function isByomExempt(policy: LimitsPolicy | null, modelId: string): boolean {
 }
 
 /**
- * Would a chat request on this model be refused by `model.allowed`?
- * Conjunctive (model AND family), pure, mode-agnostic. `isBlocked` returns
- * false on a `null`/`true` cell, so an unauthored policy answers false.
+ * Would a chat request on this model be refused by `model.allowed`? One
+ * merged gate cell, pure, mode-agnostic. `isBlocked` returns false on a
+ * `null`/`true` cell; with no authored policy only the compiled catalog
+ * answers — true for an external model (config/limits.ts), false otherwise.
  */
 export function isModelBlocked(
   policy: LimitsPolicy | null,
@@ -128,9 +124,7 @@ export function isModelBlocked(
   const def = getLimitDefinition('model.allowed');
   if (!def) return false;
   if (modelId && isByomExempt(policy, modelId)) return false;
-  return gateCells(def, policy, principal, modelId, series, active).some(
-    isBlocked,
-  );
+  return isBlocked(gateCell(def, policy, principal, modelId, series, active));
 }
 
 interface CellReading {

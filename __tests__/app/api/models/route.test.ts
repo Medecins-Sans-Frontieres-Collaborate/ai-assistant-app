@@ -369,18 +369,39 @@ describe('GET /api/models', () => {
     it('a family block hides every member in enforce mode', async () => {
       limitsState.policy = policyWith([
         { limitKey: 'model.allowed', series: 'gpt', value: false },
+        // The control is external (unavailable by catalog) — grant it.
+        { limitKey: 'model.allowed', series: 'claude', value: true },
       ]);
       const { data } = await body(await GET(req()));
       expect(data.models.map((m) => m.id).sort()).toEqual(['claude-sonnet-5']);
     });
 
-    it('a model-level allow does NOT rescue a family block (conjunctive, like the send)', async () => {
+    it('a model-level allow overrides a family block for that model only (inheritance, like the send)', async () => {
       limitsState.policy = policyWith([
         { limitKey: 'model.allowed', series: 'gpt', value: false },
         { limitKey: 'model.allowed', modelId: 'o3', value: true },
       ]);
       const { data } = await body(await GET(req()));
-      expect(data.models.map((m) => m.id)).not.toContain('o3');
+      const ids = data.models.map((m) => m.id);
+      expect(ids).toContain('o3');
+      expect(ids).not.toContain('o4-mini');
+      expect(ids).not.toContain('gpt-5.2');
+    });
+
+    it('model approval rules shape the list exactly as the send: family default + model override', async () => {
+      const list = { groups: [], domains: [], allow: [], deny: [] };
+      limitsState.policy = policyWith([], {
+        modelAccess: [
+          { series: 'claude', defaultAccess: null, ...list },
+          { series: 'gpt', defaultAccess: false, ...list },
+          { modelId: 'o3', defaultAccess: null, ...list },
+        ],
+      });
+      const { data } = await body(await GET(req()));
+      expect(data.models.map((m) => m.id).sort()).toEqual([
+        'claude-sonnet-5',
+        'o3',
+      ]);
     });
 
     it('hides NOTHING in observe mode — the send is allowed, so the list is unfiltered', async () => {
@@ -400,25 +421,28 @@ describe('GET /api/models', () => {
     });
 
     it('warms the group cache BEFORE building the principal, so a group-targeted block hides', async () => {
-      limitsState.policy = policyWith([], {
-        overrides: [
-          {
-            id: 'lim-0000000000a1',
-            label: '',
-            enabled: true,
-            scope: 'group',
-            targets: ['g-restricted'],
-            priority: 0,
-            entries: [
-              { limitKey: 'model.allowed', modelId: 'o3', value: false },
-            ],
-            createdBy: 'admin',
-            createdAt: '2026-01-01T00:00:00.000Z',
-            updatedBy: 'admin',
-            updatedAt: '2026-01-01T00:00:00.000Z',
-          },
-        ],
-      });
+      limitsState.policy = policyWith(
+        [{ limitKey: 'model.allowed', series: 'claude', value: true }],
+        {
+          overrides: [
+            {
+              id: 'lim-0000000000a1',
+              label: '',
+              enabled: true,
+              scope: 'group',
+              targets: ['g-restricted'],
+              priority: 0,
+              entries: [
+                { limitKey: 'model.allowed', modelId: 'o3', value: false },
+              ],
+              createdBy: 'admin',
+              createdAt: '2026-01-01T00:00:00.000Z',
+              updatedBy: 'admin',
+              updatedAt: '2026-01-01T00:00:00.000Z',
+            },
+          ],
+        },
+      );
       // Cold cache: membership is only known once the warm-up has run.
       mockResolveUserGroupIds.mockImplementation(async () => {
         limitsState.cachedGroupIds = ['g-restricted'];

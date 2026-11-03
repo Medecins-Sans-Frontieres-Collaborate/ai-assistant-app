@@ -9,6 +9,7 @@ import { createTestChatContext } from '@/__tests__/lib/services/chat/testUtils';
 import { PromptAgentEnricher } from '@/lib/services/chat/enrichers/PromptAgentEnricher';
 import { ChatContext } from '@/lib/services/chat/pipeline/ChatContext';
 
+import { PROMPT_AGENT_MAX_PROMPT_CHARS } from '@/lib/constants/promptAgents';
 import { describe, expect, it } from 'vitest';
 
 const promptAgentRecord = {
@@ -57,6 +58,23 @@ describe('PromptAgentEnricher', () => {
 
       // Persona instructions come FIRST and verbatim; the shared rules follow
       expect(result.systemPrompt).toMatch(/^You are a persona\.\n\n/);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('preserves a maximum-length persona including its final instructions', async () => {
+      const systemPrompt =
+        'x'.repeat(PROMPT_AGENT_MAX_PROMPT_CHARS - 4) + '\nEND';
+      const result = await enricher.execute(
+        makeContext({
+          promptAgent: { ...promptAgentRecord, systemPrompt },
+        }),
+      );
+
+      expect(result.systemPrompt.slice(0, systemPrompt.length)).toBe(
+        systemPrompt,
+      );
+      expect(result.systemPrompt.slice(systemPrompt.length)).toMatch(/^\n\n/);
+      expect(result.systemPrompt).toContain('## Response Formatting');
       expect(result.errors).toHaveLength(0);
     });
 

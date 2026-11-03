@@ -3,7 +3,6 @@ import { NextRequest } from 'next/server';
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
 import {
   AgentAccessConflictError,
-  StoredOrgRagAgent,
   createAgentAccessBlobStorage,
   deleteOrgAgent,
   listAllOrgAgents,
@@ -22,7 +21,6 @@ import {
   canEditKey,
 } from '@/lib/services/agentAccess/adminRouteHelpers';
 import {
-  AgentAccessConfig,
   ORG_AGENT_SOURCE,
   OrgRagAgent,
   OrgRagAgentHistoryEntry,
@@ -233,28 +231,38 @@ export async function GET() {
   try {
     // Read storage DIRECTLY (like the sibling GETs), not the ≤60s-stale
     // service snapshot: the etags echoed here feed the If-Match CAS.
-    let stored: StoredOrgRagAgent[] = [];
-    let config: AgentAccessConfig | null = null;
     let orgAgentsUnavailable = false;
-    let fetchedAt: number | null = null;
-    try {
-      const storage = createAgentAccessBlobStorage();
-      const [listed, configResult] = await Promise.all([
-        listAllOrgAgents(storage),
-        readConfig(storage),
-      ]);
-      stored = listed;
-      config = configResult?.config ?? null;
-      fetchedAt = Date.now();
-    } catch (error) {
-      console.error(
-        `[agent-access-admin] direct org-agents read failed: ${sanitizeForLog(error)}`,
+    let configUnavailable = false;
+    const storage = createAgentAccessBlobStorage();
+    const [stored, configResult] = await Promise.all([
+      listAllOrgAgents(storage).catch((error) => {
+        console.error(
+          `[agent-access-admin] direct org-agents read failed: ${sanitizeForLog(error)}`,
+        );
+        orgAgentsUnavailable = true;
+        return [];
+      }),
+      readConfig(storage).catch((error) => {
+        console.error(
+          `[agent-access-admin] org-agents permission config read failed: ${sanitizeForLog(error)}`,
+        );
+        configUnavailable = true;
+        return null;
+      }),
+    ]);
+    if (configUnavailable) {
+      return errorResponse(
+        'Admin permissions are temporarily unavailable; retry shortly',
+        503,
+        undefined,
+        'AGENT_ACCESS_CONFIG_UNAVAILABLE',
       );
-      orgAgentsUnavailable = true;
-      config = service.getSnapshot().config;
     }
 
-    const status = resolveAdminStatus(session.user, config);
+    const status = resolveAdminStatus(
+      session.user,
+      configResult?.config ?? null,
+    );
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }
@@ -290,7 +298,7 @@ export async function GET() {
       })),
       staticAgents,
       orgAgentsUnavailable,
-      fetchedAt,
+      fetchedAt: orgAgentsUnavailable ? null : Date.now(),
       // Static config ids the editor may offer as override targets.
       staticAgentIds: Array.from(staticAgentIds()),
       canCreate: status.isGlobalAdmin,

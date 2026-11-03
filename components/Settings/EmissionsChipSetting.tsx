@@ -1,3 +1,4 @@
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -6,7 +7,9 @@ import {
   EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
   EMISSIONS_CHIP_AUTOHIDE_MAX_MS,
   EMISSIONS_CHIP_AUTOHIDE_MIN_MS,
+  EMISSIONS_CHIP_LABEL_MODE_OPTIONS,
   EMISSIONS_CHIP_VISIBILITY_OPTIONS,
+  EmissionsChipLabelMode,
   EmissionsChipVisibility,
   clampEmissionsChipAutoHideMs,
 } from '@/lib/utils/shared/emissions';
@@ -27,8 +30,11 @@ const MAX_SECONDS = EMISSIONS_CHIP_AUTOHIDE_MAX_MS / 1000;
  */
 export const EmissionsChipSetting: FC = () => {
   const t = useTranslations('usageImpact');
+  const { showUsageCost } = useFlags();
   const visibility = useSettingsStore((s) => s.emissionsChipVisibility);
   const setVisibility = useSettingsStore((s) => s.setEmissionsChipVisibility);
+  const labelMode = useSettingsStore((s) => s.emissionsChipLabelMode);
+  const setLabelMode = useSettingsStore((s) => s.setEmissionsChipLabelMode);
   const autoHideMs = useSettingsStore((s) => s.emissionsChipAutoHideMs);
   const setAutoHideMs = useSettingsStore((s) => s.setEmissionsChipAutoHideMs);
 
@@ -68,6 +74,11 @@ export const EmissionsChipSetting: FC = () => {
     always: t('chipAlwaysHint'),
     auto: t('chipAutoHint'),
     hidden: t('chipHiddenHint'),
+  };
+  const labelModeLabel: Record<EmissionsChipLabelMode, string> = {
+    emissions: t('chipLabelEmissions'),
+    cost: t('chipLabelCost'),
+    both: t('chipLabelBoth'),
   };
 
   return (
@@ -126,6 +137,38 @@ export const EmissionsChipSetting: FC = () => {
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             {t('chipAutoHideHint', { min: MIN_SECONDS, max: MAX_SECONDS })}
           </p>
+        </div>
+      )}
+
+      {/* What the collapsed chip reads. Pointless while hidden, and absent
+          when the tenant switched cost display off (same fail-open rule as
+          the chip itself). */}
+      {visibility !== 'hidden' && showUsageCost !== false && (
+        <div className="mt-4">
+          <h5 className="mb-1 text-sm font-medium text-black dark:text-white">
+            {t('chipLabelTitle')}
+          </h5>
+          <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
+            {t('chipLabelHint')}
+          </p>
+          <div className="flex flex-wrap gap-4">
+            {EMISSIONS_CHIP_LABEL_MODE_OPTIONS.map((mode) => (
+              <label
+                key={mode}
+                className="flex cursor-pointer items-center gap-2 text-sm text-black dark:text-gray-200"
+                data-testid={`emissions-chip-label-${mode}`}
+              >
+                <input
+                  type="radio"
+                  name="emissions-chip-label-mode"
+                  className="h-4 w-4 accent-gray-600 dark:accent-gray-400"
+                  checked={labelMode === mode}
+                  onChange={() => setLabelMode(mode)}
+                />
+                {labelModeLabel[mode]}
+              </label>
+            ))}
+          </div>
         </div>
       )}
     </div>

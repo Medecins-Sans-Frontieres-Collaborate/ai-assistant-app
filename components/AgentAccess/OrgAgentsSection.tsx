@@ -1,11 +1,10 @@
 'use client';
 
 import {
+  IconChecklist,
   IconDatabase,
   IconHistory,
   IconPlus,
-  IconRefresh,
-  IconTrash,
   IconX,
 } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -15,6 +14,7 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { useGroupNames } from '@/client/hooks/useGroupNames';
 import { useHiddenAdminAgents } from '@/client/hooks/useHiddenAdminAgents';
 
 import type { OrgRagAgent } from '@/lib/services/agentAccess/types';
@@ -23,7 +23,13 @@ import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
 import { OpenAIModels } from '@/types/openai';
 
-import { CanonicalKeyChip } from './CanonicalKeyChip';
+import { AccessSummary } from './AccessSummary';
+import { AgentActionsMenu } from './AgentActionsMenu';
+import { AgentListStatus } from './AgentListStatus';
+import rowStyles from './AgentRow.module.css';
+import { AgentRowHeader } from './AgentRowHeader';
+import { AgentTechnicalDetails } from './AgentTechnicalDetails';
+import { AgentTypeLabel } from './AgentTypeLabel';
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
 import {
   HiddenBadge,
@@ -31,6 +37,11 @@ import {
   ShowHiddenToggle,
 } from './HiddenAgentsControls';
 import { RuleEditor } from './RuleEditor';
+import {
+  agentAudienceSearchLabel,
+  agentSearchDocument,
+  matchesAgentSearch,
+} from './agentSearch';
 import {
   AdminHistoryResponse,
   AdminOrgAgentsResponse,
@@ -41,6 +52,7 @@ import {
   OrgAgentDraft,
   clientCanonicalAgentKey,
 } from './types';
+import { useAdminAgentTranslations } from './useAdminAgentTranslations';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
@@ -787,6 +799,7 @@ const OrgAgentHistoryPanel: FC<OrgAgentHistoryPanelProps> = ({
 };
 
 interface OrgAgentsSectionProps {
+  searchQuery?: string;
   /** Rules from the panel's rules query — reused for the access pill/editor. */
   rules: AdminStoredRule[];
   /** Invalidate shared panel data (rules + discovery) after a change. */
@@ -801,9 +814,11 @@ interface OrgAgentsSectionProps {
  */
 export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
   rules,
+  searchQuery = '',
   onDataChanged,
 }) => {
-  const t = useTranslations('agentAccess');
+  const t = useAdminAgentTranslations();
+  const tSearch = useTranslations('m365.files');
   const queryClient = useQueryClient();
   const [isCreating, setIsCreating] = useState(false);
   /** Create flow seeded from a built-in agent (Override button). */
@@ -820,6 +835,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
   } | null>(null);
 
   const hiddenAgents = useHiddenAdminAgents();
+  const { isHidden: isHiddenForSearch } = hiddenAgents;
   const agentsQuery = useQuery<AdminOrgAgentsResponse>({
     queryKey: ['agent-access-org-agents'],
     queryFn: async () => {
@@ -830,7 +846,8 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
       return unwrapApiData<AdminOrgAgentsResponse>(await response.json());
     },
     retry: 1,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus:
+      !isCreating && editingId === null && editingRuleKey === null,
   });
 
   const indexesQuery = useQuery<{ indexes: string[] }>({
@@ -859,6 +876,13 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
   const rulesByKey = useMemo(
     () => new Map(rules.map((rule) => [rule.canonicalKey, rule])),
     [rules],
+  );
+  const searchGroupNames = useGroupNames(
+    rules
+      .filter((entry) =>
+        entry.canonicalKey.startsWith(`${CLIENT_ORG_AGENT_SOURCE}::`),
+      )
+      .flatMap((entry) => entry.rule.access.allowGroups ?? []),
   );
 
   // Re-runs the index validation without editing (e.g. after a staged
@@ -909,22 +933,85 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
     invalidate();
   };
 
-  const agents = agentsQuery.data?.orgAgents ?? [];
+  const agents = useMemo(
+    () => agentsQuery.data?.orgAgents ?? [],
+    [agentsQuery.data?.orgAgents],
+  );
   // Built-in agents an admin record already overrides are shown as that
   // record (the registry serves the record, not the file entry).
-  const staticAgents = (agentsQuery.data?.staticAgents ?? []).filter(
-    (entry) => !entry.overridden,
+  const staticAgents = useMemo(
+    () =>
+      (agentsQuery.data?.staticAgents ?? []).filter(
+        (entry) => !entry.overridden,
+      ),
+    [agentsQuery.data?.staticAgents],
   );
-  const hiddenStatic = hiddenAgents.partition(
+  const searchDocuments = useMemo(
+    () =>
+      new Map(
+        [...agents, ...staticAgents].map((entry) => {
+          const access = rulesByKey.get(entry.canonicalKey)?.rule.access;
+          return [
+            entry.canonicalKey,
+            agentSearchDocument({
+              ...entry,
+              access,
+              kind: [
+                'native',
+                t('nativeLabel'),
+                'knowledge',
+                t('orgAgentBadge'),
+              ],
+              accessLabel: agentAudienceSearchLabel(access, {
+                everyone: t('allEligibleUsers'),
+                restricted: t('accessRestricted'),
+                none: t('noAllowedAudience'),
+              }),
+              groupNames: (access?.allowGroups ?? []).map(
+                (id) => searchGroupNames[id],
+              ),
+              hidden: isHiddenForSearch(entry.canonicalKey)
+                ? t('hiddenBadge')
+                : undefined,
+              enabledLabel: entry.agent.enabled
+                ? undefined
+                : t('orgAgentDisabledBadge'),
+            }),
+          ];
+        }),
+      ),
+    [agents, staticAgents, rulesByKey, searchGroupNames, t, isHiddenForSearch],
+  );
+  const unfilteredStatic = hiddenAgents.partition(
     staticAgents,
     (entry) => entry.canonicalKey,
   );
-  const hiddenStored = hiddenAgents.partition(
+  const unfilteredStored = hiddenAgents.partition(
     agents,
     (entry) => entry.canonicalKey,
   );
+  const matches = (entry: AdminStoredOrgAgent | AdminStaticOrgAgent) =>
+    matchesAgentSearch(
+      searchDocuments.get(entry.canonicalKey) ?? '',
+      searchQuery,
+    ) ||
+    editingRuleKey === entry.canonicalKey ||
+    editingId === entry.agent.id ||
+    historyKey === entry.canonicalKey ||
+    confirmDeleteId === entry.agent.id;
+  const hiddenStatic = {
+    ...unfilteredStatic,
+    visible: unfilteredStatic.visible.filter(matches),
+  };
+  const hiddenStored = {
+    ...unfilteredStored,
+    visible: unfilteredStored.visible.filter(matches),
+  };
   const staticAgentIds = agentsQuery.data?.staticAgentIds ?? [];
-  const canCreate = agentsQuery.data?.canCreate !== false;
+  const listingUnavailable = agentsQuery.data?.orgAgentsUnavailable === true;
+  const listingReady =
+    !agentsQuery.isPending && !agentsQuery.isError && !listingUnavailable;
+  const canCreate = agentsQuery.data?.canCreate === true;
   const indexNames = indexesQuery.data?.indexes ?? [];
 
   return (
@@ -943,11 +1030,12 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
         <button
           type="button"
           aria-expanded={isCreating}
+          disabled={!listingReady}
           onClick={() => {
             setOverridePrefill(null);
             setIsCreating((creating) => !creating);
           }}
-          className="mb-3 flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+          className="mb-3 flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-black hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
         >
           <IconPlus size={16} />
           {t('addOrgAgent')}
@@ -982,11 +1070,15 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
         </div>
       )}
 
-      {agentsQuery.data?.orgAgentsUnavailable && (
-        <p className="mb-2 text-xs text-amber-700 dark:text-amber-400">
-          {t('orgAgentsUnavailableWarning')}
-        </p>
-      )}
+      <AgentListStatus
+        pending={agentsQuery.isPending}
+        fetching={agentsQuery.isFetching}
+        failed={agentsQuery.isError}
+        unavailableMessage={
+          listingUnavailable ? t('orgAgentsUnavailableWarning') : undefined
+        }
+        onRetry={() => void agentsQuery.refetch()}
+      />
 
       <ShowHiddenToggle
         hiddenCount={hiddenStatic.hiddenCount + hiddenStored.hiddenCount}
@@ -995,88 +1087,109 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
       />
       {hiddenStored.visible.length === 0 &&
       hiddenStatic.visible.length === 0 ? (
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {agents.length === 0 && staticAgents.length === 0
-            ? t('noOrgAgents')
-            : t('allAgentsHidden')}
-        </p>
+        listingReady && (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {searchQuery.trim() &&
+            unfilteredStored.visible.length + unfilteredStatic.visible.length >
+              0
+              ? tSearch('noResults', { query: searchQuery })
+              : agents.length === 0 && staticAgents.length === 0
+                ? t('noOrgAgents')
+                : t('allAgentsHidden')}
+          </p>
+        )
       ) : (
-        <ul className="space-y-2">
+        <ul className={`${rowStyles.list} space-y-2`}>
           {hiddenStatic.visible.map((entry) => {
             // Built-in (deployment config) agent: read-only settings, but
             // its access rule is editable under the same canonical key the
             // invocation guard and discovery filter evaluate.
             const stored = rulesByKey.get(entry.canonicalKey) ?? null;
-            const isRestricted = stored?.rule.access.type === 'restricted';
             return (
               <li
                 key={entry.canonicalKey}
                 data-testid={`static-org-agent-${entry.agent.id}`}
                 className="rounded-lg border border-gray-200 p-3 dark:border-gray-700"
               >
-                <div className="flex items-center gap-3">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="truncate text-sm font-medium text-black dark:text-white">
-                        {entry.agent.name}
-                      </span>
-                      <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
-                        {t('orgAgentBadge')}
-                      </span>
-                      <span
-                        title={t('orgAgentBuiltinHint')}
-                        className="shrink-0 rounded-full bg-gray-200 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                <AgentRowHeader
+                  identity={
+                    <>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="min-w-0 [overflow-wrap:anywhere] text-sm font-medium text-black dark:text-white">
+                          {entry.agent.name}
+                        </span>
+                        <span
+                          title={t('orgAgentBuiltinHint')}
+                          className="shrink-0 rounded-full bg-gray-200 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                        >
+                          {t('orgAgentBuiltinBadge')}
+                        </span>
+                      </div>
+                      <AgentTypeLabel kind="knowledge" />
+                      {entry.agent.description && (
+                        <p
+                          className="line-clamp-2 text-xs text-gray-600 dark:text-gray-300"
+                          title={entry.agent.description}
+                        >
+                          {entry.agent.description}
+                        </p>
+                      )}
+                    </>
+                  }
+                  audience={<AccessSummary access={stored?.rule.access} />}
+                  actions={
+                    <>
+                      {hiddenAgents.isHidden(entry.canonicalKey) && (
+                        <HiddenBadge />
+                      )}
+                      <button
+                        type="button"
+                        aria-expanded={editingRuleKey === entry.canonicalKey}
+                        onClick={() =>
+                          setEditingRuleKey(
+                            editingRuleKey === entry.canonicalKey
+                              ? null
+                              : entry.canonicalKey,
+                          )
+                        }
+                        className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                       >
-                        {t('orgAgentBuiltinBadge')}
-                      </span>
-                    </div>
-                    <CanonicalKeyChip canonicalKey={entry.canonicalKey} />
-                    <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                      {entry.agent.searchIndex || entry.agent.id}
-                    </p>
-                  </div>
-                  <span
-                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                      isRestricted
-                        ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                        : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                    }`}
-                  >
-                    {isRestricted ? t('accessRestricted') : t('accessEveryone')}
-                  </span>
-                  {hiddenAgents.isHidden(entry.canonicalKey) && <HiddenBadge />}
-                  <HideAgentButton
-                    hidden={hiddenAgents.isHidden(entry.canonicalKey)}
-                    onHide={() => hiddenAgents.hide(entry.canonicalKey)}
-                    onUnhide={() => hiddenAgents.unhide(entry.canonicalKey)}
-                  />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setEditingRuleKey(
-                        editingRuleKey === entry.canonicalKey
-                          ? null
-                          : entry.canonicalKey,
-                      )
-                    }
-                    className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                  >
-                    {t('editAccess')}
-                  </button>
-                  {canCreate && (
-                    <button
-                      type="button"
-                      title={t('orgAgentBuiltinHint')}
-                      onClick={() => {
-                        setOverridePrefill(entry);
-                        setIsCreating(true);
-                      }}
-                      className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                    >
-                      {t('orgAgentOverrideAction')}
-                    </button>
-                  )}
-                </div>
+                        {editingRuleKey === entry.canonicalKey
+                          ? t('cancel')
+                          : t('editAccess')}
+                      </button>
+                      {canCreate && (
+                        <button
+                          type="button"
+                          title={t('orgAgentBuiltinHint')}
+                          disabled={!listingReady}
+                          onClick={() => {
+                            setOverridePrefill(entry);
+                            setIsCreating(true);
+                          }}
+                          className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                        >
+                          {t('orgAgentOverrideAction')}
+                        </button>
+                      )}
+                      <AgentActionsMenu name={entry.agent.name}>
+                        <HideAgentButton
+                          hidden={hiddenAgents.isHidden(entry.canonicalKey)}
+                          onHide={() => hiddenAgents.hide(entry.canonicalKey)}
+                          onUnhide={() =>
+                            hiddenAgents.unhide(entry.canonicalKey)
+                          }
+                        />
+                      </AgentActionsMenu>
+                    </>
+                  }
+                />
+
+                <AgentTechnicalDetails canonicalKey={entry.canonicalKey}>
+                  <p className="[overflow-wrap:anywhere]">
+                    {entry.agent.searchIndex || entry.agent.id}
+                  </p>
+                </AgentTechnicalDetails>
 
                 {editingRuleKey === entry.canonicalKey && (
                   <div className="mt-2">
@@ -1111,132 +1224,181 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
           })}
           {hiddenStored.visible.map((entry) => {
             const stored = rulesByKey.get(entry.canonicalKey) ?? null;
-            const isRestricted = stored?.rule.access.type === 'restricted';
             const validation = entry.agent.validation;
             return (
               <li
                 key={entry.canonicalKey}
                 className="rounded-lg border border-gray-200 p-3 dark:border-gray-700"
               >
-                <div className="flex items-center gap-3">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="truncate text-sm font-medium text-black dark:text-white">
-                        {entry.agent.name}
-                      </span>
-                      <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
-                        {t('orgAgentBadge')}
-                      </span>
-                      {!entry.agent.enabled && (
-                        <span className="shrink-0 rounded-full bg-gray-200 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                          {t('orgAgentDisabledBadge')}
+                <AgentRowHeader
+                  identity={
+                    <>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="min-w-0 [overflow-wrap:anywhere] text-sm font-medium text-black dark:text-white">
+                          {entry.agent.name}
                         </span>
+                        {!entry.agent.enabled && (
+                          <span className="shrink-0 rounded-full bg-gray-200 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                            {t('orgAgentDisabledBadge')}
+                          </span>
+                        )}
+                      </div>
+                      <AgentTypeLabel kind="knowledge" />
+                      {entry.agent.description && (
+                        <p
+                          className="line-clamp-2 text-xs text-gray-600 dark:text-gray-300"
+                          title={entry.agent.description}
+                        >
+                          {entry.agent.description}
+                        </p>
                       )}
-                    </div>
-                    <CanonicalKeyChip canonicalKey={entry.canonicalKey} />
-                    <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                      {entry.agent.searchIndex}
-                    </p>
-                  </div>
-                  <span
-                    title={
-                      validation.status === 'failed'
-                        ? validation.error
-                        : undefined
-                    }
-                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                      validation.status === 'ok'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                        : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                    }`}
-                  >
-                    {validation.status === 'ok'
-                      ? validation.documentCount !== undefined
-                        ? t('orgAgentValidationOkDocs', {
-                            count: validation.documentCount,
-                          })
-                        : t('orgAgentValidationOk')
-                      : t('orgAgentValidationFailed')}
-                  </span>
-                  <span
-                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                      isRestricted
-                        ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                        : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                    }`}
-                  >
-                    {isRestricted ? t('accessRestricted') : t('accessEveryone')}
-                  </span>
-                  {hiddenAgents.isHidden(entry.canonicalKey) && <HiddenBadge />}
-                  <HideAgentButton
-                    hidden={hiddenAgents.isHidden(entry.canonicalKey)}
-                    onHide={() => hiddenAgents.hide(entry.canonicalKey)}
-                    onUnhide={() => hiddenAgents.unhide(entry.canonicalKey)}
-                  />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setEditingRuleKey(
-                        editingRuleKey === entry.canonicalKey
-                          ? null
-                          : entry.canonicalKey,
-                      )
-                    }
-                    className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                  >
-                    {t('editAccess')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setRestorePrefill(null);
-                      setEditingId(
-                        editingId === entry.agent.id ? null : entry.agent.id,
-                      );
-                    }}
-                    className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                  >
-                    {t('editAgent')}
-                  </button>
-                  <button
-                    type="button"
-                    disabled={revalidateMutation.isPending}
-                    onClick={() => revalidateMutation.mutate(entry.agent.id)}
-                    className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                    title={t('orgAgentRevalidateHint')}
-                  >
-                    <IconRefresh
-                      size={14}
-                      className={
-                        revalidateMutation.isPending ? 'animate-spin' : ''
-                      }
-                    />
-                    {t('orgAgentRevalidate')}
-                  </button>
-                  <button
-                    type="button"
-                    aria-label={t('historyTitle')}
-                    title={t('historyTitle')}
-                    onClick={() =>
-                      setHistoryKey(
-                        historyKey === entry.canonicalKey
-                          ? null
-                          : entry.canonicalKey,
-                      )
-                    }
-                    className="shrink-0 rounded-md border border-gray-200 p-1.5 text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                  >
-                    <IconHistory size={15} />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label={t('deleteAgent')}
-                    onClick={() => setConfirmDeleteId(entry.agent.id)}
-                    className="shrink-0 rounded-md border border-gray-200 p-1.5 text-red-600 hover:bg-red-50 dark:border-gray-700 dark:hover:bg-red-900/20"
-                  >
-                    <IconTrash size={15} />
-                  </button>
-                </div>
+                    </>
+                  }
+                  audience={
+                    <>
+                      <AccessSummary access={stored?.rule.access} />
+                      <span
+                        title={
+                          validation.status === 'failed'
+                            ? validation.error
+                            : undefined
+                        }
+                        className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
+                          validation.status === 'ok'
+                            ? 'text-gray-600 dark:text-gray-300'
+                            : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                        }`}
+                      >
+                        {validation.status === 'ok'
+                          ? validation.documentCount !== undefined
+                            ? t('orgAgentValidationOkDocs', {
+                                count: validation.documentCount,
+                              })
+                            : t('orgAgentValidationOk')
+                          : t('orgAgentValidationFailed')}
+                      </span>
+                    </>
+                  }
+                  actions={
+                    <>
+                      {hiddenAgents.isHidden(entry.canonicalKey) && (
+                        <HiddenBadge />
+                      )}
+                      <button
+                        type="button"
+                        aria-expanded={editingRuleKey === entry.canonicalKey}
+                        onClick={() =>
+                          setEditingRuleKey(
+                            editingRuleKey === entry.canonicalKey
+                              ? null
+                              : entry.canonicalKey,
+                          )
+                        }
+                        className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                      >
+                        {editingRuleKey === entry.canonicalKey
+                          ? t('cancel')
+                          : t('editAccess')}
+                      </button>
+                      <button
+                        type="button"
+                        aria-expanded={editingId === entry.agent.id}
+                        onClick={() => {
+                          setRestorePrefill(null);
+                          setEditingId(
+                            editingId === entry.agent.id
+                              ? null
+                              : entry.agent.id,
+                          );
+                        }}
+                        className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                      >
+                        {editingId === entry.agent.id
+                          ? t('cancel')
+                          : t('editAgent')}
+                      </button>
+                      <AgentActionsMenu name={entry.agent.name}>
+                        <HideAgentButton
+                          hidden={hiddenAgents.isHidden(entry.canonicalKey)}
+                          onHide={() => hiddenAgents.hide(entry.canonicalKey)}
+                          onUnhide={() =>
+                            hiddenAgents.unhide(entry.canonicalKey)
+                          }
+                        />
+                        <button
+                          type="button"
+                          disabled={revalidateMutation.isPending}
+                          onClick={() =>
+                            revalidateMutation.mutate(entry.agent.id)
+                          }
+                          className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                          title={t('orgAgentRevalidateHint')}
+                        >
+                          <IconChecklist
+                            size={14}
+                            className={
+                              revalidateMutation.isPending
+                                ? 'animate-pulse'
+                                : ''
+                            }
+                          />
+                          {t('orgAgentRevalidate')}
+                        </button>
+                        <button
+                          type="button"
+                          aria-label={t('historyTitle')}
+                          title={t('historyTitle')}
+                          onClick={() =>
+                            setHistoryKey(
+                              historyKey === entry.canonicalKey
+                                ? null
+                                : entry.canonicalKey,
+                            )
+                          }
+                          className="shrink-0 rounded-md border border-gray-200 p-1.5 text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                        >
+                          <IconHistory size={15} />
+                        </button>
+                        <button
+                          type="button"
+                          className="shrink-0 rounded-md border border-red-200 px-3 py-1 text-sm text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-900/20"
+                          onClick={() =>
+                            setConfirmDeleteId(
+                              confirmDeleteId === entry.agent.id
+                                ? null
+                                : entry.agent.id,
+                            )
+                          }
+                        >
+                          {t('deleteAgent')}
+                        </button>
+                      </AgentActionsMenu>
+                    </>
+                  }
+                />
+
+                <AgentTechnicalDetails canonicalKey={entry.canonicalKey}>
+                  <p className="[overflow-wrap:anywhere]">
+                    {entry.agent.searchIndex}
+                  </p>
+                  <p>
+                    {t('m365AgentModelLabel')}:{' '}
+                    {entry.agent.baseModelId ?? t('m365AgentDefaultModel')}
+                  </p>
+                  {entry.agent.maintainedBy && (
+                    <p>{entry.agent.maintainedBy}</p>
+                  )}
+                  <ul className="space-y-1">
+                    {entry.agent.sources.map((source) => (
+                      <li
+                        key={`${source.name}:${source.url}`}
+                        className="[overflow-wrap:anywhere]"
+                      >
+                        {source.name} · {source.url}
+                      </li>
+                    ))}
+                  </ul>
+                </AgentTechnicalDetails>
 
                 {validation.status === 'failed' && validation.error && (
                   <p className="mt-2 break-words rounded-md bg-red-50 p-2 text-xs text-red-800 dark:bg-red-900/20 dark:text-red-300">
@@ -1245,24 +1407,24 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                 )}
 
                 {confirmDeleteId === entry.agent.id && (
-                  <div className="mt-2 flex items-center justify-between rounded-md bg-red-50 p-2 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-300">
-                    <span>{t('orgAgentDeleteConfirm')}</span>
-                    <span className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setConfirmDeleteId(null)}
-                        className="rounded-md px-2 py-0.5 hover:bg-red-100 dark:hover:bg-red-900/40"
-                      >
-                        {t('cancel')}
-                      </button>
+                  <div className="mt-2 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-700 dark:bg-red-900/20 dark:text-red-300">
+                    <p>{t('orgAgentDeleteConfirm')}</p>
+                    <div className="mt-2 flex gap-2">
                       <button
                         type="button"
                         onClick={() => void handleDelete(entry)}
-                        className="rounded-md bg-red-600 px-2 py-0.5 font-medium text-white hover:bg-red-700"
+                        className="rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700"
                       >
-                        {t('deleteAgent')}
+                        {t('confirmDeleteAgent')}
                       </button>
-                    </span>
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDeleteId(null)}
+                        className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                      >
+                        {t('cancel')}
+                      </button>
+                    </div>
                   </div>
                 )}
 

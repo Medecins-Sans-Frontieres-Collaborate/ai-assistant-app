@@ -3,7 +3,6 @@ import { NextRequest } from 'next/server';
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
 import {
   AgentAccessConflictError,
-  StoredM365Agent,
   createAgentAccessBlobStorage,
   deleteM365Agent,
   deleteM365AgentManifest,
@@ -24,7 +23,6 @@ import {
   delegateToCreator,
 } from '@/lib/services/agentAccess/adminRouteHelpers';
 import {
-  AgentAccessConfig,
   M365Agent,
   M365AgentHistoryEntry,
   M365AgentSource,
@@ -393,40 +391,52 @@ export async function GET() {
   try {
     // Read storage DIRECTLY (like the sibling GETs), not the ≤60s-stale
     // service snapshot: the etags echoed here feed the If-Match CAS.
-    let stored: StoredM365Agent[] = [];
-    let config: AgentAccessConfig | null = null;
     let m365AgentsUnavailable = false;
-    let fetchedAt: number | null = null;
+    let configUnavailable = false;
     const jobs: Record<string, ReturnType<typeof summarizeIndexJob>> = {};
-    try {
-      const storage = createAgentAccessBlobStorage();
-      const [listed, configResult, jobRecords] = await Promise.all([
-        listAllM365Agents(storage),
-        readConfig(storage),
-        // Index job summaries ride along so the list can show progress /
-        // Resume without a request per row. Best-effort.
-        listIndexJobs(storage).catch((error) => {
-          console.warn(
-            `[agent-access-admin] index job listing failed: ${sanitizeForLog(error)}`,
-          );
-          return new Map();
-        }),
-      ]);
-      stored = listed;
-      config = configResult?.config ?? null;
-      fetchedAt = Date.now();
-      for (const [agentId, job] of jobRecords) {
-        jobs[agentId] = summarizeIndexJob(job);
-      }
-    } catch (error) {
-      console.error(
-        `[agent-access-admin] direct m365-agents read failed: ${sanitizeForLog(error)}`,
+    const storage = createAgentAccessBlobStorage();
+    const [stored, configResult, jobRecords] = await Promise.all([
+      listAllM365Agents(storage).catch((error) => {
+        console.error(
+          `[agent-access-admin] direct m365-agents read failed: ${sanitizeForLog(error)}`,
+        );
+        m365AgentsUnavailable = true;
+        return [];
+      }),
+      readConfig(storage).catch((error) => {
+        console.error(
+          `[agent-access-admin] m365-agents permission config read failed: ${sanitizeForLog(error)}`,
+        );
+        configUnavailable = true;
+        return null;
+      }),
+      // Index job summaries ride along so the list can show progress /
+      // Resume without a request per row. Best-effort.
+      listIndexJobs(storage).catch((error) => {
+        console.warn(
+          `[agent-access-admin] index job listing failed: ${sanitizeForLog(error)}`,
+        );
+        return new Map();
+      }),
+    ]);
+    // Missing config is a real absence of delegation; unreadable config is
+    // not. Never authorize from an older snapshot or misreport an outage as 403.
+    if (configUnavailable) {
+      return errorResponse(
+        'Admin permissions are temporarily unavailable; retry shortly',
+        503,
+        undefined,
+        'AGENT_ACCESS_CONFIG_UNAVAILABLE',
       );
-      m365AgentsUnavailable = true;
-      config = service.getSnapshot().config;
+    }
+    for (const [agentId, job] of jobRecords) {
+      jobs[agentId] = summarizeIndexJob(job);
     }
 
-    const status = resolveAdminStatus(session.user, config);
+    const status = resolveAdminStatus(
+      session.user,
+      configResult?.config ?? null,
+    );
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }
@@ -443,7 +453,7 @@ export async function GET() {
         etag: entry.etag,
       })),
       m365AgentsUnavailable,
-      fetchedAt,
+      fetchedAt: m365AgentsUnavailable ? null : Date.now(),
       // Env-configured cap, served so the editor's client-side limit always
       // matches what POST/PUT will actually accept.
       maxDocuments: MAX_M365_AGENT_DOCUMENTS,

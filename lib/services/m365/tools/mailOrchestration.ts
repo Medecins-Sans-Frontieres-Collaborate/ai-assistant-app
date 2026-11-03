@@ -208,6 +208,12 @@ export interface CompositeRun {
   timedOut(): boolean;
   /** ≤4 in-flight Graph requests — every Graph call goes through here. */
   schedule<T>(fn: () => Promise<T>): Promise<T>;
+  /**
+   * Optional per-call abort signal (long-running runs bound each fetch to
+   * the remaining wall clock so a stalled connection cannot outlive the
+   * job's stale window). Undefined keeps fetch's own defaults.
+   */
+  signalFor?(): AbortSignal | undefined;
 }
 
 export function createCompositeRun(
@@ -303,9 +309,11 @@ export async function graphGetJson<T>(
   return run.schedule(async () => {
     const token = await mintGraphToken(run.req, options.scopes ?? run.scopes);
     const url = path.startsWith('https://') ? path : `${GRAPH_V1}${path}`;
+    const signal = options.init?.signal ?? run.signalFor?.();
     const doFetch = () =>
       fetch(url, {
         ...options.init,
+        ...(signal ? { signal } : {}),
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: 'application/json',

@@ -149,6 +149,47 @@ export interface ChatContext {
    */
   memories?: string[];
 
+  /**
+   * Skill ids explicitly invoked for this message (composer skill picker).
+   * Consumed by SkillEnricher, which resolves them against the user's
+   * visible catalog — docs/SKILLS_DESIGN.md §5.1.
+   */
+  forcedSkillIds?: string[];
+  /** Pins are a subset of explicit ids; never a grant of access. */
+  pinnedSkillIds?: string[];
+  userSkills?: import('@/lib/services/skills/types').UserSkill[];
+  /**
+   * The user's Settings toggle (default on). False = no automatic skill
+   * selection and no personal skills this turn; explicit (forced/pinned)
+   * and admin `always` skills still apply — docs/SKILLS_DESIGN.md §5.1.
+   */
+  skillsAuto?: boolean;
+  /** Server-resolved eligibility; agent skills are delivered only as tools. */
+  agentSkillsEnabled?: boolean;
+  /** Server-only eligible catalog; never accepted from ChatBody. */
+  skillCatalog?: import('@/lib/services/skills/types').CatalogSkill[];
+  /** Resolved server-side instructions; resource retrieval is a separate bounded stage. */
+  activeSkills?: import('@/lib/services/skills/types').Skill[];
+  /** Actual injected instruction tokens, deducted from the shared evidence budget. */
+  skillTokensUsed?: number;
+  /** Present even for empty/failed decisions, preventing a second router call. */
+  skillRouting?: { relevantSkills?: string[]; degraded?: boolean };
+  /**
+   * Version pins for requested skills (id → `updatedAt` of the body that
+   * ran the first time) so regeneration replays what the user actually
+   * ran — docs/SKILLS_DESIGN.md §5.7. Client-supplied; only ever narrows
+   * which stored version is used.
+   */
+  skillVersions?: Record<string, string>;
+  /**
+   * Standard-turn model-driven skill loading (§5.6): the tool loop offers
+   * `load_skill` over the visible catalog minus the ids already injected.
+   * Set by SkillEnricher; never accepted from ChatBody.
+   */
+  standardSkillTools?: { excludeIds: string[] };
+  /** Persona skill scope resolved by AgentSkillEnricher (§5.4). */
+  skillScope?: import('@/lib/services/skills/skillTools').SkillToolScope;
+
   /** Display name preference from General Settings (for deriving name fallback) */
   displayNamePreference?: DisplayNamePreference;
 

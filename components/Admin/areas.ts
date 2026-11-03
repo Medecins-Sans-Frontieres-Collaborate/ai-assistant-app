@@ -11,6 +11,7 @@ import {
   IconRoute,
   IconShieldLock,
   IconSocial,
+  IconSparkles,
   IconSpeakerphone,
   IconTextWrap,
   IconUserShield,
@@ -105,6 +106,13 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     icon: IconVocabulary,
     labelKey: 'agentAccess.glossariesTab',
     descriptionKey: 'admin.areaDescription.glossaries',
+  },
+  skills: {
+    id: 'skills',
+    href: '/admin/skills',
+    icon: IconSparkles,
+    labelKey: 'admin.area.skills',
+    descriptionKey: 'admin.areaDescription.skills',
   },
   'map-datasets': {
     id: 'map-datasets',
@@ -237,6 +245,9 @@ export const ADMIN_GROUPS: AdminAreaGroupDescriptor[] = [
     id: 'libraries',
     labelKey: 'admin.group.libraries',
     areas: [
+      // Reusable instruction blocks the assistant pulls in per turn —
+      // authored content, like guides, so it lives with them.
+      'skills',
       'guides',
       'glossaries',
       'map-datasets',

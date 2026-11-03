@@ -1,12 +1,17 @@
 'use client';
 
 import { IconLeaf, IconTrash } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useMemo } from 'react';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
+import {
+  estimateRequestUsd,
+  formatUsdLabel,
+} from '@/lib/utils/shared/chat/requestCost';
 import {
   ASSUMPTIONS_VERSION,
   SMARTPHONE_CHARGE_GRAMS,
@@ -15,7 +20,12 @@ import {
   estimateCO2Grams,
 } from '@/lib/utils/shared/emissions';
 
-import { OpenAIModelID, OpenAIModels, getModelSizeClass } from '@/types/openai';
+import {
+  OpenAIModelID,
+  OpenAIModels,
+  PRICING_AS_OF,
+  getModelSizeClass,
+} from '@/types/openai';
 
 import { EmissionsChipSetting } from '@/components/Settings/EmissionsChipSetting';
 import { YourLimitsTable } from '@/components/Settings/Sections/YourLimitsTable';
@@ -53,6 +63,8 @@ const WORKFLOW_I18N_KEY: Record<string, string> = {
 
 export const UsageImpactSection: FC = () => {
   const t = useTranslations();
+  const locale = useLocale();
+  const { showUsageCost } = useFlags();
   const tokenUsageStats = useSettingsStore((s) => s.tokenUsageStats);
   const workflowUsageStats = useSettingsStore((s) => s.workflowUsageStats);
   const estimatedUsageStats = useSettingsStore((s) => s.estimatedUsageStats);
@@ -71,6 +83,12 @@ export const UsageImpactSection: FC = () => {
     // The back-calculated portion, tracked separately so the UI can label it.
     let estimatedCO2 = 0;
     let estimatedRequests = 0;
+    // List-price USD for the same buckets (docs/CHAT_COST_CHIP.md); the
+    // arithmetic is linear in tokens, so pricing a bucket's totals equals
+    // pricing its requests one by one.
+    let totalUsd = 0;
+    let pricedRequests = 0;
+    let unpricedRequests = 0;
     const byModel = new Map<string, { requests: number; gCO2e: number }>();
     const byRegion = new Map<string, { requests: number; gCO2e: number }>();
 
@@ -99,6 +117,19 @@ export const UsageImpactSection: FC = () => {
         totalPrompt += bucket.promptTokens;
         totalCompletion += bucket.completionTokens;
         totalCO2 += gCO2e;
+        const cost = estimateRequestUsd({
+          modelId,
+          promptTokens: bucket.promptTokens,
+          completionTokens: bucket.completionTokens,
+          reasoningEffort: effort === 'none' ? undefined : effort,
+          liveModels: models,
+        });
+        if (cost.usd !== undefined) {
+          totalUsd += cost.usd;
+          pricedRequests += bucket.requests;
+        } else {
+          unpricedRequests += bucket.requests;
+        }
         if (isEstimated) {
           estimatedCO2 += gCO2e;
           estimatedRequests += bucket.requests;
@@ -151,6 +182,9 @@ export const UsageImpactSection: FC = () => {
       totalCO2,
       estimatedCO2,
       estimatedRequests,
+      totalUsd,
+      pricedRequests,
+      unpricedRequests,
       topModels,
       regions,
       workflowRows,
@@ -165,6 +199,13 @@ export const UsageImpactSection: FC = () => {
 
   const regionLabel = (region: string) =>
     region === 'default' ? t('usageImpact.regionDefault') : region;
+
+  // Fail-open like the impact flag; nothing to show when no bucket priced.
+  const costShown = showUsageCost !== false && summary.pricedRequests > 0;
+  const usd = (value: number) =>
+    formatUsdLabel(value, locale, (amount) =>
+      t('emissions.chip.cost.lessThan', { amount }),
+    );
 
   return (
     <div className="p-4">
@@ -219,7 +260,11 @@ export const UsageImpactSection: FC = () => {
           </div>
 
           {/* Totals */}
-          <div className="grid grid-cols-3 gap-3">
+          <div
+            className={`grid gap-3 ${
+              costShown ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'
+            }`}
+          >
             {[
               {
                 label: t('usageImpact.requests'),
@@ -233,6 +278,14 @@ export const UsageImpactSection: FC = () => {
                 label: t('usageImpact.completionTokens'),
                 value: numberFmt.format(summary.totalCompletion),
               },
+              ...(costShown
+                ? [
+                    {
+                      label: t('usageImpact.costTile'),
+                      value: usd(summary.totalUsd),
+                    },
+                  ]
+                : []),
             ].map((stat) => (
               <div
                 key={stat.label}
@@ -247,6 +300,15 @@ export const UsageImpactSection: FC = () => {
               </div>
             ))}
           </div>
+          {costShown && (
+            <p className="-mt-3 text-xs text-gray-500 dark:text-gray-400">
+              {t('usageImpact.costDisclosure', { asOf: PRICING_AS_OF })}
+              {summary.unpricedRequests > 0 &&
+                ` ${t('usageImpact.costUnpriced', {
+                  count: summary.unpricedRequests,
+                })}`}
+            </p>
+          )}
 
           {/* Everyday activity equivalents — same-carbon durations of other
               services (comparators are assumptions in config/emissions.json) */}

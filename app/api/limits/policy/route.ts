@@ -37,6 +37,10 @@ import { STRONG_ETAG_REGEX } from '@/lib/services/agentAccess/adminRouteHelpers'
 import { toLimitDelegations } from '@/lib/services/delegations/types';
 import { LimitsService } from '@/lib/services/limits/LimitsService';
 import {
+  collectGroupIds,
+  refreshGroupLabels,
+} from '@/lib/services/limits/groupLabels';
+import {
   LimitsConflictError,
   PolicyUnreadableError,
   createLimitsBlobStorage,
@@ -45,6 +49,11 @@ import {
   writeHistoryEntry,
   writePolicy,
 } from '@/lib/services/limits/limitsStore';
+import {
+  defaultCellKey,
+  expandModelAccess,
+  modelAccessDimension,
+} from '@/lib/services/limits/modelAccess';
 import {
   MAX_OVERRIDES,
   clampToHardCeilings,
@@ -56,8 +65,10 @@ import {
   LimitDelegation,
   LimitOverride,
   LimitsPolicy,
+  ModelAccessRule,
 } from '@/lib/services/limits/types';
 import { LIMITS_ERROR_CODES } from '@/lib/services/limits/wire';
+import { getGroupMembershipStats } from '@/lib/services/m365/groupMembership';
 
 import {
   badRequestResponse,
@@ -94,6 +105,10 @@ export async function GET() {
       policy: result?.policy ?? null,
       etag: result?.etag ?? null,
       policyUnavailable: false,
+      // Replica-local health of the Entra membership cache: the one place
+      // an admin can see that group-based rules are not being evaluated
+      // (consent regression, Graph outage) without reading server logs.
+      groupMembership: getGroupMembershipStats(),
     });
   } catch (error) {
     // ⚠ Never answer "no policy configured" on a read failure: that would
@@ -150,6 +165,21 @@ export async function PUT(request: NextRequest) {
       'Duplicate default for one limit cell',
       duplicateCell,
     );
+  }
+  // Model approval rules: one per model or family, and a node default must
+  // not ALSO be set as a global default for the same cell — the resolver
+  // would pick one by restrictiveness and the other would silently lose.
+  const modelAccessBody = parsed.data.modelAccess;
+  if (modelAccessBody) {
+    const duplicateDimension = modelAccessBody
+      .map(modelAccessDimension)
+      .find((dim, index, all) => all.indexOf(dim) !== index);
+    if (duplicateDimension) {
+      return badRequestResponse(
+        'Two model approval rules for one model or family',
+        duplicateDimension,
+      );
+    }
   }
 
   const ifMatchEtag = request.headers.get('if-match');
@@ -239,23 +269,53 @@ export async function PUT(request: NextRequest) {
       };
     });
 
+    // Absent key = a client that predates the approval view: keep what is
+    // stored rather than erasing it (same guard shape as delegations).
+    const modelAccess: ModelAccessRule[] =
+      modelAccessBody ?? stored?.policy.modelAccess ?? [];
+    // Against the rules that WILL be stored — a client that omitted the key
+    // keeps the stored ones, and must not slip a global default under one
+    // of their node defaults either.
+    const defaultCells = new Set(parsed.data.defaults.map(defaultCellKey));
+    const collision = expandModelAccess(modelAccess).defaults.find((entry) =>
+      defaultCells.has(defaultCellKey(entry)),
+    );
+    if (collision) {
+      return badRequestResponse(
+        'A model approval default is also set in the global defaults; set it in one place',
+        defaultCellKey(collision),
+      );
+    }
+
+    // Display names for every group id the document references, read with
+    // the admin's own token and pruned to referenced ids — so the history
+    // snapshot written below still names the group after a rename or
+    // deletion. Best effort: a Graph failure keeps the stored labels.
+    const groupLabels = await refreshGroupLabels(
+      request,
+      collectGroupIds({ overrides, delegations, modelAccess }),
+      stored?.policy.groupLabels,
+    );
+
     const policy: LimitsPolicy = {
       version: 1,
       defaults: clampToHardCeilings(parsed.data.defaults),
       overrides,
+      modelAccess,
       delegations,
       mode: parsed.data.mode,
       failMode: parsed.data.failMode,
       timezone: parsed.data.timezone,
       countByomUsage: parsed.data.countByomUsage,
       countAuxiliaryUsage: parsed.data.countAuxiliaryUsage,
+      ...(groupLabels ? { groupLabels } : {}),
       updatedBy: userMail,
       updatedAt: now,
     };
 
     const etag = await writePolicy(storage, policy, ifMatchEtag);
     console.log(
-      `[limits-admin] action=upsert mode=${policy.mode} overrides=${policy.overrides.length} delegations=${policy.delegations.length} by=${sanitizeForLog(userMail)}`,
+      `[limits-admin] action=upsert mode=${policy.mode} overrides=${policy.overrides.length} modelAccess=${policy.modelAccess.length} delegations=${policy.delegations.length} by=${sanitizeForLog(userMail)}`,
     );
     // Best-effort audit copy — never fails the write the admin just made.
     await writeHistoryEntry(storage, {

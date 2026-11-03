@@ -145,15 +145,34 @@ export async function searchEntraGroups(
   return data.groups;
 }
 
-/** Fresh display names for stored group ids — resolved on editor open. */
+/** Server cap on one name-resolution call; longer lists are chunked. */
+const GROUP_LOOKUP_CHUNK = 500;
+
+/**
+ * Fresh display names for stored group ids — resolved on editor open, one
+ * POST per ≤500 ids (never one request per id). Ids the directory does not
+ * know are simply absent from the result.
+ */
 export async function lookupEntraGroups(
   ids: string[],
 ): Promise<M365GroupEntry[]> {
-  if (ids.length === 0) return [];
-  const data = await requestJson<{ groups: M365GroupEntry[] }>(
-    `/api/m365/groups?ids=${encodeURIComponent(ids.join(','))}`,
-  );
-  return data.groups;
+  const unique = [...new Set(ids.map((id) => id.trim()).filter(Boolean))];
+  if (unique.length === 0) return [];
+  const groups: M365GroupEntry[] = [];
+  for (let start = 0; start < unique.length; start += GROUP_LOOKUP_CHUNK) {
+    const data = await requestJson<{ groups: M365GroupEntry[] }>(
+      '/api/m365/groups',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ids: unique.slice(start, start + GROUP_LOOKUP_CHUNK),
+        }),
+      },
+    );
+    groups.push(...data.groups);
+  }
+  return groups;
 }
 
 export async function listSiteDrives(siteId: string): Promise<M365DriveInfo[]> {
@@ -501,4 +520,57 @@ export async function saveToOneDrive(
     method: 'POST',
     body: form,
   });
+}
+
+// ---------------------------------------------------------------------------
+// Daily digest (docs/M365_DAILY_DIGEST.md)
+// ---------------------------------------------------------------------------
+
+export async function startDigestJob(
+  request: import('@/types/m365Digest').DigestRequest,
+): Promise<{
+  jobId: string;
+  status: import('@/types/m365Digest').DigestJobStatus;
+}> {
+  return requestJson('/api/m365/digest', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request),
+  });
+}
+
+export interface DigestJobSnapshot {
+  jobId: string;
+  status: import('@/types/m365Digest').DigestJobStatus;
+  progress: import('@/types/m365Digest').DigestJobProgress;
+  result?: import('@/types/m365Digest').CommsDigest;
+  error?: string;
+}
+
+export async function fetchDigestJob(
+  jobId: string,
+): Promise<DigestJobSnapshot> {
+  return requestJson(`/api/m365/digest/${encodeURIComponent(jobId)}`);
+}
+
+/** Drops the server-side record once the card holds the result. */
+export async function deleteDigestJob(jobId: string): Promise<void> {
+  await requestJson(`/api/m365/digest/${encodeURIComponent(jobId)}`, {
+    method: 'DELETE',
+  });
+}
+
+export interface M365ChannelEntry {
+  channelId: string;
+  name: string;
+}
+
+/** Channels of one joined team, for the digest channel picker. */
+export async function listTeamChannels(
+  groupId: string,
+): Promise<M365ChannelEntry[]> {
+  const data = await requestJson<{ channels: M365ChannelEntry[] }>(
+    `/api/m365/teams?channelsOf=${encodeURIComponent(groupId)}`,
+  );
+  return data.channels;
 }

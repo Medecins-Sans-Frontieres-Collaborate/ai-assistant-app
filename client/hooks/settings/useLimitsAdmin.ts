@@ -18,6 +18,7 @@ import {
   LimitOverride,
   LimitsFailMode,
   LimitsMode,
+  ModelAccessRule,
   OverrideScope,
 } from '@/lib/services/limits/types';
 import { LIMITS_ERROR_CODES } from '@/lib/services/limits/wire';
@@ -370,6 +371,8 @@ export interface PolicyPutDelegation {
  */
 export interface PolicyPutBody {
   defaults: LimitEntry[];
+  /** Always present: an absent key means "keep what is stored" on the server. */
+  modelAccess: ModelAccessRule[];
   overrides: LimitOverride[];
   delegations: PolicyPutDelegation[];
   mode: LimitsMode;

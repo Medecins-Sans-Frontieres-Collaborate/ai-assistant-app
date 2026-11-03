@@ -103,6 +103,8 @@ export class ServiceContainer {
 
     this.azureOpenAIClient = new AzureOpenAI({
       endpoint: env.AZURE_OPENAI_ENDPOINT,
+      apiKey: '', // Suppress the SDK's ambient API-key default when using Entra.
+      baseURL: '', // Derive from the explicit Azure endpoint, never OPENAI_BASE_URL.
       azureADTokenProvider,
       apiVersion: OPENAI_API_VERSION,
     });
@@ -139,7 +141,13 @@ export class ServiceContainer {
     this.fileProcessingService = new FileProcessingService();
 
     // 3. Initialize services that depend on clients
-    this.toolRouterService = new ToolRouterService(this.openAIClient);
+    this.toolRouterService = new ToolRouterService(
+      this.openAIClient,
+      (region) => {
+        const regional = this.getChatClientsForRegion(region);
+        return regional.openAIClient ?? regional.azureOpenAIClient;
+      },
+    );
     // Singleton on purpose: it remembers which assessor models failed
     // recently, so a missing deployment is not retried on every search.
     this.searchAssessor = new SearchAssessor(
@@ -231,7 +239,14 @@ export class ServiceContainer {
         : env.AZURE_AI_FOUNDRY_ENDPOINT_US;
     const accountBase = foundryEndpoint?.replace(/\/api\/projects\/.*$/, '');
 
-    const clients: RegionChatClients = {};
+    const clients: RegionChatClients =
+      env.AZURE_DEFAULT_REGION === region
+        ? {
+            azureOpenAIClient: this.azureOpenAIClient,
+            openAIClient: this.openAIClient,
+            anthropicFoundryClient: this.anthropicFoundryClient,
+          }
+        : {};
 
     const azureOpenAIEndpoint =
       (region === 'EU'
@@ -244,6 +259,8 @@ export class ServiceContainer {
     if (azureOpenAIEndpoint) {
       clients.azureOpenAIClient = new AzureOpenAI({
         endpoint: azureOpenAIEndpoint,
+        apiKey: '',
+        baseURL: '',
         azureADTokenProvider: this.azureADTokenProvider,
         apiVersion: OPENAI_API_VERSION,
       });
