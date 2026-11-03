@@ -1,5 +1,20 @@
+import type { AdminStoredRule } from './types';
+
 /** Public, already-authorized metadata to search, with no additional requests. */
 export type AgentSearchMetadata = unknown;
+
+/** Uses the same audience distinctions as the row, including empty restrictions. */
+export function agentAudienceSearchLabel(
+  access: AdminStoredRule['rule']['access'] | undefined,
+  labels: { everyone: string; restricted: string; none: string },
+): string {
+  if (access?.type !== 'restricted') return labels.everyone;
+  return [access.allowDomains, access.allowUsers, access.allowGroups].some(
+    (values) => values?.length,
+  )
+    ? labels.restricted
+    : labels.none;
+}
 
 /**
  * Builds a normalized search document from JSON-shaped admin metadata values.
