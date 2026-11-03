@@ -1377,6 +1377,10 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                   <p className="[overflow-wrap:anywhere]">
                     {entry.agent.searchIndex}
                   </p>
+                  <p>
+                    {t('m365AgentModelLabel')}:{' '}
+                    {entry.agent.baseModelId ?? t('m365AgentDefaultModel')}
+                  </p>
                   {entry.agent.maintainedBy && (
                     <p>{entry.agent.maintainedBy}</p>
                   )}

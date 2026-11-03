@@ -2269,6 +2269,16 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                 />
 
                 <AgentTechnicalDetails canonicalKey={entry.canonicalKey}>
+                  <p>
+                    {t('m365AgentModelLabel')}:{' '}
+                    {entry.agent.chatModelId ?? t('m365AgentDefaultModel')}
+                  </p>
+                  <p>
+                    {t('updatedByLine', {
+                      user: entry.agent.updatedBy,
+                      date: formatAdminTimestamp(entry.agent.updatedAt),
+                    })}
+                  </p>
                   {entry.agent.maxDocumentsOverride !== undefined && (
                     <p>
                       {entry.agent.maxDocumentsOverrideBy

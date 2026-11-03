@@ -1666,6 +1666,12 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                         canonicalKey={row.canonicalKey}
                         source={row.source}
                       >
+                        {row.promptAgent && (
+                          <p>
+                            {t('agentModelLabel')}:{' '}
+                            {row.promptAgent.agent.modelId}
+                          </p>
+                        )}
                         {row.stored && (
                           <p className="[overflow-wrap:anywhere] text-xs text-gray-600 dark:text-gray-300">
                             {t('updatedByLine', {
