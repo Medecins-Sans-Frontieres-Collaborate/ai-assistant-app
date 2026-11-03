@@ -1,5 +1,15 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  QueryClient,
+  QueryClientProvider,
+  focusManager,
+} from '@tanstack/react-query';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import React from 'react';
 import toast from 'react-hot-toast';
 
@@ -179,6 +189,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  focusManager.setFocused(undefined);
   vi.unstubAllGlobals();
 });
 
@@ -207,7 +218,11 @@ describe('M365AgentsSection — management visibility diagnostics', () => {
   it.each([401, 403, 500])(
     'keeps the section mounted after a %i listing failure, even though the agent controls disappear',
     async (listingStatus) => {
-      installFetch({ listings: [], listingStatus });
+      const scenario = {
+        listings: [[baseAgent([indexedSource])]],
+        listingStatus,
+      };
+      installFetch(scenario);
       const { queryClient } = renderSection();
       await waitFor(
         () => {
@@ -221,8 +236,18 @@ describe('M365AgentsSection — management visibility diagnostics', () => {
       expect(
         screen.queryByRole('button', { name: 'Edit agent' }),
       ).not.toBeInTheDocument();
-      // Observed bug: request failures currently masquerade as an empty list.
-      expect(screen.getByText('noM365Agents')).toBeInTheDocument();
+      expect(screen.queryByText('noM365Agents')).not.toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        "Couldn't load access data.",
+      );
+      expect(
+        screen.getByRole('button', { name: 'addM365Agent' }),
+      ).toBeDisabled();
+      scenario.listingStatus = 200;
+      fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+      expect(await screen.findByText('HR Handbook')).toBeInTheDocument();
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Edit agent' })).toBeEnabled();
     },
   );
 
@@ -238,6 +263,71 @@ describe('M365AgentsSection — management visibility diagnostics', () => {
     expect(
       screen.getByText('m365AgentsUnavailableWarning'),
     ).toBeInTheDocument();
+    expect(screen.queryByText('noM365Agents')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Retry' })).toBeEnabled();
+  });
+
+  it('recovers a failed listing when the admin returns to the window', async () => {
+    const scenario = {
+      listings: [[baseAgent([indexedSource])]],
+      listingStatus: 500,
+    };
+    installFetch(scenario);
+    const { queryClient } = renderSection();
+    await waitFor(
+      () =>
+        expect(
+          queryClient.getQueryState(['agent-access-m365-agents'])?.status,
+        ).toBe('error'),
+      { timeout: 4000 },
+    );
+    scenario.listingStatus = 200;
+    act(() => {
+      focusManager.setFocused(false);
+      focusManager.setFocused(true);
+    });
+    expect(await screen.findByText('HR Handbook')).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('shows loading instead of an empty list while the first request is pending', async () => {
+    let resolve!: (response: Response) => void;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        () =>
+          new Promise<Response>((done) => {
+            resolve = done;
+          }),
+      ),
+    );
+    renderSection();
+    expect(screen.getByRole('status')).toHaveTextContent('Loading');
+    expect(screen.queryByText('noM365Agents')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'addM365Agent' })).toBeDisabled();
+    await act(async () => {
+      resolve(jsonResponse(200, { success: true, data: { m365Agents: [] } }));
+    });
+    expect(await screen.findByText('noM365Agents')).toBeInTheDocument();
+  });
+
+  it('does not refetch on focus while a source editor has an unsaved draft', async () => {
+    const original = baseAgent([indexedSource]);
+    const { calls } = installFetch({
+      listings: [[original], [{ ...original, etag: '"updated"' }]],
+    });
+    renderSection();
+    fireEvent.click(await screen.findByRole('button', { name: 'Edit agent' }));
+    const name = screen.getByDisplayValue('HR Handbook');
+    fireEvent.change(name, { target: { value: 'Unsaved title' } });
+    await act(async () => {
+      focusManager.setFocused(false);
+      focusManager.setFocused(true);
+    });
+    expect(screen.getByDisplayValue('Unsaved title')).toBeInTheDocument();
+    expect(
+      calls.filter((call) => call === 'GET /api/agent-access/m365-agents'),
+    ).toHaveLength(1);
   });
 });
 

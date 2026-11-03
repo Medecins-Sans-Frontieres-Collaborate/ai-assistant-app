@@ -514,6 +514,55 @@ describe('AgentAccessPanel', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('refreshes both management listings after saving access rules', async () => {
+    const invalidateSpy = vi.spyOn(QueryClient.prototype, 'invalidateQueries');
+    try {
+      renderPanel();
+      const row = await openEditorFor('Sales Agent');
+      fireEvent.click(within(row).getByRole('button', { name: 'Save' }));
+      await waitFor(() => {
+        for (const key of [
+          'agent-access-rules',
+          'agent-access-m365-agents',
+          'agent-access-org-agents',
+        ]) {
+          expect(invalidateSpy).toHaveBeenCalledWith(
+            expect.objectContaining({ queryKey: [key] }),
+          );
+        }
+      });
+    } finally {
+      invalidateSpy.mockRestore();
+    }
+  });
+
+  it('refreshes management listings after saving local-admin delegations', async () => {
+    const invalidateSpy = vi.spyOn(QueryClient.prototype, 'invalidateQueries');
+    try {
+      renderPanel('localAdmins');
+      const label = (await screen.findByText('HR Handbook (M365)')).closest(
+        'label',
+      )!;
+      fireEvent.click(within(label).getByRole('checkbox'));
+      fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+      await waitFor(() => {
+        for (const key of [
+          'agent-access-config',
+          'agent-access-me',
+          'agent-access-rules',
+          'agent-access-m365-agents',
+          'agent-access-org-agents',
+        ]) {
+          expect(invalidateSpy).toHaveBeenCalledWith(
+            expect.objectContaining({ queryKey: [key] }),
+          );
+        }
+      });
+    } finally {
+      invalidateSpy.mockRestore();
+    }
+  });
+
   it('restricted editor shows domain/user chip inputs and an editable Groups section', async () => {
     renderPanel();
     const row = await openEditorFor('Sales Agent');
