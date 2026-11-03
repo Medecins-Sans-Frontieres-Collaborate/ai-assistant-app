@@ -16,9 +16,10 @@ export const ADMIN_AGENT_LABELS = {
     '{indexed, plural, one {# document} other {# documents}} indexed',
 } as const;
 
+const fallbackMessages: Record<string, string> = ADMIN_AGENT_LABELS;
 const fallback = createTranslator({
   locale: 'en',
-  messages: ADMIN_AGENT_LABELS,
+  messages: fallbackMessages,
 });
 
 /**
