@@ -19,8 +19,9 @@ vi.mock('@/components/Chat/ChatInput/M365FilePickerModal', () => ({
   default: () => null,
 }));
 
+const mockM365Flags = vi.hoisted(() => ({ agentsEnabled: true }));
 vi.mock('@/client/hooks/useM365Enabled', () => ({
-  useM365Enabled: () => ({ agentsEnabled: true }),
+  useM365Enabled: () => mockM365Flags,
 }));
 
 const jsonResponse = (status: number, body: unknown) =>
@@ -102,6 +103,9 @@ interface Scenario {
   listings: AdminStoredM365Agent[][];
   /** Step responses in order (last one repeats). */
   steps?: Response[];
+  /** Rejected management listings are independent of discovery/rules. */
+  listingStatus?: number;
+  listingUnavailable?: boolean;
 }
 
 function installFetch(scenario: Scenario) {
@@ -113,6 +117,11 @@ function installFetch(scenario: Scenario) {
       const url = typeof input === 'string' ? input : input.toString();
       calls.push(`${init?.method ?? 'GET'} ${url}`);
       if (url === '/api/agent-access/m365-agents') {
+        if (scenario.listingStatus && scenario.listingStatus !== 200) {
+          return jsonResponse(scenario.listingStatus, {
+            error: 'Listing failed',
+          });
+        }
         const agents =
           scenario.listings[
             Math.min(listingCalls, scenario.listings.length - 1)
@@ -122,7 +131,7 @@ function installFetch(scenario: Scenario) {
           success: true,
           data: {
             m365Agents: agents,
-            m365AgentsUnavailable: false,
+            m365AgentsUnavailable: scenario.listingUnavailable ?? false,
             fetchedAt: 1,
             maxDocuments: 50,
             maxBytes: 512 * 1024 * 1024,
@@ -153,14 +162,16 @@ function renderSection() {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
-  return render(
+  const view = render(
     <QueryClientProvider client={queryClient}>
       <M365AgentsSection rules={[]} onDataChanged={() => {}} />
     </QueryClientProvider>,
   );
+  return { ...view, queryClient };
 }
 
 beforeEach(() => {
+  mockM365Flags.agentsEnabled = true;
   useSettingsStore.setState({ m365Connected: true, hiddenAdminAgentKeys: [] });
   useUIStore.setState({ isSettingsOpen: false });
   vi.mocked(toast.error).mockClear();
@@ -169,6 +180,65 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+});
+
+describe('M365AgentsSection — management visibility diagnostics', () => {
+  it('does not mount the section or fetch its listing when the capability flag is false', () => {
+    mockM365Flags.agentsEnabled = false;
+    const { calls } = installFetch({
+      listings: [[baseAgent([indexedSource])]],
+    });
+    const { container } = renderSection();
+    expect(container).toBeEmptyDOMElement();
+    expect(calls).toEqual([]);
+  });
+
+  it('keeps source editing available while disconnected and for an agent with no indexed content', async () => {
+    useSettingsStore.setState({ m365Connected: false });
+    installFetch({ listings: [[baseAgent([pendingSource])]] });
+    renderSection();
+    const edit = await screen.findByRole('button', { name: 'Edit agent' });
+    expect(edit).toBeEnabled();
+    expect(screen.getByText('m365AgentsHeading')).toBeInTheDocument();
+    fireEvent.click(edit);
+    expect(screen.getByText('Handbook.pdf')).toBeInTheDocument();
+  });
+
+  it.each([401, 403, 500])(
+    'keeps the section mounted after a %i listing failure, even though the agent controls disappear',
+    async (listingStatus) => {
+      installFetch({ listings: [], listingStatus });
+      const { queryClient } = renderSection();
+      await waitFor(
+        () => {
+          expect(
+            queryClient.getQueryState(['agent-access-m365-agents'])?.status,
+          ).toBe('error');
+        },
+        { timeout: 4000 },
+      );
+      expect(screen.getByText('m365AgentsHeading')).toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Edit agent' }),
+      ).not.toBeInTheDocument();
+      // Observed bug: request failures currently masquerade as an empty list.
+      expect(screen.getByText('noM365Agents')).toBeInTheDocument();
+    },
+  );
+
+  it('keeps the section mounted and reports a server-side store outage', async () => {
+    installFetch({ listings: [[]], listingUnavailable: true });
+    const { queryClient } = renderSection();
+    await waitFor(() => {
+      expect(
+        queryClient.getQueryState(['agent-access-m365-agents'])?.status,
+      ).toBe('success');
+    });
+    expect(screen.getByText('m365AgentsHeading')).toBeInTheDocument();
+    expect(
+      screen.getByText('m365AgentsUnavailableWarning'),
+    ).toBeInTheDocument();
+  });
 });
 
 describe('M365AgentsSection — Microsoft 365 connection gating', () => {
