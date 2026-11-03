@@ -74,10 +74,7 @@ export const AccessSummary: FC<AccessSummaryProps> = ({ access }) => {
                     dir="auto"
                     className="min-w-0 max-w-full [overflow-wrap:anywhere]"
                   >
-                    {audience.groups
-                      ? (groupNames[value] ??
-                        (expanded ? value : `${value.slice(0, 8)}…`))
-                      : value}
+                    {audience.groups ? (groupNames[value] ?? value) : value}
                   </span>
                 ))}
                 {!expanded && audience.values.length > PREVIEW_LIMIT && (
