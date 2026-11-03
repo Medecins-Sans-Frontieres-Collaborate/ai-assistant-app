@@ -42,6 +42,8 @@ const mockMessages: Record<string, unknown> = {
     noMatches: 'No directory matches — you can enter the address manually',
   },
   transcript: { copy: 'Copy' },
+  announcements: { more: 'More' },
+  analyticsAdmin: { health: { total: { files: 'Files' } } },
   common: {
     cancel: 'Cancel',
     undo: 'Undo',
@@ -367,6 +369,7 @@ const mockMessages: Record<string, unknown> = {
     },
   },
   m365: {
+    files: { noResults: 'No matches for “{query}”' },
     tools: {
       alwaysConfirmNote:
         'This action always asks for confirmation — it can’t be auto-approved.',
@@ -549,6 +552,12 @@ const mockMessages: Record<string, unknown> = {
       'Set what happens when the assistant wants to run each tool — in every conversation. Ask is the default; Block always wins.',
   },
   agentAccess: {
+    nativeLabel: 'Native',
+    allEligibleUsers: 'All eligible users',
+    noAllowedAudience: 'No allowed audience',
+    accessScopeHint: 'App access rules only. Source permissions still apply.',
+    detailsLabel: 'Details',
+    indexedDocumentSummary: '{indexed} documents indexed',
     title: 'Access & Connectors',
     description:
       "Control which users can use shared agents and organization connectors. Rules only further restrict what a user's own Azure access already allows — they can never grant access Azure denies.",
@@ -1287,7 +1296,8 @@ function getNestedValue(
   return typeof current === 'string' ? current : undefined;
 }
 
-vi.mock('next-intl', () => ({
+vi.mock('next-intl', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('next-intl')>()),
   useTranslations: (namespace?: string) => {
     const translate = (
       key: string,
