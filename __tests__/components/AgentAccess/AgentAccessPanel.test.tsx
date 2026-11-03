@@ -483,13 +483,80 @@ describe('AgentAccessPanel', () => {
     vi.unstubAllGlobals();
   });
 
+  it('searches across agent sections using source names, type, audiences and hidden identifiers without new requests', async () => {
+    m365Sources = [
+      {
+        sourceId: 'src-1',
+        driveId: 'drive-1',
+        itemId: 'item-1',
+        title: 'Handbook.pdf',
+        webUrl: 'https://example.org/library',
+        kind: 'file',
+        status: 'indexed',
+        recursive: false,
+        excludedItemIds: [],
+      },
+    ];
+    renderPanel();
+    await screen.findByText('Helpdesk Agent');
+    await screen.findByText('HR Handbook (M365)');
+    await screen.findByText('MSF Communications');
+    const search = screen.getByRole('searchbox', { name: 'Search' });
+    const requestCount = fetchMock.mock.calls.length;
+    fireEvent.change(search, { target: { value: 'HANDBOOK.PDF' } });
+    expect(screen.getByText('HR Handbook (M365)')).toBeInTheDocument();
+    expect(screen.queryByText('Sales Agent')).not.toBeInTheDocument();
+    expect(screen.queryByText('MSF Communications')).not.toBeInTheDocument();
+    fireEvent.change(search, { target: { value: 'native files' } });
+    expect(screen.getByText('HR Handbook (M365)')).toBeInTheDocument();
+    fireEvent.change(search, { target: { value: 'proj-a::sales' } });
+    expect(screen.getByText('Sales Agent')).toBeInTheDocument();
+    expect(screen.queryByText('HR Handbook (M365)')).not.toBeInTheDocument();
+    fireEvent.change(search, { target: { value: 'msf.org' } });
+    expect(screen.getByText('Sales Agent')).toBeInTheDocument();
+    expect(screen.queryByText('Helpdesk Agent')).not.toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(requestCount);
+    fireEvent.change(search, { target: { value: '' } });
+    expect(screen.getByText('Helpdesk Agent')).toBeInTheDocument();
+  });
+
+  it('keeps hidden agents excluded from search until explicitly revealed', async () => {
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    useSettingsStore.setState({
+      hiddenAdminAgentKeys: [storedPromptAgent.canonicalKey],
+    });
+    renderPanel();
+    await screen.findByText('Helpdesk Agent');
+    fireEvent.change(screen.getByRole('searchbox'), {
+      target: { value: 'Travel Advisor' },
+    });
+    expect(screen.queryByText('Travel Advisor')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Show' }));
+    expect(screen.getByText('Travel Advisor')).toBeInTheDocument();
+    useSettingsStore.setState({ hiddenAdminAgentKeys: [] });
+  });
+
+  it('preserves open access editors and their drafts while filtering', async () => {
+    renderPanel();
+    const row = await openEditorFor('Sales Agent');
+    const input = within(row).getByPlaceholderText('person@example.org');
+    fireEvent.change(input, { target: { value: 'unsaved@example.org' } });
+    fireEvent.change(screen.getByRole('searchbox'), {
+      target: { value: 'does-not-match' },
+    });
+    expect(screen.getByDisplayValue('unsaved@example.org')).toBeInTheDocument();
+    fireEvent.click(within(row).getAllByRole('button', { name: 'Cancel' })[0]);
+    expect(screen.queryByText('Sales Agent')).not.toBeInTheDocument();
+  });
+
   it('renders merged rows with actual allowed audiences and a "not discoverable" badge for rule-only rows', async () => {
     renderPanel();
 
     // Discovered agent without a rule → implicit Everyone.
     const helpdesk = (await screen.findByText('Helpdesk Agent')).closest('li');
     expect(
-      within(helpdesk as HTMLElement).getByText('Everyone'),
+      within(helpdesk as HTMLElement).getByText('All eligible users'),
     ).toBeInTheDocument();
 
     // Discovered agent with a restricted rule.
@@ -864,7 +931,7 @@ describe('AgentAccessPanel', () => {
     expect(
       await within(row).findByText(/m365AgentSources \(1\)/),
     ).toBeInTheDocument();
-    expect(within(row).getByText('Handbook.pdf')).toBeInTheDocument();
+    expect(within(row).getAllByText('Handbook.pdf')).toHaveLength(2);
   });
 
   it('renders a prompt-agent row with badge and Edit agent / Delete actions', async () => {
@@ -880,12 +947,17 @@ describe('AgentAccessPanel', () => {
     details.open = true;
     expect(row).not.toBeNull();
     expect(
-      within(row as HTMLElement).getByText('Prompt agent'),
+      within(row as HTMLElement).getByText('Native · Prompt agent'),
     ).toBeInTheDocument();
     expect(
       within(row as HTMLElement).getByText('Edit agent'),
     ).toBeInTheDocument();
-    expect(within(row as HTMLElement).getByText('Delete')).toBeInTheDocument();
+    fireEvent.click(
+      within(row as HTMLElement).getByRole('button', { name: /^More:/ }),
+    );
+    expect(
+      screen.getByRole('menuitem', { name: 'Delete' }),
+    ).toBeInTheDocument();
     // Discovered through /api/agents too, so no amber badge.
     expect(
       within(row as HTMLElement).queryByText('Not discoverable by you'),
@@ -1045,7 +1117,10 @@ describe('AgentAccessPanel', () => {
     renderPanel();
 
     const row = (await screen.findByText('Travel Advisor')).closest('li');
-    fireEvent.click(within(row as HTMLElement).getByText('Delete'));
+    fireEvent.click(
+      within(row as HTMLElement).getByRole('button', { name: /^More:/ }),
+    );
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Delete' }));
     // Nothing sent until the inline confirm.
     expect(agentDeleteCalls).toHaveLength(0);
     fireEvent.click(within(row as HTMLElement).getByText('Yes, delete'));
@@ -1067,7 +1142,10 @@ describe('AgentAccessPanel', () => {
     renderPanel();
 
     const row = (await screen.findByText('Travel Advisor')).closest('li');
-    fireEvent.click(within(row as HTMLElement).getByText('Delete'));
+    fireEvent.click(
+      within(row as HTMLElement).getByRole('button', { name: /^More:/ }),
+    );
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Delete' }));
     fireEvent.click(within(row as HTMLElement).getByText('Yes, delete'));
 
     expect(
@@ -1224,8 +1302,9 @@ describe('AgentAccessPanel', () => {
     expect(row).not.toBeNull();
 
     fireEvent.click(
-      within(row as HTMLElement).getByRole('button', { name: 'Hide' }),
+      within(row as HTMLElement).getByRole('button', { name: /^More:/ }),
     );
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Hide' }));
     expect(screen.queryByText('Travel Advisor')).not.toBeInTheDocument();
     expect(useSettingsStore.getState().hiddenAdminAgentKeys).toEqual([
       storedPromptAgent.canonicalKey,
@@ -1238,8 +1317,9 @@ describe('AgentAccessPanel', () => {
       within(revealed as HTMLElement).getByText('Hidden'),
     ).toBeInTheDocument();
     fireEvent.click(
-      within(revealed as HTMLElement).getByRole('button', { name: 'Unhide' }),
+      within(revealed as HTMLElement).getByRole('button', { name: /^More:/ }),
     );
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Unhide' }));
     expect(useSettingsStore.getState().hiddenAdminAgentKeys).toEqual([]);
     expect(screen.queryByText('Hidden')).not.toBeInTheDocument();
   });
@@ -1467,7 +1547,7 @@ describe('AgentAccessPanel', () => {
       // Missing mock keys fall back to the key name.
       expect(within(row).getByText('orgAgentBuiltinBadge')).toBeInTheDocument();
       // No rule stored under org-agent::msf_communications → implicit Everyone.
-      expect(within(row).getByText('Everyone')).toBeInTheDocument();
+      expect(within(row).getByText('All eligible users')).toBeInTheDocument();
       // Read-only settings: no edit/delete affordances on a built-in row.
       expect(
         within(row).queryByRole('button', { name: 'Delete agent' }),
