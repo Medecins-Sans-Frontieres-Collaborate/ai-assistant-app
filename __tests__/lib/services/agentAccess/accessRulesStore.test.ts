@@ -32,6 +32,7 @@ import {
 
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
 
+import { PROMPT_AGENT_MAX_PROMPT_CHARS } from '@/lib/constants/promptAgents';
 import { Readable } from 'stream';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -496,6 +497,27 @@ describe('accessRulesStore', () => {
   });
 
   describe('writePromptAgent', () => {
+    it('round-trips a maximum-length Unicode prompt through blob serialization', async () => {
+      const systemPrompt =
+        'é'.repeat(PROMPT_AGENT_MAX_PROMPT_CHARS - 3) + 'END';
+      const agent = { ...samplePromptAgent, systemPrompt };
+      client.upload.mockResolvedValue({ etag: '"etag-new"' });
+
+      await writePromptAgent(storage, agent, null);
+      const [content, length] = client.upload.mock.calls[0];
+      expect(length).toBe((content as Buffer).length);
+      expect(
+        JSON.parse((content as Buffer).toString('utf8')).systemPrompt,
+      ).toBe(systemPrompt);
+      client.download.mockResolvedValue(
+        downloadResponseFor((content as Buffer).toString('utf8'), '"etag-new"'),
+      );
+
+      const result = await readPromptAgent(storage, agent.id);
+      expect(result?.agent.systemPrompt).toBe(systemPrompt);
+      expect(result?.etag).toBe('"etag-new"');
+    });
+
     it('creates with If-None-Match:* when no etag is given, at the id-derived path', async () => {
       client.upload.mockResolvedValue({ etag: '"etag-new"' });
 
