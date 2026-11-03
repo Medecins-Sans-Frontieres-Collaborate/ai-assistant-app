@@ -142,6 +142,49 @@ beforeEach(() => {
 });
 
 describe('/api/agent-access/org-agents', () => {
+  it('returns 503 without using stale permissions when the delegation config is unreadable', async () => {
+    mockStore.listAllOrgAgents.mockResolvedValue([]);
+    mockStore.readConfig.mockRejectedValueOnce(
+      new Error('Permission store unavailable'),
+    );
+    const response = await GET();
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(503);
+    expect(body.code).toBe('AGENT_ACCESS_CONFIG_UNAVAILABLE');
+    expect(mockAdminAuth.resolveAdminStatus).not.toHaveBeenCalled();
+  });
+
+  it('authorizes a local admin from fresh config during an agent-store outage', async () => {
+    const { resolveAdminStatus } = await vi.importActual<
+      typeof import('@/lib/services/agentAccess/adminAuth')
+    >('@/lib/services/agentAccess/adminAuth');
+    mockAdminAuth.resolveAdminStatus.mockImplementation(resolveAdminStatus);
+    mockAuth.mockResolvedValue({
+      ...session,
+      user: { id: 'delegate', mail: 'delegate@example.org', name: 'Delegate' },
+    });
+    mockStore.readConfig.mockResolvedValue({
+      config: {
+        version: 1,
+        localAdmins: [
+          {
+            email: 'delegate@example.org',
+            agentKeys: ['org-agent::orgr-abcdefabcdef'],
+          },
+        ],
+      },
+    });
+    mockStore.listAllOrgAgents.mockRejectedValueOnce(
+      new Error('Record store unavailable'),
+    );
+    const response = await GET();
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(200);
+    expect(body.data.orgAgentsUnavailable).toBe(true);
+    expect(body.data.orgAgents).toEqual([]);
+    expect(body.data.canCreate).toBe(false);
+  });
+
   it('404s everyone while the feature is disabled', async () => {
     mockService.isEnabled.mockReturnValue(false);
     const response = await GET();

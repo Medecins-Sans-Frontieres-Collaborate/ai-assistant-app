@@ -280,7 +280,7 @@ describe('/api/agent-access/m365-agents', () => {
 
   it.each([
     { cachedDelegation: true, expectedStatus: 200 },
-    { cachedDelegation: false, expectedStatus: 403 },
+    { cachedDelegation: false, expectedStatus: 200 },
   ])(
     'a failed management listing with cachedDelegation=$cachedDelegation returns $expectedStatus',
     async ({ cachedDelegation, expectedStatus }) => {
@@ -309,22 +309,43 @@ describe('/api/agent-access/m365-agents', () => {
             }
           : null,
       });
-      mockStore.readConfig.mockResolvedValue(null);
+      mockStore.readConfig.mockResolvedValue({
+        config: {
+          version: 1,
+          localAdmins: [
+            {
+              email: 'delegate@example.org',
+              agentKeys: ['m365-agent::m365-abcdefabcdef'],
+            },
+          ],
+        },
+        etag: '"config-1"',
+      });
       mockStore.listAllM365Agents.mockRejectedValueOnce(
         new Error('M365 record storage unavailable'),
       );
 
       const response = await GET();
       expect(response.status).toBe(expectedStatus);
-      if (cachedDelegation) {
-        const body = await parseJsonResponse(response);
-        expect(body.data.m365AgentsUnavailable).toBe(true);
-        expect(body.data.m365Agents).toEqual([]);
-      }
+      const body = await parseJsonResponse(response);
+      expect(body.data.m365AgentsUnavailable).toBe(true);
+      expect(body.data.m365Agents).toEqual([]);
       // Management visibility does not depend on the caller's Graph access.
       expect(mockPlanner.planSources).not.toHaveBeenCalled();
     },
   );
+
+  it('returns temporary unavailability, not a permission denial or stale authorization, when config cannot be read', async () => {
+    mockStore.listAllM365Agents.mockResolvedValue([]);
+    mockStore.readConfig.mockRejectedValueOnce(
+      new Error('Permission store unavailable'),
+    );
+    const response = await GET();
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(503);
+    expect(body.code).toBe('AGENT_ACCESS_CONFIG_UNAVAILABLE');
+    expect(mockAdminAuth.resolveAdminStatus).not.toHaveBeenCalled();
+  });
 
   it('404s everyone while the feature is disabled', async () => {
     mockService.isEnabled.mockReturnValue(false);
