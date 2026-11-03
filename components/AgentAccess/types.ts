@@ -388,6 +388,7 @@ export interface MergedAgentRow {
   source: string;
   agentName: string;
   displayName: string;
+  description?: string;
   discoverable: boolean;
   stored: AdminStoredRule | null;
   /**
