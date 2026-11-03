@@ -473,10 +473,11 @@ describe('M365AgentsSection — failed job and re-index affordances', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('renders Re-index all as a bordered secondary button with the agent name titled', async () => {
+  it('keeps Re-index all available in More, with the agent name titled', async () => {
     installFetch({ agents: [agentWith([folderSource])] });
     renderSection();
-    const reindex = await screen.findByRole('button', {
+    fireEvent.click(await screen.findByRole('button', { name: /^More:/ }));
+    const reindex = await screen.findByRole('menuitem', {
       name: 'm365AgentReindexAll',
     });
     expect(reindex.className).toContain('border-gray-200');
