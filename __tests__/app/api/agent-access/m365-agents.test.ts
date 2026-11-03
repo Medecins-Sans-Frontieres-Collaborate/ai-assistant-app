@@ -171,6 +171,113 @@ beforeEach(() => {
 });
 
 describe('/api/agent-access/m365-agents', () => {
+  it('lists only the delegated agent for a local admin who is not its creator', async () => {
+    const { resolveAdminStatus } = await vi.importActual<
+      typeof import('@/lib/services/agentAccess/adminAuth')
+    >('@/lib/services/agentAccess/adminAuth');
+    mockAdminAuth.resolveAdminStatus.mockImplementation(resolveAdminStatus);
+    mockAuth.mockResolvedValue({
+      ...session,
+      user: {
+        id: 'delegate-user',
+        mail: 'delegate@example.org',
+        name: 'Delegate',
+      },
+    });
+    const config = {
+      version: 1,
+      localAdmins: [
+        {
+          email: 'delegate@example.org',
+          agentKeys: ['m365-agent::m365-abcdefabcdef'],
+        },
+      ],
+      updatedBy: 'admin@example.org',
+      updatedAt: '2026-07-29T00:00:00.000Z',
+    };
+    mockStore.readConfig.mockResolvedValue({ config, etag: '"config-1"' });
+    mockStore.listAllM365Agents.mockResolvedValue([
+      {
+        canonicalKey: 'm365-agent::m365-abcdefabcdef',
+        m365Agent: makeAgent(),
+        etag: '"agent-1"',
+      },
+      {
+        canonicalKey: 'm365-agent::m365-111111111111',
+        m365Agent: makeAgent({ id: 'm365-111111111111' }),
+        etag: '"agent-2"',
+      },
+    ]);
+
+    const response = await GET();
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(200);
+    expect(body.data.isGlobalAdmin).toBe(false);
+    expect(body.data.m365Agents).toHaveLength(1);
+    expect(body.data.m365Agents[0].agent).toMatchObject({
+      id: 'm365-abcdefabcdef',
+      createdBy: 'admin@example.org',
+      sources: [{ itemId: 'item1' }],
+    });
+  });
+
+  it('allows a delegated non-creator to replace sources but denies an undelegated agent', async () => {
+    const { resolveAdminStatus } = await vi.importActual<
+      typeof import('@/lib/services/agentAccess/adminAuth')
+    >('@/lib/services/agentAccess/adminAuth');
+    mockAdminAuth.resolveAdminStatus.mockImplementation(resolveAdminStatus);
+    mockAuth.mockResolvedValue({
+      ...session,
+      user: {
+        id: 'delegate-user',
+        mail: 'delegate@example.org',
+        name: 'Delegate',
+      },
+    });
+    mockService.getSnapshot.mockReturnValue({
+      config: {
+        version: 1,
+        localAdmins: [
+          {
+            email: 'delegate@example.org',
+            agentKeys: ['m365-agent::m365-abcdefabcdef'],
+          },
+        ],
+      },
+      rulesUnavailable: false,
+    });
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: makeAgent(),
+      etag: '"etag-1"',
+    });
+    const requestFor = (id: string) =>
+      new NextRequest('http://localhost/api/agent-access/m365-agents', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'If-Match': '"etag-1"' },
+        body: JSON.stringify({
+          id,
+          name: 'Budget agent',
+          sources: [{ ...validSource, itemId: 'replacement-file' }],
+        }),
+      });
+
+    const allowed = await PUT(requestFor('m365-abcdefabcdef'));
+    expect(allowed.status).toBe(200);
+    expect(mockStore.writeM365Agent).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        createdBy: 'admin@example.org',
+        updatedBy: 'delegate@example.org',
+        sources: [expect.objectContaining({ itemId: 'replacement-file' })],
+      }),
+      '"etag-1"',
+    );
+    mockStore.writeM365Agent.mockClear();
+    const denied = await PUT(requestFor('m365-111111111111'));
+    expect(denied.status).toBe(403);
+    expect(mockStore.writeM365Agent).not.toHaveBeenCalled();
+  });
+
   it('404s everyone while the feature is disabled', async () => {
     mockService.isEnabled.mockReturnValue(false);
     const response = await GET();
