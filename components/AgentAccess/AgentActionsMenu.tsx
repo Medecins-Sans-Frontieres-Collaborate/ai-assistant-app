@@ -48,10 +48,12 @@ export const AgentActionsMenu: FC<AgentActionsMenuProps> = ({
       button.setAttribute('role', 'menuitem');
       button.tabIndex = -1;
     });
-    menuRef.current
-      ?.querySelector<HTMLButtonElement>('button:not(:disabled)')
-      ?.focus({ preventScroll: true });
-  }, [open]);
+    if (!menuRef.current?.contains(document.activeElement)) {
+      menuRef.current
+        ?.querySelector<HTMLButtonElement>('button:not(:disabled)')
+        ?.focus({ preventScroll: true });
+    }
+  }, [open, children]);
 
   return (
     <div>

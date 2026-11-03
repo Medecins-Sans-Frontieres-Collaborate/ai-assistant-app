@@ -6,6 +6,25 @@ import { AgentActionsMenu } from '@/components/AgentAccess/AgentActionsMenu';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('AgentActionsMenu', () => {
+  it('keeps live action updates accessible without stealing focus', () => {
+    const view = render(
+      <AgentActionsMenu name="Handbook">
+        <button>Hide</button>
+      </AgentActionsMenu>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'More: Handbook' }));
+    const hide = screen.getByRole('menuitem', { name: 'Hide' });
+    view.rerender(
+      <AgentActionsMenu name="Handbook">
+        <button>Hide</button>
+        <button>Refresh</button>
+      </AgentActionsMenu>,
+    );
+    expect(
+      screen.getByRole('menuitem', { name: 'Refresh' }),
+    ).toBeInTheDocument();
+    expect(hide).toHaveFocus();
+  });
   it('reveals secondary actions on demand, skips disabled actions, and restores focus', () => {
     render(
       <AgentActionsMenu name="Handbook">
