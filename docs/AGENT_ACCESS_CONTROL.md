@@ -257,6 +257,11 @@ invocation resolution.
   rules or delegations. Canonical key: `prompt-agent::<id>` (`PROMPT_AGENT_SOURCE = 'prompt-agent'`
   is a pseudo-source; it cannot collide with ARM paths, which start with `/`). These keys flow
   through `config.json` delegation and access rules as plain strings.
+- Native prompt-agent system prompts may contain up to **100,000 UTF-16 code units** after
+  trimming outer whitespace. The editor and create/update API share
+  `PROMPT_AGENT_MAX_PROMPT_CHARS` in `lib/constants/promptAgents.ts`. Stored prompts are not
+  truncated on read or during persona injection; the selected model's context window still
+  bounds the complete chat request.
 - Blob: `system/agent-access/prompt-agents/<id>.json`, zod-validated (read-side permissive per the
   schema-evolution rule):
 
