@@ -12,6 +12,7 @@ import { OpenAIModels } from '@/types/openai';
 import { AdminStoredPromptAgent } from './types';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { PROMPT_AGENT_MAX_PROMPT_CHARS } from '@/lib/constants/promptAgents';
 
 /**
  * Agent-backed model ids can't be a prompt agent's engine (the server
@@ -115,7 +116,10 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
     storedModelMissing && !isServerKnownModelId(modelId);
 
   const canSave =
-    name.trim().length > 0 && systemPrompt.trim().length > 0 && modelId !== '';
+    name.trim().length > 0 &&
+    systemPrompt.trim().length > 0 &&
+    systemPrompt.trim().length <= PROMPT_AGENT_MAX_PROMPT_CHARS &&
+    modelId !== '';
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -222,7 +226,7 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
             rows={6}
             value={systemPrompt}
             placeholder={t('agentSystemPromptPlaceholder')}
-            maxLength={10000}
+            maxLength={PROMPT_AGENT_MAX_PROMPT_CHARS}
             onChange={(e) => setSystemPrompt(e.target.value)}
           />
         </div>
