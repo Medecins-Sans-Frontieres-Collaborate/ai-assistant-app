@@ -389,6 +389,8 @@ export interface MergedAgentRow {
   agentName: string;
   displayName: string;
   description?: string;
+  /** Full authorized discovery metadata, retained for admin filtering. */
+  discovery?: DiscoveredAgentSummary;
   discoverable: boolean;
   stored: AdminStoredRule | null;
   /**
