@@ -2,8 +2,9 @@
 export type AgentSearchMetadata = unknown;
 
 /**
- * Builds a normalized search document from JSON-shaped admin metadata, including
- * property names and primitive values. Cycles are ignored; null/undefined are
+ * Builds a normalized search document from JSON-shaped admin metadata values.
+ * Field names are excluded so a "failed: 0" count does not match "failed".
+ * Cycles are ignored; null/undefined are
  * omitted. Never fetches prompts, file content or directory memberships.
  */
 export function agentSearchDocument(metadata: AgentSearchMetadata): string {
@@ -19,10 +20,7 @@ export function agentSearchDocument(metadata: AgentSearchMetadata): string {
     if (typeof value !== 'object' || seen.has(value)) return [];
     seen.add(value);
     if (Array.isArray(value)) return value.flatMap(visit);
-    return Object.entries(value).flatMap(([key, entry]) => [
-      key,
-      ...visit(entry),
-    ]);
+    return Object.values(value).flatMap(visit);
   };
   return visit(metadata)
     .join(' ')
