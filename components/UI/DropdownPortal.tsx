@@ -152,10 +152,20 @@ export function DropdownPortal({
   useEffect(() => {
     if (!isOpen) return;
 
-    window.addEventListener('scroll', onClose, true);
+    const handleScroll = (event: Event) => {
+      // Scrolling the menu itself leaves its anchor in place. Only movement
+      // outside the portal strands the popup away from its trigger.
+      if (
+        event.target instanceof Node &&
+        dropdownRef.current?.contains(event.target)
+      )
+        return;
+      onClose();
+    };
+    window.addEventListener('scroll', handleScroll, true);
     window.addEventListener('resize', onClose);
     return () => {
-      window.removeEventListener('scroll', onClose, true);
+      window.removeEventListener('scroll', handleScroll, true);
       window.removeEventListener('resize', onClose);
     };
   }, [isOpen, onClose]);
