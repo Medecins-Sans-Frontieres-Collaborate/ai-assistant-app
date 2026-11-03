@@ -3,10 +3,21 @@ import {
   agentSearchDocument,
   matchesAgentSearch,
 } from '@/components/AgentAccess/agentSearch';
+import { isAgentListSource } from '@/components/AgentAccess/types';
 
 import { describe, expect, it } from 'vitest';
 
 describe('agent metadata search', () => {
+  it('classifies canonical source variants consistently without duplicate native rows', () => {
+    for (const source of ['m365-agent', 'M365-Agent', ' org-agent ', ' GUIDE '])
+      expect(isAgentListSource(source)).toBe(false);
+    for (const source of [
+      'prompt-agent',
+      ' Prompt-Agent ',
+      '/subscriptions/Example/Projects/HR',
+    ])
+      expect(isAgentListSource(source)).toBe(true);
+  });
   it('makes empty restrictions searchable as no audience, not everyone', () => {
     const labels = {
       everyone: 'All eligible users',
