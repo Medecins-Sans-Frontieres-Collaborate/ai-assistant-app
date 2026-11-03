@@ -609,7 +609,11 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
   };
 
   const refetchRules = async () => {
-    await queryClient.invalidateQueries({ queryKey: ['agent-access-rules'] });
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['agent-access-rules'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-m365-agents'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-org-agents'] }),
+    ]);
   };
 
   const handleSaved = async () => {
