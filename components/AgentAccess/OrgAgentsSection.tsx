@@ -831,6 +831,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
   } | null>(null);
 
   const hiddenAgents = useHiddenAdminAgents();
+  const { isHidden: isHiddenForSearch } = hiddenAgents;
   const agentsQuery = useQuery<AdminOrgAgentsResponse>({
     queryKey: ['agent-access-org-agents'],
     queryFn: async () => {
@@ -924,7 +925,10 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
     invalidate();
   };
 
-  const agents = agentsQuery.data?.orgAgents ?? [];
+  const agents = useMemo(
+    () => agentsQuery.data?.orgAgents ?? [],
+    [agentsQuery.data?.orgAgents],
+  );
   // Built-in agents an admin record already overrides are shown as that
   // record (the registry serves the record, not the file entry).
   const staticAgents = useMemo(
@@ -957,19 +961,12 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
               groupNames: (access?.allowGroups ?? []).map(
                 (id) => searchGroupNames[id],
               ),
-              hidden: hiddenAgents.isHidden(entry.canonicalKey),
+              hidden: isHiddenForSearch(entry.canonicalKey),
             }),
           ];
         }),
       ),
-    [
-      agents,
-      staticAgents,
-      rulesByKey,
-      searchGroupNames,
-      t,
-      hiddenAgents.isHidden,
-    ],
+    [agents, staticAgents, rulesByKey, searchGroupNames, t, isHiddenForSearch],
   );
   const unfilteredStatic = hiddenAgents.partition(
     staticAgents,

@@ -343,6 +343,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
    */
   // Per-admin hidden agents (presentational only — see the hook).
   const hiddenAgents = useHiddenAdminAgents();
+  const { isHidden: isHiddenForSearch } = hiddenAgents;
   // The list below is Foundry + prompt agents only. Knowledge and Microsoft
   // 365 agents arrive from discovery under the SAME canonical key their
   // sections edit, so showing them here too was one agent twice; rules for
@@ -372,11 +373,11 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
             groupNames: (row.stored?.rule.access.allowGroups ?? []).map(
               (id) => searchGroupNames[id],
             ),
-            hidden: hiddenAgents.isHidden(row.canonicalKey),
+            hidden: isHiddenForSearch(row.canonicalKey),
           }),
         ]),
       ),
-    [agentListRows, searchGroupNames, t, hiddenAgents.isHidden],
+    [agentListRows, searchGroupNames, t, isHiddenForSearch],
   );
   const visibleRows = unfilteredVisibleRows.filter(
     (row) =>

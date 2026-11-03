@@ -1486,6 +1486,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const hiddenAgents = useHiddenAdminAgents();
+  const { isHidden: isHiddenForSearch } = hiddenAgents;
   const agentsQuery = useQuery<AdminM365AgentsResponse>({
     queryKey: ['agent-access-m365-agents'],
     queryFn: async () => {
@@ -1707,7 +1708,10 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
     invalidate();
   };
 
-  const agents = agentsQuery.data?.m365Agents ?? [];
+  const agents = useMemo(
+    () => agentsQuery.data?.m365Agents ?? [],
+    [agentsQuery.data?.m365Agents],
+  );
   const searchDocuments = useMemo(
     () =>
       new Map(
@@ -1734,20 +1738,12 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                 (id) => searchGroupNames[id],
               ),
               job: jobs[entry.agent.id],
-              hidden: hiddenAgents.isHidden(entry.canonicalKey),
+              hidden: isHiddenForSearch(entry.canonicalKey),
             }),
           ];
         }),
       ),
-    [
-      agents,
-      rulesByKey,
-      searchGroupNames,
-      jobs,
-      t,
-      tFiles,
-      hiddenAgents.isHidden,
-    ],
+    [agents, rulesByKey, searchGroupNames, jobs, t, tFiles, isHiddenForSearch],
   );
   const listingUnavailable = agentsQuery.data?.m365AgentsUnavailable === true;
   const listingReady =
