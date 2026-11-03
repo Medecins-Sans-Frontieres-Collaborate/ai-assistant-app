@@ -1,4 +1,5 @@
 import {
+  agentAudienceSearchLabel,
   agentSearchDocument,
   matchesAgentSearch,
 } from '@/components/AgentAccess/agentSearch';
@@ -6,6 +7,36 @@ import {
 import { describe, expect, it } from 'vitest';
 
 describe('agent metadata search', () => {
+  it('makes empty restrictions searchable as no audience, not everyone', () => {
+    const labels = {
+      everyone: 'All eligible users',
+      restricted: 'Selected audience',
+      none: 'No allowed audience',
+    };
+    expect(agentAudienceSearchLabel(undefined, labels)).toBe(labels.everyone);
+    expect(
+      agentAudienceSearchLabel(
+        {
+          type: 'restricted',
+          allowDomains: [],
+          allowUsers: [],
+          allowGroups: [],
+        },
+        labels,
+      ),
+    ).toBe(labels.none);
+    expect(
+      agentAudienceSearchLabel(
+        {
+          type: 'restricted',
+          allowDomains: ['msf.org'],
+          allowUsers: [],
+          allowGroups: [],
+        },
+        labels,
+      ),
+    ).toBe(labels.restricted);
+  });
   it('matches nested source, audience, actor, key and configuration values', () => {
     const document = agentSearchDocument({
       name: 'Employee Handbook',
