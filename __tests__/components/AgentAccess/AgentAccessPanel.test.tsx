@@ -20,6 +20,7 @@ import { AgentAccessPanel } from '@/components/AgentAccess/AgentAccessPanel';
 import type {
   AdminConfigResponse,
   AdminStoredConnector,
+  AdminStoredM365Agent,
   AdminStoredPromptAgent,
   AdminStoredRule,
   DiscoveredAgentSummary,
@@ -155,6 +156,7 @@ let putCalls: { headers: Record<string, string>; body: unknown }[];
 let deleteStatus: number;
 let deleteCalls: { url: string; headers: Record<string, string> }[];
 let agentsResponse: DiscoveredAgentSummary[];
+let m365Sources: AdminStoredM365Agent['agent']['sources'];
 let promptAgentsResponse: AdminStoredPromptAgent[];
 let agentPostStatus: number;
 let agentPostCalls: { headers: Record<string, string>; body: unknown }[];
@@ -341,7 +343,7 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
               chatModelId: null,
               embeddingModelId: 'text-embedding',
               ragConfig: { topK: 10 },
-              sources: [],
+              sources: m365Sources,
               createdBy: 'admin@example.org',
               createdAt: '2026-07-29T00:00:00.000Z',
               updatedBy: 'admin@example.org',
@@ -450,6 +452,7 @@ describe('AgentAccessPanel', () => {
     deleteStatus = 200;
     deleteCalls = [];
     agentsResponse = discoveredAgents;
+    m365Sources = [];
     promptAgentsResponse = [];
     agentPostStatus = 200;
     agentPostCalls = [];
@@ -759,6 +762,60 @@ describe('AgentAccessPanel', () => {
     ).not.toBeInTheDocument();
     // The merged list has its own heading like the sections.
     expect(screen.getByText('Foundry and prompt agents')).toBeInTheDocument();
+  });
+
+  it('shows a delegated M365 agent once, with access and source editing for a local admin', async () => {
+    meResponse = {
+      isGlobalAdmin: false,
+      isLocalAdmin: true,
+      editableAgentKeys: ['m365-agent::m365-0123456789ab'],
+    };
+    agentsResponse = [
+      {
+        id: 'm365-0123456789ab',
+        name: 'HR Handbook (M365)',
+        agentName: 'm365-0123456789ab',
+        source: 'm365-agent',
+        type: 'm365',
+      },
+    ];
+    rulesResponse = [
+      {
+        ...restrictedRule,
+        canonicalKey: 'm365-agent::m365-0123456789ab',
+        rule: {
+          ...restrictedRule.rule,
+          source: 'm365-agent',
+          agentName: 'm365-0123456789ab',
+        },
+      },
+    ];
+    m365Sources = [
+      {
+        sourceId: 'src-handbook',
+        driveId: 'drive-1',
+        itemId: 'file-1',
+        kind: 'file',
+        title: 'Handbook.pdf',
+        webUrl: 'https://example.org/Handbook.pdf',
+        status: 'indexed',
+        recursive: false,
+        excludedItemIds: [],
+      },
+    ];
+    renderPanel();
+
+    const names = await screen.findAllByText('HR Handbook (M365)');
+    expect(names).toHaveLength(1);
+    const row = names[0].closest('li')!;
+    expect(
+      within(row).getByRole('button', { name: 'Edit access' }),
+    ).toBeEnabled();
+    fireEvent.click(within(row).getByRole('button', { name: 'Edit agent' }));
+    expect(
+      await within(row).findByText(/m365AgentSources \(1\)/),
+    ).toBeInTheDocument();
+    expect(within(row).getByText('Handbook.pdf')).toBeInTheDocument();
   });
 
   it('renders a prompt-agent row with badge and Edit agent / Delete actions', async () => {
