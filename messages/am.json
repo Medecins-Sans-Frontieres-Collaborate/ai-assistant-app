@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "መምረጥ የሚችሉ ችሎታዎች አይታዩም።",
     "agentSkillsLoading": "ክህሎቶች በመጫን ላይ…",
     "agentSkillsLoadError": "ክህሎቶች ማጫን አልተቻለም። ቀድሞ የተወሰኑ ምርጦች ተከበሩ።",
-    "agentSkillsNotVisible": "(ለእርስዎ የማይታይ — ለማጥፋት ምልክቱን አጥፉ)"
+    "agentSkillsNotVisible": "(ለእርስዎ የማይታይ — ለማጥፋት ምልክቱን አጥፉ)",
+    "nativeLabel": "የሃገር ቋንቋ",
+    "allEligibleUsers": "ሁሉም ብቁ ተጠቃሚዎች",
+    "noAllowedAudience": "ፈቃድ ያላቸው ታዳጊዎች የሉም",
+    "accessScopeHint": "የመተግበሪያ መድረሻ መስፈርቶች ብቻ ናቸው። የምንጭ ፈቃድ ገና ይተገበራል።",
+    "detailsLabel": "ዝርዝሮች",
+    "indexedDocumentSummary": "{indexed, plural, one {# ሰነድ} other {# ሰነዶች}} ተሰናዳ"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",

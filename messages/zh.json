@@ -5419,7 +5419,13 @@
     "agentSkillsNone": "无可选技能。",
     "agentSkillsLoading": "正在加载技能…",
     "agentSkillsLoadError": "无法加载技能。先前保存的选择将被保留。",
-    "agentSkillsNotVisible": "（您不可见 — 取消勾选可移除）"
+    "agentSkillsNotVisible": "（您不可见 — 取消勾选可移除）",
+    "nativeLabel": "本地",
+    "allEligibleUsers": "所有符合条件的用户",
+    "noAllowedAudience": "无允许的受众",
+    "accessScopeHint": "仅适用于应用访问规则。来源权限仍然适用。",
+    "detailsLabel": "详情",
+    "indexedDocumentSummary": "已索引{indexed, plural, one {#份文档} other {#份文档}}"
   },
   "localModels": {
     "title": "本地模型",

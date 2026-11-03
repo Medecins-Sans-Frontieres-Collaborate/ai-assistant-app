@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "هیچ مهارتی برای انتخاب وجود ندارد.",
     "agentSkillsLoading": "در حال بارگذاری مهارت‌ها...",
     "agentSkillsLoadError": "امکان بارگذاری مهارت‌ها وجود ندارد. انتخاب‌های قبلی حفظ می‌شوند.",
-    "agentSkillsNotVisible": "(برای شما قابل مشاهده نیست — برای حذف علامت را بردارید)"
+    "agentSkillsNotVisible": "(برای شما قابل مشاهده نیست — برای حذف علامت را بردارید)",
+    "nativeLabel": "بومی",
+    "allEligibleUsers": "همه کاربران واجد شرایط",
+    "noAllowedAudience": "هیچ مخاطب مجازی وجود ندارد",
+    "accessScopeHint": "فقط قوانین دسترسی برنامه اعمال می‌شود. مجوزهای منبع همچنان برقرار هستند.",
+    "detailsLabel": "جزئیات",
+    "indexedDocumentSummary": "{indexed, plural, one {# سند} other {# سند}} فهرست شده"
   },
   "localModels": {
     "title": "مدل‌های محلی",

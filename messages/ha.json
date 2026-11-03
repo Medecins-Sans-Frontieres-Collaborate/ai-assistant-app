@@ -5372,7 +5372,13 @@
     "agentSkillsNone": "Babu kwarewa da za a iya zaɓa.",
     "agentSkillsLoading": "Ana loda fasahohi...",
     "agentSkillsLoadError": "Ba a samu lodawa fasahohi ba. Za a ci gaba da amfani da zaɓin da aka adana a baya.",
-    "agentSkillsNotVisible": "(ba ta bayyana gare ka — cire alama don cirewa)"
+    "agentSkillsNotVisible": "(ba ta bayyana gare ka — cire alama don cirewa)",
+    "nativeLabel": "Na asali",
+    "allEligibleUsers": "Dukkan masu cancanta",
+    "noAllowedAudience": "Babu wadanda aka yarda su",
+    "accessScopeHint": "Ka'idojin samun damar app ne kawai. Izinin tushe har yanzu yana aiki.",
+    "detailsLabel": "Cikakkun bayanai",
+    "indexedDocumentSummary": "{indexed, plural, one {Takarda #} other {Takardu #}} an jera"
   },
   "localModels": {
     "title": "Samfuran cikin gida",

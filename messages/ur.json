@@ -5418,7 +5418,13 @@
     "agentSkillsNone": "منتخب کرنے کے لئے کوئی مہارت دستیاب نہیں۔",
     "agentSkillsLoading": "مہارتیں لوڈ ہو رہی ہیں…",
     "agentSkillsLoadError": "مہارتیں لوڈ نہیں کی جا سکیں۔ پہلے محفوظ کردہ انتخاب برقرار رہیں گے۔",
-    "agentSkillsNotVisible": "(آپ کے لیے ظاہر نہیں — ہٹانے کے لیے نشان ہٹائیں)"
+    "agentSkillsNotVisible": "(آپ کے لیے ظاہر نہیں — ہٹانے کے لیے نشان ہٹائیں)",
+    "nativeLabel": "مقامی",
+    "allEligibleUsers": "تمام اہل صارفین",
+    "noAllowedAudience": "کوئی مجاز سامعین نہیں",
+    "accessScopeHint": "صرف ایپ کی رسائی کے اصول لاگو ہیں۔ ماخذ کی اجازتیں بدستور موثر ہیں۔",
+    "detailsLabel": "تفصیلات",
+    "indexedDocumentSummary": "{indexed, plural, one {# دستاویز} other {# دستاویزات}} اندراج شدہ"
   },
   "localModels": {
     "title": "لوکل ماڈلز",

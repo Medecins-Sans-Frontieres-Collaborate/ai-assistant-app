@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "चयन के लिए कोई कौशल उपलब्ध नहीं है।",
     "agentSkillsLoading": "कौशल लोड हो रहे हैं...",
     "agentSkillsLoadError": "कौशल लोड नहीं हो सके। पहले से सहेजे गए चयन बरकरार हैं।",
-    "agentSkillsNotVisible": "(आपको दिखाई नहीं दे रहा — हटाने के लिए अनचेक करें)"
+    "agentSkillsNotVisible": "(आपको दिखाई नहीं दे रहा — हटाने के लिए अनचेक करें)",
+    "nativeLabel": "मूल",
+    "allEligibleUsers": "सभी पात्र उपयोगकर्ता",
+    "noAllowedAudience": "कोई अनुमत दर्शक नहीं",
+    "accessScopeHint": "केवल ऐप एक्सेस नियम। स्रोत अनुमतियाँ अभी भी लागू हैं।",
+    "detailsLabel": "विवरण",
+    "indexedDocumentSummary": "{indexed, plural, one {# दस्तावेज़} other {# दस्तावेज़} } सूचीबद्ध"
   },
   "localModels": {
     "title": "स्थानीय मॉडल्स",

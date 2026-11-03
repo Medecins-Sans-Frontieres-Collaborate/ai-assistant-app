@@ -5419,7 +5419,13 @@
     "agentSkillsNone": "Không có kỹ năng nào để chọn.",
     "agentSkillsLoading": "Đang tải các kỹ năng…",
     "agentSkillsLoadError": "Không thể tải các kỹ năng. Các lựa chọn đã lưu trước đó được giữ nguyên.",
-    "agentSkillsNotVisible": "(không hiển thị với bạn — bỏ chọn để xóa)"
+    "agentSkillsNotVisible": "(không hiển thị với bạn — bỏ chọn để xóa)",
+    "nativeLabel": "Gốc",
+    "allEligibleUsers": "Tất cả người dùng đủ điều kiện",
+    "noAllowedAudience": "Không có đối tượng được phép",
+    "accessScopeHint": "Chỉ áp dụng quy tắc truy cập ứng dụng. Quyền từ nguồn vẫn còn hiệu lực.",
+    "detailsLabel": "Chi tiết",
+    "indexedDocumentSummary": "{indexed, plural, one {# tài liệu} other {# tài liệu}} đã được lập chỉ mục"
   },
   "localModels": {
     "title": "Mô hình cục bộ",

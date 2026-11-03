@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "තේරීමට ලබා ගත හැකි කෞශල්‍ය නොමැත.",
     "agentSkillsLoading": "කුසලතා පැටවෙමින්…",
     "agentSkillsLoadError": "කුසලතා පැටවිය නොහැක. පෙර සුරක්ෂිත කළ තේරීම් තැබීමේ තවදුරටත් පවතිනවා.",
-    "agentSkillsNotVisible": "(ඔබට නොපෙන්වනවා — ඉවත් කිරීම සඳහා ටික් ඉවත් කරන්න)"
+    "agentSkillsNotVisible": "(ඔබට නොපෙන්වනවා — ඉවත් කිරීම සඳහා ටික් ඉවත් කරන්න)",
+    "nativeLabel": "දේශීය",
+    "allEligibleUsers": "සැලකිල්ලට ගත හැකි සෙසු පරිශීලකයින් සියල්ල",
+    "noAllowedAudience": "නිකුත් කරනු ලැබූ පිරිසක් නොමැත",
+    "accessScopeHint": "ඇප් ප්‍රවේශ නියමයන් පමණි. මූලාශ්‍ර අවසරයන් තවදුරටත් බලපායි.",
+    "detailsLabel": "විස්තර",
+    "indexedDocumentSummary": "{indexed, plural, one { ලේඛනය # ක්} other { ලේඛන # ක්}} indexed"
   },
   "localModels": {
     "title": "ප්‍රාදේශීය ආදර්ශ",

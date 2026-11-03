@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "Inga färdigheter tillgängliga att välja.",
     "agentSkillsLoading": "Laddar färdigheter…",
     "agentSkillsLoadError": "Färdigheter kunde inte laddas. Tidigare sparade val behålls.",
-    "agentSkillsNotVisible": "(inte synlig för dig — avmarkera för att ta bort)"
+    "agentSkillsNotVisible": "(inte synlig för dig — avmarkera för att ta bort)",
+    "nativeLabel": "Inbyggd",
+    "allEligibleUsers": "Alla behöriga användare",
+    "noAllowedAudience": "Ingen tillåten målgrupp",
+    "accessScopeHint": "Endast appens åtkomstregler. Källbehörigheter gäller fortfarande.",
+    "detailsLabel": "Detaljer",
+    "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokument}} indexerade"
   },
   "localModels": {
     "title": "Lokala modeller",

@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "ရွေးချယ်နိုင်သောအတတ်ပညာမရှိပါ။",
     "agentSkillsLoading": "စွမ်းရည်များ လုပ်ဆောင်နေပါသည်...",
     "agentSkillsLoadError": "စွမ်းရည်များကို မထည့်နိုင်ပါ။ ယခင်သိမ်းဆည်းမှုများ သာမန်တင်ထားပါမည်။",
-    "agentSkillsNotVisible": "(သင့်အား မမြင်ရပါ — ဖြုတ်လိုပါက အမှန်ခြစ်ဖယ်ပါ)"
+    "agentSkillsNotVisible": "(သင့်အား မမြင်ရပါ — ဖြုတ်လိုပါက အမှန်ခြစ်ဖယ်ပါ)",
+    "nativeLabel": "ဇာတိ",
+    "allEligibleUsers": "အရည်အချင်း ပြည့်မြောက်သည့် အသုံးပြုသူအားလုံး",
+    "noAllowedAudience": "ခွင့်ပြုထားသည့် ပရိသတ်မရှိပါ",
+    "accessScopeHint": "App ဝင်ရောက်ခွင့်စည်းမျဉ်းများသာ အာဏာပါသည်။ Source permissions များသုံးသပ်ဆောင်ရွက်မည်။",
+    "detailsLabel": "အသေးစိတ်",
+    "indexedDocumentSummary": "{indexed, plural, one {စာရွက်စာတမ်း # ခု} other {စာရွက်စာတမ်း # ခု}} အညွှန်းချထားသည်"
   },
   "localModels": {
     "title": "ဒေသတွင်း မော်ဒယ်များ",

@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "Nejsou dostupné žádné dovednosti k výběru.",
     "agentSkillsLoading": "Načítání dovedností…",
     "agentSkillsLoadError": "Dovednosti se nepodařilo načíst. Dříve uložený výběr zůstává zachován.",
-    "agentSkillsNotVisible": "(neviditelné pro vás — odškrtněte pro odebrání)"
+    "agentSkillsNotVisible": "(neviditelné pro vás — odškrtněte pro odebrání)",
+    "nativeLabel": "Nativní",
+    "allEligibleUsers": "Všichni oprávnění uživatelé",
+    "noAllowedAudience": "Není povolen žádný okruh uživatelů",
+    "accessScopeHint": "Pouze pravidla přístupu aplikace. Práva zdroje stále platí.",
+    "detailsLabel": "Podrobnosti",
+    "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokumentů}} indexováno"
   },
   "localModels": {
     "title": "Lokální modely",

@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "Hakuna ujuzi unaopatikana kuchagua.",
     "agentSkillsLoading": "Inapakia ujuzi…",
     "agentSkillsLoadError": "Ujuzi haukuweza kupakiwa. Machaguo yaliyohifadhiwa awali yamebaki.",
-    "agentSkillsNotVisible": "(haionekani kwako — toa tiki kuondoa)"
+    "agentSkillsNotVisible": "(haionekani kwako — toa tiki kuondoa)",
+    "nativeLabel": "Asili",
+    "allEligibleUsers": "Watumiaji wote wanaostahili",
+    "noAllowedAudience": "Hakuna hadhira inayoruhusiwa",
+    "accessScopeHint": "Kanuni za upatikanaji wa programu pekee. Ruhusa za chanzo bado zinatumika.",
+    "detailsLabel": "Maelezo",
+    "indexedDocumentSummary": "{indexed, plural, one {nyaraka #} other {nyaraka #}} zimeorodheshwa"
   },
   "localModels": {
     "title": "Miundo ya ndani",

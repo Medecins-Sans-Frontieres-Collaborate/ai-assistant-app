@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "אין מיומנויות זמינות לבחירה.",
     "agentSkillsLoading": "טוען מיומנויות…",
     "agentSkillsLoadError": "לא ניתן לטעון את המיומנויות. הבחירות שנשמרו קודם נשמרות.",
-    "agentSkillsNotVisible": "(לא גלוי עבורך — בטל סימון להסרה)"
+    "agentSkillsNotVisible": "(לא גלוי עבורך — בטל סימון להסרה)",
+    "nativeLabel": "מקורי",
+    "allEligibleUsers": "כל המשתמשים הזכאים",
+    "noAllowedAudience": "אין קהל מורשה",
+    "accessScopeHint": "כללי הגישה לאפליקציה בלבד. הרשאות המקור עדיין יישומו.",
+    "detailsLabel": "פרטים",
+    "indexedDocumentSummary": "{indexed, plural, one {מסמך אחד} other {# מסמכים}} מאונדקסים"
   },
   "localModels": {
     "title": "מודלים מקומיים",

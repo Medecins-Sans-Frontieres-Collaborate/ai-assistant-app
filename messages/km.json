@@ -5372,7 +5372,13 @@
     "agentSkillsNone": "គ្មានជំនាញសម្រាប់ជ្រើស។",
     "agentSkillsLoading": "កំពុងផ្ទុកជំនាញ…",
     "agentSkillsLoadError": "មិនអាចផ្ទុកជំនាញបានទេ។ ជម្រើសដែលបានរក្សាទុកពីមុននៅតែសល់។",
-    "agentSkillsNotVisible": "(មើលមិនឃើញចំពោះអ្នក — បោះយកបើចង់លុប)"
+    "agentSkillsNotVisible": "(មើលមិនឃើញចំពោះអ្នក — បោះយកបើចង់លុប)",
+    "nativeLabel": "ដើម",
+    "allEligibleUsers": "អ្នកប្រើប្រាស់ដែលមានសិទ្ធទាំងអស់",
+    "noAllowedAudience": "គ្មានទស្សនិកជនដែលអាចអនុញ្ញាត",
+    "accessScopeHint": "គោលការណ៍ចូលប្រើតែរបស់កម្មវិធីប៉ុណ្ណោះ។ សិទ្ធិប្រភពនៅតែ有អនុវត្ត។",
+    "detailsLabel": "ព័ត៌មានលម្អិត",
+    "indexedDocumentSummary": "{indexed, plural, one {ឯកសារចំនួន #} other {ឯកសារចំនួន #}} ដែលបានបញ្ជូលបញ្ជី"
   },
   "localModels": {
     "title": "ម៉ូឌែលក្នុងតំបន់",

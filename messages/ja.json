@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "選択できるスキルがありません。",
     "agentSkillsLoading": "スキルを読み込み中…",
     "agentSkillsLoadError": "スキルを読み込めませんでした。以前保存された選択は保持されています。",
-    "agentSkillsNotVisible": "（表示されていません — チェックを外すと削除されます）"
+    "agentSkillsNotVisible": "（表示されていません — チェックを外すと削除されます）",
+    "nativeLabel": "ネイティブ",
+    "allEligibleUsers": "すべての該当ユーザー",
+    "noAllowedAudience": "許可された対象者なし",
+    "accessScopeHint": "アプリのアクセスルールのみ適用されます。元の権限も有効です。",
+    "detailsLabel": "詳細",
+    "indexedDocumentSummary": "{indexed, plural, one {# 件のドキュメント} other {# 件のドキュメント}}をインデックス化済み"
   },
   "localModels": {
     "title": "ローカルモデル",

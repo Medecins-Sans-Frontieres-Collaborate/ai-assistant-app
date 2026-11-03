@@ -5372,7 +5372,13 @@
     "agentSkillsNone": "Alaa tawas tawa suɓo.",
     "agentSkillsLoading": "Ndeneji ndi loowdi…",
     "agentSkillsLoadError": "Ndeneji ndi waawi loowde. Kuusal ngal so hullii ngal, o nanii.",
-    "agentSkillsNotVisible": "(keɓaani e ma—yof tuuma ndon moƴƴi)"
+    "agentSkillsNotVisible": "(keɓaani e ma—yof tuuma ndon moƴƴi)",
+    "nativeLabel": "Jom laawol",
+    "allEligibleUsers": "Golle kammuuɗe waawi ngam",
+    "noAllowedAudience": "Haa hay on jeytinooɓe",
+    "accessScopeHint": "Kaɗow ngal App tan. Sonnaande danginaa yettii.",
+    "detailsLabel": "Cifɗe",
+    "indexedDocumentSummary": "{indexed, plural, one {# daftor} other {# daftorɗe}} woni index"
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",

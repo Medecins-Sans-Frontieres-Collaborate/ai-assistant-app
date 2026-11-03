@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "ఎంచుకునేందుకు నైపుణ్యాలు లేవు.",
     "agentSkillsLoading": "నైపుణ్యాలు లోడ్ అవుతున్నాయి…",
     "agentSkillsLoadError": "నైపుణ్యాలను లోడ్ చేయడం సాధ్యపడలేదు. ముందు సేవ్ చేసిన ఎంపికలు అలాగే ఉంటాయి.",
-    "agentSkillsNotVisible": "(మీకు కనిపించదు — తొలగించడానికి టిక్ తప్పించండి)"
+    "agentSkillsNotVisible": "(మీకు కనిపించదు — తొలగించడానికి టిక్ తప్పించండి)",
+    "nativeLabel": "స్థానిక",
+    "allEligibleUsers": "అర్హత ఉన్న అన్ని వినియోగదారులు",
+    "noAllowedAudience": "అనుమతించబడిన ప్రేక్షకులు లేరు",
+    "accessScopeHint": "యాప్ యాక్సెస్ నియమాలు మాత్రమే వర్తిస్తాయి. మూల అనుమతులు మారవు.",
+    "detailsLabel": "వివరాలు",
+    "indexedDocumentSummary": "{indexed, plural, one {# డాక్యుమెంట్} other {# డాక్యుమెంట్లు}} ఇండెక్స్ చేయబడింది"
   },
   "localModels": {
     "title": "లోకల్ మోడల్స్",

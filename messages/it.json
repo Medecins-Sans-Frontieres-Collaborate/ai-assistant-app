@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "Nessuna competenza disponibile da selezionare.",
     "agentSkillsLoading": "Caricamento delle skill…",
     "agentSkillsLoadError": "Impossibile caricare le skill. Le selezioni salvate in precedenza sono mantenute.",
-    "agentSkillsNotVisible": "(non visibile — deseleziona per rimuovere)"
+    "agentSkillsNotVisible": "(non visibile — deseleziona per rimuovere)",
+    "nativeLabel": "Nativo",
+    "allEligibleUsers": "Tutti gli utenti idonei",
+    "noAllowedAudience": "Nessun pubblico autorizzato",
+    "accessScopeHint": "Solo regole di accesso dell'app. I permessi della fonte si applicano comunque.",
+    "detailsLabel": "Dettagli",
+    "indexedDocumentSummary": "{indexed, plural, one {# documento} other {# documenti}} indicizzati"
   },
   "localModels": {
     "title": "Modelli locali",

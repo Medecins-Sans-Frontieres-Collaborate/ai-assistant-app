@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "Geen vaardigheden beschikbaar om te selecteren.",
     "agentSkillsLoading": "Vaardigheden laden…",
     "agentSkillsLoadError": "Vaardigheden konden niet worden geladen. Eerder opgeslagen selecties blijven behouden.",
-    "agentSkillsNotVisible": "(niet zichtbaar voor u — deselecteer om te verwijderen)"
+    "agentSkillsNotVisible": "(niet zichtbaar voor u — deselecteer om te verwijderen)",
+    "nativeLabel": "Natuurlijk",
+    "allEligibleUsers": "Alle in aanmerking komende gebruikers",
+    "noAllowedAudience": "Geen toegestane doelgroep",
+    "accessScopeHint": "Alleen toegangsregels voor de app. Bronrechten blijven van kracht.",
+    "detailsLabel": "Details",
+    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documenten}} geïndexeerd"
   },
   "localModels": {
     "title": "Lokale modellen",

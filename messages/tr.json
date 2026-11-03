@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "Seçilebilecek yetenek yok.",
     "agentSkillsLoading": "Beceri yükleniyor…",
     "agentSkillsLoadError": "Beceriler yüklenemedi. Daha önce kaydedilen seçimler korunur.",
-    "agentSkillsNotVisible": "(size görünmüyor — kaldırmak için işareti kaldırın)"
+    "agentSkillsNotVisible": "(size görünmüyor — kaldırmak için işareti kaldırın)",
+    "nativeLabel": "Yerel",
+    "allEligibleUsers": "Tüm uygun kullanıcılar",
+    "noAllowedAudience": "İzin verilen hedef kitle yok",
+    "accessScopeHint": "Yalnızca uygulama erişim kuralları geçerlidir. Kaynak izinleri hala uygulanır.",
+    "detailsLabel": "Ayrıntılar",
+    "indexedDocumentSummary": "{indexed, plural, one {# doküman} other {# doküman}} indekslendi"
   },
   "localModels": {
     "title": "Yerel modeller",

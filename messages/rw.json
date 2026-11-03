@@ -5372,7 +5372,13 @@
     "agentSkillsNone": "Nta bumenyi buboneka bwo gutoranya.",
     "agentSkillsLoading": "Turimo turagura ubumenyi...",
     "agentSkillsLoadError": "Ubumenyi ntibwabonetse. Ibyo wahisemo mbere biracyahari.",
-    "agentSkillsNotVisible": "(ntibigaragara kuri wowe — kurenzaho akamenyetso bivana)"
+    "agentSkillsNotVisible": "(ntibigaragara kuri wowe — kurenzaho akamenyetso bivana)",
+    "nativeLabel": "Kavukire",
+    "allEligibleUsers": "Abakoresha bose bemerewe",
+    "noAllowedAudience": "Nta bagenerwabikorwa bemerewe",
+    "accessScopeHint": "Amategeko y'ikoreshwa rya porogaramu gusa. Uburenganzira bw'inkomoko buracyakurikizwa.",
+    "detailsLabel": "Ibisobanuro",
+    "indexedDocumentSummary": "{indexed, plural, one {inyandiko #} other {inyandiko #}} zashyizwe ku rutonde"
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",

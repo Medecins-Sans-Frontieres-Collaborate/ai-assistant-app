@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "Ei valittavia osaamisia.",
     "agentSkillsLoading": "Ladataan taitoja…",
     "agentSkillsLoadError": "Taitoja ei voitu ladata. Aiemmin tallennetut valinnat säilytetään.",
-    "agentSkillsNotVisible": "(ei näy sinulle — poista valinta poistaaksesi)"
+    "agentSkillsNotVisible": "(ei näy sinulle — poista valinta poistaaksesi)",
+    "nativeLabel": "Alkuperäinen",
+    "allEligibleUsers": "Kaikki kelpoiset käyttäjät",
+    "noAllowedAudience": "Ei sallittua yleisöä",
+    "accessScopeHint": "Vain sovelluksen käyttöoikeussäännöt. Lähteen käyttöoikeudet ovat yhä voimassa.",
+    "detailsLabel": "Tiedot",
+    "indexedDocumentSummary": "{indexed, plural, one {# asiakirja} other {# asiakirjaa}} indeksoitu"
   },
   "localModels": {
     "title": "Paikalliset mallit",

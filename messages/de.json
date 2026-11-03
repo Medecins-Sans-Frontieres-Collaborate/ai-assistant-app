@@ -4825,6 +4825,12 @@
     "description": "Ältere Nachrichten über dieses Limit hinaus werden zusammengefasst und als Kontext gesendet."
   },
   "agentAccess": {
+    "nativeLabel": "App-intern",
+    "allEligibleUsers": "Alle berechtigten Nutzer",
+    "noAllowedAudience": "Keine zugelassene Zielgruppe",
+    "accessScopeHint": "Nur App-Zugriffsregeln. Die Berechtigungen der Quellen gelten weiterhin.",
+    "detailsLabel": "Details",
+    "indexedDocumentSummary": "{indexed, plural, one {# Dokument indiziert} other {# Dokumente indiziert}}",
     "title": "Agentenzugriff",
     "description": "Steuern Sie, welche Nutzer gemeinsam genutzte Foundry-Agenten verwenden können. Die Regeln schränken nur weiter ein, was bereits durch den eigenen Azure-Zugriff erlaubt ist — Zugriffsrechte, die Azure verweigert, können nie gewährt werden.",
     "backToChat": "Zurück zum Chat",

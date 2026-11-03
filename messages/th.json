@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "ไม่มีทักษะให้เลือก",
     "agentSkillsLoading": "กำลังโหลดทักษะ…",
     "agentSkillsLoadError": "ไม่สามารถโหลดทักษะได้ ทักษะที่เลือกไว้ก่อนหน้านี้ยังคงอยู่.",
-    "agentSkillsNotVisible": "(คุณไม่เห็น — ยกเลิกเลือกเพื่อถอดออก)"
+    "agentSkillsNotVisible": "(คุณไม่เห็น — ยกเลิกเลือกเพื่อถอดออก)",
+    "nativeLabel": "กำเนิด",
+    "allEligibleUsers": "ผู้ใช้ที่มีสิทธิ์ทั้งหมด",
+    "noAllowedAudience": "ไม่มีผู้ใช้งานที่ได้รับอนุญาต",
+    "accessScopeHint": "ใช้เฉพาะกฎการเข้าถึงของแอป สิทธิ์จากแหล่งข้อมูลยังคงมีผลอยู่",
+    "detailsLabel": "รายละเอียด",
+    "indexedDocumentSummary": "มีการจัดทำดัชนี{indexed, plural, one {เอกสาร # ฉบับ} other {เอกสาร # ฉบับ}}"
   },
   "localModels": {
     "title": "โมเดลภายในเครื่อง",

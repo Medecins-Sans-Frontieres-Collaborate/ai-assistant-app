@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "Brak dostępnych umiejętności do wyboru.",
     "agentSkillsLoading": "Ładowanie umiejętności…",
     "agentSkillsLoadError": "Nie udało się załadować umiejętności. Wcześniej zapisane wybory zostały zachowane.",
-    "agentSkillsNotVisible": "(niewidoczne dla Ciebie — odznacz, aby usunąć)"
+    "agentSkillsNotVisible": "(niewidoczne dla Ciebie — odznacz, aby usunąć)",
+    "nativeLabel": "Rodzime",
+    "allEligibleUsers": "Wszyscy uprawnieni użytkownicy",
+    "noAllowedAudience": "Brak dozwolonej grupy odbiorców",
+    "accessScopeHint": "Tylko reguły dostępu aplikacji. Uprawnienia źródła nadal obowiązują.",
+    "detailsLabel": "Szczegóły",
+    "indexedDocumentSummary": "Zaindeksowano {indexed, plural, one {# dokument} other {# dokumentów}}"
   },
   "localModels": {
     "title": "Modele lokalne",

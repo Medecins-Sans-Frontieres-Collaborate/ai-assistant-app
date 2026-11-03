@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "নির্বাচনের জন্য কোনো দক্ষতা নেই।",
     "agentSkillsLoading": "স্কিল লোড হচ্ছে…",
     "agentSkillsLoadError": "স্কিলগুলো লোড করা যায়নি। পূর্বে সংরক্ষিত নির্বাচনগুলো রাখা হয়েছে।",
-    "agentSkillsNotVisible": "(আপনার জন্য দৃশ্যমান নয় — অপসারণ করতে টিক চিহ্ন উঠান)"
+    "agentSkillsNotVisible": "(আপনার জন্য দৃশ্যমান নয় — অপসারণ করতে টিক চিহ্ন উঠান)",
+    "nativeLabel": "নেটিভ",
+    "allEligibleUsers": "সমস্ত যোগ্য ব্যবহারকারী",
+    "noAllowedAudience": "অনুমোদিত শ্রোতা নেই",
+    "accessScopeHint": "শুধুমাত্র অ্যাপ অ্যাক্সেস নিয়ম প্রযোজ্য। সোর্স পারমিশন এখনও প্রযোজ্য।",
+    "detailsLabel": "বিস্তারিত",
+    "indexedDocumentSummary": "{indexed, plural, one {#টি ডকুমেন্ট} other {#টি ডকুমেন্ট} } সূচিকৃত"
   },
   "localModels": {
     "title": "স্থানীয় মডেলসমূহ",

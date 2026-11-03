@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "선택할 수 있는 스킬이 없습니다.",
     "agentSkillsLoading": "스킬 불러오는 중…",
     "agentSkillsLoadError": "스킬을 불러올 수 없습니다. 이전에 저장된 선택 사항은 유지됩니다.",
-    "agentSkillsNotVisible": "(회원님께는 표시되지 않습니다 — 체크 해제 시 제거)"
+    "agentSkillsNotVisible": "(회원님께는 표시되지 않습니다 — 체크 해제 시 제거)",
+    "nativeLabel": "네이티브",
+    "allEligibleUsers": "모든 적격 사용자",
+    "noAllowedAudience": "허용된 대상 없음",
+    "accessScopeHint": "앱 접근 규칙만 적용됩니다. 소스 권한은 여전히 적용됩니다.",
+    "detailsLabel": "세부정보",
+    "indexedDocumentSummary": "{indexed, plural, one {문서 #건} other {문서 #건}} 인덱싱됨"
   },
   "localModels": {
     "title": "로컬 모델",

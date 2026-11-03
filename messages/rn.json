@@ -5372,7 +5372,13 @@
     "agentSkillsNone": "Nta bushobozi buboneka vyo gutora.",
     "agentSkillsLoading": "Biriko biradukura ubushobozi...",
     "agentSkillsLoadError": "Ubushobozi ntibashoboye kudukurwa. Ivyo wahisemo mbere bikazigamwa.",
-    "agentSkillsNotVisible": "(ntibiboneka kuri wewe — sogota kugira uvyikure)"
+    "agentSkillsNotVisible": "(ntibiboneka kuri wewe — sogota kugira uvyikure)",
+    "nativeLabel": "Kavukiro",
+    "allEligibleUsers": "Abakoresha bose bemerewe",
+    "noAllowedAudience": "Nta bantu bemerewe",
+    "accessScopeHint": "Amabwiriza y’ukuntu porogaramu ikoreshwa gusa. Uburenganzira biva aho bikomoka biguma bikoreshwa.",
+    "detailsLabel": "Ibisobanuro",
+    "indexedDocumentSummary": "{indexed, plural, one {# idocumenti} other {# zidocumenti}} zarashizwe ku rutonde"
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",

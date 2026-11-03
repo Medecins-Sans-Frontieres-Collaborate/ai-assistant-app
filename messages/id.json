@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "Tidak ada keahlian yang dapat dipilih.",
     "agentSkillsLoading": "Memuat keterampilan...",
     "agentSkillsLoadError": "Keterampilan tidak dapat dimuat. Pilihan yang telah disimpan sebelumnya tetap dipertahankan.",
-    "agentSkillsNotVisible": "(tidak terlihat oleh Anda — hapus centang untuk menghapus)"
+    "agentSkillsNotVisible": "(tidak terlihat oleh Anda — hapus centang untuk menghapus)",
+    "nativeLabel": "Asli",
+    "allEligibleUsers": "Semua pengguna yang memenuhi syarat",
+    "noAllowedAudience": "Tidak ada audiens yang diizinkan",
+    "accessScopeHint": "Hanya aturan akses aplikasi. Izin sumber tetap berlaku.",
+    "detailsLabel": "Detail",
+    "indexedDocumentSummary": "{indexed, plural, one {# dokumen} other {# dokumen}} diindeks"
   },
   "localModels": {
     "title": "Model lokal",

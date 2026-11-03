@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "Nu există abilități disponibile pentru selecție.",
     "agentSkillsLoading": "Se încarcă abilitățile…",
     "agentSkillsLoadError": "Abilitățile nu au putut fi încărcate. Se păstrează selecțiile salvate anterior.",
-    "agentSkillsNotVisible": "(nu este vizibil pentru dvs. — debifați pentru a elimina)"
+    "agentSkillsNotVisible": "(nu este vizibil pentru dvs. — debifați pentru a elimina)",
+    "nativeLabel": "Nativ",
+    "allEligibleUsers": "Toți utilizatorii eligibili",
+    "noAllowedAudience": "Nicio audiență permisă",
+    "accessScopeHint": "Doar regulile de acces ale aplicației. Permisiunile sursei se aplică în continuare.",
+    "detailsLabel": "Detalii",
+    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documente}} indexate"
   },
   "localModels": {
     "title": "Modele locale",

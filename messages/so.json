@@ -5372,7 +5372,13 @@
     "agentSkillsNone": "Xirfado aan la heli karin si loo doorto.",
     "agentSkillsLoading": "Xirfado ayaa la soo dajinayaa…",
     "agentSkillsLoadError": "Xirfadihii lama soo dajin karin. Doorashadii hore ayaa la hayaa.",
-    "agentSkillsNotVisible": "(adiga laguma tusayo — calaamadda ka saar si aad u tirtirto)"
+    "agentSkillsNotVisible": "(adiga laguma tusayo — calaamadda ka saar si aad u tirtirto)",
+    "nativeLabel": "Hooyo",
+    "allEligibleUsers": "Dhammaan isticmaaleyaasha u qalma",
+    "noAllowedAudience": "Ma jiro dhegaystayaal la oggol yahay",
+    "accessScopeHint": "Kaliya xeerarka gelitaanka app-ka. Ogolaanshaha ilaha wali wuu shaqaynayaa.",
+    "detailsLabel": "Faahfaahin",
+    "indexedDocumentSummary": "{indexed, plural, one {# dukumenti} other {# dukumanti}} la diiwaangeliyey"
   },
   "localModels": {
     "title": "Moodallo maxalli ah",

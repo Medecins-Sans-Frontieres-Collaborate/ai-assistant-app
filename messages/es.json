@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "No hay habilidades disponibles para seleccionar.",
     "agentSkillsLoading": "Cargando habilidades…",
     "agentSkillsLoadError": "No se pudieron cargar las habilidades. Se mantienen las selecciones guardadas anteriormente.",
-    "agentSkillsNotVisible": "(no visible para usted — desmarque para eliminar)"
+    "agentSkillsNotVisible": "(no visible para usted — desmarque para eliminar)",
+    "nativeLabel": "Nativo",
+    "allEligibleUsers": "Todos los usuarios elegibles",
+    "noAllowedAudience": "Sin audiencia permitida",
+    "accessScopeHint": "Solo reglas de acceso a la app. Los permisos de origen siguen aplicando.",
+    "detailsLabel": "Detalles",
+    "indexedDocumentSummary": "{indexed, plural, one {# documento} other {# documentos}} indexados"
   },
   "localModels": {
     "title": "Modelos locales",

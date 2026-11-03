@@ -4825,6 +4825,12 @@
     "description": "Les messages plus anciens dépassant cette limite sont résumés et envoyés en tant que contexte."
   },
   "agentAccess": {
+    "nativeLabel": "Natif",
+    "allEligibleUsers": "Tous les utilisateurs autorisés",
+    "noAllowedAudience": "Aucun public autorisé",
+    "accessScopeHint": "Règles d’accès de l’application uniquement. Les autorisations des sources restent applicables.",
+    "detailsLabel": "Détails",
+    "indexedDocumentSummary": "{indexed, plural, one {# document indexé} other {# documents indexés}}",
     "title": "Accès agent",
     "description": "Gérez quels utilisateurs peuvent utiliser les agents Foundry partagés. Les règles ne peuvent que restreindre davantage ce que l’accès Azure personnel d’un utilisateur permet déjà — elles ne peuvent jamais accorder un accès refusé par Azure.",
     "backToChat": "Retour à la discussion",

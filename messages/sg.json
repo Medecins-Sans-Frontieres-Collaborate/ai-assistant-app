@@ -5372,7 +5372,13 @@
     "agentSkillsNone": "Makandï ala ku na ilî.",
     "agentSkillsLoading": "Yeke ti zo skills...",
     "agentSkillsLoadError": "Skills ala yeke ti zo. Skill oko na mo ti kangbida na awa mo ti yeke.",
-    "agentSkillsNotVisible": "(ala na mboko ti mo — tiro na wa ti yeke)"
+    "agentSkillsNotVisible": "(ala na mboko ti mo — tiro na wa ti yeke)",
+    "nativeLabel": "Ya zo",
+    "allEligibleUsers": "Bê ti mbi yeke mo asili",
+    "noAllowedAudience": "Mbênî zinga ayeke mo azo abê",
+    "accessScopeHint": "Zaka wakana App sôhïngö tî wákanga. Lilo tî gbàngbâ awa sômâ na kodro.",
+    "detailsLabel": "Lédéngö",
+    "indexedDocumentSummary": "{indexed, plural, one {# dokumenti} other {# dokumenti}} gbèyê"
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",

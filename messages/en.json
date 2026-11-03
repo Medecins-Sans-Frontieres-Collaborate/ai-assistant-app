@@ -4747,6 +4747,12 @@
     "description": "Older messages beyond this limit are summarized and sent as context."
   },
   "agentAccess": {
+    "nativeLabel": "Native",
+    "allEligibleUsers": "All eligible users",
+    "noAllowedAudience": "No allowed audience",
+    "accessScopeHint": "App access rules only. Source permissions still apply.",
+    "detailsLabel": "Details",
+    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documents}} indexed",
     "title": "Access & Connectors",
     "description": "Control which users can use shared agents and organization connectors. Rules only further restrict what a user's own Azure access already allows — they can never grant access Azure denies.",
     "backToChat": "Back to chat",

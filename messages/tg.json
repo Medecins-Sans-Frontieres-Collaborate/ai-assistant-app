@@ -5372,7 +5372,13 @@
     "agentSkillsNone": "Барои интихоб ягон маҳорат мавҷуд нест.",
     "agentSkillsLoading": "Маҳоратҳо пурбор мешаванд…",
     "agentSkillsLoadError": "Маҳоратҳо пурбор карда нашуданд. Интихобҳои қаблан захирашуда боқӣ мемонанд.",
-    "agentSkillsNotVisible": "(барои шумо намоён нест — барои ҳазф қайдро гиред)"
+    "agentSkillsNotVisible": "(барои шумо намоён нест — барои ҳазф қайдро гиред)",
+    "nativeLabel": "Забони модарӣ",
+    "allEligibleUsers": "Ҳамаи корбарони мувофиқ",
+    "noAllowedAudience": "Ҳеҷ шунавандаи иҷозатдодашуда нест",
+    "accessScopeHint": "Танҳо қоидаҳои дастрасии барнома. Ҳуқуқҳои манбаи маълумот ҳанӯз амал мекунанд.",
+    "detailsLabel": "Тафсилот",
+    "indexedDocumentSummary": "{indexed, plural, one {# ҳуҷҷат} other {# ҳуҷҷат}} индексонида шуд"
   },
   "localModels": {
     "title": "Моделҳои маҳаллӣ",

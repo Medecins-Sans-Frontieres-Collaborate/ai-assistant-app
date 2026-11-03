@@ -5372,7 +5372,13 @@
     "agentSkillsNone": "Δεν υπάρχουν διαθέσιμες δεξιότητες για επιλογή.",
     "agentSkillsLoading": "Φόρτωση δεξιοτήτων…",
     "agentSkillsLoadError": "Δεν ήταν δυνατή η φόρτωση των δεξιοτήτων. Οι προηγούμενες επιλογές διατηρούνται.",
-    "agentSkillsNotVisible": "(δεν είναι ορατό σε εσάς — αποεπιλέξτε για αφαίρεση)"
+    "agentSkillsNotVisible": "(δεν είναι ορατό σε εσάς — αποεπιλέξτε για αφαίρεση)",
+    "nativeLabel": "Εγγενές",
+    "allEligibleUsers": "Όλοι οι επιλέξιμοι χρήστες",
+    "noAllowedAudience": "Καμία επιτρεπτή ομάδα",
+    "accessScopeHint": "Μόνο κανόνες πρόσβασης εφαρμογής. Τα δικαιώματα της πηγής εξακολουθούν να ισχύουν.",
+    "detailsLabel": "Λεπτομέρειες",
+    "indexedDocumentSummary": "{indexed, plural, one {# έγγραφο} other {# έγγραφα}} ευρετηριασμένα"
   },
   "localModels": {
     "title": "Τοπικά μοντέλα",

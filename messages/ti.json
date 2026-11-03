@@ -5372,7 +5372,13 @@
     "agentSkillsNone": "ትምህርታት ይበጽሑ ዘይኮኑ ኣሎ።",
     "agentSkillsLoading": "ስልታት እዘንሓይ...",
     "agentSkillsLoadError": "ስልታት ምጽናዕ ኣይተኻነ። ንቅርብ ንምሩጽ ዝተዘበነ ምሉእ ይንበር።",
-    "agentSkillsNotVisible": "(ንሓሳብኻ ዘይብሉ ፥ ንምሕዳስ ትዕገት)"
+    "agentSkillsNotVisible": "(ንሓሳብኻ ዘይብሉ ፥ ንምሕዳስ ትዕገት)",
+    "nativeLabel": "ውልቃዊ",
+    "allEligibleUsers": "ኩሉ ምብቃህ ተጠቃሚታት",
+    "noAllowedAudience": "ተፈታዊ ደጋፊታት ኣይተቐበሉን",
+    "accessScopeHint": "እቲ መተግበሪ መግቢ ሕርወታት እዚኣ፡ ሓሳብ ተሞንጎ ይትግበሩ። ኣብ ምእንቲ ኣብ መእተዊ ፍቓዶም እንደሳሳት ይተግበሩ።",
+    "detailsLabel": "ዝርዝር",
+    "indexedDocumentSummary": "{indexed, plural, one {# ሰነድ} other {# ሰነዳት}} ተተውካ"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",

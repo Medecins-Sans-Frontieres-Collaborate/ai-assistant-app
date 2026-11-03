@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "Нет доступных для выбора навыков.",
     "agentSkillsLoading": "Загрузка навыков…",
     "agentSkillsLoadError": "Не удалось загрузить навыки. Ранее сохранённые выборы остаются.",
-    "agentSkillsNotVisible": "(невидимо для вас — снимите галочку, чтобы удалить)"
+    "agentSkillsNotVisible": "(невидимо для вас — снимите галочку, чтобы удалить)",
+    "nativeLabel": "Родной",
+    "allEligibleUsers": "Все подходящие пользователи",
+    "noAllowedAudience": "Нет разрешённой аудитории",
+    "accessScopeHint": "Только правила доступа приложения. Разрешения источника по-прежнему действуют.",
+    "detailsLabel": "Подробнее",
+    "indexedDocumentSummary": "{indexed, plural, one {# документ} other {# документов}} проиндексировано"
   },
   "localModels": {
     "title": "Локальные модели",

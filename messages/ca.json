@@ -5388,7 +5388,13 @@
     "agentSkillsNone": "No hi ha habilitats disponibles per seleccionar.",
     "agentSkillsLoading": "Carregant habilitats…",
     "agentSkillsLoadError": "No s’han pogut carregar les habilitats. Es conserven les seleccions desades anteriorment.",
-    "agentSkillsNotVisible": "(no visible per a vostè — desmarqueu-ho per eliminar-ho)"
+    "agentSkillsNotVisible": "(no visible per a vostè — desmarqueu-ho per eliminar-ho)",
+    "nativeLabel": "Natiu",
+    "allEligibleUsers": "Tots els usuaris amb dret",
+    "noAllowedAudience": "Sense públic autoritzat",
+    "accessScopeHint": "Només regles d'accés de l'aplicació. Els permisos de l'origen encara s'apliquen.",
+    "detailsLabel": "Detalls",
+    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documents}} indexats"
   },
   "localModels": {
     "title": "Models locals",
