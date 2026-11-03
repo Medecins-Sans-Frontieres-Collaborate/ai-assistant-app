@@ -20,7 +20,8 @@ import {
 } from '@/lib/utils/shared/translation/languages';
 
 import { AccessPill } from './AccessPill';
-import { CanonicalKeyChip } from './CanonicalKeyChip';
+import { AccessSummary } from './AccessSummary';
+import { AgentTechnicalDetails } from './AgentTechnicalDetails';
 import { CatalogOauthSection } from './CatalogOauthSection';
 import { ConnectorEditor } from './ConnectorEditor';
 import { GuideEditor } from './GuideEditor';
@@ -1464,8 +1465,6 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
             ) : (
               <ul className="space-y-2">
                 {visibleRows.map((row) => {
-                  const isRestricted =
-                    row.stored?.rule.access.type === 'restricted';
                   const isPromptAgent =
                     row.source === CLIENT_PROMPT_AGENT_SOURCE;
                   const isHiddenRow = hiddenAgents.isHidden(row.canonicalKey);
@@ -1474,10 +1473,10 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                       key={row.canonicalKey}
                       className="rounded-lg border border-gray-200 dark:border-gray-700 p-3"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="truncate text-sm font-medium text-black dark:text-white">
+                      <div className="min-w-0">
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="min-w-0 [overflow-wrap:anywhere] text-sm font-medium text-black dark:text-white">
                               {row.displayName}
                             </span>
                             {isPromptAgent && (
@@ -1494,81 +1493,83 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                               </span>
                             )}
                           </div>
-                          <p
-                            className="truncate text-xs text-gray-500 dark:text-gray-400"
-                            title={row.source}
-                          >
-                            {t('sourceLabel')}: {row.source}
-                          </p>
-                          <CanonicalKeyChip canonicalKey={row.canonicalKey} />
+                          <AccessSummary access={row.stored?.rule.access} />
                         </div>
-                        <AccessPill restricted={isRestricted} />
-                        {isHiddenRow && <HiddenBadge />}
-                        <HideAgentButton
-                          hidden={isHiddenRow}
-                          onHide={() => hiddenAgents.hide(row.canonicalKey)}
-                          onUnhide={() => hiddenAgents.unhide(row.canonicalKey)}
-                        />
-                        <button
-                          type="button"
-                          aria-expanded={editingKey === row.canonicalKey}
-                          className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                          onClick={() =>
-                            setEditingKey(
-                              editingKey === row.canonicalKey
-                                ? null
-                                : row.canonicalKey,
-                            )
-                          }
-                        >
-                          {editingKey === row.canonicalKey
-                            ? t('cancel')
-                            : t('editAccess')}
-                        </button>
-                        {row.promptAgent && (
-                          <>
-                            <button
-                              type="button"
-                              className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                              onClick={() =>
-                                setEditingAgentKey(
-                                  editingAgentKey === row.canonicalKey
-                                    ? null
-                                    : row.canonicalKey,
-                                )
-                              }
-                            >
-                              {editingAgentKey === row.canonicalKey
-                                ? t('cancel')
-                                : t('editAgent')}
-                            </button>
-                            <button
-                              type="button"
-                              className="shrink-0 rounded-md border border-red-200 dark:border-red-900 px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
-                              onClick={() =>
-                                setConfirmDeleteKey(
-                                  confirmDeleteKey === row.canonicalKey
-                                    ? null
-                                    : row.canonicalKey,
-                                )
-                              }
-                            >
-                              {t('deleteAgent')}
-                            </button>
-                          </>
-                        )}
+                        <div className="mt-3 flex flex-wrap items-center gap-2 [&>button]:min-h-11 [&>button]:whitespace-normal">
+                          {isHiddenRow && <HiddenBadge />}
+                          <HideAgentButton
+                            hidden={isHiddenRow}
+                            onHide={() => hiddenAgents.hide(row.canonicalKey)}
+                            onUnhide={() =>
+                              hiddenAgents.unhide(row.canonicalKey)
+                            }
+                          />
+                          <button
+                            type="button"
+                            aria-expanded={editingKey === row.canonicalKey}
+                            className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                            onClick={() =>
+                              setEditingKey(
+                                editingKey === row.canonicalKey
+                                  ? null
+                                  : row.canonicalKey,
+                              )
+                            }
+                          >
+                            {editingKey === row.canonicalKey
+                              ? t('cancel')
+                              : t('editAccess')}
+                          </button>
+                          {row.promptAgent && (
+                            <>
+                              <button
+                                type="button"
+                                className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                                onClick={() =>
+                                  setEditingAgentKey(
+                                    editingAgentKey === row.canonicalKey
+                                      ? null
+                                      : row.canonicalKey,
+                                  )
+                                }
+                              >
+                                {editingAgentKey === row.canonicalKey
+                                  ? t('cancel')
+                                  : t('editAgent')}
+                              </button>
+                              <button
+                                type="button"
+                                className="shrink-0 rounded-md border border-red-200 dark:border-red-900 px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                onClick={() =>
+                                  setConfirmDeleteKey(
+                                    confirmDeleteKey === row.canonicalKey
+                                      ? null
+                                      : row.canonicalKey,
+                                  )
+                                }
+                              >
+                                {t('deleteAgent')}
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </div>
 
-                      {row.stored && (
-                        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-                          {t('updatedByLine', {
-                            user: row.stored.rule.updatedBy,
-                            date: formatAdminTimestamp(
-                              row.stored.rule.updatedAt,
-                            ),
-                          })}
-                        </p>
-                      )}
+                      <AgentTechnicalDetails
+                        canonicalKey={row.canonicalKey}
+                        source={row.source}
+                      >
+                        {row.stored && (
+                          <p className="[overflow-wrap:anywhere] text-xs text-gray-600 dark:text-gray-300">
+                            {t('updatedByLine', {
+                              user: row.stored.rule.updatedBy,
+                              date: formatAdminTimestamp(
+                                row.stored.rule.updatedAt,
+                              ),
+                            })}
+                          </p>
+                        )}
+                      </AgentTechnicalDetails>
 
                       {editingKey === row.canonicalKey && (
                         <RuleEditor
