@@ -105,11 +105,13 @@ export function useDelegatableAgents({
     queryKey: ['agent-access-m365-agents'],
     queryFn: () => fetchAdminList('/api/agent-access/m365-agents'),
     ...listQuery,
+    refetchOnWindowFocus: true,
   });
   const orgQuery = useQuery<AdminOrgAgentsResponse>({
     queryKey: ['agent-access-org-agents'],
     queryFn: () => fetchAdminList('/api/agent-access/org-agents'),
     ...listQuery,
+    refetchOnWindowFocus: true,
   });
   const guidesQuery = useQuery<AdminGuidesResponse>({
     queryKey: ['agent-access-guides'],
