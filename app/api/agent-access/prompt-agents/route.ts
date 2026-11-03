@@ -40,6 +40,7 @@ import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 import { OpenAIModels } from '@/types/openai';
 
 import { auth } from '@/auth';
+import { PROMPT_AGENT_MAX_PROMPT_CHARS } from '@/lib/constants/promptAgents';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
@@ -75,7 +76,7 @@ const DELEGATION_CAS_ATTEMPTS = 3;
 const agentFieldsSchema = z.object({
   name: z.string().trim().min(1).max(100),
   description: z.string().trim().max(300).default(''),
-  systemPrompt: z.string().trim().min(1).max(10000),
+  systemPrompt: z.string().trim().min(1).max(PROMPT_AGENT_MAX_PROMPT_CHARS),
   modelId: z.string().trim().min(1).max(100),
 });
 
