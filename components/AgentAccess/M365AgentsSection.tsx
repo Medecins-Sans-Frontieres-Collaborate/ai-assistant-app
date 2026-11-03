@@ -19,6 +19,7 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { useGroupNames } from '@/client/hooks/useGroupNames';
 import { useHiddenAdminAgents } from '@/client/hooks/useHiddenAdminAgents';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
@@ -35,8 +36,12 @@ import { OpenAIModels } from '@/types/openai';
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 
 import { AccessSummary } from './AccessSummary';
+import { AgentActionsMenu } from './AgentActionsMenu';
 import { AgentListStatus } from './AgentListStatus';
+import rowStyles from './AgentRow.module.css';
+import { AgentRowHeader } from './AgentRowHeader';
 import { AgentTechnicalDetails } from './AgentTechnicalDetails';
+import { AgentTypeLabel } from './AgentTypeLabel';
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
 import {
   HiddenBadge,
@@ -54,6 +59,8 @@ import {
   selectUnpreparedScannedPdfs,
 } from './M365SourcePlanView';
 import { RuleEditor } from './RuleEditor';
+import { agentSearchDocument, matchesAgentSearch } from './agentSearch';
+import { formatAdminTimestamp } from './formatAdminTimestamp';
 import {
   AdminM365AgentsResponse,
   AdminStoredM365Agent,
@@ -1434,6 +1441,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
 };
 
 interface M365AgentsSectionProps {
+  searchQuery?: string;
   /** Rules from the panel's rules query — reused for the access pill/editor. */
   rules: AdminStoredRule[];
   /** Invalidate shared panel data (rules + discovery) after a change. */
@@ -1447,9 +1455,12 @@ interface M365AgentsSectionProps {
  */
 export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   rules,
+  searchQuery = '',
   onDataChanged,
 }) => {
   const t = useTranslations('agentAccess');
+  const tSearch = useTranslations('m365.files');
+  const tFiles = useTranslations('analyticsAdmin.health.total');
   const queryClient = useQueryClient();
   const { agentsEnabled } = useM365Enabled();
   const m365Connected = useSettingsStore((s) => s.m365Connected);
@@ -1501,6 +1512,9 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   const rulesByKey = useMemo(
     () => new Map(rules.map((rule) => [rule.canonicalKey, rule])),
     [rules],
+  );
+  const searchGroupNames = useGroupNames(
+    rules.flatMap((entry) => entry.rule.access.allowGroups ?? []),
   );
 
   /**
@@ -1692,15 +1706,62 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
     invalidate();
   };
 
-  if (!agentsEnabled) return null;
-
   const agents = agentsQuery.data?.m365Agents ?? [];
+  const searchDocuments = useMemo(
+    () =>
+      new Map(
+        agents.map((entry) => {
+          const access = rulesByKey.get(entry.canonicalKey)?.rule.access;
+          return [
+            entry.canonicalKey,
+            agentSearchDocument({
+              ...entry,
+              access,
+              kind: [
+                'native',
+                t('nativeLabel'),
+                'files',
+                tFiles('files'),
+                'm365',
+                'Microsoft 365',
+              ],
+              accessLabel:
+                access?.type === 'restricted'
+                  ? t('accessRestricted')
+                  : t('allEligibleUsers'),
+              groupNames: (access?.allowGroups ?? []).map(
+                (id) => searchGroupNames[id],
+              ),
+              job: jobs[entry.agent.id],
+              hidden: hiddenAgents.isHidden(entry.canonicalKey),
+            }),
+          ];
+        }),
+      ),
+    [
+      agents,
+      rulesByKey,
+      searchGroupNames,
+      jobs,
+      t,
+      tFiles,
+      hiddenAgents.isHidden,
+    ],
+  );
   const listingUnavailable = agentsQuery.data?.m365AgentsUnavailable === true;
   const listingReady =
     !agentsQuery.isPending && !agentsQuery.isError && !listingUnavailable;
-  const { visible: visibleAgents, hiddenCount } = hiddenAgents.partition(
-    agents,
-    (entry) => entry.canonicalKey,
+  const { visible: unfilteredVisibleAgents, hiddenCount } =
+    hiddenAgents.partition(agents, (entry) => entry.canonicalKey);
+  const visibleAgents = unfilteredVisibleAgents.filter(
+    (entry) =>
+      matchesAgentSearch(
+        searchDocuments.get(entry.canonicalKey) ?? '',
+        searchQuery,
+      ) ||
+      editingRuleKey === entry.canonicalKey ||
+      editingId === entry.agent.id ||
+      confirmDeleteId === entry.agent.id,
   );
   const maxDocuments = agentsQuery.data?.maxDocuments ?? DEFAULT_MAX_SOURCES;
   const maxBytes = agentsQuery.data?.maxBytes ?? DEFAULT_MAX_BYTES;
@@ -1714,6 +1775,8 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   const capCeilings: M365DocumentCapCeilings =
     agentsQuery.data?.maxDocumentsCeilings ?? DEFAULT_CAP_CEILINGS;
   const isGlobalAdmin = agentsQuery.data?.isGlobalAdmin === true;
+
+  if (!agentsEnabled) return null;
 
   return (
     <div className="mt-6 border-t border-gray-200 pt-4 dark:border-gray-700">
@@ -1793,11 +1856,15 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
       {visibleAgents.length === 0 ? (
         listingReady && (
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            {agents.length === 0 ? t('noM365Agents') : t('allAgentsHidden')}
+            {searchQuery.trim() && unfilteredVisibleAgents.length > 0
+              ? tSearch('noResults', { query: searchQuery })
+              : agents.length === 0
+                ? t('noM365Agents')
+                : t('allAgentsHidden')}
           </p>
         )
       ) : (
-        <ul className="space-y-2">
+        <ul className={`${rowStyles.list} space-y-2`}>
           {visibleAgents.map((entry) => {
             const stored = rulesByKey.get(entry.canonicalKey) ?? null;
             const sources = entry.agent.sources;
@@ -1811,9 +1878,6 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                 s.status !== 'error' &&
                 s.status !== 'missing' &&
                 (s.indexedChunks ?? (s.status === 'indexed' ? 1 : 0)) > 0,
-            ).length;
-            const unindexedSources = sources.filter(
-              (s) => s.status !== 'indexed',
             ).length;
             // "Indexed" with zero chunks means extraction found no text
             // (e.g. a scanned PDF without a text layer) — a silently empty
@@ -1877,291 +1941,351 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                 key={entry.canonicalKey}
                 className="rounded-lg border border-gray-200 p-3 dark:border-gray-700"
               >
-                <div className="min-w-0">
-                  <div className="min-w-0 space-y-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span
-                        className="min-w-0 [overflow-wrap:anywhere] text-sm font-medium text-black dark:text-white"
-                        title={entry.agent.name}
-                      >
-                        {entry.agent.name}
-                      </span>
-                      <span className="shrink-0 rounded-full bg-sky-100 px-2 py-0.5 text-xs text-sky-800 dark:bg-sky-900/30 dark:text-sky-300">
-                        {t('m365AgentBadge')}
-                      </span>
-                    </div>
-                    <AccessSummary access={stored?.rule.access} />
-                    {entry.agent.maxDocumentsOverride !== undefined && (
-                      <span
-                        className="inline-block rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
-                        title={entry.agent.maxDocumentsOverrideAt}
-                      >
-                        {entry.agent.maxDocumentsOverrideBy
-                          ? t('m365AgentLimitBadge', {
-                              limit: entry.agent.maxDocumentsOverride,
-                              who: entry.agent.maxDocumentsOverrideBy,
-                            })
-                          : t('m365AgentLimitBadgePlain', {
-                              limit: entry.agent.maxDocumentsOverride,
-                            })}
-                      </span>
-                    )}
-                    {contentSources === 0 ? (
-                      <p className="text-xs font-medium text-red-700 dark:text-red-400">
-                        {t('m365AgentStatusNotIndexed')}
-                      </p>
-                    ) : contentSources < sources.length ? (
-                      <p className="text-xs font-medium text-amber-700 dark:text-amber-400">
-                        {t('m365AgentStatusPartial', {
-                          indexed: contentSources,
-                          count: sources.length,
-                        })}
-                      </p>
-                    ) : (
-                      <p className="text-xs text-gray-600 dark:text-gray-300">
-                        {t('m365AgentSourceSummary', {
-                          count: sources.length,
-                          pending: unindexedSources,
-                        })}
-                      </p>
-                    )}
-                    {jobActive && (
-                      <p
-                        className={`flex items-center gap-1 text-xs font-medium ${
-                          job.stale && !driving
-                            ? 'text-amber-700 dark:text-amber-400'
-                            : 'text-blue-700 dark:text-blue-400'
-                        }`}
-                      >
-                        {driving && (
-                          <IconRefresh size={12} className="animate-spin" />
-                        )}
-                        {job.stale && !driving
-                          ? t('m365AgentIndexInterrupted', {
-                              done: job.done,
-                              total: job.total,
-                            })
-                          : t(
-                              job.mode === 'refresh'
-                                ? 'm365AgentRefreshProgress'
-                                : 'm365AgentIndexProgress',
-                              { done: job.done, total: job.total },
-                            )}
-                        {!driving && (
-                          <span className="font-normal text-gray-500 dark:text-gray-400">
-                            ·{' '}
-                            {t('m365AgentIndexStartedBy', {
-                              name: job.startedBy,
-                            })}
-                          </span>
-                        )}
-                      </p>
-                    )}
-                    {job?.status === 'failed' && (
-                      <div className="flex items-start gap-2 text-xs text-red-700 dark:text-red-400">
-                        <p
-                          className="line-clamp-2 min-w-0 break-words"
-                          title={job.error}
+                <AgentRowHeader
+                  identity={
+                    <>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span
+                          className="min-w-0 [overflow-wrap:anywhere] text-sm font-medium text-black dark:text-white"
+                          title={entry.agent.name}
                         >
-                          {t('m365AgentIndexJobFailed', {
-                            error: job.error ?? '',
+                          {entry.agent.name}
+                        </span>
+                        {hiddenAgents.isHidden(entry.canonicalKey) && (
+                          <HiddenBadge />
+                        )}
+                      </div>
+                      <AgentTypeLabel
+                        kind="files"
+                        sourceLabel="Microsoft 365"
+                      />
+                      {entry.agent.description && (
+                        <p
+                          className="line-clamp-2 text-xs text-gray-600 dark:text-gray-300"
+                          title={entry.agent.description}
+                        >
+                          {entry.agent.description}
+                        </p>
+                      )}
+                      <p
+                        className="line-clamp-1 text-xs text-gray-600 dark:text-gray-300"
+                        title={sources
+                          .map((source) => source.title)
+                          .join(' · ')}
+                      >
+                        {sources
+                          .slice(0, 2)
+                          .map((source) => source.title)
+                          .join(' · ')}
+                        {sources.length > 2 ? ` +${sources.length - 2}` : ''}
+                      </p>
+                    </>
+                  }
+                  audience={
+                    <>
+                      <AccessSummary access={stored?.rule.access} />
+                      {contentSources === 0 ? (
+                        <p className="text-xs font-medium text-amber-800 dark:text-amber-300">
+                          {t('m365AgentStatusNotIndexed')}
+                        </p>
+                      ) : contentSources < sources.length ? (
+                        <p className="text-xs font-medium text-amber-700 dark:text-amber-400">
+                          {t('m365AgentStatusPartial', {
+                            indexed: contentSources,
+                            count: sources.length,
                           })}
                         </p>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            void startIndex(entry.agent.id, 'full')
-                          }
-                          disabled={!m365Connected}
-                          className="shrink-0 rounded-md border border-red-300 px-2 py-0.5 font-medium hover:bg-red-50 disabled:opacity-40 dark:border-red-700 dark:hover:bg-red-900/20"
-                          title={actionDisabledTitle ?? t('m365AgentIndexHint')}
-                        >
-                          {t('m365AgentIndexRetry')}
-                        </button>
-                      </div>
-                    )}
-                    {finishedVerdict === 'visible' && (
-                      <p
-                        role="status"
-                        className="text-xs font-medium text-green-700 dark:text-green-400"
-                      >
-                        {t('m365AgentRunVisible')}
-                      </p>
-                    )}
-                    {finishedVerdict === 'hidden' && (
-                      <p
-                        role="status"
-                        className="text-xs font-medium text-red-700 dark:text-red-400"
-                      >
-                        {t('m365AgentRunHidden')}
-                      </p>
-                    )}
-                    {sourceErrors.length > 0 && (
-                      <ul className="text-xs text-red-600 dark:text-red-400">
-                        {sourceErrors.map(({ title, error }) => (
-                          <li
-                            key={`${title}:${error}`}
-                            className="line-clamp-2 break-words"
-                            title={`${title}: ${error}`}
-                          >
-                            <span className="font-medium">{title}</span>:{' '}
-                            {error}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    {emptySources > 0 && (
-                      <p className="text-xs text-amber-700 dark:text-amber-400">
-                        {t('m365AgentEmptySourcesWarning', {
-                          count: emptySources,
-                        })}
-                      </p>
-                    )}
-                    {docCounts.present &&
-                      docCounts.failed + docCounts.noText + docCounts.skipped >
-                        0 && (
-                        <M365AttentionFiles
-                          agentId={entry.agent.id}
-                          count={
-                            docCounts.failed +
-                            docCounts.noText +
-                            docCounts.skipped
-                          }
-                          excludeItemIds={sources
-                            .filter((s) => s.kind === 'file' && !!s.error)
-                            .map((s) => s.itemId)}
-                          ocrMaxPages={ocrMaxPages}
-                          autoOcrMaxPagesPerFile={autoOcrMaxPagesPerFile}
-                          onPrepared={invalidate}
-                        />
+                      ) : (
+                        <p className="text-xs text-gray-600 dark:text-gray-300">
+                          {docCounts.present
+                            ? t('indexedDocumentSummary', {
+                                indexed: docCounts.indexed,
+                              })
+                            : `${t('m365AgentSources')}: ${sources.length}`}
+                        </p>
                       )}
-                  </div>
-                  <div className="mt-3 flex flex-wrap items-center gap-2 [&>button]:min-h-11 [&>button]:whitespace-normal">
-                    {hiddenAgents.isHidden(entry.canonicalKey) && (
-                      <HiddenBadge />
-                    )}
-                    <HideAgentButton
-                      hidden={hiddenAgents.isHidden(entry.canonicalKey)}
-                      onHide={() => hiddenAgents.hide(entry.canonicalKey)}
-                      onUnhide={() => hiddenAgents.unhide(entry.canonicalKey)}
-                    />
-                    {jobActive ? (
-                      <>
-                        {(!driving || job?.stale) && (
+                      {lastIndexedAt && (
+                        <p className="text-xs text-gray-600 dark:text-gray-300">
+                          {t('m365AgentLastIndexed', {
+                            date: formatAdminTimestamp(lastIndexedAt),
+                          })}
+                        </p>
+                      )}
+                      {jobActive && (
+                        <p
+                          className={`flex items-center gap-1 text-xs font-medium ${
+                            job.stale && !driving
+                              ? 'text-amber-700 dark:text-amber-400'
+                              : 'text-blue-700 dark:text-blue-400'
+                          }`}
+                        >
+                          {driving && (
+                            <IconRefresh size={12} className="animate-spin" />
+                          )}
+                          {job.stale && !driving
+                            ? t('m365AgentIndexInterrupted', {
+                                done: job.done,
+                                total: job.total,
+                              })
+                            : t(
+                                job.mode === 'refresh'
+                                  ? 'm365AgentRefreshProgress'
+                                  : 'm365AgentIndexProgress',
+                                { done: job.done, total: job.total },
+                              )}
+                          {!driving && (
+                            <span className="font-normal text-gray-500 dark:text-gray-400">
+                              ·{' '}
+                              {t('m365AgentIndexStartedBy', {
+                                name: job.startedBy,
+                              })}
+                            </span>
+                          )}
+                        </p>
+                      )}
+                      {job?.status === 'failed' && (
+                        <div className="flex items-start gap-2 text-xs text-red-700 dark:text-red-400">
+                          <p
+                            className="line-clamp-2 min-w-0 break-words"
+                            title={job.error}
+                          >
+                            {t('m365AgentIndexJobFailed', {
+                              error: job.error ?? '',
+                            })}
+                          </p>
                           <button
                             type="button"
                             onClick={() =>
-                              void stepUntilDone(entry.agent.id, job!.jobId)
+                              void startIndex(entry.agent.id, 'full')
                             }
                             disabled={!m365Connected}
-                            className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                            className="shrink-0 rounded-md border border-red-300 px-2 py-0.5 font-medium hover:bg-red-50 disabled:opacity-40 dark:border-red-700 dark:hover:bg-red-900/20"
                             title={
-                              actionDisabledTitle ??
-                              t('m365AgentIndexResumeHint')
+                              actionDisabledTitle ?? t('m365AgentIndexHint')
                             }
                           >
-                            <IconRefresh size={14} />
-                            {t('m365AgentIndexResume')}
+                            {t('m365AgentIndexRetry')}
                           </button>
+                        </div>
+                      )}
+                      {finishedVerdict === 'visible' && (
+                        <p
+                          role="status"
+                          className="text-xs font-medium text-green-700 dark:text-green-400"
+                        >
+                          {t('m365AgentRunVisible')}
+                        </p>
+                      )}
+                      {finishedVerdict === 'hidden' && (
+                        <p
+                          role="status"
+                          className="text-xs font-medium text-red-700 dark:text-red-400"
+                        >
+                          {t('m365AgentRunHidden')}
+                        </p>
+                      )}
+                      {sourceErrors.length > 0 && (
+                        <ul className="text-xs text-red-600 dark:text-red-400">
+                          {sourceErrors.map(({ title, error }) => (
+                            <li
+                              key={`${title}:${error}`}
+                              className="line-clamp-2 break-words"
+                              title={`${title}: ${error}`}
+                            >
+                              <span className="font-medium">{title}</span>:{' '}
+                              {error}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      {emptySources > 0 && (
+                        <p className="text-xs text-amber-700 dark:text-amber-400">
+                          {t('m365AgentEmptySourcesWarning', {
+                            count: emptySources,
+                          })}
+                        </p>
+                      )}
+                      {docCounts.present &&
+                        docCounts.failed +
+                          docCounts.noText +
+                          docCounts.skipped >
+                          0 && (
+                          <M365AttentionFiles
+                            agentId={entry.agent.id}
+                            count={
+                              docCounts.failed +
+                              docCounts.noText +
+                              docCounts.skipped
+                            }
+                            excludeItemIds={sources
+                              .filter((s) => s.kind === 'file' && !!s.error)
+                              .map((s) => s.itemId)}
+                            ocrMaxPages={ocrMaxPages}
+                            autoOcrMaxPagesPerFile={autoOcrMaxPagesPerFile}
+                            onPrepared={invalidate}
+                          />
                         )}
-                        <button
-                          type="button"
-                          onClick={() =>
-                            void cancelIndex(entry.agent.id, job!.jobId)
-                          }
-                          className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-red-700 hover:bg-red-50 dark:border-gray-700 dark:text-red-400 dark:hover:bg-red-900/20"
-                        >
-                          <IconPlayerStop size={14} />
-                          {t('m365AgentIndexStop')}
-                        </button>
-                      </>
-                    ) : hasBeenIndexed ? (
-                      <>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            void startIndex(entry.agent.id, 'refresh')
-                          }
-                          disabled={!m365Connected}
-                          className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                          title={
-                            actionDisabledTitle ?? t('m365AgentRefreshHint')
-                          }
-                        >
-                          <IconRefresh size={14} />
-                          {t('m365AgentRefresh')}
-                        </button>
+                    </>
+                  }
+                  actions={
+                    <>
+                      {jobActive ? (
+                        <>
+                          {(!driving || job?.stale) && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                void stepUntilDone(entry.agent.id, job!.jobId)
+                              }
+                              disabled={!m365Connected}
+                              className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                              title={
+                                actionDisabledTitle ??
+                                t('m365AgentIndexResumeHint')
+                              }
+                            >
+                              <IconRefresh size={14} />
+                              {t('m365AgentIndexResume')}
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() =>
+                              void cancelIndex(entry.agent.id, job!.jobId)
+                            }
+                            className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-red-700 hover:bg-red-50 dark:border-gray-700 dark:text-red-400 dark:hover:bg-red-900/20"
+                          >
+                            <IconPlayerStop size={14} />
+                            {t('m365AgentIndexStop')}
+                          </button>
+                        </>
+                      ) : hasBeenIndexed ? null : (
                         <button
                           type="button"
                           onClick={() =>
                             void startIndex(entry.agent.id, 'full')
                           }
                           disabled={!m365Connected}
-                          className="shrink-0 rounded-md border border-gray-200 px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 hover:text-black disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                          className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-gray-800 disabled:opacity-40 dark:border-gray-700 dark:text-gray-200"
                           title={actionDisabledTitle ?? t('m365AgentIndexHint')}
                         >
-                          {t('m365AgentReindexAll')}
+                          <IconRefresh size={14} />
+                          {t('m365AgentIndex')}
                         </button>
-                      </>
-                    ) : (
+                      )}
                       <button
                         type="button"
-                        onClick={() => void startIndex(entry.agent.id, 'full')}
-                        disabled={!m365Connected}
-                        className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                        title={actionDisabledTitle ?? t('m365AgentIndexHint')}
+                        aria-expanded={editingRuleKey === entry.canonicalKey}
+                        onClick={() =>
+                          setEditingRuleKey(
+                            editingRuleKey === entry.canonicalKey
+                              ? null
+                              : entry.canonicalKey,
+                          )
+                        }
+                        className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                       >
-                        <IconRefresh size={14} />
-                        {t('m365AgentIndex')}
+                        {editingRuleKey === entry.canonicalKey
+                          ? t('cancel')
+                          : t('editAccess')}
                       </button>
-                    )}
-                    <button
-                      type="button"
-                      aria-expanded={editingRuleKey === entry.canonicalKey}
-                      onClick={() =>
-                        setEditingRuleKey(
-                          editingRuleKey === entry.canonicalKey
-                            ? null
-                            : entry.canonicalKey,
-                        )
-                      }
-                      className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                    >
-                      {editingRuleKey === entry.canonicalKey
-                        ? t('cancel')
-                        : t('editAccess')}
-                    </button>
-                    <button
-                      type="button"
-                      aria-expanded={editingId === entry.agent.id}
-                      onClick={() =>
-                        setEditingId(
-                          editingId === entry.agent.id ? null : entry.agent.id,
-                        )
-                      }
-                      className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                    >
-                      {editingId === entry.agent.id
-                        ? t('cancel')
-                        : t('editAgent')}
-                    </button>
-                    <button
-                      type="button"
-                      className="shrink-0 rounded-md border border-red-200 px-3 py-1 text-sm text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-900/20"
-                      onClick={() =>
-                        setConfirmDeleteId(
-                          confirmDeleteId === entry.agent.id
-                            ? null
-                            : entry.agent.id,
-                        )
-                      }
-                    >
-                      {t('deleteAgent')}
-                    </button>
-                  </div>
-                </div>
+                      <button
+                        type="button"
+                        aria-expanded={editingId === entry.agent.id}
+                        onClick={() =>
+                          setEditingId(
+                            editingId === entry.agent.id
+                              ? null
+                              : entry.agent.id,
+                          )
+                        }
+                        className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                      >
+                        {editingId === entry.agent.id
+                          ? t('cancel')
+                          : t('editAgent')}
+                      </button>
+                      <AgentActionsMenu name={entry.agent.name}>
+                        <HideAgentButton
+                          hidden={hiddenAgents.isHidden(entry.canonicalKey)}
+                          onHide={() => hiddenAgents.hide(entry.canonicalKey)}
+                          onUnhide={() =>
+                            hiddenAgents.unhide(entry.canonicalKey)
+                          }
+                        />
+                        {!jobActive && hasBeenIndexed && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                void startIndex(entry.agent.id, 'refresh')
+                              }
+                              disabled={!m365Connected}
+                              className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                              title={
+                                actionDisabledTitle ?? t('m365AgentRefreshHint')
+                              }
+                            >
+                              <IconRefresh size={14} />
+                              {t('m365AgentRefresh')}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                void startIndex(entry.agent.id, 'full')
+                              }
+                              disabled={!m365Connected}
+                              className="shrink-0 rounded-md border border-gray-200 px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 hover:text-black disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                              title={
+                                actionDisabledTitle ?? t('m365AgentIndexHint')
+                              }
+                            >
+                              {t('m365AgentReindexAll')}
+                            </button>
+                          </>
+                        )}
+                        <button
+                          type="button"
+                          className="shrink-0 rounded-md border border-red-200 px-3 py-1 text-sm text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-900/20"
+                          onClick={() =>
+                            setConfirmDeleteId(
+                              confirmDeleteId === entry.agent.id
+                                ? null
+                                : entry.agent.id,
+                            )
+                          }
+                        >
+                          {t('deleteAgent')}
+                        </button>
+                      </AgentActionsMenu>
+                    </>
+                  }
+                />
 
                 <AgentTechnicalDetails canonicalKey={entry.canonicalKey}>
+                  {entry.agent.maxDocumentsOverride !== undefined && (
+                    <p>
+                      {entry.agent.maxDocumentsOverrideBy
+                        ? t('m365AgentLimitBadge', {
+                            limit: entry.agent.maxDocumentsOverride,
+                            who: entry.agent.maxDocumentsOverrideBy,
+                          })
+                        : t('m365AgentLimitBadgePlain', {
+                            limit: entry.agent.maxDocumentsOverride,
+                          })}
+                    </p>
+                  )}
+                  <ul className="space-y-1">
+                    {sources.map((source) => (
+                      <li
+                        key={source.sourceId}
+                        className="[overflow-wrap:anywhere]"
+                      >
+                        {source.title}
+                        {source.webUrl ? ` · ${source.webUrl}` : ''}
+                      </li>
+                    ))}
+                  </ul>
                   {docCounts.present && (
                     <p>
                       {t('m365AgentDocCounts', {
