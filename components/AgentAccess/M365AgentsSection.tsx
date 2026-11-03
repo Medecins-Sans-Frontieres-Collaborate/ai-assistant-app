@@ -62,6 +62,7 @@ import { RuleEditor } from './RuleEditor';
 import {
   agentAudienceSearchLabel,
   agentSearchDocument,
+  countM365ContentSources,
   matchesAgentSearch,
 } from './agentSearch';
 import { formatAdminTimestamp } from './formatAdminTimestamp';
@@ -1721,6 +1722,14 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
       new Map(
         agents.map((entry) => {
           const access = rulesByKey.get(entry.canonicalKey)?.rule.access;
+          const contentSources = countM365ContentSources(entry.agent.sources);
+          const indexedDocuments = entry.agent.sources.reduce(
+            (total, source) => total + (source.counts?.indexed ?? 0),
+            0,
+          );
+          const hasDocumentCounts = entry.agent.sources.some(
+            (source) => !!source.counts,
+          );
           return [
             entry.canonicalKey,
             agentSearchDocument({
@@ -1743,6 +1752,22 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                 (id) => searchGroupNames[id],
               ),
               job: jobs[entry.agent.id],
+              indexedDocuments: hasDocumentCounts
+                ? indexedDocuments
+                : undefined,
+              contentLabel:
+                contentSources === 0
+                  ? t('m365AgentStatusNotIndexed')
+                  : contentSources < entry.agent.sources.length
+                    ? t('m365AgentStatusPartial', {
+                        indexed: contentSources,
+                        count: entry.agent.sources.length,
+                      })
+                    : hasDocumentCounts
+                      ? t('indexedDocumentSummary', {
+                          indexed: indexedDocuments,
+                        })
+                      : `${t('m365AgentSources')}: ${entry.agent.sources.length}`,
               hidden: isHiddenForSearch(entry.canonicalKey)
                 ? t('hiddenBadge')
                 : undefined,
@@ -1880,12 +1905,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
             // still carrying a transient `indexing`/`pending` status from
             // an older run keeps counting as long as its chunks exist —
             // "6 documents indexed" and "Not indexed" must never both show.
-            const contentSources = sources.filter(
-              (s) =>
-                s.status !== 'error' &&
-                s.status !== 'missing' &&
-                (s.indexedChunks ?? (s.status === 'indexed' ? 1 : 0)) > 0,
-            ).length;
+            const contentSources = countM365ContentSources(sources);
             // "Indexed" with zero chunks means extraction found no text
             // (e.g. a scanned PDF without a text layer) — a silently empty
             // agent unless surfaced here.
