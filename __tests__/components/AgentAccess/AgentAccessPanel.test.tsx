@@ -480,7 +480,7 @@ describe('AgentAccessPanel', () => {
     vi.unstubAllGlobals();
   });
 
-  it('renders merged rows: discovered agents, access badges, and a "not discoverable" badge for rule-only rows', async () => {
+  it('renders merged rows with actual allowed audiences and a "not discoverable" badge for rule-only rows', async () => {
     renderPanel();
 
     // Discovered agent without a rule → implicit Everyone.
@@ -492,7 +492,7 @@ describe('AgentAccessPanel', () => {
     // Discovered agent with a restricted rule.
     const sales = screen.getByText('Sales Agent').closest('li');
     expect(
-      within(sales as HTMLElement).getByText('Restricted'),
+      within(sales as HTMLElement).getByText('msf.org'),
     ).toBeInTheDocument();
     expect(
       within(sales as HTMLElement).getByText(
@@ -518,7 +518,9 @@ describe('AgentAccessPanel', () => {
     expect(within(row).getByText('Allowed domains')).toBeInTheDocument();
     expect(within(row).getByText('Allowed users')).toBeInTheDocument();
     // Stored domain chip; users list is empty so its placeholder shows.
-    expect(within(row).getByText('msf.org')).toBeInTheDocument();
+    expect(
+      within(row).getByRole('button', { name: 'Remove msf.org' }),
+    ).toBeInTheDocument();
     expect(
       within(row).getByPlaceholderText('person@example.org'),
     ).toBeInTheDocument();
@@ -704,7 +706,9 @@ describe('AgentAccessPanel', () => {
     expect(within(row).getByText('new-domain.org')).toBeInTheDocument();
     expect(within(row).getByText('second.org')).toBeInTheDocument();
     // Only the original stored chip — the re-pasted duplicate was dropped.
-    expect(within(row).getAllByText(/msf\.org/i)).toHaveLength(1);
+    expect(
+      within(row).getAllByRole('button', { name: /Remove msf\.org/i }),
+    ).toHaveLength(1);
 
     fireEvent.click(within(row).getByText('Save'));
     await waitFor(() => expect(putCalls).toHaveLength(1));
@@ -763,6 +767,11 @@ describe('AgentAccessPanel', () => {
     renderPanel();
 
     const row = (await screen.findByText('Travel Advisor')).closest('li');
+    const details = row!.querySelector('details')!;
+    expect(details).not.toHaveAttribute('open');
+    fireEvent.click(details.querySelector('summary')!);
+    // jsdom does not implement the browser's native details toggle.
+    details.open = true;
     expect(row).not.toBeNull();
     expect(
       within(row as HTMLElement).getByText('Prompt agent'),
