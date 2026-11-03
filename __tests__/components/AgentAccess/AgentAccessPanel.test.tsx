@@ -520,6 +520,25 @@ describe('AgentAccessPanel', () => {
     expect(screen.getByText('Helpdesk Agent')).toBeInTheDocument();
   });
 
+  it('retains and searches extra authorized Foundry discovery metadata', async () => {
+    agentsResponse = [
+      Object.assign({}, discoveredAgents[0], {
+        deploymentModel: 'foundry-specific-deployment',
+        description: 'Réponse clinique',
+      }),
+    ];
+    renderPanel();
+    await screen.findByText('Helpdesk Agent');
+    fireEvent.change(screen.getByRole('searchbox'), {
+      target: { value: 'foundry-specific-deployment' },
+    });
+    expect(screen.getByText('Helpdesk Agent')).toBeInTheDocument();
+    fireEvent.change(screen.getByRole('searchbox'), {
+      target: { value: 'reponse clinique' },
+    });
+    expect(screen.getByText('Helpdesk Agent')).toBeInTheDocument();
+  });
+
   it('keeps hidden agents excluded from search until explicitly revealed', async () => {
     agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
     promptAgentsResponse = [storedPromptAgent];
