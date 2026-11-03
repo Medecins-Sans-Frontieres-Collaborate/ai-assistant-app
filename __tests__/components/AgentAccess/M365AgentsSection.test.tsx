@@ -212,7 +212,7 @@ describe('M365AgentsSection — management visibility diagnostics', () => {
     expect(edit).toBeEnabled();
     expect(screen.getByText('m365AgentsHeading')).toBeInTheDocument();
     fireEvent.click(edit);
-    expect(screen.getByText('Handbook.pdf')).toBeInTheDocument();
+    expect(screen.getAllByText('Handbook.pdf')).toHaveLength(2);
   });
 
   it.each([401, 403, 500])(
