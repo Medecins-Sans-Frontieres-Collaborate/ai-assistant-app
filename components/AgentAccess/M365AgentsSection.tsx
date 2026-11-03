@@ -34,8 +34,8 @@ import { OpenAIModels } from '@/types/openai';
 
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 
-import { AccessPill } from './AccessPill';
-import { CanonicalKeyChip } from './CanonicalKeyChip';
+import { AccessSummary } from './AccessSummary';
+import { AgentTechnicalDetails } from './AgentTechnicalDetails';
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
 import {
   HiddenBadge,
@@ -1786,7 +1786,6 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
         <ul className="space-y-2">
           {visibleAgents.map((entry) => {
             const stored = rulesByKey.get(entry.canonicalKey) ?? null;
-            const isRestricted = stored?.rule.access.type === 'restricted';
             const sources = entry.agent.sources;
             // Content-bearing = has chunks and is not broken. A legacy
             // `indexed` record without chunk counts is trusted; a record
@@ -1864,11 +1863,11 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                 key={entry.canonicalKey}
                 className="rounded-lg border border-gray-200 p-3 dark:border-gray-700"
               >
-                <div className="flex items-center gap-3">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
+                <div className="min-w-0">
+                  <div className="min-w-0 space-y-1">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span
-                        className="truncate text-sm font-medium text-black dark:text-white"
+                        className="min-w-0 [overflow-wrap:anywhere] text-sm font-medium text-black dark:text-white"
                         title={entry.agent.name}
                       >
                         {entry.agent.name}
@@ -1877,7 +1876,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         {t('m365AgentBadge')}
                       </span>
                     </div>
-                    <CanonicalKeyChip canonicalKey={entry.canonicalKey} />
+                    <AccessSummary access={stored?.rule.access} />
                     {entry.agent.maxDocumentsOverride !== undefined && (
                       <span
                         className="inline-block rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
@@ -1905,7 +1904,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         })}
                       </p>
                     ) : (
-                      <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-gray-600 dark:text-gray-300">
                         {t('m365AgentSourceSummary', {
                           count: sources.length,
                           pending: unindexedSources,
@@ -1967,24 +1966,6 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         </button>
                       </div>
                     )}
-                    {docCounts.present && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {t('m365AgentDocCounts', {
-                          indexed: docCounts.indexed,
-                          failed: docCounts.failed,
-                          noText: docCounts.noText,
-                          needsPreparation: docCounts.needsPreparation,
-                          skipped: docCounts.skipped,
-                        })}
-                      </p>
-                    )}
-                    {lastIndexedAt && (
-                      <p className="text-xs text-gray-400 dark:text-gray-500">
-                        {t('m365AgentLastIndexed', {
-                          date: new Date(lastIndexedAt).toLocaleString(),
-                        })}
-                      </p>
-                    )}
                     {finishedVerdict === 'visible' && (
                       <p
                         role="status"
@@ -2041,122 +2022,151 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         />
                       )}
                   </div>
-                  <AccessPill restricted={isRestricted} />
-                  {hiddenAgents.isHidden(entry.canonicalKey) && <HiddenBadge />}
-                  <HideAgentButton
-                    hidden={hiddenAgents.isHidden(entry.canonicalKey)}
-                    onHide={() => hiddenAgents.hide(entry.canonicalKey)}
-                    onUnhide={() => hiddenAgents.unhide(entry.canonicalKey)}
-                  />
-                  {jobActive ? (
-                    <>
-                      {(!driving || job?.stale) && (
+                  <div className="mt-3 flex flex-wrap items-center gap-2 [&>button]:min-h-11 [&>button]:whitespace-normal">
+                    {hiddenAgents.isHidden(entry.canonicalKey) && (
+                      <HiddenBadge />
+                    )}
+                    <HideAgentButton
+                      hidden={hiddenAgents.isHidden(entry.canonicalKey)}
+                      onHide={() => hiddenAgents.hide(entry.canonicalKey)}
+                      onUnhide={() => hiddenAgents.unhide(entry.canonicalKey)}
+                    />
+                    {jobActive ? (
+                      <>
+                        {(!driving || job?.stale) && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              void stepUntilDone(entry.agent.id, job!.jobId)
+                            }
+                            disabled={!m365Connected}
+                            className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                            title={
+                              actionDisabledTitle ??
+                              t('m365AgentIndexResumeHint')
+                            }
+                          >
+                            <IconRefresh size={14} />
+                            {t('m365AgentIndexResume')}
+                          </button>
+                        )}
                         <button
                           type="button"
                           onClick={() =>
-                            void stepUntilDone(entry.agent.id, job!.jobId)
+                            void cancelIndex(entry.agent.id, job!.jobId)
+                          }
+                          className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-red-700 hover:bg-red-50 dark:border-gray-700 dark:text-red-400 dark:hover:bg-red-900/20"
+                        >
+                          <IconPlayerStop size={14} />
+                          {t('m365AgentIndexStop')}
+                        </button>
+                      </>
+                    ) : hasBeenIndexed ? (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            void startIndex(entry.agent.id, 'refresh')
                           }
                           disabled={!m365Connected}
                           className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                           title={
-                            actionDisabledTitle ?? t('m365AgentIndexResumeHint')
+                            actionDisabledTitle ?? t('m365AgentRefreshHint')
                           }
                         >
                           <IconRefresh size={14} />
-                          {t('m365AgentIndexResume')}
+                          {t('m365AgentRefresh')}
                         </button>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() =>
-                          void cancelIndex(entry.agent.id, job!.jobId)
-                        }
-                        className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-red-700 hover:bg-red-50 dark:border-gray-700 dark:text-red-400 dark:hover:bg-red-900/20"
-                      >
-                        <IconPlayerStop size={14} />
-                        {t('m365AgentIndexStop')}
-                      </button>
-                    </>
-                  ) : hasBeenIndexed ? (
-                    <>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          void startIndex(entry.agent.id, 'refresh')
-                        }
-                        disabled={!m365Connected}
-                        className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                        title={actionDisabledTitle ?? t('m365AgentRefreshHint')}
-                      >
-                        <IconRefresh size={14} />
-                        {t('m365AgentRefresh')}
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            void startIndex(entry.agent.id, 'full')
+                          }
+                          disabled={!m365Connected}
+                          className="shrink-0 rounded-md border border-gray-200 px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 hover:text-black disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                          title={actionDisabledTitle ?? t('m365AgentIndexHint')}
+                        >
+                          {t('m365AgentReindexAll')}
+                        </button>
+                      </>
+                    ) : (
                       <button
                         type="button"
                         onClick={() => void startIndex(entry.agent.id, 'full')}
                         disabled={!m365Connected}
-                        className="shrink-0 rounded-md border border-gray-200 px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 hover:text-black disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                        className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                         title={actionDisabledTitle ?? t('m365AgentIndexHint')}
                       >
-                        {t('m365AgentReindexAll')}
+                        <IconRefresh size={14} />
+                        {t('m365AgentIndex')}
                       </button>
-                    </>
-                  ) : (
+                    )}
                     <button
                       type="button"
-                      onClick={() => void startIndex(entry.agent.id, 'full')}
-                      disabled={!m365Connected}
-                      className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                      title={actionDisabledTitle ?? t('m365AgentIndexHint')}
+                      aria-expanded={editingRuleKey === entry.canonicalKey}
+                      onClick={() =>
+                        setEditingRuleKey(
+                          editingRuleKey === entry.canonicalKey
+                            ? null
+                            : entry.canonicalKey,
+                        )
+                      }
+                      className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                     >
-                      <IconRefresh size={14} />
-                      {t('m365AgentIndex')}
+                      {editingRuleKey === entry.canonicalKey
+                        ? t('cancel')
+                        : t('editAccess')}
                     </button>
-                  )}
-                  <button
-                    type="button"
-                    aria-expanded={editingRuleKey === entry.canonicalKey}
-                    onClick={() =>
-                      setEditingRuleKey(
-                        editingRuleKey === entry.canonicalKey
-                          ? null
-                          : entry.canonicalKey,
-                      )
-                    }
-                    className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                  >
-                    {editingRuleKey === entry.canonicalKey
-                      ? t('cancel')
-                      : t('editAccess')}
-                  </button>
-                  <button
-                    type="button"
-                    aria-expanded={editingId === entry.agent.id}
-                    onClick={() =>
-                      setEditingId(
-                        editingId === entry.agent.id ? null : entry.agent.id,
-                      )
-                    }
-                    className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                  >
-                    {editingId === entry.agent.id
-                      ? t('cancel')
-                      : t('editAgent')}
-                  </button>
-                  <button
-                    type="button"
-                    className="shrink-0 rounded-md border border-red-200 px-3 py-1 text-sm text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-900/20"
-                    onClick={() =>
-                      setConfirmDeleteId(
-                        confirmDeleteId === entry.agent.id
-                          ? null
-                          : entry.agent.id,
-                      )
-                    }
-                  >
-                    {t('deleteAgent')}
-                  </button>
+                    <button
+                      type="button"
+                      aria-expanded={editingId === entry.agent.id}
+                      onClick={() =>
+                        setEditingId(
+                          editingId === entry.agent.id ? null : entry.agent.id,
+                        )
+                      }
+                      className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                    >
+                      {editingId === entry.agent.id
+                        ? t('cancel')
+                        : t('editAgent')}
+                    </button>
+                    <button
+                      type="button"
+                      className="shrink-0 rounded-md border border-red-200 px-3 py-1 text-sm text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-900/20"
+                      onClick={() =>
+                        setConfirmDeleteId(
+                          confirmDeleteId === entry.agent.id
+                            ? null
+                            : entry.agent.id,
+                        )
+                      }
+                    >
+                      {t('deleteAgent')}
+                    </button>
+                  </div>
                 </div>
+
+                <AgentTechnicalDetails canonicalKey={entry.canonicalKey}>
+                  {docCounts.present && (
+                    <p>
+                      {t('m365AgentDocCounts', {
+                        indexed: docCounts.indexed,
+                        failed: docCounts.failed,
+                        noText: docCounts.noText,
+                        needsPreparation: docCounts.needsPreparation,
+                        skipped: docCounts.skipped,
+                      })}
+                    </p>
+                  )}
+                  {lastIndexedAt && (
+                    <p>
+                      {t('m365AgentLastIndexed', {
+                        date: new Date(lastIndexedAt).toLocaleString(),
+                      })}
+                    </p>
+                  )}
+                </AgentTechnicalDetails>
 
                 {confirmDeleteId === entry.agent.id && (
                   <div className="mt-2 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-700 dark:bg-red-900/20 dark:text-red-300">
