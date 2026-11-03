@@ -37,7 +37,7 @@ export const AgentActionsMenu: FC<AgentActionsMenuProps> = ({
   const close = useCallback(() => setOpen(false), []);
   const returnFocus = () => {
     close();
-    triggerRef.current?.focus();
+    triggerRef.current?.focus({ preventScroll: true });
   };
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export const AgentActionsMenu: FC<AgentActionsMenuProps> = ({
     });
     menuRef.current
       ?.querySelector<HTMLButtonElement>('button:not(:disabled)')
-      ?.focus();
+      ?.focus({ preventScroll: true });
   }, [open]);
 
   return (
@@ -121,10 +121,10 @@ export const AgentActionsMenu: FC<AgentActionsMenuProps> = ({
                       : -1;
             if (next >= 0) {
               event.preventDefault();
-              items[next].focus();
+              items[next].focus({ preventScroll: true });
             }
           }}
-          className="flex w-56 max-w-[calc(100vw-1rem)] flex-col gap-0.5 rounded-lg border border-gray-200 bg-gray-50 p-1 shadow-lg dark:border-gray-700 dark:bg-gray-800 [&_button]:min-h-11 [&_button]:w-full [&_button]:justify-start [&_button]:rounded-md [&_button]:border-0 [&_button]:px-3 [&_button]:py-2 [&_button]:text-start [&_button]:focus-visible:outline [&_button]:focus-visible:outline-2"
+          className="flex max-h-[calc(100dvh-1rem)] w-56 max-w-[calc(100vw-1rem)] flex-col gap-0.5 overflow-y-auto rounded-lg border border-gray-200 bg-gray-50 p-1 shadow-lg dark:border-gray-700 dark:bg-gray-800 [&_button]:min-h-11 [&_button]:w-full [&_button]:shrink-0 [&_button]:justify-start [&_button]:rounded-md [&_button]:border-0 [&_button]:px-3 [&_button]:py-2 [&_button]:text-start [&_button]:focus-visible:outline [&_button]:focus-visible:outline-2"
         >
           {children}
         </div>
