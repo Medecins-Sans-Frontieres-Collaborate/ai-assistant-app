@@ -37,7 +37,11 @@ import {
   ShowHiddenToggle,
 } from './HiddenAgentsControls';
 import { RuleEditor } from './RuleEditor';
-import { agentSearchDocument, matchesAgentSearch } from './agentSearch';
+import {
+  agentAudienceSearchLabel,
+  agentSearchDocument,
+  matchesAgentSearch,
+} from './agentSearch';
 import {
   AdminHistoryResponse,
   AdminOrgAgentsResponse,
@@ -954,14 +958,20 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                 'knowledge',
                 t('orgAgentBadge'),
               ],
-              accessLabel:
-                access?.type === 'restricted'
-                  ? t('accessRestricted')
-                  : t('allEligibleUsers'),
+              accessLabel: agentAudienceSearchLabel(access, {
+                everyone: t('allEligibleUsers'),
+                restricted: t('accessRestricted'),
+                none: t('noAllowedAudience'),
+              }),
               groupNames: (access?.allowGroups ?? []).map(
                 (id) => searchGroupNames[id],
               ),
-              hidden: isHiddenForSearch(entry.canonicalKey),
+              hidden: isHiddenForSearch(entry.canonicalKey)
+                ? t('hiddenBadge')
+                : undefined,
+              enabledLabel: entry.agent.enabled
+                ? undefined
+                : t('orgAgentDisabledBadge'),
             }),
           ];
         }),
