@@ -244,9 +244,11 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const searchGroupNames = useGroupNames(
-    (rulesQuery.data?.rules ?? []).flatMap(
-      (entry) => entry.rule.access.allowGroups ?? [],
-    ),
+    (rulesQuery.data?.rules ?? [])
+      .filter((entry) =>
+        isAgentListSource(entry.rule.source.trim().toLowerCase()),
+      )
+      .flatMap((entry) => entry.rule.access.allowGroups ?? []),
   );
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [editingAgentKey, setEditingAgentKey] = useState<string | null>(null);

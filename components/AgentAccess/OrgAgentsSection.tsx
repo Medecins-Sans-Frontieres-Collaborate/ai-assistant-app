@@ -878,7 +878,11 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
     [rules],
   );
   const searchGroupNames = useGroupNames(
-    rules.flatMap((entry) => entry.rule.access.allowGroups ?? []),
+    rules
+      .filter((entry) =>
+        entry.canonicalKey.startsWith(`${CLIENT_ORG_AGENT_SOURCE}::`),
+      )
+      .flatMap((entry) => entry.rule.access.allowGroups ?? []),
   );
 
   // Re-runs the index validation without editing (e.g. after a staged
