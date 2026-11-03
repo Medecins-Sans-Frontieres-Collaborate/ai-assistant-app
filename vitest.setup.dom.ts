@@ -41,6 +41,7 @@ const mockMessages: Record<string, unknown> = {
     searching: 'Searching your organization…',
     noMatches: 'No directory matches — you can enter the address manually',
   },
+  transcript: { copy: 'Copy' },
   common: {
     cancel: 'Cancel',
     undo: 'Undo',
@@ -278,6 +279,7 @@ const mockMessages: Record<string, unknown> = {
     },
   },
   agentsTab: {
+    agentSources: { technicalDetails: 'Technical details' },
     emptyState: {
       title: 'No regional / organization agents available',
       description: 'Connect a Foundry project below to discover its agents.',
