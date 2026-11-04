@@ -46,6 +46,20 @@ const serverEnvSchema = z.object({
   AZURE_CLIENT_ID: z.string().optional(),
   AZURE_CLIENT_SECRET: z.string().optional(),
 
+  // Hard maximum ages for successful authorization checks, in minutes.
+  PERMISSION_GROUP_CACHE_MINUTES: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(60)
+    .default(5),
+  PERMISSION_SOURCE_CACHE_MINUTES: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(60)
+    .default(5),
+
   // Azure OpenAI
   AZURE_OPENAI_ENDPOINT: z.string().url().optional(),
   /** Optional explicit residency declaration for all generic default model endpoints. */
