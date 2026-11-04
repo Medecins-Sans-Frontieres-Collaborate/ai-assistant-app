@@ -41,6 +41,7 @@ import { NextRequest } from 'next/server';
 
 import type { M365ErrorKind } from '@/lib/services/m365/graphApi';
 import { MetricsService } from '@/lib/services/observability/MetricsService';
+import { getPermissionCache } from '@/lib/services/permissions/PermissionCache';
 import { normalizeMail } from '@/lib/services/shared/principalMatching';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -108,7 +109,6 @@ interface CacheEntry {
 
 const cacheById = new Map<string, CacheEntry>();
 const cacheByMail = new Map<string, CacheEntry>();
-const inFlight = new Map<string, Promise<string[]>>();
 
 /**
  * "View as" group overrides (lib/services/admin/viewAsTypes.ts), kept in
@@ -376,8 +376,6 @@ export async function resolveUserGroupIds(
   clearViewAsOverride(userId, mail);
 
   try {
-    const { getPermissionCache } =
-      await import('@/lib/services/permissions/PermissionCache');
     let fetched = false;
     const snapshot = await getPermissionCache().resolve(
       userId,
@@ -476,7 +474,6 @@ export async function resolveUserGroupIds(
 export function clearGroupMembershipCache(): void {
   cacheById.clear();
   cacheByMail.clear();
-  inFlight.clear();
   viewAsById.clear();
   viewAsByMail.clear();
   stats.hits = 0;
