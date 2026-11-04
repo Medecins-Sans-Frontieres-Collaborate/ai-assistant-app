@@ -17,11 +17,11 @@
  * files and for children with broken permission inheritance. Folders
  * indexed before manifests existed fall back to one security-trimmed
  * immediate-children listing, matching their snapshot semantics.
- * Verdicts are cached per user+agent for a short TTL (per-process, like the
- * access-rules snapshot): max staleness after a permission revocation in
- * SharePoint is CACHE_TTL_MS. Only DEFINITIVE verdicts are cached: a probe
- * that came back throttled or 5xx fails closed for this request but is
- * not remembered, so a Graph wobble cannot lock a user out for the TTL.
+ * Definitive verdicts use the shared PermissionCache per user/agent/source
+ * revision. Hard maximum age is configurable, default five minutes. Unknown
+ * results are never persisted as verified access; a short local failure
+ * cooldown prevents repeated probes while Graph is throttled. Every call
+ * revalidates shared generations so manual invalidation bypasses both caches.
  */
 import { NextRequest } from 'next/server';
 
@@ -85,7 +85,9 @@ export interface AgentSourceAccess {
 
 const sourceAccessSchema: z.ZodType<AgentSourceAccess> = z.object({
   accessibleSourceIds: z.array(z.string()),
-  unverifiable: z.boolean(),
+  unverifiable: z
+    .boolean()
+    .refine((value) => !value, 'Only verified access may be persisted'),
   accessibleFolderItems: z.array(
     z.object({ driveId: z.string(), itemId: z.string() }),
   ),
@@ -304,7 +306,8 @@ const manifestCache = new Map<string, ManifestCacheEntry>();
 async function loadIndexedItems(
   agent: M365Agent,
 ): Promise<Map<string, ProbeTarget[]> | null> {
-  const cached = manifestCache.get(agent.id);
+  const manifestKey = `${agent.id}:${agent.updatedAt}`;
+  const cached = manifestCache.get(manifestKey);
   if (cached && Date.now() - cached.at < MANIFEST_CACHE_TTL_MS) {
     return cached.bySource;
   }
@@ -337,7 +340,7 @@ async function loadIndexedItems(
     );
   }
   if (manifestCache.size >= MAX_CACHE_ENTRIES) manifestCache.clear();
-  manifestCache.set(agent.id, { at: Date.now(), bySource });
+  manifestCache.set(manifestKey, { at: Date.now(), bySource });
   return bySource;
 }
 
