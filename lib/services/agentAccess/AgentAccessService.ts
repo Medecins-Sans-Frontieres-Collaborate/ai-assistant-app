@@ -244,7 +244,6 @@ export class AgentAccessService {
   private lastGenerationEtag: string | null = null;
   /** Failed generation validation makes retained rules unusable for authorization. */
   private generationVerificationFailed = false;
-  private generationProbeInFlight: Promise<boolean> | null = null;
 
   static getInstance(): AgentAccessService {
     if (!AgentAccessService.instance) {
@@ -293,6 +292,16 @@ export class AgentAccessService {
       });
     }
     await this.refreshInFlight;
+    // A caller can join a refresh begun before its request (and before a
+    // remote invalidation). Validate again for THIS caller after shared work.
+    if (this.state) {
+      try {
+        if (await this.probeGenerationChanged()) this.fetchedAt = 0;
+        this.generationVerificationFailed = false;
+      } catch {
+        this.generationVerificationFailed = true;
+      }
+    }
   }
 
   /**
@@ -329,20 +338,15 @@ export class AgentAccessService {
   }
 
   /**
-   * Reads the sentinel ETag (single-flight) and reports whether it moved
+   * Reads the sentinel ETag for this caller and reports whether it moved
    * since the last full refresh. A missing sentinel is the initial baseline;
    * storage errors reject so ensureFresh marks authorization unavailable.
    */
   private async probeGenerationChanged(): Promise<boolean> {
-    if (!this.generationProbeInFlight) {
-      this.generationProbeInFlight = (async () => {
-        const etag = await readGenerationEtag(this.getStorage());
-        return etag !== this.lastGenerationEtag;
-      })().finally(() => {
-        this.generationProbeInFlight = null;
-      });
-    }
-    return this.generationProbeInFlight;
+    // Never join an earlier request's probe: its response may already contain
+    // a generation superseded before this authorization began.
+    const etag = await readGenerationEtag(this.getStorage());
+    return etag !== this.lastGenerationEtag;
   }
 
   private rulesAreUnavailable(): boolean {
