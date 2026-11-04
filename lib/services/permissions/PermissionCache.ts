@@ -16,6 +16,7 @@ const PREFIX = 'system/permission-cache/v1';
 const MAX_USERS = 2000;
 const MAX_SNAPSHOTS = 32;
 const MAX_BYTES = 2 * 1024 * 1024;
+const MAX_MEMORY_BYTES = 32 * 1024 * 1024;
 const snapshotSchema = z.object({
   globalGeneration: z.string(),
   checkedAt: z.number().finite().nonnegative(),
@@ -69,6 +70,8 @@ export interface PermissionCachePolicy {
  */
 export class PermissionCache {
   private readonly users = new Map<string, Stored<UserRecord>>();
+  private readonly userBytes = new Map<string, number>();
+  private memoryBytes = 0;
   private global: Stored<GlobalRecord> | undefined;
   private readonly inFlight = new Map<
     string,
@@ -159,10 +162,25 @@ export class PermissionCache {
   }
 
   private remember(userId: string, record: Stored<UserRecord>): void {
-    this.users.delete(userId);
-    if (this.users.size >= MAX_USERS)
-      this.users.delete(this.users.keys().next().value!);
+    this.forget(userId);
+    const bytes = Buffer.byteLength(JSON.stringify(record.value));
+    while (
+      this.users.size >= MAX_USERS ||
+      this.memoryBytes + bytes > MAX_MEMORY_BYTES
+    ) {
+      const oldest = this.users.keys().next().value;
+      if (oldest === undefined) return;
+      this.forget(oldest);
+    }
     this.users.set(userId, record);
+    this.userBytes.set(userId, bytes);
+    this.memoryBytes += bytes;
+  }
+
+  private forget(userId: string): void {
+    this.memoryBytes -= this.userBytes.get(userId) ?? 0;
+    this.userBytes.delete(userId);
+    this.users.delete(userId);
   }
 
   /**
@@ -209,6 +227,7 @@ export class PermissionCache {
       key,
       generation,
       user.value.generation,
+      policy.maxAgeMs,
     ]);
     const failure = this.failures.get(workKey);
     if (failure && now < failure.expiresAt) throw failure.error;
@@ -308,7 +327,13 @@ export class PermissionCache {
         ) {
           throw new PermissionCacheInvalidatedError();
         }
-        return selected;
+        if (
+          Date.now() >=
+          Math.min(selected.expiresAt, selected.checkedAt + policy.maxAgeMs)
+        ) {
+          throw new Error('Permission snapshot expired during verification');
+        }
+        return { ...selected, value: schema.parse(selected.value) };
       } catch (error) {
         if (!(error instanceof AgentAccessConflictError)) throw error;
       }
@@ -353,7 +378,7 @@ export class PermissionCache {
           { abortSignal: AbortSignal.timeout(5000) },
         );
         if (userId === undefined) this.global = undefined;
-        else this.users.delete(userId);
+        else this.forget(userId);
         return { generation, invalidatedAt };
       } catch (error) {
         if (!(error instanceof AgentAccessConflictError)) throw error;
@@ -365,6 +390,8 @@ export class PermissionCache {
   /** Clears replica memory only, for tests. It intentionally does not invalidate shared data. */
   clearMemory(): void {
     this.users.clear();
+    this.userBytes.clear();
+    this.memoryBytes = 0;
     this.global = undefined;
     this.failures.clear();
   }
