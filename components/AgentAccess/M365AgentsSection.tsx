@@ -700,6 +700,9 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   const roleCeiling = isGlobalAdmin
     ? capCeilings.globalAdmin
     : capCeilings.localAdmin;
+  // Match the API's source-array bound, not the document cap: a folder can
+  // expand beyond the cap and individual files may not count toward it.
+  const maxSourceSelections = capCeilings.globalAdmin;
   /** The cap the draft asks for (a stored raise may exceed the caller's role). */
   const draftCap = maxDocumentsOverride ?? maxSources;
   /**
@@ -781,8 +784,8 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       ) {
         return prev;
       }
-      if (prev.length >= maxSources) {
-        toast.error(t('m365AgentTooManySources', { max: maxSources }));
+      if (prev.length >= maxSourceSelections) {
+        toast.error(t('m365AgentTooManySources', { max: maxSourceSelections }));
         return prev;
       }
       return [
@@ -1128,6 +1131,32 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
 
         {/* Sources */}
         <div>
+          {isGlobalAdmin && (
+            <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+              <label className="flex flex-wrap items-center gap-2">
+                <span className="font-semibold">
+                  {t('m365CapRaiseInputLabel')}
+                </span>
+                <input
+                  type="number"
+                  min={1}
+                  max={capCeilings.globalAdmin}
+                  value={capInput || String(draftCap)}
+                  onChange={(e) => setCapInput(e.target.value)}
+                  aria-label={t('m365CapRaiseInputLabel')}
+                  className="min-h-11 w-24 rounded-md border border-gray-300 bg-gray-50 px-2 py-1 text-sm text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100"
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() => applyCap(Number(capInput) || draftCap)}
+                disabled={!capInput || Number(capInput) === draftCap}
+                className="min-h-11 rounded-md border border-gray-300 px-3 py-1 font-medium hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-40 dark:border-gray-600 dark:hover:bg-gray-800"
+              >
+                {t('m365CapRaiseApply')}
+              </button>
+            </div>
+          )}
           <div className="mb-1 flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
               {t('m365AgentSources')} ({sources.length})
@@ -1137,12 +1166,12 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
               onClick={() => setPickerOpen(true)}
               // The cap is per DOCUMENT (the meter below); the source count
               // is only a coarse guard against pathological lists.
-              disabled={sources.length >= maxSources || !m365Connected}
+              disabled={sources.length >= maxSourceSelections || !m365Connected}
               title={
                 !m365Connected
                   ? t('m365ActionNeedsConnection')
-                  : sources.length >= maxSources
-                    ? t('m365AgentTooManySources', { max: maxSources })
+                  : sources.length >= maxSourceSelections
+                    ? t('m365AgentTooManySources', { max: maxSourceSelections })
                     : undefined
               }
               className="flex items-center gap-1 rounded-md border border-neutral-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-100 disabled:opacity-40 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
@@ -1200,58 +1229,18 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                 <div className="mt-1 space-y-1">
                   <p>{t('m365CapOverDocuments', { max: effectiveCap })}</p>
                   <p>{t('m365PlanTrimHint')}</p>
-                  {planMatchesDraft && (
+                  {planMatchesDraft && !isGlobalAdmin && (
                     <div className="flex flex-wrap items-center gap-2">
-                      {isGlobalAdmin ? (
-                        <>
-                          <label className="flex items-center gap-1">
-                            <span>{t('m365CapRaiseInputLabel')}</span>
-                            <input
-                              type="number"
-                              min={1}
-                              max={capCeilings.globalAdmin}
-                              value={
-                                capInput ||
-                                String(
-                                  Math.min(
-                                    Math.max(localRaiseTarget, needed),
-                                    capCeilings.globalAdmin,
-                                  ),
-                                )
-                              }
-                              onChange={(e) => setCapInput(e.target.value)}
-                              aria-label={t('m365CapRaiseInputLabel')}
-                              className="w-20 rounded border border-gray-300 bg-white px-1.5 py-0.5 text-xs text-gray-900 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100"
-                            />
-                          </label>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              applyCap(
-                                Number(capInput) ||
-                                  Math.min(
-                                    Math.max(localRaiseTarget, needed),
-                                    capCeilings.globalAdmin,
-                                  ),
-                              )
-                            }
-                            className="rounded-md border border-red-300 px-2 py-0.5 font-medium text-red-800 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/40"
-                          >
-                            {t('m365CapRaiseApply')}
-                          </button>
-                        </>
-                      ) : (
-                        localRaiseTarget > effectiveCap && (
-                          <button
-                            type="button"
-                            onClick={() => applyCap(localRaiseTarget)}
-                            className="rounded-md border border-red-300 px-2 py-0.5 font-medium text-red-800 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/40"
-                          >
-                            {t('m365CapRaiseButton', {
-                              limit: localRaiseTarget,
-                            })}
-                          </button>
-                        )
+                      {localRaiseTarget > effectiveCap && (
+                        <button
+                          type="button"
+                          onClick={() => applyCap(localRaiseTarget)}
+                          className="rounded-md border border-red-300 px-2 py-0.5 font-medium text-red-800 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/40"
+                        >
+                          {t('m365CapRaiseButton', {
+                            limit: localRaiseTarget,
+                          })}
+                        </button>
                       )}
                     </div>
                   )}
@@ -1301,7 +1290,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           )}
           {sources.length === 0 ? (
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              {t('m365AgentNoSources', { max: maxSources })}
+              {t('m365AgentNoSources', { max: draftCap })}
             </p>
           ) : (
             <ul className="space-y-1">
