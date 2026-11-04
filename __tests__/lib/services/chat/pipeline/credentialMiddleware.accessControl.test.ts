@@ -707,30 +707,35 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
       );
     });
 
-    it('static rag botId + rules unavailable: serves rule-free (fail-open, audited)', async () => {
-      // Unlike `orgr-` ids, a built-in agent must survive a storage outage.
+    it('static rag botId + rules unavailable: fails closed rather than bypassing invalidated rules', async () => {
       accessGetSnapshot.mockReturnValue({ rulesUnavailable: true });
       accessEvaluate.mockReturnValue({
         decision: 'unavailable',
         reason: 'rules-unavailable',
       });
 
-      const result = await createCredentialMiddleware(
-        makePromptAgentContext({
-          promptAgent: undefined,
-          botId: 'msf_communications',
-        }),
-        mockReq,
-      );
-
-      expect(result).toEqual({});
-      expect(accessEvaluate).not.toHaveBeenCalled();
+      await expect(
+        createCredentialMiddleware(
+          makePromptAgentContext({
+            promptAgent: undefined,
+            botId: 'msf_communications',
+          }),
+          mockReq,
+        ),
+      ).rejects.toMatchObject({
+        code: ErrorCode.AGENT_UNAVAILABLE,
+        metadata: {
+          accessDecision: 'unavailable',
+          accessReason: 'rules-unavailable',
+        },
+      });
+      expect(accessEvaluate).toHaveBeenCalled();
       expect(emitAccessAudit).toHaveBeenCalledWith(
         expect.objectContaining({
           agentName: 'msf_communications',
           source: 'org-agent',
-          decision: 'allow',
-          reason: 'rules-unavailable-static-fallback',
+          decision: 'unavailable',
+          reason: 'rules-unavailable',
         }),
       );
     });
