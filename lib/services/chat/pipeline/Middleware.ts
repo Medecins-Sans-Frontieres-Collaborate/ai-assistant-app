@@ -822,10 +822,9 @@ const resolveCredentialContext = async (
   // config agent with no record is evaluated under the very same key, so
   // an admin can restrict a built-in agent without overriding it (no rule
   // → allow, so this is a no-op until a rule exists). The cold-start
-  // fail-closed arm applies to `orgr-` ids only: a static-id botId whose
-  // rules cannot be verified degrades to the rule-free static entry,
-  // exactly like a deployment where the record never existed (blocking
-  // there would take every static agent down with a storage outage).
+  // Unresolved `orgr-` ids fail closed below. Static agents are also
+  // evaluated, including when rules are unavailable: a storage outage must
+  // never bypass an administrator's restriction or manual invalidation.
   if (accessService.isEnabled() && context.botId) {
     await accessService.ensureFresh();
     const orgRecord = accessService.getOrgAgentById(context.botId);
