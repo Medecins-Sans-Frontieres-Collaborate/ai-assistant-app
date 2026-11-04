@@ -287,7 +287,10 @@ export class PermissionCache {
       const selected =
         newer &&
         newer.globalGeneration === snapshot.globalGeneration &&
-        newer.checkedAt > checkedAt
+        newer.checkedAt >= checkedAt &&
+        newer.checkedAt <= Date.now() &&
+        Date.now() <
+          Math.min(newer.expiresAt, newer.checkedAt + policy.maxAgeMs)
           ? { ...newer, value: schema.parse(newer.value) }
           : snapshot;
       const entries = Object.entries(current.value.snapshots)
