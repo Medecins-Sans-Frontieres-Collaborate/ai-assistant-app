@@ -259,12 +259,15 @@ async function getVisibleOrgAgents(
   const suppressedStaticIds: string[] = [...disabledStaticIds];
   for (const orgAgent of serveable) {
     const overridesStatic = staticIds.has(orgAgent.id);
-    const { decision } = accessService.evaluateAccess({
+    const { decision, reason } = accessService.evaluateAccess({
       userMail,
       source: ORG_AGENT_SOURCE,
       agentName: orgAgent.id,
     });
-    if (decision === 'deny') {
+    if (
+      decision === 'deny' ||
+      reason.endsWith('group-membership-unavailable')
+    ) {
       // The override is restricted away from this user. Its rule key is
       // `org-agent::<id>` — the SAME key the static entry is evaluated
       // under — so getDeniedStaticOrgAgentIds() suppresses the static twin
@@ -318,14 +321,17 @@ async function getDeniedStaticOrgAgentIds(
   if (!accessService.isEnabled()) return [];
   await accessService.ensureFresh();
   return getOrganizationAgents()
-    .filter(
-      (agent) =>
-        accessService.evaluateAccess({
-          userMail,
-          source: ORG_AGENT_SOURCE,
-          agentName: agent.id,
-        }).decision === 'deny',
-    )
+    .filter((agent) => {
+      const result = accessService.evaluateAccess({
+        userMail,
+        source: ORG_AGENT_SOURCE,
+        agentName: agent.id,
+      });
+      return (
+        result.decision === 'deny' ||
+        result.reason.endsWith('group-membership-unavailable')
+      );
+    })
     .map((agent) => agent.id);
 }
 
@@ -639,6 +645,7 @@ export async function discoverFoundryAgents(
         agentName: agent.agentName,
       });
       if (decision === 'unavailable') {
+        if (reason.endsWith('group-membership-unavailable')) continue;
         if (isGroupMembershipDegradedReason(reason)) {
           // A Graph blip on one user's group lookup must not switch rule
           // enforcement off for the entire catalog: show this agent (the
