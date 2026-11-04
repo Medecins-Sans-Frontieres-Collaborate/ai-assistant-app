@@ -45,6 +45,9 @@ import { normalizeMail } from '@/lib/services/shared/principalMatching';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
+import { env } from '@/config/environment';
+import { z } from 'zod';
+
 /**
  * Graph failure kinds a later attempt can plausibly clear. Everything else
  * ('consent_missing', 'not_connected', 'forbidden', 'not_found') is a
@@ -72,7 +75,7 @@ function isRetryableGraphFailure(error: unknown): boolean {
   return RETRYABLE_GRAPH_KINDS.has(kind as M365ErrorKind);
 }
 
-const CACHE_TTL_MS = 10 * 60 * 1000;
+const CACHE_TTL_MS = env.PERMISSION_GROUP_CACHE_MINUTES * 60 * 1000;
 /** Retryable failures (throttle, 5xx, network): re-ask soon. */
 const FAILURE_TTL_MS = 60 * 1000;
 /**
@@ -99,6 +102,8 @@ interface CacheEntry {
    * docstring), which stays a plain "no groups".
    */
   degraded?: boolean;
+  /** Lookup failed, including structural failures. Never authoritative empty membership. */
+  unavailable?: boolean;
 }
 
 const cacheById = new Map<string, CacheEntry>();
@@ -150,7 +155,7 @@ function readEntry(
 ): CacheEntry | null {
   const entry = map.get(key);
   if (!entry) return null;
-  if (entry.expiresAt < Date.now()) {
+  if (entry.expiresAt <= Date.now()) {
     map.delete(key);
     return null;
   }
@@ -172,6 +177,8 @@ function writeCache(
   groupIds: string[],
   ttl: number,
   degraded: boolean,
+  expiresAt = Date.now() + ttl,
+  unavailable = false,
 ): void {
   // Oldest-first eviction keeps the maps bounded on busy multi-user replicas.
   for (const map of [cacheById, cacheByMail]) {
@@ -182,7 +189,7 @@ function writeCache(
   }
   // One entry object shared by both maps, so `degraded` reads identically
   // whether the caller looks the user up by id or by mail.
-  const entry: CacheEntry = { groupIds, expiresAt: Date.now() + ttl, degraded };
+  const entry: CacheEntry = { groupIds, expiresAt, degraded, unavailable };
   cacheById.set(userId, entry);
   if (mail) cacheByMail.set(mail, entry);
 }
@@ -336,6 +343,15 @@ export function isGroupMembershipDegraded(
   return readEntry(cacheByMail, normalized)?.degraded === true;
 }
 
+/** Whether membership could not be verified, distinct from verified empty membership. */
+export function isGroupMembershipUnavailable(
+  mail: string | null | undefined,
+): boolean {
+  const normalized = normalizeMail(mail);
+  if (!normalized || readEntry(viewAsByMail, normalized)) return false;
+  return readEntry(cacheByMail, normalized)?.unavailable === true;
+}
+
 /**
  * Warms (and returns) the user's transitive group ids. Safe to await on any
  * request path: cached hits return synchronously, concurrent cold calls
@@ -359,83 +375,101 @@ export async function resolveUserGroupIds(
   }
   clearViewAsOverride(userId, mail);
 
-  const now = Date.now();
-  const cached = readCache(cacheById, userId);
-  if (cached !== null) {
-    count('hit');
-    maybeLogStats(now);
-    return cached;
+  try {
+    const { getPermissionCache } =
+      await import('@/lib/services/permissions/PermissionCache');
+    let fetched = false;
+    const snapshot = await getPermissionCache().resolve(
+      userId,
+      'groups',
+      z.array(z.string().min(1)),
+      async () => {
+        fetched = true;
+        count('miss');
+        // Lazy import: this module is reached from the sync principal-building
+        // paths (limits routeGuard, agent access), which are imported by half
+        // the server. A static graphApi import (behind groupDirectory) would
+        // drag next-auth into every one of those module graphs (and their
+        // tests) for a call that only happens here.
+        const { fetchMemberGroupIds } =
+          await import('@/lib/services/m365/groupDirectory');
+        const result = await fetchMemberGroupIds(req, { kind: 'me' });
+        if (result.oversizeFallback) {
+          count('oversize_fallback');
+          console.warn(
+            `[group-membership] getMemberGroups refused for user=${sanitizeForLog(userId)}; ` +
+              `served ${result.groupIds.length} ids via transitiveMemberOf truncated=${result.truncated}`,
+          );
+        }
+        if (result.truncated)
+          throw new Error(
+            'Group membership lookup was truncated; complete membership cannot be verified',
+          );
+        return result.groupIds;
+      },
+      {
+        maxAgeMs: CACHE_TTL_MS,
+        failureTtlMs: (error) =>
+          isRetryableGraphFailure(error)
+            ? FAILURE_TTL_MS
+            : STRUCTURAL_FAILURE_TTL_MS,
+      },
+    );
+    if (!fetched) count('hit');
+    writeCache(
+      userId,
+      mail,
+      snapshot.value,
+      CACHE_TTL_MS,
+      false,
+      Math.min(snapshot.expiresAt, snapshot.checkedAt + CACHE_TTL_MS),
+    );
+    return snapshot.value;
+  } catch (error) {
+    // Degraded evaluation (fourth pass A1): group clauses evaluate false
+    // for this user until the negative cache expires, while user/domain
+    // clauses keep working. Audit it — a quiet Graph outage must not look
+    // like a correct deny. Agent access additionally reads the `degraded`
+    // marker below and reports 'unavailable' for group-scoped rules
+    // rather than denying; usage limits stay fail-open on the plain [].
+    //
+    // Only a transient failure earns that marker. A structural one is
+    // logged just as loudly (the kind rides the audit line, so a missing
+    // tenant grant is still traceable) but leaves `degraded` false, so
+    // group-scoped rules go back to denying instead of softening for the
+    // lifetime of the gap — and it is remembered for the full TTL, so the
+    // line below is written once per window, not once a minute.
+    const retryable = isRetryableGraphFailure(error);
+    const kind =
+      error instanceof Error && error.name === 'M365Error'
+        ? String((error as Error & { kind?: unknown }).kind ?? 'unknown')
+        : 'network';
+    const reason =
+      error instanceof Error ? error.message.slice(0, 120) : 'unknown';
+    console.warn(
+      `[agent-access-audit] group-membership degraded user=${sanitizeForLog(userId)} ` +
+        `retryable=${retryable} kind=${sanitizeForLog(kind)} ` +
+        `reason=${sanitizeForLog(reason)}`,
+    );
+    count(retryable ? 'failure_retryable' : 'failure_structural');
+    stats.lastFailure = {
+      at: new Date().toISOString(),
+      kind: retryable ? 'retryable' : 'structural',
+      reason: sanitizeForLog(`${kind}: ${reason}`),
+    };
+    writeCache(
+      userId,
+      mail,
+      [],
+      retryable ? FAILURE_TTL_MS : STRUCTURAL_FAILURE_TTL_MS,
+      retryable,
+      undefined,
+      true,
+    );
+    return [];
+  } finally {
+    maybeLogStats(Date.now());
   }
-
-  const running = inFlight.get(userId);
-  if (running) return running;
-  count('miss');
-  const fetchPromise = (async () => {
-    try {
-      // Lazy import: this module is reached from the sync principal-building
-      // paths (limits routeGuard, agent access), which are imported by half
-      // the server. A static graphApi import (behind groupDirectory) would
-      // drag next-auth into every one of those module graphs (and their
-      // tests) for a call that only happens here.
-      const { fetchMemberGroupIds } =
-        await import('@/lib/services/m365/groupDirectory');
-      const result = await fetchMemberGroupIds(req, { kind: 'me' });
-      if (result.oversizeFallback) {
-        count('oversize_fallback');
-        console.warn(
-          `[group-membership] getMemberGroups refused for user=${sanitizeForLog(userId)}; ` +
-            `served ${result.groupIds.length} ids via transitiveMemberOf truncated=${result.truncated}`,
-        );
-      }
-      writeCache(userId, mail, result.groupIds, CACHE_TTL_MS, false);
-      return result.groupIds;
-    } catch (error) {
-      // Degraded evaluation (fourth pass A1): group clauses evaluate false
-      // for this user until the negative cache expires, while user/domain
-      // clauses keep working. Audit it — a quiet Graph outage must not look
-      // like a correct deny. Agent access additionally reads the `degraded`
-      // marker below and reports 'unavailable' for group-scoped rules
-      // rather than denying; usage limits stay fail-open on the plain [].
-      //
-      // Only a transient failure earns that marker. A structural one is
-      // logged just as loudly (the kind rides the audit line, so a missing
-      // tenant grant is still traceable) but leaves `degraded` false, so
-      // group-scoped rules go back to denying instead of softening for the
-      // lifetime of the gap — and it is remembered for the full TTL, so the
-      // line below is written once per window, not once a minute.
-      const retryable = isRetryableGraphFailure(error);
-      const kind =
-        error instanceof Error && error.name === 'M365Error'
-          ? String((error as Error & { kind?: unknown }).kind ?? 'unknown')
-          : 'network';
-      const reason =
-        error instanceof Error ? error.message.slice(0, 120) : 'unknown';
-      console.warn(
-        `[agent-access-audit] group-membership degraded user=${sanitizeForLog(userId)} ` +
-          `retryable=${retryable} kind=${sanitizeForLog(kind)} ` +
-          `reason=${sanitizeForLog(reason)}`,
-      );
-      count(retryable ? 'failure_retryable' : 'failure_structural');
-      stats.lastFailure = {
-        at: new Date().toISOString(),
-        kind: retryable ? 'retryable' : 'structural',
-        reason: sanitizeForLog(`${kind}: ${reason}`),
-      };
-      writeCache(
-        userId,
-        mail,
-        [],
-        retryable ? FAILURE_TTL_MS : STRUCTURAL_FAILURE_TTL_MS,
-        retryable,
-      );
-      return [];
-    } finally {
-      inFlight.delete(userId);
-      maybeLogStats(Date.now());
-    }
-  })();
-  inFlight.set(userId, fetchPromise);
-  return fetchPromise;
 }
 
 /** Test hook — evaluation semantics depend on cache state. */
