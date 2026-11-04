@@ -7966,5 +7966,21 @@
     "instructionsHint": "Do 16 KB instrukcija, uključujući bilo koje importovane tekstualne reference. Binarni fajlovi i trajno indeksiranje dokumenata dostupni su samo za organizacione veštine. Export koristi standardni SKILL.md naziv bez user: prefiksa.",
     "enabled": "Omogućeno za moje razgovore",
     "empty": "Kreirajte veštinu za ponavljajući zadatak ili importujte SKILL.md da je pregledate i sačuvate ovde."
+  },
+  "permissionCache": {
+    "title": "Osveži dozvole",
+    "description": "Poništi keširano članstvo u grupi i pristup iz Microsoft 365 izvora. Sledeći zaštićeni zahtev mora ponovo proveriti dozvole na svakom serveru.",
+    "scope": "Osveži za",
+    "oneUser": "Jedan korisnik",
+    "everyone": "Svi",
+    "userId": "Entra ID objekta korisnika",
+    "userIdHint": "Koristite ID objekta korisnika iz Microsoft Entra, a ne njegovu email adresu. Unesite važeći UUID.",
+    "confirmAll": "Zahtevaj osvežene provere dozvola za sve korisnike. Ovo može privremeno povećati Microsoft Graph saobraćaj.",
+    "refreshUser": "Osveži dozvole korisnika",
+    "refreshAll": "Osveži sve dozvole",
+    "refreshing": "Poništavanje keša…",
+    "invalidated": "Keš je poništen. Potrebna je nova verifikacija pri sledećem zaštićenom zahtevu; dozvole još nisu ponovo proverene.",
+    "failed": "Poništavanje keša nije potvrđeno. Pokušajte ponovo uskoro.",
+    "propagationNote": "Ovo primorava novu proveru, ali ne menja Microsoft dozvole. Kašnjenja propagacije kod Microsofta i dalje važe. Već odobrene operacije nisu opozvane."
   }
 }

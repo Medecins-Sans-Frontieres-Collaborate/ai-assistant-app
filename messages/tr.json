@@ -7982,5 +7982,21 @@
     "instructionsHint": "Her türlü içe aktarılan metin referansı dâhil en fazla 16 KB talimat. İkili dosyalar ve kalıcı doküman indekslemesi yalnızca kurum becerileri için kullanılabilir. Dışa aktarım, kullanıcı: öneki olmadan standart SKILL.md adını kullanır.",
     "enabled": "Kendi sohbetlerim için etkin",
     "empty": "Tekrarlayan bir görev için beceri oluşturun veya gözden geçirmek ve kaydetmek için bir SKILL.md içe aktarın."
+  },
+  "permissionCache": {
+    "title": "İzinleri yenile",
+    "description": "Önbellekteki grup üyeliğini ve Microsoft 365 kaynak erişimini geçersiz kıl. Sonraki korumalı istekte, her sunucuda izinler yeniden doğrulanmalıdır.",
+    "scope": "Şunun için yenile:",
+    "oneUser": "Bir kullanıcı",
+    "everyone": "Herkes",
+    "userId": "Entra kullanıcı nesne kimliği",
+    "userIdHint": "Kullanıcının Microsoft Entra'daki nesne kimliğini kullanın, e-posta adresini değil. Geçerli bir UUID girin.",
+    "confirmAll": "Herkes için izinlerin yeniden kontrol edilmesini gerektirir. Bu, geçici olarak Microsoft Graph trafiğini artırabilir.",
+    "refreshUser": "Kullanıcı izinlerini yenile",
+    "refreshAll": "Tüm izinleri yenile",
+    "refreshing": "Önbellek geçersiz kılınıyor…",
+    "invalidated": "Önbellek geçersiz kılındı. Sonraki korumalı istekte yeniden doğrulama gereklidir; izinler henüz tekrar kontrol edilmemiştir.",
+    "failed": "Önbelleğin geçersiz kılındığı doğrulanamadı. Kısa süre içinde tekrar deneyin.",
+    "propagationNote": "Bu, Microsoft izinlerinde bir değişiklik yapmaz, yalnızca yeni bir kontrolü zorlar. Microsoft yayılma gecikmeleri yine de geçerlidir. Zaten yetkilendirilmiş işlemler geri alınmaz."
   }
 }

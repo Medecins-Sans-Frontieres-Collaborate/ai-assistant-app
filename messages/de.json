@@ -6873,6 +6873,22 @@
     "englishOnly": "Versionshinweise sind auf Englisch verfasst.",
     "viewOnGithub": "Alle Versionen auf GitHub ansehen"
   },
+  "permissionCache": {
+    "title": "Berechtigungen aktualisieren",
+    "description": "Zwischengespeicherte Gruppenmitgliedschaften und Zugriffsrechte auf Microsoft-365-Quellen ungültig machen. Die nächste geschützte Anfrage muss die Berechtigungen auf jedem Server erneut prüfen.",
+    "scope": "Aktualisieren für",
+    "oneUser": "Eine Person",
+    "everyone": "Alle",
+    "userId": "Entra-Benutzerobjekt-ID",
+    "userIdHint": "Die Objekt-ID aus Microsoft Entra verwenden, nicht die E-Mail-Adresse. Eine gültige UUID eingeben.",
+    "confirmAll": "Neue Berechtigungsprüfungen für alle erzwingen. Dies kann den Microsoft-Graph-Datenverkehr vorübergehend erhöhen.",
+    "refreshUser": "Benutzerberechtigungen aktualisieren",
+    "refreshAll": "Alle Berechtigungen aktualisieren",
+    "refreshing": "Cache wird ungültig gemacht…",
+    "invalidated": "Cache ungültig gemacht. Die nächste geschützte Anfrage erfordert eine neue Prüfung. Die Berechtigungen wurden noch nicht erneut geprüft.",
+    "failed": "Die Cache-Invalidierung konnte nicht bestätigt werden. Bitte in Kürze erneut versuchen.",
+    "propagationNote": "Dies erzwingt eine neue Prüfung, keine Änderung der Microsoft-Berechtigungen. Microsoft-Verzögerungen gelten weiterhin. Bereits autorisierte Vorgänge werden nicht rückgängig gemacht."
+  },
   "globalAdmins": {
     "title": "Globale Administratoren",
     "description": "Globale Administratoren können jeden Administrationsbereich bearbeiten, einschließlich der Verwaltung der anderen Administratoren. Zwei Listen gelten gleichzeitig: die durch das Deployment festgelegte und die hier verwaltete.",

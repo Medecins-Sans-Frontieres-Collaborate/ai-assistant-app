@@ -7966,5 +7966,21 @@
     "instructionsHint": "Ilaa 16 KB oo tilmaamo ah, oo ay ku jiraan qoraalka la soo geliyay. Fayooshinka binary-ga iyo diiwaan gelinta joogtada ah ee dukumiintiyada waxa loo heli karaa xirfadaha ururka oo keliya. Dhoofinta waxay isticmaashaa magaca caadiga ah ee SKILL.md la’aanteed astaanta user:.",
     "enabled": "Waa loo hawlgeliyay wadahadalladayda",
     "empty": "Abuur xirfad hawl soo noqnoqota ah, ama soo geli SKILL.md si aad u eegto una kaydiso halkan."
+  },
+  "permissionCache": {
+    "title": "Cusbooneysii oggolaanshaha",
+    "description": "Tirtir xasuusta xubinnimada kooxda iyo gelitaanka Microsoft 365 ee la kaydiyay. Codsiga xiga ee la ilaaliyo wuxuu u baahan doonaa in mar kale lagu xaqiijiyo oggolaanshaha, server walba.",
+    "scope": "Cusbooneysii",
+    "oneUser": "Hal isticmaal",
+    "everyone": "Dhammaan",
+    "userId": "Aqoonsiga shayga isticmaalaha Entra",
+    "userIdHint": "Isticmaal Aqoonsiga shayga isticmaalaha ee Microsoft Entra, ma aha cinwaankooda email. Gali UUID sax ah.",
+    "confirmAll": "U baahan hubin oggolaansho cusub dhammaan dadka. Tani waxay si ku-meel-gaar ah u kordhin kartaa taraafikada Microsoft Graph.",
+    "refreshUser": "Cusbooneysii oggolaanshaha isticmaalaha",
+    "refreshAll": "Cusbooneysii dhammaan oggolaanshaha",
+    "refreshing": "Xasuusta waa la tirtirayaa…",
+    "invalidated": "Xasuusta waa la tirtiray. Hubin cusub ayaa loo baahan yahay codsiga la ilaaliyo ee xiga; oggolaanshaha weli lama hubin.",
+    "failed": "Ma suurtagalin in la xaqiijiyo tir-tirka xasuusta. Fadlan isku day mar kale dhowaan.",
+    "propagationNote": "Tani waxay ku khasbaysaa hubin cusub, ma ahan isbeddel oggolaanshaha Microsoft. Dib u dhigista faafinta Microsoft weli way jirtaa. Hawlgallada horey loo oggolaaday lagama laaban."
   }
 }

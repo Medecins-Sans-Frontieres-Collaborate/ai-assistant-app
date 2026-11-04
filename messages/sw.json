@@ -7982,5 +7982,21 @@
     "instructionsHint": "Hadi KB 16 za maagizo, ikijumuisha marejeo yoyote ya maandishi yaliyoingizwa. Faili za binary na kuorodhesha nyaraka kwa kudumu vinapatikana tu kwa ujuzi wa shirika. Uzalishaji unatumia jina la SKILL.md bila kiambishi awali cha mtumiaji:.",
     "enabled": "Imewezeshwa kwa mazungumzo yangu",
     "empty": "Unda ujuzi kwa kazi inayojirudia, au ingiza SKILL.md ili kukagua na kuhifadhi hapa."
+  },
+  "permissionCache": {
+    "title": "Sasisha ruhusa",
+    "description": "Futa uanachama wa kundi na ufikiaji wa chanzo cha Microsoft 365 uliowekwa kwenye kache. Ombi linalofuata la ulinzi litalazimika kuhakiki tena ruhusa katika kila seva.",
+    "scope": "Sasisha kwa",
+    "oneUser": "Mtumiaji mmoja",
+    "everyone": "Wote",
+    "userId": "ID ya kitu cha mtumiaji wa Entra",
+    "userIdHint": "Tumia ID ya kitu cha mtumiaji kutoka Microsoft Entra, si barua pepe yao. Weka UUID halali.",
+    "confirmAll": "Hitaji uhakiki upya wa ruhusa kwa kila mtu. Hii inaweza kuongeza trafiki ya Microsoft Graph kwa muda mfupi.",
+    "refreshUser": "Sasisha ruhusa za mtumiaji",
+    "refreshAll": "Sasisha ruhusa zote",
+    "refreshing": "Inafuta kache...",
+    "invalidated": "Kache imefutwa. Uhakiki mpya unahitajika kwenye ombi linalolindwa linalofuata; ruhusa bado hazijahakikiwa upya.",
+    "failed": "Uthibitisho wa kufuta kache haujawezekana. Jaribu tena hivi karibuni.",
+    "propagationNote": "Hii inalazimisha uhakiki mpya pekee, si mabadiliko ya ruhusa za Microsoft. Muda wa ucheleweshaji wa usambazaji wa Microsoft bado unahusika. Uendeshaji ulioruhusiwa tayari hautabatilishwa."
   }
 }

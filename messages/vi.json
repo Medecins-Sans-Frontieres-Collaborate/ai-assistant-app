@@ -8013,5 +8013,21 @@
     "instructionsHint": "Tối đa 16 KB hướng dẫn, bao gồm mọi tham chiếu văn bản đã nhập. Tệp nhị phân và lập chỉ mục tài liệu liên tục chỉ có ở kỹ năng tổ chức. Xuất ra sẽ dùng tên chuẩn SKILL.md mà không có tiền tố user:.",
     "enabled": "Đã bật cho hội thoại của tôi",
     "empty": "Tạo kỹ năng cho một nhiệm vụ lặp lại, hoặc nhập SKILL.md để xem và lưu tại đây."
+  },
+  "permissionCache": {
+    "title": "Làm mới quyền truy cập",
+    "description": "Làm mất hiệu lực bộ nhớ đệm thành viên nhóm và quyền truy cập nguồn Microsoft 365. Yêu cầu được bảo vệ tiếp theo sẽ phải kiểm tra lại quyền truy cập trên mọi máy chủ.",
+    "scope": "Làm mới cho",
+    "oneUser": "Một người dùng",
+    "everyone": "Tất cả mọi người",
+    "userId": "ID đối tượng người dùng Entra",
+    "userIdHint": "Sử dụng ID đối tượng của người dùng từ Microsoft Entra, không phải địa chỉ email của họ. Nhập một UUID hợp lệ.",
+    "confirmAll": "Yêu cầu kiểm tra lại quyền truy cập cho tất cả mọi người. Điều này có thể tạm thời tăng lưu lượng Microsoft Graph.",
+    "refreshUser": "Làm mới quyền của người dùng",
+    "refreshAll": "Làm mới tất cả quyền truy cập",
+    "refreshing": "Đang làm mất hiệu lực bộ nhớ đệm…",
+    "invalidated": "Bộ nhớ đệm đã bị vô hiệu hóa. Yêu cầu được bảo vệ tiếp theo cần xác minh lại; quyền truy cập chưa được kiểm tra lại.",
+    "failed": "Không thể xác nhận việc vô hiệu hóa bộ nhớ đệm. Vui lòng thử lại sau.",
+    "propagationNote": "Thao tác này chỉ buộc kiểm tra lại quyền truy cập chứ không thay đổi quyền trên Microsoft. Thời gian lan truyền của Microsoft vẫn áp dụng. Các thao tác đã được phê duyệt không bị hủy bỏ."
   }
 }

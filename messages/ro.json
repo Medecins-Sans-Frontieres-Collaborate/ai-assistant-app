@@ -7982,5 +7982,21 @@
     "instructionsHint": "Până la 16 KB de instrucțiuni, inclusiv orice referințe de text importate. Fișierele binare și indexarea persistentă a documentelor sunt disponibile doar pentru abilitățile organizației. Exportarea folosește numele standard SKILL.md fără prefixul user:.",
     "enabled": "Activată pentru conversațiile mele",
     "empty": "Creați o abilitate pentru o sarcină recurentă sau importați un SKILL.md pentru a-l verifica și salva aici."
+  },
+  "permissionCache": {
+    "title": "Reîmprospătează permisiunile",
+    "description": "Invalidează grupurile memorate și accesul la sursa Microsoft 365 din cache. La următoarea solicitare protejată, permisiunile trebuie verificate din nou pe fiecare server.",
+    "scope": "Reîmprospătează pentru",
+    "oneUser": "Un utilizator",
+    "everyone": "Toată lumea",
+    "userId": "ID obiect utilizator Entra",
+    "userIdHint": "Folosiți ID-ul de obiect al utilizatorului din Microsoft Entra, nu adresa lor de email. Introduceți un UUID valid.",
+    "confirmAll": "Solicită verificarea recentă a permisiunilor pentru toți utilizatorii. Acest lucru poate crește temporar traficul Microsoft Graph.",
+    "refreshUser": "Reîmprospătează permisiunile utilizatorului",
+    "refreshAll": "Reîmprospătează toate permisiunile",
+    "refreshing": "Se invalidează cache-ul…",
+    "invalidated": "Cache-ul a fost invalidat. Este necesară o verificare nouă la următoarea solicitare protejată; permisiunile nu au fost încă reverificate.",
+    "failed": "Invalidarea cache-ului nu a putut fi confirmată. Reîncercați în scurt timp.",
+    "propagationNote": "Acest lucru forțează o verificare proaspătă, nu modifică permisiunile Microsoft. Întârzierile de propagare Microsoft se aplică în continuare. Operațiunile deja autorizate nu sunt anulate."
   }
 }

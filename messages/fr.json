@@ -7982,5 +7982,21 @@
     "instructionsHint": "Jusqu'à 16 Ko d'instructions, y compris les références textuelles importées. Les fichiers binaires et l'indexation persistante des documents sont disponibles uniquement pour les compétences organisationnelles. L'export utilise le nom standard SKILL.md sans le préfixe user:.",
     "enabled": "Activée pour mes conversations",
     "empty": "Créez une compétence pour une tâche récurrente, ou importez un SKILL.md pour l'examiner et l'enregistrer ici."
+  },
+  "permissionCache": {
+    "title": "Actualiser les autorisations",
+    "description": "Invalider le cache des appartenances aux groupes et l'accès aux sources Microsoft 365. La prochaine requête protégée doit de nouveau vérifier les autorisations sur chaque serveur.",
+    "scope": "Actualiser pour",
+    "oneUser": "Un utilisateur",
+    "everyone": "Tout le monde",
+    "userId": "ID d’objet utilisateur Entra",
+    "userIdHint": "Utilisez l'ID d’objet utilisateur depuis Microsoft Entra, et non son adresse e-mail. Saisissez un UUID valide.",
+    "confirmAll": "Nécessiter une vérification des autorisations pour tout le monde. Cela peut temporairement augmenter le trafic Microsoft Graph.",
+    "refreshUser": "Actualiser les autorisations de l’utilisateur",
+    "refreshAll": "Actualiser toutes les autorisations",
+    "refreshing": "Invalidation du cache…",
+    "invalidated": "Cache invalidé. Une nouvelle vérification sera requise lors de la prochaine demande protégée ; les autorisations n'ont pas encore été revérifiées.",
+    "failed": "L’invalidation du cache n’a pas pu être confirmée. Veuillez réessayer sous peu.",
+    "propagationNote": "Ceci force une nouvelle vérification, sans modifier les autorisations Microsoft. Les délais de propagation de Microsoft restent valables. Les opérations déjà autorisées ne sont pas annulées."
   }
 }

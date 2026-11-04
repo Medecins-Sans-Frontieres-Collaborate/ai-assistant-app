@@ -7966,5 +7966,21 @@
     "instructionsHint": "Har zuwa 16 KB na umarni, da sun haɗa da duk wani rubutun da aka shigo da shi. Fayilolin binary da dogayen index na takardu sai ga kwarewar kungiya. Fitarwa yana amfani da sunan SKILL.md ba tare da user: a gaba ba.",
     "enabled": "An kunna don tattaunawata",
     "empty": "Kirkiri kwarewa don al'amuran da ake maimaitawa, ko shigo da SKILL.md don dubawa da ajiye ta a nan."
+  },
+  "permissionCache": {
+    "title": "Sabunta izini",
+    "description": "Soke bayanan rukunin da aka ajiye da shiga asalin Microsoft 365. Bukatar da aka kare ta gaba dole ta sake duba izini, a kowanne uwar garke.",
+    "scope": "Sabunta wa",
+    "oneUser": "Mai amfani daya",
+    "everyone": "Kowa",
+    "userId": "Entra user object ID",
+    "userIdHint": "Yi amfani da object ID na mai amfani daga Microsoft Entra, ba adireshin imel dinsu ba. Shigar da ingantaccen UUID.",
+    "confirmAll": "Bukaci duba izini daga farko ga kowa. Wannan zai iya kara yawan zirga-zirgar Microsoft Graph na ɗan lokaci.",
+    "refreshUser": "Sabunta izinin mai amfani",
+    "refreshAll": "Sabunta dukkan izini",
+    "refreshing": "Ana soke cache…",
+    "invalidated": "An soke cache. Bukatar tabbatarwa daga farko za a yi da zarar an gabatar da sabuwar bukatar kariya; ba a sake duba izini ba tukuna.",
+    "failed": "Ba a iya tabbatar da soke cache ba. A sake gwadawa daga baya kaɗan.",
+    "propagationNote": "Wannan yana tilasta sabon duba izini, ba sauyin izini a Microsoft ba. Jinkirin watsa bayanai daga Microsoft har yanzu yana aiki. Ayyukan da aka riga aka amince da su ba za a soke su ba."
   }
 }

@@ -7966,5 +7966,21 @@
     "instructionsHint": "Amabwiriza agera kuri 16 KB, harimo n'inyandiko zatumijwe. Amadosiye ya binary n'ubushobozi bwo kubika inyandiko burambye biboneka gusa ku bumenyi bw'umuryango. Gutanga hanze bikoresha izina rya SKILL.md risanzwe ntirifite user: prefix.",
     "enabled": "Byemejwe mu biganiro byanjye",
     "empty": "Hanga ubumenyi bw'akazi kugaruka, cyangwa tereza SKILL.md maze ugenzure ubibike hano."
+  },
+  "permissionCache": {
+    "title": "Ongera usuzume uburenganzira",
+    "description": "Kuraho ibikorwa byabitswe ku itsinda n’uburenganzira bwo kugera kuri Microsoft 365. Gusaba gukurikira kurinzwe kuzongera kugenzura uburenganzira kuri buri murongo wa seriveri.",
+    "scope": "Ongera usuzume kuri",
+    "oneUser": "Umukoresha umwe",
+    "everyone": "Bose",
+    "userId": "Entra user object ID",
+    "userIdHint": "Koresha object ID y’umukoresha iri muri Microsoft Entra, ntabwo ari aderesi ya email. Shyiramo UUID yemewe.",
+    "confirmAll": "Gusaba kugenzura bushya uburenganzira kuri bose. Ibi bishobora kongera by’igihe gito urujya n’uruza rwa Microsoft Graph.",
+    "refreshUser": "Ongera usuzume uburenganzira bw’umukoresha",
+    "refreshAll": "Ongera usuzume uburenganzira bwa bose",
+    "refreshing": "Kuraho ibikorwa byabitswe…",
+    "invalidated": "Ibikorwa byabitswe byakuweho. Hazakenerwa igenzura rishya kuri buri busabe bukurikira; uburenganzira ntiburagenzurwa ubu.",
+    "failed": "Ntibyashobotse kwemeza ko ibikorwa byabitswe byakuweho. Ongera ugerageze vuba.",
+    "propagationNote": "Ibi bituma hagenzurwa bushya gusa, ntibihindura uburenganzira muri Microsoft. Gutinda gutambutsa amakuru kwa Microsoft biracyakurikizwa. Ibikorwa byari byemewe ntibisubirwaho."
   }
 }

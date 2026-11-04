@@ -7982,5 +7982,21 @@
     "instructionsHint": "Instruksi hingga 16 KB, termasuk referensi teks yang diimpor. File biner dan pengindeksan dokumen permanen hanya tersedia untuk keterampilan organisasi. Ekspor menggunakan nama standar SKILL.md tanpa awalan user:.",
     "enabled": "Diaktifkan untuk percakapan saya",
     "empty": "Buat keterampilan untuk tugas berulang, atau impor SKILL.md untuk ditinjau dan disimpan di sini."
+  },
+  "permissionCache": {
+    "title": "Segarkan izin",
+    "description": "Batalkan keanggotaan grup dan akses sumber Microsoft 365 yang telah di-cache. Permintaan terlindungi berikutnya harus memverifikasi izin ulang, di setiap server.",
+    "scope": "Segarkan untuk",
+    "oneUser": "Satu pengguna",
+    "everyone": "Semua orang",
+    "userId": "ID objek pengguna Entra",
+    "userIdHint": "Gunakan ID objek pengguna dari Microsoft Entra, bukan alamat email mereka. Masukkan UUID yang valid.",
+    "confirmAll": "Wajibkan pemeriksaan izin terbaru untuk semua orang. Hal ini mungkin untuk sementara meningkatkan lalu lintas Microsoft Graph.",
+    "refreshUser": "Segarkan izin pengguna",
+    "refreshAll": "Segarkan semua izin",
+    "refreshing": "Membatalkan cache…",
+    "invalidated": "Cache telah dibatalkan. Verifikasi ulang diperlukan pada permintaan terlindungi berikutnya; izin belum diperiksa ulang.",
+    "failed": "Pembatalan cache tidak dapat dikonfirmasi. Coba lagi dalam waktu dekat.",
+    "propagationNote": "Ini memaksa pemeriksaan ulang, bukan mengubah izin Microsoft. Penundaan propagasi Microsoft tetap berlaku. Operasi yang sudah diizinkan tidak dibatalkan."
   }
 }

@@ -7982,5 +7982,21 @@
     "instructionsHint": "Enintään 16 KB ohjeita, mukaan lukien mahdolliset tuodut tekstiviitteet. Binääritiedostot ja pysyvä asiakirjaindeksointi ovat käytettävissä vain organisaatiotaidoissa. Vientitoiminto käyttää oletuksena SKILL.md-nimeä ilman user:-etuliitettä.",
     "enabled": "Käytössä omissa keskusteluissani",
     "empty": "Luo taito toistuvaan tehtävään tai tuo SKILL.md tarkistaaksesi ja tallentaaksesi sen tähän."
+  },
+  "permissionCache": {
+    "title": "Päivitä käyttöoikeudet",
+    "description": "Mitätöi välimuistiin tallennetut ryhmän jäsenyydet ja Microsoft 365 -lähteiden käyttöoikeudet. Seuraavalla suojatulla pyynnöllä käyttöoikeudet tarkistetaan uudelleen jokaisella palvelimella.",
+    "scope": "Päivitä kohteelle",
+    "oneUser": "Yksi käyttäjä",
+    "everyone": "Kaikki",
+    "userId": "Entra-käyttäjän objektitunnus",
+    "userIdHint": "Käytä käyttäjän objektitunnusta Microsoft Entrasta, ei sähköpostiosoitetta. Syötä kelvollinen UUID.",
+    "confirmAll": "Edellytä uudet käyttöoikeustarkistukset kaikille. Tämä saattaa tilapäisesti lisätä Microsoft Graph -liikennettä.",
+    "refreshUser": "Päivitä käyttäjän käyttöoikeudet",
+    "refreshAll": "Päivitä kaikki käyttöoikeudet",
+    "refreshing": "Välimuistia mitätöidään…",
+    "invalidated": "Välimuisti mitätöity. Seuraava suojattu pyyntö vaatii uuden tarkistuksen; käyttöoikeudet eivät ole vielä päivittyneet.",
+    "failed": "Välimuistin mitätöintiä ei voitu vahvistaa. Yritä uudelleen hetken kuluttua.",
+    "propagationNote": "Tämä pakottaa uuden tarkistuksen, mutta ei muuta Microsoftin käyttöoikeuksia. Microsoftin viiveet ovat edelleen voimassa. Jo myönnetyt oikeudet säilyvät."
   }
 }

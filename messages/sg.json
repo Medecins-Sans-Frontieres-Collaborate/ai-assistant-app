@@ -7966,5 +7966,21 @@
     "instructionsHint": "Instructions kokü 16 KB, yimbi wala texte importé. Fichî binêr na document sô yê ti indexation persistante a yê ti mbi tî organization. Export yê ti SKILL.md standard abâ préfixe utilisateur.",
     "enabled": "Ayeke ti dialogue ti mbi",
     "empty": "Küê mbi tî tâche sô yê ti végî na sôko, wala import SKILL.md tî bâ na yî tî yê ti kpê na nga nzönî."
+  },
+  "permissionCache": {
+    "title": "Sôhâ permissions",
+    "description": "Kûê timbê ti sôhâ ti groupe na mbi Microsoft 365. Deni kété ti a yâ hîngî na permissions na server kõdzini na server.",
+    "scope": "Sôhâ ti",
+    "oneUser": "Moto mîngi",
+    "everyone": "Könö",
+    "userId": "Entra user object ID",
+    "userIdHint": "Kêtê object ID ti moto na Microsoft Entra, mo kêtê email ti yê. Kôdôpe UUID a yeke.",
+    "confirmAll": "Zîa sôhâ ti permissions ni sôhâ ti kõnö. Iko, Microsoft Graph traffic a pâsi sôhâ.",
+    "refreshUser": "Sôhâ permissions ti moto",
+    "refreshAll": "Sôhâ permissions ti kõnö",
+    "refreshing": "Yè mbi tîmbè sôhâ...",
+    "invalidated": "Sôhâ tîmbè. Ti yâ hîngî tî sôhâ ngâ, bêngo permissions asili tî yâ hîngî.",
+    "failed": "Sôhâ tîmbè asili ti zîâ hîngî. Sôhâ mo mû ngangu.",
+    "propagationNote": "Lêdê atene hîngî sôhâ tî permissions, mo ayeke ti yô Microsoft permissions. Sêlê propagation ti Microsoft ayeke. Opération ti zîâ sôhâ asili ti zo yeke ti sï."
   }
 }

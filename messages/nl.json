@@ -7982,5 +7982,21 @@
     "instructionsHint": "Maximaal 16 KB aan instructies, inclusief geïmporteerde tekstverwijzingen. Binaire bestanden en permanente documentindexering zijn alleen beschikbaar voor organisatievaardigheden. Export gebruikt de standaardnaam SKILL.md zonder het user:-voorvoegsel.",
     "enabled": "Ingeschakeld voor mijn gesprekken",
     "empty": "Maak een vaardigheid voor een terugkerende taak, of importeer een SKILL.md om deze hier te bekijken en op te slaan."
+  },
+  "permissionCache": {
+    "title": "Permissies vernieuwen",
+    "description": "Maak de cache van groepslidmaatschappen en Microsoft 365 bron-toegang ongeldig. Bij het volgende beschermde verzoek moeten permissies opnieuw worden gecontroleerd op elke server.",
+    "scope": "Vernieuwen voor",
+    "oneUser": "Eén gebruiker",
+    "everyone": "Iedereen",
+    "userId": "Entra gebruikersobject-ID",
+    "userIdHint": "Gebruik het object-ID van de gebruiker uit Microsoft Entra, niet het e-mailadres. Voer een geldige UUID in.",
+    "confirmAll": "Vereis vernieuwde permissiecontroles voor iedereen. Dit kan tijdelijk het verkeer naar Microsoft Graph verhogen.",
+    "refreshUser": "Gebruikerspermissies vernieuwen",
+    "refreshAll": "Alle permissies vernieuwen",
+    "refreshing": "Cache ongeldig maken...",
+    "invalidated": "Cache ongeldig gemaakt. Er is bij het volgende beschermde verzoek een nieuwe verificatie vereist; permissies zijn nog niet opnieuw gecontroleerd.",
+    "failed": "Ongeldig maken van de cache kon niet worden bevestigd. Probeer het binnenkort opnieuw.",
+    "propagationNote": "Dit dwingt een nieuwe controle af, geen wijziging in Microsoft-permissies. Microsoft-vertragingen bij propagatie blijven van toepassing. Reeds geautoriseerde handelingen worden niet teruggedraaid."
   }
 }

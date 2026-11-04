@@ -7982,5 +7982,21 @@
     "instructionsHint": "Až 16 KB pokynů včetně importovaných textových odkazů. Binární soubory a trvalé indexování dokumentů je dostupné jen pro organizační dovednosti. Export používá standardní název SKILL.md bez předpony user:.",
     "enabled": "Povoleno pro mé konverzace",
     "empty": "Vytvořte dovednost pro opakovaný úkol či importujte SKILL.md k revizi a uložení zde."
+  },
+  "permissionCache": {
+    "title": "Obnovit oprávnění",
+    "description": "Zneplatní uložené členství ve skupině a přístup ke zdrojům Microsoft 365. Další chráněný požadavek musí znovu ověřit oprávnění na každém serveru.",
+    "scope": "Obnovit pro",
+    "oneUser": "Jeden uživatel",
+    "everyone": "Všichni",
+    "userId": "ID objektu uživatele Entra",
+    "userIdHint": "Použijte ID objektu uživatele z Microsoft Entra, nikoli e-mailovou adresu. Zadejte platné UUID.",
+    "confirmAll": "Vyžadovat nové ověření oprávnění pro všechny. To může dočasně zvýšit provoz na Microsoft Graph.",
+    "refreshUser": "Obnovit oprávnění uživatele",
+    "refreshAll": "Obnovit všechna oprávnění",
+    "refreshing": "Zneplatňování cache…",
+    "invalidated": "Cache byla zneplatněna. Při dalším chráněném požadavku bude vyžadováno nové ověření; oprávnění zatím nebyla znovu zkontrolována.",
+    "failed": "Zneplatnění cache se nepodařilo potvrdit. Zkuste to prosím znovu za chvíli.",
+    "propagationNote": "Tímto se vynutí nové ověření, nikoliv změna oprávnění v Microsoftu. Zpoždění propagace v Microsoftu stále platí. Již autorizované operace nebudou zrušeny."
   }
 }

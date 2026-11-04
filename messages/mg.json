@@ -7966,5 +7966,21 @@
     "instructionsHint": "Hatramin’ny 16 KB ny toromarika, anisan’izany ireo refy soratra nampidirina. Ho an’ny fahaiza-manao fikambanana ihany no azo anaovana fichier binerika sy fampidirana lova antontan-taratasy maharitra. Mampiasa anarana SKILL.md tsy misy user: rehefa manondrana.",
     "enabled": "Azo ampiasaina amin'ny resako",
     "empty": "Mamoròna fahaiza-manao ho an’ny asa miverimberina, na ampidiro SKILL.md, izay ho azonao jerena sy tehirizina eto."
+  },
+  "permissionCache": {
+    "title": "Havaozy ny fahazoan-dàlana",
+    "description": "Foano ny fitehirizana anaty cache ny fidirana amin'ny vondrona sy ny loharano Microsoft 365. Mila hamariparitra indray ny fahazoan-dàlana amin'ny fangatahana voaaro manaraka, amin'ny lohamilina tsirairay.",
+    "scope": "Havaozy ho an'ny",
+    "oneUser": "Mpampiasa iray",
+    "everyone": "Olona rehetra",
+    "userId": "Entra User Object ID",
+    "userIdHint": "Ampiasao ny object ID an'ny mpampiasa avy amin'ny Microsoft Entra, fa tsy ny adiresy mailaka-ny. Ampidiro UUID manan-kery.",
+    "confirmAll": "Takio ny fanamarinana vaovao amin'ny fahazoan-dàlana ho an'ny rehetra. Mety hampitombo vetivety ny fifamoivoizan'ny Microsoft Graph izany.",
+    "refreshUser": "Havaozy ny fahazoan-dàlana an'ny mpampiasa",
+    "refreshAll": "Havaozy ny fahazoan-dàlana rehetra",
+    "refreshing": "Foanana ny cache…",
+    "invalidated": "Voafafa ny cache. Ilaina ny fanamarinana vaovao amin'ny fangatahana voaaro manaraka; tsy mbola nodinihina indray ny fahazoan-dàlana.",
+    "failed": "Tsy voamarina ny fanafoanana ny cache. Avereno kely ato.",
+    "propagationNote": "Miteraka fanamarinana vaovao fotsiny ity, fa tsy manova ny fahazoan-dàlana Microsoft. Mbola mihatra ny fahataran'ny fiparitahan'ny Microsoft. Ny asa efa nahazo alalana dia tsy voafafa."
   }
 }

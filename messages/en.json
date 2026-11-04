@@ -7036,6 +7036,22 @@
     "noMatches": "No conversations match your filter",
     "listLabel": "Conversations to import"
   },
+  "permissionCache": {
+    "title": "Refresh permissions",
+    "description": "Invalidate cached group membership and Microsoft 365 source access. The next protected request must verify permissions again, on every server.",
+    "scope": "Refresh for",
+    "oneUser": "One user",
+    "everyone": "Everyone",
+    "userId": "Entra user object ID",
+    "userIdHint": "Use the user's object ID from Microsoft Entra, not their email address. Enter a valid UUID.",
+    "confirmAll": "Require fresh permission checks for everyone. This may temporarily increase Microsoft Graph traffic.",
+    "refreshUser": "Refresh user permissions",
+    "refreshAll": "Refresh all permissions",
+    "refreshing": "Invalidating cache…",
+    "invalidated": "Cache invalidated. Fresh verification is required on the next protected request; permissions have not been rechecked yet.",
+    "failed": "Cache invalidation could not be confirmed. Retry shortly.",
+    "propagationNote": "This forces a fresh check, not a change in Microsoft permissions. Microsoft propagation delays still apply. Operations already authorized are not undone."
+  },
   "globalAdmins": {
     "title": "Global admins",
     "description": "Global administrators may edit every admin area, including who the other administrators are. Two lists apply at once: the one set by deployment, and the one you manage here.",
