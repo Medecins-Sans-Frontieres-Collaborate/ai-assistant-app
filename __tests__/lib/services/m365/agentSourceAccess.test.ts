@@ -9,11 +9,29 @@ import {
   checkAgentSourceAccess,
   clearAgentSourceAccessCache,
 } from '@/lib/services/m365/agentSourceAccess';
+import { getPermissionCache } from '@/lib/services/permissions/PermissionCache';
 
+import { permissionStorage } from '@/__tests__/helpers/memoryPermissionStorage';
 import { getGraphAccessToken } from '@/auth';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/auth', () => ({ getGraphAccessToken: vi.fn() }));
+vi.mock(
+  '@/lib/services/permissions/PermissionCache',
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import('@/lib/services/permissions/PermissionCache')
+      >();
+    const { permissionStorage } =
+      await import('@/__tests__/helpers/memoryPermissionStorage');
+    const cache = new actual.PermissionCache(
+      permissionStorage.storage,
+      'test-tenant',
+    );
+    return { ...actual, getPermissionCache: () => cache };
+  },
+);
 
 const mockStore = vi.hoisted(() => ({
   createAgentAccessBlobStorage: vi.fn(() => ({})),
@@ -84,6 +102,8 @@ function batchResponse(statusFor: (index: number) => number) {
 beforeEach(() => {
   vi.clearAllMocks();
   clearAgentSourceAccessCache();
+  permissionStorage.records.clear();
+  getPermissionCache().clearMemory();
   // Default: no manifest → legacy immediate-children semantics.
   mockStore.readM365AgentManifest.mockResolvedValue(null);
   vi.stubGlobal('fetch', fetchMock);
@@ -98,6 +118,37 @@ afterEach(() => {
 });
 
 describe('checkAgentSourceAccess ($batch probes)', () => {
+  it('manual invalidation rechecks a cached grant immediately and does not reuse it on storage failure', async () => {
+    fetchMock.mockImplementation(batchResponse(() => 200));
+    const agent = makeAgent(1);
+    expect(
+      (await checkAgentSourceAccess(req, 'u1', agent)).accessibleSourceIds,
+    ).toEqual(['src-0']);
+    await getPermissionCache().invalidate('admin', 'u1');
+    fetchMock.mockImplementation(batchResponse(() => 403));
+    expect(
+      (await checkAgentSourceAccess(req, 'u1', agent)).accessibleSourceIds,
+    ).toEqual([]);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    permissionStorage.download.mockRejectedValueOnce(new Error('Storage down'));
+    await expect(
+      checkAgentSourceAccess(req, 'u1', agent),
+    ).rejects.toMatchObject({ kind: 'graph_error', status: 503 });
+  });
+
+  it('manual invalidation bypasses an unverifiable-result cooldown', async () => {
+    fetchMock.mockImplementation(batchResponse(() => 503));
+    const agent = makeAgent(1);
+    expect((await checkAgentSourceAccess(req, 'u1', agent)).unverifiable).toBe(
+      true,
+    );
+    await getPermissionCache().invalidate('admin', 'u1');
+    fetchMock.mockImplementation(batchResponse(() => 200));
+    const refreshed = await checkAgentSourceAccess(req, 'u1', agent);
+    expect(refreshed.unverifiable).toBe(false);
+    expect(refreshed.accessibleSourceIds).toEqual(['src-0']);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
   it('splits 50 sources into 3 batch calls and maps verdicts', async () => {
     // Even indices accessible; odd denied; index 8 (otherwise accessible)
     // throttled on both passes — must fail closed.
