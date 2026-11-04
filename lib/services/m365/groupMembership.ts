@@ -91,6 +91,19 @@ const FAILURE_TTL_MS = 60 * 1000;
  * remembered as long as a successful answer would be.
  */
 const STRUCTURAL_FAILURE_TTL_MS = CACHE_TTL_MS;
+
+function failureCooldownMs(error: unknown): number {
+  if (!isRetryableGraphFailure(error)) return STRUCTURAL_FAILURE_TTL_MS;
+  const retryAfter =
+    error instanceof Error
+      ? (error as Error & { retryAfterSeconds?: number }).retryAfterSeconds
+      : undefined;
+  return typeof retryAfter === 'number' &&
+    Number.isFinite(retryAfter) &&
+    retryAfter > 0
+    ? Math.max(FAILURE_TTL_MS, retryAfter * 1000)
+    : FAILURE_TTL_MS;
+}
 const MAX_CACHE_ENTRIES = 2000;
 /** The stats summary line is written at most this often (and only on change). */
 const STATS_LOG_INTERVAL_MS = 5 * 60 * 1000;
@@ -412,10 +425,7 @@ export async function resolveUserGroupIds(
       },
       {
         maxAgeMs: CACHE_TTL_MS,
-        failureTtlMs: (error) =>
-          isRetryableGraphFailure(error)
-            ? FAILURE_TTL_MS
-            : STRUCTURAL_FAILURE_TTL_MS,
+        failureTtlMs: failureCooldownMs,
       },
     );
     if (!fetched) count('hit');
@@ -469,7 +479,7 @@ export async function resolveUserGroupIds(
       userId,
       mail,
       [],
-      retryable ? FAILURE_TTL_MS : STRUCTURAL_FAILURE_TTL_MS,
+      failureCooldownMs(error),
       retryable,
       cachedFailure ? previous.expiresAt : undefined,
       true,
