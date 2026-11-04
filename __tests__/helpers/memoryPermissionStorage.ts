@@ -42,8 +42,15 @@ export function memoryPermissionStorage() {
       return { etag };
     },
   );
+  const getProperties = vi.fn(async (path: string) => {
+    const record = records.get(path);
+    if (!record)
+      throw Object.assign(new Error('Missing blob'), { statusCode: 404 });
+    return { etag: record.etag };
+  });
   const storage = {
     getBlockBlobClient: (path: string) => ({
+      getProperties: () => getProperties(path),
       download: (
         _offset: number,
         _count: number | undefined,
@@ -56,7 +63,7 @@ export function memoryPermissionStorage() {
       ) => upload(path, content, options),
     }),
   } as unknown as BlobStorage;
-  return { storage, records, download, upload };
+  return { storage, records, download, upload, getProperties };
 }
 
 /** Shared backing store for integration tests that inject the real permission-cache service. */
