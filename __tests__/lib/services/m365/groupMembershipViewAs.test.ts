@@ -8,7 +8,9 @@ import {
   isGroupMembershipDegradedForUser,
   resolveUserGroupIds,
 } from '@/lib/services/m365/groupMembership';
+import { getPermissionCache } from '@/lib/services/permissions/PermissionCache';
 
+import { permissionStorage } from '@/__tests__/helpers/memoryPermissionStorage';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const graphJson = vi.hoisted(() => vi.fn());
@@ -20,6 +22,8 @@ const base = { id: 'oid-1', displayName: 'Admin', mail: 'Admin@Example.com' };
 describe('group membership under view-as', () => {
   beforeEach(() => {
     clearGroupMembershipCache();
+    permissionStorage.records.clear();
+    getPermissionCache().clearMemory();
     graphJson.mockReset();
     graphJson.mockResolvedValue({ value: ['real-group'] });
   });
@@ -91,3 +95,20 @@ describe('group membership under view-as', () => {
     expect(getCachedGroupIdsForUser('oid-1')).toEqual(['real-group']);
   });
 });
+
+vi.mock(
+  '@/lib/services/permissions/PermissionCache',
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import('@/lib/services/permissions/PermissionCache')
+      >();
+    const { permissionStorage } =
+      await import('@/__tests__/helpers/memoryPermissionStorage');
+    const cache = new actual.PermissionCache(
+      permissionStorage.storage,
+      'test-tenant',
+    );
+    return { ...actual, getPermissionCache: () => cache };
+  },
+);
