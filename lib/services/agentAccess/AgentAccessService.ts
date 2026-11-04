@@ -6,7 +6,8 @@ import { Session } from 'next-auth';
  * See docs/AGENT_ACCESS_CONTROL.md. Caching contract: callers `await
  * ensureFresh()` first (no-op while the 60s TTL is warm), then call the
  * synchronous `evaluateAccess()` any number of times over that snapshot.
- * On refresh failure the last-known-good ruleset keeps serving; the
+ * Expired or invalidated rules never authorize requests. Last-known-good
+ * data is retained for diagnostics only after a refresh failure; the
  * distinct 'unavailable' decision covers the two states where the answer is
  * "cannot say", not "no": (1) the feature is enabled AND no snapshot was
  * ever loaded ('rules-unavailable'), and (2) the rule targets GROUPS and
@@ -15,9 +16,9 @@ import { Session } from 'next-auth';
  * cases callers fail closed at invocation and pass through at discovery, so
  * a Graph blip hides no agent from the picker but grants no invocation.
  *
- * All existing caches in this app are per-process with no cross-replica
- * invalidation; this follows the same convention with a deliberately short
- * TTL because it is a security control (max revocation latency ≈ 60s).
+ * Rules remain replica-local, with a shared generation ETag checked on every
+ * ensureFresh call. Membership and source inputs use PermissionCache. The
+ * 60-second rule age is a hard bound even when storage is unavailable.
  */
 import {
   StoredAgentAccessRule,
@@ -80,12 +81,8 @@ const RULES_CACHE_TTL_MS = 60_000;
  */
 const REFRESH_FAILURE_COOLDOWN_MS = 5_000;
 /**
- * How often a warm replica probes the generation sentinel's ETag between
- * full refreshes. A changed sentinel (another replica served an admin
- * write) triggers an immediate refetch, so cross-replica propagation drops
- * from ≤RULES_CACHE_TTL_MS to roughly this interval. The probe is a single
- * tiny-blob read; on any probe failure (or a deployment whose sentinel was
- * never written) behavior degrades to exactly the pre-sentinel TTL bound.
+ * Generation checks are not time-cached: a manual invalidation must be
+ * observed by the next authorization, including on a warm replica.
  */
 
 export type AccessDecisionKind = 'allow' | 'deny' | 'unavailable';
@@ -245,7 +242,7 @@ export class AgentAccessService {
   private refreshInFlight: Promise<void> | null = null;
   /** Sentinel ETag observed at the last full refresh; null = never read. */
   private lastGenerationEtag: string | null = null;
-  /** Epoch ms of the last sentinel probe (throttles to the probe interval). */
+  /** Failed generation validation makes retained rules unusable for authorization. */
   private generationVerificationFailed = false;
   private generationProbeInFlight: Promise<boolean> | null = null;
 
@@ -263,17 +260,13 @@ export class AgentAccessService {
   /**
    * Refreshes the cached ruleset when the 60s TTL has expired (single-flight;
    * concurrent callers share one refresh). Never throws: failures keep the
-   * last-known-good state and are reported through evaluateAccess /
-   * getSnapshot as 'unavailable' only when no state was ever loaded.
+   * last-known-good data for diagnostics, but expired/invalidated rules and
+   * failed generation checks report 'unavailable'. No stale grant is issued.
    */
   async ensureFresh(): Promise<void> {
     if (!this.isEnabled()) return;
     if (this.state && Date.now() - this.fetchedAt < RULES_CACHE_TTL_MS) {
-      // Warm snapshot: probe the generation sentinel (throttled) so another
-      // replica's admin write is picked up in ~GENERATION_PROBE_INTERVAL_MS
-      // instead of waiting out the TTL. An unchanged (or unreadable)
-      // sentinel keeps serving the warm snapshot — the TTL stays the
-      // correctness backstop either way.
+      // Revalidate before authorizing even inside the snapshot TTL.
       let changed: boolean;
       try {
         changed = await this.probeGenerationChanged();
@@ -290,8 +283,8 @@ export class AgentAccessService {
       this.lastRefreshFailureAt !== 0 &&
       Date.now() - this.lastRefreshFailureAt < REFRESH_FAILURE_COOLDOWN_MS
     ) {
-      // Storage just failed and we have a last-known-good ruleset: serve it
-      // without retrying storage until the cooldown elapses.
+      // Avoid repeated full refresh work during an outage. Retained rules
+      // remain unavailable; this cooldown does not extend authorization age.
       return;
     }
     if (!this.refreshInFlight) {
@@ -304,23 +297,25 @@ export class AgentAccessService {
 
   /**
    * Forces the next ensureFresh() to refetch (called after admin writes on
-   * the replica that served the write). The last-known-good state is kept so
-   * a refetch failure does not degrade to 'unavailable'. Bumping the epoch
+   * the replica that served the write). Last-known-good data is retained,
+   * but cannot authorize until refreshed. Bumping the epoch
    * makes any refresh already in flight complete WITHOUT stamping freshness
    * (it started before the write and may carry pre-write data), so the next
    * ensureFresh() refetches. The write that triggered the invalidation just
    * reached storage, so the failure cooldown is cleared to retry immediately.
+   * broadcast defaults true; false is for callers that already awaited a
+   * durable sentinel bump. Returns void; broadcasting failures are logged.
    */
-  invalidate(): void {
+  invalidate(broadcast = true): void {
     this.epoch += 1;
     this.fetchedAt = 0;
     this.lastRefreshFailureAt = 0;
     // Fire-and-forget sentinel bump so OTHER replicas pick this write up at
-    // the probe interval instead of the full TTL. Best-effort by design: a
+    // the next generation check instead of the full TTL. Best-effort: a
     // failed bump costs cross-replica latency (≤TTL — exactly the
     // pre-sentinel bound), never correctness, and must not fail or slow the
     // admin write that triggered it.
-    void this.bumpGenerationBestEffort();
+    if (broadcast) void this.bumpGenerationBestEffort();
   }
 
   private async bumpGenerationBestEffort(): Promise<void> {
@@ -335,9 +330,8 @@ export class AgentAccessService {
 
   /**
    * Reads the sentinel ETag (single-flight) and reports whether it moved
-   * since the last full refresh. Errors and a missing sentinel report
-   * `false` — the TTL backstop then governs, exactly as before the
-   * sentinel existed.
+   * since the last full refresh. A missing sentinel is the initial baseline;
+   * storage errors reject so ensureFresh marks authorization unavailable.
    */
   private async probeGenerationChanged(): Promise<boolean> {
     if (!this.generationProbeInFlight) {
@@ -351,7 +345,6 @@ export class AgentAccessService {
     return this.generationProbeInFlight;
   }
 
-  /** Cached snapshot for the admin API (rules + etags + config). */
   private rulesAreUnavailable(): boolean {
     return (
       this.isEnabled() &&
@@ -361,6 +354,7 @@ export class AgentAccessService {
     );
   }
 
+  /** Cached diagnostic/catalog data; config is withheld when rules cannot be verified. */
   getSnapshot(): AgentAccessSnapshot {
     return {
       rules: this.state?.rules ?? [],
@@ -498,7 +492,7 @@ export class AgentAccessService {
       return { decision: 'allow', reason: 'feature-disabled' };
     }
     if (!this.state || this.rulesAreUnavailable()) {
-      // Enabled but no last-known-good: callers fail closed at invocation
+      // Enabled but no verified rules: callers fail closed at invocation
       // and pass through at discovery (spec semantics #5).
       return { decision: 'unavailable', reason: 'rules-unavailable' };
     }
@@ -619,12 +613,8 @@ export class AgentAccessService {
     const startedAt = Date.now();
     try {
       const storage = this.getStorage();
-      // The sentinel ETag read is ISSUED before the listings (awaited at the
-      // end): a bump landing after this point differs from the stamped
-      // value, so the next probe refetches — the same never-lose-a-write
-      // reasoning as the epoch check on fetchedAt below. Best-effort: a
-      // failed read keeps the previous baseline and the TTL backstop
-      // governs.
+      // Bracket the load with generation checks, so invalidation during a
+      // refresh never gives pre-change data a new authorization lifetime.
       const generationEtag = await readGenerationEtag(storage);
       // Rules and config load in one transaction: that pair is kept/replaced
       // atomically, so a failure in either keeps last-known-good for both
@@ -861,7 +851,7 @@ export class AgentAccessService {
       console.error(
         `[agent-access] rules refresh failed (${
           this.state
-            ? 'serving last-known-good'
+            ? 'retaining last-known-good for diagnostics; authorization unavailable'
             : 'NO last-known-good — invocation fails closed'
         }): ${sanitizeForLog(error)}`,
       );
