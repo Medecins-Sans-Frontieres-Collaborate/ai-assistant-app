@@ -25,7 +25,11 @@ const bodySchema = z.discriminatedUnion('scope', [
   z
     .object({
       scope: z.literal('user'),
-      userId: z.uuid().transform((id) => id.toLowerCase()),
+      userId: z
+        .string()
+        .trim()
+        .regex(/^[a-f\d]{8}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{12}$/i)
+        .transform((id) => id.toLowerCase()),
     })
     .strict(),
   z.object({ scope: z.literal('all'), confirm: z.literal(true) }).strict(),
