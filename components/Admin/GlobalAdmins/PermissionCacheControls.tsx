@@ -8,11 +8,11 @@ import {
   ADMIN_BTN_SECONDARY,
   ADMIN_FIELD,
   ADMIN_HEADING,
-  ADMIN_HINT,
   ADMIN_LABEL,
 } from '@/components/Admin/adminClasses';
 
 const OBJECT_ID = /^[a-f\d]{8}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{12}$/i;
+const HINT = 'mt-1 text-sm text-gray-700 dark:text-gray-200';
 
 /** Global-admin cache refresh form. Shows invalidation, not an unverified upstream permission change. */
 export const PermissionCacheControls: FC = () => {
@@ -39,7 +39,13 @@ export const PermissionCacheControls: FC = () => {
             : { scope, confirm: confirmed },
         ),
       });
-      if (!response.ok)
+      const result = await response.json();
+      if (
+        !response.ok ||
+        result?.success !== true ||
+        result.data?.status !== 'invalidated' ||
+        result.data?.freshVerificationRequired !== true
+      )
         throw new Error('Permission invalidation was not confirmed');
       setOutcome('success');
     } catch {
@@ -57,10 +63,7 @@ export const PermissionCacheControls: FC = () => {
       <h3 id="permission-cache-title" className={ADMIN_HEADING}>
         {t('title')}
       </h3>
-      <p
-        id="permission-cache-description"
-        className={`${ADMIN_HINT} max-w-prose`}
-      >
+      <p id="permission-cache-description" className={`${HINT} max-w-prose`}>
         {t('description')}
       </p>
       <form
@@ -102,11 +105,15 @@ export const PermissionCacheControls: FC = () => {
                   setOutcome(null);
                 }}
                 autoComplete="off"
+                dir="ltr"
                 spellCheck={false}
                 required
+                aria-invalid={
+                  userId.trim() !== '' && !OBJECT_ID.test(userId.trim())
+                }
                 aria-describedby="permission-cache-user-hint"
               />
-              <p id="permission-cache-user-hint" className={ADMIN_HINT}>
+              <p id="permission-cache-user-hint" className={HINT}>
                 {t('userIdHint')}
               </p>
             </div>
@@ -140,7 +147,7 @@ export const PermissionCacheControls: FC = () => {
             {t(outcome === 'success' ? 'invalidated' : 'failed')}
           </p>
         )}
-        <p className={`${ADMIN_HINT} max-w-prose`}>{t('propagationNote')}</p>
+        <p className={`${HINT} max-w-prose`}>{t('propagationNote')}</p>
       </form>
     </section>
   );
