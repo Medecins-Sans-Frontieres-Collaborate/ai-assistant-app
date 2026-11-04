@@ -7966,5 +7966,21 @@
     "instructionsHint": "Tii na 16 KB ya mitindo, ezali na ba références ya texte oyo ekotamaki. Ba fichiers binaires mpe index ya document oyo ezalaka libela ezali kaka mpo na mikoki ya organisation. Export ekosalela nkombo standard SKILL.md na litomba te na prefix ya user:.",
     "enabled": "Efungolami mpo na bisolo na ngai",
     "empty": "Kela mikoki mpo na mosala ya mbala mingi, to kotisa SKILL.md mpo otala mpe obomba yango awa."
+  },
+  "permissionCache": {
+    "title": "Bongisa ndingisa",
+    "description": "Koboya ba informations ya mosolo na ndingisa ya lisanga mpe bokoteli ya Microsoft 365 source. Botuni oyo ezali kobatelama ekozala na posa ya kotala lisusu ndingisa na server nyonso.",
+    "scope": "Bongisa mpo na",
+    "oneUser": "Motu moko",
+    "everyone": "Bato nyonso",
+    "userId": "ID ya eloko ya mosaleli ya Entra",
+    "userIdHint": "Salela ID ya eloko ya mosaleli awa na Microsoft Entra, te email na ye. Kotia UUID oyo ezali malamu.",
+    "confirmAll": "Senga kotala ndingisa ya sika mpo na bato nyonso. Ekoki komema koyeba mingi na Microsoft Graph temporairement.",
+    "refreshUser": "Bongisa ndingisa ya mosaleli",
+    "refreshAll": "Bongisa ndingisa nyonso",
+    "refreshing": "Koboya mosolo…",
+    "invalidated": "Mosolo eboyamaki. Kotalela sika esengeli na request oyo ekobatelama; ndingisa etalemi kaka te.",
+    "failed": "Kobosana mosolo ekokaki te kondimama. Binda lisusu sima moke.",
+    "propagationNote": "Oyo etindi na kontrola ya sika, te kobongola ndingisa na Microsoft. Kobika ya Microsoft ekoki kozala na ntembe. Misala oyo ezwaki ndingisa ekozongisama te."
   }
 }

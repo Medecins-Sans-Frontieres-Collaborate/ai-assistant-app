@@ -7982,5 +7982,21 @@
     "instructionsHint": "Upp till 16 KB instruktioner, inklusive eventuella importerade textreferenser. Binära filer och kvarvarande dokumentindexering är endast tillgängligt för organisationsfärdigheter. Export använder standardnamnet SKILL.md utan prefixet user:.",
     "enabled": "Aktiverad för mina konversationer",
     "empty": "Skapa en färdighet för en återkommande uppgift, eller importera en SKILL.md för att granska och spara den här."
+  },
+  "permissionCache": {
+    "title": "Uppdatera behörigheter",
+    "description": "Ogiltigförklara sparad gruppmedlemskap och Microsoft 365-källåtkomst. Nästa skyddade begäran måste verifiera behörigheterna igen på varje server.",
+    "scope": "Uppdatera för",
+    "oneUser": "En användare",
+    "everyone": "Alla",
+    "userId": "Entra-användarobjekt-ID",
+    "userIdHint": "Använd användarens objekt-ID från Microsoft Entra, inte deras e-postadress. Ange ett giltigt UUID.",
+    "confirmAll": "Kräv nya behörighetskontroller för alla. Detta kan tillfälligt öka trafiken mot Microsoft Graph.",
+    "refreshUser": "Uppdatera användarbehörigheter",
+    "refreshAll": "Uppdatera alla behörigheter",
+    "refreshing": "Ogiltigförklarar cache…",
+    "invalidated": "Cachen har ogiltigförklarats. Ny verifiering krävs vid nästa skyddade begäran; behörigheterna har ännu inte kontrollerats igen.",
+    "failed": "Cacheogiltigförklaringen kunde inte bekräftas. Försök igen om en stund.",
+    "propagationNote": "Detta tvingar fram en ny kontroll, men ändrar inte Microsoft-behörigheterna. Fördröjningar i Microsofts spridning gäller fortfarande. Redan godkända åtgärder återkallas inte."
   }
 }

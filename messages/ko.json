@@ -7982,5 +7982,21 @@
     "instructionsHint": "가져온 텍스트 참조를 포함해 최대 16 KB의 지침이 가능합니다. 바이너리 파일과 지속적인 문서 색인 기능은 조직 스킬에서만 지원됩니다. 내보내기는 user: 접두사 없이 일반 SKILL.md 이름을 사용합니다.",
     "enabled": "내 대화에서 활성화됨",
     "empty": "반복 작업을 위한 스킬을 만들거나 SKILL.md를 가져와 검토 후 저장하세요."
+  },
+  "permissionCache": {
+    "title": "권한 새로고침",
+    "description": "캐시된 그룹 멤버십과 Microsoft 365 소스 접근을 무효화합니다. 다음 보호된 요청 시, 모든 서버에서 다시 권한을 확인해야 합니다.",
+    "scope": "대상 새로고침",
+    "oneUser": "한 사용자",
+    "everyone": "모든 사용자",
+    "userId": "Entra 사용자 오브젝트 ID",
+    "userIdHint": "사용자의 이메일 주소가 아닌 Microsoft Entra의 오브젝트 ID를 사용하세요. 유효한 UUID를 입력하세요.",
+    "confirmAll": "모든 사용자의 신규 권한 확인을 요구합니다. Microsoft Graph 트래픽이 일시적으로 증가할 수 있습니다.",
+    "refreshUser": "사용자 권한 새로고침",
+    "refreshAll": "모든 권한 새로고침",
+    "refreshing": "캐시 무효화 중…",
+    "invalidated": "캐시가 무효화되었습니다. 다음 보호된 요청에서 새로운 검증이 필요합니다. 권한은 아직 다시 확인되지 않았습니다.",
+    "failed": "캐시 무효화를 확인할 수 없습니다. 잠시 후 다시 시도하세요.",
+    "propagationNote": "이는 Microsoft 권한이 변경되는 것이 아니라 새로운 확인만 강제합니다. Microsoft 전파 지연은 여전히 적용됩니다. 이미 승인된 작업은 취소되지 않습니다."
   }
 }

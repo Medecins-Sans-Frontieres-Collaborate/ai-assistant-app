@@ -7966,5 +7966,21 @@
     "instructionsHint": "Amabwirizwa agera kuri 16 KB, harimwo ivyanditswe vyinjiye. Amadosiye binary n'ugushira mu gatete ababikora burundu biboneka gusa ku bushobozi bw'ishirahamwe. Kumanura bisanzwe bikoresha izina SKILL.md ata user: prefix.",
     "enabled": "Vyemewe mu biganiro vyanje",
     "empty": "Kora ubushobozi ku gikorwa gisubira, canke injiza SKILL.md kugira uce urwiga ugahazigama."
+  },
+  "permissionCache": {
+    "title": "Subira ukuraba uburenganzira",
+    "description": "Kuraho amakuru abitswe yerekeye imigwi n’ukwinjira kuri Microsoft 365. Ibisabwa bisabwa gucungerwa bizosaba kwongera kugenzura uburenganzira, kuri server yose.",
+    "scope": "Subira ivugururwa kuri",
+    "oneUser": "Umukoresha umwe",
+    "everyone": "Bose",
+    "userId": "Entra user object ID",
+    "userIdHint": "Koresha object ID ry’umukoresha muri Microsoft Entra, ntukoreshe aderesi email yabo. Shiramwo UUID yemewe.",
+    "confirmAll": "Saba ko uburenganzira bushasha bugenzurwa kuri bose. Ivyo bishobora kwongereza gato ibikorwa vya Microsoft Graph.",
+    "refreshUser": "Subira kuraba uburenganzira bw’umukoresha",
+    "refreshAll": "Subira kuraba uburenganzira bwose",
+    "refreshing": "Urahagarika cache…",
+    "invalidated": "Cache yahagaritswe. Ugusubira kugenzura bizosabwa kuri bisaba bicunguwe bikurikira; uburenganzira ntiburagenzurwa.",
+    "failed": "Kuhagarika cache ntivyagenze neza. Sugerageza vuba.",
+    "propagationNote": "Ibi bihanura ko hagenzurwa bushasha, si uguhindura uburenganzira muri Microsoft. Ukudindira kwa Microsoft biraca bibaho. Ibikorwa vyemejwe ntibisubirizwa inyuma."
   }
 }

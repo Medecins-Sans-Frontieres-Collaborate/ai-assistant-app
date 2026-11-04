@@ -7982,5 +7982,21 @@
     "instructionsHint": "Do 16 KB instrukcji, wliczając wszelkie importowane teksty. Pliki binarne i trwałe indeksowanie dokumentów są dostępne tylko dla umiejętności organizacji. Eksport wykorzystuje standardową nazwę SKILL.md bez przedrostka user:.",
     "enabled": "Włączone dla moich rozmów",
     "empty": "Utwórz umiejętność do powtarzalnego zadania lub zaimportuj SKILL.md, aby przejrzeć i zapisać ją tutaj."
+  },
+  "permissionCache": {
+    "title": "Odśwież uprawnienia",
+    "description": "Unieważnij zapamiętane członkostwo w grupie i dostęp do źródła Microsoft 365. Kolejne chronione żądanie będzie musiało ponownie zweryfikować uprawnienia na każdym serwerze.",
+    "scope": "Odśwież dla",
+    "oneUser": "Jeden użytkownik",
+    "everyone": "Wszyscy",
+    "userId": "Identyfikator obiektu użytkownika Entra",
+    "userIdHint": "Użyj identyfikatora obiektu użytkownika z Microsoft Entra, a nie adresu e-mail. Wprowadź prawidłowy UUID.",
+    "confirmAll": "Wymuś ponowną weryfikację uprawnień dla wszystkich. Może to tymczasowo zwiększyć ruch w Microsoft Graph.",
+    "refreshUser": "Odśwież uprawnienia użytkownika",
+    "refreshAll": "Odśwież wszystkie uprawnienia",
+    "refreshing": "Unieważnianie pamięci podręcznej…",
+    "invalidated": "Pamięć podręczna została unieważniona. Przy następnym chronionym żądaniu wymagana będzie ponowna weryfikacja; uprawnienia nie zostały jeszcze sprawdzone.",
+    "failed": "Nie udało się potwierdzić unieważnienia pamięci podręcznej. Spróbuj ponownie za chwilę.",
+    "propagationNote": "Wymusza to ponowną weryfikację, a nie zmianę uprawnień w Microsoft. Nadal obowiązują opóźnienia propagacji Microsoft. Uprawnienia już przyznane nie zostaną cofnięte."
   }
 }

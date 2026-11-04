@@ -7982,5 +7982,21 @@
     "instructionsHint": "Fins a 16 KB d'instruccions, incloent-hi qualsevol referència de text importada. Els fitxers binaris i la indexació persistent de documents només estan disponibles per a habilitats d'organització. L'exportació utilitza el nom estàndard SKILL.md sense el prefix user:.",
     "enabled": "Habilitada per a les meves converses",
     "empty": "Crea una habilitat per a una tasca recurrent, o importa un SKILL.md per revisar-lo i desar-lo aquí."
+  },
+  "permissionCache": {
+    "title": "Actualitza permisos",
+    "description": "Invalida la memòria cau de la pertinença a grups i l'accés a la font de Microsoft 365. La propera sol·licitud protegida haurà de verificar els permisos de nou, en cada servidor.",
+    "scope": "Actualitza per a",
+    "oneUser": "Un usuari",
+    "everyone": "Tothom",
+    "userId": "ID d'objecte de l'usuari d'Entra",
+    "userIdHint": "Utilitza l'ID d'objecte de l'usuari de Microsoft Entra, no la seva adreça electrònica. Introdueix un UUID vàlid.",
+    "confirmAll": "Requereix una revisió fresca dels permisos per a tothom. Això pot augmentar temporalment el trànsit de Microsoft Graph.",
+    "refreshUser": "Actualitza permisos d'usuari",
+    "refreshAll": "Actualitza tots els permisos",
+    "refreshing": "S'està invalidant la memòria cau…",
+    "invalidated": "Memòria cau invalidada. Es requereix una verificació nova en la propera sol·licitud protegida; els permisos encara no s'han tornat a comprovar.",
+    "failed": "No s'ha pogut confirmar la invalidació de la memòria cau. Torna-ho a provar d'aquí a poc.",
+    "propagationNote": "Això obliga a fer una revisió nova, no un canvi en els permisos de Microsoft. Els retards de propagació de Microsoft continuen aplicant-se. Les operacions ja autoritzades no es desfan."
   }
 }

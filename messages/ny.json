@@ -7966,5 +7966,21 @@
     "instructionsHint": "Mpaka 16 KB ya malangizo, kuphatikizapo ma reference kapena text omwe mwalowetsa. Mafayilo a binary ndi kulemba zikalata nthawi zonse zimapezeka pa maluso a bungwe okha. Export imagwiritsa ntchito dzina SKILL.md wamba popanda user: prefix.",
     "enabled": "Ayatsidwa pa zokambirana zanga",
     "empty": "Pangani luso la ntchito yomwe mumachita pafupipafupi, kapena import SKILL.md kuti muwone ndi kusunga pano."
+  },
+  "permissionCache": {
+    "title": "Sinthani zilolezo",
+    "description": "Chotsani kusungirako kwa gulu ndi mwayi wochokera ku Microsoft 365. Pempho lotsatira lotetezedwa liyenera kuwonanso zilolezo pa server iliyonse.",
+    "scope": "Sinthani kwa",
+    "oneUser": "Wogwiritsa ntchito m'modzi",
+    "everyone": "Onse",
+    "userId": "Entra user object ID",
+    "userIdHint": "Gwiritsani ntchito object ID ya ogwiritsa ntchito kuchokera ku Microsoft Entra, osati imelo yawo. Lowetsani UUID yolondola.",
+    "confirmAll": "Funsani kusintha kwatsopano kwa zilolezo kwa aliyense. Izi zingachulukitse nthawi yomweyo kuchuluka kwa Microsoft Graph.",
+    "refreshUser": "Sinthani zilolezo za wogwiritsa ntchito",
+    "refreshAll": "Sinthani zilolezo za onse",
+    "refreshing": "Ikuchotsa kusungirako...",
+    "invalidated": "Kusungirako kwachotsedwa. Kutsimikiza kwatsopano kuyenera kuchitika pa pempho lotsatira; zilolezo sizinafufuzidwebe.",
+    "failed": "Kutsimikiza kuchotsa kusungirako kwalephereka. Yesaninso posachedwa.",
+    "propagationNote": "Izi zimangowonjezera kufufuza kwatsopano, osasintha zilolezo za Microsoft. Kuchedwa kwa kufalikira kwa Microsoft kukadali. Ntchito zomwe zanenedwa kale sizichotsedwa."
   }
 }

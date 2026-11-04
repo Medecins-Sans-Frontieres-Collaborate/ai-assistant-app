@@ -7966,5 +7966,21 @@
     "instructionsHint": "To 16 KB ti awọn ilana, pẹlu itọkasi ọrọ ti a gbe wọle. Awọn faili binary ati atokọ iwe aṣẹ alagbero wa fun ọgbọn ajo nikan. Gbigbe jade nlo orukọ SKILL.md deede lai pẹlu user: ni ibẹrẹ.",
     "enabled": "Ti muu ṣiṣẹ fun awọn ibaraẹnisọrọ mi",
     "empty": "Ṣẹda ọgbọn fun iṣẹ ti o maa n ṣẹlẹ, tabi gbe SKILL.md wọle lati ṣayẹwo ati fipamọ rẹ nibi."
+  },
+  "permissionCache": {
+    "title": "Ṣe imudojuiwọn awọn igbanilaaye",
+    "description": "Fagile asopọ ẹgbẹ ti a fipamọ ati wiwọle orisun Microsoft 365. Gbogbo ìbéèrè tó ń bọ ti a dáàbò bo gbọdọ ṣàyẹwò igbanilaaye lẹẹkansii, lori gbogbo olupin.",
+    "scope": "Mú tuntun fún",
+    "oneUser": "Ọkan lara awọn olumulo",
+    "everyone": "Gbogbo eniyan",
+    "userId": "ID ohun elo olumulo Entra",
+    "userIdHint": "Lo ID ohun elo olumulo lati Microsoft Entra, kii ṣe adirẹsi imeeli wọn. Tẹ UUID to wulo sii.",
+    "confirmAll": "Beere ayẹwo igbanilaaye tuntun fun gbogbo eniyan. Eyi le mu ki ijabọ Microsoft Graph pọ si ni igba diẹ.",
+    "refreshUser": "Ṣe imudojuiwọn igbanilaaye olumulo",
+    "refreshAll": "Ṣe imudojuiwọn gbogbo igbanilaaye",
+    "refreshing": "N fagile kaṣi…",
+    "invalidated": "A ti fagile kaṣi. Ayẹwo tuntun nilo fun ìbéèrè tó ń bọ ti a dáàbò bo; igbanilaaye ko tíi ṣe ayẹwo.",
+    "failed": "Ko le jẹrisi atẹyin kaṣi. Da àtunṣe lẹyin keji.",
+    "propagationNote": "Eyi fọ̀rọ̀ ṣàyẹwò tuntun, kii ṣe iyipada ninu igbanilaaye Microsoft. Akoko idaduro ikede Microsoft ṣi wulo. Awọn iṣẹ ti a ti fọwọsi ko majẹmú pada."
   }
 }

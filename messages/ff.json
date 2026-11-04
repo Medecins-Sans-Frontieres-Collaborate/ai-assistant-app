@@ -7966,5 +7966,21 @@
     "instructionsHint": "Danndu 16 KB moƴƴi e danndu imported text references. Binary files e persistent document indexing moƴƴi organisation skills tan. Export ina waawi SKILL.md standard name haddi user: prefix.",
     "enabled": "Enable caatike am",
     "empty": "Waɗ keertugol e gollal goɗɗum, walla importi SKILL.md jey e fayyi ko."
+  },
+  "permissionCache": {
+    "title": "Hesɗit binndol-jiite",
+    "description": "Momtu keɓe worii e binndol-jiite ngam anndin heɓtannde e gese Microsoft 365. Yimɓe laawol so wowli e bantare ina soɓa waawti e binndol-jiite on ko feeñi ɗuum.",
+    "scope": "Hesɗit woni",
+    "oneUser": "Jeyngu ɗiɗo",
+    "everyone": "Fayde oo",
+    "userId": "Entra Jayngol object ID",
+    "userIdHint": "Naat object ID jayngol e Microsoft Entra, teeɗa heen email adress makko. Naat UUID moƴƴi.",
+    "confirmAll": "Naat topirde binndol-jiite fayde oo. Ɓe laawto tagude Microsoft Graph ko ɓurnde hoyraale.",
+    "refreshUser": "Hesɗit binndol-jiite jayngol",
+    "refreshAll": "Hesɗit binndol-jiite fayde oo",
+    "refreshing": "Momtude binndol-jiite...",
+    "invalidated": "Binndol-jiite momti. So wowli e bantare ina soɓa waawi ɓeydude binndol-jiite; topirde binndol-jiite yettaa ngam waawi.",
+    "failed": "Momtude binndol-jiite ngakka waawi ɓeydude. Naat so ɓuri hondu.",
+    "propagationNote": "O ngolla ko topirde binndol-jiite neɗɗa, teeɗa rewte Microsoft binndol-jiite. Humtorde Microsoft waawaani waɗora seŋi. Nda so mbaɗi tiggirde ɗuum, hay goonga leydi bingel."
   }
 }

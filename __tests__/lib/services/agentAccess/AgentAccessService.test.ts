@@ -44,9 +44,13 @@ vi.mock('@/lib/services/observability/AzureMonitorLoggingService', () => ({
 const cachedGroupsMock = vi.hoisted(() => vi.fn<() => string[]>(() => []));
 // Degraded = the lookup FAILED (not "member of nothing"); default healthy.
 const degradedGroupsMock = vi.hoisted(() => vi.fn<() => boolean>(() => false));
+const unavailableGroupsMock = vi.hoisted(() =>
+  vi.fn<() => boolean>(() => false),
+);
 vi.mock('@/lib/services/m365/groupMembership', () => ({
   getCachedGroupIdsForMail: cachedGroupsMock,
   isGroupMembershipDegraded: degradedGroupsMock,
+  isGroupMembershipUnavailable: unavailableGroupsMock,
 }));
 
 const mockEnv = vi.hoisted(() => ({
@@ -61,6 +65,11 @@ vi.mock('@/lib/services/agentAccess/accessRulesStore', () => ({
   readConfig: vi.fn(),
   listAllPromptAgents: vi.fn(),
   listAllGuides: vi.fn(),
+  listAllConnectors: vi.fn().mockResolvedValue([]),
+  listAllCatalogOauthApps: vi.fn().mockResolvedValue([]),
+  listAllSkills: vi.fn().mockResolvedValue([]),
+  listAllM365Agents: vi.fn().mockResolvedValue([]),
+  listAllOrgAgents: vi.fn().mockResolvedValue([]),
   readGenerationEtag: vi.fn(),
   bumpGeneration: vi.fn(),
 }));
@@ -442,7 +451,7 @@ describe('AgentAccessService', () => {
       );
     });
 
-    it('serves the last-known-good ruleset after a failed refresh', async () => {
+    it('retains last-known-good for diagnostics but fails closed after invalidation and refresh failure', async () => {
       const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const service = await freshServiceWith([
         storedRule(SOURCE_A, 'finance-bot', {
@@ -455,24 +464,25 @@ describe('AgentAccessService', () => {
       service.invalidate();
       await service.ensureFresh();
 
-      // Old rules still apply — no degradation to 'unavailable'.
+      // Retained rules are not valid authorization after invalidation.
       expect(
         service.evaluateAccess({
           userMail: 'user@example.com',
           source: SOURCE_A,
           agentName: 'finance-bot',
         }),
-      ).toEqual({ decision: 'allow', reason: 'allow-user' });
+      ).toEqual({ decision: 'unavailable', reason: 'rules-unavailable' });
       expect(
         service.evaluateAccess({
           userMail: 'stranger@other.org',
           source: SOURCE_A,
           agentName: 'finance-bot',
         }),
-      ).toEqual({ decision: 'deny', reason: 'not-allowed' });
-      expect(service.getSnapshot().rulesUnavailable).toBe(false);
+      ).toEqual({ decision: 'unavailable', reason: 'rules-unavailable' });
+      expect(service.getSnapshot().rulesUnavailable).toBe(true);
+      expect(service.getSnapshot().rules).toHaveLength(1);
       expect(errorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('serving last-known-good'),
+        expect.stringContaining('retaining last-known-good'),
       );
     });
 
@@ -495,7 +505,7 @@ describe('AgentAccessService', () => {
       expect(mockListAllRules).toHaveBeenCalledTimes(2);
     });
 
-    it('generation sentinel: probes at most once per interval', async () => {
+    it('generation sentinel: verifies each authorization call even inside the previous probe interval', async () => {
       vi.useFakeTimers();
       vi.setSystemTime(new Date('2026-07-17T12:00:00.000Z'));
       mockReadGenerationEtag.mockResolvedValue('"g1"');
@@ -504,12 +514,105 @@ describe('AgentAccessService', () => {
 
       vi.advanceTimersByTime(6_000);
       await service.ensureFresh(); // one probe
-      await service.ensureFresh(); // throttled — no second probe
-      expect(mockReadGenerationEtag).toHaveBeenCalledTimes(probesAfterLoad + 1);
+      await service.ensureFresh(); // each call revalidates
+      expect(mockReadGenerationEtag).toHaveBeenCalledTimes(probesAfterLoad + 2);
       expect(mockListAllRules).toHaveBeenCalledTimes(1);
     });
 
-    it('generation sentinel: a failing probe degrades to the plain TTL bound', async () => {
+    it('does not let a post-invalidation request join a pre-invalidation generation probe', async () => {
+      mockReadGenerationEtag.mockResolvedValue('"g1"');
+      const service = await freshServiceWith([
+        storedRule(SOURCE_A, 'finance-bot', { type: 'public' }),
+      ]);
+      let release!: (etag: string) => void;
+      mockReadGenerationEtag.mockImplementationOnce(
+        () =>
+          new Promise<string>((resolve) => {
+            release = resolve;
+          }),
+      );
+      const earlier = service.ensureFresh();
+      mockReadGenerationEtag.mockResolvedValue('"g2"');
+      mockListAllRules.mockResolvedValue([
+        storedRule(SOURCE_A, 'finance-bot', { type: 'restricted' }),
+      ]);
+      const callsBeforeNewRequest = mockReadGenerationEtag.mock.calls.length;
+      const later = service.ensureFresh();
+      const callsAfterNewRequest = mockReadGenerationEtag.mock.calls.length;
+      release('"g1"');
+      await Promise.all([earlier, later]);
+      expect(callsAfterNewRequest).toBe(callsBeforeNewRequest + 1);
+      expect(
+        service.evaluateAccess({
+          userMail: 'user@example.com',
+          source: SOURCE_A,
+          agentName: 'finance-bot',
+        }),
+      ).toEqual({ decision: 'deny', reason: 'not-allowed' });
+    });
+
+    it('revalidates a late caller after joining a full refresh that captured pre-invalidation data', async () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-11-04T12:00:00Z'));
+      mockReadGenerationEtag.mockResolvedValue('"g1"');
+      const service = await freshServiceWith([
+        storedRule(SOURCE_A, 'finance-bot', { type: 'public' }),
+      ]);
+      vi.advanceTimersByTime(61_000);
+      let release!: (etag: string) => void;
+      let reachedFinalRead!: () => void;
+      const ready = new Promise<void>((resolve) => {
+        reachedFinalRead = resolve;
+      });
+      mockReadGenerationEtag
+        .mockResolvedValueOnce('"g1"')
+        .mockImplementationOnce(() => {
+          reachedFinalRead();
+          return new Promise<string>((resolve) => {
+            release = resolve;
+          });
+        });
+      const earlier = service.ensureFresh();
+      await ready;
+      mockReadGenerationEtag.mockResolvedValue('"g2"');
+      mockListAllRules.mockResolvedValue([
+        storedRule(SOURCE_A, 'finance-bot', { type: 'restricted' }),
+      ]);
+      const later = service.ensureFresh();
+      release('"g1"');
+      await Promise.all([earlier, later]);
+      expect(
+        service.evaluateAccess({
+          userMail: 'user@example.com',
+          source: SOURCE_A,
+          agentName: 'finance-bot',
+        }),
+      ).toEqual({ decision: 'unavailable', reason: 'rules-unavailable' });
+      await service.ensureFresh();
+      expect(
+        service.evaluateAccess({
+          userMail: 'user@example.com',
+          source: SOURCE_A,
+          agentName: 'finance-bot',
+        }),
+      ).toEqual({ decision: 'deny', reason: 'not-allowed' });
+    });
+
+    it('fails closed if the caller-specific generation check fails after shared refresh work', async () => {
+      mockReadGenerationEtag.mockResolvedValue('"g1"');
+      mockReadGenerationEtag
+        .mockResolvedValueOnce('"g1"')
+        .mockResolvedValueOnce('"g1"')
+        .mockRejectedValueOnce(new Error('Storage down'));
+      const service = await freshServiceWith([
+        storedRule(SOURCE_A, 'finance-bot', { type: 'public' }),
+      ]);
+      expect(service.getSnapshot().rulesUnavailable).toBe(true);
+      await service.ensureFresh();
+      expect(service.getSnapshot().rulesUnavailable).toBe(false);
+    });
+
+    it('generation sentinel: a failing probe marks authorization unavailable until it recovers', async () => {
       vi.useFakeTimers();
       vi.setSystemTime(new Date('2026-07-17T12:00:00.000Z'));
       mockReadGenerationEtag.mockResolvedValue('"g1"');
@@ -519,10 +622,16 @@ describe('AgentAccessService', () => {
       vi.advanceTimersByTime(6_000);
       await service.ensureFresh();
       expect(mockListAllRules).toHaveBeenCalledTimes(1); // no refetch, no throw
+      expect(service.getSnapshot().rulesUnavailable).toBe(true);
 
       vi.advanceTimersByTime(56_000); // past the 60s TTL backstop
       await service.ensureFresh();
+      expect(mockListAllRules).toHaveBeenCalledTimes(1); // cannot verify generation
+      mockReadGenerationEtag.mockResolvedValue('"g1"');
+      vi.advanceTimersByTime(6_000);
+      await service.ensureFresh();
       expect(mockListAllRules).toHaveBeenCalledTimes(2);
+      expect(service.getSnapshot().rulesUnavailable).toBe(false);
     });
 
     it('invalidate() bumps the sentinel best-effort', async () => {
@@ -574,6 +683,7 @@ describe('AgentAccessService', () => {
       const service = getService();
 
       const inFlight = service.ensureFresh();
+      await vi.waitFor(() => expect(mockListAllRules).toHaveBeenCalledTimes(1));
       // Admin write on this replica while the refresh is still in flight.
       service.invalidate();
       resolveList([storedRule(SOURCE_A, 'finance-bot', { type: 'public' })]);
@@ -587,7 +697,7 @@ describe('AgentAccessService', () => {
           source: SOURCE_A,
           agentName: 'finance-bot',
         }),
-      ).toEqual({ decision: 'allow', reason: 'public' });
+      ).toEqual({ decision: 'unavailable', reason: 'rules-unavailable' });
 
       // … but it is NOT considered fresh: the next ensureFresh refetches.
       await service.ensureFresh();
@@ -602,7 +712,7 @@ describe('AgentAccessService', () => {
       expect(mockListAllRules).toHaveBeenCalledTimes(1);
     });
 
-    it('serves last-known-good without hitting storage for 5s after a failed refresh', async () => {
+    it('fails closed without repeating refresh work for 5s after a failed refresh', async () => {
       vi.useFakeTimers();
       vi.setSystemTime(new Date('2026-07-17T12:00:00.000Z'));
       vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -629,7 +739,7 @@ describe('AgentAccessService', () => {
           source: SOURCE_A,
           agentName: 'finance-bot',
         }),
-      ).toEqual({ decision: 'allow', reason: 'allow-user' });
+      ).toEqual({ decision: 'unavailable', reason: 'rules-unavailable' });
 
       // Past the cooldown: storage is retried again.
       vi.advanceTimersByTime(1_500);
@@ -696,6 +806,7 @@ describe('AgentAccessService', () => {
 
       const first = service.ensureFresh();
       const second = service.ensureFresh();
+      await vi.waitFor(() => expect(mockListAllRules).toHaveBeenCalledTimes(1));
       resolveList([]);
       await Promise.all([first, second]);
 

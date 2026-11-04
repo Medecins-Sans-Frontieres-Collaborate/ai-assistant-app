@@ -13,10 +13,28 @@ import {
   clearGroupMembershipCache,
   resolveUserGroupIds,
 } from '@/lib/services/m365/groupMembership';
+import { getPermissionCache } from '@/lib/services/permissions/PermissionCache';
 
+import { permissionStorage } from '@/__tests__/helpers/memoryPermissionStorage';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const graphJsonMock = vi.hoisted(() => vi.fn());
+vi.mock(
+  '@/lib/services/permissions/PermissionCache',
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import('@/lib/services/permissions/PermissionCache')
+      >();
+    const { permissionStorage } =
+      await import('@/__tests__/helpers/memoryPermissionStorage');
+    const cache = new actual.PermissionCache(
+      permissionStorage.storage,
+      'test-tenant',
+    );
+    return { ...actual, getPermissionCache: () => cache };
+  },
+);
 vi.mock('@/auth', () => ({ getGraphAccessToken: vi.fn() }));
 vi.mock('@/lib/services/m365/graphApi', () => ({
   graphJson: graphJsonMock,
@@ -48,6 +66,8 @@ const policy = LimitsPolicySchema.parse({
 beforeEach(() => {
   vi.clearAllMocks();
   clearGroupMembershipCache();
+  permissionStorage.records.clear();
+  getPermissionCache().clearMemory();
 });
 
 describe('group grant → warmed cache → principal → model gate', () => {
@@ -87,6 +107,7 @@ describe('group grant → warmed cache → principal → model gate', () => {
     ).toBe(true);
 
     clearGroupMembershipCache(); // stands in for the 60 s negative TTL
+    getPermissionCache().clearMemory();
     graphJsonMock.mockResolvedValueOnce({ value: [RESEARCH] });
     await resolveUserGroupIds(req, session);
     expect(

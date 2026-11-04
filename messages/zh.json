@@ -8013,5 +8013,21 @@
     "instructionsHint": "说明最多 16 KB，包括任何导入的文本引用。二进制文件及持久化文档索引仅适用于组织技能。导出时采用标准 SKILL.md 名称，无 user: 前缀。",
     "enabled": "已用于我的对话",
     "empty": "为经常性任务创建技能，或导入 SKILL.md 以便在此审查和保存。"
+  },
+  "permissionCache": {
+    "title": "刷新权限",
+    "description": "使缓存的组成员身份和 Microsoft 365 源访问失效。下一次受保护的请求必须在每台服务器上重新验证权限。",
+    "scope": "刷新范围",
+    "oneUser": "单个用户",
+    "everyone": "所有人",
+    "userId": "Entra 用户对象 ID",
+    "userIdHint": "请使用 Microsoft Entra 中用户的对象 ID，不要使用邮箱地址。输入有效的 UUID。",
+    "confirmAll": "要求所有人重新进行权限检查。这可能会暂时增加 Microsoft Graph 的流量。",
+    "refreshUser": "刷新用户权限",
+    "refreshAll": "刷新所有权限",
+    "refreshing": "正在使缓存失效…",
+    "invalidated": "缓存已失效。下次受保护请求需重新验证权限；权限尚未重新检查。",
+    "failed": "无法确认缓存失效。请稍后重试。",
+    "propagationNote": "此操作仅强制进行新检查，不会更改 Microsoft 权限。微软的传播延迟仍然适用。已授权的操作不会被撤销。"
   }
 }

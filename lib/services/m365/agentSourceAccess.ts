@@ -17,11 +17,11 @@
  * files and for children with broken permission inheritance. Folders
  * indexed before manifests existed fall back to one security-trimmed
  * immediate-children listing, matching their snapshot semantics.
- * Verdicts are cached per user+agent for a short TTL (per-process, like the
- * access-rules snapshot): max staleness after a permission revocation in
- * SharePoint is CACHE_TTL_MS. Only DEFINITIVE verdicts are cached: a probe
- * that came back throttled or 5xx fails closed for this request but is
- * not remembered, so a Graph wobble cannot lock a user out for the TTL.
+ * Definitive verdicts use the shared PermissionCache per user/agent/source
+ * revision. Hard maximum age is configurable, default five minutes. Unknown
+ * results are never persisted as verified access; a short local failure
+ * cooldown prevents repeated probes while Graph is throttled. Every call
+ * revalidates shared generations so manual invalidation bypasses both caches.
  */
 import { NextRequest } from 'next/server';
 
@@ -34,12 +34,21 @@ import type {
   M365AgentSource,
 } from '@/lib/services/agentAccess/types';
 import type { AccessibleFolderItem } from '@/lib/services/m365/agentIndexService';
-import { graphJson, withGraphTokenCache } from '@/lib/services/m365/graphApi';
+import {
+  M365Error,
+  graphJson,
+  withGraphTokenCache,
+} from '@/lib/services/m365/graphApi';
+import { getPermissionCache } from '@/lib/services/permissions/PermissionCache';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
+import { env } from '@/config/environment';
+import { createHash } from 'node:crypto';
+import { z } from 'zod';
+
 const GRAPH_SCOPES = ['Files.ReadWrite.All'];
-const CACHE_TTL_MS = 5 * 60_000;
+const CACHE_TTL_MS = env.PERMISSION_SOURCE_CACHE_MINUTES * 60_000;
 const MAX_CACHE_ENTRIES = 2000;
 /** Graph JSON batching allows at most 20 sub-requests per call. */
 const GRAPH_BATCH_SIZE = 20;
@@ -74,11 +83,22 @@ export interface AgentSourceAccess {
   results: SourceAccessResult[];
 }
 
-interface CacheEntry {
-  at: number;
-  access: AgentSourceAccess;
-  /** Per-entry lifetime; the negative (unverifiable) entry is short-lived. */
-  ttlMs: number;
+const sourceAccessSchema: z.ZodType<AgentSourceAccess> = z.object({
+  accessibleSourceIds: z.array(z.string()),
+  unverifiable: z
+    .boolean()
+    .refine((value) => !value, 'Only verified access may be persisted'),
+  accessibleFolderItems: z.array(
+    z.object({ driveId: z.string(), itemId: z.string() }),
+  ),
+  results: z.array(z.object({ sourceId: z.string(), accessible: z.boolean() })),
+});
+
+/** Short-lived unknown results are never persisted as verified source access. */
+class SourceVerificationError extends Error {
+  constructor(readonly access: AgentSourceAccess) {
+    super('Source permissions could not be fully verified');
+  }
 }
 
 /**
@@ -119,11 +139,12 @@ function chunkTargets(targets: ProbeTarget[]): ProbeTarget[][] {
   return out;
 }
 
-const cache = new Map<string, CacheEntry>();
-
-function cacheKey(userId: string, agent: M365Agent): string {
+function cacheKey(agent: M365Agent): string {
   // updatedAt in the key: editing sources invalidates naturally.
-  return `${userId}:${agent.id}:${agent.updatedAt}`;
+  const sources = createHash('sha256')
+    .update(JSON.stringify(agent.sources))
+    .digest('hex');
+  return `sources:${agent.id}:${agent.updatedAt}:${sources}`;
 }
 
 interface GraphBatchResponseShape {
@@ -197,9 +218,19 @@ async function probeBatch(
   const verdicts = new Map<string, Verdict>();
   const throttled: ProbeTarget[] = [];
   let waitMs = 0;
+  const targetsByRequestId = new Map(
+    slice.map((target, index) => [String(index), target]),
+  );
+  const seen = new Set<string>();
   for (const response of data.responses ?? []) {
-    const target = slice[Number(response.id)];
+    if (typeof response.id !== 'string') continue;
+    const target = targetsByRequestId.get(response.id);
     if (!target) continue;
+    if (seen.has(response.id)) {
+      verdicts.set(target.key, 'unknown');
+      continue;
+    }
+    seen.add(response.id);
     const status = response.status ?? 0;
     if (status >= 200 && status < 300) {
       verdicts.set(target.key, 'ok');
@@ -285,7 +316,8 @@ const manifestCache = new Map<string, ManifestCacheEntry>();
 async function loadIndexedItems(
   agent: M365Agent,
 ): Promise<Map<string, ProbeTarget[]> | null> {
-  const cached = manifestCache.get(agent.id);
+  const manifestKey = `${agent.id}:${agent.updatedAt}`;
+  const cached = manifestCache.get(manifestKey);
   if (cached && Date.now() - cached.at < MANIFEST_CACHE_TTL_MS) {
     return cached.bySource;
   }
@@ -318,7 +350,7 @@ async function loadIndexedItems(
     );
   }
   if (manifestCache.size >= MAX_CACHE_ENTRIES) manifestCache.clear();
-  manifestCache.set(agent.id, { at: Date.now(), bySource });
+  manifestCache.set(manifestKey, { at: Date.now(), bySource });
   return bySource;
 }
 
@@ -400,67 +432,93 @@ export async function checkAgentSourceAccess(
   userId: string,
   agent: M365Agent,
 ): Promise<AgentSourceAccess> {
-  const key = cacheKey(userId, agent);
-  const cached = cache.get(key);
-  if (cached && Date.now() - cached.at < cached.ttlMs) {
-    return cached.access;
+  try {
+    const snapshot = await getPermissionCache().resolve(
+      userId,
+      cacheKey(agent),
+      sourceAccessSchema,
+      async () => {
+        // Several $batch calls plus folder listings: one token mint for all.
+        return withGraphTokenCache(req, async () => {
+          const verdicts = await probeSources(req, agent.sources);
+          const results = agent.sources.map(
+            (source): SourceAccessResult => ({
+              sourceId: source.sourceId,
+              accessible: verdicts.get(source.sourceId) === 'ok',
+            }),
+          );
+          let unverifiable = agent.sources.some(
+            (source) =>
+              (verdicts.get(source.sourceId) ?? 'unknown') === 'unknown',
+          );
+
+          const folderItems = await resolveAccessibleFolderItems(
+            req,
+            agent,
+            agent.sources.filter(
+              (source) =>
+                source.kind === 'folder' &&
+                verdicts.get(source.sourceId) === 'ok',
+            ),
+          );
+          unverifiable ||= folderItems.unverifiable;
+
+          const access: AgentSourceAccess = {
+            accessibleSourceIds: results
+              .filter((r) => r.accessible)
+              .map((r) => r.sourceId),
+            accessibleFolderItems: folderItems.items,
+            results,
+            unverifiable,
+          };
+
+          if (unverifiable) {
+            // Fail closed now; hold the verdict briefly so a throttled tenant is
+            // not re-probed on every message, then ask Graph again.
+            console.warn(
+              `[m365-agents] source access for agent ${sanitizeForLog(agent.id)} could not be fully verified; held for ${UNVERIFIABLE_CACHE_TTL_MS / 1000}s`,
+            );
+            throw new SourceVerificationError(access);
+          }
+          return access;
+        });
+      },
+      {
+        maxAgeMs: CACHE_TTL_MS,
+        failureTtlMs: (error) =>
+          error instanceof SourceVerificationError
+            ? UNVERIFIABLE_CACHE_TTL_MS
+            : 0,
+        failureMayAuthorize: true,
+      },
+    );
+    return snapshot.value;
+  } catch (error) {
+    if (error instanceof SourceVerificationError) {
+      // PermissionCache validated generations and the original lookup age,
+      // including cooldown hits. Clone so callers cannot mutate that cache.
+      return {
+        ...error.access,
+        accessibleSourceIds: [...error.access.accessibleSourceIds],
+        accessibleFolderItems: error.access.accessibleFolderItems.map(
+          (item) => ({ ...item }),
+        ),
+        results: error.access.results.map((result) => ({ ...result })),
+      };
+    }
+    if (error instanceof M365Error) throw error;
+    console.warn(
+      `[m365-agents] source permission verification unavailable: ${sanitizeForLog(error)}`,
+    );
+    throw new M365Error(
+      'Source permissions are temporarily unavailable; retry shortly',
+      'graph_error',
+      503,
+    );
   }
-  // Several $batch calls plus folder listings: one token mint for all.
-  return withGraphTokenCache(req, async () => {
-    const verdicts = await probeSources(req, agent.sources);
-    const results = agent.sources.map(
-      (source): SourceAccessResult => ({
-        sourceId: source.sourceId,
-        accessible: verdicts.get(source.sourceId) === 'ok',
-      }),
-    );
-    let unverifiable = agent.sources.some(
-      (source) => (verdicts.get(source.sourceId) ?? 'unknown') === 'unknown',
-    );
-
-    const folderItems = await resolveAccessibleFolderItems(
-      req,
-      agent,
-      agent.sources.filter(
-        (source) =>
-          source.kind === 'folder' && verdicts.get(source.sourceId) === 'ok',
-      ),
-    );
-    unverifiable ||= folderItems.unverifiable;
-
-    const access: AgentSourceAccess = {
-      accessibleSourceIds: results
-        .filter((r) => r.accessible)
-        .map((r) => r.sourceId),
-      accessibleFolderItems: folderItems.items,
-      results,
-      unverifiable,
-    };
-
-    if (unverifiable) {
-      // Fail closed now; hold the verdict briefly so a throttled tenant is
-      // not re-probed on every message, then ask Graph again.
-      console.warn(
-        `[m365-agents] source access for agent ${sanitizeForLog(agent.id)} could not be fully verified; held for ${UNVERIFIABLE_CACHE_TTL_MS / 1000}s`,
-      );
-      cache.set(key, {
-        at: Date.now(),
-        access,
-        ttlMs: UNVERIFIABLE_CACHE_TTL_MS,
-      });
-      return access;
-    }
-    if (cache.size >= MAX_CACHE_ENTRIES) {
-      // Simple pressure valve; entries are tiny and TTL-bounded anyway.
-      cache.clear();
-    }
-    cache.set(key, { at: Date.now(), access, ttlMs: CACHE_TTL_MS });
-    return access;
-  });
 }
 
 /** Test hook. */
 export function clearAgentSourceAccessCache(): void {
-  cache.clear();
   manifestCache.clear();
 }

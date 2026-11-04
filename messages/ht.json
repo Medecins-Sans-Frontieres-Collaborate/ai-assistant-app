@@ -7966,5 +7966,21 @@
     "instructionsHint": "Jiska 16 KB enstriksyon, enkli nenpòt referans tèks ou enpòte. Fichye binè ak endèks fichye pèmanan yo disponib sèlman pou konpetans òganizasyon. Ekspòtasyon ap itilize non estanda SKILL.md san prefiks user: la.",
     "enabled": "Aktive pou konvèsasyon mwen yo",
     "empty": "Kreye yon konpetans pou yon travay ki repete, oswa enpòte yon SKILL.md pou revize epi sove li isit la."
+  },
+  "permissionCache": {
+    "title": "Rafrechi pèmisyon yo",
+    "description": "Anile manm gwoup ki an kachèt ak aksè sous Microsoft 365 la. Pwochen demann ki pwoteje a dwe verifye pèmisyon yo ankò, sou chak sèvè.",
+    "scope": "Rafrechi pou",
+    "oneUser": "Yon itilizatè",
+    "everyone": "Tout moun",
+    "userId": "Entra user object ID",
+    "userIdHint": "Sèvi ak object ID itilizatè a soti nan Microsoft Entra, pa adrès imel li. Antre yon UUID ki valab.",
+    "confirmAll": "Egzijans pou tout moun fè tcheke pèmisyon fre. Sa ka ogmante trafik Microsoft Graph tanporèman.",
+    "refreshUser": "Rafrechi pèmisyon itilizatè",
+    "refreshAll": "Rafrechi tout pèmisyon",
+    "refreshing": "Kap anile kachèt la…",
+    "invalidated": "Kachèt la anile. Yon verifikasyon fre obligatwa nan pwochen demann ki pwoteje; pèmisyon yo poko tcheke ankò.",
+    "failed": "Pa t kapab konfime anilasyon kachèt la. Eseye ankò talè.",
+    "propagationNote": "Sa fòse yon tcheke fre, li pa chanje pèmisyon Microsoft yo. Reta pwopagasyon Microsoft yo toujou aplike. Operasyon ki deja otorize yo pa anile."
   }
 }

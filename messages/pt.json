@@ -7982,5 +7982,21 @@
     "instructionsHint": "Até 16 KB de instruções, incluindo qualquer referência de texto importada. Arquivos binários e indexação persistente de documentos estão disponíveis apenas para habilidades da organização. A exportação usa o nome padrão SKILL.md sem o prefixo user:.",
     "enabled": "Habilitado para minhas conversas",
     "empty": "Crie uma habilidade para uma tarefa recorrente ou importe um SKILL.md para revisar e salvar aqui."
+  },
+  "permissionCache": {
+    "title": "Atualizar permissões",
+    "description": "Invalidar o cache de associação a grupos e acesso às fontes do Microsoft 365. A próxima solicitação protegida deverá verificar as permissões novamente, em todos os servidores.",
+    "scope": "Atualizar para",
+    "oneUser": "Um usuário",
+    "everyone": "Todos",
+    "userId": "ID do objeto do usuário Entra",
+    "userIdHint": "Use o ID do objeto do usuário do Microsoft Entra, não o endereço de e-mail. Insira um UUID válido.",
+    "confirmAll": "Exigir nova verificação de permissões para todos. Isso pode aumentar temporariamente o tráfego do Microsoft Graph.",
+    "refreshUser": "Atualizar permissões do usuário",
+    "refreshAll": "Atualizar todas as permissões",
+    "refreshing": "Invalidando cache…",
+    "invalidated": "Cache invalidado. Uma nova verificação será necessária na próxima solicitação protegida; as permissões ainda não foram rechecadas.",
+    "failed": "Não foi possível confirmar a invalidação do cache. Tente novamente em breve.",
+    "propagationNote": "Isto força uma nova verificação, mas não altera as permissões da Microsoft. Os atrasos de propagação da Microsoft ainda se aplicam. Operações já autorizadas não serão desfeitas."
   }
 }

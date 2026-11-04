@@ -7966,5 +7966,21 @@
     "instructionsHint": "Ifinyelela ku-16 KB yemiyalelo, kufaka phakathi noma yimiphi imibhalo engenisiwe. Amafayela angama-binary kanye nokuhlola imibhalo njalo kungatholakale kuphela kumakhono enhlangano. Ukuthekelisa kusebenzisa igama elijwayelekile elithi SKILL.md ngaphandle kowe-user: prefix.",
     "enabled": "Kuvunyelwe ezingxoxweni zami",
     "empty": "Dala ikhono lomsebenzi ophindaphindayo, noma faka i-SKILL.md ukuze uyibheke futhi uyigcine lapha."
+  },
+  "permissionCache": {
+    "title": "Buyekeza izimvume",
+    "description": "Susa amandla okugcina okuqinisekisayo kobulungu eqenjini kanye nokufinyelela emthonjeni we-Microsoft 365. Isicelo esilandelayo esivikelekile kumele siqinisekise izimvume futhi, kuyo yonke iseva.",
+    "scope": "Buyekeza ku",
+    "oneUser": "Umsebenzisi oyedwa",
+    "everyone": "Wonke umuntu",
+    "userId": "I-Entra user object ID",
+    "userIdHint": "Sebenzisa i-object ID yomsebenzisi evela ku-Microsoft Entra, hhayi ikheli lakhe le-imeyili. Faka i-UUID evumelekile.",
+    "confirmAll": "Cela ukuhlolwa okusha kwezimvume kubo bonke abantu. Lokhu kungandisa isikhashana umthamo womsebenzi ku-Microsoft Graph.",
+    "refreshUser": "Buyekeza izimvume zomsebenzisi",
+    "refreshAll": "Buyekeza zonke izimvume",
+    "refreshing": "Kusulwa ikheshana…",
+    "invalidated": "Ikheshana isusiwe. Ukuqinisekisa okusha kudingeka esicelweni esilandelayo esivikelekile; izimvume azikabuyekezwa okwamanje.",
+    "failed": "Ukusulwa kwekheshana akukwazanga ukuqinisekiswa. Zama futhi ngokuhamba kwesikhathi.",
+    "propagationNote": "Lokhu kuphoqa ukuhlolwa okusha, hhayi ushintsho kwezizimvume ze-Microsoft. Ukubambezeleka ekusabalaliseni kwe-Microsoft kusasebenza. Izisebenzi ezisele zigunyaziwe azikhanselwa."
   }
 }

@@ -21,6 +21,7 @@ import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
 import { normalizeAdminMail } from '@/lib/services/admin/globalAdminsTypes';
 
+import { PermissionCacheControls } from '@/components/Admin/GlobalAdmins/PermissionCacheControls';
 import {
   ADMIN_BANNER_ERROR,
   ADMIN_BANNER_WARN,
@@ -341,6 +342,7 @@ export const GlobalAdminsPanel: FC<GlobalAdminsPanelProps> = ({
         </button>
         {dirty && <span className={ADMIN_MUTED}>{t('unsavedChanges')}</span>}
       </footer>
+      <PermissionCacheControls />
     </div>
   );
 };

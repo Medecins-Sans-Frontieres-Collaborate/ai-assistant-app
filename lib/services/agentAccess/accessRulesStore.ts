@@ -489,7 +489,15 @@ export async function writeHistoryEntry(
 export async function readGenerationEtag(
   storage: BlobStorage,
 ): Promise<string | null> {
-  const result = await downloadBlob(storage, AGENT_ACCESS_GENERATION_PATH);
+  const result = await downloadBlob(
+    storage,
+    AGENT_ACCESS_GENERATION_PATH,
+    'agentAccess.readGeneration',
+    {
+      maxBytes: 1024,
+      abortSignal: AbortSignal.timeout(5000),
+    },
+  );
   return result?.etag ?? null;
 }
 

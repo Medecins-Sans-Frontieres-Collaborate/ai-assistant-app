@@ -14,10 +14,16 @@ export default getRequestConfig(async ({ requestLocale }) => {
   // Load flat messages from messages directory
   try {
     const messages = (await import(`./messages/${locale}.json`)).default;
+    // Newly introduced admin controls remain usable while locale translations
+    // roll out. Existing translated namespaces are never replaced.
+    const english = (await import('./messages/en.json')).default;
 
     return {
       locale,
-      messages,
+      messages: {
+        ...messages,
+        permissionCache: messages.permissionCache ?? english.permissionCache,
+      },
     };
   } catch (error) {
     console.error(`Failed to load messages for ${locale}`, error);
