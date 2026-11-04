@@ -53,6 +53,7 @@ import { canonicalAgentKey } from '@/lib/services/agentAccess/types';
 import {
   getCachedGroupIdsForMail,
   isGroupMembershipDegraded,
+  isGroupMembershipUnavailable,
 } from '@/lib/services/m365/groupMembership';
 import { getAzureMonitorLogger } from '@/lib/services/observability/AzureMonitorLoggingService';
 import {
@@ -86,7 +87,6 @@ const REFRESH_FAILURE_COOLDOWN_MS = 5_000;
  * tiny-blob read; on any probe failure (or a deployment whose sentinel was
  * never written) behavior degrades to exactly the pre-sentinel TTL bound.
  */
-const GENERATION_PROBE_INTERVAL_MS = 5_000;
 
 export type AccessDecisionKind = 'allow' | 'deny' | 'unavailable';
 
@@ -100,6 +100,9 @@ export type AccessDecisionKind = 'allow' | 'deny' | 'unavailable';
  * rest of the catalog).
  */
 export const GROUP_MEMBERSHIP_DEGRADED_REASON = 'group-membership-degraded';
+/** Unknown membership due to a structural failure; discovery must not soften it. */
+export const GROUP_MEMBERSHIP_UNAVAILABLE_REASON =
+  'group-membership-unavailable';
 
 /**
  * Whether a decision reason denotes the degraded-group case, including
@@ -243,7 +246,7 @@ export class AgentAccessService {
   /** Sentinel ETag observed at the last full refresh; null = never read. */
   private lastGenerationEtag: string | null = null;
   /** Epoch ms of the last sentinel probe (throttles to the probe interval). */
-  private generationProbedAt = 0;
+  private generationVerificationFailed = false;
   private generationProbeInFlight: Promise<boolean> | null = null;
 
   static getInstance(): AgentAccessService {
@@ -271,10 +274,14 @@ export class AgentAccessService {
       // instead of waiting out the TTL. An unchanged (or unreadable)
       // sentinel keeps serving the warm snapshot — the TTL stays the
       // correctness backstop either way.
-      if (Date.now() - this.generationProbedAt < GENERATION_PROBE_INTERVAL_MS) {
+      let changed: boolean;
+      try {
+        changed = await this.probeGenerationChanged();
+        this.generationVerificationFailed = false;
+      } catch {
+        this.generationVerificationFailed = true;
         return;
       }
-      const changed = await this.probeGenerationChanged();
       if (!changed) return;
       this.fetchedAt = 0; // fall through to a full refresh below
     }
@@ -335,21 +342,8 @@ export class AgentAccessService {
   private async probeGenerationChanged(): Promise<boolean> {
     if (!this.generationProbeInFlight) {
       this.generationProbeInFlight = (async () => {
-        try {
-          const etag = await readGenerationEtag(this.getStorage());
-          this.generationProbedAt = Date.now();
-          if (etag === null) return false;
-          if (this.lastGenerationEtag === null) {
-            // Older snapshot predates sentinel tracking: adopt the current
-            // value as the baseline rather than treating it as a change.
-            this.lastGenerationEtag = etag;
-            return false;
-          }
-          return etag !== this.lastGenerationEtag;
-        } catch {
-          this.generationProbedAt = Date.now();
-          return false;
-        }
+        const etag = await readGenerationEtag(this.getStorage());
+        return etag !== this.lastGenerationEtag;
       })().finally(() => {
         this.generationProbeInFlight = null;
       });
@@ -358,10 +352,19 @@ export class AgentAccessService {
   }
 
   /** Cached snapshot for the admin API (rules + etags + config). */
+  private rulesAreUnavailable(): boolean {
+    return (
+      this.isEnabled() &&
+      (!this.state ||
+        this.generationVerificationFailed ||
+        Date.now() - this.fetchedAt >= RULES_CACHE_TTL_MS)
+    );
+  }
+
   getSnapshot(): AgentAccessSnapshot {
     return {
       rules: this.state?.rules ?? [],
-      config: this.state?.config ?? null,
+      config: this.rulesAreUnavailable() ? null : (this.state?.config ?? null),
       configEtag: this.state?.configEtag ?? null,
       promptAgents: this.state?.promptAgents ?? [],
       connectors: this.state?.connectors ?? [],
@@ -370,7 +373,7 @@ export class AgentAccessService {
       skills: this.state?.skills ?? [],
       m365Agents: this.state?.m365Agents ?? [],
       orgAgents: this.state?.orgAgents ?? [],
-      rulesUnavailable: this.isEnabled() && this.state === null,
+      rulesUnavailable: this.rulesAreUnavailable(),
       fetchedAt: this.state ? this.fetchedAt : null,
     };
   }
@@ -494,7 +497,7 @@ export class AgentAccessService {
     if (!this.isEnabled()) {
       return { decision: 'allow', reason: 'feature-disabled' };
     }
-    if (!this.state) {
+    if (!this.state || this.rulesAreUnavailable()) {
       // Enabled but no last-known-good: callers fail closed at invocation
       // and pass through at discovery (spec semantics #5).
       return { decision: 'unavailable', reason: 'rules-unavailable' };
@@ -592,6 +595,15 @@ export class AgentAccessService {
         reason: GROUP_MEMBERSHIP_DEGRADED_REASON,
       };
     }
+    if (
+      access.allowGroups.length > 0 &&
+      isGroupMembershipUnavailable(userMail)
+    ) {
+      return {
+        decision: 'unavailable',
+        reason: GROUP_MEMBERSHIP_UNAVAILABLE_REASON,
+      };
+    }
     return { decision: 'deny', reason: 'not-allowed' };
   }
 
@@ -604,6 +616,7 @@ export class AgentAccessService {
 
   private async refresh(): Promise<void> {
     const epochAtEntry = this.epoch;
+    const startedAt = Date.now();
     try {
       const storage = this.getStorage();
       // The sentinel ETag read is ISSUED before the listings (awaited at the
@@ -612,15 +625,7 @@ export class AgentAccessService {
       // reasoning as the epoch check on fetchedAt below. Best-effort: a
       // failed read keeps the previous baseline and the TTL backstop
       // governs.
-      let generationEtagPromise: Promise<string | null>;
-      try {
-        generationEtagPromise = readGenerationEtag(storage).then(
-          (etag) => etag,
-          () => this.lastGenerationEtag,
-        );
-      } catch {
-        generationEtagPromise = Promise.resolve(this.lastGenerationEtag);
-      }
+      const generationEtag = await readGenerationEtag(storage);
       // Rules and config load in one transaction: that pair is kept/replaced
       // atomically, so a failure in either keeps last-known-good for both
       // (never a mixed-age rules/config pair). Prompt agents load in a
@@ -842,11 +847,17 @@ export class AgentAccessService {
         orgAgents,
         orgAgentsById,
       };
-      this.lastGenerationEtag = await generationEtagPromise;
+      const finalGenerationEtag = await readGenerationEtag(storage);
+      this.lastGenerationEtag = generationEtag;
+      this.generationVerificationFailed = false;
       this.lastRefreshFailureAt = 0;
-      this.fetchedAt = this.epoch === epochAtEntry ? Date.now() : 0;
+      this.fetchedAt =
+        this.epoch === epochAtEntry && generationEtag === finalGenerationEtag
+          ? startedAt
+          : 0;
     } catch (error) {
       this.lastRefreshFailureAt = Date.now();
+      this.generationVerificationFailed = true;
       console.error(
         `[agent-access] rules refresh failed (${
           this.state
