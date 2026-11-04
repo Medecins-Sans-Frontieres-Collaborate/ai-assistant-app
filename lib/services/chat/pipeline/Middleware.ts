@@ -851,21 +851,7 @@ const resolveCredentialContext = async (
     const staticAgent = orgRecord
       ? null
       : getOrganizationAgentById(context.botId);
-    if (staticAgent && accessService.getSnapshot().rulesUnavailable) {
-      // Static fail-open (see above): audited so the degradation is visible.
-      emitAccessAudit({
-        user: context.user,
-        telemetry: auditTelemetry(context),
-        userMail: context.user?.mail,
-        agentName: staticAgent.id,
-        source: ORG_AGENT_SOURCE,
-        decision: 'allow',
-        reason: 'rules-unavailable-static-fallback',
-      });
-      console.warn(
-        '[CredentialMiddleware] Agent access rules unavailable; serving static org agent rule-free',
-      );
-    } else if (orgRecord || staticAgent) {
+    if (orgRecord || staticAgent) {
       const agentName = orgRecord ? orgRecord.id : staticAgent!.id;
       const decision = accessService.evaluateAccess({
         userMail: context.user?.mail,
