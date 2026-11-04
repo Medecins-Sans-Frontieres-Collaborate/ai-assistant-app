@@ -19,7 +19,28 @@ vi.mock('react-hot-toast', () => ({
   default: Object.assign(vi.fn(), { success: vi.fn(), error: vi.fn() }),
 }));
 vi.mock('@/components/Chat/ChatInput/M365FilePickerModal', () => ({
-  default: () => null,
+  default: ({
+    isOpen,
+    onPick,
+  }: {
+    isOpen: boolean;
+    onPick: (entry: Record<string, unknown>) => void;
+  }) =>
+    isOpen ? (
+      <button
+        onClick={() =>
+          onPick({
+            driveId: 'b!drive',
+            itemId: 'NEXTFILE',
+            name: 'next.pdf',
+            isFolder: false,
+            webUrl: 'https://contoso.sharepoint.com/next.pdf',
+          })
+        }
+      >
+        Select next file
+      </button>
+    ) : null,
 }));
 vi.mock('@/client/hooks/useM365Enabled', () => ({
   useM365Enabled: () => ({ agentsEnabled: true }),
@@ -384,6 +405,29 @@ describe('document cap override — local admin', () => {
 });
 
 describe('document cap override — global admin', () => {
+  it.each([49, 50, 51])(
+    'allows saving %i documents only when within the current cap',
+    async (documents) => {
+      const { planCalls } = installFetch({
+        agents: [agentWith()],
+        isGlobalAdmin: true,
+        documents,
+      });
+      renderSection();
+      await openEditor();
+      await waitForPlan(planCalls, (body) => body.maxDocuments === undefined);
+      await screen.findByText('m365CapDocuments');
+      fireEvent.change(screen.getByLabelText('m365AgentNameLabel'), {
+        target: { value: 'Updated handbook' },
+      });
+      await waitFor(() => {
+        const save = screen.getByRole('button', { name: /^(save|Save)$/ });
+        if (documents <= DEFAULT_CAP) expect(save).toBeEnabled();
+        else expect(save).toBeDisabled();
+      });
+    },
+  );
+
   it('takes a numeric limit and re-plans with it', async () => {
     const { planCalls } = installFetch({
       agents: [agentWith()],
@@ -407,13 +451,59 @@ describe('document cap override — global admin', () => {
     fireEvent.click(screen.getByRole('button', { name: 'm365CapRaiseApply' }));
     expect(window.confirm).toHaveBeenCalledWith('m365CapRaiseConfirm');
     await waitForPlan(planCalls, (b) => b.maxDocuments === 150);
-    // Within the cap now: the raise control is gone, the note stays.
+    // Within the cap now: the setting remains available for future edits.
     await waitFor(() => {
-      expect(
-        screen.queryByLabelText('m365CapRaiseInputLabel'),
-      ).not.toBeInTheDocument();
+      expect(screen.getByLabelText('m365CapRaiseInputLabel')).toHaveValue(150);
     });
     expect(screen.getByText('m365CapOverrideNote')).toBeInTheDocument();
+  });
+
+  it.each([49, 50, 51])(
+    'offers the limit setting with %i documents and saves an override of 80',
+    async (documents) => {
+      const { calls, planCalls } = installFetch({
+        agents: [agentWith()],
+        isGlobalAdmin: true,
+        documents,
+      });
+      renderSection();
+      await openEditor();
+      await waitForPlan(planCalls, (body) => body.maxDocuments === undefined);
+      const input = screen.getByLabelText('m365CapRaiseInputLabel');
+      expect(input).toHaveValue(50);
+      expect(
+        screen.getByRole('button', { name: 'm365CapRaiseApply' }),
+      ).toBeDisabled();
+      fireEvent.change(input, { target: { value: '80' } });
+      fireEvent.click(
+        screen.getByRole('button', { name: 'm365CapRaiseApply' }),
+      );
+      await waitForPlan(planCalls, (body) => body.maxDocuments === 80);
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /^(save|Save)$/ }),
+        ).toBeEnabled();
+      });
+      fireEvent.click(screen.getByRole('button', { name: /^(save|Save)$/ }));
+      await waitFor(() => {
+        expect(calls.find((call) => call.method === 'PUT')?.body).toMatchObject(
+          {
+            maxDocumentsOverride: 80,
+          },
+        );
+      });
+    },
+  );
+
+  it('offers the setting before any sources are selected', async () => {
+    installFetch({
+      agents: [agentWith({ sources: [] })],
+      isGlobalAdmin: true,
+      documents: 0,
+    });
+    renderSection();
+    await openEditor();
+    expect(screen.getByLabelText('m365CapRaiseInputLabel')).toHaveValue(50);
   });
 
   it('clamps a value above the global ceiling to the ceiling', async () => {
@@ -428,6 +518,65 @@ describe('document cap override — global admin', () => {
     fireEvent.change(input, { target: { value: '500' } });
     fireEvent.click(screen.getByRole('button', { name: 'm365CapRaiseApply' }));
     await waitForPlan(planCalls, (b) => b.maxDocuments === 200);
+  });
+});
+
+describe('source selection is separate from the document cap', () => {
+  const fileSources = (count: number) =>
+    Array.from({ length: count }, (_, index) => ({
+      ...folderSource,
+      sourceId: `src-${index}`,
+      itemId: `FILE${index}`,
+      kind: 'file' as const,
+      title: `file-${index}.pdf`,
+      recursive: false,
+    }));
+
+  it.each([false, true])(
+    'allows adding a 51st source (global admin: %s)',
+    async (isGlobalAdmin) => {
+      const { planCalls } = installFetch({
+        agents: [agentWith({ sources: fileSources(50) })],
+        isGlobalAdmin,
+        documents: 50,
+      });
+      renderSection();
+      await openEditor();
+      const add = screen.getByRole('button', { name: 'm365AgentAddSource' });
+      expect(add).toBeEnabled();
+      fireEvent.click(add);
+      fireEvent.click(screen.getByRole('button', { name: 'Select next file' }));
+      await waitForPlan(planCalls, (body) => body.sources?.length === 51);
+    },
+  );
+
+  it('honors a saved override of 80 instead of stopping at 50 sources', async () => {
+    installFetch({
+      agents: [
+        agentWith({ sources: fileSources(50), maxDocumentsOverride: 80 }),
+      ],
+      isGlobalAdmin: true,
+      documents: 50,
+    });
+    renderSection();
+    await openEditor();
+    expect(screen.getByLabelText('m365CapRaiseInputLabel')).toHaveValue(80);
+    expect(
+      screen.getByRole('button', { name: 'm365AgentAddSource' }),
+    ).toBeEnabled();
+  });
+
+  it('still bounds source selections at the global ceiling', async () => {
+    installFetch({
+      agents: [agentWith({ sources: fileSources(200) })],
+      isGlobalAdmin: true,
+      documents: 200,
+    });
+    renderSection();
+    await openEditor();
+    expect(
+      screen.getByRole('button', { name: 'm365AgentAddSource' }),
+    ).toBeDisabled();
   });
 });
 
