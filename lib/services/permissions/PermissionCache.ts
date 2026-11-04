@@ -3,9 +3,11 @@ import {
   AgentAccessConflictError,
   downloadBlob,
   downloadBlobIfChanged,
+  statusCodeOf,
   uploadJson,
 } from '@/lib/services/agentAccess/blobCas';
 
+import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 import type { BlobStorage } from '@/lib/utils/server/blob/blob';
 
 import { env } from '@/config/environment';
@@ -60,6 +62,12 @@ export interface PermissionCachePolicy {
   maxAgeMs: number;
   /** Local cooldown for lookup failures. Failures are never stored as verified snapshots. */
   failureTtlMs?: (error: unknown) => number;
+  /**
+   * True when a lookup error contains usable partial permissions. Such errors
+   * must pass shared-generation/age validation before propagation, and their
+   * cooldown cannot outlive the lookup's original maximum age.
+   */
+  failureMayAuthorize?: boolean;
 }
 
 /**
@@ -87,7 +95,8 @@ export class PermissionCache {
     private readonly storage: BlobStorage,
     private readonly tenantId: string,
   ) {
-    if (!tenantId.trim())
+    this.tenantId = tenantId.trim().toLowerCase();
+    if (!this.tenantId)
       throw new Error('AZURE_TENANT_ID is required for permission caching');
   }
 
@@ -197,6 +206,7 @@ export class PermissionCache {
     loader: () => Promise<T>,
     policy: PermissionCachePolicy,
   ): Promise<PermissionSnapshot<T>> {
+    userId = userId.trim().toLowerCase();
     if (
       !userId ||
       !key ||
@@ -228,20 +238,35 @@ export class PermissionCache {
       generation,
       user.value.generation,
       policy.maxAgeMs,
+      policy.failureMayAuthorize === true,
     ]);
     const failure = this.failures.get(workKey);
     if (failure && now < failure.expiresAt) throw failure.error;
     this.failures.delete(workKey);
     const running = this.inFlight.get(workKey);
     if (running) return running as Promise<PermissionSnapshot<T>>;
-    const work = this.refresh(userId, key, schema, loader, policy, global, user)
+    const checkedAt = Date.now();
+    const work = this.refresh(
+      userId,
+      key,
+      schema,
+      loader,
+      policy,
+      global,
+      user,
+      checkedAt,
+    )
       .catch((error: unknown) => {
         if (!(error instanceof PermissionCacheInvalidatedError)) {
           const ttl = policy.failureTtlMs?.(error) ?? 0;
           if (ttl > 0) {
             if (this.failures.size >= MAX_USERS)
               this.failures.delete(this.failures.keys().next().value!);
-            this.failures.set(workKey, { error, expiresAt: Date.now() + ttl });
+            const expiresAt = policy.failureMayAuthorize
+              ? Math.min(Date.now() + ttl, checkedAt + policy.maxAgeMs)
+              : Date.now() + ttl;
+            if (expiresAt > Date.now())
+              this.failures.set(workKey, { error, expiresAt });
           }
         }
         throw error;
@@ -261,13 +286,29 @@ export class PermissionCache {
     policy: PermissionCachePolicy,
     global: Stored<GlobalRecord>,
     initial: Stored<UserRecord>,
+    checkedAt: number,
   ): Promise<PermissionSnapshot<T>> {
-    const checkedAt = Date.now();
+    let value: T;
+    try {
+      value = schema.parse(await loader());
+    } catch (error) {
+      if (policy.failureMayAuthorize) {
+        // A partial result carried by an error is still authorization data.
+        // It must not escape via the exception path before these checks.
+        await this.assertGeneration(userId, global, initial);
+        if (Date.now() >= checkedAt + policy.maxAgeMs) {
+          throw new Error(
+            'Partial permission snapshot expired during verification',
+          );
+        }
+      }
+      throw error;
+    }
     const snapshot = {
       globalGeneration: global.value.generation,
       checkedAt,
       expiresAt: checkedAt + policy.maxAgeMs,
-      value: schema.parse(await loader()),
+      value,
     };
     // CAS merges independent resource refreshes without resurrecting invalidated data.
     for (let attempt = 0; attempt < 4; attempt++) {
@@ -346,6 +387,44 @@ export class PermissionCache {
     );
   }
 
+  private async assertGeneration(
+    userId: string,
+    global: Stored<GlobalRecord>,
+    user: Stored<UserRecord>,
+  ): Promise<void> {
+    const [currentGlobal, currentUser] = await Promise.all([
+      this.readGlobal(),
+      this.readUser(userId),
+    ]);
+    if (
+      currentGlobal.value.generation !== global.value.generation ||
+      currentUser.value.generation !== user.value.generation
+    ) {
+      throw new PermissionCacheInvalidatedError();
+    }
+  }
+
+  private async invalidationEtag(userId?: string): Promise<string | null> {
+    const abortSignal = AbortSignal.timeout(5000);
+    try {
+      // Metadata-only recovery works even for invalid JSON, a wrong identity,
+      // or an oversized payload. Never trust or preserve the corrupt contents.
+      const result = await withAzureRetry(
+        () =>
+          this.storage
+            .getBlockBlobClient(this.path(userId))
+            .getProperties({ abortSignal }),
+        { label: 'permissions.invalidationEtag' },
+      );
+      if (!result.etag)
+        throw new Error('Permission cache metadata is missing its CAS ETag');
+      return result.etag;
+    } catch (error) {
+      if (statusCodeOf(error) === 404) return null;
+      throw error;
+    }
+  }
+
   /**
    * Durably invalidates a user or all users (userId omitted). Requires the caller
    * to authorize the admin first. Returns only after Blob confirms the CAS write;
@@ -355,28 +434,28 @@ export class PermissionCache {
     actor: string,
     userId?: string,
   ): Promise<{ generation: string; invalidatedAt: string }> {
+    userId = userId?.trim().toLowerCase();
     if (!actor.trim() || userId === '')
       throw new Error('Invalid permission invalidation identity');
     const invalidatedAt = new Date().toISOString();
     const generation = randomUUID();
     for (let attempt = 0; attempt < 4; attempt++) {
-      const current =
-        userId === undefined
-          ? await this.readGlobal()
-          : await this.readUser(userId);
+      const etag = await this.invalidationEtag(userId);
       const value = {
-        ...current.value,
+        version: 1 as const,
         generation,
         invalidatedAt,
         invalidatedBy: actor,
-        ...(userId === undefined ? {} : { snapshots: {} }),
+        ...(userId === undefined
+          ? {}
+          : { tenantId: this.tenantId, userId, snapshots: {} }),
       };
       try {
         await uploadJson(
           this.storage,
           this.path(userId),
           value,
-          current.etag,
+          etag,
           'permissions.invalidate',
           { abortSignal: AbortSignal.timeout(5000) },
         );
