@@ -12,12 +12,31 @@ import {
   getGroupMembershipStats,
   isGroupMembershipDegraded,
   isGroupMembershipDegradedForUser,
+  isGroupMembershipUnavailable,
   resolveUserGroupIds,
 } from '@/lib/services/m365/groupMembership';
+import { getPermissionCache } from '@/lib/services/permissions/PermissionCache';
 
+import { permissionStorage } from '@/__tests__/helpers/memoryPermissionStorage';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const graphJsonMock = vi.hoisted(() => vi.fn());
+vi.mock(
+  '@/lib/services/permissions/PermissionCache',
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import('@/lib/services/permissions/PermissionCache')
+      >();
+    const { permissionStorage } =
+      await import('@/__tests__/helpers/memoryPermissionStorage');
+    const cache = new actual.PermissionCache(
+      permissionStorage.storage,
+      'test-tenant',
+    );
+    return { ...actual, getPermissionCache: () => cache };
+  },
+);
 
 vi.mock('@/auth', () => ({ getGraphAccessToken: vi.fn() }));
 vi.mock('@/lib/services/m365/graphApi', () => ({
@@ -48,6 +67,8 @@ const session = {
 beforeEach(() => {
   vi.clearAllMocks();
   clearGroupMembershipCache();
+  permissionStorage.records.clear();
+  getPermissionCache().clearMemory();
 });
 
 describe('resolveUserGroupIds', () => {
@@ -72,6 +93,17 @@ describe('resolveUserGroupIds', () => {
     await resolveUserGroupIds(req, session);
     await resolveUserGroupIds(req, session);
     expect(graphJsonMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('manual invalidation replaces the local membership view before the TTL expires', async () => {
+    graphJsonMock.mockResolvedValue({ value: ['old-grant'] });
+    await resolveUserGroupIds(req, session);
+    await getPermissionCache().invalidate('admin', 'oid-1');
+    graphJsonMock.mockResolvedValue({ value: [] });
+    expect(await resolveUserGroupIds(req, session)).toEqual([]);
+    expect(getCachedGroupIdsForMail('ada@contoso.com')).toEqual([]);
+    expect(isGroupMembershipUnavailable('ada@contoso.com')).toBe(false);
+    expect(graphJsonMock).toHaveBeenCalledTimes(2);
   });
 
   it('dedupes concurrent cold fetches into one Graph call', async () => {
@@ -165,6 +197,7 @@ describe('degradation reporting', () => {
       expect(getCachedGroupIdsForUser('oid-1')).toEqual([]);
       expect(isGroupMembershipDegradedForUser('oid-1')).toBe(false);
       expect(isGroupMembershipDegraded('ada@contoso.com')).toBe(false);
+      expect(isGroupMembershipUnavailable('ada@contoso.com')).toBe(true);
     },
   );
 
@@ -175,6 +208,7 @@ describe('degradation reporting', () => {
     expect(isGroupMembershipDegradedForUser('oid-1')).toBe(true);
 
     clearGroupMembershipCache();
+    getPermissionCache().clearMemory();
     graphJsonMock.mockResolvedValue({ value: ['g1'] });
     await resolveUserGroupIds(req, session);
     expect(isGroupMembershipDegradedForUser('oid-1')).toBe(false);
@@ -182,6 +216,27 @@ describe('degradation reporting', () => {
 });
 
 describe('failure TTLs, oversize fallback and stats', () => {
+  it('honors Graph Retry-After beyond one minute while manual invalidation bypasses the cooldown', async () => {
+    vi.useFakeTimers();
+    try {
+      graphJsonMock.mockRejectedValueOnce(
+        Object.assign(new FakeM365Error('throttled', 'rate_limited'), {
+          retryAfterSeconds: 120,
+        }),
+      );
+      graphJsonMock.mockResolvedValue({ value: ['grant'] });
+      await resolveUserGroupIds(req, session);
+      vi.advanceTimersByTime(61_000);
+      expect(await resolveUserGroupIds(req, session)).toEqual([]);
+      expect(graphJsonMock).toHaveBeenCalledTimes(1);
+      await getPermissionCache().invalidate('admin', 'oid-1');
+      expect(await resolveUserGroupIds(req, session)).toEqual(['grant']);
+      expect(graphJsonMock).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   class FakeM365ErrorWithStatus extends Error {
     constructor(
       message: string,
@@ -210,6 +265,7 @@ describe('failure TTLs, oversize fallback and stats', () => {
       expect(graphJsonMock).toHaveBeenCalledTimes(2); // TTL passed
 
       clearGroupMembershipCache();
+      getPermissionCache().clearMemory();
       graphJsonMock.mockRejectedValue(
         new FakeM365Error('throttled', 'rate_limited'),
       );
