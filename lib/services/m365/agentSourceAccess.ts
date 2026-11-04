@@ -218,9 +218,19 @@ async function probeBatch(
   const verdicts = new Map<string, Verdict>();
   const throttled: ProbeTarget[] = [];
   let waitMs = 0;
+  const targetsByRequestId = new Map(
+    slice.map((target, index) => [String(index), target]),
+  );
+  const seen = new Set<string>();
   for (const response of data.responses ?? []) {
-    const target = slice[Number(response.id)];
+    if (typeof response.id !== 'string') continue;
+    const target = targetsByRequestId.get(response.id);
     if (!target) continue;
+    if (seen.has(response.id)) {
+      verdicts.set(target.key, 'unknown');
+      continue;
+    }
+    seen.add(response.id);
     const status = response.status ?? 0;
     if (status >= 200 && status < 300) {
       verdicts.set(target.key, 'ok');
@@ -479,11 +489,23 @@ export async function checkAgentSourceAccess(
           error instanceof SourceVerificationError
             ? UNVERIFIABLE_CACHE_TTL_MS
             : 0,
+        failureMayAuthorize: true,
       },
     );
     return snapshot.value;
   } catch (error) {
-    if (error instanceof SourceVerificationError) return error.access;
+    if (error instanceof SourceVerificationError) {
+      // PermissionCache validated generations and the original lookup age,
+      // including cooldown hits. Clone so callers cannot mutate that cache.
+      return {
+        ...error.access,
+        accessibleSourceIds: [...error.access.accessibleSourceIds],
+        accessibleFolderItems: error.access.accessibleFolderItems.map(
+          (item) => ({ ...item }),
+        ),
+        results: error.access.results.map((result) => ({ ...result })),
+      };
+    }
     if (error instanceof M365Error) throw error;
     console.warn(
       `[m365-agents] source permission verification unavailable: ${sanitizeForLog(error)}`,
