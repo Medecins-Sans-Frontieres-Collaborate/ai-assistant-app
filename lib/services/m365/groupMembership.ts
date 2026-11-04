@@ -2,12 +2,13 @@
  * Entra group membership for principal targeting (third pass §5).
  *
  * `resolveUserGroupIds` fetches the signed-in user's transitive group ids
- * via delegated Graph (`POST /me/getMemberGroups`, Group.Read.All) and
- * caches them in-process, keyed by BOTH user id and mail — the limits
+ * via delegated Graph (`POST /me/getMemberGroups`, Group.Read.All), with
+ * shared, tenant-scoped snapshots in PermissionCache. Routes revalidate
+ * shared generations before warming the local id/mail views — the limits
  * principal builder looks up by id, the agent-access rule evaluator only
  * has the user's mail. Both read the cache synchronously so the evaluation
  * hot paths stay sync; routes warm it with one awaited call per request
- * (which is a no-op while the TTL holds).
+ * (Graph is skipped while the verified snapshot's hard TTL holds).
  *
  * Failure posture: group lookups NEVER throw and NEVER block user/domain
  * matching — on any failure (consent missing, Graph down) the user simply
@@ -27,7 +28,10 @@
  * invocation) instead of 'deny'. Usage limits keep reading the plain [] and
  * stay fail-open.
  *
- * Only RETRYABLE failures are marked, though. The negative-cache entry is
+ * Only RETRYABLE failures set `degraded`, though. All lookup failures also
+ * set `unavailable`, so invocation distinguishes unknown membership from
+ * verified empty membership. Structural failures remain hidden at discovery
+ * and report unavailable at invocation. The negative-cache entry is
  * re-armed identically every time it expires, so the marker tracks the
  * condition, not a 60-second window: a structural failure (tenant consent
  * never granted, a refresh token that no longer redeems) would soften every
@@ -375,8 +379,9 @@ export async function resolveUserGroupIds(
   }
   clearViewAsOverride(userId, mail);
 
+  const previous = readEntry(cacheById, userId);
+  let fetched = false;
   try {
-    let fetched = false;
     const snapshot = await getPermissionCache().resolve(
       userId,
       'groups',
@@ -444,24 +449,29 @@ export async function resolveUserGroupIds(
         : 'network';
     const reason =
       error instanceof Error ? error.message.slice(0, 120) : 'unknown';
-    console.warn(
-      `[agent-access-audit] group-membership degraded user=${sanitizeForLog(userId)} ` +
-        `retryable=${retryable} kind=${sanitizeForLog(kind)} ` +
-        `reason=${sanitizeForLog(reason)}`,
-    );
-    count(retryable ? 'failure_retryable' : 'failure_structural');
-    stats.lastFailure = {
-      at: new Date().toISOString(),
-      kind: retryable ? 'retryable' : 'structural',
-      reason: sanitizeForLog(`${kind}: ${reason}`),
-    };
+    const cachedFailure = !fetched && previous?.unavailable === true;
+    if (cachedFailure) {
+      count('hit');
+    } else {
+      console.warn(
+        `[agent-access-audit] group-membership degraded user=${sanitizeForLog(userId)} ` +
+          `retryable=${retryable} kind=${sanitizeForLog(kind)} ` +
+          `reason=${sanitizeForLog(reason)}`,
+      );
+      count(retryable ? 'failure_retryable' : 'failure_structural');
+      stats.lastFailure = {
+        at: new Date().toISOString(),
+        kind: retryable ? 'retryable' : 'structural',
+        reason: sanitizeForLog(`${kind}: ${reason}`),
+      };
+    }
     writeCache(
       userId,
       mail,
       [],
       retryable ? FAILURE_TTL_MS : STRUCTURAL_FAILURE_TTL_MS,
       retryable,
-      undefined,
+      cachedFailure ? previous.expiresAt : undefined,
       true,
     );
     return [];
