@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     // A rules write failure must not be advertised as a complete invalidation.
     await bumpGeneration(createAgentAccessBlobStorage());
     const result = await getPermissionCache().invalidate(actor, userId);
-    AgentAccessService.getInstance().invalidate();
+    AgentAccessService.getInstance().invalidate(false);
     console.log(
       `[permission-cache-audit] outcome=invalidated scope=${parsed.data.scope} user=${sanitizeForLog(userId ?? '*')} by=${sanitizeForLog(actor)} generation=${result.generation} at=${result.invalidatedAt}`,
     );
