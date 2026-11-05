@@ -10,7 +10,7 @@ import type {
   AuxiliaryRegion,
 } from '@/lib/services/auxiliary/types';
 
-import { unwrapApiData } from './useAgentAccessAdmin';
+import { apiErrorMessage, unwrapApiData } from './useAgentAccessAdmin';
 
 /** Admin transport errors carry safe HTTP classification and optional validation detail. */
 export class AuxiliaryAdminError extends Error {
@@ -31,13 +31,23 @@ async function requestReport(
     `/api/admin/auxiliary-models${refresh ? '?refresh=1' : ''}`,
     init,
   );
-  const body = await response.json();
+  const body = await response.json().catch(() => null);
   if (!response.ok)
     throw new AuxiliaryAdminError(
       response.status,
-      typeof body.error === 'string' ? body.error : 'Request failed',
+      apiErrorMessage(body, 'Request failed'),
     );
-  return unwrapApiData<AuxiliaryAdminReport>(body);
+  const report = unwrapApiData<AuxiliaryAdminReport>(body);
+  if (
+    !report ||
+    !Array.isArray(report.chains) ||
+    !Array.isArray(report.inventory) ||
+    !report.effective ||
+    !Array.isArray(report.choices?.EU) ||
+    !Array.isArray(report.choices?.US)
+  )
+    throw new AuxiliaryAdminError(502, 'Invalid readiness response');
+  return report;
 }
 
 /** Global-admin policy read, CAS save, and fixed probes; mutations update only this query's report. */
