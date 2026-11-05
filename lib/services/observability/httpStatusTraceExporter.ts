@@ -36,7 +36,7 @@ export class HttpStatusAzureTraceExporter extends AzureMonitorTraceExporter {
   export(
     spans: Parameters<AzureMonitorTraceExporter['export']>[0],
     callback: Parameters<AzureMonitorTraceExporter['export']>[1],
-  ): void {
-    super.export(spans.map(normalizeHttpDependency), callback);
+  ): Promise<void> {
+    return super.export(spans.map(normalizeHttpDependency), callback);
   }
 }
