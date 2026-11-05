@@ -112,6 +112,7 @@ export class HealthCheckService {
             'azureBlobStorageEU',
             'azureBlobStorageAdmin',
             'azureSpeechWhisper',
+            'auxiliaryModels',
             'ffmpeg',
           ];
 
@@ -222,6 +223,31 @@ export class HealthCheckService {
    */
   private async runCheck(service: ServiceName): Promise<ServiceCheck> {
     switch (service) {
+      case 'auxiliaryModels': {
+        const { AuxiliaryModelService } =
+          await import('@/lib/services/auxiliary/AuxiliaryModelService');
+        const report = await AuxiliaryModelService.getInstance().report();
+        // Public health exposes only aggregate codes, never endpoints, assignments or identities.
+        if (
+          report.chains.some(
+            (chain) =>
+              chain.state === 'unavailable' ||
+              chain.state === 'check_unavailable',
+          )
+        )
+          return { status: 'fail', message: 'auxiliary_chain_unavailable' };
+        if (report.chains.some((chain) => chain.state === 'unverified'))
+          return {
+            status: 'skip',
+            message: 'auxiliary_compatibility_unverified',
+          };
+        return {
+          status: 'pass',
+          message: report.chains.some((chain) => chain.state === 'fallback')
+            ? 'auxiliary_using_fallback'
+            : 'auxiliary_ready',
+        };
+      }
       case 'azureOpenAI':
         return this.checkAzureOpenAI();
       case 'azureSearch':
