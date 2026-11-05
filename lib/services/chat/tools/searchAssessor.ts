@@ -17,19 +17,19 @@
  * a model is not deployed on every account (third-party models may exist in
  * one region only), and an EU user's question must be assessed in the EU.
  *
- *  - EU user:    selected model on the EU account, then the fallback model
- *                on the EU account, then on the default account.
+ *  - EU user:    selected model and fallbacks on verified EU accounts only.
  *  - Other user: selected model on their home account, the default account,
  *                then the EU account (the same cross-region routing chat
  *                uses for EU-hosted models); then the fallback model on the
  *                home and default accounts.
  *
- * The fallback is the tool router's own model: it just classified this very
- * message on the default client, so that last resort is no new exposure.
+ * Production uses the shared auxiliary policy/executor for model and account
+ * selection. The legacy injectable client path remains for isolated callers.
  * Each failed model+account pair is skipped for a cooldown — long for a
  * deployment that does not exist — so a miss costs one failed call, not one
  * per search.
  */
+import type { AuxiliaryModelExecutor } from '@/lib/services/auxiliary/AuxiliaryModelExecutor';
 import { findAssessorModel } from '@/lib/services/webSearch/config/assessorModels';
 import { ASSESSOR_FALLBACK_MODEL_ID } from '@/lib/services/webSearch/config/types';
 
@@ -203,7 +203,8 @@ export function allowedVerdicts(
   );
 }
 
-const assessmentSchema = (verdicts: AssessmentVerdict[]) => ({
+/** Strict schema shared by runtime assessment and synthetic compatibility checks. */
+export const assessmentSchema = (verdicts: AssessmentVerdict[]) => ({
   type: 'object',
   properties: {
     verdict: { type: 'string', enum: verdicts },
@@ -488,6 +489,7 @@ export class SearchAssessor {
   constructor(
     private defaultClient: OpenAI,
     private regionClient?: RegionClientResolver,
+    private executor?: AuxiliaryModelExecutor,
   ) {}
 
   /** The accounts to try, in order, per model — see the file header. */
@@ -503,13 +505,8 @@ export class SearchAssessor {
     const isEu = options.region === 'EU';
 
     const plan: Array<[string, Array<typeof home>]> = [
-      [
-        options.modelId,
-        isEu
-          ? [home ?? fallbackAccount]
-          : [home, fallbackAccount, account('EU')],
-      ],
-      [ASSESSOR_FALLBACK_MODEL_ID, [home, fallbackAccount]],
+      [options.modelId, isEu ? [home] : [home, fallbackAccount, account('EU')]],
+      [ASSESSOR_FALLBACK_MODEL_ID, isEu ? [home] : [home, fallbackAccount]],
     ];
 
     const targets: AssessorTarget[] = [];
@@ -537,6 +534,56 @@ export class SearchAssessor {
     input: AssessmentInput,
     options: AssessOptions,
   ): Promise<SearchAssessment | null> {
+    if (this.executor) {
+      try {
+        return await this.executor.execute(
+          {
+            model: '',
+            messages: [
+              { role: 'system', content: buildAssessorSystemPrompt(input) },
+              { role: 'user', content: buildAssessorUserMessage(input) },
+            ],
+            max_completion_tokens: 2400,
+            reasoning_effort: 'low',
+            response_format: {
+              type: 'json_schema',
+              json_schema: {
+                name: 'search_assessment',
+                strict: true,
+                schema: assessmentSchema(allowedVerdicts(input)),
+              },
+            },
+          },
+          (response) =>
+            parseAssessment(
+              response.choices[0]?.message.content ?? '',
+              input.sources.length,
+            ) ?? undefined,
+          {
+            operation: 'assessment',
+            region: options.region === 'US' ? 'US' : 'EU',
+            signal: options.signal,
+            timeoutMs: options.timeoutMs,
+            onUsage: (response, candidate) =>
+              this.reportUsage(
+                response,
+                {
+                  client: this.defaultClient,
+                  region:
+                    candidate.reference.accountBinding === 'default'
+                      ? null
+                      : candidate.reference.accountBinding,
+                  model: candidate.model,
+                },
+                options,
+                candidate.model.supportsReasoningEffort === true,
+              ),
+          },
+        );
+      } catch {
+        return null;
+      }
+    }
     for (const target of this.targets(options)) {
       if (options.signal?.aborted) return null;
       const label = `${target.region ?? 'default'}:${target.model.id}`;
