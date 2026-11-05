@@ -1,0 +1,44 @@
+name: Bug report
+description: Report a problem with the AI assistant.
+title: '[Bug]: '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue and any attachments will be public. Do not include email addresses, phone numbers, patient information, confidential MSF information, passwords, or access tokens.
+
+        We can ask follow-up questions in the GitHub comments. You do not need to provide contact details.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected to happen. Use fictional examples rather than real personal or confidential information.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Explain how to reproduce the problem without sharing private conversations or sensitive files.
+      placeholder: |
+        1. Open...
+        2. Select...
+        3. Observe...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      description: Include the app version if you know it.
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and device
+      description: Include your browser, operating system, and whether you are using a phone, tablet, or computer. Do not include device names or identifiers.
+      placeholder: Firefox on Windows, computer
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Optional screenshots or error messages. Remove personal information, confidential content, and credentials before attaching or pasting anything.
