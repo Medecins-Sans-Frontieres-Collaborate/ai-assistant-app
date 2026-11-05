@@ -513,7 +513,8 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   onCancel,
   onConflictReload,
 }) => {
-  const t = useTranslations('agentAccess');
+  const t = useAdminAgentTranslations();
+  const queryClient = useQueryClient();
   const models = useSettingsStore((s) => s.models);
   const userRegion = useSettingsStore((s) => s.userRegion);
   // Client-side off switch (Settings › Connections). Planning and indexing
@@ -542,6 +543,8 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     number | null
   >(existing?.agent.maxDocumentsOverride ?? null);
   const [capInput, setCapInput] = useState('');
+  const [capSaving, setCapSaving] = useState(false);
+  const [capSaved, setCapSaved] = useState(false);
   /** Server refused the override for this role (M365_CAP_ABOVE_ROLE). */
   const [capError, setCapError] = useState<string | null>(null);
   const [sources, setSources] = useState<EditorSource[]>(
@@ -746,9 +749,14 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       t('m365CapRaiseConfirm', { limit, default: maxSources }),
     );
     if (!confirmed) return;
-    setCapError(null);
-    setCapInput('');
-    setMaxDocumentsOverride(limit === maxSources ? null : limit);
+    const override = limit === maxSources ? null : limit;
+    if (existing) {
+      void persistCap(override);
+    } else {
+      setCapError(null);
+      setCapInput('');
+      setMaxDocumentsOverride(override);
+    }
   };
   const [isSaving, setIsSaving] = useState(false);
   /**
@@ -809,6 +817,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     name.trim().length > 0 &&
     sources.length > 0 &&
     !isSaving &&
+    !capSaving &&
     !overCap &&
     !anyTruncated &&
     planProblem === null &&
@@ -890,6 +899,61 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     setConflict({ latest: null });
   };
 
+  /** Save only the cap; keep unrelated edits and advance the editor's CAS token. */
+  const persistCap = async (override: number | null) => {
+    if (!existing || capSaving || isSaving) return;
+    setCapSaving(true);
+    setCapSaved(false);
+    setCapError(null);
+    try {
+      const response = await fetch('/api/agent-access/m365-agents', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'If-Match': saveEtag!,
+        },
+        body: JSON.stringify({
+          id: existing.agent.id,
+          maxDocumentsOverride: override,
+        }),
+      });
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        setCapError(
+          response.status === 409
+            ? t('conflictError')
+            : body?.error || t('saveError'),
+        );
+        return;
+      }
+      const data = unwrapApiData<{ agent: M365AgentRecord; etag: string }>(
+        await response.json(),
+      );
+      setMaxDocumentsOverride(data.agent.maxDocumentsOverride ?? null);
+      setCapInput('');
+      setSaveEtag(data.etag);
+      queryClient.setQueryData<AdminM365AgentsResponse>(
+        ['agent-access-m365-agents'],
+        (current) =>
+          current
+            ? {
+                ...current,
+                m365Agents: current.m365Agents.map((entry) =>
+                  entry.agent.id === existing.agent.id
+                    ? { ...entry, agent: data.agent, etag: data.etag }
+                    : entry,
+                ),
+              }
+            : current,
+      );
+      setCapSaved(true);
+    } catch {
+      setCapError(t('saveError'));
+    } finally {
+      setCapSaving(false);
+    }
+  };
+
   const handleSave = async (etagOverride?: string) => {
     setIsSaving(true);
     setSaveError(false);
@@ -909,7 +973,9 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           chatModelId: chatModelId || null,
           topK: existing?.agent.ragConfig.topK ?? 10,
           autoOcr,
-          maxDocumentsOverride,
+          // Existing limits have their own immediate, cap-only write. An
+          // ordinary metadata save must not clear or replay a stale raise.
+          ...(!existing && { maxDocumentsOverride }),
           sources: sources.map(toSourcePayload),
         }),
       });
@@ -1142,7 +1208,11 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                   min={1}
                   max={capCeilings.globalAdmin}
                   value={capInput || String(draftCap)}
-                  onChange={(e) => setCapInput(e.target.value)}
+                  disabled={capSaving || isSaving}
+                  onChange={(e) => {
+                    setCapSaved(false);
+                    setCapInput(e.target.value);
+                  }}
                   aria-label={t('m365CapRaiseInputLabel')}
                   className="min-h-11 w-24 rounded-md border border-gray-300 bg-gray-50 px-2 py-1 text-sm text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100"
                 />
@@ -1150,12 +1220,36 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
               <button
                 type="button"
                 onClick={() => applyCap(Number(capInput) || draftCap)}
-                disabled={!capInput || Number(capInput) === draftCap}
+                disabled={
+                  capSaving ||
+                  isSaving ||
+                  !capInput ||
+                  Number(capInput) === draftCap
+                }
                 className="min-h-11 rounded-md border border-gray-300 px-3 py-1 font-medium hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-40 dark:border-gray-600 dark:hover:bg-gray-800"
               >
-                {t('m365CapRaiseApply')}
+                {capSaving ? t('saving') : t('m365CapRaiseApply')}
               </button>
             </div>
+          )}
+          <p className="mb-2 text-xs text-gray-600 dark:text-gray-300">
+            {t(existing ? 'm365CapImmediateHelp' : 'm365CapDraftHelp')}
+          </p>
+          {capSaved && (
+            <p
+              role="status"
+              className="mb-2 text-xs text-gray-700 dark:text-gray-300"
+            >
+              {t('m365CapSaved', { limit: draftCap })}
+            </p>
+          )}
+          {capError && (
+            <p
+              role="alert"
+              className="mb-2 text-xs text-red-700 dark:text-red-400"
+            >
+              {capError}
+            </p>
           )}
           <div className="mb-1 flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
@@ -1234,6 +1328,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                       {localRaiseTarget > effectiveCap && (
                         <button
                           type="button"
+                          disabled={capSaving || isSaving}
                           onClick={() => applyCap(localRaiseTarget)}
                           className="rounded-md border border-red-300 px-2 py-0.5 font-medium text-red-800 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/40"
                         >
@@ -1258,19 +1353,19 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                   <button
                     type="button"
                     onClick={() => {
-                      setCapError(null);
-                      setCapInput('');
-                      setMaxDocumentsOverride(null);
+                      if (existing) {
+                        void persistCap(null);
+                      } else {
+                        setCapError(null);
+                        setCapInput('');
+                        setMaxDocumentsOverride(null);
+                      }
                     }}
+                    disabled={capSaving || isSaving}
                     className="underline"
                   >
                     {t('m365CapResetDefault', { default: maxSources })}
                   </button>
-                </p>
-              )}
-              {capError && (
-                <p role="alert" className="mt-1 text-red-700 dark:text-red-400">
-                  {capError}
                 </p>
               )}
               {plan?.overByteCap && (
