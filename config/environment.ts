@@ -83,6 +83,10 @@ const serverEnvSchema = z.object({
   AZURE_AI_FOUNDRY_ENDPOINT_US: z.string().url().optional(),
   AZURE_AI_FOUNDRY_RESOURCE_ID_EU: z.string().optional(),
   AZURE_AI_FOUNDRY_RESOURCE_ID_US: z.string().optional(),
+  // Default account ARM id for auxiliary inventory; never inferred from user input.
+  AZURE_AI_FOUNDRY_RESOURCE_ID: z.string().optional(),
+  // Optional environment-specific, create-free bootstrap assignments (JSON).
+  AUXILIARY_MODEL_BOOTSTRAP: z.string().optional(),
 
   // Per-region chat endpoints for cross-region routing (a US user chatting
   // with the EU instance of a dually-hosted model, and EU users pinned to EU
