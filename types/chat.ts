@@ -660,6 +660,13 @@ export type AuxiliaryFailureReason =
   | 'timeout'
   | 'provider';
 
+/** Per-request sink for actual auxiliary provider usage, including fallback attempts. */
+export type AuxiliaryUsageSink = (
+  usage: TokenUsageMetadata,
+  model: OpenAIModel,
+  region: 'EU' | 'US' | null,
+) => void;
+
 export interface ToolRouterResponse {
   tools: ToolType[];
   /** Validated ids from the request's access-filtered skill catalog. */
@@ -738,6 +745,7 @@ export interface ToolRouterResponse {
 }
 
 export interface ToolRouterRequest {
+  onUsage?: AuxiliaryUsageSink;
   messages: Message[];
   currentMessage: string;
   /** Resolved server-side residency, never an unchecked client override. */
