@@ -173,7 +173,10 @@ export function summarizeSkillToolCalls(
 
 /** Whether any record reports a problem worth flagging on the chip. */
 export function skillUsageHasIssue(calls: readonly ToolCallRecord[]): boolean {
-  return calls.some((call) => call.status !== 'completed');
+  return calls.some(
+    (call) =>
+      call.status === 'failed' || call.status === 'incomplete' || !!call.error,
+  );
 }
 
 /**
@@ -193,7 +196,8 @@ export function skillUsageNeedsAttention(
   if (
     calls.some(
       (call) =>
-        call.name === 'load_skill (requested)' && call.status !== 'completed',
+        call.name === 'load_skill (requested)' &&
+        (call.status === 'failed' || call.status === 'incomplete'),
     )
   )
     return true;
@@ -205,5 +209,8 @@ export function skillUsageNeedsAttention(
     lines.some((line) => line.kind === 'references' && line.unavailable)
   )
     return true;
-  return calls.some((call) => call.name === 'use_skills' && !!call.error);
+  return calls.some(
+    (call) =>
+      call.name === 'use_skills' && (!!call.error || call.status === 'failed'),
+  );
 }
