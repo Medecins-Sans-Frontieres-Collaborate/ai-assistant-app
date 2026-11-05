@@ -189,7 +189,8 @@ export class SkillEnricher extends BasePipelineStage {
               : '';
       // The skills-only router call is the one wait this stage adds to a
       // turn; say so while it runs rather than leaving the generic text up.
-      void context.emitActivity?.('chat.activity.selectingSkills');
+      // Automatic selection is background work, not a separate user-facing
+      // activity. Keep the current progress label while classification runs.
       routing = await this.router.determineSkills({
         timeoutMs: Math.max(
           1,
@@ -277,7 +278,7 @@ export class SkillEnricher extends BasePipelineStage {
     // model is still working, so skill use is visible before the answer
     // and not only in the retrospective record. Standing 'always' skills
     // stay silent here for the same reason they emit no record.
-    const announced = active.filter((entry) => entry.via !== 'always');
+    const announced = active.filter((entry) => entry.via === 'forced');
     if (announced.length > 0) {
       void context.emitActivity?.(
         announced.length === 1
