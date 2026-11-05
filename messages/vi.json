@@ -5656,7 +5656,8 @@
       "webSearch": "Giới hạn phạm vi tìm kiếm web: tìm kiếm nhiều bước, mô hình đánh giá và các giới hạn của nó.",
       "contextBudget": "Lượng thông tin cuộc trò chuyện mỗi mô hình nhận được trong mỗi lượt.",
       "analytics": "Báo cáo đã chuyển: nội dung đã nhận, ai có thể mở từng thư mục và các trường có thể hiển thị.",
-      "skills": "Các khối hướng dẫn có thể tái sử dụng mà trợ lý áp dụng khi cuộc trò chuyện cần."
+      "skills": "Các khối hướng dẫn có thể tái sử dụng mà trợ lý áp dụng khi cuộc trò chuyện cần.",
+      "models": "Gán mô hình nền và kiểm tra mức độ sẵn sàng triển khai tại khu vực."
     },
     "openSettings": "Mở cài đặt",
     "area": {
@@ -5668,7 +5669,8 @@
       "webSearch": "Tìm kiếm web",
       "contextBudget": "Ngân sách ngữ cảnh",
       "analytics": "Phân tích",
-      "skills": "Kỹ năng"
+      "skills": "Kỹ năng",
+      "models": "Mô hình và mức sẵn sàng"
     }
   },
   "limits": {
@@ -8032,5 +8034,114 @@
     "invalidated": "Bộ nhớ đệm đã bị vô hiệu hóa. Yêu cầu được bảo vệ tiếp theo cần xác minh lại; quyền truy cập chưa được kiểm tra lại.",
     "failed": "Không thể xác nhận việc vô hiệu hóa bộ nhớ đệm. Vui lòng thử lại sau.",
     "propagationNote": "Thao tác này chỉ buộc kiểm tra lại quyền truy cập chứ không thay đổi quyền trên Microsoft. Thời gian lan truyền của Microsoft vẫn áp dụng. Các thao tác đã được phê duyệt không bị hủy bỏ."
+  },
+  "auxiliaryModels": {
+    "title": "Mô hình và mức sẵn sàng",
+    "description": "Chọn mô hình cho quyết định nền và kiểm tra các triển khai đang phục vụ chúng.",
+    "environmentHint": "Thay đổi chỉ áp dụng cho môi trường này. Live, beta và dev có chính sách độc lập.",
+    "updated": "Báo cáo được cập nhật: {time}",
+    "loading": "Đang tải các phân công mô hình và mức sẵn sàng…",
+    "loadError": "Không thể tải các phân công mô hình. Thử lại mà không thay đổi chính sách hiện tại.",
+    "retry": "Thử lại",
+    "neverChecked": "Chưa kiểm tra",
+    "bootstrapUnavailable": "Cài đặt bootstrap môi trường không hợp lệ. Một chính sách đã lưu hiện tại vẫn đang có hiệu lực, nhưng không thể khôi phục mặc định môi trường cho đến khi sửa cài đặt triển khai.",
+    "runtimeFallback": "Các yêu cầu gần đây đã dùng mô hình dự phòng. Kiểm tra vị trí triển khai chính và kết quả hoạt động.",
+    "accountLocation": "Vị trí tài khoản Azure: {location}",
+    "incidents": "Thay đổi mức sẵn sàng gần đây",
+    "noIncidents": "Không ghi nhận thất bại hoặc phục hồi mức sẵn sàng nào.",
+    "refreshInventory": "Làm mới danh mục triển khai",
+    "refreshing": "Đang làm mới danh mục…",
+    "configUnavailable": "Kho lưu trữ chính sách không khả dụng. Các phân công hiển thị có thể là phiên bản cuối cùng. Tính năng chỉnh sửa sẽ bị tạm dừng cho đến khi lưu trữ được khôi phục.",
+    "attention": "Cần chú ý",
+    "eligibleCount": "{count, plural, =0 {Không có triển khai tương thích. Chọn một mô hình khu vực phù hợp.} one {Một triển khai tương thích. Thêm dự phòng để tăng độ ổn định.} other {# triển khai tương thích trong chuỗi này.}}",
+    "retirementWarning": "Phiên bản mô hình được chọn sắp ngừng hoạt động. Kiểm tra phương án thay thế trước khi chuyển nó làm chính.",
+    "assignments": "Phân công mô hình",
+    "readiness": "Mức sẵn sàng",
+    "assignmentHint": "Các mô hình chạy theo thứ tự hiển thị. Các triển khai thiếu, không tương thích và đã ngưng hoạt động sẽ bị bỏ qua. Yêu cầu từ EU chỉ chạy trên triển khai đã xác minh tại EU.",
+    "probeUsage": "Kiểm tra tương thích gửi yêu cầu tổng hợp cố định với danh tính ứng dụng. Sử dụng số lượng nhỏ token mô hình, không dùng dữ liệu hội thoại. Vui lòng đợi ít nhất một phút trước khi kiểm tra lại một triển khai.",
+    "save": "Lưu phân công",
+    "saving": "Đang lưu…",
+    "saved": "Đã lưu phân công. Yêu cầu mới sẽ áp dụng chính sách này.",
+    "resetDefaults": "Dùng mặc định môi trường",
+    "unsaved": "Chưa lưu thay đổi",
+    "readinessHint": "Danh mục xác nhận triển khai đã tồn tại. Hoạt động hợp lệ gần đây hoặc kiểm tra tương thích xác nhận ứng dụng có thể sử dụng nó. Thất bại khi làm mới không xóa kiểm tra thành công cuối cùng.",
+    "account": "Ràng buộc tài khoản: {binding}",
+    "lastInventory": "Danh mục triển khai thành công cuối cùng: {time}",
+    "retirementUnknown": "Không rõ trạng thái ngừng hoạt động do không xác minh được danh mục mô hình.",
+    "history": "Lịch sử chính sách",
+    "revision": "Phiên bản hiệu lực: {revision}",
+    "noHistory": "Chưa ghi nhận thay đổi chính sách nào trong môi trường này.",
+    "conflict": "Quản trị viên khác đã thay đổi chính sách. Bản nháp của bạn vẫn còn đây. Tải lại chính sách trước khi lưu mới.",
+    "rateLimit": "Triển khai này vừa được kiểm tra gần đây. Đợi một phút trước khi kiểm tra lại.",
+    "actionError": "Không thể hoàn thành thao tác. Kiểm tra chi tiết và thử lại; bản nháp của bạn chưa bị xoá.",
+    "technicalDetails": "Chi tiết kỹ thuật",
+    "reloadPolicy": "Tải lại chính sách và huỷ bản nháp",
+    "emptyChain": "Chưa gán mô hình nào. Thêm một triển khai tương thích trước khi lưu.",
+    "primary": "Chính",
+    "fallback": "Dự phòng",
+    "unknown": "Không xác định",
+    "retires": "Phiên bản mô hình sẽ ngừng hoạt động vào {date}",
+    "checkResults": "Kết quả kiểm tra hoạt động",
+    "passed": "Đạt",
+    "moveUp": "Di chuyển lên",
+    "moveDown": "Di chuyển xuống",
+    "remove": "Xóa",
+    "moveUpLabel": "Di chuyển {model} lên",
+    "moveDownLabel": "Di chuyển {model} xuống",
+    "removeLabel": "Xóa {model} khỏi chuỗi",
+    "runChecks": "Chạy kiểm tra tương thích",
+    "findDeployment": "Tìm triển khai",
+    "deployment": "Triển khai",
+    "chooseDeployment": "Chọn triển khai",
+    "addDeployment": "Thêm vào chuỗi",
+    "checkBeforeAdd": "Chạy kiểm tra tương thích cho mục đích này trước khi thêm triển khai.",
+    "assessmentManaged": "Các mô hình đánh giá tìm kiếm và phương án dự phòng được quản lý trong Mô hình và trạng thái sẵn sàng.",
+    "manageModels": "Quản lý mô hình và trạng thái sẵn sàng",
+    "purpose": {
+      "routing": "Chuyển tuyến",
+      "searchAssessment": "Đánh giá tìm kiếm"
+    },
+    "purposeDescription": {
+      "routing": "Chọn kỹ năng, chuyển hướng tìm kiếm và mã, và phân loại cắt tài liệu.",
+      "searchAssessment": "Đánh giá nguồn và chọn bước tiếp theo trong tìm kiếm nhiều bước."
+    },
+    "state": {
+      "ready": "Sẵn sàng",
+      "unverified": "Có sẵn, chưa kiểm tra đầy đủ",
+      "fallback": "Đang dùng phương án dự phòng",
+      "unavailable": "Không có mô hình phù hợp",
+      "check_unavailable": "Không thể kiểm tra"
+    },
+    "inventoryState": {
+      "current": "Hiện tại",
+      "stale": "Kho đã biết gần nhất",
+      "unavailable": "Không thể truy cập kho"
+    },
+    "operation": {
+      "skills": "Chọn kỹ năng",
+      "tools": "Chuyển hướng công cụ",
+      "trim": "Phân loại cắt giảm",
+      "assessment": "Đánh giá tìm kiếm"
+    },
+    "reason": {
+      "endpoint_missing": "Thiếu endpoint hoặc ràng buộc tài khoản",
+      "deployment_missing": "Thiếu triển khai hoặc không hoạt động",
+      "unauthorized": "Bị từ chối truy cập danh tính ứng dụng",
+      "timeout": "Kiểm tra quá thời gian",
+      "throttled": "Đã đạt hạn ngạch hoặc giới hạn tốc độ",
+      "incompatible": "Tác vụ không tương thích",
+      "provider": "Gọi nhà cung cấp thất bại",
+      "residency": "Vùng xử lý không được phép",
+      "retired": "Phiên bản mô hình đã ngưng sử dụng",
+      "inventory_unavailable": "Không thể xác minh kho",
+      "refused": "Mô hình đã từ chối yêu cầu"
+    },
+    "accountError": {
+      "account_resource_missing": "Cấu hình ID tài nguyên Foundry ARM của ràng buộc này để xác minh kho.",
+      "endpoint_missing": "Cấu hình endpoint suy luận cho ràng buộc này.",
+      "endpoint_account_mismatch": "Endpoint và ID tài nguyên ARM xác định hai tài khoản khác nhau. Hãy sửa lại cấu hình triển khai.",
+      "inventory_refresh_failed": "Làm mới kho thất bại. Kiểm tra quyền Reader của ứng dụng và kết nối tài khoản.",
+      "credential_unavailable": "Ứng dụng không thể lấy được thông tin xác thực kho. Kiểm tra cấu hình danh tính triển khai."
+    }
   }
 }

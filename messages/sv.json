@@ -5625,7 +5625,8 @@
       "webSearch": "Hur långt en webbsökning kan gå: flerstegssökning, bedömningsmodell och dess gränser.",
       "contextBudget": "Hur mycket av en konversation som skickas till varje modell vid varje tur.",
       "analytics": "Levererade rapporter: vad anlände, vem kan öppna varje mapp och vilka fält som kan visas.",
-      "skills": "Återanvändbara instruktioner som assistenten tillämpar vid behov i en konversation."
+      "skills": "Återanvändbara instruktioner som assistenten tillämpar vid behov i en konversation.",
+      "models": "Tilldela bakgrundsmodeller och kontrollera regional redo-status."
     },
     "openSettings": "Öppna inställningar",
     "area": {
@@ -5637,7 +5638,8 @@
       "webSearch": "Webbsökning",
       "contextBudget": "Context budget",
       "analytics": "Analys",
-      "skills": "Färdigheter"
+      "skills": "Färdigheter",
+      "models": "Modeller och redo-status"
     }
   },
   "limits": {
@@ -8001,5 +8003,114 @@
     "invalidated": "Cachen har ogiltigförklarats. Ny verifiering krävs vid nästa skyddade begäran; behörigheterna har ännu inte kontrollerats igen.",
     "failed": "Cacheogiltigförklaringen kunde inte bekräftas. Försök igen om en stund.",
     "propagationNote": "Detta tvingar fram en ny kontroll, men ändrar inte Microsoft-behörigheterna. Fördröjningar i Microsofts spridning gäller fortfarande. Redan godkända åtgärder återkallas inte."
+  },
+  "auxiliaryModels": {
+    "title": "Modeller och redo-status",
+    "description": "Välj modeller för bakgrundsbeslut och granska tillhörande deployment.",
+    "environmentHint": "Ändringar gäller endast denna miljö. Live, beta och dev har separata policyer.",
+    "updated": "Rapport uppdaterad: {time}",
+    "loading": "Laddar modell-tilldelningar och redo-status…",
+    "loadError": "Kunde inte ladda modell-tilldelningar. Försök igen utan att ändra aktuell policy.",
+    "retry": "Försök igen",
+    "neverChecked": "Ej kontrollerat",
+    "bootstrapUnavailable": "Inställningen för miljö-bootstrap är ogiltig. En sparad policy gäller fortfarande, men standardinställningar kan inte återställas förrän deployment-inställningen är rättad.",
+    "runtimeFallback": "Nyliga förfrågningar använde en reservmodell. Kontrollera primärt deployment och dess resultat.",
+    "accountLocation": "Azure-kontoplats: {location}",
+    "incidents": "Senaste ändringar i redo-status",
+    "noIncidents": "Inga misslyckanden eller återhämtningar i redo-status har registrerats.",
+    "refreshInventory": "Uppdatera inventering",
+    "refreshing": "Uppdaterar inventering…",
+    "configUnavailable": "Policy-lagring är otillgänglig. Visade tilldelningar kan vara senaste kända versionen. Redigering är inaktiverad tills lagringen återhämtar sig.",
+    "attention": "Kräver åtgärd",
+    "eligibleCount": "{count, plural, =0 {Ingen lämplig deployment. Välj en kompatibel regional modell.} one {En lämplig deployment. Lägg till ett reservalternativ för bättre motståndskraft.} other {# lämpliga deployment i denna kedja.}}",
+    "retirementWarning": "En utsedd modellversion närmar sig avveckling. Kontrollera ersättningen innan den flyttas till primär position.",
+    "assignments": "Modell-tilldelningar",
+    "readiness": "Redo-status",
+    "assignmentHint": "Modeller körs i visad ordning. Saknade, inkompatibla och avvecklade deployment hoppas över. EU-förfrågningar stannar på verifierade EU-resident deployment.",
+    "probeUsage": "Kompatibilitetskontroller skickar fasta syntetiska förfrågningar med app-identitet. De använder ett litet antal model-tokens, aldrig samtalsdata. Vänta minst en minut innan du upprepar en deployment-kontroll.",
+    "save": "Spara tilldelningar",
+    "saving": "Sparar…",
+    "saved": "Tilldelningar sparade. Nya förfrågningar använder denna policy.",
+    "resetDefaults": "Använd miljöstandarder",
+    "unsaved": "Osparade ändringar",
+    "readinessHint": "Inventeringen bekräftar att en deployment existerar. En nyligen giltig åtgärd eller kontroll bekräftar att appen kan använda den. Misslyckade uppdateringar tar inte bort senaste lyckade kontroll.",
+    "account": "Kontobindning: {binding}",
+    "lastInventory": "Senaste lyckade inventering: {time}",
+    "retirementUnknown": "Avvecklingsstatus är okänd eftersom modellkatalogen inte kunde verifieras.",
+    "history": "Policy-historik",
+    "revision": "Gällande revision: {revision}",
+    "noHistory": "Inga policyändringar har registrerats i denna miljö.",
+    "conflict": "En annan administratör har ändrat policyn. Ditt utkast finns kvar. Ladda om policyn innan du sparar på nytt.",
+    "rateLimit": "Denna deployment har kontrollerats nyligen. Vänta en minut innan du kontrollerar igen.",
+    "actionError": "Åtgärden kunde inte slutföras. Kontrollera detaljerna och försök igen; ditt utkast har inte slängts.",
+    "technicalDetails": "Tekniska detaljer",
+    "reloadPolicy": "Ladda om policy och släng utkast",
+    "emptyChain": "Inga modeller är tilldelade. Lägg till en kompatibel deployment innan du sparar.",
+    "primary": "Primär",
+    "fallback": "Reserv",
+    "unknown": "Okänd",
+    "retires": "Modellversionen avvecklas {date}",
+    "checkResults": "Resultat från åtgärdskontroller",
+    "passed": "Godkänd",
+    "moveUp": "Flytta upp",
+    "moveDown": "Flytta ned",
+    "remove": "Ta bort",
+    "moveUpLabel": "Flytta {model} upp",
+    "moveDownLabel": "Flytta {model} ned",
+    "removeLabel": "Ta bort {model} från kedjan",
+    "runChecks": "Kör kompatibilitetskontroller",
+    "findDeployment": "Hitta en driftsättning",
+    "deployment": "Driftsättning",
+    "chooseDeployment": "Välj en driftsättning",
+    "addDeployment": "Lägg till i kedjan",
+    "checkBeforeAdd": "Kör denna ändamålets kompatibilitetskontroller innan driftsättningen läggs till.",
+    "assessmentManaged": "Modeller för sökbedömning och reservhantering hanteras under Modeller och färdighetsstatus.",
+    "manageModels": "Hantera modeller och färdighetsstatus",
+    "purpose": {
+      "routing": "Ruttning",
+      "searchAssessment": "Sökbedömning"
+    },
+    "purposeDescription": {
+      "routing": "Färdighetsval, sök- och kodruttning samt dokumenttrimning och klassificering.",
+      "searchAssessment": "Bedöm källor och välj nästa steg vid flerstegssökning."
+    },
+    "state": {
+      "ready": "Klar",
+      "unverified": "Tillgänglig, ej fullständigt kontrollerad",
+      "fallback": "Reserv används",
+      "unavailable": "Ingen lämplig modell",
+      "check_unavailable": "Kontroller otillgängliga"
+    },
+    "inventoryState": {
+      "current": "Aktuell",
+      "stale": "Senast kända inventering",
+      "unavailable": "Inventering otillgänglig"
+    },
+    "operation": {
+      "skills": "Färdighetsval",
+      "tools": "Verktygsruttning",
+      "trim": "Trimklassificering",
+      "assessment": "Sökbedömning"
+    },
+    "reason": {
+      "endpoint_missing": "Slutpunkt eller kontobindning saknas",
+      "deployment_missing": "Driftsättning saknas eller betjänar inte",
+      "unauthorized": "Appidentitetens åtkomst nekad",
+      "timeout": "Kontroll avbröts p.g.a. timeout",
+      "throttled": "Kvot- eller hastighetsgräns uppnådd",
+      "incompatible": "Otillåten åtgärd",
+      "provider": "Fel vid anrop till leverantör",
+      "residency": "Behandlingszon ej tillåten",
+      "retired": "Modellversionen har tagits ur bruk",
+      "inventory_unavailable": "Inventeringen kunde inte verifieras",
+      "refused": "Modellen avböjde begäran"
+    },
+    "accountError": {
+      "account_resource_missing": "Ange denna bindnings Foundry ARM-resurs-ID för att verifiera inventeringen.",
+      "endpoint_missing": "Ange denna bindnings inferensslutpunkt.",
+      "endpoint_account_mismatch": "Slutpunkten och ARM-resurs-ID tillhör olika konton. Korrigera driftsättningskonfigurationen.",
+      "inventory_refresh_failed": "Uppdatering av inventering misslyckades. Kontrollera Reader-åtkomst och kontokoppling för appens identitet.",
+      "credential_unavailable": "Appen kunde inte hämta sin inventeringsbehörighet. Kontrollera konfigurationen för driftsättningsidentitet."
+    }
   }
 }

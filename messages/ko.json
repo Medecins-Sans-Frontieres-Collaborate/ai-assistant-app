@@ -5625,7 +5625,8 @@
       "webSearch": "웹 검색의 범위: 다단계 검색, 평가 모델 및 제한 사항.",
       "contextBudget": "각 모델이 매 회차에 받는 대화량",
       "analytics": "전달된 보고서: 도착한 항목, 각 폴더의 열람 권한, 표시할 수 있는 필드.",
-      "skills": "대화에 필요할 때 어시스턴트가 적용하는 재사용 가능한 지시문 블록입니다."
+      "skills": "대화에 필요할 때 어시스턴트가 적용하는 재사용 가능한 지시문 블록입니다.",
+      "models": "백그라운드 모델을 할당하고 지역 배포 준비 상태를 확인하세요."
     },
     "openSettings": "설정 열기",
     "area": {
@@ -5637,7 +5638,8 @@
       "webSearch": "웹 검색",
       "contextBudget": "컨텍스트 예산",
       "analytics": "분석",
-      "skills": "스킬"
+      "skills": "스킬",
+      "models": "모델 및 준비 상태"
     }
   },
   "limits": {
@@ -8001,5 +8003,114 @@
     "invalidated": "캐시가 무효화되었습니다. 다음 보호된 요청에서 새로운 검증이 필요합니다. 권한은 아직 다시 확인되지 않았습니다.",
     "failed": "캐시 무효화를 확인할 수 없습니다. 잠시 후 다시 시도하세요.",
     "propagationNote": "이는 Microsoft 권한이 변경되는 것이 아니라 새로운 확인만 강제합니다. Microsoft 전파 지연은 여전히 적용됩니다. 이미 승인된 작업은 취소되지 않습니다."
+  },
+  "auxiliaryModels": {
+    "title": "모델 및 준비 상태",
+    "description": "백그라운드 결정을 위한 모델을 선택하고, 이를 제공하는 배포 현황을 확인하세요.",
+    "environmentHint": "변경 사항은 현재 환경에만 적용됩니다. Live, beta, dev 환경은 각각 별도의 정책을 가집니다.",
+    "updated": "보고서 업데이트: {time}",
+    "loading": "모델 할당 및 준비 상태 불러오는 중…",
+    "loadError": "모델 할당 정보를 불러올 수 없습니다. 현재 정책은 변경하지 않고 다시 시도하세요.",
+    "retry": "다시 시도",
+    "neverChecked": "점검되지 않음",
+    "bootstrapUnavailable": "환경 부트스트랩 설정이 올바르지 않습니다. 저장된 기존 정책은 유지되지만, 배포 설정이 수정될 때까지 환경 기본값을 복원할 수 없습니다.",
+    "runtimeFallback": "최근 요청에서 대체(fallback) 모델을 사용했습니다. 기본 배포 및 작업 결과를 확인하세요.",
+    "accountLocation": "Azure 계정 위치: {location}",
+    "incidents": "최근 준비 상태 변경",
+    "noIncidents": "기록된 준비 실패 또는 복구가 없습니다.",
+    "refreshInventory": "인벤토리 새로고침",
+    "refreshing": "인벤토리 새로고침 중…",
+    "configUnavailable": "정책 저장소를 사용할 수 없습니다. 표시된 할당 정보는 마지막으로 확인된 버전일 수 있습니다. 저장소가 복구될 때까지 편집이 불가능합니다.",
+    "attention": "주의 필요",
+    "eligibleCount": "{count, plural, =0 {호환되는 배포가 없습니다. 호환 가능한 지역 모델을 선택하세요.} one {하나의 호환 배포가 있습니다. 복구 강화를 위해 대체(fallback)를 추가하세요.} other {이 체인에 #개의 호환 배포가 있습니다.}}",
+    "retirementWarning": "지정된 모델 버전이 사용 종료 예정입니다. 교체 모델을 기본으로 설정하기 전에 확인하세요.",
+    "assignments": "모델 할당",
+    "readiness": "준비 상태",
+    "assignmentHint": "모델은 표시된 순서대로 실행됩니다. 누락되었거나, 호환되지 않거나, 퇴역된 배포는 건너뜁니다. EU 요청은 검증된 EU 내 배포만 사용합니다.",
+    "probeUsage": "호환성 확인은 앱 식별자로 고정된 합성 요청을 보냅니다. 적은 수의 모델 토큰만 사용하며, 대화 데이터는 사용하지 않습니다. 배포 체크를 다시 하기 전 최소 1분 기다리세요.",
+    "save": "할당 저장",
+    "saving": "저장 중…",
+    "saved": "할당이 저장되었습니다. 새 요청은 이 정책을 사용합니다.",
+    "resetDefaults": "환경 기본값 사용",
+    "unsaved": "저장되지 않은 변경 사항",
+    "readinessHint": "인벤토리를 통해 배포가 존재함이 확인됩니다. 최근 유효한 작업 또는 호환성 검사 결과를 통해 앱이 사용할 수 있음을 확인합니다. 새로고침 실패 시 최근 성공 확인은 지워지지 않습니다.",
+    "account": "계정 연동: {binding}",
+    "lastInventory": "마지막 정상 인벤토리: {time}",
+    "retirementUnknown": "모델 카탈로그를 확인할 수 없어 사용 종료 상태를 알 수 없습니다.",
+    "history": "정책 변경 이력",
+    "revision": "적용 중인 리비전: {revision}",
+    "noHistory": "이 환경에서는 정책 변경 이력이 없습니다.",
+    "conflict": "다른 관리자가 정책을 변경했습니다. 작성 중인 초안은 그대로 남아 있습니다. 새로 저장하기 전에 정책을 다시 불러오세요.",
+    "rateLimit": "이 배포는 최근에 점검되었습니다. 1분 후 다시 점검하세요.",
+    "actionError": "작업을 완료할 수 없습니다. 세부 정보를 확인하고 다시 시도하세요. 초안은 삭제되지 않았습니다.",
+    "technicalDetails": "기술 세부 정보",
+    "reloadPolicy": "정책 다시 불러오기 및 초안 폐기",
+    "emptyChain": "할당된 모델이 없습니다. 저장 전에 호환 배포를 추가하세요.",
+    "primary": "기본",
+    "fallback": "대체",
+    "unknown": "알 수 없음",
+    "retires": "모델 버전 사용 종료일: {date}",
+    "checkResults": "작업 점검 결과",
+    "passed": "통과",
+    "moveUp": "위로 이동",
+    "moveDown": "아래로 이동",
+    "remove": "제거",
+    "moveUpLabel": "{model} 위로 이동",
+    "moveDownLabel": "{model} 아래로 이동",
+    "removeLabel": "체인에서 {model} 제거",
+    "runChecks": "호환성 검사 실행",
+    "findDeployment": "배포 찾기",
+    "deployment": "배포",
+    "chooseDeployment": "배포 선택",
+    "addDeployment": "체인에 추가",
+    "checkBeforeAdd": "배포를 추가하기 전에 이 목적의 호환성 검사를 실행합니다.",
+    "assessmentManaged": "검색 평가 모델과 예비 모델은 모델 및 준비 상태에서 관리됩니다.",
+    "manageModels": "모델 및 준비 상태 관리",
+    "purpose": {
+      "routing": "라우팅",
+      "searchAssessment": "검색 평가"
+    },
+    "purposeDescription": {
+      "routing": "기술 선택, 검색 및 코드 라우팅, 문서 트림 분류.",
+      "searchAssessment": "소스를 평가하고 다단계 검색 중 다음 단계를 선택합니다."
+    },
+    "state": {
+      "ready": "준비됨",
+      "unverified": "사용 가능, 완전히 확인되지 않음",
+      "fallback": "예비 모델 사용 중",
+      "unavailable": "사용 가능한 모델 없음",
+      "check_unavailable": "검사 불가"
+    },
+    "inventoryState": {
+      "current": "현재",
+      "stale": "마지막으로 확인된 인벤토리",
+      "unavailable": "인벤토리 불가"
+    },
+    "operation": {
+      "skills": "기술 선택",
+      "tools": "도구 라우팅",
+      "trim": "트림 분류",
+      "assessment": "검색 평가"
+    },
+    "reason": {
+      "endpoint_missing": "엔드포인트 또는 계정 바인딩 누락",
+      "deployment_missing": "배포가 없거나 서비스 중이 아님",
+      "unauthorized": "앱 신원 접근 거부",
+      "timeout": "검사 시간 초과",
+      "throttled": "쿼터 또는 속도 제한 도달",
+      "incompatible": "작업이 호환되지 않음",
+      "provider": "프로바이더 호출 실패",
+      "residency": "처리 구역이 허용되지 않음",
+      "retired": "모델 버전 지원 종료",
+      "inventory_unavailable": "인벤토리 확인 불가",
+      "refused": "모델이 요청을 거부함"
+    },
+    "accountError": {
+      "account_resource_missing": "인벤토리 확인을 위해 이 바인딩의 Foundry ARM 리소스 ID를 구성하세요.",
+      "endpoint_missing": "이 바인딩의 추론 엔드포인트를 구성하세요.",
+      "endpoint_account_mismatch": "엔드포인트와 ARM 리소스 ID가 다른 계정을 식별합니다. 배포 구성을 수정하세요.",
+      "inventory_refresh_failed": "인벤토리 새로고침 실패. 앱 신원의 Reader 접근 권한과 계정 연결을 확인하세요.",
+      "credential_unavailable": "앱이 인벤토리 자격 증명을 가져올 수 없습니다. 배포 신원 구성을 확인하세요."
+    }
   }
 }

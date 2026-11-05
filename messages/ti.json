@@ -5609,7 +5609,8 @@
       "webSearch": "ምፍለጣ ኣብ web፡ ባይ ምፍለጣ፣ ኣትቃሻ መሓሪ ከኣ ደቂ ጉዳይ ውሽጢ።",
       "contextBudget": "ብቦና ክንታይ conversations ቀረቡዮም model ብእዋኑ ይቅረቡ።",
       "analytics": "ተሰጥዎ ሪፖርታት፡ ምንባብ መግቢ ፋይል፣ ክንደይ ዝተጠቀሙ ፦ ኣብ ፋይል ዝመዓዙ ኣካል፣ ዝተረኸበ ቦታ",
-      "skills": "ገንዘብ ትእዛዝ ናይ መሰልታት ብዝያዳ ናይ ንድሕረ መደበኛ መጠን ዝምልከት ዘሎ፣ ሓገዝ ሓዳስ ብደረት ክሳዕ ምምሕዳር የተገበረው።"
+      "skills": "ገንዘብ ትእዛዝ ናይ መሰልታት ብዝያዳ ናይ ንድሕረ መደበኛ መጠን ዝምልከት ዘሎ፣ ሓገዝ ሓዳስ ብደረት ክሳዕ ምምሕዳር የተገበረው።",
+      "models": "ዋና ናይ መደብ ሞዴሎታት ይመደብን ናብ ኩባንያ ውስጢ ምትእትናን ይዓትቱ።"
     },
     "openSettings": "ቅንጥታት ክፈት",
     "area": {
@@ -5621,7 +5622,8 @@
       "webSearch": "Web search",
       "contextBudget": "Context budget",
       "analytics": "Analytics",
-      "skills": "መሰልታት"
+      "skills": "መሰልታት",
+      "models": "ሞዴሎታትን ቅድሚ ምግባርን"
     }
   },
   "limits": {
@@ -7985,5 +7987,114 @@
     "invalidated": "መዝጊቡ ተዓቅበ። ብቐጻሊ ዝሒዙ ዝተጠቀመ መሰል ምርኣይ ፍቓድ ደገ ይደሊ፧ ፍቓድታት ድማ ከምዚ ኣይተቐንዩን።",
     "failed": "መዝጊቡ ክብረሉ ኣይተረኽበን። ቅልጡ ግለ ፈትኑ።",
     "propagationNote": "እዚ ንፍሹእ ምረመራ ይግበሩ፣ ንምቕያር ፍቓድ Microsoft ኣይኮነን። ሓደሽቲ ዝምልአ ዕላማ ተማሕላለ። ስራሕታት ብመወዳእታ ብቓይዱ ኣይተቐድሙንን።"
+  },
+  "auxiliaryModels": {
+    "title": "ሞዴሎታትን ቅድሚ ምግባርን",
+    "description": "ናይ ድሕነት ውሳኔ ሞዴሎታት ምረፅ እና ንምስራሕ ዝሰርሑ ምትእታት ይፈትኑ።",
+    "environmentHint": "ምስውጣቶም ንእዚ አካባቢ ብብሓት ይግበሩ። Live፣ beta እና dev ራስኻድ ፖሊሲ ኣለዎም።",
+    "updated": "መረጋገጺ ተቐዲሙ፡ {time}",
+    "loading": "ቅድመ-ምግባርን ሞዴሎታትን እዩ ይጸዓና…",
+    "loadError": "ቅድመ-ምግባር ሞዴሎታት ክንደይ ኣይተተኸለን። ናይ እቲ ሕዚ ፖሊሲ ምቑጽር ኣይቕረቡን።",
+    "retry": "እንተደገመ ፈትነ።",
+    "neverChecked": "ኣይተፈተነን",
+    "bootstrapUnavailable": "ኣብዚ አካባቢ መእተዊ ቅንጥታ የቐልሲ ኣይኮነን። ዝተቆልለ ፖሊሲ ይተሓየበልዎ እዩ፣ ብዛዕባ አካባቢ ዘሃደስኩም ግን ክንከውንን ክንደይ ኣይከኣልን።",
+    "runtimeFallback": "ኣብ ቅርቡ ኣብ ነገዲ መመሳሰሊ ሞዴል ተጠቅሞ። ናይ መጀመሪ ምትእታትን ውጽኢታቱን ኣረጋግ።",
+    "accountLocation": "Azure ኣካውንት ኣካባቢ። {location}",
+    "incidents": "ዝተሃደሰ ለውጢ ቅድሚ ምግባር",
+    "noIncidents": "ዝተመወወ ጸግዓማ ወይ ምምክር ዝተመወወ የቐንየለን።",
+    "refreshInventory": "ካብ ምእንቲ ቅድሚ ምግባር ሓድሽ",
+    "refreshing": "ቅድሚ ምግባር እዩ ይሓውስ…",
+    "configUnavailable": "ዝኽርኦ ፖሊሲ ነይሩ ይተኣተወ ኣይኮነን። ዝተቆልለ መሰረታዊ ምርኣይ ይህሉ። ምምሕዳር ክትከውን ከምዘይከኣል እዩ ክትተሓተበ ክተኣልጸዉ እሞ።",
+    "attention": "ምድላው የገብር ፅሑፍ",
+    "eligibleCount": "{count, plural, =0 {ዝተሓደሰ ከምልኡ ምትእታ የለን። ተሳእኮ ዘሎ ክልተን ሞዴል ምረፅ።} one {ናይ ሞዴል ውድብ ኣንዲት ምትእታ ኣሎ። ደጋጋሚ ምትእታ ድማ ወስደ።} other {ምድላው ሞዴሎታት ፡ #።}}",
+    "retirementWarning": "ንዚ ሞዴል ትሕዝቶ መግስጋም ይቕረብ። ንተኸውን ሞዴል ቅድሚ ናብ ዋና ምትእታ ምኽንያት ኣረጋግ።",
+    "assignments": "ቅድመ-ምግባር ሞዴሎታት",
+    "readiness": "ቅድሚ ምግባር",
+    "assignmentHint": "ሞዴሎታት ብዝተቀረቡ ቅደም ተከታታይ ይሰራሕ። ዝንብላዕ፣ ዘይተተዳለወንን እናዘቕዱ ሞዴሎታት ይርፉ። ድሕሪ አውሮፓ ኣብ ቅድሚ ምግባር ዘሎ ቅርጺ እዩ ይቕርበን።",
+    "probeUsage": "ናይ ግንዛቤ ቅድሚ ምትእታት ብመለኪዒ ዝተዋሀበ ምውሳኔ ሓያል ኤፒአይ ንእትዕግድ፡ ምስ መብታ መተግበሪ ይሰደሩ፡ ንብዙሕ ኣንፎ ሞዴል ቶክን ይጠቕም፡ ዝርዝር ሕቶ የተጠቕሞን። ኣብ ዓንዲ ደቒቕ ድማ ምብራር ክትመልስ ክትደእው ኣለኻ።",
+    "save": "ቅድመ-ምግባር ኣኣትዉ",
+    "saving": "ተኣቲዉ…",
+    "saved": "ቅድመ-ምግባር ተኣቲዉ። ሓዲሽ ሕቶ እዚ ፖሊሲ ይጠቕም።",
+    "resetDefaults": "ኣብ አካባቢ ዘሎ መደብ ተጠቒሙ",
+    "unsaved": "ዘይተኣቲዉ ልውጢ",
+    "readinessHint": "ቅድሚ ምግባር እቲ ምትእታ ኣሎ ይወስነሉ፡ ቅርብ ወይስ ትኽክለኛ ኦፕሬሽን ወይ compatibility check እቲ app ክኸውን ይኸውን ደሊ። ዝተሓደሰ ዘይተዓለበ ሒደት ዝተሓሸ ቅድሚ ምግባር ኣይጽልኦን እዩ።",
+    "account": "ኣካውንት ብኣካባቢ፡ {binding}",
+    "lastInventory": "መወዳኦ መዓልቲ ዓጻውቲ ሕቶ፡ {time}",
+    "retirementUnknown": "ዝገበር ዓበይቲ ሞዴል ካብ ናይ ሞዴል ዝርዝር ሞዴል ይትዕቀት ክንደይ ኣይተቐመጠን።",
+    "history": "ዝርዝር ፖሊሲ",
+    "revision": "ኣካል ምውሳኔ፡ {revision}",
+    "noHistory": "ኣብዚ አካባቢ ዝምድና ፖሊሲ የቐንየለን።",
+    "conflict": "ካልኣይ ኣስተዳደር ፖሊሲ ለውጥ ገብሮ እዩ። ማዕቀፉ እዚ ኣሎ። ዕድል ኣብ ምምሕዳር ቅዱስ ቅድሚ ድሓን ፖሊሲ ተለኣኺ።",
+    "rateLimit": "እዚ ምትእታ ቅርብ ተፈቲኑ። ክፈተነኩም እንታይ ደቒቕ ተድሊ።",
+    "actionError": "እቲ ሓሳብ ቅድሚ ምግባር ክደው ኣይከኣልን። ዝርዝር ኣረጋግፉ ደገመ ተፈቲኑ፤ ማዕቀፉ ኣይተውደበን።",
+    "technicalDetails": "ቴክኒካል ዝርዝር",
+    "reloadPolicy": "ፖሊሲ ኣንደኣ ፈጺሙ፡ draft ክውሰዱኡ",
+    "emptyChain": "ሞዴሎታት ኣይተመደቡን። ቅድመ-ምግባር ዝተዳለወን ቅድሚ ምሕዳር ይውሰዱ።",
+    "primary": "ዋና",
+    "fallback": "ሓገዝ",
+    "unknown": "ዘይትበቀል",
+    "retires": "እዚ ናይ ሞዴል ቱሪ ኣብ {date} ይሕዝ።",
+    "checkResults": "ውጽኢታት ቅድሚ ምትእታ",
+    "passed": "ኣልፎ",
+    "moveUp": "ቅድመ ኣንስኡ",
+    "moveDown": "ታሕቲ ኣንቀሳቕስ",
+    "remove": "ሰርዝ",
+    "moveUpLabel": "{model} ላዕሊ ኣንቀሳቕስ",
+    "moveDownLabel": "{model} ታሕቲ ኣንቀሳቕስ",
+    "removeLabel": "{model} ካብ ተቐንዕሲ ሰርዝ",
+    "runChecks": "ውሳነታት ምምርመራ ኣስካሂል",
+    "findDeployment": "Deployment ፈልጥ",
+    "deployment": "Deployment",
+    "chooseDeployment": "Deployment ምረፅ",
+    "addDeployment": "ናብ ተቐንዕሲ ደምስ",
+    "checkBeforeAdd": "ከምቲ deployment ደምስ ድማ ውሳነታት እዚ ዝተወሃቦ purpose ኣስካሂል።",
+    "assessmentManaged": "ናይ ምምርመራ ሞዴልን fallback ናይ Models and readiness ውሽጢ ተዛዚሙ እዮም።",
+    "manageModels": "ሞዴልን ቅድሚ ኣተዓቂቡን ኣዳልጉ",
+    "purpose": {
+      "routing": "Routing",
+      "searchAssessment": "Search assessment"
+    },
+    "purposeDescription": {
+      "routing": "ስነ ክህደት ምርጫ፣ ፍለጋን ኣብ ዋና ኮድ ምስጠውውቅን ናይ ሰነድ ቅጥዒ ዝምልከት ውሳነ።",
+      "searchAssessment": "ኣቓሚ ምንባብ ምግምጋምን ኣብ ብክልተ ደረጃ ፍለጋ ምውሳን ቀጻሊ ደረጃ ምምረፅ።"
+    },
+    "state": {
+      "ready": "ዝዘጋጀ",
+      "unverified": "ዝኾነ፣ ብፍጹም ዝርመረሉን ኣይኮነን",
+      "fallback": "Fallback ተጠቒሚ እዩ",
+      "unavailable": "ልዕሊ ሞዴል የለን",
+      "check_unavailable": "ምርመራታት የብሉን"
+    },
+    "inventoryState": {
+      "current": "ኣሁን",
+      "stale": "መወዳእታ ዝበለ",
+      "unavailable": "ናይ ብዛዕባ ጥራይ የብሉን"
+    },
+    "operation": {
+      "skills": "ስነ ክህደት ምርጫ",
+      "tools": "ኣብ መሳርሒ ምዝገብ",
+      "trim": "ቅጥቃጥ ምምልከት",
+      "assessment": "Search assessment"
+    },
+    "reason": {
+      "endpoint_missing": "Endpoint ወይ ብ መለለይ ኣቋራጽ ብርኪ የጎዳኣን",
+      "deployment_missing": "Deployment የጎዳኣን ወይ ኣይሰርሕን",
+      "unauthorized": "ኣብ identity ኣፕሊኬሽን መግበሪ እተኣካበተን ይኹን ይበል።",
+      "timeout": "ምርመራ ግዜ ኣልፎ ው።",
+      "throttled": "Quota ወይ ድምበት ደርሲኡ",
+      "incompatible": "መስርሒ ዝሓይሽ ኣይተመፅአን",
+      "provider": "ጥሪ ናይ provider ውፉይ ገይሩ",
+      "residency": "ኣተሓሳስባ ዞባ ኣይፍቀደን",
+      "retired": "ትሕዝቶ ቦታ ሞዴል ዝተዘወሰነ",
+      "inventory_unavailable": "ናይ ብዛዕባ ምርመራ ኣይተረኽበን",
+      "refused": "ሞዴል ሓበሬታ ኣይተቐበለን"
+    },
+    "accountError": {
+      "account_resource_missing": "ናይ binding እዚ ናይ Foundry ARM resource ID ኣቕሓዚ እንተደሊኻ ፈጽም ብዛዕባ ምርመራ ክትረክብ።",
+      "endpoint_missing": "ናይ binding እዚ ናይ inference endpoint ኣቕሓዚ።",
+      "endpoint_account_mismatch": "Endpointን ARM resource IDን ብቐይሩ ናይ ኣካውንት ይምልከቱ። ቅንጠታ ናይ deployment ኣድስጉ።",
+      "inventory_refresh_failed": "ሓደሽቲ ብዛዕባ ድሕሪ ኣተረፈ። ፈትኑ እንተ Reader ኣብ identity ኣፕሊኬሽን እተሓታፍያን ናይ ኣካውንት ምድላውን።",
+      "credential_unavailable": "ኣፕሊኬሽን ብዛዕባ ምርመራ መክትቢ ኣይተረኸበን። ቅንጠታ ናይ deployment identity ምምዝጋብ ፈትኑ።"
+    }
   }
 }

@@ -5625,7 +5625,8 @@
       "webSearch": "Jinsi utafutaji wa wavuti unaweza kufanyika: utafutaji wa hatua nyingi, modeli ya kukagua na mipaka yake.",
       "contextBudget": "Sehemu ya mazungumzo inayotumwa kwa kila modeli kila mara.",
       "analytics": "Ripoti zilizowasilishwa: kilichofika, nani anaweza kufungua kila folda, na ni vipimo gani vinaweza kuonyeshwa.",
-      "skills": "Vifurushi vya maagizo vinavyoweza kutumiwa tena ambavyo msaidizi anatumia pale inapohitajika kwenye mazungumzo."
+      "skills": "Vifurushi vya maagizo vinavyoweza kutumiwa tena ambavyo msaidizi anatumia pale inapohitajika kwenye mazungumzo.",
+      "models": "Weka miundo ya usuli na angalia utayari wa usanidi wa kieneo."
     },
     "openSettings": "Fungua mipangilio",
     "area": {
@@ -5637,7 +5638,8 @@
       "webSearch": "Utafutaji wa wavuti",
       "contextBudget": "Bajeti ya muktadha",
       "analytics": "Takwimu",
-      "skills": "Ujuzi"
+      "skills": "Ujuzi",
+      "models": "Miundo na utayari"
     }
   },
   "limits": {
@@ -8001,5 +8003,114 @@
     "invalidated": "Kache imefutwa. Uhakiki mpya unahitajika kwenye ombi linalolindwa linalofuata; ruhusa bado hazijahakikiwa upya.",
     "failed": "Uthibitisho wa kufuta kache haujawezekana. Jaribu tena hivi karibuni.",
     "propagationNote": "Hii inalazimisha uhakiki mpya pekee, si mabadiliko ya ruhusa za Microsoft. Muda wa ucheleweshaji wa usambazaji wa Microsoft bado unahusika. Uendeshaji ulioruhusiwa tayari hautabatilishwa."
+  },
+  "auxiliaryModels": {
+    "title": "Miundo na utayari",
+    "description": "Chagua miundo kwa ajili ya maamuzi ya usuli na kagua usanidi unaoiendesha.",
+    "environmentHint": "Mabadiliko yanahusu mazingira haya pekee. Live, beta na dev vina sera huru.",
+    "updated": "Ripoti imesasishwa: {time}",
+    "loading": "Inapakia miundo na utayari…",
+    "loadError": "Haikuweza kupakia mgao wa miundo. Jaribu tena bila kubadilisha sera ya sasa.",
+    "retry": "Jaribu tena",
+    "neverChecked": "Haijakaguliwa",
+    "bootstrapUnavailable": "Mpangilio wa bootstrap wa mazingira si sahihi. Sera iliyohifadhiwa itaendelea kutumika, lakini chaguo-msingi haziwezi kurejeshwa hadi mpangilio wa usanidi usahihishwe.",
+    "runtimeFallback": "Maombi ya karibuni yalitumia mfano mbadala. Angalia usanidi mkuu na matokeo yake.",
+    "accountLocation": "Eneo la akaunti ya Azure: {location}",
+    "incidents": "Mabadiliko ya utayari ya hivi karibuni",
+    "noIncidents": "Hakuna kushindwa au urejeshaji wa utayari ulioandikwa.",
+    "refreshInventory": "Sasisha orodha",
+    "refreshing": "Inasasisha orodha…",
+    "configUnavailable": "Hifadhi ya sera haipatikani. Mgao unaoonekana huenda ni toleo la mwisho linalojulikana. Uhariri umesitishwa hadi hifadhi irejee.",
+    "attention": "Inahitaji uangalizi",
+    "eligibleCount": "{count, plural, =0 {Hakuna usanidi unaofaa. Chagua mfano wa kanda unaolingana.} one {Usanidi mmoja unaofaa. Ongeza mbadala kuboresha uimara.} other {# usanidi unaofaa katika mlolongo huu.}}",
+    "retirementWarning": "Toleo maalum la mfano linakaribia kustaafu. Hakikisha mbadala wake kabla ya kulifanya la msingi.",
+    "assignments": "Mgao wa miundo",
+    "readiness": "Utayari",
+    "assignmentHint": "Miundo inafanya kazi kwa mpangilio ulioonyeshwa. Usanidi ambao umekosekana, hauendani au umestaafu unapukwa. Maombi ya EU hubaki kwenye usanidi uliothibitishwa wa EU.",
+    "probeUsage": "Ukaguzi wa ulinganifu hutuma maombi bandia maalum kwa kutumia utambulisho wa app. Yanatumia idadi ndogo ya tokeni za mfano, sio data ya mazungumzo. Subiri angalau dakika moja kabla ya kurudia ukaguzi wa usanidi.",
+    "save": "Hifadhi mgao",
+    "saving": "Inahifadhi…",
+    "saved": "Mgao umehifadhiwa. Maombi mapya yatatumia sera hii.",
+    "resetDefaults": "Tumia mipangilio chaguo-msingi ya mazingira",
+    "unsaved": "Mabadiliko yasiyohifadhiwa",
+    "readinessHint": "Orodha inathibitisha usanidi upo. Operesheni halali ya hivi karibuni au ukaguzi wa ulinganifu inathibitisha app inaweza kutumia. Kusasisha kukishindikana hakuondoi ukaguzi uliofanikiwa wa mwisho.",
+    "account": "Muungano wa akaunti: {binding}",
+    "lastInventory": "Orodha ya mwisho iliyofaulu: {time}",
+    "retirementUnknown": "Hali ya kustaafu haijulikani kwa sababu katalogi ya mfano haikuweza kuthibitishwa.",
+    "history": "Historia ya sera",
+    "revision": "Toleo linalotumika: {revision}",
+    "noHistory": "Hakuna mabadiliko ya sera yaliyoandikwa kwenye mazingira haya.",
+    "conflict": "Msimamizi mwingine amebadilisha sera. Rasimu yako bado ipo. Pakia upya sera kabla ya kuhifadhi tena.",
+    "rateLimit": "Usanidi huu umekaguliwa hivi karibuni. Subiri dakika moja kabla ya kukagua tena.",
+    "actionError": "Hatua haikuweza kukamilika. Angalia maelezo na jaribu tena; rasimu yako haijafutwa.",
+    "technicalDetails": "Maelezo ya kiufundi",
+    "reloadPolicy": "Pakia upya sera na futa rasimu",
+    "emptyChain": "Hakuna miundo iliyogawiwa. Ongeza usanidi unaolingana kabla ya kuhifadhi.",
+    "primary": "Kuu",
+    "fallback": "Mbadala",
+    "unknown": "Haijulikani",
+    "retires": "Toleo la mfano litaacha kutumika {date}",
+    "checkResults": "Matokeo ya ukaguzi wa operesheni",
+    "passed": "Imepita",
+    "moveUp": "Panda juu",
+    "moveDown": "Shusha chini",
+    "remove": "Ondoa",
+    "moveUpLabel": "Pandisha {model} juu",
+    "moveDownLabel": "Shusha {model} chini",
+    "removeLabel": "Ondoa {model} kwenye mfuatano",
+    "runChecks": "Fanya ukaguzi wa ulinganifu",
+    "findDeployment": "Tafuta mkakati wa utekelezaji",
+    "deployment": "Utekelezaji",
+    "chooseDeployment": "Chagua utekelezaji",
+    "addDeployment": "Ongeza kwenye mfuatano",
+    "checkBeforeAdd": "Fanya ukaguzi wa ulinganifu wa lengo hili kabla ya kuongeza utekelezaji.",
+    "assessmentManaged": "Mifano ya tathmini ya utafutaji na mbadala inasimamiwa kwenye Mifano na utayari.",
+    "manageModels": "Simamia mifano na utayari",
+    "purpose": {
+      "routing": "Uelekezaji",
+      "searchAssessment": "Tathmini ya utafutaji"
+    },
+    "purposeDescription": {
+      "routing": "Uteuzi wa ujuzi, uelekezaji wa utafutaji na msimbo, na uainishaji wa kufupisha nyaraka.",
+      "searchAssessment": "Tathmini vyanzo na chagua hatua inayofuata wakati wa utafutaji wa hatua nyingi."
+    },
+    "state": {
+      "ready": "Tayari",
+      "unverified": "Inapatikana, haijakaguliwa kabisa",
+      "fallback": "Inatumia mbadala",
+      "unavailable": "Hakuna mfano unaofaa",
+      "check_unavailable": "Ukaguzi haupatikani"
+    },
+    "inventoryState": {
+      "current": "Sasa",
+      "stale": "Hifadhi iliyojulikana mwisho",
+      "unavailable": "Hifadhi haipatikani"
+    },
+    "operation": {
+      "skills": "Uteuzi wa ujuzi",
+      "tools": "Uelekezaji wa zana",
+      "trim": "Uainishaji wa kufupisha",
+      "assessment": "Tathmini ya utafutaji"
+    },
+    "reason": {
+      "endpoint_missing": "Kiunganishi au uhusiano wa akaunti umekosekana",
+      "deployment_missing": "Utekelezaji umekosekana au hautoi huduma",
+      "unauthorized": "Ufikiaji wa utambulisho wa programu umekataliwa",
+      "timeout": "Ukaguzi umeisha muda",
+      "throttled": "Kikomo cha matumizi au kiwango kimefikiwa",
+      "incompatible": "Uendeshaji hautangamani",
+      "provider": "Mwito wa mtoa huduma ulishindwa",
+      "residency": "Eneo la uchakataji haliruhusiwi",
+      "retired": "Toleo la mfano limesitishwa",
+      "inventory_unavailable": "Hifadhi haikuweza kuthibitishwa",
+      "refused": "Mfano ulikataa ombi"
+    },
+    "accountError": {
+      "account_resource_missing": "Sanidi Foundry ARM resource ID ya muunganisho huu ili kuhakikisha hifadhi yake.",
+      "endpoint_missing": "Sanidi kiunganishi cha inference cha muunganisho huu.",
+      "endpoint_account_mismatch": "Kiunganishi na ARM resource ID vinatambulisha akaunti tofauti. Rekebisha usanidi wa utekelezaji.",
+      "inventory_refresh_failed": "Usasishaji wa hifadhi umeshindwa. Kagua ufikiaji wa Reader wa utambulisho wa programu na muunganisho wa akaunti.",
+      "credential_unavailable": "Programu haikuweza kupata kitambulisho chake cha hifadhi. Kagua usanidi wa utambulisho wa utekelezaji."
+    }
   }
 }

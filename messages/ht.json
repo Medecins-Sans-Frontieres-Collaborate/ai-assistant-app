@@ -5609,7 +5609,8 @@
       "webSearch": "Jiska ki nivo rechèch sou entènèt ka ale: rechèch plizyè etap, modèl ki verifye ak limit li yo.",
       "contextBudget": "Konbyen nan chak konvèsasyon ki voye bay chak modèl sou chak etap.",
       "analytics": "Rapò yo delivre: sa ki rive, kiyès ki ka ouvri chak dosye, ak ki jaden ki ka montre.",
-      "skills": "Blòk enstriksyon reutilizab asistan an aplike lè yon konvèsasyon bezwen yo."
+      "skills": "Blòk enstriksyon reutilizab asistan an aplike lè yon konvèsasyon bezwen yo.",
+      "models": "Asiyen modèl background yo epi verifye preparasyon pou deplwaye nan rejyon an."
     },
     "openSettings": "Louvri anviwònman yo",
     "area": {
@@ -5621,7 +5622,8 @@
       "webSearch": "Rechèch sou entènèt",
       "contextBudget": "Bidjè kontèks",
       "analytics": "Analiz",
-      "skills": "Konpetans"
+      "skills": "Konpetans",
+      "models": "Modèl ak preparasyon"
     }
   },
   "limits": {
@@ -7985,5 +7987,114 @@
     "invalidated": "Kachèt la anile. Yon verifikasyon fre obligatwa nan pwochen demann ki pwoteje; pèmisyon yo poko tcheke ankò.",
     "failed": "Pa t kapab konfime anilasyon kachèt la. Eseye ankò talè.",
     "propagationNote": "Sa fòse yon tcheke fre, li pa chanje pèmisyon Microsoft yo. Reta pwopagasyon Microsoft yo toujou aplike. Operasyon ki deja otorize yo pa anile."
+  },
+  "auxiliaryModels": {
+    "title": "Modèl ak preparasyon",
+    "description": "Chwazi modèl pou desizyon background epi enspekte deplwaman ki sèvi ak yo.",
+    "environmentHint": "Chanjman yo aplike sèlman pou anviwònman sa a. Live, beta ak dev gen politik endepandan.",
+    "updated": "Rapò mete ajou: {time}",
+    "loading": "Y ap chaje asiyasyon modèl yo ak preparasyon…",
+    "loadError": "Pa posib pou chaje asiyasyon modèl yo. Eseye ankò san ou pa chanje politik aktyèl la.",
+    "retry": "Re-ese",
+    "neverChecked": "Pa t' verifye",
+    "bootstrapUnavailable": "Paramèt bootstrap anviwònman an pa valab. Yon politik ki te deja sove ap kontinye, men ou pa ka retabli valè default anviwònman an jiskaske ou korije paramèt deplwaman an.",
+    "runtimeFallback": "Dènye demann yo te itilize yon modèl ranplasman. Verifye deplwaman prensipal la ak rezilta operasyon li yo.",
+    "accountLocation": "Kote kont Azure a: {location}",
+    "incidents": "Dènye chanjman preparasyon yo",
+    "noIncidents": "Pa gen echèk oswa rekiperasyon preparasyon ki te anrejistre.",
+    "refreshInventory": "Rafrechi envantè a",
+    "refreshing": "Y ap rafrechi envantè a…",
+    "configUnavailable": "Depo politik la pa disponib. Asiyasyon yo ka dènye vèsyon ki te konnen. Ou pa ka modifye jiskaske depo a refonksyone.",
+    "attention": "Bezwen atansyon",
+    "eligibleCount": "{count, plural, =0 {Pa gen deplwaman ki konpatib. Chwazi yon modèl rejyonal ki konpatib.} one {Yon sèl deplwaman ki konpatib. Ajoute yon ranplasman pou amelyore rezistans.} other {# deplwaman ki konpatib nan chèn sa a.}}",
+    "retirementWarning": "Yon vèsyon modèl ki defini ap pwoche retret. Verifye ranplasman an avan ou mete li kòm prensipal.",
+    "assignments": "Asiyasyon modèl yo",
+    "readiness": "Preparasyon",
+    "assignmentHint": "Modèl yo egzekite nan lòd yo montre a. Deplwaman ki manke, ki pa konpatib oswa ki pran retrèt pa itilize. Demann Inyon Ewòp yo rete sou deplwaman verifye ki rezidan Inyon Ewòp.",
+    "probeUsage": "Chèk konpatibilite voye demann sentetik fiks ak idantite aplikasyon an. Yo sèvi ak ti kantite modèl tokens, pa janm done konvèsasyon. Tann omwen yon minit avan ou repete yon chèk deplwaman.",
+    "save": "Sove asiyasyon yo",
+    "saving": "Y ap sove…",
+    "saved": "Asiyasyon yo sove. Nouvo demann ap itilize politik sa a.",
+    "resetDefaults": "Itilize valè default anviwònman an",
+    "unsaved": "Chanjman ki pa sove",
+    "readinessHint": "Envantè konfime fla gen yon deplwaman ki egziste. Yon operasyon ki valab dènyèman oswa yon chèk konpatibilite konfime app la ka itilize li. Echèk rafrechi pa efase dènye chèk ki te reyisi.",
+    "account": "Lyen ak kont: {binding}",
+    "lastInventory": "Dènye envantè ki reyisi: {time}",
+    "retirementUnknown": "Estati retrèt la pa konnen paske pa te posib verifye katalòg modèl la.",
+    "history": "Istwa politik",
+    "revision": "Revizyon efikas: {revision}",
+    "noHistory": "Pa gen chanjman politik ki te anrejistre nan anviwònman sa a.",
+    "conflict": "Yon lòt administratè te chanje politik la. Bouyon ou toujou la. Rechaje politik la avan ou sove ankò.",
+    "rateLimit": "Deplwaman sa a te verifye dènyèman. Tann yon minit avan ou tcheke li ankò.",
+    "actionError": "Aksyon an pa t' ka fèt. Tcheke detay yo epi re-ese; bouyon ou la toujou.",
+    "technicalDetails": "Detay teknik",
+    "reloadPolicy": "Rechaje politik la epi anile bouyon",
+    "emptyChain": "Pa gen modèl ki asiyen. Ajoute yon deplwaman ki konpatib avan ou sove.",
+    "primary": "Prensipal",
+    "fallback": "Ranplasman",
+    "unknown": "Pa konnen",
+    "retires": "Vèsyon modèl la pran retrèt {date}",
+    "checkResults": "Rezilta tcheke operasyon",
+    "passed": "Reyisi",
+    "moveUp": "Monte",
+    "moveDown": "Desann",
+    "remove": "Retire",
+    "moveUpLabel": "Monte {model}",
+    "moveDownLabel": "Desann {model}",
+    "removeLabel": "Retire {model} nan chèn nan",
+    "runChecks": "Kouri verifikasyon konpatibilite",
+    "findDeployment": "Chèche yon deplwaman",
+    "deployment": "Deplwaman",
+    "chooseDeployment": "Chwazi yon deplwaman",
+    "addDeployment": "Ajoute nan chèn nan",
+    "checkBeforeAdd": "Kouri verifikasyon konpatibilite bi sa a anvan ou ajoute deplwaman an.",
+    "assessmentManaged": "Modèl recherche-evalyasyon ak ranplasman yo jere nan \"Modèl ak preparasyon\".",
+    "manageModels": "Jere modèl ak preparasyon",
+    "purpose": {
+      "routing": "Routaj",
+      "searchAssessment": "Evalyasyon rechèch"
+    },
+    "purposeDescription": {
+      "routing": "Chwazi konpetans, routaj rechèch ak kòd, ak klasifikasyon dokiman-koupe.",
+      "searchAssessment": "Evalye sous yo epi chwazi pwochen etap pandan rechèch milti-etap."
+    },
+    "state": {
+      "ready": "Pare",
+      "unverified": "Disponib, pa totalman verifye",
+      "fallback": "Ap itilize ranplasman",
+      "unavailable": "Pa gen modèl ki kalifye",
+      "check_unavailable": "Verifikasyon pa disponib"
+    },
+    "inventoryState": {
+      "current": "Aktuèl",
+      "stale": "Dènye envantè ki te konnen",
+      "unavailable": "Envantè pa disponib"
+    },
+    "operation": {
+      "skills": "Chwazi konpetans",
+      "tools": "Routaj zouti",
+      "trim": "Klasifikasyon koutaj",
+      "assessment": "Evalyasyon rechèch"
+    },
+    "reason": {
+      "endpoint_missing": "Fenpwen oswa koneksyon kont manke",
+      "deployment_missing": "Deplwaman pa la oswa pa ap sèvi",
+      "unauthorized": "Aksè idantite aplikasyon an refize",
+      "timeout": "Verifikasyon depase tan",
+      "throttled": "Kout oswa limit pousantaj rive",
+      "incompatible": "Operasyon enkonpatib",
+      "provider": "Apèl founisè a echwe",
+      "residency": "Zòn tretman pa otorize",
+      "retired": "Vèsyon modèl la retire",
+      "inventory_unavailable": "Envantè pa t ka verifye",
+      "refused": "Modèl la rejte demann lan"
+    },
+    "accountError": {
+      "account_resource_missing": "Konfigire ID resous Foundry ARM lyen sa a pou verifye envantè li.",
+      "endpoint_missing": "Konfigire fenpwen enférans lyen sa a.",
+      "endpoint_account_mismatch": "Fenpwen an ak ID resous ARM lan idantifye de kont diferan. Korije konfigirasyon deplwaman an.",
+      "inventory_refresh_failed": "Rafrechisman envantè a echwe. Tcheke aksè Lecteur idantite app la ak koneksyon kont lan.",
+      "credential_unavailable": "App a pa t kapab jwenn kalifikasyon envantè li. Tcheke konfigirasyon idantite deplwaman an."
+    }
   }
 }

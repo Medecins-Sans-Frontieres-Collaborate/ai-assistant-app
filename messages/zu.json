@@ -5609,7 +5609,8 @@
       "webSearch": "Ukuthi usesho lwewebhu lungahamba luze kufike kuphi: usesho lwezinyathelo eziningi, imodeli yokuhlola nemingcele yayo.",
       "contextBudget": "Inani lengxoxo elithunyelwa kwimodeli ngayinye ngomjikelezo ngamunye.",
       "analytics": "Imibiko elayishiwe: okuthunyelwe, ukuthi ubani ongavula ifolda ngayinye, nezinkambu ezingaboniswa.",
-      "skills": "Amabhulokhi wemiyalelo angasetshenziswa kabusha uwusizo uma ingxoxo idinga wona."
+      "skills": "Amabhulokhi wemiyalelo angasetshenziswa kabusha uwusizo uma ingxoxo idinga wona.",
+      "models": "Nika amamodeli ngemuva bese uhlole ukulungela ukwabiwa kwesifunda."
     },
     "openSettings": "Vula izilungiselelo",
     "area": {
@@ -5621,7 +5622,8 @@
       "webSearch": "Ukusesha kwewebhu",
       "contextBudget": "Isabelomali somongo",
       "analytics": "Izibalo",
-      "skills": "Amakhono"
+      "skills": "Amakhono",
+      "models": "Amamodeli nokulungela"
     }
   },
   "limits": {
@@ -7985,5 +7987,114 @@
     "invalidated": "Ikheshana isusiwe. Ukuqinisekisa okusha kudingeka esicelweni esilandelayo esivikelekile; izimvume azikabuyekezwa okwamanje.",
     "failed": "Ukusulwa kwekheshana akukwazanga ukuqinisekiswa. Zama futhi ngokuhamba kwesikhathi.",
     "propagationNote": "Lokhu kuphoqa ukuhlolwa okusha, hhayi ushintsho kwezizimvume ze-Microsoft. Ukubambezeleka ekusabalaliseni kwe-Microsoft kusasebenza. Izisebenzi ezisele zigunyaziwe azikhanselwa."
+  },
+  "auxiliaryModels": {
+    "title": "Amamodeli nokulungela",
+    "description": "Khetha amamodeli ezinqumweni ezingemuva bese ubheka ukwabiwa okusebenza wona.",
+    "environmentHint": "Izinguquko zisebenza kule ndawo kuphela. I-Live, beta ne-dev zinemithetho ezizimele.",
+    "updated": "Umbiko ubuyekeziwe: {time}",
+    "loading": "Kulayishwa izabelo zamamodeli nokulungela…",
+    "loadError": "Izabelo zamamodeli azikwazanga ukulayishwa. Zama futhi ngaphandle kokushintsha inqubomgomo yamanje.",
+    "retry": "Zama futhi",
+    "neverChecked": "Akukakuhlolwa",
+    "bootstrapUnavailable": "Ilungiselelo le-bootstrap lendawo alikho kahle. Inqubomgomo egciniwe isasebenza, kodwa okuzenzakalelayo kwendawo ngeke kubuyiselwe kuze kuchitshiyelwe ilungiselelo lokwabiwa.",
+    "runtimeFallback": "Izicelo zakamuva zisebenzise imodeli yokufaka isipele. Hlola ukwabiwa okuyinhloko nemiphumela yokusebenza kwako.",
+    "accountLocation": "Indawo ye-akhawunti ye-Azure: {location}",
+    "incidents": "Izinguquko zakamuva zokulungela",
+    "noIncidents": "Azikho izinhlekelele noma ukubuyiselwa kokulungela okubhalisiwe.",
+    "refreshInventory": "Buyekeza uhlu lwempahla",
+    "refreshing": "Kuyabuyekezwa uhlu lwempahla…",
+    "configUnavailable": "Isitoreji senqubomgomo asitholakali. Izabelo ezibonisiwe zingahle zibe inguqulo yokugcina eyaziwayo. Ukuhlela akuvumelekile kuze kubuyiselwe isitoreji.",
+    "attention": "Kudinga ukunakekelwa",
+    "eligibleCount": "{count, plural, =0 {Awekho ukwabiwa okufanelekile. Khetha imodeli yesifunda efanele.} one {Kunokwabiwa okukodwa okufanelekile. Faka isipele ukuthuthukisa ukumelana.} other {# ukwabiwa okufanelekile kulo chungechunge.}}",
+    "retirementWarning": "Inguqulo yemodeli eklanyelwe iseduze nokuthatha umhlalaphansi. Hlola enye ngaphambi kokuyisa endaweni eyinhloko.",
+    "assignments": "Izabelo zamamodeli",
+    "readiness": "Ukulungela",
+    "assignmentHint": "Amamodeli asebenza ngokulandelana okufakiwe. Ukwabiwa okungalungile, okungahambisani noma okuthathe umhlalaphansi kuyagqitshwa. Izicelo zase-EU zihlala ezikwabiweni ze-EU eziqinisekisiwe.",
+    "probeUsage": "Ukuhlola ukuhambisana kuthumela izicelo ezenziwe ngamabomu nge-ID yohlelo lokusebenza. Kusetshenziswa amathokheni ambalwa emodeli, neze idatha yengxoxo. Linda okungenani umzuzu ngaphambi kokuphinda uhlolo lokwabiwa.",
+    "save": "Londoloza izabelo",
+    "saving": "Kuyalondolozwa…",
+    "saved": "Izabelo zilondoloziwe. Izicelo ezintsha zisebenzisa le nqubomgomo.",
+    "resetDefaults": "Sebenzisa okuzenzakalelayo kwendawo",
+    "unsaved": "Izinguquko ezingalondoloziwe",
+    "readinessHint": "Uhlu lwempahla luqinisekisa ukuhlela ikhona. Umsebenzi ovumelekile wakamuva noma ukuhlola ukuhambisana kuqinisekisa ukuthi uhlelo lokusebenza lungayisebenzisa. Ukuhluleka ukubuyekezwa akukususi ukuhlola okuphumelele kokugcina.",
+    "account": "Ukuxhumana kwe-akhawunti: {binding}",
+    "lastInventory": "Uhlu lwempahla oluphelele lokugcina: {time}",
+    "retirementUnknown": "Isimo sokuthatha umhlalaphansi asaziwa ngoba ikhathalogi yemodeli ayikwazanga ukuqinisekiswa.",
+    "history": "Umlando wenqubomgomo",
+    "revision": "Ukuhlela okusebenza: {revision}",
+    "noHistory": "Azikho izinguquko zenqubomgomo ezirekhodiwe kule ndawo.",
+    "conflict": "Umphathi omunye ushintshe inqubomgomo. Idrafti yakho isekhona. Layisha kabusha inqubomgomo ngaphambi kokulondoloza okusha.",
+    "rateLimit": "Lokhu kuhanjiswa kuhlolwe muva nje. Linda umzuzu owodwa ngaphambi kokuphinda uhlolo.",
+    "actionError": "Isenzo asikwazanga ukuqedwa. Hlola imininingwane bese uzama futhi; idrafti yakho ayikasuswa.",
+    "technicalDetails": "Imininingwane yezobuchwepheshe",
+    "reloadPolicy": "Layisha kabusha inqubomgomo bese ulahla idrafti",
+    "emptyChain": "Awekho amamodeli anikeziwe. Engeza ukwabiwa okufanele ngaphambi kokulondoloza.",
+    "primary": "Okuyinhloko",
+    "fallback": "Isipele",
+    "unknown": "Akwaziwa",
+    "retires": "Inguqulo yemodeli ithatha umhlalaphansi ngo {date}",
+    "checkResults": "Imiphumela yokuhlola ukusebenza",
+    "passed": "Kuphasile",
+    "moveUp": "Nyusa phezulu",
+    "moveDown": "Hambisa phansi",
+    "remove": "Susa",
+    "moveUpLabel": "Hambisa u-{model} phezulu",
+    "moveDownLabel": "Hambisa u-{model} phansi",
+    "removeLabel": "Susa u-{model} ochungechungeni",
+    "runChecks": "Qhuba izivivinyo zokuhambisana",
+    "findDeployment": "Thola ukudidiyelwa",
+    "deployment": "Ukudidiyelwa",
+    "chooseDeployment": "Khetha ukudidiyelwa",
+    "addDeployment": "Engeza ochungechungeni",
+    "checkBeforeAdd": "Qhuba izivivinyo zokuhambisana kwenhloso ngaphambi kokwengeza ukudidiyelwa.",
+    "assessmentManaged": "Amamodeli okusesha-uhlolo kanye nezindlela zokuphepha zilawulwa ku-Amamodeli nokulungela ukusebenza.",
+    "manageModels": "Phatha amamodeli nokulungela ukusebenza",
+    "purpose": {
+      "routing": "Ukumisa indlela",
+      "searchAssessment": "Ukuhlola okuseshwayo"
+    },
+    "purposeDescription": {
+      "routing": "Ukukhethwa kwamakhono, ukusesha nokuphatha izindlela zekhowudi, kanye nokuhlonza imibhalo ngokugunda.",
+      "searchAssessment": "Hlola imithombo bese ukhetha isinyathelo esilandelayo ngesikhathi sokusesha okunezinyathelo eziningi."
+    },
+    "state": {
+      "ready": "Ilungele",
+      "unverified": "Iyatholakala, ayikahlolwa ngokuphelele",
+      "fallback": "Kusetshenziswa indlela yokuphepha",
+      "unavailable": "Ayikho imodeli efanele",
+      "check_unavailable": "Izivivinyo azitholakali"
+    },
+    "inventoryState": {
+      "current": "Okwamanje",
+      "stale": "Uhlolo lokugcina olwaziwayo",
+      "unavailable": "Uhlolo alutholakali"
+    },
+    "operation": {
+      "skills": "Ukukhetha amakhono",
+      "tools": "Ukumisa amathuluzi",
+      "trim": "Ukuhlukanisa ngokugunda",
+      "assessment": "Ukuhlola okuseshwayo"
+    },
+    "reason": {
+      "endpoint_missing": "I-endpoint noma ibhondi ye-akhawunti ayikho",
+      "deployment_missing": "Ukudidiyelwa akutholakali noma akusebenzi",
+      "unauthorized": "Ukungafinyeleli kobunikazi bohlelo",
+      "timeout": "Ukuhlolwa kuphelelwe isikhathi",
+      "throttled": "Kuqediwe isabelo noma umugqa wokufinyelela",
+      "incompatible": "Ukuhamba akuhambisani",
+      "provider": "Ukushaywa kwephutha ekubizeni umhlinzeki",
+      "residency": "Indawo yokucubungula ayivumelekile",
+      "retired": "Inguqulo yemodeli isithathe umhlalaphansi",
+      "inventory_unavailable": "Uhlolo alukwazanga ukuqinisekiswa",
+      "refused": "Imodeli yenqabile isicelo"
+    },
+    "accountError": {
+      "account_resource_missing": "Lungisa i-Foundry ARM resource ID yalokhu kubopha ukuze uqinisekise uhlolo lwayo.",
+      "endpoint_missing": "Lungisa i-endpoint yokuhlakanipha yokubopha lokhu.",
+      "endpoint_account_mismatch": "I-endpoint ne-ARM resource ID zikhomba kuma-akhawunti ahlukene. Lungisa ukucushwa kokudidiyelwa.",
+      "inventory_refresh_failed": "Ukuvuselelwa kohlolo kwehlulekile. Hlola ukufinyelela kwe-Reader kobunikazi bohlelo nokuxhumana kwe-akhawunti.",
+      "credential_unavailable": "Uhlelo alukwazanga ukuthola i-credential yohlolo lwayo. Hlola ukucushwa kobunikazi bokudidiyelwa."
+    }
   }
 }

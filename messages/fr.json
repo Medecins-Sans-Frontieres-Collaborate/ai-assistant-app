@@ -5625,7 +5625,8 @@
       "webSearch": "Jusqu’où la recherche web peut aller : recherche en plusieurs étapes, modèle d’évaluation et limites.",
       "contextBudget": "Quantité de conversation envoyée à chaque modèle à chaque tour.",
       "analytics": "Rapports livrés : éléments reçus, personnes pouvant ouvrir chaque dossier et champs pouvant être affichés.",
-      "skills": "Blocs d’instructions réutilisables appliqués par l’assistant selon les besoins de la conversation."
+      "skills": "Blocs d’instructions réutilisables appliqués par l’assistant selon les besoins de la conversation.",
+      "models": "Attribuez des modèles de fond et vérifiez la préparation au déploiement régional."
     },
     "openSettings": "Ouvrir les paramètres",
     "area": {
@@ -5637,7 +5638,8 @@
       "webSearch": "Recherche web",
       "contextBudget": "Budget de contexte",
       "analytics": "Analytique",
-      "skills": "Compétences"
+      "skills": "Compétences",
+      "models": "Modèles et préparation"
     }
   },
   "limits": {
@@ -8001,5 +8003,114 @@
     "invalidated": "Cache invalidé. Une nouvelle vérification sera requise lors de la prochaine demande protégée ; les autorisations n'ont pas encore été revérifiées.",
     "failed": "L’invalidation du cache n’a pas pu être confirmée. Veuillez réessayer sous peu.",
     "propagationNote": "Ceci force une nouvelle vérification, sans modifier les autorisations Microsoft. Les délais de propagation de Microsoft restent valables. Les opérations déjà autorisées ne sont pas annulées."
+  },
+  "auxiliaryModels": {
+    "title": "Modèles et préparation",
+    "description": "Choisissez des modèles pour les décisions de fond et vérifiez les déploiements qui les servent.",
+    "environmentHint": "Les modifications s’appliquent uniquement à cet environnement. Live, beta et dev possèdent des politiques indépendantes.",
+    "updated": "Rapport mis à jour : {time}",
+    "loading": "Chargement des attributions de modèles et de la préparation…",
+    "loadError": "Les attributions de modèles n’ont pas pu être chargées. Réessayez sans modifier la politique actuelle.",
+    "retry": "Réessayer",
+    "neverChecked": "Non vérifié",
+    "bootstrapUnavailable": "Le paramètre d’initialisation de l’environnement est invalide. Une politique déjà enregistrée reste en vigueur, mais les paramètres par défaut ne peuvent être restaurés tant que le paramètre de déploiement n’est pas corrigé.",
+    "runtimeFallback": "Des requêtes récentes ont utilisé un modèle de secours. Vérifiez le déploiement principal et ses résultats d’opération.",
+    "accountLocation": "Emplacement du compte Azure : {location}",
+    "incidents": "Évolutions récentes de la préparation",
+    "noIncidents": "Aucun échec ni reprise de préparation n’a été enregistré.",
+    "refreshInventory": "Rafraîchir l’inventaire",
+    "refreshing": "Rafraîchissement de l’inventaire…",
+    "configUnavailable": "Le stockage de la politique est indisponible. Les attributions affichées peuvent être la dernière version connue. La modification est désactivée jusqu’à ce que le stockage soit restauré.",
+    "attention": "Nécessite une attention",
+    "eligibleCount": "{count, plural, =0 {Aucun déploiement compatible. Choisissez un modèle régional compatible.} one {Un déploiement compatible. Ajoutez un secours pour plus de résilience.} other {# déploiements compatibles dans cette chaîne.}}",
+    "retirementWarning": "Une version de modèle désignée approche de la retraite. Vérifiez le modèle de remplacement avant de le placer en position principale.",
+    "assignments": "Attributions de modèles",
+    "readiness": "Préparation",
+    "assignmentHint": "Les modèles sont exécutés dans l’ordre affiché. Les déploiements manquants, incompatibles ou retirés sont ignorés. Les requêtes UE restent sur des déploiements validés situés en UE.",
+    "probeUsage": "Les vérifications de compatibilité envoient des requêtes synthétiques fixes avec l’identité de l’application. Elles utilisent peu de jetons de modèle, jamais de données de conversation. Attendez au moins une minute avant de répéter une vérification de déploiement.",
+    "save": "Enregistrer les attributions",
+    "saving": "Enregistrement…",
+    "saved": "Attributions enregistrées. Les nouvelles requêtes suivront cette politique.",
+    "resetDefaults": "Utiliser les paramètres par défaut de l’environnement",
+    "unsaved": "Modifications non enregistrées",
+    "readinessHint": "L’inventaire confirme l’existence d’un déploiement. Une opération valide récente ou une vérification de compatibilité prouve que l’app peut l’utiliser. Les échecs de rafraîchissement n’effacent pas la dernière vérification réussie.",
+    "account": "Liaison de compte : {binding}",
+    "lastInventory": "Dernier inventaire réussi : {time}",
+    "retirementUnknown": "Le statut de retraite est inconnu car le catalogue de modèles n’a pas pu être vérifié.",
+    "history": "Historique de la politique",
+    "revision": "Révision effective : {revision}",
+    "noHistory": "Aucun changement de politique n’a été enregistré dans cet environnement.",
+    "conflict": "Un autre administrateur a modifié la politique. Votre brouillon est toujours ici. Rechargez la politique avant d’effectuer un nouvel enregistrement.",
+    "rateLimit": "Ce déploiement a été vérifié récemment. Attendez une minute avant de le vérifier à nouveau.",
+    "actionError": "L’action n’a pas pu être menée à bien. Vérifiez les détails et réessayez ; votre brouillon n’a pas été supprimé.",
+    "technicalDetails": "Détails techniques",
+    "reloadPolicy": "Recharger la politique et abandonner le brouillon",
+    "emptyChain": "Aucun modèle n’est attribué. Ajoutez un déploiement compatible avant d’enregistrer.",
+    "primary": "Principal",
+    "fallback": "Secours",
+    "unknown": "Inconnu",
+    "retires": "Version du modèle retirée le {date}",
+    "checkResults": "Résultats de la vérification de l’opération",
+    "passed": "Réussi",
+    "moveUp": "Déplacer vers le haut",
+    "moveDown": "Déplacer vers le bas",
+    "remove": "Supprimer",
+    "moveUpLabel": "Déplacer {model} vers le haut",
+    "moveDownLabel": "Déplacer {model} vers le bas",
+    "removeLabel": "Retirer {model} de la chaîne",
+    "runChecks": "Lancer les vérifications de compatibilité",
+    "findDeployment": "Rechercher un déploiement",
+    "deployment": "Déploiement",
+    "chooseDeployment": "Choisir un déploiement",
+    "addDeployment": "Ajouter à la chaîne",
+    "checkBeforeAdd": "Lancer les vérifications de compatibilité de cet usage avant d’ajouter le déploiement.",
+    "assessmentManaged": "Les modèles d'évaluation de recherche et les solutions de repli sont gérés dans Modèles et disponibilité.",
+    "manageModels": "Gérer les modèles et la disponibilité",
+    "purpose": {
+      "routing": "Routage",
+      "searchAssessment": "Évaluation de recherche"
+    },
+    "purposeDescription": {
+      "routing": "Sélection de compétences, routage de recherche et de code, et classification de réduction de document.",
+      "searchAssessment": "Évaluer les sources et choisir l’étape suivante lors d’une recherche à étapes multiples."
+    },
+    "state": {
+      "ready": "Prêt",
+      "unverified": "Disponible, non entièrement vérifié",
+      "fallback": "Utilisation d'une solution de repli",
+      "unavailable": "Aucun modèle éligible",
+      "check_unavailable": "Vérifications indisponibles"
+    },
+    "inventoryState": {
+      "current": "Actuel",
+      "stale": "Dernier inventaire connu",
+      "unavailable": "Inventaire indisponible"
+    },
+    "operation": {
+      "skills": "Sélection de compétences",
+      "tools": "Routage d’outils",
+      "trim": "Classification de réduction",
+      "assessment": "Évaluation de recherche"
+    },
+    "reason": {
+      "endpoint_missing": "Point de terminaison ou liaison de compte manquant",
+      "deployment_missing": "Déploiement manquant ou non opérationnel",
+      "unauthorized": "Accès à l'identité de l'application refusé",
+      "timeout": "Vérification expirée",
+      "throttled": "Quota ou limite de taux atteinte",
+      "incompatible": "Opération incompatible",
+      "provider": "Échec de l'appel au fournisseur",
+      "residency": "Zone de traitement non autorisée",
+      "retired": "Version du modèle retirée",
+      "inventory_unavailable": "Impossible de vérifier l’inventaire",
+      "refused": "Le modèle a refusé la requête"
+    },
+    "accountError": {
+      "account_resource_missing": "Configurez l’ID de ressource Foundry ARM de cette liaison pour vérifier son inventaire.",
+      "endpoint_missing": "Configurez le point de terminaison d’inférence de cette liaison.",
+      "endpoint_account_mismatch": "Le point de terminaison et l’ID de ressource ARM identifient des comptes différents. Corrigez la configuration du déploiement.",
+      "inventory_refresh_failed": "Échec de l’actualisation de l’inventaire. Vérifiez l’accès Lecteur de l’identité de l’application et la connectivité du compte.",
+      "credential_unavailable": "L’application n’a pas pu obtenir son identifiant d’inventaire. Vérifiez la configuration de l’identité du déploiement."
+    }
   }
 }

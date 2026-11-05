@@ -5625,7 +5625,8 @@
       "webSearch": "Fins on pot arribar una cerca web: cerca multi-pas, el model d'avaluació i els seus límits.",
       "contextBudget": "Quant de la conversa s'envia a cada model en cada torn.",
       "analytics": "Informes lliurats: què ha arribat, qui pot obrir cada carpeta i quins camps es poden mostrar.",
-      "skills": "Blocs d'instruccions reutilitzables que l'assistent aplica quan una conversa els necessita."
+      "skills": "Blocs d'instruccions reutilitzables que l'assistent aplica quan una conversa els necessita.",
+      "models": "Assigna models de fons i verifica la preparació per al desplegament regional."
     },
     "openSettings": "Obre la configuració",
     "area": {
@@ -5637,7 +5638,8 @@
       "webSearch": "Cerca web",
       "contextBudget": "Pressupost de context",
       "analytics": "Analítica",
-      "skills": "Habilitats"
+      "skills": "Habilitats",
+      "models": "Models i preparació"
     }
   },
   "limits": {
@@ -8001,5 +8003,114 @@
     "invalidated": "Memòria cau invalidada. Es requereix una verificació nova en la propera sol·licitud protegida; els permisos encara no s'han tornat a comprovar.",
     "failed": "No s'ha pogut confirmar la invalidació de la memòria cau. Torna-ho a provar d'aquí a poc.",
     "propagationNote": "Això obliga a fer una revisió nova, no un canvi en els permisos de Microsoft. Els retards de propagació de Microsoft continuen aplicant-se. Les operacions ja autoritzades no es desfan."
+  },
+  "auxiliaryModels": {
+    "title": "Models i preparació",
+    "description": "Tria models per a decisions de fons i inspecciona els desplegaments que els serveixen.",
+    "environmentHint": "Els canvis només s'apliquen a aquest entorn. Live, beta i dev tenen polítiques independents.",
+    "updated": "Informe actualitzat: {time}",
+    "loading": "S'estan carregant les assignacions de models i l'estat de preparació…",
+    "loadError": "No s'han pogut carregar les assignacions de models. Torna-ho a intentar sense canviar la política actual.",
+    "retry": "Torna a intentar",
+    "neverChecked": "Sense comprovar",
+    "bootstrapUnavailable": "El paràmetre d'inicialització de l'entorn és invàlid. Es manté la política guardada existent, però no es poden restaurar els valors predeterminats fins que el paràmetre de desplegament no es corregeixi.",
+    "runtimeFallback": "Sol·licituds recents han utilitzat un model de recurs. Comprova el desplegament principal i els seus resultats operatius.",
+    "accountLocation": "Ubicació del compte d'Azure: {location}",
+    "incidents": "Canvis recents de preparació",
+    "noIncidents": "No s'han registrat errors ni recuperacions de la preparació.",
+    "refreshInventory": "Actualitza l'inventari",
+    "refreshing": "S'està actualitzant l'inventari…",
+    "configUnavailable": "L'emmagatzematge de la política no està disponible. Les assignacions mostrades poden ser la darrera versió coneguda. L'edició està desactivada fins que es recuperi l'emmagatzematge.",
+    "attention": "Cal atenció",
+    "eligibleCount": "{count, plural, =0 {Cap desplegament compatible. Tria un model regional compatible.} one {Un desplegament compatible. Afegeix un recurs per millorar la resiliència.} other {# desplegaments compatibles en aquesta cadena.}}",
+    "retirementWarning": "Una versió designada del model està a punt de retirar-se. Comprova el substitut abans de posar-lo com a principal.",
+    "assignments": "Assignacions de models",
+    "readiness": "Preparació",
+    "assignmentHint": "Els models s'executen en l'ordre mostrat. Els desplegaments absents, incompatibles o retirats es salten. Les sol·licituds de la UE es mantenen en desplegaments verificats amb residència a la UE.",
+    "probeUsage": "Les comprovacions de compatibilitat envien sol·licituds sintètiques fixes amb la identitat de l'aplicació. Utilitzen pocs tokens del model i mai dades de converses. Espera almenys un minut abans de repetir la comprovació d'un desplegament.",
+    "save": "Desa assignacions",
+    "saving": "S'està desant…",
+    "saved": "Assignacions desades. Les noves sol·licituds utilitzen aquesta política.",
+    "resetDefaults": "Utilitza els valors predeterminats de l'entorn",
+    "unsaved": "Canvis sense desar",
+    "readinessHint": "L'inventari confirma que existeix un desplegament. Una operació vàlida recent o una comprovació de compatibilitat confirma que l'app el pot utilitzar. Les actualitzacions fallides no esborren la darrera comprovació amb èxit.",
+    "account": "Enllaç del compte: {binding}",
+    "lastInventory": "Darrer inventari amb èxit: {time}",
+    "retirementUnknown": "L'estat de retirada és desconegut perquè no s'ha pogut verificar el catàleg de models.",
+    "history": "Historial de polítiques",
+    "revision": "Revisió efectiva: {revision}",
+    "noHistory": "No s'han registrat canvis de política en aquest entorn.",
+    "conflict": "Un altre administrador ha canviat la política. El teu esborrany encara hi és. Torna a carregar la política abans de desar de nou.",
+    "rateLimit": "Aquest desplegament s'ha verificat recentment. Espera un minut abans de tornar-lo a comprovar.",
+    "actionError": "No s'ha pogut completar l'acció. Revisa els detalls i torna-ho a provar; el teu esborrany no s'ha descartat.",
+    "technicalDetails": "Detalls tècnics",
+    "reloadPolicy": "Torna a carregar la política i descarta l'esborrany",
+    "emptyChain": "No hi ha models assignats. Afegeix un desplegament compatible abans de desar.",
+    "primary": "Principal",
+    "fallback": "Recurs",
+    "unknown": "Desconegut",
+    "retires": "La versió del model es retira el {date}",
+    "checkResults": "Resultats de la comprovació de l'operació",
+    "passed": "Passada",
+    "moveUp": "Puja",
+    "moveDown": "Mou cap avall",
+    "remove": "Elimina",
+    "moveUpLabel": "Mou {model} cap amunt",
+    "moveDownLabel": "Mou {model} cap avall",
+    "removeLabel": "Elimina {model} de la cadena",
+    "runChecks": "Executa les comprovacions de compatibilitat",
+    "findDeployment": "Troba un desplegament",
+    "deployment": "Desplegament",
+    "chooseDeployment": "Tria un desplegament",
+    "addDeployment": "Afegeix a la cadena",
+    "checkBeforeAdd": "Executa les comprovacions de compatibilitat d'aquesta finalitat abans d'afegir el desplegament.",
+    "assessmentManaged": "Els models d'avaluació de cerca i les alternatives es gestionen a Models i preparació.",
+    "manageModels": "Gestiona models i preparació",
+    "purpose": {
+      "routing": "Enrutament",
+      "searchAssessment": "Avaluació de cerca"
+    },
+    "purposeDescription": {
+      "routing": "Selecció d'habilitats, enrutament de cerques i codi, i classificació d'escurçament de documents.",
+      "searchAssessment": "Avalua les fonts i tria el pròxim pas durant una cerca en diversos passos."
+    },
+    "state": {
+      "ready": "Preparat",
+      "unverified": "Disponible, no completament verificat",
+      "fallback": "S'està utilitzant una alternativa",
+      "unavailable": "No hi ha cap model apte",
+      "check_unavailable": "Comprovacions no disponibles"
+    },
+    "inventoryState": {
+      "current": "Actual",
+      "stale": "Últim inventari conegut",
+      "unavailable": "Inventari no disponible"
+    },
+    "operation": {
+      "skills": "Selecció d'habilitats",
+      "tools": "Enrutament d'eines",
+      "trim": "Classificació d'escurçament",
+      "assessment": "Avaluació de cerca"
+    },
+    "reason": {
+      "endpoint_missing": "Falta vinculació d'endpoint o compte",
+      "deployment_missing": "Falta el desplegament o no està servint",
+      "unauthorized": "Accés d'identitat de l'aplicació denegat",
+      "timeout": "La comprovació ha excedit el temps",
+      "throttled": "S'ha assolit el límit de quota o de velocitat",
+      "incompatible": "Operació incompatible",
+      "provider": "Error en la crida al proveïdor",
+      "residency": "No es permet la zona de processament",
+      "retired": "Versió del model retirada",
+      "inventory_unavailable": "No s'ha pogut verificar l'inventari",
+      "refused": "El model ha refusat la sol·licitud"
+    },
+    "accountError": {
+      "account_resource_missing": "Configura l'ID de recurs Foundry ARM d'aquesta vinculació per verificar-ne l'inventari.",
+      "endpoint_missing": "Configura l'endpoint d'inferència d'aquesta vinculació.",
+      "endpoint_account_mismatch": "L'endpoint i l'ID de recurs ARM identifiquen comptes diferents. Corregeix la configuració del desplegament.",
+      "inventory_refresh_failed": "No s'ha pogut actualitzar l'inventari. Comprova l'accés de Lector de la identitat de l'aplicació i la connectivitat del compte.",
+      "credential_unavailable": "L'aplicació no ha pogut obtenir la seva credencial d'inventari. Comprova la configuració de la identitat de desplegament."
+    }
   }
 }

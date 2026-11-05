@@ -5609,7 +5609,8 @@
       "webSearch": "Koliko daleko može ići web pretraga: višekorak pretraga, njen model procene i granice.",
       "contextBudget": "Koliko se istorije razgovora šalje svakom modelu u svakom krugu.",
       "analytics": "Dostavljeni izveštaji: šta je stiglo, ko može da otvori svaki folder i koja polja mogu biti prikazana.",
-      "skills": "Ponovo upotrebljivi blokovi instrukcija koje asistent primenjuje kada su potrebni u razgovoru."
+      "skills": "Ponovo upotrebljivi blokovi instrukcija koje asistent primenjuje kada su potrebni u razgovoru.",
+      "models": "Dodelite pozadinske modele i proverite spremnost regionalnog raspoređivanja."
     },
     "openSettings": "Otvori podešavanja",
     "area": {
@@ -5621,7 +5622,8 @@
       "webSearch": "Web pretraga",
       "contextBudget": "Budžet konteksta",
       "analytics": "Analitika",
-      "skills": "Veštine"
+      "skills": "Veštine",
+      "models": "Modeli i spremnost"
     }
   },
   "limits": {
@@ -7985,5 +7987,114 @@
     "invalidated": "Keš je poništen. Potrebna je nova verifikacija pri sledećem zaštićenom zahtevu; dozvole još nisu ponovo proverene.",
     "failed": "Poništavanje keša nije potvrđeno. Pokušajte ponovo uskoro.",
     "propagationNote": "Ovo primorava novu proveru, ali ne menja Microsoft dozvole. Kašnjenja propagacije kod Microsofta i dalje važe. Već odobrene operacije nisu opozvane."
+  },
+  "auxiliaryModels": {
+    "title": "Modeli i spremnost",
+    "description": "Izaberite modele za pozadinske odluke i proverite implementacije koje ih koriste.",
+    "environmentHint": "Promene se odnose samo na ovo okruženje. Live, beta i dev imaju nezavisne politike.",
+    "updated": "Izveštaj ažuriran: {time}",
+    "loading": "Učitavanje dodela modela i spremnosti…",
+    "loadError": "Dodele modela nije moguće učitati. Pokušajte ponovo bez menjanja trenutne politike.",
+    "retry": "Pokušaj ponovo",
+    "neverChecked": "Nije provereno",
+    "bootstrapUnavailable": "Podešavanje okruženja za pokretanje je neispravno. Postojeća sačuvana politika ostaje na snazi, ali podrazumevane vrednosti okruženja se ne mogu vratiti dok se podešavanja implementacije ne isprave.",
+    "runtimeFallback": "Skorašnji zahtevi su koristili rezervni model. Proverite primarnu implementaciju i rezultate njenog rada.",
+    "accountLocation": "Lokacija Azure naloga: {location}",
+    "incidents": "Skorašnje promene spremnosti",
+    "noIncidents": "Nisu zabeleženi problemi ni oporavci vezani za spremnost.",
+    "refreshInventory": "Osveži inventar",
+    "refreshing": "Osvežavanje inventara…",
+    "configUnavailable": "Skladište politike nije dostupno. Prikazane dodele mogu biti poslednja poznata verzija. Izmena je onemogućena dok se skladište ne oporavi.",
+    "attention": "Potrebna pažnja",
+    "eligibleCount": "{count, plural, =0 {Nema dostupnih implementacija. Izaberite kompatibilan regionalni model.} one {Jedna dostupna implementacija. Dodajte rezervnu opciju za veću otpornost.} other {# dostupnih implementacija u ovom lancu.}}",
+    "retirementWarning": "Označena verzija modela uskoro izlazi iz upotrebe. Proverite zamenu pre nego što je postavite kao primarnu.",
+    "assignments": "Dodele modela",
+    "readiness": "Spremnost",
+    "assignmentHint": "Modeli se izvršavaju redosledom prikazanim na listi. Nedostupne, nekompatibilne i penzionisane implementacije se preskaču. Zahtevi iz EU ostaju na verifikovanim EU implementacijama.",
+    "probeUsage": "Provere kompatibilnosti šalju fiksirane sintetičke zahteve sa identitetom aplikacije. Koriste mali broj tokena modela, nikada podatke konverzacije. Sačekajte najmanje jedan minut pre sledeće provere implementacije.",
+    "save": "Sačuvaj dodele",
+    "saving": "Čuvanje…",
+    "saved": "Dodele sačuvane. Novi zahtevi koriste ovu politiku.",
+    "resetDefaults": "Koristi podrazumevana podešavanja okruženja",
+    "unsaved": "Nesačuvane promene",
+    "readinessHint": "Inventar potvrđuje postojanje implementacije. Skorašnja uspešna operacija ili provera kompatibilnosti potvrđuju da aplikacija može da je koristi. Neuspešna osvežavanja ne brišu poslednju uspešnu proveru.",
+    "account": "Povezivanje naloga: {binding}",
+    "lastInventory": "Poslednji uspešan inventar: {time}",
+    "retirementUnknown": "Status penzionisanja nije poznat jer katalog modela nije moguće verifikovati.",
+    "history": "Istorija politike",
+    "revision": "Važeća revizija: {revision}",
+    "noHistory": "U ovom okruženju nije zabeležena nijedna promena politike.",
+    "conflict": "Drugi administrator je izmenio politiku. Vaš nacrt je i dalje sačuvan. Učitajte politiku ponovo pre novog čuvanja.",
+    "rateLimit": "Ova implementacija je nedavno proverena. Sačekajte minut pre ponovne provere.",
+    "actionError": "Akcija nije mogla biti završena. Proverite detalje i pokušajte ponovo; vaš nacrt nije odbačen.",
+    "technicalDetails": "Tehnički detalji",
+    "reloadPolicy": "Ponovo učitaj politiku i odbaci nacrt",
+    "emptyChain": "Nijedan model nije dodeljen. Dodajte kompatibilnu implementaciju pre čuvanja.",
+    "primary": "Primarni",
+    "fallback": "Rezervni",
+    "unknown": "Nepoznato",
+    "retires": "Verzija modela izlazi iz upotrebe {date}",
+    "checkResults": "Rezultati provere operacije",
+    "passed": "Prošla",
+    "moveUp": "Pomeri nagore",
+    "moveDown": "Pomeri dole",
+    "remove": "Ukloni",
+    "moveUpLabel": "Pomeri {model} gore",
+    "moveDownLabel": "Pomeri {model} dole",
+    "removeLabel": "Ukloni {model} iz lanca",
+    "runChecks": "Pokreni provere kompatibilnosti",
+    "findDeployment": "Pronađi deployment",
+    "deployment": "Deployment",
+    "chooseDeployment": "Izaberi deployment",
+    "addDeployment": "Dodaj u lanac",
+    "checkBeforeAdd": "Pokreni provere kompatibilnosti za ovu namenu pre dodavanja deploymenta.",
+    "assessmentManaged": "Modeli za pretragu i procenu i fallback opcije se upravljaju u Modelima i spremnosti.",
+    "manageModels": "Upravljaj modelima i spremnošću",
+    "purpose": {
+      "routing": "Ruting",
+      "searchAssessment": "Procena pretrage"
+    },
+    "purposeDescription": {
+      "routing": "Izbor veština, rutiranje pretrage i koda, i klasifikacija za skraćivanje dokumenata.",
+      "searchAssessment": "Proceni izvore i izaberi sledeći korak tokom pretrage u više koraka."
+    },
+    "state": {
+      "ready": "Spreman",
+      "unverified": "Dostupan, nije potpuno provereno",
+      "fallback": "Koristi se fallback",
+      "unavailable": "Nema odgovarajućeg modela",
+      "check_unavailable": "Provere nisu dostupne"
+    },
+    "inventoryState": {
+      "current": "Trenutno",
+      "stale": "Poslednje poznato stanje inventara",
+      "unavailable": "Inventar nije dostupan"
+    },
+    "operation": {
+      "skills": "Izbor veština",
+      "tools": "Ruting alata",
+      "trim": "Klasifikacija za skraćivanje",
+      "assessment": "Procena pretrage"
+    },
+    "reason": {
+      "endpoint_missing": "Nedostaje endpoint ili veza sa nalogom",
+      "deployment_missing": "Nedostaje deployment ili nije aktivan",
+      "unauthorized": "Pristup identitetu aplikacije odbijen",
+      "timeout": "Provera je istekla",
+      "throttled": "Dostignuta kvota ili ograničenje brzine",
+      "incompatible": "Nekompatibilna operacija",
+      "provider": "Poziv provider-u nije uspeo",
+      "residency": "Zona obrade nije dozvoljena",
+      "retired": "Verzija modela je povučena",
+      "inventory_unavailable": "Inventar nije mogao biti potvrđen",
+      "refused": "Model je odbio zahtev"
+    },
+    "accountError": {
+      "account_resource_missing": "Podesite Foundry ARM resource ID vezivanja kako biste proverili inventar.",
+      "endpoint_missing": "Podesite inference endpoint za ovo vezivanje.",
+      "endpoint_account_mismatch": "Endpoint i ARM resource ID identifikuju različite naloge. Ispravite konfiguraciju deploymenta.",
+      "inventory_refresh_failed": "Obnova inventara nije uspela. Proverite Reader pristup identiteta aplikacije i povezanost naloga.",
+      "credential_unavailable": "Aplikacija nije mogla da dođe do svojih akreditiva za inventar. Proverite konfiguraciju identiteta za deployment."
+    }
   }
 }

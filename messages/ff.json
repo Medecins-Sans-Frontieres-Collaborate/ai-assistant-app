@@ -5609,7 +5609,8 @@
       "webSearch": "Njangde web: njangde e yuɲeji, model assessor e luttugol ɗum.",
       "contextBudget": "Hooɗe konngol mon model njangu e baŋngal.",
       "analytics": "Rapporte ligge: wondude, kanko waawanaa uɓɓit fodere, e caɗeeji waawi hollita.",
-      "skills": "Bakkaaji tawa ngal jaggi e naatude jooni, jooni ummora mo waawaani."
+      "skills": "Bakkaaji tawa ngal jaggi e naatude jooni, jooni ummora mo waawaani.",
+      "models": "Seydu moodel e noolirde sey to kesi laawol ndiyam."
     },
     "openSettings": "Hollu teeltorde",
     "area": {
@@ -5621,7 +5622,8 @@
       "webSearch": "Njangde web",
       "contextBudget": "Konngol njangu",
       "analytics": "Analytics",
-      "skills": "Ndikkaaji"
+      "skills": "Ndikkaaji",
+      "models": "Moodel e noolirde"
     }
   },
   "limits": {
@@ -7985,5 +7987,114 @@
     "invalidated": "Binndol-jiite momti. So wowli e bantare ina soɓa waawi ɓeydude binndol-jiite; topirde binndol-jiite yettaa ngam waawi.",
     "failed": "Momtude binndol-jiite ngakka waawi ɓeydude. Naat so ɓuri hondu.",
     "propagationNote": "O ngolla ko topirde binndol-jiite neɗɗa, teeɗa rewte Microsoft binndol-jiite. Humtorde Microsoft waawaani waɗora seŋi. Nda so mbaɗi tiggirde ɗuum, hay goonga leydi bingel."
+  },
+  "auxiliaryModels": {
+    "title": "Moodel e noolirde",
+    "description": "Suɓo moodelji ɗiɗi e laawol kammu e yiɗi mo e ɓuri noone.",
+    "environmentHint": "Jonnude moƴƴi e kawtal gese. Live, beta e dev ɗon njaarnde hirnaari kawtal.",
+    "updated": "Jaɓɓorgo laawol: {time}",
+    "loading": "Nana ɗaɗi seydu moodelji e noolirde...",
+    "loadError": "Seydude moodelji alaa. Fuɗɗi haali, tee bolle ngal yo no huukurta.",
+    "retry": "Fuɗɗi",
+    "neverChecked": "Ala ndaarirde",
+    "bootstrapUnavailable": "Teelte bootstrap kawtal ngal jamfu. Kebhe caɗɗi laawdi, amma larugo kalaa kadi so teelte deployment njeege.",
+    "runtimeFallback": "Nyoɓdi sago laawdo fallback. Yiɗi laawol duuɓi e hesere kammu.",
+    "accountLocation": "Azure account location: {location}",
+    "incidents": "Hoore noolirde ɓe",
+    "noIncidents": "Ala karbude wala okkitde laawol hooli.",
+    "refreshInventory": "Heskita kawtal",
+    "refreshing": "Nana heskita kawtal...",
+    "configUnavailable": "Laawol ngoodi alaa. Loowdi seydu ɗe yo yɛttude caɗɗi. Fayde waawi soppita so ngoodi jogi.",
+    "attention": "Miɗo yiya",
+    "eligibleCount": "{count, plural, =0 {Ala deployment moƴƴi. Suɓo moodel kawtal mawnde.} one {Goɗɗo deployment moƴƴi. Daalee fallback meelno laawol.} other {# deployment moƴƴi e jooni.}}",
+    "retirementWarning": "Moodel totoo goonga so ndu waawi fayde. Yiɗi cuɓo moodel jokkondirɗo yamir.",
+    "assignments": "Seydude moodel",
+    "readiness": "Noolirde",
+    "assignmentHint": "Moodelji mengu orde juulde. Kalil, moodel laawol, tigi baawale ɓe. Nyoɓdi EU ɗaɗi EU-resident jokkondirɗo.",
+    "probeUsage": "Ndaarirde ko app identity suɓi haalis ɗiɗi. O jogi moodel pat. Men waawi use kalɗum. Kala ndaarirde deployment foti jam ɗi ɗoo.",
+    "save": "Danndu seydude",
+    "saving": "Nana danndu...",
+    "saved": "Moodelji seydaama. Njoɓdi yeeso yiɗi laawol tawo.",
+    "resetDefaults": "Use kawtal jamfu",
+    "unsaved": "Joɓii haali",
+    "readinessHint": "Kawtal hiɓi goɗɗo deployment. Laawol joome lesdi ko waawi njoɓdi. Heskita laawol alaa huutora waare njoɓdi.",
+    "account": "Cuɓtu account: {binding}",
+    "lastInventory": "Kawtal lesdi fayde: {time}",
+    "retirementUnknown": "Status fayde waawi howtude, katalog moodel alaa njaarnde.",
+    "history": "Laawol hande",
+    "revision": "Revision: {revision}",
+    "noHistory": "Ala moƴƴude laawol e kawtal ngal.",
+    "conflict": "Admin mawɗo feɗi laawol. Joɓii draft. Ñalla laawol jambungal rewir.",
+    "rateLimit": "Deployment ngol ndaarri. Heddu ndiyam kanko ndaroo.",
+    "actionError": "So tawii moƴƴude. Yiɗi hol ko feewi, tee fuɗɗi. Joɓii draft mo.",
+    "technicalDetails": "Kaɗɗo ngoodi",
+    "reloadPolicy": "Ñalla laawol e momta draft",
+    "emptyChain": "Ala moodel seydaama. Suɓo deployment moƴƴi, batu danndude.",
+    "primary": "Jokkondirɗo",
+    "fallback": "Fallback",
+    "unknown": "Alaa",
+    "retires": "Moodel ngol fayde {date}",
+    "checkResults": "Njoɓdi laawol",
+    "passed": "Tawii",
+    "moveUp": "Naatnu ko ɗiɗo",
+    "moveDown": "Soo dow",
+    "remove": "Momtu",
+    "moveUpLabel": "Soo {model} ko gila",
+    "moveDownLabel": "Soo {model} dow",
+    "removeLabel": "Momtu {model} e ceɗɗi",
+    "runChecks": "Semmbu banndu sukkondiral",
+    "findDeployment": "Yiy ceɗɗi",
+    "deployment": "Ceɗɗi",
+    "chooseDeployment": "Suɓo ceɗɗi",
+    "addDeployment": "Ɓeydu e ceɗɗi",
+    "checkBeforeAdd": "Semmbu banndu sukkondiral ngol tun, ko to njaɗɗin ceɗɗi.",
+    "assessmentManaged": "Moodel jiɓol sukkondiral e banndu fayde eno wona ko Models e readiness.",
+    "manageModels": "Feññi moodel e readiness",
+    "purpose": {
+      "routing": "Yeerina",
+      "searchAssessment": "Sukkondiral yiyde"
+    },
+    "purposeDescription": {
+      "routing": "Suɓa jam, yiyde e yeerina code, e cataaji kalaama.",
+      "searchAssessment": "Sukkondir e suɓo baɗte to ngam yiyde banndi lawol."
+    },
+    "state": {
+      "ready": "Ko laawol",
+      "unverified": "Dum jogii, amma anndaa",
+      "fallback": "Nennditaade fallback",
+      "unavailable": "Moodel jogorɗo/aƴa jogi",
+      "check_unavailable": "Banndu sukkuɗe aƴa jogi"
+    },
+    "inventoryState": {
+      "current": "Jonnondirde",
+      "stale": "Jonnondirde njiyataa",
+      "unavailable": "Jonnondirde aƴa jogi"
+    },
+    "operation": {
+      "skills": "Suɓo jam",
+      "tools": "Yeerina ngesa",
+      "trim": "Kalaama cataaji",
+      "assessment": "Sukkondiral yiyde"
+    },
+    "reason": {
+      "endpoint_missing": "Endpoint walla bindugol account aƴa jogi",
+      "deployment_missing": "Ceɗɗi aƴa jogi walla waawataa fayda",
+      "unauthorized": "Access moƴƴi app identity",
+      "timeout": "Banndu waawtaa",
+      "throttled": "Quota walla rate limit reentii",
+      "incompatible": "Huutorde a waawannda",
+      "provider": "Loomirɗo ummoraade",
+      "residency": "Sebhi mum ngalaa waawde",
+      "retired": "Lennol moodel ngesa",
+      "inventory_unavailable": "A waawanee andude jonnondirde",
+      "refused": "Moodel refuseri jamfa"
+    },
+    "accountError": {
+      "account_resource_missing": "Teelta Foundry ARM resource ID binding ngol ngam iyi jonnondirde mum.",
+      "endpoint_missing": "Teelta endpoint inference binding ngol.",
+      "endpoint_account_mismatch": "Endpoint e ARM resource ID yiɗi accounteji ɗiɓɓe. Fayda teelte ceɗɗi.",
+      "inventory_refresh_failed": "Jonnondirde hesɗinii. Teeŋtu access Reader app identity e connectivity account.",
+      "credential_unavailable": "App a waawani andude credential jonnondirde mum. Teeŋtu teelte ceɗɗi identity."
+    }
   }
 }

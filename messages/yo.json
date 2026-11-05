@@ -5609,7 +5609,8 @@
       "webSearch": "Bí ìwádìí lórí ayélujára ṣe lè lọ jiná: ìwádìí pẹ̀lú ọ̀nà púpọ̀, àmúdájú rẹ̀ àti àìlà rẹ̀.",
       "contextBudget": "Ìwọn ìtàn àjíròrò tí a rán si gbogbo àlẹ́mọ̀ ní gbogbo yíyí.",
       "analytics": "Ìjábọ́ tí a fi ránṣẹ́: ohun tó dé, ẹni tí ó lè ṣí apamọ́ kọọkan, àti àwọn pápá wo ni a lè fi hàn.",
-      "skills": "Àwọn àkọsílẹ̀ ìtọnisọna tí a lè tun lo tí iranwọ́ nlo bí a bá nílò wọn ninu ibaraẹnisọrọ."
+      "skills": "Àwọn àkọsílẹ̀ ìtọnisọna tí a lè tun lo tí iranwọ́ nlo bí a bá nílò wọn ninu ibaraẹnisọrọ.",
+      "models": "Yan awọn awoṣe abẹlẹ ki o ṣayẹwo imurasilẹ fun ifilọlẹ agbegbe."
     },
     "openSettings": "Ṣí eto",
     "area": {
@@ -5621,7 +5622,8 @@
       "webSearch": "Ìwádìí lórí ayélujára",
       "contextBudget": "Ìpòwó àkọsílẹ̀",
       "analytics": "Ìtúpalẹ̀",
-      "skills": "Ọgbon"
+      "skills": "Ọgbon",
+      "models": "Awoṣe ati imurasilẹ"
     }
   },
   "limits": {
@@ -7985,5 +7987,114 @@
     "invalidated": "A ti fagile kaṣi. Ayẹwo tuntun nilo fun ìbéèrè tó ń bọ ti a dáàbò bo; igbanilaaye ko tíi ṣe ayẹwo.",
     "failed": "Ko le jẹrisi atẹyin kaṣi. Da àtunṣe lẹyin keji.",
     "propagationNote": "Eyi fọ̀rọ̀ ṣàyẹwò tuntun, kii ṣe iyipada ninu igbanilaaye Microsoft. Akoko idaduro ikede Microsoft ṣi wulo. Awọn iṣẹ ti a ti fọwọsi ko majẹmú pada."
+  },
+  "auxiliaryModels": {
+    "title": "Awoṣe ati imurasilẹ",
+    "description": "Yan awọn awoṣe fun awọn ipinnu abẹlẹ ki o ṣayẹwo awọn ifilọlẹ ti n ṣiṣẹ wọn.",
+    "environmentHint": "Ayipada naa kan ayika yii nikan. Live, beta ati dev ni eto imulo otooto.",
+    "updated": "Iroyin ti ni imudojuiwọn: {time}",
+    "loading": "N n gba iṣẹ abojuto awoṣe ati imurasilẹ…",
+    "loadError": "Ko le gba iṣẹ abojuto awoṣe. Tun gbiyanju laisi yi imulo lọwọlọwọ pada.",
+    "retry": "Tun gbiyanju",
+    "neverChecked": "Kò tii ṣayẹwo",
+    "bootstrapUnavailable": "Eto bootstrap ayika ko wulo. Imulo ti a fipamọ tẹlẹ ṣi wa n'ipa, ṣugbọn awọn aiyipada ayika ko le ṣe pada titi a fi tọ eto ifilọlẹ rẹ.",
+    "runtimeFallback": "Awọn ibeere to ṣẹṣẹ lo awoṣe yiyipada. Ṣayẹwo ifilọlẹ akọkọ ati awọn esi iṣẹ rẹ.",
+    "accountLocation": "Ipo akọọlẹ Azure: {location}",
+    "incidents": "Awon ayipada imurasilẹ to ṣẹṣẹ",
+    "noIncidents": "Ko si ikuna tabi imupadabọ imurasilẹ ti a ti forukọsilẹ.",
+    "refreshInventory": "Tunṣe akojọ ohun elo",
+    "refreshing": "N tunsẹ akojọ ohun elo…",
+    "configUnavailable": "Ibi ipamọ imulo ko wa lọwọlọwọ. Awọn atokọ awoṣe ti o han le jẹ ẹya to kẹhin ti a mọ. Alakoso ko le ṣe amúlò titi ibi ipamọ yóò fi bọ pada.",
+    "attention": "Nilo ifojusi",
+    "eligibleCount": "{count, plural, =0 {Ko si ifilọlẹ to yẹ. Yan awoṣe agbegbe to yẹ.} one {Ifilọlẹ kan to yẹ. Fikun awoṣe yiyipada lati mu iduroṣinṣin pọ.} other {# ifilọlẹ to yẹ ninu pq yii.}}",
+    "retirementWarning": "Ẹya awoṣe ti a yan sunmọ igba ifẹyinti rẹ. Ṣayẹwo rọpo rẹ ki o to gbe e si ipo akọkọ.",
+    "assignments": "Iṣẹ abojuto awoṣe",
+    "readiness": "Imurasilẹ",
+    "assignmentHint": "Awoṣe n ṣiṣẹ ni irọlẹ ti a fi han. Awọn ifilọlẹ ti ko si, ti ko baamu ati ti ifẹyinti ni a kọja. Awọn ibeere EU wa lori ifilọlẹ EU ti a fọwọsi.",
+    "probeUsage": "Amulo ibamu n firanṣẹ awọn ibeere onitẹmọ pẹlu idamo app. Wọn lo diẹ ninu awọn token awoṣe, kii ṣe data ibanisọrọ rara. Duro o kere ju iṣẹju kan ki o to tun ṣayẹwo ifilọlẹ kan.",
+    "save": "Fipamọ iṣẹ abojuto",
+    "saving": "N fipamọ…",
+    "saved": "Iṣẹ abojuto ti fipamọ. Awọn ibeere tuntun lo imulo yii.",
+    "resetDefaults": "Lo aiyipada ayika",
+    "unsaved": "Ayipada ti a ko fipamọ",
+    "readinessHint": "Akojọ ohun elo fidi mule pe ifilọlẹ wa. Iṣẹ to ṣẹṣẹ ti o pe tabi ayẹwo ibamu fidi mule pe app le lo. Ifẹyinti ti o kuna ko pa ayẹwo to ṣaṣeyọri to kẹhin run.",
+    "account": "Isopọ akọọlẹ: {binding}",
+    "lastInventory": "Akojọ ohun elo to ṣaṣeyọri to kẹhin: {time}",
+    "retirementUnknown": "Ipo ifẹyinti ko mọ nitori a ko le fidi katalog awoṣe mule.",
+    "history": "Itan imulo",
+    "revision": "Atunṣe to wulo: {revision}",
+    "noHistory": "Ko si ayipada imulo ti a ti forukọsilẹ ni ayika yii.",
+    "conflict": "Alakoso miran ti yi imulo pada. Atilẹba rẹ ṣi wa nibi. Tun gbe imulo wọle ki o to ṣe fipamọ tuntun.",
+    "rateLimit": "Ifilọlẹ yii ni a ṣayẹwo laipẹ. Duro iṣẹju kan ki o to tun ṣayẹwo.",
+    "actionError": "Ko le pari iṣe naa. Ṣayẹwo alaye ki o tun gbiyanju; atilehin rẹ ko tii parẹ.",
+    "technicalDetails": "Alaye imọ-ẹrọ",
+    "reloadPolicy": "Tun gbe imulo wọle ki o fọwọsi atilehin",
+    "emptyChain": "Ko si awoṣe ti a fi si ipo. Fikun ifilọlẹ ti o baamu ki o to fipamọ.",
+    "primary": "Akọkọ",
+    "fallback": "Iyipada",
+    "unknown": "Aimo",
+    "retires": "Ẹya awoṣe n fi iṣẹ silẹ ni {date}",
+    "checkResults": "Esi ayẹwo iṣẹ",
+    "passed": "Ti kọja",
+    "moveUp": "Gbe soke",
+    "moveDown": "Gbé sí isalẹ",
+    "remove": "Yọ kuro",
+    "moveUpLabel": "Gbé {model} soke",
+    "moveDownLabel": "Gbé {model} sí isalẹ",
+    "removeLabel": "Yọ {model} kuro nínú ẹ̀rọ",
+    "runChecks": "Ṣiṣe ayewo ibamu",
+    "findDeployment": "Wa agbekọja",
+    "deployment": "Agbekọja",
+    "chooseDeployment": "Yan agbekọja",
+    "addDeployment": "Fi kun ẹ̀rọ",
+    "checkBeforeAdd": "Ṣe ayewo ibamu fún ìdí èyí ṣáájú fífi agbekọja kun.",
+    "assessmentManaged": "Àwọn àmúlò àyẹ̀wò àwárí àti afẹ́yinti ni a n ṣakoso nínú Àmúlò àti ìmúrànṣé.",
+    "manageModels": "Ṣakoso àmúlò àti ìmúrànṣé",
+    "purpose": {
+      "routing": "Ìtẹ̀sísọ",
+      "searchAssessment": "Àyẹ̀wò àwárí"
+    },
+    "purposeDescription": {
+      "routing": "Ìyan aṣáájú, àwárí àti ìtẹ̀sísọ kóòdù, àti ìkawe ìgbọ́nwọ awọn ìwé.",
+      "searchAssessment": "Ṣàtúnṣe àwòrán àwọn orísun kí o sì yan igbésẹ tókàn nínú àwọn àwárí onígbésẹ púpọ̀."
+    },
+    "state": {
+      "ready": "Ṣetán",
+      "unverified": "Wa, kò tíì pé",
+      "fallback": "N lo afẹ́yinti",
+      "unavailable": "Ko si àmúlò tó yẹ",
+      "check_unavailable": "Ayewo ko sí"
+    },
+    "inventoryState": {
+      "current": "Tó wà",
+      "stale": "Ìpamọ̀ àkọ́kọ́",
+      "unavailable": "Ìpamọ̀ ko sí"
+    },
+    "operation": {
+      "skills": "Ìyan aṣáájú",
+      "tools": "Ìtẹ̀sísọ irinṣẹ",
+      "trim": "Ìkawe ìgbọ́nwọ",
+      "assessment": "Àyẹ̀wò àwárí"
+    },
+    "reason": {
+      "endpoint_missing": "Aini ipari tabi asopọ àpamọ̀",
+      "deployment_missing": "Agbekọja ò sí tàbí kò ṣiṣẹ́",
+      "unauthorized": "Akọpamọ app kọwọlé",
+      "timeout": "Ayewo kó pé",
+      "throttled": "Ìyípo péré tàbí ipo àpo ti pé",
+      "incompatible": "Iṣe ko baamu",
+      "provider": "Ìpè pèsè kọja",
+      "residency": "Agbegbe sisẹ̀ kò jẹ́wọ́",
+      "retired": "Ẹ̀ya àmúlò ti wáyẹ",
+      "inventory_unavailable": "Ìpamọ̀ kò ní lè jẹ́rí",
+      "refused": "Àmúlò kọ ìbéèrè"
+    },
+    "accountError": {
+      "account_resource_missing": "Tún ID orisun Foundry ARM asopọ yìí ṣe láti jẹ́rìí ìpamọ̀ rẹ̀.",
+      "endpoint_missing": "Tún ipari inference asopọ yìí ṣe.",
+      "endpoint_account_mismatch": "Ipari àti ARM ID orisun fi àkọọlẹ̀ oríṣìí méjì hàn. Ṣàtúnṣe àtúnṣe agbekọja.",
+      "inventory_refresh_failed": "Ìmúpọ̀ ìpamọ̀ kò ṣaṣeyọri. Ṣàyẹ̀wò ààyè Kaṣe Reader app àti asopọ àkọọlẹ̀.",
+      "credential_unavailable": "App kò le rí ìwé-ẹ̀rí ìpamọ̀ rẹ̀. Ṣàyẹ̀wò àtúnṣe àkọpamọ̀ agbekọja."
+    }
   }
 }

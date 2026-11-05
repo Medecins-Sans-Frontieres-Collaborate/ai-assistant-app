@@ -5625,7 +5625,8 @@
       "webSearch": "Fino a dove può arrivare una ricerca web: ricerca a più passaggi, il suo modello di valutazione e i suoi limiti.",
       "contextBudget": "Quanta parte di una conversazione viene inviata ad ogni turno da ciascun modello.",
       "analytics": "Rapporti consegnati: cosa è arrivato, chi può aprire ogni cartella e quali campi possono essere mostrati.",
-      "skills": "Blocchi di istruzioni riutilizzabili applicati dall'assistente quando necessario durante una conversazione."
+      "skills": "Blocchi di istruzioni riutilizzabili applicati dall'assistente quando necessario durante una conversazione.",
+      "models": "Assegna modelli di background e verifica la prontezza della distribuzione regionale."
     },
     "openSettings": "Apri impostazioni",
     "area": {
@@ -5637,7 +5638,8 @@
       "webSearch": "Ricerca web",
       "contextBudget": "Budget di contesto",
       "analytics": "Analytics",
-      "skills": "Competenze"
+      "skills": "Competenze",
+      "models": "Modelli e prontezza"
     }
   },
   "limits": {
@@ -8001,5 +8003,114 @@
     "invalidated": "Cache invalidata. Alla prossima richiesta protetta sarà necessaria una nuova verifica; le autorizzazioni non sono ancora state ricontrollate.",
     "failed": "Impossibile confermare l’invalidamento della cache. Riprova a breve.",
     "propagationNote": "Questa operazione forza una nuova verifica, ma non modifica le autorizzazioni Microsoft. Si applicano comunque i normali ritardi di propagazione di Microsoft. Le operazioni già autorizzate non vengono annullate."
+  },
+  "auxiliaryModels": {
+    "title": "Modelli e prontezza",
+    "description": "Scegli i modelli per le decisioni di background e verifica le distribuzioni che li servono.",
+    "environmentHint": "Le modifiche si applicano solo a questo ambiente. Live, beta e dev hanno politiche indipendenti.",
+    "updated": "Report aggiornato: {time}",
+    "loading": "Caricamento assegnazioni e prontezza dei modelli…",
+    "loadError": "Impossibile caricare le assegnazioni dei modelli. Riprova senza modificare la policy attuale.",
+    "retry": "Riprova",
+    "neverChecked": "Non verificato",
+    "bootstrapUnavailable": "L'impostazione di bootstrap dell'ambiente non è valida. Una policy salvata esistente rimane in vigore, ma i valori predefiniti dell'ambiente non possono essere ripristinati finché la configurazione della distribuzione non viene corretta.",
+    "runtimeFallback": "Richieste recenti hanno utilizzato un modello di fallback. Controlla la distribuzione primaria e i relativi risultati.",
+    "accountLocation": "Posizione account Azure: {location}",
+    "incidents": "Cambiamenti recenti nella prontezza",
+    "noIncidents": "Nessun errore o ripristino di prontezza registrato.",
+    "refreshInventory": "Aggiorna inventario",
+    "refreshing": "Aggiornamento inventario…",
+    "configUnavailable": "Lo storage delle policy non è disponibile. Le assegnazioni visualizzate potrebbero essere l'ultima versione nota. La modifica è disabilitata finché lo storage non viene ripristinato.",
+    "attention": "Richiede attenzione",
+    "eligibleCount": "{count, plural, =0 {Nessuna distribuzione compatibile. Scegli un modello regionale compatibile.} one {Una distribuzione compatibile. Aggiungi un fallback per migliorare la resilienza.} other {# distribuzioni compatibili in questa catena.}}",
+    "retirementWarning": "Una versione designata del modello sta per essere ritirata. Verifica la sostituzione prima di spostarla alla posizione primaria.",
+    "assignments": "Assegnazioni modelli",
+    "readiness": "Prontezza",
+    "assignmentHint": "I modelli vengono eseguiti nell'ordine mostrato. Le distribuzioni mancanti, incompatibili o ritirate vengono ignorate. Le richieste EU restano sulle distribuzioni residenti e verificate nell'UE.",
+    "probeUsage": "I controlli di compatibilità inviano richieste sintetiche fisse con l'identità dell'app. Utilizzano pochi token modello, mai dati di conversazione. Attendi almeno un minuto prima di ripetere un controllo.",
+    "save": "Salva assegnazioni",
+    "saving": "Salvataggio…",
+    "saved": "Assegnazioni salvate. Le nuove richieste useranno questa policy.",
+    "resetDefaults": "Usa i valori predefiniti dell'ambiente",
+    "unsaved": "Modifiche non salvate",
+    "readinessHint": "L'inventario conferma che una distribuzione esiste. Una recente operazione valida o controllo di compatibilità conferma che l'app può usarla. I refresh falliti non eliminano l'ultimo controllo riuscito.",
+    "account": "Collegamento account: {binding}",
+    "lastInventory": "Ultimo inventario riuscito: {time}",
+    "retirementUnknown": "Lo stato di ritiro è sconosciuto perché il catalogo dei modelli non può essere verificato.",
+    "history": "Cronologia policy",
+    "revision": "Revisione effettiva: {revision}",
+    "noHistory": "Nessuna modifica di policy registrata in questo ambiente.",
+    "conflict": "Un altro amministratore ha modificato la policy. La tua bozza è ancora qui. Ricarica la policy prima di salvare nuovamente.",
+    "rateLimit": "Questa distribuzione è già stata verificata di recente. Attendere un minuto prima di rifare il controllo.",
+    "actionError": "Impossibile completare l'azione. Controlla i dettagli e riprova; la tua bozza non è stata eliminata.",
+    "technicalDetails": "Dettagli tecnici",
+    "reloadPolicy": "Ricarica policy e scarta bozza",
+    "emptyChain": "Nessun modello assegnato. Aggiungi una distribuzione compatibile prima di salvare.",
+    "primary": "Primario",
+    "fallback": "Fallback",
+    "unknown": "Sconosciuto",
+    "retires": "La versione del modello verrà ritirata il {date}",
+    "checkResults": "Risultati controllo operazione",
+    "passed": "Superato",
+    "moveUp": "Sposta su",
+    "moveDown": "Sposta in basso",
+    "remove": "Rimuovi",
+    "moveUpLabel": "Sposta {model} in alto",
+    "moveDownLabel": "Sposta {model} in basso",
+    "removeLabel": "Rimuovi {model} dalla catena",
+    "runChecks": "Esegui verifiche di compatibilità",
+    "findDeployment": "Trova un deployment",
+    "deployment": "Deployment",
+    "chooseDeployment": "Scegli un deployment",
+    "addDeployment": "Aggiungi alla catena",
+    "checkBeforeAdd": "Esegui le verifiche di compatibilità per questo scopo prima di aggiungere il deployment.",
+    "assessmentManaged": "I modelli di valutazione ricerca e i fallback sono gestiti in Modelli e disponibilità.",
+    "manageModels": "Gestisci modelli e disponibilità",
+    "purpose": {
+      "routing": "Instradamento",
+      "searchAssessment": "Valutazione ricerca"
+    },
+    "purposeDescription": {
+      "routing": "Selezione delle competenze, instradamento della ricerca e del codice, e classificazione per riduzione documenti.",
+      "searchAssessment": "Valuta le fonti e scegli il prossimo passo durante una ricerca multi-step."
+    },
+    "state": {
+      "ready": "Pronto",
+      "unverified": "Disponibile, non completamente verificato",
+      "fallback": "Uso fallback",
+      "unavailable": "Nessun modello idoneo",
+      "check_unavailable": "Verifiche non disponibili"
+    },
+    "inventoryState": {
+      "current": "Attuale",
+      "stale": "Ultimo inventario conosciuto",
+      "unavailable": "Inventario non disponibile"
+    },
+    "operation": {
+      "skills": "Selezione delle competenze",
+      "tools": "Instradamento strumenti",
+      "trim": "Classificazione riduzione",
+      "assessment": "Valutazione ricerca"
+    },
+    "reason": {
+      "endpoint_missing": "Endpoint o associazione account mancante",
+      "deployment_missing": "Deployment mancante o non attivo",
+      "unauthorized": "Accesso identità app negato",
+      "timeout": "Verifica scaduta",
+      "throttled": "Quota o limite di velocità raggiunto",
+      "incompatible": "Operazione incompatibile",
+      "provider": "Errore chiamata provider",
+      "residency": "Zona di elaborazione non consentita",
+      "retired": "Versione modello ritirata",
+      "inventory_unavailable": "Inventario non verificabile",
+      "refused": "Modello ha rifiutato la richiesta"
+    },
+    "accountError": {
+      "account_resource_missing": "Configura la Foundry ARM resource ID di questa associazione per verificare il suo inventario.",
+      "endpoint_missing": "Configura l'endpoint di inferenza di questa associazione.",
+      "endpoint_account_mismatch": "L'endpoint e l'ARM resource ID corrispondono a account diversi. Correggi la configurazione del deployment.",
+      "inventory_refresh_failed": "Aggiornamento inventario non riuscito. Verifica l'accesso Reader per l'identità dell'app e la connettività dell'account.",
+      "credential_unavailable": "L'app non ha potuto ottenere le credenziali per l'inventario. Controlla la configurazione dell'identità del deployment."
+    }
   }
 }

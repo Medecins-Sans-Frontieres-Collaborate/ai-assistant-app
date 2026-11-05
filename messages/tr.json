@@ -5625,7 +5625,8 @@
       "webSearch": "Web aramasının ne kadar ileri gidebileceği: çok aşamalı arama, denetleyici modeli ve sınırları.",
       "contextBudget": "Her modelin her turda aldığı konuşma miktarı.",
       "analytics": "Teslim edilen raporlar: neler geldi, her klasörü kim açabilir, hangi alanlar gösterilebilir.",
-      "skills": "Asistanın, gerektiğinde bir konuşmaya uyguladığı tekrar kullanılabilir talimat blokları."
+      "skills": "Asistanın, gerektiğinde bir konuşmaya uyguladığı tekrar kullanılabilir talimat blokları.",
+      "models": "Arka plan modellerini atayın ve bölgesel dağıtım hazırlığını kontrol edin."
     },
     "openSettings": "Ayarları aç",
     "area": {
@@ -5637,7 +5638,8 @@
       "webSearch": "Web arama",
       "contextBudget": "Kontekst bütçesi",
       "analytics": "Analitik",
-      "skills": "Yetenekler"
+      "skills": "Yetenekler",
+      "models": "Modeller ve hazırlık"
     }
   },
   "limits": {
@@ -8001,5 +8003,114 @@
     "invalidated": "Önbellek geçersiz kılındı. Sonraki korumalı istekte yeniden doğrulama gereklidir; izinler henüz tekrar kontrol edilmemiştir.",
     "failed": "Önbelleğin geçersiz kılındığı doğrulanamadı. Kısa süre içinde tekrar deneyin.",
     "propagationNote": "Bu, Microsoft izinlerinde bir değişiklik yapmaz, yalnızca yeni bir kontrolü zorlar. Microsoft yayılma gecikmeleri yine de geçerlidir. Zaten yetkilendirilmiş işlemler geri alınmaz."
+  },
+  "auxiliaryModels": {
+    "title": "Modeller ve hazırlık",
+    "description": "Arka plan kararları için modelleri seçin ve onları servis eden dağıtımları inceleyin.",
+    "environmentHint": "Değişiklikler yalnızca bu ortamda geçerlidir. Live, beta ve dev ortamlarının politikaları birbirinden bağımsızdır.",
+    "updated": "Rapor güncellendi: {time}",
+    "loading": "Model atamaları ve hazırlık durumu yükleniyor…",
+    "loadError": "Model atamaları yüklenemedi. Mevcut politikayı değiştirmeden tekrar deneyin.",
+    "retry": "Yeniden dene",
+    "neverChecked": "Kontrol edilmedi",
+    "bootstrapUnavailable": "Ortamın bootstrap ayarı geçersiz. Kaydedilmiş mevcut politika yürürlükte kalır, ancak dağıtım ayarı düzeltilene kadar ortam varsayılanları geri yüklenemez.",
+    "runtimeFallback": "Son taleplerde yedek bir model kullanıldı. Birincil dağıtımı ve operasyon sonuçlarını kontrol edin.",
+    "accountLocation": "Azure hesap konumu: {location}",
+    "incidents": "Son hazırlık değişiklikleri",
+    "noIncidents": "Hazırlık başarısızlığı veya iyileşme kaydedilmedi.",
+    "refreshInventory": "Envanteri yenile",
+    "refreshing": "Envanter yenileniyor…",
+    "configUnavailable": "Politika depolama kullanılamıyor. Görüntülenen atamalar son bilinen sürüm olabilir. Depo düzelene kadar düzenleme yapılamaz.",
+    "attention": "Dikkat gerektiriyor",
+    "eligibleCount": "{count, plural, =0 {Uygun dağıtım yok. Uyumlu bir bölgesel model seçin.} one {Bir uygun dağıtım var. Dayanıklılığı artırmak için bir yedek ekleyin.} other {Bu zincirde # uygun dağıtım var.}}",
+    "retirementWarning": "Belirtilen bir model sürümü emekliliğe yaklaşıyor. Onu birincil konuma taşımadan önce yedeğini kontrol edin.",
+    "assignments": "Model atamaları",
+    "readiness": "Hazırlık",
+    "assignmentHint": "Modeller gösterilen sırayla çalışır. Eksik, uyumsuz ve emekli edilmiş dağıtımlar atlanır. AB istekleri yalnızca doğrulanmış AB içi dağıtımlar üzerinde kalır.",
+    "probeUsage": "Uyumluluk kontrolleri uygulama kimliğiyle sabit sentetik istekler gönderir. Az sayıda model jetonu kullanılır, asla sohbet verisi kullanılmaz. Bir dağıtım kontrolünü tekrar etmeden önce en az bir dakika bekleyin.",
+    "save": "Atamaları kaydet",
+    "saving": "Kaydediliyor…",
+    "saved": "Atamalar kaydedildi. Yeni istekler bu politikayı kullanacak.",
+    "resetDefaults": "Ortam varsayılanlarını kullan",
+    "unsaved": "Kaydedilmemiş değişiklikler",
+    "readinessHint": "Envanter bir dağıtımın varlığını doğrular. Geçerli bir operasyon veya uyumluluk kontrolü, uygulamanın bunu kullanabileceğini gösterir. Başarısız yenilemeler son başarılı kontrolü silmez.",
+    "account": "Hesap bağlantısı: {binding}",
+    "lastInventory": "Son başarılı envanter: {time}",
+    "retirementUnknown": "Model kataloğu doğrulanamadığı için emeklilik durumu bilinmiyor.",
+    "history": "Politika geçmişi",
+    "revision": "Etkin revizyon: {revision}",
+    "noHistory": "Bu ortamda politika değişikliği kaydedilmedi.",
+    "conflict": "Başka bir yönetici politikayı değiştirdi. Taslağınız hâlâ burada. Yeni bir kayıt yapmadan önce politikayı yeniden yükleyin.",
+    "rateLimit": "Bu dağıtım yakın zamanda kontrol edildi. Yeniden kontrol etmek için bir dakika bekleyin.",
+    "actionError": "İşlem tamamlanamadı. Detayları inceleyip tekrar deneyin; taslağınız silinmedi.",
+    "technicalDetails": "Teknik detaylar",
+    "reloadPolicy": "Politikayı yeniden yükle ve taslağı sil",
+    "emptyChain": "Hiçbir model atanmadı. Kaydetmeden önce uyumlu bir dağıtım ekleyin.",
+    "primary": "Birincil",
+    "fallback": "Yedek",
+    "unknown": "Bilinmiyor",
+    "retires": "Model sürümü {date} tarihinde emekliye ayrılıyor",
+    "checkResults": "Operasyon kontrol sonuçları",
+    "passed": "Başarılı",
+    "moveUp": "Yukarı taşı",
+    "moveDown": "Aşağı taşı",
+    "remove": "Kaldır",
+    "moveUpLabel": "{model} yukarı taşı",
+    "moveDownLabel": "{model} aşağı taşı",
+    "removeLabel": "{model} zincirden kaldır",
+    "runChecks": "Uyumluluk kontrollerini çalıştır",
+    "findDeployment": "Bir dağıtım bul",
+    "deployment": "Dağıtım",
+    "chooseDeployment": "Bir dağıtım seç",
+    "addDeployment": "Zincire ekle",
+    "checkBeforeAdd": "Dağıtımı eklemeden önce bu amacın uyumluluk kontrollerini çalıştırın.",
+    "assessmentManaged": "Arama-değerlendirme modelleri ve yedekleri, Modeller ve kullanılabilirlik bölümünde yönetilir.",
+    "manageModels": "Modelleri ve kullanılabilirliği yönet",
+    "purpose": {
+      "routing": "Yönlendirme",
+      "searchAssessment": "Arama değerlendirmesi"
+    },
+    "purposeDescription": {
+      "routing": "Yetenek seçimi, arama ve kod yönlendirme ile doküman kısaltma sınıflandırması.",
+      "searchAssessment": "Kaynakları değerlendirir ve çok adımlı aramada bir sonraki adımı seçer."
+    },
+    "state": {
+      "ready": "Hazır",
+      "unverified": "Mevcut, tam olarak kontrol edilmedi",
+      "fallback": "Yedek model kullanılıyor",
+      "unavailable": "Uygun model yok",
+      "check_unavailable": "Kontroller kullanılamıyor"
+    },
+    "inventoryState": {
+      "current": "Güncel",
+      "stale": "Son bilinen envanter",
+      "unavailable": "Envanter kullanılamıyor"
+    },
+    "operation": {
+      "skills": "Yetenek seçimi",
+      "tools": "Araç yönlendirme",
+      "trim": "Kısaltma sınıflandırması",
+      "assessment": "Arama değerlendirmesi"
+    },
+    "reason": {
+      "endpoint_missing": "Uç nokta veya hesap bağlantısı eksik",
+      "deployment_missing": "Dağıtım eksik veya hizmet vermiyor",
+      "unauthorized": "Uygulama kimliği erişimi reddedildi",
+      "timeout": "Kontrol zaman aşımına uğradı",
+      "throttled": "Kota veya oran sınırına ulaşıldı",
+      "incompatible": "İşlem uyumsuz",
+      "provider": "Sağlayıcı çağrısı başarısız oldu",
+      "residency": "İşleme bölgesi izinli değil",
+      "retired": "Model sürümü kullanımdan kaldırıldı",
+      "inventory_unavailable": "Envanter doğrulanamadı",
+      "refused": "Model isteği reddetti"
+    },
+    "accountError": {
+      "account_resource_missing": "Envanterini doğrulamak için bu bağlantının Foundry ARM kaynak kimliğini yapılandırın.",
+      "endpoint_missing": "Bu bağlantının çıkarım (inference) uç noktasını yapılandırın.",
+      "endpoint_account_mismatch": "Uç nokta ile ARM kaynak kimliği farklı hesapları göstermektedir. Dağıtım yapılandırmasını düzeltin.",
+      "inventory_refresh_failed": "Envanter yenilemesi başarısız oldu. Uygulama kimliğinin Okuyucu iznini ve hesap bağlantısını kontrol edin.",
+      "credential_unavailable": "Uygulama envanter yetkilendirmesini alamadı. Dağıtım kimlik yapılandırmasını kontrol edin."
+    }
   }
 }

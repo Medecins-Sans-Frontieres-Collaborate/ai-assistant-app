@@ -5609,7 +5609,8 @@
       "webSearch": "Esika boluki na internet ekoki kokende: boluki ya mikolo mingi, model ya kotalela yango mpe mindule na yango.",
       "contextBudget": "Bokangiseli ya lisolo oyo model nyonso ezwi na tour nyonso.",
       "analytics": "Rapport epesami: nini ebimi, nani akoki kofungola dosiye, mpe bilanga nini ekoki komonana.",
-      "skills": "Biteni ya mateya oyo asistani akoki kosalela tango esengeli na lisolo."
+      "skills": "Biteni ya mateya oyo asistani akoki kosalela tango esengeli na lisolo.",
+      "models": "Pona ba modèles ya nsé mpe kotalela soki eteni ekokani na kotombola bakoki ya bisika."
     },
     "openSettings": "Fungola malamu misala ya malamu",
     "area": {
@@ -5621,7 +5622,8 @@
       "webSearch": "Boluki na internet",
       "contextBudget": "Bokangiseli ya kontekste",
       "analytics": "Analytics",
-      "skills": "Ba compétence"
+      "skills": "Ba compétence",
+      "models": "Ba modèles mpe bokokani"
     }
   },
   "limits": {
@@ -7985,5 +7987,114 @@
     "invalidated": "Mosolo eboyamaki. Kotalela sika esengeli na request oyo ekobatelama; ndingisa etalemi kaka te.",
     "failed": "Kobosana mosolo ekokaki te kondimama. Binda lisusu sima moke.",
     "propagationNote": "Oyo etindi na kontrola ya sika, te kobongola ndingisa na Microsoft. Kobika ya Microsoft ekoki kozala na ntembe. Misala oyo ezwaki ndingisa ekozongisama te."
+  },
+  "auxiliaryModels": {
+    "title": "Ba modèles mpe bokokani",
+    "description": "Pona ba modèles mpo na makano ya nsé mpe talá ba deployments oyo ezali kosala yango.",
+    "environmentHint": "Mbongwana ezali kaka mpo na environnement oyo. Live, beta mpe dev ezali na ba politiki na yango moko.",
+    "updated": "Rapport ebongwani: {time}",
+    "loading": "Tolandi koloda pôna misala ya modèle mpe bokokani…",
+    "loadError": "Bokaboli ya modèles ekoki te kolodama. Zongisa lisusu kozanga kobongola politiki ya sikawa.",
+    "retry": "Zongela",
+    "neverChecked": "Etalelami te",
+    "bootstrapUnavailable": "Bosengi ya bootstrap ya environnement ezali malamu te. Politiki esalisamá ezali nanu na misala, kasi defaults ya environnement ekoki te kozongisama ntango bosengi ya deployment ekosengeli kobongwana.",
+    "runtimeFallback": "Ba demandes ya suka esalelaki fallback modèle. Talá bâ deployment ya liboso mpe ba résultat na yango.",
+    "accountLocation": "Esika ya compte Azure: {location}",
+    "incidents": "Mbongwana ya suká ya bokokani",
+    "noIncidents": "Mpasi to mobongisi ya bokokani etangami te.",
+    "refreshInventory": "Bongisa lisusu inventaire",
+    "refreshing": "Tolandi kobongisa inventaire…",
+    "configUnavailable": "Ekopesa ndakisa ya politiki ezali te. Bokaboli oyo maye mamonami ezali version ya suka eyebani. Kobongisa ekotimama te kino stockage ezonga.",
+    "attention": "Esololi",
+    "eligibleCount": "{count, plural, =0 {Deployment ekokani te. Pona modèle ya eteni ekokani.} one {Deployment mókó ekokani. Bakisa fallback mpo na kozala na makasi mingi.} other {# deployments ekokani na chaîne oyo.}}",
+    "retirementWarning": "Version moko ya modèle ekóti pene ya retraite. Tálá en remplacement libosoliboso ya kobakisa yango lokola ya liboso.",
+    "assignments": "Bokaboli ya modèles",
+    "readiness": "Bokokani",
+    "assignmentHint": "Ba modèles ekendaka na litomba ndenge ezali komonana. Deployments oyo ezali te, ekokani te to ezali retire ekopetolama. Masenga ya EU ekokoka kaka na deployments oyo ebikisami na EU.",
+    "probeUsage": "Batutoli ya kokokanisa batindaka ba demandes synthétiques na identité ya app. Basalelaka ba tokens mingi te ya modèle, kasi tango nyonso donnee ya conversation te. Zela minute moko liboso ozozanga kosala lisusu kontrola ya deployment.",
+    "save": "Bomba bokaboli",
+    "saving": "Tobombaka…",
+    "saved": "Bokaboli ebombami. Ba demandes ya sika ekosalela politiki oyo.",
+    "resetDefaults": "Kozwla defaults ya environnement",
+    "unsaved": "Mbongwana ebombami te",
+    "readinessHint": "Inventaire emonisi ete deployment ezali. Misala ya suka oyo eleki to kontrôle ya kokokani ebimisi ko application ekoki kosalela yango. Soki bobongisi ya suka ekweaki, ekolongwa te té elandaki ya suka na malamu.",
+    "account": "Account etali: {binding}",
+    "lastInventory": "Inventaire ya suka oyo ebongaki malamu: {time}",
+    "retirementUnknown": "Etat ya retraite eyebani te mpamba na modèle catalogue esalemi te vérification.",
+    "history": "Lifekiseli ya politiki",
+    "revision": "Revision ezosalama: {revision}",
+    "noHistory": "Mbongwana ya politiki etangami te na environnement oyo.",
+    "conflict": "Administrateur mosusu abongolaki politiki. Draft na yo ezali kaka. Lade politiki libosoliboso, liboso obombaka lisusu.",
+    "rateLimit": "Deployment oyo etalelamaki na tango ya suka. Zela minute moko libosoliboso olongisa kontrola lisusu.",
+    "actionError": "Likambo ekokisami te. Tálá makambo mingi mpe zongela lisusu, draft na yo elongwami te.",
+    "technicalDetails": "Makambo ya technique",
+    "reloadPolicy": "Yebisa politiki lisusu mpe longola draft",
+    "emptyChain": "Ba modèles ekabwamaki te. Bakisa deployment ekokani libosoliboso obomba.",
+    "primary": "Ya liboso",
+    "fallback": "Ya kokumba",
+    "unknown": "Eyebani te",
+    "retires": "Version ya modèle ekokende na retraite na {date}",
+    "checkResults": "Bitumba ya kontrola ya misala",
+    "passed": "Ekwei",
+    "moveUp": "Tombola",
+    "moveDown": "Kokitisa",
+    "remove": "Kolongola",
+    "moveUpLabel": "Kokende {model} likoló",
+    "moveDownLabel": "Kokende {model} se",
+    "removeLabel": "Kolongola {model} na chaîne",
+    "runChecks": "Kosala ba contrôle ya compatibilité",
+    "findDeployment": "Koluka deployment",
+    "deployment": "Deployment",
+    "chooseDeployment": "Pona deployment",
+    "addDeployment": "Kobakisa na chaîne",
+    "checkBeforeAdd": "Kosala contrôle ya compatibilité mpo na maye ezali ya butu wana liboso ya kobakisa deployment.",
+    "assessmentManaged": "Ba modèles ya recherche-évaluation pe ba fallback basalelami na Models pe readiness.",
+    "manageModels": "Kosala misala ya modèles pe readiness",
+    "purpose": {
+      "routing": "Routing",
+      "searchAssessment": "Recherche-évaluation"
+    },
+    "purposeDescription": {
+      "routing": "Kopona mayele, koluka pe routing ya code, pe klasyifikasi ya document-trim.",
+      "searchAssessment": "Kopesa motuya na banyoka pe kopona etape elandi na recherche-ma etape mingi."
+    },
+    "state": {
+      "ready": "Elingi",
+      "unverified": "Ezali, kasi etangalami te",
+      "fallback": "Kosalela fallback",
+      "unavailable": "Model moko te ezali",
+      "check_unavailable": "Ba contrôle ezali te"
+    },
+    "inventoryState": {
+      "current": "Ya sik’oyo",
+      "stale": "Inventaire ya suka oyo eyebani",
+      "unavailable": "Inventaire ezali te"
+    },
+    "operation": {
+      "skills": "Kopona mayele",
+      "tools": "Routing ya outils",
+      "trim": "Klasifikasyo ya trim",
+      "assessment": "Recherche-évaluation"
+    },
+    "reason": {
+      "endpoint_missing": "Endpoint to compte ekangami te",
+      "deployment_missing": "Deployment ezali te to ezosala te",
+      "unauthorized": "Accès na identité ya app eboyi",
+      "timeout": "Controle esili na tango",
+      "throttled": "Quota to limite ya vitesse ekokisami",
+      "incompatible": "Operation ekoki kosalema te",
+      "provider": "Appel ya provider esimbi te",
+      "residency": "Zone ya traitement epesami ndingisa te",
+      "retired": "Version ya modèle elongiwe",
+      "inventory_unavailable": "Inventaire ekokaki te kokangama",
+      "refused": "Model eboyi bosenga"
+    },
+    "accountError": {
+      "account_resource_missing": "Konfigura ID ya ressource Foundry ARM mpo na kokanga inventaire na binding oyo.",
+      "endpoint_missing": "Konfigura endpoint ya inference mpo na binding oyo.",
+      "endpoint_account_mismatch": "Endpoint na ID ya ressource ARM ezali na ba comptes ya ndenge na ndenge. Sombola configuration ya deployment.",
+      "inventory_refresh_failed": "Inventaire esibuaki kokoba. Tala soki app ezali na Reader accès pe connexion ya compte.",
+      "credential_unavailable": "App ekokaki te kozwa credential na yango ya inventaire. Tala configuration ya identité ya deployment."
+    }
   }
 }

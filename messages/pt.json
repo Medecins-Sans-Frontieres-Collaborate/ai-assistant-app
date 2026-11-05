@@ -5625,7 +5625,8 @@
       "webSearch": "Até onde pode ir uma busca na web: busca em múltiplos passos, modelo avaliador e seus limites.",
       "contextBudget": "Quantas partes de uma conversa cada modelo recebe a cada rodada.",
       "analytics": "Relatórios entregues: o que chegou, quem pode acessar cada pasta e quais campos podem ser exibidos.",
-      "skills": "Blocos de instruções reutilizáveis que o assistente aplica quando necessário em uma conversa."
+      "skills": "Blocos de instruções reutilizáveis que o assistente aplica quando necessário em uma conversa.",
+      "models": "Atribua modelos de base e verifique a prontidão para implantação regional."
     },
     "openSettings": "Abrir configurações",
     "area": {
@@ -5637,7 +5638,8 @@
       "webSearch": "Busca na web",
       "contextBudget": "Orçamento de contexto",
       "analytics": "Análises",
-      "skills": "Habilidades"
+      "skills": "Habilidades",
+      "models": "Modelos e prontidão"
     }
   },
   "limits": {
@@ -8001,5 +8003,114 @@
     "invalidated": "Cache invalidado. Uma nova verificação será necessária na próxima solicitação protegida; as permissões ainda não foram rechecadas.",
     "failed": "Não foi possível confirmar a invalidação do cache. Tente novamente em breve.",
     "propagationNote": "Isto força uma nova verificação, mas não altera as permissões da Microsoft. Os atrasos de propagação da Microsoft ainda se aplicam. Operações já autorizadas não serão desfeitas."
+  },
+  "auxiliaryModels": {
+    "title": "Modelos e prontidão",
+    "description": "Escolha modelos para decisões de base e inspecione as implantações que os atendem.",
+    "environmentHint": "As alterações se aplicam apenas a este ambiente. Live, beta e dev têm políticas independentes.",
+    "updated": "Relatório atualizado: {time}",
+    "loading": "Carregando atribuições de modelos e prontidão…",
+    "loadError": "As atribuições de modelos não puderam ser carregadas. Tente novamente sem alterar a política atual.",
+    "retry": "Tentar novamente",
+    "neverChecked": "Não verificado",
+    "bootstrapUnavailable": "A configuração de bootstrap do ambiente é inválida. Uma política salva existente permanece em vigor, mas os padrões do ambiente não podem ser restaurados até que a configuração de implantação seja corrigida.",
+    "runtimeFallback": "Solicitações recentes usaram um modelo de fallback. Verifique a implantação primária e seus resultados de operação.",
+    "accountLocation": "Localização da conta Azure: {location}",
+    "incidents": "Alterações recentes de prontidão",
+    "noIncidents": "Nenhuma falha ou recuperação de prontidão registrada.",
+    "refreshInventory": "Atualizar inventário",
+    "refreshing": "Atualizando inventário…",
+    "configUnavailable": "O armazenamento da política está indisponível. As atribuições exibidas podem ser a última versão conhecida. A edição está desabilitada até que o armazenamento se recupere.",
+    "attention": "Necessita de atenção",
+    "eligibleCount": "{count, plural, =0 {Nenhuma implantação elegível. Escolha um modelo regional compatível.} one {Uma implantação elegível. Adicione um fallback para aumentar a resiliência.} other {# implantações elegíveis nesta cadeia.}}",
+    "retirementWarning": "Uma versão de modelo designada está próxima da aposentadoria. Verifique a substituição antes de torná-la primária.",
+    "assignments": "Atribuições de modelos",
+    "readiness": "Prontidão",
+    "assignmentHint": "Os modelos são executados na ordem mostrada. Implantações ausentes, incompatíveis e aposentadas são ignoradas. Solicitações da UE permanecem em implantações verificadas residentes na UE.",
+    "probeUsage": "As verificações de compatibilidade enviam solicitações sintéticas fixas com a identidade do app. Utilizam poucos tokens do modelo, nunca dados de conversa. Aguarde pelo menos um minuto antes de repetir uma verificação de implantação.",
+    "save": "Salvar atribuições",
+    "saving": "Salvando…",
+    "saved": "Atribuições salvas. Novas solicitações usarão esta política.",
+    "resetDefaults": "Usar padrões do ambiente",
+    "unsaved": "Alterações não salvas",
+    "readinessHint": "O inventário confirma a existência de uma implantação. Uma operação válida recente ou verificação de compatibilidade confirma que o app pode usá-la. Falhas de atualização não apagam a última verificação bem-sucedida.",
+    "account": "Vínculo de conta: {binding}",
+    "lastInventory": "Último inventário bem-sucedido: {time}",
+    "retirementUnknown": "Status de aposentadoria desconhecido porque o catálogo de modelos não pôde ser verificado.",
+    "history": "Histórico de políticas",
+    "revision": "Revisão efetiva: {revision}",
+    "noHistory": "Nenhuma alteração de política registrada neste ambiente.",
+    "conflict": "Outro administrador alterou a política. Seu rascunho continua aqui. Recarregue a política antes de salvar novamente.",
+    "rateLimit": "Esta implantação foi verificada recentemente. Aguarde um minuto antes de verificar novamente.",
+    "actionError": "A ação não pôde ser concluída. Verifique os detalhes e tente novamente; seu rascunho não foi descartado.",
+    "technicalDetails": "Detalhes técnicos",
+    "reloadPolicy": "Recarregar política e descartar rascunho",
+    "emptyChain": "Nenhum modelo atribuído. Adicione uma implantação compatível antes de salvar.",
+    "primary": "Primário",
+    "fallback": "Fallback",
+    "unknown": "Desconhecido",
+    "retires": "Versão do modelo aposenta em {date}",
+    "checkResults": "Resultados da verificação da operação",
+    "passed": "Aprovado",
+    "moveUp": "Mover para cima",
+    "moveDown": "Mover para baixo",
+    "remove": "Remover",
+    "moveUpLabel": "Mover {model} para cima",
+    "moveDownLabel": "Mover {model} para baixo",
+    "removeLabel": "Remover {model} da cadeia",
+    "runChecks": "Executar verificações de compatibilidade",
+    "findDeployment": "Encontrar uma implantação",
+    "deployment": "Implantação",
+    "chooseDeployment": "Escolher uma implantação",
+    "addDeployment": "Adicionar à cadeia",
+    "checkBeforeAdd": "Execute as verificações de compatibilidade deste propósito antes de adicionar a implantação.",
+    "assessmentManaged": "Modelos de avaliação de busca e alternativas são gerenciados em Modelos e disponibilidade.",
+    "manageModels": "Gerenciar modelos e disponibilidade",
+    "purpose": {
+      "routing": "Roteamento",
+      "searchAssessment": "Avaliação de busca"
+    },
+    "purposeDescription": {
+      "routing": "Seleção de habilidade, roteamento de busca e código, e classificação de redução de documentos.",
+      "searchAssessment": "Avaliar fontes e escolher o próximo passo durante a busca em múltiplas etapas."
+    },
+    "state": {
+      "ready": "Pronto",
+      "unverified": "Disponível, não totalmente verificado",
+      "fallback": "Usando alternativa",
+      "unavailable": "Nenhum modelo elegível",
+      "check_unavailable": "Verificações indisponíveis"
+    },
+    "inventoryState": {
+      "current": "Atual",
+      "stale": "Último inventário conhecido",
+      "unavailable": "Inventário indisponível"
+    },
+    "operation": {
+      "skills": "Seleção de habilidade",
+      "tools": "Roteamento de ferramentas",
+      "trim": "Classificação de redução",
+      "assessment": "Avaliação de busca"
+    },
+    "reason": {
+      "endpoint_missing": "Vínculo de endpoint ou conta ausente",
+      "deployment_missing": "Implantação ausente ou não disponível",
+      "unauthorized": "Acesso de identidade do app negado",
+      "timeout": "Verificação expirou",
+      "throttled": "Limite de cota ou taxa atingido",
+      "incompatible": "Operação incompatível",
+      "provider": "Falha na chamada ao provedor",
+      "residency": "Zona de processamento não permitida",
+      "retired": "Versão do modelo descontinuada",
+      "inventory_unavailable": "Não foi possível verificar o inventário",
+      "refused": "O modelo recusou a solicitação"
+    },
+    "accountError": {
+      "account_resource_missing": "Configure o ID do recurso Foundry ARM deste vínculo para verificar seu inventário.",
+      "endpoint_missing": "Configure o endpoint de inferência deste vínculo.",
+      "endpoint_account_mismatch": "O endpoint e o ID do recurso ARM identificam contas diferentes. Corrija a configuração da implantação.",
+      "inventory_refresh_failed": "Falha ao atualizar o inventário. Verifique o acesso de Leitor à identidade do app e a conectividade da conta.",
+      "credential_unavailable": "O app não conseguiu obter sua credencial de inventário. Verifique a configuração de identidade da implantação."
+    }
   }
 }

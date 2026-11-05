@@ -5609,7 +5609,8 @@
       "webSearch": "Urugero irondera kuri web ishobora kwishikana: irondera ry'indaryo nyinshi, modèle ya assessora n'integerezo yayo.",
       "contextBudget": "Uko igice c'ikiganiro ca model gushikirwa kuri buri ndaryo.",
       "analytics": "Raporo zatanzwe: ivyarungitswe, uwemerewe gufungura buri folder, n'ibibanza bishobora kwerekwa.",
-      "skills": "Ibice vy'amabwirizwa vyifashishwa uko bigize bitanga ubufasha igihe bigiye gukenerwa mu kiganiro."
+      "skills": "Ibice vy'amabwirizwa vyifashishwa uko bigize bitanga ubufasha igihe bigiye gukenerwa mu kiganiro.",
+      "models": "Haheza guhitamwo ivyitegererezo vy'inyuma no kugenzura ko deployment yo mu karere yiteguye."
     },
     "openSettings": "Fungura ivyo gushiraho",
     "area": {
@@ -5621,7 +5622,8 @@
       "webSearch": "Irondera kuri web",
       "contextBudget": "Context budget",
       "analytics": "Analytics",
-      "skills": "Ubushobozi"
+      "skills": "Ubushobozi",
+      "models": "Ivyitegererezo n'ukwitegura"
     }
   },
   "limits": {
@@ -7985,5 +7987,114 @@
     "invalidated": "Cache yahagaritswe. Ugusubira kugenzura bizosabwa kuri bisaba bicunguwe bikurikira; uburenganzira ntiburagenzurwa.",
     "failed": "Kuhagarika cache ntivyagenze neza. Sugerageza vuba.",
     "propagationNote": "Ibi bihanura ko hagenzurwa bushasha, si uguhindura uburenganzira muri Microsoft. Ukudindira kwa Microsoft biraca bibaho. Ibikorwa vyemejwe ntibisubirizwa inyuma."
+  },
+  "auxiliaryModels": {
+    "title": "Ivyitegererezo n'ukwitegura",
+    "description": "Hitamwo ivyitegererezo vyo gufata ingingo z'inyuma no kuraba aho deployment zishikira.",
+    "environmentHint": "Impinduka zikoreshwa gusa kuri iri rirere. Live, beta na dev bifise amategeko yaho nyene.",
+    "updated": "Raporo yashinzwe: {time}",
+    "loading": "Turiko turashira mu bikorwa ivyitegererezo n'ukwitegura…",
+    "loadError": "Ivyitegererezo ntivyashoboye kuronswa. Sayera utavuyeko politike iriko irakoreshwa.",
+    "retry": "Gerageza gusubira",
+    "neverChecked": "Ntivyagenzuwe",
+    "bootstrapUnavailable": "Igenwa rya bootstrap ry’iri rirere si ryiza. Politike yasanzwe ibandanya gukoreshwa, ariko defaults z’iri rirere ntizishobora gusubirwaho udashizeho deployment nziza.",
+    "runtimeFallback": "Ibisaba biheruka vyakoresheje ivitegererezo ribosora. Raba deployment y'ibanze hamwe n'ivyavuye mu bikorwa vyayo.",
+    "accountLocation": "Ahari konti ya Azure: {location}",
+    "incidents": "Impinduka ziheruka mu gutegura",
+    "noIncidents": "Nta kwititura canke gukira vyakozwe bimaze kwandikwa.",
+    "refreshInventory": "Sukura urutonde",
+    "refreshing": "Turiko turasubira gukura urutonde…",
+    "configUnavailable": "Ububiko bwa politike ntiburiko buraboneka. Ivyerekanywe bishobora kuba ari ivyanyuma vyamenyekanye. Guhindura birabujijwe gushika ububiko busubiriye gukora.",
+    "attention": "Bikeneye kwitwararikwa",
+    "eligibleCount": "{count, plural, =0 {Nta deployment yemewe. Hitamwo ivitegererezo ribereye ry’akarere.} one {Deployment imwe yemewe. Shiramwo ikibosora kugira urusheho gukomera.} other {# deployments zemewe muri uno murongo.}}",
+    "retirementWarning": "Verisiyo y’ivitegererezo yagenywe iramaze igihe yegereje guhagarikwa. Raba iryosubirije imbere yo kurishira mu kibanza c'ibanze.",
+    "assignments": "Ugutoranya ivyitegererezo",
+    "readiness": "Ukitegura",
+    "assignmentHint": "Ivyitegererezo bikora muri urwo rutonde. Aho deployment yibuze, itahuye canke yahagaritswe birasimburwa. Ivy'ibisabwa vyo mu bumwe bwa EU biguma kuri deployment zemejwe zo muri EU.",
+    "probeUsage": "Igenzura rya Compatibility rituma hasabwa ibisabwa vyakozwe bidasanzwe ukoresheje indangamuntu y'iyi app. Bikoresha utuntu duke twa token z’ivyitegererezo, ntibikoresha ibiganiro vyawe. Rindira n’imiburiburi umunota umwe gutangarira ku bisubira gusaba igenzura.",
+    "save": "Zigama vya vyagenywe",
+    "saving": "Turiko turazigama…",
+    "saved": "Ivyagenywe vyazigamitswe. Ibisabwa bishasha bikoresha iyi politike.",
+    "resetDefaults": "Koresha defaults z’iri rirere",
+    "unsaved": "Impinduka ntizirabikwa",
+    "readinessHint": "Urutonde rwemeza ko deployment ihari. Igikorwa giheruka canke igenzura rya compatibility vyemeza ko app ishobora kubikoresha. Gutsindwa gusubira kuja ntibigira ico bigize ku musubirizo w'igenzura ryagenze neza.",
+    "account": "Imikogoto ya konti: {binding}",
+    "lastInventory": "Urutonde rwanyuma rwagenze neza: {time}",
+    "retirementUnknown": "Ihagarikwa ntiryamenyekanye kuko ikayi y’ivyitegererezo itashoboye kwemezwa.",
+    "history": "Ingene politike yahindutse",
+    "revision": "Ukuhindurwa gukora: {revision}",
+    "noHistory": "Nta mpinduka za politike ziri muri iri rirere zaranditswe.",
+    "conflict": "Hundi muyobozi yahinduye politike. Igishushanyo cawe kiracariho. Sukura politike usubire kugira ushobore kuzovugurura.",
+    "rateLimit": "Iyi deployment imaze kugenzurwa vuba. Tegezerwa umunota wose ugisubira kugenzura.",
+    "actionError": "Igikorwa nticashoboye kurangizwa. Raba ivyanditswe wongere ugerageze; igishushanyo cawe nticakuweho.",
+    "technicalDetails": "Ibisobanuro vy'ubuhinga",
+    "reloadPolicy": "Sukura politike ureke igishushanyo",
+    "emptyChain": "Nta vyitegererezo vyagenywe. Shiramwo deployment ibereye imbere yo kuzigama.",
+    "primary": "Ibikuru",
+    "fallback": "Ibibosora",
+    "unknown": "Ntibiramenyekana",
+    "retires": "Verisiyo y’ivitegererezo izohagarikwa ku wa {date}",
+    "checkResults": "Ivyavuye mu igenzura ry’ingirakamaro",
+    "passed": "Vyagenze neza",
+    "moveUp": "Cungura hejuru",
+    "moveDown": "Manura hasi",
+    "remove": "Kura",
+    "moveUpLabel": "Mwinjiza {model} hejuru",
+    "moveDownLabel": "Manura {model} hasi",
+    "removeLabel": "Kura {model} mu rukurikirane",
+    "runChecks": "Kora isuzuma ry'ukwihuza",
+    "findDeployment": "Rondera deployment",
+    "deployment": "Deployment",
+    "chooseDeployment": "Hitamwo deployment",
+    "addDeployment": "Ongerako mu rukurikirane",
+    "checkBeforeAdd": "Kora isuzuma ry'ukwihuza kuri iyi ntego imbere yo kwongerako deployment.",
+    "assessmentManaged": "Imigenzo ya search-assessment n'iyisubirira birashinzwe mu Models and readiness.",
+    "manageModels": "Gereranya models n'ubushobozi bwazo",
+    "purpose": {
+      "routing": "Routing",
+      "searchAssessment": "Search assessment"
+    },
+    "purposeDescription": {
+      "routing": "Guhitamwo ubuhinga, gushakisha no guhururira code, no kugabanya inyandiko.",
+      "searchAssessment": "Gusesengura ivy'incegeranyo no guhitamwo ikindi gikorwa mu bushakashatsi burimwo intambwe nyinshi."
+    },
+    "state": {
+      "ready": "Vyiteguye",
+      "unverified": "Iraboneka, ntirasuzumwa bose",
+      "fallback": "Iriko ikoresha isubirizo",
+      "unavailable": "Nta model ibereye",
+      "check_unavailable": "Isuzuma ntiriboneka"
+    },
+    "inventoryState": {
+      "current": "Iriho ubu",
+      "stale": "Inventory izwi ziheruka",
+      "unavailable": "Inventory ntiboneka"
+    },
+    "operation": {
+      "skills": "Guhitamwo ubuhinga",
+      "tools": "Gutunganiriza ibikoresho",
+      "trim": "Gukata amakategori",
+      "assessment": "Search assessment"
+    },
+    "reason": {
+      "endpoint_missing": "Endpoint canke isano y'uburyo nta",
+      "deployment_missing": "Deployment irabuze canke nti iriko irakora",
+      "unauthorized": "Uburenganzira bw'iyo application bwimwe",
+      "timeout": "Isuzuma ryarengeje igihe",
+      "throttled": "Quota canke igipimo carengejwe",
+      "incompatible": "Igikorwa ntigishobora gukorwa",
+      "provider": "Guhamagara provider vyarananiranye",
+      "residency": "Intara iriko irakoreshwa ntiyemewe",
+      "retired": "Version ya model yakuwemwo",
+      "inventory_unavailable": "Inventory ntiyashoboye gusuzumwa",
+      "refused": "Model yaranse gusubiza isaba"
+    },
+    "accountError": {
+      "account_resource_missing": "Shiraho Foundry ARM resource ID ya binding kugira wemeze inventory yayo.",
+      "endpoint_missing": "Tegura inference endpoint ya binding.",
+      "endpoint_account_mismatch": "Endpoint na ARM resource ID vyerekana konti zitandukanye. Genzura uko deployment ishinze.",
+      "inventory_refresh_failed": "Gusubira kwemeza inventory vyarananiranye. Raba ko application ifise uburenganzira bwa Reader no ko ihuzwa na konti.",
+      "credential_unavailable": "Application ntiyashoboye kubona credential yayo ya inventory. Raba ko deployment identity imeze neza."
+    }
   }
 }

@@ -5625,7 +5625,8 @@
       "webSearch": "Cât de departe poate merge o căutare pe web: multi-step search, modelul evaluator și limitele sale.",
       "contextBudget": "Câtă parte din conversație primește fiecare model la fiecare răspuns.",
       "analytics": "Rapoarte livrate: ce a sosit, cine poate accesa fiecare dosar și ce câmpuri pot fi afişate.",
-      "skills": "Blocuri de instrucțiuni reutilizabile pe care asistentul le aplică atunci când conversația necesită acest lucru."
+      "skills": "Blocuri de instrucțiuni reutilizabile pe care asistentul le aplică atunci când conversația necesită acest lucru.",
+      "models": "Atribuiți modele de fundal și verificați pregătirea pentru implementare regională."
     },
     "openSettings": "Deschide setările",
     "area": {
@@ -5637,7 +5638,8 @@
       "webSearch": "Căutare web",
       "contextBudget": "Buget context",
       "analytics": "Analitice",
-      "skills": "Abilități"
+      "skills": "Abilități",
+      "models": "Modele și pregătire"
     }
   },
   "limits": {
@@ -8001,5 +8003,114 @@
     "invalidated": "Cache-ul a fost invalidat. Este necesară o verificare nouă la următoarea solicitare protejată; permisiunile nu au fost încă reverificate.",
     "failed": "Invalidarea cache-ului nu a putut fi confirmată. Reîncercați în scurt timp.",
     "propagationNote": "Acest lucru forțează o verificare proaspătă, nu modifică permisiunile Microsoft. Întârzierile de propagare Microsoft se aplică în continuare. Operațiunile deja autorizate nu sunt anulate."
+  },
+  "auxiliaryModels": {
+    "title": "Modele și pregătire",
+    "description": "Alegeți modelele pentru decizii de fundal și inspectați implementările care le deservesc.",
+    "environmentHint": "Modificările se aplică doar acestui mediu. Live, beta și dev au politici independente.",
+    "updated": "Raport actualizat: {time}",
+    "loading": "Se încarcă atribuirea modelelor și starea de pregătire…",
+    "loadError": "Atribuirile modelelor nu au putut fi încărcate. Reîncercați fără a schimba politica curentă.",
+    "retry": "Reîncercați",
+    "neverChecked": "Neverificat",
+    "bootstrapUnavailable": "Setarea de bootstrap a mediului nu este validă. O politică salvată existentă rămâne activă, dar setările implicite ale mediului nu pot fi restaurate până când setarea de implementare nu este corectată.",
+    "runtimeFallback": "Solicitările recente au folosit un model de rezervă. Verificați implementarea principală și rezultatele operațiunilor.",
+    "accountLocation": "Locație cont Azure: {location}",
+    "incidents": "Modificări recente de pregătire",
+    "noIncidents": "Nu au fost înregistrate eșecuri sau recuperări recente de pregătire.",
+    "refreshInventory": "Reîmprospătează inventarul",
+    "refreshing": "Se reîmprospătează inventarul…",
+    "configUnavailable": "Stocarea politicii nu este disponibilă. Atribuirile afișate pot fi ultima versiune cunoscută. Editarea este dezactivată până la recuperarea stocării.",
+    "attention": "Necesară atenție",
+    "eligibleCount": "{count, plural, =0 {Nicio implementare eligibilă. Alegeți un model regional compatibil.} one {O implementare eligibilă. Adăugați un model de rezervă pentru a crește reziliența.} other {# implementări eligibile în acest lanț.}}",
+    "retirementWarning": "O versiune de model desemnată se apropie de retragere. Verificați înlocuirea înainte de a o muta în poziția principală.",
+    "assignments": "Atribuiri modele",
+    "readiness": "Pregătire",
+    "assignmentHint": "Modelele rulează în ordinea afișată. Implementările lipsă, incompatibile sau retrase sunt omise. Solicitările din UE rămân pe implementări verificate cu rezidență UE.",
+    "probeUsage": "Verificările de compatibilitate trimit solicitări sintetice fixe cu identitatea aplicației. Folosesc un număr mic de token-uri de model, niciodată date conversaționale. Așteptați cel puțin un minut înainte de a repeta o verificare de implementare.",
+    "save": "Salvează atribuiri",
+    "saving": "Se salvează…",
+    "saved": "Atribuirile au fost salvate. Noile solicitări folosesc această politică.",
+    "resetDefaults": "Folosește valorile implicite ale mediului",
+    "unsaved": "Modificări nesalvate",
+    "readinessHint": "Inventarul confirmă existența unei implementări. O operațiune sau verificare de compatibilitate recentă validă confirmă că aplicația o poate folosi. Reîmprospătările eșuate nu șterg ultimul control reușit.",
+    "account": "Legare cont: {binding}",
+    "lastInventory": "Ultimul inventar reușit: {time}",
+    "retirementUnknown": "Starea de retragere este necunoscută deoarece catalogul de modele nu a putut fi verificat.",
+    "history": "Istoric politică",
+    "revision": "Revizie efectivă: {revision}",
+    "noHistory": "Nu au fost înregistrate modificări de politică în acest mediu.",
+    "conflict": "Alt administrator a modificat politica. Schița dvs. este încă aici. Reîncărcați politica înainte de a salva din nou.",
+    "rateLimit": "Această implementare a fost verificată recent. Așteptați un minut înainte de a verifica din nou.",
+    "actionError": "Acțiunea nu a putut fi finalizată. Verificați detaliile și reîncercați; schița dvs. nu a fost ștearsă.",
+    "technicalDetails": "Detalii tehnice",
+    "reloadPolicy": "Reîncarcă politica și renunță la schiță",
+    "emptyChain": "Nu sunt atribuite modele. Adăugați o implementare compatibilă înainte de a salva.",
+    "primary": "Principal",
+    "fallback": "Rezervă",
+    "unknown": "Necunoscut",
+    "retires": "Versiunea modelului se retrage la {date}",
+    "checkResults": "Rezultate verificare operațiune",
+    "passed": "A trecut",
+    "moveUp": "Mută sus",
+    "moveDown": "Mută în jos",
+    "remove": "Elimină",
+    "moveUpLabel": "Mută {model} în sus",
+    "moveDownLabel": "Mută {model} în jos",
+    "removeLabel": "Elimină {model} din lanț",
+    "runChecks": "Rulează verificările de compatibilitate",
+    "findDeployment": "Caută un deployment",
+    "deployment": "Deployment",
+    "chooseDeployment": "Alege un deployment",
+    "addDeployment": "Adaugă în lanț",
+    "checkBeforeAdd": "Rulează verificările de compatibilitate pentru acest scop înainte de a adăuga deployment-ul.",
+    "assessmentManaged": "Modelele de evaluare-căutare și fallback-urile sunt gestionate în Modele și pregătire.",
+    "manageModels": "Gestionează modelele și pregătirea",
+    "purpose": {
+      "routing": "Rutare",
+      "searchAssessment": "Evaluare căutare"
+    },
+    "purposeDescription": {
+      "routing": "Selectarea abilităților, rutare căutare și cod, și clasificare de tip document-trim.",
+      "searchAssessment": "Evaluează sursele și alege următorul pas în timpul unei căutări pe mai multe etape."
+    },
+    "state": {
+      "ready": "Pregătit",
+      "unverified": "Disponibil, dar neverificat complet",
+      "fallback": "Se utilizează fallback",
+      "unavailable": "Niciun model eligibil",
+      "check_unavailable": "Verificări indisponibile"
+    },
+    "inventoryState": {
+      "current": "Curent",
+      "stale": "Ultimul inventar cunoscut",
+      "unavailable": "Inventar indisponibil"
+    },
+    "operation": {
+      "skills": "Selectare abilități",
+      "tools": "Rutare instrumente",
+      "trim": "Clasificare trim",
+      "assessment": "Evaluare căutare"
+    },
+    "reason": {
+      "endpoint_missing": "Endpoint sau legătură cont lipsă",
+      "deployment_missing": "Deployment lipsă sau nu servește",
+      "unauthorized": "Acces la identitatea aplicației refuzat",
+      "timeout": "Verificarea a expirat",
+      "throttled": "S-a atins limita de cotă sau rată",
+      "incompatible": "Operație incompatibilă",
+      "provider": "Eșec la apelarea providerului",
+      "residency": "Zona de procesare nepermisă",
+      "retired": "Versiune model retrasă",
+      "inventory_unavailable": "Inventarul nu a putut fi verificat",
+      "refused": "Modelul a refuzat cererea"
+    },
+    "accountError": {
+      "account_resource_missing": "Configurați Foundry ARM resource ID pentru această legătură, pentru a verifica inventarul.",
+      "endpoint_missing": "Configurați endpoint-ul de inferență pentru această legătură.",
+      "endpoint_account_mismatch": "Endpoint-ul și ARM resource ID identifică conturi diferite. Corectați configurația deployment-ului.",
+      "inventory_refresh_failed": "Reîmprospătarea inventarului a eșuat. Verificați accesul Reader și conectivitatea contului pentru identitatea aplicației.",
+      "credential_unavailable": "Aplicația nu a putut obține acreditarea de inventar. Verificați configurația identității de deployment."
+    }
   }
 }
