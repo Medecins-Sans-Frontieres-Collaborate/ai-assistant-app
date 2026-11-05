@@ -10,6 +10,7 @@
  * with the remedy. Warn-only, fire-and-forget, never fatal.
  */
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
+import { AuxiliaryModelService } from '@/lib/services/auxiliary/AuxiliaryModelService';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 import type { UserRegion } from '@/lib/utils/shared/region';
@@ -100,7 +101,18 @@ export async function checkAuxiliaryRouterEndpoints(
 export async function logAuxiliaryRouterStartupWarnings(): Promise<void> {
   if (process.env.NODE_ENV === 'test') return;
   try {
-    await checkAuxiliaryRouterEndpoints({ getClient: defaultGetClient });
+    const report = await AuxiliaryModelService.getInstance().report();
+    for (const chain of report.chains) {
+      if (
+        chain.state !== 'ready' ||
+        chain.redundancy < 2 ||
+        chain.candidates.some((entry) => entry.retiringSoon)
+      ) {
+        console.warn(
+          `[auxiliary-readiness] environment=${report.environment} purpose=${chain.purpose} region=${chain.region} state=${chain.state} eligible=${chain.redundancy}. Inspect Models and readiness in Admin.`,
+        );
+      }
+    }
   } catch (error) {
     console.warn(
       `[tool-router] auxiliary endpoint startup check skipped: ${sanitizeForLog(error)}`,
