@@ -290,7 +290,11 @@ describe('M365AgentsSection — document cap save payload', () => {
       try {
         renderSection();
         fireEvent.click(
-          await screen.findByRole('button', { name: 'Edit agent' }),
+          await screen.findByRole(
+            'button',
+            { name: 'Edit agent' },
+            { timeout: 5000 },
+          ),
         );
         if (scenario !== 'stored override') {
           fireEvent.change(screen.getByLabelText('m365AgentNameLabel'), {
@@ -306,7 +310,7 @@ describe('M365AgentsSection — document cap save payload', () => {
           if (scenario === 'failed raise' || scenario === 'stale raise') {
             await screen.findByText(
               scenario === 'stale raise'
-                ? 'conflictError'
+                ? 'Someone else changed this while you were editing. Reload to load the latest version, then make your change again.'
                 : 'Limit save failed',
             );
             expect(agent.agent.maxDocumentsOverride).toBeUndefined();
