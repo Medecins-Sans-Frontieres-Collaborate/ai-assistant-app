@@ -4,8 +4,8 @@ import { routing } from './config/i18n';
 
 type MessageTree = { [key: string]: string | MessageTree };
 
-/** Fill only missing auxiliary UI translations, retaining localized values at every nesting level. */
-function auxiliaryMessages(
+/** Fill missing feature translations without replacing any existing localized values. */
+function fillMissingMessages(
   base: MessageTree,
   translated?: MessageTree,
 ): MessageTree {
@@ -16,7 +16,7 @@ function auxiliaryMessages(
         ? typeof translated?.[key] === 'string'
           ? translated[key]
           : value
-        : auxiliaryMessages(
+        : fillMissingMessages(
             value,
             typeof translated?.[key] === 'object'
               ? (translated[key] as MessageTree)
@@ -47,10 +47,17 @@ export default getRequestConfig(async ({ requestLocale }) => {
       messages: {
         ...messages,
         permissionCache: messages.permissionCache ?? english.permissionCache,
-        auxiliaryModels: auxiliaryMessages(
+        auxiliaryModels: fillMissingMessages(
           english.auxiliaryModels,
           messages.auxiliaryModels,
         ),
+        chat: {
+          ...messages.chat,
+          skillUsage: fillMissingMessages(
+            english.chat.skillUsage,
+            messages.chat?.skillUsage,
+          ),
+        },
         admin: {
           ...messages.admin,
           area: {
