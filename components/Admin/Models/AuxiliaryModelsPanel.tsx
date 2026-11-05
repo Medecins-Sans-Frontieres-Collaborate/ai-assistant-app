@@ -11,6 +11,7 @@ import {
 
 import {
   AUXILIARY_LIMITS,
+  AUXILIARY_OPERATION_REVISION,
   AUXILIARY_PURPOSES,
   AUXILIARY_REGIONS,
   type AuxiliaryAdminReport,
@@ -26,7 +27,7 @@ import {
 import {
   ADMIN_BANNER_ERROR,
   ADMIN_BANNER_WARN,
-  ADMIN_BTN_PRIMARY,
+  ADMIN_BTN_PRIMARY_STRONG,
   ADMIN_BTN_SECONDARY,
   ADMIN_CHIP_NEUTRAL,
   ADMIN_FIELD,
@@ -49,7 +50,7 @@ export function AuxiliaryModelsPanel() {
   const [notice, setNotice] = useState<string | null>(null);
   if (query.data && query.data !== seed) {
     setSeed(query.data);
-    if (!dirty && !query.data.configUnavailable) {
+    if (!dirty) {
       setDraft(structuredClone(query.data.effective));
       setEtag(query.data.etag);
     }
@@ -96,10 +97,12 @@ export function AuxiliaryModelsPanel() {
     (chain) =>
       chain.state !== 'ready' ||
       chain.redundancy < 2 ||
-      chain.candidates.some((candidate) => candidate.retiringSoon),
+      chain.candidates.some(
+        (candidate) => candidate.retiringSoon || candidate.retirementUnknown,
+      ),
   );
   return (
-    <div className="mx-auto w-full max-w-5xl space-y-6 p-4 sm:p-6">
+    <div className="min-w-0 w-full space-y-6">
       <header className="space-y-3">
         <div className="flex flex-wrap items-baseline gap-3">
           <h1 className="text-2xl font-bold">{t('title')}</h1>
@@ -125,6 +128,11 @@ export function AuxiliaryModelsPanel() {
           {t('configUnavailable')}
         </p>
       )}
+      {report.bootstrapUnavailable && (
+        <p className={ADMIN_BANNER_WARN} role="alert">
+          {t('bootstrapUnavailable')}
+        </p>
+      )}
       {problems.length > 0 && (
         <section aria-label={t('attention')} className="space-y-2">
           <h2 className="text-lg font-semibold">{t('attention')}</h2>
@@ -136,6 +144,10 @@ export function AuxiliaryModelsPanel() {
                   {t(`state.${chain.state}`)}
                 </p>
                 <p>{t('eligibleCount', { count: chain.redundancy })}</p>
+                {chain.runtimeFallback && <p>{t('runtimeFallback')}</p>}
+                {chain.candidates.some((entry) => entry.retirementUnknown) && (
+                  <p>{t('retirementUnknown')}</p>
+                )}
                 {chain.candidates.some((entry) => entry.retiringSoon) && (
                   <p>{t('retirementWarning')}</p>
                 )}
@@ -156,8 +168,26 @@ export function AuxiliaryModelsPanel() {
             role="tab"
             aria-selected={tab === name}
             aria-controls={`aux-panel-${name}`}
+            tabIndex={tab === name ? 0 : -1}
             className={`${action} ${tab === name ? 'font-semibold underline underline-offset-4' : ''}`}
             onClick={() => setTab(name)}
+            onKeyDown={(event) => {
+              if (
+                !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)
+              )
+                return;
+              event.preventDefault();
+              const next =
+                event.key === 'Home'
+                  ? 'assignments'
+                  : event.key === 'End'
+                    ? 'readiness'
+                    : tab === 'assignments'
+                      ? 'readiness'
+                      : 'assignments';
+              setTab(next);
+              document.getElementById(`aux-tab-${next}`)?.focus();
+            }}
           >
             {t(name)}
           </button>
@@ -200,7 +230,7 @@ export function AuxiliaryModelsPanel() {
             ))}
           <div className="flex flex-wrap items-center gap-3 border-t border-gray-200 pt-5 dark:border-gray-700">
             <button
-              className={`${ADMIN_BTN_PRIMARY} min-h-11`}
+              className={`${ADMIN_BTN_PRIMARY_STRONG} min-h-11`}
               disabled={!dirty || busy || !draft || report.configUnavailable}
               onClick={() =>
                 draft &&
@@ -221,7 +251,9 @@ export function AuxiliaryModelsPanel() {
             </button>
             <button
               className={action}
-              disabled={busy || report.configUnavailable}
+              disabled={
+                busy || report.configUnavailable || report.bootstrapUnavailable
+              }
               onClick={() => {
                 setDraft(structuredClone(report.defaults));
                 setDirty(true);
@@ -254,6 +286,11 @@ export function AuxiliaryModelsPanel() {
               <p className={body}>
                 {t('lastInventory', { time: timestamp(inventory.fetchedAt) })}
               </p>
+              <p className={body}>
+                {t('accountLocation', {
+                  location: inventory.location ?? t('unknown'),
+                })}
+              </p>
               {inventory.account.resourcePath && (
                 <p className={`${body} break-all`}>
                   {inventory.account.resourcePath}
@@ -274,6 +311,27 @@ export function AuxiliaryModelsPanel() {
               )}
             </section>
           ))}
+          <section className="space-y-3 border-t border-gray-200 pt-4 dark:border-gray-700">
+            <h2 className="text-lg font-semibold">{t('incidents')}</h2>
+            {report.incidents?.length ? (
+              <ul className="space-y-3">
+                {report.incidents.map((entry, index) => (
+                  <li
+                    key={`${entry.key}:${entry.checkedAt}:${index}`}
+                    className={body}
+                  >
+                    {timestamp(entry.checkedAt)} · <bdi>{entry.key}</bdi> ·{' '}
+                    {t(`operation.${entry.operation}`)}:{' '}
+                    {entry.success
+                      ? t('passed')
+                      : t(`reason.${entry.reason ?? 'provider'}`)}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className={body}>{t('noIncidents')}</p>
+            )}
+          </section>
           <section className="space-y-3 border-t border-gray-200 pt-4 dark:border-gray-700">
             <h2 className="text-lg font-semibold">{t('history')}</h2>
             <p className={`${body} break-all`}>
@@ -378,6 +436,7 @@ function ChainEditor({
         .sort((a, b) => b.checkedAt.localeCompare(a.checkedAt))[0];
       return (
         latest?.success &&
+        latest.operationRevision === AUXILIARY_OPERATION_REVISION &&
         Date.now() - Date.parse(latest.checkedAt) <
           AUXILIARY_LIMITS.probeFreshMs
       );
@@ -412,7 +471,8 @@ function ChainEditor({
             >
               <div className="min-w-0 space-y-2">
                 <p className="break-all font-semibold">
-                  {index + 1}. {reference.deploymentName}
+                  {format.number(index + 1)}.{' '}
+                  <bdi>{reference.deploymentName}</bdi>
                 </p>
                 <p className={body}>
                   {t(index === 0 ? 'primary' : 'fallback')} ·{' '}
