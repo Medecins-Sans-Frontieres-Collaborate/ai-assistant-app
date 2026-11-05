@@ -79,6 +79,10 @@ export function auxiliaryAccount(binding: AuxiliaryBinding): AuxiliaryAccount {
     url.protocol !== 'https:' ||
     url.username ||
     url.password ||
+    url.search ||
+    url.hash ||
+    url.port ||
+    !['/', '/openai/v1/'].includes(url.pathname) ||
     ![
       `${name}.services.ai.azure.com`,
       `${name}.cognitiveservices.azure.com`,
@@ -95,5 +99,5 @@ export function auxiliaryAccount(binding: AuxiliaryBinding): AuxiliaryAccount {
   ) {
     return { ...result, resourcePath, error: 'endpoint_account_mismatch' };
   }
-  return { binding, resourcePath, endpoint, configured: true };
+  return { binding, resourcePath, endpoint: url.toString(), configured: true };
 }
