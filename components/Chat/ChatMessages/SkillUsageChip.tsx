@@ -37,11 +37,14 @@ export const SkillUsageChip: FC<SkillUsageChipProps> = ({ toolCalls }) => {
   const [expanded, setExpanded] = useState(false);
   const detailsId = useId();
 
-  if (toolCalls.length === 0) return null;
+  const finishedCalls = toolCalls.filter(
+    (call) => call.status !== 'in_progress',
+  );
+  if (finishedCalls.length === 0) return null;
 
-  const lines = summarizeSkillToolCalls(toolCalls);
-  const issue = skillUsageHasIssue(toolCalls);
-  const attention = skillUsageNeedsAttention(toolCalls);
+  const lines = summarizeSkillToolCalls(finishedCalls);
+  const issue = skillUsageHasIssue(finishedCalls);
+  const attention = skillUsageNeedsAttention(finishedCalls);
 
   const label = (line: SkillUsageLine): string | null => {
     switch (line.kind) {
@@ -54,11 +57,11 @@ export const SkillUsageChip: FC<SkillUsageChipProps> = ({ toolCalls }) => {
       case 'unavailable':
         return `${line.id} (${t('unavailable')})`;
       case 'references':
-        return t('references', { count: line.count });
+        return `${t('references', { count: line.count })}${line.unavailable ? `; ${t('referencesUnavailable')}` : ''}`;
       case 'agentLoad':
-        return `${line.name} (${t('agentLoad')})`;
+        return `${line.name} (${line.failed ? t('unavailable') : t('agentLoad')})`;
       case 'agentSearch':
-        return t('agentSearch');
+        return `${t('agentSearch')}${line.failed ? ` (${t('unavailable')})` : ''}`;
       case 'note':
         return null;
     }
@@ -66,7 +69,7 @@ export const SkillUsageChip: FC<SkillUsageChipProps> = ({ toolCalls }) => {
   const named = lines.filter(
     (line) => line.kind === 'skill' || line.kind === 'agentLoad',
   );
-  const count = new Set(named.map((line) => line.name)).size;
+  const count = named.length;
   const inline = lines
     .filter(
       (line) =>
