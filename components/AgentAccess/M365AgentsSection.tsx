@@ -1235,12 +1235,12 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           <p className="mb-2 text-xs text-gray-600 dark:text-gray-300">
             {t(existing ? 'm365CapImmediateHelp' : 'm365CapDraftHelp')}
           </p>
-          {capSaved && (
+          {(capSaving || capSaved) && (
             <p
               role="status"
               className="mb-2 text-xs text-gray-700 dark:text-gray-300"
             >
-              {t('m365CapSaved', { limit: draftCap })}
+              {capSaving ? t('saving') : t('m365CapSaved', { limit: draftCap })}
             </p>
           )}
           {capError && (
@@ -1330,7 +1330,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                           type="button"
                           disabled={capSaving || isSaving}
                           onClick={() => applyCap(localRaiseTarget)}
-                          className="rounded-md border border-red-300 px-2 py-0.5 font-medium text-red-800 hover:bg-red-100 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/40"
+                          className="rounded-md border border-red-300 px-2 py-0.5 font-medium text-red-800 hover:bg-red-100 disabled:opacity-40 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/40"
                         >
                           {t('m365CapRaiseButton', {
                             limit: localRaiseTarget,
@@ -2483,7 +2483,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
 
                 {editingId === entry.agent.id && (
                   <M365AgentEditor
-                    key={`${entry.agent.id}:${entry.etag}`}
+                    key={entry.agent.id}
                     existing={entry}
                     maxSources={maxDocuments}
                     maxBytes={maxBytes}
