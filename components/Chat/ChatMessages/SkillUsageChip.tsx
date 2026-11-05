@@ -4,15 +4,15 @@ import {
   IconAlertCircle,
   IconChevronDown,
   IconChevronRight,
-  IconSparkles,
 } from '@tabler/icons-react';
-import { FC, useState } from 'react';
+import { FC, useId, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import {
   SkillUsageLine,
   skillUsageHasIssue,
+  skillUsageNeedsAttention,
   summarizeSkillToolCalls,
 } from '@/lib/utils/shared/chat/skillToolCalls';
 
@@ -28,17 +28,20 @@ interface SkillUsageChipProps {
  * of which skills shaped the answer and how they were selected
  * (docs/SKILLS_DESIGN.md §10). Rendered apart from the MCP tool strip so
  * skill use reads as guidance applied, not as an external tool call. The
- * chip names everything inline; the toggle reveals the raw lines (dropped
- * ids, degraded routing, document notices) for anyone debugging a turn.
+ * compact disclosure leaves automatic work in the background. Explicit
+ * omissions and approval requirements retain attention styling; names,
+ * selection methods, versions and diagnostics remain available on demand.
  */
 export const SkillUsageChip: FC<SkillUsageChipProps> = ({ toolCalls }) => {
   const t = useTranslations('chat.skillUsage');
   const [expanded, setExpanded] = useState(false);
+  const detailsId = useId();
 
   if (toolCalls.length === 0) return null;
 
   const lines = summarizeSkillToolCalls(toolCalls);
   const issue = skillUsageHasIssue(toolCalls);
+  const attention = skillUsageNeedsAttention(toolCalls);
 
   const label = (line: SkillUsageLine): string | null => {
     switch (line.kind) {
@@ -60,49 +63,76 @@ export const SkillUsageChip: FC<SkillUsageChipProps> = ({ toolCalls }) => {
         return null;
     }
   };
-  const inline = lines.map(label).filter((text): text is string => !!text);
+  const named = lines.filter(
+    (line) => line.kind === 'skill' || line.kind === 'agentLoad',
+  );
+  const count = new Set(named.map((line) => line.name)).size;
+  const inline = lines
+    .filter(
+      (line) =>
+        line.kind === 'unavailable' ||
+        line.kind === 'consent' ||
+        (line.kind === 'skill' && line.via !== 'auto'),
+    )
+    .map(label)
+    .filter((text): text is string => !!text);
   const notes = lines.filter(
     (line): line is Extract<SkillUsageLine, { kind: 'note' }> =>
       line.kind === 'note',
   );
-  const hasDetails = notes.length > 0 || toolCalls.some((call) => call.error);
+  const detailLabels = lines
+    .filter((line) => line.kind !== 'note')
+    .map(label)
+    .filter((text): text is string => !!text);
+  const summary = inline.length
+    ? inline.join(', ')
+    : issue
+      ? t('limited')
+      : count
+        ? t('appliedCount', { count })
+        : null;
 
   return (
-    <div className="my-3 max-w-prose not-prose" data-testid="skill-usage-chip">
-      <div
-        className={`inline-flex max-w-full flex-wrap items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs ${
-          issue
-            ? 'border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200'
-            : 'border-violet-200 bg-violet-50 text-violet-900 dark:border-violet-800 dark:bg-violet-950/40 dark:text-violet-200'
-        }`}
+    <div
+      className="my-1 max-w-prose not-prose"
+      data-testid="skill-usage-chip"
+      data-attention={attention ? 'required' : 'background'}
+    >
+      <button
+        type="button"
+        onClick={() => setExpanded((value) => !value)}
+        aria-expanded={expanded}
+        aria-controls={detailsId}
+        aria-label={expanded ? t('hideDetails') : t('showDetails')}
+        className={`inline-flex min-h-8 max-w-full items-center gap-1.5 rounded py-1 text-start text-xs leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 [@media(pointer:coarse)]:min-h-11 ${attention ? 'text-amber-900 hover:text-amber-950 dark:text-amber-200 dark:hover:text-amber-100' : 'text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100'}`}
       >
-        {issue ? (
-          <IconAlertCircle size={12} aria-hidden="true" />
-        ) : (
-          <IconSparkles size={12} aria-hidden="true" />
+        {attention && (
+          <IconAlertCircle size={12} aria-hidden="true" className="shrink-0" />
         )}
-        <span className="font-medium">{t('label')}:</span>
         <span className="min-w-0 break-words">
-          {inline.length > 0 ? inline.join(', ') : t('incomplete')}
+          {t('label')}
+          {summary ? ` · ${summary}` : ''}
         </span>
-        {hasDetails && (
-          <button
-            type="button"
-            onClick={() => setExpanded((v) => !v)}
-            aria-expanded={expanded}
-            aria-label={expanded ? t('hideDetails') : t('showDetails')}
-            className="ml-1 inline-flex items-center rounded p-0.5 hover:bg-black/5 dark:hover:bg-white/10"
-          >
-            {expanded ? (
-              <IconChevronDown size={12} aria-hidden="true" />
-            ) : (
-              <IconChevronRight size={12} aria-hidden="true" />
-            )}
-          </button>
+        {expanded ? (
+          <IconChevronDown size={12} aria-hidden="true" className="shrink-0" />
+        ) : (
+          <IconChevronRight
+            size={12}
+            aria-hidden="true"
+            className="shrink-0 rtl:rotate-180"
+          />
         )}
-      </div>
-      {expanded && hasDetails && (
-        <ul className="mt-2 space-y-1 border-l-2 border-gray-200 pl-3 text-xs text-gray-700 dark:border-gray-700 dark:text-gray-300">
+      </button>
+      {expanded && (
+        <ul
+          id={detailsId}
+          className="mt-1 space-y-1 text-xs leading-relaxed text-gray-700 dark:text-gray-300"
+        >
+          {detailLabels.map((text, index) => (
+            <li key={`detail-${index}`} className="break-words">
+              {text}
+            </li>
+          ))}
           {notes.map((note, index) => (
             <li key={`note-${index}`} className="break-words">
               {note.text}
