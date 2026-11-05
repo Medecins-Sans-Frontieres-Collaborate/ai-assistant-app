@@ -69,7 +69,7 @@ import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
 /**
- * GET/POST/PUT/DELETE /api/agent-access/m365-agents — admin CRUD for M365
+ * GET/POST/PUT/PATCH/DELETE /api/agent-access/m365-agents — admin CRUD for M365
  * file-backed RAG agents (docs/M365_SECOND_PASS_AGENTS_DESIGN.md). 404 while
  * agent access control is disabled. Any admin (global or local) may create —
  * the design decision from review; edits and deletes are authorized per
@@ -140,6 +140,13 @@ const agentFieldsSchema = z
 const putBodySchema = agentFieldsSchema.extend({
   id: z.string().trim().min(1).max(100),
 });
+
+const capBodySchema = z
+  .object({
+    id: putBodySchema.shape.id,
+    maxDocumentsOverride: agentFieldsSchema.shape.maxDocumentsOverride.unwrap(),
+  })
+  .strict();
 
 /**
  * Ids are server-generated, so a client-supplied one only ever needs to be
@@ -670,6 +677,7 @@ export async function PUT(request: NextRequest) {
     const storage = createAgentAccessBlobStorage();
     const existing = await readM365Agent(storage, parsed.data.id);
     if (!existing) return notFoundResponse('M365 agent');
+    if (existing.etag !== ifMatchEtag) return conflictResponse(service);
 
     const now = new Date().toISOString();
     const sources = reconcileSources(
@@ -741,6 +749,96 @@ export async function PUT(request: NextRequest) {
       return conflictResponse(service);
     }
     return handleApiError(error, 'Failed to update M365 agent');
+  }
+}
+
+/**
+ * Persists only an existing agent's document limit, preserving all other
+ * metadata and sources. Accepts an id and a numeric override (or null to
+ * reset), with a strong If-Match ETag. Returns the saved record and ETag;
+ * invalid input, role violations, missing agents and stale writes return
+ * 400, 403, 404 and 409 respectively. Does not require a Graph connection:
+ * changing a limit does not index files, and index runs enforce the cap.
+ */
+export async function PATCH(request: NextRequest) {
+  const service = AgentAccessService.getInstance();
+  if (!service.isEnabled()) return notFoundResponse('Resource');
+
+  const session = await auth();
+  if (!session?.user) return unauthorizedResponse();
+  const userMail = session.user.mail?.trim().toLowerCase();
+  if (!userMail) return forbiddenResponse();
+
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return badRequestResponse('Invalid JSON body');
+  }
+  const parsed = capBodySchema.safeParse(body);
+  if (!parsed.success) return badRequestResponse('Invalid document limit body');
+  if (!M365_AGENT_ID_PATTERN.test(parsed.data.id)) {
+    return badRequestResponse('Invalid agent id');
+  }
+  const ifMatchEtag = request.headers.get('if-match');
+  if (ifMatchEtag === null || !STRONG_ETAG_REGEX.test(ifMatchEtag)) {
+    return badRequestResponse('If-Match must be a quoted strong ETag');
+  }
+
+  const canonicalKey = canonicalAgentKey(M365_AGENT_SOURCE, parsed.data.id);
+  try {
+    await service.ensureFresh();
+    const status = resolveAdminStatus(
+      session.user,
+      service.getSnapshot().config,
+    );
+    if (!status.isGlobalAdmin && !status.isLocalAdmin)
+      return forbiddenResponse();
+    if (!canEditKey(status, canonicalKey)) return forbiddenResponse();
+
+    const storage = createAgentAccessBlobStorage();
+    const existing = await readM365Agent(storage, parsed.data.id);
+    if (!existing) return notFoundResponse('M365 agent');
+    if (existing.etag !== ifMatchEtag) return conflictResponse(service);
+
+    const now = new Date().toISOString();
+    const override = resolveCapOverride(
+      parsed.data.maxDocumentsOverride,
+      existing.m365Agent,
+      status.isGlobalAdmin,
+      userMail,
+      now,
+    );
+    if ('error' in override) {
+      return errorResponse(
+        override.error,
+        400,
+        undefined,
+        'M365_CAP_ABOVE_ROLE',
+      );
+    }
+    const agent: M365Agent = {
+      ...existing.m365Agent,
+      ...override.fields,
+      updatedBy: userMail,
+      updatedAt: now,
+    };
+    const etag = await writeM365Agent(storage, agent, ifMatchEtag);
+    service.invalidate();
+    auditAdminWrite('m365-agent-cap-update', canonicalKey, userMail);
+    await appendHistoryBestEffort({
+      version: 1,
+      canonicalKey,
+      action: 'upsert',
+      m365Agent: agent,
+      updatedBy: userMail,
+      updatedAt: now,
+    });
+    return successResponse({ agent, etag, canonicalKey });
+  } catch (error) {
+    if (error instanceof AgentAccessConflictError)
+      return conflictResponse(service);
+    return handleApiError(error, 'Failed to update M365 agent document limit');
   }
 }
 
