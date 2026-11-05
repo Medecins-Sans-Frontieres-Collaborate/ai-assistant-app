@@ -647,6 +647,103 @@ describe('per-agent document cap override', () => {
       editableAgentKeys: ['m365-agent::m365-abcdefabcdef'],
     });
 
+  it.each(
+    ['create', 'raise on update', 'keep stored override'].flatMap((operation) =>
+      [51, 80, 81].map((documentCount) => ({ operation, documentCount })),
+    ),
+  )(
+    '$operation: validates $documentCount files against an 80-file cap with the real planner',
+    async ({ operation, documentCount }) => {
+      const planner = await vi.importActual<
+        typeof import('@/lib/services/m365/agentSourcePlanner')
+      >('@/lib/services/m365/agentSourcePlanner');
+      const { getGraphAccessToken } = await import('@/auth');
+      vi.mocked(getGraphAccessToken).mockResolvedValue({
+        accessToken: 'test-token',
+        grantedScopes: [],
+      });
+      const sources = Array.from({ length: documentCount }, (_, index) => ({
+        ...validSource,
+        itemId: `file-${index}`,
+        title: `Document-${index}.pdf`,
+      }));
+      const graphFetch = vi.fn(async (url: string) => {
+        const itemId = new URL(url).pathname.split('/').pop()!;
+        return new Response(
+          JSON.stringify({
+            id: itemId,
+            name: `${itemId}.pdf`,
+            size: 1024,
+            file: {},
+          }),
+          { headers: { 'Content-Type': 'application/json' } },
+        );
+      });
+      planner.clearPlannerCacheForTests();
+      vi.stubGlobal('fetch', graphFetch);
+      mockPlanner.planSources.mockImplementation(planner.planSources);
+      try {
+        // Reuse metadata cached under the old cap, as happens when the
+        // editor raises its limit after planning the selected files.
+        const oldPlan = await planner.planSources(
+          postRequest({}),
+          session.user.id,
+          sources.map((source) => ({ ...source, kind: 'file' as const })),
+          { maxDocuments: 50 },
+        );
+        expect(oldPlan.overDocumentCap).toBe(true);
+        expect(graphFetch).toHaveBeenCalledTimes(documentCount);
+
+        const storedOverride = operation === 'keep stored override';
+        const existing = makeAgent(
+          storedOverride
+            ? {
+                maxDocumentsOverride: 80,
+                maxDocumentsOverrideBy: 'global@example.org',
+              }
+            : {},
+        );
+        mockStore.readM365Agent.mockResolvedValue({
+          m365Agent: existing,
+          etag: '"etag-1"',
+        });
+        const body = {
+          name: 'Document agent',
+          sources,
+          ...(!storedOverride && { maxDocumentsOverride: 80 }),
+        };
+        const response =
+          operation === 'create'
+            ? await POST(postRequest(body))
+            : await PUT(putRequest({ ...body, id: existing.id }));
+
+        expect(graphFetch).toHaveBeenCalledTimes(documentCount);
+        const result = await parseJsonResponse(response);
+        if (documentCount <= 80) {
+          expect(response.status).toBe(200);
+          expect(result.data.agent.maxDocumentsOverride).toBe(80);
+          expect(result.data.agent.sources).toHaveLength(documentCount);
+          expect(mockStore.writeM365Agent).toHaveBeenCalledOnce();
+          if (storedOverride) {
+            expect(result.data.agent.maxDocumentsOverrideBy).toBe(
+              'global@example.org',
+            );
+          }
+        } else {
+          expect(response.status).toBe(400);
+          expect(result.error).toBe(
+            'Sources expand to 81 documents; at most 80 are allowed',
+          );
+          expect(mockStore.writeM365Agent).not.toHaveBeenCalled();
+        }
+      } finally {
+        planner.clearPlannerCacheForTests();
+        vi.unstubAllGlobals();
+        mockPlanner.planSources.mockReset();
+      }
+    },
+  );
+
   it('lets a local admin raise the cap up to their ceiling and stamps who did it', async () => {
     asLocalAdmin();
     const existing = makeAgent();

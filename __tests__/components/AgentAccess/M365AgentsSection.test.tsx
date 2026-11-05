@@ -197,6 +197,104 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+describe('M365AgentsSection — document cap save payload', () => {
+  it.each(['stored override', 'raise in editor'])(
+    'sends the 80-file cap when saving 51 sources with a %s',
+    async (scenario) => {
+      const agent = baseAgent(
+        Array.from({ length: 51 }, (_, index) => ({
+          ...indexedSource,
+          sourceId: `src-${index}`,
+          itemId: `file-${index}`,
+          title: `Document-${index}.pdf`,
+        })),
+      );
+      if (scenario === 'stored override') {
+        agent.agent.maxDocumentsOverride = 80;
+      }
+      const savePayloads: Record<string, unknown>[] = [];
+      const planCaps: number[] = [];
+      const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
+        if (url === '/api/agent-access/m365-agents') {
+          if (init?.method === 'PUT') {
+            const payload = JSON.parse(String(init.body));
+            savePayloads.push(payload);
+            return jsonResponse(
+              payload.maxDocumentsOverride === 80 ? 200 : 400,
+              payload.maxDocumentsOverride === 80
+                ? { success: true, data: { agent: agent.agent } }
+                : {
+                    error:
+                      'Sources expand to 51 documents; at most 50 are allowed',
+                  },
+            );
+          }
+          return jsonResponse(200, {
+            success: true,
+            data: {
+              m365Agents: [agent],
+              maxDocuments: 50,
+              maxBytes: 512 * 1024 * 1024,
+              maxDocumentsCeilings: { localAdmin: 100, globalAdmin: 200 },
+              isGlobalAdmin: true,
+              jobs: {},
+            },
+          });
+        }
+        if (url === '/api/agent-access/m365-agents/plan') {
+          const payload = JSON.parse(String(init?.body));
+          const cap = payload.maxDocuments ?? 50;
+          planCaps.push(cap);
+          return jsonResponse(200, {
+            success: true,
+            data: {
+              plans: [],
+              totalDocuments: 51,
+              totalBytes: 51 * 1024,
+              maxDocuments: cap,
+              maxBytes: 512 * 1024 * 1024,
+              overDocumentCap: 51 > cap,
+              overByteCap: false,
+            },
+          });
+        }
+        return jsonResponse(404, { error: `unmocked ${url}` });
+      });
+      vi.stubGlobal('fetch', fetchMock);
+      const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true);
+      try {
+        renderSection();
+        fireEvent.click(
+          await screen.findByRole('button', { name: 'Edit agent' }),
+        );
+        if (scenario === 'raise in editor') {
+          fireEvent.change(screen.getByLabelText('m365CapRaiseInputLabel'), {
+            target: { value: '80' },
+          });
+          fireEvent.click(
+            screen.getByRole('button', { name: 'm365CapRaiseApply' }),
+          );
+          expect(confirm).toHaveBeenCalledOnce();
+        }
+        await waitFor(() => expect(planCaps).toContain(80));
+        const save = screen.getByRole('button', { name: 'Save' });
+        await waitFor(() => expect(save).toBeEnabled());
+        fireEvent.click(save);
+        await waitFor(() => expect(savePayloads).toHaveLength(1));
+        expect(savePayloads[0]).toMatchObject({
+          id: agent.agent.id,
+          maxDocumentsOverride: 80,
+        });
+        expect(savePayloads[0].sources).toHaveLength(51);
+        await waitFor(() => expect(toast.success).toHaveBeenCalled());
+        expect(toast.error).not.toHaveBeenCalled();
+      } finally {
+        confirm.mockRestore();
+      }
+    },
+  );
+});
+
 describe('M365AgentsSection — management visibility diagnostics', () => {
   it('searches aggregated document counts without treating zero failures as failed status', async () => {
     const agent = baseAgent([
