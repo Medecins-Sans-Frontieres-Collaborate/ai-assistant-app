@@ -204,7 +204,11 @@ export class ChatPipeline {
           this.createTimeoutPromise(timeout, stage.name, stageAbort);
         try {
           context = await Promise.race([
-            stage.execute({ ...context, stageSignal: stageAbort.signal }),
+            stage.execute({
+              ...context,
+              stageSignal: stageAbort.signal,
+              stageDeadline: Date.now() + timeout,
+            }),
             timeoutPromise,
           ]);
         } catch (error) {
