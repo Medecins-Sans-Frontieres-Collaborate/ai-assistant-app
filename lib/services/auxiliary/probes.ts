@@ -1,6 +1,12 @@
 /** Fixed synthetic fixtures using the real operation request builders; no user data or arbitrary prompts. */
 import { ToolRouterService } from '@/lib/services/chat/ToolRouterService';
-import { assessmentSchema } from '@/lib/services/chat/tools/searchAssessor';
+import {
+  type AssessmentInput,
+  allowedVerdicts,
+  assessmentSchema,
+  buildAssessorSystemPrompt,
+  buildAssessorUserMessage,
+} from '@/lib/services/chat/tools/searchAssessor';
 
 import { MessageType } from '@/types/chat';
 
@@ -8,77 +14,50 @@ import type { AuxiliaryOperation } from './types';
 
 import type OpenAI from 'openai';
 
-/** Validate the closed, provider-neutral JSON schema subset used by our classifiers. */
-export function matchesAuxiliarySchema(
-  value: unknown,
-  schema: Record<string, unknown>,
-): boolean {
-  if (Array.isArray(schema.enum) && !schema.enum.includes(value)) return false;
-  if (schema.type === 'object') {
-    if (!value || typeof value !== 'object' || Array.isArray(value))
-      return false;
-    const object = value as Record<string, unknown>;
-    const properties = (schema.properties ?? {}) as Record<
-      string,
-      Record<string, unknown>
-    >;
-    if (
-      Array.isArray(schema.required) &&
-      schema.required.some((key) => typeof key !== 'string' || !(key in object))
-    )
-      return false;
-    return Object.entries(object).every(([key, entry]) =>
-      properties[key]
-        ? matchesAuxiliarySchema(entry, properties[key])
-        : schema.additionalProperties !== false,
-    );
-  }
-  if (schema.type === 'array')
-    return (
-      Array.isArray(value) &&
-      (typeof schema.maxItems !== 'number' ||
-        value.length <= schema.maxItems) &&
-      value.every((entry) =>
-        matchesAuxiliarySchema(
-          entry,
-          (schema.items ?? {}) as Record<string, unknown>,
-        ),
-      )
-    );
-  if (schema.type === 'string') return typeof value === 'string';
-  if (schema.type === 'boolean') return typeof value === 'boolean';
-  if (schema.type === 'number')
-    return typeof value === 'number' && Number.isFinite(value);
-  if (schema.type === 'integer')
-    return typeof value === 'number' && Number.isInteger(value);
-  return true;
-}
+export { matchesAuxiliarySchema } from './schemaValidation';
 
 /** Build one synthetic request through the actual router builders, or the exported assessment schema. */
 export async function auxiliaryProbeRequest(
   operation: AuxiliaryOperation,
 ): Promise<OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming> {
-  if (operation === 'assessment')
+  if (operation === 'assessment') {
+    const input: AssessmentInput = {
+      question: 'Synthetic readiness check: no sources',
+      recentContext: [],
+      today: new Date().toISOString().slice(0, 10),
+      sources: [],
+      steps: [],
+      stepsRemaining: 0,
+      exploratoryStepsRemaining: 0,
+      canRead: false,
+      maxReads: 0,
+      maxUseful: 3,
+      assessSources: false,
+      searchHealth: '',
+      strategiesTried: [],
+      continuation: false,
+    };
     return {
       model: '',
       messages: [
         {
           role: 'system',
-          content:
-            'Return a JSON search assessment. No sources are available. Choose give_up, empty lists, false exploratory, and empty strings where no detail is needed.',
+          content: buildAssessorSystemPrompt(input),
         },
-        { role: 'user', content: 'Synthetic readiness check: no sources.' },
+        { role: 'user', content: buildAssessorUserMessage(input) },
       ],
       max_completion_tokens: 2400,
+      reasoning_effort: 'low',
       response_format: {
         type: 'json_schema',
         json_schema: {
           name: 'search_assessment',
           strict: true,
-          schema: assessmentSchema(['give_up']),
+          schema: assessmentSchema(allowedVerdicts(input)),
         },
       },
     };
+  }
   let captured:
     | OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming
     | undefined;
