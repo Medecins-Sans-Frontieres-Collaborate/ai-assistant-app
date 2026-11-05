@@ -75,6 +75,7 @@ export const SkillUsageChip: FC<SkillUsageChipProps> = ({ toolCalls }) => {
       (line) =>
         line.kind === 'unavailable' ||
         line.kind === 'consent' ||
+        (attention && line.kind === 'agentLoad' && line.failed) ||
         (line.kind === 'skill' && line.via !== 'auto'),
     )
     .map(label)
@@ -89,11 +90,13 @@ export const SkillUsageChip: FC<SkillUsageChipProps> = ({ toolCalls }) => {
     .filter((text): text is string => !!text);
   const summary = inline.length
     ? inline.join(', ')
-    : issue
-      ? t('limited')
-      : count
-        ? t('appliedCount', { count })
-        : null;
+    : attention
+      ? t('incomplete')
+      : issue
+        ? t('limited')
+        : count
+          ? t('appliedCount', { count })
+          : null;
 
   return (
     <div
@@ -141,7 +144,7 @@ export const SkillUsageChip: FC<SkillUsageChipProps> = ({ toolCalls }) => {
               {note.text}
             </li>
           ))}
-          {toolCalls
+          {finishedCalls
             .filter((call) => call.error)
             .map((call) => (
               <li
