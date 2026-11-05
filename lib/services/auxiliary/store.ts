@@ -21,7 +21,8 @@ import { z } from 'zod';
 const observationSchema = z.object({
   key: z.string().max(180),
   operation: z.enum(['skills', 'tools', 'trim', 'assessment']),
-  fingerprint: z.string().max(512),
+  fingerprint: z.string().max(1024),
+  operationRevision: z.number().int().nonnegative().default(0),
   policyRevision: z.string().max(200),
   checkedAt: z.string().datetime(),
   success: z.boolean(),
@@ -53,6 +54,11 @@ const historySchema = z.object({
 const stateSchema = z.object({
   observations: z.array(observationSchema).max(200),
   history: z.array(historySchema).max(50),
+  incidents: z.array(observationSchema).max(100).default([]),
+});
+const readBounds = (maxBytes = 1024 * 1024) => ({
+  maxBytes,
+  abortSignal: AbortSignal.timeout(3000),
 });
 export type AuxiliaryState = z.infer<typeof stateSchema>;
 
@@ -69,6 +75,7 @@ export async function readAuxiliaryPolicy(
     storage,
     `${auxiliaryPrefix()}config.json`,
     'auxiliary.readPolicy',
+    readBounds(64 * 1024),
   );
   if (!result) return null;
   const policy = AuxiliaryPolicySchema.parse(
@@ -94,6 +101,7 @@ export async function writeAuxiliaryPolicy(
     parsed,
     etag,
     'auxiliary.writePolicy',
+    { abortSignal: AbortSignal.timeout(10_000) },
   );
 }
 
@@ -105,10 +113,11 @@ export async function readAuxiliaryState(
     storage,
     `${auxiliaryPrefix()}state.json`,
     'auxiliary.readState',
+    readBounds(),
   );
   return result
     ? stateSchema.parse(JSON.parse(result.buffer.toString('utf8')))
-    : { observations: [], history: [] };
+    : { observations: [], history: [], incidents: [] };
 }
 
 /** Merge newest observations with bounded CAS retries; never overwrite another replica's newer result. */
@@ -119,19 +128,40 @@ export async function persistAuxiliaryState(
 ): Promise<void> {
   for (let attempt = 0; attempt < 3; attempt++) {
     const path = `${auxiliaryPrefix()}state.json`;
-    const read = await downloadBlob(storage, path, 'auxiliary.readState');
+    const read = await downloadBlob(
+      storage,
+      path,
+      'auxiliary.readState',
+      readBounds(),
+    );
     const state = read
       ? stateSchema.parse(JSON.parse(read.buffer.toString('utf8')))
-      : { observations: [], history: [] };
+      : { observations: [], history: [], incidents: [] };
     const merged = new Map(
       state.observations.map((entry) => [
         `${entry.key}:${entry.operation}:${entry.fingerprint}:${entry.source}`,
         entry,
       ]),
     );
+    const incidents = [...state.incidents];
     for (const entry of observations) {
       const key = `${entry.key}:${entry.operation}:${entry.fingerprint}:${entry.source}`;
       const previous = merged.get(key);
+      const latest = [...merged.values()]
+        .filter(
+          (old) =>
+            old.key === entry.key &&
+            old.operation === entry.operation &&
+            old.fingerprint === entry.fingerprint,
+        )
+        .sort((a, b) => b.checkedAt.localeCompare(a.checkedAt))[0];
+      if (
+        (!latest && !entry.success) ||
+        (latest &&
+          latest.checkedAt < entry.checkedAt &&
+          (latest.success !== entry.success || latest.reason !== entry.reason))
+      )
+        incidents.push(entry);
       if (!previous || previous.checkedAt <= entry.checkedAt)
         merged.set(key, entry);
     }
@@ -142,6 +172,9 @@ export async function persistAuxiliaryState(
       ]),
     );
     const next = stateSchema.parse({
+      incidents: incidents
+        .sort((a, b) => b.checkedAt.localeCompare(a.checkedAt))
+        .slice(0, 100),
       observations: [...merged.values()]
         .sort((a, b) => b.checkedAt.localeCompare(a.checkedAt))
         .slice(0, 200),
@@ -156,6 +189,7 @@ export async function persistAuxiliaryState(
         next,
         read?.etag ?? null,
         'auxiliary.writeState',
+        { abortSignal: AbortSignal.timeout(10_000) },
       );
       return;
     } catch (error) {
@@ -178,6 +212,7 @@ export async function recordAuxiliaryHistory(
       policy,
       null,
       'auxiliary.history',
+      { abortSignal: AbortSignal.timeout(10_000) },
     );
     await persistAuxiliaryState(
       [],
@@ -196,7 +231,12 @@ export async function claimAuxiliaryProbe(
 ): Promise<boolean> {
   const storage = createAdminBlobStorage();
   const path = `${auxiliaryPrefix()}probe-claims/${createHash('sha256').update(key).digest('hex')}.json`;
-  const read = await downloadBlob(storage, path, 'auxiliary.claimProbe');
+  const read = await downloadBlob(
+    storage,
+    path,
+    'auxiliary.claimProbe',
+    readBounds(1024),
+  );
   if (read) {
     const claim = z
       .object({ at: z.number() })
@@ -210,6 +250,7 @@ export async function claimAuxiliaryProbe(
       { at: Date.now() },
       read?.etag ?? null,
       'auxiliary.claimProbe',
+      { abortSignal: AbortSignal.timeout(10_000) },
     );
     return true;
   } catch (error) {
