@@ -187,8 +187,6 @@ export class SkillEnricher extends BasePipelineStage {
             : last && 'text' in last
               ? last.text
               : '';
-      // The skills-only router call is the one wait this stage adds to a
-      // turn; say so while it runs rather than leaving the generic text up.
       // Automatic selection is background work, not a separate user-facing
       // activity. Keep the current progress label while classification runs.
       routing = await this.router.determineSkills({
@@ -274,10 +272,9 @@ export class SkillEnricher extends BasePipelineStage {
     if (active.length > 0) {
       systemPrompt = `${systemPrompt}\n\n${buildSkillsPromptSection(active)}`;
     }
-    // Live indicator (§10): the per-turn selections are named while the
-    // model is still working, so skill use is visible before the answer
-    // and not only in the retrospective record. Standing 'always' skills
-    // stay silent here for the same reason they emit no record.
+    // Only a one-shot explicit request changes the live activity label.
+    // Automatic and standing/pinned guidance remain background context;
+    // their completed-use record is still available with the answer.
     const announced = active.filter((entry) => entry.via === 'forced');
     if (announced.length > 0) {
       void context.emitActivity?.(
