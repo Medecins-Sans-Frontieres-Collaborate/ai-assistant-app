@@ -175,3 +175,35 @@ export function summarizeSkillToolCalls(
 export function skillUsageHasIssue(calls: readonly ToolCallRecord[]): boolean {
   return calls.some((call) => call.status !== 'completed');
 }
+
+/**
+ * Whether skill feedback needs prominent user attention, rather than quiet
+ * background metadata. Explicit omissions and approval requests stand out;
+ * optional automatic-routing outages alone do not. Unknown failures remain
+ * visible rather than being assumed harmless.
+ */
+export function skillUsageNeedsAttention(
+  calls: readonly ToolCallRecord[],
+): boolean {
+  const lines = summarizeSkillToolCalls(calls);
+  if (
+    lines.some((line) => line.kind === 'unavailable' || line.kind === 'consent')
+  )
+    return true;
+  if (
+    calls.some(
+      (call) =>
+        call.name === 'load_skill (requested)' && call.status !== 'completed',
+    )
+  )
+    return true;
+  const explicit = lines.some(
+    (line) => line.kind === 'skill' && line.via !== 'auto',
+  );
+  if (
+    explicit &&
+    lines.some((line) => line.kind === 'references' && line.unavailable)
+  )
+    return true;
+  return calls.some((call) => call.name === 'use_skills' && !!call.error);
+}
