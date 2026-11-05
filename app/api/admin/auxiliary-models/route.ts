@@ -1,10 +1,10 @@
 /** Global-admin-only environment-local policy, inventory refresh, and fixed compatibility probes. */
 import { NextRequest } from 'next/server';
 
-import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { isGlobalAdmin } from '@/lib/services/agentAccess/adminAuth';
 import { STRONG_ETAG_REGEX } from '@/lib/services/agentAccess/adminRouteHelpers';
 import { AgentAccessConflictError } from '@/lib/services/agentAccess/blobCas';
+import { AuxiliaryModelService } from '@/lib/services/auxiliary/AuxiliaryModelService';
 import { readAuxiliaryAdminBody } from '@/lib/services/auxiliary/adminBody';
 import { auxiliaryEnvironment } from '@/lib/services/auxiliary/bindings';
 import { resolveAuxiliaryCandidate } from '@/lib/services/auxiliary/resolution';
@@ -42,9 +42,9 @@ export async function GET(request: NextRequest) {
   if (!isGlobalAdmin(session.user)) return forbiddenResponse();
   try {
     return successResponse(
-      await ServiceContainer.getInstance()
-        .getAuxiliaryModelService()
-        .report(request.nextUrl.searchParams.get('refresh') === '1'),
+      await AuxiliaryModelService.getInstance().report(
+        request.nextUrl.searchParams.get('refresh') === '1',
+      ),
     );
   } catch (error) {
     return handleApiError(error, 'Unable to read auxiliary model readiness');
@@ -78,7 +78,7 @@ export async function PUT(request: NextRequest) {
   if (etag !== null && !STRONG_ETAG_REGEX.test(etag))
     return badRequestResponse('If-Match must be a quoted strong ETag');
   try {
-    const service = ServiceContainer.getInstance().getAuxiliaryModelService();
+    const service = AuxiliaryModelService.getInstance();
     const report = await service.report(true);
     if (
       report.configUnavailable ||
@@ -181,9 +181,11 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) return badRequestResponse('Invalid compatibility check');
   try {
     return successResponse(
-      await ServiceContainer.getInstance()
-        .getAuxiliaryModelService()
-        .probe(parsed.data.reference, parsed.data.purpose, parsed.data.region),
+      await AuxiliaryModelService.getInstance().probe(
+        parsed.data.reference,
+        parsed.data.purpose,
+        parsed.data.region,
+      ),
     );
   } catch (error) {
     if (error instanceof Error && error.message === 'PROBE_RATE_LIMIT')
