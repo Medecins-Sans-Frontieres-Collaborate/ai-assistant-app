@@ -98,6 +98,8 @@ export interface DeployedModel {
    * user-scoped (byom) discovery, which skips the catalog read.
    */
   retiresAt?: string;
+  /** The catalog included this version/SKU, even if Azure announced no retirement date. */
+  retirementKnown?: boolean;
 }
 
 /** Raw shape of a deployment as returned by the ARM list endpoint. */
@@ -138,6 +140,16 @@ interface CachedDeployments {
   expiresAt: number;
 }
 
+/** Inventory observation including failed refreshes and unfiltered deployment states. */
+export interface DeploymentObservation {
+  models: DeployedModel[];
+  fetchedAt?: string;
+  location?: string;
+  retirementAvailable: boolean;
+  status: 'current' | 'stale' | 'unavailable';
+  error?: string;
+}
+
 export class ModelDiscoveryService {
   private static instance: ModelDiscoveryService | null = null;
   // Keyed by account resource path (region), NOT by user — see file header.
@@ -149,6 +161,87 @@ export class ModelDiscoveryService {
   // cold-cache callers so N parallel listDeployedModels calls trigger a single
   // fetchAllDeployments (stampede protection).
   private inFlight = new Map<string, Promise<DeployedModel[]>>();
+  private observations = new Map<string, DeploymentObservation>();
+  private catalogAvailable = new Map<string, boolean>();
+  private incompletePages = new Set<string>();
+
+  /**
+   * Observe authoritative inventory with explicit freshness and failure status.
+   * Uses app ARM credentials; preserves the last successful observation on error.
+   * `refresh` invalidates only this account. Never throws provider errors.
+   */
+  async observeDeployments(
+    armToken: string,
+    resourcePath: string,
+    refresh = false,
+  ): Promise<DeploymentObservation> {
+    if (!isValidFoundryResourcePath(resourcePath))
+      throw new Error('Invalid Foundry resource path');
+    const accountPath = stripToAccountPath(resourcePath);
+    const previous = this.observations.get(accountPath);
+    if (
+      !refresh &&
+      previous?.fetchedAt &&
+      Date.now() - Date.parse(previous.fetchedAt) < 5 * 60_000
+    )
+      return previous;
+    this.clearCache(accountPath);
+    try {
+      const [_, account] = await Promise.all([
+        this.listDeployedModels(armToken, accountPath),
+        fetch(
+          `https://management.azure.com${accountPath}?api-version=${ARM_API_VERSION}`,
+          {
+            headers: { Authorization: `Bearer ${armToken}` },
+            signal: AbortSignal.timeout(CATALOG_TIMEOUT_MS),
+          },
+        ).then(async (response) => {
+          if (!response.ok)
+            throw new Error(`Account inventory HTTP ${response.status}`);
+          return (await response.json()) as { location?: string };
+        }),
+      ]);
+      const observed = this.observations.get(accountPath)!;
+      if (
+        !account.location ||
+        this.incompletePages.has(
+          `https://management.azure.com${accountPath}/deployments?api-version=${ARM_API_VERSION}`,
+        )
+      )
+        throw new Error('Incomplete account inventory');
+      const models = observed.models.map((model) => {
+        if (observed.retirementAvailable || model.retiresAt) return model;
+        const last = previous?.models.find(
+          (old) =>
+            old.modelName === model.modelName &&
+            old.modelVersion === model.modelVersion &&
+            old.sku === model.sku,
+        );
+        return last?.retiresAt
+          ? { ...model, retiresAt: last.retiresAt }
+          : model;
+      });
+      const result: DeploymentObservation = {
+        ...observed,
+        models,
+        location: account.location,
+        status: 'current',
+      };
+      this.observations.set(accountPath, result);
+      return result;
+    } catch {
+      const result: DeploymentObservation = {
+        models: previous?.models ?? [],
+        fetchedAt: previous?.fetchedAt,
+        location: previous?.location,
+        retirementAvailable: previous?.retirementAvailable ?? false,
+        status: previous?.fetchedAt ? 'stale' : 'unavailable',
+        error: 'inventory_refresh_failed',
+      };
+      this.observations.set(accountPath, result);
+      return result;
+    }
+  }
 
   static getInstance(): ModelDiscoveryService {
     if (!ModelDiscoveryService.instance) {
@@ -259,6 +352,16 @@ export class ModelDiscoveryService {
       .filter((m) => this.isChatCapable(m))
       .map((m) => this.withRetirementDate(m, retirementDates));
     this.warnAboutApproachingRetirements(models);
+    if (withRetirementDates)
+      this.observations.set(accountPath, {
+        models: raw
+          .map((d) => this.toDeployedModel(d))
+          .filter((m): m is DeployedModel => m !== null)
+          .map((m) => this.withRetirementDate(m, retirementDates)),
+        fetchedAt: new Date().toISOString(),
+        status: 'current',
+        retirementAvailable: this.catalogAvailable.get(accountPath) ?? false,
+      });
 
     // Don't pin an empty result for the full hour — a transient ARM failure or
     // a freshly-provisioned account can return zero deployments. Re-discover
@@ -344,18 +447,29 @@ export class ModelDiscoveryService {
         const fields = entry.model ?? entry;
         if (!fields.name || !fields.version) continue;
         const inference = fields.deprecation?.inference;
+        dates.set(
+          this.retirementKey(fields.name, fields.version),
+          inference ?? '',
+        );
         if (inference) {
           dates.set(this.retirementKey(fields.name, fields.version), inference);
         }
         for (const sku of fields.skus ?? []) {
-          if (!sku.name || !sku.deprecationDate) continue;
+          if (!sku.name) continue;
           dates.set(
             this.retirementKey(fields.name, fields.version, sku.name),
-            sku.deprecationDate,
+            sku.deprecationDate ?? inference ?? '',
           );
         }
       }
+      this.catalogAvailable.set(
+        accountPath,
+        !this.incompletePages.has(
+          `https://management.azure.com${accountPath}/models?api-version=${ARM_API_VERSION}`,
+        ),
+      );
     } catch (error) {
+      this.catalogAvailable.set(accountPath, false);
       console.warn(
         '[ModelDiscoveryService] Could not read model retirement dates; continuing without them:',
         error instanceof Error ? error.message : error,
@@ -381,7 +495,13 @@ export class ModelDiscoveryService {
           )
         : undefined) ??
       retirementDates.get(this.retirementKey(m.modelName, m.modelVersion));
-    return retiresAt ? { ...m, retiresAt } : m;
+    const retirementKnown =
+      retirementDates.has(this.retirementKey(m.modelName, m.modelVersion)) ||
+      (!!m.sku &&
+        retirementDates.has(
+          this.retirementKey(m.modelName, m.modelVersion, m.sku),
+        ));
+    return { ...m, retirementKnown, ...(retiresAt ? { retiresAt } : {}) };
   }
 
   /** One log line per deployment that retires soon (once per cache fill). */
@@ -412,6 +532,8 @@ export class ModelDiscoveryService {
   ): Promise<T[]> {
     const all: T[] = [];
     let url: string | undefined = firstUrl;
+    const deadline = signal ?? AbortSignal.timeout(15_000);
+    this.incompletePages.delete(firstUrl);
 
     for (let page = 0; url && page < MAX_PAGES; page++) {
       const response = await fetch(url, {
@@ -419,7 +541,7 @@ export class ModelDiscoveryService {
           Authorization: `Bearer ${armToken}`,
           'Content-Type': 'application/json',
         },
-        ...(signal ? { signal } : {}),
+        signal: deadline,
       });
 
       if (!response.ok) {
@@ -434,6 +556,8 @@ export class ModelDiscoveryService {
       }
 
       const data = (await response.json()) as ArmListPage<T>;
+      if (!Array.isArray(data.value))
+        throw new Error(`Invalid ${what} inventory response`);
       if (data.value) all.push(...data.value);
 
       // nextLink is an absolute ARM URL already carrying the api-version. It is
@@ -444,11 +568,13 @@ export class ModelDiscoveryService {
         console.error(
           '[ModelDiscoveryService] Ignoring non-ARM nextLink host; stopping pagination',
         );
+        this.incompletePages.add(firstUrl);
         break;
       }
       url = data.nextLink;
     }
 
+    if (url) this.incompletePages.add(firstUrl);
     return all;
   }
 
