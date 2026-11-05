@@ -392,6 +392,14 @@ export class ToolRouterEnricher extends BasePipelineStage {
       const trimDocument = pickTrimmableDocument(attachmentManifest);
       if (trimDocument) {
         const trimTarget = await this.toolRouterService.classifyDocumentTrim({
+          onUsage: (usage, model) =>
+            recordTokenUsage(
+              usage,
+              model,
+              context.user,
+              false,
+              context.telemetry,
+            ),
           messages: baseMessages,
           currentMessage,
           documentFilename: trimDocument.filename,
@@ -502,6 +510,14 @@ export class ToolRouterEnricher extends BasePipelineStage {
         currentMessage,
       );
       decided = await this.toolRouterService.determineTool({
+        onUsage: (usage, model) =>
+          recordTokenUsage(
+            usage,
+            model,
+            context.user,
+            false,
+            context.telemetry,
+          ),
         messages: baseMessages,
         currentMessage,
         region: auxiliaryRegion(context.user.region, context.hostedRegion),
@@ -524,6 +540,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
           skillRouting: {
             relevantSkills: decided.relevantSkills ?? [],
             degraded: decided.degraded || decided.skillSelectionDegraded,
+            degradedReason: decided.degradedReason,
+            degradedRegion: decided.degradedRegion,
           },
         };
       }
@@ -1320,7 +1338,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
             modelId: config.assessorModelId,
             // The user's own region: an EU user's question is assessed on
             // the EU account, where the regional deployments also live.
-            region: context.user.region ?? null,
+            region: auxiliaryRegion(context.user.region, context.hostedRegion),
             signal: run.signal,
             timeoutMs,
             // Assessor calls are the user's spend like any other model

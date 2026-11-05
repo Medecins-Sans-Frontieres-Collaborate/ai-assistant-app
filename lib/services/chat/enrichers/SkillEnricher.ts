@@ -25,6 +25,8 @@
  */
 import { createAgentAccessBlobStorage } from '@/lib/services/agentAccess/accessRulesStore';
 import { readSkillHistoryVersion } from '@/lib/services/agentAccess/accessRulesStore';
+import { AUXILIARY_LIMITS } from '@/lib/services/auxiliary/types';
+import { recordTokenUsage } from '@/lib/services/observability/tokenUsageRecorder';
 import { auxiliaryRegion } from '@/lib/services/skills/skillRegion';
 import { SKILL_LIMITS, Skill } from '@/lib/services/skills/types';
 import { personalSkillCatalog } from '@/lib/services/skills/userSkills';
@@ -189,6 +191,23 @@ export class SkillEnricher extends BasePipelineStage {
       // turn; say so while it runs rather than leaving the generic text up.
       void context.emitActivity?.('chat.activity.selectingSkills');
       routing = await this.router.determineSkills({
+        timeoutMs: Math.max(
+          1,
+          Math.min(
+            SKILL_LIMITS.routingTimeoutMs,
+            (context.stageDeadline ?? Infinity) -
+              Date.now() -
+              AUXILIARY_LIMITS.deliveryReserveMs,
+          ),
+        ),
+        onUsage: (usage, model) =>
+          recordTokenUsage(
+            usage,
+            model,
+            context.user,
+            false,
+            context.telemetry,
+          ),
         messages: context.messages,
         currentMessage,
         skillCatalog: catalog,
@@ -315,6 +334,10 @@ export class SkillEnricher extends BasePipelineStage {
       'skills.selected_by': active.map(({ via }) => via),
       'skills.delivery': delivery,
       'skills.routing_degraded': routing?.degraded ?? false,
+      'skills.routing_degraded_reason': routing?.degradedReason ?? 'none',
+      'skills.routing_region':
+        routing?.degradedRegion ??
+        auxiliaryRegion(context.user.region, context.hostedRegion),
     });
     return {
       ...context,
