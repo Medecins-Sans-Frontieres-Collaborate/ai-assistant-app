@@ -10,6 +10,7 @@ import { parseJsonResponse } from '../helpers';
 import {
   DELETE,
   GET,
+  PATCH,
   POST,
   PUT,
 } from '@/app/api/agent-access/m365-agents/route';
@@ -913,5 +914,138 @@ describe('per-agent document cap override', () => {
       globalAdmin: 200,
     });
     expect(body.data.isGlobalAdmin).toBe(true);
+  });
+});
+
+describe('independent document limit updates', () => {
+  const capRequest = (body: unknown, etag = '"etag-1"') =>
+    new NextRequest('http://localhost/api/agent-access/m365-agents', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'If-Match': etag },
+      body: JSON.stringify(body),
+    });
+
+  beforeEach(() => {
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: makeAgent(),
+      etag: '"etag-1"',
+    });
+  });
+
+  it('persists only the cap and audit history without planning or indexing sources', async () => {
+    const existing = makeAgent({
+      autoOcr: true,
+      systemPrompt: 'Keep this prompt',
+    });
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: existing,
+      etag: '"etag-1"',
+    });
+    const response = await PATCH(
+      capRequest({ id: existing.id, maxDocumentsOverride: 80 }),
+    );
+    expect(response.status).toBe(200);
+    const body = await parseJsonResponse(response);
+    expect(body.data).toMatchObject({
+      etag: '"etag-1"',
+      agent: { maxDocumentsOverride: 80 },
+    });
+    const written = mockStore.writeM365Agent.mock.calls[0][1];
+    expect(written).toMatchObject({
+      ...existing,
+      maxDocumentsOverride: 80,
+      maxDocumentsOverrideBy: 'admin@example.org',
+      maxDocumentsOverrideAt: expect.any(String),
+      updatedAt: expect.any(String),
+    });
+    expect(mockPlanner.planSources).not.toHaveBeenCalled();
+    expect(mockIndexService.purgeSourcesFromIndex).not.toHaveBeenCalled();
+    expect(mockStore.writeM365AgentHistoryEntry).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ m365Agent: written }),
+    );
+  });
+
+  it('resets only the override on an explicit null request', async () => {
+    const existing = makeAgent({
+      maxDocumentsOverride: 80,
+      maxDocumentsOverrideBy: 'global@example.org',
+    });
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: existing,
+      etag: '"etag-1"',
+    });
+    const response = await PATCH(
+      capRequest({ id: existing.id, maxDocumentsOverride: null }),
+    );
+    expect(response.status).toBe(200);
+    const written = mockStore.writeM365Agent.mock.calls[0][1];
+    expect(written.maxDocumentsOverride).toBeUndefined();
+    expect(written.maxDocumentsOverrideBy).toBeUndefined();
+    expect(written.sources).toEqual(existing.sources);
+  });
+
+  it.each([
+    {},
+    { maxDocumentsOverride: 0 },
+    { maxDocumentsOverride: 80.5 },
+    { maxDocumentsOverride: 80, name: 'Unrelated edit' },
+  ])('rejects an invalid or mixed cap update: %j', async (fields) => {
+    const response = await PATCH(
+      capRequest({ id: 'm365-abcdefabcdef', ...fields }),
+    );
+    expect(response.status).toBe(400);
+    expect(mockStore.writeM365Agent).not.toHaveBeenCalled();
+  });
+
+  it('rejects stale writes before a cap check can misreport the default limit', async () => {
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: makeAgent({ maxDocumentsOverride: 80 }),
+      etag: '"new-etag"',
+    });
+    const cap = await PATCH(
+      capRequest({ id: 'm365-abcdefabcdef', maxDocumentsOverride: 100 }),
+    );
+    expect(cap.status).toBe(409);
+    const save = await PUT(
+      new NextRequest('http://localhost/api/agent-access/m365-agents', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'If-Match': '"etag-1"' },
+        body: JSON.stringify({
+          id: 'm365-abcdefabcdef',
+          name: 'Old draft',
+          sources: [validSource],
+          maxDocumentsOverride: null,
+        }),
+      }),
+    );
+    expect(save.status).toBe(409);
+    expect(mockPlanner.planSources).not.toHaveBeenCalled();
+    expect(mockStore.writeM365Agent).not.toHaveBeenCalled();
+  });
+
+  it('enforces delegated edit permissions and the local role ceiling', async () => {
+    mockAdminAuth.resolveAdminStatus.mockReturnValue({
+      isGlobalAdmin: false,
+      isLocalAdmin: true,
+      editableAgentKeys: [],
+    });
+    const denied = await PATCH(
+      capRequest({ id: 'm365-abcdefabcdef', maxDocumentsOverride: 80 }),
+    );
+    expect(denied.status).toBe(403);
+    mockAdminAuth.resolveAdminStatus.mockReturnValue({
+      isGlobalAdmin: false,
+      isLocalAdmin: true,
+      editableAgentKeys: ['m365-agent::m365-abcdefabcdef'],
+    });
+    const aboveRole = await PATCH(
+      capRequest({ id: 'm365-abcdefabcdef', maxDocumentsOverride: 150 }),
+    );
+    expect(aboveRole.status).toBe(400);
+    expect((await parseJsonResponse(aboveRole)).code).toBe(
+      'M365_CAP_ABOVE_ROLE',
+    );
+    expect(mockStore.writeM365Agent).not.toHaveBeenCalled();
   });
 });
