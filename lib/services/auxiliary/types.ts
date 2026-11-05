@@ -8,10 +8,14 @@ import { z } from 'zod';
 export const AUXILIARY_PURPOSES = ['routing', 'searchAssessment'] as const;
 export const AUXILIARY_REGIONS = ['EU', 'US'] as const;
 export const AUXILIARY_BINDINGS = ['EU', 'US', 'default'] as const;
+export const AUXILIARY_OPERATION_REVISION = 1;
 export const AUXILIARY_LIMITS = {
   chainLength: 5,
   attempts: 3,
   routingMs: 8000,
+  deliveryReserveMs: 2000,
+  lowReasoningTokens: 768,
+  framingTokens: 128,
   refreshMs: 5 * 60_000,
   inventoryMaxAgeMs: 60 * 60_000,
   policyMaxAgeMs: 60 * 60_000,
@@ -91,6 +95,7 @@ export interface AuxiliaryInventory {
   error?: string;
 }
 export interface AuxiliaryCandidate {
+  capabilityKnown?: boolean;
   priority?: number;
   reference: AuxiliaryReference;
   deployment: DeployedModel;
@@ -111,6 +116,7 @@ export type AuxiliaryFailure =
   | 'inventory_unavailable'
   | 'refused';
 export interface AuxiliaryObservation {
+  operationRevision: number;
   key: string;
   operation: AuxiliaryOperation;
   fingerprint: string;
@@ -135,6 +141,7 @@ export interface AuxiliaryCandidateStatus {
   observations: AuxiliaryObservation[];
 }
 export interface AuxiliaryChainReport {
+  runtimeFallback?: boolean;
   purpose: AuxiliaryPurpose;
   region: AuxiliaryRegion;
   state:
@@ -151,12 +158,14 @@ export interface AuxiliaryAdminReport {
   policy: AuxiliaryPolicy | null;
   etag: string | null;
   configUnavailable: boolean;
+  bootstrapUnavailable?: boolean;
   defaults: AuxiliaryAssignments;
   effective: AuxiliaryAssignments;
   revision: string;
   checkedAt: string;
   inventory: AuxiliaryInventory[];
   choices: Record<AuxiliaryRegion, AuxiliaryCandidateStatus[]>;
+  incidents: AuxiliaryObservation[];
   observations: AuxiliaryObservation[];
   chains: AuxiliaryChainReport[];
   history: Array<{ updatedAt: string; updatedBy: string; revision: string }>;
