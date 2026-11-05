@@ -1019,7 +1019,9 @@
       "agentSearch": "imibhalo ifunwe umenzeli",
       "needsApproval": "kudinga ukuvunywa kwakho",
       "original": "njengoba kusetshenziswe ekuqaleni",
-      "updated": "kubuyekeziwe kusukela lapho"
+      "updated": "kubuyekeziwe kusukela lapho",
+      "limited": "Kulinganiselwe",
+      "appliedCount": "Kusetshenziswe u-{count}"
     },
     "skillsManualHint": "Ukuzikhethela okuzenzakalelayo kuvaliwe Ezilungisezweni. Sebenzisa kanye umlayezo olandelayo, noma mni izibalo ukuze zisetshenziswe kulo ngxoxo.",
     "queuedMessage": {

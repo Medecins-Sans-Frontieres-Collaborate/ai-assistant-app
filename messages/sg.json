@@ -1019,7 +1019,9 @@
       "agentSearch": "documents ku agent yeke na mara",
       "needsApproval": "asila na mo",
       "original": "tî lâ zo",
-      "updated": "fâfâ na"
+      "updated": "fâfâ na",
+      "limited": "Gbé",
+      "appliedCount": "{count} ti lo"
     },
     "skillsManualHint": "Poko so ti yeke na Settings. Mbi kama na yeke mo ti wa na ni, to pin na skill ti yeke na wa na makara ti nzoni so alingo.",
     "queuedMessage": {

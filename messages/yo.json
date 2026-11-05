@@ -1019,7 +1019,9 @@
       "agentSearch": "ageni wa awọn iwe",
       "needsApproval": "nilo ìfọwọ́sí rẹ",
       "original": "bí a ṣe ṣe ní akọkọ",
-      "updated": "ti ṣe imudojuiwọn lati igba naa"
+      "updated": "ti ṣe imudojuiwọn lati igba naa",
+      "limited": "Pípẹ́kànsí",
+      "appliedCount": "A ti lò {count}"
     },
     "skillsManualHint": "Àṣàyàn aifọwọyi wa ni pipa ninu Eto. Lo lẹ́kan fún ifiranṣẹ tó ń bọ, tàbí dí amọja kan mọ́lẹ̀ kí o máa lo ní gbogbo ibarẹ̀ yìí.",
     "queuedMessage": {

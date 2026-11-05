@@ -904,7 +904,9 @@
       "agentSearch": "በagent የተወደዱ ሰነዶች",
       "needsApproval": "የእርስዎ ማረጋገጥ ያስፈልጋል",
       "original": "እንደ መጀመሪያ ሁኔታ",
-      "updated": "ከዚያ በኋላ ዘመናዊ ተደርጓል"
+      "updated": "ከዚያ በኋላ ዘመናዊ ተደርጓል",
+      "limited": "የተገደበ",
+      "appliedCount": "{count} ተተግብሏል"
     },
     "skillsManualHint": "በሴቲንግስ ላይ ራስ-ሰር መምረጥ ተዘግቷል። ለቀጣይ መልእክት አንድ ጊዜ ይጠቀሙ፣ ወይም ችሎታን ለዚህ ውይይት ሁሉ ይጠቁሙ።",
     "queuedMessage": {

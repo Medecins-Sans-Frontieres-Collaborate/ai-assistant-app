@@ -894,6 +894,8 @@
     "skillAlwaysOnHint": "Von einem Administrator zu jeder Nachricht in diesem Gespräch hinzugefügt.",
     "skillUsage": {
       "label": "Skills",
+      "limited": "Eingeschränkt",
+      "appliedCount": "{count} angewendet",
       "requested": "angefordert",
       "pinned": "angeheftet",
       "auto": "auto",

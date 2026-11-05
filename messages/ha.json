@@ -1019,7 +1019,9 @@
       "agentSearch": "wakili ya bincika takardu",
       "needsApproval": "yana buƙatar amincewarka",
       "original": "kamar yadda aka fara gudanar",
-      "updated": "an sabunta tun"
+      "updated": "an sabunta tun",
+      "limited": "Ƙuntatacce",
+      "appliedCount": "An yi amfani dashi sau {count}"
     },
     "skillsManualHint": "Zaɓin kai tsaye yana kashe a Saituna. Yi amfani da shi sau ɗaya don saƙon na gaba, ko kunshi ƙwarewar da za ka so a duk wannan tattaunawar.",
     "queuedMessage": {

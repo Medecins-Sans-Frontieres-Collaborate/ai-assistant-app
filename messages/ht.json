@@ -1019,7 +1019,9 @@
       "agentSearch": "dokiman chèche pa ajan",
       "needsApproval": "bezwen apwobasyon ou",
       "original": "jan li te egzekite okòmansman",
-      "updated": "mete ajou depi"
+      "updated": "mete ajou depi",
+      "limited": "Limite",
+      "appliedCount": "{count} aplike"
     },
     "skillsManualHint": "Seleksyon otomatik la fèmen nan Anviwònman. Sèvi avè l yon sèl fwa pou pwochen mesaj la, oswa fikse yon konpetans pou itilize li pandan tout konvèsasyon sa a.",
     "queuedMessage": {

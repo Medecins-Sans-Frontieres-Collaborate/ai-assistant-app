@@ -1019,7 +1019,9 @@
       "agentSearch": "documents agent mo njahi",
       "needsApproval": "ɗum naatani heɓugol jamma maa",
       "original": "ko ɗum waɗii kisa",
-      "updated": "woneede hesere"
+      "updated": "woneede hesere",
+      "limited": "Sikkingol",
+      "appliedCount": "{count} yerii"
     },
     "skillsManualHint": "Suɓo yimitte e Teelte. Waɗ yontondiral gooto e junngidole, walla fabo so tawii aɗa heɓi tokku e hito e wannan jawdi.",
     "queuedMessage": {

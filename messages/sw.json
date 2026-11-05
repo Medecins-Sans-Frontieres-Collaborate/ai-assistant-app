@@ -961,7 +961,9 @@
       "agentSearch": "nyaraka zilizopekuliwa na wakala",
       "needsApproval": "inahitaji idhini yako",
       "original": "kama ilivyotekelezwa asili",
-      "updated": "imesasishwa tangu"
+      "updated": "imesasishwa tangu",
+      "limited": "Imepunguzwa",
+      "appliedCount": "{count} imetumika"
     },
     "skillsManualHint": "Uteuzi wa moja kwa moja umezimwa kwenye Mipangilio. Tumia mara moja kwa ujumbe unaofuata, au weka skill ili itumike kwenye mazungumzo haya yote.",
     "queuedMessage": {

@@ -907,7 +907,9 @@
       "agentSearch": "documentos buscados por el agente",
       "needsApproval": "requiere su aprobación",
       "original": "como se ejecutó originalmente",
-      "updated": "actualizado desde"
+      "updated": "actualizado desde",
+      "limited": "Limitado",
+      "appliedCount": "{count} aplicado(s)"
     },
     "skillsManualHint": "La selección automática está desactivada en Configuración. Úselo una vez para el siguiente mensaje o ancle una habilidad para usarla durante toda esta conversación.",
     "queuedMessage": {

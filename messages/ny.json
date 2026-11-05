@@ -1019,7 +1019,9 @@
       "agentSearch": "zolemba zasakidwa ndi agent",
       "needsApproval": "akufunika kuvomereza kwanu",
       "original": "monga anaendetsedwa poyamba",
-      "updated": "zasinthidwa kuyambira pamenepo"
+      "updated": "zasinthidwa kuyambira pamenepo",
+      "limited": "Yochepa",
+      "appliedCount": "Zagwiritsidwa ntchito {count}"
     },
     "skillsManualHint": "Kusankhidwa kwa ntchito zokha kwazimitsidwa mu Zikhazikiko. Gwiritsani ntchito kamodzi pa uthenga wotsatira, kapena pangani pin ntchito kuti igwiritsidwe mu zokambirana zonsezi.",
     "queuedMessage": {

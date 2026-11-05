@@ -894,6 +894,8 @@
     "skillAlwaysOnHint": "Ajouté à chaque message dans cette conversation par un administrateur.",
     "skillUsage": {
       "label": "Compétences",
+      "limited": "Limité",
+      "appliedCount": "{count, plural, one {# appliquée} other {# appliquées}}",
       "requested": "demandée",
       "pinned": "épinglée",
       "auto": "auto",

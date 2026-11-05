@@ -1019,7 +1019,9 @@
       "agentSearch": "ba ndakisa basalelamaki na agent",
       "needsApproval": "ezali na posa ya ndingisa na yo",
       "original": "lokola etambolaki na ebandeli",
-      "updated": "ebongwanaki banda kala"
+      "updated": "ebongwanaki banda kala",
+      "limited": "Ekokisama",
+      "appliedCount": "Ebatelami {count}"
     },
     "skillsManualHint": "Kopona ya automatique ezali te na Paramètres. Salela mbala moko na sango elandi, to pindá mayele moko mpo esalela na nsuka ya lisungi oyo.",
     "queuedMessage": {

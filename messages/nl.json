@@ -913,6 +913,8 @@
     "skillAlwaysOnHint": "Toegevoegd aan elk bericht in dit gesprek door een beheerder.",
     "skillUsage": {
       "label": "Skills",
+      "limited": "Beperkt",
+      "appliedCount": "{count} toegepast",
       "requested": "aangevraagd",
       "pinned": "vastgezet",
       "auto": "auto",

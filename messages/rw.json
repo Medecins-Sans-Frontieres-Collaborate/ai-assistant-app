@@ -1019,7 +1019,9 @@
       "agentSearch": "inyandiko zashakishijwe n’umukozi",
       "needsApproval": "bisaba ko ubishyiraho uruhushya",
       "original": "uko byari bikorwa mbere",
-      "updated": "byahinduwe kuva icyo gihe"
+      "updated": "byahinduwe kuva icyo gihe",
+      "limited": "Bifite imipaka",
+      "appliedCount": "Byakoreshejwe {count}"
     },
     "skillsManualHint": "Guhitamo byikora birazimye muri Settings. Koresha inshuro imwe ku butumwa bukurikira, cyangwa shyiraho ubuhanga bwihariye kugira ngo bukomeze gukoreshwa muri iki kiganiro.",
     "queuedMessage": {

@@ -961,7 +961,9 @@
       "agentSearch": "ajan tarafından belgeler arandı",
       "needsApproval": "onayınızı gerektiriyor",
       "original": "ilk çalıştırıldığı gibi",
-      "updated": "sonradan güncellendi"
+      "updated": "sonradan güncellendi",
+      "limited": "Sınırlı",
+      "appliedCount": "{count} uygulandı"
     },
     "skillsManualHint": "Otomatik seçim Ayarlar'da kapalı. Bir sonraki mesaj için bir kez kullanabilir veya bir yeteneği sabitleyerek bu görüşme boyunca kullanabilirsiniz.",
     "queuedMessage": {

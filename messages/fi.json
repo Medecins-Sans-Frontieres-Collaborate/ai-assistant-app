@@ -936,7 +936,9 @@
       "agentSearch": "agentti haki dokumentteja",
       "needsApproval": "vaatii hyväksyntäsi",
       "original": "alun perin suoritettu",
-      "updated": "päivitetty sen jälkeen"
+      "updated": "päivitetty sen jälkeen",
+      "limited": "Rajoitettu",
+      "appliedCount": "{count} sovellettu"
     },
     "skillsManualHint": "Automaattinen valinta on pois päältä asetuksissa. Käytä kerran seuraavan viestin kohdalla tai kiinnitä taito käyttääksesi sitä koko keskustelun ajan.",
     "queuedMessage": {

@@ -894,6 +894,8 @@
     "skillAlwaysOnHint": "يضيفه المسؤول إلى كل رسالة في هذه المحادثة.",
     "skillUsage": {
       "label": "المهارات",
+      "limited": "محدود",
+      "appliedCount": "تم تطبيق {count}",
       "requested": "تم الطلب",
       "pinned": "مثبت",
       "auto": "تلقائي",

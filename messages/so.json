@@ -1019,7 +1019,9 @@
       "agentSearch": "dukumentiyada uu wakiilku raadiyay",
       "needsApproval": "waxaa u baahan oggolaanshahaaga",
       "original": "sida markii hore loo orodsiiyay",
-      "updated": "waxaa la cusboonaysiiyay tan iyo"
+      "updated": "waxaa la cusboonaysiiyay tan iyo",
+      "limited": "Xaddidan",
+      "appliedCount": "{count} la adeegsaday"
     },
     "skillsManualHint": "Xulashada otomaatiga ah waa deman tahay ee Dejinta. Isticmaal hal mar farriinta xigta, ama ku lifaaq xirfadda si aad ugu isticmaasho wada sheekaysigan oo dhan.",
     "queuedMessage": {

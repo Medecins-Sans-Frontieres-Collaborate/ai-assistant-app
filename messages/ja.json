@@ -961,7 +961,9 @@
       "agentSearch": "エージェントによる文書検索",
       "needsApproval": "承認が必要です",
       "original": "元の実行時",
-      "updated": "更新済み"
+      "updated": "更新済み",
+      "limited": "制限あり",
+      "appliedCount": "{count} 件適用済み"
     },
     "skillsManualHint": "設定で自動選択がオフになっています。次のメッセージのみ使用するか、スキルをピン止めしてこの会話全体で使用してください。",
     "queuedMessage": {

@@ -882,7 +882,9 @@
       "agentSearch": "documenti cercati dall'agente",
       "needsApproval": "richiede la tua approvazione",
       "original": "come eseguito originalmente",
-      "updated": "aggiornato da allora"
+      "updated": "aggiornato da allora",
+      "limited": "Limitato",
+      "appliedCount": "{count} applicato"
     },
     "skillsManualHint": "La selezione automatica è disattivata nelle Impostazioni. Usa una volta per il prossimo messaggio, oppure fissa una competenza per utilizzarla durante tutta la conversazione.",
     "queuedMessage": {

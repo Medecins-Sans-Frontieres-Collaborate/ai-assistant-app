@@ -961,7 +961,9 @@
       "agentSearch": "dokument sökta av agent",
       "needsApproval": "kräver ditt godkännande",
       "original": "som ursprungligen kördes",
-      "updated": "uppdaterad sedan dess"
+      "updated": "uppdaterad sedan dess",
+      "limited": "Begränsad",
+      "appliedCount": "{count} tillämpade"
     },
     "skillsManualHint": "Automatiskt val är avstängt i Inställningar. Använd en gång för nästa meddelande eller fäst en färdighet för att använda den under hela denna konversation.",
     "queuedMessage": {

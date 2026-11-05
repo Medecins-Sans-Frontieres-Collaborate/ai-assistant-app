@@ -964,6 +964,8 @@
     },
     "skillUsage": {
       "label": "Skills",
+      "limited": "Limited",
+      "appliedCount": "{count} applied",
       "requested": "requested",
       "pinned": "pinned",
       "auto": "auto",

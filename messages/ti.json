@@ -1019,7 +1019,9 @@
       "agentSearch": "ሰነዶታት ብ agent ዝተወሰዱ",
       "needsApproval": "ሓላፊን ማሕበራዊ ምድሓን ይፃወት የለዎ",
       "original": "እንተ መጀመርያ ንሰርሕ",
-      "updated": "ካብ ዚቀደሙ፡ ተሓዲሱ"
+      "updated": "ካብ ዚቀደሙ፡ ተሓዲሱ",
+      "limited": "ውሑደ",
+      "appliedCount": "{count} ተተግብረሉ"
     },
     "skillsManualHint": "ሓሳብ ኣብ ቅድሚ ኣይተሰረዙን። ንብቲ መልእኽቲ ናይ ሓደ ግዜ ጭን ወይ ትክክል ናይ ኣዚ ባይ ትምህርት ሓሳብ ምርጫ ምሕባ የኽንስ።",
     "queuedMessage": {

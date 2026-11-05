@@ -961,7 +961,9 @@
       "agentSearch": "에이전트가 검색한 문서",
       "needsApproval": "승인이 필요합니다",
       "original": "원래 실행대로",
-      "updated": "이후로 업데이트됨"
+      "updated": "이후로 업데이트됨",
+      "limited": "제한됨",
+      "appliedCount": "{count}개 적용됨"
     },
     "skillsManualHint": "자동 선택 기능이 설정에서 꺼져 있습니다. 다음 메시지에 한 번 사용하거나, 스킬을 고정하여 대화 내내 사용할 수 있습니다.",
     "queuedMessage": {

@@ -992,7 +992,9 @@
       "agentSearch": "由代理检索文档",
       "needsApproval": "需要您的批准",
       "original": "按最初运行",
-      "updated": "已更新"
+      "updated": "已更新",
+      "limited": "受限",
+      "appliedCount": "已应用 {count} 次"
     },
     "skillsManualHint": "设置中已关闭自动选择。可选择在下条消息中使用一次，或固定某个技能以在本次对话中持续使用。",
     "queuedMessage": {

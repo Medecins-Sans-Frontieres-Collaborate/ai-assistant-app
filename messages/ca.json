@@ -936,7 +936,9 @@
       "agentSearch": "documents cercats per l’agent",
       "needsApproval": "requereix la vostra aprovació",
       "original": "tal com es va executar originalment",
-      "updated": "actualitzat des de llavors"
+      "updated": "actualitzat des de llavors",
+      "limited": "Limitat",
+      "appliedCount": "{count} aplicats"
     },
     "skillsManualHint": "La selecció automàtica està desactivada a Configuració. Utilitzeu una habilitat per al proper missatge o fixeuneu-ne una per utilitzar-la durant tota aquesta conversa.",
     "queuedMessage": {

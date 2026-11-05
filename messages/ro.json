@@ -959,7 +959,9 @@
       "agentSearch": "documente căutate de agent",
       "needsApproval": "necesită aprobarea dvs.",
       "original": "așa cum a fost executat inițial",
-      "updated": "actualizat de atunci"
+      "updated": "actualizat de atunci",
+      "limited": "Limitat",
+      "appliedCount": "{count} aplicat"
     },
     "skillsManualHint": "Selecția automată este dezactivată în Setări. Utilizați o dată pentru următorul mesaj sau fixați o abilitate pentru a o folosi pe tot parcursul acestei conversații.",
     "queuedMessage": {

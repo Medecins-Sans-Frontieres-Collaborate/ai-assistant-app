@@ -1019,7 +1019,9 @@
       "agentSearch": "dokumenta pretražio agent",
       "needsApproval": "zahteva vašu odobrenje",
       "original": "kao što je prvobitno pokrenuto",
-      "updated": "ažurirano od"
+      "updated": "ažurirano od",
+      "limited": "Ograničeno",
+      "appliedCount": "Primenjeno: {count}"
     },
     "skillsManualHint": "Automatski izbor je isključen u Podešavanjima. Upotrebite veštinu jednom za sledeću poruku ili je zakačite da bi se koristila tokom celog razgovora.",
     "queuedMessage": {

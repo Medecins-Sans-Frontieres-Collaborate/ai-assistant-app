@@ -1019,7 +1019,9 @@
       "agentSearch": "inyandiko zarashakwe n'uwukora",
       "needsApproval": "bisaba uruhushwa rwawe",
       "original": "uko vyakoreshejwe ubwa mbere",
-      "updated": "vyahinduwe kuva ico gihe"
+      "updated": "vyahinduwe kuva ico gihe",
+      "limited": "Bifise imbibe",
+      "appliedCount": "Vyashizweko {count}"
     },
     "skillsManualHint": "Guhitamwo bihanitse vyakuwe muri Ivyashizweho. Koresha rimwe ku butumwa bukurikira, canke ufate ubumenyi kugirango ubukoreshe muri iyi biganiro yose.",
     "queuedMessage": {

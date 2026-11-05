@@ -962,7 +962,9 @@
       "agentSearch": "tài liệu được agent tìm kiếm",
       "needsApproval": "cần bạn phê duyệt",
       "original": "như lúc chạy ban đầu",
-      "updated": "đã cập nhật kể từ đó"
+      "updated": "đã cập nhật kể từ đó",
+      "limited": "Giới hạn",
+      "appliedCount": "Đã áp dụng {count}"
     },
     "skillsManualHint": "Tự động chọn đã tắt trong Cài đặt. Sử dụng một lần cho tin nhắn tiếp theo hoặc ghim kỹ năng để dùng xuyên suốt cuộc trò chuyện này.",
     "queuedMessage": {

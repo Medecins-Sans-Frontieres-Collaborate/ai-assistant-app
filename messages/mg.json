@@ -1019,7 +1019,9 @@
       "agentSearch": "antontan-taratasy notadiavin’ny agent",
       "needsApproval": "mila fankatoavanao",
       "original": "araka ny fomba nanombohana azy",
-      "updated": "novaina hatramin'ny"
+      "updated": "novaina hatramin'ny",
+      "limited": "Voafetra",
+      "appliedCount": "{count} nampiharina"
     },
     "skillsManualHint": "Tsy mandeha ho azy ny fisafidianana ao amin'ny Fikirana. Ampiasao indray mandeha amin'ny hafatra manaraka, na aparitaho mandritra ity resaka ity ny fahaiza-manao iray.",
     "queuedMessage": {

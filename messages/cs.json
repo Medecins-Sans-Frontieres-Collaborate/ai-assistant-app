@@ -961,7 +961,9 @@
       "agentSearch": "dokumenty vyhledané agentem",
       "needsApproval": "vyžaduje vaše schválení",
       "original": "původní provedení",
-      "updated": "aktualizováno od té doby"
+      "updated": "aktualizováno od té doby",
+      "limited": "Omezeno",
+      "appliedCount": "Použito: {count}"
     },
     "skillsManualHint": "Automatický výběr je vypnutý v nastavení. Použijte jednorázově pro další zprávu nebo připněte dovednost, aby byla používána v celém tomto rozhovoru.",
     "queuedMessage": {

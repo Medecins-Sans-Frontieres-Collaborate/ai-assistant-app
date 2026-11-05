@@ -958,7 +958,9 @@
       "agentSearch": "dokumenty przeszukane przez agenta",
       "needsApproval": "wymaga Twojej akceptacji",
       "original": "jak pierwotnie uruchomione",
-      "updated": "zaktualizowane od tego czasu"
+      "updated": "zaktualizowane od tego czasu",
+      "limited": "Ograniczone",
+      "appliedCount": "Zastosowano {count}"
     },
     "skillsManualHint": "Automatyczny wybór jest wyłączony w Ustawieniach. Użyj jednorazowo przy następnej wiadomości lub przypnij umiejętność, aby korzystać z niej przez całą rozmowę.",
     "queuedMessage": {

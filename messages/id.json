@@ -928,7 +928,9 @@
       "agentSearch": "dokumen dicari oleh agen",
       "needsApproval": "memerlukan persetujuan Anda",
       "original": "sesuai dijalankan awalnya",
-      "updated": "diperbarui sejak itu"
+      "updated": "diperbarui sejak itu",
+      "limited": "Terbatas",
+      "appliedCount": "{count} diterapkan"
     },
     "skillsManualHint": "Pemilihan otomatis dimatikan di Pengaturan. Gunakan sekali untuk pesan berikutnya, atau sematkan sebuah skill untuk menggunakannya selama percakapan ini.",
     "queuedMessage": {
