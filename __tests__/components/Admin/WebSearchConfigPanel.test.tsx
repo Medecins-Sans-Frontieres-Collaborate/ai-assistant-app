@@ -94,8 +94,9 @@ describe('WebSearchConfigPanel', () => {
   it('shows the code defaults when nothing has been saved', async () => {
     renderPanel();
     expect(await screen.findByLabelText(/enabledLabel/)).toBeChecked();
-    expect(screen.getByLabelText('assessorLabel')).toHaveValue(
-      'Mistral-Large-3',
+    expect(screen.getByRole('link', { name: 'manageModels' })).toHaveAttribute(
+      'href',
+      '/admin/models',
     );
     expect(screen.getByLabelText('maxStepsLabel')).toHaveValue(3);
     expect(screen.getByLabelText('maxStepsExploratoryLabel')).toHaveValue(6);
@@ -118,7 +119,7 @@ describe('WebSearchConfigPanel', () => {
     };
     renderPanel();
     expect(await screen.findByLabelText('maxStepsLabel')).toHaveValue(5);
-    expect(screen.getByLabelText('assessorLabel')).toHaveValue('gpt-5.4-mini');
+    expect(screen.queryByLabelText('assessorLabel')).not.toBeInTheDocument();
     expect(screen.getByLabelText('timeBudgetLabel')).toHaveValue(90);
   });
 
@@ -128,9 +129,6 @@ describe('WebSearchConfigPanel', () => {
     fireEvent.change(await screen.findByLabelText('maxStepsLabel'), {
       target: { value: '4' },
     });
-    fireEvent.change(screen.getByLabelText('assessorLabel'), {
-      target: { value: 'gpt-5.4-mini' },
-    });
     fireEvent.click(screen.getByRole('button', { name: 'save' }));
 
     await waitFor(() => expect(putCalls()).toHaveLength(1));
@@ -139,7 +137,7 @@ describe('WebSearchConfigPanel', () => {
       (putCalls()[0].init!.headers as Record<string, string>)['if-match'],
     ).toBe('"etag-1"');
     expect(putBody()).toEqual({
-      multiStep: { maxSteps: 4, assessorModelId: 'gpt-5.4-mini' },
+      multiStep: { maxSteps: 4 },
     });
     await waitFor(() => expect(toast.success).toHaveBeenCalled());
   });
@@ -148,7 +146,10 @@ describe('WebSearchConfigPanel', () => {
     renderPanel();
     fireEvent.click(await screen.findByLabelText(/enabledLabel/));
 
-    expect(screen.getByLabelText('assessorLabel')).toBeDisabled();
+    expect(screen.getByRole('link', { name: 'manageModels' })).toHaveAttribute(
+      'href',
+      '/admin/models',
+    );
     expect(screen.getByLabelText('maxStepsLabel')).toBeDisabled();
     expect(screen.getByLabelText(/pageReadsLabel/)).toBeDisabled();
 
