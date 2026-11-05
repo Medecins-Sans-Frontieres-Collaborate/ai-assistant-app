@@ -305,6 +305,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     steps:
+      - name: Checkout readiness checker
+        uses: actions/checkout@v4
       - name: Resolve image tag
         id: resolve-tag
         run: |
@@ -329,6 +331,16 @@ jobs:
             --name ${{ vars.CONTAINER_APP_NAME }} \
             --resource-group ${{ vars.RESOURCE_GROUP }} \
             --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ steps.resolve-tag.outputs.tag }}
+
+      - name: Check auxiliary model readiness
+        env:
+          READINESS_URL: ${{ vars.AUXILIARY_READINESS_URL }}
+        run: |
+          if [ -z "$READINESS_URL" ]; then
+            echo "::warning::Auxiliary readiness was not checked: configure AUXILIARY_READINESS_URL reachable from this runner."
+            exit 0
+          fi
+          python3 scripts/check-auxiliary-readiness.py "$READINESS_URL" --require-probes
 
   # JOB 5: Create a GitHub Release after a successful Live deployment.
   # CalVer tags (v2026.07.01, -2/-3 for same-day deploys) with GitHub's
