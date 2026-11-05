@@ -932,6 +932,31 @@ describe('independent document limit updates', () => {
     });
   });
 
+  it('requires an enabled feature, a session, an existing agent and a strong ETag', async () => {
+    const body = { id: 'm365-abcdefabcdef', maxDocumentsOverride: 80 };
+    mockService.isEnabled.mockReturnValueOnce(false);
+    expect((await PATCH(capRequest(body))).status).toBe(404);
+    mockAuth.mockResolvedValueOnce(null);
+    expect((await PATCH(capRequest(body))).status).toBe(401);
+    expect((await PATCH(capRequest(body, 'unquoted'))).status).toBe(400);
+    mockStore.readM365Agent.mockResolvedValueOnce(null);
+    expect((await PATCH(capRequest(body))).status).toBe(404);
+    expect(mockStore.writeM365Agent).not.toHaveBeenCalled();
+  });
+
+  it('returns a conflict if the record changes between read and write', async () => {
+    const { AgentAccessConflictError } =
+      await import('@/lib/services/agentAccess/accessRulesStore');
+    mockStore.writeM365Agent.mockRejectedValueOnce(
+      new AgentAccessConflictError(),
+    );
+    const response = await PATCH(
+      capRequest({ id: 'm365-abcdefabcdef', maxDocumentsOverride: 80 }),
+    );
+    expect(response.status).toBe(409);
+    expect(mockStore.writeM365AgentHistoryEntry).not.toHaveBeenCalled();
+  });
+
   it('persists only the cap and audit history without planning or indexing sources', async () => {
     const existing = makeAgent({
       autoOcr: true,
