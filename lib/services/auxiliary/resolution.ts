@@ -1,5 +1,10 @@
 /** Pure candidate eligibility shared by runtime, admin, and readiness. */
-import { synthesizeUnknownModel } from '@/lib/services/models/modelResolution';
+import {
+  applyTagOverlay,
+  inferProvider,
+  inferSdk,
+  synthesizeUnknownModel,
+} from '@/lib/services/models/modelResolution';
 
 import {
   RETIREMENT_MOVE_DAYS,
@@ -27,11 +32,16 @@ export function auxiliaryModel(
   const known = Object.values(OpenAIModels).find(
     (model) => model.id === deployment.modelName,
   );
-  const model = known ?? synthesizeUnknownModel(deployment);
+  const model = applyTagOverlay(
+    known ?? synthesizeUnknownModel(deployment),
+    deployment.tags,
+  );
   return {
     ...model,
     id: deployment.modelName,
     deploymentName: deployment.deploymentName,
+    provider: inferProvider(deployment.publisher),
+    sdk: inferSdk(deployment.publisher),
   };
 }
 
@@ -41,7 +51,7 @@ export function candidateFingerprint(
   inventory: AuxiliaryInventory,
   deployment: AuxiliaryCandidate['deployment'],
 ): string {
-  return `${inventory.account.resourcePath}|${reference.deploymentName}|${deployment.modelName}|${deployment.modelVersion ?? 'unknown'}|${deployment.sku ?? 'unknown'}`;
+  return `${inventory.account.resourcePath}|${inventory.location ?? 'unknown'}|${reference.deploymentName}|${deployment.modelName}|${deployment.modelVersion ?? 'unknown'}|${deployment.sku ?? 'unknown'}`;
 }
 
 /** Evaluate a designated target. Unknown/expired residency evidence never becomes permission. */
@@ -82,7 +92,9 @@ export function resolveAuxiliaryCandidate(
       entry.key === referenceKey(reference) &&
       entry.fingerprint === fingerprint,
   );
-  status.retirementUnknown = !inventory.retirementAvailable;
+  status.retirementUnknown =
+    !inventory.retirementAvailable ||
+    (!deployment.retirementKnown && !deployment.retiresAt);
   const retirement = deployment.retiresAt
     ? Date.parse(deployment.retiresAt)
     : Infinity;
@@ -119,6 +131,9 @@ export function resolveAuxiliaryCandidate(
       model,
       endpoint: inventory.account.endpoint,
       fingerprint,
+      capabilityKnown: Object.values(OpenAIModels).some(
+        (entry) => entry.id === deployment.modelName,
+      ),
     },
   };
 }
