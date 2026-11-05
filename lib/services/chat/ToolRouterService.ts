@@ -1,4 +1,10 @@
 import {
+  type AuxiliaryModelExecutor,
+  AuxiliaryUnavailableError,
+} from '@/lib/services/auxiliary/AuxiliaryModelExecutor';
+import { matchesAuxiliarySchema } from '@/lib/services/auxiliary/schemaValidation';
+import type { AuxiliaryOperation } from '@/lib/services/auxiliary/types';
+import {
   SkillRoutingEntry,
   selectedSkillIds,
   skillRoutingPrompt,
@@ -9,6 +15,7 @@ import { SKILL_LIMITS } from '@/lib/services/skills/types';
 import { devTrace } from '@/lib/utils/server/debug/devTrace';
 
 import type { AuxiliaryFailureReason } from '@/types/chat';
+import type { AuxiliaryUsageSink } from '@/types/chat';
 import {
   Message,
   ToolRouterRequest,
@@ -70,10 +77,8 @@ const TRIM_CLASSIFY_SCHEMA = {
  * Uses a lightweight model to intelligently decide when web search is beneficial.
  */
 /**
- * The auxiliary classifier every routing decision rides (tool routing,
- * document-trim classification, skills-only selection). It must be
- * deployed in EVERY Foundry account a region can pin to — a missing
- * deployment degrades every decision in that region to "no tools".
+ * Legacy classifier for isolated/injectable clients. Production resolves the
+ * environment's auxiliary policy and actual deployment capabilities instead.
  */
 export const AUXILIARY_ROUTER_MODEL = 'gpt-5.4-nano';
 
@@ -101,6 +106,20 @@ export function describeAuxiliaryFailure(
   const where = region
     ? `the ${region} auxiliary endpoint`
     : 'the default endpoint';
+  if (error instanceof AuxiliaryUnavailableError) {
+    const reason: AuxiliaryFailureReason = [
+      'endpoint_missing',
+      'deployment_missing',
+      'unauthorized',
+      'timeout',
+    ].includes(error.reason)
+      ? (error.reason as AuxiliaryFailureReason)
+      : 'provider';
+    return {
+      reason,
+      message: `Configured auxiliary model chain unavailable on ${where} (${error.reason}). Check Models and readiness in Admin.`,
+    };
+  }
   if (error instanceof AuxiliaryEndpointMissingError) {
     return { reason: 'endpoint_missing', message: error.message };
   }
@@ -136,7 +155,104 @@ export class ToolRouterService {
   constructor(
     private openAIClient: OpenAI,
     private regionalClient?: (region: 'US' | 'EU') => OpenAI | undefined,
+    private executor?: AuxiliaryModelExecutor,
   ) {}
+
+  private async complete(
+    region: 'US' | 'EU' | undefined,
+    operation: AuxiliaryOperation,
+    params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
+    options?: {
+      signal?: AbortSignal;
+      timeout?: number;
+      maxRetries?: number;
+      onUsage?: AuxiliaryUsageSink;
+    },
+  ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
+    if (!this.executor)
+      return this.clientFor(region).chat.completions.create(params, {
+        signal: options?.signal,
+        timeout: options?.timeout,
+        maxRetries: options?.maxRetries,
+      });
+    return this.executor.execute(
+      params,
+      (response) => {
+        const text = response.choices[0]?.message.content;
+        if (!text) return undefined;
+        try {
+          const parsed = JSON.parse(text);
+          if (!parsed || typeof parsed !== 'object') return undefined;
+          if (
+            params.response_format?.type === 'json_schema' &&
+            params.response_format.json_schema.schema
+          ) {
+            const schema = params.response_format.json_schema.schema;
+            if (operation === 'tools') {
+              const value = { ...parsed };
+              delete value.relevantSkills;
+              const properties = {
+                ...(schema.properties as Record<string, unknown>),
+              };
+              delete properties.relevantSkills;
+              const required = (schema.required as string[]).filter(
+                (key) => key !== 'relevantSkills',
+              );
+              if (
+                !matchesAuxiliarySchema(value, {
+                  ...schema,
+                  properties,
+                  required,
+                })
+              )
+                return undefined;
+            } else if (!matchesAuxiliarySchema(parsed, schema))
+              return undefined;
+          }
+          if (operation === 'skills' && !Array.isArray(parsed.relevantSkills))
+            return undefined;
+          if (
+            operation === 'tools' &&
+            typeof parsed.needsWebSearch !== 'boolean'
+          )
+            return undefined;
+          if (
+            operation === 'trim' &&
+            (typeof parsed.isLengthReductionRequest !== 'boolean' ||
+              typeof parsed.targetIsAttachedDocument !== 'boolean')
+          )
+            return undefined;
+          return response;
+        } catch {
+          return undefined;
+        }
+      },
+      {
+        region: region ?? 'EU',
+        operation,
+        signal: options?.signal,
+        timeoutMs: options?.timeout ?? SKILL_LIMITS.routingTimeoutMs,
+        onUsage: (response, candidate) => {
+          const servingRegion =
+            candidate.reference.accountBinding === 'default'
+              ? null
+              : candidate.reference.accountBinding;
+          if (response.usage)
+            options?.onUsage?.(
+              {
+                modelId: candidate.deployment.modelName,
+                region: servingRegion,
+                promptTokens: response.usage.prompt_tokens,
+                completionTokens: response.usage.completion_tokens,
+                totalTokens: response.usage.total_tokens,
+              },
+              candidate.model,
+              servingRegion,
+            );
+        },
+      },
+    );
+  }
 
   private warnedUsFallback = false;
 
@@ -169,6 +285,8 @@ export class ToolRouterService {
    * Returns degraded on timeout/provider failure so explicit skills survive.
    */
   async determineSkills(request: {
+    timeoutMs?: number;
+    onUsage?: AuxiliaryUsageSink;
     messages: Message[];
     currentMessage: string;
     skillCatalog: SkillRoutingEntry[];
@@ -187,9 +305,9 @@ export class ToolRouterService {
     if (!catalog.length) return { relevantSkills: [] };
     try {
       const recent = this.getRecentMessages(request.messages, 6);
-      const response = await this.clientFor(
+      const response = await this.complete(
         request.region,
-      ).chat.completions.create(
+        'skills',
         {
           model: AUXILIARY_ROUTER_MODEL,
           messages: [
@@ -226,8 +344,15 @@ export class ToolRouterService {
         },
         {
           signal: request.signal,
-          timeout: SKILL_LIMITS.routingTimeoutMs,
+          timeout: Math.max(
+            1,
+            Math.min(
+              SKILL_LIMITS.routingTimeoutMs,
+              request.timeoutMs ?? SKILL_LIMITS.routingTimeoutMs,
+            ),
+          ),
           maxRetries: 0,
+          onUsage: request.onUsage,
         },
       );
       const result = JSON.parse(
@@ -264,6 +389,7 @@ export class ToolRouterService {
    * classifier failed — the turn then degrades to normal routing).
    */
   async classifyDocumentTrim(request: {
+    onUsage?: AuxiliaryUsageSink;
     messages: Message[];
     currentMessage: string;
     documentFilename: string;
@@ -289,9 +415,9 @@ targetIsAttachedDocument identifies WHAT is being shortened. It is true only whe
 
 When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit "none".`;
 
-      const response = await this.clientFor(
+      const response = await this.complete(
         request.region,
-      ).chat.completions.create(
+        'trim',
         {
           model: AUXILIARY_ROUTER_MODEL,
           messages: [
@@ -324,6 +450,7 @@ When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit
           signal: request.signal,
           timeout: SKILL_LIMITS.routingTimeoutMs,
           maxRetries: 0,
+          onUsage: request.onUsage,
         },
       );
 
@@ -681,9 +808,9 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               schemaProperties.relevantSkills = skillRoutingSchema(catalog);
               requiredFields.push('relevantSkills');
             }
-            const response = await this.clientFor(
+            const response = await this.complete(
               request.region,
-            ).chat.completions.create(
+              'tools',
               {
                 model: AUXILIARY_ROUTER_MODEL,
                 messages: conversationMessages,
@@ -718,8 +845,9 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                     signal: request.signal,
                     timeout: SKILL_LIMITS.routingTimeoutMs,
                     maxRetries: 0,
+                    onUsage: request.onUsage,
                   }
-                : undefined,
+                : { signal: request.signal, onUsage: request.onUsage },
             );
 
             const result = JSON.parse(
