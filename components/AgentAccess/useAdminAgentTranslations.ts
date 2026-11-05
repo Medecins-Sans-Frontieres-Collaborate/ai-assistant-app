@@ -14,6 +14,10 @@ export const ADMIN_AGENT_LABELS = {
   detailsLabel: 'Details',
   indexedDocumentSummary:
     '{indexed, plural, one {# document} other {# documents}} indexed',
+  m365CapImmediateHelp:
+    'Apply saves the limit immediately. Other edits still need Save.',
+  m365CapDraftHelp: 'The limit is saved when you create the agent.',
+  m365CapSaved: 'Document limit saved: {limit}.',
 } as const;
 
 const fallbackMessages: Record<string, string> = ADMIN_AGENT_LABELS;
