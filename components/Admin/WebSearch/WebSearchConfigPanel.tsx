@@ -5,6 +5,7 @@ import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 import {
   WebSearchConfigConflict,
@@ -71,6 +72,7 @@ function overridesOf(
  */
 export const WebSearchConfigPanel: FC = () => {
   const t = useTranslations('webSearchAdmin');
+  const auxiliary = useTranslations('auxiliaryModels');
   const { query, save } = useWebSearchConfigAdmin();
   const [draft, setDraft] = useState<ResolvedMultiStepConfig>({
     ...MULTI_STEP_DEFAULTS,
@@ -144,10 +146,7 @@ export const WebSearchConfigPanel: FC = () => {
     );
   }
 
-  const { config, defaults, bounds, assessorModels, assessorFallbackModelId } =
-    query.data;
-  const modelName = (id: string) =>
-    assessorModels.find((model) => model.id === id)?.name ?? id;
+  const { config, defaults, bounds } = query.data;
 
   const clamp = (key: NumericKey, value: number): number => {
     const { min, max } = bounds[key];
@@ -276,30 +275,13 @@ export const WebSearchConfigPanel: FC = () => {
           {toggleRow('enabled', 'enabledLabel', 'enabledDescription')}
 
           <li className={ADMIN_ROW}>
-            <label htmlFor="web-search-assessor" className={ADMIN_LABEL}>
-              {t('assessorLabel')}
-            </label>
-            <select
-              id="web-search-assessor"
-              className={ADMIN_FIELD}
-              value={draft.assessorModelId}
-              disabled={!draft.enabled}
-              onChange={(e) => update({ assessorModelId: e.target.value })}
+            <p className={ADMIN_LABEL}>{auxiliary('assessmentManaged')}</p>
+            <Link
+              className={`${ADMIN_BTN_SECONDARY} inline-flex min-h-11`}
+              href="/admin/models"
             >
-              {assessorModels.map((model) => (
-                <option key={model.id} value={model.id}>
-                  {model.name}
-                </option>
-              ))}
-            </select>
-            <p className={ADMIN_HINT}>
-              {t('assessorDescription', {
-                fallback: modelName(assessorFallbackModelId),
-              })}
-            </p>
-            <p className={ADMIN_HINT}>
-              {t('defaultHint', { value: modelName(defaults.assessorModelId) })}
-            </p>
+              {auxiliary('manageModels')}
+            </Link>
           </li>
 
           {numberRow(
