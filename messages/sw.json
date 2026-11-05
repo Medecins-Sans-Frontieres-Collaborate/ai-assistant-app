@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "Hakuna hadhira inayoruhusiwa",
     "accessScopeHint": "Kanuni za upatikanaji wa programu pekee. Ruhusa za chanzo bado zinatumika.",
     "detailsLabel": "Maelezo",
-    "indexedDocumentSummary": "{indexed, plural, one {nyaraka #} other {nyaraka #}} zimeorodheshwa"
+    "indexedDocumentSummary": "{indexed, plural, one {nyaraka #} other {nyaraka #}} zimeorodheshwa",
+    "m365CapImmediateHelp": "Kitufe cha Tumia kinaweka kikomo mara moja. Mabadiliko mengine bado yanahitaji Hifadhi.",
+    "m365CapDraftHelp": "Kikomo kitawekwa unapoanzisha wakala.",
+    "m365CapSaved": "Kikomo cha hati kimehifadhiwa: {limit}."
   },
   "localModels": {
     "title": "Miundo ya ndani",

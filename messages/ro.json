@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "Nicio audiență permisă",
     "accessScopeHint": "Doar regulile de acces ale aplicației. Permisiunile sursei se aplică în continuare.",
     "detailsLabel": "Detalii",
-    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documente}} indexate"
+    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documente}} indexate",
+    "m365CapImmediateHelp": "Aplicarea salvează limita imediat. Alte modificări necesită în continuare Salvare.",
+    "m365CapDraftHelp": "Limita este salvată la crearea agentului.",
+    "m365CapSaved": "Limită de documente salvată: {limit}."
   },
   "localModels": {
     "title": "Modele locale",

@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "නිකුත් කරනු ලැබූ පිරිසක් නොමැත",
     "accessScopeHint": "ඇප් ප්‍රවේශ නියමයන් පමණි. මූලාශ්‍ර අවසරයන් තවදුරටත් බලපායි.",
     "detailsLabel": "විස්තර",
-    "indexedDocumentSummary": "{indexed, plural, one { ලේඛනය # ක්} other { ලේඛන # ක්}} indexed"
+    "indexedDocumentSummary": "{indexed, plural, one { ලේඛනය # ක්} other { ලේඛන # ක්}} indexed",
+    "m365CapImmediateHelp": "යාවත්කාලීන කරීමෙන් සීමාව වහාම සුරක්ෂිත වේ. අනෙකුත් වෙනස්කම් සුරැකිමට Save අවිස්සාවක් අවශ්‍යවේ.",
+    "m365CapDraftHelp": "ඔබ නියෝජිතයා සෑදීමේදී සීමාව සුරක්ෂිත වේ.",
+    "m365CapSaved": "ළිපිගොනු සීමාව සුරකින්නායි: {limit}."
   },
   "localModels": {
     "title": "ප්‍රාදේශීය ආදර්ශ",

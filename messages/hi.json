@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "कोई अनुमत दर्शक नहीं",
     "accessScopeHint": "केवल ऐप एक्सेस नियम। स्रोत अनुमतियाँ अभी भी लागू हैं।",
     "detailsLabel": "विवरण",
-    "indexedDocumentSummary": "{indexed, plural, one {# दस्तावेज़} other {# दस्तावेज़} } सूचीबद्ध"
+    "indexedDocumentSummary": "{indexed, plural, one {# दस्तावेज़} other {# दस्तावेज़} } सूचीबद्ध",
+    "m365CapImmediateHelp": "Apply करने से सीमा तुरंत सहेज ली जाती है। अन्य बदलावों के लिए अभी भी Save करना ज़रूरी है।",
+    "m365CapDraftHelp": "सीमा तब सहेजी जाती है जब आप एजेंट बनाते हैं।",
+    "m365CapSaved": "दस्तावेज़ सीमा सहेजी गई: {limit}."
   },
   "localModels": {
     "title": "स्थानीय मॉडल्स",

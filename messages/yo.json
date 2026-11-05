@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Kò sí olùgbọ tó fara mọ́",
     "accessScopeHint": "Àwọn ìlànà ìforúkọsílẹ̀ app nìkan. Àwọn àṣẹ orísun ṣi ń ṣiṣẹ́.",
     "detailsLabel": "Àlàyé",
-    "indexedDocumentSummary": "{indexed, plural, one {# ìwé ìtàn} other {# àwọn ìwé ìtàn}} tí a ti fi sí àtòjọ"
+    "indexedDocumentSummary": "{indexed, plural, one {# ìwé ìtàn} other {# àwọn ìwé ìtàn}} tí a ti fi sí àtòjọ",
+    "m365CapImmediateHelp": "Títẹ ‘Apply’ máa pamọ ààlà náà lóde-òní. Awọn àtúnṣe mìíràn ṣe dandan kí o fi pamọ́.",
+    "m365CapDraftHelp": "Ààlà náà máa wa ní pamo nígbà tí o dá aṣojú náà ṣẹ̀dá.",
+    "m365CapSaved": "Ààlà ìwé tí a fipamọ: {limit}."
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",

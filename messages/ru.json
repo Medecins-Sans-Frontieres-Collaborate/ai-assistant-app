@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "Нет разрешённой аудитории",
     "accessScopeHint": "Только правила доступа приложения. Разрешения источника по-прежнему действуют.",
     "detailsLabel": "Подробнее",
-    "indexedDocumentSummary": "{indexed, plural, one {# документ} other {# документов}} проиндексировано"
+    "indexedDocumentSummary": "{indexed, plural, one {# документ} other {# документов}} проиндексировано",
+    "m365CapImmediateHelp": "Применение немедленно сохраняет лимит. Для других изменений требуется Сохранить.",
+    "m365CapDraftHelp": "Лимит сохраняется при создании агента.",
+    "m365CapSaved": "Лимит документов сохранён: {limit}."
   },
   "localModels": {
     "title": "Локальные модели",

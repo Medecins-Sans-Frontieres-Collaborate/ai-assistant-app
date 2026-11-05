@@ -5425,7 +5425,10 @@
     "noAllowedAudience": "无允许的受众",
     "accessScopeHint": "仅适用于应用访问规则。来源权限仍然适用。",
     "detailsLabel": "详情",
-    "indexedDocumentSummary": "已索引{indexed, plural, one {#份文档} other {#份文档}}"
+    "indexedDocumentSummary": "已索引{indexed, plural, one {#份文档} other {#份文档}}",
+    "m365CapImmediateHelp": "点击“应用”会立即保存限制。其他更改仍需点击“保存”。",
+    "m365CapDraftHelp": "该限制将在创建代理时保存。",
+    "m365CapSaved": "文档限制已保存：{limit}。"
   },
   "localModels": {
     "title": "本地模型",

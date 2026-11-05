@@ -5394,7 +5394,10 @@
     "agentSkillsNone": "Keine Fähigkeiten zur Auswahl verfügbar.",
     "agentSkillsLoading": "Fähigkeiten werden geladen…",
     "agentSkillsLoadError": "Fähigkeiten konnten nicht geladen werden. Frühere Auswahlen bleiben erhalten.",
-    "agentSkillsNotVisible": "(für Sie nicht sichtbar — zum Entfernen abwählen)"
+    "agentSkillsNotVisible": "(für Sie nicht sichtbar — zum Entfernen abwählen)",
+    "m365CapImmediateHelp": "Übernehmen speichert das Limit sofort. Für andere Änderungen ist weiterhin Speichern erforderlich.",
+    "m365CapDraftHelp": "Das Limit wird beim Erstellen des Agents gespeichert.",
+    "m365CapSaved": "Dokumentenlimit gespeichert: {limit}."
   },
   "localModels": {
     "title": "Lokale Modelle",

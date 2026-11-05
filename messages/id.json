@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "Tidak ada audiens yang diizinkan",
     "accessScopeHint": "Hanya aturan akses aplikasi. Izin sumber tetap berlaku.",
     "detailsLabel": "Detail",
-    "indexedDocumentSummary": "{indexed, plural, one {# dokumen} other {# dokumen}} diindeks"
+    "indexedDocumentSummary": "{indexed, plural, one {# dokumen} other {# dokumen}} diindeks",
+    "m365CapImmediateHelp": "Terapkan akan menyimpan batasan secara langsung. Edit lainnya tetap perlu disimpan dengan Save.",
+    "m365CapDraftHelp": "Batasan akan disimpan saat Anda membuat agen.",
+    "m365CapSaved": "Batas dokumen tersimpan: {limit}."
   },
   "localModels": {
     "title": "Model lokal",

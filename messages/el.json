@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Καμία επιτρεπτή ομάδα",
     "accessScopeHint": "Μόνο κανόνες πρόσβασης εφαρμογής. Τα δικαιώματα της πηγής εξακολουθούν να ισχύουν.",
     "detailsLabel": "Λεπτομέρειες",
-    "indexedDocumentSummary": "{indexed, plural, one {# έγγραφο} other {# έγγραφα}} ευρετηριασμένα"
+    "indexedDocumentSummary": "{indexed, plural, one {# έγγραφο} other {# έγγραφα}} ευρετηριασμένα",
+    "m365CapImmediateHelp": "Η εφαρμογή αποθηκεύει το όριο άμεσα. Άλλες αλλαγές χρειάζονται Αποθήκευση.",
+    "m365CapDraftHelp": "Το όριο αποθηκεύεται όταν δημιουργείτε τον agent.",
+    "m365CapSaved": "Όριο εγγράφων αποθηκεύτηκε: {limit}."
   },
   "localModels": {
     "title": "Τοπικά μοντέλα",

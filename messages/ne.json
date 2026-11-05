@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "कुनै अनुमति प्राप्त दर्शक छैन",
     "accessScopeHint": "केवल एप पहुँचका नियमहरू। स्रोत अनुमति अझै लागू हुन्छ।",
     "detailsLabel": "विवरणहरू",
-    "indexedDocumentSummary": "{indexed, plural, one {# कागजात} other {# कागजातहरू}} अनुक्रमित"
+    "indexedDocumentSummary": "{indexed, plural, one {# कागजात} other {# कागजातहरू}} अनुक्रमित",
+    "m365CapImmediateHelp": "Apply गर्दा सीमा तुरुन्तै सुरक्षित हुन्छ। अन्य सम्पादनहरू बचत गर्न अझै पनि Save चाहिन्छ।",
+    "m365CapDraftHelp": "एजेन्ट बनाउँदा सीमा सुरक्षित हुन्छ।",
+    "m365CapSaved": "डोक्युमेन्ट सीमा सुरक्षित गरियो: {limit}।"
   },
   "localModels": {
     "title": "स्थानीय मोडेलहरू",

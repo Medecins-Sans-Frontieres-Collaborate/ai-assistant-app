@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Ҳеҷ шунавандаи иҷозатдодашуда нест",
     "accessScopeHint": "Танҳо қоидаҳои дастрасии барнома. Ҳуқуқҳои манбаи маълумот ҳанӯз амал мекунанд.",
     "detailsLabel": "Тафсилот",
-    "indexedDocumentSummary": "{indexed, plural, one {# ҳуҷҷат} other {# ҳуҷҷат}} индексонида шуд"
+    "indexedDocumentSummary": "{indexed, plural, one {# ҳуҷҷат} other {# ҳуҷҷат}} индексонида шуд",
+    "m365CapImmediateHelp": "Тугмаи «Apply» маҳдудиятро фавран нигоҳ медорад. Тағиротҳои дигарро бояд «Save» захира кард.",
+    "m365CapDraftHelp": "Маҳдудият ҳангоми эҷоди агент нигоҳ дошта мешавад.",
+    "m365CapSaved": "Маҳдудияти ҳуҷҷатҳо нигоҳ дошта шуд: {limit}."
   },
   "localModels": {
     "title": "Моделҳои маҳаллӣ",

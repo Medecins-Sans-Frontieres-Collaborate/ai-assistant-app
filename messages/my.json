@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "ခွင့်ပြုထားသည့် ပရိသတ်မရှိပါ",
     "accessScopeHint": "App ဝင်ရောက်ခွင့်စည်းမျဉ်းများသာ အာဏာပါသည်။ Source permissions များသုံးသပ်ဆောင်ရွက်မည်။",
     "detailsLabel": "အသေးစိတ်",
-    "indexedDocumentSummary": "{indexed, plural, one {စာရွက်စာတမ်း # ခု} other {စာရွက်စာတမ်း # ခု}} အညွှန်းချထားသည်"
+    "indexedDocumentSummary": "{indexed, plural, one {စာရွက်စာတမ်း # ခု} other {စာရွက်စာတမ်း # ခု}} အညွှန်းချထားသည်",
+    "m365CapImmediateHelp": "အကန့်အသတ် ပြင်ဆင်ပြီး Apply နှိပ်လျှင် ချက်ခြင်းသိမ်းဆည်းမည်။ အခြားပြင်ဆင်မှုများကို အာမခံသိမ်းရန် Save ကိုလည်းနှိပ်ရပါမည်။",
+    "m365CapDraftHelp": "အေးဂျင့်အသစ်ဖန်တီးသောအချိန်တွင် အကန့်အသတ်ကို သိမ်းဆည်းမည်။",
+    "m365CapSaved": "စာတမ်းအကန့်အသတ် သိမ်းပြီးပါပြီ- {limit}။"
   },
   "localModels": {
     "title": "ဒေသတွင်း မော်ဒယ်များ",

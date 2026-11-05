@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "គ្មានទស្សនិកជនដែលអាចអនុញ្ញាត",
     "accessScopeHint": "គោលការណ៍ចូលប្រើតែរបស់កម្មវិធីប៉ុណ្ណោះ។ សិទ្ធិប្រភពនៅតែ有អនុវត្ត។",
     "detailsLabel": "ព័ត៌មានលម្អិត",
-    "indexedDocumentSummary": "{indexed, plural, one {ឯកសារចំនួន #} other {ឯកសារចំនួន #}} ដែលបានបញ្ជូលបញ្ជី"
+    "indexedDocumentSummary": "{indexed, plural, one {ឯកសារចំនួន #} other {ឯកសារចំនួន #}} ដែលបានបញ្ជូលបញ្ជី",
+    "m365CapImmediateHelp": "ចុច Apply ដើម្បីរក្សាទុកកម្រិតភ្លាមៗ។ ការកែប្រែផ្សេងៗត្រូវតែចុច Save បន្តបើយញ។",
+    "m365CapDraftHelp": "កម្រិតនេះនឹងត្រូវរក្សាទុកនៅពេលអ្នកបង្កើតភ្នាក់ងារ។",
+    "m365CapSaved": "បានរក្សាទុកកម្រិតឯកសារ៖ {limit}។"
   },
   "localModels": {
     "title": "ម៉ូឌែលក្នុងតំបន់",

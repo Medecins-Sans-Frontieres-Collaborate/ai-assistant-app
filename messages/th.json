@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "ไม่มีผู้ใช้งานที่ได้รับอนุญาต",
     "accessScopeHint": "ใช้เฉพาะกฎการเข้าถึงของแอป สิทธิ์จากแหล่งข้อมูลยังคงมีผลอยู่",
     "detailsLabel": "รายละเอียด",
-    "indexedDocumentSummary": "มีการจัดทำดัชนี{indexed, plural, one {เอกสาร # ฉบับ} other {เอกสาร # ฉบับ}}"
+    "indexedDocumentSummary": "มีการจัดทำดัชนี{indexed, plural, one {เอกสาร # ฉบับ} other {เอกสาร # ฉบับ}}",
+    "m365CapImmediateHelp": "การใช้ Apply จะบันทึกขีดจำกัดทันที การแก้ไขอื่น ๆ ยังต้องกด Save",
+    "m365CapDraftHelp": "ขีดจำกัดจะถูกบันทึกเมื่อคุณสร้างตัวแทนแล้ว",
+    "m365CapSaved": "บันทึกขีดจำกัดเอกสารแล้ว: {limit}."
   },
   "localModels": {
     "title": "โมเดลภายในเครื่อง",

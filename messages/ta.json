@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "அனுமதிக்கப்பட்ட பார்வையாளர்கள் இல்லை",
     "accessScopeHint": "பயன்பாட்டு அணுகல் விதிகள் மட்டும். மூல அனுமதிகள் தொடரும்.",
     "detailsLabel": "விவரங்கள்",
-    "indexedDocumentSummary": "{indexed, plural, one {# ஆவணம்} other {# ஆவணங்கள்}} சுட்டுரையாக்கப்பட்டுள்ளது"
+    "indexedDocumentSummary": "{indexed, plural, one {# ஆவணம்} other {# ஆவணங்கள்}} சுட்டுரையாக்கப்பட்டுள்ளது",
+    "m365CapImmediateHelp": "விண்ணப்பித்ததும் வரம்பு உடனடியாக சேமிக்கப்படும். பிற மாற்றங்களுக்கு இன்னும் Save தேவை.",
+    "m365CapDraftHelp": "நீங்கள் முகவரை உருவாக்கும்போது வரம்பு சேமிக்கப்படும்.",
+    "m365CapSaved": "ஆவண வரம்பு சேமிக்கப்பட்டது: {limit}."
   },
   "localModels": {
     "title": "உள்ளூர் மாதிரிகள்",

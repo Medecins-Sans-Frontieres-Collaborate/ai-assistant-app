@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Akukho izilaleli ezivunyelwe",
     "accessScopeHint": "Imithetho yokufinyelela uhlelo kuphela. Izimvume zomthombo zisasebenza.",
     "detailsLabel": "Imininingwane",
-    "indexedDocumentSummary": "{indexed, plural, one {# umbhalo} other {# imibhalo}} efakiwe kuhlu"
+    "indexedDocumentSummary": "{indexed, plural, one {# umbhalo} other {# imibhalo}} efakiwe kuhlu",
+    "m365CapImmediateHelp": "Ukusebenzisa i-Apply kugcina umkhawulo masinyane. Okunye ukuhlela kudinga i-Save.",
+    "m365CapDraftHelp": "Umkhawulo uyagcinwa lapho udala i-ejenti.",
+    "m365CapSaved": "Umkhawulo wamadokhumenti ugciniwe: {limit}."
   },
   "localModels": {
     "title": "Amamodeli endaweni",

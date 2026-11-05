@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Pa gen okenn odyans otorize",
     "accessScopeHint": "Se sèlman règ aksè aplikasyon an. Otorizasyon sous yo toujou valab.",
     "detailsLabel": "Detay",
-    "indexedDocumentSummary": "{indexed, plural, one {# dokiman} other {# dokiman}} ki endèksé"
+    "indexedDocumentSummary": "{indexed, plural, one {# dokiman} other {# dokiman}} ki endèksé",
+    "m365CapImmediateHelp": "Aplike a sove limit la imedyatman. Lòt chanjman bezwen ou Save toujou.",
+    "m365CapDraftHelp": "W ap sove limit la lè w kreye ajan an.",
+    "m365CapSaved": "Limit dokiman an sove: {limit}."
   },
   "localModels": {
     "title": "Modèl lokal",

@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "許可された対象者なし",
     "accessScopeHint": "アプリのアクセスルールのみ適用されます。元の権限も有効です。",
     "detailsLabel": "詳細",
-    "indexedDocumentSummary": "{indexed, plural, one {# 件のドキュメント} other {# 件のドキュメント}}をインデックス化済み"
+    "indexedDocumentSummary": "{indexed, plural, one {# 件のドキュメント} other {# 件のドキュメント}}をインデックス化済み",
+    "m365CapImmediateHelp": "適用すると制限が即座に保存されます。他の変更にはまだ「保存」が必要です。",
+    "m365CapDraftHelp": "制限はエージェント作成時に保存されます。",
+    "m365CapSaved": "ドキュメント制限を保存しました: {limit}。"
   },
   "localModels": {
     "title": "ローカルモデル",

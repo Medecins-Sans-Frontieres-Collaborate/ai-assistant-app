@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "ፈቃድ ያላቸው ታዳጊዎች የሉም",
     "accessScopeHint": "የመተግበሪያ መድረሻ መስፈርቶች ብቻ ናቸው። የምንጭ ፈቃድ ገና ይተገበራል።",
     "detailsLabel": "ዝርዝሮች",
-    "indexedDocumentSummary": "{indexed, plural, one {# ሰነድ} other {# ሰነዶች}} ተሰናዳ"
+    "indexedDocumentSummary": "{indexed, plural, one {# ሰነድ} other {# ሰነዶች}} ተሰናዳ",
+    "m365CapImmediateHelp": "ተግባሩ ወዲያውኑ ገደቡን ይቀመጣል። ሌሎች ማስተካከያዎች ግን ማስቀመጥ ያስፈልጋሉ።",
+    "m365CapDraftHelp": "ወኪሉን ሲፈጥሩ ገደቡ ይቀመጣል።",
+    "m365CapSaved": "የሰነድ ገደብ ተቀምጧል፡ {limit}።"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",

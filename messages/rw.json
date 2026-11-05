@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Nta bagenerwabikorwa bemerewe",
     "accessScopeHint": "Amategeko y'ikoreshwa rya porogaramu gusa. Uburenganzira bw'inkomoko buracyakurikizwa.",
     "detailsLabel": "Ibisobanuro",
-    "indexedDocumentSummary": "{indexed, plural, one {inyandiko #} other {inyandiko #}} zashyizwe ku rutonde"
+    "indexedDocumentSummary": "{indexed, plural, one {inyandiko #} other {inyandiko #}} zashyizwe ku rutonde",
+    "m365CapImmediateHelp": "Gukanda kuri Apply bihita bibika umupaka. Izindi mpinduka zigomba kubikwa ukoresheje Save.",
+    "m365CapDraftHelp": "Umupaka uzabikwa igihe ukora agent.",
+    "m365CapSaved": "Umupaka w'inyandiko wabitswe: {limit}."
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",

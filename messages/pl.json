@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "Brak dozwolonej grupy odbiorców",
     "accessScopeHint": "Tylko reguły dostępu aplikacji. Uprawnienia źródła nadal obowiązują.",
     "detailsLabel": "Szczegóły",
-    "indexedDocumentSummary": "Zaindeksowano {indexed, plural, one {# dokument} other {# dokumentów}}"
+    "indexedDocumentSummary": "Zaindeksowano {indexed, plural, one {# dokument} other {# dokumentów}}",
+    "m365CapImmediateHelp": "Zastosowanie zapisuje limit natychmiast. Inne zmiany wymagają zapisania.",
+    "m365CapDraftHelp": "Limit zostanie zapisany podczas tworzenia agenta.",
+    "m365CapSaved": "Zapisano limit dokumentów: {limit}."
   },
   "localModels": {
     "title": "Modele lokalne",

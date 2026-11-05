@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Tsy misy mpijery azo avela",
     "accessScopeHint": "Fitsipika fidirana amin'ny fampiharana ihany. Mbola mihatra hatrany ny fahazoan-dalana avy amin'ny loharano.",
     "detailsLabel": "Antsipiriany",
-    "indexedDocumentSummary": "{indexed, plural, one {rakitra #} other {rakitra #}} voatanisa"
+    "indexedDocumentSummary": "{indexed, plural, one {rakitra #} other {rakitra #}} voatanisa",
+    "m365CapImmediateHelp": "Rehefa ampiharina dia voatahiry avy hatrany ny fetra. Ny fanovana hafa dia mila asiana Save ihany.",
+    "m365CapDraftHelp": "Ny fetra dia tehirizina rehefa mamorona agent ianao.",
+    "m365CapSaved": "Voatahiry ny fetra amin'ny antontan-taratasy: {limit}."
   },
   "localModels": {
     "title": "Model eo an-toerana",

@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Nema dozvoljene publike",
     "accessScopeHint": "Samo pravila pristupa aplikacije. Dozvole izvora i dalje važe.",
     "detailsLabel": "Detalji",
-    "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokumenata}} indeksirano"
+    "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokumenata}} indeksirano",
+    "m365CapImmediateHelp": "Primena odmah čuva ograničenje. Ostale izmene zahtevaju čuvanje.",
+    "m365CapDraftHelp": "Ograničenje će biti sačuvano kada kreirate agenta.",
+    "m365CapSaved": "Ograničenje dokumenata sačuvano: {limit}."
   },
   "localModels": {
     "title": "Lokalni modeli",

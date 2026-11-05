@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "Ei sallittua yleisöä",
     "accessScopeHint": "Vain sovelluksen käyttöoikeussäännöt. Lähteen käyttöoikeudet ovat yhä voimassa.",
     "detailsLabel": "Tiedot",
-    "indexedDocumentSummary": "{indexed, plural, one {# asiakirja} other {# asiakirjaa}} indeksoitu"
+    "indexedDocumentSummary": "{indexed, plural, one {# asiakirja} other {# asiakirjaa}} indeksoitu",
+    "m365CapImmediateHelp": "Käytä tallentaa rajan heti. Muut muutokset vaativat vielä Tallenna-toiminnon.",
+    "m365CapDraftHelp": "Raja tallennetaan, kun luot agentin.",
+    "m365CapSaved": "Dokumenttiraja tallennettu: {limit}."
   },
   "localModels": {
     "title": "Paikalliset mallit",

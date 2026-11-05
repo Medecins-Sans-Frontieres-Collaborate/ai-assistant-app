@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "هیڅ اجازه لرونکی لیدونکی نشته",
     "accessScopeHint": "یوازې د ایپ د لاسرسي مقررات. د سرچینې اجازې لا هم تطبیق کیږي.",
     "detailsLabel": "جزیات",
-    "indexedDocumentSummary": "{indexed, plural, one {# سند} other {# اسناد}} ثبت شوي"
+    "indexedDocumentSummary": "{indexed, plural, one {# سند} other {# اسناد}} ثبت شوي",
+    "m365CapImmediateHelp": "د Apply سره محدوده سمدستي ثبتېږي. نور بدلونونه لاهم Save ته اړتیا لري.",
+    "m365CapDraftHelp": "محدوده هغه مهال ثبتېږي کله چې تاسو عامل جوړ کړئ.",
+    "m365CapSaved": "د اسنادو محدوده ثبت شوه: {limit}."
   },
   "localModels": {
     "title": "محلي ماډلونه",

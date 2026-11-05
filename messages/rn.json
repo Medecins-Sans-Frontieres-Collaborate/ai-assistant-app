@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Nta bantu bemerewe",
     "accessScopeHint": "Amabwiriza y’ukuntu porogaramu ikoreshwa gusa. Uburenganzira biva aho bikomoka biguma bikoreshwa.",
     "detailsLabel": "Ibisobanuro",
-    "indexedDocumentSummary": "{indexed, plural, one {# idocumenti} other {# zidocumenti}} zarashizwe ku rutonde"
+    "indexedDocumentSummary": "{indexed, plural, one {# idocumenti} other {# zidocumenti}} zarashizwe ku rutonde",
+    "m365CapImmediateHelp": "Gukanda Apply bibika ako kanya iyo limite. Iyindi mihinduririzo ikeneye kubikwa ukoresheje Save.",
+    "m365CapDraftHelp": "Limite ibikwa igihe ushiraho agent.",
+    "m365CapSaved": "Limite y'ivyanditswe ibitswe: {limit}."
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",

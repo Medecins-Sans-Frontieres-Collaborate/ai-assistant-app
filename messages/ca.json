@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "Sense públic autoritzat",
     "accessScopeHint": "Només regles d'accés de l'aplicació. Els permisos de l'origen encara s'apliquen.",
     "detailsLabel": "Detalls",
-    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documents}} indexats"
+    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documents}} indexats",
+    "m365CapImmediateHelp": "En fer clic a Aplicar, el límit es desa immediatament. Altres canvis requereixen Desa.",
+    "m365CapDraftHelp": "El límit es desa quan creeu l'agent.",
+    "m365CapSaved": "Límit de documents desat: {limit}."
   },
   "localModels": {
     "title": "Models locals",

@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "Není povolen žádný okruh uživatelů",
     "accessScopeHint": "Pouze pravidla přístupu aplikace. Práva zdroje stále platí.",
     "detailsLabel": "Podrobnosti",
-    "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokumentů}} indexováno"
+    "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokumentů}} indexováno",
+    "m365CapImmediateHelp": "Použití uloží limit ihned. Ostatní úpravy je stále nutné uložit.",
+    "m365CapDraftHelp": "Limit se uloží při vytvoření agenta.",
+    "m365CapSaved": "Limit dokumentů uložen: {limit}."
   },
   "localModels": {
     "title": "Lokální modely",

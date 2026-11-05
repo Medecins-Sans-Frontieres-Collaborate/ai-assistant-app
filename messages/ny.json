@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Palibe owerengeka ovomerezeka",
     "accessScopeHint": "Malangizo olowera pulogalamuyi basi. Chilolezo cha zomwe zachokera zikadali ntchito.",
     "detailsLabel": "Zambiri",
-    "indexedDocumentSummary": "{indexed, plural, one {# chikalata} other {# zikalata}} zalembedwa"
+    "indexedDocumentSummary": "{indexed, plural, one {# chikalata} other {# zikalata}} zalembedwa",
+    "m365CapImmediateHelp": "Kugwiritsa ntchito kumasunga malire nthawi yomweyo. Kusintha kwina konse kumafunika Save.",
+    "m365CapDraftHelp": "Malire amasungidwa mukalenga agent.",
+    "m365CapSaved": "Malire a zolemba asungidwa: {limit}."
   },
   "localModels": {
     "title": "Mitundu yapafupi",

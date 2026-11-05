@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "অনুমোদিত শ্রোতা নেই",
     "accessScopeHint": "শুধুমাত্র অ্যাপ অ্যাক্সেস নিয়ম প্রযোজ্য। সোর্স পারমিশন এখনও প্রযোজ্য।",
     "detailsLabel": "বিস্তারিত",
-    "indexedDocumentSummary": "{indexed, plural, one {#টি ডকুমেন্ট} other {#টি ডকুমেন্ট} } সূচিকৃত"
+    "indexedDocumentSummary": "{indexed, plural, one {#টি ডকুমেন্ট} other {#টি ডকুমেন্ট} } সূচিকৃত",
+    "m365CapImmediateHelp": "প্রয়োগ করলে সীমাটি সঙ্গে সঙ্গে সংরক্ষিত হয়। অন্যান্য সম্পাদনার জন্য এখনও সংরক্ষণ করতে হবে।",
+    "m365CapDraftHelp": "এজেন্ট তৈরি করার সময় সীমাটি সংরক্ষিত হয়।",
+    "m365CapSaved": "নথির সীমা সংরক্ষিত হয়েছে: {limit}।"
   },
   "localModels": {
     "title": "স্থানীয় মডেলসমূহ",

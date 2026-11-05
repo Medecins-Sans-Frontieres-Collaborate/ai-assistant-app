@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "Ingen tillåten målgrupp",
     "accessScopeHint": "Endast appens åtkomstregler. Källbehörigheter gäller fortfarande.",
     "detailsLabel": "Detaljer",
-    "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokument}} indexerade"
+    "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokument}} indexerade",
+    "m365CapImmediateHelp": "Verkställ sparar gränsen direkt. Andra ändringar kräver fortfarande Spara.",
+    "m365CapDraftHelp": "Gränsen sparas när du skapar agenten.",
+    "m365CapSaved": "Dokumentgräns sparad: {limit}."
   },
   "localModels": {
     "title": "Lokala modeller",

@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "İzin verilen hedef kitle yok",
     "accessScopeHint": "Yalnızca uygulama erişim kuralları geçerlidir. Kaynak izinleri hala uygulanır.",
     "detailsLabel": "Ayrıntılar",
-    "indexedDocumentSummary": "{indexed, plural, one {# doküman} other {# doküman}} indekslendi"
+    "indexedDocumentSummary": "{indexed, plural, one {# doküman} other {# doküman}} indekslendi",
+    "m365CapImmediateHelp": "Uygula, limiti hemen kaydeder. Diğer değişiklikler için yine de Kaydet gerekir.",
+    "m365CapDraftHelp": "Limit, ajanı oluşturduğunuzda kaydedilir.",
+    "m365CapSaved": "Belge limiti kaydedildi: {limit}."
   },
   "localModels": {
     "title": "Yerel modeller",

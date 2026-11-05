@@ -5425,7 +5425,10 @@
     "noAllowedAudience": "Không có đối tượng được phép",
     "accessScopeHint": "Chỉ áp dụng quy tắc truy cập ứng dụng. Quyền từ nguồn vẫn còn hiệu lực.",
     "detailsLabel": "Chi tiết",
-    "indexedDocumentSummary": "{indexed, plural, one {# tài liệu} other {# tài liệu}} đã được lập chỉ mục"
+    "indexedDocumentSummary": "{indexed, plural, one {# tài liệu} other {# tài liệu}} đã được lập chỉ mục",
+    "m365CapImmediateHelp": "Nhấn Áp dụng sẽ lưu giới hạn ngay lập tức. Các chỉnh sửa khác vẫn cần Lưu.",
+    "m365CapDraftHelp": "Giới hạn sẽ được lưu khi bạn tạo agent.",
+    "m365CapSaved": "Đã lưu giới hạn tài liệu: {limit}."
   },
   "localModels": {
     "title": "Mô hình cục bộ",

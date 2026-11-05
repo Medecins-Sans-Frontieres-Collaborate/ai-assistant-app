@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "허용된 대상 없음",
     "accessScopeHint": "앱 접근 규칙만 적용됩니다. 소스 권한은 여전히 적용됩니다.",
     "detailsLabel": "세부정보",
-    "indexedDocumentSummary": "{indexed, plural, one {문서 #건} other {문서 #건}} 인덱싱됨"
+    "indexedDocumentSummary": "{indexed, plural, one {문서 #건} other {문서 #건}} 인덱싱됨",
+    "m365CapImmediateHelp": "적용을 클릭하면 제한이 바로 저장됩니다. 다른 수정 사항은 저장이 필요합니다.",
+    "m365CapDraftHelp": "제한은 에이전트를 생성할 때 저장됩니다.",
+    "m365CapSaved": "문서 제한이 저장되었습니다: {limit}."
   },
   "localModels": {
     "title": "로컬 모델",

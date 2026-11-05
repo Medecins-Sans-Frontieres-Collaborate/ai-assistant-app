@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "ተፈታዊ ደጋፊታት ኣይተቐበሉን",
     "accessScopeHint": "እቲ መተግበሪ መግቢ ሕርወታት እዚኣ፡ ሓሳብ ተሞንጎ ይትግበሩ። ኣብ ምእንቲ ኣብ መእተዊ ፍቓዶም እንደሳሳት ይተግበሩ።",
     "detailsLabel": "ዝርዝር",
-    "indexedDocumentSummary": "{indexed, plural, one {# ሰነድ} other {# ሰነዳት}} ተተውካ"
+    "indexedDocumentSummary": "{indexed, plural, one {# ሰነድ} other {# ሰነዳት}} ተተውካ",
+    "m365CapImmediateHelp": "መፈጸሚ ዝተረኽበ ድማ እቲ ውሳኔ ብእተፈጸመ ይኽእል። ካልእ ምሕዳራት ግን ግን ምዝገብ እየ ይደሊ።",
+    "m365CapDraftHelp": "እቲ ውሳኔ ኣብ ምፍጣር ዓገንት ምኽንያት ይኽድኡ።",
+    "m365CapSaved": "ውሳኔ ዶክመንት ዝተዛመደ፡ {limit}።"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",

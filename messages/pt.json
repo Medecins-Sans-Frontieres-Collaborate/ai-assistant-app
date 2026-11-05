@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "Nenhum público permitido",
     "accessScopeHint": "Apenas regras de acesso do aplicativo. Permissões da fonte ainda se aplicam.",
     "detailsLabel": "Detalhes",
-    "indexedDocumentSummary": "{indexed, plural, one {# documento} other {# documentos}} indexado(s)"
+    "indexedDocumentSummary": "{indexed, plural, one {# documento} other {# documentos}} indexado(s)",
+    "m365CapImmediateHelp": "Aplicar salva o limite imediatamente. Outras edições ainda precisam de Salvar.",
+    "m365CapDraftHelp": "O limite é salvo quando você cria o agente.",
+    "m365CapSaved": "Limite de documentos salvo: {limit}."
   },
   "localModels": {
     "title": "Modelos locais",

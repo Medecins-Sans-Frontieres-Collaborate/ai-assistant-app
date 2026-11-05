@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "అనుమతించబడిన ప్రేక్షకులు లేరు",
     "accessScopeHint": "యాప్ యాక్సెస్ నియమాలు మాత్రమే వర్తిస్తాయి. మూల అనుమతులు మారవు.",
     "detailsLabel": "వివరాలు",
-    "indexedDocumentSummary": "{indexed, plural, one {# డాక్యుమెంట్} other {# డాక్యుమెంట్లు}} ఇండెక్స్ చేయబడింది"
+    "indexedDocumentSummary": "{indexed, plural, one {# డాక్యుమెంట్} other {# డాక్యుమెంట్లు}} ఇండెక్స్ చేయబడింది",
+    "m365CapImmediateHelp": "Apply చేసినపుడు పరిమితిని వెంటనే సేవ్ చేయబడుతుంది. ఇతర మార్పులకు ఇంకా Save అవసరం.",
+    "m365CapDraftHelp": "ఏజెంట్ సృష్టించినప్పుడు పరిమితి సేవ్ చేయబడుతుంది.",
+    "m365CapSaved": "పత్రాల పరిమితి సేవ్ చేయబడింది: {limit}."
   },
   "localModels": {
     "title": "లోకల్ మోడల్స్",

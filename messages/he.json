@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "אין קהל מורשה",
     "accessScopeHint": "כללי הגישה לאפליקציה בלבד. הרשאות המקור עדיין יישומו.",
     "detailsLabel": "פרטים",
-    "indexedDocumentSummary": "{indexed, plural, one {מסמך אחד} other {# מסמכים}} מאונדקסים"
+    "indexedDocumentSummary": "{indexed, plural, one {מסמך אחד} other {# מסמכים}} מאונדקסים",
+    "m365CapImmediateHelp": "לחיצה על 'החל' שומרת את ההגבלה מיד. עריכות אחרות עדיין דורשות שמירה.",
+    "m365CapDraftHelp": "ההגבלה נשמרת כאשר אתה יוצר את הסוכן.",
+    "m365CapSaved": "הגבלת מסמכים נשמרה: {limit}."
   },
   "localModels": {
     "title": "מודלים מקומיים",

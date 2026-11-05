@@ -5394,7 +5394,10 @@
     "noAllowedAudience": "Geen toegestane doelgroep",
     "accessScopeHint": "Alleen toegangsregels voor de app. Bronrechten blijven van kracht.",
     "detailsLabel": "Details",
-    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documenten}} geïndexeerd"
+    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documenten}} geïndexeerd",
+    "m365CapImmediateHelp": "Toepassen slaat de limiet direct op. Andere wijzigingen moeten nog worden opgeslagen.",
+    "m365CapDraftHelp": "De limiet wordt opgeslagen wanneer u de agent aanmaakt.",
+    "m365CapSaved": "Documentlimiet opgeslagen: {limit}."
   },
   "localModels": {
     "title": "Lokale modellen",

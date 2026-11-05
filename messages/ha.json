@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Babu wadanda aka yarda su",
     "accessScopeHint": "Ka'idojin samun damar app ne kawai. Izinin tushe har yanzu yana aiki.",
     "detailsLabel": "Cikakkun bayanai",
-    "indexedDocumentSummary": "{indexed, plural, one {Takarda #} other {Takardu #}} an jera"
+    "indexedDocumentSummary": "{indexed, plural, one {Takarda #} other {Takardu #}} an jera",
+    "m365CapImmediateHelp": "Aikace-aikacen yana adana iyaka nan da nan. Sauran gyare-gyare suna buƙatar Ajiyewa.",
+    "m365CapDraftHelp": "Za a adana iyakar lokacin kirkirar wakili.",
+    "m365CapSaved": "An adana iyakar takardu: {limit}."
   },
   "localModels": {
     "title": "Samfuran cikin gida",

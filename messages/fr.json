@@ -5394,7 +5394,10 @@
     "agentSkillsNone": "Aucune compétence disponible à sélectionner.",
     "agentSkillsLoading": "Chargement des compétences…",
     "agentSkillsLoadError": "Impossible de charger les compétences. Les sélections enregistrées précédemment sont conservées.",
-    "agentSkillsNotVisible": "(non visible pour vous — décochez pour retirer)"
+    "agentSkillsNotVisible": "(non visible pour vous — décochez pour retirer)",
+    "m365CapImmediateHelp": "Appliquer enregistre la limite immédiatement. Les autres modifications nécessitent toujours Enregistrer.",
+    "m365CapDraftHelp": "La limite est enregistrée lors de la création de l’agent.",
+    "m365CapSaved": "Limite de documents enregistrée : {limit}."
   },
   "localModels": {
     "title": "Modèles locaux",

@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Ma jiro dhegaystayaal la oggol yahay",
     "accessScopeHint": "Kaliya xeerarka gelitaanka app-ka. Ogolaanshaha ilaha wali wuu shaqaynayaa.",
     "detailsLabel": "Faahfaahin",
-    "indexedDocumentSummary": "{indexed, plural, one {# dukumenti} other {# dukumanti}} la diiwaangeliyey"
+    "indexedDocumentSummary": "{indexed, plural, one {# dukumenti} other {# dukumanti}} la diiwaangeliyey",
+    "m365CapImmediateHelp": "Marka la dalbado waxa isla markiiba la badbaadinayaa xaddiga. Tafatirro kale wali waxay u baahan yihiin Badbaadin.",
+    "m365CapDraftHelp": "Xaddiga waxa la badbaadinayaa marka aad abuurto wakiilka.",
+    "m365CapSaved": "Xaddiga dukumiintiga waa la badbaadiyey: {limit}."
   },
   "localModels": {
     "title": "Moodallo maxalli ah",

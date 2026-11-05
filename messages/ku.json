@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "هیچ بینەرێکی ڕێگەپێدراو نییە",
     "accessScopeHint": "تەنها یاساکانی دەستگەیشتنی ئەپ کاردەکەن. مافی سەرچاوە هێشتا جێبەجێ دەکرێت.",
     "detailsLabel": "وردەکاری",
-    "indexedDocumentSummary": "{indexed, plural, one {# بەڵگنامە} other {# بەڵگنامە}} فهرستکران"
+    "indexedDocumentSummary": "{indexed, plural, one {# بەڵگنامە} other {# بەڵگنامە}} فهرستکران",
+    "m365CapImmediateHelp": "بەکاربردن پێویستەکە فەلەکە بە دواوی تۆمار دەکات. گۆڕانکارییەکانی تر هێشتا پێویستیان بە پاشەکەوتکردنە.",
+    "m365CapDraftHelp": "پێوەندی تۆمار دەکرێت کاتێك ئەجێنتەکە دروست دەکەیت.",
+    "m365CapSaved": "سنوری بەڵگە تۆمارکرا: {limit}."
   },
   "localModels": {
     "title": "مۆدێلە سەرەکییەکان",

@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Mbênî zinga ayeke mo azo abê",
     "accessScopeHint": "Zaka wakana App sôhïngö tî wákanga. Lilo tî gbàngbâ awa sômâ na kodro.",
     "detailsLabel": "Lédéngö",
-    "indexedDocumentSummary": "{indexed, plural, one {# dokumenti} other {# dokumenti}} gbèyê"
+    "indexedDocumentSummary": "{indexed, plural, one {# dokumenti} other {# dokumenti}} gbèyê",
+    "m365CapImmediateHelp": "Sô bê ti mbi yâlimingo na tî lo na yângâ. Tîngbi yâlimingo mô tô yângâ ti mbi yângâ 'Save'.",
+    "m365CapDraftHelp": "Yâlimingo na tî yâlimi sô yobê na mbênî agent.",
+    "m365CapSaved": "Yâlimingo na tî document sô yângâ: {limit}."
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",

@@ -5378,7 +5378,10 @@
     "noAllowedAudience": "Mokei ezali te",
     "accessScopeHint": "Ndenge ya kotia ndelo na application kaka. Ndakisa ya ndenge ya kotikala ekoki",
     "detailsLabel": "Bisika",
-    "indexedDocumentSummary": "{indexed, plural, one {# mokanda} other {# mikanda}} esalemi index"
+    "indexedDocumentSummary": "{indexed, plural, one {# mokanda} other {# mikanda}} esalemi index",
+    "m365CapImmediateHelp": "Kobakisa ekebisa ndenge moko limite. Mabongoli mosusu esengeli kokota na Save.",
+    "m365CapDraftHelp": "Limite ekotondi ntango okokela agent.",
+    "m365CapSaved": "Limite ya bandocuments ebombami: {limit}."
   },
   "localModels": {
     "title": "Bamodelo ya esika",
