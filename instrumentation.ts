@@ -63,9 +63,8 @@ export async function register() {
       await import('@/lib/services/limits/startupWarnings')
     ).logLimitsStartupWarnings();
 
-    // Region-pinned tool routing has no fallback: announce a region whose
-    // account cannot serve the router model instead of letting every turn
-    // there silently lose web search and skills.
+    // Announce environment-local auxiliary chain risks and start passive
+    // readiness maintenance. No paid inference probes run implicitly at boot.
     try {
       void (
         await import('@/lib/services/chat/auxiliaryRouterStartupCheck')
@@ -106,8 +105,10 @@ export async function register() {
     }
 
     const { registerOTel } = await import('@vercel/otel');
-    const { AzureMonitorTraceExporter, AzureMonitorMetricExporter } =
+    const { AzureMonitorMetricExporter } =
       await import('@azure/monitor-opentelemetry-exporter');
+    const { HttpStatusAzureTraceExporter } =
+      await import('@/lib/services/observability/httpStatusTraceExporter');
     const { PeriodicExportingMetricReader } =
       await import('@opentelemetry/sdk-metrics');
 
@@ -127,7 +128,7 @@ export async function register() {
         serviceName: process.env.NEXT_PUBLIC_ENV
           ? `msf-ai-assistant-${process.env.NEXT_PUBLIC_ENV}`
           : 'msf-ai-assistant',
-        traceExporter: new AzureMonitorTraceExporter({
+        traceExporter: new HttpStatusAzureTraceExporter({
           connectionString,
         }),
         metricReaders: [
