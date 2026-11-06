@@ -8,6 +8,8 @@ import { z } from 'zod';
 export const AUXILIARY_PURPOSES = ['routing', 'searchAssessment'] as const;
 export const AUXILIARY_REGIONS = ['EU', 'US'] as const;
 export const AUXILIARY_BINDINGS = ['EU', 'US', 'default'] as const;
+/** First-choice routing deployment when no administrator or bootstrap override exists. */
+export const DEFAULT_AUXILIARY_ROUTING_MODEL = 'gpt-5.6-luna';
 export const AUXILIARY_OPERATION_REVISION = 1;
 export const AUXILIARY_LIMITS = {
   chainLength: 5,
