@@ -235,6 +235,9 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       skillVersions,
       userSkills,
       skillsAuto,
+      activeFiles,
+      activeFilesTokensUsed,
+      autoInjectPinnedImages,
     } = body;
 
     if (mcpServers?.length) {
@@ -316,6 +319,14 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       skillVersions,
       userSkills,
       skillsAuto,
+      // Active files from the client (validated shape/caps in
+      // InputValidator). Consumed by ActiveFileProcessor/ActiveFileInjector;
+      // this hand-off was lost in a large sync commit (2b5da4db1), which
+      // left activated files — including auto-activated generated files —
+      // invisible to the model (issue #152).
+      activeFiles,
+      activeFilesTokensUsed,
+      autoInjectPinnedImages,
     };
   } catch (error) {
     if (error instanceof PipelineError) {
