@@ -3,7 +3,10 @@ import {
   AuxiliaryUnavailableError,
 } from '@/lib/services/auxiliary/AuxiliaryModelExecutor';
 import { matchesAuxiliarySchema } from '@/lib/services/auxiliary/schemaValidation';
-import type { AuxiliaryOperation } from '@/lib/services/auxiliary/types';
+import {
+  type AuxiliaryOperation,
+  DEFAULT_AUXILIARY_ROUTING_MODEL,
+} from '@/lib/services/auxiliary/types';
 import {
   SkillRoutingEntry,
   selectedSkillIds,
@@ -73,14 +76,14 @@ const TRIM_CLASSIFY_SCHEMA = {
 /**
  * ToolRouterService
  *
- * Determines which tools are needed for a given message using gpt-5.4-nano.
- * Uses a lightweight model to intelligently decide when web search is beneficial.
+ * Determines which tools are needed using the auxiliary routing policy.
+ * Defaults to GPT-5.6 Luna unless an administrator overrides the selection.
  */
 /**
  * Legacy classifier for isolated/injectable clients. Production resolves the
  * environment's auxiliary policy and actual deployment capabilities instead.
  */
-export const AUXILIARY_ROUTER_MODEL = 'gpt-5.4-nano';
+export const AUXILIARY_ROUTER_MODEL = DEFAULT_AUXILIARY_ROUTING_MODEL;
 
 /** Thrown when a region-pinned call has no regional client to run on. */
 export class AuxiliaryEndpointMissingError extends Error {
