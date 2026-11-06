@@ -1,5 +1,8 @@
 /** Real policy/inventory/executor integration with only ARM, credential and blob seams mocked. */
-import { AuxiliaryModelService } from '@/lib/services/auxiliary/AuxiliaryModelService';
+import {
+  AuxiliaryModelService,
+  auxiliaryBootstrap,
+} from '@/lib/services/auxiliary/AuxiliaryModelService';
 import { AuxiliaryPolicySchema } from '@/lib/services/auxiliary/types';
 
 import { auxiliaryReport } from './fixtures';
@@ -19,6 +22,7 @@ const mocks = vi.hoisted(() => ({
 const config = vi.hoisted(() => ({
   NODE_ENV: 'test',
   NEXT_PUBLIC_ENV: 'live',
+  AUXILIARY_MODEL_BOOTSTRAP: undefined as string | undefined,
   AZURE_AI_FOUNDRY_ENDPOINT_EU:
     'https://eu.services.ai.azure.com/api/projects/default',
   AZURE_AI_FOUNDRY_ENDPOINT_US:
@@ -67,6 +71,7 @@ function valueFor(schema: any): unknown {
 }
 beforeEach(() => {
   vi.clearAllMocks();
+  config.AUXILIARY_MODEL_BOOTSTRAP = undefined;
   fixture = reportFixture();
   mocks.readPolicy.mockResolvedValue({
     policy: AuxiliaryPolicySchema.parse({
@@ -116,6 +121,127 @@ afterEach(() => {
 });
 
 describe('environment-local model service', () => {
+  it('defaults routing to Luna in both regions without changing assessment defaults', () => {
+    const defaults = auxiliaryBootstrap('custom-assessor');
+    expect(defaults.routing.EU).toEqual([
+      { accountBinding: 'EU', deploymentName: 'gpt-5.6-luna' },
+      { accountBinding: 'EU', deploymentName: 'gpt-5.4-mini' },
+      { accountBinding: 'EU', deploymentName: 'gpt-4.1' },
+    ]);
+    expect(defaults.routing.US).toEqual([
+      { accountBinding: 'US', deploymentName: 'gpt-5.6-luna' },
+      { accountBinding: 'US', deploymentName: 'gpt-5.4-nano' },
+      { accountBinding: 'US', deploymentName: 'gpt-5.4-mini' },
+      { accountBinding: 'US', deploymentName: 'gpt-4.1' },
+    ]);
+    for (const region of ['EU', 'US'] as const) {
+      expect(defaults.searchAssessment[region][0].deploymentName).toBe(
+        'custom-assessor',
+      );
+      expect(defaults.searchAssessment[region]).not.toContainEqual(
+        expect.objectContaining({ deploymentName: 'gpt-5.6-luna' }),
+      );
+    }
+  });
+  it('preserves explicit deployment bootstrap assignments', () => {
+    config.AUXILIARY_MODEL_BOOTSTRAP = JSON.stringify(fixture.effective);
+    expect(auxiliaryBootstrap()).toEqual(fixture.effective);
+  });
+  it.each(['EU', 'US'] as const)(
+    'resolves Luna first for all routing operations in %s without an admin policy',
+    async (region) => {
+      mocks.readPolicy.mockResolvedValue(null);
+      const inventory = fixture.inventory.find(
+        (entry) => entry.account.binding === region,
+      )!;
+      for (const modelName of ['gpt-5.6-luna', 'gpt-5.4-mini'])
+        inventory.models.push({
+          ...inventory.models[0],
+          deploymentName: modelName,
+          modelName,
+        });
+      for (const operation of ['skills', 'tools', 'trim'] as const) {
+        const result = await service.resolve(operation, region);
+        expect(result.candidates.map((entry) => entry.model.id)).toEqual([
+          'gpt-5.6-luna',
+          'gpt-5.4-mini',
+        ]);
+        expect(result.candidates[0].reference.accountBinding).toBe(region);
+      }
+    },
+  );
+  it.each(['EU', 'US'] as const)(
+    'keeps admin routing overrides authoritative in %s even when Luna is deployed',
+    async (region) => {
+      const inventory = fixture.inventory.find(
+        (entry) => entry.account.binding === region,
+      )!;
+      inventory.models.push({
+        ...inventory.models[0],
+        deploymentName: 'gpt-5.6-luna',
+        modelName: 'gpt-5.6-luna',
+      });
+      const result = await service.resolve('tools', region);
+      expect(
+        result.candidates.map((entry) => entry.reference.deploymentName),
+      ).toEqual(['classifier']);
+      const report = await service.report();
+      expect(report.choices[region]).toContainEqual(
+        expect.objectContaining({
+          reference: { accountBinding: region, deploymentName: 'gpt-5.6-luna' },
+          eligible: true,
+        }),
+      );
+    },
+  );
+  it.each(['EU', 'US'] as const)(
+    'uses the existing regional fallback in %s when Luna is not deployed',
+    async (region) => {
+      mocks.readPolicy.mockResolvedValue(null);
+      const inventory = fixture.inventory.find(
+        (entry) => entry.account.binding === region,
+      )!;
+      inventory.models.push({
+        ...inventory.models[0],
+        deploymentName: 'gpt-5.4-mini',
+      });
+      const result = await service.resolve('tools', region);
+      expect(result.candidates.map((entry) => entry.model.id)).toEqual([
+        'gpt-5.4-mini',
+      ]);
+    },
+  );
+  it.each(['EU', 'US'] as const)(
+    'probes Luna with all routing schemas in %s',
+    async (region) => {
+      const inventory = fixture.inventory.find(
+        (entry) => entry.account.binding === region,
+      )!;
+      inventory.models.push({
+        ...inventory.models[0],
+        deploymentName: 'gpt-5.6-luna',
+        modelName: 'gpt-5.6-luna',
+      });
+      await service.probe(
+        { accountBinding: region, deploymentName: 'gpt-5.6-luna' },
+        'routing',
+        region,
+      );
+      expect(mocks.create).toHaveBeenCalledTimes(3);
+      expect(mocks.create.mock.calls.map(([request]) => request.model)).toEqual(
+        ['gpt-5.6-luna', 'gpt-5.6-luna', 'gpt-5.6-luna'],
+      );
+      expect(
+        mocks.create.mock.calls.map(
+          ([request]) => request.response_format.json_schema.name,
+        ),
+      ).toEqual([
+        'skill_selection',
+        'tool_router_response',
+        'document_trim_classification',
+      ]);
+    },
+  );
   it('observes inventory without calling the inference provider', async () => {
     const report = await service.report();
     expect(report.environment).toBe('live');
