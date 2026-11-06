@@ -80,6 +80,37 @@ describe('SkillEnricher', () => {
     mockGetVisibleSkills.mockResolvedValue([]);
   });
 
+  it.each(['auto', 'pinned', 'requested'] as const)(
+    'keeps %s skill use recorded but only announces a one-shot request',
+    async (via) => {
+      mockGetVisibleSkills.mockResolvedValue([entry({ id: 'style' })]);
+      const emitActivity = vi.fn().mockResolvedValue(undefined);
+      const emitMarker = vi.fn().mockResolvedValue(undefined);
+      const instance = new SkillEnricher({
+        determineSkills: vi
+          .fn()
+          .mockResolvedValue({ relevantSkills: ['style'] }),
+      });
+      await instance.execute({
+        ...createTestChatContext({ systemPrompt: BASE_PROMPT }),
+        emitActivity,
+        emitMarker,
+        ...(via === 'auto' ? {} : { forcedSkillIds: ['style'] }),
+        ...(via === 'pinned' ? { pinnedSkillIds: ['style'] } : {}),
+      });
+      expect(emitMarker).toHaveBeenCalled();
+      expect(emitActivity).not.toHaveBeenCalledWith(
+        'chat.activity.selectingSkills',
+      );
+      if (via === 'requested')
+        expect(emitActivity).toHaveBeenCalledWith(
+          'chat.activity.applyingSkill',
+          expect.objectContaining({ skills: 'style' }),
+        );
+      else expect(emitActivity).not.toHaveBeenCalled();
+    },
+  );
+
   describe('shouldRun', () => {
     it('runs on a standard turn when the feature is enabled', () => {
       expect(enricher.shouldRun(createTestChatContext({}))).toBe(true);

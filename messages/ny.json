@@ -1019,7 +1019,9 @@
       "agentSearch": "zolemba zasakidwa ndi agent",
       "needsApproval": "akufunika kuvomereza kwanu",
       "original": "monga anaendetsedwa poyamba",
-      "updated": "zasinthidwa kuyambira pamenepo"
+      "updated": "zasinthidwa kuyambira pamenepo",
+      "limited": "Yochepa",
+      "appliedCount": "Zagwiritsidwa ntchito {count}"
     },
     "skillsManualHint": "Kusankhidwa kwa ntchito zokha kwazimitsidwa mu Zikhazikiko. Gwiritsani ntchito kamodzi pa uthenga wotsatira, kapena pangani pin ntchito kuti igwiritsidwe mu zokambirana zonsezi.",
     "queuedMessage": {
@@ -5378,7 +5380,10 @@
     "noAllowedAudience": "Palibe owerengeka ovomerezeka",
     "accessScopeHint": "Malangizo olowera pulogalamuyi basi. Chilolezo cha zomwe zachokera zikadali ntchito.",
     "detailsLabel": "Zambiri",
-    "indexedDocumentSummary": "{indexed, plural, one {# chikalata} other {# zikalata}} zalembedwa"
+    "indexedDocumentSummary": "{indexed, plural, one {# chikalata} other {# zikalata}} zalembedwa",
+    "m365CapImmediateHelp": "Kugwiritsa ntchito kumasunga malire nthawi yomweyo. Kusintha kwina konse kumafunika Save.",
+    "m365CapDraftHelp": "Malire amasungidwa mukalenga agent.",
+    "m365CapSaved": "Malire a zolemba asungidwa: {limit}."
   },
   "localModels": {
     "title": "Mitundu yapafupi",
@@ -5606,7 +5611,8 @@
       "webSearch": "Malire a kufufuza pa intaneti: kufufuza kokhala ndi magawo angapo, mtundu wa wowunika, ndi malire ake.",
       "contextBudget": "Kuchuluka kwa mbiri ya zokambirana yomwe imatumidwa ku mtundu uliwonse pa nthawi iliyonse.",
       "analytics": "Malingaliro a ma report: zomwe zabwera, amene angatsegule galimoto iliyonse, ndi magawo omwe angasonyezedwe.",
-      "skills": "Ma blokosi a malangizo omwe wothandiza amagwiritsa ntchito pamene akuyankhula ndi munthu akafunikira."
+      "skills": "Ma blokosi a malangizo omwe wothandiza amagwiritsa ntchito pamene akuyankhula ndi munthu akafunikira.",
+      "models": "Perekani zitsanzo zakumbuyo ndi kuyang'ana kukonzeka kwa dera."
     },
     "openSettings": "Tsegulani makonda",
     "area": {
@@ -5618,7 +5624,8 @@
       "webSearch": "Kufufuza pa intaneti",
       "contextBudget": "Bajeti ya mbiri",
       "analytics": "Kuwunika deta",
-      "skills": "Ziluso"
+      "skills": "Ziluso",
+      "models": "Zitsanzo ndi kukonzeka"
     }
   },
   "limits": {
@@ -7982,5 +7989,114 @@
     "invalidated": "Kusungirako kwachotsedwa. Kutsimikiza kwatsopano kuyenera kuchitika pa pempho lotsatira; zilolezo sizinafufuzidwebe.",
     "failed": "Kutsimikiza kuchotsa kusungirako kwalephereka. Yesaninso posachedwa.",
     "propagationNote": "Izi zimangowonjezera kufufuza kwatsopano, osasintha zilolezo za Microsoft. Kuchedwa kwa kufalikira kwa Microsoft kukadali. Ntchito zomwe zanenedwa kale sizichotsedwa."
+  },
+  "auxiliaryModels": {
+    "title": "Zitsanzo ndi kukonzeka",
+    "description": "Sankhani zitsanzo zokhudzana ndi zisankho zakumbuyo ndi onani ma deployments omwe amagwiritsa ntchito.",
+    "environmentHint": "Zosintha zigwira ntchito pa environment iyi yokha. Live, beta ndi dev zili ndi malamulo awo.",
+    "updated": "Lipoti lasinthidwa: {time}",
+    "loading": "Ikutsegula zitsanzo ndi kukonzeka…",
+    "loadError": "Zitsanzo sizingatsegulidwe. Yesaninso popanda kusintha lamulo lomwe likugwiritsidwa ntchito.",
+    "retry": "Yesaninso",
+    "neverChecked": "Sanayang'anidwe",
+    "bootstrapUnavailable": "Kusintha kwa bootstrap kwa environment sikuyenda bwino. Lamulo lapo latsala kugwiritsidwa ntchito, koma defaults za environment sizingabwezedwe mpaka deployment ikonzedwe.",
+    "runtimeFallback": "Pempho laposachedwa linagwiritsa ntchito fallback model. Onani primary deployment ndi zotsatira zake.",
+    "accountLocation": "Malo a akaunti ya Azure: {location}",
+    "incidents": "Kusintha kokonzeka posachedwa",
+    "noIncidents": "Palibe zolakwika kapena kukonzanso kukonzeka zomwe zalembedwa.",
+    "refreshInventory": "Sinthani inventory",
+    "refreshing": "Ikusintha inventory…",
+    "configUnavailable": "Kusungirako malamulo sikukugwira ntchito. Zomwe zikuwoneka zingakhale zosintha zomaliza zomwe zinalipo. Simungasinthe mpaka storage itayambiranso.",
+    "attention": "Zikufuna chidwi",
+    "eligibleCount": "{count, plural, =0 {Palibe deployment yogwirizana. Sankhani model ina ya dera.} one {Deployment imodzi yogwirizana. Onjezani fallback kuti muwonjezere kulimba.} other {# deployments zogwirizana m'njira iyi.}}",
+    "retirementWarning": "Model version yomwe mwasankha ikuyandikira kutuluka ntchito. Onani model ina musanayika kuti ikhale primary.",
+    "assignments": "Model assignments",
+    "readiness": "Kukonzeka",
+    "assignmentHint": "Zitsanzo zimayenda moyang'anizana motere. Ma deployments omwe alibe, sagwirizana kapena atachotsedwa amatulukidwa. Ma pempho a EU amangogwiritsidwa ntchito pa deployments omwe avomerezedwa a ku EU.",
+    "probeUsage": "Ma compatibility check amatuma ma synthetic requests okhazikika ndi ID ya app. Amagwiritsa ntchito model tokens ochepa, osati data ya mkambirane. Dikirani mphindi imodzi musanabwereze deployment check.",
+    "save": "Sungani assignments",
+    "saving": "Kusunga…",
+    "saved": "Assignment yasungidwa. Ma pempho atsopano agwiritsa ntchito lamulo ili.",
+    "resetDefaults": "Gwiritsani defaults za environment",
+    "unsaved": "Zosintha zosasungidwa",
+    "readinessHint": "Inventory imatsimikizira kuti deployment ilipo. Ntchito yachitika bwino kapena compatibility check posachedwapa zimatsimikizira kuti app ingagwiritse ntchito. Kulephera kukonza sizingakhudze check yomaliza yabwino.",
+    "account": "Account binding: {binding}",
+    "lastInventory": "Inventory yomaliza yachita bwino: {time}",
+    "retirementUnknown": "Status ya kutuluka ntchito sizikudziwika chifukwa model catalog sanatsimikizidwe.",
+    "history": "Mbiri ya malamulo",
+    "revision": "Revision yogwira ntchito: {revision}",
+    "noHistory": "Palibe kusintha kwa malamulo komwe kwalembedwa mu environment iyi.",
+    "conflict": "Admin wina wasintha lamulo. Zomwe mumalemba zili pano. Yambitsaninso lamulo musanasunge.",
+    "rateLimit": "Deployment iyi inayang'anidwa posachedwa. Dikirani mphindi imodzi musanayiyang'anenso.",
+    "actionError": "Zochita sizingatheke. Onani zambiri ndiyesenso; zomwe mwasungira sizinatayike.",
+    "technicalDetails": "Zambiri za luso",
+    "reloadPolicy": "Yambitsaninso lamulo ndi kutaya zomwe mwasungira",
+    "emptyChain": "Palibe zitsanzo zomwe zasankhidwa. Onjezerani deployment yogwirizana musanasunge.",
+    "primary": "Primary",
+    "fallback": "Fallback",
+    "unknown": "Sadziwika",
+    "retires": "Model version ituluka ntchito pa {date}",
+    "checkResults": "Zotsatira za operation check",
+    "passed": "Zadutsa",
+    "moveUp": "Kwambani mmwamba",
+    "moveDown": "Sunthetsani pansi",
+    "remove": "Chotsani",
+    "moveUpLabel": "Sunthetsani {model} pamwamba",
+    "moveDownLabel": "Sunthetsani {model} pansi",
+    "removeLabel": "Chotsani {model} mu chain",
+    "runChecks": "Thamanga zowunikira zolumikizana",
+    "findDeployment": "Pezani deployment",
+    "deployment": "Deployment",
+    "chooseDeployment": "Sankhani deployment",
+    "addDeployment": "Onjezani mu chain",
+    "checkBeforeAdd": "Thamangitsani zowunikira zolumikizana za cholinga chino musanawonjezere deployment.",
+    "assessmentManaged": "Mitundu ya search-assessment ndi fallbacks zikulamulidwa mu Models ndi readiness.",
+    "manageModels": "Sinthani mitundu ndi readiness",
+    "purpose": {
+      "routing": "Routing",
+      "searchAssessment": "Search assessment"
+    },
+    "purposeDescription": {
+      "routing": "Kusankha luso, kusaka ndi code routing, komanso kulemba magawo a document-trim.",
+      "searchAssessment": "Onani magwero ndi kusankha sitepe yotsatira pa multi-step search."
+    },
+    "state": {
+      "ready": "Wokonzeka",
+      "unverified": "Likubwera, silinatsimikizidwe bwino",
+      "fallback": "Kugwiritsa ntchito fallback",
+      "unavailable": "Palibe model yomwe ikuyenera",
+      "check_unavailable": "Zowunikira kulibe"
+    },
+    "inventoryState": {
+      "current": "Yatsopano",
+      "stale": "Inventory yomaliza yomwe inadziwika",
+      "unavailable": "Inventory kulibe"
+    },
+    "operation": {
+      "skills": "Kusankha luso",
+      "tools": "Tool routing",
+      "trim": "Trim classification",
+      "assessment": "Search assessment"
+    },
+    "reason": {
+      "endpoint_missing": "Endpoint kapena account binding ilibe",
+      "deployment_missing": "Deployment ilibe kapena sikugwira ntchito",
+      "unauthorized": "Mwayi wa app identity waletsedwa",
+      "timeout": "Check yachedwa",
+      "throttled": "Quota kapena rate limit yakwanitsidwa",
+      "incompatible": "Operation sikugwirizana",
+      "provider": "Provider call yalephera",
+      "residency": "Malo opangira saloledwa",
+      "retired": "Model version yathandidwa",
+      "inventory_unavailable": "Sinali kutha kutsimikizira inventory",
+      "refused": "Model yakaniza pempho"
+    },
+    "accountError": {
+      "account_resource_missing": "Konzani Foundry ARM resource ID ya binding iyi kuti mutsimikizire inventory yake.",
+      "endpoint_missing": "Konzani inference endpoint ya binding iyi.",
+      "endpoint_account_mismatch": "Endpoint ndi ARM resource ID zikuwonetsa maakaunti osiyana. Konzani zoikamo za deployment.",
+      "inventory_refresh_failed": "Zalephera kukonzanso inventory. Onani mwayi wa app identity ngati Reader komanso kulumikizana kwa account.",
+      "credential_unavailable": "App sizinapeze cholembera cha inventory chake. Onani zoikamo za deployment identity."
+    }
   }
 }

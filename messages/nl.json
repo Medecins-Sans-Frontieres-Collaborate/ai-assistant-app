@@ -913,6 +913,8 @@
     "skillAlwaysOnHint": "Toegevoegd aan elk bericht in dit gesprek door een beheerder.",
     "skillUsage": {
       "label": "Skills",
+      "limited": "Beperkt",
+      "appliedCount": "{count} toegepast",
       "requested": "aangevraagd",
       "pinned": "vastgezet",
       "auto": "auto",
@@ -5394,7 +5396,10 @@
     "noAllowedAudience": "Geen toegestane doelgroep",
     "accessScopeHint": "Alleen toegangsregels voor de app. Bronrechten blijven van kracht.",
     "detailsLabel": "Details",
-    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documenten}} geïndexeerd"
+    "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documenten}} geïndexeerd",
+    "m365CapImmediateHelp": "Toepassen slaat de limiet direct op. Andere wijzigingen moeten nog worden opgeslagen.",
+    "m365CapDraftHelp": "De limiet wordt opgeslagen wanneer u de agent aanmaakt.",
+    "m365CapSaved": "Documentlimiet opgeslagen: {limit}."
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -5622,7 +5627,8 @@
       "webSearch": "Hoe uitgebreid webzoek kan gaan: meerdere zoekstappen, het beoordelingsmodel en zijn limieten.",
       "contextBudget": "Hoeveel van een gesprek elk model per beurt ontvangt.",
       "analytics": "Afgeleverde rapporten: wat is ontvangen, wie mag welke map openen, en welke velden mogen getoond worden.",
-      "skills": "Herbruikbare instructieblokken die de assistent toepast wanneer een gesprek daarom vraagt."
+      "skills": "Herbruikbare instructieblokken die de assistent toepast wanneer een gesprek daarom vraagt.",
+      "models": "Wijs achtergrondmodellen toe en controleer de gereedheid voor regionale uitrol."
     },
     "openSettings": "Instellingen openen",
     "area": {
@@ -5634,7 +5640,8 @@
       "webSearch": "Webzoek",
       "contextBudget": "Contextbudget",
       "analytics": "Analytics",
-      "skills": "Vaardigheden"
+      "skills": "Vaardigheden",
+      "models": "Modellen en gereedheid"
     }
   },
   "limits": {
@@ -7998,5 +8005,114 @@
     "invalidated": "Cache ongeldig gemaakt. Er is bij het volgende beschermde verzoek een nieuwe verificatie vereist; permissies zijn nog niet opnieuw gecontroleerd.",
     "failed": "Ongeldig maken van de cache kon niet worden bevestigd. Probeer het binnenkort opnieuw.",
     "propagationNote": "Dit dwingt een nieuwe controle af, geen wijziging in Microsoft-permissies. Microsoft-vertragingen bij propagatie blijven van toepassing. Reeds geautoriseerde handelingen worden niet teruggedraaid."
+  },
+  "auxiliaryModels": {
+    "title": "Modellen en gereedheid",
+    "description": "Kies modellen voor achtergrondbeslissingen en bekijk de uitrols die deze ondersteunen.",
+    "environmentHint": "Wijzigingen gelden alleen voor deze omgeving. Live, beta en dev hebben onafhankelijke beleidsregels.",
+    "updated": "Rapport bijgewerkt: {time}",
+    "loading": "Modeltoewijzingen en gereedheid laden…",
+    "loadError": "Modeltoewijzingen konden niet worden geladen. Probeer opnieuw zonder het huidige beleid te wijzigen.",
+    "retry": "Opnieuw proberen",
+    "neverChecked": "Niet gecontroleerd",
+    "bootstrapUnavailable": "De bootstrap-instelling van de omgeving is ongeldig. Een bestaande opgeslagen beleidsregel blijft van kracht, maar omgevingsstandaarden kunnen niet worden hersteld totdat de uitroldinstelling is gecorrigeerd.",
+    "runtimeFallback": "Recente verzoeken gebruikten een fallbackmodel. Controleer de primaire uitrol en de resultaten.",
+    "accountLocation": "Azure-accountlocatie: {location}",
+    "incidents": "Recente gereedheidswijzigingen",
+    "noIncidents": "Er zijn geen storingen of hersteld meldingen geregistreerd.",
+    "refreshInventory": "Inventaris bijwerken",
+    "refreshing": "Inventaris wordt bijgewerkt…",
+    "configUnavailable": "Beleidsopslag is niet beschikbaar. De weergegeven toewijzingen kunnen de laatst bekende versie zijn. Bewerken is uitgeschakeld tot de opslag is hersteld.",
+    "attention": "Heeft aandacht nodig",
+    "eligibleCount": "{count, plural, =0 {Geen geschikte uitrol. Kies een compatibel regionaal model.} one {Eén geschikte uitrol. Voeg een fallback toe voor meer veerkracht.} other {# geschikte uitrols in deze keten.}}",
+    "retirementWarning": "Een aangewezen modelversie nadert het einde van de ondersteuning. Controleer de vervanger voordat u deze als primair instelt.",
+    "assignments": "Modeltoewijzingen",
+    "readiness": "Gereedheid",
+    "assignmentHint": "Modellen draaien in de getoonde volgorde. Missende, incompatibele en uitgefaseerde uitrollen worden overgeslagen. EU-verzoeken blijven op geverifieerde EU-uitrols.",
+    "probeUsage": "Compatibiliteitscontroles sturen vaste synthetische verzoeken met de app-identiteit. Ze gebruiken een klein aantal modeltokens, nooit gespreksdata. Wacht minstens een minuut voor u een uitrol opnieuw controleert.",
+    "save": "Toewijzingen opslaan",
+    "saving": "Bezig met opslaan…",
+    "saved": "Toewijzingen opgeslagen. Nieuwe verzoeken gebruiken dit beleid.",
+    "resetDefaults": "Gebruik omgevingsstandaarden",
+    "unsaved": "Niet-opgeslagen wijzigingen",
+    "readinessHint": "Inventaris bevestigt dat een uitrol bestaat. Een recente geldige operatie of compatibiliteitscontrole toont aan dat de app deze kan gebruiken. Mislukte updates wissen het laatste geslaagde resultaat niet.",
+    "account": "Accountkoppeling: {binding}",
+    "lastInventory": "Laatste geslaagde inventaris: {time}",
+    "retirementUnknown": "Status van uitfasering is onbekend omdat de modelcatalogus niet kon worden geverifieerd.",
+    "history": "Beleidsverleden",
+    "revision": "Effectieve revisie: {revision}",
+    "noHistory": "Geen beleidswijzigingen vastgelegd in deze omgeving.",
+    "conflict": "Een andere beheerder heeft het beleid aangepast. Uw concept staat er nog. Herlaad het beleid voordat u opnieuw opslaat.",
+    "rateLimit": "Deze uitrol is recent gecontroleerd. Wacht één minuut voor u opnieuw controleert.",
+    "actionError": "De actie kon niet worden voltooid. Controleer de details en probeer opnieuw; uw concept is niet verwijderd.",
+    "technicalDetails": "Technische details",
+    "reloadPolicy": "Beleid herladen en concept verwijderen",
+    "emptyChain": "Er zijn geen modellen toegewezen. Voeg een compatibele uitrol toe voordat u opslaat.",
+    "primary": "Primair",
+    "fallback": "Fallback",
+    "unknown": "Onbekend",
+    "retires": "Modelversie wordt uitgefaseerd op {date}",
+    "checkResults": "Resultaten van operationele controle",
+    "passed": "Geslaagd",
+    "moveUp": "Omhoog verplaatsen",
+    "moveDown": "Omlaag verplaatsen",
+    "remove": "Verwijderen",
+    "moveUpLabel": "Verplaats {model} omhoog",
+    "moveDownLabel": "Verplaats {model} omlaag",
+    "removeLabel": "Verwijder {model} uit de keten",
+    "runChecks": "Compatibiliteitscontroles uitvoeren",
+    "findDeployment": "Zoek een deployment",
+    "deployment": "Deployment",
+    "chooseDeployment": "Kies een deployment",
+    "addDeployment": "Toevoegen aan keten",
+    "checkBeforeAdd": "Voer de compatibiliteitscontroles van dit doel uit voordat u de deployment toevoegt.",
+    "assessmentManaged": "Search-assessment modellen en fallbackopties worden beheerd onder Modellen en gereedheid.",
+    "manageModels": "Modellen en gereedheid beheren",
+    "purpose": {
+      "routing": "Routing",
+      "searchAssessment": "Search assessment"
+    },
+    "purposeDescription": {
+      "routing": "Skillselectie, zoek- en coderouting, en classifcatie van document-trims.",
+      "searchAssessment": "Beoordeel bronnen en kies de volgende stap bij een meerstapszoekopdracht."
+    },
+    "state": {
+      "ready": "Gereed",
+      "unverified": "Beschikbaar, niet volledig gecontroleerd",
+      "fallback": "Fallback in gebruik",
+      "unavailable": "Geen geschikt model",
+      "check_unavailable": "Controles niet beschikbaar"
+    },
+    "inventoryState": {
+      "current": "Huidig",
+      "stale": "Laatste bekende inventaris",
+      "unavailable": "Inventaris niet beschikbaar"
+    },
+    "operation": {
+      "skills": "Skillselectie",
+      "tools": "Toolrouting",
+      "trim": "Trim-classificatie",
+      "assessment": "Search assessment"
+    },
+    "reason": {
+      "endpoint_missing": "Endpoint of accountbinding ontbreekt",
+      "deployment_missing": "Deployment ontbreekt of is niet actief",
+      "unauthorized": "Toegang app-identiteit geweigerd",
+      "timeout": "Controle is verlopen",
+      "throttled": "Quota of ratelimiet bereikt",
+      "incompatible": "Onverenigbare bewerking",
+      "provider": "Provider-oproep mislukt",
+      "residency": "Verwerkingszone is niet toegestaan",
+      "retired": "Modelversie buiten gebruik",
+      "inventory_unavailable": "Inventaris kon niet worden geverifieerd",
+      "refused": "Model heeft het verzoek geweigerd"
+    },
+    "accountError": {
+      "account_resource_missing": "Configureer de Foundry ARM resource-ID voor deze binding om de inventaris te verifiëren.",
+      "endpoint_missing": "Configureer het inference endpoint voor deze binding.",
+      "endpoint_account_mismatch": "Het endpoint en de ARM resource-ID horen bij verschillende accounts. Corrigeer de deploymentconfiguratie.",
+      "inventory_refresh_failed": "Vernieuwen van de inventaris is mislukt. Controleer de Reader-toegang en accountconnectiviteit van de app-identiteit.",
+      "credential_unavailable": "De app kon de inventarisreferentie niet verkrijgen. Controleer de deploymentidentiteit-configuratie."
+    }
   }
 }

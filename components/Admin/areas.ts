@@ -86,6 +86,13 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     labelKey: 'admin.area.webSearch',
     descriptionKey: 'admin.areaDescription.webSearch',
   },
+  models: {
+    id: 'models',
+    href: '/admin/models',
+    icon: IconGauge,
+    labelKey: 'admin.area.models',
+    descriptionKey: 'admin.areaDescription.models',
+  },
   'context-budget': {
     id: 'context-budget',
     href: '/admin/context-budget',
@@ -238,6 +245,7 @@ export const ADMIN_GROUPS: AdminAreaGroupDescriptor[] = [
       'connectors',
       'workflows',
       'web-search',
+      'models',
       'context-budget',
     ],
   },

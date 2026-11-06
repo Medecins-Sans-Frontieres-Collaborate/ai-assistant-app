@@ -25,6 +25,8 @@
  */
 import { createAgentAccessBlobStorage } from '@/lib/services/agentAccess/accessRulesStore';
 import { readSkillHistoryVersion } from '@/lib/services/agentAccess/accessRulesStore';
+import { AUXILIARY_LIMITS } from '@/lib/services/auxiliary/types';
+import { recordTokenUsage } from '@/lib/services/observability/tokenUsageRecorder';
 import { auxiliaryRegion } from '@/lib/services/skills/skillRegion';
 import { SKILL_LIMITS, Skill } from '@/lib/services/skills/types';
 import { personalSkillCatalog } from '@/lib/services/skills/userSkills';
@@ -185,10 +187,26 @@ export class SkillEnricher extends BasePipelineStage {
             : last && 'text' in last
               ? last.text
               : '';
-      // The skills-only router call is the one wait this stage adds to a
-      // turn; say so while it runs rather than leaving the generic text up.
-      void context.emitActivity?.('chat.activity.selectingSkills');
+      // Automatic selection is background work, not a separate user-facing
+      // activity. Keep the current progress label while classification runs.
       routing = await this.router.determineSkills({
+        timeoutMs: Math.max(
+          1,
+          Math.min(
+            SKILL_LIMITS.routingTimeoutMs,
+            (context.stageDeadline ?? Infinity) -
+              Date.now() -
+              AUXILIARY_LIMITS.deliveryReserveMs,
+          ),
+        ),
+        onUsage: (usage, model) =>
+          recordTokenUsage(
+            usage,
+            model,
+            context.user,
+            false,
+            context.telemetry,
+          ),
         messages: context.messages,
         currentMessage,
         skillCatalog: catalog,
@@ -254,11 +272,10 @@ export class SkillEnricher extends BasePipelineStage {
     if (active.length > 0) {
       systemPrompt = `${systemPrompt}\n\n${buildSkillsPromptSection(active)}`;
     }
-    // Live indicator (§10): the per-turn selections are named while the
-    // model is still working, so skill use is visible before the answer
-    // and not only in the retrospective record. Standing 'always' skills
-    // stay silent here for the same reason they emit no record.
-    const announced = active.filter((entry) => entry.via !== 'always');
+    // Only a one-shot explicit request changes the live activity label.
+    // Automatic and standing/pinned guidance remain background context;
+    // their completed-use record is still available with the answer.
+    const announced = active.filter((entry) => entry.via === 'forced');
     if (announced.length > 0) {
       void context.emitActivity?.(
         announced.length === 1
@@ -315,6 +332,10 @@ export class SkillEnricher extends BasePipelineStage {
       'skills.selected_by': active.map(({ via }) => via),
       'skills.delivery': delivery,
       'skills.routing_degraded': routing?.degraded ?? false,
+      'skills.routing_degraded_reason': routing?.degradedReason ?? 'none',
+      'skills.routing_region':
+        routing?.degradedRegion ??
+        auxiliaryRegion(context.user.region, context.hostedRegion),
     });
     return {
       ...context,

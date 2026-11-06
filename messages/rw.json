@@ -1019,7 +1019,9 @@
       "agentSearch": "inyandiko zashakishijwe n’umukozi",
       "needsApproval": "bisaba ko ubishyiraho uruhushya",
       "original": "uko byari bikorwa mbere",
-      "updated": "byahinduwe kuva icyo gihe"
+      "updated": "byahinduwe kuva icyo gihe",
+      "limited": "Bifite imipaka",
+      "appliedCount": "Byakoreshejwe {count}"
     },
     "skillsManualHint": "Guhitamo byikora birazimye muri Settings. Koresha inshuro imwe ku butumwa bukurikira, cyangwa shyiraho ubuhanga bwihariye kugira ngo bukomeze gukoreshwa muri iki kiganiro.",
     "queuedMessage": {
@@ -5378,7 +5380,10 @@
     "noAllowedAudience": "Nta bagenerwabikorwa bemerewe",
     "accessScopeHint": "Amategeko y'ikoreshwa rya porogaramu gusa. Uburenganzira bw'inkomoko buracyakurikizwa.",
     "detailsLabel": "Ibisobanuro",
-    "indexedDocumentSummary": "{indexed, plural, one {inyandiko #} other {inyandiko #}} zashyizwe ku rutonde"
+    "indexedDocumentSummary": "{indexed, plural, one {inyandiko #} other {inyandiko #}} zashyizwe ku rutonde",
+    "m365CapImmediateHelp": "Gukanda kuri Apply bihita bibika umupaka. Izindi mpinduka zigomba kubikwa ukoresheje Save.",
+    "m365CapDraftHelp": "Umupaka uzabikwa igihe ukora agent.",
+    "m365CapSaved": "Umupaka w'inyandiko wabitswe: {limit}."
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",
@@ -5606,7 +5611,8 @@
       "webSearch": "Uko nshakisha kuri webishobora kugera: ishakisha y'amaguru menshi, modeli isuzuma n'imbibi zayo.",
       "contextBudget": "Isi y'ikiganiro buri model ishyikirizwa buri gihe.",
       "analytics": "Raporo zageze: ibyageze, abemerewe gufungura buri dossier, ndetse n'imyanya ishobora kwerekanwa.",
-      "skills": "Ibice by’amabwiriza akoreshwa inshuro nyinshi bishyirwa n’umufasha igihe bigaragaye ko bikenewe mu kiganiro."
+      "skills": "Ibice by’amabwiriza akoreshwa inshuro nyinshi bishyirwa n’umufasha igihe bigaragaye ko bikenewe mu kiganiro.",
+      "models": "Shyiraho imodoka z’inyuma kandi usuzume ko akarere gateguye neza gushyirwamo."
     },
     "openSettings": "Fungura imyanya",
     "area": {
@@ -5618,7 +5624,8 @@
       "webSearch": "Shakisha kuri web",
       "contextBudget": "Ingengo y'ikiganiro",
       "analytics": "Isesengura",
-      "skills": "Ubushobozi"
+      "skills": "Ubushobozi",
+      "models": "Imodoka n’ubiteguye"
     }
   },
   "limits": {
@@ -7982,5 +7989,114 @@
     "invalidated": "Ibikorwa byabitswe byakuweho. Hazakenerwa igenzura rishya kuri buri busabe bukurikira; uburenganzira ntiburagenzurwa ubu.",
     "failed": "Ntibyashobotse kwemeza ko ibikorwa byabitswe byakuweho. Ongera ugerageze vuba.",
     "propagationNote": "Ibi bituma hagenzurwa bushya gusa, ntibihindura uburenganzira muri Microsoft. Gutinda gutambutsa amakuru kwa Microsoft biracyakurikizwa. Ibikorwa byari byemewe ntibisubirwaho."
+  },
+  "auxiliaryModels": {
+    "title": "Imodoka n’ubiteguye",
+    "description": "Hitamo imodoka zifasha mu byemezo by’inyuma kandi usuzume ibikorwa bikoreshwa na zo.",
+    "environmentHint": "Impinduka zikoreshwa kuri uru rwego gusa. Live, beta na dev bifite amategeko yihariye.",
+    "updated": "Raporo yavuguruwe: {time}",
+    "loading": "Turi gutunganya ishyirwaho ry’imodoka n’ubiteguye…",
+    "loadError": "Ishyirwaho ry’imodoka ntiryabonetse. Ongera ugerageze utahinduye politiki iriho.",
+    "retry": "Ongera ugerageze",
+    "neverChecked": "Ntibyigeze byagenzurwa",
+    "bootstrapUnavailable": "Imiterere ya bootstrap y’uru rwego si yo. Politiki yari isanzwe izagumaho, ariko ntibishoboka gusubiza imyifatire isanzwe kugeza igihe ishyirwaho rya deployment rikonjewe.",
+    "runtimeFallback": "Ubusabe bushya bwakoresheje imodoka isimbura. Genza neza deployment nyamukuru n’ibisubizo byayo.",
+    "accountLocation": "Aho konti ya Azure iherereye: {location}",
+    "incidents": "Impinduka ziheruka mu biteguye",
+    "noIncidents": "Nta bibazo cyangwa kugarura biteguye byigeze byandikwa.",
+    "refreshInventory": "Sukura lisiti",
+    "refreshing": "Turimo dusukura lisiti…",
+    "configUnavailable": "Kubika politiki ntibiboneka. Imodoka zerekanywe zishobora kuba ari zo ziheruka kumenyekana. Guhindura birahagaritswe kugeza igihe kubika byagarutse.",
+    "attention": "Bikeneye kwitabwaho",
+    "eligibleCount": "{count, plural, =0 {Nta deployment ikwiriye ibonetse. Hitamo imodoka y’akarere iboneye.} one {Deployment imwe iboneye ibonetse. Ongera ushyireho isimbura kugira ngo wiyongere imbaraga.} other {# deployments ziboneye muri uru ruhererekane.}}",
+    "retirementWarning": "Verisiyo y’imodoka yatoranijwe iri hafi gusaza. Genza neza icyo uyisimbuza mbere y’uko ijya ku mwanya nyamukuru.",
+    "assignments": "Ishyirwaho ry’imodoka",
+    "readiness": "Ubiteguye",
+    "assignmentHint": "Imodoka zikora uko zerekanywe. Deployment zibuzemo, zidahuye, n’izisigaye ziracikwa. Ibyifuzo biva i Burayi bigenda kuri deployment zemejwe zo mu Burayi.",
+    "probeUsage": "Isuzuma ryo guhuza ryohereza ubusabe bupanzwe bukoresha imyirondoro ya app. Bikoresha model tokens nkeya gusa, ntibikoreshwa amakuru y’ibiganiro. Tegereza nibura umunota mbere yo kongera isuzuma rya deployment.",
+    "save": "Bika ishyirwaho",
+    "saving": "Birimo kubikwa…",
+    "saved": "Ishyirwaho ryabitswe. Ibyifuzo bishya bizakoresha iyi politiki.",
+    "resetDefaults": "Koresha imyifatire isanzwe y’uru rwego",
+    "unsaved": "Impinduka ntizabitswe",
+    "readinessHint": "Lisiti yerekana ko deployment ihari. Igikorwa giheruka cyizewe cyangwa gusuzuma guhuza byemeza ko app abayikoresha. Ibisukurwa byananiranye ntibisiba isuzuma ryanyuma ryakozwe neza.",
+    "account": "Iyoherezwaho rya konti: {binding}",
+    "lastInventory": "Lisiti iheruka gukorwa neza: {time}",
+    "retirementUnknown": "Amakuru yo gusaza ntazwi kuko katalogi y’imodoka itagenzuwe.",
+    "history": "Amateka ya politiki",
+    "revision": "Ihinduka rikoreshwa: {revision}",
+    "noHistory": "Nta mpinduka za politiki zanditswe kuri uru rwego.",
+    "conflict": "Undi muyobozi yahinduye politiki. Umushinga wawe uracyahari. Ongera ushyiremo politiki mbere yo kubika bushya.",
+    "rateLimit": "Iyi deployment iheruka kugenzurwa. Tegereza umunota umwe mbere yo gusubiramo igenzura.",
+    "actionError": "Igikorwa nticyashobotse. Suuzuma ibyo bisobanuro wongere ugerageze; umushinga wawe nturajugunywa.",
+    "technicalDetails": "Ibisobanuro bya tekiniki",
+    "reloadPolicy": "Subizamo politiki usibe umushinga",
+    "emptyChain": "Nta modoka yashyizweho. Shyiraho deployment iboneye mbere yo kubika.",
+    "primary": "Nyamukuru",
+    "fallback": "Isimbura",
+    "unknown": "Ntibizwi",
+    "retires": "Imodoka isazira ku itariki: {date}",
+    "checkResults": "Ibisubizo by’isuzuma ry’ibikorwa",
+    "passed": "Byagenze neza",
+    "moveUp": "Jyamo hejuru",
+    "moveDown": "Imura hasi",
+    "remove": "Kuraho",
+    "moveUpLabel": "Imura {model} hejuru",
+    "moveDownLabel": "Imura {model} hasi",
+    "removeLabel": "Kuraho {model} muri uru rukurikirane",
+    "runChecks": "Kora igenzura ry'ihuzwa",
+    "findDeployment": "Shaka gahunda ishyirwa mu bikorwa",
+    "deployment": "Ishyirwa mu bikorwa",
+    "chooseDeployment": "Hitamo ishyirwa mu bikorwa",
+    "addDeployment": "Ongeraho ku rukurikirane",
+    "checkBeforeAdd": "Banze igenzura ry'ihuzwa ry'iyi ntego mbere yo kongera ishyirwa mu bikorwa.",
+    "assessmentManaged": "Imashini z'isesengura no gusimbura bigenzurwa muri Imashini n'itegurwa.",
+    "manageModels": "Genzura imashini n'itegurwa",
+    "purpose": {
+      "routing": "Kuyobora (Routing)",
+      "searchAssessment": "Isesengura ryo gushakisha"
+    },
+    "purposeDescription": {
+      "routing": "Guhitamo ubumenyi, gushakisha no kuyobora amakode, no kugabanya inyandiko.",
+      "searchAssessment": "Sesa inkomoko no guhitamo intambwe ikurikira mu gushakisha bifite inzira nyinshi."
+    },
+    "state": {
+      "ready": "Biteguye",
+      "unverified": "Birahari, ntiwagenzuwe neza",
+      "fallback": "Hari gukoreshwa impuzandengo",
+      "unavailable": "Nta mashini iboneye",
+      "check_unavailable": "Igenzura ntiriboneka"
+    },
+    "inventoryState": {
+      "current": "Iriho ubu",
+      "stale": "Ibya nyuma byabitswe",
+      "unavailable": "Ibiri mu bubiko ntibiboneka"
+    },
+    "operation": {
+      "skills": "Guhitamo ubumenyi",
+      "tools": "Kuyobora ibikoresho",
+      "trim": "Gusobanura ukwaguka",
+      "assessment": "Isesengura ryo gushakisha"
+    },
+    "reason": {
+      "endpoint_missing": "Ihererekanyabubasha cyangwa ihuza konti ntirihari",
+      "deployment_missing": "Ishyirwa mu bikorwa ntirihari cyangwa ntiririmo gukora",
+      "unauthorized": "Uburenganzira bwo kubona application bwanzwe",
+      "timeout": "Igenzura riratinze",
+      "throttled": "Ingano yagenwe cyangwa umubare ntarengwa wagezweho",
+      "incompatible": "Igikorwa ntigihuza",
+      "provider": "Guhamagara utanga serivisi byanze",
+      "residency": "Agace ko gutunganyirizwamo ntikemewe",
+      "retired": "Verisiyo y’imashini yarahagaritswe",
+      "inventory_unavailable": "Ntibishobotse kugenzura ibiri mu bubiko",
+      "refused": "Imashini yanze icyifuzo"
+    },
+    "accountError": {
+      "account_resource_missing": "Shyiramo ID y'umurongo wa Foundry ARM w'iyi mihuzabikorwa kugira ngo ugenzure ibiri mu bubiko.",
+      "endpoint_missing": "Shyiramo iherezo ryo gukorera kuri iyi mihuzabikorwa.",
+      "endpoint_account_mismatch": "Iherezo n’ID ya Foundry ARM bigaragaza konti zitandukanye. Hindura uburyo bwa deployment.",
+      "inventory_refresh_failed": "Kugenzura ibiri mububiko byanze. Reba niba application ifite uburenganzira bwa Reader kandi konti ihujwe.",
+      "credential_unavailable": "Application ntiyashoboye kubona uruhushya rwayo rwo kugenzura ibiri mu bubiko. Reba igenamiterere rya deployment ID."
+    }
   }
 }

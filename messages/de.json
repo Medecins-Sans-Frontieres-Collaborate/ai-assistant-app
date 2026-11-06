@@ -894,6 +894,8 @@
     "skillAlwaysOnHint": "Von einem Administrator zu jeder Nachricht in diesem Gespräch hinzugefügt.",
     "skillUsage": {
       "label": "Skills",
+      "limited": "Eingeschränkt",
+      "appliedCount": "{count} angewendet",
       "requested": "angefordert",
       "pinned": "angeheftet",
       "auto": "auto",
@@ -5394,7 +5396,10 @@
     "agentSkillsNone": "Keine Fähigkeiten zur Auswahl verfügbar.",
     "agentSkillsLoading": "Fähigkeiten werden geladen…",
     "agentSkillsLoadError": "Fähigkeiten konnten nicht geladen werden. Frühere Auswahlen bleiben erhalten.",
-    "agentSkillsNotVisible": "(für Sie nicht sichtbar — zum Entfernen abwählen)"
+    "agentSkillsNotVisible": "(für Sie nicht sichtbar — zum Entfernen abwählen)",
+    "m365CapImmediateHelp": "Übernehmen speichert das Limit sofort. Für andere Änderungen ist weiterhin Speichern erforderlich.",
+    "m365CapDraftHelp": "Das Limit wird beim Erstellen des Agents gespeichert.",
+    "m365CapSaved": "Dokumentenlimit gespeichert: {limit}."
   },
   "localModels": {
     "title": "Lokale Modelle",
@@ -5622,7 +5627,8 @@
       "webSearch": "Wie weit eine Websuche gehen kann: mehrschrittige Suche, Bewertungsmodell und Grenzen.",
       "contextBudget": "Wie viel einer Konversation pro Zug an jedes Modell gesendet wird.",
       "analytics": "Gelieferte Berichte: Was eingetroffen ist, wer auf welchen Ordner zugreifen darf und welche Felder angezeigt werden können.",
-      "skills": "Wiederverwendbare Anweisungsblöcke, die der Assistent bei Bedarf in einer Unterhaltung anwendet."
+      "skills": "Wiederverwendbare Anweisungsblöcke, die der Assistent bei Bedarf in einer Unterhaltung anwendet.",
+      "models": "Hintergrundmodelle zuweisen und regionale Einsatzbereitschaft prüfen."
     },
     "openSettings": "Einstellungen öffnen",
     "area": {
@@ -5634,7 +5640,8 @@
       "webSearch": "Websuche",
       "contextBudget": "Kontextbudget",
       "analytics": "Analytics",
-      "skills": "Fähigkeiten"
+      "skills": "Fähigkeiten",
+      "models": "Modelle und Bereitschaft"
     }
   },
   "limits": {
@@ -7982,6 +7989,115 @@
       }
     },
     "requireConsentDisabledHint": "Nur automatische Fähigkeiten können zuvor um Erlaubnis bitten: angeforderte, angeheftete und immer-aktive Fähigkeiten werden sofort angewendet, und auf Anfrage gewählte Fähigkeiten werden vom Modell nie ausgewählt."
+  },
+  "auxiliaryModels": {
+    "title": "Modelle und Betriebsbereitschaft",
+    "description": "Wählen Sie Modelle für Hintergrundentscheidungen und prüfen Sie die zugehörigen Bereitstellungen.",
+    "environmentHint": "Änderungen gelten nur für diese Umgebung. Live, Beta und Entwicklung haben unabhängige Richtlinien.",
+    "updated": "Bericht aktualisiert: {time}",
+    "loading": "Modellzuweisungen und Betriebsbereitschaft werden geladen…",
+    "loadError": "Die Modellzuweisungen konnten nicht geladen werden. Wiederholen Sie den Vorgang, ohne die aktuelle Richtlinie zu ändern.",
+    "retry": "Erneut versuchen",
+    "neverChecked": "Nicht geprüft",
+    "refreshInventory": "Bereitstellungen aktualisieren",
+    "refreshing": "Bereitstellungen werden aktualisiert…",
+    "attention": "Handlungsbedarf",
+    "eligibleCount": "{count, plural, =0 {Keine geeignete Bereitstellung. Wählen Sie ein kompatibles regionales Modell.} one {Eine geeignete Bereitstellung. Ergänzen Sie ein Ersatzmodell.} other {# geeignete Bereitstellungen in dieser Reihenfolge.}}",
+    "retirementWarning": "Eine zugewiesene Modellversion wird bald außer Betrieb genommen. Prüfen Sie das Ersatzmodell vor seiner Verwendung als primäres Modell.",
+    "assignments": "Modellzuweisungen",
+    "readiness": "Betriebsbereitschaft",
+    "assignmentHint": "Modelle werden in der angezeigten Reihenfolge verwendet. Fehlende, inkompatible und außer Betrieb genommene Bereitstellungen werden übersprungen. EU-Anfragen bleiben bei nachweislich EU-residenten Bereitstellungen.",
+    "probeUsage": "Kompatibilitätsprüfungen senden festgelegte synthetische Anfragen mit der App-Identität. Sie verbrauchen wenige Modell-Token, aber keine Gesprächsdaten. Warten Sie vor einer erneuten Prüfung mindestens eine Minute.",
+    "save": "Zuweisungen speichern",
+    "saving": "Speichern…",
+    "saved": "Zuweisungen gespeichert. Neue Anfragen verwenden diese Richtlinie.",
+    "resetDefaults": "Umgebungsstandard verwenden",
+    "unsaved": "Ungespeicherte Änderungen",
+    "account": "Kontozuordnung: {binding}",
+    "lastInventory": "Letzte erfolgreiche Bestandsprüfung: {time}",
+    "retirementUnknown": "Der Status der Modellablösung ist unbekannt, da der Modellkatalog nicht verifiziert werden konnte.",
+    "history": "Richtlinienverlauf",
+    "revision": "Wirksame Version: {revision}",
+    "noHistory": "In dieser Umgebung wurden noch keine Richtlinienänderungen erfasst.",
+    "conflict": "Ein anderer Administrator hat die Richtlinie geändert. Ihr Entwurf bleibt erhalten. Laden Sie die Richtlinie vor dem nächsten Speichern neu.",
+    "rateLimit": "Diese Bereitstellung wurde kürzlich geprüft. Warten Sie vor der nächsten Prüfung eine Minute.",
+    "technicalDetails": "Technische Einzelheiten",
+    "reloadPolicy": "Richtlinie neu laden und Entwurf verwerfen",
+    "emptyChain": "Es sind keine Modelle zugewiesen. Ergänzen Sie vor dem Speichern eine kompatible Bereitstellung.",
+    "primary": "Primäres Modell",
+    "fallback": "Ersatzmodell",
+    "unknown": "Unbekannt",
+    "retires": "Diese Modellversion wird am {date} außer Betrieb genommen",
+    "checkResults": "Prüfergebnisse nach Vorgang",
+    "passed": "Bestanden",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten",
+    "remove": "Entfernen",
+    "moveUpLabel": "{model} nach oben verschieben",
+    "moveDownLabel": "{model} nach unten verschieben",
+    "removeLabel": "{model} aus der Reihenfolge entfernen",
+    "runChecks": "Kompatibilität prüfen",
+    "findDeployment": "Bereitstellung suchen",
+    "deployment": "Bereitstellung",
+    "chooseDeployment": "Bereitstellung auswählen",
+    "addDeployment": "Zur Reihenfolge hinzufügen",
+    "checkBeforeAdd": "Prüfen Sie die Kompatibilität für diesen Zweck, bevor Sie die Bereitstellung hinzufügen.",
+    "assessmentManaged": "Modelle und Ersatzmodelle für die Suchbewertung werden unter Modelle und Betriebsbereitschaft verwaltet.",
+    "manageModels": "Modelle und Betriebsbereitschaft verwalten",
+    "purpose": {
+      "routing": "Routing",
+      "searchAssessment": "Suchbewertung"
+    },
+    "purposeDescription": {
+      "routing": "Skill-Auswahl, Such- und Code-Routing sowie Klassifizierung der Dokumentkürzung.",
+      "searchAssessment": "Quellen bewerten und den nächsten Schritt einer mehrstufigen Suche auswählen."
+    },
+    "state": {
+      "ready": "Bereit",
+      "unverified": "Verfügbar, nicht vollständig geprüft",
+      "fallback": "Ersatzmodell wird verwendet",
+      "unavailable": "Kein geeignetes Modell",
+      "check_unavailable": "Prüfungen nicht verfügbar"
+    },
+    "inventoryState": {
+      "current": "Aktuell",
+      "stale": "Letzter bekannter Bestand",
+      "unavailable": "Bestand nicht verfügbar"
+    },
+    "operation": {
+      "skills": "Skill-Auswahl",
+      "tools": "Tool-Routing",
+      "trim": "Kürzungsklassifizierung",
+      "assessment": "Suchbewertung"
+    },
+    "reason": {
+      "endpoint_missing": "Endpunkt oder Kontozuordnung fehlt",
+      "deployment_missing": "Bereitstellung fehlt oder ist nicht aktiv",
+      "unauthorized": "Zugriff für die App-Identität verweigert",
+      "timeout": "Zeitlimit der Prüfung überschritten",
+      "throttled": "Kontingent oder Anfragelimit erreicht",
+      "incompatible": "Vorgang nicht kompatibel",
+      "provider": "Anbieteraufruf fehlgeschlagen",
+      "residency": "Verarbeitungszone nicht zulässig",
+      "retired": "Modellversion außer Betrieb",
+      "inventory_unavailable": "Bestand konnte nicht verifiziert werden",
+      "refused": "Das Modell hat die Anfrage abgelehnt"
+    },
+    "bootstrapUnavailable": "Die Umgebungs-Bootstrap-Einstellung ist ungültig. Eine vorhandene gespeicherte Richtlinie bleibt in Kraft, aber die Standardwerte der Umgebung können erst wiederhergestellt werden, wenn die Bereitstellungseinstellung korrigiert wurde.",
+    "runtimeFallback": "Für letzte Anfragen wurde ein Fallback-Modell verwendet. Prüfen Sie die primäre Bereitstellung und deren Betriebsergebnisse.",
+    "accountLocation": "Azure-Kontostandort: {location}",
+    "incidents": "Kürzliche Änderungen der Einsatzbereitschaft",
+    "noIncidents": "Es wurden keine Ausfälle oder Wiederherstellungen der Bereitschaft verzeichnet.",
+    "configUnavailable": "Die Richtlinienspeicherung ist nicht verfügbar. Die angezeigten Zuweisungen entsprechen möglicherweise der letzten bekannten Version. Änderungen sind erst wieder möglich, wenn die Speicherung wiederhergestellt ist.",
+    "readinessHint": "Das Inventar bestätigt das Vorhandensein einer Bereitstellung. Ein kürzlich erfolgreicher Vorgang oder Kompatibilitätscheck bestätigt, dass die App sie nutzen kann. Fehlgeschlagene Aktualisierungen löschen die letzte erfolgreiche Überprüfung nicht.",
+    "actionError": "Die Aktion konnte nicht abgeschlossen werden. Überprüfen Sie die Details und versuchen Sie es erneut; Ihr Entwurf wurde nicht verworfen.",
+    "accountError": {
+      "account_resource_missing": "Konfigurieren Sie die Foundry ARM-Ressourcen-ID für diese Bindung, um das Inventar zu prüfen.",
+      "endpoint_missing": "Konfigurieren Sie den Inferenz-Endpunkt für diese Bindung.",
+      "endpoint_account_mismatch": "Der Endpunkt und die ARM-Ressourcen-ID gehören zu unterschiedlichen Konten. Korrigieren Sie die Bereitstellungskonfiguration.",
+      "inventory_refresh_failed": "Inventaraktualisierung fehlgeschlagen. Prüfen Sie den Reader-Zugriff der App-Identität und die Kontoverbindung.",
+      "credential_unavailable": "Die App konnte ihr Inventar-Zertifikat nicht abrufen. Prüfen Sie die Identitätskonfiguration der Bereitstellung."
+    }
   },
   "personalSkills": {
     "title": "Persönliche Fähigkeiten",

@@ -128,6 +128,7 @@ interface Scenario {
   /** Changes-preview payload (defaults to "never indexed"). */
   changes?: Record<string, unknown>;
   put?: (body: Record<string, unknown>) => Response;
+  patch?: (body: Record<string, unknown>) => Response;
 }
 
 function installFetch(scenario: Scenario) {
@@ -162,6 +163,23 @@ function installFetch(scenario: Scenario) {
         return jsonResponse(200, {
           success: true,
           data: { m365Agent: scenario.agents[0].agent, etag: '"etag-2"' },
+        });
+      }
+      if (url === '/api/agent-access/m365-agents' && method === 'PATCH') {
+        if (scenario.patch) return scenario.patch(body);
+        const existing = scenario.agents[0];
+        const saved = {
+          ...existing,
+          etag: '"etag-2"',
+          agent: {
+            ...existing.agent,
+            maxDocumentsOverride: body.maxDocumentsOverride ?? undefined,
+          },
+        };
+        scenario.agents[0] = saved;
+        return jsonResponse(200, {
+          success: true,
+          data: { agent: saved.agent, etag: saved.etag },
         });
       }
       if (url === '/api/agent-access/m365-agents/plan') {
@@ -246,7 +264,11 @@ function renderSection() {
 
 async function openEditor() {
   fireEvent.click(
-    await screen.findByRole('button', { name: /editAgent|Edit agent/ }),
+    await screen.findByRole(
+      'button',
+      { name: /editAgent|Edit agent/ },
+      { timeout: 5000 },
+    ),
   );
 }
 
@@ -303,11 +325,8 @@ describe('document cap override — local admin', () => {
     });
     expect(screen.getByText('m365CapOverrideNote')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /^(save|Save)$/ }));
-    await waitFor(() => {
-      expect(calls.some((c) => c.method === 'PUT')).toBe(true);
-    });
-    expect(calls.find((c) => c.method === 'PUT')!.body).toMatchObject({
+    expect(calls.some((c) => c.method === 'PUT')).toBe(false);
+    expect(calls.find((c) => c.method === 'PATCH')!.body).toMatchObject({
       id: AGENT_ID,
       maxDocumentsOverride: 70,
     });
@@ -349,8 +368,8 @@ describe('document cap override — local admin', () => {
   it('renders the server refusal for a cap above the role ceiling', async () => {
     installFetch({
       agents: [agentWith({ maxDocumentsOverride: 80 } as never)],
-      documents: 10,
-      put: () =>
+      documents: 81,
+      patch: () =>
         jsonResponse(400, {
           success: false,
           error: 'Local admins may set at most 100 documents',
@@ -359,11 +378,9 @@ describe('document cap override — local admin', () => {
     });
     renderSection();
     await openEditor();
-    // Make it dirty so the PUT goes out.
-    fireEvent.change(await screen.findByLabelText('m365AgentNameLabel'), {
-      target: { value: 'HR Handbook v2' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: /^(save|Save)$/ }));
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'm365CapRaiseButton' }),
+    );
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'Local admins may set at most 100 documents',
     );
@@ -380,13 +397,13 @@ describe('document cap override — local admin', () => {
     fireEvent.click(
       await screen.findByRole('button', { name: 'm365CapResetDefault' }),
     );
-    fireEvent.click(screen.getByRole('button', { name: /^(save|Save)$/ }));
     await waitFor(() => {
-      expect(calls.some((c) => c.method === 'PUT')).toBe(true);
+      expect(calls.some((c) => c.method === 'PATCH')).toBe(true);
     });
     expect(
-      calls.find((c) => c.method === 'PUT')!.body.maxDocumentsOverride,
+      calls.find((c) => c.method === 'PATCH')!.body.maxDocumentsOverride,
     ).toBe(null);
+    expect(calls.some((c) => c.method === 'PUT')).toBe(false);
   });
 
   it('shows the override on the agent row', async () => {
@@ -484,14 +501,14 @@ describe('document cap override — global admin', () => {
           screen.getByRole('button', { name: /^(save|Save)$/ }),
         ).toBeEnabled();
       });
-      fireEvent.click(screen.getByRole('button', { name: /^(save|Save)$/ }));
       await waitFor(() => {
-        expect(calls.find((call) => call.method === 'PUT')?.body).toMatchObject(
-          {
-            maxDocumentsOverride: 80,
-          },
-        );
+        expect(
+          calls.find((call) => call.method === 'PATCH')?.body,
+        ).toMatchObject({
+          maxDocumentsOverride: 80,
+        });
       });
+      expect(calls.some((call) => call.method === 'PUT')).toBe(false);
     },
   );
 
@@ -715,8 +732,12 @@ describe('adversarial-pass fixes', () => {
       await screen.findByRole('button', { name: 'm365CapRaiseButton' }),
     );
     expect(window.confirm).toHaveBeenCalledTimes(1);
-    // The raise is applied to the draft at once: the button is gone before
-    // the delayed plan answers, so it cannot be clicked twice.
+    // The button is disabled during persistence, then disappears while
+    // the delayed plan catches up with the newly saved cap.
+    expect(
+      screen.getByRole('button', { name: 'm365CapRaiseButton' }),
+    ).toBeDisabled();
+    await screen.findByText('Document limit saved: 70.');
     expect(
       screen.queryByRole('button', { name: 'm365CapRaiseButton' }),
     ).not.toBeInTheDocument();

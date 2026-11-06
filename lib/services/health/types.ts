@@ -70,6 +70,7 @@ export interface HealthCheckConfig {
  */
 export type ServiceName =
   | 'azureOpenAI'
+  | 'auxiliaryModels'
   | 'azureSearch'
   | 'azureBlobStorage'
   | 'azureBlobStorageEU'

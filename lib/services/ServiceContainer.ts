@@ -1,6 +1,7 @@
 import { OPENAI_API_VERSION } from '@/lib/utils/app/const';
 import { UserRegion } from '@/lib/utils/shared/region';
 
+import { AuxiliaryModelService } from './auxiliary/AuxiliaryModelService';
 import { AIFoundryAgentHandler } from './chat/AIFoundryAgentHandler';
 import { FileProcessingService } from './chat/FileProcessingService';
 import { StandardChatService } from './chat/StandardChatService';
@@ -65,6 +66,7 @@ export class ServiceContainer {
   private fileProcessingService!: FileProcessingService;
   private toolRouterService!: ToolRouterService;
   private searchAssessor!: SearchAssessor;
+  private auxiliaryModelService!: AuxiliaryModelService;
   private aiFoundryAgentHandler!: AIFoundryAgentHandler;
 
   // Chat service (uses all the above)
@@ -141,18 +143,21 @@ export class ServiceContainer {
     this.fileProcessingService = new FileProcessingService();
 
     // 3. Initialize services that depend on clients
+    this.auxiliaryModelService = AuxiliaryModelService.getInstance();
     this.toolRouterService = new ToolRouterService(
       this.openAIClient,
       (region) => {
         const regional = this.getChatClientsForRegion(region);
         return regional.openAIClient ?? regional.azureOpenAIClient;
       },
+      this.auxiliaryModelService.executor,
     );
     // Singleton on purpose: it remembers which assessor models failed
     // recently, so a missing deployment is not retried on every search.
     this.searchAssessor = new SearchAssessor(
       this.openAIClient,
       (region) => this.getChatClientsForRegion(region).openAIClient,
+      this.auxiliaryModelService.executor,
     );
     // AIFoundryAgentHandler is stateless — credentials are passed per-request
     // from the pipeline context (OBO for Foundry agents, DefaultAzureCredential fallback)
@@ -179,6 +184,8 @@ export class ServiceContainer {
    * Only use this for testing purposes.
    */
   public static reset(): void {
+    ServiceContainer.instance?.auxiliaryModelService?.dispose();
+    AuxiliaryModelService.reset();
     ServiceContainer.instance = null;
   }
 
@@ -297,6 +304,11 @@ export class ServiceContainer {
   }
 
   // Getters for all services
+
+  /** Shared environment-local auxiliary policy, executor, and readiness service. */
+  public getAuxiliaryModelService(): AuxiliaryModelService {
+    return this.auxiliaryModelService;
+  }
 
   public getAzureOpenAIClient(): AzureOpenAI {
     return this.azureOpenAIClient;

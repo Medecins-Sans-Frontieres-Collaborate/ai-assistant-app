@@ -1019,7 +1019,9 @@
       "agentSearch": "wakili ya bincika takardu",
       "needsApproval": "yana buƙatar amincewarka",
       "original": "kamar yadda aka fara gudanar",
-      "updated": "an sabunta tun"
+      "updated": "an sabunta tun",
+      "limited": "Ƙuntatacce",
+      "appliedCount": "An yi amfani dashi sau {count}"
     },
     "skillsManualHint": "Zaɓin kai tsaye yana kashe a Saituna. Yi amfani da shi sau ɗaya don saƙon na gaba, ko kunshi ƙwarewar da za ka so a duk wannan tattaunawar.",
     "queuedMessage": {
@@ -5378,7 +5380,10 @@
     "noAllowedAudience": "Babu wadanda aka yarda su",
     "accessScopeHint": "Ka'idojin samun damar app ne kawai. Izinin tushe har yanzu yana aiki.",
     "detailsLabel": "Cikakkun bayanai",
-    "indexedDocumentSummary": "{indexed, plural, one {Takarda #} other {Takardu #}} an jera"
+    "indexedDocumentSummary": "{indexed, plural, one {Takarda #} other {Takardu #}} an jera",
+    "m365CapImmediateHelp": "Aikace-aikacen yana adana iyaka nan da nan. Sauran gyare-gyare suna buƙatar Ajiyewa.",
+    "m365CapDraftHelp": "Za a adana iyakar lokacin kirkirar wakili.",
+    "m365CapSaved": "An adana iyakar takardu: {limit}."
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -5606,7 +5611,8 @@
       "webSearch": "Inda binciken yanar gizo zai iya kaiwa: bincike mai matakai da dama, tsarin tantancewa, da iyakokinsa.",
       "contextBudget": "Yawan tarihin hira da kowanne tsarin za a tura a kowane zagaye.",
       "analytics": "Rahotannin da aka isar: abin da ya iso, wanda zai iya bude kowane fayil, da wadanne filaye za a iya nuna su.",
-      "skills": "Block na umarni da ake iya amfani da su wanda mai taimako ke amfani da su idan tattaunawa ta bukata."
+      "skills": "Block na umarni da ake iya amfani da su wanda mai taimako ke amfani da su idan tattaunawa ta bukata.",
+      "models": "Sanya samfura na baya da duba shirin yanki don aikin kaddamarwa."
     },
     "openSettings": "Buɗe saituna",
     "area": {
@@ -5618,7 +5624,8 @@
       "webSearch": "Binciken yanar gizo",
       "contextBudget": "Kasafin mahallin hirar",
       "analytics": "Nazari",
-      "skills": "Kwarewa"
+      "skills": "Kwarewa",
+      "models": "Samfura da shiri"
     }
   },
   "limits": {
@@ -7982,5 +7989,114 @@
     "invalidated": "An soke cache. Bukatar tabbatarwa daga farko za a yi da zarar an gabatar da sabuwar bukatar kariya; ba a sake duba izini ba tukuna.",
     "failed": "Ba a iya tabbatar da soke cache ba. A sake gwadawa daga baya kaɗan.",
     "propagationNote": "Wannan yana tilasta sabon duba izini, ba sauyin izini a Microsoft ba. Jinkirin watsa bayanai daga Microsoft har yanzu yana aiki. Ayyukan da aka riga aka amince da su ba za a soke su ba."
+  },
+  "auxiliaryModels": {
+    "title": "Samfura da shiri",
+    "description": "Zaɓi samfura don yanke shawara na baya kuma duba wuraren da ke karewa gare su.",
+    "environmentHint": "Canje-canje sun shafi wannan muhalli kawai. Live, beta da dev suna da manufofi masu zaman kansu.",
+    "updated": "Rahoto an sabunta: {time}",
+    "loading": "Ana loda aikin sanya samfur da shiri…",
+    "loadError": "Ba a iya lodar aikin sanya samfur ba. Sake gwadawa ba tare da canza manufar yanzu ba.",
+    "retry": "Sake gwadawa",
+    "neverChecked": "Ba a duba ba",
+    "bootstrapUnavailable": "Saitin bootstrap na wannan muhalli bai dace ba. Manufar da aka riga aka ajiye tana aiki, amma ba za a iya dawo da tsoffin saitunan muhalli ba har sai an gyara saitin kaddamarwa.",
+    "runtimeFallback": "Bukatun kwanan nan sun yi amfani da samfur na madadin. Duba babban wurin kaddamarwa da sakamakon aikinsa.",
+    "accountLocation": "Matsayin asusun Azure: {location}",
+    "incidents": "Sauye-sauyen shiri na baya-bayan nan",
+    "noIncidents": "Ba a samu gazawar ko samun damar shiri ba a tarihi.",
+    "refreshInventory": "Sabunta jeri",
+    "refreshing": "Ana sabunta jeri…",
+    "configUnavailable": "Ajiya na manufofi baya nan yanzu. Ana iya nuna sabon nau'in da aka fi sani. Gyara ba zai yiwu ba har sai ajiya ta dawo.",
+    "attention": "Na bukatar kulawa",
+    "eligibleCount": "{count, plural, =0 {Babu kaddamarwar da ta dace. Zaɓi samfur na yanki mai dacewa.} one {Kaddamarwa ɗaya ce kawai ta dace. Ƙara madadin don ƙara ƙarfin juriya.} other {# kaddamarwa masu dacewa a cikin wannan jeri.}}",
+    "retirementWarning": "Wani sigar samfur da aka dora tana dab da daina aiki. Duba maye gurbin kafin ƙaura shi zuwa matsayin babban.",
+    "assignments": "Ayyukan sanya samfur",
+    "readiness": "Shiri",
+    "assignmentHint": "Samfura na aiki da jeri yadda aka nuna. Wuraren da ba su samu ba, ba su dace ba da wadanda suka tsufa an bar su. Bukatun EU za su tsaya ne a wuraren EU da aka tabbatar.",
+    "probeUsage": "Dubawar dacewa suna aika da tsarin buƙatun zamani tare da ainihin app. Suna amfani da kaɗan daga token na samfur, ba bayanan tattaunawa ba. Jira aƙalla minti ɗaya kafin sake duba wani kaddamarwa.",
+    "save": "Ajiye aikin sanya samfur",
+    "saving": "Ana ajiye…",
+    "saved": "An ajiye ayyukan. Bukatu na gaba za su bi wannan manufar.",
+    "resetDefaults": "Yi amfani da tsoffin saitunan muhalli",
+    "unsaved": "Canje-canjen da ba a ajiye su ba",
+    "readinessHint": "Jeri yana tabbatar da cewa an sami kaddamarwa. Aiwatarwa ko dubawar dacewa ta baya-bayan nan mai inganci na tabbatar da cewa app na iya yin amfani da shi. Rashin sabunta jeri ba zai cire nasarar duba da aka yi ba.",
+    "account": "Lokal da asusu: {binding}",
+    "lastInventory": "Jerin da ya yi nasara na ƙarshe: {time}",
+    "retirementUnknown": "Matsayin daina aiki ba a sani ba saboda ba a iya tabbatar da kundin samfura ba.",
+    "history": "Tarihin manufofi",
+    "revision": "Gyaran da ya yi tasiri: {revision}",
+    "noHistory": "Ba a samu wani canjin manufa a wannan muhalli ba.",
+    "conflict": "Wani mai gudanarwa ya canza manufar. Draf ɗinka har yanzu yana nan. Sake ɗauko manufar kafin ka ajiye sabuwa.",
+    "rateLimit": "An duba wannan kaddamarwa kwanan nan. Jira minti ɗaya kafin sake duba.",
+    "actionError": "Ba a iya kammala aikin ba. Duba bayani sannan a sake gwadawa; ba a zubar da draf ɗinka ba.",
+    "technicalDetails": "Bayanan fasaha",
+    "reloadPolicy": "Sake ɗauko manufa da zubar da draf",
+    "emptyChain": "Ba a sanya kowanne samfur ba. Ƙara kaddamarwa mai dacewa kafin ajiye.",
+    "primary": "Babba",
+    "fallback": "Madadin",
+    "unknown": "Ba a sani ba",
+    "retires": "Sigar samfur za ta daina aiki ranar {date}",
+    "checkResults": "Sakamakon dubawar aiki",
+    "passed": "Ya wuce",
+    "moveUp": "Matsa sama",
+    "moveDown": "Matsar da ƙasa",
+    "remove": "Cire",
+    "moveUpLabel": "Matsar da {model} sama",
+    "moveDownLabel": "Matsar da {model} ƙasa",
+    "removeLabel": "Cire {model} daga jerin",
+    "runChecks": "Gudanar da gwaje-gwajen dacewa",
+    "findDeployment": "Nema tura aiki",
+    "deployment": "Tura aiki",
+    "chooseDeployment": "Zaɓi tura aikin",
+    "addDeployment": "Ƙara zuwa jerin",
+    "checkBeforeAdd": "Gudanar da gwaje-gwajen dacewa na wannan manufa kafin a ƙara tura aikin.",
+    "assessmentManaged": "Ana tafiyar da samfuran bincike-da-kimanta da madadin su a sashen Samfura da Shirye-shiryen aiki.",
+    "manageModels": "Gudanar da samfura da shirye-shirye",
+    "purpose": {
+      "routing": "Sarrafa hanyar aiki",
+      "searchAssessment": "Kimanta bincike"
+    },
+    "purposeDescription": {
+      "routing": "Zaɓin fasaha, bincike da sarrafar hanyar lambar, da tantance takardu.",
+      "searchAssessment": "Kimanta tushe da zaɓar mataki na gaba cikin bincike mai matakai da yawa."
+    },
+    "state": {
+      "ready": "Shirye",
+      "unverified": "Akwai, ba a kammala duba ba",
+      "fallback": "Ana amfani da madadin",
+      "unavailable": "Babu samfuri mai izini",
+      "check_unavailable": "Gwaje-gwajen ba su samu"
+    },
+    "inventoryState": {
+      "current": "Na yanzu",
+      "stale": "Jerin da aka fi sani da shi",
+      "unavailable": "Ba a samun jeri"
+    },
+    "operation": {
+      "skills": "Zaɓin fasaha",
+      "tools": "Sarrafa hanyoyin aiki",
+      "trim": "Rarrabe takardu",
+      "assessment": "Kimanta bincike"
+    },
+    "reason": {
+      "endpoint_missing": "Babu adireshin ƙarshe ko haɗin asusu",
+      "deployment_missing": "Tura aiki babu ko ba ya aiki",
+      "unauthorized": "Baiwa asali na app an hana",
+      "timeout": "Dubawa ta ɗauki lokaci tayi",
+      "throttled": "An kai iyaka ko ƙuntata",
+      "incompatible": "Aikin bai dace ba",
+      "provider": "Kiran mai tabbatarwa ya gaza",
+      "residency": "Ba a yarda da yankin sarrafawa ba",
+      "retired": "Sigar samfurin ta daina amfani",
+      "inventory_unavailable": "Ba a iya tabbatar da jerin ba",
+      "refused": "Samfurin ya ƙi buƙatar"
+    },
+    "accountError": {
+      "account_resource_missing": "Saita ARM resource ID na wannan haɗin don tabbatar da jerin sa.",
+      "endpoint_missing": "Saita adireshin ƙarshe na wannan haɗin.",
+      "endpoint_account_mismatch": "Adireshin ƙarshe da ARM resource ID na nuni da asusu daban-daban. Gyara saitin tura aiki.",
+      "inventory_refresh_failed": "Sabunta jerin ta gaza. Duba izinin Reader na app da haɗin asusu.",
+      "credential_unavailable": "App ba zai iya samun takardar izinin jerin sa ba. Duba tsarawa tura aiki na asali."
+    }
   }
 }

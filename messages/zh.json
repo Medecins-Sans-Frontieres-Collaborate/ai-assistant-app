@@ -992,7 +992,9 @@
       "agentSearch": "由代理检索文档",
       "needsApproval": "需要您的批准",
       "original": "按最初运行",
-      "updated": "已更新"
+      "updated": "已更新",
+      "limited": "受限",
+      "appliedCount": "已应用 {count} 次"
     },
     "skillsManualHint": "设置中已关闭自动选择。可选择在下条消息中使用一次，或固定某个技能以在本次对话中持续使用。",
     "queuedMessage": {
@@ -5425,7 +5427,10 @@
     "noAllowedAudience": "无允许的受众",
     "accessScopeHint": "仅适用于应用访问规则。来源权限仍然适用。",
     "detailsLabel": "详情",
-    "indexedDocumentSummary": "已索引{indexed, plural, one {#份文档} other {#份文档}}"
+    "indexedDocumentSummary": "已索引{indexed, plural, one {#份文档} other {#份文档}}",
+    "m365CapImmediateHelp": "点击“应用”会立即保存限制。其他更改仍需点击“保存”。",
+    "m365CapDraftHelp": "该限制将在创建代理时保存。",
+    "m365CapSaved": "文档限制已保存：{limit}。"
   },
   "localModels": {
     "title": "本地模型",
@@ -5653,7 +5658,8 @@
       "webSearch": "网页搜索可进行到的深度：多步搜索、评估模型及其限制。",
       "contextBudget": "每轮发送给模型的对话内容量。",
       "analytics": "已生成报告：包括内容、可查看每个文件夹的用户及可显示的字段。",
-      "skills": "当对话需要时，助手会应用的可复用指令块。"
+      "skills": "当对话需要时，助手会应用的可复用指令块。",
+      "models": "分配后台模型并检查区域部署准备情况。"
     },
     "openSettings": "打开设置",
     "area": {
@@ -5665,7 +5671,8 @@
       "webSearch": "网页搜索",
       "contextBudget": "上下文预算",
       "analytics": "分析",
-      "skills": "技能"
+      "skills": "技能",
+      "models": "模型和准备情况"
     }
   },
   "limits": {
@@ -8029,5 +8036,114 @@
     "invalidated": "缓存已失效。下次受保护请求需重新验证权限；权限尚未重新检查。",
     "failed": "无法确认缓存失效。请稍后重试。",
     "propagationNote": "此操作仅强制进行新检查，不会更改 Microsoft 权限。微软的传播延迟仍然适用。已授权的操作不会被撤销。"
+  },
+  "auxiliaryModels": {
+    "title": "模型和准备情况",
+    "description": "选择用于后台决策的模型，并检查为其提供服务的部署情况。",
+    "environmentHint": "更改仅适用于当前环境。正式、测试和开发环境有各自独立的策略。",
+    "updated": "报告更新时间：{time}",
+    "loading": "正在加载模型分配和准备情况…",
+    "loadError": "无法加载模型分配。请重试，当前策略不会被更改。",
+    "retry": "重试",
+    "neverChecked": "未检查",
+    "bootstrapUnavailable": "环境引导设置无效。现有已保存的策略仍然有效，但在修正部署设置前，无法恢复环境默认值。",
+    "runtimeFallback": "近期请求使用了备用模型。请检查主要部署及其操作结果。",
+    "accountLocation": "Azure 账户位置：{location}",
+    "incidents": "近期准备情况变化",
+    "noIncidents": "未记录准备失败或恢复。",
+    "refreshInventory": "刷新清单",
+    "refreshing": "正在刷新清单…",
+    "configUnavailable": "策略存储不可用。当前显示的分配可能为最后已知版本。在存储恢复之前，编辑功能已禁用。",
+    "attention": "需要关注",
+    "eligibleCount": "{count, plural, =0 {无可用部署。请选择兼容的区域模型。} one {有一个可用部署。增加备用可提升系统韧性。} other {该链路中有 # 个可用部署。}}",
+    "retirementWarning": "指定的模型版本即将退役。将其迁移到主要位置前请检查替代方案。",
+    "assignments": "模型分配",
+    "readiness": "准备情况",
+    "assignmentHint": "模型将按所示顺序运行。缺失、不兼容和已退役的部署会被跳过。欧洲区请求仅使用已验证的欧洲区部署。",
+    "probeUsage": "兼容性检查会以应用身份发送固定的模拟请求。仅使用极少数量的模型 token，从不使用对话数据。重复部署检查请至少间隔一分钟。",
+    "save": "保存分配",
+    "saving": "正在保存…",
+    "saved": "分配已保存。新请求将采用此策略。",
+    "resetDefaults": "使用环境默认值",
+    "unsaved": "未保存更改",
+    "readinessHint": "清单确认存在部署。最近的有效操作或兼容性检查确认应用可使用该部署。刷新失败不会抹除最后一次成功检查。",
+    "account": "账户绑定：{binding}",
+    "lastInventory": "上次成功清单：{time}",
+    "retirementUnknown": "因无法验证模型目录，退役状态未知。",
+    "history": "策略历史",
+    "revision": "生效版本：{revision}",
+    "noHistory": "此环境未记录策略变更。",
+    "conflict": "有其他管理员修改了策略。您的草稿仍已保留。请在再次保存前重新加载策略。",
+    "rateLimit": "该部署刚刚被检查。请等待一分钟后重试。",
+    "actionError": "操作无法完成。请检查详细信息后重试，您的草稿未被舍弃。",
+    "technicalDetails": "技术细节",
+    "reloadPolicy": "重新加载策略并放弃草稿",
+    "emptyChain": "未分配任何模型。请添加兼容部署后再保存。",
+    "primary": "主要",
+    "fallback": "备用",
+    "unknown": "未知",
+    "retires": "模型版本将在 {date} 退役",
+    "checkResults": "操作检查结果",
+    "passed": "通过",
+    "moveUp": "上移",
+    "moveDown": "下移",
+    "remove": "移除",
+    "moveUpLabel": "上移{model}",
+    "moveDownLabel": "下移{model}",
+    "removeLabel": "将{model}从链中移除",
+    "runChecks": "运行兼容性检查",
+    "findDeployment": "查找部署",
+    "deployment": "部署",
+    "chooseDeployment": "选择部署",
+    "addDeployment": "添加到链中",
+    "checkBeforeAdd": "在添加部署前运行此用途的兼容性检查。",
+    "assessmentManaged": "搜索评估模型及其备用方案请在“模型与就绪性”中管理。",
+    "manageModels": "管理模型与就绪性",
+    "purpose": {
+      "routing": "路由",
+      "searchAssessment": "搜索评估"
+    },
+    "purposeDescription": {
+      "routing": "技能选择、搜索与代码路由，以及文档截断分类。",
+      "searchAssessment": "在多步搜索中评估来源并选择下一步。"
+    },
+    "state": {
+      "ready": "就绪",
+      "unverified": "可用，未完全检查",
+      "fallback": "使用备用方案",
+      "unavailable": "无合适模型",
+      "check_unavailable": "检查不可用"
+    },
+    "inventoryState": {
+      "current": "当前",
+      "stale": "最近已知库存",
+      "unavailable": "库存不可用"
+    },
+    "operation": {
+      "skills": "技能选择",
+      "tools": "工具路由",
+      "trim": "截断分类",
+      "assessment": "搜索评估"
+    },
+    "reason": {
+      "endpoint_missing": "缺少端点或账户绑定",
+      "deployment_missing": "缺少或未启用部署",
+      "unauthorized": "应用身份访问被拒绝",
+      "timeout": "检查超时",
+      "throttled": "已达到配额或速率限制",
+      "incompatible": "操作不兼容",
+      "provider": "提供方调用失败",
+      "residency": "处理区域不被允许",
+      "retired": "模型版本已退役",
+      "inventory_unavailable": "无法验证库存",
+      "refused": "模型拒绝了请求"
+    },
+    "accountError": {
+      "account_resource_missing": "请配置此绑定的 Foundry ARM 资源 ID 以验证其库存。",
+      "endpoint_missing": "请配置此绑定的推理端点。",
+      "endpoint_account_mismatch": "端点与 ARM 资源 ID 所对应的账户不一致，请更正部署配置。",
+      "inventory_refresh_failed": "库存刷新失败。请检查应用身份的读取权限和账户连通性。",
+      "credential_unavailable": "应用无法获取其库存凭证。请检查部署身份配置。"
+    }
   }
 }

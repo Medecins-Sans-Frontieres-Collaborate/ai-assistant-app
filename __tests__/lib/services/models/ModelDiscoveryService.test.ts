@@ -605,7 +605,7 @@ describe('ModelDiscoveryService', () => {
       expect(models[0].retiresAt).toBeUndefined();
     });
 
-    it('gives the catalog read its own deadline, and leaves the deployment list without one', async () => {
+    it('bounds both catalog and deployment inventory reads', async () => {
       mockArm([chatDep('gpt-5.4', 'gpt-5.4', '2026-03-05')]);
       await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
 
@@ -614,7 +614,7 @@ describe('ModelDiscoveryService', () => {
       const catalogCall = calls.find(([url]) => isCatalogUrl(url));
       const deploymentCall = calls.find(([url]) => !isCatalogUrl(url));
       expect(catalogCall?.[1]?.signal).toBeInstanceOf(AbortSignal);
-      expect(deploymentCall?.[1]?.signal).toBeUndefined();
+      expect(deploymentCall?.[1]?.signal).toBeInstanceOf(AbortSignal);
     });
 
     it('still discovers when the catalog read is aborted by its deadline', async () => {

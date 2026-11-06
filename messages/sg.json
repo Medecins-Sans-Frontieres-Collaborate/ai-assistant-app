@@ -1019,7 +1019,9 @@
       "agentSearch": "documents ku agent yeke na mara",
       "needsApproval": "asila na mo",
       "original": "tî lâ zo",
-      "updated": "fâfâ na"
+      "updated": "fâfâ na",
+      "limited": "Gbé",
+      "appliedCount": "{count} ti lo"
     },
     "skillsManualHint": "Poko so ti yeke na Settings. Mbi kama na yeke mo ti wa na ni, to pin na skill ti yeke na wa na makara ti nzoni so alingo.",
     "queuedMessage": {
@@ -5378,7 +5380,10 @@
     "noAllowedAudience": "Mbênî zinga ayeke mo azo abê",
     "accessScopeHint": "Zaka wakana App sôhïngö tî wákanga. Lilo tî gbàngbâ awa sômâ na kodro.",
     "detailsLabel": "Lédéngö",
-    "indexedDocumentSummary": "{indexed, plural, one {# dokumenti} other {# dokumenti}} gbèyê"
+    "indexedDocumentSummary": "{indexed, plural, one {# dokumenti} other {# dokumenti}} gbèyê",
+    "m365CapImmediateHelp": "Sô bê ti mbi yâlimingo na tî lo na yângâ. Tîngbi yâlimingo mô tô yângâ ti mbi yângâ 'Save'.",
+    "m365CapDraftHelp": "Yâlimingo na tî yâlimi sô yobê na mbênî agent.",
+    "m365CapSaved": "Yâlimingo na tî document sô yângâ: {limit}."
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",
@@ -5606,7 +5611,8 @@
       "webSearch": "Limâ so luka tî web alê: luka maboko, model tî ködrö na mabôndo tî bängö.",
       "contextBudget": "Limê tî karê gbanî tî kônvu ti model da dö tî turn kölü.",
       "analytics": "Rapô so asara: mbîrî asarê, azo anza tî kufa na foldere, na châ tî gbâ chô so ayeke hîla.",
-      "skills": "Ti barara na yeke soro, assistant a yeke gu na mo na di ala na soro."
+      "skills": "Ti barara na yeke soro, assistant a yeke gu na mo na di ala na soro.",
+      "models": "Pala mo su mbeti na mo tengbi model na mo kangu sa ti to mbeti."
     },
     "openSettings": "Fungbi tî settings",
     "area": {
@@ -5618,7 +5624,8 @@
       "webSearch": "Luka tî web",
       "contextBudget": "Budget tî kônvu",
       "analytics": "Ánalîtiki",
-      "skills": "Bakara"
+      "skills": "Bakara",
+      "models": "Model na kangu"
     }
   },
   "limits": {
@@ -7982,5 +7989,114 @@
     "invalidated": "Sôhâ tîmbè. Ti yâ hîngî tî sôhâ ngâ, bêngo permissions asili tî yâ hîngî.",
     "failed": "Sôhâ tîmbè asili ti zîâ hîngî. Sôhâ mo mû ngangu.",
     "propagationNote": "Lêdê atene hîngî sôhâ tî permissions, mo ayeke ti yô Microsoft permissions. Sêlê propagation ti Microsoft ayeke. Opération ti zîâ sôhâ asili ti zo yeke ti sï."
+  },
+  "auxiliaryModels": {
+    "title": "Model na kangu",
+    "description": "Sâra model ti kéré ti kulî mo na kende to deployment ti yângâ tî mo.",
+    "environmentHint": "Mbongô tî mo bara na environment ûngu mo. Live, beta na dev tângâ siriri na règle ti bango.",
+    "updated": "Rapô bara : {time}",
+    "loading": "Lâda sï model na kangu...",
+    "loadError": "Sô lâda sï model na kangu tâ yeke. Sâra na wânda ukɛ ti règle sâwa.",
+    "retry": "Sâra bîrî",
+    "neverChecked": "A lâ wé",
+    "bootstrapUnavailable": "Manangement ti environment bootstrap a mbi siriri. Règle ti sìngbâ ti yeke hû, mbi lingkungan sô a bara sô ê tâ sô tî to règle ti deployment ka sirirï.",
+    "runtimeFallback": "Demande sûngô-bê ti sô yângâ na fallback model. Gbe ti PRIMARY deployment na sô yângâ.",
+    "accountLocation": "Azure account location: {location}",
+    "incidents": "Bâsô na yângâ ti kangu",
+    "noIncidents": "Lâ bâsô ti kangu wé a sôngo ka bâ tanda wé.",
+    "refreshInventory": "Mbïngbi inventaire",
+    "refreshing": "Mbïngbï inventaire...",
+    "configUnavailable": "La stockage ti règle a mbi yeke. Ina assignment a bara ti mô bâ tî kodro ti wânda. Gbara hî sô stockage mo yâ ara ká a zia.",
+    "attention": "Yângâ londo",
+    "eligibleCount": "{count, plural, =0 {Deployment kété wé. Sâra model ti kodro na region kété.} one {Deployment mû na yeke. Sâra fallback ôko na yimbi résilience.} other {# deployment a yeke na chaîne ûngu.}}",
+    "retirementWarning": "Version ti model a sô bâ na nga gu so sô mbènî. Gbe ti sô mba hî sô tî kodro na PRIMARY.",
+    "assignments": "Assignment ti model",
+    "readiness": "Kangu",
+    "assignmentHint": "Model mo bara na lânga sô yângâ. Deployment sô mo yè, ndongo na gâ a kété, na nga gu so ngbangi. Demande EU mo yeke na deployment ti EU sô yângâ.",
+    "probeUsage": "Tî sô probe compatibility, mo sâra demande synthétique sô mo sâra identity ti application. Model tokens mo yeke tî mbi, mbi fâda data na conversation. Yèkè sô a yângâ ti tâ tî deployment hî na minute mû.",
+    "save": "Sè assignment",
+    "saving": "Sé...",
+    "saved": "Assignment a sè. Demande tî sô yângâ bâ bara règle ûngu.",
+    "resetDefaults": "Se sônga ti environment",
+    "unsaved": "Mbongô wé sè wé",
+    "readinessHint": "Inventaire sô yângâ deployment yâ. Opération mû sô yângâ ôko sô probe compatibility yâ tî application mbi. Bâ mbïngbï sô tâ yeke mbi a tâ yâ sô bâ sô probe bâ na réussite.",
+    "account": "Account binding: {binding}",
+    "lastInventory": "Inventaire tî réussite na nga : {time}",
+    "retirementUnknown": "État ti retraite a mbï yeke na yângâ sô catalog ti model tâ yeke tî probe.",
+    "history": "Historique ti règle",
+    "revision": "Révision tî yângâ : {revision}",
+    "noHistory": "Mbongô tî règle ka a yé wé na environment ûngu.",
+    "conflict": "Administrateur mû a sâra règle ûngu. Deberê mo bâ yeke. Probe règle môka ka mo sè code mû.",
+    "rateLimit": "Deployment ûngu a probe na nga mû. Fâda minute mû ka mo probe mû bâ sëngö.",
+    "actionError": "A yêmâ ka mo sâra action ûngu. Gbe ti détail na sâra bîrî; deberê mo lâ wé.",
+    "technicalDetails": "Baka ti technique",
+    "reloadPolicy": "Probe règle na tukpu deberê",
+    "emptyChain": "Model kété a sâra. Sâra deployment sô na kodro na sè.",
+    "primary": "Primary",
+    "fallback": "Fallback",
+    "unknown": "A lâ wé",
+    "retires": "Model version a nga gu so na {date}",
+    "checkResults": "Bändörö ti probe opération",
+    "passed": "Gâ tî réussite",
+    "moveUp": "Bara tî yângâ",
+    "moveDown": "Küta na sôrô",
+    "remove": "Kôda",
+    "moveUpLabel": "Vûsî {model} na mbi",
+    "moveDownLabel": "Vûsî {model} na sôrô",
+    "removeLabel": "Kôda {model} na chen",
+    "runChecks": "Sôko lâsö check ti compatibilité",
+    "findDeployment": "Kêtê ti deployment",
+    "deployment": "Deployment",
+    "chooseDeployment": "Sâra deployment",
+    "addDeployment": "Dûsô na chen",
+    "checkBeforeAdd": "Sôko lâsö check ti compatibilité na zo na îrû ti deployment.",
+    "assessmentManaged": "Model ti search-assessment na lâa ti fallback bale ti Models na readiness.",
+    "manageModels": "Sêse Model na readiness",
+    "purpose": {
+      "routing": "Routing",
+      "searchAssessment": "Search assessment"
+    },
+    "purposeDescription": {
+      "routing": "Sâra compétence, kêtê code na routing, na classifier document ti trim.",
+      "searchAssessment": "Fâ mbi mbênî na sâla pîlî-lingbi na kêtê amene na môko na search ti steps mingi."
+    },
+    "state": {
+      "ready": "Yeke sâra",
+      "unverified": "Yeke, mbi lâsö check tî yângâ",
+      "fallback": "Bê ti fallback",
+      "unavailable": "Modèle apa la",
+      "check_unavailable": "Check apa la"
+    },
+    "inventoryState": {
+      "current": "Oko",
+      "stale": "Inventory ti mbênî",
+      "unavailable": "Inventory apa la"
+    },
+    "operation": {
+      "skills": "Sâra compétence",
+      "tools": "Routing ti tool",
+      "trim": "Classifier ti trim",
+      "assessment": "Search assessment"
+    },
+    "reason": {
+      "endpoint_missing": "Endpoint oba account binding apa la",
+      "deployment_missing": "Deployment apa la dê oba yâ mbi bê",
+      "unauthorized": "Access ti identité ti app a yêhêle",
+      "timeout": "Check ayeke na time",
+      "throttled": "Quota oba rate limit ayeke",
+      "incompatible": "Opération a kwa",
+      "provider": "Appel ti provider ayeke",
+      "residency": "Zone ti processing a la yêhêle",
+      "retired": "Version ti modèle ayeke",
+      "inventory_unavailable": "Inventory a la mingi a yeke sôko",
+      "refused": "Modèle ayeke demande"
+    },
+    "accountError": {
+      "account_resource_missing": "Sètè ID ti Foundry ARM resource ti binding a ni, mhatrê ti inventory.",
+      "endpoint_missing": "Sètè endpoint ti inference ti binding a.",
+      "endpoint_account_mismatch": "Endpoint na ARM ID pâsô kêtê ti account yângâ. Kûè configuration ti deployment.",
+      "inventory_refresh_failed": "Refresh ti inventory ayeke. Gôzo access Reader na identity ti app na connectivity ti account.",
+      "credential_unavailable": "App ayeke bâ kêtê credential ti inventory. Gôzo configuration ti identity ti deployment."
+    }
   }
 }

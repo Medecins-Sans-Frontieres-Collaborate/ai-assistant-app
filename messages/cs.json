@@ -961,7 +961,9 @@
       "agentSearch": "dokumenty vyhledané agentem",
       "needsApproval": "vyžaduje vaše schválení",
       "original": "původní provedení",
-      "updated": "aktualizováno od té doby"
+      "updated": "aktualizováno od té doby",
+      "limited": "Omezeno",
+      "appliedCount": "Použito: {count}"
     },
     "skillsManualHint": "Automatický výběr je vypnutý v nastavení. Použijte jednorázově pro další zprávu nebo připněte dovednost, aby byla používána v celém tomto rozhovoru.",
     "queuedMessage": {
@@ -5394,7 +5396,10 @@
     "noAllowedAudience": "Není povolen žádný okruh uživatelů",
     "accessScopeHint": "Pouze pravidla přístupu aplikace. Práva zdroje stále platí.",
     "detailsLabel": "Podrobnosti",
-    "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokumentů}} indexováno"
+    "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokumentů}} indexováno",
+    "m365CapImmediateHelp": "Použití uloží limit ihned. Ostatní úpravy je stále nutné uložit.",
+    "m365CapDraftHelp": "Limit se uloží při vytvoření agenta.",
+    "m365CapSaved": "Limit dokumentů uložen: {limit}."
   },
   "localModels": {
     "title": "Lokální modely",
@@ -5622,7 +5627,8 @@
       "webSearch": "Jak daleko může webové hledání jít: vícekrokové hledání, posuzovací model a limity.",
       "contextBudget": "Kolik konverzace je každý modelu posíláno při každém kroku.",
       "analytics": "Doručené reporty: co dorazilo, kdo může otevřít kterou složku a která pole lze zobrazit.",
-      "skills": "Znovupoužitelné bloky instrukcí, které asistent použije, když je to v konverzaci potřeba."
+      "skills": "Znovupoužitelné bloky instrukcí, které asistent použije, když je to v konverzaci potřeba.",
+      "models": "Přiřaďte podpůrné modely a zkontrolujte připravenost pro regionální nasazení."
     },
     "openSettings": "Otevřít nastavení",
     "area": {
@@ -5634,7 +5640,8 @@
       "webSearch": "Webové hledání",
       "contextBudget": "Rozpočet kontextu",
       "analytics": "Analytika",
-      "skills": "Dovednosti"
+      "skills": "Dovednosti",
+      "models": "Modely a připravenost"
     }
   },
   "limits": {
@@ -7998,5 +8005,114 @@
     "invalidated": "Cache byla zneplatněna. Při dalším chráněném požadavku bude vyžadováno nové ověření; oprávnění zatím nebyla znovu zkontrolována.",
     "failed": "Zneplatnění cache se nepodařilo potvrdit. Zkuste to prosím znovu za chvíli.",
     "propagationNote": "Tímto se vynutí nové ověření, nikoliv změna oprávnění v Microsoftu. Zpoždění propagace v Microsoftu stále platí. Již autorizované operace nebudou zrušeny."
+  },
+  "auxiliaryModels": {
+    "title": "Modely a připravenost",
+    "description": "Vyberte modely pro podpůrná rozhodnutí a zkontrolujte nasazení, která je využívají.",
+    "environmentHint": "Změny platí pouze pro toto prostředí. Live, beta a dev mají nezávislé zásady.",
+    "updated": "Zpráva aktualizována: {time}",
+    "loading": "Načítání přiřazení modelů a připravenosti…",
+    "loadError": "Nepodařilo se načíst přiřazení modelů. Zkuste znovu bez změny aktuální zásady.",
+    "retry": "Zkusit znovu",
+    "neverChecked": "Nekontrolováno",
+    "bootstrapUnavailable": "Nastavení bootstrap prostředí je neplatné. Dříve uložená zásada zůstává platná, ale výchozí hodnoty prostředí nelze obnovit, dokud nebude opraveno nastavení nasazení.",
+    "runtimeFallback": "Nedávné požadavky použily záložní model. Zkontrolujte primární nasazení a jeho výsledky.",
+    "accountLocation": "Umístění Azure účtu: {location}",
+    "incidents": "Nedávné změny v připravenosti",
+    "noIncidents": "Nebyl zaznamenán žádný výpadek nebo obnovení připravenosti.",
+    "refreshInventory": "Obnovit inventář",
+    "refreshing": "Obnovování inventáře…",
+    "configUnavailable": "Úložiště zásad není k dispozici. Zobrazená přiřazení mohou být poslední známou verzí. Úpravy jsou zakázány do obnovení úložiště.",
+    "attention": "Vyžaduje pozornost",
+    "eligibleCount": "{count, plural, =0 {Žádné vhodné nasazení. Zvolte kompatibilní regionální model.} one {Jedno vhodné nasazení. Přidejte zálohu pro lepší odolnost.} other {# vhodných nasazení v tomto řetězci.}}",
+    "retirementWarning": "Označená verze modelu se blíží k vyřazení. Zkontrolujte náhradu před přesunutím na primární pozici.",
+    "assignments": "Přiřazení modelů",
+    "readiness": "Připravenost",
+    "assignmentHint": "Modely běží ve zobrazeném pořadí. Chybějící, nekompatibilní a vyřazená nasazení jsou přeskočena. Požadavky z EU zůstávají na ověřených nasazeních v EU.",
+    "probeUsage": "Kontroly kompatibility odesílají pevné syntetické požadavky s identitou aplikace. Použijí malé množství tokenů modelu, nikdy ne konverzační data. Před opakováním kontroly počkejte alespoň minutu.",
+    "save": "Uložit přiřazení",
+    "saving": "Ukládání…",
+    "saved": "Přiřazení uložena. Nové požadavky používají tuto zásadu.",
+    "resetDefaults": "Použít výchozí hodnoty prostředí",
+    "unsaved": "Neuložené změny",
+    "readinessHint": "Inventář potvrzuje existenci nasazení. Nedávná platná operace nebo kontrola kompatibility potvrzuje, že ji aplikace může použít. Neúspěšná obnovení nesmažou poslední úspěšnou kontrolu.",
+    "account": "Vazba na účet: {binding}",
+    "lastInventory": "Poslední úspěšný inventář: {time}",
+    "retirementUnknown": "Stav vyřazení není znám, protože se nepodařilo ověřit katalog modelu.",
+    "history": "Historie zásad",
+    "revision": "Platná revize: {revision}",
+    "noHistory": "V tomto prostředí nebyly zaznamenány žádné změny zásad.",
+    "conflict": "Další administrátor změnil zásadu. Váš návrh stále zůstává zde. Před dalším uložením načtěte zásadu znovu.",
+    "rateLimit": "Toto nasazení bylo nedávno kontrolováno. Počkejte jednu minutu před opakováním kontroly.",
+    "actionError": "Akci se nepodařilo dokončit. Zkontrolujte podrobnosti a zkuste to znovu; váš návrh nebyl ztracen.",
+    "technicalDetails": "Technické detaily",
+    "reloadPolicy": "Načíst zásadu a zahodit návrh",
+    "emptyChain": "Nejsou přiřazeny žádné modely. Před uložením přidejte kompatibilní nasazení.",
+    "primary": "Primární",
+    "fallback": "Záloha",
+    "unknown": "Neznámé",
+    "retires": "Verze modelu bude vyřazena {date}",
+    "checkResults": "Výsledky kontroly operace",
+    "passed": "Splněno",
+    "moveUp": "Posunout nahoru",
+    "moveDown": "Posunout dolů",
+    "remove": "Odstranit",
+    "moveUpLabel": "Posunout {model} nahoru",
+    "moveDownLabel": "Posunout {model} dolů",
+    "removeLabel": "Odebrat {model} z řetězce",
+    "runChecks": "Spustit kontrolu kompatibility",
+    "findDeployment": "Najít nasazení",
+    "deployment": "Nasazení",
+    "chooseDeployment": "Vyberte nasazení",
+    "addDeployment": "Přidat do řetězce",
+    "checkBeforeAdd": "Před přidáním nasazení spusťte kontroly kompatibility pro tento účel.",
+    "assessmentManaged": "Modely pro search-assessment a záložní možnosti se spravují v části Modely a připravenost.",
+    "manageModels": "Spravovat modely a připravenost",
+    "purpose": {
+      "routing": "Směrování",
+      "searchAssessment": "Search assessment"
+    },
+    "purposeDescription": {
+      "routing": "Výběr dovedností, směrování hledání a kódu a klasifikace zkrácení dokumentu.",
+      "searchAssessment": "Vyhodnocení zdrojů a volba dalšího kroku při vícekrokovém hledání."
+    },
+    "state": {
+      "ready": "Připraveno",
+      "unverified": "Dostupné, není plně ověřeno",
+      "fallback": "Používá záložní možnost",
+      "unavailable": "Neexistuje vhodný model",
+      "check_unavailable": "Kontroly nejsou dostupné"
+    },
+    "inventoryState": {
+      "current": "Aktuální",
+      "stale": "Poslední známý inventář",
+      "unavailable": "Inventář není dostupný"
+    },
+    "operation": {
+      "skills": "Výběr dovedností",
+      "tools": "Směrování nástrojů",
+      "trim": "Klasifikace zkrácení",
+      "assessment": "Search assessment"
+    },
+    "reason": {
+      "endpoint_missing": "Chybí endpoint nebo propojení účtu",
+      "deployment_missing": "Nasazení chybí nebo neposkytuje službu",
+      "unauthorized": "Přístup k identitě aplikace odepřen",
+      "timeout": "Kontrola byla přerušena kvůli časovému limitu",
+      "throttled": "Byl dosažen limit kvóty nebo rychlosti",
+      "incompatible": "Operace není kompatibilní",
+      "provider": "Volání poskytovatele selhalo",
+      "residency": "Zóna zpracování není povolena",
+      "retired": "Verze modelu byla vyřazena",
+      "inventory_unavailable": "Inventář nelze ověřit",
+      "refused": "Model odmítl požadavek"
+    },
+    "accountError": {
+      "account_resource_missing": "Pro ověření inventáře nastavte Foundry ARM resource ID tohoto propojení.",
+      "endpoint_missing": "Nastavte inference endpoint tohoto propojení.",
+      "endpoint_account_mismatch": "Endpoint a ARM resource ID patří různým účtům. Upravte konfiguraci nasazení.",
+      "inventory_refresh_failed": "Obnovení inventáře selhalo. Zkontrolujte Reader přístup identity aplikace a připojení účtu.",
+      "credential_unavailable": "Aplikace nemohla získat přihlašovací údaje pro inventář. Zkontrolujte nastavení identity nasazení."
+    }
   }
 }

@@ -2,6 +2,30 @@ import { getRequestConfig } from 'next-intl/server';
 
 import { routing } from './config/i18n';
 
+type MessageTree = { [key: string]: string | MessageTree };
+
+/** Fill missing feature translations without replacing any existing localized values. */
+function fillMissingMessages(
+  base: MessageTree,
+  translated?: MessageTree,
+): MessageTree {
+  return Object.fromEntries(
+    Object.entries(base).map(([key, value]) => [
+      key,
+      typeof value === 'string'
+        ? typeof translated?.[key] === 'string'
+          ? translated[key]
+          : value
+        : fillMissingMessages(
+            value,
+            typeof translated?.[key] === 'object'
+              ? (translated[key] as MessageTree)
+              : undefined,
+          ),
+    ]),
+  );
+}
+
 export default getRequestConfig(async ({ requestLocale }) => {
   // Get locale from request or use default
   let locale = await requestLocale;
@@ -23,6 +47,30 @@ export default getRequestConfig(async ({ requestLocale }) => {
       messages: {
         ...messages,
         permissionCache: messages.permissionCache ?? english.permissionCache,
+        auxiliaryModels: fillMissingMessages(
+          english.auxiliaryModels,
+          messages.auxiliaryModels,
+        ),
+        chat: {
+          ...messages.chat,
+          skillUsage: fillMissingMessages(
+            english.chat.skillUsage,
+            messages.chat?.skillUsage,
+          ),
+        },
+        admin: {
+          ...messages.admin,
+          area: {
+            ...messages.admin?.area,
+            models: messages.admin?.area?.models ?? english.admin.area.models,
+          },
+          areaDescription: {
+            ...messages.admin?.areaDescription,
+            models:
+              messages.admin?.areaDescription?.models ??
+              english.admin.areaDescription.models,
+          },
+        },
       },
     };
   } catch (error) {

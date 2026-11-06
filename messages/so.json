@@ -1019,7 +1019,9 @@
       "agentSearch": "dukumentiyada uu wakiilku raadiyay",
       "needsApproval": "waxaa u baahan oggolaanshahaaga",
       "original": "sida markii hore loo orodsiiyay",
-      "updated": "waxaa la cusboonaysiiyay tan iyo"
+      "updated": "waxaa la cusboonaysiiyay tan iyo",
+      "limited": "Xaddidan",
+      "appliedCount": "{count} la adeegsaday"
     },
     "skillsManualHint": "Xulashada otomaatiga ah waa deman tahay ee Dejinta. Isticmaal hal mar farriinta xigta, ama ku lifaaq xirfadda si aad ugu isticmaasho wada sheekaysigan oo dhan.",
     "queuedMessage": {
@@ -5378,7 +5380,10 @@
     "noAllowedAudience": "Ma jiro dhegaystayaal la oggol yahay",
     "accessScopeHint": "Kaliya xeerarka gelitaanka app-ka. Ogolaanshaha ilaha wali wuu shaqaynayaa.",
     "detailsLabel": "Faahfaahin",
-    "indexedDocumentSummary": "{indexed, plural, one {# dukumenti} other {# dukumanti}} la diiwaangeliyey"
+    "indexedDocumentSummary": "{indexed, plural, one {# dukumenti} other {# dukumanti}} la diiwaangeliyey",
+    "m365CapImmediateHelp": "Marka la dalbado waxa isla markiiba la badbaadinayaa xaddiga. Tafatirro kale wali waxay u baahan yihiin Badbaadin.",
+    "m365CapDraftHelp": "Xaddiga waxa la badbaadinayaa marka aad abuurto wakiilka.",
+    "m365CapSaved": "Xaddiga dukumiintiga waa la badbaadiyey: {limit}."
   },
   "localModels": {
     "title": "Moodallo maxalli ah",
@@ -5606,7 +5611,8 @@
       "webSearch": "Baaxadda uu gaarayo baaritaanka webka: baaritaan tillaabo badan, modelka qiimeeyaha iyo xaddidaadiisa.",
       "contextBudget": "Inta taariikh-wada sheekaysi ah ee model kastaa loo diro marka la isticmaalo.",
       "analytics": "Warbixino la keenay: waxa yimid, cidda furin karta gal kasta, iyo qaybahaa la tusin karo.",
-      "skills": "Xirmooyin tilmaamo dib loo isticmaali karo oo kaaliyuhu adeegsado marka looga baahdo wadahadalka."
+      "skills": "Xirmooyin tilmaamo dib loo isticmaali karo oo kaaliyuhu adeegsado marka looga baahdo wadahadalka.",
+      "models": "U qoondee moodallada asalka ah oo hubi diyaar garowga qeybaha."
     },
     "openSettings": "Fur dejinta",
     "area": {
@@ -5618,7 +5624,8 @@
       "webSearch": "Baaritaanka webka",
       "contextBudget": "Miisaaniyada macnaha guud",
       "analytics": "Falcelin xogeed",
-      "skills": "Xirfadaha"
+      "skills": "Xirfadaha",
+      "models": "Moodallo iyo diyaar garow"
     }
   },
   "limits": {
@@ -7982,5 +7989,114 @@
     "invalidated": "Xasuusta waa la tirtiray. Hubin cusub ayaa loo baahan yahay codsiga la ilaaliyo ee xiga; oggolaanshaha weli lama hubin.",
     "failed": "Ma suurtagalin in la xaqiijiyo tir-tirka xasuusta. Fadlan isku day mar kale dhowaan.",
     "propagationNote": "Tani waxay ku khasbaysaa hubin cusub, ma ahan isbeddel oggolaanshaha Microsoft. Dib u dhigista faafinta Microsoft weli way jirtaa. Hawlgallada horey loo oggolaaday lagama laaban."
+  },
+  "auxiliaryModels": {
+    "title": "Moodallo iyo diyaar garow",
+    "description": "Dooro moodallo go'aamada asalka ah una fiirso meelaha loo qaybiyay oo adeega.",
+    "environmentHint": "Isbeddelladani waxay saameynayaan deegaanka kaliya. Live, beta iyo dev waxay leeyihiin siyaasad kala madax bannaan.",
+    "updated": "Warbixin la cusbooneysiiyay: {time}",
+    "loading": "Moodallada la qoondeeyay iyo diyaar garowga waa la rarayaa…",
+    "loadError": "Moodallo lama heli karo. Dib u day ku qaado adigoon bedelin siyaasadda hadda jirta.",
+    "retry": "Isku day mar kale",
+    "neverChecked": "Lama hubin",
+    "bootstrapUnavailable": "Dejinta deegaanka bootstrap waa khaldan tahay. Siyaasadda kaydsan ee hore ayaa sii shaqaynaysa, laakiin lama soo celin karo dejiyaasha asalka ah ilaa dejinta qaybinta la saxo.",
+    "runtimeFallback": "Codsiyadii ugu dambeeyay waxay isticmaaleen moodal beddel ah. Hubi qaybinta ugu weyn iyo natiijada hawsha.",
+    "accountLocation": "Goobta koontada Azure: {location}",
+    "incidents": "Isbeddellada diyaar garowga ee ugu dambeeyay",
+    "noIncidents": "Ma jiraan wax guuldarro ama soo kabasho diyaar garow ah oo la diiwaan geliyay.",
+    "refreshInventory": "Cusbooneysii keydka",
+    "refreshing": "Keydka waa la cusbooneysiinayaa…",
+    "configUnavailable": "Kaydinta siyaasadda lama heli karo. Waxaad aragtaa qeybo la cusbooneysiiyay oo ugu dambeysay. Wax ka beddelku waa la xannibay ilaa kaydku soo kabsado.",
+    "attention": "Waa u baahan tahay fiiro gaar ah",
+    "eligibleCount": "{count, plural, =0 {Ma jiro qaybin u qalma. Dooro moodal goboleed oo habboon.} one {Hal qaybin u qalma. Ku dar beddel si ay u xoojiso adkaysiga.} other {# qaybin u qalma silsiladdan.}}",
+    "retirementWarning": "Nooca moodalka la calaamadeeyay wuxuu dhowaan galay xilli ka fadhiisan. Beddelka hubi ka hor intaadan u wareejin booska ugu weyn.",
+    "assignments": "Moodallo la qoondeeyay",
+    "readiness": "Diyaar garow",
+    "assignmentHint": "Moodalladu waxay u shaqeeyaan sida lagu soo bandhigay. Qaybinta maqan, aan isku socon ama af-gudban waa la boodaa. Codsiyada Midowga Yurub waxay ku sii nagaanayaan qaybiso la xaqiijiyay oo EU-deggan.",
+    "probeUsage": "Hubinta la jaanqaadidda waxay dirtaa codsiyo macmal ah oo ku go'an aqoonsiga app-ka. Waxay isticmaalaan tiro yar oo tokens ah, waligood kama adeegtaan xogta wadahadalka. Sug ugu yaraan hal daqiiqo kahor intaadan mar kale hubin qaybin.",
+    "save": "Kaydi qoondeynta",
+    "saving": "Waa la kaydinayaa…",
+    "saved": "Qoondeynta waa la kaydiyay. Codsiyada cusub waxay adeegsan doonaan siyaasaddan.",
+    "resetDefaults": "Isticmaal dejinta asalka deegaanka",
+    "unsaved": "Isbeddello aan la kaydin",
+    "readinessHint": "Keydku wuxuu xaqiijinayaa in qaybin jirto. Hawl dhammaatay ama tijaabo la jaanqaadaysay dhowaan waxay xaqiijisaa in app-ku adeegsan karo. Fashilka cusbooneysiintu ma tirtirto hubintii ugu dambaysay ee saxda ahayd.",
+    "account": "La xiriir koontada: {binding}",
+    "lastInventory": "Keydkii ugu dambeeyay ee guulaystay: {time}",
+    "retirementUnknown": "Xaaladda ka fadhiisinta lama yaqaan sababtoo ah moodal catalog lama xaqiijin.",
+    "history": "Taariikhda siyaasadda",
+    "revision": "Nuqulka wax-ku-oolka ah: {revision}",
+    "noHistory": "Isbadal siyaasadeed laguma diiwaan gelin deegaanka.",
+    "conflict": "Maamul kale ayaa beddelay siyaasadda. Qoraalkaaga wali waa halkan. Dib u rar siyaasadda ka hor intaadan kaydin mar kale.",
+    "rateLimit": "Qaybintan dhawaan ayaa la hubiyay. Sug hal daqiiqo ka hor intaadan mar kale hubinayn.",
+    "actionError": "Hawsha lama bixin karin. Faahfaahinta hubi oo isku day mar kale; qoraalkaaga lama tuurin.",
+    "technicalDetails": "Faahfaahinta farsamada",
+    "reloadPolicy": "Dib u rar siyaasadda oo tuur qoraalka",
+    "emptyChain": "Moodallo lama qoondeynin. Ku dar qaybin la jaanqaadi karta ka hor intaadan kaydin.",
+    "primary": "Ugu weyn",
+    "fallback": "Beddel",
+    "unknown": "Lama yaqaan",
+    "retires": "Nooca moodalka ayaa ka fadhiisanaya {date}",
+    "checkResults": "Natiijooyinka hubinta hawsha",
+    "passed": "Waa guuleysatay",
+    "moveUp": "U dhaqaaji kore",
+    "moveDown": "Hoos u dhaqdhaqaaq",
+    "remove": "Ka saar",
+    "moveUpLabel": "Kor u dhaqdhaqaaq {model}",
+    "moveDownLabel": "Hoos u dhaqdhaqaaq {model}",
+    "removeLabel": "Ka saar {model} silsiladda",
+    "runChecks": "Orod hubinta waafaqsanaanta",
+    "findDeployment": "Raadi dhaqangelin",
+    "deployment": "Dhaqangelin",
+    "chooseDeployment": "Dooro dhaqangelin",
+    "addDeployment": "Kudar silsiladda",
+    "checkBeforeAdd": "Orod hubinta waafaqsanaanta ujeedkan kahor intaan dhaqangelinta la darin.",
+    "assessmentManaged": "Moodooyinka qiimeynta raadinta iyo kuwa beddelka ah waxaa laga maamulaa Moodooyinka iyo diyaar-garowga.",
+    "manageModels": "Maamul moodeellada iyo diyaar-garowga",
+    "purpose": {
+      "routing": "U hagid",
+      "searchAssessment": "Qiimeynta raadinta"
+    },
+    "purposeDescription": {
+      "routing": "Xulashada xirfadda, raadinta iyo u gudbinta koodka, iyo kala soocidda dukumeentiyada.",
+      "searchAssessment": "Qiimee ilaha oo door tallaabada xigta inta lagu jiro raadinta tallaabooyin badan."
+    },
+    "state": {
+      "ready": "Diyaar",
+      "unverified": "La heli karo, aan si buuxda loo hubin",
+      "fallback": "Beddel la isticmaalayo",
+      "unavailable": "Model la aqbali karo ma jiro",
+      "check_unavailable": "Hubin lama heli karo"
+    },
+    "inventoryState": {
+      "current": "Hadda",
+      "stale": "Qalabkii ugu dambeeyay ee la ogaa",
+      "unavailable": "Qalab lama heli karo"
+    },
+    "operation": {
+      "skills": "Xulashada xirfadda",
+      "tools": "U hagid qalab",
+      "trim": "Kala soocid gaabin",
+      "assessment": "Qiimeynta raadinta"
+    },
+    "reason": {
+      "endpoint_missing": "Dhammaadka ama isku-xirka akoonka waa maqan yahay",
+      "deployment_missing": "Dhaqangelin maqan ama ma shaqaynayso",
+      "unauthorized": "Aqoonsiga abka waa la diiday",
+      "timeout": "Hubintu way ka baxday waqtigii loo qorsheeyay",
+      "throttled": "Quota ama xadka isticmaalka waa la gaaray",
+      "incompatible": "Hawl aan iswaafaqsanayn",
+      "provider": "Wicitaanka bixiyaha ayaa fashilmay",
+      "residency": "Aagga farsameyntu oggolaansho ma leh",
+      "retired": "Nooca modelkan waa la joojiyay",
+      "inventory_unavailable": "Qalabka lama xaqiijin karo",
+      "refused": "Model-ku wuu diiday codsiga"
+    },
+    "accountError": {
+      "account_resource_missing": "Habee Foundry ARM resource ID-ga isku-xirkan si aad u xaqiijiso qalabkiisa.",
+      "endpoint_missing": "Habee dhammaadka inference-ka ee isku-xirkan.",
+      "endpoint_account_mismatch": "Dhammaadka iyo ARM resource ID waxay tilmaamayaan akoonno kala duwan. Sax dejinta dhaqangelinta.",
+      "inventory_refresh_failed": "Cusbooneysiinta qalabka waa ay fashilantay. Hubi akhriska aqoonsiga abka iyo isku xirnaanta akoonka.",
+      "credential_unavailable": "Abku ma helin karo caddeyntiisa qalabka. Hubi dejinta aqoonsiga dhaqangelinta."
+    }
   }
 }

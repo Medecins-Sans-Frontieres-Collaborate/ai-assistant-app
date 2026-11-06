@@ -961,7 +961,9 @@
       "agentSearch": "エージェントによる文書検索",
       "needsApproval": "承認が必要です",
       "original": "元の実行時",
-      "updated": "更新済み"
+      "updated": "更新済み",
+      "limited": "制限あり",
+      "appliedCount": "{count} 件適用済み"
     },
     "skillsManualHint": "設定で自動選択がオフになっています。次のメッセージのみ使用するか、スキルをピン止めしてこの会話全体で使用してください。",
     "queuedMessage": {
@@ -5394,7 +5396,10 @@
     "noAllowedAudience": "許可された対象者なし",
     "accessScopeHint": "アプリのアクセスルールのみ適用されます。元の権限も有効です。",
     "detailsLabel": "詳細",
-    "indexedDocumentSummary": "{indexed, plural, one {# 件のドキュメント} other {# 件のドキュメント}}をインデックス化済み"
+    "indexedDocumentSummary": "{indexed, plural, one {# 件のドキュメント} other {# 件のドキュメント}}をインデックス化済み",
+    "m365CapImmediateHelp": "適用すると制限が即座に保存されます。他の変更にはまだ「保存」が必要です。",
+    "m365CapDraftHelp": "制限はエージェント作成時に保存されます。",
+    "m365CapSaved": "ドキュメント制限を保存しました: {limit}。"
   },
   "localModels": {
     "title": "ローカルモデル",
@@ -5622,7 +5627,8 @@
       "webSearch": "ウェブ検索がどこまで可能か：マルチステップ検索、その評価用モデルと制限。",
       "contextBudget": "各モデルが毎回送信する会話の量。",
       "analytics": "配布されたレポート：到着した内容、各フォルダーを開く可能性のある人物、表示可能な項目。",
-      "skills": "会話で必要な際にアシスタントが適用する再利用可能な指示ブロックです。"
+      "skills": "会話で必要な際にアシスタントが適用する再利用可能な指示ブロックです。",
+      "models": "バックグラウンドモデルの割り当てと、地域展開の準備状況を確認します。"
     },
     "openSettings": "設定を開く",
     "area": {
@@ -5634,7 +5640,8 @@
       "webSearch": "ウェブ検索",
       "contextBudget": "コンテキスト予算",
       "analytics": "アナリティクス",
-      "skills": "スキル"
+      "skills": "スキル",
+      "models": "モデルと準備状況"
     }
   },
   "limits": {
@@ -7998,5 +8005,114 @@
     "invalidated": "キャッシュが無効化されました。次回の保護されたリクエストで再認証が必要です。権限はまだ再確認されていません。",
     "failed": "キャッシュの無効化を確認できませんでした。しばらくしてから再試行してください。",
     "propagationNote": "これは新しい権限チェックを強制するものであり、Microsoft 上の権限自体は変更しません。Microsoft 側の伝播遅延は適用されます。すでに承認された操作は取り消されません。"
+  },
+  "auxiliaryModels": {
+    "title": "モデルと準備状況",
+    "description": "バックグラウンドの判断に使用するモデルを選択し、それらを提供するデプロイメントを確認します。",
+    "environmentHint": "変更はこの環境のみに適用されます。本番、ベータ、開発環境は個別にポリシーが設定されています。",
+    "updated": "レポート更新日時: {time}",
+    "loading": "モデルの割り当てと準備状況を読み込み中…",
+    "loadError": "モデルの割り当てを読み込めませんでした。現在のポリシーは変更せずに再試行してください。",
+    "retry": "再試行",
+    "neverChecked": "未確認",
+    "bootstrapUnavailable": "環境のブートストラップ設定が無効です。既存の保存済みポリシーは有効ですが、デプロイメント設定が修正されるまで環境デフォルトには戻せません。",
+    "runtimeFallback": "直近のリクエストでフォールバックモデルが使用されました。プライマリデプロイメントおよびその動作結果を確認してください。",
+    "accountLocation": "Azureアカウントのロケーション: {location}",
+    "incidents": "最近の準備状況の変更",
+    "noIncidents": "準備失敗または復旧の記録はありません。",
+    "refreshInventory": "インベントリを更新",
+    "refreshing": "インベントリを更新中…",
+    "configUnavailable": "ポリシーの保存先が利用できません。表示されている割り当ては最新のものです。保存先が復旧するまで編集はできません。",
+    "attention": "注意が必要",
+    "eligibleCount": "{count, plural, =0 {適格なデプロイメントがありません。互換性のある地域モデルを選択してください。} one {適格なデプロイメントが1件あります。冗長性向上のためフォールバックを追加してください。} other {このチェーン内に#件の適格なデプロイメントがあります。}}",
+    "retirementWarning": "指定されたモデルバージョンがまもなくリタイアします。プライマリ化する前に代替モデルを確認してください。",
+    "assignments": "モデル割り当て",
+    "readiness": "準備状況",
+    "assignmentHint": "モデルは表示順に実行されます。不足・非互換・リタイア済みデプロイメントはスキップされます。EUリクエストは検証済みEU配備に留まります。",
+    "probeUsage": "互換性チェックはアプリIDを用いて固定の合成リクエストを送信します。会話データは使わず、少数のモデルトークンのみ消費します。デプロイメントの再チェックは1分以上空けてください。",
+    "save": "割り当てを保存",
+    "saving": "保存中…",
+    "saved": "割り当てが保存されました。新たなリクエストはこのポリシーを使用します。",
+    "resetDefaults": "環境デフォルトを使用",
+    "unsaved": "未保存の変更",
+    "readinessHint": "インベントリでデプロイメントの存在を確認します。最近の有効な操作または互換性チェックでアプリ利用可能なことを確認します。更新失敗でも直近の正常チェックは消去されません。",
+    "account": "アカウントバインディング: {binding}",
+    "lastInventory": "前回成功したインベントリ: {time}",
+    "retirementUnknown": "モデルカタログが確認できないためリタイア状況が不明です。",
+    "history": "ポリシー履歴",
+    "revision": "有効リビジョン: {revision}",
+    "noHistory": "この環境で記録されたポリシー変更はありません。",
+    "conflict": "他の管理者がポリシーを変更しました。作成中の下書きは保持されています。新たに保存する前にポリシーを再読み込みしてください。",
+    "rateLimit": "このデプロイメントは直近でチェック済みです。再チェックは1分以上お待ちください。",
+    "actionError": "操作を完了できませんでした。詳細を確認し再試行してください。下書きは保持されています。",
+    "technicalDetails": "技術的詳細",
+    "reloadPolicy": "ポリシーを再読み込みして下書きを破棄",
+    "emptyChain": "モデルが割り当てられていません。保存前に互換性のあるデプロイメントを追加してください。",
+    "primary": "プライマリ",
+    "fallback": "フォールバック",
+    "unknown": "不明",
+    "retires": "モデルバージョンのリタイア予定日: {date}",
+    "checkResults": "操作チェック結果",
+    "passed": "合格",
+    "moveUp": "上へ移動",
+    "moveDown": "下へ移動",
+    "remove": "削除",
+    "moveUpLabel": "{model} を上へ移動",
+    "moveDownLabel": "{model} を下へ移動",
+    "removeLabel": "{model} をチェーンから削除",
+    "runChecks": "互換性チェックを実行",
+    "findDeployment": "デプロイメントを検索",
+    "deployment": "デプロイメント",
+    "chooseDeployment": "デプロイメントを選択",
+    "addDeployment": "チェーンに追加",
+    "checkBeforeAdd": "この目的の互換性チェックを実行してからデプロイメントを追加します。",
+    "assessmentManaged": "検索評価モデルとフォールバックは「モデルと可用性管理」で管理されます。",
+    "manageModels": "モデルと可用性を管理",
+    "purpose": {
+      "routing": "ルーティング",
+      "searchAssessment": "検索評価"
+    },
+    "purposeDescription": {
+      "routing": "スキル選択、検索・コードルーティング、文書短縮分類。",
+      "searchAssessment": "マルチステップ検索で情報源を評価し、次のステップを選択します。"
+    },
+    "state": {
+      "ready": "準備完了",
+      "unverified": "利用可能（未確認）",
+      "fallback": "フォールバック使用中",
+      "unavailable": "利用可能なモデルなし",
+      "check_unavailable": "チェック不可"
+    },
+    "inventoryState": {
+      "current": "現在",
+      "stale": "最後に確認されたインベントリ",
+      "unavailable": "インベントリ情報なし"
+    },
+    "operation": {
+      "skills": "スキル選択",
+      "tools": "ツールルーティング",
+      "trim": "短縮分類",
+      "assessment": "検索評価"
+    },
+    "reason": {
+      "endpoint_missing": "エンドポイントまたはアカウントの関連付けがありません",
+      "deployment_missing": "デプロイメントがないか、稼働していません",
+      "unauthorized": "アプリIDアクセスが拒否されました",
+      "timeout": "チェックがタイムアウトしました",
+      "throttled": "クォータまたはレート制限に到達しました",
+      "incompatible": "操作が互換性なし",
+      "provider": "プロバイダーの呼び出しに失敗しました",
+      "residency": "処理ゾーンが許可されていません",
+      "retired": "モデルバージョンは廃止されました",
+      "inventory_unavailable": "インベントリを確認できませんでした",
+      "refused": "モデルがリクエストを拒否しました"
+    },
+    "accountError": {
+      "account_resource_missing": "このバインディングの Foundry ARM リソース ID を設定して、インベントリを確認してください。",
+      "endpoint_missing": "このバインディングの推論エンドポイントを設定してください。",
+      "endpoint_account_mismatch": "エンドポイントと ARM リソース ID が異なるアカウントを指しています。デプロイメント設定を修正してください。",
+      "inventory_refresh_failed": "インベントリの更新に失敗しました。アプリIDのReaderアクセス権およびアカウント接続を確認してください。",
+      "credential_unavailable": "アプリがインベントリの認証情報を取得できませんでした。デプロイメントID設定を確認してください。"
+    }
   }
 }

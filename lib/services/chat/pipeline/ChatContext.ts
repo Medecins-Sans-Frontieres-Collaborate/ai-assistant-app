@@ -124,6 +124,8 @@ export interface ChatContext {
    * middleware — and never aborted after the stage has returned.
    */
   stageSignal?: AbortSignal;
+  /** Server-owned deadline for the current stage, used to reserve optional enrichment time. */
+  stageDeadline?: number;
 
   /** Raw user prompt from request (before building full system prompt) */
   rawUserPrompt?: string;
@@ -173,7 +175,12 @@ export interface ChatContext {
   /** Actual injected instruction tokens, deducted from the shared evidence budget. */
   skillTokensUsed?: number;
   /** Present even for empty/failed decisions, preventing a second router call. */
-  skillRouting?: { relevantSkills?: string[]; degraded?: boolean };
+  skillRouting?: {
+    relevantSkills?: string[];
+    degraded?: boolean;
+    degradedReason?: import('@/types/chat').AuxiliaryFailureReason;
+    degradedRegion?: 'EU' | 'US';
+  };
   /**
    * Version pins for requested skills (id → `updatedAt` of the body that
    * ran the first time) so regeneration replays what the user actually

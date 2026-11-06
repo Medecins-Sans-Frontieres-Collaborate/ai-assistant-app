@@ -928,7 +928,9 @@
       "agentSearch": "dokumen dicari oleh agen",
       "needsApproval": "memerlukan persetujuan Anda",
       "original": "sesuai dijalankan awalnya",
-      "updated": "diperbarui sejak itu"
+      "updated": "diperbarui sejak itu",
+      "limited": "Terbatas",
+      "appliedCount": "{count} diterapkan"
     },
     "skillsManualHint": "Pemilihan otomatis dimatikan di Pengaturan. Gunakan sekali untuk pesan berikutnya, atau sematkan sebuah skill untuk menggunakannya selama percakapan ini.",
     "queuedMessage": {
@@ -5394,7 +5396,10 @@
     "noAllowedAudience": "Tidak ada audiens yang diizinkan",
     "accessScopeHint": "Hanya aturan akses aplikasi. Izin sumber tetap berlaku.",
     "detailsLabel": "Detail",
-    "indexedDocumentSummary": "{indexed, plural, one {# dokumen} other {# dokumen}} diindeks"
+    "indexedDocumentSummary": "{indexed, plural, one {# dokumen} other {# dokumen}} diindeks",
+    "m365CapImmediateHelp": "Terapkan akan menyimpan batasan secara langsung. Edit lainnya tetap perlu disimpan dengan Save.",
+    "m365CapDraftHelp": "Batasan akan disimpan saat Anda membuat agen.",
+    "m365CapSaved": "Batas dokumen tersimpan: {limit}."
   },
   "localModels": {
     "title": "Model lokal",
@@ -5622,7 +5627,8 @@
       "webSearch": "Cakupan pencarian web: pencarian bertahap, model penilai dan batasannya.",
       "contextBudget": "Jumlah percakapan yang dikirim ke setiap model di setiap giliran.",
       "analytics": "Laporan yang dikirim: apa saja yang diterima, siapa yang dapat membuka setiap folder, dan bidang mana yang dapat ditampilkan.",
-      "skills": "Blok instruksi yang dapat digunakan kembali, diterapkan oleh asisten saat percakapan membutuhkannya."
+      "skills": "Blok instruksi yang dapat digunakan kembali, diterapkan oleh asisten saat percakapan membutuhkannya.",
+      "models": "Tetapkan model latar belakang dan periksa kesiapan penyebaran regional."
     },
     "openSettings": "Buka pengaturan",
     "area": {
@@ -5634,7 +5640,8 @@
       "webSearch": "Pencarian web",
       "contextBudget": "Anggaran konteks",
       "analytics": "Analitik",
-      "skills": "Keterampilan"
+      "skills": "Keterampilan",
+      "models": "Model dan kesiapan"
     }
   },
   "limits": {
@@ -7998,5 +8005,114 @@
     "invalidated": "Cache telah dibatalkan. Verifikasi ulang diperlukan pada permintaan terlindungi berikutnya; izin belum diperiksa ulang.",
     "failed": "Pembatalan cache tidak dapat dikonfirmasi. Coba lagi dalam waktu dekat.",
     "propagationNote": "Ini memaksa pemeriksaan ulang, bukan mengubah izin Microsoft. Penundaan propagasi Microsoft tetap berlaku. Operasi yang sudah diizinkan tidak dibatalkan."
+  },
+  "auxiliaryModels": {
+    "title": "Model dan kesiapan",
+    "description": "Pilih model untuk keputusan latar belakang dan tinjau penyebaran yang melayaninya.",
+    "environmentHint": "Perubahan hanya berlaku di lingkungan ini. Live, beta, dan dev memiliki kebijakan masing-masing.",
+    "updated": "Laporan diperbarui: {time}",
+    "loading": "Memuat penugasan model dan kesiapan…",
+    "loadError": "Penugasan model tidak dapat dimuat. Coba lagi tanpa mengubah kebijakan saat ini.",
+    "retry": "Coba lagi",
+    "neverChecked": "Belum diperiksa",
+    "bootstrapUnavailable": "Pengaturan bootstrap lingkungan tidak valid. Kebijakan tersimpan yang ada tetap berlaku, namun default lingkungan tidak dapat dipulihkan hingga pengaturan penyebaran diperbaiki.",
+    "runtimeFallback": "Permintaan terbaru menggunakan model fallback. Periksa penyebaran utama dan hasil operasinya.",
+    "accountLocation": "Lokasi akun Azure: {location}",
+    "incidents": "Perubahan kesiapan terbaru",
+    "noIncidents": "Tidak ada kegagalan atau pemulihan kesiapan yang tercatat.",
+    "refreshInventory": "Muat ulang inventaris",
+    "refreshing": "Memuat ulang inventaris…",
+    "configUnavailable": "Penyimpanan kebijakan tidak tersedia. Penugasan yang ditampilkan mungkin versi terakhir yang diketahui. Pengeditan dinonaktifkan sampai penyimpanan pulih.",
+    "attention": "Perlu perhatian",
+    "eligibleCount": "{count, plural, =0 {Tidak ada penyebaran yang memenuhi syarat. Pilih model regional yang kompatibel.} one {Satu penyebaran memenuhi syarat. Tambahkan fallback untuk meningkatkan ketahanan.} other {# penyebaran memenuhi syarat dalam rantai ini.}}",
+    "retirementWarning": "Versi model yang ditetapkan akan segera pensiun. Periksa pengganti sebelum memindahkannya ke posisi utama.",
+    "assignments": "Penugasan model",
+    "readiness": "Kesiapan",
+    "assignmentHint": "Model dijalankan sesuai urutan yang ditampilkan. Penyebaran yang hilang, tidak kompatibel, dan sudah pensiun akan dilewati. Permintaan EU tetap di penyebaran EU yang telah diverifikasi.",
+    "probeUsage": "Pemeriksaan kompatibilitas mengirim permintaan sintetis tetap dengan identitas aplikasi. Menggunakan sedikit token model, tidak pernah memakai data percakapan. Tunggu minimal satu menit sebelum mengulangi pemeriksaan penyebaran.",
+    "save": "Simpan penugasan",
+    "saving": "Menyimpan…",
+    "saved": "Penugasan disimpan. Permintaan baru akan menggunakan kebijakan ini.",
+    "resetDefaults": "Gunakan default lingkungan",
+    "unsaved": "Perubahan belum disimpan",
+    "readinessHint": "Inventaris memastikan penyebaran ada. Operasi valid terkini atau pengecekan kompatibilitas memastikan aplikasi dapat menggunakannya. Penyegaran yang gagal tidak menghapus pengecekan sukses terakhir.",
+    "account": "Tautan akun: {binding}",
+    "lastInventory": "Inventaris terakhir yang berhasil: {time}",
+    "retirementUnknown": "Status pensiun tidak diketahui karena katalog model tidak dapat diverifikasi.",
+    "history": "Riwayat kebijakan",
+    "revision": "Revisi efektif: {revision}",
+    "noHistory": "Tidak ada perubahan kebijakan yang tercatat di lingkungan ini.",
+    "conflict": "Administrator lain mengubah kebijakan. Draf Anda masih ada. Muat ulang kebijakan sebelum menyimpan kembali.",
+    "rateLimit": "Penyebaran ini baru saja diperiksa. Tunggu satu menit sebelum memeriksa lagi.",
+    "actionError": "Tindakan tidak dapat diselesaikan. Periksa detail dan coba lagi; draf Anda tidak dihapus.",
+    "technicalDetails": "Detail teknis",
+    "reloadPolicy": "Muat ulang kebijakan dan buang draf",
+    "emptyChain": "Tidak ada model yang ditugaskan. Tambahkan penyebaran kompatibel sebelum menyimpan.",
+    "primary": "Utama",
+    "fallback": "Fallback",
+    "unknown": "Tidak diketahui",
+    "retires": "Versi model akan pensiun pada {date}",
+    "checkResults": "Hasil pemeriksaan operasi",
+    "passed": "Lulus",
+    "moveUp": "Pindah ke atas",
+    "moveDown": "Pindahkan ke bawah",
+    "remove": "Hapus",
+    "moveUpLabel": "Pindahkan {model} ke atas",
+    "moveDownLabel": "Pindahkan {model} ke bawah",
+    "removeLabel": "Hapus {model} dari rangkaian",
+    "runChecks": "Jalankan pemeriksaan kompatibilitas",
+    "findDeployment": "Cari deployment",
+    "deployment": "Deployment",
+    "chooseDeployment": "Pilih deployment",
+    "addDeployment": "Tambah ke rangkaian",
+    "checkBeforeAdd": "Jalankan pemeriksaan kompatibilitas tujuan ini sebelum menambah deployment.",
+    "assessmentManaged": "Model search-assessment dan fallback dikelola di Model dan kesiapan.",
+    "manageModels": "Kelola model dan kesiapan",
+    "purpose": {
+      "routing": "Routing",
+      "searchAssessment": "Search assessment"
+    },
+    "purposeDescription": {
+      "routing": "Pemilihan skill, pencarian dan routing kode, serta klasifikasi dokumen trim.",
+      "searchAssessment": "Menilai sumber dan memilih langkah berikutnya dalam pencarian multi-tahap."
+    },
+    "state": {
+      "ready": "Siap",
+      "unverified": "Tersedia, belum sepenuhnya diperiksa",
+      "fallback": "Menggunakan fallback",
+      "unavailable": "Tidak ada model yang memenuhi syarat",
+      "check_unavailable": "Pemeriksaan tidak tersedia"
+    },
+    "inventoryState": {
+      "current": "Terkini",
+      "stale": "Inventaris terakhir",
+      "unavailable": "Inventaris tidak tersedia"
+    },
+    "operation": {
+      "skills": "Pemilihan skill",
+      "tools": "Routing alat",
+      "trim": "Klasifikasi trim",
+      "assessment": "Search assessment"
+    },
+    "reason": {
+      "endpoint_missing": "Endpoint atau pengikatan akun belum ada",
+      "deployment_missing": "Deployment belum ada atau tidak berjalan",
+      "unauthorized": "Akses identitas aplikasi ditolak",
+      "timeout": "Pemeriksaan melebihi waktu",
+      "throttled": "Batas kuota atau rate telah tercapai",
+      "incompatible": "Operasi tidak kompatibel",
+      "provider": "Panggilan ke provider gagal",
+      "residency": "Zona pemrosesan tidak diizinkan",
+      "retired": "Versi model sudah dipensiunkan",
+      "inventory_unavailable": "Inventaris tidak dapat diverifikasi",
+      "refused": "Model menolak permintaan"
+    },
+    "accountError": {
+      "account_resource_missing": "Konfigurasikan Foundry ARM resource ID pengikatan ini untuk memverifikasi inventarisnya.",
+      "endpoint_missing": "Konfigurasikan endpoint inferensi untuk pengikatan ini.",
+      "endpoint_account_mismatch": "Endpoint dan ARM resource ID menunjuk ke akun yang berbeda. Perbaiki konfigurasi deployment.",
+      "inventory_refresh_failed": "Pembaruan inventaris gagal. Periksa akses Reader dan koneksi akun pada identitas aplikasi.",
+      "credential_unavailable": "Aplikasi tidak dapat memperoleh kredensial inventarisnya. Periksa konfigurasi identitas deployment."
+    }
   }
 }

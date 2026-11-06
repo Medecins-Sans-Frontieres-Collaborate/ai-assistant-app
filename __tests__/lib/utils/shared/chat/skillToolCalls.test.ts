@@ -1,6 +1,7 @@
 import {
   partitionSkillToolCalls,
   skillUsageHasIssue,
+  skillUsageNeedsAttention,
   summarizeSkillToolCalls,
 } from '@/lib/utils/shared/chat/skillToolCalls';
 
@@ -116,6 +117,54 @@ describe('skillToolCalls', () => {
   it('flags issues when any record is not completed', () => {
     expect(skillUsageHasIssue([record({})])).toBe(false);
     expect(skillUsageHasIssue([record({ status: 'incomplete' })])).toBe(true);
+    expect(skillUsageHasIssue([record({ status: 'in_progress' })])).toBe(false);
+  });
+
+  it('does not elevate optional routing failures, even when a requested skill applied', () => {
+    expect(
+      skillUsageNeedsAttention([
+        record({
+          status: 'incomplete',
+          output:
+            'GDPR (requested)\nAutomatic skill selection unavailable; explicitly selected skills still apply.',
+        }),
+      ]),
+    ).toBe(false);
+  });
+
+  it('keeps explicit omissions, requested-load failures and consent requirements actionable', () => {
+    expect(
+      skillUsageNeedsAttention([
+        record({ status: 'incomplete', output: 'missing (unavailable)' }),
+      ]),
+    ).toBe(true);
+    expect(
+      skillUsageNeedsAttention([
+        record({ name: 'load_skill (requested)', status: 'failed' }),
+      ]),
+    ).toBe(true);
+    expect(
+      skillUsageNeedsAttention([record({ output: 'Travel (needs approval)' })]),
+    ).toBe(true);
+  });
+
+  it('highlights unavailable references only when they affect explicitly selected guidance', () => {
+    const references = record({
+      name: 'skill_references',
+      status: 'incomplete',
+    });
+    expect(
+      skillUsageNeedsAttention([
+        record({ output: 'Style (auto)' }),
+        references,
+      ]),
+    ).toBe(false);
+    expect(
+      skillUsageNeedsAttention([
+        record({ output: 'Style (pinned)' }),
+        references,
+      ]),
+    ).toBe(true);
   });
 });
 

@@ -11,6 +11,7 @@ import type {
   M365IndexJob,
   M365ManifestItem,
 } from '@/lib/services/agentAccess/types';
+import { M365AgentSchema } from '@/lib/services/agentAccess/types';
 import {
   IndexJobActiveError,
   autoOcrBudgetFor,
@@ -310,6 +311,39 @@ describe('startIndexJob refresh mode', () => {
 });
 
 describe('stepIndexJob', () => {
+  it('preserves a limit raised during indexing, including after JSON storage round-trip', async () => {
+    const { jobId } = await startIndexJob(
+      req,
+      storage,
+      agent,
+      'u1',
+      'admin@example.org',
+    );
+    const raised = {
+      ...agent,
+      maxDocumentsOverride: 80,
+      maxDocumentsOverrideBy: 'global@example.org',
+      maxDocumentsOverrideAt: '2026-11-05T00:00:00.000Z',
+    };
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: raised,
+      etag: '"raised-etag"',
+    });
+    await stepIndexJob(req, storage, agent.id, jobId, 0);
+    await stepIndexJob(req, storage, agent.id, jobId, 0);
+    await stepIndexJob(req, storage, agent.id, jobId, 0);
+    const written = mockStore.writeM365Agent.mock.calls.at(-1)!;
+    expect(written[2]).toBe('"raised-etag"');
+    const reloaded = M365AgentSchema.parse(
+      JSON.parse(JSON.stringify(written[1])),
+    );
+    expect(reloaded).toMatchObject({
+      maxDocumentsOverride: 80,
+      maxDocumentsOverrideBy: raised.maxDocumentsOverrideBy,
+      maxDocumentsOverrideAt: raised.maxDocumentsOverrideAt,
+    });
+  });
+
   it('processes all items across steps and finalizes on the draining step', async () => {
     const { jobId } = await startIndexJob(
       req,

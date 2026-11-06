@@ -958,7 +958,9 @@
       "agentSearch": "dokumenty przeszukane przez agenta",
       "needsApproval": "wymaga Twojej akceptacji",
       "original": "jak pierwotnie uruchomione",
-      "updated": "zaktualizowane od tego czasu"
+      "updated": "zaktualizowane od tego czasu",
+      "limited": "Ograniczone",
+      "appliedCount": "Zastosowano {count}"
     },
     "skillsManualHint": "Automatyczny wybór jest wyłączony w Ustawieniach. Użyj jednorazowo przy następnej wiadomości lub przypnij umiejętność, aby korzystać z niej przez całą rozmowę.",
     "queuedMessage": {
@@ -5394,7 +5396,10 @@
     "noAllowedAudience": "Brak dozwolonej grupy odbiorców",
     "accessScopeHint": "Tylko reguły dostępu aplikacji. Uprawnienia źródła nadal obowiązują.",
     "detailsLabel": "Szczegóły",
-    "indexedDocumentSummary": "Zaindeksowano {indexed, plural, one {# dokument} other {# dokumentów}}"
+    "indexedDocumentSummary": "Zaindeksowano {indexed, plural, one {# dokument} other {# dokumentów}}",
+    "m365CapImmediateHelp": "Zastosowanie zapisuje limit natychmiast. Inne zmiany wymagają zapisania.",
+    "m365CapDraftHelp": "Limit zostanie zapisany podczas tworzenia agenta.",
+    "m365CapSaved": "Zapisano limit dokumentów: {limit}."
   },
   "localModels": {
     "title": "Modele lokalne",
@@ -5622,7 +5627,8 @@
       "webSearch": "Jak głęboko może sięgać wyszukiwanie w sieci: wielostopniowe wyszukiwanie, model oceniający i jego limity.",
       "contextBudget": "Ile rozmowy każdy model otrzymuje przy każdym użyciu.",
       "analytics": "Dostarczone raporty: co dotarło, kto może otworzyć każdy folder i które pola mogą być wyświetlane.",
-      "skills": "Wielokrotnego użytku bloki instrukcji stosowane przez asystenta w razie potrzeby podczas rozmowy."
+      "skills": "Wielokrotnego użytku bloki instrukcji stosowane przez asystenta w razie potrzeby podczas rozmowy.",
+      "models": "Przypisz modele bazowe i sprawdź gotowość wdrożenia regionalnego."
     },
     "openSettings": "Otwórz ustawienia",
     "area": {
@@ -5634,7 +5640,8 @@
       "webSearch": "Wyszukiwanie w sieci",
       "contextBudget": "Budżet kontekstu",
       "analytics": "Analityka",
-      "skills": "Umiejętności"
+      "skills": "Umiejętności",
+      "models": "Modele i gotowość"
     }
   },
   "limits": {
@@ -7998,5 +8005,114 @@
     "invalidated": "Pamięć podręczna została unieważniona. Przy następnym chronionym żądaniu wymagana będzie ponowna weryfikacja; uprawnienia nie zostały jeszcze sprawdzone.",
     "failed": "Nie udało się potwierdzić unieważnienia pamięci podręcznej. Spróbuj ponownie za chwilę.",
     "propagationNote": "Wymusza to ponowną weryfikację, a nie zmianę uprawnień w Microsoft. Nadal obowiązują opóźnienia propagacji Microsoft. Uprawnienia już przyznane nie zostaną cofnięte."
+  },
+  "auxiliaryModels": {
+    "title": "Modele i gotowość",
+    "description": "Wybierz modele do podejmowania decyzji bazowych i sprawdź wdrożenia, które je obsługują.",
+    "environmentHint": "Zmiany dotyczą tylko tego środowiska. Live, beta i dev mają niezależne polityki.",
+    "updated": "Raport zaktualizowano: {time}",
+    "loading": "Ładowanie przypisań modeli i gotowości…",
+    "loadError": "Nie można załadować przypisań modeli. Spróbuj ponownie bez zmiany bieżącej polityki.",
+    "retry": "Ponów próbę",
+    "neverChecked": "Nie sprawdzono",
+    "bootstrapUnavailable": "Ustawienie bootstrap środowiska jest nieprawidłowe. Obowiązuje zapisania polityka, ale domyślne wartości nie zostaną przywrócone, dopóki ustawienie wdrożenia nie zostanie poprawione.",
+    "runtimeFallback": "Ostatnie żądania używały modelu zapasowego. Sprawdź główne wdrożenie i wyniki jego działania.",
+    "accountLocation": "Lokalizacja konta Azure: {location}",
+    "incidents": "Ostatnie zmiany w gotowości",
+    "noIncidents": "Nie odnotowano awarii ani przywróceń gotowości.",
+    "refreshInventory": "Odśwież inwentarz",
+    "refreshing": "Odświeżanie inwentarza…",
+    "configUnavailable": "Pamięć polityki jest niedostępna. Wyświetlane przypisania mogą być ostatnią znaną wersją. Edycja jest wyłączona do czasu przywrócenia pamięci.",
+    "attention": "Wymaga uwagi",
+    "eligibleCount": "{count, plural, =0 {Brak zgodnego wdrożenia. Wybierz kompatybilny regionalny model.} one {Jedno zgodne wdrożenie. Dodaj zapasowe, aby zwiększyć odporność.} other {# zgodnych wdrożeń w tym łańcuchu.}}",
+    "retirementWarning": "Wersja modelu przeznaczona do wycofania. Sprawdź zamiennik przed zmianą na pozycję główną.",
+    "assignments": "Przypisania modeli",
+    "readiness": "Gotowość",
+    "assignmentHint": "Modele są uruchamiane w pokazanej kolejności. Brakujące, niezgodne i wycofane wdrożenia są pomijane. Żądania z UE pozostają na zweryfikowanych wdrożeniach rezydujących w UE.",
+    "probeUsage": "Sprawdzanie kompatybilności wysyła stałe, syntetyczne żądania z tożsamością aplikacji. Zużywają niewielką liczbę tokenów modeli, nigdy danych rozmów. Odczekaj co najmniej minutę przed ponownym sprawdzeniem wdrożenia.",
+    "save": "Zapisz przypisania",
+    "saving": "Zapisywanie…",
+    "saved": "Przypisania zapisane. Nowe żądania używają tej polityki.",
+    "resetDefaults": "Użyj domyślnych środowiska",
+    "unsaved": "Niezapisane zmiany",
+    "readinessHint": "Inwentarz potwierdza istnienie wdrożenia. Ostatnia udana operacja lub sprawdzenie kompatybilności potwierdza możliwość użycia przez aplikację. Nieudane odświeżenia nie usuwają ostatniego udanego sprawdzenia.",
+    "account": "Powiązanie konta: {binding}",
+    "lastInventory": "Ostatni udany inwentarz: {time}",
+    "retirementUnknown": "Status wycofania jest nieznany, ponieważ nie można zweryfikować katalogu modeli.",
+    "history": "Historia polityki",
+    "revision": "Obowiązująca rewizja: {revision}",
+    "noHistory": "Nie zarejestrowano zmian polityki w tym środowisku.",
+    "conflict": "Inny administrator zmienił politykę. Twój szkic nadal jest dostępny. Przeładuj politykę przed zapisem.",
+    "rateLimit": "To wdrożenie zostało sprawdzone niedawno. Odczekaj minutę przed ponownym sprawdzeniem.",
+    "actionError": "Nie udało się wykonać akcji. Sprawdź szczegóły i spróbuj ponownie; Twój szkic nie został odrzucony.",
+    "technicalDetails": "Szczegóły techniczne",
+    "reloadPolicy": "Przeładuj politykę i odrzuć szkic",
+    "emptyChain": "Nie przypisano modeli. Dodaj zgodne wdrożenie przed zapisaniem.",
+    "primary": "Główny",
+    "fallback": "Zapasowy",
+    "unknown": "Nieznane",
+    "retires": "Wersja modelu zostanie wycofana dnia {date}",
+    "checkResults": "Wyniki sprawdzenia operacji",
+    "passed": "Zdane",
+    "moveUp": "Przesuń wyżej",
+    "moveDown": "Przesuń w dół",
+    "remove": "Usuń",
+    "moveUpLabel": "Przesuń {model} w górę",
+    "moveDownLabel": "Przesuń {model} w dół",
+    "removeLabel": "Usuń {model} z łańcucha",
+    "runChecks": "Uruchom kontrolę kompatybilności",
+    "findDeployment": "Znajdź wdrożenie",
+    "deployment": "Wdrożenie",
+    "chooseDeployment": "Wybierz wdrożenie",
+    "addDeployment": "Dodaj do łańcucha",
+    "checkBeforeAdd": "Uruchom kontrolę kompatybilności tego celu przed dodaniem wdrożenia.",
+    "assessmentManaged": "Modele oceny wyszukiwania i przełączniki awaryjne są zarządzane w zakładce Modele i gotowość.",
+    "manageModels": "Zarządzaj modelami i gotowością",
+    "purpose": {
+      "routing": "Routing",
+      "searchAssessment": "Ocena wyszukiwania"
+    },
+    "purposeDescription": {
+      "routing": "Wybór umiejętności, routing wyszukiwania i kodu oraz klasyfikacja skracania dokumentów.",
+      "searchAssessment": "Oceń źródła i wybierz kolejny krok podczas wieloetapowego wyszukiwania."
+    },
+    "state": {
+      "ready": "Gotowy",
+      "unverified": "Dostępny, nie w pełni sprawdzony",
+      "fallback": "Używany tryb awaryjny",
+      "unavailable": "Brak odpowiedniego modelu",
+      "check_unavailable": "Kontrole niedostępne"
+    },
+    "inventoryState": {
+      "current": "Aktualny",
+      "stale": "Ostatnio znany stan magazynu",
+      "unavailable": "Magazyn niedostępny"
+    },
+    "operation": {
+      "skills": "Wybór umiejętności",
+      "tools": "Routing narzędzi",
+      "trim": "Klasyfikacja skracania",
+      "assessment": "Ocena wyszukiwania"
+    },
+    "reason": {
+      "endpoint_missing": "Brak endpointu lub powiązania konta",
+      "deployment_missing": "Brak wdrożenia lub nie obsługuje",
+      "unauthorized": "Odmowa dostępu do tożsamości aplikacji",
+      "timeout": "Przekroczono czas kontroli",
+      "throttled": "Limit przydziału lub szybkości osiągnięty",
+      "incompatible": "Operacja niekompatybilna",
+      "provider": "Błąd wywołania dostawcy",
+      "residency": "Strefa przetwarzania jest niedozwolona",
+      "retired": "Wersja modelu wycofana",
+      "inventory_unavailable": "Nie można zweryfikować magazynu",
+      "refused": "Model odrzucił żądanie"
+    },
+    "accountError": {
+      "account_resource_missing": "Skonfiguruj Foundry ARM resource ID tego powiązania, aby zweryfikować jego magazyn.",
+      "endpoint_missing": "Skonfiguruj endpoint inferencyjny tego powiązania.",
+      "endpoint_account_mismatch": "Endpoint i ARM resource ID wskazują na różne konta. Popraw konfigurację wdrożenia.",
+      "inventory_refresh_failed": "Odświeżenie magazynu nie powiodło się. Sprawdź uprawnienia Reader tożsamości aplikacji i łączność z kontem.",
+      "credential_unavailable": "Aplikacja nie mogła uzyskać swojego poświadczenia magazynu. Sprawdź konfigurację tożsamości wdrożenia."
+    }
   }
 }

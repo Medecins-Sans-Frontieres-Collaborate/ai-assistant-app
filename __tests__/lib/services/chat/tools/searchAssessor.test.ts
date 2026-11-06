@@ -517,7 +517,7 @@ describe('SearchAssessor', () => {
       );
     });
 
-    it('an EU user never leaves the EU for the selected model — only the router’s own model may run on the default account', async () => {
+    it('an EU user never leaves the EU, including the fallback model', async () => {
       eu.mockRejectedValue(notDeployed());
       create.mockResolvedValue(completion(answerJson));
 
@@ -527,12 +527,12 @@ describe('SearchAssessor', () => {
         timeoutMs: 20_000,
       });
 
-      expect(result?.verdict).toBe('answer');
+      expect(result).toBeNull();
       expect(models(eu)).toEqual([
         'Mistral-Large-3',
         ASSESSOR_FALLBACK_MODEL_ID,
       ]);
-      expect(models(create)).toEqual([ASSESSOR_FALLBACK_MODEL_ID]);
+      expect(create).not.toHaveBeenCalled();
       expect(us).not.toHaveBeenCalled();
     });
 
@@ -613,7 +613,7 @@ describe('SearchAssessor', () => {
       expect(shared.mock.calls.length + create.mock.calls.length).toBe(2);
     });
 
-    it('uses the default account when no region is configured or given', async () => {
+    it('refuses an unconfigured EU account but retains the legacy unpinned default path', async () => {
       assessor = new SearchAssessor(
         client(create, 'https://default.example/'),
         () => undefined,
@@ -629,7 +629,7 @@ describe('SearchAssessor', () => {
         modelId: DEFAULT_ASSESSOR_MODEL_ID,
         timeoutMs: 20_000,
       });
-      expect(models(create)).toEqual(['Mistral-Large-3', 'Mistral-Large-3']);
+      expect(models(create)).toEqual(['Mistral-Large-3']);
     });
   });
 });

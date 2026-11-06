@@ -907,7 +907,9 @@
       "agentSearch": "documentos buscados por el agente",
       "needsApproval": "requiere su aprobación",
       "original": "como se ejecutó originalmente",
-      "updated": "actualizado desde"
+      "updated": "actualizado desde",
+      "limited": "Limitado",
+      "appliedCount": "{count} aplicado(s)"
     },
     "skillsManualHint": "La selección automática está desactivada en Configuración. Úselo una vez para el siguiente mensaje o ancle una habilidad para usarla durante toda esta conversación.",
     "queuedMessage": {
@@ -5394,7 +5396,10 @@
     "noAllowedAudience": "Sin audiencia permitida",
     "accessScopeHint": "Solo reglas de acceso a la app. Los permisos de origen siguen aplicando.",
     "detailsLabel": "Detalles",
-    "indexedDocumentSummary": "{indexed, plural, one {# documento} other {# documentos}} indexados"
+    "indexedDocumentSummary": "{indexed, plural, one {# documento} other {# documentos}} indexados",
+    "m365CapImmediateHelp": "Aplicar guarda el límite de inmediato. Los demás cambios requieren Guardar.",
+    "m365CapDraftHelp": "El límite se guarda al crear el agente.",
+    "m365CapSaved": "Límite de documentos guardado: {limit}."
   },
   "localModels": {
     "title": "Modelos locales",
@@ -5622,7 +5627,8 @@
       "webSearch": "Hasta dónde puede llegar una búsqueda web: búsqueda multi-paso, su modelo evaluador y sus límites.",
       "contextBudget": "Cuánta conversación se envía a cada modelo en cada turno.",
       "analytics": "Informes entregados: lo que llegó, quién puede abrir cada carpeta y qué campos se pueden mostrar.",
-      "skills": "Bloques de instrucciones reutilizables que el asistente aplica cuando una conversación los necesita."
+      "skills": "Bloques de instrucciones reutilizables que el asistente aplica cuando una conversación los necesita.",
+      "models": "Asigne modelos de fondo y verifique la preparación para el despliegue regional."
     },
     "openSettings": "Abrir ajustes",
     "area": {
@@ -5634,7 +5640,8 @@
       "webSearch": "Búsqueda web",
       "contextBudget": "Presupuesto de contexto",
       "analytics": "Analítica",
-      "skills": "Habilidades"
+      "skills": "Habilidades",
+      "models": "Modelos y preparación"
     }
   },
   "limits": {
@@ -7998,5 +8005,114 @@
     "invalidated": "Caché invalidada. Se requiere una verificación nueva en la próxima solicitud protegida; los permisos aún no se han vuelto a comprobar.",
     "failed": "No se pudo confirmar la invalidación de la caché. Intente de nuevo en breve.",
     "propagationNote": "Esto fuerza una verificación nueva, no un cambio en los permisos de Microsoft. Siguen aplicando los retrasos de propagación de Microsoft. Las operaciones ya autorizadas no se deshacen."
+  },
+  "auxiliaryModels": {
+    "title": "Modelos y preparación",
+    "description": "Elija modelos para decisiones de fondo e inspeccione los despliegues que los sirven.",
+    "environmentHint": "Los cambios solo se aplican a este entorno. Live, beta y dev tienen políticas independientes.",
+    "updated": "Informe actualizado: {time}",
+    "loading": "Cargando asignaciones de modelos y preparación…",
+    "loadError": "No se pudieron cargar las asignaciones de modelos. Vuelva a intentarlo sin cambiar la política actual.",
+    "retry": "Reintentar",
+    "neverChecked": "No verificado",
+    "bootstrapUnavailable": "La configuración de arranque del entorno es inválida. Se mantiene en vigor una política guardada existente, pero los valores predeterminados del entorno no pueden restaurarse hasta que se corrija la configuración de despliegue.",
+    "runtimeFallback": "Las solicitudes recientes usaron un modelo alternativo. Verifique el despliegue principal y sus resultados de operación.",
+    "accountLocation": "Ubicación de la cuenta de Azure: {location}",
+    "incidents": "Cambios recientes en preparación",
+    "noIncidents": "No se han registrado fallos ni recuperaciones de preparación.",
+    "refreshInventory": "Actualizar inventario",
+    "refreshing": "Actualizando inventario…",
+    "configUnavailable": "El almacenamiento de la política no está disponible. Las asignaciones mostradas pueden ser la última versión conocida. La edición está deshabilitada hasta que se recupere el almacenamiento.",
+    "attention": "Requiere atención",
+    "eligibleCount": "{count, plural, =0 {No hay despliegue elegible. Elija un modelo regional compatible.} one {Un despliegue elegible. Agregue un alternativo para mejorar la resiliencia.} other {# despliegues elegibles en esta cadena.}}",
+    "retirementWarning": "Una versión designada del modelo se acerca a su retirada. Revise el reemplazo antes de ponerlo en la posición principal.",
+    "assignments": "Asignaciones de modelos",
+    "readiness": "Preparación",
+    "assignmentHint": "Los modelos se ejecutan en el orden mostrado. Los despliegues ausentes, incompatibles o retirados se omiten. Las solicitudes de la UE permanecen en despliegues verificados residentes en la UE.",
+    "probeUsage": "Las comprobaciones de compatibilidad envían solicitudes sintéticas fijas con la identidad de la app. Utilizan pocos tokens del modelo, nunca datos de conversación. Espere al menos un minuto antes de repetir una comprobación de despliegue.",
+    "save": "Guardar asignaciones",
+    "saving": "Guardando…",
+    "saved": "Asignaciones guardadas. Las nuevas solicitudes usarán esta política.",
+    "resetDefaults": "Usar valores predeterminados del entorno",
+    "unsaved": "Cambios no guardados",
+    "readinessHint": "El inventario confirma que existe un despliegue. Una operación reciente válida o una comprobación de compatibilidad confirman que la app puede usarlo. Las actualizaciones fallidas no eliminan la última comprobación exitosa.",
+    "account": "Vinculación de cuenta: {binding}",
+    "lastInventory": "Último inventario exitoso: {time}",
+    "retirementUnknown": "El estado de retirada es desconocido porque no se pudo verificar el catálogo del modelo.",
+    "history": "Historial de la política",
+    "revision": "Revisión efectiva: {revision}",
+    "noHistory": "No se han registrado cambios de política en este entorno.",
+    "conflict": "Otro administrador cambió la política. Su borrador sigue aquí. Recargue la política antes de guardar nuevamente.",
+    "rateLimit": "Este despliegue fue verificado recientemente. Espere un minuto antes de volver a comprobarlo.",
+    "actionError": "No se pudo completar la acción. Revise los detalles e intente de nuevo; su borrador no se ha descartado.",
+    "technicalDetails": "Detalles técnicos",
+    "reloadPolicy": "Recargar política y descartar borrador",
+    "emptyChain": "No hay modelos asignados. Añada un despliegue compatible antes de guardar.",
+    "primary": "Principal",
+    "fallback": "Alternativo",
+    "unknown": "Desconocido",
+    "retires": "La versión del modelo se retira el {date}",
+    "checkResults": "Resultados de la comprobación de operación",
+    "passed": "Aprobado",
+    "moveUp": "Subir",
+    "moveDown": "Bajar",
+    "remove": "Eliminar",
+    "moveUpLabel": "Subir {model}",
+    "moveDownLabel": "Bajar {model}",
+    "removeLabel": "Eliminar {model} de la cadena",
+    "runChecks": "Ejecutar verificaciones de compatibilidad",
+    "findDeployment": "Buscar un deployment",
+    "deployment": "Deployment",
+    "chooseDeployment": "Elegir un deployment",
+    "addDeployment": "Agregar a la cadena",
+    "checkBeforeAdd": "Ejecutar las comprobaciones de compatibilidad de este propósito antes de agregar el deployment.",
+    "assessmentManaged": "Los modelos de search-assessment y backups se gestionan en Modelos y disponibilidad.",
+    "manageModels": "Gestionar modelos y disponibilidad",
+    "purpose": {
+      "routing": "Enrutamiento",
+      "searchAssessment": "Evaluación de búsqueda"
+    },
+    "purposeDescription": {
+      "routing": "Selección de habilidades, enrutamiento de búsqueda y código, y clasificación para recorte de documentos.",
+      "searchAssessment": "Evalúa las fuentes y decide el siguiente paso durante una búsqueda de varios pasos."
+    },
+    "state": {
+      "ready": "Listo",
+      "unverified": "Disponible, no completamente verificado",
+      "fallback": "Usando respaldo",
+      "unavailable": "No hay modelo elegible",
+      "check_unavailable": "Verificaciones no disponibles"
+    },
+    "inventoryState": {
+      "current": "Actual",
+      "stale": "Último inventario conocido",
+      "unavailable": "Inventario no disponible"
+    },
+    "operation": {
+      "skills": "Selección de habilidades",
+      "tools": "Enrutamiento de herramientas",
+      "trim": "Clasificación de recorte",
+      "assessment": "Evaluación de búsqueda"
+    },
+    "reason": {
+      "endpoint_missing": "Falta endpoint o vinculación de cuenta",
+      "deployment_missing": "Falta deployment o no está sirviendo",
+      "unauthorized": "Acceso denegado a la identidad de la app",
+      "timeout": "La verificación excedió el tiempo",
+      "throttled": "Se alcanzó la cuota o el límite de velocidad",
+      "incompatible": "Operación incompatible",
+      "provider": "Error en la llamada al proveedor",
+      "residency": "La zona de procesamiento no está permitida",
+      "retired": "Versión del modelo retirada",
+      "inventory_unavailable": "No se pudo verificar el inventario",
+      "refused": "El modelo rechazó la solicitud"
+    },
+    "accountError": {
+      "account_resource_missing": "Configure el ID de recurso Foundry ARM de esta vinculación para verificar su inventario.",
+      "endpoint_missing": "Configure el endpoint de inferencia de esta vinculación.",
+      "endpoint_account_mismatch": "El endpoint y el ID de recurso ARM identifican cuentas diferentes. Corrija la configuración del deployment.",
+      "inventory_refresh_failed": "Falló la actualización del inventario. Verifique el acceso Reader de la identidad de la app y la conectividad de la cuenta.",
+      "credential_unavailable": "La app no pudo obtener su credencial de inventario. Verifique la configuración de la identidad del deployment."
+    }
   }
 }
