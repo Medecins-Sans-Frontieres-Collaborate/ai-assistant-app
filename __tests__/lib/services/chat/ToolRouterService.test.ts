@@ -938,7 +938,7 @@ describe('ToolRouterService', () => {
     });
 
     describe('model configuration', () => {
-      it('should use gpt-5.4-nano model for tool routing', async () => {
+      it('should use gpt-5.6-luna model for tool routing', async () => {
         const mockResponse = {
           choices: [
             {
@@ -972,7 +972,7 @@ describe('ToolRouterService', () => {
         await service.determineTool(request);
 
         const callArgs = mockOpenAIClient.chat.completions.create.mock.calls[0];
-        expect(callArgs[0].model).toBe('gpt-5.4-nano');
+        expect(callArgs[0].model).toBe('gpt-5.6-luna');
       });
 
       it('should use structured JSON output with strict schema', async () => {

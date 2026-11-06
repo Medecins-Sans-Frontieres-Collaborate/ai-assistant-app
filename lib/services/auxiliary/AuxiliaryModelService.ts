@@ -34,6 +34,7 @@ import {
   type AuxiliaryOperation,
   type AuxiliaryPolicy,
   type AuxiliaryRegion,
+  DEFAULT_AUXILIARY_ROUTING_MODEL,
   PURPOSE_OPERATIONS,
   referenceKey,
 } from './types';
@@ -56,8 +57,17 @@ export function auxiliaryBootstrap(
   const us = auxiliaryAccount('US').configured ? 'US' : 'default';
   return {
     routing: {
-      EU: references('EU', ['gpt-5.4-mini', 'gpt-4.1']),
-      US: references(us, ['gpt-5.4-nano', 'gpt-5.4-mini', 'gpt-4.1']),
+      EU: references('EU', [
+        DEFAULT_AUXILIARY_ROUTING_MODEL,
+        'gpt-5.4-mini',
+        'gpt-4.1',
+      ]),
+      US: references(us, [
+        DEFAULT_AUXILIARY_ROUTING_MODEL,
+        'gpt-5.4-nano',
+        'gpt-5.4-mini',
+        'gpt-4.1',
+      ]),
     },
     searchAssessment: {
       EU: references('EU', [
