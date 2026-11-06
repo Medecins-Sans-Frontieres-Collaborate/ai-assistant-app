@@ -1,6 +1,7 @@
 import { Session } from 'next-auth';
 
 import { DEFAULT_SYSTEM_PROMPT } from '@/lib/utils/app/const';
+import { toProviderMessages } from '@/lib/utils/server/chat/providerMessages';
 
 import { Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
@@ -36,13 +37,17 @@ export class StandardOpenAIHandler extends ModelHandler {
     systemPrompt: string | undefined,
     modelConfig: OpenAIModel,
   ): OpenAI.Chat.Completions.ChatCompletionMessageParam[] {
-    // Standard approach: add system message at the beginning
+    // Standard approach: add system message at the beginning. History
+    // messages are reduced to role + content: the third-party serving
+    // containers behind Foundry reject unknown message keys (see
+    // buildRequestParams), so app-internal fields such as tool-call records
+    // must not ride along (issue #152).
     return [
       {
         role: 'system',
         content: systemPrompt || DEFAULT_SYSTEM_PROMPT,
       },
-      ...(messages as OpenAI.Chat.Completions.ChatCompletionMessageParam[]),
+      ...toProviderMessages(messages),
     ];
   }
 
