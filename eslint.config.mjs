@@ -16,6 +16,8 @@ export default [
       '*.config.js',
       '*.config.mjs',
       '.husky/**/*',
+      // Python virtual environments (tooling venvs ship their own JS).
+      '**/.venv/**/*',
     ],
   },
   {
