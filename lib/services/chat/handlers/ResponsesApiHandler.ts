@@ -1,4 +1,5 @@
 import { stripThinking } from '@/lib/utils/app/stream/thinking';
+import { resolveReasoningEffort } from '@/lib/utils/shared/chat/reasoningEffort';
 
 import {
   FileMessageContent,
@@ -189,10 +190,7 @@ export class ResponsesApiHandler {
     }
 
     if (modelConfig.supportsReasoningEffort) {
-      const effort =
-        reasoningEffort === 'minimal' && !modelConfig.supportsMinimalReasoning
-          ? 'low'
-          : reasoningEffort;
+      const effort = resolveReasoningEffort(modelConfig, reasoningEffort);
       params.reasoning = {
         ...(effort ? { effort } : {}),
         // The entire point of this API surface for us: visible reasoning.
