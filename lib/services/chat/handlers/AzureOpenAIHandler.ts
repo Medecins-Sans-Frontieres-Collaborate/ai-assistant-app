@@ -1,6 +1,10 @@
 import { Session } from 'next-auth';
 
 import { DEFAULT_SYSTEM_PROMPT } from '@/lib/utils/app/const';
+import {
+  ProviderMessageFields,
+  toProviderMessages,
+} from '@/lib/utils/server/chat/providerMessages';
 
 import {
   FileMessageContent,
@@ -60,19 +64,24 @@ export class AzureOpenAIHandler extends ModelHandler {
    * This is a defensive measure to prevent API errors if upstream processing
    * fails to convert custom content types like 'file_url'.
    *
+   * Every returned message carries ONLY `role` and `content`: app-internal
+   * fields on history messages (tool-call records, citations, thinking,
+   * error flags, tone/prompt ids) are dropped here so they never reach the
+   * provider (see lib/utils/server/chat/providerMessages.ts, issue #152).
+   *
    * @param messages - The messages to sanitize
-   * @returns Messages with only Azure-supported content types
+   * @returns Provider-shaped messages with only Azure-supported content types
    */
-  private sanitizeMessages(messages: Message[]): Message[] {
+  private sanitizeMessages(messages: Message[]): ProviderMessageFields[] {
     return messages.map((message) => {
       // String content is always valid
       if (typeof message.content === 'string') {
-        return message;
+        return { role: message.role, content: message.content };
       }
 
       // Non-array content, pass through
       if (!Array.isArray(message.content)) {
-        return message;
+        return { role: message.role, content: message.content };
       }
 
       // Filter out unsupported content types
@@ -83,7 +92,7 @@ export class AzureOpenAIHandler extends ModelHandler {
       // If all content was filtered out, add placeholder text
       if (filteredContent.length === 0) {
         return {
-          ...message,
+          role: message.role,
           content: '[Content could not be processed]',
         };
       }
@@ -95,14 +104,14 @@ export class AzureOpenAIHandler extends ModelHandler {
         'text' in filteredContent[0]
       ) {
         return {
-          ...message,
+          role: message.role,
           content: filteredContent[0].text,
         };
       }
 
       return {
-        ...message,
-        content: filteredContent,
+        role: message.role,
+        content: filteredContent as Message['content'],
       };
     });
   }
@@ -134,7 +143,7 @@ export class AzureOpenAIHandler extends ModelHandler {
    * @returns Messages with system prompt merged into first user message
    */
   private mergeSystemPromptIntoMessages(
-    messages: Message[],
+    messages: ProviderMessageFields[],
     systemPrompt: string,
   ): OpenAI.Chat.Completions.ChatCompletionMessageParam[] {
     const firstUserIndex = messages.findIndex((m) => m.role === 'user');
@@ -188,7 +197,7 @@ export class AzureOpenAIHandler extends ModelHandler {
     // sources.
     if (this.shouldAvoidSystemPrompt(modelConfig)) {
       const withoutSystemRoles = sanitizedMessages.map(
-        (msg): Message =>
+        (msg): ProviderMessageFields =>
           msg.role === 'system' ? { ...msg, role: 'user' } : msg,
       );
       return this.mergeSystemPromptIntoMessages(
@@ -203,7 +212,7 @@ export class AzureOpenAIHandler extends ModelHandler {
         role: 'system',
         content: effectiveSystemPrompt,
       },
-      ...(sanitizedMessages as OpenAI.Chat.Completions.ChatCompletionMessageParam[]),
+      ...toProviderMessages(sanitizedMessages),
     ];
   }
 

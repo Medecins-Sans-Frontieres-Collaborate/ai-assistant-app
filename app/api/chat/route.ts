@@ -24,6 +24,8 @@ import {
   isModelHandlerStage,
   resolveStageTimeouts,
 } from '@/lib/services/chat/pipeline';
+import { ActiveFileInjector } from '@/lib/services/chat/processors/ActiveFileInjector';
+import { ActiveFileProcessor } from '@/lib/services/chat/processors/ActiveFileProcessor';
 import { FileProcessor } from '@/lib/services/chat/processors/FileProcessor';
 import { ImageProcessor } from '@/lib/services/chat/processors/ImageProcessor';
 import {
@@ -371,6 +373,15 @@ export async function POST(req: NextRequest): Promise<Response> {
           blobStorageClient,
         ),
         new ImageProcessor(),
+        // Active files: extract text for files without cached content, then
+        // inject the selected files into the prompt. These stages were
+        // dropped from the pipeline by a large sync commit (2b5da4db1);
+        // without them, activated files — including the generated files the
+        // client auto-activates after an interpreter run (issue #126) —
+        // never reached the model while the generated-file manifest claimed
+        // their text was present (issue #152).
+        new ActiveFileProcessor(),
+        new ActiveFileInjector(),
 
         // Feature enrichers
         // Prompt-agent persona override runs BEFORE RAGEnricher: both key
