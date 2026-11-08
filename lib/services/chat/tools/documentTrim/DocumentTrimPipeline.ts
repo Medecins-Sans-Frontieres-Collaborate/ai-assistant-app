@@ -17,7 +17,11 @@ import {
   createFoundryOpenAIClient,
 } from '../CodeInterpreterTool';
 import { persistContainerFiles } from '../CodeInterpreterTool';
-import { TrimTarget, TrimmableFormat } from './trimDetector';
+import {
+  LengthChangeDirection,
+  TrimTarget,
+  TrimmableFormat,
+} from './trimDetector';
 import { buildTrimInstruction } from './trimInstruction';
 import { TRIM_PLAN_SCHEMA, TrimPlan } from './trimPlanSchema';
 import { partitionForTrim } from './trimSections';
@@ -62,6 +66,12 @@ export interface DocumentTrimResult extends CodeInterpreterResult {
   retried: boolean;
   /** Protected sections excluded from the count and left untouched. */
   excludedSections: string[];
+  /**
+   * The document already met the target, so nothing was planned, run or
+   * produced (`generatedFiles` is empty). Callers tell the user instead of
+   * reporting a failure.
+   */
+  alreadyWithinTarget?: boolean;
 }
 
 interface TrimStats {
@@ -114,6 +124,77 @@ export function resolveTrimTarget(
     target: Math.max(1, Math.round(countWords(extractedText) * target.keep)),
     approx: true,
   };
+}
+
+/** A document's countable length measured against a length request. */
+export interface DocumentLengthCheck {
+  unit: 'words' | 'characters';
+  /** Resolved target in `unit`. */
+  target: number;
+  /** Current countable length in `unit` (protected sections excluded). */
+  current: number;
+  approx: boolean;
+  /** True when the requested change is already satisfied — nothing to do. */
+  alreadyMet: boolean;
+}
+
+/**
+ * Measures `countableText` against a length target in the given direction.
+ *
+ * "Already met" reuses the pipeline's own acceptance band so the check and
+ * the verifier agree: a reduction is met at or below the target (up to
+ * OVERSHOOT_RATIO above it for approximate, page-derived targets, which is
+ * what the verifier would accept after trimming); an expansion is met at or
+ * above the target (down to target / OVERSHOOT_RATIO when approximate).
+ *
+ * @param countableText - Body text with protected sections removed.
+ * @param target - The classified target.
+ * @param direction - Which way the user wants the length to move.
+ * @returns The measurement and whether the request is already satisfied.
+ */
+function assessLength(
+  countableText: string,
+  target: TrimTarget,
+  direction: LengthChangeDirection,
+): DocumentLengthCheck {
+  const resolved = resolveTrimTarget(target, countableText);
+  const current =
+    resolved.unit === 'words'
+      ? countWords(countableText)
+      : countableText.length;
+  const tolerance = resolved.approx ? OVERSHOOT_RATIO : 1;
+  const alreadyMet =
+    direction === 'reduce'
+      ? current <= resolved.target * tolerance
+      : current >= resolved.target / tolerance;
+  return { ...resolved, current, alreadyMet };
+}
+
+/**
+ * Checks an attached document's length against a classified length request
+ * BEFORE any planning or code runs, counting the same body text the trim
+ * pipeline counts (references, appendices and other protected sections
+ * excluded).
+ *
+ * @param extractedText - The document's full extracted text.
+ * @param target - The classified target.
+ * @param direction - 'reduce' (trim) or 'expand'.
+ * @returns The measurement; `alreadyMet` means no change is needed.
+ *
+ * @example
+ * checkDocumentLength(text, { kind: 'absolute', unit: 'words', target: 500, approx: true }, 'reduce');
+ * // => { unit: 'words', target: 500, current: 420, approx: true, alreadyMet: true }
+ */
+export function checkDocumentLength(
+  extractedText: string,
+  target: TrimTarget,
+  direction: LengthChangeDirection,
+): DocumentLengthCheck {
+  return assessLength(
+    partitionForTrim(extractedText).countableText,
+    target,
+    direction,
+  );
 }
 
 const PLANNER_SYSTEM_PROMPT = `You are producing a MECHANICAL edit plan to shorten a document. Another program will apply your plan verbatim — you will not get to clarify anything.
@@ -411,6 +492,33 @@ export async function runDocumentTrim(
   // BODY — cutting the reference list to hit a number would be vandalism.
   const partition = partitionForTrim(params.extractedText);
   const resolved = resolveTrimTarget(params.target, partition.countableText);
+
+  // Already short enough: planning would find nothing to cut and the turn
+  // would report a failure for a request that needs no work at all.
+  const lengthCheck = assessLength(
+    partition.countableText,
+    params.target,
+    'reduce',
+  );
+  if (lengthCheck.alreadyMet) {
+    console.log(
+      `[DocumentTrim] Already within target (${lengthCheck.current} <= ${lengthCheck.target} ${lengthCheck.unit}); nothing to trim`,
+    );
+    return {
+      text: `The document already has ${lengthCheck.current} ${lengthCheck.unit}, within the ${lengthCheck.target} ${lengthCheck.unit} target. No changes were made.`,
+      codeRuns: [],
+      generatedFiles: [],
+      containerIds: [],
+      durationMs: Date.now() - startedAt,
+      unit: lengthCheck.unit,
+      targetCount: lengthCheck.target,
+      countBefore: lengthCheck.current,
+      countAfter: lengthCheck.current,
+      retried: false,
+      excludedSections: partition.excludedHeadings,
+      alreadyWithinTarget: true,
+    };
+  }
   const outputFilename = outputFilenameFor(
     params.document,
     params.format,
