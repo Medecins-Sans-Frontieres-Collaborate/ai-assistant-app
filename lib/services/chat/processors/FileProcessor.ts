@@ -19,6 +19,7 @@ import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { validateBufferSignature } from '@/lib/utils/server/file/fileValidation';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import { applyAdmissionCeiling } from '@/lib/utils/shared/modelThroughput';
 
 import { Message, TextMessageContent } from '@/types/chat';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
@@ -29,12 +30,25 @@ import {
   getFastTranscriptionService,
 } from '../../transcription/fastTranscriptionService';
 import { TranscriptionServiceFactory } from '../../transcriptionService';
+import {
+  nativeInterpreterPlanned,
+  planningTokensPerMinute,
+} from '../enrichers/interpreterCapability';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
+import {
+  blobIdFromUrl,
+  selectInterpreterInputRefs,
+} from '../tools/interpreterInputRefs';
 import {
   InputValidator,
   expiredFilePipelineError,
 } from '../validators/InputValidator';
+import {
+  MOUNTED_FILES_INLINE_BUDGET_TOKENS,
+  buildMountedFileExcerpt,
+  mountedExcerptTokens,
+} from './mountedFileExcerpt';
 
 import {
   isAudioVideoFile,
@@ -52,6 +66,9 @@ import { performance } from 'perf_hooks';
 // Note: Synchronous polling was removed in favor of async client-side polling.
 // Batch transcription jobs are now submitted and returned immediately with pending state.
 // The frontend polls /api/transcription/status/[jobId] and updates the message when complete.
+
+/** Float slack for the per-turn inline budget comparison (see execute). */
+const INLINE_BUDGET_EPSILON_TOKENS = 1e-6;
 
 /**
  * FileProcessor handles file content processing in the pipeline.
@@ -143,7 +160,32 @@ export class FileProcessor extends BasePipelineStage {
           const inlineFiles: Array<{
             filename: string;
             content: string;
+            isExcerpt?: boolean;
           }> = [];
+          // Full text of every file the prompt carries only in part
+          // (excerpt or summary), for the attachment reader tools.
+          const partialTexts: Record<string, string> = {};
+          // Estimated tokens already inlined this turn. The inline threshold
+          // is one window for the WHOLE turn, not per file: two spreadsheets
+          // each just under it would otherwise both inline and together
+          // overflow what the deployment admits (429 on every retry).
+          let inlinedTokens = 0;
+          // Throughput each model call of this turn may plan with: an
+          // interpreter turn re-sends this context on every call.
+          const planningTpm = planningTokensPerMinute(context);
+          // Attachments the native interpreter mounts in its sandbox. An
+          // over-budget one is excerpted (the model reads the rest with
+          // code) instead of summarized on the same deployment.
+          const mountedBlobIds = new Set(
+            nativeInterpreterPlanned(context)
+              ? selectInterpreterInputRefs({ messages: context.messages }).map(
+                  (ref) => ref.id,
+                )
+              : [],
+          );
+          // Attachments placed in context this turn (ActiveFileInjector
+          // skips them so a document is never sent twice).
+          const processedUrls: string[] = [];
 
           const transcripts: TranscriptMetadata[] = [];
 
@@ -671,24 +713,67 @@ export class FileProcessor extends BasePipelineStage {
                 );
 
                 // Calculate chunk threshold for this model/content
-                const modelConfig =
+                const catalogConfig =
                   OpenAIModels[context.modelId as OpenAIModelID];
+                const modelConfig = catalogConfig
+                  ? applyAdmissionCeiling(catalogConfig, planningTpm)
+                  : undefined;
                 const charsPerToken = estimateCharsPerToken(text);
                 const { chunkSize } = calculateChunkConfig(
                   modelConfig,
                   charsPerToken,
                 );
+                // Unrounded on purpose: a file of exactly chunkSize chars
+                // must still inline (rounding the two sides apart would
+                // refuse it whenever charsPerToken is fractional), and the
+                // epsilon absorbs float error in the running sum.
+                const fileTokens = text.length / charsPerToken;
+                const windowInlineTokens = chunkSize / charsPerToken;
+                const mounted = mountedBlobIds.has(
+                  blobIdFromUrl(file.url) ?? '',
+                );
+                const inlineBudgetTokens = mounted
+                  ? Math.min(
+                      windowInlineTokens,
+                      MOUNTED_FILES_INLINE_BUDGET_TOKENS,
+                    )
+                  : windowInlineTokens;
 
-                if (text.length <= chunkSize) {
-                  // Small file: skip summarization, include raw content inline
+                if (
+                  inlinedTokens + fileTokens <=
+                  inlineBudgetTokens + INLINE_BUDGET_EPSILON_TOKENS
+                ) {
+                  // Fits the turn's remaining inline budget: skip
+                  // summarization, include raw content inline.
                   console.log(
-                    `[FileProcessor] Small file (${text.length} chars <= ${chunkSize} chunk size), inlining: ${sanitizeForLog(filename)}`,
+                    `[FileProcessor] Inlining ${sanitizeForLog(filename)} (~${Math.round(fileTokens)} tokens; turn total ~${Math.round(inlinedTokens + fileTokens)} of ${Math.round(inlineBudgetTokens)})`,
                   );
                   inlineFiles.push({ filename, content: text });
-                } else {
-                  // Large file: use chunking/summarization pipeline
+                  inlinedTokens += fileTokens;
+                } else if (mounted) {
+                  const excerptTokens = mountedExcerptTokens(
+                    inlineBudgetTokens - inlinedTokens,
+                  );
+                  const excerpt = buildMountedFileExcerpt(
+                    text,
+                    filename,
+                    excerptTokens * charsPerToken,
+                  );
                   console.log(
-                    `[FileProcessor] Large file (${text.length} chars > ${chunkSize} chunk size), summarizing: ${sanitizeForLog(filename)}`,
+                    `[FileProcessor] Excerpting ${sanitizeForLog(filename)} (~${Math.round(fileTokens)} tokens; ~${excerptTokens} inline, full file mounted for the code interpreter)`,
+                  );
+                  inlineFiles.push({
+                    filename,
+                    content: excerpt,
+                    isExcerpt: excerpt !== text,
+                  });
+                  if (excerpt !== text) partialTexts[filename] = text;
+                  inlinedTokens += excerpt.length / charsPerToken;
+                } else {
+                  // Large file, or the turn's inline budget is spent: use
+                  // the chunking/summarization pipeline.
+                  console.log(
+                    `[FileProcessor] Summarizing ${sanitizeForLog(filename)} (~${Math.round(fileTokens)} tokens; ~${Math.round(inlinedTokens)} of ${Math.round(inlineBudgetTokens)} already inlined this turn)`,
                   );
 
                   // A large document means dozens of sequential summarization
@@ -724,6 +809,7 @@ export class FileProcessor extends BasePipelineStage {
                     // Images will be included in the final message content by StandardChatHandler
                     images: undefined,
                     preExtractedText: text,
+                    servingTokensPerMinute: planningTpm,
                     onProgress: (processed, total) => {
                       void context.emitActivity?.(
                         'chat.activity.condensingDocument',
@@ -749,6 +835,7 @@ export class FileProcessor extends BasePipelineStage {
                     );
                   }
 
+                  partialTexts[filename] = text;
                   fileSummaries.push({
                     filename,
                     summary,
@@ -756,6 +843,7 @@ export class FileProcessor extends BasePipelineStage {
                   });
                 }
 
+                processedUrls.push(file.url);
                 console.log(
                   `[FileProcessor] Document processed: ${sanitizeForLog(filename)}`,
                 );
@@ -854,6 +942,16 @@ export class FileProcessor extends BasePipelineStage {
               transcripts: transcripts.length > 0 ? transcripts : undefined,
               images: convertedImages.length > 0 ? convertedImages : undefined,
             },
+            attachmentUrlsProcessedThisTurn:
+              processedUrls.length > 0 ? processedUrls : undefined,
+            ...(Object.keys(partialTexts).length > 0
+              ? {
+                  attachmentTexts: {
+                    ...context.attachmentTexts,
+                    ...partialTexts,
+                  },
+                }
+              : {}),
           };
         } catch (error) {
           span.recordException(error as Error);
