@@ -395,3 +395,91 @@ describe('StandardChatHandler — builtin M365 server seam', () => {
     expect(request.builtinExecutor).toBeUndefined();
   });
 });
+
+/**
+ * The attachment reader: offered when the prompt carries a file only in
+ * part and the model can use tools; never otherwise.
+ */
+describe('StandardChatHandler — attachment reader', () => {
+  const CLAUDE = {
+    id: 'claude-sonnet-5',
+    sdk: 'anthropic-foundry',
+    supportsTools: true,
+  } as unknown as ChatContext['model'];
+  const MISTRAL = {
+    id: 'Mistral-Large-3',
+    sdk: 'openai',
+  } as unknown as ChatContext['model'];
+
+  function setup() {
+    const handleChat = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ text: 'ok' }), {
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    );
+    const handler = new StandardChatHandler({
+      handleChat,
+    } as unknown as StandardChatService) as unknown as HandlerInternals;
+    return { handler, handleChat };
+  }
+
+  const summarized = (model: ChatContext['model']): ChatContext =>
+    ({
+      ...createTestChatContext({
+        model,
+        messages: [
+          {
+            role: 'user',
+            content: 'What does table 4 say?',
+            messageType: MessageType.TEXT,
+          },
+        ],
+        processedContent: {
+          fileSummaries: [
+            {
+              filename: 'report.pdf',
+              summary: 'An annual report.',
+              originalContent: '',
+            },
+          ],
+        },
+      }),
+      attachmentTexts: { 'report.pdf': 'Table 4: 61 % → 83 %' },
+    }) as ChatContext;
+
+  it('registers the reader for a tool-capable model', async () => {
+    const { handler, handleChat } = setup();
+    await handler.executeStage(summarized(CLAUDE));
+    const request = handleChat.mock.calls[0][0];
+    expect(request.mcpServers).toEqual([
+      expect.objectContaining({
+        id: 'builtin-attachments',
+        provenance: 'builtin',
+      }),
+    ]);
+    const reader = request.builtinExecutors['builtin-attachments'];
+    expect(reader.immediate).toBe(true);
+    const read = await reader.callTool('read_attachment', {
+      filename: 'report.pdf',
+    });
+    expect(read.resultText).toContain('Table 4: 61 % → 83 %');
+  });
+
+  it('offers nothing to a model without tools', async () => {
+    const { handler, handleChat } = setup();
+    await handler.executeStage(summarized(MISTRAL));
+    const request = handleChat.mock.calls[0][0];
+    expect(request.mcpServers).toBeUndefined();
+  });
+
+  it('tells the model the full text is reachable only when it is', () => {
+    const { handler } = setup();
+    const withTools = handler.buildFinalMessages(summarized(CLAUDE));
+    expect(withTools[0].content as string).toContain('read_attachment');
+    expect(withTools[0].content as string).not.toContain(
+      'cannot be passed to you',
+    );
+    const without = handler.buildFinalMessages(summarized(MISTRAL));
+    expect(without[0].content as string).toContain('cannot be passed to you');
+  });
+});
