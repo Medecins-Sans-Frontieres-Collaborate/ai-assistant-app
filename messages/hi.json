@@ -2244,7 +2244,7 @@
   },
   "dropdown": {
     "searchTooltip": "हर संदेश के लिए वेब सर्च सक्षम करें।\n\nरियल-टाइम Bing वेब एक्सेस से नवीनतम जानकारी प्राप्त करें।",
-    "attachTooltip": "फाइलें, चित्र या ऑडियो/वीडियो संलग्न करें।\n\nसमर्थित फॉर्मेट:\n• इमेज: JPEG, PNG, GIF, WebP (अधिकतम 5MB, 10 तक)\n• दस्तावेज़: PDF, DOCX, XLSX, PPTX, TXT, MD (अधिकतम 10MB, 3 तक)\n• डेटा: CSV, JSON, XML, YAML (अधिकतम 10MB, 3 तक)\n• कोड: PY, JS, TS, JAVA, C, CPP, GO आदि (अधिकतम 10MB, 3 तक)\n• ऑडियो/वीडियो: MP3, WAV, MP4, WebM (अधिकतम 25MB, 1 फाइल)\n\nकुलः 10 फाइलें, अधिकतम 50MB",
+    "attachTooltip": "फाइलें, चित्र या ऑडियो/वीडियो संलग्न करें।\n\nसमर्थित फॉर्मेट:\n• इमेज: JPEG, PNG, GIF, WebP (अधिकतम 5MB, 10 तक)\n• दस्तावेज़: PDF, DOCX, XLSX, PPTX, TXT, MD (अधिकतम 10MB, {maxDocuments} तक)\n• डेटा: CSV, JSON, XML, YAML (अधिकतम 10MB, {maxDocuments} तक)\n• कोड: PY, JS, TS, JAVA, C, CPP, GO आदि (अधिकतम 10MB, {maxDocuments} तक)\n• ऑडियो/वीडियो: MP3, WAV, MP4, WebM (अधिकतम 25MB, 1 फाइल)\n\nकुलः {maxFiles} फाइलें, अधिकतम 50MB",
     "transcribeTooltip": "ट्रांसक्रिप्शन के लिए ऑडियो या वीडियो फाइलें अपलोड करें।\n\nसमर्थित फॉर्मेट: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nअधिकतम आकार: 25MB\n\nजब आप संदेश भेजते हैं, ट्रांसक्रिप्शन स्वतः हो जाएगी।",
     "selected": "चयनित",
     "expandActions": "क्रियाएँ विस्तार करें",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "कनेक्टर्स (MCP)",
       "ttsCharactersPerRequest": "प्रति पढ़कर सुनाने में अक्षर",
       "uploadMegabytesPerFile": "प्रति फ़ाइल अपलोड आकार",
+      "uploadDocumentsPerMessage": "प्रति संदेश दस्तावेज़",
       "mcpRoundsPerRequest": "प्रति संदेश टूल राउंड्स",
       "ttsCharactersPerDay": "प्रतिदिन पढ़कर सुनाने के अक्षर",
       "transcriptionMinutesPerDay": "प्रतिदिन ट्रांसक्रिप्शन मिनट",
@@ -5727,6 +5728,7 @@
       "minutes": "मिनट",
       "jobs": "जॉब्स",
       "rounds": "राउंड्स",
+      "documents": "दस्तावेज़",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "क्या कनेक्टर्स (MCP टूल्स) का उपयोग किया जा सकता है।",
       "ttsCharactersPerRequest": "एक अनुरोध में अधिकतम टेक्स्ट जिसे पढ़ा जा सकता है।",
       "uploadMegabytesPerFile": "सबसे बड़ा एकल फ़ाइल जिसे अपलोड किया जा सकता है।",
+      "uploadDocumentsPerMessage": "एक संदेश के साथ कितने दस्तावेज़ संलग्न किए जा सकते हैं।",
       "mcpRoundsPerRequest": "एक संदेश में कितने टूल कॉल जोड़े जा सकते हैं।",
       "ttsCharactersPerDay": "प्रतिदिन पढ़े गए कुल अक्षर।",
       "transcriptionMinutesPerDay": "प्रतिदिन ट्रांसक्राइब किए गए कुल ऑडियो और वीडियो मिनट्स।",

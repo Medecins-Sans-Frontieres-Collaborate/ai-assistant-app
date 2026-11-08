@@ -805,6 +805,134 @@ describe('ToolRouterService', () => {
       });
     });
 
+    /**
+     * Auxiliary outage → the user's chat model decides. Without this, a
+     * non-native model in EU silently got no code interpreter (2026-11-07).
+     */
+    describe('chat-model fallback when the auxiliary chain fails', () => {
+      const interpreterTurn = (decisionFallback?: unknown) =>
+        ({
+          messages: [
+            {
+              role: 'user' as const,
+              content: 'Produce the review as a Word document',
+              messageType: MessageType.TEXT,
+            },
+          ],
+          currentMessage: 'Produce the review as a Word document',
+          forceWebSearch: false,
+          considerCodeExecution: true,
+          decisionFallback,
+        }) as any;
+      const chatModel = { id: 'Mistral-Large-3' } as any;
+      const decision = {
+        needsWebSearch: false,
+        searchQuery: '',
+        searchRecency: 'none',
+        searchComprehensive: false,
+        searchCategory: 'general',
+        searchLanguage: 'auto',
+        additionalSearchQueries: [],
+        needsCodeExecution: true,
+        codeTask: 'Build the review .docx from the five files',
+      };
+
+      beforeEach(() => {
+        mockOpenAIClient.chat.completions.create.mockRejectedValue(
+          new Error('Auxiliary EU inference unavailable (residency)'),
+        );
+      });
+
+      it('uses the chat model decision and records its usage', async () => {
+        const onUsage = vi.fn();
+        const fallback = vi.fn().mockResolvedValue({
+          text: JSON.stringify(decision),
+          model: chatModel,
+          region: 'EU',
+          usage: { promptTokens: 900, completionTokens: 40, totalTokens: 940 },
+        });
+        const result = await service.determineTool({
+          ...interpreterTurn(fallback),
+          onUsage,
+        });
+        expect(result.tools).toEqual(['code_interpreter']);
+        expect(result.codeTask).toBe(decision.codeTask);
+        expect(result.degraded).toBeUndefined();
+        // Same request the auxiliary model got (messages + schema).
+        const [params] = fallback.mock.calls[0];
+        expect(params.response_format.json_schema.name).toBe(
+          'tool_router_response',
+        );
+        expect(onUsage).toHaveBeenCalledWith(
+          expect.objectContaining({
+            totalTokens: 940,
+            modelId: 'Mistral-Large-3',
+          }),
+          chatModel,
+          'EU',
+        );
+      });
+
+      it('rejects a fallback decision that breaks the schema and degrades as before', async () => {
+        const fallback = vi.fn().mockResolvedValue({
+          text: JSON.stringify({ needsCodeExecution: 'yes' }),
+          model: chatModel,
+          region: 'EU',
+        });
+        const result = await service.determineTool(interpreterTurn(fallback));
+        expect(result.tools).toEqual([]);
+        expect(result.degraded).toBe(true);
+      });
+
+      it('degrades as before when the fallback itself fails', async () => {
+        const fallback = vi.fn().mockRejectedValue(new Error('429'));
+        const result = await service.determineTool(interpreterTurn(fallback));
+        expect(result.tools).toEqual([]);
+        expect(result.degraded).toBe(true);
+      });
+
+      it('does not try the fallback once the request is aborted', async () => {
+        const controller = new AbortController();
+        controller.abort();
+        const fallback = vi.fn();
+        await service.determineTool({
+          ...interpreterTurn(fallback),
+          signal: controller.signal,
+        });
+        expect(fallback).not.toHaveBeenCalled();
+      });
+
+      it('lets the chat model classify a trim request too', async () => {
+        const fallback = vi.fn().mockResolvedValue({
+          text: JSON.stringify({
+            lengthLimitIsForNewDeliverable: false,
+            isLengthReductionRequest: true,
+            isLengthIncreaseRequest: false,
+            targetIsAttachedDocument: true,
+            targetValue: 6000,
+            targetUnit: 'words',
+          }),
+          model: chatModel,
+          region: 'EU',
+        });
+        const target = await service.classifyDocumentTrim({
+          messages: [
+            {
+              role: 'user',
+              content: 'réduis ce document à 6000 mots',
+              messageType: MessageType.TEXT,
+            } as Message,
+          ],
+          currentMessage: 'réduis ce document à 6000 mots',
+          documentFilename: 'manuscript.docx',
+          decisionFallback: fallback,
+        });
+        expect(target).toEqual(
+          expect.objectContaining({ unit: 'words', target: 6000 }),
+        );
+      });
+    });
+
     describe('error handling', () => {
       it('should handle API errors gracefully', async () => {
         mockOpenAIClient.chat.completions.create.mockRejectedValue(
@@ -1171,6 +1299,37 @@ describe('ToolRouterService', () => {
         );
       });
 
+      it('never trims when the length limits a NEW deliverable (Tongolo review)', async () => {
+        // The classifier's other fields can still look like a trim — the
+        // deliverable flag vetoes deterministically.
+        mockClassification({
+          lengthLimitIsForNewDeliverable: true,
+          isLengthReductionRequest: true,
+          targetIsAttachedDocument: true,
+          targetValue: 4,
+          targetUnit: 'pages',
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+        const call = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
+        expect(call.messages[0].content).toContain('NEW deliverable');
+        expect(call.response_format.json_schema.schema.required[0]).toBe(
+          'lengthLimitIsForNewDeliverable',
+        );
+      });
+
+      it('still trims when the deliverable flag is false', async () => {
+        mockClassification({
+          lengthLimitIsForNewDeliverable: false,
+          isLengthReductionRequest: true,
+          targetIsAttachedDocument: true,
+          targetValue: 6000,
+          targetUnit: 'words',
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toEqual(
+          expect.objectContaining({ unit: 'words', target: 6000 }),
+        );
+      });
+
       it('maps pages to approximate words', async () => {
         mockClassification({
           isLengthReductionRequest: true,
@@ -1183,6 +1342,59 @@ describe('ToolRouterService', () => {
           unit: 'words',
           target: 2500,
           approx: true,
+        });
+      });
+
+      it('maps a lengthening request to an expand target', async () => {
+        mockClassification({
+          lengthLimitIsForNewDeliverable: false,
+          isLengthReductionRequest: false,
+          isLengthIncreaseRequest: true,
+          targetIsAttachedDocument: true,
+          targetValue: 3000,
+          targetUnit: 'words',
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toEqual({
+          kind: 'absolute',
+          unit: 'words',
+          target: 3000,
+          approx: false,
+          direction: 'expand',
+        });
+      });
+
+      it('treats contradictory direction flags as no length request', async () => {
+        mockClassification({
+          isLengthReductionRequest: true,
+          isLengthIncreaseRequest: true,
+          targetIsAttachedDocument: true,
+          targetValue: 3000,
+          targetUnit: 'words',
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+      });
+
+      it('requires percent below 100 to reduce and above 100 to expand', async () => {
+        const percent = (value: number, increase: boolean) =>
+          mockClassification({
+            isLengthReductionRequest: !increase,
+            isLengthIncreaseRequest: increase,
+            targetIsAttachedDocument: true,
+            targetValue: value,
+            targetUnit: 'percent_to_keep',
+          });
+        percent(100, false);
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+        percent(100, true);
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+        percent(80, true);
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+        percent(200, true);
+        expect(await service.classifyDocumentTrim(baseRequest)).toEqual({
+          kind: 'ratio',
+          keep: 2,
+          approx: true,
+          direction: 'expand',
         });
       });
 

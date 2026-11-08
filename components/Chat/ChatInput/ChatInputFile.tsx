@@ -25,6 +25,10 @@ import {
 
 import FileIcon from '@/components/Icons/file';
 
+import {
+  DEFAULT_DOCUMENTS_PER_MESSAGE,
+  DOCUMENTS_PER_MESSAGE_LIMIT_KEY,
+} from '@/config/limits';
 import { ATTACH_ACCEPT_TYPES } from '@/lib/constants/fileTypes';
 
 /** Admin per-file ceiling (docs/LIMITS.md); `null` value = unlimited. */
@@ -81,6 +85,44 @@ export function useUploadLimitSync(): number | undefined {
   }, [megabytes, t]);
 
   return megabytes;
+}
+
+/**
+ * The caller's resolved `feature.upload.documentsPerMessage` while the
+ * limits system is enforcing; `undefined` otherwise, which leaves the
+ * compiled default (DEFAULT_DOCUMENTS_PER_MESSAGE) in force. Unlike the
+ * per-file cap, an admin may RAISE this one for specific people.
+ */
+export function useEffectiveDocumentsPerMessage(): number | undefined {
+  const { enforce, limits } = useMyLimits();
+  return useMemo(() => {
+    if (!enforce) return undefined;
+    const row = limits.find(
+      (candidate) =>
+        candidate.limitKey === DOCUMENTS_PER_MESSAGE_LIMIT_KEY &&
+        !candidate.modelId &&
+        !candidate.series &&
+        typeof candidate.value === 'number',
+    );
+    return typeof row?.value === 'number' ? row.value : undefined;
+  }, [enforce, limits]);
+}
+
+/**
+ * Keeps `FileUploadService`'s documents-per-message limit in step with the
+ * caller's limits, so every composer entry point (picker, drop, paste)
+ * checks the same number the chat route enforces. Mount ONCE; clears on
+ * unmount.
+ *
+ * @returns The limit in force.
+ */
+export function useDocumentsPerMessageSync(): number {
+  const documents = useEffectiveDocumentsPerMessage();
+  useEffect(() => {
+    FileUploadService.setDocumentsPerMessageLimit(documents ?? null);
+    return () => FileUploadService.setDocumentsPerMessageLimit(null);
+  }, [documents]);
+  return documents ?? DEFAULT_DOCUMENTS_PER_MESSAGE;
 }
 
 interface ChatInputFileProps {

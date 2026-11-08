@@ -36,6 +36,7 @@ import {
 } from '@/lib/utils/app/metadata';
 import { buildConversationContextSections } from '@/lib/utils/app/systemPrompt';
 import { getCompactionBoundary } from '@/lib/utils/shared/chat/conversationCompaction';
+import { fallbackRequirementsForTurn } from '@/lib/utils/shared/chat/fallbackRequirements';
 import { findMessageIndexForApprovalId } from '@/lib/utils/shared/chat/findMessageIndexForApprovalId';
 import { applyMcpPin } from '@/lib/utils/shared/chat/mcpPin';
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
@@ -143,16 +144,24 @@ function trailingUserMessage(conversation: Conversation): Message | undefined {
  * Fallback-resolution context from the client's live state: the discovery-
  * served model list (so the fallback never targets an undeployed model),
  * the user's configured default model (tried first — the most predictable
- * substitute), and the user's region. Every chatStore fallback lookup goes
+ * substitute), the user's region, and the capabilities the turn needs.
+ * Every chatStore fallback lookup goes
  * through this so the chain tracks the dynamic model system instead of the
  * static catalog.
  */
-function dynamicFallbackOpts() {
+function dynamicFallbackOpts(conversation: Conversation) {
   const settings = useSettingsStore.getState();
   return {
     availableModels: settings.models.length > 0 ? settings.models : undefined,
     preferredDefaultId: settings.defaultModelId || null,
     userRegion: settings.userRegion ?? null,
+    // What the turn needs from its rescuer (code interpreter, vision), so a
+    // file-generation turn never silently lands on a model that can only
+    // pretend to make the file.
+    requirements: fallbackRequirementsForTurn({
+      interpreterMode: useChatInputStore.getState().interpreterMode,
+      entries: conversation.messages,
+    }),
   };
 }
 
@@ -1267,8 +1276,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       // chain over the served list; the static ultimate fallback only
       // matters when the live list is empty AND the chain resolves nothing.
       const rescuedModel =
-        getFallbackModel([conversation.model.id], [], dynamicFallbackOpts()) ??
-        OpenAIModels[fallbackModelID];
+        getFallbackModel(
+          [conversation.model.id],
+          [],
+          dynamicFallbackOpts(conversation),
+        ) ?? OpenAIModels[fallbackModelID];
 
       if (!rescuedModel) {
         throw new Error(
@@ -2430,7 +2442,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       modelId.startsWith('custom-') ||
       isLocalModel(conversation?.model);
     const nextFallbackModel = conversation
-      ? getFallbackModel([conversation.model.id], [], dynamicFallbackOpts())
+      ? getFallbackModel(
+          [conversation.model.id],
+          [],
+          dynamicFallbackOpts(conversation),
+        )
       : null;
     // "Prefer my selected model" (issue #130): the user opted out of silent
     // model switching. The failure surfaces with the manual "Try with
@@ -2629,7 +2645,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const fallbackModel = getFallbackModel(
       attemptedModelIds,
       [],
-      dynamicFallbackOpts(),
+      dynamicFallbackOpts(conversation),
     );
     if (!fallbackModel) {
       console.error(
@@ -2869,7 +2885,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         !streamSettled &&
         !isNonRetryableSendError(retryError) &&
         (!chainHasPartialState || forcedRetry) &&
-        getFallbackModel(nextAttemptedIds, [], dynamicFallbackOpts())
+        getFallbackModel(
+          nextAttemptedIds,
+          [],
+          dynamicFallbackOpts(conversation),
+        )
       ) {
         toast.dismiss(toastId);
         return get().retryWithFallbackModel(

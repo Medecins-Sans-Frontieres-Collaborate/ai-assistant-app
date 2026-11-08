@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "့Messages တိုင်းအတွက် web search ကိုဖွင့်နိုင်သည်။\n\nလက်ရှိ Bing အသုံးပြုခြင်းဖြင့် နောက်ဆုံးသတင်းအချက်အလက်များပေးစွမ်းသည်။",
-    "attachTooltip": "ဖိုင်များ၊ ဓါတ်ပုံ၊ သံ/ဗီဒီယိုများပူးတွဲပါ။\n\nထောက်ပံ့ထားသော ဖော်မတ်များ:\n• ဓါတ်ပုံ: JPEG, PNG, GIF, WebP (အများဆုံး 5MB၊ အများဆုံး 10 ဖိုင်)\n• စာရွက်စာတမ်း: PDF, DOCX, XLSX, PPTX, TXT, MD (အများဆုံး 10MB၊ အများဆုံး 3 ဖိုင်)\n• ဒေတာ: CSV, JSON, XML, YAML (အများဆုံး 10MB၊ အများဆုံး 3 ဖိုင်)\n• ကုဒ်: PY, JS, TS, JAVA, C, CPP, GO စသည် (အများဆုံး 10MB၊ အများဆုံး 3 ဖိုင်)\n• သံ/ဗီဒီယို: MP3, WAV, MP4, WebM (အများဆုံး 25MB, ဖိုင် ၁ ခု)\n\nစုစုပေါင်း: ဖိုင်အယောက် ၁၀၊ အများဆုံး ၅၀MB",
+    "attachTooltip": "ဖိုင်များ၊ ဓါတ်ပုံ၊ သံ/ဗီဒီယိုများပူးတွဲပါ။\n\nထောက်ပံ့ထားသော ဖော်မတ်များ:\n• ဓါတ်ပုံ: JPEG, PNG, GIF, WebP (အများဆုံး 5MB၊ အများဆုံး 10 ဖိုင်)\n• စာရွက်စာတမ်း: PDF, DOCX, XLSX, PPTX, TXT, MD (အများဆုံး 10MB၊ အများဆုံး {maxDocuments} ဖိုင်)\n• ဒေတာ: CSV, JSON, XML, YAML (အများဆုံး 10MB၊ အများဆုံး {maxDocuments} ဖိုင်)\n• ကုဒ်: PY, JS, TS, JAVA, C, CPP, GO စသည် (အများဆုံး 10MB၊ အများဆုံး {maxDocuments} ဖိုင်)\n• သံ/ဗီဒီယို: MP3, WAV, MP4, WebM (အများဆုံး 25MB, ဖိုင် ၁ ခု)\n\nစုစုပေါင်း: ဖိုင်အယောက် {maxFiles}၊ အများဆုံး ၅၀MB",
     "transcribeTooltip": "လေ့လာရန်အတွက် သံဖိုင် သို့မဟုတ် ဗီဒီယိုဖိုင်များ တင်ပါ။\n\nထောက်ပံ့သည့်ဖော်မတ်များ- MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nအကြီးဆုံး 25MB\n\nသင် message ပို့သောအခါ ဆာဗာသည် အလိုအလျောက် လူ့ဘာသာပြန်ချက်ပြုလုပ်ပေးပါသည်။",
     "selected": "ရွေးချယ်ပြီး",
     "expandActions": "လုပ်ဆောင်ချက်များ ချဲ့ချင်ရန်",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "တစ်ကြိမ် ဖတ်ကြားရန် စာလုံးအရေအတွက်",
       "uploadMegabytesPerFile": "တစ်ဖိုင်လျှင် ဖြည့်သွင်းနိုင်သော အရွယ်အစား",
+      "uploadDocumentsPerMessage": "တစ်မက်ဆေ့ချ်လျှင် စာရွက်စာတမ်း",
       "mcpRoundsPerRequest": "တစ်မက်ဆေ့ချ်လျှင် ကိရိယာ အသုံးပြုမှု",
       "ttsCharactersPerDay": "တစ်နေ့လျှင် ဖတ်ကြားစာလုံးအရေအတွက်",
       "transcriptionMinutesPerDay": "တစ်နေ့လျှင် သံထွက် လက်ခံနိုင်သော မိနစ်များ",
@@ -5727,6 +5728,7 @@
       "minutes": "မိနစ်များ",
       "jobs": "အလုပ်များ",
       "rounds": "အကြိမ်",
+      "documents": "ခု",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Connectors (MCP tools) ကို အသုံးပြုနိုင်/မနိုင်။",
       "ttsCharactersPerRequest": "တစ်ကြိမ်တောင်းဆိုမှုတွင် အသံထွက်ဖတ်နိုင်သည့် အရှည်ဆုံးစာပိုဒ်။",
       "uploadMegabytesPerFile": "တစ်ဖိုင်တည်း ပိုမို upload လုပ်နိုင်သည့်အကြီးဆုံးဖိုင်။",
+      "uploadDocumentsPerMessage": "မက်ဆေ့ချ်တစ်ခုတွင် ပူးတွဲနိုင်သော စာရွက်စာတမ်း အရေအတွက်။",
       "mcpRoundsPerRequest": "စာပို့ချက်တစ်ခုတွင် tool call များ ဆက်တိုက် ခေါ်နိုင်သော အရေအတွက်။",
       "ttsCharactersPerDay": "တစ်နေ့လျှင် အသံထွက်ဖတ်နိုင်သည့် စာလုံးစုစုများ။",
       "transcriptionMinutesPerDay": "တစ်နေ့လျှင် audio နှင့် video စုစုပေါင်း မြန်နှုန်း (မိနစ်) ပြန်လည်ရေးသားခြင်း။",

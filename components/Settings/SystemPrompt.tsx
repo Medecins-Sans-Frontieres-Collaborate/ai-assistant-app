@@ -211,7 +211,7 @@ export const SystemPrompt: FC<Props> = ({
             overflow: textareaScrollHeight > 300 ? 'auto' : 'hidden',
           }}
           placeholder={
-            t(`Enter a prompt or type "/" to select a prompt...`) || ''
+            t('Enter a prompt or type "/" to select a prompt_ellipsis') || ''
           }
           value={value ?? ''}
           rows={1}

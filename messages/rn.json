@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Komeza kurondera kuri interineti ku butumwa bwose.\n\nBitanga amakuru y'ubu bikoresheje Bing mu gihe nyaco.",
-    "attachTooltip": "Omatanya amadosiye, amashusho, canke amajwi/amashusho.\n\nImiterere yemewe:\n• Amashusho: JPEG, PNG, GIF, WebP (5MB ntarengwa, kugeza 10)\n• Inyandiko: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB ntarengwa, kugeza 3)\n• Amakuru: CSV, JSON, XML, YAML (10MB ntarengwa, kugeza 3)\n• Kode: PY, JS, TS, JAVA, C, CPP, GO, n'ibindi (10MB ntarengwa, kugeza 3)\n• Amajwi/Amashusho: MP3, WAV, MP4, WebM (25MB ntarengwa, idosiye 1)\n\nHamwe: amadosiye 10, 50MB ntarengwa",
+    "attachTooltip": "Omatanya amadosiye, amashusho, canke amajwi/amashusho.\n\nImiterere yemewe:\n• Amashusho: JPEG, PNG, GIF, WebP (5MB ntarengwa, kugeza 10)\n• Inyandiko: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB ntarengwa, kugeza {maxDocuments})\n• Amakuru: CSV, JSON, XML, YAML (10MB ntarengwa, kugeza {maxDocuments})\n• Kode: PY, JS, TS, JAVA, C, CPP, GO, n'ibindi (10MB ntarengwa, kugeza {maxDocuments})\n• Amajwi/Amashusho: MP3, WAV, MP4, WebM (25MB ntarengwa, idosiye 1)\n\nHamwe: amadosiye {maxFiles}, 50MB ntarengwa",
     "transcribeTooltip": "Shiriza amadosiye y'amajwi canke amashusho yo guhindura mu nyandiko.\n\nImiterere yemewe: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nIngano ntarengwa: 25MB\n\nGuhindura mu nyandiko biraba ubwite iyo utumye ubutumwa.",
     "selected": "Vyahisemwe",
     "expandActions": "Nura Ibikorwa",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "Inyuguti kuri buri gusoma",
       "uploadMegabytesPerFile": "Ingano yo kurungika kuri buri dosiye",
+      "uploadDocumentsPerMessage": "Inyandiko kuri buri butumwa",
       "mcpRoundsPerRequest": "Ibigendanye n'igikoresho kuri buri butumwa",
       "ttsCharactersPerDay": "Inyuguti zo gusoma ku munsi",
       "transcriptionMinutesPerDay": "Uminota w'uguhindura amajwi ku munsi",
@@ -5711,6 +5712,7 @@
       "minutes": "iminota",
       "jobs": "imirimo",
       "rounds": "ibihe",
+      "documents": "inyandiko",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Nimba connectors (MCP tools) zishobora gukoreshwa.",
       "ttsCharactersPerRequest": "Ingingo ndende ishobora gusomwa rimwe.",
       "uploadMegabytesPerFile": "Idosiye nini ushobora kudandaza.",
+      "uploadDocumentsPerMessage": "Igitigiri c'inyandiko zishobora gufatanywa n'ubutumwa bumwe.",
       "mcpRoundsPerRequest": "Ibikoresho bingahe ushobora guhamagara mu butumwa bumwe.",
       "ttsCharactersPerDay": "Igiteranyo c'inyuguti zose zisomwe ku munsi.",
       "transcriptionMinutesPerDay": "Iminota yose ya audio na video yanditswe ubutumwa ku munsi.",

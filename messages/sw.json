@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "Washa utafutaji wa mtandaoni kwa kila ujumbe.\n\nHutoa taarifa za hivi punde kwa kutumia Bing kwa muda halisi.",
-    "attachTooltip": "Ambatisha faili, picha, au sauti/video.\n\nAina zinazoungwa mkono:\n• Picha: JPEG, PNG, GIF, WebP (5MB kiwango cha juu, hadi 10)\n• Nyaraka: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB kiwango cha juu, hadi 3)\n• Data: CSV, JSON, XML, YAML (10MB kiwango cha juu, hadi 3)\n• Misimbo: PY, JS, TS, JAVA, C, CPP, GO, nk. (10MB kiwango cha juu, hadi 3)\n• Sauti/Video: MP3, WAV, MP4, WebM (25MB kiwango cha juu, faili 1)\n\nJumla: faili 10, 50MB kiwango cha juu",
+    "attachTooltip": "Ambatisha faili, picha, au sauti/video.\n\nAina zinazoungwa mkono:\n• Picha: JPEG, PNG, GIF, WebP (5MB kiwango cha juu, hadi 10)\n• Nyaraka: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB kiwango cha juu, hadi {maxDocuments})\n• Data: CSV, JSON, XML, YAML (10MB kiwango cha juu, hadi {maxDocuments})\n• Misimbo: PY, JS, TS, JAVA, C, CPP, GO, nk. (10MB kiwango cha juu, hadi {maxDocuments})\n• Sauti/Video: MP3, WAV, MP4, WebM (25MB kiwango cha juu, faili 1)\n\nJumla: faili {maxFiles}, 50MB kiwango cha juu",
     "transcribeTooltip": "Pakia faili za sauti au video kwa ajili ya kunakiliwa.\n\nAina zinazoungwa mkono: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nUkubwa wa juu: 25MB\n\nUandishi hutokea moja kwa moja unapotuma ujumbe.",
     "selected": "Imeteuliwa",
     "expandActions": "Panua Vitendo",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Viunganishi (MCP)",
       "ttsCharactersPerRequest": "Herufi kwa kila usomaji",
       "uploadMegabytesPerFile": "Ukubwa wa kupakia kwa kila faili",
+      "uploadDocumentsPerMessage": "Nyaraka kwa kila ujumbe",
       "mcpRoundsPerRequest": "Mizunguko ya chombo kwa ujumbe",
       "ttsCharactersPerDay": "Herufi za kusomwa kwa siku",
       "transcriptionMinutesPerDay": "Dakika za kunakili kwa siku",
@@ -5727,6 +5728,7 @@
       "minutes": "dakika",
       "jobs": "kazi",
       "rounds": "mizunguko",
+      "documents": "nyaraka",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Iwapo viunganishi (MCP tools) vinaweza kutumika.",
       "ttsCharactersPerRequest": "Sehemu ndefu zaidi inayoweza kusomwa kwa sauti kwa ombi moja.",
       "uploadMegabytesPerFile": "Faili kubwa zaidi inayoweza kupakiwa.",
+      "uploadDocumentsPerMessage": "Idadi ya nyaraka zinazoweza kuambatishwa kwenye ujumbe mmoja.",
       "mcpRoundsPerRequest": "Idadi ya miito ya zana ambayo ujumbe mmoja unaweza kuunganisha.",
       "ttsCharactersPerDay": "Jumla ya herufi zinazosomeka kwa sauti kwa siku.",
       "transcriptionMinutesPerDay": "Jumla ya dakika za sauti na video zinazonakiliwa kwa siku.",

@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Омогућите веб претрагу за сваку поруку.\n\nПружа ажурне информације користећи приступ Bing вебу у реалном времену.",
-    "attachTooltip": "Приложите фајлове, слике или аудио/видео.\n\nПодржани формати:\n• Слике: JPEG, PNG, GIF, WebP (макс 5MB, до 10)\n• Документи: PDF, DOCX, XLSX, PPTX, TXT, MD (макс 10MB, до 3)\n• Подаци: CSV, JSON, XML, YAML (макс 10MB, до 3)\n• Код: PY, JS, TS, JAVA, C, CPP, GO, итд. (макс 10MB, до 3)\n• Аудио/видео: MP3, WAV, MP4, WebM (макс 25MB, 1 фајл)\n\nУкупно: 10 фајлова, макс 50MB",
+    "attachTooltip": "Приложите фајлове, слике или аудио/видео.\n\nПодржани формати:\n• Слике: JPEG, PNG, GIF, WebP (макс 5MB, до 10)\n• Документи: PDF, DOCX, XLSX, PPTX, TXT, MD (макс 10MB, до {maxDocuments})\n• Подаци: CSV, JSON, XML, YAML (макс 10MB, до {maxDocuments})\n• Код: PY, JS, TS, JAVA, C, CPP, GO, итд. (макс 10MB, до {maxDocuments})\n• Аудио/видео: MP3, WAV, MP4, WebM (макс 25MB, 1 фајл)\n\nУкупно: {maxFiles} фајлова, макс 50MB",
     "transcribeTooltip": "Отпремите аудио или видео фајлове за транскрипцију.\n\nПодржани формати: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nМакс величина: 25MB\n\nТранскрипција се дешава аутоматски када пошаљете поруку.",
     "selected": "Изабрано",
     "expandActions": "Прошири акције",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Konektori (MCP)",
       "ttsCharactersPerRequest": "Karaktera po čitanju naglas",
       "uploadMegabytesPerFile": "Veličina prenosa po fajlu",
+      "uploadDocumentsPerMessage": "Dokumenata po poruci",
       "mcpRoundsPerRequest": "Krugova alata po poruci",
       "ttsCharactersPerDay": "Karaktera za čitanje naglas dnevno",
       "transcriptionMinutesPerDay": "Minuta transkripcije dnevno",
@@ -5711,6 +5712,7 @@
       "minutes": "minuta",
       "jobs": "poslova",
       "rounds": "krugova",
+      "documents": "dokumenata",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Da li se konektori (MCP alati) mogu koristiti.",
       "ttsCharactersPerRequest": "Najduži odlomak koji može biti pročitan naglas u jednom zahtevu.",
       "uploadMegabytesPerFile": "Najveći pojedinačni fajl koji se može otpremiti.",
+      "uploadDocumentsPerMessage": "Koliko dokumenata može da se priloži jednoj poruci.",
       "mcpRoundsPerRequest": "Koliko alatki može jedan zahtev da poveže u lancu.",
       "ttsCharactersPerDay": "Ukupno karaktera pročitanih naglas dnevno.",
       "transcriptionMinutesPerDay": "Ukupno audio i video minuta transkribovanih dnevno.",

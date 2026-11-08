@@ -355,8 +355,60 @@ export function isDeploymentNotFoundError(error: unknown): boolean {
   );
 }
 
+/**
+ * What the failed turn needs from whichever model rescues it. A fallback
+ * that silently lacks a capability the turn relied on does worse than
+ * failing: on 2026-11-06 a Word-memo turn fell back from GPT-6 Astra to
+ * Mistral Large 3, which has no code interpreter, and it answered with a
+ * download link to a file that never existed (rendered "[blocked]").
+ *
+ * - 'prefer': capable models are tried first, in chain order; an incapable
+ *   model is still a last resort, so a turn that merely COULD have used the
+ *   capability is answered rather than failed.
+ * - 'require': only capable models qualify; null when none remain.
+ */
+export type FallbackRequirement = 'prefer' | 'require';
+
+export interface FallbackRequirements {
+  /** Code execution / file generation (`supportsCodeInterpreter`). */
+  codeInterpreter?: FallbackRequirement;
+  /** Image input (`supportsVision`). */
+  vision?: FallbackRequirement;
+}
+
+/** Whether `model` has every capability named in `requirements`. */
+export function meetsFallbackRequirements(
+  model: OpenAIModel,
+  requirements: FallbackRequirements,
+): boolean {
+  if (requirements.codeInterpreter && model.supportsCodeInterpreter !== true) {
+    return false;
+  }
+  if (requirements.vision && model.supportsVision !== true) return false;
+  return true;
+}
+
+/** Only the 'require' entries of `requirements` (the hard constraints). */
+function hardRequirements(
+  requirements: FallbackRequirements,
+): FallbackRequirements {
+  return {
+    ...(requirements.codeInterpreter === 'require'
+      ? { codeInterpreter: 'require' as const }
+      : {}),
+    ...(requirements.vision === 'require'
+      ? { vision: 'require' as const }
+      : {}),
+  };
+}
+
 /** Dynamic-system context for fallback resolution (all optional). */
 export interface FallbackModelOptions {
+  /**
+   * Capabilities the failed turn needs (see FallbackRequirements). Absent =
+   * any eligible model, the previous behaviour.
+   */
+  requirements?: FallbackRequirements;
   /**
    * The discovery-served model list. When present, fallback candidates are
    * restricted to models actually served right now and the chain gains a
@@ -380,13 +432,45 @@ export interface FallbackModelOptions {
 }
 
 /**
+ * Fallback targets that `modelIds` declare for themselves
+ * (`fallbackModelIds`), in order and de-duplicated: every target of the
+ * first model, then every new target of the next, and so on. Read from the
+ * served list when given (where a `ui-fallback` tag may have replaced the
+ * catalog value), else from the catalog. Unknown ids contribute nothing.
+ *
+ * @param modelIds - Models whose preferences apply, most important first
+ *        (the model that just failed, then fallbacks already attempted).
+ * @param availableModels - Discovery-served list, if one exists.
+ * @returns Candidate model ids; not yet checked for eligibility.
+ */
+export function getDeclaredFallbackIds(
+  modelIds: readonly string[],
+  availableModels?: readonly OpenAIModel[],
+): string[] {
+  const byId = new Map(availableModels?.map((m) => [m.id, m]) ?? []);
+  const declared: string[] = [];
+  for (const modelId of modelIds) {
+    const model = byId.get(modelId) ?? OpenAIModels[modelId as OpenAIModelID];
+    for (const targetId of model?.fallbackModelIds ?? []) {
+      if (!declared.includes(targetId)) declared.push(targetId);
+    }
+  }
+  return declared;
+}
+
+/**
  * Returns the next model to fall back to after a model-specific failure.
  *
- * Walks the preferred default (if any) then the environment's fallback
- * chain, and returns the first model that exists, is fallback-eligible, and
- * is not in `excludeModelIds` (the model that just failed plus any
- * fallbacks already attempted). Returns null when the chain is exhausted —
- * callers should surface the original error at that point.
+ * Walks, in order: the fallback targets the failed and already-attempted
+ * models declare (`fallbackModelIds` — closest-equivalent first, so a GPT-6
+ * Astra failure lands on the Sol line rather than the cheapest model), the
+ * preferred default (if any), then the environment's fallback chain. Returns
+ * the first model that exists, is fallback-eligible, selectable in the
+ * caller's region, not blocked, not in `excludeModelIds` (the model that
+ * just failed plus any fallbacks already attempted), and has the
+ * capabilities in `opts.requirements` — preferred ones only while a capable
+ * candidate remains. Returns null when every candidate is exhausted (or none
+ * meets a required capability) — callers should surface the original error.
  */
 export function getFallbackModel(
   excludeModelIds: string[],
@@ -407,9 +491,16 @@ export function getFallbackModel(
   const hasLiveList = !!availableModels && availableModels.length > 0;
 
   const candidates = [
+    ...getDeclaredFallbackIds(excludeModelIds, availableModels),
     ...(preferredDefaultId ? [preferredDefaultId] : []),
     ...getFallbackChain(availableModels),
   ];
+
+  const requirements = opts.requirements ?? {};
+  const hard = hardRequirements(requirements);
+  // First eligible model that meets only the HARD requirements — the
+  // last-resort answer when no candidate meets the preferences too.
+  let lastResort: OpenAIModel | null = null;
 
   for (const modelId of candidates) {
     if (excludeModelIds.includes(modelId)) continue;
@@ -429,7 +520,10 @@ export function getFallbackModel(
     if (!model) continue;
     if (!isFallbackEligible(model)) continue;
     if (userRegion && !isModelSelectableInRegion(model, userRegion)) continue;
-    return model;
+    if (meetsFallbackRequirements(model, requirements)) return model;
+    if (!lastResort && meetsFallbackRequirements(model, hard)) {
+      lastResort = model;
+    }
   }
-  return null;
+  return lastResort;
 }

@@ -386,3 +386,20 @@ describe('synthetic operation contracts', () => {
       expect(matchesAuxiliarySchema(value, schema)).toBe(false);
   });
 });
+
+describe('auxiliary reasoning effort adaptation', () => {
+  it("downgrades 'minimal' to 'low' for models that reject it, keeping the token headroom", () => {
+    // GPT-5.6 Luna answers 400 to reasoning_effort 'minimal' (issue #149).
+    const data = inventory();
+    data.models[0].modelName = 'gpt-5.6-luna';
+    const luna = resolveAuxiliaryCandidate(ref, data, 'EU').candidate!;
+    const adapted = auxiliaryParameters(params, luna);
+    expect(adapted.reasoning_effort).toBe('low');
+    expect(adapted.max_completion_tokens).toBe(256 + 768);
+  });
+  it("keeps 'minimal' for models that accept it, without extra headroom", () => {
+    const adapted = auxiliaryParameters(params, candidate());
+    expect(adapted.reasoning_effort).toBe('minimal');
+    expect(adapted.max_completion_tokens).toBe(256);
+  });
+});

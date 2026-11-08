@@ -41,6 +41,11 @@ vi.mock('@/client/hooks/useM365Enabled', () => ({
   }),
 }));
 
+// The attach tooltip's documents limit (useMyLimits → React Query); no
+// limit known → the compiled default.
+vi.mock('@/components/Chat/ChatInput/ChatInputFile', () => ({
+  useEffectiveDocumentsPerMessage: () => undefined,
+}));
 vi.mock('@/client/hooks/ui/useCameraSupport', () => ({
   useCameraSupport: () => false,
 }));

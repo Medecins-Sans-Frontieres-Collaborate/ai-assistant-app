@@ -32,13 +32,14 @@ import {
   createAzureOpenAIStreamProcessor,
 } from '@/lib/utils/app/stream/streamProcessor';
 import { getMessagesToSend } from '@/lib/utils/server/chat/chat';
-import { devTrace } from '@/lib/utils/server/debug/devTrace';
 import {
   perfLog,
   sanitizeForLog,
 } from '@/lib/utils/server/log/logSanitization';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
+import { resolveReasoningEffort } from '@/lib/utils/shared/chat/reasoningEffort';
 import { resolveChatRegion } from '@/lib/utils/shared/modelRegion';
+import { applyAdmissionCeiling } from '@/lib/utils/shared/modelThroughput';
 import { UserRegion } from '@/lib/utils/shared/region';
 
 import { RequestTelemetry } from '@/lib/types/logging';
@@ -54,6 +55,7 @@ import {
   MAX_OVERFLOW_SHRINKS,
   shrinkChatHistoryForOverflow,
 } from './contextOverflowRecovery';
+import { INTERPRETER_UNAVAILABLE_NOTICE } from './enrichers/interpreterCapability';
 import { AnthropicFoundryHandler } from './handlers/AnthropicFoundryHandler';
 import { HandlerFactory } from './handlers/HandlerFactory';
 import type { ModelHandler } from './handlers/ModelHandler';
@@ -66,6 +68,17 @@ import {
   withModelRetry,
 } from './modelRetry';
 import { classifyProviderError } from './providerErrors';
+import {
+  STRUCTURED_DECISION_FALLBACK_TIMEOUT_MS,
+  StructuredDecisionParams,
+  StructuredDecisionProvider,
+  StructuredDecisionResult,
+  StructuredDecisionTarget,
+  extractJsonObject,
+  fallbackDecisionMaxTokens,
+  schemaInstruction,
+  toAnthropicMessages,
+} from './routing/structuredDecisionFallback';
 import {
   StreamContinuation,
   TRIM_CONTEXT_ACTIVITY_KEY,
@@ -146,6 +159,13 @@ export interface StandardChatRequest {
   /** Requested hosting region (cross-region routing); EU users are forced to EU. */
   hostedRegion?: UserRegion;
   /**
+   * Throughput each model call of this turn may plan with: the serving
+   * deployment's TPM limit, split across the calls a native interpreter
+   * turn makes (planningTokensPerMinute). Caps the planned window via
+   * applyAdmissionCeiling; undefined = no cap.
+   */
+  planningTokensPerMinute?: number;
+  /**
    * Native MCP tool loop inputs (already catalog-resolved + SSRF-guarded by
    * StandardChatHandler). Empty/absent = MCP inactive, zero behavior change.
    */
@@ -216,7 +236,7 @@ export interface RegionClientResolver {
  *
  * Uses dependency injection for all dependencies.
  */
-export class StandardChatService {
+export class StandardChatService implements StructuredDecisionProvider {
   private azureOpenAIClient: AzureOpenAI;
   private openAIClient: OpenAI;
   private anthropicFoundryClient: AnthropicFoundry | undefined;
@@ -261,6 +281,162 @@ export class StandardChatService {
       openAIClient: regional?.openAIClient ?? this.openAIClient,
       anthropicFoundryClient:
         regional?.anthropicFoundryClient ?? this.anthropicFoundryClient,
+    };
+  }
+
+  /**
+   * Residency guard: a region-pinned request must have that region's client
+   * for the model's SDK. The unpinned default endpoints are never a
+   * residency fallback.
+   *
+   * @throws When `region` is set and has no client for `config.sdk`.
+   */
+  private assertRegionalClient(
+    config: OpenAIModel,
+    region: UserRegion | null,
+  ): void {
+    if (!region) return;
+    const regional = this.getRegionClients?.(region);
+    const available =
+      config.sdk === 'anthropic-foundry'
+        ? regional?.anthropicFoundryClient
+        : config.sdk === 'azure-openai'
+          ? regional?.azureOpenAIClient
+          : regional?.openAIClient;
+    if (!available)
+      throw new Error(
+        `No ${region} endpoint configured for ${config.sdk ?? 'OpenAI-compatible'} inference. Unpinned default endpoints are not a residency fallback.`,
+      );
+  }
+
+  /**
+   * Makes one structured routing decision with the user's chat model, under
+   * the same region resolution and residency guard as the chat answer
+   * itself. Used only when the auxiliary model chain has failed (see
+   * lib/services/chat/routing/structuredDecisionFallback.ts).
+   *
+   * Per SDK: Azure OpenAI is held to the JSON schema by the API; Anthropic
+   * is forced to call a tool whose input schema is the decision schema;
+   * other OpenAI-compatible Foundry models get the schema in the system
+   * prompt and their reply is parsed tolerantly. The caller validates.
+   *
+   * @param target - The chat model and the caller's residency.
+   * @param params - The router's request (messages, json_schema, budget).
+   * @param signal - Aborts the call (stage timeout, client disconnect).
+   * @returns The JSON text, the answering model and its usage.
+   * @throws When the region has no client for the model, the call fails,
+   *         or the reply carries no JSON object.
+   */
+  async completeStructuredDecision(
+    target: StructuredDecisionTarget,
+    params: StructuredDecisionParams,
+    signal?: AbortSignal,
+  ): Promise<StructuredDecisionResult> {
+    const { model } = target;
+    const region = resolveChatRegion(target.userRegion, target.hostedRegion);
+    this.assertRegionalClient(model, region);
+    const clients = this.resolveClients(region);
+    const deployment = model.deploymentName || model.id;
+    const format =
+      params.response_format?.type === 'json_schema'
+        ? params.response_format.json_schema
+        : undefined;
+    const schema = (format?.schema ?? { type: 'object' }) as Record<
+      string,
+      unknown
+    >;
+    const maxTokens = fallbackDecisionMaxTokens(
+      params.max_completion_tokens ?? params.max_tokens,
+      model.tokenLimit,
+    );
+    const timeout = AbortSignal.timeout(
+      STRUCTURED_DECISION_FALLBACK_TIMEOUT_MS,
+    );
+    const callSignal = signal ? AbortSignal.any([signal, timeout]) : timeout;
+
+    if (HandlerFactory.isAnthropicModel(model)) {
+      const client = clients.anthropicFoundryClient;
+      if (!client)
+        throw new Error('No Anthropic Foundry client configured for decision');
+      const toolName = format?.name ?? 'decision';
+      const { system, messages } = toAnthropicMessages(params.messages);
+      const response = await client.messages.create(
+        {
+          model: deployment,
+          max_tokens: maxTokens,
+          system,
+          messages,
+          tools: [
+            {
+              name: toolName,
+              description: 'Record the decision.',
+              input_schema: schema as Anthropic.Tool.InputSchema,
+            },
+          ],
+          tool_choice: { type: 'tool', name: toolName },
+        },
+        { signal: callSignal },
+      );
+      const call = response.content.find((block) => block.type === 'tool_use');
+      if (!call || call.type !== 'tool_use')
+        throw new Error(`${model.id} returned no decision`);
+      return {
+        text: JSON.stringify(call.input),
+        model,
+        region,
+        usage: {
+          promptTokens: response.usage.input_tokens,
+          completionTokens: response.usage.output_tokens,
+          totalTokens:
+            response.usage.input_tokens + response.usage.output_tokens,
+        },
+      };
+    }
+
+    // Azure OpenAI takes the OpenAI-native fields. Third-party serving
+    // containers on the Foundry OpenAI-compatible endpoint validate the
+    // body strictly (Pydantic extra="forbid"): Mistral-Large-3 422s on
+    // `max_completion_tokens` (observed 2026-11-07), so they get only the
+    // classic chat-completions fields.
+    const schemaHeld = model.sdk === 'azure-openai';
+    const effort = schemaHeld
+      ? resolveReasoningEffort(model, 'low')
+      : undefined;
+    const client = schemaHeld
+      ? clients.azureOpenAIClient
+      : clients.openAIClient;
+    const response = await client.chat.completions.create(
+      schemaHeld
+        ? {
+            model: deployment,
+            messages: params.messages,
+            max_completion_tokens: maxTokens,
+            response_format: params.response_format,
+            ...(effort ? { reasoning_effort: effort } : {}),
+          }
+        : {
+            model: deployment,
+            messages: [
+              ...params.messages,
+              { role: 'system', content: schemaInstruction(schema) },
+            ],
+            max_tokens: maxTokens,
+          },
+      { signal: callSignal },
+    );
+    const text = extractJsonObject(response.choices[0]?.message.content);
+    if (!text) throw new Error(`${model.id} returned no JSON decision`);
+    return {
+      text,
+      model,
+      region,
+      usage: response.usage
+        ? {
+            promptTokens: response.usage.prompt_tokens,
+            completionTokens: response.usage.completion_tokens,
+            totalTokens: response.usage.total_tokens,
+          }
+        : undefined,
     };
   }
 
@@ -484,10 +660,27 @@ export class StandardChatService {
 
     // Select appropriate model (may upgrade for images, validate, etc.)
     const perfModelStart = performance.now();
-    const { modelId, modelConfig } = this.modelSelector.selectModel(
+    const selected = this.modelSelector.selectModel(
       request.model,
       request.messages,
     );
+    const { modelId } = selected;
+    // Plan within the serving deployment's admission ceiling: the catalog
+    // window can exceed what a small deployment admits per request, and an
+    // over-ceiling request is 429'd on every retry. The TPM was measured for
+    // the REQUESTED deployment, so a selector swap (vision upgrade) skips it.
+    const modelConfig =
+      modelId === request.model.id
+        ? applyAdmissionCeiling(
+            selected.modelConfig,
+            request.planningTokensPerMinute,
+          )
+        : selected.modelConfig;
+    if (modelConfig.maxLength < selected.modelConfig.maxLength) {
+      console.log(
+        `[StandardChatService] ${sanitizeForLog(modelId)}: window capped ${selected.modelConfig.maxLength} -> ${modelConfig.maxLength} tokens by deployment throughput (${request.planningTokensPerMinute} TPM per model call)`,
+      );
+    }
     perfLog(
       'StandardChatService.selectModel',
       perfModelStart,
@@ -575,17 +768,8 @@ export class StandardChatService {
         ? this.getRegionClients?.(chatRegion)
         : undefined;
     const requireRegionalClient = (config: OpenAIModel) => {
-      if (customSource || !chatRegion) return;
-      const available =
-        config.sdk === 'anthropic-foundry'
-          ? regionalClients?.anthropicFoundryClient
-          : config.sdk === 'azure-openai'
-            ? regionalClients?.azureOpenAIClient
-            : regionalClients?.openAIClient;
-      if (!available)
-        throw new Error(
-          `No ${chatRegion} endpoint configured for ${config.sdk ?? 'OpenAI-compatible'} inference. Unpinned default endpoints are not a residency fallback.`,
-        );
+      if (customSource) return;
+      this.assertRegionalClient(config, chatRegion);
     };
     requireRegionalClient(modelConfig);
     if (customSource) {
@@ -800,11 +984,6 @@ export class StandardChatService {
               console.warn(
                 `[StandardChatService] Responses deployment for ${sanitizeForLog(responsesConfig.id)} not found; retrying Responses path on ${sanitizeForLog(fallback.id)}.`,
               );
-              // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-              devTrace('responses-deployment-fallback', {
-                from: responsesConfig.id,
-                to: fallback.id,
-              });
               responsesConfig = fallback;
               continue;
             }
@@ -813,12 +992,6 @@ export class StandardChatService {
             `[StandardChatService] Responses API failed for ${sanitizeForLog(responsesConfig.id)}; falling back to chat.completions:`,
             message,
           );
-          // TEMP DEBUG (see devTrace.ts) — DELETE before merge. A silent
-          // drop to chat.completions also silently drops the interpreter.
-          devTrace('responses-path-fallback', {
-            model: responsesConfig.id,
-            error: message.slice(0, 300),
-          });
           break;
         }
       }
@@ -830,7 +1003,7 @@ export class StandardChatService {
     // claim explicitly, or the model narrates having "created" files it
     // cannot possibly produce.
     const effectiveSystemPrompt = request.nativeCodeInterpreter
-      ? `${enhancedPrompt}\n\nIMPORTANT: Code execution and file generation are NOT available for this response. Do not claim to have run code or created/saved any files. If the request requires producing a file, say that file generation is temporarily unavailable and provide the content inline instead.`
+      ? `${enhancedPrompt}\n\n${INTERPRETER_UNAVAILABLE_NOTICE}`
       : enhancedPrompt;
 
     // Select a handler (OpenAI-compatible) and execute. If the model's
@@ -1079,15 +1252,6 @@ export class StandardChatService {
     const ciFileIds = nativeCI
       ? await handler.uploadInputFiles(nativeCI.inputFiles)
       : [];
-
-    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-    devTrace('native-ci', {
-      requested: !!request.nativeCodeInterpreter,
-      active: !!nativeCI,
-      inputFiles: nativeCI?.inputFiles.map((f) => f.filename) ?? [],
-      uploadedFileIds: ciFileIds.length,
-      forced: nativeCI?.forced ?? false,
-    });
 
     const params = handler.buildRequestParams(
       modelConfig,

@@ -2244,7 +2244,7 @@
   },
   "dropdown": {
     "searchTooltip": "ለእያንዳንዱ መልእክት የድህረ ገፅ ፍለጋ ያንቃ።\n\nበቅርብ ጊዜ Bing ድህረ ገፅ አገልግሎት ላይ ትኩስ መረጃ ይሰጣል።",
-    "attachTooltip": "ፋይሎች፣ ምስሎች ወይም ድምፅ/ቪዲዮ ያጫኑ።\n\nየሚደገፉ ቅርጸ ቁምፊዎች:\n• ምስሎች: JPEG, PNG, GIF, WebP (ከፍተኛ 5MB፣ እስከ 10)\n• ሰነዶች: PDF, DOCX, XLSX, PPTX, TXT, MD (ከፍተኛ 10MB፣ እስከ 3)\n• ውሂብ: CSV, JSON, XML, YAML (ከፍተኛ 10MB፣ እስከ 3)\n• ኮድ: PY, JS, TS, JAVA, C, CPP, GO, ወዘተ (ከፍተኛ 10MB፣ እስከ 3)\n• ድምፅ/ቪዲዮ: MP3, WAV, MP4, WebM (ከፍተኛ 25MB፣ 1 ፋይል)\n\nጠቅላላ፡ 10 ፋይሎች፣ ከፍተኛ 50MB",
+    "attachTooltip": "ፋይሎች፣ ምስሎች ወይም ድምፅ/ቪዲዮ ያጫኑ።\n\nየሚደገፉ ቅርጸ ቁምፊዎች:\n• ምስሎች: JPEG, PNG, GIF, WebP (ከፍተኛ 5MB፣ እስከ 10)\n• ሰነዶች: PDF, DOCX, XLSX, PPTX, TXT, MD (ከፍተኛ 10MB፣ እስከ {maxDocuments})\n• ውሂብ: CSV, JSON, XML, YAML (ከፍተኛ 10MB፣ እስከ {maxDocuments})\n• ኮድ: PY, JS, TS, JAVA, C, CPP, GO, ወዘተ (ከፍተኛ 10MB፣ እስከ {maxDocuments})\n• ድምፅ/ቪዲዮ: MP3, WAV, MP4, WebM (ከፍተኛ 25MB፣ 1 ፋይል)\n\nጠቅላላ፡ {maxFiles} ፋይሎች፣ ከፍተኛ 50MB",
     "transcribeTooltip": "የድምፅ ወይም የቪዲዮ ፋይሎችን ለማስተርጎም ያጫኑ።\n\nየሚደገፉ ቅርጸ ቁምፊዎች: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nከፍተኛ መጠን፡ 25MB\n\nመርጃውን ሲላኩ ማስተርጎም በራሱ ይከናወናል።",
     "selected": "ተመርጧል",
     "expandActions": "እርምጃዎችን ያሳድጉ",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "በአነባበር በጥያቄ ያሉ ቁምፊዎች",
       "uploadMegabytesPerFile": "የፋይል የመስቀል መጠን",
+      "uploadDocumentsPerMessage": "በአንድ መልእክት የሰነዶች ብዛት",
       "mcpRoundsPerRequest": "በመልእክት የመሳሪያ ዙሮች",
       "ttsCharactersPerDay": "የቀኑ የአነባበር ቁምፊዎች",
       "transcriptionMinutesPerDay": "የቀኑ የቅዳሜ ደቂቃዎች",
@@ -5727,6 +5728,7 @@
       "minutes": "ደቂቃዎች",
       "jobs": "ስራዎች",
       "rounds": "ዙሮች",
+      "documents": "ሰነዶች",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Connectors (MCP tools) መጠቀም ይቻላል ወይስ አይቻልም።",
       "ttsCharactersPerRequest": "በአንድ ጥያቄ የሚነበብ ከፍተኛ አካፍ።",
       "uploadMegabytesPerFile": "አንዳንድ የታደሰ ፋይል ከፍተኛ መጠን።",
+      "uploadDocumentsPerMessage": "ከአንድ መልእክት ጋር ሊያያዙ የሚችሉ የሰነዶች ብዛት።",
       "mcpRoundsPerRequest": "በአንድ መልእክት ላይ ምን ብዛት የመሳሪያ ጥሪዎች ሊያገናኙ ይችላሉ።",
       "ttsCharactersPerDay": "በቀን የተነበበው ጠቅላላ ቁምፊዎች።",
       "transcriptionMinutesPerDay": "በቀን የተጻፉ ድምጽና ቪዲዎ ደቂቃዎች ድምር።",

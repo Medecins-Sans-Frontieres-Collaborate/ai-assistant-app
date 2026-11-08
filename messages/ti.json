@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "ንነፍሲ ወከፍ መልእኽቲ ናይ ወብ ድልያ ኣኽእል።\n\nብናይ ቅጽበት Bing ወብ ምእታው እዋናዊ ሓበሬታ ይህብ።",
-    "attachTooltip": "ፋይላት፣ ስእልታት፣ ወይ ድምጺ/ቪድዮ ኣተሓሕዝ።\n\nዝተደገፉ ቅርጽታት:\n• ስእልታት: JPEG, PNG, GIF, WebP (5MB ዝለዓለ፣ ክሳብ 10)\n• ሰነዳት: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB ዝለዓለ፣ ክሳብ 3)\n• ዳታ: CSV, JSON, XML, YAML (10MB ዝለዓለ፣ ክሳብ 3)\n• ኮድ: PY, JS, TS, JAVA, C, CPP, GO, ወዘተ. (10MB ዝለዓለ፣ ክሳብ 3)\n• ድምጺ/ቪድዮ: MP3, WAV, MP4, WebM (25MB ዝለዓለ፣ 1 ፋይል)\n\nድምር: 10 ፋይላት፣ 50MB ዝለዓለ",
+    "attachTooltip": "ፋይላት፣ ስእልታት፣ ወይ ድምጺ/ቪድዮ ኣተሓሕዝ።\n\nዝተደገፉ ቅርጽታት:\n• ስእልታት: JPEG, PNG, GIF, WebP (5MB ዝለዓለ፣ ክሳብ 10)\n• ሰነዳት: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB ዝለዓለ፣ ክሳብ {maxDocuments})\n• ዳታ: CSV, JSON, XML, YAML (10MB ዝለዓለ፣ ክሳብ {maxDocuments})\n• ኮድ: PY, JS, TS, JAVA, C, CPP, GO, ወዘተ. (10MB ዝለዓለ፣ ክሳብ {maxDocuments})\n• ድምጺ/ቪድዮ: MP3, WAV, MP4, WebM (25MB ዝለዓለ፣ 1 ፋይል)\n\nድምር: {maxFiles} ፋይላት፣ 50MB ዝለዓለ",
     "transcribeTooltip": "ንጽሕፈት ናይ ድምጺ ወይ ቪድዮ ፋይላት ጸዓን።\n\nዝተደገፉ ቅርጽታት: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nዝለዓለ ዓቐን: 25MB\n\nመልእኽቲ ምስ ትልእኽ ጽሕፈት ባዕሉ ይፍጸም።",
     "selected": "ዝተመርጸ",
     "expandActions": "ተግባራት ኣስፍሕ",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "ሃላባት ናይ ኣንብባ ኣይተፈተነ",
       "uploadMegabytesPerFile": "ዓበይቲ መጠን ናይ ፋይል",
+      "uploadDocumentsPerMessage": "ሰነዳት ናይ ሓደ መልእኽቲ",
       "mcpRoundsPerRequest": "ወርድ መሳርያ ናይ መልእኽቲ",
       "ttsCharactersPerDay": "ሃላባት ኣንብባ ናይ ኣዓል",
       "transcriptionMinutesPerDay": "ደቒቓት ቅጽሪ ቃል ናይ ኣዓል",
@@ -5711,6 +5712,7 @@
       "minutes": "ደቒቓት",
       "jobs": "ስራሕታት",
       "rounds": "ወርድ",
+      "documents": "ሰነዳት",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "ኮኔክተር (MCP tools) ክጥቀም እንተኾነ።",
       "ttsCharactersPerRequest": "ኣብ ሓንቲ ጥያቄ ዝበጽሖ ዝኽእል ካብ ጸብጻብ ዝኾነ።",
       "uploadMegabytesPerFile": "ኣብ ሓንቲ ፋይል ዝብጽሑ ዝኽእል ሓበሬታ።",
+      "uploadDocumentsPerMessage": "ምስ ሓደ መልእኽቲ ክተሓሓዙ ዝኽእሉ ሰነዳት ብዝሒ።",
       "mcpRoundsPerRequest": "ኣብ ሓንቲ መልእኽቲ ክዝርከብ ዝኽእል ግምጃታት MCP ፡ ብግንዛቤ።",
       "ttsCharactersPerDay": "ክሳዕ መዓልቲ ዝነበበ ባዕላ ባዕሉ ፊደላት።",
       "transcriptionMinutesPerDay": "ኣብ ሓሙሽተ መዓልቲ ጽሑፍ ዝርግጸሉ ደቂ ድምጺን ቪዲዩን ደቒቓታት።",

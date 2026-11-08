@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "เปิดการค้นหาทางเว็บสำหรับทุกข้อความ\n\nให้ข้อมูลที่ทันสมัยโดยใช้ Bing แบบเรียลไทม์",
-    "attachTooltip": "แนบไฟล์ รูปภาพ หรือเสียง/วิดีโอ\n\nรูปแบบที่รองรับ:\n• รูปภาพ: JPEG, PNG, GIF, WebP (สูงสุด 5MB, ไม่เกิน 10 ไฟล์)\n• เอกสาร: PDF, DOCX, XLSX, PPTX, TXT, MD (สูงสุด 10MB, ไม่เกิน 3 ไฟล์)\n• ข้อมูล: CSV, JSON, XML, YAML (สูงสุด 10MB, ไม่เกิน 3 ไฟล์)\n• โค้ด: PY, JS, TS, JAVA, C, CPP, GO เป็นต้น (สูงสุด 10MB, ไม่เกิน 3 ไฟล์)\n• เสียง/วิดีโอ: MP3, WAV, MP4, WebM (สูงสุด 25MB, 1 ไฟล์)\n\nรวมทั้งหมด: 10 ไฟล์, ขนาดไม่เกิน 50MB",
+    "attachTooltip": "แนบไฟล์ รูปภาพ หรือเสียง/วิดีโอ\n\nรูปแบบที่รองรับ:\n• รูปภาพ: JPEG, PNG, GIF, WebP (สูงสุด 5MB, ไม่เกิน 10 ไฟล์)\n• เอกสาร: PDF, DOCX, XLSX, PPTX, TXT, MD (สูงสุด 10MB, ไม่เกิน {maxDocuments} ไฟล์)\n• ข้อมูล: CSV, JSON, XML, YAML (สูงสุด 10MB, ไม่เกิน {maxDocuments} ไฟล์)\n• โค้ด: PY, JS, TS, JAVA, C, CPP, GO เป็นต้น (สูงสุด 10MB, ไม่เกิน {maxDocuments} ไฟล์)\n• เสียง/วิดีโอ: MP3, WAV, MP4, WebM (สูงสุด 25MB, 1 ไฟล์)\n\nรวมทั้งหมด: {maxFiles} ไฟล์, ขนาดไม่เกิน 50MB",
     "transcribeTooltip": "อัปโหลดไฟล์เสียงหรือวิดีโอเพื่อถอดเสียง\n\nรองรับ: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nขนาดสูงสุด: 25MB\n\nระบบจะถอดเสียงอัตโนมัติเมื่อคุณส่งข้อความ",
     "selected": "เลือกแล้ว",
     "expandActions": "ขยายรายการการดำเนินการ",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "ตัวอักษรต่อการอ่านออกเสียง",
       "uploadMegabytesPerFile": "ขนาดอัปโหลดต่อไฟล์",
+      "uploadDocumentsPerMessage": "เอกสารต่อข้อความ",
       "mcpRoundsPerRequest": "รอบเครื่องมือต่อข้อความ",
       "ttsCharactersPerDay": "ตัวอักษรที่อ่านออกเสียงต่อวัน",
       "transcriptionMinutesPerDay": "นาทีถอดความต่อวัน",
@@ -5727,6 +5728,7 @@
       "minutes": "นาที",
       "jobs": "งาน",
       "rounds": "รอบ",
+      "documents": "เอกสาร",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "สามารถใช้คอนเนคเตอร์ (MCP tools) ได้หรือไม่",
       "ttsCharactersPerRequest": "ข้อความที่ยาวที่สุดที่อ่านออกเสียงได้ต่อหนึ่งคำขอ",
       "uploadMegabytesPerFile": "ไฟล์เดี่ยวที่สามารถอัปโหลดได้ใหญ่ที่สุด",
+      "uploadDocumentsPerMessage": "จำนวนเอกสารที่แนบกับข้อความหนึ่งได้",
       "mcpRoundsPerRequest": "ในหนึ่งข้อความสามารถเรียกใช้เครื่องมือได้กี่ครั้ง",
       "ttsCharactersPerDay": "จำนวนอักขระที่อ่านออกเสียงได้ต่อวันทั้งหมด",
       "transcriptionMinutesPerDay": "จำนวนนาทีเสียงและวิดีโอที่ถอดความต่อวัน",

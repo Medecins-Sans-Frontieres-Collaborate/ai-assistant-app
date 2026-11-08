@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Vumela ukusesha kwewebhu kuwo wonke umlayezo.\n\nKunikeza ulwazi olusha kusetshenziswa ukufinyelela kwe-Bing kwewebhu ngqo.",
-    "attachTooltip": "Namathisela amafayela, izithombe, noma omsindo/ividiyo.\n\nAmafomathi asekelwayo:\n• Izithombe: JPEG, PNG, GIF, WebP (5MB max, kuze kube-10)\n• Amadokhumenti: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB max, kuze kube-3)\n• Idatha: CSV, JSON, XML, YAML (10MB max, kuze kube-3)\n• Ikhodi: PY, JS, TS, JAVA, C, CPP, GO, njll. (10MB max, kuze kube-3)\n• Omsindo/Ividiyo: MP3, WAV, MP4, WebM (25MB max, ifayela eli-1)\n\nIsamba: amafayela angu-10, 50MB max",
+    "attachTooltip": "Namathisela amafayela, izithombe, noma omsindo/ividiyo.\n\nAmafomathi asekelwayo:\n• Izithombe: JPEG, PNG, GIF, WebP (5MB max, kuze kube-10)\n• Amadokhumenti: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB max, kuze kube-{maxDocuments})\n• Idatha: CSV, JSON, XML, YAML (10MB max, kuze kube-{maxDocuments})\n• Ikhodi: PY, JS, TS, JAVA, C, CPP, GO, njll. (10MB max, kuze kube-{maxDocuments})\n• Omsindo/Ividiyo: MP3, WAV, MP4, WebM (25MB max, ifayela eli-1)\n\nIsamba: amafayela angu-{maxFiles}, 50MB max",
     "transcribeTooltip": "Layisha amafayela omsindo noma evidiyo ukuze abhalwe phansi.\n\nAmafomathi asekelwayo: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nUbukhulu obukhulu: 25MB\n\nUkubhalwa phansi kwenzeka ngokuzenzakalela uma uthumela umlayezo.",
     "selected": "Okukhethiwe",
     "expandActions": "Nweba Izenzo",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Izixhumi (MCP)",
       "ttsCharactersPerRequest": "Izimpawu zokufunda ngokuzwakalayo",
       "uploadMegabytesPerFile": "Usayizi wokulayisha ifayela ngalinye",
+      "uploadDocumentsPerMessage": "Amadokhumenti ngomlayezo",
       "mcpRoundsPerRequest": "Umjikelezo wethuluzi ngomlayezo",
       "ttsCharactersPerDay": "Izimpawu zokufunda ngokuzwakalayo ngosuku",
       "transcriptionMinutesPerDay": "Imizuzu yokuhumusha ngosuku",
@@ -5711,6 +5712,7 @@
       "minutes": "imizuzu",
       "jobs": "imisebenzi",
       "rounds": "umjikelezo",
+      "documents": "amadokhumenti",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Ingabe ama-connector (amathuluzi e-MCP) angasetshenziswa.",
       "ttsCharactersPerRequest": "Isiqephu eside kakhulu esingafundwa ngasikhathi sinye.",
       "uploadMegabytesPerFile": "Ifayela elilodwa elikhulu kakhulu elingalayishwa.",
+      "uploadDocumentsPerMessage": "Mangaki amadokhumenti angananyathiselwa emlayezweni owodwa.",
       "mcpRoundsPerRequest": "Mangaki amathuluzi angaxhunywa ngomlayezo owodwa.",
       "ttsCharactersPerDay": "Inani eliphelele lwezinhlamvu ezifundwa ngosuku.",
       "transcriptionMinutesPerDay": "Imizuzu ephelele yomsindo nemifanekiso eqoshiwe ngosuku.",

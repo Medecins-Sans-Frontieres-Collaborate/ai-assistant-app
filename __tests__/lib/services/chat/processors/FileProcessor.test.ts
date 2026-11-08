@@ -1,5 +1,6 @@
 import { FileProcessingService } from '@/lib/services/chat/FileProcessingService';
 import { FileProcessor } from '@/lib/services/chat/processors/FileProcessor';
+import { MOUNTED_FILES_INLINE_BUDGET_TOKENS } from '@/lib/services/chat/processors/mountedFileExcerpt';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 
 import {
@@ -10,10 +11,12 @@ import {
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 
 import { MessageType } from '@/types/chat';
+import { InterpreterMode } from '@/types/interpreterMode';
 
 import { createTestChatContext } from '../testUtils';
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { env } from '@/config/environment';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock document processing modules for inline file tests
 vi.mock('@/lib/utils/server/file/fileHandling', () => ({
@@ -466,6 +469,8 @@ describe('FileProcessor', () => {
 
       // Should NOT populate inlineFiles
       expect(result.processedContent?.inlineFiles).toBeUndefined();
+      // The full text stays reachable behind the summary.
+      expect(result.attachmentTexts).toEqual({ 'large-report.txt': largeText });
     });
 
     it('forwards botId to summarization for org KB agents (no promptAgent)', async () => {
@@ -621,6 +626,258 @@ describe('FileProcessor', () => {
 
       // parseAndQueryFileOpenAI should only be called once (for the large file)
       expect(mockParseAndQuery).toHaveBeenCalledTimes(1);
+    });
+
+    const twoFileContext = (
+      options: { modelId?: string; servingTokensPerMinute?: number } = {},
+    ) => ({
+      ...createTestChatContext({
+        hasFiles: true,
+        ...(options.modelId ? { model: { id: options.modelId } } : {}),
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: 'Compare these workbooks' },
+              {
+                type: 'file_url',
+                url: 'https://blob.com/IB26.xlsx',
+                originalFilename: 'IB26.xlsx',
+              },
+              {
+                type: 'file_url',
+                url: 'https://blob.com/WB27.xlsx',
+                originalFilename: 'WB27.xlsx',
+              },
+            ],
+            messageType: MessageType.FILE,
+          },
+        ],
+      }),
+      servingTokensPerMinute: options.servingTokensPerMinute,
+    });
+
+    it('summarizes the file that would push the turn past one window', async () => {
+      // Each 30K-char file fits a 50K chunk alone; together (60K) they do not.
+      mockLoadDocument
+        .mockResolvedValueOnce('A'.repeat(30000))
+        .mockResolvedValueOnce('B'.repeat(30000));
+      mockCalcChunkConfig.mockReturnValue({
+        chunkSize: 50000,
+        batchSize: 3,
+        maxCompletionTokens: 5000,
+        maxSummaryLength: 32000,
+      });
+      mockParseAndQuery.mockResolvedValue('Summary of WB27.');
+
+      const result = await fileProcessor.execute(twoFileContext());
+
+      expect(result.processedContent?.inlineFiles).toEqual([
+        { filename: 'IB26.xlsx', content: 'A'.repeat(30000) },
+      ]);
+      expect(result.processedContent?.fileSummaries).toEqual([
+        expect.objectContaining({ filename: 'WB27.xlsx' }),
+      ]);
+    });
+
+    it('inlines both files when together they exactly fill the window', async () => {
+      mockLoadDocument
+        .mockResolvedValueOnce('A'.repeat(25000))
+        .mockResolvedValueOnce('B'.repeat(25000));
+      mockCalcChunkConfig.mockReturnValue({
+        chunkSize: 50000,
+        batchSize: 3,
+        maxCompletionTokens: 5000,
+        maxSummaryLength: 32000,
+      });
+
+      const result = await fileProcessor.execute(twoFileContext());
+
+      expect(mockParseAndQuery).not.toHaveBeenCalled();
+      expect(result.processedContent?.inlineFiles).toHaveLength(2);
+    });
+
+    it('sizes against the deployment ceiling and forwards it to summarization', async () => {
+      mockLoadDocument.mockResolvedValue('C'.repeat(60000));
+      mockCalcChunkConfig.mockReturnValue({
+        chunkSize: 50000,
+        batchSize: 3,
+        maxCompletionTokens: 5000,
+        maxSummaryLength: 32000,
+      });
+
+      await fileProcessor.execute(
+        twoFileContext({
+          modelId: 'gpt-6-astra',
+          servingTokensPerMinute: 250000,
+        }),
+      );
+
+      // 250K TPM -> 225K admissible, below Astra's 272K catalog window.
+      expect(mockCalcChunkConfig).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: 'gpt-6-astra',
+          maxLength: 225000,
+          tokensPerMinute: 250000,
+        }),
+        expect.any(Number),
+      );
+      expect(mockParseAndQuery).toHaveBeenCalledWith(
+        expect.objectContaining({ servingTokensPerMinute: 250000 }),
+      );
+    });
+
+    describe('native interpreter turns (files mounted in the sandbox)', () => {
+      const priorEnabled = env.CODE_INTERPRETER_ENABLED;
+      beforeEach(() => {
+        (env as any).CODE_INTERPRETER_ENABLED = true;
+        mockCalcChunkConfig.mockReturnValue({
+          chunkSize: 400000,
+          batchSize: 3,
+          maxCompletionTokens: 5000,
+          maxSummaryLength: 32000,
+        });
+      });
+      afterEach(() => {
+        (env as any).CODE_INTERPRETER_ENABLED = priorEnabled;
+      });
+
+      const interpreterTurn = (
+        interpreterMode: InterpreterMode,
+        servingTokensPerMinute?: number,
+      ) => {
+        const base = twoFileContext({ servingTokensPerMinute });
+        return {
+          ...base,
+          interpreterMode,
+          modelId: 'gpt-5.6-luna',
+          model: {
+            ...base.model,
+            id: 'gpt-5.6-luna',
+            sdk: 'azure-openai' as const,
+            supportsCodeInterpreter: true,
+            supportsResponsesApi: true,
+          },
+        };
+      };
+
+      // charsPerToken is mocked at 4: MOUNTED_FILES_INLINE_BUDGET_TOKENS
+      // (16K) is 64K chars of mounted files inlined in full per turn.
+      const budgetChars = MOUNTED_FILES_INLINE_BUDGET_TOKENS * 4;
+
+      it('inlines mounted files that together exactly fill the mounted budget', async () => {
+        mockLoadDocument
+          .mockResolvedValueOnce('A'.repeat(budgetChars / 2))
+          .mockResolvedValueOnce('B'.repeat(budgetChars / 2));
+
+        const result = await fileProcessor.execute(
+          interpreterTurn(InterpreterMode.INTELLIGENT),
+        );
+
+        expect(
+          result.processedContent?.inlineFiles?.map((f) => f.content),
+        ).toEqual(['A'.repeat(budgetChars / 2), 'B'.repeat(budgetChars / 2)]);
+      });
+
+      it('excerpts (never summarizes) the mounted file that overflows the budget', async () => {
+        mockLoadDocument
+          .mockResolvedValueOnce('A'.repeat(budgetChars / 2))
+          .mockResolvedValueOnce('B'.repeat(budgetChars / 2 + 4));
+
+        const result = await fileProcessor.execute(
+          interpreterTurn(InterpreterMode.INTELLIGENT),
+        );
+
+        expect(mockParseAndQuery).not.toHaveBeenCalled();
+        const [ib26, wb27] = result.processedContent?.inlineFiles ?? [];
+        expect(ib26.content).toBe('A'.repeat(budgetChars / 2));
+        expect(wb27.filename).toBe('WB27.xlsx');
+        expect(wb27.content).toMatch(/^\[Excerpt of WB27\.xlsx/);
+        expect(wb27.content).toContain('available to your code interpreter');
+        expect(wb27.content.length).toBeLessThan(budgetChars / 2);
+        // The full text is kept for re-access; the whole file is not.
+        expect(result.attachmentTexts).toEqual({
+          'WB27.xlsx': 'B'.repeat(budgetChars / 2 + 4),
+        });
+      });
+
+      it('keeps the full-window inline budget when the interpreter is off', async () => {
+        mockLoadDocument
+          .mockResolvedValueOnce('A'.repeat(budgetChars))
+          .mockResolvedValueOnce('B'.repeat(budgetChars));
+
+        const result = await fileProcessor.execute(
+          interpreterTurn(InterpreterMode.OFF),
+        );
+
+        expect(
+          result.processedContent?.inlineFiles?.map((f) => f.content),
+        ).toEqual(['A'.repeat(budgetChars), 'B'.repeat(budgetChars)]);
+      });
+
+      it('plans the window with the per-call share of the deployment TPM', async () => {
+        mockLoadDocument.mockResolvedValue('C'.repeat(100));
+
+        await fileProcessor.execute(
+          interpreterTurn(InterpreterMode.INTELLIGENT, 250000),
+        );
+
+        // 250K TPM / 3 planned calls = 83,333 -> 74,999 admissible.
+        expect(mockCalcChunkConfig).toHaveBeenCalledWith(
+          expect.objectContaining({
+            maxLength: 74999,
+            tokensPerMinute: 83333,
+          }),
+          expect.any(Number),
+        );
+      });
+
+      it('reports every attachment it placed in context', async () => {
+        mockLoadDocument.mockResolvedValue('C'.repeat(100));
+
+        const result = await fileProcessor.execute(
+          interpreterTurn(InterpreterMode.INTELLIGENT),
+        );
+
+        expect(result.attachmentUrlsProcessedThisTurn).toEqual([
+          'https://blob.com/IB26.xlsx',
+          'https://blob.com/WB27.xlsx',
+        ]);
+      });
+    });
+
+    it('still inlines a single file of exactly chunkSize at a fractional chars-per-token', async () => {
+      vi.mocked(estimateCharsPerToken).mockReturnValueOnce(3.3);
+      mockLoadDocument.mockResolvedValue('D'.repeat(50000));
+      mockCalcChunkConfig.mockReturnValue({
+        chunkSize: 50000,
+        batchSize: 3,
+        maxCompletionTokens: 5000,
+        maxSummaryLength: 32000,
+      });
+
+      const result = await fileProcessor.execute(
+        createTestChatContext({
+          hasFiles: true,
+          messages: [
+            {
+              role: 'user',
+              content: [
+                { type: 'text', text: 'Read this' },
+                {
+                  type: 'file_url',
+                  url: 'https://blob.com/exact.txt',
+                  originalFilename: 'exact.txt',
+                },
+              ],
+              messageType: MessageType.FILE,
+            },
+          ],
+        }),
+      );
+
+      expect(mockParseAndQuery).not.toHaveBeenCalled();
+      expect(result.processedContent?.inlineFiles).toHaveLength(1);
     });
 
     it('should inline file at exactly the chunk size boundary', async () => {

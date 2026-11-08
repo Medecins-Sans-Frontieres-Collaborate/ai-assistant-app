@@ -19,7 +19,10 @@ import {
 
 import { OpenAIModel, OpenAIModelID } from '@/types/openai';
 
-import { useUploadLimitSync } from '@/components/Chat/ChatInput/ChatInputFile';
+import {
+  useDocumentsPerMessageSync,
+  useUploadLimitSync,
+} from '@/components/Chat/ChatInput/ChatInputFile';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 import {
@@ -119,6 +122,8 @@ export function AppInitializer() {
   // in the tree currently mounts). AppInitializer is the one host guaranteed
   // to render for every signed-in user, exactly like useModelsQuery above.
   useUploadLimitSync();
+  // Same for feature.upload.documentsPerMessage (admin-overridable per person).
+  useDocumentsPerMessageSync();
 
   useEffect(() => {
     // Ensure we only initialize once, even in React StrictMode

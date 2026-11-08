@@ -3,7 +3,6 @@ import toast from 'react-hot-toast';
 
 import { FileUploadService } from '@/client/services/fileUploadService';
 
-import { FILE_COUNT_LIMITS } from '@/lib/utils/app/const';
 import {
   AudioExtractionUnavailableError,
   extractAudioFromVideo,
@@ -20,6 +19,10 @@ import {
   ImageMessageContent,
 } from '@/types/chat';
 
+import {
+  checkAttachmentLimits,
+  describeAttachmentLimitViolation,
+} from '@/client/handlers/chatInput/attachmentLimits';
 import { isChangeEvent } from '@/client/handlers/chatInput/common';
 import { isAudioVideoFileByTypeOrName } from '@/lib/constants/fileTypes';
 
@@ -31,6 +34,12 @@ export async function onFileUpload(
   setImageFieldValue: Dispatch<SetStateAction<ImageFieldValue>>,
   setUploadProgress: Dispatch<SetStateAction<{ [key: string]: number }>>,
   signal?: AbortSignal,
+  /**
+   * The composer's current attachments, so per-message limits count them.
+   * Omitted → only this selection is checked (callers outside the chat
+   * composer).
+   */
+  existingPreviews: readonly FilePreview[] = [],
 ) {
   let files: FileList | File[];
   if (isChangeEvent(event)) {
@@ -47,8 +56,7 @@ export async function onFileUpload(
 
   const filesArray = Array.from(files);
 
-  // Categorize files by type
-  const images = filesArray.filter((file) => file.type.startsWith('image/'));
+  // Categorize files by type (the slow-processing hint below)
   const audioVideo = filesArray.filter((file) =>
     isAudioVideoFileByTypeOrName(file.name, file.type),
   );
@@ -58,44 +66,15 @@ export async function onFileUpload(
       !isAudioVideoFileByTypeOrName(file.name, file.type),
   );
 
-  // Validate count limits
-  if (filesArray.length > FILE_COUNT_LIMITS.MAX_TOTAL_FILES) {
-    toast.error(
-      `Maximum ${FILE_COUNT_LIMITS.MAX_TOTAL_FILES} files allowed (you selected ${filesArray.length})`,
-    );
-    return;
-  }
-
-  if (images.length > FILE_COUNT_LIMITS.MAX_IMAGES) {
-    toast.error(
-      `Maximum ${FILE_COUNT_LIMITS.MAX_IMAGES} images allowed (you selected ${images.length})`,
-    );
-    return;
-  }
-
-  if (documents.length > FILE_COUNT_LIMITS.MAX_DOCUMENTS) {
-    toast.error(
-      `Maximum ${FILE_COUNT_LIMITS.MAX_DOCUMENTS} documents allowed (you selected ${documents.length})`,
-    );
-    return;
-  }
-
-  if (audioVideo.length > FILE_COUNT_LIMITS.MAX_AUDIO_VIDEO) {
-    toast.error(
-      `Maximum ${FILE_COUNT_LIMITS.MAX_AUDIO_VIDEO} audio/video file allowed (you selected ${audioVideo.length})`,
-    );
-    return;
-  }
-
-  // Validate total size
-  const totalSize = filesArray.reduce((sum, file) => sum + file.size, 0);
-  if (totalSize > FILE_COUNT_LIMITS.MAX_TOTAL_SIZE) {
-    const totalSizeMB = (totalSize / (1024 * 1024)).toFixed(1);
-    const maxSizeMB = (
-      FILE_COUNT_LIMITS.MAX_TOTAL_SIZE /
-      (1024 * 1024)
-    ).toFixed(0);
-    toast.error(`Total size ${totalSizeMB}MB exceeds ${maxSizeMB}MB limit`);
+  // Per-MESSAGE limits: counts what is already in the composer too, so
+  // attaching in several selections cannot exceed them.
+  const violation = checkAttachmentLimits(
+    filesArray,
+    existingPreviews,
+    FileUploadService.getDocumentsPerMessageLimit(),
+  );
+  if (violation) {
+    toast.error(describeAttachmentLimitViolation(violation));
     return;
   }
 

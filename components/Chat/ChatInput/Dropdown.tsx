@@ -69,6 +69,7 @@ import { Tone } from '@/types/tone';
 import { TRANSCRIPT_BLOB_THRESHOLD } from '@/types/transcription';
 
 import ChatInputDocumentTranslate from '@/components/Chat/ChatInput/ChatInputDocumentTranslate';
+import { useEffectiveDocumentsPerMessage } from '@/components/Chat/ChatInput/ChatInputFile';
 import ChatInputImage from '@/components/Chat/ChatInput/ChatInputImage';
 import ChatInputImageCapture from '@/components/Chat/ChatInput/ChatInputImageCapture';
 import ChatInputTranslate from '@/components/Chat/ChatInput/ChatInputTranslate';
@@ -88,8 +89,10 @@ import M365FilePickerModal from './M365FilePickerModal';
 import M365MailImportModal from './M365MailImportModal';
 import UrlAttachModal from './UrlAttachModal';
 
+import { maxFilesPerMessage } from '@/client/handlers/chatInput/attachmentLimits';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { DEFAULT_DOCUMENTS_PER_MESSAGE } from '@/config/limits';
 import {
   ATTACH_ACCEPT_TYPES,
   DOCUMENT_TRANSLATION_ACCEPT_TYPES,
@@ -679,6 +682,11 @@ const Dropdown: React.FC<DropdownProps> = ({
     [selectedConversation, mcpServers, updateMcpServer, updateConversation],
   );
 
+  // The caller's documents-per-message limit (admin-overridable), so the
+  // attach tooltip states the number the composer actually enforces.
+  const documentsPerMessage =
+    useEffectiveDocumentsPerMessage() ?? DEFAULT_DOCUMENTS_PER_MESSAGE;
+
   // Define menu items - memoized to avoid ref access issues during render.
   const menuItems: MenuItem[] = useMemo(
     () => [
@@ -983,7 +991,10 @@ const Dropdown: React.FC<DropdownProps> = ({
           />
         ),
         label: t('attachFilesDropdown'),
-        infoTooltip: t('dropdown.attachTooltip'),
+        infoTooltip: t('dropdown.attachTooltip', {
+          maxDocuments: documentsPerMessage,
+          maxFiles: maxFilesPerMessage(documentsPerMessage),
+        }),
         onClick: handleAttachClick,
         category: 'media',
       },
@@ -1220,6 +1231,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       handleDocumentTranslateClick,
       toggleSearchMode,
       toggleInterpreterMode,
+      documentsPerMessage,
     ],
   );
 

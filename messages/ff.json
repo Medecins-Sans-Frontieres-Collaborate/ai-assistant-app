@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Hurmin yiylaango geese ngam neldol kala.\n\nEna hokka humpito keso huutoriiɗo heɓol geese Bing sahaa-goonga.",
-    "attachTooltip": "Ɓoornin piilde, nate, walla nanndol/wideyoo.\n\nMbaydiiji ballitaaɗi:\n• Nate: JPEG, PNG, GIF, WebP (5MB ɓurngal, haa 10)\n• Ɗereeji: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB ɓurngal, haa 3)\n• Keɓe: CSV, JSON, XML, YAML (10MB ɓurngal, haa 3)\n• Dokkol: PY, JS, TS, JAVA, C, CPP, GO, ekn. (10MB ɓurngal, haa 3)\n• Nanndol/Wideyoo: MP3, WAV, MP4, WebM (25MB ɓurngal, fiilde 1)\n\nTimmungo: piilde 10, 50MB ɓurngal",
+    "attachTooltip": "Ɓoornin piilde, nate, walla nanndol/wideyoo.\n\nMbaydiiji ballitaaɗi:\n• Nate: JPEG, PNG, GIF, WebP (5MB ɓurngal, haa 10)\n• Ɗereeji: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB ɓurngal, haa {maxDocuments})\n• Keɓe: CSV, JSON, XML, YAML (10MB ɓurngal, haa {maxDocuments})\n• Dokkol: PY, JS, TS, JAVA, C, CPP, GO, ekn. (10MB ɓurngal, haa {maxDocuments})\n• Nanndol/Wideyoo: MP3, WAV, MP4, WebM (25MB ɓurngal, fiilde 1)\n\nTimmungo: piilde {maxFiles}, 50MB ɓurngal",
     "transcribeTooltip": "Nuldu piilde nanndol walla wideyoo ngam winnditagol.\n\nMbaydiiji ballitaaɗi: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nMawngu ɓurngal: 25MB\n\nWinnditagol ena waɗee e hoore mum nde neldu-ɗaa neldol ngol.",
     "selected": "Cuɓaama",
     "expandActions": "Uddit Golle",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "Binndol kala naanande",
       "uploadMegabytesPerFile": "Ceer upload kala fiilde",
+      "uploadDocumentsPerMessage": "Dokimaaji kala galɗe",
       "mcpRoundsPerRequest": "Rewte tool kala galɗe",
       "ttsCharactersPerDay": "Binndol kala ñalnde (haaletinnde)",
       "transcriptionMinutesPerDay": "Minutaji transcription kala ñalnde",
@@ -5711,6 +5712,7 @@
       "minutes": "minutaji",
       "jobs": "golleji",
       "rounds": "rewte",
+      "documents": "dokimaaji",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "So MCP toolen ena waawi usaade.",
       "ttsCharactersPerRequest": "Doggi maaɗi jaangiri e wiyaade e goɗɗum.",
       "uploadMegabytesPerFile": "Binnde ɗiɗi fow wawan laawol laawitorde.",
+      "uploadDocumentsPerMessage": "Hol no foti dokimaaji jokkondirde e galɗe gooto.",
       "mcpRoundsPerRequest": "Hitaande MCP waltiido e goɗɗum.",
       "ttsCharactersPerDay": "Doggi fow jaangiri e wiyaade lewru ngal.",
       "transcriptionMinutesPerDay": "Yiyde suɓo e bidde goɗɗum lewru ngal.",

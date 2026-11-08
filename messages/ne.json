@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "प्रत्येक सन्देशका लागि वेब खोज सक्षम गर्नुहोस्।\n\nवास्तविक-समय Bing वेब पहुँच प्रयोग गरेर अद्यावधिक जानकारी प्रदान गर्दछ।",
-    "attachTooltip": "फाइलहरू, तस्बिरहरू, वा अडियो/भिडियो संलग्न गर्नुहोस्।\n\nसमर्थित ढाँचाहरू:\n• तस्बिरहरू: JPEG, PNG, GIF, WebP (अधिकतम 5MB, १० सम्म)\n• कागजातहरू: PDF, DOCX, XLSX, PPTX, TXT, MD (अधिकतम 10MB, ३ सम्म)\n• डाटा: CSV, JSON, XML, YAML (अधिकतम 10MB, ३ सम्म)\n• कोड: PY, JS, TS, JAVA, C, CPP, GO, आदि (अधिकतम 10MB, ३ सम्म)\n• अडियो/भिडियो: MP3, WAV, MP4, WebM (अधिकतम 25MB, १ फाइल)\n\nजम्मा: १० फाइलहरू, अधिकतम 50MB",
+    "attachTooltip": "फाइलहरू, तस्बिरहरू, वा अडियो/भिडियो संलग्न गर्नुहोस्।\n\nसमर्थित ढाँचाहरू:\n• तस्बिरहरू: JPEG, PNG, GIF, WebP (अधिकतम 5MB, १० सम्म)\n• कागजातहरू: PDF, DOCX, XLSX, PPTX, TXT, MD (अधिकतम 10MB, {maxDocuments} सम्म)\n• डाटा: CSV, JSON, XML, YAML (अधिकतम 10MB, {maxDocuments} सम्म)\n• कोड: PY, JS, TS, JAVA, C, CPP, GO, आदि (अधिकतम 10MB, {maxDocuments} सम्म)\n• अडियो/भिडियो: MP3, WAV, MP4, WebM (अधिकतम 25MB, १ फाइल)\n\nजम्मा: {maxFiles} फाइलहरू, अधिकतम 50MB",
     "transcribeTooltip": "ट्रान्सक्रिप्सनका लागि अडियो वा भिडियो फाइलहरू अपलोड गर्नुहोस्।\n\nसमर्थित ढाँचाहरू: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nअधिकतम आकार: 25MB\n\nसन्देश पठाउँदा ट्रान्सक्रिप्सन स्वचालित रूपमा हुन्छ।",
     "selected": "छानिएको",
     "expandActions": "कार्यहरू विस्तार गर्नुहोस्",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "कनेक्टरहरू (MCP)",
       "ttsCharactersPerRequest": "प्रति रीड-अलाउड क्यारेक्टरहरू",
       "uploadMegabytesPerFile": "प्रति फाइल अपलोड साइज",
+      "uploadDocumentsPerMessage": "प्रति सन्देश कागजातहरू",
       "mcpRoundsPerRequest": "प्रति सन्देश टुल राउन्डहरू",
       "ttsCharactersPerDay": "प्रति दिन रीड-अलाउड क्यारेक्टरहरू",
       "transcriptionMinutesPerDay": "प्रति दिन ट्रान्सक्रिप्सन मिनेटहरू",
@@ -5711,6 +5712,7 @@
       "minutes": "मिनेट",
       "jobs": "कामहरू",
       "rounds": "राउन्डहरू",
+      "documents": "कागजातहरू",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "कनेक्टर (MCP टुल्स) प्रयोग गर्न मिल्छ कि मिल्दैन।",
       "ttsCharactersPerRequest": "एक अनुरोधमा उच्चारण गर्न मिल्ने सबैभन्दा लामो अनुच्छेद।",
       "uploadMegabytesPerFile": "अपलोड गर्न मिल्ने सबैभन्दा ठूलो एकल फाइल।",
+      "uploadDocumentsPerMessage": "एउटा सन्देशमा कतिवटा कागजात संलग्न गर्न सकिन्छ।",
       "mcpRoundsPerRequest": "एउटा सन्देशले कति टुल कलहरू चेन गर्न सक्छ।",
       "ttsCharactersPerDay": "प्रति दिन उच्चारण गरिएका जम्मा क्यारेक्टरहरू।",
       "transcriptionMinutesPerDay": "प्रति दिन ट्रान्सक्रिप्सन गरिएका जम्मा अडियो र भिडियो मिनेटहरू।",

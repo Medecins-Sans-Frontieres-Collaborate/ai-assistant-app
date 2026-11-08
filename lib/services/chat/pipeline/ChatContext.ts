@@ -39,6 +39,12 @@ export interface ProcessedContent {
   inlineFiles?: {
     filename: string;
     content: string;
+    /**
+     * True when `content` is only an excerpt of a document mounted for the
+     * code interpreter (see processors/mountedFileExcerpt.ts). Consumers
+     * that need the whole text (the trim planner) must re-extract it.
+     */
+    isExcerpt?: boolean;
   }[];
 
   /** Transcripts from audio/video files */
@@ -317,6 +323,23 @@ export interface ChatContext {
   interpreterMode?: InterpreterMode;
 
   /**
+   * Set by ToolRouterEnricher once the sub-tool (Phase 1) interpreter has
+   * been run for this turn, whether it succeeded or failed — either way the
+   * model has been told the outcome. Unset = no code ran (see
+   * interpreterAdvertisedButUnavailable).
+   */
+  codeInterpreterAttempted?: boolean;
+
+  /**
+   * Deterministic notes ToolRouterEnricher attaches to the user's message
+   * after routing: an attached document's measured length against a
+   * requested length, or attachments the code interpreter could not load.
+   * Applied once in ToolRouterEnricher.executeStage, so later routing
+   * cannot drop them.
+   */
+  routerNotes?: string[];
+
+  /**
    * Set by ToolRouterEnricher when the PICKED model can run the
    * code_interpreter tool natively on the Responses path (Phase 2): the
    * enricher skips the sub-tool round-trip and StandardChatService attaches
@@ -334,7 +357,38 @@ export interface ChatContext {
    * Client preference only — resolveChatRegion enforces EU users → EU
    * server-side regardless of this value.
    */
+  /**
+   * Timers for this turn, scaled to its workload (pipeline/turnBudget.ts).
+   * Set by the chat route before the pipeline runs; absent → the compiled
+   * defaults.
+   */
+  turnBudget?: import('./turnBudget').TurnBudget;
+  /**
+   * Full extracted text of attachments the prompt carries only in part (an
+   * excerpt or a summary), by filename. The attachment reader tools serve
+   * it back on demand (tools/attachmentReader.ts).
+   */
+  attachmentTexts?: Record<string, string>;
   hostedRegion?: 'US' | 'EU';
+
+  /**
+   * Tokens-per-minute limit of the deployment serving `modelId` in the
+   * region this request routes to (Standard-family SKUs). Set by
+   * createThroughputMiddleware; undefined = unknown, plan without a ceiling.
+   * This is the MEASURED limit. Consumers plan with
+   * planningTokensPerMinute (enrichers/interpreterCapability.ts), which
+   * splits it across the model calls the turn makes, and clamp catalog
+   * configs with applyAdmissionCeiling so file inlining, document chunking
+   * and history trimming produce requests Azure will admit.
+   */
+  servingTokensPerMinute?: number;
+
+  /**
+   * App URLs of the attachments FileProcessor put into this turn's context
+   * (inlined, excerpted or summarized). ActiveFileInjector skips active
+   * files with these URLs so the same document is never sent twice.
+   */
+  attachmentUrlsProcessedThisTurn?: string[];
 
   /** Whether agent mode is enabled */
   agentMode?: boolean;

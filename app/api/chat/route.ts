@@ -24,6 +24,7 @@ import {
   isModelHandlerStage,
   resolveStageTimeouts,
 } from '@/lib/services/chat/pipeline';
+import { planTurnBudgetFor } from '@/lib/services/chat/pipeline/turnWorkload';
 import { ActiveFileInjector } from '@/lib/services/chat/processors/ActiveFileInjector';
 import { ActiveFileProcessor } from '@/lib/services/chat/processors/ActiveFileProcessor';
 import { FileProcessor } from '@/lib/services/chat/processors/FileProcessor';
@@ -36,7 +37,6 @@ import {
 } from '@/lib/services/chat/providerErrors';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 
-import { devTrace } from '@/lib/utils/server/debug/devTrace';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { ErrorCode, ErrorSeverity, PipelineError } from '@/types/errors';
@@ -340,16 +340,6 @@ export async function POST(req: NextRequest): Promise<Response> {
       interpreterMode: context.interpreterMode,
       hasAgent: context.agentMode,
     });
-    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-    devTrace('context-built', {
-      model: context.modelId,
-      hasFiles: context.hasFiles,
-      searchMode: context.searchMode ?? null,
-      interpreterMode: context.interpreterMode ?? null,
-      agentMode: context.agentMode ?? null,
-      botId: context.botId ?? null,
-      messageCount: context.messages?.length,
-    });
 
     // 2. Get services from container (singleton, reused across requests)
     const container = ServiceContainer.getInstance();
@@ -358,7 +348,15 @@ export async function POST(req: NextRequest): Promise<Response> {
     const aiFoundryAgentHandler = container.getAIFoundryAgentHandler();
     const standardChatService = container.getStandardChatService();
 
-    // 3. Build pipeline
+    // 3. Size this turn's timers to its workload (files to mount, code,
+    // search). A plain question keeps the compiled defaults.
+    const turnBudget = planTurnBudgetFor(
+      context,
+      context.modelTimeoutMs ?? STAGE_TIMEOUTS.StandardChatHandler,
+    );
+    context.turnBudget = turnBudget;
+
+    // 4. Build pipeline
     const inputValidator = new InputValidator();
     // Create blob storage client for batch transcription support
     const blobStorageClient = createBlobStorageClient(context.session);
@@ -406,6 +404,9 @@ export async function POST(req: NextRequest): Promise<Response> {
         new ToolRouterEnricher(
           toolRouterService,
           container.getSearchAssessor(),
+          // Routing second chance when the auxiliary chain is down: the
+          // user's own chat model, under the same residency guard.
+          standardChatService,
         ),
         new SkillEnricher(toolRouterService),
         new SkillReferenceEnricher(),
@@ -418,15 +419,14 @@ export async function POST(req: NextRequest): Promise<Response> {
         new AgentChatHandler(aiFoundryAgentHandler),
         new StandardChatHandler(standardChatService),
       ],
-      resolveStageTimeouts(context.modelTimeoutMs),
+      resolveStageTimeouts(context.modelTimeoutMs, turnBudget),
     );
 
     // Guard for the pipeline execution phase (everything up to the model's
-    // first byte). Pre-stage budget + the user's model timeout (issue #130;
-    // clamped by the middleware, default = the compiled handler timeout).
-    const modelTimeoutMs =
-      context.modelTimeoutMs ?? STAGE_TIMEOUTS.StandardChatHandler;
-    const timeoutMs = PRE_MODEL_BUDGET_MS + modelTimeoutMs;
+    // first byte): the pre-model budget plus the model timeout, both scaled
+    // to the turn's workload (never below the compiled values).
+    const timeoutMs =
+      Math.max(PRE_MODEL_BUDGET_MS, turnBudget.preModelMs) + turnBudget.modelMs;
 
     // Request-level cancellation: when the guard below fires, or the
     // client goes away (Stop button, tab closed, network dropped), the

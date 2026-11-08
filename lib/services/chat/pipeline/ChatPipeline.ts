@@ -10,6 +10,7 @@ import { ErrorCode, ErrorSeverity, PipelineError } from '@/types/errors';
 
 import { ChatContext } from './ChatContext';
 import { PipelineStage } from './PipelineStage';
+import type { TurnBudget } from './turnBudget';
 
 /** Union of all possible message content types */
 type MessageContent =
@@ -86,12 +87,29 @@ export function isModelHandlerStage(stageName: unknown): boolean {
  */
 export function resolveStageTimeouts(
   modelTimeoutMs: number | undefined,
+  budget?: TurnBudget,
 ): Record<string, number> {
-  if (modelTimeoutMs === undefined) return STAGE_TIMEOUTS;
+  // The turn budget only ever lengthens: its model value is the user's
+  // timeout raised to the workload floor (turnBudget.ts).
+  const model = budget?.modelMs ?? modelTimeoutMs;
+  const scaled = budget
+    ? {
+        ...STAGE_TIMEOUTS,
+        FileProcessor: Math.max(
+          STAGE_TIMEOUTS.FileProcessor,
+          budget.fileStageMs,
+        ),
+        ToolRouterEnricher: Math.max(
+          STAGE_TIMEOUTS.ToolRouterEnricher,
+          budget.toolStageMs,
+        ),
+      }
+    : STAGE_TIMEOUTS;
+  if (model === undefined) return scaled;
   return {
-    ...STAGE_TIMEOUTS,
-    StandardChatHandler: modelTimeoutMs,
-    AgentChatHandler: Math.max(STAGE_TIMEOUTS.AgentChatHandler, modelTimeoutMs),
+    ...scaled,
+    StandardChatHandler: model,
+    AgentChatHandler: Math.max(STAGE_TIMEOUTS.AgentChatHandler, model),
   };
 }
 

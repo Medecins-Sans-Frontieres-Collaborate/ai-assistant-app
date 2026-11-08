@@ -10,7 +10,6 @@ import { ResolvedMultiStepConfig } from '@/lib/services/webSearch/config/types';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
-import { devTrace } from '@/lib/utils/server/debug/devTrace';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { getContentType } from '@/lib/utils/server/file/mimeTypes';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -22,12 +21,7 @@ import {
   isContinuableSearchState,
 } from '@/lib/utils/shared/searchState';
 
-import {
-  FileMessageContent,
-  ImageMessageContent,
-  Message,
-  ToolRouterResponse,
-} from '@/types/chat';
+import { FileMessageContent, Message, ToolRouterResponse } from '@/types/chat';
 import { InterpreterMode } from '@/types/interpreterMode';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 import { Citation } from '@/types/rag';
@@ -45,6 +39,12 @@ import { ToolRouterService } from '../ToolRouterService';
 import { ChatContext, shouldExecuteAsAgent } from '../pipeline/ChatContext';
 import { STAGE_TIMEOUTS } from '../pipeline/ChatPipeline';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
+import { fullTextAccess } from '../processors/attachmentAccess';
+import { excerptInlineFilesForReaccess } from '../processors/mountedFileExcerpt';
+import type {
+  StructuredDecisionFallback,
+  StructuredDecisionProvider,
+} from '../routing/structuredDecisionFallback';
 import {
   CodeInterpreterInputFile,
   CodeInterpreterResult,
@@ -56,12 +56,19 @@ import {
   resolveDefaultWebSearchProvider,
 } from '../tools/WebSearchTool';
 import { fetchArticleText, readCitedSources } from '../tools/citedSourceReader';
-import { runDocumentTrim } from '../tools/documentTrim/DocumentTrimPipeline';
+import {
+  checkDocumentLength,
+  runDocumentTrim,
+} from '../tools/documentTrim/DocumentTrimPipeline';
 import {
   TrimTarget,
   TrimmableDocument,
   pickTrimmableDocument,
 } from '../tools/documentTrim/trimDetector';
+import {
+  INTERPRETER_STAGING_MAX_BYTES,
+  selectInterpreterInputRefs,
+} from '../tools/interpreterInputRefs';
 import {
   MultiStepResult,
   PriorSearchState,
@@ -84,12 +91,14 @@ import {
   searchHealthReport,
 } from '../tools/searxngSearch';
 import {
+  INTERPRETER_UNAVAILABLE_NOTICE,
+  interpreterAdvertisedButUnavailable,
   interpreterRequested,
   nativeInterpreterCapable,
 } from './interpreterCapability';
+import { searchRequested } from './searchRequest';
 
 import { env } from '@/config/environment';
-import { generatedFileBlobId } from '@/lib/constants/generatedFiles';
 import { emitSearchInterim, emitToolCallRecord } from '@/lib/streamMarkers';
 
 /**
@@ -128,6 +137,18 @@ export class ToolRouterEnricher extends BasePipelineStage {
   // failures degrade via our catch instead of being killed silently.
   private static readonly INTERPRETER_TIMEOUT_MS =
     STAGE_TIMEOUTS.ToolRouterEnricher - 5000;
+
+  /**
+   * This turn's sub-tool interpreter (and document-trim) budget: scaled to
+   * the files it mounts (pipeline/turnBudget.ts), never below the compiled
+   * default. The tool stage's own timeout is sized to cover it.
+   */
+  private static interpreterTimeoutMs(context: ChatContext): number {
+    return Math.max(
+      ToolRouterEnricher.INTERPRETER_TIMEOUT_MS,
+      context.turnBudget?.interpreterMs ?? 0,
+    );
+  }
 
   // "Executed by" label on the search tool record for feed-based providers
   // (the Bing executor replaces its own with the deployment it ran on).
@@ -212,17 +233,41 @@ export class ToolRouterEnricher extends BasePipelineStage {
   private webSearchTool: WebSearchTool;
   private codeInterpreterTool: CodeInterpreterTool;
   private searchAssessor?: SearchAssessor;
+  private decisionProvider?: StructuredDecisionProvider;
 
   constructor(
     toolRouterService: ToolRouterService,
     // Absent → every search is single-step (the pre-multi-step behaviour).
     searchAssessor?: SearchAssessor,
+    // Absent → an auxiliary routing outage degrades to "no tools".
+    decisionProvider?: StructuredDecisionProvider,
   ) {
     super();
     this.toolRouterService = toolRouterService;
     this.webSearchTool = new WebSearchTool();
     this.codeInterpreterTool = new CodeInterpreterTool();
     this.searchAssessor = searchAssessor;
+    this.decisionProvider = decisionProvider;
+  }
+
+  /**
+   * The routing second chance for this turn: the user's own chat model,
+   * under the turn's residency. None for custom-source (byom) models,
+   * which run on the user's own account and credential.
+   */
+  private decisionFallbackFor(
+    context: ChatContext,
+  ): StructuredDecisionFallback | undefined {
+    const provider = this.decisionProvider;
+    const model = context.model;
+    if (!provider || !model || model.isCustomSourceModel) return undefined;
+    const target = {
+      model,
+      userRegion: context.user?.region as 'US' | 'EU' | null | undefined,
+      hostedRegion: context.hostedRegion,
+    };
+    return (params, signal) =>
+      provider.completeStructuredDecision(target, params, signal);
   }
 
   /**
@@ -233,17 +278,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
    * RAGEnricher's `!context.promptAgent` guard).
    */
   private searchRequested(context: ChatContext): boolean {
-    const modeActive =
-      context.searchMode === SearchMode.INTELLIGENT ||
-      context.searchMode === SearchMode.ALWAYS;
-    if (!modeActive) return false;
-    if (context.botId && !context.promptAgent && !context.m365Agent) {
-      // Sync snapshot peek (shouldRun cannot await): admin records win over
-      // the static config; a cold snapshot denies — fail closed.
-      const agent = peekOrgAgentById(context.botId);
-      return !!agent?.allowWebSearch;
-    }
-    return true;
+    return searchRequested(context);
   }
 
   private nativeInterpreterCapable(context: ChatContext): boolean {
@@ -288,6 +323,65 @@ export class ToolRouterEnricher extends BasePipelineStage {
   }
 
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
+    const routed = this.applyRouterNotes(await this.routeTools(context));
+    // The system prompt advertised file generation whenever the interpreter
+    // mode is on. If this turn's model cannot run code natively and no
+    // sub-tool run happened, withdraw that claim, or the model narrates a
+    // file it never made (a "[blocked]" download link).
+    if (
+      interpreterAdvertisedButUnavailable(routed, shouldExecuteAsAgent(routed))
+    ) {
+      console.log(
+        '[ToolRouterEnricher] No code ran for a non-native model; withdrawing the file-generation claim',
+      );
+      return {
+        ...routed,
+        systemPrompt: `${routed.systemPrompt}\n\n${INTERPRETER_UNAVAILABLE_NOTICE}`,
+      };
+    }
+    return routed;
+  }
+
+  /** Prepends the accumulated `routerNotes` to the last message, once. */
+  private applyRouterNotes(context: ChatContext): ChatContext {
+    if (!context.routerNotes?.length) return context;
+    const messages = context.enrichedMessages || context.messages;
+    const last = messages[messages.length - 1];
+    return {
+      ...context,
+      enrichedMessages: [
+        ...messages.slice(0, -1),
+        this.prependContextToMessage(last, context.routerNotes.join('\n\n')),
+      ],
+      routerNotes: undefined,
+    };
+  }
+
+  /** Returns `context` with `note` appended to its router notes. */
+  private static withRouterNote(
+    context: ChatContext,
+    note: string | undefined,
+  ): ChatContext {
+    return note
+      ? { ...context, routerNotes: [...(context.routerNotes ?? []), note] }
+      : context;
+  }
+
+  /**
+   * Note for attachments the sandbox could not load this turn, so the model
+   * never claims to have read them with code (an excerpt may still say the
+   * full file is "available to your code interpreter").
+   */
+  private static unmountedFilesNote(unmounted: string[]): string | undefined {
+    if (unmounted.length === 0) return undefined;
+    return (
+      `Note: these attached files could not be loaded into the code interpreter this turn (size budget or read error): ${unmounted.join(', ')}. ` +
+      'Do not claim to have opened them with code; work only from the text provided for them in this conversation, and say so if that limits the answer.'
+    );
+  }
+
+  /** Decides and runs this turn's tools (search, sub-tool interpreter). */
+  private async routeTools(context: ChatContext): Promise<ChatContext> {
     // Start with current messages (may already be enriched by RAG)
     const baseMessages = context.enrichedMessages || context.messages;
 
@@ -367,15 +461,6 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const searchRequested = this.searchRequested(context);
     const interpreterRequestedAny = this.interpreterRequested(context);
 
-    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-    devTrace('tool-router-enricher', {
-      searchRequested,
-      interpreterRequestedAny,
-      interpreterMode: context.interpreterMode ?? null,
-      interpreterEnvEnabled: env.CODE_INTERPRETER_ENABLED,
-      attachmentManifest,
-    });
-
     // Dedicated document-trim path. The trigger is split by nature:
     // FACTUAL precondition (a trimmable document is attached — language-
     // independent) is checked deterministically; INTENT ("did the user ask
@@ -402,21 +487,33 @@ export class ToolRouterEnricher extends BasePipelineStage {
             ),
           messages: baseMessages,
           currentMessage,
+          decisionFallback: this.decisionFallbackFor(context),
           documentFilename: trimDocument.filename,
           region: auxiliaryRegion(context.user.region, context.hostedRegion),
           signal: context.stageSignal,
         });
-        // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-        devTrace('trim-intent', {
-          filename: trimDocument.filename,
-          target: trimTarget,
-        });
-        if (trimTarget) {
-          return await this.executeDocumentTrim(
+        if (trimTarget?.direction === 'expand') {
+          // No expansion pipeline: the model lengthens the document itself.
+          // Measure first so it never pads a document that is already long
+          // enough, and knows the real starting length when it is not.
+          context = ToolRouterEnricher.withRouterNote(
             context,
-            trimTarget,
-            trimDocument,
+            await this.describeExpansionRequest(
+              context,
+              trimDocument.filename,
+              trimTarget,
+            ),
           );
+        } else if (trimTarget) {
+          // The trim pipeline runs code and reports its own outcome.
+          return {
+            ...(await this.executeDocumentTrim(
+              context,
+              trimTarget,
+              trimDocument,
+            )),
+            codeInterpreterAttempted: true,
+          };
         }
       }
     }
@@ -432,13 +529,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
       console.log(
         '[ToolRouterEnricher] Native code interpreter — deferring to the Responses path',
       );
-      context = {
-        ...context,
-        nativeCodeInterpreter: {
-          forced: context.interpreterMode === InterpreterMode.ALWAYS,
-          inputFiles: await this.collectInterpreterInputFiles(context),
+      const staged = await this.stageInterpreterInputFiles(context);
+      context = ToolRouterEnricher.withRouterNote(
+        {
+          ...context,
+          nativeCodeInterpreter: {
+            forced: context.interpreterMode === InterpreterMode.ALWAYS,
+            inputFiles: staged.files,
+          },
         },
-      };
+        ToolRouterEnricher.unmountedFilesNote(staged.unmounted),
+      );
     }
     const interpreterRequested = interpreterRequestedAny && !nativeInterpreter;
 
@@ -521,6 +622,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
         messages: baseMessages,
         currentMessage,
         region: auxiliaryRegion(context.user.region, context.hostedRegion),
+        decisionFallback: this.decisionFallbackFor(context),
         forceWebSearch: false,
         considerCodeExecution: undecidedInterpreter,
         hasPriorSearchCitations: undecidedSearch && priorCitations.length > 0,
@@ -568,18 +670,6 @@ export class ToolRouterEnricher extends BasePipelineStage {
         await context.emitActivity?.('chat.activity.toolRoutingUnavailable');
       }
     }
-
-    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-    devTrace('tool-router-decision', {
-      undecidedSearch,
-      undecidedInterpreter,
-      forceWebSearch,
-      forceInterpreter,
-      nativeInterpreter,
-      decidedTools: decided.tools,
-      degraded: decided.degraded ?? false,
-      codeTask: decided.codeTask?.slice(0, 200) ?? null,
-    });
 
     const tools = new Set(
       decided.tools.filter(
@@ -2025,8 +2115,6 @@ export class ToolRouterEnricher extends BasePipelineStage {
     console.log(
       `[ToolRouterEnricher] Executing document trim for ${sanitizeForLog(document.filename)}`,
     );
-    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-    devTrace('trim-start', { filename: document.filename, target });
 
     try {
       const inputFiles = await this.collectInterpreterInputFiles(context);
@@ -2053,7 +2141,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           interpreterTool: this.codeInterpreterTool,
           // Slightly under the outer race below so the pipeline's own
           // deadline handling (retry containment, recovery) always wins.
-          budgetMs: ToolRouterEnricher.INTERPRETER_TIMEOUT_MS - 5000,
+          budgetMs: ToolRouterEnricher.interpreterTimeoutMs(context) - 5000,
           onActivity: (key, params) => {
             void context.emitActivity?.(key, params);
           },
@@ -2061,21 +2149,30 @@ export class ToolRouterEnricher extends BasePipelineStage {
         new Promise<never>((_, reject) => {
           trimTimer = setTimeout(() => {
             reject(new Error('Document trim timed out'));
-          }, ToolRouterEnricher.INTERPRETER_TIMEOUT_MS);
+          }, ToolRouterEnricher.interpreterTimeoutMs(context));
         }),
       ]).finally(() => {
         if (trimTimer) clearTimeout(trimTimer);
       });
 
-      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-      devTrace('trim-done', {
-        countBefore: result.countBefore,
-        countAfter: result.countAfter,
-        target: result.targetCount,
-        unit: result.unit,
-        retried: result.retried,
-        generatedFiles: result.generatedFiles.map((f) => f.filename),
-      });
+      if (result.alreadyWithinTarget) {
+        // Nothing ran and nothing was produced: no tool record, and an
+        // explicit note so the model reports "no change needed" rather
+        // than a failure or an imaginary file.
+        const note =
+          `Note: the attached document "${document.filename}" already has about ${result.countBefore} ${result.unit} of body text ` +
+          `(protected sections such as references excluded), which is within the requested target of ${result.targetCount} ${result.unit}. ` +
+          'No shortened file was produced because no change is needed. Tell the user this plainly, do not claim a file was created, ' +
+          'and offer to shorten it further if they want a lower target.';
+        const lastMsg = baseMessages[baseMessages.length - 1];
+        return {
+          ...context,
+          enrichedMessages: [
+            ...baseMessages.slice(0, -1),
+            this.prependContextToMessage(lastMsg, note),
+          ],
+        };
+      }
 
       await this.emitInterpreterRecord(
         context,
@@ -2095,10 +2192,6 @@ export class ToolRouterEnricher extends BasePipelineStage {
       };
     } catch (error) {
       console.error('[ToolRouterEnricher] Document trim failed:', error);
-      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-      devTrace('trim-failed', {
-        error: error instanceof Error ? error.message : String(error),
-      });
 
       await this.emitInterpreterRecord(
         context,
@@ -2124,6 +2217,48 @@ export class ToolRouterEnricher extends BasePipelineStage {
   }
 
   /**
+   * Measures the attached document for an expansion request and phrases
+   * the result for the model. Fails soft: if the bytes or text cannot be
+   * read, the turn proceeds without a note.
+   *
+   * @param context - The current chat context.
+   * @param filename - The attached document the user wants lengthened.
+   * @param target - The classified expansion target.
+   * @returns A note to prepend to the user's message, or undefined.
+   */
+  private async describeExpansionRequest(
+    context: ChatContext,
+    filename: string,
+    target: TrimTarget,
+  ): Promise<string | undefined> {
+    try {
+      const inputFiles = await this.collectInterpreterInputFiles(context);
+      const documentFile = inputFiles.find(
+        (f) => f.filename.toLowerCase() === filename.toLowerCase(),
+      );
+      if (!documentFile) return undefined;
+      const check = checkDocumentLength(
+        await this.resolveExtractedText(context, documentFile),
+        target,
+        'expand',
+      );
+      console.log(
+        `[ToolRouterEnricher] Expansion request for ${sanitizeForLog(filename)}: ${check.current} vs target ${check.target} ${check.unit} (already met: ${check.alreadyMet})`,
+      );
+      const measured = `the attached document "${filename}" currently has about ${check.current} ${check.unit} of body text (protected sections such as references excluded); the requested length is about ${check.target} ${check.unit}.`;
+      return check.alreadyMet
+        ? `Note: ${measured} It already meets that length. Do not pad it to reach a number — tell the user it already meets the target and ask whether they want a longer target or specific sections developed.`
+        : `Note: ${measured} Lengthen it by about ${check.target - check.current} ${check.unit} with substantive content, and deliver it in the same format as the original.`;
+    } catch (error) {
+      console.warn(
+        '[ToolRouterEnricher] Could not measure document for expansion request:',
+        error instanceof Error ? error.message : error,
+      );
+      return undefined;
+    }
+  }
+
+  /**
    * Planning input for the trim pipeline: the already-extracted inline text
    * when FileProcessor produced it this turn, else a fresh extraction from
    * the raw bytes (follow-up turns, or files that went the summarize path —
@@ -2136,7 +2271,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const inline = context.processedContent?.inlineFiles?.find(
       (f) => f.filename.toLowerCase() === documentFile.filename.toLowerCase(),
     );
-    if (inline?.content) return inline.content;
+    // An excerpt is not the document: planning edits against it would
+    // trim (and measure) only its first few thousand tokens.
+    if (inline?.content && !inline.isExcerpt) return inline.content;
 
     const file = new File(
       [new Uint8Array(documentFile.data)],
@@ -2161,8 +2298,6 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const baseMessages = context.enrichedMessages || context.messages;
     const startTime = Date.now();
     console.log('[ToolRouterEnricher] Executing code interpreter');
-    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-    devTrace('interpreter-start', { task: task.slice(0, 200) });
 
     // Interpreter runs take multiple seconds — keep the loader honest. (The
     // client adds its own live elapsed counter to any chat.activity.* text,
@@ -2170,7 +2305,13 @@ export class ToolRouterEnricher extends BasePipelineStage {
     await context.emitActivity?.('chat.activity.runningCode');
 
     try {
-      const inputFiles = await this.collectInterpreterInputFiles(context);
+      const staged = await this.stageInterpreterInputFiles(context);
+      const inputFiles = staged.files;
+      // Both the success and failure returns below spread `context`.
+      context = ToolRouterEnricher.withRouterNote(
+        context,
+        ToolRouterEnricher.unmountedFilesNote(staged.unmounted),
+      );
 
       let interpreterTimer: ReturnType<typeof setTimeout> | undefined;
       const result = await Promise.race([
@@ -2185,7 +2326,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
             (err as { isInterpreterTimeout?: boolean }).isInterpreterTimeout =
               true;
             reject(err);
-          }, ToolRouterEnricher.INTERPRETER_TIMEOUT_MS);
+          }, ToolRouterEnricher.interpreterTimeoutMs(context));
         }),
       ]).finally(() => {
         if (interpreterTimer) clearTimeout(interpreterTimer);
@@ -2194,12 +2335,6 @@ export class ToolRouterEnricher extends BasePipelineStage {
       console.log(
         `[ToolRouterEnricher] Code interpreter completed: ${result.codeRuns.length} runs, ${result.generatedFiles.length} generated files, ${result.text.length} chars`,
       );
-      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-      devTrace('interpreter-done', {
-        codeRuns: result.codeRuns.length,
-        generatedFiles: result.generatedFiles.map((f) => f.filename),
-        textChars: result.text.length,
-      });
 
       await this.emitInterpreterRecord(
         context,
@@ -2214,8 +2349,12 @@ export class ToolRouterEnricher extends BasePipelineStage {
         this.buildInterpreterContext(result),
       );
       return {
-        ...context,
+        ...ToolRouterEnricher.excerptReadAttachments(
+          context,
+          inputFiles.map((file) => file.filename),
+        ),
         enrichedMessages: [...baseMessages.slice(0, -1), enrichedLastMessage],
+        codeInterpreterAttempted: true,
       };
     } catch (error) {
       const timedOut =
@@ -2225,11 +2364,6 @@ export class ToolRouterEnricher extends BasePipelineStage {
         `[ToolRouterEnricher] Code interpreter ${timedOut ? 'timed out' : 'failed'}:`,
         error,
       );
-      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-      devTrace('interpreter-failed', {
-        timedOut,
-        error: error instanceof Error ? error.message : String(error),
-      });
 
       await this.emitInterpreterRecord(
         context,
@@ -2250,6 +2384,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
       return {
         ...context,
         enrichedMessages: [...baseMessages.slice(0, -1), enrichedLastMessage],
+        codeInterpreterAttempted: true,
       };
     }
   }
@@ -2320,7 +2455,16 @@ export class ToolRouterEnricher extends BasePipelineStage {
           .map((f) => f.filename)
           .join(
             ', ',
-          )}. These are already displayed to the user with previews/download links — refer to them by filename and do NOT fabricate links or re-print their contents.`
+          )}. These are already displayed to the user with previews/download links — refer to them by filename and do NOT fabricate links or re-print their contents. ` +
+        // On 2026-11-07 a multi-document review came back as a finished
+        // .docx, and the answering model then wrote a second, longer
+        // analysis in chat (calling the file "generated previously"),
+        // contradicting a value in it and offering to shrink the margins.
+        // The interpreter read the full sources; the answering model only
+        // has excerpts, so its re-analysis is both redundant and less exact.
+        `When a generated file is the deliverable the user asked for, it is complete: it was built from the full source files. ` +
+        `Reply briefly — what the file covers and any limitations or open questions reported in the results above — and stop. ` +
+        `Do not redo, extend or restate its analysis in chat, do not describe it as an earlier version, and do not suggest smaller fonts, margins or spacing.`
       : '';
     return (
       `Code execution results (a sandboxed Python interpreter ran for this request; ` +
@@ -2364,87 +2508,44 @@ export class ToolRouterEnricher extends BasePipelineStage {
   }
 
   /**
-   * Loads the RAW bytes of the conversation's most recent attachments from
-   * blob storage for the sandbox. Raw bytes matter: the interpreter must
-   * parse the actual CSV/XLSX, not the text summary the file pipeline
-   * produced. Walks backwards from the last message because interpreter
-   * tasks are often follow-ups ("now trim it to 6k words") on a message
-   * that carries no attachment itself. Reads from `context.messages` (not
+   * Loads the RAW bytes of the files in scope for this turn from blob
+   * storage for the sandbox. Raw bytes matter: the interpreter must parse
+   * the actual CSV/XLSX, not the text summary the file pipeline produced.
+   * Which files: the latest attachments, then the active files the
+   * ActiveFileInjector selected (so an upload from an earlier turn is
+   * openable, not just quoted), then earlier generated files — see
+   * selectInterpreterInputRefs. Reads `context.messages` (not
    * enrichedMessages) because processors may have rewritten attachment
    * entries there.
    */
   private async collectInterpreterInputFiles(
     context: ChatContext,
   ): Promise<CodeInterpreterInputFile[]> {
-    const MAX_FILES = 4;
-    const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
+    return (await this.stageInterpreterInputFiles(context)).files;
+  }
 
-    const refs: Array<{
-      id: string;
-      filename: string;
-      location: 'files' | 'images';
-    }> = [];
-    for (
-      let messageIndex = context.messages.length - 1;
-      messageIndex >= 0 && refs.length === 0;
-      messageIndex--
-    ) {
-      const message = context.messages[messageIndex];
-      if (!Array.isArray(message?.content)) continue;
-      for (const item of message.content) {
-        if (refs.length >= MAX_FILES) break;
-        if (item.type === 'file_url') {
-          const f = item as FileMessageContent;
-          const id = f.url?.split('/').pop()?.split('?')[0];
-          if (id) {
-            refs.push({
-              id,
-              filename: f.originalFilename || id,
-              location: 'files',
-            });
-          }
-        } else if (item.type === 'image_url') {
-          const img = item as ImageMessageContent;
-          const url = img.image_url?.url ?? '';
-          // Only blob-backed references; data URLs are legacy and rare.
-          if (url.startsWith('/api/file/')) {
-            const id = url.split('/').pop()?.split('?')[0];
-            if (id) refs.push({ id, filename: id, location: 'images' });
-          }
-        }
-      }
-    }
-    // Nothing attached this turn: fall back to the files the interpreter
-    // itself produced earlier (issue #126), newest reply first, so "fix the
-    // script you wrote" re-runs against the real file rather than a memory
-    // of it. Generated refs are persisted under the same upload paths.
-    if (refs.length === 0) {
-      for (
-        let messageIndex = context.messages.length - 1;
-        messageIndex >= 0 && refs.length < MAX_FILES;
-        messageIndex--
-      ) {
-        const message = context.messages[messageIndex];
-        if (message?.role !== 'assistant') continue;
-        for (const record of message.toolCalls ?? []) {
-          for (const file of record.generated_files ?? []) {
-            if (refs.length >= MAX_FILES) break;
-            const id = generatedFileBlobId(file.url);
-            if (!id || refs.some((r) => r.id === id)) continue;
-            refs.push({
-              id,
-              filename: file.filename || id,
-              location: file.is_image ? 'images' : 'files',
-            });
-          }
-        }
-      }
-    }
-    if (refs.length === 0) return [];
+  /**
+   * Loads the selected files for the sandbox within
+   * INTERPRETER_STAGING_MAX_BYTES. A file that does not fit is skipped and
+   * the rest still load (one large file used to stop every file after it);
+   * skipped and unreadable files are reported so the model can be told.
+   *
+   * @returns The loaded files and the names of selected files not loaded.
+   */
+  private async stageInterpreterInputFiles(
+    context: ChatContext,
+  ): Promise<{ files: CodeInterpreterInputFile[]; unmounted: string[] }> {
+    const refs = selectInterpreterInputRefs({
+      messages: context.messages,
+      activeFiles: context.activeFiles,
+      droppedActiveFileIds: context.activeFilesDroppedThisTurn,
+    });
+    if (refs.length === 0) return { files: [], unmounted: [] };
 
     const userId = getUserIdFromSession(context.session);
     const blobStorageClient = createBlobStorageClient(context.session);
     const files: CodeInterpreterInputFile[] = [];
+    const unmounted: string[] = [];
     let totalBytes = 0;
 
     for (const ref of refs) {
@@ -2453,14 +2554,18 @@ export class ToolRouterEnricher extends BasePipelineStage {
           `${userId}/uploads/${ref.location}/${ref.id}`,
           BlobProperty.BLOB,
         )) as Buffer;
-        if (!Buffer.isBuffer(data)) continue;
-        totalBytes += data.length;
-        if (totalBytes > MAX_TOTAL_BYTES) {
-          console.warn(
-            '[ToolRouterEnricher] Interpreter input size budget reached; skipping remaining attachments',
-          );
-          break;
+        if (!Buffer.isBuffer(data)) {
+          unmounted.push(ref.filename);
+          continue;
         }
+        if (totalBytes + data.length > INTERPRETER_STAGING_MAX_BYTES) {
+          console.warn(
+            `[ToolRouterEnricher] ${sanitizeForLog(ref.filename)} exceeds the remaining interpreter staging budget; skipping it`,
+          );
+          unmounted.push(ref.filename);
+          continue;
+        }
+        totalBytes += data.length;
         const extension = ref.filename.split('.').pop() ?? '';
         files.push({
           filename: ref.filename,
@@ -2474,9 +2579,48 @@ export class ToolRouterEnricher extends BasePipelineStage {
           `[ToolRouterEnricher] Could not load attachment for interpreter: ${ref.filename}:`,
           err instanceof Error ? err.message : err,
         );
+        unmounted.push(ref.filename);
       }
     }
-    return files;
+    return { files, unmounted };
+  }
+
+  /**
+   * After the sub-tool interpreter has read the mounted attachments in
+   * full, the answering model needs their results, not a second full copy
+   * of every file: large ones become excerpts (with the full text kept for
+   * the attachment reader tools). Only when those tools can reach the
+   * model — otherwise an excerpt would be a dead end, and the full text
+   * stays inline exactly as before.
+   *
+   * @param context - The turn after the interpreter ran.
+   * @param mountedFilenames - The files the sandbox actually received.
+   */
+  private static excerptReadAttachments(
+    context: ChatContext,
+    mountedFilenames: readonly string[],
+  ): ChatContext {
+    const inlineFiles = context.processedContent?.inlineFiles;
+    if (!inlineFiles?.length || mountedFilenames.length === 0) return context;
+    if (fullTextAccess(context) !== 'tool') return context;
+    const excerpted = excerptInlineFilesForReaccess(
+      inlineFiles,
+      new Set(mountedFilenames.map((name) => name.toLowerCase())),
+      'tool',
+    );
+    const shortened = Object.keys(excerpted.fullTexts);
+    if (shortened.length === 0) return context;
+    console.log(
+      `[ToolRouterEnricher] Excerpting ${shortened.length} attachment(s) the interpreter read in full; full text served by the attachment reader`,
+    );
+    return {
+      ...context,
+      processedContent: {
+        ...context.processedContent,
+        inlineFiles: excerpted.inlineFiles,
+      },
+      attachmentTexts: { ...context.attachmentTexts, ...excerpted.fullTexts },
+    };
   }
 
   private static truncate(text: string, maxChars: number): string {

@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "Activa la cerca web per a cada missatge.\n\nOfereix informació actualitzada amb accés en temps real a Bing.",
-    "attachTooltip": "Adjunta fitxers, imatges o àudio/vídeo.\n\nFormats admesos:\n• Imatges: JPEG, PNG, GIF, WebP (màx. 5MB, fins a 10)\n• Documents: PDF, DOCX, XLSX, PPTX, TXT, MD (màx. 10MB, fins a 3)\n• Dades: CSV, JSON, XML, YAML (màx. 10MB, fins a 3)\n• Codi: PY, JS, TS, JAVA, C, CPP, GO, etc. (màx. 10MB, fins a 3)\n• Àudio/Vídeo: MP3, WAV, MP4, WebM (màx. 25MB, 1 fitxer)\n\nTotal: 10 fitxers, màx. 50MB",
+    "attachTooltip": "Adjunta fitxers, imatges o àudio/vídeo.\n\nFormats admesos:\n• Imatges: JPEG, PNG, GIF, WebP (màx. 5MB, fins a 10)\n• Documents: PDF, DOCX, XLSX, PPTX, TXT, MD (màx. 10MB, fins a {maxDocuments})\n• Dades: CSV, JSON, XML, YAML (màx. 10MB, fins a {maxDocuments})\n• Codi: PY, JS, TS, JAVA, C, CPP, GO, etc. (màx. 10MB, fins a {maxDocuments})\n• Àudio/Vídeo: MP3, WAV, MP4, WebM (màx. 25MB, 1 fitxer)\n\nTotal: {maxFiles} fitxers, màx. 50MB",
     "transcribeTooltip": "Puja fitxers d'àudio o vídeo per a la transcripció.\n\nFormats admesos: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nMida màxima: 25MB\n\nLa transcripció es fa automàticament quan enviïs el missatge.",
     "selected": "Seleccionat",
     "expandActions": "Amplia accions",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "Caràcters per lectura en veu alta",
       "uploadMegabytesPerFile": "Mida de pujada per fitxer",
+      "uploadDocumentsPerMessage": "Documents per missatge",
       "mcpRoundsPerRequest": "Voltes d'eina per missatge",
       "ttsCharactersPerDay": "Caràcters de lectura en veu alta per dia",
       "transcriptionMinutesPerDay": "Minuts de transcripció per dia",
@@ -5727,6 +5728,7 @@
       "minutes": "minuts",
       "jobs": "tascas",
       "rounds": "voltes",
+      "documents": "documents",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Si es poden utilitzar connectors (eines MCP).",
       "ttsCharactersPerRequest": "El fragment més llarg que es pot llegir en veu alta en una sola petició.",
       "uploadMegabytesPerFile": "El fitxer individual més gran que es pot pujar.",
+      "uploadDocumentsPerMessage": "Quants documents es poden adjuntar a un missatge.",
       "mcpRoundsPerRequest": "Quants usos d'eina pot concatenar un missatge.",
       "ttsCharactersPerDay": "Caràcters llegits en veu alta per dia.",
       "transcriptionMinutesPerDay": "Total de minuts d'àudio i vídeo transcrits per dia.",

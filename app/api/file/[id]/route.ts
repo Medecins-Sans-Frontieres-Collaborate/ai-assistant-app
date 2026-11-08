@@ -6,9 +6,14 @@ import { getAzureMonitorLogger } from '@/lib/services/observability';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import {
+  errorResponse,
+  notFoundResponse,
+} from '@/lib/utils/server/api/apiResponse';
+import {
   BlobProperty,
   getBlobBase64String,
 } from '@/lib/utils/server/blob/blob';
+import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 
 import { auth } from '@/auth';
 
@@ -107,23 +112,27 @@ export async function GET(
       throw new Error(`Invalid fileType requested: ${fileType}`);
     }
   } catch (error) {
-    console.error('Error retrieving blob:', error);
+    // A missing blob is the caller's 404 (expired upload, wrong region, a
+    // link to a file that never persisted) — not a server fault.
+    const missing = isBlobNotFoundError(error);
+    if (!missing) console.error('Error retrieving blob:', error);
 
-    // Log error
     void logger.logFileRetrievalError({
       user: session.user,
       fileId: id,
       fileType,
-      errorCode: 'FILE_RETRIEVAL_ERROR',
+      errorCode: missing ? 'FILE_NOT_FOUND' : 'FILE_RETRIEVAL_ERROR',
       errorMessage: error instanceof Error ? error.message : 'Unknown error',
     });
 
-    return NextResponse.json(
-      { error: 'Failed to retrieve file' },
-      {
-        status: 500,
-        headers: { 'Cache-Control': 's-maxage=43200, stale-while-revalidate' },
-      },
-    );
+    const response = missing
+      ? notFoundResponse('File')
+      : errorResponse('Failed to retrieve file', 500);
+    // Never let a cache keep an error: this response used to carry
+    // `s-maxage=43200`, so one transient storage failure (or a request
+    // made a moment before the file persisted) left the download link
+    // broken for 12 hours after storage had recovered.
+    response.headers.set('Cache-Control', 'no-store');
+    return response;
   }
 }

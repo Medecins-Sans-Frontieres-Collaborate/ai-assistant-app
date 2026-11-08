@@ -2244,7 +2244,7 @@
   },
   "dropdown": {
     "searchTooltip": "প্রতিটি বার্তার জন্য ওয়েব সার্চ সক্রিয় করুন।\n\nএটি রিয়েল-টাইম Bing ওয়েব অ্যাক্সেস ব্যবহার করে সর্বশেষ তথ্য প্রদান করে।",
-    "attachTooltip": "ফাইল, ছবি, বা অডিও/ভিডিও সংযুক্ত করুন।\n\nসমর্থিত ফর্ম্যাট:\n• ছবি: JPEG, PNG, GIF, WebP (সর্বোচ্চ ৫MB, সর্বাধিক ১০টি)\n• ডকুমেন্ট: PDF, DOCX, XLSX, PPTX, TXT, MD (সর্বোচ্চ ১০MB, সর্বাধিক ৩টি)\n• ডেটা: CSV, JSON, XML, YAML (সর্বোচ্চ ১০MB, সর্বাধিক ৩টি)\n• কোড: PY, JS, TS, JAVA, C, CPP, GO ইত্যাদি (সর্বোচ্চ ১০MB, সর্বাধিক ৩টি)\n• অডিও/ভিডিও: MP3, WAV, MP4, WebM (সর্বোচ্চ ২৫MB, ১টি)\n\nমোট: ১০টি ফাইল, সর্বোচ্চ ৫০MB",
+    "attachTooltip": "ফাইল, ছবি, বা অডিও/ভিডিও সংযুক্ত করুন।\n\nসমর্থিত ফর্ম্যাট:\n• ছবি: JPEG, PNG, GIF, WebP (সর্বোচ্চ ৫MB, সর্বাধিক ১০টি)\n• ডকুমেন্ট: PDF, DOCX, XLSX, PPTX, TXT, MD (সর্বোচ্চ ১০MB, সর্বাধিক {maxDocuments}টি)\n• ডেটা: CSV, JSON, XML, YAML (সর্বোচ্চ ১০MB, সর্বাধিক {maxDocuments}টি)\n• কোড: PY, JS, TS, JAVA, C, CPP, GO ইত্যাদি (সর্বোচ্চ ১০MB, সর্বাধিক {maxDocuments}টি)\n• অডিও/ভিডিও: MP3, WAV, MP4, WebM (সর্বোচ্চ ২৫MB, ১টি)\n\nমোট: {maxFiles}টি ফাইল, সর্বোচ্চ ৫০MB",
     "transcribeTooltip": "ট্রান্সক্রিপশনের জন্য অডিও বা ভিডিও ফাইল আপলোড করুন।\n\nসমর্থিত ফর্ম্যাট: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nসর্বাধিক আকার: ২৫MB\n\nআপনি বার্তা পাঠানোর সাথে সাথে স্বয়ংক্রিয়ভাবে ট্রান্সক্রিপশন হবে।",
     "selected": "নির্বাচিত",
     "expandActions": "অ্যাকশনসমূহ প্রসারিত করুন",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "কনেক্টরস (MCP)",
       "ttsCharactersPerRequest": "প্রতি রিড-আলাউড অক্ষর সংখ্যা",
       "uploadMegabytesPerFile": "প্রতি ফাইল আপলোড সাইজ",
+      "uploadDocumentsPerMessage": "প্রতি বার্তায় নথি",
       "mcpRoundsPerRequest": "প্রতি বার্তা টুল রাউন্ড",
       "ttsCharactersPerDay": "প্রতিদিন রিড-আলাউড অক্ষর",
       "transcriptionMinutesPerDay": "প্রতিদিন ট্রান্সক্রিপশন মিনিট",
@@ -5727,6 +5728,7 @@
       "minutes": "মিনিট",
       "jobs": "জব",
       "rounds": "রাউন্ড",
+      "documents": "নথি",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "কানেক্টর (MCP tools) ব্যবহার করা যাবে কি না।",
       "ttsCharactersPerRequest": "একটি অনুরোধে সর্বাধিক যতো বড় টেক্সট পড়ে শোনানো যাবে।",
       "uploadMegabytesPerFile": "একক ফাইলের সর্বাধিক আকার যা আপলোড করা যাবে।",
+      "uploadDocumentsPerMessage": "একটি বার্তায় কতগুলি নথি সংযুক্ত করা যায়।",
       "mcpRoundsPerRequest": "একটি বার্তায় সর্বাধিক কতটি টুল কল চেইন করা যাবে।",
       "ttsCharactersPerDay": "দৈনিক সর্বমোট পড়ে শোনানো অক্ষর সংখ্যা।",
       "transcriptionMinutesPerDay": "প্রতিদিন অডিও ও ভিডিও ট্রান্সক্রিপশনের মোট মিনিট।",

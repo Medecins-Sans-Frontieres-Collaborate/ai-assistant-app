@@ -12,6 +12,8 @@ vi.mock('@/client/services/fileUploadService', () => ({
   FileUploadService: {
     uploadMultipleFiles: (...args: unknown[]) =>
       uploadMultipleFilesMock(...args),
+    // The compiled default (DEFAULT_DOCUMENTS_PER_MESSAGE).
+    getDocumentsPerMessageLimit: () => 5,
   },
 }));
 

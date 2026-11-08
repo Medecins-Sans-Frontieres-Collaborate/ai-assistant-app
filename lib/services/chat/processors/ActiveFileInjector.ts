@@ -5,10 +5,12 @@ import {
   selectFilesForBudget,
 } from '@/lib/utils/server/chat/activeFiles';
 import { IMAGE_TOKENS_HIGH_DETAIL } from '@/lib/utils/server/chat/chat';
+import { applyAdmissionCeiling } from '@/lib/utils/shared/modelThroughput';
 
 import { ActiveFile, ImageMessageContent } from '@/types/chat';
 import { OpenAIVisionModelID } from '@/types/openai';
 
+import { planningTokensPerMinute } from '../enrichers/interpreterCapability';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 
@@ -31,7 +33,7 @@ export class ActiveFileInjector extends BasePipelineStage {
     // Server backstop: strip pinned flag from files exceeding the tier's
     // pin token limit. The client may have pinned at upload time under a
     // different model selection.
-    const sanitizedFiles = activeFiles.map((f) => {
+    const pinSanitizedFiles = activeFiles.map((f) => {
       if (
         f.pinned &&
         f.processedContent?.tokenEstimate &&
@@ -41,6 +43,23 @@ export class ActiveFileInjector extends BasePipelineStage {
       }
       return f;
     });
+
+    // FileProcessor already placed these attachments in this turn's context
+    // (inline, excerpt or summary). Injecting their active-file copy too
+    // sent the same spreadsheet twice — and on an interpreter turn, twice
+    // per model call. They are neither selected nor dropped: the model has
+    // them, and the interpreter still mounts them.
+    const alreadyInContext = new Set(
+      context.attachmentUrlsProcessedThisTurn ?? [],
+    );
+    const sanitizedFiles = pinSanitizedFiles.filter(
+      (f) => !alreadyInContext.has(f.url),
+    );
+    if (sanitizedFiles.length < pinSanitizedFiles.length) {
+      console.log(
+        `[ActiveFileInjector] Skipping ${pinSanitizedFiles.length - sanitizedFiles.length} active file(s) already in context this turn`,
+      );
+    }
 
     // Session quota enforcement
     const usedSoFar = context.activeFilesTokensUsed ?? 0;
@@ -61,7 +80,13 @@ export class ActiveFileInjector extends BasePipelineStage {
     // Apply budget selection with session quota cap. The per-turn ceiling
     // scales with the model's context window so modern 128k/200k models get
     // the headroom they can support, while legacy models stay at the floor.
-    const budgetTokens = computeActiveFilePerTurnBudget(context.model);
+    // The window is the one every model call of this turn can be admitted
+    // with (deployment throughput split across an interpreter turn's calls).
+    const budgetTokens = computeActiveFilePerTurnBudget(
+      context.model
+        ? applyAdmissionCeiling(context.model, planningTokensPerMinute(context))
+        : context.model,
+    );
     const effectiveBudget = Math.min(budgetTokens, remaining);
     const { selected, dropped } = selectFilesForBudget(
       sanitizedFiles,
@@ -75,8 +100,12 @@ export class ActiveFileInjector extends BasePipelineStage {
     // turn and never lets a dropped file rotate back in.
     const nowIso = new Date().toISOString();
     const selectedIds = new Set(selected.map((f) => f.id));
-    const updatedActiveFiles = sanitizedFiles.map((f) =>
-      selectedIds.has(f.id) ? { ...f, lastUsedAt: nowIso } : f,
+    // Built from the full list: files skipped as already-in-context stay
+    // active (and count as used), only their duplicate injection is skipped.
+    const updatedActiveFiles = pinSanitizedFiles.map((f) =>
+      selectedIds.has(f.id) || alreadyInContext.has(f.url)
+        ? { ...f, lastUsedAt: nowIso }
+        : f,
     );
 
     // Separate images from text-like files

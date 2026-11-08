@@ -1,13 +1,15 @@
 import { StreamInterruptedError } from '@/lib/utils/shared/chat/streamParser';
 
 import { Conversation } from '@/types/chat';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { ApiError } from '@/client/services';
+import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
 import { getFallbackChain } from '@/config/models';
 import '@testing-library/jest-dom';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('react-hot-toast', () => ({
   default: {
@@ -263,6 +265,60 @@ describe('ChatStore - fallback chain', () => {
       expect(state.originalModelId).toBe(OpenAIModelID.GPT_5_2_CHAT);
       expect(state.isRetrying).toBe(false);
       expect(state.error).toBeNull();
+    });
+
+    describe('capability-aware ordering', () => {
+      const chainAfter = (failed: string) =>
+        getFallbackChain().filter((id) => id !== failed);
+      const canRunCode = (id: string) =>
+        OpenAIModels[id as OpenAIModelID]?.supportsCodeInterpreter === true;
+      const attempted = (spy: ReturnType<typeof vi.fn>) =>
+        spy.mock.calls.map((call) => (call[0] as Conversation).model.id);
+      const failAll = () =>
+        vi.fn().mockRejectedValue(new ApiError('boom', 500, 'ISE'));
+
+      afterEach(() => {
+        useChatInputStore.setState({ interpreterMode: InterpreterMode.OFF });
+      });
+
+      it('fixture: the chain holds models on both sides of the capability', () => {
+        const chain = chainAfter(OpenAIModelID.GPT_5_2_CHAT);
+        expect(chain.some(canRunCode)).toBe(true);
+        expect(chain.some((id) => !canRunCode(id))).toBe(true);
+      });
+
+      it('tries interpreter-capable models first in Intelligent mode, the rest as last resort', async () => {
+        useChatInputStore.setState({
+          interpreterMode: InterpreterMode.INTELLIGENT,
+        });
+        const sendSpy = failAll();
+        useChatStore.setState({ sendChatRequest: sendSpy });
+
+        await useChatStore
+          .getState()
+          .retryWithFallbackModel(makeConversation(OpenAIModelID.GPT_5_2_CHAT));
+
+        const chain = chainAfter(OpenAIModelID.GPT_5_2_CHAT);
+        expect(attempted(sendSpy)).toEqual([
+          ...chain.filter(canRunCode),
+          ...chain.filter((id) => !canRunCode(id)),
+        ]);
+      });
+
+      it('never sends a forced-interpreter turn to a model that cannot run code', async () => {
+        useChatInputStore.setState({ interpreterMode: InterpreterMode.ALWAYS });
+        const sendSpy = failAll();
+        useChatStore.setState({ sendChatRequest: sendSpy });
+
+        await useChatStore
+          .getState()
+          .retryWithFallbackModel(makeConversation(OpenAIModelID.GPT_5_2_CHAT));
+
+        expect(attempted(sendSpy)).toEqual(
+          chainAfter(OpenAIModelID.GPT_5_2_CHAT).filter(canRunCode),
+        );
+        expect(useChatStore.getState().error).toBeTruthy();
+      });
     });
 
     it('stops the chain when the user aborts mid-retry', async () => {

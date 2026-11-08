@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Alefaso ny fikarohana aterineto isaky ny hafatra.\n\nManome vaovao vaovao mampiasa fidirana aterineto Bing mivantana.",
-    "attachTooltip": "Ampifandraiso rakitra, sary, na feo/video.\n\nEndrika tohanana:\n• Sary: JPEG, PNG, GIF, WebP (5MB max, hatramin'ny 10)\n• Tahirin-kevitra: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB max, hatramin'ny 3)\n• Angona: CSV, JSON, XML, YAML (10MB max, hatramin'ny 3)\n• Kaody: PY, JS, TS, JAVA, C, CPP, GO, sns. (10MB max, hatramin'ny 3)\n• Feo/Video: MP3, WAV, MP4, WebM (25MB max, rakitra 1)\n\nTotaly: rakitra 10, 50MB max",
+    "attachTooltip": "Ampifandraiso rakitra, sary, na feo/video.\n\nEndrika tohanana:\n• Sary: JPEG, PNG, GIF, WebP (5MB max, hatramin'ny 10)\n• Tahirin-kevitra: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB max, hatramin'ny {maxDocuments})\n• Angona: CSV, JSON, XML, YAML (10MB max, hatramin'ny {maxDocuments})\n• Kaody: PY, JS, TS, JAVA, C, CPP, GO, sns. (10MB max, hatramin'ny {maxDocuments})\n• Feo/Video: MP3, WAV, MP4, WebM (25MB max, rakitra 1)\n\nTotaly: rakitra {maxFiles}, 50MB max",
     "transcribeTooltip": "Ampakaro ny rakitra feo na video handikana.\n\nEndrika tohanana: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nHabe max: 25MB\n\nNy fandikana dia mitranga ho azy rehefa mandefa ny hafatra ianao.",
     "selected": "Voafidy",
     "expandActions": "Hanitaro ny Hetsika",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "Tarehintsoratra isaky ny famakiana feo",
       "uploadMegabytesPerFile": "Haben’ny rakitra isaky ny fandefasana",
+      "uploadDocumentsPerMessage": "Antontan-taratasy isaky ny hafatra",
       "mcpRoundsPerRequest": "Tondro fitaovana isaky ny hafatra",
       "ttsCharactersPerDay": "Tarehintsoratra famakiana feo isan'andro",
       "transcriptionMinutesPerDay": "Minitra transcription isan'andro",
@@ -5711,6 +5712,7 @@
       "minutes": "minitra",
       "jobs": "asa",
       "rounds": "dingana",
+      "documents": "antontan-taratasy",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Afaka ampiasaina ve ny connecteurs (MCP tools).",
       "ttsCharactersPerRequest": "Lahatsoratra lava indrindra azo averina amin’ny feo amin’ny fangatahana iray.",
       "uploadMegabytesPerFile": "Raketa tokana lehibe indrindra azo alefa.",
+      "uploadDocumentsPerMessage": "Firy ny antontan-taratasy azo ampiarahina amin'ny hafatra iray.",
       "mcpRoundsPerRequest": "Firy ny fitsidihana fitaovana azo ampifandray amin’ny hafatra iray.",
       "ttsCharactersPerDay": "Isan’ny tarehintsoratra averina amin’ny feo isan'andro.",
       "transcriptionMinutesPerDay": "Isan'ny minitra raki-peo sy lahatsary nadika ho soratra isan’andro.",

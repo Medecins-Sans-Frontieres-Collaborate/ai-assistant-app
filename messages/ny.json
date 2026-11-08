@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Yambitsani kusakira pa intaneti pa uthenga uliwonse.\n\nImapereka zambiri zaposachedwa pogwiritsa ntchito mwayi wa Bing pa intaneti nthawi yeniyeni.",
-    "attachTooltip": "Matitsani mafayilo, zithunzi, kapena mawu/kanema.\n\nMitundu yothandizidwa:\n• Zithunzi: JPEG, PNG, GIF, WebP (5MB mochuluka, mpaka 10)\n• Zikalata: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB mochuluka, mpaka 3)\n• Deta: CSV, JSON, XML, YAML (10MB mochuluka, mpaka 3)\n• Nambala: PY, JS, TS, JAVA, C, CPP, GO, ndi zina (10MB mochuluka, mpaka 3)\n• Mawu/Kanema: MP3, WAV, MP4, WebM (25MB mochuluka, fayilo 1)\n\nZonse: mafayilo 10, 50MB mochuluka",
+    "attachTooltip": "Matitsani mafayilo, zithunzi, kapena mawu/kanema.\n\nMitundu yothandizidwa:\n• Zithunzi: JPEG, PNG, GIF, WebP (5MB mochuluka, mpaka 10)\n• Zikalata: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB mochuluka, mpaka {maxDocuments})\n• Deta: CSV, JSON, XML, YAML (10MB mochuluka, mpaka {maxDocuments})\n• Nambala: PY, JS, TS, JAVA, C, CPP, GO, ndi zina (10MB mochuluka, mpaka {maxDocuments})\n• Mawu/Kanema: MP3, WAV, MP4, WebM (25MB mochuluka, fayilo 1)\n\nZonse: mafayilo {maxFiles}, 50MB mochuluka",
     "transcribeTooltip": "Kwezani mafayilo a mawu kapena kanema olemba.\n\nMitundu yothandizidwa: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nKukula kwambiri: 25MB\n\nKulemba kumachitika modzidzimutsa mukatumiza uthenga.",
     "selected": "Zosankhidwa",
     "expandActions": "Kwezani Zochitika",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "Zilembo pa kuwerenga mokweza",
       "uploadMegabytesPerFile": "Kukula kwa fayilo imodzi potumiza",
+      "uploadDocumentsPerMessage": "Zikalata pa uthenga",
       "mcpRoundsPerRequest": "Nthawi za zida pa uthenga",
       "ttsCharactersPerDay": "Zilembo zowerengedwa mokweza patsiku",
       "transcriptionMinutesPerDay": "Mphindi za zomasulira mawu patsiku",
@@ -5711,6 +5712,7 @@
       "minutes": "mphindi",
       "jobs": "ntchito",
       "rounds": "zoyenda",
+      "documents": "zikalata",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Ngati ma connector (MCP tools) angagwiritsidwe ntchito.",
       "ttsCharactersPerRequest": "Lalikulu kwambiri lomwe lingawerengedwe mokweza kamodzi.",
       "uploadMegabytesPerFile": "Fayilo yayikulu kwambiri yomwe ingakwezedwe.",
+      "uploadDocumentsPerMessage": "Kuchuluka kwa zikalata zomwe zingaphatikizidwe ku uthenga umodzi.",
       "mcpRoundsPerRequest": "Zida zingati zomwe uthenga umodzi ungatseketse.",
       "ttsCharactersPerDay": "Makalata onse omwe awerengedwa mokweza pa tsiku.",
       "transcriptionMinutesPerDay": "Nthawi yonse ya ma audio ndi ma video yomwe imalembedwa litere pa tsiku.",

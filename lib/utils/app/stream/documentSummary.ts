@@ -8,6 +8,10 @@ import {
 import { createAzureOpenAIStreamProcessor } from '@/lib/utils/app/stream/streamProcessor';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import {
+  admissibleRequestTokens,
+  applyAdmissionCeiling,
+} from '@/lib/utils/shared/modelThroughput';
 
 import { ImageMessageContent } from '@/types/chat';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
@@ -94,7 +98,9 @@ interface ChunkConfig {
  * - Each chunk is processed individually by `summarizeChunk`, so we can use nearly the full
  *   context window for input (minus output tokens and prompt overhead).
  * - Chunk size: Available input tokens × chars per token, bounded by MIN/MAX_CHUNK_CHARS.
- * - Batch size: Scales with context window size (larger context = more parallel chunks).
+ * - Batch size: Scales with context window size (larger context = more parallel chunks),
+ *   capped — when the model carries `tokensPerMinute` — at how many chunk requests the
+ *   deployment can admit at once (minimum 1).
  * - Max completion tokens: Based on model's output token limit, capped for efficiency.
  * - Max summary length: Scales with model output capacity for richer summaries.
  *
@@ -144,10 +150,29 @@ export function calculateChunkConfig(
   // Batch size scales with context window
   // With larger chunks, we need fewer chunks in parallel
   const rawBatchSize = Math.floor(model.maxLength / 50000);
-  const batchSize = Math.max(
+  const windowBatchSize = Math.max(
     CHUNK_CONFIG.MIN_BATCH_SIZE,
     Math.min(CHUNK_CONFIG.MAX_BATCH_SIZE, rawBatchSize),
   );
+  // A batch is sent all at once, so it must fit the deployment's per-minute
+  // admission budget too: 5 near-window chunks against a 250K TPM deployment
+  // is ~1.2M tokens in one burst, and every call in it is 429'd. Throughput
+  // overrides MIN_BATCH_SIZE — a floor that guarantees rejection helps no one.
+  const batchSize =
+    model.tokensPerMinute !== undefined
+      ? Math.max(
+          1,
+          Math.min(
+            windowBatchSize,
+            Math.floor(
+              admissibleRequestTokens(model.tokensPerMinute) /
+                (Math.ceil(chunkSize / charsPerToken) +
+                  maxCompletionTokens +
+                  promptOverhead),
+            ),
+          ),
+        )
+      : windowBatchSize;
 
   // Summary length scales with model output capacity
   const rawSummaryLength = model.tokenLimit * 2;
@@ -166,6 +191,7 @@ export function calculateChunkConfig(
     charsPerToken,
     chunkSize,
     batchSize,
+    tokensPerMinute: model.tokensPerMinute,
     maxSummaryLength,
   });
 
@@ -188,6 +214,12 @@ interface ParseAndQueryFilterOpenAIArguments {
    * to keep the client's loader honest instead of silent for minutes.
    */
   onProgress?: (processedChunks: number, totalChunks: number) => void;
+  /**
+   * TPM limit of the deployment serving `modelId` (ChatContext
+   * .servingTokensPerMinute). Caps chunk size and parallelism so summary
+   * calls fit what the deployment admits; undefined = catalog sizing.
+   */
+  servingTokensPerMinute?: number;
 }
 
 /**
@@ -288,6 +320,7 @@ export async function parseAndQueryFileOpenAI({
   images = [],
   preExtractedText,
   onProgress,
+  servingTokensPerMinute,
 }: ParseAndQueryFilterOpenAIArguments): Promise<ReadableStream | string> {
   console.log(
     '[parseAndQueryFileOpenAI] Starting with file:',
@@ -317,7 +350,10 @@ export async function parseAndQueryFileOpenAI({
 
   // Get model configuration for dynamic chunk sizing using direct key access
   console.log('[parseAndQueryFileOpenAI] Looking up model:', modelId);
-  const modelConfig = OpenAIModels[modelId as OpenAIModelID];
+  const catalogConfig = OpenAIModels[modelId as OpenAIModelID];
+  const modelConfig = catalogConfig
+    ? applyAdmissionCeiling(catalogConfig, servingTokensPerMinute)
+    : undefined;
   if (!modelConfig) {
     console.log(
       '[parseAndQueryFileOpenAI] Model not found in OpenAIModels, using defaults',

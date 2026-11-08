@@ -5,6 +5,7 @@ import type {
   CodeInterpreterTool,
 } from '@/lib/services/chat/tools/CodeInterpreterTool';
 import {
+  checkDocumentLength,
   chunkForPlanning,
   parseTrimStats,
   resolveTrimTarget,
@@ -427,5 +428,81 @@ describe('runDocumentTrim', () => {
     expect(execute.mock.calls[0][0].task).toContain('9000 words');
     expect(result.targetCount).toBe(9000);
     expect(result.retried).toBe(false);
+  });
+});
+
+/**
+ * The one-line size check: a length request is measured before anything
+ * runs. Fixtures sit exactly on, just inside and just outside each bound.
+ */
+describe('checkDocumentLength', () => {
+  const words = (n: number) => 'word '.repeat(n).trim();
+  const exact = (target: number) =>
+    ({ kind: 'absolute', unit: 'words', target, approx: false }) as const;
+  const approx = (target: number) =>
+    ({ kind: 'absolute', unit: 'words', target, approx: true }) as const;
+
+  it('reduce, exact target: met at the target, not one word over', () => {
+    expect(
+      checkDocumentLength(words(500), exact(500), 'reduce').alreadyMet,
+    ).toBe(true);
+    expect(
+      checkDocumentLength(words(501), exact(500), 'reduce').alreadyMet,
+    ).toBe(false);
+  });
+
+  it('reduce, approximate target: met within the 10% overshoot, not beyond', () => {
+    expect(
+      checkDocumentLength(words(550), approx(500), 'reduce').alreadyMet,
+    ).toBe(true);
+    expect(
+      checkDocumentLength(words(551), approx(500), 'reduce').alreadyMet,
+    ).toBe(false);
+  });
+
+  it('expand, exact target: met at the target, not one word under', () => {
+    const met = checkDocumentLength(words(500), exact(500), 'expand');
+    expect(met).toMatchObject({ alreadyMet: true, current: 500, target: 500 });
+    expect(
+      checkDocumentLength(words(499), exact(500), 'expand').alreadyMet,
+    ).toBe(false);
+  });
+
+  it('expand, approximate target: met within the same tolerance below', () => {
+    // 500 / 1.1 = 454.5…
+    expect(
+      checkDocumentLength(words(455), approx(500), 'expand').alreadyMet,
+    ).toBe(true);
+    expect(
+      checkDocumentLength(words(454), approx(500), 'expand').alreadyMet,
+    ).toBe(false);
+  });
+
+  it('a ratio target is never already met', () => {
+    const half = { kind: 'ratio', keep: 0.5, approx: true } as const;
+    const double = { kind: 'ratio', keep: 2, approx: true } as const;
+    expect(checkDocumentLength(words(800), half, 'reduce').alreadyMet).toBe(
+      false,
+    );
+    expect(checkDocumentLength(words(800), double, 'expand').alreadyMet).toBe(
+      false,
+    );
+  });
+});
+
+describe('runDocumentTrim — already within target', () => {
+  it('runs no code and reports the unchanged count', async () => {
+    const { tool, execute } = makeTool([]);
+    const result = await runDocumentTrim({
+      ...baseParams(tool),
+      extractedText: 'word '.repeat(400).trim(),
+      target: { kind: 'absolute', unit: 'words', target: 500, approx: true },
+    });
+    expect(execute).not.toHaveBeenCalled();
+    expect(callStructuredMock).not.toHaveBeenCalled();
+    expect(result.alreadyWithinTarget).toBe(true);
+    expect(result.codeRuns).toEqual([]);
+    expect(result.generatedFiles).toEqual([]);
+    expect(result.countAfter).toBe(400);
   });
 });

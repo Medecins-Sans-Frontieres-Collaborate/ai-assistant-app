@@ -20,6 +20,7 @@ import { isVerifiedContinuation } from '@/lib/services/limits/continuationToken'
 import {
   LimitCheckResult,
   applyMode,
+  checkCeiling,
   checkGate,
   currentPolicy,
   denialMessage,
@@ -40,6 +41,7 @@ import { checkAgentSourceAccess } from '@/lib/services/m365/agentSourceAccess';
 import { M365Error } from '@/lib/services/m365/graphApi';
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import { resolveCustomSourceModel } from '@/lib/services/models/customModelSources';
+import { resolveServingTokensPerMinute } from '@/lib/services/models/deploymentThroughput';
 import { resolveOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
 import { ModelSelector, RateLimiter } from '@/lib/services/shared';
 
@@ -54,8 +56,11 @@ import {
   isValidFoundryResourcePath,
   stripToAccountPath,
 } from '@/lib/utils/shared/armPath';
+import { countDocumentAttachments } from '@/lib/utils/shared/chat/attachmentCounts';
 import { clampModelTimeoutMs } from '@/lib/utils/shared/chat/modelTimeout';
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
+import { resolveChatRegion } from '@/lib/utils/shared/modelRegion';
+import { UserRegion } from '@/lib/utils/shared/region';
 
 import { RequestTelemetry } from '@/lib/types/logging';
 import { ChatBody } from '@/types/chat';
@@ -68,7 +73,11 @@ import { ChatContext } from './ChatContext';
 
 import { auth, getAccessTokenForOBO } from '@/auth';
 import { env } from '@/config/environment';
-import { getDefaultModel, getFallbackChain } from '@/config/models';
+import {
+  getDeclaredFallbackIds,
+  getDefaultModel,
+  getFallbackChain,
+} from '@/config/models';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { TokenCredential } from '@azure/identity';
 import { randomUUID } from 'crypto';
@@ -1525,6 +1534,23 @@ export async function createLimitsMiddleware(
       );
     }
 
+    // Documents on the message being sent (the composer checks the same
+    // number before upload; this is the server-side control). Only the
+    // newest message: earlier turns were admitted when they were sent.
+    const documentCount = countDocumentAttachments(context.messages?.at(-1));
+    if (documentCount > 0) {
+      throwIfDenied(
+        checkCeiling(
+          policy,
+          principal,
+          'feature.upload.documentsPerMessage',
+          documentCount,
+          active,
+        ),
+        context,
+      );
+    }
+
     // ── Counters. `chat.messagesPerDay`, `model:<id>.requests` and
     //    `family:<series>.requests` are CONJUNCTIVE — all must pass — and are
     //    debited in ONE compare-and-swap so a request can never consume one
@@ -1654,8 +1680,16 @@ export async function createLimitsMiddleware(
     // every member out of the fallback chain unless a model rule overrides
     // it, exactly as the send decides. Pure resolution — no storage, no
     // per-model round trip.
+    // Candidates = the chain plus the targets the requested model declares
+    // (fallbackModelIds), which getFallbackModel tries first.
+    const fallbackCandidateIds = [
+      ...new Set([
+        ...getDeclaredFallbackIds([context.modelId]),
+        ...getFallbackChain(),
+      ]),
+    ];
     const blockedModelIds = policy
-      ? getFallbackChain().filter((id) =>
+      ? fallbackCandidateIds.filter((id) =>
           isModelBlocked(
             policy,
             principal,
@@ -1720,6 +1754,40 @@ function throwIfDenied(result: LimitCheckResult, context: ChatContext): void {
  * Builds the initial ChatContext from a NextRequest.
  * Applies all standard middleware and returns a fully initialized context.
  */
+/**
+ * Resolves the throughput (TPM) limit of the deployment that will serve this
+ * request, so downstream stages plan requests within its admission ceiling
+ * (lib/utils/shared/modelThroughput.ts). Without it a large-file turn on a
+ * small deployment is rejected with 429 on every attempt and the client
+ * silently ends the turn on a fallback model.
+ *
+ * Runs after createCredentialMiddleware (the model is final). Only catalog
+ * models are looked up — agents, custom-source and local models have no app
+ * deployment to measure. The region mirrors StandardChatService's routing:
+ * EU users always EU, otherwise the requested hosting region, otherwise the
+ * user's home region (US when unknown). Never throws.
+ */
+export async function createThroughputMiddleware(
+  context: Partial<ChatContext>,
+): Promise<Partial<ChatContext>> {
+  const modelId = context.modelId;
+  // Catalog-only: byom-/org-/custom-/local ids are never catalog keys.
+  if (!modelId || !OpenAIModels[modelId as OpenAIModelID]) return {};
+  if (context.model?.isCustomSourceModel) return {};
+  const userRegion = context.user?.region as UserRegion | undefined;
+  const region =
+    resolveChatRegion(userRegion, context.hostedRegion) ?? userRegion ?? 'US';
+  const servingTokensPerMinute = await resolveServingTokensPerMinute(
+    modelId,
+    region,
+  );
+  if (servingTokensPerMinute === undefined) return {};
+  console.log(
+    `[ThroughputMiddleware] ${sanitizeForLog(modelId)} in ${region}: ${servingTokensPerMinute} TPM`,
+  );
+  return { servingTokensPerMinute };
+}
+
 export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
   // Apply initial middleware
   let context = await applyMiddleware(req, [
@@ -1763,6 +1831,12 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
   context = {
     ...context,
     ...(await createCredentialMiddleware(context, req)),
+  };
+
+  // Deployment throughput ceiling for request planning (model is final).
+  context = {
+    ...context,
+    ...(await createThroughputMiddleware(context)),
   };
 
   context = {

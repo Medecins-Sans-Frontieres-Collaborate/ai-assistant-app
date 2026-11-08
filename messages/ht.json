@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Aktive rechèch wèb pou chak mesaj.\n\nBay enfòmasyon ajou lè l itilize aksè wèb Bing an tan reyèl.",
-    "attachTooltip": "Atache fichye, imaj, oswa odyo/videyo.\n\nFòma sipòte:\n• Imaj: JPEG, PNG, GIF, WebP (5MB maks, jiska 10)\n• Dokiman: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB maks, jiska 3)\n• Done: CSV, JSON, XML, YAML (10MB maks, jiska 3)\n• Kòd: PY, JS, TS, JAVA, C, CPP, GO, elatriye (10MB maks, jiska 3)\n• Odyo/Videyo: MP3, WAV, MP4, WebM (25MB maks, 1 fichye)\n\nTotal: 10 fichye, 50MB maks",
+    "attachTooltip": "Atache fichye, imaj, oswa odyo/videyo.\n\nFòma sipòte:\n• Imaj: JPEG, PNG, GIF, WebP (5MB maks, jiska 10)\n• Dokiman: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB maks, jiska {maxDocuments})\n• Done: CSV, JSON, XML, YAML (10MB maks, jiska {maxDocuments})\n• Kòd: PY, JS, TS, JAVA, C, CPP, GO, elatriye (10MB maks, jiska {maxDocuments})\n• Odyo/Videyo: MP3, WAV, MP4, WebM (25MB maks, 1 fichye)\n\nTotal: {maxFiles} fichye, 50MB maks",
     "transcribeTooltip": "Telechaje fichye odyo oswa videyo pou transkripsyon.\n\nFòma sipòte: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nGwosè maks: 25MB\n\nTranskripsyon fèt otomatikman lè ou voye mesaj la.",
     "selected": "Chwazi",
     "expandActions": "Elaji Aksyon",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Konektè (MCP)",
       "ttsCharactersPerRequest": "Karaktè pa lekti anwo",
       "uploadMegabytesPerFile": "Gwosè chajman pa fichye",
+      "uploadDocumentsPerMessage": "Dokiman pa mesaj",
       "mcpRoundsPerRequest": "Ronn zouti pa mesaj",
       "ttsCharactersPerDay": "Karaktè lekti anwo pa jou",
       "transcriptionMinutesPerDay": "Minit transkripsyon pa jou",
@@ -5711,6 +5712,7 @@
       "minutes": "minit",
       "jobs": "travay",
       "rounds": "ronn",
+      "documents": "dokiman",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Si konektè (zouti MCP) kapab itilize.",
       "ttsCharactersPerRequest": "Tekst ki pi long ki ka li a wotaw nan yon demann.",
       "uploadMegabytesPerFile": "Pi gwo fichye sèl ki ka telechaje.",
+      "uploadDocumentsPerMessage": "Konbyen dokiman ou ka tache nan yon mesaj.",
       "mcpRoundsPerRequest": "Konbyen apèl zouti yon sèl mesaj ka chane.",
       "ttsCharactersPerDay": "Total karaktè li a wotaw pa jou.",
       "transcriptionMinutesPerDay": "Total minit odyo ak videyo transkri pa jou.",

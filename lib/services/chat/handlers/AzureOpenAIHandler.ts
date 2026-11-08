@@ -5,6 +5,7 @@ import {
   ProviderMessageFields,
   toProviderMessages,
 } from '@/lib/utils/server/chat/providerMessages';
+import { resolveReasoningEffort } from '@/lib/utils/shared/chat/reasoningEffort';
 
 import {
   FileMessageContent,
@@ -249,9 +250,11 @@ export class AzureOpenAIHandler extends ModelHandler {
       params.temperature = temperature;
     }
 
-    // Add reasoning_effort if model supports it (GPT-5, o3)
-    if (modelConfig?.supportsReasoningEffort && reasoningEffort) {
-      params.reasoning_effort = reasoningEffort;
+    // Add reasoning_effort if the model supports it (GPT-5, o3). The helper
+    // also downgrades 'minimal' for models that reject it (GPT-5.6+).
+    const effort = resolveReasoningEffort(modelConfig, reasoningEffort);
+    if (effort) {
+      params.reasoning_effort = effort;
     }
 
     // Add verbosity if model supports it (GPT-5 models only)

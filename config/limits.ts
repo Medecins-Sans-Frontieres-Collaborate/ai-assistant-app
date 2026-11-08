@@ -30,6 +30,7 @@ export type LimitUnit =
   | 'minutes'
   | 'jobs'
   | 'rounds'
+  | 'documents'
   | 'boolean';
 
 /**
@@ -73,6 +74,18 @@ export interface LimitDefinition {
 }
 
 const MEGABYTE = 1024 * 1024;
+
+/**
+ * Documents (anything not an image or audio/video) one chat message may
+ * carry. Images and audio/video keep their own compiled caps
+ * (FILE_COUNT_LIMITS). Resolved per user by the limits system; the
+ * composer and the chat route both enforce it.
+ */
+export const DOCUMENTS_PER_MESSAGE_LIMIT_KEY =
+  'feature.upload.documentsPerMessage';
+
+/** Documents per message when no policy is enforced (observe mode, no policy). */
+export const DEFAULT_DOCUMENTS_PER_MESSAGE = 5;
 
 export const LIMIT_DEFINITIONS: readonly LimitDefinition[] = [
   // ── Models ────────────────────────────────────────────────────────────
@@ -206,6 +219,26 @@ export const LIMIT_DEFINITIONS: readonly LimitDefinition[] = [
     enforcedAt:
       'lib/services/limits/uploadLimit.ts resolveEffectiveUploadMegabytes',
     labelKey: 'uploadMegabytesPerFile',
+  },
+  {
+    key: DOCUMENTS_PER_MESSAGE_LIMIT_KEY,
+    kind: 'ceiling',
+    unit: 'documents',
+    window: 'request',
+    perModel: false,
+    // The composer's default (was a compiled 3 per selection). Unlike most
+    // keys this is NOT unlimited by default: each document costs extraction
+    // time and context, so an admin raises it per person or group.
+    defaultValue: DEFAULT_DOCUMENTS_PER_MESSAGE,
+    // The only published code-interpreter file cap (Assistants API: 20
+    // files); the Responses API documents none. The sandbox mounts up to
+    // this many files (MAX_INTERPRETER_INPUT_FILES), so every document a
+    // user may attach can also be opened with code.
+    hardCeiling: 20,
+    category: 'files',
+    enforcedAt:
+      'lib/services/chat/pipeline/Middleware.ts createLimitsMiddleware',
+    labelKey: 'uploadDocumentsPerMessage',
   },
   {
     key: 'feature.mcp.roundsPerRequest',

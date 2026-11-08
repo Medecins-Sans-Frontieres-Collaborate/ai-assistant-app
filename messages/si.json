@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "සෑම පණිවුඩයක්ම සඳහා වෙබ් සෙවීම සක්‍රිය කරන්න.\n\nසමුදායේතින් Bing වෙබ් පිවිසුම භාවිතයෙන් යාවත්කාලීන තොරතුරු ලබා දේ.",
-    "attachTooltip": "ගොනු, පින්තූර හෝ ශ්‍රව්‍ය/දෘශ්‍ය යෙදවන්න.\n\nසහාය දක්වන ආකෘති:\n• පින්තූර: JPEG, PNG, GIF, WebP (උපරිම 5MB, ගොනු 10ක් දක්වා)\n• ලියවිලි: PDF, DOCX, XLSX, PPTX, TXT, MD (උපරිම 10MB, ගොනු 3ක් දක්වා)\n• දත්ත: CSV, JSON, XML, YAML (උපරිම 10MB, ගොනු 3ක් දක්වා)\n• කේතය: PY, JS, TS, JAVA, C, CPP, GO, ආදී (උපරිම 10MB, ගොනු 3ක් දක්වා)\n• ශ්‍රව්‍ය/දෘශ්‍ය: MP3, WAV, MP4, WebM (උපරිම 25MB, ගොනුව 1ක්)\n\nමුලු ගණන: ගොනු 10, උපරිම 50MB",
+    "attachTooltip": "ගොනු, පින්තූර හෝ ශ්‍රව්‍ය/දෘශ්‍ය යෙදවන්න.\n\nසහාය දක්වන ආකෘති:\n• පින්තූර: JPEG, PNG, GIF, WebP (උපරිම 5MB, ගොනු 10ක් දක්වා)\n• ලියවිලි: PDF, DOCX, XLSX, PPTX, TXT, MD (උපරිම 10MB, ගොනු {maxDocuments}ක් දක්වා)\n• දත්ත: CSV, JSON, XML, YAML (උපරිම 10MB, ගොනු {maxDocuments}ක් දක්වා)\n• කේතය: PY, JS, TS, JAVA, C, CPP, GO, ආදී (උපරිම 10MB, ගොනු {maxDocuments}ක් දක්වා)\n• ශ්‍රව්‍ය/දෘශ්‍ය: MP3, WAV, MP4, WebM (උපරිම 25MB, ගොනුව 1ක්)\n\nමුලු ගණන: ගොනු {maxFiles}, උපරිම 50MB",
     "transcribeTooltip": "ලිපිගත කිරීම සඳහා ශ්‍රව්‍ය හෝ දෘශ්‍ය ගොනු උඩුගත කරන්න.\n\nසහායදක්වන ආකෘති: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nඋපරිම ප්‍රමාණය: 25MB\n\nපණිවුඩය යැවූ විට ලිපිගත කිරීම ස්වයංක්‍රීයව සිදු වේ.",
     "selected": "තෝරාගෙන ඇත",
     "expandActions": "ක්‍රියා විකාශනය කරන්න",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "එක් නරඹීමකට අකුරු",
       "uploadMegabytesPerFile": "එක් ගොනුවකට උඩුගත විශාලත්වය",
+      "uploadDocumentsPerMessage": "එක් පණිවිඩයකට ලේඛන",
       "mcpRoundsPerRequest": "එක් පණිවිඩයකට මෙවලම් වට",
       "ttsCharactersPerDay": "දිනකට අකුරු නරඹන්න",
       "transcriptionMinutesPerDay": "දිනකට අනුවාදන මිනිත්තු",
@@ -5727,6 +5728,7 @@
       "minutes": "මිනිත්තු",
       "jobs": "කාර්යයන්",
       "rounds": "වට",
+      "documents": "ලේඛන",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "සම්බන්ධකරන (MCP මෙවලම්) භාවිත කළ හැකිද යන්න.",
       "ttsCharactersPerRequest": "එක් ඉල්ලීමකදී උච්චාරණය කළ හැකි දිගම උපුටාව.",
       "uploadMegabytesPerFile": "උඩුගත කළ හැකි විශාලතම ගොනුව.",
+      "uploadDocumentsPerMessage": "එක් පණිවිඩයකට ඇමිණිය හැකි ලේඛන ගණන.",
       "mcpRoundsPerRequest": "එක් පණිවිඩයක මගින් සම්බන්ධ කළ හැකි මෙවලම් සංඛ්‍යාව.",
       "ttsCharactersPerDay": "දිනකට උච්චාරණය කළ මුළු අක්ෂර ගණන.",
       "transcriptionMinutesPerDay": "දිනකට ලියවීම සඳහා පරිවර්තනය කරන මුළු ශ්‍රව්‍ය හා දෘශ්‍ය මිනිත්තු.",

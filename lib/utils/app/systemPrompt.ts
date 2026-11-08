@@ -13,6 +13,7 @@
  * - Current date/time (always included)
  * - User information (optional, controlled by settings)
  */
+import { GENERATED_DOCUMENT_LAYOUT_RULE } from '@/lib/constants/generatedFiles';
 
 /**
  * Formatting rules that are a CONTRACT WITH THE RENDERER, not editorial
@@ -301,7 +302,8 @@ export const CODE_INTERPRETER_PROMPT_SECTION =
   '- CREATE downloadable files (.xlsx, .csv, .docx, .png, …) — including from content earlier in this conversation, e.g. exporting discussed data as a spreadsheet or turning notes into a document\n' +
   'Generated files are automatically shown to the user with previews and download links. ' +
   'When the user asks for output "as a file", a spreadsheet, a document, or a chart, FAVOR producing a real file via code execution over pasting content as markdown or pointing at the Download button (the Download button remains fine for exporting the response text itself). ' +
-  'Refer to generated files by filename only — never invent links.';
+  'Refer to generated files by filename only — never invent links. ' +
+  GENERATED_DOCUMENT_LAYOUT_RULE;
 
 /**
  * File-output guidance rendered when the code interpreter is NOT active:

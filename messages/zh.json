@@ -2275,7 +2275,7 @@
   },
   "dropdown": {
     "searchTooltip": "为每条消息启用网页搜索。\n\n通过实时 Bing 网页访问提供最新信息。",
-    "attachTooltip": "可附加文件、图片或音频/视频。\n\n支持格式：\n• 图片：JPEG、PNG、GIF、WebP（最大5MB，最多10个）\n• 文档：PDF、DOCX、XLSX、PPTX、TXT、MD（最大10MB，最多3个）\n• 数据：CSV、JSON、XML、YAML（最大10MB，最多3个）\n• 代码：PY、JS、TS、JAVA、C、CPP、GO 等（最大10MB，最多3个）\n• 音频/视频：MP3、WAV、MP4、WebM（最大25MB，1个文件）\n\n总计：最多10个文件，最大50MB",
+    "attachTooltip": "可附加文件、图片或音频/视频。\n\n支持格式：\n• 图片：JPEG、PNG、GIF、WebP（最大5MB，最多10个）\n• 文档：PDF、DOCX、XLSX、PPTX、TXT、MD（最大10MB，最多{maxDocuments}个）\n• 数据：CSV、JSON、XML、YAML（最大10MB，最多{maxDocuments}个）\n• 代码：PY、JS、TS、JAVA、C、CPP、GO 等（最大10MB，最多{maxDocuments}个）\n• 音频/视频：MP3、WAV、MP4、WebM（最大25MB，1个文件）\n\n总计：最多{maxFiles}个文件，最大50MB",
     "transcribeTooltip": "上传音频或视频文件进行转录。\n\n支持格式：MP3、MP4、WAV、WebM、M4A、MPEG、MPGA\n单文件最大：25MB\n\n发送消息后自动转录。",
     "selected": "已选择",
     "expandActions": "展开操作",
@@ -5725,6 +5725,7 @@
       "mcpEnabled": "连接器（MCP）",
       "ttsCharactersPerRequest": "每次朗读字符数",
       "uploadMegabytesPerFile": "每文件上传大小",
+      "uploadDocumentsPerMessage": "每条消息文档数",
       "mcpRoundsPerRequest": "每消息工具轮次",
       "ttsCharactersPerDay": "每日朗读字符数",
       "transcriptionMinutesPerDay": "每日转录分钟数",
@@ -5758,6 +5759,7 @@
       "minutes": "分钟",
       "jobs": "作业",
       "rounds": "轮次",
+      "documents": "份",
       "boolean": ""
     },
     "window": {
@@ -5804,6 +5806,7 @@
       "mcpEnabled": "是否可使用连接器（MCP工具）。",
       "ttsCharactersPerRequest": "单次请求可朗读的最长文本。",
       "uploadMegabytesPerFile": "可上传的单个最大文件大小。",
+      "uploadDocumentsPerMessage": "一条消息可附加的文档数量。",
       "mcpRoundsPerRequest": "一条消息可串联的工具调用次数。",
       "ttsCharactersPerDay": "每日朗读的总字符数。",
       "transcriptionMinutesPerDay": "每日音频和视频转录总分钟数。",
