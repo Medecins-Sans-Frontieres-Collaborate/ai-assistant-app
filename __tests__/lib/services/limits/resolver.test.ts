@@ -510,6 +510,9 @@ describe('resolveAllLimits', () => {
       'feature.m365.mail.readsPerDay',
       'feature.m365.toolCallsPerDay',
       'feature.mcp.roundsPerRequest',
+      // The composer always capped documents per message (3, per selection);
+      // the key moves that cap into policy and raises the default to 5.
+      'feature.upload.documentsPerMessage',
       'feature.upload.megabytesPerFile',
     ]);
   });
