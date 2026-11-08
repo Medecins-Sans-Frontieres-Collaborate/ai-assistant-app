@@ -5,6 +5,10 @@ import {
   parseAndQueryFileOpenAI,
   splitIntoChunks,
 } from '@/lib/utils/app/stream/documentSummary';
+import {
+  admissibleRequestTokens,
+  applyAdmissionCeiling,
+} from '@/lib/utils/shared/modelThroughput';
 
 import { OpenAIModel } from '@/types/openai';
 
@@ -180,6 +184,57 @@ describe('Document Summary Utilities', () => {
       expect(config.maxCompletionTokens).toBe(4000);
       // 16000 * 2 = 32000, within 16K-64K range
       expect(config.maxSummaryLength).toBe(32000);
+    });
+
+    describe('deployment throughput', () => {
+      const astra: OpenAIModel = {
+        id: 'gpt-6-astra',
+        name: 'GPT-6 Astra',
+        maxLength: 272000,
+        tokenLimit: 32000,
+      };
+      const burstTokens = (
+        config: ReturnType<typeof calculateChunkConfig>,
+      ): number =>
+        config.batchSize *
+        (Math.ceil(config.chunkSize / TOKEN_ESTIMATION.LATIN) +
+          config.maxCompletionTokens +
+          CHUNK_CONFIG.SYSTEM_PROMPT_TOKENS +
+          CHUNK_CONFIG.PROMPT_WRAPPER_TOKENS);
+
+      it('keeps window-based parallelism when throughput is unknown', () => {
+        // 272000 / 50000 = 5 parallel near-window chunks.
+        expect(calculateChunkConfig(astra).batchSize).toBe(5);
+      });
+
+      it('fits one batch inside a 250K TPM deployment (the 2026-11-06 burst)', () => {
+        const config = calculateChunkConfig(
+          applyAdmissionCeiling(astra, 250000),
+        );
+        expect(config.batchSize).toBeGreaterThanOrEqual(1);
+        expect(config.batchSize).toBeLessThan(5);
+        expect(burstTokens(config)).toBeLessThanOrEqual(
+          admissibleRequestTokens(250000),
+        );
+      });
+
+      it('goes below MIN_BATCH_SIZE rather than guarantee a rejection', () => {
+        const config = calculateChunkConfig(
+          applyAdmissionCeiling(astra, 100000),
+        );
+        expect(CHUNK_CONFIG.MIN_BATCH_SIZE).toBeGreaterThan(1);
+        expect(config.batchSize).toBe(1);
+        expect(burstTokens(config)).toBeLessThanOrEqual(
+          admissibleRequestTokens(100000),
+        );
+      });
+
+      it('restores full parallelism once capacity is raised', () => {
+        const config = calculateChunkConfig(
+          applyAdmissionCeiling(astra, 5000000),
+        );
+        expect(config.batchSize).toBe(5);
+      });
     });
 
     it('should calculate larger values for o3 model with extended context', () => {
