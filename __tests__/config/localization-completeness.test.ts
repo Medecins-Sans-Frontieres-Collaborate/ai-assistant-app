@@ -1,3 +1,4 @@
+import { defaultLocale } from '@/config/i18n';
 import fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
@@ -20,63 +21,86 @@ function flattenKeys(obj: Record<string, unknown>, prefix = ''): string[] {
   });
 }
 
+/** Flattened keys of every locale file in /messages, by locale. */
+function loadLocaleKeys(): Map<string, Set<string>> {
+  const messagesDir = path.join(process.cwd(), 'messages');
+  const localeKeys = new Map<string, Set<string>>();
+  for (const file of fs.readdirSync(messagesDir)) {
+    if (!file.endsWith('.json')) continue;
+    const content = JSON.parse(
+      fs.readFileSync(path.join(messagesDir, file), 'utf-8'),
+    );
+    localeKeys.set(file.replace('.json', ''), new Set(flattenKeys(content)));
+  }
+  return localeKeys;
+}
+
+/** Applies `select` to each locale's keys; keeps locales with a non-empty result, sorted. */
+function keysOutside(
+  localeKeys: Map<string, Set<string>>,
+  select: (keys: Set<string>) => string[],
+): [string, string[]][] {
+  return [...localeKeys.entries()]
+    .map(([locale, keys]): [string, string[]] => [locale, select(keys).sort()])
+    .filter(([, keys]) => keys.length > 0)
+    .sort(([a], [b]) => a.localeCompare(b));
+}
+
+const formatReport = (entries: [string, string[]][]) =>
+  entries.map(([locale, keys]) => `  ${locale}: ${keys.join(', ')}`).join('\n');
+
+const countKeys = (entries: [string, string[]][]) =>
+  entries.reduce((sum, [, keys]) => sum + keys.length, 0);
+
 /**
- * Symmetric localization completeness test.
+ * Localization completeness, measured against the default locale (English),
+ * which is the source every other locale is translated from.
  *
- * Checks all locale files in /messages/ against each other to find missing keys.
- * No locale is treated as the "reference" - if any locale has a key that another
- * locale lacks, the missing key is reported for the locale that lacks it.
- * Uses recursive key flattening to detect missing nested keys.
+ * - FAILS when a locale lacks a key the default locale has: that string
+ *   would render untranslated (or as a raw key) for those users.
+ * - WARNS (does not fail) when a locale carries keys the default locale no
+ *   longer has: leftovers of removed or renamed strings. They are never
+ *   looked up, so they cost file size, not correctness.
  */
 describe('Localization Completeness', () => {
-  it('should have no missing keys across all locales', () => {
-    const messagesDir = path.join(process.cwd(), 'messages');
-    const localeFiles = fs
-      .readdirSync(messagesDir)
-      .filter((f) => f.endsWith('.json'));
+  const localeKeys = loadLocaleKeys();
+  const referenceKeys = localeKeys.get(defaultLocale);
 
-    expect(localeFiles.length).toBeGreaterThan(0);
+  it('has a message file for the default locale', () => {
+    expect(localeKeys.size).toBeGreaterThan(1);
+    expect(referenceKeys, `messages/${defaultLocale}.json`).toBeDefined();
+  });
 
-    // Build map: locale -> Set of flattened keys (including nested)
-    const localeKeys: Map<string, Set<string>> = new Map();
-    for (const file of localeFiles) {
-      const locale = file.replace('.json', '');
-      const filePath = path.join(messagesDir, file);
-      const content = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-      localeKeys.set(locale, new Set(flattenKeys(content)));
-    }
-
-    // Build union of all keys across all locales
-    const allKeys = new Set<string>();
-    for (const keys of localeKeys.values()) {
-      keys.forEach((k) => allKeys.add(k));
-    }
-
-    // Find missing keys for each locale
-    const missingByLocale: Map<string, string[]> = new Map();
-    for (const [locale, keys] of localeKeys) {
-      const missing = [...allKeys].filter((k) => !keys.has(k)).sort();
-      if (missing.length > 0) {
-        missingByLocale.set(locale, missing);
-      }
-    }
-
-    // Assert and report
-    if (missingByLocale.size > 0) {
-      const sortedLocales = [...missingByLocale.entries()].sort(([a], [b]) =>
-        a.localeCompare(b),
-      );
-      const report = sortedLocales
-        .map(([locale, keys]) => `  ${locale}: ${keys.join(', ')}`)
-        .join('\n');
-
-      const totalMissing = sortedLocales.reduce(
-        (sum, [, keys]) => sum + keys.length,
-        0,
-      );
-
+  it(`every locale has every ${defaultLocale} key`, () => {
+    if (!referenceKeys) return;
+    const missing = keysOutside(localeKeys, (keys) =>
+      [...referenceKeys].filter((key) => !keys.has(key)),
+    );
+    if (missing.length > 0) {
       expect.fail(
-        `Found ${totalMissing} missing key(s) across ${missingByLocale.size} locale(s):\n${report}`,
+        `Found ${countKeys(missing)} ${defaultLocale} key(s) missing from ${missing.length} locale(s):\n${formatReport(missing)}`,
+      );
+    }
+  });
+
+  it(`reports keys that ${defaultLocale} no longer has (warning only)`, () => {
+    if (!referenceKeys) return;
+    const stale = keysOutside(localeKeys, (keys) =>
+      [...keys].filter((key) => !referenceKeys.has(key)),
+    );
+    if (stale.length > 0) {
+      // One line per key (not per locale): the same leftover usually sits
+      // in most locales, so this keeps the warning short.
+      const localesByKey = new Map<string, number>();
+      for (const [, keys] of stale)
+        for (const key of keys)
+          localesByKey.set(key, (localesByKey.get(key) ?? 0) + 1);
+      const lines = [...localesByKey.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, count]) => `  ${key} (${count} locale(s))`);
+      console.warn(
+        `[localization] ${localesByKey.size} key(s) that ${defaultLocale} no longer has remain in ${stale.length} locale(s). ` +
+          `They are never looked up and can be removed:\n${lines.join('\n')}`,
       );
     }
   });
