@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "Aktivera webbsökning för varje meddelande.\n\nGer uppdaterad information med realtidsåtkomst till Bing webben.",
-    "attachTooltip": "Bifoga filer, bilder eller ljud/video.\n\nStödda format:\n• Bilder: JPEG, PNG, GIF, WebP (max 5 MB, upp till 10)\n• Dokument: PDF, DOCX, XLSX, PPTX, TXT, MD (max 10 MB, upp till 3)\n• Data: CSV, JSON, XML, YAML (max 10 MB, upp till 3)\n• Kod: PY, JS, TS, JAVA, C, CPP, GO, etc. (max 10 MB, upp till 3)\n• Ljud/Video: MP3, WAV, MP4, WebM (max 25 MB, 1 fil)\n\nTotalt: 10 filer, max 50 MB",
+    "attachTooltip": "Bifoga filer, bilder eller ljud/video.\n\nStödda format:\n• Bilder: JPEG, PNG, GIF, WebP (max 5 MB, upp till 10)\n• Dokument: PDF, DOCX, XLSX, PPTX, TXT, MD (max 10 MB, upp till {maxDocuments})\n• Data: CSV, JSON, XML, YAML (max 10 MB, upp till {maxDocuments})\n• Kod: PY, JS, TS, JAVA, C, CPP, GO, etc. (max 10 MB, upp till {maxDocuments})\n• Ljud/Video: MP3, WAV, MP4, WebM (max 25 MB, 1 fil)\n\nTotalt: {maxFiles} filer, max 50 MB",
     "transcribeTooltip": "Ladda upp ljud- eller videofiler för transkribering.\n\nStödda format: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nMaxstorlek: 25 MB\n\nTranskribering sker automatiskt när meddelandet skickas.",
     "selected": "Vald",
     "expandActions": "Visa fler åtgärder",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Anslutningar (MCP)",
       "ttsCharactersPerRequest": "Tecken per uppläsning",
       "uploadMegabytesPerFile": "Uppladdningsstorlek per fil",
+      "uploadDocumentsPerMessage": "Dokument per meddelande",
       "mcpRoundsPerRequest": "Verktygsomgångar per meddelande",
       "ttsCharactersPerDay": "Upplästa tecken per dag",
       "transcriptionMinutesPerDay": "Transkriptionsminuter per dag",
@@ -5727,6 +5728,7 @@
       "minutes": "minuter",
       "jobs": "jobb",
       "rounds": "omgångar",
+      "documents": "dokument",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Om anslutningar (MCP-verktyg) kan användas.",
       "ttsCharactersPerRequest": "Längsta stycke som kan uppläsas per förfrågan.",
       "uploadMegabytesPerFile": "Största enskilda fil som kan laddas upp.",
+      "uploadDocumentsPerMessage": "Hur många dokument som kan bifogas ett meddelande.",
       "mcpRoundsPerRequest": "Hur många verktygsanrop ett meddelande kan kedja ihop.",
       "ttsCharactersPerDay": "Totalt antal tecken upplästa per dag.",
       "transcriptionMinutesPerDay": "Totalt antal ljud- och videominuter transkriberade per dag.",

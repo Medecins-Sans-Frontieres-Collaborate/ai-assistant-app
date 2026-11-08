@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "הפעל חיפוש באינטרנט עבור כל הודעה.\n\nמספק מידע עדכני באמצעות גישה בזמן אמת ל-Bing.",
-    "attachTooltip": "צרף קבצים, תמונות או שמע/וידאו.\n\nפורמטים נתמכים:\n• תמונות: JPEG, PNG, GIF, WebP (עד 5MB, עד 10 קבצים)\n• מסמכים: PDF, DOCX, XLSX, PPTX, TXT, MD (עד 10MB, עד 3 קבצים)\n• נתונים: CSV, JSON, XML, YAML (עד 10MB, עד 3 קבצים)\n• קוד: PY, JS, TS, JAVA, C, CPP, GO ועוד (עד 10MB, עד 3 קבצים)\n• שמע/וידאו: MP3, WAV, MP4, WebM (עד 25MB, קובץ אחד)\n\nסה\"כ: 10 קבצים, עד 50MB",
+    "attachTooltip": "צרף קבצים, תמונות או שמע/וידאו.\n\nפורמטים נתמכים:\n• תמונות: JPEG, PNG, GIF, WebP (עד 5MB, עד 10 קבצים)\n• מסמכים: PDF, DOCX, XLSX, PPTX, TXT, MD (עד 10MB, עד {maxDocuments} קבצים)\n• נתונים: CSV, JSON, XML, YAML (עד 10MB, עד {maxDocuments} קבצים)\n• קוד: PY, JS, TS, JAVA, C, CPP, GO ועוד (עד 10MB, עד {maxDocuments} קבצים)\n• שמע/וידאו: MP3, WAV, MP4, WebM (עד 25MB, קובץ אחד)\n\nסה\"כ: {maxFiles} קבצים, עד 50MB",
     "transcribeTooltip": "העלה קבצי שמע או וידאו לתמלול.\n\nפורמטים נתמכים: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nגודל מקסימלי: 25MB\n\nהתמלול מתבצע אוטומטית בעת שליחת ההודעה.",
     "selected": "נבחר",
     "expandActions": "הצג פעולות נוספות",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "תווים לכל קריאה בקול רם",
       "uploadMegabytesPerFile": "גודל העלאה לכל קובץ",
+      "uploadDocumentsPerMessage": "מסמכים לכל הודעה",
       "mcpRoundsPerRequest": "סבבי כלי לכל הודעה",
       "ttsCharactersPerDay": "תווים בקריאה בקול רם ביום",
       "transcriptionMinutesPerDay": "דקות תמלול ביום",
@@ -5727,6 +5728,7 @@
       "minutes": "דקות",
       "jobs": "משימות",
       "rounds": "סבבים",
+      "documents": "מסמכים",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "האם ניתן להשתמש בקונקטורים (MCP tools).",
       "ttsCharactersPerRequest": "הקטע הארוך ביותר שניתן להקריא בבקשה אחת.",
       "uploadMegabytesPerFile": "הקובץ הבודד הגדול ביותר שניתן להעלות.",
+      "uploadDocumentsPerMessage": "כמה מסמכים ניתן לצרף להודעה אחת.",
       "mcpRoundsPerRequest": "כמה קריאות לכלים הודעה אחת יכולה לשרשר.",
       "ttsCharactersPerDay": "סה\"כ תווים מוקראים ליום.",
       "transcriptionMinutesPerDay": "סה\"כ דקות שמע ווידאו המתומללות ביום.",

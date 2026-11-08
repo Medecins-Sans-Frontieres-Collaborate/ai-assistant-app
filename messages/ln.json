@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Ndeka bolukiluki ya web pona nsango moko na moko.\n\nEpesi basango ya sika na Bing web real-time.",
-    "attachTooltip": "Kobakisela bafichier, bamisele, to audio/video.\n\nBamodèle oyo endimama :\n• Bamisele : JPEG, PNG, GIF, WebP (5MB ndambo, tii 10)\n• Bazulunalo : PDF, DOCX, XLSX, PPTX, TXT, MD (10MB ndambo, tii 3)\n• Donnée : CSV, JSON, XML, YAML (10MB ndambo, tii 3)\n• Kode : PY, JS, TS, JAVA, C, CPP, GO, etc. (10MB ndambo, tii 3)\n• Audio/Video : MP3, WAV, MP4, WebM (25MB ndambo, fichié moko)\n\nPotal: ba fichié 10, 50MB ndambo.",
+    "attachTooltip": "Kobakisela bafichier, bamisele, to audio/video.\n\nBamodèle oyo endimama :\n• Bamisele : JPEG, PNG, GIF, WebP (5MB ndambo, tii 10)\n• Bazulunalo : PDF, DOCX, XLSX, PPTX, TXT, MD (10MB ndambo, tii {maxDocuments})\n• Donnée : CSV, JSON, XML, YAML (10MB ndambo, tii {maxDocuments})\n• Kode : PY, JS, TS, JAVA, C, CPP, GO, etc. (10MB ndambo, tii {maxDocuments})\n• Audio/Video : MP3, WAV, MP4, WebM (25MB ndambo, fichié moko)\n\nPotal: ba fichié {maxFiles}, 50MB ndambo.",
     "transcribeTooltip": "Tinda bafichier ya audio to video pona transcription.\n\nBamodèle : MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nNdé mbóte: 25MB\n\nTranscription esalemaka automatique soki otindi nsango.",
     "selected": "Esí ponami",
     "expandActions": "Kotalisa misala",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Mikangisi (MCP)",
       "ttsCharactersPerRequest": "Alphabets na motángo moko",
       "uploadMegabytesPerFile": "Buleméga byte na fichier moko",
+      "uploadDocumentsPerMessage": "Mikanda na nsango moko",
       "mcpRoundsPerRequest": "Mikapo na nsango moko",
       "ttsCharactersPerDay": "Alphabets ya kotángama na mokolo",
       "transcriptionMinutesPerDay": "Minuta ya transcription na mokolo",
@@ -5711,6 +5712,7 @@
       "minutes": "minuta",
       "jobs": "misala",
       "rounds": "bitúka",
+      "documents": "mikanda",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Soki ba connectors (MCP tools) ekoki kosalelama.",
       "ttsCharactersPerRequest": "Lolemo moke koleka oyo ekoki komitana na lisolo moko.",
       "uploadMegabytesPerFile": "Ndakisa ya fichier moko eleki nyonso ekoki ko-upload.",
+      "uploadDocumentsPerMessage": "Motángo ya mikanda oyo okoki kokangisa na nsango moko.",
       "mcpRoundsPerRequest": "Mbala boni message moko ekoki kobengana ba tool.",
       "ttsCharactersPerDay": "Bamilaki nyonso oyo ebétami na maloba na mokolo moko.",
       "transcriptionMinutesPerDay": "Minute nyonso ya audio mpe vidéo oyo ebongolami na mokolo.",

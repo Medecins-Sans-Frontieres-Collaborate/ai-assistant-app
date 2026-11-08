@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "Her mesaj için web aramasını etkinleştirin.\n\nGerçek zamanlı Bing erişimiyle güncel bilgiler sunar.",
-    "attachTooltip": "Dosya, görsel veya ses/video ekleyin.\n\nDesteklenen formatlar:\n• Görseller: JPEG, PNG, GIF, WebP (en fazla 5MB, 10 adet)\n• Dokümanlar: PDF, DOCX, XLSX, PPTX, TXT, MD (en fazla 10MB, 3 adet)\n• Veri: CSV, JSON, XML, YAML (en fazla 10MB, 3 adet)\n• Kod: PY, JS, TS, JAVA, C, CPP, GO vb. (en fazla 10MB, 3 adet)\n• Ses/Video: MP3, WAV, MP4, WebM (en fazla 25MB, 1 dosya)\n\nToplam: 10 dosya, en fazla 50MB",
+    "attachTooltip": "Dosya, görsel veya ses/video ekleyin.\n\nDesteklenen formatlar:\n• Görseller: JPEG, PNG, GIF, WebP (en fazla 5MB, 10 adet)\n• Dokümanlar: PDF, DOCX, XLSX, PPTX, TXT, MD (en fazla 10MB, {maxDocuments} adet)\n• Veri: CSV, JSON, XML, YAML (en fazla 10MB, {maxDocuments} adet)\n• Kod: PY, JS, TS, JAVA, C, CPP, GO vb. (en fazla 10MB, {maxDocuments} adet)\n• Ses/Video: MP3, WAV, MP4, WebM (en fazla 25MB, 1 dosya)\n\nToplam: {maxFiles} dosya, en fazla 50MB",
     "transcribeTooltip": "Ses veya video dosyalarını transkripsiyon için yükleyin.\n\nDesteklenen formatlar: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nMaksimum boyut: 25MB\n\nMesajı gönderdiğinizde transkripsiyon otomatik olarak yapılır.",
     "selected": "Seçildi",
     "expandActions": "Eylemleri Genişlet",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Bağlayıcılar (MCP)",
       "ttsCharactersPerRequest": "Her okuma başına karakter",
       "uploadMegabytesPerFile": "Dosya başına yükleme boyutu",
+      "uploadDocumentsPerMessage": "Mesaj başına belge",
       "mcpRoundsPerRequest": "Mesaj başına araç turu",
       "ttsCharactersPerDay": "Günlük okuma karakteri",
       "transcriptionMinutesPerDay": "Günlük transkripsiyon dakikası",
@@ -5727,6 +5728,7 @@
       "minutes": "dakika",
       "jobs": "iş",
       "rounds": "tur",
+      "documents": "belge",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Bağlayıcıların (MCP araçları) kullanılıp kullanılamayacağı.",
       "ttsCharactersPerRequest": "Tek bir istekte sesli okunabilecek en uzun pasaj.",
       "uploadMegabytesPerFile": "Yüklenebilecek en büyük tek dosya.",
+      "uploadDocumentsPerMessage": "Bir mesaja kaç belge eklenebileceği.",
       "mcpRoundsPerRequest": "Bir mesajda zincirlenebilecek araç çağrısı sayısı.",
       "ttsCharactersPerDay": "Günlük sesli okunan toplam karakter sayısı.",
       "transcriptionMinutesPerDay": "Günlük olarak deşifre edilen toplam ses ve video dakikası.",

@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Ενεργοποίηση αναζήτησης ιστού για κάθε μήνυμα.\n\nΠαρέχει ενημερωμένες πληροφορίες χρησιμοποιώντας πρόσβαση ιστού Bing σε πραγματικό χρόνο.",
-    "attachTooltip": "Επισύναψη αρχείων, εικόνων ή ήχου/βίντεο.\n\nΥποστηριζόμενες μορφές:\n• Εικόνες: JPEG, PNG, GIF, WebP (μέγ. 5MB, έως 10)\n• Έγγραφα: PDF, DOCX, XLSX, PPTX, TXT, MD (μέγ. 10MB, έως 3)\n• Δεδομένα: CSV, JSON, XML, YAML (μέγ. 10MB, έως 3)\n• Κώδικας: PY, JS, TS, JAVA, C, CPP, GO, κλπ. (μέγ. 10MB, έως 3)\n• Ήχος/Βίντεο: MP3, WAV, MP4, WebM (μέγ. 25MB, 1 αρχείο)\n\nΣύνολο: 10 αρχεία, μέγ. 50MB",
+    "attachTooltip": "Επισύναψη αρχείων, εικόνων ή ήχου/βίντεο.\n\nΥποστηριζόμενες μορφές:\n• Εικόνες: JPEG, PNG, GIF, WebP (μέγ. 5MB, έως 10)\n• Έγγραφα: PDF, DOCX, XLSX, PPTX, TXT, MD (μέγ. 10MB, έως {maxDocuments})\n• Δεδομένα: CSV, JSON, XML, YAML (μέγ. 10MB, έως {maxDocuments})\n• Κώδικας: PY, JS, TS, JAVA, C, CPP, GO, κλπ. (μέγ. 10MB, έως {maxDocuments})\n• Ήχος/Βίντεο: MP3, WAV, MP4, WebM (μέγ. 25MB, 1 αρχείο)\n\nΣύνολο: {maxFiles} αρχεία, μέγ. 50MB",
     "transcribeTooltip": "Μεταφόρτωση αρχείων ήχου ή βίντεο για μεταγραφή.\n\nΥποστηριζόμενες μορφές: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nΜέγ. μέγεθος: 25MB\n\nΗ μεταγραφή γίνεται αυτόματα όταν στέλνετε το μήνυμα.",
     "selected": "Επιλεγμένο",
     "expandActions": "Ανάπτυξη Ενεργειών",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Συνδετήρες (MCP)",
       "ttsCharactersPerRequest": "Χαρακτήρες ανά ανάγνωση",
       "uploadMegabytesPerFile": "Μέγεθος αποστολής ανά αρχείο",
+      "uploadDocumentsPerMessage": "Έγγραφα ανά μήνυμα",
       "mcpRoundsPerRequest": "Γύροι εργαλείου ανά μήνυμα",
       "ttsCharactersPerDay": "Χαρακτήρες ανάγνωσης ανά ημέρα",
       "transcriptionMinutesPerDay": "Λεπτά απομαγνητοφώνησης ανά ημέρα",
@@ -5711,6 +5712,7 @@
       "minutes": "λεπτά",
       "jobs": "εργασίες",
       "rounds": "γύροι",
+      "documents": "έγγραφα",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Αν μπορούν να χρησιμοποιούνται connectors (εργαλεία MCP).",
       "ttsCharactersPerRequest": "Μεγαλύτερο απόσπασμα που μπορεί να αναγνωστεί δυνατά σε ένα αίτημα.",
       "uploadMegabytesPerFile": "Μεγαλύτερο αρχείο που μπορεί να ανέβει.",
+      "uploadDocumentsPerMessage": "Πόσα έγγραφα μπορούν να επισυναφθούν σε ένα μήνυμα.",
       "mcpRoundsPerRequest": "Πόσες κλήσεις εργαλείων μπορεί να αλυσιδωθεί σε ένα μήνυμα.",
       "ttsCharactersPerDay": "Συνολικοί χαρακτήρες που διαβάζονται ανά ημέρα.",
       "transcriptionMinutesPerDay": "Συνολικά λεπτά ήχου και βίντεο που μεταγράφονται ανά ημέρα.",

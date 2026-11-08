@@ -2398,7 +2398,7 @@
   },
   "dropdown": {
     "searchTooltip": "ہر پیغام کے لیے ویب تلاش کو فعال کریں۔\n\nحقیقی وقت Bing ویب رسائی کے ذریعے تازہ ترین معلومات فراہم کرتا ہے۔",
-    "attachTooltip": "فائلیں، تصاویر، یا آڈیو/ویڈیو منسلک کریں۔\n\nمددگار فارمیٹس:\n• تصاویر: JPEG، PNG، GIF، WebP (زیادہ سے زیادہ 5MB، کل 10)\n• دستاویزات: PDF، DOCX، XLSX، PPTX، TXT، MD (زیادہ سے زیادہ 10MB، کل 3)\n• ڈیٹا: CSV، JSON، XML، YAML (زیادہ سے زیادہ 10MB، کل 3)\n• کوڈ: PY، JS، TS، JAVA، C، CPP، GO وغیرہ (زیادہ سے زیادہ 10MB، کل 3)\n• آڈیو/ویڈیو: MP3، WAV، MP4، WebM (زیادہ سے زیادہ 25MB، صرف 1 فائل)\n\nکل: 10 فائلیں، زیادہ سے زیادہ 50MB",
+    "attachTooltip": "فائلیں، تصاویر، یا آڈیو/ویڈیو منسلک کریں۔\n\nمددگار فارمیٹس:\n• تصاویر: JPEG، PNG، GIF، WebP (زیادہ سے زیادہ 5MB، کل 10)\n• دستاویزات: PDF، DOCX، XLSX، PPTX، TXT، MD (زیادہ سے زیادہ 10MB، کل {maxDocuments})\n• ڈیٹا: CSV، JSON، XML، YAML (زیادہ سے زیادہ 10MB، کل {maxDocuments})\n• کوڈ: PY، JS، TS، JAVA، C، CPP، GO وغیرہ (زیادہ سے زیادہ 10MB، کل {maxDocuments})\n• آڈیو/ویڈیو: MP3، WAV، MP4، WebM (زیادہ سے زیادہ 25MB، صرف 1 فائل)\n\nکل: {maxFiles} فائلیں، زیادہ سے زیادہ 50MB",
     "transcribeTooltip": "تحریر کے لیے آڈیو یا ویڈیو فائلیں اپ لوڈ کریں۔\n\nمدد گار فارمیٹس: MP3، MP4، WAV، WebM، M4A، MPEG، MPGA\nزیادہ سے زیادہ سائز: 25MB\n\nپیغام بھیجنے پر خودکار تحریر ہوگی۔",
     "selected": "منتخب شدہ",
     "expandActions": "اعمال کو وسعت دیں",
@@ -5724,6 +5724,7 @@
       "mcpEnabled": "کنیکٹرز (MCP)",
       "ttsCharactersPerRequest": "ہر پڑھ کر سنانے پر حروف",
       "uploadMegabytesPerFile": "فی فائل اپ لوڈ سائز",
+      "uploadDocumentsPerMessage": "فی پیغام دستاویزات",
       "mcpRoundsPerRequest": "ہر پیغام پر ٹول راونڈز",
       "ttsCharactersPerDay": "روزانہ پڑھ کر سنانے کے حروف",
       "transcriptionMinutesPerDay": "روزانہ ٹرانسکرپشن منٹس",
@@ -5757,6 +5758,7 @@
       "minutes": "منٹ",
       "jobs": "جوبز",
       "rounds": "راونڈز",
+      "documents": "دستاویزات",
       "boolean": ""
     },
     "window": {
@@ -5803,6 +5805,7 @@
       "mcpEnabled": "کیا کنیکٹرز (MCP ٹولز) استعمال کیے جا سکتے ہیں۔",
       "ttsCharactersPerRequest": "ایک درخواست میں زیادہ سے زیادہ عبارت جسے سنایا جا سکتا ہے۔",
       "uploadMegabytesPerFile": "فی اپلوڈ سب سے بڑی فائل کا سائز۔",
+      "uploadDocumentsPerMessage": "ایک پیغام کے ساتھ کتنی دستاویزات منسلک کی جا سکتی ہیں۔",
       "mcpRoundsPerRequest": "ایک پیغام میں کتنے ٹول کالز کی اجازت ہے۔",
       "ttsCharactersPerDay": "روزانہ سنے گئے تمام حروف کی کل تعداد۔",
       "transcriptionMinutesPerDay": "روزانہ آڈیو اور ویڈیو منٹس کی کل ٹرانسکرپشن۔",

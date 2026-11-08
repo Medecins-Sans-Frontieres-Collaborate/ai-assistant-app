@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "Abilita la ricerca web per ogni messaggio.\n\nFornisce informazioni aggiornate tramite accesso web in tempo reale con Bing.",
-    "attachTooltip": "Allega file, immagini o audio/video.\n\nFormati supportati:\n• Immagini: JPEG, PNG, GIF, WebP (max 5MB, fino a 10)\n• Documenti: PDF, DOCX, XLSX, PPTX, TXT, MD (max 10MB, fino a 3)\n• Dati: CSV, JSON, XML, YAML (max 10MB, fino a 3)\n• Codice: PY, JS, TS, JAVA, C, CPP, GO, ecc. (max 10MB, fino a 3)\n• Audio/Video: MP3, WAV, MP4, WebM (max 25MB, 1 file)\n\nTotale: 10 file, massimo 50MB",
+    "attachTooltip": "Allega file, immagini o audio/video.\n\nFormati supportati:\n• Immagini: JPEG, PNG, GIF, WebP (max 5MB, fino a 10)\n• Documenti: PDF, DOCX, XLSX, PPTX, TXT, MD (max 10MB, fino a {maxDocuments})\n• Dati: CSV, JSON, XML, YAML (max 10MB, fino a {maxDocuments})\n• Codice: PY, JS, TS, JAVA, C, CPP, GO, ecc. (max 10MB, fino a {maxDocuments})\n• Audio/Video: MP3, WAV, MP4, WebM (max 25MB, 1 file)\n\nTotale: {maxFiles} file, massimo 50MB",
     "transcribeTooltip": "Carica file audio o video per la trascrizione.\n\nFormati supportati: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nDimensione massima: 25MB\n\nLa trascrizione avviene automaticamente al momento dell'invio del messaggio.",
     "selected": "Selezionato",
     "expandActions": "Espandi azioni",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Connettori (MCP)",
       "ttsCharactersPerRequest": "Caratteri per lettura vocale",
       "uploadMegabytesPerFile": "Dimensione upload per file",
+      "uploadDocumentsPerMessage": "Documenti per messaggio",
       "mcpRoundsPerRequest": "Round dello strumento per messaggio",
       "ttsCharactersPerDay": "Caratteri letti al giorno",
       "transcriptionMinutesPerDay": "Minuti di trascrizione al giorno",
@@ -5727,6 +5728,7 @@
       "minutes": "minuti",
       "jobs": "operazioni",
       "rounds": "round",
+      "documents": "documenti",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Se è possibile utilizzare i connettori (strumenti MCP).",
       "ttsCharactersPerRequest": "Passaggio più lungo che può essere letto ad alta voce in una richiesta.",
       "uploadMegabytesPerFile": "Dimensione massima di un singolo file caricabile.",
+      "uploadDocumentsPerMessage": "Quanti documenti si possono allegare a un messaggio.",
       "mcpRoundsPerRequest": "Numero di chiamate di strumenti possibili in un singolo messaggio.",
       "ttsCharactersPerDay": "Caratteri totali letti ad alta voce al giorno.",
       "transcriptionMinutesPerDay": "Minuti totali di audio e video trascritti al giorno.",

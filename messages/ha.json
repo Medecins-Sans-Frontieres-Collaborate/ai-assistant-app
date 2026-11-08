@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": " kunna binciken yanar gizo ga kowane saƙo.\n\nYana kawo bayanai na zamani ta amfani da Bing a ainihin lokaci.",
-    "attachTooltip": "Manna fayiloli, hotuna, ko sauti/bidi'o'i.\n\nNau'in fayilolin da ake goyon baya:\n• Hotuna: JPEG, PNG, GIF, WebP (5MB max, har zuwa 10)\n• Takardu: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB max, har zuwa 3)\n• Bayanai: CSV, JSON, XML, YAML (10MB max, har zuwa 3)\n• Lamba: PY, JS, TS, JAVA, C, CPP, GO, da sauransu (10MB max, har zuwa 3)\n• Sauti/Bidi'o'i: MP3, WAV, MP4, WebM (25MB max, fayil 1)\n\nJimla: Fayiloli 10, 50MB max",
+    "attachTooltip": "Manna fayiloli, hotuna, ko sauti/bidi'o'i.\n\nNau'in fayilolin da ake goyon baya:\n• Hotuna: JPEG, PNG, GIF, WebP (5MB max, har zuwa 10)\n• Takardu: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB max, har zuwa {maxDocuments})\n• Bayanai: CSV, JSON, XML, YAML (10MB max, har zuwa {maxDocuments})\n• Lamba: PY, JS, TS, JAVA, C, CPP, GO, da sauransu (10MB max, har zuwa {maxDocuments})\n• Sauti/Bidi'o'i: MP3, WAV, MP4, WebM (25MB max, fayil 1)\n\nJimla: Fayiloli {maxFiles}, 50MB max",
     "transcribeTooltip": "Dora fayilolin sauti ko bidiyo don fassara zuwa rubutu.\n\nNau'in da ake goyon baya: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nGirman mafi yawa: 25MB\n\nFassarar rubutu tana faruwa kai tsaye idan ka tura saƙon.",
     "selected": "An zaɓa",
     "expandActions": "Faɗaɗa Ayyuka",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Haɗa-haɗa (MCP)",
       "ttsCharactersPerRequest": "Haruffa a duk karanta da ƙarfi",
       "uploadMegabytesPerFile": "Girman loda fayil",
+      "uploadDocumentsPerMessage": "Takardu a kowane saƙo",
       "mcpRoundsPerRequest": "Zagaye na kayan aiki a saƙo",
       "ttsCharactersPerDay": "Haruffa karanta da ƙarfi a rana",
       "transcriptionMinutesPerDay": "Mintuna na fassarar rubutu a rana",
@@ -5711,6 +5712,7 @@
       "minutes": "minti",
       "jobs": "aiki",
       "rounds": "zagaye",
+      "documents": "takardu",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Ko za a iya amfani da connectors (MCP tools).",
       "ttsCharactersPerRequest": "Doguwar hanyar da za a iya karantawa a bayyane cikin buƙata guda.",
       "uploadMegabytesPerFile": "Babban fayil ɗaya da za a iya loda.",
+      "uploadDocumentsPerMessage": "Adadin takardun da za a iya haɗawa da saƙo ɗaya.",
       "mcpRoundsPerRequest": "Yawan kira na kayan aiki da saƙo ɗaya zai iya haɗawa.",
       "ttsCharactersPerDay": "Jimillar haruffan da aka karanta a rana guda.",
       "transcriptionMinutesPerDay": "Jimillar mintuna na sauti da bidiyo da aka rubuta a rana daya.",

@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "Aktifkan pencarian web untuk setiap pesan.\n\nMemberikan informasi terbaru menggunakan akses web Bing secara real-time.",
-    "attachTooltip": "Lampirkan file, gambar, atau audio/video.\n\nFormat yang didukung:\n• Gambar: JPEG, PNG, GIF, WebP (maksimal 5MB, hingga 10 file)\n• Dokumen: PDF, DOCX, XLSX, PPTX, TXT, MD (maksimal 10MB, hingga 3 file)\n• Data: CSV, JSON, XML, YAML (maksimal 10MB, hingga 3 file)\n• Kode: PY, JS, TS, JAVA, C, CPP, GO, dll. (maksimal 10MB, hingga 3 file)\n• Audio/Video: MP3, WAV, MP4, WebM (maksimal 25MB, 1 file)\n\nTotal: 10 file, maksimal 50MB",
+    "attachTooltip": "Lampirkan file, gambar, atau audio/video.\n\nFormat yang didukung:\n• Gambar: JPEG, PNG, GIF, WebP (maksimal 5MB, hingga 10 file)\n• Dokumen: PDF, DOCX, XLSX, PPTX, TXT, MD (maksimal 10MB, hingga {maxDocuments} file)\n• Data: CSV, JSON, XML, YAML (maksimal 10MB, hingga {maxDocuments} file)\n• Kode: PY, JS, TS, JAVA, C, CPP, GO, dll. (maksimal 10MB, hingga {maxDocuments} file)\n• Audio/Video: MP3, WAV, MP4, WebM (maksimal 25MB, 1 file)\n\nTotal: {maxFiles} file, maksimal 50MB",
     "transcribeTooltip": "Unggah file audio atau video untuk transkripsi.\n\nFormat yang didukung: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nUkuran maksimum: 25MB\n\nTranskripsi berlangsung otomatis saat Anda mengirim pesan.",
     "selected": "Dipilih",
     "expandActions": "Perluas Aksi",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Connector (MCP)",
       "ttsCharactersPerRequest": "Karakter per baca suara",
       "uploadMegabytesPerFile": "Ukuran unggah per berkas",
+      "uploadDocumentsPerMessage": "Dokumen per pesan",
       "mcpRoundsPerRequest": "Putaran alat per pesan",
       "ttsCharactersPerDay": "Karakter baca suara per hari",
       "transcriptionMinutesPerDay": "Menit transkripsi per hari",
@@ -5727,6 +5728,7 @@
       "minutes": "menit",
       "jobs": "pekerjaan",
       "rounds": "putaran",
+      "documents": "dokumen",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Apakah konektor (alat MCP) dapat digunakan.",
       "ttsCharactersPerRequest": "Bagian terpanjang yang dapat dibacakan dalam satu permintaan.",
       "uploadMegabytesPerFile": "Ukuran maksimum satu file yang dapat diunggah.",
+      "uploadDocumentsPerMessage": "Berapa banyak dokumen yang dapat dilampirkan ke satu pesan.",
       "mcpRoundsPerRequest": "Berapa banyak pemanggilan alat yang dapat dirangkai dalam satu pesan.",
       "ttsCharactersPerDay": "Total karakter yang dibacakan per hari.",
       "transcriptionMinutesPerDay": "Total menit audio dan video yang ditranskripsi per hari.",

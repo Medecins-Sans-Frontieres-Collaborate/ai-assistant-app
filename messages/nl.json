@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "Webzoekfunctie inschakelen voor elk bericht.\n\nBiedt actuele informatie via real-time Bing webtoegang.",
-    "attachTooltip": "Bestanden, afbeeldingen of audio/video bijvoegen.\n\nOndersteunde formaten:\n• Afbeeldingen: JPEG, PNG, GIF, WebP (max. 5MB, tot 10)\n• Documenten: PDF, DOCX, XLSX, PPTX, TXT, MD (max. 10MB, tot 3)\n• Data: CSV, JSON, XML, YAML (max. 10MB, tot 3)\n• Code: PY, JS, TS, JAVA, C, CPP, GO, enz. (max. 10MB, tot 3)\n• Audio/Video: MP3, WAV, MP4, WebM (max. 25MB, 1 bestand)\n\nTotaal: 10 bestanden, maximaal 50MB",
+    "attachTooltip": "Bestanden, afbeeldingen of audio/video bijvoegen.\n\nOndersteunde formaten:\n• Afbeeldingen: JPEG, PNG, GIF, WebP (max. 5MB, tot 10)\n• Documenten: PDF, DOCX, XLSX, PPTX, TXT, MD (max. 10MB, tot {maxDocuments})\n• Data: CSV, JSON, XML, YAML (max. 10MB, tot {maxDocuments})\n• Code: PY, JS, TS, JAVA, C, CPP, GO, enz. (max. 10MB, tot {maxDocuments})\n• Audio/Video: MP3, WAV, MP4, WebM (max. 25MB, 1 bestand)\n\nTotaal: {maxFiles} bestanden, maximaal 50MB",
     "transcribeTooltip": "Upload audio- of videobestanden voor transcriptie.\n\nOndersteunde formaten: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nMaximale grootte: 25MB\n\nTranscriptie gebeurt automatisch bij het verzenden van het bericht.",
     "selected": "Geselecteerd",
     "expandActions": "Acties uitklappen",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "Tekens per voorleesactie",
       "uploadMegabytesPerFile": "Uploadgrootte per bestand",
+      "uploadDocumentsPerMessage": "Documenten per bericht",
       "mcpRoundsPerRequest": "Toolrondes per bericht",
       "ttsCharactersPerDay": "Voorleestekens per dag",
       "transcriptionMinutesPerDay": "Transcriptieminuten per dag",
@@ -5727,6 +5728,7 @@
       "minutes": "minuten",
       "jobs": "taken",
       "rounds": "rondes",
+      "documents": "documenten",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Of connectors (MCP-tools) gebruikt kunnen worden.",
       "ttsCharactersPerRequest": "Langste passage die per verzoek mag worden voorgelezen.",
       "uploadMegabytesPerFile": "Grootste afzonderlijke bestand dat geüpload kan worden.",
+      "uploadDocumentsPerMessage": "Hoeveel documenten aan één bericht kunnen worden toegevoegd.",
       "mcpRoundsPerRequest": "Hoeveel toolcalls één bericht mag koppelen.",
       "ttsCharactersPerDay": "Totaal aantal voorgelezen tekens per dag.",
       "transcriptionMinutesPerDay": "Totaal aantal getranscribeerde audio- en videominuten per dag.",

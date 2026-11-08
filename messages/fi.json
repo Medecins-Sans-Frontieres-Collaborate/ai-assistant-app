@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "Ota verkkohaku käyttöön jokaisessa viestissä.\n\nTarjoaa ajantasaiset tiedot reaaliaikaisen Bing-verkkoyhteyden avulla.",
-    "attachTooltip": "Liitä tiedostoja, kuvia tai ääni-/videotiedostoja.\n\nTuetut muodot:\n• Kuvat: JPEG, PNG, GIF, WebP (enint. 5 Mt, enintään 10 kpl)\n• Asiakirjat: PDF, DOCX, XLSX, PPTX, TXT, MD (enint. 10 Mt, enintään 3 kpl)\n• Data: CSV, JSON, XML, YAML (enint. 10 Mt, enintään 3 kpl)\n• Koodi: PY, JS, TS, JAVA, C, CPP, GO jne. (enint. 10 Mt, enintään 3 kpl)\n• Ääni/video: MP3, WAV, MP4, WebM (enint. 25 Mt, 1 tiedosto)\n\nYhteensä: 10 tiedostoa, maksimissaan 50 Mt",
+    "attachTooltip": "Liitä tiedostoja, kuvia tai ääni-/videotiedostoja.\n\nTuetut muodot:\n• Kuvat: JPEG, PNG, GIF, WebP (enint. 5 Mt, enintään 10 kpl)\n• Asiakirjat: PDF, DOCX, XLSX, PPTX, TXT, MD (enint. 10 Mt, enintään {maxDocuments} kpl)\n• Data: CSV, JSON, XML, YAML (enint. 10 Mt, enintään {maxDocuments} kpl)\n• Koodi: PY, JS, TS, JAVA, C, CPP, GO jne. (enint. 10 Mt, enintään {maxDocuments} kpl)\n• Ääni/video: MP3, WAV, MP4, WebM (enint. 25 Mt, 1 tiedosto)\n\nYhteensä: {maxFiles} tiedostoa, maksimissaan 50 Mt",
     "transcribeTooltip": "Lataa ääni- tai videotiedostoja puhtaaksikirjoitusta varten.\n\nTuetut muodot: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nMaksimikoko: 25 Mt\n\nPuhtaaksikirjoitus tapahtuu automaattisesti viestin lähetyksen yhteydessä.",
     "selected": "Valittu",
     "expandActions": "Laajenna toiminnot",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Liitännät (MCP)",
       "ttsCharactersPerRequest": "Merkkejä per ääneenluku",
       "uploadMegabytesPerFile": "Tiedostokoko latausta kohti",
+      "uploadDocumentsPerMessage": "Asiakirjoja viestiä kohti",
       "mcpRoundsPerRequest": "Työkalukierroksia viestiä kohti",
       "ttsCharactersPerDay": "Ääneenluettuja merkkejä päivässä",
       "transcriptionMinutesPerDay": "Transkriptiominuutteja päivässä",
@@ -5727,6 +5728,7 @@
       "minutes": "minuuttia",
       "jobs": "tehtävää",
       "rounds": "kierrosta",
+      "documents": "asiakirjaa",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Voidaanko yhdistimiä (MCP-työkalut) käyttää.",
       "ttsCharactersPerRequest": "Pisin teksti, joka voidaan lukea ääneen yhdessä pyynnössä.",
       "uploadMegabytesPerFile": "Suurin yksittäinen ladattava tiedosto.",
+      "uploadDocumentsPerMessage": "Kuinka monta asiakirjaa yhteen viestiin voi liittää.",
       "mcpRoundsPerRequest": "Kuinka monta työkalukutsua yksi viesti voi ketjuttaa.",
       "ttsCharactersPerDay": "Yhteensä ääneen luetut merkit per päivä.",
       "transcriptionMinutesPerDay": "Yhteensä päivittäin litteroidut ääni- ja videominuutit.",

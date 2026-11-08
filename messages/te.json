@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "ప్రతి సందేశానికి వెబ్ సెర్చ్ ενεργం చేయండి.\n\nప్రస్తుత Bing వెబ్ యాక్సెస్ ద్వారా తాజా సమాచారాన్ని అందిస్తుంది.",
-    "attachTooltip": "ఫైళ్లు, చిత్రాలు లేదా ఆడియో/వీడియోలను జతచేయండి.\n\nమద్దతు కలిగిన ఫార్మాట్స్:\n• చిత్రాలు: JPEG, PNG, GIF, WebP (గరిష్ఠంగా 5MB, 10 వరకు)\n• డాక్యుమెంట్లు: PDF, DOCX, XLSX, PPTX, TXT, MD (గరిష్ఠంగా 10MB, 3 వరకు)\n• డేటా: CSV, JSON, XML, YAML (గరిష్ఠంగా 10MB, 3 వరకు)\n• కోడ్: PY, JS, TS, JAVA, C, CPP, GO, మొదలైనవి (గరిష్ఠంగా 10MB, 3 వరకు)\n• ఆడియో/వీడియో: MP3, WAV, MP4, WebM (గరిష్ఠంగా 25MB, 1 ఫైల్)\n\nమొత్తం: 10 ఫైళ్లు, గరిష్ఠంగా 50MB",
+    "attachTooltip": "ఫైళ్లు, చిత్రాలు లేదా ఆడియో/వీడియోలను జతచేయండి.\n\nమద్దతు కలిగిన ఫార్మాట్స్:\n• చిత్రాలు: JPEG, PNG, GIF, WebP (గరిష్ఠంగా 5MB, 10 వరకు)\n• డాక్యుమెంట్లు: PDF, DOCX, XLSX, PPTX, TXT, MD (గరిష్ఠంగా 10MB, {maxDocuments} వరకు)\n• డేటా: CSV, JSON, XML, YAML (గరిష్ఠంగా 10MB, {maxDocuments} వరకు)\n• కోడ్: PY, JS, TS, JAVA, C, CPP, GO, మొదలైనవి (గరిష్ఠంగా 10MB, {maxDocuments} వరకు)\n• ఆడియో/వీడియో: MP3, WAV, MP4, WebM (గరిష్ఠంగా 25MB, 1 ఫైల్)\n\nమొత్తం: {maxFiles} ఫైళ్లు, గరిష్ఠంగా 50MB",
     "transcribeTooltip": "ఆడియో లేదా వీడియో ఫైళ్ళను ట్రాన్స్క్రిప్షన్ కోసం అప్‌లోడ్ చేయండి.\n\nమద్దతు ఫార్మాట్స్: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nగరిష్ఠ పరిమాణం: 25MB\n\nమీరు సందేశాన్ని పంపినప్పుడు ట్రాన్స్క్రిప్షన్ స్వయంచాలకంగా జరుగుతుంది.",
     "selected": "ఎంచుకున్నది",
     "expandActions": "చర్యలను విస్తరించు",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "కనెక్టర్స్ (MCP)",
       "ttsCharactersPerRequest": "ఒక రీడ్-అలౌడ్‌కు అక్షరాలు",
       "uploadMegabytesPerFile": "ఒక ఫైల్‌కు అప్లోడ్ పరిమాణం",
+      "uploadDocumentsPerMessage": "ఒక సందేశానికి పత్రాలు",
       "mcpRoundsPerRequest": "ఒక సందేశానికి టూల్ రౌండ్లు",
       "ttsCharactersPerDay": "ప్రతి రోజు రీడ్-అలౌడ్ అక్షరాలు",
       "transcriptionMinutesPerDay": "ప్రతి రోజు ట్రాన్స్‌క్రిప్షన్ నిమిషాలు",
@@ -5727,6 +5728,7 @@
       "minutes": "నిమిషాలు",
       "jobs": "జాబ్స్",
       "rounds": "రౌండ్లు",
+      "documents": "పత్రాలు",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "కనెక్టర్లు (MCP tools) ఉపయోగించవచ్చో లేదో.",
       "ttsCharactersPerRequest": "ఒక విజ్ఞాపనలో చదివించే అతి పొడవైన పరిచ్ఛేదం.",
       "uploadMegabytesPerFile": "అప్‌లోడ్ చేయదగిన అతిపెద్ద ఒక్క ఫైల్.",
+      "uploadDocumentsPerMessage": "ఒక సందేశానికి ఎన్ని పత్రాలను జత చేయవచ్చు.",
       "mcpRoundsPerRequest": "ఒక సందేశంలో ఎన్నిసార్లు టూల్‌లను కలిపి పిలవొచ్చో.",
       "ttsCharactersPerDay": "రోజుకు చదివించే మొత్తం అక్షరాలు.",
       "transcriptionMinutesPerDay": "రోజుకు ట్రాన్స్‌క్రైబ్ చేసిన మొత్తం ఆడియో మరియు వీడియో నిమిషాలు.",

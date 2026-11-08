@@ -2244,7 +2244,7 @@
   },
   "dropdown": {
     "searchTooltip": "Povolit webové vyhledávání pro každou zprávu.\n\nPoskytuje aktuální informace pomocí přístupu na web Bing v reálném čase.",
-    "attachTooltip": "Připojte soubory, obrázky nebo audio/video.\n\nPodporované formáty:\n• Obrázky: JPEG, PNG, GIF, WebP (max. 5 MB, až 10)\n• Dokumenty: PDF, DOCX, XLSX, PPTX, TXT, MD (max. 10 MB, až 3)\n• Data: CSV, JSON, XML, YAML (max. 10 MB, až 3)\n• Kód: PY, JS, TS, JAVA, C, CPP, GO, atd. (max. 10 MB, až 3)\n• Audio/Video: MP3, WAV, MP4, WebM (max. 25 MB, 1 soubor)\n\nCelkem: 10 souborů, maximálně 50 MB",
+    "attachTooltip": "Připojte soubory, obrázky nebo audio/video.\n\nPodporované formáty:\n• Obrázky: JPEG, PNG, GIF, WebP (max. 5 MB, až 10)\n• Dokumenty: PDF, DOCX, XLSX, PPTX, TXT, MD (max. 10 MB, až {maxDocuments})\n• Data: CSV, JSON, XML, YAML (max. 10 MB, až {maxDocuments})\n• Kód: PY, JS, TS, JAVA, C, CPP, GO, atd. (max. 10 MB, až {maxDocuments})\n• Audio/Video: MP3, WAV, MP4, WebM (max. 25 MB, 1 soubor)\n\nCelkem: {maxFiles} souborů, maximálně 50 MB",
     "transcribeTooltip": "Nahrajte audio nebo video soubory k přepisu.\n\nPodporované formáty: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nMaximální velikost: 25 MB\n\nPřepis proběhne automaticky po odeslání zprávy.",
     "selected": "Vybráno",
     "expandActions": "Rozbalit akce",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Konektory (MCP)",
       "ttsCharactersPerRequest": "Znaků na přečtení",
       "uploadMegabytesPerFile": "Velikost uploadu na soubor",
+      "uploadDocumentsPerMessage": "Dokumenty na zprávu",
       "mcpRoundsPerRequest": "Počet kol nástroje na zprávu",
       "ttsCharactersPerDay": "Přečtených znaků za den",
       "transcriptionMinutesPerDay": "Minut přepisu za den",
@@ -5727,6 +5728,7 @@
       "minutes": "minut",
       "jobs": "úloh",
       "rounds": "kol",
+      "documents": "dokumentů",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Zda lze používat konektory (MCP nástroje).",
       "ttsCharactersPerRequest": "Nejdelší úsek, který lze přečíst nahlas v jednom požadavku.",
       "uploadMegabytesPerFile": "Největší jeden soubor, který lze nahrát.",
+      "uploadDocumentsPerMessage": "Kolik dokumentů lze připojit k jedné zprávě.",
       "mcpRoundsPerRequest": "Kolik volání nástrojů může jedno sdělení řetězit.",
       "ttsCharactersPerDay": "Celkový počet znaků přečtených nahlas za den.",
       "transcriptionMinutesPerDay": "Celkový počet minut audia a videa přepsaných za den.",

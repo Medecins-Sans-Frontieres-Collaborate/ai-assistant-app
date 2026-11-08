@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "Włącz wyszukiwanie w sieci dla każdej wiadomości.\n\nZapewnia aktualne informacje dzięki dostępowi do internetu Bing w czasie rzeczywistym.",
-    "attachTooltip": "Dołącz pliki, obrazy lub dźwięk/wideo.\n\nObsługiwane formaty:\n• Obrazy: JPEG, PNG, GIF, WebP (maks. 5 MB, do 10 plików)\n• Dokumenty: PDF, DOCX, XLSX, PPTX, TXT, MD (maks. 10 MB, do 3 plików)\n• Dane: CSV, JSON, XML, YAML (maks. 10 MB, do 3 plików)\n• Kod: PY, JS, TS, JAVA, C, CPP, GO itp. (maks. 10 MB, do 3 plików)\n• Audio/Wideo: MP3, WAV, MP4, WebM (maks. 25 MB, 1 plik)\n\nŁącznie: 10 plików, maks. 50 MB",
+    "attachTooltip": "Dołącz pliki, obrazy lub dźwięk/wideo.\n\nObsługiwane formaty:\n• Obrazy: JPEG, PNG, GIF, WebP (maks. 5 MB, do 10 plików)\n• Dokumenty: PDF, DOCX, XLSX, PPTX, TXT, MD (maks. 10 MB, do {maxDocuments} plików)\n• Dane: CSV, JSON, XML, YAML (maks. 10 MB, do {maxDocuments} plików)\n• Kod: PY, JS, TS, JAVA, C, CPP, GO itp. (maks. 10 MB, do {maxDocuments} plików)\n• Audio/Wideo: MP3, WAV, MP4, WebM (maks. 25 MB, 1 plik)\n\nŁącznie: {maxFiles} plików, maks. 50 MB",
     "transcribeTooltip": "Prześlij pliki audio lub wideo do transkrypcji.\n\nObsługiwane formaty: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nMaksymalny rozmiar: 25 MB\n\nTranskrypcja nastąpi automatycznie po wysłaniu wiadomości.",
     "selected": "Wybrano",
     "expandActions": "Rozwiń działania",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Konektory (MCP)",
       "ttsCharactersPerRequest": "Znaki na jednorazowe odczytanie",
       "uploadMegabytesPerFile": "Rozmiar pliku do przesłania",
+      "uploadDocumentsPerMessage": "Dokumenty na wiadomość",
       "mcpRoundsPerRequest": "Rundy narzędzia na wiadomość",
       "ttsCharactersPerDay": "Znaki do odczytania dziennie",
       "transcriptionMinutesPerDay": "Minuty transkrypcji dziennie",
@@ -5727,6 +5728,7 @@
       "minutes": "minuty",
       "jobs": "zadania",
       "rounds": "rundy",
+      "documents": "dokumentów",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Czy można korzystać z konektorów (narzędzi MCP).",
       "ttsCharactersPerRequest": "Najdłuższy fragment tekstu do odczytania w jednym żądaniu.",
       "uploadMegabytesPerFile": "Największy pojedynczy plik możliwy do przesłania.",
+      "uploadDocumentsPerMessage": "Ile dokumentów można dołączyć do jednej wiadomości.",
       "mcpRoundsPerRequest": "Ile wywołań narzędzi można połączyć w jednej wiadomości.",
       "ttsCharactersPerDay": "Łączna liczba znaków odczytana na głos dziennie.",
       "transcriptionMinutesPerDay": "Łączna liczba minut dźwięku i wideo transkrybowana dziennie.",

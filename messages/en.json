@@ -3902,7 +3902,7 @@
     "aiToolsTooltip": "Capabilities the assistant can use while answering: live web search, code execution, and connected services.",
     "searchTooltip": "Enable web search for every message.\n\nProvides up-to-date information using live news and web sources.",
     "codeInterpreterTooltip": "Run Python code in a secure sandbox for every message.\n\nGreat for data analysis, calculations, and chart generation from attached files.",
-    "attachTooltip": "Attach files, images, or audio/video.\n\nSupported formats:\n• Images: JPEG, PNG, GIF, WebP (5MB max, up to 10)\n• Documents: PDF, DOCX, XLSX, PPTX, TXT, MD (50MB max, up to 3)\n• Data: CSV, JSON, XML, YAML (50MB max, up to 3)\n• Code: PY, JS, TS, JAVA, C, CPP, GO, etc. (50MB max, up to 3)\n• Audio: MP3, M4A, WAV, OGG, FLAC, and more (1GB max, 1 file)\n• Video: MP4, MOV, MKV, WebM, and more (1.5GB max, 1 file)\n\nTotal: 10 files, 1.5GB max",
+    "attachTooltip": "Attach files, images, or audio/video.\n\nSupported formats:\n• Images: JPEG, PNG, GIF, WebP (5MB max, up to 10)\n• Documents: PDF, DOCX, XLSX, PPTX, TXT, MD (50MB max, up to {maxDocuments})\n• Data: CSV, JSON, XML, YAML (50MB max, up to {maxDocuments})\n• Code: PY, JS, TS, JAVA, C, CPP, GO, etc. (50MB max, up to {maxDocuments})\n• Audio: MP3, M4A, WAV, OGG, FLAC, and more (1GB max, 1 file)\n• Video: MP4, MOV, MKV, WebM, and more (1.5GB max, 1 file)\n\nTotal: {maxFiles} files, 1.5GB max",
     "transcribeTooltip": "Upload audio or video files for transcription.\n\nSupported formats: MP3, M4A, WAV, OGG, FLAC, AAC, Opus, MP4, MOV, MKV, WebM, and more\nMax size: 1GB audio / 1.5GB video\n\nTranscription happens automatically when you send the message.",
     "selected": "Selected",
     "expandActions": "Expand Actions",
@@ -5746,6 +5746,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "Characters per read-aloud",
       "uploadMegabytesPerFile": "Upload size per file",
+      "uploadDocumentsPerMessage": "Documents per message",
       "mcpRoundsPerRequest": "Tool rounds per message",
       "ttsCharactersPerDay": "Read-aloud characters per day",
       "transcriptionMinutesPerDay": "Transcription minutes per day",
@@ -5779,6 +5780,7 @@
       "minutes": "minutes",
       "jobs": "jobs",
       "rounds": "rounds",
+      "documents": "documents",
       "boolean": ""
     },
     "window": {
@@ -5857,6 +5859,7 @@
       "mcpEnabled": "Whether connectors (MCP tools) can be used.",
       "ttsCharactersPerRequest": "Longest passage that can be read aloud in one request.",
       "uploadMegabytesPerFile": "Largest single file that can be uploaded.",
+      "uploadDocumentsPerMessage": "How many documents can be attached to one message.",
       "mcpRoundsPerRequest": "How many tool calls one message may chain.",
       "ttsCharactersPerDay": "Total characters read aloud per day.",
       "transcriptionMinutesPerDay": "Total audio and video minutes transcribed per day.",

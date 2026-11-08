@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "جستجوی وب را برای هر پیام فعال کنید.\n\nاطلاعات به‌روز را با دسترسی لحظه‌ای به وب Bing فراهم می‌کند.",
-    "attachTooltip": "ضمیمه کردن فایل‌ها، تصاویر یا صوت/ویدیو.\n\nفرمت‌های پشتیبانی‌شده:\n• تصاویر: JPEG، PNG، GIF، WebP (حداکثر ۵ مگابایت، تا ۱۰ عدد)\n• اسناد: PDF، DOCX، XLSX، PPTX، TXT، MD (حداکثر ۱۰ مگابایت، تا ۳ عدد)\n• داده‌ها: CSV، JSON، XML، YAML (حداکثر ۱۰ مگابایت، تا ۳ عدد)\n• کد: PY، JS، TS، JAVA، C، CPP، GO و غیره (حداکثر ۱۰ مگابایت، تا ۳ عدد)\n• صوت/ویدیو: MP3، WAV، MP4، WebM (حداکثر ۲۵ مگابایت، ۱ فایل)\n\nمجموع: ۱۰ فایل، حداکثر ۵۰ مگابایت",
+    "attachTooltip": "ضمیمه کردن فایل‌ها، تصاویر یا صوت/ویدیو.\n\nفرمت‌های پشتیبانی‌شده:\n• تصاویر: JPEG، PNG، GIF، WebP (حداکثر ۵ مگابایت، تا ۱۰ عدد)\n• اسناد: PDF، DOCX، XLSX، PPTX، TXT، MD (حداکثر ۱۰ مگابایت، تا {maxDocuments} عدد)\n• داده‌ها: CSV، JSON، XML، YAML (حداکثر ۱۰ مگابایت، تا {maxDocuments} عدد)\n• کد: PY، JS، TS، JAVA، C، CPP، GO و غیره (حداکثر ۱۰ مگابایت، تا {maxDocuments} عدد)\n• صوت/ویدیو: MP3، WAV، MP4، WebM (حداکثر ۲۵ مگابایت، ۱ فایل)\n\nمجموع: {maxFiles} فایل، حداکثر ۵۰ مگابایت",
     "transcribeTooltip": "آپلود فایل‌های صوتی یا ویدیویی برای تبدیل به متن.\n\nفرمت‌های پشتیبانی‌شده: MP3، MP4، WAV، WebM، M4A، MPEG، MPGA\nحداکثر اندازه: ۲۵ مگابایت\n\nتبدیل به متن به‌صورت خودکار هنگام ارسال پیام انجام می‌شود.",
     "selected": "انتخاب شده",
     "expandActions": "گسترش عملیات",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "کانکتور‌ها (MCP)",
       "ttsCharactersPerRequest": "تعداد کاراکتر در هر خواندن",
       "uploadMegabytesPerFile": "حجم هر فایل بارگذاری",
+      "uploadDocumentsPerMessage": "اسناد در هر پیام",
       "mcpRoundsPerRequest": "دور ابزار به ازای هر پیام",
       "ttsCharactersPerDay": "تعداد کاراکتر خواندن در روز",
       "transcriptionMinutesPerDay": "دقایق رونویسی در روز",
@@ -5727,6 +5728,7 @@
       "minutes": "دقیقه",
       "jobs": "فرآیند",
       "rounds": "دور",
+      "documents": "سند",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "امکان استفاده از کانکتور‌ها (ابزارهای MCP).",
       "ttsCharactersPerRequest": "طولانی‌ترین بخشی که می‌توان در یک درخواست خواند.",
       "uploadMegabytesPerFile": "بیشترین اندازه یک فایل مجزا برای بارگذاری.",
+      "uploadDocumentsPerMessage": "تعداد اسنادی که می‌توان به یک پیام پیوست کرد.",
       "mcpRoundsPerRequest": "تعداد دفعات استفاده از ابزارها در یک پیام.",
       "ttsCharactersPerDay": "کل کاراکترهای خوانده‌شده در هر روز.",
       "transcriptionMinutesPerDay": "مجموع دقایق صوت و ویدیوی رونویسی شده در روز.",

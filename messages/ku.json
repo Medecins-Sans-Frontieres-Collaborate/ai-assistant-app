@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Ji bo her peyamê lêgerîna webê çalak bike.\n\nAgahiyên nûvekirî bi gihîştina webê ya rast-demê ya Bing peyda dike.",
-    "attachTooltip": "Pel, wêne, an deng/vîdyo ve girê bide.\n\nFormatên piştgirîkirî:\n• Wêne: JPEG, PNG, GIF, WebP (herî zêde 5MB, heta 10)\n• Belge: PDF, DOCX, XLSX, PPTX, TXT, MD (herî zêde 10MB, heta 3)\n• Dane: CSV, JSON, XML, YAML (herî zêde 10MB, heta 3)\n• Kod: PY, JS, TS, JAVA, C, CPP, GO, hwd. (herî zêde 10MB, heta 3)\n• Deng/Vîdyo: MP3, WAV, MP4, WebM (herî zêde 25MB, 1 pel)\n\nTevahî: 10 pel, herî zêde 50MB",
+    "attachTooltip": "Pel, wêne, an deng/vîdyo ve girê bide.\n\nFormatên piştgirîkirî:\n• Wêne: JPEG, PNG, GIF, WebP (herî zêde 5MB, heta 10)\n• Belge: PDF, DOCX, XLSX, PPTX, TXT, MD (herî zêde 10MB, heta {maxDocuments})\n• Dane: CSV, JSON, XML, YAML (herî zêde 10MB, heta {maxDocuments})\n• Kod: PY, JS, TS, JAVA, C, CPP, GO, hwd. (herî zêde 10MB, heta {maxDocuments})\n• Deng/Vîdyo: MP3, WAV, MP4, WebM (herî zêde 25MB, 1 pel)\n\nTevahî: {maxFiles} pel, herî zêde 50MB",
     "transcribeTooltip": "Pelên deng an vîdyo ji bo nivîsandinê bar bike.\n\nFormatên piştgirîkirî: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nHerî zêde: 25MB\n\nNivîsandin bi otomatîk dema ku peyamê bişînî pêk tê.",
     "selected": "Hilbijartî",
     "expandActions": "Kiryarên Berfireh",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "پەیوەندیکەرەکان (MCP)",
       "ttsCharactersPerRequest": "پیت بە هەر خوێندنەوە",
       "uploadMegabytesPerFile": "قەبارەی بارکردن بۆ هەر پەڕگە",
+      "uploadDocumentsPerMessage": "بەڵگەنامە بۆ هەر پەیامێک",
       "mcpRoundsPerRequest": "جۆرەکان بۆ هەر پەیامێک",
       "ttsCharactersPerDay": "پیتەکانی خوێندنەوە لە ڕۆژێکدا",
       "transcriptionMinutesPerDay": "خولەکەکانی وتاردان لە ڕۆژێکدا",
@@ -5711,6 +5712,7 @@
       "minutes": "خولەک",
       "jobs": "ئیش",
       "rounds": "جۆر",
+      "documents": "بەڵگەنامە",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "دەتوانرێت توڵەکان (MCP) بەکارببرێن یان نا.",
       "ttsCharactersPerRequest": "درێژترین نووسین کە لە داواکارییەکدا دەخوێندرێتەوە.",
       "uploadMegabytesPerFile": "گەورەترین پەڕگەی تاکەتایی کە دەتوانرێت باربکرێت.",
+      "uploadDocumentsPerMessage": "چەند بەڵگەنامە دەتوانرێت بە یەک پەیامەوە هاوپێچ بکرێت.",
       "mcpRoundsPerRequest": "چەند توڵ دەتوانرێت لە پەیامێکدا لە پێناو یەکتر بکرێت.",
       "ttsCharactersPerDay": "کۆی پیتە خوێندراوەکان بە رۆژێک.",
       "transcriptionMinutesPerDay": "کۆی خولەکەکانی وێنەدانی دەنگ و ڤیدیۆ بە رۆژێک.",

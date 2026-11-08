@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "すべてのメッセージでウェブ検索を有効にします。\n\nリアルタイムのBingウェブアクセスで最新情報を取得します。",
-    "attachTooltip": "ファイル、画像、音声/動画を添付します。\n\n対応形式:\n• 画像: JPEG、PNG、GIF、WebP（最大5MB、最大10件）\n• 書類: PDF、DOCX、XLSX、PPTX、TXT、MD（最大10MB、最大3件）\n• データ: CSV、JSON、XML、YAML（最大10MB、最大3件）\n• コード: PY、JS、TS、JAVA、C、CPP、GOなど（最大10MB、最大3件）\n• 音声/動画: MP3、WAV、MP4、WebM（最大25MB、1ファイル）\n\n合計: 最大10ファイル、合計50MBまで",
+    "attachTooltip": "ファイル、画像、音声/動画を添付します。\n\n対応形式:\n• 画像: JPEG、PNG、GIF、WebP（最大5MB、最大10件）\n• 書類: PDF、DOCX、XLSX、PPTX、TXT、MD（最大10MB、最大{maxDocuments}件）\n• データ: CSV、JSON、XML、YAML（最大10MB、最大{maxDocuments}件）\n• コード: PY、JS、TS、JAVA、C、CPP、GOなど（最大10MB、最大{maxDocuments}件）\n• 音声/動画: MP3、WAV、MP4、WebM（最大25MB、1ファイル）\n\n合計: 最大{maxFiles}ファイル、合計50MBまで",
     "transcribeTooltip": "音声または動画ファイルをアップロードして文字起こしを行います。\n\n対応形式: MP3、MP4、WAV、WebM、M4A、MPEG、MPGA\n最大サイズ: 25MB\n\nメッセージ送信時に自動で文字起こしされます。",
     "selected": "選択済み",
     "expandActions": "アクションを展開",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "コネクター（MCP）",
       "ttsCharactersPerRequest": "1回の読み上げごとの文字数",
       "uploadMegabytesPerFile": "ファイルごとのアップロードサイズ",
+      "uploadDocumentsPerMessage": "1メッセージあたりのドキュメント数",
       "mcpRoundsPerRequest": "1メッセージあたりのツール使用回数",
       "ttsCharactersPerDay": "1日あたりの読み上げ文字数",
       "transcriptionMinutesPerDay": "1日あたりの書き起こし分数",
@@ -5727,6 +5728,7 @@
       "minutes": "分",
       "jobs": "件",
       "rounds": "ラウンド",
+      "documents": "件",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "コネクター（MCPツール）が利用できるかどうか。",
       "ttsCharactersPerRequest": "1回のリクエストで読み上げ可能な最長のテキスト。",
       "uploadMegabytesPerFile": "1ファイルあたりアップロード可能な最大容量。",
+      "uploadDocumentsPerMessage": "1つのメッセージに添付できるドキュメントの数。",
       "mcpRoundsPerRequest": "1つのメッセージで実行可能なツール呼び出しの回数。",
       "ttsCharactersPerDay": "1日あたり音声読み上げ可能な合計文字数。",
       "transcriptionMinutesPerDay": "1日あたり文字起こしできる音声・動画の合計分数。",

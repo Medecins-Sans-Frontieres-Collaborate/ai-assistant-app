@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Enable web search for every message.\n\nProvides up-to-date information using real-time Bing web access.",
-    "attachTooltip": "Attach files, images, or audio/video.\n\nSupported formats:\n• Images: JPEG, PNG, GIF, WebP (5MB max, up to 10)\n• Documents: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB max, up to 3)\n• Data: CSV, JSON, XML, YAML (10MB max, up to 3)\n• Code: PY, JS, TS, JAVA, C, CPP, GO, etc. (10MB max, up to 3)\n• Audio/Video: MP3, WAV, MP4, WebM (25MB max, 1 file)\n\nTotal: 10 files, 50MB max",
+    "attachTooltip": "Attach files, images, or audio/video.\n\nSupported formats:\n• Images: JPEG, PNG, GIF, WebP (5MB max, up to 10)\n• Documents: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB max, up to {maxDocuments})\n• Data: CSV, JSON, XML, YAML (10MB max, up to {maxDocuments})\n• Code: PY, JS, TS, JAVA, C, CPP, GO, etc. (10MB max, up to {maxDocuments})\n• Audio/Video: MP3, WAV, MP4, WebM (25MB max, 1 file)\n\nTotal: {maxFiles} files, 50MB max",
     "transcribeTooltip": "Upload audio or video files for transcription.\n\nSupported formats: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nMax size: 25MB\n\nTranscription happens automatically when you send the message.",
     "selected": "Selected",
     "expandActions": "Expand Actions",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "Mbëtï na likundu ngangu gbegbe",
       "uploadMegabytesPerFile": "Limburu Mb na dosié yeke",
+      "uploadDocumentsPerMessage": "Mbëti ti ndinga yeke",
       "mcpRoundsPerRequest": "Tokombere ya tool ti ndinga yeke",
       "ttsCharactersPerDay": "Mbëtï na likundu na mbo",
       "transcriptionMinutesPerDay": "Mbela na transcription na mbo",
@@ -5711,6 +5712,7 @@
       "minutes": "mbela",
       "jobs": "tirï",
       "rounds": "tokombere",
+      "documents": "mbëti",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Sô MCP tools ayeke bale.",
       "ttsCharactersPerRequest": "Mbênî texte mo bale tî yeke sô nongô na bale ôko.",
       "uploadMegabytesPerFile": "Fichier mo bale so ayeke fata.",
+      "uploadDocumentsPerMessage": "Wungo ti mbëti so a lingbi ti kangbi na ndinga ôko.",
       "mcpRoundsPerRequest": "Ngbêtî ti tool mo bale tî ayeke kêtï na message ôko.",
       "ttsCharactersPerDay": "Ngbêtî ti texte mo nongö tî ôko.",
       "transcriptionMinutesPerDay": "Ngbêtî minute ti odiyo na vidéo mo transcribe ôko.",

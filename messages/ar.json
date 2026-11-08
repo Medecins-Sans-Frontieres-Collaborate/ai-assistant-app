@@ -2244,7 +2244,7 @@
   },
   "dropdown": {
     "searchTooltip": "فعّل البحث عبر الإنترنت لكل رسالة.\n\nيقدّم معلومات محدثة باستخدام الوصول الفوري إلى Bing.",
-    "attachTooltip": "إرفاق الملفات أو الصور أو الصوت/الفيديو.\n\nالصيغ المدعومة:\n• الصور: JPEG، PNG، GIF، WebP (بحد أقصى 5MB، حتى 10 ملفات)\n• المستندات: PDF، DOCX، XLSX، PPTX، TXT، MD (بحد أقصى 10MB، حتى 3 ملفات)\n• البيانات: CSV، JSON، XML، YAML (بحد أقصى 10MB، حتى 3 ملفات)\n• الأكواد: PY، JS، TS، JAVA، C، CPP، GO، إلخ. (بحد أقصى 10MB، حتى 3 ملفات)\n• الصوت/الفيديو: MP3، WAV، MP4، WebM (بحد أقصى 25MB، ملف واحد)\n\nالإجمالي: 10 ملفات، حتى 50MB",
+    "attachTooltip": "إرفاق الملفات أو الصور أو الصوت/الفيديو.\n\nالصيغ المدعومة:\n• الصور: JPEG، PNG، GIF، WebP (بحد أقصى 5MB، حتى 10 ملفات)\n• المستندات: PDF، DOCX، XLSX، PPTX، TXT، MD (بحد أقصى 10MB، حتى {maxDocuments} ملفات)\n• البيانات: CSV، JSON، XML، YAML (بحد أقصى 10MB، حتى {maxDocuments} ملفات)\n• الأكواد: PY، JS، TS، JAVA، C، CPP، GO، إلخ. (بحد أقصى 10MB، حتى {maxDocuments} ملفات)\n• الصوت/الفيديو: MP3، WAV، MP4، WebM (بحد أقصى 25MB، ملف واحد)\n\nالإجمالي: {maxFiles} ملفات، حتى 50MB",
     "transcribeTooltip": "تحميل ملفات صوتية أو فيديو لتحويلها إلى نص.\n\nالصيغ المدعومة: MP3، MP4، WAV، WebM، M4A، MPEG، MPGA\nالحجم الأقصى: 25MB\n\nيتم التحويل إلى نص تلقائياً عند إرسال الرسالة.",
     "selected": "محدد",
     "expandActions": "توسيع الإجراءات",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "الموصلات (MCP)",
       "ttsCharactersPerRequest": "عدد الأحرف لكل قراءة",
       "uploadMegabytesPerFile": "حجم التحميل لكل ملف",
+      "uploadDocumentsPerMessage": "المستندات لكل رسالة",
       "mcpRoundsPerRequest": "جولات الأداة لكل رسالة",
       "ttsCharactersPerDay": "عدد أحرف القراءة في اليوم",
       "transcriptionMinutesPerDay": "دقائق النسخ في اليوم",
@@ -5727,6 +5728,7 @@
       "minutes": "دقائق",
       "jobs": "مهام",
       "rounds": "جولات",
+      "documents": "مستندات",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "إمكانية استخدام الموصلات (أدوات MCP).",
       "ttsCharactersPerRequest": "أطول نص يمكن قراءته صوتياً في طلب واحد.",
       "uploadMegabytesPerFile": "أكبر ملف مفرد يمكن تحميله.",
+      "uploadDocumentsPerMessage": "عدد المستندات التي يمكن إرفاقها برسالة واحدة.",
       "mcpRoundsPerRequest": "عدد مرات استدعاء الأدوات في رسالة واحدة.",
       "ttsCharactersPerDay": "إجمالي الأحرف المقروءة صوتياً يومياً.",
       "transcriptionMinutesPerDay": "إجمالي دقائق الصوت والفيديو التي يتم نسخها يومياً.",

@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "បើកសេវាស្វែងរកតាមអ៊ីនធើណិតសម្រាប់រាល់សារ។\n\nផ្ដល់ព័ត៌មានទាន់សម័យតាមការចូលប្រើ Bing ថ្មីៗ។",
-    "attachTooltip": "ភ្ជាប់ឯកសារ រូបភាព ឬសំឡេង/វីដេអូ។\n\nទ្រទ្រង់ប្រភេទ៖\n• រូបភាព៖ JPEG, PNG, GIF, WebP (អតិបរមា 5MB, ចំនួន ១០)\n• ឯកសារ៖ PDF, DOCX, XLSX, PPTX, TXT, MD (អតិបរមា 10MB, ចំនួន ៣)\n• ទិន្នន័យ៖ CSV, JSON, XML, YAML (អតិបរមា 10MB, ចំនួន ៣)\n• កូដ៖ PY, JS, TS, JAVA, C, CPP, GO ជាដើម (អតិបរមា 10MB, ចំនួន ៣)\n• សម្លេង/វីដេអូ៖ MP3, WAV, MP4, WebM (អតិបរមា 25MB, 1 ឯកសារ)\n\nសរុប: ១០ ឯកសារ, ៥០MB",
+    "attachTooltip": "ភ្ជាប់ឯកសារ រូបភាព ឬសំឡេង/វីដេអូ។\n\nទ្រទ្រង់ប្រភេទ៖\n• រូបភាព៖ JPEG, PNG, GIF, WebP (អតិបរមា 5MB, ចំនួន ១០)\n• ឯកសារ៖ PDF, DOCX, XLSX, PPTX, TXT, MD (អតិបរមា 10MB, ចំនួន {maxDocuments})\n• ទិន្នន័យ៖ CSV, JSON, XML, YAML (អតិបរមា 10MB, ចំនួន {maxDocuments})\n• កូដ៖ PY, JS, TS, JAVA, C, CPP, GO ជាដើម (អតិបរមា 10MB, ចំនួន {maxDocuments})\n• សម្លេង/វីដេអូ៖ MP3, WAV, MP4, WebM (អតិបរមា 25MB, 1 ឯកសារ)\n\nសរុប: {maxFiles} ឯកសារ, ៥០MB",
     "transcribeTooltip": "បញ្ចូលឯកសារសំឡេង ឬវីដេអូសម្រាប់បម្លែងអក្សរ។\n\nទ្រទ្រង់៖ MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nអតិបរមា៖ 25MB\n\nការបម្លែងអក្សរនឹងប្រតិបត្តិដោយស្វ័យប្រវត្តិពេលបញ្ជូនសារ។",
     "selected": "បានជ្រើសរើស",
     "expandActions": "ពង្រីកសកម្មភាព",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Connectors (MCP)",
       "ttsCharactersPerRequest": "តួអក្សរបោះពុម្ពសម្លេងក្នុងមួយដង",
       "uploadMegabytesPerFile": "ទំហំឯកសារទទួលបានក្នុងមួយឯកសារ",
+      "uploadDocumentsPerMessage": "ឯកសារក្នុងមួយសារ",
       "mcpRoundsPerRequest": "ដំណាក់កាលឧបករណ៍ក្នុងមួយសារ",
       "ttsCharactersPerDay": "តួអក្សរបោះពុម្ពសម្លេងក្នុងមួយថ្ងៃ",
       "transcriptionMinutesPerDay": "នាទីបម្លែងសំលេងជាអក្សរក្នុងមួយថ្ងៃ",
@@ -5711,6 +5712,7 @@
       "minutes": "នាទី",
       "jobs": "កិច្ចការ",
       "rounds": "ដំណាក់កាល",
+      "documents": "ឯកសារ",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "ថាតើអាចប្រើ connectors (MCP tools) បានឬទេ។",
       "ttsCharactersPerRequest": "មាតិកាយូរ​បំផុត​ដែលអាចអានជូតក្នុងសំណើតែមួយ។",
       "uploadMegabytesPerFile": "ឯកសារធំបំផុតតែមួយដែលអាចផ្ទុកឡើង។",
+      "uploadDocumentsPerMessage": "ចំនួនឯកសារដែលអាចភ្ជាប់ទៅសារមួយ។",
       "mcpRoundsPerRequest": "ចំនួនកំណត់ហៅឧបករណ៍សម្រាប់សារមួយ។",
       "ttsCharactersPerDay": "សរុបតួអក្សរដែលអានជូតក្នុងមួយថ្ងៃ។",
       "transcriptionMinutesPerDay": "សរុបនាទីសំឡេង និងវីដេអូត្រូវបានបកស្រាយក្នុងមួយថ្ងៃ។",

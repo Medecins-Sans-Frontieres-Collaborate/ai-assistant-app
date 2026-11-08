@@ -2396,7 +2396,7 @@
   },
   "dropdown": {
     "searchTooltip": "Activează căutarea web pentru fiecare mesaj.\n\nOferă informații actualizate folosind acces Bing în timp real.",
-    "attachTooltip": "Atașați fișiere, imagini sau audio/video.\n\nFormate acceptate:\n• Imagini: JPEG, PNG, GIF, WebP (maxim 5MB, până la 10)\n• Documente: PDF, DOCX, XLSX, PPTX, TXT, MD (maxim 10MB, până la 3)\n• Date: CSV, JSON, XML, YAML (maxim 10MB, până la 3)\n• Cod: PY, JS, TS, JAVA, C, CPP, GO etc. (maxim 10MB, până la 3)\n• Audio/Video: MP3, WAV, MP4, WebM (maxim 25MB, 1 fișier)\n\nTotal: 10 fișiere, maximum 50MB",
+    "attachTooltip": "Atașați fișiere, imagini sau audio/video.\n\nFormate acceptate:\n• Imagini: JPEG, PNG, GIF, WebP (maxim 5MB, până la 10)\n• Documente: PDF, DOCX, XLSX, PPTX, TXT, MD (maxim 10MB, până la {maxDocuments})\n• Date: CSV, JSON, XML, YAML (maxim 10MB, până la {maxDocuments})\n• Cod: PY, JS, TS, JAVA, C, CPP, GO etc. (maxim 10MB, până la {maxDocuments})\n• Audio/Video: MP3, WAV, MP4, WebM (maxim 25MB, 1 fișier)\n\nTotal: {maxFiles} fișiere, maximum 50MB",
     "transcribeTooltip": "Încărcați fișiere audio sau video pentru transcriere.\n\nFormate acceptate: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nDimensiune maximă: 25MB\n\nTranscrierea se face automat când trimiteți mesajul.",
     "selected": "Selectat",
     "expandActions": "Extindeți Acțiunile",
@@ -5694,6 +5694,7 @@
       "mcpEnabled": "Conectori (MCP)",
       "ttsCharactersPerRequest": "Caractere per citire cu voce tare",
       "uploadMegabytesPerFile": "Dimensiune fișier pentru încărcare",
+      "uploadDocumentsPerMessage": "Documente per mesaj",
       "mcpRoundsPerRequest": "Runde instrument per mesaj",
       "ttsCharactersPerDay": "Caractere citite cu voce tare pe zi",
       "transcriptionMinutesPerDay": "Minute de transcriere pe zi",
@@ -5727,6 +5728,7 @@
       "minutes": "minute",
       "jobs": "procese",
       "rounds": "runde",
+      "documents": "documente",
       "boolean": ""
     },
     "window": {
@@ -5773,6 +5775,7 @@
       "mcpEnabled": "Dacă pot fi folosite conectorii (unelte MCP).",
       "ttsCharactersPerRequest": "Cel mai lung fragment ce poate fi citit într-o solicitare.",
       "uploadMegabytesPerFile": "Cel mai mare fișier individual ce poate fi încărcat.",
+      "uploadDocumentsPerMessage": "Câte documente pot fi atașate la un mesaj.",
       "mcpRoundsPerRequest": "Câte apeluri de unelte poate lansa un mesaj în lanț.",
       "ttsCharactersPerDay": "Total caractere citite pe zi.",
       "transcriptionMinutesPerDay": "Total minute de audio și video transcrise pe zi.",

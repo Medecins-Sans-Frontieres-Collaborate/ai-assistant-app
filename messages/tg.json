@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Ҷустуҷӯи вебро барои ҳар паём фаъол кунед.\n\nМаълумоти навтарин бо истифодаи дастрасии воқеӣ ба Bing дода мешавад.",
-    "attachTooltip": "Файлҳо, тасвирҳо ё аудио/видео замима кунед.\n\nФорматҳои дастгириёфта:\n• Тасвирҳо: JPEG, PNG, GIF, WebP (максимум 5MB, то 10 адад)\n• Ҳуҷҷатҳо: PDF, DOCX, XLSX, PPTX, TXT, MD (максимум 10MB, то 3 адад)\n• Маълумот: CSV, JSON, XML, YAML (максимум 10MB, то 3 адад)\n• Код: PY, JS, TS, JAVA, C, CPP, GO ва ғ. (максимум 10MB, то 3 адад)\n• Аудио/Видео: MP3, WAV, MP4, WebM (максимум 25MB, 1 файл)\n\nҲамагӣ: 10 файл, на бештар аз 50MB",
+    "attachTooltip": "Файлҳо, тасвирҳо ё аудио/видео замима кунед.\n\nФорматҳои дастгириёфта:\n• Тасвирҳо: JPEG, PNG, GIF, WebP (максимум 5MB, то 10 адад)\n• Ҳуҷҷатҳо: PDF, DOCX, XLSX, PPTX, TXT, MD (максимум 10MB, то {maxDocuments} адад)\n• Маълумот: CSV, JSON, XML, YAML (максимум 10MB, то {maxDocuments} адад)\n• Код: PY, JS, TS, JAVA, C, CPP, GO ва ғ. (максимум 10MB, то {maxDocuments} адад)\n• Аудио/Видео: MP3, WAV, MP4, WebM (максимум 25MB, 1 файл)\n\nҲамагӣ: {maxFiles} файл, на бештар аз 50MB",
     "transcribeTooltip": "Файлҳои аудио ё видеоро барои транскрипсия боргузорӣ кунед.\n\nФорматҳои дастгириёфта: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nҲаҷми максималӣ: 25MB\n\nТранскрипсия ба таври худкор ҳангоми фиристодани паём иҷро мешавад.",
     "selected": "Интихоб шуд",
     "expandActions": "Кӯшишҳои бештар кушоед",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Пайвандгарҳо (MCP)",
       "ttsCharactersPerRequest": "Шумораи ҳарфҳо барои хондан",
       "uploadMegabytesPerFile": "Ҳаҷми бардошт барои ҳар файл",
+      "uploadDocumentsPerMessage": "Ҳуҷҷатҳо барои ҳар паём",
       "mcpRoundsPerRequest": "Давраҳои абзор барои ҳар паём",
       "ttsCharactersPerDay": "Ҳарфҳои хондашаванда дар як рӯз",
       "transcriptionMinutesPerDay": "Дақиқаҳои транскрипсия дар як рӯз",
@@ -5711,6 +5712,7 @@
       "minutes": "дақиқа",
       "jobs": "кор",
       "rounds": "давра",
+      "documents": "ҳуҷҷат",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Оё қуфлкунакҳо (MCP tools) метавонанд истифода шаванд.",
       "ttsCharactersPerRequest": "Дарозтарин порча, ки бо як дархост баланд хонда мешавад.",
       "uploadMegabytesPerFile": "Бузургтарин файли ягонаи боргузорӣшаванда.",
+      "uploadDocumentsPerMessage": "Шумораи ҳуҷҷатҳое, ки ба як паём замима кардан мумкин аст.",
       "mcpRoundsPerRequest": "Чанд даъвати асбоб як паём пайдарпай иҷро мекунад.",
       "ttsCharactersPerDay": "Ҳамагӣ рамзҳои баландхонӣ дар як рӯз.",
       "transcriptionMinutesPerDay": "Ҳамагӣ дақиқаҳои файли аудио ва видео дар як рӯз транскрипсия мешаванд.",

@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "د هر پيغام لپاره ويب لټون فعال کړئ.\n\nد Bing ریښتینې ويب لاسرسي سره تازه معلومات برابروي.",
-    "attachTooltip": "فایلونه، انځورونه، یا آډیو/ویډیو نښلول.\n\nمناسب ډولونه:\n• انځورونه: JPEG، PNG، GIF، WebP (اعظمي ۵MB، تر ۱۰ پورې)\n• اسناد: PDF، DOCX، XLSX، PPTX، TXT، MD (اعظمي ۱۰MB، تر ۳ پورې)\n• ډاټا: CSV، JSON، XML، YAML (اعظمي ۱۰MB، تر ۳ پورې)\n• کوډ: PY، JS، TS، JAVA، C، CPP، GO، نور (اعظمي ۱۰MB، تر ۳ پورې)\n• آډیو/ویډیو: MP3، WAV، MP4، WebM (اعظمي ۲۵MB، ۱ فایل)\n\nټولټال: ۱۰ فایلونه، اعظمي ۵۰MB",
+    "attachTooltip": "فایلونه، انځورونه، یا آډیو/ویډیو نښلول.\n\nمناسب ډولونه:\n• انځورونه: JPEG، PNG، GIF، WebP (اعظمي ۵MB، تر ۱۰ پورې)\n• اسناد: PDF، DOCX، XLSX، PPTX، TXT، MD (اعظمي ۱۰MB، تر {maxDocuments} پورې)\n• ډاټا: CSV، JSON، XML، YAML (اعظمي ۱۰MB، تر {maxDocuments} پورې)\n• کوډ: PY، JS، TS، JAVA، C، CPP، GO، نور (اعظمي ۱۰MB، تر {maxDocuments} پورې)\n• آډیو/ویډیو: MP3، WAV، MP4، WebM (اعظمي ۲۵MB، ۱ فایل)\n\nټولټال: {maxFiles} فایلونه، اعظمي ۵۰MB",
     "transcribeTooltip": "د آډیو یا ویډیو فایلونه د ټرانسکرېپشن لپاره پورته کړئ.\n\nمناسب ډولونه: MP3، MP4، WAV، WebM، M4A، MPEG، MPGA\nاعظمي کچه: ۲۵MB\n\nټرانسکرېپشن به له پيغام سره په اوتومات ډول وشي.",
     "selected": "انتخاب شوی",
     "expandActions": "عملیات پراخ کړئ",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "کنیکټرونه (MCP)",
       "ttsCharactersPerRequest": "حروف هر غږییز لوست ته",
       "uploadMegabytesPerFile": "هر فایل اپلوډ اندازه",
+      "uploadDocumentsPerMessage": "اسناد هر پیغام ته",
       "mcpRoundsPerRequest": "اوزار ګردشونه هر پیغام ته",
       "ttsCharactersPerDay": "د غږییز لوست حروف ورځني",
       "transcriptionMinutesPerDay": "د ثبت متن دقیقې هره ورځ",
@@ -5711,6 +5712,7 @@
       "minutes": "دقیقې",
       "jobs": "کارونه",
       "rounds": "گردشونه",
+      "documents": "اسناد",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "کنکټرونه (د MCP وسیلې) کارول کېدای شي که نه.",
       "ttsCharactersPerRequest": "تر ټولو اوږد متن چې په یوه غوښتنه کې غږېدلی شي.",
       "uploadMegabytesPerFile": "تر ټولو لوی فایل چې پورته کېدای شي.",
+      "uploadDocumentsPerMessage": "څومره اسناد له یوه پیغام سره نښلول کېدای شي.",
       "mcpRoundsPerRequest": "په یوه پیغام کې څو وسیلې غږول کېدای شي.",
       "ttsCharactersPerDay": "په ورځ کې ټول غږېدلي توري.",
       "transcriptionMinutesPerDay": "په ورځ کې ټول اورېدلي یا ویډیو دقیقې چې نقل شوې وي.",

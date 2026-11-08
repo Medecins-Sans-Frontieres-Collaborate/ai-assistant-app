@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Mú ìwádìí wẹ́ẹ̀bù ṣiṣẹ́ fún ìfiránṣẹ́ kọ̀ọ̀kan.\n\nÓ ń pèsè àlàyé tuntun pẹ̀lú ààyè wẹ́ẹ̀bù Bing ní àkókò gidi.",
-    "attachTooltip": "So àwọn fáìlì, àwọn àwòrán, tàbí ohun/fídíò mọ́.\n\nÀwọn ọ̀nà tí a ṣe àtìlẹ́yìn fún:\n• Àwọn àwòrán: JPEG, PNG, GIF, WebP (5MB pọ̀ jù, títí dé 10)\n• Àwọn ìwé: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB pọ̀ jù, títí dé 3)\n• Dátà: CSV, JSON, XML, YAML (10MB pọ̀ jù, títí dé 3)\n• Kóòdù: PY, JS, TS, JAVA, C, CPP, GO, àti bẹ́ẹ̀ bẹ́ẹ̀ lọ (10MB pọ̀ jù, títí dé 3)\n• Ohun/Fídíò: MP3, WAV, MP4, WebM (25MB pọ̀ jù, fáìlì 1)\n\nÀpapọ̀: àwọn fáìlì 10, 50MB pọ̀ jù",
+    "attachTooltip": "So àwọn fáìlì, àwọn àwòrán, tàbí ohun/fídíò mọ́.\n\nÀwọn ọ̀nà tí a ṣe àtìlẹ́yìn fún:\n• Àwọn àwòrán: JPEG, PNG, GIF, WebP (5MB pọ̀ jù, títí dé 10)\n• Àwọn ìwé: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB pọ̀ jù, títí dé {maxDocuments})\n• Dátà: CSV, JSON, XML, YAML (10MB pọ̀ jù, títí dé {maxDocuments})\n• Kóòdù: PY, JS, TS, JAVA, C, CPP, GO, àti bẹ́ẹ̀ bẹ́ẹ̀ lọ (10MB pọ̀ jù, títí dé {maxDocuments})\n• Ohun/Fídíò: MP3, WAV, MP4, WebM (25MB pọ̀ jù, fáìlì 1)\n\nÀpapọ̀: àwọn fáìlì {maxFiles}, 50MB pọ̀ jù",
     "transcribeTooltip": "Gbe àwọn fáìlì ohun tàbí fídíò sókè fún kíkọ sí ọ̀rọ̀.\n\nÀwọn ọ̀nà tí a ṣe àtìlẹ́yìn fún: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nÌwọ̀n pọ̀ jù: 25MB\n\nKíkọ sí ọ̀rọ̀ ṣẹlẹ̀ fúnrararẹ̀ nígbà tí o bá fi ìfiránṣẹ́ ránṣẹ́.",
     "selected": "Tí A Yan",
     "expandActions": "Fẹ̀ Àwọn Ìgbésẹ̀",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Àsopọ̀ (MCP)",
       "ttsCharactersPerRequest": "Àmì-ọrọ kọọkan ní kíkà síta",
       "uploadMegabytesPerFile": "Ìwọn fífi fáìlì kọọkan rán",
+      "uploadDocumentsPerMessage": "Àwọn ìwé fún ìfiranṣẹ́ kọọkan",
       "mcpRoundsPerRequest": "Ìtàkùn irinṣẹ́ kọọkan fún ìfiranṣẹ́",
       "ttsCharactersPerDay": "Àmì-ọrọ kíkà síta lojojumo",
       "transcriptionMinutesPerDay": "Ìṣẹ́jú ìtumọ̀ lójú ọjọ́ kan",
@@ -5711,6 +5712,7 @@
       "minutes": "ìṣẹ́jú",
       "jobs": "ṣẹ́",
       "rounds": "ítàkùn",
+      "documents": "ìwé",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "Bóyá a le lo àwọn amóhùnnáwòrán (MCP tools).",
       "ttsCharactersPerRequest": "Gígùn tó pọ̀jù tí a lè ka sókè ní ìbéèrè kan.",
       "uploadMegabytesPerFile": "Ìwọn tó pọ̀jù jùlọ fún fáìlì kọọkan tí a le gbe sórí ẹrọ.",
+      "uploadDocumentsPerMessage": "Iye ìwé tí a lè so mọ́ ìfiranṣẹ́ kan.",
       "mcpRoundsPerRequest": "Ìye ìpe irinṣẹ́ tí ìfiranṣẹ́ kan lè dá pọ̀.",
       "ttsCharactersPerDay": "Apapọ àwọn lẹ́tà tó ni a ka sókè ní ọjọ́ kan.",
       "transcriptionMinutesPerDay": "Apapọ ìràkòwé ohun àti fídíò ní ọjọ́ kan.",

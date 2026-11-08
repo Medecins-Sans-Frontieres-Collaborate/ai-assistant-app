@@ -2318,7 +2318,7 @@
   },
   "dropdown": {
     "searchTooltip": "Fur raadinta shabakadda fariin kasta.\n\nWuxuu bixiyaa macluumaad cusub iyada oo la adeegsanayo gelitaanka Bing shabakadda waqtiga dhabta ah.",
-    "attachTooltip": "Ku lifaaq faylal, sawirro, ama cod/fiidiyow.\n\nQaababka la taageerayo:\n• Sawirro: JPEG, PNG, GIF, WebP (5MB ugu badan, ilaa 10)\n• Dukumentiyo: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB ugu badan, ilaa 3)\n• Xog: CSV, JSON, XML, YAML (10MB ugu badan, ilaa 3)\n• Kood: PY, JS, TS, JAVA, C, CPP, GO, iwm. (10MB ugu badan, ilaa 3)\n• Cod/Fiidiyow: MP3, WAV, MP4, WebM (25MB ugu badan, 1 fayl)\n\nWadarta: 10 fayl, 50MB ugu badan",
+    "attachTooltip": "Ku lifaaq faylal, sawirro, ama cod/fiidiyow.\n\nQaababka la taageerayo:\n• Sawirro: JPEG, PNG, GIF, WebP (5MB ugu badan, ilaa 10)\n• Dukumentiyo: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB ugu badan, ilaa {maxDocuments})\n• Xog: CSV, JSON, XML, YAML (10MB ugu badan, ilaa {maxDocuments})\n• Kood: PY, JS, TS, JAVA, C, CPP, GO, iwm. (10MB ugu badan, ilaa {maxDocuments})\n• Cod/Fiidiyow: MP3, WAV, MP4, WebM (25MB ugu badan, 1 fayl)\n\nWadarta: {maxFiles} fayl, 50MB ugu badan",
     "transcribeTooltip": "Soo geli faylal cod ama fiidiyow ah si loo qoro.\n\nQaababka la taageerayo: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nCabbirka ugu badan: 25MB\n\nQoristaanku wuxuu si toos ah u dhacaa markaad dirto fariinta.",
     "selected": "La doortay",
     "expandActions": "Ballaadhi Ficilada",
@@ -5678,6 +5678,7 @@
       "mcpEnabled": "Isku-xirayaasha (MCP)",
       "ttsCharactersPerRequest": "Astaamaha akhrinta codkiiba",
       "uploadMegabytesPerFile": "Cabbirka upload faylkiiba",
+      "uploadDocumentsPerMessage": "Dukumentiyada fariin kasta",
       "mcpRoundsPerRequest": "Wareegyada qalabka fariin kasta",
       "ttsCharactersPerDay": "Astaamaha akhrinta codka maalintii",
       "transcriptionMinutesPerDay": "Daqiiqadaha turjumaadda maalintii",
@@ -5711,6 +5712,7 @@
       "minutes": "daqiiqo",
       "jobs": "hawl",
       "rounds": "wareegyo",
+      "documents": "dukumentiyo",
       "boolean": ""
     },
     "window": {
@@ -5757,6 +5759,7 @@
       "mcpEnabled": "In connectors (MCP tools) la isticmaali karo.",
       "ttsCharactersPerRequest": "Qoraalka ugu dheer ee hal codsi lagu akhriyi karo.",
       "uploadMegabytesPerFile": "Faylka ugu weyn ee la galiyo.",
+      "uploadDocumentsPerMessage": "Inta dukumenti ee lagu lifaaqi karo hal fariin.",
       "mcpRoundsPerRequest": "Imisa jeer oo qalab ah ayaa fariin kelidii socon karta.",
       "ttsCharactersPerDay": "Wadar xarafka maalintii la akhrin karo.",
       "transcriptionMinutesPerDay": "Wadar daqiiqo cod iyo muuqaal maalintii la qoraayo.",
