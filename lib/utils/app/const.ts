@@ -147,9 +147,10 @@ export const WHISPER_MAX_SIZE = 25 * 1024 * 1024; // 25MB
 // File upload count limits per message
 export const FILE_COUNT_LIMITS = {
   MAX_IMAGES: 10, // OpenAI vision models support up to 10 images
-  MAX_DOCUMENTS: 3, // Document summarization is expensive
+  // Documents per message are a per-user limit, not a constant:
+  // `feature.upload.documentsPerMessage` (config/limits.ts, default 5).
   MAX_AUDIO_VIDEO: 1, // Transcription is expensive (time + cost)
-  MAX_TOTAL_FILES: 10, // Total attachments (any type)
+  MAX_TOTAL_FILES: 10, // Total attachments (any type); raised to the documents limit when an admin allows more
   MAX_TOTAL_SIZE: FILE_SIZE_LIMITS.VIDEO_MAX_BYTES, // 1.5GB total per message (matches largest file type)
 } as const;
 
