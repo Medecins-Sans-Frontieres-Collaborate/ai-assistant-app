@@ -4,6 +4,7 @@
  * runs against the real file.
  */
 import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnricher';
+import { MAX_INTERPRETER_INPUT_FILES } from '@/lib/services/chat/tools/interpreterInputRefs';
 
 import { Message } from '@/types/chat';
 
@@ -110,11 +111,14 @@ describe('ToolRouterEnricher.collectInterpreterInputFiles — generated files', 
     expect(files.map((f) => f.filename)).toEqual(['data.csv']);
   });
 
-  it('ignores refs that are not app-relative file urls and caps at four', async () => {
-    const many = Array.from({ length: 6 }, (_, i) => ({
-      url: `/api/file/h${i}.txt`,
-      filename: `f${i}.txt`,
-    }));
+  it('ignores refs that are not app-relative file urls and caps at the per-turn limit', async () => {
+    const many = Array.from(
+      { length: MAX_INTERPRETER_INPUT_FILES + 2 },
+      (_, i) => ({
+        url: `/api/file/h${i}.txt`,
+        filename: `f${i}.txt`,
+      }),
+    );
     const context = createTestChatContext({
       messages: [
         assistantWith([
@@ -125,10 +129,55 @@ describe('ToolRouterEnricher.collectInterpreterInputFiles — generated files', 
       ],
     });
     const files = await collect(context);
-    expect(files).toHaveLength(4);
+    expect(files).toHaveLength(MAX_INTERPRETER_INPUT_FILES);
     expect(blobGetMock).not.toHaveBeenCalledWith(
       expect.stringContaining('evil'),
       expect.anything(),
     );
+  });
+
+  it('mounts active files from earlier turns, minus those the injector dropped', async () => {
+    const context = {
+      ...createTestChatContext({
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: 'the 2027 proposal' },
+              {
+                type: 'file_url',
+                url: '/api/file/wb27.xlsx',
+                originalFilename: 'WB27.xlsx',
+              },
+            ],
+          } as unknown as Message,
+        ],
+      }),
+      activeFiles: [
+        {
+          id: 'af-ib26',
+          url: '/api/file/ib26.xlsx',
+          originalFilename: 'IB26.xlsx',
+          addedAt: '2026-11-07T10:00:00.000Z',
+          sourceMessageId: 'm1',
+          status: 'ready' as const,
+        },
+        {
+          id: 'af-big',
+          url: '/api/file/big.xlsx',
+          originalFilename: 'big.xlsx',
+          addedAt: '2026-11-07T10:00:00.000Z',
+          sourceMessageId: 'm1',
+          status: 'ready' as const,
+        },
+      ],
+      activeFilesDroppedThisTurn: ['af-big'],
+    };
+    const files = await collect(context);
+    expect(files.map((f) => f.filename)).toEqual(['WB27.xlsx', 'IB26.xlsx']);
+    expect(blobGetMock.mock.calls.map((c) => c[0])).toEqual([
+      'user-1/uploads/files/wb27.xlsx',
+      'user-1/uploads/files/ib26.xlsx',
+    ]);
   });
 });
