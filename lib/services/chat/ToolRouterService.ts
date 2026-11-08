@@ -7,6 +7,7 @@ import {
   type AuxiliaryOperation,
   DEFAULT_AUXILIARY_ROUTING_MODEL,
 } from '@/lib/services/auxiliary/types';
+import type { StructuredDecisionFallback } from '@/lib/services/chat/routing/structuredDecisionFallback';
 import {
   SkillRoutingEntry,
   selectedSkillIds,
@@ -14,8 +15,6 @@ import {
   skillRoutingSchema,
 } from '@/lib/services/skills/skillRouting';
 import { SKILL_LIMITS } from '@/lib/services/skills/types';
-
-import { devTrace } from '@/lib/utils/server/debug/devTrace';
 
 import type { AuxiliaryFailureReason } from '@/types/chat';
 import type { AuxiliaryUsageSink } from '@/types/chat';
@@ -34,7 +33,9 @@ import { OpenAI } from 'openai';
 
 /** Classifier output for the document-trim intent (strict schema). */
 interface TrimClassification {
+  lengthLimitIsForNewDeliverable: boolean;
   isLengthReductionRequest: boolean;
+  isLengthIncreaseRequest: boolean;
   targetIsAttachedDocument: boolean;
   targetValue: number;
   targetUnit: 'words' | 'characters' | 'pages' | 'percent_to_keep' | 'none';
@@ -43,10 +44,22 @@ interface TrimClassification {
 const TRIM_CLASSIFY_SCHEMA = {
   type: 'object',
   properties: {
+    // First on purpose: the model commits to "what is this length about?"
+    // before it can pattern-match "4 pages" + attached file into a trim.
+    lengthLimitIsForNewDeliverable: {
+      type: 'boolean',
+      description:
+        'True when the length mentioned is a LIMIT for NEW content the assistant is asked to write — a report, memo, review, analysis or summary built from the documents (e.g. "maximum four pages", "en 2 pages max"). False when the user asks to shorten the attached file itself.',
+    },
     isLengthReductionRequest: {
       type: 'boolean',
       description:
         'True ONLY when the last user message asks to reduce/shorten something to an explicit target length.',
+    },
+    isLengthIncreaseRequest: {
+      type: 'boolean',
+      description:
+        'True ONLY when the last user message asks to lengthen/expand the attached document to an explicit target length (e.g. "étoffe ce document à 3000 mots", "double its length").',
     },
     targetIsAttachedDocument: {
       type: 'boolean',
@@ -56,16 +69,18 @@ const TRIM_CLASSIFY_SCHEMA = {
     targetValue: {
       type: 'number',
       description:
-        'The numeric target (word/character/page count, or percent of the original to KEEP). 0 when not a length-reduction request.',
+        'The numeric target (word/character/page count, or percent of the original length to reach — below 100 to reduce, above 100 to expand, e.g. 200 for "double it"). 0 when not a length-change request.',
     },
     targetUnit: {
       type: 'string',
       enum: ['words', 'characters', 'pages', 'percent_to_keep', 'none'],
-      description: '"none" when not a length-reduction request.',
+      description: '"none" when not a length-change request.',
     },
   },
   required: [
+    'lengthLimitIsForNewDeliverable',
     'isLengthReductionRequest',
+    'isLengthIncreaseRequest',
     'targetIsAttachedDocument',
     'targetValue',
     'targetUnit',
@@ -161,7 +176,114 @@ export class ToolRouterService {
     private executor?: AuxiliaryModelExecutor,
   ) {}
 
+  /**
+   * One auxiliary decision call. When the auxiliary chain fails and the
+   * caller supplied `fallback` (the user's chat model), the same request is
+   * made there and held to the same validation; the original error is
+   * rethrown if the fallback fails too.
+   */
   private async complete(
+    region: 'US' | 'EU' | undefined,
+    operation: AuxiliaryOperation,
+    params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
+    options?: {
+      signal?: AbortSignal;
+      timeout?: number;
+      maxRetries?: number;
+      onUsage?: AuxiliaryUsageSink;
+      fallback?: StructuredDecisionFallback;
+    },
+  ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
+    try {
+      return await this.completeOnAuxiliary(region, operation, params, options);
+    } catch (error) {
+      if (!options?.fallback || options.signal?.aborted) throw error;
+      return await this.completeOnFallback(operation, params, options, error);
+    }
+  }
+
+  /**
+   * The chat-model second chance for {@link complete}.
+   *
+   * @throws The ORIGINAL auxiliary error when the fallback also fails, so
+   *         the caller's degraded-routing log names the real cause.
+   */
+  private async completeOnFallback(
+    operation: AuxiliaryOperation,
+    params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
+    options: {
+      signal?: AbortSignal;
+      onUsage?: AuxiliaryUsageSink;
+      fallback?: StructuredDecisionFallback;
+    },
+    auxiliaryError: unknown,
+  ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
+    const reason =
+      auxiliaryError instanceof Error ? auxiliaryError.message : auxiliaryError;
+    try {
+      const result = await options.fallback!(params, options.signal);
+      const response = {
+        id: 'chat-model-fallback',
+        object: 'chat.completion',
+        created: Math.floor(Date.now() / 1000),
+        model: result.model.id,
+        choices: [
+          {
+            index: 0,
+            finish_reason: 'stop',
+            logprobs: null,
+            message: { role: 'assistant', content: result.text, refusal: null },
+          },
+        ],
+      } as OpenAI.Chat.Completions.ChatCompletion;
+      if (result.usage)
+        options.onUsage?.(
+          { ...result.usage, modelId: result.model.id, region: result.region },
+          result.model,
+          result.region,
+        );
+      const accepted = ToolRouterService.acceptDecision(
+        operation,
+        params,
+        response,
+      );
+      if (!accepted)
+        throw new Error(
+          `${result.model.id} returned an invalid ${operation} decision`,
+        );
+      console.warn(
+        `[ToolRouterService] Auxiliary ${operation} decision unavailable (${reason}); decided by the chat model ${result.model.id} instead`,
+      );
+      ToolRouterService.markDecidedBy(operation, 'chat_model');
+      return accepted;
+    } catch (fallbackError) {
+      console.warn(
+        `[ToolRouterService] Chat-model fallback for the ${operation} decision failed:`,
+        fallbackError instanceof Error ? fallbackError.message : fallbackError,
+      );
+      throw auxiliaryError;
+    }
+  }
+
+  /**
+   * Records which model made a decision on the active span. Telemetry is
+   * best-effort: a tracing failure must never discard a valid decision.
+   */
+  private static markDecidedBy(
+    operation: AuxiliaryOperation,
+    decider: 'chat_model',
+  ): void {
+    try {
+      trace
+        .getActiveSpan?.()
+        ?.setAttribute(`tool_router.${operation}_decided_by`, decider);
+    } catch {
+      // Tracing unavailable; the log line above already names the decider.
+    }
+  }
+
+  /** The auxiliary chain (or the plain regional client when none is wired). */
+  private async completeOnAuxiliary(
     region: 'US' | 'EU' | undefined,
     operation: AuxiliaryOperation,
     params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
@@ -180,56 +302,8 @@ export class ToolRouterService {
       });
     return this.executor.execute(
       params,
-      (response) => {
-        const text = response.choices[0]?.message.content;
-        if (!text) return undefined;
-        try {
-          const parsed = JSON.parse(text);
-          if (!parsed || typeof parsed !== 'object') return undefined;
-          if (
-            params.response_format?.type === 'json_schema' &&
-            params.response_format.json_schema.schema
-          ) {
-            const schema = params.response_format.json_schema.schema;
-            if (operation === 'tools') {
-              const value = { ...parsed };
-              delete value.relevantSkills;
-              const properties = {
-                ...(schema.properties as Record<string, unknown>),
-              };
-              delete properties.relevantSkills;
-              const required = (schema.required as string[]).filter(
-                (key) => key !== 'relevantSkills',
-              );
-              if (
-                !matchesAuxiliarySchema(value, {
-                  ...schema,
-                  properties,
-                  required,
-                })
-              )
-                return undefined;
-            } else if (!matchesAuxiliarySchema(parsed, schema))
-              return undefined;
-          }
-          if (operation === 'skills' && !Array.isArray(parsed.relevantSkills))
-            return undefined;
-          if (
-            operation === 'tools' &&
-            typeof parsed.needsWebSearch !== 'boolean'
-          )
-            return undefined;
-          if (
-            operation === 'trim' &&
-            (typeof parsed.isLengthReductionRequest !== 'boolean' ||
-              typeof parsed.targetIsAttachedDocument !== 'boolean')
-          )
-            return undefined;
-          return response;
-        } catch {
-          return undefined;
-        }
-      },
+      (response) =>
+        ToolRouterService.acceptDecision(operation, params, response),
       {
         region: region ?? 'EU',
         operation,
@@ -255,6 +329,66 @@ export class ToolRouterService {
         },
       },
     );
+  }
+
+  /**
+   * Accepts a decision response only when it is a JSON object of the
+   * requested shape: the schema (minus the skills field, which may degrade
+   * on its own for 'tools') and the operation's required booleans. Shared
+   * by the auxiliary chain and the chat-model fallback so both are held to
+   * the same contract.
+   *
+   * @returns The response, or undefined when it must be rejected.
+   */
+  private static acceptDecision(
+    operation: AuxiliaryOperation,
+    params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
+    response: OpenAI.Chat.Completions.ChatCompletion,
+  ): OpenAI.Chat.Completions.ChatCompletion | undefined {
+    const text = response.choices[0]?.message.content;
+    if (!text) return undefined;
+    try {
+      const parsed = JSON.parse(text);
+      if (!parsed || typeof parsed !== 'object') return undefined;
+      if (
+        params.response_format?.type === 'json_schema' &&
+        params.response_format.json_schema.schema
+      ) {
+        const schema = params.response_format.json_schema.schema;
+        if (operation === 'tools') {
+          const value = { ...parsed };
+          delete value.relevantSkills;
+          const properties = {
+            ...(schema.properties as Record<string, unknown>),
+          };
+          delete properties.relevantSkills;
+          const required = (schema.required as string[]).filter(
+            (key) => key !== 'relevantSkills',
+          );
+          if (
+            !matchesAuxiliarySchema(value, {
+              ...schema,
+              properties,
+              required,
+            })
+          )
+            return undefined;
+        } else if (!matchesAuxiliarySchema(parsed, schema)) return undefined;
+      }
+      if (operation === 'skills' && !Array.isArray(parsed.relevantSkills))
+        return undefined;
+      if (operation === 'tools' && typeof parsed.needsWebSearch !== 'boolean')
+        return undefined;
+      if (
+        operation === 'trim' &&
+        (typeof parsed.isLengthReductionRequest !== 'boolean' ||
+          typeof parsed.targetIsAttachedDocument !== 'boolean')
+      )
+        return undefined;
+      return response;
+    } catch {
+      return undefined;
+    }
   }
 
   private warnedUsFallback = false;
@@ -398,12 +532,14 @@ export class ToolRouterService {
     documentFilename: string;
     region?: 'US' | 'EU';
     signal?: AbortSignal;
+    /** The user's chat model, used if the auxiliary chain fails. */
+    decisionFallback?: StructuredDecisionFallback;
   }): Promise<TrimTarget | null> {
     try {
       const recentMessages = this.getRecentMessages(request.messages, 6);
       const lastIndex = recentMessages.length - 1;
 
-      const systemPrompt = `You classify whether the user's LAST message asks to REDUCE an attached document to a target length. The attached document is: ${request.documentFilename}
+      const systemPrompt = `You classify whether the user's LAST message asks to REDUCE (or, the mirror case, EXPAND) an attached document to a target length. The attached document is: ${request.documentFilename}
 
 Users write in ANY language — classify by MEANING, never by keywords.
 
@@ -413,10 +549,12 @@ isLengthReductionRequest is true ONLY when the message asks to shorten/trim/cond
 Follow-up phrasings count when the conversation shows a pending trim request ("please do it", "vas-y").
 
 It is FALSE for: summarizing, critiquing, translating, expanding, formatting, questions about the document, or length mentions that are not reduction targets ("the doc is 6000 words — fix the typos").
+It is also FALSE when the length is a limit for a NEW deliverable the user asks you to create from the attached documents — a review, report, memo or analysis ("create a Word report, maximum four pages", "rédige une note de 2 pages à partir de ces rapports"). Writing a new document of a given length is not shortening the attached one; set lengthLimitIsForNewDeliverable true.
 
 targetIsAttachedDocument identifies WHAT is being shortened. It is true only when the request refers to the attached document file (${request.documentFilename}). It is FALSE when the user wants to shorten text that lives in the conversation itself — a draft they typed or pasted into the chat, a previous assistant answer, a quoted passage — even if a file was uploaded earlier in the conversation. When the last messages revolve around conversation text rather than the file, the file is not the target.
 
-When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit "none".`;
+isLengthIncreaseRequest is the mirror case: true ONLY when the message asks to lengthen/expand the attached document to an explicit target (a count, or a multiple such as "double it" → 200 percent_to_keep). Never set both.
+When either is true: set targetValue and targetUnit. When both are false: targetValue 0, targetUnit "none".`;
 
       const response = await this.complete(
         request.region,
@@ -454,6 +592,7 @@ When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit
           timeout: SKILL_LIMITS.routingTimeoutMs,
           maxRetries: 0,
           onUsage: request.onUsage,
+          fallback: request.decisionFallback,
         },
       );
 
@@ -467,10 +606,6 @@ When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit
         '[ToolRouterService] Document-trim classification failed:',
         error instanceof Error ? error.message : error,
       );
-      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-      devTrace('trim-classify-error', {
-        error: error instanceof Error ? error.message.slice(0, 200) : 'unknown',
-      });
       return null;
     }
   }
@@ -480,17 +615,29 @@ When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit
     classification: TrimClassification,
   ): TrimTarget | null {
     const {
+      lengthLimitIsForNewDeliverable,
       isLengthReductionRequest,
+      isLengthIncreaseRequest,
       targetIsAttachedDocument,
       targetValue,
       targetUnit,
     } = classification;
+    // Exactly one direction, or neither: contradictory flags are treated as
+    // "not a length request" rather than guessed at.
+    const expand =
+      isLengthIncreaseRequest === true && !isLengthReductionRequest;
     // Both halves must hold: a length target alone is not enough — the
     // pipeline exists to preserve FILE formatting, so shortening text that
     // lives in the chat (a pasted draft, a prior answer) must stay a normal
     // chat turn even while a trimmable file sits earlier in the conversation.
+    // A page limit on a NEW deliverable ("create a report, max four pages")
+    // is never a trim, whatever the other fields say: on 2026-11-07 such a
+    // request was trimmed instead of analysed, so no code ran and no report
+    // was produced.
     if (
-      !isLengthReductionRequest ||
+      lengthLimitIsForNewDeliverable === true ||
+      (!isLengthReductionRequest && !expand) ||
+      (isLengthReductionRequest && isLengthIncreaseRequest === true) ||
       !targetIsAttachedDocument ||
       targetUnit === 'none' ||
       !Number.isFinite(targetValue) ||
@@ -498,34 +645,40 @@ When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit
     ) {
       return null;
     }
-    switch (targetUnit) {
-      case 'words':
-        return {
-          kind: 'absolute',
-          unit: 'words',
-          target: Math.round(targetValue),
-          approx: false,
-        };
-      case 'characters':
-        return {
-          kind: 'absolute',
-          unit: 'characters',
-          target: Math.round(targetValue),
-          approx: false,
-        };
-      case 'pages':
-        return {
-          kind: 'absolute',
-          unit: 'words',
-          target: Math.round(targetValue * WORDS_PER_PAGE),
-          approx: true,
-        };
-      case 'percent_to_keep':
-        if (targetValue >= 100) return null;
-        return { kind: 'ratio', keep: targetValue / 100, approx: true };
-      default:
-        return null;
-    }
+    const target = ((): TrimTarget | null => {
+      switch (targetUnit) {
+        case 'words':
+          return {
+            kind: 'absolute',
+            unit: 'words',
+            target: Math.round(targetValue),
+            approx: false,
+          };
+        case 'characters':
+          return {
+            kind: 'absolute',
+            unit: 'characters',
+            target: Math.round(targetValue),
+            approx: false,
+          };
+        case 'pages':
+          return {
+            kind: 'absolute',
+            unit: 'words',
+            target: Math.round(targetValue * WORDS_PER_PAGE),
+            approx: true,
+          };
+        case 'percent_to_keep':
+          // A ratio must move the length the requested way: below 100 % to
+          // reduce, above it to expand.
+          if (expand ? targetValue <= 100 : targetValue >= 100) return null;
+          return { kind: 'ratio', keep: targetValue / 100, approx: true };
+        default:
+          return null;
+      }
+    })();
+    if (!target) return null;
+    return expand ? { ...target, direction: 'expand' } : target;
   }
 
   /**
@@ -606,13 +759,13 @@ Code execution is needed for:
 - Non-trivial calculations, statistics, simulations, or numeric verification
 - File transformations (parse, filter, aggregate, convert, export)
 - Producing downloadable files (Excel, CSV, Word, charts) from data or content in the conversation — e.g. "export this as a spreadsheet", "make a document out of these notes"
-- Editing an ATTACHED document into a new version of itself — shortening or trimming it to a target length (words, characters, or pages), restructuring, reformatting, or converting it — the deliverable is a new file in the original format
+- Editing an ATTACHED document into a new version of itself — shortening or trimming it to a target length (words, characters, or pages), lengthening or expanding it, restructuring, reformatting, or converting it — the deliverable is a new file in the original format
 
 Code execution is NOT needed for:
 - Writing code examples or tutorials for the user to run themselves
 - Explaining concepts, debugging by inspection, code review
 - Simple arithmetic a model can do reliably
-- Pure text tasks answered directly in chat (writing, translating, or summarizing pasted text). But when the request is to shorten, rewrite, translate, or reformat an ATTACHED FILE, that is a file transformation and DOES need code execution — regardless of whether the target is expressed in words, characters, or pages
+- Pure text tasks answered directly in chat (writing, translating, or summarizing pasted text). But when the request is to shorten, lengthen, rewrite, translate, or reformat an ATTACHED FILE, that is a file transformation and DOES need code execution — regardless of whether the target is expressed in words, characters, or pages
 
 IMPORTANT: Always provide codeTask in your response:
 - If needsCodeExecution is true, provide a self-contained task description (what to compute/produce, referencing attached files by their exact names from the manifest — current-turn OR earlier-turn)
@@ -849,8 +1002,13 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                     timeout: SKILL_LIMITS.routingTimeoutMs,
                     maxRetries: 0,
                     onUsage: request.onUsage,
+                    fallback: request.decisionFallback,
                   }
-                : { signal: request.signal, onUsage: request.onUsage },
+                : {
+                    signal: request.signal,
+                    onUsage: request.onUsage,
+                    fallback: request.decisionFallback,
+                  },
             );
 
             const result = JSON.parse(
@@ -985,8 +1143,6 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
             console.error(
               `[ToolRouterService] Falling back to no-tools (web_search disabled) — ${failure.reason}: ${errMessage}`,
             );
-            // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
-            devTrace('tool-router-error', { error: errMessage.slice(0, 300) });
             span.recordException(error as Error);
             span.setAttribute('tool_router.fallback', 'error');
             span.setAttribute('tool_router.fallback_reason', errMessage);
