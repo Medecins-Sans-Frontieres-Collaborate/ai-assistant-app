@@ -485,7 +485,9 @@ export const ChatInput = ({
       'text/markdown': ['.md'],
     },
     maxSize: FILE_SIZE_LIMITS.FILE_MAX_BYTES,
-    maxFiles: 5,
+    // No `maxFiles`: react-dropzone rejects an over-limit drop silently.
+    // onFileUpload checks the per-message limits (including files already
+    // attached) and explains any refusal.
     noClick: true, // Don't trigger file picker on click
     noKeyboard: true, // Don't trigger on keyboard
   });

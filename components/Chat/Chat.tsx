@@ -27,6 +27,7 @@ import { isLocalModel } from '@/lib/services/models/localModels';
 import { isAgentShapedModelId } from '@/lib/utils/app/agentAttachment';
 import { downloadChatDebugBundle } from '@/lib/utils/app/export/chatDebugExport';
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
+import { fallbackRequirementsForTurn } from '@/lib/utils/shared/chat/fallbackRequirements';
 import { entryToDisplayMessage } from '@/lib/utils/shared/chat/messageVersioning';
 import {
   escalateModelTimeoutSeconds,
@@ -55,6 +56,7 @@ import { ModelSwitchPrompt } from './ModelSwitchPrompt';
 import { ModelUnavailableNotice } from './ModelUnavailableNotice';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -591,6 +593,7 @@ export function Chat({
   // label always names a model that actually exists right now — MUST match
   // what retryFailedWithFallbackModel will pick.
   const userRegion = useSettingsStore((s) => s.userRegion);
+  const interpreterMode = useChatInputStore((s) => s.interpreterMode);
   const fallbackModelForRetry = useMemo(() => {
     if (!failedConversation) return null;
     const model = failedConversation.model;
@@ -606,8 +609,12 @@ export function Chat({
       availableModels: models.length > 0 ? models : undefined,
       preferredDefaultId: defaultModelId || null,
       userRegion: userRegion ?? null,
+      requirements: fallbackRequirementsForTurn({
+        interpreterMode,
+        entries: failedConversation.messages,
+      }),
     });
-  }, [failedConversation, models, defaultModelId, userRegion]);
+  }, [failedConversation, models, defaultModelId, userRegion, interpreterMode]);
   const canRetryFallback =
     !!error && !isRetrying && errorIsRecoverable && !!fallbackModelForRetry;
 
