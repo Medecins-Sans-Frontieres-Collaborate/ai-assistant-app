@@ -1,6 +1,7 @@
 import { InterpreterMode } from '@/types/interpreterMode';
 import { SearchMode } from '@/types/searchMode';
 
+import { onFileUpload } from '@/client/handlers/chatInput/file-upload';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -244,6 +245,78 @@ describe('chatInputStore', () => {
       useChatInputStore.getState().setUsedPromptVariables(null);
 
       expect(useChatInputStore.getState().usedPromptVariables).toBeNull();
+    });
+  });
+
+  describe('handleFileUpload batches', () => {
+    it('runs a second selection alongside the first instead of aborting it', async () => {
+      const signals: AbortSignal[] = [];
+      const releases: Array<() => void> = [];
+      vi.mocked(onFileUpload).mockImplementation(
+        async (_e, _a, _b, _c, _d, _f, signal) => {
+          signals.push(signal as AbortSignal);
+          await new Promise<void>((resolve) => releases.push(resolve));
+        },
+      );
+      const a = new File(['a'], 'a.pdf');
+      const b = new File(['b'], 'b.pdf');
+      const first = useChatInputStore.getState().handleFileUpload([a]);
+      const second = useChatInputStore.getState().handleFileUpload([b]);
+
+      expect(signals).toHaveLength(2);
+      expect(signals[0].aborted).toBe(false);
+      expect(useChatInputStore.getState().uploadBatches).toHaveLength(2);
+
+      // Removing an in-flight file cancels only the batch carrying it.
+      useChatInputStore.getState().removeFile({
+        name: 'b.pdf',
+        type: '',
+        status: 'uploading',
+        previewUrl: '',
+        file: b,
+      });
+      expect(signals[1].aborted).toBe(true);
+      expect(signals[0].aborted).toBe(false);
+
+      releases.forEach((release) => release());
+      await Promise.all([first, second]);
+      expect(useChatInputStore.getState().uploadBatches).toHaveLength(0);
+    });
+
+    it('passes the composer previews so per-message limits see them', async () => {
+      vi.mocked(onFileUpload).mockResolvedValue(undefined);
+      const existing = [
+        {
+          name: 'x.pdf',
+          type: 'application/pdf',
+          status: 'completed' as const,
+          previewUrl: '',
+        },
+      ];
+      useChatInputStore.setState({ filePreviews: existing });
+      await useChatInputStore
+        .getState()
+        .handleFileUpload([new File(['y'], 'y.pdf')]);
+      expect(vi.mocked(onFileUpload).mock.calls.at(-1)?.[7]).toEqual(existing);
+    });
+
+    it('clearUploadState aborts every batch in flight', async () => {
+      const signals: AbortSignal[] = [];
+      vi.mocked(onFileUpload).mockImplementation(
+        async (_e, _a, _b, _c, _d, _f, signal) => {
+          signals.push(signal as AbortSignal);
+          await new Promise(() => {});
+        },
+      );
+      void useChatInputStore
+        .getState()
+        .handleFileUpload([new File(['a'], 'a.pdf')]);
+      void useChatInputStore
+        .getState()
+        .handleFileUpload([new File(['b'], 'b.pdf')]);
+      useChatInputStore.getState().clearUploadState();
+      expect(signals.every((s) => s.aborted)).toBe(true);
+      expect(useChatInputStore.getState().uploadBatches).toHaveLength(0);
     });
   });
 });
