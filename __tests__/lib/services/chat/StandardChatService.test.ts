@@ -153,6 +153,70 @@ describe('StandardChatService', () => {
       ).rejects.toThrow(/No EU endpoint/);
       expect(mockHandler.executeRequest).not.toHaveBeenCalled();
     });
+    describe('deployment throughput ceiling', () => {
+      const astra = OpenAIModels['gpt-6-astra' as OpenAIModelID];
+      const messages: Message[] = [
+        { role: 'user', content: 'Two workbooks', messageType: undefined },
+      ];
+
+      // Runs handleChat up to region resolution, then stops it there (an EU
+      // user with no EU client throws) — far enough to observe the planned
+      // window without mocking the provider call.
+      const planWith = async (
+        selected: { modelId: string; modelConfig: typeof astra },
+        planningTokensPerMinute?: number,
+      ) => {
+        vi.mocked(mockModelSelector.selectModel).mockReturnValue(selected);
+        vi.mocked(mockToneService.applyTone).mockReturnValue('Core');
+        vi.mocked(mockStreamingService.getStreamConfig).mockReturnValue({
+          stream: false,
+          temperature: 1,
+        });
+        const { getMessagesToSend } =
+          await import('@/lib/utils/server/chat/chat');
+        vi.mocked(getMessagesToSend).mockResolvedValue(messages);
+        await expect(
+          service.handleChat({
+            model: astra,
+            messages,
+            user: { ...testUser, region: 'EU' },
+            systemPrompt: 'Core',
+            planningTokensPerMinute,
+          }),
+        ).rejects.toThrow(/No EU endpoint/);
+        const planned = vi.mocked(mockStreamingService.getStreamConfig).mock
+          .calls[0][3];
+        const historyOptions = vi.mocked(getMessagesToSend).mock.calls[0][5];
+        return { planned, historyOptions };
+      };
+
+      it('plans a 250K TPM Astra turn inside what the deployment admits', async () => {
+        const { planned, historyOptions } = await planWith(
+          { modelId: astra.id, modelConfig: astra },
+          250000,
+        );
+        expect(planned?.maxLength).toBe(225000);
+        expect(historyOptions?.windowTokens).toBe(225000 - astra.tokenLimit);
+      });
+
+      it('keeps the catalog window when the ceiling is unknown', async () => {
+        const { planned } = await planWith({
+          modelId: astra.id,
+          modelConfig: astra,
+        });
+        expect(planned?.maxLength).toBe(astra.maxLength);
+      });
+
+      it('ignores the ceiling when the selector swapped models', async () => {
+        const gpt5 = OpenAIModels[OpenAIModelID.GPT_5_2];
+        const { planned } = await planWith(
+          { modelId: gpt5.id, modelConfig: gpt5 },
+          10000,
+        );
+        expect(planned?.maxLength).toBe(gpt5.maxLength);
+      });
+    });
+
     it('should handle standard chat request successfully (non-streaming)', async () => {
       const model = OpenAIModels[OpenAIModelID.GPT_5_2];
       const messages: Message[] = [
