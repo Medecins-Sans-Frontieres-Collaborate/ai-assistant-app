@@ -125,11 +125,15 @@ export async function handleFileUpload(
 
 1. User selects files via `<input type="file">` or drag-drop
 2. `categorizeFile()` determines file type (image, audio, video, document)
-3. Validation against limits in `lib/constants/fileLimits.ts`:
-   - Max 10 total files
+3. Validation against PER-MESSAGE limits in `client/handlers/chatInput/attachmentLimits.ts`
+   (files already in the composer count, so attaching in several selections cannot exceed them):
+   - Max 10 total files (raised to the documents limit when that is higher)
    - Max 10 images
-   - Max 3 documents
+   - Documents (anything not an image or audio/video): `feature.upload.documentsPerMessage`,
+     default 5, admin-overridable per user/domain/group up to 20 (config/limits.ts). The chat
+     route enforces the same limit server-side (createLimitsMiddleware).
    - Max 1 audio/video file
+   - Max 1.5GB total per message
 4. Size limits checked per category:
    - `IMAGE`: 5MB
    - `AUDIO`: 1GB
