@@ -191,6 +191,24 @@ export interface OpenAIModel {
    */
   hostedIn?: ('US' | 'EU')[];
   /**
+   * Tokens-per-minute limit of the deployment that serves this model in the
+   * home region (Standard-family SKUs only). Runtime-only like hostedIn —
+   * stamped by discovery, never authored in config/models.json. When set,
+   * `maxLength` has already been reduced to what that deployment admits per
+   * request; see lib/utils/shared/modelThroughput.ts.
+   */
+  tokensPerMinute?: number;
+  /**
+   * Models to try FIRST when this one fails with a model-specific error,
+   * in order, before the default and the environment fallback chain — so a
+   * failed turn lands on the closest equivalent (GPT-6 Astra → the Sol line)
+   * instead of the cheapest model. Authored in config/models.json or set by
+   * the deployment's `ui-fallback` ARM tag (comma-separated; the tag wins).
+   * Each candidate still passes the usual served/region/eligibility/admin
+   * checks in getFallbackModel.
+   */
+  fallbackModelIds?: string[];
+  /**
    * Where inference runs. 'azure' (default when absent) = inside MSF's Azure
    * environment; 'external' = the provider's own infrastructure reached
    * through Azure AI Foundry (currently the claude-* models); 'local' =
@@ -596,6 +614,7 @@ const openAIModelSchema = z.object({
   reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
   supportsReasoningEffort: z.boolean().optional(),
   supportsMinimalReasoning: z.boolean().optional(),
+  fallbackModelIds: z.array(z.string().min(1)).optional(),
   verbosity: z.enum(['low', 'medium', 'high']).optional(),
   supportsVerbosity: z.boolean().optional(),
   avoidSystemPrompt: z.boolean().optional(),
