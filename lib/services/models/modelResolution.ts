@@ -6,6 +6,11 @@
  * route wires these together with ModelDiscoveryService + the request session.
  * See docs/MODEL_DISCOVERY_DESIGN.md (§3.3, §3.4, §3.5).
  */
+import {
+  applyAdmissionCeiling,
+  deploymentTokensPerMinute,
+} from '@/lib/utils/shared/modelThroughput';
+
 import { ModelRetirementFacts, OpenAIModel } from '@/types/openai';
 
 import { DeployedModel } from './ModelDiscoveryService';
@@ -163,6 +168,14 @@ export function applyTagOverlay(
   // is usable (served, selectable, not itself retiring) is decided where the
   // served list is known — lib/utils/shared/modelRetirement.ts.
   if (tags['ui-successor']?.trim()) m.successorId = tags['ui-successor'].trim();
+  // Closest-equivalent fallback order, e.g. `ui-fallback: gpt-6.1-sol,gpt-5.6-sol`.
+  // Replaces the catalog list so ops can re-point a fallback without a deploy;
+  // every candidate is still vetted by getFallbackModel.
+  const fallbackIds = (tags['ui-fallback'] ?? '')
+    .split(',')
+    .map((id) => id.trim())
+    .filter((id) => id.length > 0);
+  if (fallbackIds.length > 0) m.fallbackModelIds = fallbackIds;
   // There is deliberately NO ui-hosting overlay: `hosting` is a compliance
   // disclosure ("inference runs outside MSF's Azure environment"), and an ARM
   // tag must not be able to relabel how data is handled. Changing it requires
@@ -197,16 +210,23 @@ export function synthesizeUnknownModel(d: DeployedModel): OpenAIModel {
 }
 
 /**
- * Stamps the discovery facts retirement handling runs on: when Azure stops
- * serving the deployed model version, and — only when it differs from the
- * deployment name — which model the deployment actually runs.
+ * Stamps the deployment's facts onto its model: the throughput ceiling, when
+ * Azure stops serving the deployed model version (retirement handling), and
+ * — only when it differs from the deployment name — which model the
+ * deployment actually runs.
  */
-function withRetirementFacts(
+function withDeploymentFacts(
   model: OpenAIModel,
   d: DeployedModel,
 ): OpenAIModel {
   return {
-    ...model,
+    // The deployment's TPM limit caps the usable window (see
+    // lib/utils/shared/modelThroughput.ts), so the picker and every budget
+    // computed from this entry reflect what Azure will actually admit.
+    ...applyAdmissionCeiling(
+      model,
+      deploymentTokensPerMinute(d.sku, d.capacity),
+    ),
     ...(d.retiresAt ? { retiresAt: d.retiresAt } : {}),
     ...(d.modelName !== d.deploymentName
       ? { deploymentModelName: d.modelName }
@@ -262,9 +282,9 @@ export function mergeDiscoveryWithMetadata(
     if (!isDeploymentVisibleInRing(d.tags, opts.ring)) continue;
     const meta = metadataById[d.deploymentName];
     if (meta) {
-      out.push(withRetirementFacts(applyTagOverlay({ ...meta }, d.tags), d));
+      out.push(withDeploymentFacts(applyTagOverlay({ ...meta }, d.tags), d));
     } else if (opts.showUnknown) {
-      out.push(withRetirementFacts(synthesizeUnknownModel(d), d));
+      out.push(withDeploymentFacts(synthesizeUnknownModel(d), d));
     }
   }
   return out;
