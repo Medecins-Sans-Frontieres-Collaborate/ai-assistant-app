@@ -76,6 +76,50 @@ describe('ActiveFileInjector', () => {
     expect(result.activeFilesTokensConsumedThisTurn).toBe(20_000);
   });
 
+  it('skips files FileProcessor already placed in context, keeping them active', async () => {
+    // 2026-11-07: a pinned workbook uploaded this turn was inlined by
+    // FileProcessor AND injected here — the same ~47K tokens twice.
+    const context = createTestChatContext({
+      messages: [{ role: 'user', content: 'hello' }],
+    });
+    context.activeFiles = [
+      makeFile('uploaded', 20_000, { pinned: true }),
+      makeFile('earlier', 1_000),
+    ];
+    context.attachmentUrlsProcessedThisTurn = ['https://files/uploaded'];
+
+    const result = await new ActiveFileInjector().execute(context);
+
+    expect(result.systemPrompt).not.toContain('x'.repeat(20_000 * 4));
+    expect(result.systemPrompt).toContain('x'.repeat(1_000 * 4));
+    expect(result.activeFilesTokensConsumedThisTurn).toBe(1_000);
+    expect(result.activeFilesDroppedThisTurn).toEqual([]);
+    const uploaded = result.activeFiles!.find((f) => f.id === 'uploaded')!;
+    expect(uploaded.pinned).toBe(true);
+    expect(uploaded.lastUsedAt).toBeDefined();
+  });
+
+  it('sizes the per-turn budget by the deployment throughput of an interpreter turn', async () => {
+    // Test model (128K/16K): 33.5K budget unclamped; 150K TPM / 3 calls
+    // -> 45K window -> 8.6K budget. 8K + 20K both fit the first, only the
+    // 8K file fits the second. (A single over-budget file is always kept
+    // as the degraded fallback, so the bracket needs two.)
+    const build = (servingTokensPerMinute?: number) => {
+      const context = createTestChatContext({
+        messages: [{ role: 'user', content: 'hello' }],
+      });
+      context.activeFiles = [makeFile('small', 8_000), makeFile('big', 20_000)];
+      context.servingTokensPerMinute = servingTokensPerMinute;
+      context.nativeCodeInterpreter = { forced: false, inputFiles: [] };
+      return context;
+    };
+    const unclamped = await new ActiveFileInjector().execute(build());
+    expect(unclamped.activeFilesDroppedThisTurn).toEqual([]);
+
+    const clamped = await new ActiveFileInjector().execute(build(150_000));
+    expect(clamped.activeFilesDroppedThisTurn).toEqual(['big']);
+  });
+
   it('stamps lastUsedAt only on selected files, not on dropped ones', async () => {
     const context = createTestChatContext({
       messages: [{ role: 'user', content: 'hello' }],
