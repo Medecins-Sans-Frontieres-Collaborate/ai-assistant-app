@@ -76,6 +76,16 @@ export async function register() {
       );
     }
 
+    // Load deployment throughput (TPM) so the first chat turns after boot
+    // plan within their deployment's admission ceiling. Fire-and-forget.
+    try {
+      (
+        await import('@/lib/services/models/deploymentThroughput')
+      ).warmServingThroughput();
+    } catch (err) {
+      console.warn('[Instrumentation] Throughput warm-up skipped:', err);
+    }
+
     // Rehearse the static org RAG agents' search index against the retrieval
     // contract (admin-authored agents are validated on save; the file-based
     // ones have no other admission gate). Fire-and-forget: one Search
