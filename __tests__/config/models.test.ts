@@ -1,13 +1,16 @@
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import {
+  FallbackRequirements,
   getCurrentEnvironment,
+  getDeclaredFallbackIds,
   getDefaultModel,
   getFallbackChain,
   getFallbackModel,
   getModelConfig,
   isDeploymentNotFoundError,
   isModelDisabled,
+  meetsFallbackRequirements,
 } from '@/config/models';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -331,6 +334,226 @@ describe('Model Configuration', () => {
         { availableModels: served },
       );
       expect(fallback).toBeNull();
+    });
+  });
+
+  describe('declared fallback preferences (fallbackModelIds)', () => {
+    beforeEach(() => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
+    });
+
+    const mkModel = (
+      id: string,
+      over: Partial<OpenAIModel> = {},
+    ): OpenAIModel =>
+      ({
+        id,
+        name: id,
+        maxLength: 272000,
+        tokenLimit: 32000,
+        series: 'gpt',
+        variant: 'standard',
+        ...over,
+      }) as OpenAIModel;
+
+    // Prod-shaped served list: Astra plus the Sol line, alongside the
+    // cheaper default (gpt-5.4) that leads the environment chain.
+    const served: OpenAIModel[] = [
+      mkModel('gpt-6-astra', {
+        versionLabel: '6',
+        fallbackModelIds: ['gpt-6.1-sol', 'gpt-5.6-sol'],
+      }),
+      mkModel('gpt-6.1-sol', {
+        versionLabel: '6.1',
+        fallbackModelIds: ['gpt-5.6-sol'],
+      }),
+      mkModel('gpt-5.6-sol', { versionLabel: '5.6' }),
+      mkModel('gpt-5.4', { versionLabel: '5.4', maxLength: 128000 }),
+    ];
+
+    it('ships Astra -> Sol in the catalog', () => {
+      expect(
+        OpenAIModels['gpt-6-astra' as OpenAIModelID]?.fallbackModelIds,
+      ).toEqual(['gpt-6.1-sol', 'gpt-5.6-sol']);
+    });
+
+    it('sends a failed Astra turn to GPT-6.1 Sol, not the cheap default', () => {
+      const fallback = getFallbackModel(['gpt-6-astra'], [], {
+        availableModels: served,
+        preferredDefaultId: 'gpt-5.4',
+      });
+      expect(fallback?.id).toBe('gpt-6.1-sol');
+    });
+
+    it('steps down the Sol line before leaving it', () => {
+      const fallback = getFallbackModel(['gpt-6-astra', 'gpt-6.1-sol'], [], {
+        availableModels: served,
+        preferredDefaultId: 'gpt-5.4',
+      });
+      expect(fallback?.id).toBe('gpt-5.6-sol');
+    });
+
+    it('falls through to the default once every declared target is spent', () => {
+      const fallback = getFallbackModel(
+        ['gpt-6-astra', 'gpt-6.1-sol', 'gpt-5.6-sol'],
+        [],
+        { availableModels: served, preferredDefaultId: 'gpt-5.4' },
+      );
+      expect(fallback?.id).toBe('gpt-5.4');
+    });
+
+    it('skips a declared target that is not served', () => {
+      const withoutSol61 = served.filter((m) => m.id !== 'gpt-6.1-sol');
+      const fallback = getFallbackModel(['gpt-6-astra'], [], {
+        availableModels: withoutSol61,
+      });
+      expect(fallback?.id).toBe('gpt-5.6-sol');
+    });
+
+    it('skips a declared target the admin has blocked for this caller', () => {
+      const fallback = getFallbackModel(['gpt-6-astra'], ['GPT-6.1-SOL'], {
+        availableModels: served,
+      });
+      expect(fallback?.id).toBe('gpt-5.6-sol');
+    });
+
+    it('skips a declared target outside the caller region', () => {
+      const regional = served.map((m) =>
+        m.id === 'gpt-6.1-sol'
+          ? { ...m, hostedIn: ['US' as const] }
+          : { ...m, hostedIn: ['US' as const, 'EU' as const] },
+      );
+      const fallback = getFallbackModel(['gpt-6-astra'], [], {
+        availableModels: regional,
+        userRegion: 'EU',
+      });
+      expect(fallback?.id).toBe('gpt-5.6-sol');
+    });
+
+    it('lets a served entry (ui-fallback tag) override the catalog list', () => {
+      const retagged = served.map((m) =>
+        m.id === 'gpt-6-astra' ? { ...m, fallbackModelIds: ['gpt-5.4'] } : m,
+      );
+      expect(getDeclaredFallbackIds(['gpt-6-astra'], retagged)).toEqual([
+        'gpt-5.4',
+      ]);
+    });
+
+    it('orders and de-duplicates declarations across attempted models', () => {
+      expect(
+        getDeclaredFallbackIds(['gpt-6-astra', 'gpt-6.1-sol'], served),
+      ).toEqual(['gpt-6.1-sol', 'gpt-5.6-sol']);
+      expect(getDeclaredFallbackIds(['unknown-model'], served)).toEqual([]);
+    });
+  });
+
+  describe('capability-aware fallback (requirements)', () => {
+    beforeEach(() => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
+    });
+
+    const mk = (id: string, over: Partial<OpenAIModel> = {}): OpenAIModel =>
+      ({
+        id,
+        name: id,
+        maxLength: 128000,
+        tokenLimit: 16000,
+        ...over,
+      }) as OpenAIModel;
+
+    // Chain order puts the interpreter-less Mistral ahead of gpt-5-mini —
+    // the 2026-11-06 shape where a Word-memo turn landed on Mistral.
+    const served: OpenAIModel[] = [
+      mk('gpt-6-astra', {
+        supportsCodeInterpreter: true,
+        supportsVision: true,
+      }),
+      mk('Mistral-Large-3', { series: 'mistral' }),
+      mk('gpt-5-mini', {
+        series: 'gpt',
+        supportsCodeInterpreter: true,
+        supportsVision: true,
+      }),
+    ];
+    const pick = (
+      excluded: string[],
+      requirements?: FallbackRequirements,
+      models = served,
+    ) =>
+      getFallbackModel(excluded, [], {
+        availableModels: models,
+        preferredDefaultId: 'Mistral-Large-3',
+        requirements,
+      })?.id ?? null;
+
+    it('keeps chain order when nothing is required', () => {
+      expect(pick(['gpt-6-astra'])).toBe('Mistral-Large-3');
+    });
+
+    it('skips an interpreter-less model when the turn prefers code execution', () => {
+      expect(pick(['gpt-6-astra'], { codeInterpreter: 'prefer' })).toBe(
+        'gpt-5-mini',
+      );
+    });
+
+    it('still answers with an incapable model as a last resort when only preferred', () => {
+      expect(
+        pick(['gpt-6-astra', 'gpt-5-mini'], { codeInterpreter: 'prefer' }),
+      ).toBe('Mistral-Large-3');
+    });
+
+    it('never lands on an incapable model when code execution is required', () => {
+      expect(pick(['gpt-6-astra'], { codeInterpreter: 'require' })).toBe(
+        'gpt-5-mini',
+      );
+      expect(
+        pick(['gpt-6-astra', 'gpt-5-mini'], { codeInterpreter: 'require' }),
+      ).toBeNull();
+    });
+
+    it('prefers a vision model for an image turn', () => {
+      expect(pick(['gpt-6-astra'], { vision: 'prefer' })).toBe('gpt-5-mini');
+    });
+
+    it('honours a hard requirement even while only preferring another', () => {
+      const models = [
+        ...served,
+        mk('code-no-vision', { supportsCodeInterpreter: true }),
+      ];
+      // gpt-5-mini meets both; once it is spent, the code-capable model wins
+      // over the earlier-ranked Mistral even though it lacks vision.
+      expect(
+        pick(
+          ['gpt-6-astra', 'gpt-5-mini'],
+          { codeInterpreter: 'require', vision: 'prefer' },
+          models,
+        ),
+      ).toBe('code-no-vision');
+    });
+
+    it('reports capabilities per model', () => {
+      expect(
+        meetsFallbackRequirements(served[1], { codeInterpreter: 'prefer' }),
+      ).toBe(false);
+      expect(
+        meetsFallbackRequirements(served[2], {
+          codeInterpreter: 'require',
+          vision: 'prefer',
+        }),
+      ).toBe(true);
+      expect(meetsFallbackRequirements(served[1], {})).toBe(true);
+    });
+
+    it('marks every Astra/Sol fallback target as interpreter-capable in the catalog', () => {
+      for (const id of ['gpt-6.1-sol', 'gpt-5.6-sol', 'gpt-5.4']) {
+        expect(OpenAIModels[id as OpenAIModelID]?.supportsCodeInterpreter).toBe(
+          true,
+        );
+      }
+      expect(
+        OpenAIModels['Mistral-Large-3' as OpenAIModelID]
+          ?.supportsCodeInterpreter,
+      ).not.toBe(true);
     });
   });
 
