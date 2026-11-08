@@ -1,4 +1,10 @@
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
+import { attachmentToolsAvailable } from '@/lib/services/chat/processors/attachmentAccess';
+import {
+  ATTACHMENT_SERVER_ID,
+  buildAttachmentServer,
+  createAttachmentReader,
+} from '@/lib/services/chat/tools/attachmentReader';
 import { consumeToolBudget } from '@/lib/services/limits/toolBudget';
 import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
 import { createM365ToolExecutor } from '@/lib/services/m365/tools/executor';
@@ -39,6 +45,7 @@ import {
 } from '@/types/extractionRecipe';
 
 import { StandardChatService } from '../StandardChatService';
+import { planningTokensPerMinute } from '../enrichers/interpreterCapability';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 import {
@@ -456,6 +463,16 @@ export class StandardChatHandler extends BasePipelineStage {
             }
           }
 
+          // Attachment reader: the full text of files the prompt carries
+          // only as an excerpt or a summary, read back on demand.
+          if (context.attachmentTexts && attachmentToolsAvailable(context)) {
+            const reader = createAttachmentReader(context.attachmentTexts);
+            if (reader) {
+              resolvedMcpServers.push(buildAttachmentServer());
+              builtinExecutors[ATTACHMENT_SERVER_ID] = reader;
+            }
+          }
+
           // Custom-source (byom) routing: only the credential middleware can
           // set isCustomSourceModel (InputValidator strips it from the client
           // body), and it always binds endpoint + credential alongside. The
@@ -496,6 +513,7 @@ export class StandardChatHandler extends BasePipelineStage {
             botId: ragConfig?.botId,
             telemetry: context.telemetry,
             hostedRegion: context.hostedRegion,
+            planningTokensPerMinute: planningTokensPerMinute(context),
             transcript,
             citations,
             tone: context.tone,
@@ -710,14 +728,24 @@ export class StandardChatHandler extends BasePipelineStage {
       // The preamble matters: without it, models given only a condensed
       // summary respond by asking the user to "upload the file" they already
       // uploaded — the raw text simply cannot travel in the context window.
+      // With the attachment reader on this turn, the full text is one tool
+      // call away; without it, the summaries are all the model can see.
+      const fullTextReachable =
+        attachmentToolsAvailable(context) &&
+        fileSummaries.every((f) => context.attachmentTexts?.[f.filename]);
       processedTextParts.push(
         'The user has ALREADY uploaded the following file(s). The full text was ' +
           'extracted server-side and condensed into the summaries below because ' +
-          'it exceeds the context window — the raw file cannot be passed to you. ' +
-          'Never ask the user to upload, paste, or re-send the file. Work from ' +
-          'these summaries, and if the task genuinely requires the full verbatim ' +
-          'text, say that limitation explicitly while still doing your best with ' +
-          'what is here.\n\n' +
+          'it exceeds the context window. ' +
+          'Never ask the user to upload, paste, or re-send the file. ' +
+          (fullTextReachable
+            ? 'Work from these summaries, and when the answer needs a passage, ' +
+              'figure or wording they do not contain, find it in the full text ' +
+              'with the search_attachment and read_attachment tools.\n\n'
+            : 'The raw file cannot be passed to you. Work from these summaries, ' +
+              'and if the task genuinely requires the full verbatim text, say ' +
+              'that limitation explicitly while still doing your best with what ' +
+              'is here.\n\n') +
           fileSummaries
             .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
             .join('\n\n'),
@@ -730,7 +758,8 @@ export class StandardChatHandler extends BasePipelineStage {
       // to be uploaded — which the user already did.
       processedTextParts.push(
         'The user has ALREADY uploaded the following file(s); the fenced ' +
-          'blocks below are their full extracted text. Never ask the user to ' +
+          'blocks below are their extracted text (in full unless the block ' +
+          'is marked as an excerpt). Never ask the user to ' +
           'upload, paste, or re-send these files — work directly from this ' +
           'content.\n\n' +
           inlineFiles
