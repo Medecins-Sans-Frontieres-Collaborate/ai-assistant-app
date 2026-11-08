@@ -118,3 +118,30 @@ export function formatGeneratedFileSize(bytes: number | undefined): string {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
+
+/** Smallest body-text size, in points, a generated document may use. */
+export const GENERATED_DOCUMENT_MIN_BODY_PT = 10;
+
+/** Smallest size, in points, for tables, footnotes and captions. */
+export const GENERATED_DOCUMENT_MIN_TABLE_PT = 9;
+
+/**
+ * Layout rule for documents the code interpreter writes (.docx, .pptx, .pdf).
+ * Shared by the main system prompt (native interpreter) and the sub-tool
+ * interpreter's task preamble so both paths hold the same floor.
+ *
+ * Why: asked for a four-page review, the model met the page limit by setting
+ * table text to 6.5-7 pt (reproduced 2026-11-07, Tongolo review) even though
+ * the user had forbidden unreadably small text. A length limit has to be met
+ * by writing less, not by shrinking the type.
+ *
+ * The first wording (sizes plus "never shrink") was ignored on a live rerun
+ * the same day: Normal 8.5 pt, tables 7 pt. The model had a hard page limit
+ * and no permitted way out of it, so the rule is stated in the code the
+ * model writes (Pt values) and gives it one: go slightly over, and say so.
+ */
+export const GENERATED_DOCUMENT_LAYOUT_RULE =
+  `Readable type is a hard rule for every document you generate. In python-docx, set the Normal style to Pt(${GENERATED_DOCUMENT_MIN_BODY_PT}) or larger ` +
+  `and never pass anything below Pt(${GENERATED_DOCUMENT_MIN_TABLE_PT}) for a run, table cell, footnote or caption (in any other library: body at least ${GENERATED_DOCUMENT_MIN_BODY_PT} pt, everything else at least ${GENERATED_DOCUMENT_MIN_TABLE_PT} pt). ` +
+  'A page or length limit is met by cutting and condensing content (fewer words, merged table columns, detail moved to an annex), never by smaller type, narrower margins or tighter spacing. ' +
+  'If the essential content cannot fit at these sizes, deliver it slightly over the limit and tell the user, rather than shrinking it.';
