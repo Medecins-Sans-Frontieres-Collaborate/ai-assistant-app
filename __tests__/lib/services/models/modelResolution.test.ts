@@ -536,3 +536,97 @@ describe('mergeMultiRegionDiscovery', () => {
     ).toEqual([]);
   });
 });
+
+describe('deployment throughput ceiling', () => {
+  const astraMeta: Record<string, OpenAIModel> = {
+    'gpt-6-astra': {
+      id: 'gpt-6-astra',
+      name: 'GPT-6 Astra',
+      maxLength: 272000,
+      tokenLimit: 32000,
+      sdk: 'azure-openai',
+      fallbackModelIds: ['gpt-6.1-sol'],
+    },
+  };
+  const withSku = (sku: string, capacity: number): DeployedModel => ({
+    ...deployed('gpt-6-astra', 'OpenAI'),
+    sku,
+    capacity,
+  });
+
+  it('caps the window of a 250K TPM GlobalStandard deployment', () => {
+    const [astra] = mergeDiscoveryWithMetadata(
+      [withSku('GlobalStandard', 250)],
+      astraMeta,
+      { showUnknown: false },
+    );
+    expect(astra.tokensPerMinute).toBe(250000);
+    expect(astra.maxLength).toBe(225000);
+    expect(astra.tokenLimit).toBe(32000);
+  });
+
+  it('keeps the catalog window once capacity covers it', () => {
+    const [astra] = mergeDiscoveryWithMetadata(
+      [withSku('GlobalStandard', 1000)],
+      astraMeta,
+      { showUnknown: false },
+    );
+    expect(astra.maxLength).toBe(272000);
+    expect(astra.tokensPerMinute).toBe(1000000);
+  });
+
+  it('applies no ceiling to provisioned (PTU) capacity', () => {
+    const [astra] = mergeDiscoveryWithMetadata(
+      [withSku('GlobalProvisionedManaged', 50)],
+      astraMeta,
+      { showUnknown: false },
+    );
+    expect(astra.maxLength).toBe(272000);
+    expect(astra.tokensPerMinute).toBeUndefined();
+  });
+
+  it('keeps the home region ceiling when regions differ', () => {
+    const out = mergeMultiRegionDiscovery(
+      [
+        { region: 'EU', deployed: [withSku('DataZoneStandard', 250)] },
+        { region: 'US', deployed: [withSku('GlobalStandard', 1000)] },
+      ],
+      astraMeta,
+      { showUnknown: false },
+    );
+    expect(out[0].tokensPerMinute).toBe(250000);
+    expect(out[0].maxLength).toBe(225000);
+  });
+
+  it('never mutates the catalog metadata', () => {
+    mergeDiscoveryWithMetadata([withSku('GlobalStandard', 250)], astraMeta, {
+      showUnknown: false,
+    });
+    expect(astraMeta['gpt-6-astra'].maxLength).toBe(272000);
+    expect(astraMeta['gpt-6-astra'].tokensPerMinute).toBeUndefined();
+  });
+});
+
+describe('applyTagOverlay ui-fallback', () => {
+  const base: OpenAIModel = {
+    id: 'gpt-6-astra',
+    name: 'GPT-6 Astra',
+    maxLength: 272000,
+    tokenLimit: 32000,
+    fallbackModelIds: ['gpt-6.1-sol'],
+  };
+
+  it('replaces the catalog fallback order with the tag list', () => {
+    const out = applyTagOverlay(base, {
+      'ui-fallback': ' gpt-5.6-sol , gpt-6.1-sol ,',
+    });
+    expect(out.fallbackModelIds).toEqual(['gpt-5.6-sol', 'gpt-6.1-sol']);
+    expect(base.fallbackModelIds).toEqual(['gpt-6.1-sol']);
+  });
+
+  it('ignores a blank tag', () => {
+    expect(
+      applyTagOverlay(base, { 'ui-fallback': ' , ' }).fallbackModelIds,
+    ).toEqual(['gpt-6.1-sol']);
+  });
+});
