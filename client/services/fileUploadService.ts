@@ -4,6 +4,7 @@ import { cacheImageBase64 } from '@/lib/services/imageService';
 
 import type { ChunkedUploadSession } from '@/lib/types/chunkedUpload';
 
+import { DEFAULT_DOCUMENTS_PER_MESSAGE } from '@/config/limits';
 import {
   cancelChunkedUploadAction,
   finalizeChunkedUploadAction,
@@ -52,6 +53,12 @@ export interface EffectiveUploadLimit {
  * which is exactly today's behaviour and the fail-open posture.
  */
 let effectiveUploadLimit: EffectiveUploadLimit | null = null;
+
+/**
+ * The caller's resolved `feature.upload.documentsPerMessage`, published by
+ * `useDocumentsPerMessageSync`. null → the compiled default.
+ */
+let documentsPerMessageLimit: number | null = null;
 
 /**
  * "Image" / "Video" / "File" — the same subject the compiled-cap message
@@ -236,6 +243,22 @@ export class FileUploadService {
    */
   static setEffectiveUploadLimit(limit: EffectiveUploadLimit | null): void {
     effectiveUploadLimit = limit;
+  }
+
+  /**
+   * Publish (or clear, with `null`) the caller's documents-per-message
+   * limit. Called from `useDocumentsPerMessageSync`.
+   */
+  static setDocumentsPerMessageLimit(limit: number | null): void {
+    documentsPerMessageLimit = limit;
+  }
+
+  /**
+   * Documents one message may carry for this caller: the admin-resolved
+   * value when the limits system is enforcing, else the compiled default.
+   */
+  static getDocumentsPerMessageLimit(): number {
+    return documentsPerMessageLimit ?? DEFAULT_DOCUMENTS_PER_MESSAGE;
   }
 
   /** The cap currently in force, for the composer hint and for tests. */
