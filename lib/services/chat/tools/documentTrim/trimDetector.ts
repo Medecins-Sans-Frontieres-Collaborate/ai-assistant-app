@@ -8,8 +8,16 @@
  * is trimmable, and how targets are represented.
  */
 
-/** A resolved length target for the trim pipeline. */
-export type TrimTarget =
+/**
+ * Which way a classified length request moves the attached document.
+ * 'reduce' runs the trim pipeline; 'expand' has no pipeline — the model
+ * lengthens the document itself, and the enricher only checks whether the
+ * document already meets the target.
+ */
+export type LengthChangeDirection = 'reduce' | 'expand';
+
+/** A resolved length target for the trim pipeline (or an expansion check). */
+export type TrimTarget = (
   | {
       kind: 'absolute';
       unit: 'words' | 'characters';
@@ -19,10 +27,17 @@ export type TrimTarget =
     }
   | {
       kind: 'ratio';
-      /** Fraction of the document to KEEP (0–1, exclusive). */
+      /**
+       * Multiple of the current length to reach: below 1 to reduce
+       * (0.5 = "cut in half"), above 1 to expand (2 = "double it").
+       */
       keep: number;
       approx: true;
-    };
+    }
+) & {
+  /** Absent = 'reduce', the only direction before expansion checks. */
+  direction?: LengthChangeDirection;
+};
 
 export type TrimmableFormat = 'docx' | 'md' | 'txt';
 
