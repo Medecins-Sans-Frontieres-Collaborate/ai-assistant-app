@@ -101,6 +101,7 @@ export const LIMIT_GROUPS: readonly LimitGroup[] = [
     id: 'uploads',
     memberKeys: [
       'feature.upload.megabytesPerFile',
+      'feature.upload.documentsPerMessage',
       'feature.upload.filesPerDay',
     ],
   },
