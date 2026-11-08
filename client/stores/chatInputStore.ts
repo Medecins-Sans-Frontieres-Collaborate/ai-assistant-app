@@ -103,7 +103,12 @@ interface ChatInputState {
   // aborting it doesn't trigger a re-render. Per-batch (not per-file): when
   // the user removes any file from a batch, the still-queued and in-flight
   // uploads are cancelled together. Already-completed uploads are unaffected.
-  uploadAbortController: AbortController | null;
+  /**
+   * In-flight upload batches, one per selection. Several can run at once —
+   * adding files while others upload must not cancel them — so each batch
+   * keeps its own controller and the File objects it is uploading.
+   */
+  uploadBatches: UploadBatch[];
 
   // Prompt state
   usedPromptId: string | null;
@@ -183,6 +188,31 @@ interface ChatInputState {
   ) => void;
 }
 
+/** One selection's upload: its abort controller and the files it carries. */
+interface UploadBatch {
+  controller: AbortController;
+  files: Set<File>;
+}
+
+/** The File objects an upload event carries (input change, drop, paste). */
+function filesOfUploadEvent(
+  event: React.ChangeEvent<HTMLInputElement> | FileList | File[],
+): File[] {
+  if (Array.isArray(event)) return event;
+  if (typeof FileList !== 'undefined' && event instanceof FileList) {
+    return Array.from(event);
+  }
+  const target = (event as React.ChangeEvent<HTMLInputElement>).target;
+  return target?.files ? Array.from(target.files) : [];
+}
+
+/** Cancels every in-flight upload batch (clear, new conversation). */
+function abortUploadBatches(batches: readonly UploadBatch[]): void {
+  for (const batch of batches) {
+    if (!batch.controller.signal.aborted) batch.controller.abort();
+  }
+}
+
 export const useChatInputStore = create<ChatInputState>((set, get) => ({
   // Initial state - Text
   textFieldValue: '',
@@ -220,7 +250,7 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
   imageFieldValue: null,
   uploadProgress: {},
   submitType: 'TEXT',
-  uploadAbortController: null,
+  uploadBatches: [],
 
   // Initial state - Prompt
   usedPromptId: null,
@@ -331,13 +361,15 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       submitType: typeof type === 'function' ? type(state.submitType) : type,
     })),
   handleFileUpload: async (event) => {
-    // Abort any prior in-flight batch — onFileUpload starts a fresh batch.
-    const prior = get().uploadAbortController;
-    if (prior && !prior.signal.aborted) {
-      prior.abort();
-    }
-    const controller = new AbortController();
-    set({ uploadAbortController: controller });
+    // A new selection runs alongside any batch still uploading. (It used to
+    // abort the previous batch, so attaching in two steps silently dropped
+    // the first step's files whenever they were still in flight.)
+    const batch: UploadBatch = {
+      controller: new AbortController(),
+      files: new Set(filesOfUploadEvent(event)),
+    };
+    const existingPreviews = get().filePreviews;
+    set((state) => ({ uploadBatches: [...state.uploadBatches, batch] }));
     try {
       await onFileUpload(
         event,
@@ -346,14 +378,13 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
         get().setFileFieldValue,
         get().setImageFieldValue,
         get().setUploadProgress,
-        controller.signal,
+        batch.controller.signal,
+        existingPreviews,
       );
     } finally {
-      // Only clear if this is still the current controller — a newer batch
-      // may have started before this one finished.
-      if (get().uploadAbortController === controller) {
-        set({ uploadAbortController: null });
-      }
+      set((state) => ({
+        uploadBatches: state.uploadBatches.filter((b) => b !== batch),
+      }));
     }
   },
 
@@ -369,12 +400,14 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
         filePreview.status === 'pending' ||
         filePreview.status === 'uploading' ||
         filePreview.status === 'extracting';
-      if (
-        shouldCancelBatch &&
-        state.uploadAbortController &&
-        !state.uploadAbortController.signal.aborted
-      ) {
-        state.uploadAbortController.abort();
+      if (shouldCancelBatch) {
+        // Only the batch carrying this file; other selections keep going.
+        const owner = state.uploadBatches.find(
+          (batch) => filePreview.file && batch.files.has(filePreview.file),
+        );
+        if (owner && !owner.controller.signal.aborted) {
+          owner.controller.abort();
+        }
       }
 
       // Release the preview's object URL — `URL.createObjectURL` retains the
@@ -439,13 +472,10 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
     }),
 
   clearUploadState: () => {
-    const prior = get().uploadAbortController;
-    if (prior && !prior.signal.aborted) {
-      prior.abort();
-    }
+    abortUploadBatches(get().uploadBatches);
     revokeAllPreviewUrls(get().filePreviews);
     set({
-      uploadAbortController: null,
+      uploadBatches: [],
       filePreviews: [],
       fileFieldValue: null,
       imageFieldValue: null,
@@ -459,13 +489,10 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
     defaultSearchMode = SearchMode.OFF,
     defaultInterpreterMode = InterpreterMode.OFF,
   ) => {
-    const prior = get().uploadAbortController;
-    if (prior && !prior.signal.aborted) {
-      prior.abort();
-    }
+    abortUploadBatches(get().uploadBatches);
     revokeAllPreviewUrls(get().filePreviews);
     set({
-      uploadAbortController: null,
+      uploadBatches: [],
       textFieldValue: '',
       searchMode: defaultSearchMode,
       interpreterMode: defaultInterpreterMode,
