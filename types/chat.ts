@@ -753,6 +753,12 @@ export interface ToolRouterRequest {
   /** Already access-filtered, auto-only metadata; forced skills excluded. */
   skillCatalog?: import('@/lib/services/skills/skillRouting').SkillRoutingEntry[];
   signal?: AbortSignal;
+  /**
+   * The user's chat model as a second chance when the auxiliary routing
+   * chain is unavailable (structuredDecisionFallback.ts). Absent → an
+   * auxiliary failure degrades to "no tools", as before.
+   */
+  decisionFallback?: import('@/lib/services/chat/routing/structuredDecisionFallback').StructuredDecisionFallback;
   forceWebSearch?: boolean; // When true, always use web search (search mode enabled)
   forceCodeInterpreter?: boolean; // When true, always run the code interpreter (InterpreterMode.ALWAYS)
   /**
