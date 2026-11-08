@@ -431,7 +431,7 @@ describe('/api/file/[id]', () => {
       consoleErrorSpy.mockRestore();
     });
 
-    it('includes cache headers in error response', async () => {
+    it('never lets a cache keep an error response', async () => {
       mockBlobClient.get.mockRejectedValue(new Error('Storage error'));
 
       const request = createRequest(validSha256, 'file');
@@ -439,13 +439,35 @@ describe('/api/file/[id]', () => {
         params: Promise.resolve({ id: validSha256 }),
       });
 
-      expect(response.headers.get('Cache-Control')).toBe(
-        's-maxage=43200, stale-while-revalidate',
-      );
+      // Was `s-maxage=43200`: a transient failure stayed broken for 12 h.
+      expect(response.headers.get('Cache-Control')).toBe('no-store');
     });
 
-    it('handles file not found errors', async () => {
-      mockBlobClient.get.mockRejectedValue(new Error('File not found'));
+    it('returns 404 for a blob that does not exist', async () => {
+      // Shape of the Azure SDK RestError for a missing blob.
+      mockBlobClient.get.mockRejectedValue(
+        Object.assign(new Error('The specified blob does not exist.'), {
+          name: 'RestError',
+          statusCode: 404,
+          code: 'BlobNotFound',
+        }),
+      );
+
+      const request = createRequest(validSha256, 'file');
+      const response = await GET(request, {
+        params: Promise.resolve({ id: validSha256 }),
+      });
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(404);
+      expect(data.error).toBe('File not found');
+      expect(response.headers.get('Cache-Control')).toBe('no-store');
+    });
+
+    it('keeps 500 for a storage failure that is not a missing blob', async () => {
+      mockBlobClient.get.mockRejectedValue(
+        Object.assign(new Error('Server busy'), { statusCode: 503 }),
+      );
 
       const request = createRequest(validSha256, 'file');
       const response = await GET(request, {
