@@ -70,15 +70,8 @@ const agent = {
   updatedAt: '2026-07-29T00:00:00.000Z',
 } as unknown as ChatContext['m365Agent'];
 
-const openAIClient = {
-  chat: {
-    completions: {
-      create: vi.fn().mockResolvedValue({
-        choices: [{ message: { content: 'handbook leave policy' } }],
-      }),
-    },
-  },
-} as never;
+const reformulate = vi.fn();
+const reformulator = { reformulate } as never;
 
 function makeContext(overrides: Partial<ChatContext> = {}): ChatContext {
   return {
@@ -92,6 +85,10 @@ function makeContext(overrides: Partial<ChatContext> = {}): ChatContext {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  reformulate.mockResolvedValue({
+    query: 'handbook leave policy',
+    source: 'auxiliary',
+  });
 });
 
 describe('M365AgentEnricher — retrieval failure is loud, not silent', () => {
@@ -99,7 +96,7 @@ describe('M365AgentEnricher — retrieval failure is loud, not silent', () => {
     searchM365Agent.mockRejectedValue(new Error('index not found'));
     const context = makeContext();
 
-    const result = await new M365AgentEnricher(openAIClient).execute(context);
+    const result = await new M365AgentEnricher(reformulator).execute(context);
 
     expect(result.systemPrompt).toContain(
       'You are the Ops Handbook assistant.',
@@ -125,7 +122,7 @@ describe('M365AgentEnricher — retrieval failure is loud, not silent', () => {
   it('degrades the same way from the pipeline timeout hook', () => {
     const context = makeContext();
 
-    const result = new M365AgentEnricher(openAIClient).onTimeout(context);
+    const result = new M365AgentEnricher(reformulator).onTimeout(context);
 
     expect(result.systemPrompt).toContain(
       'You are the Ops Handbook assistant.',
@@ -139,7 +136,7 @@ describe('M365AgentEnricher — retrieval failure is loud, not silent', () => {
 
   it('leaves a non-M365 context untouched on timeout', () => {
     const context = makeContext({ m365Agent: undefined });
-    expect(new M365AgentEnricher(openAIClient).onTimeout(context)).toBe(
+    expect(new M365AgentEnricher(reformulator).onTimeout(context)).toBe(
       context,
     );
   });
@@ -154,7 +151,7 @@ describe('M365AgentEnricher — retrieval failure is loud, not silent', () => {
       },
     ]);
 
-    const result = await new M365AgentEnricher(openAIClient).execute(
+    const result = await new M365AgentEnricher(reformulator).execute(
       makeContext(),
     );
 
@@ -174,9 +171,40 @@ describe('M365AgentEnricher — retrieval failure is loud, not silent', () => {
         }
       ).retrievalFailed,
     ).toBeUndefined();
-    // The gpt-5 family rejects non-default temperatures.
-    expect(openAIClient.chat.completions.create).toHaveBeenCalledWith(
-      expect.not.objectContaining({ temperature: expect.anything() }),
+    // The rewritten query is what reaches the index.
+    expect(searchM365Agent.mock.calls[0][0]).toBe('handbook leave policy');
+  });
+});
+
+describe('M365AgentEnricher — query rewrite residency', () => {
+  beforeEach(() => {
+    searchM365Agent.mockResolvedValue([]);
+  });
+
+  it("rewrites in the user's region with the chat model as the fallback", async () => {
+    const completeText = vi.fn();
+    const context = makeContext({
+      user: { ...createTestChatContext().user, region: 'EU' },
+    });
+
+    await new M365AgentEnricher(reformulator, { completeText }).execute(
+      context,
     );
+
+    const [prompt, routing] = reformulate.mock.calls[0];
+    expect(prompt.systemPrompt).toContain('self-contained search query');
+    expect(routing.region).toBe('EU');
+    expect(routing.textFallback).toEqual(expect.any(Function));
+  });
+
+  it('searches with the raw question when no rewrite is produced', async () => {
+    reformulate.mockResolvedValue(undefined);
+    const context = makeContext({
+      messages: [{ role: 'user', content: 'What is the leave policy?' }],
+    });
+
+    await new M365AgentEnricher(reformulator).execute(context);
+
+    expect(searchM365Agent.mock.calls[0][0]).toBe('What is the leave policy?');
   });
 });
