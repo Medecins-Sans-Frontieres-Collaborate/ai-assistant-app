@@ -818,6 +818,13 @@ export interface ActiveFile {
   lastUsedAt?: string;
   errorMessage?: string;
   pinned?: boolean;
+  /**
+   * True when `pinned` came from the "auto-pin uploads" setting rather than
+   * the user pinning this file. Auto-pinned files give way to newer uploads
+   * at the active-file cap (see evictActiveFilesOverCap); cleared as soon
+   * as the user pins or unpins the file themselves.
+   */
+  autoPinned?: boolean;
 
   // Cached processed content (populated after first use)
   processedContent?: {
