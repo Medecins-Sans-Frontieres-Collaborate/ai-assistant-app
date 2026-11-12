@@ -5,6 +5,7 @@ import {
 } from '@/lib/services/transcription/common';
 
 import { WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
+import { getCognitiveServicesTokenProvider } from '@/lib/utils/server/azure/cognitiveServicesAuth';
 
 import {
   ITranscriptionService,
@@ -15,19 +16,20 @@ import {
 
 import { env } from '@/config/environment';
 import { toAzureWhisperLanguageRequest } from '@/lib/constants/transcriptionLanguages';
-import {
-  DefaultAzureCredential,
-  getBearerTokenProvider,
-} from '@azure/identity';
 import fs from 'fs';
 import { AzureOpenAI } from 'openai';
 
+/**
+ * Whisper transcription on Azure OpenAI, authenticated as the application
+ * identity (Entra ID). There is deliberately no key path: once local auth is
+ * off on the Foundry account a leftover OPENAI_API_KEY is dead, and preferring
+ * it would turn every transcription into a 401.
+ */
 export class WhisperTranscriptionService implements ITranscriptionService {
   private deployment: string;
   private client: AzureOpenAI;
 
   constructor() {
-    const apiKey = env.OPENAI_API_KEY;
     const azureEndpoint = env.AZURE_OPENAI_ENDPOINT;
     const deployment = 'whisper';
     const apiVersion = env.OPENAI_API_VERSION;
@@ -37,27 +39,14 @@ export class WhisperTranscriptionService implements ITranscriptionService {
     }
 
     this.deployment = deployment;
-
-    // Initialize Azure OpenAI client with either API key or Azure AD auth
-    if (apiKey) {
-      this.client = new AzureOpenAI({
-        apiKey,
-        endpoint: azureEndpoint,
-        apiVersion,
-        deployment: this.deployment,
-      });
-    } else {
-      const credential = new DefaultAzureCredential();
-      const scope = 'https://cognitiveservices.azure.com/.default';
-      const azureADTokenProvider = getBearerTokenProvider(credential, scope);
-
-      this.client = new AzureOpenAI({
-        endpoint: azureEndpoint,
-        apiVersion,
-        deployment: this.deployment,
-        azureADTokenProvider,
-      });
-    }
+    this.client = new AzureOpenAI({
+      endpoint: azureEndpoint,
+      apiKey: '', // Suppress the SDK's ambient OPENAI_API_KEY default.
+      baseURL: '', // Derive from the explicit Azure endpoint, never OPENAI_BASE_URL.
+      apiVersion,
+      deployment: this.deployment,
+      azureADTokenProvider: getCognitiveServicesTokenProvider(),
+    });
   }
 
   async transcribe(
