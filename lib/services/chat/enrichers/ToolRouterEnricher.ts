@@ -36,6 +36,7 @@ import {
 } from '@/types/webSearch';
 
 import { ToolRouterService } from '../ToolRouterService';
+import { structuredFallbackForTurn } from '../auxiliaryTurnRouting';
 import { ChatContext, shouldExecuteAsAgent } from '../pipeline/ChatContext';
 import { STAGE_TIMEOUTS } from '../pipeline/ChatPipeline';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
@@ -252,22 +253,12 @@ export class ToolRouterEnricher extends BasePipelineStage {
 
   /**
    * The routing second chance for this turn: the user's own chat model,
-   * under the turn's residency. None for custom-source (byom) models,
-   * which run on the user's own account and credential.
+   * under the turn's residency (see structuredFallbackForTurn).
    */
   private decisionFallbackFor(
     context: ChatContext,
   ): StructuredDecisionFallback | undefined {
-    const provider = this.decisionProvider;
-    const model = context.model;
-    if (!provider || !model || model.isCustomSourceModel) return undefined;
-    const target = {
-      model,
-      userRegion: context.user?.region as 'US' | 'EU' | null | undefined,
-      hostedRegion: context.hostedRegion,
-    };
-    return (params, signal) =>
-      provider.completeStructuredDecision(target, params, signal);
+    return structuredFallbackForTurn(context, this.decisionProvider);
   }
 
   /**
