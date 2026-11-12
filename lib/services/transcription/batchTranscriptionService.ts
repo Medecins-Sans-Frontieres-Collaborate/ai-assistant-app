@@ -6,9 +6,12 @@
  *
  * @see https://learn.microsoft.com/en-us/azure/ai-services/speech-service/batch-transcription
  */
-import { ITranscriptionService } from '@/types/transcription';
+import {
+  getCognitiveServicesAuthHeaders,
+  resolveSpeechEndpoint,
+} from '@/lib/utils/server/azure/cognitiveServicesAuth';
 
-import { env } from '@/config/environment';
+import { ITranscriptionService } from '@/types/transcription';
 
 /**
  * Status of a batch transcription job
@@ -47,19 +50,44 @@ export interface BatchTranscriptionResult {
  * The batch API is asynchronous - jobs are submitted and polled for completion.
  */
 export class BatchTranscriptionService implements ITranscriptionService {
-  private baseUrl: string;
-  private apiKey: string;
+  /** `{custom-domain endpoint}/speechtotext/v3.2`, or undefined when unconfigured. */
+  private readonly baseUrl: string | undefined;
 
   constructor() {
-    const region = env.AZURE_SPEECH_REGION || 'eastus';
-    this.baseUrl = `https://${region}.api.cognitive.microsoft.com/speechtotext/v3.2`;
-    this.apiKey = env.AZURE_SPEECH_KEY || '';
+    const endpoint = resolveSpeechEndpoint();
+    this.baseUrl = endpoint ? `${endpoint}/speechtotext/v3.2` : undefined;
 
-    if (!this.apiKey) {
+    if (!this.baseUrl) {
       console.warn(
-        'AZURE_SPEECH_KEY not configured - batch transcription will not work',
+        'No Speech custom-domain endpoint (AZURE_SPEECH_ENDPOINT or AZURE_OPENAI_ENDPOINT) - batch transcription will not work',
       );
     }
+  }
+
+  /**
+   * Calls the batch API as the application identity (Entra ID).
+   *
+   * @param path - Path below `/speechtotext/v3.2`, starting with `/`
+   * @param init - Fetch options; an `Authorization` header is added
+   * @returns The raw response, for the caller to check
+   * @throws Error when no Speech endpoint is configured or no token can be acquired
+   */
+  private async speechFetch(
+    path: string,
+    init: RequestInit = {},
+  ): Promise<Response> {
+    if (!this.baseUrl) {
+      throw new Error(
+        'Azure Speech batch transcription is not configured: set AZURE_SPEECH_ENDPOINT or AZURE_OPENAI_ENDPOINT to the Speech account custom-domain endpoint',
+      );
+    }
+    const headers = new Headers(init.headers);
+    for (const [name, value] of Object.entries(
+      await getCognitiveServicesAuthHeaders(),
+    )) {
+      headers.set(name, value);
+    }
+    return fetch(`${this.baseUrl}${path}`, { ...init, headers });
   }
 
   /**
@@ -92,18 +120,11 @@ export class BatchTranscriptionService implements ITranscriptionService {
     blobUrl: string,
     locale = 'en-US',
   ): Promise<string> {
-    if (!this.apiKey) {
-      throw new Error('Azure Speech API key not configured');
-    }
-
     const displayName = `Transcription-${Date.now()}`;
 
-    const response = await fetch(`${this.baseUrl}/transcriptions`, {
+    const response = await this.speechFetch('/transcriptions', {
       method: 'POST',
-      headers: {
-        'Ocp-Apim-Subscription-Key': this.apiKey,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contentUrls: [blobUrl],
         locale,
@@ -127,7 +148,7 @@ export class BatchTranscriptionService implements ITranscriptionService {
     const data = await response.json();
 
     // Extract job ID from the self link
-    // Format: https://{region}.api.cognitive.microsoft.com/speechtotext/v3.2/transcriptions/{id}
+    // Format: {endpoint}/speechtotext/v3.2/transcriptions/{id}
     const selfLink = data.self as string;
     const jobId = selfLink.split('/').pop();
 
@@ -146,17 +167,9 @@ export class BatchTranscriptionService implements ITranscriptionService {
    * @throws Error if status check fails
    */
   async getStatus(jobId: string): Promise<BatchTranscriptionJob> {
-    if (!this.apiKey) {
-      throw new Error('Azure Speech API key not configured');
-    }
-
     this.validateJobId(jobId);
 
-    const response = await fetch(`${this.baseUrl}/transcriptions/${jobId}`, {
-      headers: {
-        'Ocp-Apim-Subscription-Key': this.apiKey,
-      },
-    });
+    const response = await this.speechFetch(`/transcriptions/${jobId}`);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -183,20 +196,11 @@ export class BatchTranscriptionService implements ITranscriptionService {
    * @throws Error if transcript retrieval fails
    */
   async getTranscript(jobId: string): Promise<string> {
-    if (!this.apiKey) {
-      throw new Error('Azure Speech API key not configured');
-    }
-
     this.validateJobId(jobId);
 
     // First, get the list of result files
-    const filesResponse = await fetch(
-      `${this.baseUrl}/transcriptions/${jobId}/files`,
-      {
-        headers: {
-          'Ocp-Apim-Subscription-Key': this.apiKey,
-        },
-      },
+    const filesResponse = await this.speechFetch(
+      `/transcriptions/${jobId}/files`,
     );
 
     if (!filesResponse.ok) {
@@ -256,17 +260,10 @@ export class BatchTranscriptionService implements ITranscriptionService {
    * @throws Error if deletion fails
    */
   async deleteTranscription(jobId: string): Promise<void> {
-    if (!this.apiKey) {
-      throw new Error('Azure Speech API key not configured');
-    }
-
     this.validateJobId(jobId);
 
-    const response = await fetch(`${this.baseUrl}/transcriptions/${jobId}`, {
+    const response = await this.speechFetch(`/transcriptions/${jobId}`, {
       method: 'DELETE',
-      headers: {
-        'Ocp-Apim-Subscription-Key': this.apiKey,
-      },
     });
 
     if (!response.ok && response.status !== 204) {
@@ -296,6 +293,6 @@ export class BatchTranscriptionService implements ITranscriptionService {
    * @returns true if the service is configured
    */
   isConfigured(): boolean {
-    return !!this.apiKey;
+    return !!this.baseUrl;
   }
 }
