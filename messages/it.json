@@ -587,7 +587,8 @@
     "clear": "Cancella",
     "undo": "Annulla",
     "durationSeconds": "{count, plural, one {# secondo} other {# secondi}}",
-    "durationMinutes": "{count, plural, one {# minuto} other {# minuti}}"
+    "durationMinutes": "{count, plural, one {# minuto} other {# minuti}}",
+    "clearSearch": "Cancella ricerca"
   },
   "chat": {
     "downloadAudio": "Scarica audio",
@@ -8095,7 +8096,13 @@
       "skills": "Selezione delle competenze",
       "tools": "Instradamento strumenti",
       "trim": "Classificazione riduzione",
-      "assessment": "Valutazione ricerca"
+      "assessment": "Valutazione ricerca",
+      "query": "Riscrittura della query di ricerca",
+      "mailScreen": "Schermata phishing delle mail",
+      "mailAnalysis": "Analisi delle mail e dei digest",
+      "schemaProposal": "Proposta dello schema di estrazione",
+      "mcpPlan": "Piano del connettore",
+      "vision": "Lettura di immagini e pagine"
     },
     "reason": {
       "endpoint_missing": "Endpoint o associazione account mancante",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "L'endpoint e l'ARM resource ID corrispondono a account diversi. Correggi la configurazione del deployment.",
       "inventory_refresh_failed": "Aggiornamento inventario non riuscito. Verifica l'accesso Reader per l'identità dell'app e la connettività dell'account.",
       "credential_unavailable": "L'app non ha potuto ottenere le credenziali per l'inventario. Controlla la configurazione dell'identità del deployment."
-    }
+    },
+    "notSupported": "Non supportato da questo modello",
+    "unservedOperations": "Nessun modello in questa catena supporta: {operations}. Aggiungi un modello che lo supporti."
   }
 }

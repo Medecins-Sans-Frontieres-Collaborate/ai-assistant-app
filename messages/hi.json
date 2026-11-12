@@ -612,7 +612,8 @@
     "clear": "साफ़ करें",
     "undo": "पूर्ववत करें",
     "durationSeconds": "{count, plural, one {# सेकंड} other {# सेकंड}}",
-    "durationMinutes": "{count, plural, one {# मिनट} other {# मिनट}}"
+    "durationMinutes": "{count, plural, one {# मिनट} other {# मिनट}}",
+    "clearSearch": "खोज साफ करें"
   },
   "errors": {
     "unexpectedErrorOccurred": "एक अप्रत्याशित त्रुटि हुई",
@@ -8095,7 +8096,13 @@
       "skills": "स्किल चयन",
       "tools": "टूल रूटिंग",
       "trim": "ट्रिम वर्गीकरण",
-      "assessment": "सर्च असेसमेंट"
+      "assessment": "सर्च असेसमेंट",
+      "query": "खोज क्वेरी पुनःलेखन",
+      "mailScreen": "मेल फ़िशिंग स्क्रीन",
+      "mailAnalysis": "मेल और डाइजेस्ट विश्लेषण",
+      "schemaProposal": "एक्सट्रैक्शन स्कीमा प्रस्ताव",
+      "mcpPlan": "कनेक्टर प्लान",
+      "vision": "छवि और पृष्ठ पढ़ना"
     },
     "reason": {
       "endpoint_missing": "एंडपॉइंट या अकाउंट बाइंडिंग नहीं है",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "एंडपॉइंट और ARM रिसोर्स ID अलग अकाउंट दर्शाते हैं। डिप्लॉयमेंट कॉन्फ़िगरेशन सही करें।",
       "inventory_refresh_failed": "इंवेंटरी रिफ्रेश असफल हुआ। ऐप की पहचान के रीडर एक्सेस व अकाउंट कनेक्टिविटी जांचें।",
       "credential_unavailable": "ऐप अपनी इन्वेंटरी क्रेडेंशियल प्राप्त नहीं कर सका। डिप्लॉयमेंट पहचान कॉन्फ़िगरेशन जांचें।"
-    }
+    },
+    "notSupported": "यह मॉडल समर्थित नहीं है",
+    "unservedOperations": "इस श्रृंखला में कोई मॉडल {operations} का समर्थन नहीं करता। कृपया ऐसा मॉडल जोड़ें जो समर्थन करता हो।"
   }
 }

@@ -715,7 +715,8 @@
     "clear": "Sukura",
     "undo": "Subira inyuma",
     "durationSeconds": "{count, plural, one {# isegonda} other {# amasegonda}}",
-    "durationMinutes": "{count, plural, one {# umunota} other {# iminota}}"
+    "durationMinutes": "{count, plural, one {# umunota} other {# iminota}}",
+    "clearSearch": "Siba ivyo warondera"
   },
   "terms": {
     "officialLanguages": "Verisiyo yemewe:",
@@ -8079,7 +8080,13 @@
       "skills": "Guhitamwo ubuhinga",
       "tools": "Gutunganiriza ibikoresho",
       "trim": "Gukata amakategori",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "Gusubiramwo ijambo ryo kurondera",
+      "mailScreen": "Ekrani yo gukumira ubutumwa bw’uburiganya",
+      "mailAnalysis": "Isesengura ry’ubutumwa n’umwumvane",
+      "schemaProposal": "Itangwa ry’igitangwa c’umushingantahe wo gukura amakuru",
+      "mcpPlan": "Umugambi wa connector",
+      "vision": "Gusoma amashusho n'impapuro"
     },
     "reason": {
       "endpoint_missing": "Endpoint canke isano y'uburyo nta",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Endpoint na ARM resource ID vyerekana konti zitandukanye. Genzura uko deployment ishinze.",
       "inventory_refresh_failed": "Gusubira kwemeza inventory vyarananiranye. Raba ko application ifise uburenganzira bwa Reader no ko ihuzwa na konti.",
       "credential_unavailable": "Application ntiyashoboye kubona credential yayo ya inventory. Raba ko deployment identity imeze neza."
-    }
+    },
+    "notSupported": "Iki gishusho nticabishigikira",
+    "unservedOperations": "Nta gishusho na kimwe muri uru rukurikirane gifise ubushobozi bwo gukora ibi: {operations}. Shiramwo ikindi gishusho kibishoboye."
   }
 }

@@ -715,7 +715,8 @@
     "clear": "Siba",
     "undo": "Subira inyuma",
     "durationSeconds": "{count, plural, one {# isegonda} other {# segonda}}",
-    "durationMinutes": "{count, plural, one {# umunota} other {# minota}}"
+    "durationMinutes": "{count, plural, one {# umunota} other {# minota}}",
+    "clearSearch": "Sukura ibyo ushakisha"
   },
   "terms": {
     "officialLanguages": "Verisiyo nyayo:",
@@ -8079,7 +8080,13 @@
       "skills": "Guhitamo ubumenyi",
       "tools": "Kuyobora ibikoresho",
       "trim": "Gusobanura ukwaguka",
-      "assessment": "Isesengura ryo gushakisha"
+      "assessment": "Isesengura ryo gushakisha",
+      "query": "Gusubiramo ibibazo byo gushakisha",
+      "mailScreen": "Ecran yo gufata ubutumwa bushobora kuba bushukana (phishing)",
+      "mailAnalysis": "Isesengura ry'ubutumwa n'ibikubiye mu digest",
+      "schemaProposal": "Icyifuzo cy'imbonerahamwe yo gukurura amakuru",
+      "mcpPlan": "Igishushanyo cy'umuhuza (Connector plan)",
+      "vision": "Gusoma ishusho n’urupapuro"
     },
     "reason": {
       "endpoint_missing": "Ihererekanyabubasha cyangwa ihuza konti ntirihari",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Iherezo n’ID ya Foundry ARM bigaragaza konti zitandukanye. Hindura uburyo bwa deployment.",
       "inventory_refresh_failed": "Kugenzura ibiri mububiko byanze. Reba niba application ifite uburenganzira bwa Reader kandi konti ihujwe.",
       "credential_unavailable": "Application ntiyashoboye kubona uruhushya rwayo rwo kugenzura ibiri mu bubiko. Reba igenamiterere rya deployment ID."
-    }
+    },
+    "notSupported": "Iyi model ntabwo ibishyigikira",
+    "unservedOperations": "Nta model muri uru rukurikirane ishyigikira: {operations}. Ongera model ibishoboye."
   }
 }

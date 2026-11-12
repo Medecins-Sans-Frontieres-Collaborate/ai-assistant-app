@@ -529,7 +529,8 @@
     "clear": "ล้าง",
     "undo": "ย้อนกลับ",
     "durationSeconds": "{count, plural, one {# วินาที} other {# วินาที}}",
-    "durationMinutes": "{count, plural, one {# นาที} other {# นาที}}"
+    "durationMinutes": "{count, plural, one {# นาที} other {# นาที}}",
+    "clearSearch": "ล้างการค้นหา"
   },
   "errors": {
     "unexpectedErrorOccurred": "เกิดข้อผิดพลาดที่ไม่คาดคิด",
@@ -8095,7 +8096,13 @@
       "skills": "การเลือกทักษะ",
       "tools": "การกำหนดเส้นทางเครื่องมือ",
       "trim": "การจัดประเภทการตัด",
-      "assessment": "การประเมินค้นหา"
+      "assessment": "การประเมินค้นหา",
+      "query": "เขียนคำค้นหาใหม่",
+      "mailScreen": "หน้าตรวจสอบฟิชชิงทางอีเมล",
+      "mailAnalysis": "การวิเคราะห์อีเมลและสรุป",
+      "schemaProposal": "ข้อเสนอรูปแบบการดึงข้อมูล",
+      "mcpPlan": "แผนการเชื่อมต่อ",
+      "vision": "การอ่านภาพและหน้าเอกสาร"
     },
     "reason": {
       "endpoint_missing": "ไม่มี endpoint หรือการเชื่อมโยงบัญชี",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Endpoint และ ARM resource ID เป็นบัญชีที่ต่างกัน กรุณาตั้งค่าการดีพลอยใหม่",
       "inventory_refresh_failed": "รีเฟรชข้อมูลสินค้าคงคลังล้มเหลว ตรวจสอบสิทธิ์ Reader ของตัวแอปและการเชื่อมต่อบัญชี",
       "credential_unavailable": "แอปไม่สามารถขอรับ credential สำหรับสินค้าคงคลัง ตรวจสอบการตั้งค่าตัวตนการดีพลอย"
-    }
+    },
+    "notSupported": "โมเดลนี้ไม่รองรับ",
+    "unservedOperations": "ไม่มีโมเดลใดในชุดนี้รองรับ: {operations} กรุณาเพิ่มโมเดลที่รองรับ."
   }
 }

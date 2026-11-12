@@ -715,7 +715,8 @@
     "clear": "Küata",
     "undo": "Zûa na mbênî",
     "durationSeconds": "{count, plural, one {# sǝgɔ} other {# sǝgɔ}}",
-    "durationMinutes": "{count, plural, one {# miníti} other {# miníti}}"
+    "durationMinutes": "{count, plural, one {# miníti} other {# miníti}}",
+    "clearSearch": "Kiri lo na yeke"
   },
   "terms": {
     "officialLanguages": "Version officiel:",
@@ -8079,7 +8080,13 @@
       "skills": "Sâra compétence",
       "tools": "Routing ti tool",
       "trim": "Classifier ti trim",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "Kombeti ti na kombere mo",
+      "mailScreen": "Kudzo na nde kitapɛ na mail",
+      "mailAnalysis": "Kudzo na analisɛ na mail na digest",
+      "schemaProposal": "Tɔngana schema na kufa",
+      "mcpPlan": "Plan na konektɛ",
+      "vision": "Kembe na sango na page"
     },
     "reason": {
       "endpoint_missing": "Endpoint oba account binding apa la",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Endpoint na ARM ID pâsô kêtê ti account yângâ. Kûè configuration ti deployment.",
       "inventory_refresh_failed": "Refresh ti inventory ayeke. Gôzo access Reader na identity ti app na connectivity ti account.",
       "credential_unavailable": "App ayeke bâ kêtê credential ti inventory. Gôzo configuration ti identity ti deployment."
-    }
+    },
+    "notSupported": "Model ti yaba na",
+    "unservedOperations": "Model ti so na siri ti chain ti kodeni na: {operations}. Ku model ti yeke na."
   }
 }

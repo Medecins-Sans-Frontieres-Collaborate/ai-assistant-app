@@ -577,7 +577,8 @@
     "clear": "Wissen",
     "undo": "Ongedaan maken",
     "durationSeconds": "{count, plural, one {# seconde} other {# seconden}}",
-    "durationMinutes": "{count, plural, one {# minuut} other {# minuten}}"
+    "durationMinutes": "{count, plural, one {# minuut} other {# minuten}}",
+    "clearSearch": "Zoekopdracht wissen"
   },
   "errors": {
     "somethingWentWrong": "Er is iets misgegaan",
@@ -8095,7 +8096,13 @@
       "skills": "Skillselectie",
       "tools": "Toolrouting",
       "trim": "Trim-classificatie",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "Zoekopdracht herschrijven",
+      "mailScreen": "Phishingmail-scherm",
+      "mailAnalysis": "Analyse van e-mails en samenvattingen",
+      "schemaProposal": "Voorstel extractieschema",
+      "mcpPlan": "Connectorplan",
+      "vision": "Afbeeldingen en pagina's lezen"
     },
     "reason": {
       "endpoint_missing": "Endpoint of accountbinding ontbreekt",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Het endpoint en de ARM resource-ID horen bij verschillende accounts. Corrigeer de deploymentconfiguratie.",
       "inventory_refresh_failed": "Vernieuwen van de inventaris is mislukt. Controleer de Reader-toegang en accountconnectiviteit van de app-identiteit.",
       "credential_unavailable": "De app kon de inventarisreferentie niet verkrijgen. Controleer de deploymentidentiteit-configuratie."
-    }
+    },
+    "notSupported": "Niet ondersteund door dit model",
+    "unservedOperations": "Geen enkel model in deze keten ondersteunt: {operations}. Voeg een model toe dat dit wel doet."
   }
 }

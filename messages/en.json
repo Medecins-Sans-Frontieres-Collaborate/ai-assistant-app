@@ -710,6 +710,7 @@
     }
   },
   "common": {
+    "clearSearch": "Clear search",
     "close": "Close",
     "remove": "Remove",
     "tryAgain": "Try again",
@@ -5373,6 +5374,8 @@
     "loadError": "Model assignments could not be loaded. Retry without changing the current policy.",
     "retry": "Retry",
     "neverChecked": "Not checked",
+    "notSupported": "Not supported by this model",
+    "unservedOperations": "No model in this chain supports: {operations}. Add a model that does.",
     "bootstrapUnavailable": "The environment bootstrap setting is invalid. An existing saved policy remains in force, but environment defaults cannot be restored until the deployment setting is corrected.",
     "runtimeFallback": "Recent requests used a fallback model. Check the primary deployment and its operation results.",
     "accountLocation": "Azure account location: {location}",
@@ -5450,6 +5453,12 @@
       "skills": "Skill selection",
       "tools": "Tool routing",
       "trim": "Trim classification",
+      "query": "Search query rewrite",
+      "mailScreen": "Mail phishing screen",
+      "mailAnalysis": "Mail and digest analysis",
+      "schemaProposal": "Extraction schema proposal",
+      "mcpPlan": "Connector plan",
+      "vision": "Image and page reading",
       "assessment": "Search assessment"
     },
     "reason": {

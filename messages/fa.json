@@ -537,7 +537,8 @@
     "clear": "پاک‌سازی",
     "undo": "برگرداندن",
     "durationSeconds": "{count, plural, one {# ثانیه} other {# ثانیه}}",
-    "durationMinutes": "{count, plural, one {# دقیقه} other {# دقیقه}}"
+    "durationMinutes": "{count, plural, one {# دقیقه} other {# دقیقه}}",
+    "clearSearch": "پاک کردن جستجو"
   },
   "errors": {
     "unexpectedErrorOccurred": "یک خطای غیرمنتظره رخ داد",
@@ -8095,7 +8096,13 @@
       "skills": "انتخاب مهارت",
       "tools": "مسیریابی ابزار",
       "trim": "طبقه‌بندی حذف",
-      "assessment": "ارزیابی جستجو"
+      "assessment": "ارزیابی جستجو",
+      "query": "بازنویسی درخواست جستجو",
+      "mailScreen": "صفحه فیشینگ ایمیل",
+      "mailAnalysis": "تحلیل ایمیل و خلاصه",
+      "schemaProposal": "پیشنهاد الگوی استخراج",
+      "mcpPlan": "برنامه کانکتور",
+      "vision": "خواندن تصاویر و صفحات"
     },
     "reason": {
       "endpoint_missing": "نقطه پایانی یا اتصال حساب وجود ندارد",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "نقطه پایانی و شناسه منبع ARM، حساب‌های مختلفی را نشان می‌دهند. پیکربندی استقرار را اصلاح کنید.",
       "inventory_refresh_failed": "به‌روزرسانی موجودی انجام نشد. دسترسی Reader شناسه برنامه و اتصال حساب را بررسی کنید.",
       "credential_unavailable": "برنامه به اعتبارنامه موجودی دسترسی ندارد. پیکربندی شناسه استقرار را بررسی کنید."
-    }
+    },
+    "notSupported": "این مدل پشتیبانی نمی‌کند",
+    "unservedOperations": "هیچ مدلی در این زنجیره از {operations} پشتیبانی نمی‌کند. مدلی را اضافه کنید که این قابلیت را داشته باشد."
   }
 }

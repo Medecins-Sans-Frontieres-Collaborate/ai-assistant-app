@@ -641,7 +641,8 @@
     "clear": "清除",
     "undo": "撤销",
     "durationSeconds": "{count, plural, one {# 秒} other {# 秒}}",
-    "durationMinutes": "{count, plural, one {# 分钟} other {# 分钟}}"
+    "durationMinutes": "{count, plural, one {# 分钟} other {# 分钟}}",
+    "clearSearch": "清除搜索"
   },
   "errors": {
     "unexpectedErrorOccurred": "发生了意外错误",
@@ -8126,7 +8127,13 @@
       "skills": "技能选择",
       "tools": "工具路由",
       "trim": "截断分类",
-      "assessment": "搜索评估"
+      "assessment": "搜索评估",
+      "query": "搜索查询重写",
+      "mailScreen": "邮件钓鱼筛查",
+      "mailAnalysis": "邮件与摘要分析",
+      "schemaProposal": "抽取方案建议",
+      "mcpPlan": "连接器计划",
+      "vision": "图像与页面读取"
     },
     "reason": {
       "endpoint_missing": "缺少端点或账户绑定",
@@ -8147,6 +8154,8 @@
       "endpoint_account_mismatch": "端点与 ARM 资源 ID 所对应的账户不一致，请更正部署配置。",
       "inventory_refresh_failed": "库存刷新失败。请检查应用身份的读取权限和账户连通性。",
       "credential_unavailable": "应用无法获取其库存凭证。请检查部署身份配置。"
-    }
+    },
+    "notSupported": "该模型不支持",
+    "unservedOperations": "此链中没有模型支持：{operations}。请添加支持该功能的模型。"
   }
 }

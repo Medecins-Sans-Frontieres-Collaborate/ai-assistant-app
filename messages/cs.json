@@ -612,7 +612,8 @@
     "clear": "Vymazat",
     "undo": "Zpět",
     "durationSeconds": "{count, plural, one {# sekunda} few {# sekundy} other {# sekund}}",
-    "durationMinutes": "{count, plural, one {# minuta} few {# minuty} other {# minut}}"
+    "durationMinutes": "{count, plural, one {# minuta} few {# minuty} other {# minut}}",
+    "clearSearch": "Vymazat hledání"
   },
   "errors": {
     "unexpectedErrorOccurred": "Došlo k neočekávané chybě",
@@ -8095,7 +8096,13 @@
       "skills": "Výběr dovedností",
       "tools": "Směrování nástrojů",
       "trim": "Klasifikace zkrácení",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "Přepsání vyhledávacího dotazu",
+      "mailScreen": "Obrazovka phishingu e-mailu",
+      "mailAnalysis": "Analýza e-mailů a shrnutí",
+      "schemaProposal": "Návrh extrakčního schématu",
+      "mcpPlan": "Plán konektoru",
+      "vision": "Čtení obrázků a stránek"
     },
     "reason": {
       "endpoint_missing": "Chybí endpoint nebo propojení účtu",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Endpoint a ARM resource ID patří různým účtům. Upravte konfiguraci nasazení.",
       "inventory_refresh_failed": "Obnovení inventáře selhalo. Zkontrolujte Reader přístup identity aplikace a připojení účtu.",
       "credential_unavailable": "Aplikace nemohla získat přihlašovací údaje pro inventář. Zkontrolujte nastavení identity nasazení."
-    }
+    },
+    "notSupported": "Tento model nepodporuje",
+    "unservedOperations": "Žádný model v tomto řetězci nepodporuje: {operations}. Přidejte model, který je podporuje."
   }
 }

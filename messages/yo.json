@@ -715,7 +715,8 @@
     "clear": "Nu kúrò",
     "undo": "Yí padà",
     "durationSeconds": "{count, plural, one {# ìṣẹ́jú-aaya} other {# ìṣẹ́jú-aaya}}",
-    "durationMinutes": "{count, plural, one {# ìṣẹ́jú} other {# ìṣẹ́jú}}"
+    "durationMinutes": "{count, plural, one {# ìṣẹ́jú} other {# ìṣẹ́jú}}",
+    "clearSearch": "Nu iṣẹ́ àwárí kúrò"
   },
   "terms": {
     "officialLanguages": "Ẹ̀dà osẹ̀:",
@@ -8079,7 +8080,13 @@
       "skills": "Ìyan aṣáájú",
       "tools": "Ìtẹ̀sísọ irinṣẹ",
       "trim": "Ìkawe ìgbọ́nwọ",
-      "assessment": "Àyẹ̀wò àwárí"
+      "assessment": "Àyẹ̀wò àwárí",
+      "query": "Tun àwárí padà",
+      "mailScreen": "Àkọsílẹ ìtẹ́wọgbà ifiweránṣẹ",
+      "mailAnalysis": "Ìtúpalẹ̀ ifiweránṣẹ àti àkótán",
+      "schemaProposal": "Ìfilọ́lẹ̀ àtòjọ agbékọ́sẹ",
+      "mcpPlan": "Ètò asopọ",
+      "vision": "Kíkà àwòrán àti ojúewé"
     },
     "reason": {
       "endpoint_missing": "Aini ipari tabi asopọ àpamọ̀",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Ipari àti ARM ID orisun fi àkọọlẹ̀ oríṣìí méjì hàn. Ṣàtúnṣe àtúnṣe agbekọja.",
       "inventory_refresh_failed": "Ìmúpọ̀ ìpamọ̀ kò ṣaṣeyọri. Ṣàyẹ̀wò ààyè Kaṣe Reader app àti asopọ àkọọlẹ̀.",
       "credential_unavailable": "App kò le rí ìwé-ẹ̀rí ìpamọ̀ rẹ̀. Ṣàyẹ̀wò àtúnṣe àkọpamọ̀ agbekọja."
-    }
+    },
+    "notSupported": "Akọ́màlú yìí kò dáyè gba",
+    "unservedOperations": "Kò sí akọ́màlú kankan nínú pq yìí tó dáyè gba: {operations}. Ṣàfikún akọ́màlú tó le ṣe bẹ́ẹ̀."
   }
 }

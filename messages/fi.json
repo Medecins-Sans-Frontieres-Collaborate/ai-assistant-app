@@ -587,7 +587,8 @@
     "clear": "Tyhjennä",
     "undo": "Kumoa",
     "durationSeconds": "{count, plural, one {# sekunti} other {# sekuntia}}",
-    "durationMinutes": "{count, plural, one {# minuutti} other {# minuuttia}}"
+    "durationMinutes": "{count, plural, one {# minuutti} other {# minuuttia}}",
+    "clearSearch": "Tyhjennä haku"
   },
   "errors": {
     "unexpectedErrorOccurred": "Odottamaton virhe tapahtui",
@@ -8095,7 +8096,13 @@
       "skills": "Taitojen valinta",
       "tools": "Työkalureititys",
       "trim": "Typistyksen luokittelu",
-      "assessment": "Hakuarviointi"
+      "assessment": "Hakuarviointi",
+      "query": "Hakukyselyn uudelleenkirjoitus",
+      "mailScreen": "Sähköpostin tietojenkalastelun seulonta",
+      "mailAnalysis": "Sähköposti- ja tiivistelmäanalyysi",
+      "schemaProposal": "Tietojen poiminnan skeemaehdotus",
+      "mcpPlan": "Liitännäissuunnitelma",
+      "vision": "Kuvien ja sivujen lukeminen"
     },
     "reason": {
       "endpoint_missing": "Päätepiste tai tilin sidonta puuttuu",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Päätepiste ja ARM-resurssin tunniste viittaavat eri tileihin. Korjaa käyttöönoton asetukset.",
       "inventory_refresh_failed": "Inventaarion päivitys epäonnistui. Tarkista sovelluksen Reader-oikeudet ja tilin yhteys.",
       "credential_unavailable": "Sovellus ei saanut inventaarion tunnistettaan. Tarkista käyttöönoton tunnistusasetukset."
-    }
+    },
+    "notSupported": "Ei tuettu tässä mallissa",
+    "unservedOperations": "Yksikään ketjun malleista ei tue: {operations}. Lisää tuen tarjoava malli."
   }
 }

@@ -715,7 +715,8 @@
     "clear": "Momtu",
     "undo": "Firtu",
     "durationSeconds": "{count, plural, one {# saɗi} other {# saɗii}}",
-    "durationMinutes": "{count, plural, one {# hoɗɗo} other {# hoɗɗi}}"
+    "durationMinutes": "{count, plural, one {# hoɗɗo} other {# hoɗɗi}}",
+    "clearSearch": "Momtuɗe njoɓdi"
   },
   "terms": {
     "officialLanguages": "Yamre laawɗuɗo:",
@@ -8079,7 +8080,13 @@
       "skills": "Suɓo jam",
       "tools": "Yeerina ngesa",
       "trim": "Kalaama cataaji",
-      "assessment": "Sukkondiral yiyde"
+      "assessment": "Sukkondiral yiyde",
+      "query": "Sabugol ngoo rewte",
+      "mailScreen": "Cuɓɗo phishing ɗum e ñiiɓo",
+      "mailAnalysis": "Ñiiɓo e digest-an ɗi anndani",
+      "schemaProposal": "Ɓeyditere schema e jogii",
+      "mcpPlan": "Jigu connector",
+      "vision": "Njaɓɗe e leeri cuɓo"
     },
     "reason": {
       "endpoint_missing": "Endpoint walla bindugol account aƴa jogi",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Endpoint e ARM resource ID yiɗi accounteji ɗiɓɓe. Fayda teelte ceɗɗi.",
       "inventory_refresh_failed": "Jonnondirde hesɗinii. Teeŋtu access Reader app identity e connectivity account.",
       "credential_unavailable": "App a waawani andude credential jonnondirde mum. Teeŋtu teelte ceɗɗi identity."
-    }
+    },
+    "notSupported": "Model ɗin ndon tokkata",
+    "unservedOperations": "Model jowi, kadi sees chain ɗin, ndon tokkat: {operations}. Jokk model mo tokkata ɗum."
   }
 }

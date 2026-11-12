@@ -715,7 +715,8 @@
     "clear": "Share",
     "undo": "Wani lokaci baya",
     "durationSeconds": "{count, plural, one {# daqiqa} other {# daqiqo}}",
-    "durationMinutes": "{count, plural, one {# minti} other {# mintuna}}"
+    "durationMinutes": "{count, plural, one {# minti} other {# mintuna}}",
+    "clearSearch": "Share bincike"
   },
   "terms": {
     "officialLanguages": "Fassarar hukuma:",
@@ -8079,7 +8080,13 @@
       "skills": "Zaɓin fasaha",
       "tools": "Sarrafa hanyoyin aiki",
       "trim": "Rarrabe takardu",
-      "assessment": "Kimanta bincike"
+      "assessment": "Kimanta bincike",
+      "query": "Sake rubuta binciken tambaya",
+      "mailScreen": "Allon sata ta imel",
+      "mailAnalysis": "Nazarin imel da takaitawa",
+      "schemaProposal": "Shirin tsari na fitar da bayanai",
+      "mcpPlan": "Shirin haɗa maɓalli",
+      "vision": "Karanta hoto da shafi"
     },
     "reason": {
       "endpoint_missing": "Babu adireshin ƙarshe ko haɗin asusu",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Adireshin ƙarshe da ARM resource ID na nuni da asusu daban-daban. Gyara saitin tura aiki.",
       "inventory_refresh_failed": "Sabunta jerin ta gaza. Duba izinin Reader na app da haɗin asusu.",
       "credential_unavailable": "App ba zai iya samun takardar izinin jerin sa ba. Duba tsarawa tura aiki na asali."
-    }
+    },
+    "notSupported": "Wannan samfurin bai goyi bayan haka ba",
+    "unservedOperations": "Babu samfurin a wannan jerin da ke goyan bayan: {operations}. Ƙara samfurin da zai iya."
   }
 }

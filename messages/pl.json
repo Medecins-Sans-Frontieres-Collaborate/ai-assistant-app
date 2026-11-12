@@ -609,7 +609,8 @@
     "clear": "Wyczyść",
     "undo": "Cofnij",
     "durationSeconds": "{count, plural, one {# sekunda} other {# sekund(y)}}",
-    "durationMinutes": "{count, plural, one {# minuta} other {# minut(y)}}"
+    "durationMinutes": "{count, plural, one {# minuta} other {# minut(y)}}",
+    "clearSearch": "Wyczyść wyszukiwanie"
   },
   "errors": {
     "unexpectedErrorOccurred": "Wystąpił nieoczekiwany błąd",
@@ -8095,7 +8096,13 @@
       "skills": "Wybór umiejętności",
       "tools": "Routing narzędzi",
       "trim": "Klasyfikacja skracania",
-      "assessment": "Ocena wyszukiwania"
+      "assessment": "Ocena wyszukiwania",
+      "query": "Przepisanie zapytania wyszukiwania",
+      "mailScreen": "Ekran phishingu mailowego",
+      "mailAnalysis": "Analiza maili i podsumowań",
+      "schemaProposal": "Propozycja schematu ekstrakcji",
+      "mcpPlan": "Plan konektora",
+      "vision": "Odczyt obrazów i stron"
     },
     "reason": {
       "endpoint_missing": "Brak endpointu lub powiązania konta",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Endpoint i ARM resource ID wskazują na różne konta. Popraw konfigurację wdrożenia.",
       "inventory_refresh_failed": "Odświeżenie magazynu nie powiodło się. Sprawdź uprawnienia Reader tożsamości aplikacji i łączność z kontem.",
       "credential_unavailable": "Aplikacja nie mogła uzyskać swojego poświadczenia magazynu. Sprawdź konfigurację tożsamości wdrożenia."
-    }
+    },
+    "notSupported": "Nieobsługiwane przez ten model",
+    "unservedOperations": "Żaden model w tym łańcuchu nie obsługuje: {operations}. Dodaj model, który to umożliwia."
   }
 }

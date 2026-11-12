@@ -587,7 +587,8 @@
     "clear": "ရှင်းလင်းပါ",
     "undo": "ပြန်ဖျက်ပါ",
     "durationSeconds": "{count, plural, one {# စက္ကန့်} other {# စက္ကန့်}}",
-    "durationMinutes": "{count, plural, one {# မိနစ်} other {# မိနစ်}}"
+    "durationMinutes": "{count, plural, one {# မိနစ်} other {# မိနစ်}}",
+    "clearSearch": "ရှာဖွေရေးကိုရှင်းမည်"
   },
   "errors": {
     "unexpectedErrorOccurred": "မမျှော်လင့်ထားသော အမှားတစ်ခု ဖြစ်ပွားခဲ့သည်",
@@ -8095,7 +8096,13 @@
       "skills": "ကျွမ်းကျင်မှုရွေးချယ်ခြင်း",
       "tools": "ကိရိယာလမ်းကြောင်းသတ်မှတ်ခြင်း",
       "trim": "စာရွက်ခွဲခြားမှု",
-      "assessment": "ရှာဖွေမှုအကဲဖြတ်ခြင်း"
+      "assessment": "ရှာဖွေမှုအကဲဖြတ်ခြင်း",
+      "query": "ရှာဖွေမည့်အကြောင်းအရာ ပြန်ရေးခြင်း",
+      "mailScreen": "အီးမေးလ် ထောက်လှမ်းမှု စစ်ဆေးခြင်း",
+      "mailAnalysis": "အီးမေးလ်နှင့် အကျဥ်းချုပ် စစ်ဆေးမှု",
+      "schemaProposal": "ဖော်ထုတ်မှု စည်းမျဉ်း အဆိုပြုချက်",
+      "mcpPlan": "Connector အစီအစဉ်",
+      "vision": "ပုံနှင့်စာမျက်နှာဖတ်ခြင်း"
     },
     "reason": {
       "endpoint_missing": "Endpoint သို့မဟုတ် အကောင့်ချိတ်ဆက်မှု လိုနေသည်",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Endpoint နှင့် ARM resource ID တို့သည် အကောင့်ကွဲပြားသည်ကိုညွှန်ပြပါသည်။ Deployment configuration ကိုပြင်ပါ။",
       "inventory_refresh_failed": "စာရင်းအသစ်တင်ခြင်း မအောင်မြင်ပါ။ app identity ၏ Reader ထောက်ပံ့ခွင့်နှင့်အကောင့်ချိတ်ဆက်မှုများကိုစစ်ဆေးပါ။",
       "credential_unavailable": "app သည် ၎င်း၏အထောက်အထား (credential) ကိုရယူ၍မရပါ။ Deployment identity စိတ်ထဲသို့ပြင်ဆင်ပါ။"
-    }
+    },
+    "notSupported": "ဤမော်ဒယ်တွင် မပံ့ပိုးပါ",
+    "unservedOperations": "ဤကွင်းစည်းထဲရှိ မော်ဒယ်များသည် {operations} ကို မပံ့ပိုးပါ။ ပြုလုပ်နိုင်သော မော်ဒယ်တစ်ခုထည့်ပါ။"
   }
 }

@@ -715,7 +715,8 @@
     "clear": "ኣጽዳቕ",
     "undo": "ኣቐላጥፍ",
     "durationSeconds": "{count, plural, one {# ሰከንድ} other {# ሰከንዳት}}",
-    "durationMinutes": "{count, plural, one {# ደቒቕ} other {# ደቒቓት}}"
+    "durationMinutes": "{count, plural, one {# ደቒቕ} other {# ደቒቓት}}",
+    "clearSearch": "ድሑረ መፈለጊ ኣርኣይ"
   },
   "terms": {
     "officialLanguages": "ወግዓዊ ሕትመት:",
@@ -8079,7 +8080,13 @@
       "skills": "ስነ ክህደት ምርጫ",
       "tools": "ኣብ መሳርሒ ምዝገብ",
       "trim": "ቅጥቃጥ ምምልከት",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "ምግባር ዳግማይ መታየት ኣለዎ",
+      "mailScreen": "መደበር ፡ መልእኽት ፊሺንግ",
+      "mailAnalysis": "መልእኽትን ዝመጽእ ፈተና",
+      "schemaProposal": "ቅድሚ ውጽኢት ስከማ ሓበሬታ",
+      "mcpPlan": "መበጃ ኣገናኒ",
+      "vision": "ምስእን እና ገጽ ቕይታ"
     },
     "reason": {
       "endpoint_missing": "Endpoint ወይ ብ መለለይ ኣቋራጽ ብርኪ የጎዳኣን",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Endpointን ARM resource IDን ብቐይሩ ናይ ኣካውንት ይምልከቱ። ቅንጠታ ናይ deployment ኣድስጉ።",
       "inventory_refresh_failed": "ሓደሽቲ ብዛዕባ ድሕሪ ኣተረፈ። ፈትኑ እንተ Reader ኣብ identity ኣፕሊኬሽን እተሓታፍያን ናይ ኣካውንት ምድላውን።",
       "credential_unavailable": "ኣፕሊኬሽን ብዛዕባ ምርመራ መክትቢ ኣይተረኸበን። ቅንጠታ ናይ deployment identity ምምዝጋብ ፈትኑ።"
-    }
+    },
+    "notSupported": "ንዚ ሞዴል ይካበን ኣይደለን",
+    "unservedOperations": "ሞዴል ዝድለ ምርካብ ኣይኮነን: {operations}። ሞዴል ዘይምርካብ ወይ ጨምረ።"
   }
 }

@@ -715,7 +715,8 @@
     "clear": "Nadiifi",
     "undo": "Dib u noqosh",
     "durationSeconds": "{count, plural, one {# ilbiriqsi} other {# ilbiriqsi}}",
-    "durationMinutes": "{count, plural, one {# daqiiqo} other {# daqiiqo}}"
+    "durationMinutes": "{count, plural, one {# daqiiqo} other {# daqiiqo}}",
+    "clearSearch": "Tirtir raadinta"
   },
   "terms": {
     "officialLanguages": "Nooca rasmiga ah:",
@@ -8079,7 +8080,13 @@
       "skills": "Xulashada xirfadda",
       "tools": "U hagid qalab",
       "trim": "Kala soocid gaabin",
-      "assessment": "Qiimeynta raadinta"
+      "assessment": "Qiimeynta raadinta",
+      "query": "Dib-u-qorista weydiinta raadinta",
+      "mailScreen": "Shaashadda baadhista phishing-ka ee iimaylka",
+      "mailAnalysis": "Falanqaynta iimaylka iyo soo koobidda",
+      "schemaProposal": "Soo jeedinta qaabka soo saarista",
+      "mcpPlan": "Qorshaha isku xidhaha",
+      "vision": "Akhrinta sawir iyo bog"
     },
     "reason": {
       "endpoint_missing": "Dhammaadka ama isku-xirka akoonka waa maqan yahay",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Dhammaadka iyo ARM resource ID waxay tilmaamayaan akoonno kala duwan. Sax dejinta dhaqangelinta.",
       "inventory_refresh_failed": "Cusbooneysiinta qalabka waa ay fashilantay. Hubi akhriska aqoonsiga abka iyo isku xirnaanta akoonka.",
       "credential_unavailable": "Abku ma helin karo caddeyntiisa qalabka. Hubi dejinta aqoonsiga dhaqangelinta."
-    }
+    },
+    "notSupported": "Moodelkani ma taageerayo",
+    "unservedOperations": "Ma jiro moodel silsiladdan ku jira oo taageera: {operations}. Ku dar moodel taageera."
   }
 }

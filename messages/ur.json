@@ -611,7 +611,8 @@
     "clear": "صاف کریں",
     "undo": "واپس لیں",
     "durationSeconds": "{count, plural, one {# سیکنڈ} other {# سیکنڈز}}",
-    "durationMinutes": "{count, plural, one {# منٹ} other {# منٹ}}"
+    "durationMinutes": "{count, plural, one {# منٹ} other {# منٹ}}",
+    "clearSearch": "تلاش صاف کریں"
   },
   "errors": {
     "unexpectedErrorOccurred": "ایک غیر متوقع خرابی پیش آگئی",
@@ -8125,7 +8126,13 @@
       "skills": "اسکل سلیکشن",
       "tools": "ٹول روٹنگ",
       "trim": "ٹرم درجہ بندی",
-      "assessment": "سرچ اسیسمنٹ"
+      "assessment": "سرچ اسیسمنٹ",
+      "query": "تلاش سوال نو لکھیں",
+      "mailScreen": "میل فِشنگ اسکرین",
+      "mailAnalysis": "میل اور ڈائجسٹ تجزیہ",
+      "schemaProposal": "ایکسٹریکشن اسکیمہ تجویز",
+      "mcpPlan": "کنیکٹر منصوبہ",
+      "vision": "تصویر اور صفحہ پڑھنا"
     },
     "reason": {
       "endpoint_missing": "اینڈ پوائنٹ یا اکاؤنٹ بائنڈنگ غائب ہے",
@@ -8146,6 +8153,8 @@
       "endpoint_account_mismatch": "اینڈ پوائنٹ اور ARM resource ID مختلف اکاؤنٹس ظاہر کرتے ہیں۔ ڈیپلائمنٹ کنفیگریشن درست کریں۔",
       "inventory_refresh_failed": "انوینٹری ریفریش ناکام۔ ایپ کی شناخت کے Reader رسائی اور اکاؤنٹ کنیکٹیویٹی چیک کریں۔",
       "credential_unavailable": "ایپ اپنی انوینٹری کریڈینشل حاصل نہیں کر سکی۔ ڈیپلائمنٹ شناخت کی ترتیبات چیک کریں۔"
-    }
+    },
+    "notSupported": "یہ ماڈل اس کی حمایت نہیں کرتا",
+    "unservedOperations": "اس سلسلے میں کوئی ماڈل {operations} کی حمایت نہیں کرتا۔ ایسا ماڈل شامل کریں جو کرے۔"
   }
 }

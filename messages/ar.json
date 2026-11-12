@@ -612,7 +612,8 @@
     "clear": "مسح",
     "undo": "تراجع",
     "durationSeconds": "{count, plural, one {# ثانية} other {# ثوانٍ}}",
-    "durationMinutes": "{count, plural, one {# دقيقة} other {# دقائق}}"
+    "durationMinutes": "{count, plural, one {# دقيقة} other {# دقائق}}",
+    "clearSearch": "مسح البحث"
   },
   "chat": {
     "downloadAudio": "تنزيل الصوت",
@@ -8067,7 +8068,13 @@
       "skills": "اختيار المهارات",
       "tools": "توجيه الأدوات",
       "trim": "تصنيف التقصير",
-      "assessment": "تقييم البحث"
+      "assessment": "تقييم البحث",
+      "query": "إعادة صياغة استعلام البحث",
+      "mailScreen": "شاشة تصيّد الرسائل",
+      "mailAnalysis": "تحليل الرسائل والملخص",
+      "schemaProposal": "اقتراح مخطط الاستخراج",
+      "mcpPlan": "خطة الموصل",
+      "vision": "قراءة الصور والصفحات"
     },
     "reason": {
       "endpoint_missing": "نقطة النهاية أو ربط الحساب مفقود",
@@ -8100,7 +8107,9 @@
       "endpoint_account_mismatch": "نقطة النهاية ومعرف مورد ARM يحددان حسابين مختلفين. يرجى تصحيح إعدادات النشر.",
       "inventory_refresh_failed": "فشل تحديث الجرد. تحقق من صلاحية Reader لهوية التطبيق واتصال الحساب.",
       "credential_unavailable": "تعذر على التطبيق الحصول على بيانات اعتماد الجرد الخاصة به. تحقق من إعداد هوية النشر."
-    }
+    },
+    "notSupported": "غير مدعوم من هذا النموذج",
+    "unservedOperations": "لا يدعم أي نموذج في هذه السلسلة العمليات التالية: {operations}. يرجى إضافة نموذج يدعمها."
   },
   "personalSkills": {
     "title": "المهارات الشخصية",

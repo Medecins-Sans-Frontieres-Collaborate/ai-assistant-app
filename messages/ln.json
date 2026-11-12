@@ -715,7 +715,8 @@
     "clear": "Kolongola",
     "undo": "Kobongisa lisusu",
     "durationSeconds": "{count, plural, one {# sekonde} other {# basekonde}}",
-    "durationMinutes": "{count, plural, one {# minute} other {# baminate}}"
+    "durationMinutes": "{count, plural, one {# minute} other {# baminate}}",
+    "clearSearch": "Sangisa recherche"
   },
   "terms": {
     "officialLanguages": "Version officielle :",
@@ -8079,7 +8080,13 @@
       "skills": "Kopona mayele",
       "tools": "Routing ya outils",
       "trim": "Klasifikasyo ya trim",
-      "assessment": "Recherche-évaluation"
+      "assessment": "Recherche-évaluation",
+      "query": "Kokoma lisusu motuna ya koluka",
+      "mailScreen": "Ekran ya bango na mail phishing",
+      "mailAnalysis": "Analyse ya mail mpe digest",
+      "schemaProposal": "Proposition ya schema ya extraction",
+      "mcpPlan": "Plan ya connector",
+      "vision": "Koyekola elilingi mpe kotala lokasa"
     },
     "reason": {
       "endpoint_missing": "Endpoint to compte ekangami te",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Endpoint na ID ya ressource ARM ezali na ba comptes ya ndenge na ndenge. Sombola configuration ya deployment.",
       "inventory_refresh_failed": "Inventaire esibuaki kokoba. Tala soki app ezali na Reader accès pe connexion ya compte.",
       "credential_unavailable": "App ekokaki te kozwa credential na yango ya inventaire. Tala configuration ya identité ya deployment."
-    }
+    },
+    "notSupported": "Model oyo ekoki te",
+    "unservedOperations": "Model moko te na ekangami oyo ekoki: {operations}. Yanganisa model moko ekoki."
   }
 }

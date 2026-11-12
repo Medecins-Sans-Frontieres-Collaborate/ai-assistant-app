@@ -715,7 +715,8 @@
     "clear": "Efase",
     "undo": "Anile",
     "durationSeconds": "{count, plural, one {# segonn} other {# segonn}}",
-    "durationMinutes": "{count, plural, one {# minit} other {# minit}}"
+    "durationMinutes": "{count, plural, one {# minit} other {# minit}}",
+    "clearSearch": "Efase rechèch"
   },
   "terms": {
     "officialLanguages": "Vèsyon ofisyèl:",
@@ -8079,7 +8080,13 @@
       "skills": "Chwazi konpetans",
       "tools": "Routaj zouti",
       "trim": "Klasifikasyon koutaj",
-      "assessment": "Evalyasyon rechèch"
+      "assessment": "Evalyasyon rechèch",
+      "query": "Rekri rechèch kesyon an",
+      "mailScreen": "Ekran mail phishing",
+      "mailAnalysis": "Analiz mail ak rezime",
+      "schemaProposal": "Pwopozisyon plan ekstraksyon",
+      "mcpPlan": "Plan konektè",
+      "vision": "Li imaj ak paj"
     },
     "reason": {
       "endpoint_missing": "Fenpwen oswa koneksyon kont manke",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Fenpwen an ak ID resous ARM lan idantifye de kont diferan. Korije konfigirasyon deplwaman an.",
       "inventory_refresh_failed": "Rafrechisman envantè a echwe. Tcheke aksè Lecteur idantite app la ak koneksyon kont lan.",
       "credential_unavailable": "App a pa t kapab jwenn kalifikasyon envantè li. Tcheke konfigirasyon idantite deplwaman an."
-    }
+    },
+    "notSupported": "Modèl sa pa sipòte sa",
+    "unservedOperations": "Pa gen okenn modèl nan chèn sa a ki sipòte: {operations}. Ajoute yon modèl ki ka fè sa."
   }
 }

@@ -612,7 +612,8 @@
     "clear": "Effacer",
     "undo": "Annuler",
     "durationSeconds": "{count, plural, one {# seconde} other {# secondes}}",
-    "durationMinutes": "{count, plural, one {# minute} other {# minutes}}"
+    "durationMinutes": "{count, plural, one {# minute} other {# minutes}}",
+    "clearSearch": "Effacer la recherche"
   },
   "chat": {
     "downloadAudio": "Télécharger l'audio",
@@ -8095,7 +8096,13 @@
       "skills": "Sélection de compétences",
       "tools": "Routage d’outils",
       "trim": "Classification de réduction",
-      "assessment": "Évaluation de recherche"
+      "assessment": "Évaluation de recherche",
+      "query": "Réécriture de la requête de recherche",
+      "mailScreen": "Écran de détection de phishing par e-mail",
+      "mailAnalysis": "Analyse des e-mails et des synthèses",
+      "schemaProposal": "Proposition de schéma d’extraction",
+      "mcpPlan": "Plan du connecteur",
+      "vision": "Lecture d’images et de pages"
     },
     "reason": {
       "endpoint_missing": "Point de terminaison ou liaison de compte manquant",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Le point de terminaison et l’ID de ressource ARM identifient des comptes différents. Corrigez la configuration du déploiement.",
       "inventory_refresh_failed": "Échec de l’actualisation de l’inventaire. Vérifiez l’accès Lecteur de l’identité de l’application et la connectivité du compte.",
       "credential_unavailable": "L’application n’a pas pu obtenir son identifiant d’inventaire. Vérifiez la configuration de l’identité du déploiement."
-    }
+    },
+    "notSupported": "Non pris en charge par ce modèle",
+    "unservedOperations": "Aucun modèle dans cette chaîne ne prend en charge : {operations}. Ajoutez un modèle qui le fait."
   }
 }

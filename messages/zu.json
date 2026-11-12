@@ -715,7 +715,8 @@
     "clear": "Sula",
     "undo": "Buyisela emuva",
     "durationSeconds": "{count, plural, one {# umzuzwana} other {# imizuzwana}}",
-    "durationMinutes": "{count, plural, one {# umzuzu} other {# imizuzu}}"
+    "durationMinutes": "{count, plural, one {# umzuzu} other {# imizuzu}}",
+    "clearSearch": "Sula usesho"
   },
   "terms": {
     "officialLanguages": "Inguqulo esemthethweni:",
@@ -8079,7 +8080,13 @@
       "skills": "Ukukhetha amakhono",
       "tools": "Ukumisa amathuluzi",
       "trim": "Ukuhlukanisa ngokugunda",
-      "assessment": "Ukuhlola okuseshwayo"
+      "assessment": "Ukuhlola okuseshwayo",
+      "query": "Phinda umbuzo wokusesha",
+      "mailScreen": "Isikrini sokukhwabanisa nge-imeyili",
+      "mailAnalysis": "Uhlaziyo lwe-imeyili kanye ne-digest",
+      "schemaProposal": "Isiphakamiso seshishini sokukhipha",
+      "mcpPlan": "Uhlelo lwe-connector",
+      "vision": "Ukufunda izithombe namakhasi"
     },
     "reason": {
       "endpoint_missing": "I-endpoint noma ibhondi ye-akhawunti ayikho",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "I-endpoint ne-ARM resource ID zikhomba kuma-akhawunti ahlukene. Lungisa ukucushwa kokudidiyelwa.",
       "inventory_refresh_failed": "Ukuvuselelwa kohlolo kwehlulekile. Hlola ukufinyelela kwe-Reader kobunikazi bohlelo nokuxhumana kwe-akhawunti.",
       "credential_unavailable": "Uhlelo alukwazanga ukuthola i-credential yohlolo lwayo. Hlola ukucushwa kobunikazi bokudidiyelwa."
-    }
+    },
+    "notSupported": "Le modeli ayisekelwanga",
+    "unservedOperations": "Ayikho modeli kule chain esekela: {operations}. Engeza modeli eyenza lokhu."
   }
 }

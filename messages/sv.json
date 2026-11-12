@@ -612,7 +612,8 @@
     "clear": "Rensa",
     "undo": "Ångra",
     "durationSeconds": "{count, plural, one {# sekund} other {# sekunder}}",
-    "durationMinutes": "{count, plural, one {# minut} other {# minuter}}"
+    "durationMinutes": "{count, plural, one {# minut} other {# minuter}}",
+    "clearSearch": "Rensa sökning"
   },
   "errors": {
     "unexpectedErrorOccurred": "Ett oväntat fel uppstod",
@@ -8095,7 +8096,13 @@
       "skills": "Färdighetsval",
       "tools": "Verktygsruttning",
       "trim": "Trimklassificering",
-      "assessment": "Sökbedömning"
+      "assessment": "Sökbedömning",
+      "query": "Omskrivning av sökfråga",
+      "mailScreen": "E-postphishing-skärm",
+      "mailAnalysis": "Analys av e-post och sammanfattning",
+      "schemaProposal": "Förslag på extraktionsschema",
+      "mcpPlan": "Connector-plan",
+      "vision": "Bild- och sidläsning"
     },
     "reason": {
       "endpoint_missing": "Slutpunkt eller kontobindning saknas",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Slutpunkten och ARM-resurs-ID tillhör olika konton. Korrigera driftsättningskonfigurationen.",
       "inventory_refresh_failed": "Uppdatering av inventering misslyckades. Kontrollera Reader-åtkomst och kontokoppling för appens identitet.",
       "credential_unavailable": "Appen kunde inte hämta sin inventeringsbehörighet. Kontrollera konfigurationen för driftsättningsidentitet."
-    }
+    },
+    "notSupported": "Stöds inte av denna modell",
+    "unservedOperations": "Ingen modell i denna kedja stöder: {operations}. Lägg till en modell som gör det."
   }
 }

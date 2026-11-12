@@ -612,7 +612,8 @@
     "clear": "Limpar",
     "undo": "Desfazer",
     "durationSeconds": "{count, plural, one {# segundo} other {# segundos}}",
-    "durationMinutes": "{count, plural, one {# minuto} other {# minutos}}"
+    "durationMinutes": "{count, plural, one {# minuto} other {# minutos}}",
+    "clearSearch": "Limpar busca"
   },
   "chat": {
     "downloadAudio": "Baixar áudio",
@@ -8095,7 +8096,13 @@
       "skills": "Seleção de habilidade",
       "tools": "Roteamento de ferramentas",
       "trim": "Classificação de redução",
-      "assessment": "Avaliação de busca"
+      "assessment": "Avaliação de busca",
+      "query": "Reescrever consulta de pesquisa",
+      "mailScreen": "Tela de phishing de e-mail",
+      "mailAnalysis": "Análise de e-mail e resumo",
+      "schemaProposal": "Proposta de esquema de extração",
+      "mcpPlan": "Plano de conector",
+      "vision": "Leitura de imagens e páginas"
     },
     "reason": {
       "endpoint_missing": "Vínculo de endpoint ou conta ausente",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "O endpoint e o ID do recurso ARM identificam contas diferentes. Corrija a configuração da implantação.",
       "inventory_refresh_failed": "Falha ao atualizar o inventário. Verifique o acesso de Leitor à identidade do app e a conectividade da conta.",
       "credential_unavailable": "O app não conseguiu obter sua credencial de inventário. Verifique a configuração de identidade da implantação."
-    }
+    },
+    "notSupported": "Não suportado por este modelo",
+    "unservedOperations": "Nenhum modelo nesta cadeia suporta: {operations}. Adicione um modelo que suporte."
   }
 }

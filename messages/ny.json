@@ -715,7 +715,8 @@
     "clear": "Chotsani",
     "undo": "Bwezerani",
     "durationSeconds": "{count, plural, one {# sekondi} other {# masekondi}}",
-    "durationMinutes": "{count, plural, one {# mphindi} other {# mphindi}}"
+    "durationMinutes": "{count, plural, one {# mphindi} other {# mphindi}}",
+    "clearSearch": "Chotsani kusaka"
   },
   "terms": {
     "officialLanguages": "Mtundu waumulungu:",
@@ -8079,7 +8080,13 @@
       "skills": "Kusankha luso",
       "tools": "Tool routing",
       "trim": "Trim classification",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "Kusinthanso kufunsa kwa kufufuza",
+      "mailScreen": "Chifaniziro cha phishing cha imelo",
+      "mailAnalysis": "Kufufuza ndi kusanthula za imelo",
+      "schemaProposal": "Mapendekere a dongosolo lochotsa",
+      "mcpPlan": "Dongosolo la connector",
+      "vision": "Kuwerenga chithunzi ndi tsamba"
     },
     "reason": {
       "endpoint_missing": "Endpoint kapena account binding ilibe",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Endpoint ndi ARM resource ID zikuwonetsa maakaunti osiyana. Konzani zoikamo za deployment.",
       "inventory_refresh_failed": "Zalephera kukonzanso inventory. Onani mwayi wa app identity ngati Reader komanso kulumikizana kwa account.",
       "credential_unavailable": "App sizinapeze cholembera cha inventory chake. Onani zoikamo za deployment identity."
-    }
+    },
+    "notSupported": "Sathandizidwa ndi modeli iyi",
+    "unservedOperations": "Palibe modeli mu unoyu imathandiza: {operations}. Onjezani modeli yomwe imathandiza."
   }
 }

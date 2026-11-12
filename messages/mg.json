@@ -715,7 +715,8 @@
     "clear": "Fafao",
     "undo": "Avereno",
     "durationSeconds": "{count, plural, one {# segondra} other {# segondra}}",
-    "durationMinutes": "{count, plural, one {# minitra} other {# minitra}}"
+    "durationMinutes": "{count, plural, one {# minitra} other {# minitra}}",
+    "clearSearch": "Fafao ny fikarohana"
   },
   "terms": {
     "officialLanguages": "Kinova ofisialy:",
@@ -8079,7 +8080,13 @@
       "skills": "Fifantenana fahaiza-manao",
       "tools": "Fanitsiana lalana fitaovana",
       "trim": "Fanasokajiana famerana",
-      "assessment": "Fanombanana fikarohana"
+      "assessment": "Fanombanana fikarohana",
+      "query": "Fanoratana indray ny fangatahana fikarohana",
+      "mailScreen": "Sary fitaka amin'ny mailaka",
+      "mailAnalysis": "Fandinihana mailaka sy digest",
+      "schemaProposal": "Soso-kevitra drafitra fakana",
+      "mcpPlan": "Drafitra connector",
+      "vision": "Famakiana sary sy pejy"
     },
     "reason": {
       "endpoint_missing": "Tsy hita ny endpoint na fatorana amin'ny kaonty",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Mamaritra kaonty tsy mitovy ny endpoint sy ny ARM resource ID. Ahitsio ny toeran'ny fampiharana.",
       "inventory_refresh_failed": "Tsy nahomby ny fanavaozana fampiraiketana. Hamarino ny Reader access sy ny fifandraisana amin'ny kaonty amin'ny maha-app.",
       "credential_unavailable": "Tsy azony ny fanomezana fampiraiketana. Hamarino ny toeran'ny maha-fampiharana."
-    }
+    },
+    "notSupported": "Tsy tohanan'ity modèle ity",
+    "unservedOperations": "Tsy misy modèle amin'ity rojo ity no manohana: {operations}. Ampio modèle izay manohana izany."
   }
 }

@@ -611,7 +611,8 @@
     "clear": "Xóa",
     "undo": "Hoàn tác",
     "durationSeconds": "{count, plural, one {# giây} other {# giây}}",
-    "durationMinutes": "{count, plural, one {# phút} other {# phút}}"
+    "durationMinutes": "{count, plural, one {# phút} other {# phút}}",
+    "clearSearch": "Xóa tìm kiếm"
   },
   "errors": {
     "unexpectedErrorOccurred": "Đã xảy ra lỗi không mong muốn",
@@ -8126,7 +8127,13 @@
       "skills": "Chọn kỹ năng",
       "tools": "Chuyển hướng công cụ",
       "trim": "Phân loại cắt giảm",
-      "assessment": "Đánh giá tìm kiếm"
+      "assessment": "Đánh giá tìm kiếm",
+      "query": "Viết lại truy vấn tìm kiếm",
+      "mailScreen": "Màn hình phát hiện lừa đảo qua email",
+      "mailAnalysis": "Phân tích email và bản tổng hợp",
+      "schemaProposal": "Đề xuất sơ đồ trích xuất",
+      "mcpPlan": "Kế hoạch kết nối",
+      "vision": "Đọc hình ảnh và trang"
     },
     "reason": {
       "endpoint_missing": "Thiếu endpoint hoặc ràng buộc tài khoản",
@@ -8147,6 +8154,8 @@
       "endpoint_account_mismatch": "Endpoint và ID tài nguyên ARM xác định hai tài khoản khác nhau. Hãy sửa lại cấu hình triển khai.",
       "inventory_refresh_failed": "Làm mới kho thất bại. Kiểm tra quyền Reader của ứng dụng và kết nối tài khoản.",
       "credential_unavailable": "Ứng dụng không thể lấy được thông tin xác thực kho. Kiểm tra cấu hình danh tính triển khai."
-    }
+    },
+    "notSupported": "Không được hỗ trợ bởi mô hình này",
+    "unservedOperations": "Không có mô hình nào trong chuỗi này hỗ trợ: {operations}. Hãy thêm một mô hình phù hợp."
   }
 }

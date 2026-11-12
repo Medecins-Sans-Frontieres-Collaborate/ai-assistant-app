@@ -612,7 +612,8 @@
     "clear": "Leeren",
     "undo": "Rückgängig",
     "durationSeconds": "{count, plural, one {# Sekunde} other {# Sekunden}}",
-    "durationMinutes": "{count, plural, one {# Minute} other {# Minuten}}"
+    "durationMinutes": "{count, plural, one {# Minute} other {# Minuten}}",
+    "clearSearch": "Suche zurücksetzen"
   },
   "chat": {
     "downloadAudio": "Audio herunterladen",
@@ -8071,7 +8072,13 @@
       "skills": "Skill-Auswahl",
       "tools": "Tool-Routing",
       "trim": "Kürzungsklassifizierung",
-      "assessment": "Suchbewertung"
+      "assessment": "Suchbewertung",
+      "query": "Suchanfrage umschreiben",
+      "mailScreen": "Mail-Phishing-Screen",
+      "mailAnalysis": "Analyse von E-Mails und Zusammenfassungen",
+      "schemaProposal": "Vorschlag für ein Extraktionsschema",
+      "mcpPlan": "Connector-Plan",
+      "vision": "Bild- und Seitenerkennung"
     },
     "reason": {
       "endpoint_missing": "Endpunkt oder Kontozuordnung fehlt",
@@ -8100,7 +8107,9 @@
       "endpoint_account_mismatch": "Der Endpunkt und die ARM-Ressourcen-ID gehören zu unterschiedlichen Konten. Korrigieren Sie die Bereitstellungskonfiguration.",
       "inventory_refresh_failed": "Inventaraktualisierung fehlgeschlagen. Prüfen Sie den Reader-Zugriff der App-Identität und die Kontoverbindung.",
       "credential_unavailable": "Die App konnte ihr Inventar-Zertifikat nicht abrufen. Prüfen Sie die Identitätskonfiguration der Bereitstellung."
-    }
+    },
+    "notSupported": "Von diesem Modell nicht unterstützt",
+    "unservedOperations": "Kein Modell in dieser Kette unterstützt: {operations}. Fügen Sie ein entsprechendes Modell hinzu."
   },
   "personalSkills": {
     "title": "Persönliche Fähigkeiten",

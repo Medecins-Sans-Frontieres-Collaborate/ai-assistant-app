@@ -612,7 +612,8 @@
     "clear": "Futa",
     "undo": "Rudisha",
     "durationSeconds": "{count, plural, one {# sekunde} other {# sekunde}}",
-    "durationMinutes": "{count, plural, one {# dakika} other {# dakika}}"
+    "durationMinutes": "{count, plural, one {# dakika} other {# dakika}}",
+    "clearSearch": "Futa utafutaji"
   },
   "errors": {
     "unexpectedErrorOccurred": "Hitilafu isiyotarajiwa imetokea",
@@ -8095,7 +8096,13 @@
       "skills": "Uteuzi wa ujuzi",
       "tools": "Uelekezaji wa zana",
       "trim": "Uainishaji wa kufupisha",
-      "assessment": "Tathmini ya utafutaji"
+      "assessment": "Tathmini ya utafutaji",
+      "query": "Andika upya hoja ya utafutaji",
+      "mailScreen": "Skrini ya udukuzi wa barua pepe",
+      "mailAnalysis": "Uchambuzi wa barua pepe na muhtasari",
+      "schemaProposal": "Pendekezo la mpangilio wa uchanganuzi",
+      "mcpPlan": "Mpango wa kiunganishi",
+      "vision": "Usomaji wa picha na kurasa"
     },
     "reason": {
       "endpoint_missing": "Kiunganishi au uhusiano wa akaunti umekosekana",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Kiunganishi na ARM resource ID vinatambulisha akaunti tofauti. Rekebisha usanidi wa utekelezaji.",
       "inventory_refresh_failed": "Usasishaji wa hifadhi umeshindwa. Kagua ufikiaji wa Reader wa utambulisho wa programu na muunganisho wa akaunti.",
       "credential_unavailable": "Programu haikuweza kupata kitambulisho chake cha hifadhi. Kagua usanidi wa utambulisho wa utekelezaji."
-    }
+    },
+    "notSupported": "Haungiwi mkono na mfano huu",
+    "unservedOperations": "Hakuna mfano katika mnyororo huu unaounga mkono: {operations}. Ongeza mfano unaoufanya."
   }
 }

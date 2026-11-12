@@ -715,7 +715,8 @@
     "clear": "پاک کړئ",
     "undo": "بیرته واخلئ",
     "durationSeconds": "{count, plural, one {# ثانیه} other {# ثانیې}}",
-    "durationMinutes": "{count, plural, one {# دقیقه} other {# دقیقې}}"
+    "durationMinutes": "{count, plural, one {# دقیقه} other {# دقیقې}}",
+    "clearSearch": "لټون پاک کړئ"
   },
   "terms": {
     "officialLanguages": "رسمي نسخه:",
@@ -8079,7 +8080,13 @@
       "skills": "د مهارت ټاکنه",
       "tools": "د وسیلو رهنمایي",
       "trim": "د لنډیز طبقه بندي",
-      "assessment": "د پلټنې ارزونه"
+      "assessment": "د پلټنې ارزونه",
+      "query": "د لټون پوښتنې بیا لیکنه",
+      "mailScreen": "د بریښنالیک فیشنګ سکرین",
+      "mailAnalysis": "د بریښنالیک او خلاصې تحلیل",
+      "schemaProposal": "د استخراج سکیمه وړاندیز",
+      "mcpPlan": "د کنیکټر پلان",
+      "vision": "تصویر او پاڼې لوستنه"
     },
     "reason": {
       "endpoint_missing": "اینډپواینټ یا اکاونټ تړنه نشته",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "اینډپواینټ او ARM resource ID مختلف اکاونټونه ښيي. د ډیپلویمنټ تنظیم سم کړئ.",
       "inventory_refresh_failed": "د انوینټري نوي کول ناکام شول. د اپ هویت د Reader لاسرسی او د اکاونټ اتصال وګورئ.",
       "credential_unavailable": "اپ نه شو کولی خپله انوینټري تصدیق ترلاسه کړي. د ډیپلویمنټ هویت تنظیم وګورئ."
-    }
+    },
+    "notSupported": "پدې ماډل کې نه ملاتړ کېږي",
+    "unservedOperations": "په دې سلسله کې هېڅ ماډل {operations} نه ملاتړ کوي. یو داسې ماډل اضافه کړئ چې دا ملاتړ کوي."
   }
 }

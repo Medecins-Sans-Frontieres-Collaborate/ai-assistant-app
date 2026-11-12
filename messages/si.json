@@ -579,7 +579,8 @@
     "clear": "පිරිසිඳු කරන්න",
     "undo": "අහෝසි කරන්න",
     "durationSeconds": "{count, plural, one {තත්පර #} other {තත්පර #}}",
-    "durationMinutes": "{count, plural, one {විනාඩි #} other {විනාඩි #}}"
+    "durationMinutes": "{count, plural, one {විනාඩි #} other {විනාඩි #}}",
+    "clearSearch": "සෙවීම මකන්න"
   },
   "errors": {
     "unexpectedErrorOccurred": "අනපේක්ෂිත දෝෂයක් සිදු විය",
@@ -8095,7 +8096,13 @@
       "skills": "දක්ෂතාව තේරීම",
       "tools": "උපකරණ Routing",
       "trim": "වර්ගීකරණය කපන්න",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "සෙවීමේ උපදෙස් යළි ලිවීම",
+      "mailScreen": "Mail phishing තිරය",
+      "mailAnalysis": "Mail සහ digest විශ්ලේෂණය",
+      "schemaProposal": "Extraction schema යෝජනාව",
+      "mcpPlan": "Connector සැලැස්ම",
+      "vision": "පිළිඹිඹු සහ පිටු කියවීම"
     },
     "reason": {
       "endpoint_missing": "Endpoint නැත හෝ ගිණුම් බැඳීම නැත",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Endpoint සහ ARM resource ID වෙනස් ගිණුම් වලට අයත්ය. Deployment වින්‍යාසය නිවැරදි කරන්න.",
       "inventory_refresh_failed": "ඉන්වෙන්ටරි යාවත්කාලීන කිරීම අසාර්ථකයි. App identity හි Reader ප්‍රවේශය සහ ගිණුම් සම්බන්ධතාව පරීක්ෂා කරන්න.",
       "credential_unavailable": "මෙම app එකට එහි ඉන්වෙන්ටරි credential ලබාගත නොහැක. Deployment identity වින්‍යාසය පරීක්ෂා කරන්න."
-    }
+    },
+    "notSupported": "මෙම ආදර්ශය විසින් සහය නොදක්වනවා",
+    "unservedOperations": "මෙම සංකේතාත්මක ශ්‍රේණියේ කිසිදු ආදර්ශයකි {operations} සඳහා සහය නොදක්වයි. එය සහය දක්වන ආදර්ශයක් යොදන්න."
   }
 }

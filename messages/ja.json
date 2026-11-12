@@ -612,7 +612,8 @@
     "clear": "クリア",
     "undo": "元に戻す",
     "durationSeconds": "{count, plural, one {# 秒} other {# 秒}}",
-    "durationMinutes": "{count, plural, one {# 分} other {# 分}}"
+    "durationMinutes": "{count, plural, one {# 分} other {# 分}}",
+    "clearSearch": "検索をクリア"
   },
   "errors": {
     "unexpectedErrorOccurred": "予期しないエラーが発生しました",
@@ -8095,7 +8096,13 @@
       "skills": "スキル選択",
       "tools": "ツールルーティング",
       "trim": "短縮分類",
-      "assessment": "検索評価"
+      "assessment": "検索評価",
+      "query": "検索クエリの書き換え",
+      "mailScreen": "メールフィッシング画面",
+      "mailAnalysis": "メールおよびダイジェスト分析",
+      "schemaProposal": "抽出スキーマ提案",
+      "mcpPlan": "コネクタープラン",
+      "vision": "画像とページの読み取り"
     },
     "reason": {
       "endpoint_missing": "エンドポイントまたはアカウントの関連付けがありません",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "エンドポイントと ARM リソース ID が異なるアカウントを指しています。デプロイメント設定を修正してください。",
       "inventory_refresh_failed": "インベントリの更新に失敗しました。アプリIDのReaderアクセス権およびアカウント接続を確認してください。",
       "credential_unavailable": "アプリがインベントリの認証情報を取得できませんでした。デプロイメントID設定を確認してください。"
-    }
+    },
+    "notSupported": "このモデルではサポートされていません",
+    "unservedOperations": "このチェーン内のモデルはいずれも次の操作をサポートしていません: {operations}。対応するモデルを追加してください。"
   }
 }

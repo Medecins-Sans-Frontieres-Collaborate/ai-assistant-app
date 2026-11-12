@@ -715,7 +715,8 @@
     "clear": "Obriši",
     "undo": "Poništi",
     "durationSeconds": "{count, plural, one {# sekunda} other {# sekundi}}",
-    "durationMinutes": "{count, plural, one {# minut} other {# minuta}}"
+    "durationMinutes": "{count, plural, one {# minut} other {# minuta}}",
+    "clearSearch": "Obriši pretragu"
   },
   "terms": {
     "officialLanguages": "Званична верзија:",
@@ -8079,7 +8080,13 @@
       "skills": "Izbor veština",
       "tools": "Ruting alata",
       "trim": "Klasifikacija za skraćivanje",
-      "assessment": "Procena pretrage"
+      "assessment": "Procena pretrage",
+      "query": "Prepravka upita za pretragu",
+      "mailScreen": "Ekran za phishing mejlova",
+      "mailAnalysis": "Analiza mejlova i pregleda",
+      "schemaProposal": "Predlog za šemu ekstrakcije",
+      "mcpPlan": "Plan konektora",
+      "vision": "Čitanje slika i stranica"
     },
     "reason": {
       "endpoint_missing": "Nedostaje endpoint ili veza sa nalogom",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Endpoint i ARM resource ID identifikuju različite naloge. Ispravite konfiguraciju deploymenta.",
       "inventory_refresh_failed": "Obnova inventara nije uspela. Proverite Reader pristup identiteta aplikacije i povezanost naloga.",
       "credential_unavailable": "Aplikacija nije mogla da dođe do svojih akreditiva za inventar. Proverite konfiguraciju identiteta za deployment."
-    }
+    },
+    "notSupported": "Nije podržano od strane ovog modela",
+    "unservedOperations": "Nijedan model u ovom lancu ne podržava: {operations}. Dodajte model koji to omogućava."
   }
 }

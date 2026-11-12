@@ -579,7 +579,8 @@
     "clear": "Bersihkan",
     "undo": "Urungkan",
     "durationSeconds": "{count, plural, one {# detik} other {# detik}}",
-    "durationMinutes": "{count, plural, one {# menit} other {# menit}}"
+    "durationMinutes": "{count, plural, one {# menit} other {# menit}}",
+    "clearSearch": "Hapus pencarian"
   },
   "errors": {
     "unexpectedErrorOccurred": "Terjadi kesalahan yang tidak terduga",
@@ -8095,7 +8096,13 @@
       "skills": "Pemilihan skill",
       "tools": "Routing alat",
       "trim": "Klasifikasi trim",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "Tulis ulang permintaan pencarian",
+      "mailScreen": "Layar phishing email",
+      "mailAnalysis": "Analisis email dan ringkasan",
+      "schemaProposal": "Usulan skema ekstraksi",
+      "mcpPlan": "Rencana konektor",
+      "vision": "Pembacaan gambar dan halaman"
     },
     "reason": {
       "endpoint_missing": "Endpoint atau pengikatan akun belum ada",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Endpoint dan ARM resource ID menunjuk ke akun yang berbeda. Perbaiki konfigurasi deployment.",
       "inventory_refresh_failed": "Pembaruan inventaris gagal. Periksa akses Reader dan koneksi akun pada identitas aplikasi.",
       "credential_unavailable": "Aplikasi tidak dapat memperoleh kredensial inventarisnya. Periksa konfigurasi identitas deployment."
-    }
+    },
+    "notSupported": "Tidak didukung oleh model ini",
+    "unservedOperations": "Tidak ada model dalam rantai ini yang mendukung: {operations}. Tambahkan model yang mendukung."
   }
 }

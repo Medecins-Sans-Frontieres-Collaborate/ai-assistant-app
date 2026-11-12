@@ -587,7 +587,8 @@
     "clear": "נקה",
     "undo": "בטל",
     "durationSeconds": "{count, plural, one {# שנייה} other {# שניות}}",
-    "durationMinutes": "{count, plural, one {# דקה} other {# דקות}}"
+    "durationMinutes": "{count, plural, one {# דקה} other {# דקות}}",
+    "clearSearch": "נקה חיפוש"
   },
   "errors": {
     "unexpectedErrorOccurred": "אירעה שגיאה בלתי צפויה",
@@ -8095,7 +8096,13 @@
       "skills": "בחירת מיומנויות",
       "tools": "ניתוב כלים",
       "trim": "סיווג קיצוץ",
-      "assessment": "הערכת חיפוש"
+      "assessment": "הערכת חיפוש",
+      "query": "שכתוב שאילתת חיפוש",
+      "mailScreen": "מסך פישינג בדוא\"ל",
+      "mailAnalysis": "ניתוח דוא\"ל ותמצית",
+      "schemaProposal": "הצעת מבנה חילוץ",
+      "mcpPlan": "תכנית מחבר",
+      "vision": "קריאת תמונות ודפים"
     },
     "reason": {
       "endpoint_missing": "חסר נקודת קצה או קישור לחשבון",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "נקודת הקצה ומזהה משאב ARM מזהים חשבונות שונים. תקן את הגדרות הפריסה.",
       "inventory_refresh_failed": "רענון המלאי נכשל. בדוק את גישת קורא של זהות האפליקציה ואת החיבור לחשבון.",
       "credential_unavailable": "האפליקציה לא הצליחה לקבל את אישור המלאי שלה. בדוק את הגדרות זיהוי הפריסה."
-    }
+    },
+    "notSupported": "לא נתמך על ידי דגם זה",
+    "unservedOperations": "אף דגם בשרשרת זו אינו תומך ב: {operations}. יש להוסיף דגם שתומך בכך."
   }
 }

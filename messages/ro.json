@@ -610,7 +610,8 @@
     "clear": "Șterge",
     "undo": "Anulare",
     "durationSeconds": "{count, plural, one {# secundă} other {# secunde}}",
-    "durationMinutes": "{count, plural, one {# minut} other {# minute}}"
+    "durationMinutes": "{count, plural, one {# minut} other {# minute}}",
+    "clearSearch": "Șterge căutarea"
   },
   "errors": {
     "unexpectedErrorOccurred": "A apărut o eroare neașteptată",
@@ -8095,7 +8096,13 @@
       "skills": "Selectare abilități",
       "tools": "Rutare instrumente",
       "trim": "Clasificare trim",
-      "assessment": "Evaluare căutare"
+      "assessment": "Evaluare căutare",
+      "query": "Rescrierea interogării de căutare",
+      "mailScreen": "Ecran de phishing mail",
+      "mailAnalysis": "Analiză mail și digest",
+      "schemaProposal": "Propunere de schemă de extragere",
+      "mcpPlan": "Plan conector",
+      "vision": "Citire de imagini și pagini"
     },
     "reason": {
       "endpoint_missing": "Endpoint sau legătură cont lipsă",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Endpoint-ul și ARM resource ID identifică conturi diferite. Corectați configurația deployment-ului.",
       "inventory_refresh_failed": "Reîmprospătarea inventarului a eșuat. Verificați accesul Reader și conectivitatea contului pentru identitatea aplicației.",
       "credential_unavailable": "Aplicația nu a putut obține acreditarea de inventar. Verificați configurația identității de deployment."
-    }
+    },
+    "notSupported": "Nesusținut de acest model",
+    "unservedOperations": "Niciun model din acest lanț nu suportă: {operations}. Adăugați un model care să o facă."
   }
 }

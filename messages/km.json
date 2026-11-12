@@ -715,7 +715,8 @@
     "clear": "លុបចេញ",
     "undo": "បោះបង់",
     "durationSeconds": "{count, plural, one {# វិនាទី} other {# វិនាទី}}",
-    "durationMinutes": "{count, plural, one {# នាទី} other {# នាទី}}"
+    "durationMinutes": "{count, plural, one {# នាទី} other {# នាទី}}",
+    "clearSearch": "ជម្រះការស្វែងរក"
   },
   "terms": {
     "officialLanguages": "កំណែផ្លូវការ៖",
@@ -8079,7 +8080,13 @@
       "skills": "ជ្រើសជំនាញ",
       "tools": "បញ្ច្រាស់ឧបករណ៍",
       "trim": "ចំណាត់ថ្នាក់កាត់បន្ថយ",
-      "assessment": "វាយតម្លៃស្វែងរក"
+      "assessment": "វាយតម្លៃស្វែងរក",
+      "query": "សំណួរស្វែងរកបង្ហាញឡើងវិញ",
+      "mailScreen": "អេក្រង់ Mail phishing",
+      "mailAnalysis": "ការវិភាគសំបុត្រ និង digest",
+      "schemaProposal": "សំណើរលក្ខណៈស្គេមការទាញយក",
+      "mcpPlan": "ផែនការ Connector",
+      "vision": "អានរូបភាព និងទំព័រ"
     },
     "reason": {
       "endpoint_missing": "បាត់បណ្តាញចេញឬការចងគណនី",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "បណ្តាញចេញ និង ARM resource ID សម្គាល់គណនីខុសគ្នា។ សូមកែការកំណត់ការដាក់បញ្ចូល។",
       "inventory_refresh_failed": "បរាជ័យក្នុងការធ្វើបច្ចុប្បន្នភាពបញ្ជី។ សូមពិនិត្យ Reader access របស់ឧត្តមភាពកម្មវិធី និងការតភ្ជាប់គណនី។",
       "credential_unavailable": "កម្មវិធីមិនអាចយក credential សម្រាប់បញ្ជី។ សូមពិនិត្យការកំណត់ឧត្តមភាពការដាក់បញ្ចូល។"
-    }
+    },
+    "notSupported": "មិនគាំទ្រដោយម៉ូដែលនេះទេ",
+    "unservedOperations": "គ្មានម៉ូដែលណាមួយក្នុងសង្វាក់នេះគាំទ្រចំពោះ៖ {operations}។ សូមបន្ថែមម៉ូដែលដែលអាចអនុវត្តបាន។"
   }
 }

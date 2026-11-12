@@ -587,7 +587,8 @@
     "clear": "Neteja",
     "undo": "Desfés",
     "durationSeconds": "{count, plural, one {# segon} other {# segons}}",
-    "durationMinutes": "{count, plural, one {# minut} other {# minuts}}"
+    "durationMinutes": "{count, plural, one {# minut} other {# minuts}}",
+    "clearSearch": "Neteja la cerca"
   },
   "errors": {
     "unexpectedErrorOccurred": "S'ha produït un error inesperat",
@@ -8095,7 +8096,13 @@
       "skills": "Selecció d'habilitats",
       "tools": "Enrutament d'eines",
       "trim": "Classificació d'escurçament",
-      "assessment": "Avaluació de cerca"
+      "assessment": "Avaluació de cerca",
+      "query": "Reescriptura de consulta de cerca",
+      "mailScreen": "Pantalla de phishing de correu",
+      "mailAnalysis": "Anàlisi de correus i resums",
+      "schemaProposal": "Proposta d’esquema d’extracció",
+      "mcpPlan": "Pla de connector",
+      "vision": "Lectura d’imatges i pàgines"
     },
     "reason": {
       "endpoint_missing": "Falta vinculació d'endpoint o compte",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "L'endpoint i l'ID de recurs ARM identifiquen comptes diferents. Corregeix la configuració del desplegament.",
       "inventory_refresh_failed": "No s'ha pogut actualitzar l'inventari. Comprova l'accés de Lector de la identitat de l'aplicació i la connectivitat del compte.",
       "credential_unavailable": "L'aplicació no ha pogut obtenir la seva credencial d'inventari. Comprova la configuració de la identitat de desplegament."
-    }
+    },
+    "notSupported": "No és compatible amb aquest model",
+    "unservedOperations": "Cap model d’aquesta cadena admet: {operations}. Afegeix un model que sí que ho faci."
   }
 }

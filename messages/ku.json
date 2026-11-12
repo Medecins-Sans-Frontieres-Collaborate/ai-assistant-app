@@ -715,7 +715,8 @@
     "clear": "پاککردنەوە",
     "undo": "گەڕاندنەوە",
     "durationSeconds": "{count, plural, one {# چرکە} other {# چرکە}}",
-    "durationMinutes": "{count, plural, one {# خوولەک} other {# خوولەک}}"
+    "durationMinutes": "{count, plural, one {# خوولەک} other {# خوولەک}}",
+    "clearSearch": "گەڕان پاک بکە"
   },
   "terms": {
     "officialLanguages": "Guhertoya fermî:",
@@ -8079,7 +8080,13 @@
       "skills": "هەلبژاردنی تواناکان",
       "tools": "ڕاوەندکردنی ئامراز",
       "trim": "جیاکردنەوەی بەڵگە",
-      "assessment": "تێبینەوەی گەڕان"
+      "assessment": "تێبینەوەی گەڕان",
+      "query": "دوبارە نووسینی داواکاری گەڕان",
+      "mailScreen": "پەڕەی فیشینگی ئیمەیڵ",
+      "mailAnalysis": "توێژینەوەی ئیمەیڵ و دایجەست",
+      "schemaProposal": "پێشنیازی شێمەی هەڵگرتن",
+      "mcpPlan": "پلانی کۆنەکتۆر",
+      "vision": "خوێندنەوەی وێنە و پەڕە"
     },
     "reason": {
       "endpoint_missing": "Endpoint یان بەستەری هەژماری تێدایە",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "Endpoint و ناسنامەی ARM هەژمار جیاوازن. ڕێکخستنی دابەشکردن ڕاست بکە.",
       "inventory_refresh_failed": "نوێکردنەوەی ستاوی سەرکەوتو نەبوو. دسترسی Reader ی ناساندنی ئەپ و بەستەری هەژمار بپشکنە.",
       "credential_unavailable": "ئەپ ناتوانی ناسنامەی ستاوی بدۆزێتەوە. ڕێکخستنی ناساندنی دابەشکردن بپشکنە."
-    }
+    },
+    "notSupported": "ئەم مۆدێلە پشتیوانی ناکات",
+    "unservedOperations": "هیچ مۆدێلێک لە ئەم زنجیرەدا پشتیوانی ناکات: {operations}. مۆدێلێک زیاد بکە کە بتوانێتەوە."
   }
 }

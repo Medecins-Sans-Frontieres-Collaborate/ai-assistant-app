@@ -612,7 +612,8 @@
     "clear": "Temizle",
     "undo": "Geri al",
     "durationSeconds": "{count, plural, one {# saniye} other {# saniye}}",
-    "durationMinutes": "{count, plural, one {# dakika} other {# dakika}}"
+    "durationMinutes": "{count, plural, one {# dakika} other {# dakika}}",
+    "clearSearch": "Aramayı temizle"
   },
   "errors": {
     "unexpectedErrorOccurred": "Beklenmeyen bir hata oluştu",
@@ -8095,7 +8096,13 @@
       "skills": "Yetenek seçimi",
       "tools": "Araç yönlendirme",
       "trim": "Kısaltma sınıflandırması",
-      "assessment": "Arama değerlendirmesi"
+      "assessment": "Arama değerlendirmesi",
+      "query": "Arama sorgusunu yeniden yaz",
+      "mailScreen": "E-posta oltalama ekranı",
+      "mailAnalysis": "E-posta ve derleme analizi",
+      "schemaProposal": "Çıkarma şeması önerisi",
+      "mcpPlan": "Bağlayıcı planı",
+      "vision": "Görüntü ve sayfa okuma"
     },
     "reason": {
       "endpoint_missing": "Uç nokta veya hesap bağlantısı eksik",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "Uç nokta ile ARM kaynak kimliği farklı hesapları göstermektedir. Dağıtım yapılandırmasını düzeltin.",
       "inventory_refresh_failed": "Envanter yenilemesi başarısız oldu. Uygulama kimliğinin Okuyucu iznini ve hesap bağlantısını kontrol edin.",
       "credential_unavailable": "Uygulama envanter yetkilendirmesini alamadı. Dağıtım kimlik yapılandırmasını kontrol edin."
-    }
+    },
+    "notSupported": "Bu model tarafından desteklenmiyor",
+    "unservedOperations": "Bu zincirdeki hiçbir model şu işlemleri desteklemiyor: {operations}. Destekleyen bir model ekleyin."
   }
 }

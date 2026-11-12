@@ -609,7 +609,8 @@
     "clear": "አጽዳ",
     "undo": "ተድላ",
     "durationSeconds": "{count, plural, one {# ሰከንድ} other {# ሰከንዶች}}",
-    "durationMinutes": "{count, plural, one {# ደቂቃ} other {# ደቂቃዎች}}"
+    "durationMinutes": "{count, plural, one {# ደቂቃ} other {# ደቂቃዎች}}",
+    "clearSearch": "ፍለጋውን ያጽዱ"
   },
   "chat": {
     "downloadAudio": "ድምጽን አውርድ",
@@ -8095,7 +8096,13 @@
       "skills": "ክነውነት ምርጫ",
       "tools": "መሳሪያ መሪ አቀራረብ",
       "trim": "አይነት መድብስ",
-      "assessment": "የፍለጋ ግምገማ"
+      "assessment": "የፍለጋ ግምገማ",
+      "query": "የፍለጋ ጥያቄ እንደገና መፃፊያ",
+      "mailScreen": "የኢሜይል ፊሺንግ ማቅረብ ማያ",
+      "mailAnalysis": "የኢሜይል እና የማጠራረቅ ትንተና",
+      "schemaProposal": "የማርጠኛ ስኪማ ጥያቄ",
+      "mcpPlan": "የመገናኛ እቅድ",
+      "vision": "ምስልና ገጽ እንቅስቃሴ አንበብ"
     },
     "reason": {
       "endpoint_missing": "መጨረሻ ወይም የመለያ ግንኙነት አለመኖሩ",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "መጨረሻውና ARM resource ID በተለያየ መለያዎች ይገናኛሉ። የዝውውር አዋጁን ያስተካክሉ።",
       "inventory_refresh_failed": "ዝርዝር አድሱን ማድረግ አልተሳካም። የመተግበሪያውን Reader መዳረሻና የመለያውን ግንኙነት ያረጋግጡ።",
       "credential_unavailable": "መተግበሪያው የዝርዝር credential ማግኘት አልቻለም። የዝውውር መታወቂያ አዋጁን ያረጋግጡ።"
-    }
+    },
+    "notSupported": "ይህ ሞዴል አይደግፍም",
+    "unservedOperations": "ይህ ሰንሰለት ውስጥ ምንም ሞዴል {operations} አይደግፍም። እንዲደግፉ ሞዴሎችን ያክሉ።"
   }
 }

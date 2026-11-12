@@ -715,7 +715,8 @@
     "clear": "खाली गर्नुहोस्",
     "undo": "पूर्वस्थितिमा फर्काउनुहोस्",
     "durationSeconds": "{count, plural, one {# सेकेन्ड} other {# सेकेन्डहरू}}",
-    "durationMinutes": "{count, plural, one {# मिनेट} other {# मिनेटहरू}}"
+    "durationMinutes": "{count, plural, one {# मिनेट} other {# मिनेटहरू}}",
+    "clearSearch": "खोजी खाली गर्नुहोस्"
   },
   "terms": {
     "officialLanguages": "आधिकारिक संस्करण:",
@@ -8079,7 +8080,13 @@
       "skills": "सीप चयन",
       "tools": "उपकरण राउटिङ",
       "trim": "ट्रिम वर्गीकरण",
-      "assessment": "खोज मूल्याङ्कन"
+      "assessment": "खोज मूल्याङ्कन",
+      "query": "खोज प्रश्न पुन:लेखन",
+      "mailScreen": "मेल फिसिङ् स्क्रिन",
+      "mailAnalysis": "मेल र डाइजेस्ट विश्लेषण",
+      "schemaProposal": "उत्कर्षण स्किमा प्रस्ताव",
+      "mcpPlan": "कनेक्टर योजना",
+      "vision": "छवि र पृष्ठ पढ्ने"
     },
     "reason": {
       "endpoint_missing": "एन्डपोइन्ट वा खाता बाइन्डिङ हराइरहेको छ",
@@ -8100,6 +8107,8 @@
       "endpoint_account_mismatch": "एन्डपोइन्ट र ARM resource ID फरक खाताको लागि छन्। डिप्लोयमेन्ट कन्फिगरेसन सुधार गर्नुहोस्।",
       "inventory_refresh_failed": "सूची ताजा पार्न असफल भयो। एपको Reader पहुँच र खाता जडान जाँच गर्नुहोस्।",
       "credential_unavailable": "एपले आफ्नो सूची प्रमाणिकरण प्राप्त गर्न सकेन। डिप्लोयमेन्ट पहिचान कन्फिगरेसन जाँच गर्नुहोस्।"
-    }
+    },
+    "notSupported": "यो मोडेलमा समर्थित छैन",
+    "unservedOperations": "यो शृंखलामा कुनै मोडेलले {operations} समर्थन गर्दैन। त्यो समर्थन गर्ने मोडेल थप्नुहोस्।"
   }
 }

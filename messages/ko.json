@@ -612,7 +612,8 @@
     "clear": "지우기",
     "undo": "실행 취소",
     "durationSeconds": "{count, plural, one {#초} other {#초}}",
-    "durationMinutes": "{count, plural, one {#분} other {#분}}"
+    "durationMinutes": "{count, plural, one {#분} other {#분}}",
+    "clearSearch": "검색 지우기"
   },
   "errors": {
     "unexpectedErrorOccurred": "예기치 않은 오류가 발생했습니다",
@@ -8095,7 +8096,13 @@
       "skills": "기술 선택",
       "tools": "도구 라우팅",
       "trim": "트림 분류",
-      "assessment": "검색 평가"
+      "assessment": "검색 평가",
+      "query": "검색 쿼리 재작성",
+      "mailScreen": "메일 피싱 화면",
+      "mailAnalysis": "메일 및 요약 분석",
+      "schemaProposal": "추출 스키마 제안",
+      "mcpPlan": "커넥터 계획",
+      "vision": "이미지 및 페이지 읽기"
     },
     "reason": {
       "endpoint_missing": "엔드포인트 또는 계정 바인딩 누락",
@@ -8116,6 +8123,8 @@
       "endpoint_account_mismatch": "엔드포인트와 ARM 리소스 ID가 다른 계정을 식별합니다. 배포 구성을 수정하세요.",
       "inventory_refresh_failed": "인벤토리 새로고침 실패. 앱 신원의 Reader 접근 권한과 계정 연결을 확인하세요.",
       "credential_unavailable": "앱이 인벤토리 자격 증명을 가져올 수 없습니다. 배포 신원 구성을 확인하세요."
-    }
+    },
+    "notSupported": "이 모델에서 지원하지 않습니다",
+    "unservedOperations": "이 체인에 있는 어떤 모델도 지원하지 않는 작업입니다: {operations}. 해당 작업을 지원하는 모델을 추가하세요."
   }
 }
