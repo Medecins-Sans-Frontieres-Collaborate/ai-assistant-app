@@ -2,7 +2,9 @@ import { Session } from 'next-auth';
 
 import { DEFAULT_SYSTEM_PROMPT } from '@/lib/utils/app/const';
 import {
+  OMITTED_CONTENT_PLACEHOLDER,
   ProviderMessageFields,
+  attachmentReferenceText,
   toProviderMessages,
 } from '@/lib/utils/server/chat/providerMessages';
 import { resolveReasoningEffort } from '@/lib/utils/shared/chat/reasoningEffort';
@@ -90,11 +92,15 @@ export class AzureOpenAIHandler extends ModelHandler {
         AZURE_SUPPORTED_CONTENT_TYPES.includes(c.type),
       );
 
-      // If all content was filtered out, add placeholder text
+      // If all content was filtered out, keep the turn non-empty with a
+      // reference to its files (neutral: nothing failed, see
+      // OMITTED_CONTENT_PLACEHOLDER).
       if (filteredContent.length === 0) {
         return {
           role: message.role,
-          content: '[Content could not be processed]',
+          content:
+            attachmentReferenceText(message.content) ??
+            OMITTED_CONTENT_PLACEHOLDER,
         };
       }
 
