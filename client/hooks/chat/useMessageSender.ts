@@ -204,6 +204,7 @@ export function useMessageSender({
           const filename =
             file.originalFilename || file.url.split('/').pop() || '';
           if (isAudioVideoFile(filename)) continue; // Transcript activated separately
+          const autoPin = useSettingsStore.getState().autoPinActiveFiles;
           initialActiveFiles.push({
             id: `${file.url}-${Date.now()}`,
             url: file.url,
@@ -212,7 +213,8 @@ export function useMessageSender({
             addedAt: new Date().toISOString(),
             sourceMessageId: messageId,
             status: 'idle',
-            pinned: useSettingsStore.getState().autoPinActiveFiles,
+            pinned: autoPin,
+            ...(autoPin ? { autoPinned: true } : {}),
           });
         }
       }
