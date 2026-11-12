@@ -129,7 +129,7 @@ interface AgentAccessPanelProps {
 export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
   const t = useAdminAgentTranslations();
   const tCommon = useTranslations('common');
-  const tSearch = useTranslations('m365.files');
+  const tSearch = useTranslations('m365.picker');
   const queryClient = useQueryClient();
   const {
     me,
@@ -830,8 +830,8 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
               type="search"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              aria-label={tCommon('search')}
-              placeholder={tCommon('search')}
+              aria-label={tCommon('searchEllipsis')}
+              placeholder={tCommon('searchEllipsis')}
               className="min-h-11 w-full min-w-0 bg-transparent text-sm text-gray-800 outline-none dark:text-gray-200"
             />
           </label>
