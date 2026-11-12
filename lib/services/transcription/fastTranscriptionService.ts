@@ -20,13 +20,17 @@ import {
 } from '@/lib/services/transcription/common';
 
 import {
+  getCognitiveServicesAuthHeaders,
+  resolveSpeechEndpoint,
+} from '@/lib/utils/server/azure/cognitiveServicesAuth';
+
+import {
   ITranscriptionService,
   TranscriptionError,
   TranscriptionErrorClass,
   TranscriptionOptions,
 } from '@/types/transcription';
 
-import { env } from '@/config/environment';
 import { getAzureSpeechLocales } from '@/lib/constants/transcriptionLanguages';
 import fs from 'fs';
 import path from 'path';
@@ -36,20 +40,20 @@ export const FAST_TRANSCRIPTION_MAX_SIZE = 500 * 1024 * 1024;
 
 const API_VERSION = '2025-10-15';
 
+/**
+ * Authenticates as the application identity (Entra ID) against the Speech
+ * account's custom-domain endpoint; see cognitiveServicesAuth.ts.
+ */
 export class FastTranscriptionService implements ITranscriptionService {
-  private endpoint: string;
-  private apiKey: string;
+  private readonly endpoint: string | undefined;
 
   constructor() {
-    const region = env.AZURE_SPEECH_REGION || 'eastus';
-    this.endpoint =
-      env.AZURE_SPEECH_ENDPOINT ||
-      `https://${region}.api.cognitive.microsoft.com`;
-    this.apiKey = env.AZURE_SPEECH_KEY || '';
+    this.endpoint = resolveSpeechEndpoint();
   }
 
+  /** True when a Speech custom-domain endpoint is configured. */
   isAvailable(): boolean {
-    return !!this.apiKey;
+    return !!this.endpoint;
   }
 
   async transcribe(
@@ -58,7 +62,7 @@ export class FastTranscriptionService implements ITranscriptionService {
   ): Promise<string> {
     if (!this.isAvailable()) {
       const err = new Error(
-        'Azure Speech transcription is not configured (AZURE_SPEECH_KEY missing).',
+        'Azure Speech transcription is not configured (no Speech custom-domain endpoint: set AZURE_SPEECH_ENDPOINT or AZURE_OPENAI_ENDPOINT).',
       ) as TranscriptionError;
       err.errorClass = 'permanent';
       throw err;
@@ -97,12 +101,23 @@ export class FastTranscriptionService implements ITranscriptionService {
         }),
       );
 
-      const url = `${this.endpoint.replace(/\/$/, '')}/speechtotext/transcriptions:transcribe?api-version=${API_VERSION}`;
+      const url = `${this.endpoint}/speechtotext/transcriptions:transcribe?api-version=${API_VERSION}`;
+      let authHeaders: Record<string, string>;
+      try {
+        authHeaders = await getCognitiveServicesAuthHeaders();
+      } catch (credentialError) {
+        const err = new Error(
+          `Azure Speech transcription could not authenticate the application identity: ${credentialError instanceof Error ? credentialError.message : String(credentialError)}`,
+        ) as TranscriptionError;
+        err.errorClass = 'permanent';
+        throw err;
+      }
+
       let response: Response;
       try {
         response = await fetch(url, {
           method: 'POST',
-          headers: { 'Ocp-Apim-Subscription-Key': this.apiKey },
+          headers: authHeaders,
           body: form,
         });
       } catch (networkError) {
