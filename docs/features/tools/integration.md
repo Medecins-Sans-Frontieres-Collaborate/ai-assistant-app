@@ -51,7 +51,7 @@ The `ToolRouterEnricher` interacts with the `ChatContext` in several ways:
 ### 2. OpenAI / Compatible API
 
 - **Purpose**: Used by `ToolRouterService` for intelligent tool routing decisions.
-- **Model**: `gpt-5-mini` (or similar lightweight model) is used for its efficiency and JSON schema support.
+- **Model**: the residency-routed auxiliary chain (small per-region utility models assigned under Models in Admin), with the user's chat model as the fallback. All helper-model calls go through `AuxiliaryCompletionService` (`lib/services/auxiliary/auxiliaryCompletion.ts`); never hardcode a model on the default client.
 - **JSON Schema**: Uses strict JSON schema mode to ensure reliable tool selection responses.
 
 ---

@@ -21,7 +21,7 @@ The execution of tools is integrated into the `ChatPipeline` via the `ToolRouter
 3.  **Tool Routing Decision**:
     - The enricher calls `ToolRouterService.determineTool()`.
     - In `ALWAYS` mode, it immediately selects `web_search`.
-    - In `INTELLIGENT` mode, it uses a lightweight LLM (`gpt-5-mini`) to analyze the user's message and conversation context to decide if web search is needed.
+    - In `INTELLIGENT` mode, it uses a lightweight LLM (the residency-routed auxiliary chain, see `lib/services/auxiliary/auxiliaryCompletion.ts`) to analyze the user's message and conversation context to decide if web search is needed.
 4.  **Tool Execution**:
     - If a tool is selected (e.g., `web_search`), the enricher calls the corresponding tool's `execute()` method.
     - For `WebSearchTool`, it delegates the search to `AgentChatService.executeWebSearchTool()`.
