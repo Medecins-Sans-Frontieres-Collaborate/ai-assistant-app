@@ -10,6 +10,7 @@ import type { BlobStorage } from '@/lib/utils/server/blob/blob';
 
 import { auxiliaryEnvironment } from './bindings';
 import {
+  AUXILIARY_OPERATIONS,
   type AuxiliaryObservation,
   type AuxiliaryPolicy,
   AuxiliaryPolicySchema,
@@ -20,7 +21,7 @@ import { z } from 'zod';
 
 const observationSchema = z.object({
   key: z.string().max(180),
-  operation: z.enum(['skills', 'tools', 'trim', 'assessment']),
+  operation: z.enum(AUXILIARY_OPERATIONS),
   fingerprint: z.string().max(1024),
   operationRevision: z.number().int().nonnegative().default(0),
   policyRevision: z.string().max(200),
