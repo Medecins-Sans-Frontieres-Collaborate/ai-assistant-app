@@ -60,6 +60,7 @@ import {
 } from '@/lib/services/m365/agentIndexService';
 import { summarizeCounts } from '@/lib/services/m365/agentSourcePlanner';
 import { withGraphTokenCache } from '@/lib/services/m365/graphApi';
+import type { VisionRouting } from '@/lib/services/m365/visionTranscription';
 
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -453,16 +454,26 @@ async function finalizeIndexJob(
  * progress. Safe to call from several browsers at once: claims and
  * outcomes go through CAS, so two steppers simply share the work.
  */
+export interface IndexJobStepOptions {
+  /** Where auto-OCR page images may be read (visionRoutingFor: always EU). */
+  vision?: VisionRouting;
+  /** Wall-clock budget for this step. */
+  budgetMs?: number;
+}
+
 export function stepIndexJob(
   req: NextRequest,
   storage: BlobStorage,
   agentId: string,
   jobId: string,
-  budgetMs = STEP_TIME_BUDGET_MS,
+  options: IndexJobStepOptions = {},
 ): Promise<IndexJobSummary> {
   // A step downloads several documents: mint the token once for all of them.
   return withGraphTokenCache(req, () =>
-    runIndexJobStep(req, storage, agentId, jobId, budgetMs),
+    runIndexJobStep(req, storage, agentId, jobId, {
+      ...options,
+      budgetMs: options.budgetMs ?? STEP_TIME_BUDGET_MS,
+    }),
   );
 }
 
@@ -479,7 +490,11 @@ async function runIndexJobStep(
   storage: BlobStorage,
   agentId: string,
   jobId: string,
-  budgetMs: number,
+  {
+    budgetMs,
+    vision,
+  }: Required<Pick<IndexJobStepOptions, 'budgetMs'>> &
+    Pick<IndexJobStepOptions, 'vision'>,
 ): Promise<IndexJobSummary> {
   const startedAt = Date.now();
 
@@ -570,6 +585,7 @@ async function runIndexJobStep(
             autoOcr
               ? {
                   autoOcr,
+                  vision,
                   // Cache what was paid for: the next run (or Re-index all)
                   // reads the derived text instead of OCR'ing again.
                   persistOcr: async (output) => {
