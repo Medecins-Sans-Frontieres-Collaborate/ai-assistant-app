@@ -8,6 +8,8 @@ import { ToolRouterService } from '@/lib/services/chat/ToolRouterService';
 
 import { Message, MessageType } from '@/types/chat';
 
+import { strictSchemaClient } from './strictSchemaClient';
+
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock OpenTelemetry
@@ -49,7 +51,9 @@ describe('ToolRouterService', () => {
       },
     };
 
-    service = new ToolRouterService(mockOpenAIClient);
+    service = new ToolRouterService(
+      strictSchemaClient(mockOpenAIClient) as any,
+    );
   });
 
   describe('determineTool', () => {
@@ -140,7 +144,10 @@ describe('ToolRouterService', () => {
         expect(mockOpenAIClient.chat.completions.create).toHaveBeenCalled();
       });
 
-      it('maps fan-out queries: primary first, blanks/dupes dropped, capped at 5', async () => {
+      // The schema caps additionalSearchQueries at 4 (so at most 5 queries
+      // with the primary); a longer list is rejected as a whole by the
+      // shared schema validation, like any other off-schema decision.
+      it('maps fan-out queries: primary first, blanks/dupes dropped', async () => {
         mockOpenAIClient.chat.completions.create.mockResolvedValue({
           choices: [
             {
@@ -155,8 +162,6 @@ describe('ToolRouterService', () => {
                     '',
                     'france strikes 2026',
                     'italy port workers 2026',
-                    'spain farmers 2026',
-                    'portugal teachers 2026',
                   ],
                 }),
               },
@@ -174,9 +179,30 @@ describe('ToolRouterService', () => {
           'france strikes 2026',
           'germany rail dispute 2026',
           'italy port workers 2026',
-          'spain farmers 2026',
-          'portugal teachers 2026',
         ]);
+      });
+
+      it('rejects a fan-out list longer than the schema allows', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: true,
+                  searchQuery: 'france strikes 2026',
+                  additionalSearchQueries: ['a', 'b', 'c', 'd', 'e'],
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage: 'compare the european labor disputes',
+        });
+
+        expect(result.degraded).toBe(true);
       });
 
       it('switches to liberal fan-out wording and a larger token cap when the backend welcomes it', async () => {
