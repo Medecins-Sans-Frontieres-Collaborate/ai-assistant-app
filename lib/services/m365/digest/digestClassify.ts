@@ -10,6 +10,7 @@
  * All item text is untrusted (mail/chat content): it is fenced as data in
  * the prompt and the model's output is validated against the known ids.
  */
+import type { AuxiliaryRegion } from '@/lib/services/auxiliary/types';
 import { runUtilityJson } from '@/lib/services/m365/tools/mailOrchestration';
 import { truncateText } from '@/lib/services/m365/tools/shared';
 
@@ -186,15 +187,22 @@ export interface ClassifyResult {
   degraded: boolean;
 }
 
-/** Pass 1: a category and one-line reason per item. */
+/**
+ * Pass 1: a category and one-line reason per item.
+ *
+ * @param items - The digest items.
+ * @param region - Residency region for the model pass (mailUtilityRegion).
+ */
 export async function classifyDigestItems(
   items: readonly DigestItem[],
+  region: AuxiliaryRegion,
 ): Promise<ClassifyResult> {
   const sorted = sortByDigestPriority(items);
   const forModel = sorted.slice(0, MAX_CLASSIFY_LINES);
   const result = await runUtilityJson<{
     items: { id: string; category: string; reason: string }[];
   }>({
+    region,
     system:
       'You classify workplace communications for a personal digest. Categories and their rules:\n' +
       DIGEST_CATEGORIES.map(
@@ -304,9 +312,16 @@ export function fallbackActionItems(
     }));
 }
 
-/** Pass 2: themes per category and concrete action items, from the actionable items. */
+/**
+ * Pass 2: themes per category and concrete action items, from the
+ * actionable items.
+ *
+ * @param items - The classified digest items.
+ * @param region - Residency region for the model pass (mailUtilityRegion).
+ */
 export async function extractDigestInsights(
   items: readonly DigestItem[],
+  region: AuxiliaryRegion,
 ): Promise<InsightsResult> {
   // Priority order so company updates fill whatever room the asks leave.
   const actionable = sortByDigestPriority(
@@ -329,6 +344,7 @@ export async function extractDigestInsights(
       dueHint: string;
     }[];
   }>({
+    region,
     system:
       'You turn classified workplace communications into a digest. ' +
       `Produce at most ${MAX_THEMES} themes (group related items; title ≤ 8 words, summary ≤ 30 words, category = the items' category) ` +
