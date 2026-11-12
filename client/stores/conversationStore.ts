@@ -3,6 +3,7 @@
 import toast from 'react-hot-toast';
 
 import { perConversationStorage } from '@/lib/utils/app/storage/perConversationStorage';
+import { evictActiveFilesOverCap } from '@/lib/utils/shared/chat/activeFileEviction';
 import {
   migrateLegacyMessages,
   needsMigration,
@@ -28,6 +29,7 @@ import {
   ACTIVE_FILE_CONTENT_MAX_BYTES,
   ACTIVE_FILE_PIN_TOKEN_LIMIT,
   ACTIVE_FILE_SESSION_QUOTA,
+  DEFAULT_ACTIVE_FILES_MAX_COUNT,
 } from '@/lib/constants/activeFileQuotas';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -696,22 +698,15 @@ export const useConversationStore = create<ConversationStore>()(
 
             // Deduplicate by url — same file should not appear twice
             const alreadyExists = existing.some((f) => f.url === file.url);
-            let next = alreadyExists ? existing : [...existing, file];
-
-            // If exceeding 5 files, remove oldest unpinned files
-            const MAX_FILES = c.activeFilesMaxCount ?? 5;
-            while (next.length > MAX_FILES) {
-              // Find oldest unpinned file
-              const unpinned = next.filter((f) => !f.pinned);
-              if (unpinned.length === 0) break; // All pinned, can't remove
-
-              // Sort by addedAt ascending (oldest first)
-              unpinned.sort((a, b) => a.addedAt.localeCompare(b.addedAt));
-              const oldestUnpinned = unpinned[0];
-
-              // Remove it
-              next = next.filter((f) => f.id !== oldestUnpinned.id);
-            }
+            // Over the cap, the oldest unpinned files go first, then the
+            // oldest auto-pinned ones; files the user pinned stay.
+            const next = alreadyExists
+              ? existing
+              : evictActiveFilesOverCap(
+                  [...existing, file],
+                  c.activeFilesMaxCount ?? DEFAULT_ACTIVE_FILES_MAX_COUNT,
+                  file,
+                );
 
             return {
               ...c,
@@ -814,8 +809,10 @@ export const useConversationStore = create<ConversationStore>()(
           conversations: state.conversations.map((c) => {
             if (c.id !== conversationId) return c;
             const existing = c.activeFiles ?? [];
+            // A pin or unpin by the user is their choice from here on,
+            // no longer the auto-pin default.
             const next = existing.map((f) =>
-              f.id === fileId ? { ...f, pinned } : f,
+              f.id === fileId ? { ...f, pinned, autoPinned: false } : f,
             );
             return {
               ...c,
