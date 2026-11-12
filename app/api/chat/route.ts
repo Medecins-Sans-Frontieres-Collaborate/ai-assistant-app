@@ -360,8 +360,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     const inputValidator = new InputValidator();
     // Create blob storage client for batch transcription support
     const blobStorageClient = createBlobStorageClient(context.session);
-    // Get Foundry OpenAI client for RAG service (uses gpt-5-mini for query reformulation)
-    const foundryOpenAIClient = container.getOpenAIClient();
+    // Knowledge-base query rewrites: residency-routed auxiliary model, with
+    // the user's chat model as the fallback.
+    const queryReformulator = container.getQueryReformulator();
     const pipeline = new ChatPipeline(
       [
         // Content processors
@@ -369,6 +370,9 @@ export async function POST(req: NextRequest): Promise<Response> {
           fileProcessingService,
           inputValidator,
           blobStorageClient,
+          // Large-document summaries run on the user's chat model, in the
+          // same region (or custom-source account) as the answer.
+          standardChatService,
         ),
         new ImageProcessor(),
         // Active files: extract text for files without cached content, then
@@ -387,11 +391,12 @@ export async function POST(req: NextRequest): Promise<Response> {
         new PromptAgentEnricher(),
         // M365 file-backed agent retrieval — mutually exclusive with
         // RAGEnricher (both key off botId; each skips the other's kind).
-        new M365AgentEnricher(foundryOpenAIClient),
+        new M365AgentEnricher(queryReformulator, standardChatService),
         new RAGEnricher(
           env.SEARCH_ENDPOINT!,
           env.SEARCH_INDEX!,
-          foundryOpenAIClient,
+          queryReformulator,
+          standardChatService,
         ),
         // Names the files earlier interpreter runs produced (issue #126) —
         // after the persona/RAG stages that may replace systemPrompt, before
