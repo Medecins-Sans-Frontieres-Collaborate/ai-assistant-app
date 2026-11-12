@@ -52,8 +52,7 @@ Values for rate and pitch are constrained by `TTS_CONSTRAINTS`:
 
 ### Environment Variables
 
-The backend requires the following variables:
+The backend authenticates as the application identity (Entra ID); account keys are not used.
 
-- `AZURE_SPEECH_REGION`: The Azure region (e.g., `eastus`).
-- `AZURE_SPEECH_KEY`: (Optional) The API key for Azure Speech Services.
-- If no key is provided, the application attempts to use Managed Identity (Entra ID).
+- `AZURE_SPEECH_ENDPOINT`: (Optional) The Speech account's custom-domain endpoint (`https://<name>.cognitiveservices.azure.com`). Defaults to `AZURE_OPENAI_ENDPOINT`. Regional endpoints are rejected because they do not accept Entra tokens.
+- The application identity needs the **Cognitive Services Speech User** role on that account.
