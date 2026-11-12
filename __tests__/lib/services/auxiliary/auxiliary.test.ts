@@ -6,11 +6,13 @@ import {
 } from '@/lib/services/auxiliary/AuxiliaryModelExecutor';
 import { isEuProcessing } from '@/lib/services/auxiliary/bindings';
 import {
+  auxiliaryProbeAccepts,
   auxiliaryProbeRequest,
   matchesAuxiliarySchema,
 } from '@/lib/services/auxiliary/probes';
 import { resolveAuxiliaryCandidate } from '@/lib/services/auxiliary/resolution';
 import {
+  AUXILIARY_OPERATIONS,
   AuxiliaryAssignmentsSchema,
   type AuxiliaryCandidate,
   type AuxiliaryInventory,
@@ -208,6 +210,86 @@ describe('auxiliary shared execution', () => {
     });
     return { executor, create, observe };
   }
+  describe('vision awareness (model metadata)', () => {
+    const imageParams: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming =
+      {
+        model: '',
+        max_completion_tokens: 100,
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: 'Describe' },
+              {
+                type: 'image_url',
+                // ~3 MB of base64: must not count as text tokens.
+                image_url: {
+                  url: `data:image/png;base64,${'A'.repeat(3_000_000)}`,
+                },
+              },
+            ],
+          },
+        ],
+      };
+    const textOnly = (name: string) =>
+      candidate({
+        reference: { ...ref, deploymentName: name },
+        fingerprint: name,
+        model: { ...candidate().model, supportsVision: false },
+      });
+    const visual = (name: string) =>
+      candidate({
+        reference: { ...ref, deploymentName: name },
+        fingerprint: name,
+        priority: 1,
+        model: { ...candidate().model, supportsVision: true },
+      });
+
+    it('skips text-only models for an image request without calling them', async () => {
+      const { executor, create } = harness([textOnly('text'), visual('eyes')]);
+      expect(
+        await executor.execute(imageParams, valid, {
+          operation: 'vision',
+          region: 'EU',
+        }),
+      ).toBe(true);
+      expect(create.mock.calls.map(([request]) => request.model)).toEqual([
+        'eyes',
+      ]);
+    });
+
+    it('treats any request carrying an image as needing vision', async () => {
+      const { executor, create } = harness([textOnly('text'), visual('eyes')]);
+      await executor.execute(imageParams, valid, {
+        operation: 'mailAnalysis',
+        region: 'EU',
+      });
+      expect(create.mock.calls.map(([request]) => request.model)).toEqual([
+        'eyes',
+      ]);
+    });
+
+    it('is unavailable (incompatible) when no candidate supports vision', async () => {
+      const { executor, create } = harness([textOnly('text')]);
+      await expect(
+        executor.execute(imageParams, valid, {
+          operation: 'vision',
+          region: 'EU',
+        }),
+      ).rejects.toMatchObject({ reason: 'incompatible' });
+      expect(create).not.toHaveBeenCalled();
+    });
+
+    it('still serves text operations on text-only models', async () => {
+      const { executor, create } = harness([textOnly('text')]);
+      await executor.execute(params, valid, {
+        operation: 'skills',
+        region: 'EU',
+      });
+      expect(create).toHaveBeenCalledTimes(1);
+    });
+  });
+
   it('calls actual deployment names and falls back on a missing primary', async () => {
     const { executor, create, observe } = harness();
     create.mockRejectedValueOnce(
@@ -352,16 +434,77 @@ describe('auxiliary shared execution', () => {
 });
 
 describe('synthetic operation contracts', () => {
-  it.each(['skills', 'tools', 'trim', 'assessment'] as const)(
+  // Plain-text operations (query, vision) are covered below.
+  it.each(
+    AUXILIARY_OPERATIONS.filter(
+      (operation) => operation !== 'query' && operation !== 'vision',
+    ),
+  )(
     'builds the real %s schema with bounded synthetic input',
     async (operation) => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
       const request = await auxiliaryProbeRequest(operation);
       expect(request.response_format?.type).toBe('json_schema');
       expect(JSON.stringify(request.messages).toLowerCase()).toContain(
         'synthetic',
       );
+      // Capturing a router request must not look like a routing outage.
+      expect(warn).not.toHaveBeenCalled();
+      warn.mockRestore();
     },
   );
+  it('builds the vision probe as one synthetic image and accepts any text', async () => {
+    const request = await auxiliaryProbeRequest('vision');
+    const parts = request.messages[0].content as Array<{
+      type: string;
+      text?: string;
+      image_url?: { url: string };
+    }>;
+    expect(parts.map((part) => part.type)).toEqual(['text', 'image_url']);
+    expect(parts[0].text).toContain('Synthetic');
+    expect(parts[1].image_url?.url).toMatch(/^data:image\/png;base64,/);
+    const reply = (content: string) =>
+      ({ choices: [{ message: { content } }] }) as never;
+    expect(
+      auxiliaryProbeAccepts('vision', request, reply('A blue square.')),
+    ).toBe(true);
+    expect(auxiliaryProbeAccepts('vision', request, reply('  '))).toBe(false);
+  });
+
+  it('builds the query rewrite as plain text with bounded synthetic input', async () => {
+    const request = await auxiliaryProbeRequest('query');
+    expect(request.response_format).toBeUndefined();
+    expect(request.max_completion_tokens).toBeGreaterThan(0);
+    expect(JSON.stringify(request.messages).toLowerCase()).toContain(
+      'synthetic',
+    );
+  });
+  it('accepts a query probe reply only when it reads as a search query', async () => {
+    const request = await auxiliaryProbeRequest('query');
+    const reply = (content: string | null) =>
+      ({
+        choices: [{ message: { content } }],
+      }) as OpenAI.Chat.Completions.ChatCompletion;
+    expect(
+      auxiliaryProbeAccepts('query', request, reply('MSF news November 2026')),
+    ).toBe(true);
+    expect(auxiliaryProbeAccepts('query', request, reply(''))).toBe(false);
+    expect(auxiliaryProbeAccepts('query', request, reply(null))).toBe(false);
+    expect(
+      auxiliaryProbeAccepts('query', request, reply('x'.repeat(501))),
+    ).toBe(false);
+  });
+  it('still holds decision probes to their JSON schema', async () => {
+    const request = await auxiliaryProbeRequest('tools');
+    const reply = (content: string) =>
+      ({
+        choices: [{ message: { content } }],
+      }) as OpenAI.Chat.Completions.ChatCompletion;
+    expect(auxiliaryProbeAccepts('tools', request, reply('MSF news'))).toBe(
+      false,
+    );
+    expect(auxiliaryProbeAccepts('tools', request, reply('{}'))).toBe(false);
+  });
   it('rejects wrong types, missing fields, unknown properties, enum escapes and excessive arrays', () => {
     const schema = {
       type: 'object',

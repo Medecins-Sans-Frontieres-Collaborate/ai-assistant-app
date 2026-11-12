@@ -3,7 +3,10 @@ import {
   AuxiliaryModelService,
   auxiliaryBootstrap,
 } from '@/lib/services/auxiliary/AuxiliaryModelService';
-import { AuxiliaryPolicySchema } from '@/lib/services/auxiliary/types';
+import {
+  AuxiliaryPolicySchema,
+  ROUTING_OPERATIONS,
+} from '@/lib/services/auxiliary/types';
 
 import { auxiliaryReport } from './fixtures';
 
@@ -39,6 +42,7 @@ vi.mock('@azure/identity', () => ({
   DefaultAzureCredential: class {
     getToken = mocks.token;
   },
+  getBearerTokenProvider: () => async () => 'app-token',
 }));
 vi.mock('@/lib/services/auxiliary/store', () => ({
   readAuxiliaryPolicy: mocks.readPolicy,
@@ -120,6 +124,55 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
+/** What each routing operation's probe request is recognised by, in probe order. */
+const ROUTING_PROBES = [
+  'skill_selection',
+  'tool_router_response',
+  'document_trim_classification',
+  'query_rewrite',
+  'mail_screen_verdict',
+  'mail_query_expansion',
+  'flat_schema_proposal',
+  'mcp_turn_plan',
+  'image_read',
+];
+
+/**
+ * The operation each probe request exercised: the JSON schema name for the
+ * routing decisions, `query_rewrite` for the plain-text query rewrite,
+ * `image_read` for the vision probe (an image part).
+ */
+function probedOperations(): string[] {
+  return mocks.create.mock.calls.map(([request]) =>
+    request.response_format
+      ? request.response_format.json_schema.name
+      : Array.isArray(request.messages[0].content)
+        ? 'image_read'
+        : request.messages[0].content.includes('search query optimizer')
+          ? 'query_rewrite'
+          : 'unknown',
+  );
+}
+
+describe('AuxiliaryModelService singleton', () => {
+  afterEach(() => AuxiliaryModelService.reset());
+
+  it('lives on globalThis, so instrumentation and route bundles share one warmed instance', () => {
+    const instance = AuxiliaryModelService.getInstance();
+    const slot = (globalThis as unknown as Record<symbol, unknown>)[
+      Symbol.for('ai-assistant.auxiliaryModelService')
+    ];
+    expect(slot).toBe(instance);
+    expect(AuxiliaryModelService.getInstance()).toBe(instance);
+  });
+
+  it('reset clears the shared slot', () => {
+    const first = AuxiliaryModelService.getInstance();
+    AuxiliaryModelService.reset();
+    expect(AuxiliaryModelService.getInstance()).not.toBe(first);
+  });
+});
+
 describe('environment-local model service', () => {
   it('defaults routing to Luna in both regions without changing assessment defaults', () => {
     const defaults = auxiliaryBootstrap('custom-assessor');
@@ -160,7 +213,7 @@ describe('environment-local model service', () => {
           deploymentName: modelName,
           modelName,
         });
-      for (const operation of ['skills', 'tools', 'trim'] as const) {
+      for (const operation of ROUTING_OPERATIONS) {
         const result = await service.resolve(operation, region);
         expect(result.candidates.map((entry) => entry.model.id)).toEqual([
           'gpt-5.6-luna',
@@ -227,19 +280,11 @@ describe('environment-local model service', () => {
         'routing',
         region,
       );
-      expect(mocks.create).toHaveBeenCalledTimes(3);
-      expect(mocks.create.mock.calls.map(([request]) => request.model)).toEqual(
-        ['gpt-5.6-luna', 'gpt-5.6-luna', 'gpt-5.6-luna'],
-      );
+      expect(mocks.create).toHaveBeenCalledTimes(ROUTING_OPERATIONS.length);
       expect(
-        mocks.create.mock.calls.map(
-          ([request]) => request.response_format.json_schema.name,
-        ),
-      ).toEqual([
-        'skill_selection',
-        'tool_router_response',
-        'document_trim_classification',
-      ]);
+        new Set(mocks.create.mock.calls.map(([request]) => request.model)),
+      ).toEqual(new Set(['gpt-5.6-luna']));
+      expect(probedOperations()).toEqual(ROUTING_PROBES);
     },
   );
   it('observes inventory without calling the inference provider', async () => {
@@ -260,6 +305,27 @@ describe('environment-local model service', () => {
     ).toEqual(['classifier']);
     expect(result.candidates[0].model.id).toBe('gpt-5.4-mini');
   });
+  it('reports a chain whose models cannot read images as ready with vision unserved', async () => {
+    fixture.inventory[0].models.push({
+      ...fixture.inventory[0].models[0],
+      deploymentName: 'text-only',
+      modelName: 'gpt-6-small-new',
+    });
+    const policy = await mocks.readPolicy();
+    policy.policy.assignments.routing.EU = [
+      { accountBinding: 'EU', deploymentName: 'text-only' },
+    ];
+    const report = await service.probe(
+      { accountBinding: 'EU', deploymentName: 'text-only' },
+      'routing',
+      'EU',
+    );
+    const chain = report.chains.find(
+      (entry) => entry.purpose === 'routing' && entry.region === 'EU',
+    );
+    expect(chain?.state).toBe('ready');
+    expect(chain?.unservedOperations).toEqual(['vision']);
+  });
   it('never resolves a US global deployment as an EU fallback', async () => {
     const policy = await mocks.readPolicy();
     policy.policy.assignments.routing.EU = [
@@ -273,16 +339,8 @@ describe('environment-local model service', () => {
       'routing',
       'EU',
     );
-    expect(mocks.create).toHaveBeenCalledTimes(3);
-    expect(
-      mocks.create.mock.calls.map(
-        ([request]) => request.response_format.json_schema.name,
-      ),
-    ).toEqual([
-      'skill_selection',
-      'tool_router_response',
-      'document_trim_classification',
-    ]);
+    expect(mocks.create).toHaveBeenCalledTimes(ROUTING_OPERATIONS.length);
+    expect(probedOperations()).toEqual(ROUTING_PROBES);
     expect(
       report.chains.find(
         (chain) => chain.purpose === 'routing' && chain.region === 'EU',
@@ -304,9 +362,20 @@ describe('environment-local model service', () => {
     const newChoice = report.choices.EU.find(
       (entry) => entry.reference.deploymentName === 'new-gpt',
     );
+    // An unknown model declares no vision support in metadata, so it is
+    // held to (and probed for) every routing operation except `vision`.
+    expect(newChoice?.capabilities).toEqual([]);
     expect(
-      newChoice?.observations.filter((entry) => entry.success),
-    ).toHaveLength(3);
+      newChoice?.observations
+        .filter((entry) => entry.success)
+        .map((entry) => entry.operation)
+        .sort(),
+    ).toEqual(ROUTING_OPERATIONS.filter((op) => op !== 'vision').sort());
+    expect(
+      mocks.create.mock.calls.some(([request]) =>
+        Array.isArray(request.messages[0].content),
+      ),
+    ).toBe(false);
     expect(
       report.effective.routing.EU.map((entry) => entry.deploymentName),
     ).not.toContain('new-gpt');
