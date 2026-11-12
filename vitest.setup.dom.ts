@@ -54,7 +54,7 @@ const mockMessages: Record<string, unknown> = {
     normal: 'Normal',
     variable: 'Variable',
     variables: 'Variables',
-    search: 'Search',
+    searchEllipsis: 'Search...',
     beta: 'Beta',
     tryAgain: 'Try again',
     // The real keys are ICU plurals; the mock t() only does {param}
@@ -369,7 +369,7 @@ const mockMessages: Record<string, unknown> = {
     },
   },
   m365: {
-    files: { noResults: 'No matches for “{query}”' },
+    picker: { noResults: 'No matches for “{query}”' },
     tools: {
       alwaysConfirmNote:
         'This action always asks for confirmation — it can’t be auto-approved.',
