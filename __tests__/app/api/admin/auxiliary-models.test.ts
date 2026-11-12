@@ -4,7 +4,10 @@ import { NextRequest } from 'next/server';
 import { auxiliaryReport } from '@/__tests__/lib/services/auxiliary/fixtures';
 import { AgentAccessConflictError } from '@/lib/services/agentAccess/blobCas';
 import { resolveAuxiliaryCandidate } from '@/lib/services/auxiliary/resolution';
-import type { AuxiliaryAdminReport } from '@/lib/services/auxiliary/types';
+import {
+  type AuxiliaryAdminReport,
+  ROUTING_OPERATIONS,
+} from '@/lib/services/auxiliary/types';
 
 import { GET, POST, PUT } from '@/app/api/admin/auxiliary-models/route';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -180,20 +183,18 @@ describe('auxiliary model administration', () => {
       report.inventory[0],
       'EU',
     ).candidate!.fingerprint;
-    report.observations = (['skills', 'tools', 'trim'] as const).map(
-      (operation) => ({
-        key: 'EU:new-small',
-        fingerprint,
-        operation,
-        operationRevision: 1,
-        policyRevision: report.revision,
-        checkedAt: new Date().toISOString(),
-        success: true,
-        durationMs: 1,
-        source: 'probe',
-        fallback: false,
-      }),
-    );
+    report.observations = ROUTING_OPERATIONS.map((operation) => ({
+      key: 'EU:new-small',
+      fingerprint,
+      operation,
+      operationRevision: 1,
+      policyRevision: report.revision,
+      checkedAt: new Date().toISOString(),
+      success: true,
+      durationMs: 1,
+      source: 'probe',
+      fallback: false,
+    }));
     expect((await PUT(request('PUT', { assignments: draft }))).status).toBe(
       200,
     );
