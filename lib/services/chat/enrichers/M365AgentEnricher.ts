@@ -12,23 +12,31 @@
  *
  * Model orchestration per request: the chat model was resolved by
  * createModelSelectionMiddleware (agent's chatModelId or the catalog
- * default); the query is reformulated with the shared utility model and
- * embedded with the agent's embedding deployment inside searchM365Agent.
+ * default); the query is reformulated under the user's residency (see
+ * lib/services/search/queryReformulation.ts) and embedded with the agent's
+ * embedding deployment inside searchM365Agent.
  */
 import { searchM365Agent } from '@/lib/services/m365/agentIndexService';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
+import {
+  type QueryReformulationPrompt,
+  type QueryReformulator,
+  latestUserQuestion,
+  rewriteConversationHistory,
+} from '@/lib/services/search/queryReformulation';
 
 import { buildAgentPromptSections } from '@/lib/utils/app/systemPrompt';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { Message, MessageType } from '@/types/chat';
 
+import { auxiliaryTurnRouting } from '../auxiliaryTurnRouting';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
+import type { TextCompletionProvider } from '../textCompletion';
 
-import OpenAI from 'openai';
-
-const REFORMULATION_MODEL = 'gpt-5-mini';
+const M365_REFORMULATION_SYSTEM_PROMPT =
+  'Rewrite the final user question as a concise, self-contained search query for a document knowledge base. Resolve pronouns and references using the conversation. Return ONLY the query.';
 
 /**
  * Injected in place of the sources block when retrieval could not run. The
@@ -45,7 +53,15 @@ const RETRIEVAL_FAILED_NOTE =
 export class M365AgentEnricher extends BasePipelineStage {
   readonly name = 'M365AgentEnricher';
 
-  constructor(private openAIClient: OpenAI) {
+  /**
+   * @param reformulator - Rewrites search queries under the user's residency.
+   * @param textCompletionProvider - The user's chat model, the rewrite's
+   *        fallback when no residency-eligible auxiliary model answers.
+   */
+  constructor(
+    private readonly reformulator: QueryReformulator,
+    private readonly textCompletionProvider?: TextCompletionProvider,
+  ) {
     super();
   }
 
@@ -124,51 +140,25 @@ export class M365AgentEnricher extends BasePipelineStage {
     };
   }
 
-  /** Last user-message text; empty string when none (e.g. image-only). */
-  private extractQuery(messages: Message[]): string {
-    for (let i = messages.length - 1; i >= 0; i -= 1) {
-      const message = messages[i];
-      if (message.role !== 'user') continue;
-      if (typeof message.content === 'string') return message.content;
-      return '';
-    }
-    return '';
-  }
-
   /**
-   * Compact search-query reformulation with the shared utility model —
-   * same role (and same deployment) as RAGService.reformulateQuery. Any
+   * Compact search-query reformulation under the user's residency. Any
    * failure falls back to the raw query; retrieval quality degrades, the
    * request never does.
    */
-  private async reformulateQuery(messages: Message[]): Promise<string> {
-    const original = this.extractQuery(messages);
+  private async reformulateQuery(context: ChatContext): Promise<string> {
+    const messages = context.messages;
+    const original = latestUserQuestion(messages);
     if (!original) return original;
-    try {
-      const history = messages
-        .slice(-5)
-        .map(
-          (m) =>
-            `${m.role}: ${typeof m.content === 'string' ? m.content : '[non-text]'}`,
-        )
-        .join('\n');
-      const completion = await this.openAIClient.chat.completions.create({
-        // No temperature: the gpt-5 family rejects non-default values and
-        // the call would silently fall back to the raw query.
-        model: REFORMULATION_MODEL,
-        messages: [
-          {
-            role: 'system',
-            content:
-              'Rewrite the final user question as a concise, self-contained search query for a document knowledge base. Resolve pronouns and references using the conversation. Return ONLY the query.',
-          },
-          { role: 'user', content: `${history}\n\nSearch query:` },
-        ],
-      });
-      return completion.choices[0]?.message?.content?.trim() || original;
-    } catch {
-      return original;
-    }
+    const history = rewriteConversationHistory(messages);
+    const prompt: QueryReformulationPrompt = {
+      systemPrompt: M365_REFORMULATION_SYSTEM_PROMPT,
+      userPrompt: `${history}\n\nSearch query:`,
+    };
+    const result = await this.reformulator.reformulate(
+      prompt,
+      auxiliaryTurnRouting(context, this.textCompletionProvider),
+    );
+    return result?.query ?? original;
   }
 
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
@@ -190,7 +180,7 @@ export class M365AgentEnricher extends BasePipelineStage {
     let enrichedMessages: Message[] = [...baseMessages];
 
     try {
-      const query = await this.reformulateQuery(context.messages);
+      const query = await this.reformulateQuery(context);
       const searchDocs = query
         ? await searchM365Agent(
             query,
