@@ -29,14 +29,92 @@ export const AUXILIARY_LIMITS = {
 export type AuxiliaryPurpose = (typeof AUXILIARY_PURPOSES)[number];
 export type AuxiliaryRegion = (typeof AUXILIARY_REGIONS)[number];
 export type AuxiliaryBinding = (typeof AUXILIARY_BINDINGS)[number];
-export type AuxiliaryOperation = 'skills' | 'tools' | 'trim' | 'assessment';
+/**
+ * One kind of auxiliary request. Every helper-model call in the app is one
+ * of these and runs through AuxiliaryCompletionService
+ * (auxiliaryCompletion.ts), so each is residency-routed and probed:
+ *
+ * - skills / tools / trim: chat routing decisions (ToolRouterService)
+ * - query: knowledge-base search-query rewrite (search/queryReformulation)
+ * - mailScreen: phishing screen over a mail body (m365/tools/mailScreen)
+ * - mailAnalysis: batched mail and digest analysis passes
+ *   (m365/tools/mailOrchestration runUtilityJson)
+ * - schemaProposal: structured-extraction field proposals
+ *   (utils/server/extraction/proposeFlatSchema)
+ * - mcpPlan: connector tool-use plan (mcp/McpPlannerService)
+ * - vision: image description and page OCR for M365 agent sources
+ *   (m365/visionTranscription); needs the `vision` capability
+ * - assessment: web-search source assessment (its own purpose and chain)
+ *
+ * All but `assessment` ride the routing chain: the small per-region utility
+ * models an administrator assigns under Models in Admin. An operation that
+ * needs a capability (OPERATION_CAPABILITIES) runs only on chain models
+ * whose metadata declares it.
+ */
+export const ROUTING_OPERATIONS = [
+  'skills',
+  'tools',
+  'trim',
+  'query',
+  'mailScreen',
+  'mailAnalysis',
+  'schemaProposal',
+  'mcpPlan',
+  'vision',
+] as const;
+export const AUXILIARY_OPERATIONS = [
+  ...ROUTING_OPERATIONS,
+  'assessment',
+] as const;
+export type AuxiliaryOperation = (typeof AUXILIARY_OPERATIONS)[number];
 export const PURPOSE_OPERATIONS: Record<
   AuxiliaryPurpose,
   AuxiliaryOperation[]
 > = {
-  routing: ['skills', 'tools', 'trim'],
+  routing: [...ROUTING_OPERATIONS],
   searchAssessment: ['assessment'],
 };
+
+/**
+ * Model capabilities an operation can require, each read from model
+ * metadata (config/models.json via OpenAIModel):
+ *
+ * - vision: accepts image input (`supportsVision`)
+ */
+export const AUXILIARY_CAPABILITIES = ['vision'] as const;
+export type AuxiliaryCapability = (typeof AUXILIARY_CAPABILITIES)[number];
+
+/** What each operation needs beyond chat completion; absent means nothing. */
+export const OPERATION_CAPABILITIES: Partial<
+  Record<AuxiliaryOperation, readonly AuxiliaryCapability[]>
+> = {
+  vision: ['vision'],
+};
+
+/** Whether a model with `capabilities` can serve `operation`. */
+export function servesOperation(
+  operation: AuxiliaryOperation,
+  capabilities: readonly AuxiliaryCapability[],
+): boolean {
+  return (OPERATION_CAPABILITIES[operation] ?? []).every((required) =>
+    capabilities.includes(required),
+  );
+}
+
+/**
+ * The operations of `purpose` a model with `capabilities` is expected to
+ * pass (probes and readiness never hold a model to an operation it cannot
+ * serve). Without known capabilities: every operation.
+ */
+export function operationsServed(
+  purpose: AuxiliaryPurpose,
+  capabilities?: readonly AuxiliaryCapability[],
+): AuxiliaryOperation[] {
+  if (!capabilities) return PURPOSE_OPERATIONS[purpose];
+  return PURPOSE_OPERATIONS[purpose].filter((operation) =>
+    servesOperation(operation, capabilities),
+  );
+}
 
 export const AuxiliaryReferenceSchema = z
   .object({
@@ -137,6 +215,8 @@ export interface AuxiliaryCandidateStatus {
   eligible: boolean;
   reason?: AuxiliaryFailure;
   fingerprint?: string;
+  /** Capabilities from the deployed model's metadata (eligible candidates). */
+  capabilities?: AuxiliaryCapability[];
   retiringSoon: boolean;
   movingSoon: boolean;
   retirementUnknown: boolean;
@@ -144,6 +224,8 @@ export interface AuxiliaryCandidateStatus {
 }
 export interface AuxiliaryChainReport {
   runtimeFallback?: boolean;
+  /** Operations no usable model in the chain can serve (missing capability). */
+  unservedOperations?: AuxiliaryOperation[];
   purpose: AuxiliaryPurpose;
   region: AuxiliaryRegion;
   state:
