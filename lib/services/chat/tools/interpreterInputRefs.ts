@@ -26,14 +26,22 @@ import { generatedFileBlobId } from '@/lib/constants/generatedFiles';
  * Sources, in priority order (earlier sources win the file cap):
  *  1. The most recent message with attachments — what the user just handed
  *     over, or the last upload a follow-up is about.
- *  2. The conversation's active files that the ActiveFileInjector selected
- *     for this turn (pinned first, then most recently used) — uploads from
- *     earlier turns and auto-activated generated files (issue #152).
+ *  2. The conversation's active files — uploads from earlier turns and
+ *     auto-activated generated files (issue #152). Files whose text the
+ *     ActiveFileInjector placed in the prompt come first, then the ones it
+ *     left out for the per-turn token budget; within each group pinned
+ *     first, then most recently used.
  *  3. Files earlier interpreter runs produced (issue #126) — only when the
  *     user has attached nothing, so "fix the script you wrote" re-runs
  *     against the real file.
  *
  * Duplicates (the same blob reached through several sources) mount once.
+ *
+ * Mounting is NOT gated by the prompt's token budget: a mounted file costs
+ * no context tokens. Tying the two together left a conversation with 22
+ * active files able to open only the two just attached, because the other
+ * twenty did not fit the text budget. Files mounted without their text are
+ * flagged (`textOmittedFromPrompt`) so the model can be told they exist.
  */
 
 /** A stored file to mount: blob id, display name, and upload sub-folder. */
@@ -44,6 +52,12 @@ export interface InterpreterInputRef {
   filename: string;
   /** Upload sub-folder the blob lives in: `<user>/uploads/<location>/<id>`. */
   location: 'files' | 'images';
+  /**
+   * True for an active file whose text the ActiveFileInjector left out of
+   * this turn's prompt (per-turn token budget). The file is still mounted;
+   * the model has to be told it is there, since nothing else names it.
+   */
+  textOmittedFromPrompt?: boolean;
 }
 
 /**
@@ -110,23 +124,29 @@ function latestAttachmentRefs(messages: Message[]): InterpreterInputRef[] {
 }
 
 /**
- * Refs for active files the injector kept this turn, pinned first, then
- * most recently used. Transcripts (`transcript://`) and inline `data:`
- * entries have no blob to mount and are skipped, as are errored files.
+ * Refs for the conversation's active files. Files whose text is in this
+ * turn's prompt come first (they win the file cap), then the ones the
+ * injector left out, flagged `textOmittedFromPrompt`; within each group
+ * pinned first, then most recently used. Transcripts (`transcript://`) and
+ * inline `data:` entries have no blob to mount and are skipped, as are
+ * errored files.
  */
 function activeFileRefs(
   activeFiles: readonly ActiveFile[],
-  droppedIds: ReadonlySet<string>,
+  textOmittedIds: ReadonlySet<string>,
 ): InterpreterInputRef[] {
   const recency = (f: ActiveFile) => Date.parse(f.lastUsedAt ?? f.addedAt) || 0;
+  const textOmitted = (f: ActiveFile) => textOmittedIds.has(f.id);
   return activeFiles
-    .filter((f) => f.status !== 'error' && !droppedIds.has(f.id))
+    .filter((f) => f.status !== 'error')
     .filter(
       (f) => !f.url.startsWith('transcript:') && !f.url.startsWith('data:'),
     )
     .sort(
       (a, b) =>
-        Number(!!b.pinned) - Number(!!a.pinned) || recency(b) - recency(a),
+        Number(textOmitted(a)) - Number(textOmitted(b)) ||
+        Number(!!b.pinned) - Number(!!a.pinned) ||
+        recency(b) - recency(a),
     )
     .flatMap((f): InterpreterInputRef[] => {
       const id = blobIdFromUrl(f.url);
@@ -139,6 +159,7 @@ function activeFileRefs(
           id,
           filename: f.originalFilename || id,
           location: isImage ? 'images' : 'files',
+          ...(textOmitted(f) ? { textOmittedFromPrompt: true } : {}),
         },
       ];
     });
@@ -172,9 +193,11 @@ function generatedHistoryRefs(messages: Message[]): InterpreterInputRef[] {
  *        enriched copy: processors may rewrite attachment entries there).
  * @param input.activeFiles - The conversation's active files after the
  *        ActiveFileInjector ran.
- * @param input.droppedActiveFileIds - Active files the injector left out
- *        this turn (over budget); they are not mounted either, so the
- *        sandbox never holds a file the model was not told about.
+ * @param input.droppedActiveFileIds - Active files whose text the injector
+ *        left out of the prompt this turn (over budget). They are still
+ *        mounted, after the files that are in the prompt, and come back
+ *        flagged `textOmittedFromPrompt` so the caller can name them to
+ *        the model.
  * @param maxFiles - Cap on mounted files (default MAX_INTERPRETER_INPUT_FILES).
  * @returns Ordered, de-duplicated refs, at most `maxFiles` long.
  */
