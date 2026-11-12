@@ -2,12 +2,16 @@ import {
   type AuxiliaryModelExecutor,
   AuxiliaryUnavailableError,
 } from '@/lib/services/auxiliary/AuxiliaryModelExecutor';
+import { AuxiliaryCompletionService } from '@/lib/services/auxiliary/auxiliaryCompletion';
 import { matchesAuxiliarySchema } from '@/lib/services/auxiliary/schemaValidation';
 import {
   type AuxiliaryOperation,
   DEFAULT_AUXILIARY_ROUTING_MODEL,
 } from '@/lib/services/auxiliary/types';
-import type { StructuredDecisionFallback } from '@/lib/services/chat/routing/structuredDecisionFallback';
+import {
+  STRUCTURED_DECISION_FALLBACK_TIMEOUT_MS,
+  type StructuredDecisionFallback,
+} from '@/lib/services/chat/routing/structuredDecisionFallback';
 import {
   SkillRoutingEntry,
   selectedSkillIds,
@@ -170,17 +174,28 @@ export function describeAuxiliaryFailure(
 export class ToolRouterService {
   private tracer = trace.getTracer('tool-router-service');
 
+  /** The shared helper-model path on the executor; absent without one. */
+  private readonly completions?: AuxiliaryCompletionService;
+
   constructor(
     private openAIClient: OpenAI,
     private regionalClient?: (region: 'US' | 'EU') => OpenAI | undefined,
-    private executor?: AuxiliaryModelExecutor,
-  ) {}
+    executor?: AuxiliaryModelExecutor,
+  ) {
+    this.completions = executor
+      ? new AuxiliaryCompletionService(executor)
+      : undefined;
+  }
 
   /**
-   * One auxiliary decision call. When the auxiliary chain fails and the
-   * caller supplied `fallback` (the user's chat model), the same request is
-   * made there and held to the same validation; the original error is
-   * rethrown if the fallback fails too.
+   * One auxiliary decision call, through the shared helper-model path
+   * (AuxiliaryCompletionService): the region's auxiliary chain, then the
+   * caller's chat-model fallback when supplied, both held to
+   * acceptDecision. Without an executor (readiness probe capture, tests)
+   * the plain regional client stands in for the chain.
+   *
+   * @throws The ORIGINAL auxiliary error when no path produced a valid
+   *         decision, so the caller's degraded-routing log names the cause.
    */
   private async complete(
     region: 'US' | 'EU' | undefined,
@@ -189,80 +204,30 @@ export class ToolRouterService {
     options?: {
       signal?: AbortSignal;
       timeout?: number;
-      maxRetries?: number;
       onUsage?: AuxiliaryUsageSink;
       fallback?: StructuredDecisionFallback;
     },
   ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
-    try {
-      return await this.completeOnAuxiliary(region, operation, params, options);
-    } catch (error) {
-      if (!options?.fallback || options.signal?.aborted) throw error;
-      return await this.completeOnFallback(operation, params, options, error);
-    }
-  }
-
-  /**
-   * The chat-model second chance for {@link complete}.
-   *
-   * @throws The ORIGINAL auxiliary error when the fallback also fails, so
-   *         the caller's degraded-routing log names the real cause.
-   */
-  private async completeOnFallback(
-    operation: AuxiliaryOperation,
-    params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
-    options: {
-      signal?: AbortSignal;
-      onUsage?: AuxiliaryUsageSink;
-      fallback?: StructuredDecisionFallback;
-    },
-    auxiliaryError: unknown,
-  ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
-    const reason =
-      auxiliaryError instanceof Error ? auxiliaryError.message : auxiliaryError;
-    try {
-      const result = await options.fallback!(params, options.signal);
-      const response = {
-        id: 'chat-model-fallback',
-        object: 'chat.completion',
-        created: Math.floor(Date.now() / 1000),
-        model: result.model.id,
-        choices: [
-          {
-            index: 0,
-            finish_reason: 'stop',
-            logprobs: null,
-            message: { role: 'assistant', content: result.text, refusal: null },
-          },
-        ],
-      } as OpenAI.Chat.Completions.ChatCompletion;
-      if (result.usage)
-        options.onUsage?.(
-          { ...result.usage, modelId: result.model.id, region: result.region },
-          result.model,
-          result.region,
-        );
-      const accepted = ToolRouterService.acceptDecision(
-        operation,
-        params,
-        response,
-      );
-      if (!accepted)
-        throw new Error(
-          `${result.model.id} returned an invalid ${operation} decision`,
-        );
-      console.warn(
-        `[ToolRouterService] Auxiliary ${operation} decision unavailable (${reason}); decided by the chat model ${result.model.id} instead`,
-      );
+    const completions =
+      this.completions ??
+      new AuxiliaryCompletionService(undefined, () => this.clientFor(region));
+    const answer = await completions.completeJson({
+      operation,
+      region: region ?? 'EU',
+      params,
+      accept: (response) =>
+        ToolRouterService.acceptDecision(operation, params, response),
+      timeoutMs: options?.timeout ?? SKILL_LIMITS.routingTimeoutMs,
+      // A chat model may be large; it keeps its own budget rather than
+      // whatever the auxiliary chain left over.
+      fallbackTimeoutMs: STRUCTURED_DECISION_FALLBACK_TIMEOUT_MS,
+      signal: options?.signal,
+      onUsage: options?.onUsage,
+      fallback: options?.fallback,
+    });
+    if (answer.source === 'chat_model')
       ToolRouterService.markDecidedBy(operation, 'chat_model');
-      return accepted;
-    } catch (fallbackError) {
-      console.warn(
-        `[ToolRouterService] Chat-model fallback for the ${operation} decision failed:`,
-        fallbackError instanceof Error ? fallbackError.message : fallbackError,
-      );
-      throw auxiliaryError;
-    }
+    return answer.value;
   }
 
   /**
@@ -280,55 +245,6 @@ export class ToolRouterService {
     } catch {
       // Tracing unavailable; the log line above already names the decider.
     }
-  }
-
-  /** The auxiliary chain (or the plain regional client when none is wired). */
-  private async completeOnAuxiliary(
-    region: 'US' | 'EU' | undefined,
-    operation: AuxiliaryOperation,
-    params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
-    options?: {
-      signal?: AbortSignal;
-      timeout?: number;
-      maxRetries?: number;
-      onUsage?: AuxiliaryUsageSink;
-    },
-  ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
-    if (!this.executor)
-      return this.clientFor(region).chat.completions.create(params, {
-        signal: options?.signal,
-        timeout: options?.timeout,
-        maxRetries: options?.maxRetries,
-      });
-    return this.executor.execute(
-      params,
-      (response) =>
-        ToolRouterService.acceptDecision(operation, params, response),
-      {
-        region: region ?? 'EU',
-        operation,
-        signal: options?.signal,
-        timeoutMs: options?.timeout ?? SKILL_LIMITS.routingTimeoutMs,
-        onUsage: (response, candidate) => {
-          const servingRegion =
-            candidate.reference.accountBinding === 'default'
-              ? null
-              : candidate.reference.accountBinding;
-          if (response.usage)
-            options?.onUsage?.(
-              {
-                modelId: candidate.deployment.modelName,
-                region: servingRegion,
-                promptTokens: response.usage.prompt_tokens,
-                completionTokens: response.usage.completion_tokens,
-                totalTokens: response.usage.total_tokens,
-              },
-              candidate.model,
-              servingRegion,
-            );
-        },
-      },
-    );
   }
 
   /**
@@ -488,7 +404,6 @@ export class ToolRouterService {
               request.timeoutMs ?? SKILL_LIMITS.routingTimeoutMs,
             ),
           ),
-          maxRetries: 0,
           onUsage: request.onUsage,
         },
       );
@@ -590,7 +505,6 @@ When either is true: set targetValue and targetUnit. When both are false: target
         {
           signal: request.signal,
           timeout: SKILL_LIMITS.routingTimeoutMs,
-          maxRetries: 0,
           onUsage: request.onUsage,
           fallback: request.decisionFallback,
         },
@@ -1000,7 +914,6 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                 ? {
                     signal: request.signal,
                     timeout: SKILL_LIMITS.routingTimeoutMs,
-                    maxRetries: 0,
                     onUsage: request.onUsage,
                     fallback: request.decisionFallback,
                   }
