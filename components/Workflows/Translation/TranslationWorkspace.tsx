@@ -103,6 +103,7 @@ export function TranslationWorkspace({
   conversationId,
 }: WorkflowWorkspaceProps) {
   const t = useTranslations('workflows');
+  const tCommon = useTranslations('common');
   const conversation = useConversationStore((s) =>
     s.conversations.find((c) => c.id === conversationId),
   );
@@ -877,14 +878,14 @@ export function TranslationWorkspace({
               }}
               className="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
             >
-              {t('common.undo')}
+              {tCommon('undo')}
             </button>
           </div>
         ),
         { duration: 8000 },
       );
     },
-    [patchState, revertEdit, t],
+    [patchState, revertEdit, t, tCommon],
   );
 
   /**
