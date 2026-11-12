@@ -371,6 +371,22 @@ export class ToolRouterEnricher extends BasePipelineStage {
     );
   }
 
+  /**
+   * Note naming the files that are mounted in the sandbox although their
+   * text is not in this turn's prompt (active files over the per-turn token
+   * budget). Nothing else tells the model they exist, and without it the
+   * model reports earlier uploads as unavailable.
+   */
+  private static mountedWithoutTextNote(
+    filenames: string[],
+  ): string | undefined {
+    if (filenames.length === 0) return undefined;
+    return (
+      `Note: these files from earlier in the conversation are mounted in the code interpreter, but their text is not included in this turn's context (context budget): ${filenames.join(', ')}. ` +
+      'They are available: open them with code whenever the task involves them, and never ask the user to upload them again.'
+    );
+  }
+
   /** Decides and runs this turn's tools (search, sub-tool interpreter). */
   private async routeTools(context: ChatContext): Promise<ChatContext> {
     // Start with current messages (may already be enriched by RAG)
@@ -530,6 +546,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
           },
         },
         ToolRouterEnricher.unmountedFilesNote(staged.unmounted),
+      );
+      context = ToolRouterEnricher.withRouterNote(
+        context,
+        ToolRouterEnricher.mountedWithoutTextNote(staged.mountedWithoutText),
       );
     }
     const interpreterRequested = interpreterRequestedAny && !nativeInterpreter;
@@ -2303,6 +2323,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
         context,
         ToolRouterEnricher.unmountedFilesNote(staged.unmounted),
       );
+      context = ToolRouterEnricher.withRouterNote(
+        context,
+        ToolRouterEnricher.mountedWithoutTextNote(staged.mountedWithoutText),
+      );
 
       let interpreterTimer: ReturnType<typeof setTimeout> | undefined;
       const result = await Promise.race([
@@ -2502,9 +2526,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
    * Loads the RAW bytes of the files in scope for this turn from blob
    * storage for the sandbox. Raw bytes matter: the interpreter must parse
    * the actual CSV/XLSX, not the text summary the file pipeline produced.
-   * Which files: the latest attachments, then the active files the
-   * ActiveFileInjector selected (so an upload from an earlier turn is
-   * openable, not just quoted), then earlier generated files — see
+   * Which files: the latest attachments, then the conversation's active
+   * files (so an upload from an earlier turn is openable, whether or not
+   * its text fit this turn's prompt), then earlier generated files — see
    * selectInterpreterInputRefs. Reads `context.messages` (not
    * enrichedMessages) because processors may have rewritten attachment
    * entries there.
@@ -2521,22 +2545,28 @@ export class ToolRouterEnricher extends BasePipelineStage {
    * the rest still load (one large file used to stop every file after it);
    * skipped and unreadable files are reported so the model can be told.
    *
-   * @returns The loaded files and the names of selected files not loaded.
+   * @returns The loaded files, the names of selected files not loaded, and
+   *          the names of loaded files whose text is not in the prompt.
    */
-  private async stageInterpreterInputFiles(
-    context: ChatContext,
-  ): Promise<{ files: CodeInterpreterInputFile[]; unmounted: string[] }> {
+  private async stageInterpreterInputFiles(context: ChatContext): Promise<{
+    files: CodeInterpreterInputFile[];
+    unmounted: string[];
+    mountedWithoutText: string[];
+  }> {
     const refs = selectInterpreterInputRefs({
       messages: context.messages,
       activeFiles: context.activeFiles,
       droppedActiveFileIds: context.activeFilesDroppedThisTurn,
     });
-    if (refs.length === 0) return { files: [], unmounted: [] };
+    if (refs.length === 0) {
+      return { files: [], unmounted: [], mountedWithoutText: [] };
+    }
 
     const userId = getUserIdFromSession(context.session);
     const blobStorageClient = createBlobStorageClient(context.session);
     const files: CodeInterpreterInputFile[] = [];
     const unmounted: string[] = [];
+    const mountedWithoutText: string[] = [];
     let totalBytes = 0;
 
     for (const ref of refs) {
@@ -2563,6 +2593,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           data,
           mimeType: getContentType(extension),
         });
+        if (ref.textOmittedFromPrompt) mountedWithoutText.push(ref.filename);
       } catch (err) {
         // A missing blob must not sink the run — the interpreter still gets
         // the task plus whatever attachments DID load.
@@ -2573,7 +2604,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
         unmounted.push(ref.filename);
       }
     }
-    return { files, unmounted };
+    return { files, unmounted, mountedWithoutText };
   }
 
   /**
