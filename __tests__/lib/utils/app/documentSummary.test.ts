@@ -1,9 +1,11 @@
+import type { TextCompleter } from '@/lib/services/chat/textCompletion';
+
 import { CHUNK_CONFIG, TOKEN_ESTIMATION } from '@/lib/utils/app/const';
 import {
   calculateChunkConfig,
   estimateCharsPerToken,
-  parseAndQueryFileOpenAI,
   splitIntoChunks,
+  summarizeDocumentForQuery,
 } from '@/lib/utils/app/stream/documentSummary';
 import {
   admissibleRequestTokens,
@@ -19,26 +21,6 @@ const mockLoadDocument = vi.fn();
 vi.mock('@/lib/utils/server/file/fileHandling', () => ({
   loadDocument: (...args: any[]) => mockLoadDocument(...args),
 }));
-
-const mockCreate = vi.fn();
-vi.mock('@azure/identity', () => ({
-  DefaultAzureCredential: vi.fn(),
-  getBearerTokenProvider: vi.fn().mockReturnValue(vi.fn()),
-}));
-
-vi.mock('openai', () => {
-  class MockAzureOpenAI {
-    chat = {
-      completions: {
-        create: (...args: any[]) => mockCreate(...args),
-      },
-    };
-  }
-  return {
-    default: MockAzureOpenAI,
-    AzureOpenAI: MockAzureOpenAI,
-  };
-});
 
 describe('Document Summary Utilities', () => {
   describe('estimateCharsPerToken', () => {
@@ -529,49 +511,119 @@ describe('Document Summary Utilities', () => {
     });
   });
 
-  describe('parseAndQueryFileOpenAI preExtractedText', () => {
-    const mockUser = { id: 'test-user', name: 'Test' };
-    const mockFile = new File(['content'], 'test.txt');
+  describe('summarizeDocumentForQuery', () => {
+    const file = new File(['content'], 'test.txt');
 
-    it('should skip loadDocument when preExtractedText is provided', async () => {
-      mockLoadDocument.mockResolvedValue('should not be called');
-
-      // Mock the summarize chunk + final completion calls
-      // First call: chunk summary, Second call: final response
-      mockCreate.mockResolvedValue({
-        choices: [{ message: { content: 'mocked response' } }],
+    /** A completer that answers each call with the next queued reply. */
+    function scriptedCompleter(
+      ...replies: Array<string | Error>
+    ): TextCompleter & ReturnType<typeof vi.fn> {
+      const complete = vi.fn(async () => {
+        const reply = replies.shift() ?? 'final summary';
+        if (reply instanceof Error) throw reply;
+        return reply;
       });
+      return complete as unknown as TextCompleter & ReturnType<typeof vi.fn>;
+    }
 
-      await parseAndQueryFileOpenAI({
-        file: mockFile,
+    it('skips loadDocument when preExtractedText is provided', async () => {
+      mockLoadDocument.mockClear();
+      await summarizeDocumentForQuery({
+        file,
         prompt: 'test prompt',
         modelId: 'gpt-4.1',
-        user: mockUser as any,
-        stream: false,
+        complete: scriptedCompleter('chunk summary', 'final summary'),
         preExtractedText: 'pre-extracted content here',
       });
-
-      // loadDocument should NOT be called since preExtractedText was provided
       expect(mockLoadDocument).not.toHaveBeenCalled();
     });
 
-    it('should call loadDocument when preExtractedText is not provided', async () => {
+    it('loads the document when no preExtractedText is provided', async () => {
       mockLoadDocument.mockResolvedValue('loaded from file');
-
-      mockCreate.mockResolvedValue({
-        choices: [{ message: { content: 'mocked response' } }],
-      });
-
-      await parseAndQueryFileOpenAI({
-        file: mockFile,
+      await summarizeDocumentForQuery({
+        file,
         prompt: 'test prompt',
         modelId: 'gpt-4.1',
-        user: mockUser as any,
-        stream: false,
+        complete: scriptedCompleter('chunk summary', 'final summary'),
+      });
+      expect(mockLoadDocument).toHaveBeenCalledWith(file);
+    });
+
+    it('summarizes each chunk, then asks for one query-focused summary', async () => {
+      const complete = scriptedCompleter('first part', 'second part', 'final');
+      const text = 'x'.repeat(CHUNK_CONFIG.DEFAULT_CHUNK_CHARS + 10);
+
+      const summary = await summarizeDocumentForQuery({
+        file,
+        prompt: 'what changed?',
+        modelId: 'not-in-catalog', // default sizing: exactly two chunks
+        complete,
+        preExtractedText: text,
       });
 
-      // loadDocument SHOULD be called since no preExtractedText
-      expect(mockLoadDocument).toHaveBeenCalledWith(mockFile);
+      expect(summary).toBe('final');
+      expect(complete).toHaveBeenCalledTimes(3);
+      const finalRequest = complete.mock.calls[2][0];
+      expect(finalRequest.userPrompt).toContain('first part');
+      expect(finalRequest.userPrompt).toContain('second part');
+      expect(finalRequest.userPrompt).toContain('what changed?');
+      // The request carries only text fields: no SDK-specific parameters
+      // (data_sources, max_completion_tokens) leak out of the summarizer.
+      expect(Object.keys(finalRequest).sort()).toEqual([
+        'maxTokens',
+        'systemPrompt',
+        'temperature',
+        'userPrompt',
+      ]);
+    });
+
+    it('keeps going when some chunks fail', async () => {
+      const complete = scriptedCompleter(
+        new Error('429 rate limited'),
+        'second part',
+        'final',
+      );
+
+      const summary = await summarizeDocumentForQuery({
+        file,
+        prompt: 'q',
+        modelId: 'not-in-catalog',
+        complete,
+        preExtractedText: 'x'.repeat(CHUNK_CONFIG.DEFAULT_CHUNK_CHARS + 10),
+      });
+
+      expect(summary).toBe('final');
+      expect(complete.mock.calls[2][0].userPrompt).toContain('second part');
+    });
+
+    it('throws the real cause when every chunk fails, without a final call', async () => {
+      const notDeployed = new Error(
+        '404 The API deployment for this resource does not exist.',
+      );
+      const complete = scriptedCompleter(notDeployed, notDeployed);
+
+      await expect(
+        summarizeDocumentForQuery({
+          file,
+          prompt: 'q',
+          modelId: 'not-in-catalog',
+          complete,
+          preExtractedText: 'x'.repeat(CHUNK_CONFIG.DEFAULT_CHUNK_CHARS + 10),
+        }),
+      ).rejects.toBe(notDeployed);
+      expect(complete).toHaveBeenCalledTimes(2);
+    });
+
+    it('throws when the final summary comes back empty', async () => {
+      await expect(
+        summarizeDocumentForQuery({
+          file,
+          prompt: 'q',
+          modelId: 'gpt-4.1',
+          complete: scriptedCompleter('chunk summary', ''),
+          preExtractedText: 'short document',
+        }),
+      ).rejects.toThrow(/empty document summary/);
     });
   });
 });
