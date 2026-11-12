@@ -1,6 +1,14 @@
+import {
+  getAuxiliaryCompletions,
+  parseJsonReply,
+} from '@/lib/services/auxiliary/auxiliaryCompletion';
+import type { AuxiliaryRegion } from '@/lib/services/auxiliary/types';
+import type { StructuredDecisionFallback } from '@/lib/services/chat/routing/structuredDecisionFallback';
+
+import type { AuxiliaryUsageSink } from '@/types/chat';
 import { FieldType, RecipeField } from '@/types/extractionRecipe';
 
-import OpenAI from 'openai';
+import type OpenAI from 'openai';
 
 /**
  * Shared infrastructure for *proposing* a flat extraction schema via
@@ -130,11 +138,20 @@ function buildSystemPrompt(
   return lines.join('\n');
 }
 
+/** Most one proposal may take on the auxiliary chain. */
+export const SCHEMA_PROPOSAL_TIMEOUT_MS = 45_000;
+
 export interface ProposeFlatSchemaOptions {
+  /** Residency region for the model call (auxiliaryRegion()). */
+  region: AuxiliaryRegion;
+  /** The user's chat model, when the caller has one (chat turns). */
+  fallback?: StructuredDecisionFallback;
+  /** Token-usage sink for the model call. */
+  onUsage?: AuxiliaryUsageSink;
+  /** Cancels the proposal (stage timeout, client disconnect). */
+  signal?: AbortSignal;
   /** When true (default), enforces at least one number/date/enum field. */
   requireMetric?: boolean;
-  /** OpenAI model id (default 'gpt-5-mini'). */
-  model?: string;
   /**
    * Field types the model is allowed to emit. Defaults to `FLAT_FIELD_TYPES`
    * (primitives only). Pass `ALL_FIELD_TYPES` for user-authored recipe
@@ -152,21 +169,56 @@ interface RawField {
 }
 
 /**
+ * The proposal request. Exported so the auxiliary readiness probe
+ * (auxiliary/probes.ts) exercises exactly what runtime sends.
+ *
+ * @param userContent - The joined user-prompt fragments.
+ * @param allowedTypes - Field types the model may emit.
+ * @param requireMetric - Whether a number/date/enum field is required.
+ */
+export function flatSchemaProposalRequest(
+  userContent: string,
+  allowedTypes: ReadonlyArray<FieldType> = FLAT_FIELD_TYPES,
+  requireMetric = true,
+): OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming {
+  return {
+    model: '',
+    messages: [
+      {
+        role: 'system',
+        content: buildSystemPrompt(allowedTypes, requireMetric),
+      },
+      { role: 'user', content: userContent },
+    ],
+    response_format: {
+      type: 'json_schema',
+      json_schema: {
+        name: 'flat_schema_proposal',
+        strict: true,
+        schema: buildSchema(allowedTypes) as unknown as Record<string, unknown>,
+      },
+    },
+  };
+}
+
+/**
  * Proposes a flat schema given a list of user-prompt fragments. Each
  * fragment is joined with a blank line. Callers compose fragments
  * appropriate to their context (raw source text, user instructions,
  * existing fields, sample material).
+ *
+ * The call runs through the shared helper-model path (operation
+ * `schemaProposal`) in the caller's residency region, with the user's chat
+ * model as the fallback when the caller supplies one.
+ *
+ * @throws When no model produced a proposal with a fields array.
  */
 export async function proposeFlatSchema(
-  openAIClient: OpenAI,
   userPromptParts: string[],
-  options: ProposeFlatSchemaOptions = {},
+  options: ProposeFlatSchemaOptions,
 ): Promise<RecipeField[]> {
   const requireMetric = options.requireMetric !== false;
-  const model = options.model ?? 'gpt-5-mini';
   const allowedTypes = options.allowedTypes ?? FLAT_FIELD_TYPES;
-  const systemPrompt = buildSystemPrompt(allowedTypes, requireMetric);
-  const schema = buildSchema(allowedTypes);
 
   const runOnce = async (extraNudge?: string): Promise<RecipeField[]> => {
     const userContent = [
@@ -174,29 +226,27 @@ export async function proposeFlatSchema(
       ...(extraNudge ? ['', extraNudge] : []),
     ].join('\n\n');
 
-    const completion = await openAIClient.chat.completions.create({
-      model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userContent },
-      ],
-      response_format: {
-        type: 'json_schema',
-        json_schema: {
-          name: 'flat_schema_proposal',
-          strict: true,
-          schema: schema as unknown as Record<string, unknown>,
-        },
+    const completions = await getAuxiliaryCompletions();
+    const answer = await completions.completeJson({
+      operation: 'schemaProposal',
+      region: options.region,
+      params: flatSchemaProposalRequest(
+        userContent,
+        allowedTypes,
+        requireMetric,
+      ),
+      accept: (response) => {
+        const value = parseJsonReply(response) as
+          | { fields?: unknown }
+          | undefined;
+        return value && Array.isArray(value.fields) ? value : undefined;
       },
+      timeoutMs: SCHEMA_PROPOSAL_TIMEOUT_MS,
+      signal: options.signal,
+      onUsage: options.onUsage,
+      fallback: options.fallback,
     });
-
-    const raw = completion.choices[0]?.message?.content ?? '{}';
-    let payload: { fields?: unknown };
-    try {
-      payload = JSON.parse(raw) as { fields?: unknown };
-    } catch {
-      throw new Error('Model returned malformed JSON for schema proposal');
-    }
+    const payload = answer.value;
 
     if (!Array.isArray(payload.fields)) {
       throw new Error('Schema proposal missing fields array');
