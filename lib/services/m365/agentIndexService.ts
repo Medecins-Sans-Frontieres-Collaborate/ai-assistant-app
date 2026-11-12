@@ -54,6 +54,10 @@ import {
   graphFetch,
   graphJson,
 } from '@/lib/services/m365/graphApi';
+import {
+  AGENT_CONTENT_REGION,
+  type VisionRouting,
+} from '@/lib/services/m365/visionTranscription';
 
 import {
   NoExtractableTextError,
@@ -1159,6 +1163,11 @@ export interface IndexJobItemOptions {
    */
   persistOcr?: (output: AutoOcrOutput) => Promise<void>;
   signal?: AbortSignal;
+  /**
+   * Where auto-OCR page images may be read (vision engine). Absent:
+   * AGENT_CONTENT_REGION (EU).
+   */
+  vision?: VisionRouting;
 }
 
 function noTextOutcome(
@@ -1245,6 +1254,7 @@ export async function indexJobItem(
         const result = await ocrPdfBuffer(pdfBytes.buffer, pdfBytes.name, {
           maxPages: pages,
           signal: options.signal,
+          vision: options.vision ?? { region: AGENT_CONTENT_REGION },
         });
         ocrText = result.text;
         ocrPages = result.pages;
