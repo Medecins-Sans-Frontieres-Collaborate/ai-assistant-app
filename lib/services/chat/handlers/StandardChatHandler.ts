@@ -45,6 +45,7 @@ import {
 } from '@/types/extractionRecipe';
 
 import { StandardChatService } from '../StandardChatService';
+import { auxiliaryTurnRouting } from '../auxiliaryTurnRouting';
 import { planningTokensPerMinute } from '../enrichers/interpreterCapability';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
@@ -863,8 +864,8 @@ export class StandardChatHandler extends BasePipelineStage {
    * by `ExtractionEnricher` runs against the user's model.
    *
    * Auto mode is two stages:
-   *   1. Propose a flat schema via `proposeFlatSchema` (gpt-5-mini
-   *      structured-output call). The result is synthesised into a
+   *   1. Propose a flat schema via `proposeFlatSchema` (a residency-
+   *      routed helper-model call). The result is synthesised into a
    *      transient `ExtractionRecipe` (id `auto`) so Stage 2 reuses the
    *      same code path as recipe mode.
    *   2. Run the strict `json_schema` extraction with the synthesised
@@ -893,9 +894,16 @@ export class StandardChatHandler extends BasePipelineStage {
         '[StandardChatHandler] Auto-mode stage 1: proposing flat schema',
       );
 
-      const openAIClient = ServiceContainer.getInstance().getOpenAIClient();
+      // Residency-routed helper call, with the user's chat model as the
+      // fallback (see auxiliaryTurnRouting).
+      const routing = auxiliaryTurnRouting(context, this.standardChatService);
       const promptParts = this.messagesToPromptParts(messagesToSend);
-      proposedFields = await proposeFlatSchema(openAIClient, promptParts);
+      proposedFields = await proposeFlatSchema(promptParts, {
+        region: routing.region,
+        fallback: routing.structuredFallback,
+        onUsage: routing.onUsage,
+        signal: routing.signal,
+      });
 
       // Synthesise a transient recipe so Stage 2 reuses recipe mode.
       const now = new Date().toISOString();
