@@ -136,7 +136,7 @@ describe('ToolRouterEnricher.collectInterpreterInputFiles — generated files', 
     );
   });
 
-  it('mounts active files from earlier turns, minus those the injector dropped', async () => {
+  it('mounts active files from earlier turns, including those left out of the prompt, and names the latter', async () => {
     const context = {
       ...createTestChatContext({
         messages: [
@@ -173,11 +173,17 @@ describe('ToolRouterEnricher.collectInterpreterInputFiles — generated files', 
       ],
       activeFilesDroppedThisTurn: ['af-big'],
     };
-    const files = await collect(context);
-    expect(files.map((f) => f.filename)).toEqual(['WB27.xlsx', 'IB26.xlsx']);
+    const staged = await (enricher as any).stageInterpreterInputFiles(context);
+    expect(staged.files.map((f: { filename: string }) => f.filename)).toEqual([
+      'WB27.xlsx',
+      'IB26.xlsx',
+      'big.xlsx',
+    ]);
+    expect(staged.mountedWithoutText).toEqual(['big.xlsx']);
     expect(blobGetMock.mock.calls.map((c) => c[0])).toEqual([
       'user-1/uploads/files/wb27.xlsx',
       'user-1/uploads/files/ib26.xlsx',
+      'user-1/uploads/files/big.xlsx',
     ]);
   });
 });
