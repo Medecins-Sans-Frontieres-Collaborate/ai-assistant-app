@@ -652,7 +652,7 @@ export const ChatInput = ({
 
                 {/* Bottom row with badges and controls */}
                 <div
-                  className={`absolute left-2 flex items-center gap-2 z-[10001] transition-all duration-200 ${
+                  className={`absolute start-2 flex items-center gap-2 z-[10001] transition-all duration-200 ${
                     hasBadgeRow || isMultiline
                       ? 'bottom-2'
                       : 'top-1/2 transform -translate-y-1/2'
@@ -675,7 +675,7 @@ export const ChatInput = ({
 
                 {/* Badges displayed after dropdown */}
                 <div
-                  className={`absolute left-14 flex items-center gap-2 z-[10000] transition-all duration-200 ${
+                  className={`absolute start-14 flex items-center gap-2 z-[10000] transition-all duration-200 ${
                     hasBadgeRow || isMultiline
                       ? 'bottom-2'
                       : 'top-1/2 transform -translate-y-1/2'
@@ -739,7 +739,7 @@ export const ChatInput = ({
                 {/* Conversation emissions estimate — right-aligned sibling of
                     the (bottom-center) scroll button, anchored to the chat
                     column so split view is respected. */}
-                <div className="absolute bottom-full mb-2 right-2 z-[9999]">
+                <div className="absolute bottom-full mb-2 end-2 z-[9999]">
                   <EmissionsChip conversation={selectedConversation} />
                 </div>
 
@@ -751,7 +751,7 @@ export const ChatInput = ({
                     follow the input in the empty-chat (centered) layout too.
                     Each renders nothing when inactive, so the default
                     conversation adds zero chrome. */}
-                <div className="absolute bottom-full mb-2 left-2 z-[9999] flex items-center gap-1.5">
+                <div className="absolute bottom-full mb-2 start-2 z-[9999] flex items-center gap-1.5">
                   <SkillBadges />
                   <AgentChip />
                   <ConnectorActivityBadge />
