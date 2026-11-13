@@ -12,6 +12,7 @@ import {
   MCP_ENABLED_KEY,
   WEB_SEARCH_CALLS_KEY,
   WEB_SEARCH_ENABLED_KEY,
+  attachedAgentHidesWebSearch,
   deriveToolLimitGate,
   effectiveInterpreterMode,
   effectiveSearchMode,
@@ -51,6 +52,34 @@ vi.mock('@/client/hooks/settings/useAvailableAgents', () => ({
   useAvailableAgents: () => ({ agents: [] }),
   findAttachedAgent: () => undefined,
 }));
+
+describe('attachedAgentHidesWebSearch', () => {
+  it('shows the control when no agent is attached', () => {
+    expect(attachedAgentHidesWebSearch(undefined)).toBe(false);
+  });
+
+  // M365 and org agents must be switched on; an unset flag keeps them off.
+  it.each(['m365', 'org'] as const)('%s agents opt in', (kind) => {
+    expect(attachedAgentHidesWebSearch({ kind, allowWebSearch: true })).toBe(
+      false,
+    );
+    expect(attachedAgentHidesWebSearch({ kind, allowWebSearch: false })).toBe(
+      true,
+    );
+    expect(attachedAgentHidesWebSearch({ kind })).toBe(true);
+  });
+
+  // Prompt and static RAG agents search unless switched off.
+  it.each(['prompt', 'rag'] as const)('%s agents opt out', (kind) => {
+    expect(attachedAgentHidesWebSearch({ kind, allowWebSearch: false })).toBe(
+      true,
+    );
+    expect(attachedAgentHidesWebSearch({ kind, allowWebSearch: true })).toBe(
+      false,
+    );
+    expect(attachedAgentHidesWebSearch({ kind })).toBe(false);
+  });
+});
 
 describe('deriveToolLimitGate', () => {
   it('without a budget only the block matters', () => {
