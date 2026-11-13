@@ -103,7 +103,7 @@ interface DiscoveredAgent {
   category?: string;
   /** Maintainer info (from ui-maintained-by tag) */
   maintainedBy?: string;
-  /** Org RAG agents only — whether the web-search toggle is allowed. */
+  /** Org RAG, prompt and M365 agents — whether the agent's turns may search the web. */
   allowWebSearch?: boolean;
   /** Org RAG agents only — whether the code-interpreter toggle is allowed. */
   allowCodeInterpreter?: boolean;
