@@ -465,6 +465,15 @@ describe('/api/agent-access/prompt-agents', () => {
       );
     });
 
+    it('keeps web search on unless the creator switches it off', async () => {
+      await POST(postRequest(postBody));
+      await POST(postRequest({ ...postBody, allowWebSearch: false }));
+
+      expect(
+        writePromptAgent.mock.calls.map((call) => call[1].allowWebSearch),
+      ).toEqual([true, false]);
+    });
+
     it('lets a ZERO-KEY local admin create and auto-delegates the new key to them', async () => {
       mockAuth.mockResolvedValue(ZERO_KEY_SESSION);
 
