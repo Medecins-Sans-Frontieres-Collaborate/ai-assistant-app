@@ -5,6 +5,10 @@
  * DefaultAzureCredential, Foundry OpenAI-compat endpoint, AnthropicFoundry)
  * but reads env directly so a half-configured .env.local still works.
  */
+import { AUXILIARY_LIMITS } from '@/lib/services/auxiliary/types';
+
+import { OpenAIModelID, OpenAIModels } from '@/types/openai';
+
 import { envString, loadEvalEnv } from './env';
 
 import { AnthropicFoundry } from '@anthropic-ai/foundry-sdk';
@@ -95,4 +99,45 @@ export function getEvalClients(): EvalClients {
       : undefined,
   };
   return clients;
+}
+
+/**
+ * The OpenAI-compatible client for evals that drive ToolRouterService
+ * directly. In the app the router's calls pass through the auxiliary
+ * executor, which adapts `reasoning_effort` to the serving model; a bare
+ * client sends the router's 'minimal' as-is, and models that do not accept
+ * it (the GPT-5.6 family) answer 400, so every decision reads as degraded.
+ * This wrapper applies the executor's rule: 'minimal' becomes 'low' with
+ * the low-reasoning token headroom when the catalog says the model has no
+ * minimal setting.
+ *
+ * @returns A client whose chat completions adapt reasoning effort per model.
+ */
+export function getRouterEvalClient(): OpenAI {
+  const base = getEvalClients().openAICompat;
+  const create = base.chat.completions.create.bind(base.chat.completions);
+  const adaptedCreate = (
+    params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
+    options?: OpenAI.RequestOptions,
+  ) => {
+    const model = OpenAIModels[params.model as OpenAIModelID];
+    const needsLow =
+      params.reasoning_effort === 'minimal' &&
+      model?.supportsMinimalReasoning === false;
+    return create(
+      needsLow
+        ? {
+            ...params,
+            reasoning_effort: 'low',
+            max_completion_tokens:
+              (params.max_completion_tokens ?? 256) +
+              AUXILIARY_LIMITS.lowReasoningTokens,
+          }
+        : params,
+      options,
+    );
+  };
+  return {
+    chat: { completions: { create: adaptedCreate } },
+  } as unknown as OpenAI;
 }
