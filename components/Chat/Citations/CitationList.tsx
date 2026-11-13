@@ -2,8 +2,10 @@ import {
   IconBlockquote,
   IconChevronDown,
   IconChevronUp,
+  IconFiles,
   IconLayoutCards,
   IconList,
+  IconWorld,
 } from '@tabler/icons-react';
 import React, {
   FC,
@@ -14,9 +16,14 @@ import React, {
   useState,
 } from 'react';
 
-import { buildSourceCards } from '@/lib/utils/app/citationDisplay';
+import { useTranslations } from 'next-intl';
 
-import { Citation } from '@/types/rag';
+import {
+  buildSourceCards,
+  groupSourceCardsByOrigin,
+} from '@/lib/utils/app/citationDisplay';
+
+import { Citation, CitationOrigin } from '@/types/rag';
 
 import { CitationItem } from './CitationItem';
 import { CitationListItem } from './CitationListItem';
@@ -92,11 +99,34 @@ function useResolvedCitationLinks(citations: Citation[]): Citation[] {
   );
 }
 
+/**
+ * Heading above the sources of one origin ("Agent documents" / "Web").
+ * The hint spells out what the origin means for readers who hover it.
+ */
+const OriginHeading: FC<{
+  label: string;
+  hint: string;
+  origin: CitationOrigin;
+}> = ({ label, hint, origin }) => {
+  const Icon = origin === 'knowledge' ? IconFiles : IconWorld;
+  return (
+    <div
+      className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400"
+      title={hint}
+      data-testid={`source-origin-${origin}`}
+    >
+      <Icon size={13} aria-hidden="true" />
+      <span>{label}</span>
+    </div>
+  );
+};
+
 export const CitationList: FC<CitationListProps> = ({
   citations: rawCitations,
   citedNumbers,
 }) => {
   const citations = useResolvedCitationLinks(rawCitations);
+  const t = useTranslations('chat.sources');
   const [isExpanded, setIsExpanded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [viewMode, setViewMode] = useState<'cards' | 'list'>('cards');
@@ -113,6 +143,21 @@ export const CitationList: FC<CitationListProps> = ({
   const uniqueCitations = useMemo(
     () => buildSourceCards(citations, citedNumbers),
     [citations, citedNumbers],
+  );
+
+  // Documents of an agent and public web pages are listed under separate
+  // headings, so a reader never has to infer a source's origin from its
+  // domain. Messages stored before origins were recorded stay one flat list.
+  const sourceGroups = useMemo(
+    () => groupSourceCardsByOrigin(uniqueCitations),
+    [uniqueCitations],
+  );
+  const originLabel = (origin: CitationOrigin): string =>
+    origin === 'knowledge' ? t('fromDocuments') : t('fromWeb');
+  const originHint = (origin: CitationOrigin): string =>
+    origin === 'knowledge' ? t('fromDocumentsHint') : t('fromWebHint');
+  const labelledGroups = sourceGroups.filter(
+    (group) => group.origin !== undefined,
   );
 
   // Extract unique domains for header favicon display
@@ -272,9 +317,22 @@ export const CitationList: FC<CitationListProps> = ({
               {uniqueCitations.length}
             </span>
             <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
-              {uniqueCitations.length > 1 ? 'Sources' : 'Source'}
+              {t('heading', { count: uniqueCitations.length })}
             </span>
           </div>
+          {labelledGroups.length > 1 && (
+            <span
+              className="text-xs text-gray-500 dark:text-gray-400"
+              data-testid="source-origin-summary"
+            >
+              {labelledGroups
+                .map(
+                  (group) =>
+                    `${originLabel(group.origin!)} ${group.cards.length}`,
+                )
+                .join(' · ')}
+            </span>
+          )}
         </div>
 
         {/* Header favicons showing unique source domains */}
@@ -337,7 +395,7 @@ export const CitationList: FC<CitationListProps> = ({
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
           isExpanded
             ? viewMode === 'cards'
-              ? 'max-h-[240px] opacity-100'
+              ? 'max-h-[270px] opacity-100'
               : 'max-h-[400px] opacity-100'
             : 'max-h-0 opacity-0'
         }`}
@@ -352,23 +410,57 @@ export const CitationList: FC<CitationListProps> = ({
             onMouseLeave={handleReactMouseLeave}
           >
             <div className="inline-flex gap-4">
-              {uniqueCitations.map((citation, index) => (
+              {sourceGroups.map((group, groupIndex) => (
                 <div
-                  key={citation.number || citation.url || index}
-                  className="flex-shrink-0"
+                  key={group.origin ?? 'unlabelled'}
+                  className={`flex flex-col gap-1.5 ${
+                    groupIndex > 0
+                      ? 'border-l border-gray-300 pl-4 dark:border-gray-600'
+                      : ''
+                  }`}
                 >
-                  <CitationItem citation={citation} />
+                  {group.origin && (
+                    <OriginHeading
+                      label={originLabel(group.origin)}
+                      hint={originHint(group.origin)}
+                      origin={group.origin}
+                    />
+                  )}
+                  <div className="inline-flex gap-4">
+                    {group.cards.map((citation, index) => (
+                      <div
+                        key={citation.number || citation.url || index}
+                        className="flex-shrink-0"
+                      >
+                        <CitationItem
+                          citation={citation}
+                          showOriginLabel={group.origin === undefined}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         ) : (
           <div className="flex flex-col gap-2 pt-3 overflow-y-auto max-h-[350px]">
-            {uniqueCitations.map((citation, index) => (
-              <CitationListItem
-                key={citation.number || citation.url || index}
-                citation={citation}
-              />
+            {sourceGroups.map((group) => (
+              <React.Fragment key={group.origin ?? 'unlabelled'}>
+                {group.origin && (
+                  <OriginHeading
+                    label={originLabel(group.origin)}
+                    hint={originHint(group.origin)}
+                    origin={group.origin}
+                  />
+                )}
+                {group.cards.map((citation, index) => (
+                  <CitationListItem
+                    key={citation.number || citation.url || index}
+                    citation={citation}
+                  />
+                ))}
+              </React.Fragment>
             ))}
           </div>
         )}
