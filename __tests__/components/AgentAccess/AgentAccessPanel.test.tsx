@@ -1030,6 +1030,7 @@ describe('AgentAccessPanel', () => {
       modelId: 'gpt-5.2',
       skillAccess: 'inherit',
       skillIds: [],
+      allowWebSearch: true,
     });
     // Create-only: no If-Match rides along.
     expect(agentPostCalls[0].headers['If-Match']).toBeUndefined();
@@ -1127,6 +1128,7 @@ describe('AgentAccessPanel', () => {
       modelId: 'gpt-5.2',
       skillAccess: 'inherit',
       skillIds: [],
+      allowWebSearch: true,
     });
   });
 
