@@ -1,4 +1,7 @@
-import { buildSourceCards } from '@/lib/utils/app/citationDisplay';
+import {
+  buildSourceCards,
+  groupSourceCardsByOrigin,
+} from '@/lib/utils/app/citationDisplay';
 
 import { Citation } from '@/types/rag';
 
@@ -82,5 +85,66 @@ describe('buildSourceCards', () => {
       [1],
     );
     expect(cards).toHaveLength(0);
+  });
+});
+
+describe('source origins', () => {
+  const page = (number: number, origin?: Citation['origin']): Citation => ({
+    title: `Source ${number}`,
+    date: '',
+    url: `https://example.org/${number}`,
+    number,
+    ...(origin ? { origin } : {}),
+  });
+
+  it('never merges a web page into a document card that shares its title', () => {
+    const cards = buildSourceCards([
+      { ...page(1, 'knowledge'), title: 'Overtime rules' },
+      { ...page(2, 'web'), title: 'Overtime rules' },
+    ]);
+
+    expect(cards.map((card) => card.origin)).toEqual(['knowledge', 'web']);
+  });
+
+  it('still merges chunks of the same document', () => {
+    const cards = buildSourceCards([
+      { ...page(1, 'knowledge'), url: URL },
+      { ...page(2, 'knowledge'), url: URL },
+    ]);
+
+    expect(cards).toHaveLength(1);
+  });
+
+  it('lists documents before web pages, keeping order within each', () => {
+    const groups = groupSourceCardsByOrigin(
+      buildSourceCards([
+        page(1, 'web'),
+        page(2, 'knowledge'),
+        page(3, 'web'),
+        page(4, 'knowledge'),
+      ]),
+    );
+
+    expect(
+      groups.map((group) => [group.origin, group.cards.map((c) => c.number)]),
+    ).toEqual([
+      ['knowledge', [2, 4]],
+      ['web', [1, 3]],
+    ]);
+  });
+
+  it('keeps cards stored without an origin in a last, unlabelled group', () => {
+    const groups = groupSourceCardsByOrigin(
+      buildSourceCards([page(1), page(2, 'web')]),
+    );
+
+    expect(groups.map((group) => group.origin)).toEqual(['web', undefined]);
+  });
+
+  it('returns no empty groups', () => {
+    expect(groupSourceCardsByOrigin([])).toEqual([]);
+    expect(
+      groupSourceCardsByOrigin(buildSourceCards([page(1, 'web')])),
+    ).toHaveLength(1);
   });
 });
