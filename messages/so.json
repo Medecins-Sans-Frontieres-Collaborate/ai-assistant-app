@@ -959,7 +959,13 @@
     "ttsError": "Khalad abuurista codka. Fadlan isku day mar kale.",
     "unsupportedMessageType": "Khalad soo bandhigista fariinta: Nooca fariinta lama taageero",
     "addLanguageOption": "Ku dar \"{name}\"…",
-    "sources": "Xigashooyin",
+    "sources": {
+      "fromDocuments": "Dukumentiyada wakiilka",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Qaybo laga soo xigtay dukumentiyada wakiilkan",
+      "fromWebHint": "Bogagga dadweynaha ee laga helay raadinta web-ka",
+      "heading": "{count, plural, one {Ilo} other {Ilaha}}"
+    },
     "interpreterBadge": "Orod koodhka",
     "disableCodeInterpreter": "Dami fulinta koodhka",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# dukumenti} other {# dukumanti}} la diiwaangeliyey",
     "m365CapImmediateHelp": "Marka la dalbado waxa isla markiiba la badbaadinayaa xaddiga. Tafatirro kale wali waxay u baahan yihiin Badbaadin.",
     "m365CapDraftHelp": "Xaddiga waxa la badbaadinayaa marka aad abuurto wakiilka.",
-    "m365CapSaved": "Xaddiga dukumiintiga waa la badbaadiyey: {limit}."
+    "m365CapSaved": "Xaddiga dukumiintiga waa la badbaadiyey: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Si caadi ah waa dansan tahay: wakiilku wuxuu ka jawaabaa oo kaliya dukumentiyadiisa, waligiisna ma baadho webka, xitaa hadduu isticmaaluhu doorto baadi-goob kale. Marka la shido, awaamiirta wakiilku waxay go'aaminayaan goorta raadinta web-ku dhacdo iyo bogagga uu adeegsan karo, ilo kasta oo web ahna si gaar ah ayaa loo muujinayaa marka la barbar dhigo dukumentiyada wakiilka.",
+    "promptAgentAllowWebSearchHelp": "Si caadi ah waa shidan tahay. Marka la damiyo, wakiilkan waligiis ma baadho webka, xitaa hadduu isticmaaluhu doorto baadi-goob kale."
   },
   "localModels": {
     "title": "Moodallo maxalli ah",

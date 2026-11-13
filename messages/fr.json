@@ -847,7 +847,13 @@
     "ttsError": "Erreur lors de la génération de l’audio. Veuillez réessayer.",
     "unsupportedMessageType": "Erreur d’affichage du message : type de message non pris en charge",
     "addLanguageOption": "Ajouter « {name} »…",
-    "sources": "Sources",
+    "sources": {
+      "fromDocuments": "Documents de l'agent",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Extraits issus des documents propres à cet agent",
+      "fromWebHint": "Pages publiques trouvées via une recherche web",
+      "heading": "{count, plural, one {Source} other {Sources}}"
+    },
     "interpreterBadge": "Exécuter le code",
     "disableCodeInterpreter": "Désactiver l'exécution du code",
     "interimSearch": {
@@ -896,7 +902,7 @@
     "skillUsage": {
       "label": "Compétences",
       "limited": "Limité",
-      "appliedCount": "{count, plural, one {# appliquée} other {# appliquées}}",
+      "appliedCount": "{count} appliqué(s)",
       "requested": "demandée",
       "pinned": "épinglée",
       "auto": "auto",
@@ -5400,7 +5406,9 @@
     "agentSkillsNotVisible": "(non visible pour vous — décochez pour retirer)",
     "m365CapImmediateHelp": "Appliquer enregistre la limite immédiatement. Les autres modifications nécessitent toujours Enregistrer.",
     "m365CapDraftHelp": "La limite est enregistrée lors de la création de l’agent.",
-    "m365CapSaved": "Limite de documents enregistrée : {limit}."
+    "m365CapSaved": "Limite de documents enregistrée : {limit}.",
+    "m365AgentAllowWebSearchHelp": "Désactivé par défaut : l'agent répond uniquement à partir de ses documents et ne recherche jamais sur le web, quel que soit le paramètre de recherche choisi par l'utilisateur. Lorsque activé, les instructions de l'agent déterminent quand une recherche web a lieu et quels sites peuvent être utilisés ; les sources web sont toujours affichées séparément des documents de l'agent.",
+    "promptAgentAllowWebSearchHelp": "Activé par défaut. Lorsque désactivé, cet agent ne recherche jamais sur le web, quel que soit le paramètre de recherche choisi par l'utilisateur."
   },
   "localModels": {
     "title": "Modèles locaux",

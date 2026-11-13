@@ -898,7 +898,13 @@
     "ttsError": "Błąd podczas generowania dźwięku. Spróbuj ponownie.",
     "unsupportedMessageType": "Błąd podczas wyświetlania wiadomości: Nieobsługiwany typ wiadomości",
     "addLanguageOption": "Dodaj \"{name}\"…",
-    "sources": "Źródła",
+    "sources": {
+      "fromDocuments": "Dokumenty agenta",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Fragmenty z własnych dokumentów tego agenta",
+      "fromWebHint": "Publiczne strony znalezione przez wyszukiwarkę internetową",
+      "heading": "{count, plural, one {Źródło} other {Źródła}}"
+    },
     "interpreterBadge": "Uruchom kod",
     "disableCodeInterpreter": "Wyłącz wykonywanie kodu",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "Zaindeksowano {indexed, plural, one {# dokument} other {# dokumentów}}",
     "m365CapImmediateHelp": "Zastosowanie zapisuje limit natychmiast. Inne zmiany wymagają zapisania.",
     "m365CapDraftHelp": "Limit zostanie zapisany podczas tworzenia agenta.",
-    "m365CapSaved": "Zapisano limit dokumentów: {limit}."
+    "m365CapSaved": "Zapisano limit dokumentów: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Domyślnie wyłączone: agent odpowiada tylko na podstawie własnych dokumentów i nigdy nie przeszukuje internetu, niezależnie od ustawień wyszukiwania użytkownika. Po włączeniu to instrukcje agenta decydują, kiedy uruchamia się wyszukiwanie internetowe i z których stron może korzystać, a źródła internetowe są zawsze wyświetlane oddzielnie od dokumentów agenta.",
+    "promptAgentAllowWebSearchHelp": "Domyślnie włączone. Po wyłączeniu agent nigdy nie przeszukuje internetu, niezależnie od ustawień wyszukiwania użytkownika."
   },
   "localModels": {
     "title": "Modele lokalne",

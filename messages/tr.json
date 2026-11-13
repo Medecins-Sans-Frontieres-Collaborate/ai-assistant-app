@@ -901,7 +901,13 @@
     "ttsError": "Ses oluşturulurken hata oluştu. Lütfen tekrar deneyin.",
     "unsupportedMessageType": "Mesaj görüntülenemedi: Desteklenmeyen mesaj türü",
     "addLanguageOption": "\"{name}\" ekle…",
-    "sources": "Kaynaklar",
+    "sources": {
+      "fromDocuments": "Agent dokümanları",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Bu agent'ın kendi dokümanlarından alınan pasajlar",
+      "fromWebHint": "Web aramasıyla bulunan herkese açık sayfalar",
+      "heading": "{count, plural, one {Kaynak} other {Kaynaklar}}"
+    },
     "interpreterBadge": "Kodu çalıştır",
     "disableCodeInterpreter": "Kod çalıştırmayı devre dışı bırak",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# doküman} other {# doküman}} indekslendi",
     "m365CapImmediateHelp": "Uygula, limiti hemen kaydeder. Diğer değişiklikler için yine de Kaydet gerekir.",
     "m365CapDraftHelp": "Limit, ajanı oluşturduğunuzda kaydedilir.",
-    "m365CapSaved": "Belge limiti kaydedildi: {limit}."
+    "m365CapSaved": "Belge limiti kaydedildi: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Varsayılan olarak kapalıdır: agent sadece kendi dokümanlarından yanıt verir ve kullanıcı hangi arama ayarını seçerse seçsin asla web'de arama yapmaz. Açık olduğunda ise, agent'ın talimatları web aramasının ne zaman yapılacağını ve hangi sitelerin kullanılacağını belirler; web kaynakları her zaman agent'ın dokümanlarından ayrı olarak gösterilir.",
+    "promptAgentAllowWebSearchHelp": "Varsayılan olarak açıktır. Kapalıysa, bu agent, kullanıcı hangi arama ayarını seçerse seçsin asla web'de arama yapmaz."
   },
   "localModels": {
     "title": "Yerel modeller",

@@ -868,7 +868,13 @@
     "ttsError": "Terjadi kesalahan saat membuat audio. Silakan coba lagi.",
     "unsupportedMessageType": "Galat saat menampilkan pesan: Jenis pesan tidak didukung",
     "addLanguageOption": "Tambahkan \"{name}\"…",
-    "sources": "Sumber",
+    "sources": {
+      "fromDocuments": "Dokumen agen",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Bagian dari dokumen milik agen ini",
+      "fromWebHint": "Halaman publik yang ditemukan lewat pencarian web",
+      "heading": "{count, plural, one {Sumber} other {Sumber}}"
+    },
     "interpreterBadge": "Jalankan kode",
     "disableCodeInterpreter": "Nonaktifkan eksekusi kode",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# dokumen} other {# dokumen}} diindeks",
     "m365CapImmediateHelp": "Terapkan akan menyimpan batasan secara langsung. Edit lainnya tetap perlu disimpan dengan Save.",
     "m365CapDraftHelp": "Batasan akan disimpan saat Anda membuat agen.",
-    "m365CapSaved": "Batas dokumen tersimpan: {limit}."
+    "m365CapSaved": "Batas dokumen tersimpan: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Nonaktif secara default: agen hanya menjawab dari dokumennya dan tidak pernah mencari di web, apa pun pengaturan pencarian yang dipilih pengguna. Jika diaktifkan, instruksi agen menentukan kapan pencarian web dilakukan dan situs web mana yang dapat digunakan, serta sumber web selalu ditampilkan terpisah dari dokumen agen.",
+    "promptAgentAllowWebSearchHelp": "Aktif secara default. Jika dinonaktifkan, agen ini tidak pernah mencari di web, apa pun pengaturan pencarian yang dipilih pengguna."
   },
   "localModels": {
     "title": "Model lokal",

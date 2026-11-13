@@ -959,7 +959,13 @@
     "ttsError": "Nisy hadisoana tamin'ny famoronana feo. Azafady avereno.",
     "unsupportedMessageType": "Hadisoana tamin'ny fandefasana hafatra: Tsy tohanana ity karazana hafatra ity",
     "addLanguageOption": "Ampio \"{name}\"…",
-    "sources": "Loharano",
+    "sources": {
+      "fromDocuments": "Taratasy avy amin'ny agent",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Biby avy amin'ny taratasy manokan'ity agent ity",
+      "fromWebHint": "Pejy ho an'ny daholobe hitan'ny fikarohana amin'ny web",
+      "heading": "{count, plural, one {Loharano} other {Loharano}}"
+    },
     "interpreterBadge": "Alefa ny kaody",
     "disableCodeInterpreter": "Atsaharo ny fanatanterahana kaody",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {rakitra #} other {rakitra #}} voatanisa",
     "m365CapImmediateHelp": "Rehefa ampiharina dia voatahiry avy hatrany ny fetra. Ny fanovana hafa dia mila asiana Save ihany.",
     "m365CapDraftHelp": "Ny fetra dia tehirizina rehefa mamorona agent ianao.",
-    "m365CapSaved": "Voatahiry ny fetra amin'ny antontan-taratasy: {limit}."
+    "m365CapSaved": "Voatahiry ny fetra amin'ny antontan-taratasy: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Tsy mandeha ho azy: valin-teny avy amin'ny taratasiny ihany no omena ary tsy manao fikarohana amin'ny web, na inona na inona safidin'ny mpampiasa. Raha alefa, ny toromarika omen'ny agent no mamaritra raha hanao fikarohana amin'ny web sy amin'ny tranonkala inona no ampiasaina, ary aseho misaraka foana ny loharano avy amin'ny web sy ny taratasin'ny agent.",
+    "promptAgentAllowWebSearchHelp": "Tafiditra amin'ny fomba ho azy. Raha esorina, dia tsy hanao fikarohana amin'ny web mihitsy ity agent ity, na inona na inona safidin'ny mpampiasa."
   },
   "localModels": {
     "title": "Model eo an-toerana",

@@ -847,7 +847,13 @@
     "ttsError": "Fehler beim Generieren des Audios. Bitte erneut versuchen.",
     "unsupportedMessageType": "Fehler beim Anzeigen der Nachricht: Nicht unterstützter Nachrichtentyp",
     "addLanguageOption": "„{name}“ hinzufügen…",
-    "sources": "Quellen",
+    "sources": {
+      "fromDocuments": "Agent-Dokumente",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Abschnitte aus den eigenen Dokumenten dieses Agents",
+      "fromWebHint": "Öffentliche Seiten, die über eine Websuche gefunden wurden",
+      "heading": "{count, plural, one {Quelle} other {Quellen}}"
+    },
     "interpreterBadge": "Code ausführen",
     "disableCodeInterpreter": "Codeausführung deaktivieren",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "agentSkillsNotVisible": "(für Sie nicht sichtbar — zum Entfernen abwählen)",
     "m365CapImmediateHelp": "Übernehmen speichert das Limit sofort. Für andere Änderungen ist weiterhin Speichern erforderlich.",
     "m365CapDraftHelp": "Das Limit wird beim Erstellen des Agents gespeichert.",
-    "m365CapSaved": "Dokumentenlimit gespeichert: {limit}."
+    "m365CapSaved": "Dokumentenlimit gespeichert: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Standardmäßig deaktiviert: Der Agent antwortet nur aus seinen eigenen Dokumenten und durchsucht niemals das Web, unabhängig von der vom Nutzer gewählten Sucheinstellung. Ist diese Option aktiviert, bestimmen die Agenten-Anweisungen, wann eine Websuche durchgeführt wird und welche Websites verwendet werden dürfen. Webquellen werden immer getrennt von den Agentendokumenten angezeigt.",
+    "promptAgentAllowWebSearchHelp": "Standardmäßig aktiviert. Wenn deaktiviert, sucht dieser Agent niemals im Web, unabhängig von der vom Nutzer gewählten Sucheinstellung."
   },
   "localModels": {
     "title": "Lokale Modelle",

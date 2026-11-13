@@ -959,7 +959,13 @@
     "ttsError": "Faut ti kûê audio. Bï nga tîngbïngö.",
     "unsupportedMessageType": "Faut ti vë mesajï: Tîpi mesajï so a sô ndöka",
     "addLanguageOption": "Gbêtî \"{name}\"…",
-    "sources": "Ngu nzönî",
+    "sources": {
+      "fromDocuments": "Dokument ya agent",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Gbolite ti dokument ya agent azo",
+      "fromWebHint": "Page ya publiek mo web ti ko rese",
+      "heading": "{count, plural, one {Gbangu} other {Gbangu mo}}"
+    },
     "interpreterBadge": "Ngba kodê",
     "disableCodeInterpreter": "Kôtrê na kodê",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# dokumenti} other {# dokumenti}} gbèyê",
     "m365CapImmediateHelp": "Sô bê ti mbi yâlimingo na tî lo na yângâ. Tîngbi yâlimingo mô tô yângâ ti mbi yângâ 'Save'.",
     "m365CapDraftHelp": "Yâlimingo na tî yâlimi sô yobê na mbênî agent.",
-    "m365CapSaved": "Yâlimingo na tî document sô yângâ: {limit}."
+    "m365CapSaved": "Yâlimingo na tî document sô yângâ: {limit}.",
+    "m365AgentAllowWebSearchHelp": "A ga tun na ndika: agent azô sô gbâ ti dokument ape asili ti to, a te rese web, kaka na ayeke ti y用户. Sô a tun, instruksyon ya agent na yeke na rese web na ndokoti mo website na yeke gbalî, mo web source na yeke mbi somo ti dokument ya agent.",
+    "promptAgentAllowWebSearchHelp": "A tun na ndika. Sô a te tun, agent azo sô te rese web, kaka na ayeke ti y用户."
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",

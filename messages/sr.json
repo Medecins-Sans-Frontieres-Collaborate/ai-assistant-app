@@ -959,7 +959,13 @@
     "ttsError": "Greška pri generisanju zvuka. Pokušajte ponovo.",
     "unsupportedMessageType": "Greška pri prikazu poruke: Nepodržan tip poruke",
     "addLanguageOption": "Dodaj \"{name}\"…",
-    "sources": "Izvori",
+    "sources": {
+      "fromDocuments": "Dokumenti agenta",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Delovi iz sopstvenih dokumenata ovog agenta",
+      "fromWebHint": "Javne stranice pronađene putem web pretrage",
+      "heading": "{count, plural, one {Izvor} other {Izvori}}"
+    },
     "interpreterBadge": "Pokreni kod",
     "disableCodeInterpreter": "Onemogući izvršavanje koda",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokumenata}} indeksirano",
     "m365CapImmediateHelp": "Primena odmah čuva ograničenje. Ostale izmene zahtevaju čuvanje.",
     "m365CapDraftHelp": "Ograničenje će biti sačuvano kada kreirate agenta.",
-    "m365CapSaved": "Ograničenje dokumenata sačuvano: {limit}."
+    "m365CapSaved": "Ograničenje dokumenata sačuvano: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Podrazumevano isključeno: agent odgovara samo iz svojih dokumenata i nikada ne pretražuje web, bez obzira na korisničku postavku pretrage. Kada je uključeno, instrukcije agenta odlučuju kada se pokreće web pretraga i koje sajtove može koristiti, a izvori sa weba su uvek prikazani odvojeno od dokumenata agenta.",
+    "promptAgentAllowWebSearchHelp": "Podrazumevano uključeno. Kada je isključeno, ovaj agent nikada ne pretražuje web, bez obzira na korisničku postavku pretrage."
   },
   "localModels": {
     "title": "Lokalni modeli",

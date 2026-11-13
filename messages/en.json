@@ -891,6 +891,13 @@
       "showAll": "Show all {count} sources",
       "showFewer": "Show fewer"
     },
+    "sources": {
+      "heading": "{count, plural, one {Source} other {Sources}}",
+      "fromDocuments": "Agent documents",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Passages from this agent's own documents",
+      "fromWebHint": "Public pages found by a web search"
+    },
     "activity": {
       "callingTool": "Calling tool…",
       "stillWorking": "Still working…",
@@ -5079,6 +5086,8 @@
     "m365AgentAttentionFailed": "Could not load file details.",
     "m365AgentAttentionNone": "No per-file details recorded for the last run.",
     "m365AgentAutoOcrLabel": "OCR scanned PDFs automatically during indexing",
+    "m365AgentAllowWebSearchHelp": "Off by default: the agent answers only from its documents and never searches the web, whatever search setting the user has chosen. When on, the agent's instructions decide when a web search runs and which websites it may use, and web sources are always shown separately from the agent's documents.",
+    "promptAgentAllowWebSearchHelp": "On by default. When off, this agent never searches the web, whatever search setting the user has chosen.",
     "m365AgentAutoOcrHelp": "Off by default — OCR is billed per page. When on, each index run OCRs scanned PDFs up to {perRun} pages per run and {perFile} pages per file; larger or over-budget files keep the Prepare (OCR) option.",
     "m365AgentIndexRetry": "Retry",
     "m365PrepareAllButton": "Prepare all scanned PDFs ({count})",

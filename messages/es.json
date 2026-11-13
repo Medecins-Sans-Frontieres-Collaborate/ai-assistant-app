@@ -847,7 +847,13 @@
     "ttsError": "Error al generar el audio. Intente nuevamente.",
     "unsupportedMessageType": "Error al mostrar el mensaje: Tipo de mensaje no compatible",
     "addLanguageOption": "Agregar \"{name}\"…",
-    "sources": "Fuentes",
+    "sources": {
+      "fromDocuments": "Documentos del agente",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Pasajes de los documentos propios de este agente",
+      "fromWebHint": "Páginas públicas encontradas mediante una búsqueda web",
+      "heading": "{count, plural, one {Fuente} other {Fuentes}}"
+    },
     "interpreterBadge": "Ejecutar código",
     "disableCodeInterpreter": "Desactivar ejecución de código",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# documento} other {# documentos}} indexados",
     "m365CapImmediateHelp": "Aplicar guarda el límite de inmediato. Los demás cambios requieren Guardar.",
     "m365CapDraftHelp": "El límite se guarda al crear el agente.",
-    "m365CapSaved": "Límite de documentos guardado: {limit}."
+    "m365CapSaved": "Límite de documentos guardado: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Desactivado por defecto: el agente responde solo usando sus documentos y nunca busca en la web, independientemente de la configuración de búsqueda elegida por el usuario. Cuando está activado, las instrucciones del agente determinan cuándo se realiza una búsqueda web y qué sitios puede utilizar, y las fuentes web siempre se muestran separadas de los documentos del agente.",
+    "promptAgentAllowWebSearchHelp": "Activado por defecto. Si se desactiva, este agente nunca busca en la web, independientemente de la configuración de búsqueda elegida por el usuario."
   },
   "localModels": {
     "title": "Modelos locales",

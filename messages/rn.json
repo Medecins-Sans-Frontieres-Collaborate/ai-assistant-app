@@ -959,7 +959,13 @@
     "ttsError": "Ikosa mu gukora amajwi. Gerageza gusubira.",
     "unsupportedMessageType": "Ikosa mu kwerekana ubutumwa: Ubwoko bw'ubutumwa ntibushigikiwe",
     "addLanguageOption": "Ongeramwo \"{name}\"…",
-    "sources": "Inkomoko",
+    "sources": {
+      "fromDocuments": "Inyandiko z'umukozi",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Ibice vyatoranijwe mu nyandiko z’uyu mukozi",
+      "fromWebHint": "Urupapuro rusanzwe rusangwa kuri web rwasanzwe biciye mu kurondera",
+      "heading": "{count, plural, one {Inkomoko} other {Inkomoko}}"
+    },
     "interpreterBadge": "Gira isuzuma rya code",
     "disableCodeInterpreter": "Zimya isuzuma rya code",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# idocumenti} other {# zidocumenti}} zarashizwe ku rutonde",
     "m365CapImmediateHelp": "Gukanda Apply bibika ako kanya iyo limite. Iyindi mihinduririzo ikeneye kubikwa ukoresheje Save.",
     "m365CapDraftHelp": "Limite ibikwa igihe ushiraho agent.",
-    "m365CapSaved": "Limite y'ivyanditswe ibitswe: {limit}."
+    "m365CapSaved": "Limite y'ivyanditswe ibitswe: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Biba vyugaye ku ntango: umukozi arishura akoresheje inyandiko ziwe gusa, nta na rimwe arondera kuri web, naho hoba hari ukundi vyashizweho n’umukoresha. Iyo bivuyeho, amabwirizwa y’umukozi ni yo afata ingingo y’igihe yokorana no kurondera kuri web be n’urutonde rwa web ikoreshwa, kandi aho iva muri web biratandukanywa n’ivyavuye mu nyandiko z’umukozi.",
+    "promptAgentAllowWebSearchHelp": "Biba vyuguruye ku ntango. Iyo vyugaye, uyu mukozi nta na rimwe arondera kuri web, naho umukoresha yoshiraho ukundi."
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",

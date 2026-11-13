@@ -899,7 +899,13 @@
     "ttsError": "Eroare la generarea audio. Vă rugăm să încercați din nou.",
     "unsupportedMessageType": "Eroare la afișarea mesajului: Tip de mesaj neacceptat",
     "addLanguageOption": "Adăugați „{name}”...",
-    "sources": "Surse",
+    "sources": {
+      "fromDocuments": "Documentele agentului",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Fragmente din documentele proprii ale acestui agent",
+      "fromWebHint": "Pagini publice găsite printr-o căutare web",
+      "heading": "{count, plural, one {Sursă} other {Surse}}"
+    },
     "interpreterBadge": "Rulează cod",
     "disableCodeInterpreter": "Dezactivează executarea codului",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documente}} indexate",
     "m365CapImmediateHelp": "Aplicarea salvează limita imediat. Alte modificări necesită în continuare Salvare.",
     "m365CapDraftHelp": "Limita este salvată la crearea agentului.",
-    "m365CapSaved": "Limită de documente salvată: {limit}."
+    "m365CapSaved": "Limită de documente salvată: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Dezactivat implicit: agentul răspunde doar din documentele sale și nu caută niciodată pe web, indiferent de setarea aleasă de utilizator. Dacă este activat, instrucțiunile agentului decid când se efectuează o căutare web și ce site-uri poate folosi, iar sursele web sunt afișate întotdeauna separat față de documentele agentului.",
+    "promptAgentAllowWebSearchHelp": "Activat implicit. Dacă este dezactivat, acest agent nu caută niciodată pe web, indiferent de setarea aleasă de utilizator."
   },
   "localModels": {
     "title": "Modele locale",

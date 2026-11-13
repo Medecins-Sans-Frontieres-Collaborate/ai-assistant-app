@@ -932,7 +932,13 @@
     "ttsError": "生成音频时出错。请重试。",
     "unsupportedMessageType": "消息渲染错误：不支持的消息类型",
     "addLanguageOption": "添加“{name}”…",
-    "sources": "来源",
+    "sources": {
+      "fromDocuments": "代理文档",
+      "fromWeb": "网络",
+      "fromDocumentsHint": "来自该代理自身文档的段落",
+      "fromWebHint": "通过网络搜索找到的公开页面",
+      "heading": "{count, plural, one {来源} other {来源}}"
+    },
     "interpreterBadge": "运行代码",
     "disableCodeInterpreter": "禁用代码执行",
     "interimSearch": {
@@ -5431,7 +5437,9 @@
     "indexedDocumentSummary": "已索引{indexed, plural, one {#份文档} other {#份文档}}",
     "m365CapImmediateHelp": "点击“应用”会立即保存限制。其他更改仍需点击“保存”。",
     "m365CapDraftHelp": "该限制将在创建代理时保存。",
-    "m365CapSaved": "文档限制已保存：{limit}。"
+    "m365CapSaved": "文档限制已保存：{limit}。",
+    "m365AgentAllowWebSearchHelp": "默认关闭：代理仅根据自身文档回答，从不搜索网络，无论用户选择了何种搜索设置。开启后，代理的指令将决定何时进行网络搜索以及可使用哪些网站，并且网络来源始终与代理文档分开展示。",
+    "promptAgentAllowWebSearchHelp": "默认开启。关闭后，不管用户选择了什么搜索设置，该代理都不会进行网络搜索。"
   },
   "localModels": {
     "title": "本地模型",

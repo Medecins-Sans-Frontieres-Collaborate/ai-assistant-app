@@ -866,7 +866,13 @@
     "ttsError": "Fout bij het genereren van audio. Probeer het opnieuw.",
     "unsupportedMessageType": "Fout bij weergeven bericht: Niet-ondersteund berichttype",
     "addLanguageOption": "\"{name}\" toevoegen…",
-    "sources": "Bronnen",
+    "sources": {
+      "fromDocuments": "Agentdocumenten",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Fragmenten uit de documenten van deze agent",
+      "fromWebHint": "Openbare pagina's gevonden via een webzoekopdracht",
+      "heading": "{count, plural, one {Bron} other {Bronnen}}"
+    },
     "interpreterBadge": "Code uitvoeren",
     "disableCodeInterpreter": "Code-uitvoering uitschakelen",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documenten}} geïndexeerd",
     "m365CapImmediateHelp": "Toepassen slaat de limiet direct op. Andere wijzigingen moeten nog worden opgeslagen.",
     "m365CapDraftHelp": "De limiet wordt opgeslagen wanneer u de agent aanmaakt.",
-    "m365CapSaved": "Documentlimiet opgeslagen: {limit}."
+    "m365CapSaved": "Documentlimiet opgeslagen: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Standaard uitgeschakeld: de agent geeft alleen antwoorden op basis van zijn eigen documenten en voert nooit een webzoekopdracht uit, ongeacht de ingestelde zoekoptie van de gebruiker. Wanneer ingeschakeld, bepalen de instructies van de agent wanneer er een webzoekopdracht wordt uitgevoerd en welke websites gebruikt mogen worden. Webbronnen worden altijd apart getoond van de agentdocumenten.",
+    "promptAgentAllowWebSearchHelp": "Standaard ingeschakeld. Wanneer uitgeschakeld, zoekt deze agent nooit op het web, ongeacht de zoekinstelling van de gebruiker."
   },
   "localModels": {
     "title": "Lokale modellen",

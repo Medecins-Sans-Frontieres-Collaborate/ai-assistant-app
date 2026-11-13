@@ -901,7 +901,13 @@
     "ttsError": "Hitilafu kutengeneza sauti. Tafadhali jaribu tena.",
     "unsupportedMessageType": "Hitilafu kuonesha ujumbe: Aina ya ujumbe haitambuliwi",
     "addLanguageOption": "Ongeza \"{name}\"…",
-    "sources": "Vyanzo",
+    "sources": {
+      "fromDocuments": "Nyaraka za wakala",
+      "fromWeb": "Wavuti",
+      "fromDocumentsHint": "Sehemu kutoka kwenye nyaraka za wakala huyu",
+      "fromWebHint": "Kurasa za umma zilizopatikana kupitia utafutaji wa wavuti",
+      "heading": "{count, plural, one {Chanzo} other {Vyanzo}}"
+    },
     "interpreterBadge": "Endesha msimbo",
     "disableCodeInterpreter": "Zima utekelezaji wa msimbo",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {nyaraka #} other {nyaraka #}} zimeorodheshwa",
     "m365CapImmediateHelp": "Kitufe cha Tumia kinaweka kikomo mara moja. Mabadiliko mengine bado yanahitaji Hifadhi.",
     "m365CapDraftHelp": "Kikomo kitawekwa unapoanzisha wakala.",
-    "m365CapSaved": "Kikomo cha hati kimehifadhiwa: {limit}."
+    "m365CapSaved": "Kikomo cha hati kimehifadhiwa: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Imewashwa kwa chaguo-msingi: wakala hujibu tu kutoka kwenye nyaraka zake na hafanyi utafutaji wa wavuti, bila kujali mpangilio wa utafutaji uliowekwa na mtumiaji. Ikiwashwa, maelekezo ya wakala huamua lini utafutaji wa wavuti utafanywa na tovuti gani zitakazotumika, na vyanzo vya wavuti huonyeshwa kando na nyaraka za wakala.",
+    "promptAgentAllowWebSearchHelp": "Imewashwa kwa chaguo-msingi. Ikiwa imezimwa, wakala huyu hafanyi utafutaji wa wavuti, bila kujali mpangilio wa utafutaji uliowekwa na mtumiaji."
   },
   "localModels": {
     "title": "Miundo ya ndani",

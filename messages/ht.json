@@ -959,7 +959,13 @@
     "ttsError": "Erè pandan kreyasyon odyo. Tanpri eseye ankò.",
     "unsupportedMessageType": "Erè pandan afichaj mesaj la: Tip mesaj sa a pa sipòte",
     "addLanguageOption": "Ajoute \"{name}\"…",
-    "sources": "Sous",
+    "sources": {
+      "fromDocuments": "Dokiman ajan an",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Pasyaj ki soti nan dokiman pa ajan sa a",
+      "fromWebHint": "Paj piblik yo jwenn sou entènèt",
+      "heading": "{count, plural, one {Sous} other {Sous yo}}"
+    },
     "interpreterBadge": "Kouri kòd",
     "disableCodeInterpreter": "Dezaktive ekzekisyon kòd",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# dokiman} other {# dokiman}} ki endèksé",
     "m365CapImmediateHelp": "Aplike a sove limit la imedyatman. Lòt chanjman bezwen ou Save toujou.",
     "m365CapDraftHelp": "W ap sove limit la lè w kreye ajan an.",
-    "m365CapSaved": "Limit dokiman an sove: {limit}."
+    "m365CapSaved": "Limit dokiman an sove: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Pa default, li etenn: ajan an reponn sèlman ak dokiman pa li epi li pa janm fè rechech sou entènèt, kèlkeswa ki anviwònman itilizatè a chwazi. Si li limen, enstriksyon ajan an deside kilè pou li fè rechech sou entènèt epi ki sit li ka itilize, epi sous entènèt yo toujou parèt separe ak dokiman ajan an.",
+    "promptAgentAllowWebSearchHelp": "Pa default, li limen. Si li etenn, ajan sa a pa fè rechech sou entènèt, kèlkeswa anviwònman rechech itilizatè a chwazi."
   },
   "localModels": {
     "title": "Modèl lokal",

@@ -959,7 +959,13 @@
     "ttsError": "Kasaleli molangi ya mino esalami malamu te. Meká lisusu.",
     "unsupportedMessageType": "Mbeba kobimisa nsango: Motindo ya nsango oyo esengeli te",
     "addLanguageOption": "Bakisa \"{name}\"…",
-    "sources": "Bisika ya nsuka",
+    "sources": {
+      "fromDocuments": "Mikanda ya agent",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Bilembo uta na mikanda ya agent oyo",
+      "fromWebHint": "Masolo ya polele oyo emonani na bosakoli web",
+      "heading": "{count, plural, one {Esika} other {Bisika}}"
+    },
     "interpreterBadge": "Tobeta code",
     "disableCodeInterpreter": "Kokanga kosalela code",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# mokanda} other {# mikanda}} esalemi index",
     "m365CapImmediateHelp": "Kobakisa ekebisa ndenge moko limite. Mabongoli mosusu esengeli kokota na Save.",
     "m365CapDraftHelp": "Limite ekotondi ntango okokela agent.",
-    "m365CapSaved": "Limite ya bandocuments ebombami: {limit}."
+    "m365CapSaved": "Limite ya bandocuments ebombami: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Ekangami na liboso: agent azongisaka kaka na mikanda na ye moko mpe akosala jamais bosakoli na web, ata motatoli nini moto aponi. Soki ekotami, mateya ya agent nde ekotinda soki bosakoli ya web esalemi mpe ndenge wana bakoki kosalela bisika nini, mpe bilembo ya web ekomonana nyonso na limwe epai ya mikanda ya agent.",
+    "promptAgentAllowWebSearchHelp": "Ekotami na liboso. Soki ekangami, agent oyo akosala jamais bosakoli na web, ata motatoli nini moto aponi."
   },
   "localModels": {
     "title": "Bamodelo ya esika",

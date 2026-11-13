@@ -959,7 +959,13 @@
     "ttsError": "ስህተት ኣብ ምፍጣር ድምጺ። እቲ ግዜ ደገ ፈትኑ።",
     "unsupportedMessageType": "ስህተት ኣብ ምርሕያብ መልእኽቲ፡ ዘይተደገፀ ዓይነት መልእኽቲ",
     "addLanguageOption": "\"{name}\" ኩናት ኣእቱ...",
-    "sources": "ምንጮታት",
+    "sources": {
+      "fromDocuments": "ጀንት ሰነዶታት",
+      "fromWeb": "ዊብ",
+      "fromDocumentsHint": "ካብ ነዚ ጀንት ሰነዶታት ዝተወገዙ መድረኽታት",
+      "fromWebHint": "ኣይቲህና ገጽታት ብ ዊብ ሰርች ዘተረፉ",
+      "heading": "{count, plural, one {መንገዲ ሓበሬታ} other {መንገዳት ሓበሬታ}}"
+    },
     "interpreterBadge": "ኮድ ኣምራ",
     "disableCodeInterpreter": "ኮድ ምፅሓፍ ምስጢር",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# ሰነድ} other {# ሰነዳት}} ተተውካ",
     "m365CapImmediateHelp": "መፈጸሚ ዝተረኽበ ድማ እቲ ውሳኔ ብእተፈጸመ ይኽእል። ካልእ ምሕዳራት ግን ግን ምዝገብ እየ ይደሊ።",
     "m365CapDraftHelp": "እቲ ውሳኔ ኣብ ምፍጣር ዓገንት ምኽንያት ይኽድኡ።",
-    "m365CapSaved": "ውሳኔ ዶክመንት ዝተዛመደ፡ {limit}።"
+    "m365CapSaved": "ውሳኔ ዶክመንት ዝተዛመደ፡ {limit}።",
+    "m365AgentAllowWebSearchHelp": "ዘብዙሕት እንተዘይእተፈቐደ: ጀንት ንብጽሓ፡ ካብ ናይ ሰነዶቱ ዝወጻ ጥያቄ የርሕን ዊብ የርሕን፡ ኣብ እዋን ጥራይ ትሕደት ዘይኮነ። እንተፈቐደ ጀንት መምሕራዉ ይገበረካ፡ መበገሲ ዊብ ሰርች ከይኸውንን እንታይ ዊብሳይት ኣብስሓት ይሰጥ፡ ንኹሉ ዊብ ምንጭ ከብ ጀንት ሰነዶታት ብዝሓደስ ይብል።",
+    "promptAgentAllowWebSearchHelp": "እቲ ዳር default እዩ። እንተዘይእተፈቐደ፡ እዚ ጀንት ዊብ ብምርምር የርሕን፡ ብውሕስ search setting ተሰሪሑ."
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",

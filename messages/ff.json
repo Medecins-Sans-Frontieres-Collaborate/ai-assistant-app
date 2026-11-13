@@ -959,7 +959,13 @@
     "ttsError": "Jaɓɓorgo winndito awdiyo. Huumtu e gite.",
     "unsupportedMessageType": "Jaɓɓorgo njettude ndemgol: No waawani ndemgol ngol",
     "addLanguageOption": "Naatnu \"{name}\"…",
-    "sources": "Janngiiji",
+    "sources": {
+      "fromDocuments": "Doggal agent",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Paragraf ngol doggal agent on",
+      "fromWebHint": "Guurel jeyaa jamfa web search",
+      "heading": "{count, plural, one {Jeyngu} other {Jeynguuji}}"
+    },
     "interpreterBadge": "Hurmin kod",
     "disableCodeInterpreter": "Daskitin hurmital kod",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# daftor} other {# daftorɗe}} woni index",
     "m365CapImmediateHelp": "Tappitde «Apply» nde ina fayda e kadi doo. Ko feewi-dee to gollal «Save».",
     "m365CapDraftHelp": "Nde tappitde nde naatno e jam to wonnanii agent.",
-    "m365CapSaved": "Ndogorde dokumintii fayɗi: {limit}."
+    "m365CapSaved": "Ndogorde dokumintii fayɗi: {limit}.",
+    "m365AgentAllowWebSearchHelp": "A tawii 'Off': agent on foti jamaa e doggal makko tan, hara e jamfa web, ko hara woni hol ko fayda user. So tawii 'On', doo agent on jooɗa holi ko feɗi jamfa web e web sites mo heɓi, e doggal web on rewta baɗo ba doggal agent.",
+    "promptAgentAllowWebSearchHelp": "A tawii 'On' tan: so tawii 'Off', agent on waawaa jamfa web, hol ko fayda user."
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",

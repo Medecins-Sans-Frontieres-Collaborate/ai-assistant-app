@@ -959,7 +959,13 @@
     "ttsError": "د غږ جوړولو تېروتنه. مهرباني وکړئ بیا هڅه وکړئ.",
     "unsupportedMessageType": "د پیغام ښودلو تېروتنه: نه ملاتړېدونکی ډول",
     "addLanguageOption": "\"{name}\" اضافه کړئ...",
-    "sources": "سرچینې",
+    "sources": {
+      "fromDocuments": "د اجنټ اسناد",
+      "fromWeb": "ویب",
+      "fromDocumentsHint": "د دې اجنټ د خپلو اسنادو برخې",
+      "fromWebHint": "هغه عامې پاڼې چې د ویب لټون له لارې موندل شوي",
+      "heading": "{count, plural, one {سرچينه} other {سرچينې}}"
+    },
     "interpreterBadge": "کوډ وچلوئ",
     "disableCodeInterpreter": "د کوډ اجرا کول غیر فعال کړئ",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# سند} other {# اسناد}} ثبت شوي",
     "m365CapImmediateHelp": "د Apply سره محدوده سمدستي ثبتېږي. نور بدلونونه لاهم Save ته اړتیا لري.",
     "m365CapDraftHelp": "محدوده هغه مهال ثبتېږي کله چې تاسو عامل جوړ کړئ.",
-    "m365CapSaved": "د اسنادو محدوده ثبت شوه: {limit}."
+    "m365CapSaved": "د اسنادو محدوده ثبت شوه: {limit}.",
+    "m365AgentAllowWebSearchHelp": "په تلواله توګه بند: اجنټ یوازې له خپلو اسنادو ځواب ورکوي او هیڅکله ویب نه لټوي، حتی که کارونکي بل ډول لټون ټاکلی وي. کله چې فعال شي، اجنټ لارښونې پرېکړه کوي چې ویب لټون کله ترسره شي او کومې ویب پاڼې کارول کېږي، او د ویب سرچینې تل له اجنټ اسنادو جلا ښودل کېږي.",
+    "promptAgentAllowWebSearchHelp": "په تلواله توګه فعال. که بند شي، دا اجنټ هیڅکله ویب نه لټوي، حتی که کارونکي بل ډول لټون ټاکلی وي."
   },
   "localModels": {
     "title": "محلي ماډلونه",

@@ -959,7 +959,13 @@
     "ttsError": "Vuto popanga mawu. Chonde yesani kachiwiri.",
     "unsupportedMessageType": "Vuto pokuonetsera uthenga: Mtundu wa uthenga sunalangizidwe",
     "addLanguageOption": "Onjezani \"{name}\"…",
-    "sources": "Zotengera",
+    "sources": {
+      "fromDocuments": "Zikalata za agent",
+      "fromWeb": "Webusayiti",
+      "fromDocumentsHint": "Mizere yomwe idachokera ku zikalata za agent uyu",
+      "fromWebHint": "Mamasamba a pagulu omwe apezeka pofufuza pa webusayiti",
+      "heading": "{count, plural, one {Gwero} other {Zigwero}}"
+    },
     "interpreterBadge": "Yendetsani code",
     "disableCodeInterpreter": "Letsani kuyendetsa code",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# chikalata} other {# zikalata}} zalembedwa",
     "m365CapImmediateHelp": "Kugwiritsa ntchito kumasunga malire nthawi yomweyo. Kusintha kwina konse kumafunika Save.",
     "m365CapDraftHelp": "Malire amasungidwa mukalenga agent.",
-    "m365CapSaved": "Malire a zolemba asungidwa: {limit}."
+    "m365CapSaved": "Malire a zolemba asungidwa: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Zatseka mwachisawawa: agent imayankha kokha kuchokera ku zikalata zake ndipo sagwiritsa ntchito kufufuza pa webusayiti, ziribe kanthu momwe ogwiritsa ntchito asankhire. Ikatsegulidwa, malangizo a agent amasankha nthawi yokafufuza pa webusayiti ndi mawebusayiti amene akhoza kugwiritsidwa, ndipo magwero a webusayiti amasonyezedwa mosiyana ndi zikalata za agent.",
+    "promptAgentAllowWebSearchHelp": "Zatsegulidwa mwachisawawa. Ikatseka, agent uyu safufuza konse pa webusayiti, ziribe kanthu momwe ogwiritsa ntchito asankhire."
   },
   "localModels": {
     "title": "Mitundu yapafupi",

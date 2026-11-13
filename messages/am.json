@@ -844,7 +844,13 @@
     "ttsError": "ድምጽ ለመፍጠር ስህተት አጋጥሟል። እባክዎ ደግመው ይሞክሩ።",
     "unsupportedMessageType": "መልእክቱን ማሳየት ላይ ስህተት፡ የማይደገፍ ዓይነት",
     "addLanguageOption": "\"{name}\" ያክሉ…",
-    "sources": "ምንጮች",
+    "sources": {
+      "fromDocuments": "የውክልና ሰነዶች",
+      "fromWeb": "ድህረ ገጽ",
+      "fromDocumentsHint": "ከዚህ ውክልና ራሱ ከሚያውቀው ሰነድ ክፍሎች",
+      "fromWebHint": "በድህረ ገጽ ፍለጋ የተገኙ የህዝብ ገፆች",
+      "heading": "{count, plural, one {ምንጭ} other {ምንጮች}}"
+    },
     "interpreterBadge": "ኮድ አስኬድ",
     "disableCodeInterpreter": "የኮድ አፈጻጸምን አጥፋ",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# ሰነድ} other {# ሰነዶች}} ተሰናዳ",
     "m365CapImmediateHelp": "ተግባሩ ወዲያውኑ ገደቡን ይቀመጣል። ሌሎች ማስተካከያዎች ግን ማስቀመጥ ያስፈልጋሉ።",
     "m365CapDraftHelp": "ወኪሉን ሲፈጥሩ ገደቡ ይቀመጣል።",
-    "m365CapSaved": "የሰነድ ገደብ ተቀምጧል፡ {limit}።"
+    "m365CapSaved": "የሰነድ ገደብ ተቀምጧል፡ {limit}።",
+    "m365AgentAllowWebSearchHelp": "ነቅቷ የለም፡ ውክልናው ምላሹን ሁሉ በራሱ ሰነዶች ብቻ ይሰጣል፣ ተጠቃሚው የፍለጋ ቅኝቱን ምንም ቢመርጥ። እሱ ሲነቃ፣ ውክልናው መመሪያዎቹ መቼ የድህረገፅ ፍለጋ እንደሚወጣና ምን ድህረገፆች እንደሚጠቀም ይወስናሉ፣ ከውክልና ሰነዶች ድህረገፅ ምንጮች ሁልጊዜ በተለይ ይታያሉ።",
+    "promptAgentAllowWebSearchHelp": "በነቅቷ ነው የተዘጋጅቷ። ሲዘጋ፣ ይህ ውክልና ተጠቃሚው የፍለጋ ቅኝቱን ምንም ቢመርጥ ድህረገፅ ፍለጋ አያደርግም።"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",

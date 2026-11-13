@@ -901,7 +901,13 @@
     "ttsError": "Fel vid generering av ljud. Försök igen.",
     "unsupportedMessageType": "Fel vid visning av meddelande: Ej stödd meddelandetyp",
     "addLanguageOption": "Lägg till \"{name}\"…",
-    "sources": "Källor",
+    "sources": {
+      "fromDocuments": "Agentdokument",
+      "fromWeb": "Webb",
+      "fromDocumentsHint": "Utdrag från denna agents egna dokument",
+      "fromWebHint": "Offentliga sidor som hittats via webbsökning",
+      "heading": "{count, plural, one {Källa} other {Källor}}"
+    },
     "interpreterBadge": "Kör kod",
     "disableCodeInterpreter": "Inaktivera kodkörning",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokument}} indexerade",
     "m365CapImmediateHelp": "Verkställ sparar gränsen direkt. Andra ändringar kräver fortfarande Spara.",
     "m365CapDraftHelp": "Gränsen sparas när du skapar agenten.",
-    "m365CapSaved": "Dokumentgräns sparad: {limit}."
+    "m365CapSaved": "Dokumentgräns sparad: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Avstängt som standard: agenten svarar endast från sina egna dokument och söker aldrig på webben, oavsett vilken sökinställning användaren har valt. När funktionen är påslagen bestämmer agentens instruktioner när en webbsökning görs och vilka webbplatser som får användas, och webbkällor visas alltid separat från agentens dokument.",
+    "promptAgentAllowWebSearchHelp": "Påslaget som standard. När avstängt, söker agenten aldrig på webben, oavsett vilken sökinställning användaren har valt."
   },
   "localModels": {
     "title": "Lokala modeller",

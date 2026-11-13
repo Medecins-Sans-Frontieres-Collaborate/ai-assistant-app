@@ -959,7 +959,13 @@
     "ttsError": "Kuskure wurin ƙirƙirar sauti. Da fatan za a sake gwadawa.",
     "unsupportedMessageType": "Kuskure wurin nuna saƙo: Nau'in saƙo baya dacewa",
     "addLanguageOption": "Ƙara \"{name}\"…",
-    "sources": "Tushen bayanai",
+    "sources": {
+      "fromDocuments": "Takardun wakili",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Sassaukan da ke cikin takardun wannan wakili",
+      "fromWebHint": "Shafukan jama'a da aka samo ta binciken web",
+      "heading": "{count, plural, one {Tushen Bayani} other {Tushen Bayani}}"
+    },
     "interpreterBadge": "Gudanar da lamba",
     "disableCodeInterpreter": "Kashe gudanar da lamba",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {Takarda #} other {Takardu #}} an jera",
     "m365CapImmediateHelp": "Aikace-aikacen yana adana iyaka nan da nan. Sauran gyare-gyare suna buƙatar Ajiyewa.",
     "m365CapDraftHelp": "Za a adana iyakar lokacin kirkirar wakili.",
-    "m365CapSaved": "An adana iyakar takardu: {limit}."
+    "m365CapSaved": "An adana iyakar takardu: {limit}.",
+    "m365AgentAllowWebSearchHelp": "A kashe ta tsoho: wakilin yana amsa ne kawai daga takardun sa, baya yin binciken web, ko menene saitin bincike da mai amfani ya zaba. Idan an kunna, umarnin wakili ne ke yanke shawara lokacin da za a gudanar da binciken web da kuma irin shafukan da zai iya amfani da su, sannan tushen web za a nuna su daban-daban da na takardun wakili.",
+    "promptAgentAllowWebSearchHelp": "A kunna ta tsoho. Idan an kashe, wannan wakili baya yin binciken web, ko menene saitin bincike da mai amfani ya zaba."
   },
   "localModels": {
     "title": "Samfuran cikin gida",

@@ -959,7 +959,13 @@
     "ttsError": "Iphutha ekukhiqizeni umsindo. Zama futhi.",
     "unsupportedMessageType": "Iphutha ekuboniseni umlayezo: Uhlobo lomlayezo alusekelwa",
     "addLanguageOption": "Engeza \"{name}\"...",
-    "sources": "Imithombo",
+    "sources": {
+      "fromDocuments": "Amadokhumenti we-ejenti",
+      "fromWeb": "IWebhu",
+      "fromDocumentsHint": "Izingxenye ezivela kumadokhumenti awo lo majenti",
+      "fromWebHint": "Amakhasi omphakathi atholwe ngokusesha kwiwebhu",
+      "heading": "{count, plural, one {Umthombo} other {Imithombo}}"
+    },
     "interpreterBadge": "Sebenzisa ikhodi",
     "disableCodeInterpreter": "Khubaza ukusebenza kwekhodi",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# umbhalo} other {# imibhalo}} efakiwe kuhlu",
     "m365CapImmediateHelp": "Ukusebenzisa i-Apply kugcina umkhawulo masinyane. Okunye ukuhlela kudinga i-Save.",
     "m365CapDraftHelp": "Umkhawulo uyagcinwa lapho udala i-ejenti.",
-    "m365CapSaved": "Umkhawulo wamadokhumenti ugciniwe: {limit}."
+    "m365CapSaved": "Umkhawulo wamadokhumenti ugciniwe: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Kuvaliwe ngokuzenzakalelayo: i-ejenti iphendula kuphela kumadokhumenti ayo futhi ayisoze yasesha iwebhu, noma ngabe yimaphi amasethingi okusesha umsebenzisi akhethe. Uma kuvuliwe, imiyalelo ye-ejenti inquma ukuthi usesho lwewebhu lusebenza nini nokuthi imaphi amawebhusayithi angasetshenziswa, futhi imithombo evela kwiwebhu ihlale ikhonjiswa ngokuhlukile kumadokhumenti e-ejenti.",
+    "promptAgentAllowWebSearchHelp": "Kuvuliwe ngokuzenzakalelayo. Uma kuvaliwe, le ejenti ayisoze yasesha iwebhu, noma ngabe yimaphi amasethingi okusesha umsebenzisi akhethe."
   },
   "localModels": {
     "title": "Amamodeli endaweni",

@@ -876,7 +876,13 @@
     "ttsError": "שגיאה ביצירת שמע. נא לנסות שוב.",
     "unsupportedMessageType": "שגיאה בהצגת ההודעה: סוג הודעה לא נתמך",
     "addLanguageOption": "הוסף \"{name}\"…",
-    "sources": "מקורות",
+    "sources": {
+      "fromDocuments": "מסמכי הסוכן",
+      "fromWeb": "אינטרנט",
+      "fromDocumentsHint": "קטעים ממסמכי הסוכן עצמו",
+      "fromWebHint": "דפים ציבוריים שנמצאו בחיפוש באינטרנט",
+      "heading": "{count, plural, one {מקור} other {מקורות}}"
+    },
     "interpreterBadge": "הרץ קוד",
     "disableCodeInterpreter": "השבת הרצת קוד",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {מסמך אחד} other {# מסמכים}} מאונדקסים",
     "m365CapImmediateHelp": "לחיצה על 'החל' שומרת את ההגבלה מיד. עריכות אחרות עדיין דורשות שמירה.",
     "m365CapDraftHelp": "ההגבלה נשמרת כאשר אתה יוצר את הסוכן.",
-    "m365CapSaved": "הגבלת מסמכים נשמרה: {limit}."
+    "m365CapSaved": "הגבלת מסמכים נשמרה: {limit}.",
+    "m365AgentAllowWebSearchHelp": "כבוי כברירת מחדל: הסוכן עונה רק ממסמכיו ואינו מחפש באינטרנט, ללא קשר להגדרת החיפוש שהמשתמש בחר. כאשר פועל, הוראות הסוכן קובעות מתי יתבצע חיפוש אינטרנט ואילו אתרים ניתן להיעזר בהם, ומקוררי האינטרנט מוצגים תמיד בנפרד ממסמכי הסוכן.",
+    "promptAgentAllowWebSearchHelp": "פעיל כברירת מחדל. כאשר כבוי, סוכן זה לעולם לא מחפש באינטרנט, ללא קשר להגדרת החיפוש שנבחרה על ידי המשתמש."
   },
   "localModels": {
     "title": "מודלים מקומיים",

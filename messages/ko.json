@@ -901,7 +901,13 @@
     "ttsError": "오디오 생성 오류가 발생했습니다. 다시 시도해 주세요.",
     "unsupportedMessageType": "메시지 렌더링 오류: 지원되지 않는 메시지 유형",
     "addLanguageOption": "\"{name}\" 추가…",
-    "sources": "출처",
+    "sources": {
+      "fromDocuments": "에이전트 문서",
+      "fromWeb": "웹",
+      "fromDocumentsHint": "이 에이전트의 자체 문서에서 발췌된 내용",
+      "fromWebHint": "웹 검색으로 찾은 공개 페이지",
+      "heading": "{count, plural, one {출처} other {출처}}"
+    },
     "interpreterBadge": "코드 실행",
     "disableCodeInterpreter": "코드 실행 비활성화",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {문서 #건} other {문서 #건}} 인덱싱됨",
     "m365CapImmediateHelp": "적용을 클릭하면 제한이 바로 저장됩니다. 다른 수정 사항은 저장이 필요합니다.",
     "m365CapDraftHelp": "제한은 에이전트를 생성할 때 저장됩니다.",
-    "m365CapSaved": "문서 제한이 저장되었습니다: {limit}."
+    "m365CapSaved": "문서 제한이 저장되었습니다: {limit}.",
+    "m365AgentAllowWebSearchHelp": "기본적으로 비활성화: 에이전트는 오직 자신의 문서에서만 답변하며, 사용자가 어떤 검색 설정을 선택하더라도 웹 검색을 수행하지 않습니다. 활성화하면 에이전트의 지침에 따라 웹 검색 여부와 사용할 웹사이트가 결정되며, 웹 출처는 항상 에이전트 문서와 별도로 표시됩니다.",
+    "promptAgentAllowWebSearchHelp": "기본적으로 활성화되어 있습니다. 비활성화하면, 사용자의 검색 설정에 관계없이 이 에이전트는 웹 검색을 수행하지 않습니다."
   },
   "localModels": {
     "title": "로컬 모델",

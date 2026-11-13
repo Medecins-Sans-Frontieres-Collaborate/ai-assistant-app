@@ -959,7 +959,13 @@
     "ttsError": "Habayeho ikosa mu gutunganya amajwi. Ongera ugerageze.",
     "unsupportedMessageType": "Ikosa mu kugaragaza ubutumwa: Ubwoko bw'ubutumwa butemerewe",
     "addLanguageOption": "Ongeraho \"{name}\"…",
-    "sources": "Inkomoko",
+    "sources": {
+      "fromDocuments": "Inyandiko za agent",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Imirongo yaturutse mu nyandiko za agent",
+      "fromWebHint": "Urupapuro rusanzwe rwasanzwe binyuze mu gushakisha kuri web",
+      "heading": "{count, plural, one {Inkomoko} other {Inkomoko}}"
+    },
     "interpreterBadge": "Koresha code",
     "disableCodeInterpreter": "Hagarika ikoreshwa rya code",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {inyandiko #} other {inyandiko #}} zashyizwe ku rutonde",
     "m365CapImmediateHelp": "Gukanda kuri Apply bihita bibika umupaka. Izindi mpinduka zigomba kubikwa ukoresheje Save.",
     "m365CapDraftHelp": "Umupaka uzabikwa igihe ukora agent.",
-    "m365CapSaved": "Umupaka w'inyandiko wabitswe: {limit}."
+    "m365CapSaved": "Umupaka w'inyandiko wabitswe: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Default ni Off: agent isubiza gusa avuye mu nyandiko ze kandi ntishakisha kuri web, n'ubwo umukoresha yaba yarahisemo indi setting yo gushakisha. Iyo On, amabwiriza ya agent niyo agena igihe gushakisha kuri web bikorwa n'aho bifatira, kandi ibivuye kuri web bigaragazwa bitandukanye n'inyandiko za agent.",
+    "promptAgentAllowWebSearchHelp": "Default ni On. Iyo bibaye Off, agent ntishakisha kuri web na rimwe, nubwo umukoresha yaba yarahisemo indi setting yo gushakisha."
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",

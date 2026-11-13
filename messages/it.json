@@ -822,7 +822,13 @@
     "ttsError": "Errore nella generazione dell'audio. Riprova.",
     "unsupportedMessageType": "Errore nella visualizzazione del messaggio: tipo non supportato",
     "addLanguageOption": "Aggiungi \"{name}\"…",
-    "sources": "Fonti",
+    "sources": {
+      "fromDocuments": "Documenti dell'agente",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Brani dai documenti propri dell'agente",
+      "fromWebHint": "Pagine pubbliche trovate tramite ricerca web",
+      "heading": "{count, plural, one {Fonte} other {Fonti}}"
+    },
     "interpreterBadge": "Esegui codice",
     "disableCodeInterpreter": "Disattiva esecuzione codice",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# documento} other {# documenti}} indicizzati",
     "m365CapImmediateHelp": "L'applicazione salva immediatamente il limite. Altre modifiche richiedono comunque Salva.",
     "m365CapDraftHelp": "Il limite viene salvato quando crei l'agente.",
-    "m365CapSaved": "Limite documenti salvato: {limit}."
+    "m365CapSaved": "Limite documenti salvato: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Disattivato per impostazione predefinita: l'agente risponde solo dai suoi documenti e non cerca mai sul web, indipendentemente dall'impostazione di ricerca scelta dall'utente. Quando attivato, le istruzioni dell'agente decidono quando effettuare una ricerca web e quali siti utilizzare, e le fonti web sono sempre visualizzate separatamente dai documenti dell'agente.",
+    "promptAgentAllowWebSearchHelp": "Attivato per impostazione predefinita. Se disattivato, questo agente non cerca mai sul web, qualunque sia l'impostazione di ricerca scelta dall'utente."
   },
   "localModels": {
     "title": "Modelli locali",

@@ -901,7 +901,13 @@
     "ttsError": "音声の生成中にエラーが発生しました。再試行してください。",
     "unsupportedMessageType": "メッセージの表示エラー：サポートされていないメッセージタイプ",
     "addLanguageOption": "「{name}」を追加…",
-    "sources": "出典",
+    "sources": {
+      "fromDocuments": "エージェントのドキュメント",
+      "fromWeb": "ウェブ",
+      "fromDocumentsHint": "このエージェント自身のドキュメントから抜粋",
+      "fromWebHint": "ウェブ検索で見つかった公開ページ",
+      "heading": "{count, plural, one {情報源} other {情報源}}"
+    },
     "interpreterBadge": "コード実行",
     "disableCodeInterpreter": "コード実行を無効化",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# 件のドキュメント} other {# 件のドキュメント}}をインデックス化済み",
     "m365CapImmediateHelp": "適用すると制限が即座に保存されます。他の変更にはまだ「保存」が必要です。",
     "m365CapDraftHelp": "制限はエージェント作成時に保存されます。",
-    "m365CapSaved": "ドキュメント制限を保存しました: {limit}。"
+    "m365CapSaved": "ドキュメント制限を保存しました: {limit}。",
+    "m365AgentAllowWebSearchHelp": "デフォルトはオフ：エージェントは自分のドキュメントのみから回答し、ユーザーの検索設定に関わらずウェブ検索はしません。オンにすると、エージェントの指示によりウェブ検索のタイミングや使用するウェブサイトが決まり、ウェブの情報源は常にエージェントのドキュメントと分けて表示されます。",
+    "promptAgentAllowWebSearchHelp": "デフォルトはオンです。オフにすると、ユーザーの検索設定に関わらず、このエージェントはウェブ検索をしません。"
   },
   "localModels": {
     "title": "ローカルモデル",

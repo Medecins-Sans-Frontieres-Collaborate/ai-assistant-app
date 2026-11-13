@@ -959,7 +959,13 @@
     "ttsError": "Asise lakoko iṣejade ohun. Jọwọ gbiyanju lẹẹkansi.",
     "unsupportedMessageType": "Aṣiṣe ṣiṣi ifiranṣẹ: Iru ifiranṣẹ ti a ko ṣe atilẹyin",
     "addLanguageOption": "Ṣàfikún \"{name}\"…",
-    "sources": "Àwọn orísun",
+    "sources": {
+      "fromDocuments": "Awọn iwe aṣẹ aṣoju",
+      "fromWeb": "Ayelujara",
+      "fromDocumentsHint": "Awọn gbolohun lati inu awọn iwe aṣẹ aṣoju yii",
+      "fromWebHint": "Àwọn ojú-ìwé àkọsílẹ ti ìṣàwárí wẹẹbù",
+      "heading": "{count, plural, one {Orisun} other {Orisun}}"
+    },
     "interpreterBadge": "Ṣiṣẹ koodu",
     "disableCodeInterpreter": "Mu ṣiṣe koodu ṣiṣẹ silẹ",
     "interimSearch": {
@@ -5384,7 +5390,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# ìwé ìtàn} other {# àwọn ìwé ìtàn}} tí a ti fi sí àtòjọ",
     "m365CapImmediateHelp": "Títẹ ‘Apply’ máa pamọ ààlà náà lóde-òní. Awọn àtúnṣe mìíràn ṣe dandan kí o fi pamọ́.",
     "m365CapDraftHelp": "Ààlà náà máa wa ní pamo nígbà tí o dá aṣojú náà ṣẹ̀dá.",
-    "m365CapSaved": "Ààlà ìwé tí a fipamọ: {limit}."
+    "m365CapSaved": "Ààlà ìwé tí a fipamọ: {limit}.",
+    "m365AgentAllowWebSearchHelp": "A ti pa a mọ́ ṣáájú: aṣoju naa máa dahùn láti inu awọn iwe rẹ nikan, kò máa ṣàwárí lori wẹẹbù, bí olumulo ṣe yan eto àwárí kankan. Tí o bá jẹ pé a ti muu ṣiṣẹ, àṣẹ aṣoju yoo pinnu bóyá a máa ṣàwárí wẹẹbù àti irú oju opo wẹẹbù tí yóò lo, ati pe orisun wẹẹbù yoo máa han lọtọ lati awọn iwe aṣẹ aṣoju.",
+    "promptAgentAllowWebSearchHelp": "A ti muu ṣiṣẹ latọkànwá. Tí a bá ti pa a, aṣoju yii kii yoo ṣàwárí lori wẹẹbù, bí olumulo ṣe yan eto àwárí kankan."
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",

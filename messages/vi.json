@@ -902,7 +902,13 @@
     "ttsError": "Lỗi tạo âm thanh. Vui lòng thử lại.",
     "unsupportedMessageType": "Lỗi hiển thị tin nhắn: Loại tin nhắn không được hỗ trợ",
     "addLanguageOption": "Thêm \"{name}\"…",
-    "sources": "Nguồn",
+    "sources": {
+      "fromDocuments": "Tài liệu của tác vụ",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Đoạn trích từ chính tài liệu của tác vụ này",
+      "fromWebHint": "Trang công khai được tìm thấy qua tìm kiếm trên web",
+      "heading": "{count, plural, one {Nguồn} other {Nguồn}}"
+    },
     "interpreterBadge": "Chạy mã",
     "disableCodeInterpreter": "Tắt thực thi mã",
     "interimSearch": {
@@ -5431,7 +5437,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# tài liệu} other {# tài liệu}} đã được lập chỉ mục",
     "m365CapImmediateHelp": "Nhấn Áp dụng sẽ lưu giới hạn ngay lập tức. Các chỉnh sửa khác vẫn cần Lưu.",
     "m365CapDraftHelp": "Giới hạn sẽ được lưu khi bạn tạo agent.",
-    "m365CapSaved": "Đã lưu giới hạn tài liệu: {limit}."
+    "m365CapSaved": "Đã lưu giới hạn tài liệu: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Mặc định là tắt: Tác vụ chỉ trả lời từ tài liệu của mình và không bao giờ tìm kiếm trên web, dù người dùng chọn cài đặt tìm kiếm nào. Khi bật, hướng dẫn của tác vụ quyết định khi nào thực hiện tìm kiếm web và sử dụng các trang web nào; các nguồn từ web luôn được hiển thị riêng biệt với tài liệu của tác vụ.",
+    "promptAgentAllowWebSearchHelp": "Mặc định là bật. Khi tắt, tác vụ này sẽ không bao giờ tìm kiếm trên web, dù người dùng chọn cài đặt tìm kiếm nào."
   },
   "localModels": {
     "title": "Mô hình cục bộ",

@@ -876,7 +876,13 @@
     "ttsError": "Virhe ääntä luodessa. Yritä uudelleen.",
     "unsupportedMessageType": "Virhe viestin näyttämisessä: Ei-tuettu viestityyppi",
     "addLanguageOption": "Lisää \"{name}\"...",
-    "sources": "Lähteet",
+    "sources": {
+      "fromDocuments": "Agentin asiakirjat",
+      "fromWeb": "Verkko",
+      "fromDocumentsHint": "Ote tämän agentin omista asiakirjoista",
+      "fromWebHint": "Julkiset sivut, jotka löytyivät verkkohakujen avulla",
+      "heading": "{count, plural, one {Lähde} other {Lähteet}}"
+    },
     "interpreterBadge": "Suorita koodi",
     "disableCodeInterpreter": "Poista koodin suoritus käytöstä",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# asiakirja} other {# asiakirjaa}} indeksoitu",
     "m365CapImmediateHelp": "Käytä tallentaa rajan heti. Muut muutokset vaativat vielä Tallenna-toiminnon.",
     "m365CapDraftHelp": "Raja tallennetaan, kun luot agentin.",
-    "m365CapSaved": "Dokumenttiraja tallennettu: {limit}."
+    "m365CapSaved": "Dokumenttiraja tallennettu: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Pois päältä oletuksena: agentti vastaa vain omista asiakirjoistaan eikä koskaan tee verkkohakuja, riippumatta käyttäjän hakuasetuksista. Kun asetus on päällä, agentin ohjeet määrittävät, milloin verkkohaku tehdään ja mitä sivustoja voidaan käyttää, ja verkkolähteet näytetään aina erillään agentin asiakirjoista.",
+    "promptAgentAllowWebSearchHelp": "Oletuksena päällä. Kun pois päältä, tämä agentti ei koskaan tee verkkohakuja, riippumatta käyttäjän hakuasetuksista."
   },
   "localModels": {
     "title": "Paikalliset mallit",

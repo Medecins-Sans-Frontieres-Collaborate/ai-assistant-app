@@ -901,7 +901,13 @@
     "ttsError": "Chyba při generování zvuku. Zkuste to prosím znovu.",
     "unsupportedMessageType": "Chyba při zobrazení zprávy: Nepodporovaný typ zprávy",
     "addLanguageOption": "Přidat „{name}“…",
-    "sources": "Zdroje",
+    "sources": {
+      "fromDocuments": "Dokumenty agenta",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Pasáže z vlastních dokumentů tohoto agenta",
+      "fromWebHint": "Veřejné stránky nalezené webovým vyhledáváním",
+      "heading": "{count, plural, one {Zdroj} other {Zdroje}}"
+    },
     "interpreterBadge": "Spustit kód",
     "disableCodeInterpreter": "Zakázat spouštění kódu",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokumentů}} indexováno",
     "m365CapImmediateHelp": "Použití uloží limit ihned. Ostatní úpravy je stále nutné uložit.",
     "m365CapDraftHelp": "Limit se uloží při vytvoření agenta.",
-    "m365CapSaved": "Limit dokumentů uložen: {limit}."
+    "m365CapSaved": "Limit dokumentů uložen: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Ve výchozím nastavení vypnuto: agent odpovídá pouze z vlastních dokumentů a nikdy neprohledává web, bez ohledu na nastavení vyhledávání uživatele. Pokud je zapnuto, pokyny agenta určují, kdy bude spuštěno webové vyhledávání a které webové stránky může použít. Zdroje z webu jsou vždy zobrazovány odděleně od dokumentů agenta.",
+    "promptAgentAllowWebSearchHelp": "Ve výchozím nastavení zapnuto. Pokud je vypnuto, tento agent nikdy nevyhledává na webu, bez ohledu na nastavení vyhledávání uživatele."
   },
   "localModels": {
     "title": "Lokální modely",

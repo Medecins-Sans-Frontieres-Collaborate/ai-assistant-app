@@ -876,7 +876,13 @@
     "ttsError": "Error en generar l'àudio. Torni-ho a provar.",
     "unsupportedMessageType": "Error en mostrar el missatge: tipus de missatge no compatible",
     "addLanguageOption": "Afegeix \"{name}\"…",
-    "sources": "Fonts",
+    "sources": {
+      "fromDocuments": "Documents de l'agent",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Fragments dels propis documents d’aquest agent",
+      "fromWebHint": "Pàgines públiques trobades amb una cerca web",
+      "heading": "{count, plural, one {Font} other {Fonts}}"
+    },
     "interpreterBadge": "Executa codi",
     "disableCodeInterpreter": "Desactiva l'execució de codi",
     "interimSearch": {
@@ -5400,7 +5406,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documents}} indexats",
     "m365CapImmediateHelp": "En fer clic a Aplicar, el límit es desa immediatament. Altres canvis requereixen Desa.",
     "m365CapDraftHelp": "El límit es desa quan creeu l'agent.",
-    "m365CapSaved": "Límit de documents desat: {limit}."
+    "m365CapSaved": "Límit de documents desat: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Desactivat per defecte: l’agent només respon amb els seus propis documents i mai no cerca al web, independentment de la configuració de cerca de l’usuari. Quan està activat, les instruccions de l’agent decideixen quan es fa una cerca web i quins llocs web es poden utilitzar, i les fonts web sempre es mostren separadament dels documents de l’agent.",
+    "promptAgentAllowWebSearchHelp": "Activat per defecte. Si es desactiva, aquest agent mai no cerca al web, sigui quina sigui la configuració de cerca de l’usuari."
   },
   "localModels": {
     "title": "Models locals",
