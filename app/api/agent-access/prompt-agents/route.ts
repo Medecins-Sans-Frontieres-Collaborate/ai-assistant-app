@@ -85,6 +85,8 @@ const agentFieldsSchema = z.object({
   // skill is simply not offered).
   skillAccess: PromptAgentSkillAccessSchema.default('inherit'),
   skillIds: z.array(SkillIdSchema).max(20).default([]),
+  /** Whether the persona's turns may search the web; on unless opted out. */
+  allowWebSearch: z.boolean().default(true),
 });
 
 const putBodySchema = agentFieldsSchema.extend({
@@ -369,6 +371,7 @@ export async function POST(request: NextRequest) {
       skillAccess: parsed.data.skillAccess,
       skillIds:
         parsed.data.skillAccess === 'selected' ? parsed.data.skillIds : [],
+      allowWebSearch: parsed.data.allowWebSearch,
       createdBy: userMail,
       createdAt: now,
       updatedBy: userMail,
@@ -508,6 +511,7 @@ export async function PUT(request: NextRequest) {
       skillAccess: parsed.data.skillAccess,
       skillIds:
         parsed.data.skillAccess === 'selected' ? parsed.data.skillIds : [],
+      allowWebSearch: parsed.data.allowWebSearch,
       updatedBy: userMail,
       updatedAt: now,
     };
