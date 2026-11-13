@@ -1,4 +1,4 @@
-import { Citation } from '@/types/rag';
+import { Citation, CitationOrigin } from '@/types/rag';
 
 /**
  * Source-card assembly for the citations dropdown. Several citations of the
@@ -32,8 +32,13 @@ export function buildSourceCards(
     if (!citation.url) continue;
     const existing = groups.find(
       (group) =>
-        (group[0].url && citation.url && group[0].url === citation.url) ||
-        (group[0].title && citation.title && group[0].title === citation.title),
+        // A web page never merges into a document's card (or the reverse),
+        // even when the two share a title: their origins must stay apart.
+        group[0].origin === citation.origin &&
+        ((group[0].url && citation.url && group[0].url === citation.url) ||
+          (group[0].title &&
+            citation.title &&
+            group[0].title === citation.title)),
     );
     if (existing) {
       existing.push(citation);
@@ -81,4 +86,36 @@ export function buildSourceCards(
       ...(locators.length > 0 ? { locator: locators.join(', ') } : {}),
     };
   });
+}
+
+/** Source cards of one origin; `origin` is undefined for unlabelled cards. */
+export interface SourceCardGroup {
+  origin: CitationOrigin | undefined;
+  cards: SourceCard[];
+}
+
+/** Display order of the groups: the agent's documents before the web. */
+const ORIGIN_ORDER: (CitationOrigin | undefined)[] = [
+  'knowledge',
+  'web',
+  undefined,
+];
+
+/**
+ * Splits source cards by where they came from, so the list can show an
+ * agent's own documents and public web pages under separate headings.
+ * Cards keep their order within a group; empty groups are dropped. Cards
+ * without an origin (messages stored before origins were recorded) form a
+ * last, unlabelled group.
+ *
+ * @param cards - Cards from {@link buildSourceCards}.
+ * @returns Non-empty groups: documents, then web, then unlabelled.
+ */
+export function groupSourceCardsByOrigin(
+  cards: SourceCard[],
+): SourceCardGroup[] {
+  return ORIGIN_ORDER.map((origin) => ({
+    origin,
+    cards: cards.filter((card) => card.origin === origin),
+  })).filter((group) => group.cards.length > 0);
 }
