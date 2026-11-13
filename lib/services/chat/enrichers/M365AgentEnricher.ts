@@ -33,7 +33,12 @@ import { Message, MessageType } from '@/types/chat';
 import { auxiliaryTurnRouting } from '../auxiliaryTurnRouting';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
+import { noWebSearchReminder, withOrigin } from '../routing/sourceProvenance';
 import type { TextCompletionProvider } from '../textCompletion';
+import { prependContextToMessage } from './messageContext';
+import { searchRequested } from './searchRequest';
+
+import { emitToolCallRecord } from '@/lib/streamMarkers';
 
 const M365_REFORMULATION_SYSTEM_PROMPT =
   'Rewrite the final user question as a concise, self-contained search query for a document knowledge base. Resolve pronouns and references using the conversation. Return ONLY the query.';
@@ -49,6 +54,20 @@ const RETRIEVAL_FAILED_NOTE =
   'IMPORTANT: The knowledge-base search for this agent FAILED for this message (a temporary technical error, not a permissions issue and not an empty knowledge base). ' +
   "Tell the user briefly that you could not search the agent's documents right now and ask them to try again in a moment. " +
   'Do NOT claim you have no documents and do NOT answer from general knowledge as if it came from the documents.';
+
+/**
+ * Added to the agent's source rules on turns where no web search can run
+ * (the owner left web search off, or the user switched search off). An
+ * agent whose instructions mention looking things up would otherwise fill
+ * the gap from memory and attribute it to a website it never opened.
+ */
+const NO_WEB_SEARCH_RULE =
+  "- No web search is run for this message: the agent's documents are your only source. Never state or imply that something was looked up online or comes from a website or an outside organisation, and give no links to outside sites. " +
+  'If you add anything from general knowledge, label it plainly as general knowledge that was not checked against any source and may be out of date.';
+
+/** Tells the model its document search came back empty, so it says so. */
+const NO_PASSAGES_NOTE =
+  "The search of this agent's documents returned no passages for this message. Say that the documents do not cover it; never present other information as coming from the documents.";
 
 export class M365AgentEnricher extends BasePipelineStage {
   readonly name = 'M365AgentEnricher';
@@ -80,7 +99,58 @@ export class M365AgentEnricher extends BasePipelineStage {
     console.error(
       `[M365AgentEnricher] retrieval timed out for ${sanitizeForLog(agent.id)}; degrading with retrieval-failed note`,
     );
+    void this.emitKnowledgeSearchRecord(context, {
+      error: "The search of the agent's documents timed out.",
+    });
     return this.degradedContext(context, 'timeout');
+  }
+
+  /** Distinguishes records of the same millisecond. */
+  private static knowledgeRecordSeq = 0;
+
+  /**
+   * Persistent record of the search of the agent's own documents, in the
+   * same "Used N tools" strip as the web search's record — so a reader can
+   * see how every source of an answer was found, and that a search which
+   * found nothing (or failed) did run.
+   *
+   * @param context - The turn; needs `emitMarker` and `m365Agent`.
+   * @param outcome - The reworded query and what it matched, or the error.
+   */
+  private async emitKnowledgeSearchRecord(
+    context: ChatContext,
+    outcome: {
+      query?: string;
+      passages?: number;
+      documents?: number;
+      error?: string;
+      durationMs?: number;
+    },
+  ): Promise<void> {
+    const agent = context.m365Agent;
+    if (!context.emitMarker || !agent) return;
+    const { passages = 0, documents = 0 } = outcome;
+    const found =
+      passages === 0
+        ? "No matching passages in the agent's documents"
+        : `${passages} passage${passages === 1 ? '' : 's'} from ${documents} document${documents === 1 ? '' : 's'} of the agent`;
+    M365AgentEnricher.knowledgeRecordSeq += 1;
+    await context.emitMarker(
+      emitToolCallRecord({
+        id: `knowledge-search-${Date.now()}-${M365AgentEnricher.knowledgeRecordSeq}`,
+        name: 'knowledge_search',
+        server_label: agent.name,
+        arguments: JSON.stringify(
+          outcome.query ? { query: outcome.query.slice(0, 500) } : {},
+        ),
+        status: outcome.error ? 'failed' : 'completed',
+        output: outcome.error ? null : found,
+        error: outcome.error ?? null,
+        ...(outcome.durationMs !== undefined
+          ? { duration_ms: outcome.durationMs }
+          : {}),
+      }),
+    );
   }
 
   /** The agent's prompt with the renderer/summary/memory sections re-appended. */
@@ -122,6 +192,9 @@ export class M365AgentEnricher extends BasePipelineStage {
         ...baseMessages,
       ],
       systemPrompt: this.agentSystemPrompt(context),
+      // A search that could not run says nothing about what the documents
+      // hold; the router must not read it as "not found, fall back".
+      agentKnowledge: { status: 'failed', passages: [] },
       processedContent: {
         ...context.processedContent,
         metadata: {
@@ -171,6 +244,9 @@ export class M365AgentEnricher extends BasePipelineStage {
       console.error(
         `[M365AgentEnricher] no accessible sources on context for ${sanitizeForLog(agent.id)}; skipping retrieval`,
       );
+      await this.emitKnowledgeSearchRecord(context, {
+        error: "None of the agent's documents could be opened for this search.",
+      });
       return this.degradedContext(context, 'no-accessible-sources');
     }
 
@@ -179,6 +255,10 @@ export class M365AgentEnricher extends BasePipelineStage {
     const baseMessages = context.enrichedMessages || context.messages;
     let enrichedMessages: Message[] = [...baseMessages];
 
+    // Same gate the tool router acts on, so the model is never told a
+    // search cannot run on a turn where one then does (or the reverse).
+    const webSearchPossible = searchRequested(context);
+    const startedAt = Date.now();
     try {
       const query = await this.reformulateQuery(context);
       const searchDocs = query
@@ -220,22 +300,44 @@ export class M365AgentEnricher extends BasePipelineStage {
               '<<<CITATION_QUOTES>>>\n' +
               '{"1": "verbatim passage from source 1 supporting the claim(s) you cited it for", "3": "..."}\n' +
               '<<<END_CITATION_QUOTES>>>\n' +
-              "  Include one entry for EVERY source number you cited. Each passage must be copied character-for-character from that source's Content (quotes are rejected if they do not match exactly), must be the passage most relevant to YOUR claims, and should be under 60 words. Output nothing after the block.\n\n" +
-              `Available sources:\n\n${contextString}`,
+              "  Include one entry for EVERY source number you cited. Each passage must be copied character-for-character from that source's Content (quotes are rejected if they do not match exactly), must be the passage most relevant to YOUR claims, and should be under 60 words. Output nothing after the block.\n" +
+              (webSearchPossible ? '' : `${NO_WEB_SEARCH_RULE}\n`) +
+              `\nAvailable sources:\n\n${contextString}`,
+            messageType: MessageType.TEXT,
+          },
+          ...enrichedMessages,
+        ];
+      } else if (query) {
+        enrichedMessages = [
+          {
+            role: 'system',
+            content: webSearchPossible
+              ? NO_PASSAGES_NOTE
+              : `${NO_PASSAGES_NOTE}\n${NO_WEB_SEARCH_RULE}`,
             messageType: MessageType.TEXT,
           },
           ...enrichedMessages,
         ];
       }
 
-      const citations = searchDocs.map((doc, index) => ({
-        title: doc.title,
-        date: doc.date,
-        url: doc.url,
-        number: index + 1,
-        ...(doc.locator ? { locator: doc.locator } : {}),
-        ...(doc.quote ? { quote: doc.quote } : {}),
-      }));
+      const citations = withOrigin(
+        searchDocs.map((doc, index) => ({
+          title: doc.title,
+          date: doc.date,
+          url: doc.url,
+          number: index + 1,
+          ...(doc.locator ? { locator: doc.locator } : {}),
+          ...(doc.quote ? { quote: doc.quote } : {}),
+        })),
+        'knowledge',
+      );
+
+      await this.emitKnowledgeSearchRecord(context, {
+        query,
+        passages: searchDocs.length,
+        documents: new Set(searchDocs.map((doc) => doc.url || doc.title)).size,
+        durationMs: Date.now() - startedAt,
+      });
 
       // Verification corpus for the model's claim quotes: chunk text per
       // citation number. StandardChatHandler ships it in a terminal
@@ -256,10 +358,30 @@ export class M365AgentEnricher extends BasePipelineStage {
         telemetry: context.telemetry,
       });
 
+      // With the web closed for this turn nothing downstream adds the
+      // reminder, so it is placed next to the user's message here; when a
+      // search may run, the tool router adds it if none does.
+      const lastMessage = enrichedMessages[enrichedMessages.length - 1];
+      if (!webSearchPossible && lastMessage?.role === 'user') {
+        enrichedMessages = [
+          ...enrichedMessages.slice(0, -1),
+          prependContextToMessage(lastMessage, noWebSearchReminder(citations)),
+        ];
+      }
+
       return {
         ...context,
         enrichedMessages,
         systemPrompt: this.agentSystemPrompt(context),
+        // The router decides an owner's "otherwise search the web" rule
+        // from these passages (agentSearchGuidance.ts).
+        agentKnowledge: {
+          status: 'searched',
+          passages: searchDocs.map((doc) => ({
+            title: doc.title,
+            text: doc.chunk,
+          })),
+        },
         processedContent: {
           ...context.processedContent,
           metadata: {
@@ -293,6 +415,11 @@ export class M365AgentEnricher extends BasePipelineStage {
         telemetry: context.telemetry,
       });
       await context.emitActivity?.('chat.activity.knowledgeSearchFailed');
+      await this.emitKnowledgeSearchRecord(context, {
+        error:
+          "The agent's documents could not be searched (a temporary technical error).",
+        durationMs: Date.now() - startedAt,
+      });
       return this.degradedContext(context, 'error');
     }
   }
