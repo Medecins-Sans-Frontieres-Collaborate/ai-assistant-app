@@ -1,15 +1,41 @@
+import { IconFiles, IconWorld } from '@tabler/icons-react';
 import React from 'react';
 
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
 import { SourceCard } from '@/lib/utils/app/citationDisplay';
 
-export const CitationItem: React.FC<{ citation: SourceCard }> = ({
+interface CitationItemProps {
+  citation: SourceCard;
+  /**
+   * Spell the origin out next to its icon. The source list turns this off:
+   * its cards already sit under an origin heading, and a long translated
+   * label would crowd the card's domain and number out of the footer. The
+   * hover popover of an inline [n] marker has no heading and keeps it.
+   */
+  showOriginLabel?: boolean;
+}
+
+export const CitationItem: React.FC<CitationItemProps> = ({
   citation,
+  showOriginLabel = true,
 }) => {
+  const t = useTranslations('chat.sources');
   if (!citation.title || !citation.url) {
     return null;
   }
+  // The card also serves as the hover popover of an inline [n] marker,
+  // where no group heading is in sight — so it names its own origin.
+  const OriginIcon = citation.origin === 'knowledge' ? IconFiles : IconWorld;
+  const originLabel =
+    citation.origin === 'knowledge'
+      ? t('fromDocuments')
+      : citation.origin === 'web'
+        ? t('fromWeb')
+        : null;
+  const originHint =
+    citation.origin === 'knowledge' ? t('fromDocumentsHint') : t('fromWebHint');
 
   const processUrl = (
     url: string,
@@ -118,9 +144,22 @@ export const CitationItem: React.FC<{ citation: SourceCard }> = ({
               className="mr-1 my-0 p-0 align-middle"
             />
           </div>
-          <span className="truncate">{displayName}</span>
+          <span className="min-w-0 truncate">{displayName}</span>
           <span>|</span>
-          <span>{citation.number}</span>
+          <span className="shrink-0">{citation.number}</span>
+          {originLabel && (
+            <span
+              className="!ms-auto flex min-w-0 items-center gap-0.5 ps-1 text-[10.5px] font-medium"
+              title={`${originLabel}: ${originHint}`}
+              aria-label={originLabel}
+              data-testid="citation-origin"
+            >
+              <OriginIcon size={11} className="shrink-0" aria-hidden="true" />
+              {showOriginLabel && (
+                <span className="truncate">{originLabel}</span>
+              )}
+            </span>
+          )}
         </div>
       </Link>
     </div>
