@@ -9,6 +9,12 @@ import {
   DEFAULT_AUXILIARY_ROUTING_MODEL,
 } from '@/lib/services/auxiliary/types';
 import {
+  MAX_SEARCH_SITES,
+  agentSearchGuidancePrompt,
+  normalizeSearchSites,
+  restrictQueriesToSites,
+} from '@/lib/services/chat/routing/agentSearchGuidance';
+import {
   STRUCTURED_DECISION_FALLBACK_TIMEOUT_MS,
   type StructuredDecisionFallback,
 } from '@/lib/services/chat/routing/structuredDecisionFallback';
@@ -623,7 +629,11 @@ When either is true: set targetValue and targetUnit. When both are false: target
             hasUserProvidedContent,
             searchDecided,
             searchFanOut,
+            agentGuidance,
           } = request;
+          // The agent's knowledge search is judged only when one ran for
+          // this turn; instructions alone still steer the search decision.
+          const judgesKnowledge = agentGuidance?.knowledge !== undefined;
           const considerCodeExecution =
             request.considerCodeExecution || forceCodeInterpreter;
 
@@ -755,7 +765,7 @@ Also tune the search when needsWebSearch is true:
 - searchRecency: "day" for breaking news/live data, "week" or "month" for recent developments, "none" when age doesn't matter
 - searchComprehensive: true for research-style questions wanting breadth (comparisons, overviews, "what are my options"), false for single-fact lookups
 - searchCategory: which kind of source answers best — "news" for current events, recent developments and open-ended "what is happening in/with X" questions; "science" for medical, clinical, public-health and academic research questions (journals, studies, MSF research publications); "it" for programming, software and technical documentation; "humanitarian" for humanitarian crises, operations and datasets (displacement, outbreaks, country situations); "general" for everything else or when unsure
-${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecutionPromptSection}${catalog.length ? skillRoutingPrompt(catalog) : ''}`;
+${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecutionPromptSection}${catalog.length ? skillRoutingPrompt(catalog) : ''}${agentGuidance ? agentSearchGuidancePrompt(agentGuidance) : ''}`;
 
             // Include recent conversation history for context-aware decisions
             // Take last 3 message pairs (6 messages max) to keep it efficient
@@ -795,6 +805,29 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
             // The cap grows when code execution is considered because the
             // schema then carries a codeTask sentence as well.
             const schemaProperties: Record<string, unknown> = {
+              // Declared first so the model commits to this reading before
+              // it decides the search that depends on it.
+              ...(judgesKnowledge
+                ? {
+                    knowledgeBaseAnswers: {
+                      type: 'boolean',
+                      description:
+                        "Whether the agent's retrieved knowledge-base passages contain the specific information the user's last message asks for",
+                    },
+                  }
+                : {}),
+              // Asked as its own yes/no, before the search decision: left
+              // implicit, the topic limit was honoured in one language and
+              // skipped in another for the same question.
+              ...(agentGuidance
+                ? {
+                    instructionsAllowSearch: {
+                      type: 'boolean',
+                      description:
+                        "Whether the agent owner's instructions permit a web search for the topic of the user's last message. False when they limit web search to certain topics and this one is outside them, or when they forbid web search. True when the topic is one they allow, or when they say nothing about web search",
+                    },
+                  }
+                : {}),
               needsWebSearch: {
                 type: 'boolean',
                 description: 'Whether web search is needed for this query',
@@ -835,7 +868,20 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                   : 'Usually empty. Extra queries ONLY for clearly separable aspects one query cannot cover (max 4)',
               },
             };
+            if (agentGuidance) {
+              schemaProperties.searchSites = {
+                type: 'array',
+                items: { type: 'string' },
+                maxItems: MAX_SEARCH_SITES,
+                description:
+                  'Bare domains the agent instructions restrict the web search to; empty when they name none or no search is needed',
+              };
+            }
             const requiredFields = [
+              ...(judgesKnowledge ? ['knowledgeBaseAnswers'] : []),
+              ...(agentGuidance
+                ? ['instructionsAllowSearch', 'searchSites']
+                : []),
               'needsWebSearch',
               'searchQuery',
               'searchRecency',
@@ -895,6 +941,9 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                   12 +
                   // A planned fan-out is up to four more keyword queries.
                   (searchFanOut ? 80 : 0) +
+                  // An agent's site limits can need one query per site,
+                  // plus the knowledgeBaseAnswers flag.
+                  (agentGuidance ? 100 : 0) +
                   (catalog.length ? 256 : 0),
                 response_format: {
                   type: 'json_schema',
@@ -936,6 +985,11 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
             // stand, and only the skill side is reported as degraded.
             const skillSelectionDegraded =
               catalog.length > 0 && !Array.isArray(result.relevantSkills);
+            const knowledgeBaseAnswers =
+              judgesKnowledge &&
+              typeof result.knowledgeBaseAnswers === 'boolean'
+                ? { knowledgeBaseAnswers: result.knowledgeBaseAnswers }
+                : {};
             if (skillSelectionDegraded) {
               console.warn(
                 '[ToolRouterService] Skill selection missing from the tool router response; tools decision kept, skills treated as degraded',
@@ -946,6 +1000,21 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               span.setAttribute('tool_router.skills', relevantSkills);
 
             console.log('[ToolRouterService] AI decision:', result);
+            // An agent's document search that could not run says nothing
+            // about what the documents hold, so the model's decision to
+            // fall back to the web is overruled: answering from the web
+            // could bypass documents that do have the answer. Enforced
+            // here because the model alone held this rule only most of the
+            // time. A search the user switched on (below) still runs.
+            if (agentGuidance?.knowledge?.status === 'failed') {
+              result.needsWebSearch = false;
+            }
+            // The owner's topic limit binds whatever else the model wrote:
+            // a question it judged outside the allowed topics is not
+            // searched, and neither is one the user asks to have searched.
+            if (agentGuidance && result.instructionsAllowSearch === false) {
+              result.needsWebSearch = false;
+            }
             // The search was decided upstream; the model only planned it.
             if (searchDecided) result.needsWebSearch = true;
 
@@ -991,7 +1060,11 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
             const primaryQuery = result.needsWebSearch
               ? result.searchQuery || currentMessage
               : undefined;
-            const searchQueries = primaryQuery
+            const searchSites =
+              agentGuidance && result.needsWebSearch
+                ? normalizeSearchSites(result.searchSites)
+                : [];
+            const plannedQueries = primaryQuery
               ? [
                   primaryQuery,
                   ...(Array.isArray(result.additionalSearchQueries)
@@ -1004,6 +1077,11 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                     : []),
                 ].slice(0, 5)
               : undefined;
+            // An agent's website limit is applied here, in code, rather
+            // than left to the model to write into each query.
+            const searchQueries = plannedQueries
+              ? restrictQueriesToSites(plannedQueries, searchSites)
+              : undefined;
 
             if (tools.length > 0 || searchFollowUp) {
               const recency = result.searchRecency;
@@ -1011,7 +1089,9 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                 tools,
                 relevantSkills,
                 ...(skillSelectionDegraded ? { skillSelectionDegraded } : {}),
-                searchQuery: primaryQuery,
+                ...knowledgeBaseAnswers,
+                ...(searchSites.length ? { searchSites } : {}),
+                searchQuery: searchQueries?.[0] ?? primaryQuery,
                 searchQueries,
                 searchRecency:
                   result.needsWebSearch &&
@@ -1042,6 +1122,7 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               tools: [] as ToolType[],
               relevantSkills,
               ...(skillSelectionDegraded ? { skillSelectionDegraded } : {}),
+              ...knowledgeBaseAnswers,
               reasoning: 'No tools needed',
             };
           } catch (error) {
