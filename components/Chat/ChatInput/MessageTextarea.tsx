@@ -41,8 +41,8 @@ export const MessageTextarea: React.FC<MessageTextareaProps> = ({
   return (
     <textarea
       ref={textareaRef}
-      className={`m-0 w-full resize-none border-0 bg-transparent p-0 pr-24 text-black dark:bg-transparent dark:text-white focus:outline-none focus:ring-0 focus:border-0 ${
-        hasBadgeRow ? 'pt-3 pb-[88px] pl-3' : 'py-3.5 pl-10 md:py-3 md:pl-10'
+      className={`m-0 w-full resize-none border-0 bg-transparent p-0 pe-24 text-black dark:bg-transparent dark:text-white focus:outline-none focus:ring-0 focus:border-0 ${
+        hasBadgeRow ? 'pt-3 pb-[88px] ps-3' : 'py-3.5 ps-10 md:py-3 md:ps-10'
       }`}
       style={{
         resize: 'none',
