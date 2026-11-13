@@ -230,7 +230,14 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
                   {t('codeOutput')}
                 </div>
               )}
-              <pre className="max-h-32 max-w-full overflow-auto rounded border border-emerald-200/60 bg-emerald-50 px-2 py-1 text-[0.7rem] leading-snug text-emerald-900 dark:border-emerald-700/40 dark:bg-emerald-900/15 dark:text-emerald-100">
+              {/* Code output keeps its columns; every other outcome is
+                  prose (what a search found and why it ran) and wraps so
+                  it reads without sideways scrolling. */}
+              <pre
+                className={`max-h-32 max-w-full overflow-auto rounded border border-emerald-200/60 bg-emerald-50 px-2 py-1 text-[0.7rem] leading-snug text-emerald-900 dark:border-emerald-700/40 dark:bg-emerald-900/15 dark:text-emerald-100 ${
+                  isCodeInterpreter ? '' : 'whitespace-pre-wrap break-words'
+                }`}
+              >
                 {call.output}
               </pre>
             </div>
