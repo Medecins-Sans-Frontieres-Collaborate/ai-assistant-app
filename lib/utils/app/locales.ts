@@ -89,6 +89,28 @@ export const getOfficialTermsLanguageName = (locale: string): string => {
 };
 
 /**
+ * Supported locales written right to left. Kurdish (`ku`) is offered in its
+ * Latin script (Kurmanji) and therefore reads left to right.
+ */
+export const RTL_LOCALES: readonly string[] = ['ar', 'fa', 'ps', 'ur'];
+
+/**
+ * Whether a locale's script runs right to left.
+ * @param locale - ISO 639-1 language code
+ * @returns True for right-to-left locales
+ */
+export const isRtlLocale = (locale: string): boolean =>
+  RTL_LOCALES.includes(locale);
+
+/**
+ * Text direction for the document of a locale (the `dir` of `<html>`).
+ * @param locale - ISO 639-1 language code
+ * @returns 'rtl' or 'ltr'
+ */
+export const localeDirection = (locale: string): 'rtl' | 'ltr' =>
+  isRtlLocale(locale) ? 'rtl' : 'ltr';
+
+/**
  * Get all supported locales
  * @returns Array of supported locale codes
  */
