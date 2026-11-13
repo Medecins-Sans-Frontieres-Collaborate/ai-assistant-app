@@ -10,6 +10,7 @@ import { Message, MessageType } from '@/types/chat';
 import { auxiliaryTurnRouting } from '../auxiliaryTurnRouting';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
+import { withOrigin } from '../routing/sourceProvenance';
 import type { TextCompletionProvider } from '../textCompletion';
 
 import { SpanStatusCode, trace } from '@opentelemetry/api';
@@ -228,12 +229,15 @@ export class RAGEnricher extends BasePipelineStage {
           }
 
           // Convert search results to citations format for downstream handlers
-          const citations = searchDocs.map((doc, index) => ({
-            title: doc.title,
-            date: doc.date,
-            url: doc.url,
-            number: index + 1,
-          }));
+          const citations = withOrigin(
+            searchDocs.map((doc, index) => ({
+              title: doc.title,
+              date: doc.date,
+              url: doc.url,
+              number: index + 1,
+            })),
+            'knowledge',
+          );
 
           // The org agent's prompt REPLACES the base prompt, taking the
           // renderer contract (math/markdown/diagram rules) with it as well
