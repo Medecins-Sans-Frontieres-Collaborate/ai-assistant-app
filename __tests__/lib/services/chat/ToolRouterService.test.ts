@@ -1665,5 +1665,222 @@ describe('ToolRouterService', () => {
         expect(result.tools).toEqual([]);
       });
     });
+
+    describe('agent guidance (owner rules + knowledge search)', () => {
+      const answerWith = (decision: Record<string, unknown>) =>
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [{ message: { content: JSON.stringify(decision) } }],
+        });
+      const baseDecision = {
+        instructionsAllowSearch: true,
+        needsWebSearch: true,
+        searchQuery: 'Uganda entry vaccinations',
+        searchRecency: 'none',
+        searchComprehensive: false,
+        searchCategory: 'general',
+        searchLanguage: 'en',
+        additionalSearchQueries: [],
+      };
+      const request = {
+        messages: [
+          {
+            role: 'user' as const,
+            content: 'Which vaccinations for Uganda?',
+            messageType: MessageType.TEXT,
+          },
+        ],
+        currentMessage: 'Which vaccinations for Uganda?',
+      };
+      const guidance = {
+        agentName: 'Field HR',
+        instructions: 'If the documents lack it, search who.int and cdc.gov.',
+        knowledge: {
+          status: 'searched' as const,
+          passages: [{ title: 'Leave.pdf', text: '30 days of leave' }],
+        },
+      };
+      const sentParams = () =>
+        mockOpenAIClient.chat.completions.create.mock.calls[0][0];
+
+      it('shows the router the instructions and passages and asks for the verdict first', async () => {
+        answerWith({
+          knowledgeBaseAnswers: false,
+          ...baseDecision,
+          searchSites: [],
+        });
+
+        const result = await service.determineTool({
+          ...request,
+          agentGuidance: guidance,
+        });
+
+        const params = sentParams();
+        const systemPrompt = params.messages[0].content as string;
+        expect(systemPrompt).toContain(guidance.instructions);
+        expect(systemPrompt).toContain('30 days of leave');
+        const schema = params.response_format.json_schema.schema;
+        expect(Object.keys(schema.properties)[0]).toBe('knowledgeBaseAnswers');
+        expect(schema.required).toEqual(
+          expect.arrayContaining(['knowledgeBaseAnswers', 'searchSites']),
+        );
+        expect(result.knowledgeBaseAnswers).toBe(false);
+        expect(result.tools).toEqual(['web_search']);
+        expect(result.searchSites).toBeUndefined();
+        expect(result.searchQueries).toEqual(['Uganda entry vaccinations']);
+      });
+
+      describe("the owner's topic limit", () => {
+        // The model asks for a search in both cases; only its reading of
+        // the topic differs.
+        const decide = (instructionsAllowSearch: boolean) => {
+          answerWith({
+            knowledgeBaseAnswers: false,
+            ...baseDecision,
+            instructionsAllowSearch,
+            searchSites: [],
+          });
+          return service.determineTool({ ...request, agentGuidance: guidance });
+        };
+
+        it('overrules a search on a topic the instructions do not allow', async () => {
+          expect((await decide(false)).tools).toEqual([]);
+        });
+
+        it('lets the search run on an allowed topic', async () => {
+          expect((await decide(true)).tools).toEqual(['web_search']);
+        });
+
+        it('asks for the topic verdict before the search decision', async () => {
+          await decide(true);
+
+          const schema = sentParams().response_format.json_schema.schema;
+          const keys = Object.keys(schema.properties);
+          expect(keys.indexOf('instructionsAllowSearch')).toBeLessThan(
+            keys.indexOf('needsWebSearch'),
+          );
+          expect(schema.required).toContain('instructionsAllowSearch');
+        });
+      });
+
+      describe('a document search that could not run', () => {
+        const failed = {
+          ...guidance,
+          knowledge: { status: 'failed' as const, passages: [] },
+        };
+        // The model is made to ask for a search in every case below.
+        const modelWantsSearch = () =>
+          answerWith({
+            knowledgeBaseAnswers: false,
+            ...baseDecision,
+            searchSites: ['who.int'],
+          });
+
+        it('never falls back to the web, even when the model decides to', async () => {
+          modelWantsSearch();
+
+          const result = await service.determineTool({
+            ...request,
+            agentGuidance: failed,
+          });
+
+          expect(result.tools).toEqual([]);
+        });
+
+        it('leaves the same decision alone when the search ran', async () => {
+          modelWantsSearch();
+
+          const result = await service.determineTool({
+            ...request,
+            agentGuidance: guidance,
+          });
+
+          expect(result.tools).toEqual(['web_search']);
+        });
+
+        it('still runs a search the user switched on', async () => {
+          modelWantsSearch();
+
+          const result = await service.determineTool({
+            ...request,
+            agentGuidance: failed,
+            searchDecided: true,
+          });
+
+          expect(result.tools).toEqual(['web_search']);
+        });
+      });
+
+      it('restricts every planned query to the websites the rules name', async () => {
+        answerWith({
+          knowledgeBaseAnswers: false,
+          ...baseDecision,
+          searchSites: ['https://www.who.int/', 'cdc.gov', 'not a site'],
+        });
+
+        const result = await service.determineTool({
+          ...request,
+          agentGuidance: guidance,
+        });
+
+        expect(result.searchSites).toEqual(['who.int', 'cdc.gov']);
+        expect(result.searchQueries).toEqual([
+          'Uganda entry vaccinations site:who.int',
+          'Uganda entry vaccinations site:cdc.gov',
+        ]);
+        expect(result.searchQuery).toBe(
+          'Uganda entry vaccinations site:who.int',
+        );
+      });
+
+      it('reports the verdict on a no-search decision too', async () => {
+        answerWith({
+          knowledgeBaseAnswers: true,
+          ...baseDecision,
+          needsWebSearch: false,
+          searchQuery: '',
+          searchSites: ['who.int'],
+        });
+
+        const result = await service.determineTool({
+          ...request,
+          agentGuidance: guidance,
+        });
+
+        expect(result.tools).toEqual([]);
+        expect(result.knowledgeBaseAnswers).toBe(true);
+        expect(result.searchSites).toBeUndefined();
+      });
+
+      it('asks for no knowledge verdict when the agent has no knowledge search', async () => {
+        answerWith({ ...baseDecision, searchSites: [] });
+
+        const result = await service.determineTool({
+          ...request,
+          agentGuidance: {
+            agentName: guidance.agentName,
+            instructions: guidance.instructions,
+          },
+        });
+
+        const schema = sentParams().response_format.json_schema.schema;
+        expect(schema.properties.knowledgeBaseAnswers).toBeUndefined();
+        expect(schema.properties.searchSites).toBeDefined();
+        expect(result.knowledgeBaseAnswers).toBeUndefined();
+      });
+
+      it('leaves the prompt and schema untouched without guidance', async () => {
+        answerWith(baseDecision);
+
+        const result = await service.determineTool(request);
+
+        const params = sentParams();
+        expect(params.messages[0].content).not.toContain('AGENT RULES');
+        const schema = params.response_format.json_schema.schema;
+        expect(schema.properties.knowledgeBaseAnswers).toBeUndefined();
+        expect(schema.properties.searchSites).toBeUndefined();
+        expect(result.knowledgeBaseAnswers).toBeUndefined();
+        expect(result.searchQueries).toEqual(['Uganda entry vaccinations']);
+      });
+    });
   });
 });
