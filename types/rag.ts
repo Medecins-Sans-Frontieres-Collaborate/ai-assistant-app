@@ -32,6 +32,13 @@ export interface RAGResponse {
   total_sources: number;
 }
 
+/**
+ * Where a cited source came from: `knowledge` is a passage retrieved from
+ * an agent's own documents, `web` a public page a web search found. The
+ * source list groups and labels cards by it so the two are never confused.
+ */
+export type CitationOrigin = 'knowledge' | 'web';
+
 export interface Citation {
   title: string;
   date: string;
@@ -57,4 +64,6 @@ export interface Citation {
    * tooltip/card as the footnote evidence.
    */
   quote?: string;
+  /** Absent on citations stored before origins were recorded. */
+  origin?: CitationOrigin;
 }
