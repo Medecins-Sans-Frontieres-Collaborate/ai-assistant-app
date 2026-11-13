@@ -116,6 +116,8 @@ const agentFieldsSchema = z
     topK: z.number().int().min(1).max(20).default(10),
     /** OCR scanned PDFs during index runs within the env page budgets. */
     autoOcr: z.boolean().default(false),
+    /** Whether the agent's turns may search the web; off unless opted in. */
+    allowWebSearch: z.boolean().default(false),
     /**
      * Per-agent document cap; null = the env default. Bounded by the
      * caller's role ceiling (local vs global admin) below.
@@ -562,6 +564,7 @@ export async function POST(request: NextRequest) {
       embeddingModelId: env.OPENAI_EMBEDDING_DEPLOYMENT,
       ragConfig: { topK: parsed.data.topK },
       autoOcr: parsed.data.autoOcr,
+      allowWebSearch: parsed.data.allowWebSearch,
       ...override.fields,
       sources: newSources,
       createdBy: userMail,
@@ -714,6 +717,7 @@ export async function PUT(request: NextRequest) {
       chatModelId: parsed.data.chatModelId,
       ragConfig: { topK: parsed.data.topK },
       autoOcr: parsed.data.autoOcr,
+      allowWebSearch: parsed.data.allowWebSearch,
       ...override.fields,
       sources,
       updatedBy: userMail,
