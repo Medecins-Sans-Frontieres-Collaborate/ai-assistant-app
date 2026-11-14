@@ -299,7 +299,7 @@ export const StorageWarningDialog: FC<StorageWarningDialogProps> = ({
                         <select
                           value={keepCount}
                           onChange={(e) => setKeepCount(Number(e.target.value))}
-                          className="ml-2 text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 px-2 py-1"
+                          className="ms-2 text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 px-2 py-1"
                         >
                           {KEEP_COUNT_OPTIONS.map((count) => (
                             <option key={count} value={count}>
@@ -330,7 +330,7 @@ export const StorageWarningDialog: FC<StorageWarningDialogProps> = ({
                           onChange={(e) =>
                             setOlderThanDays(Number(e.target.value))
                           }
-                          className="ml-2 text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 px-2 py-1"
+                          className="ms-2 text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 px-2 py-1"
                         >
                           {DAYS_OPTIONS.map((days) => (
                             <option key={days} value={days}>
