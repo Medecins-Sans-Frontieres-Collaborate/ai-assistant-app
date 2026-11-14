@@ -1,6 +1,9 @@
 import {
+  RTL_LOCALES,
   getAutonym,
   getSupportedLocales,
+  isRtlLocale,
+  localeDirection,
   localeToAutonym,
 } from '@/lib/utils/app/locales';
 
@@ -399,5 +402,28 @@ describe('locales', () => {
       expect(autonyms.length).toBe(locales.length);
       expect(autonyms.every((a) => typeof a === 'string')).toBe(true);
     });
+  });
+});
+
+describe('text direction of locales', () => {
+  it('marks every right-to-left locale the app offers, and only those', () => {
+    const supported = getSupportedLocales();
+    expect(RTL_LOCALES.every((locale) => supported.includes(locale))).toBe(
+      true,
+    );
+    expect([...RTL_LOCALES].sort()).toEqual(['ar', 'fa', 'ps', 'ur']);
+  });
+
+  it('gives right-to-left locales the rtl direction', () => {
+    expect(isRtlLocale('ar')).toBe(true);
+    expect(localeDirection('ar')).toBe('rtl');
+    expect(localeDirection('ur')).toBe('rtl');
+  });
+
+  it('keeps every other locale left to right, Latin-script Kurdish included', () => {
+    expect(isRtlLocale('en')).toBe(false);
+    expect(localeDirection('fr')).toBe('ltr');
+    expect(localeDirection('ku')).toBe('ltr');
+    expect(localeDirection('not-a-locale')).toBe('ltr');
   });
 });
