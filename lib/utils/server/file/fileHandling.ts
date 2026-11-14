@@ -31,7 +31,7 @@ const execFileAsync = promisify(execFile);
  * ChatPipeline.EXECUTION_TIMEOUT_MS so legitimate large conversions don't
  * fail here when they would otherwise succeed at the pipeline level.
  */
-const CONVERTER_EXEC_OPTS = {
+export const CONVERTER_EXEC_OPTS = {
   timeout: 180_000,
   killSignal: 'SIGKILL' as const,
   maxBuffer: 100 * 1024 * 1024,
@@ -108,7 +108,7 @@ async function retryRemoveFile(
   }
 }
 
-async function removeTempDir(dir: string): Promise<void> {
+export async function removeTempDir(dir: string): Promise<void> {
   try {
     await fs.promises.rm(dir, { recursive: true, force: true });
   } catch (error) {
@@ -637,7 +637,7 @@ async function xlsxToText(
  * profile directory keeps concurrent conversions on the same OS user from
  * colliding on the shared default profile lock.
  */
-async function libreOfficeConvert(
+export async function libreOfficeConvert(
   inputPath: string,
   format: string,
   outputDir: string,
