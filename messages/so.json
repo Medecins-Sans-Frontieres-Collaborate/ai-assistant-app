@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Moodelkani ma taageerayo",
     "unservedOperations": "Ma jiro moodel silsiladdan ku jira oo taageera: {operations}. Ku dar moodel taageera."
+  },
+  "filePreview": {
+    "preview": "Muuqaal Hore",
+    "download": "Soo Degso",
+    "loading": "Muuqaal hore aya la diyaarinayaa…",
+    "failed": "Faylkan lama soo bandhigi karo. Weli waad soo degsan kartaa.",
+    "pageOf": "Bogga {page} ee {total}",
+    "truncated": "Waxaad arkeysaa {shown} boggii ugu horreeyay ee {total}. Faylka soo degso si aad ugu aragto inta kale.",
+    "enlarge": "Weyne {name}"
   }
 }

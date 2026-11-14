@@ -8134,5 +8134,14 @@
     },
     "notSupported": "Non pris en charge par ce modèle",
     "unservedOperations": "Aucun modèle dans cette chaîne ne prend en charge : {operations}. Ajoutez un modèle qui le fait."
+  },
+  "filePreview": {
+    "preview": "Aperçu",
+    "download": "Télécharger",
+    "loading": "Préparation de l’aperçu…",
+    "failed": "Impossible d’afficher l’aperçu de ce fichier. Vous pouvez néanmoins le télécharger.",
+    "pageOf": "Page {page} sur {total}",
+    "truncated": "Affichage des {shown} premières pages sur {total}. Téléchargez le fichier pour voir le reste.",
+    "enlarge": "Agrandir {name}"
   }
 }

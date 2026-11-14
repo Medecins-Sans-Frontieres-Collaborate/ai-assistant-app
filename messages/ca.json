@@ -8134,5 +8134,14 @@
     },
     "notSupported": "No és compatible amb aquest model",
     "unservedOperations": "Cap model d’aquesta cadena admet: {operations}. Afegeix un model que sí que ho faci."
+  },
+  "filePreview": {
+    "preview": "Previsualització",
+    "download": "Descarrega",
+    "loading": "S’està preparant la previsualització…",
+    "failed": "No s’ha pogut previsualitzar aquest fitxer. Encara el pots descarregar.",
+    "pageOf": "Pàgina {page} de {total}",
+    "truncated": "Es mostren les primeres {shown} de {total} pàgines. Descarrega el fitxer per veure la resta.",
+    "enlarge": "Amplia {name}"
   }
 }

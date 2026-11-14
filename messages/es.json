@@ -8134,5 +8134,14 @@
     },
     "notSupported": "No compatible con este modelo",
     "unservedOperations": "Ningún modelo de esta cadena admite: {operations}. Añada un modelo que lo haga."
+  },
+  "filePreview": {
+    "preview": "Vista previa",
+    "download": "Descargar",
+    "loading": "Preparando vista previa…",
+    "failed": "No se puede mostrar la vista previa de este archivo. Aun así puede descargarlo.",
+    "pageOf": "Página {page} de {total}",
+    "truncated": "Mostrando las primeras {shown} de {total} páginas. Descargue el archivo para ver el resto.",
+    "enlarge": "Ampliar {name}"
   }
 }

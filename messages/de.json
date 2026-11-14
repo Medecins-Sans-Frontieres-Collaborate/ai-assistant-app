@@ -8134,5 +8134,14 @@
     "instructionsHint": "Bis zu 16 KB Anweisungen, einschließlich importierter Textreferenzen. Binärdateien und dauerhafte Dokumentenindizierung sind nur für Organisationsfähigkeiten verfügbar. Der Export verwendet den Standardnamen SKILL.md ohne user:-Präfix.",
     "enabled": "Für meine Gespräche aktiviert",
     "empty": "Erstellen Sie eine Fähigkeit für wiederkehrende Aufgaben oder importieren Sie eine SKILL.md, um sie hier zu prüfen und zu speichern."
+  },
+  "filePreview": {
+    "preview": "Vorschau",
+    "download": "Herunterladen",
+    "loading": "Vorschau wird vorbereitet…",
+    "failed": "Diese Datei kann nicht angezeigt werden. Sie können sie trotzdem herunterladen.",
+    "pageOf": "Seite {page} von {total}",
+    "truncated": "Es werden die ersten {shown} von {total} Seiten angezeigt. Laden Sie die Datei herunter, um den Rest zu sehen.",
+    "enlarge": "{name} vergrößern"
   }
 }

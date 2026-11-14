@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Wannan samfurin bai goyi bayan haka ba",
     "unservedOperations": "Babu samfurin a wannan jerin da ke goyan bayan: {operations}. Ƙara samfurin da zai iya."
+  },
+  "filePreview": {
+    "preview": "Dubawa",
+    "download": "Zazzage",
+    "loading": "Ana shirin dubawa...",
+    "failed": "Ba a iya dubawa wannan fayil din. Still za ka iya zazzage shi.",
+    "pageOf": "Shafi {page} daga cikin {total}",
+    "truncated": "An nuna shafuka {shown} na {total}. Zazzage fayil din don ganin sauran.",
+    "enlarge": "Fadada {name}"
   }
 }

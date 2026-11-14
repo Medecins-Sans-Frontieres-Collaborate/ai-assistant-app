@@ -8118,5 +8118,14 @@
     },
     "notSupported": "ንዚ ሞዴል ይካበን ኣይደለን",
     "unservedOperations": "ሞዴል ዝድለ ምርካብ ኣይኮነን: {operations}። ሞዴል ዘይምርካብ ወይ ጨምረ።"
+  },
+  "filePreview": {
+    "preview": "ንኣብ ቅድሚ ምርኣይ",
+    "download": "ኣውርድ",
+    "loading": "ንቅድሚ ምርኣይ ዝዘጋጅ እዩ...",
+    "failed": "ነዚ ፋይል ክርኣይ ኣልተተኻነ። ግን ኣውርድ ክትደልወሉ ትኽእል።",
+    "pageOf": "ገጽ {page} ካብ {total}",
+    "truncated": "ንቀዳሚ {shown} ካብ {total} ገጻት ይብርፅእ። ኣብሓደስ ንምርኣይ ፋይል ኣውርድ።",
+    "enlarge": "{name} ኣብዚጽው"
   }
 }

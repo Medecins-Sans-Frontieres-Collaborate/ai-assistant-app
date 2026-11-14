@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Le modeli ayisekelwanga",
     "unservedOperations": "Ayikho modeli kule chain esekela: {operations}. Engeza modeli eyenza lokhu."
+  },
+  "filePreview": {
+    "preview": "Buka kuqala",
+    "download": "Landa",
+    "loading": "Ngilungiselela ukubuka kuqala...",
+    "failed": "Le fayili ayikwazanga ukubonwa kuqala. Ungayilanda noma kunjalo.",
+    "pageOf": "Ikhasi {page} kwa-{total}",
+    "truncated": "Kubukiswa amakhasi {shown} kokungu-{total} wokuqala. Landa ifayili ukuze ubone wonke.",
+    "enlarge": "Khulisa {name}"
   }
 }

@@ -8134,5 +8134,14 @@
     },
     "notSupported": "이 모델에서 지원하지 않습니다",
     "unservedOperations": "이 체인에 있는 어떤 모델도 지원하지 않는 작업입니다: {operations}. 해당 작업을 지원하는 모델을 추가하세요."
+  },
+  "filePreview": {
+    "preview": "미리보기",
+    "download": "다운로드",
+    "loading": "미리보기를 준비 중입니다…",
+    "failed": "이 파일은 미리보기할 수 없습니다. 그래도 다운로드는 가능합니다.",
+    "pageOf": "{total}페이지 중 {page}페이지",
+    "truncated": "전체 {total}페이지 중 처음 {shown}페이지만 표시합니다. 나머지 페이지를 보려면 파일을 다운로드하세요.",
+    "enlarge": "{name} 확대"
   }
 }

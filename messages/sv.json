@@ -8134,5 +8134,14 @@
     },
     "notSupported": "Stöds inte av denna modell",
     "unservedOperations": "Ingen modell i denna kedja stöder: {operations}. Lägg till en modell som gör det."
+  },
+  "filePreview": {
+    "preview": "Förhandsgranska",
+    "download": "Ladda ner",
+    "loading": "Förbereder förhandsvisning...",
+    "failed": "Den här filen kunde inte förhandsgranskas. Du kan fortfarande ladda ner den.",
+    "pageOf": "Sida {page} av {total}",
+    "truncated": "Visar de första {shown} av {total} sidor. Ladda ner filen för att se resten.",
+    "enlarge": "Förstora {name}"
   }
 }

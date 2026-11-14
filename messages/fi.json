@@ -8134,5 +8134,14 @@
     },
     "notSupported": "Ei tuettu tässä mallissa",
     "unservedOperations": "Yksikään ketjun malleista ei tue: {operations}. Lisää tuen tarjoava malli."
+  },
+  "filePreview": {
+    "preview": "Esikatselu",
+    "download": "Lataa",
+    "loading": "Valmistellaan esikatselua…",
+    "failed": "Tiedoston esikatselu ei onnistunut. Voit silti ladata sen.",
+    "pageOf": "Sivu {page} / {total}",
+    "truncated": "Näytetään ensimmäiset {shown} / {total} sivusta. Lataa tiedosto nähdäksesi loput.",
+    "enlarge": "Suurenna {name}"
   }
 }

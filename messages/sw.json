@@ -8134,5 +8134,14 @@
     },
     "notSupported": "Haungiwi mkono na mfano huu",
     "unservedOperations": "Hakuna mfano katika mnyororo huu unaounga mkono: {operations}. Ongeza mfano unaoufanya."
+  },
+  "filePreview": {
+    "preview": "Onyesho",
+    "download": "Pakua",
+    "loading": "Inatayarisha onyesho...",
+    "failed": "Faili hili halijaweza kuoneshwa. Bado unaweza kulipakua.",
+    "pageOf": "Ukurasa {page} kati ya {total}",
+    "truncated": "Inaonyesha kurasa {shown} za kwanza kati ya {total}. Pakua faili ili kuona zilizobaki.",
+    "enlarge": "Panua {name}"
   }
 }

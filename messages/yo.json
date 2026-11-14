@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Akọ́màlú yìí kò dáyè gba",
     "unservedOperations": "Kò sí akọ́màlú kankan nínú pq yìí tó dáyè gba: {operations}. Ṣàfikún akọ́màlú tó le ṣe bẹ́ẹ̀."
+  },
+  "filePreview": {
+    "preview": "Àwòrán àkọ́kọ́",
+    "download": "Gba kalẹ̀",
+    "loading": "Ń pèsè àwòrán àkọ́kọ́…",
+    "failed": "A kò le fi fáìlì yìí hàn gẹ́gẹ́ bí àwòrán àkọ́kọ́. O lè ṣí i gbà sílẹ̀.",
+    "pageOf": "Ojúewé {page} nínú {total}",
+    "truncated": "Àfihàn ojúewé {shown} àkọ́kọ́ nínú {total}. Gba fáìlì náà kalẹ̀ láti rí agbo.",
+    "enlarge": "Ṣàgbélé {name}"
   }
 }

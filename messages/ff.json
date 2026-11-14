@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Model ɗin ndon tokkata",
     "unservedOperations": "Model jowi, kadi sees chain ɗin, ndon tokkat: {operations}. Jokk model mo tokkata ɗum."
+  },
+  "filePreview": {
+    "preview": "Moƴƴi",
+    "download": "Yottu",
+    "loading": "Moƴƴi moƴƴugol...",
+    "failed": "Fiilde ɗiɗen nde moƴƴi moƴƴugol. Aɗa waawi yottude e yettude.",
+    "pageOf": "Cuɓo {page} e {total}",
+    "truncated": "Mennude cuɓɓe {shown} e {total} kam. Yottu fiilde feewi haɓo cuɓɓe fof.",
+    "enlarge": "Nyaɓnu {name}"
   }
 }

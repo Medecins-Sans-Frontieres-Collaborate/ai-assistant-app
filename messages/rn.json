@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Iki gishusho nticabishigikira",
     "unservedOperations": "Nta gishusho na kimwe muri uru rukurikirane gifise ubushobozi bwo gukora ibi: {operations}. Shiramwo ikindi gishusho kibishoboye."
+  },
+  "filePreview": {
+    "preview": "Ihimbaze",
+    "download": "Kurondera",
+    "loading": "Turiko turategura kubona ihimbaze…",
+    "failed": "Iyi fayi ntishoboye kwerekanwa. Ushobora n'ukuyikuraho.",
+    "pageOf": "Urupapuro {page} kuri {total}",
+    "truncated": "Turi kwerekana urupapuro rwa mbere {shown} kuri {total}. Kurondera iyi fayi kugira ubone ibisigaye.",
+    "enlarge": "Gukuruza {name}"
   }
 }

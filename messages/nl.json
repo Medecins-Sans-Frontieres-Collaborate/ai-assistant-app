@@ -8134,5 +8134,14 @@
     },
     "notSupported": "Niet ondersteund door dit model",
     "unservedOperations": "Geen enkel model in deze keten ondersteunt: {operations}. Voeg een model toe dat dit wel doet."
+  },
+  "filePreview": {
+    "preview": "Voorbeeld",
+    "download": "Downloaden",
+    "loading": "Voorbeeld wordt voorbereid…",
+    "failed": "Dit bestand kan niet worden weergegeven. U kunt het nog steeds downloaden.",
+    "pageOf": "Pagina {page} van {total}",
+    "truncated": "Eerste {shown} van {total} pagina's worden getoond. Download het bestand om de rest te zien.",
+    "enlarge": "Vergroot {name}"
   }
 }

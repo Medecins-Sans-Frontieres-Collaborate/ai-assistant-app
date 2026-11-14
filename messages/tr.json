@@ -8134,5 +8134,14 @@
     },
     "notSupported": "Bu model tarafından desteklenmiyor",
     "unservedOperations": "Bu zincirdeki hiçbir model şu işlemleri desteklemiyor: {operations}. Destekleyen bir model ekleyin."
+  },
+  "filePreview": {
+    "preview": "Önizleme",
+    "download": "İndir",
+    "loading": "Önizleme hazırlanıyor…",
+    "failed": "Bu dosya önizlenemedi. Yine de indirebilirsiniz.",
+    "pageOf": "Sayfa {page} / {total}",
+    "truncated": "İlk {shown} sayfa gösteriliyor (toplam {total}). Devamını görmek için dosyayı indirin.",
+    "enlarge": "{name} öğesini büyüt"
   }
 }

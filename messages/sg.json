@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Model ti yaba na",
     "unservedOperations": "Model ti so na siri ti chain ti kodeni na: {operations}. Ku model ti yeke na."
+  },
+  "filePreview": {
+    "preview": "Lomongo",
+    "download": "Ködörï",
+    "loading": "Lâködörö na yalöngö lomongo...",
+    "failed": "Fi le file a kötî ngâ na lohîsa. Mörï ködörï ti yâ ye.",
+    "pageOf": "Page {page} ti {total}",
+    "truncated": "Löngö page {shown} ti {total} na tî tî. Ködörï file ti yä mbïa ti tjetërï.",
+    "enlarge": "Giligimba {name}"
   }
 }

@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Modèl sa pa sipòte sa",
     "unservedOperations": "Pa gen okenn modèl nan chèn sa a ki sipòte: {operations}. Ajoute yon modèl ki ka fè sa."
+  },
+  "filePreview": {
+    "preview": "Gade an avan",
+    "download": "Telechaje",
+    "loading": "Ap prepare aperçu…",
+    "failed": "Nou pa ka wè aperçu fichye sa a. Ou kapab toujou telechaje li.",
+    "pageOf": "Paj {page} sou {total}",
+    "truncated": "Ap montre {shown} premye paj sou {total}. Telechaje fichye a pou w ka wè rès la.",
+    "enlarge": "Elaji {name}"
   }
 }

@@ -8134,5 +8134,14 @@
     },
     "notSupported": "Nieobsługiwane przez ten model",
     "unservedOperations": "Żaden model w tym łańcuchu nie obsługuje: {operations}. Dodaj model, który to umożliwia."
+  },
+  "filePreview": {
+    "preview": "Podgląd",
+    "download": "Pobierz",
+    "loading": "Przygotowywanie podglądu…",
+    "failed": "Nie można wyświetlić podglądu tego pliku. Nadal możesz go pobrać.",
+    "pageOf": "Strona {page} z {total}",
+    "truncated": "Wyświetlono pierwsze {shown} z {total} stron. Pobierz plik, aby zobaczyć resztę.",
+    "enlarge": "Powiększ {name}"
   }
 }

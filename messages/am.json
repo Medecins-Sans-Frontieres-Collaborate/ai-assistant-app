@@ -8134,5 +8134,14 @@
     },
     "notSupported": "ይህ ሞዴል አይደግፍም",
     "unservedOperations": "ይህ ሰንሰለት ውስጥ ምንም ሞዴል {operations} አይደግፍም። እንዲደግፉ ሞዴሎችን ያክሉ።"
+  },
+  "filePreview": {
+    "preview": "ቅድመ እይታ",
+    "download": "ያውርዱ",
+    "loading": "ቅድመ እይታን ማዘጋጅ...",
+    "failed": "ይህ ፋይል ማቅድመ እይታ አልተቻለም። ነገር ግን እስካሁን ማውረድ ይችላሉ።",
+    "pageOf": "ገጽ {page} ከ {total}",
+    "enlarge": "{name}ን የማትዋላት",
+    "truncated": "የመጀመሪያ {shown} ከ {total} ገጾች ታየ። ቀሪውን ለማየት ፋይሉን ያውርዱ።"
   }
 }

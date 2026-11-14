@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Sathandizidwa ndi modeli iyi",
     "unservedOperations": "Palibe modeli mu unoyu imathandiza: {operations}. Onjezani modeli yomwe imathandiza."
+  },
+  "filePreview": {
+    "preview": "Onani",
+    "download": "Tsitsani",
+    "loading": "Ikukonzekera chithunzithunzi...",
+    "failed": "Fayiloyi sichingathe kuonetsedwa pano. Mutha kutengabe fayiloyi.",
+    "pageOf": "Tsamba {page} mwa {total}",
+    "truncated": "Ikusonyeza masamba {shown} mwa {total}. Tsitsani fayiloyi kuti muwone zina.",
+    "enlarge": "Kukulitsani {name}"
   }
 }

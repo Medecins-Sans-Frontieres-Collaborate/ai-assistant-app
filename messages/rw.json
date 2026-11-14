@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Iyi model ntabwo ibishyigikira",
     "unservedOperations": "Nta model muri uru rukurikirane ishyigikira: {operations}. Ongera model ibishoboye."
+  },
+  "filePreview": {
+    "preview": "Reba Mbere",
+    "download": "Manura",
+    "loading": "Birategurwa kugirango urebwe mbere…",
+    "failed": "Iyi dosiye ntishoboye kurebwa mbere. Irashobora kugumana ukayimanura.",
+    "pageOf": "Urupapuro {page} muri {total}",
+    "truncated": "Uhereye urupapuro rwa mbere {shown} muri {total}. Manura dosiye kugira ngo ubone ayandi.",
+    "enlarge": "Gukuraho {name}"
   }
 }

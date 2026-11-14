@@ -8165,5 +8165,14 @@
     },
     "notSupported": "Không được hỗ trợ bởi mô hình này",
     "unservedOperations": "Không có mô hình nào trong chuỗi này hỗ trợ: {operations}. Hãy thêm một mô hình phù hợp."
+  },
+  "filePreview": {
+    "preview": "Xem trước",
+    "download": "Tải xuống",
+    "loading": "Đang chuẩn bị xem trước…",
+    "failed": "Không thể xem trước tệp này. Bạn vẫn có thể tải xuống.",
+    "pageOf": "Trang {page} trên {total}",
+    "truncated": "Hiển thị {shown} trang đầu trong tổng số {total} trang. Tải xuống tệp để xem các trang còn lại.",
+    "enlarge": "Phóng to {name}"
   }
 }

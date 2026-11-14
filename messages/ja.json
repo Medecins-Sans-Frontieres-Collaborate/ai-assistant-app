@@ -8134,5 +8134,14 @@
     },
     "notSupported": "このモデルではサポートされていません",
     "unservedOperations": "このチェーン内のモデルはいずれも次の操作をサポートしていません: {operations}。対応するモデルを追加してください。"
+  },
+  "filePreview": {
+    "preview": "プレビュー",
+    "download": "ダウンロード",
+    "loading": "プレビューを準備中…",
+    "failed": "このファイルはプレビューできません。ダウンロードは可能です。",
+    "pageOf": "{total} ページ中 {page} ページ",
+    "enlarge": "{name} を拡大",
+    "truncated": "最初の{shown}ページ（全{total}ページ中）を表示しています。残りを見るにはファイルをダウンロードしてください。"
   }
 }

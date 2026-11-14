@@ -42,6 +42,17 @@ const mockMessages: Record<string, unknown> = {
     noMatches: 'No directory matches — you can enter the address manually',
   },
   transcript: { copy: 'Copy' },
+  // Mirrors messages/en.json.
+  filePreview: {
+    preview: 'Preview',
+    download: 'Download',
+    loading: 'Preparing preview…',
+    failed: 'This file could not be previewed. You can still download it.',
+    pageOf: 'Page {page} of {total}',
+    truncated:
+      'Showing the first {shown} of {total} pages. Download the file to see the rest.',
+    enlarge: 'Enlarge {name}',
+  },
   announcements: { more: 'More' },
   analyticsAdmin: { health: { total: { files: 'Files' } } },
   common: {

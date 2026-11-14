@@ -8114,5 +8114,14 @@
   "enterTagsPlaceholder": "تاگ زیاد بکە (Enter بگرە)",
   "enterPromptNamePlaceholder": "بۆ نموونە، وەڵامی ئیمەیڵ",
   "enterPromptDescriptionPlaceholder": "ئەم پڕۆمپتە بۆ چیە؟",
-  "enterPromptContentPlaceholder": "پڕۆمپتەکەت لێرە بنووسە. '{{variable}}' بەکاربهێنە بۆ ناوەڕۆکی گۆڕاو."
+  "enterPromptContentPlaceholder": "پڕۆمپتەکەت لێرە بنووسە. '{{variable}}' بەکاربهێنە بۆ ناوەڕۆکی گۆڕاو.",
+  "filePreview": {
+    "preview": "پێشبینین",
+    "download": "داگرتن",
+    "loading": "ئامادەکردنی پێشبینین...",
+    "failed": "ئەم پەڕگەیە نەتوانرا پێشبین بکرێت. دەتوانی هێشتا داگرتنی بکەیت.",
+    "pageOf": "لاپه‌ڕه‌ {page} لە {total}",
+    "truncated": "نیشاندانی یەکەم {shown} لە {total} لاپه‌ڕە. بۆ بینینی هەموو لاپه‌ڕەکان، پەڕگەکە دابگرە.",
+    "enlarge": "گەورەکردنی {name}"
+  }
 }

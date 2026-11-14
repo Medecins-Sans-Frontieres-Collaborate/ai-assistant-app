@@ -8134,5 +8134,14 @@
     },
     "notSupported": "Tidak didukung oleh model ini",
     "unservedOperations": "Tidak ada model dalam rantai ini yang mendukung: {operations}. Tambahkan model yang mendukung."
+  },
+  "filePreview": {
+    "preview": "Pratinjau",
+    "download": "Unduh",
+    "loading": "Menyiapkan pratinjau…",
+    "failed": "Berkas ini tidak dapat dipratinjau. Anda tetap bisa mengunduhnya.",
+    "pageOf": "Halaman {page} dari {total}",
+    "truncated": "Menampilkan {shown} halaman pertama dari {total} halaman. Unduh berkas untuk melihat sisanya.",
+    "enlarge": "Perbesar {name}"
   }
 }

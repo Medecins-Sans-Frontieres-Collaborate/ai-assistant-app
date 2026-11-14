@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Nije podržano od strane ovog modela",
     "unservedOperations": "Nijedan model u ovom lancu ne podržava: {operations}. Dodajte model koji to omogućava."
+  },
+  "filePreview": {
+    "preview": "Pregled",
+    "download": "Preuzmi",
+    "loading": "Pripremanje pregleda…",
+    "failed": "Ovaj fajl nije moguće pregledati. I dalje možete da ga preuzmete.",
+    "pageOf": "Strana {page} od {total}",
+    "truncated": "Prikazano je prvih {shown} od ukupno {total} strana. Preuzmite fajl da biste videli ostatak.",
+    "enlarge": "Uvećaj {name}"
   }
 }

@@ -8165,5 +8165,14 @@
     },
     "notSupported": "该模型不支持",
     "unservedOperations": "此链中没有模型支持：{operations}。请添加支持该功能的模型。"
+  },
+  "filePreview": {
+    "preview": "预览",
+    "download": "下载",
+    "loading": "正在准备预览…",
+    "failed": "无法预览此文件。您仍然可以下载。",
+    "pageOf": "第 {page} 页，共 {total} 页",
+    "truncated": "显示前 {shown} 页，共 {total} 页。下载文件以查看全部内容。",
+    "enlarge": "放大{name}"
   }
 }

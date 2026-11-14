@@ -8134,5 +8134,14 @@
     },
     "notSupported": "Non supportato da questo modello",
     "unservedOperations": "Nessun modello in questa catena supporta: {operations}. Aggiungi un modello che lo supporti."
+  },
+  "filePreview": {
+    "preview": "Anteprima",
+    "download": "Scarica",
+    "loading": "Preparazione dell'anteprima…",
+    "failed": "Impossibile visualizzare l'anteprima di questo file. Puoi comunque scaricarlo.",
+    "pageOf": "Pagina {page} di {total}",
+    "truncated": "Visualizzate le prime {shown} di {total} pagine. Scarica il file per vedere le altre.",
+    "enlarge": "Ingrandisci {name}"
   }
 }

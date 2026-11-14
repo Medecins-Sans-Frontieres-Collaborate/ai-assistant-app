@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Tsy tohanan'ity modèle ity",
     "unservedOperations": "Tsy misy modèle amin'ity rojo ity no manohana: {operations}. Ampio modèle izay manohana izany."
+  },
+  "filePreview": {
+    "preview": "Topi-maso",
+    "download": "Ampidino",
+    "loading": "Manomana topi-maso…",
+    "failed": "Tsy afaka asiana topi-maso ity rakitra ity. Afaka manampy azy ianao.",
+    "pageOf": "Pejy {page} amin'ny {total}",
+    "truncated": "Aseho ny {shown} voalohany amin'ny pejy {total}. Ampidino ny rakitra raha hijery ny ambiny.",
+    "enlarge": "Hanitatra an'i {name}"
   }
 }

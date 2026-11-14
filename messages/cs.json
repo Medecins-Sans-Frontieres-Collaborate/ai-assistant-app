@@ -8134,5 +8134,14 @@
     },
     "notSupported": "Tento model nepodporuje",
     "unservedOperations": "Žádný model v tomto řetězci nepodporuje: {operations}. Přidejte model, který je podporuje."
+  },
+  "filePreview": {
+    "preview": "Náhled",
+    "download": "Stáhnout",
+    "loading": "Připravuji náhled…",
+    "failed": "Tento soubor nelze zobrazit v náhledu. Stále jej však můžete stáhnout.",
+    "pageOf": "Stránka {page} z {total}",
+    "truncated": "Zobrazuje se prvních {shown} z {total} stránek. Pro zobrazení zbytku si stáhněte soubor.",
+    "enlarge": "Zvětšit {name}"
   }
 }

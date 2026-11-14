@@ -8118,5 +8118,14 @@
     },
     "notSupported": "Model oyo ekoki te",
     "unservedOperations": "Model moko te na ekangami oyo ekoki: {operations}. Yanganisa model moko ekoki."
+  },
+  "filePreview": {
+    "preview": "Talelá liboso",
+    "download": "Zwá",
+    "loading": "Toli kosala etaleli ya liboso…",
+    "failed": "Dokima oyo ekoki te kolakisa etaleli ya liboso. Okoki kaka kozwa yango.",
+    "pageOf": "Lokasa {page} kati na {total}",
+    "truncated": "Toli kolakisa bakasa {shown} ya {total} ya liboso. Zwá dosié mpo omona nyonso.",
+    "enlarge": "Kokisa {name}"
   }
 }

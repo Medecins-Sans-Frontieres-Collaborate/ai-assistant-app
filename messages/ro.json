@@ -8134,5 +8134,14 @@
     },
     "notSupported": "Nesusținut de acest model",
     "unservedOperations": "Niciun model din acest lanț nu suportă: {operations}. Adăugați un model care să o facă."
+  },
+  "filePreview": {
+    "preview": "Previzualizare",
+    "download": "Descărcare",
+    "loading": "Se pregătește previzualizarea…",
+    "failed": "Acest fișier nu poate fi previzualizat. Îl puteți descărca totuși.",
+    "pageOf": "Pagina {page} din {total}",
+    "truncated": "Se afișează primele {shown} din {total} pagini. Descărcați fișierul pentru a vedea restul.",
+    "enlarge": "Măriți {name}"
   }
 }
