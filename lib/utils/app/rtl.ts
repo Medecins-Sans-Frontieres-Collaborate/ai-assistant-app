@@ -25,3 +25,27 @@ export function isRTL(locale: string): boolean {
 export function getDirection(locale: string): 'rtl' | 'ltr' {
   return isRTL(locale) ? 'rtl' : 'ltr';
 }
+
+/**
+ * Get the text direction of any language, not only the app's UI locales.
+ *
+ * Uses the runtime's CLDR data, so languages the UI is not translated into
+ * (Dari, Sorani, Uyghur, …) resolve correctly; falls back to RTL_LOCALES when
+ * the code is not a valid language tag or the runtime has no text info.
+ *
+ * @param languageCode - BCP 47 language tag (e.g., 'ar', 'prs', 'zh-Hans')
+ * @returns 'rtl' or 'ltr'
+ */
+export function getLanguageDirection(languageCode: string): 'rtl' | 'ltr' {
+  try {
+    const locale = new Intl.Locale(languageCode).maximize() as Intl.Locale & {
+      getTextInfo?: () => { direction?: string };
+      textInfo?: { direction?: string };
+    };
+    const direction = (locale.getTextInfo?.() ?? locale.textInfo)?.direction;
+    if (direction === 'rtl' || direction === 'ltr') return direction;
+  } catch {
+    // Not a valid language tag: fall through to the static list.
+  }
+  return getDirection(languageCode.split('-')[0]);
+}
