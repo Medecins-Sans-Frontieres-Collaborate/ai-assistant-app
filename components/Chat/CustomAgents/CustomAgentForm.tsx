@@ -318,7 +318,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
             <button
               type="button"
               onClick={() => setShowNotice(!showNotice)}
-              className="w-full p-2 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-200 dark:border-amber-800 flex items-center justify-between text-left hover:bg-amber-100 dark:hover:bg-amber-900/30 transition-colors"
+              className="w-full p-2 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-200 dark:border-amber-800 flex items-center justify-between text-start hover:bg-amber-100 dark:hover:bg-amber-900/30 transition-colors"
             >
               <div className="flex items-center gap-2">
                 <IconAlertCircle
@@ -447,7 +447,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
               <button
                 type="button"
                 onClick={() => setShowNotice(!showNotice)}
-                className="w-full p-2 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-200 dark:border-amber-800 flex items-center justify-between text-left hover:bg-amber-100 dark:hover:bg-amber-900/30 transition-colors"
+                className="w-full p-2 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-200 dark:border-amber-800 flex items-center justify-between text-start hover:bg-amber-100 dark:hover:bg-amber-900/30 transition-colors"
               >
                 <div className="flex items-center gap-2">
                   <IconAlertCircle

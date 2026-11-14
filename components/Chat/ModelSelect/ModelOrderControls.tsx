@@ -93,14 +93,14 @@ export const ModelOrderControls: FC<ModelOrderControlsProps> = ({
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 z-10 mt-1 w-36 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg">
+            <div className="absolute end-0 z-10 mt-1 w-36 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg">
               {modes.map((mode) => (
                 <button
                   key={mode.id}
                   type="button"
                   onClick={() => handleModeSelect(mode.id)}
                   className={`
-                    w-full px-3 py-1.5 text-xs text-left transition-colors
+                    w-full px-3 py-1.5 text-xs text-start transition-colors
                     ${
                       orderMode === mode.id
                         ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'

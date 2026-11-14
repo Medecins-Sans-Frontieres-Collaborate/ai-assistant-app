@@ -86,7 +86,7 @@ export const CustomAgentList: FC<CustomAgentListProps> = ({
             onClick={() => !isDefunct && onSelect(agent)}
             disabled={isDefunct}
             className={`
-              w-full text-left p-3 rounded-lg transition-all duration-150 flex items-center justify-between gap-2
+              w-full text-start p-3 rounded-lg transition-all duration-150 flex items-center justify-between gap-2
               ${
                 isDefunct
                   ? 'border-2 border-amber-300 dark:border-amber-700 opacity-60 cursor-not-allowed bg-amber-50 dark:bg-amber-900/10'
