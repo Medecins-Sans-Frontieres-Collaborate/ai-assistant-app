@@ -116,7 +116,7 @@ export const HealthTab: FC<HealthTabProps> = ({ onOpenFields }) => {
           <Totals totals={health.totals} />
           <button
             type="button"
-            className={`${ADMIN_BTN_SECONDARY} ml-auto`}
+            className={`${ADMIN_BTN_SECONDARY} ms-auto`}
             disabled={recheck.isPending || health.totals.files === 0}
             onClick={() => runRecheck()}
           >

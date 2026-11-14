@@ -92,7 +92,7 @@ export const ScopeSummary: FC<ScopeSummaryProps> = ({
           </h2>
           <button
             type="button"
-            className="ml-auto flex items-center gap-1 rounded text-xs text-gray-500 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-400 dark:hover:text-white"
+            className="ms-auto flex items-center gap-1 rounded text-xs text-gray-500 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-400 dark:hover:text-white"
             onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
           >

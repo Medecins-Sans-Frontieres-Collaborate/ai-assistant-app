@@ -181,7 +181,7 @@ const MailToolPayload: FC<{ args: MailPayloadArgs }> = ({ args }) => {
       ))}
       {args.subject !== undefined && (
         <p className="text-gray-900 dark:text-gray-100">
-          <span className="mr-1.5 text-[11px] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          <span className="me-1.5 text-[11px] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
             {t('subject')}
           </span>
           {args.subject}
@@ -708,7 +708,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
   );
 
   return (
-    <div className="my-3 flex max-w-prose items-start gap-2 border-l-2 border-blue-400/70 py-1.5 pl-3 not-prose dark:border-blue-500/60">
+    <div className="my-3 flex max-w-prose items-start gap-2 border-s-2 border-blue-400/70 py-1.5 ps-3 not-prose dark:border-blue-500/60">
       <IconShieldCheck
         size={14}
         className="mt-[3px] shrink-0 text-blue-600 dark:text-blue-400"
@@ -718,7 +718,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
         <p className="text-sm leading-snug text-gray-900 dark:text-white">
           {titleNode}
           {serverLabel && (
-            <span className="ml-1.5 text-xs text-gray-500 dark:text-gray-400">
+            <span className="ms-1.5 text-xs text-gray-500 dark:text-gray-400">
               {t('viaService', { service: serverLabel })}
             </span>
           )}
@@ -773,7 +773,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                   onClick={() => handleApproveWithScope('once')}
                   disabled={approveDisabled}
                   className={`inline-flex items-center gap-1 ${
-                    alwaysConfirm ? 'rounded-md' : 'rounded-l-md'
+                    alwaysConfirm ? 'rounded-md' : 'rounded-s-md'
                   } bg-blue-600 px-2.5 py-1 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-700 dark:hover:bg-blue-600`}
                 >
                   <IconCheck size={14} aria-hidden="true" />
@@ -789,7 +789,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                     aria-label={t('approveOptionsLabel')}
                     aria-haspopup="menu"
                     aria-expanded={menuOpen}
-                    className="inline-flex items-center rounded-r-md border-l border-blue-500/40 bg-blue-600 px-1.5 py-1 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-700 dark:hover:bg-blue-600"
+                    className="inline-flex items-center rounded-e-md border-s border-blue-500/40 bg-blue-600 px-1.5 py-1 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-700 dark:hover:bg-blue-600"
                   >
                     <IconChevronDown size={14} aria-hidden="true" />
                   </button>
@@ -810,7 +810,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                     type="button"
                     role="menuitem"
                     onClick={() => handleApproveWithScope('once')}
-                    className="flex w-full items-center px-3 py-1.5 text-left text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="flex w-full items-center px-3 py-1.5 text-start text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     {t('approveOnce')}
                   </button>
@@ -819,7 +819,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                     role="menuitem"
                     onClick={() => handleApproveWithScope('tool')}
                     disabled={!toolName}
-                    className="flex w-full items-center px-3 py-1.5 text-left text-gray-800 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="flex w-full items-center px-3 py-1.5 text-start text-gray-800 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     {t('alwaysApproveThisTool')}
                   </button>
@@ -827,7 +827,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                     type="button"
                     role="menuitem"
                     onClick={() => handleApproveWithScope('all')}
-                    className="flex w-full items-center px-3 py-1.5 text-left text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="flex w-full items-center px-3 py-1.5 text-start text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     {t('alwaysApproveAllTools')}
                   </button>
@@ -836,7 +836,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                     role="menuitem"
                     onClick={() => handleApproveWithScope('everywhere')}
                     disabled={!toolName}
-                    className="flex w-full items-center border-t border-gray-100 px-3 py-1.5 text-left text-gray-800 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="flex w-full items-center border-t border-gray-100 px-3 py-1.5 text-start text-gray-800 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     {t('alwaysApproveEverywhere')}
                   </button>
@@ -847,7 +847,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                   type="button"
                   onClick={() => handleApprovalClick(false)}
                   disabled={buttonsDisabled}
-                  className="inline-flex items-center gap-1 rounded-l-md border border-gray-300 bg-white px-2.5 py-1 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+                  className="inline-flex items-center gap-1 rounded-s-md border border-gray-300 bg-white px-2.5 py-1 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
                 >
                   <IconX size={14} aria-hidden="true" />
                   {t('denyButton')}
@@ -861,7 +861,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                   aria-label={t('denyOptionsLabel')}
                   aria-haspopup="menu"
                   aria-expanded={denyMenuOpen}
-                  className="inline-flex items-center rounded-r-md border border-l-0 border-gray-300 bg-white px-1.5 py-1 text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+                  className="inline-flex items-center rounded-e-md border border-s-0 border-gray-300 bg-white px-1.5 py-1 text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
                 >
                   <IconChevronDown size={14} aria-hidden="true" />
                 </button>
@@ -884,7 +884,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                       setDenyMenuOpen(false);
                       handleApprovalClick(false);
                     }}
-                    className="flex w-full items-center px-3 py-1.5 text-left text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                    className="flex w-full items-center px-3 py-1.5 text-start text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     {t('denyOnce')}
                   </button>
@@ -897,7 +897,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                       role="menuitem"
                       onClick={handleDenyEverywhere}
                       disabled={!toolName}
-                      className="flex w-full items-center px-3 py-1.5 text-left text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                      className="flex w-full items-center px-3 py-1.5 text-start text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 dark:text-red-400 dark:hover:bg-red-900/20"
                     >
                       {t('neverAllowEverywhere')}
                     </button>

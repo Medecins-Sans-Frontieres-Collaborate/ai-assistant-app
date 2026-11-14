@@ -25,6 +25,8 @@ vi.mock('@tabler/icons-react', () => ({
     React.createElement('div', { 'data-testid': 'file-text-icon', className }),
   IconCode: ({ className }: any) =>
     React.createElement('div', { 'data-testid': 'code-icon', className }),
+  IconEye: ({ className }: any) =>
+    React.createElement('div', { 'data-testid': 'preview-icon', className }),
 }));
 
 describe('FileContent', () => {
@@ -63,6 +65,22 @@ describe('FileContent', () => {
 
       expect(screen.getByText('document.pdf')).toBeInTheDocument();
       expect(screen.getByTestId('download-icon')).toBeInTheDocument();
+    });
+
+    it('offers a page preview for office documents and PDFs only', () => {
+      const files = [
+        createFileContent('/api/file/a.pptx', 'slides.pptx'),
+        createFileContent('/api/file/b.docx', 'memo.docx'),
+        createFileContent('/api/file/c.csv', 'rows.csv'),
+        createFileContent('/api/file/d.mp3', 'call.mp3'),
+      ];
+
+      render(<FileContent files={files} images={[]} />);
+
+      expect(screen.getAllByRole('button', { name: 'Preview' })).toHaveLength(
+        2,
+      );
+      expect(screen.getAllByTestId('download-icon')).toHaveLength(4);
     });
 
     it('renders multiple files', () => {

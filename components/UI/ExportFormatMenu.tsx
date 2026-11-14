@@ -43,7 +43,7 @@ export const ExportFormatMenu: FC<ExportFormatMenuProps> = ({
           key={format}
           role="menuitem"
           onClick={() => onSelect(format)}
-          className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+          className="w-full px-4 py-2 text-start text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
         >
           {t(labelKey)}
         </button>
@@ -59,7 +59,7 @@ export const ExportFormatMenu: FC<ExportFormatMenuProps> = ({
               key={`onedrive-${format}`}
               role="menuitem"
               onClick={() => onSaveToOneDrive(format)}
-              className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+              className="flex w-full items-center gap-2 px-4 py-2 text-start text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
             >
               <IconBrandOnedrive
                 size={15}

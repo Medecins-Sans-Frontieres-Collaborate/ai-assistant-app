@@ -5,6 +5,7 @@ import {
   IconBrandOnedrive,
   IconDownload,
   IconFileText,
+  IconFileTypeDocx,
   IconLanguage,
   IconLoader2,
 } from '@tabler/icons-react';
@@ -20,8 +21,14 @@ import {
   saveToOneDrive,
 } from '@/client/services/m365/m365Client';
 
+import { pendingPollInterval } from '@/lib/utils/shared/translation/documentMode';
+
 import { isAssistantMessageGroup } from '@/types/chat';
-import { TRANSLATION_EXPIRY_DAYS } from '@/types/documentTranslation';
+import {
+  TRANSLATION_EXPIRY_DAYS,
+  supportsPagedText,
+  textVersionFilename,
+} from '@/types/documentTranslation';
 import type { M365SaveDestination } from '@/types/m365';
 
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
@@ -137,14 +144,6 @@ export function formatPendingTranslationReference(
   submittedAt: string,
 ): string {
   return `[TranslationPending: ${filename} | lang:${languageCode} | job:${jobId} | ext:${extension} | submitted:${submittedAt}]`;
-}
-
-/** Transcription-style polling backoff by elapsed time. */
-function pendingPollInterval(elapsedMs: number): number {
-  if (elapsedMs < 30_000) return 2_000;
-  if (elapsedMs < 2 * 60_000) return 5_000;
-  if (elapsedMs < 10 * 60_000) return 15_000;
-  return 30_000;
 }
 
 /**
@@ -380,6 +379,7 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
 }) => {
   const t = useTranslations();
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isExportingText, setIsExportingText] = useState(false);
 
   // Parse the reference
   const reference = useMemo(
@@ -487,45 +487,65 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
     [saveTranslationTo],
   );
 
-  // Handle download
-  const handleDownload = useCallback(async () => {
-    if (!reference || isExpired) return;
-
-    setIsDownloading(true);
-
-    try {
-      const response = await fetch(
-        `/api/document-translation/content/${reference.jobId}?filename=${encodeURIComponent(reference.filename)}&ext=${reference.extension}`,
-      );
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error(t('documentTranslation.documentNotFound'));
+  /**
+   * Fetches a file of this translation and hands it to the browser as a
+   * download. Shared by the translated file and its text version.
+   */
+  const downloadFile = useCallback(
+    async (url: string, filename: string, setBusy: (busy: boolean) => void) => {
+      if (isExpired) return;
+      setBusy(true);
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(
+            response.status === 404
+              ? t('documentTranslation.documentNotFound')
+              : t('documentTranslation.downloadFailed'),
+          );
         }
-        throw new Error(t('documentTranslation.downloadFailed'));
+
+        const objectUrl = URL.createObjectURL(await response.blob());
+        const a = document.createElement('a');
+        a.href = objectUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(objectUrl);
+
+        toast.success(t('documentTranslation.downloadSuccess'));
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
+        toast.error(errorMessage);
+        console.error('[DocumentTranslationViewer] Download error:', error);
+      } finally {
+        setBusy(false);
       }
+    },
+    [isExpired, t],
+  );
 
-      // Get the blob and create download link
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = reference.filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+  // The translated file, layout preserved.
+  const handleDownload = useCallback(() => {
+    if (!reference) return;
+    void downloadFile(
+      `/api/document-translation/content/${reference.jobId}?filename=${encodeURIComponent(reference.filename)}&ext=${reference.extension}`,
+      reference.filename,
+      setIsDownloading,
+    );
+  }, [reference, downloadFile]);
 
-      toast.success(t('documentTranslation.downloadSuccess'));
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      toast.error(errorMessage);
-      console.error('[DocumentTranslationViewer] Download error:', error);
-    } finally {
-      setIsDownloading(false);
-    }
-  }, [reference, isExpired, t]);
+  // The text version: an editable Word file, one page per source page.
+  const handleDownloadTextVersion = useCallback(() => {
+    if (!reference) return;
+    void downloadFile(
+      `/api/document-translation/export/${reference.jobId}?format=docx`,
+      textVersionFilename(reference.filename),
+      setIsExportingText,
+    );
+  }, [reference, downloadFile]);
 
   // Async (batch) translation still in flight → progress card with polling.
   // (Placed after every hook — no conditional hook calls.)
@@ -616,6 +636,23 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
                   {t('documentTranslation.saveToOneDrive')}
                 </button>
               </>
+            )}
+
+            {/* Text version: only for formats with a page-level text view */}
+            {supportsPagedText(reference.extension) && !isExpired && (
+              <button
+                onClick={handleDownloadTextVersion}
+                disabled={isExportingText}
+                title={t('documentTranslation.textVersionHint')}
+                className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600"
+              >
+                {isExportingText ? (
+                  <IconLoader2 size={16} className="animate-spin" />
+                ) : (
+                  <IconFileTypeDocx size={16} />
+                )}
+                {t('documentTranslation.textVersion')}
+              </button>
             )}
 
             {/* Download button */}

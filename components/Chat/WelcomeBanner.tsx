@@ -78,7 +78,7 @@ export function WelcomeBanner({ onVisibilityChange }: WelcomeBannerProps) {
   if (!isMounted || !isVisible) return null;
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[60] pointer-events-none">
+    <div className="fixed top-0 start-0 end-0 z-[60] pointer-events-none">
       <div className="flex">
         {/* Spacer for sidebar on desktop - matches sidebar width */}
         <div

@@ -36,11 +36,24 @@ import {
 } from '@/types/webSearch';
 
 import { ToolRouterService } from '../ToolRouterService';
+import { structuredFallbackForTurn } from '../auxiliaryTurnRouting';
 import { ChatContext, shouldExecuteAsAgent } from '../pipeline/ChatContext';
 import { STAGE_TIMEOUTS } from '../pipeline/ChatPipeline';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 import { fullTextAccess } from '../processors/attachmentAccess';
 import { excerptInlineFilesForReaccess } from '../processors/mountedFileExcerpt';
+import {
+  type AgentSearchGuidance,
+  agentEmptySearchNotice,
+  agentSearchGuidance,
+  questionWithinSites,
+} from '../routing/agentSearchGuidance';
+import {
+  agentWebSearchReason,
+  mergeWebCitations,
+  noWebSearchReminder,
+  sourceProvenanceNote,
+} from '../routing/sourceProvenance';
 import type {
   StructuredDecisionFallback,
   StructuredDecisionProvider,
@@ -96,6 +109,7 @@ import {
   interpreterRequested,
   nativeInterpreterCapable,
 } from './interpreterCapability';
+import { prependContextToMessage } from './messageContext';
 import { searchRequested } from './searchRequest';
 
 import { env } from '@/config/environment';
@@ -252,22 +266,12 @@ export class ToolRouterEnricher extends BasePipelineStage {
 
   /**
    * The routing second chance for this turn: the user's own chat model,
-   * under the turn's residency. None for custom-source (byom) models,
-   * which run on the user's own account and credential.
+   * under the turn's residency (see structuredFallbackForTurn).
    */
   private decisionFallbackFor(
     context: ChatContext,
   ): StructuredDecisionFallback | undefined {
-    const provider = this.decisionProvider;
-    const model = context.model;
-    if (!provider || !model || model.isCustomSourceModel) return undefined;
-    const target = {
-      model,
-      userRegion: context.user?.region as 'US' | 'EU' | null | undefined,
-      hostedRegion: context.hostedRegion,
-    };
-    return (params, signal) =>
-      provider.completeStructuredDecision(target, params, signal);
+    return structuredFallbackForTurn(context, this.decisionProvider);
   }
 
   /**
@@ -378,6 +382,96 @@ export class ToolRouterEnricher extends BasePipelineStage {
       `Note: these attached files could not be loaded into the code interpreter this turn (size budget or read error): ${unmounted.join(', ')}. ` +
       'Do not claim to have opened them with code; work only from the text provided for them in this conversation, and say so if that limits the answer.'
     );
+  }
+
+  /**
+   * Note naming the files that are mounted in the sandbox although their
+   * text is not in this turn's prompt (active files over the per-turn token
+   * budget). Nothing else tells the model they exist, and without it the
+   * model reports earlier uploads as unavailable.
+   */
+  private static mountedWithoutTextNote(
+    filenames: string[],
+  ): string | undefined {
+    if (filenames.length === 0) return undefined;
+    return (
+      `Note: these files from earlier in the conversation are mounted in the code interpreter, but their text is not included in this turn's context (context budget): ${filenames.join(', ')}. ` +
+      'They are available: open them with code whenever the task involves them, and never ask the user to upload them again.'
+    );
+  }
+
+  /**
+   * On an M365 agent turn that ends up without a web search, says so right
+   * next to the user's message (sourceProvenance.ts: noWebSearchReminder).
+   * Other turns are returned unchanged.
+   */
+  private static withNoWebSearchReminder(context: ChatContext): ChatContext {
+    // With the web closed for the turn (owner switch or search mode) the
+    // agent's own stage has already placed the note; do not repeat it.
+    if (!context.m365Agent || !searchRequested(context)) return context;
+    const messages = context.enrichedMessages || context.messages;
+    const last = messages[messages.length - 1];
+    if (!last || last.role !== 'user') return context;
+    const reminder = noWebSearchReminder(
+      context.processedContent?.metadata?.citations ?? [],
+    );
+    return {
+      ...context,
+      enrichedMessages: [
+        ...messages.slice(0, -1),
+        prependContextToMessage(last, reminder),
+      ],
+    };
+  }
+
+  /**
+   * The instruction that keeps an agent's own documents and web findings
+   * apart in the answer's wording (sourceProvenance.ts). Empty on turns
+   * without a knowledge base.
+   */
+  private static provenanceNote(
+    context: ChatContext,
+    existingCitations: Citation[],
+    webCount: number,
+  ): string {
+    const note = sourceProvenanceNote({
+      existing: existingCitations,
+      webCount,
+      knowledgeSearch: context.agentKnowledge?.status ?? 'none',
+    });
+    return note ? `\n\n${note}` : '';
+  }
+
+  /**
+   * The note for the model when a search ran and found nothing usable. A
+   * plain model is told to answer from its own knowledge; an agent bound to
+   * its owner's instructions reports the miss and follows those instead.
+   */
+  private static emptySearchNotice(context: ChatContext): string {
+    const agentGuidance = agentSearchGuidance(context);
+    if (agentGuidance) return agentEmptySearchNotice(agentGuidance);
+    return (
+      `Note: a live web search ran for this request but found no useful sources. ` +
+      `Mention that ONCE, briefly. Then answer the user's ACTUAL question confidently from your own knowledge, as specifically as you can. ` +
+      `If you do not have specific knowledge of the event or fact being asked about, say so in one sentence and suggest narrowing the question — ` +
+      `do NOT pad the answer with generic background, and do not apologize repeatedly or speculate about why the search failed.`
+    );
+  }
+
+  /**
+   * The conversation the router classifies. When the turn carries an
+   * agent's knowledge search, the router receives the passages through
+   * `agentGuidance`, so the retrieval stage's system message (the same
+   * passages wrapped in answer-writing rules) is left out: it would only
+   * reach the router in conversations short enough to fit its history
+   * window, making the decision depend on conversation length.
+   */
+  private static routerConversation(
+    messages: Message[],
+    agentGuidance: AgentSearchGuidance | undefined,
+  ): Message[] {
+    if (!agentGuidance?.knowledge) return messages;
+    return messages.filter((message) => message.role !== 'system');
   }
 
   /** Decides and runs this turn's tools (search, sub-tool interpreter). */
@@ -540,11 +634,22 @@ export class ToolRouterEnricher extends BasePipelineStage {
         },
         ToolRouterEnricher.unmountedFilesNote(staged.unmounted),
       );
+      context = ToolRouterEnricher.withRouterNote(
+        context,
+        ToolRouterEnricher.mountedWithoutTextNote(staged.mountedWithoutText),
+      );
     }
     const interpreterRequested = interpreterRequestedAny && !nativeInterpreter;
 
+    // "Always search" forces a search for a plain model. On an M365 agent
+    // it does not: the owner's instructions decide when the agent may go to
+    // the web and on which websites, and a user setting must not widen
+    // that (a forced search on a handbook agent would cite whatever the
+    // open web returns). There the mode means "search is available".
     const forceWebSearch =
-      searchRequested && context.searchMode === SearchMode.ALWAYS;
+      searchRequested &&
+      context.searchMode === SearchMode.ALWAYS &&
+      !context.m365Agent;
     const forceInterpreter =
       interpreterRequested &&
       context.interpreterMode === InterpreterMode.ALWAYS;
@@ -591,6 +696,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // the Bing agent paths expand it themselves, SearXNG cannot).
     const plansQueries =
       searchRequested && this.resolveSearchProvider(context) === 'searxng';
+    const agentGuidance = agentSearchGuidance(context);
+    // An agent's rules can limit WHERE a search looks, so a forced search
+    // is planned for agent turns on every backend.
     const planForcedSearch = forceWebSearch && plansQueries;
     // Citations from the most recent searched turn: follow-up questions
     // about that data are answered by re-fetching THOSE articles rather
@@ -619,11 +727,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
             false,
             context.telemetry,
           ),
-        messages: baseMessages,
+        messages: ToolRouterEnricher.routerConversation(
+          baseMessages,
+          agentGuidance,
+        ),
         currentMessage,
         region: auxiliaryRegion(context.user.region, context.hostedRegion),
         decisionFallback: this.decisionFallbackFor(context),
         forceWebSearch: false,
+        // Owner rules only bear on a search that is still undecided or
+        // being planned; an interpreter-only decision stays generic.
+        ...(agentGuidance && undecidedSearch ? { agentGuidance } : {}),
         considerCodeExecution: undecidedInterpreter,
         hasPriorSearchCitations: undecidedSearch && priorCitations.length > 0,
         hasPriorSearchState: undecidedSearch && priorSearch !== null,
@@ -646,6 +760,13 @@ export class ToolRouterEnricher extends BasePipelineStage {
             degradedRegion: decided.degradedRegion,
           },
         };
+      }
+      if (decided.knowledgeBaseAnswers !== undefined) {
+        // The one line that explains an agent's fallback search (or its
+        // absence) when reading a turn's log.
+        console.log(
+          `[ToolRouterEnricher] Agent knowledge base answers the question: ${decided.knowledgeBaseAnswers}; web search decided: ${decided.tools.includes('web_search')}`,
+        );
       }
     } else {
       console.log(
@@ -700,6 +821,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
       searchFollowUp: decided.searchFollowUp,
       searchContinue: decided.searchContinue,
       searchLanguage: decided.searchLanguage,
+      searchSites: decided.searchSites,
       codeTask: forceInterpreter ? rawUserPrompt : decided.codeTask,
     };
 
@@ -708,7 +830,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const followUpRequested =
       toolResponse.searchFollowUp === true && priorCitations.length > 0;
     if (toolResponse.tools.length === 0 && !followUpRequested) {
-      return context;
+      return ToolRouterEnricher.withNoWebSearchReminder(context);
     }
 
     let workingContext = context;
@@ -740,8 +862,18 @@ export class ToolRouterEnricher extends BasePipelineStage {
         ? Math.min(MAX_SEARCH_RESULT_COUNT, Math.max(options.resultCount, 12))
         : options.resultCount;
 
+      // Why the search ran, kept with the search's record so a reader can
+      // see that an agent fell back to the web and within which limits.
+      const webSearchReason = context.m365Agent
+        ? agentWebSearchReason({
+            agentName: context.m365Agent.name,
+            knowledgeSearch: context.agentKnowledge?.status ?? 'none',
+            knowledgeBaseAnswers: decided.knowledgeBaseAnswers,
+            sites: toolResponse.searchSites ?? [],
+          })
+        : undefined;
       workingContext = await this.executeWebSearch(
-        workingContext,
+        { ...workingContext, webSearchReason },
         toolResponse.searchQueries?.length
           ? toolResponse.searchQueries
           : [toolResponse.searchQuery || currentMessage],
@@ -753,7 +885,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
           // single-fact lookups answer from the fastest one.
           deep: toolResponse.searchComprehensive === true,
           category: toolResponse.searchCategory,
-          question: rawUserPrompt,
+          question: questionWithinSites(
+            rawUserPrompt,
+            toolResponse.searchSites ?? [],
+          ),
           language: toolResponse.searchLanguage,
           continuation:
             toolResponse.searchContinue && priorSearch
@@ -983,10 +1118,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
 
           const emptyNotice: string =
             searchResult.metadata?.emptyNotice ??
-            `Note: a live web search ran for this request but found no useful sources. ` +
-              `Mention that ONCE, briefly. Then answer the user's ACTUAL question confidently from your own knowledge, as specifically as you can. ` +
-              `If you do not have specific knowledge of the event or fact being asked about, say so in one sentence and suggest narrowing the question — ` +
-              `do NOT pad the answer with generic background, and do not apologize repeatedly or speculate about why the search failed.`;
+            ToolRouterEnricher.emptySearchNotice(context);
           const lastMsg = baseMessages[baseMessages.length - 1];
           return {
             ...context,
@@ -1076,10 +1208,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           console.warn(
             '[ToolRouterEnricher] Search citations were all unusable; answering from model knowledge',
           );
-          const emptyNotice =
-            `Note: a live web search ran for this request but found no useful sources. ` +
-            `Mention that ONCE, briefly. Then answer the user's ACTUAL question confidently from your own knowledge, as specifically as you can — ` +
-            `do NOT pad the answer with generic background.`;
+          const emptyNotice = ToolRouterEnricher.emptySearchNotice(context);
           const lastMsgEmpty = baseMessages[baseMessages.length - 1];
           return {
             ...context,
@@ -1103,7 +1232,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
               .join('\n')
           : '';
 
-        const searchContext = `Web Search results:\n\n${truncatedSearchText}\n\nAvailable sources:\n${citationReferences}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.`;
+        const searchContext = `Web Search results:\n\n${truncatedSearchText}\n\nAvailable sources:\n${citationReferences}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.${ToolRouterEnricher.provenanceNote(context, existingCitations, truncatedCitations.length)}`;
 
         // Merge search context into the last user message so it works with ALL
         // model providers (OpenAI, Anthropic, DeepSeek, Llama, etc.)
@@ -1123,13 +1252,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
         // prompt and would render as orphans.
         const newCitations = truncatedCitations;
 
-        const mergedCitations = [
-          ...existingCitations,
-          ...newCitations.map((c, idx) => ({
-            ...c,
-            number: existingCitations.length + idx + 1,
-          })),
-        ];
+        const mergedCitations = mergeWebCitations(
+          existingCitations,
+          newCitations,
+        );
 
         console.log(
           '[ToolRouterEnricher] Merging citations - existing:',
@@ -1899,20 +2025,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
       const references = digest.citations
         .map((c, idx) => `[${citationOffset + idx + 1}] ${c.title || c.url}`)
         .join('\n');
-      const followUpBlock = `${digestText}\n\nAvailable sources:\n${references}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.`;
+      const followUpBlock = `${digestText}\n\nAvailable sources:\n${references}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.${ToolRouterEnricher.provenanceNote(context, existingCitations, digest.citations.length)}`;
 
       const lastMsg = baseMessages[baseMessages.length - 1];
       const enrichedMessages = [
         ...baseMessages.slice(0, -1),
         this.prependContextToMessage(lastMsg, followUpBlock),
       ];
-      const mergedCitations = [
-        ...existingCitations,
-        ...digest.citations.map((c, idx) => ({
-          ...c,
-          number: citationOffset + idx + 1,
-        })),
-      ];
+      const mergedCitations = mergeWebCitations(
+        existingCitations,
+        digest.citations,
+      );
 
       await this.emitSearchRecord(
         context,
@@ -2001,20 +2124,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const references = digest.citations
       .map((c, idx) => `[${citationOffset + idx + 1}] ${c.title || c.url}`)
       .join('\n');
-    const searchContext = `Web Search results:\n\n${digestText}\n\nAvailable sources:\n${references}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.`;
+    const searchContext = `Web Search results:\n\n${digestText}\n\nAvailable sources:\n${references}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.${ToolRouterEnricher.provenanceNote(context, existingCitations, digest.citations.length)}`;
 
     const lastMsg = baseMessages[baseMessages.length - 1];
     const enrichedMessages = [
       ...baseMessages.slice(0, -1),
       this.prependContextToMessage(lastMsg, searchContext),
     ];
-    const mergedCitations = [
-      ...existingCitations,
-      ...digest.citations.map((c, idx) => ({
-        ...c,
-        number: citationOffset + idx + 1,
-      })),
-    ];
+    const mergedCitations = mergeWebCitations(
+      existingCitations,
+      digest.citations,
+    );
 
     await this.emitSearchRecord(
       context,
@@ -2062,6 +2182,11 @@ export class ToolRouterEnricher extends BasePipelineStage {
 
     const MAX_QUERY_CHARS = 500;
     const subject = ToolRouterEnricher.truncate(query, MAX_QUERY_CHARS);
+    // An agent turn's search says, next to what it found, why the agent
+    // went to the web at all (follow-up steps state their own reason).
+    const agentReason = step ? undefined : context.webSearchReason;
+    const outcomeWithReason =
+      outcome && agentReason ? `${outcome}\n${agentReason}` : outcome;
     ToolRouterEnricher.searchRecordSeq += 1;
     await context.emitMarker(
       emitToolCallRecord({
@@ -2076,7 +2201,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           ...(step?.why ? { why: step.why } : {}),
         }),
         status: error ? 'failed' : 'completed',
-        output: outcome,
+        output: outcomeWithReason,
         error,
         duration_ms: durationMs,
       }),
@@ -2312,6 +2437,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
         context,
         ToolRouterEnricher.unmountedFilesNote(staged.unmounted),
       );
+      context = ToolRouterEnricher.withRouterNote(
+        context,
+        ToolRouterEnricher.mountedWithoutTextNote(staged.mountedWithoutText),
+      );
 
       let interpreterTimer: ReturnType<typeof setTimeout> | undefined;
       const result = await Promise.race([
@@ -2511,9 +2640,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
    * Loads the RAW bytes of the files in scope for this turn from blob
    * storage for the sandbox. Raw bytes matter: the interpreter must parse
    * the actual CSV/XLSX, not the text summary the file pipeline produced.
-   * Which files: the latest attachments, then the active files the
-   * ActiveFileInjector selected (so an upload from an earlier turn is
-   * openable, not just quoted), then earlier generated files — see
+   * Which files: the latest attachments, then the conversation's active
+   * files (so an upload from an earlier turn is openable, whether or not
+   * its text fit this turn's prompt), then earlier generated files — see
    * selectInterpreterInputRefs. Reads `context.messages` (not
    * enrichedMessages) because processors may have rewritten attachment
    * entries there.
@@ -2530,22 +2659,28 @@ export class ToolRouterEnricher extends BasePipelineStage {
    * the rest still load (one large file used to stop every file after it);
    * skipped and unreadable files are reported so the model can be told.
    *
-   * @returns The loaded files and the names of selected files not loaded.
+   * @returns The loaded files, the names of selected files not loaded, and
+   *          the names of loaded files whose text is not in the prompt.
    */
-  private async stageInterpreterInputFiles(
-    context: ChatContext,
-  ): Promise<{ files: CodeInterpreterInputFile[]; unmounted: string[] }> {
+  private async stageInterpreterInputFiles(context: ChatContext): Promise<{
+    files: CodeInterpreterInputFile[];
+    unmounted: string[];
+    mountedWithoutText: string[];
+  }> {
     const refs = selectInterpreterInputRefs({
       messages: context.messages,
       activeFiles: context.activeFiles,
       droppedActiveFileIds: context.activeFilesDroppedThisTurn,
     });
-    if (refs.length === 0) return { files: [], unmounted: [] };
+    if (refs.length === 0) {
+      return { files: [], unmounted: [], mountedWithoutText: [] };
+    }
 
     const userId = getUserIdFromSession(context.session);
     const blobStorageClient = createBlobStorageClient(context.session);
     const files: CodeInterpreterInputFile[] = [];
     const unmounted: string[] = [];
+    const mountedWithoutText: string[] = [];
     let totalBytes = 0;
 
     for (const ref of refs) {
@@ -2572,6 +2707,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
           data,
           mimeType: getContentType(extension),
         });
+        if (ref.textOmittedFromPrompt) mountedWithoutText.push(ref.filename);
       } catch (err) {
         // A missing blob must not sink the run — the interpreter still gets
         // the task plus whatever attachments DID load.
@@ -2582,7 +2718,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
         unmounted.push(ref.filename);
       }
     }
-    return { files, unmounted };
+    return { files, unmounted, mountedWithoutText };
   }
 
   /**
@@ -2629,45 +2765,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
       : text;
   }
 
-  /**
-   * Prepends context text to a message's content.
-   * Handles both string and array content formats.
-   */
+  /** See {@link prependContextToMessage} (messageContext.ts). */
   private prependContextToMessage(message: Message, context: string): Message {
-    if (typeof message.content === 'string') {
-      return {
-        ...message,
-        content: `${context}\n\n---\n\n${message.content}`,
-      };
-    }
-
-    if (Array.isArray(message.content)) {
-      // Prepend to the first text block only
-      const hasText = message.content.some((c) => c.type === 'text');
-      if (hasText) {
-        let modified = false;
-        const modifiedContent = message.content.map((c) => {
-          if (!modified && c.type === 'text' && 'text' in c) {
-            modified = true;
-            return { ...c, text: `${context}\n\n---\n\n${c.text}` };
-          }
-          return c;
-        });
-        return { ...message, content: modifiedContent };
-      }
-
-      // No text content, add as first item
-      return {
-        ...message,
-        content: [{ type: 'text', text: context }, ...message.content],
-      };
-    }
-
-    // Fallback: convert to string
-    return {
-      ...message,
-      content: `${context}\n\n---\n\n${String(message.content)}`,
-    };
+    return prependContextToMessage(message, context);
   }
 
   /**

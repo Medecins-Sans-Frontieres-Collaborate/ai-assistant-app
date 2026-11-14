@@ -52,7 +52,7 @@ export const DropdownMoreSection: React.FC<DropdownMoreSectionProps> = ({
         type="button"
         onClick={onToggleExpanded}
         aria-expanded={expanded}
-        className="flex items-center gap-1.5 w-full min-h-11 px-3 py-2 text-left text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150"
+        className="flex items-center gap-1.5 w-full min-h-11 px-3 py-2 text-start text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150"
       >
         <IconChevronDown
           size={16}
@@ -62,7 +62,7 @@ export const DropdownMoreSection: React.FC<DropdownMoreSectionProps> = ({
           aria-hidden="true"
         />
         <span className="truncate">{t('dropdown.sectionMore')}</span>
-        <span className="ml-auto text-xs text-gray-400 dark:text-gray-500">
+        <span className="ms-auto text-xs text-gray-400 dark:text-gray-500">
           {items.length}
         </span>
       </button>

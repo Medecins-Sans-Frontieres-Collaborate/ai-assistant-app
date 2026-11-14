@@ -187,7 +187,7 @@ export const FieldPolicyTab: FC = () => {
                       {t(`field.${field}.description`)}
                     </span>
                   </span>
-                  <span className={`${ADMIN_MUTED} ml-auto shrink-0`}>
+                  <span className={`${ADMIN_MUTED} ms-auto shrink-0`}>
                     {shown ? t('fields.shown') : t('fields.hidden')}
                   </span>
                 </label>
@@ -270,7 +270,7 @@ const ColumnRow: FC<{
         <span className="break-all font-mono text-xs text-black dark:text-white">
           {column}
         </span>
-        {detail && <span className={`${ADMIN_MUTED} ml-2`}>{detail}</span>}
+        {detail && <span className={`${ADMIN_MUTED} ms-2`}>{detail}</span>}
       </span>
       <select
         aria-label={t('fields.classifyAs', { column })}

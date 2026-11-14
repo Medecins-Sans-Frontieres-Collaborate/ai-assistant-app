@@ -170,6 +170,7 @@ async function getVisiblePromptAgentEntries(
         agentName: promptAgent.id,
         source: PROMPT_AGENT_SOURCE,
         type: 'prompt',
+        allowWebSearch: promptAgent.allowWebSearch !== false,
       });
     }
   }
@@ -217,6 +218,7 @@ async function getVisibleM365AgentEntries(
         agentName: m365Agent.id,
         source: M365_AGENT_SOURCE,
         type: 'm365',
+        allowWebSearch: m365Agent.allowWebSearch === true,
       });
     }
   }

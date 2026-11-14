@@ -86,7 +86,11 @@ const LOCALE_NAMES: Record<string, string> = {
   ja: 'Japanese',
   km: 'Khmer',
   ko: 'Korean',
-  ku: 'Kurdish',
+  // `ku` is the Kurdish macrolanguage; the app offers one variety under it.
+  // Naming only "Kurdish" let the model drift between Kurmanji (Latin
+  // script) and Sorani (Arabic script) from one run to the next. The choice
+  // is recorded in lib/utils/app/locales.ts.
+  ku: 'Central Kurdish (Sorani), written in the Arabic script — never Kurmanji and never the Latin alphabet',
   ln: 'Lingala',
   mg: 'Malagasy',
   my: 'Burmese',

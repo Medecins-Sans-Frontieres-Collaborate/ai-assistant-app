@@ -37,6 +37,10 @@ import {
   clampPasteAttachmentChars,
 } from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
+import {
+  ANALYSIS_STRIP_HEIGHT,
+  clampAnalysisStripHeight,
+} from '@/lib/utils/shared/translation/runProgress';
 
 import { VoiceSet } from '@/types/drafter';
 import { FormTemplate } from '@/types/formFill';
@@ -848,6 +852,15 @@ interface SettingsStore {
   setConfirmStopFromKeyboard: (enabled: boolean) => void;
   setAutoClearResolvedEdits: (enabled: boolean) => void;
   setReviewOverwriteAcknowledged: (acknowledged: boolean) => void;
+  /**
+   * Hides the Translation workspace's analysis strip. A preference of the
+   * person, not of one conversation: it applies to every translation.
+   */
+  translationAnalysisHidden: boolean;
+  setTranslationAnalysisHidden: (hidden: boolean) => void;
+  /** Height of the expanded analysis strip, in CSS pixels. */
+  translationAnalysisHeight: number;
+  setTranslationAnalysisHeight: (height: number) => void;
   setMapImportDefaultConfidence: (value: 'high' | 'medium' | 'low') => void;
   setSuggestRevisions: (enabled: boolean) => void;
   setSuggestRevisionsException: (
@@ -1134,6 +1147,8 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
       reviewOverwriteAcknowledged: false,
+      translationAnalysisHidden: false,
+      translationAnalysisHeight: ANALYSIS_STRIP_HEIGHT.default,
       mapImportDefaultConfidence: 'high',
       m365Connected: true,
       m365ConnectedUserSet: false,
@@ -1979,6 +1994,10 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ autoClearResolvedEdits: enabled }),
       setReviewOverwriteAcknowledged: (acknowledged) =>
         set({ reviewOverwriteAcknowledged: acknowledged }),
+      setTranslationAnalysisHidden: (hidden) =>
+        set({ translationAnalysisHidden: hidden }),
+      setTranslationAnalysisHeight: (height) =>
+        set({ translationAnalysisHeight: clampAnalysisStripHeight(height) }),
       setMapImportDefaultConfidence: (value) =>
         set({ mapImportDefaultConfidence: value }),
 
@@ -2120,6 +2139,8 @@ export const useSettingsStore = create<SettingsStore>()(
           confirmStopFromKeyboard: true,
           autoClearResolvedEdits: false,
           reviewOverwriteAcknowledged: false,
+          translationAnalysisHidden: false,
+          translationAnalysisHeight: ANALYSIS_STRIP_HEIGHT.default,
           mapImportDefaultConfidence: 'high',
           suggestRevisions: true,
           suggestRevisionsExceptions: {
@@ -2141,7 +2162,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 74, // v74: m365Digest* (daily digest defaults)
+      version: 75, // v75: translationAnalysis* (analysis strip preferences)
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2246,6 +2267,8 @@ export const useSettingsStore = create<SettingsStore>()(
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
         autoClearResolvedEdits: state.autoClearResolvedEdits,
         reviewOverwriteAcknowledged: state.reviewOverwriteAcknowledged,
+        translationAnalysisHidden: state.translationAnalysisHidden,
+        translationAnalysisHeight: state.translationAnalysisHeight,
         mapImportDefaultConfidence: state.mapImportDefaultConfidence,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
@@ -3003,6 +3026,20 @@ export const useSettingsStore = create<SettingsStore>()(
                 )
                 .slice(0, 10)
             : [];
+        }
+
+        // Version 74 → 75: Translation analysis strip preferences. Shown at
+        // the default height — what these users already had. The height is
+        // clamped, not trusted: it round-trips through localStorage.
+        if (version < 75) {
+          if (typeof state.translationAnalysisHidden !== 'boolean') {
+            state.translationAnalysisHidden = false;
+          }
+          state.translationAnalysisHeight = clampAnalysisStripHeight(
+            typeof state.translationAnalysisHeight === 'number'
+              ? state.translationAnalysisHeight
+              : ANALYSIS_STRIP_HEIGHT.default,
+          );
         }
 
         // Whatever version it came from, the per-set rows are only kept as

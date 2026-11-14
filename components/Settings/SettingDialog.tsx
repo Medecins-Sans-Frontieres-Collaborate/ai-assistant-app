@@ -298,7 +298,7 @@ export function SettingDialog() {
 
           <div
             ref={modalRef}
-            className="dark:border-netural-400 inline-block transform rounded-lg border border-gray-300 bg-white text-left align-bottom shadow-xl transition-all dark:bg-surface-dark-base sm:my-8 w-full md:max-w-[800px] lg:max-w-[900px] xl:max-w-[1000px] sm:align-middle animate-modal-in"
+            className="dark:border-netural-400 inline-block transform rounded-lg border border-gray-300 bg-white text-start align-bottom shadow-xl transition-all dark:bg-surface-dark-base sm:my-8 w-full md:max-w-[800px] lg:max-w-[900px] xl:max-w-[1000px] sm:align-middle animate-modal-in"
             role="dialog"
           >
             <div className="flex flex-col md:flex-row h-[550px] md:h-[700px]">

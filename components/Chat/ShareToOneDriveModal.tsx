@@ -347,7 +347,7 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
             </button>
 
             {customizeOpen && (
-              <div className="mt-3 space-y-3 border-l-2 border-gray-200 pl-4 dark:border-gray-700">
+              <div className="mt-3 space-y-3 border-s-2 border-gray-200 ps-4 dark:border-gray-700">
                 {!messageContent && (
                   <>
                     <label className={checkboxClasses}>

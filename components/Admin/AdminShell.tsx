@@ -82,7 +82,7 @@ export const AdminShell: FC<AdminShellProps> = ({ areas, children }) => {
           onClick={() => setIsSettingsOpen(true)}
           aria-label={t('admin.openSettings')}
           title={t('admin.openSettings')}
-          className="ml-auto rounded-md p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+          className="ms-auto rounded-md p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
         >
           <IconSettings size={18} aria-hidden="true" />
         </button>

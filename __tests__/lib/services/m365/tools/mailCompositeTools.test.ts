@@ -6,7 +6,7 @@
  * count-bearing activity markers, Retry-After honoring, and configured-
  * mailbox enforcement. Graph is mocked at mintGraphToken + global fetch
  * (composites do targeted raw fetches to see Retry-After); the phishing
- * screen and the utility OpenAI client are mocked/injected.
+ * screen is mocked and the utility passes run on a fake auxiliary chain.
  */
 import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
@@ -29,11 +29,11 @@ import {
   dedupeByConversation,
   setNowFnForTests,
   setSleepFnForTests,
-  setUtilityClientForTests,
 } from '@/lib/services/m365/tools/mailOrchestration';
 import { M365ToolInputError } from '@/lib/services/m365/tools/shared';
 
-import type OpenAI from 'openai';
+import { installFakeAuxiliaryCompletions } from '../../auxiliary/fakeCompletions';
+
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mintGraphTokenMock = vi.hoisted(() => vi.fn());
@@ -61,10 +61,14 @@ const session = {
 } as unknown as Session;
 
 const fetchMock = vi.fn();
+/** The utility passes' fake auxiliary chain (installed per test). */
 const utilityCreateMock = vi.fn();
-const fakeUtilityClient = {
-  chat: { completions: { create: utilityCreateMock } },
-} as unknown as OpenAI;
+let fakeCompletions: ReturnType<typeof installFakeAuxiliaryCompletions>;
+
+/** No residency-eligible utility model answers: the passes degrade. */
+function utilityUnavailable(): void {
+  utilityCreateMock.mockRejectedValue(new Error('no eligible utility model'));
+}
 
 function makeCtx(
   overrides: Partial<M365ToolExecutionContext> = {},
@@ -143,7 +147,7 @@ beforeEach(() => {
   screenMock.mockResolvedValue({ verdict: 'clear' });
   setSleepFnForTests(async () => {});
   setNowFnForTests(() => FIXED_NOW);
-  setUtilityClientForTests(fakeUtilityClient);
+  fakeCompletions = installFakeAuxiliaryCompletions(utilityCreateMock);
   // Fresh Response per call — a Response body is single-read.
   fetchMock.mockImplementation(async () => jsonResponse({ value: [] }));
 });
@@ -152,8 +156,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
   setNowFnForTests(null);
   setSleepFnForTests(null);
-  // null (not undefined): never let a stray call construct the real client.
-  setUtilityClientForTests(null);
+  fakeCompletions.restore();
 });
 
 // ---------------------------------------------------------------------------
@@ -289,7 +292,10 @@ describe('mailDigest', () => {
 
     expect(utilityCreateMock).toHaveBeenCalledTimes(1);
     const params = utilityCreateMock.mock.calls[0][0];
-    expect(params.model).toBe('gpt-5-mini');
+    // No hardcoded model: the residency chain picks the deployment, in the
+    // user's region (unknown region resolves EU).
+    expect(params.model).toBe('');
+    expect(fakeCompletions.regions).toEqual(['EU']);
     expect(params.reasoning_effort).toBe('low');
     expect(params.response_format.json_schema.strict).toBe(true);
     expect(result).toContain('3 messages in 2 conversations');
@@ -305,7 +311,7 @@ describe('mailDigest', () => {
   });
 
   it('degrades to heuristic classification with a note when the utility model is unavailable', async () => {
-    setUtilityClientForTests(null);
+    utilityUnavailable();
     fetchMock.mockResolvedValue(
       jsonResponse({
         value: [
@@ -334,7 +340,7 @@ describe('mailDigest', () => {
     ).rejects.toBeInstanceOf(M365ToolInputError);
     expect(fetchMock).not.toHaveBeenCalled();
 
-    setUtilityClientForTests(null);
+    utilityUnavailable();
     const ctx = makeCtx({ sharedMailboxes: ['Triage@Contoso.com'] });
     await mailDigest(req, session, { mailbox: 'triage@contoso.com' }, ctx);
     const url = String(fetchMock.mock.calls[0][0]);
@@ -342,7 +348,7 @@ describe('mailDigest', () => {
   });
 
   it('stops scanning at the 500-envelope cap and says so', async () => {
-    setUtilityClientForTests(null);
+    utilityUnavailable();
     let page = 0;
     fetchMock.mockImplementation(async () => {
       page++;
@@ -606,7 +612,7 @@ describe('mailThreadBrief', () => {
   });
 
   it('falls back to a raw timeline with a degraded note when the utility model is unavailable', async () => {
-    setUtilityClientForTests(null);
+    utilityUnavailable();
     fetchMock.mockResolvedValue(jsonResponse({ value: threadMessages }));
     const result = await mailThreadBrief(
       req,
@@ -738,7 +744,7 @@ describe('mailDeepSearch', () => {
   });
 
   it('degrades end-to-end without the utility model: goal as query, recency ranking, excerpts', async () => {
-    setUtilityClientForTests(null);
+    utilityUnavailable();
     const hit = graphMessage({
       id: 'm1',
       conversationId: 'conv1',
@@ -782,7 +788,7 @@ describe('mailDeepSearch', () => {
   });
 
   it('honors Retry-After on 429 with a single backoff-and-retry', async () => {
-    setUtilityClientForTests(null);
+    utilityUnavailable();
     const sleeps: number[] = [];
     setSleepFnForTests(async (ms) => {
       sleeps.push(ms);
@@ -899,7 +905,7 @@ describe('mailCommitments', () => {
   });
 
   it('degrades to the keyword heuristic with a note when the utility model is unavailable', async () => {
-    setUtilityClientForTests(null);
+    utilityUnavailable();
     routeMailFolders({
       sent: [
         graphMessage({

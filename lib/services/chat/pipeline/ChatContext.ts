@@ -1,6 +1,7 @@
 import { Session } from 'next-auth';
 
 import { M365Agent, PromptAgent } from '@/lib/services/agentAccess/types';
+import type { AgentKnowledgeRetrieval } from '@/lib/services/chat/routing/agentSearchGuidance';
 import { ModelSelector } from '@/lib/services/shared';
 
 import type {
@@ -410,6 +411,21 @@ export interface ChatContext {
    * the Foundry execution path.
    */
   m365Agent?: M365Agent;
+
+  /**
+   * What the agent's knowledge search returned this turn, set by the
+   * agent's retrieval stage (M365AgentEnricher). The tool router reads it
+   * to apply owner rules such as "search the web when the documents do not
+   * have the answer" (lib/services/chat/routing/agentSearchGuidance.ts).
+   */
+  agentKnowledge?: AgentKnowledgeRetrieval;
+
+  /**
+   * Why this turn's web search ran on an agent turn (the agent's documents
+   * lacked the answer, the user forced it, ...), in plain words. Shown with
+   * the search's tool record (sourceProvenance.ts: agentWebSearchReason).
+   */
+  webSearchReason?: string;
 
   /**
    * Layer-2 trim result: the agent's source ids the REQUESTING USER'S own

@@ -15,7 +15,7 @@
  * - Every body passes screenMailMessage BEFORE it can reach a sub-model
  *   pass or tool output; flagged bodies are excluded from analysis and
  *   surfaced as flagged envelopes with reasons — never silently dropped.
- * - Utility-model (gpt-5-mini) passes are BATCHED (one call over many
+ * - Utility-model passes (residency-routed auxiliary chain) are BATCHED (one call over many
  *   envelopes) with strict json_schema output carrying message ids +
  *   one-line reasons; any failure returns null and callers degrade to
  *   deterministic behavior — utility unavailability never fails a tool.
@@ -31,6 +31,11 @@
 import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
+import {
+  getAuxiliaryCompletions,
+  parseJsonReply,
+} from '@/lib/services/auxiliary/auxiliaryCompletion';
+import type { AuxiliaryRegion } from '@/lib/services/auxiliary/types';
 import { createLimiter } from '@/lib/services/m365/graphLimiter';
 import type { M365ToolExecutionContext } from '@/lib/services/m365/tools/executor';
 import {
@@ -43,6 +48,9 @@ import {
   stripHtml,
   truncateText,
 } from '@/lib/services/m365/tools/shared';
+import { auxiliaryRegion } from '@/lib/services/skills/skillRegion';
+
+import type { UserRegion } from '@/lib/utils/shared/region';
 
 import type OpenAI from 'openai';
 
@@ -576,80 +584,23 @@ export function flaggedSummaryLines(flagged: FlaggedEnvelope[]): string[] {
 }
 
 // ---------------------------------------------------------------------------
-// Utility model (gpt-5-mini) — batched, structured, best-effort
+// Utility model — batched, structured, best-effort, residency-routed
 // ---------------------------------------------------------------------------
 
-const UTILITY_MODEL = 'gpt-5-mini';
 const UTILITY_BUDGET_MS = 12_000;
 const UTILITY_MAX_COMPLETION_TOKENS = 1_500;
 
-let utilityOverride: OpenAI | null | undefined;
-let builtUtilityClient: OpenAI | null | undefined;
-
-/** Tests inject a fake client (or null for the degraded path). */
-export function setUtilityClientForTests(
-  client: OpenAI | null | undefined,
-): void {
-  utilityOverride = client;
-  builtUtilityClient = undefined;
-}
-
 /**
- * Replicates ServiceContainer's OpenAI-compatible Foundry client: Entra
- * bearer per request (DefaultAzureCredential → cognitiveservices scope)
- * with the static OPENAI_API_KEY as fallback. Construction is lazy and
- * cached; any failure yields null → callers degrade deterministically.
+ * The residency region for a user's mail passes: EU users (and users of
+ * unknown region) always resolve EU.
  */
-async function getUtilityClient(): Promise<OpenAI | null> {
-  if (utilityOverride !== undefined) return utilityOverride;
-  if (builtUtilityClient !== undefined) return builtUtilityClient;
-  try {
-    const [{ env }, { default: OpenAICtor }, azureIdentity] = await Promise.all(
-      [
-        import('@/config/environment'),
-        import('openai'),
-        import('@azure/identity'),
-      ],
-    );
-    const baseURL =
-      env.AZURE_AI_FOUNDRY_OPENAI_ENDPOINT ||
-      (env.AZURE_AI_FOUNDRY_ENDPOINT
-        ? `${env.AZURE_AI_FOUNDRY_ENDPOINT.replace('/api/projects/default', '')}/openai/v1/`
-        : undefined);
-    if (!baseURL) {
-      builtUtilityClient = null;
-      return null;
-    }
-    const tokenProvider = azureIdentity.getBearerTokenProvider(
-      new azureIdentity.DefaultAzureCredential(),
-      'https://cognitiveservices.azure.com/.default',
-    );
-    const entraPreferredFetch: typeof fetch = async (input, init) => {
-      try {
-        const token = await tokenProvider();
-        const headers = new Headers(init?.headers);
-        headers.set('Authorization', `Bearer ${token}`);
-        return fetch(input, { ...init, headers });
-      } catch {
-        return fetch(input, init);
-      }
-    };
-    builtUtilityClient = new OpenAICtor({
-      baseURL,
-      apiKey: env.OPENAI_API_KEY || 'placeholder',
-      fetch: entraPreferredFetch,
-    });
-  } catch (error) {
-    console.warn(
-      '[mailOrchestration] Utility client unavailable; composites degrade to deterministic behavior:',
-      error instanceof Error ? error.message : error,
-    );
-    builtUtilityClient = null;
-  }
-  return builtUtilityClient;
+export function mailUtilityRegion(session: Session): AuxiliaryRegion {
+  return auxiliaryRegion(session.user?.region as UserRegion | undefined);
 }
 
 export interface UtilityJsonOptions {
+  /** Residency region for the pass (mailUtilityRegion). */
+  region: AuxiliaryRegion;
   system: string;
   user: string;
   schemaName: string;
@@ -658,58 +609,63 @@ export interface UtilityJsonOptions {
 }
 
 /**
- * One batched, short-budget, strict-json utility pass. Returns null on ANY
- * failure (no client, timeout, bad JSON) — never throws, so composites
- * degrade instead of failing. Mail content passes through transiently;
- * nothing is logged or persisted.
+ * The request one utility pass sends. Exported so the auxiliary readiness
+ * probe (auxiliary/probes.ts) exercises exactly what runtime sends.
+ */
+export function utilityJsonRequest(
+  options: Omit<UtilityJsonOptions, 'region'>,
+): OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming {
+  return {
+    model: '',
+    // 'low' (not minimal), matching McpPlannerService: analysis quality
+    // over a few envelopes is the whole point of the pass.
+    reasoning_effort: 'low',
+    max_completion_tokens:
+      options.maxCompletionTokens ?? UTILITY_MAX_COMPLETION_TOKENS,
+    messages: [
+      { role: 'system', content: options.system },
+      { role: 'user', content: options.user },
+    ],
+    response_format: {
+      type: 'json_schema',
+      json_schema: {
+        name: options.schemaName,
+        strict: true,
+        schema: options.schema,
+      },
+    },
+  };
+}
+
+/**
+ * One batched, short-budget, strict-json utility pass through the shared
+ * helper-model path (operation `mailAnalysis`) in the user's residency
+ * region. Returns null on ANY failure (no eligible model, timeout, bad
+ * JSON) — never throws, so composites degrade instead of failing. Mail
+ * content passes through transiently; nothing is logged or persisted.
  */
 export async function runUtilityJson<T>(
   options: UtilityJsonOptions,
 ): Promise<T | null> {
-  const client = await getUtilityClient();
-  if (!client) return null;
-  let timer: ReturnType<typeof setTimeout> | undefined;
   try {
-    const timeout = new Promise<never>((_, reject) => {
-      timer = setTimeout(
-        () => reject(new Error('Utility budget exceeded')),
-        UTILITY_BUDGET_MS,
-      );
+    const completions = await getAuxiliaryCompletions();
+    const answer = await completions.completeJson({
+      operation: 'mailAnalysis',
+      region: options.region,
+      params: utilityJsonRequest(options),
+      accept: (response) => {
+        const value = parseJsonReply(response);
+        return value && typeof value === 'object' ? (value as T) : undefined;
+      },
+      timeoutMs: UTILITY_BUDGET_MS,
     });
-    const response = await Promise.race([
-      client.chat.completions.create({
-        model: UTILITY_MODEL,
-        // 'low' (not minimal), matching McpPlannerService: analysis quality
-        // over a few envelopes is the whole point of the pass.
-        reasoning_effort: 'low',
-        max_completion_tokens:
-          options.maxCompletionTokens ?? UTILITY_MAX_COMPLETION_TOKENS,
-        messages: [
-          { role: 'system', content: options.system },
-          { role: 'user', content: options.user },
-        ],
-        response_format: {
-          type: 'json_schema',
-          json_schema: {
-            name: options.schemaName,
-            strict: true,
-            schema: options.schema,
-          },
-        },
-      }),
-      timeout,
-    ]);
-    const content = response.choices[0]?.message?.content;
-    if (!content) return null;
-    return JSON.parse(content) as T;
+    return answer.value;
   } catch (error) {
     console.warn(
       '[mailOrchestration] Utility pass failed; degrading to deterministic behavior:',
       error instanceof Error ? error.message : error,
     );
     return null;
-  } finally {
-    if (timer !== undefined) clearTimeout(timer);
   }
 }
 

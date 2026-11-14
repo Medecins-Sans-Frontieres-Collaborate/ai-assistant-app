@@ -61,7 +61,7 @@ export const TypeaheadDropdown: FC<TypeaheadDropdownProps> = ({
   if (!typeaheadDropdownOpen(status, suggestions.length)) return null;
 
   const frame =
-    'absolute left-0 top-full z-20 mt-1 w-full min-w-[220px] rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800';
+    'absolute start-0 top-full z-20 mt-1 w-full min-w-[220px] rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800';
 
   if (suggestions.length === 0) {
     return (

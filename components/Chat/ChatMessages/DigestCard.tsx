@@ -485,7 +485,7 @@ export const DigestCard: FC<DigestCardProps> = ({ state, conversationId }) => {
                   return next;
                 })
               }
-              className="flex w-full items-center gap-2 px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-800/60"
+              className="flex w-full items-center gap-2 px-3 py-2 text-start hover:bg-gray-50 dark:hover:bg-gray-800/60"
             >
               {open ? (
                 <IconChevronDown size={16} aria-hidden="true" />

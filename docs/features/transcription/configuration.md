@@ -16,12 +16,11 @@ Note: The system looks for a deployment named `whisper` on your Azure OpenAI res
 
 #### 2. Batch Transcription Configuration (Legacy)
 
-Required only if using the Azure Speech Batch API for large files.
+Used by the Azure Speech batch API (large files) and fast transcription (the "Azure Speech" engine). Both authenticate as the application identity (Entra ID), which needs the **Cognitive Services Speech User** role on the account. Whisper uses the same identity and needs **Cognitive Services OpenAI User**.
 
-| Variable              | Description                           | Default  |
-| :-------------------- | :------------------------------------ | :------- |
-| `AZURE_SPEECH_KEY`    | API key for Azure Speech Services.    | -        |
-| `AZURE_SPEECH_REGION` | Azure region for the Speech resource. | `eastus` |
+| Variable                | Description                                                                                                        | Default                 |
+| :---------------------- | :----------------------------------------------------------------------------------------------------------------- | :---------------------- |
+| `AZURE_SPEECH_ENDPOINT` | Speech account custom-domain endpoint (`https://<name>.cognitiveservices.azure.com`). Regional hosts are rejected. | `AZURE_OPENAI_ENDPOINT` |
 
 #### 3. FFmpeg Configuration
 

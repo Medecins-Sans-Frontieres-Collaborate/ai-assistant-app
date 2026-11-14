@@ -106,7 +106,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
               {t('settings.skills.autoApply')}
             </span>
           </label>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-7">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ms-7">
             {t('settings.skills.autoApplyDescription')}
           </p>
         </div>
@@ -461,13 +461,13 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
                   {t('settings.aboutYou.shareBasicInfo')}
                 </span>
               </label>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-7">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ms-7">
                 {t('settings.aboutYou.shareBasicInfoDescription')}
               </p>
 
               {/* Conditional fields when enabled */}
               {state.includeUserInfoInPrompt && (
-                <div className="mt-4 space-y-4 ml-7">
+                <div className="mt-4 space-y-4 ms-7">
                   {/* Preferred Name */}
                   <div>
                     <label className="text-sm font-medium text-black dark:text-gray-200">

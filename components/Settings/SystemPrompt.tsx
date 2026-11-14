@@ -204,7 +204,7 @@ export const SystemPrompt: FC<Props> = ({
       <div className="relative">
         <textarea
           ref={textareaRef}
-          className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 pr-12 text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-gray-600 dark:text-gray-100"
+          className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 pe-12 text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-gray-600 dark:text-gray-100"
           style={{
             resize: 'none',
             maxHeight: '300px',
@@ -225,13 +225,13 @@ export const SystemPrompt: FC<Props> = ({
             onClick={handleClear}
             aria-label={t('settings.clearField')}
             title={t('settings.clearField')}
-            className="absolute right-0 top-0 inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-500 hover:text-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:text-gray-400 dark:hover:text-gray-100"
+            className="absolute end-0 top-0 inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-500 hover:text-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:text-gray-400 dark:hover:text-gray-100"
           >
             <IconX size={16} aria-hidden="true" />
           </button>
         )}
       </div>
-      <div className="mt-1 text-right text-xs text-gray-500 dark:text-gray-400 tabular-nums">
+      <div className="mt-1 text-end text-xs text-gray-500 dark:text-gray-400 tabular-nums">
         {t('settings.characterCount', {
           current: valueLength,
           max: maxLength,

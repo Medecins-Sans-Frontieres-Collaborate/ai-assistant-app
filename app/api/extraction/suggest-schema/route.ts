@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 
-import { ServiceContainer } from '@/lib/services/ServiceContainer';
+import { recordTokenUsage } from '@/lib/services/observability/tokenUsageRecorder';
+import { auxiliaryRegion } from '@/lib/services/skills/skillRegion';
 
 import {
   badRequestResponse,
@@ -12,6 +13,7 @@ import {
   ALL_FIELD_TYPES,
   proposeFlatSchema,
 } from '@/lib/utils/server/extraction/proposeFlatSchema';
+import type { UserRegion } from '@/lib/utils/shared/region';
 
 import { auth } from '@/auth';
 import { z } from 'zod';
@@ -90,9 +92,13 @@ export async function POST(req: NextRequest): Promise<Response> {
       userPromptParts.push(`Sample material:\n${sampleText.slice(0, 4000)}`);
     }
 
-    const openAIClient = ServiceContainer.getInstance().getOpenAIClient();
-
-    const fields = await proposeFlatSchema(openAIClient, userPromptParts, {
+    // Residency-routed helper call in the user's region. There is no chat
+    // model in scope on this route, so no chat-model fallback.
+    const fields = await proposeFlatSchema(userPromptParts, {
+      region: auxiliaryRegion(session.user?.region as UserRegion | undefined),
+      onUsage: (usage, model) =>
+        recordTokenUsage(usage, model, session.user, false),
+      signal: req.signal,
       allowedTypes: ALL_FIELD_TYPES,
       requireMetric: false,
     });

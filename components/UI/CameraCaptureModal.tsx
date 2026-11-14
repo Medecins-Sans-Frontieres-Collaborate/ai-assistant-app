@@ -161,7 +161,7 @@ export const CameraCaptureModal: FC<CameraCaptureModalProps> = ({
       disabled={error !== null}
       className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white px-4 py-2 rounded-md flex items-center justify-center"
     >
-      <IconCamera className="w-6 h-6 mr-2" />
+      <IconCamera className="w-6 h-6 me-2" />
       <span>{t('Take photo')}</span>
     </button>
   );

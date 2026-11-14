@@ -103,7 +103,7 @@ export function AnnouncementBanner({
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-[59] pointer-events-none"
+      className="fixed top-0 start-0 end-0 z-[59] pointer-events-none"
       role={announcement.severity === 'critical' ? 'alert' : 'status'}
     >
       <div className="flex">
@@ -143,13 +143,13 @@ export function AnnouncementBanner({
                       {/* A delegated notice always says who it is from,
                           so it cannot pass as an org-wide one. */}
                       {announcement.from && (
-                        <span className="mr-1.5 rounded bg-black/5 px-1 py-px text-[10px] font-medium uppercase tracking-wide text-gray-600 dark:bg-white/10 dark:text-gray-300">
+                        <span className="me-1.5 rounded bg-black/5 px-1 py-px text-[10px] font-medium uppercase tracking-wide text-gray-600 dark:bg-white/10 dark:text-gray-300">
                           {announcement.from}
                         </span>
                       )}
                       <span className="font-semibold">{title}</span>
                       {body && (
-                        <span className="ml-2 font-normal text-gray-700 dark:text-gray-300">
+                        <span className="ms-2 font-normal text-gray-700 dark:text-gray-300">
                           {body}
                         </span>
                       )}

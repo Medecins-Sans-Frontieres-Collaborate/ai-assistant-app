@@ -67,10 +67,10 @@ interface CostCalculatorProps {
 }
 
 const TH =
-  'px-2 py-1 text-left text-xs font-medium text-gray-500 dark:text-gray-400';
+  'px-2 py-1 text-start text-xs font-medium text-gray-500 dark:text-gray-400';
 const TD = 'px-2 py-1 text-sm text-black dark:text-white';
 const TD_NUM =
-  'px-2 py-1 text-right text-sm tabular-nums text-black dark:text-white';
+  'px-2 py-1 text-end text-sm tabular-nums text-black dark:text-white';
 
 /**
  * The estimator (docs/LIMITS_COST_INSIGHTS_DESIGN.md §4c): users × requests
@@ -583,20 +583,20 @@ const Results: FC<ResultsProps> = ({
           <thead>
             <tr>
               <th className={TH}>{t('cost.calculator.columns.model')}</th>
-              <th className={`${TH} text-right`}>
+              <th className={`${TH} text-end`}>
                 {t('cost.calculator.columns.perRequest')}
               </th>
-              <th className={`${TH} text-right`}>
+              <th className={`${TH} text-end`}>
                 {t('cost.calculator.columns.requestsPerPeriod', {
                   period: periodLabel,
                 })}
               </th>
-              <th className={`${TH} text-right`}>
+              <th className={`${TH} text-end`}>
                 {t('cost.calculator.columns.spendPerPeriod', {
                   period: periodLabel,
                 })}
               </th>
-              <th className={`${TH} text-right`}>
+              <th className={`${TH} text-end`}>
                 {t('cost.calculator.columns.spendPerYear')}
               </th>
             </tr>

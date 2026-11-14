@@ -21,6 +21,7 @@ import {
   type AuxiliaryReference,
   type AuxiliaryRegion,
   PURPOSE_OPERATIONS,
+  operationsServed,
   referenceKey,
 } from '@/lib/services/auxiliary/types';
 
@@ -97,6 +98,7 @@ export function AuxiliaryModelsPanel() {
     (chain) =>
       chain.state !== 'ready' ||
       chain.redundancy < 2 ||
+      !!chain.unservedOperations?.length ||
       chain.candidates.some(
         (candidate) => candidate.retiringSoon || candidate.retirementUnknown,
       ),
@@ -145,6 +147,15 @@ export function AuxiliaryModelsPanel() {
                 </p>
                 <p>{t('eligibleCount', { count: chain.redundancy })}</p>
                 {chain.runtimeFallback && <p>{t('runtimeFallback')}</p>}
+                {!!chain.unservedOperations?.length && (
+                  <p>
+                    {t('unservedOperations', {
+                      operations: chain.unservedOperations
+                        .map((operation) => t(`operation.${operation}`))
+                        .join(', '),
+                    })}
+                  </p>
+                )}
                 {chain.candidates.some((entry) => entry.retirementUnknown) && (
                   <p>{t('retirementUnknown')}</p>
                 )}
@@ -430,7 +441,7 @@ function ChainEditor({
       );
   const checked = (status?: AuxiliaryCandidateStatus) =>
     !!status?.fingerprint &&
-    PURPOSE_OPERATIONS[purpose].every((operation) => {
+    operationsServed(purpose, status.capabilities).every((operation) => {
       const latest = status.observations
         .filter((entry) => entry.operation === operation)
         .sort((a, b) => b.checkedAt.localeCompare(a.checkedAt))[0];
@@ -518,11 +529,16 @@ function ChainEditor({
                         return (
                           <li key={operation}>
                             {t(`operation.${operation}`)}:{' '}
-                            {latest
-                              ? latest.success
-                                ? t('passed')
-                                : t(`reason.${latest.reason ?? 'provider'}`)
-                              : t('neverChecked')}
+                            {!operationsServed(
+                              purpose,
+                              status.capabilities,
+                            ).includes(operation)
+                              ? t('notSupported')
+                              : latest
+                                ? latest.success
+                                  ? t('passed')
+                                  : t(`reason.${latest.reason ?? 'provider'}`)
+                                : t('neverChecked')}
                           </li>
                         );
                       })}

@@ -11,6 +11,7 @@ import { OpenAIModel } from '@/types/openai';
 
 import { CodeInterpreterInputFile } from '../tools/CodeInterpreterTool';
 
+import { FILE_OR_CHAT_DELIVERABLE_RULE } from '@/lib/constants/generatedFiles';
 import type { AzureOpenAI } from 'openai';
 import type OpenAI from 'openai';
 import { toFile } from 'openai';
@@ -151,11 +152,12 @@ export class ResponsesApiHandler {
     const fileFormatInstruction =
       codeInterpreter && codeInterpreter.fileIds.length > 0
         ? `\n\nA Python code interpreter is available with the user's uploaded file(s) mounted in its working directory.${mountedList} ` +
-          `When the request asks you to TRANSFORM an attached file — shorten or trim it to a target length (words, characters, or pages), lengthen or expand it, rewrite, ` +
-          `reformat, translate, or clean it — or to produce any downloadable artifact, you MUST use the code interpreter and actually perform the ` +
+          `${FILE_OR_CHAT_DELIVERABLE_RULE} ` +
+          `When a file IS the deliverable — a whole document shortened or trimmed to a target length (words, characters, or pages), lengthened, restructured, ` +
+          `reformatted, translated, or cleaned, or any downloadable artifact — you MUST use the code interpreter and actually perform the ` +
           `task now. Do NOT respond with a plan, recommendations, or a description of how you would do it. ` +
           `Save the result as a NEW file in the SAME format as the input — e.g. .docx in → .docx out via python-docx, .xlsx via openpyxl — unless ` +
-          `the user explicitly asks for a different output format, and do not deliver the transformed content as chat text. ` +
+          `the user explicitly asks for a different output format, and do not deliver that transformed document as chat text. ` +
           `For questions ABOUT the file's content that need no new file, answer directly without running code.`
         : '';
 

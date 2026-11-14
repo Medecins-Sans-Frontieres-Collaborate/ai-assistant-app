@@ -23,6 +23,10 @@ import {
   restoreAgentSkillState,
 } from '@/lib/services/skills/skillTools';
 
+import {
+  OMITTED_CONTENT_PLACEHOLDER,
+  attachmentReferenceText,
+} from '@/lib/utils/server/chat/providerMessages';
 import { composeExtractionPrompt } from '@/lib/utils/server/extraction/composeExtractionPrompt';
 import { proposeFlatSchema } from '@/lib/utils/server/extraction/proposeFlatSchema';
 import { recipesToResponseFormat } from '@/lib/utils/server/extraction/recipeToJsonSchema';
@@ -45,6 +49,7 @@ import {
 } from '@/types/extractionRecipe';
 
 import { StandardChatService } from '../StandardChatService';
+import { auxiliaryTurnRouting } from '../auxiliaryTurnRouting';
 import { planningTokensPerMinute } from '../enrichers/interpreterCapability';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
@@ -863,8 +868,8 @@ export class StandardChatHandler extends BasePipelineStage {
    * by `ExtractionEnricher` runs against the user's model.
    *
    * Auto mode is two stages:
-   *   1. Propose a flat schema via `proposeFlatSchema` (gpt-5-mini
-   *      structured-output call). The result is synthesised into a
+   *   1. Propose a flat schema via `proposeFlatSchema` (a residency-
+   *      routed helper-model call). The result is synthesised into a
    *      transient `ExtractionRecipe` (id `auto`) so Stage 2 reuses the
    *      same code path as recipe mode.
    *   2. Run the strict `json_schema` extraction with the synthesised
@@ -893,9 +898,16 @@ export class StandardChatHandler extends BasePipelineStage {
         '[StandardChatHandler] Auto-mode stage 1: proposing flat schema',
       );
 
-      const openAIClient = ServiceContainer.getInstance().getOpenAIClient();
+      // Residency-routed helper call, with the user's chat model as the
+      // fallback (see auxiliaryTurnRouting).
+      const routing = auxiliaryTurnRouting(context, this.standardChatService);
       const promptParts = this.messagesToPromptParts(messagesToSend);
-      proposedFields = await proposeFlatSchema(openAIClient, promptParts);
+      proposedFields = await proposeFlatSchema(promptParts, {
+        region: routing.region,
+        fallback: routing.structuredFallback,
+        onUsage: routing.onUsage,
+        signal: routing.signal,
+      });
 
       // Synthesise a transient recipe so Stage 2 reuses recipe mode.
       const now = new Date().toISOString();
@@ -1113,6 +1125,28 @@ export class StandardChatHandler extends BasePipelineStage {
   }
 
   /**
+   * Adds an attachment reference to a message's remaining content: appended
+   * to its first text part, or as the only text part when it has none.
+   *
+   * @param content - Content parts left after filtering.
+   * @param reference - Reference text, or undefined when no file was removed.
+   * @returns New content parts; `content` itself when there is no reference.
+   */
+  private static withAttachmentReference(
+    content: MessageContent[],
+    reference: string | undefined,
+  ): MessageContent[] {
+    if (!reference) return content;
+    const textIndex = content.findIndex((c) => c.type === 'text');
+    if (textIndex === -1) {
+      return [{ type: 'text', text: reference }, ...content];
+    }
+    const textPart = content[textIndex] as TextMessageContent;
+    const text = textPart.text ? `${textPart.text}\n\n${reference}` : reference;
+    return content.map((c, i) => (i === textIndex ? { ...textPart, text } : c));
+  }
+
+  /**
    * Strips content types not supported by LLM APIs from messages.
    * This is a defensive measure to ensure 'file_url' and other internal
    * content types never reach the API even if upstream processing fails.
@@ -1132,19 +1166,21 @@ export class StandardChatHandler extends BasePipelineStage {
         return message;
       }
 
-      // Filter out unsupported content types
-      const filteredContent = message.content.filter((c: MessageContent) =>
-        ALLOWED_CONTENT_TYPES.includes(c.type),
+      // Filter out unsupported content types. Removed files leave a named
+      // reference behind (see attachmentReferenceText): a history message
+      // that was only an upload must not read as a failed upload.
+      const filteredContent = StandardChatHandler.withAttachmentReference(
+        message.content.filter((c: MessageContent) =>
+          ALLOWED_CONTENT_TYPES.includes(c.type),
+        ),
+        attachmentReferenceText(message.content),
       );
 
-      // If all content was filtered out, add placeholder text
+      // Nothing left and no file to name: keep the turn non-empty.
       if (filteredContent.length === 0) {
-        console.warn(
-          '[StandardChatHandler] All content was filtered out, adding placeholder',
-        );
         return {
           ...message,
-          content: '[File content could not be processed]',
+          content: OMITTED_CONTENT_PLACEHOLDER,
         };
       }
 

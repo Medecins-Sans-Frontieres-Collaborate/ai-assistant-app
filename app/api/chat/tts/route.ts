@@ -6,6 +6,10 @@ import { guardLimit } from '@/lib/services/limits/routeGuard';
 
 import { cleanMarkdown } from '@/lib/utils/app/clean';
 import { unauthorizedResponse } from '@/lib/utils/server/api/apiResponse';
+import {
+  getApplicationCredential,
+  resolveSpeechEndpoint,
+} from '@/lib/utils/server/azure/cognitiveServicesAuth';
 import { createApiLoggingContext } from '@/lib/utils/server/observability';
 
 import {
@@ -224,34 +228,23 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // Azure Speech Services configuration
-    const region = process.env.AZURE_SPEECH_REGION || 'eastus';
-    const subscriptionKey = process.env.AZURE_SPEECH_KEY;
-
-    let speechConfig: sdk.SpeechConfig;
-
-    if (subscriptionKey) {
-      // Use subscription key authentication
-      speechConfig = sdk.SpeechConfig.fromSubscription(subscriptionKey, region);
-    } else {
-      // Fall back to managed identity (Entra ID) token
-      const { DefaultAzureCredential } = await import('@azure/identity');
-      const credential = new DefaultAzureCredential();
-      const tokenResponse = await credential.getToken(
-        'https://cognitiveservices.azure.com/.default',
-      );
-
-      if (!tokenResponse || !tokenResponse.token) {
-        throw new Error(
-          'Failed to get authentication token for Speech Services',
-        );
-      }
-
-      speechConfig = sdk.SpeechConfig.fromAuthorizationToken(
-        tokenResponse.token,
-        region,
+    // Azure Speech, authenticated as the application identity (Entra ID).
+    // The SDK needs the account's custom-domain endpoint for this; it acquires
+    // and refreshes the token itself.
+    const speechEndpoint = resolveSpeechEndpoint();
+    if (!speechEndpoint) {
+      return NextResponse.json(
+        {
+          error:
+            'Text-to-speech is not configured: set AZURE_SPEECH_ENDPOINT (or AZURE_OPENAI_ENDPOINT) to the Speech account custom-domain endpoint',
+        },
+        { status: 503 },
       );
     }
+    const speechConfig = sdk.SpeechConfig.fromEndpoint(
+      new URL(speechEndpoint),
+      getApplicationCredential(),
+    );
 
     // Set output format
     speechConfig.speechSynthesisOutputFormat =

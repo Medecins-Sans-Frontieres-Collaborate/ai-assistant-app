@@ -248,7 +248,10 @@ export const WebSearchConfigPanel: FC = () => {
               update({ [key]: clamp(key, e.target.valueAsNumber) })
             }
           />
-          <span className={ADMIN_MUTED}>{t('rangeHint', { min, max })}</span>
+          {/* A numeric range reads low to high in every language. */}
+          <span className={ADMIN_MUTED} dir="ltr">
+            {t('rangeHint', { min, max })}
+          </span>
         </div>
         {descriptionKey && <p className={ADMIN_HINT}>{t(descriptionKey)}</p>}
         <p className={ADMIN_HINT}>

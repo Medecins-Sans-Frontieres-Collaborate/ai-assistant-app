@@ -34,9 +34,12 @@ export function nativeInterpreterCapable(context: ChatContext): boolean {
     // functionality via the existing bounded pre-turn sub-tool path.
     !context.agentSkillsEnabled &&
     !context.model?.isCustomSourceModel &&
-    // Only REAL (network) MCP servers force the chat.completions loop —
-    // the builtin M365 toolset must not disable the native interpreter.
-    !context.mcpServers?.some((entry) => !entry.builtin)
+    // ANY connector toolset — network servers and the builtin M365 one
+    // alike — sends the turn through the chat.completions tool loop
+    // (StandardChatService), which cannot carry the native interpreter.
+    // Claiming native capability there skips the sub-tool round-trip too,
+    // leaving the turn with no way to run code or produce a file.
+    !context.mcpServers?.length
   );
 }
 

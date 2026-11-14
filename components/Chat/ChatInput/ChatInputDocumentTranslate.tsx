@@ -462,11 +462,11 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
             }}
             onFocus={() => setShowTargetDropdown(true)}
             placeholder={t('documentTranslation.searchLanguage')}
-            className="w-full pl-10 pr-4 py-3 text-base bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
+            className="w-full ps-10 pe-4 py-3 text-base bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
           />
           <IconLanguage
             size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute start-3 top-1/2 -translate-y-1/2 text-gray-400"
           />
         </div>
         {showTargetDropdown && (
@@ -486,7 +486,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                     key={lang.code}
                     type="button"
                     onClick={() => selectTargetLanguage(lang.code)}
-                    className={`w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                    className={`w-full flex items-center gap-2 text-start px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
                       targetLanguage === lang.code
                         ? 'bg-blue-50 dark:bg-blue-900/20'
                         : ''
@@ -503,7 +503,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                     {!lang.officiallySupported && (
                       <IconAlertTriangle
                         size={14}
-                        className="ml-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
+                        className="ms-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
                         aria-label={t(
                           'documentTranslation.unofficialBadgeLabel',
                         )}
@@ -541,7 +541,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
               >
                 <span>
                   {t('documentTranslation.sourceLanguage')}
-                  <span className="ml-2 text-xs font-normal text-gray-500 dark:text-gray-400">
+                  <span className="ms-2 text-xs font-normal text-gray-500 dark:text-gray-400">
                     ({t('documentTranslation.autoDetect')})
                   </span>
                 </span>
@@ -579,17 +579,17 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                   }}
                   onFocus={() => setShowSourceDropdown(true)}
                   placeholder={t('documentTranslation.searchLanguage')}
-                  className="w-full pl-10 pr-10 py-2.5 text-sm bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
+                  className="w-full ps-10 pe-10 py-2.5 text-sm bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
                 />
                 <IconLanguage
                   size={16}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  className="absolute start-3 top-1/2 -translate-y-1/2 text-gray-400"
                 />
                 {sourceLanguage && (
                   <button
                     type="button"
                     onClick={clearSourceLanguage}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    className="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                   >
                     <IconX size={14} />
                   </button>
@@ -615,7 +615,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                           key={lang.code}
                           type="button"
                           onClick={() => selectSourceLanguage(lang.code)}
-                          className={`w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                          className={`w-full flex items-center gap-2 text-start px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
                             sourceLanguage === lang.code
                               ? 'bg-blue-50 dark:bg-blue-900/20'
                               : ''
@@ -632,7 +632,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                           {!lang.officiallySupported && (
                             <IconAlertTriangle
                               size={14}
-                              className="ml-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
+                              className="ms-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
                               aria-label={t(
                                 'documentTranslation.unofficialBadgeLabel',
                               )}

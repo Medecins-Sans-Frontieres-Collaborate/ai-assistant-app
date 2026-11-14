@@ -23,6 +23,10 @@ import {
 } from './toolLoopCore';
 import { reconstructTranscript } from './toolLoopReducer';
 import { mcpToolsToOpenAITools } from './toolNameMapping';
+import {
+  REASONING_EFFORT_WITH_TOOLS,
+  isToolReasoningConflict,
+} from './toolReasoningConflict';
 
 import { ResolvedMcpServer } from '@/config/mcpCatalog';
 import type OpenAI from 'openai';
@@ -81,6 +85,13 @@ export interface McpToolLoopOptions {
 }
 
 type OpenAIMessage = OpenAI.Chat.Completions.ChatCompletionMessageParam;
+
+/**
+ * Deployments seen refusing tools alongside a reasoning effort (see
+ * toolReasoningConflict). Learned at runtime, per server process, so the
+ * refused first attempt is paid once rather than on every turn.
+ */
+const modelsNeedingReasoningOffWithTools = new Set<string>();
 
 function buildOpenAIStrategy(
   options: McpToolLoopOptions,
@@ -161,11 +172,33 @@ function buildOpenAIStrategy(
         if (!allowToolUse) params.tool_choice = 'none';
       }
 
-      const completionStream = (await options.handler.executeRequest(
-        params,
-        true,
-        options.signal,
-      )) as AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>;
+      const reasoningOffKnown = modelsNeedingReasoningOffWithTools.has(
+        params.model,
+      );
+      if (reasoningOffKnown && openAITools.length > 0) {
+        params.reasoning_effort = REASONING_EFFORT_WITH_TOOLS as never;
+      }
+      const requestRound = () =>
+        options.handler.executeRequest(params, true, options.signal) as Promise<
+          AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>
+        >;
+      let completionStream: AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>;
+      try {
+        completionStream = await requestRound();
+      } catch (error) {
+        // The refusal arrives before any output, so repeating the request
+        // with reasoning off is invisible to the user. The deployment is
+        // remembered, so later rounds and turns skip the refused attempt.
+        if (reasoningOffKnown || !isToolReasoningConflict(error)) {
+          throw error;
+        }
+        console.warn(
+          '[McpToolLoop] Model rejects tools with reasoning_effort; retrying this turn with reasoning off',
+        );
+        modelsNeedingReasoningOffWithTools.add(params.model);
+        params.reasoning_effort = REASONING_EFFORT_WITH_TOOLS as never;
+        completionStream = await requestRound();
+      }
       // Headers are in: the model has started. Signal BEFORE consuming.
       onModelStarted?.();
 

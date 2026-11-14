@@ -222,9 +222,105 @@ export interface TranslationTargetLanguage {
   custom?: boolean;
 }
 
+/**
+ * Reference to an uploaded document: one larger than one translation batch,
+ * or one that can be translated whole. Only the reference is persisted; the
+ * document's page text stays on the server and is re-read on demand
+ * (workflow state must stay small).
+ */
+export interface TranslationSourceDocument {
+  /** Original filename, for display. */
+  name: string;
+  /** Blob reference accepted by `/api/file/process`. */
+  url: string;
+  /** Highest page number that has text. */
+  lastPage: number;
+  /** Pages currently loaded as source text, e.g. `"1-40, 45"`. */
+  selectedPages: string;
+  /**
+   * True when the whole document is loaded as source text, so there are no
+   * pages to choose between. The reference is kept only so the file can be
+   * translated whole.
+   */
+  fitsOneBatch?: boolean;
+  /** True when the server can read the file with OCR. */
+  ocrAvailable?: boolean;
+  /** True when the text in use was read with OCR. */
+  ocrApplied?: boolean;
+  /**
+   * True when no text could be extracted (a scanned file) and the reference
+   * is kept only to translate the document whole. `sourceText` is then not
+   * taken from this document, and `lastPage` and `selectedPages` are empty.
+   */
+  noText?: boolean;
+}
+
+/** How a translation is produced. */
+export type TranslationMode = 'quick' | 'agentic' | 'document';
+
+/** The modes that translate the source text with the language model. */
+export type TranslationTextMode = Exclude<TranslationMode, 'document'>;
+
+/**
+ * A whole-document translation the conversation refers to. A reference
+ * only: the files, the per-page text and the corrections live on the
+ * server, never in workflow state.
+ */
+export interface TranslationDocumentJob {
+  jobId: string;
+  /**
+   * `translating`: the job is running. `preparing`: the translated file
+   * exists and its page text is being read for the first time. `ready`:
+   * pages can be read. `failed`: terminal, see `error`.
+   */
+  status: 'translating' | 'preparing' | 'ready' | 'failed';
+  /** ISO timestamp of the submission. */
+  submittedAt: string;
+  /** Name of the uploaded file. */
+  sourceName: string;
+  /** Name of the translated file, used for downloads. */
+  translatedFilename: string;
+  /** Lowercase file extension without the dot. */
+  fileExtension: string;
+  /** Target language code the job was submitted with. */
+  targetLanguage: string;
+  /** ISO timestamp after which the server deletes the files. */
+  expiresAt?: string;
+  /** Known once the page text has been read. */
+  pageCount?: number;
+  /** 1-based page the reader is on. */
+  page: number;
+  /**
+   * The page whose translation currently occupies `finalText`, or undefined
+   * while the reader has not taken the pane over.
+   */
+  viewPage?: number;
+  /** Failure message when `status` is `failed`. */
+  error?: string;
+}
+
+/** The text-mode result set aside while the reader occupies the pane. */
+export interface TranslationTextResult {
+  finalText?: string;
+  assessment?: TranslationAssessment;
+}
+
 export interface TranslationWorkflowState {
   kind: 'translation';
   sourceText: string;
+  /**
+   * Set while `sourceText` holds a selection of pages from a document too
+   * large to translate in one batch.
+   */
+  sourceDocument?: TranslationSourceDocument;
+  /** The whole-document translation of `sourceDocument`, if one was run. */
+  documentJob?: TranslationDocumentJob;
+  /**
+   * `finalText` and `assessment` as they were before the document reader
+   * took the translation pane over; restored when the user leaves
+   * `document` mode.
+   */
+  textModeResult?: TranslationTextResult;
   sourceLang?: string;
   /** Legacy locale-code field; superseded by targetLanguage. */
   targetLang?: string;
@@ -249,7 +345,12 @@ export interface TranslationWorkflowState {
    * glossaries', first guide winning among guides.
    */
   glossaryGuideIds?: string[];
-  mode: 'quick' | 'agentic';
+  /**
+   * `quick` and `agentic` translate the source text with the language
+   * model. `document` sends the whole uploaded file through document
+   * translation (layout kept) and reads the result page by page.
+   */
+  mode: TranslationMode;
   analysis?: TranslationAnalysis;
   rounds: TranslationReviewRound[];
   /** Deterministic glossary check of the run's final text (issue #131). */

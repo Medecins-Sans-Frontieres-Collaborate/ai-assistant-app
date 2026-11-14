@@ -100,6 +100,6 @@ Test the full routing and enrichment flow in `__tests__/lib/services/chat/enrich
 
 1.  **Privacy First**: Only send necessary data to external tools/agents. Avoid sending the full conversation history unless absolutely required.
 2.  **Graceful Failure**: Always wrap tool execution in try-catch blocks. If a tool fails, the chat should still proceed (possibly with a note to the user).
-3.  **Lightweight Routing**: Use efficient models (like `gpt-5-mini`) for routing to minimize latency.
+3.  **Lightweight Routing**: Route helper calls through `AuxiliaryCompletionService` (`lib/services/auxiliary/auxiliaryCompletion.ts`) with a new `AuxiliaryOperation` and a probe builder in `lib/services/auxiliary/probes.ts`; it runs on the small residency-verified models for the user's region.
 4.  **Citations**: When fetching external information, always provide citations in the `ToolResult` to maintain transparency.
 5.  **Structured Output**: Use JSON schemas for tool routing to ensure the results are easily machine-readable.

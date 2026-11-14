@@ -123,7 +123,7 @@ export const WebSearchSettingsPanel: FC = () => {
         <label className="flex items-center justify-between gap-3">
           <span className="text-sm font-bold text-black dark:text-gray-200">
             {t('sourcesLabel')}
-            <span className="ml-2 font-medium text-gray-600 dark:text-gray-300">
+            <span className="ms-2 font-medium text-gray-600 dark:text-gray-300">
               {webSearchOptions.resultCount}
             </span>
           </span>

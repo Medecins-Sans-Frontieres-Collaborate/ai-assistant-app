@@ -318,18 +318,18 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                 <IconWorld size={14} />
                 <span>{t('terms.translateForUnderstanding')}</span>
                 {isTranslating && (
-                  <IconLoader2 size={12} className="animate-spin ml-1" />
+                  <IconLoader2 size={12} className="animate-spin ms-1" />
                 )}
               </button>
 
               {/* Translation language dropdown */}
               {showTranslationDropdown && (
-                <div className="absolute top-full left-0 mt-1 w-48 max-h-48 overflow-y-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">
+                <div className="absolute top-full start-0 mt-1 w-48 max-h-48 overflow-y-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">
                   {translationLocales.map((locale) => (
                     <button
                       key={locale}
                       onClick={() => handleTranslate(locale)}
-                      className="w-full px-3 py-2 text-left text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="w-full px-3 py-2 text-start text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     >
                       {getAutonym(locale)}
                     </button>

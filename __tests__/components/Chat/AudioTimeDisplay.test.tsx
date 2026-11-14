@@ -156,7 +156,7 @@ describe('AudioTimeDisplay', () => {
       );
 
       const speedIndicator = screen.getByText('(1.5x)');
-      expect(speedIndicator).toHaveClass('ml-1');
+      expect(speedIndicator).toHaveClass('ms-1');
       expect(speedIndicator).toHaveClass('text-xs');
       expect(speedIndicator).toHaveClass('text-gray-500');
       expect(speedIndicator).toHaveClass('dark:text-gray-400');

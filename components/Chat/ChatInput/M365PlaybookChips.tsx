@@ -66,7 +66,7 @@ export const M365PlaybookChips: FC = () => {
         return (
           <span
             key={playbook.id}
-            className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 pl-2 pr-1 py-0.5 text-xs text-blue-800 dark:border-blue-800 dark:bg-blue-900/30 dark:text-blue-200"
+            className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 ps-2 pe-1 py-0.5 text-xs text-blue-800 dark:border-blue-800 dark:bg-blue-900/30 dark:text-blue-200"
           >
             <button
               type="button"

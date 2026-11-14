@@ -137,4 +137,43 @@ describe('Models and readiness', () => {
       screen.getByText(/Policy storage is unavailable/),
     ).toBeInTheDocument();
   });
+  it('marks capability-limited operations instead of reporting them unchecked', () => {
+    const result = mocks.hook();
+    const report = result.query.data;
+    const status = report.choices.EU.find(
+      (entry: { reference: { accountBinding: string } }) =>
+        entry.reference.accountBinding === 'EU',
+    );
+    status.capabilities = [];
+    status.observations = [
+      {
+        key: 'EU:classifier',
+        operation: 'skills',
+        fingerprint: status.fingerprint,
+        operationRevision: 1,
+        policyRevision: 'bootstrap:test',
+        checkedAt: new Date().toISOString(),
+        success: true,
+        durationMs: 10,
+        source: 'probe',
+        fallback: false,
+      },
+    ];
+    report.chains.find(
+      (chain: { purpose: string; region: string }) =>
+        chain.purpose === 'routing' && chain.region === 'EU',
+    ).unservedOperations = ['vision'];
+    mount();
+    expect(
+      screen.getByText(
+        'No model in this chain supports: Image and page reading. Add a model that does.',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getAllByText(/Image and page reading/).length,
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getByText('Not supported by this model', { exact: false }),
+    ).toBeInTheDocument();
+  });
 });

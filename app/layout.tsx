@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from 'next';
+import { getLocale } from 'next-intl/server';
 import { Inter } from 'next/font/google';
+
+import { localeDirection } from '@/lib/utils/app/locales';
 
 import './globals.css';
 
@@ -58,15 +61,27 @@ export const viewport: Viewport = {
 };
 
 /**
- * Root layout for the entire application
+ * Root layout for the entire application.
+ *
+ * The document's language and text direction come from the request's
+ * locale, resolved on the server. The locale is never in the URL
+ * (`localePrefix: 'never'`), so it cannot be read from the path on the
+ * client; doing that left every language rendering as left-to-right
+ * English markup.
  */
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getLocale();
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html
+      lang={locale}
+      dir={localeDirection(locale)}
+      suppressHydrationWarning
+      className="dark"
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -95,14 +110,6 @@ export default function RootLayout({
                   } else {
                     document.documentElement.classList.remove('dark');
                   }
-
-                  // Set RTL direction based on locale from URL path
-                  var pathSegments = window.location.pathname.split('/').filter(Boolean);
-                  var pathLocale = pathSegments[0] || 'en';
-                  var rtlLocales = ['ar', 'he', 'fa', 'ur'];
-                  var isRTL = rtlLocales.includes(pathLocale);
-                  document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-                  document.documentElement.lang = pathLocale;
                 } catch (e) {
                   // Fallback to dark on error
                   document.documentElement.classList.add('dark');

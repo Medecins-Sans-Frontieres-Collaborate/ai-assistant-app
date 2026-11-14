@@ -116,6 +116,7 @@ export function useAvailableAgents(): {
           description: agent.description,
           kind: agent.type,
           category: agent.category,
+          allowWebSearch: agent.allowWebSearch,
         });
       } else if (agent.type === 'org') {
         deduped.push({

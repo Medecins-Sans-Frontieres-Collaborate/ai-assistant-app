@@ -249,7 +249,7 @@ export const EmissionsChip: FC<EmissionsChipProps> = ({ conversation }) => {
       }`}
     >
       {isOpen && (
-        <div className="absolute bottom-full right-0 mb-2 w-72 rounded-lg border border-gray-200 bg-white p-3 text-xs shadow-lg dark:border-gray-700 dark:bg-surface-dark z-[10000]">
+        <div className="absolute bottom-full end-0 mb-2 w-72 rounded-lg border border-gray-200 bg-white p-3 text-xs shadow-lg dark:border-gray-700 dark:bg-surface-dark z-[10000]">
           <ImpactReadout
             title={t('emissions.chip.title')}
             rows={rows}

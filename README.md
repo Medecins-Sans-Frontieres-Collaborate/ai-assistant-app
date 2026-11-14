@@ -155,7 +155,7 @@ available to `DefaultAzureCredential` that has access to the storage account.
 
 ### Tech Stack
 
-- **Framework:** Next.js 16 (App Router with Turbopack)
+- **Framework:** Next.js 16 (App Router, webpack bundler)
 - **Language:** TypeScript 5.7
 - **UI Library:** React 19
 - **Styling:** Tailwind CSS 3.4

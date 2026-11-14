@@ -204,7 +204,7 @@ describe('SpeedControl', () => {
       );
 
       const dropdown = container.querySelector('.absolute');
-      expect(dropdown).toHaveClass('right-0');
+      expect(dropdown).toHaveClass('end-0');
       expect(dropdown).toHaveClass('bottom-full');
       expect(dropdown).toHaveClass('shadow-lg');
     });

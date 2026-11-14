@@ -210,7 +210,7 @@ const MailRow: FC<{
             {senderInitials(envelope)}
           </span>
           {unread && (
-            <span className="absolute -left-0.5 -top-0.5 h-2 w-2 rounded-full bg-blue-600">
+            <span className="absolute -start-0.5 -top-0.5 h-2 w-2 rounded-full bg-blue-600">
               <span className="sr-only">{t('unread')}</span>
             </span>
           )}
@@ -220,7 +220,7 @@ const MailRow: FC<{
           type="button"
           onClick={onToggleExpand}
           aria-expanded={expanded}
-          className="min-w-0 cursor-pointer text-left"
+          className="min-w-0 cursor-pointer text-start"
         >
           <div className="flex items-center gap-1.5">
             <span
@@ -322,7 +322,7 @@ const MailRow: FC<{
       </div>
 
       {expanded && (
-        <div className="space-y-1 pb-2 pl-[52px] pr-3">
+        <div className="space-y-1 pb-2 ps-[52px] pe-3">
           {envelope.preview && (
             <p className="max-h-32 overflow-y-auto whitespace-pre-wrap text-xs text-gray-600 dark:text-gray-400">
               {envelope.preview}
@@ -643,7 +643,7 @@ const M365MailImportBody: FC<{ onClose: () => void }> = ({ onClose }) => {
       <div className="relative">
         <IconSearch
           size={16}
-          className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+          className="absolute start-2.5 top-1/2 -translate-y-1/2 text-gray-400"
         />
         <input
           type="text"
@@ -659,14 +659,14 @@ const M365MailImportBody: FC<{ onClose: () => void }> = ({ onClose }) => {
             }
           }}
           placeholder={t('searchPlaceholder')}
-          className="w-full rounded-lg border border-gray-300 bg-gray-50 py-1.5 pl-8 pr-8 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder-gray-400"
+          className="w-full rounded-lg border border-gray-300 bg-gray-50 py-1.5 ps-8 pe-8 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder-gray-400"
         />
         {query && (
           <button
             type="button"
             onClick={() => setQuery('')}
             aria-label={t('clearSearch')}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+            className="absolute end-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
           >
             <IconX size={14} />
           </button>

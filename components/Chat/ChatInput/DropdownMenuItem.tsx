@@ -15,6 +15,12 @@ import { createPortal } from 'react-dom';
 
 import { useTranslations } from 'next-intl';
 
+import { isRtlElement } from '@/lib/utils/client/textDirection';
+
+/** Width of the info tooltip and its distance from the info icon. */
+const INFO_TOOLTIP_WIDTH_PX = 256;
+const INFO_TOOLTIP_GAP_PX = 8;
+
 export interface MenuItem {
   id: string;
   icon: React.ReactNode;
@@ -103,9 +109,13 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
     }
     if (infoIconRef.current) {
       const rect = infoIconRef.current.getBoundingClientRect();
+      // Opens toward the end edge: right of the icon, or left of it in
+      // right-to-left layouts.
       setTooltipPos({
-        left: rect.right + 8,
-        top: rect.top - 8,
+        left: isRtlElement(infoIconRef.current)
+          ? rect.left - INFO_TOOLTIP_GAP_PX - INFO_TOOLTIP_WIDTH_PX
+          : rect.right + INFO_TOOLTIP_GAP_PX,
+        top: rect.top - INFO_TOOLTIP_GAP_PX,
       });
     }
     setShowInfo(true);
@@ -142,8 +152,8 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
       <button
         id={`dropdown-item-${item.id}`}
         data-item-id={item.id}
-        className={`flex items-center gap-2.5 flex-1 min-w-0 py-2 pr-3 text-left text-sm focus:outline-none ${
-          nested ? 'pl-9' : 'pl-3'
+        className={`flex items-center gap-2.5 flex-1 min-w-0 py-2 pe-3 text-start text-sm focus:outline-none ${
+          nested ? 'ps-9' : 'ps-3'
         } ${disabled ? 'cursor-not-allowed' : ''}`}
         onClick={disabled ? undefined : item.onClick}
         role={item.toggle ? 'menuitemcheckbox' : 'menuitem'}
@@ -180,7 +190,7 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
         </span>
       </button>
 
-      <div className="relative self-stretch flex items-center gap-0.5 flex-shrink-0 pr-2">
+      <div className="relative self-stretch flex items-center gap-0.5 flex-shrink-0 pe-2">
         {/* Hover-revealed controls are overlaid on the label's tail rather than
             held in flow. Reserving their width permanently clipped labels on
             every row — and at 33 locales the long ones ("Audio/Video
@@ -188,7 +198,7 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
             them visible, since there the state is the information. */}
         {((hideable && onToggleHidden) || (pinnable && onTogglePin)) && (
           <div
-            className={`absolute right-full top-0 bottom-0 flex items-center gap-0.5 pl-6 rounded-md transition-opacity duration-150 motion-reduce:transition-none ${
+            className={`absolute end-full top-0 bottom-0 flex items-center gap-0.5 ps-6 rounded-md transition-opacity duration-150 motion-reduce:transition-none ${
               isSelected
                 ? 'bg-gray-100 dark:bg-gray-700'
                 : 'bg-white dark:bg-gray-800 group-hover:bg-gray-100 dark:group-hover:bg-gray-700'
@@ -322,7 +332,7 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
             aria-label={
               expanded ? t('dropdown.hideSources') : t('dropdown.showSources')
             }
-            className="px-2.5 py-3 -mr-1 rounded-md text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-200/70 dark:hover:bg-gray-600/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition-colors duration-150"
+            className="px-2.5 py-3 -me-1 rounded-md text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-200/70 dark:hover:bg-gray-600/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition-colors duration-150"
           >
             <IconChevronDown
               size={16}
@@ -340,8 +350,9 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
         typeof document !== 'undefined' &&
         createPortal(
           <div
-            className="fixed bg-gray-900 dark:bg-gray-800 text-white text-xs py-2 px-3 rounded-lg shadow-xl w-64 z-[10003] whitespace-pre-line border border-gray-700"
+            className="fixed bg-gray-900 dark:bg-gray-800 text-white text-xs py-2 px-3 rounded-lg shadow-xl z-[10003] whitespace-pre-line border border-gray-700"
             style={{
+              width: `${INFO_TOOLTIP_WIDTH_PX}px`,
               left: `${tooltipPos.left}px`,
               top: `${tooltipPos.top}px`,
             }}

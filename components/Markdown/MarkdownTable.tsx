@@ -64,7 +64,7 @@ function FormatMenu<F extends string>({
           key={format}
           role="menuitem"
           onClick={() => onSelect(format)}
-          className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+          className="w-full px-4 py-2 text-start text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
         >
           {t(labelKey)}
         </button>

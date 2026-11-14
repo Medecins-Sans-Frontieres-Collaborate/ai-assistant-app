@@ -1,4 +1,9 @@
-import { AssistantMessageGroup, Conversation, MessageType } from '@/types/chat';
+import {
+  ActiveFile,
+  AssistantMessageGroup,
+  Conversation,
+  MessageType,
+} from '@/types/chat';
 import { FolderInterface } from '@/types/folder';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
@@ -1337,6 +1342,68 @@ describe('conversationStore', () => {
       expect(state.selectedConversationId).toBeNull();
       expect(state.folders).toEqual([]);
       expect(state.searchTerm).toBe('');
+    });
+  });
+
+  describe('active file cap', () => {
+    const CONVERSATION_ID = 'conv-active';
+    const MAX_FILES = 2;
+
+    const activeFile = (
+      id: string,
+      addedAt: string,
+      over: Partial<ActiveFile> = {},
+    ): ActiveFile => ({
+      id,
+      url: `/api/file/${id}.docx`,
+      originalFilename: `${id}.docx`,
+      addedAt,
+      sourceMessageId: `m-${id}`,
+      status: 'idle',
+      ...over,
+    });
+
+    const activeIds = () =>
+      useConversationStore
+        .getState()
+        .conversations.find((c) => c.id === CONVERSATION_ID)!
+        .activeFiles!.map((f) => f.id);
+
+    beforeEach(() => {
+      useConversationStore.setState({
+        conversations: [
+          {
+            id: CONVERSATION_ID,
+            name: 'Active files',
+            messages: [],
+            activeFiles: [],
+            activeFilesMaxCount: MAX_FILES,
+          } as unknown as Conversation,
+        ],
+      });
+    });
+
+    it('holds the cap when every upload is auto-pinned', () => {
+      const { activateFile } = useConversationStore.getState();
+      const autoPinned = { pinned: true, autoPinned: true };
+      activateFile(CONVERSATION_ID, activeFile('a', '2026-11-01', autoPinned));
+      activateFile(CONVERSATION_ID, activeFile('b', '2026-11-02', autoPinned));
+      activateFile(CONVERSATION_ID, activeFile('c', '2026-11-03', autoPinned));
+
+      expect(activeIds()).toEqual(['b', 'c']);
+    });
+
+    it('keeps a file the user pinned themselves, even beyond the cap', () => {
+      const { activateFile, setPinned } = useConversationStore.getState();
+      const autoPinned = { pinned: true, autoPinned: true };
+      activateFile(CONVERSATION_ID, activeFile('a', '2026-11-01', autoPinned));
+      activateFile(CONVERSATION_ID, activeFile('b', '2026-11-02', autoPinned));
+      // Re-pinning by hand turns the auto-pin into the user's own choice.
+      setPinned(CONVERSATION_ID, 'a', true);
+      setPinned(CONVERSATION_ID, 'b', true);
+      activateFile(CONVERSATION_ID, activeFile('c', '2026-11-03', autoPinned));
+
+      expect(activeIds()).toEqual(['a', 'b', 'c']);
     });
   });
 });

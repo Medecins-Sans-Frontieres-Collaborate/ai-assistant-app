@@ -30,7 +30,7 @@ export const StatTile: FC<StatTileProps> = ({ label, value, unit, detail }) => (
         {value}
       </span>
       {unit && (
-        <span className="ml-1 text-sm text-gray-600 dark:text-gray-300">
+        <span className="ms-1 text-sm text-gray-600 dark:text-gray-300">
           {unit}
         </span>
       )}

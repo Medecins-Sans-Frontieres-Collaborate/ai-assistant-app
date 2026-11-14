@@ -413,6 +413,21 @@ describe('/api/agent-access/m365-agents', () => {
     );
   });
 
+  it('keeps web search off unless the creator switches it on', async () => {
+    await POST(postRequest({ name: 'Budget agent', sources: [validSource] }));
+    await POST(
+      postRequest({
+        name: 'Budget agent',
+        sources: [validSource],
+        allowWebSearch: true,
+      }),
+    );
+
+    expect(
+      mockStore.writeM365Agent.mock.calls.map((call) => call[1].allowWebSearch),
+    ).toEqual([false, true]);
+  });
+
   it('refuses a create whose sources expand past the document cap', async () => {
     mockPlanner.planSources.mockResolvedValue({
       plans: [],

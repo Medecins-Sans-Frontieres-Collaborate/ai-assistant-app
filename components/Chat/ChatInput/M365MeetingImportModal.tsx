@@ -397,7 +397,7 @@ const M365MeetingImportBody: FC<{
                       onClick={() => toggleExpand(meeting)}
                       aria-expanded={expanded}
                       aria-controls={`m365-meeting-${meeting.eventId}`}
-                      className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                      className="flex min-w-0 flex-1 items-center gap-2 text-start"
                     >
                       {expanded ? (
                         <IconChevronDown
@@ -438,7 +438,7 @@ const M365MeetingImportBody: FC<{
                   {expanded && (
                     <div
                       id={`m365-meeting-${meeting.eventId}`}
-                      className="pb-2 pl-12 pr-3 text-sm"
+                      className="pb-2 ps-12 pe-3 text-sm"
                     >
                       {resource === 'loading' || resource === undefined ? (
                         <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">

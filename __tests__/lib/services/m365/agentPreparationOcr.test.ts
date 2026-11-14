@@ -1,7 +1,7 @@
 /**
  * OCR engine selection for scanned PDFs (Prepare + auto-OCR): Document
- * Intelligence when configured, the vision model otherwise, page caps
- * forwarded to both.
+ * Intelligence when configured, the vision operation otherwise (a fake
+ * residency chain here), page caps forwarded to both.
  */
 import {
   OcrEngineUnavailableError,
@@ -9,14 +9,15 @@ import {
   resolveOcrEngine,
 } from '@/lib/services/m365/agentPreparationService';
 
+import { installFakeAuxiliaryCompletions } from '../auxiliary/fakeCompletions';
+
 import * as fs from 'fs';
 import * as path from 'path';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const envMock = vi.hoisted(() => ({
   env: {
     M365_AGENT_OCR_ENGINE: 'auto',
-    M365_AGENT_VISION_MODEL: 'gpt-5-mini',
     M365_AGENT_OCR_MAX_PAGES: 200,
   } as Record<string, unknown>,
 }));
@@ -42,13 +43,6 @@ vi.mock(
     };
   },
 );
-vi.mock('@/lib/services/ServiceContainer', () => ({
-  ServiceContainer: {
-    getInstance: () => ({
-      getOpenAIClient: () => ({ chat: { completions: mockVision } }),
-    }),
-  },
-}));
 vi.mock('@/auth', () => ({ auth: vi.fn(), getGraphAccessToken: vi.fn() }));
 vi.mock('@/lib/services/m365/agentIndexService', () => ({
   downloadItemBytes: vi.fn(),
@@ -77,8 +71,15 @@ vi.mock('child_process', () => ({
 
 const pdf = Buffer.from('%PDF-1.4 scanned');
 
+/** Where page images may be read in these tests. */
+const vision = { region: 'EU' as const };
+let fakeChain: ReturnType<typeof installFakeAuxiliaryCompletions>;
+
+afterEach(() => fakeChain.restore());
+
 beforeEach(() => {
   vi.clearAllMocks();
+  fakeChain = installFakeAuxiliaryCompletions(mockVision.create);
   envMock.env.M365_AGENT_OCR_ENGINE = 'auto';
   diMock.configured = true;
   diMock.analyzeDocument.mockResolvedValue({
@@ -89,6 +90,7 @@ beforeEach(() => {
     ],
   });
   mockVision.create.mockImplementation(async () => ({
+    model: 'gpt-5.6-luna',
     choices: [{ message: { content: 'seen text' } }],
   }));
 });
@@ -114,7 +116,10 @@ describe('resolveOcrEngine', () => {
 
 describe('ocrPdfBuffer', () => {
   it('uses Document Intelligence with a 1-N page selection and page markers', async () => {
-    const result = await ocrPdfBuffer(pdf, 'scan.pdf', { maxPages: 50 });
+    const result = await ocrPdfBuffer(pdf, 'scan.pdf', {
+      maxPages: 50,
+      vision,
+    });
     expect(diMock.analyzeDocument).toHaveBeenCalledWith(
       pdf,
       expect.objectContaining({
@@ -127,6 +132,7 @@ describe('ocrPdfBuffer', () => {
       engine: 'di',
       pages: 2,
       text: '--- Page 1 ---\nA\n--- Page 2 ---\nB',
+      model: 'document-intelligence:prebuilt-read',
     });
     expect(mockVision.create).not.toHaveBeenCalled();
   });
@@ -143,7 +149,7 @@ describe('ocrPdfBuffer', () => {
         content: 'A',
         pages: [{ pageNumber: 1, text: 'A' }],
       });
-    const result = await ocrPdfBuffer(pdf, 'scan.pdf', { maxPages: 5 });
+    const result = await ocrPdfBuffer(pdf, 'scan.pdf', { maxPages: 5, vision });
     expect(diMock.analyzeDocument).toHaveBeenCalledTimes(2);
     expect(diMock.analyzeDocument.mock.calls[1][1]).not.toHaveProperty('pages');
     expect(result.pages).toBe(1);
@@ -154,7 +160,7 @@ describe('ocrPdfBuffer', () => {
       content: '',
       pages: [1, 2, 3, 4].map((n) => ({ pageNumber: n, text: `p${n}` })),
     });
-    const result = await ocrPdfBuffer(pdf, 'scan.pdf', { maxPages: 2 });
+    const result = await ocrPdfBuffer(pdf, 'scan.pdf', { maxPages: 2, vision });
     expect(result.pages).toBe(2);
     expect(result.text).not.toContain('p3');
   });
@@ -166,9 +172,15 @@ describe('ocrPdfBuffer', () => {
     diMock.analyzeDocument.mockRejectedValue(
       new DocumentIntelligenceError('boom', 'poll', 500),
     );
-    const result = await ocrPdfBuffer(pdf, 'scan.pdf', { maxPages: 2 });
+    const result = await ocrPdfBuffer(pdf, 'scan.pdf', { maxPages: 2, vision });
     expect(result.engine).toBe('vision');
     expect(result.pages).toBe(2);
+    // Read on the routed region's chain; the serving model is recorded.
+    expect(new Set(fakeChain.regions)).toEqual(new Set(['EU']));
+    expect(result.model).toBe('gpt-5.6-luna');
+    const sent = mockVision.create.mock.calls[0][0];
+    expect(sent.model).toBe('');
+    expect(sent.messages[0].content[1].type).toBe('image_url');
     expect(result.text).toBe(
       '--- Page 1 ---\nseen text\n--- Page 2 ---\nseen text',
     );
@@ -182,7 +194,7 @@ describe('ocrPdfBuffer', () => {
     envMock.env.M365_AGENT_OCR_ENGINE = 'di';
     diMock.analyzeDocument.mockRejectedValue(new Error('boom'));
     await expect(
-      ocrPdfBuffer(pdf, 'scan.pdf', { maxPages: 2 }),
+      ocrPdfBuffer(pdf, 'scan.pdf', { maxPages: 2, vision }),
     ).rejects.toThrow('boom');
     expect(mockVision.create).not.toHaveBeenCalled();
   });
@@ -193,11 +205,20 @@ describe('ocrPdfBuffer', () => {
     await ocrPdfBuffer(pdf, 'scan.pdf', {
       maxPages: 1,
       signal: controller.signal,
+      vision,
     });
     const opts = execMock.execFile.mock.calls[0][2] as { signal?: AbortSignal };
     expect(opts.signal).toBe(controller.signal);
-    expect(mockVision.create.mock.calls[0][1]).toEqual({
+    expect(mockVision.create.mock.calls[0][1]).toMatchObject({
       signal: controller.signal,
     });
+  });
+
+  it('fails with an admin-facing error when no vision model is eligible', async () => {
+    envMock.env.M365_AGENT_OCR_ENGINE = 'vision';
+    mockVision.create.mockRejectedValue(new Error('no eligible model'));
+    await expect(
+      ocrPdfBuffer(pdf, 'scan.pdf', { maxPages: 1, vision }),
+    ).rejects.toThrow('No vision-capable model is available for EU processing');
   });
 });

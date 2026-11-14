@@ -214,13 +214,18 @@ describe('classifyDigestItems', () => {
         { id: 'mail:ghost', category: 'fyi', reason: 'unknown id ignored' },
       ],
     });
-    const result = await classifyDigestItems([
-      item('mail:1', {
-        signals: signals({ unanswered: true, mentionsMe: true }),
-      }),
-      item('mail:2', { signals: signals({ broadcast: true }) }),
-    ]);
+    const result = await classifyDigestItems(
+      [
+        item('mail:1', {
+          signals: signals({ unanswered: true, mentionsMe: true }),
+        }),
+        item('mail:2', { signals: signals({ broadcast: true }) }),
+      ],
+      'EU',
+    );
     expect(result.degraded).toBe(false);
+    // The pass runs in the caller's residency region.
+    expect(vi.mocked(runUtilityJson).mock.calls[0][0].region).toBe('EU');
     const byId = new Map(result.items.map((entry) => [entry.id, entry]));
     expect(byId.get('mail:1')?.category).toBe('askedOfMe');
     expect(byId.get('mail:1')?.reason).toBe('asks for a budget review');
@@ -231,11 +236,14 @@ describe('classifyDigestItems', () => {
 
   it('falls back to heuristics and reports degraded when the model is unavailable', async () => {
     vi.mocked(runUtilityJson).mockResolvedValue(null);
-    const result = await classifyDigestItems([
-      item('mail:1', {
-        signals: signals({ unanswered: true, mentionsMe: true }),
-      }),
-    ]);
+    const result = await classifyDigestItems(
+      [
+        item('mail:1', {
+          signals: signals({ unanswered: true, mentionsMe: true }),
+        }),
+      ],
+      'EU',
+    );
     expect(result.degraded).toBe(true);
     expect(result.items[0].category).toBe('needsReply');
   });
@@ -275,16 +283,19 @@ describe('extractDigestInsights', () => {
         },
       ],
     });
-    const result = await extractDigestInsights([
-      item('mail:1', {
-        category: 'needsReply',
-        signals: signals({ unanswered: true, mentionsMe: true }),
-      }),
-      item('mail:2', {
-        category: 'companyUpdates',
-        signals: signals({ broadcast: true }),
-      }),
-    ]);
+    const result = await extractDigestInsights(
+      [
+        item('mail:1', {
+          category: 'needsReply',
+          signals: signals({ unanswered: true, mentionsMe: true }),
+        }),
+        item('mail:2', {
+          category: 'companyUpdates',
+          signals: signals({ broadcast: true }),
+        }),
+      ],
+      'EU',
+    );
     expect(result.actionItems).toHaveLength(1);
     expect(result.actionItems[0]).toMatchObject({
       sourceItemId: 'mail:1',
@@ -300,9 +311,10 @@ describe('extractDigestInsights', () => {
   });
 
   it('skips the model entirely when nothing is actionable', async () => {
-    const result = await extractDigestInsights([
-      item('mail:1', { category: 'fyi' }),
-    ]);
+    const result = await extractDigestInsights(
+      [item('mail:1', { category: 'fyi' })],
+      'EU',
+    );
     expect(runUtilityJson).not.toHaveBeenCalled();
     expect(result).toEqual({ themes: [], actionItems: [], degraded: false });
   });

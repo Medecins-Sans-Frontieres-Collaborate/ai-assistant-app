@@ -275,7 +275,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
     return (
       <div className="flex flex-col md:flex-row h-full">
         {/* Left Panel - List */}
-        <div className="w-full md:w-1/2 border-r-0 md:border-r border-b md:border-b-0 border-gray-200 dark:border-gray-700 flex flex-col max-h-[50%] md:max-h-full">
+        <div className="w-full md:w-1/2 border-e-0 md:border-e border-b md:border-b-0 border-gray-200 dark:border-gray-700 flex flex-col max-h-[50%] md:max-h-full">
           {/* Toolbar */}
           <div className="flex-shrink-0 px-4 py-3 bg-gray-50 dark:bg-surface-dark-recessed border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between gap-3">
@@ -283,14 +283,14 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
               <div className="flex-1 relative max-w-md">
                 <IconSearch
                   size={16}
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  className="absolute start-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                 />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={t('searchTonesPlaceholder')}
-                  className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full ps-9 pe-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -427,7 +427,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
                   </div>
 
                   {!isCollapsed && folderTones.length > 0 && (
-                    <div className="ml-4 mt-1 space-y-1">
+                    <div className="ms-4 mt-1 space-y-1">
                       {folderTones.map((tone) => (
                         <div
                           key={tone.id}

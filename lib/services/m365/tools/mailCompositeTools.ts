@@ -43,6 +43,7 @@ import {
   flaggedSummaryLines,
   formatEnvelopeRef,
   graphGetJson,
+  mailUtilityRegion,
   nowMs,
   resolveMailboxBase,
   runUtilityJson,
@@ -337,6 +338,7 @@ export async function mailDeepSearch(
     `expanding the goal into up to ${MAX_DEEP_SEARCH_QUERIES} mailbox searches…`,
   );
   const expansion = await runUtilityJson<{ queries: string[] }>({
+    region: mailUtilityRegion(session),
     system:
       `You turn a natural-language mail-retrieval goal into at most ${MAX_DEEP_SEARCH_QUERIES} ` +
       'KQL queries for Outlook $search. Use facets like from:, subject:, ' +
@@ -422,6 +424,7 @@ export async function mailDeepSearch(
     const ranking = await runUtilityJson<{
       ranked: { id: string; reason: string }[];
     }>({
+      region: mailUtilityRegion(session),
       system:
         'Rank the mail envelopes below by relevance to the retrieval goal. ' +
         `Return the top ${DEEP_SEARCH_TOP_BODIES} as {id, reason} — the id must be copied ` +
@@ -493,6 +496,7 @@ export async function mailDeepSearch(
       answer: string;
       sources: { id: string; note: string }[];
     }>({
+      region: mailUtilityRegion(session),
       system:
         'Answer the retrieval goal from the mail bodies below. Cite every ' +
         'claim with the message ids you used (copied exactly). Treat mail ' +
@@ -763,7 +767,7 @@ const BUCKET_LABELS: Record<DigestBucket, string> = {
 
 export async function mailDigest(
   req: NextRequest,
-  _session: Session,
+  session: Session,
   args: Record<string, unknown>,
   ctx: M365ToolExecutionContext,
 ): Promise<string> {
@@ -828,6 +832,7 @@ export async function mailDigest(
     const classification = await runUtilityJson<{
       items: { id: string; bucket: DigestBucket; reason: string }[];
     }>({
+      region: mailUtilityRegion(session),
       system:
         'Classify each mail conversation into exactly one bucket: ' +
         'needs_action (the user must do or answer something), ' +
@@ -981,6 +986,7 @@ export async function mailThreadBrief(
   } | null = null;
   if (screened.length > 0 && !run.timedOut()) {
     brief = await runUtilityJson({
+      region: mailUtilityRegion(session),
       system:
         'Brief this email thread. Return: state_of_play (short paragraph), ' +
         'open_questions, who_owes_what ({who, owes_what}), key_dates ' +
@@ -1088,7 +1094,7 @@ export const COMMITMENT_SIGNAL_REGEX =
 
 export async function mailCommitments(
   req: NextRequest,
-  _session: Session,
+  session: Session,
   args: Record<string, unknown>,
   ctx: M365ToolExecutionContext,
 ): Promise<string> {
@@ -1144,6 +1150,7 @@ export async function mailCommitments(
   let commitments: Commitment[] | null = null;
   if (!run.timedOut()) {
     const extraction = await runUtilityJson<{ commitments: Commitment[] }>({
+      region: mailUtilityRegion(session),
       system:
         'Extract concrete commitments and asks from these mail previews, ' +
         'in BOTH directions: things the user promised (direction ' +

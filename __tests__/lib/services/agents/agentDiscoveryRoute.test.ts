@@ -309,6 +309,26 @@ describe('collectAppAgents — app-managed kinds list on allow only', () => {
     );
   });
 
+  it('tells the client whether each agent may search the web', async () => {
+    const flags = async (prompt: object, m365: object) => {
+      accessService.getPromptAgents.mockReturnValue([
+        { ...promptAgent, ...prompt },
+      ]);
+      accessService.getM365Agents.mockReturnValue([{ ...m365Agent, ...m365 }]);
+      const { agents } = await collectAppAgents(USER_MAIL);
+      return [
+        agents.find((a) => a.id === promptAgent.id)?.allowWebSearch,
+        agents.find((a) => a.id === m365Agent.id)?.allowWebSearch,
+      ];
+    };
+
+    // Unset: a prompt agent searches, an M365 agent does not.
+    expect(await flags({}, {})).toEqual([true, false]);
+    expect(
+      await flags({ allowWebSearch: false }, { allowWebSearch: true }),
+    ).toEqual([false, true]);
+  });
+
   it('hides a never-indexed M365 agent even on allow', async () => {
     accessService.getM365Agents.mockReturnValue([
       { ...m365Agent, sources: [{ sourceId: 's1', status: 'pending' }] },

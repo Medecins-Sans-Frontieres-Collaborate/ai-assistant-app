@@ -23,7 +23,7 @@ import { NextRequest } from 'next/server';
 
 import { DocumentTranslationService } from '@/lib/services/documentTranslation/documentTranslationService';
 import { createTranslationJob } from '@/lib/services/documentTranslation/translationJobStore';
-import { guardLimit } from '@/lib/services/limits/routeGuard';
+import { GuardResult, guardLimit } from '@/lib/services/limits/routeGuard';
 import { isValidGraphId } from '@/lib/services/m365/graphApi';
 import {
   fetchDriveItemBuffer,
@@ -39,6 +39,7 @@ import {
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
 import { AzureBlobStorage } from '@/lib/utils/server/blob/blob';
+import { countPdfPages } from '@/lib/utils/server/file/fileHandling';
 import { createApiLoggingContext } from '@/lib/utils/server/observability';
 import { sanitizeBlobExtension } from '@/lib/utils/shared/blobPath';
 
@@ -48,6 +49,7 @@ import {
   MAX_DOCUMENT_SIZE,
   MAX_GLOSSARY_SIZE,
   TRANSLATION_EXPIRY_DAYS,
+  TRANSLATION_PAGES_LIMIT_KEY,
   TRANSLATION_STAGING_CONTAINER,
   generateTranslatedFilename,
   getDocumentContentType,
@@ -64,6 +66,37 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 export const maxDuration = 60; // Allow up to 60 seconds for translation
+
+/**
+ * Reserves a PDF's pages against the caller's daily page allowance
+ * (`feature.translation.pagesPerDay`).
+ *
+ * Fails open when the page count cannot be read: a file the counter cannot
+ * parse is rejected by the translator anyway, and a cost control must not
+ * turn a counting fault into a feature outage (same stance as guardLimit).
+ *
+ * @returns The guard result; `allowed: false` carries the response to return.
+ */
+async function reservePdfPages(
+  session: Parameters<typeof guardLimit>[0],
+  request: NextRequest,
+  pdf: Buffer,
+): Promise<GuardResult> {
+  let pageCount: number;
+  try {
+    pageCount = await countPdfPages(pdf, { signal: request.signal });
+  } catch (error) {
+    console.warn(
+      '[DocumentTranslation] Could not count pages; page allowance not charged:',
+      error instanceof Error ? error.message : error,
+    );
+    return { allowed: true };
+  }
+  return guardLimit(session, TRANSLATION_PAGES_LIMIT_KEY, {
+    req: request,
+    amount: pageCount,
+  });
+}
 
 export async function POST(request: NextRequest) {
   const ctx = createApiLoggingContext();
@@ -153,6 +186,12 @@ export async function POST(request: NextRequest) {
   if (!translationGuard.allowed && translationGuard.response) {
     return translationGuard.response;
   }
+  // Reservations to hand back if the request then fails: a translation that
+  // never started must not consume the user's daily allowance.
+  const reservationRollbacks: Array<() => Promise<void>> = [];
+  if (translationGuard.rollback) {
+    reservationRollbacks.push(translationGuard.rollback);
+  }
 
   // Validate document size
   if (document.size > MAX_DOCUMENT_SIZE) {
@@ -223,6 +262,19 @@ export async function POST(request: NextRequest) {
     // only ever touches the staging account — the firewalled user-data
     // accounts are never exposed to it.
     if (requiresAsyncTranslation(document.name)) {
+      // Usage limit: pages per day. Only the batch (PDF) path has a page
+      // count that is cheap to read before translating.
+      const pagesGuard = await reservePdfPages(
+        session,
+        request,
+        documentBuffer,
+      );
+      if (!pagesGuard.allowed && pagesGuard.response) {
+        await Promise.allSettled(reservationRollbacks.map((undo) => undo()));
+        return pagesGuard.response;
+      }
+      if (pagesGuard.rollback) reservationRollbacks.push(pagesGuard.rollback);
+
       const jobId = uuidv4();
       const fileExtension = sanitizeBlobExtension(
         document.name.split('.').pop(),
@@ -438,6 +490,7 @@ export async function POST(request: NextRequest) {
 
     return successResponse(reference);
   } catch (error) {
+    await Promise.allSettled(reservationRollbacks.map((undo) => undo()));
     const errorMessage = ctx.getErrorMessage(error);
     // Full error object server-side — Azure SDK errors hide the useful
     // parts (code, statusCode, request URL) outside .message.

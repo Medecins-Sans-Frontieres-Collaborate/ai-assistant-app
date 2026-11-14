@@ -100,7 +100,7 @@ export const ModelAccessNodeEditor: FC<ModelAccessNodeEditorProps> = ({
       <div>
         <div className={ADMIN_LABEL}>
           {t('modelAccess.defaultLabel')}
-          <span className="ml-2 flex flex-wrap items-center gap-2">
+          <span className="ms-2 flex flex-wrap items-center gap-2">
             <select
               className={ADMIN_FIELD}
               value={mode}

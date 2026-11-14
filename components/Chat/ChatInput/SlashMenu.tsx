@@ -85,10 +85,10 @@ const CommandItem: FC<CommandItemProps> = ({
     <li
       className={`group relative cursor-pointer px-3 py-2.5 text-sm transition-all duration-150 ${
         isExecuting
-          ? 'bg-green-50 dark:bg-green-900/30 border-l-2 border-green-500'
+          ? 'bg-green-50 dark:bg-green-900/30 border-s-2 border-green-500'
           : isActive
-            ? 'bg-blue-50 dark:bg-blue-900/30 border-l-2 border-blue-500'
-            : 'hover:bg-gray-50 dark:hover:bg-[#2a2a2a] border-l-2 border-transparent'
+            ? 'bg-blue-50 dark:bg-blue-900/30 border-s-2 border-blue-500'
+            : 'hover:bg-gray-50 dark:hover:bg-[#2a2a2a] border-s-2 border-transparent'
       }`}
       onClick={async (e) => {
         e.preventDefault();
@@ -176,8 +176,8 @@ const PromptItem: FC<PromptItemProps> = ({
     <li
       className={`group relative cursor-pointer px-3 py-2.5 text-sm transition-all duration-150 ${
         isActive
-          ? 'bg-blue-50 dark:bg-blue-900/30 border-l-2 border-blue-500'
-          : 'hover:bg-gray-50 dark:hover:bg-[#2a2a2a] border-l-2 border-transparent'
+          ? 'bg-blue-50 dark:bg-blue-900/30 border-s-2 border-blue-500'
+          : 'hover:bg-gray-50 dark:hover:bg-[#2a2a2a] border-s-2 border-transparent'
       }`}
       onClick={(e) => {
         e.preventDefault();
@@ -235,8 +235,8 @@ const RecipeItem: FC<RecipeItemProps> = ({
     <li
       className={`group relative cursor-pointer px-3 py-2.5 text-sm transition-all duration-150 ${
         isActive
-          ? 'bg-blue-50 dark:bg-blue-900/30 border-l-2 border-blue-500'
-          : 'hover:bg-gray-50 dark:hover:bg-[#2a2a2a] border-l-2 border-transparent'
+          ? 'bg-blue-50 dark:bg-blue-900/30 border-s-2 border-blue-500'
+          : 'hover:bg-gray-50 dark:hover:bg-[#2a2a2a] border-s-2 border-transparent'
       }`}
       onClick={(e) => {
         e.preventDefault();
@@ -294,8 +294,8 @@ const ToneItem: FC<ToneItemProps> = ({
     <li
       className={`group relative cursor-pointer px-3 py-2.5 text-sm transition-all duration-150 ${
         isActive
-          ? 'bg-purple-50 dark:bg-purple-900/30 border-l-2 border-purple-500'
-          : 'hover:bg-gray-50 dark:hover:bg-[#2a2a2a] border-l-2 border-transparent'
+          ? 'bg-purple-50 dark:bg-purple-900/30 border-s-2 border-purple-500'
+          : 'hover:bg-gray-50 dark:hover:bg-[#2a2a2a] border-s-2 border-transparent'
       }`}
       onClick={(e) => {
         e.preventDefault();

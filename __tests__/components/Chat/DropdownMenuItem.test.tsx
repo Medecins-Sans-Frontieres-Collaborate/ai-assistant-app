@@ -158,7 +158,7 @@ describe('DropdownMenuItem', () => {
       const button = screen.getByRole('menuitem');
       expect(button).toHaveClass('flex');
       expect(button).toHaveClass('items-center');
-      expect(button).toHaveClass('text-left');
+      expect(button).toHaveClass('text-start');
       // The rounded row affordance is on the wrapping container
       const row = button.parentElement as HTMLElement;
       expect(row).toHaveClass('rounded-md');

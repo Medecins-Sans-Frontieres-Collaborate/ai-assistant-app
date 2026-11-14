@@ -501,7 +501,7 @@ describe('AgentAccessPanel', () => {
     await screen.findByText('Helpdesk Agent');
     await screen.findByText('HR Handbook (M365)');
     await screen.findByText('MSF Communications');
-    const search = screen.getByRole('searchbox', { name: 'Search' });
+    const search = screen.getByRole('searchbox', { name: 'Search...' });
     const requestCount = fetchMock.mock.calls.length;
     fireEvent.change(search, { target: { value: 'HANDBOOK.PDF' } });
     expect(screen.getByText('HR Handbook (M365)')).toBeInTheDocument();
@@ -1030,6 +1030,7 @@ describe('AgentAccessPanel', () => {
       modelId: 'gpt-5.2',
       skillAccess: 'inherit',
       skillIds: [],
+      allowWebSearch: true,
     });
     // Create-only: no If-Match rides along.
     expect(agentPostCalls[0].headers['If-Match']).toBeUndefined();
@@ -1127,6 +1128,7 @@ describe('AgentAccessPanel', () => {
       modelId: 'gpt-5.2',
       skillAccess: 'inherit',
       skillIds: [],
+      allowWebSearch: true,
     });
   });
 

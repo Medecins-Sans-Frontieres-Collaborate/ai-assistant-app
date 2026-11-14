@@ -242,7 +242,7 @@ export function HelpPageClient({
           {/* FAQ Tile */}
           <button
             onClick={() => toggleSection('faq')}
-            className={`group relative p-6 rounded-xl border-2 transition-all text-left ${
+            className={`group relative p-6 rounded-xl border-2 transition-all text-start ${
               expandedSection === 'faq'
                 ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20 shadow-lg scale-[1.02]'
                 : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-md'
@@ -288,7 +288,7 @@ export function HelpPageClient({
           {/* Privacy Tile */}
           <button
             onClick={() => toggleSection('privacy')}
-            className={`group relative p-6 rounded-xl border-2 transition-all text-left ${
+            className={`group relative p-6 rounded-xl border-2 transition-all text-start ${
               expandedSection === 'privacy'
                 ? 'border-green-500 dark:border-green-400 bg-green-50 dark:bg-green-900/20 shadow-lg scale-[1.02]'
                 : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-green-300 dark:hover:border-green-600 hover:shadow-md'
@@ -334,7 +334,7 @@ export function HelpPageClient({
           {/* Contact & Support Tile */}
           <button
             onClick={() => toggleSection('contact')}
-            className={`group relative p-6 rounded-xl border-2 transition-all text-left ${
+            className={`group relative p-6 rounded-xl border-2 transition-all text-start ${
               expandedSection === 'contact'
                 ? 'border-purple-500 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg scale-[1.02]'
                 : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md'
@@ -385,7 +385,7 @@ export function HelpPageClient({
                 <div className="relative">
                   <IconSearch
                     size={20}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                    className="absolute start-4 top-1/2 -translate-y-1/2 text-gray-400"
                   />
                   <input
                     type="text"
@@ -396,7 +396,7 @@ export function HelpPageClient({
                     }
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
+                    className="w-full ps-12 pe-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
                   />
                 </div>
               </div>
@@ -428,7 +428,7 @@ export function HelpPageClient({
                       >
                         <button
                           onClick={() => toggleFaqItem(index)}
-                          className="w-full flex items-center justify-between gap-3 p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"
+                          className="w-full flex items-center justify-between gap-3 p-4 text-start hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"
                         >
                           <span className="text-sm font-semibold text-gray-900 dark:text-white">
                             {faq.question}
@@ -531,7 +531,7 @@ export function HelpPageClient({
                         >
                           <button
                             onClick={() => togglePrivacyItem(item.id)}
-                            className="w-full flex items-center justify-between gap-3 p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"
+                            className="w-full flex items-center justify-between gap-3 p-4 text-start hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"
                           >
                             <span className="text-sm font-semibold text-gray-900 dark:text-white">
                               {item.question}

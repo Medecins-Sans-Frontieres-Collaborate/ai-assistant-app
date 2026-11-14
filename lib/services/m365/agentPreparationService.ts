@@ -27,7 +27,6 @@
 import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import type {
   M365Agent,
   M365PreparationKind,
@@ -51,6 +50,15 @@ import {
   extensionOf,
 } from '@/lib/services/m365/agentSourcePlanner';
 import { graphJson } from '@/lib/services/m365/graphApi';
+import {
+  IMAGE_DESCRIPTION_PROMPT,
+  PAGE_OCR_PROMPT,
+  type VisionRouting,
+  type VisionTranscription,
+  VisionUnavailableError,
+  transcribeImage,
+  visionRoutingFor,
+} from '@/lib/services/m365/visionTranscription';
 import { getJobForUser } from '@/lib/services/transcription/chunkedJobStore';
 import { getChunkedTranscriptionService } from '@/lib/services/transcription/chunkedTranscriptionService';
 import { WhisperTranscriptionService } from '@/lib/services/transcription/whisperTranscriptionService';
@@ -74,7 +82,7 @@ const GRAPH_SCOPES = ['Files.ReadWrite.All'];
 /** Images above this are refused — vision inputs are small by design. */
 const MAX_IMAGE_BYTES = 20 * 1024 * 1024;
 const OCR_RENDER_DPI = 110;
-/** Derived-text `model` label for DI-produced OCR (vision records the deployment). */
+/** Derived-text `model` label for DI-produced OCR (vision records the serving model). */
 const DI_OCR_MODEL_LABEL = 'document-intelligence:prebuilt-read';
 /** Derived text cap, matching the extractor's budget order of magnitude. */
 const MAX_DERIVED_CHARS = 2_000_000;
@@ -172,53 +180,31 @@ async function withTempFile<T>(
 // Vision
 // ---------------------------------------------------------------------------
 
-const IMAGE_PROMPT =
-  'You are preparing an image so it can be found by text search. Write plain text, no markdown: ' +
-  '(1) a factual description of what the image shows; (2) every piece of visible text transcribed ' +
-  'verbatim, including numbers, dates, labels and captions; (3) if it is a chart, table or diagram, ' +
-  'the data and relationships it conveys. Do not speculate about what is not visible.';
-
-const OCR_PROMPT =
-  'This is one page of a scanned document. Transcribe ALL text on the page verbatim, preserving ' +
-  'reading order, headings and paragraph breaks. Render tables as rows of cells separated by " | ". ' +
-  'Briefly describe figures in square brackets. Output plain text only.';
-
-async function describeWithVision(
-  imageBuffer: Buffer,
+/**
+ * Reads one image as the `vision` helper operation; a missing vision model
+ * becomes an admin-facing refusal rather than a raw provider error.
+ */
+async function readImage(
+  image: Buffer,
   mimeType: string,
   prompt: string,
-  signal?: AbortSignal,
-): Promise<string> {
-  const client = ServiceContainer.getInstance().getOpenAIClient();
-  const completion = await client.chat.completions.create(
-    {
-      model: env.M365_AGENT_VISION_MODEL,
-      messages: [
-        {
-          role: 'user',
-          content: [
-            { type: 'text', text: prompt },
-            {
-              type: 'image_url',
-              image_url: {
-                url: `data:${mimeType};base64,${imageBuffer.toString('base64')}`,
-                detail: 'high',
-              },
-            },
-          ],
-        },
-      ],
-    },
-    signal ? { signal } : undefined,
-  );
-  return completion.choices[0]?.message?.content?.trim() ?? '';
+  routing: VisionRouting,
+): Promise<VisionTranscription> {
+  try {
+    return await transcribeImage(image, mimeType, prompt, routing);
+  } catch (error) {
+    if (error instanceof VisionUnavailableError)
+      throw new PreparationError(error.message, 503);
+    throw error;
+  }
 }
 
 async function ocrPdfWithVision(
   buffer: Buffer,
   maxPages: number,
-  signal?: AbortSignal,
-): Promise<{ text: string; pages: number }> {
+  routing: VisionRouting,
+): Promise<{ text: string; pages: number; model: string }> {
+  const signal = routing.signal;
   return withTempFile('scan.pdf', buffer, async (pdfPath) => {
     const outDir = await fs.promises.mkdtemp(
       path.join(os.tmpdir(), 'm365-ocr-'),
@@ -246,6 +232,7 @@ async function ocrPdfWithVision(
         );
       }
       const texts = new Array<string>(pages.length);
+      const models = new Set<string>();
       let next = 0;
       await Promise.all(
         Array.from(
@@ -257,12 +244,14 @@ async function ocrPdfWithVision(
               const png = await fs.promises.readFile(
                 path.join(outDir, pages[index]),
               );
-              texts[index] = await describeWithVision(
+              const page = await readImage(
                 png,
                 'image/png',
-                OCR_PROMPT,
-                signal,
+                PAGE_OCR_PROMPT,
+                routing,
               );
+              texts[index] = page.text;
+              models.add(page.model);
             }
           },
         ),
@@ -273,6 +262,8 @@ async function ocrPdfWithVision(
           .map((text, i) => `--- Page ${i + 1} ---\n${text}`)
           .join('\n'),
         pages: texts.length,
+        // Pages can land on different chain models (fallback); name each.
+        model: [...models].join(','),
       };
     } finally {
       await fs.promises
@@ -292,6 +283,8 @@ export interface OcrPdfResult {
   /** Pages actually OCR'd (≤ `maxPages`). */
   pages: number;
   engine: 'di' | 'vision';
+  /** What produced the text: the DI model label or the serving model id(s). */
+  model: string;
 }
 
 /** `M365_AGENT_OCR_ENGINE=di` with no Document Intelligence configured. */
@@ -374,7 +367,12 @@ async function ocrPdfWithDocumentIntelligence(
 export async function ocrPdfBuffer(
   buffer: Buffer,
   name: string,
-  options: { maxPages: number; signal?: AbortSignal },
+  options: {
+    maxPages: number;
+    signal?: AbortSignal;
+    /** Where page images may be read (vision engine). */
+    vision: VisionRouting;
+  },
 ): Promise<OcrPdfResult> {
   const engine = resolveOcrEngine();
   const maxPages = Math.max(1, Math.floor(options.maxPages));
@@ -385,7 +383,7 @@ export async function ocrPdfBuffer(
         maxPages,
         options.signal,
       );
-      return { ...di, engine: 'di' };
+      return { ...di, engine: 'di', model: DI_OCR_MODEL_LABEL };
     } catch (error) {
       // `auto` keeps the vision path as a fallback for service outages;
       // an explicit `di` setting fails loudly instead of paying twice.
@@ -401,7 +399,10 @@ export async function ocrPdfBuffer(
       );
     }
   }
-  const vision = await ocrPdfWithVision(buffer, maxPages, options.signal);
+  const vision = await ocrPdfWithVision(buffer, maxPages, {
+    ...options.vision,
+    signal: options.signal ?? options.vision.signal,
+  });
   return { ...vision, engine: 'vision' };
 }
 
@@ -454,6 +455,7 @@ export async function prepareAgentItem(
 
   const mimeType = meta.file?.mimeType ?? 'application/octet-stream';
   const preparedAt = new Date().toISOString();
+  const vision = visionRoutingFor(session);
   const record = async (text: string, model?: string) => {
     const trimmed =
       text.length > MAX_DERIVED_CHARS
@@ -499,8 +501,13 @@ export async function prepareAgentItem(
       meta.name,
       MAX_IMAGE_BYTES,
     );
-    const text = await describeWithVision(buffer, mimeType, IMAGE_PROMPT);
-    return record(text, env.M365_AGENT_VISION_MODEL);
+    const image = await readImage(
+      buffer,
+      mimeType,
+      IMAGE_DESCRIPTION_PROMPT,
+      vision,
+    );
+    return record(image.text, image.model);
   }
 
   if (kind === 'pdfOcr') {
@@ -517,11 +524,9 @@ export async function prepareAgentItem(
     );
     const ocr = await ocrPdfBuffer(buffer, meta.name, {
       maxPages: env.M365_AGENT_OCR_MAX_PAGES,
+      vision,
     });
-    return record(
-      ocr.text,
-      ocr.engine === 'di' ? DI_OCR_MODEL_LABEL : env.M365_AGENT_VISION_MODEL,
-    );
+    return record(ocr.text, ocr.model);
   }
 
   // Audio / video — the admin's own transcription budget applies.

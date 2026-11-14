@@ -54,10 +54,7 @@ The server determines the `effectiveVoiceName` using a priority hierarchy:
 
 #### Azure Authentication
 
-The server authenticates with Azure Speech Services using one of two methods:
-
-- **Subscription Key**: If `AZURE_SPEECH_KEY` is set in environment variables.
-- **Entra ID (Managed Identity)**: If no key is provided, it uses `DefaultAzureCredential` to fetch an OAuth token.
+The server authenticates as the application identity (Entra ID, `DefaultAzureCredential`) with `SpeechConfig.fromEndpoint(endpoint, credential)`, which acquires and refreshes tokens itself. The endpoint is the account custom domain from `AZURE_SPEECH_ENDPOINT`, or `AZURE_OPENAI_ENDPOINT` when unset (see `lib/utils/server/azure/cognitiveServicesAuth.ts`). There is no key path.
 
 ### 4. Speech Synthesis
 

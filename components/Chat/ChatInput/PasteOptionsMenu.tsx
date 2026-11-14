@@ -186,7 +186,7 @@ export const PasteOptionsMenu: FC<PasteOptionsMenuProps> = ({
                     tabIndex={-1}
                     data-paste-option={option.id}
                     onClick={() => onSelect(option.id)}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:bg-neutral-100 dark:focus:bg-neutral-700 focus:outline-none transition-colors"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-start text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:bg-neutral-100 dark:focus:bg-neutral-700 focus:outline-none transition-colors"
                   >
                     <span className="flex-shrink-0 text-neutral-500 dark:text-neutral-400">
                       {ICONS[option.id]}

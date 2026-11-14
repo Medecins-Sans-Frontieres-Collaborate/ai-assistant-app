@@ -225,7 +225,7 @@ const RecipeRow: FC<RecipeRowProps> = ({
         <button
           type="button"
           onClick={onToggleExpand}
-          className="flex items-center gap-2 flex-1 text-left focus:outline-none"
+          className="flex items-center gap-2 flex-1 text-start focus:outline-none"
           aria-expanded={isExpanded}
         >
           {isExpanded ? (

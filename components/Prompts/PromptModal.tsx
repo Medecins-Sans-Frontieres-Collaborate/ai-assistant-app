@@ -106,7 +106,7 @@ export const PromptModal: FC<PromptModalProps> = ({
         <div>
           <label className="block text-sm font-bold mb-2 text-black dark:text-white">
             {t('Description')}
-            <span className="text-xs text-gray-500 dark:text-gray-400 ml-2 font-normal">
+            <span className="text-xs text-gray-500 dark:text-gray-400 ms-2 font-normal">
               ({t('Optional')})
             </span>
           </label>

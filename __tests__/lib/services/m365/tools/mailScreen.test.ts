@@ -2,8 +2,9 @@
  * Phishing-screen policy: each deterministic signal flags on its own (no
  * model call), the utility-model stage decides signal-free bodies, model
  * failure fails CLOSED, overrides pass through as labeled-suspicious, and
- * verdicts are cached per message id. The utility client is mocked at the
- * ServiceContainer boundary (the screen lazy-imports it).
+ * verdicts are cached per message id. The model stage runs on a fake
+ * auxiliary chain (installFakeAuxiliaryCompletions), which also records
+ * the residency region of each call.
  */
 import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
@@ -13,19 +14,12 @@ import {
   screenMailMessage,
 } from '@/lib/services/m365/tools/mailScreen';
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { installFakeAuxiliaryCompletions } from '../../auxiliary/fakeCompletions';
 
-const modelCreateMock = vi.hoisted(() => vi.fn());
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/lib/services/ServiceContainer', () => ({
-  ServiceContainer: {
-    getInstance: () => ({
-      getOpenAIClient: () => ({
-        chat: { completions: { create: modelCreateMock } },
-      }),
-    }),
-  },
-}));
+const modelCreateMock = vi.fn();
+let fakeCompletions: ReturnType<typeof installFakeAuxiliaryCompletions>;
 
 const req = new NextRequest('http://localhost/api/chat');
 const session = {
@@ -56,9 +50,12 @@ function input(
 
 beforeEach(() => {
   vi.clearAllMocks();
+  fakeCompletions = installFakeAuxiliaryCompletions(modelCreateMock);
   clearMailScreenCache();
   modelVerdict(false);
 });
+
+afterEach(() => fakeCompletions.restore());
 
 describe('deterministic signals (no model call)', () => {
   it('flags Authentication-Results spf=fail', async () => {
@@ -239,6 +236,26 @@ describe('utility-model stage', () => {
     const verdict = await screenMailMessage(req, session, input());
     expect(verdict).toEqual({ verdict: 'clear' });
     expect(modelCreateMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('screens in the user residency region; unknown users resolve EU', async () => {
+    modelVerdict(false);
+    const usUser = {
+      user: { id: 'user-us', mail: 'us@contoso.com', region: 'US' },
+    } as unknown as Session;
+    await screenMailMessage(req, usUser, input());
+    await screenMailMessage(req, session, input());
+    expect(fakeCompletions.regions).toEqual(['US', 'EU']);
+  });
+
+  it('fails CLOSED on a malformed verdict', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    modelCreateMock.mockResolvedValue({
+      choices: [{ message: { content: '{"reasons":[]}' } }],
+    });
+    const verdict = await screenMailMessage(req, session, input());
+    expect(verdict.verdict).toBe('suspicious');
+    warn.mockRestore();
   });
 
   it('flags on a model-suspicious verdict with the model reasons', async () => {

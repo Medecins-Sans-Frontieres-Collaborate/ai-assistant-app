@@ -1,16 +1,19 @@
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 import { resolveOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
 import { RAGService } from '@/lib/services/ragService';
+import type { QueryReformulator } from '@/lib/services/search/queryReformulation';
 
 import { buildAgentPromptSections } from '@/lib/utils/app/systemPrompt';
 
 import { Message, MessageType } from '@/types/chat';
 
+import { auxiliaryTurnRouting } from '../auxiliaryTurnRouting';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
+import { withOrigin } from '../routing/sourceProvenance';
+import type { TextCompletionProvider } from '../textCompletion';
 
 import { SpanStatusCode, trace } from '@opentelemetry/api';
-import OpenAI from 'openai';
 
 /**
  * RAGEnricher adds RAG (Retrieval Augmented Generation) capabilities to the chat.
@@ -38,7 +41,6 @@ export class RAGEnricher extends BasePipelineStage {
   private tracer = trace.getTracer('rag-enricher');
   private searchEndpoint: string;
   private searchIndex: string;
-  private openAIClient: OpenAI;
   /**
    * One RAGService per search index: admin-authored org agents (and static
    * entries with a `ragConfig.searchIndex` override) query their own index
@@ -46,15 +48,22 @@ export class RAGEnricher extends BasePipelineStage {
    */
   private ragServicesByIndex = new Map<string, RAGService>();
 
+  /**
+   * @param searchEndpoint - The shared Azure AI Search endpoint.
+   * @param searchIndex - The default org knowledge-base index.
+   * @param reformulator - Rewrites search queries under the user's residency.
+   * @param textCompletionProvider - The user's chat model, the rewrite's
+   *        fallback when no residency-eligible auxiliary model answers.
+   */
   constructor(
     searchEndpoint: string,
     searchIndex: string,
-    openAIClient: OpenAI,
+    private readonly reformulator: QueryReformulator,
+    private readonly textCompletionProvider?: TextCompletionProvider,
   ) {
     super();
     this.searchEndpoint = searchEndpoint;
     this.searchIndex = searchIndex;
-    this.openAIClient = openAIClient;
   }
 
   private ragServiceForIndex(searchIndex: string): RAGService {
@@ -63,7 +72,7 @@ export class RAGEnricher extends BasePipelineStage {
       service = new RAGService(
         this.searchEndpoint,
         searchIndex,
-        this.openAIClient,
+        this.reformulator,
       );
       this.ragServicesByIndex.set(searchIndex, service);
     }
@@ -182,7 +191,12 @@ export class RAGEnricher extends BasePipelineStage {
           );
           const { searchDocs, searchMetadata } = await this.ragServiceForIndex(
             agentSearchIndex,
-          ).performSearch(enrichedMessages, agent, context.user);
+          ).performSearch(
+            enrichedMessages,
+            agent,
+            context.user,
+            auxiliaryTurnRouting(context, this.textCompletionProvider),
+          );
 
           console.log(
             `[RAGEnricher] Search returned ${searchDocs.length} documents`,
@@ -215,12 +229,15 @@ export class RAGEnricher extends BasePipelineStage {
           }
 
           // Convert search results to citations format for downstream handlers
-          const citations = searchDocs.map((doc, index) => ({
-            title: doc.title,
-            date: doc.date,
-            url: doc.url,
-            number: index + 1,
-          }));
+          const citations = withOrigin(
+            searchDocs.map((doc, index) => ({
+              title: doc.title,
+              date: doc.date,
+              url: doc.url,
+              number: index + 1,
+            })),
+            'knowledge',
+          );
 
           // The org agent's prompt REPLACES the base prompt, taking the
           // renderer contract (math/markdown/diagram rules) with it as well
@@ -279,14 +296,13 @@ export class RAGEnricher extends BasePipelineStage {
           span.setAttribute('rag.agent_name', agent.name);
           span.setStatus({ code: SpanStatusCode.OK });
 
-          // Log RAG configuration (the actual search is performed by Azure OpenAI)
-          // This gives us visibility into RAG usage patterns
-          // Note: Query content intentionally omitted for user privacy
+          // Log RAG usage patterns. Query content is intentionally omitted
+          // for user privacy.
           const logger = getAzureMonitorLogger();
           void logger.logSearch({
             user: context.user,
             query: '', // Privacy: user query content not logged
-            resultCount: 0, // Results come from Azure OpenAI, we don't have visibility
+            resultCount: searchDocs.length,
             searchType: 'semantic',
             indexName: agentSearchIndex,
             botId: context.botId,

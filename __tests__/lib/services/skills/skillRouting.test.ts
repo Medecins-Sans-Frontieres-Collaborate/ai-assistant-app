@@ -2,7 +2,8 @@ import { ToolRouterService } from '@/lib/services/chat/ToolRouterService';
 import { selectedSkillIds } from '@/lib/services/skills/skillRouting';
 import { SKILL_LIMITS } from '@/lib/services/skills/types';
 
-import type OpenAI from 'openai';
+import { strictSchemaClient } from '../chat/strictSchemaClient';
+
 import { describe, expect, it, vi } from 'vitest';
 
 const skillCatalog = [
@@ -17,15 +18,21 @@ const skillCatalog = [
     description: 'Questions about this app.',
   },
 ];
-function harness(content: unknown) {
+/**
+ * A router over a fake model replying `content`. Replies are completed to
+ * the request schema like a strict json_schema model (strictSchemaClient);
+ * `raw` sends them exactly as written, to exercise off-schema replies.
+ */
+function harness(content: unknown, { raw = false } = {}) {
   const create = vi.fn().mockResolvedValue({
     choices: [{ message: { content: JSON.stringify(content) } }],
   });
+  const client = { chat: { completions: { create } } };
   return {
     create,
-    router: new ToolRouterService({
-      chat: { completions: { create } },
-    } as unknown as OpenAI),
+    router: new ToolRouterService(
+      raw ? (client as unknown as OpenAI) : strictSchemaClient(client),
+    ),
   };
 }
 
@@ -56,8 +63,10 @@ describe('skill routing contracts', () => {
   });
 
   it('skills-only routing has no web/code schema and always includes the current message', async () => {
+    // Duplicates are dropped. (An id outside the catalog enum rejects the
+    // whole decision at schema validation; see the next test.)
     const { create, router } = harness({
-      relevantSkills: ['gdpr', 'unknown', 'gdpr'],
+      relevantSkills: ['gdpr', 'gdpr'],
     });
     const result = await router.determineSkills({
       messages: [],
@@ -70,6 +79,16 @@ describe('skill routing contracts', () => {
       Object.keys(params.response_format.json_schema.schema.properties),
     ).toEqual(['relevantSkills']);
     expect(params.messages.at(-1).content).toBe('Use GDPR');
+  });
+
+  it('rejects a decision naming a skill outside the catalog', async () => {
+    const { router } = harness({ relevantSkills: ['gdpr', 'unknown'] });
+    const result = await router.determineSkills({
+      messages: [],
+      currentMessage: 'Use GDPR',
+      skillCatalog,
+    });
+    expect(result.relevantSkills).toEqual([]);
   });
 
   it('does not call the provider for an empty catalog', async () => {
@@ -87,7 +106,7 @@ describe('skill routing contracts', () => {
   it.each(['failure', 'malformed', 'missing'])(
     'fails boundedly on %s',
     async (mode) => {
-      const { create, router } = harness({});
+      const { create, router } = harness({}, { raw: true });
       if (mode === 'failure') create.mockRejectedValue(new Error('timeout'));
       if (mode === 'malformed')
         create.mockResolvedValue({ choices: [{ message: { content: '{' } }] });

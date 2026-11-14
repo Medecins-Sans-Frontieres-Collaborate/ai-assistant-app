@@ -370,7 +370,8 @@ export const RichTextEditor = forwardRef<
           aria-pressed={editor.isActive('orderedList')}
           disabled={!editable}
         >
-          1.
+          {/* A glyph, not a sentence: the digit stays before the dot. */}
+          <span dir="ltr">1.</span>
         </button>
         <button
           onClick={() =>

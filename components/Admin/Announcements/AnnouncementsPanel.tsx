@@ -407,7 +407,7 @@ export const AnnouncementsPanel: FC = () => {
                 <div className="flex flex-wrap items-center gap-2">
                   <button
                     type="button"
-                    className="min-w-0 flex-1 truncate text-left text-sm font-medium text-black hover:underline dark:text-white"
+                    className="min-w-0 flex-1 truncate text-start text-sm font-medium text-black hover:underline dark:text-white"
                     onClick={() => {
                       setFailures({});
                       setDraft(draftFromAnnouncement(announcement));
@@ -512,7 +512,7 @@ export const AnnouncementsPanel: FC = () => {
               {isGlobalAdmin && (
                 <button
                   type="button"
-                  className="ml-1"
+                  className="ms-1"
                   aria-label={t('removeHost', { host })}
                   onClick={async () => {
                     try {

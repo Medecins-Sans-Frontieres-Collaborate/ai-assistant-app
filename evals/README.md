@@ -65,6 +65,18 @@ answers with the full base prompt and the skill-loaded prompt. Results are
 written to `evals/results/skills-latest.json`; these checks assert pass/fail
 and remain opt-in, separate from ordinary unit tests and the parity suite.
 
+### Agent web-search fallback regression checks
+
+`EVAL_AGENT_FALLBACK=1 EVAL_AUTH=default npx vitest --run --config ./vitest.config.evals.mts evals/agentWebFallback.eval.ts`
+runs the real tool router with the guidance an M365 agent turn gives it
+(`lib/services/chat/routing/agentSearchGuidance.ts`): the owner's instructions
+plus what the knowledge search returned. The fixtures sit on both sides of each
+condition — documents answer the question or not, topic allowed for public
+lookup or not, web search forbidden, knowledge search failed, website limits,
+and internal details that must stay out of a public query. `EVAL_REPEAT=3`
+repeats every case to expose an unstable decision. Results are written to
+`evals/results/agent-web-fallback-latest.json`.
+
 - **Case**: drop a JSON file in `evals/cases/` (`id`, `tags`, `turns[{user, expect?}]`,
   optional `rubric` and `promptOptions` — the same options `buildSystemPrompt()` takes).
   Write `expect` as what a _good_ answer does, not the answer itself.

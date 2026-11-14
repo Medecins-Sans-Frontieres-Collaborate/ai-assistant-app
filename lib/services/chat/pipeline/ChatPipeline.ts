@@ -30,7 +30,11 @@ type MessageContent =
 export const STAGE_TIMEOUTS: Record<string, number> = {
   FileProcessor: 180000, // 180s (3 min) for large file download + extraction + processing
   ImageProcessor: 5000, // 5s for image validation
-  RAGEnricher: 10000,
+  // Reformulation LLM (capped at QUERY_REFORMULATION_TIMEOUT_MS, ~1 s
+  // typical) + hybrid semantic search (~0.3-0.8 s) + org-agent lookup. Same
+  // budget as M365AgentEnricher: a timeout here drops every search result,
+  // so the budget leaves headroom for a slow cold start.
+  RAGEnricher: 20000, // 20s for knowledge base search
   // Reformulation LLM + query embedding + hybrid search over the shared
   // m365-agents index.
   M365AgentEnricher: 20000, // 20s for knowledge base search

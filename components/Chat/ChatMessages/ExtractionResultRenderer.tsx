@@ -222,7 +222,7 @@ const DatasetCard: FC<DatasetCardProps> = ({ dataset }) => {
           <button
             type="button"
             onClick={() => handleDownload(defaultFormat)}
-            className="inline-flex items-center gap-1.5 rounded-l-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium pl-3 pr-2.5 py-1.5 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c]"
+            className="inline-flex items-center gap-1.5 rounded-s-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium ps-3 pe-2.5 py-1.5 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c]"
             aria-label={t('downloadAriaLabel', {
               name: dataset.recipeName,
               format: formatLabel(defaultFormat, t),
@@ -237,7 +237,7 @@ const DatasetCard: FC<DatasetCardProps> = ({ dataset }) => {
             ref={chevronRef}
             type="button"
             onClick={() => setDownloadOpen((v) => !v)}
-            className="inline-flex items-center justify-center rounded-r-lg bg-blue-600 hover:bg-blue-700 text-white px-2 py-1.5 border-l border-blue-500/60 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c]"
+            className="inline-flex items-center justify-center rounded-e-lg bg-blue-600 hover:bg-blue-700 text-white px-2 py-1.5 border-s border-blue-500/60 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 dark:focus:ring-offset-[#1c1c1c]"
             aria-haspopup="menu"
             aria-expanded={downloadOpen}
             aria-label={t('changeFormatAriaLabel', {
@@ -274,7 +274,7 @@ const DatasetCard: FC<DatasetCardProps> = ({ dataset }) => {
                     type="button"
                     role="menuitem"
                     onClick={() => handleDownload(format)}
-                    className="w-full text-left px-3 py-2 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700 focus:outline-none text-gray-800 dark:text-gray-200"
+                    className="w-full text-start px-3 py-2 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700 focus:outline-none text-gray-800 dark:text-gray-200"
                     aria-label={t('downloadAriaLabel', {
                       name: dataset.recipeName,
                       format: formatLabel(format, t),
@@ -308,7 +308,7 @@ const DatasetCard: FC<DatasetCardProps> = ({ dataset }) => {
             type="button"
             onClick={handleSaveAsRecipe}
             disabled={saved}
-            className="ml-auto inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="ms-auto inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <IconDeviceFloppy size={14} />
             <span>{t('saveAsRecipe')}</span>
@@ -349,7 +349,7 @@ const PreviewTable: FC<PreviewTableProps> = ({ dataset }) => {
               {dataset.fields.map((field) => (
                 <th
                   key={field.name}
-                  className={`text-left px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700 ${isNumericType(field.type) ? 'text-right tabular-nums' : ''}`}
+                  className={`text-start px-3 py-1.5 font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700 ${isNumericType(field.type) ? 'text-end tabular-nums' : ''}`}
                 >
                   {field.label || field.name}
                 </th>
@@ -365,7 +365,7 @@ const PreviewTable: FC<PreviewTableProps> = ({ dataset }) => {
                 {dataset.fields.map((field) => (
                   <td
                     key={field.name}
-                    className={`px-3 py-1 text-gray-800 dark:text-gray-200 align-top ${isNumericType(field.type) ? 'text-right tabular-nums' : ''}`}
+                    className={`px-3 py-1 text-gray-800 dark:text-gray-200 align-top ${isNumericType(field.type) ? 'text-end tabular-nums' : ''}`}
                   >
                     <CellValue value={row[field.name]} />
                   </td>
