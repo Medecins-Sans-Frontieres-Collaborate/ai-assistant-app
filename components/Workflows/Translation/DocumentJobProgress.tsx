@@ -16,6 +16,9 @@ import { ProgressSteps } from '../Shared/Progress/ProgressSteps';
 
 interface DocumentJobProgressProps {
   job: TranslationDocumentJob & { status: 'translating' | 'preparing' };
+  /** Status checks keep failing and have stopped; offer to check again. */
+  stalled?: boolean;
+  onRetry?: () => void;
 }
 
 const STEP_LABEL_KEY: Record<DocumentJobStep, string> = {
@@ -30,7 +33,11 @@ const STEP_LABEL_KEY: Record<DocumentJobStep, string> = {
  * where the result will appear. The job runs on the server, so the timer
  * counts from the submission and the note says the page can be left.
  */
-export function DocumentJobProgress({ job }: DocumentJobProgressProps) {
+export function DocumentJobProgress({
+  job,
+  stalled = false,
+  onRetry,
+}: DocumentJobProgressProps) {
   const t = useTranslations('workflows');
   const submittedAt = Date.parse(job.submittedAt);
 
@@ -53,9 +60,27 @@ export function DocumentJobProgress({ job }: DocumentJobProgressProps) {
         {' · '}
         {t('translation.documentTypicalDuration')}
       </p>
-      <p className="max-w-[48ch] text-xs text-gray-500 dark:text-gray-400">
-        {t('translation.documentCanLeave')}
-      </p>
+      {stalled ? (
+        <>
+          <p
+            role="alert"
+            className="max-w-[48ch] text-xs text-amber-700 dark:text-amber-400"
+          >
+            {t('translation.documentStalled')}
+          </p>
+          <button
+            type="button"
+            onClick={onRetry}
+            className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+          >
+            {t('translation.documentCheckAgain')}
+          </button>
+        </>
+      ) : (
+        <p className="max-w-[48ch] text-xs text-gray-500 dark:text-gray-400">
+          {t('translation.documentCanLeave')}
+        </p>
+      )}
     </div>
   );
 }
