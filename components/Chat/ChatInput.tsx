@@ -614,7 +614,7 @@ export const ChatInput = ({
         <M365DigestLauncherModal />
 
         <div className="items-center pt-4">
-          <div className="flex justify-center items-center space-x-2 px-2 md:px-4">
+          <div className="flex justify-center items-center gap-2 px-2 md:px-4">
             <ChatInputImageCapture
               ref={cameraRef}
               setSubmitType={setSubmitType}
@@ -629,7 +629,7 @@ export const ChatInput = ({
 
             {/* min-w-0: flex-grow alone still leaves min-width:auto, so this
                 column could not shrink below the textarea's intrinsic width
-                plus its pr-24 gutter — the root of the horizontal overflow on
+                plus its pe-24 gutter — the root of the horizontal overflow on
                 narrow viewports. */}
             <div className="relative mx-auto w-full min-w-0 max-w-3xl flex-grow px-2 sm:px-4">
               <div

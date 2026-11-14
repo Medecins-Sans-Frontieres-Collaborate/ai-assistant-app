@@ -27,7 +27,7 @@ export const ModelSwitchPrompt: React.FC<ModelSwitchPromptProps> = ({
   return (
     <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg shadow-lg p-4 max-w-md">
       <div className="flex items-start justify-between mb-3">
-        <p className="text-sm text-blue-800 dark:text-blue-200 pr-2">
+        <p className="text-sm text-blue-800 dark:text-blue-200 pe-2">
           {t('chat.modelSwitchPrompt', {
             original: originalModelName,
             fallback: fallbackModelName,

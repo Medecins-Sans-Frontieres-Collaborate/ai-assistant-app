@@ -101,7 +101,7 @@ export const ModelCard: FC<ModelCardProps> = ({
     <div
       key={id}
       className={`
-        group w-full text-left px-3 py-1.5 rounded-lg transition-all duration-150 flex items-center gap-2
+        group w-full text-start px-3 py-1.5 rounded-lg transition-all duration-150 flex items-center gap-2
         ${
           isSelected
             ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
@@ -163,7 +163,7 @@ export const ModelCard: FC<ModelCardProps> = ({
         }
         aria-disabled={isLimited || undefined}
         title={isLimited ? (limitCopy ?? undefined) : undefined}
-        className={`flex-1 flex items-center justify-between text-left min-h-[40px] gap-2 ${
+        className={`flex-1 flex items-center justify-between text-start min-h-[40px] gap-2 ${
           isLimited ? 'cursor-not-allowed' : ''
         }`}
       >

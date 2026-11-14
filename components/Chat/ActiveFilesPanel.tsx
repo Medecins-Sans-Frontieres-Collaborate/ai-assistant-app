@@ -277,7 +277,7 @@ export function ActiveFilesPanel() {
                         flex items-center justify-center transition-colors"
                       title={t('retry')}
                     >
-                      <IconRefresh size={12} className="md:mr-1" />
+                      <IconRefresh size={12} className="md:me-1" />
                       <span className="hidden md:inline">{t('retry')}</span>
                     </button>
                   </>
