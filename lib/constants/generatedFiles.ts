@@ -145,3 +145,21 @@ export const GENERATED_DOCUMENT_LAYOUT_RULE =
   `and never pass anything below Pt(${GENERATED_DOCUMENT_MIN_TABLE_PT}) for a run, table cell, footnote or caption (in any other library: body at least ${GENERATED_DOCUMENT_MIN_BODY_PT} pt, everything else at least ${GENERATED_DOCUMENT_MIN_TABLE_PT} pt). ` +
   'A page or length limit is met by cutting and condensing content (fewer words, merged table columns, detail moved to an annex), never by smaller type, narrower margins or tighter spacing. ' +
   'If the essential content cannot fit at these sizes, deliver it slightly over the limit and tell the user, rather than shrinking it.';
+
+/**
+ * When a request should end in a FILE and when in TEXT in the chat. Shared by
+ * the main system prompt and the native interpreter's instructions so both
+ * state the same rule; the tool router carries a longer form of it
+ * (ToolRouterService) because it has to classify, not just comply.
+ *
+ * Why: "reword this email" with the email attached came back as a file to
+ * download instead of the reworded text (browser runs 2026-11-13, Mistral
+ * via the router and GPT-5.2 on the native path, in English, French, Arabic
+ * and Spanish). An attachment is where the content lives, not a request for
+ * a file back.
+ */
+export const FILE_OR_CHAT_DELIVERABLE_RULE =
+  'Create a file only when a file is the deliverable: the user asks for one (a file, document, download, or "the updated version"), ' +
+  'asks to change an attached presentation, spreadsheet, or dataset, or asks for a whole formatted document (report, memo, proposal) to be shortened, lengthened, restructured, reformatted, converted, or translated. ' +
+  'When the user asks to reword, correct, shorten, translate, or reply to a short message they attached (an email, note, letter, or post), to improve one passage of a document, ' +
+  'or to summarize or answer questions about an attachment or web page, reply with the text itself in the chat and do NOT create a file — a file would hide the answer behind a download.';
