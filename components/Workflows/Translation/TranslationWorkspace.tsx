@@ -32,6 +32,7 @@ import {
   useMyLimits,
 } from '@/client/hooks/settings/useMyLimits';
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
+import { useElementWidth } from '@/client/hooks/ui/useElementWidth';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 import { useDocumentTranslationReader } from '@/client/hooks/workflows/useDocumentTranslationReader';
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
@@ -107,9 +108,11 @@ import {
   SourcePage,
   formatPageSelection,
   joinPages,
+  parsePageSelection,
   selectBatch,
   splitExtractedPages,
 } from '@/lib/utils/shared/translation/pageBatches';
+import { stripPageCounters } from '@/lib/utils/shared/translation/pageSheets';
 import { TRANSLATION_QUALITY_CRITERIA } from '@/lib/utils/shared/translation/qualityCriteria';
 import {
   countAnalysisNotes,
@@ -117,6 +120,10 @@ import {
   hasPaperTrail,
   lastReviewVerdict,
 } from '@/lib/utils/shared/translation/runProgress';
+import {
+  REVIEW_BESIDE_MIN_WIDTH,
+  workspaceLayout,
+} from '@/lib/utils/shared/translation/workspaceLayout';
 
 import {
   TRANSLATION_PAGES_LIMIT_KEY,
@@ -158,7 +165,9 @@ import { GlossaryManager } from './GlossaryManager';
 import { GlossaryPicker, languageFit } from './GlossaryPicker';
 import { OcrOffer, OcrOfferReason } from './OcrOffer';
 import { SelectionChangeRequest } from './SelectionChangeRequest';
+import { SourceDocumentCard } from './SourceDocumentCard';
 import { SourcePageSelector } from './SourcePageSelector';
+import { SourcePageSheets } from './SourcePageSheets';
 import { TranslationRunStatus } from './TranslationRunStatus';
 import { UploadProgress } from './UploadProgress';
 
@@ -175,6 +184,16 @@ type PageDeparture = { page: number } | { mode: TranslationMode };
 const MAX_SOURCE_CHARS = 60_000;
 
 const ACCEPTED_UPLOADS = '.pdf,.doc,.docx,.txt,.md,.xml,.ppt,.pptx';
+
+/** A quiet text button inside the source document card. */
+const CARD_ACTION_CLASS =
+  'shrink-0 whitespace-nowrap rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-40 dark:text-gray-400 dark:hover:bg-surface-dark-elevated';
+
+/**
+ * Least height a text pane keeps once the workbench scrolls (it no longer
+ * fits its window), so a pane is never squeezed down to a line or two.
+ */
+const PANE_MIN_HEIGHT = 'min-h-[14rem]';
 
 /** A change to the translation asked for in words, from the bar or the rail. */
 interface ChangeRequestInput {
@@ -272,6 +291,25 @@ export function TranslationWorkspace({
   const [changeError, setChangeError] = useState<string | null>(null);
   const changeAbortRef = useRef<AbortController | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  // Arrangement follows the workspace's own width (see workspaceLayout).
+  // Until measured, assume there is room: that is the desktop arrangement.
+  const { ref: measureRoot, width: workspaceWidth } =
+    useElementWidth<HTMLDivElement>(REVIEW_BESIDE_MIN_WIDTH);
+  const layout = workspaceLayout(workspaceWidth);
+  const setRoot = useCallback(
+    (node: HTMLDivElement | null) => {
+      rootRef.current = node;
+      measureRoot(node);
+    },
+    [measureRoot],
+  );
+  const reviewColumnClasses = `flex shrink-0 flex-col border-gray-200 dark:border-gray-700 ${
+    layout.reviewBeside
+      ? 'w-96 border-s'
+      : layout.panesSideBySide
+        ? 'max-h-80 border-t'
+        : 'border-t'
+  }`;
   const locale = useLocale();
   // The request waiting behind the pending-suggestions dialog.
   const heldChangeRef = useRef<ChangeRequestInput | null>(null);
@@ -310,6 +348,9 @@ export function TranslationWorkspace({
   // memory only: workflow state persists the reference, never the text.
   const [sourcePages, setSourcePages] = useState<SourcePage[] | null>(null);
   const [loadingSourcePages, setLoadingSourcePages] = useState(false);
+  // The user chose to see (and edit) the document's text as one run rather
+  // than as page sheets.
+  const [sourceAsText, setSourceAsText] = useState(false);
 
   const patchState = useCallback(
     (patch: Partial<TranslationWorkflowState>) => {
@@ -702,6 +743,8 @@ export function TranslationWorkspace({
     text: string;
     ocrAvailable: boolean;
     ocrApplied: boolean;
+    /** File size in bytes, when known. */
+    size?: number;
   }): 'loaded' | 'empty' | 'too-long' => {
     // Splitting also drops the extractor's page markers, which must not
     // reach the translation.
@@ -711,6 +754,7 @@ export function TranslationWorkspace({
     if (!fullText) return 'empty';
     const lastPage = allPages[allPages.length - 1];
     const ocr = {
+      ...(extracted.size !== undefined && { size: extracted.size }),
       ...(extracted.ocrAvailable && { ocrAvailable: true }),
       ...(extracted.ocrApplied && { ocrApplied: true }),
     };
@@ -751,6 +795,7 @@ export function TranslationWorkspace({
     }
 
     setSourcePages(sourceDocument ? pages : null);
+    setSourceAsText(false);
     setSparseTextHint(
       extracted.ocrAvailable &&
         !extracted.ocrApplied &&
@@ -815,6 +860,7 @@ export function TranslationWorkspace({
       });
       const outcome = loadExtractedDocument({
         ...extracted,
+        size: file.size,
         ocrApplied: false,
       });
       if (outcome === 'loaded') {
@@ -909,6 +955,7 @@ export function TranslationWorkspace({
         name: offer.name,
         url: offer.url,
         text,
+        size: uploadedFileRef.current?.file.size,
         ocrAvailable: true,
         ocrApplied: true,
       });
@@ -1685,6 +1732,37 @@ export function TranslationWorkspace({
   const pagesBudget = featureRemaining(TRANSLATION_PAGES_LIMIT_KEY);
   const ocrBudget = featureRemaining(OCR_PAGES_LIMIT_KEY);
   const loadedDocument = state?.sourceDocument;
+  /**
+   * The loaded document's pages as page sheets, or null when they cannot
+   * stand for the source: pages are not in memory, the file has no text, or
+   * the text was edited and no longer is those pages. Whole-document mode
+   * translates the file itself, so every page shows; the other modes show
+   * the pages loaded as source text.
+   */
+  const sheetPages = useMemo(() => {
+    if (!sourcePages || !loadedDocument || loadedDocument.noText) return null;
+    const display = stripPageCounters(sourcePages);
+    if (state?.mode === 'document') return display;
+    const selection = parsePageSelection(
+      loadedDocument.selectedPages,
+      sourcePages,
+    );
+    if (!selection.ok) return null;
+    if (joinPages(sourcePages, selection.pages) !== sourceText) return null;
+    const selected = new Set(selection.pages);
+    return display.filter((page) => selected.has(page.page));
+  }, [sourcePages, loadedDocument, state?.mode, sourceText]);
+  /** The source pane is showing the loaded document, not a busy state. */
+  const showDocumentCard =
+    !!loadedDocument && !uploading && !readingDocument && ocrOffer === null;
+  const showSheets = showDocumentCard && sheetPages !== null && !sourceAsText;
+  /** Lets go of the loaded document and the text that came from it. */
+  const handleRemoveDocument = () => {
+    setSourcePages(null);
+    setSparseTextHint(false);
+    setUploadError(null);
+    patchState({ sourceText: '', sourceDocument: undefined });
+  };
   /** OCR can still be asked for on the loaded document. */
   const canOfferOcr =
     !!loadedDocument?.ocrAvailable &&
@@ -1848,7 +1926,7 @@ export function TranslationWorkspace({
   const reviewVerdict = lastReviewVerdict(state.rounds);
 
   return (
-    <div ref={rootRef} className="flex h-full min-h-0 flex-col">
+    <div ref={setRoot} className="flex h-full min-h-0 flex-col">
       {/* Controls bar */}
       <div className="flex flex-wrap items-center gap-2 border-b border-gray-200 px-3 py-2 dark:border-gray-700">
         <button
@@ -2171,13 +2249,37 @@ export function TranslationWorkspace({
         )}
 
       {/* Workbench: panes (+ assess controls) with the review column beside */}
-      <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-        <div className="flex min-h-0 flex-1 flex-col">
+      <div
+        className={`flex min-h-0 flex-1 ${
+          // Without room for the review beside the panes, the parts stack
+          // and the workbench scrolls instead of squeezing each one flat.
+          layout.reviewBeside ? 'flex-row' : 'flex-col overflow-y-auto'
+        }`}
+      >
+        <div
+          className={`flex min-w-0 flex-1 flex-col ${
+            layout.reviewBeside ? 'min-h-0' : 'shrink-0'
+          }`}
+        >
           {/* Panes */}
-          <div className="flex min-h-0 flex-1 flex-col md:flex-row">
-            <div className="flex min-h-0 flex-1 flex-col border-b border-gray-200 dark:border-gray-700 md:border-b-0 md:border-e">
-              <div className="flex items-center justify-between px-3 pt-2">
-                <span className="flex items-center gap-2 text-xs font-medium text-gray-500 dark:text-gray-400">
+          <div
+            className={`flex flex-1 ${
+              layout.reviewBeside
+                ? 'min-h-0 flex-row'
+                : layout.panesSideBySide
+                  ? `${PANE_MIN_HEIGHT} flex-row`
+                  : 'flex-col'
+            }`}
+          >
+            <div
+              className={`flex min-w-0 flex-1 flex-col border-gray-200 dark:border-gray-700 ${
+                layout.panesSideBySide
+                  ? 'min-h-0 border-e'
+                  : `${PANE_MIN_HEIGHT} border-b`
+              }`}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-3 pt-2">
+                <span className="flex items-center gap-2 whitespace-nowrap text-xs font-medium text-gray-500 dark:text-gray-400">
                   {t('translation.sourceLabel')}
                   {readingDocument && documentJob && (
                     <span className="font-normal">
@@ -2193,7 +2295,7 @@ export function TranslationWorkspace({
                     </span>
                   )}
                 </span>
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1 whitespace-nowrap">
                   {loadedDocument?.ocrApplied && !ocrOffer && (
                     <span
                       title={t('translation.ocrAppliedHint')}
@@ -2295,9 +2397,68 @@ export function TranslationWorkspace({
                     })}
                   </p>
                 )}
+              {showDocumentCard && loadedDocument && (
+                <SourceDocumentCard
+                  document={loadedDocument}
+                  disabled={
+                    isRunning ||
+                    assessing ||
+                    submittingDocument ||
+                    documentInProgress
+                  }
+                  onRemove={handleRemoveDocument}
+                  action={
+                    loadedDocument.noText
+                      ? undefined
+                      : sheetPages
+                        ? // Whole document reads the file, not this text:
+                          // there is nothing to edit there.
+                          !documentMode && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setSourceAsText((asText) => !asText)
+                              }
+                              disabled={isRunning}
+                              className={CARD_ACTION_CLASS}
+                            >
+                              {sourceAsText
+                                ? t('translation.sourceShowPages')
+                                : t('translation.sourceEditText')}
+                            </button>
+                          )
+                        : !sourcePages && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSourceAsText(false);
+                                void handleLoadSourcePages();
+                              }}
+                              disabled={loadingSourcePages}
+                              className={CARD_ACTION_CLASS}
+                            >
+                              {loadingSourcePages
+                                ? t('translation.pagesLoading')
+                                : t('translation.sourceShowPages')}
+                            </button>
+                          )
+                  }
+                />
+              )}
+              {showSheets && sheetPages && loadedDocument && (
+                <SourcePageSheets
+                  pages={sheetPages}
+                  lastPage={loadedDocument.lastPage}
+                />
+              )}
               <textarea
                 ref={sourceRef}
-                hidden={uploading || readingDocument || ocrOffer !== null}
+                hidden={
+                  uploading ||
+                  readingDocument ||
+                  ocrOffer !== null ||
+                  showSheets
+                }
                 value={sourceText}
                 onChange={(e) =>
                   patchState({
@@ -2316,9 +2477,13 @@ export function TranslationWorkspace({
               />
             </div>
 
-            <div className="flex min-h-0 flex-1 flex-col">
-              <div className="flex items-center justify-between px-3 pt-2">
-                <span className="flex min-w-0 flex-wrap items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400">
+            <div
+              className={`flex min-w-0 flex-1 flex-col ${
+                layout.panesSideBySide ? 'min-h-0' : PANE_MIN_HEIGHT
+              }`}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-3 pt-2">
+                <span className="flex min-w-0 flex-wrap items-center gap-1.5 whitespace-nowrap text-xs font-medium text-gray-500 dark:text-gray-400">
                   {t('translation.targetLabel')}
                   {isDraft && (
                     <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300">
@@ -2356,7 +2521,7 @@ export function TranslationWorkspace({
                     </button>
                   )}
                 </span>
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1 whitespace-nowrap">
                   {pageInPane && reader.page && pageIsCorrected && (
                     <button
                       type="button"
@@ -2657,14 +2822,14 @@ export function TranslationWorkspace({
             modifies, so the pending-edit queue is never buried in the
             paper-trail strip below. */}
         {assessing && (
-          <div className="flex max-h-80 shrink-0 flex-col border-t border-gray-200 dark:border-gray-700 lg:max-h-none lg:w-96 lg:border-s lg:border-t-0">
+          <div className={reviewColumnClasses}>
             <AssessmentProgress
               criteria={[...selectedCriteria].map(resolveCriterionLabel)}
             />
           </div>
         )}
         {assessment && reviewOpen && !assessing && (
-          <div className="flex max-h-80 shrink-0 flex-col border-t border-gray-200 dark:border-gray-700 lg:max-h-none lg:w-96 lg:border-s lg:border-t-0">
+          <div className={reviewColumnClasses}>
             <AssessmentPanel
               assessment={assessment}
               resolveCriterionLabel={resolveCriterionLabel}
