@@ -61,6 +61,18 @@ export function WorkflowShell() {
     setMobileTab('conversation');
   }
 
+  // The reverse request: a rail instruction whose result lands in the
+  // workspace (translation change requests) brings the workspace back.
+  const workspaceRequest = useWorkflowRailStore(
+    (state) => state.workspaceRequest,
+  );
+  const [seenWorkspaceRequest, setSeenWorkspaceRequest] =
+    useState(workspaceRequest);
+  if (workspaceRequest !== seenWorkspaceRequest) {
+    setSeenWorkspaceRequest(workspaceRequest);
+    setMobileTab('workspace');
+  }
+
   const type = selectedConversation?.conversationType;
   if (!selectedConversation || !type) return null;
 
