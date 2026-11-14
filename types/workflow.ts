@@ -248,6 +248,8 @@ export interface TranslationSourceDocument {
   url: string;
   /** Highest page number that has text. */
   lastPage: number;
+  /** File size in bytes, when known. */
+  size?: number;
   /** Pages currently loaded as source text, e.g. `"1-40, 45"`. */
   selectedPages: string;
   /**
