@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "{name} disimpan ke OneDrive.",
     "openInOneDrive": "Buka",
     "saveForbidden": "Anda tidak memiliki izin menulis ke folder tersebut — pilih folder lain dengan 'Simpan ke OneDrive'.",
-    "saveToOneDriveFailed": "Tidak dapat menyimpan ke OneDrive — silakan coba lagi."
+    "saveToOneDriveFailed": "Tidak dapat menyimpan ke OneDrive — silakan coba lagi.",
+    "textVersion": "Versi teks (DOCX)",
+    "textVersionHint": "File Word yang dapat diedit dengan teks terjemahan, satu halaman untuk setiap halaman sumber. File terjemahan tetap mempertahankan tata letak asli."
   },
   "terms": {
     "officialLanguages": "Versi resmi:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "Berkas tersebut terlalu besar untuk diimpor (maksimal 5 MB).",
       "importNothing": "Tidak ditemukan baris yang dapat digunakan ({skipped} dilewati).",
       "importSummary": "{added} ditambahkan, {replaced} diganti, {skipped} dilewati.",
-      "entriesTooManyToShow": "{count} istilah — terlalu banyak untuk ditampilkan di sini. Ekspor untuk meninjau, atau impor file untuk mengganti istilah."
+      "entriesTooManyToShow": "{count} istilah — terlalu banyak untuk ditampilkan di sini. Ekspor untuk meninjau, atau impor file untuk mengganti istilah.",
+      "pagesLoaded": "halaman {selected} dari {total} sudah dimuat",
+      "pagesLabel": "Halaman",
+      "pagesApply": "Muat halaman",
+      "pagesPrevious": "Batch sebelumnya",
+      "pagesNext": "Batch berikutnya",
+      "pagesBudget": "{used} / {max} karakter",
+      "pagesChange": "Ubah halaman",
+      "pagesLoading": "Memuat halaman…",
+      "pagesInvalid": "Masukkan nomor atau rentang halaman, misal 1-40, 45.",
+      "pagesUnavailable": "Tidak ada teks di halaman tersebut.",
+      "pagesTooMany": "Pilihan ini memiliki {used} karakter, sedangkan satu batch maksimal {max}. Pilih halaman lebih sedikit.",
+      "stop": "Berhenti",
+      "stepAnalyzing": "Menganalisis",
+      "stepTranslating": "Menerjemahkan",
+      "stepReviewing": "Meninjau",
+      "stepDone": "Selesai",
+      "runProgressLabel": "Kemajuan terjemahan",
+      "runHintAnalyzing": "Membaca sumber untuk istilah yang sulit dan ambiguitas.",
+      "runHintTranslating": "Menulis terjemahan.",
+      "runHintReviewing": "Memeriksa draft dengan sumber.",
+      "runHintReviewingRound": "Memeriksa draft dengan sumber · putaran {round} dari maksimal {total}.",
+      "runRound": "Putaran {round} dari maksimal {total}",
+      "draftLabel": "Draft",
+      "sourceLocked": "Terkunci saat menerjemahkan",
+      "analysisNotes": "{count, plural, one {# catatan} other {# catatan}}",
+      "analysisPill": "{count, plural, one {Analisis · # catatan} other {Analisis · # catatan}}",
+      "reviewSummary": "{count, plural, one {Tinjauan: # putaran, {verdict}} other {Tinjauan: # putaran, {verdict}}}",
+      "analysisDismiss": "Sembunyikan untuk semua terjemahan",
+      "analysisShow": "Tampilkan analisis pra-terjemahan",
+      "analysisResize": "Ubah ukuran panel analisis",
+      "assessingCriteria": "{count, plural, one {Memeriksa # kriteria} other {Memeriksa # kriteria}}",
+      "editsPending": "Suntingan yang disarankan akan muncul di sini setelah penilaian selesai.",
+      "uploadProgressLabel": "Kemajuan unggahan",
+      "uploadStepUploading": "Mengunggah",
+      "uploadStepReading": "Membaca teks",
+      "uploadStepReady": "Siap",
+      "uploadCancel": "Batalkan"
     },
     "document": {
       "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "Pembacaan email per hari",
       "m365MailDraftsPerDay": "Draft email per hari",
       "m365MailDeepScansPerDay": "Deep scan email per hari",
-      "m365DigestRunsPerDay": "Ringkasan harian per hari"
+      "m365DigestRunsPerDay": "Ringkasan harian per hari",
+      "translationPagesPerDay": "Halaman terjemahan dokumen per hari"
     },
     "valueModeLabel": "Jenis batas",
     "valueAmountLabel": "Jumlah batas",
@@ -5738,7 +5778,8 @@
       "jobs": "pekerjaan",
       "rounds": "putaran",
       "documents": "dokumen",
-      "boolean": ""
+      "boolean": "",
+      "pages": "halaman"
     },
     "window": {
       "day": "hari",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "Pencarian email dan pembacaan pesan/percakapan per hari. Jika melewati batas, alat email akan menampilkan hasil 'coba lagi besok'.",
       "m365MailDraftsPerDay": "Draft email yang dapat dibuat asisten per hari — masing-masing dikonfirmasi secara individual. Dibatasi secara ketat.",
       "m365MailDeepScansPerDay": "Analisis email komposit (ringkasan, pencarian mendalam, komitmen) per hari. Setiap pemindaian dihitung satu unit anggaran tanpa melihat jumlah pembacaan di dalamnya.",
-      "m365DigestRunsPerDay": "Microsoft 365 ringkasan harian per hari. Satu jalankan terdiri dari puluhan pembacaan Graph dan dua panggilan model analisis; pemilih periode membuat permintaan ulang menjadi mudah, sehingga batas default ketat."
+      "m365DigestRunsPerDay": "Microsoft 365 ringkasan harian per hari. Satu jalankan terdiri dari puluhan pembacaan Graph dan dua panggilan model analisis; pemilih periode membuat permintaan ulang menjadi mudah, sehingga batas default ketat.",
+      "translationPagesPerDay": "Halaman PDF yang dikirim untuk terjemahan dokumen per hari."
     },
     "scopeFamily": "Keluarga",
     "scopeModel": "Model",

@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "{name} در OneDrive ذخیره شد.",
     "openInOneDrive": "باز کردن",
     "saveForbidden": "شما اجازه نوشتن در آن پوشه را ندارید — با «ذخیره‌سازی در OneDrive» پوشه دیگری انتخاب کنید.",
-    "saveToOneDriveFailed": "ذخیره‌سازی در OneDrive موفق نبود — لطفاً دوباره تلاش کنید."
+    "saveToOneDriveFailed": "ذخیره‌سازی در OneDrive موفق نبود — لطفاً دوباره تلاش کنید.",
+    "textVersion": "نسخه متنی (DOCX)",
+    "textVersionHint": "یک فایل Word قابل ویرایش با متن ترجمه‌شده، هر صفحه برای یک صفحه منبع. فایل ترجمه‌شده چیدمان اصلی را حفظ می‌کند."
   },
   "terms": {
     "officialLanguages": "نسخه رسمی:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "این فایل برای وارد کردن بسیار بزرگ است (حداکثر ۵ مگابایت).",
       "importNothing": "هیچ سطر قابل استفاده‌ای یافت نشد ({skipped} رد شده).",
       "importSummary": "{added} اضافه شد، {replaced} جایگزین شد، {skipped} رد شد.",
-      "entriesTooManyToShow": "{count} واژه — نمایش همه ممکن نیست. برای بررسی، خروجی بگیرید یا برای جایگزینی واژه‌ها فایل وارد کنید."
+      "entriesTooManyToShow": "{count} واژه — نمایش همه ممکن نیست. برای بررسی، خروجی بگیرید یا برای جایگزینی واژه‌ها فایل وارد کنید.",
+      "pagesLoaded": "صفحات {selected} از {total} بارگذاری شده‌اند",
+      "pagesLabel": "صفحات",
+      "pagesApply": "بارگذاری صفحات",
+      "pagesPrevious": "دسته قبلی",
+      "pagesNext": "دسته بعدی",
+      "pagesBudget": "{used} / {max} کاراکتر",
+      "pagesChange": "تغییر صفحات",
+      "pagesLoading": "در حال بارگذاری صفحات...",
+      "pagesInvalid": "شماره یا بازه صفحات را وارد کنید، مثلاً ۱-۴۰، ۴۵.",
+      "pagesUnavailable": "هیچ یک از این صفحات شامل متن نیستند.",
+      "pagesTooMany": "این انتخاب {used} کاراکتر است و هر دسته {max} کاراکتر را نگه می‌دارد. صفحات کمتری انتخاب کنید.",
+      "stop": "توقف",
+      "stepAnalyzing": "در حال تحلیل",
+      "stepTranslating": "در حال ترجمه",
+      "stepReviewing": "در حال بازبینی",
+      "stepDone": "انجام شد",
+      "runProgressLabel": "پیشرفت ترجمه",
+      "runHintAnalyzing": "در حال خواندن منبع برای اصطلاحات دشوار و ابهامات.",
+      "runHintTranslating": "در حال نوشتن ترجمه.",
+      "runHintReviewing": "در حال بررسی پیش‌نویس با منبع.",
+      "runHintReviewingRound": "در حال بررسی پیش‌نویس با منبع · دور {round} از {total}.",
+      "runRound": "دور {round} از {total}",
+      "draftLabel": "پیش‌نویس",
+      "sourceLocked": "در حال ترجمه قفل است",
+      "analysisNotes": "{count, plural, one {# یادداشت} other {# یادداشت}}",
+      "analysisPill": "{count, plural, one {تحلیل · # یادداشت} other {تحلیل · # یادداشت}}",
+      "reviewSummary": "{count, plural, one {بازبینی: # دور، {verdict}} other {بازبینی: # دور، {verdict}}}",
+      "analysisDismiss": "پنهان کردن برای همه ترجمه‌ها",
+      "analysisShow": "نمایش تحلیل پیش از ترجمه",
+      "analysisResize": "تغییر اندازه پانل تحلیل",
+      "assessingCriteria": "{count, plural, one {در حال بررسی # معیار} other {در حال بررسی # معیار}}",
+      "editsPending": "ویرایش‌های پیشنهادی پس از پایان ارزیابی اینجا نمایش داده می‌شوند.",
+      "uploadProgressLabel": "پیشرفت آپلود",
+      "uploadStepUploading": "در حال آپلود",
+      "uploadStepReading": "در حال خواندن متن",
+      "uploadStepReady": "آماده",
+      "uploadCancel": "لغو"
     },
     "document": {
       "emptyTitle": "مشخصات سند موردنظر را توضیح دهید",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "تعداد خواندن ایمیل در روز",
       "m365MailDraftsPerDay": "تعداد پیش‌نویس ایمیل در روز",
       "m365MailDeepScansPerDay": "تعداد اسکن عمیق ایمیل در روز",
-      "m365DigestRunsPerDay": "اجرای خلاصه روزانه در هر روز"
+      "m365DigestRunsPerDay": "اجرای خلاصه روزانه در هر روز",
+      "translationPagesPerDay": "تعداد صفحات ترجمه سند در روز"
     },
     "valueModeLabel": "نوع محدودیت",
     "valueAmountLabel": "مقدار محدودیت",
@@ -5738,7 +5778,8 @@
       "jobs": "فرآیند",
       "rounds": "دور",
       "documents": "سند",
-      "boolean": ""
+      "boolean": "",
+      "pages": "صفحات"
     },
     "window": {
       "day": "روز",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "جستجو و خواندن پیام/رشته‌های ایمیل در روز. پس از عبور از محدودیت، ابزارهای ایمیل پیام \"فردا دوباره امتحان کنید\" را نمایش می‌دهند.",
       "m365MailDraftsPerDay": "پیش‌نویس‌های ایمیلی که دستیار می‌تواند در هر روز ایجاد کند — هر کدام جداگانه تأیید می‌شوند. محدودیت به‌صورت عمدی کم است.",
       "m365MailDeepScansPerDay": "تجزیه‌وتحلیل‌های ترکیبی ایمیل (خلاصه‌ها، جستجوی عمیق، تعهدات) در روز. هر تجزیه‌وتحلیل یک واحد بودجه محسوب می‌شود بدون توجه به تعداد دفعات خواندن داخلی.",
-      "m365DigestRunsPerDay": "اجرای خلاصه روزانه Microsoft 365 در هر روز. هر اجرا شامل چندین خوانش Graph و دو فراخوانی مدل تحلیل است؛ انتخاب دوره، اجرای مجدد را آسان می‌کند، بنابراین مقدار پیش‌فرض محدود است."
+      "m365DigestRunsPerDay": "اجرای خلاصه روزانه Microsoft 365 در هر روز. هر اجرا شامل چندین خوانش Graph و دو فراخوانی مدل تحلیل است؛ انتخاب دوره، اجرای مجدد را آسان می‌کند، بنابراین مقدار پیش‌فرض محدود است.",
+      "translationPagesPerDay": "صفحات PDF ارسال‌شده برای ترجمه سند در روز."
     },
     "scopeFamily": "خانواده",
     "scopeModel": "مدل",

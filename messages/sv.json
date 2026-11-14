@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "Sparade {name} till OneDrive.",
     "openInOneDrive": "Öppna",
     "saveForbidden": "Du har inte behörighet att skriva till den mappen — välj en annan med ”Spara till OneDrive”.",
-    "saveToOneDriveFailed": "Det gick inte att spara till OneDrive — försök igen."
+    "saveToOneDriveFailed": "Det gick inte att spara till OneDrive — försök igen.",
+    "textVersion": "Textversion (DOCX)",
+    "textVersionHint": "En redigerbar Word-fil med den översatta texten, en sida per källsida. Den översatta filen behåller ursprungslayouten."
   },
   "terms": {
     "officialLanguages": "Officiell version:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "Filen är för stor för import (max 5 MB).",
       "importNothing": "Inga användbara rader hittades ({skipped} hoppades över).",
       "importSummary": "{added} tillagda, {replaced} ersatta, {skipped} hoppade över.",
-      "entriesTooManyToShow": "{count} termer — för många för att listas här. Exportera för att granska dem, eller importera en fil för att ersätta termer."
+      "entriesTooManyToShow": "{count} termer — för många för att listas här. Exportera för att granska dem, eller importera en fil för att ersätta termer.",
+      "pagesLoaded": "sidor {selected} av {total} inlästa",
+      "pagesLabel": "Sidor",
+      "pagesApply": "Ladda sidor",
+      "pagesPrevious": "Föregående omgång",
+      "pagesNext": "Nästa omgång",
+      "pagesBudget": "{used} / {max} tecken",
+      "pagesChange": "Ändra sidor",
+      "pagesLoading": "Laddar sidor…",
+      "pagesInvalid": "Ange sidnummer eller intervall, till exempel 1-40, 45.",
+      "pagesUnavailable": "Ingen av dessa sidor innehåller text.",
+      "pagesTooMany": "Det urvalet är {used} tecken och en omgång rymmer {max}. Välj färre sidor.",
+      "stop": "Stoppa",
+      "stepAnalyzing": "Analyserar",
+      "stepTranslating": "Översätter",
+      "stepReviewing": "Granskar",
+      "stepDone": "Klar",
+      "runProgressLabel": "Översättningsförlopp",
+      "runHintAnalyzing": "Läser källan för svåra termer och tvetydigheter.",
+      "runHintTranslating": "Skriver översättningen.",
+      "runHintReviewing": "Kontrollerar utkastet mot källan.",
+      "runHintReviewingRound": "Kontrollerar utkastet mot källan · omgång {round} av upp till {total}.",
+      "runRound": "Omgång {round} av upp till {total}",
+      "draftLabel": "Utkast",
+      "sourceLocked": "Låst under översättning",
+      "analysisNotes": "{count, plural, one {# anteckning} other {# anteckningar}}",
+      "analysisPill": "{count, plural, one {Analys · # anteckning} other {Analys · # anteckningar}}",
+      "reviewSummary": "{count, plural, one {Granskning: # omgång, {verdict}} other {Granskning: # omgångar, {verdict}}}",
+      "analysisDismiss": "Dölj för alla översättningar",
+      "analysisShow": "Visa föranalys",
+      "analysisResize": "Ändra storlek på analyspanelen",
+      "assessingCriteria": "{count, plural, one {Kontrollerar # kriterium} other {Kontrollerar # kriterier}}",
+      "editsPending": "Föreslagna ändringar visas här när granskningen är klar.",
+      "uploadProgressLabel": "Uppladdningsförlopp",
+      "uploadStepUploading": "Laddar upp",
+      "uploadStepReading": "Läser text",
+      "uploadStepReady": "Klar",
+      "uploadCancel": "Avbryt"
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "Mail-läsningar per dag",
       "m365MailDraftsPerDay": "Mailutkast per dag",
       "m365MailDeepScansPerDay": "Mail-djupanalyser per dag",
-      "m365DigestRunsPerDay": "Dagliga digest-körningar per dag"
+      "m365DigestRunsPerDay": "Dagliga digest-körningar per dag",
+      "translationPagesPerDay": "Sidor för dokumentöversättning per dag"
     },
     "valueModeLabel": "Begränsningstyp",
     "valueAmountLabel": "Begränsningsvärde",
@@ -5738,7 +5778,8 @@
       "jobs": "jobb",
       "rounds": "omgångar",
       "documents": "dokument",
-      "boolean": ""
+      "boolean": "",
+      "pages": "sidor"
     },
     "window": {
       "day": "dag",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "E-postsökningar och läsningar av meddelanden/trådar per dag. Om gränsen överskrids returnerar e-postverktygen \"försök igen imorgon\".",
       "m365MailDraftsPerDay": "E-postutkast som assistenten får skapa per dag — varje måste bekräftas individuellt. Medvetet stramt.",
       "m365MailDeepScansPerDay": "Sammansatta e-postanalyser (sammandrag, djupsök, åtaganden) per dag. Varje skanning räknas som en budgetenhet oavsett antal interna läsningar.",
-      "m365DigestRunsPerDay": "Microsoft 365 dagliga digest-körningar per dag. En körning innebär dussintals Graph-läsningar plus två analysmodellsanrop; periodväljaren gör det billigt att köra om, därför är standardvärdet stramt."
+      "m365DigestRunsPerDay": "Microsoft 365 dagliga digest-körningar per dag. En körning innebär dussintals Graph-läsningar plus två analysmodellsanrop; periodväljaren gör det billigt att köra om, därför är standardvärdet stramt.",
+      "translationPagesPerDay": "PDF-sidor inskickade för dokumentöversättning per dag."
     },
     "scopeFamily": "Familj",
     "scopeModel": "Modell",

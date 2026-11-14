@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "Sove {name} nan OneDrive.",
     "openInOneDrive": "Louvri",
     "saveForbidden": "Ou pa gen otorizasyon pou ekri nan folder sa — chwazi yon lòt ak “Sove nan OneDrive”.",
-    "saveToOneDriveFailed": "Pa t kapab sove nan OneDrive — tanpri eseye ankò."
+    "saveToOneDriveFailed": "Pa t kapab sove nan OneDrive — tanpri eseye ankò.",
+    "textVersion": "Vèsyon tèks (DOCX)",
+    "textVersionHint": "Yon dokiman Word ou ka modifye ak tèks tradui a, yon paj pou chak paj orijinal. Fichye tradui a kenbe dispozisyon orijinal la."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Fichye sa a two lou pou enpòte (5 MB max).",
       "importNothing": "Pa jwenn okenn liy ki itilize ({skipped} sote).",
       "importSummary": "{added} ajoute, {replaced} ranplase, {skipped} sote.",
-      "entriesTooManyToShow": "{count} tèm — two anpil pou montre isit la. Ekspòte pou revize yo, oswa enpòte yon fichye pou ranplase yo."
+      "entriesTooManyToShow": "{count} tèm — two anpil pou montre isit la. Ekspòte pou revize yo, oswa enpòte yon fichye pou ranplase yo.",
+      "pagesLoaded": "{selected} sou {total} paj chaje",
+      "pagesLabel": "Paj",
+      "pagesApply": "Chaje paj yo",
+      "pagesPrevious": "Pakèt anvan",
+      "pagesNext": "Pakèt apre",
+      "pagesBudget": "{used} / {max} karaktè",
+      "pagesChange": "Chanje paj yo",
+      "pagesLoading": "Ap chaje paj yo...",
+      "pagesInvalid": "Antre nimewo oswa ranje paj, pa egzanp 1-40, 45.",
+      "pagesUnavailable": "Paj sa yo pa gen okenn tèks.",
+      "pagesTooMany": "Seleksyon sa a gen {used} karaktè epi yon pakèt kenbe {max}. Chwazi mwens paj.",
+      "stop": "Sispann",
+      "stepAnalyzing": "Ap analize",
+      "stepTranslating": "Ap tradui",
+      "stepReviewing": "Ap revize",
+      "stepDone": "Fini",
+      "runProgressLabel": "Pwoogrè tradiksyon",
+      "runHintAnalyzing": "Li sous la pou mo difisil ak anbigwite.",
+      "runHintTranslating": "Ap ekri tradiksyon an.",
+      "runHintReviewing": "Ap verifye bouyon an ak sous la.",
+      "runHintReviewingRound": "Ap verifye bouyon an ak sous la · wonn {round} sou {total}.",
+      "runRound": "Ronn {round} sou {total}",
+      "draftLabel": "Bouyon",
+      "sourceLocked": "Bloke pandan tradiksyon",
+      "analysisNotes": "{count, plural, one {# nòt} other {# nòt}}",
+      "analysisPill": "{count, plural, one {Analiz · # nòt} other {Analiz · # nòt}}",
+      "reviewSummary": "{count, plural, one {Revizyon: # ronn, {verdict}} other {Revizyon: # ronn, {verdict}}}",
+      "analysisDismiss": "Kache pou tout tradiksyon yo",
+      "analysisShow": "Montre analiz avan tradiksyon",
+      "analysisResize": "Chanje gwosè panèl analiz la",
+      "assessingCriteria": "{count, plural, one {Ap tcheke # kritè} other {Ap tcheke # kritè}}",
+      "editsPending": "Edits yo ap parèt isit la lè evalyasyon an fini.",
+      "uploadProgressLabel": "Pwoogrè chajman",
+      "uploadStepUploading": "Ap chaje",
+      "uploadStepReading": "Ap li tèks la",
+      "uploadStepReady": "Pare",
+      "uploadCancel": "Anile"
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Lekti imel pa jou",
       "m365MailDraftsPerDay": "Boukonn imel pa jou",
       "m365MailDeepScansPerDay": "Skan fon imel pa jou",
-      "m365DigestRunsPerDay": "Rapò chak jou pa jou"
+      "m365DigestRunsPerDay": "Rapò chak jou pa jou",
+      "translationPagesPerDay": "Paj dokiman tradiksyon pa jou"
     },
     "valueModeLabel": "Kalite limit",
     "valueAmountLabel": "Montan limit",
@@ -5722,7 +5762,8 @@
       "jobs": "travay",
       "rounds": "ronn",
       "documents": "dokiman",
-      "boolean": ""
+      "boolean": "",
+      "pages": "paj"
     },
     "window": {
       "day": "jou",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Rechèch imel ak lekti mesaj/sijè pa jou. Si w depase limit la, zouti imel yo ap retounen yon mesaj “rekòmanse demen”.",
       "m365MailDraftsPerDay": "Brouyon imèl asistan an ka kreye chak jou — chak youn konfime separeman. Limit la byen sere.",
       "m365MailDeepScansPerDay": "Analiz imel konpoze (rezime, rechèch pwofon, angajman) pa jou. Chak analiz konte kòm yon inite bidjè kèlkeswa kantite lekti andedan l.",
-      "m365DigestRunsPerDay": "Microsoft 365 rapò chak jou pa jou. Chak egzekisyon vle di plizyè lekti Graph plis de apèl modèl analiz; chwa peryòd la fè fasil repase, se poutèt sa limit la sere pa default."
+      "m365DigestRunsPerDay": "Microsoft 365 rapò chak jou pa jou. Chak egzekisyon vle di plizyè lekti Graph plis de apèl modèl analiz; chwa peryòd la fè fasil repase, se poutèt sa limit la sere pa default.",
+      "translationPagesPerDay": "Paj PDF soumèt pou tradiksyon dokiman pa jou."
     },
     "scopeFamily": "Fanmi",
     "scopeModel": "Modèl",

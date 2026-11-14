@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "Tallennettu {name} OneDriveen.",
     "openInOneDrive": "Avaa",
     "saveForbidden": "Sinulla ei ole oikeutta tallentaa tähän kansioon — valitse toinen \"Tallenna OneDriveen\" -toiminnolla.",
-    "saveToOneDriveFailed": "Tallennus OneDriveen epäonnistui — yritä uudelleen."
+    "saveToOneDriveFailed": "Tallennus OneDriveen epäonnistui — yritä uudelleen.",
+    "textVersion": "Tekstiversio (DOCX)",
+    "textVersionHint": "Muokattava Word-tiedosto, jossa käännetty teksti, yksi sivu vastaavalle lähdesivulle. Käännetty tiedosto säilyttää alkuperäisen ulkoasun."
   },
   "terms": {
     "officialLanguages": "Virallinen versio:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "Tiedosto on liian suuri tuotavaksi (enintään 5 Mt).",
       "importNothing": "Käytettäviä rivejä ei löytynyt ({skipped} ohitettu).",
       "importSummary": "{added} lisätty, {replaced} korvattu, {skipped} ohitettu.",
-      "entriesTooManyToShow": "{count} termiä – liian monta näytettäväksi tässä. Vie tarkastellaksesi, tai tuo uusi tiedosto korvataksesi termit."
+      "entriesTooManyToShow": "{count} termiä – liian monta näytettäväksi tässä. Vie tarkastellaksesi, tai tuo uusi tiedosto korvataksesi termit.",
+      "pagesLoaded": "sivua {selected} / {total} ladattu",
+      "pagesLabel": "Sivut",
+      "pagesApply": "Lataa sivut",
+      "pagesPrevious": "Edellinen erä",
+      "pagesNext": "Seuraava erä",
+      "pagesBudget": "{used} / {max} merkkiä",
+      "pagesChange": "Vaihda sivuja",
+      "pagesLoading": "Ladataan sivuja…",
+      "pagesInvalid": "Syötä sivunumeroita tai alueita, esimerkiksi 1-40, 45.",
+      "pagesUnavailable": "Yhdelläkään näistä sivuista ei ole tekstiä.",
+      "pagesTooMany": "Valinta on {used} merkkiä ja yksi erä voi sisältää {max}. Valitse vähemmän sivuja.",
+      "stop": "Pysäytä",
+      "stepAnalyzing": "Analysoidaan",
+      "stepTranslating": "Käännetään",
+      "stepReviewing": "Arvioidaan",
+      "stepDone": "Valmis",
+      "runProgressLabel": "Käännöksen edistyminen",
+      "runHintAnalyzing": "Luetaan lähdetekstiä vaikeiden termien ja epäselvyyksien varalta.",
+      "runHintTranslating": "Kirjoitetaan käännöstä.",
+      "runHintReviewing": "Tarkistetaan luonnosta verrattuna lähdetekstiin.",
+      "runHintReviewingRound": "Tarkistetaan luonnosta verrattuna lähdetekstiin · kierros {round} enintään {total}.",
+      "runRound": "Kierros {round} enintään {total}",
+      "draftLabel": "Luonnos",
+      "sourceLocked": "Lukittu käännöksen ajan",
+      "analysisNotes": "{count, plural, one {# huomio} other {# huomiota}}",
+      "analysisPill": "{count, plural, one {Analyysi · # huomio} other {Analyysi · # huomiota}}",
+      "reviewSummary": "{count, plural, one {Arviointi: # kierros, {verdict}} other {Arviointi: # kierrosta, {verdict}}}",
+      "analysisDismiss": "Piilota kaikista käännöksistä",
+      "analysisShow": "Näytä esianalyysi",
+      "analysisResize": "Muuta analyysipaneelin kokoa",
+      "assessingCriteria": "{count, plural, one {Tarkistetaan # kriteeri} other {Tarkistetaan # kriteeriä}}",
+      "editsPending": "Ehdotetut muokkaukset näkyvät tässä arvioinnin valmistuttua.",
+      "uploadProgressLabel": "Latauksen edistyminen",
+      "uploadStepUploading": "Ladataan",
+      "uploadStepReading": "Luetaan tekstiä",
+      "uploadStepReady": "Valmis",
+      "uploadCancel": "Peruuta"
     },
     "document": {
       "emptyTitle": "Kuvaile haluamaasi asiakirjaa",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "Sähköpostien luku päivässä",
       "m365MailDraftsPerDay": "Sähköpostiluonnokset päivässä",
       "m365MailDeepScansPerDay": "Sähköpostien syvätarkistukset päivässä",
-      "m365DigestRunsPerDay": "Päivittäiset yhteenvetoraportit per päivä"
+      "m365DigestRunsPerDay": "Päivittäiset yhteenvetoraportit per päivä",
+      "translationPagesPerDay": "Dokumenttikäännöksen sivut per päivä"
     },
     "valueModeLabel": "Rajoituksen tyyppi",
     "valueAmountLabel": "Rajoituksen määrä",
@@ -5738,7 +5778,8 @@
       "jobs": "tehtävää",
       "rounds": "kierrosta",
       "documents": "asiakirjaa",
-      "boolean": ""
+      "boolean": "",
+      "pages": "sivua"
     },
     "window": {
       "day": "päivä",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "Sähköpostihakujen ja viestien/keskustelujen luku per päivä. Kun raja ylittyy, sähköpostityökalut palauttavat “yritä uudelleen huomenna” -viestin.",
       "m365MailDraftsPerDay": "Sähköpostiluonnokset, joita assistentti voi luoda päivässä — jokainen vahvistetaan erikseen. Raja on tarkoituksella tiukka.",
       "m365MailDeepScansPerDay": "Yhdistetyt sähköpostianalyysit (koosteet, syvähaut, sitoumukset) päivässä. Jokainen skannaus vie yhden budjettiyksikön riippumatta sisäisistä luennoista.",
-      "m365DigestRunsPerDay": "Microsoft 365 -päivittäiset yhteenvetoraportit per päivä. Yksi ajo sisältää kymmeniä Graph-lukuja ja kaksi analyysimallikutsua; ajanjakson valinta tekee uusinnat helpoiksi, joten oletus on tiukka."
+      "m365DigestRunsPerDay": "Microsoft 365 -päivittäiset yhteenvetoraportit per päivä. Yksi ajo sisältää kymmeniä Graph-lukuja ja kaksi analyysimallikutsua; ajanjakson valinta tekee uusinnat helpoiksi, joten oletus on tiukka.",
+      "translationPagesPerDay": "PDF-sivut, jotka lähetetty dokumenttikäännökseen päivässä."
     },
     "scopeFamily": "Perhe",
     "scopeModel": "Malli",

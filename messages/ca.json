@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "S'ha desat {name} a OneDrive.",
     "openInOneDrive": "Obre",
     "saveForbidden": "No tens permís per escriure en aquesta carpeta — tria'n una altra amb “Desa a OneDrive”.",
-    "saveToOneDriveFailed": "No s'ha pogut desar a OneDrive — torna-ho a intentar."
+    "saveToOneDriveFailed": "No s'ha pogut desar a OneDrive — torna-ho a intentar.",
+    "textVersion": "Versió de text (DOCX)",
+    "textVersionHint": "Un fitxer Word editable amb el text traduït, una pàgina per cada pàgina d’origen. El fitxer traduït manté la disposició original."
   },
   "terms": {
     "officialLanguages": "Versió oficial:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "El fitxer és massa gran per importar (màxim 5 MB).",
       "importNothing": "No s'han trobat files útils ({skipped} omeses).",
       "importSummary": "{added} afegits, {replaced} reemplaçats, {skipped} omesos.",
-      "entriesTooManyToShow": "{count} termes — massa per llistar aquí. Exporta per revisar-los, o importa un fitxer per reemplaçar termes."
+      "entriesTooManyToShow": "{count} termes — massa per llistar aquí. Exporta per revisar-los, o importa un fitxer per reemplaçar termes.",
+      "pagesLoaded": "pàgines {selected} de {total} carregades",
+      "pagesLabel": "Pàgines",
+      "pagesApply": "Carregar pàgines",
+      "pagesPrevious": "Lot anterior",
+      "pagesNext": "Lot següent",
+      "pagesBudget": "{used} / {max} caràcters",
+      "pagesChange": "Canvia pàgines",
+      "pagesLoading": "S’estan carregant les pàgines…",
+      "pagesInvalid": "Introduïu números de pàgina o intervals, per exemple 1-40, 45.",
+      "pagesUnavailable": "Cap d’aquestes pàgines conté text.",
+      "pagesTooMany": "Aquesta selecció ocupa {used} caràcters i un lot en pot contenir {max}. Trieu menys pàgines.",
+      "stop": "Atura",
+      "stepAnalyzing": "S'està analitzant",
+      "stepTranslating": "S'està traduint",
+      "stepReviewing": "S'està revisant",
+      "stepDone": "Fet",
+      "runProgressLabel": "Progrés de la traducció",
+      "runHintAnalyzing": "S'està llegint l'original per identificar termes difícils i ambigüitats.",
+      "runHintTranslating": "S'està escrivint la traducció.",
+      "runHintReviewing": "S'està comprovant el primer esborrany amb l'original.",
+      "runHintReviewingRound": "S'està comprovant el primer esborrany amb l'original · volta {round} de fins a {total}.",
+      "runRound": "Volta {round} de fins a {total}",
+      "draftLabel": "Esborrany",
+      "sourceLocked": "Blocat durant la traducció",
+      "analysisNotes": "{count, plural, one {# nota} other {# notes}}",
+      "analysisPill": "{count, plural, one {Anàlisi · # nota} other {Anàlisi · # notes}}",
+      "reviewSummary": "{count, plural, one {Revisió: # volta, {verdict}} other {Revisions: # voltes, {verdict}}}",
+      "analysisDismiss": "Amaga per a totes les traduccions",
+      "analysisShow": "Mostra l'anàlisi prèvia a la traducció",
+      "analysisResize": "Canvia la mida del panell d'anàlisi",
+      "assessingCriteria": "{count, plural, one {S'està comprovant # criteri} other {S'estan comprovant # criteris}}",
+      "editsPending": "Les edicions suggerides apareixeran aquí quan finalitzi l'avaluació.",
+      "uploadProgressLabel": "Progrés de la càrrega",
+      "uploadStepUploading": "S'està carregant",
+      "uploadStepReading": "S'està llegint el text",
+      "uploadStepReady": "Preparat",
+      "uploadCancel": "Cancel·la"
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "Lectures de correus per dia",
       "m365MailDraftsPerDay": "Esborranys de correus per dia",
       "m365MailDeepScansPerDay": "Anàlisis profundes de correus per dia",
-      "m365DigestRunsPerDay": "Execucions diàries del resum per dia"
+      "m365DigestRunsPerDay": "Execucions diàries del resum per dia",
+      "translationPagesPerDay": "Pàgines de traducció de documents per dia"
     },
     "valueModeLabel": "Tipus de límit",
     "valueAmountLabel": "Quantitat límit",
@@ -5738,7 +5778,8 @@
       "jobs": "tascas",
       "rounds": "voltes",
       "documents": "documents",
-      "boolean": ""
+      "boolean": "",
+      "pages": "pàgines"
     },
     "window": {
       "day": "dia",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "Cerques de correu i lectures de missatges/converses al dia. Superat el límit, les eines de correu et donaran el resultat \"torna-ho a provar demà\".",
       "m365MailDraftsPerDay": "Esborranys de correu electrònic que l'assistent pot crear cada dia — cadascun confirmat individualment. Límit intencionadament restrictiu.",
       "m365MailDeepScansPerDay": "Anàlisis de correu compostes (resums, cerques profundes, compromisos) al dia. Cada anàlisi compta com una unitat del pressupost, independentment de les lectures internes.",
-      "m365DigestRunsPerDay": "Execucions del resum diari de Microsoft 365 per dia. Cada execució implica desenes de lectures Graph i dues trucades als models d'anàlisi; l’eina de selecció de període fa que repetir execucions sigui fàcil, per això el valor predeterminat és restrictiu."
+      "m365DigestRunsPerDay": "Execucions del resum diari de Microsoft 365 per dia. Cada execució implica desenes de lectures Graph i dues trucades als models d'anàlisi; l’eina de selecció de període fa que repetir execucions sigui fàcil, per això el valor predeterminat és restrictiu.",
+      "translationPagesPerDay": "Pàgines PDF enviades per a la traducció de documents cada dia."
     },
     "scopeFamily": "Família",
     "scopeModel": "Model",

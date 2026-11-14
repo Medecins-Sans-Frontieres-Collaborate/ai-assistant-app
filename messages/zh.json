@@ -2592,7 +2592,9 @@
     "savedToOneDrive": "已将 {name} 保存到 OneDrive。",
     "openInOneDrive": "打开",
     "saveForbidden": "您没有向该文件夹写入的权限，请使用“保存到 OneDrive”选择其他文件夹。",
-    "saveToOneDriveFailed": "无法保存到 OneDrive，请重试。"
+    "saveToOneDriveFailed": "无法保存到 OneDrive，请重试。",
+    "textVersion": "文本版本（DOCX）",
+    "textVersionHint": "可编辑的 Word 文件，包含翻译文本，每页对应原文一页。翻译文件本身保留原始格式。"
   },
   "terms": {
     "officialLanguages": "官方版本：",
@@ -3105,7 +3107,44 @@
       "importTooLarge": "该文件过大，无法导入（最大 5 MB）。",
       "importNothing": "未找到可用行（已跳过 {skipped} 行）。",
       "importSummary": "已添加 {added} 条，替换 {replaced} 条，跳过 {skipped} 条。",
-      "entriesTooManyToShow": "共 {count} 个术语—数量过多，无法全部显示。请导出以查看，或导入文件替换术语。"
+      "entriesTooManyToShow": "共 {count} 个术语—数量过多，无法全部显示。请导出以查看，或导入文件替换术语。",
+      "pagesLoaded": "已加载 {total} 页中的第 {selected} 页",
+      "pagesLabel": "页数",
+      "pagesApply": "加载页数",
+      "pagesPrevious": "上一批",
+      "pagesNext": "下一批",
+      "pagesBudget": "{used} / {max} 个字符",
+      "pagesChange": "更改页数",
+      "pagesLoading": "正在加载页数…",
+      "pagesInvalid": "请输入页码或范围，例如 1-40，45。",
+      "pagesUnavailable": "所选页面没有文本内容。",
+      "pagesTooMany": "此选择共 {used} 个字符，每批最多 {max} 个字符。请减少页数。",
+      "stop": "停止",
+      "stepAnalyzing": "分析中",
+      "stepTranslating": "翻译中",
+      "stepReviewing": "审核中",
+      "stepDone": "完成",
+      "runProgressLabel": "翻译进度",
+      "runHintAnalyzing": "正在查找难解术语和歧义。",
+      "runHintTranslating": "正在撰写翻译。",
+      "runHintReviewing": "正在比对草稿与原文。",
+      "runHintReviewingRound": "正在比对草稿与原文 · 第 {round} 轮，共 {total} 轮。",
+      "runRound": "第 {round} 轮，共 {total} 轮",
+      "draftLabel": "草稿",
+      "sourceLocked": "翻译期间已锁定",
+      "analysisNotes": "{count, plural, one {# 条备注} other {# 条备注}}",
+      "analysisPill": "{count, plural, one {分析 · # 条备注} other {分析 · # 条备注}}",
+      "reviewSummary": "{count, plural, one {审核：# 轮，{verdict}} other {审核：# 轮，{verdict}}}",
+      "analysisDismiss": "对所有翻译隐藏",
+      "analysisShow": "显示翻译前分析",
+      "analysisResize": "调整分析面板大小",
+      "assessingCriteria": "{count, plural, one {检查 # 个标准} other {检查 # 个标准}}",
+      "editsPending": "评估完成后，建议修改将显示在此处。",
+      "uploadProgressLabel": "上传进度",
+      "uploadStepUploading": "上传中",
+      "uploadStepReading": "读取文本",
+      "uploadStepReady": "准备就绪",
+      "uploadCancel": "取消"
     },
     "document": {
       "emptyTitle": "描述您需要的文档",
@@ -5746,7 +5785,8 @@
       "m365MailReadsPerDay": "每日邮件读取次数",
       "m365MailDraftsPerDay": "每日邮件草稿次数",
       "m365MailDeepScansPerDay": "每日邮件深度扫描次数",
-      "m365DigestRunsPerDay": "每日摘要运行次数"
+      "m365DigestRunsPerDay": "每日摘要运行次数",
+      "translationPagesPerDay": "每日文档翻译页数"
     },
     "valueModeLabel": "限额类型",
     "valueAmountLabel": "限额数量",
@@ -5769,7 +5809,8 @@
       "jobs": "作业",
       "rounds": "轮次",
       "documents": "份",
-      "boolean": ""
+      "boolean": "",
+      "pages": "页"
     },
     "window": {
       "day": "天",
@@ -5827,7 +5868,8 @@
       "m365MailReadsPerDay": "每天的邮件搜索及邮件/会话读取次数。超出限制后，邮件工具会返回“请明天重试”提示。",
       "m365MailDraftsPerDay": "助手每天可创建的邮件草稿数——每个均需单独确认，配额有限。",
       "m365MailDeepScansPerDay": "每天的综合邮件分析（摘要、深度搜索、承诺）。每次分析计为一个预算单位，与内部读取次数无关。",
-      "m365DigestRunsPerDay": "Microsoft 365 每日摘要运行次数。一次运行包含多次 Graph 读取和两次分析模型调用；周期选择器让复运行变得容易，因此默认限制较严。"
+      "m365DigestRunsPerDay": "Microsoft 365 每日摘要运行次数。一次运行包含多次 Graph 读取和两次分析模型调用；周期选择器让复运行变得容易，因此默认限制较严。",
+      "translationPagesPerDay": "每日提交用于文档翻译的 PDF 页数。"
     },
     "scopeFamily": "系列",
     "scopeModel": "模型",

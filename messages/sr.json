@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "Sačuvano {name} na OneDrive.",
     "openInOneDrive": "Otvori",
     "saveForbidden": "Nemate dozvolu za pisanje u taj folder — izaberite drugi uz „Sačuvaj na OneDrive“.",
-    "saveToOneDriveFailed": "Nije moguće sačuvati na OneDrive — pokušajte ponovo."
+    "saveToOneDriveFailed": "Nije moguće sačuvati na OneDrive — pokušajte ponovo.",
+    "textVersion": "Tekstualna verzija (DOCX)",
+    "textVersionHint": "Izmenjiva Word datoteka sa prevedenim tekstom, jedna stranica po izvornoj stranici. Prevedena datoteka zadržava originalni izgled."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Taj fajl je prevelik za uvoz (maksimalno 5 MB).",
       "importNothing": "Nije pronađen nijedan upotrebljiv red ({skipped} preskočeno).",
       "importSummary": "{added} dodato, {replaced} zamenjeno, {skipped} preskočeno.",
-      "entriesTooManyToShow": "{count} termina — previše za prikaz. Izvezite da ih proverite ili uvezite fajl da zamenite termine."
+      "entriesTooManyToShow": "{count} termina — previše za prikaz. Izvezite da ih proverite ili uvezite fajl da zamenite termine.",
+      "pagesLoaded": "stranice {selected} od {total} učitane",
+      "pagesLabel": "Stranice",
+      "pagesApply": "Učitaj stranice",
+      "pagesPrevious": "Prethodna serija",
+      "pagesNext": "Sledeća serija",
+      "pagesBudget": "{used} / {max} karaktera",
+      "pagesChange": "Promeni stranice",
+      "pagesLoading": "Učitavanje stranica…",
+      "pagesInvalid": "Unesite brojeve ili opsege stranica, na primer 1-40, 45.",
+      "pagesUnavailable": "Nijedna od tih stranica ne sadrži tekst.",
+      "pagesTooMany": "Taj izbor ima {used} karaktera, dok jedna serija može da sadrži {max}. Izaberite manje stranica.",
+      "stop": "Zaustavi",
+      "stepAnalyzing": "Analiza",
+      "stepTranslating": "Prevod",
+      "stepReviewing": "Pregled",
+      "stepDone": "Završeno",
+      "runProgressLabel": "Napredak prevoda",
+      "runHintAnalyzing": "Čitanje izvora radi složenih termina i nejasnoća.",
+      "runHintTranslating": "Pisanje prevoda.",
+      "runHintReviewing": "Provera nacrta prema izvoru.",
+      "runHintReviewingRound": "Provera nacrta prema izvoru · runda {round} od najviše {total}.",
+      "runRound": "Runda {round} od najviše {total}",
+      "draftLabel": "Nacrt",
+      "sourceLocked": "Zaključano tokom prevoda",
+      "analysisNotes": "{count, plural, one {# napomena} other {# napomena}}",
+      "analysisPill": "{count, plural, one {Analiza · # napomena} other {Analiza · # napomena}}",
+      "reviewSummary": "{count, plural, one {Pregled: # runda, {verdict}} other {Pregled: # rundi, {verdict}}}",
+      "analysisDismiss": "Sakrij za sve prevode",
+      "analysisShow": "Prikaži analizu pre prevoda",
+      "analysisResize": "Promeni veličinu panela za analizu",
+      "assessingCriteria": "{count, plural, one {Provera # kriterijuma} other {Provera # kriterijuma}}",
+      "editsPending": "Predložene izmene će se pojaviti ovde kada procena bude završena.",
+      "uploadProgressLabel": "Napredak otpremanja",
+      "uploadStepUploading": "Otpremanje",
+      "uploadStepReading": "Čitanje teksta",
+      "uploadStepReady": "Spremno",
+      "uploadCancel": "Otkaži"
     },
     "document": {
       "emptyTitle": "Opišite dokument koji želite",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Čitanje pošte dnevno",
       "m365MailDraftsPerDay": "Draftovi pošte dnevno",
       "m365MailDeepScansPerDay": "Dubinske pretrage pošte dnevno",
-      "m365DigestRunsPerDay": "Dnevnih pokretanja sažetka po danu"
+      "m365DigestRunsPerDay": "Dnevnih pokretanja sažetka po danu",
+      "translationPagesPerDay": "Stranica dokumenata za prevod dnevno"
     },
     "valueModeLabel": "Tip ograničenja",
     "valueAmountLabel": "Vrednost ograničenja",
@@ -5722,7 +5762,8 @@
       "jobs": "poslova",
       "rounds": "krugova",
       "documents": "dokumenata",
-      "boolean": ""
+      "boolean": "",
+      "pages": "stranice"
     },
     "window": {
       "day": "dan",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Pretrage pošte i čitanja poruka/niti po danu. Kada pređete limit, alati za poštu vraćaju poruku „pokušajte ponovo sutra“.",
       "m365MailDraftsPerDay": "Broj email nacrta koje asistent može napraviti dnevno — svaki posebno potvrđen. Svesno ograničeno.",
       "m365MailDeepScansPerDay": "Složene analize pošte (sažeci, dubinsko pretraživanje, obaveze) po danu. Svako skeniranje je jedna budžetska jedinica bez obzira na broj unutrašnjih čitanja.",
-      "m365DigestRunsPerDay": "Microsoft 365 dnevni sažetak po danu. Jedno pokretanje obuhvata desetine Graph čitanja i dva poziva analiznog modela; izbor perioda omogućava lako ponovno pokretanje, pa je podrazumevana granica stroga."
+      "m365DigestRunsPerDay": "Microsoft 365 dnevni sažetak po danu. Jedno pokretanje obuhvata desetine Graph čitanja i dva poziva analiznog modela; izbor perioda omogućava lako ponovno pokretanje, pa je podrazumevana granica stroga.",
+      "translationPagesPerDay": "PDF stranice poslate za prevod dokumenata dnevno."
     },
     "scopeFamily": "Porodica",
     "scopeModel": "Model",

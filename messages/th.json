@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "บันทึก {name} ลง OneDrive แล้ว",
     "openInOneDrive": "เปิด",
     "saveForbidden": "คุณไม่มีสิทธิ์บันทึกลงโฟลเดอร์นี้ — กรุณาเลือกโฟลเดอร์อื่นโดยใช้ “บันทึกลง OneDrive”",
-    "saveToOneDriveFailed": "ไม่สามารถบันทึกลง OneDrive ได้ — กรุณาลองใหม่"
+    "saveToOneDriveFailed": "ไม่สามารถบันทึกลง OneDrive ได้ — กรุณาลองใหม่",
+    "textVersion": "เวอร์ชันข้อความ (DOCX)",
+    "textVersionHint": "ไฟล์ Word ที่แก้ไขได้ พร้อมข้อความแปล ทีละหน้าของต้นฉบับ ไฟล์ที่แปลจะคงรูปแบบเดิมไว้"
   },
   "terms": {
     "officialLanguages": "ฉบับทางการ:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "ไฟล์นั้นมีขนาดใหญ่เกินไป (สูงสุด 5 MB)",
       "importNothing": "ไม่พบแถวที่ใช้งานได้ ({skipped} แถวถูกข้าม)",
       "importSummary": "เพิ่ม {added} แทนที่ {replaced} ข้าม {skipped}",
-      "entriesTooManyToShow": "{count} คำศัพท์ — จำนวนมากเกินไปที่จะแสดงที่นี่ กรุณาส่งออกเพื่อตรวจทาน หรือ นำเข้าไฟล์เพื่อแทนที่คำศัพท์"
+      "entriesTooManyToShow": "{count} คำศัพท์ — จำนวนมากเกินไปที่จะแสดงที่นี่ กรุณาส่งออกเพื่อตรวจทาน หรือ นำเข้าไฟล์เพื่อแทนที่คำศัพท์",
+      "pagesLoaded": "โหลด {selected} จาก {total} หน้าแล้ว",
+      "pagesLabel": "หน้า",
+      "pagesApply": "โหลดหน้า",
+      "pagesPrevious": "ชุดก่อนหน้า",
+      "pagesNext": "ชุดถัดไป",
+      "pagesBudget": "{used} / {max} อักขระ",
+      "pagesChange": "เปลี่ยนหน้า",
+      "pagesLoading": "กำลังโหลดหน้า…",
+      "pagesInvalid": "กรอกเลขหน้าหรือช่วงหน้า เช่น 1-40, 45",
+      "pagesUnavailable": "ไม่มีข้อความในหน้าเหล่านั้น",
+      "pagesTooMany": "การเลือกนี้มี {used} อักขระ และหนึ่งชุดรองรับได้ {max} กรุณาเลือกหน้าน้อยลง",
+      "stop": "หยุด",
+      "stepAnalyzing": "กำลังวิเคราะห์",
+      "stepTranslating": "กำลังแปล",
+      "stepReviewing": "กำลังตรวจทาน",
+      "stepDone": "เสร็จสิ้น",
+      "runProgressLabel": "ความคืบหน้าการแปล",
+      "runHintAnalyzing": "อ่านต้นฉบับเพื่อค้นหาคำศัพท์ที่ซับซ้อนและความหมายกำกวม",
+      "runHintTranslating": "กำลังเขียนคำแปล",
+      "runHintReviewing": "ตรวจสอบร่างกับต้นฉบับ",
+      "runHintReviewingRound": "ตรวจสอบร่างกับต้นฉบับ · รอบที่ {round} จากสูงสุด {total}",
+      "runRound": "รอบที่ {round} จากสูงสุด {total}",
+      "draftLabel": "ร่าง",
+      "sourceLocked": "ล็อกขณะกำลังแปล",
+      "analysisNotes": "{count, plural, one {# หมายเหตุ} other {# หมายเหตุ}}",
+      "analysisPill": "{count, plural, one {การวิเคราะห์ · # หมายเหตุ} other {การวิเคราะห์ · # หมายเหตุ}}",
+      "reviewSummary": "{count, plural, one {ตรวจทาน: # รอบ, {verdict}} other {ตรวจทาน: # รอบ, {verdict}}}",
+      "analysisDismiss": "ซ่อนสำหรับคำแปลทั้งหมด",
+      "analysisShow": "แสดงการวิเคราะห์ก่อนแปล",
+      "analysisResize": "ปรับขนาดแผงการวิเคราะห์",
+      "assessingCriteria": "{count, plural, one {ตรวจสอบ # เกณฑ์} other {ตรวจสอบ # เกณฑ์}}",
+      "editsPending": "ข้อเสนอแนะจะแสดงที่นี่เมื่อการประเมินเสร็จสิ้น",
+      "uploadProgressLabel": "ความคืบหน้าการอัปโหลด",
+      "uploadStepUploading": "กำลังอัปโหลด",
+      "uploadStepReading": "กำลังอ่านเนื้อหา",
+      "uploadStepReady": "พร้อมใช้งาน",
+      "uploadCancel": "ยกเลิก"
     },
     "document": {
       "emptyTitle": "อธิบายประเภทเอกสารที่ต้องการ",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "อ่านอีเมลต่อวัน",
       "m365MailDraftsPerDay": "ฉบับร่างอีเมลต่อวัน",
       "m365MailDeepScansPerDay": "Mail deep scans ต่อวัน",
-      "m365DigestRunsPerDay": "จำนวนการสรุปรายวันต่อวัน"
+      "m365DigestRunsPerDay": "จำนวนการสรุปรายวันต่อวัน",
+      "translationPagesPerDay": "จำนวนหน้าที่แปลเอกสารได้ต่อวัน"
     },
     "valueModeLabel": "ประเภทข้อจำกัด",
     "valueAmountLabel": "ปริมาณข้อจำกัด",
@@ -5738,7 +5778,8 @@
       "jobs": "งาน",
       "rounds": "รอบ",
       "documents": "เอกสาร",
-      "boolean": ""
+      "boolean": "",
+      "pages": "หน้า"
     },
     "window": {
       "day": "วัน",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "การค้นหาและอ่านอีเมล/กระทู้ต่อวัน หากเกินขีดจำกัด เครื่องมือจะตอบว่า \"กรุณาลองใหม่พรุ่งนี้\"",
       "m365MailDraftsPerDay": "ฉบับร่างอีเมลที่ผู้ช่วยสามารถสร้างต่อวัน — ทุกฉบับต้องยืนยันทีละฉบับ กำหนดไว้อย่างเข้มงวด",
       "m365MailDeepScansPerDay": "การวิเคราะห์อีเมลแบบรวม (digest, deep search, commitments) ต่อวัน นับเป็นหน่วยละ 1 ครั้งไม่ว่าวิเคราะห์ภายในกี่ครั้ง",
-      "m365DigestRunsPerDay": "จำนวนการสรุปรายวันของ Microsoft 365 ต่อวัน การสรุปแต่ละครั้งจะมีการอ่าน Graph หลายรายการและเรียกใช้โมเดลวิเคราะห์สองครั้ง ตัวเลือกช่วงเวลาทำให้สามารถขอประมวลผลซ้ำได้ง่าย จึงกำหนดค่าเริ่มต้นไว้ให้จำกัด"
+      "m365DigestRunsPerDay": "จำนวนการสรุปรายวันของ Microsoft 365 ต่อวัน การสรุปแต่ละครั้งจะมีการอ่าน Graph หลายรายการและเรียกใช้โมเดลวิเคราะห์สองครั้ง ตัวเลือกช่วงเวลาทำให้สามารถขอประมวลผลซ้ำได้ง่าย จึงกำหนดค่าเริ่มต้นไว้ให้จำกัด",
+      "translationPagesPerDay": "จำนวนหน้า PDF ที่ส่งแปลเอกสารต่อวัน"
     },
     "scopeFamily": "ตระกูล",
     "scopeModel": "โมเดล",

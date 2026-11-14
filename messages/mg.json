@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "Voatahiry {name} ao amin’ny OneDrive.",
     "openInOneDrive": "Sokafy",
     "saveForbidden": "Tsy manana alalana hanoratra ao amin'io lahatahiry io ianao — mifidiana hafa amin'ny 'Tehirizo ao amin’ny OneDrive'.",
-    "saveToOneDriveFailed": "Tsy afaka nitahiry tao amin’ny OneDrive — andramo indray azafady."
+    "saveToOneDriveFailed": "Tsy afaka nitahiry tao amin’ny OneDrive — andramo indray azafady.",
+    "textVersion": "Dikan-teny lahatsoratra (DOCX)",
+    "textVersionHint": "Rakitra Word azo ovaina misy dikan-teny amin’ny pejy tsirairay avy amin’ny loharano. Mitazona ny endrika tany am-boalohany ny rakitra nadika."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Lehibe loatra io rakitra io ka tsy azo hampidirina (5 MB fara-fahabetsany).",
       "importNothing": "Tsy nahitana andalana azo ampiasaina ({skipped} nesorina).",
       "importSummary": "{added} nampiana, {replaced} nosoloina, {skipped} nesorina.",
-      "entriesTooManyToShow": "{count} voambolana — be loatra ka tsy azo aseho eto. Aondrana hojerena, na ampidiro rakitra hanoloana voambolana."
+      "entriesTooManyToShow": "{count} voambolana — be loatra ka tsy azo aseho eto. Aondrana hojerena, na ampidiro rakitra hanoloana voambolana.",
+      "pagesLoaded": "pejy {selected} amin'ny {total} efa voaentana",
+      "pagesLabel": "Pejy",
+      "pagesApply": "Entano ny pejy",
+      "pagesPrevious": "Antontan-pejy teo aloha",
+      "pagesNext": "Antontan-pejy manaraka",
+      "pagesBudget": "{used} / {max} tarehintsoratra",
+      "pagesChange": "Ovay ny pejy",
+      "pagesLoading": "Manentana pejy…",
+      "pagesInvalid": "Ampidiro isa na elanelana isa, ohatra 1-40, 45.",
+      "pagesUnavailable": "Tsy misy amin'ireo pejy ireo no misy soratra.",
+      "pagesTooMany": "{used} tarehintsoratra io safidy io ary {max} tarehintsoratra amin'ny antontan-pejy iray. Misafidiana pejy vitsy kokoa.",
+      "stop": "Atsaharo",
+      "stepAnalyzing": "Manadihady",
+      "stepTranslating": "Mandika",
+      "stepReviewing": "Mamerina mijery",
+      "stepDone": "Vita",
+      "runProgressLabel": "Fandrosoan'ny fandikana",
+      "runHintAnalyzing": "Mamaky ny loharano mba hahitana teny sy hevitra sarotra na tsy mazava.",
+      "runHintTranslating": "Manoratra ny dika.",
+      "runHintReviewing": "Manamarina ny dika amin'ny loharano.",
+      "runHintReviewingRound": "Manamarina ny dika amin'ny loharano · manodidina faha-{round} amin'ny {total}.",
+      "runRound": "Manodidina faha-{round} amin'ny {total}",
+      "draftLabel": "Dika an-draharaha",
+      "sourceLocked": "Voahidy mandritra ny fandikana",
+      "analysisNotes": "{count, plural, one {fanamarihana #} other {fanamarihana #}}",
+      "analysisPill": "{count, plural, one {Fanadihadiana · fanamarihana #} other {Fanadihadiana · fanamarihana #}}",
+      "reviewSummary": "{count, plural, one {Fanadihadiana: manodidina faha-#, {verdict}} other {Fanadihadiana: manodidina #, {verdict}}}",
+      "analysisDismiss": "Afeno amin'ny fandikana rehetra",
+      "analysisShow": "Asehoy ny fanadihadiana alohan'ny fandikana",
+      "analysisResize": "Ovay ny haben'ny takelaka fanadihadiana",
+      "assessingCriteria": "{count, plural, one {Manamarina laharam-pahamehana #} other {Manamarina laharam-pahamehana #}}",
+      "editsPending": "Hiseho eto ny fanitsiana natolotra rehefa vita ny fanombanana.",
+      "uploadProgressLabel": "Fandrosoan'ny fampiakarana",
+      "uploadStepUploading": "Mampakatra",
+      "uploadStepReading": "Mamaky lahatsoratra",
+      "uploadStepReady": "Vonona",
+      "uploadCancel": "Foano"
     },
     "document": {
       "emptyTitle": "Lazao ny antontan-taratasy ilainao",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Mamaky mailaka isan'andro",
       "m365MailDraftsPerDay": "Draft mailaka isan'andro",
       "m365MailDeepScansPerDay": "Famotopotorana lalina mailaka isan'andro",
-      "m365DigestRunsPerDay": "Famintinana isan'andro isan'andro"
+      "m365DigestRunsPerDay": "Famintinana isan'andro isan'andro",
+      "translationPagesPerDay": "Isan'ny pejy azo adika isan’andro"
     },
     "valueModeLabel": "Karazan'ny fetra",
     "valueAmountLabel": "Habetsahan'ny fetra",
@@ -5722,7 +5762,8 @@
       "jobs": "asa",
       "rounds": "dingana",
       "documents": "antontan-taratasy",
-      "boolean": ""
+      "boolean": "",
+      "pages": "pejy"
     },
     "window": {
       "day": "andro",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Fikarohana sy famakiana mailaka/sotekan-dresaka isan'andro. Raha mihoatra ny fetra, dia hafatra \"miezaha indray rahampitso\" no ho averin'ny fitaovana mailaka.",
       "m365MailDraftsPerDay": "Dikasary mailaka azon'ny mpanampy foronina isan'andro — tsirairay dia voamarina. Tena voafaritra henjana.",
       "m365MailDeepScansPerDay": "Fanadihadiana mailaka mifangaro (famintinana, fikarohana lalina, fanoloran-tena) isan'andro. Isaky ny scan iray dia iray ny teti-bola, na firy na firy ny famakiana anatiny.",
-      "m365DigestRunsPerDay": "Famintinana isan'andro Microsoft 365 isan'andro. Ny famintinana iray dia ahitana famakiana Graph maromaro sy antso modely fanadihadiana roa; mora atao indray ny fangatahana amin'ny alàlan'ny safidy vanim-potoana, ka tery ny fatra mahazatra."
+      "m365DigestRunsPerDay": "Famintinana isan'andro Microsoft 365 isan'andro. Ny famintinana iray dia ahitana famakiana Graph maromaro sy antso modely fanadihadiana roa; mora atao indray ny fangatahana amin'ny alàlan'ny safidy vanim-potoana, ka tery ny fatra mahazatra.",
+      "translationPagesPerDay": "Pejy PDF nalefa adika rehetra isan’andro."
     },
     "scopeFamily": "Fianakaviana",
     "scopeModel": "Modely",

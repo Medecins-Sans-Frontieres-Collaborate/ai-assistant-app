@@ -2086,7 +2086,9 @@
     "expired": "ئەم وەرگێڕانە بەسەرچووە و بەردەست نیە",
     "expiresSoon": "لە {days} ڕۆژدا بەسەر دەچێت - زوو داونلود بکە",
     "expires": "بەردەستە بۆ {days} ڕۆژ",
-    "pickFromOneDrive": "فایلێک دیاربکە لە OneDrive / SharePoint"
+    "pickFromOneDrive": "فایلێک دیاربکە لە OneDrive / SharePoint",
+    "textVersion": "وەشانى دەق (DOCX)",
+    "textVersionHint": "فایلی Word بۆ دەستکاری وەک دەقێکی وەرگێراو، هەر پەڕەیەک بۆ سەرچاوەیەک. فایلە وەرگێراوەکە خێرا لە شێوەی سەرەکی دەماوێت."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -2585,7 +2587,44 @@
       "glossariesButton": "{count, plural, =0 {گۆڕانکاری} one {# گۆڕانکاری} other {# گۆڕانکاری}}",
       "glossaryEntryCount": "{count, plural, one {# وشە} other {# وشە}}",
       "showOtherLanguages": "{count, plural, one {# گۆڕانکاری بۆ زمانێکی تر پیشان بده} other {# گۆڕانکاری بۆ زمانەکانی تر پیشان بده}}",
-      "importHint": "ستوونەکان: source، target، note، kind، sourceExpansion، targetExpansion. فایلێکی دو ستوونی هەروەها کاردەکات."
+      "importHint": "ستوونەکان: source، target، note، kind، sourceExpansion، targetExpansion. فایلێکی دو ستوونی هەروەها کاردەکات.",
+      "pagesLoaded": "پەڕە {selected} لە {total} پەرە بارکرا",
+      "pagesLabel": "پەڕەکان",
+      "pagesApply": "پەڕەکان باربکە",
+      "pagesPrevious": "کۆمەڵەی پێشوو",
+      "pagesNext": "کۆمەڵەی دواتر",
+      "pagesBudget": "{used} / {max} پیت",
+      "pagesChange": "گۆڕینی پەڕەکان",
+      "pagesLoading": "پەڕەکان دەبارێن…",
+      "pagesInvalid": "ژمارە یان مەودانی پەڕە بنووسە، بۆ نمونە ١-٤٠، ٤٥.",
+      "pagesUnavailable": "هیچ یەك لەم پەڕانە دەق نەیە.",
+      "pagesTooMany": "ئەم هەڵبژاردە {used} پیتە و یەک کۆمەڵە {max} پیت دەگرێت. پەڕە کەمتر هەڵبژێرە.",
+      "stop": "وەستاندن",
+      "stepAnalyzing": "لەباربردن",
+      "stepTranslating": "وەرگێڕان",
+      "stepReviewing": "پشکنین",
+      "stepDone": "تەواو",
+      "runProgressLabel": "پیشڕفتی وەرگێڕان",
+      "runHintAnalyzing": "خوێندنەوەی سەرچاوە بۆ وشە خراپەکان و دانڕوونیەکان.",
+      "runHintTranslating": "نوسینی وەرگێڕەکان.",
+      "runHintReviewing": "پشکنینی پیشنیار لەگەڵ سەرچاوە.",
+      "runHintReviewingRound": "پشکنینی پیشنیار لەگەڵ سەرچاوە · دولکە {round} لە زۆرترین {total}.",
+      "runRound": "دولکە {round} لە زۆرترین {total}",
+      "draftLabel": "ڕەشنووس",
+      "sourceLocked": "قەفڵکراوە لە کاتی وەرگێڕاندا",
+      "analysisNotes": "{count, plural, one {# تێبینی} other {# تێبینی}}",
+      "analysisPill": "{count, plural, one {لەباربردن · # تێبینی} other {لەباربردن · # تێبینی}}",
+      "reviewSummary": "{count, plural, one {پشکنین: # دولکە، {verdict}} other {پشکنین: # دولکە، {verdict}}}",
+      "analysisDismiss": "شاردنەوە بۆ هەموو وەرگێڕەکان",
+      "analysisShow": "نیشاندانی لەباربردنی پێش وەرگێڕ",
+      "analysisResize": "گۆڕینی قەبارەی پەنجەرەی لەباربردن",
+      "assessingCriteria": "{count, plural, one {پشکنینی # فەرمیار} other {پشکنینی # فەرمیار}}",
+      "editsPending": "دەستکاری پێشنیارکراو لێرە دەردەکەوێت کاتێک هەرێمی پشکنین تەواوبێت.",
+      "uploadProgressLabel": "پیشڕفتی بارکردن",
+      "uploadStepUploading": "بارکردن",
+      "uploadStepReading": "خوێندنەوەی دەق",
+      "uploadStepReady": "ئامادە",
+      "uploadCancel": "هەڵوەشاندنەوە"
     },
     "document": {
       "emptyTitle": "پێسەندکردنی بەلگەی پێویست",
@@ -5224,7 +5263,8 @@
       "m365MailReadsPerDay": "خوێندنی نامە بۆ هەروەهاک",
       "m365MailDraftsPerDay": "درافتی نامە بۆ هەروەهاک",
       "m365MailDeepScansPerDay": "تاقیکردنەوەی گەورەی نامە بۆ هەروەهاک",
-      "m365DigestRunsPerDay": "ژمارەی کار کردنی کۆگەی ڕۆژانە بە ڕۆژێک"
+      "m365DigestRunsPerDay": "ژمارەی کار کردنی کۆگەی ڕۆژانە بە ڕۆژێک",
+      "translationPagesPerDay": "ژمارەی پەڕەکانی وەرگێرانی بەڵگەنامە لە ڕۆژ"
     },
     "valueModeLabel": "جۆری سنووردارکردن",
     "valueAmountLabel": "بڕی سنووردارکردن",
@@ -5247,7 +5287,8 @@
       "jobs": "ئیش",
       "rounds": "جۆر",
       "documents": "بەڵگەنامە",
-      "boolean": ""
+      "boolean": "",
+      "pages": "پەڕە"
     },
     "window": {
       "day": "ڕۆژ",
@@ -5305,7 +5346,8 @@
       "m365MailReadsPerDay": "گەڕان و خوێندنەوەی نامە/بابەت لە ڕۆژێکدا. لە سنوور پاشگەزبریدا، ئامرازەکانی ئیمەیڵ \"دووبارە هەول بدە سبەی\" دەگونجێنن.",
       "m365MailDraftsPerDay": "ڕەشنووسی ئیمەیڵەکان كە یاریدەدەری كارەسا دەكرێتەوە لە ڕۆژێکدا — هەریەک بە تایبەتی دڵنیابکرێن. سنووری توندی هەیە.",
       "m365MailDeepScansPerDay": "توێژینەوەی كۆمەڵەیی ئیمەیڵ (پوختە، گەڕانی تەواو، پەیوەندیەکان) لە ڕۆژێکدا. هەریەک توێژینەوە یەک یەکەی بودجەیە، پێویست بە ژمارەی خوێندنەوەکانی ناوخۆیەکان نابێت.",
-      "m365DigestRunsPerDay": "کار کردنی کۆگەی ڕۆژانەی Microsoft 365 بە ڕۆژێک. یەک کارکردن چەندین خوێندنەوەی Graph بەلاوی دوو بانگکردن بە مۆدێلی ڕاپرسیە؛ هەڵبژاردنی ماوە کارکردنی دووبارە بە ئاسان دەکات، بۆیە بەڕێزێکی کەم بەڕێوەدەچێت."
+      "m365DigestRunsPerDay": "کار کردنی کۆگەی ڕۆژانەی Microsoft 365 بە ڕۆژێک. یەک کارکردن چەندین خوێندنەوەی Graph بەلاوی دوو بانگکردن بە مۆدێلی ڕاپرسیە؛ هەڵبژاردنی ماوە کارکردنی دووبارە بە ئاسان دەکات، بۆیە بەڕێزێکی کەم بەڕێوەدەچێت.",
+      "translationPagesPerDay": "پەڕەکانی PDF کە بۆ وەرگێرانی بەڵگەنامە نێردراوە لە ڕۆژ."
     },
     "scopeFamily": "خێزان",
     "scopeModel": "مۆدێل",

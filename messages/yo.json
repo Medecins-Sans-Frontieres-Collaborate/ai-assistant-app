@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "A ti fipamọ́ {name} sí OneDrive.",
     "openInOneDrive": "Ṣí i",
     "saveForbidden": "O kò ní àṣẹ láti kọ sínú àpamọ́ yìí — yan omiran pẹ̀lú “Fipamọ́ sí OneDrive”.",
-    "saveToOneDriveFailed": "A kò lè fipamọ́ sí OneDrive — jọ̀wọ́ gbìyànjú lẹ́ẹ̀kansi."
+    "saveToOneDriveFailed": "A kò lè fipamọ́ sí OneDrive — jọ̀wọ́ gbìyànjú lẹ́ẹ̀kansi.",
+    "textVersion": "Èdà ọrọ̀ (DOCX)",
+    "textVersionHint": "Fáìlì Word tí èèyàn lè ṣàtúnṣe pẹ̀lú itumọ̀ ọrọ̀, oju-iwe kọọkan fún orísun akọwé kọọkan. Fáìlì tó túmọ̀ náà máa pa ipa àtẹ̀jáde.</br>"
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Fáìlì yìí tóbi ju lati wọlé (ìyókù tó pọ̀ jù 5 MB).",
       "importNothing": "Kò sí ìlà tó wúlò rí ({skipped} fo sílẹ̀).",
       "importSummary": "{added} fi kún, {replaced} rọ̀pò, {skipped} fo sílẹ̀.",
-      "entriesTooManyToShow": "{count} ọ̀rọ̀ — púpọ̀ ju láti ṣàfihàn níbí. Ṣe ọkọ láti ṣàyẹ̀wò, tàbí gbé fáìlì wọlé láti rọ̀pò àwọn ọ̀rọ̀."
+      "entriesTooManyToShow": "{count} ọ̀rọ̀ — púpọ̀ ju láti ṣàfihàn níbí. Ṣe ọkọ láti ṣàyẹ̀wò, tàbí gbé fáìlì wọlé láti rọ̀pò àwọn ọ̀rọ̀.",
+      "pagesLoaded": "{selected} ninu {total} oju-iwe ti kojọpọ",
+      "pagesLabel": "Oju-iwe",
+      "pagesApply": "Kó oju-iwe",
+      "pagesPrevious": "Ìkójọpọ́ ṣáájú",
+      "pagesNext": "Ìkójọpọ́ tó tẹ̀síwájú",
+      "pagesBudget": "{used} / {max} akọmọtara",
+      "pagesChange": "Ṣàtúnṣe oju-iwe",
+      "pagesLoading": "Ń kó oju-iwe…",
+      "pagesInvalid": "Tẹ́ nọmba tàbí àgboorùn ti oju-iwe, apẹẹrẹ 1-40, 45.",
+      "pagesUnavailable": "Kò sí ọrọ̀ kankan nínú àwọn oju-iwe wọ̀nyí.",
+      "pagesTooMany": "Ìyànjú wọ̀nyí jẹ́ {used} akọmọtara, ìkójọpọ̀ kan le mú {max}. Jọ̀wọ́, yàn kere síi.",
+      "stop": "Dákẹ́",
+      "stepAnalyzing": "Mú àyẹ̀wò",
+      "stepTranslating": "Mú ìtúmọ̀",
+      "stepReviewing": "Ṣàyẹ̀wò",
+      "stepDone": "Parí",
+      "runProgressLabel": "Ìlòsíwájú ìtúmọ̀",
+      "runHintAnalyzing": "Ka orísun láti wá àwọn ìtumọ̀ tá a má lè fidi rẹ múlẹ̀.",
+      "runHintTranslating": "Kọ ìtúmọ̀ náà.",
+      "runHintReviewing": "Ṣàyẹ̀wò àtúnyẹ̀wò pẹ̀lú orísun.",
+      "runHintReviewingRound": "Ṣàyẹ̀wò àtúnyẹ̀wò pẹ̀lú orísun · yípo {round} nínú tó pọ̀jù {total}.",
+      "runRound": "Yípo {round} nínú tó pọ̀jù {total}",
+      "draftLabel": "Àtúnyẹ̀wò",
+      "sourceLocked": "Ti dá pọ̀ nígbà ìtúmọ̀",
+      "analysisNotes": "{count, plural, one {# àkíyèsí} other {# àkíyèsí}}",
+      "analysisPill": "{count, plural, one {Onínọmbà · # àkíyèsí} other {Onínọmbà · # àkíyèsí}}",
+      "reviewSummary": "{count, plural, one {Ìdánwò: # yípo, {verdict}} other {Ìdánwò: # yípo, {verdict}}}",
+      "analysisDismiss": "Pa kúrò níwájú gbogbo ìtumọ̀",
+      "analysisShow": "Fi àyẹ̀wò ṣáájú ìtúmọ̀ hàn",
+      "analysisResize": "Tún pánẹli onínọmbà ṣe tó bá yẹ",
+      "assessingCriteria": "{count, plural, one {Ṣàyẹ̀wò # àfihàn} other {Ṣàyẹ̀wò # àfihàn}}",
+      "editsPending": "Àwọn ìyípadà tó dá yíó hàn níbí lẹ́yìn ayẹwo.",
+      "uploadProgressLabel": "Ìlòsíwájú ìkó",
+      "uploadStepUploading": "N'kó rẹ s'órí ayelujara",
+      "uploadStepReading": "Ká ọrọ̀",
+      "uploadStepReady": "Tayọ",
+      "uploadCancel": "Fagilé"
     },
     "document": {
       "emptyTitle": "Ṣàpèjúwe iwe ti o fẹ",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Kíkà imeeli lojoojumọ",
       "m365MailDraftsPerDay": "Ìkọ ìfojúsọna imeeli lojoojumọ",
       "m365MailDeepScansPerDay": "Ìṣáyẹlẹkun imeeli lojoojumọ",
-      "m365DigestRunsPerDay": "Iṣiṣẹ ajọpọ ojoojúmọ̀ lóde ọjọ́ kọọkan"
+      "m365DigestRunsPerDay": "Iṣiṣẹ ajọpọ ojoojúmọ̀ lóde ọjọ́ kọọkan",
+      "translationPagesPerDay": "Oju-iwe itumọ̀ àwọn dìpọ̀kùméńtì lẹ́ ọjọ́ kan"
     },
     "valueModeLabel": "Iru ààlà",
     "valueAmountLabel": "Ìye ààlà",
@@ -5722,7 +5762,8 @@
       "jobs": "ṣẹ́",
       "rounds": "ítàkùn",
       "documents": "ìwé",
-      "boolean": ""
+      "boolean": "",
+      "pages": "oju-iwe"
     },
     "window": {
       "day": "ọjọ́",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Ṣiṣawari imeeli ati kika ifiranṣẹ/thread fun ọjọ kan. Ti o ba ju iye lọ, irinṣẹ imeeli yoo sọ “gbiyanju lola”.",
       "m365MailDraftsPerDay": "Àwọn àtẹjáde imeeli tí iranlọwọ le dá ṣẹda fun ọjọ kan — ọkọọkan gbọdọ jẹrisi. A ti fi dínkù mọ́n.",
       "m365MailDeepScansPerDay": "Itupalẹ imeeli to pọ (digest, wiwa jinlẹ, ileri) fun ọjọ kan. Kọọkan jẹ ẹgbẹ kan ni isuna, laibikita iye kika inu rẹ.",
-      "m365DigestRunsPerDay": "Microsoft 365 ṣiṣe ajọpọ ojoojúmọ̀ lóde ọjọ́ kọọkan. Iṣiṣẹ kan jẹ́ ọpọlọpọ ka Graph pọ̀ síi pẹ̀lú ipe awoṣe ìtúpalẹ̀ méjì; asayan àkókò fàájì fun ṣiṣe tútù, nítorí náà a fi ọna tó kù han gẹ́gẹ́ bí aṣàyàn àtajọ."
+      "m365DigestRunsPerDay": "Microsoft 365 ṣiṣe ajọpọ ojoojúmọ̀ lóde ọjọ́ kọọkan. Iṣiṣẹ kan jẹ́ ọpọlọpọ ka Graph pọ̀ síi pẹ̀lú ipe awoṣe ìtúpalẹ̀ méjì; asayan àkókò fàájì fun ṣiṣe tútù, nítorí náà a fi ọna tó kù han gẹ́gẹ́ bí aṣàyàn àtajọ.",
+      "translationPagesPerDay": "Oju-iwe PDF tí a fi ranṣẹ́ fún itumọ̀ dìpọ̀kùméńtì lẹ́ ọjọ́ kan."
     },
     "scopeFamily": "Ìdílé",
     "scopeModel": "Àpẹẹrẹ",

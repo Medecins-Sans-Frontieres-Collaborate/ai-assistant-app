@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "Imehifadhi {name} kwenye OneDrive.",
     "openInOneDrive": "Fungua",
     "saveForbidden": "Huna ruhusa ya kuandika kwenye folda hiyo — chagua nyingine kwa “Hifadhi kwenye OneDrive”.",
-    "saveToOneDriveFailed": "Imeshindwa kuhifadhi kwenye OneDrive — tafadhali jaribu tena."
+    "saveToOneDriveFailed": "Imeshindwa kuhifadhi kwenye OneDrive — tafadhali jaribu tena.",
+    "textVersion": "Toleo la maandishi (DOCX)",
+    "textVersionHint": "Faili ya Word inayoweza kuhaririwa yenye maandishi yaliyotafsiriwa, ukurasa mmoja kwa kila chanzo. Faili yenyewe iliyotafsiriwa inabaki na mpangilio asilia."
   },
   "terms": {
     "officialLanguages": "Toleo rasmi:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "Faili hilo ni kubwa mno kulingiza (MB 5 za juu zaidi).",
       "importNothing": "Hakuna safu zinazoweza kutumika zimepatikana ({skipped} zimeachwa).",
       "importSummary": "{added} zimeongezwa, {replaced} zilibadilishwa, {skipped} zimeachwa.",
-      "entriesTooManyToShow": "{count} maneno — ni mengi mno kuorodheshwa hapa. Hamisha ili kuyakagua, au ingiza faili kubadilisha maneno."
+      "entriesTooManyToShow": "{count} maneno — ni mengi mno kuorodheshwa hapa. Hamisha ili kuyakagua, au ingiza faili kubadilisha maneno.",
+      "pagesLoaded": "kurasa {selected} kati ya {total} zimepakuliwa",
+      "pagesLabel": "Kurasa",
+      "pagesApply": "Pakia kurasa",
+      "pagesPrevious": "Kifurushi kilichopita",
+      "pagesNext": "Kifurushi kinachofuata",
+      "pagesBudget": "{used} / {max} herufi",
+      "pagesChange": "Badilisha kurasa",
+      "pagesLoading": "Inapakia kurasa...",
+      "pagesInvalid": "Weka namba au safu za kurasa, kwa mfano 1-40, 45.",
+      "pagesUnavailable": "Hakuna kati ya kurasa hizo zinazo maandishi.",
+      "pagesTooMany": "Uchaguzi huo una herufi {used} na kifurushi kimoja kinakubali {max}. Chagua kurasa chache zaidi.",
+      "stop": "Acha",
+      "stepAnalyzing": "Inachambua",
+      "stepTranslating": "Inatafsiri",
+      "stepReviewing": "Inakagua",
+      "stepDone": "Imekamilika",
+      "runProgressLabel": "Maendeleo ya tafsiri",
+      "runHintAnalyzing": "Inasoma chanzo kutafuta maneno tata na utata.",
+      "runHintTranslating": "Inaandika tafsiri.",
+      "runHintReviewing": "Inakagua rasimu dhidi ya chanzo.",
+      "runHintReviewingRound": "Inakagua rasimu dhidi ya chanzo · duru ya {round} kati ya hadi {total}.",
+      "runRound": "Duru ya {round} kati ya hadi {total}",
+      "draftLabel": "Rasimu",
+      "sourceLocked": "Imefungwa wakati wa kutafsiri",
+      "analysisNotes": "{count, plural, one {# kumbukumbu} other {# kumbukumbu}}",
+      "analysisPill": "{count, plural, one {Uchambuzi · # kumbukumbu} other {Uchambuzi · # kumbukumbu}}",
+      "reviewSummary": "{count, plural, one {Ukaguzi: duru #, {verdict}} other {Ukaguzi: duru #, {verdict}}}",
+      "analysisDismiss": "Ficha kwa tafsiri zote",
+      "analysisShow": "Onyesha uchambuzi kabla ya tafsiri",
+      "analysisResize": "Badilisha ukubwa wa paneli ya uchambuzi",
+      "assessingCriteria": "{count, plural, one {Inakagua kigezo #} other {Inakagua vigezo #}}",
+      "editsPending": "Marekebisho yaliyopendekezwa yataonekana hapa baada ya tathmini kuisha.",
+      "uploadProgressLabel": "Maendeleo ya kupakia",
+      "uploadStepUploading": "Inapakia",
+      "uploadStepReading": "Inasoma maandishi",
+      "uploadStepReady": "Iko tayari",
+      "uploadCancel": "Ghairi"
     },
     "document": {
       "emptyTitle": "Eleza unachohitaji kwenye hati",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "Usomaji wa barua kwa siku",
       "m365MailDraftsPerDay": "Rasimu za barua kwa siku",
       "m365MailDeepScansPerDay": "Uchambuzi wa kina wa barua kwa siku",
-      "m365DigestRunsPerDay": "Digest za kila siku kwa siku"
+      "m365DigestRunsPerDay": "Digest za kila siku kwa siku",
+      "translationPagesPerDay": "Kurasa za kutafsiriwarusha kwa siku"
     },
     "valueModeLabel": "Aina ya kikomo",
     "valueAmountLabel": "Kiwango cha kikomo",
@@ -5738,7 +5778,8 @@
       "jobs": "kazi",
       "rounds": "mizunguko",
       "documents": "nyaraka",
-      "boolean": ""
+      "boolean": "",
+      "pages": "kurasa"
     },
     "window": {
       "day": "siku",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "Utafutaji wa barua na usomaji wa ujumbe/mitiririko kwa siku. Ukizidisha kikomo, zana za barua zitarudisha \"jaribu tena kesho\".",
       "m365MailDraftsPerDay": "Rasimu za barua pepe ambazo msaidizi anaweza kuunda kwa siku — kila moja inathibitishwa kando. Kikomo hiki ni makusudi kuwa kidogo.",
       "m365MailDeepScansPerDay": "Uchanganuzi wa barua pepe uliounganishwa (mwhtasari, utafutaji wa kina, ahadi) kwa siku. Kila uchunguzi huhesabiwa kama kitengo kimoja, bila kujali idadi ya usomaji wake wa ndani.",
-      "m365DigestRunsPerDay": "Digest za Microsoft 365 za kila siku kwa siku. Digest moja inajumuisha kusoma kwa Graph mara nyingi pamoja na miito miwili ya modeli ya uchambuzi; chaguo la kipindi hufanya kurudia kuwa rahisi kuomba, hivyo kizingiti cha kawaida ni kidogo."
+      "m365DigestRunsPerDay": "Digest za Microsoft 365 za kila siku kwa siku. Digest moja inajumuisha kusoma kwa Graph mara nyingi pamoja na miito miwili ya modeli ya uchambuzi; chaguo la kipindi hufanya kurudia kuwa rahisi kuomba, hivyo kizingiti cha kawaida ni kidogo.",
+      "translationPagesPerDay": "Kurasa za PDF zilizowasilishwa kwa ajili ya kutafsiriwa kwa siku."
     },
     "scopeFamily": "Familia",
     "scopeModel": "Mfano",

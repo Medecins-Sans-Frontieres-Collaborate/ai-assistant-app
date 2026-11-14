@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "{name}, OneDrive'a kaydedildi.",
     "openInOneDrive": "Aç",
     "saveForbidden": "Bu klasöre yazma izniniz yok — “OneDrive'a kaydet” ile başka bir klasör seçin.",
-    "saveToOneDriveFailed": "OneDrive'a kaydedilemedi — lütfen tekrar deneyin."
+    "saveToOneDriveFailed": "OneDrive'a kaydedilemedi — lütfen tekrar deneyin.",
+    "textVersion": "Metin sürümü (DOCX)",
+    "textVersionHint": "Her kaynak sayfa için birer olmak üzere, çevrilmiş metni içeren düzenlenebilir bir Word dosyası. Çevirisi yapılan dosya orijinal düzeni korur."
   },
   "terms": {
     "officialLanguages": "Resmi sürüm:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "Bu dosya içe aktarmak için çok büyük (en fazla 5 MB).",
       "importNothing": "Kullanılabilir satır bulunamadı ({skipped} atlandı).",
       "importSummary": "{added} eklendi, {replaced} değiştirildi, {skipped} atlandı.",
-      "entriesTooManyToShow": "{count} terim — burada listelenemeyecek kadar fazla. Gözden geçirmek için dışa aktarın veya terimleri değiştirmek için bir dosya içe aktarın."
+      "entriesTooManyToShow": "{count} terim — burada listelenemeyecek kadar fazla. Gözden geçirmek için dışa aktarın veya terimleri değiştirmek için bir dosya içe aktarın.",
+      "pagesLoaded": "{total} sayfanın {selected} tanesi yüklendi",
+      "pagesLabel": "Sayfalar",
+      "pagesApply": "Sayfaları yükle",
+      "pagesPrevious": "Önceki grup",
+      "pagesNext": "Sonraki grup",
+      "pagesBudget": "{used} / {max} karakter",
+      "pagesChange": "Sayfaları değiştir",
+      "pagesLoading": "Sayfalar yükleniyor…",
+      "pagesInvalid": "Lütfen sayfa numaralarını veya aralıklarını girin, örneğin 1-40, 45.",
+      "pagesUnavailable": "Bu sayfaların hiçbirinde metin yok.",
+      "pagesTooMany": "Bu seçim {used} karakter ve bir grupta en fazla {max} karakter olabilir. Daha az sayfa seçin.",
+      "stop": "Durdur",
+      "stepAnalyzing": "Analiz ediliyor",
+      "stepTranslating": "Çevriliyor",
+      "stepReviewing": "Gözden geçiriliyor",
+      "stepDone": "Tamamlandı",
+      "runProgressLabel": "Çeviri ilerlemesi",
+      "runHintAnalyzing": "Zor terimler ve belirsizlikler için kaynak metin okunuyor.",
+      "runHintTranslating": "Çeviri yazılıyor.",
+      "runHintReviewing": "Taslak, kaynak ile karşılaştırılıyor.",
+      "runHintReviewingRound": "Taslak, kaynak ile karşılaştırılıyor · {total} adede kadar {round}. tur.",
+      "runRound": "{total} adede kadar {round}. tur",
+      "draftLabel": "Taslak",
+      "sourceLocked": "Çeviri sırasında kilitli",
+      "analysisNotes": "{count, plural, one {# not} other {# not}}",
+      "analysisPill": "{count, plural, one {Analiz · # not} other {Analiz · # not}}",
+      "reviewSummary": "{count, plural, one {İnceleme: # tur, {verdict}} other {İnceleme: # tur, {verdict}}}",
+      "analysisDismiss": "Tüm çeviriler için gizle",
+      "analysisShow": "Ön çeviri analizini göster",
+      "analysisResize": "Analiz panelini yeniden boyutlandır",
+      "assessingCriteria": "{count, plural, one {# kriter kontrol ediliyor} other {# kriter kontrol ediliyor}}",
+      "editsPending": "Değerlendirme sona erdiğinde önerilen düzenlemeler burada görünecek.",
+      "uploadProgressLabel": "Yükleme ilerlemesi",
+      "uploadStepUploading": "Yükleniyor",
+      "uploadStepReading": "Metin okunuyor",
+      "uploadStepReady": "Hazır",
+      "uploadCancel": "İptal et"
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "Günde e-posta okuma",
       "m365MailDraftsPerDay": "Günde e-posta taslakları",
       "m365MailDeepScansPerDay": "Günde e-posta derin taramaları",
-      "m365DigestRunsPerDay": "Günlük özeti çalışma sayısı"
+      "m365DigestRunsPerDay": "Günlük özeti çalışma sayısı",
+      "translationPagesPerDay": "Günlük belge çevirisi sayfa limiti"
     },
     "valueModeLabel": "Sınır türü",
     "valueAmountLabel": "Sınır miktarı",
@@ -5738,7 +5778,8 @@
       "jobs": "iş",
       "rounds": "tur",
       "documents": "belge",
-      "boolean": ""
+      "boolean": "",
+      "pages": "sayfa"
     },
     "window": {
       "day": "gün",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "Günlük e-posta aramaları ve mesaj/konu okumaları. Limit aşılırsa, e-posta araçları 'yarın tekrar deneyin' sonucu döndürür.",
       "m365MailDraftsPerDay": "Yardımcının günde oluşturabileceği e-posta taslakları — her biri tek tek onaylanır. Kasıtlı olarak sıkı tutulmuştur.",
       "m365MailDeepScansPerDay": "Bileşik e-posta analizleri (özetler, derin arama, taahhütler) günlük limiti. Her tarama, içine kaç okuma girerse girsin bir bütçe birimidir.",
-      "m365DigestRunsPerDay": "Microsoft 365 günlük özeti çalışma sayısı. Bir çalışma, onlarca Graph okuması ve iki analiz modeli çağrısı içerir; dönem seçicisi tekrar çalıştırmaları kolaylaştırır, bu yüzden varsayılan sınır sıkıdır."
+      "m365DigestRunsPerDay": "Microsoft 365 günlük özeti çalışma sayısı. Bir çalışma, onlarca Graph okuması ve iki analiz modeli çağrısı içerir; dönem seçicisi tekrar çalıştırmaları kolaylaştırır, bu yüzden varsayılan sınır sıkıdır.",
+      "translationPagesPerDay": "Belge çevirisi için gönderilen PDF sayfa sayısı (günlük)."
     },
     "scopeFamily": "Aile",
     "scopeModel": "Model",

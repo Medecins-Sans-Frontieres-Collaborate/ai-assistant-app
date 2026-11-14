@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "Kugcinwe {name} ku-OneDrive.",
     "openInOneDrive": "Vula",
     "saveForbidden": "Awuvunyelwe ukubhala kule folda — khetha enye nge-“Londoloza ku-OneDrive”.",
-    "saveToOneDriveFailed": "Ayikwazanga ukulondoloza ku-OneDrive — zama futhi."
+    "saveToOneDriveFailed": "Ayikwazanga ukulondoloza ku-OneDrive — zama futhi.",
+    "textVersion": "Uhlobo lombhalo (DOCX)",
+    "textVersionHint": "Ifayela le-Word elilungiseka eliqukethe umbhalo ohunyushiwe, ikhasi elilodwa likhasi langempela. Ifayela elihunyushiwe ligcina isakhiwo sangempela."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Ifayela likhulu kakhulu ukufakwa (5 MB max).",
       "importNothing": "Alukho ulayini olungasetshenziswa olwatholakala ({skipped} lushiywe).",
       "importSummary": "{added} kufakiwe, {replaced} kushintshiwe, {skipped} kushiywe.",
-      "entriesTooManyToShow": "{count} amagama — amaningi kakhulu ukuboniswa lapha. Thumela ngaphandle ukuze uwabuke, noma faka ifayela ukuze ushintshe amagama."
+      "entriesTooManyToShow": "{count} amagama — amaningi kakhulu ukuboniswa lapha. Thumela ngaphandle ukuze uwabuke, noma faka ifayela ukuze ushintshe amagama.",
+      "pagesLoaded": "amakhasi {selected} kwe-{total} alayishiwe",
+      "pagesLabel": "Amakhasi",
+      "pagesApply": "Layisha amakhasi",
+      "pagesPrevious": "Iqoqo langaphambili",
+      "pagesNext": "Iqoqo elilandelayo",
+      "pagesBudget": "{used} / {max} izinhlamvu",
+      "pagesChange": "Shintsha amakhasi",
+      "pagesLoading": "Kulayishwa amakhasi…",
+      "pagesInvalid": "Faka izinombolo zamakhasi noma uhla, isibonelo 1-40, 45.",
+      "pagesUnavailable": "Awukho umkhasi ekhethiwe onezibhalo.",
+      "pagesTooMany": "Lokho kukhethwe kungu-{used} izinhlamvu kanti iqoqo elilodwa lingathwala {max}. Khetha amakhasi ambalwa.",
+      "stop": "Misa",
+      "stepAnalyzing": "Kuhlaziywa",
+      "stepTranslating": "Kuhumushwa",
+      "stepReviewing": "Kuyabuyekezwa",
+      "stepDone": "Kuqedile",
+      "runProgressLabel": "Inqubekela phambili yokuhumusha",
+      "runHintAnalyzing": "Kufundwa umthombo ukuze kutholwe amagama anzima nezingaqondakali.",
+      "runHintTranslating": "Kubhalwa ukuhumusha.",
+      "runHintReviewing": "Kuhlolwa okusalungiswa uma kuqhathaniswa nomthombo.",
+      "runHintReviewingRound": "Kuhlolwa okusalungiswa uma kuqhathaniswa nomthombo · umzuliswano {round} kwezifika ku-{total}.",
+      "runRound": "Umzuliswano {round} kwezifika ku-{total}",
+      "draftLabel": "Okusalungiswa",
+      "sourceLocked": "Kuvalwe ngenkathi kuhumushwa",
+      "analysisNotes": "{count, plural, one {# inothi} other {# amanothi}}",
+      "analysisPill": "{count, plural, one {Ukuhlaziywa · # inothi} other {Ukuhlaziywa · # amanothi}}",
+      "reviewSummary": "{count, plural, one {Ukuhlola: # umzuliswano, {verdict}} other {Ukuhlola: # imizuliswano, {verdict}}}",
+      "analysisDismiss": "Fihla kuzo zonke izihumusho",
+      "analysisShow": "Bonisa ukuhlaziywa ngaphambi kokuhumusha",
+      "analysisResize": "Shintsha usayizi wephaneli yokuhlaziywa",
+      "assessingCriteria": "{count, plural, one {Kuhlolwa # isilinganiso} other {Kuhlolwa # izilinganiso}}",
+      "editsPending": "Izichibiyelo eziphakanyisiwe zizovela lapha uma ukuhlolwa sekuqediwe.",
+      "uploadProgressLabel": "Inqubekela phambili yokulayisha",
+      "uploadStepUploading": "Kulayishwa",
+      "uploadStepReading": "Kufundwa umbhalo",
+      "uploadStepReady": "Sekulungele",
+      "uploadCancel": "Khansela"
     },
     "document": {
       "emptyTitle": "Chaza umbhalo ofunayo",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Ukufunda i-imeyili ngosuku",
       "m365MailDraftsPerDay": "Amadrafti e-imeyili ngosuku",
       "m365MailDeepScansPerDay": "Ukuhlolwa okujulile kwe-imeyili ngosuku",
-      "m365DigestRunsPerDay": "Izikhathi zokwenza i-daily digest ngosuku"
+      "m365DigestRunsPerDay": "Izikhathi zokwenza i-daily digest ngosuku",
+      "translationPagesPerDay": "Amakhasi okuhunyushwa kwezincwadi ngosuku"
     },
     "valueModeLabel": "Uhlobo lomkhawulo",
     "valueAmountLabel": "Inani lomkhawulo",
@@ -5722,7 +5762,8 @@
       "jobs": "imisebenzi",
       "rounds": "umjikelezo",
       "documents": "amadokhumenti",
-      "boolean": ""
+      "boolean": "",
+      "pages": "amakhasi"
     },
     "window": {
       "day": "usuku",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Ukusesha i-imeyili nokufunda imilayezo/izingxoxo ngosuku. Uma kudlula umkhawulo, amathuluzi e-imeyili abuyisa umphumela othi 'zama futhi kusasa'.",
       "m365MailDraftsPerDay": "Izimpelesi ze-imeyili i-assistant engazidala ngosuku — ngayinye iqinisekiswa eyodwa. Kuncishisiwe ngamabomu.",
       "m365MailDeepScansPerDay": "Ukuhlaziywa kwe-imeyili okuhlanganisiwe (ama-digest, usesho olunzulu, izifungo) ngosuku. Ukusesha ngakunye kubalwa kanye noma ngabe kunokufunda okuthize ngaphakathi.",
-      "m365DigestRunsPerDay": "I-Microsoft 365 daily digest yenziwa ngosuku. Ukuqhuba okukodwa kufaka ukufunda okuningi ku-Graph kanye nezicelomodel ezibili zokuhlaziya; ukukhetha isikhathi kwenza kube lula ukuphinda, ngakho-ke okuzenzakalelayo kuqinile."
+      "m365DigestRunsPerDay": "I-Microsoft 365 daily digest yenziwa ngosuku. Ukuqhuba okukodwa kufaka ukufunda okuningi ku-Graph kanye nezicelomodel ezibili zokuhlaziya; ukukhetha isikhathi kwenza kube lula ukuphinda, ngakho-ke okuzenzakalelayo kuqinile.",
+      "translationPagesPerDay": "Amakhasi e-PDF athunyelwe ukuze ahunyushwe ngosuku."
     },
     "scopeFamily": "Umndeni",
     "scopeModel": "Imodeli",

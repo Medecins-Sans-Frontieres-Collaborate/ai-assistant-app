@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "{name} OneDrive ته خوندي شو.",
     "openInOneDrive": "پرانیستل",
     "saveForbidden": "تاسو ته دلته لیکلو اجازه نشته — له “OneDrive ته خوندي کړئ” سره بل فولډر غوره کړئ.",
-    "saveToOneDriveFailed": "OneDrive ته خوندي نشو — مهرباني وکړئ بیا هڅه وکړئ."
+    "saveToOneDriveFailed": "OneDrive ته خوندي نشو — مهرباني وکړئ بیا هڅه وکړئ.",
+    "textVersion": "د متن بڼه (DOCX)",
+    "textVersionHint": "د ایډیټ وړ Word فایل چې ژباړل شوی متن لري، هره پاڼه د سرچینې هرې پاڼې لپاره. ژباړل شوی فایل خپله اصلي بڼه ساتي."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "دا فایل د واردولو لپاره ډېره لوی ده (اعظمي ۵ MB).",
       "importNothing": "هیڅ قابل استفاده کتار ونه موندل شو ({skipped} له پامه وغورځول شول).",
       "importSummary": "{added} زیات شول، {replaced} تعویض شول، {skipped} له پامه وغورځول شول.",
-      "entriesTooManyToShow": "{count} اصطلاحات — دلته ښودلو ته ډېر زیات دي. د کتلو لپاره صادر کړئ، یا د بدلولو لپاره فایل وارد کړئ."
+      "entriesTooManyToShow": "{count} اصطلاحات — دلته ښودلو ته ډېر زیات دي. د کتلو لپاره صادر کړئ، یا د بدلولو لپاره فایل وارد کړئ.",
+      "pagesLoaded": "{total} څخه {selected} پاڼې پورته شوې",
+      "pagesLabel": "پاڼې",
+      "pagesApply": "پاڼې پورته کړئ",
+      "pagesPrevious": "تېر دسته",
+      "pagesNext": "راتلونکی دسته",
+      "pagesBudget": "{max} کې {used} توري",
+      "pagesChange": "پاڼې بدل کړئ",
+      "pagesLoading": "پاڼې پورته کېږي…",
+      "pagesInvalid": "د پاڼو شمېرې یا سلسلې دننه کړئ، لکه ۱–۴۰، ۴۵.",
+      "pagesUnavailable": "په دې پاڼو کې هیڅ متن نشته.",
+      "pagesTooMany": "ستاسو ټاکنه {used} توري لري او یوه دسته {max} توري لري. لږ پاڼې وټاکئ.",
+      "stop": "درول",
+      "stepAnalyzing": "تحلیل روان دی",
+      "stepTranslating": "ژباړه روانه ده",
+      "stepReviewing": "کتنه روانه ده",
+      "stepDone": "پای ته ورسېد",
+      "runProgressLabel": "د ژباړې پرمختګ",
+      "runHintAnalyzing": "د سرچینې ستونزمن اصطلاحات او ناڅرګندۍ لوستل.",
+      "runHintTranslating": "ژباړه لیکل.",
+      "runHintReviewing": "د مسودې معاینه د اصل متن سره.",
+      "runHintReviewingRound": "د مسودې معاینه د اصل سره · پړاو {round} له اعظمي {total} څخه.",
+      "runRound": "پړاو {round} له اعظمي {total} څخه",
+      "draftLabel": "مسوده",
+      "sourceLocked": "د ژباړې پر مهال تړل شوی",
+      "analysisNotes": "{count, plural, one {# یادونه} other {# یادونې}}",
+      "analysisPill": "{count, plural, one {تحلیل · # یادونه} other {تحلیل · # یادونې}}",
+      "reviewSummary": "{count, plural, one {کتنه: # پړاو، {verdict}} other {کتنه: # پړاوونه، {verdict}}}",
+      "analysisDismiss": "ټولو ژباړو لپاره پټه کړئ",
+      "analysisShow": "د ژباړې مخکې تحلیل وښایئ",
+      "analysisResize": "د تحلیل پینل اندازه بدل کړئ",
+      "assessingCriteria": "{count, plural, one {# معیار ارزونه روانه ده} other {# معیارونه ارزول کېږي}}",
+      "editsPending": "اړ پیشنهاد شوي تعدیلات به دلته ښکاره شي کله چې ارزونه پای ته ورسېږي.",
+      "uploadProgressLabel": "د پورته کولو پرمختګ",
+      "uploadStepUploading": "برېښنالیک ته پورته کول",
+      "uploadStepReading": "متن لوستل",
+      "uploadStepReady": "چمتو",
+      "uploadCancel": "لغوه کړئ"
     },
     "document": {
       "emptyTitle": "هغه سند تشریح کړئ چې غواړئ",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "د ایمیل لوستل هره ورځ",
       "m365MailDraftsPerDay": "د ایمیل مسودې هره ورځ",
       "m365MailDeepScansPerDay": "د ایمیل ژور اسکن هره ورځ",
-      "m365DigestRunsPerDay": "د ورځني Digest چلولو شمېر په ورځ کې"
+      "m365DigestRunsPerDay": "د ورځني Digest چلولو شمېر په ورځ کې",
+      "translationPagesPerDay": "د ورځې د سند ژباړې پاڼې"
     },
     "valueModeLabel": "د محدویت ډول",
     "valueAmountLabel": "د محدویت اندازه",
@@ -5722,7 +5762,8 @@
       "jobs": "کارونه",
       "rounds": "گردشونه",
       "documents": "اسناد",
-      "boolean": ""
+      "boolean": "",
+      "pages": "پاڼې"
     },
     "window": {
       "day": "ورځ",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "په ورځ کې د ایمیل لټون او د پیغام/تار لوستلو شمېر. له حده زیات، د ایمیل وسیلې \"سبا بیا هڅه وکړئ\" نتیجه ورکوي.",
       "m365MailDraftsPerDay": "په ورځ کې دومره ایمیل مسودې چې مرسته کوونکی یې جوړولی شي — هره یوه جلا تاییدېږي. قصدي محدوده ده.",
       "m365MailDeepScansPerDay": "مخلوط د ایمیل ژورې شننې (هضم، ژوره لټون، ژمنتیاوې) په ورځ کې. هره شننه یوه واحده اندازه ګڼل کېږي، که څه هم دننه څو لوستنې لري.",
-      "m365DigestRunsPerDay": "Microsoft 365 ورځنی Digest چلولو شمېر په ورځ کې. یو چلول ګڼ شمېر Graph لوستل او دوه analysis-model اړیکې لري؛ د مودې غوره کولو وسیله بیا چلول آسانه کوي، نو معمول محدودیت جدي ټاکل شوی."
+      "m365DigestRunsPerDay": "Microsoft 365 ورځنی Digest چلولو شمېر په ورځ کې. یو چلول ګڼ شمېر Graph لوستل او دوه analysis-model اړیکې لري؛ د مودې غوره کولو وسیله بیا چلول آسانه کوي، نو معمول محدودیت جدي ټاکل شوی.",
+      "translationPagesPerDay": "هره ورځ د سند ژباړې لپاره PDF پاڼې سپارل کېږي."
     },
     "scopeFamily": "کورنۍ",
     "scopeModel": "ماډل",

@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "Sêngö {name} na OneDrive.",
     "openInOneDrive": "Hûsa",
     "saveForbidden": "O kûe tî mû lângô na folder a — pîlî ngba ngâ na \"Sêngö na OneDrive\".",
-    "saveToOneDriveFailed": "Mo kêtê na sêngö na OneDrive — mbênî sô mbênî."
+    "saveToOneDriveFailed": "Mo kêtê na sêngö na OneDrive — mbênî sô mbênî.",
+    "textVersion": "Version ti texte (DOCX)",
+    "textVersionHint": "Fichier Word ti code yeke su. Texte na ape ti yeke ti mo, fala ko na fala ti source. Fichier ti traduction ape ti layout ti origine."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Fichî â ni abe mingi kêtî (5 MB kêtî dû).",
       "importNothing": "La yângâ ti mû mo ape ({skipped} kode ayo).",
       "importSummary": "{added} akêtî, {replaced} asûkê, {skipped} kode.",
-      "entriesTooManyToShow": "{count} térè — mingi kodro ti sô hînga. Exporté wa yângâ pè, wa importé fichî wa sûkê térè."
+      "entriesTooManyToShow": "{count} térè — mingi kodro ti sô hînga. Exporté wa yângâ pè, wa importé fichî wa sûkê térè.",
+      "pagesLoaded": "Fala na {selected} ti {total} ayeke da",
+      "pagesLabel": "Fala",
+      "pagesApply": "Yeke fala",
+      "pagesPrevious": "Fala ti mo ti tete",
+      "pagesNext": "Fala ti mo ti soro",
+      "pagesBudget": "{used} / {max} ya mo",
+      "pagesChange": "Kwe fala",
+      "pagesLoading": "Ayeke fala…",
+      "pagesInvalid": "Zia nomo ti fala na, ala ti 1-40, 45.",
+      "pagesUnavailable": "Fala ti nzoni ni aké ti logba.",
+      "pagesTooMany": "Fingo alé {used} ya mo, mo ti batch kodro {max}. Sélé fala ti mingi pâ.",
+      "stop": "Ké",
+      "stepAnalyzing": "Kâmbi",
+      "stepTranslating": "Yângâ ti sângi",
+      "stepReviewing": "Gbêtî",
+      "stepDone": "Kûê",
+      "runProgressLabel": "Yângâ ti sângi yâ na",
+      "runHintAnalyzing": "Kûè ti yângâ ti ngâ mô faka na sô yângâ na biningo.",
+      "runHintTranslating": "Kâ tûmbû yângâ ti sângi.",
+      "runHintReviewing": "Kûè la tîngbîla na bî yângâ ti sângi.",
+      "runHintReviewingRound": "Kûè la tîngbîla na bî yângâ ti sângi · round {round} na {total}.",
+      "runRound": "Round {round} na {total}",
+      "draftLabel": "Bosike",
+      "sourceLocked": "Gbârî bada ni sângi sêkê",
+      "analysisNotes": "{count, plural, one {# tînyîsa} other {# tînyîsa}}",
+      "analysisPill": "{count, plural, one {Kâmbi · # tînyîsa} other {Kâmbi · # tînyîsa}}",
+      "reviewSummary": "{count, plural, one {Gbêtî: # round, {verdict}} other {Gbêtî: # rounds, {verdict}}}",
+      "analysisDismiss": "Kûlî ndâ yângâ sô sângi vû",
+      "analysisShow": "Ase kâmbi na mô môla sângi",
+      "analysisResize": "Wâlî panel ti kâmbi",
+      "assessingCriteria": "{count, plural, one {Kûè ti # kritèriûm} other {Kûè ti # kritèriûm}}",
+      "editsPending": "Kô yângâ ti bâga ti yângâ ti sô gba yâ na.",
+      "uploadProgressLabel": "Yângâ ti upload yâ na",
+      "uploadStepUploading": "Uploadî",
+      "uploadStepReading": "Kûè ti tèkè",
+      "uploadStepReady": "Kêgbè",
+      "uploadCancel": "Gbê"
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Lecture ti courrier par jour",
       "m365MailDraftsPerDay": "Bê ti rédaction ti courrier par jour",
       "m365MailDeepScansPerDay": "Bê ti scan approfondi ti courrier par jour",
-      "m365DigestRunsPerDay": "Zinga na mbëtï na téne na yeke pasi"
+      "m365DigestRunsPerDay": "Zinga na mbëtï na téne na yeke pasi",
+      "translationPagesPerDay": "Fala ti traduction ti document na lengo"
     },
     "valueModeLabel": "Zoni tî nzoni",
     "valueAmountLabel": "Zöngö tî nzoni",
@@ -5722,7 +5762,8 @@
       "jobs": "tirï",
       "rounds": "tokombere",
       "documents": "mbëti",
-      "boolean": ""
+      "boolean": "",
+      "pages": "fala"
     },
     "window": {
       "day": "mbo",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Söngö tî mail na nzönî/ngangu bï lönji. Sô mbi kïri, tool tî mail a teni \"bo sô mâle\" da.",
       "m365MailDraftsPerDay": "Mail draft sô assistant a kunna bï lönji na yeke gï. Yëngö sô mbeni bi ködä.",
       "m365MailDeepScansPerDay": "Analiz tî mail sô gbû (digest, deep search, commitments) bï lönji. Analiz sî kötä mbi kïri ndö, tool sô na lo ape.",
-      "m365DigestRunsPerDay": "Microsoft 365 zinga na mbëtï na téne na yeke pasi. Yeke pasi e lingbi kété na ndokua na Graph na yeke gbanga mo na mbînda analysis-model; mo na period picker na yeke maboko, ngangu na default na yeke ngbanga."
+      "m365DigestRunsPerDay": "Microsoft 365 zinga na mbëtï na téne na yeke pasi. Yeke pasi e lingbi kété na ndokua na Graph na yeke gbanga mo na mbînda analysis-model; mo na period picker na yeke maboko, ngangu na default na yeke ngbanga.",
+      "translationPagesPerDay": "Fala PDF ti yeke soumis pour traduction ti document na lengo."
     },
     "scopeFamily": "Famili",
     "scopeModel": "Modèle",

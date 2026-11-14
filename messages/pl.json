@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "Zapisano {name} na OneDrive.",
     "openInOneDrive": "Otwórz",
     "saveForbidden": "Nie masz uprawnień do zapisu w tym folderze — wybierz inny przy użyciu „Zapisz na OneDrive”.",
-    "saveToOneDriveFailed": "Nie udało się zapisać na OneDrive — spróbuj ponownie."
+    "saveToOneDriveFailed": "Nie udało się zapisać na OneDrive — spróbuj ponownie.",
+    "textVersion": "Wersja tekstowa (DOCX)",
+    "textVersionHint": "Edytowalny plik Word z przetłumaczonym tekstem, jedna strona na stronę źródłową. Sam przetłumaczony plik zachowuje oryginalny układ."
   },
   "terms": {
     "officialLanguages": "Wersja oficjalna:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "Ten plik jest zbyt duży do importu (maks. 5 MB).",
       "importNothing": "Nie znaleziono użytecznych wierszy ({skipped} pominięto).",
       "importSummary": "{added} dodano, {replaced} zastąpiono, {skipped} pominięto.",
-      "entriesTooManyToShow": "{count} terminów — zbyt dużo, by wyświetlić tutaj. Wyeksportuj, aby przejrzeć, lub zaimportuj plik, by zastąpić terminy."
+      "entriesTooManyToShow": "{count} terminów — zbyt dużo, by wyświetlić tutaj. Wyeksportuj, aby przejrzeć, lub zaimportuj plik, by zastąpić terminy.",
+      "pagesLoaded": "załadowano strony {selected} z {total}",
+      "pagesLabel": "Strony",
+      "pagesApply": "Załaduj strony",
+      "pagesPrevious": "Poprzednia partia",
+      "pagesNext": "Następna partia",
+      "pagesBudget": "{used} / {max} znaków",
+      "pagesChange": "Zmień strony",
+      "pagesLoading": "Ładowanie stron…",
+      "pagesInvalid": "Wprowadź numery lub zakresy stron, np. 1-40, 45.",
+      "pagesUnavailable": "Żadna z tych stron nie zawiera tekstu.",
+      "pagesTooMany": "Ten wybór to {used} znaków, a jedna partia może mieć maksymalnie {max}. Wybierz mniej stron.",
+      "stop": "Zatrzymaj",
+      "stepAnalyzing": "Analizowanie",
+      "stepTranslating": "Tłumaczenie",
+      "stepReviewing": "Recenzja",
+      "stepDone": "Gotowe",
+      "runProgressLabel": "Postęp tłumaczenia",
+      "runHintAnalyzing": "Odczytywanie źródła w poszukiwaniu trudnych terminów i niejednoznaczności.",
+      "runHintTranslating": "Tworzenie tłumaczenia.",
+      "runHintReviewing": "Porównywanie wersji roboczej z oryginałem.",
+      "runHintReviewingRound": "Porównywanie wersji roboczej z oryginałem · runda {round} z maksymalnie {total}.",
+      "runRound": "Runda {round} z maksymalnie {total}",
+      "draftLabel": "Wersja robocza",
+      "sourceLocked": "Zablokowane podczas tłumaczenia",
+      "analysisNotes": "{count, plural, one {# uwaga} other {# uwag}}",
+      "analysisPill": "{count, plural, one {Analiza · # uwaga} other {Analiza · # uwag}}",
+      "reviewSummary": "{count, plural, one {Recenzja: # runda, {verdict}} other {Recenzja: # rundy, {verdict}}}",
+      "analysisDismiss": "Ukryj dla wszystkich tłumaczeń",
+      "analysisShow": "Pokaż analizę przed tłumaczeniem",
+      "analysisResize": "Zmień rozmiar panelu analizy",
+      "assessingCriteria": "{count, plural, one {Sprawdzanie # kryterium} other {Sprawdzanie # kryteriów}}",
+      "editsPending": "Sugerowane poprawki pojawią się tutaj po zakończeniu oceny.",
+      "uploadProgressLabel": "Postęp przesyłania",
+      "uploadStepUploading": "Przesyłanie",
+      "uploadStepReading": "Odczytywanie tekstu",
+      "uploadStepReady": "Gotowe",
+      "uploadCancel": "Anuluj"
     },
     "document": {
       "emptyTitle": "Opisz dokument, który chcesz uzyskać",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "Odczyty wiadomości dziennie",
       "m365MailDraftsPerDay": "Szkice wiadomości dziennie",
       "m365MailDeepScansPerDay": "Głębokie skanowanie wiadomości dziennie",
-      "m365DigestRunsPerDay": "Dzienne uruchomienia podsumowań"
+      "m365DigestRunsPerDay": "Dzienne uruchomienia podsumowań",
+      "translationPagesPerDay": "Strony tłumaczenia dokumentów na dzień"
     },
     "valueModeLabel": "Typ limitu",
     "valueAmountLabel": "Wartość limitu",
@@ -5738,7 +5778,8 @@
       "jobs": "zadania",
       "rounds": "rundy",
       "documents": "dokumentów",
-      "boolean": ""
+      "boolean": "",
+      "pages": "strony"
     },
     "window": {
       "day": "dzień",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "Wyszukiwania poczty i odczytywanie wiadomości/wątków dziennie. Po przekroczeniu limitu narzędzia pocztowe zwrócą komunikat „spróbuj ponownie jutro”.",
       "m365MailDraftsPerDay": "Szkice e-mail, które asystent może utworzyć dziennie — każdy zatwierdzany osobno. Limit celowo niski.",
       "m365MailDeepScansPerDay": "Złożone analizy poczty (streszczenia, głębokie wyszukiwanie, zobowiązania) dziennie. Każde skanowanie to jedna jednostka budżetowa bez względu na liczbę wewnętrznych odczytów.",
-      "m365DigestRunsPerDay": "Liczba dziennych uruchomień podsumowania Microsoft 365. Jedno uruchomienie to kilkadziesiąt odczytów Graph oraz dwa wywołania modeli analitycznych; wybór okresu pozwala łatwo ponawiać zadania, dlatego domyślny limit jest niski."
+      "m365DigestRunsPerDay": "Liczba dziennych uruchomień podsumowania Microsoft 365. Jedno uruchomienie to kilkadziesiąt odczytów Graph oraz dwa wywołania modeli analitycznych; wybór okresu pozwala łatwo ponawiać zadania, dlatego domyślny limit jest niski.",
+      "translationPagesPerDay": "Strony PDF przesłane do tłumaczenia dokumentów dziennie."
     },
     "scopeFamily": "Rodzina",
     "scopeModel": "Model",

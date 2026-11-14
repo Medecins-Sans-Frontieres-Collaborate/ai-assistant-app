@@ -2592,7 +2592,9 @@
     "savedToOneDrive": "Đã lưu {name} vào OneDrive.",
     "openInOneDrive": "Mở",
     "saveForbidden": "Bạn không có quyền ghi vào thư mục đó — hãy chọn thư mục khác bằng “Lưu vào OneDrive”.",
-    "saveToOneDriveFailed": "Không thể lưu vào OneDrive — vui lòng thử lại."
+    "saveToOneDriveFailed": "Không thể lưu vào OneDrive — vui lòng thử lại.",
+    "textVersion": "Phiên bản văn bản (DOCX)",
+    "textVersionHint": "Tập tin Word có thể chỉnh sửa với văn bản đã dịch, mỗi trang tương ứng với một trang gốc. Tập tin đã dịch giữ nguyên bố cục gốc."
   },
   "terms": {
     "officialLanguages": "Phiên bản chính thức:",
@@ -3105,7 +3107,44 @@
       "importTooLarge": "Tập tin đó quá lớn để nhập (tối đa 5 MB).",
       "importNothing": "Không tìm thấy dòng sử dụng được ({skipped} đã bỏ qua).",
       "importSummary": "Đã thêm {added}, đã thay thế {replaced}, đã bỏ qua {skipped}.",
-      "entriesTooManyToShow": "{count} thuật ngữ — quá nhiều để hiển thị ở đây. Vui lòng xuất ra để xem lại, hoặc nhập tập tin mới để thay thế các thuật ngữ."
+      "entriesTooManyToShow": "{count} thuật ngữ — quá nhiều để hiển thị ở đây. Vui lòng xuất ra để xem lại, hoặc nhập tập tin mới để thay thế các thuật ngữ.",
+      "pagesLoaded": "đã tải {selected} trên {total} trang",
+      "pagesLabel": "Trang",
+      "pagesApply": "Tải trang",
+      "pagesPrevious": "Lô trước",
+      "pagesNext": "Lô tiếp",
+      "pagesBudget": "{used} / {max} ký tự",
+      "pagesChange": "Thay đổi trang",
+      "pagesLoading": "Đang tải trang…",
+      "pagesInvalid": "Nhập số hoặc khoảng trang, ví dụ 1-40, 45.",
+      "pagesUnavailable": "Không có trang nào trong số đó chứa văn bản.",
+      "pagesTooMany": "Lựa chọn này có {used} ký tự, mỗi lô chỉ chứa được {max}. Chọn ít trang hơn.",
+      "stop": "Dừng lại",
+      "stepAnalyzing": "Đang phân tích",
+      "stepTranslating": "Đang dịch",
+      "stepReviewing": "Đang kiểm tra",
+      "stepDone": "Hoàn thành",
+      "runProgressLabel": "Tiến độ dịch",
+      "runHintAnalyzing": "Đang đọc nguồn để xác định thuật ngữ và điểm mơ hồ.",
+      "runHintTranslating": "Đang viết bản dịch.",
+      "runHintReviewing": "Đang kiểm tra bản nháp với nội dung gốc.",
+      "runHintReviewingRound": "Đang kiểm tra bản nháp với nội dung gốc · vòng {round} trên tối đa {total}.",
+      "runRound": "Vòng {round} trên tối đa {total}",
+      "draftLabel": "Bản nháp",
+      "sourceLocked": "Đã khóa trong khi đang dịch",
+      "analysisNotes": "{count, plural, one {# ghi chú} other {# ghi chú}}",
+      "analysisPill": "{count, plural, one {Phân tích · # ghi chú} other {Phân tích · # ghi chú}}",
+      "reviewSummary": "{count, plural, one {Kiểm tra: # vòng, {verdict}} other {Kiểm tra: # vòng, {verdict}}}",
+      "analysisDismiss": "Ẩn cho tất cả bản dịch",
+      "analysisShow": "Hiện phân tích trước khi dịch",
+      "analysisResize": "Thay đổi kích thước bảng phân tích",
+      "assessingCriteria": "{count, plural, one {Đang kiểm tra # tiêu chí} other {Đang kiểm tra # tiêu chí}}",
+      "editsPending": "Các chỉnh sửa đề xuất sẽ hiển thị ở đây khi đánh giá hoàn tất.",
+      "uploadProgressLabel": "Tiến độ tải lên",
+      "uploadStepUploading": "Đang tải lên",
+      "uploadStepReading": "Đang đọc văn bản",
+      "uploadStepReady": "Sẵn sàng",
+      "uploadCancel": "Hủy"
     },
     "document": {
       "emptyTitle": "Mô tả tài liệu bạn muốn",
@@ -5746,7 +5785,8 @@
       "m365MailReadsPerDay": "Lượt đọc thư mỗi ngày",
       "m365MailDraftsPerDay": "Bản nháp thư mỗi ngày",
       "m365MailDeepScansPerDay": "Quét sâu thư mỗi ngày",
-      "m365DigestRunsPerDay": "Số lần chạy tổng hợp mỗi ngày"
+      "m365DigestRunsPerDay": "Số lần chạy tổng hợp mỗi ngày",
+      "translationPagesPerDay": "Số trang dịch tài liệu mỗi ngày"
     },
     "valueModeLabel": "Loại giới hạn",
     "valueAmountLabel": "Giá trị giới hạn",
@@ -5769,7 +5809,8 @@
       "jobs": "lượt",
       "rounds": "lượt",
       "documents": "tài liệu",
-      "boolean": ""
+      "boolean": "",
+      "pages": "trang"
     },
     "window": {
       "day": "ngày",
@@ -5827,7 +5868,8 @@
       "m365MailReadsPerDay": "Số lượt tìm kiếm thư và đọc tin nhắn/chủ đề mỗi ngày. Khi vượt giới hạn, công cụ thư sẽ trả về \"vui lòng thử lại vào ngày mai\".",
       "m365MailDraftsPerDay": "Số bản nháp email trợ lý có thể tạo mỗi ngày — mỗi bản cần xác nhận riêng. Hạn mức được đặt nghiêm ngặt.",
       "m365MailDeepScansPerDay": "Số lượt phân tích thư tổng hợp (tóm tắt, tìm kiếm sâu, cam kết) mỗi ngày. Mỗi lượt quét tính là một đơn vị ngân sách, bất kể số lần đọc bên trong.",
-      "m365DigestRunsPerDay": "Số lần chạy tổng hợp Microsoft 365 mỗi ngày. Một lần chạy gồm hàng chục lượt đọc Graph cùng hai lần gọi phân tích; bộ chọn khoảng thời gian giúp dễ yêu cầu chạy lại, do đó giới hạn mặc định khá chặt."
+      "m365DigestRunsPerDay": "Số lần chạy tổng hợp Microsoft 365 mỗi ngày. Một lần chạy gồm hàng chục lượt đọc Graph cùng hai lần gọi phân tích; bộ chọn khoảng thời gian giúp dễ yêu cầu chạy lại, do đó giới hạn mặc định khá chặt.",
+      "translationPagesPerDay": "Số trang PDF nộp để dịch tài liệu mỗi ngày."
     },
     "scopeFamily": "Nhóm",
     "scopeModel": "Mô hình",

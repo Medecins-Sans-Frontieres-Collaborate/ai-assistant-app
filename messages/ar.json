@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "تم حفظ {name} في OneDrive.",
     "openInOneDrive": "فتح",
     "saveForbidden": "ليست لديك صلاحية الكتابة في هذا المجلد — يرجى اختيار مجلد آخر باستخدام \"حفظ في OneDrive\".",
-    "saveToOneDriveFailed": "تعذر الحفظ في OneDrive — يرجى المحاولة مجددًا."
+    "saveToOneDriveFailed": "تعذر الحفظ في OneDrive — يرجى المحاولة مجددًا.",
+    "textVersion": "نسخة النص (DOCX)",
+    "textVersionHint": "ملف Word قابل للتعديل يحتوي على النص المترجم، صفحة لكل صفحة مصدرية. يحتفظ ملف الترجمة بتنسيق الصفحة الأصلي."
   },
   "terms": {
     "officialLanguages": "النسخة الرسمية:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "الملف كبير جدًا للاستيراد (الحد الأقصى 5 ميغابايت).",
       "importNothing": "لم يتم العثور على صفوف صالحة ({skipped} تم تجاوزها).",
       "importSummary": "{added} أُضيفت، {replaced} استُبدلت، {skipped} تجاوزت.",
-      "entriesTooManyToShow": "{count} مصطلحات — عدد كبير جدًا لعرضها هنا. قم بالتصدير لمراجعتها أو استورد ملفًا لاستبدال المصطلحات."
+      "entriesTooManyToShow": "{count} مصطلحات — عدد كبير جدًا لعرضها هنا. قم بالتصدير لمراجعتها أو استورد ملفًا لاستبدال المصطلحات.",
+      "pagesLoaded": "تم تحميل الصفحات {selected} من {total}",
+      "pagesLabel": "الصفحات",
+      "pagesApply": "تحميل الصفحات",
+      "pagesPrevious": "الدُفعة السابقة",
+      "pagesNext": "الدُفعة التالية",
+      "pagesBudget": "{used} / {max} حرف",
+      "pagesChange": "تغيير الصفحات",
+      "pagesLoading": "جاري تحميل الصفحات…",
+      "pagesInvalid": "أدخل أرقام الصفحات أو نطاقات، مثل 1-40، 45.",
+      "pagesUnavailable": "لا تحتوي هذه الصفحات على نص.",
+      "pagesTooMany": "هذا الاختيار فيه {used} حرف، وكل دفعة تستوعب {max}. يرجى اختيار صفحات أقل.",
+      "stop": "إيقاف",
+      "stepAnalyzing": "جارٍ التحليل",
+      "stepTranslating": "جارٍ الترجمة",
+      "stepReviewing": "جارٍ المراجعة",
+      "stepDone": "تم",
+      "runProgressLabel": "تقدم الترجمة",
+      "runHintAnalyzing": "قراءة المصدر لاكتشاف المصطلحات الصعبة والغموض.",
+      "runHintTranslating": "كتابة الترجمة.",
+      "runHintReviewing": "مراجعة المسودة مقارنة بالمصدر.",
+      "runHintReviewingRound": "مراجعة المسودة مقارنة بالمصدر · الجولة {round} من أصل {total}.",
+      "runRound": "الجولة {round} من أصل {total}",
+      "draftLabel": "مسودة",
+      "sourceLocked": "مغلق أثناء الترجمة",
+      "analysisNotes": "{count, plural, one {ملاحظة واحدة} other {# ملاحظات}}",
+      "analysisPill": "{count, plural, one {تحليل · ملاحظة واحدة} other {تحليل · # ملاحظات}}",
+      "reviewSummary": "{count, plural, one {مراجعة: جولة واحدة، {verdict}} other {مراجعة: # جولات، {verdict}}}",
+      "analysisDismiss": "إخفاء لجميع الترجمات",
+      "analysisShow": "عرض التحليل المسبق للترجمة",
+      "analysisResize": "تغيير حجم لوحة التحليل",
+      "assessingCriteria": "{count, plural, one {جارٍ فحص معيار واحد} other {جارٍ فحص # معايير}}",
+      "editsPending": "ستظهر التعديلات المقترحة هنا عندما تنتهي المراجعة.",
+      "uploadProgressLabel": "تقدم الرفع",
+      "uploadStepUploading": "جارٍ الرفع",
+      "uploadStepReading": "جارٍ قراءة النص",
+      "uploadStepReady": "جاهز",
+      "uploadCancel": "إلغاء"
     },
     "document": {
       "emptyTitle": "صف المستند الذي تريده",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "قراءات البريد يوميًا",
       "m365MailDraftsPerDay": "مسودات البريد يوميًا",
       "m365MailDeepScansPerDay": "عمليات الفحص العميق للبريد يوميًا",
-      "m365DigestRunsPerDay": "عدد مرات تشغيل الملخص اليومي في اليوم"
+      "m365DigestRunsPerDay": "عدد مرات تشغيل الملخص اليومي في اليوم",
+      "translationPagesPerDay": "عدد صفحات ترجمة الوثائق في اليوم"
     },
     "valueModeLabel": "نوع الحد",
     "valueAmountLabel": "قيمة الحد",
@@ -5738,7 +5778,8 @@
       "jobs": "مهام",
       "rounds": "جولات",
       "documents": "مستندات",
-      "boolean": ""
+      "boolean": "",
+      "pages": "صفحات"
     },
     "window": {
       "day": "يوم",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "عدد عمليات البحث في البريد الإلكتروني وقراءة الرسائل/المحادثات يوميًا. عند تجاوز الحد، تظهر نتيجة \"حاول مرة أخرى غدًا\".",
       "m365MailDraftsPerDay": "مسودات البريد الإلكتروني التي يمكن للمساعد إنشاؤها يوميًا — يتم تأكيد كل واحدة على حدة. الحد مقيد عمدًا.",
       "m365MailDeepScansPerDay": "تحليلات البريد الإلكتروني المركبة (التلخيصات، البحث العميق، الالتزامات) يوميًا. كل عملية فحص تُحسب كوحدة واحدة بغض النظر عن عدد القراءات الداخلية.",
-      "m365DigestRunsPerDay": "عدد مرات تشغيل الملخص اليومي لـ Microsoft 365 في اليوم. كل تشغيل يتضمن عشرات قراءات Graph بالإضافة إلى مكالمتين لنموذج التحليل؛ أداة اختيار الفترة تجعل إعادة التشغيل سهلة، لذا الإعداد الافتراضي محدود."
+      "m365DigestRunsPerDay": "عدد مرات تشغيل الملخص اليومي لـ Microsoft 365 في اليوم. كل تشغيل يتضمن عشرات قراءات Graph بالإضافة إلى مكالمتين لنموذج التحليل؛ أداة اختيار الفترة تجعل إعادة التشغيل سهلة، لذا الإعداد الافتراضي محدود.",
+      "translationPagesPerDay": "صفحات PDF المقدمة لترجمة الوثائق يومياً."
     },
     "scopeFamily": "العائلة",
     "scopeModel": "النموذج",

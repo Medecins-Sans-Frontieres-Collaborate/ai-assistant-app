@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "{name} opgeslagen in OneDrive.",
     "openInOneDrive": "Openen",
     "saveForbidden": "U heeft geen toestemming om naar die map te schrijven — kies een andere met “Opslaan in OneDrive”.",
-    "saveToOneDriveFailed": "Kan niet opslaan in OneDrive — probeer het opnieuw."
+    "saveToOneDriveFailed": "Kan niet opslaan in OneDrive — probeer het opnieuw.",
+    "textVersion": "Tekstversie (DOCX)",
+    "textVersionHint": "Een bewerkbaar Word-bestand met de vertaalde tekst, één pagina per bronpagina. Het vertaalde bestand behoudt zelf de oorspronkelijke opmaak."
   },
   "terms": {
     "officialLanguages": "Officiële versie:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "Dat bestand is te groot om te importeren (max. 5 MB).",
       "importNothing": "Geen bruikbare rijen gevonden ({skipped} overgeslagen).",
       "importSummary": "{added} toegevoegd, {replaced} vervangen, {skipped} overgeslagen.",
-      "entriesTooManyToShow": "{count} termen — te veel om hier te tonen. Exporteer om ze te bekijken, of importeer een bestand om termen te vervangen."
+      "entriesTooManyToShow": "{count} termen — te veel om hier te tonen. Exporteer om ze te bekijken, of importeer een bestand om termen te vervangen.",
+      "pagesLoaded": "pagina’s {selected} van {total} geladen",
+      "pagesLabel": "Pagina’s",
+      "pagesApply": "Pagina’s laden",
+      "pagesPrevious": "Vorige batch",
+      "pagesNext": "Volgende batch",
+      "pagesBudget": "{used} / {max} tekens",
+      "pagesChange": "Pagina’s wijzigen",
+      "pagesLoading": "Pagina’s laden…",
+      "pagesInvalid": "Voer paginanummers of bereiken in, bijvoorbeeld 1-40, 45.",
+      "pagesUnavailable": "Geen van deze pagina’s bevat tekst.",
+      "pagesTooMany": "Die selectie bevat {used} tekens, terwijl één batch maximaal {max} bevat. Kies minder pagina’s.",
+      "stop": "Stoppen",
+      "stepAnalyzing": "Analyseren",
+      "stepTranslating": "Vertalen",
+      "stepReviewing": "Beoordelen",
+      "stepDone": "Klaar",
+      "runProgressLabel": "Vertaalvoortgang",
+      "runHintAnalyzing": "Brontekst wordt gelezen op lastige termen en onduidelijkheden.",
+      "runHintTranslating": "De vertaling wordt geschreven.",
+      "runHintReviewing": "Concept wordt gecontroleerd met de brontekst.",
+      "runHintReviewingRound": "Concept wordt gecontroleerd met de brontekst · ronde {round} van maximaal {total}.",
+      "runRound": "Ronde {round} van maximaal {total}",
+      "draftLabel": "Concept",
+      "sourceLocked": "Geblokkeerd tijdens vertalen",
+      "analysisNotes": "{count, plural, one {# opmerking} other {# opmerkingen}}",
+      "analysisPill": "{count, plural, one {Analyse · # opmerking} other {Analyse · # opmerkingen}}",
+      "reviewSummary": "{count, plural, one {Beoordeling: # ronde, {verdict}} other {Beoordeling: # rondes, {verdict}}}",
+      "analysisDismiss": "Verbergen voor alle vertalingen",
+      "analysisShow": "Laat de pre-vertaalanalyse zien",
+      "analysisResize": "Analysevenster wijzigen",
+      "assessingCriteria": "{count, plural, one {# criterium controleren} other {# criteria controleren}}",
+      "editsPending": "Voorgestelde bewerkingen verschijnen hier na de beoordeling.",
+      "uploadProgressLabel": "Uploadvoortgang",
+      "uploadStepUploading": "Uploaden",
+      "uploadStepReading": "Tekst lezen",
+      "uploadStepReady": "Gereed",
+      "uploadCancel": "Annuleren"
     },
     "document": {
       "emptyTitle": "Beschrijf het gewenste document",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "E-mails lezen per dag",
       "m365MailDraftsPerDay": "E-mailconcepten per dag",
       "m365MailDeepScansPerDay": "Diepgaande e-mailscans per dag",
-      "m365DigestRunsPerDay": "Dagelijkse samenvattingen per dag"
+      "m365DigestRunsPerDay": "Dagelijkse samenvattingen per dag",
+      "translationPagesPerDay": "Vertaalde pagina’s per dag"
     },
     "valueModeLabel": "Limiettype",
     "valueAmountLabel": "Limietbedrag",
@@ -5738,7 +5778,8 @@
       "jobs": "taken",
       "rounds": "rondes",
       "documents": "documenten",
-      "boolean": ""
+      "boolean": "",
+      "pages": "pagina’s"
     },
     "window": {
       "day": "dag",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "E-mailzoekopdrachten en het lezen van berichten/threads per dag. Na overschrijding geeft de tool een melding 'probeer het morgen opnieuw'.",
       "m365MailDraftsPerDay": "E-mailconcepten die de assistent per dag mag aanmaken — elk exemplaar wordt afzonderlijk bevestigd. Bewust beperkt.",
       "m365MailDeepScansPerDay": "Samengestelde mailanalyses (overzichten, diepzoeken, toezeggingen) per dag. Elke scan telt als één eenheid, ongeacht het aantal interne leesacties.",
-      "m365DigestRunsPerDay": "Microsoft 365 dagelijkse samenvattingen per dag. Eén uitvoering bevat tientallen Graph-lezingen plus twee analysemodel-aanroepen; de periodekiezer maakt het eenvoudig om opnieuw uit te voeren, dus de standaardlimiet is streng."
+      "m365DigestRunsPerDay": "Microsoft 365 dagelijkse samenvattingen per dag. Eén uitvoering bevat tientallen Graph-lezingen plus twee analysemodel-aanroepen; de periodekiezer maakt het eenvoudig om opnieuw uit te voeren, dus de standaardlimiet is streng.",
+      "translationPagesPerDay": "PDF-pagina’s die per dag voor documentvertaling zijn ingediend."
     },
     "scopeFamily": "Familie",
     "scopeModel": "Model",

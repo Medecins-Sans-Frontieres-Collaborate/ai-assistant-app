@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "{name} ወደ OneDrive ተቀመጠ።",
     "openInOneDrive": "ክፈት",
     "saveForbidden": "ወደዚያ ፎልደር ለመጻፍ ፍቃድ የሎትም — ሌላ ፎልደር “ወደ OneDrive አስቀምጥ”ን ይምረጡ።",
-    "saveToOneDriveFailed": "ወደ OneDrive ማስቀመጥ አልተቻለም — እባኮትን ደግመው ይሞክሩ።"
+    "saveToOneDriveFailed": "ወደ OneDrive ማስቀመጥ አልተቻለም — እባኮትን ደግመው ይሞክሩ።",
+    "textVersion": "የጽሑፍ እትም (DOCX)",
+    "textVersionHint": "የትርጉም ጽሑፍ ውስጥ አንድ ገፅ በየምንጩ ገፅ ላይ የሚያሳይ ማስተካከያ የሚቻለው የWord ፋይል። የተተረጎመው ፋይል አንደኛውን ቅጥ ያቆያል።"
   },
   "terms": {
     "officialLanguages": "አካባቢ ትክክለኛ ቅጽ:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "ያ ፋይል ለመስመጥ በጣም ትልቅ ነው (ከ5 MB በታች).",
       "importNothing": "ምንም መጠቀም የሚቻል ረድፎች አልተገኙም ({skipped} ተወስኗል።)",
       "importSummary": "{added} ታክሏል, {replaced} ተቀይሯል, {skipped} ተወስኗል።",
-      "entriesTooManyToShow": "{count} ቃላት — እዚህ ለማሳየት ብዙ ናቸው። ለማየት ያስመጡ ወይም ቃላቶችን ለመቀየር ፋይል ያስመጡ።"
+      "entriesTooManyToShow": "{count} ቃላት — እዚህ ለማሳየት ብዙ ናቸው። ለማየት ያስመጡ ወይም ቃላቶችን ለመቀየር ፋይል ያስመጡ።",
+      "pagesLoaded": "ገፆች {selected} ከ {total} ተጫኑ",
+      "pagesLabel": "ገፆች",
+      "pagesApply": "ገፆችን ጫን",
+      "pagesPrevious": "ቀዳሚ ስብስክ",
+      "pagesNext": "ቀጣይ ስብስክ",
+      "pagesBudget": "{used} / {max} ቁምፊዎች",
+      "pagesChange": "ገፆችን ቀይር",
+      "pagesLoading": "ገፆችን በተጫን ላይ…",
+      "pagesInvalid": "የገፅ ቁጥሮች ወይም ክልሎችን ያስገቡ፣ ለምሳሌ 1-40, 45።",
+      "pagesUnavailable": "ከነዚህ ገፆች ማንኛውም ጽሑፍ አይይዙም።",
+      "pagesTooMany": "ይዞታው {used} ቁምፊዎች ናቸው እና አንድ ስብስክ {max} ይይዛል። ዝቅተኛ ገፆች ይምረጡ።",
+      "stop": "ቆልጦ",
+      "stepAnalyzing": "ትንሳኤ ማድረግ",
+      "stepTranslating": "ትርጉም ማድረግ",
+      "stepReviewing": "መደምደም",
+      "stepDone": "ተጠናቀቀ",
+      "runProgressLabel": "የትርጉም እድገት",
+      "runHintAnalyzing": "የምንጭን ድርጊቶችና ልዩ ቃላት ማንበብ።",
+      "runHintTranslating": "ትርጉም መደርሰት።",
+      "runHintReviewing": "የዝርዝሩን ፅሁፍ ምንጩን ለድምደም መመልከት።",
+      "runHintReviewingRound": "የዝርዝሩን ፅሁፍ ምንጩን ለድምደም መመልከት · ዙር {round} ከ {total} ውስጥ።",
+      "runRound": "ዙር {round} ከ {total} ውስጥ",
+      "draftLabel": "ምልክት",
+      "sourceLocked": "በትርጉም ላይ ሲሆን የተቆለፈ",
+      "analysisNotes": "{count, plural, one {# ማስታወቂያ} other {# ማስታወቂያዎች}}",
+      "analysisPill": "{count, plural, one {ትንሳኤ · # ማስታወቂያ} other {ትንሳኤ · # ማስታወቂያዎች}}",
+      "reviewSummary": "{count, plural, one {ክርክር፡ # ዙር፣ {verdict}} other {ክርክር፡ # ዙሮች፣ {verdict}}}",
+      "analysisDismiss": "ለአጠቃላይ ትርጉሞች ደብቅ",
+      "analysisShow": "ቅድመ ትርጉም ትንሳኤን አሳይ",
+      "analysisResize": "የትንሳኤ ፓነልን መቀየር",
+      "assessingCriteria": "{count, plural, one {# መስፈርት ማረግ} other {# መስፈርቶች ማረግ}}",
+      "editsPending": "የተጠቀሰ ማሻሻያ እዚህ ይታያል ግምገማው ሲጨርስ።",
+      "uploadProgressLabel": "የመስቀመጥ እድገት",
+      "uploadStepUploading": "በመስቀመጥ ላይ",
+      "uploadStepReading": "ትንታኔ ፅሁፍ ማንበብ",
+      "uploadStepReady": "ዝግጁ",
+      "uploadCancel": "ሰርዝ"
     },
     "document": {
       "emptyTitle": "የሚፈልጉትን ሰነድ ይግለጹ",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "የኢሜይል ንባቦች በቀን",
       "m365MailDraftsPerDay": "የኢሜይል ረቂቅ በቀን",
       "m365MailDeepScansPerDay": "የኢሜይል ደርድር በቀን",
-      "m365DigestRunsPerDay": "ዕንድነት በዕለት የሚሰራው ማጠቃለያ"
+      "m365DigestRunsPerDay": "ዕንድነት በዕለት የሚሰራው ማጠቃለያ",
+      "translationPagesPerDay": "በቀን የሰነድ ትርጉም ገፆች"
     },
     "valueModeLabel": "የገደብ አይነት",
     "valueAmountLabel": "የገደብ መጠን",
@@ -5738,7 +5778,8 @@
       "jobs": "ስራዎች",
       "rounds": "ዙሮች",
       "documents": "ሰነዶች",
-      "boolean": ""
+      "boolean": "",
+      "pages": "ገፆች"
     },
     "window": {
       "day": "ቀን",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "የኢሜይል ፍለጋና መልእክት/ክፍል ንባቦች በቀን። ከገደቡ በላይ፣ የኢሜይል መሳሪያዎች \"እባክዎ ነገ ይደግሙ\" ይመልሳሉ።",
       "m365MailDraftsPerDay": "የአጋሩ በቀን ሊፈጥሩት የሚችሉ የኢሜይል ረቂቅ። እያንዳንዳቸው በተናጽፎ ይረጋገጣሉ። በትክክል የተጠበቀ።",
       "m365MailDeepScansPerDay": "የተደበቀ የኢሜይል አስተ تحليل (ዳይጀስት፣ ጥልቅ ፍለጋ፣ ተግባራት) በቀን። እያንዳንዱ ፍለጋ አንድ ጀብዱ ነው፤ የውስጥ ንባቦች አይቀመጡበትም።",
-      "m365DigestRunsPerDay": "Microsoft 365 ዕለታዊ ማጠቃለያ በዕለት የሚሰራው፡ አንድ ማጠቃለያ ብዙ የGraph እየተነበበ ከመድረክ ተጠቃሚዎች ተጠቃሚዎችን ያካትታል፣ እና ሁለት የትንበያ-ሞዴል ጥሪዎች አሉ፡ የፈተናው የወቅት መለያያ እንደገና ማድረግ አሳካኝ ያደርገዋል፣ ስለዚህ የችሎታው ድፍረት አጠቃላይ ነው።"
+      "m365DigestRunsPerDay": "Microsoft 365 ዕለታዊ ማጠቃለያ በዕለት የሚሰራው፡ አንድ ማጠቃለያ ብዙ የGraph እየተነበበ ከመድረክ ተጠቃሚዎች ተጠቃሚዎችን ያካትታል፣ እና ሁለት የትንበያ-ሞዴል ጥሪዎች አሉ፡ የፈተናው የወቅት መለያያ እንደገና ማድረግ አሳካኝ ያደርገዋል፣ ስለዚህ የችሎታው ድፍረት አጠቃላይ ነው።",
+      "translationPagesPerDay": "በቀን ለሰነድ ትርጉም የሚቀርቡ የPDF ገፆች።"
     },
     "scopeFamily": "ቤተሰብ",
     "scopeModel": "ሞዴል",

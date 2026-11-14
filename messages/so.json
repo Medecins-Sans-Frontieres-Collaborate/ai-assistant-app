@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "{name} waa lagu kaydiyay OneDrive.",
     "openInOneDrive": "Fur",
     "saveForbidden": "Ma haysid ogolaansho galkaas — dooro mid kale oo “Kaydi OneDrive”.",
-    "saveToOneDriveFailed": "Lama kaydin karo OneDrive — fadlan isku day mar kale."
+    "saveToOneDriveFailed": "Lama kaydin karo OneDrive — fadlan isku day mar kale.",
+    "textVersion": "Nooca qoraalka (DOCX)",
+    "textVersionHint": "Waa fayl Word ah oo la qori karo oo leh qoraalka la tarjumay, hal bog boggiiba. Faylka la tarjumay waxa uu hayaa habayntii asalka ahayd."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Faylkaas aad buu u weyn yahay si loo soo dejiyo (ugu badnaan 5 MB).",
       "importNothing": "Ma jirin saf la isticmaalayo oo la helay ({skipped} waa la dhaafay).",
       "importSummary": "{added} waa la daray, {replaced} waa la beddelay, {skipped} waa la dhaafay.",
-      "entriesTooManyToShow": "{count} erey — aad bay u badan yihiin in halkan lagu soo bandhigo. Dhoofso si aad u eegto, ama fayl soo geli si aad ereyada u beddesho."
+      "entriesTooManyToShow": "{count} erey — aad bay u badan yihiin in halkan lagu soo bandhigo. Dhoofso si aad u eegto, ama fayl soo geli si aad ereyada u beddesho.",
+      "pagesLoaded": "bogagga {selected} ee {total} waa la raray",
+      "pagesLabel": "Bogag",
+      "pagesApply": "Rar bogagga",
+      "pagesPrevious": "Xirmo hore",
+      "pagesNext": "Xirmo xigta",
+      "pagesBudget": "{used} / {max} xaraf",
+      "pagesChange": "Beddel bogagga",
+      "pagesLoading": "Bogagga waa la rarayaa…",
+      "pagesInvalid": "Geli lambarrada ama kala-duwanaanta bogagga, tusaale ahaan 1-40, 45.",
+      "pagesUnavailable": "Midna bogaggaas ma laha qoraal.",
+      "pagesTooMany": "Xulashadaas waa {used} xaraf, hal xirmana waxay qaadi kartaa {max}. Dooro bogag yar.",
+      "stop": "Jooji",
+      "stepAnalyzing": "Falanqaynaya",
+      "stepTranslating": "Turjumaya",
+      "stepReviewing": "Dib u eegis",
+      "stepDone": "Dhammaystiran",
+      "runProgressLabel": "Horumarka turjumaadda",
+      "runHintAnalyzing": "Akhriyeynaaya ilo-ereyada adag iyo xaaladaha mugdiga ah.",
+      "runHintTranslating": "Qoraya turjumaadda.",
+      "runHintReviewing": "Eegaya qoraalka qabyo ahaanta ah marka loo eego ilaha.",
+      "runHintReviewingRound": "Eegaya qoraalka qabyo ahaanta ah marka loo eego ilaha · wareega {round} ee ugu badnaan {total}.",
+      "runRound": "Wareegga {round} ee ugu badnaan {total}",
+      "draftLabel": "Qabyo",
+      "sourceLocked": "Waa xiranyahay inta la turjumayo",
+      "analysisNotes": "{count, plural, one {# qoraal} other {# qoraallo}}",
+      "analysisPill": "{count, plural, one {Falanqayn · # qoraal} other {Falanqayn · # qoraallo}}",
+      "reviewSummary": "{count, plural, one {Dib u eegis: # wareeg, {verdict}} other {Dib u eegis: # wareegyo, {verdict}}}",
+      "analysisDismiss": "Qari dhammaan turjumaadaha",
+      "analysisShow": "Muuji falanqaynta ka hor turjumaadda",
+      "analysisResize": "Beddel cabbirka paneelka falanqaynta",
+      "assessingCriteria": "{count, plural, one {Hubinaya # shardi} other {Hubinaya # shuruudo}}",
+      "editsPending": "Wax ka beddelka la soo jeediyey ayaa halkan ka muuqan doona marka qiimeyntu dhammaato.",
+      "uploadProgressLabel": "Horumarka gelinta",
+      "uploadStepUploading": "Soo gelinaya",
+      "uploadStepReading": "Akhriyaya qoraalka",
+      "uploadStepReady": "Diyaar",
+      "uploadCancel": "Jooji"
     },
     "document": {
       "emptyTitle": "Sharax dukumintiga aad rabto",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Akhriska iimaylada maalintii",
       "m365MailDraftsPerDay": "Qoraalka drafts ee iimayl maalintii",
       "m365MailDeepScansPerDay": "Baaritaannada qoto-dheer ee iimayl maalintii",
-      "m365DigestRunsPerDay": "Tirada maalinlaha ah ee digest-ka Microsoft 365"
+      "m365DigestRunsPerDay": "Tirada maalinlaha ah ee digest-ka Microsoft 365",
+      "translationPagesPerDay": "Bogagga turjumaadda dukumeenti maalintii"
     },
     "valueModeLabel": "Nooca xadka",
     "valueAmountLabel": "Tirada xadka",
@@ -5722,7 +5762,8 @@
       "jobs": "hawl",
       "rounds": "wareegyo",
       "documents": "dukumentiyo",
-      "boolean": ""
+      "boolean": "",
+      "pages": "bogag"
     },
     "window": {
       "day": "maalin",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Baadhista iimaylada iyo akhrinta fariimaha/xadhkaha maalintii. Haddii xadka la dhaafo, qalabka iyo warqadaha waxay soo celiyaan \"isku day berrito.\"",
       "m365MailDraftsPerDay": "Qoraallada email ee kaaliyuhu samayn karo maalintii — mid kasta waa in si gaar ah loo xaqiijiyaa. Si ula kac ah xadidan.",
       "m365MailDeepScansPerDay": "Falanqaynta wadajirka ah ee iimaylada (warbixino, baadhis qoto dheer, ballanqaadyo) maalintii. Baadhis walba waa hal unug xisaabeed, si kasta oo faahfaahin ah oo ay leedahay.",
-      "m365DigestRunsPerDay": "Digest-ka maalinlaha Microsoft 365 ee la ordo maalintii. Hal orod waxay tahay akhrisyo faro badan oo Graph ah iyo wacitaan laba jeer oo analysis-model ah; xulashada muddada waxay ka dhigtaa in la codsado orod cusub mid fudud, sidaas darteed xadka caadiga ah waa xaddidan yahay."
+      "m365DigestRunsPerDay": "Digest-ka maalinlaha Microsoft 365 ee la ordo maalintii. Hal orod waxay tahay akhrisyo faro badan oo Graph ah iyo wacitaan laba jeer oo analysis-model ah; xulashada muddada waxay ka dhigtaa in la codsado orod cusub mid fudud, sidaas darteed xadka caadiga ah waa xaddidan yahay.",
+      "translationPagesPerDay": "Bogagga PDF-ga ee loo gudbiyay turjumaadda dukumeenti maalintii."
     },
     "scopeFamily": "Qoys",
     "scopeModel": "Moodel",

@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "Habitswe {name} kuri OneDrive.",
     "openInOneDrive": "Fungura",
     "saveForbidden": "Nta burenganzira bwo kwandika muri iyo dossier ufite — hitamo indi ukoresheje “Bika kuri OneDrive”.",
-    "saveToOneDriveFailed": "Ntibishobotse kubika kuri OneDrive — gerageza kongera."
+    "saveToOneDriveFailed": "Ntibishobotse kubika kuri OneDrive — gerageza kongera.",
+    "textVersion": "Verisiyo y'inyandiko (DOCX)",
+    "textVersionHint": "Ifayili ya Word ishobora guhindurwa irimo inyandiko yavuye mu rurimi, paji imwe kuri paji yo mu isoko. Ifayili yanditswe igumana imiterere ya mbere."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Iyo dosiye nini cyane ngo yinjizwe (ntigomba kurenza 5 MB).",
       "importNothing": "Nta mirongo ikoreshwa yabonetse ({skipped} byasizwe).",
       "importSummary": "{added} byongewe, {replaced} bisimbuwe, {skipped} byasizwe.",
-      "entriesTooManyToShow": "{count} amagambo — ni menshi cyane ngo agaragazwe hano. Kohereza ibisohoka kugira ngo ubisuzume, cyangwa winjize dosiye isimbuza amagambo."
+      "entriesTooManyToShow": "{count} amagambo — ni menshi cyane ngo agaragazwe hano. Kohereza ibisohoka kugira ngo ubisuzume, cyangwa winjize dosiye isimbuza amagambo.",
+      "pagesLoaded": "Paji {selected} kuri {total} zamaze kwishyirwaho",
+      "pagesLabel": "Paji",
+      "pagesApply": "Shyiraho paji",
+      "pagesPrevious": "Agasanzwe kabanje",
+      "pagesNext": "Agasanzwe gakurikiraho",
+      "pagesBudget": "{used} / {max} inyuguti",
+      "pagesChange": "Hindura paji",
+      "pagesLoading": "Birimo gushyiraho paji...",
+      "pagesInvalid": "Andika nimero cyangwa intera za paji, urugero 1-40, 45.",
+      "pagesUnavailable": "Nta paji muri izo zirimo inyandiko.",
+      "pagesTooMany": "Iyo uhisemo ni inyuguti {used} kandi agasanzwe kamwe gafata {max}. Hitamo paji nkeya.",
+      "stop": "Hagarika",
+      "stepAnalyzing": "Gusesengura",
+      "stepTranslating": "Guhindura",
+      "stepReviewing": "Gusuzuma",
+      "stepDone": "Byarangiye",
+      "runProgressLabel": "Imiterere y’ihinduriro",
+      "runHintAnalyzing": "Gusoma inkomoko no gushakisha amagambo ateye ubwenge n’ibisobanuye birimo urujijo.",
+      "runHintTranslating": "Kwandika ihinduriro.",
+      "runHintReviewing": "Gusuzuma umushinga ugereranije n’inkomoko.",
+      "runHintReviewingRound": "Gusuzuma umushinga ugereranije n’inkomoko · icyiciro {round} muri {total}.",
+      "runRound": "Icyiciro {round} muri {total}",
+      "draftLabel": "Umushinga",
+      "sourceLocked": "Birafunze mugihe cyo guhindura",
+      "analysisNotes": "{count, plural, one {# igitekerezo} other {# ibitekerezo}}",
+      "analysisPill": "{count, plural, one {Isesengura · # igitekerezo} other {Isesengura · # ibitekerezo}}",
+      "reviewSummary": "{count, plural, one {Isuzuma: # icyiciro, {verdict}} other {Isuzuma: # byiciro, {verdict}}}",
+      "analysisDismiss": "Hisha kuri byose",
+      "analysisShow": "Erekana isesengura mbere yo guhindura",
+      "analysisResize": "Hindura ingano y’akanwa k’isesengura",
+      "assessingCriteria": "{count, plural, one {Gusuzuma # inkingi} other {Gusuzuma # inkingi}}",
+      "editsPending": "Impinduka zitanzwe zizagaragarira hano iyo isuzuma rirangiye.",
+      "uploadProgressLabel": "Imiterere yo kohereza",
+      "uploadStepUploading": "Birakoherezwa",
+      "uploadStepReading": "Gusoma inyandiko",
+      "uploadStepReady": "Byiteguye",
+      "uploadCancel": "Sesa"
     },
     "document": {
       "emptyTitle": "Sobanura inyandiko ushaka",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Ibikorwa byo gusoma email ku munsi",
       "m365MailDraftsPerDay": "Ibigereranyo bya email ku munsi",
       "m365MailDeepScansPerDay": "Gusuzuma emails byimbitse ku munsi",
-      "m365DigestRunsPerDay": "Digest ya buri munsi iboneka buri munsi"
+      "m365DigestRunsPerDay": "Digest ya buri munsi iboneka buri munsi",
+      "translationPagesPerDay": "Paji za document translated ku munsi"
     },
     "valueModeLabel": "Ubwoko bw'umupaka",
     "valueAmountLabel": "Ingano yumupaka",
@@ -5722,7 +5762,8 @@
       "jobs": "imirimo",
       "rounds": "inshuro",
       "documents": "inyandiko",
-      "boolean": ""
+      "boolean": "",
+      "pages": "paji"
     },
     "window": {
       "day": "umunsi",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Gushakisha no gusoma ubutumwa/biganiro ku munsi. Nurenga urugero, ibikoresho by'ubutumwa bisubiza 'gerageza ejo'.",
       "m365MailDraftsPerDay": "Imyiteguro y'ubutumwa bwandikirwa buri munsi—buri kimwe kimenyeshwa ukwacyo. Umubare ugenzurwa cyane.",
       "m365MailDeepScansPerDay": "Isesengura ryimbitse ry'ubutumwa (digests, deep search, commitments) ku munsi. Buri scan ifatwa nk'ingengo y'imari imwe, utitaye ku mubare w'ubusoma buyirimo.",
-      "m365DigestRunsPerDay": "Digest ya Microsoft 365 ya buri munsi. Igikorwa kimwe kirimo gusoma Graph kenshi n'inshuro ebyiri zo gukoresha analysis-model; gufata igihe n'ubundi bituma gahunda zo gusubiramo zizagara byoroshye, bityo umubare wemewe ni muto."
+      "m365DigestRunsPerDay": "Digest ya Microsoft 365 ya buri munsi. Igikorwa kimwe kirimo gusoma Graph kenshi n'inshuro ebyiri zo gukoresha analysis-model; gufata igihe n'ubundi bituma gahunda zo gusubiramo zizagara byoroshye, bityo umubare wemewe ni muto.",
+      "translationPagesPerDay": "Paji za PDF zashyikirijwe document translation buri munsi."
     },
     "scopeFamily": "Urugo",
     "scopeModel": "Model",

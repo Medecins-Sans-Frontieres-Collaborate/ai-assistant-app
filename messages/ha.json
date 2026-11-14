@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "An ajiye {name} zuwa OneDrive.",
     "openInOneDrive": "Buɗe",
     "saveForbidden": "Ba ka da izini ka rubuta wannan fayil — zaɓi wani tare da “Ajiye zuwa OneDrive”.",
-    "saveToOneDriveFailed": "Ba a iya ajiye zuwa OneDrive ba — da fatan za a sake gwadawa."
+    "saveToOneDriveFailed": "Ba a iya ajiye zuwa OneDrive ba — da fatan za a sake gwadawa.",
+    "textVersion": "Sigar rubutu (DOCX)",
+    "textVersionHint": "Fayil din Word mai sauƙi da rubutun da aka fassara, shafi daya kowanne asali. Fayil din da aka fassara yana riƙe da tsarin asali."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Fayil ɗin yayi girma fiye da izini (max 5 MB).",
       "importNothing": "Ba a sami layin da ya dace ba ({skipped} an tsallake).",
       "importSummary": "{added} an ƙara, {replaced} an maye gurbinsu, {skipped} an tsallake.",
-      "entriesTooManyToShow": "{count} kalmomi — sun yi yawa a nan. Fitar da su don duba, ko shigo da fayil don maye gurbinsu."
+      "entriesTooManyToShow": "{count} kalmomi — sun yi yawa a nan. Fitar da su don duba, ko shigo da fayil don maye gurbinsu.",
+      "pagesLoaded": "Shafuka {selected} daga {total} an loda",
+      "pagesLabel": "Shafuka",
+      "pagesApply": "Loda shafuka",
+      "pagesPrevious": "Kundin baya",
+      "pagesNext": "Kundin gaba",
+      "pagesBudget": "{used} / {max} haruffa",
+      "pagesChange": "Canza shafuka",
+      "pagesLoading": "Ana loda shafuka…",
+      "pagesInvalid": "Shigar lambobin shafi ko iyaka, misali 1-40, 45.",
+      "pagesUnavailable": "Ba wani daga cikin shafukan ya kunshi rubutu.",
+      "pagesTooMany": "Zabin nan na {used} haruffa ne, bayanai daya yana ɗauke da {max}. Zaɓi ƙasa da haka.",
+      "stop": "Tsayar",
+      "stepAnalyzing": "Nazari",
+      "stepTranslating": "Fassarar",
+      "stepReviewing": "Duba",
+      "stepDone": "An gama",
+      "runProgressLabel": "Ci gaban fassara",
+      "runHintAnalyzing": "Karanta tushen don gano kalmomi masu wahala da rashin bayyananniya.",
+      "runHintTranslating": "Rubuta fassarar.",
+      "runHintReviewing": "Tantance rubutun da tushen.",
+      "runHintReviewingRound": "Tantance rubutun da tushen · zagaye na {round} daga cikin har zuwa {total}.",
+      "runRound": "Zagaye na {round} daga cikin har zuwa {total}",
+      "draftLabel": "Rubutun farko",
+      "sourceLocked": "An kulle yayin fassara",
+      "analysisNotes": "{count, plural, one {# bayanin} other {# bayanai}}",
+      "analysisPill": "{count, plural, one {Nazari · # bayanin} other {Nazari · # bayanai}}",
+      "reviewSummary": "{count, plural, one {Dubawa: # zagaye, {verdict}} other {Dubawa: # zagaye, {verdict}}}",
+      "analysisDismiss": "Boyewa ga duk fassara",
+      "analysisShow": "Nuna nazarin kafin fassara",
+      "analysisResize": "Canza girman kwandon nazari",
+      "assessingCriteria": "{count, plural, one {Gani # ka'ida} other {Gani # ka'idoji}}",
+      "editsPending": "Shawarwarin gyare-gyare za su bayyana anan idan an kammala bincike.",
+      "uploadProgressLabel": "Ci gaban loda",
+      "uploadStepUploading": "Ana lodawa",
+      "uploadStepReading": "Karanta rubutu",
+      "uploadStepReady": "A shirye",
+      "uploadCancel": "Soke"
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Karanta imel a rana",
       "m365MailDraftsPerDay": "Rubutun imel a rana",
       "m365MailDeepScansPerDay": "Cikakken duba imel a rana",
-      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na kullum a rana"
+      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na kullum a rana",
+      "translationPagesPerDay": "Shafukan fassarar takardu a rana"
     },
     "valueModeLabel": "Irin iyaka",
     "valueAmountLabel": "Adadin iyaka",
@@ -5722,7 +5762,8 @@
       "jobs": "aiki",
       "rounds": "zagaye",
       "documents": "takardu",
-      "boolean": ""
+      "boolean": "",
+      "pages": "shafuka"
     },
     "window": {
       "day": "rana",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Binciken imel da karanta saƙonni/lambobin zance a rana. Idan an wuce iyaka, kayan aikin imel za su nuna “gwada gobe”.",
       "m365MailDraftsPerDay": "Kirkiran rubutattun imel ɗin da mataimakin zai iya yi a rana — kowannensu ana tabbatarwa dabam. An yi da gangan don kar a wuce gona da iri.",
       "m365MailDeepScansPerDay": "Cikakkun nazarin imel (taƙaitawa, bincike mai zurfi, alƙawari) a rana. Kowanne bincike guda yana ɗauke da tamkar ɗaya daga cikin kasafin, ko da yawan karatunsu a ciki.",
-      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na Microsoft 365 a rana. Gudun guda yana kunshe da karanta Graph da dama tare da kira na analysis-model guda biyu; zaɓin lokacin yana sauƙaƙa maidowa, saboda haka an sa iyaka a bisa tsoho."
+      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na Microsoft 365 a rana. Gudun guda yana kunshe da karanta Graph da dama tare da kira na analysis-model guda biyu; zaɓin lokacin yana sauƙaƙa maidowa, saboda haka an sa iyaka a bisa tsoho.",
+      "translationPagesPerDay": "Shafukan PDF da aka tura don fassarar takardu a rana."
     },
     "scopeFamily": "Dangi",
     "scopeModel": "Samfuri",

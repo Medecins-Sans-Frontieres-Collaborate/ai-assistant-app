@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "{name} をOneDriveに保存しました。",
     "openInOneDrive": "開く",
     "saveForbidden": "そのフォルダへの書き込み権限がありません — 「OneDriveに保存」で別のフォルダを選択してください。",
-    "saveToOneDriveFailed": "OneDriveへの保存に失敗しました。もう一度お試しください。"
+    "saveToOneDriveFailed": "OneDriveへの保存に失敗しました。もう一度お試しください。",
+    "textVersion": "テキスト版（DOCX）",
+    "textVersionHint": "各ソースページごとに翻訳テキストを含む編集可能なWordファイルです。翻訳ファイルは元のレイアウトを保持します。"
   },
   "terms": {
     "officialLanguages": "公式版：",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "ファイルサイズが大きすぎます（最大5MB）。",
       "importNothing": "利用可能な行がありませんでした（{skipped}件スキップ）。",
       "importSummary": "{added}件追加、{replaced}件置換、{skipped}件スキップ。",
-      "entriesTooManyToShow": "{count}用語 — 多すぎてここには表示できません。すべて確認したい場合はエクスポートしてください。またはファイルをインポートして用語を置き換えることもできます。"
+      "entriesTooManyToShow": "{count}用語 — 多すぎてここには表示できません。すべて確認したい場合はエクスポートしてください。またはファイルをインポートして用語を置き換えることもできます。",
+      "pagesLoaded": "{total}ページ中{selected}ページが読み込まれました",
+      "pagesLabel": "ページ",
+      "pagesApply": "ページを読み込む",
+      "pagesPrevious": "前のバッチ",
+      "pagesNext": "次のバッチ",
+      "pagesBudget": "{used} / {max}文字",
+      "pagesChange": "ページを変更",
+      "pagesLoading": "ページを読み込んでいます…",
+      "pagesInvalid": "ページ番号や範囲を入力してください（例：1-40、45）。",
+      "pagesUnavailable": "これらのページにはテキストがありません。",
+      "pagesTooMany": "その選択は{used}文字で、1バッチは{max}文字までです。ページ数を減らしてください。",
+      "stop": "停止",
+      "stepAnalyzing": "解析中",
+      "stepTranslating": "翻訳中",
+      "stepReviewing": "確認中",
+      "stepDone": "完了",
+      "runProgressLabel": "翻訳の進捗",
+      "runHintAnalyzing": "難しい用語や曖昧な点を確認しています。",
+      "runHintTranslating": "翻訳文を作成しています。",
+      "runHintReviewing": "原文と草稿を確認しています。",
+      "runHintReviewingRound": "原文と草稿を確認しています · {total} 回中 {round} 回目。",
+      "runRound": "{total} 回中 {round} 回目",
+      "draftLabel": "草稿",
+      "sourceLocked": "翻訳中はロックされています",
+      "analysisNotes": "{count, plural, one {# 件のメモ} other {# 件のメモ}}",
+      "analysisPill": "{count, plural, one {解析 · # 件のメモ} other {解析 · # 件のメモ}}",
+      "reviewSummary": "{count, plural, one {レビュー: # 回, {verdict}} other {レビュー: # 回, {verdict}}}",
+      "analysisDismiss": "すべての翻訳で非表示",
+      "analysisShow": "事前解析を表示",
+      "analysisResize": "解析パネルをサイズ変更",
+      "assessingCriteria": "{count, plural, one {基準 # 件を確認中} other {基準 # 件を確認中}}",
+      "editsPending": "評価が終了すると、提案された編集がここに表示されます。",
+      "uploadProgressLabel": "アップロードの進捗",
+      "uploadStepUploading": "アップロード中",
+      "uploadStepReading": "テキストを読み込み中",
+      "uploadStepReady": "準備完了",
+      "uploadCancel": "キャンセル"
     },
     "document": {
       "emptyTitle": "作成したい文書の説明",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "メール参照/日",
       "m365MailDraftsPerDay": "メール下書き/日",
       "m365MailDeepScansPerDay": "メールディープスキャン/日",
-      "m365DigestRunsPerDay": "1日あたりのダイジェスト実行回数"
+      "m365DigestRunsPerDay": "1日あたりのダイジェスト実行回数",
+      "translationPagesPerDay": "文書翻訳ページ数／日"
     },
     "valueModeLabel": "制限タイプ",
     "valueAmountLabel": "上限値",
@@ -5738,7 +5778,8 @@
       "jobs": "件",
       "rounds": "ラウンド",
       "documents": "件",
-      "boolean": ""
+      "boolean": "",
+      "pages": "ページ"
     },
     "window": {
       "day": "日",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "1日にできるメール検索やメッセージ／スレッドの閲覧回数です。上限を超えると「明日もう一度お試しください」と返されます。",
       "m365MailDraftsPerDay": "アシスタントが1日に作成できる下書きメール数 — それぞれ個別に確認されます。厳しい上限となります。",
       "m365MailDeepScansPerDay": "1日にできる複合メール解析（ダイジェスト、詳細検索、コミットメント）。各解析は内部の読取回数にかかわらず1ユニットとしてカウントされます。",
-      "m365DigestRunsPerDay": "Microsoft 365の1日あたりのダイジェスト実行回数です。1回の実行で多数のGraphリードと分析モデルコールを含みます。期間ピッカーで再実行が容易なため、初期設定は厳しくなっています。"
+      "m365DigestRunsPerDay": "Microsoft 365の1日あたりのダイジェスト実行回数です。1回の実行で多数のGraphリードと分析モデルコールを含みます。期間ピッカーで再実行が容易なため、初期設定は厳しくなっています。",
+      "translationPagesPerDay": "文書翻訳のために1日に提出できるPDFページ数。"
     },
     "scopeFamily": "ファミリー",
     "scopeModel": "モデル",

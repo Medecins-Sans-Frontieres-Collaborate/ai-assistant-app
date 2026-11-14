@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "Zasungidwa {name} ku OneDrive.",
     "openInOneDrive": "Tsegulani",
     "saveForbidden": "Simulolezedwa kulemba mu chikwatu chimenecho — sankhani china ndi “Sungani ku OneDrive”.",
-    "saveToOneDriveFailed": "Zalephera kusunga ku OneDrive — chonde yesaninso."
+    "saveToOneDriveFailed": "Zalephera kusunga ku OneDrive — chonde yesaninso.",
+    "textVersion": "Mavuto a Mawu (DOCX)",
+    "textVersionHint": "Fayilo ya Word yosinthika yokhala ndi zomasulira, tsamba lililonse likugwirizana ndi tsamba loyamba. Fayilo yosinthidwa imasunga mawonekedwe a choyambirira."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Fayilo imeneyo ndi yayikulu kwambiri kuti italetsedwe (pafupifupi 5 MB yokha).",
       "importNothing": "Palibe mizere yogwiritsidwa ntchito yomwe yapezeka ({skipped} yasiyidwa).",
       "importSummary": "{added} zawonjezedwa, {replaced} zasinthidwa, {skipped} zasiyidwa.",
-      "entriesTooManyToShow": "{count} mawu — ambiri kwambiri kuti akhalemo. Tumizani kunja kuti muwawerenge, kapena tengani fayilo yatsopano kuti musinthe mawu."
+      "entriesTooManyToShow": "{count} mawu — ambiri kwambiri kuti akhalemo. Tumizani kunja kuti muwawerenge, kapena tengani fayilo yatsopano kuti musinthe mawu.",
+      "pagesLoaded": "masamba {selected} mwa {total} atsegulidwa",
+      "pagesLabel": "Masamba",
+      "pagesApply": "Tsegula masamba",
+      "pagesPrevious": "Gulu lapitalo",
+      "pagesNext": "Gulu lotsatira",
+      "pagesBudget": "{used} / {max} zilembo",
+      "pagesChange": "Sinthani masamba",
+      "pagesLoading": "Kutsitsa masamba…",
+      "pagesInvalid": "Lowetsani manambala kapena ma ranges a masamba, mwachitsanzo 1-40, 45.",
+      "pagesUnavailable": "Palibe masamba amenewa ali ndi zolemba.",
+      "pagesTooMany": "Kusankhaku kuli ndi zilembo {used}, gulu limodzi limavomereza {max}. Sankhani masamba ochepa.",
+      "stop": "Yimitsa",
+      "stepAnalyzing": "Kusanthula",
+      "stepTranslating": "Kutanthauzira",
+      "stepReviewing": "Kuyang'ana",
+      "stepDone": "Zatha",
+      "runProgressLabel": "Kupita patsogolo kwatanthauzo",
+      "runHintAnalyzing": "Kuwerenga zoyambirira zonse ndi mawu ovuta ndi zomwe zingasokoneze.",
+      "runHintTranslating": "Kulemba matanthauzo.",
+      "runHintReviewing": "Kuyerekezera zolembedwazo ndi zoyambirira.",
+      "runHintReviewingRound": "Kuyerekezera zolembedwazo ndi zoyambirira · gawo {round} mwa {total}.",
+      "runRound": "Gawo {round} mwa {total}",
+      "draftLabel": "Chikalata",
+      "sourceLocked": "Yatsekedwa panthauzidwe",
+      "analysisNotes": "{count, plural, one {# ndemanga} other {# ndemanga}}",
+      "analysisPill": "{count, plural, one {Kusanthula · # ndemanga} other {Kusanthula · # ndemanga}}",
+      "reviewSummary": "{count, plural, one {Chiwuniriro: # gawo, {verdict}} other {Chiwuniriro: # zigawo, {verdict}}}",
+      "analysisDismiss": "Bisa kwa matanthauzo onse",
+      "analysisShow": "Onetsani kusanthula musanatanthauze",
+      "analysisResize": "Sintha kukula kwa gawoli losanthula",
+      "assessingCriteria": "{count, plural, one {Kuverenga # mfundo} other {Kuverenga # mfundo}}",
+      "editsPending": "Zosintha zomwe zalimbikitsidwa zidzaonekera pano akamaliza kuwerenga.",
+      "uploadProgressLabel": "Kupita patsogolo pa kukweza",
+      "uploadStepUploading": "Kukutumiza",
+      "uploadStepReading": "Kuwerenga malemba",
+      "uploadStepReady": "Zakonzeka",
+      "uploadCancel": "Letsani"
     },
     "document": {
       "emptyTitle": "Fotokozani chikalata chomwe mukufuna",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Mail omwe akuwerengedwa pa tsiku",
       "m365MailDraftsPerDay": "Mail zotsatira pa tsiku",
       "m365MailDeepScansPerDay": "Mail deep scans pa tsiku",
-      "m365DigestRunsPerDay": "Digest yatsiku ndi yatsiku"
+      "m365DigestRunsPerDay": "Digest yatsiku ndi yatsiku",
+      "translationPagesPerDay": "Masamba a kutembenuza chikalata patsiku"
     },
     "valueModeLabel": "Mtundu wa malire",
     "valueAmountLabel": "Kuchuluka kwa malire",
@@ -5722,7 +5762,8 @@
       "jobs": "ntchito",
       "rounds": "zoyenda",
       "documents": "zikalata",
-      "boolean": ""
+      "boolean": "",
+      "pages": "masamba"
     },
     "window": {
       "day": "tsiku",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Kufufuza maimelo ndi kuwerenga mauthenga/ma thread patsiku. Mukapitirira malire, zida za imelo zidzabweretsa \"yesaninso mawa\".",
       "m365MailDraftsPerDay": "Ma email drafts omwe wothandizira akhoza kupanga patsiku — iliyonse imatsimikiziridwa payekha. Malire anaundana mwadala.",
       "m365MailDeepScansPerDay": "Ma composite mail analyses (digests, deep search, commitments) patsiku. Scan iliyonse ndi budget unit imodzi, mosasamala za ma reads ake.",
-      "m365DigestRunsPerDay": "Microsoft 365 digest yatsiku ndi yatsiku. Run imodzi imaphatikizapo ma Graph reads ambiri ndi kuitana ku analysis-model kawiri; kusankha nthawi kumapangitsa kuti run izipemphedwa zotsika mtengo, choncho default ndi yokhuta."
+      "m365DigestRunsPerDay": "Microsoft 365 digest yatsiku ndi yatsiku. Run imodzi imaphatikizapo ma Graph reads ambiri ndi kuitana ku analysis-model kawiri; kusankha nthawi kumapangitsa kuti run izipemphedwa zotsika mtengo, choncho default ndi yokhuta.",
+      "translationPagesPerDay": "Masamba a PDF omwe ayikidwa kuti atembenuzidwe akalembu patsiku."
     },
     "scopeFamily": "Banja",
     "scopeModel": "Mtundu",

@@ -2563,7 +2563,9 @@
     "savedToOneDrive": "{name} کو OneDrive پر محفوظ کر دیا گیا۔",
     "openInOneDrive": "کھولیں",
     "saveForbidden": "آپ کو اس فولڈر میں لکھنے کی اجازت نہیں — \"OneDrive پر محفوظ کریں\" کے ساتھ دوسرا فولڈر منتخب کریں۔",
-    "saveToOneDriveFailed": "OneDrive پر محفوظ نہیں کر سکے — دوبارہ کوشش کریں۔"
+    "saveToOneDriveFailed": "OneDrive پر محفوظ نہیں کر سکے — دوبارہ کوشش کریں۔",
+    "textVersion": "متنی ورژن (DOCX)",
+    "textVersionHint": "ایک قابل ترمیم Word فائل جس میں ترجمہ شدہ متن ہو، ہر ماخذ صفحہ کے لیے ایک صفحہ۔ ترجمہ شدہ فائل اپنا اصل لے آؤٹ برقرار رکھتی ہے۔"
   },
   "terms": {
     "officialLanguages": "سرکاری نسخہ:",
@@ -3104,7 +3106,44 @@
       "importTooLarge": "یہ فائل درآمد کرنے کے لیے بہت بڑی ہے (زیادہ سے زیادہ 5MB)۔",
       "importNothing": "کوئی قابل استعمال قطار نہیں ملی ({skipped} چھوڑ دی گئیں)۔",
       "importSummary": "{added} شامل ہوئیں، {replaced} تبدیل ہوئیں، {skipped} چھوڑ دی گئیں۔",
-      "entriesTooManyToShow": "{count} اصطلاحات — یہاں فہرست کرنے کے لیے بہت زیادہ ہیں۔ جائزہ لینے کے لیے برآمد کریں یا اصطلاحات تبدیل کرنے کے لیے فائل درآمد کریں۔"
+      "entriesTooManyToShow": "{count} اصطلاحات — یہاں فہرست کرنے کے لیے بہت زیادہ ہیں۔ جائزہ لینے کے لیے برآمد کریں یا اصطلاحات تبدیل کرنے کے لیے فائل درآمد کریں۔",
+      "pagesLoaded": "{total} میں سے {selected} صفحات لوڈ ہو گئے",
+      "pagesLabel": "صفحات",
+      "pagesApply": "صفحات لوڈ کریں",
+      "pagesPrevious": "پچھلا بیچ",
+      "pagesNext": "اگلا بیچ",
+      "pagesBudget": "{max} / {used} حروف",
+      "pagesChange": "صفحات تبدیل کریں",
+      "pagesLoading": "صفحات لوڈ ہو رہے ہیں…",
+      "pagesInvalid": "صفحہ نمبر یا رینج درج کریں، مثلاً 1-40، 45۔",
+      "pagesUnavailable": "ان میں سے کوئی بھی صفحہ متن پر مشتمل نہیں ہے۔",
+      "pagesTooMany": "یہ انتخاب {used} حروف پر مشتمل ہے جبکہ ایک بیچ میں {max} آ سکتے ہیں۔ کم صفحات منتخب کریں۔",
+      "stop": "روکیں",
+      "stepAnalyzing": "تجزیہ کیا جا رہا ہے",
+      "stepTranslating": "ترجمہ کیا جا رہا ہے",
+      "stepReviewing": "نظرِ ثانی کی جا رہی ہے",
+      "stepDone": "مکمل",
+      "runProgressLabel": "ترجمہ کی پیشرفت",
+      "runHintAnalyzing": "ماخذ میں پیچیدہ اصطلاحات اور ابہام کو پڑھا جا رہا ہے۔",
+      "runHintTranslating": "ترجمہ لکھا جا رہا ہے۔",
+      "runHintReviewing": "مسودہ کو اصل سے جانچا جا رہا ہے۔",
+      "runHintReviewingRound": "مسودہ کو اصل سے جانچا جا رہا ہے · مرحلہ {round} کل {total} میں سے۔",
+      "runRound": "مرحلہ {round} کل {total} میں سے",
+      "draftLabel": "مسودہ",
+      "sourceLocked": "ترجمے کے دوران مقفل",
+      "analysisNotes": "{count, plural, one {# نوٹ} other {# نوٹس}}",
+      "analysisPill": "{count, plural, one {تجزیہ · # نوٹ} other {تجزیہ · # نوٹس}}",
+      "reviewSummary": "{count, plural, one {جائزہ: # مرحلہ، {verdict}} other {جائزہ: # مراحل، {verdict}}}",
+      "analysisDismiss": "تمام تراجم کے لیے چھپائیں",
+      "analysisShow": "پری ٹرانسلیشن تجزیہ دکھائیں",
+      "analysisResize": "تجزیہ پینل کا سائز تبدیل کریں",
+      "assessingCriteria": "{count, plural, one {# معیار کو جانچا جا رہا ہے} other {# معیارات کو جانچا جا رہا ہے}}",
+      "editsPending": "تشخیص مکمل ہونے پر تجویز کردہ ترامیم یہاں ظاہر ہوں گی۔",
+      "uploadProgressLabel": "اپ لوڈ کی پیش رفت",
+      "uploadStepUploading": "اپ لوڈ ہو رہا ہے",
+      "uploadStepReading": "متن پڑھا جا رہا ہے",
+      "uploadStepReady": "تیار",
+      "uploadCancel": "منسوخ کریں"
     },
     "document": {
       "emptyTitle": "جس دستاویز کی وضاحت چاہتے ہیں بیان کریں",
@@ -5745,7 +5784,8 @@
       "m365MailReadsPerDay": "میل پڑھنے کی تعداد فی دن",
       "m365MailDraftsPerDay": "میل ڈرافٹس فی دن",
       "m365MailDeepScansPerDay": "میل ڈیپ اسکینز فی دن",
-      "m365DigestRunsPerDay": "یومیہ ڈائجسٹ رنز فی دن"
+      "m365DigestRunsPerDay": "یومیہ ڈائجسٹ رنز فی دن",
+      "translationPagesPerDay": "روزانہ ترجمہ کے صفحات"
     },
     "valueModeLabel": "لیمٹ کی قسم",
     "valueAmountLabel": "لیمٹ کی مقدار",
@@ -5768,7 +5808,8 @@
       "jobs": "جوبز",
       "rounds": "راونڈز",
       "documents": "دستاویزات",
-      "boolean": ""
+      "boolean": "",
+      "pages": "صفحات"
     },
     "window": {
       "day": "دن",
@@ -5826,7 +5867,8 @@
       "m365MailReadsPerDay": "میل تلاشیں اور فی دن پیغام/تھریڈ ریڈز۔ حد سے زائد ہونے پر میل ٹولز \"کل دوبارہ کوشش کریں\" کا نتیجہ واپس کرتے ہیں۔",
       "m365MailDraftsPerDay": "ای میل ڈرافٹس جو اسسٹنٹ فی دن بنا سکتا ہے — ہر ایک کی الگ سے تصدیق کی جاتی ہے۔ جان بوجھ کر محدود رکھی گئی ہے۔",
       "m365MailDeepScansPerDay": "کمپوزٹ میل جوابات (ڈائجیسٹس، ڈیپ سرچ، کمٹمنٹس) فی دن۔ ہر اسکین ایک بجٹ یونٹ ہے، چاہے اس کے اندرونی ریڈز کتنے بھی ہوں۔",
-      "m365DigestRunsPerDay": "Microsoft 365 یومیہ ڈائجسٹ رنز فی دن۔ ایک رن میں کئی Graph ریڈز اور دو analysis-model کالز ہوتی ہیں؛ پیریڈ پککر سے دوبارہ رن آسانی سے کی جا سکتی ہے، اس لیے ڈیفالٹ محدود ہے۔"
+      "m365DigestRunsPerDay": "Microsoft 365 یومیہ ڈائجسٹ رنز فی دن۔ ایک رن میں کئی Graph ریڈز اور دو analysis-model کالز ہوتی ہیں؛ پیریڈ پککر سے دوبارہ رن آسانی سے کی جا سکتی ہے، اس لیے ڈیفالٹ محدود ہے۔",
+      "translationPagesPerDay": "روزانہ دستاویز ترجمہ کے لیے جمع شدہ PDF صفحات۔"
     },
     "scopeFamily": "فیملی",
     "scopeModel": "ماڈل",

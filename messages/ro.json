@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "{name} a fost salvat în OneDrive.",
     "openInOneDrive": "Deschide",
     "saveForbidden": "Nu aveți permisiunea de a scrie în acel folder — alegeți altul cu „Salvează în OneDrive”.",
-    "saveToOneDriveFailed": "Nu s-a putut salva în OneDrive — vă rugăm încercați din nou."
+    "saveToOneDriveFailed": "Nu s-a putut salva în OneDrive — vă rugăm încercați din nou.",
+    "textVersion": "Versiune text (DOCX)",
+    "textVersionHint": "Un fișier Word editabil cu textul tradus, o pagină pentru fiecare pagină sursă. Fișierul tradus păstrează layout-ul original."
   },
   "terms": {
     "officialLanguages": "Versiune oficială:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "Fișierul este prea mare pentru import (maxim 5 MB).",
       "importNothing": "Nu s-au găsit rânduri utilizabile ({skipped} s-au sărit).",
       "importSummary": "{added} adăugate, {replaced} înlocuite, {skipped} sărite.",
-      "entriesTooManyToShow": "{count} termeni — prea mulți pentru a fi afișați aici. Exportați pentru a-i verifica sau importați un fișier pentru a înlocui termenii."
+      "entriesTooManyToShow": "{count} termeni — prea mulți pentru a fi afișați aici. Exportați pentru a-i verifica sau importați un fișier pentru a înlocui termenii.",
+      "pagesLoaded": "pagini {selected} din {total} încărcate",
+      "pagesLabel": "Pagini",
+      "pagesApply": "Încarcă pagini",
+      "pagesPrevious": "Lotul anterior",
+      "pagesNext": "Lotul următor",
+      "pagesBudget": "{used} / {max} caractere",
+      "pagesChange": "Schimbă paginile",
+      "pagesLoading": "Se încarcă paginile…",
+      "pagesInvalid": "Introduceți numere sau intervale de pagini, de exemplu 1-40, 45.",
+      "pagesUnavailable": "Niciuna dintre aceste pagini nu conține text.",
+      "pagesTooMany": "Selecția are {used} caractere, iar un lot poate conține {max}. Alegeți mai puține pagini.",
+      "stop": "Oprește",
+      "stepAnalyzing": "Se analizează",
+      "stepTranslating": "Se traduce",
+      "stepReviewing": "Se verifică",
+      "stepDone": "Finalizat",
+      "runProgressLabel": "Progresul traducerii",
+      "runHintAnalyzing": "Se analizează sursa pentru termeni dificili și ambiguități.",
+      "runHintTranslating": "Se redactează traducerea.",
+      "runHintReviewing": "Se verifică schița față de sursă.",
+      "runHintReviewingRound": "Se verifică schița față de sursă · runda {round} din maximum {total}.",
+      "runRound": "Runda {round} din maximum {total}",
+      "draftLabel": "Schiță",
+      "sourceLocked": "Blocat în timpul traducerii",
+      "analysisNotes": "{count, plural, one {# notă} other {# note}}",
+      "analysisPill": "{count, plural, one {Analiză · # notă} other {Analiză · # note}}",
+      "reviewSummary": "{count, plural, one {Revizuire: # rundă, {verdict}} other {Revizuire: # runde, {verdict}}}",
+      "analysisDismiss": "Ascunde pentru toate traducerile",
+      "analysisShow": "Arată analiza pre-traducere",
+      "analysisResize": "Redimensionează panoul de analiză",
+      "assessingCriteria": "{count, plural, one {Se verifică # criteriu} other {Se verifică # criterii}}",
+      "editsPending": "Modificările sugerate vor apărea aici după finalizarea evaluării.",
+      "uploadProgressLabel": "Progresul încărcării",
+      "uploadStepUploading": "Se încarcă",
+      "uploadStepReading": "Se citește textul",
+      "uploadStepReady": "Gata",
+      "uploadCancel": "Anulează"
     },
     "document": {
       "emptyTitle": "Descrieți documentul dorit",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "Citiri e-mail pe zi",
       "m365MailDraftsPerDay": "Ciorne e-mail pe zi",
       "m365MailDeepScansPerDay": "Scanări detaliate e-mail pe zi",
-      "m365DigestRunsPerDay": "Raport zilnic pe zi"
+      "m365DigestRunsPerDay": "Raport zilnic pe zi",
+      "translationPagesPerDay": "Pagini de traducere a documentelor pe zi"
     },
     "valueModeLabel": "Tip limită",
     "valueAmountLabel": "Valoare limită",
@@ -5738,7 +5778,8 @@
       "jobs": "procese",
       "rounds": "runde",
       "documents": "documente",
-      "boolean": ""
+      "boolean": "",
+      "pages": "pagini"
     },
     "window": {
       "day": "zi",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "Căutări e-mail și citiri de mesaje/fire pe zi. Peste limită, instrumentele mail returnează un mesaj „încercați din nou mâine”.",
       "m365MailDraftsPerDay": "Schimburi de e-mailuri pe care asistentul le poate crea zilnic — fiecare confirmat individual. Limită restrânsă intenționat.",
       "m365MailDeepScansPerDay": "Analize compuse de e-mail (sumare, căutare detaliată, angajamente) pe zi. Fiecare scanare reprezintă o unitate din buget, indiferent de numărul de citiri interne.",
-      "m365DigestRunsPerDay": "Rapoartele zilnice Microsoft 365 pe zi. Un raport implică zeci de citiri Graph și două apeluri pentru analiza modelului; selectorul de perioadă permite reexecutări ușor de cerut, astfel că limita implicită este strictă."
+      "m365DigestRunsPerDay": "Rapoartele zilnice Microsoft 365 pe zi. Un raport implică zeci de citiri Graph și două apeluri pentru analiza modelului; selectorul de perioadă permite reexecutări ușor de cerut, astfel că limita implicită este strictă.",
+      "translationPagesPerDay": "Pagini PDF trimise pentru traducerea documentelor pe zi."
     },
     "scopeFamily": "Familie",
     "scopeModel": "Model",

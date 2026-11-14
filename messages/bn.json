@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "{name} OneDrive-এ সংরক্ষণ হয়েছে।",
     "openInOneDrive": "খুলুন",
     "saveForbidden": "আপনার ঐ ফোল্ডারে লেখার অনুমতি নেই — “OneDrive-এ সংরক্ষণ করুন” দিয়ে অন্য ফোল্ডার বাছাই করুন।",
-    "saveToOneDriveFailed": "OneDrive-এ সংরক্ষণ করা যায়নি — আবার চেষ্টা করুন।"
+    "saveToOneDriveFailed": "OneDrive-এ সংরক্ষণ করা যায়নি — আবার চেষ্টা করুন।",
+    "textVersion": "টেক্সট ভার্সন (DOCX)",
+    "textVersionHint": "অনুবাদিত টেক্সটসহ একটি সম্পাদনযোগ্য Word ফাইল, প্রতি উত্স পৃষ্ঠার জন্য একটি পৃষ্ঠা। অনুবাদিত ফাইলটি মূল বিন্যাস বজায় রাখে।"
   },
   "terms": {
     "officialLanguages": "সরকারি সংস্করণ:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "ফাইলটি খুব বড় (সর্বোচ্চ ৫ MB)।",
       "importNothing": "কোনো ব্যবহারযোগ্য সারি পাওয়া যায়নি ({skipped} টি বাদ)।",
       "importSummary": "{added}টি যোগ হয়েছে, {replaced}টি প্রতিস্থাপিত, {skipped}টি বাদ।",
-      "entriesTooManyToShow": "{count} টার্ম — এখানে তালিকাভুক্ত করা সম্ভব নয়। পর্যালোচনার জন্য রপ্তানি করুন, অথবা টার্ম পরিবর্তনের জন্য ফাইল আমদানি করুন।"
+      "entriesTooManyToShow": "{count} টার্ম — এখানে তালিকাভুক্ত করা সম্ভব নয়। পর্যালোচনার জন্য রপ্তানি করুন, অথবা টার্ম পরিবর্তনের জন্য ফাইল আমদানি করুন।",
+      "pagesLoaded": "{total} এর মধ্যে {selected} পৃষ্ঠা লোড হয়েছে",
+      "pagesLabel": "পৃষ্ঠা",
+      "pagesApply": "পৃষ্ঠা লোড করুন",
+      "pagesPrevious": "পূর্ববর্তী ব্যাচ",
+      "pagesNext": "পরবর্তী ব্যাচ",
+      "pagesBudget": "{used} / {max} অক্ষর",
+      "pagesChange": "পৃষ্ঠা পরিবর্তন করুন",
+      "pagesLoading": "পৃষ্ঠা লোড হচ্ছে…",
+      "pagesInvalid": "পৃষ্ঠা নম্বর বা পরিসর লিখুন, যেমন ১-৪০, ৪৫।",
+      "pagesUnavailable": "এই পৃষ্ঠাগুলোর কোনো টেক্সট নেই।",
+      "pagesTooMany": "এই নির্বাচনে {used} অক্ষর রয়েছে, এবং এক ব্যাচে সর্বোচ্চ {max} রাখা যাবে। কম পৃষ্ঠা নির্বাচন করুন।",
+      "stop": "থামান",
+      "stepAnalyzing": "বিশ্লেষণ করা হচ্ছে",
+      "stepTranslating": "অনুবাদ করা হচ্ছে",
+      "stepReviewing": "পর্যালোচনা করা হচ্ছে",
+      "stepDone": "সমাপ্ত",
+      "runProgressLabel": "অনুবাদের অগ্রগতি",
+      "runHintAnalyzing": "সম্ভাব্য জটিল শব্দ ও অস্পষ্টতা পড়া হচ্ছে।",
+      "runHintTranslating": "অনুবাদ লেখা হচ্ছে।",
+      "runHintReviewing": "ড্রাফটটি মূলের সঙ্গে যাচাই করা হচ্ছে।",
+      "runHintReviewingRound": "ড্রাফটটি মূলের সঙ্গে যাচাই করা হচ্ছে · {total} রাউন্ডের মধ্যে {round}।",
+      "runRound": "{total} রাউন্ডের মধ্যে {round}",
+      "draftLabel": "খসড়া",
+      "sourceLocked": "অনুবাদের সময় লক করা হয়েছে",
+      "analysisNotes": "{count, plural, one {# নোট} other {# নোটসমূহ}}",
+      "analysisPill": "{count, plural, one {বিশ্লেষণ · # নোট} other {বিশ্লেষণ · # নোটসমূহ}}",
+      "reviewSummary": "{count, plural, one {পর্যালোচনা: # রাউন্ড, {verdict}} other {পর্যালোচনা: # রাউন্ডসমূহ, {verdict}}}",
+      "analysisDismiss": "সব অনুবাদের জন্য আড়াল করুন",
+      "analysisShow": "পূর্ব-অনুবাদ বিশ্লেষণ দেখান",
+      "analysisResize": "বিশ্লেষণ প্যানেল আকার পরিবর্তন করুন",
+      "assessingCriteria": "{count, plural, one {#টি মানদণ্ড যাচাই করা হচ্ছে} other {#টি মানদণ্ড যাচাই করা হচ্ছে}}",
+      "editsPending": "মূল্যায়ন শেষ হলে প্রস্তাবিত সম্পাদনা এখানে দেখাবে।",
+      "uploadProgressLabel": "আপলোডের অগ্রগতি",
+      "uploadStepUploading": "আপলোড করা হচ্ছে",
+      "uploadStepReading": "পাঠ্য পড়া হচ্ছে",
+      "uploadStepReady": "প্রস্তুত",
+      "uploadCancel": "বাতিল করুন"
     },
     "document": {
       "emptyTitle": "আপনি যে নথি চান তা বর্ণনা করুন",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "প্রতিদিন মেইল রিড",
       "m365MailDraftsPerDay": "প্রতিদিন মেইল ড্রাফট",
       "m365MailDeepScansPerDay": "প্রতিদিন মেইল ডিপ স্ক্যান",
-      "m365DigestRunsPerDay": "প্রতিদিন ডাইজেস্ট রান"
+      "m365DigestRunsPerDay": "প্রতিদিন ডাইজেস্ট রান",
+      "translationPagesPerDay": "প্রতিদিন ডকুমেন্ট অনুবাদের পৃষ্ঠা"
     },
     "valueModeLabel": "লিমিট ধরণ",
     "valueAmountLabel": "লিমিট পরিমাণ",
@@ -5738,7 +5778,8 @@
       "jobs": "জব",
       "rounds": "রাউন্ড",
       "documents": "নথি",
-      "boolean": ""
+      "boolean": "",
+      "pages": "পৃষ্ঠা"
     },
     "window": {
       "day": "দিন",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "প্রতিদিন মেইল অনুসন্ধান ও বার্তা/থ্রেড পড়া। সীমা অতিক্রম হলে, মেইল টুল 'আগামীকাল আবার চেষ্টা করুন' ফলাফল দেখাবে।",
       "m365MailDraftsPerDay": "সহকারী প্রতিদিন যতগুলি ইমেল খসড়া তৈরি করতে পারে — প্রতিটি আলাদাভাবে নিশ্চিত করা হয়। ইচ্ছাকৃতভাবে সীমিত।",
       "m365MailDeepScansPerDay": "প্রতিদিন কম্পোজিট মেইল বিশ্লেষণ (ডাইজেস্ট, গভীর অনুসন্ধান, কমিটমেন্ট)। প্রত্যেকটি স্ক্যান একটি বাজেট ইউনিট, তার ভিতরের রিড সংখ্যা বিবেচ্য নয়।",
-      "m365DigestRunsPerDay": "Microsoft 365 প্রতিদিনের ডাইজেস্ট রান। একটি রান মানে ডজনের বেশি Graph পড়া ও দুইটি analysis-model কল; পিরিয়ড পিকার পুনরায় রান অনুরোধকে সহজ করে, তাই ডিফল্ট সীমিত।"
+      "m365DigestRunsPerDay": "Microsoft 365 প্রতিদিনের ডাইজেস্ট রান। একটি রান মানে ডজনের বেশি Graph পড়া ও দুইটি analysis-model কল; পিরিয়ড পিকার পুনরায় রান অনুরোধকে সহজ করে, তাই ডিফল্ট সীমিত।",
+      "translationPagesPerDay": "প্রতিদিন ডকুমেন্ট অনুবাদের জন্য জমা দেয়া PDF পৃষ্ঠা।"
     },
     "scopeFamily": "পরিবার",
     "scopeModel": "মডেল",

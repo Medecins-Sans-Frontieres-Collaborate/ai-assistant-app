@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "{name} ናብ OneDrive ዝተወሰኸ።",
     "openInOneDrive": "ኽፈት",
     "saveForbidden": "ንከዚ ፎልደር ምዝገብ ዝተኣክልኩም ፈቃድ የብልኩምን — ካልእ ብ “ን OneDrive ውሰኹ” ምረፁ።",
-    "saveToOneDriveFailed": "ናብ OneDrive ምዝገብ ኣይተተኻኸለን — ደጊም።"
+    "saveToOneDriveFailed": "ናብ OneDrive ምዝገብ ኣይተተኻኸለን — ደጊም።",
+    "textVersion": "ፅሑፍ ዝሓዘ ሓሳብ (DOCX)",
+    "textVersionHint": "ዝተተዛዘለ ናይ Word ፋይል ኣብኡ ዝተተርጐሞ ጽሑፍ፣ ናይ እዋኑ ገጻት ናይ ሓደ ገጽ፡ ብሓላፊ ፋይል ድማ ውድብ ስርዓት ኣዝዩ ይጽዕብ።"
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "እዚ ፋይል ብምንታይ ዝበለ ነይሩ (5 MB ድሕሪት ኣይተሳነን።)",
       "importNothing": "ምዕባለ መስርሒ ብምስካድ {skipped} ኣይተረኽበን።",
       "importSummary": "{added} ተወስነ፣ {replaced} ተቐይሩ፣ {skipped} ተርፊቱ።",
-      "entriesTooManyToShow": "{count} ቃላት — ሓደሽ ዝርዝር ከምዚ ኣይትቀርብን። ኣልፈልጢ ምርኣይ፣ ወይ CSV/TSV ምትኣንቀሳቓስ ምስክዕ።"
+      "entriesTooManyToShow": "{count} ቃላት — ሓደሽ ዝርዝር ከምዚ ኣይትቀርብን። ኣልፈልጢ ምርኣይ፣ ወይ CSV/TSV ምትኣንቀሳቓስ ምስክዕ።",
+      "pagesLoaded": "ዝተሰተዑ ገጻት {selected} ካብ {total}",
+      "pagesLabel": "ገጻት",
+      "pagesApply": "ገጻት ምጽናይ",
+      "pagesPrevious": "የቐንየሉ ሓንቲ ግብሪ",
+      "pagesNext": "ኣቐናየሉ ሓንቲ ግብሪ",
+      "pagesBudget": "ቁስሊ ፊደላት {used} / {max}",
+      "pagesChange": "ገጻት ምቕያር",
+      "pagesLoading": "ገጻት ይተሰተው…",
+      "pagesInvalid": "ቁፅሪ ገጻት ወይ ranges ኣእብዩ፡ ኣምሓራ 1-40, 45.",
+      "pagesUnavailable": "ካብ እዚኦም ገጻት ጽሑፍ የብልኩም.",
+      "pagesTooMany": "እቲ መርጠኹ ፊደላት {used} እና፡ ሓንቲ ግብሪ {max} ፊደላት ይቆጽል። ገጻት ንእሽቶ ምርጫ ግደፍ.",
+      "stop": "ይቁም",
+      "stepAnalyzing": "ኣንስናን",
+      "stepTranslating": "ትርጉም ኣደርግ",
+      "stepReviewing": "ኣተናበይ",
+      "stepDone": "ተዛየረ",
+      "runProgressLabel": "ዝተግበሩ ትርጉም",
+      "runHintAnalyzing": "ቃላት ዝተሓሳስቡ ንቀሪታቱ ንምንባብ።",
+      "runHintTranslating": "ትርጉም እዚ ኣደርግ።",
+      "runHintReviewing": "ሓሳባ ትርጉም ምቕናብ ምትእት።",
+      "runHintReviewingRound": "ሓሳባ ትርጉም ምቕናብ ምትእት · ዙር {round} ካብ {total}።",
+      "runRound": "ዙር {round} ካብ {total}",
+      "draftLabel": "ሓሳባ",
+      "sourceLocked": "እዚ ዝተፈለለ ኣብቲ ትርጉም",
+      "analysisNotes": "{count, plural, one {# ማስታወሻ} other {# ማስታወሻታት}}",
+      "analysisPill": "{count, plural, one {ትንተር፡ # ማስታወሻ} other {ትንተር፡ # ማስታወሻታት}}",
+      "reviewSummary": "{count, plural, one {ምቕናብ፡ # ዙር፡ {verdict}} other {ምቕናብ፡ # ዙርታት፡ {verdict}}}",
+      "analysisDismiss": "ንትርጉማት ኩሉ ሰብት ምርካብ",
+      "analysisShow": "ትንተር ንቅድመ-ትርጉም ምርኣይ",
+      "analysisResize": "ፓነል ትንተር ምስዕም",
+      "assessingCriteria": "{count, plural, one {# መርሓት ምምረፅ} other {# መርሓታት ምምረፅ}}",
+      "editsPending": "ቀዳሚ ምስሓዝ እዚ ንምባል ይሕይው።",
+      "uploadProgressLabel": "ዝተሰቐሐ ሕጂ",
+      "uploadStepUploading": "ምስቀሓ",
+      "uploadStepReading": "ውሽጢ ምንባብ",
+      "uploadStepReady": "ዝዘየረ",
+      "uploadCancel": "ሰርዝ"
     },
     "document": {
       "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "ናይ ሜይል ምንባብ ብሕደግ",
       "m365MailDraftsPerDay": "ናይ ሜይል ማእከላይ ጽሑፍ ብሕደግ",
       "m365MailDeepScansPerDay": "ናይ ሜይል ብዝተስተዋዅነ ፍለጥ ብሕደግ",
-      "m365DigestRunsPerDay": "ዕለታዊ ዝተደገመ ማህደር ፍርዲ"
+      "m365DigestRunsPerDay": "ዕለታዊ ዝተደገመ ማህደር ፍርዲ",
+      "translationPagesPerDay": "ገጻት ናይ ደብተር ትርጉም ባህሪ ናይ ኣለዋዋሊ መዓልቲ"
     },
     "valueModeLabel": "ዓይነት መድረ",
     "valueAmountLabel": "መጠን መድረ",
@@ -5722,7 +5762,8 @@
       "jobs": "ስራሕታት",
       "rounds": "ወርድ",
       "documents": "ሰነዳት",
-      "boolean": ""
+      "boolean": "",
+      "pages": "ገጻት"
     },
     "window": {
       "day": "ኣዓል",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "ምፍታን ናይ ኢሜል እና ምንባብ ሜል/መንገዲ በዓል መዓልቲ። ቅጥዒ ኣተዉ ኣብ ዚ ተጠቂሙ፡ መገልገሲ ደገ 'ክሳብ ጽባሕ ደገም ፈትኑ' ይርከብ።",
       "m365MailDraftsPerDay": "ንመዓልቲ ኣዝዩ ዘለዎ ኢሜል ፅሑፋታት ኣስተኻኺላ፡ ካብ ሓደ ሓደ ዝተረጋገጹ። ብዝምልከት ኣግንዑ።",
       "m365MailDeepScansPerDay": "ብሓባር ዝተፈጠሩ ምምርኣይ መንጸባር ኢሜል (digest, deep search, commitments) በዓል መዓልቲ። ካብ ናይቲ ዝተረኸበ ዝግበር ውሽጢ አይተለየን።",
-      "m365DigestRunsPerDay": "Microsoft 365 ዕለታዊ ዝተደገመ ማህደር ፍርዲ ብናይ ዕለት፡ ኣንድ ፍርዲ ውስተ ዓይነት ዝኣተወ ብብርሀነት ይኸውን፡ እንተማሃበር ፋይን ብዘይ ወጻኢ ይተሓበሩ፣ ፍርዲ ኣብ ሕጂ ከተምርጡን ኣብ ቀዳማይ ምውናስ ቀሊል ክህልዉዎ ይዘይ፣ ዚኣኸውን ዘይምልከት ዘለዎ።"
+      "m365DigestRunsPerDay": "Microsoft 365 ዕለታዊ ዝተደገመ ማህደር ፍርዲ ብናይ ዕለት፡ ኣንድ ፍርዲ ውስተ ዓይነት ዝኣተወ ብብርሀነት ይኸውን፡ እንተማሃበር ፋይን ብዘይ ወጻኢ ይተሓበሩ፣ ፍርዲ ኣብ ሕጂ ከተምርጡን ኣብ ቀዳማይ ምውናስ ቀሊል ክህልዉዎ ይዘይ፣ ዚኣኸውን ዘይምልከት ዘለዎ።",
+      "translationPagesPerDay": "PDF ገጻት ትርጉም ናይ ደብተር ምህበስ ኣብ መዓልቲ."
     },
     "scopeFamily": "ህይወታዊ ቤት",
     "scopeModel": "ሞዴል",

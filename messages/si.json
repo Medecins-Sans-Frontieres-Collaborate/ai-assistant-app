@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "{name} OneDrive වෙත සුරක්ෂිත කර ඇත.",
     "openInOneDrive": "විවෘත කරන්න",
     "saveForbidden": "ඔබට එම ෆෝල්ඩරයට ලිවීමට අවසර නැත — “OneDrive වෙත සුරකින්න” මඟින් වෙනත් එකක් තෝරන්න.",
-    "saveToOneDriveFailed": "OneDrive වෙත සුරැකීමට නොහැකි විය — කරුණාකර නැවත උත්සාහ කරන්න."
+    "saveToOneDriveFailed": "OneDrive වෙත සුරැකීමට නොහැකි විය — කරුණාකර නැවත උත්සාහ කරන්න.",
+    "textVersion": "පෙළ සංස්කරණය (DOCX)",
+    "textVersionHint": "පරිවර්තිත පෙළ සහිත සංස්කරණයට හැකි Word ගොනුවක්, හැරී හැම මූලාශ්‍ර පිටුවකටම පිටුවක්. පරිවර්තිත ගොනුව මුල් ආකෘතිය තැන්පත් කරයි."
   },
   "terms": {
     "officialLanguages": "නිළ අනුවාදය:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "そのファイルはインポートするには大きすぎます（උපරිම 5 MB).",
       "importNothing": "ඉල්ලීය යාන්ත්‍රණ පේළි කිසිවක් හමු නොවීය ({skipped} හැර දක්වයි).",
       "importSummary": "{added} එකතු කළා, {replaced} ප්‍රතිස්ථාපනය කළා, {skipped} හැරි.",
-      "entriesTooManyToShow": "පද {count}ක් — මෙහි පෙන්වීමට ඉතා වැඩියි. ඒවා සමාලෝචනයට නිර්යාත කරන්න හෝ පද ප්‍රතිස්ථාපනයට ගොනුවක් ආයාත කරන්න."
+      "entriesTooManyToShow": "පද {count}ක් — මෙහි පෙන්වීමට ඉතා වැඩියි. ඒවා සමාලෝචනයට නිර්යාත කරන්න හෝ පද ප්‍රතිස්ථාපනයට ගොනුවක් ආයාත කරන්න.",
+      "pagesLoaded": "පිටු {selected} ක් සිට {total} දක්වා පැටවී ඇත",
+      "pagesLabel": "පිටු",
+      "pagesApply": "පිටු පූරණය කරන්න",
+      "pagesPrevious": "පෙර කේතය",
+      "pagesNext": "ඊළඟ කේතය",
+      "pagesBudget": "අක්‍ෂර {used} / {max}",
+      "pagesChange": "පිටු වෙනස් කරන්න",
+      "pagesLoading": "පිටු පූරණය වෙමින්…",
+      "pagesInvalid": "පිටු අංක හෝ පරාසය ඇතුළත් කරන්න, උදාහරණයක් ලෙස 1-40, 45.",
+      "pagesUnavailable": "එම පිටු වල කිසිවක් පෙළ නොමැත.",
+      "pagesTooMany": "එම තේරීම අක්‍ෂර {used} ක් වන අතර එක් කේතයක නවතම ලෙස {max} අඩංගු වේ. කරුණාකර පහතින් පිටු තෝරන්න.",
+      "stop": "නවතන්න",
+      "stepAnalyzing": "විකුණා දැක්වීම",
+      "stepTranslating": "පරිවර්තනය වෙමින්",
+      "stepReviewing": "සමාලෝචනය",
+      "stepDone": "සම්පූර්ණයි",
+      "runProgressLabel": "පරිවර්තන ප්‍රගතිය",
+      "runHintAnalyzing": "සංකීර්ණ වචන සහ නොපැහැදිලිත්වයන් සඳහා මූලාශ්‍රය කියවීම.",
+      "runHintTranslating": "පරිවර්තනය ලියමින්.",
+      "runHintReviewing": "කැඩැල්ල මූලාශ්‍රය සමඟ පරීක්ෂා කිරීම.",
+      "runHintReviewingRound": "කැඩැල්ල මූලාශ්‍රය සමඟ පරීක්ෂා කිරීම · වටය {round} / {total}.",
+      "runRound": "වටය {round} / {total}",
+      "draftLabel": "උප්පැන්නය",
+      "sourceLocked": "පරිවර්තනය වීමේදී අගුළු දමා ඇත",
+      "analysisNotes": "{count, plural, one {සටහන #} other {සටහන් #}}",
+      "analysisPill": "{count, plural, one {විශ්ලේෂණය · සටහන #} other {විශ්ලේෂණය · සටහන් #}}",
+      "reviewSummary": "{count, plural, one {සමාලෝචනය: වටය #, {verdict}} other {සමාලෝචනය: වට #, {verdict}}}",
+      "analysisDismiss": "සියළු පරිවර්තන සඳහා සඟවන්න",
+      "analysisShow": "පූර්ව-පරිවර්තන විශ්ලේෂණය පෙන්වන්න",
+      "analysisResize": "විශ්ලේෂණ පැනලය ප්‍රතිඅතින් සැකසන්න",
+      "assessingCriteria": "{count, plural, one {මට්ටම # පරීක්ෂා කිරීම} other {මට්ටම් # පරීක්ෂා කිරීම}}",
+      "editsPending": "ඉදිරිපත් කළ සංශෝධන ඇගයීම නිමා වූ විට මෙහි පෙනේ.",
+      "uploadProgressLabel": "උඩුගත කිරීමේ ප්‍රගතිය",
+      "uploadStepUploading": "උඩුගත වෙමින්",
+      "uploadStepReading": "පෙළ කියවමින්",
+      "uploadStepReady": "සූදානම්",
+      "uploadCancel": "අවලංගු කරන්න"
     },
     "document": {
       "emptyTitle": "ඔබට අවශ්‍ය ලිපිය විස්තර කරන්න",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "දිනයකට මින් පණිවිඩ කියවීම්",
       "m365MailDraftsPerDay": "දිනයකට පණිවිඩ කුඨි ප්‍රති-ව්‍යුහ",
       "m365MailDeepScansPerDay": "දිනයකට පණිවිඩ ගැඹුරු පරිලෝකන",
-      "m365DigestRunsPerDay": "දිනපතා Digest ක්‍රියාත්මක වීමේ සංඛ්‍යාව"
+      "m365DigestRunsPerDay": "දිනපතා Digest ක්‍රියාත්මක වීමේ සංඛ්‍යාව",
+      "translationPagesPerDay": "දිනයකට ලේඛන පරිවර්තන පිටු"
     },
     "valueModeLabel": "සීමා වර්ගය",
     "valueAmountLabel": "සීමාවේ ප්‍රමාණය",
@@ -5738,7 +5778,8 @@
       "jobs": "කාර්යයන්",
       "rounds": "වට",
       "documents": "ලේඛන",
-      "boolean": ""
+      "boolean": "",
+      "pages": "පිටු"
     },
     "window": {
       "day": "දවස",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "දිනකට තැපැල් සෙවීම් සහ පණිවුඩ/තරඟ කියවීම්. සීමාව ඉක්මුවහොත් 'හෙට නැවත උත්සාහ කරන්න' යන ප්‍රතිඵලයක් ලැබේ.",
       "m365MailDraftsPerDay": "සායකයා විසින් දිනකට නිර්මාණය කළ හැකි ඊමේල් කෙටියි - එකින් එක තහවුරු කළ යුතුය. හෘදයාංගමව තද සීමාවකි.",
       "m365MailDeepScansPerDay": "යුතුකමි (digests, deep search, commitments) වැනි සංයුක්ත තැපැල් විශ්ලේෂණය දිනකට. ඇසුරුමක් තුළ කියවීම් ගණන නොසලකා එක් එක විශ්ලේෂණයක් තනි ඒකකයකි.",
-      "m365DigestRunsPerDay": "Microsoft 365 දෛනික Digest ක්‍රියාත්මක වන සංඛ්‍යාව. එක් වරක් ධාවනය වීමෙන් වැඩි ගණනක් Graph කියවීම් සහ විශ්ලේෂණ මාදිලි ඇමතුම් දෙකක් සිදු වේ; කාල පරාසය තෝරනය යළි ධාවනය ඉතා පහසු මොළමක් නිසා පෙරනිමි අගය තදකි."
+      "m365DigestRunsPerDay": "Microsoft 365 දෛනික Digest ක්‍රියාත්මක වන සංඛ්‍යාව. එක් වරක් ධාවනය වීමෙන් වැඩි ගණනක් Graph කියවීම් සහ විශ්ලේෂණ මාදිලි ඇමතුම් දෙකක් සිදු වේ; කාල පරාසය තෝරනය යළි ධාවනය ඉතා පහසු මොළමක් නිසා පෙරනිමි අගය තදකි.",
+      "translationPagesPerDay": "PDF ලේඛන පරිවර්තනය සඳහා දිනයකට ඉදිරිපත් කළ පිටු."
     },
     "scopeFamily": "පවුල",
     "scopeModel": "මාදිලිය",

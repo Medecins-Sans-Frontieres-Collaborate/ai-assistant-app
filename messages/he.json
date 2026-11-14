@@ -2561,7 +2561,9 @@
     "savedToOneDrive": "נשמר {name} ל-OneDrive.",
     "openInOneDrive": "פתח",
     "saveForbidden": "אין לך הרשאה לכתוב לתיקייה הזו — בחר תיקייה אחרת באמצעות 'שמור ל-OneDrive'.",
-    "saveToOneDriveFailed": "לא ניתן היה לשמור ל-OneDrive — נסה שוב."
+    "saveToOneDriveFailed": "לא ניתן היה לשמור ל-OneDrive — נסה שוב.",
+    "textVersion": "גרסת טקסט (DOCX)",
+    "textVersionHint": "קובץ Word ניתן לעריכה עם הטקסט המתורגם, עמוד אחד לכל עמוד מקור. הקובץ המתורגם שומר על העימוד המקורי."
   },
   "terms": {
     "officialLanguages": "גרסה רשמית:",
@@ -3074,7 +3076,44 @@
       "importTooLarge": "הקובץ גדול מדי לייבוא (מקסימום 5 מגה-בייט).",
       "importNothing": "לא נמצאו שורות מתאימות ({skipped} דולגו).",
       "importSummary": "{added} נוספו, {replaced} הוחלפו, {skipped} דולגו.",
-      "entriesTooManyToShow": "{count} מונחים — יותר מדי להצגה כאן. ייצא/י כדי לעיין בהם, או יבא/י קובץ להחלפת מונחים."
+      "entriesTooManyToShow": "{count} מונחים — יותר מדי להצגה כאן. ייצא/י כדי לעיין בהם, או יבא/י קובץ להחלפת מונחים.",
+      "pagesLoaded": "נטענו {selected} מתוך {total} עמודים",
+      "pagesLabel": "עמודים",
+      "pagesApply": "טען עמודים",
+      "pagesPrevious": "אצווה קודמת",
+      "pagesNext": "אצווה הבאה",
+      "pagesBudget": "{used} / {max} תווים",
+      "pagesChange": "שנה עמודים",
+      "pagesLoading": "טוען עמודים…",
+      "pagesInvalid": "נא הזן מספרי עמודים או טווחים, לדוגמה 1-40, 45.",
+      "pagesUnavailable": "אף אחד מהעמודים האלו לא מכיל טקסט.",
+      "pagesTooMany": "הבחירה הזו כוללת {used} תווים ואצווה אחת יכולה להכיל {max}. בחר פחות עמודים.",
+      "stop": "עצור",
+      "stepAnalyzing": "מנתח",
+      "stepTranslating": "מתרגם",
+      "stepReviewing": "בודק",
+      "stepDone": "הושלם",
+      "runProgressLabel": "התקדמות תרגום",
+      "runHintAnalyzing": "קורא את המקור למציאת מושגים ואתגרים.",
+      "runHintTranslating": "כותב את התרגום.",
+      "runHintReviewing": "בודק את הטיוטה מול המקור.",
+      "runHintReviewingRound": "בודק את הטיוטה מול המקור · סבב {round} מתוך עד {total}.",
+      "runRound": "סבב {round} מתוך עד {total}",
+      "draftLabel": "טיוטה",
+      "sourceLocked": "נעול במהלך התרגום",
+      "analysisNotes": "{count, plural, one {הערה אחת} other {# הערות}}",
+      "analysisPill": "{count, plural, one {ניתוח · הערה אחת} other {ניתוח · # הערות}}",
+      "reviewSummary": "{count, plural, one {סקירה: סבב אחד, {verdict}} other {סקירה: # סבבים, {verdict}}}",
+      "analysisDismiss": "הסתר לכל התרגומים",
+      "analysisShow": "הצג את ניתוח הקדם-תרגום",
+      "analysisResize": "שנה גודל חלונית הניתוח",
+      "assessingCriteria": "{count, plural, one {בודק קריטריון אחד} other {בודק # קריטריונים}}",
+      "editsPending": "הצעות עריכה יופיעו כאן לאחר סיום הערכה.",
+      "uploadProgressLabel": "התקדמות העלאה",
+      "uploadStepUploading": "מעלה",
+      "uploadStepReading": "קורא טקסט",
+      "uploadStepReady": "מוכן",
+      "uploadCancel": "ביטול"
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",
@@ -5715,7 +5754,8 @@
       "m365MailReadsPerDay": "קריאות דואר ביום",
       "m365MailDraftsPerDay": "טיוטות דואר ביום",
       "m365MailDeepScansPerDay": "סריקות מעמיקות לדואר ביום",
-      "m365DigestRunsPerDay": "הרצות תקציר יומי ליום"
+      "m365DigestRunsPerDay": "הרצות תקציר יומי ליום",
+      "translationPagesPerDay": "עמודים לתרגום מסמכים ביום"
     },
     "valueModeLabel": "סוג הגבלה",
     "valueAmountLabel": "כמות הגבלה",
@@ -5738,7 +5778,8 @@
       "jobs": "משימות",
       "rounds": "סבבים",
       "documents": "מסמכים",
-      "boolean": ""
+      "boolean": "",
+      "pages": "עמודים"
     },
     "window": {
       "day": "יום",
@@ -5796,7 +5837,8 @@
       "m365MailReadsPerDay": "חיפושי דואר וקריאת הודעות/אשכולות ביום. כשעוברים את המגבלה, כלי הדואר יחזירו הודעת \"נסה שוב מחר\".",
       "m365MailDraftsPerDay": "טיוטות אימייל שהעוזר יכול ליצור ביום — כל אחת מאושרת בנפרד. מגבלה מכוונת.",
       "m365MailDeepScansPerDay": "ניתוחי דואר מורכבים (סיכומים, חיפוש מעמיק, התחייבויות) ביום. כל סריקה נחשבת כיחידת תקציב אחת ללא קשר למספר הקריאות הפנימיות.",
-      "m365DigestRunsPerDay": "הרצות תקציר יומי של Microsoft 365 ליום. כל הרצה כוללת עשרות קריאות ל-Graph ושתי קריאות למודלים של ניתוח; בורר התקופה הופך הרצות חוזרות לקלות לביצוע, לכן ההגבלה הדיפולטיבית הדוקה."
+      "m365DigestRunsPerDay": "הרצות תקציר יומי של Microsoft 365 ליום. כל הרצה כוללת עשרות קריאות ל-Graph ושתי קריאות למודלים של ניתוח; בורר התקופה הופך הרצות חוזרות לקלות לביצוע, לכן ההגבלה הדיפולטיבית הדוקה.",
+      "translationPagesPerDay": "עמודי PDF שנשלחו לתרגום מסמכים ביום."
     },
     "scopeFamily": "משפחה",
     "scopeModel": "מודל",

@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "Ebombi {name} na OneDrive.",
     "openInOneDrive": "Fungola",
     "saveForbidden": "Ozungeli ndingisa te ya kokoma na dosiye yango — poná mosusu na « Kobomba na OneDrive ».",
-    "saveToOneDriveFailed": "Ekokaki te kobomba na OneDrive — meka lisusu."
+    "saveToOneDriveFailed": "Ekokaki te kobomba na OneDrive — meka lisusu.",
+    "textVersion": "Version ya maloba (DOCX)",
+    "textVersionHint": "Fichie ya Word oyo ekoki kobongisama, elanda maloba nyonso ebongolami, lokola liboso na mokolo moko na page ya ebandeli. Fichie yango ekobatela esika ya masolo ya ebandeli."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Dosye yango eleki monene mpo na kokota (5 MB ekoki koleka te).",
       "importNothing": "Bakangeli ya ntina te emonani ({skipped} epanoli).",
       "importSummary": "{added} ebakisami, {replaced} ebongolami, {skipped} epanoli.",
-      "entriesTooManyToShow": "{count} maloba — ezali mingi mpo kolakisa awa. Kobimisa mpo kotala yango, to kokota dosye mpo ebongola maloba."
+      "entriesTooManyToShow": "{count} maloba — ezali mingi mpo kolakisa awa. Kobimisa mpo kotala yango, to kokota dosye mpo ebongola maloba.",
+      "pagesLoaded": "masolo {selected} na {total} ezwi",
+      "pagesLabel": "Masolo",
+      "pagesApply": "Kokɔta masolo",
+      "pagesPrevious": "Etuluku ya liboso",
+      "pagesNext": "Etuluku elandi",
+      "pagesBudget": "{used} / {max} ba-karaktɛrɛ",
+      "pagesChange": "Kobongola masolo",
+      "pagesLoading": "Kozwa masolo…",
+      "pagesInvalid": "Tika nɔmɛrɛ ya masolo to ba interval, ndakisa 1-40, 45.",
+      "pagesUnavailable": "Motoso ya masolo wana ezalaka na maloba te.",
+      "pagesTooMany": "Sankalu yango ezali {used} ba-karaktɛrɛ mpe etuluku moko ekoki kozala {max}. Pona masolo mike.",
+      "stop": "Tika",
+      "stepAnalyzing": "Kosalisa",
+      "stepTranslating": "Kokóka",
+      "stepReviewing": "Kokanisa",
+      "stepDone": "Esili",
+      "runProgressLabel": "Ndelo ya kokóka",
+      "runHintAnalyzing": "Kotalela maloba ya ebandeli mpo na maloba makasi to bokangani.",
+      "runHintTranslating": "Kokoma kobongola.",
+      "runHintReviewing": "Kokanga motólo elongo na ebandeli.",
+      "runHintReviewingRound": "Kokanga motólo elongo na ebandeli · rondo {round} ya {total}.",
+      "runRound": "Rondo {round} ya {total}",
+      "draftLabel": "Mikanda",
+      "sourceLocked": "Ekangami ntango ya kokóka",
+      "analysisNotes": "{count, plural, one {# tikali} other {# bitikali}}",
+      "analysisPill": "{count, plural, one {Kosalisa · # tikali} other {Kosalisa · # bitikali}}",
+      "reviewSummary": "{count, plural, one {Esengeli: # rondo, {verdict}} other {Esengeli: # rondos, {verdict}}}",
+      "analysisDismiss": "Kokangela nyonso",
+      "analysisShow": "Lakisa kosalisa liboso ya kobongola",
+      "analysisResize": "Bongisa ekotisi ya kosalisa",
+      "assessingCriteria": "{count, plural, one {Kotala # elembo} other {Kotala # bamelambo}}",
+      "editsPending": "Kobongola oyo epesami ekomona awa soki esili kolanda pemi.",
+      "uploadProgressLabel": "Ndelo ya kopesa",
+      "uploadStepUploading": "Kopesa",
+      "uploadStepReading": "Kotalela maloba",
+      "uploadStepReady": "Elingi",
+      "uploadCancel": "Senga"
     },
     "document": {
       "emptyTitle": "Sosola mokanda olingi",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Ba lecture ya email na mokolo",
       "m365MailDraftsPerDay": "Ba drafts ya email na mokolo",
       "m365MailDeepScansPerDay": "Ba deep scan ya email na mokolo",
-      "m365DigestRunsPerDay": "Nbongo ya mokuse ya mokolo na mokolo"
+      "m365DigestRunsPerDay": "Nbongo ya mokuse ya mokolo na mokolo",
+      "translationPagesPerDay": "Masolo ya kobongola ya mokolo moko"
     },
     "valueModeLabel": "Motindo ya mingambo",
     "valueAmountLabel": "Motango ya mingambo",
@@ -5722,7 +5762,8 @@
       "jobs": "misala",
       "rounds": "bitúka",
       "documents": "mikanda",
-      "boolean": ""
+      "boolean": "",
+      "pages": "masolo"
     },
     "window": {
       "day": "mokolo",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Koluka mpe kotala baranseli to ba thread mokolo mobimba. Soki ekoleka ndelo, baoutil ya email ekopesa sango « meka lisusu lobi ».",
       "m365MailDraftsPerDay": "Bilongwa ya email assistant akoki kosala mokolo moko — moko na moko ekopesama ndingisa liboso. Ezali na ndelo makasi.",
       "m365MailDeepScansPerDay": "Analyse ya baranseli ya email mokolo moko (digest, koluka makasi, commitments). Scan moko ezali unité moko ata bonene na yango.",
-      "m365DigestRunsPerDay": "Microsoft 365 ebongisaka mokuse ya mokolo na mokolo. Eloko moko ezali kopesa ba-Graph mingi mpe mibeko mibale ya modèlé d'analyse; pondu ya tango esalaka komipesa lisusu mpasi te, yango wana motungisi ya liboso ezali makasi."
+      "m365DigestRunsPerDay": "Microsoft 365 ebongisaka mokuse ya mokolo na mokolo. Eloko moko ezali kopesa ba-Graph mingi mpe mibeko mibale ya modèlé d'analyse; pondu ya tango esalaka komipesa lisusu mpasi te, yango wana motungisi ya liboso ezali makasi.",
+      "translationPagesPerDay": "Masolo ya PDF oyo epesami mpo na kobongola document na mokolo moko."
     },
     "scopeFamily": "Famille",
     "scopeModel": "Modèle",

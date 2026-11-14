@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "បានរក្សាទុក {name} ទៅ OneDrive។",
     "openInOneDrive": "បើក",
     "saveForbidden": "អ្នកមិនមានសិទ្ធិក្នុងការសរសេរទៅថតនោះទេ — សូមជ្រើសថតផ្សេងទៀតជាមួយ “រក្សាទុកទៅ OneDrive”។",
-    "saveToOneDriveFailed": "មិនអាចរក្សាទុកទៅ OneDrive បានទេ — សូមសាកល្បងម្តងទៀត។"
+    "saveToOneDriveFailed": "មិនអាចរក្សាទុកទៅ OneDrive បានទេ — សូមសាកល្បងម្តងទៀត។",
+    "textVersion": "ជាប្រភេទអត្ថបទ (DOCX)",
+    "textVersionHint": "ឯកសារ Word ដែលេខងាយកែប្រែបាន មានអត្ថបទបកប្រែ ទំព័រដើមមួយមានមួយទំព័រ។ ផែនការដើមនៃឯកសារបកប្រែត្រូវបានរក្សាទុកដដែល។"
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "ឯកសារនោះធំពេកសម្រាប់នាំចូល (អតិបរមា ៥MB)។",
       "importNothing": "រកមិនឃើញជួរដែលអាចប្រើបានទេ ({skipped} ត្រូវបានរំលង)។",
       "importSummary": "បានបន្ថែម {added}, ជំនួស {replaced}, រំលង {skipped}។",
-      "entriesTooManyToShow": "{count} ពាក្យ — ហ្រើយពេកមិនអាចបង្ហាញនៅទីនេះទេ។ អាចនាំចេញដើម្បីពិនិត្យ ឬនាំចូលឯកសារដើម្បីជំនួសពាក្យ។"
+      "entriesTooManyToShow": "{count} ពាក្យ — ហ្រើយពេកមិនអាចបង្ហាញនៅទីនេះទេ។ អាចនាំចេញដើម្បីពិនិត្យ ឬនាំចូលឯកសារដើម្បីជំនួសពាក្យ។",
+      "pagesLoaded": "ទំព័រ {selected} ​ក្នុងចំណោម {total} បានផ្ទុករួចហើយ",
+      "pagesLabel": "ទំព័រ",
+      "pagesApply": "ផ្ទុកទំព័រ",
+      "pagesPrevious": "កញ្ចប់មុន",
+      "pagesNext": "កញ្ចប់បន្ទាប់",
+      "pagesBudget": "អក្សរ {used} / {max}",
+      "pagesChange": "ផ្លាស់ប្តូរទំព័រ",
+      "pagesLoading": "កំពុងផ្ទុកទំព័រ…",
+      "pagesInvalid": "បញ្ជូលលេខទំព័រ ឬជួរទំព័រ ឧទាហរណ៍ 1-40, 45।",
+      "pagesUnavailable": "មិនមានអត្ថបទនៅលើទំព័រទាំងនោះទេ។",
+      "pagesTooMany": "ជម្រើសនេះមានអក្សរ {used} ហើយកញ្ចប់មួយអាចបញ្ចូលបាន {max}។ សូមជ្រើសរើសទំព័រតិចជាងនេះ។",
+      "stop": "បញ្ឈប់",
+      "stepAnalyzing": "កំពុងវិភាគ",
+      "stepTranslating": "កំពុងបកប្រែ",
+      "stepReviewing": "កំពុងពិនិត្យឡើងវិញ",
+      "stepDone": "ស្រេចแล้ว",
+      "runProgressLabel": "វឌ្ឍនភាពបកប្រែ",
+      "runHintAnalyzing": "កំពុងអានប្រភពដើម្បីរកពាក្យពិបាក និងភាពមិនច្បាស់។",
+      "runHintTranslating": "កំពុងសរសេរការបកប្រែ។",
+      "runHintReviewing": "កំពុងពិនិត្យព្រាងប្រៀបធៀបនឹងប្រភព។",
+      "runHintReviewingRound": "កំពុងពិនិត្យព្រាងប្រៀបធៀបនឹងប្រភព ·ជុំទី {round} ក្នុងចំណោមអតិបរមា {total}។",
+      "runRound": "ជុំទី {round} ក្នុងចំណោមអតិបរមា {total}",
+      "draftLabel": "ព្រាង",
+      "sourceLocked": "បានបិទសោនៅពេលកំពុងបកប្រែ",
+      "analysisNotes": "{count, plural, one {សំគាល់ #} other {សំគាល់ #}}",
+      "analysisPill": "{count, plural, one {វិភាគ · សំគាល់ #} other {វិភាគ · សំគាល់ #}}",
+      "reviewSummary": "{count, plural, one {ពិនិត្យឡើងវិញ៖ ជុំ# ({verdict})} other {ពិនិត្យឡើងវិញ៖ # ជុំ ({verdict})}}",
+      "analysisDismiss": "លាក់សម្រាប់ការបកប្រែទាំងអស់",
+      "analysisShow": "បង្ហាញការវិភាគមុនបកប្រែ",
+      "analysisResize": "ប្ដូរទំហំបន្ទះវិភាគ",
+      "assessingCriteria": "{count, plural, one {កំពុងពិនិត្យលក្ខណៈវិចារណៈ #} other {កំពុងពិនិត្យលក្ខណៈវិចារណៈ #}}",
+      "editsPending": "ការកែសម្រួលដែលបានស្នើនឹងបង្ហាញនៅទីនេះនៅពេលសម្រួលសម្រេច។",
+      "uploadProgressLabel": "វឌ្ឍនភាពបញ្ចូលឯកសារ",
+      "uploadStepUploading": "កំពុងបញ្ចូលឡើង",
+      "uploadStepReading": "កំពុងអានអត្ថបទ",
+      "uploadStepReady": "រួចរាល់",
+      "uploadCancel": "បោះបង់"
     },
     "document": {
       "emptyTitle": "ពណ៌នាអំពីឯកសារដែលអ្នកត្រូវការ",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "អានអ៊ីមែលក្នុងមួយថ្ងៃ",
       "m365MailDraftsPerDay": "ស្បៀងអ៊ីមែលក្នុងមួយថ្ងៃ",
       "m365MailDeepScansPerDay": "ស្កេនដ៏ជ្រៅអ៊ីមែលក្នុងមួយថ្ងៃ",
-      "m365DigestRunsPerDay": "ចំនួនដើររបាយការណ៍ប្រចាំថ្ងៃក្នុងមួយថ្ងៃ"
+      "m365DigestRunsPerDay": "ចំនួនដើររបាយការណ៍ប្រចាំថ្ងៃក្នុងមួយថ្ងៃ",
+      "translationPagesPerDay": "ចំនួនទំព័របកប្រែឯកសារក្នុងមួយថ្ងៃ"
     },
     "valueModeLabel": "ប្រភេទដែនកំណត់",
     "valueAmountLabel": "ចំនួនដែនកំណត់",
@@ -5722,7 +5762,8 @@
       "jobs": "កិច្ចការ",
       "rounds": "ដំណាក់កាល",
       "documents": "ឯកសារ",
-      "boolean": ""
+      "boolean": "",
+      "pages": "ទំព័រ"
     },
     "window": {
       "day": "ថ្ងៃ",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "ការ​ស្វែងរក​អ៊ីមែល និងអានសារ/ខ្សែសារប្រចាំថ្ងៃ។ ប្រសិនលើសកំណត់ ឧបករណ៍អ៊ីមែល​នឹងបង្ហាញ “សូមសាកល្បងម្តងទៀតថ្ងៃស្អែក”។",
       "m365MailDraftsPerDay": "សេចក្តីព្រាងអ៊ីមែលដែលជំនួយការ​អាចបង្កើតប្រចាំថ្ងៃ — គ្រប់សេចក្តីព្រាងត្រូវបានបញ្ជាក់រៀងៗគ្នា។ កំណត់អោយតឹង។",
       "m365MailDeepScansPerDay": "ការវិភាគសំបុត្រសរុប (digest, deep search, commitments) ប្រចាំថ្ងៃ។ ស្វែងរកម្តង គិតជា១ថវិកា។",
-      "m365DigestRunsPerDay": "Microsoft 365 ដំណើរការរបាយការណ៍ប្រចាំថ្ងៃក្នុងមួយថ្ងៃ។ ដំណើរការមួយមានការអានជាច្រើនលើ Graph និងក៏មានការហៅ analysis-model ពីរដងផងដែរ។ មុខងារជ្រើសរយៈពេលអាចស្នើប្រើឡើងវិញបានសមស្រួល ដូចនេះតម្លៃលំនាំដើមសល់តិច។"
+      "m365DigestRunsPerDay": "Microsoft 365 ដំណើរការរបាយការណ៍ប្រចាំថ្ងៃក្នុងមួយថ្ងៃ។ ដំណើរការមួយមានការអានជាច្រើនលើ Graph និងក៏មានការហៅ analysis-model ពីរដងផងដែរ។ មុខងារជ្រើសរយៈពេលអាចស្នើប្រើឡើងវិញបានសមស្រួល ដូចនេះតម្លៃលំនាំដើមសល់តិច។",
+      "translationPagesPerDay": "ចំនួនទំព័រ PDF ដែលដាក់ស្នើសុំបកប្រែឯកសារនៅក្នុងមួយថ្ងៃ។"
     },
     "scopeFamily": "គ្រួសារ",
     "scopeModel": "ម៉ូដែល",

@@ -2559,7 +2559,9 @@
     "savedToOneDrive": "{name} danndii e OneDrive.",
     "openInOneDrive": "Uddit",
     "saveForbidden": "Alaa sikki ma faamu ndokkude e folder — suɓo gooto e “Danndu e OneDrive”.",
-    "saveToOneDriveFailed": "Danndude e OneDrive feewaani — jokkondir leydi."
+    "saveToOneDriveFailed": "Danndude e OneDrive feewaani — jokkondir leydi.",
+    "textVersion": "Taarihi hinnde (DOCX)",
+    "textVersionHint": "Fiilu Word moɗɗo e hinnde jokkude, pottal goɗɗo e pottal maɓɓe. Fiilu jokkude mo ɗon faalaaama leejo maɓɓe."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3058,7 +3060,44 @@
       "importTooLarge": "Fayli on ɓuri baɗi tuuba jiggito (5MB dollere).",
       "importNothing": "Safaraaji jokkere njiyataa ({skipped} topi).",
       "importSummary": "{added} daade, {replaced} sosde, {skipped} topde.",
-      "entriesTooManyToShow": "{count} ɗemɗe — ɓuri piillude fii njiyde. Tuttinoo njiyde walla jiggito fayli ha topde ɗemɗe."
+      "entriesTooManyToShow": "{count} ɗemɗe — ɓuri piillude fii njiyde. Tuttinoo njiyde walla jiggito fayli ha topde ɗemɗe.",
+      "pagesLoaded": "Pottal {selected} e {total} jogii",
+      "pagesLabel": "Pottal",
+      "pagesApply": "Joga pottal",
+      "pagesPrevious": "Pottal ɗeeɓɓe",
+      "pagesNext": "Pottal ɗiɗɗo",
+      "pagesBudget": "{used} / {max} ɗacal",
+      "pagesChange": "Jokkun pottal",
+      "pagesLoading": "Pottal jogii…",
+      "pagesInvalid": "Yam pottal nden ko ɓannu, kala 1-40, 45.",
+      "pagesUnavailable": "Pottal ɗee anndaa hinnde.",
+      "pagesTooMany": "Banndiima ngal {used} ɗacal, e baatchi goɗɗo jogii {max}. Yamu pottal ndii.",
+      "stop": "Daddu",
+      "stepAnalyzing": "Nanaanal",
+      "stepTranslating": "Wuurndugol",
+      "stepReviewing": "Rifirugol",
+      "stepDone": "Naat",
+      "runProgressLabel": "Hokkugo wuurndugol",
+      "runHintAnalyzing": "Nanaanal andal goɗɗe e maande mum.",
+      "runHintTranslating": "Teeŋgol wuurndugol.",
+      "runHintReviewing": "Rifirugol draft e andal mum.",
+      "runHintReviewingRound": "Rifirugol draft e andal mum · duusi {round} e {total}.",
+      "runRound": "Duusi {round} e {total}",
+      "draftLabel": "Draft",
+      "sourceLocked": "Nduɗɗi e wuurndugol",
+      "analysisNotes": "{count, plural, one {# alaaɗe} other {# alaaɗi}}",
+      "analysisPill": "{count, plural, one {Nanaanal · # alaaɗe} other {Nanaanal · # alaaɗi}}",
+      "reviewSummary": "{count, plural, one {Rifirugol: # duusi, {verdict}} other {Rifirugol: # duusuuji, {verdict}}}",
+      "analysisDismiss": "Fayde e wuurndugol gulu",
+      "analysisShow": "Hollu nanaanal to wuurndugol",
+      "analysisResize": "Heddu panel nanaanal",
+      "assessingCriteria": "{count, plural, one {Rifirugol # heɓane} other {Rifirugol # heɓanɗi}}",
+      "editsPending": "Faydaaji teeŋti ɗa baɗi rifirugol.",
+      "uploadProgressLabel": "Hokkugo upload",
+      "uploadStepUploading": "Uploadugo",
+      "uploadStepReading": "Ɓeydude binndol",
+      "uploadStepReady": "Dotti",
+      "uploadCancel": "Fayde"
     },
     "document": {
       "emptyTitle": "Winndu lan binndi dannde maa",
@@ -5699,7 +5738,8 @@
       "m365MailReadsPerDay": "Janngirde email booyre",
       "m365MailDraftsPerDay": "Draft email booyre",
       "m365MailDeepScansPerDay": "Jayaanu email booyre",
-      "m365DigestRunsPerDay": "Digest jooni ñalaw taara"
+      "m365DigestRunsPerDay": "Digest jooni ñalaw taara",
+      "translationPagesPerDay": "Pottal jokkude e dokomento ñande"
     },
     "valueModeLabel": "Noone gannugol",
     "valueAmountLabel": "Sari gannugol",
@@ -5722,7 +5762,8 @@
       "jobs": "golleji",
       "rounds": "rewte",
       "documents": "dokimaaji",
-      "boolean": ""
+      "boolean": "",
+      "pages": "pottal"
     },
     "window": {
       "day": "ñalnde",
@@ -5780,7 +5821,8 @@
       "m365MailReadsPerDay": "Njiilaw e huutoraawe imeli kala ñalngu. So e kesol, imeli mbaawi 'reftir e ñalngu seuɗi'.",
       "m365MailDraftsPerDay": "Cargal imeli ko yaltu so gollal jooɗii e ñalngu, kala gootol jogii noddine mum. Ko fayande.",
       "m365MailDeepScansPerDay": "Dolli analise buum imeli (dige, njiilaw nguurndu, ballal) kala ñalngu. Kala analise kaŋko ɗiɗi ko unit e budget.",
-      "m365DigestRunsPerDay": "Microsoft 365 digest jooni ñalaw taara. Jooni e walii Graph reads e analysis-model ñaari; period picker moƴƴa jangkooma, kono default noon moƴƴi."
+      "m365DigestRunsPerDay": "Microsoft 365 digest jooni ñalaw taara. Jooni e walii Graph reads e analysis-model ñaari; period picker moƴƴa jangkooma, kono default noon moƴƴi.",
+      "translationPagesPerDay": "Pottal PDF jogii e dokomento jokkude ñande."
     },
     "scopeFamily": "Sarɗi",
     "scopeModel": "Moodel",
