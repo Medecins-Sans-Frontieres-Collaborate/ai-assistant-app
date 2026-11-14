@@ -141,6 +141,9 @@ function ConversationItemInner({
           {/* title: the row truncates, so hovering reveals the full name */}
           <span
             className="truncate"
+            // Titles are in the conversation's language, not the UI's: let
+            // each one truncate at the end of its own script.
+            dir="auto"
             title={conversation.name || t('New Conversation')}
           >
             {conversation.name || t('New Conversation')}
@@ -185,7 +188,7 @@ function ConversationItemInner({
             <div className="p-1">
               {/* Rename option */}
               <button
-                className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleCloseMenu();
@@ -204,7 +207,7 @@ function ConversationItemInner({
                   anchored to the Options button (the menu closes first, so
                   the picker never fights the menu for the viewport) */}
               <button
-                className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
+                className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleCloseMenu();
@@ -226,7 +229,7 @@ function ConversationItemInner({
 
               {/* Export option */}
               <button
-                className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleCloseMenu();
@@ -243,7 +246,7 @@ function ConversationItemInner({
               {/* Share option — only when the capability is wired */}
               {handleShareConversation && (
                 <button
-                  className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                  className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleCloseMenu();
@@ -260,7 +263,7 @@ function ConversationItemInner({
 
               {/* Delete option */}
               <button
-                className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                className="w-full text-start px-3 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleCloseMenu();

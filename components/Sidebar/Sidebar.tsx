@@ -552,10 +552,10 @@ export const Sidebar = memo(function Sidebar() {
         // 100%` against the initial containing block (the large viewport), so
         // the drawer ran under the mobile URL bar. w-[min(...)] keeps a
         // tappable strip of backdrop on 320px screens.
-        className={`sidebar-width-target fixed left-0 top-0 z-50 h-dvh flex flex-col border-r border-gray-300 bg-white dark:border-gray-700 dark:bg-surface-dark-base transition-all duration-300 ease-in-out w-[min(var(--sidebar-width,260px),85vw)] ${
+        className={`sidebar-width-target fixed start-0 top-0 z-50 h-dvh flex flex-col border-e border-gray-300 bg-white dark:border-gray-700 dark:bg-surface-dark-base transition-all duration-300 ease-in-out w-[min(var(--sidebar-width,260px),85vw)] ${
           showChatbar
             ? 'translate-x-0 overflow-hidden'
-            : '-translate-x-full md:translate-x-0 md:w-14 overflow-visible'
+            : '-translate-x-full rtl:translate-x-full md:translate-x-0 rtl:md:translate-x-0 md:w-14 overflow-visible'
         }`}
       >
         <SidebarHeader
@@ -604,7 +604,7 @@ export const Sidebar = memo(function Sidebar() {
                 </button>
               )}
               {!showChatbar && (
-                <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
+                <span className="absolute start-full ms-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
                   {t('New chat')}
                 </span>
               )}
@@ -640,7 +640,7 @@ export const Sidebar = memo(function Sidebar() {
                       return (
                         <button
                           key={type}
-                          className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                          className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                           onClick={() => handleNewWorkflowConversation(type)}
                         >
                           <Icon size={14} />
@@ -652,7 +652,7 @@ export const Sidebar = memo(function Sidebar() {
                   </>
                 )}
                 <button
-                  className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                  className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                   onClick={handleImportClick}
                 >
                   <IconUpload size={14} />
@@ -676,12 +676,12 @@ export const Sidebar = memo(function Sidebar() {
               {t('Search chats')}
             </span>
             {showChatbar && (
-              <span className="ml-auto text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+              <span className="ms-auto text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
                 {modifierLabel}+K
               </span>
             )}
             {!showChatbar && (
-              <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
+              <span className="absolute start-full ms-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
                 {t('Search chats')}
               </span>
             )}
@@ -704,7 +704,7 @@ export const Sidebar = memo(function Sidebar() {
               {t('sidebar.quickActions')}
             </span>
             {!showChatbar && (
-              <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
+              <span className="absolute start-full ms-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
                 {t('sidebar.quickActions')}
               </span>
             )}
@@ -742,7 +742,7 @@ export const Sidebar = memo(function Sidebar() {
               />
               {agentBrowserStatus === 'error' && (
                 <span
-                  className="absolute right-2 top-1.5 h-2 w-2 rounded-full bg-amber-500"
+                  className="absolute end-2 top-1.5 h-2 w-2 rounded-full bg-amber-500"
                   aria-hidden="true"
                 />
               )}
@@ -752,7 +752,7 @@ export const Sidebar = memo(function Sidebar() {
                 {t('sidebar.agentsEntry')}
               </span>
               {!showChatbar && (
-                <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
+                <span className="absolute start-full ms-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
                   {t('sidebar.agentsEntry')}
                 </span>
               )}
@@ -798,7 +798,7 @@ export const Sidebar = memo(function Sidebar() {
             <div className="rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark">
               <div className="p-1">
                 <button
-                  className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                  className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                   onClick={handleImportClick}
                 >
                   <IconUpload size={14} />
@@ -906,7 +906,7 @@ export const Sidebar = memo(function Sidebar() {
                       ) : folderViewEnabled ? (
                         <button
                           type="button"
-                          className="min-w-0 flex-1 truncate text-left text-sm font-medium text-gray-900 dark:text-gray-100"
+                          className="min-w-0 flex-1 truncate text-start text-sm font-medium text-gray-900 dark:text-gray-100"
                           title={folder.name}
                           aria-label={t('sidebar.openFolder', {
                             name: folder.name,
@@ -974,7 +974,7 @@ export const Sidebar = memo(function Sidebar() {
                                 <div className="p-1">
                                   {folderViewEnabled && (
                                     <button
-                                      className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                                      className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                                       onClick={(e) => {
                                         e.stopPropagation();
                                         setShowFolderMenuId(null);
@@ -991,7 +991,7 @@ export const Sidebar = memo(function Sidebar() {
 
                                   {/* New chat directly inside this folder */}
                                   <button
-                                    className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                                    className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setShowFolderMenuId(null);
@@ -1015,7 +1015,7 @@ export const Sidebar = memo(function Sidebar() {
 
                                   {/* Rename option */}
                                   <button
-                                    className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                                    className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setShowFolderMenuId(null);
@@ -1034,7 +1034,7 @@ export const Sidebar = memo(function Sidebar() {
 
                                   {/* Export option */}
                                   <button
-                                    className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                                    className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setShowFolderMenuId(null);
@@ -1053,7 +1053,7 @@ export const Sidebar = memo(function Sidebar() {
 
                                   {/* Delete option */}
                                   <button
-                                    className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                                    className="w-full text-start px-3 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setShowFolderMenuId(null);
@@ -1080,7 +1080,7 @@ export const Sidebar = memo(function Sidebar() {
 
                     {/* Folder conversations */}
                     {!folderManager.collapsedFolders.has(folder.id) && (
-                      <div className="ml-6 space-y-1 mt-1">
+                      <div className="ms-6 space-y-1 mt-1">
                         <VirtualConversationList
                           conversations={folderConversations}
                           selectedConversationId={

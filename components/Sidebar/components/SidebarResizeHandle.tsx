@@ -6,6 +6,9 @@ import { useTranslations } from 'next-intl';
 
 import { useUI } from '@/client/hooks/ui/useUI';
 
+/** Arrow-key step for the keyboard path. */
+import { inlineEndSign } from '@/lib/utils/client/textDirection';
+
 import {
   SIDEBAR_DEFAULT_WIDTH,
   SIDEBAR_MAX_WIDTH,
@@ -13,7 +16,6 @@ import {
   clampSidebarWidth,
 } from '@/types/ui';
 
-/** Arrow-key step for the keyboard path. */
 const KEYBOARD_STEP_PX = 16;
 
 /**
@@ -38,6 +40,8 @@ export function SidebarResizeHandle() {
     startWidth: number;
     latest: number;
     root: HTMLElement | null;
+    /** +1 when dragging right widens the sidebar, -1 when it narrows it. */
+    widenSign: 1 | -1;
   } | null>(null);
   // Mirrors the live width for aria-valuenow while dragging.
   const [liveWidth, setLiveWidth] = useState<number | null>(null);
@@ -77,6 +81,7 @@ export function SidebarResizeHandle() {
       startWidth: sidebarWidth,
       latest: sidebarWidth,
       root,
+      widenSign: inlineEndSign(e.currentTarget),
     };
     document.documentElement.setAttribute('data-sidebar-resizing', '');
     try {
@@ -89,7 +94,9 @@ export function SidebarResizeHandle() {
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const drag = dragRef.current;
     if (!drag) return;
-    const next = clampSidebarWidth(drag.startWidth + (e.clientX - drag.startX));
+    const next = clampSidebarWidth(
+      drag.startWidth + (e.clientX - drag.startX) * drag.widenSign,
+    );
     if (next === drag.latest) return;
     drag.latest = next;
     drag.root?.style.setProperty('--sidebar-width', `${next}px`);
@@ -100,11 +107,15 @@ export function SidebarResizeHandle() {
     switch (e.key) {
       case 'ArrowLeft':
         e.preventDefault();
-        setSidebarWidth(sidebarWidth - KEYBOARD_STEP_PX);
+        setSidebarWidth(
+          sidebarWidth - KEYBOARD_STEP_PX * inlineEndSign(e.currentTarget),
+        );
         break;
       case 'ArrowRight':
         e.preventDefault();
-        setSidebarWidth(sidebarWidth + KEYBOARD_STEP_PX);
+        setSidebarWidth(
+          sidebarWidth + KEYBOARD_STEP_PX * inlineEndSign(e.currentTarget),
+        );
         break;
       case 'Home':
         e.preventDefault();
@@ -135,7 +146,7 @@ export function SidebarResizeHandle() {
       onKeyDown={onKeyDown}
       // Hidden until hover/focus so the default look is unchanged; the 6px
       // hit area straddles the border.
-      className="absolute inset-y-0 -right-[3px] z-10 hidden w-1.5 cursor-col-resize transition-colors hover:bg-blue-500/50 focus:bg-blue-500/50 focus:outline-none md:block"
+      className="absolute inset-y-0 -end-[3px] z-10 hidden w-1.5 cursor-col-resize transition-colors hover:bg-blue-500/50 focus:bg-blue-500/50 focus:outline-none md:block"
     />
   );
 }
