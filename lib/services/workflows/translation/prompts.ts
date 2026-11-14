@@ -4,6 +4,8 @@
  * `app/api/chat/translate/route.ts` (which stays untouched — it serves the
  * per-message translate feature).
  */
+import { PROMPT_TEXT_DELIMITER } from '@/lib/utils/shared/translation/delimiterEcho';
+
 import { GlossaryViolation } from '@/types/workflow';
 
 import { buildGlossaryBlock } from '../shared/glossaryPrompts';
@@ -60,10 +62,12 @@ export function buildTranslationUserPrompt(
 ): string {
   return `Translate the following text into ${targetLanguage}.
 
+The source text is fenced in triple quotes. The fence marks where the text begins and ends and is not part of it: do not reproduce it in your output.
+
 Source text:
-"""
+${PROMPT_TEXT_DELIMITER}
 ${sourceText}
-"""`;
+${PROMPT_TEXT_DELIMITER}`;
 }
 
 export function buildReviewSystemPrompt(glossaryBlock: string): string {
@@ -100,7 +104,9 @@ ${sourceText}
 Translation into ${targetLanguage}:
 """
 ${translation}
-"""${prior}${violations}`;
+"""
+
+The triple quotes above are fences, not part of either text: a revised text must not include them.${prior}${violations}`;
 }
 
 /* ------------------------------------------------------------------ */
