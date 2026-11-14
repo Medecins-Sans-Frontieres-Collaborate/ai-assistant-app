@@ -87,7 +87,7 @@ export const CitationItem: React.FC<CitationItemProps> = ({
               {citation.evidence!.map((entry) => (
                 <blockquote
                   key={entry.number}
-                  className="text-[11.5px] italic text-gray-600 dark:text-gray-300 border-l-2 border-gray-400 dark:border-gray-500 pl-2"
+                  className="text-[11.5px] italic text-gray-600 dark:text-gray-300 border-s-2 border-gray-400 dark:border-gray-500 ps-2"
                   title={entry.quote}
                 >
                   <span
@@ -108,7 +108,7 @@ export const CitationItem: React.FC<CitationItemProps> = ({
           ) : (
             citation.quote && (
               <blockquote
-                className="text-[11.5px] italic line-clamp-4 text-gray-600 dark:text-gray-300 border-l-2 border-gray-400 dark:border-gray-500 pl-2 mb-1"
+                className="text-[11.5px] italic line-clamp-4 text-gray-600 dark:text-gray-300 border-s-2 border-gray-400 dark:border-gray-500 ps-2 mb-1"
                 title={citation.quote}
               >
                 “{citation.quote}”
@@ -133,7 +133,7 @@ export const CitationItem: React.FC<CitationItemProps> = ({
             })}
           </div>
         )}
-        <div className="absolute bottom-0 left-0 right-0 dark:bg-surface-dark bg-gray-100 px-2 py-1 flex items-center dark:text-white text-gray-500 text-[11.5px] space-x-1">
+        <div className="absolute bottom-0 start-0 end-0 dark:bg-surface-dark bg-gray-100 px-2 py-1 flex items-center dark:text-white text-gray-500 text-[11.5px] space-x-1">
           <div className="flex items-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -141,7 +141,7 @@ export const CitationItem: React.FC<CitationItemProps> = ({
               alt={`${hostname} favicon`}
               width={12}
               height={12}
-              className="mr-1 my-0 p-0 align-middle"
+              className="me-1 my-0 p-0 align-middle"
             />
           </div>
           <span className="min-w-0 truncate">{displayName}</span>

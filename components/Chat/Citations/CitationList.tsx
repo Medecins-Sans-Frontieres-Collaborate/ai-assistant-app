@@ -337,7 +337,7 @@ export const CitationList: FC<CitationListProps> = ({
 
         {/* Header favicons showing unique source domains */}
         {visibleFavicons.length > 0 && (
-          <div className="flex items-center gap-1 ml-3 pl-3 border-l border-gray-300 dark:border-gray-600">
+          <div className="flex items-center gap-1 ms-3 ps-3 border-s border-gray-300 dark:border-gray-600">
             {visibleFavicons.map((citation) => {
               const hostname = new URL(citation.sourceUrl || citation.url)
                 .hostname;
@@ -356,14 +356,14 @@ export const CitationList: FC<CitationListProps> = ({
               );
             })}
             {overflowCount > 0 && (
-              <span className="text-xs text-gray-500 dark:text-gray-400 ml-0.5">
+              <span className="text-xs text-gray-500 dark:text-gray-400 ms-0.5">
                 +{overflowCount}
               </span>
             )}
           </div>
         )}
 
-        <div className="flex items-center gap-1 ml-auto">
+        <div className="flex items-center gap-1 ms-auto">
           {/* View mode toggle button */}
           <button
             onClick={toggleViewMode}
@@ -415,7 +415,7 @@ export const CitationList: FC<CitationListProps> = ({
                   key={group.origin ?? 'unlabelled'}
                   className={`flex flex-col gap-1.5 ${
                     groupIndex > 0
-                      ? 'border-l border-gray-300 pl-4 dark:border-gray-600'
+                      ? 'border-s border-gray-300 ps-4 dark:border-gray-600'
                       : ''
                   }`}
                 >
