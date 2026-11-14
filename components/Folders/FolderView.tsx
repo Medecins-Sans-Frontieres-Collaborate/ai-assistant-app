@@ -206,7 +206,7 @@ export function FolderView({ folderId }: FolderViewProps) {
             title={folder.name}
           >
             {folder.name}
-            <span className="ml-2 font-normal text-gray-500 dark:text-gray-400">
+            <span className="ms-2 font-normal text-gray-500 dark:text-gray-400">
               {t('folderView.chatCount', { count: items.length })}
             </span>
           </h1>
@@ -361,7 +361,7 @@ export function FolderView({ folderId }: FolderViewProps) {
                   <button
                     type="button"
                     onClick={() => handleOpen(conversation.id)}
-                    className="flex min-w-0 flex-1 items-center gap-3 py-3 text-left hover:bg-gray-50 dark:hover:bg-surface-dark-elevated"
+                    className="flex min-w-0 flex-1 items-center gap-3 py-3 text-start hover:bg-gray-50 dark:hover:bg-surface-dark-elevated"
                     aria-current={isCurrent ? 'true' : undefined}
                   >
                     <Icon
