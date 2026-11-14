@@ -5,7 +5,7 @@ import {
   IconPlayerStopFilled,
   IconWand,
 } from '@tabler/icons-react';
-import { FormEvent, KeyboardEvent, useState } from 'react';
+import { FormEvent, KeyboardEvent, useId, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -45,6 +45,8 @@ export function ChangeRequestBar({
   onStop,
 }: ChangeRequestBarProps) {
   const t = useTranslations('workflows');
+  // The shell can mount two workspaces at once, so a fixed id would repeat.
+  const fieldId = useId();
   const [draft, setDraft] = useState('');
   const running = runningInstruction !== undefined;
   const disabled = running || Boolean(disabledReason);
@@ -71,7 +73,7 @@ export function ChangeRequestBar({
     <div className="border-t border-gray-200 px-3 py-2 dark:border-gray-700">
       <form onSubmit={onFormSubmit} className="flex items-center gap-2">
         <label
-          htmlFor="translation-change-request"
+          htmlFor={fieldId}
           className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-gray-300 bg-gray-50 px-2.5 focus-within:border-blue-600 dark:border-gray-700 dark:bg-surface-dark-elevated"
           title={disabledReason}
         >
@@ -82,7 +84,8 @@ export function ChangeRequestBar({
           />
           <span className="sr-only">{t('translation.changeLabel')}</span>
           <input
-            id="translation-change-request"
+            id={fieldId}
+            data-change-request-field
             type="text"
             value={running ? runningInstruction : draft}
             onChange={(event) => setDraft(event.target.value)}
