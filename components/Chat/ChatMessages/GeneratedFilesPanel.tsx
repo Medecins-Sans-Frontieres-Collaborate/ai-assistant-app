@@ -1,6 +1,6 @@
 'use client';
 
-import { IconDownload } from '@tabler/icons-react';
+import { IconDownload, IconEye } from '@tabler/icons-react';
 import { FC, useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -9,6 +9,12 @@ import { fetchImageBase64FromMessageContent } from '@/lib/services/imageService'
 
 import type { ToolCallRecord } from '@/types/chat';
 
+import {
+  FilePreviewModal,
+  PreviewableFile,
+} from '@/components/Chat/ChatMessages/FilePreviewModal';
+
+import { isPagePreviewable } from '@/lib/constants/filePreview';
 import type { GeneratedFileRef } from '@/lib/streamMarkers';
 
 interface GeneratedFilesPanelProps {
@@ -48,24 +54,34 @@ function badgeClassFor(extension: string): string {
 export const GeneratedFilesPanel: FC<GeneratedFilesPanelProps> = ({
   toolCalls,
 }) => {
+  // One viewer for the whole panel: only one file is ever previewed at once.
+  const [previewed, setPreviewed] = useState<PreviewableFile | null>(null);
   const files = toolCalls.flatMap((call) => call.generated_files ?? []);
   if (files.length === 0) return null;
 
   return (
     <div className="not-prose my-3 flex flex-wrap items-start gap-3">
       {files.map((file) => (
-        <GeneratedFileCard key={file.url} file={file} />
+        <GeneratedFileCard
+          key={file.url}
+          file={file}
+          onPreview={setPreviewed}
+        />
       ))}
+      <FilePreviewModal file={previewed} onClose={() => setPreviewed(null)} />
     </div>
   );
 };
 
 interface GeneratedFileCardProps {
   file: GeneratedFileRef;
+  /** Opens the viewer on this file. */
+  onPreview: (file: PreviewableFile) => void;
 }
 
-const GeneratedFileCard: FC<GeneratedFileCardProps> = ({ file }) => {
+const GeneratedFileCard: FC<GeneratedFileCardProps> = ({ file, onPreview }) => {
   const t = useTranslations('chat.toolSummary');
+  const tPreview = useTranslations('filePreview');
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [imageFailed, setImageFailed] = useState(false);
 
@@ -98,12 +114,21 @@ const GeneratedFileCard: FC<GeneratedFileCardProps> = ({ file }) => {
     return (
       <figure className="w-full max-w-md">
         {imageSrc ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={imageSrc}
-            alt={file.filename}
-            className="max-w-full rounded-xl border border-gray-200 dark:border-gray-700"
-          />
+          <button
+            type="button"
+            onClick={() =>
+              onPreview({ url: file.url, filename: file.filename, imageSrc })
+            }
+            aria-label={tPreview('enlarge', { name: file.filename })}
+            className="block cursor-zoom-in rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imageSrc}
+              alt={file.filename}
+              className="max-w-full rounded-xl border border-gray-200 dark:border-gray-700"
+            />
+          </button>
         ) : (
           <div className="h-48 w-full animate-pulse rounded-xl border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800" />
         )}
@@ -139,14 +164,28 @@ const GeneratedFileCard: FC<GeneratedFileCardProps> = ({ file }) => {
       <div className="break-words text-sm font-medium text-gray-900 dark:text-gray-100">
         {file.filename}
       </div>
-      <a
-        href={file.url}
-        download={file.filename}
-        className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-blue-700"
-      >
-        <IconDownload size={16} aria-hidden="true" />
-        {t('downloadFile')}
-      </a>
+      <div className="flex flex-wrap gap-2">
+        {isPagePreviewable(file.filename) && (
+          <button
+            type="button"
+            onClick={() =>
+              onPreview({ url: file.url, filename: file.filename })
+            }
+            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
+          >
+            <IconEye size={16} aria-hidden="true" />
+            {tPreview('preview')}
+          </button>
+        )}
+        <a
+          href={file.url}
+          download={file.filename}
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+        >
+          <IconDownload size={16} aria-hidden="true" />
+          {t('downloadFile')}
+        </a>
+      </div>
     </div>
   );
 };
