@@ -171,7 +171,10 @@ export const ModelCard: FC<ModelCardProps> = ({
           {icon}
           <div className="flex flex-col min-w-0 leading-tight">
             <div className="flex items-center gap-1.5">
-              <span className="font-medium text-sm text-gray-900 dark:text-white truncate">
+              <span
+                className="font-medium text-sm text-gray-900 dark:text-white truncate"
+                dir="auto"
+              >
                 {name}
               </span>
               {badge}
