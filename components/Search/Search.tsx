@@ -22,7 +22,7 @@ const Search: FC<Props> = ({ placeholder, searchTerm, onSearch }) => {
   return (
     <div className="relative flex items-center mx-2">
       <input
-        className="w-full flex-1 rounded-md border border-gray-600 bg-white dark:bg-surface-dark-base px-4 py-3 pr-10 text-[14px] leading-3 text-black dark:text-white"
+        className="w-full flex-1 rounded-md border border-gray-600 bg-white dark:bg-surface-dark-base px-4 py-3 pe-10 text-[14px] leading-3 text-black dark:text-white"
         type="text"
         placeholder={t(placeholder) || ''}
         value={searchTerm}
@@ -34,7 +34,7 @@ const Search: FC<Props> = ({ placeholder, searchTerm, onSearch }) => {
         <button
           onClick={clearSearch}
           aria-label={t('common.clearSearch')}
-          className="absolute right-4 hover:text-gray-400 text-black dark:text-gray-300"
+          className="absolute end-4 hover:text-gray-400 text-black dark:text-gray-300"
         >
           <IconX size={18} />
         </button>
