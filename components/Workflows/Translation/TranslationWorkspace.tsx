@@ -2,6 +2,7 @@
 
 import {
   IconAdjustments,
+  IconArrowBackUp,
   IconBook2,
   IconClipboardCheck,
   IconCopy,
@@ -18,11 +19,21 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 
 import { useAvailableGuides } from '@/client/hooks/settings/useAvailableGuides';
+import {
+  useLimitGates,
+  useMyLimits,
+} from '@/client/hooks/settings/useMyLimits';
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
+import { useDocumentTranslationReader } from '@/client/hooks/workflows/useDocumentTranslationReader';
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
 import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
+import {
+  DocumentJobError,
+  fetchStoredFile,
+  submitDocumentTranslation,
+} from '@/client/services/workflows/documentTranslationJob';
 import {
   FileTextExtractionError,
   UploadStage,
@@ -55,6 +66,12 @@ import {
   withoutResolvedEdits,
 } from '@/lib/utils/shared/review/reviewQueue';
 import {
+  fileExtensionOf,
+  leaveDocumentReader,
+  showDocumentPage,
+  wholeDocumentEligibility,
+} from '@/lib/utils/shared/translation/documentMode';
+import {
   applyEdit,
   applyEditsInOrder,
 } from '@/lib/utils/shared/translation/editApplication';
@@ -80,10 +97,16 @@ import {
 } from '@/lib/utils/shared/translation/runProgress';
 
 import {
+  TRANSLATION_PAGES_LIMIT_KEY,
+  supportsPagedText,
+} from '@/types/documentTranslation';
+import {
   TranslationAnalysis,
+  TranslationDocumentJob,
   TranslationEditStatus,
   TranslationGlossary,
   TranslationGlossaryCheck,
+  TranslationMode,
   TranslationReviewRound,
   TranslationRoundChange,
   TranslationTargetLanguage,
@@ -105,6 +128,9 @@ import { PendingEditsDialog } from '../Shared/Review/PendingEditsDialog';
 import { WorkflowWorkspaceProps } from '../registry';
 import { AnalysisStrip } from './AnalysisStrip';
 import { AssessmentProgress } from './AssessmentProgress';
+import { DocumentDownloadMenu } from './DocumentDownloadMenu';
+import { DocumentJobProgress } from './DocumentJobProgress';
+import { DocumentReaderBar } from './DocumentReaderBar';
 import { GlossaryManager } from './GlossaryManager';
 import { GlossaryPicker, languageFit } from './GlossaryPicker';
 import { SourcePageSelector } from './SourcePageSelector';
@@ -322,6 +348,70 @@ export function TranslationWorkspace({
     append: appendSource,
   });
   const targetText = targetDraft ?? state?.finalText ?? '';
+
+  // --- Whole-document mode ------------------------------------------------
+  const documentMode = state?.mode === 'document';
+  const documentJob = state?.documentJob;
+  // The file as uploaded in this session, to submit without re-downloading.
+  const uploadedFileRef = useRef<{ url: string; file: File } | null>(null);
+  const [submittingDocument, setSubmittingDocument] = useState(false);
+  const [documentError, setDocumentError] = useState<string | null>(null);
+  const [confirmRetranslate, setConfirmRetranslate] = useState(false);
+  const { featureRemaining } = useLimitGates();
+  const { refetch: refetchLimits } = useMyLimits();
+
+  const patchDocumentJob = useCallback(
+    (jobPatch: Partial<TranslationDocumentJob>) => {
+      updateWorkflowState(conversationId, (prev) => {
+        const p = prev as TranslationWorkflowState;
+        if (!p.documentJob) return p;
+        return {
+          ...p,
+          documentJob: { ...p.documentJob, ...jobPatch },
+          updatedAt: new Date().toISOString(),
+        };
+      });
+    },
+    [conversationId, updateWorkflowState],
+  );
+  const showPageInPane = useCallback(
+    (page: number, text: string) => {
+      updateWorkflowState(conversationId, (prev) => {
+        const p = prev as TranslationWorkflowState;
+        return {
+          ...p,
+          ...showDocumentPage(p, page, text),
+          updatedAt: new Date().toISOString(),
+        };
+      });
+    },
+    [conversationId, updateWorkflowState],
+  );
+  const reader = useDocumentTranslationReader({
+    job: documentJob,
+    active: documentMode,
+    paneText: state?.finalText,
+    onJobChange: patchDocumentJob,
+    onShowPage: showPageInPane,
+  });
+  const documentInProgress =
+    documentJob?.status === 'translating' ||
+    documentJob?.status === 'preparing';
+  // The reader has pages to show: the panes show a page, not the source text.
+  const readingDocument = documentMode && documentJob?.status === 'ready';
+  /** The reader's page is loaded and is the text in the translation pane. */
+  const pageInPane =
+    readingDocument &&
+    !!reader.page &&
+    documentJob?.viewPage === reader.page.page;
+  /** The page in the pane differs from its machine translation. */
+  const pageIsCorrected =
+    pageInPane &&
+    (state?.finalText ?? '').trim() !== reader.page?.translation.trim();
+  /** The text the translation in the pane was made from. */
+  const activeSource = readingDocument
+    ? (reader.page?.source ?? '')
+    : sourceText;
 
   // Glossary attachments — arrays, with the pre-picker single-id fields
   // read as a fallback so older conversations keep their selection.
@@ -570,8 +660,33 @@ export function TranslationWorkspace({
         };
       }
 
+      // A document that fits one batch still keeps its reference when it
+      // can be translated whole, which needs the file itself.
+      if (
+        !sourceDocument &&
+        extracted.url &&
+        supportsPagedText(fileExtensionOf(file.name))
+      ) {
+        sourceDocument = {
+          name: file.name,
+          url: extracted.url,
+          lastPage: allPages[allPages.length - 1],
+          selectedPages: formatPageSelection(allPages),
+        };
+      }
+
       setSourcePages(sourceDocument ? pages : null);
-      patchState({ sourceText: loadedText, sourceDocument });
+      uploadedFileRef.current = extracted.url
+        ? { url: extracted.url, file }
+        : null;
+      setDocumentError(null);
+      // A new document replaces the one a whole-document job was run on.
+      patchState({
+        ...(state ? leaveDocumentReader(state) : {}),
+        sourceText: loadedText,
+        sourceDocument,
+        documentJob: undefined,
+      });
       nameWorkflowConversation(conversationId, {
         label: file.name,
         sample: loadedText,
@@ -621,7 +736,7 @@ export function TranslationWorkspace({
   };
 
   const handleTranslate = useCallback(async () => {
-    if (!state || isRunning) return;
+    if (!state || isRunning || state.mode === 'document') return;
     const text = sourceText.trim();
     if (!text || !targetLanguage) return;
     // A fresh translation replaces the text the suggestions point at:
@@ -746,7 +861,7 @@ export function TranslationWorkspace({
 
   const handleAssess = useCallback(async () => {
     if (!state || !targetLanguage || assessing || isRunning) return;
-    const source = sourceText.trim();
+    const source = activeSource.trim();
     const translation = state.finalText ?? '';
     if (!source || !translation.trim() || selectedCriteria.size === 0) return;
     // A new assessment replaces the queue outright: settle it first (§6b).
@@ -843,7 +958,7 @@ export function TranslationWorkspace({
     targetLanguage,
     assessing,
     isRunning,
-    sourceText,
+    activeSource,
     selectedCriteria,
     translationCriteria,
     translationGuides,
@@ -1156,6 +1271,81 @@ export function TranslationWorkspace({
     else void handleAssess();
   }, [queuedAction, hasUnresolvedEdits, handleTranslate, handleAssess]);
 
+  const documentEligibility = wholeDocumentEligibility(
+    state?.sourceDocument,
+    targetLanguage?.custom ? undefined : targetLanguage?.id,
+  );
+  const pagesBudget = featureRemaining(TRANSLATION_PAGES_LIMIT_KEY);
+
+  /** Sends the uploaded file through whole-document translation. */
+  const submitDocument = async () => {
+    if (!state || !documentEligibility.ok || submittingDocument) return;
+    const { document: source, languageCode } = documentEligibility;
+    setDocumentError(null);
+    setSubmittingDocument(true);
+    try {
+      const kept = uploadedFileRef.current;
+      const file =
+        kept?.url === source.url
+          ? kept.file
+          : await fetchStoredFile(source.url, source.name);
+      const pending = await submitDocumentTranslation(file, languageCode);
+      setEditingTarget(false);
+      updateWorkflowState(conversationId, (prev) => {
+        const p = prev as TranslationWorkflowState;
+        return {
+          ...p,
+          // The pane goes back to the text modes first, so the new job's
+          // first page sets aside their result, not the old job's page.
+          ...leaveDocumentReader(p),
+          documentJob: {
+            jobId: pending.jobId,
+            status: 'translating',
+            submittedAt: pending.submittedAt,
+            sourceName: pending.originalFilename,
+            translatedFilename: pending.translatedFilename,
+            fileExtension: pending.fileExtension,
+            targetLanguage: pending.targetLanguage,
+            page: 1,
+          },
+          updatedAt: new Date().toISOString(),
+        };
+      });
+      void refetchLimits();
+    } catch (error) {
+      const known = error instanceof DocumentJobError ? error : undefined;
+      setDocumentError(
+        known?.status === 429
+          ? t('translation.documentLimitReached')
+          : known?.code === 'SERVICE_NOT_CONFIGURED'
+            ? t('translation.documentUnavailable')
+            : t('translation.documentSubmitFailed', {
+                message: error instanceof Error ? error.message : String(error),
+              }),
+      );
+    } finally {
+      setSubmittingDocument(false);
+    }
+  };
+  /** A finished job is only replaced on purpose: it charges pages again. */
+  const handleTranslateDocument = () => {
+    if (documentJob?.status === 'ready') setConfirmRetranslate(true);
+    else void submitDocument();
+  };
+
+  const goToDocumentPage = (page: number) => {
+    setEditingTarget(false);
+    patchDocumentJob({ page });
+  };
+  const handleModeChange = (mode: TranslationMode) => {
+    if (!state || mode === state.mode) return;
+    setEditingTarget(false);
+    patchState({
+      mode,
+      ...(mode !== 'document' ? leaveDocumentReader(state) : {}),
+    });
+  };
+
   if (!state) return null;
 
   const canTranslate =
@@ -1169,15 +1359,34 @@ export function TranslationWorkspace({
     !uploading &&
     !assessing &&
     !!targetLanguage &&
-    sourceText.trim().length > 0 &&
+    activeSource.trim().length > 0 &&
     (state.finalText ?? '').trim().length > 0 &&
-    selectedCriteria.size > 0;
-  const tooLong = sourceText.length > MAX_SOURCE_CHARS;
+    selectedCriteria.size > 0 &&
+    // In the reader, only a page that is actually in the pane is assessed.
+    (!documentMode || pageInPane);
+  const tooLong = !documentMode && sourceText.length > MAX_SOURCE_CHARS;
+  const canTranslateDocument =
+    documentEligibility.ok &&
+    !submittingDocument &&
+    !documentInProgress &&
+    !uploading &&
+    !assessing;
+  const documentBlockerKey: Record<string, string> = {
+    'no-document': 'translation.documentNeedsFile',
+    'unsupported-format': 'translation.documentNeedsPdf',
+    'no-language': 'translation.documentNeedsLanguage',
+    'unsupported-language': 'translation.documentLanguageUnsupported',
+  };
+  const documentBlocker = documentEligibility.ok
+    ? null
+    : t(documentBlockerKey[documentEligibility.reason]);
 
-  const runStage = deriveRunStage(run?.activityKey, state.mode);
+  const textMode = state.mode === 'document' ? 'quick' : state.mode;
+  const runStage = deriveRunStage(run?.activityKey, textMode);
   // A Reviewed run's text is a draft until the last review round is done.
   const isDraft = isRunning && state.mode === 'agentic' && targetText !== '';
-  const paperTrailHidden = analysisHidden && hasPaperTrail(state);
+  const paperTrailHidden =
+    !documentMode && analysisHidden && hasPaperTrail(state);
   const showAnalysis = () => {
     setAnalysisHidden(false);
     setAnalysisExpanded(true);
@@ -1220,7 +1429,11 @@ export function TranslationWorkspace({
             onClick={() => setGlossaryPickerOpen((open) => !open)}
             aria-expanded={glossaryPickerOpen}
             aria-haspopup="dialog"
-            disabled={isRunning}
+            // Whole-document translation does not take glossaries.
+            disabled={isRunning || documentMode}
+            title={
+              documentMode ? t('translation.documentNoGlossaries') : undefined
+            }
             className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm text-gray-700 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300"
           >
             <IconBook2 size={15} aria-hidden />
@@ -1295,17 +1508,19 @@ export function TranslationWorkspace({
           aria-label={t('translation.mode')}
           className="ms-auto flex rounded-lg bg-gray-100 p-0.5 dark:bg-surface-dark-elevated"
         >
-          {(['quick', 'agentic'] as const).map((mode) => (
+          {(['quick', 'agentic', 'document'] as const).map((mode) => (
             <button
               key={mode}
               role="radio"
               aria-checked={state.mode === mode}
-              onClick={() => patchState({ mode })}
-              disabled={isRunning}
+              onClick={() => handleModeChange(mode)}
+              disabled={isRunning || assessing}
               title={
                 mode === 'quick'
                   ? t('translation.modeQuickHint')
-                  : t('translation.modeAgenticHint')
+                  : mode === 'agentic'
+                    ? t('translation.modeAgenticHint')
+                    : t('translation.modeDocumentHint')
               }
               className={`rounded-md px-2.5 py-1 text-xs font-medium disabled:opacity-50 ${
                 state.mode === mode
@@ -1315,13 +1530,22 @@ export function TranslationWorkspace({
             >
               {mode === 'quick'
                 ? t('translation.modeQuick')
-                : t('translation.modeAgentic')}
+                : mode === 'agentic'
+                  ? t('translation.modeAgentic')
+                  : t('translation.modeDocument')}
             </button>
           ))}
         </div>
 
         {/* What this run will cost, while quick/agentic is still a choice. */}
-        {!isRunning && (
+        {documentMode && pagesBudget && (
+          <span className="text-xs tabular-nums text-gray-500 dark:text-gray-400">
+            {t('translation.documentPagesLeft', {
+              count: pagesBudget.remaining,
+            })}
+          </span>
+        )}
+        {!isRunning && !documentMode && (
           <RunEstimateHint
             model={conversation?.model}
             sourceText={state.sourceText}
@@ -1362,6 +1586,17 @@ export function TranslationWorkspace({
             <IconPlayerStopFilled size={14} aria-hidden />
             {t('translation.stop')}
           </button>
+        ) : documentMode ? (
+          <button
+            type="button"
+            onClick={handleTranslateDocument}
+            disabled={!canTranslateDocument}
+            className="min-h-[36px] rounded-lg bg-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
+          >
+            {submittingDocument
+              ? t('translation.documentSubmitting')
+              : t('translation.translateDocument')}
+          </button>
         ) : (
           <button
             type="button"
@@ -1375,7 +1610,12 @@ export function TranslationWorkspace({
       </div>
 
       {/* Status / errors */}
-      {(run?.error || tooLong || uploadError || targetLanguage?.custom) && (
+      {(run?.error ||
+        tooLong ||
+        uploadError ||
+        targetLanguage?.custom ||
+        (documentMode &&
+          (documentError || (documentBlocker && !documentJob)))) && (
         <div className="border-b border-gray-200 px-3 py-2 dark:border-gray-700">
           {targetLanguage?.custom && (
             <p className="text-xs text-amber-700 dark:text-amber-400">
@@ -1401,10 +1641,36 @@ export function TranslationWorkspace({
               {uploadError}
             </p>
           )}
+          {documentMode && documentBlocker && !documentJob && (
+            <p className="text-sm text-amber-700 dark:text-amber-400">
+              {documentBlocker}
+            </p>
+          )}
+          {documentMode && documentError && (
+            <p className="text-sm text-red-700 dark:text-red-400" role="alert">
+              {documentError}
+            </p>
+          )}
         </div>
       )}
 
-      {state?.sourceDocument && (
+      {readingDocument && documentJob && (
+        <DocumentReaderBar
+          key={`${documentJob.jobId}:${documentJob.page}`}
+          job={documentJob}
+          correctedPages={reader.correctedPages}
+          saveState={reader.saveState}
+          disabled={assessing}
+          onGoToPage={goToDocumentPage}
+        />
+      )}
+      {readingDocument && !reader.pagesAligned && (
+        <p className="border-b border-gray-200 px-3 py-1.5 text-xs text-amber-700 dark:border-gray-700 dark:text-amber-400">
+          {t('translation.documentPagesNotAligned')}
+        </p>
+      )}
+
+      {state?.sourceDocument && !documentMode && (
         <SourcePageSelector
           key={`${state.sourceDocument.url}:${state.sourceDocument.selectedPages}`}
           document={state.sourceDocument}
@@ -1426,6 +1692,13 @@ export function TranslationWorkspace({
               <div className="flex items-center justify-between px-3 pt-2">
                 <span className="flex items-center gap-2 text-xs font-medium text-gray-500 dark:text-gray-400">
                   {t('translation.sourceLabel')}
+                  {readingDocument && documentJob && (
+                    <span className="font-normal">
+                      {t('translation.pageNumber', {
+                        page: String(documentJob.page),
+                      })}
+                    </span>
+                  )}
                   {isRunning && (
                     <span className="inline-flex items-center gap-1 font-normal">
                       <IconLock size={12} aria-hidden />
@@ -1436,7 +1709,13 @@ export function TranslationWorkspace({
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  disabled={isRunning || uploading || assessing}
+                  disabled={
+                    isRunning ||
+                    uploading ||
+                    assessing ||
+                    submittingDocument ||
+                    documentInProgress
+                  }
                   className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
                 >
                   <IconUpload size={13} aria-hidden />
@@ -1458,9 +1737,21 @@ export function TranslationWorkspace({
                   onCancel={() => uploadAbortRef.current?.abort()}
                 />
               )}
+              {readingDocument && !uploading && (
+                <div
+                  data-testid="document-source-page"
+                  className="min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap p-3 text-sm text-gray-900 dark:text-gray-100"
+                >
+                  {pageInPane ? (
+                    reader.page?.source
+                  ) : reader.pageError ? null : (
+                    <SkeletonLines widths={['88%', '94%', '61%']} />
+                  )}
+                </div>
+              )}
               <textarea
                 ref={sourceRef}
-                hidden={uploading}
+                hidden={uploading || readingDocument}
                 value={sourceText}
                 onChange={(e) =>
                   patchState({
@@ -1482,6 +1773,18 @@ export function TranslationWorkspace({
                   {isDraft && (
                     <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300">
                       {t('translation.draftLabel')}
+                    </span>
+                  )}
+                  {pageInPane && documentJob && (
+                    <span className="font-normal">
+                      {t('translation.pageNumber', {
+                        page: String(documentJob.page),
+                      })}
+                    </span>
+                  )}
+                  {pageInPane && pageIsCorrected && (
+                    <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300">
+                      {t('translation.correctedLabel')}
                     </span>
                   )}
                   {/* The dismissed analysis strip stays one click away. */}
@@ -1511,6 +1814,26 @@ export function TranslationWorkspace({
                   )}
                 </span>
                 <span className="flex items-center gap-1">
+                  {pageInPane && reader.page && pageIsCorrected && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        patchState({
+                          finalText: reader.page?.translation ?? '',
+                          assessment: undefined,
+                        })
+                      }
+                      disabled={assessing}
+                      title={t('translation.correctionRestoreHint')}
+                      className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+                    >
+                      <IconArrowBackUp size={13} aria-hidden />
+                      {t('translation.correctionRestore')}
+                    </button>
+                  )}
+                  {readingDocument && documentJob && (
+                    <DocumentDownloadMenu job={documentJob} />
+                  )}
                   <button
                     type="button"
                     onClick={() => setEditingTarget((editing) => !editing)}
@@ -1518,7 +1841,9 @@ export function TranslationWorkspace({
                     // text they don't cover is free to change, and typing
                     // over one goes through handleTargetChange's gate
                     // (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §5).
-                    disabled={isRunning || assessing}
+                    disabled={
+                      isRunning || assessing || (documentMode && !pageInPane)
+                    }
                     aria-pressed={editingTarget}
                     title={
                       editingTarget
@@ -1549,13 +1874,60 @@ export function TranslationWorkspace({
               </div>
               {isRunning && (
                 <TranslationRunStatus
-                  mode={state.mode}
+                  mode={textMode}
                   stage={runStage}
                   round={run?.activityParams?.round}
                   totalRounds={run?.activityParams?.total}
                 />
               )}
-              {editingTarget ? (
+              {documentMode && !pageInPane ? (
+                documentJob &&
+                (documentJob.status === 'translating' ||
+                  documentJob.status === 'preparing') ? (
+                  <DocumentJobProgress
+                    job={{ ...documentJob, status: documentJob.status }}
+                  />
+                ) : documentJob?.status === 'failed' || reader.pageError ? (
+                  <div
+                    role="alert"
+                    className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 p-6 text-center"
+                  >
+                    <p className="max-w-[48ch] text-sm text-red-700 dark:text-red-400">
+                      {documentJob?.status === 'failed'
+                        ? documentJob.error
+                          ? t('translation.documentFailed', {
+                              message: documentJob.error,
+                            })
+                          : t('translation.documentGone')
+                        : t('translation.documentPageFailed', {
+                            message: reader.pageError ?? '',
+                          })}
+                    </p>
+                    {documentJob?.status !== 'failed' && (
+                      <button
+                        type="button"
+                        onClick={reader.retryPage}
+                        className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+                      >
+                        {t('translation.retry')}
+                      </button>
+                    )}
+                  </div>
+                ) : documentJob ? (
+                  <div className="min-h-0 flex-1 p-3">
+                    <SkeletonLines widths={['92%', '70%', '84%', '48%']} />
+                  </div>
+                ) : (
+                  <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-2 p-6 text-center">
+                    <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                      {t('translation.documentIntroTitle')}
+                    </p>
+                    <p className="max-w-[52ch] text-xs text-gray-500 dark:text-gray-400">
+                      {t('translation.documentIntro')}
+                    </p>
+                  </div>
+                )
+              ) : editingTarget ? (
                 <>
                   {/* The textarea cannot mark suggestions, so while editing
                       the user is told what is at stake instead (§5 v1). */}
@@ -1736,7 +2108,7 @@ export function TranslationWorkspace({
       </div>
 
       {/* Pre-run paper trail (analysis + review rounds) — history only */}
-      {!analysisHidden && (
+      {!analysisHidden && !documentMode && (
         <AnalysisStrip
           analysis={state.analysis}
           rounds={state.rounds}
@@ -1785,6 +2157,18 @@ export function TranslationWorkspace({
         onAcceptAll={() => decidePendingAndRun('accepted')}
         onRejectAll={() => decidePendingAndRun('rejected')}
         onCancel={() => setReviewGate(null)}
+      />
+
+      <ConfirmDialog
+        isOpen={confirmRetranslate}
+        title={t('translation.documentRetranslateTitle')}
+        message={t('translation.documentRetranslateMessage')}
+        confirmLabel={t('translation.translateDocument')}
+        onConfirm={() => {
+          setConfirmRetranslate(false);
+          void submitDocument();
+        }}
+        onCancel={() => setConfirmRetranslate(false)}
       />
 
       {/* First change over a suggested passage: explain once, then act.
