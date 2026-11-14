@@ -1,5 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 
 import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
 
@@ -291,6 +298,7 @@ describe('Translation uploads larger than one batch', () => {
       url: '/api/file/source.pdf',
       lastPage: PAGE_COUNT,
       selectedPages: '1-2',
+      size: 8,
     });
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     expect(nameWorkflowConversation).toHaveBeenCalled();
@@ -437,5 +445,98 @@ describe('Translation uploads larger than one batch', () => {
     expect(
       screen.queryByRole('button', { name: 'translation.pagesNext' }),
     ).not.toBeInTheDocument();
+  });
+
+  describe('page sheets and the file card', () => {
+    const sheets = () => screen.queryByTestId('source-page-sheets');
+    const sheetPages = () =>
+      [...sheets()!.querySelectorAll('[data-source-page]')].map((sheet) =>
+        sheet.getAttribute('data-source-page'),
+      );
+    const sourceField = () =>
+      document.querySelector<HTMLTextAreaElement>(
+        'textarea[placeholder="translation.sourcePlaceholder"]',
+      )!;
+
+    it('shows the loaded pages as sheets, one per page, under the file card', async () => {
+      uploadPdf();
+      await waitFor(() => expect(sheets()).toBeInTheDocument());
+      expect(sheetPages()).toEqual(['1', '2']);
+      expect(
+        within(screen.getByTestId('source-document-card')).getByText(
+          'source.pdf',
+        ),
+      ).toBeInTheDocument();
+      expect(sourceField().hidden).toBe(true);
+    });
+
+    it('follows the page selection', async () => {
+      uploadPdf();
+      await waitFor(() => expect(sheets()).toBeInTheDocument());
+      fireEvent.click(
+        screen.getByRole('button', { name: 'translation.pagesNext' }),
+      );
+      await waitFor(() => expect(sheetPages()).toEqual(['3', '4']));
+    });
+
+    it('shows every page in whole-document mode', async () => {
+      uploadPdf();
+      await waitFor(() => expect(sheets()).toBeInTheDocument());
+      act(() => {
+        useConversationStore
+          .getState()
+          .updateWorkflowState('pdf-audit', (prev) => ({
+            ...(prev as TranslationWorkflowState),
+            mode: 'document',
+          }));
+      });
+      await waitFor(() =>
+        expect(sheetPages()).toEqual(['1', '2', '3', '4', '5']),
+      );
+      // The file is what gets translated there: no text to edit.
+      expect(
+        screen.queryByRole('button', { name: 'translation.sourceEditText' }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('switches to editable text, and stays there once the text no longer is the pages', async () => {
+      uploadPdf();
+      await waitFor(() => expect(sheets()).toBeInTheDocument());
+      fireEvent.click(
+        screen.getByRole('button', { name: 'translation.sourceEditText' }),
+      );
+      expect(sheets()).not.toBeInTheDocument();
+      expect(sourceField().hidden).toBe(false);
+      fireEvent.click(
+        screen.getByRole('button', { name: 'translation.sourceShowPages' }),
+      );
+      expect(sheets()).toBeInTheDocument();
+
+      fireEvent.click(
+        screen.getByRole('button', { name: 'translation.sourceEditText' }),
+      );
+      fireEvent.change(sourceField(), { target: { value: 'My own words' } });
+      expect(sheets()).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'translation.sourceShowPages' }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('removes the document and its text from the card', async () => {
+      uploadPdf();
+      await waitFor(() => expect(sheets()).toBeInTheDocument());
+      fireEvent.click(
+        screen.getByRole('button', {
+          name: 'translation.sourceRemoveDocument',
+        }),
+      );
+      expect(sourceState().sourceDocument).toBeUndefined();
+      expect(sourceState().sourceText).toBe('');
+      expect(sheets()).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('source-document-card'),
+      ).not.toBeInTheDocument();
+      expect(sourceField().hidden).toBe(false);
+    });
   });
 });
