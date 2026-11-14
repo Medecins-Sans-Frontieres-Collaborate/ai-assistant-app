@@ -21,6 +21,7 @@ import {
   MAX_PAGES_PER_READ,
   PagedTextUnsupportedError,
   TranslationFilesMissingError,
+  correctedPageNumbers,
   getPageCorrections,
   getTranslationPages,
   savePageCorrection,
@@ -102,13 +103,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       to,
       pages: record.pages.slice(from - 1, to).map((page) => ({
         ...page,
-        ...(corrections[page.page] && {
-          correction: corrections[page.page],
+        ...(corrections.has(page.page) && {
+          correction: corrections.get(page.page),
         }),
       })),
-      correctedPages: Object.keys(corrections)
-        .map(Number)
-        .sort((a, b) => a - b),
+      correctedPages: correctedPageNumbers(corrections),
     });
   } catch (error) {
     return pageErrorResponse(error);
@@ -149,10 +148,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     );
     return successResponse({
       page: body.page,
-      correction: corrections[body.page] ?? null,
-      correctedPages: Object.keys(corrections)
-        .map(Number)
-        .sort((a, b) => a - b),
+      correction: corrections.get(body.page) ?? null,
+      correctedPages: correctedPageNumbers(corrections),
     });
   } catch (error) {
     return pageErrorResponse(error);
