@@ -205,3 +205,40 @@ layout, and then reads the result page by page.
   switches to Whole document. In the reader the source side of such a page
   has no text, so quality assessment is unavailable for it; reading the file
   with OCR first gives a source to compare against.
+
+## Change requests
+
+The user can ask for a change to a translation in words ("make it more
+formal", "say tableta"). The request never rewrites the text: it comes back
+as individual edits in the review column, each accepted or rejected on its
+own.
+
+- **Three ways in, one path.** The bar under the panes
+  (`ChangeRequestBar`), a popover on highlighted text
+  (`SelectionChangeRequest`) and the conversation rail all end in
+  `runChangeRequest` in `TranslationWorkspace`.
+- **Server.** `POST /api/workflows/translation/revise` takes the
+  instruction, the source (optional: a scanned page has none), the
+  translation, the target language, the glossaries, an optional
+  `selection {text, start}` and the UI locale. It returns `{reply, edits}`
+  from one structured call (`runTranslationChangeRequest`). A message that
+  is a question returns a reply and no edits.
+- **Where the edits live.** In the same `assessment` slot as quality
+  assessment edits, marked by `assessment.request` (`criteria` is empty and
+  `overallSummary` holds the reply). Accept, reject, undo, the highlights,
+  the pending-suggestions dialog and, in Whole document mode, saving the
+  page correction are therefore the assessment code paths, not copies.
+  A request that produces no edits leaves the slot untouched.
+- **Selections.** Edits must lie inside the selected passage (enforced in
+  the prompt and by `sanitizeChangeEdits`) and are anchored with
+  `stampSelectionAnchors`, so a phrase that also occurs elsewhere changes
+  only where it was highlighted.
+- **The rail.** `translationRailChat.sendRailMessage` parks the instruction
+  in `workflowRailStore.workspaceRequests`; the workspace takes it, runs it
+  and calls `settle(reply)`, which the rail posts as the assistant message.
+  The shell mounts a workspace per layout and hides one with CSS, so only
+  the copy on screen takes a request (`checkVisibility`). If no workspace
+  takes it within `WORKSPACE_PICKUP_TIMEOUT_MS` the rail answers for itself.
+- **Limits.** Instruction `MAX_CHANGE_INSTRUCTION_CHARS` (2,000), at most
+  `MAX_CHANGE_EDITS` (20) edits, texts up to 60,000 characters. Runs debit
+  the shared token budget like every workflow call.
