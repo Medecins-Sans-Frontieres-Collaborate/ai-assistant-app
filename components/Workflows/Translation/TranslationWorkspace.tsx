@@ -24,7 +24,7 @@ import {
 } from 'react';
 import toast from 'react-hot-toast';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { useAvailableGuides } from '@/client/hooks/settings/useAvailableGuides';
 import {
@@ -51,6 +51,7 @@ import {
 } from '@/client/services/workflows/fileTextExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
 import { assessTranslation } from '@/client/services/workflows/translationAssessment';
+import { requestTranslationChange } from '@/client/services/workflows/translationChangeRequest';
 import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
 import { AGENTIC_TRANSLATION_MAX_PASSES } from '@/lib/services/workflows/shared/workflowLimits';
 
@@ -81,6 +82,11 @@ import {
   invertPatch,
   withoutResolvedEdits,
 } from '@/lib/utils/shared/review/reviewQueue';
+import {
+  CHANGE_REQUEST_CRITERION,
+  ChangeSelection,
+  stampSelectionAnchors,
+} from '@/lib/utils/shared/translation/changeRequest';
 import {
   fileExtensionOf,
   leaveDocumentReader,
@@ -144,18 +150,21 @@ import { PendingEditsDialog } from '../Shared/Review/PendingEditsDialog';
 import { WorkflowWorkspaceProps } from '../registry';
 import { AnalysisStrip } from './AnalysisStrip';
 import { AssessmentProgress } from './AssessmentProgress';
+import { ChangeRequestBar } from './ChangeRequestBar';
 import { DocumentDownloadMenu } from './DocumentDownloadMenu';
 import { DocumentJobProgress } from './DocumentJobProgress';
 import { DocumentReaderBar } from './DocumentReaderBar';
 import { GlossaryManager } from './GlossaryManager';
 import { GlossaryPicker, languageFit } from './GlossaryPicker';
 import { OcrOffer, OcrOfferReason } from './OcrOffer';
+import { SelectionChangeRequest } from './SelectionChangeRequest';
 import { SourcePageSelector } from './SourcePageSelector';
 import { TranslationRunStatus } from './TranslationRunStatus';
 import { UploadProgress } from './UploadProgress';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { useWorkflowRailStore } from '@/client/stores/workflowRailStore';
 import { useWorkflowRunStore } from '@/client/stores/workflowRunStore';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -166,6 +175,21 @@ type PageDeparture = { page: number } | { mode: TranslationMode };
 const MAX_SOURCE_CHARS = 60_000;
 
 const ACCEPTED_UPLOADS = '.pdf,.doc,.docx,.txt,.md,.xml,.ppt,.pptx';
+
+/** A change to the translation asked for in words, from the bar or the rail. */
+interface ChangeRequestInput {
+  instruction: string;
+  /** Limits the edits to one passage of the translation. */
+  selection?: ChangeSelection;
+  /** The rail's stop button. */
+  signal?: AbortSignal;
+  /**
+   * Given by the rail, which shows the reply as the assistant's message.
+   * Without it the request came from the workspace, which logs the
+   * exchange in the rail itself.
+   */
+  settle?: (reply: string) => void;
+}
 
 export function TranslationWorkspace({
   conversationId,
@@ -239,6 +263,17 @@ export function TranslationWorkspace({
   } | null>(null);
   const [assessing, setAssessing] = useState(false);
   const [assessError, setAssessError] = useState<string | null>(null);
+  // A change the user asked for in words, while the server works on it.
+  const [changeRun, setChangeRun] = useState<{
+    instruction: string;
+    startedAt: number;
+  } | null>(null);
+  const [changeNote, setChangeNote] = useState<string | null>(null);
+  const [changeError, setChangeError] = useState<string | null>(null);
+  const changeAbortRef = useRef<AbortController | null>(null);
+  const locale = useLocale();
+  // The request waiting behind the pending-suggestions dialog.
+  const heldChangeRef = useRef<ChangeRequestInput | null>(null);
   // Built-ins on by default; custom criteria start off, so adding one
   // never silently changes what the next assessment measures.
   const [selectedCriteria, setSelectedCriteria] = useState<Set<string>>(
@@ -1425,6 +1460,143 @@ export function TranslationWorkspace({
   );
 
   /**
+   * Carries out a change the user asked for in words: the instruction goes
+   * to the server with the text in view and comes back as suggested edits in
+   * the review column. Nothing is applied until the user accepts an edit.
+   * A message that is a question comes back as a reply with no edits, and
+   * leaves the review column as it was.
+   */
+  const runChangeRequest = useCallback(
+    async (request: ChangeRequestInput) => {
+      const fromRail = Boolean(request.settle);
+      /** Says why nothing happened, where the request was made. */
+      const refuse = (message: string) => {
+        if (request.settle) request.settle(message);
+        else setChangeError(message);
+      };
+      const translation = state?.finalText ?? '';
+      if (
+        !state ||
+        !targetLanguage ||
+        !translation.trim() ||
+        (documentMode && !pageInPane)
+      ) {
+        refuse(t('translation.changeNoTranslation'));
+        return;
+      }
+      if (isRunning || assessing || changeRun) {
+        refuse(t('translation.changeBusy'));
+        return;
+      }
+      // New edits replace the queue outright: settle it first (§6b).
+      if (hasUnresolvedEdits) {
+        heldChangeRef.current = request;
+        setReviewGate('request');
+        return;
+      }
+
+      setChangeError(null);
+      setChangeNote(null);
+      setEditingTarget(false);
+      setChangeRun({ instruction: request.instruction, startedAt: Date.now() });
+      const abort = new AbortController();
+      changeAbortRef.current = abort;
+      const stopFromRail = () => abort.abort();
+      request.signal?.addEventListener('abort', stopFromRail);
+      if (request.signal?.aborted) abort.abort();
+
+      let reply: string;
+      try {
+        const result = await requestTranslationChange({
+          signal: abort.signal,
+          sourceText: activeSource,
+          translation,
+          targetLanguage: targetLanguage.label,
+          instruction: request.instruction,
+          selection: request.selection,
+          interfaceLocale: locale,
+          glossaryEntries: activeGlossaryEntries,
+          glossaryGuideIds: selectedOrgIds,
+          modelId: conversation?.model?.id,
+          conversationId,
+        });
+        if (result.edits.length === 0) {
+          reply = result.reply || t('translation.changeNoEdits');
+          if (!fromRail) setChangeNote(reply);
+        } else {
+          const minted = result.edits.map((edit) => ({
+            ...edit,
+            criterion: CHANGE_REQUEST_CRITERION,
+            severity: 'minor' as const,
+            id: uuidv4(),
+            status: 'pending' as const,
+          }));
+          patchState({
+            assessment: {
+              id: uuidv4(),
+              criteria: [],
+              overallSummary: result.reply,
+              // A selection pins each edit to where the user selected it;
+              // otherwise anchor against the translation as sent.
+              edits: request.selection
+                ? stampSelectionAnchors(translation, request.selection, minted)
+                : stampEditAnchors(translation, minted),
+              createdAt: new Date().toISOString(),
+              request: {
+                instruction: request.instruction,
+                ...(request.selection && {
+                  selectedText: request.selection.text,
+                }),
+              },
+            },
+          });
+          setReviewOpen(true);
+          const pendingLine = t('translation.changeReplyPending', {
+            count: result.edits.length,
+          });
+          reply = result.reply
+            ? `${result.reply}\n\n${pendingLine}`
+            : pendingLine;
+        }
+      } catch (err) {
+        if (abort.signal.aborted) {
+          // Stopping is the user's decision, not a failure.
+          reply = t('translation.changeStopped');
+        } else {
+          reply =
+            err instanceof Error ? err.message : t('translation.changeFailed');
+          if (!fromRail) setChangeError(reply);
+        }
+      } finally {
+        request.signal?.removeEventListener('abort', stopFromRail);
+        setChangeRun(null);
+      }
+      if (request.settle) request.settle(reply);
+      else {
+        appendWorkflowRailMessages(conversationId, request.instruction, reply);
+      }
+    },
+    [
+      state,
+      targetLanguage,
+      documentMode,
+      pageInPane,
+      isRunning,
+      assessing,
+      changeRun,
+      hasUnresolvedEdits,
+      activeSource,
+      activeGlossaryEntries,
+      selectedOrgIds,
+      conversation?.model?.id,
+      conversationId,
+      locale,
+      patchState,
+      t,
+    ],
+  );
+
+  /**
    * An AI run asked for while suggestions were still pending
    * (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §6b). The dialog decides the queue in
    * bulk; the run itself is QUEUED rather than called from the dialog's
@@ -1434,11 +1606,11 @@ export function TranslationWorkspace({
    * `resolveAll` would read the render's stale closure and send the model the
    * pre-decision document, silently discarding what the user just accepted.
    */
-  const [reviewGate, setReviewGate] = useState<'translate' | 'assess' | null>(
-    null,
-  );
+  const [reviewGate, setReviewGate] = useState<
+    'translate' | 'assess' | 'request' | null
+  >(null);
   const [queuedAction, setQueuedAction] = useState<
-    'translate' | 'assess' | null
+    'translate' | 'assess' | 'request' | null
   >(null);
   const decidePendingAndRun = useCallback(
     (decision: 'accepted' | 'rejected') => {
@@ -1454,8 +1626,51 @@ export function TranslationWorkspace({
     if (!queuedAction || hasUnresolvedEdits) return;
     setQueuedAction(null);
     if (queuedAction === 'translate') void handleTranslate();
-    else void handleAssess();
-  }, [queuedAction, hasUnresolvedEdits, handleTranslate, handleAssess]);
+    else if (queuedAction === 'assess') void handleAssess();
+    else {
+      const held = heldChangeRef.current;
+      heldChangeRef.current = null;
+      if (held) void runChangeRequest(held);
+    }
+  }, [
+    queuedAction,
+    hasUnresolvedEdits,
+    handleTranslate,
+    handleAssess,
+    runChangeRequest,
+  ]);
+
+  /** Closes the pending-suggestions dialog without running anything. */
+  const cancelReviewGate = useCallback(() => {
+    if (reviewGate === 'request') {
+      // The rail is waiting for an answer to what the user typed there.
+      heldChangeRef.current?.settle?.(t('translation.changeHeld'));
+      heldChangeRef.current = null;
+    }
+    setReviewGate(null);
+  }, [reviewGate, t]);
+
+  // An instruction typed in the conversation rail is parked for the
+  // workspace, which holds everything the request needs. Taking it removes
+  // it, so a repeated effect run cannot act on the same request twice.
+  const parkedRailRequest = useWorkflowRailStore(
+    (store) => store.workspaceRequests[conversationId],
+  );
+  const runRailRequest = useEffectEvent((request: ChangeRequestInput) => {
+    void runChangeRequest(request);
+  });
+  useEffect(() => {
+    if (!parkedRailRequest) return;
+    const taken = useWorkflowRailStore
+      .getState()
+      .takeWorkspaceRequest(conversationId, parkedRailRequest.id);
+    if (!taken) return;
+    runRailRequest({
+      instruction: taken.text,
+      signal: taken.signal,
+      settle: taken.settle,
+    });
+  }, [parkedRailRequest, conversationId]);
 
   const documentEligibility = wholeDocumentEligibility(
     state?.sourceDocument,
@@ -1587,6 +1802,7 @@ export function TranslationWorkspace({
     !isRunning &&
     !uploading &&
     !assessing &&
+    !changeRun &&
     !!targetLanguage &&
     activeSource.trim().length > 0 &&
     (state.finalText ?? '').trim().length > 0 &&
@@ -2288,18 +2504,31 @@ export function TranslationWorkspace({
                       />
                     </>
                   ) : targetText ? (
-                    <AnnotatedText
+                    <SelectionChangeRequest
                       text={targetText}
-                      edits={previewEdits}
-                      activeId={preview.activeId}
-                      pinnedId={preview.pinnedId}
-                      onPin={preview.setPinned}
-                      onHover={preview.setHovered}
-                      i18nNamespace="workflows.translation"
-                      onAccept={(id) => resolveEdit(id, 'accepted')}
-                      onReject={(id) => resolveEdit(id, 'rejected')}
-                      disabled={assessing || isRunning}
-                    />
+                      disabled={
+                        isDraft ||
+                        assessing ||
+                        changeRun !== null ||
+                        (documentMode && !pageInPane)
+                      }
+                      onSubmit={(instruction, selection) =>
+                        void runChangeRequest({ instruction, selection })
+                      }
+                    >
+                      <AnnotatedText
+                        text={targetText}
+                        edits={previewEdits}
+                        activeId={preview.activeId}
+                        pinnedId={preview.pinnedId}
+                        onPin={preview.setPinned}
+                        onHover={preview.setHovered}
+                        i18nNamespace="workflows.translation"
+                        onAccept={(id) => resolveEdit(id, 'accepted')}
+                        onReject={(id) => resolveEdit(id, 'rejected')}
+                        disabled={assessing || isRunning}
+                      />
+                    </SelectionChangeRequest>
                   ) : (
                     <span className="text-gray-400 dark:text-gray-500">
                       {t('translation.targetEmpty')}
@@ -2309,6 +2538,27 @@ export function TranslationWorkspace({
               )}
             </div>
           </div>
+
+          {/* Ask for a change in words; the answer is suggested edits. */}
+          {(state.finalText ?? '').trim().length > 0 &&
+            (!documentMode || pageInPane) && (
+              <ChangeRequestBar
+                runningInstruction={changeRun?.instruction}
+                runningSince={changeRun?.startedAt}
+                hasResult={Boolean(assessment?.request)}
+                disabledReason={
+                  isRunning || assessing
+                    ? t('translation.changeBusy')
+                    : undefined
+                }
+                note={changeNote}
+                error={changeError}
+                onSubmit={(instruction) =>
+                  void runChangeRequest({ instruction })
+                }
+                onStop={() => changeAbortRef.current?.abort()}
+              />
+            )}
 
           {/* Quality assessment controls */}
           {(state.finalText ?? '').trim().length > 0 && (
@@ -2413,6 +2663,15 @@ export function TranslationWorkspace({
               assessment={assessment}
               resolveCriterionLabel={resolveCriterionLabel}
               i18nNamespace="workflows.translation"
+              request={
+                assessment.request && {
+                  title: t('translation.changeTitle'),
+                  instruction: assessment.request.instruction,
+                  selectedText: assessment.request.selectedText,
+                  selectedLabel: t('translation.changeSelectedLabel'),
+                  emptyMessage: t('translation.changeNoEdits'),
+                }
+              }
               previewEditId={preview.activeId}
               onPreviewEdit={preview.setHovered}
               onAccept={(id) => resolveEdit(id, 'accepted')}
@@ -2424,7 +2683,7 @@ export function TranslationWorkspace({
               autoClearResolved={autoClearResolvedEdits}
               onToggleAutoClear={setAutoClearResolvedEdits}
               onClose={() => setReviewOpen(false)}
-              disabled={assessing || isRunning}
+              disabled={assessing || isRunning || changeRun !== null}
             />
           </div>
         )}
@@ -2475,11 +2734,13 @@ export function TranslationWorkspace({
         actionLabel={
           reviewGate === 'assess'
             ? t('translation.pendingRunActionAssess')
-            : t('translation.pendingRunActionTranslate')
+            : reviewGate === 'request'
+              ? t('translation.pendingRunActionRequest')
+              : t('translation.pendingRunActionTranslate')
         }
         onAcceptAll={() => decidePendingAndRun('accepted')}
         onRejectAll={() => decidePendingAndRun('rejected')}
-        onCancel={() => setReviewGate(null)}
+        onCancel={cancelReviewGate}
       />
       <PendingEditsDialog
         isOpen={departureGate !== null}
