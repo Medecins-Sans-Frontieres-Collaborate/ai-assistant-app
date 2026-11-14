@@ -26,7 +26,8 @@ export const localeToAutonym: Record<string, string> = {
   ja: '日本語',
   km: 'ខ្មែរ',
   ko: '한국어',
-  ku: 'Kurdî',
+  // Central Kurdish (Sorani); see RTL_LOCALES below for the choice.
+  ku: 'کوردی (سۆرانی)',
   ln: 'Lingála',
   mg: 'Malagasy',
   my: 'မြန်မာဘာသာ',
@@ -89,10 +90,27 @@ export const getOfficialTermsLanguageName = (locale: string): string => {
 };
 
 /**
- * Supported locales written right to left. Kurdish (`ku`) is offered in its
- * Latin script (Kurmanji) and therefore reads left to right.
+ * Supported locales written right to left.
+ *
+ * Kurdish: `ku` is the Kurdish macrolanguage, and the app offers ONE variety
+ * under it — Central Kurdish (Sorani), written in the Arabic script and
+ * therefore right to left. Northern Kurdish (Kurmanji, Latin script, left to
+ * right) is not offered; if it is added it needs its own locale (`kmr`), not
+ * a share of this one. scripts/translateMissing.ts names the same variety so
+ * translations cannot drift between the two.
+ *
+ * This list is checked against the translations themselves in
+ * __tests__/config/locale-direction.test.ts: a locale whose strings are
+ * written in a right-to-left script must appear here, and no other may.
  */
-export const RTL_LOCALES: readonly string[] = ['ar', 'fa', 'ps', 'ur'];
+export const RTL_LOCALES: readonly string[] = [
+  'ar',
+  'fa',
+  'he',
+  'ku',
+  'ps',
+  'ur',
+];
 
 /**
  * Whether a locale's script runs right to left.
