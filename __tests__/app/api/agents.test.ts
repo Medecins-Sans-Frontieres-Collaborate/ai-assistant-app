@@ -235,6 +235,8 @@ describe('GET /api/agents — access-control discovery filter', () => {
         agentName: 'prompt-abc123def456',
         source: PROMPT_AGENT_SOURCE,
         type: 'prompt',
+        // Prompt agents allow web search unless their owner turned it off.
+        allowWebSearch: true,
       });
       // Access-evaluated under the prompt-agent pseudo-source.
       expect(accessEvaluate).toHaveBeenCalledWith({
@@ -292,6 +294,7 @@ describe('GET /api/agents — access-control discovery filter', () => {
             agentName: 'prompt-abc123def456',
             source: PROMPT_AGENT_SOURCE,
             type: 'prompt',
+            allowWebSearch: true,
           },
         ],
         suppressedOrgAgentIds: [],
