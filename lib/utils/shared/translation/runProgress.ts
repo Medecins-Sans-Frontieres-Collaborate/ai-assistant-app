@@ -6,6 +6,7 @@
 import {
   TranslationAnalysis,
   TranslationReviewRound,
+  TranslationTextMode,
   TranslationWorkflowState,
 } from '@/types/workflow';
 
@@ -34,10 +35,7 @@ export interface ProgressStep<Id extends string = string> {
   status: ProgressStepStatus;
 }
 
-const STAGES_BY_MODE: Record<
-  TranslationWorkflowState['mode'],
-  TranslationRunStage[]
-> = {
+const STAGES_BY_MODE: Record<TranslationTextMode, TranslationRunStage[]> = {
   quick: ['translating'],
   agentic: ['analyzing', 'translating', 'reviewing'],
 };
@@ -52,7 +50,7 @@ const STAGES_BY_MODE: Record<
  */
 export function deriveRunStage(
   activityKey: string | undefined,
-  mode: TranslationWorkflowState['mode'],
+  mode: TranslationTextMode,
 ): TranslationRunStage {
   const stages = STAGES_BY_MODE[mode];
   const reported = (
@@ -92,7 +90,7 @@ export function buildProgressSteps<Id extends string>(
  * @param stage - The step in progress.
  */
 export function translationRunSteps(
-  mode: TranslationWorkflowState['mode'],
+  mode: TranslationTextMode,
   stage: TranslationRunStage,
 ): ProgressStep<TranslationRunStage | 'done'>[] {
   return buildProgressSteps<TranslationRunStage | 'done'>(
