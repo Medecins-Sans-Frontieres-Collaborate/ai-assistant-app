@@ -3,6 +3,7 @@ import {
   IconBookmarkPlus,
   IconCode,
   IconDownload,
+  IconEye,
   IconFileText,
 } from '@tabler/icons-react';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
@@ -18,8 +19,14 @@ import {
   Message,
 } from '@/types/chat';
 
+import {
+  FilePreviewModal,
+  PreviewableFile,
+} from '@/components/Chat/ChatMessages/FilePreviewModal';
+
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { isPagePreviewable } from '@/lib/constants/filePreview';
 
 /**
  * Component to display image files
@@ -205,6 +212,8 @@ export const FileContent: FC<FileContentProps> = ({
 }) => {
   const t = useTranslations();
   const { openArtifact, openDocument } = useArtifactStore();
+  const tPreview = useTranslations('filePreview');
+  const [previewed, setPreviewed] = useState<PreviewableFile | null>(null);
   const [isLoadingFile, setIsLoadingFile] = useState<string | null>(null);
 
   const selectedConversationId = useConversationStore(
@@ -536,6 +545,21 @@ export const FileContent: FC<FileContentProps> = ({
                     />
                   </button>
                 )}
+                {/* Page preview (Word, PowerPoint, Excel, PDF) */}
+                {isPagePreviewable(filename) && (
+                  <button
+                    onClick={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      setPreviewed({ url: file.url, filename });
+                    }}
+                    className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    title={tPreview('preview')}
+                    aria-label={tPreview('preview')}
+                  >
+                    <IconEye className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                  </button>
+                )}
                 {/* Open in Code Editor button (only for code files) */}
                 {isCode && (
                   <button
@@ -605,6 +629,7 @@ export const FileContent: FC<FileContentProps> = ({
           </div>
         );
       })}
+      <FilePreviewModal file={previewed} onClose={() => setPreviewed(null)} />
     </div>
   );
 };
