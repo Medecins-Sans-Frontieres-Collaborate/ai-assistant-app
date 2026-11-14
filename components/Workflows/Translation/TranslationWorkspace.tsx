@@ -1886,6 +1886,8 @@ export function TranslationWorkspace({
                   documentJob.status === 'preparing') ? (
                   <DocumentJobProgress
                     job={{ ...documentJob, status: documentJob.status }}
+                    stalled={reader.stalled}
+                    onRetry={reader.retryStatus}
                   />
                 ) : documentJob?.status === 'failed' || reader.pageError ? (
                   <div
