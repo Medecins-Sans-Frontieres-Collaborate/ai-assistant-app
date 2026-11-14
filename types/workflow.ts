@@ -238,6 +238,56 @@ export interface TranslationSourceDocument {
   selectedPages: string;
 }
 
+/** How a translation is produced. */
+export type TranslationMode = 'quick' | 'agentic' | 'document';
+
+/** The modes that translate the source text with the language model. */
+export type TranslationTextMode = Exclude<TranslationMode, 'document'>;
+
+/**
+ * A whole-document translation the conversation refers to. A reference
+ * only: the files, the per-page text and the corrections live on the
+ * server, never in workflow state.
+ */
+export interface TranslationDocumentJob {
+  jobId: string;
+  /**
+   * `translating`: the job is running. `preparing`: the translated file
+   * exists and its page text is being read for the first time. `ready`:
+   * pages can be read. `failed`: terminal, see `error`.
+   */
+  status: 'translating' | 'preparing' | 'ready' | 'failed';
+  /** ISO timestamp of the submission. */
+  submittedAt: string;
+  /** Name of the uploaded file. */
+  sourceName: string;
+  /** Name of the translated file, used for downloads. */
+  translatedFilename: string;
+  /** Lowercase file extension without the dot. */
+  fileExtension: string;
+  /** Target language code the job was submitted with. */
+  targetLanguage: string;
+  /** ISO timestamp after which the server deletes the files. */
+  expiresAt?: string;
+  /** Known once the page text has been read. */
+  pageCount?: number;
+  /** 1-based page the reader is on. */
+  page: number;
+  /**
+   * The page whose translation currently occupies `finalText`, or undefined
+   * while the reader has not taken the pane over.
+   */
+  viewPage?: number;
+  /** Failure message when `status` is `failed`. */
+  error?: string;
+}
+
+/** The text-mode result set aside while the reader occupies the pane. */
+export interface TranslationTextResult {
+  finalText?: string;
+  assessment?: TranslationAssessment;
+}
+
 export interface TranslationWorkflowState {
   kind: 'translation';
   sourceText: string;
@@ -246,6 +296,14 @@ export interface TranslationWorkflowState {
    * large to translate in one batch.
    */
   sourceDocument?: TranslationSourceDocument;
+  /** The whole-document translation of `sourceDocument`, if one was run. */
+  documentJob?: TranslationDocumentJob;
+  /**
+   * `finalText` and `assessment` as they were before the document reader
+   * took the translation pane over; restored when the user leaves
+   * `document` mode.
+   */
+  textModeResult?: TranslationTextResult;
   sourceLang?: string;
   /** Legacy locale-code field; superseded by targetLanguage. */
   targetLang?: string;
@@ -270,7 +328,12 @@ export interface TranslationWorkflowState {
    * glossaries', first guide winning among guides.
    */
   glossaryGuideIds?: string[];
-  mode: 'quick' | 'agentic';
+  /**
+   * `quick` and `agentic` translate the source text with the language
+   * model. `document` sends the whole uploaded file through document
+   * translation (layout kept) and reads the result page by page.
+   */
+  mode: TranslationMode;
   analysis?: TranslationAnalysis;
   rounds: TranslationReviewRound[];
   /** Deterministic glossary check of the run's final text (issue #131). */
