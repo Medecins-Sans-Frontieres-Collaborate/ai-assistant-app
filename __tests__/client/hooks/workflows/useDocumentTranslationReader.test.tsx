@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 
 import {
   CORRECTION_SAVE_DELAY_MS,
+  MAX_CONSECUTIVE_STATUS_FAILURES,
   READER_PAGE_WINDOW,
   pageWindowStart,
   useDocumentTranslationReader,
@@ -182,6 +183,53 @@ describe('following a running job', () => {
       await settle();
       expect(host.job).toMatchObject({ status: 'failed', error: '' });
     });
+  });
+
+  it('stalls only after a full run of failed checks, and resumes on retry', async () => {
+    vi.useFakeTimers();
+    vi.mocked(fetchDocumentJobStatus).mockRejectedValue(new Error('502'));
+    const { host, view } = mountReader({
+      job: { ...baseJob, status: 'translating' },
+    });
+    const advance = async (checks: number) => {
+      for (let n = 0; n < checks; n += 1) {
+        await act(async () => {
+          await vi.advanceTimersByTimeAsync(2_000);
+        });
+      }
+    };
+    await advance(MAX_CONSECUTIVE_STATUS_FAILURES - 2);
+    expect(vi.mocked(fetchDocumentJobStatus).mock.calls.length).toBe(
+      MAX_CONSECUTIVE_STATUS_FAILURES - 1,
+    );
+    expect(view.result.current.stalled).toBe(false);
+
+    await advance(1);
+    expect(fetchDocumentJobStatus).toHaveBeenCalledTimes(
+      MAX_CONSECUTIVE_STATUS_FAILURES,
+    );
+    // The query client delivers the error to observers on a later tick.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1);
+    });
+    expect(view.result.current.stalled).toBe(true);
+    expect(host.job?.status).toBe('translating');
+
+    // Stalled means checking has stopped.
+    await advance(5);
+    expect(fetchDocumentJobStatus).toHaveBeenCalledTimes(
+      MAX_CONSECUTIVE_STATUS_FAILURES,
+    );
+
+    vi.mocked(fetchDocumentJobStatus).mockResolvedValue({
+      status: 'Failed',
+      error: 'bad pdf',
+    });
+    await act(async () => {
+      view.result.current.retryStatus();
+      await vi.advanceTimersByTimeAsync(0);
+    });
+    expect(host.job).toMatchObject({ status: 'failed', error: 'bad pdf' });
   });
 
   it('keeps following while another mode is active, but reads no pages', async () => {
