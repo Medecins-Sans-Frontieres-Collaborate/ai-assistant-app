@@ -18,6 +18,8 @@ export interface RequestTranslationChangeInput {
   instruction: string;
   /** Limits the edits to one passage of the translation. */
   selection?: ChangeSelection;
+  /** The user's UI locale; decides the reply language when in doubt. */
+  interfaceLocale?: string;
   glossaryEntries?: GlossaryEntry[];
   glossaryGuideIds?: string[];
   modelId?: string;
