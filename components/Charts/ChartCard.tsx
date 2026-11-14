@@ -73,7 +73,7 @@ export const ChartCard: FC<ChartCardProps> = ({
 
       {asTable ? (
         <div className="max-h-80 overflow-auto">
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-start text-sm">
             <thead className="sticky top-0 bg-white text-xs text-gray-500 dark:bg-surface-dark dark:text-gray-400">
               <tr>
                 {table.columns.map((column, index) => (
@@ -81,7 +81,7 @@ export const ChartCard: FC<ChartCardProps> = ({
                     key={`${column}-${index}`}
                     scope="col"
                     className={`border-b border-gray-200 px-2 py-1.5 font-medium dark:border-gray-700 ${
-                      index === 0 ? '' : 'text-right'
+                      index === 0 ? '' : 'text-end'
                     }`}
                   >
                     {column}
@@ -96,7 +96,7 @@ export const ChartCard: FC<ChartCardProps> = ({
                     <td
                       key={index}
                       className={`border-b border-gray-100 px-2 py-1.5 dark:border-gray-800 ${
-                        index === 0 ? '' : 'text-right tabular-nums'
+                        index === 0 ? '' : 'text-end tabular-nums'
                       }`}
                     >
                       {cell === null
