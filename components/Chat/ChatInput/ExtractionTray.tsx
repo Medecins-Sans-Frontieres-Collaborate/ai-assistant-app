@@ -105,7 +105,7 @@ export const ExtractionTray: FC = () => {
             <button
               type="button"
               onClick={() => removeRecipeId(recipe.id)}
-              className="ml-0.5 rounded-sm p-0.5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="ms-0.5 rounded-sm p-0.5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               aria-label={t('removeRecipe', { name: recipe.name })}
               title={t('remove')}
             >
@@ -139,7 +139,7 @@ export const ExtractionTray: FC = () => {
         </button>
 
         <span
-          className="ml-auto inline-flex items-center text-gray-400 dark:text-gray-500"
+          className="ms-auto inline-flex items-center text-gray-400 dark:text-gray-500"
           title={t('trayInfo')}
         >
           <IconInfoCircle size={14} aria-hidden="true" />

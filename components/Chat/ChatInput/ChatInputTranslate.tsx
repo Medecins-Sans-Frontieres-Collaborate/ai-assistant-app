@@ -193,7 +193,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
           <input
             type="text"
             placeholder={t('chat.typeLanguagePlaceholder')}
-            className="flex-1 pl-4 pr-10 py-3 text-base bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
+            className="flex-1 ps-4 pe-10 py-3 text-base bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
             value={targetLanguage}
             onChange={(e) => setTargetLanguage(e.target.value)}
           />
@@ -220,7 +220,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
           {t('advancedOptionsButton')}
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className={`h-5 w-5 ml-2 transform transition-transform ${showAdvanced ? 'rotate-180' : ''}`}
+            className={`h-5 w-5 ms-2 transform transition-transform ${showAdvanced ? 'rotate-180' : ''}`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -304,7 +304,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
                 />
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-3 sm:space-y-0 mt-5">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 sm:rtl:space-x-reverse space-y-3 sm:space-y-0 mt-5">
               <div className="flex items-center">
                 <input
                   id="use-formal-language"
@@ -315,7 +315,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
                 />
                 <label
                   htmlFor="use-formal-language"
-                  className="ml-3 block text-sm font-medium text-gray-900 dark:text-gray-100"
+                  className="ms-3 block text-sm font-medium text-gray-900 dark:text-gray-100"
                 >
                   {t('translatorFormalLanguageLabel')}
                 </label>
@@ -332,7 +332,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
                 />
                 <label
                   htmlFor="use-gender-gray-language"
-                  className="ml-3 block text-sm font-medium text-gray-900 dark:text-gray-100"
+                  className="ms-3 block text-sm font-medium text-gray-900 dark:text-gray-100"
                 >
                   {t('translatorGenderNeutralLabel')}
                 </label>
@@ -352,7 +352,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
         />
         <label
           htmlFor="auto-submit"
-          className="ml-3 block text-sm font-medium text-gray-900 dark:text-gray-100"
+          className="ms-3 block text-sm font-medium text-gray-900 dark:text-gray-100"
         >
           {t('autoSubmitButton')}
         </label>

@@ -1539,7 +1539,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         aria-haspopup="menu"
         aria-expanded={isOpen}
         aria-label={t('common.toggleDropdownMenu')}
-        className="focus:outline-none inline-flex items-center justify-center min-h-11 px-2.5 -ml-2.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+        className="focus:outline-none inline-flex items-center justify-center min-h-11 px-2.5 -ms-2.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
       >
         <IconCirclePlus className="w-7 h-7 md:w-6 md:h-6 text-black dark:text-white" />
       </button>
@@ -1620,7 +1620,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           return (
             <div
               ref={dropdownRef}
-              className={`absolute ${openDownward ? 'top-full mt-2 z-[10000]' : 'bottom-full mb-2 z-[9999]'} left-0 flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-80 outline-none overflow-hidden ${
+              className={`absolute ${openDownward ? 'top-full mt-2 z-[10000]' : 'bottom-full mb-2 z-[9999]'} start-0 flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-80 outline-none overflow-hidden ${
                 openDownward ? 'animate-slide-down-reverse' : 'animate-slide-up'
               }`}
               tabIndex={-1}
@@ -1701,7 +1701,7 @@ const Dropdown: React.FC<DropdownProps> = ({
               setSelectedToneId(null);
               setIsToneOpen(false);
             }}
-            className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all mb-2 ${
+            className={`w-full text-start px-4 py-3 rounded-lg border-2 transition-all mb-2 ${
               !selectedToneId
                 ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                 : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
@@ -1722,7 +1722,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                 setSelectedToneId(tone.id);
                 setIsToneOpen(false);
               }}
-              className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all mb-2 ${
+              className={`w-full text-start px-4 py-3 rounded-lg border-2 transition-all mb-2 ${
                 selectedToneId === tone.id
                   ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                   : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'

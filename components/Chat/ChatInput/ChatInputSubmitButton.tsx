@@ -54,7 +54,7 @@ const ChatInputSubmitButton: FC<ChatInputSubmitButtonProps> = ({
           aria-label={t('chat.sendMessage')}
         >
           <IconArrowUp size={18} className="md:hidden" />
-          <IconSend2 size={16} className="hidden md:block ml-0.5" />
+          <IconSend2 size={16} className="hidden md:block ms-0.5" />
         </button>
       )}
     </>

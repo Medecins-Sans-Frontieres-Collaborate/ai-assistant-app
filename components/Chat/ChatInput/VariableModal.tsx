@@ -119,20 +119,20 @@ export const VariableModal: FC<Props> = ({
     >
       <div
         ref={modalRef}
-        className="relative inline-block max-h-[90vh] w-full max-w-lg transform overflow-hidden rounded-xl border border-gray-200 bg-white text-left align-bottom shadow-xl transition-all dark:border-gray-700 dark:bg-surface-dark sm:my-8 sm:align-middle animate-modal-in"
+        className="relative inline-block max-h-[90vh] w-full max-w-lg transform overflow-hidden rounded-xl border border-gray-200 bg-white text-start align-bottom shadow-xl transition-all dark:border-gray-700 dark:bg-surface-dark sm:my-8 sm:align-middle animate-modal-in"
         role="dialog"
       >
         {/* Header */}
         <div className="relative border-b border-gray-200 bg-blue-50 px-6 py-5 dark:border-gray-700 dark:bg-blue-900/20">
           <button
             onClick={onClose}
-            className="absolute right-4 top-4 p-1 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors rounded-lg hover:bg-white/50 dark:hover:bg-black/30"
+            className="absolute end-4 top-4 p-1 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors rounded-lg hover:bg-white/50 dark:hover:bg-black/30"
             aria-label={t('common.close')}
           >
             <IconX size={20} />
           </button>
 
-          <div className="flex items-start gap-3 pr-8">
+          <div className="flex items-start gap-3 pe-8">
             <div className="flex-1 min-w-0">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
                 {prompt.name}

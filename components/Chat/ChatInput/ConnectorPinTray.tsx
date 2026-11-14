@@ -202,7 +202,7 @@ export const ConnectorPinTray: FC = () => {
         <button
           type="button"
           onClick={close}
-          className="ml-auto rounded-md p-1 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="ms-auto rounded-md p-1 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
           aria-label={t('dismiss')}
           title={t('dismiss')}
         >
