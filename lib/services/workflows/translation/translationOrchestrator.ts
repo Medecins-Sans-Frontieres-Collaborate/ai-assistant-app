@@ -1,7 +1,12 @@
 import { criterionRubricLine } from '@/lib/utils/shared/review/customCriteria';
+import {
+  createDelimiterEchoFilter,
+  stripEchoedDelimiters,
+} from '@/lib/utils/shared/translation/delimiterEcho';
 import { computeSegmentChanges } from '@/lib/utils/shared/translation/editApplication';
 import { checkGlossaryCompliance } from '@/lib/utils/shared/translation/glossaryMatch';
 import { builtinRubricLine } from '@/lib/utils/shared/translation/qualityCriteria';
+import { TRANSLATION_ACTIVITY } from '@/lib/utils/shared/translation/runProgress';
 
 import {
   GlossaryEntry,
@@ -94,7 +99,7 @@ export async function runTranslationWorkflow(
   // Phase 1 — analysis (agentic only)
   let analysis: TranslationAnalysis | undefined;
   if (mode === 'agentic') {
-    writer.activity('chat.activity.workflow.analyzingSource');
+    writer.activity(TRANSLATION_ACTIVITY.analyzing);
     analysis = await callStructured<TranslationAnalysis>({
       client,
       model: modelId,
@@ -114,7 +119,13 @@ export async function runTranslationWorkflow(
 
   // Phase 2 — translation, streamed as display text so the target pane
   // fills live.
-  writer.activity('chat.activity.workflow.translating');
+  writer.activity(TRANSLATION_ACTIVITY.translating);
+  // Models sometimes echo the prompt's fence around the answer; it is kept
+  // off the screen while streaming and out of the text the run works with.
+  const echoFilter = createDelimiterEchoFilter(sourceText);
+  const writeText = (text: string) => {
+    if (text) writer.text(text);
+  };
   let translation = await callStreamedText({
     client,
     model: modelId,
@@ -123,11 +134,13 @@ export async function runTranslationWorkflow(
       analysis ? analysisToNotes(analysis) : undefined,
     ),
     user: buildTranslationUserPrompt(sourceText, targetLanguage),
-    onDelta: (delta) => writer.text(delta),
+    onDelta: (delta) => writeText(echoFilter.push(delta)),
     signal,
     usage,
     usageLabel: 'translate',
   });
+  writeText(echoFilter.end());
+  translation = stripEchoedDelimiters(translation, sourceText);
 
   // Deterministic glossary check (issue #131): the model was TOLD the
   // terminology; this verifies it. Recomputed on every revision, since a
@@ -141,7 +154,7 @@ export async function runTranslationWorkflow(
     const priorIssues: string[] = [];
     for (let round = 1; round <= maxRounds; round++) {
       if (signal?.aborted) return;
-      writer.activity('chat.activity.workflow.reviewingTranslation', {
+      writer.activity(TRANSLATION_ACTIVITY.reviewing, {
         round: String(round),
         total: String(maxRounds),
       });
@@ -166,6 +179,12 @@ export async function runTranslationWorkflow(
         usageLabel: `review:${round}`,
       });
 
+      // The review prompt fences both texts too, so a revision can come back
+      // fenced; normalize it once, before it is compared or used.
+      const revisedText = review.revisedText?.trim()
+        ? stripEchoedDelimiters(review.revisedText, sourceText)
+        : '';
+
       rounds = round;
       writer.event({
         workflow: 'translation',
@@ -178,19 +197,17 @@ export async function runTranslationWorkflow(
       // rounds remain, unless the reviewer also produced no fix — a
       // round that changes nothing would only repeat itself.
       if (review.verdict === 'approve') {
-        const hasFix =
-          !!review.revisedText?.trim() &&
-          review.revisedText.trim() !== translation.trim();
+        const hasFix = !!revisedText && revisedText !== translation.trim();
         if (violationsBefore.length === 0 || !hasFix) break;
       }
 
       priorIssues.push(
         ...review.issues.map((i) => `${i.excerpt}: ${i.problem}`),
       );
-      if (review.revisedText && review.revisedText.trim()) {
+      if (revisedText) {
         // Computed diff (not model self-report) — honest by construction.
-        const changes = computeSegmentChanges(translation, review.revisedText);
-        translation = review.revisedText;
+        const changes = computeSegmentChanges(translation, revisedText);
+        translation = revisedText;
         // Revisions replace the pane content — sent as an event, not
         // display text, so the client swaps rather than appends.
         writer.event({
