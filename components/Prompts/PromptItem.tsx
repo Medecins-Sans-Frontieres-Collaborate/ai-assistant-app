@@ -140,7 +140,7 @@ export const PromptItem: FC<PromptItemProps> = ({
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 mt-1 w-52 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark-base shadow-lg z-50">
+            <div className="absolute end-0 mt-1 w-52 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark-base shadow-lg z-50">
               {/* Move to folder — closes the menu and opens the searchable
                   FolderPicker anchored to the Options button */}
               <button
@@ -173,7 +173,7 @@ export const PromptItem: FC<PromptItemProps> = ({
                     setShowMenu(false);
                   }}
                 >
-                  <IconDownload size={16} className="mr-2" />
+                  <IconDownload size={16} className="me-2" />
                   {t('Export')}
                 </button>
               )}
@@ -186,7 +186,7 @@ export const PromptItem: FC<PromptItemProps> = ({
                   setShowMenu(false);
                 }}
               >
-                <IconTrash size={16} className="mr-2" />
+                <IconTrash size={16} className="me-2" />
                 {t('Delete')}
               </button>
             </div>

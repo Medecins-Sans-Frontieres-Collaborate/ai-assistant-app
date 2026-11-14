@@ -399,7 +399,7 @@ export const PromptDashboard: FC<PromptDashboardProps> = ({
                 {tag}
                 <button
                   onClick={() => handleRemoveTag(tag)}
-                  className="ml-1 hover:text-gray-900 dark:hover:text-gray-100"
+                  className="ms-1 hover:text-gray-900 dark:hover:text-gray-100"
                 >
                   <IconX size={14} />
                 </button>
@@ -668,7 +668,7 @@ export const PromptDashboard: FC<PromptDashboardProps> = ({
                       {revisionResult.suggestions.map((suggestion, index) => (
                         <li
                           key={index}
-                          className="text-xs text-gray-600 dark:text-gray-400 pl-3 relative before:absolute before:left-0 before:top-1.5 before:w-1.5 before:h-1.5 before:bg-yellow-500 before:rounded-full"
+                          className="text-xs text-gray-600 dark:text-gray-400 ps-3 relative before:absolute before:start-0 before:top-1.5 before:w-1.5 before:h-1.5 before:bg-yellow-500 before:rounded-full"
                         >
                           {suggestion}
                         </li>
