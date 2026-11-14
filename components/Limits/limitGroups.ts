@@ -107,7 +107,10 @@ export const LIMIT_GROUPS: readonly LimitGroup[] = [
   },
   {
     id: 'translation',
-    memberKeys: ['feature.translation.jobsPerDay'],
+    memberKeys: [
+      'feature.translation.jobsPerDay',
+      'feature.translation.pagesPerDay',
+    ],
   },
 ];
 
