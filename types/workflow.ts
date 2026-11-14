@@ -139,6 +139,19 @@ export interface TranslationAssessment {
    * reads correctly after the criterion is renamed or deleted.
    */
   labels?: Record<string, string>;
+  /**
+   * Set when the edits answer a change the user asked for in words rather
+   * than a quality assessment: `criteria` is then empty and
+   * `overallSummary` holds the assistant's reply.
+   */
+  request?: TranslationChangeRequestRecord;
+}
+
+/** The instruction a set of requested edits answers. */
+export interface TranslationChangeRequestRecord {
+  instruction: string;
+  /** The passage the request was limited to, when one was selected. */
+  selectedText?: string;
 }
 
 export interface GlossaryEntry {
