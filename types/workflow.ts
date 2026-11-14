@@ -223,9 +223,10 @@ export interface TranslationTargetLanguage {
 }
 
 /**
- * Reference to an uploaded document that is larger than one translation
- * batch. Only the reference is persisted; the document's page text stays on
- * the server and is re-read on demand (workflow state must stay small).
+ * Reference to an uploaded document: one larger than one translation batch,
+ * or one that can be translated whole. Only the reference is persisted; the
+ * document's page text stays on the server and is re-read on demand
+ * (workflow state must stay small).
  */
 export interface TranslationSourceDocument {
   /** Original filename, for display. */
@@ -236,6 +237,12 @@ export interface TranslationSourceDocument {
   lastPage: number;
   /** Pages currently loaded as source text, e.g. `"1-40, 45"`. */
   selectedPages: string;
+  /**
+   * True when the whole document is loaded as source text, so there are no
+   * pages to choose between. The reference is kept only so the file can be
+   * translated whole.
+   */
+  fitsOneBatch?: boolean;
 }
 
 /** How a translation is produced. */
