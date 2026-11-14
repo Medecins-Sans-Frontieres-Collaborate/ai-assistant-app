@@ -175,3 +175,33 @@ layout, and then reads the result page by page.
 - **Stated limits**: a line says attached glossaries are not applied, and the
   introduction, the progress pane and the translate-again dialog say a
   started document translation cannot be stopped.
+
+## OCR for scanned PDFs
+
+`POST /api/file/ocr` reads a stored PDF with Azure Document Intelligence
+(`prebuilt-read`, the client shared with grants and agent indexing).
+
+- **When it is offered**: a PDF with no extractable text gets an offer in the
+  source pane instead of an error; a PDF whose text is sparse
+  (`looksLikeSparseText`: under 120 characters per page, or text on fewer than
+  half the pages) gets a suggestion strip; any loaded PDF has a "Read with
+  OCR" button. Nothing runs until the user confirms on the offer, which states
+  the cost. Offers appear only when the server reports OCR as configured
+  (`ocrAvailable` on `/api/file/process` responses).
+- **Cost control**: the file's pages are charged to `feature.ocr.pagesPerDay`
+  before analysis and refunded when OCR fails, is cancelled, or finds no
+  text. One request reads at most `MAX_OCR_PAGES` (500). A file whose pages
+  cannot be counted is refused rather than analysed unmetered.
+- **Result**: text in the extractors' `--- Page N ---` format, written to the
+  file's text cache. `/api/file/process` therefore returns the OCR text for
+  that file afterwards, which is what page selection re-reads after a reload.
+- **Configuration**: `AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT` and
+  `AZURE_DOCUMENT_INTELLIGENCE_KEY`. The resource is regional; see the
+  residency note in `lib/services/documentIntelligence/client.ts`.
+- **Scanned PDF to whole-document mode**: the no-text offer also has
+  "Translate whole document", shown whether or not OCR is configured.
+  Document translation reads scanned pages itself, so the file reference is
+  kept with `noText: true`, the source text is left empty and the mode
+  switches to Whole document. In the reader the source side of such a page
+  has no text, so quality assessment is unavailable for it; reading the file
+  with OCR first gives a source to compare against.
