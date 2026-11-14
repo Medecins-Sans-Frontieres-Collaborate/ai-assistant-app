@@ -222,9 +222,30 @@ export interface TranslationTargetLanguage {
   custom?: boolean;
 }
 
+/**
+ * Reference to an uploaded document that is larger than one translation
+ * batch. Only the reference is persisted; the document's page text stays on
+ * the server and is re-read on demand (workflow state must stay small).
+ */
+export interface TranslationSourceDocument {
+  /** Original filename, for display. */
+  name: string;
+  /** Blob reference accepted by `/api/file/process`. */
+  url: string;
+  /** Highest page number that has text. */
+  lastPage: number;
+  /** Pages currently loaded as source text, e.g. `"1-40, 45"`. */
+  selectedPages: string;
+}
+
 export interface TranslationWorkflowState {
   kind: 'translation';
   sourceText: string;
+  /**
+   * Set while `sourceText` holds a selection of pages from a document too
+   * large to translate in one batch.
+   */
+  sourceDocument?: TranslationSourceDocument;
   sourceLang?: string;
   /** Legacy locale-code field; superseded by targetLanguage. */
   targetLang?: string;
