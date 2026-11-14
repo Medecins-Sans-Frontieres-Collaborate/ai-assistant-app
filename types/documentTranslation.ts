@@ -303,3 +303,9 @@ export function generateTranslatedFilename(
   const extension = originalFilename.substring(lastDotIndex);
   return `${baseName}_${targetLanguage}${extension}`;
 }
+
+/**
+ * Limit key of the daily page allowance for document translation. Charged
+ * by the translate route; read by the UI to show what is left.
+ */
+export const TRANSLATION_PAGES_LIMIT_KEY = 'feature.translation.pagesPerDay';
