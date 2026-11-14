@@ -78,7 +78,8 @@ export function DocumentJobProgress({
         </>
       ) : (
         <p className="max-w-[48ch] text-xs text-gray-500 dark:text-gray-400">
-          {t('translation.documentCanLeave')}
+          {t('translation.documentCanLeave')}{' '}
+          {t('translation.documentNoCancel')}
         </p>
       )}
     </div>
