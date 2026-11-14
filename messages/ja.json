@@ -2911,7 +2911,7 @@
       "addedByYou": "あなたが追加しました",
       "glossary": "用語集",
       "noGlossary": "用語集なし",
-      "manageGlossaries": "用語集",
+      "manageGlossaries": "用語集を管理",
       "glossaries": "用語集",
       "closeGlossaries": "用語集を閉じる",
       "glossariesEmpty": "特定用語の訳を固定したい場合は用語集を作成してください。用語集はこのデバイスに保存され、他の翻訳でも再利用できます。",
@@ -3209,7 +3209,12 @@
       "changeBusy": "現在の処理が終了するまでお待ちいただき、再度ご依頼ください。",
       "changeHeld": "未送信：判断待ちの提案された編集があります。",
       "pendingRunActionRequest": "変更を依頼しています",
-      "railPlaceholder": "変更や質問を依頼する…"
+      "railPlaceholder": "変更や質問を依頼する…",
+      "documentPageCount": "{count, plural, one {#ページ} other {#ページ}}",
+      "sourceShowPages": "ページを表示",
+      "sourceEditText": "テキストとして編集",
+      "sourceRemoveDocument": "ドキュメントを削除",
+      "sourceJumpToPage": "ページに移動"
     },
     "document": {
       "emptyTitle": "作成したい文書の説明",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "必須訳語",
       "guideNote": "注記",
       "pendingRun": {
-        "title": "{count} 件の提案がまだ保留中です",
+        "title": "{count, plural, one {# 件の提案が未処理です} other {# 件の提案が未処理です}}",
         "body": "{action} は未決定の提案を含むテキスト全体の内容を変更する可能性があり、新しい評価が現在のリストに置き換わります。先に残りの提案を処理してください。",
         "acceptAll": "残りをすべて承認",
         "rejectAll": "すべて却下",

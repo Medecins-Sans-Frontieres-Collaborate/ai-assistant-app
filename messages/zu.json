@@ -2895,7 +2895,7 @@
       "addedByYou": "Engezwe nguwe",
       "glossary": "Isichazamazwi",
       "noGlossary": "Asikho isichazamazwi",
-      "manageGlossaries": "Izichazamazwi",
+      "manageGlossaries": "Phatha amashoshozelo",
       "glossaries": "Izichazamazwi",
       "closeGlossaries": "Vala izichazamazwi",
       "glossariesEmpty": "Dala isichazamazwi ukuze uqinisekise ukuhumusha kwamagama athile. Izichazamazwi zigcinwa kudivayisi yakho futhi ziyaphinda zisetshenziswe ekuhumushweni.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Linda ukuphothulwa komsebenzi wamanje; bese ubuza futhi.",
       "changeHeld": "Akukathunyelwa: kusamele kuthathwe isinqumo eziphakamisweni zokuhlela.",
       "pendingRunActionRequest": "Kucelwa ushintsho",
-      "railPlaceholder": "Cela ushintsho noma ubuze umbuzo…"
+      "railPlaceholder": "Cela ushintsho noma ubuze umbuzo…",
+      "documentPageCount": "{count, plural, one {# ikhasi} other {# amakhasi}}",
+      "sourceShowPages": "Bonisa amakhasi",
+      "sourceEditText": "Hlela njengombhalo",
+      "sourceRemoveDocument": "Susa idokhumenti",
+      "sourceJumpToPage": "Ya ekhasini"
     },
     "document": {
       "emptyTitle": "Chaza umbhalo ofunayo",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Ukuhumusha okudingekayo",
       "guideNote": "Inothi",
       "pendingRun": {
-        "title": "{count} iziphakamiso zisalindile",
+        "title": "{count, plural, one {# isiphakamiso sisalindile} other {# iziphakamiso zisalindile}}",
         "body": "{action} ingashintsha noma iyiphi ingxenye yombhalo, kuhlanganise nezigaba ezineziziphakamiso ongakazinqumi, futhi ukuhlolwa okusha kuthatha indawo yohlu lwamanje. Qala unqume ngeziphakamiso ezisele.",
         "acceptAll": "Yamukela konke okusele",
         "rejectAll": "Lahla konke",

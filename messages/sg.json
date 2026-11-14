@@ -2895,7 +2895,7 @@
       "addedByYou": "Mo hû fâ",
       "glossary": "Glossar",
       "noGlossary": "Glossar ningún",
-      "manageGlossaries": "Bâa ti glossar",
+      "manageGlossaries": "Közë ti glossaires",
       "glossaries": "Glossar",
       "closeGlossaries": "Kêtê glossar",
       "glossariesEmpty": "Kêtî glossar sô ayeke gâgâ dô tî kêtî tî terme spécifik. Glossar ayeke sauvegarder na appareil o na ayeke bâa na kêtî sangö nyini.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Laî ti bîanî na sô bûngbi ti tâmbï, atâ fâ mbotî a kô.",
       "changeHeld": "Mbôtî tînda: kulïngbi sô mbotî mo yeke sô yângâ na bire na mo tâna.",
       "pendingRunActionRequest": "Fâ mbotî ti kulïngbi",
-      "railPlaceholder": "Fâ mbotî ti kulïngbi wala ti mbîa sî..."
+      "railPlaceholder": "Fâ mbotî ti kulïngbi wala ti mbîa sî...",
+      "documentPageCount": "{count, plural, one {# kâda} other {# kâda}}",
+      "sourceShowPages": "Fânga kâda",
+      "sourceEditText": "Gbéngö ngâ text",
+      "sourceRemoveDocument": "Kúe document",
+      "sourceJumpToPage": "Yâ kâda mô"
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Sû tî hùndângö",
       "guideNote": "Küê",
       "pendingRun": {
-        "title": "{count} likambeni ti ke na ndéngbi ti gba",
+        "title": "{count, plural, one {# ti mbi na koui} other {# ti mbi na koui}}",
         "body": "{action} apê na yângâ mbi na ndângô biani, da mbi ti likambeni ti ke na ndéngbi ti gba sô mo sise kwê na mo, na zîgü mbênî apê na yângâ mbi siriri. Asekia likambeni ti gba na biani na yeke.",
         "acceptAll": "Kwê so likambeni ti gba na biani",
         "rejectAll": "Su a na biani",

@@ -2942,7 +2942,7 @@
       "addedByYou": "Bạn đã thêm",
       "glossary": "Thuật ngữ",
       "noGlossary": "Chưa có thuật ngữ",
-      "manageGlossaries": "Thuật ngữ",
+      "manageGlossaries": "Quản lý từ điển thuật ngữ",
       "glossaries": "Thuật ngữ",
       "closeGlossaries": "Đóng thuật ngữ",
       "glossariesEmpty": "Tạo một thuật ngữ để cố định cách dịch các thuật ngữ chuyên biệt. Thuật ngữ sẽ được lưu trên thiết bị này và dùng lại cho các lần dịch khác.",
@@ -3240,7 +3240,12 @@
       "changeBusy": "Vui lòng đợi phiên hiện tại kết thúc rồi thử lại.",
       "changeHeld": "Chưa gửi: vẫn còn các chỉnh sửa đề xuất đang chờ quyết định.",
       "pendingRunActionRequest": "Đang yêu cầu thay đổi",
-      "railPlaceholder": "Yêu cầu thay đổi hoặc đặt câu hỏi…"
+      "railPlaceholder": "Yêu cầu thay đổi hoặc đặt câu hỏi…",
+      "documentPageCount": "{count, plural, one {# trang} other {# trang}}",
+      "sourceShowPages": "Hiển thị các trang",
+      "sourceEditText": "Chỉnh sửa dưới dạng văn bản",
+      "sourceRemoveDocument": "Xóa tài liệu",
+      "sourceJumpToPage": "Chuyển tới trang"
     },
     "document": {
       "emptyTitle": "Mô tả tài liệu bạn muốn",
@@ -3868,7 +3873,7 @@
       "guideTargetTerm": "Dịch bắt buộc",
       "guideNote": "Ghi chú",
       "pendingRun": {
-        "title": "{count} đề xuất vẫn đang chờ",
+        "title": "{count, plural, one {# đề xuất còn đang chờ} other {# đề xuất còn đang chờ}}",
         "body": "{action} có thể thay đổi bất kỳ phần nào của văn bản, bao gồm cả những đoạn có đề xuất mà bạn chưa quyết định, và đánh giá mới sẽ thay thế danh sách hiện tại. Hãy quyết định các đề xuất còn lại trước.",
         "acceptAll": "Chấp nhận tất cả còn lại",
         "rejectAll": "Từ chối tất cả",

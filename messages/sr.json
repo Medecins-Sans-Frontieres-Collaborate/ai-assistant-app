@@ -2895,7 +2895,7 @@
       "addedByYou": "Dodali ste vi",
       "glossary": "Glosar",
       "noGlossary": "Nema glosara",
-      "manageGlossaries": "Glosari",
+      "manageGlossaries": "Upravljajte glosarima",
       "glossaries": "Glosari",
       "closeGlossaries": "Zatvori glosare",
       "glossariesEmpty": "Kreirajte glosar kako biste zaključali prevod određenih termina. Glosari se čuvaju na ovom uređaju i mogu se koristiti za sve prevode.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Sačekajte da trenutna obrada završi, pa pokušajte ponovo.",
       "changeHeld": "Nije poslato: postoji još predloženih izmena koje čekaju odluku.",
       "pendingRunActionRequest": "Tražim izmenu",
-      "railPlaceholder": "Zatražite izmenu ili postavite pitanje…"
+      "railPlaceholder": "Zatražite izmenu ili postavite pitanje…",
+      "documentPageCount": "{count, plural, one {# stranica} other {# stranica}}",
+      "sourceShowPages": "Prikaži stranice",
+      "sourceEditText": "Uredi kao tekst",
+      "sourceRemoveDocument": "Ukloni dokument",
+      "sourceJumpToPage": "Idi na stranicu"
     },
     "document": {
       "emptyTitle": "Opišite dokument koji želite",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Obavezan prevod",
       "guideNote": "Napomena",
       "pendingRun": {
-        "title": "{count} predloga još uvek na čekanju",
+        "title": "{count, plural, one {# predlog još na čekanju} other {# predloga još na čekanju}}",
         "body": "{action} može izmeniti bilo koji deo teksta, uključujući odlomke sa predlozima o kojima još niste odlučili, a nova procena menja trenutnu listu. Prvo odlučite o preostalim predlozima.",
         "acceptAll": "Prihvati sve preostale",
         "rejectAll": "Odbaci sve",

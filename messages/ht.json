@@ -2895,7 +2895,7 @@
       "addedByYou": "Ajoute pa ou",
       "glossary": "Glosè",
       "noGlossary": "Pa gen glosè",
-      "manageGlossaries": "Glosè yo",
+      "manageGlossaries": "Jere glosè yo",
       "glossaries": "Glosè yo",
       "closeGlossaries": "Fèmen glosè yo",
       "glossariesEmpty": "Kreye yon glosè pou fikse kijan tèm espesifik yo tradui. Glosè yo sove sou aparèy sa a e ou ka reutilize yo pou lòt tradiksyon.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Tanpri tann okazyon sa fini, epi mande ankò.",
       "changeHeld": "Pa voye: Gen chanjman sijere ki toujou ap tann desizyon.",
       "pendingRunActionRequest": "Lap mande pou yon chanjman",
-      "railPlaceholder": "Mande pou yon chanjman oswa poze yon kesyon…"
+      "railPlaceholder": "Mande pou yon chanjman oswa poze yon kesyon…",
+      "documentPageCount": "{count, plural, one {# paj} other {# paj}}",
+      "sourceShowPages": "Montre paj yo",
+      "sourceEditText": "Edit tankou tèks",
+      "sourceRemoveDocument": "Retire dokiman an",
+      "sourceJumpToPage": "Ale sou yon paj"
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Tradiksyon obligatwa",
       "guideNote": "Nòt",
       "pendingRun": {
-        "title": "{count} sijesyon toujou ann atant",
+        "title": "{count, plural, one {# sijesyon toujou an atant} other {# sijesyon toujou an atant}}",
         "body": "{action} ka modifye nenpòt pati nan tèk la, enkli pasaj ki gen sijesyon ou poko deside, epi yon nouvo evalyasyon pral ranplase lis aktyèl la. Fè chwa w sou rès sijesyon yo anvan.",
         "acceptAll": "Aksepte tout rès yo",
         "rejectAll": "Rejte tout",

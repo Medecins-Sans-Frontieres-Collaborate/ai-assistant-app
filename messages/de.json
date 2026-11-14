@@ -2911,7 +2911,7 @@
       "addedByYou": "Von Ihnen hinzugefügt",
       "glossary": "Glossar",
       "noGlossary": "Kein Glossar",
-      "manageGlossaries": "Glossare",
+      "manageGlossaries": "Glossare verwalten",
       "glossaries": "Glossare",
       "closeGlossaries": "Glossare schließen",
       "glossariesEmpty": "Erstellen Sie ein Glossar, um die Übersetzung spezifischer Begriffe festzulegen. Glossare werden auf diesem Gerät gespeichert und sind für künftige Übersetzungen wiederverwendbar.",
@@ -3209,7 +3209,12 @@
       "changeBusy": "Warten Sie, bis der aktuelle Vorgang abgeschlossen ist, und fragen Sie dann erneut an.",
       "changeHeld": "Nicht gesendet: Es gibt noch Änderungsvorschläge, für die eine Entscheidung aussteht.",
       "pendingRunActionRequest": "Änderung wird angefordert",
-      "railPlaceholder": "Änderung oder Frage anfragen…"
+      "railPlaceholder": "Änderung oder Frage anfragen…",
+      "documentPageCount": "{count, plural, one {# Seite} other {# Seiten}}",
+      "sourceShowPages": "Seiten anzeigen",
+      "sourceEditText": "Als Text bearbeiten",
+      "sourceRemoveDocument": "Dokument entfernen",
+      "sourceJumpToPage": "Zu einer Seite gehen"
     },
     "document": {
       "emptyTitle": "Beschreiben Sie das gewünschte Dokument",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "Erforderliche Übersetzung",
       "guideNote": "Hinweis",
       "pendingRun": {
-        "title": "{count} Vorschläge noch offen",
+        "title": "{count, plural, one {# Vorschlag noch ausstehend} other {# Vorschläge noch ausstehend}}",
         "body": "{action} kann jeden Teil des Textes ändern, auch Abschnitte mit offenen Vorschlägen, über die Sie noch nicht entschieden haben. Eine neue Beurteilung ersetzt die aktuelle Liste. Treffen Sie zuerst eine Entscheidung zu den verbleibenden Vorschlägen.",
         "acceptAll": "Alle verbleibenden übernehmen",
         "rejectAll": "Alle ablehnen",

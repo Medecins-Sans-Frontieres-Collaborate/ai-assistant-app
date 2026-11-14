@@ -2911,7 +2911,7 @@
       "addedByYou": "Afegit per vosaltres",
       "glossary": "Glossari",
       "noGlossary": "Cap glossari",
-      "manageGlossaries": "Glossaris",
+      "manageGlossaries": "Gestiona els glossaris",
       "glossaries": "Glossaris",
       "closeGlossaries": "Tanca els glossaris",
       "glossariesEmpty": "Creeu un glossari per definir com es tradueixen termes específics. Els glossaris es desen en aquest dispositiu i es poden reutilitzar en altres traduccions.",
@@ -3209,7 +3209,12 @@
       "changeBusy": "Espera que acabi l'execució actual i torna-ho a demanar.",
       "changeHeld": "No s'ha enviat: hi ha modificacions suggerides pendents de decisió.",
       "pendingRunActionRequest": "Sol·licitant un canvi",
-      "railPlaceholder": "Demana un canvi o fes una pregunta…"
+      "railPlaceholder": "Demana un canvi o fes una pregunta…",
+      "documentPageCount": "{count, plural, one {# pàgina} other {# pàgines}}",
+      "sourceShowPages": "Mostra les pàgines",
+      "sourceEditText": "Edita com a text",
+      "sourceRemoveDocument": "Elimina el document",
+      "sourceJumpToPage": "Vés a una pàgina"
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "Traducció requerida",
       "guideNote": "Nota",
       "pendingRun": {
-        "title": "{count} suggeriments encara pendents",
+        "title": "{count, plural, one {Encara queda # suggeriment pendent} other {Encara queden # suggeriments pendents}}",
         "body": "{action} pot modificar qualsevol part del text, inclosos els fragments amb suggeriments pendents, i una nova avaluació substituirà la llista actual. Decideix primer sobre els suggeriments pendents.",
         "acceptAll": "Accepta tots els pendents",
         "rejectAll": "Rebutja'ls tots",

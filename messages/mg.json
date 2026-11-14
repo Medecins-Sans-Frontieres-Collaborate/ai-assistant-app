@@ -2895,7 +2895,7 @@
       "addedByYou": "Nampianao",
       "glossary": "Voambolana",
       "noGlossary": "Tsy misy voambolana",
-      "manageGlossaries": "Voambolana",
+      "manageGlossaries": "Tantano ny voambolana",
       "glossaries": "Voambolana",
       "closeGlossaries": "Akaro ny voambolana",
       "glossariesEmpty": "Mamoròna voambolana hanamafisana fa mitovy foana ny dikan-teny amin'ny voambolana manokana. Tehirizina amin'ity fitaovana ity ny voambolana ary azo ampiasaina amin'ny fandikan-teny manaraka.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Miandrasa hanao vita ny fihazakazahana ankehitriny, dia miverena mangataka.",
       "changeHeld": "Tsy nalefa: mbola misy fanitsiana aroso miandry fanapahan-kevitra.",
       "pendingRunActionRequest": "Mangataka fanovana",
-      "railPlaceholder": "Mangataha fanovana na fanontaniana..."
+      "railPlaceholder": "Mangataha fanovana na fanontaniana...",
+      "documentPageCount": "{count, plural, one {# pejy} other {# pejy}}",
+      "sourceShowPages": "Asehoy ny pejy",
+      "sourceEditText": "Hanova ho soratra",
+      "sourceRemoveDocument": "Hamafa antontan-taratasy",
+      "sourceJumpToPage": "Mankanesa amin'ny pejy"
     },
     "document": {
       "emptyTitle": "Lazao ny antontan-taratasy ilainao",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Dikan-teny takiana",
       "guideNote": "Fanamarihana",
       "pendingRun": {
-        "title": "Soso-kevitra {count} mbola miandry",
+        "title": "{count, plural, one {# soso-kevitra mbola andrasana} other {# soso-kevitra mbola andrasana}}",
         "body": "Afaka manova faritra rehetra ao amin'ny lahatsoratra ny {action}, anisan'izany ireo misy soso-kevitra mbola tsy noraisinao fanapahan-kevitra, ary soloan'ny fanombanana vaovao ny lisitra ankehitriny. Raiso aloha ny fanapahan-kevitra amin'ireo sisa.",
         "acceptAll": "Ekeo daholo ny sisa rehetra",
         "rejectAll": "Lavina daholo",

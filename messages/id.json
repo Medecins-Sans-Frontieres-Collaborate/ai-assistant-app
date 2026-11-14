@@ -2911,7 +2911,7 @@
       "addedByYou": "Ditambahkan oleh Anda",
       "glossary": "Glosarium",
       "noGlossary": "Tidak ada glosarium",
-      "manageGlossaries": "Glosarium",
+      "manageGlossaries": "Kelola glosarium",
       "glossaries": "Glosarium",
       "closeGlossaries": "Tutup glosarium",
       "glossariesEmpty": "Buat glosarium untuk memastikan istilah tertentu diterjemahkan dengan tepat. Glosarium disimpan di perangkat ini dan dapat digunakan ulang di terjemahan lain.",
@@ -3209,7 +3209,12 @@
       "changeBusy": "Tunggu proses saat ini selesai, lalu ajukan lagi.",
       "changeHeld": "Belum dikirim: masih ada suntingan yang disarankan menunggu keputusan.",
       "pendingRunActionRequest": "Meminta perubahan",
-      "railPlaceholder": "Ajukan perubahan atau pertanyaan…"
+      "railPlaceholder": "Ajukan perubahan atau pertanyaan…",
+      "documentPageCount": "{count, plural, one {# halaman} other {# halaman}}",
+      "sourceShowPages": "Tampilkan halaman",
+      "sourceEditText": "Edit sebagai teks",
+      "sourceRemoveDocument": "Hapus dokumen",
+      "sourceJumpToPage": "Pergi ke halaman"
     },
     "document": {
       "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "Terjemahan wajib",
       "guideNote": "Catatan",
       "pendingRun": {
-        "title": "{count} saran masih tertunda",
+        "title": "{count, plural, one {# saran masih tertunda} other {# saran masih tertunda}}",
         "body": "{action} dapat mengubah bagian mana pun dari teks, termasuk bagian yang memiliki saran yang belum Anda putuskan, dan penilaian baru akan menggantikan daftar saat ini. Selesaikan sisa saran terlebih dahulu.",
         "acceptAll": "Terima semua sisa",
         "rejectAll": "Tolak semua",

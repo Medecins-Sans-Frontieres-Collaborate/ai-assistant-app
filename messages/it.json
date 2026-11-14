@@ -2911,7 +2911,7 @@
       "addedByYou": "Aggiunta da te",
       "glossary": "Glossario",
       "noGlossary": "Nessun glossario",
-      "manageGlossaries": "Glossari",
+      "manageGlossaries": "Gestisci i glossari",
       "glossaries": "Glossari",
       "closeGlossaries": "Chiudi glossari",
       "glossariesEmpty": "Crea un glossario per definire la traduzione di termini specifici. I glossari sono salvati su questo dispositivo e riutilizzabili tra le traduzioni.",
@@ -3209,7 +3209,12 @@
       "changeBusy": "Attendi che l'esecuzione attuale termini e poi richiedi di nuovo.",
       "changeHeld": "Non inviato: ci sono ancora modifiche suggerite in attesa di decisione.",
       "pendingRunActionRequest": "Richiesta di modifica",
-      "railPlaceholder": "Richiedi una modifica o una domanda…"
+      "railPlaceholder": "Richiedi una modifica o una domanda…",
+      "documentPageCount": "{count, plural, one {# pagina} other {# pagine}}",
+      "sourceShowPages": "Mostra pagine",
+      "sourceEditText": "Modifica come testo",
+      "sourceRemoveDocument": "Rimuovi documento",
+      "sourceJumpToPage": "Vai a una pagina"
     },
     "document": {
       "emptyTitle": "Descrivi il documento desiderato",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "Traduzione richiesta",
       "guideNote": "Nota",
       "pendingRun": {
-        "title": "{count} suggerimenti ancora in sospeso",
+        "title": "{count, plural, one {# suggerimento ancora in sospeso} other {# suggerimenti ancora in sospeso}}",
         "body": "{action} può modificare qualsiasi parte del testo, incluse sezioni con suggerimenti non ancora decisi, e una nuova valutazione sostituirà l’elenco attuale. Decidi prima i suggerimenti rimanenti.",
         "acceptAll": "Accetta tutti i rimanenti",
         "rejectAll": "Rifiuta tutti",

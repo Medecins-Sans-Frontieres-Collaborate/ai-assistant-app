@@ -2895,7 +2895,7 @@
       "addedByYou": "Washizemwo",
       "glossary": "Inyandiko z’amagambo",
       "noGlossary": "Nta nyandiko y’amagambo",
-      "manageGlossaries": "Inyandiko z’amagambo",
+      "manageGlossaries": "Gutunganya amajambo y'inyunganizi",
       "glossaries": "Inyandiko z’amagambo",
       "closeGlossaries": "Funga inyandiko z’amagambo",
       "glossariesEmpty": "Kora inyandiko y’amagambo kugirango amagambo amwe n’amwe ahindurwe uko bikwiye. Izi nyandiko zibikwa kuri iyi mashini kandi zishobora gukoreshwa no mu yindi mihinduro.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Rindira gushika igikorwa kiriko gikora kirarangira, hanyuma ugaruke usabe.",
       "changeHeld": "Ntibirungitswe: hari ivyo gusaba guhindura birindiriye ingingo.",
       "pendingRunActionRequest": "Kurasaba igihinduka",
-      "railPlaceholder": "Saba igihinduka canke ikibazo…"
+      "railPlaceholder": "Saba igihinduka canke ikibazo…",
+      "documentPageCount": "{count, plural, one {# rupapuro} other {# rupapuro}}",
+      "sourceShowPages": "Erekana impapuro",
+      "sourceEditText": "Hindura nk'inyandiko",
+      "sourceRemoveDocument": "Kuraho inyandiko",
+      "sourceJumpToPage": "Jana ku rupapuro"
     },
     "document": {
       "emptyTitle": "Sobanura igitabo ushaka",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Inyandurizo isabwa",
       "guideNote": "Icatumye",
       "pendingRun": {
-        "title": "Ivyiyumviro {count} biracategereje",
+        "title": "{count, plural, one {# iciyumviro kiracategerejwe} other {# ivyiyumviro biracategerejwe}}",
         "body": "{action} birashobora guhindura igice cose c'ijambo, harimwo n'ibice bifise ivyiyumviro utarafata ingingo, kandi isuzuma rishasha risubirira urutonde ruhari. Rabanza utohore ivyiyumviro vyasigaye.",
         "acceptAll": "Emera vyose bisigaye",
         "rejectAll": "Hakana vyose",

@@ -2895,7 +2895,7 @@
       "addedByYou": "ستاسو لخوا زياته شوې",
       "glossary": "ګلاسري",
       "noGlossary": "ګلاسري نشته",
-      "manageGlossaries": "ګلاسريان",
+      "manageGlossaries": "ګلاسري مدیریت کړئ",
       "glossaries": "ګلاسريان",
       "closeGlossaries": "ګلاسريان وتړئ",
       "glossariesEmpty": "يو ګلاسري جوړ کړئ څو ځانګړي اصطلاحات يو ډول وژباړل شي. ګلاسريان په همدې آله کې خوندي وي او په مختلفو ژباړو کې کارېدلی شي.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "د روان بهیر تر پای ته رسېدو انتظار وکړئ، بیا بیا وغواړئ.",
       "changeHeld": "نه دي استول شوي: لا هم وړاندیز شوي سمونونه د پرېکړې په تمه دي.",
       "pendingRunActionRequest": "د بدلون غوښتنه روانه ده",
-      "railPlaceholder": "د بدلون یا پوښتنې غوښتنه وکړئ…"
+      "railPlaceholder": "د بدلون یا پوښتنې غوښتنه وکړئ…",
+      "documentPageCount": "{count, plural, one {# صفحه} other {# صفحې}}",
+      "sourceShowPages": "صفحات وښایاست",
+      "sourceEditText": "د متن په توګه سم کړئ",
+      "sourceRemoveDocument": "سند لیرې کړئ",
+      "sourceJumpToPage": "صفحه ته لاړ شئ"
     },
     "document": {
       "emptyTitle": "هغه سند تشریح کړئ چې غواړئ",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "اړینه ژباړه",
       "guideNote": "یادونه",
       "pendingRun": {
-        "title": "{count} وړاندیزونه لا هم پاتې دي",
+        "title": "{count, plural, one {# وړاندیز لا هم پاتې دی} other {# وړاندیزونه لا هم پاتې دي}}",
         "body": "{action} کولای شي د متن هره برخه بدله کړي، حتا هغه ټوټې چې لا یې وړاندیزونه نه دي منل شوي، او نوی ارزیابي به اوسنی لیست بدل کړي. اول پاتې وړاندیزونه وټاکئ.",
         "acceptAll": "ټول پاتې ومنئ",
         "rejectAll": "ټول رد کړئ",

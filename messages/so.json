@@ -2895,7 +2895,7 @@
       "addedByYou": "Adiga ayaa soo dartay",
       "glossary": "Ereybixin",
       "noGlossary": "Ereybixin ma jiro",
-      "manageGlossaries": "Ereybixino",
+      "manageGlossaries": "Maamul erey-bixinnada",
       "glossaries": "Ereybixino",
       "closeGlossaries": "Xidho ereybixino",
       "glossariesEmpty": "Samee ereybixin si aad u sugto sida loo turjumo erayo gaar ah. Ereybixintu waxay ku kaydsan tahay qalabkan waxayna la isticmaali kartaa turjumaanada kale.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Sug in hawsha hadda socota ay dhammaato, markaas kadib mar kale weydii.",
       "changeHeld": "Lama dirin: waxaa jira tafatirro la soo jeediyay oo wali sugaya go'aan.",
       "pendingRunActionRequest": "Beddel ayaa la weydiinayaa",
-      "railPlaceholder": "Weydii beddel ama su'aal…"
+      "railPlaceholder": "Weydii beddel ama su'aal…",
+      "documentPageCount": "{count, plural, one {# bog} other {# bogag}}",
+      "sourceShowPages": "Muuji bogagga",
+      "sourceEditText": "Wax ka beddel sida qoraal",
+      "sourceRemoveDocument": "Ka saar dokumeentiga",
+      "sourceJumpToPage": "U gudub bog"
     },
     "document": {
       "emptyTitle": "Sharax dukumintiga aad rabto",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Tarjumaad loo baahanyahay",
       "guideNote": "Ogeysiis",
       "pendingRun": {
-        "title": "{count} talo wali sugaysa",
+        "title": "{count, plural, one {# talo wali way sugaysaa} other {# talooyin wali way sugayaan}}",
         "body": "{action} waxay wax ka beddeli kartaa qayb kasta oo qoraalka ah, oo ay ku jiraan meelaha talooyinka la bixiyay ee aanad weli go'aan ka gaarin, qiimeyn cusubna waxa ay beddeshaa liiska hadda jira. Go'aan ka gaadh talooyinka haray marka hore.",
         "acceptAll": "Dhammaan haray aqbal",
         "rejectAll": "Dhammaan diid",

@@ -2895,7 +2895,7 @@
       "addedByYou": "ንኽትወሃብካ",
       "glossary": "መዝገብ ቓላት",
       "noGlossary": "መዝገብ ቓላት ኣይተሰብረን።",
-      "manageGlossaries": "መዝገቦት ቓላት",
+      "manageGlossaries": "ቃላት ዝተሓማሙትን ምስራሕ",
       "glossaries": "መዝገቦት ቓላት",
       "closeGlossaries": "መዝገቦት ቓላት ዕጽሓ።",
       "glossariesEmpty": "ምንኣብ ተለዋዋጥ ቃላት እንታይ እኮ ዝተተሓሓዙ ክትርግሙ መዝገብ በጅሉ። መዝገቦት ቓላት ኣብዚ መሳርሒት ይዓቅቡን ኩሉ ትርጉም ግን ንምጠቃም ይኻነ።",
@@ -3193,7 +3193,12 @@
       "changeBusy": "መድረይ ስራሕ ይዓበየ። ወደፊት ጥዕና ምጥዋዕየ ተቐባልዎ።",
       "changeHeld": "ኣይተልኣን፡ ዝተገልጸ ምስልታት ኣብ ዕውት እዮም ክቕበል ተሓት።",
       "pendingRunActionRequest": "ቕድም ንምጥዋዕየ እየ።",
-      "railPlaceholder": "ክቕየም ወይ ሕቶ ጠይቅ…"
+      "railPlaceholder": "ክቕየም ወይ ሕቶ ጠይቅ…",
+      "documentPageCount": "{count, plural, one {# ገፅ} other {# ገፅታት}}",
+      "sourceShowPages": "ገፅታት ርእዩ",
+      "sourceEditText": "ከነ ጽሑፍ ምጽናዕ",
+      "sourceRemoveDocument": "መድእታ ወጽን",
+      "sourceJumpToPage": "ገፅ ምድረድ"
     },
     "document": {
       "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "ኣስፈላጦ ትርጉም",
       "guideNote": "ማስታወሻ",
       "pendingRun": {
-        "title": "{count} ምምኽራት ኣላ ዘይተጽሕፉ።",
+        "title": "{count, plural, one {# ናይ ምጥንቓቕ ሓሳብ የተረኽበን} other {# ናይ ምጥንቓቕ ሓሳባት የተረኽቡን}}",
         "body": "{action} ክኸውን ይኽእል፣ በዚ ምኽራት ኣይተውሉን ምዃኑ ጽሑፋት ሙሉእ ክለውጠሉ ይኽእሉ፣ እናተሕደሰ ምዕጽማት ድማ ናይ ሕፂና ዝርዝር ክትኸውን ይኽእል። ቀደም ንነበሩ ምምኽራት ቅድሚ ዚ ሓሳብ።",
         "acceptAll": "ምስሉ ትስዕቲ ንኩሎም ተቐቢሉ",
         "rejectAll": "ኩሎም ኣልቦ",

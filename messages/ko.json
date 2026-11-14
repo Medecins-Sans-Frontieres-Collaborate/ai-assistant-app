@@ -3209,7 +3209,12 @@
       "changeBusy": "현재 작업이 끝난 후 다시 요청하세요.",
       "changeHeld": "전송되지 않음: 결정이 필요한 제안된 편집이 있습니다.",
       "pendingRunActionRequest": "변경 요청 중",
-      "railPlaceholder": "변경 또는 질문을 요청하세요…"
+      "railPlaceholder": "변경 또는 질문을 요청하세요…",
+      "documentPageCount": "{count, plural, one {# 페이지} other {# 페이지}}",
+      "sourceShowPages": "페이지 보기",
+      "sourceEditText": "텍스트로 편집하기",
+      "sourceRemoveDocument": "문서 제거",
+      "sourceJumpToPage": "페이지로 이동"
     },
     "document": {
       "emptyTitle": "원하는 문서를 설명하세요",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "필수 번역어",
       "guideNote": "참고",
       "pendingRun": {
-        "title": "{count}개의 제안이 아직 보류 중입니다",
+        "title": "{count, plural, one {#개 제안이 아직 처리되지 않음} other {#개 제안이 아직 처리되지 않음}}",
         "body": "{action}은 선택하지 않은 제안이 포함된 부분을 비롯해 텍스트의 모든 부분을 변경할 수 있으며, 새 평가가 현재 목록을 대체합니다. 남은 제안을 먼저 결정하세요.",
         "acceptAll": "남은 모든 항목 수락",
         "rejectAll": "모두 거부",

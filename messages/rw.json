@@ -2895,7 +2895,7 @@
       "addedByYou": "Wongeyeho",
       "glossary": "Inkoranyamagambo",
       "noGlossary": "Nta nkoranyamagambo",
-      "manageGlossaries": "Inkoranyamagambo",
+      "manageGlossaries": "Genzura glossaries",
       "glossaries": "Inkoranyamagambo",
       "closeGlossaries": "Funga inkoranyamagambo",
       "glossariesEmpty": "Shyiraho inkoranyamagambo kugira ngo amagambo amwe na amwe asobanurwe kimwe buri gihe. Inkoranyamagambo ibikwa kuri uru rubuga kandi ushobora kuyikoresha no mu bindi bikorwa byo guhindura.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Tegereza kugeza ibyo biriho birangiye, ubone kongera gusaba.",
       "changeHeld": "Ntibyoherejwe: hari ibitekerezo byo gukosora bikeneye icyemezo.",
       "pendingRunActionRequest": "Gusaba impinduka",
-      "railPlaceholder": "Saba impinduka cyangwa ikibazo…"
+      "railPlaceholder": "Saba impinduka cyangwa ikibazo…",
+      "documentPageCount": "{count, plural, one {# rupapuro} other {# mpapuro}}",
+      "sourceShowPages": "Erekana impapuro",
+      "sourceEditText": "Hindura nk'inyandiko",
+      "sourceRemoveDocument": "Kuraho inyandiko",
+      "sourceJumpToPage": "Jya ku rupapuro"
     },
     "document": {
       "emptyTitle": "Sobanura inyandiko ushaka",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Ibisabwa guhindurwamo",
       "guideNote": "Icyitonderwa",
       "pendingRun": {
-        "title": "Hari ibitekerezo {count} bigitegereje kwemezwa",
+        "title": "{count, plural, one {# igitekerezo kiracyategereje} other {# ibitekerezo biracyategereje}}",
         "body": "{action} birashobora guhindura igice icyo ari cyo cyose cy'inyandiko, harimo n'ibice biriho ibitekerezo utarafataho umwanzuro, kandi isuzuma rishya risimbura urutonde ruriho ubu. Banza ufate umwanzuro ku bisigaye.",
         "acceptAll": "Emerera ibisigaye byose",
         "rejectAll": "Hakana byose",

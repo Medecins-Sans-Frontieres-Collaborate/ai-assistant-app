@@ -2895,7 +2895,7 @@
       "addedByYou": "A naatinii",
       "glossary": "Glossary",
       "noGlossary": "Glossary anndaa",
-      "manageGlossaries": "Glossaryji",
+      "manageGlossaries": "Jaram glossaries",
       "glossaries": "Glossaryji",
       "closeGlossaries": "Uddu glossaryji",
       "glossariesEmpty": "Winndu glossary tawi a lumtidi humondiral fayde hubitere. Glossaryji danndaa hisi e appareil nde tawi hokkanee dow hubitereji.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Waawi kadi e run mo lafi jokku, doo sari mo wii.",
       "changeHeld": "Ba sendi: jaɓaaji ɗe mo lafi sari baɗa jokku e laawol.",
       "pendingRunActionRequest": "Naari sari ɗe gollal",
-      "railPlaceholder": "Sari ɗe gollal walla ñaam…"
+      "railPlaceholder": "Sari ɗe gollal walla ñaam…",
+      "documentPageCount": "{count, plural, one {# gese} other {# gesew}}",
+      "sourceShowPages": "Hollu geseɗi",
+      "sourceEditText": "Taƴƴi ɗum e ɗortogal",
+      "sourceRemoveDocument": "Momtu dokumangol",
+      "sourceJumpToPage": "Yah e gese"
     },
     "document": {
       "emptyTitle": "Winndu lan binndi dannde maa",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Pularnde juulnde",
       "guideNote": "Tilasta",
       "pendingRun": {
-        "title": "{count} gollal ndiyam mbaydi",
+        "title": "{count, plural, one {# laabi mo miɗo welti haa jibinɗo} other {# laabi fow miɗi welti haa jibinɗo}}",
         "body": "{action} ina waawi waylita dee caɗeele doronto, e ndaɗo ɗiɗi feewi gollal maa a ene jogiima, tee rewisar makko bayyi lenyol ngol yimɓe. Fiññi e gollal mbaydi.",
         "acceptAll": "Tawi gollal fow mbaydi",
         "rejectAll": "Mbaydi fow",

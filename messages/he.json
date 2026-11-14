@@ -2911,7 +2911,7 @@
       "addedByYou": "הוסף על ידך",
       "glossary": "מילון מונחים",
       "noGlossary": "אין מילון מונחים",
-      "manageGlossaries": "מילוני מונחים",
+      "manageGlossaries": "ניהול מילונים",
       "glossaries": "מילוני מונחים",
       "closeGlossaries": "סגור מילוני מונחים",
       "glossariesEmpty": "צור מילון מונחים כדי לקבוע כיצד מונחים מסוימים יתורגמו. מילונים נשמרים במכשיר זה וזמינים לשימוש חוזר בתרגומים נוספים.",
@@ -3209,7 +3209,12 @@
       "changeBusy": "יש להמתין לסיום ההרצה הנוכחית, ואז לבקש שוב.",
       "changeHeld": "לא נשלח: נשארו עריכות מוצעות שממתינות להחלטה.",
       "pendingRunActionRequest": "מבקש שינוי",
-      "railPlaceholder": "בקש שינוי או שאל שאלה…"
+      "railPlaceholder": "בקש שינוי או שאל שאלה…",
+      "documentPageCount": "{count, plural, one {דף אחד} other {# דפים}}",
+      "sourceShowPages": "הצג דפים",
+      "sourceEditText": "ערוך כטקסט",
+      "sourceRemoveDocument": "הסר מסמך",
+      "sourceJumpToPage": "עבור לדף"
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "תרגום דרוש",
       "guideNote": "הערה",
       "pendingRun": {
-        "title": "{count} הצעות עדיין ממתינות",
+        "title": "{count, plural, one {הצעה אחת ממתינה לאישור} other {# הצעות ממתינות לאישור}}",
         "body": "{action} עשוי לשנות כל חלק בטקסט, כולל קטעים עם הצעות שעדיין לא החלטת עליהן, והערכה חדשה תחליף את הרשימה הנוכחית. אנא הכר תחילה לגבי ההצעות שנותרו.",
         "acceptAll": "אשר את כל הנותרים",
         "rejectAll": "דחה את כולם",

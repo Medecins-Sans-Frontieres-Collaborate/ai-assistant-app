@@ -2911,7 +2911,7 @@
       "addedByYou": "Lisätty itse",
       "glossary": "Sanasto",
       "noGlossary": "Ei sanastoa",
-      "manageGlossaries": "Sanastot",
+      "manageGlossaries": "Hallitse sanastoja",
       "glossaries": "Sanastot",
       "closeGlossaries": "Sulje sanastot",
       "glossariesEmpty": "Luo sanasto varmistaaksesi tiettyjen termien käännökset. Sanastot tallennetaan tälle laitteelle ja ovat käytettävissä muissa käännöksissä.",
@@ -3209,7 +3209,12 @@
       "changeBusy": "Odota nykyisen suorituksen loppumista ja pyydä sitten uudelleen.",
       "changeHeld": "Ei lähetetty: ehdotettuja muokkauksia odottaa vielä hyväksyntää.",
       "pendingRunActionRequest": "Muutospyyntö vireillä",
-      "railPlaceholder": "Kysy muutos tai esitä kysymys…"
+      "railPlaceholder": "Kysy muutos tai esitä kysymys…",
+      "documentPageCount": "{count, plural, one {# sivu} other {# sivua}}",
+      "sourceShowPages": "Näytä sivut",
+      "sourceEditText": "Muokkaa tekstinä",
+      "sourceRemoveDocument": "Poista asiakirja",
+      "sourceJumpToPage": "Siirry sivulle"
     },
     "document": {
       "emptyTitle": "Kuvaile haluamaasi asiakirjaa",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "Vaadittu käännös",
       "guideNote": "Huomautus",
       "pendingRun": {
-        "title": "{count} ehdotusta vielä odottaa",
+        "title": "{count, plural, one {# ehdotus odottaa vielä} other {# ehdotusta odottavat vielä}}",
         "body": "{action} voi muuttaa mitä tahansa tekstin osaa, myös kohtia joissa on vielä päättämättömiä ehdotuksia, ja uusi arviointi korvaa nykyisen listan. Käsittele ensin jäljellä olevat ehdotukset.",
         "acceptAll": "Hyväksy kaikki jäljellä olevat",
         "rejectAll": "Hylkää kaikki",

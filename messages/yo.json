@@ -2895,7 +2895,7 @@
       "addedByYou": "Ìwọ ni o ṣàfikún",
       "glossary": "Ìtówólétumo",
       "noGlossary": "Kò sí ìtówólétumo",
-      "manageGlossaries": "Ìtówólétumo",
+      "manageGlossaries": "Ṣakoso àtòkasí",
       "glossaries": "Ìtówólétumo",
       "closeGlossaries": "Pa ìtówólétumo",
       "glossariesEmpty": "Ṣẹ́da ìtówólétumo láti fi mú bí a ṣe túmọ̀ àwọn ọ̀rọ̀ pàtó. Ìtówólétumo máa dákẹ́ lórí ìmúlò yìí, ó sì le lo fun ìtumọ̀ míì.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Duro kí iṣẹ́ tí ó ń lọ parí, lẹ́yìn náà bẹ̀rẹ̀ lẹ́ẹkansí.",
       "changeHeld": "Kò tíì ranṣẹ: àwọn àyípadà tí a dáyàn ṣi ń dúró de ipinnu.",
       "pendingRunActionRequest": "N béèrè fún àyípadà",
-      "railPlaceholder": "Bẹ̀rẹ̀ fún ayípadà tàbí ìbéèrè kan…"
+      "railPlaceholder": "Bẹ̀rẹ̀ fún ayípadà tàbí ìbéèrè kan…",
+      "documentPageCount": "{count, plural, one {# oju-iwe} other {# oju-iwe}}",
+      "sourceShowPages": "Fihan awọn oju-iwe",
+      "sourceEditText": "Ṣatúnṣe gẹ́gẹ́ bí ọrọ",
+      "sourceRemoveDocument": "Yọ iwe kuro",
+      "sourceJumpToPage": "Lọ sí oju-iwe"
     },
     "document": {
       "emptyTitle": "Ṣàpèjúwe iwe ti o fẹ",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Ìtúmọ̀ tó yẹ",
       "guideNote": "Akíyèsí",
       "pendingRun": {
-        "title": "{count} awọn iṣeduro ṣi dúró de",
+        "title": "{count, plural, one {# ìmòràn ṣi ń dúró} other {# àwọn ìmòràn ṣi ń dúró}}",
         "body": "{action} lè yí apá kankan ti ọrọ padà, pẹ̀lú wọn tí a ṣe iṣeduro lórí tí o kò ti pinnu, àti àyẹ̀wò tuntun yóò rọ́pò àtòjọ ìṣàkóso. Jọ̀wọ́, pinnu àwọn iṣeduro tó kù kọ́kọ́.",
         "acceptAll": "Gba gbogbo tí kò fi sílẹ̀",
         "rejectAll": "Kọ gbogbo rẹ",

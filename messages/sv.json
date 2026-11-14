@@ -2911,7 +2911,7 @@
       "addedByYou": "Tillagd av dig",
       "glossary": "Ordlista",
       "noGlossary": "Ingen ordlista",
-      "manageGlossaries": "Ordlistor",
+      "manageGlossaries": "Hantera ordlistor",
       "glossaries": "Ordlistor",
       "closeGlossaries": "Stäng ordlistor",
       "glossariesEmpty": "Skapa en ordlista för att säkerställa hur specifika termer översätts. Ordlistor sparas på denna enhet och kan återanvändas i flera översättningar.",
@@ -3209,7 +3209,12 @@
       "changeBusy": "Vänta tills den pågående processen är klar och försök igen.",
       "changeHeld": "Ej skickad: det finns föreslagna ändringar som väntar på beslut.",
       "pendingRunActionRequest": "Ber om en ändring",
-      "railPlaceholder": "Be om en ändring eller ställ en fråga…"
+      "railPlaceholder": "Be om en ändring eller ställ en fråga…",
+      "documentPageCount": "{count, plural, one {# sida} other {# sidor}}",
+      "sourceShowPages": "Visa sidor",
+      "sourceEditText": "Redigera som text",
+      "sourceRemoveDocument": "Ta bort dokument",
+      "sourceJumpToPage": "Gå till en sida"
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "Obligatorisk översättning",
       "guideNote": "Notering",
       "pendingRun": {
-        "title": "{count} förslag väntar fortfarande",
+        "title": "{count, plural, one {# förslag väntar fortfarande} other {# förslag väntar fortfarande}}",
         "body": "{action} kan ändra alla delar av texten, även avsnitt med förslag du inte bestämt om än, och en ny utvärdering ersätter den nuvarande listan. Ta ställning till de återstående förslagen först.",
         "acceptAll": "Acceptera alla återstående",
         "rejectAll": "Avslå alla",

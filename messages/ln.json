@@ -2895,7 +2895,7 @@
       "addedByYou": "Obakisi yango",
       "glossary": "Glossaire",
       "noGlossary": "Glossaire ezali te",
-      "manageGlossaries": "Ba glossaires",
+      "manageGlossaries": "Kosalela mabuka ya maloba",
       "glossaries": "Ba glossaires",
       "closeGlossaries": "Kokanga ba glossaires",
       "glossariesEmpty": "Kokela glossary mpo kokanga ndenge ba termes ya ntina ekobongolama. Ba glossaires ebombamaka na appareil oyo mpe ekoki kosalelama na ba traductions mingi.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Zela tósilisa mosala oyo ezali, sima senga lisusu.",
       "changeHeld": "Ebotama te : mibongiseli ezali kozela ekateli.",
       "pendingRunActionRequest": "Tosengi mbongwana",
-      "railPlaceholder": "Senga mbongwana to kotuna motuna…"
+      "railPlaceholder": "Senga mbongwana to kotuna motuna…",
+      "documentPageCount": "{count, plural, one {# lokasa} other {# bakolasa}}",
+      "sourceShowPages": "Lakisa bakolasa",
+      "sourceEditText": "Salela mbongwana lokola maloba",
+      "sourceRemoveDocument": "Longola mokanda",
+      "sourceJumpToPage": "Kende na lokasa"
     },
     "document": {
       "emptyTitle": "Sosola mokanda olingi",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Kobongola esengeli",
       "guideNote": "Noti",
       "pendingRun": {
-        "title": "Sugeransé {count} naino ezali na kozela",
+        "title": "{count, plural, one {# eyano ezali naino kosalelama} other {# bayano ezali naino kosalelama}}",
         "body": "{action} ekoki kobongola ndambo nyonso ya ndelo, ata biteni oyo ezali naino na sugeransé osaleli te, mpe assessment ya sika ekosilisa liste ya lelo. Banda boya sugeransé ezali naino.",
         "acceptAll": "Senga nyonso oyo ezali naino",
         "rejectAll": "Kokanga nyonso",

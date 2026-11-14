@@ -2942,7 +2942,7 @@
       "addedByYou": "您已添加",
       "glossary": "词汇表",
       "noGlossary": "无词汇表",
-      "manageGlossaries": "词汇表",
+      "manageGlossaries": "管理词汇表",
       "glossaries": "词汇表",
       "closeGlossaries": "关闭词汇表",
       "glossariesEmpty": "创建词汇表可锁定特定术语的译法。词汇表保存在本设备，可在多次翻译中复用。",
@@ -3240,7 +3240,12 @@
       "changeBusy": "请等待当前运行结束后再试。",
       "changeHeld": "未发送：还有建议修改待决。",
       "pendingRunActionRequest": "正在请求修改",
-      "railPlaceholder": "提出修改或问题…"
+      "railPlaceholder": "提出修改或问题…",
+      "documentPageCount": "{count, plural, one {# 页} other {# 页}}",
+      "sourceShowPages": "显示页面",
+      "sourceEditText": "以文本方式编辑",
+      "sourceRemoveDocument": "移除文档",
+      "sourceJumpToPage": "跳转到指定页面"
     },
     "document": {
       "emptyTitle": "描述您需要的文档",
@@ -3868,7 +3873,7 @@
       "guideTargetTerm": "要求翻译",
       "guideNote": "备注",
       "pendingRun": {
-        "title": "还有 {count} 条建议待处理",
+        "title": "{count, plural, one {# 条建议待处理} other {# 条建议待处理}}",
         "body": "{action} 可能会更改文本的任何部分，包括尚未处理的建议段落，且新的评估会替换当前列表。请先完成剩余建议的处理。",
         "acceptAll": "接受全部剩余建议",
         "rejectAll": "全部拒绝",

@@ -2911,7 +2911,7 @@
       "addedByYou": "Ajoutée par vous",
       "glossary": "Glossaire",
       "noGlossary": "Aucun glossaire",
-      "manageGlossaries": "Glossaires",
+      "manageGlossaries": "Gérer les glossaires",
       "glossaries": "Glossaires",
       "closeGlossaries": "Fermer les glossaires",
       "glossariesEmpty": "Créez un glossaire pour verrouiller la traduction de certains termes. Les glossaires sont enregistrés sur cet appareil et réutilisables sur différentes traductions.",
@@ -3209,7 +3209,12 @@
       "changeBusy": "Attendez la fin du processus en cours avant de demander à nouveau.",
       "changeHeld": "Non envoyé : des modifications proposées attendent encore une décision.",
       "pendingRunActionRequest": "Demande de modification en cours",
-      "railPlaceholder": "Demandez une modification ou posez une question…"
+      "railPlaceholder": "Demandez une modification ou posez une question…",
+      "documentPageCount": "{count, plural, one {# page} other {# pages}}",
+      "sourceShowPages": "Afficher les pages",
+      "sourceEditText": "Modifier en tant que texte",
+      "sourceRemoveDocument": "Supprimer le document",
+      "sourceJumpToPage": "Aller à une page"
     },
     "document": {
       "emptyTitle": "Décrivez le document souhaité",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "Traduction requise",
       "guideNote": "Note",
       "pendingRun": {
-        "title": "{count} suggestions encore en attente",
+        "title": "{count, plural, one {# suggestion en attente} other {# suggestions en attente}}",
         "body": "{action} peut modifier n’importe quelle partie du texte, y compris les passages avec des suggestions non décidées, et une nouvelle évaluation remplace la liste actuelle. Décidez des suggestions restantes d’abord.",
         "acceptAll": "Tout accepter",
         "rejectAll": "Tout rejeter",

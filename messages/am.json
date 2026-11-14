@@ -2911,7 +2911,7 @@
       "addedByYou": "የታከለው በእርስዎ",
       "glossary": "መዝገበ ቃላት",
       "noGlossary": "መዝገበ ቃላት የለም",
-      "manageGlossaries": "መዝገበ ቃላት",
+      "manageGlossaries": "የቃላት ዝርዝሮችን አስተዳድር",
       "glossaries": "መዝገበ ቃላት",
       "closeGlossaries": "መዝገበ ቃላትን ዝጋ",
       "glossariesEmpty": "አንዳንድ ተወላጅ ቃላት እንዴት እንደሚተረጉሙ ለማየት መዝገበ ቃላት ይፍጠሩ። መዝገበ ቃላት በዚህ መሳሪያ ላይ ይቀመጣሉ እና በትርጉማት መካከል መድገም ይችላሉ።",
@@ -3209,7 +3209,12 @@
       "changeBusy": "አሁን የሚከናወኑትን ሥራዎች ይጨርሱ፤ ከዚያ በኋላ ይጠይቁ።",
       "changeHeld": "አይልኩም፤ ጥቅም ላይ የሚዋሉ ምርምር አሻሽሎች የመዉዋል ይጠብቁ።",
       "pendingRunActionRequest": "ለመቀየር በመጠየቅ ላይ",
-      "railPlaceholder": "ለመቀየር ወይም ጥያቄ ጠየቁ…"
+      "railPlaceholder": "ለመቀየር ወይም ጥያቄ ጠየቁ…",
+      "documentPageCount": "{count, plural, one {# ገፅ} other {# ገፆች}}",
+      "sourceShowPages": "ገፆችን አሳይ",
+      "sourceEditText": "እንደ ጽሁፍ አርትዕ",
+      "sourceRemoveDocument": "ሰነዱን አስወግድ",
+      "sourceJumpToPage": "ወደ ገፅ ሂድ"
     },
     "document": {
       "emptyTitle": "የሚፈልጉትን ሰነድ ይግለጹ",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "አስፈላጊ ትርጉም",
       "guideNote": "ማስታወሻ",
       "pendingRun": {
-        "title": "{count} ጥያቄዎች ገና በትዕዛዝ ላይ ናቸው",
+        "title": "{count, plural, one {# ጥያቄ ገና በመጠባበቅ ላይ አለ} other {# ጥያቄዎች ገና በመጠባበቅ ላይ አሉ}}",
         "body": "{action} የጽሑፉን ማንኛውንም ክፍል ሊቀይር ይችላል፣ ገና ውሳኔ ላይ ያልወሰኑትን ጥያቄዎች ጨምሮ፣ እና አዲሱ ግምገማ አሁኑን ዝርዝር ይቀይራል። ቀሪዎቹን ጥያቄዎች መመርጥ አስቀድሞ ይውሰኑ።",
         "acceptAll": "ሁሉንም ቀሪዎቹን ይቀበሉ",
         "rejectAll": "ሁሉንም ይተዉ",

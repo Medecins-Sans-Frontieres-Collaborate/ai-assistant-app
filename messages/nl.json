@@ -2911,7 +2911,7 @@
       "addedByYou": "Door u toegevoegd",
       "glossary": "Glossarium",
       "noGlossary": "Geen glossarium",
-      "manageGlossaries": "Glossaria",
+      "manageGlossaries": "Beheer glossaria",
       "glossaries": "Glossaria",
       "closeGlossaries": "Glossaria sluiten",
       "glossariesEmpty": "Maak een glossarium aan om vast te leggen hoe specifieke termen worden vertaald. Glossaria worden op dit apparaat opgeslagen en zijn herbruikbaar bij vertalingen.",
@@ -3209,7 +3209,12 @@
       "changeBusy": "Wacht tot de huidige run is voltooid en probeer het daarna opnieuw.",
       "changeHeld": "Niet verzonden: er wachten nog voorgestelde wijzigingen op een beslissing.",
       "pendingRunActionRequest": "Wijziging wordt aangevraagd",
-      "railPlaceholder": "Vraag om een wijziging of stel een vraag…"
+      "railPlaceholder": "Vraag om een wijziging of stel een vraag…",
+      "documentPageCount": "{count, plural, one {# pagina} other {# pagina's}}",
+      "sourceShowPages": "Pagina's weergeven",
+      "sourceEditText": "Als tekst bewerken",
+      "sourceRemoveDocument": "Document verwijderen",
+      "sourceJumpToPage": "Ga naar een pagina"
     },
     "document": {
       "emptyTitle": "Beschrijf het gewenste document",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "Vereiste vertaling",
       "guideNote": "Opmerking",
       "pendingRun": {
-        "title": "{count} suggesties nog in behandeling",
+        "title": "{count, plural, one {# suggestie nog in behandeling} other {# suggesties nog in behandeling}}",
         "body": "{action} kan elk deel van de tekst wijzigen, inclusief passages met suggesties waarover u nog geen beslissing hebt genomen; een nieuwe beoordeling vervangt de huidige lijst. Behandel eerst de resterende suggesties.",
         "acceptAll": "Alles accepteren",
         "rejectAll": "Alles weigeren",

@@ -2895,7 +2895,7 @@
       "addedByYou": "Ka ƙara",
       "glossary": "Jadawalin kalmomi",
       "noGlossary": "Babu jadawalin kalmomi",
-      "manageGlossaries": "Jadawalin kalmomi",
+      "manageGlossaries": "Sarrafa ƙamus",
       "glossaries": "Jadawalin kalmomi",
       "closeGlossaries": "Rufe jadawalin kalmomi",
       "glossariesEmpty": "Ƙirƙiri jadawalin kalmomi don tabbatar da fassarar wasu kalmomi. Jadawalai za su ajiye a wannan na'ura kuma za a iya sake amfani da su.",
@@ -3193,7 +3193,12 @@
       "changeBusy": "Jira a gama aikin yanzu, sannan ka sake tambaya.",
       "changeHeld": "Ba a aika ba: har yanzu ba a yanke hukunci kan gyare-gyaren da aka ba da shawara ba.",
       "pendingRunActionRequest": "Ana neman a yi canji",
-      "railPlaceholder": "Nemi a yi canji ko tambaya…"
+      "railPlaceholder": "Nemi a yi canji ko tambaya…",
+      "documentPageCount": "{count, plural, one {shafi #} other {shafuka #}}",
+      "sourceShowPages": "Nuna shafuka",
+      "sourceEditText": "Gyara azaman rubutu",
+      "sourceRemoveDocument": "Cire takarda",
+      "sourceJumpToPage": "Je zuwa shafi"
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",
@@ -3821,7 +3826,7 @@
       "guideTargetTerm": "Fassarar da ake buƙata",
       "guideNote": "Lura",
       "pendingRun": {
-        "title": "Akwai shawarwari {count} da ke jiran dubawa",
+        "title": "{count, plural, one {# shawarar da ke jiran amsa} other {# shawarwari da ke jiran amsa}}",
         "body": "{action} na iya sauya kowanne bangare na rubutu, ciki har da sassan da ke da shawarwari da ba ka yanke hukunci ba tukuna, kuma sabon tantancewa zai maye gurbin jerin yanzu. Ka yanke shawarar saura da farko.",
         "acceptAll": "Amince da duk saura",
         "rejectAll": "Ki duk",

@@ -2911,7 +2911,7 @@
       "addedByYou": "Adicionado por você",
       "glossary": "Glossário",
       "noGlossary": "Nenhum glossário",
-      "manageGlossaries": "Glossários",
+      "manageGlossaries": "Gerenciar glossários",
       "glossaries": "Glossários",
       "closeGlossaries": "Fechar glossários",
       "glossariesEmpty": "Crie um glossário para travar como termos específicos são traduzidos. Os glossários são salvos neste dispositivo e podem ser reutilizados em outras traduções.",
@@ -3209,7 +3209,12 @@
       "changeBusy": "Aguarde a finalização da execução atual para pedir novamente.",
       "changeHeld": "Não enviado: há sugestões de edição aguardando decisão.",
       "pendingRunActionRequest": "Solicitando uma alteração",
-      "railPlaceholder": "Solicite uma alteração ou faça uma pergunta…"
+      "railPlaceholder": "Solicite uma alteração ou faça uma pergunta…",
+      "documentPageCount": "{count, plural, one {# página} other {# páginas}}",
+      "sourceShowPages": "Mostrar páginas",
+      "sourceEditText": "Editar como texto",
+      "sourceRemoveDocument": "Remover documento",
+      "sourceJumpToPage": "Ir para uma página"
     },
     "document": {
       "emptyTitle": "Descreva o documento desejado",
@@ -3837,7 +3842,7 @@
       "guideTargetTerm": "Tradução obrigatória",
       "guideNote": "Nota",
       "pendingRun": {
-        "title": "{count} sugestões ainda pendentes",
+        "title": "{count, plural, one {# sugestão pendente} other {# sugestões pendentes}}",
         "body": "{action} pode alterar qualquer parte do texto, inclusive passagens com sugestões ainda não definidas, e uma nova avaliação substitui a lista atual. Decida as sugestões restantes primeiro.",
         "acceptAll": "Aceitar todas as restantes",
         "rejectAll": "Rejeitar todas",
