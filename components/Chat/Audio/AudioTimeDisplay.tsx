@@ -27,7 +27,7 @@ export const AudioTimeDisplay: React.FC<AudioTimeDisplayProps> = ({
     <div className="text-xs text-gray-600 dark:text-gray-300">
       {formatTime(currentTime)} / {formatTime(duration)}
       {playbackSpeed !== 1 && (
-        <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">
+        <span className="ms-1 text-xs text-gray-500 dark:text-gray-400">
           ({playbackSpeed}x)
         </span>
       )}
