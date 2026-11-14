@@ -501,7 +501,7 @@ describe('AgentAccessPanel', () => {
     await screen.findByText('Helpdesk Agent');
     await screen.findByText('HR Handbook (M365)');
     await screen.findByText('MSF Communications');
-    const search = screen.getByRole('searchbox', { name: 'Search' });
+    const search = screen.getByRole('searchbox', { name: 'Search...' });
     const requestCount = fetchMock.mock.calls.length;
     fireEvent.change(search, { target: { value: 'HANDBOOK.PDF' } });
     expect(screen.getByText('HR Handbook (M365)')).toBeInTheDocument();
