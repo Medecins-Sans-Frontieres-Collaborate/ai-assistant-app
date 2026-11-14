@@ -19,6 +19,69 @@ target languages, evaluates quality, and manages revisions. Server side:
 - The server receives the language as a **display label** (≤80 chars,
   free text by design), not a locale code.
 
+## Documents larger than one batch
+
+A run takes at most 60,000 source characters. An uploaded document over
+that is not rejected: `lib/utils/shared/translation/pageBatches.ts` splits
+the extracted text into pages, the first batch of consecutive pages that
+fits is loaded, and `SourcePageSelector` (a strip above the source pane)
+lets the user type a page range or step to the previous/next batch. A
+selection is applied only if it fits the budget.
+
+- Workflow state keeps a **reference** (`sourceDocument`: name, blob url,
+  last page, selected pages) plus the bounded source text, never the whole
+  document. After a reload the pages are re-read on demand through
+  `/api/file/process`, which is cached server-side.
+- Splitting also removes the extractor's `--- Page N ---` markers, for small
+  documents too.
+- A file with no server copy (plain text read in the browser) or a single
+  page over the budget still gets the "too long" message.
+
+Whole-file, layout-preserving translation is the separate chat feature
+(`/api/document-translation/*`). For PDFs it also offers:
+
+- `GET /api/document-translation/pages/{jobId}?from=&to=`: source and
+  translated text per page (built once, cached as a blob), at most 25 pages
+  per read.
+- `PUT /api/document-translation/pages/{jobId}`: the user's corrected text
+  for one page (`text: null` clears it), stored as a blob.
+- `GET /api/document-translation/export/{jobId}?format=docx`: the text
+  version, one Word page per source page, corrections applied. The
+  translated PDF itself is never modified.
+- `feature.translation.pagesPerDay`: admin-configurable daily page
+  allowance, charged per PDF page at submit and returned if the submission
+  fails.
+
+## Progress and the analysis strip
+
+Work with distinct phases shows named steps (`Shared/Progress/ProgressSteps`)
+instead of a bare spinner:
+
+- **Reviewed run**: Analyzing, Translating, Reviewing, Done, at the top of
+  the translation pane (`TranslationRunStatus`). The step comes from the
+  run's latest activity key; the keys live in `TRANSLATION_ACTIVITY`
+  (`lib/utils/shared/translation/runProgress.ts`), which the orchestrator and
+  the workspace both import. The text is labelled "Draft" and faded until the
+  last review round finishes.
+- **Quick run**: one pass, so a progress bar and placeholder lines, no steps.
+- **Assessment**: the quality column opens at once and lists the criteria
+  being checked (`AssessmentProgress`). The assessment is a single request,
+  so the criteria are shown in progress together, not one by one.
+- **Upload**: Uploading, Reading text, Ready, in the source pane
+  (`UploadProgress`), with Cancel.
+
+Run, assessment and upload can each be stopped; a stop is not reported as an
+error.
+
+The paper trail (analysis, review rounds, glossary check) lives in
+`AnalysisStrip` under the panes. It shows as a one-line header, expands on
+click, and goes back to the header when a run completes. The expanded strip
+is resizable by dragging its top edge or with the arrow keys (up grows).
+Dismissing it and its height are **user preferences** in the settings store
+(`translationAnalysisHidden`, `translationAnalysisHeight`), so they apply to
+every translation; a dismissed strip is reopened from a pill in the
+translation pane header.
+
 ## Working translation & editable output
 
 `TranslationWorkflowState.finalText` is the **working translation** —
