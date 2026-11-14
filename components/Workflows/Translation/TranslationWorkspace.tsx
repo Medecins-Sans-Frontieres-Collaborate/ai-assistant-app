@@ -11,6 +11,7 @@ import {
   IconPencil,
   IconPencilOff,
   IconPlayerStopFilled,
+  IconScan,
   IconUpload,
 } from '@tabler/icons-react';
 import {
@@ -45,6 +46,7 @@ import {
   FileTextExtractionError,
   UploadStage,
   extractTextFromUploadedFile,
+  ocrUploadedFile,
   uploadAndExtractText,
 } from '@/client/services/workflows/fileTextExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
@@ -56,6 +58,13 @@ import {
   LanguageOption,
   sortLanguageOptionsByLabel,
 } from '@/lib/utils/app/languagePickerHelpers';
+import {
+  MAX_OCR_PAGES,
+  OCR_ERROR,
+  OCR_PAGES_LIMIT_KEY,
+  looksLikeSparseText,
+  supportsOcr,
+} from '@/lib/utils/shared/file/ocr';
 import { isCustomCriterionId } from '@/lib/utils/shared/review/customCriteria';
 import {
   changedRange,
@@ -140,6 +149,7 @@ import { DocumentJobProgress } from './DocumentJobProgress';
 import { DocumentReaderBar } from './DocumentReaderBar';
 import { GlossaryManager } from './GlossaryManager';
 import { GlossaryPicker, languageFit } from './GlossaryPicker';
+import { OcrOffer, OcrOfferReason } from './OcrOffer';
 import { SourcePageSelector } from './SourcePageSelector';
 import { TranslationRunStatus } from './TranslationRunStatus';
 import { UploadProgress } from './UploadProgress';
@@ -239,9 +249,20 @@ export function TranslationWorkspace({
   // The upload in flight, if any: what the source pane shows instead of text.
   const [upload, setUpload] = useState<{
     name: string;
-    size: number;
+    size?: number;
     stage: UploadStage;
   } | null>(null);
+  /** An open offer to read a stored PDF with OCR. */
+  const [ocrOffer, setOcrOffer] = useState<{
+    name: string;
+    url: string;
+    reason: OcrOfferReason;
+    /** False when the server has no OCR to run. */
+    canOcr: boolean;
+    error?: string;
+  } | null>(null);
+  /** The loaded document's text is thin enough to suggest OCR. */
+  const [sparseTextHint, setSparseTextHint] = useState(false);
   const uploading = upload !== null;
   const uploadAbortRef = useRef<AbortController | null>(null);
   const assessAbortRef = useRef<AbortController | null>(null);
@@ -631,92 +652,240 @@ export function TranslationWorkspace({
         ? err.message
         : t('document.uploadFailed');
 
+  /**
+   * Makes extracted text the workspace's source: splits it into pages, loads
+   * the first batch when it is larger than one, and keeps the file's
+   * reference. Shared by plain extraction and OCR.
+   *
+   * @returns 'loaded', or why nothing was loaded: 'empty' (no text) or
+   *   'too-long' (larger than a batch and impossible to page).
+   */
+  const loadExtractedDocument = (extracted: {
+    name: string;
+    url: string;
+    text: string;
+    ocrAvailable: boolean;
+    ocrApplied: boolean;
+  }): 'loaded' | 'empty' | 'too-long' => {
+    // Splitting also drops the extractor's page markers, which must not
+    // reach the translation.
+    const pages = splitExtractedPages(extracted.text);
+    const allPages = pages.map((page) => page.page);
+    const fullText = joinPages(pages, allPages);
+    if (!fullText) return 'empty';
+    const lastPage = allPages[allPages.length - 1];
+    const ocr = {
+      ...(extracted.ocrAvailable && { ocrAvailable: true }),
+      ...(extracted.ocrApplied && { ocrApplied: true }),
+    };
+
+    let loadedText = fullText;
+    let sourceDocument: TranslationWorkflowState['sourceDocument'];
+    if (fullText.length > MAX_SOURCE_CHARS) {
+      // Larger than one batch: load the first batch and let the user pick
+      // other pages. That needs a server copy to re-read after a reload
+      // and more than one page to choose from.
+      const firstBatch = selectBatch(pages, MAX_SOURCE_CHARS);
+      if (!extracted.url || firstBatch.length === 0) return 'too-long';
+      loadedText = joinPages(pages, firstBatch);
+      sourceDocument = {
+        name: extracted.name,
+        url: extracted.url,
+        lastPage,
+        selectedPages: formatPageSelection(firstBatch),
+        ...ocr,
+      };
+    }
+
+    // A document that fits one batch still keeps its reference when it
+    // can be translated whole, which needs the file itself.
+    if (
+      !sourceDocument &&
+      extracted.url &&
+      supportsPagedText(fileExtensionOf(extracted.name))
+    ) {
+      sourceDocument = {
+        name: extracted.name,
+        url: extracted.url,
+        lastPage,
+        selectedPages: formatPageSelection(allPages),
+        fitsOneBatch: true,
+        ...ocr,
+      };
+    }
+
+    setSourcePages(sourceDocument ? pages : null);
+    setSparseTextHint(
+      extracted.ocrAvailable &&
+        !extracted.ocrApplied &&
+        supportsOcr(extracted.name) &&
+        looksLikeSparseText(
+          pages.map((page) => page.text.length),
+          lastPage,
+        ),
+    );
+    setDocumentError(null);
+    // A new document replaces the one a whole-document job was run on.
+    patchState({
+      ...(state ? leaveDocumentReader(state) : {}),
+      sourceText: loadedText,
+      sourceDocument,
+      documentJob: undefined,
+    });
+    nameWorkflowConversation(conversationId, {
+      label: extracted.name,
+      sample: loadedText,
+      workflow: 'Translation',
+    });
+    return 'loaded';
+  };
+
+  /** Reports why extracted text was not loaded. */
+  const reportUnloaded = (outcome: 'empty' | 'too-long', name: string) =>
+    setUploadError(
+      outcome === 'empty'
+        ? t('document.referenceEmpty', { name })
+        : t('translation.tooLong', { max: String(MAX_SOURCE_CHARS) }),
+    );
+
   const handleUpload = async (files: FileList | null) => {
     const file = files?.[0];
     if (!file) return;
     setUploadError(null);
+    setOcrOffer(null);
     const abort = new AbortController();
     uploadAbortRef.current = abort;
     setUpload({ name: file.name, size: file.size, stage: 'uploading' });
+    /**
+     * A stored PDF without text is not a dead end: it can be read with OCR
+     * (when the server has it) or translated whole.
+     */
+    const offerOcr = (url: string | undefined, available: boolean) => {
+      if (!url || !supportsPagedText(fileExtensionOf(file.name))) return false;
+      uploadedFileRef.current = { url, file };
+      setOcrOffer({
+        name: file.name,
+        url,
+        reason: 'no-text',
+        canOcr: available && supportsOcr(file.name),
+      });
+      return true;
+    };
     try {
       const extracted = await uploadAndExtractText(file, {
         signal: abort.signal,
         onStage: (stage) =>
           setUpload((current) => (current ? { ...current, stage } : current)),
       });
-      // Splitting also drops the extractor's page markers, which must not
-      // reach the translation.
-      const pages = splitExtractedPages(extracted.text);
-      const allPages = pages.map((page) => page.page);
-      const fullText = joinPages(pages, allPages);
-      if (!fullText) {
-        setUploadError(t('document.referenceEmpty', { name: file.name }));
-        return;
-      }
-
-      let loadedText = fullText;
-      let sourceDocument: TranslationWorkflowState['sourceDocument'];
-      if (fullText.length > MAX_SOURCE_CHARS) {
-        // Larger than one batch: load the first batch and let the user pick
-        // other pages. That needs a server copy to re-read after a reload
-        // and more than one page to choose from.
-        const firstBatch = selectBatch(pages, MAX_SOURCE_CHARS);
-        if (!extracted.url || firstBatch.length === 0) {
-          setUploadError(
-            t('translation.tooLong', { max: String(MAX_SOURCE_CHARS) }),
-          );
-          return;
-        }
-        loadedText = joinPages(pages, firstBatch);
-        sourceDocument = {
-          name: file.name,
-          url: extracted.url,
-          lastPage: allPages[allPages.length - 1],
-          selectedPages: formatPageSelection(firstBatch),
-        };
-      }
-
-      // A document that fits one batch still keeps its reference when it
-      // can be translated whole, which needs the file itself.
-      if (
-        !sourceDocument &&
-        extracted.url &&
-        supportsPagedText(fileExtensionOf(file.name))
+      const outcome = loadExtractedDocument({
+        ...extracted,
+        ocrApplied: false,
+      });
+      if (outcome === 'loaded') {
+        uploadedFileRef.current = extracted.url
+          ? { url: extracted.url, file }
+          : null;
+      } else if (
+        outcome !== 'empty' ||
+        !offerOcr(extracted.url, extracted.ocrAvailable)
       ) {
-        sourceDocument = {
-          name: file.name,
-          url: extracted.url,
-          lastPage: allPages[allPages.length - 1],
-          selectedPages: formatPageSelection(allPages),
-          fitsOneBatch: true,
-        };
+        reportUnloaded(outcome, file.name);
       }
-
-      setSourcePages(sourceDocument ? pages : null);
-      uploadedFileRef.current = extracted.url
-        ? { url: extracted.url, file }
-        : null;
-      setDocumentError(null);
-      // A new document replaces the one a whole-document job was run on.
-      patchState({
-        ...(state ? leaveDocumentReader(state) : {}),
-        sourceText: loadedText,
-        sourceDocument,
-        documentJob: undefined,
-      });
-      nameWorkflowConversation(conversationId, {
-        label: file.name,
-        sample: loadedText,
-        workflow: 'Translation',
-      });
     } catch (err) {
       // A cancelled upload is the user's decision, not a failure to report.
-      if (!abort.signal.aborted) {
+      if (abort.signal.aborted) return;
+      const noText =
+        err instanceof FileTextExtractionError && err.code === OCR_ERROR.noText;
+      if (
+        !noText ||
+        !offerOcr(err.context.url, err.context.ocrAvailable === true)
+      ) {
         setUploadError(extractionErrorMessage(err, file.name));
       }
     } finally {
       setUpload(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  /** Message for a failed OCR attempt, specific where the server was. */
+  const ocrErrorMessage = (err: unknown): string => {
+    const known = err instanceof FileTextExtractionError ? err : undefined;
+    if (known?.context.status === 429) return t('translation.ocrLimitReached');
+    switch (known?.code) {
+      case OCR_ERROR.tooManyPages:
+        return t('translation.ocrTooManyPages', { max: String(MAX_OCR_PAGES) });
+      case OCR_ERROR.notConfigured:
+        return t('translation.ocrUnavailable');
+      case OCR_ERROR.noText:
+        return t('translation.ocrNoText');
+      default:
+        return t('translation.ocrFailed');
+    }
+  };
+
+  /**
+   * Makes the offered file, which has no text, the workspace's document and
+   * switches to whole-document mode, where translation reads the pages.
+   */
+  const handleTranslateScannedWhole = () => {
+    const offer = ocrOffer;
+    if (!offer || !state) return;
+    setOcrOffer(null);
+    setSourcePages(null);
+    setSparseTextHint(false);
+    setUploadError(null);
+    setDocumentError(null);
+    setEditingTarget(false);
+    patchState({
+      ...leaveDocumentReader(state),
+      mode: 'document',
+      sourceText: '',
+      sourceDocument: {
+        name: offer.name,
+        url: offer.url,
+        lastPage: 0,
+        selectedPages: '',
+        fitsOneBatch: true,
+        noText: true,
+        ...(offer.canOcr && { ocrAvailable: true }),
+      },
+      documentJob: undefined,
+    });
+    nameWorkflowConversation(conversationId, {
+      label: offer.name,
+      sample: offer.name,
+      workflow: 'Translation',
+    });
+  };
+
+  /** Reads the offered file with OCR and loads the result as the source. */
+  const handleRunOcr = async () => {
+    const offer = ocrOffer;
+    if (!offer || uploading) return;
+    setUploadError(null);
+    const abort = new AbortController();
+    uploadAbortRef.current = abort;
+    setUpload({ name: offer.name, stage: 'ocr' });
+    try {
+      const { text } = await ocrUploadedFile(offer.url, abort.signal);
+      const outcome = loadExtractedDocument({
+        name: offer.name,
+        url: offer.url,
+        text,
+        ocrAvailable: true,
+        ocrApplied: true,
+      });
+      if (outcome !== 'loaded') reportUnloaded(outcome, offer.name);
+      setOcrOffer(null);
+      void refetchLimits();
+    } catch (err) {
+      // Cancelling leaves the offer open, without an error.
+      if (!abort.signal.aborted) {
+        setOcrOffer({ ...offer, error: ocrErrorMessage(err) });
+      }
+    } finally {
+      setUpload(null);
     }
   };
 
@@ -1293,6 +1462,22 @@ export function TranslationWorkspace({
     targetLanguage?.custom ? undefined : targetLanguage?.id,
   );
   const pagesBudget = featureRemaining(TRANSLATION_PAGES_LIMIT_KEY);
+  const ocrBudget = featureRemaining(OCR_PAGES_LIMIT_KEY);
+  const loadedDocument = state?.sourceDocument;
+  /** OCR can still be asked for on the loaded document. */
+  const canOfferOcr =
+    !!loadedDocument?.ocrAvailable &&
+    !loadedDocument.ocrApplied &&
+    supportsOcr(loadedDocument.name);
+  const offerOcrForLoaded = (reason: OcrOfferReason) => {
+    if (!loadedDocument) return;
+    setOcrOffer({
+      name: loadedDocument.name,
+      url: loadedDocument.url,
+      reason,
+      canOcr: true,
+    });
+  };
 
   /** Sends the uploaded file through whole-document translation. */
   const submitDocument = async () => {
@@ -1726,6 +1911,28 @@ export function TranslationWorkspace({
         </p>
       )}
 
+      {sparseTextHint && canOfferOcr && !ocrOffer && !uploading && (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-gray-200 px-3 py-2 text-xs dark:border-gray-700">
+          <span className="text-amber-700 dark:text-amber-400">
+            {t('translation.ocrSparseHint')}
+          </span>
+          <button
+            type="button"
+            onClick={() => offerOcrForLoaded('sparse')}
+            className="rounded-lg border border-gray-300 px-2 py-0.5 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+          >
+            {t('translation.ocrButton')}
+          </button>
+          <button
+            type="button"
+            onClick={() => setSparseTextHint(false)}
+            className="rounded-lg px-2 py-0.5 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+          >
+            {t('translation.ocrDismiss')}
+          </button>
+        </div>
+      )}
+
       {state?.sourceDocument &&
         !state.sourceDocument.fitsOneBatch &&
         !documentMode && (
@@ -1764,21 +1971,49 @@ export function TranslationWorkspace({
                     </span>
                   )}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={
-                    isRunning ||
-                    uploading ||
-                    assessing ||
-                    submittingDocument ||
-                    documentInProgress
-                  }
-                  className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
-                >
-                  <IconUpload size={13} aria-hidden />
-                  {t('translation.uploadDocument')}
-                </button>
+                <span className="flex items-center gap-1">
+                  {loadedDocument?.ocrApplied && !ocrOffer && (
+                    <span
+                      title={t('translation.ocrAppliedHint')}
+                      className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300"
+                    >
+                      {t('translation.ocrApplied')}
+                    </span>
+                  )}
+                  {canOfferOcr && !ocrOffer && !readingDocument && (
+                    <button
+                      type="button"
+                      onClick={() => offerOcrForLoaded('manual')}
+                      disabled={
+                        isRunning ||
+                        uploading ||
+                        assessing ||
+                        submittingDocument ||
+                        documentInProgress
+                      }
+                      title={t('translation.ocrButtonHint')}
+                      className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+                    >
+                      <IconScan size={13} aria-hidden />
+                      {t('translation.ocrButton')}
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={
+                      isRunning ||
+                      uploading ||
+                      assessing ||
+                      submittingDocument ||
+                      documentInProgress
+                    }
+                    className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+                  >
+                    <IconUpload size={13} aria-hidden />
+                    {t('translation.uploadDocument')}
+                  </button>
+                </span>
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -1795,27 +2030,62 @@ export function TranslationWorkspace({
                   onCancel={() => uploadAbortRef.current?.abort()}
                 />
               )}
-              {readingDocument && !uploading && (
+              {ocrOffer && !uploading && (
+                <OcrOffer
+                  fileName={ocrOffer.name}
+                  reason={ocrOffer.reason}
+                  canOcr={ocrOffer.canOcr}
+                  onTranslateWhole={
+                    ocrOffer.reason === 'no-text'
+                      ? handleTranslateScannedWhole
+                      : undefined
+                  }
+                  pagesLeft={ocrBudget?.remaining}
+                  error={ocrOffer.error}
+                  onRun={() => void handleRunOcr()}
+                  onDismiss={() => setOcrOffer(null)}
+                />
+              )}
+              {readingDocument && !uploading && !ocrOffer && (
                 <div
                   data-testid="document-source-page"
                   className="min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap p-3 text-sm text-gray-900 dark:text-gray-100"
                 >
                   {pageInPane ? (
-                    reader.page?.source
+                    reader.page?.source || (
+                      <span className="text-gray-500 dark:text-gray-400">
+                        {t('translation.scannedPageNote')}
+                      </span>
+                    )
                   ) : reader.pageError ? null : (
                     <SkeletonLines widths={['88%', '94%', '61%']} />
                   )}
                 </div>
               )}
+              {loadedDocument?.noText &&
+                sourceText === '' &&
+                !readingDocument &&
+                !uploading &&
+                !ocrOffer && (
+                  <p className="px-3 pt-2 text-xs text-gray-600 dark:text-gray-400">
+                    {t('translation.scannedSourceNote', {
+                      name: loadedDocument.name,
+                    })}
+                  </p>
+                )}
               <textarea
                 ref={sourceRef}
-                hidden={uploading || readingDocument}
+                hidden={uploading || readingDocument || ocrOffer !== null}
                 value={sourceText}
                 onChange={(e) =>
                   patchState({
                     sourceText: e.target.value,
-                    // Emptying the pane lets go of the document it came from.
-                    ...(e.target.value === '' && { sourceDocument: undefined }),
+                    // Emptying the pane lets go of the document it came from;
+                    // so does typing over a document that brought no text.
+                    ...((e.target.value === '' ||
+                      state.sourceDocument?.noText) && {
+                      sourceDocument: undefined,
+                    }),
                   })
                 }
                 disabled={isRunning || uploading}
