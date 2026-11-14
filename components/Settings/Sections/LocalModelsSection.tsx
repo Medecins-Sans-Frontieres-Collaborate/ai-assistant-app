@@ -106,7 +106,7 @@ export const LocalModelsSection: FC = () => {
                     {definition.label}
                   </span>
                   {definition.experimental && (
-                    <span className="ml-2 rounded bg-gray-200 px-1.5 py-0.5 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                    <span className="ms-2 rounded bg-gray-200 px-1.5 py-0.5 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                       {t('experimental')}
                     </span>
                   )}

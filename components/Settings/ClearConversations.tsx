@@ -23,13 +23,13 @@ export const ClearConversations: FC<Props> = ({ onClearConversations }) => {
     <div className="flex cursor-pointer items-center rounded-lg py-3 px-3 hover:bg-gray-500/10 w-[200px]">
       <IconTrash size={18} />
 
-      <div className="ml-3 flex-1 text-left text-[12.5px] leading-3 text-white">
+      <div className="ms-3 flex-1 text-start text-[12.5px] leading-3 text-white">
         {t('Are you sure?')}
       </div>
 
       <div className="flex w-[40px]">
         <IconCheck
-          className="ml-auto mr-1 min-w-[20px] text-gray-400 hover:text-gray-100"
+          className="ms-auto me-1 min-w-[20px] text-gray-400 hover:text-gray-100"
           size={18}
           onClick={(e: React.MouseEvent) => {
             e.stopPropagation();
@@ -38,7 +38,7 @@ export const ClearConversations: FC<Props> = ({ onClearConversations }) => {
         />
 
         <IconX
-          className="ml-auto min-w-[20px] text-gray-400 hover:text-gray-100"
+          className="ms-auto min-w-[20px] text-gray-400 hover:text-gray-100"
           size={18}
           onClick={(e: React.MouseEvent) => {
             e.stopPropagation();

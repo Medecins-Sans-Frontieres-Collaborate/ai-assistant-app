@@ -339,7 +339,7 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
 
             {/* Collapsible action buttons */}
             {showLegacyOptions && (
-              <div className="flex flex-col space-y-2 mt-3 pl-5">
+              <div className="flex flex-col space-y-2 mt-3 ps-5">
                 {/* Migrate button */}
                 {onOpenMigration && (
                   <SidebarButton
@@ -427,7 +427,7 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
             </button>
 
             {showQuarantineOptions && (
-              <div className="flex flex-col space-y-2 mt-3 pl-5">
+              <div className="flex flex-col space-y-2 mt-3 ps-5">
                 {onOpenQuarantine && (
                   <SidebarButton
                     text={t('settings.Review & Recover')}
@@ -528,7 +528,7 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
             <h3 className="text-md font-bold text-black dark:text-white">
               {t('settings.Team Templates')}
             </h3>
-            <span className="ml-2 px-2 py-0.5 text-xs font-semibold bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 rounded">
+            <span className="ms-2 px-2 py-0.5 text-xs font-semibold bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 rounded">
               {t('settings.Experimental')}
             </span>
           </div>

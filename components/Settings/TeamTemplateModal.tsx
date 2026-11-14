@@ -278,7 +278,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
         {/* Header */}
         <div className="flex-shrink-0 px-4 md:px-6 py-3 md:py-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
-            <div className="flex-1 min-w-0 mr-4">
+            <div className="flex-1 min-w-0 me-4">
               <div className="flex items-center gap-2">
                 <h3 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white truncate">
                   {t('Team Templates')}
@@ -421,7 +421,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                               >
                                 {t('None')}
                               </button>
-                              <span className="flex-1 text-xs text-gray-500 dark:text-gray-400 text-right">
+                              <span className="flex-1 text-xs text-gray-500 dark:text-gray-400 text-end">
                                 {selectedPromptIds.length} {t('selected')}
                               </span>
                             </div>
@@ -517,7 +517,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                               >
                                 {t('None')}
                               </button>
-                              <span className="flex-1 text-xs text-gray-500 dark:text-gray-400 text-right">
+                              <span className="flex-1 text-xs text-gray-500 dark:text-gray-400 text-end">
                                 {selectedToneIds.length} {t('selected')}
                               </span>
                             </div>
