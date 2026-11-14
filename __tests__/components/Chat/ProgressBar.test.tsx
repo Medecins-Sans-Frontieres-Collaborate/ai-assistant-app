@@ -205,7 +205,7 @@ describe('ProgressBar', () => {
       ) as HTMLElement;
       expect(progressFill).toHaveClass('absolute');
       expect(progressFill).toHaveClass('top-0');
-      expect(progressFill).toHaveClass('left-0');
+      expect(progressFill).toHaveClass('start-0');
       expect(progressFill).toHaveClass('h-2');
       expect(progressFill).toHaveClass('rounded-full');
     });

@@ -203,7 +203,7 @@ describe('NavigationItem', () => {
       expect(button).toHaveClass('w-full');
     });
 
-    it('has text-left alignment', () => {
+    it('has text-start alignment', () => {
       render(
         <NavigationItem
           section={SettingsSection.GENERAL}
@@ -214,7 +214,7 @@ describe('NavigationItem', () => {
       );
 
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('text-left');
+      expect(button).toHaveClass('text-start');
     });
 
     it('has rounded corners', () => {
