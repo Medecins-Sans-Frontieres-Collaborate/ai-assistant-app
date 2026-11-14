@@ -243,6 +243,16 @@ export interface TranslationSourceDocument {
    * translated whole.
    */
   fitsOneBatch?: boolean;
+  /** True when the server can read the file with OCR. */
+  ocrAvailable?: boolean;
+  /** True when the text in use was read with OCR. */
+  ocrApplied?: boolean;
+  /**
+   * True when no text could be extracted (a scanned file) and the reference
+   * is kept only to translate the document whole. `sourceText` is then not
+   * taken from this document, and `lastPage` and `selectedPages` are empty.
+   */
+  noText?: boolean;
 }
 
 /** How a translation is produced. */
