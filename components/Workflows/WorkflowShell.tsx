@@ -223,7 +223,9 @@ export function WorkflowShell() {
                 ? t('shell.hideConversation')
                 : t('shell.showConversation')
             }
-            position="bottom"
+            // The button sits at the window's edge: a centered tooltip
+            // below it would run off screen.
+            position="left"
           >
             <button
               type="button"
