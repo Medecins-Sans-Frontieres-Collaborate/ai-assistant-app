@@ -216,13 +216,13 @@ export const RebillingDashboard: FC<{ view: RollupView }> = ({ view }) => {
               <p className="mb-3 text-sm font-semibold text-black dark:text-white">
                 {t('rebilling.reconciliation')}
               </p>
-              <table className="w-full text-left text-sm">
+              <table className="w-full text-start text-sm">
                 <thead className="text-xs text-gray-500 dark:text-gray-400">
                   <tr>
                     <th scope="col" className="py-1.5 font-medium">
                       {t('rebilling.col.line')}
                     </th>
-                    <th scope="col" className="py-1.5 text-right font-medium">
+                    <th scope="col" className="py-1.5 text-end font-medium">
                       {t('rebilling.col.amount')}
                       {currency ? ` (${currency})` : ''}
                     </th>
@@ -237,7 +237,7 @@ export const RebillingDashboard: FC<{ view: RollupView }> = ({ view }) => {
                       <td className="whitespace-pre-wrap py-1.5">
                         {reconciliation.text(row, 'line')}
                       </td>
-                      <td className="py-1.5 text-right tabular-nums">
+                      <td className="py-1.5 text-end tabular-nums">
                         {reconciliation.maybeNum(row, 'amount') === null
                           ? '—'
                           : formatFull(

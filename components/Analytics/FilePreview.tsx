@@ -278,7 +278,7 @@ const TableBody: FC<{ fileId: string; summary: TableSummary }> = ({
           <div
             role="group"
             aria-label={t('preview.modeLabel')}
-            className="ml-auto flex gap-1"
+            className="ms-auto flex gap-1"
           >
             {(['table', 'chart'] as const).map((option) => {
               const Icon = option === 'table' ? IconTable : IconChartBar;
