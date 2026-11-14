@@ -6,6 +6,7 @@ import {
   IconClipboardCheck,
   IconCopy,
   IconLanguage,
+  IconLock,
   IconPencil,
   IconPencilOff,
   IconPlayerStopFilled,
@@ -24,6 +25,8 @@ import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
 import {
   FileTextExtractionError,
+  UploadStage,
+  extractTextFromUploadedFile,
   uploadAndExtractText,
 } from '@/client/services/workflows/fileTextExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
@@ -61,7 +64,20 @@ import {
   findTranslationLanguage,
   translationLanguageLabel,
 } from '@/lib/utils/shared/translation/languages';
+import {
+  SourcePage,
+  formatPageSelection,
+  joinPages,
+  selectBatch,
+  splitExtractedPages,
+} from '@/lib/utils/shared/translation/pageBatches';
 import { TRANSLATION_QUALITY_CRITERIA } from '@/lib/utils/shared/translation/qualityCriteria';
+import {
+  countAnalysisNotes,
+  deriveRunStage,
+  hasPaperTrail,
+  lastReviewVerdict,
+} from '@/lib/utils/shared/translation/runProgress';
 
 import {
   TranslationAnalysis,
@@ -78,6 +94,8 @@ import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 import { LanguagePicker } from '@/components/UI/LanguagePicker';
 
 import { RunEstimateHint } from '../Impact/RunEstimateHint';
+import { ElapsedTime } from '../Shared/Progress/ElapsedTime';
+import { SkeletonLines } from '../Shared/Progress/SkeletonLines';
 import { AnnotatedText } from '../Shared/Review/AnnotatedText';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaManager } from '../Shared/Review/CriteriaManager';
@@ -85,9 +103,13 @@ import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
 import { GuidePicker } from '../Shared/Review/GuidePicker';
 import { PendingEditsDialog } from '../Shared/Review/PendingEditsDialog';
 import { WorkflowWorkspaceProps } from '../registry';
-import { AnalysisPanel } from './AnalysisPanel';
+import { AnalysisStrip } from './AnalysisStrip';
+import { AssessmentProgress } from './AssessmentProgress';
 import { GlossaryManager } from './GlossaryManager';
 import { GlossaryPicker, languageFit } from './GlossaryPicker';
+import { SourcePageSelector } from './SourcePageSelector';
+import { TranslationRunStatus } from './TranslationRunStatus';
+import { UploadProgress } from './UploadProgress';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -124,6 +146,14 @@ export function TranslationWorkspace({
   );
   const setReviewOverwriteAcknowledged = useSettingsStore(
     (s) => s.setReviewOverwriteAcknowledged,
+  );
+  const analysisHidden = useSettingsStore((s) => s.translationAnalysisHidden);
+  const setAnalysisHidden = useSettingsStore(
+    (s) => s.setTranslationAnalysisHidden,
+  );
+  const analysisHeight = useSettingsStore((s) => s.translationAnalysisHeight);
+  const setAnalysisHeight = useSettingsStore(
+    (s) => s.setTranslationAnalysisHeight,
   );
   const translationCriteria = useSettingsStore((s) => s.translationCriteria);
   const addTranslationCriterion = useSettingsStore(
@@ -170,8 +200,23 @@ export function TranslationWorkspace({
   );
   const langButtonRef = useRef<HTMLButtonElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState(false);
+  // The upload in flight, if any: what the source pane shows instead of text.
+  const [upload, setUpload] = useState<{
+    name: string;
+    size: number;
+    stage: UploadStage;
+  } | null>(null);
+  const uploading = upload !== null;
+  const uploadAbortRef = useRef<AbortController | null>(null);
+  const assessAbortRef = useRef<AbortController | null>(null);
+  // The analysis strip starts as its one-line header and goes back to it
+  // whenever a run completes; whether it is shown at all is a preference.
+  const [analysisExpanded, setAnalysisExpanded] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  // Pages of the large document behind `state.sourceDocument`. Held in
+  // memory only: workflow state persists the reference, never the text.
+  const [sourcePages, setSourcePages] = useState<SourcePage[] | null>(null);
+  const [loadingSourcePages, setLoadingSourcePages] = useState(false);
 
   const patchState = useCallback(
     (patch: Partial<TranslationWorkflowState>) => {
@@ -472,39 +517,106 @@ export function TranslationWorkspace({
     [assessment?.labels, translationCriteria, translationGuides, t],
   );
 
+  /** Message for an extraction failure, specific where the server was. */
+  const extractionErrorMessage = (err: unknown, name: string): string =>
+    err instanceof FileTextExtractionError && err.code === 'NO_EXTRACTABLE_TEXT'
+      ? t('document.referenceEmpty', { name })
+      : err instanceof Error
+        ? err.message
+        : t('document.uploadFailed');
+
   const handleUpload = async (files: FileList | null) => {
     const file = files?.[0];
     if (!file) return;
     setUploadError(null);
-    setUploading(true);
+    const abort = new AbortController();
+    uploadAbortRef.current = abort;
+    setUpload({ name: file.name, size: file.size, stage: 'uploading' });
     try {
-      const extracted = await uploadAndExtractText(file);
-      if (!extracted.text.trim()) {
+      const extracted = await uploadAndExtractText(file, {
+        signal: abort.signal,
+        onStage: (stage) =>
+          setUpload((current) => (current ? { ...current, stage } : current)),
+      });
+      // Splitting also drops the extractor's page markers, which must not
+      // reach the translation.
+      const pages = splitExtractedPages(extracted.text);
+      const allPages = pages.map((page) => page.page);
+      const fullText = joinPages(pages, allPages);
+      if (!fullText) {
         setUploadError(t('document.referenceEmpty', { name: file.name }));
-      } else if (extracted.text.length > MAX_SOURCE_CHARS) {
-        setUploadError(
-          t('translation.tooLong', { max: String(MAX_SOURCE_CHARS) }),
-        );
-      } else {
-        patchState({ sourceText: extracted.text });
-        nameWorkflowConversation(conversationId, {
-          label: file.name,
-          sample: extracted.text,
-          workflow: 'Translation',
-        });
+        return;
       }
+
+      let loadedText = fullText;
+      let sourceDocument: TranslationWorkflowState['sourceDocument'];
+      if (fullText.length > MAX_SOURCE_CHARS) {
+        // Larger than one batch: load the first batch and let the user pick
+        // other pages. That needs a server copy to re-read after a reload
+        // and more than one page to choose from.
+        const firstBatch = selectBatch(pages, MAX_SOURCE_CHARS);
+        if (!extracted.url || firstBatch.length === 0) {
+          setUploadError(
+            t('translation.tooLong', { max: String(MAX_SOURCE_CHARS) }),
+          );
+          return;
+        }
+        loadedText = joinPages(pages, firstBatch);
+        sourceDocument = {
+          name: file.name,
+          url: extracted.url,
+          lastPage: allPages[allPages.length - 1],
+          selectedPages: formatPageSelection(firstBatch),
+        };
+      }
+
+      setSourcePages(sourceDocument ? pages : null);
+      patchState({ sourceText: loadedText, sourceDocument });
+      nameWorkflowConversation(conversationId, {
+        label: file.name,
+        sample: loadedText,
+        workflow: 'Translation',
+      });
     } catch (err) {
-      setUploadError(
-        err instanceof FileTextExtractionError &&
-          err.code === 'NO_EXTRACTABLE_TEXT'
-          ? t('document.referenceEmpty', { name: file.name })
-          : err instanceof Error
-            ? err.message
-            : t('document.uploadFailed'),
-      );
+      // A cancelled upload is the user's decision, not a failure to report.
+      if (!abort.signal.aborted) {
+        setUploadError(extractionErrorMessage(err, file.name));
+      }
     } finally {
-      setUploading(false);
+      setUpload(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  /** Loads a different selection of the large document's pages. */
+  const handleSelectSourcePages = (selected: number[]) => {
+    if (!state?.sourceDocument || !sourcePages || selected.length === 0) return;
+    setUploadError(null);
+    patchState({
+      sourceText: joinPages(sourcePages, selected),
+      sourceDocument: {
+        ...state.sourceDocument,
+        selectedPages: formatPageSelection(selected),
+      },
+    });
+  };
+
+  /** Re-reads the large document's pages after a reload dropped them. */
+  const handleLoadSourcePages = async () => {
+    const sourceDocument = state?.sourceDocument;
+    if (!sourceDocument || loadingSourcePages) return;
+    setUploadError(null);
+    setLoadingSourcePages(true);
+    try {
+      setSourcePages(
+        splitExtractedPages(
+          await extractTextFromUploadedFile(sourceDocument.url),
+        ),
+      );
+    } catch (err) {
+      setUploadError(extractionErrorMessage(err, sourceDocument.name));
+    } finally {
+      setLoadingSourcePages(false);
     }
   };
 
@@ -548,7 +660,10 @@ export function TranslationWorkspace({
           modelId: conversation?.model?.id,
           conversationId,
         },
-        onText: (fullText) => setTargetDraft(fullText),
+        // The stream's activity and event markers each leave a line break
+        // in the display text, so a draft arrives padded with blank lines
+        // before and after. They are not part of the translation.
+        onText: (fullText) => setTargetDraft(fullText.trim()),
         onEvent: (event) => {
           if (event.type === 'analysis') {
             analysis = event.data as TranslationAnalysis;
@@ -586,6 +701,7 @@ export function TranslationWorkspace({
       if (finalText) {
         patchState({ finalText });
         setTargetDraft(null);
+        setAnalysisExpanded(false);
         // No label: a pasted-text translation gets named from its own
         // content, but one started from a file keeps the filename.
         nameWorkflowConversation(conversationId, {
@@ -658,8 +774,11 @@ export function TranslationWorkspace({
       return;
     }
 
+    const abort = new AbortController();
+    assessAbortRef.current = abort;
     try {
       const result = await assessTranslation({
+        signal: abort.signal,
         sourceText: source,
         translation,
         targetLanguage: targetLanguage.label,
@@ -710,9 +829,12 @@ export function TranslationWorkspace({
         }),
       );
     } catch (err) {
-      setAssessError(
-        err instanceof Error ? err.message : t('document.uploadFailed'),
-      );
+      // Stopping an assessment is the user's decision, not a failure.
+      if (!abort.signal.aborted) {
+        setAssessError(
+          err instanceof Error ? err.message : t('document.uploadFailed'),
+        );
+      }
     } finally {
       setAssessing(false);
     }
@@ -1052,6 +1174,16 @@ export function TranslationWorkspace({
     selectedCriteria.size > 0;
   const tooLong = sourceText.length > MAX_SOURCE_CHARS;
 
+  const runStage = deriveRunStage(run?.activityKey, state.mode);
+  // A Reviewed run's text is a draft until the last review round is done.
+  const isDraft = isRunning && state.mode === 'agentic' && targetText !== '';
+  const paperTrailHidden = analysisHidden && hasPaperTrail(state);
+  const showAnalysis = () => {
+    setAnalysisHidden(false);
+    setAnalysisExpanded(true);
+  };
+  const reviewVerdict = lastReviewVerdict(state.rounds);
+
   return (
     <div className="flex h-full min-h-0 flex-col">
       {/* Controls bar */}
@@ -1203,14 +1335,32 @@ export function TranslationWorkspace({
           />
         )}
 
+        {isRunning && (
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {runStage === 'reviewing' &&
+              run?.activityParams?.round &&
+              run.activityParams.total && (
+                <>
+                  {t('translation.runRound', {
+                    round: run.activityParams.round,
+                    total: run.activityParams.total,
+                  })}
+                  {' · '}
+                </>
+              )}
+            <ElapsedTime />
+          </span>
+        )}
+
         {isRunning ? (
           <button
             type="button"
             onClick={() => cancelRun(conversationId)}
             aria-label={t('shell.stopGenerating')}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-300 text-gray-900 hover:bg-gray-400 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
+            className="inline-flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg border border-gray-400 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-100 dark:border-gray-500 dark:text-white dark:hover:bg-surface-dark-elevated"
           >
-            <IconPlayerStopFilled size={16} aria-hidden />
+            <IconPlayerStopFilled size={14} aria-hidden />
+            {t('translation.stop')}
           </button>
         ) : (
           <button
@@ -1254,6 +1404,19 @@ export function TranslationWorkspace({
         </div>
       )}
 
+      {state?.sourceDocument && (
+        <SourcePageSelector
+          key={`${state.sourceDocument.url}:${state.sourceDocument.selectedPages}`}
+          document={state.sourceDocument}
+          pages={sourcePages}
+          maxChars={MAX_SOURCE_CHARS}
+          loading={loadingSourcePages}
+          disabled={isRunning || uploading || assessing}
+          onSelect={handleSelectSourcePages}
+          onLoadPages={() => void handleLoadSourcePages()}
+        />
+      )}
+
       {/* Workbench: panes (+ assess controls) with the review column beside */}
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
         <div className="flex min-h-0 flex-1 flex-col">
@@ -1261,8 +1424,14 @@ export function TranslationWorkspace({
           <div className="flex min-h-0 flex-1 flex-col md:flex-row">
             <div className="flex min-h-0 flex-1 flex-col border-b border-gray-200 dark:border-gray-700 md:border-b-0 md:border-e">
               <div className="flex items-center justify-between px-3 pt-2">
-                <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                <span className="flex items-center gap-2 text-xs font-medium text-gray-500 dark:text-gray-400">
                   {t('translation.sourceLabel')}
+                  {isRunning && (
+                    <span className="inline-flex items-center gap-1 font-normal">
+                      <IconLock size={12} aria-hidden />
+                      {t('translation.sourceLocked')}
+                    </span>
+                  )}
                 </span>
                 <button
                   type="button"
@@ -1271,9 +1440,7 @@ export function TranslationWorkspace({
                   className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
                 >
                   <IconUpload size={13} aria-hidden />
-                  {uploading
-                    ? t('document.uploading')
-                    : t('translation.uploadDocument')}
+                  {t('translation.uploadDocument')}
                 </button>
                 <input
                   ref={fileInputRef}
@@ -1283,10 +1450,25 @@ export function TranslationWorkspace({
                   onChange={(e) => void handleUpload(e.target.files)}
                 />
               </div>
+              {upload && (
+                <UploadProgress
+                  fileName={upload.name}
+                  fileSize={upload.size}
+                  stage={upload.stage}
+                  onCancel={() => uploadAbortRef.current?.abort()}
+                />
+              )}
               <textarea
                 ref={sourceRef}
+                hidden={uploading}
                 value={sourceText}
-                onChange={(e) => patchState({ sourceText: e.target.value })}
+                onChange={(e) =>
+                  patchState({
+                    sourceText: e.target.value,
+                    // Emptying the pane lets go of the document it came from.
+                    ...(e.target.value === '' && { sourceDocument: undefined }),
+                  })
+                }
                 disabled={isRunning || uploading}
                 placeholder={t('translation.sourcePlaceholder')}
                 className="min-h-0 flex-1 resize-none bg-transparent p-3 text-sm text-gray-900 placeholder-gray-500 focus:outline-none disabled:opacity-70 dark:text-gray-100 dark:placeholder-gray-400"
@@ -1295,17 +1477,37 @@ export function TranslationWorkspace({
 
             <div className="flex min-h-0 flex-1 flex-col">
               <div className="flex items-center justify-between px-3 pt-2">
-                <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                <span className="flex min-w-0 flex-wrap items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400">
                   {t('translation.targetLabel')}
-                  {isRunning && (
-                    <span className="ms-2 animate-pulse">
-                      {t('translation.translating')}
+                  {isDraft && (
+                    <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300">
+                      {t('translation.draftLabel')}
                     </span>
                   )}
-                  {assessing && (
-                    <span className="ms-2 animate-pulse">
-                      {t('translation.assessing')}
-                    </span>
+                  {/* The dismissed analysis strip stays one click away. */}
+                  {paperTrailHidden && !isRunning && (
+                    <button
+                      type="button"
+                      onClick={showAnalysis}
+                      title={t('translation.analysisShow')}
+                      className="rounded-full border border-gray-300 px-2 py-0.5 text-[11px] font-normal text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+                    >
+                      {state.analysis
+                        ? t('translation.analysisPill', {
+                            count: countAnalysisNotes(state.analysis),
+                          })
+                        : reviewVerdict
+                          ? t('translation.reviewTitle')
+                          : t('translation.glossaryCheckTitle')}
+                      {state.analysis && reviewVerdict && (
+                        <>
+                          {' · '}
+                          {reviewVerdict === 'approve'
+                            ? t('translation.verdictApprove')
+                            : t('translation.verdictRevise')}
+                        </>
+                      )}
+                    </button>
                   )}
                 </span>
                 <span className="flex items-center gap-1">
@@ -1345,6 +1547,14 @@ export function TranslationWorkspace({
                   </button>
                 </span>
               </div>
+              {isRunning && (
+                <TranslationRunStatus
+                  mode={state.mode}
+                  stage={runStage}
+                  round={run?.activityParams?.round}
+                  totalRounds={run?.activityParams?.total}
+                />
+              )}
               {editingTarget ? (
                 <>
                   {/* The textarea cannot mark suggestions, so while editing
@@ -1366,8 +1576,23 @@ export function TranslationWorkspace({
                   />
                 </>
               ) : (
-                <div className="min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap p-3 text-sm text-gray-900 dark:text-gray-100">
-                  {targetText ? (
+                <div
+                  // A draft under review is readable but visibly not final.
+                  className={`min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap p-3 text-sm text-gray-900 dark:text-gray-100 ${
+                    isDraft && runStage === 'reviewing'
+                      ? 'opacity-70 motion-safe:animate-pulse'
+                      : ''
+                  }`}
+                >
+                  {isRunning && runStage !== 'reviewing' ? (
+                    <>
+                      {targetText}
+                      <SkeletonLines
+                        widths={['92%', '70%', '48%']}
+                        className={targetText ? 'mt-3' : ''}
+                      />
+                    </>
+                  ) : targetText ? (
                     <AnnotatedText
                       text={targetText}
                       edits={previewEdits}
@@ -1439,17 +1664,31 @@ export function TranslationWorkspace({
                       : t('translation.showReview')}
                   </button>
                 )}
-                <button
-                  type="button"
-                  onClick={() => void handleAssess()}
-                  disabled={!canAssess}
-                  className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-900 hover:bg-gray-300 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-elevated dark:text-gray-100 dark:hover:bg-gray-700"
-                >
-                  <IconClipboardCheck size={14} aria-hidden />
-                  {assessing
-                    ? t('translation.assessing')
-                    : t('translation.assess')}
-                </button>
+                {assessing ? (
+                  <>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {t('translation.assessing')}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => assessAbortRef.current?.abort()}
+                      className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg border border-gray-400 px-2.5 py-1 text-xs font-medium text-gray-900 hover:bg-gray-100 dark:border-gray-500 dark:text-gray-100 dark:hover:bg-surface-dark-elevated"
+                    >
+                      <IconPlayerStopFilled size={12} aria-hidden />
+                      {t('translation.stop')}
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => void handleAssess()}
+                    disabled={!canAssess}
+                    className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-900 hover:bg-gray-300 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-elevated dark:text-gray-100 dark:hover:bg-gray-700"
+                  >
+                    <IconClipboardCheck size={14} aria-hidden />
+                    {t('translation.assess')}
+                  </button>
+                )}
               </span>
               {assessError && (
                 <p
@@ -1466,7 +1705,14 @@ export function TranslationWorkspace({
         {/* Quality review column — a dedicated pane beside the text it
             modifies, so the pending-edit queue is never buried in the
             paper-trail strip below. */}
-        {assessment && reviewOpen && (
+        {assessing && (
+          <div className="flex max-h-80 shrink-0 flex-col border-t border-gray-200 dark:border-gray-700 lg:max-h-none lg:w-96 lg:border-s lg:border-t-0">
+            <AssessmentProgress
+              criteria={[...selectedCriteria].map(resolveCriterionLabel)}
+            />
+          </div>
+        )}
+        {assessment && reviewOpen && !assessing && (
           <div className="flex max-h-80 shrink-0 flex-col border-t border-gray-200 dark:border-gray-700 lg:max-h-none lg:w-96 lg:border-s lg:border-t-0">
             <AssessmentPanel
               assessment={assessment}
@@ -1490,13 +1736,18 @@ export function TranslationWorkspace({
       </div>
 
       {/* Pre-run paper trail (analysis + review rounds) — history only */}
-      <div className="max-h-56 shrink-0 overflow-y-auto">
-        <AnalysisPanel
+      {!analysisHidden && (
+        <AnalysisStrip
           analysis={state.analysis}
           rounds={state.rounds}
           glossaryCheck={state.glossaryCheck}
+          expanded={analysisExpanded}
+          onToggleExpanded={() => setAnalysisExpanded((open) => !open)}
+          onDismiss={() => setAnalysisHidden(true)}
+          height={analysisHeight}
+          onResize={setAnalysisHeight}
         />
-      </div>
+      )}
 
       {/* Glossary manager */}
       {criteriaOpen && (
