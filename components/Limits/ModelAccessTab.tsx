@@ -211,7 +211,7 @@ const Node: FC<NodeProps> = ({
   const hasChildren = children !== undefined;
 
   return (
-    <div className={nested ? `${ADMIN_CARD} ml-4` : ADMIN_CARD}>
+    <div className={nested ? `${ADMIN_CARD} ms-4` : ADMIN_CARD}>
       <div className="flex flex-wrap items-center gap-2">
         {hasChildren && (
           <button
@@ -253,7 +253,7 @@ const Node: FC<NodeProps> = ({
         )}
         <button
           type="button"
-          className="ml-auto rounded text-xs text-blue-600 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400"
+          className="ms-auto rounded text-xs text-blue-600 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-400"
           onClick={() => setEditing((v) => !v)}
           aria-expanded={editing}
           aria-label={t('modelAccess.editNode', { label })}

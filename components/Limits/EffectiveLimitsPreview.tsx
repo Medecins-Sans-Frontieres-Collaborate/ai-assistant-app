@@ -274,15 +274,15 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 text-left dark:border-gray-700">
-                      <th className="py-1.5 pr-3 font-medium text-gray-700 dark:text-gray-300">
+                    <tr className="border-b border-gray-200 text-start dark:border-gray-700">
+                      <th className="py-1.5 pe-3 font-medium text-gray-700 dark:text-gray-300">
                         {t('previewColumnLimit')}
                       </th>
-                      <th className="py-1.5 pr-3 font-medium text-gray-700 dark:text-gray-300">
+                      <th className="py-1.5 pe-3 font-medium text-gray-700 dark:text-gray-300">
                         {t('previewColumnValue')}
                       </th>
                       {showUsageColumn && (
-                        <th className="py-1.5 pr-3 font-medium text-gray-700 dark:text-gray-300">
+                        <th className="py-1.5 pe-3 font-medium text-gray-700 dark:text-gray-300">
                           {t('previewColumnUsage')}
                         </th>
                       )}
@@ -297,14 +297,14 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
                         key={`${limit.limitKey}|${limit.modelId ?? ''}|${limit.series ?? ''}`}
                         className="border-b border-gray-100 dark:border-gray-800"
                       >
-                        <td className="py-1.5 pr-3 text-black dark:text-white">
+                        <td className="py-1.5 pe-3 text-black dark:text-white">
                           {rowLabel(limit)}
                         </td>
-                        <td className="py-1.5 pr-3 text-black dark:text-white">
+                        <td className="py-1.5 pe-3 text-black dark:text-white">
                           {valueLabel(limit)}
                         </td>
                         {showUsageColumn && (
-                          <td className="py-1.5 pr-3 text-black dark:text-white">
+                          <td className="py-1.5 pe-3 text-black dark:text-white">
                             <UsageCell limit={limit} usage={usageFor(limit)} />
                           </td>
                         )}

@@ -85,7 +85,7 @@ export const ScopedLimitRows: FC<ScopedLimitRowsProps> = ({
   };
 
   return (
-    <div className="mt-2 space-y-2 border-l border-gray-200 pl-3 dark:border-gray-700">
+    <div className="mt-2 space-y-2 border-s border-gray-200 ps-3 dark:border-gray-700">
       {scoped.map(({ key, modelId, series }) => {
         const unknown = isUnknownQualifier(catalog, { modelId, series });
         return (

@@ -281,7 +281,7 @@ export const ScopedOverridesTab: FC<ScopedOverridesTabProps> = ({
             >
               <button
                 type="button"
-                className="flex w-full items-center gap-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-300"
+                className="flex w-full items-center gap-2 text-start text-sm font-semibold text-gray-700 dark:text-gray-300"
                 aria-expanded={calculatorOpen}
                 aria-controls="limits-scoped-cost-body"
                 onClick={() => setCalculatorOpen((open) => !open)}
