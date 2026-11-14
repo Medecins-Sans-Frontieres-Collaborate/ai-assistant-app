@@ -52,6 +52,32 @@ Whole-file, layout-preserving translation is the separate chat feature
   allowance, charged per PDF page at submit and returned if the submission
   fails.
 
+## Uploaded documents as page sheets
+
+An uploaded document that keeps its file reference (`sourceDocument`) is shown
+in the source pane as a file card followed by one sheet per page, instead of
+one run of text.
+
+- **File card** (`SourceDocumentCard`): name, page count, size (`size` on
+  `TranslationSourceDocument`, when known) and a remove button, which clears
+  the document and its text.
+- **Sheets** (`SourcePageSheets`): each page is a card with its number as a
+  label outside the text. A marker in the corner shows the page in view
+  ("Page 12 of 409") and opens a field to jump to a page. Off-screen sheets
+  are skipped with CSS `content-visibility`.
+- **Which pages**: Quick and Reviewed show the pages loaded as source text;
+  Whole document shows every page, because the file itself is translated.
+- **Printed page counters** ("Page 3 / 409") are removed from the start or end
+  of a sheet when at least half the pages carry one naming their own page
+  (`stripPageCounters` in `lib/utils/shared/translation/pageSheets.ts`). This
+  is display only: the text sent for translation is unchanged.
+- **Editing**: sheets are read-only. "Edit as text" on the card switches to the
+  text field (not offered in Whole document mode). Once the text no longer
+  equals the loaded pages, the sheets are not offered, since they would show
+  something other than what is translated.
+- **After a reload** the pages are no longer in memory; the card offers "Show
+  pages", which reads the stored file again.
+
 ## Progress and the analysis strip
 
 Work with distinct phases shows named steps (`Shared/Progress/ProgressSteps`)
