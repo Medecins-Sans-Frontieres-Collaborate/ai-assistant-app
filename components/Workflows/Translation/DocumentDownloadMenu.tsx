@@ -111,7 +111,9 @@ export function DocumentDownloadMenu({ job }: DocumentDownloadMenuProps) {
       {open && (
         <div
           role="menu"
-          className="absolute end-0 z-20 mt-1 w-72 rounded-lg border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-surface-dark-elevated"
+          // Wraps its own text whatever the header around it does, and stays
+          // narrow enough to open leftward on a phone without leaving the screen.
+          className="absolute end-0 z-20 mt-1 w-64 whitespace-normal rounded-lg border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-700 dark:bg-surface-dark-elevated"
         >
           {items.map((item) => (
             <button
