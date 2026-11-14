@@ -339,6 +339,27 @@ describe('an instruction typed in the conversation rail', () => {
     ).toBeUndefined();
   });
 
+  it('is left alone by a workspace copy that is not on screen', async () => {
+    // The shell keeps a second, CSS-hidden copy mounted; it must not act.
+    const visibility = vi.fn(() => false);
+    HTMLElement.prototype.checkVisibility = visibility;
+    try {
+      mountWorkspace();
+      const settle = askFromRail('Say tableta');
+      await act(async () => {
+        await Promise.resolve();
+      });
+      expect(visibility).toHaveBeenCalled();
+      expect(settle).not.toHaveBeenCalled();
+      expect(reviseCalls()).toHaveLength(0);
+      expect(
+        useWorkflowRailStore.getState().workspaceRequests[CONVERSATION_ID],
+      ).toBeDefined();
+    } finally {
+      delete (HTMLElement.prototype as Partial<HTMLElement>).checkVisibility;
+    }
+  });
+
   it('answers a question without touching the review column or the bar', async () => {
     reviseResponse = () =>
       Promise.resolve(envelope({ reply: 'PO means by mouth.', edits: [] }));
@@ -388,5 +409,44 @@ describe('an instruction typed in the conversation rail', () => {
       expect(settle).toHaveBeenCalledWith('translation.changeStopped'),
     );
     expect(screen.queryByRole('alert')).toBeNull();
+  });
+});
+
+describe('asking for a change to a highlighted passage', () => {
+  it('sends the passage and pins the edit to where it was highlighted', async () => {
+    const repeated = 'Tome 1 comprimido. Luego tome 1 comprimido.';
+    reviseResponse = () =>
+      Promise.resolve(
+        envelope({
+          reply: 'I suggest one change.',
+          edits: [{ before: '1 comprimido', after: '1 tableta', reason: 'r' }],
+        }),
+      );
+    mountWorkspace({ finalText: repeated });
+    const start = repeated.lastIndexOf('1 comprimido');
+    const node = screen.getByText(repeated).firstChild!;
+    const range = document.createRange();
+    range.setStart(node, start);
+    range.setEnd(node, start + '1 comprimido'.length);
+    window.getSelection()!.removeAllRanges();
+    window.getSelection()!.addRange(range);
+    fireEvent.mouseUp(screen.getByText(repeated));
+
+    const field = screen.getByLabelText('translation.changeSelectionLabel');
+    fireEvent.change(field, { target: { value: 'say tableta' } });
+    fireEvent.submit(field.closest('form')!);
+
+    await waitFor(() => expect(reviseCalls()).toHaveLength(1));
+    expect(reviseCalls()[0].selection).toEqual({ text: '1 comprimido', start });
+    await waitFor(() =>
+      expect(state().assessment?.request).toEqual({
+        instruction: 'say tableta',
+        selectedText: '1 comprimido',
+      }),
+    );
+    expect(state().assessment!.edits[0].anchorStart).toBe(start);
+    fireEvent.click(await screen.findByRole('button', { name: 'acceptEdit' }));
+    // The second occurrence changed; the first, identical one did not.
+    expect(state().finalText).toBe('Tome 1 comprimido. Luego tome 1 tableta.');
   });
 });
