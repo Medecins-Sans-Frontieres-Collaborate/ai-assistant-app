@@ -21,6 +21,12 @@ import { TranslationDocumentJob } from '@/types/workflow';
 /** Pages fetched per request; windows are aligned so they cache cleanly. */
 export const READER_PAGE_WINDOW = 5;
 
+/**
+ * Status checks that may fail in a row before the hook stops asking and
+ * reports the job as stalled, leaving the next check to the user.
+ */
+export const MAX_CONSECUTIVE_STATUS_FAILURES = 15;
+
 /** How long typing must pause before a page correction is saved. */
 export const CORRECTION_SAVE_DELAY_MS = 700;
 
@@ -46,6 +52,13 @@ interface UseDocumentTranslationReaderOptions {
 }
 
 export interface DocumentTranslationReader {
+  /**
+   * The running job's status could not be read many times in a row, and
+   * checking has stopped. The job itself may still be running.
+   */
+  stalled: boolean;
+  /** Starts checking a stalled job again. */
+  retryStatus: () => void;
   /** The page in view, once its text has loaded. */
   page: DocumentJobPage | undefined;
   /** True while the page in view is being fetched. */
@@ -94,17 +107,22 @@ export function useDocumentTranslationReader({
   });
 
   // --- Follow a running job -------------------------------------------
+  const pollDelay = () =>
+    pendingPollInterval(
+      Date.now() - (Number.isFinite(submittedAt) ? submittedAt : Date.now()),
+    );
   const statusQuery = useQuery({
     queryKey: ['document-translation-status', jobId],
     queryFn: ({ signal }) => fetchDocumentJobStatus(jobId as string, signal),
     enabled: !!jobId && job?.status === 'translating',
-    // A failed poll is transient: keep the schedule, do not retry at once.
-    retry: false,
+    // A failed check is transient: it is repeated on the polling schedule,
+    // and only a full run of failures puts the query in its error state.
+    retry: MAX_CONSECUTIVE_STATUS_FAILURES - 1,
+    retryDelay: () => pollDelay(),
     gcTime: 0,
-    refetchInterval: () =>
-      pendingPollInterval(
-        Date.now() - (Number.isFinite(submittedAt) ? submittedAt : Date.now()),
-      ),
+    // Once stalled, stop asking until the user asks again.
+    refetchInterval: (query) =>
+      query.state.status === 'error' ? false : pollDelay(),
   });
   const status = statusQuery.data;
   useEffect(() => {
@@ -257,6 +275,8 @@ export function useDocumentTranslationReader({
   useEffect(() => () => flushPendingSave.current(), []);
 
   return {
+    stalled: job?.status === 'translating' && statusQuery.isError,
+    retryStatus: () => void statusQuery.refetch(),
     page,
     loadingPage: readable && !page && pagesQuery.isFetching,
     pageError:
