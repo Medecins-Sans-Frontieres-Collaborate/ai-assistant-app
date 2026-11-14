@@ -271,6 +271,7 @@ export function TranslationWorkspace({
   const [changeNote, setChangeNote] = useState<string | null>(null);
   const [changeError, setChangeError] = useState<string | null>(null);
   const changeAbortRef = useRef<AbortController | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const locale = useLocale();
   // The request waiting behind the pending-suggestions dialog.
   const heldChangeRef = useRef<ChangeRequestInput | null>(null);
@@ -1661,6 +1662,11 @@ export function TranslationWorkspace({
   });
   useEffect(() => {
     if (!parkedRailRequest) return;
+    // The shell mounts the workspace once per layout (side by side and
+    // tabbed) and hides one with CSS. Only the copy on screen may act: its
+    // progress, its stop button and its dialogs are the ones the user sees.
+    const root = rootRef.current;
+    if (!root || root.checkVisibility?.() === false) return;
     const taken = useWorkflowRailStore
       .getState()
       .takeWorkspaceRequest(conversationId, parkedRailRequest.id);
@@ -1842,7 +1848,7 @@ export function TranslationWorkspace({
   const reviewVerdict = lastReviewVerdict(state.rounds);
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div ref={rootRef} className="flex h-full min-h-0 flex-col">
       {/* Controls bar */}
       <div className="flex flex-wrap items-center gap-2 border-b border-gray-200 px-3 py-2 dark:border-gray-700">
         <button
