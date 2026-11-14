@@ -364,7 +364,13 @@ describe('Translation uploads larger than one batch', () => {
       });
     uploadPdf();
     await waitFor(() => expect(sourceState().sourceText).toBe('Uno\n\nDos'));
-    expect(sourceState().sourceDocument).toBeUndefined();
+    // The file reference is kept so the PDF can be translated whole, but
+    // with nothing to choose between there is no page selection strip.
+    expect(sourceState().sourceDocument).toMatchObject({
+      url: '/api/file/source.pdf',
+      fitsOneBatch: true,
+    });
+    expect(screen.queryByLabelText('translation.pagesLabel')).toBeNull();
   });
 
   it('re-reads the pages on demand when they are no longer in memory', async () => {
