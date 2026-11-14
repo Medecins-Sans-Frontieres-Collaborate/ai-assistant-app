@@ -7,12 +7,12 @@ import {
   translationRunSteps,
 } from '@/lib/utils/shared/translation/runProgress';
 
-import { TranslationWorkflowState } from '@/types/workflow';
+import { TranslationTextMode } from '@/types/workflow';
 
 import { ProgressSteps } from '../Shared/Progress/ProgressSteps';
 
 interface TranslationRunStatusProps {
-  mode: TranslationWorkflowState['mode'];
+  mode: TranslationTextMode;
   /** The step in progress. */
   stage: TranslationRunStage;
   /** Review round in progress and the most rounds a run may take. */
