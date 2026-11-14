@@ -24,7 +24,7 @@ const Lightbox: FC<LightboxProps> = ({ imageUrl, onClose }) => {
       onClick={onClose}
     >
       <button
-        className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
+        className="absolute top-4 end-4 text-white hover:text-gray-300 transition-colors"
         onClick={onClose}
         aria-label={t('common.close')}
       >
@@ -192,12 +192,12 @@ export const ImageContent: FC<ImageContentProps> = React.memo(({ images }) => {
             />
             {/* Hover overlay with badge and download icon */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-              <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-xs font-bold bg-purple-500 text-white">
+              <div className="absolute top-2 start-2 px-2 py-0.5 rounded text-xs font-bold bg-purple-500 text-white">
                 IMG
               </div>
               <button
                 onClick={(e) => downloadImage(e, imageBase64, index)}
-                className="absolute top-2 right-2 p-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 transition-colors"
+                className="absolute top-2 end-2 p-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 transition-colors"
                 title={t('download')}
               >
                 <IconDownload className="w-4 h-4 text-gray-700 dark:text-gray-300" />

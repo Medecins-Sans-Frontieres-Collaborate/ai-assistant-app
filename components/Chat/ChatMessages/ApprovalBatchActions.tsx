@@ -94,7 +94,7 @@ export const ApprovalBatchActions: FC<ApprovalBatchActionsProps> = ({
   };
 
   return (
-    <div className="my-2 flex flex-wrap items-center gap-2 border-l-2 border-blue-400/70 py-1.5 pl-3 not-prose dark:border-blue-500/60">
+    <div className="my-2 flex flex-wrap items-center gap-2 border-s-2 border-blue-400/70 py-1.5 ps-3 not-prose dark:border-blue-500/60">
       <span className="text-xs text-gray-500 dark:text-gray-400">
         {t('batchPendingHint', { count: undecided.length })}
       </span>

@@ -100,7 +100,7 @@ export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
         >
           {multiStep ? t('multiStepTitle') : t('title')}
         </span>
-        <span className="ml-auto text-gray-500 dark:text-gray-400">
+        <span className="ms-auto text-gray-500 dark:text-gray-400">
           {t('sourcesCount', { count: interim.entries.length })}
         </span>
       </div>
