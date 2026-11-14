@@ -390,6 +390,31 @@ async function extractTextWithPdfToTextCli(
 }
 
 /**
+ * Extracts a PDF's text page by page, keeping line and paragraph breaks.
+ *
+ * Uses `pdftotext`, whose plain mode emits text in reading order with a form
+ * feed after every page. Unlike `pdfToText` this returns one entry for EVERY
+ * page (empty string for a page without text), so index `n - 1` is always
+ * page `n` and two renditions of the same document line up page for page.
+ *
+ * @param inputPath - Path to the PDF on disk.
+ * @param options - Optional abort signal for the converter process.
+ * @returns One string per page, in page order.
+ * @throws Error when `pdftotext` is missing, times out, or rejects the file.
+ */
+export async function extractPdfPageTexts(
+  inputPath: string,
+  options?: ExtractionOptions,
+): Promise<string[]> {
+  const stdout = await extractTextWithPdfToTextCli(inputPath, options);
+  const pages = stdout.split('\f');
+  // pdftotext terminates the last page with a form feed, which leaves one
+  // empty trailing entry that is not a page.
+  if (pages.length > 1 && pages[pages.length - 1].trim() === '') pages.pop();
+  return pages.map((page) => page.trim());
+}
+
+/**
  * Extract text from a PDF: pdfjs-dist (most tolerant of malformed files),
  * then pdftotext, then — only when an extractor actually THREW, i.e. the
  * structure is suspect — a Ghostscript re-distill followed by pdftotext
