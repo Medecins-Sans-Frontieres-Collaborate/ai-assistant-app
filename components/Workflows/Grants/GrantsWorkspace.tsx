@@ -1269,7 +1269,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           {error}
           <button
             onClick={() => setError(null)}
-            className="ml-2 font-medium underline"
+            className="ms-2 font-medium underline"
           >
             Dismiss
           </button>
@@ -1331,7 +1331,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             <div className="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
               <button
                 onClick={() => setPromptOpen((v) => !v)}
-                className="flex w-full items-center justify-between p-4 text-left"
+                className="flex w-full items-center justify-between p-4 text-start"
               >
                 <span className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
                   {promptOpen ? (
@@ -1688,7 +1688,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                               {group.label}
                             </span>
                           </label>
-                          <div className="ml-6 grid grid-cols-2 gap-x-4 gap-y-1 md:grid-cols-3">
+                          <div className="ms-6 grid grid-cols-2 gap-x-4 gap-y-1 md:grid-cols-3">
                             {group.columns.map((col) => (
                               <label
                                 key={col}
@@ -1813,7 +1813,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                 <table className="min-w-full text-sm">
                   <thead className="bg-gray-50 dark:bg-gray-900/40">
                     <tr>
-                      <th className="w-8 py-2 pl-2 pr-0">
+                      <th className="w-8 py-2 ps-2 pe-0">
                         <span className="sr-only">
                           Include likely match in extraction
                         </span>
@@ -1828,7 +1828,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                       ].map((h) => (
                         <th
                           key={h}
-                          className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300"
+                          className="px-3 py-2 text-start font-semibold text-gray-700 dark:text-gray-300"
                         >
                           {h}
                         </th>
@@ -1841,7 +1841,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                         key={i}
                         className="border-t border-gray-100 dark:border-gray-700/60"
                       >
-                        <td className="w-8 py-2 pl-2 pr-0 align-middle">
+                        <td className="w-8 py-2 ps-2 pe-0 align-middle">
                           {r.narrativeFile &&
                             (r.align === 'Yes' || r.recovered) && (
                               <input
@@ -2164,18 +2164,18 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                 </div>
               );
             })()}
-            <div className="ml-auto flex items-center gap-3">
+            <div className="ms-auto flex items-center gap-3">
               <div className="relative">
                 <IconSearch
                   size={14}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400"
+                  className="absolute start-2 top-1/2 -translate-y-1/2 text-gray-400"
                 />
                 <input
                   type="text"
                   placeholder="Search rows..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-48 rounded border border-gray-300 py-1 pl-7 pr-2 text-sm dark:border-gray-600 dark:bg-gray-700"
+                  className="w-48 rounded border border-gray-300 py-1 ps-7 pe-2 text-sm dark:border-gray-600 dark:bg-gray-700"
                 />
               </div>
               <select
@@ -2200,7 +2200,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                   <IconAlertTriangle size={18} />
                   Supplemental Data Issues
                 </div>
-                <ul className="ml-6 list-disc space-y-1 text-sm text-yellow-700 dark:text-yellow-400">
+                <ul className="ms-6 list-disc space-y-1 text-sm text-yellow-700 dark:text-yellow-400">
                   {extractionData.supplementalReport.missing.map((item, i) => (
                     <li key={`missing-${i}`}>
                       <span className="font-medium capitalize">
@@ -2241,7 +2241,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             <table className="min-w-full text-sm">
               <thead className="sticky top-0 z-20 bg-gray-50 dark:bg-gray-800">
                 <tr>
-                  <th className="sticky left-0 z-30 bg-gray-50 px-3 py-2 text-left font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
+                  <th className="sticky start-0 z-30 bg-gray-50 px-3 py-2 text-start font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
                     <div className="flex items-center gap-2">
                       <input
                         type="checkbox"
@@ -2263,7 +2263,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                     .map((col) => (
                       <th
                         key={col}
-                        className="whitespace-nowrap px-3 py-2 text-left font-medium text-gray-700 dark:text-white"
+                        className="whitespace-nowrap px-3 py-2 text-start font-medium text-gray-700 dark:text-white"
                       >
                         {col}
                       </th>
@@ -2288,7 +2288,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                           includedRows.has(rowIdx) ? '' : 'opacity-40'
                         }`}
                       >
-                        <td className="sticky left-0 z-10 bg-white dark:bg-gray-900">
+                        <td className="sticky start-0 z-10 bg-white dark:bg-gray-900">
                           <div className="flex items-center gap-1 px-2 py-2">
                             <input
                               type="checkbox"
@@ -2331,7 +2331,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                             )}
                             {isFlaggedDocType(docTypeForRow(rowIdx)) && (
                               <span
-                                className="ml-0.5 whitespace-nowrap rounded bg-amber-100 px-1 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                                className="ms-0.5 whitespace-nowrap rounded bg-amber-100 px-1 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
                                 title="Coordination/strategy document — not a project narrative. Review and check the box to include it in the exported CSV."
                               >
                                 {docTypeForRow(rowIdx)}
@@ -2341,7 +2341,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                               docTypeForRow(rowIdx),
                             ) && (
                               <span
-                                className="ml-0.5 whitespace-nowrap rounded bg-emerald-100 px-1 py-0.5 text-[10px] font-medium uppercase tracking-wide text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
+                                className="ms-0.5 whitespace-nowrap rounded bg-emerald-100 px-1 py-0.5 text-[10px] font-medium uppercase tracking-wide text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
                                 title="Green Initiative submission — included in the export by default."
                               >
                                 {docTypeForRow(rowIdx)}
@@ -2560,7 +2560,7 @@ export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             </button>
             <button
               onClick={() => setUiState('complete')}
-              className="ml-auto rounded-lg bg-green-600 px-6 py-2 font-semibold text-white hover:bg-green-700"
+              className="ms-auto rounded-lg bg-green-600 px-6 py-2 font-semibold text-white hover:bg-green-700"
             >
               Finalize
             </button>

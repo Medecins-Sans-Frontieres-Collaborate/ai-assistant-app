@@ -1839,7 +1839,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           <div
             role="group"
             aria-label={t('document.editorMode')}
-            className="mr-1 hidden items-center rounded-lg bg-gray-100 p-0.5 sm:flex dark:bg-surface-dark-base"
+            className="me-1 hidden items-center rounded-lg bg-gray-100 p-0.5 sm:flex dark:bg-surface-dark-base"
           >
             {(
               [

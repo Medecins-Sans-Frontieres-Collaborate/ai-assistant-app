@@ -386,11 +386,7 @@ export function BriefPane(props: BriefPaneProps) {
           onClick={() => setFieldsFolded(!folded)}
         >
           {folded ? (
-            <IconChevronRight
-              size={14}
-              aria-hidden
-              className="shrink-0 rtl:rotate-180"
-            />
+            <IconChevronRight size={14} aria-hidden className="shrink-0" />
           ) : (
             <IconChevronDown size={14} aria-hidden className="shrink-0" />
           )}
@@ -743,11 +739,7 @@ export function BriefPane(props: BriefPaneProps) {
                             {open ? (
                               <IconChevronDown size={14} aria-hidden />
                             ) : (
-                              <IconChevronRight
-                                size={14}
-                                aria-hidden
-                                className="rtl:rotate-180"
-                              />
+                              <IconChevronRight size={14} aria-hidden />
                             )}
                             {t('showProof')}
                           </button>

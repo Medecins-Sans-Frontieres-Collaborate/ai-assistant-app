@@ -88,7 +88,7 @@ export function FeatureList({
               ref={virtualizer.measureElement}
               data-index={virtualRow.index}
               style={{ transform: `translateY(${virtualRow.start}px)` }}
-              className={`absolute left-0 top-0 flex w-full items-start gap-1 border-b border-gray-100 px-2 py-1 dark:border-gray-800 ${isFaint ? 'opacity-40' : ''}`}
+              className={`absolute start-0 top-0 flex w-full items-start gap-1 border-b border-gray-100 px-2 py-1 dark:border-gray-800 ${isFaint ? 'opacity-40' : ''}`}
             >
               {/* The whole row focuses the map on the point. */}
               <button
