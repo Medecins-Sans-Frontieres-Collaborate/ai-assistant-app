@@ -340,7 +340,7 @@ export const LocalAdminsSection: FC<LocalAdminsSectionProps> = ({ rows }) => {
                     <div className="relative mb-2">
                       <IconSearch
                         size={14}
-                        className="pointer-events-none absolute left-2 top-2 text-gray-400"
+                        className="pointer-events-none absolute start-2 top-2 text-gray-400"
                       />
                       <input
                         type="search"
@@ -353,7 +353,7 @@ export const LocalAdminsSection: FC<LocalAdminsSectionProps> = ({ rows }) => {
                         }
                         placeholder={t('localAdminSearchPlaceholder')}
                         aria-label={t('localAdminSearchPlaceholder')}
-                        className="w-full rounded-md border border-gray-300 bg-white py-1 pl-7 pr-2 text-sm dark:border-gray-600 dark:bg-gray-800"
+                        className="w-full rounded-md border border-gray-300 bg-white py-1 ps-7 pe-2 text-sm dark:border-gray-600 dark:bg-gray-800"
                       />
                     </div>
                   )}

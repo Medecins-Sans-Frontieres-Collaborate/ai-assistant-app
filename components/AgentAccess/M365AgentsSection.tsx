@@ -1112,7 +1112,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
             />
             <span className="font-semibold">{t('m365AgentAutoOcrLabel')}</span>
           </label>
-          <p className="ml-6 mt-1 text-xs text-gray-500 dark:text-gray-400">
+          <p className="ms-6 mt-1 text-xs text-gray-500 dark:text-gray-400">
             {t('m365AgentAutoOcrHelp', {
               perRun: autoOcrMaxPagesPerRun,
               perFile: autoOcrMaxPagesPerFile,
@@ -1129,7 +1129,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
             />
             <span className="font-semibold">{t('orgAgentAllowWebSearch')}</span>
           </label>
-          <p className="ml-6 mt-1 text-xs text-gray-500 dark:text-gray-400">
+          <p className="ms-6 mt-1 text-xs text-gray-500 dark:text-gray-400">
             {t('m365AgentAllowWebSearchHelp')}
           </p>
         </div>
@@ -1319,7 +1319,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                 })}
               </span>
               {maxDocumentsOverride !== null && (
-                <span className="ml-2 text-gray-600 dark:text-gray-400">
+                <span className="ms-2 text-gray-600 dark:text-gray-400">
                   {t('m365CapOverrideNote', { limit: maxDocumentsOverride })}
                 </span>
               )}
@@ -1329,7 +1329,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                 max: formatBytes(maxBytes),
               })}
               {planLoading && (
-                <span className="ml-2 text-gray-500 dark:text-gray-400">
+                <span className="ms-2 text-gray-500 dark:text-gray-400">
                   {t('m365PlanScanning')}
                 </span>
               )}

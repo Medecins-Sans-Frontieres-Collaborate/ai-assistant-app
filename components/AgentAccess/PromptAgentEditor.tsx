@@ -294,7 +294,7 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
             />
             {t('orgAgentAllowWebSearch')}
           </label>
-          <p className="ml-6 mt-1 text-xs text-gray-600 dark:text-gray-400">
+          <p className="ms-6 mt-1 text-xs text-gray-600 dark:text-gray-400">
             {t('promptAgentAllowWebSearchHelp')}
           </p>
         </div>
