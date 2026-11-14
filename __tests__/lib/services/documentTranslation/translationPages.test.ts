@@ -4,6 +4,7 @@ import {
   MAX_PAGE_CORRECTION_CHARS,
   PagedTextUnsupportedError,
   TranslationFilesMissingError,
+  correctedPageNumbers,
   effectiveTranslation,
   getPageCorrections,
   getTranslationPages,
@@ -156,14 +157,14 @@ describe('page corrections', () => {
     await savePageCorrection(storage, JOB, 2, '1 comp.', PAGE_COUNT);
     await savePageCorrection(storage, JOB, 3, 'tres', PAGE_COUNT);
     let corrections = await getPageCorrections(storage, JOB);
-    expect(corrections[2].text).toBe('1 comp.');
-    expect(Object.keys(corrections)).toEqual(['2', '3']);
+    expect(corrections.get(2)?.text).toBe('1 comp.');
+    expect(correctedPageNumbers(corrections)).toEqual([2, 3]);
 
     await savePageCorrection(storage, JOB, 2, '1 comprimido', PAGE_COUNT);
     await savePageCorrection(storage, JOB, 3, null, PAGE_COUNT);
     corrections = await getPageCorrections(storage, JOB);
-    expect(corrections[2].text).toBe('1 comprimido');
-    expect(corrections[3]).toBeUndefined();
+    expect(corrections.get(2)?.text).toBe('1 comprimido');
+    expect(corrections.has(3)).toBe(false);
   });
 
   it('keeps an empty string as a correction (the page is intentionally blank)', async () => {
@@ -175,7 +176,7 @@ describe('page corrections', () => {
       '',
       PAGE_COUNT,
     );
-    expect(corrections[1].text).toBe('');
+    expect(corrections.get(1)?.text).toBe('');
   });
 
   it('accepts the first and last page and refuses the pages just outside', async () => {
@@ -219,14 +220,58 @@ describe('page corrections', () => {
 
   it('reads no corrections from a missing or corrupt record', async () => {
     expect(await getPageCorrections(createStorage({}).storage, JOB)).toEqual(
-      {},
+      new Map(),
     );
     expect(
       await getPageCorrections(
         createStorage({ [CORRECTIONS]: 'not json' }).storage,
         JOB,
       ),
-    ).toEqual({});
+    ).toEqual(new Map());
+  });
+});
+
+describe('corrections as stored', () => {
+  const stored = (corrections: Record<string, unknown>) =>
+    createStorage({
+      [CORRECTIONS]: JSON.stringify({ version: 1, corrections }),
+    }).storage;
+  const fix = { text: 'x', updatedAt: 'then' };
+
+  it('reads back only whole page numbers from 1 up', async () => {
+    const corrections = await getPageCorrections(
+      stored({ '1': fix, '0': fix, '-2': fix, '2.5': fix, abc: fix, '7': fix }),
+      JOB,
+    );
+    expect(correctedPageNumbers(corrections)).toEqual([1, 7]);
+  });
+
+  it('cannot be steered onto the object prototype by a stored key', async () => {
+    // JSON.parse keeps "__proto__" as an own key; it must not be applied.
+    const storage = createStorage({
+      [CORRECTIONS]:
+        '{"version":1,"corrections":{"__proto__":{"text":"evil","updatedAt":"t"},"constructor":{"text":"evil","updatedAt":"t"},"3":{"text":"ok","updatedAt":"t"}}}',
+    }).storage;
+    const corrections = await getPageCorrections(storage, JOB);
+    expect(correctedPageNumbers(corrections)).toEqual([3]);
+    expect(({} as Record<string, unknown>).text).toBeUndefined();
+  });
+
+  it('lists corrected pages in numeric, not text, order', async () => {
+    const corrections = await getPageCorrections(
+      stored({ '10': fix, '9': fix, '100': fix }),
+      JOB,
+    );
+    expect(correctedPageNumbers(corrections)).toEqual([9, 10, 100]);
+  });
+
+  it('writes a record the reader accepts', async () => {
+    const { storage, spies } = createStorage({});
+    await savePageCorrection(storage, JOB, 2, 'dos', 3);
+    const written = JSON.parse(spies.upload.mock.calls.at(-1)![1] as string);
+    expect(written.version).toBe(1);
+    expect(Object.keys(written.corrections)).toEqual(['2']);
+    expect(written.corrections['2'].text).toBe('dos');
   });
 });
 
@@ -236,14 +281,17 @@ describe('effectiveTranslation', () => {
   it('prefers the correction, including an empty one', () => {
     const at = '2026-01-01T00:00:00.000Z';
     expect(
-      effectiveTranslation(page, { 4: { text: 'comp.', updatedAt: at } }),
+      effectiveTranslation(
+        page,
+        new Map([[4, { text: 'comp.', updatedAt: at }]]),
+      ),
     ).toBe('comp.');
-    expect(effectiveTranslation(page, { 4: { text: '', updatedAt: at } })).toBe(
-      '',
-    );
+    expect(
+      effectiveTranslation(page, new Map([[4, { text: '', updatedAt: at }]])),
+    ).toBe('');
   });
 
   it('falls back to the machine translation', () => {
-    expect(effectiveTranslation(page, {})).toBe('pestaña');
+    expect(effectiveTranslation(page, new Map())).toBe('pestaña');
   });
 });
