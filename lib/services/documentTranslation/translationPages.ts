@@ -70,8 +70,13 @@ export interface PageCorrection {
   updatedAt: string;
 }
 
-/** Corrections keyed by 1-based page number. */
-export type PageCorrections = Record<number, PageCorrection>;
+/**
+ * A job's corrections, keyed by 1-based page number.
+ *
+ * A Map, not an object: page numbers arrive from requests and from stored
+ * JSON, and a Map key can never reach a property of the object prototype.
+ */
+export type PageCorrections = Map<number, PageCorrection>;
 
 interface CorrectionsRecord {
   version: number;
@@ -221,12 +226,23 @@ export async function getPageCorrections(
     storage,
     translationBlobPath(job, '_corrections.json'),
   );
-  if (record?.version !== CORRECTIONS_RECORD_VERSION) return {};
-  const corrections: PageCorrections = {};
-  for (const [page, correction] of Object.entries(record.corrections ?? {})) {
-    corrections[Number(page)] = correction;
+  if (record?.version !== CORRECTIONS_RECORD_VERSION) return new Map();
+  const corrections: PageCorrections = new Map();
+  for (const [key, correction] of Object.entries(record.corrections ?? {})) {
+    const page = Number(key);
+    // Only keys this module could have written are read back.
+    if (Number.isInteger(page) && page >= 1) corrections.set(page, correction);
   }
   return corrections;
+}
+
+/**
+ * Page numbers that have a correction, ascending.
+ *
+ * @param corrections - All corrections of the job.
+ */
+export function correctedPageNumbers(corrections: PageCorrections): number[] {
+  return [...corrections.keys()].sort((a, b) => a - b);
 }
 
 /**
@@ -266,13 +282,13 @@ export async function savePageCorrection(
 
   const corrections = await getPageCorrections(storage, job);
   if (text === null) {
-    delete corrections[page];
+    corrections.delete(page);
   } else {
-    corrections[page] = { text, updatedAt: new Date().toISOString() };
+    corrections.set(page, { text, updatedAt: new Date().toISOString() });
   }
   const record: CorrectionsRecord = {
     version: CORRECTIONS_RECORD_VERSION,
-    corrections,
+    corrections: Object.fromEntries(corrections),
   };
   await storage.upload(
     translationBlobPath(job, '_corrections.json'),
@@ -293,5 +309,5 @@ export function effectiveTranslation(
   page: TranslationPageText,
   corrections: PageCorrections,
 ): string {
-  return corrections[page.page]?.text ?? page.translation;
+  return corrections.get(page.page)?.text ?? page.translation;
 }
