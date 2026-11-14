@@ -683,13 +683,22 @@ Code execution is needed for:
 - Non-trivial calculations, statistics, simulations, or numeric verification
 - File transformations (parse, filter, aggregate, convert, export)
 - Producing downloadable files (Excel, CSV, Word, charts) from data or content in the conversation — e.g. "export this as a spreadsheet", "make a document out of these notes"
-- Editing an ATTACHED document into a new version of itself — shortening or trimming it to a target length (words, characters, or pages), lengthening or expanding it, restructuring, reformatting, or converting it — the deliverable is a new file in the original format
+- Editing an ATTACHED document into a new version of itself — shortening or trimming it to a target length (words, characters, or pages), lengthening or expanding it, restructuring, reformatting, converting, or translating it as a whole — the deliverable is a new file in the original format
+- Changing an attached presentation, spreadsheet, or dataset in any way (slides, titles, cells, sheets) — these can only be delivered as a file
 
 Code execution is NOT needed for:
 - Writing code examples or tutorials for the user to run themselves
 - Explaining concepts, debugging by inspection, code review
 - Simple arithmetic a model can do reliably
-- Pure text tasks answered directly in chat (writing, translating, or summarizing pasted text). But when the request is to shorten, lengthen, rewrite, translate, or reformat an ATTACHED FILE, that is a file transformation and DOES need code execution — regardless of whether the target is expressed in words, characters, or pages
+- Pure text tasks answered directly in chat (writing, translating, or summarizing pasted text)
+- Questions about, summaries of, or extractions from an attachment or an attached web page — the answer is text in chat
+- Rewording, polishing, correcting, shortening, translating, or replying to a SHORT MESSAGE that happens to be attached — an email, chat message, letter, note, post, or pasted text saved as a file. The user will paste the result somewhere, so the deliverable is text in chat, not a file
+- Improving a sentence, paragraph, or passage of an attached document when the user does not ask for the document back
+
+Decide by the DELIVERABLE, not by whether a file is attached: is the user expecting a FILE back, or TEXT in the chat?
+- An explicit request for a file, document, download, or "the updated version" always means a file — even for a short message
+- A whole-document edit of a formatted document (report, memo, proposal, policy, CV) means a file, whether the target is expressed in words, characters, or pages
+- Otherwise prefer text in chat: an unwanted file hides the answer behind a download
 
 IMPORTANT: Always provide codeTask in your response:
 - If needsCodeExecution is true, provide a self-contained task description (what to compute/produce, referencing attached files by their exact names from the manifest — current-turn OR earlier-turn)
