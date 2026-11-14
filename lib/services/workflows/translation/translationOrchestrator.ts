@@ -1,5 +1,10 @@
 import { criterionRubricLine } from '@/lib/utils/shared/review/customCriteria';
 import {
+  ChangeEdit,
+  ChangeSelection,
+  sanitizeChangeEdits,
+} from '@/lib/utils/shared/translation/changeRequest';
+import {
   createDelimiterEchoFilter,
   stripEchoedDelimiters,
 } from '@/lib/utils/shared/translation/delimiterEcho';
@@ -35,6 +40,8 @@ import {
   buildAnalysisUserPrompt,
   buildAssessmentSystemPrompt,
   buildAssessmentUserPrompt,
+  buildChangeRequestSystemPrompt,
+  buildChangeRequestUserPrompt,
   buildGlossaryBlock,
   buildReviewSystemPrompt,
   buildReviewUserPrompt,
@@ -43,6 +50,7 @@ import {
 } from './prompts';
 import {
   ANALYSIS_SCHEMA,
+  CHANGE_REQUEST_SCHEMA,
   REVIEW_SCHEMA,
   buildAssessmentSchema,
 } from './schemas';
@@ -353,4 +361,69 @@ export async function runTranslationAssessment(
     .slice(0, MAX_ASSESSMENT_EDITS);
 
   return { criteria, overallSummary: result.overallSummary, edits };
+}
+
+export interface TranslationChangeRequestOptions {
+  /** May be empty: a scanned page has a translation but no source text. */
+  sourceText: string;
+  translation: string;
+  targetLanguage: string;
+  /** What the user asked for, in their own words. */
+  instruction: string;
+  /** Limits the edits to one passage of the translation. */
+  selection?: ChangeSelection;
+  /** The user's UI locale; decides the reply language when in doubt. */
+  interfaceLocale?: string;
+  glossaryEntries: GlossaryEntry[];
+  modelId?: string;
+  usage?: WorkflowUsageCollector;
+}
+
+export interface TranslationChangeRequestResult {
+  /** Short message to the user: what changed, or the answer to a question. */
+  reply: string;
+  edits: ChangeEdit[];
+}
+
+/**
+ * Turns a change the user asked for in words into individual edits on an
+ * existing translation. One strict structured call; nothing is applied
+ * here, the client shows each edit for the user to accept or reject.
+ *
+ * @param options - The texts, the instruction and optional scope.
+ * @returns The reply and the usable edits (possibly none: a question, or a
+ *   translation that already does what was asked).
+ * @throws When the model call fails.
+ */
+export async function runTranslationChangeRequest(
+  options: TranslationChangeRequestOptions,
+): Promise<TranslationChangeRequestResult> {
+  const result = await callStructured<{ reply: string; edits: unknown }>({
+    client: createAzureClient(),
+    model: options.modelId,
+    system: buildChangeRequestSystemPrompt(
+      buildGlossaryBlock(options.glossaryEntries, options.sourceText),
+      Boolean(options.selection),
+      options.interfaceLocale,
+    ),
+    user: buildChangeRequestUserPrompt({
+      sourceText: options.sourceText,
+      translation: options.translation,
+      targetLanguage: options.targetLanguage,
+      instruction: options.instruction,
+      selectedText: options.selection?.text,
+    }),
+    schemaName: 'translation_change_request',
+    schema: CHANGE_REQUEST_SCHEMA,
+    usage: options.usage,
+    usageLabel: 'revise',
+  });
+  return {
+    reply: typeof result.reply === 'string' ? result.reply.trim() : '',
+    edits: sanitizeChangeEdits(
+      result.edits,
+      options.translation,
+      options.selection,
+    ),
+  };
 }
