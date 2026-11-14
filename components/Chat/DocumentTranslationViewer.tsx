@@ -21,6 +21,8 @@ import {
   saveToOneDrive,
 } from '@/client/services/m365/m365Client';
 
+import { pendingPollInterval } from '@/lib/utils/shared/translation/documentMode';
+
 import { isAssistantMessageGroup } from '@/types/chat';
 import {
   TRANSLATION_EXPIRY_DAYS,
@@ -142,14 +144,6 @@ export function formatPendingTranslationReference(
   submittedAt: string,
 ): string {
   return `[TranslationPending: ${filename} | lang:${languageCode} | job:${jobId} | ext:${extension} | submitted:${submittedAt}]`;
-}
-
-/** Transcription-style polling backoff by elapsed time. */
-function pendingPollInterval(elapsedMs: number): number {
-  if (elapsedMs < 30_000) return 2_000;
-  if (elapsedMs < 2 * 60_000) return 5_000;
-  if (elapsedMs < 10 * 60_000) return 15_000;
-  return 30_000;
 }
 
 /**
