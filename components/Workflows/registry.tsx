@@ -35,6 +35,11 @@ export interface WorkflowDefinition {
    */
   railSend?: () => Promise<RailSendModule>;
   /**
+   * Key under `workflows` for the rail composer's placeholder, when the
+   * rail does something more specific than general chat.
+   */
+  railPlaceholderKey?: string;
+  /**
    * Optional strip rendered above the rail's composer, for context the send
    * needs and the user must see before sending (the drafter's "To:" line).
    * Lazy for the same reason as the workspace.
@@ -56,6 +61,10 @@ export const WORKFLOW_REGISTRY: Record<
       })),
     ),
     createInitialState: () => createInitialWorkflowState('translation'),
+    // Rail messages become suggested edits on the translation, or answers
+    // about it (docs/TRANSLATION_WORKFLOW.md, "Change requests").
+    railSend: () => import('@/client/services/workflows/translationRailChat'),
+    railPlaceholderKey: 'translation.railPlaceholder',
   },
   document: {
     meta: WORKFLOW_META.document,
