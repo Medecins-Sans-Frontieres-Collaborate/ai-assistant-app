@@ -138,3 +138,40 @@ Mixing them in one collapsed strip buried the interactive part.
 above its trigger but flips below when the space above can't fit it (the
 workspace trigger sits at the top of the window), clamps horizontally,
 and repositions on scroll/resize while open.
+
+## Whole-document mode
+
+A third mode beside Quick and Reviewed. It sends the uploaded PDF through
+document translation (`/api/document-translation/translate`), which keeps the
+layout, and then reads the result page by page.
+
+- **Availability** (`wholeDocumentEligibility`): a PDF kept on the server and a
+  target language that document translation supports. Custom languages and
+  other formats are refused with a message; glossaries and review rounds do
+  not apply and the glossary control is disabled.
+- **State**: only a job reference (`documentJob`) is stored in workflow state.
+  Page text is fetched five pages at a time and cached in memory.
+- **Progress**: Uploaded, Translating, Preparing pages, Ready, shown in the
+  translation pane with time since submission. The job is followed while the
+  workspace is mounted, in any mode, and resumes after a reload. After 15
+  failed status checks in a row checking stops and "Check again" is offered.
+- **Pane ownership**: the page in view is placed in `finalText`, so editing,
+  quality assessment and suggested edits work on a page as they do on pasted
+  text. The text-mode result is set aside in `textModeResult` and restored on
+  leaving the mode. The convention is documented once, in
+  `lib/utils/shared/translation/documentMode.ts`.
+- **Corrections**: any change to the page (typing or an accepted suggestion)
+  is saved as that page's correction after a 700 ms pause, and immediately
+  when the page is turned, the mode is left or the workspace closes. Text
+  equal to the machine translation removes the correction ("Restore").
+- **Downloads**: the translated PDF (original layout, without corrections)
+  and the text version DOCX (with corrections).
+- **Limits**: the daily page allowance is charged by the translate route; the
+  toolbar shows pages left today when limits are enforced. Translating a
+  finished document again asks first, since it charges the pages again.
+- **Leaving a page with suggestions pending**: turning the page or leaving
+  the mode opens the accept all / reject all dialog first, because
+  suggestions belong to the page they were made for.
+- **Stated limits**: a line says attached glossaries are not applied, and the
+  introduction, the progress pane and the translate-again dialog say a
+  started document translation cannot be stopped.
