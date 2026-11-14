@@ -14,18 +14,28 @@ import { ProgressSteps } from '../Shared/Progress/ProgressSteps';
 
 interface UploadProgressProps {
   fileName: string;
-  /** File size in bytes. */
-  fileSize: number;
+  /** File size in bytes, when known. */
+  fileSize?: number;
   /** The step in progress. */
   stage: UploadStage;
   onCancel: () => void;
 }
 
-const UPLOAD_STEP_ORDER = ['uploading', 'reading', 'ready'] as const;
+type UploadStep = UploadStage | 'uploaded' | 'ready';
 
-const STEP_LABEL_KEY: Record<(typeof UPLOAD_STEP_ORDER)[number], string> = {
+const UPLOAD_STEP_ORDER: readonly UploadStep[] = [
+  'uploading',
+  'reading',
+  'ready',
+];
+/** OCR reads a file that is already stored, so its first step is done. */
+const OCR_STEP_ORDER: readonly UploadStep[] = ['uploaded', 'ocr', 'ready'];
+
+const STEP_LABEL_KEY: Record<UploadStep, string> = {
   uploading: 'translation.uploadStepUploading',
+  uploaded: 'translation.documentStepUploaded',
   reading: 'translation.uploadStepReading',
+  ocr: 'translation.uploadStepOcr',
   ready: 'translation.uploadStepReady',
 };
 
@@ -50,13 +60,18 @@ export function UploadProgress({
       <span className="inline-flex max-w-full items-center gap-2 rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-800 dark:border-gray-600 dark:text-gray-200">
         <IconFileText size={16} className="shrink-0" aria-hidden />
         <span className="truncate font-medium">{fileName}</span>
-        <span className="shrink-0 text-gray-500 dark:text-gray-400">
-          {formatBytes(fileSize)}
-        </span>
+        {fileSize !== undefined && (
+          <span className="shrink-0 text-gray-500 dark:text-gray-400">
+            {formatBytes(fileSize)}
+          </span>
+        )}
       </span>
       <ProgressSteps
         label={t('translation.uploadProgressLabel')}
-        steps={buildProgressSteps(UPLOAD_STEP_ORDER, stage).map((step) => ({
+        steps={buildProgressSteps(
+          stage === 'ocr' ? OCR_STEP_ORDER : UPLOAD_STEP_ORDER,
+          stage,
+        ).map((step) => ({
           ...step,
           label: t(STEP_LABEL_KEY[step.id]),
         }))}
