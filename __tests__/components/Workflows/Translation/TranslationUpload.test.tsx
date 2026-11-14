@@ -111,13 +111,24 @@ afterEach(() => vi.unstubAllGlobals());
 
 describe('Translation PDF uploads — actual upload helper and workspace', () => {
   it.each(['', ' \n\t'])(
-    'shows the filename message for empty successful extraction: %j',
+    'offers ways forward, not an error, for empty successful extraction: %j',
     async (content) => {
       processingResponse = () => Response.json({ results: [{ content }] });
       const { input } = uploadPdf();
-      expect(await screen.findByRole('alert')).toHaveTextContent(
-        'No text could be extracted from source.pdf',
-      );
+      // A PDF without text can still be translated whole. OCR is not
+      // offered here: this server response does not report it available.
+      expect(
+        await screen.findByText('translation.ocrReasonNoText'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', {
+          name: 'translation.scannedUseWholeDocument',
+        }),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'translation.ocrRun' }),
+      ).toBeNull();
+      expect(screen.queryByRole('alert')).toBeNull();
       expect(sourceState().sourceText).toBe(ORIGINAL);
       expect(nameWorkflowConversation).not.toHaveBeenCalled();
       expect(input.value).toBe('');
@@ -127,7 +138,7 @@ describe('Translation PDF uploads — actual upload helper and workspace', () =>
     },
   );
 
-  it('localizes the typed no-text failure instead of showing a server error', async () => {
+  it('never shows the server error text for the typed no-text failure', async () => {
     processingResponse = () =>
       Response.json(
         {
@@ -138,14 +149,15 @@ describe('Translation PDF uploads — actual upload helper and workspace', () =>
         { status: 422 },
       );
     uploadPdf();
-    expect(await screen.findByRole('alert')).toHaveTextContent(
-      'No text could be extracted from source.pdf',
-    );
+    expect(
+      await screen.findByText('translation.ocrReasonNoText'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/no extractable text/)).toBeNull();
     expect(sourceState().sourceText).toBe(ORIGINAL);
     expect(nameWorkflowConversation).not.toHaveBeenCalled();
   });
 
-  it('resets the file input and clears the error when retrying the same file', async () => {
+  it('resets the file input and clears the offer when retrying the same file', async () => {
     processingResponse = () => Response.json({ results: [{ content: '' }] });
     const { input, file } = uploadPdf();
     // jsdom does not populate a file input's fakepath when firing change.
@@ -154,7 +166,7 @@ describe('Translation PDF uploads — actual upload helper and workspace', () =>
       writable: true,
       value: 'C:\\fakepath\\source.pdf',
     });
-    await screen.findByRole('alert');
+    await screen.findByText('translation.ocrReasonNoText');
     expect(input.value).toBe('');
     processingResponse = () =>
       Response.json({ results: [{ content: 'Recovered source.' }] });
@@ -162,6 +174,7 @@ describe('Translation PDF uploads — actual upload helper and workspace', () =>
     await waitFor(() =>
       expect(sourceState().sourceText).toBe('Recovered source.'),
     );
+    expect(screen.queryByText('translation.ocrReasonNoText')).toBeNull();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'translation.uploadDocument' }),
