@@ -68,7 +68,8 @@ import { v4 as uuidv4 } from 'uuid';
 export const maxDuration = 60; // Allow up to 60 seconds for translation
 
 /**
- * Reserves a PDF's pages against the caller's daily page allowance.
+ * Reserves a PDF's pages against the caller's daily page allowance
+ * (`feature.translation.pagesPerDay`).
  *
  * Fails open when the page count cannot be read: a file the counter cannot
  * parse is rejected by the translator anyway, and a cost control must not
