@@ -304,6 +304,17 @@ export const LIMIT_DEFINITIONS: readonly LimitDefinition[] = [
     labelKey: 'translationPagesPerDay',
   },
   {
+    key: 'feature.ocr.pagesPerDay',
+    kind: 'counter',
+    unit: 'pages',
+    window: 'day',
+    perModel: false,
+    defaultValue: null,
+    category: 'documents',
+    enforcedAt: 'app/api/file/ocr/route.ts POST',
+    labelKey: 'ocrPagesPerDay',
+  },
+  {
     key: 'feature.webSearch.callsPerDay',
     kind: 'counter',
     unit: 'calls',
