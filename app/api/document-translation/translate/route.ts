@@ -49,6 +49,7 @@ import {
   MAX_DOCUMENT_SIZE,
   MAX_GLOSSARY_SIZE,
   TRANSLATION_EXPIRY_DAYS,
+  TRANSLATION_PAGES_LIMIT_KEY,
   TRANSLATION_STAGING_CONTAINER,
   generateTranslatedFilename,
   getDocumentContentType,
@@ -65,9 +66,6 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 export const maxDuration = 60; // Allow up to 60 seconds for translation
-
-/** Daily page allowance for document translation (config/limits.ts). */
-const TRANSLATION_PAGES_LIMIT_KEY = 'feature.translation.pagesPerDay';
 
 /**
  * Reserves a PDF's pages against the caller's daily page allowance.
