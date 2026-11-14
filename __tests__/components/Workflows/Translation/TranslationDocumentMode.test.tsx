@@ -285,7 +285,7 @@ describe('whole-document mode: submitting', () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText('translation.documentCanLeave'),
+      screen.getByText(/translation.documentCanLeave/),
     ).toBeInTheDocument();
     // The text-mode result is untouched until a page is shown.
     expect(workflowState().finalText).toBe('text mode result');
@@ -467,6 +467,116 @@ describe('whole-document mode: corrections', () => {
         ),
     );
     expect(putCalls()).toEqual([]);
+  });
+});
+
+describe('whole-document mode: leaving a page with suggestions pending', () => {
+  const pendingEdit = {
+    id: 'e1',
+    criterion: 'accuracy',
+    severity: 'major',
+    before: 'machine',
+    after: 'human',
+    reason: 'test',
+    status: 'pending',
+  };
+  async function readerWithSuggestion() {
+    mountWorkspace({ documentJob: readyJob });
+    await screen.findByText('machine page 1');
+    act(() => {
+      useConversationStore
+        .getState()
+        .updateWorkflowState('doc-mode', (prev) => ({
+          ...(prev as TranslationWorkflowState),
+          assessment: {
+            criteria: [],
+            summary: '',
+            edits: [pendingEdit],
+          } as never,
+        }));
+    });
+    await waitFor(() =>
+      expect(workflowState().assessment?.edits).toHaveLength(1),
+    );
+  }
+  const gate = () => screen.queryByText('translation.pendingLeavePage');
+
+  it('turns the page freely when nothing is pending', async () => {
+    mountWorkspace({ documentJob: readyJob });
+    await screen.findByText('machine page 1');
+    fireEvent.click(
+      screen.getByRole('button', { name: 'translation.pageNext' }),
+    );
+    expect(gate()).toBeNull();
+    expect(await screen.findByText('machine page 2')).toBeInTheDocument();
+  });
+
+  it('asks first, and stays on the page when cancelled', async () => {
+    await readerWithSuggestion();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'translation.pageNext' }),
+    );
+    expect(gate()).toBeInTheDocument();
+    expect(workflowState().documentJob?.page).toBe(1);
+    fireEvent.click(screen.getByRole('button', { name: 'cancel' }));
+    expect(gate()).toBeNull();
+    expect(workflowState().documentJob?.page).toBe(1);
+    expect(workflowState().assessment?.edits[0].status).toBe('pending');
+  });
+
+  it('accepting all saves the change as a correction, then turns the page', async () => {
+    await readerWithSuggestion();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'translation.pageNext' }),
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'acceptAll' }));
+    expect(await screen.findByText('machine page 2')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(putCalls()).toEqual([{ page: 1, text: 'human page 1' }]),
+    );
+  });
+
+  it('rejecting all turns the page and writes nothing', async () => {
+    await readerWithSuggestion();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'translation.pageNext' }),
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'rejectAll' }));
+    expect(await screen.findByText('machine page 2')).toBeInTheDocument();
+    expect(putCalls()).toEqual([]);
+  });
+
+  it('gates leaving the mode the same way', async () => {
+    await readerWithSuggestion();
+    fireEvent.click(
+      screen.getByRole('radio', { name: 'translation.modeQuick' }),
+    );
+    expect(gate()).toBeInTheDocument();
+    expect(workflowState().mode).toBe('document');
+    fireEvent.click(screen.getByRole('button', { name: 'rejectAll' }));
+    await waitFor(() => expect(workflowState().mode).toBe('quick'));
+    expect(workflowState().finalText).toBe('text mode result');
+  });
+});
+
+describe('whole-document mode: what does not apply', () => {
+  it('says so when glossaries are attached, and only then', () => {
+    const { unmount } = mountWorkspace({});
+    expect(
+      screen.queryByText(/translation.documentGlossariesIgnored/),
+    ).toBeNull();
+    unmount();
+    mountWorkspace({ glossaryGuideIds: ['org-1', 'org-2'] } as never);
+    expect(
+      screen.getByText('translation.documentGlossariesIgnored 2'),
+    ).toBeInTheDocument();
+  });
+
+  it('says a running translation cannot be stopped', () => {
+    mountWorkspace({ documentJob: { ...readyJob, status: 'translating' } });
+    expect(
+      screen.getByText(/translation.documentNoCancel/),
+    ).toBeInTheDocument();
   });
 });
 
