@@ -13,7 +13,10 @@
  * - Current date/time (always included)
  * - User information (optional, controlled by settings)
  */
-import { GENERATED_DOCUMENT_LAYOUT_RULE } from '@/lib/constants/generatedFiles';
+import {
+  FILE_OR_CHAT_DELIVERABLE_RULE,
+  GENERATED_DOCUMENT_LAYOUT_RULE,
+} from '@/lib/constants/generatedFiles';
 
 /**
  * Formatting rules that are a CONTRACT WITH THE RENDERER, not editorial
@@ -303,8 +306,8 @@ export const CODE_INTERPRETER_PROMPT_SECTION =
   '- CREATE downloadable files (.xlsx, .csv, .docx, .png, …) — including from content earlier in this conversation, e.g. exporting discussed data as a spreadsheet or turning notes into a document\n' +
   'Generated files are automatically shown to the user with previews and download links. ' +
   'When the user asks for output "as a file", a spreadsheet, a document, or a chart, FAVOR producing a real file via code execution over pasting content as markdown or pointing at the Download button (the Download button remains fine for exporting the response text itself). ' +
-  'Create a file only when a file is the deliverable: the user asks for one, or asks to change an attached presentation, spreadsheet, or whole document. ' +
-  'When the user asks to reword, correct, shorten, translate, or reply to a short message they attached (an email, note, or post), or to summarize or answer questions about an attachment or web page, reply with the text itself in the chat and do NOT create a file — a file would hide the answer behind a download. ' +
+  FILE_OR_CHAT_DELIVERABLE_RULE +
+  ' ' +
   'Refer to generated files by filename only — never invent links. ' +
   GENERATED_DOCUMENT_LAYOUT_RULE;
 
