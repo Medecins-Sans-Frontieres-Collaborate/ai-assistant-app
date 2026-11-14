@@ -2854,7 +2854,8 @@ export function TranslationWorkspace({
               autoClearResolved={autoClearResolvedEdits}
               onToggleAutoClear={setAutoClearResolvedEdits}
               onClose={() => setReviewOpen(false)}
-              disabled={assessing || isRunning || changeRun !== null}
+              // Not shown at all while assessing (see the condition above).
+              disabled={isRunning || changeRun !== null}
             />
           </div>
         )}
