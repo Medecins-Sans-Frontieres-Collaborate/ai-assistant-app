@@ -106,7 +106,7 @@ export const AdminAreaNav: FC<AdminAreaNavProps> = ({ areas, variant }) => {
   return (
     <nav
       aria-label={t('admin.areaNavLabel')}
-      className="hidden w-56 shrink-0 overflow-y-auto border-r border-gray-200 p-3 lg:block dark:border-gray-700"
+      className="hidden w-56 shrink-0 overflow-y-auto border-e border-gray-200 p-3 lg:block dark:border-gray-700"
     >
       {groups.map((group) => (
         <div key={group.id} className="mb-4 last:mb-0">
