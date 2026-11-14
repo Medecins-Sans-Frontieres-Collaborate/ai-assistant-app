@@ -26,6 +26,11 @@ import { useTranslations } from 'next-intl';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useTones } from '@/client/hooks/settings/useTones';
 
+import {
+  messageText,
+  withMessageText,
+} from '@/lib/utils/shared/chat/messageText';
+
 import { Conversation, Message } from '@/types/chat';
 
 import { MathStreamdown } from '@/components/Markdown/MathStreamdown';
@@ -76,8 +81,10 @@ export const UserMessage: FC<UserMessageProps> = memo(
     const { openArtifact, openDocument } = useArtifactStore();
     const { content, toneId, promptId, promptVariables, artifactContext } =
       message;
+    // The typed text only. A message with an upload stores a list of parts,
+    // so `content` itself is not always a string.
     const [localMessageContent, setLocalMessageContent] = useState<string>(
-      content as string,
+      messageText(content),
     );
     const [isPromptExpanded, setIsPromptExpanded] = useState(false);
 
@@ -85,17 +92,19 @@ export const UserMessage: FC<UserMessageProps> = memo(
     const usedPrompt = promptId ? prompts.find((p) => p.id === promptId) : null;
 
     const handleEditMessage = () => {
-      if (localMessageContent !== content) {
+      if (localMessageContent !== messageText(content)) {
         if (selectedConversation && onEdit) {
-          onEdit({ ...message, content: localMessageContent });
-          setMessageContent(localMessageContent);
+          // Replace the text and keep any uploads the message carries.
+          const editedContent = withMessageText(content, localMessageContent);
+          onEdit({ ...message, content: editedContent });
+          setMessageContent(editedContent);
         }
       }
       setIsEditing(false);
     };
 
     useEffect(() => {
-      setLocalMessageContent(content as string);
+      setLocalMessageContent(messageText(content));
     }, [content]);
 
     useEffect(() => {
@@ -114,7 +123,7 @@ export const UserMessage: FC<UserMessageProps> = memo(
     return (
       <div className="relative flex flex-col items-end px-4 py-1 text-base lg:px-0 w-full">
         <div
-          className={`${hasAttachments ? 'w-full max-w-2xl' : 'inline-block max-w-[85%]'} bg-gray-200 dark:bg-surface-dark-elevated rounded-3xl px-4 text-gray-800 dark:text-white text-base`}
+          className={`${hasAttachments ? 'w-full max-w-2xl' : 'inline-block max-w-[85%]'} bg-gray-200 dark:bg-surface-dark-elevated rounded-3xl px-4 py-2.5 text-gray-800 dark:text-white text-base`}
         >
           {isEditing ? (
             <div className="flex flex-col">
@@ -147,7 +156,7 @@ export const UserMessage: FC<UserMessageProps> = memo(
                 <button
                   className="h-[40px] rounded-md border border-gray-300 px-4 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
                   onClick={() => {
-                    setLocalMessageContent(content as string);
+                    setLocalMessageContent(messageText(content));
                     setIsEditing(false);
                   }}
                 >
@@ -278,7 +287,7 @@ export const UserMessage: FC<UserMessageProps> = memo(
                         <span className="font-medium">{usedPrompt.name}</span>
                       </div>
 
-                      <div className="prose prose-invert prose-p:my-2 text-white max-w-none mb-2">
+                      <div className="user-message-text prose prose-invert text-white max-w-none mb-2">
                         {/* Deliberately NOT math-normalized: this is the
                             user's own text. Someone who typed `\(` may have
                             meant to show LaTeX source, and there is no
@@ -320,11 +329,14 @@ export const UserMessage: FC<UserMessageProps> = memo(
                 <>
                   {/* Attachments (images/files) and the typed text are both
                       rendered: a message can carry an upload AND a caption, so
-                      `children || text` would silently drop the caption. */}
+                      `children || text` would silently drop the caption.
+                      Callers pass only the attachments as children; the text
+                      is rendered here, through the same markdown path whether
+                      or not the message has an upload. */}
                   {children}
                   {localMessageContent && (
                     <div
-                      className={`prose dark:prose-invert prose-p:my-2 text-gray-800 dark:text-white max-w-none ${
+                      className={`user-message-text prose dark:prose-invert text-gray-800 dark:text-white max-w-none ${
                         children ? 'mt-2' : ''
                       }`}
                     >
