@@ -33,6 +33,7 @@ import {
   escalateModelTimeoutSeconds,
   isModelTimeoutErrorCode,
 } from '@/lib/utils/shared/chat/modelTimeout';
+import { rewriteSandboxLinks } from '@/lib/utils/shared/chat/sandboxLinks';
 
 import { ErrorCode } from '@/types/errors';
 import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
@@ -422,7 +423,9 @@ export function Chat({
       }
     }
     if (lastContent) {
-      navigator.clipboard.writeText(lastContent);
+      // Stored text can still carry the interpreter's container links,
+      // which resolve nowhere outside the sandbox.
+      navigator.clipboard.writeText(rewriteSandboxLinks(lastContent));
     }
   }, [selectedConversation?.messages]);
 
