@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "페이지별로 한 페이지씩, 수정 사항이 포함된 일반 텍스트입니다.",
       "documentNoCancel": "문서 번역이 시작되면 중단할 수 없습니다.",
       "documentGlossariesIgnored": "{count, plural, one {선택한 용어집이 이 모드에서는 적용되지 않습니다.} other {선택한 #개의 용어집이 이 모드에서는 적용되지 않습니다.}} 용어는 품질 평가로 페이지별로 확인하거나, 빠른 번역 또는 검토된 번역을 이용하십시오.",
-      "pendingLeavePage": "제안은 이 페이지에만 속하며, 페이지를 떠나면 저장되지 않습니다. 남은 제안을 먼저 결정하십시오."
+      "pendingLeavePage": "제안은 이 페이지에만 속하며, 페이지를 떠나면 저장되지 않습니다. 남은 제안을 먼저 결정하십시오.",
+      "uploadStepOcr": "OCR로 읽는 중",
+      "ocrButton": "OCR로 읽기",
+      "ocrButtonHint": "스캔된 페이지이거나 인식이 잘못된 텍스트의 경우, 이 PDF를 텍스트 인식으로 다시 읽기",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "이 텍스트는 텍스트 인식으로 읽어들였습니다. 원본과 비교해 확인하세요.",
+      "ocrReasonNoText": "{name}에서 텍스트를 찾을 수 없습니다. 스캔된 문서로 보입니다.",
+      "ocrReasonSparse": "{name}에서 텍스트가 거의 발견되지 않았습니다. 일부가 스캔본일 수도 있습니다.",
+      "ocrReasonManual": "{name}을(를) 다시 텍스트 인식으로 읽으시겠습니까?",
+      "ocrExplanation": "OCR은 페이지 이미지에서 텍스트를 읽어옵니다. 일반 업로드보다 시간이 더 걸리며, 파일의 모든 페이지가 일일 OCR 할당량에 포함됩니다. 저화질 스캔, 손글씨, 표는 잘못 인식될 수 있습니다.",
+      "ocrPagesLeft": "{count, plural, one {오늘 남은 OCR 페이지 1개.} other {오늘 남은 OCR 페이지 #개.}}",
+      "ocrRun": "OCR로 읽기",
+      "ocrDismiss": "지금은 안 함",
+      "ocrSparseHint": "이 PDF에서 텍스트가 거의 발견되지 않았습니다. 일부 페이지가 스캔본일 수 있습니다.",
+      "ocrLimitReached": "이 문서는 오늘 사용 가능한 OCR 페이지 수를 초과합니다.",
+      "ocrTooManyPages": "이 문서는 OCR 처리 가능 한도를 초과했습니다. 최대 {max}페이지만 읽을 수 있습니다. PDF를 분할해 일부만 업로드하세요.",
+      "ocrUnavailable": "이 서버에는 OCR이 설정되어 있지 않습니다.",
+      "ocrNoText": "이 문서에서도 OCR이 텍스트를 찾지 못했습니다.",
+      "ocrFailed": "OCR로 문서를 읽을 수 없습니다. 다시 시도해 주세요.",
+      "scannedWholeExplanation": "전체 문서를 번역할 수도 있습니다. 스캔된 페이지를 직접 읽고, 레이아웃을 유지하며, 페이지 수가 일일 번역 허용량에 반영됩니다.",
+      "scannedUseWholeDocument": "전체 문서 번역",
+      "scannedSourceNote": "{name}에 표시할 텍스트가 없습니다. 전체 문서 번역은 페이지를 직접 읽습니다. 여기에 텍스트를 입력하면 문서가 대체됩니다.",
+      "scannedPageNote": "원본의 이 페이지에서 텍스트를 읽을 수 없습니다. 파일과 직접 비교해 주세요."
     },
     "document": {
       "emptyTitle": "원하는 문서를 설명하세요",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "메일 일일 초안 수",
       "m365MailDeepScansPerDay": "메일 일일 심층 검사 수",
       "m365DigestRunsPerDay": "일일 다이제스트 실행 횟수",
-      "translationPagesPerDay": "하루당 문서 번역 페이지 수"
+      "translationPagesPerDay": "하루당 문서 번역 페이지 수",
+      "ocrPagesPerDay": "일일 OCR 페이지 수"
     },
     "valueModeLabel": "제한 유형",
     "valueAmountLabel": "제한 수량",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "어시스턴트가 하루에 생성할 수 있는 이메일 초안 수(각각 개별 확인 필요). 일부러 엄격하게 설정됨.",
       "m365MailDeepScansPerDay": "종합 메일 분석(다이제스트, 심층 검색, 약속 확인) 일일 제한입니다. 각 분석은 내부 읽기 횟수와 관계없이 1회로 계산됩니다.",
       "m365DigestRunsPerDay": "Microsoft 365의 일일 다이제스트 실행 횟수입니다. 한 번 실행하면 여러 번의 Graph 읽기와 두 번의 분석 모델 호출이 이루어집니다. 기간 선택기를 통해 재실행 요청이 쉽게 이루어질 수 있으므로 기본값이 엄격하게 설정되어 있습니다.",
-      "translationPagesPerDay": "하루에 문서 번역을 위해 제출된 PDF 페이지 수."
+      "translationPagesPerDay": "하루에 문서 번역을 위해 제출된 PDF 페이지 수.",
+      "ocrPagesPerDay": "하루에 OCR(스캔 문서의 텍스트 인식)로 읽을 수 있는 PDF 페이지 수입니다."
     },
     "scopeFamily": "패밀리",
     "scopeModel": "모델",

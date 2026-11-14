@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Inyandiko isanzwe, urupapuro kuri rumwe, harimwo n’ivyahinduwe.",
       "documentNoCancel": "Igihe itanguranwa ry’inyandiko ritanguye, ntirishobora guhagarikwa.",
       "documentGlossariesIgnored": "{count, plural, one {Icapiro watoranije ntikikoreshwa muri ubu buryo.} other {Amahipfo {{count}} watoranije ntakoreshwa muri ubu buryo.}} Raba ico ijambo risobanura urupapuro ku rundi ukoresheje Assess quality, canke ukoreshe Quick canke Reviewed.",
-      "pendingLeavePage": "Ivyo wasavye kuri uru rupapuro ntibizoguma biriho nugasohoka. Banza ufate ingingo ku bisigaye usabwe."
+      "pendingLeavePage": "Ivyo wasavye kuri uru rupapuro ntibizoguma biriho nugasohoka. Banza ufate ingingo ku bisigaye usabwe.",
+      "uploadStepOcr": "Kurisoma ukoresheje OCR",
+      "ocrButton": "Soma ukoresheje OCR",
+      "ocrButtonHint": "Soma iri PDF wongere ukoresheje kumenya inyandiko, ku mpapuro zasanzwe zifotowe canke ahari indome zidasobanutse",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Aya majambo yasomwe mu mpapuro ukoresheje kumenya inyandiko. Raba ugereranye n'umwimerere.",
+      "ocrReasonNoText": "Nta majambo yabonetse muri {name}. Bisa n’aho ari urupapuro rwafotowe.",
+      "ocrReasonSparse": "Hari amajambo make cane yabonetse muri {name}. Kamwe muri yo gashobora kuba gafotowe.",
+      "ocrReasonManual": "None usome {name} wongere ukoresheje kumenya inyandiko?",
+      "ocrExplanation": "OCR isoma amajambo avuye ku mafoto y’impapuro. Bitwara umwanya kuruta isanzwe, buri rupapuro rw’agasomwa ruba rwanditswe kuri konti yawe yo ku munsi, kandi rushobora kudasoma neza impapuro zifotowe nabi, inyandiko zanditse n’intoki canke imbonerahamwe.",
+      "ocrPagesLeft": "{count, plural, one {# rupapuro rwa OCR rusigaye uyu musi.} other {# mapapuro ya OCR asigaye uyu musi.}}",
+      "ocrRun": "Soma ukoresheje OCR",
+      "ocrDismiss": "Si ubu",
+      "ocrSparseHint": "Hari amajambo make cane yabonetse muri iri PDF. Zimwe mu mpapuro zishobora kuba zafotowe.",
+      "ocrLimitReached": "Iri documento rifise impapuro zirenga izo wemerewe kuri OCR uyu musi.",
+      "ocrTooManyPages": "Iri documento rirakomeye cane kuri OCR, ishobora gusoma ntirenge {max} z’impapuro. Cagagura PDF wongere ushireho igice kimwe.",
+      "ocrUnavailable": "OCR ntirashirwaho kuri server iyi.",
+      "ocrNoText": "OCR ntibashije kubona amajambo muri iri documento.",
+      "ocrFailed": "Documento ntishoboye gusomwa ukoresheje OCR. Gerageza gushira bwa kabiri.",
+      "scannedWholeExplanation": "Urashobora kandi guhindura urwandiko rwose: isoma impapuro zapimwe wenyine, igasigaza uko byari biteguye, kandi igabara impapuro mu rugero wahawe rwo guhindura buri munsi.",
+      "scannedUseWholeDocument": "Hindura urwandiko rwose",
+      "scannedSourceNote": "{name} nta jambo rifise ryo kwerekana hano. Uhindura urwandiko rwose, risoma impapuro zarwo zose. Kwandika insiguro yawe hano bisimbura urwandiko.",
+      "scannedPageNote": "Nta jambo ryabonetse kuri iyi paje y’umwimerere. Gereranya n’idosiye ubwayo."
     },
     "document": {
       "emptyTitle": "Sobanura igitabo ushaka",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Drafts z’amabaruwa ku musi",
       "m365MailDeepScansPerDay": "Deep scan z’amabaruwa ku musi",
       "m365DigestRunsPerDay": "Uburyo bwa digest bwa buri munsi",
-      "translationPagesPerDay": "Impapuro z'ibisiguro ku munsi"
+      "translationPagesPerDay": "Impapuro z'ibisiguro ku munsi",
+      "ocrPagesPerDay": "Mapapuro ya OCR ku musi"
     },
     "valueModeLabel": "Ubwoko bw'ipimo",
     "valueAmountLabel": "Ingano y'ipimo",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Utugereranyo twa email usanzwe ushobora gukora ku munsi — kamwe kamwe kemezwa. Bigenwe ko biba bike.",
       "m365MailDeepScansPerDay": "Ivyigwa vyimbitse vya email (digests, deep search, commitments) ku munsi. Igisuzuma cose ni unit 1 n'ubwo haba hari menshi vyasomwa imbere.",
       "m365DigestRunsPerDay": "Digest ya Microsoft 365 yo ku munsi. Urugendo rumwe rugizwe n’isomwa rya Graph nyinshi hamwe n’amashikirizano abiri y’icigwa; kwisanga igihe usubira vyagizwe vyoroshe, naho ivyo defaults birafashe.",
-      "translationPagesPerDay": "Impapuro za PDF zashizweko zisabwa ibisiguro ku munsi."
+      "translationPagesPerDay": "Impapuro za PDF zashizweko zisabwa ibisiguro ku munsi.",
+      "ocrPagesPerDay": "Mapapuro ya PDF asomwa ukoresheje OCR (kumenya inyandiko ku nyandiko zifotowe) ku musi."
     },
     "scopeFamily": "Umuryango",
     "scopeModel": "Model",

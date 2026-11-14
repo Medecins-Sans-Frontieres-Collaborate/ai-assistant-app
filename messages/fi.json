@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Pelkkä teksti, sivu kerrallaan, korjauksillasi.",
       "documentNoCancel": "Asiakirjan kääntämistä ei voi keskeyttää, kun se on aloitettu.",
       "documentGlossariesIgnored": "{count, plural, one {Valittua sanastoa ei käytetä tässä tilassa.} other {Valittuja sanastoja (#) ei käytetä tässä tilassa.}} Tarkista termit sivu kerrallaan kohdassa Arvioi laatu, tai käytä Pika- tai Tarkastettu-tilaa.",
-      "pendingLeavePage": "Ehdotukset kuuluvat tälle sivulle, eivätkä ne säily, kun poistut sivulta. Käsittele jäljellä olevat ehdotukset ensin."
+      "pendingLeavePage": "Ehdotukset kuuluvat tälle sivulle, eivätkä ne säily, kun poistut sivulta. Käsittele jäljellä olevat ehdotukset ensin.",
+      "uploadStepOcr": "Luetaan OCR:llä",
+      "ocrButton": "Lue OCR:llä",
+      "ocrButtonHint": "Lue tämä PDF uudelleen tekstintunnistuksella, jos sivut ovat skannattuja tai teksti oli virheellinen",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Tämä teksti on luettu sivuilta tekstintunnistuksella. Tarkista alkuperäisestä.",
+      "ocrReasonNoText": "Tiedostosta {name} ei löytynyt tekstiä. Se vaikuttaa skannatulta asiakirjalta.",
+      "ocrReasonSparse": "Tiedostosta {name} löytyi hyvin vähän tekstiä. Osa siitä voi olla skannattu.",
+      "ocrReasonManual": "Luetaanko tiedosto {name} uudelleen tekstintunnistuksella?",
+      "ocrExplanation": "OCR lukee tekstin sivukuvista. Se kestää kauemmin kuin tavallinen lataus, laskee jokaisen sivun päivittäisestä OCR-kiintiöstäsi ja voi lukea huonosti skannattuja, käsinkirjoitettuja tai taulukkomuotoisia sivuja väärin.",
+      "ocrPagesLeft": "{count, plural, one {# OCR-sivu jäljellä tänään.} other {# OCR-sivua jäljellä tänään.}}",
+      "ocrRun": "Lue OCR:llä",
+      "ocrDismiss": "Ei nyt",
+      "ocrSparseHint": "Tässä PDF:ssä löytyi hyvin vähän tekstiä. Osa sivuista voi olla skannattuja.",
+      "ocrLimitReached": "Tässä asiakirjassa on enemmän sivuja kuin tämän päivän OCR-kiintiössäsi on jäljellä.",
+      "ocrTooManyPages": "Tämä asiakirja on liian pitkä OCR-luettavaksi; enintään {max} sivua voidaan lukea. Jaa PDF pienempiin osiin.",
+      "ocrUnavailable": "OCR ei ole käytössä tällä palvelimella.",
+      "ocrNoText": "OCR ei löytänyt tekstiä tästäkään asiakirjasta.",
+      "ocrFailed": "Asiakirjaa ei voitu lukea OCR:llä. Yritä uudelleen.",
+      "scannedWholeExplanation": "Voit myös kääntää koko asiakirjan: se lukee skannatut sivut itse, säilyttää ulkoasun ja laskee sivut päivittäistä käännöskiintiötäsi vastaan.",
+      "scannedUseWholeDocument": "Käännä koko asiakirja",
+      "scannedSourceNote": "{name}-asiakirjassa ei ole tekstiä näytettäväksi tässä. Koko asiakirjan käännös lukee sivut suoraan. Oman tekstin kirjoittaminen tähän korvaa asiakirjan.",
+      "scannedPageNote": "Tältä alkuperäisen sivulta ei voitu lukea tekstiä. Vertaa itse tiedostoon."
     },
     "document": {
       "emptyTitle": "Kuvaile haluamaasi asiakirjaa",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "Sähköpostiluonnokset päivässä",
       "m365MailDeepScansPerDay": "Sähköpostien syvätarkistukset päivässä",
       "m365DigestRunsPerDay": "Päivittäiset yhteenvetoraportit per päivä",
-      "translationPagesPerDay": "Dokumenttikäännöksen sivut per päivä"
+      "translationPagesPerDay": "Dokumenttikäännöksen sivut per päivä",
+      "ocrPagesPerDay": "OCR-sivuja päivässä"
     },
     "valueModeLabel": "Rajoituksen tyyppi",
     "valueAmountLabel": "Rajoituksen määrä",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "Sähköpostiluonnokset, joita assistentti voi luoda päivässä — jokainen vahvistetaan erikseen. Raja on tarkoituksella tiukka.",
       "m365MailDeepScansPerDay": "Yhdistetyt sähköpostianalyysit (koosteet, syvähaut, sitoumukset) päivässä. Jokainen skannaus vie yhden budjettiyksikön riippumatta sisäisistä luennoista.",
       "m365DigestRunsPerDay": "Microsoft 365 -päivittäiset yhteenvetoraportit per päivä. Yksi ajo sisältää kymmeniä Graph-lukuja ja kaksi analyysimallikutsua; ajanjakson valinta tekee uusinnat helpoiksi, joten oletus on tiukka.",
-      "translationPagesPerDay": "PDF-sivut, jotka lähetetty dokumenttikäännökseen päivässä."
+      "translationPagesPerDay": "PDF-sivut, jotka lähetetty dokumenttikäännökseen päivässä.",
+      "ocrPagesPerDay": "OCR:llä (tekstintunnistuksella) luetut PDF-sivut päivässä skannattuja asiakirjoja varten."
     },
     "scopeFamily": "Perhe",
     "scopeModel": "Malli",

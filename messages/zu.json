@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Umbhalo oyisicaba, ikhasi elilodwa ngekhasi, uhlanganisa izilungiso zakho.",
       "documentNoCancel": "Ukuhumusha kombhalo akungenziwa ukuphumisa uma sekuphakathi nendlela.",
       "documentGlossariesIgnored": "{count, plural, one {Igama olikhethe ayisetshenziswa kule ndlela.} other {Amagama # owakhethiwe awasetshenziswa kule ndlela.}} Hlola amagama ekhasini ngakhasini ngokuthi Uhlola ikhwalithi, noma usebenzisa Okusheshayo noma Okubuyekeziwe.",
-      "pendingLeavePage": "Izinto eziphakanyisiwe zihlukaniselwe leli khasi futhi azigcinwa uma ushiya leli khasi. Qala unqume ngezinto ezisele eziphakanyisiwe."
+      "pendingLeavePage": "Izinto eziphakanyisiwe zihlukaniselwe leli khasi futhi azigcinwa uma ushiya leli khasi. Qala unqume ngezinto ezisele eziphakanyisiwe.",
+      "uploadStepOcr": "Ukufunda nge-OCR",
+      "ocrButton": "Funda nge-OCR",
+      "ocrButtonHint": "Funda le-PDF futhi usebenzise ukuhlonza umbhalo, uma amakhasi eqoshwe noma uma umbhalo ungaphume kahle",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Lo mbhalo watholakala ekhasini nge-OCR. Qaphela futhi uwuhlole nogqobo.",
+      "ocrReasonNoText": "Awukho umbhalo otholakele ku-{name}. Kubukeka sengathi kungumbhalo oqoshiwe.",
+      "ocrReasonSparse": "Umbhalo omncane kakhulu utholakele ku-{name}. Kungenzeka ukuthi eminye izigaba iqoshiwe.",
+      "ocrReasonManual": "Funda u-{name} futhi usebenzise ukuhlonza umbhalo?",
+      "ocrExplanation": "I-OCR ifunda umbhalo kuzakhiwo zekhasimende. Kudla isikhathi eside kunokulayisha okujwayelekile, kufaka yonke ikhasi kwinqubo yakho yansuku zonke ye-OCR, futhi kungahle kuphumelele kahle ekuhloleni okungalungile, ukubhala ngesandla noma amatafula.",
+      "ocrPagesLeft": "{count, plural, one {# ikhasi le-OCR elisele namuhla.} other {# amakhasi e-OCR asele namuhla.}}",
+      "ocrRun": "Funda nge-OCR",
+      "ocrDismiss": "Akufani manje",
+      "ocrSparseHint": "Umbhalo omncane kakhulu utholakele kule-PDF. Amanye amakhasi angaba aqoshiwe.",
+      "ocrLimitReached": "Le dokhumenti inamakhasi amaningi kunalokho okuvunyelwe yi-OCR yakho namuhla.",
+      "ocrTooManyPages": "Le dokhumenti inde kakhulu ukuze ifundwe nge-OCR, okwazi ukufunda amakhasi angafika ku-{max}. Hlukanisa i-PDF ulayishe ingxenye.",
+      "ocrUnavailable": "I-OCR ayilungiselelwe kule server.",
+      "ocrNoText": "OCR ayitholanga umbhalo kule dokhumenti futhi.",
+      "ocrFailed": "Le dokhumenti ayikwazanga ukufundwa nge-OCR. Zama futhi.",
+      "scannedWholeExplanation": "Ungahumusha futhi lonke idokhumenti: ukufunda amakhasi ahloliwe ngokuqondile, kugcine uhlelo lwakho, futhi kubala amakhasi ngesibalo sakho sosuku sokuhumusha.",
+      "scannedUseWholeDocument": "Humusha yonke idokhumenti",
+      "scannedSourceNote": "Akukho mbhalo ozovela lapha ku-{name}. Ukuhumusha yonke idokhumenti kufunda amakhasi ngokuqondile. Uma ubhala umbhalo wakho lapha, uyashintsha idokhumenti.",
+      "scannedPageNote": "Ayikho imibhalo ekwazeke ukufundwa kuleli khasi eliyisiqalo. Qhathanisa nefayela uqobo lwayo."
     },
     "document": {
       "emptyTitle": "Chaza umbhalo ofunayo",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Amadrafti e-imeyili ngosuku",
       "m365MailDeepScansPerDay": "Ukuhlolwa okujulile kwe-imeyili ngosuku",
       "m365DigestRunsPerDay": "Izikhathi zokwenza i-daily digest ngosuku",
-      "translationPagesPerDay": "Amakhasi okuhunyushwa kwezincwadi ngosuku"
+      "translationPagesPerDay": "Amakhasi okuhunyushwa kwezincwadi ngosuku",
+      "ocrPagesPerDay": "Amakhasi e-OCR ngosuku"
     },
     "valueModeLabel": "Uhlobo lomkhawulo",
     "valueAmountLabel": "Inani lomkhawulo",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Izimpelesi ze-imeyili i-assistant engazidala ngosuku — ngayinye iqinisekiswa eyodwa. Kuncishisiwe ngamabomu.",
       "m365MailDeepScansPerDay": "Ukuhlaziywa kwe-imeyili okuhlanganisiwe (ama-digest, usesho olunzulu, izifungo) ngosuku. Ukusesha ngakunye kubalwa kanye noma ngabe kunokufunda okuthize ngaphakathi.",
       "m365DigestRunsPerDay": "I-Microsoft 365 daily digest yenziwa ngosuku. Ukuqhuba okukodwa kufaka ukufunda okuningi ku-Graph kanye nezicelomodel ezibili zokuhlaziya; ukukhetha isikhathi kwenza kube lula ukuphinda, ngakho-ke okuzenzakalelayo kuqinile.",
-      "translationPagesPerDay": "Amakhasi e-PDF athunyelwe ukuze ahunyushwe ngosuku."
+      "translationPagesPerDay": "Amakhasi e-PDF athunyelwe ukuze ahunyushwe ngosuku.",
+      "ocrPagesPerDay": "Amakhasi e-PDF afundwa nge-OCR (ukuhlonza umbhalo kumadokhumenti aqoshiwe) ngosuku."
     },
     "scopeFamily": "Umndeni",
     "scopeModel": "Imodeli",

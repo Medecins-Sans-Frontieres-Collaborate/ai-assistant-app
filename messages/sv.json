@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Enkel text, en sida per sida, med dina korrigeringar.",
       "documentNoCancel": "En dokumentöversättning kan inte avbrytas när den väl har påbörjats.",
       "documentGlossariesIgnored": "{count, plural, one {Din valda ordlista används inte i detta läge.} other {Dina # valda ordlistor används inte i detta läge.}} Kontrollera terminologi sida för sida med Bedöm kvalitet, eller använd Snabb eller Granskad.",
-      "pendingLeavePage": "Förslag hör till denna sida och sparas inte om du lämnar sidan. Ta ställning till återstående förslag först."
+      "pendingLeavePage": "Förslag hör till denna sida och sparas inte om du lämnar sidan. Ta ställning till återstående förslag först.",
+      "uploadStepOcr": "Läser med OCR",
+      "ocrButton": "Läs med OCR",
+      "ocrButtonHint": "Läs denna PDF igen med textigenkänning, för inskannade sidor eller text som blev fel",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Denna text har lästs från sidorna med textigenkänning. Jämför med originalet.",
+      "ocrReasonNoText": "Ingen text hittades i {name}. Det verkar vara ett inskannat dokument.",
+      "ocrReasonSparse": "Mycket lite text hittades i {name}. En del kan vara inskannad.",
+      "ocrReasonManual": "Läsa {name} igen med textigenkänning?",
+      "ocrExplanation": "OCR läser text från sidbilder. Det tar längre tid än en vanlig uppladdning, varje sida räknas mot din dagliga OCR-gräns och den kan feltolka dåliga skanningar, handskrift och tabeller.",
+      "ocrPagesLeft": "{count, plural, one {# OCR-sida kvar idag.} other {# OCR-sidor kvar idag.}}",
+      "ocrRun": "Läs med OCR",
+      "ocrDismiss": "Inte nu",
+      "ocrSparseHint": "Mycket lite text hittades i denna PDF. Vissa sidor kan vara inskannade.",
+      "ocrLimitReached": "Detta dokument har fler sidor än din återstående OCR-gräns för idag.",
+      "ocrTooManyPages": "Detta dokument är för långt för OCR, som läser högst {max} sidor. Dela upp PDF:en och ladda upp en del.",
+      "ocrUnavailable": "OCR är inte konfigurerat på denna server.",
+      "ocrNoText": "OCR hittade inte heller någon text i detta dokument.",
+      "ocrFailed": "Dokumentet kunde inte läsas med OCR. Försök igen.",
+      "scannedWholeExplanation": "Du kan också översätta hela dokumentet: det läser in skannade sidor själv, behåller layouten och räknar sidorna mot din dagliga översättningskvot.",
+      "scannedUseWholeDocument": "Översätt hela dokumentet",
+      "scannedSourceNote": "{name} har ingen text att visa här. Översättning av hela dokumentet läser sidorna direkt. Om du skriver egen text här ersätter det dokumentet.",
+      "scannedPageNote": "Ingen text kunde läsas från denna sida i originalet. Jämför med själva filen."
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "Mailutkast per dag",
       "m365MailDeepScansPerDay": "Mail-djupanalyser per dag",
       "m365DigestRunsPerDay": "Dagliga digest-körningar per dag",
-      "translationPagesPerDay": "Sidor för dokumentöversättning per dag"
+      "translationPagesPerDay": "Sidor för dokumentöversättning per dag",
+      "ocrPagesPerDay": "OCR-sidor per dag"
     },
     "valueModeLabel": "Begränsningstyp",
     "valueAmountLabel": "Begränsningsvärde",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "E-postutkast som assistenten får skapa per dag — varje måste bekräftas individuellt. Medvetet stramt.",
       "m365MailDeepScansPerDay": "Sammansatta e-postanalyser (sammandrag, djupsök, åtaganden) per dag. Varje skanning räknas som en budgetenhet oavsett antal interna läsningar.",
       "m365DigestRunsPerDay": "Microsoft 365 dagliga digest-körningar per dag. En körning innebär dussintals Graph-läsningar plus två analysmodellsanrop; periodväljaren gör det billigt att köra om, därför är standardvärdet stramt.",
-      "translationPagesPerDay": "PDF-sidor inskickade för dokumentöversättning per dag."
+      "translationPagesPerDay": "PDF-sidor inskickade för dokumentöversättning per dag.",
+      "ocrPagesPerDay": "PDF-sidor som lästs med OCR (textigenkänning för inskannade dokument) per dag."
     },
     "scopeFamily": "Familj",
     "scopeModel": "Modell",

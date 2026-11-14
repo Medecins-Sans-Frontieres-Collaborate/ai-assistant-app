@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Text pla, una pàgina per full, amb les teves correccions.",
       "documentNoCancel": "No es pot aturar la traducció d’un document un cop ha començat.",
       "documentGlossariesIgnored": "{count, plural, one {El vostre glossari seleccionat no s’aplica en aquest mode.} other {Els vostres # glossaris seleccionats no s’apliquen en aquest mode.}} Comproveu la terminologia pàgina per pàgina amb Avalua la qualitat o feu servir Ràpida o Revisada.",
-      "pendingLeavePage": "Les suggeriments pertanyen a aquesta pàgina i no es conserven quan la deixeu. Acabeu de decidir els suggeriments restants primer."
+      "pendingLeavePage": "Les suggeriments pertanyen a aquesta pàgina i no es conserven quan la deixeu. Acabeu de decidir els suggeriments restants primer.",
+      "uploadStepOcr": "Lectura amb OCR",
+      "ocrButton": "Llegeix amb OCR",
+      "ocrButtonHint": "Torna a llegir aquest PDF amb reconeixement de text, per a pàgines escanejades o textos mal llegits",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Aquest text s’ha obtingut mitjançant reconeixement de text de les pàgines. Comprova’l amb l’original.",
+      "ocrReasonNoText": "No s’ha trobat cap text a {name}. Sembla que és un document escanejat.",
+      "ocrReasonSparse": "S’ha trobat molt poc text a {name}. Part del contingut podria estar escanejat.",
+      "ocrReasonManual": "Vols tornar a llegir {name} amb reconeixement de text?",
+      "ocrExplanation": "L’OCR extreu el text de les imatges de les pàgines. Tarda més que una pujada normal, compta cada pàgina del fitxer dintre del teu límit diari d’OCR, i pot llegir erròniament escaneigs defectuosos, escriptura a mà i taules.",
+      "ocrPagesLeft": "{count, plural, one {# pàgina OCR disponible per avui.} other {# pàgines OCR disponibles per avui.}}",
+      "ocrRun": "Llegeix amb OCR",
+      "ocrDismiss": "Ara no",
+      "ocrSparseHint": "S’ha trobat molt poc text en aquest PDF. Algunes pàgines podrien estar escanejades.",
+      "ocrLimitReached": "Aquest document té més pàgines de les permeses pel teu límit d’OCR per avui.",
+      "ocrTooManyPages": "Aquest document és massa llarg per a l’OCR, que llegeix com a màxim {max} pàgines. Divideix el PDF i puja’n una part.",
+      "ocrUnavailable": "L’OCR no està configurat en aquest servidor.",
+      "ocrNoText": "L’OCR tampoc no ha trobat text en aquest document.",
+      "ocrFailed": "No s’ha pogut llegir el document amb OCR. Torna-ho a provar.",
+      "scannedWholeExplanation": "També podeu traduir tot el document: llegeix automàticament les pàgines escanejades, manté el format i descompta les pàgines del vostre límit diari de traducció.",
+      "scannedUseWholeDocument": "Traduïu tot el document",
+      "scannedSourceNote": "{name} no té cap text per mostrar aquí. La traducció de tot el document llegeix directament les seves pàgines. Si escriviu el vostre propi text aquí, substituireu el document.",
+      "scannedPageNote": "No s'ha pogut llegir cap text d'aquesta pàgina de l'original. Compareu-ho amb el fitxer mateix."
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "Esborranys de correus per dia",
       "m365MailDeepScansPerDay": "Anàlisis profundes de correus per dia",
       "m365DigestRunsPerDay": "Execucions diàries del resum per dia",
-      "translationPagesPerDay": "Pàgines de traducció de documents per dia"
+      "translationPagesPerDay": "Pàgines de traducció de documents per dia",
+      "ocrPagesPerDay": "Pàgines OCR al dia"
     },
     "valueModeLabel": "Tipus de límit",
     "valueAmountLabel": "Quantitat límit",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "Esborranys de correu electrònic que l'assistent pot crear cada dia — cadascun confirmat individualment. Límit intencionadament restrictiu.",
       "m365MailDeepScansPerDay": "Anàlisis de correu compostes (resums, cerques profundes, compromisos) al dia. Cada anàlisi compta com una unitat del pressupost, independentment de les lectures internes.",
       "m365DigestRunsPerDay": "Execucions del resum diari de Microsoft 365 per dia. Cada execució implica desenes de lectures Graph i dues trucades als models d'anàlisi; l’eina de selecció de període fa que repetir execucions sigui fàcil, per això el valor predeterminat és restrictiu.",
-      "translationPagesPerDay": "Pàgines PDF enviades per a la traducció de documents cada dia."
+      "translationPagesPerDay": "Pàgines PDF enviades per a la traducció de documents cada dia.",
+      "ocrPagesPerDay": "Pàgines PDF llegides amb OCR (reconeixement de text per a documents escanejats) per dia."
     },
     "scopeFamily": "Família",
     "scopeModel": "Model",

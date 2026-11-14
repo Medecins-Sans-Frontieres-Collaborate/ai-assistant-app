@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Text simplu, o pagină per pagină, cu corecturile dvs.",
       "documentNoCancel": "O traducere de document nu poate fi oprită după ce a început.",
       "documentGlossariesIgnored": "{count, plural, one {Glosarul selectat nu este aplicat în acest mod.} other {Cele # glosare selectate nu sunt aplicate în acest mod.}} Verificați terminologia pagină cu pagină folosind Evaluare calitate sau utilizați Rapid sau Revizuit.",
-      "pendingLeavePage": "Sugestiile aparțin acestei pagini și nu vor fi păstrate dacă o părăsiți. Decideți mai întâi asupra sugestiilor rămase."
+      "pendingLeavePage": "Sugestiile aparțin acestei pagini și nu vor fi păstrate dacă o părăsiți. Decideți mai întâi asupra sugestiilor rămase.",
+      "uploadStepOcr": "Citire cu OCR",
+      "ocrButton": "Citește cu OCR",
+      "ocrButtonHint": "Citește din nou acest PDF cu recunoașterea textului, pentru pagini scanate sau text preluat greșit",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Acest text a fost citit de pe pagini cu recunoașterea textului. Verificați-l cu originalul.",
+      "ocrReasonNoText": "Nu s-a găsit niciun text în {name}. Pare a fi un document scanat.",
+      "ocrReasonSparse": "S-a găsit foarte puțin text în {name}. O parte poate fi scanată.",
+      "ocrReasonManual": "Citiți din nou {name} cu recunoașterea textului?",
+      "ocrExplanation": "OCR citește textul din imaginile paginii. Procesul durează mai mult decât o încărcare normală, numără fiecare pagină a fișierului în limita zilnică OCR și poate interpreta greșit scanările slabe, scrisul de mână și tabelele.",
+      "ocrPagesLeft": "{count, plural, one {# pagină OCR rămasă azi.} other {# pagini OCR rămase azi.}}",
+      "ocrRun": "Citește cu OCR",
+      "ocrDismiss": "Nu acum",
+      "ocrSparseHint": "S-a găsit foarte puțin text în acest PDF. Unele pagini pot fi scanate.",
+      "ocrLimitReached": "Acest document are mai multe pagini decât limita OCR permisă astăzi.",
+      "ocrTooManyPages": "Acest document este prea lung pentru OCR, care citește cel mult {max} pagini. Împarte PDF-ul și încarcă o parte.",
+      "ocrUnavailable": "OCR nu este configurat pe acest server.",
+      "ocrNoText": "OCR nu a găsit niciun text nici în acest document.",
+      "ocrFailed": "Documentul nu a putut fi citit cu OCR. Încercați din nou.",
+      "scannedWholeExplanation": "Puteți traduce și întregul document: acesta citește singur paginile scanate, păstrează structura și numără paginile în limita zilnică de traduceri.",
+      "scannedUseWholeDocument": "Traduceți întregul document",
+      "scannedSourceNote": "{name} nu are text de afișat aici. Traducerea întregului document citește paginile direct. Dacă introduceți propriul text aici, acesta va înlocui documentul.",
+      "scannedPageNote": "Nu s-a putut citi niciun text de pe această pagină a originalului. Comparați cu fișierul propriu-zis."
     },
     "document": {
       "emptyTitle": "Descrieți documentul dorit",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "Ciorne e-mail pe zi",
       "m365MailDeepScansPerDay": "Scanări detaliate e-mail pe zi",
       "m365DigestRunsPerDay": "Raport zilnic pe zi",
-      "translationPagesPerDay": "Pagini de traducere a documentelor pe zi"
+      "translationPagesPerDay": "Pagini de traducere a documentelor pe zi",
+      "ocrPagesPerDay": "Pagini OCR pe zi"
     },
     "valueModeLabel": "Tip limită",
     "valueAmountLabel": "Valoare limită",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "Schimburi de e-mailuri pe care asistentul le poate crea zilnic — fiecare confirmat individual. Limită restrânsă intenționat.",
       "m365MailDeepScansPerDay": "Analize compuse de e-mail (sumare, căutare detaliată, angajamente) pe zi. Fiecare scanare reprezintă o unitate din buget, indiferent de numărul de citiri interne.",
       "m365DigestRunsPerDay": "Rapoartele zilnice Microsoft 365 pe zi. Un raport implică zeci de citiri Graph și două apeluri pentru analiza modelului; selectorul de perioadă permite reexecutări ușor de cerut, astfel că limita implicită este strictă.",
-      "translationPagesPerDay": "Pagini PDF trimise pentru traducerea documentelor pe zi."
+      "translationPagesPerDay": "Pagini PDF trimise pentru traducerea documentelor pe zi.",
+      "ocrPagesPerDay": "Pagini PDF citite cu OCR (recunoașterea textului pentru documente scanate) pe zi."
     },
     "scopeFamily": "Familie",
     "scopeModel": "Model",

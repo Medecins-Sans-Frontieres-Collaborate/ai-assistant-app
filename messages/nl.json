@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Platte tekst, één pagina per pagina, met uw correcties.",
       "documentNoCancel": "Een documentvertaling kan niet worden gestopt zodra deze is gestart.",
       "documentGlossariesIgnored": "{count, plural, one {Uw geselecteerde woordenlijst wordt in deze modus niet toegepast.} other {Uw # geselecteerde woordenlijsten worden in deze modus niet toegepast.}} Controleer de terminologie per pagina met Kwaliteit beoordelen, of gebruik Snel of Gekeurd.",
-      "pendingLeavePage": "Suggesties horen bij deze pagina en worden niet bewaard als u deze verlaat. Beslis eerst over de resterende suggesties."
+      "pendingLeavePage": "Suggesties horen bij deze pagina en worden niet bewaard als u deze verlaat. Beslis eerst over de resterende suggesties.",
+      "uploadStepOcr": "Lezen met OCR",
+      "ocrButton": "Lezen met OCR",
+      "ocrButtonHint": "Lees deze PDF opnieuw met tekstherkenning, voor gescande pagina's of verkeerd herkende tekst",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Deze tekst is met tekstherkenning van de pagina's gelezen. Vergelijk het met het origineel.",
+      "ocrReasonNoText": "Er is geen tekst gevonden in {name}. Dit lijkt een gescand document.",
+      "ocrReasonSparse": "Er is zeer weinig tekst gevonden in {name}. Mogelijk zijn sommige delen gescand.",
+      "ocrReasonManual": "{name} opnieuw lezen met tekstherkenning?",
+      "ocrExplanation": "OCR leest de tekst uit de paginabeelden. Dit duurt langer dan een normale upload, telt elke pagina van het bestand mee voor uw dagelijkse OCR-tegoed, en kan slecht gescande tekst, handschrift en tabellen verkeerd lezen.",
+      "ocrPagesLeft": "{count, plural, one {# OCR-pagina over vandaag.} other {# OCR-pagina's over vandaag.}}",
+      "ocrRun": "Lezen met OCR",
+      "ocrDismiss": "Niet nu",
+      "ocrSparseHint": "Er is zeer weinig tekst gevonden in deze PDF. Sommige pagina's kunnen gescand zijn.",
+      "ocrLimitReached": "Dit document heeft meer pagina's dan uw resterende OCR-tegoed voor vandaag.",
+      "ocrTooManyPages": "Dit document is te lang voor OCR, dat maximaal {max} pagina's leest. Splits de PDF en upload een deel.",
+      "ocrUnavailable": "OCR is niet ingesteld op deze server.",
+      "ocrNoText": "OCR heeft ook in dit document geen tekst gevonden.",
+      "ocrFailed": "Het document kon niet gelezen worden met OCR. Probeer het opnieuw.",
+      "scannedWholeExplanation": "U kunt ook het hele document vertalen: het leest gescande pagina's zelf, behoudt de opmaak en telt het aantal pagina's mee voor uw dagelijkse vertaallimiet.",
+      "scannedUseWholeDocument": "Vertaal het hele document",
+      "scannedSourceNote": "{name} heeft hier geen tekst om weer te geven. Bij vertaling van het hele document worden de pagina's direct gelezen. Eigen tekst typen vervangt het document.",
+      "scannedPageNote": "Van deze pagina van het origineel kon geen tekst worden gelezen. Vergelijk met het bestand zelf."
     },
     "document": {
       "emptyTitle": "Beschrijf het gewenste document",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "E-mailconcepten per dag",
       "m365MailDeepScansPerDay": "Diepgaande e-mailscans per dag",
       "m365DigestRunsPerDay": "Dagelijkse samenvattingen per dag",
-      "translationPagesPerDay": "Vertaalde pagina’s per dag"
+      "translationPagesPerDay": "Vertaalde pagina’s per dag",
+      "ocrPagesPerDay": "OCR-pagina's per dag"
     },
     "valueModeLabel": "Limiettype",
     "valueAmountLabel": "Limietbedrag",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "E-mailconcepten die de assistent per dag mag aanmaken — elk exemplaar wordt afzonderlijk bevestigd. Bewust beperkt.",
       "m365MailDeepScansPerDay": "Samengestelde mailanalyses (overzichten, diepzoeken, toezeggingen) per dag. Elke scan telt als één eenheid, ongeacht het aantal interne leesacties.",
       "m365DigestRunsPerDay": "Microsoft 365 dagelijkse samenvattingen per dag. Eén uitvoering bevat tientallen Graph-lezingen plus twee analysemodel-aanroepen; de periodekiezer maakt het eenvoudig om opnieuw uit te voeren, dus de standaardlimiet is streng.",
-      "translationPagesPerDay": "PDF-pagina’s die per dag voor documentvertaling zijn ingediend."
+      "translationPagesPerDay": "PDF-pagina’s die per dag voor documentvertaling zijn ingediend.",
+      "ocrPagesPerDay": "PDF-pagina's die per dag met OCR (tekstherkenning voor gescande documenten) zijn gelezen."
     },
     "scopeFamily": "Familie",
     "scopeModel": "Model",

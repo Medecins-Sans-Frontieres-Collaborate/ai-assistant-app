@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Texte brut, une page par page, avec vos corrections.",
       "documentNoCancel": "Une traduction de document ne peut pas être interrompue une fois démarrée.",
       "documentGlossariesIgnored": "{count, plural, one {Votre glossaire sélectionné n'est pas appliqué dans ce mode.} other {Vos # glossaires sélectionnés ne sont pas appliqués dans ce mode.}} Vérifiez la terminologie page par page avec Évaluer la qualité, ou utilisez Rapide ou Révisé.",
-      "pendingLeavePage": "Les suggestions appartiennent à cette page et ne sont pas conservées lorsque vous la quittez. Traitez d'abord les suggestions restantes."
+      "pendingLeavePage": "Les suggestions appartiennent à cette page et ne sont pas conservées lorsque vous la quittez. Traitez d'abord les suggestions restantes.",
+      "uploadStepOcr": "Lecture avec OCR",
+      "ocrButton": "Lire avec OCR",
+      "ocrButtonHint": "Relire ce PDF avec la reconnaissance de texte, pour les pages scannées ou le texte mal extrait",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Ce texte a été lu à partir des pages grâce à la reconnaissance de texte. Vérifiez-le avec l’original.",
+      "ocrReasonNoText": "Aucun texte trouvé dans {name}. Il semble s’agir d’un document scanné.",
+      "ocrReasonSparse": "Très peu de texte a été trouvé dans {name}. Une partie pourrait être scannée.",
+      "ocrReasonManual": "Relire {name} avec la reconnaissance de texte ?",
+      "ocrExplanation": "OCR lit le texte depuis les images des pages. Cela prend plus de temps qu’un téléchargement classique, chaque page est comptée dans votre quota OCR journalier, et les scans de mauvaise qualité, l’écriture manuscrite ou les tableaux peuvent être mal lus.",
+      "ocrPagesLeft": "{count, plural, one {# page OCR restante aujourd’hui.} other {# pages OCR restantes aujourd’hui.}}",
+      "ocrRun": "Lire avec OCR",
+      "ocrDismiss": "Pas maintenant",
+      "ocrSparseHint": "Très peu de texte trouvé dans ce PDF. Certaines pages pourraient être scannées.",
+      "ocrLimitReached": "Ce document contient plus de pages que votre quota OCR journalier.",
+      "ocrTooManyPages": "Ce document est trop long pour OCR, qui lit au maximum {max} pages. Divisez le PDF et téléchargez une partie.",
+      "ocrUnavailable": "OCR n’est pas configuré sur ce serveur.",
+      "ocrNoText": "OCR n’a trouvé aucun texte dans ce document non plus.",
+      "ocrFailed": "Le document n’a pas pu être lu avec OCR. Veuillez réessayer.",
+      "scannedWholeExplanation": "Vous pouvez également traduire l’ensemble du document : il lit directement les pages scannées, conserve la mise en page et décompte les pages de votre quota quotidien de traduction.",
+      "scannedUseWholeDocument": "Traduire l’ensemble du document",
+      "scannedSourceNote": "{name} n’a aucun texte à afficher ici. La traduction de l’ensemble du document lit directement ses pages. Si vous saisissez votre propre texte ici, le document sera remplacé.",
+      "scannedPageNote": "Aucun texte n’a pu être lu sur cette page de l’original. Veuillez comparer avec le fichier lui-même."
     },
     "document": {
       "emptyTitle": "Décrivez le document souhaité",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "Brouillons de courriels par jour",
       "m365MailDeepScansPerDay": "Analyses approfondies de courriels par jour",
       "m365DigestRunsPerDay": "Exécutions du digest quotidien par jour",
-      "translationPagesPerDay": "Pages de traduction de documents par jour"
+      "translationPagesPerDay": "Pages de traduction de documents par jour",
+      "ocrPagesPerDay": "Pages OCR par jour"
     },
     "valueModeLabel": "Type de limite",
     "valueAmountLabel": "Quantité limite",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "Brouillons d’e-mails que l’assistant peut créer par jour — chacun est confirmé individuellement. Limite volontairement stricte.",
       "m365MailDeepScansPerDay": "Analyses composites de mails (synthèses, recherche avancée, engagements) par jour. Chaque analyse compte pour une unité, quel que soit le nombre de lectures internes.",
       "m365DigestRunsPerDay": "Exécutions du digest quotidien Microsoft 365 par jour. Une exécution correspond à plusieurs lectures Graph plus deux appels au modèle d’analyse ; le sélecteur de période permet d'effectuer facilement des relances, donc la limite par défaut est stricte.",
-      "translationPagesPerDay": "Pages PDF soumises pour la traduction de documents par jour."
+      "translationPagesPerDay": "Pages PDF soumises pour la traduction de documents par jour.",
+      "ocrPagesPerDay": "Pages PDF lues avec OCR (reconnaissance de texte pour documents scannés) par jour."
     },
     "scopeFamily": "Famille",
     "scopeModel": "Modèle",

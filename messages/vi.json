@@ -3197,7 +3197,29 @@
       "downloadTextVersionHint": "Văn bản thuần, mỗi trang một tệp, có bao gồm chỉnh sửa của bạn.",
       "documentNoCancel": "Không thể dừng việc dịch tài liệu sau khi đã bắt đầu.",
       "documentGlossariesIgnored": "{count, plural, one {Bảng thuật ngữ bạn đã chọn sẽ không được áp dụng ở chế độ này.} other {# bảng thuật ngữ bạn đã chọn sẽ không được áp dụng ở chế độ này.}} Kiểm tra thuật ngữ từng trang bằng Đánh giá chất lượng hoặc sử dụng Nhanh hay Đã kiểm duyệt.",
-      "pendingLeavePage": "Các gợi ý thuộc về trang này và sẽ không được lưu nếu bạn rời khỏi. Vui lòng xử lý hết các gợi ý còn lại trước."
+      "pendingLeavePage": "Các gợi ý thuộc về trang này và sẽ không được lưu nếu bạn rời khỏi. Vui lòng xử lý hết các gợi ý còn lại trước.",
+      "uploadStepOcr": "Đang đọc bằng OCR",
+      "ocrButton": "Đọc bằng OCR",
+      "ocrButtonHint": "Đọc lại PDF này bằng nhận diện văn bản, dành cho các trang quét hoặc khi văn bản chưa chính xác",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Văn bản này được đọc từ các trang bằng nhận diện văn bản. Vui lòng kiểm tra lại với bản gốc.",
+      "ocrReasonNoText": "Không tìm thấy văn bản trong {name}. Có vẻ đây là tài liệu đã được quét.",
+      "ocrReasonSparse": "Rất ít văn bản được tìm thấy trong {name}. Một số có thể là ảnh quét.",
+      "ocrReasonManual": "Đọc lại {name} bằng nhận diện văn bản?",
+      "ocrExplanation": "OCR đọc văn bản từ hình ảnh trang. Thao tác này mất nhiều thời gian hơn tải lên thông thường, tính từng trang trong hạn mức OCR hằng ngày của bạn, và có thể nhận diện sai với ảnh quét kém, chữ viết tay hoặc bảng biểu.",
+      "ocrPagesLeft": "{count, plural, one {Còn # trang OCR hôm nay.} other {Còn # trang OCR hôm nay.}}",
+      "ocrRun": "Đọc bằng OCR",
+      "ocrDismiss": "Để sau",
+      "ocrSparseHint": "Rất ít văn bản được tìm thấy trong PDF này. Một số trang có thể là ảnh quét.",
+      "ocrLimitReached": "Tài liệu này có nhiều trang hơn hạn mức OCR còn lại của bạn hôm nay.",
+      "ocrTooManyPages": "Tài liệu này quá dài cho OCR, chỉ tối đa {max} trang. Vui lòng tách nhỏ PDF và tải lên một phần.",
+      "ocrUnavailable": "OCR chưa được thiết lập trên máy chủ này.",
+      "ocrNoText": "OCR cũng không tìm thấy văn bản nào trong tài liệu này.",
+      "ocrFailed": "Không thể đọc tài liệu bằng OCR. Vui lòng thử lại.",
+      "scannedWholeExplanation": "Bạn cũng có thể dịch toàn bộ tài liệu: hệ thống sẽ tự đọc các trang đã quét, giữ nguyên bố cục và tính số trang vào hạn mức dịch hàng ngày của bạn.",
+      "scannedUseWholeDocument": "Dịch toàn bộ tài liệu",
+      "scannedSourceNote": "{name} không có nội dung để hiển thị tại đây. Việc dịch toàn bộ tài liệu sẽ đọc trực tiếp các trang của nó. Nếu bạn nhập văn bản ở đây, nội dung tài liệu sẽ bị thay thế.",
+      "scannedPageNote": "Không thể đọc được văn bản nào từ trang này của bản gốc. Vui lòng so sánh với chính tệp tài liệu."
     },
     "document": {
       "emptyTitle": "Mô tả tài liệu bạn muốn",
@@ -5839,7 +5861,8 @@
       "m365MailDraftsPerDay": "Bản nháp thư mỗi ngày",
       "m365MailDeepScansPerDay": "Quét sâu thư mỗi ngày",
       "m365DigestRunsPerDay": "Số lần chạy tổng hợp mỗi ngày",
-      "translationPagesPerDay": "Số trang dịch tài liệu mỗi ngày"
+      "translationPagesPerDay": "Số trang dịch tài liệu mỗi ngày",
+      "ocrPagesPerDay": "Số trang OCR mỗi ngày"
     },
     "valueModeLabel": "Loại giới hạn",
     "valueAmountLabel": "Giá trị giới hạn",
@@ -5922,7 +5945,8 @@
       "m365MailDraftsPerDay": "Số bản nháp email trợ lý có thể tạo mỗi ngày — mỗi bản cần xác nhận riêng. Hạn mức được đặt nghiêm ngặt.",
       "m365MailDeepScansPerDay": "Số lượt phân tích thư tổng hợp (tóm tắt, tìm kiếm sâu, cam kết) mỗi ngày. Mỗi lượt quét tính là một đơn vị ngân sách, bất kể số lần đọc bên trong.",
       "m365DigestRunsPerDay": "Số lần chạy tổng hợp Microsoft 365 mỗi ngày. Một lần chạy gồm hàng chục lượt đọc Graph cùng hai lần gọi phân tích; bộ chọn khoảng thời gian giúp dễ yêu cầu chạy lại, do đó giới hạn mặc định khá chặt.",
-      "translationPagesPerDay": "Số trang PDF nộp để dịch tài liệu mỗi ngày."
+      "translationPagesPerDay": "Số trang PDF nộp để dịch tài liệu mỗi ngày.",
+      "ocrPagesPerDay": "Số trang PDF được đọc bằng OCR (nhận diện văn bản cho tài liệu quét) mỗi ngày."
     },
     "scopeFamily": "Nhóm",
     "scopeModel": "Mô hình",

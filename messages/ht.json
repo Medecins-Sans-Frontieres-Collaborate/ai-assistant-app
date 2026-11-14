@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Tèks senp, yon paj pa paj, ak koreksyon ou yo.",
       "documentNoCancel": "Ou pa ka sispann tradiksyon yon dokiman apre li kòmanse.",
       "documentGlossariesIgnored": "{count, plural, one {Glosè ou chwazi a pa aplike nan mòd sa a.} other {# glosè ou chwazi yo pa aplike nan mòd sa a.}} Tcheke tèm paj pa paj ak Evalye kalite, oswa itilize Rapid oswa Revize.",
-      "pendingLeavePage": "Sijesyon yo sèlman pou paj sa a epi yo pap konsève si ou kite li. Fè chwa pou rès sijesyon yo dabor."
+      "pendingLeavePage": "Sijesyon yo sèlman pou paj sa a epi yo pap konsève si ou kite li. Fè chwa pou rès sijesyon yo dabor.",
+      "uploadStepOcr": "Li ak OCR",
+      "ocrButton": "Li ak OCR",
+      "ocrButtonHint": "Li PDF sa ankò ak rekonesans tèks, pou paj eskane oswa lè tèks la pa soti byen",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Tèks sa soti nan paj yo ak rekonesans tèks. Verifye li ak dokiman orijinal la.",
+      "ocrReasonNoText": "Pa gen tèks ki jwenn nan {name}. Li sanble se yon dokiman eskane.",
+      "ocrReasonSparse": "Tèks yo jwenn trè piti nan {name}. Gen kèk ka eskane.",
+      "ocrReasonManual": "Li {name} ankò ak rekonesans tèks?",
+      "ocrExplanation": "OCR li tèks sou imaj paj yo. Li pran plis tan pase yon upload nòmal, konte chak paj nan fichye a sou kantite OCR ou ka itilize chak jou, epi li ka mal li eskane ki pa klè, ekriti ak tab.",
+      "ocrPagesLeft": "{count, plural, one {# paj OCR ki rete jodi a.} other {# paj OCR ki rete jodi a.}}",
+      "ocrRun": "Li ak OCR",
+      "ocrDismiss": "Pa kounye a",
+      "ocrSparseHint": "Tèks yo jwenn trè piti nan PDF sa. Gen kèk paj ki ka eskane.",
+      "ocrLimitReached": "Dokiman sa gen plis paj pase kantite OCR ou ka itilize jodi a.",
+      "ocrTooManyPages": "Dokiman sa twò long pou OCR, ki ka li jiska {max} paj. Separe PDF la epi w apupload yon pati.",
+      "ocrUnavailable": "OCR pa disponib sou sèvè sa a.",
+      "ocrNoText": "OCR pa jwenn tèks nan dokiman sa tou.",
+      "ocrFailed": "Dokiman an pa t ka li ak OCR. Eseye ankò.",
+      "scannedWholeExplanation": "Ou ka tou tradui tout dokiman an : li li paj eskane yo li menm, li kenbe dispozisyon an, epi li konte paj yo kòm pati de limit tradiksyon ou chak jou.",
+      "scannedUseWholeDocument": "Tradui tout dokiman an",
+      "scannedSourceNote": "{name} pa gen okenn tèks pou montre isit la. Tradiksyon tout dokiman an li paj yo dirèkteman. Si ou tape pwòp tèks ou isit la, li ap ranplase dokiman an.",
+      "scannedPageNote": "Pa t gen okenn tèks ki te ka li sou paj sa a nan dokiman orijinal la. Konpare ak dosye a menm."
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Boukonn imel pa jou",
       "m365MailDeepScansPerDay": "Skan fon imel pa jou",
       "m365DigestRunsPerDay": "Rapò chak jou pa jou",
-      "translationPagesPerDay": "Paj dokiman tradiksyon pa jou"
+      "translationPagesPerDay": "Paj dokiman tradiksyon pa jou",
+      "ocrPagesPerDay": "Paj OCR pa jou"
     },
     "valueModeLabel": "Kalite limit",
     "valueAmountLabel": "Montan limit",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Brouyon imèl asistan an ka kreye chak jou — chak youn konfime separeman. Limit la byen sere.",
       "m365MailDeepScansPerDay": "Analiz imel konpoze (rezime, rechèch pwofon, angajman) pa jou. Chak analiz konte kòm yon inite bidjè kèlkeswa kantite lekti andedan l.",
       "m365DigestRunsPerDay": "Microsoft 365 rapò chak jou pa jou. Chak egzekisyon vle di plizyè lekti Graph plis de apèl modèl analiz; chwa peryòd la fè fasil repase, se poutèt sa limit la sere pa default.",
-      "translationPagesPerDay": "Paj PDF soumèt pou tradiksyon dokiman pa jou."
+      "translationPagesPerDay": "Paj PDF soumèt pou tradiksyon dokiman pa jou.",
+      "ocrPagesPerDay": "Paj PDF li ak OCR (rekonesans tèks pou dokiman eskane) pa jou."
     },
     "scopeFamily": "Fanmi",
     "scopeModel": "Modèl",

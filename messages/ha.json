@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Rubutu kai tsaye, shafi guda a kowane shafi, tare da gyaranka.",
       "documentNoCancel": "Ba za a iya dakatar da fassarar takarda bayan an fara ba.",
       "documentGlossariesIgnored": "{count, plural, one {An zaɓar glossary ɗinka ba za a amfani da shi a wannan yanayin ba.} other {Glossary ɗinku da kuka zaɓa # ba za a amfani da su a wannan yanayin ba.}} Duba kalmomi shafi-shafi ta amfani da Assess quality, ko amfani da Quick ko Reviewed.",
-      "pendingLeavePage": "Shawarwarin suna wannan shafi, ba za su ci gaba idan ka bar shafin ba. Yanke shawarar shawarwarin da suka rage farko."
+      "pendingLeavePage": "Shawarwarin suna wannan shafi, ba za su ci gaba idan ka bar shafin ba. Yanke shawarar shawarwarin da suka rage farko.",
+      "uploadStepOcr": "Karanta da OCR",
+      "ocrButton": "Karanta da OCR",
+      "ocrButtonHint": "Karanta wannan PDF din da sake gane rubutu, don shafukan da aka scana ko rubutun da bai fito daidai ba",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "An karanta wannan rubutun daga shafuka ta hanyar gane rubutu. Duba da asalin takarda.",
+      "ocrReasonNoText": "Ba a sami rubutu a cikin {name}. Kamar yana daga cikin takardun da aka scana.",
+      "ocrReasonSparse": "An sami ƙananan rubutu a cikin {name}. Wataƙila an scana wasu daga cikinsu.",
+      "ocrReasonManual": "A sake karanta {name} ta hanyar gane rubutu?",
+      "ocrExplanation": "OCR yana karanta rubutu daga hoton shafuka. Yana ɗaukar lokaci fiye da hanya ta al'ada, yana ƙididdige kowanne shafi a cikin fayil ɗin da iyakar OCR na yau, kuma yana iya yin kuskure idan scan ɗin ba kyau ba, rubutun hannu ko tebur.",
+      "ocrPagesLeft": "{count, plural, one {# shafin OCR ya rage yau.} other {# shafukan OCR sun rage yau.}}",
+      "ocrRun": "Karanta da OCR",
+      "ocrDismiss": "Ba yanzu ba",
+      "ocrSparseHint": "An sami ƙananan rubutu a cikin wannan PDF din. Wasu shafuka ma sun kasance an scana.",
+      "ocrLimitReached": "Wannan takarda tana da shafuka fiye da iyakar OCR da ke sauran yau.",
+      "ocrTooManyPages": "Wannan takarda tana da shafuka masu yawa don OCR, wanda ke karanta har zuwa {max} shafuka kawai. Raba PDF din sannan ka ɗora wani ɓangare.",
+      "ocrUnavailable": "OCR bai kasance a wannan sabar ba.",
+      "ocrNoText": "OCR bai samu rubutu a wannan takarda ba.",
+      "ocrFailed": "Ba a iya karanta takardar da OCR ba. Ka sake gwadawa.",
+      "scannedWholeExplanation": "Hakanan za a iya fassara dukkan takaddar: tsarin yana karanta shafukan da aka duba da kansa, yana kiyaye yadda aka tsara su, kuma yana ƙirga shafuka a cikin ƙarfin fassarar ku na kullum.",
+      "scannedUseWholeDocument": "Fassara dukkan takaddar",
+      "scannedSourceNote": "Babu rubutu da za a nuna a nan daga {name}. Fassara dukkan takaddar tana karanta shafukanta kai tsaye. Idan ka rubuta naka a nan, zai maye gurbin takaddar.",
+      "scannedPageNote": "Ba a iya karanta rubutu daga wannan shafin asali ba. Kwatanta da fayil ɗin da kansa."
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Rubutun imel a rana",
       "m365MailDeepScansPerDay": "Cikakken duba imel a rana",
       "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na kullum a rana",
-      "translationPagesPerDay": "Shafukan fassarar takardu a rana"
+      "translationPagesPerDay": "Shafukan fassarar takardu a rana",
+      "ocrPagesPerDay": "Shafukan OCR a kowace rana"
     },
     "valueModeLabel": "Irin iyaka",
     "valueAmountLabel": "Adadin iyaka",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Kirkiran rubutattun imel ɗin da mataimakin zai iya yi a rana — kowannensu ana tabbatarwa dabam. An yi da gangan don kar a wuce gona da iri.",
       "m365MailDeepScansPerDay": "Cikakkun nazarin imel (taƙaitawa, bincike mai zurfi, alƙawari) a rana. Kowanne bincike guda yana ɗauke da tamkar ɗaya daga cikin kasafin, ko da yawan karatunsu a ciki.",
       "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na Microsoft 365 a rana. Gudun guda yana kunshe da karanta Graph da dama tare da kira na analysis-model guda biyu; zaɓin lokacin yana sauƙaƙa maidowa, saboda haka an sa iyaka a bisa tsoho.",
-      "translationPagesPerDay": "Shafukan PDF da aka tura don fassarar takardu a rana."
+      "translationPagesPerDay": "Shafukan PDF da aka tura don fassarar takardu a rana.",
+      "ocrPagesPerDay": "Shafukan PDF da aka karanta da OCR (gane rubutu don takardun da aka scana) a kowace rana."
     },
     "scopeFamily": "Dangi",
     "scopeModel": "Samfuri",

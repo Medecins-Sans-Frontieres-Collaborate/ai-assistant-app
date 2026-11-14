@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Düzeltilmiş metninizle, sayfa başına bir sayfa düz metin.",
       "documentNoCancel": "Bir belge çevirisi başladıktan sonra durdurulamaz.",
       "documentGlossariesIgnored": "{count, plural, one {Seçtiğiniz sözlük bu modda uygulanmaz.} other {Seçtiğiniz # sözlük bu modda uygulanmaz.}} Terimleri kaliteyi değerlendir ile sayfa sayfa kontrol edin ya da Hızlı veya Gözden Geçirilmiş seçeneklerini kullanın.",
-      "pendingLeavePage": "Öneriler bu sayfaya aittir ve sayfadan ayrıldığınızda saklanmaz. Önce kalan öneriler hakkında karar verin."
+      "pendingLeavePage": "Öneriler bu sayfaya aittir ve sayfadan ayrıldığınızda saklanmaz. Önce kalan öneriler hakkında karar verin.",
+      "uploadStepOcr": "OCR ile okuma",
+      "ocrButton": "OCR ile oku",
+      "ocrButtonHint": "Taranmış sayfalar veya yanlış algılanan metinler için bu PDF’yi metin tanıma ile tekrar okuyun",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Bu metin, sayfalardan metin tanıma ile okundu. Aslıyla karşılaştırın.",
+      "ocrReasonNoText": "{name} içinde metin bulunamadı. Görünüşe göre bu bir taranmış belge.",
+      "ocrReasonSparse": "{name} içinde çok az metin bulundu. Bazı bölümleri taranmış olabilir.",
+      "ocrReasonManual": "{name} metin tanıma ile yeniden okunsun mu?",
+      "ocrExplanation": "OCR, metni sayfa görsellerinden okur. Bu işlem normal yüklemeye göre daha uzun sürer, dosyanın her sayfası günlük OCR hakkınıza sayılır ve zayıf taramalarda, el yazısında ve tablolarda hata yapabilir.",
+      "ocrPagesLeft": "{count, plural, one {Bugün # OCR sayfa hakkınız kaldı.} other {Bugün # OCR sayfa hakkınız kaldı.}}",
+      "ocrRun": "OCR ile oku",
+      "ocrDismiss": "Şimdi değil",
+      "ocrSparseHint": "Bu PDF’de çok az metin bulundu. Bazı sayfalar taranmış olabilir.",
+      "ocrLimitReached": "Bu belgedeki sayfa sayısı, bugünkü OCR hakkınızdan fazla.",
+      "ocrTooManyPages": "Bu belge, OCR için çok uzun; en fazla {max} sayfa okunabiliyor. PDF’yi bölüp bir kısmını yükleyin.",
+      "ocrUnavailable": "Bu sunucuda OCR kurulmamış.",
+      "ocrNoText": "OCR bu belgede de metin bulamadı.",
+      "ocrFailed": "Belge OCR ile okunamadı. Tekrar deneyin.",
+      "scannedWholeExplanation": "Tüm belgeyi de çevirebilirsiniz: taranmış sayfaları kendisi okur, biçimi korur ve çevrilen sayfa sayısını günlük çeviri limitinize sayar.",
+      "scannedUseWholeDocument": "Tüm belgeyi çevir",
+      "scannedSourceNote": "{name} burada gösterilecek bir metin içermiyor. Tüm belge çevirisi, sayfalarını doğrudan okur. Buraya kendi metninizi yazarsanız belgeyi değiştirirsiniz.",
+      "scannedPageNote": "Orijinalin bu sayfasından metin okunamadı. Dosyanın kendisiyle karşılaştırın."
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "Günde e-posta taslakları",
       "m365MailDeepScansPerDay": "Günde e-posta derin taramaları",
       "m365DigestRunsPerDay": "Günlük özeti çalışma sayısı",
-      "translationPagesPerDay": "Günlük belge çevirisi sayfa limiti"
+      "translationPagesPerDay": "Günlük belge çevirisi sayfa limiti",
+      "ocrPagesPerDay": "Günlük OCR sayfa hakkı"
     },
     "valueModeLabel": "Sınır türü",
     "valueAmountLabel": "Sınır miktarı",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "Yardımcının günde oluşturabileceği e-posta taslakları — her biri tek tek onaylanır. Kasıtlı olarak sıkı tutulmuştur.",
       "m365MailDeepScansPerDay": "Bileşik e-posta analizleri (özetler, derin arama, taahhütler) günlük limiti. Her tarama, içine kaç okuma girerse girsin bir bütçe birimidir.",
       "m365DigestRunsPerDay": "Microsoft 365 günlük özeti çalışma sayısı. Bir çalışma, onlarca Graph okuması ve iki analiz modeli çağrısı içerir; dönem seçicisi tekrar çalıştırmaları kolaylaştırır, bu yüzden varsayılan sınır sıkıdır.",
-      "translationPagesPerDay": "Belge çevirisi için gönderilen PDF sayfa sayısı (günlük)."
+      "translationPagesPerDay": "Belge çevirisi için gönderilen PDF sayfa sayısı (günlük).",
+      "ocrPagesPerDay": "Günde OCR ile okunan PDF sayfa sayısı (taranmış belgeler için metin tanıma)."
     },
     "scopeFamily": "Aile",
     "scopeModel": "Model",

@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Čist tekst, jedna stranica po stranici, sa vašim ispravkama.",
       "documentNoCancel": "Prevod dokumenta ne može biti zaustavljen nakon što je započet.",
       "documentGlossariesIgnored": "{count, plural, one {Izabrani glosar nije primenjen u ovom režimu.} other {Izabrana # glosara nisu primenjena u ovom režimu.}} Proverite terminologiju stranicu po stranicu pomoću Procene kvaliteta ili koristite Brzi ili Recenzirani.",
-      "pendingLeavePage": "Predlozi se odnose na ovu stranicu i neće biti sačuvani kada je napustite. Najpre odlučite o preostalim predlozima."
+      "pendingLeavePage": "Predlozi se odnose na ovu stranicu i neće biti sačuvani kada je napustite. Najpre odlučite o preostalim predlozima.",
+      "uploadStepOcr": "Čitanje pomoću OCR-a",
+      "ocrButton": "Čitaj pomoću OCR-a",
+      "ocrButtonHint": "Ponovo pročitaj ovaj PDF pomoću prepoznavanja teksta, za skenirane stranice ili tekst koji je pogrešno pročitan",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Ovaj tekst je pročitan sa stranica pomoću prepoznavanja teksta. Uporedite ga sa originalom.",
+      "ocrReasonNoText": "Nije pronađen tekst u {name}. Izgleda kao skenirani dokument.",
+      "ocrReasonSparse": "Pronađeno je vrlo malo teksta u {name}. Deo možda je skeniran.",
+      "ocrReasonManual": "Da li ponovo da pročitam {name} pomoću prepoznavanja teksta?",
+      "ocrExplanation": "OCR čita tekst sa slika stranica. Traje duže od normalnog učitavanja, računa svaku stranicu fajla prema vašem dnevnom ograničenju za OCR i može pogrešno pročitati loše skenirane stranice, rukopis i tabele.",
+      "ocrPagesLeft": "{count, plural, one {# OCR stranica preostala danas.} other {# OCR stranica preostalo danas.}}",
+      "ocrRun": "Čitaj pomoću OCR-a",
+      "ocrDismiss": "Ne sada",
+      "ocrSparseHint": "Pronađeno je vrlo malo teksta u ovom PDF-u. Neke stranice mogu biti skenirane.",
+      "ocrLimitReached": "Ovaj dokument ima više stranica nego što vam je preostalo za OCR danas.",
+      "ocrTooManyPages": "Ovaj dokument je predugačak za OCR, koji može da pročita najviše {max} stranica. Podelite PDF i učitajte deo.",
+      "ocrUnavailable": "OCR nije podešen na ovom serveru.",
+      "ocrNoText": "OCR nije pronašao tekst ni u ovom dokumentu.",
+      "ocrFailed": "Dokument nije mogao da se pročita pomoću OCR-a. Pokušajte ponovo.",
+      "scannedWholeExplanation": "Možete takođe prevesti ceo dokument: samostalno očitava skenirane stranice, zadržava raspored i broj stranica uračunava u vašu dnevnu kvotu za prevod.",
+      "scannedUseWholeDocument": "Prevedi ceo dokument",
+      "scannedSourceNote": "{name} nema tekst za prikaz ovde. Prevodi cele dokumente očitavaju stranice direktno. Ako ovde unesete svoj tekst, on zamenjuje dokument.",
+      "scannedPageNote": "Tekst sa ove stranice originala nije mogao biti očitan. Uporedite sa samim fajlom."
     },
     "document": {
       "emptyTitle": "Opišite dokument koji želite",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Draftovi pošte dnevno",
       "m365MailDeepScansPerDay": "Dubinske pretrage pošte dnevno",
       "m365DigestRunsPerDay": "Dnevnih pokretanja sažetka po danu",
-      "translationPagesPerDay": "Stranica dokumenata za prevod dnevno"
+      "translationPagesPerDay": "Stranica dokumenata za prevod dnevno",
+      "ocrPagesPerDay": "OCR stranica dnevno"
     },
     "valueModeLabel": "Tip ograničenja",
     "valueAmountLabel": "Vrednost ograničenja",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Broj email nacrta koje asistent može napraviti dnevno — svaki posebno potvrđen. Svesno ograničeno.",
       "m365MailDeepScansPerDay": "Složene analize pošte (sažeci, dubinsko pretraživanje, obaveze) po danu. Svako skeniranje je jedna budžetska jedinica bez obzira na broj unutrašnjih čitanja.",
       "m365DigestRunsPerDay": "Microsoft 365 dnevni sažetak po danu. Jedno pokretanje obuhvata desetine Graph čitanja i dva poziva analiznog modela; izbor perioda omogućava lako ponovno pokretanje, pa je podrazumevana granica stroga.",
-      "translationPagesPerDay": "PDF stranice poslate za prevod dokumenata dnevno."
+      "translationPagesPerDay": "PDF stranice poslate za prevod dokumenata dnevno.",
+      "ocrPagesPerDay": "PDF stranice pročitane pomoću OCR-a (prepoznavanje teksta kod skeniranih dokumenata) dnevno."
     },
     "scopeFamily": "Porodica",
     "scopeModel": "Model",

@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Lahatsoratra tsotra, pejy iray isaky ny pejy, miaraka amin'ny fanitsiana nataonao.",
       "documentNoCancel": "Tsy azo ajanona ny fandikan-teny amin'ny antontan-taratasy raha vantany vao manomboka.",
       "documentGlossariesIgnored": "{count, plural, one {Tsy ampiharina amin'ity fomba ity ny voambolana fidinao.} other {Tsy ampiharina amin'ity fomba ity ny voambolana # voafidinao.}} Jereo tsirairay isaky ny pejy ny voambolana amin'ny alalan'ny Assess quality, na ampiasao Quick na Reviewed.",
-      "pendingLeavePage": "An'ny ity pejy ity ihany ireo soso-kevitra ary tsy voatahiry raha miala amin'izany ianao. Ataovy aloha ny fanapahan-kevitra amin'ny sisa tavela."
+      "pendingLeavePage": "An'ny ity pejy ity ihany ireo soso-kevitra ary tsy voatahiry raha miala amin'izany ianao. Ataovy aloha ny fanapahan-kevitra amin'ny sisa tavela.",
+      "uploadStepOcr": "Mamaky amin'ny alalan'ny OCR",
+      "ocrButton": "Vakio amin'ny OCR",
+      "ocrButtonHint": "Vakio indray ity PDF ity amin'ny alalan'ny fahafantarana soratra, ho an'ny pejy notsaraina na soratra diso nivoaka",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Avy amin'ny pejy voasoratra amin'ny OCR ity soratra ity. Ampitahao amin'ny dika tany am-boalohany.",
+      "ocrReasonNoText": "Tsy nisy soratra hita tao amin'ny {name}. Tahaka ny antontan-taratasy noskanina izy io.",
+      "ocrReasonSparse": "Vitsy dia vitsy ny soratra hita tao amin'ny {name}. Mety misy amin'izany no noskanina.",
+      "ocrReasonManual": "Vakio indray amin'ny alalan'ny OCR ve ny {name}?",
+      "ocrExplanation": "Ny OCR dia mamaky ny soratra avy amin'ny sary amin'ny pejy. Ela kokoa noho ny fandefasana mahazatra, isaina amin'ny fetranao isan'andro ny pejy tsirairay, ary mety tsy hamaky tsara raha ratsy ny scan, fanoratana tanana na tabila.",
+      "ocrPagesLeft": "{count, plural, one {# pejy OCR sisa anio.} other {# pejy OCR sisa anio.}}",
+      "ocrRun": "Vakio amin'ny OCR",
+      "ocrDismiss": "Tsy izao",
+      "ocrSparseHint": "Vitsy dia vitsy ny soratra hita amin'ity PDF ity. Mety noskanina ny pejy sasany.",
+      "ocrLimitReached": "Mihoatra ny fetra OCR andronao ny isan'ny pejin'ity antontan-taratasy ity.",
+      "ocrTooManyPages": "Lava loatra ity antontan-taratasy ity ho an'ny OCR, izay mamaky indrindra {max} pejy. Saraho ny PDF ary ampidiro amin'ny ampahany.",
+      "ocrUnavailable": "Tsy mbola voahetsika amin'ity lohamilina ity ny OCR.",
+      "ocrNoText": "Tsy nahita soratra tao amin'ity antontan-taratasy ity ihany koa ny OCR.",
+      "ocrFailed": "Tsy voavaky tamin'ny OCR ilay antontan-taratasy. Andramo indray.",
+      "scannedWholeExplanation": "Azonao atao ihany koa ny mandika ny antontan-taratasy manontolo: mamaky mivantana ireo pejy nosokajiana, mitahiry ny endriky ny pejy, ary manisa ireo pejy amin'ny taham-pandika andavanandro.",
+      "scannedUseWholeDocument": "Dikao ny antontan-taratasy manontolo",
+      "scannedSourceNote": "Tsy misy lahatsoratra aseho ao amin'i {name}. Ny fandikana manontolo dia mamaky mivantana ireo pejy. Raha manoratra lahatsoratra eto ianao dia manolo ilay antontan-taratasy.",
+      "scannedPageNote": "Tsy nahitana lahatsoratra azo vakiana avy amin'ity pejy amin'ny dika tany am-boalohany ity. Tadiavo sy ampitahao amin'ilay antontan-taratasy."
     },
     "document": {
       "emptyTitle": "Lazao ny antontan-taratasy ilainao",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Draft mailaka isan'andro",
       "m365MailDeepScansPerDay": "Famotopotorana lalina mailaka isan'andro",
       "m365DigestRunsPerDay": "Famintinana isan'andro isan'andro",
-      "translationPagesPerDay": "Isan'ny pejy azo adika isan’andro"
+      "translationPagesPerDay": "Isan'ny pejy azo adika isan’andro",
+      "ocrPagesPerDay": "Isan'ny pejy OCR isan'andro"
     },
     "valueModeLabel": "Karazan'ny fetra",
     "valueAmountLabel": "Habetsahan'ny fetra",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Dikasary mailaka azon'ny mpanampy foronina isan'andro — tsirairay dia voamarina. Tena voafaritra henjana.",
       "m365MailDeepScansPerDay": "Fanadihadiana mailaka mifangaro (famintinana, fikarohana lalina, fanoloran-tena) isan'andro. Isaky ny scan iray dia iray ny teti-bola, na firy na firy ny famakiana anatiny.",
       "m365DigestRunsPerDay": "Famintinana isan'andro Microsoft 365 isan'andro. Ny famintinana iray dia ahitana famakiana Graph maromaro sy antso modely fanadihadiana roa; mora atao indray ny fangatahana amin'ny alàlan'ny safidy vanim-potoana, ka tery ny fatra mahazatra.",
-      "translationPagesPerDay": "Pejy PDF nalefa adika rehetra isan’andro."
+      "translationPagesPerDay": "Pejy PDF nalefa adika rehetra isan’andro.",
+      "ocrPagesPerDay": "Isan'ny pejin'ny PDF vakiana amin'ny OCR (fahafantarana soratra ho an'ny taratasy noskanina) isan'andro."
     },
     "scopeFamily": "Fianakaviana",
     "scopeModel": "Modely",

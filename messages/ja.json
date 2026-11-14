@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "各ページごとにプレーンテキスト。修正内容を含みます。",
       "documentNoCancel": "ドキュメントの翻訳は一度開始すると中断できません。",
       "documentGlossariesIgnored": "{count, plural, one {選択した用語集はこのモードでは適用されません。} other {選択した用語集#件はこのモードでは適用されません。}} 用語をページごとに確認するには「品質評価」を利用するか、「クイック」または「レビュー済み」をご利用ください。",
-      "pendingLeavePage": "提案はこのページにのみ適用され、離れると保持されません。残りの提案を先にご確認ください。"
+      "pendingLeavePage": "提案はこのページにのみ適用され、離れると保持されません。残りの提案を先にご確認ください。",
+      "uploadStepOcr": "OCRで読み取り中",
+      "ocrButton": "OCRで読み取り",
+      "ocrButtonHint": "スキャンされたページや正しく取得できなかったテキストのPDFを、テキスト認識で再度読み取ります",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "このテキストはページからテキスト認識で取得されました。元の文書と照合してください。",
+      "ocrReasonNoText": "{name}にテキストが見つかりませんでした。スキャンされた文書のようです。",
+      "ocrReasonSparse": "{name}にごくわずかなテキストしか見つかりませんでした。一部がスキャンされている可能性があります。",
+      "ocrReasonManual": "{name}を再度テキスト認識で読み取りますか？",
+      "ocrExplanation": "OCRはページ画像からテキストを抽出します。通常のアップロードより時間がかかり、ファイル内すべてのページが1日あたりのOCR上限にカウントされます。また、画質の悪いスキャンや手書き・表の内容は正しく認識できない場合があります。",
+      "ocrPagesLeft": "{count, plural, one {本日残り#ページOCR可能} other {本日残り#ページOCR可能}}",
+      "ocrRun": "OCRで読み取り",
+      "ocrDismiss": "今はしない",
+      "ocrSparseHint": "このPDFにはごくわずかなテキストしか見つかりませんでした。一部のページはスキャンされている可能性があります。",
+      "ocrLimitReached": "この文書のページ数は、本日のOCR利用可能数を超えています。",
+      "ocrTooManyPages": "この文書はOCRの対応上限である{max}ページを超えています。PDFを分割して一部のみアップロードしてください。",
+      "ocrUnavailable": "このサーバーではOCRが設定されていません。",
+      "ocrNoText": "この文書にもOCRでテキストは見つかりませんでした。",
+      "ocrFailed": "OCRで文書を読み取れませんでした。再度お試しください。",
+      "scannedWholeExplanation": "ドキュメント全体も翻訳できます。スキャンされたページを自動で読み取り、レイアウトを保持し、ページ数は日ごとの翻訳可能数にカウントされます。",
+      "scannedUseWholeDocument": "ドキュメント全体を翻訳",
+      "scannedSourceNote": "{name}には表示できるテキストがありません。ドキュメント全体の翻訳はページを直接読み取ります。ここに独自のテキストを入力すると、ドキュメントが置き換わります。",
+      "scannedPageNote": "原本のこのページからテキストを読み取れませんでした。ファイル自体と比べてご確認ください。"
     },
     "document": {
       "emptyTitle": "作成したい文書の説明",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "メール下書き/日",
       "m365MailDeepScansPerDay": "メールディープスキャン/日",
       "m365DigestRunsPerDay": "1日あたりのダイジェスト実行回数",
-      "translationPagesPerDay": "文書翻訳ページ数／日"
+      "translationPagesPerDay": "文書翻訳ページ数／日",
+      "ocrPagesPerDay": "1日あたりのOCRページ数"
     },
     "valueModeLabel": "制限タイプ",
     "valueAmountLabel": "上限値",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "アシスタントが1日に作成できる下書きメール数 — それぞれ個別に確認されます。厳しい上限となります。",
       "m365MailDeepScansPerDay": "1日にできる複合メール解析（ダイジェスト、詳細検索、コミットメント）。各解析は内部の読取回数にかかわらず1ユニットとしてカウントされます。",
       "m365DigestRunsPerDay": "Microsoft 365の1日あたりのダイジェスト実行回数です。1回の実行で多数のGraphリードと分析モデルコールを含みます。期間ピッカーで再実行が容易なため、初期設定は厳しくなっています。",
-      "translationPagesPerDay": "文書翻訳のために1日に提出できるPDFページ数。"
+      "translationPagesPerDay": "文書翻訳のために1日に提出できるPDFページ数。",
+      "ocrPagesPerDay": "1日にOCR（スキャン文書のテキスト認識）で読み取れるPDFページ数。"
     },
     "scopeFamily": "ファミリー",
     "scopeModel": "モデル",

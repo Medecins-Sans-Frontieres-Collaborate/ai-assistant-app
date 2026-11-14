@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Maloba kaka, mboka moko na mboka moko, na mabongoli na yo.",
       "documentNoCancel": "Kokoma libongoli ya mokanda ekokoka te kotika sima esukoli.",
       "documentGlossariesIgnored": "{count, plural, one {Glossaire oponi esalemi te na mode oyo.} other {Ba glossaires # oponami esalemaka te na mode oyo.}} Kanga maloba na nse page na page na Assess quality, to salela Quick to Reviewed.",
-      "pendingLeavePage": "Basuggestion ezali na page oyo kaka mpe ekobima soki obimi. Yebisa liboso makambo ya kotikala."
+      "pendingLeavePage": "Basuggestion ezali na page oyo kaka mpe ekobima soki obimi. Yebisa liboso makambo ya kotikala.",
+      "uploadStepOcr": "Kotalela na OCR",
+      "ocrButton": "Tala na OCR",
+      "ocrButtonHint": "Talela PDF oyo lisusu na mayokani ya koluka maloba, mpo na ba pages oyo scan esalami to soki maloba ebimi mabe",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Maloba oyo ebimaki na ba pages ebandaki na mayokani ya koluka maloba. Tala ndenge ezali na orijinale.",
+      "ocrReasonNoText": "Maloba moko te emonani na {name}. Ekoki kozala dokumente yako scanner.",
+      "ocrReasonSparse": "Maloba mingi te emonani na {name}. Nionso ekoki kozala scanner.",
+      "ocrReasonManual": "Kotala lisusu {name} na mayokani ya koluka maloba?",
+      "ocrExplanation": "OCR etalela maloba uta na ba images ya pages. Esengaka ntango mingi koleka upload normal, ekotaka page nyonso na compte ya OCR na mokolo, mpe ekoki kokosa na ba scans mabe, écriture à la main to ba tables.",
+      "ocrPagesLeft": "{count, plural, one {# page ya OCR etikali lelo.} other {# ba pages ya OCR etikali lelo.}}",
+      "ocrRun": "Tala na OCR",
+      "ocrDismiss": "Te sik’oyo",
+      "ocrSparseHint": "Maloba mingi te emonani na PDF oyo. Ba pages mosusu ekoki kozala scanner.",
+      "ocrLimitReached": "Dokumente oyo ezali na ba pages ebele koleka allowance ya OCR oyo ozali nango lelo.",
+      "ocrTooManyPages": "Dokumente oyo ezali molai mingi mpo na OCR, oyo ekoki kotalela ntango moko {max} pages. Kata PDF mpe upload esika moko.",
+      "ocrUnavailable": "OCR esalama te na server oyo.",
+      "ocrNoText": "OCR emonaki lisusu maloba moko te na dokumente oyo.",
+      "ocrFailed": "Dokumente ekokaki te kotalela na OCR. Meleka lisusu.",
+      "scannedWholeExplanation": "Okoki mpe kobongola mobimba ya mokanda: esomaka peji oyo eskanami moko na moko, ebatisaka ndenge ya ntina, mpe ekembaka ba peji na nombre ya mokolo na mokolo oyo okoki kobongola.",
+      "scannedUseWholeDocument": "Bongola mobimba ya mokanda",
+      "scannedSourceNote": "{name} ezalaka na maloba te mpo na kolakisa awa. Kobongola mobimba ya mokanda esomaka ba peji na yango moko. Soki okomi maloba na yo awa, ekokoma esalela esika ya mokanda.",
+      "scannedPageNote": "Maloba moko te esangisami na peji oyo ya mokanda ya liboso. Kanisa kotala dosie moko na moko."
     },
     "document": {
       "emptyTitle": "Sosola mokanda olingi",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Ba drafts ya email na mokolo",
       "m365MailDeepScansPerDay": "Ba deep scan ya email na mokolo",
       "m365DigestRunsPerDay": "Nbongo ya mokuse ya mokolo na mokolo",
-      "translationPagesPerDay": "Masolo ya kobongola ya mokolo moko"
+      "translationPagesPerDay": "Masolo ya kobongola ya mokolo moko",
+      "ocrPagesPerDay": "Ba pages ya OCR na mokolo"
     },
     "valueModeLabel": "Motindo ya mingambo",
     "valueAmountLabel": "Motango ya mingambo",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Bilongwa ya email assistant akoki kosala mokolo moko — moko na moko ekopesama ndingisa liboso. Ezali na ndelo makasi.",
       "m365MailDeepScansPerDay": "Analyse ya baranseli ya email mokolo moko (digest, koluka makasi, commitments). Scan moko ezali unité moko ata bonene na yango.",
       "m365DigestRunsPerDay": "Microsoft 365 ebongisaka mokuse ya mokolo na mokolo. Eloko moko ezali kopesa ba-Graph mingi mpe mibeko mibale ya modèlé d'analyse; pondu ya tango esalaka komipesa lisusu mpasi te, yango wana motungisi ya liboso ezali makasi.",
-      "translationPagesPerDay": "Masolo ya PDF oyo epesami mpo na kobongola document na mokolo moko."
+      "translationPagesPerDay": "Masolo ya PDF oyo epesami mpo na kobongola document na mokolo moko.",
+      "ocrPagesPerDay": "Ba pages ya PDF epesamaka na OCR (mayokani ya koluka maloba mpo na ba documents ya scanner) na mokolo."
     },
     "scopeFamily": "Famille",
     "scopeModel": "Modèle",

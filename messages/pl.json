@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Czysty tekst, jedna strona na stronę, z Twoimi poprawkami.",
       "documentNoCancel": "Tłumaczenie dokumentu nie może zostać zatrzymane po jego rozpoczęciu.",
       "documentGlossariesIgnored": "{count, plural, one {Wybrany przez Ciebie glosariusz nie jest stosowany w tym trybie.} other {Wybrane przez Ciebie # glosariuszy nie są stosowane w tym trybie.}} Sprawdź terminologię strona po stronie za pomocą Oceny jakości lub użyj trybu Szybkie albo Zrecenzowane.",
-      "pendingLeavePage": "Sugestie dotyczą tylko tej strony i nie są zachowywane po jej opuszczeniu. Najpierw podejmij decyzję dotyczącą pozostałych sugestii."
+      "pendingLeavePage": "Sugestie dotyczą tylko tej strony i nie są zachowywane po jej opuszczeniu. Najpierw podejmij decyzję dotyczącą pozostałych sugestii.",
+      "uploadStepOcr": "Odczytywanie za pomocą OCR",
+      "ocrButton": "Odczytaj za pomocą OCR",
+      "ocrButtonHint": "Ponownie odczytaj ten PDF z rozpoznawaniem tekstu, jeśli strony są zeskanowane lub tekst został źle wykryty",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Ten tekst został odczytany z użyciem rozpoznawania tekstu. Porównaj go z oryginałem.",
+      "ocrReasonNoText": "Nie znaleziono tekstu w {name}. Wygląda na zeskanowany dokument.",
+      "ocrReasonSparse": "Znaleziono bardzo mało tekstu w {name}. Część tekstu może być zeskanowana.",
+      "ocrReasonManual": "Ponownie odczytać {name} z rozpoznawaniem tekstu?",
+      "ocrExplanation": "OCR odczytuje tekst z obrazów stron. Zajmuje to więcej czasu niż zwykłe przesyłanie, każda strona liczy się do Twojego dziennego limitu OCR i może błędnie rozpoznać słabe skany, pismo odręczne lub tabele.",
+      "ocrPagesLeft": "{count, plural, one {# strona OCR dostępna dzisiaj.} other {# stron OCR dostępnych dzisiaj.}}",
+      "ocrRun": "Odczytaj za pomocą OCR",
+      "ocrDismiss": "Nie teraz",
+      "ocrSparseHint": "W tym pliku PDF znaleziono bardzo mało tekstu. Niektóre strony mogą być zeskanowane.",
+      "ocrLimitReached": "Ten dokument ma więcej stron niż Twój dzienny limit OCR.",
+      "ocrTooManyPages": "Ten dokument jest za długi dla OCR, który obsługuje maksymalnie {max} stron. Podziel PDF i prześlij część.",
+      "ocrUnavailable": "OCR nie jest skonfigurowany na tym serwerze.",
+      "ocrNoText": "OCR nie znalazł tekstu również w tym dokumencie.",
+      "ocrFailed": "Nie udało się odczytać dokumentu za pomocą OCR. Spróbuj ponownie.",
+      "scannedWholeExplanation": "Możesz także przetłumaczyć cały dokument: aplikacja sama odczytuje zeskanowane strony, zachowuje układ i liczy strony do Twojego dziennego limitu tłumaczeń.",
+      "scannedUseWholeDocument": "Przetłumacz cały dokument",
+      "scannedSourceNote": "{name} nie zawiera tu żadnego tekstu. Tłumaczenie całego dokumentu odczytuje jego strony bezpośrednio. Wpisanie własnego tekstu zastępuje dokument.",
+      "scannedPageNote": "Nie udało się odczytać tekstu z tej strony oryginału. Porównaj z plikiem źródłowym."
     },
     "document": {
       "emptyTitle": "Opisz dokument, który chcesz uzyskać",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "Szkice wiadomości dziennie",
       "m365MailDeepScansPerDay": "Głębokie skanowanie wiadomości dziennie",
       "m365DigestRunsPerDay": "Dzienne uruchomienia podsumowań",
-      "translationPagesPerDay": "Strony tłumaczenia dokumentów na dzień"
+      "translationPagesPerDay": "Strony tłumaczenia dokumentów na dzień",
+      "ocrPagesPerDay": "Strony OCR na dzień"
     },
     "valueModeLabel": "Typ limitu",
     "valueAmountLabel": "Wartość limitu",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "Szkice e-mail, które asystent może utworzyć dziennie — każdy zatwierdzany osobno. Limit celowo niski.",
       "m365MailDeepScansPerDay": "Złożone analizy poczty (streszczenia, głębokie wyszukiwanie, zobowiązania) dziennie. Każde skanowanie to jedna jednostka budżetowa bez względu na liczbę wewnętrznych odczytów.",
       "m365DigestRunsPerDay": "Liczba dziennych uruchomień podsumowania Microsoft 365. Jedno uruchomienie to kilkadziesiąt odczytów Graph oraz dwa wywołania modeli analitycznych; wybór okresu pozwala łatwo ponawiać zadania, dlatego domyślny limit jest niski.",
-      "translationPagesPerDay": "Strony PDF przesłane do tłumaczenia dokumentów dziennie."
+      "translationPagesPerDay": "Strony PDF przesłane do tłumaczenia dokumentów dziennie.",
+      "ocrPagesPerDay": "Strony PDF odczytane za pomocą OCR (rozpoznawanie tekstu w zeskanowanych dokumentach) na dzień."
     },
     "scopeFamily": "Rodzina",
     "scopeModel": "Model",

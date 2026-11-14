@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Čistý text, jedna stránka po stránce, včetně vašich oprav.",
       "documentNoCancel": "Překlad dokumentu nelze po zahájení zastavit.",
       "documentGlossariesIgnored": "{count, plural, one {Vámi vybraný glosář se v tomto režimu neaplikuje.} other {Vámi vybrané # glosáře se v tomto režimu neaplikují.}} Terminologii ověřujte stránku po stránce pomocí Hodnocení kvality, nebo použijte Rychlý či Revizní.",
-      "pendingLeavePage": "Návrhy patří k této stránce a po opuštění nejsou zachovány. Nejprve rozhodněte zbývající návrhy."
+      "pendingLeavePage": "Návrhy patří k této stránce a po opuštění nejsou zachovány. Nejprve rozhodněte zbývající návrhy.",
+      "uploadStepOcr": "Čtení pomocí OCR",
+      "ocrButton": "Číst pomocí OCR",
+      "ocrButtonHint": "Znovu přečtěte tento PDF s rozpoznáváním textu, pro naskenované stránky nebo text, který byl špatně převeden",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Tento text byl načten ze stránek pomocí rozpoznávání textu. Porovnejte jej s originálem.",
+      "ocrReasonNoText": "Ve {name} nebyl nalezen žádný text. Zdá se, že jde o naskenovaný dokument.",
+      "ocrReasonSparse": "Ve {name} bylo nalezeno velmi málo textu. Některé části mohou být naskenované.",
+      "ocrReasonManual": "Znovu přečíst {name} pomocí rozpoznání textu?",
+      "ocrExplanation": "OCR načítá text z obrazů stránek. Trvá déle než běžné nahrání, započítává každou stránku souboru do vašeho denního limitu OCR a může nesprávně přečíst nekvalitní skeny, ručně psaný text a tabulky.",
+      "ocrPagesLeft": "{count, plural, one {# stránka OCR zbývá dnes.} other {# stránek OCR zbývá dnes.}}",
+      "ocrRun": "Číst pomocí OCR",
+      "ocrDismiss": "Teď ne",
+      "ocrSparseHint": "V tomto PDF bylo nalezeno velmi málo textu. Některé stránky mohou být naskenované.",
+      "ocrLimitReached": "Tento dokument má více stránek, než kolik zbývá ve vašem dnešním limitu OCR.",
+      "ocrTooManyPages": "Tento dokument je příliš dlouhý pro OCR, které čte maximálně {max} stránek. Rozdělte PDF a nahrajte pouze část.",
+      "ocrUnavailable": "OCR není na tomto serveru nastaveno.",
+      "ocrNoText": "OCR v tomto dokumentu také nenašlo žádný text.",
+      "ocrFailed": "Dokument nelze přečíst pomocí OCR. Zkuste to znovu.",
+      "scannedWholeExplanation": "Můžete také přeložit celý dokument: aplikace naskenuje stránky sama, zachová rozvržení a počítá stránky do vašeho denního limitu překladů.",
+      "scannedUseWholeDocument": "Přeložit celý dokument",
+      "scannedSourceNote": "{name} zde nemá žádný text k zobrazení. Překlad celého dokumentu načte jeho stránky přímo. Pokud zde zadáte vlastní text, dokument tím nahradíte.",
+      "scannedPageNote": "Z této stránky originálu nebyl nalezen žádný text. Porovnejte s původním souborem."
     },
     "document": {
       "emptyTitle": "Popište požadovaný dokument",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "Návrhy pošty za den",
       "m365MailDeepScansPerDay": "Hloubkové skeny pošty za den",
       "m365DigestRunsPerDay": "Denní počet spuštění souhrnu",
-      "translationPagesPerDay": "Přeložené stránky dokumentu za den"
+      "translationPagesPerDay": "Přeložené stránky dokumentu za den",
+      "ocrPagesPerDay": "OCR stránek za den"
     },
     "valueModeLabel": "Typ limitu",
     "valueAmountLabel": "Množství limitu",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "Návrhy e-mailů, které může asistent denně vytvořit — každý je zvlášť potvrzen. Omezení je záměrně přísné.",
       "m365MailDeepScansPerDay": "Složené analýzy e-mailů (souhrny, hluboké vyhledávání, závazky) za den. Každý sken je jedna jednotka, nezávisle na počtu vnitřních čtení.",
       "m365DigestRunsPerDay": "Microsoft 365 denný souhrn spuštění za den. Jedno spuštění znamená desítky čtení Graph a dvě volání analýzy modelu; výběr období umožňuje snadné opakování, proto je výchozí limit přísný.",
-      "translationPagesPerDay": "PDF stránky odeslané k překladu dokumentu za den."
+      "translationPagesPerDay": "PDF stránky odeslané k překladu dokumentu za den.",
+      "ocrPagesPerDay": "PDF stránky přečtené pomocí OCR (rozpoznávání textu ve skenovaných dokumentech) za den."
     },
     "scopeFamily": "Rodina",
     "scopeModel": "Model",

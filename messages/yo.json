@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Òrọ pẹ̀lú, oju-iwe kan si oju-iwe kan, pẹ̀lú awọn atunṣe rẹ.",
       "documentNoCancel": "A ko le da itumọ̀ iwe duro lẹ́yìn tí ó bá ti bẹ̀rẹ̀.",
       "documentGlossariesIgnored": "{count, plural, one {Ìtọ́kasí tí o yàn kò ṣiṣẹ́ nípò yìí.} other {Àwọn ìtọ́kasí {count} tí o yàn kò ṣiṣẹ́ nípò yìí.}} Ṣàyẹ̀wò itumọ̀ kíkọọ kọọkan pẹ̀lú Assess quality, tàbí lò Quick tàbí Reviewed.",
-      "pendingLeavePage": "Àwọn ìmọ̀ràn tó wà lórí ojúewé yìí nikan ni, wọn kò ní fipamọ́ tí o bá fi ojúewé sílẹ̀. Jọ̀wọ́ ṣe ìpinnu fún àwọn ìmọ̀ràn tó kù kí o tó lọ."
+      "pendingLeavePage": "Àwọn ìmọ̀ràn tó wà lórí ojúewé yìí nikan ni, wọn kò ní fipamọ́ tí o bá fi ojúewé sílẹ̀. Jọ̀wọ́ ṣe ìpinnu fún àwọn ìmọ̀ràn tó kù kí o tó lọ.",
+      "uploadStepOcr": "Kíkà pẹ̀lú OCR",
+      "ocrButton": "Kà pẹ̀lú OCR",
+      "ocrButtonHint": "Tun kà PDF yìí pẹ̀lú ìmúlò ìdánimọ̀ ọrọ̀, fún ojúewé tí a ti ṣàwárí tàbí ọrọ̀ tí kò tọ́.",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "A kà ọrọ̀ yìí láti inú ojúewé pẹ̀lú ìdánimọ̀ ọrọ̀. Ṣàyẹ̀wò ó pọ̀ mọ́ aṣẹ̀dá.",
+      "ocrReasonNoText": "Kò sí ọrọ̀ kankan tí a rí nínú {name}. Ó dà bíi pé àwòrán tí a ti ṣàwárí ni.",
+      "ocrReasonSparse": "Òpòjù díẹ̀ lásán ni a rí nínú {name}. Àpọ̀di rẹ̀ lè jẹ́ àwòrán ṣàwárí.",
+      "ocrReasonManual": "Ká tún kà {name} pẹ̀lú ìdánimọ̀ ọrọ̀?",
+      "ocrExplanation": "OCR máa kà ọrọ̀ láti inú àwòrán ojúewé. Ó gba àkókò ju àtẹ̀jáde àtàwọn míì lọ, ó ka gbogbo ojúewé nínú fáìlì síi lòdì sí ìmúlòlù kò̀ọ̀kan tó wà fún ọjọ́ yìí, ó sì lè dákẹ̀dá àwòrán tó kọ̀, kọ̀wé afọ́wọ́kọ àti tábùlù.",
+      "ocrPagesLeft": "{count, plural, one {# ojúewé OCR tó kù lónìí.} other {# ojúewé OCR tó kù lónìí.}}",
+      "ocrRun": "Kà pẹ̀lú OCR",
+      "ocrDismiss": "Kò sí bayìí",
+      "ocrSparseHint": "Òpòjù díẹ̀ lásán ni a rí nínú PDF yìí. Díẹ̀ nínú àwọn ojúewé lè jẹ́ àwòrán ṣàwárí.",
+      "ocrLimitReached": "Ìwé yìí ní ojúewé púpọ̀ ju iye tí ìwọ ṣe ní OCR lónìí lọ.",
+      "ocrTooManyPages": "Ìwé yìí gùn ju OCR lọ, to máa kà tó pọ̀ jù {max} ojúewé lọ. Ṣí PDF náà, kó sì gbìyànjú kó ara kan sọdá.",
+      "ocrUnavailable": "OCR kò ti ṣètò lórí sẹ́fà yìí.",
+      "ocrNoText": "OCR kò rí ọrọ̀ kankan nínú ìwé yìí náà.",
+      "ocrFailed": "Kò ṣeé kà ìwé yìí pẹ̀lú OCR. Gbìyànjú lẹ́ẹ̀kàn síi.",
+      "scannedWholeExplanation": "O tun le tumọ gbogbo iwe naa: yoo ka awọn oju-iwe ti a sa kọmputa funra rẹ, yoo pa ọna kika mọ, ati yoo ka awọn oju-iwe naa si ti ipin ojoojumọ rẹ fun itumọ.",
+      "scannedUseWholeDocument": "Tumọ gbogbo iwe",
+      "scannedSourceNote": "{name} ko ni ọrọ kankan lati fi han nibi. Itumọ gbogbo iwe yoo ka awọn oju-iwe rẹ taara. Ṣiṣatunkọ ọrọ tirẹ nibi yoo rọpo iwe naa.",
+      "scannedPageNote": "A ko le ka ọrọ kankan jade lati oju-iwe yii ninu atilẹba. Jọwọ fiwewe pẹlu faili funra rẹ."
     },
     "document": {
       "emptyTitle": "Ṣàpèjúwe iwe ti o fẹ",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Ìkọ ìfojúsọna imeeli lojoojumọ",
       "m365MailDeepScansPerDay": "Ìṣáyẹlẹkun imeeli lojoojumọ",
       "m365DigestRunsPerDay": "Iṣiṣẹ ajọpọ ojoojúmọ̀ lóde ọjọ́ kọọkan",
-      "translationPagesPerDay": "Oju-iwe itumọ̀ àwọn dìpọ̀kùméńtì lẹ́ ọjọ́ kan"
+      "translationPagesPerDay": "Oju-iwe itumọ̀ àwọn dìpọ̀kùméńtì lẹ́ ọjọ́ kan",
+      "ocrPagesPerDay": "Ojúewé OCR lọ́jọ́ kan"
     },
     "valueModeLabel": "Iru ààlà",
     "valueAmountLabel": "Ìye ààlà",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Àwọn àtẹjáde imeeli tí iranlọwọ le dá ṣẹda fun ọjọ kan — ọkọọkan gbọdọ jẹrisi. A ti fi dínkù mọ́n.",
       "m365MailDeepScansPerDay": "Itupalẹ imeeli to pọ (digest, wiwa jinlẹ, ileri) fun ọjọ kan. Kọọkan jẹ ẹgbẹ kan ni isuna, laibikita iye kika inu rẹ.",
       "m365DigestRunsPerDay": "Microsoft 365 ṣiṣe ajọpọ ojoojúmọ̀ lóde ọjọ́ kọọkan. Iṣiṣẹ kan jẹ́ ọpọlọpọ ka Graph pọ̀ síi pẹ̀lú ipe awoṣe ìtúpalẹ̀ méjì; asayan àkókò fàájì fun ṣiṣe tútù, nítorí náà a fi ọna tó kù han gẹ́gẹ́ bí aṣàyàn àtajọ.",
-      "translationPagesPerDay": "Oju-iwe PDF tí a fi ranṣẹ́ fún itumọ̀ dìpọ̀kùméńtì lẹ́ ọjọ́ kan."
+      "translationPagesPerDay": "Oju-iwe PDF tí a fi ranṣẹ́ fún itumọ̀ dìpọ̀kùméńtì lẹ́ ọjọ́ kan.",
+      "ocrPagesPerDay": "Ojúewé PDF tí a kà pẹ̀lú OCR (ìdánimọ̀ ọrọ̀ fún ìwé tí a ti ṣàwárí) lọ́jọ́ kan."
     },
     "scopeFamily": "Ìdílé",
     "scopeModel": "Àpẹẹrẹ",

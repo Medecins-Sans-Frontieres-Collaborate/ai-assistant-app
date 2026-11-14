@@ -3197,7 +3197,29 @@
       "downloadTextVersionHint": "纯文本，每页对应一页，含您的校正内容。",
       "documentNoCancel": "文档翻译一旦开始，无法中止。",
       "documentGlossariesIgnored": "{count, plural, one {您选择的术语库在此模式下未被应用。} other {您选择的 # 个术语库在此模式下未被应用。}} 可通过“质量评估”逐页检查术语，或使用“快速”或“已审核”模式。",
-      "pendingLeavePage": "建议仅属于此页面，离开后不会保留。请先处理剩余建议。"
+      "pendingLeavePage": "建议仅属于此页面，离开后不会保留。请先处理剩余建议。",
+      "uploadStepOcr": "正在使用 OCR 读取",
+      "ocrButton": "使用 OCR 读取",
+      "ocrButtonHint": "再次用文本识别读取此 PDF，用于扫描页或识别结果有误的文本",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "此文本通过文本识别从页面读取。请与原文核对。",
+      "ocrReasonNoText": "在{name}中未找到文本。似乎是扫描文档。",
+      "ocrReasonSparse": "在{name}中找到的文本很少。部分内容可能为扫描件。",
+      "ocrReasonManual": "要再次用文本识别读取{name}吗？",
+      "ocrExplanation": "OCR 从页面图像中读取文本，比普通上传耗时更长，每页都计入每日 OCR 配额，并且可能误读质量差的扫描、手写体和表格。",
+      "ocrPagesLeft": "{count, plural, one {今天还剩 # 页 OCR。} other {今天还剩 # 页 OCR。}}",
+      "ocrRun": "使用 OCR 读取",
+      "ocrDismiss": "暂不处理",
+      "ocrSparseHint": "在此 PDF 中找到的文本很少，部分页面可能为扫描件。",
+      "ocrLimitReached": "该文档页数超出您今日 OCR 剩余配额。",
+      "ocrTooManyPages": "该文档页数过多，OCR 最多可读取 {max} 页。请拆分 PDF 并上传部分内容。",
+      "ocrUnavailable": "本服务器未配置 OCR。",
+      "ocrNoText": "OCR 仍未在该文档中找到文本。",
+      "ocrFailed": "无法用 OCR 读取此文档。请重试。",
+      "scannedWholeExplanation": "您也可以翻译整个文档：系统会自动识别扫描页，保持版式，并按照您的每日翻译额度计算页数。",
+      "scannedUseWholeDocument": "翻译整个文档",
+      "scannedSourceNote": "{name} 此处无可显示的文本。整个文档翻译会直接识别其页面内容。您在此输入文本将替换原文件。",
+      "scannedPageNote": "该原始页面未能识别出任何文本。请与文件本身比对。"
     },
     "document": {
       "emptyTitle": "描述您需要的文档",
@@ -5839,7 +5861,8 @@
       "m365MailDraftsPerDay": "每日邮件草稿次数",
       "m365MailDeepScansPerDay": "每日邮件深度扫描次数",
       "m365DigestRunsPerDay": "每日摘要运行次数",
-      "translationPagesPerDay": "每日文档翻译页数"
+      "translationPagesPerDay": "每日文档翻译页数",
+      "ocrPagesPerDay": "每日 OCR 页数"
     },
     "valueModeLabel": "限额类型",
     "valueAmountLabel": "限额数量",
@@ -5922,7 +5945,8 @@
       "m365MailDraftsPerDay": "助手每天可创建的邮件草稿数——每个均需单独确认，配额有限。",
       "m365MailDeepScansPerDay": "每天的综合邮件分析（摘要、深度搜索、承诺）。每次分析计为一个预算单位，与内部读取次数无关。",
       "m365DigestRunsPerDay": "Microsoft 365 每日摘要运行次数。一次运行包含多次 Graph 读取和两次分析模型调用；周期选择器让复运行变得容易，因此默认限制较严。",
-      "translationPagesPerDay": "每日提交用于文档翻译的 PDF 页数。"
+      "translationPagesPerDay": "每日提交用于文档翻译的 PDF 页数。",
+      "ocrPagesPerDay": "每天通过 OCR（扫描文档文本识别）读取的 PDF 页数。"
     },
     "scopeFamily": "系列",
     "scopeModel": "模型",

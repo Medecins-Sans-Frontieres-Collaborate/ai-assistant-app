@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Sango gbângba, page na page, ti correction mo.",
       "documentNoCancel": "Fa ti siriki doküma na mbi ya timi, ti yeke sô ti be ti gbêdê.",
       "documentGlossariesIgnored": "{count, plural, one {Glossary na wa yeke yângâ ti mbi gu ti mode ti si yeke sô.} other {Glossary # na wa gbêtî yângâ ti mbi gu ti mode ti si yeke sô.}} Na yângâ ti terminology pona na page kôngo na Assess quality, wen Quick na Reviewed.",
-      "pendingLeavePage": "Suggestions ti kêtê na page ti na, ti yeke bê ti na ya ku na ti page. Pê kêtê suggestions ti yângâ na."
+      "pendingLeavePage": "Suggestions ti kêtê na page ti na, ti yeke bê ti na ya ku na ti page. Pê kêtê suggestions ti yângâ na.",
+      "uploadStepOcr": "Gbɛ ti na OCR",
+      "ocrButton": "Gbɛ ti na OCR",
+      "ocrButtonHint": "Gbɛ ti PDF azo na text ti yeke, ti komba ti page ti yeke scanné ndawi text ti soro na mo.",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Text azo ti gbɛ na page ti na text ti yeke. Oko ti yeke na original.",
+      "ocrReasonNoText": "Text te yeke na {name}. A ti se ti document ti yeke scanné.",
+      "ocrReasonSparse": "Text nzuene te yeke na {name}. Page ti mingi ti yeke scanné.",
+      "ocrReasonManual": "Gbɛ {name} azo na text ti yeke?",
+      "ocrExplanation": "OCR ti gbɛ text na image ti page. Fa ti mingi ti upload normal, ti kpi page zo na fichier ti fa na limit ti OCR ti la na binga, ti kete text ti soro na scan ti mo, écriture ti hand ndawi tabel.",
+      "ocrPagesLeft": "{count, plural, one {# page OCR ti la na binga ti linga.} other {# page OCR ti la na binga ti linga.}}",
+      "ocrRun": "Gbɛ ti na OCR",
+      "ocrDismiss": "Kombere na",
+      "ocrSparseHint": "Text nzuene te yeke na PDF azo. Page mingi ti yeke scanné.",
+      "ocrLimitReached": "Document azo ti page mingi ti ti sene na limit ti OCR ti la na binga.",
+      "ocrTooManyPages": "Document azo ti longe mingi na OCR, na le ti gbɛ mingi {max} page. Boka PDF na upload ti yeke so.",
+      "ocrUnavailable": "OCR te yeke set up na server azo.",
+      "ocrNoText": "OCR te gbɛ text na document azo so.",
+      "ocrFailed": "Document te la gbɛ ti na OCR. Fa azo ti yene.",
+      "scannedWholeExplanation": "Oko bale lo fadɛ ndokua na kɛngö wöso: oko a-lukü maboko mo da yeke scanné, oko a-pé ndöla, na oko a-küta likundu ti pagina ndö nga petene fadɛ nga fåa lingo ti kulɔngö mo.",
+      "scannedUseWholeDocument": "Fadɛ ndokua na kɛngö wöso",
+      "scannedSourceNote": "{name} ala na lingbi mo lo ga yeke na mbï na wâ na. Fadɛ ndokua na kɛngö wöso oko a-lukü pagina mo da ozingo. Sô kökörö ti kpö lingbi mo asi, mo ga köta ndokua na.",
+      "scannedPageNote": "Alinga tene na lingbi mo lozingo na pagina so a-scanné. Bala na file azo so."
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Bê ti rédaction ti courrier par jour",
       "m365MailDeepScansPerDay": "Bê ti scan approfondi ti courrier par jour",
       "m365DigestRunsPerDay": "Zinga na mbëtï na téne na yeke pasi",
-      "translationPagesPerDay": "Fala ti traduction ti document na lengo"
+      "translationPagesPerDay": "Fala ti traduction ti document na lengo",
+      "ocrPagesPerDay": "Page ti OCR na binga"
     },
     "valueModeLabel": "Zoni tî nzoni",
     "valueAmountLabel": "Zöngö tî nzoni",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Mail draft sô assistant a kunna bï lönji na yeke gï. Yëngö sô mbeni bi ködä.",
       "m365MailDeepScansPerDay": "Analiz tî mail sô gbû (digest, deep search, commitments) bï lönji. Analiz sî kötä mbi kïri ndö, tool sô na lo ape.",
       "m365DigestRunsPerDay": "Microsoft 365 zinga na mbëtï na téne na yeke pasi. Yeke pasi e lingbi kété na ndokua na Graph na yeke gbanga mo na mbînda analysis-model; mo na period picker na yeke maboko, ngangu na default na yeke ngbanga.",
-      "translationPagesPerDay": "Fala PDF ti yeke soumis pour traduction ti document na lengo."
+      "translationPagesPerDay": "Fala PDF ti yeke soumis pour traduction ti document na lengo.",
+      "ocrPagesPerDay": "Page ti PDF ti gbɛ na OCR (text ti yeke na document ti scanné) na binga."
     },
     "scopeFamily": "Famili",
     "scopeModel": "Modèle",

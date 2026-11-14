@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Teks polos, satu halaman per halaman, dengan koreksi Anda.",
       "documentNoCancel": "Terjemahan dokumen tidak dapat dihentikan setelah dimulai.",
       "documentGlossariesIgnored": "{count, plural, one {Glosarium yang Anda pilih tidak diterapkan dalam mode ini.} other {# glosarium yang Anda pilih tidak diterapkan dalam mode ini.}} Periksa terminologi halaman demi halaman dengan Assess quality, atau gunakan Quick atau Reviewed.",
-      "pendingLeavePage": "Saran terkait dengan halaman ini dan tidak akan disimpan jika Anda meninggalkannya. Putuskan saran yang tersisa terlebih dahulu."
+      "pendingLeavePage": "Saran terkait dengan halaman ini dan tidak akan disimpan jika Anda meninggalkannya. Putuskan saran yang tersisa terlebih dahulu.",
+      "uploadStepOcr": "Membaca dengan OCR",
+      "ocrButton": "Baca dengan OCR",
+      "ocrButtonHint": "Baca PDF ini lagi dengan pengenalan teks, untuk halaman hasil scan atau teks yang keluar salah",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Teks ini dibaca dari halaman dengan pengenalan teks. Periksa dengan aslinya.",
+      "ocrReasonNoText": "Tidak ditemukan teks dalam {name}. Tampaknya merupakan dokumen hasil scan.",
+      "ocrReasonSparse": "Sangat sedikit teks ditemukan dalam {name}. Sebagian mungkin hasil scan.",
+      "ocrReasonManual": "Baca {name} lagi dengan pengenalan teks?",
+      "ocrExplanation": "OCR membaca teks dari gambar halaman. Proses ini lebih lama dari unggahan biasa, menghitung setiap halaman file dengan jatah OCR harian Anda, dan bisa salah membaca hasil scan yang buruk, tulisan tangan, serta tabel.",
+      "ocrPagesLeft": "{count, plural, one {# halaman OCR tersisa hari ini.} other {# halaman OCR tersisa hari ini.}}",
+      "ocrRun": "Baca dengan OCR",
+      "ocrDismiss": "Tidak sekarang",
+      "ocrSparseHint": "Sangat sedikit teks ditemukan dalam PDF ini. Beberapa halaman mungkin hasil scan.",
+      "ocrLimitReached": "Dokumen ini memiliki lebih banyak halaman dari sisa jatah OCR Anda hari ini.",
+      "ocrTooManyPages": "Dokumen ini terlalu panjang untuk OCR, yang membaca maksimal {max} halaman. Pisahkan PDF dan unggah bagian.",
+      "ocrUnavailable": "OCR belum diatur di server ini.",
+      "ocrNoText": "OCR juga tidak menemukan teks dalam dokumen ini.",
+      "ocrFailed": "Dokumen tidak dapat dibaca dengan OCR. Coba lagi.",
+      "scannedWholeExplanation": "Anda juga dapat menerjemahkan seluruh dokumen: sistem akan membaca halaman yang dipindai secara otomatis, menjaga tata letak, dan menghitung jumlah halaman terhadap jatah terjemahan harian Anda.",
+      "scannedUseWholeDocument": "Terjemahkan seluruh dokumen",
+      "scannedSourceNote": "{name} tidak memiliki teks untuk ditampilkan di sini. Terjemahan dokumen secara keseluruhan membaca halaman-halamannya secara langsung. Jika Anda mengetik teks sendiri di sini, dokumen akan digantikan.",
+      "scannedPageNote": "Tidak ada teks yang dapat dibaca dari halaman ini pada dokumen asli. Silakan bandingkan dengan file aslinya."
     },
     "document": {
       "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "Draft email per hari",
       "m365MailDeepScansPerDay": "Deep scan email per hari",
       "m365DigestRunsPerDay": "Ringkasan harian per hari",
-      "translationPagesPerDay": "Halaman terjemahan dokumen per hari"
+      "translationPagesPerDay": "Halaman terjemahan dokumen per hari",
+      "ocrPagesPerDay": "Halaman OCR per hari"
     },
     "valueModeLabel": "Jenis batas",
     "valueAmountLabel": "Jumlah batas",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "Draft email yang dapat dibuat asisten per hari — masing-masing dikonfirmasi secara individual. Dibatasi secara ketat.",
       "m365MailDeepScansPerDay": "Analisis email komposit (ringkasan, pencarian mendalam, komitmen) per hari. Setiap pemindaian dihitung satu unit anggaran tanpa melihat jumlah pembacaan di dalamnya.",
       "m365DigestRunsPerDay": "Microsoft 365 ringkasan harian per hari. Satu jalankan terdiri dari puluhan pembacaan Graph dan dua panggilan model analisis; pemilih periode membuat permintaan ulang menjadi mudah, sehingga batas default ketat.",
-      "translationPagesPerDay": "Halaman PDF yang dikirim untuk terjemahan dokumen per hari."
+      "translationPagesPerDay": "Halaman PDF yang dikirim untuk terjemahan dokumen per hari.",
+      "ocrPagesPerDay": "Halaman PDF yang dibaca dengan OCR (pengenalan teks untuk dokumen hasil scan) per hari."
     },
     "scopeFamily": "Keluarga",
     "scopeModel": "Model",

@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Einfacher Text, eine Seite pro Seite, mit Ihren Korrekturen.",
       "documentNoCancel": "Eine Dokumentübersetzung kann nicht gestoppt werden, sobald sie gestartet wurde.",
       "documentGlossariesIgnored": "{count, plural, one {Ihr ausgewähltes Glossar wird in diesem Modus nicht angewendet.} other {Ihre # ausgewählten Glossare werden in diesem Modus nicht angewendet.}} Überprüfen Sie die Terminologie Seite für Seite mit Qualität bewerten oder verwenden Sie Schnell oder Überprüft.",
-      "pendingLeavePage": "Vorschläge gehören zu dieser Seite und werden nicht gespeichert, wenn Sie sie verlassen. Entscheiden Sie zuerst über die verbleibenden Vorschläge."
+      "pendingLeavePage": "Vorschläge gehören zu dieser Seite und werden nicht gespeichert, wenn Sie sie verlassen. Entscheiden Sie zuerst über die verbleibenden Vorschläge.",
+      "uploadStepOcr": "Lesen mit OCR",
+      "ocrButton": "Mit OCR lesen",
+      "ocrButtonHint": "Dieses PDF erneut mit Texterkennung lesen, für gescannte Seiten oder falsch erkannte Texte",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Dieser Text wurde mittels Texterkennung aus den Seiten gelesen. Bitte mit dem Original abgleichen.",
+      "ocrReasonNoText": "Kein Text in {name} gefunden. Es scheint sich um ein gescanntes Dokument zu handeln.",
+      "ocrReasonSparse": "Sehr wenig Text in {name} gefunden. Teile könnten gescannt sein.",
+      "ocrReasonManual": "{name} erneut mit Texterkennung lesen?",
+      "ocrExplanation": "OCR liest den Text aus den Seitenbildern. Dies dauert länger als ein normaler Upload, zählt jede Seite der Datei auf Ihr tägliches OCR-Kontingent, und kann bei schlechten Scans, Handschriften oder Tabellen Fehler machen.",
+      "ocrPagesLeft": "{count, plural, one {# OCR-Seite heute übrig.} other {# OCR-Seiten heute übrig.}}",
+      "ocrRun": "Mit OCR lesen",
+      "ocrDismiss": "Nicht jetzt",
+      "ocrSparseHint": "Sehr wenig Text in diesem PDF gefunden. Einige Seiten könnten gescannt sein.",
+      "ocrLimitReached": "Das Dokument hat mehr Seiten als Ihr verbleibendes OCR-Kontingent für heute.",
+      "ocrTooManyPages": "Dieses Dokument ist zu lang für OCR, das maximal {max} Seiten lesen kann. Teilen Sie das PDF und laden Sie einen Teil hoch.",
+      "ocrUnavailable": "OCR ist auf diesem Server nicht eingerichtet.",
+      "ocrNoText": "OCR hat auch in diesem Dokument keinen Text gefunden.",
+      "ocrFailed": "Das Dokument konnte nicht mit OCR gelesen werden. Bitte versuchen Sie es erneut.",
+      "scannedWholeExplanation": "Sie können auch das gesamte Dokument übersetzen: Es liest die gescannten Seiten selbst aus, behält das Layout bei und rechnet die Seiten auf Ihr tägliches Übersetzungskontingent an.",
+      "scannedUseWholeDocument": "Gesamtes Dokument übersetzen",
+      "scannedSourceNote": "{name} enthält hier keinen Text. Bei der Übersetzung des gesamten Dokuments werden die Seiten direkt gelesen. Wenn Sie hier eigenen Text eingeben, wird das Dokument ersetzt.",
+      "scannedPageNote": "Von dieser Seite des Originals konnte kein Text erkannt werden. Vergleichen Sie mit der Datei selbst."
     },
     "document": {
       "emptyTitle": "Beschreiben Sie das gewünschte Dokument",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "Mail-Entwürfe pro Tag",
       "m365MailDeepScansPerDay": "Mail-Deep-Scans pro Tag",
       "m365DigestRunsPerDay": "Tägliche Digest-Läufe pro Tag",
-      "translationPagesPerDay": "Dokumentenübersetzungsseiten pro Tag"
+      "translationPagesPerDay": "Dokumentenübersetzungsseiten pro Tag",
+      "ocrPagesPerDay": "OCR-Seiten pro Tag"
     },
     "valueModeLabel": "Limit-Typ",
     "valueAmountLabel": "Limit-Anzahl",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "E-Mail-Entwürfe, die der Assistent pro Tag erstellen darf – jeder muss einzeln bestätigt werden. Absichtlich streng limitiert.",
       "m365MailDeepScansPerDay": "Zusammengesetzte E-Mail-Analysen (Zusammenfassungen, Tiefensuche, Verpflichtungen) pro Tag. Jeder Scan entspricht einer Budgeteinheit, unabhängig von der Anzahl interner Lesevorgänge.",
       "m365DigestRunsPerDay": "Microsoft 365 tägliche Digest-Läufe pro Tag. Ein Lauf besteht aus dutzenden Graph-Lesevorgängen plus zwei Analysemodell-Aufrufen; der Zeitraum-Auswähler macht Wiederholungen einfach, daher ist der Standardwert streng.",
-      "translationPagesPerDay": "PDF-Seiten, die täglich zur Dokumentenübersetzung eingereicht werden."
+      "translationPagesPerDay": "PDF-Seiten, die täglich zur Dokumentenübersetzung eingereicht werden.",
+      "ocrPagesPerDay": "PDF-Seiten, die pro Tag mit OCR (Texterkennung für gescannte Dokumente) gelesen werden."
     },
     "scopeFamily": "Familie",
     "scopeModel": "Modell",

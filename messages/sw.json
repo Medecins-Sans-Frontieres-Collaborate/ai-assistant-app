@@ -3166,7 +3166,29 @@
       "downloadTextVersionHint": "Maandishi tupu, ukurasa mmoja kwa ukurasa, na masahihisho yako.",
       "documentNoCancel": "Utafiti wa hati hauwezi kusitishwa baada ya kuanza.",
       "documentGlossariesIgnored": "{count, plural, one {Orodha yako ya maneno uliyoteua haitatumika katika hali hii.} other {Orodha zako za maneno # ulizoteua hazitatumika katika hali hii.}} Kagua istilahi ukurasa kwa ukurasa kwa kutumia 'Assess quality', au tumia 'Quick' au 'Reviewed'.",
-      "pendingLeavePage": "Mapendekezo ni ya ukurasa huu pekee na hayatahifadhiwa unapoondoka. Fanya uamuzi kuhusu mapendekezo yaliyobaki kwanza."
+      "pendingLeavePage": "Mapendekezo ni ya ukurasa huu pekee na hayatahifadhiwa unapoondoka. Fanya uamuzi kuhusu mapendekezo yaliyobaki kwanza.",
+      "uploadStepOcr": "Kusoma kwa kutumia OCR",
+      "ocrButton": "Soma kwa OCR",
+      "ocrButtonHint": "Soma tena PDF hii kwa kutumia utambuzi wa maandishi, kwa kurasa zilizochanganuliwa au maandishi yaliyokosewa",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Maandishi haya yamesomwa kutoka kwenye kurasa kwa kutumia utambuzi wa maandishi. Linganisha na nakala asili.",
+      "ocrReasonNoText": "Hakuna maandishi yaliyopatikana katika {name}. Inaonekana ni hati iliyochanganuliwa.",
+      "ocrReasonSparse": "Maandishi machache sana yamepatikana katika {name}. Baadhi yake huenda ni maandishi yaliyoskanwa.",
+      "ocrReasonManual": "Usome {name} tena kwa kutumia utambuzi wa maandishi?",
+      "ocrExplanation": "OCR inasoma maandishi kutoka kwenye picha za kurasa. Inachukua muda mrefu kuliko kupakia kawaida, inahesabu kila ukurasa wa faili dhidi ya kiasi cha OCR kilichobaki kwa siku, na inaweza kukosea kwenye skani duni, maandishi ya mkono au jedwali.",
+      "ocrPagesLeft": "{count, plural, one {# ukurasa wa OCR umebaki leo.} other {# kurasa za OCR zimebaki leo.}}",
+      "ocrRun": "Soma kwa OCR",
+      "ocrDismiss": "Sio sasa",
+      "ocrSparseHint": "Maandishi machache sana yamepatikana katika PDF hii. Baadhi ya kurasa huenda zimeskanwa.",
+      "ocrLimitReached": "Hati hii ina kurasa nyingi kuliko kiasi cha OCR kilichobaki leo.",
+      "ocrTooManyPages": "Hati hii ni ndefu sana kwa OCR, ambayo husoma kurasa zisizozidi {max}. Gawanya PDF na upakie sehemu.",
+      "ocrUnavailable": "OCR haijawekwa kwenye seva hii.",
+      "ocrNoText": "OCR pia haikupata maandishi katika hati hii.",
+      "ocrFailed": "Hati haikuweza kusomwa kwa OCR. Jaribu tena.",
+      "scannedWholeExplanation": "Unaweza pia kutafsiri hati nzima: inasoma kurasa zilizochanganuliwa yenyewe, inahifadhi mpangilio, na inahesabu kurasa dhidi ya mgao wako wa kila siku wa tafsiri.",
+      "scannedUseWholeDocument": "Tafsiri hati nzima",
+      "scannedSourceNote": "{name} haina maandishi ya kuonyesha hapa. Tafsiri ya hati nzima inasoma kurasa zake moja kwa moja. Ukitia maandishi yako hapa, utabadilisha hati.",
+      "scannedPageNote": "Hakuna maandishi yaliyoweza kusomwa kutoka kwenye ukurasa huu wa asili. Linganisha na faili lenyewe."
     },
     "document": {
       "emptyTitle": "Eleza unachohitaji kwenye hati",
@@ -5808,7 +5830,8 @@
       "m365MailDraftsPerDay": "Rasimu za barua kwa siku",
       "m365MailDeepScansPerDay": "Uchambuzi wa kina wa barua kwa siku",
       "m365DigestRunsPerDay": "Digest za kila siku kwa siku",
-      "translationPagesPerDay": "Kurasa za kutafsiriwarusha kwa siku"
+      "translationPagesPerDay": "Kurasa za kutafsiriwarusha kwa siku",
+      "ocrPagesPerDay": "Kurasa za OCR kwa siku"
     },
     "valueModeLabel": "Aina ya kikomo",
     "valueAmountLabel": "Kiwango cha kikomo",
@@ -5891,7 +5914,8 @@
       "m365MailDraftsPerDay": "Rasimu za barua pepe ambazo msaidizi anaweza kuunda kwa siku — kila moja inathibitishwa kando. Kikomo hiki ni makusudi kuwa kidogo.",
       "m365MailDeepScansPerDay": "Uchanganuzi wa barua pepe uliounganishwa (mwhtasari, utafutaji wa kina, ahadi) kwa siku. Kila uchunguzi huhesabiwa kama kitengo kimoja, bila kujali idadi ya usomaji wake wa ndani.",
       "m365DigestRunsPerDay": "Digest za Microsoft 365 za kila siku kwa siku. Digest moja inajumuisha kusoma kwa Graph mara nyingi pamoja na miito miwili ya modeli ya uchambuzi; chaguo la kipindi hufanya kurudia kuwa rahisi kuomba, hivyo kizingiti cha kawaida ni kidogo.",
-      "translationPagesPerDay": "Kurasa za PDF zilizowasilishwa kwa ajili ya kutafsiriwa kwa siku."
+      "translationPagesPerDay": "Kurasa za PDF zilizowasilishwa kwa ajili ya kutafsiriwa kwa siku.",
+      "ocrPagesPerDay": "Kurasa za PDF zilizosomewa kwa OCR (utambuzi wa maandishi kwa hati zilizochanganuliwa) kwa siku."
     },
     "scopeFamily": "Familia",
     "scopeModel": "Mfano",

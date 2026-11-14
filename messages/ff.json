@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Text plain, kala page e page, e rewtii maa.",
       "documentNoCancel": "Joomiraa dokumeentu maa waawi dawal tuma o moƴƴi.",
       "documentGlossariesIgnored": "{count, plural, one {Glossary nde isiiɗaa maa waawi huutori e leydi mangu.} other {Glossaries # isiiɗaa maa waawi huutori e leydi mangu.}} Nyaama terminology baafal baafal e Assess quality, walla huutora Quick walla Reviewed.",
-      "pendingLeavePage": "Suggooji ɗiima leydi on kadi ɓe maa waawi dawal so a waawi firti e leydi on. Danaa suggooji waɗi e leydi on tuma saan."
+      "pendingLeavePage": "Suggooji ɗiima leydi on kadi ɓe maa waawi dawal so a waawi firti e leydi on. Danaa suggooji waɗi e leydi on tuma saan.",
+      "uploadStepOcr": "Nana waɗan e OCR",
+      "ocrButton": "Nana waɗan e OCR",
+      "ocrButtonHint": "Nana waɗan PDF ɗin e tanndugol tekst, fakkitorde e lesdi scanndirde walla tekst ɗin fowru.",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Tekst ɗin e makko tanndani e lesdi e tanndugol tekst. Faatno e asli makko.",
+      "ocrReasonNoText": "Tekst walaa e {name}. Ina heɓtaa ɗum e dokumant scanndirde.",
+      "ocrReasonSparse": "Tekst fitta e few e {name}. Ina jogii scanndirde.",
+      "ocrReasonManual": "Nana waɗan {name} e tanndugol tekst tun?",
+      "ocrExplanation": "OCR tannda tekst e lesdi gese dokumant. Ina jangata waawde, njaaɗi lesdi kala fayli e laawol OCR buum, wano waawaa tanndani scanndirde cuuɗɗi, jinndi e tabli.",
+      "ocrPagesLeft": "{count, plural, one {# lesdi OCR tanndiri heddii jooni.} other {# lesdi OCR tanndiri heddii jooni.}}",
+      "ocrRun": "Nana waɗan e OCR",
+      "ocrDismiss": "A'a jooni",
+      "ocrSparseHint": "Tekst fitta e few tanndi e PDF ɗin. Lesdi faya scanndiri.",
+      "ocrLimitReached": "Dokumant ɗin jogii lesdi faya, hebɓo laawol OCR heddii jooni.",
+      "ocrTooManyPages": "Dokumant ɗin wayi ton e OCR, tawa OCR tanndi lesdi {max} fow. Hanndu PDF ɗin, jel cuɓɓo.",
+      "ocrUnavailable": "OCR waawaa seŋa e server ɗin.",
+      "ocrNoText": "OCR walaa tekst e dokumant ɗin tun.",
+      "ocrFailed": "Dokumant ɗin waawaa tanndani e OCR. Huutu tun.",
+      "scannedWholeExplanation": "Aɗa waawi tan jooɗiiɗo ka mooftor konngol: ɗum jogii njoɓdi doondirii, waawi laawol, te ɗum hiwiire njoɓdi tawii ɗum jogii goongol njoɓdi dannde.",
+      "scannedUseWholeDocument": "Mooftor konngol fow",
+      "scannedSourceNote": "{name} alaa kala binndol konngi e jaaɗum. Jooɗiiɗo ka mooftor konngol fow jogii njoɓdi doondirii. So a binndi binndol mon e jaaɗum, ɗum naatnoy konngol.",
+      "scannedPageNote": "Alaa binndol waawii jogii e njoɓdi konngol. Heɗtii e file konngi."
     },
     "document": {
       "emptyTitle": "Winndu lan binndi dannde maa",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Draft email booyre",
       "m365MailDeepScansPerDay": "Jayaanu email booyre",
       "m365DigestRunsPerDay": "Digest jooni ñalaw taara",
-      "translationPagesPerDay": "Pottal jokkude e dokomento ñande"
+      "translationPagesPerDay": "Pottal jokkude e dokomento ñande",
+      "ocrPagesPerDay": "Lesdi OCR dii jam"
     },
     "valueModeLabel": "Noone gannugol",
     "valueAmountLabel": "Sari gannugol",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Cargal imeli ko yaltu so gollal jooɗii e ñalngu, kala gootol jogii noddine mum. Ko fayande.",
       "m365MailDeepScansPerDay": "Dolli analise buum imeli (dige, njiilaw nguurndu, ballal) kala ñalngu. Kala analise kaŋko ɗiɗi ko unit e budget.",
       "m365DigestRunsPerDay": "Microsoft 365 digest jooni ñalaw taara. Jooni e walii Graph reads e analysis-model ñaari; period picker moƴƴa jangkooma, kono default noon moƴƴi.",
-      "translationPagesPerDay": "Pottal PDF jogii e dokomento jokkude ñande."
+      "translationPagesPerDay": "Pottal PDF jogii e dokomento jokkude ñande.",
+      "ocrPagesPerDay": "Lesdi PDF tanndi e OCR (tanndugol tekst dokumant scanndirde) dii jam."
     },
     "scopeFamily": "Sarɗi",
     "scopeModel": "Moodel",

@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Qoraal furan, bog kasta bogga leh, oo leh isbeddelladaada.",
       "documentNoCancel": "Tarjumidda dukumeentiga lama joojin karo marka ay bilaabato.",
       "documentGlossariesIgnored": "{count, plural, one {Erey-bixinta aad dooratay looma adeegsan habkan.} other {# erey-bixin oo aad dooratay looma adeegsan habkan.}} Hubi eray-bixinta bog kasta adigoo isticmaalaya Qiimee tayada, ama adeegso Degdeg ama Dib-u-eegid.",
-      "pendingLeavePage": "Talo-soojeedimahan waxay ku xiran yihiin boggan waana la luminayaa markaad ka baxdo. Go'aami talo-soojeedimaha hadhay marka hore."
+      "pendingLeavePage": "Talo-soojeedimahan waxay ku xiran yihiin boggan waana la luminayaa markaad ka baxdo. Go'aami talo-soojeedimaha hadhay marka hore.",
+      "uploadStepOcr": "Akhriyaha OCR",
+      "ocrButton": "Akhri adigoo isticmaalaya OCR",
+      "ocrButtonHint": "Akhri PDF-kan mar kale adigoo adeegsanaya aqoonsiga qoraalka, gaar ahaan bogagga la sawiray ama qoraalka khaldan",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Qoraalkan waxaa laga akhriyey bogagga iyada oo la adeegsanayo aqoonsiga qoraalka. Isku barbardhig midka asalka ah.",
+      "ocrReasonNoText": "Wax qoraal ah lagama helin {name}. Waxay u muuqataa in ay tahay dukumenti la sawiray.",
+      "ocrReasonSparse": "Qoraal aad u yar ayaa laga helay {name}. Qaar ka mid ah way suurtagal tahay in la sawiray.",
+      "ocrReasonManual": "Ma rabtaa in {name} mar kale lagula akhriyo aqoonsiga qoraalka?",
+      "ocrExplanation": "OCR waxa uu qoraalka ka akhriyaa sawirada bogagga. Waxay ka dheeraataa keenista caadiga ah, bog kasta oo faylka ah waxaa laga tirinayaa xadkaaga maalinlaha OCR, waxayna si khaldan u akhriyi kartaa sawirro liita, far qoraal gacan ah, iyo miisas.",
+      "ocrPagesLeft": "{count, plural, one {# bog OCR ah oo kaa haray maanta.} other {# bogagga OCR ah oo kaa haray maanta.}}",
+      "ocrRun": "Akhri adigoo isticmaalaya OCR",
+      "ocrDismiss": "Maaha waqtigan",
+      "ocrSparseHint": "Qoraal aad u yar ayaa laga helay PDF-kan. Bogag qaar waxaa laga yaabaa in la sawiray.",
+      "ocrLimitReached": "Dukumentigan wuxuu ka badan yahay tirada bogagga OCR ee kaa haray maanta.",
+      "ocrTooManyPages": "Dukumentigan wuu dheeryahay si OCR loo akhriyo, ugu badnaan wuxuu akhrinayaa {max} bog. Kala jar PDF-ga oo qayb ka mid ah geli.",
+      "ocrUnavailable": "OCR laguma rakibin server-kan.",
+      "ocrNoText": "OCR wax qoraal ah kuma helin dukumentigan.",
+      "ocrFailed": "Dukumentiga laguma akhrin karo OCR. Fadlan isku day mar kale.",
+      "scannedWholeExplanation": "Waxaad kaloo turjumi kartaa dhammaan dukumeentiga: waxa uu si toos ah u akhriyaa bogagga la iska tiriyey, waxa uu hayaa qaab-dhismeedka, boggana waxa lagu xisaabiyaa xaddiga turjumaad ee maalintii.",
+      "scannedUseWholeDocument": "Turjun dhammaan dukumeentiga",
+      "scannedSourceNote": "{name} kuma jiro qoraal halkan lagu muujiyo. Turjumaadda dhammaan dukumeentiga waxay si toos ah u akhridaa boggiisa. Haddii aad halkan qoraal ku qorto, waxa ay beddelaysaa dukumeentiga.",
+      "scannedPageNote": "Qoraal lagama akhrin karin boggan asalka ah. Isbarbar dhig faylka laftiisa."
     },
     "document": {
       "emptyTitle": "Sharax dukumintiga aad rabto",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Qoraalka drafts ee iimayl maalintii",
       "m365MailDeepScansPerDay": "Baaritaannada qoto-dheer ee iimayl maalintii",
       "m365DigestRunsPerDay": "Tirada maalinlaha ah ee digest-ka Microsoft 365",
-      "translationPagesPerDay": "Bogagga turjumaadda dukumeenti maalintii"
+      "translationPagesPerDay": "Bogagga turjumaadda dukumeenti maalintii",
+      "ocrPagesPerDay": "Bogagga OCR ee maalintii"
     },
     "valueModeLabel": "Nooca xadka",
     "valueAmountLabel": "Tirada xadka",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Qoraallada email ee kaaliyuhu samayn karo maalintii — mid kasta waa in si gaar ah loo xaqiijiyaa. Si ula kac ah xadidan.",
       "m365MailDeepScansPerDay": "Falanqaynta wadajirka ah ee iimaylada (warbixino, baadhis qoto dheer, ballanqaadyo) maalintii. Baadhis walba waa hal unug xisaabeed, si kasta oo faahfaahin ah oo ay leedahay.",
       "m365DigestRunsPerDay": "Digest-ka maalinlaha Microsoft 365 ee la ordo maalintii. Hal orod waxay tahay akhrisyo faro badan oo Graph ah iyo wacitaan laba jeer oo analysis-model ah; xulashada muddada waxay ka dhigtaa in la codsado orod cusub mid fudud, sidaas darteed xadka caadiga ah waa xaddidan yahay.",
-      "translationPagesPerDay": "Bogagga PDF-ga ee loo gudbiyay turjumaadda dukumeenti maalintii."
+      "translationPagesPerDay": "Bogagga PDF-ga ee loo gudbiyay turjumaadda dukumeenti maalintii.",
+      "ocrPagesPerDay": "Bogagga PDF-ga ee maalintii lagu akhriyo OCR (aqoonsiga qoraalka ee dukumentiyada la sawiray)."
     },
     "scopeFamily": "Qoys",
     "scopeModel": "Moodel",

@@ -3150,7 +3150,29 @@
       "downloadTextVersionHint": "Inyandiko isanzwe, paji imwe ku yindi, n’ibyo wakosoye.",
       "documentNoCancel": "Uhereye igihe ubusobanuro bw’inyandiko butangiye, ntibishoboka kubuhagarika.",
       "documentGlossariesIgnored": "{count, plural, one {Igitabo washyizeho ntikikoreshwa muri ubu buryo.} other {Ibitabo # washyizeho ntibikoreshwa muri ubu buryo.}} Gusuzuma imikoreshereze y’amagambo buri rupapuro ukoresheje Assess quality, cyangwa ukoreshe Quick cyangwa Reviewed.",
-      "pendingLeavePage": "Imibwiriza itangwa kuri uru rupapuro ntabwo izarindwa uturutseho. Banza ufate umwanzuro ku mibwiriza isigaye."
+      "pendingLeavePage": "Imibwiriza itangwa kuri uru rupapuro ntabwo izarindwa uturutseho. Banza ufate umwanzuro ku mibwiriza isigaye.",
+      "uploadStepOcr": "Gusoma hifashishijwe OCR",
+      "ocrButton": "Soma ukoresheje OCR",
+      "ocrButtonHint": "Soma iki PDF bundi bushya ukoresheje kumenya inyandiko, kubw'impapuro zasanzwe zisanzwe cyangwa inyandiko zasohotse nabi",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Iyi nyandiko yasomwe mu mpapuro hifashishijwe kumenya inyandiko. Gereranya n'iyo w'umwimerere.",
+      "ocrReasonNoText": "Nta nyandiko yabonetse muri {name}. Bimeze nk'inyandiko yasanzwe ishyizwe kuri scanner.",
+      "ocrReasonSparse": "Inyandiko nkeya cyane yabonetse muri {name}. Ishobora kuba hari zimwe zasanzwe kuri scanner.",
+      "ocrReasonManual": "Soma {name} bundi bushya ukoresheje kumenya inyandiko?",
+      "ocrExplanation": "OCR isoma inyandiko mu mashusho y'urupapuro. Bikenera igihe kinini ugereranije n'ukubika busanzwe, buri rupapuro rwose rubarwa kuri konti yawe ya buri munsi ya OCR, kandi ishobora gusoma nabi amashusho mabi, imirongo yanditse n'udutabo.",
+      "ocrPagesLeft": "{count, plural, one {# urupapuro rwa OCR rusigaye uyu munsi.} other {# impapuro za OCR zisigaye uyu munsi.}}",
+      "ocrRun": "Soma ukoresheje OCR",
+      "ocrDismiss": "Si ubu",
+      "ocrSparseHint": "Inyandiko nkeya cyane yabonetse muri iri PDF. Hari impapuro zishobora kuba zarasanzwe kuri scanner.",
+      "ocrLimitReached": "Iyi nyandiko irimo impapuro nyinshi kurusha umubare wa OCR wemerewe uyu munsi.",
+      "ocrTooManyPages": "Iyi nyandiko ni ndende cyane kuri OCR, ishobora gusoma kugeza ku {max} impapuro. Tandukanya PDF ujye wohereza igice.",
+      "ocrUnavailable": "OCR ntiyashyizweho kuri server iyi.",
+      "ocrNoText": "OCR ntiyasanzemo inyandiko muri iyi nyandiko.",
+      "ocrFailed": "Inyandiko ntishoboye gusomwa ukoresheje OCR. Gerageza bundi bushya.",
+      "scannedWholeExplanation": "Ushobora kandi guhindura inyandiko yose: isoma impapuro zasuzumwe wenyine, ikabika imiterere yayo, kandi ikabara impapuro mu rugero wemererwa buri munsi mu guhindura.",
+      "scannedUseWholeDocument": "Hindura inyandiko yose",
+      "scannedSourceNote": "{name} nta nyandiko iri hano yo kwerekana. Guhindura inyandiko yose bisoma impapuro zayo neza. Iyo wanditse inyandiko yawe hano, irasimbura iyo nyandiko.",
+      "scannedPageNote": "Nta nyandiko yabonetse kuri uru rupapuro rw'umwimerere. Gereranya na dosiye nyirizina."
     },
     "document": {
       "emptyTitle": "Sobanura inyandiko ushaka",
@@ -5792,7 +5814,8 @@
       "m365MailDraftsPerDay": "Ibigereranyo bya email ku munsi",
       "m365MailDeepScansPerDay": "Gusuzuma emails byimbitse ku munsi",
       "m365DigestRunsPerDay": "Digest ya buri munsi iboneka buri munsi",
-      "translationPagesPerDay": "Paji za document translated ku munsi"
+      "translationPagesPerDay": "Paji za document translated ku munsi",
+      "ocrPagesPerDay": "Impapuro za OCR ku munsi"
     },
     "valueModeLabel": "Ubwoko bw'umupaka",
     "valueAmountLabel": "Ingano yumupaka",
@@ -5875,7 +5898,8 @@
       "m365MailDraftsPerDay": "Imyiteguro y'ubutumwa bwandikirwa buri munsi—buri kimwe kimenyeshwa ukwacyo. Umubare ugenzurwa cyane.",
       "m365MailDeepScansPerDay": "Isesengura ryimbitse ry'ubutumwa (digests, deep search, commitments) ku munsi. Buri scan ifatwa nk'ingengo y'imari imwe, utitaye ku mubare w'ubusoma buyirimo.",
       "m365DigestRunsPerDay": "Digest ya Microsoft 365 ya buri munsi. Igikorwa kimwe kirimo gusoma Graph kenshi n'inshuro ebyiri zo gukoresha analysis-model; gufata igihe n'ubundi bituma gahunda zo gusubiramo zizagara byoroshye, bityo umubare wemewe ni muto.",
-      "translationPagesPerDay": "Paji za PDF zashyikirijwe document translation buri munsi."
+      "translationPagesPerDay": "Paji za PDF zashyikirijwe document translation buri munsi.",
+      "ocrPagesPerDay": "Impapuro za PDF zisomwa ukoresheje OCR (kumenya inyandiko ku nyandiko zasanzwe) buri munsi."
     },
     "scopeFamily": "Urugo",
     "scopeModel": "Model",
