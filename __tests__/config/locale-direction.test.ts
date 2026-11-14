@@ -8,7 +8,8 @@ import { describe, expect, it } from 'vitest';
  * Letters of right-to-left scripts: Hebrew, Arabic (with its supplements and
  * presentation forms), Syriac, Thaana and N'Ko.
  */
-const RTL_LETTER = /[֐-׿؀-ۿ܀-ݏݐ-ݿހ-޿߀-߿ࢠ-ࣿיִ-﷿ﹰ-﻿]/g;
+const RTL_LETTER =
+  /[\u0590-\u05FF\u0600-\u06FF\u0700-\u074F\u0750-\u077F\u0780-\u07BF\u07C0-\u07FF\u08A0-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]/g;
 
 /** Any letter, in any script. */
 const ANY_LETTER = /\p{L}/gu;
