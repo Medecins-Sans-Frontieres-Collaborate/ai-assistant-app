@@ -13,7 +13,14 @@ import {
   IconPlayerStopFilled,
   IconUpload,
 } from '@tabler/icons-react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
@@ -141,6 +148,9 @@ import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useWorkflowRunStore } from '@/client/stores/workflowRunStore';
 import { v4 as uuidv4 } from 'uuid';
+
+/** Where the reader goes when it leaves the page in view. */
+type PageDeparture = { page: number } | { mode: TranslationMode };
 
 /** Pre-flight cap; the server enforces its own (larger) limit. */
 const MAX_SOURCE_CHARS = 60_000;
@@ -357,6 +367,12 @@ export function TranslationWorkspace({
   const [submittingDocument, setSubmittingDocument] = useState(false);
   const [documentError, setDocumentError] = useState<string | null>(null);
   const [confirmRetranslate, setConfirmRetranslate] = useState(false);
+  const [departureGate, setDepartureGate] = useState<PageDeparture | null>(
+    null,
+  );
+  const [queuedDeparture, setQueuedDeparture] = useState<PageDeparture | null>(
+    null,
+  );
   const { featureRemaining } = useLimitGates();
   const { refetch: refetchLimits } = useMyLimits();
 
@@ -672,6 +688,7 @@ export function TranslationWorkspace({
           url: extracted.url,
           lastPage: allPages[allPages.length - 1],
           selectedPages: formatPageSelection(allPages),
+          fitsOneBatch: true,
         };
       }
 
@@ -1337,7 +1354,7 @@ export function TranslationWorkspace({
     setEditingTarget(false);
     patchDocumentJob({ page });
   };
-  const handleModeChange = (mode: TranslationMode) => {
+  const changeMode = (mode: TranslationMode) => {
     if (!state || mode === state.mode) return;
     setEditingTarget(false);
     patchState({
@@ -1345,6 +1362,33 @@ export function TranslationWorkspace({
       ...(mode !== 'document' ? leaveDocumentReader(state) : {}),
     });
   };
+  const leavePage = (destination: PageDeparture) => {
+    if ('page' in destination) goToDocumentPage(destination.page);
+    else changeMode(destination.mode);
+  };
+  /**
+   * Suggestions belong to the page they were made for and do not follow the
+   * reader off it, so with any still pending the user decides them first.
+   */
+  const requestLeavePage = (destination: PageDeparture) => {
+    if (pageInPane && hasUnresolvedEdits) setDepartureGate(destination);
+    else leavePage(destination);
+  };
+  const decidePendingAndLeave = (decision: 'accepted' | 'rejected') => {
+    const destination = departureGate;
+    setDepartureGate(null);
+    if (!destination) return;
+    resolveAll(decision);
+    // Leave on a later render, once the decided text is in state, so an
+    // accepted suggestion is saved as the page's correction (see queuedAction).
+    setQueuedDeparture(destination);
+  };
+  const leavePageEvent = useEffectEvent(leavePage);
+  useEffect(() => {
+    if (!queuedDeparture || hasUnresolvedEdits) return;
+    setQueuedDeparture(null);
+    leavePageEvent(queuedDeparture);
+  }, [queuedDeparture, hasUnresolvedEdits]);
 
   if (!state) return null;
 
@@ -1377,6 +1421,9 @@ export function TranslationWorkspace({
     'no-language': 'translation.documentNeedsLanguage',
     'unsupported-language': 'translation.documentLanguageUnsupported',
   };
+  // Glossaries the user has attached, which this mode cannot apply.
+  const ignoredGlossaryCount =
+    selectedOrgIds.length + selectedPersonalIds.length;
   const documentBlocker = documentEligibility.ok
     ? null
     : t(documentBlockerKey[documentEligibility.reason]);
@@ -1513,7 +1560,7 @@ export function TranslationWorkspace({
               key={mode}
               role="radio"
               aria-checked={state.mode === mode}
-              onClick={() => handleModeChange(mode)}
+              onClick={() => requestLeavePage({ mode })}
               disabled={isRunning || assessing}
               title={
                 mode === 'quick'
@@ -1615,7 +1662,9 @@ export function TranslationWorkspace({
         uploadError ||
         targetLanguage?.custom ||
         (documentMode &&
-          (documentError || (documentBlocker && !documentJob)))) && (
+          (documentError ||
+            ignoredGlossaryCount > 0 ||
+            (documentBlocker && !documentJob)))) && (
         <div className="border-b border-gray-200 px-3 py-2 dark:border-gray-700">
           {targetLanguage?.custom && (
             <p className="text-xs text-amber-700 dark:text-amber-400">
@@ -1641,6 +1690,13 @@ export function TranslationWorkspace({
               {uploadError}
             </p>
           )}
+          {documentMode && ignoredGlossaryCount > 0 && (
+            <p className="text-xs text-amber-700 dark:text-amber-400">
+              {t('translation.documentGlossariesIgnored', {
+                count: ignoredGlossaryCount,
+              })}
+            </p>
+          )}
           {documentMode && documentBlocker && !documentJob && (
             <p className="text-sm text-amber-700 dark:text-amber-400">
               {documentBlocker}
@@ -1661,7 +1717,7 @@ export function TranslationWorkspace({
           correctedPages={reader.correctedPages}
           saveState={reader.saveState}
           disabled={assessing}
-          onGoToPage={goToDocumentPage}
+          onGoToPage={(page) => requestLeavePage({ page })}
         />
       )}
       {readingDocument && !reader.pagesAligned && (
@@ -1670,18 +1726,20 @@ export function TranslationWorkspace({
         </p>
       )}
 
-      {state?.sourceDocument && !documentMode && (
-        <SourcePageSelector
-          key={`${state.sourceDocument.url}:${state.sourceDocument.selectedPages}`}
-          document={state.sourceDocument}
-          pages={sourcePages}
-          maxChars={MAX_SOURCE_CHARS}
-          loading={loadingSourcePages}
-          disabled={isRunning || uploading || assessing}
-          onSelect={handleSelectSourcePages}
-          onLoadPages={() => void handleLoadSourcePages()}
-        />
-      )}
+      {state?.sourceDocument &&
+        !state.sourceDocument.fitsOneBatch &&
+        !documentMode && (
+          <SourcePageSelector
+            key={`${state.sourceDocument.url}:${state.sourceDocument.selectedPages}`}
+            document={state.sourceDocument}
+            pages={sourcePages}
+            maxChars={MAX_SOURCE_CHARS}
+            loading={loadingSourcePages}
+            disabled={isRunning || uploading || assessing}
+            onSelect={handleSelectSourcePages}
+            onLoadPages={() => void handleLoadSourcePages()}
+          />
+        )}
 
       {/* Workbench: panes (+ assess controls) with the review column beside */}
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
@@ -1773,13 +1831,6 @@ export function TranslationWorkspace({
                   {isDraft && (
                     <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300">
                       {t('translation.draftLabel')}
-                    </span>
-                  )}
-                  {pageInPane && documentJob && (
-                    <span className="font-normal">
-                      {t('translation.pageNumber', {
-                        page: String(documentJob.page),
-                      })}
                     </span>
                   )}
                   {pageInPane && pageIsCorrected && (
@@ -2159,6 +2210,15 @@ export function TranslationWorkspace({
         onAcceptAll={() => decidePendingAndRun('accepted')}
         onRejectAll={() => decidePendingAndRun('rejected')}
         onCancel={() => setReviewGate(null)}
+      />
+      <PendingEditsDialog
+        isOpen={departureGate !== null}
+        pendingCount={previewEdits.length}
+        actionLabel=""
+        message={t('translation.pendingLeavePage')}
+        onAcceptAll={() => decidePendingAndLeave('accepted')}
+        onRejectAll={() => decidePendingAndLeave('rejected')}
+        onCancel={() => setDepartureGate(null)}
       />
 
       <ConfirmDialog
