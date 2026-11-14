@@ -54,7 +54,9 @@ const mockMessages: Record<string, unknown> = {
     normal: 'Normal',
     variable: 'Variable',
     variables: 'Variables',
-    search: 'Search',
+    // Mirrors messages/en.json: there is no common.search key, and a mock
+    // entry for one hid a raw-key bug in the agents admin search box.
+    searchEllipsis: 'Search...',
     beta: 'Beta',
     tryAgain: 'Try again',
     // The real keys are ICU plurals; the mock t() only does {param}
