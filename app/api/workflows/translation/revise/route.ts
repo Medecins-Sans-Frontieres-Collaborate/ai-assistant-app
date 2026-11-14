@@ -39,6 +39,8 @@ export const maxDuration = 300;
 
 const MAX_TEXT_CHARS = 60_000;
 const MAX_LANGUAGE_LABEL_CHARS = 80;
+/** A locale code is placed in the prompt, so only that shape is accepted. */
+const LOCALE_PATTERN = /^[a-zA-Z]{2,3}(-[a-zA-Z0-9]{2,8})*$/;
 /** Same ceiling as the translate and assess routes. */
 const MAX_GLOSSARY_ENTRIES =
   MAX_ORG_GLOSSARIES_PER_REQUEST * MAX_GUIDE_ENTRIES + MAX_GUIDE_ENTRIES;
@@ -52,6 +54,8 @@ interface TranslationReviseRequest {
   instruction: string;
   /** Limits the edits to one passage of the translation. */
   selection?: ChangeSelection;
+  /** The user's UI locale (e.g. "en", "pt-BR"), for the reply language. */
+  interfaceLocale?: string;
   glossaryEntries?: GlossaryEntry[];
   glossaryGuideIds?: string[];
   /** Legacy single-guide form of `glossaryGuideIds`. */
@@ -158,6 +162,12 @@ export async function POST(req: NextRequest) {
       targetLanguage,
       instruction,
       selection,
+      // Anything that is not a plain locale code is ignored, not refused.
+      interfaceLocale:
+        typeof body.interfaceLocale === 'string' &&
+        LOCALE_PATTERN.test(body.interfaceLocale)
+          ? body.interfaceLocale
+          : undefined,
       glossaryEntries,
       modelId: resolveWorkflowModelId(body.modelId),
       usage,
