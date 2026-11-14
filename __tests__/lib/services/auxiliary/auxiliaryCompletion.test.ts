@@ -6,6 +6,7 @@
 import { AuxiliaryUnavailableError } from '@/lib/services/auxiliary/AuxiliaryModelExecutor';
 import {
   AuxiliaryCompletionService,
+  MIN_FALLBACK_BUDGET_MS,
   parseJsonReply,
 } from '@/lib/services/auxiliary/auxiliaryCompletion';
 
@@ -212,6 +213,42 @@ describe('AuxiliaryCompletionService.completeJson', () => {
         fallback: ownBudget,
       });
       expect(answer.source).toBe('chat_model');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('tries the fallback with the minimum budget left, and not with a millisecond less', async () => {
+    vi.useFakeTimers();
+    try {
+      const TIMEOUT_MS = 1000;
+      /** A chain that fails leaving exactly `left` ms of the deadline. */
+      const failingWith = (left: number) =>
+        executorWith(async (_p, _a, options) => {
+          vi.advanceTimersByTime(options.timeoutMs - left);
+          throw new AuxiliaryUnavailableError('timeout', 'EU');
+        });
+      const run = (left: number, fallback: ReturnType<typeof vi.fn>) =>
+        new AuxiliaryCompletionService(failingWith(left)).completeJson({
+          operation: 'tools',
+          region: 'EU',
+          params,
+          accept: acceptOk,
+          timeoutMs: TIMEOUT_MS,
+          fallback: fallback as never,
+        });
+
+      const enough = structuredFallback('{"ok":true}');
+      expect((await run(MIN_FALLBACK_BUDGET_MS, enough)).source).toBe(
+        'chat_model',
+      );
+
+      // What a timer firing a hair early leaves behind is not a budget.
+      const tooLittle = structuredFallback('{"ok":true}');
+      await expect(
+        run(MIN_FALLBACK_BUDGET_MS - 1, tooLittle),
+      ).rejects.toBeInstanceOf(AuxiliaryUnavailableError);
+      expect(tooLittle).not.toHaveBeenCalled();
     } finally {
       vi.useRealTimers();
     }

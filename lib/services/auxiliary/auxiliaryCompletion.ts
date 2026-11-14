@@ -51,6 +51,15 @@ export interface AuxiliaryAnswer<T> {
   model?: string;
 }
 
+/**
+ * Least time left on a shared deadline for the chat-model fallback to be
+ * tried at all. No model call completes in less, and a chain that timed out
+ * leaves a stray millisecond or two behind (timers fire slightly early
+ * against the wall clock): that remainder is an exhausted budget, not one
+ * to spend.
+ */
+export const MIN_FALLBACK_BUDGET_MS = 25;
+
 /** Routing shared by every helper call. */
 export interface AuxiliaryCallOptions {
   /** The operation (observations, cooldowns and readiness are per operation). */
@@ -331,7 +340,7 @@ export class AuxiliaryCompletionService {
   ): number | undefined {
     if (call.fallbackTimeoutMs !== undefined) return call.fallbackTimeoutMs;
     const remaining = call.timeoutMs - (Date.now() - started);
-    return remaining > 0 ? remaining : undefined;
+    return remaining >= MIN_FALLBACK_BUDGET_MS ? remaining : undefined;
   }
 
   private fallbackSignal(
