@@ -103,6 +103,7 @@ export const LIMIT_GROUPS: readonly LimitGroup[] = [
       'feature.upload.megabytesPerFile',
       'feature.upload.documentsPerMessage',
       'feature.upload.filesPerDay',
+      'feature.ocr.pagesPerDay',
     ],
   },
   {
