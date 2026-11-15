@@ -31,6 +31,7 @@ import {
   useLimitGates,
   useMyLimits,
 } from '@/client/hooks/settings/useMyLimits';
+import { useBudgetGate } from '@/client/hooks/settings/useUsageBudgets';
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
 import { useElementWidth } from '@/client/hooks/ui/useElementWidth';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
@@ -1003,6 +1004,9 @@ export function TranslationWorkspace({
       setLoadingSourcePages(false);
     }
   };
+
+  // Runs answer to the user's personal budgets (BudgetRunDialog explains).
+  const { guard: guardBudget } = useBudgetGate();
 
   const handleTranslate = useCallback(async () => {
     if (!state || isRunning || state.mode === 'document') return;
@@ -2121,7 +2125,7 @@ export function TranslationWorkspace({
         ) : documentMode ? (
           <button
             type="button"
-            onClick={handleTranslateDocument}
+            onClick={() => guardBudget(handleTranslateDocument, 'run')}
             disabled={!canTranslateDocument}
             className="min-h-[36px] rounded-lg bg-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
           >
@@ -2132,7 +2136,7 @@ export function TranslationWorkspace({
         ) : (
           <button
             type="button"
-            onClick={() => void handleTranslate()}
+            onClick={() => guardBudget(() => void handleTranslate(), 'run')}
             disabled={!canTranslate || tooLong}
             className="min-h-[36px] rounded-lg bg-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
           >
