@@ -37,6 +37,8 @@ import { UsageImpactSection } from './Sections/UsageImpactSection';
 import { SettingsSidebar } from './SettingsSidebar';
 import { SettingsSection } from './types';
 
+import { useUIStore } from '@/client/stores/uiStore';
+
 const version = packageJson.version;
 const build = process.env.NEXT_PUBLIC_BUILD || 'Unknown';
 const env = process.env.NEXT_PUBLIC_ENV || 'development';
@@ -136,6 +138,19 @@ export function SettingDialog() {
       window.removeEventListener('mousedown', handleMouseDown);
     };
   }, [isSettingsOpen, setIsSettingsOpen, showMigrationDialog]);
+
+  // Land on the section the opener asked for (e.g. "Connect Microsoft
+  // 365" → Connections), then clear the request so the next plain opening
+  // starts on the default section.
+  const requestedSection = useUIStore((s) => s.settingsInitialSection);
+  const setSettingsInitialSection = useUIStore(
+    (s) => s.setSettingsInitialSection,
+  );
+  useEffect(() => {
+    if (!isSettingsOpen || !requestedSection) return;
+    setActiveSection(requestedSection);
+    setSettingsInitialSection(null);
+  }, [isSettingsOpen, requestedSection, setSettingsInitialSection]);
 
   // Update storage data when dialog opens
   useEffect(() => {
