@@ -112,6 +112,25 @@ interface M365FilePickerModalProps {
   acceptExtensions?: string[];
 }
 
+/**
+ * Lets a surrounding dialog own the attach-mode selection (the "Add to
+ * chat" picker decides what happens to the files, so it — not this body —
+ * shows the selection bar and acts on it). Attach mode only; ignored when
+ * `onPick` or `onPickFolder` is set.
+ */
+export interface M365HostedSelection {
+  /** The current selection, keyed by `driveId/itemId`. */
+  selected: Map<string, M365DriveEntry>;
+  /** Called with the next selection whenever a file is ticked or unticked. */
+  onChange: (next: Map<string, M365DriveEntry>) => void;
+  /**
+   * Called when a file row is clicked while nothing is selected: the quick
+   * path that acts on one file without building a selection first. The host
+   * closes the dialog itself.
+   */
+  onActivate: (entry: M365DriveEntry) => void;
+}
+
 type PickerTab = M365PickerTab;
 
 /** One drill-down step: a folder (OneDrive), or a site/library (SharePoint). */
@@ -248,12 +267,19 @@ function crumbLabels(crumbs: Crumb[]): string[] {
  * any Graph traffic happen — content stays on the picker's side of the wire
  * until a file is explicitly picked.
  */
-const M365FilePickerBody: FC<{
+export const M365FilePickerBody: FC<{
   onClose: () => void;
   onPick?: (entry: M365DriveEntry) => void;
   onPickFolder?: (destination: M365SaveDestination) => void;
-  acceptExtensions?: string[];
-}> = ({ onClose, onPick: onPickProp, onPickFolder, acceptExtensions }) => {
+  acceptExtensions?: readonly string[];
+  hosted?: M365HostedSelection;
+}> = ({
+  onClose,
+  onPick: onPickProp,
+  onPickFolder,
+  acceptExtensions,
+  hosted,
+}) => {
   const t = useTranslations('m365.picker');
   const folderMode = Boolean(onPickFolder);
   // onPickFolder wins over onPick — the modes are mutually exclusive.
@@ -342,9 +368,13 @@ const M365FilePickerBody: FC<{
   );
   // Attach-mode selection for batch attach; keyed by driveId/itemId and kept
   // across navigation and tab switches so a batch can span folders.
-  const [selected, setSelected] = useState<Map<string, M365DriveEntry>>(
+  const [ownSelected, setOwnSelected] = useState<Map<string, M365DriveEntry>>(
     () => new Map(),
   );
+  // A host dialog may own the selection instead (see M365HostedSelection).
+  const hostedSelection = attachMode ? hosted : undefined;
+  const selected = hostedSelection?.selected ?? ownSelected;
+  const setSelected = hostedSelection?.onChange ?? setOwnSelected;
   // User-facing type filter (Word/Excel/PDF/…): kept across folder
   // navigation ("find the PDF somewhere in here"), reset on tab switch like
   // sort. null = all types.
@@ -816,6 +846,10 @@ const M365FilePickerBody: FC<{
       onClose();
       return;
     }
+    if (hostedSelection) {
+      hostedSelection.onActivate(entry);
+      return;
+    }
     // Continues in the background; progress shows on the attachment tile.
     void attachDriveItem(entry);
     onClose();
@@ -825,13 +859,11 @@ const M365FilePickerBody: FC<{
     `${entry.driveId}/${entry.itemId}`;
 
   const toggleSelected = (entry: M365DriveEntry) => {
-    setSelected((prev) => {
-      const next = new Map(prev);
-      const key = entryKey(entry);
-      if (next.has(key)) next.delete(key);
-      else next.set(key, entry);
-      return next;
-    });
+    const next = new Map(selected);
+    const key = entryKey(entry);
+    if (next.has(key)) next.delete(key);
+    else next.set(key, entry);
+    setSelected(next);
   };
 
   const attachSelected = () => {
@@ -1923,7 +1955,7 @@ const M365FilePickerBody: FC<{
       {/* Attach-mode selection footer: appears once anything is checked.
           Selection survives navigation and tab switches, so a batch can be
           gathered from several folders before attaching. */}
-      {attachMode && selected.size > 0 && (
+      {attachMode && !hostedSelection && selected.size > 0 && (
         <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-gray-50 px-3 py-2 dark:border-neutral-700 dark:bg-neutral-800">
           <span className="min-w-0 flex-1 truncate text-xs text-gray-600 dark:text-gray-400">
             {t('selectedCount', { count: selected.size })}
