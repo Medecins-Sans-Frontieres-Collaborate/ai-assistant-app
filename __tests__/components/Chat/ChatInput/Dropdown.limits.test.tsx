@@ -68,13 +68,7 @@ vi.mock('@/components/Chat/ChatInput/ChatInputImageCapture', () => ({
 vi.mock('@/components/Chat/ChatInput/ChatInputTranslate', () => ({
   default: Nothing,
 }));
-vi.mock('@/components/Chat/ChatInput/M365MeetingImportModal', () => ({
-  default: Nothing,
-}));
-vi.mock('@/components/Chat/ChatInput/M365FilePickerModal', () => ({
-  default: Nothing,
-}));
-vi.mock('@/components/Chat/ChatInput/M365MailImportModal', () => ({
+vi.mock('@/components/Chat/ChatInput/AddToChatDialog', () => ({
   default: Nothing,
 }));
 vi.mock('@/components/Chat/ChatInput/UrlAttachModal', () => ({
@@ -171,7 +165,6 @@ describe('Dropdown — usage-limit gates', () => {
       webSearch: { blocked: true, exhausted: false, low: false },
     };
     openMenu();
-    expand('aiTools');
 
     const search = row('search');
     expect(search).toBeDisabled();
@@ -201,7 +194,6 @@ describe('Dropdown — usage-limit gates', () => {
       webSearch: { blocked: true, exhausted: false, low: false },
     };
     openMenu();
-    expand('aiTools');
     // Expanding resets the keyboard selection to the top of the (now longer)
     // list; walk ArrowDown down to the locked "search" child, wherever it
     // landed among the sections.
@@ -237,7 +229,6 @@ describe('Dropdown — usage-limit gates', () => {
       codeInterpreter: { blocked: true, exhausted: false, low: false },
     };
     openMenu();
-    expand('aiTools');
 
     expect(row('codeInterpreter')).toBeDisabled();
     expect(
@@ -267,7 +258,6 @@ describe('Dropdown — usage-limit gates', () => {
       },
     };
     openMenu();
-    expand('aiTools');
 
     expect(screen.getByText('remaining')).toBeInTheDocument();
     expect(screen.getByText('exhausted')).toBeInTheDocument();
@@ -298,7 +288,6 @@ describe('Dropdown — usage-limit gates', () => {
       },
     };
     openMenu();
-    expand('aiTools');
 
     // The mock t() falls back to the raw key for a namespace it does not
     // carry, so 'exhaustedResets' rendering (rather than 'exhausted') proves
@@ -339,7 +328,6 @@ describe('Dropdown — usage-limit gates', () => {
 
   it("fails open: with the gates open the rows are exactly today's UI", () => {
     openMenu();
-    expand('aiTools');
     expand('focusConnector');
 
     expect(row('search')).toBeEnabled();
