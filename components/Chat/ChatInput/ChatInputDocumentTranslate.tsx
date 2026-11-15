@@ -58,6 +58,14 @@ import {
 /** Daily document-translation counter (docs/LIMITS.md); `null` = unlimited. */
 const TRANSLATION_DAY_LIMIT_KEY = 'feature.translation.jobsPerDay';
 
+/** A OneDrive/SharePoint document to translate, addressed by drive item. */
+export interface DocumentTranslationM365Source {
+  driveId: string;
+  itemId: string;
+  name: string;
+  size?: number;
+}
+
 interface ChatInputDocumentTranslateProps {
   /** Whether the modal is open */
   isOpen: boolean;
@@ -70,6 +78,13 @@ interface ChatInputDocumentTranslateProps {
    * local file was chosen. Callers gate on flag + m365Connected.
    */
   allowM365Source?: boolean;
+  /**
+   * A OneDrive/SharePoint document already chosen elsewhere (the "Add to
+   * chat" picker): the form opens on it instead of on its own picker. Keep
+   * the reference stable while the modal is open — a new object resets the
+   * form.
+   */
+  initialM365Source?: DocumentTranslationM365Source | null;
   /** Callback when translation completes successfully */
   onTranslationComplete: (reference: DocumentTranslationReference) => void;
   /**
@@ -94,6 +109,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
   onClose,
   documentFile,
   allowM365Source = false,
+  initialM365Source = null,
   onTranslationComplete,
   onTranslationPending,
 }) => {
@@ -109,12 +125,8 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
 
   // M365 source (mutually exclusive with documentFile — the caller passes
   // one or the other; the picker fills this when no local file was given).
-  const [m365Source, setM365Source] = useState<{
-    driveId: string;
-    itemId: string;
-    name: string;
-    size?: number;
-  } | null>(null);
+  const [m365Source, setM365Source] =
+    useState<DocumentTranslationM365Source | null>(null);
   const [m365PickerOpen, setM365PickerOpen] = useState(false);
   const sourceName = documentFile?.name ?? m365Source?.name ?? null;
 
@@ -175,11 +187,12 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
       setTargetSearch('');
       setSourceSearch('');
       setShowAdvancedOptions(false);
-      setM365Source(null);
-      // M365-mode open with no file goes straight to the picker.
-      setM365PickerOpen(allowM365Source && !documentFile);
+      setM365Source(initialM365Source);
+      // M365-mode open with no file and no document chosen yet goes
+      // straight to the picker.
+      setM365PickerOpen(allowM365Source && !documentFile && !initialM365Source);
     }
-  }, [isOpen, documentFile, allowM365Source]);
+  }, [isOpen, documentFile, allowM365Source, initialM365Source]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
