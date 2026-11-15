@@ -6,12 +6,14 @@ import { FC, useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useUsageBudgetsStatus } from '@/client/hooks/settings/useUsageBudgets';
 import { useWorkflowEmissions } from '@/client/hooks/workflows/useWorkflowEmissions';
 
 import { clampEmissionsChipAutoHideMs } from '@/lib/utils/shared/emissions';
 
 import { Conversation } from '@/types/chat';
 
+import { BudgetBars } from '@/components/Emissions/BudgetBars';
 import {
   ImpactReadout,
   ImpactRow,
@@ -60,6 +62,7 @@ export const WorkflowImpactBadge: FC<WorkflowImpactBadgeProps> = ({
 }) => {
   const t = useTranslations();
   const { showUsageImpact } = useFlags();
+  const budgets = useUsageBudgetsStatus();
   const summary = useWorkflowEmissions(conversation);
   const visibility = useSettingsStore((s) => s.emissionsChipVisibility);
   const autoHideMs = useSettingsStore((s) => s.emissionsChipAutoHideMs);
@@ -232,6 +235,7 @@ export const WorkflowImpactBadge: FC<WorkflowImpactBadgeProps> = ({
         <span className="hidden sm:inline">
           {t('emissions.chip.label', { grams: collapsedLabel })}
         </span>
+        <BudgetBars statuses={budgets.active} />
         {delta != null && delta > 0 && (
           <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400">
             {t('emissions.workflow.delta', { grams: formatGrams(delta) })}
