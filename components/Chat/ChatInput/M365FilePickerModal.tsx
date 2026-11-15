@@ -489,6 +489,7 @@ export const M365FilePickerBody: FC<{
 
   const load = useCallback(async () => {
     const seq = ++listSeqRef.current;
+    console.log('[PROBE] load start seq', seq, tab, JSON.stringify(crumbs));
     setErrorKey(null);
     setSearchResults(null);
     setLoadMoreFailed(false);
@@ -575,6 +576,7 @@ export const M365FilePickerBody: FC<{
       }
       setErrorKey(errorMessageKey(error));
     } finally {
+      console.log('[PROBE] load end seq', seq, 'current', listSeqRef.current);
       if (seq === listSeqRef.current) setLoading(false);
     }
   }, [tab, crumbs, lastCrumb, sharePointPhase, sort, dir]);
@@ -582,6 +584,10 @@ export const M365FilePickerBody: FC<{
   useEffect(() => {
     void load();
   }, [load]);
+  useEffect(() => {
+    console.log('[PROBE] body mount');
+    return () => console.log('[PROBE] body unmount');
+  }, []);
 
   // Location memory (attach mode only): persisted on every navigation
   // change. Searching never touches tab/crumbs/sort, so the remembered
