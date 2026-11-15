@@ -28,7 +28,17 @@ export interface MenuItem {
   tooltip?: string;
   infoTooltip?: string;
   onClick: () => void;
-  category: 'web' | 'media' | 'transform' | 'tools';
+  /**
+   * The group the row sits in: `add` brings something into the chat, `do`
+   * is a one-off job, `chat` stays on for the conversation, `start` fills
+   * the composer with a starting point.
+   */
+  category: 'add' | 'do' | 'chat' | 'start';
+  /**
+   * Extra text the menu search matches besides the label — e.g. the sources
+   * a picker row leads to, so searching for one still finds the row.
+   */
+  keywords?: string[];
   disabled?: boolean;
   toggle?: boolean;
   checked?: boolean;
