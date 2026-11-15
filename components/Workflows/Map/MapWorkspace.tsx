@@ -18,6 +18,7 @@ import {
   AvailableMapDataset,
   useAvailableMapDatasets,
 } from '@/client/hooks/settings/useAvailableMapDatasets';
+import { useBudgetGate } from '@/client/hooks/settings/useUsageBudgets';
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 
@@ -823,6 +824,9 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     }
   };
 
+  // Runs answer to the user's personal budgets (BudgetRunDialog explains).
+  const { guard: guardBudget } = useBudgetGate();
+
   const handleSubmit = () => {
     if (!trimmedSource || busy) return;
     // Pasted GeoJSON or a few CSV lines are an import, not material for the
@@ -887,7 +891,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               !e.shiftKey
             ) {
               e.preventDefault();
-              handleSubmit();
+              guardBudget(handleSubmit, 'run');
             }
           }}
           className="min-h-[44px] flex-1 resize-none rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none disabled:opacity-50 dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder-gray-400"
@@ -981,7 +985,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         )}
         <button
           type="button"
-          onClick={handleSubmit}
+          onClick={() => guardBudget(handleSubmit, 'run')}
           disabled={busy || !trimmedSource}
           className="min-h-[36px] shrink-0 rounded-lg bg-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
         >
