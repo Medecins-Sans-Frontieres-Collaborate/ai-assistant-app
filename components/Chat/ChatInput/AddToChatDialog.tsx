@@ -411,7 +411,7 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
               {tPicker('clearSelection')}
             </button>
             {offeredIntents.length > 1 && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 max-sm:w-full max-sm:flex-col max-sm:items-stretch max-sm:gap-1">
                 <span
                   id="add-to-chat-then"
                   className="whitespace-nowrap text-sm text-gray-600 dark:text-gray-400"
@@ -421,7 +421,7 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
                 <div
                   role="radiogroup"
                   aria-labelledby="add-to-chat-then"
-                  className="inline-flex overflow-hidden rounded-lg border border-gray-300 dark:border-gray-600"
+                  className="inline-flex overflow-hidden rounded-lg border border-gray-300 dark:border-gray-600 max-sm:flex"
                 >
                   {offeredIntents.map((option) => {
                     const fits = fittingIntents.includes(option);
@@ -437,7 +437,7 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
                           fits ? undefined : t(`selection.unfit.${option}`)
                         }
                         onClick={() => setIntent(option)}
-                        className={`min-h-[36px] whitespace-nowrap px-3 py-1.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                        className={`min-h-[36px] whitespace-nowrap px-3 py-1.5 text-sm max-sm:flex-auto max-sm:px-2 font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                           checked
                             ? 'bg-blue-600 text-white'
                             : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-neutral-700'
@@ -456,7 +456,7 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
                 onClick={onClose}
                 className={QUIET_BUTTON_CLASSES}
               >
-                {tRoot('Cancel')}
+                {tRoot('common.cancel')}
               </button>
               <button
                 type="button"
