@@ -276,6 +276,7 @@ const BudgetCard: FC<BudgetCardProps> = ({ metric, status }) => {
                     key={unit}
                     type="button"
                     aria-pressed={budget.unit === unit}
+                    data-unit={unit}
                     onClick={() =>
                       // Same carbon, new unit: the budget does not change
                       // size because the user changed how they picture it.
