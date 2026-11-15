@@ -7,6 +7,7 @@ import {
 } from '@/lib/services/m365/digest/digestWindow';
 import { normalizeUserSkills } from '@/lib/services/skills/userSkills';
 
+import type { AddSourceId } from '@/lib/utils/app/addToChat';
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import {
@@ -950,6 +951,14 @@ interface SettingsStore {
   m365PickerLocation: M365PickerLocation | null;
   setM365PickerLocation: (location: M365PickerLocation | null) => void;
 
+  /**
+   * The source the "Add to chat" picker was last used on, so it reopens
+   * there. null = this device. Validated on read (a source can be switched
+   * off between sessions), so a stale value is harmless.
+   */
+  addToChatLastSource: AddSourceId | null;
+  setAddToChatLastSource: (source: AddSourceId | null) => void;
+
   // Reset
   resetSettings: () => void;
 }
@@ -1162,6 +1171,7 @@ export const useSettingsStore = create<SettingsStore>()(
       m365SaveDestination: null,
       m365SaveSkipPicker: false,
       m365PickerLocation: null,
+      addToChatLastSource: null,
       suggestRevisions: true,
       suggestRevisionsExceptions: {
         largeRewrites: true,
@@ -2060,6 +2070,7 @@ export const useSettingsStore = create<SettingsStore>()(
       setM365SaveSkipPicker: (skip) => set({ m365SaveSkipPicker: skip }),
       setM365PickerLocation: (location) =>
         set({ m365PickerLocation: location }),
+      setAddToChatLastSource: (source) => set({ addToChatLastSource: source }),
 
       setSuggestRevisionsException: (key, enabled) =>
         set((state) => ({
@@ -2285,6 +2296,7 @@ export const useSettingsStore = create<SettingsStore>()(
         m365SaveDestination: state.m365SaveDestination,
         m365SaveSkipPicker: state.m365SaveSkipPicker,
         m365PickerLocation: state.m365PickerLocation,
+        addToChatLastSource: state.addToChatLastSource,
         suggestRevisionsExceptions: state.suggestRevisionsExceptions,
         suggestRevisionsLargeRewriteRatio:
           state.suggestRevisionsLargeRewriteRatio,
