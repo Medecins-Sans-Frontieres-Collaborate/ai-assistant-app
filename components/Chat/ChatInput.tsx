@@ -25,6 +25,7 @@ import { useMessageSender } from '@/client/hooks/chat/useMessageSender';
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useTones } from '@/client/hooks/settings/useTones';
+import { useBudgetGate } from '@/client/hooks/settings/useUsageBudgets';
 import { useTranscriptionPolling } from '@/client/hooks/transcription/useTranscriptionPolling';
 import { usePromptSelection } from '@/client/hooks/ui/usePromptSelection';
 
@@ -229,6 +230,8 @@ export const ChatInput = ({
     setUsedPromptVariables,
   });
 
+  const budgetGate = useBudgetGate();
+
   const [variables, setVariables] = useState<string[]>([]);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedPromptForModal, setSelectedPromptForModal] =
@@ -307,10 +310,16 @@ export const ChatInput = ({
     updatePromptListVisibilityCallback(value);
   };
 
-  const handleSend = () => {
+  /**
+   * Sends the composer's message, unless a personal budget holds it for
+   * confirmation or refuses it (useBudgetGate).
+   *
+   * @returns true when the message was sent now.
+   */
+  const handleSend = (): boolean => {
     // While streaming the message is QUEUED (useChatActions.handleSend) and
     // sent when the response finishes — no more waiting on the composer.
-    handleMessageSend();
+    if (!budgetGate.guard(handleMessageSend)) return false;
 
     if (
       window.innerWidth < UI_CONSTANTS.BREAKPOINTS.MOBILE &&
@@ -318,6 +327,7 @@ export const ChatInput = ({
     ) {
       textareaRef.current.blur();
     }
+    return true;
   };
 
   const handleStopConversation = () => {
@@ -339,7 +349,9 @@ export const ChatInput = ({
       !event.ctrlKey
     ) {
       event.preventDefault();
-      handleSend();
+      // A held or refused send keeps the draft exactly as it is, attachments
+      // included, so the reset below must not run for it.
+      if (!handleSend()) return;
       if (submitType !== 'TEXT') {
         setSubmitType('TEXT');
       }
@@ -494,6 +506,10 @@ export const ChatInput = ({
 
   const preventSubmission = (): boolean => {
     if (isTranscriptionLocked) return true;
+    // Stopped: the budget's "stop" stage is reached. Holding: a send is
+    // waiting on the "ask first" confirmation, and the draft it captured
+    // must not change underneath it.
+    if (budgetGate.isStopped || budgetGate.isHolding) return true;
     if (
       shouldPreventSubmission(
         isTranscribing,
@@ -518,11 +534,13 @@ export const ChatInput = ({
     return false;
   };
 
-  const inputPlaceholder = isTranscribing
-    ? t('transcribingChatPlaceholder')
-    : searchMode === SearchMode.ALWAYS
-      ? 'Search the web'
-      : placeholderText;
+  const inputPlaceholder = budgetGate.isStopped
+    ? t('usageBudgets.composerPaused')
+    : isTranscribing
+      ? t('transcribingChatPlaceholder')
+      : searchMode === SearchMode.ALWAYS
+        ? 'Search the web'
+        : placeholderText;
 
   // Any forced-mode/tone badge expands the composer into its two-row
   // layout: taller container, textarea padded above, badges on their own
