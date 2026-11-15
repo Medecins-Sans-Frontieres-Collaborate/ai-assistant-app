@@ -2268,20 +2268,18 @@
     "sectionPinned": "ተያይዞ የታመደ",
     "sectionFrequent": "በተደጋጋሚ የሚጠቀመው",
     "sectionMore": "ተጨማሪ",
-    "categoryWeb": "ዌብ",
-    "categoryMedia": "ሚዲያና ፋይሎች",
-    "categoryTransform": "መለወጥ",
     "pin": "ከፍ ላይ አስረግፍ",
     "unpin": "ከዚህ አልቀም",
     "moveToMore": "ወደ 'ተጨማሪ' አንቀሳቅስ",
     "moveOutOfMore": "በምናሌ አሳይ",
     "showSources": "ሌሎች ምንጮችን አሳይ",
     "hideSources": "ሌሎች ምንጮችን ደብቅ",
-    "aiTools": "AI መሳሪያዎች",
-    "aiToolsTooltip": "አጋሩ በመስጠት የሚጠቀሙት ችሎታዎች፡ live web search, code execution, እና የተገናኘ አገልግሎቶች።",
     "codeInterpreterTooltip": "ነጻነት ያለው ሲንዳቦክስ ውስጥ ለእያንዳንዱ መልእክት Python code አስኬድ።\n\nለውሂብ ትንተና፣ ስሌትና ከተያያዙ ፋይሎች ጋር ግብዓቶች ማቀናበር በጣም ይጠቅማል።",
-    "categoryTools": "መሳሪያዎች እና የማገናኛ አባላት",
-    "translationConversationTitle": "ትርጉም፡ {filename}"
+    "translationConversationTitle": "ትርጉም፡ {filename}",
+    "categoryAdd": "ያክሉ",
+    "categoryDo": "ይዉዱ",
+    "categoryChat": "በዚህ ውይይት",
+    "categoryStart": "ከ... ጀምር"
   },
   "transcription": {
     "transcribesOnSend": "በመላክ ጊዜ ይቀዳል",
@@ -8288,5 +8286,56 @@
     "pageOf": "ገጽ {page} ከ {total}",
     "enlarge": "{name}ን የማትዋላት",
     "truncated": "የመጀመሪያ {shown} ከ {total} ገጾች ታየ። ቀሪውን ለማየት ፋይሉን ያውርዱ።"
+  },
+  "addToChat": {
+    "title": "ወደ ውይይት ያክሉ",
+    "titleTranslate": "ሰነድ ይተረጉሙ",
+    "titleTranscribe": "ድምፅ ወይም ቪዲዮ ያስተርጓሙ",
+    "sourcesLabel": "ይያዙ ከ",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "ለዚህ ተግባር የለም",
+    "sources": {
+      "device": "ይህ መሣሪያ",
+      "link": "አገናኝ",
+      "camera": "ካሜራ",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ኢ-ሜይል",
+      "meetings": "ስብሰባዎች"
+    },
+    "device": {
+      "browse": "በዚህ መሣሪያ ይመልከቱ",
+      "dropHint": "ወይም ፋይሎችን በዚህ መስክ ላይ ያዝዙ፣ ወይም ይላጩ",
+      "rejected": "ከእነዚህ ፋይሎች ማንኛውም አይቻልም።",
+      "hint": {
+        "attach": "ሰነዶች፣ ምስሎች፣ ድምፅና ቪዲዮ.",
+        "translate": "አንድ ሰነድ፡ Word፣ Excel፣ PowerPoint፣ PDF፣ HTML ወይም የጽሑፍ.",
+        "transcribe": "ድምፅ ወይም ቪዲዮ። መልኩን ሲልኩ ይተርጉማል።"
+      }
+    },
+    "selection": {
+      "then": "ከዚያ",
+      "intents": {
+        "attach": "ያካትቱ",
+        "translate": "ይተረጉሙ",
+        "transcribe": "ያስተርጓሙ"
+      },
+      "confirm": {
+        "attach": "ያክሉ",
+        "translate": "ይተረጉሙ",
+        "transcribe": "ያስተርጓሙ"
+      },
+      "unfit": {
+        "attach": "እነዚህ ፋይሎች ማካተት አይችሉም",
+        "translate": "አንድ ሰነድ ብቻ ይተረጉማል",
+        "transcribe": "ድምፅና ቪዲዮ ብቻ ሊተረጉም ይችላል"
+      }
+    },
+    "menu": {
+      "addToChatNote": "ይህ መሣሪያ፣ አገናኞች፣ Microsoft 365",
+      "filesOrPhotos": "ፋይሎች ወይም ፎቶዎች",
+      "fromThisDevice": "ከዚህ መሣሪያ",
+      "connect": "Microsoft 365 ያገናኙ",
+      "connectNote": "ከOneDrive፣ ኢ-ሜይልና ስብሰባዎች ይያዙ"
+    }
   }
 }

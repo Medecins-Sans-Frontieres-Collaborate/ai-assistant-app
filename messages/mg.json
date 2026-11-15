@@ -2342,20 +2342,18 @@
     "sectionPinned": "Nampirina",
     "sectionFrequent": "Ampiasa matetika",
     "sectionMore": "Bebe kokoa",
-    "categoryWeb": "Web",
-    "categoryMedia": "Media & antontan-taratasy",
-    "categoryTransform": "Transform",
     "pin": "Apetraka an-tampony",
     "unpin": "Esorina amin'ny tampony",
     "moveToMore": "Alefa any amin'ny \"Bebe kokoa\"",
     "moveOutOfMore": "Asehoy amin'ny sakafo",
     "showSources": "Asehoy ireo loharano hafa",
     "hideSources": "Afeno ireo loharano hafa",
-    "aiTools": "Fitaovana AI",
-    "aiToolsTooltip": "Fahaiza-manao azon’ny assistant ampiasaina amin’ny famaliana: fikarohana an-tserasera mivantana, fanatanterahana kaody, ary tolotra mifandray.",
     "codeInterpreterTooltip": "Alefa ny kaody Python ao anaty sandbox azo antoka amin’ny hafatra tsirairay.\n\nTena mety amin’ny famakafakana angona, kajy, ary famoronana tabilao avy amin’ny rakitra ampidirina.",
-    "categoryTools": "Fitaovana sy mpifandray",
-    "translationConversationTitle": "Dikan-teny: {filename}"
+    "translationConversationTitle": "Dikan-teny: {filename}",
+    "categoryAdd": "Ampio",
+    "categoryDo": "Ataovy",
+    "categoryChat": "Ao amin'ity resaka ity",
+    "categoryStart": "Atombohy amin'ny"
   },
   "transcription": {
     "transcribesOnSend": "Mandika rehefa alefa",
@@ -8272,5 +8270,56 @@
     "pageOf": "Pejy {page} amin'ny {total}",
     "truncated": "Aseho ny {shown} voalohany amin'ny pejy {total}. Ampidino ny rakitra raha hijery ny ambiny.",
     "enlarge": "Hanitatra an'i {name}"
+  },
+  "addToChat": {
+    "title": "Ampio ao amin'ny resaka",
+    "titleTranslate": "Adikao ny antontan-taratasy",
+    "titleTranscribe": "Handika feo na lahatsary",
+    "sourcesLabel": "Ampio avy amin'ny",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Tsy misy amin'ity asa ity",
+    "sources": {
+      "device": "Ity fitaovana ity",
+      "link": "Rohy",
+      "camera": "Fakan-tsary",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Mailaka",
+      "meetings": "Fivoriana"
+    },
+    "device": {
+      "browse": "Hijery amin'ity fitaovana ity",
+      "dropHint": "na atsobohy eto amin'ity varavarankely ity ny rakitra, na afeho",
+      "rejected": "Tsy misy amin'ireo rakitra ireo azo ampiasaina eto.",
+      "hint": {
+        "attach": "Antontan-taratasy, sary, feo ary lahatsary.",
+        "translate": "Antontan-taratasy iray: Word, Excel, PowerPoint, PDF, HTML na lahatsoratra.",
+        "transcribe": "Feo na lahatsary. Hafindra ho soratra rehefa alefa ny hafatra."
+      }
+    },
+    "selection": {
+      "then": "Avy eo",
+      "intents": {
+        "attach": "Ampiditra",
+        "translate": "Adikao",
+        "transcribe": "Afindra ho soratra"
+      },
+      "confirm": {
+        "attach": "Ampio",
+        "translate": "Adikao",
+        "transcribe": "Afindra ho soratra"
+      },
+      "unfit": {
+        "attach": "Tsy afaka ampiditra ireo rakitra ireo",
+        "translate": "Antontan-taratasy iray ihany no azona adika amin'ny fotoana iray",
+        "transcribe": "Feo sy lahatsary ihany no azo afindra ho soratra"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Ity fitaovana ity, rohy, Microsoft 365",
+      "filesOrPhotos": "Rakitra na sary",
+      "fromThisDevice": "Avy amin'ity fitaovana ity",
+      "connect": "Ampifandraiso amin'ny Microsoft 365",
+      "connectNote": "Ampio avy amin'ny OneDrive, mailaka sy fivoriana"
+    }
   }
 }

@@ -2342,20 +2342,18 @@
     "sectionPinned": "Pine",
     "sectionFrequent": "Pi souvan itilize",
     "sectionMore": "Plis",
-    "categoryWeb": "Web",
-    "categoryMedia": "Medya & fichye",
-    "categoryTransform": "Transfòme",
     "pin": "Mete anwo",
     "unpin": "Retire soti anwo",
     "moveToMore": "Mete nan Plis",
     "moveOutOfMore": "Montre nan meni an",
     "showSources": "Montre lòt sous",
     "hideSources": "Kache lòt sous",
-    "aiTools": "Zouti AI",
-    "aiToolsTooltip": "Sa asistans lan ka itilize pandan li reponn: rechèch web an dirèk, ekzekisyon kòd, ak sèvis konekte.",
     "codeInterpreterTooltip": "Kouri kòd Python nan yon sandbox ki an sekirite pou chak mesaj.\n\nIdeyal pou analiz done, kalkil, ak kreye grafik soti nan fichye atache.",
-    "categoryTools": "Zouti ak konektè",
-    "translationConversationTitle": "Tradiksyon: {filename}"
+    "translationConversationTitle": "Tradiksyon: {filename}",
+    "categoryAdd": "Ajoute",
+    "categoryDo": "Fè",
+    "categoryChat": "Nan chat sa a",
+    "categoryStart": "Kòmanse avèk"
   },
   "transcription": {
     "transcribesOnSend": "Transkri lè voye",
@@ -8272,5 +8270,56 @@
     "pageOf": "Paj {page} sou {total}",
     "truncated": "Ap montre {shown} premye paj sou {total}. Telechaje fichye a pou w ka wè rès la.",
     "enlarge": "Elaji {name}"
+  },
+  "addToChat": {
+    "title": "Ajoute nan chat",
+    "titleTranslate": "Tradui yon dokiman",
+    "titleTranscribe": "Transkri odyo oswa videyo",
+    "sourcesLabel": "Ajoute soti nan",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Pa disponib pou aksyon sa a",
+    "sources": {
+      "device": "Aparèy sa a",
+      "link": "Lyèn",
+      "camera": "Kamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Imèl",
+      "meetings": "Reyinyon"
+    },
+    "device": {
+      "browse": "Browse aparèy sa a",
+      "dropHint": "oswa glise fichye nenpòt kote nan fenèt sa a, oswa kole",
+      "rejected": "Okenn nan fichye sa yo pa ka itilize isit la.",
+      "hint": {
+        "attach": "Dokiman, imaj, odyo ak videyo.",
+        "translate": "Yon dokiman: Word, Excel, PowerPoint, PDF, HTML oswa tèks.",
+        "transcribe": "Odyo oswa videyo. Li transkri lè ou voye mesaj la."
+      }
+    },
+    "selection": {
+      "then": "Apre sa",
+      "intents": {
+        "attach": "Anex",
+        "translate": "Tradui",
+        "transcribe": "Transkri"
+      },
+      "confirm": {
+        "attach": "Ajoute",
+        "translate": "Tradui",
+        "transcribe": "Transkri"
+      },
+      "unfit": {
+        "attach": "Fichye sa yo pa ka anexé",
+        "translate": "Tradiksyon pran yon dokiman a la fwa",
+        "transcribe": "Sèlman odyo ak videyo ka transkri"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Aparèy sa a, lyèn, Microsoft 365",
+      "filesOrPhotos": "Fichye oswa foto",
+      "fromThisDevice": "Soti nan aparèy sa a",
+      "connect": "Konekte Microsoft 365",
+      "connectNote": "Ajoute soti nan OneDrive, imèl ak reyinyon"
+    }
   }
 }

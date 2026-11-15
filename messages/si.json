@@ -2420,20 +2420,18 @@
     "sectionPinned": "ඉවිත",
     "sectionFrequent": "නිති භාවිතා කරන",
     "sectionMore": "තවත්",
-    "categoryWeb": "වෙබ්",
-    "categoryMedia": "මාධ්‍ය සහ ගොනු",
-    "categoryTransform": "පරිවර්තනය",
     "pin": "ඉහළට ඉවින්න",
     "unpin": "ඉවිත ඉවත් කරන්න",
     "moveToMore": "\"තවත්\" වෙත ගෙන යන්න",
     "moveOutOfMore": "මෙනුවේ පෙන්වන්න",
     "showSources": "වෙනත් මූලාශ්‍ර පෙන්වන්න",
     "hideSources": "වෙනත් මූලාශ්‍ර සඟවන්න",
-    "aiTools": "AI මෙවලම්",
-    "aiToolsTooltip": "උත්තර ලබාදීමට සහාය ලබාදෙන හැකියාවන්: සජීවි වෙබ් සෙවුම්, කේත ක්‍රියාත්මක කිරීම සහ සම්බන්ධිත සේවා.",
     "codeInterpreterTooltip": "එදා ඕනෑම පණිවිඩයක Python කේතයක් ආරක්ෂිත sandbox එකක ක්‍රියාත්මක කරන්න.\n\nඇමුණුම් කළ ගොනු වලින් දත්ත විශ්ලේෂණය, ගණනය සහ ආකෘති නිර්මාණය සඳහා සුදුසුය.",
-    "categoryTools": "මෙවලම් සහ සම්බන්ධක",
-    "translationConversationTitle": "පරිවර්තනය: {filename}"
+    "translationConversationTitle": "පරිවර්තනය: {filename}",
+    "categoryAdd": "එක් කරන්න",
+    "categoryDo": "කිරීමට",
+    "categoryChat": "මෙම සංවාදයේ",
+    "categoryStart": "ආරම්භ කරන්න"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI එකේ ප්‍රතිචාර ගැලපෙන්න ඔබගේ පුද්ගලික උපදෙස් එක් කරන්න. මෙවා උදව්कारी, නිවැරදි සහ නිසි ආරක්ෂාවක් ඇති ප්‍රතිචාර ගෙදීමට වන මූලික හැසිරීම් මාර්ගෝපදේශ සමඟ ඒකාබද්ධ වේ.",
   "Tip: Type \"/\" to select from saved prompt templates_": "ඉඟිය: සුරක්ෂිත උත්ප්‍රේරණ සැදීම් තෝරා ගැනීමට \"/\" ටයිප් කරන්න.",
@@ -8288,5 +8286,56 @@
     "pageOf": "පිටුව {page} / {total}",
     "truncated": "පළමු පිටු {shown} / {total} පෙන්වයි. ඉතිරි ඒවා බැලීමට ගොනුව බාගන්න.",
     "enlarge": "{name} විශාල කරන්න"
+  },
+  "addToChat": {
+    "title": "සංවාදයට එක් කරන්න",
+    "titleTranslate": " ලේඛනය පරිවර්තනය කරන්න",
+    "titleTranscribe": "ශ්‍රව්‍ය හෝ දෘශ්‍ය ලිවීම",
+    "sourcesLabel": "මේ ලබා ගන්න",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "මෙම ක්‍රියාව සඳහා නොමැත",
+    "sources": {
+      "device": "මෙම උපාංගය",
+      "link": "සබැඳි",
+      "camera": "කැමරා",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ඊමේල්",
+      "meetings": "රැස්වීම්"
+    },
+    "device": {
+      "browse": "මෙම උපාංගය සොයා බලන්න",
+      "dropHint": "හෝ මෙම කවුළුවට ගොනු ඇද දමන්න, හෝ ඇලවන්න",
+      "rejected": "මෙහි යොදා ගතහැකි ගොනු නැත.",
+      "hint": {
+        "attach": "ලේඛන, පින්තූර, ශ්‍රව්‍ය සහ දෘශ්‍ය.",
+        "translate": "එක ලේඛනයක්: Word, Excel, PowerPoint, PDF, HTML හෝ පෙළ.",
+        "transcribe": "ශ්‍රව්‍ය හෝ දෘශ්‍යය. ඔබේ පණිවිඩය යවන්නට පසු ලිවීම සිදු කෙරේ."
+      }
+    },
+    "selection": {
+      "then": "එවිට",
+      "intents": {
+        "attach": "ඇමුණුම් කරන්න",
+        "translate": "පරිවර්තනය කරන්න",
+        "transcribe": "ලිවීම කරන්න"
+      },
+      "confirm": {
+        "attach": "එක් කරන්න",
+        "translate": "පරිවර්තනය කරන්න",
+        "transcribe": "ලිවීම කරන්න"
+      },
+      "unfit": {
+        "attach": "මෙම ගොනු අමුණන්න නොහැක",
+        "translate": "පරිවර්තනය කිරීම සඳහා එක් වාරයක ලේඛනයක් පමණි",
+        "transcribe": "ශ්‍රව්‍ය හා දෘශ්‍ය පමණක් ලිවිය හැක"
+      }
+    },
+    "menu": {
+      "addToChatNote": "මෙම උපාංගය, සබැඳි, Microsoft 365",
+      "filesOrPhotos": "ගොනු හෝ පින්තූර",
+      "fromThisDevice": "මෙම උපාංගයෙන්",
+      "connect": "Microsoft 365 සම්බන්ධ කරන්න",
+      "connectNote": "OneDrive, ඊමේල් සහ රැස්වීම්වලින් ලබා ගන්න"
+    }
   }
 }

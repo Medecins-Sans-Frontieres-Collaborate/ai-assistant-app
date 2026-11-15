@@ -2420,20 +2420,18 @@
     "sectionPinned": "נעוץ",
     "sectionFrequent": "בשימוש תדיר",
     "sectionMore": "עוד",
-    "categoryWeb": "ווב",
-    "categoryMedia": "מדיה וקבצים",
-    "categoryTransform": "המרה",
     "pin": "נעץ בחלק העליון",
     "unpin": "הסר נעיצה",
     "moveToMore": "העבר ל'עוד'",
     "moveOutOfMore": "הצג בתפריט",
     "showSources": "הצג מקורות נוספים",
     "hideSources": "הסתר מקורות נוספים",
-    "aiTools": "כלי AI",
-    "aiToolsTooltip": "יכולות שהעוזר יכול להשתמש בהן כאשר עונה: חיפוש אינטרנט חי, הרצת קוד, ושירותים מחוברים.",
     "codeInterpreterTooltip": "הרץ קוד Python בסביבה מאובטחת לכל הודעה.\n\nמעולה לניתוח נתונים, חישובים ויצירת גרפים מקבצים מצורפים.",
-    "categoryTools": "כלים ומחברים",
-    "translationConversationTitle": "תרגום: {filename}"
+    "translationConversationTitle": "תרגום: {filename}",
+    "categoryAdd": "הוסף",
+    "categoryDo": "בצע",
+    "categoryChat": "בצ'אט זה",
+    "categoryStart": "התחל מ"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "הוסיפו הוראות אישיות כדי להתאים את תגובת הבינה המלאכותית. הוראות אלו משולבות עם הנחיות ליבה שמבטיחות תגובות מועילות, מדויקות ובטוחות.",
   "Tip: Type \"/\" to select from saved prompt templates_": "עצה: הקלידו \"/\" כדי לבחור מהתבניות השמורות.",
@@ -8288,5 +8286,56 @@
     "pageOf": "עמוד {page} מתוך {total}",
     "truncated": "מוצגים {shown} העמודים הראשונים מתוך {total}. להורדת שאר הדפים יש להוריד את הקובץ.",
     "enlarge": "הגדל את {name}"
+  },
+  "addToChat": {
+    "title": "הוסף לצ'אט",
+    "titleTranslate": "תרגם מסמך",
+    "titleTranscribe": "תמלל אודיו או וידאו",
+    "sourcesLabel": "הוסף מ",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "לא זמין לפעולה זו",
+    "sources": {
+      "device": "מכשיר זה",
+      "link": "קישור",
+      "camera": "מצלמה",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "דוא\"ל",
+      "meetings": "פגישות"
+    },
+    "device": {
+      "browse": "עיין במכשיר זה",
+      "dropHint": "או גרור קבצים לכל מקום בחלון זה, או הדבק",
+      "rejected": "אף אחד מהקבצים האלו לא ניתן לשימוש כאן.",
+      "hint": {
+        "attach": "מסמכים, תמונות, אודיו ווידאו.",
+        "translate": "מסמך אחד: Word, Excel, PowerPoint, PDF, HTML או טקסט.",
+        "transcribe": "אודיו או וידאו. יתומלל לאחר שליחת ההודעה."
+      }
+    },
+    "selection": {
+      "then": "לאחר מכן",
+      "intents": {
+        "attach": "צרף",
+        "translate": "תרגם",
+        "transcribe": "תמלל"
+      },
+      "confirm": {
+        "attach": "הוסף",
+        "translate": "תרגם",
+        "transcribe": "תמלל"
+      },
+      "unfit": {
+        "attach": "קבצים אלה לא ניתנים לצירוף",
+        "translate": "ניתן לתרגם מסמך אחד בכל פעם",
+        "transcribe": "ניתן לתמלל רק אודיו ווידאו"
+      }
+    },
+    "menu": {
+      "addToChatNote": "מכשיר זה, קישורים, Microsoft 365",
+      "filesOrPhotos": "קבצים או תמונות",
+      "fromThisDevice": "מהמכשיר הזה",
+      "connect": "חבר Microsoft 365",
+      "connectNote": "הוסף מ-OneDrive, דוא\"ל ופגישות"
+    }
   }
 }

@@ -2342,20 +2342,18 @@
     "sectionPinned": "La xardhay",
     "sectionFrequent": "La isticmaalo badanaa",
     "sectionMore": "Inta kale",
-    "categoryWeb": "Web",
-    "categoryMedia": "Warbaahin & Faylal",
-    "categoryTransform": "Beddel",
     "pin": "Ku xarri gali sare",
     "unpin": "Ka saar xarriga",
     "moveToMore": "U raaricinta 'Inta kale'",
     "moveOutOfMore": "Ku soo bandhig menu-ga",
     "showSources": "Tus ilo kale",
     "hideSources": "Qari ilo kale",
-    "aiTools": "AI Tools",
-    "aiToolsTooltip": "Awoodaha kaaliyaha uu adeegsan karo marka uu ka jawaabayo: raadinta webka tooska ah, fulinta koodhka, iyo adeegyo ku xiran.",
     "codeInterpreterTooltip": "Orod koodh Python ah meel ammaan ah fariin kastaba.\n\nKu habboon falanqaynta xogta, xisaabinta, iyo sawir-garayn laga sameeyo faylasha ku lifaaqan.",
-    "categoryTools": "Qalabka & xirmooyinka",
-    "translationConversationTitle": "Turjumaad: {filename}"
+    "translationConversationTitle": "Turjumaad: {filename}",
+    "categoryAdd": "Ku dar",
+    "categoryDo": "Samee",
+    "categoryChat": "Wadahadalkan",
+    "categoryStart": "Ka bilow"
   },
   "transcription": {
     "transcribesOnSend": "Wuxuu qoraa marka la diro",
@@ -8272,5 +8270,56 @@
     "pageOf": "Bogga {page} ee {total}",
     "truncated": "Waxaad arkeysaa {shown} boggii ugu horreeyay ee {total}. Faylka soo degso si aad ugu aragto inta kale.",
     "enlarge": "Weyne {name}"
+  },
+  "addToChat": {
+    "title": "Ku dar wada hadalka",
+    "titleTranslate": "U tarjum dukumenti",
+    "titleTranscribe": "Qor cod ama muuqaal",
+    "sourcesLabel": "Ka dar",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Tallaabadan looma heli karo",
+    "sources": {
+      "device": "Qalabkan",
+      "link": "Xiriir",
+      "camera": "Kamarad",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Email",
+      "meetings": "Kulammo"
+    },
+    "device": {
+      "browse": "Baadh qalabkan",
+      "dropHint": "ama faylasha meel kasta halkaan dhig, ama dhaji",
+      "rejected": "Midna faylashan lagama isticmaali karo halkan.",
+      "hint": {
+        "attach": "Dukumentiyo, sawirro, cod iyo muuqaal.",
+        "translate": "Hal dukumenti: Word, Excel, PowerPoint, PDF, HTML ama qoraal.",
+        "transcribe": "Cod ama muuqaal. Waxa la qoraa markaad farriinta dirto."
+      }
+    },
+    "selection": {
+      "then": "Markaas",
+      "intents": {
+        "attach": "Xidho",
+        "translate": "Tarjum",
+        "transcribe": "Qor"
+      },
+      "confirm": {
+        "attach": "Ku dar",
+        "translate": "Tarjum",
+        "transcribe": "Qor"
+      },
+      "unfit": {
+        "attach": "Faylashaan lama xidhi karo",
+        "translate": "Tarjumidu hal dukumenti mar bay qaadataa",
+        "transcribe": "Kaliya cod iyo muuqaal baa la qori karaa"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Qalabkan, xiriirro, Microsoft 365",
+      "filesOrPhotos": "Faylal ama sawirro",
+      "fromThisDevice": "Qalabkan laga bilaabo",
+      "connect": "Ku xidh Microsoft 365",
+      "connectNote": "Ka dar OneDrive, email iyo kulammo"
+    }
   }
 }

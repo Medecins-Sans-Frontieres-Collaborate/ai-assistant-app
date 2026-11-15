@@ -2420,20 +2420,18 @@
     "sectionPinned": "In evidenza",
     "sectionFrequent": "Usati frequentemente",
     "sectionMore": "Altro",
-    "categoryWeb": "Web",
-    "categoryMedia": "Media e file",
-    "categoryTransform": "Trasforma",
     "pin": "Metti in alto",
     "unpin": "Rimuovi dalla cima",
     "moveToMore": "Sposta in Altro",
     "moveOutOfMore": "Mostra nel menu",
     "showSources": "Mostra altre fonti",
     "hideSources": "Nascondi altre fonti",
-    "aiTools": "Strumenti AI",
-    "aiToolsTooltip": "Funzionalità che l’assistente può utilizzare durante le risposte: ricerca web in tempo reale, esecuzione di codice e servizi collegati.",
     "codeInterpreterTooltip": "Esegui codice Python in un ambiente sicuro per ogni messaggio.\n\nIdeale per analisi dati, calcoli e generazione di grafici da file allegati.",
-    "categoryTools": "Strumenti e connettori",
-    "translationConversationTitle": "Traduzione: {filename}"
+    "translationConversationTitle": "Traduzione: {filename}",
+    "categoryAdd": "Aggiungi",
+    "categoryDo": "Esegui",
+    "categoryChat": "In questa chat",
+    "categoryStart": "Inizia da"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Aggiungi le tue istruzioni personali per personalizzare le risposte dell’IA. Queste si uniscono alle linee guida principali per garantire risposte utili, accurate e sicure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Suggerimento: digita \"/\" per selezionare tra i modelli di prompt salvati.",
@@ -8288,5 +8286,56 @@
     "pageOf": "Pagina {page} di {total}",
     "truncated": "Visualizzate le prime {shown} di {total} pagine. Scarica il file per vedere le altre.",
     "enlarge": "Ingrandisci {name}"
+  },
+  "addToChat": {
+    "title": "Aggiungi alla chat",
+    "titleTranslate": "Traduci un documento",
+    "titleTranscribe": "Trascrivi audio o video",
+    "sourcesLabel": "Aggiungi da",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Non disponibile per questa azione",
+    "sources": {
+      "device": "Questo dispositivo",
+      "link": "Link",
+      "camera": "Fotocamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Email",
+      "meetings": "Riunioni"
+    },
+    "device": {
+      "browse": "Sfoglia questo dispositivo",
+      "dropHint": "oppure trascina i file in questa finestra o incolla",
+      "rejected": "Nessuno di questi file può essere utilizzato qui.",
+      "hint": {
+        "attach": "Documenti, immagini, audio e video.",
+        "translate": "Un documento: Word, Excel, PowerPoint, PDF, HTML o testo.",
+        "transcribe": "Audio o video. Sarà trascritto quando invii il messaggio."
+      }
+    },
+    "selection": {
+      "then": "Quindi",
+      "intents": {
+        "attach": "Allega",
+        "translate": "Traduci",
+        "transcribe": "Trascrivi"
+      },
+      "confirm": {
+        "attach": "Aggiungi",
+        "translate": "Traduci",
+        "transcribe": "Trascrivi"
+      },
+      "unfit": {
+        "attach": "Questi file non possono essere allegati",
+        "translate": "La traduzione accetta un solo documento alla volta",
+        "transcribe": "Solo audio e video possono essere trascritti"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Questo dispositivo, link, Microsoft 365",
+      "filesOrPhotos": "File o foto",
+      "fromThisDevice": "Da questo dispositivo",
+      "connect": "Collega Microsoft 365",
+      "connectNote": "Aggiungi da OneDrive, email e riunioni"
+    }
   }
 }

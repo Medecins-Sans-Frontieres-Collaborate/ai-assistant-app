@@ -2420,20 +2420,18 @@
     "sectionPinned": "Fästa",
     "sectionFrequent": "Frekvent använda",
     "sectionMore": "Fler",
-    "categoryWeb": "Webb",
-    "categoryMedia": "Media & filer",
-    "categoryTransform": "Transformera",
     "pin": "Fäst längst upp",
     "unpin": "Ta bort fästning",
     "moveToMore": "Flytta till Fler",
     "moveOutOfMore": "Visa i menyn",
     "showSources": "Visa andra källor",
     "hideSources": "Dölj andra källor",
-    "aiTools": "AI-verktyg",
-    "aiToolsTooltip": "Funktioner assistenten kan använda vid svar: live webbsökning, kodkörning och anslutna tjänster.",
     "codeInterpreterTooltip": "Kör Python-kod i en säker sandlåda för varje meddelande.\n\nPerfekt för dataanalys, beräkningar och diagram från bifogade filer.",
-    "categoryTools": "Verktyg & kopplingar",
-    "translationConversationTitle": "Översättning: {filename}"
+    "translationConversationTitle": "Översättning: {filename}",
+    "categoryAdd": "Lägg till",
+    "categoryDo": "Gör",
+    "categoryChat": "I denna chatt",
+    "categoryStart": "Starta från"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lägg till dina egna instruktioner för att anpassa hur AI:n svarar. Dessa kombineras med grundläggande riktlinjer som säkerställer hjälpsamma, korrekta och säkra svar.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tips: Skriv \"/\" för att välja bland sparade promptmallar.",
@@ -8288,5 +8286,56 @@
     "pageOf": "Sida {page} av {total}",
     "truncated": "Visar de första {shown} av {total} sidor. Ladda ner filen för att se resten.",
     "enlarge": "Förstora {name}"
+  },
+  "addToChat": {
+    "title": "Lägg till i chatt",
+    "titleTranslate": "Översätt ett dokument",
+    "titleTranscribe": "Transkribera ljud eller video",
+    "sourcesLabel": "Lägg till från",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Ej tillgänglig för denna åtgärd",
+    "sources": {
+      "device": "Denna enhet",
+      "link": "Länk",
+      "camera": "Kamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "E-post",
+      "meetings": "Möten"
+    },
+    "device": {
+      "browse": "Bläddra på denna enhet",
+      "dropHint": "eller släpp filer var som helst i detta fönster, eller klistra in",
+      "rejected": "Ingen av dessa filer kan användas här.",
+      "hint": {
+        "attach": "Dokument, bilder, ljud och video.",
+        "translate": "Ett dokument: Word, Excel, PowerPoint, PDF, HTML eller text.",
+        "transcribe": "Ljud eller video. Transkriberas när du skickar meddelandet."
+      }
+    },
+    "selection": {
+      "then": "Sedan",
+      "intents": {
+        "attach": "Bifoga",
+        "translate": "Översätt",
+        "transcribe": "Transkribera"
+      },
+      "confirm": {
+        "attach": "Lägg till",
+        "translate": "Översätt",
+        "transcribe": "Transkribera"
+      },
+      "unfit": {
+        "attach": "Dessa filer kan inte bifogas",
+        "translate": "Översättning tar ett dokument åt gången",
+        "transcribe": "Endast ljud och video kan transkriberas"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Denna enhet, länkar, Microsoft 365",
+      "filesOrPhotos": "Filer eller foton",
+      "fromThisDevice": "Från denna enhet",
+      "connect": "Anslut Microsoft 365",
+      "connectNote": "Lägg till från OneDrive, e-post och möten"
+    }
   }
 }

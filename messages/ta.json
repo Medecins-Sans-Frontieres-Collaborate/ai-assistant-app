@@ -2342,20 +2342,18 @@
     "sectionPinned": "முடிநிலை",
     "sectionFrequent": "முறையே அதிகம் பயன்படுத்தப்பட்ட",
     "sectionMore": "மேலும்",
-    "categoryWeb": "இணையம்",
-    "categoryMedia": "ஊடகம் & கோப்புகள்",
-    "categoryTransform": "மாற்று",
     "pin": "மேலே இடு",
     "unpin": "முடிநிலை நீக்கு",
     "moveToMore": "மேலுமிற்கு நகர்த்து",
     "moveOutOfMore": "மெனுவில் காண்பி",
     "showSources": "மற்ற மூலங்களை காட்டவும்",
     "hideSources": "மற்ற மூலங்களை மறைக்கவும்",
-    "aiTools": "AI கருவிகள்",
-    "aiToolsTooltip": "உதவியாளர் பதில் அளிக்க பயன்படுத்தக்கூடிய திறன்கள்: நேரடி இணைய தேடல், கோட் செயல்படுத்தல், மற்றும் இணைக்கப்பட்ட சேவைகள்.",
     "codeInterpreterTooltip": "ஒவ்வொரு செய்திக்கும் Python கோடுகளை பாதுகாப்பான இடமடியில் இயக்கு.\n\nஏற்றது தரவுத்தள பகுப்பாய்வு, கணக்குகள், மற்றும் இணைக்கப்பட்ட கோப்புகளிலிருந்து படங்கள் உருவாக்கத்துக்கு.",
-    "categoryTools": "கருவிகள் & இணைப்பிகள்",
-    "translationConversationTitle": "மொழிபெயர்ப்பு: {filename}"
+    "translationConversationTitle": "மொழிபெயர்ப்பு: {filename}",
+    "categoryAdd": "சேர்",
+    "categoryDo": "செய்",
+    "categoryChat": "இந்த உரையாடலில்",
+    "categoryStart": "தொடங்கும் இடம்"
   },
   "transcription": {
     "transcribesOnSend": "அனுப்பும்போது எழுத்தாக்கம் செய்யும்",
@@ -8272,5 +8270,56 @@
     "pageOf": "பக்கம் {page}/{total}",
     "truncated": "முதலில் {shown} பக்கங்கள் மட்டும் காட்டப்படுகிறது (மொத்தம் {total}). மீதியைப் பார்க்க, கோப்பை பதிவிறக்கவும்.",
     "enlarge": "{name} பெரிதாக்கு"
+  },
+  "addToChat": {
+    "title": "உரையாடலில் சேர்க்கவும்",
+    "titleTranslate": "ஆவணத்தை மொழிபெயர்க்கவும்",
+    "titleTranscribe": "ஆடியோ அல்லது வீடியோ உரை மாற்றம்",
+    "sourcesLabel": "இடமிருந்து சேர்",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "இந்த செயலில் கிடைக்கவில்லை",
+    "sources": {
+      "device": "இந்த சாதனம்",
+      "link": "இணைப்பு",
+      "camera": "கேமரா",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "மின்னஞ்சல்",
+      "meetings": "சந்திப்புகள்"
+    },
+    "device": {
+      "browse": "இந்த சாதனத்தில் உலாவு",
+      "dropHint": "அல்லது இந்த சாளரத்தில் எங்கேயும் கோப்புகளை இழுக்கவும், இல்லைனா ஒட்டவும்",
+      "rejected": "இந்த கோப்புகள் எதையும் இங்கு பயன்படுத்த முடியாது.",
+      "hint": {
+        "attach": "ஆவணங்கள், படங்கள், ஆடியோ மற்றும் வீடியோ.",
+        "translate": "ஒரு ஆவணம் மாத்திரம்: Word, Excel, PowerPoint, PDF, HTML அல்லது உரை.",
+        "transcribe": "ஆடியோ அல்லது வீடியோ. நீங்கள் செய்தி அனுப்பும் போது அது உரையாக்கம் செய்யப்படும்."
+      }
+    },
+    "selection": {
+      "then": "பிறகு",
+      "intents": {
+        "attach": "இணை",
+        "translate": "மொழிபெயர்",
+        "transcribe": "உரையாக்கு"
+      },
+      "confirm": {
+        "attach": "சேர்",
+        "translate": "மொழிபெயர்",
+        "transcribe": "உரையாக்கு"
+      },
+      "unfit": {
+        "attach": "இந்த கோப்புகளை இணைக்க முடியாது",
+        "translate": "ஒரு முறையில் ஒரு ஆவணம் மட்டுமே மொழிபெயர்க்கலாம்",
+        "transcribe": "ஆடியோ மற்றும் வீடியோ மட்டுமே உரையாக்க முடியும்"
+      }
+    },
+    "menu": {
+      "addToChatNote": "இந்த சாதனம், இணைப்புகள், Microsoft 365",
+      "filesOrPhotos": "கோப்புகள் அல்லது படங்கள்",
+      "fromThisDevice": "இந்த சாதனத்திலிருந்து",
+      "connect": "Microsoft 365 ஐ இணை",
+      "connectNote": "OneDrive, மின்னஞ்சல் மற்றும் சந்திப்புகளிலிருந்து சேர்"
+    }
   }
 }

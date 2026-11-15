@@ -2420,20 +2420,18 @@
     "sectionPinned": "Vastgemaakt",
     "sectionFrequent": "Vaak gebruikt",
     "sectionMore": "Meer",
-    "categoryWeb": "Web",
-    "categoryMedia": "Media & bestanden",
-    "categoryTransform": "Transformeren",
     "pin": "Bovenaan vastmaken",
     "unpin": "Losmaken",
     "moveToMore": "Verplaatsen naar 'Meer'",
     "moveOutOfMore": "Tonen in menu",
     "showSources": "Andere bronnen weergeven",
     "hideSources": "Andere bronnen verbergen",
-    "aiTools": "AI-tools",
-    "aiToolsTooltip": "Mogelijkheden die de assistent kan gebruiken tijdens antwoorden: live webzoekopdrachten, code-uitvoering en verbonden services.",
     "codeInterpreterTooltip": "Voer Python-code uit in een beveiligde sandbox voor elk bericht.\n\nIdeaal voor data-analyse, berekeningen en het genereren van grafieken uit bijlagen.",
-    "categoryTools": "Tools & connectors",
-    "translationConversationTitle": "Vertaling: {filename}"
+    "translationConversationTitle": "Vertaling: {filename}",
+    "categoryAdd": "Toevoegen",
+    "categoryDo": "Uitvoeren",
+    "categoryChat": "In deze chat",
+    "categoryStart": "Begin vanaf"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Voeg uw persoonlijke instructies toe om aan te passen hoe de AI reageert. Deze worden gecombineerd met de basisrichtlijnen om behulpzame, nauwkeurige en veilige antwoorden te garanderen.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Typ \"/\" om te kiezen uit opgeslagen promptsjablonen.",
@@ -8288,5 +8286,56 @@
     "pageOf": "Pagina {page} van {total}",
     "truncated": "Eerste {shown} van {total} pagina's worden getoond. Download het bestand om de rest te zien.",
     "enlarge": "Vergroot {name}"
+  },
+  "addToChat": {
+    "title": "Aan chat toevoegen",
+    "titleTranslate": "Vertaal een document",
+    "titleTranscribe": "Transcribeer audio of video",
+    "sourcesLabel": "Toevoegen vanuit",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Niet beschikbaar voor deze actie",
+    "sources": {
+      "device": "Dit apparaat",
+      "link": "Link",
+      "camera": "Camera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "E-mail",
+      "meetings": "Vergaderingen"
+    },
+    "device": {
+      "browse": "Blader op dit apparaat",
+      "dropHint": "of zet bestanden ergens in dit venster, of plak",
+      "rejected": "Geen van deze bestanden kan hier worden gebruikt.",
+      "hint": {
+        "attach": "Documenten, afbeeldingen, audio en video.",
+        "translate": "Eén document: Word, Excel, PowerPoint, PDF, HTML of tekst.",
+        "transcribe": "Audio of video. Wordt getranscribeerd bij het verzenden van het bericht."
+      }
+    },
+    "selection": {
+      "then": "Vervolgens",
+      "intents": {
+        "attach": "Bijvoegen",
+        "translate": "Vertalen",
+        "transcribe": "Transcriberen"
+      },
+      "confirm": {
+        "attach": "Toevoegen",
+        "translate": "Vertalen",
+        "transcribe": "Transcriberen"
+      },
+      "unfit": {
+        "attach": "Deze bestanden kunnen niet worden bijgevoegd",
+        "translate": "Vertalen kan slechts één document per keer",
+        "transcribe": "Alleen audio en video kunnen worden getranscribeerd"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Dit apparaat, links, Microsoft 365",
+      "filesOrPhotos": "Bestanden of foto's",
+      "fromThisDevice": "Van dit apparaat",
+      "connect": "Microsoft 365 koppelen",
+      "connectNote": "Toevoegen vanuit OneDrive, e-mail en vergaderingen"
+    }
   }
 }

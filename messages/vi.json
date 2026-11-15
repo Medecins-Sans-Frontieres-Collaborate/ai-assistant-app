@@ -2451,20 +2451,18 @@
     "sectionPinned": "Đã ghim",
     "sectionFrequent": "Thường dùng",
     "sectionMore": "Thêm",
-    "categoryWeb": "Web",
-    "categoryMedia": "Phương tiện & tệp",
-    "categoryTransform": "Biến đổi",
     "pin": "Ghim lên trên",
     "unpin": "Bỏ ghim",
     "moveToMore": "Chuyển vào mục Thêm",
     "moveOutOfMore": "Hiển thị trong menu",
     "showSources": "Hiển thị các nguồn khác",
     "hideSources": "Ẩn các nguồn khác",
-    "aiTools": "Công cụ AI",
-    "aiToolsTooltip": "Các khả năng trợ lý có thể sử dụng khi trả lời: tìm kiếm trực tiếp trên web, thực thi mã, và các dịch vụ kết nối.",
     "codeInterpreterTooltip": "Chạy mã Python trong môi trường an toàn cho mỗi tin nhắn.\n\nPhù hợp cho phân tích dữ liệu, tính toán, và tạo biểu đồ từ các tệp đính kèm.",
-    "categoryTools": "Công cụ & kết nối",
-    "translationConversationTitle": "Dịch: {filename}"
+    "translationConversationTitle": "Dịch: {filename}",
+    "categoryAdd": "Thêm",
+    "categoryDo": "Thực hiện",
+    "categoryChat": "Trong cuộc trò chuyện này",
+    "categoryStart": "Bắt đầu từ"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Thêm hướng dẫn cá nhân của bạn để tùy chỉnh cách AI phản hồi. Các hướng dẫn này sẽ được kết hợp với các quy tắc hành vi cốt lõi nhằm đảm bảo phản hồi hữu ích, chính xác và an toàn.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Mẹo: Gõ \"/\" để chọn từ các mẫu gợi ý đã lưu.",
@@ -8319,5 +8317,56 @@
     "pageOf": "Trang {page} trên {total}",
     "truncated": "Hiển thị {shown} trang đầu trong tổng số {total} trang. Tải xuống tệp để xem các trang còn lại.",
     "enlarge": "Phóng to {name}"
+  },
+  "addToChat": {
+    "title": "Thêm vào trò chuyện",
+    "titleTranslate": "Dịch tài liệu",
+    "titleTranscribe": "Chuyển lời âm thanh hoặc video",
+    "sourcesLabel": "Thêm từ",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Không khả dụng cho hành động này",
+    "sources": {
+      "device": "Thiết bị này",
+      "link": "Liên kết",
+      "camera": "Máy ảnh",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Email",
+      "meetings": "Cuộc họp"
+    },
+    "device": {
+      "browse": "Duyệt thiết bị này",
+      "dropHint": "hoặc kéo thả tệp vào bất cứ đâu trong cửa sổ này, hoặc dán",
+      "rejected": "Không có tệp nào trong số này có thể sử dụng ở đây.",
+      "hint": {
+        "attach": "Tài liệu, hình ảnh, âm thanh và video.",
+        "translate": "Một tài liệu: Word, Excel, PowerPoint, PDF, HTML hoặc văn bản.",
+        "transcribe": "Âm thanh hoặc video. Sẽ được chuyển lời khi bạn gửi tin nhắn."
+      }
+    },
+    "selection": {
+      "then": "Sau đó",
+      "intents": {
+        "attach": "Đính kèm",
+        "translate": "Dịch",
+        "transcribe": "Chuyển lời"
+      },
+      "confirm": {
+        "attach": "Thêm",
+        "translate": "Dịch",
+        "transcribe": "Chuyển lời"
+      },
+      "unfit": {
+        "attach": "Không thể đính kèm các tệp này",
+        "translate": "Chỉ dịch một tài liệu mỗi lần",
+        "transcribe": "Chỉ có thể chuyển lời âm thanh và video"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Thiết bị này, liên kết, Microsoft 365",
+      "filesOrPhotos": "Tệp hoặc ảnh",
+      "fromThisDevice": "Từ thiết bị này",
+      "connect": "Kết nối Microsoft 365",
+      "connectNote": "Thêm từ OneDrive, email và cuộc họp"
+    }
   }
 }

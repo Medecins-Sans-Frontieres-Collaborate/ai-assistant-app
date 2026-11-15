@@ -2342,20 +2342,18 @@
     "sectionPinned": "Маҳкамшуда",
     "sectionFrequent": "Бисёр истифода мешавад",
     "sectionMore": "Бештар",
-    "categoryWeb": "Веб",
-    "categoryMedia": "Медиа ва файлҳо",
-    "categoryTransform": "Табдилот",
     "pin": "Ба боло маҳкам кардан",
     "unpin": "Маҳкамкуниро хориҷ кардан",
     "moveToMore": "Ба \"Бештар\" кӯчондан",
     "moveOutOfMore": "Дар меню нишон додан",
     "showSources": "Манбаъҳои дигарро нишон диҳед",
     "hideSources": "Манбаъҳои дигарро пинҳон кунед",
-    "aiTools": "Асбобҳои AI",
-    "aiToolsTooltip": "Қобилиятҳое, ки ёвар ҳангоми ҷавоб додан метавонад истифода барад: ҷустуҷӯи онлайн, иҷрои код ва хидматҳои пайвастшуда.",
     "codeInterpreterTooltip": "Иҷро кардани коди Python дар муҳити бехатар барои ҳар паём.\n\nБарои таҳлили маълумот, ҳисобҳо ва сохтани диаграммаҳо аз файлҳои замимашуда беҳтарин аст.",
-    "categoryTools": "Воситаҳо ва пайвасткунакҳо",
-    "translationConversationTitle": "Тарҷума: {filename}"
+    "translationConversationTitle": "Тарҷума: {filename}",
+    "categoryAdd": "Илова кардан",
+    "categoryDo": "Иҷро кардан",
+    "categoryChat": "Дар ин чат",
+    "categoryStart": "Оғоз аз"
   },
   "transcription": {
     "transcribesOnSend": "Ҳангоми фиристодан транскрипсия мешавад",
@@ -8272,5 +8270,56 @@
     "pageOf": "Саҳифаи {page} аз {total}",
     "truncated": "Аввалин {shown} аз {total} саҳифаҳо нишон дода шуданд. Барои дидани боқимонда файлро боргирӣ кунед.",
     "enlarge": "{name}-ро калон кунед"
+  },
+  "addToChat": {
+    "title": "Илова ба чат",
+    "titleTranslate": "Тарҷумаи ҳуҷҷат",
+    "titleTranscribe": "Нусхабардории аудио ё видео",
+    "sourcesLabel": "Илова аз",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Барои ин амал дастрас нест",
+    "sources": {
+      "device": "Ин дастгоҳ",
+      "link": "Пайванд",
+      "camera": "Камера",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Почтаи электронӣ",
+      "meetings": "Мулоқотҳо"
+    },
+    "device": {
+      "browse": "Гузоштан аз ин дастгоҳ",
+      "dropHint": "ё файлҳоро дар ҳама ҷо дар ин равзана партоед, ё гузоред",
+      "rejected": "Ягон файл аз инҳо дар ин ҷо истифода намешавад.",
+      "hint": {
+        "attach": "Ҳуҷҷатҳо, тасвирҳо, аудио ва видео.",
+        "translate": "Якум ҳуҷҷат: Word, Excel, PowerPoint, PDF, HTML ё матн.",
+        "transcribe": "Аудио ё видео. Пас аз фиристони паём нусхабардорӣ мешавад."
+      }
+    },
+    "selection": {
+      "then": "Баъд",
+      "intents": {
+        "attach": "Пайваст кардан",
+        "translate": "Тарҷума кардан",
+        "transcribe": "Нусхабардорӣ кардан"
+      },
+      "confirm": {
+        "attach": "Илова кардан",
+        "translate": "Тарҷума кардан",
+        "transcribe": "Нусхабардорӣ кардан"
+      },
+      "unfit": {
+        "attach": "Ин файлҳо пайваст карда намешаванд",
+        "translate": "Тарҷума танҳо як ҳуҷҷатро қабул мекунад",
+        "transcribe": "Фақат аудио ва видео нусхабардорӣ мешавад"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Ин дастгоҳ, пайвандҳо, Microsoft 365",
+      "filesOrPhotos": "Файлҳо ё тасвирҳо",
+      "fromThisDevice": "Аз ин дастгоҳ",
+      "connect": "Пайваст кардани Microsoft 365",
+      "connectNote": "Илова аз OneDrive, почта ва мулоқотҳо"
+    }
   }
 }

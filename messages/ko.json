@@ -2420,20 +2420,18 @@
     "sectionPinned": "고정됨",
     "sectionFrequent": "자주 사용함",
     "sectionMore": "더 보기",
-    "categoryWeb": "웹",
-    "categoryMedia": "미디어 및 파일",
-    "categoryTransform": "변환",
     "pin": "상단에 고정",
     "unpin": "고정 해제",
     "moveToMore": "더 보기로 이동",
     "moveOutOfMore": "메뉴에 표시",
     "showSources": "다른 소스 보기",
     "hideSources": "다른 소스 숨기기",
-    "aiTools": "AI 도구",
-    "aiToolsTooltip": "어시스턴트가 답변 시 사용할 수 있는 기능: 실시간 웹 검색, 코드 실행, 연결된 서비스 등.",
     "codeInterpreterTooltip": "안전한 샌드박스에서 각 메시지마다 Python 코드를 실행합니다.\n\n첨부 파일로 데이터 분석, 계산, 차트 생성 시 유용합니다.",
-    "categoryTools": "도구 및 커넥터",
-    "translationConversationTitle": "번역: {filename}"
+    "translationConversationTitle": "번역: {filename}",
+    "categoryAdd": "추가",
+    "categoryDo": "실행",
+    "categoryChat": "이 채팅에서",
+    "categoryStart": "시작 위치"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI의 응답 방식을 맞춤화하려면 개인 지침을 추가하세요. 이는 유용하고 정확하며 안전한 응답을 보장하는 기본 행동 지침과 함께 적용됩니다.",
   "Tip: Type \"/\" to select from saved prompt templates_": "팁: \"/\"를 입력하면 저장된 프롬프트 템플릿을 선택할 수 있습니다.",
@@ -8288,5 +8286,56 @@
     "pageOf": "{total}페이지 중 {page}페이지",
     "truncated": "전체 {total}페이지 중 처음 {shown}페이지만 표시합니다. 나머지 페이지를 보려면 파일을 다운로드하세요.",
     "enlarge": "{name} 확대"
+  },
+  "addToChat": {
+    "title": "채팅에 추가",
+    "titleTranslate": "문서 번역",
+    "titleTranscribe": "오디오 또는 비디오 전사",
+    "sourcesLabel": "추가 위치",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "이 작업에서는 사용할 수 없습니다",
+    "sources": {
+      "device": "이 기기",
+      "link": "링크",
+      "camera": "카메라",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "이메일",
+      "meetings": "회의"
+    },
+    "device": {
+      "browse": "기기에서 찾아보기",
+      "dropHint": "또는 파일을 이 창 아무 곳에나 끌어놓거나, 붙여넣으세요",
+      "rejected": "이 파일들은 여기서 사용할 수 없습니다.",
+      "hint": {
+        "attach": "문서, 이미지, 오디오, 비디오",
+        "translate": "한 문서: Word, Excel, PowerPoint, PDF, HTML, 텍스트",
+        "transcribe": "오디오 또는 비디오. 메시지를 보내면 전사됩니다."
+      }
+    },
+    "selection": {
+      "then": "그 다음",
+      "intents": {
+        "attach": "첨부",
+        "translate": "번역",
+        "transcribe": "전사"
+      },
+      "confirm": {
+        "attach": "추가",
+        "translate": "번역",
+        "transcribe": "전사"
+      },
+      "unfit": {
+        "attach": "이 파일들은 첨부할 수 없습니다",
+        "translate": "번역은 한 번에 한 문서만 처리됩니다",
+        "transcribe": "오디오와 비디오만 전사할 수 있습니다"
+      }
+    },
+    "menu": {
+      "addToChatNote": "이 기기, 링크, Microsoft 365",
+      "filesOrPhotos": "파일 또는 사진",
+      "fromThisDevice": "이 기기에서",
+      "connect": "Microsoft 365 연결",
+      "connectNote": "OneDrive, 이메일, 회의에서 추가"
+    }
   }
 }

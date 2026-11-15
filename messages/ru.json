@@ -2268,20 +2268,18 @@
     "sectionPinned": "Закреплено",
     "sectionFrequent": "Часто используемые",
     "sectionMore": "Еще",
-    "categoryWeb": "Веб",
-    "categoryMedia": "Медиа и файлы",
-    "categoryTransform": "Преобразование",
     "pin": "Закрепить сверху",
     "unpin": "Открепить",
     "moveToMore": "Переместить в \"Еще\"",
     "moveOutOfMore": "Показать в меню",
     "showSources": "Показать другие источники",
     "hideSources": "Скрыть другие источники",
-    "aiTools": "Инструменты ИИ",
-    "aiToolsTooltip": "Возможности, которые может использовать ассистент при ответе: онлайн-поиск, выполнение кода и подключенные сервисы.",
     "codeInterpreterTooltip": "Выполнение кода Python в защищённой среде для каждого сообщения.\n\nИдеально для анализа данных, вычислений и создания графиков из прикреплённых файлов.",
-    "categoryTools": "Инструменты и коннекторы",
-    "translationConversationTitle": "Перевод: {filename}"
+    "translationConversationTitle": "Перевод: {filename}",
+    "categoryAdd": "Добавить",
+    "categoryDo": "Выполнить",
+    "categoryChat": "В этом чате",
+    "categoryStart": "Начать с"
   },
   "transcription": {
     "addInstructions": "Добавить инструкции",
@@ -8288,5 +8286,56 @@
     "pageOf": "Страница {page} из {total}",
     "truncated": "Показаны первые {shown} из {total} страниц. Для просмотра остальных скачайте файл.",
     "enlarge": "Увеличить {name}"
+  },
+  "addToChat": {
+    "title": "Добавить в чат",
+    "titleTranslate": "Перевести документ",
+    "titleTranscribe": "Транскрибировать аудио или видео",
+    "sourcesLabel": "Добавить из",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Недоступно для этого действия",
+    "sources": {
+      "device": "Это устройство",
+      "link": "Ссылка",
+      "camera": "Камера",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Электронная почта",
+      "meetings": "Встречи"
+    },
+    "device": {
+      "browse": "Обзор этого устройства",
+      "dropHint": "или перетащите файлы в любое место этого окна, или вставьте",
+      "rejected": "Ни один из этих файлов нельзя использовать здесь.",
+      "hint": {
+        "attach": "Документы, изображения, аудио и видео.",
+        "translate": "Один документ: Word, Excel, PowerPoint, PDF, HTML или текст.",
+        "transcribe": "Аудио или видео. Транскрипция после отправки сообщения."
+      }
+    },
+    "selection": {
+      "then": "Далее",
+      "intents": {
+        "attach": "Прикрепить",
+        "translate": "Перевести",
+        "transcribe": "Транскрибировать"
+      },
+      "confirm": {
+        "attach": "Добавить",
+        "translate": "Перевести",
+        "transcribe": "Транскрибировать"
+      },
+      "unfit": {
+        "attach": "Эти файлы нельзя прикрепить",
+        "translate": "Можно перевести только один документ за раз",
+        "transcribe": "Можно транскрибировать только аудио и видео"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Это устройство, ссылки, Microsoft 365",
+      "filesOrPhotos": "Файлы или фотографии",
+      "fromThisDevice": "С этого устройства",
+      "connect": "Подключить Microsoft 365",
+      "connectNote": "Добавить из OneDrive, электронной почты и встреч"
+    }
   }
 }

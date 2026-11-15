@@ -4042,9 +4042,7 @@
     }
   },
   "dropdown": {
-    "aiTools": "AI Tools",
     "translationConversationTitle": "Translation: {filename}",
-    "aiToolsTooltip": "Capabilities the assistant can use while answering: live web search, code execution, and connected services.",
     "searchTooltip": "Enable web search for every message.\n\nProvides up-to-date information using live news and web sources.",
     "codeInterpreterTooltip": "Run Python code in a secure sandbox for every message.\n\nGreat for data analysis, calculations, and chart generation from attached files.",
     "attachTooltip": "Attach files, images, or audio/video.\n\nSupported formats:\n• Images: JPEG, PNG, GIF, WebP (5MB max, up to 10)\n• Documents: PDF, DOCX, XLSX, PPTX, TXT, MD (50MB max, up to {maxDocuments})\n• Data: CSV, JSON, XML, YAML (50MB max, up to {maxDocuments})\n• Code: PY, JS, TS, JAVA, C, CPP, GO, etc. (50MB max, up to {maxDocuments})\n• Audio: MP3, M4A, WAV, OGG, FLAC, and more (1GB max, 1 file)\n• Video: MP4, MOV, MKV, WebM, and more (1.5GB max, 1 file)\n\nTotal: {maxFiles} files, 1.5GB max",
@@ -4066,14 +4064,14 @@
     "sectionMore": "More",
     "showSources": "Show other sources",
     "hideSources": "Hide other sources",
-    "categoryWeb": "Web",
-    "categoryMedia": "Media & files",
-    "categoryTransform": "Transform",
-    "categoryTools": "Tools & connectors",
     "pin": "Pin to top",
     "unpin": "Unpin",
     "moveToMore": "Move to More",
-    "moveOutOfMore": "Show in menu"
+    "moveOutOfMore": "Show in menu",
+    "categoryAdd": "Add",
+    "categoryDo": "Do",
+    "categoryChat": "In this chat",
+    "categoryStart": "Start from"
   },
   "transcription": {
     "languageLabel": "Recording language",
@@ -8231,5 +8229,56 @@
     "pageOf": "Page {page} of {total}",
     "truncated": "Showing the first {shown} of {total} pages. Download the file to see the rest.",
     "enlarge": "Enlarge {name}"
+  },
+  "addToChat": {
+    "title": "Add to chat",
+    "titleTranslate": "Translate a document",
+    "titleTranscribe": "Transcribe audio or video",
+    "sourcesLabel": "Add from",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Not available for this action",
+    "sources": {
+      "device": "This device",
+      "link": "Link",
+      "camera": "Camera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Email",
+      "meetings": "Meetings"
+    },
+    "device": {
+      "browse": "Browse this device",
+      "dropHint": "or drop files anywhere in this window, or paste",
+      "rejected": "None of those files can be used here.",
+      "hint": {
+        "attach": "Documents, images, audio and video.",
+        "translate": "One document: Word, Excel, PowerPoint, PDF, HTML or text.",
+        "transcribe": "Audio or video. It is transcribed when you send the message."
+      }
+    },
+    "selection": {
+      "then": "Then",
+      "intents": {
+        "attach": "Attach",
+        "translate": "Translate",
+        "transcribe": "Transcribe"
+      },
+      "confirm": {
+        "attach": "Add",
+        "translate": "Translate",
+        "transcribe": "Transcribe"
+      },
+      "unfit": {
+        "attach": "These files cannot be attached",
+        "translate": "Translation takes one document at a time",
+        "transcribe": "Only audio and video can be transcribed"
+      }
+    },
+    "menu": {
+      "addToChatNote": "This device, links, Microsoft 365",
+      "filesOrPhotos": "Files or photos",
+      "fromThisDevice": "From this device",
+      "connect": "Connect Microsoft 365",
+      "connectNote": "Add from OneDrive, email and meetings"
+    }
   }
 }

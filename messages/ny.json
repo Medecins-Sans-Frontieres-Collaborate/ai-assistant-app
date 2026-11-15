@@ -2342,20 +2342,18 @@
     "sectionPinned": "Zolumikizidwa pamwamba",
     "sectionFrequent": "Zimagwiritsidwa ntchito kawirikawiri",
     "sectionMore": "Zina",
-    "categoryWeb": "Web",
-    "categoryMedia": "Zamagwero & mafayilo",
-    "categoryTransform": "Sintha",
     "pin": "Ikani pamwamba",
     "unpin": "Chotsani pamwamba",
     "moveToMore": "Sungani ku Zina",
     "moveOutOfMore": "Onetsani mu menyu",
     "showSources": "Onetsani magwero ena",
     "hideSources": "Bisani magwero ena",
-    "aiTools": "Zida za AI",
-    "aiToolsTooltip": "Zomwe wothandizayo angagwiritse ntchito popereka yankho: kufufuza pa intaneti nthawi yeniyeni, kuthamanga kwa ma code, ndi ntchito zolumikizidwa.",
     "codeInterpreterTooltip": "Thamanga nambala ya Python m’chitetezo cha sandbox pa uthenga uliwonse.\n\nNdibwino pa kusanthula deta, mawerengero, ndi kupanga ma chart kuchokera ku mafayilo ophatikizidwa.",
-    "categoryTools": "Zida & zolumikizira",
-    "translationConversationTitle": "Kumasulira: {filename}"
+    "translationConversationTitle": "Kumasulira: {filename}",
+    "categoryAdd": "Onjezani",
+    "categoryDo": "Gwirani",
+    "categoryChat": "M'kambiranoyi",
+    "categoryStart": "Yambani kuchokera"
   },
   "transcription": {
     "transcribesOnSend": "Imalemba potumiza",
@@ -8272,5 +8270,56 @@
     "pageOf": "Tsamba {page} mwa {total}",
     "truncated": "Ikusonyeza masamba {shown} mwa {total}. Tsitsani fayiloyi kuti muwone zina.",
     "enlarge": "Kukulitsani {name}"
+  },
+  "addToChat": {
+    "title": "Onjezani mu kambirano",
+    "titleTranslate": "Tanthauzirani chikalata",
+    "titleTranscribe": "Lembani mawu kapena kanema",
+    "sourcesLabel": "Onjezerani kuchokera",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Silikupezeka pa ntchito iyi",
+    "sources": {
+      "device": "Chipangizo ichi",
+      "link": "Ulalo",
+      "camera": "Kamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Imelo",
+      "meetings": "Misonkhano"
+    },
+    "device": {
+      "browse": "Sakatulani pa chipangizochi",
+      "dropHint": "kapena kokerani mafayilo kulikonse mu zenera ili, kapena lemberani",
+      "rejected": "Palibe mafayilo amene angagwiritsidwe ntchito pano.",
+      "hint": {
+        "attach": "Zolemba, zithunzi, mawu ndi makanema.",
+        "translate": "Chikalata chimodzi: Word, Excel, PowerPoint, PDF, HTML kapena text.",
+        "transcribe": "Mawu kapena kanema. Zimalembedwa mukatumiza uthenga."
+      }
+    },
+    "selection": {
+      "then": "Kenako",
+      "intents": {
+        "attach": "Amangirizeni",
+        "translate": "Tanthauzirani",
+        "transcribe": "Lembani"
+      },
+      "confirm": {
+        "attach": "Onjezani",
+        "translate": "Tanthauzirani",
+        "transcribe": "Lembani"
+      },
+      "unfit": {
+        "attach": "Mafayilo awa sangatamangirizidwe",
+        "translate": "Kutanthauzira kumatenga chikalata chimodzi pa nthawi",
+        "transcribe": "Mawu ndi makanema okha ndi amene angalembedwe"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Chipangizo ichi, maulalo, Microsoft 365",
+      "filesOrPhotos": "Mafayilo kapena zithunzi",
+      "fromThisDevice": "Kuchokera pa chipangizochi",
+      "connect": "Lumikizani Microsoft 365",
+      "connectNote": "Onjezerani ku OneDrive, imelo ndi misonkhano"
+    }
   }
 }

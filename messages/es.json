@@ -2268,20 +2268,18 @@
     "sectionPinned": "Fijados",
     "sectionFrequent": "Usados frecuentemente",
     "sectionMore": "Más",
-    "categoryWeb": "Web",
-    "categoryMedia": "Medios y archivos",
-    "categoryTransform": "Transformar",
     "pin": "Fijar arriba",
     "unpin": "Quitar de arriba",
     "moveToMore": "Mover a Más",
     "moveOutOfMore": "Mostrar en el menú",
     "showSources": "Mostrar otras fuentes",
     "hideSources": "Ocultar otras fuentes",
-    "aiTools": "Herramientas de IA",
-    "aiToolsTooltip": "Capacidades que el asistente puede usar al responder: búsqueda web en vivo, ejecución de código y servicios conectados.",
     "codeInterpreterTooltip": "Ejecute código Python en un entorno seguro por cada mensaje.\n\nIdeal para análisis de datos, cálculos y generar gráficos a partir de archivos adjuntos.",
-    "categoryTools": "Herramientas y conectores",
-    "translationConversationTitle": "Traducción: {filename}"
+    "translationConversationTitle": "Traducción: {filename}",
+    "categoryAdd": "Agregar",
+    "categoryDo": "Realizar",
+    "categoryChat": "En este chat",
+    "categoryStart": "Comenzar desde"
   },
   "transcription": {
     "transcribesOnSend": "Transcribe al enviar",
@@ -8288,5 +8286,56 @@
     "pageOf": "Página {page} de {total}",
     "truncated": "Mostrando las primeras {shown} de {total} páginas. Descargue el archivo para ver el resto.",
     "enlarge": "Ampliar {name}"
+  },
+  "addToChat": {
+    "title": "Agregar al chat",
+    "titleTranslate": "Traducir un documento",
+    "titleTranscribe": "Transcribir audio o video",
+    "sourcesLabel": "Agregar desde",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "No disponible para esta acción",
+    "sources": {
+      "device": "Este dispositivo",
+      "link": "Enlace",
+      "camera": "Cámara",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Correo electrónico",
+      "meetings": "Reuniones"
+    },
+    "device": {
+      "browse": "Buscar en este dispositivo",
+      "dropHint": "o suelte archivos en cualquier parte de esta ventana, o pegue",
+      "rejected": "Ninguno de esos archivos puede usarse aquí.",
+      "hint": {
+        "attach": "Documentos, imágenes, audio y video.",
+        "translate": "Un documento: Word, Excel, PowerPoint, PDF, HTML o texto.",
+        "transcribe": "Audio o video. Se transcribe cuando envía el mensaje."
+      }
+    },
+    "selection": {
+      "then": "Luego",
+      "intents": {
+        "attach": "Adjuntar",
+        "translate": "Traducir",
+        "transcribe": "Transcribir"
+      },
+      "confirm": {
+        "attach": "Agregar",
+        "translate": "Traducir",
+        "transcribe": "Transcribir"
+      },
+      "unfit": {
+        "attach": "Estos archivos no se pueden adjuntar",
+        "translate": "La traducción toma un documento a la vez",
+        "transcribe": "Solo se puede transcribir audio y video"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Este dispositivo, enlaces, Microsoft 365",
+      "filesOrPhotos": "Archivos o fotos",
+      "fromThisDevice": "Desde este dispositivo",
+      "connect": "Conectar Microsoft 365",
+      "connectNote": "Agregar desde OneDrive, correo electrónico y reuniones"
+    }
   }
 }

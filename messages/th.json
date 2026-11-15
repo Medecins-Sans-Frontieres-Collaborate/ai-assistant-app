@@ -2420,20 +2420,18 @@
     "sectionPinned": "ปักหมุด",
     "sectionFrequent": "ใช้บ่อย",
     "sectionMore": "เพิ่มเติม",
-    "categoryWeb": "เว็บ",
-    "categoryMedia": "มีเดีย & ไฟล์",
-    "categoryTransform": "แปลงข้อมูล",
     "pin": "ปักหมุดไว้ด้านบน",
     "unpin": "เลิกปักหมุด",
     "moveToMore": "ย้ายไปที่เพิ่มเติม",
     "moveOutOfMore": "แสดงในเมนู",
     "showSources": "แสดงแหล่งข้อมูลอื่น",
     "hideSources": "ซ่อนแหล่งข้อมูลอื่น",
-    "aiTools": "เครื่องมือ AI",
-    "aiToolsTooltip": "ความสามารถที่ผู้ช่วยสามารถใช้งานขณะตอบ เช่น ค้นหาเว็บแบบเรียลไทม์, ประมวลผลโค้ด, และเชื่อมต่อบริการต่าง ๆ",
     "codeInterpreterTooltip": "รันโค้ด Python ใน sandbox ที่ปลอดภัยสำหรับแต่ละข้อความ\n\nเหมาะสำหรับการวิเคราะห์ข้อมูล, คำนวณ, และสร้างกราฟจากไฟล์ที่แนบ",
-    "categoryTools": "เครื่องมือและตัวเชื่อมต่อ",
-    "translationConversationTitle": "แปลภาษา: {filename}"
+    "translationConversationTitle": "แปลภาษา: {filename}",
+    "categoryAdd": "เพิ่ม",
+    "categoryDo": "ดำเนินการ",
+    "categoryChat": "ในแชทนี้",
+    "categoryStart": "เริ่มจาก"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "เพิ่มคำแนะนำส่วนตัวเพื่อปรับแต่งการตอบสนองของ AI โดยข้อมูลเหล่านี้จะถูกรวมกับแนวทางหลักเพื่อให้มั่นใจว่าการตอบสนองมีประโยชน์ ถูกต้อง และปลอดภัย",
   "Tip: Type \"/\" to select from saved prompt templates_": "เคล็ดลับ: พิมพ์ \"/\" เพื่อเลือกจากเทมเพลตพรอมต์ที่บันทึกไว้",
@@ -8288,5 +8286,56 @@
     "pageOf": "หน้า {page} จาก {total}",
     "truncated": "แสดงหน้าแรก {shown} จากทั้งหมด {total} หน้า ดาวน์โหลดไฟล์เพื่อดูหน้าที่เหลือ",
     "enlarge": "ขยาย {name}"
+  },
+  "addToChat": {
+    "title": "เพิ่มในแชท",
+    "titleTranslate": "แปลเอกสาร",
+    "titleTranscribe": "ถอดเสียงเสียงหรือวิดีโอ",
+    "sourcesLabel": "เพิ่มจาก",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "ไม่พร้อมใช้งานสำหรับการดำเนินการนี้",
+    "sources": {
+      "device": "อุปกรณ์นี้",
+      "link": "ลิงก์",
+      "camera": "กล้อง",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "อีเมล",
+      "meetings": "การประชุม"
+    },
+    "device": {
+      "browse": "เลือกไฟล์จากอุปกรณ์นี้",
+      "dropHint": "หรือวางไฟล์ในหน้าต่างนี้ หรือนำมาวาง",
+      "rejected": "ไม่สามารถใช้ไฟล์เหล่านี้ได้ที่นี่",
+      "hint": {
+        "attach": "เอกสาร รูปภาพ เสียง และวิดีโอ",
+        "translate": "เอกสารเดียว: Word, Excel, PowerPoint, PDF, HTML หรือข้อความ",
+        "transcribe": "ไฟล์เสียงหรือวิดีโอ ข้อความจะถูกถอดเสียงเมื่อส่งข้อความ"
+      }
+    },
+    "selection": {
+      "then": "จากนั้น",
+      "intents": {
+        "attach": "แนบไฟล์",
+        "translate": "แปลภาษา",
+        "transcribe": "ถอดเสียง"
+      },
+      "confirm": {
+        "attach": "เพิ่ม",
+        "translate": "แปลภาษา",
+        "transcribe": "ถอดเสียง"
+      },
+      "unfit": {
+        "attach": "ไม่สามารถแนบไฟล์เหล่านี้ได้",
+        "translate": "สามารถแปลได้ครั้งละหนึ่งเอกสาร",
+        "transcribe": "สามารถถอดเสียงได้เฉพาะไฟล์เสียงและวิดีโอ"
+      }
+    },
+    "menu": {
+      "addToChatNote": "อุปกรณ์นี้ ลิงก์ Microsoft 365",
+      "filesOrPhotos": "ไฟล์หรือรูปภาพ",
+      "fromThisDevice": "จากอุปกรณ์นี้",
+      "connect": "เชื่อมต่อ Microsoft 365",
+      "connectNote": "เพิ่มจาก OneDrive อีเมล และการประชุม"
+    }
   }
 }

@@ -2420,20 +2420,18 @@
     "sectionPinned": "Kiinnitetyt",
     "sectionFrequent": "Usein käytetyt",
     "sectionMore": "Lisää",
-    "categoryWeb": "Verkko",
-    "categoryMedia": "Media ja tiedostot",
-    "categoryTransform": "Muunnos",
     "pin": "Kiinnitä ylös",
     "unpin": "Poista kiinnitys",
     "moveToMore": "Siirrä kohtaan Lisää",
     "moveOutOfMore": "Näytä valikossa",
     "showSources": "Näytä muut lähteet",
     "hideSources": "Piilota muut lähteet",
-    "aiTools": "AI-työkalut",
-    "aiToolsTooltip": "Toiminnot, joita avustaja voi käyttää vastatessaan: reaaliaikainen verkkohaku, koodin suoritus ja yhdistetyt palvelut.",
     "codeInterpreterTooltip": "Suorita Python-koodia turvallisessa hiekkalaatikossa jokaiselle viestille.\n\nSopii hyvin datan analysointiin, laskentoihin ja kaavioiden luomiseen liitetyistä tiedostoista.",
-    "categoryTools": "Työkalut ja liitännät",
-    "translationConversationTitle": "Käännös: {filename}"
+    "translationConversationTitle": "Käännös: {filename}",
+    "categoryAdd": "Lisää",
+    "categoryDo": "Tee",
+    "categoryChat": "Tässä keskustelussa",
+    "categoryStart": "Aloita"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lisää omat ohjeesi räätälöidäksesi, miten tekoäly vastaa. Nämä yhdistetään ydinkäyttäytymissääntöihin, jotka takaavat hyödylliset, tarkat ja turvalliset vastaukset.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Vinkki: Kirjoita \"/\" valitaksesi tallennetuista kehotepohjista.",
@@ -8288,5 +8286,56 @@
     "pageOf": "Sivu {page} / {total}",
     "truncated": "Näytetään ensimmäiset {shown} / {total} sivusta. Lataa tiedosto nähdäksesi loput.",
     "enlarge": "Suurenna {name}"
+  },
+  "addToChat": {
+    "title": "Lisää keskusteluun",
+    "titleTranslate": "Käännä asiakirja",
+    "titleTranscribe": "Puhtaaksikirjoita ääni tai video",
+    "sourcesLabel": "Lisää lähteestä",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Ei saatavilla tässä toiminnossa",
+    "sources": {
+      "device": "Tämä laite",
+      "link": "Linkki",
+      "camera": "Kamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Sähköposti",
+      "meetings": "Kokoukset"
+    },
+    "device": {
+      "browse": "Selaa tätä laitetta",
+      "dropHint": "tai pudota tiedostot mihin tahansa tähän ikkunaan tai liitä",
+      "rejected": "Näitä tiedostoja ei voi käyttää täällä.",
+      "hint": {
+        "attach": "Asiakirjat, kuvat, äänet ja videot.",
+        "translate": "Yksi asiakirja: Word, Excel, PowerPoint, PDF, HTML tai teksti.",
+        "transcribe": "Ääni tai video. Puhtaaksikirjoitetaan lähetettäessä viesti."
+      }
+    },
+    "selection": {
+      "then": "Sitten",
+      "intents": {
+        "attach": "Liitä",
+        "translate": "Käännä",
+        "transcribe": "Puhtaaksikirjoita"
+      },
+      "confirm": {
+        "attach": "Lisää",
+        "translate": "Käännä",
+        "transcribe": "Puhtaaksikirjoita"
+      },
+      "unfit": {
+        "attach": "Näitä tiedostoja ei voi liittää",
+        "translate": "Käännös onnistuu vain yhdelle asiakirjalle kerrallaan",
+        "transcribe": "Vain ääni ja video voidaan puhtaaksikirjoittaa"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Tämä laite, linkit, Microsoft 365",
+      "filesOrPhotos": "Tiedostot tai kuvat",
+      "fromThisDevice": "Tästä laitteesta",
+      "connect": "Yhdistä Microsoft 365",
+      "connectNote": "Lisää OneDrivesta, sähköpostista ja kokouksista"
+    }
   }
 }

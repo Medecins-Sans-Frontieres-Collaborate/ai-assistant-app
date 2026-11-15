@@ -2342,20 +2342,18 @@
     "sectionPinned": "Tí a tifì mọ́lé",
     "sectionFrequent": "Tí a lò pọ̀",
     "sectionMore": "Ẹlòmíràn",
-    "categoryWeb": "Ayélujára",
-    "categoryMedia": "Mẹ́díà & fáìlì",
-    "categoryTransform": "Ìyípadà",
     "pin": "Gbìmọ́ sórí",
     "unpin": "Yọ gbìmọ́ kúrò",
     "moveToMore": "Gbé sí Ẹlòmíràn",
     "moveOutOfMore": "Fihàn nínú àkójọ aṣayan",
     "showSources": "Fi awọn orisun miran han",
     "hideSources": "Tọju awọn orisun miran",
-    "aiTools": "Ẹ̀rọ AI",
-    "aiToolsTooltip": "Àwọn àǹfààní tí iranlọwọ le lò nígbà idáhùn: àwárí ayelujara taara, ṣiṣé kóòdù, àti iṣẹ́ tó so pọ̀.",
     "codeInterpreterTooltip": "Ṣiṣe kóòdù Python nínú ilé tí kó ní ewu fún gbogbo ifiranṣẹ.\n\nÓ dáa fún àyẹ̀wò data, iṣirò, àti ṣíṣe àwọn àwòrán láti inú àwọn fáìlì tó wa lẹ́gbẹ́ẹ.",
-    "categoryTools": "Ọpa & asopọ",
-    "translationConversationTitle": "Ìtúmọ̀: {filename}"
+    "translationConversationTitle": "Ìtúmọ̀: {filename}",
+    "categoryAdd": "Fi kun",
+    "categoryDo": "Ṣe",
+    "categoryChat": "Nínú ìbánisọ̀rọ̀ yìí",
+    "categoryStart": "Bẹrẹ láti"
   },
   "transcription": {
     "transcribesOnSend": "Ó ń kọ sí ọ̀rọ̀ nígbà fífiránṣẹ́",
@@ -8272,5 +8270,56 @@
     "pageOf": "Ojúewé {page} nínú {total}",
     "truncated": "Àfihàn ojúewé {shown} àkọ́kọ́ nínú {total}. Gba fáìlì náà kalẹ̀ láti rí agbo.",
     "enlarge": "Ṣàgbélé {name}"
+  },
+  "addToChat": {
+    "title": "Fi kun sí ìbánisọ̀rọ̀",
+    "titleTranslate": "Túmọ̀ ìwé",
+    "titleTranscribe": "Ṣàtúpalẹ̀ fídíò tàbí fọ́ńran",
+    "sourcesLabel": "Fi kun láti",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Kò sí fún ìṣe yìí",
+    "sources": {
+      "device": "Ẹ̀rọ yìí",
+      "link": "Ìjápọ̀",
+      "camera": "Kámẹ́rà",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Ímɛ́lì",
+      "meetings": "Ipàdé"
+    },
+    "device": {
+      "browse": "Ṣàwárí ẹ̀rọ yìí",
+      "dropHint": "tàbí ju àwọn fáìlì sí ibi kàn ní ferese yìí, tàbí lẹẹ mọ́",
+      "rejected": "Kò sí nínú àwọn fáìlì wọ̀nyí tí a le lò nibi.",
+      "hint": {
+        "attach": "Ìwé, àwòrán, fọ́ńran àti fídíò.",
+        "translate": "Ìwé kan: Word, Excel, PowerPoint, PDF, HTML tàbí ọrọ.",
+        "transcribe": "Fọ́ńran tàbí fídíò. A máa túpalẹ̀ rẹ̀ nígbà tí o bá ránṣẹ́."
+      }
+    },
+    "selection": {
+      "then": "Lẹ́yìn náà",
+      "intents": {
+        "attach": "Sọ̀pọ̀ mọ́",
+        "translate": "Túmọ̀",
+        "transcribe": "Ṣàtúpalẹ̀"
+      },
+      "confirm": {
+        "attach": "Fi kun",
+        "translate": "Túmọ̀",
+        "transcribe": "Ṣàtúpalẹ̀"
+      },
+      "unfit": {
+        "attach": "A kò le sọ̀pọ̀ àwọn fáìlì wọ̀nyí",
+        "translate": "Ìtumọ̀ gba ìwé kan nígbà kan",
+        "transcribe": "Fọ́ńran àti fídíò nìkan ni a le túpalẹ̀"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Ẹ̀rọ yìí, ìjápọ̀, Microsoft 365",
+      "filesOrPhotos": "Fáìlì tàbí fọ́tò",
+      "fromThisDevice": "Láti ẹ̀rọ yìí",
+      "connect": "So pọ mọ́ Microsoft 365",
+      "connectNote": "Fi kun láti OneDrive, ímẹ́lì àti àwọn ipàdé"
+    }
   }
 }

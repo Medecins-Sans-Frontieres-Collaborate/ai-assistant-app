@@ -2420,20 +2420,18 @@
     "sectionPinned": "Iliyoungwa juu",
     "sectionFrequent": "Zinazotumika mara kwa mara",
     "sectionMore": "Zaidi",
-    "categoryWeb": "Wavuti",
-    "categoryMedia": "Vyombo vya habari & faili",
-    "categoryTransform": "Geuza",
     "pin": "Pin juu",
     "unpin": "Ondoa pin",
     "moveToMore": "Hamisha kwenye Zaidi",
     "moveOutOfMore": "Onyesha kwenye menyu",
     "showSources": "Onyesha vyanzo vingine",
     "hideSources": "Ficha vyanzo vingine",
-    "aiTools": "Vifaa vya AI",
-    "aiToolsTooltip": "Uwezo ambao msaidizi anaweza kutumia anapojibu: utafutaji mtandaoni moja kwa moja, utekelezaji wa msimbo, na huduma zilizounganishwa.",
     "codeInterpreterTooltip": "Kimbiza msimbo wa Python kwenye mazingira salama kwa kila ujumbe.\n\nInafaa kwa uchambuzi wa data, makadirio, na kuunda chati kutoka kwa mafaili yaliyoambatanishwa.",
-    "categoryTools": "Vifaa na viunganishi",
-    "translationConversationTitle": "Tafsiri: {filename}"
+    "translationConversationTitle": "Tafsiri: {filename}",
+    "categoryAdd": "Ongeza",
+    "categoryDo": "Fanya",
+    "categoryChat": "Katika gumzo hili",
+    "categoryStart": "Anza kutoka"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Ongeza maelekezo yako binafsi kubinafsisha jinsi AI inavyojibu. Haya yanaunganishwa na miongozo ya msingi ili kuhakikisha majibu ni ya msaada, sahihi na salama.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Dokezo: Andika \"/\" kuchagua kutoka kwenye templeti za maelekezo zilizohifadhiwa.",
@@ -8288,5 +8286,56 @@
     "pageOf": "Ukurasa {page} kati ya {total}",
     "truncated": "Inaonyesha kurasa {shown} za kwanza kati ya {total}. Pakua faili ili kuona zilizobaki.",
     "enlarge": "Panua {name}"
+  },
+  "addToChat": {
+    "title": "Ongeza kwenye gumzo",
+    "titleTranslate": "Tafsiri hati",
+    "titleTranscribe": "Nakili sauti au video",
+    "sourcesLabel": "Ongeza kutoka",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Haipatikani kwa hatua hii",
+    "sources": {
+      "device": "Kifaa hiki",
+      "link": "Kiungo",
+      "camera": "Kamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Barua pepe",
+      "meetings": "Mikutano"
+    },
+    "device": {
+      "browse": "Vinjari kifaa hiki",
+      "dropHint": "au dondosha mafaili popote kwenye dirisha hili, au bandika",
+      "rejected": "Hakuna kati ya mafaili haya yanayoweza kutumika hapa.",
+      "hint": {
+        "attach": "Nyaraka, picha, sauti na video.",
+        "translate": "Hati moja: Word, Excel, PowerPoint, PDF, HTML au maandishi.",
+        "transcribe": "Sauti au video. Inanakiliwa unapowasilisha ujumbe."
+      }
+    },
+    "selection": {
+      "then": "Kisha",
+      "intents": {
+        "attach": "Ambatisha",
+        "translate": "Tafsiri",
+        "transcribe": "Nakili"
+      },
+      "confirm": {
+        "attach": "Ongeza",
+        "translate": "Tafsiri",
+        "transcribe": "Nakili"
+      },
+      "unfit": {
+        "attach": "Mafaili haya hayawezi kuambatishwa",
+        "translate": "Tafsiri inachukua hati moja kwa wakati",
+        "transcribe": "Ni sauti na video pekee zinaweza kunakiliwa"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Kifaa hiki, viungo, Microsoft 365",
+      "filesOrPhotos": "Mafaili au picha",
+      "fromThisDevice": "Kutoka kwenye kifaa hiki",
+      "connect": "Unganisha Microsoft 365",
+      "connectNote": "Ongeza kutoka OneDrive, barua pepe na mikutano"
+    }
   }
 }

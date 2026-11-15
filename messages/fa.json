@@ -2420,20 +2420,18 @@
     "sectionPinned": "پین شده",
     "sectionFrequent": "پرتکرار",
     "sectionMore": "سایر",
-    "categoryWeb": "وب",
-    "categoryMedia": "رسانه و فایل‌ها",
-    "categoryTransform": "تبدیل",
     "pin": "پین به بالا",
     "unpin": "برداشتن پین",
     "moveToMore": "انتقال به سایر",
     "moveOutOfMore": "نمایش در منو",
     "showSources": "نمایش منابع دیگر",
     "hideSources": "مخفی کردن منابع دیگر",
-    "aiTools": "ابزارهای هوش مصنوعی",
-    "aiToolsTooltip": "قابلیت‌هایی که دستیار هنگام پاسخ‌دهی می‌تواند استفاده کند: جستجوی زنده وب، اجرای کد و سرویس‌های متصل.",
     "codeInterpreterTooltip": "اجرای کد پایتون در یک فضای امن برای هر پیام.\n\nمناسب برای تحلیل داده، محاسبات و ساخت نمودار از فایل‌های پیوست‌شده.",
-    "categoryTools": "ابزارها و کانکتورها",
-    "translationConversationTitle": "ترجمه: {filename}"
+    "translationConversationTitle": "ترجمه: {filename}",
+    "categoryAdd": "افزودن",
+    "categoryDo": "انجام دادن",
+    "categoryChat": "در این گفتگو",
+    "categoryStart": "شروع از"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "دستورالعمل‌های شخصی خود را برای سفارشی‌سازی نحوه پاسخ‌دهی هوش مصنوعی اضافه کنید. این دستورالعمل‌ها همراه با راهنماهای اصلی رفتاری برای تضمین پاسخ‌های مفید، دقیق و ایمن ترکیب می‌شوند.",
   "Tip: Type \"/\" to select from saved prompt templates_": "نکته: با وارد کردن \"/\" می‌توانید از قالب‌های ذخیره‌شده راهنما انتخاب کنید.",
@@ -8288,5 +8286,56 @@
     "pageOf": "صفحه {page} از {total}",
     "truncated": "نمایش {shown} صفحه از مجموع {total} صفحه. برای مشاهده بقیه، فایل را دانلود کنید.",
     "enlarge": "بزرگ‌نمایی {name}"
+  },
+  "addToChat": {
+    "title": "افزودن به گفتگو",
+    "titleTranslate": "ترجمه یک سند",
+    "titleTranscribe": "رونویسی صوت یا ویدیو",
+    "sourcesLabel": "افزودن از",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "در این اقدام قابل استفاده نیست",
+    "sources": {
+      "device": "این دستگاه",
+      "link": "لینک",
+      "camera": "دوربین",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ایمیل",
+      "meetings": "جلسات"
+    },
+    "device": {
+      "browse": "مرور این دستگاه",
+      "dropHint": "یا فایل‌ها را هرجای این پنجره بیندازید یا جای‌گذاری کنید",
+      "rejected": "هیچ‌کدام از این فایل‌ها قابل استفاده نیستند.",
+      "hint": {
+        "attach": "اسناد، تصاویر، صوت و ویدیو.",
+        "translate": "یک سند: Word، Excel، PowerPoint، PDF، HTML یا متن.",
+        "transcribe": "صوت یا ویدیو. هنگام ارسال پیام رونویسی انجام می‌شود."
+      }
+    },
+    "selection": {
+      "then": "سپس",
+      "intents": {
+        "attach": "پیوست",
+        "translate": "ترجمه",
+        "transcribe": "رونویسی"
+      },
+      "confirm": {
+        "attach": "افزودن",
+        "translate": "ترجمه",
+        "transcribe": "رونویسی"
+      },
+      "unfit": {
+        "attach": "این فایل‌ها قابل پیوست نیستند",
+        "translate": "ترجمه فقط یک سند را همزمان انجام می‌دهد",
+        "transcribe": "فقط صوت و ویدیو قابل رونویسی هستند"
+      }
+    },
+    "menu": {
+      "addToChatNote": "این دستگاه، لینک‌ها، Microsoft 365",
+      "filesOrPhotos": "فایل‌ها یا عکس‌ها",
+      "fromThisDevice": "از این دستگاه",
+      "connect": "اتصال به Microsoft 365",
+      "connectNote": "افزودن از OneDrive، ایمیل و جلسات"
+    }
   }
 }

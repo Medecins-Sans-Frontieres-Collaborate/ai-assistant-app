@@ -2342,20 +2342,18 @@
     "sectionPinned": "ዝተቐናቐኑ",
     "sectionFrequent": "ብዙሕ ዝተጠቐሙ",
     "sectionMore": "ተወሳኺ",
-    "categoryWeb": "Web",
-    "categoryMedia": "መሕደራትን ፋይልን",
-    "categoryTransform": "ምቅዋም",
     "pin": "ኣብ ላዕሊ ሓኪል",
     "unpin": "ኣይተሓከለን",
     "moveToMore": "ናብ ተወሳኺ ኣካይዱ",
     "moveOutOfMore": "ኣብ መኑ ርኣዮ",
     "showSources": "ተሓውቶ ምንጮታት ኣርኣዩ",
     "hideSources": "ተሓውቶ ምንጮታት ኣሰውሩ",
-    "aiTools": "AI መዕዛውቲ",
-    "aiToolsTooltip": "ኣብ ምልማሉ ቀሊል ክትጠቐምዎ ዝኽእል ተቋማት: ብዝኽእል ድሕሪ መለለዪ ናይ web ምድላው, ኮድ ኣፈጻጸምን ብሰርቪስታት ምትሕሳስን።",
     "codeInterpreterTooltip": "ኣብ ናይ ዕላማ ስርዓት ሓላፍነት ዝበለ Python ኮድ ኣፈጻጸም ናይቶም መልሲታት ንኣብ ንእሽቶ መልእኽቲ።\n\nብዙሕ ኣብ ትንታነ ባህሪ, ምሕሳብን ብማዕበል ፋይል መመዝገብ ፍቓድ አለዎ።",
-    "categoryTools": "መሳርሒታት እና አገናኞታት",
-    "translationConversationTitle": "ትርጉም፡ {filename}"
+    "translationConversationTitle": "ትርጉም፡ {filename}",
+    "categoryAdd": "ወሰን",
+    "categoryDo": "ኣድለ",
+    "categoryChat": "ኣብዚ ቻት",
+    "categoryStart": "ምጀመር ካብ"
   },
   "transcription": {
     "transcribesOnSend": "ኣብ ምልኣኽ ይጸሓፍ",
@@ -8272,5 +8270,56 @@
     "pageOf": "ገጽ {page} ካብ {total}",
     "truncated": "ንቀዳሚ {shown} ካብ {total} ገጻት ይብርፅእ። ኣብሓደስ ንምርኣይ ፋይል ኣውርድ።",
     "enlarge": "{name} ኣብዚጽው"
+  },
+  "addToChat": {
+    "title": "ኣብ ቻት ወሰን",
+    "titleTranslate": "ሰነድ ትርጉም",
+    "titleTranscribe": "ድምጺ ወይ ቪድዮ ትጽንቕ",
+    "sourcesLabel": "ምንጪ ወሰን",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "ምስ ዚ ኣገልግሎት የኾነን",
+    "sources": {
+      "device": "ኣብዚ መሳርሒ",
+      "link": "ሊንክ",
+      "camera": "ካሜራ",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ኢመይል",
+      "meetings": "ምዕራፍ"
+    },
+    "device": {
+      "browse": "ኣብዚ መሳርሒ ድሓል",
+      "dropHint": "ወይ ፋይልታት ኣብዚ መስተንክር ጣሉ ወይ ቅዳሚ የትኸፍሉ",
+      "rejected": "ካብዚ ፋይልታት ዝተመሓዘኩም ኣብዚ ኣርእዋ የትደለን",
+      "hint": {
+        "attach": "ሰነዳት፣ ምስናት፣ ድምጺን ቪድዮን",
+        "translate": "ሓደ ሰነድ፡ Word፣ Excel፣ PowerPoint፣ PDF፣ HTML ወይ ጽሑፍ",
+        "transcribe": "ድምጺ ወይ ቪድዮ፡ መልእኽቲ ምስ ተልኡ ይጽንቕ"
+      }
+    },
+    "selection": {
+      "then": "ቀጸም",
+      "intents": {
+        "attach": "ሰነድ ወስን",
+        "translate": "ትርጉም",
+        "transcribe": "ትጽንቕ"
+      },
+      "confirm": {
+        "attach": "ወሰን",
+        "translate": "ትርጉም",
+        "transcribe": "ትጽንቕ"
+      },
+      "unfit": {
+        "attach": "እዚ ፋይልታት ከም ትዝሓበል የትኸሲቡን",
+        "translate": "ትርጉም ናይ ሓደ ሰነድ እዩ ዝሓለፈ",
+        "transcribe": "ንድምጺን ቪድዮን ብብሉ ትጽንቕ ይክእል"
+      }
+    },
+    "menu": {
+      "addToChatNote": "ኣብዚ መሳርሒ፣ ሊንክ፣ Microsoft 365",
+      "filesOrPhotos": "ፋይልታት ወይ ምስናት",
+      "fromThisDevice": "ካብዚ መሳርሒ",
+      "connect": "Microsoft 365 ኣታሓባ",
+      "connectNote": "ኣብ OneDrive፣ ኢመይልን ምዕራፍን ወሰን"
+    }
   }
 }

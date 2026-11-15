@@ -2268,20 +2268,18 @@
     "sectionPinned": "مثبت",
     "sectionFrequent": "الاستخدام المتكرر",
     "sectionMore": "المزيد",
-    "categoryWeb": "الويب",
-    "categoryMedia": "الوسائط والملفات",
-    "categoryTransform": "تحويل",
     "pin": "تثبيت في الأعلى",
     "unpin": "إلغاء التثبيت",
     "moveToMore": "نقل إلى المزيد",
     "moveOutOfMore": "إظهار في القائمة",
     "showSources": "عرض مصادر أخرى",
     "hideSources": "إخفاء مصادر أخرى",
-    "aiTools": "أدوات الذكاء الاصطناعي",
-    "aiToolsTooltip": "القدرات التي يمكن للمساعد استخدامها أثناء الإجابة: بحث مباشر عبر الإنترنت، تنفيذ الأكواد، وخدمات متصلة.",
     "codeInterpreterTooltip": "تشغيل أكواد Python في بيئة آمنة لكل رسالة.\n\nممتاز لتحليل البيانات، إجراء العمليات الحسابية، وإنشاء الرسوم البيانية من الملفات المرفقة.",
-    "categoryTools": "الأدوات والموصلات",
-    "translationConversationTitle": "ترجمة: {filename}"
+    "translationConversationTitle": "ترجمة: {filename}",
+    "categoryAdd": "إضافة",
+    "categoryDo": "تنفيذ",
+    "categoryChat": "في هذه المحادثة",
+    "categoryStart": "ابدأ من"
   },
   "transcription": {
     "addInstructions": "إضافة تعليمات",
@@ -8288,5 +8286,56 @@
     "pageOf": "الصفحة {page} من {total}",
     "truncated": "عرض أول {shown} من {total} صفحة. قم بتنزيل الملف للاطلاع على باقي الصفحات.",
     "enlarge": "تكبير {name}"
+  },
+  "addToChat": {
+    "title": "إضافة إلى المحادثة",
+    "titleTranslate": "ترجمة مستند",
+    "titleTranscribe": "نسخ صوت أو فيديو",
+    "sourcesLabel": "الإضافة من",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "غير متاح لهذا الإجراء",
+    "sources": {
+      "device": "هذا الجهاز",
+      "link": "رابط",
+      "camera": "الكاميرا",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "البريد الإلكتروني",
+      "meetings": "الاجتماعات"
+    },
+    "device": {
+      "browse": "تصفح هذا الجهاز",
+      "dropHint": "أو اسحب الملفات إلى أي مكان في هذه النافذة، أو الصق",
+      "rejected": "لا يمكن استخدام أي من هذه الملفات هنا.",
+      "hint": {
+        "attach": "المستندات، الصور، الصوت والفيديو.",
+        "translate": "مستند واحد: Word، Excel، PowerPoint، PDF، HTML أو نص.",
+        "transcribe": "صوت أو فيديو. يتم النسخ عند إرسال الرسالة."
+      }
+    },
+    "selection": {
+      "then": "ثم",
+      "intents": {
+        "attach": "إرفاق",
+        "translate": "ترجمة",
+        "transcribe": "نسخ"
+      },
+      "confirm": {
+        "attach": "إضافة",
+        "translate": "ترجمة",
+        "transcribe": "نسخ"
+      },
+      "unfit": {
+        "attach": "لا يمكن إرفاق هذه الملفات",
+        "translate": "الترجمة تتطلب مستنداً واحداً في كل مرة",
+        "transcribe": "يمكن نسخ الصوت والفيديو فقط"
+      }
+    },
+    "menu": {
+      "addToChatNote": "هذا الجهاز، الروابط، Microsoft 365",
+      "filesOrPhotos": "ملفات أو صور",
+      "fromThisDevice": "من هذا الجهاز",
+      "connect": "ربط Microsoft 365",
+      "connectNote": "الإضافة من OneDrive، البريد الإلكتروني والاجتماعات"
+    }
   }
 }

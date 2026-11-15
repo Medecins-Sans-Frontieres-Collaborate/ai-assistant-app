@@ -2299,20 +2299,18 @@
     "sectionPinned": "已固定",
     "sectionFrequent": "常用",
     "sectionMore": "更多",
-    "categoryWeb": "网页",
-    "categoryMedia": "媒体和文件",
-    "categoryTransform": "转换",
     "pin": "置顶",
     "unpin": "取消置顶",
     "moveToMore": "移至更多",
     "moveOutOfMore": "在菜单中显示",
     "showSources": "显示其他来源",
     "hideSources": "隐藏其他来源",
-    "aiTools": "AI 工具",
-    "aiToolsTooltip": "在回答时助手可用的功能：实时网页搜索、代码执行和连接服务。",
     "codeInterpreterTooltip": "在安全沙盒环境中为每条消息运行 Python 代码。\n\n适用于数据分析、计算和从附件生成图表。",
-    "categoryTools": "工具与连接器",
-    "translationConversationTitle": "翻译：{filename}"
+    "translationConversationTitle": "翻译：{filename}",
+    "categoryAdd": "添加",
+    "categoryDo": "执行",
+    "categoryChat": "在此聊天中",
+    "categoryStart": "开始于"
   },
   "transcription": {
     "addInstructions": "添加说明",
@@ -8319,5 +8317,56 @@
     "pageOf": "第 {page} 页，共 {total} 页",
     "truncated": "显示前 {shown} 页，共 {total} 页。下载文件以查看全部内容。",
     "enlarge": "放大{name}"
+  },
+  "addToChat": {
+    "title": "添加到聊天",
+    "titleTranslate": "翻译文档",
+    "titleTranscribe": "转录音频或视频",
+    "sourcesLabel": "添加来源",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "此操作不可用",
+    "sources": {
+      "device": "本设备",
+      "link": "链接",
+      "camera": "相机",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "电子邮件",
+      "meetings": "会议"
+    },
+    "device": {
+      "browse": "浏览此设备",
+      "dropHint": "或将文件拖放到此窗口任意位置，或粘贴",
+      "rejected": "这些文件无法在此处使用。",
+      "hint": {
+        "attach": "文档、图片、音频和视频。",
+        "translate": "仅限一个文档：Word、Excel、PowerPoint、PDF、HTML 或文本。",
+        "transcribe": "音频或视频。发送消息后将进行转录。"
+      }
+    },
+    "selection": {
+      "then": "然后",
+      "intents": {
+        "attach": "附加",
+        "translate": "翻译",
+        "transcribe": "转录"
+      },
+      "confirm": {
+        "attach": "添加",
+        "translate": "翻译",
+        "transcribe": "转录"
+      },
+      "unfit": {
+        "attach": "这些文件无法附加",
+        "translate": "翻译一次只能处理一个文档",
+        "transcribe": "只能转录音频和视频"
+      }
+    },
+    "menu": {
+      "addToChatNote": "本设备、链接、Microsoft 365",
+      "filesOrPhotos": "文件或照片",
+      "fromThisDevice": "来自本设备",
+      "connect": "连接 Microsoft 365",
+      "connectNote": "可从 OneDrive、电子邮件和会议添加"
+    }
   }
 }

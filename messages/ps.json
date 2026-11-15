@@ -2342,20 +2342,18 @@
     "sectionPinned": "ټومبل شوي",
     "sectionFrequent": "پرله پسې کارول شوي",
     "sectionMore": "نور",
-    "categoryWeb": "ویب",
-    "categoryMedia": "رسنۍ او فایلونه",
-    "categoryTransform": "بدلون ورکول",
     "pin": "پورته يې ټومبل",
     "unpin": "ناټومبل",
     "moveToMore": "نور ته ولیږدول",
     "moveOutOfMore": "په مینو کې ښکاره کړئ",
     "showSources": "نورې سرچینې وښایاست",
     "hideSources": "نورې سرچینې پټې کړئ",
-    "aiTools": "AI وسیلې",
-    "aiToolsTooltip": "هغه وړتیاوې چې مرستندوی یې کارولای شي: ژوندی ویب لټون، کوډ چلول، او تړلي خدمتونه.",
     "codeInterpreterTooltip": "Python کوډ په خوندي sandbox کې د هر پیغام لپاره وچلوي.\n\nد معلوماتو شننې، حسابونو او له ضمیمه شوو فایلونو نه د جدول جوړولو لپاره غوره ده.",
-    "categoryTools": "وسايل او وصلوونکي",
-    "translationConversationTitle": "ژباړه: {filename}"
+    "translationConversationTitle": "ژباړه: {filename}",
+    "categoryAdd": "اضافه کړئ",
+    "categoryDo": "اجرا کړئ",
+    "categoryChat": "په دې چټ کې",
+    "categoryStart": "پیل کړئ له"
   },
   "transcription": {
     "transcribesOnSend": "په استولو سره ټرانسکرېپشن کېږي",
@@ -8272,5 +8270,56 @@
     "pageOf": "پاڼه {page} د {total} څخه",
     "truncated": "لومړۍ {shown} پاڼې د {total} څخه ښيي. د پاتې پاڼو لپاره فایل ډاونلوډ کړئ.",
     "enlarge": "{name} غټ کړئ"
+  },
+  "addToChat": {
+    "title": "چټ ته اضافه کړئ",
+    "titleTranslate": "یو سند وژباړئ",
+    "titleTranscribe": "آډیو یا ویدیو نقل کړئ",
+    "sourcesLabel": "اضافه کړئ له",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "د دې عمل لپاره شتون نلري",
+    "sources": {
+      "device": "دا وسیله",
+      "link": "لینک",
+      "camera": "کامره",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ایمیل",
+      "meetings": "ناستې"
+    },
+    "device": {
+      "browse": "په دې وسیله کې وګورئ",
+      "dropHint": "یا فایلونه هرچیرې په دې کړکۍ کې وغورځوئ، یا یې پیسټ کړئ",
+      "rejected": "له دغو فایلونو څخه هیڅ یو دلته نه کارول کېږي.",
+      "hint": {
+        "attach": "سندونه، انځورونه، آډیو او ویدیو.",
+        "translate": "یوه سند: Word، Excel، PowerPoint، PDF، HTML یا متن.",
+        "transcribe": "آډیو یا ویدیو. کله چې پیغام واستوئ، نقل به شي."
+      }
+    },
+    "selection": {
+      "then": "بیا",
+      "intents": {
+        "attach": "ملحق کړئ",
+        "translate": "ژباړئ",
+        "transcribe": "نقل کړئ"
+      },
+      "confirm": {
+        "attach": "اضافه کړئ",
+        "translate": "ژباړئ",
+        "transcribe": "نقل کړئ"
+      },
+      "unfit": {
+        "attach": "دا فایلونه نشي ضمیمه کېدلی",
+        "translate": "ژباړه یوازې یو سند په یو وخت کې اخلي",
+        "transcribe": "یوازې آډیو او ویدیو نقل کېدای شي"
+      }
+    },
+    "menu": {
+      "addToChatNote": "دا وسیله، لینکونه، Microsoft 365",
+      "filesOrPhotos": "فایلونه یا انځورونه",
+      "fromThisDevice": "له دې وسیلې څخه",
+      "connect": "Microsoft 365 ونښلوئ",
+      "connectNote": "د OneDrive، ایمیل او ناستو څخه اضافه کړئ"
+    }
   }
 }

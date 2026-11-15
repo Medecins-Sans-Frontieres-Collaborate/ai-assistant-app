@@ -2268,20 +2268,18 @@
     "sectionPinned": "Připnuté",
     "sectionFrequent": "Často používané",
     "sectionMore": "Více",
-    "categoryWeb": "Web",
-    "categoryMedia": "Média a soubory",
-    "categoryTransform": "Transformovat",
     "pin": "Připnout nahoru",
     "unpin": "Odepnout",
     "moveToMore": "Přesunout do Více",
     "moveOutOfMore": "Zobrazit v menu",
     "showSources": "Zobrazit další zdroje",
     "hideSources": "Skrýt další zdroje",
-    "aiTools": "AI nástroje",
-    "aiToolsTooltip": "Funkce, které asistent může využít při odpovídání: živé vyhledávání na webu, spouštění kódu a propojené služby.",
     "codeInterpreterTooltip": "Spuštění Python kódu v zabezpečeném sandboxu pro každou zprávu.\n\nVhodné pro analýzu dat, výpočty a generování grafů z přiložených souborů.",
-    "categoryTools": "Nástroje a konektory",
-    "translationConversationTitle": "Překlad: {filename}"
+    "translationConversationTitle": "Překlad: {filename}",
+    "categoryAdd": "Přidat",
+    "categoryDo": "Provést",
+    "categoryChat": "V tomto chatu",
+    "categoryStart": "Začít od"
   },
   "transcription": {
     "addInstructions": "Přidat pokyny",
@@ -8288,5 +8286,56 @@
     "pageOf": "Stránka {page} z {total}",
     "truncated": "Zobrazuje se prvních {shown} z {total} stránek. Pro zobrazení zbytku si stáhněte soubor.",
     "enlarge": "Zvětšit {name}"
+  },
+  "addToChat": {
+    "title": "Přidat do chatu",
+    "titleTranslate": "Přeložit dokument",
+    "titleTranscribe": "Přepsat audio nebo video",
+    "sourcesLabel": "Přidat z",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Pro tuto akci není k dispozici",
+    "sources": {
+      "device": "Toto zařízení",
+      "link": "Odkaz",
+      "camera": "Fotoaparát",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "E-mail",
+      "meetings": "Schůzky"
+    },
+    "device": {
+      "browse": "Procházet toto zařízení",
+      "dropHint": "nebo přetáhněte soubory kamkoli do tohoto okna, nebo vložte",
+      "rejected": "Žádný z těchto souborů zde nelze použít.",
+      "hint": {
+        "attach": "Dokumenty, obrázky, audio a video.",
+        "translate": "Jeden dokument: Word, Excel, PowerPoint, PDF, HTML nebo text.",
+        "transcribe": "Audio nebo video. Přepis proběhne po odeslání zprávy."
+      }
+    },
+    "selection": {
+      "then": "Poté",
+      "intents": {
+        "attach": "Připojit",
+        "translate": "Přeložit",
+        "transcribe": "Přepsat"
+      },
+      "confirm": {
+        "attach": "Přidat",
+        "translate": "Přeložit",
+        "transcribe": "Přepsat"
+      },
+      "unfit": {
+        "attach": "Tyto soubory nelze připojit",
+        "translate": "Překlad podporuje pouze jeden dokument najednou",
+        "transcribe": "Přepsat lze pouze audio nebo video"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Toto zařízení, odkazy, Microsoft 365",
+      "filesOrPhotos": "Soubory nebo fotografie",
+      "fromThisDevice": "Z tohoto zařízení",
+      "connect": "Připojit Microsoft 365",
+      "connectNote": "Přidat z OneDrive, e-mailu a schůzek"
+    }
   }
 }

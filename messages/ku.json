@@ -1858,19 +1858,13 @@
     "sectionPinned": "سەربەڕو",
     "sectionFrequent": "زۆر بەکاردێت",
     "sectionMore": "زیاتر",
-    "categoryWeb": "وێب",
-    "categoryMedia": "میدیا و پەڕگالەکان",
-    "categoryTransform": "گۆڕین",
     "pin": "سەربە سەرەوە بکەرەوە",
     "unpin": "لە سەرەوە دوربکە",
     "moveToMore": "گواستنەوە بۆ \"زیاتر\"",
     "moveOutOfMore": "له‌مێنیو ده‌رکه‌وه‌ پیشان بده",
     "showSources": "سەرچاوەی تر پێشان بدە",
     "hideSources": "سەرچاوەی تر بشارەوە",
-    "aiTools": "ئامرازەکانی AI",
-    "aiToolsTooltip": "توانایەکان‌ کە یارمەتی‌یار دەبمە جێبەجێبکات: گەڕانی ئۆنلاین، بەکاربردنی کۆدەکان، و خزمەتگوزارییە پەیوەندیدارەکان.",
     "codeInterpreterTooltip": "کۆدی Python لە سنبووقی پارێزراو بە هەر نامەیەک پەڕێنە.\n\nگەرینە بۆ ڕاوێژکردنی داتا، ژمێرەکان و دروستکردنی شێوەمووچە لە فایلە پەیوەستکراوەکان.",
-    "categoryTools": "ئامرازەکان و بەستەرەکان",
     "translationConversationTitle": "وەرگێڕان: {filename}",
     "searchTooltip": "گەڕانی وێب چالاک بکە بۆ هەر نامەیەک.\n\nزانیاری بەکۆن بەکار دەهێنێت لە سراچاوەی هاوڕە و وێب.",
     "attachTooltip": "پەیوەندکردنی فایل، وێنە یان دەنگ/ڤیدیۆ.\n\nفۆرماتە پشتیوانکراوەکان:\n• وێنە: JPEG، PNG، GIF، WebP (زۆرترە بە 5MB، تا 10)\n• بەڵگە: PDF، DOCX، XLSX، PPTX، TXT، MD (زۆرترە بە 50MB، تا {maxDocuments})\n• داتا: CSV، JSON، XML، YAML (زۆرترە بە 50MB، تا {maxDocuments})\n• کۆد: PY، JS، TS، JAVA، C، CPP، GO و ... (زۆرترە بە 50MB، تا {maxDocuments})\n• دەنگ: MP3، M4A، WAV، OGG، FLAC و زیاتر (زۆرترە بە 1GB، ١ فایل)\n• ڤیدیۆ: MP4، MOV، MKV، WebM و زیاتر (زۆرترە بە 1.5GB، ١ فایل)\n\nکۆی گشتی: {maxFiles} فایل، 1.5GB زۆرترین",
@@ -1882,7 +1876,11 @@
     "noToneDefault": "بێ دەنگ (بنەڕەت)",
     "useDefaultStyle": "شێوازی بنەڕەتی بەکار بهێنە",
     "noTonesCreated": "هێشتا هیچ دەنگێک دروست نەکراوە",
-    "createTonesHint": "دەنگ دروست بکە لە کردارە خێراکان"
+    "createTonesHint": "دەنگ دروست بکە لە کردارە خێراکان",
+    "categoryAdd": "زیادکردن",
+    "categoryDo": "کردن",
+    "categoryChat": "لە ئەم گفتوگۆیە",
+    "categoryStart": "دەست پێ بکە لە"
   },
   "transcription": {
     "languages": {
@@ -8268,5 +8266,56 @@
     "pageOf": "لاپه‌ڕه‌ {page} لە {total}",
     "truncated": "نیشاندانی یەکەم {shown} لە {total} لاپه‌ڕە. بۆ بینینی هەموو لاپه‌ڕەکان، پەڕگەکە دابگرە.",
     "enlarge": "گەورەکردنی {name}"
+  },
+  "addToChat": {
+    "title": "زیادکردن بۆ گفتوگۆ",
+    "titleTranslate": "وەرجێرکردنی بەڵگە",
+    "titleTranscribe": "وەربەستکردنی دەنگ یان ڤیدیۆ",
+    "sourcesLabel": "زیادکردن لە",
+    "microsoft365": "Microsoft ٣٦٥",
+    "sourceUnavailable": "بۆ ئەم کارە بەردەست نییە",
+    "sources": {
+      "device": "ئەم ئامێرە",
+      "link": "گری",
+      "camera": "کامێرا",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ئیمەیل",
+      "meetings": "کۆبوونەوەکان"
+    },
+    "device": {
+      "browse": "بەدوای ئەم ئامێرە بگرە",
+      "dropHint": "یان فایلەکان لێ بدە لە هەر شوێنێک لە ئەم پەنجەرەیە، یان پاست بکە",
+      "rejected": "هیچ فایلێک لەوانە لێرە بەکارناگەیە.",
+      "hint": {
+        "attach": "بەڵگەنامە، وێنە، دەنگ و ڤیدیۆ.",
+        "translate": "یەک بەڵگەنامە: Word، Excel، PowerPoint، PDF، HTML یان دەق.",
+        "transcribe": "دەنگ یان ڤیدیۆ. کاتێک نامە بنێری، دەربەست دەکرێت."
+      }
+    },
+    "selection": {
+      "then": "پاشان",
+      "intents": {
+        "attach": "پەیوەندیکردن",
+        "translate": "وەرجێرکردن",
+        "transcribe": "وەربەستکردن"
+      },
+      "confirm": {
+        "attach": "زیادکردن",
+        "translate": "وەرجێرکردن",
+        "transcribe": "وەربەستکردن"
+      },
+      "unfit": {
+        "attach": "ئەم فایلە ناتوانرێن پەیوەندیکرن",
+        "translate": "وەرجێرکردن تەنها یەک بەڵگەنامە لە کاتێک دەکات",
+        "transcribe": "تەنها دەنگ و ڤیدیۆ دەربەست دەکرێت"
+      }
+    },
+    "menu": {
+      "addToChatNote": "ئەم ئامێرە، گریەکان، Microsoft ٣٦٥",
+      "filesOrPhotos": "فایل یان وێنە",
+      "fromThisDevice": "لە ئەم ئامێرە",
+      "connect": "بەستن بە Microsoft ٣٦٥",
+      "connectNote": "زیادکردن لە OneDrive، ئیمەیل و کۆبوونەوەکان"
+    }
   }
 }

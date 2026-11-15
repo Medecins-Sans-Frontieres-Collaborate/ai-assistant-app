@@ -2268,20 +2268,18 @@
     "sectionPinned": "পিন করা",
     "sectionFrequent": "প্রায়ই ব্যবহৃত",
     "sectionMore": "আরও",
-    "categoryWeb": "ওয়েব",
-    "categoryMedia": "মিডিয়া ও ফাইল",
-    "categoryTransform": "রূপান্তর",
     "pin": "শীর্ষে পিন করুন",
     "unpin": "আনপিন করুন",
     "moveToMore": "'আরও' তে সরান",
     "moveOutOfMore": "মেনুতে দেখান",
     "showSources": "অন্যান্য সোর্স দেখান",
     "hideSources": "অন্যান্য সোর্স লুকান",
-    "aiTools": "AI টুলস",
-    "aiToolsTooltip": "সহযোগীর উত্তর দেওয়ার সময় ব্যবহারের সক্ষমতা: লাইভ ওয়েব সার্চ, কোড এক্সিকিউশন, ও কানেক্টেড সার্ভিসেস।",
     "codeInterpreterTooltip": "প্রতিটি বার্তার জন্য একটি নিরাপদ স্যান্ডবক্সে Python কোড চালান।\n\nডেটা বিশ্লেষণ, হিসাব, ও সংযুক্ত ফাইল থেকে চার্ট তৈরির জন্য উপযোগী।",
-    "categoryTools": "টুলস ও সংযোগকারী",
-    "translationConversationTitle": "অনুবাদ: {filename}"
+    "translationConversationTitle": "অনুবাদ: {filename}",
+    "categoryAdd": "যোগ করুন",
+    "categoryDo": "করুন",
+    "categoryChat": "এই চ্যাটে",
+    "categoryStart": "শুরু করুন"
   },
   "transcription": {
     "transcribesOnSend": "পাঠানোর সময় লিপিবদ্ধ করুন",
@@ -8288,5 +8286,56 @@
     "pageOf": "পৃষ্ঠা {page} / {total}",
     "truncated": "প্রথম {shown} টি পৃষ্ঠা দেখানো হচ্ছে, মোট {total} টি থেকে। পুরোটা দেখতে ফাইলটি ডাউনলোড করুন।",
     "enlarge": "বড় করে দেখুন: {name}"
+  },
+  "addToChat": {
+    "title": "চ্যাটে যোগ করুন",
+    "titleTranslate": "একটি ডকুমেন্ট অনুবাদ করুন",
+    "titleTranscribe": "অডিও বা ভিডিও লিখে দিন",
+    "sourcesLabel": "যা থেকে যোগ করবেন",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "এই কাজের জন্য পাওয়া যাচ্ছে না",
+    "sources": {
+      "device": "এই ডিভাইস",
+      "link": "লিঙ্ক",
+      "camera": "ক্যামেরা",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ইমেইল",
+      "meetings": "মিটিংস"
+    },
+    "device": {
+      "browse": "এই ডিভাইসে ব্রাউজ করুন",
+      "dropHint": "অথবা এই উইন্ডোতে যেকোনো জায়গায় ফাইল ড্রপ করুন, অথবা পেস্ট করুন",
+      "rejected": "এখানে এসব ফাইল ব্যবহার করা যাবে না।",
+      "hint": {
+        "attach": "ডকুমেন্ট, ছবি, অডিও ও ভিডিও।",
+        "translate": "একটি ডকুমেন্ট: Word, Excel, PowerPoint, PDF, HTML বা টেক্সট।",
+        "transcribe": "অডিও বা ভিডিও। বার্তা পাঠানোর সময় এটি লিখে দেওয়া হবে।"
+      }
+    },
+    "selection": {
+      "then": "তারপর",
+      "intents": {
+        "attach": "সংযুক্ত করুন",
+        "translate": "অনুবাদ করুন",
+        "transcribe": "লিখে দিন"
+      },
+      "confirm": {
+        "attach": "যোগ করুন",
+        "translate": "অনুবাদ",
+        "transcribe": "লিখুন"
+      },
+      "unfit": {
+        "attach": "এসব ফাইল সংযুক্ত করা যাবে না",
+        "translate": "একবারে একটি ডকুমেন্ট অনুবাদ করা যায়",
+        "transcribe": "শুধু অডিও ও ভিডিও লিখে দেওয়া সম্ভব"
+      }
+    },
+    "menu": {
+      "addToChatNote": "এই ডিভাইস, লিঙ্ক, Microsoft 365",
+      "filesOrPhotos": "ফাইল বা ছবি",
+      "fromThisDevice": "এই ডিভাইস থেকে",
+      "connect": "Microsoft 365 সংযোগ করুন",
+      "connectNote": "OneDrive, ইমেইল ও মিটিংস থেকে যোগ করুন"
+    }
   }
 }

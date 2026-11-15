@@ -2342,20 +2342,18 @@
     "sectionPinned": "Huutori",
     "sectionFrequent": "Ko feccita",
     "sectionMore": "Teeŋol",
-    "categoryWeb": "Web",
-    "categoryMedia": "Media e fiilde",
-    "categoryTransform": "Waylude",
     "pin": "Huutor e dow",
     "unpin": "Juul huutorgal",
     "moveToMore": "Yah teeŋol",
     "moveOutOfMore": "Hollu e wadalkal",
     "showSources": "Hollu suusumji goɗɗi",
     "hideSources": "Faydu suusumji goɗɗi",
-    "aiTools": "Kuutorgal AI",
-    "aiToolsTooltip": "Doggal hokketeede ka anndaa: yenndude web, fayde code, e keftingol baɗte.",
     "codeInterpreterTooltip": "Huumtu code Python ɗum ciɗi goɗɗi moƴƴi.\n\nMoƴƴi e wulnde data, hisaabe e sariyaande graph to fayde fiilde.",
-    "categoryTools": "Jumɗe e mbutukaaji",
-    "translationConversationTitle": "Tarjamnde: {filename}"
+    "translationConversationTitle": "Tarjamnde: {filename}",
+    "categoryAdd": "Ɓeydu",
+    "categoryDo": "Hoto",
+    "categoryChat": "Fi chat ɗon",
+    "categoryStart": "Fuɗɗo e"
   },
   "transcription": {
     "transcribesOnSend": "Ina winndita nde neldaa",
@@ -8272,5 +8270,56 @@
     "pageOf": "Cuɓo {page} e {total}",
     "truncated": "Mennude cuɓɓe {shown} e {total} kam. Yottu fiilde feewi haɓo cuɓɓe fof.",
     "enlarge": "Nyaɓnu {name}"
+  },
+  "addToChat": {
+    "title": "Ɓeydu e chat",
+    "titleTranslate": "Jenngu dokumen",
+    "titleTranscribe": "Jawar neɗɗaaki woɗɓe walla vidiyo",
+    "sourcesLabel": "Ɓeydu e",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Laaɓi e hili ɗon",
+    "sources": {
+      "device": "Ka neɗɗaaki",
+      "link": "Majju",
+      "camera": "Kaamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Email",
+      "meetings": "Konngol"
+    },
+    "device": {
+      "browse": "Yiyne ka neɗɗaaki",
+      "dropHint": "wallan miɗo Ɓeydu fayli ɗee ko anndaa e windu ɗon, walla paste",
+      "rejected": "Fayli ɗee waawani ko Ɓeydu e ɗon",
+      "hint": {
+        "attach": "Dokumenji, suɓe, neɗɗaaki woɗɓe walla vidiyo.",
+        "translate": "Dokumen goɗɗo: Word, Excel, PowerPoint, PDF, HTML walla text.",
+        "transcribe": "Neɗɗaaki woɗɓe walla vidiyo. Jawartaa tuma chat ɓe dafat."
+      }
+    },
+    "selection": {
+      "then": "Kadi",
+      "intents": {
+        "attach": "Ɓeydu",
+        "translate": "Jenngu",
+        "transcribe": "Jawart"
+      },
+      "confirm": {
+        "attach": "Ɓeydu",
+        "translate": "Jenngu",
+        "transcribe": "Jawart"
+      },
+      "unfit": {
+        "attach": "Fayli ɗee waawani ko Ɓeydu",
+        "translate": "Jenngu dokumen goɗɗo e jam",
+        "transcribe": "Ko neɗɗaaki woɗɓe walla vidiyo tan jawartani"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Ka neɗɗaaki, majju, Microsoft 365",
+      "filesOrPhotos": "Fayli walla suɓe",
+      "fromThisDevice": "E ka neɗɗaaki ɗon",
+      "connect": "Ɓeydu Microsoft 365",
+      "connectNote": "Ɓeydu e OneDrive, email walla konngol"
+    }
   }
 }

@@ -2342,20 +2342,18 @@
     "sectionPinned": "Καρφιτσωμένα",
     "sectionFrequent": "Συχνά χρησιμοποιούμενα",
     "sectionMore": "Περισσότερα",
-    "categoryWeb": "Web",
-    "categoryMedia": "Πολυμέσα & αρχεία",
-    "categoryTransform": "Μετασχηματισμός",
     "pin": "Καρφίτσωμα στην κορυφή",
     "unpin": "Αφαίρεση από τα καρφιτσωμένα",
     "moveToMore": "Μετακίνηση στα Περισσότερα",
     "moveOutOfMore": "Εμφάνιση στο μενού",
     "showSources": "Εμφάνιση άλλων πηγών",
     "hideSources": "Απόκρυψη άλλων πηγών",
-    "aiTools": "Εργαλεία AI",
-    "aiToolsTooltip": "Δυνατότητες που μπορεί να χρησιμοποιήσει ο βοηθός κατά την απάντηση: ζωντανή αναζήτηση στο διαδίκτυο, εκτέλεση κώδικα και συνδεδεμένες υπηρεσίες.",
     "codeInterpreterTooltip": "Εκτελεί Python code σε ασφαλές περιβάλλον για κάθε μήνυμα.\n\nΙδανικό για ανάλυση δεδομένων, υπολογισμούς και δημιουργία γραφημάτων από συνημμένα αρχεία.",
-    "categoryTools": "Εργαλεία & συνδετικά",
-    "translationConversationTitle": "Μετάφραση: {filename}"
+    "translationConversationTitle": "Μετάφραση: {filename}",
+    "categoryAdd": "Προσθήκη",
+    "categoryDo": "Ενέργεια",
+    "categoryChat": "Σε αυτή τη συζήτηση",
+    "categoryStart": "Έναρξη από"
   },
   "transcription": {
     "transcribesOnSend": "Μεταγράφεται κατά την αποστολή",
@@ -8272,5 +8270,56 @@
     "pageOf": "Σελίδα {page} από {total}",
     "truncated": "Εμφανίζονται οι πρώτες {shown} από {total} σελίδες. Κατεβάστε το αρχείο για να δείτε τις υπόλοιπες.",
     "enlarge": "Μεγέθυνση {name}"
+  },
+  "addToChat": {
+    "title": "Προσθήκη στη συζήτηση",
+    "titleTranslate": "Μετάφραση εγγράφου",
+    "titleTranscribe": "Απομαγνητοφώνηση ήχου ή βίντεο",
+    "sourcesLabel": "Προσθήκη από",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Μη διαθέσιμο για αυτήν την ενέργεια",
+    "sources": {
+      "device": "Αυτή η συσκευή",
+      "link": "Σύνδεσμος",
+      "camera": "Κάμερα",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Email",
+      "meetings": "Συναντήσεις"
+    },
+    "device": {
+      "browse": "Αναζήτηση σε αυτή τη συσκευή",
+      "dropHint": "ή σύρετε αρχεία οπουδήποτε σε αυτό το παράθυρο ή επικολλήστε",
+      "rejected": "Κανένα από αυτά τα αρχεία δεν μπορεί να χρησιμοποιηθεί εδώ.",
+      "hint": {
+        "attach": "Έγγραφα, εικόνες, ήχος και βίντεο.",
+        "translate": "Ένα έγγραφο: Word, Excel, PowerPoint, PDF, HTML ή κείμενο.",
+        "transcribe": "Ήχος ή βίντεο. Η απομαγνητοφώνηση γίνεται με την αποστολή του μηνύματος."
+      }
+    },
+    "selection": {
+      "then": "Έπειτα",
+      "intents": {
+        "attach": "Επισύναψη",
+        "translate": "Μετάφραση",
+        "transcribe": "Απομαγνητοφώνηση"
+      },
+      "confirm": {
+        "attach": "Προσθήκη",
+        "translate": "Μετάφραση",
+        "transcribe": "Απομαγνητοφώνηση"
+      },
+      "unfit": {
+        "attach": "Αυτά τα αρχεία δεν μπορούν να επισυναφθούν",
+        "translate": "Η μετάφραση γίνεται ένα έγγραφο κάθε φορά",
+        "transcribe": "Μόνο ήχος και βίντεο μπορούν να απομαγνητοφωνηθούν"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Αυτή η συσκευή, σύνδεσμοι, Microsoft 365",
+      "filesOrPhotos": "Αρχεία ή φωτογραφίες",
+      "fromThisDevice": "Από αυτή τη συσκευή",
+      "connect": "Σύνδεση Microsoft 365",
+      "connectNote": "Προσθήκη από OneDrive, email και συναντήσεις"
+    }
   }
 }

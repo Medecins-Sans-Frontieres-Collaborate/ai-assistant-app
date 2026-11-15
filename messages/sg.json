@@ -2342,20 +2342,18 @@
     "sectionPinned": "Gbê-linga",
     "sectionFrequent": "Ayeke andâ-ndâ",
     "sectionMore": "Döko",
-    "categoryWeb": "Web",
-    "categoryMedia": "Media na likundu",
-    "categoryTransform": "Sûèse",
     "pin": "Linga na bängö",
     "unpin": "Tîrî linga",
     "moveToMore": "Gbenî na döko",
     "moveOutOfMore": "Wüsa na menü",
     "showSources": "Hûngu mbi sôso fi",
     "hideSources": "Sûku mbi sôso fi",
-    "aiTools": "AI tool-s",
-    "aiToolsTooltip": "Matô na assistant na kîri: pépé web na sôko, code execution, na connected services.",
     "codeInterpreterTooltip": "Sâ Python code na sandbox gbênî mo môbé na mbênî.\n\nFunga ti analyse data, calcul, na sâ diagram na fichier na yeke.",
-    "categoryTools": "Mbênî & yâ na yôngo",
-    "translationConversationTitle": "Lingué: {filename}"
+    "translationConversationTitle": "Lingué: {filename}",
+    "categoryAdd": "Gbâ",
+    "categoryDo": "Yeke",
+    "categoryChat": "Na mbênî ti yângâ",
+    "categoryStart": "Kûê na"
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
@@ -8272,5 +8270,56 @@
     "pageOf": "Page {page} ti {total}",
     "truncated": "Löngö page {shown} ti {total} na tî tî. Ködörï file ti yä mbïa ti tjetërï.",
     "enlarge": "Giligimba {name}"
+  },
+  "addToChat": {
+    "title": "Gbâ na mbênî",
+    "titleTranslate": "Gbâ ti fâara doküma",
+    "titleTranscribe": "Gbâ ti zo yângâ tî audiyo na video",
+    "sourcesLabel": "Gbâ na",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "A kodro bâ yeke dé",
+    "sources": {
+      "device": "Gadawa ti mbi",
+      "link": "Link",
+      "camera": "Kamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Email",
+      "meetings": "Kufûtî"
+    },
+    "device": {
+      "browse": "Kângbi na gadawa ti mbi",
+      "dropHint": "Falê dosié na mbênî œ tî fenêtre só, na paste",
+      "rejected": "Dosié só bâ kodro ti yeke na mbênî so.",
+      "hint": {
+        "attach": "Doküma, fôtô, audiyo na video.",
+        "translate": "Doküma mô: Word, Excel, PowerPoint, PDF, HTML na téxte.",
+        "transcribe": "Audiyo na video. A fâara mô tî lo na yângâ ti fêtî."
+      }
+    },
+    "selection": {
+      "then": "Na sima",
+      "intents": {
+        "attach": "Attacher",
+        "translate": "Fâara",
+        "transcribe": "Zo yângâ"
+      },
+      "confirm": {
+        "attach": "Gbâ",
+        "translate": "Fâara",
+        "transcribe": "Zo yângâ"
+      },
+      "unfit": {
+        "attach": "Dosié só bâ kodro ti attacher",
+        "translate": "Fâara doküma mô na mô",
+        "transcribe": "Zo yângâ kodro na audiyo na video"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Gadawa ti mbi, link, Microsoft 365",
+      "filesOrPhotos": "Dosié na fôtô",
+      "fromThisDevice": "Na gadawa ti mbi",
+      "connect": "Kêtî Microsoft 365",
+      "connectNote": "Gbâ na OneDrive, email na kufûtî"
+    }
   }
 }

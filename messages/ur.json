@@ -2422,20 +2422,18 @@
     "sectionPinned": "پن کیا گیا",
     "sectionFrequent": "کثرت سے استعمال شدہ",
     "sectionMore": "مزید",
-    "categoryWeb": "ویب",
-    "categoryMedia": "میڈیا اور فائلز",
-    "categoryTransform": "تبدیل کریں",
     "pin": "اوپر پن کریں",
     "unpin": "پن ہٹائیں",
     "moveToMore": "مزید میں منتقل کریں",
     "moveOutOfMore": "مینو میں دکھائیں",
     "showSources": "دیگر ذرائع دکھائیں",
     "hideSources": "دیگر ذرائع چھپائیں",
-    "aiTools": "AI ٹولز",
-    "aiToolsTooltip": "جو صلاحیتیں اسسٹنٹ جواب دیتے وقت استعمال کر سکتا ہے: لائیو ویب سرچ، کوڈ پر عمل درآمد، اور منسلک سروسز۔",
     "codeInterpreterTooltip": "ہر پیغام پر محفوظ سینڈ باکس میں Python کوڈ چلائیں۔\n\nمنسلک فائلوں سے ڈیٹا تجزیہ، حسابات، اور چارٹ بنانے کے لئے بہترین۔",
-    "categoryTools": "اوزار اور کنیکٹرز",
-    "translationConversationTitle": "ترجمہ: {filename}"
+    "translationConversationTitle": "ترجمہ: {filename}",
+    "categoryAdd": "شامل کریں",
+    "categoryDo": "کریں",
+    "categoryChat": "اس چیٹ میں",
+    "categoryStart": "سے شروع کریں"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "اپنی ذاتی ہدایات شامل کریں تاکہ AI کے ردعمل کو اپنی مرضی کے مطابق بنا سکیں۔ یہ ہدایات بنیادی رہنمائی کے ساتھ ملائی جاتی ہیں جو مددگار، درست اور محفوظ جوابات کو یقینی بناتی ہیں۔",
   "Tip: Type \"/\" to select from saved prompt templates_": "ٹپ: محفوظ شدہ پرومپٹ ٹیمپلیٹس میں سے منتخب کرنے کے لیے \"/\" ٹائپ کریں۔",
@@ -8318,5 +8316,56 @@
     "pageOf": "صفحہ {page} از {total}",
     "truncated": "پہلے {shown} میں سے {total} صفحات دکھائے جا رہے ہیں۔ باقی دیکھنے کے لیے فائل ڈاؤن لوڈ کریں۔",
     "enlarge": "{name} کو بڑا کریں"
+  },
+  "addToChat": {
+    "title": "چیٹ میں شامل کریں",
+    "titleTranslate": "دستاویز کا ترجمہ کریں",
+    "titleTranscribe": "آڈیو یا ویڈیو نقل کریں",
+    "sourcesLabel": "سے شامل کریں",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "یہ عمل کیلئے دستیاب نہیں",
+    "sources": {
+      "device": "اس ڈیوائس سے",
+      "link": "لنک",
+      "camera": "کیمرہ",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ای میل",
+      "meetings": "میٹنگز"
+    },
+    "device": {
+      "browse": "اس ڈیوائس کو براؤز کریں",
+      "dropHint": "یا فائلیں اس ونڈو میں کہیں بھی چھوڑیں، یا پیسٹ کریں",
+      "rejected": "یہ فائلیں یہاں استعمال نہیں ہو سکتیں۔",
+      "hint": {
+        "attach": "دستاویزات، تصاویر، آڈیو اور ویڈیو۔",
+        "translate": "ایک دستاویز: Word، Excel، PowerPoint، PDF، HTML یا ٹیکسٹ۔",
+        "transcribe": "آڈیو یا ویڈیو۔ پیغام بھیجنے پر نقل کی جائے گی۔"
+      }
+    },
+    "selection": {
+      "then": "پھر",
+      "intents": {
+        "attach": "اٹیچ کریں",
+        "translate": "ترجمہ کریں",
+        "transcribe": "نقل کریں"
+      },
+      "confirm": {
+        "attach": "شامل کریں",
+        "translate": "ترجمہ کریں",
+        "transcribe": "نقل کریں"
+      },
+      "unfit": {
+        "attach": "یہ فائلیں اٹیچ نہیں کی جا سکتیں",
+        "translate": "ترجمہ ایک وقت میں ایک دستاویز پر ہوتا ہے",
+        "transcribe": "صرف آڈیو اور ویڈیو کی نقل ہو سکتی ہے"
+      }
+    },
+    "menu": {
+      "addToChatNote": "یہ ڈیوائس، لنکس، Microsoft 365",
+      "filesOrPhotos": "فائلیں یا تصاویر",
+      "fromThisDevice": "اس ڈیوائس سے",
+      "connect": "Microsoft 365 کنیکٹ کریں",
+      "connectNote": "OneDrive، ای میل اور میٹنگز سے شامل کریں"
+    }
   }
 }

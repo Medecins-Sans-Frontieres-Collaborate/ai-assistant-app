@@ -2342,20 +2342,18 @@
     "sectionPinned": "Ekokisami",
     "sectionFrequent": "Oyo ezali kosalelama mingi",
     "sectionMore": "Mosusu",
-    "categoryWeb": "Web",
-    "categoryMedia": "Media & bafichier",
-    "categoryTransform": "Kobongola",
     "pin": "Fixa likolo",
     "unpin": "Kolongola na cima",
     "moveToMore": "Kobakisa na Mosusu",
     "moveOutOfMore": "Lakisa na menu",
     "showSources": "Lakisa bisika mosusu",
     "hideSources": "Kunda bisika mosusu",
-    "aiTools": "Biloko ya AI",
-    "aiToolsTooltip": "Makoki oyo assistant akoki kosalela ntango azali kopesa eyano : recherche ya Internet na tango moke, kosala code, mpe services interconnectées.",
     "codeInterpreterTooltip": "Kobeta code ya Python na sandbox ya sécurité mpo na message moko na moko.\n\nEzalaki malamu mpo na analyse ya ba données, calculs, mpe kobimisa graphique na fichiers ezali.",
-    "categoryTools": "Biloko ya mosala & bakonekteur",
-    "translationConversationTitle": "Botá: {filename}"
+    "translationConversationTitle": "Botá: {filename}",
+    "categoryAdd": "Kobakisa",
+    "categoryDo": "Kosala",
+    "categoryChat": "Na lisolo oyo",
+    "categoryStart": "Kobanda na"
   },
   "transcription": {
     "transcribesOnSend": "Ekomaka transcription ntango otindi",
@@ -8272,5 +8270,56 @@
     "pageOf": "Lokasa {page} kati na {total}",
     "truncated": "Toli kolakisa bakasa {shown} ya {total} ya liboso. Zwá dosié mpo omona nyonso.",
     "enlarge": "Kokisa {name}"
+  },
+  "addToChat": {
+    "title": "Kobakisa na lisolo",
+    "titleTranslate": "Kokómbola mokanda",
+    "titleTranscribe": "Kokoma makambo ya soni to video",
+    "sourcesLabel": "Kobakisa uta",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Eza te mpo na likambo oyo",
+    "sources": {
+      "device": "Eltɔ oyo",
+      "link": "Link",
+      "camera": "Camera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Email",
+      "meetings": "Bapanzi"
+    },
+    "device": {
+      "browse": "Luka na eltɔ oyo",
+      "dropHint": "to bwaka bafichier epai nyonso na fenetre oyo, to kopya-na-kotya",
+      "rejected": "Ata moko te ya bafichier wana ekoki kosalama awa.",
+      "hint": {
+        "attach": "Bimposa, bafoto, makambo ya soni mpe video.",
+        "translate": "Moko kati na bamakanda: Word, Excel, PowerPoint, PDF, HTML to texte.",
+        "transcribe": "Soni to video. Ekomamaka tango o tindi nsango."
+      }
+    },
+    "selection": {
+      "then": "Sima",
+      "intents": {
+        "attach": "Kobatela",
+        "translate": "Kokómbola",
+        "transcribe": "Kokoma"
+      },
+      "confirm": {
+        "attach": "Kobakisa",
+        "translate": "Kokómbola",
+        "transcribe": "Kokoma"
+      },
+      "unfit": {
+        "attach": "Bafichier wana bakoki te kosalanama",
+        "translate": "Kokómbola esalemi kaka moko na moko",
+        "transcribe": "Soni mpe video nde ekoki kokomama"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Eltɔ oyo, link, Microsoft 365",
+      "filesOrPhotos": "Bafichier to bafoto",
+      "fromThisDevice": "Uta na eltɔ oyo",
+      "connect": "Kokangisa Microsoft 365",
+      "connectNote": "Kobakisa uta OneDrive, email mpe bapanzi"
+    }
   }
 }

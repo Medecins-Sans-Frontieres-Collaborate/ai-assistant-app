@@ -2420,20 +2420,18 @@
     "sectionPinned": "Przypięte",
     "sectionFrequent": "Często używane",
     "sectionMore": "Więcej",
-    "categoryWeb": "Web",
-    "categoryMedia": "Multimedia i pliki",
-    "categoryTransform": "Przekształć",
     "pin": "Przypnij na górze",
     "unpin": "Odepnij",
     "moveToMore": "Przenieś do „Więcej”",
     "moveOutOfMore": "Pokaż w menu",
     "showSources": "Pokaż inne źródła",
     "hideSources": "Ukryj inne źródła",
-    "aiTools": "Narzędzia AI",
-    "aiToolsTooltip": "Funkcje, z których asystent może korzystać podczas odpowiedzi: wyszukiwanie w internecie na żywo, wykonywanie kodu i połączone usługi.",
     "codeInterpreterTooltip": "Uruchamiaj kod Pythona w bezpiecznej piaskownicy dla każdej wiadomości.\n\nIdealne do analizy danych, obliczeń i generowania wykresów z załączonych plików.",
-    "categoryTools": "Narzędzia i łączniki",
-    "translationConversationTitle": "Tłumaczenie: {filename}"
+    "translationConversationTitle": "Tłumaczenie: {filename}",
+    "categoryAdd": "Dodaj",
+    "categoryDo": "Wykonaj",
+    "categoryChat": "W tym czacie",
+    "categoryStart": "Rozpocznij od"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Dodaj własne instrukcje, aby dostosować sposób, w jaki AI odpowiada. Zostaną one połączone z głównymi wytycznymi, które zapewniają pomocne, dokładne i bezpieczne odpowiedzi.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Porada: wpisz „/”, aby wybrać z zapisanych szablonów podpowiedzi.",
@@ -8288,5 +8286,56 @@
     "pageOf": "Strona {page} z {total}",
     "truncated": "Wyświetlono pierwsze {shown} z {total} stron. Pobierz plik, aby zobaczyć resztę.",
     "enlarge": "Powiększ {name}"
+  },
+  "addToChat": {
+    "title": "Dodaj do czatu",
+    "titleTranslate": "Przetłumacz dokument",
+    "titleTranscribe": "Transkrybuj dźwięk lub wideo",
+    "sourcesLabel": "Dodaj z",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Niedostępne dla tej akcji",
+    "sources": {
+      "device": "To urządzenie",
+      "link": "Link",
+      "camera": "Aparat",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "E-mail",
+      "meetings": "Spotkania"
+    },
+    "device": {
+      "browse": "Przeglądaj to urządzenie",
+      "dropHint": "lub upuść pliki w dowolnym miejscu tego okna lub wklej",
+      "rejected": "Żaden z tych plików nie może być tutaj użyty.",
+      "hint": {
+        "attach": "Dokumenty, obrazy, dźwięk i wideo.",
+        "translate": "Jeden dokument: Word, Excel, PowerPoint, PDF, HTML lub tekst.",
+        "transcribe": "Dźwięk lub wideo. Zostanie przepisany po wysłaniu wiadomości."
+      }
+    },
+    "selection": {
+      "then": "Następnie",
+      "intents": {
+        "attach": "Dołącz",
+        "translate": "Przetłumacz",
+        "transcribe": "Transkrybuj"
+      },
+      "confirm": {
+        "attach": "Dodaj",
+        "translate": "Przetłumacz",
+        "transcribe": "Transkrybuj"
+      },
+      "unfit": {
+        "attach": "Tych plików nie można dołączyć",
+        "translate": "Tłumaczenie obsługuje jeden dokument naraz",
+        "transcribe": "Można transkrybować tylko dźwięk i wideo"
+      }
+    },
+    "menu": {
+      "addToChatNote": "To urządzenie, linki, Microsoft 365",
+      "filesOrPhotos": "Pliki lub zdjęcia",
+      "fromThisDevice": "Z tego urządzenia",
+      "connect": "Połącz z Microsoft 365",
+      "connectNote": "Dodaj z OneDrive, e-maila i spotkań"
+    }
   }
 }

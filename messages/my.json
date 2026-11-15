@@ -2420,20 +2420,18 @@
     "sectionPinned": "အထက်တွင်တပ်ဆင်ထားသည်",
     "sectionFrequent": "မကြာခဏအသုံးပြုသော",
     "sectionMore": "နောက်ထပ်",
-    "categoryWeb": "Web",
-    "categoryMedia": "မီဒီယာနှင့် ဖိုင်များ",
-    "categoryTransform": "အပြောင်းအလဲ",
     "pin": "ထိပ်ပိုင်းတွင်တပ်ဆင်ရန်",
     "unpin": "ထိပ်မှဖြုတ်ရန်",
     "moveToMore": "နောက်ထပ်သို့ရွှေ့ရန်",
     "moveOutOfMore": "မီနူးထဲတွင် ပြရန်",
     "showSources": "အခြား ရင်းမြစ်များ ပြပါ",
     "hideSources": "အခြား ရင်းမြစ်များ 숨기기",
-    "aiTools": "AI ကိရိယာများ",
-    "aiToolsTooltip": "အဆောင်အကူညီပေးသူတွင် အသုံးပြုနိုင်သည့် လုပ်ဆောင်နိုင်မှုများ — မိမိကိုယ်တိုင် ဝက်ဘ်ရှာဖွေမှု၊ ကုဒ်အသုံးပြုမှု၊ နှင့် ဆက်စပ်ဝန်ဆောင်မှုများ။",
     "codeInterpreterTooltip": "Python code ကို မေးစာတိုင်းအတွက် အန္တရာယ်ကင်းသည့် sandbox တွင် ပြေးနိုင်သည်။\n\nData သုံးသပ်ခြင်း၊ တွက်ချက်ခြင်းနှင့် ပြိုင်ဆွယ်မှုများအတွက် အထူးသင့်လျော်သည်။",
-    "categoryTools": "ကိရိယာများနှင့် ချိတ်ဆက်တဲ့ပစ္စည်းများ",
-    "translationConversationTitle": "ဘာသာပြန်ချက် - {filename}"
+    "translationConversationTitle": "ဘာသာပြန်ချက် - {filename}",
+    "categoryAdd": "အပ်ဒ်",
+    "categoryDo": "လုပ်ပါ",
+    "categoryChat": "ဤချက်တွင်",
+    "categoryStart": "စတင်မည်"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI ရဲ့ တုန့်ပြန်မှုကို ပြင်ဆင်နိုင်ရန် ကိုယ်ပိုင်ညွှန်ကြားချက်များ ထည့်ပါ။ ဤညွှန်ကြားချက်များကို အထောက်အကူပြု၊ တိကျမှန်ကန်ပြီး လုံခြုံစိတ်ချသော တုန့်ပြန်မှုများ ရရှိစေရန် မူဝါဒအညွှန်းနှင့် တွဲဖက်အသုံးပြုပါသည်။",
   "Tip: Type \"/\" to select from saved prompt templates_": "အကြံပြုချက် - သိမ်းထားသော prompt template များကို ရွေးချယ်ရန် \"/\" ကို ရိုက်ထည့်ပါ။",
@@ -8288,5 +8286,56 @@
     "pageOf": "စာမျက်နှာ {page} of {total}",
     "enlarge": "{name} ကို ချဲ့ကြည့်ပါ",
     "truncated": "စုစုပေါင်းစာမျက်နှာ {total} မှ ပထမ {shown} မျက်နှာကိုသာ ပြပါသည်။ ကျန်ဆုံးစာမျက်နှာများကိုကြည့်ရန် ဖိုင်ကို ဒေါင်းလုပ်လုပ်ပါ။"
+  },
+  "addToChat": {
+    "title": "ချက်သို့ ထည့်ပါ",
+    "titleTranslate": "စာရွက်စာတမ်း ဘာသာပြန်ပါ",
+    "titleTranscribe": "အသံ/ဗီဒီအို စာရိုက်ပါ",
+    "sourcesLabel": "ထည့်သွင်းရန် အရင်းအမြစ်",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "ဤလှုပ်ရှားမှုအတွက် မရနိုင်ပါ",
+    "sources": {
+      "device": "ဒီစက်",
+      "link": "လင့်",
+      "camera": "ကင်မရာ",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "အီးမေးလ်",
+      "meetings": "အစည်းအဝေး"
+    },
+    "device": {
+      "browse": "ဒီစက်တွင် ရှာဖွေကြည့်ပါ",
+      "dropHint": "ဤဝင်းဒိုးတွင် ဖိုင်များကို အချေနိုင်သည် သို့မဟုတ် ကူးထည့်ပါ",
+      "rejected": "ဤနေရာတွင် ဖိုင်များကို အသုံးပြု၍မရပါ။",
+      "hint": {
+        "attach": "စာရွက်စာတမ်းများ၊ ပုံများ၊ အသံနှင့် ဗီဒီအိုများ။",
+        "translate": "စာရွက်စာတမ်းတစ်ခု - Word, Excel, PowerPoint, PDF, HTML သို့မဟုတ် အကြောင်းအရာ။",
+        "transcribe": "အသံ သို့မဟုတ် ဗီဒီအို။ မက်ဆေ့ချ်ပို့ပြီး ဝင်ရောက်ရင် စာရိုက်ပေးပါမည်။"
+      }
+    },
+    "selection": {
+      "then": "ထို့နောက်",
+      "intents": {
+        "attach": "တွဲပါ",
+        "translate": "ဘာသာပြန်ပါ",
+        "transcribe": "စာရိုက်ပါ"
+      },
+      "confirm": {
+        "attach": "ထည့်ပါ",
+        "translate": "ဘာသာပြန်ပါ",
+        "transcribe": "စာရိုက်ပါ"
+      },
+      "unfit": {
+        "attach": "ဤဖိုင်များကို တြဲ၍မရပါ",
+        "translate": "ဘာသာပြန်ခြင်းတွင် စာရွက်စာတမ်းတစ်ခုသာ လက်ခံသည်",
+        "transcribe": "အသံနှင့် ဗီဒီအို မျှသာ စာရိုက်နိုင်သည်"
+      }
+    },
+    "menu": {
+      "addToChatNote": "ဒီစက်၊ လင့်များ၊ Microsoft 365",
+      "filesOrPhotos": "ဖိုင်များ သို့မဟုတ် ပုံများ",
+      "fromThisDevice": "ဒီစက်မှ",
+      "connect": "Microsoft 365 ချိတ်ဆက်ပါ",
+      "connectNote": "OneDrive, အီးမေးလ်နှင့် အစည်းအဝေးမှ ထည့်ပါ"
+    }
   }
 }

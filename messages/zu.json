@@ -2342,20 +2342,18 @@
     "sectionPinned": "Okubekiwe",
     "sectionFrequent": "Okusetshenziswa kaningi",
     "sectionMore": "Okunye",
-    "categoryWeb": "IWebhu",
-    "categoryMedia": "I-Media & amafayela",
-    "categoryTransform": "Guqula",
     "pin": "Beka phezulu",
     "unpin": "Susa phezulu",
     "moveToMore": "Hambisa kokunye",
     "moveOutOfMore": "Bonisa kwimenyu",
     "showSources": "Bonisa eminye imithombo",
     "hideSources": "Fihla eminye imithombo",
-    "aiTools": "Amathuluzi e-AI",
-    "aiToolsTooltip": "Amakhono usizo angawasebenzisa lapho ephendula: usesho lwewebhu bukhoma, ukusebenza kwekhodi, kanye nezinsizakalo ezixhunyiwe.",
     "codeInterpreterTooltip": "Qalisa ikhodi yePython endaweni ephephile emlayezo ngamunye.\n\nKuhle ukuhlaziya idatha, izibalo, nokwenza amashadi ezifayeleni ezinamathiselwe.",
-    "categoryTools": "Amathuluzi nezixhumi",
-    "translationConversationTitle": "Ukuhunyushwa: {filename}"
+    "translationConversationTitle": "Ukuhunyushwa: {filename}",
+    "categoryAdd": "Engeza",
+    "categoryDo": "Yenza",
+    "categoryChat": "Kule ngxoxo",
+    "categoryStart": "Qala ku"
   },
   "transcription": {
     "transcribesOnSend": "Kubhalwa phansi uma kuthunyelwa",
@@ -8272,5 +8270,56 @@
     "pageOf": "Ikhasi {page} kwa-{total}",
     "truncated": "Kubukiswa amakhasi {shown} kokungu-{total} wokuqala. Landa ifayili ukuze ubone wonke.",
     "enlarge": "Khulisa {name}"
+  },
+  "addToChat": {
+    "title": "Engeza engxoxweni",
+    "titleTranslate": "Humusha umqulu",
+    "titleTranscribe": "Guqula umsindo noma ividiyo",
+    "sourcesLabel": "Engeza kusuka",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Akutholakali kule ntshukumo",
+    "sources": {
+      "device": "Leli divayisi",
+      "link": "Isixhumanisi",
+      "camera": "Ikhamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "I-imeyili",
+      "meetings": "Imihlangano"
+    },
+    "device": {
+      "browse": "Hlola leli divayisi",
+      "dropHint": "noma lahla amafayela noma kuphi kulewindi, noma unamathisele",
+      "rejected": "Ayikho yale fayela engasetshenziswa lapha.",
+      "hint": {
+        "attach": "Imibhalo, izithombe, umsindo nevidiyo.",
+        "translate": "Umqulu owodwa: Word, Excel, PowerPoint, PDF, HTML noma umbhalo.",
+        "transcribe": "Umsindo noma ividiyo. Kuzoguqulwa uma uthumela umlayezo."
+      }
+    },
+    "selection": {
+      "then": "Bese",
+      "intents": {
+        "attach": "Namathisela",
+        "translate": "Humusha",
+        "transcribe": "Guqula"
+      },
+      "confirm": {
+        "attach": "Engeza",
+        "translate": "Humusha",
+        "transcribe": "Guqula"
+      },
+      "unfit": {
+        "attach": "Lawa mafayela awakwazi ukunamatheliswa",
+        "translate": "Ukuhumusha kuthatha umqulu owodwa kuphela ngesikhathi",
+        "transcribe": "Kuphela umsindo nevidiyo engaguqulwa"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Leli divayisi, izixhumanisi, Microsoft 365",
+      "filesOrPhotos": "Amafayela noma izithombe",
+      "fromThisDevice": "Kusuka leli divayisi",
+      "connect": "Xhuma Microsoft 365",
+      "connectNote": "Engeza kusuka ku-OneDrive, i-imeyili kanye nemihlangano"
+    }
   }
 }

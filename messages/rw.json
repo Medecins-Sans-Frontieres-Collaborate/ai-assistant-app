@@ -2342,20 +2342,18 @@
     "sectionPinned": "Byafashijwe hejuru",
     "sectionFrequent": "Bisanzwe bikoreshwa",
     "sectionMore": "Ibindi",
-    "categoryWeb": "Web",
-    "categoryMedia": "Media & inyandiko",
-    "categoryTransform": "Hindura",
     "pin": "Shyira hejuru",
     "unpin": "Kura hejuru",
     "moveToMore": "Jyana mu Bindi",
     "moveOutOfMore": "Erekana muri menu",
     "showSources": "Erekana andi masoko",
     "hideSources": "Hisha andi masoko",
-    "aiTools": "Ibikoresho bya AI",
-    "aiToolsTooltip": "Ubushobozi umufasha ashobora gukoresha mu gusubiza: gushakisha kuri internet, gukoresha code, n’ubundi buryo buhuza serivisi.",
     "codeInterpreterTooltip": "Koresha code ya Python ahantu hizewe kuri buri butumwa.\n\nByiza mu isesengura ry’amakuru, imibare, no gukora imbonerahamwe bivuye ku mafayile wunzeho.",
-    "categoryTools": "Ibikoresho & connectors",
-    "translationConversationTitle": "Ihindurabitekerezo: {filename}"
+    "translationConversationTitle": "Ihindurabitekerezo: {filename}",
+    "categoryAdd": "Ongeraho",
+    "categoryDo": "Kora",
+    "categoryChat": "Muri iki kiganiro",
+    "categoryStart": "Tangirira kuri"
   },
   "transcription": {
     "transcribesOnSend": "Kwandika iyo byoherejwe",
@@ -8272,5 +8270,56 @@
     "pageOf": "Urupapuro {page} muri {total}",
     "truncated": "Uhereye urupapuro rwa mbere {shown} muri {total}. Manura dosiye kugira ngo ubone ayandi.",
     "enlarge": "Gukuraho {name}"
+  },
+  "addToChat": {
+    "title": "Ongeraho mu kiganiro",
+    "titleTranslate": "Hindura inyandiko",
+    "titleTranscribe": "Andika amajwi cyangwa amashusho",
+    "sourcesLabel": "Ongeraho uturutse kuri",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Ntibiboneka kuri iki gikorwa",
+    "sources": {
+      "device": "Igikoresho cyawe",
+      "link": "Iyanditse",
+      "camera": "Camera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Imeyili",
+      "meetings": "Inama"
+    },
+    "device": {
+      "browse": "Shakisha kuri iki gikoresho",
+      "dropHint": "Cyoza cyangwa ukore kopi iyo dosiye ahari hose aha kuri iyi window, cyangwa ubandike",
+      "rejected": "Nta dosiye kuri izo zakoreshwa hano.",
+      "hint": {
+        "attach": "Inyandiko, amashusho, amajwi n'amashusho.",
+        "translate": "Inyandiko imwe: Word, Excel, PowerPoint, PDF, HTML cyangwa text.",
+        "transcribe": "Amajwi cyangwa amashusho. Bizandikwa utanze ubutumwa."
+      }
+    },
+    "selection": {
+      "then": "Hanyuma",
+      "intents": {
+        "attach": "Shyiraho",
+        "translate": "Hindura",
+        "transcribe": "Andika"
+      },
+      "confirm": {
+        "attach": "Ongeraho",
+        "translate": "Hindura",
+        "transcribe": "Andika"
+      },
+      "unfit": {
+        "attach": "Izi dosiye ntizishobora kwiyongerwaho",
+        "translate": "Uhindura inyandiko imwe buri gihe",
+        "transcribe": "Amajwi n'amashusho gusa nibyo bishobora kwandikwa"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Igikoresho cyawe, iyanditse, Microsoft 365",
+      "filesOrPhotos": "Dosiye cyangwa amafoto",
+      "fromThisDevice": "Uturutse kuri iki gikoresho",
+      "connect": "Hunga Microsoft 365",
+      "connectNote": "Ongeraho uturutse kuri OneDrive, imeyili n'inama"
+    }
   }
 }

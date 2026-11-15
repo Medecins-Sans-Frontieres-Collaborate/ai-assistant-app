@@ -2268,20 +2268,18 @@
     "sectionPinned": "पिन किया गया",
     "sectionFrequent": "अक्सर उपयोग किए गए",
     "sectionMore": "और भी",
-    "categoryWeb": "वेब",
-    "categoryMedia": "मीडिया और फ़ाइलें",
-    "categoryTransform": "परिवर्तित करें",
     "pin": "ऊपर पिन करें",
     "unpin": "पिन हटाएँ",
     "moveToMore": "'और भी' में भेजें",
     "moveOutOfMore": "मेन्यू में दिखाएँ",
     "showSources": "अन्य स्रोत दिखाएं",
     "hideSources": "अन्य स्रोत छिपाएं",
-    "aiTools": "AI टूल्स",
-    "aiToolsTooltip": "वे क्षमताएँ जिन्हें सहायक उत्तर देते समय इस्तेमाल कर सकता है: लाइव वेब सर्च, कोड निष्पादन और कनेक्टेड सर्विसेज़।",
     "codeInterpreterTooltip": "हर संदेश के लिए एक सुरक्षित सैंडबॉक्स में Python कोड चलाएँ।\n\nसंलग्न फ़ाइलों से डेटा विश्लेषण, गणना और चार्ट जनरेट करने के लिए उपयुक्त।",
-    "categoryTools": "उपकरण और कनेक्टर",
-    "translationConversationTitle": "अनुवाद: {filename}"
+    "translationConversationTitle": "अनुवाद: {filename}",
+    "categoryAdd": "जोड़ें",
+    "categoryDo": "करें",
+    "categoryChat": "इस चैट में",
+    "categoryStart": "से शुरू करें"
   },
   "transcription": {
     "addInstructions": "निर्देश जोड़ें",
@@ -8288,5 +8286,56 @@
     "pageOf": "पृष्ठ {page} में से {total}",
     "truncated": "पहले {shown} में से {total} पृष्ठ दिखा रहे हैं। बाकी देखने के लिए फ़ाइल डाउनलोड करें।",
     "enlarge": "{name} बड़ा करें"
+  },
+  "addToChat": {
+    "title": "चैट में जोड़ें",
+    "titleTranslate": "दस्तावेज़ का अनुवाद करें",
+    "titleTranscribe": "ऑडियो या वीडियो ट्रांसक्राइब करें",
+    "sourcesLabel": "से जोड़ें",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "यह क्रिया उपलब्ध नहीं है",
+    "sources": {
+      "device": "यह डिवाइस",
+      "link": "लिंक",
+      "camera": "कैमरा",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ईमेल",
+      "meetings": "मीटिंग्स"
+    },
+    "device": {
+      "browse": "इस डिवाइस में ब्राउज़ करें",
+      "dropHint": "या फाइलें इस विंडो में कहीं भी ड्रॉप करें, या पेस्ट करें",
+      "rejected": "इनमें से कोई भी फाइल यहाँ उपयोग नहीं की जा सकती।",
+      "hint": {
+        "attach": "दस्तावेज़, छवियाँ, ऑडियो और वीडियो।",
+        "translate": "एक दस्तावेज़: Word, Excel, PowerPoint, PDF, HTML या टेक्स्ट।",
+        "transcribe": "ऑडियो या वीडियो। भेजने पर ट्रांसक्राइब किया जाता है।"
+      }
+    },
+    "selection": {
+      "then": "फिर",
+      "intents": {
+        "attach": "संलग्न करें",
+        "translate": "अनुवाद करें",
+        "transcribe": "ट्रांसक्राइब करें"
+      },
+      "confirm": {
+        "attach": "जोड़ें",
+        "translate": "अनुवाद करें",
+        "transcribe": "ट्रांसक्राइब करें"
+      },
+      "unfit": {
+        "attach": "इन फाइलों को संलग्न नहीं किया जा सकता",
+        "translate": "अनुवाद एक बार में एक दस्तावेज़ लेता है",
+        "transcribe": "केवल ऑडियो और वीडियो ट्रांसक्राइब किए जा सकते हैं"
+      }
+    },
+    "menu": {
+      "addToChatNote": "यह डिवाइस, लिंक, Microsoft 365",
+      "filesOrPhotos": "फाइलें या फोटो",
+      "fromThisDevice": "इस डिवाइस से",
+      "connect": "Microsoft 365 कनेक्ट करें",
+      "connectNote": "OneDrive, ईमेल और मीटिंग्स से जोड़ें"
+    }
   }
 }

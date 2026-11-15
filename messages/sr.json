@@ -2342,20 +2342,18 @@
     "sectionPinned": "Prikačeno",
     "sectionFrequent": "Često korišćeno",
     "sectionMore": "Više",
-    "categoryWeb": "Veb",
-    "categoryMedia": "Mediji i fajlovi",
-    "categoryTransform": "Transformiši",
     "pin": "Prikači na vrh",
     "unpin": "Otkači",
     "moveToMore": "Premesti u Više",
     "moveOutOfMore": "Prikaži u meniju",
     "showSources": "Prikaži druge izvore",
     "hideSources": "Sakrij druge izvore",
-    "aiTools": "AI alati",
-    "aiToolsTooltip": "Mogućnosti koje asistent može koristiti tokom odgovaranja: pretraga interneta uživo, izvršavanje koda i povezane usluge.",
     "codeInterpreterTooltip": "Pokrenite Python kod u sigurnom okruženju za svaku poruku.\n\nOdlično za analizu podataka, proračune i generisanje grafikona iz priloženih fajlova.",
-    "categoryTools": "Alati i konektori",
-    "translationConversationTitle": "Prevod: {filename}"
+    "translationConversationTitle": "Prevod: {filename}",
+    "categoryAdd": "Dodaj",
+    "categoryDo": "Izvrši",
+    "categoryChat": "U ovom čatu",
+    "categoryStart": "Započni od"
   },
   "transcription": {
     "transcribesOnSend": "Транскрибује при слању",
@@ -8272,5 +8270,56 @@
     "pageOf": "Strana {page} od {total}",
     "truncated": "Prikazano je prvih {shown} od ukupno {total} strana. Preuzmite fajl da biste videli ostatak.",
     "enlarge": "Uvećaj {name}"
+  },
+  "addToChat": {
+    "title": "Dodaj u čat",
+    "titleTranslate": "Prevedi dokument",
+    "titleTranscribe": "Transkribuj audio ili video",
+    "sourcesLabel": "Dodaj iz",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Nije dostupno za ovu akciju",
+    "sources": {
+      "device": "Ovaj uređaj",
+      "link": "Link",
+      "camera": "Kamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Email",
+      "meetings": "Sastanci"
+    },
+    "device": {
+      "browse": "Pretraži ovaj uređaj",
+      "dropHint": "ili prevucite fajlove bilo gde u ovom prozoru, ili nalepite",
+      "rejected": "Nijedan od ovih fajlova ne može se koristiti ovde.",
+      "hint": {
+        "attach": "Dokumenti, slike, audio i video.",
+        "translate": "Jedan dokument: Word, Excel, PowerPoint, PDF, HTML ili tekst.",
+        "transcribe": "Audio ili video. Biće transkribovan kada pošaljete poruku."
+      }
+    },
+    "selection": {
+      "then": "Zatim",
+      "intents": {
+        "attach": "Priloži",
+        "translate": "Prevedi",
+        "transcribe": "Transkribuj"
+      },
+      "confirm": {
+        "attach": "Dodaj",
+        "translate": "Prevedi",
+        "transcribe": "Transkribuj"
+      },
+      "unfit": {
+        "attach": "Ovi fajlovi ne mogu biti priloženi",
+        "translate": "Prevod se vrši na jednom dokumentu odjednom",
+        "transcribe": "Samo audio i video mogu biti transkribovani"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Ovaj uređaj, linkovi, Microsoft 365",
+      "filesOrPhotos": "Fajlovi ili fotografije",
+      "fromThisDevice": "Sa ovog uređaja",
+      "connect": "Poveži Microsoft 365",
+      "connectNote": "Dodaj iz OneDrive-a, emaila i sastanaka"
+    }
   }
 }

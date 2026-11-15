@@ -2420,20 +2420,18 @@
     "sectionPinned": "Закріплені",
     "sectionFrequent": "Часто використовувані",
     "sectionMore": "Більше",
-    "categoryWeb": "Веб",
-    "categoryMedia": "Медіа й файли",
-    "categoryTransform": "Перетворення",
     "pin": "Закріпити вгорі",
     "unpin": "Відкріпити",
     "moveToMore": "Перемістити в \"Більше\"",
     "moveOutOfMore": "Показати в меню",
     "showSources": "Показати інші джерела",
     "hideSources": "Сховати інші джерела",
-    "aiTools": "Інструменти AI",
-    "aiToolsTooltip": "Можливості, які асистент може використовувати під час відповіді: веб-пошук у реальному часі, виконання коду, підключені служби.",
     "codeInterpreterTooltip": "Виконуйте Python-код у безпечній ізольованій області для кожного повідомлення.\n\nДобре підходить для аналізу даних, обчислень та створення графіків з доданих файлів.",
-    "categoryTools": "Інструменти та конектори",
-    "translationConversationTitle": "Переклад: {filename}"
+    "translationConversationTitle": "Переклад: {filename}",
+    "categoryAdd": "Додати",
+    "categoryDo": "Виконати",
+    "categoryChat": "У цьому чаті",
+    "categoryStart": "Почати з"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Додайте особисті інструкції, щоб налаштувати відповіді ШІ. Вони поєднуються з основними правилами, які забезпечують корисні, точні та безпечні відповіді.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Порада: введіть \"/\", щоб вибрати із збережених шаблонів підказок.",
@@ -8288,5 +8286,56 @@
     "pageOf": "Сторінка {page} з {total}",
     "truncated": "Показано перші {shown} з {total} сторінок. Завантажте файл, щоб переглянути інші.",
     "enlarge": "Збільшити {name}"
+  },
+  "addToChat": {
+    "title": "Додати до чату",
+    "titleTranslate": "Перекласти документ",
+    "titleTranscribe": "Транскрибувати аудіо або відео",
+    "sourcesLabel": "Додати з",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Недоступно для цієї дії",
+    "sources": {
+      "device": "Цей пристрій",
+      "link": "Посилання",
+      "camera": "Камера",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Електронна пошта",
+      "meetings": "Зустрічі"
+    },
+    "device": {
+      "browse": "Переглянути цей пристрій",
+      "dropHint": "або перетягніть файли в це вікно, або вставте",
+      "rejected": "Жоден з цих файлів не можна використати тут.",
+      "hint": {
+        "attach": "Документи, зображення, аудіо та відео.",
+        "translate": "Один документ: Word, Excel, PowerPoint, PDF, HTML або текст.",
+        "transcribe": "Аудіо або відео. Транскрипція виконується при надсиланні повідомлення."
+      }
+    },
+    "selection": {
+      "then": "Потім",
+      "intents": {
+        "attach": "Прикріпити",
+        "translate": "Перекласти",
+        "transcribe": "Транскрибувати"
+      },
+      "confirm": {
+        "attach": "Додати",
+        "translate": "Перекласти",
+        "transcribe": "Транскрибувати"
+      },
+      "unfit": {
+        "attach": "Ці файли не можна прикріпити",
+        "translate": "Перекладається лише один документ за раз",
+        "transcribe": "Транскрибувати можна тільки аудіо та відео"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Цей пристрій, посилання, Microsoft 365",
+      "filesOrPhotos": "Файли або фотографії",
+      "fromThisDevice": "З цього пристрою",
+      "connect": "Підключити Microsoft 365",
+      "connectNote": "Додати з OneDrive, електронної пошти та зустрічей"
+    }
   }
 }

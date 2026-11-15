@@ -2420,20 +2420,18 @@
     "sectionPinned": "Pinned",
     "sectionFrequent": "అక్రమంగా వాడుతున్నవి",
     "sectionMore": "మరిన్ని",
-    "categoryWeb": "వెబ్",
-    "categoryMedia": "మీడియా & ఫైళ్లు",
-    "categoryTransform": "ట్రాన్స్‌ఫారం",
     "pin": "పైకి పిన్ చేయండి",
     "unpin": "పిన్ తీసేయండి",
     "moveToMore": "మరిన్ని విభాగానికి మార్చండి",
     "moveOutOfMore": "మెనూలో చూపించు",
     "showSources": "ఇతర स्तోత్రాలు చూపించు",
     "hideSources": "ఇతర स्रोतాలు దాచు",
-    "aiTools": "AI సాధనాలు",
-    "aiToolsTooltip": "సహాయకుడు సమాధానం ఇచ్చేటప్పుడు ఉపయోగించే సామర్ధ్యాలు: లైవ్ వెబ్ సెర్చ్, కోడ్ ఎగ్జిక్యూషన్, మరియు కనెక్ట్ చేసిన సేవలు.",
     "codeInterpreterTooltip": "ప్రతి సందేశానికి Python కోడ్‌ని భద్రమైన సండి‌బాక్స్‌లో నడపండి.\n\nజతచేసిన ఫైళ్లతో డేటా విశ్లేషణ, లెక్కింపులు, మరియు చార్ట్ రూపొందించడంలో ఉపయోగించవచ్చు.",
-    "categoryTools": "పరికరాలు & కనెక్టర్లు",
-    "translationConversationTitle": "అనువాదం: {filename}"
+    "translationConversationTitle": "అనువాదం: {filename}",
+    "categoryAdd": "జోడించు",
+    "categoryDo": "చేయి",
+    "categoryChat": "ఈ సంభాషణలో",
+    "categoryStart": "ప్రారంభించు"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI ఎలా స్పందించాలో అనుకూలీకరించడానికి మీ వ్యక్తిగత సూచనలను జత చేయండి. ఇవి సహాయకరమైన, ఖచ్చితమైన మరియు సురక్షితమైన స్పందనలను నిర్ధారించే ప్రాథమిక ప్రవర్తనా మార్గదర్శకాలతో కలిపి ఉపయోగించబడతాయి.",
   "Tip: Type \"/\" to select from saved prompt templates_": "సూచన: సేవ్ చేయబడిన ప్రాంప్ట్ టెంప్లేట్లను ఎంచుకోవడానికి \"/\" టైప్ చేయండి.",
@@ -8288,5 +8286,56 @@
     "pageOf": "పేజీ {page} / {total}",
     "truncated": "మొదటి {shown} లో {total} పేజీలను చూపుతోంది. మిగిలిన వాటిని చూడటానికి ఫైల్‌ను డౌన్‌లోడ్ చేయండి.",
     "enlarge": "{name}ను పెద్దదిగా చూపండి"
+  },
+  "addToChat": {
+    "title": "సంభాషణకు జోడించు",
+    "titleTranslate": "పత్రాన్ని అనువదించు",
+    "titleTranscribe": "ఆడియో లేదా వీడియోను లిప్యంతరీకరణ చేయండి",
+    "sourcesLabel": "ఇక్కడి నుండి జోడించు",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "ఈ చర్యకు అందుబాటులో లేదు",
+    "sources": {
+      "device": "ఈ డివైస్",
+      "link": "లింక్",
+      "camera": "కెమెరా",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ఇమెయిల్",
+      "meetings": "సమావేశాలు"
+    },
+    "device": {
+      "browse": "ఈ డివైస్‌లో బ్రౌజ్ చేయండి",
+      "dropHint": "లేదా ఫైళ్ళను ఈ విండోలో ఎక్కడైనా డ్రాప్ చేయండి, లేదా పేస్ట్ చేయండి",
+      "rejected": "ఈ ఫైళ్ళలో ఏదీ ఇక్కడ ఉపయోగించలేరు.",
+      "hint": {
+        "attach": "పత్రాలు, చిత్రాలు, ఆడియో మరియు వీడియో.",
+        "translate": "ఒక పత్రం: Word, Excel, PowerPoint, PDF, HTML లేదా టెక్స్ట్.",
+        "transcribe": "ఆడియో లేదా వీడియో. సందేశాన్ని పంపినప్పుడు ఇది లిప్యంతరీకరణ చేయబడుతుంది."
+      }
+    },
+    "selection": {
+      "then": "తర్వాత",
+      "intents": {
+        "attach": "అటాచ్ చేయండి",
+        "translate": "అనువదించు",
+        "transcribe": "లిప్యంతరీకరణ"
+      },
+      "confirm": {
+        "attach": "జోడించు",
+        "translate": "అనువదించు",
+        "transcribe": "లిప్యంతరీకరణ"
+      },
+      "unfit": {
+        "attach": "ఈ ఫైళ్ళను జోడించలేరు",
+        "translate": "ఒకేసారి ఒకే డాక్యుమెంట్ అనువాదానికి తీసుకుంటారు",
+        "transcribe": "లిప్యంతరీకరణకు కేవలం ఆడియో మరియు వీడియో మాత్రమే"
+      }
+    },
+    "menu": {
+      "addToChatNote": "ఈ డివైస్, లింకులు, Microsoft 365",
+      "filesOrPhotos": "ఫైళ్ళు లేదా ఫోటోలు",
+      "fromThisDevice": "ఈ డివైస్ నుండి",
+      "connect": "Microsoft 365 కనెక్ట్ చేయండి",
+      "connectNote": "OneDrive, ఇమెయిల్ మరియు సమావేశాల నుంచి జోడించండి"
+    }
   }
 }
