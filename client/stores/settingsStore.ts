@@ -42,6 +42,16 @@ import {
   ANALYSIS_STRIP_HEIGHT,
   clampAnalysisStripHeight,
 } from '@/lib/utils/shared/translation/runProgress';
+import {
+  BudgetMetric,
+  DEFAULT_USAGE_BUDGETS,
+  DailyTokenUsage,
+  UsageBudget,
+  UsageBudgets,
+  recordDailyUsage,
+  sanitizeDailyTokenUsage,
+  sanitizeUsageBudgets,
+} from '@/lib/utils/shared/usageBudgets';
 
 import { VoiceSet } from '@/types/drafter';
 import { FormTemplate } from '@/types/formFill';
@@ -425,6 +435,25 @@ interface SettingsStore {
    * conversations imported later (accepted limitation).
    */
   historicalUsageBackfilledAt: string | null;
+  /**
+   * The same RAW usage as tokenUsageStats, additionally bucketed by local
+   * day so personal budgets can total "this day / week / month". Pruned to
+   * DAILY_USAGE_RETENTION_DAYS on every write (usageBudgets.ts).
+   */
+  dailyTokenUsage: DailyTokenUsage;
+  /**
+   * Limits the user sets for themselves on estimated emissions and cost
+   * (lib/utils/shared/usageBudgets.ts). Off by default.
+   */
+  usageBudgets: UsageBudgets;
+  /**
+   * The budget period (its start, as a local day key) in which the user
+   * dismissed the "warn" notice, per metric — so it stays dismissed until
+   * the next period rather than returning on every render.
+   */
+  usageBudgetWarnDismissed: Partial<Record<BudgetMetric, string>>;
+  /** Local day key on which "Don't ask again today" was chosen, if any. */
+  usageBudgetAskSnoozedDay: string | null;
 
   /**
    * Provenance of the current `models` list (from /api/models). Runtime-only,
@@ -655,6 +684,10 @@ interface SettingsStore {
     counts: { promptTokens: number; completionTokens: number },
   ) => void;
   resetTokenUsageStats: () => void;
+  /** Merges a change into one metric's budget; the result is sanitized. */
+  setUsageBudget: (metric: BudgetMetric, change: Partial<UsageBudget>) => void;
+  dismissUsageBudgetWarning: (metric: BudgetMetric, periodKey: string) => void;
+  snoozeUsageBudgetAsk: (dayKey: string) => void;
   /**
    * Folds back-calculated historical buckets into estimatedUsageStats AND
    * stamps historicalUsageBackfilledAt in one atomic set — a re-invoked
@@ -1092,6 +1125,10 @@ export const useSettingsStore = create<SettingsStore>()(
       estimatedUsageStats: {},
       workflowUsageStats: {},
       historicalUsageBackfilledAt: null,
+      dailyTokenUsage: {},
+      usageBudgets: DEFAULT_USAGE_BUDGETS,
+      usageBudgetWarnDismissed: {},
+      usageBudgetAskSnoozedDay: null,
       modelListSource: null,
       userRegion: null,
       modelRetirementsApplied: {},
@@ -1670,6 +1707,12 @@ export const useSettingsStore = create<SettingsStore>()(
             },
             tokenUsageFirstTrackedAt:
               state.tokenUsageFirstTrackedAt ?? new Date().toISOString(),
+            dailyTokenUsage: recordDailyUsage(
+              state.dailyTokenUsage,
+              key,
+              usage,
+              new Date(),
+            ),
           };
         }),
 
@@ -1698,7 +1741,29 @@ export const useSettingsStore = create<SettingsStore>()(
           // Stamp (not null) so the one-time backfill doesn't resurrect the
           // history the user just chose to clear.
           historicalUsageBackfilledAt: new Date().toISOString(),
+          // The budget meters read this ledger; "reset" that left them
+          // untouched would show cleared totals beside a full meter.
+          dailyTokenUsage: {},
         }),
+
+      setUsageBudget: (metric, change) =>
+        set((state) => ({
+          usageBudgets: sanitizeUsageBudgets({
+            ...state.usageBudgets,
+            [metric]: { ...state.usageBudgets[metric], ...change },
+          }),
+        })),
+
+      dismissUsageBudgetWarning: (metric, periodKey) =>
+        set((state) => ({
+          usageBudgetWarnDismissed: {
+            ...state.usageBudgetWarnDismissed,
+            [metric]: periodKey,
+          },
+        })),
+
+      snoozeUsageBudgetAsk: (dayKey) =>
+        set({ usageBudgetAskSnoozedDay: dayKey }),
 
       mergeEstimatedUsage: (entries) =>
         set((state) => {
@@ -2120,6 +2185,10 @@ export const useSettingsStore = create<SettingsStore>()(
           tokenUsageFirstTrackedAt: null,
           estimatedUsageStats: {},
           historicalUsageBackfilledAt: null,
+          dailyTokenUsage: {},
+          usageBudgets: DEFAULT_USAGE_BUDGETS,
+          usageBudgetWarnDismissed: {},
+          usageBudgetAskSnoozedDay: null,
           savedStructures: [],
           streamingSpeed: DEFAULT_STREAMING_SPEED,
           includeUserInfoInPrompt: false,
@@ -2173,7 +2242,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 75, // v75: translationAnalysis* (analysis strip preferences)
+      version: 76, // v76: personal usage budgets + the daily usage ledger
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2244,6 +2313,10 @@ export const useSettingsStore = create<SettingsStore>()(
         estimatedUsageStats: state.estimatedUsageStats,
         workflowUsageStats: state.workflowUsageStats,
         historicalUsageBackfilledAt: state.historicalUsageBackfilledAt,
+        dailyTokenUsage: state.dailyTokenUsage,
+        usageBudgets: state.usageBudgets,
+        usageBudgetWarnDismissed: state.usageBudgetWarnDismissed,
+        usageBudgetAskSnoozedDay: state.usageBudgetAskSnoozedDay,
         savedStructures: state.savedStructures,
         streamingSpeed: state.streamingSpeed,
         includeUserInfoInPrompt: state.includeUserInfoInPrompt,
@@ -3054,6 +3127,25 @@ export const useSettingsStore = create<SettingsStore>()(
           );
         }
 
+        // Version 75 → 76: personal usage budgets. Nobody has one yet, and
+        // the daily ledger starts empty: lifetime totals carry no dates, so
+        // there is nothing honest to seed the current period with.
+        if (version < 76) {
+          state.dailyTokenUsage = sanitizeDailyTokenUsage(
+            state.dailyTokenUsage,
+          );
+          state.usageBudgets = sanitizeUsageBudgets(state.usageBudgets);
+          if (
+            state.usageBudgetWarnDismissed == null ||
+            typeof state.usageBudgetWarnDismissed !== 'object'
+          ) {
+            state.usageBudgetWarnDismissed = {};
+          }
+          if (typeof state.usageBudgetAskSnoozedDay !== 'string') {
+            state.usageBudgetAskSnoozedDay = null;
+          }
+        }
+
         // Whatever version it came from, the per-set rows are only kept as
         // clean string arrays (the workspace iterates them on load).
         state.lastChannelIdsBySet = coerceChannelIdsBySet(
@@ -3143,6 +3235,14 @@ export const useSettingsStore = create<SettingsStore>()(
           if (!Array.isArray(state.mcpServers)) {
             state.mcpServers = [];
           }
+
+          // Budgets decide whether a message is sent, so a corrupt or
+          // hand-edited value is normalized on every load, not only when
+          // the version changes.
+          state.usageBudgets = sanitizeUsageBudgets(state.usageBudgets);
+          state.dailyTokenUsage = sanitizeDailyTokenUsage(
+            state.dailyTokenUsage,
+          );
 
           // SECURITY: localRuntimePorts is the only persisted value that
           // steers where a local chat request is sent, so a tampered or
