@@ -167,8 +167,8 @@
   "uploadAudioVideoFile": "Carrega un fitxer d'àudio o vídeo",
   "uploadingFile": "Carregant fitxer...",
   "removeFile": "Elimina i selecciona un fitxer diferent",
-  "transcriptionErrorAttempt": "Error durant la transcripció (Intent {{attempt}} de 3). Reintentant...",
-  "rateLimitExceededWaiting": "Límit de taxa superat. Esperant {{seconds}} segons abans de tornar-ho a intentar...",
+  "transcriptionErrorAttempt": "Error durant la transcripció (Intent {attempt} de 3). Reintentant...",
+  "rateLimitExceededWaiting": "Límit de taxa superat. Esperant {seconds} segons abans de tornar-ho a intentar...",
   "Conversations": "Converses",
   "Prompts": "Avisos",
   "Close sidebar": "Tanca la barra lateral",
@@ -2779,7 +2779,7 @@
     "chipLabelBoth": "Ambdós",
     "costTile": "Cost estimat",
     "costDisclosure": "Cost segons preus de llista a data de {asOf} (tarifa Estàndard Global, sense descompte per entrada en memòria cau): és un límit superior, no una factura. Cerca web, execució de codi, transcripció, veu, traducció i indexació de documents no estan inclosos.",
-    "costUnpriced": "{count, plural, one {# sol·licitud sense preu de llista no s'} other {# sol·licituds sense preu de llista no s'}}inclouen."
+    "costUnpriced": "{count, plural, one {# sol·licitud sense preu de llista no s’} other {# sol·licituds sense preu de llista no s’}}inclouen."
   },
   "extraction": {
     "toggleLabel": "Extreu dades estructurades",
@@ -3902,7 +3902,7 @@
         "list<number>": "Llista de números"
       },
       "layout": "Disseny",
-      "layoutHint": "Markdown amb espais per a {{field:id}} — s'utilitza per a l'exportació renderitzada i la vista prèvia.",
+      "layoutHint": "Markdown amb espais per a '{{field:id}}' — s'utilitza per a l'exportació renderitzada i la vista prèvia.",
       "saveTemplate": "Desa plantilla",
       "deleteTemplate": "Elimina plantilla",
       "cancel": "Cancel·la",
@@ -4725,7 +4725,7 @@
       "cost": {
         "lessThan": "< {amount}",
         "rowUnpriced": "No hi ha preu de llista per a les sol·licituds d’aquesta fila",
-        "unpriced": "{count, plural, one {# sol·licitud sense preu de llista no s'} other {# sol·licituds sense preu de llista no s'}}inclouen en el cost.",
+        "unpriced": "{count, plural, one {# sol·licitud sense preu de llista no s’} other {# sol·licituds sense preu de llista no s’}}inclouen en el cost.",
         "noPriceData": "No es mostra cap cost: el model d’aquesta conversa no té preu de llista (fonts pròpies, execució local i agents no tenen preu assignat).",
         "note": "Cost segons preus de llista a data de {asOf} (tarifa Estàndard Global, sense descompte per entrada en memòria cau): és un límit superior, no una factura. Cerca web, execució de codi, transcripció, veu, traducció i indexació de documents no estan inclosos."
       }

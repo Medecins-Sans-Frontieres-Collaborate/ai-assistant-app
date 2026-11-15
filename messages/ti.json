@@ -3443,7 +3443,7 @@
       "editLocation": "ረድኤት {row} · {column}",
       "editLocationRow": "ረድኤት {row} (ምስዳድ)",
       "showReview": "ናይ ግምገማ ርኣይ",
-      "showReviewPending": "ናይ ግምገማ ርኣይ ({{count}} ናይ ምግባር ተደጊሙ)",
+      "showReviewPending": "ናይ ግምገማ ርኣይ ({count} ናይ ምግባር ተደጊሙ)",
       "assessedFiltered": "ተቕራጺ ረድፎት",
       "assessedSelection": "ተመረጹ ረድፎት",
       "assessedSample": "ናይ ናሙና {shown} ካብ {total}",
@@ -3886,7 +3886,7 @@
         "list<number>": "ዝርዝር ቁፅራት"
       },
       "layout": "ቅደም ተከተል",
-      "layoutHint": "Markdown ብ {{field:id}}ቤት — ንኣብ ምርት ውጽኢትን ንመርኣያ ትጥቀም.",
+      "layoutHint": "Markdown ብ '{{field:id}}'ቤት — ንኣብ ምርት ውጽኢትን ንመርኣያ ትጥቀም.",
       "saveTemplate": "ናይ ናብያ ቅባል ኣኣትዉ",
       "deleteTemplate": "ናይ ቅባል ኣድልዩ",
       "cancel": "ተወ",

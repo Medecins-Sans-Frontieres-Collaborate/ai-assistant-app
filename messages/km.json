@@ -3886,7 +3886,7 @@
         "list<number>": "បញ្ជីលេខ"
       },
       "layout": "ប្លង់",
-      "layoutHint": "Markdown ដែលមាន {{field:id}} ជាជម្រើស — ប្រើសម្រាប់នាំចេញនិងមើលជាមុន។",
+      "layoutHint": "Markdown ដែលមាន '{{field:id}}' ជាជម្រើស — ប្រើសម្រាប់នាំចេញនិងមើលជាមុន។",
       "saveTemplate": "រក្សាទុកពុម្ព",
       "deleteTemplate": "លុបពុម្ព",
       "cancel": "បោះបង់",

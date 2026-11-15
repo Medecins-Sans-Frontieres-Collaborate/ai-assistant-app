@@ -3014,7 +3014,7 @@
         "list<number>": "List of numbers"
       },
       "layout": "Layout",
-      "layoutHint": "Markdown with {{field:id}} slots — used for the rendered export and the preview.",
+      "layoutHint": "Markdown with '{{field:id}}' slots — used for the rendered export and the preview.",
       "saveTemplate": "Save template",
       "deleteTemplate": "Delete template",
       "cancel": "Cancel",

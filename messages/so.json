@@ -3886,7 +3886,7 @@
         "list<number>": "Liiska lambarada"
       },
       "layout": "Qaabdhismeedka",
-      "layoutHint": "Markdown leh {{field:id}} boosaska — waxaa loo adeegsadaa dhoofinta muuqaalka iyo muuqaal horudhac ah.",
+      "layoutHint": "Markdown leh '{{field:id}}' boosaska — waxaa loo adeegsadaa dhoofinta muuqaalka iyo muuqaal horudhac ah.",
       "saveTemplate": "Kaydi template-ka",
       "deleteTemplate": "Tirtir template-ka",
       "cancel": "Jooji",

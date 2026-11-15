@@ -3886,7 +3886,7 @@
         "list<number>": "Àkójọ àwọn nọ́mbà"
       },
       "layout": "Ìlàtúnṣe",
-      "layoutHint": "Markdown pẹ̀lú àwọn {{field:id}} — a máa lò ó fún títẹ̀jáde àfihàn àti ìṣàfihàn.",
+      "layoutHint": "Markdown pẹ̀lú àwọn '{{field:id}}' — a máa lò ó fún títẹ̀jáde àfihàn àti ìṣàfihàn.",
       "saveTemplate": "Fipamọ́ àpẹẹrẹ",
       "deleteTemplate": "Pa àpẹẹrẹ náà",
       "cancel": "Fagilé",

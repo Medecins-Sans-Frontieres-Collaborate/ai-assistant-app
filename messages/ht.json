@@ -3886,7 +3886,7 @@
         "list<number>": "Lis nimewo"
       },
       "layout": "Dizay",
-      "layoutHint": "Markdown ak plas {{field:id}} — itilize pou ekspòtasyon ak aperçu.",
+      "layoutHint": "Markdown ak plas '{{field:id}}' — itilize pou ekspòtasyon ak aperçu.",
       "saveTemplate": "Sove modèl",
       "deleteTemplate": "Efase modèl",
       "cancel": "Anile",

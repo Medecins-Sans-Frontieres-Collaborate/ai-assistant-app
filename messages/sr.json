@@ -3886,7 +3886,7 @@
         "list<number>": "Lista brojeva"
       },
       "layout": "Raspored",
-      "layoutHint": "Markdown sa {{field:id}} mestima — koristi se za izvoz i pregled prikaza.",
+      "layoutHint": "Markdown sa '{{field:id}}' mestima — koristi se za izvoz i pregled prikaza.",
       "saveTemplate": "Sačuvaj šablon",
       "deleteTemplate": "Obriši šablon",
       "cancel": "Otkaži",

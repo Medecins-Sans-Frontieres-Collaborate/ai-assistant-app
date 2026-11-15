@@ -3886,7 +3886,7 @@
         "list<number>": "Urutonde rw’imibare"
       },
       "layout": "Imiterere",
-      "layoutHint": "Markdown irimo {{field:id}} aho ushobora gushyira imirima — ikoreshwa mu isohoka ryashyizwe ahagaragara no mu ishusho y’icyitegererezo.",
+      "layoutHint": "Markdown irimo '{{field:id}}' aho ushobora gushyira imirima — ikoreshwa mu isohoka ryashyizwe ahagaragara no mu ishusho y’icyitegererezo.",
       "saveTemplate": "Bika icyitegererezo",
       "deleteTemplate": "Siba icyitegererezo",
       "cancel": "Hindura",

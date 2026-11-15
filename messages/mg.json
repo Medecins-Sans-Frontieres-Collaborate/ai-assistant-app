@@ -3886,7 +3886,7 @@
         "list<number>": "Lisitr'ireo isa"
       },
       "layout": "Fandaharana",
-      "layoutHint": "Markdown misy lavaka {{field:id}} — ampiasaina amin'ny famoahana aseho sy amin'ny topy maso.",
+      "layoutHint": "Markdown misy lavaka '{{field:id}}' — ampiasaina amin'ny famoahana aseho sy amin'ny topy maso.",
       "saveTemplate": "Tehirizo ny modely",
       "deleteTemplate": "Fafao ny modely",
       "cancel": "Foano",
@@ -6019,7 +6019,7 @@
     "delegationMaxOverridesHint": "Firy ny override azon'ny admins-n'ny delegation iray atontosa tanteraka.",
     "delegationAnchorWarning": "Tsy misy email domain na olona ao anatin'ity fari-piadidiana ity. Ny fitovian'ny vondrona sy toetra dia tsapaina rehefa miditra ary indraindray mety tsy ho hita, ka mety tsy mihatra mangina ny fetra — ary tsy azo jerena mialoha amin'ny alalan'ny email. Ampio domain ho anchor.",
     "anchorChip": "Tsy anchora",
-    "delegationNarrowingPreview": "{count, plural, one {# override misy ankehitriny no ivelan'} other {# overrides misy ankehitriny no ivelan'}}'ity fari-piadidiana ity araka ny draft. Tsy mihatra amin'ireo kendrena ireo intsony izany rehefa voatahiry.",
+    "delegationNarrowingPreview": "{count, plural, one {# override misy ankehitriny no ivelan’} other {# overrides misy ankehitriny no ivelan’}}’ity fari-piadidiana ity araka ny draft. Tsy mihatra amin’ireo kendrena ireo intsony izany rehefa voatahiry.",
     "delegationLiftableTitle": "Defaults azon'ny scoped admin ampitomboina",
     "delegationLiftableHint": "Ireo defaults global tsy misy hard ceiling dia azo ampitomboin'ny delegations rehetra. Apetraho ceiling raha te hampatsingivana.",
     "delegationLiftableNone": "Samy manana ceiling ny default rehetra napetraka.",

@@ -3527,7 +3527,7 @@
       "transposeSuggestion": "Tabbere nde waytu: laylayji ɗiɗi e laataa, e soowdi laa nda ko laylayji, tagi bernde si laataa ko laylayji ɗiɗi, e feere ɓe tagi laa.",
       "transposedTable": "Waytude laataa e laylayji",
       "columns": "Laa",
-      "columnsHidden": "Laa ({{count}} ɓe dowɗi)",
+      "columnsHidden": "Laa ({count} ɓe dowɗi)",
       "showAllColumns": "Hollu fow",
       "chartScatter": "Diagrama scatter (x e y)",
       "chartPivot": "Tabbere Pivot",
@@ -3886,7 +3886,7 @@
         "list<number>": "Cuusal lakke"
       },
       "layout": "Leemsa",
-      "layoutHint": "Markdown e {{field:id}} doole — ko leeɗii feewu export e he siriino.",
+      "layoutHint": "Markdown e '{{field:id}}' doole — ko leeɗii feewu export e he siriino.",
       "saveTemplate": "Danndu templet",
       "deleteTemplate": "Momtu templet",
       "cancel": "Haaytu",

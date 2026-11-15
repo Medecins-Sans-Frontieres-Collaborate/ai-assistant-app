@@ -3886,7 +3886,7 @@
         "list<number>": "Jerin lambobi"
       },
       "layout": "Tsari",
-      "layoutHint": "Markdown tare da {{field:id}} guraben — ana amfani da shi don fitarwa na gani da samfoti.",
+      "layoutHint": "Markdown tare da '{{field:id}}' guraben — ana amfani da shi don fitarwa na gani da samfoti.",
       "saveTemplate": "Ajiye samfur",
       "deleteTemplate": "Goge samfur",
       "cancel": "Soke",

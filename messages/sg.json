@@ -3886,7 +3886,7 @@
         "list<number>": "Lista tî lisso"
       },
       "layout": "Plan",
-      "layoutHint": "Markdown na {{field:id}} dende — a hûnda mo le kê na export na preview.",
+      "layoutHint": "Markdown na '{{field:id}}' dende — a hûnda mo le kê na export na preview.",
       "saveTemplate": "Sêka modèle",
       "deleteTemplate": "Küta modèle",
       "cancel": "Annulé",

@@ -3886,7 +3886,7 @@
         "list<number>": "Uhlu lwezinombolo"
       },
       "layout": "Uhluwo",
-      "layoutHint": "Markdown ene {{field:id}} izikhala — isetshenziswa ekukhipheni nasekubukezeni.",
+      "layoutHint": "Markdown ene '{{field:id}}' izikhala — isetshenziswa ekukhipheni nasekubukezeni.",
       "saveTemplate": "Londoloza itemplate",
       "deleteTemplate": "Susa itemplate",
       "cancel": "Khansela",
