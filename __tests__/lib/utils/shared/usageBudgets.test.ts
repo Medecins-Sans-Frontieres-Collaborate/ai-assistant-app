@@ -95,12 +95,12 @@ describe('evaluateBudget', () => {
   });
 
   it('treats usage that sums to a hair under a threshold as having met it', () => {
-    // 0.1 + 0.2 !== 0.3 in floating point: eight tenths summed lands at
-    // 79.99999999999999, which must still read as 80%.
+    // Usage is a sum of per-request floats. 800 requests of 0.1 g is 80 g on
+    // paper and a hair under it in floating point, and must still read as
+    // having reached the 80% stage.
     let used = 0;
-    for (let i = 0; i < 8; i++) used += 10.000000000000002 - 2e-15;
-    used = 0.1 * 3 * (80 / 0.3);
-    expect(used).not.toBe(80);
+    for (let i = 0; i < 800; i++) used += 0.1;
+    expect(used).toBeLessThan(80);
     expect(evaluateBudget(budget(), used).state).toBe('warn');
   });
 
