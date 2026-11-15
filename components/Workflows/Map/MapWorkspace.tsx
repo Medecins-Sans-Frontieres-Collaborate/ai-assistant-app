@@ -118,6 +118,8 @@ const MAX_FEATURES = MAP_MAX_FEATURES;
 
 export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const t = useTranslations('workflows');
+  // Runs answer to the user's personal budgets (BudgetRunDialog explains).
+  const { guard: guardBudget } = useBudgetGate();
   const tMap = useTranslations('workflows.map');
   // Link-fetch copy is shared with the chat composer, so it lives in its own
   // top-level namespace rather than under workflows.map.
@@ -823,9 +825,6 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       void runEnrichment(materialized.features.map((f) => f.id));
     }
   };
-
-  // Runs answer to the user's personal budgets (BudgetRunDialog explains).
-  const { guard: guardBudget } = useBudgetGate();
 
   const handleSubmit = () => {
     if (!trimmedSource || busy) return;
