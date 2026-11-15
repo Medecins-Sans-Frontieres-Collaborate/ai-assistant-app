@@ -295,10 +295,10 @@ export const ChatInput = ({
 
     if (maxLength && value.length > maxLength) {
       alert(
-        t(
-          `Message limit is {{maxLength}} characters. You have entered {{valueLength}} characters.`,
-          { maxLength, valueLength: value.length },
-        ),
+        t('chat.messageLimitExceeded', {
+          maxLength,
+          valueLength: value.length,
+        }),
       );
       return;
     }
