@@ -180,7 +180,7 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
               otherwise shadowed by this span's title for anyone hovering
               the label text itself — the row's biggest hit target. */}
           <span
-            className="block truncate"
+            className="line-clamp-2"
             title={locked ? undefined : item.label}
           >
             {item.label}
@@ -188,7 +188,7 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
           {item.note && (
             <span
               title={item.note}
-              className={`block truncate text-[11px] font-normal ${
+              className={`line-clamp-2 text-[11px] font-normal ${
                 item.noteTone === 'warning'
                   ? 'text-amber-700 dark:text-amber-400'
                   : 'text-gray-500 dark:text-gray-400'
