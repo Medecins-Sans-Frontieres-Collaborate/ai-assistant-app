@@ -130,7 +130,9 @@ export interface BudgetGate {
   /**
    * Runs `action` unless a budget intervenes.
    *
-   * - stop → the action is dropped (the notice explains why).
+   * - stop → the action never runs. A message is simply dropped (the
+   *          composer already says why); a run is held so the run dialog can
+   *          explain the refusal.
    * - ask  → the action is held until the user confirms, unless they chose
    *          "Don't ask again today".
    * - otherwise it runs immediately.
@@ -159,7 +161,13 @@ export function useBudgetGate(): BudgetGate {
 
   const guard = useCallback(
     (action: () => void, kind: BudgetGatedActionKind = 'message') => {
-      if (isStopped) return false;
+      if (isStopped) {
+        // The composer is disabled and labelled while stopped, so a message
+        // needs no further word. A run button is not, so its refusal is
+        // held for the run dialog to explain.
+        if (kind === 'run') hold({ kind, run: action });
+        return false;
+      }
       if (mustAsk) {
         hold({ kind, run: action });
         return false;
