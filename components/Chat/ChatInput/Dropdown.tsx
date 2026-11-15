@@ -1,8 +1,6 @@
 import {
   IconBraces,
-  IconBrandOnedrive,
   IconBrandWindows,
-  IconCalendarEvent,
   IconCamera,
   IconChecklist,
   IconCirclePlus,
@@ -11,11 +9,10 @@ import {
   IconFileText,
   IconLanguage,
   IconLink,
-  IconMailDown,
   IconPaperclip,
+  IconPlug,
   IconPlugConnected,
   IconRoute,
-  IconSparkles,
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
@@ -51,6 +48,12 @@ import {
   M365_BUILTIN_SERVER_LABEL,
 } from '@/lib/services/m365/tools/toolCatalog';
 
+import {
+  AddIntent,
+  AddToChatCapabilities,
+  filesForIntent,
+  needsPicker,
+} from '@/lib/utils/app/addToChat';
 import { normalizeForSearch } from '@/lib/utils/app/localeSearch';
 import { isRTL } from '@/lib/utils/app/rtl';
 
@@ -68,30 +71,32 @@ import { SearchMode, normalizeSearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
 import { TRANSCRIPT_BLOB_THRESHOLD } from '@/types/transcription';
 
-import ChatInputDocumentTranslate from '@/components/Chat/ChatInput/ChatInputDocumentTranslate';
+import AddToChatDialog from '@/components/Chat/ChatInput/AddToChatDialog';
+import ChatInputDocumentTranslate, {
+  DocumentTranslationM365Source,
+} from '@/components/Chat/ChatInput/ChatInputDocumentTranslate';
 import { useEffectiveDocumentsPerMessage } from '@/components/Chat/ChatInput/ChatInputFile';
 import ChatInputImage from '@/components/Chat/ChatInput/ChatInputImage';
 import ChatInputImageCapture from '@/components/Chat/ChatInput/ChatInputImageCapture';
 import ChatInputTranslate from '@/components/Chat/ChatInput/ChatInputTranslate';
 import { DropdownSearchInput } from '@/components/Chat/ChatInput/DropdownSearchInput';
-import M365MeetingImportModal from '@/components/Chat/ChatInput/M365MeetingImportModal';
 import {
   formatPendingTranslationReference,
   formatTranslationReference,
 } from '@/components/Chat/DocumentTranslationViewer';
 import ImageIcon from '@/components/Icons/image';
+import { SettingsSection } from '@/components/Settings/types';
 import Modal from '@/components/UI/Modal';
 
 import { DropdownCategoryGroup } from './DropdownCategoryGroup';
 import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
 import { DropdownMoreSection } from './DropdownMoreSection';
-import M365FilePickerModal from './M365FilePickerModal';
-import M365MailImportModal from './M365MailImportModal';
 import UrlAttachModal from './UrlAttachModal';
 
 import { maxFilesPerMessage } from '@/client/handlers/chatInput/attachmentLimits';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { useUIStore } from '@/client/stores/uiStore';
 import { DEFAULT_DOCUMENTS_PER_MESSAGE } from '@/config/limits';
 import {
   ATTACH_ACCEPT_TYPES,
@@ -211,8 +216,15 @@ const Dropdown: React.FC<DropdownProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isTranslateOpen, setIsTranslateOpen] = useState(false);
   const [isDocumentTranslateOpen, setIsDocumentTranslateOpen] = useState(false);
-  const [isMeetingImportOpen, setIsMeetingImportOpen] = useState(false);
   const [documentToTranslate, setDocumentToTranslate] = useState<File | null>(
+    null,
+  );
+  // A OneDrive / SharePoint document handed over by the "Add to chat"
+  // picker; the translation form opens on it instead of on its own picker.
+  const [m365DocumentToTranslate, setM365DocumentToTranslate] =
+    useState<DocumentTranslationM365Source | null>(null);
+  // What the "Add to chat" picker was opened for; null = closed.
+  const [addDialogIntent, setAddDialogIntent] = useState<AddIntent | null>(
     null,
   );
   const [isImageOpen, setIsImageOpen] = useState(false);
@@ -223,8 +235,6 @@ const Dropdown: React.FC<DropdownProps> = ({
   // Parent rows whose nested sources are currently revealed (e.g. `attach`).
   const [expandedParentIds, setExpandedParentIds] = useState<string[]>([]);
   const [urlModalOpen, setUrlModalOpen] = useState(false);
-  const [m365PickerOpen, setM365PickerOpen] = useState(false);
-  const [m365MailOpen, setM365MailOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -252,6 +262,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   const tUrl = useTranslations('urlFetch');
   const tM365 = useTranslations('m365');
   const tGates = useTranslations('limitsUx.gates');
+  const tAdd = useTranslations('addToChat');
 
   const chatInputImageRef = useRef<{ openFilePicker: () => void }>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -298,6 +309,73 @@ const Dropdown: React.FC<DropdownProps> = ({
     closeDropdown();
   }, [closeDropdown]);
 
+  // What this person can add from. Every Microsoft 365 entry is its own
+  // flag AND the connect opt-in, so the sources switch independently.
+  const addCapabilities: AddToChatCapabilities = useMemo(
+    () => ({
+      camera: hasCameraSupport,
+      m365Files: isM365FilesEnabled,
+      m365Mail: isM365MailEnabled,
+      m365Meetings: isM365MeetingsEnabled,
+      m365Translation: isM365TranslationEnabled,
+    }),
+    [
+      hasCameraSupport,
+      isM365FilesEnabled,
+      isM365MailEnabled,
+      isM365MeetingsEnabled,
+      isM365TranslationEnabled,
+    ],
+  );
+  // The picker only exists where there is a Microsoft 365 source to pick
+  // from; otherwise each row goes straight to the system file dialog.
+  const attachUsesPicker = needsPicker('attach', addCapabilities);
+  const translateUsesPicker = needsPicker('translate', addCapabilities);
+  const transcribeUsesPicker = needsPicker('transcribe', addCapabilities);
+  // Settings only has a Connections pane to send people to when the files
+  // or mail feature is on (see SettingDialog).
+  const canConnectM365 = (m365FilesFlag || m365MailFlag) && !m365Connected;
+
+  const openAddDialog = useCallback(
+    (intent: AddIntent) => {
+      setAddDialogIntent(intent);
+      closeDropdown();
+    },
+    [closeDropdown],
+  );
+
+  /** Opens the system file dialog that matches an intent. */
+  const browseDevice = useCallback((intent: AddIntent) => {
+    const input =
+      intent === 'translate'
+        ? documentTranslateInputRef.current
+        : intent === 'transcribe'
+          ? transcribeInputRef.current
+          : fileInputRef.current;
+    input?.click();
+  }, []);
+
+  /** Starts translating a local document in the translation form. */
+  const translateLocalDocument = useCallback((file: File) => {
+    setM365DocumentToTranslate(null);
+    setDocumentToTranslate(file);
+    setIsDocumentTranslateOpen(true);
+  }, []);
+
+  /** Routes files dropped or pasted into the picker by intent. */
+  const handlePickerDeviceFiles = useCallback(
+    (files: File[], intent: AddIntent) => {
+      const usable = filesForIntent(files, intent);
+      if (usable.length === 0) return;
+      if (intent === 'translate') {
+        translateLocalDocument(usable[0]);
+        return;
+      }
+      void handleFileUpload(usable);
+    },
+    [handleFileUpload, translateLocalDocument],
+  );
+
   // §4 tier 1: a meeting transcript becomes a standard transcript message —
   // blob-stored above the threshold (TranscriptViewer + expiry reuse), inline
   // below it. Same message-pair shape as the translation import.
@@ -306,10 +384,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       transcript: import('@/types/m365').M365MeetingTranscript,
       meeting: import('@/types/m365').M365MeetingEntry,
     ) => {
-      if (!selectedConversation) {
-        setIsMeetingImportOpen(false);
-        return;
-      }
+      if (!selectedConversation) return;
       let assistantContent: string;
       const bytes = new TextEncoder().encode(transcript.transcript).length;
       if (bytes > TRANSCRIPT_BLOB_THRESHOLD) {
@@ -369,7 +444,6 @@ const Dropdown: React.FC<DropdownProps> = ({
         updates.name = meeting.subject;
       }
       updateConversation(selectedConversation.id, updates);
-      setIsMeetingImportOpen(false);
     },
     [selectedConversation, updateConversation, tM365],
   );
@@ -381,6 +455,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         console.error('[DocumentTranslation] No conversation selected');
         setIsDocumentTranslateOpen(false);
         setDocumentToTranslate(null);
+        setM365DocumentToTranslate(null);
         return;
       }
 
@@ -443,6 +518,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       // Close modal
       setIsDocumentTranslateOpen(false);
       setDocumentToTranslate(null);
+      setM365DocumentToTranslate(null);
     },
     [selectedConversation, updateConversation, t],
   );
@@ -457,6 +533,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         console.error('[DocumentTranslation] No conversation selected');
         setIsDocumentTranslateOpen(false);
         setDocumentToTranslate(null);
+        setM365DocumentToTranslate(null);
         return;
       }
 
@@ -509,6 +586,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
       setIsDocumentTranslateOpen(false);
       setDocumentToTranslate(null);
+      setM365DocumentToTranslate(null);
     },
     [selectedConversation, updateConversation, t],
   );
@@ -653,7 +731,6 @@ const Dropdown: React.FC<DropdownProps> = ({
   // all-disabled, so a disabled connector can be re-enabled from here
   // instead of a trip to Settings.
   const showConnectors = mcpServers.length > 0 || builtinM365Available;
-  const hasAiToolChildren = !hideWebSearch || !hideCodeInterpreter;
 
   // One click always flips whether the server runs in THIS chat: a
   // globally-off server is switched on everywhere (plus cleared from the
@@ -688,31 +765,192 @@ const Dropdown: React.FC<DropdownProps> = ({
     useEffectiveDocumentsPerMessage() ?? DEFAULT_DOCUMENTS_PER_MESSAGE;
 
   // Define menu items - memoized to avoid ref access issues during render.
+  // Array order is display order within each group (Add, Do, In this chat,
+  // Start from).
   const menuItems: MenuItem[] = useMemo(
     () => [
-      // Capability toggles (what the AI can DO this turn) nest under one
-      // parent, mirroring the attach → file/link pattern. Pinning or
-      // frequent use of a child auto-promotes it back to a top-level row.
-      ...(hasAiToolChildren
+      // ── Add: bring something into the chat ────────────────────────────
+      // With a Microsoft 365 source to choose from, one row opens the
+      // picker that holds every source. Without one the picker would only
+      // be an extra step in front of the system file dialog, so the device
+      // sources are direct rows instead.
+      ...(attachUsesPicker
         ? [
             {
-              id: 'aiTools',
+              id: 'attach',
               icon: (
-                <IconSparkles
+                <IconPaperclip
                   size={18}
-                  className="text-blue-500 flex-shrink-0"
+                  className="flex-shrink-0 text-gray-700 dark:text-gray-300"
                 />
               ),
-              label: t('dropdown.aiTools'),
-              infoTooltip: t('dropdown.aiToolsTooltip'),
-              // Expands in place; the row has no action of its own.
+              label: tAdd('title'),
+              note: tAdd('menu.addToChatNote'),
+              infoTooltip: t('dropdown.attachTooltip', {
+                maxDocuments: documentsPerMessage,
+                maxFiles: maxFilesPerMessage(documentsPerMessage),
+              }),
+              onClick: () => openAddDialog('attach'),
+              category: 'add' as const,
+              opensDialog: true,
+              // The sources now live inside the picker; searching the menu
+              // for one of them should still land here.
+              keywords: [
+                t('attachFilesDropdown'),
+                tUrl('attachLink'),
+                t('cameraDropdown'),
+                tM365('attach.menuLabel'),
+                tM365('mail.menuLabel'),
+                tM365('meetings.menuLabel'),
+              ],
+            },
+          ]
+        : [
+            {
+              id: 'attach',
+              icon: (
+                <IconPaperclip
+                  size={18}
+                  className="flex-shrink-0 text-gray-700 dark:text-gray-300"
+                />
+              ),
+              label: tAdd('menu.filesOrPhotos'),
+              note: tAdd('menu.fromThisDevice'),
+              infoTooltip: t('dropdown.attachTooltip', {
+                maxDocuments: documentsPerMessage,
+                maxFiles: maxFilesPerMessage(documentsPerMessage),
+              }),
+              onClick: handleAttachClick,
+              category: 'add' as const,
+              keywords: [t('attachFilesDropdown')],
+            },
+            {
+              id: 'attach-link',
+              icon: (
+                <IconLink
+                  size={18}
+                  className="flex-shrink-0 text-gray-700 dark:text-gray-300"
+                />
+              ),
+              label: tAdd('sources.link'),
+              infoTooltip: tUrl('attachLinkDescription'),
               onClick: () => {
-                toggleParentExpanded('aiTools');
+                setUrlModalOpen(true);
+                closeDropdown();
               },
-              category: 'tools' as const,
+              category: 'add' as const,
+              opensDialog: true,
+              keywords: [tUrl('attachLink')],
+            },
+            ...(hasCameraSupport
+              ? [
+                  {
+                    id: 'camera',
+                    icon: (
+                      <IconCamera
+                        size={18}
+                        className="text-red-500 flex-shrink-0"
+                      />
+                    ),
+                    label: t('cameraDropdown'),
+                    infoTooltip: t('dropdown.cameraTooltip'),
+                    onClick: () => {
+                      onCameraClick();
+                      closeDropdown();
+                    },
+                    category: 'add' as const,
+                    opensDialog: true,
+                  },
+                ]
+              : []),
+          ]),
+      // Microsoft 365 is on for the organisation but this person has not
+      // connected: one quiet row that leads to connecting. Nothing at all
+      // when it is switched off.
+      ...(canConnectM365
+        ? [
+            {
+              id: 'connect-m365',
+              icon: (
+                <IconPlug size={18} className="flex-shrink-0 text-gray-500" />
+              ),
+              label: tAdd('menu.connect'),
+              note: tAdd('menu.connectNote'),
+              onClick: () => {
+                useUIStore
+                  .getState()
+                  .openSettingsAt(SettingsSection.CONNECTIONS);
+                closeDropdown();
+              },
+              category: 'add' as const,
+              opensDialog: true,
             },
           ]
         : []),
+      // ── Do: a one-off job ──────────────────────────────────────────────
+      {
+        id: 'translate',
+        icon: (
+          <IconLanguage size={18} className="text-teal-500 flex-shrink-0" />
+        ),
+        label: t('translateTextDropdown'),
+        infoTooltip: t('dropdown.translateTooltip'),
+        onClick: () => {
+          setIsTranslateOpen(true);
+          closeDropdown();
+        },
+        category: 'do',
+        opensDialog: true,
+      },
+      {
+        id: 'translateDocument',
+        icon: (
+          <IconFileText size={18} className="text-indigo-500 flex-shrink-0" />
+        ),
+        label: t('translateDocumentDropdown'),
+        infoTooltip: t('dropdown.translateDocumentTooltip'),
+        // Same picker, opened for translating; straight to the system file
+        // dialog when OneDrive / SharePoint is not an option.
+        onClick: translateUsesPicker
+          ? () => openAddDialog('translate')
+          : handleDocumentTranslateClick,
+        category: 'do',
+        opensDialog: true,
+        keywords: [tM365('translate.menuLabel')],
+      },
+      {
+        id: 'transcribe',
+        icon: (
+          <IconFileMusic size={18} className="text-orange-500 flex-shrink-0" />
+        ),
+        label: t('transcribeAudioVideoDropdown'),
+        infoTooltip: t('dropdown.transcribeTooltip'),
+        onClick: transcribeUsesPicker
+          ? () => openAddDialog('transcribe')
+          : handleTranscribeClick,
+        category: 'do',
+        opensDialog: transcribeUsesPicker,
+      },
+      ...(isExtractionEnabled
+        ? [
+            {
+              id: 'extract',
+              icon: (
+                <IconBraces size={18} className="text-blue-500 flex-shrink-0" />
+              ),
+              label: t('extraction.toggleLabel'),
+              infoTooltip: t('extraction.trayInfo'),
+              onClick: () => {
+                setExtractionMode(!extractionMode);
+                closeDropdown();
+              },
+              category: 'do' as const,
+              toggle: true,
+              checked: extractionMode,
+            },
+          ]
+        : []),
+      // ── In this chat: what stays on for the conversation ──────────────
       // Foundry / restricted org agents hide the web-search toggle entirely.
       ...(hideWebSearch
         ? []
@@ -728,14 +966,13 @@ const Dropdown: React.FC<DropdownProps> = ({
                 toggleSearchMode();
                 closeDropdown();
               },
-              category: 'tools' as const,
+              category: 'chat' as const,
               toggle: true,
               // A lock reads as Off: the stored preference is untouched and
               // returns when the gate lifts.
               checked:
                 !toolLimits.webSearch.blocked &&
                 searchMode === SearchMode.ALWAYS,
-              parentId: 'aiTools',
               lockReason: searchLockReason,
               ...budgetNoteFor(
                 toolLimits.webSearch,
@@ -762,12 +999,11 @@ const Dropdown: React.FC<DropdownProps> = ({
                 toggleInterpreterMode();
                 closeDropdown();
               },
-              category: 'tools' as const,
+              category: 'chat' as const,
               toggle: true,
               checked:
                 !toolLimits.codeInterpreter.blocked &&
                 interpreterMode === InterpreterMode.ALWAYS,
-              parentId: 'aiTools',
               lockReason: interpreterLockReason,
               ...budgetNoteFor(
                 toolLimits.codeInterpreter,
@@ -800,7 +1036,7 @@ const Dropdown: React.FC<DropdownProps> = ({
               onClick: () => {
                 toggleParentExpanded('focusConnector');
               },
-              category: 'tools' as const,
+              category: 'chat' as const,
               // The parent stays expandable so the reason is discoverable;
               // the children carry the lock.
               ...(connectorsLockReason
@@ -844,7 +1080,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                           : [...disabled, M365_BUILTIN_SERVER_ID],
                       });
                     },
-                    category: 'tools' as const,
+                    category: 'chat' as const,
                     toggle: true,
                     checked: !connectorsLockReason && builtinM365Active,
                     parentId: 'focusConnector',
@@ -884,7 +1120,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                 onClick: () => {
                   toggleConnectorForChat(server.id);
                 },
-                category: 'tools' as const,
+                category: 'chat' as const,
                 toggle: true,
                 checked:
                   !connectorsLockReason &&
@@ -909,52 +1145,10 @@ const Dropdown: React.FC<DropdownProps> = ({
                 setConnectorPinTrayOpen(true);
                 closeDropdown();
               },
-              category: 'tools' as const,
+              category: 'chat' as const,
               opensDialog: true,
               parentId: 'focusConnector',
             },
-          ]
-        : []),
-      // Microsoft 365 playbooks: one expandable parent listing the curated
-      // chains. Picking one fills the composer with its prompt — nothing is
-      // sent, so this is a starting point the user can still edit.
-      ...(isM365PlaybooksEnabled
-        ? [
-            {
-              id: 'm365Playbooks',
-              icon: (
-                <IconRoute size={18} className="text-blue-500 flex-shrink-0" />
-              ),
-              label: tM365('playbooks.menuLabel'),
-              infoTooltip: tM365('playbooks.menuTooltip'),
-              onClick: () => {
-                toggleParentExpanded('m365Playbooks');
-              },
-              category: 'tools' as const,
-            },
-            ...visibleM365Playbooks.map((playbook) => ({
-              id: `m365Playbook-${playbook.id}`,
-              icon:
-                playbook.kind === 'digest' ? (
-                  <IconChecklist
-                    size={18}
-                    className="text-blue-500 flex-shrink-0"
-                  />
-                ) : (
-                  <IconRoute
-                    size={18}
-                    className="text-blue-500 flex-shrink-0"
-                  />
-                ),
-              label: tM365(`playbooks.${playbook.titleKey}`),
-              infoTooltip: tM365(`playbooks.${playbook.descriptionKey}`),
-              onClick: () => {
-                void launchPlaybook(playbook.id);
-                closeDropdown();
-              },
-              category: 'tools' as const,
-              parentId: 'm365Playbooks',
-            })),
           ]
         : []),
       {
@@ -976,207 +1170,52 @@ const Dropdown: React.FC<DropdownProps> = ({
           setIsToneOpen(true);
           closeDropdown();
         },
-        // Tone shapes the response style — it lives with the other
-        // response-shaping actions, not the capability toggles.
-        category: 'transform',
+        // Tone stays on for the conversation, like the switches beside it.
+        category: 'chat',
         disabled: tones.length === 0,
         opensDialog: true,
       },
-      {
-        id: 'attach',
-        icon: (
-          <IconPaperclip
-            size={18}
-            className="flex-shrink-0 text-gray-700 dark:text-gray-300"
-          />
-        ),
-        label: t('attachFilesDropdown'),
-        infoTooltip: t('dropdown.attachTooltip', {
-          maxDocuments: documentsPerMessage,
-          maxFiles: maxFilesPerMessage(documentsPerMessage),
-        }),
-        onClick: handleAttachClick,
-        category: 'media',
-      },
-      {
-        id: 'attach-link',
-        icon: (
-          <IconLink
-            size={18}
-            className="flex-shrink-0 text-gray-700 dark:text-gray-300"
-          />
-        ),
-        label: tUrl('attachLink'),
-        infoTooltip: tUrl('attachLinkDescription'),
-        onClick: () => {
-          setUrlModalOpen(true);
-          closeDropdown();
-        },
-        category: 'media',
-        opensDialog: true,
-        // An alternate source for the same job as `attach`, so it nests under
-        // it. The modal lives outside the menu, so closing the menu is safe.
-        parentId: 'attach',
-      },
-      ...(isM365FilesEnabled
+      // ── Start from ────────────────────────────────────────────────────
+      // Microsoft 365 playbooks: one expandable parent listing the curated
+      // chains. Picking one fills the composer with its prompt — nothing is
+      // sent, so this is a starting point the user can still edit.
+      ...(isM365PlaybooksEnabled
         ? [
             {
-              id: 'attach-m365',
+              id: 'm365Playbooks',
               icon: (
-                <IconBrandOnedrive
-                  size={18}
-                  className="flex-shrink-0 text-blue-500"
-                />
+                <IconRoute size={18} className="text-blue-500 flex-shrink-0" />
               ),
-              label: tM365('attach.menuLabel'),
-              infoTooltip: tM365('attach.menuTooltip'),
+              label: tM365('playbooks.menuLabel'),
+              infoTooltip: tM365('playbooks.menuTooltip'),
               onClick: () => {
-                setM365PickerOpen(true);
+                toggleParentExpanded('m365Playbooks');
+              },
+              category: 'start' as const,
+            },
+            ...visibleM365Playbooks.map((playbook) => ({
+              id: `m365Playbook-${playbook.id}`,
+              icon:
+                playbook.kind === 'digest' ? (
+                  <IconChecklist
+                    size={18}
+                    className="text-blue-500 flex-shrink-0"
+                  />
+                ) : (
+                  <IconRoute
+                    size={18}
+                    className="text-blue-500 flex-shrink-0"
+                  />
+                ),
+              label: tM365(`playbooks.${playbook.titleKey}`),
+              infoTooltip: tM365(`playbooks.${playbook.descriptionKey}`),
+              onClick: () => {
+                void launchPlaybook(playbook.id);
                 closeDropdown();
               },
-              category: 'media' as const,
-              opensDialog: true,
-              // Another alternate source for `attach`, like attach-link.
-              parentId: 'attach',
-            },
-          ]
-        : []),
-      ...(isM365MailEnabled
-        ? [
-            {
-              id: 'attach-m365-mail',
-              icon: (
-                <IconMailDown
-                  size={18}
-                  className="flex-shrink-0 text-sky-600"
-                />
-              ),
-              label: tM365('mail.menuLabel'),
-              infoTooltip: tM365('mail.menuTooltip'),
-              onClick: () => {
-                setM365MailOpen(true);
-                closeDropdown();
-              },
-              category: 'media' as const,
-              opensDialog: true,
-              parentId: 'attach',
-            },
-          ]
-        : []),
-      {
-        id: 'transcribe',
-        icon: (
-          <IconFileMusic size={18} className="text-orange-500 flex-shrink-0" />
-        ),
-        label: t('transcribeAudioVideoDropdown'),
-        infoTooltip: t('dropdown.transcribeTooltip'),
-        onClick: handleTranscribeClick,
-        category: 'media',
-      },
-      {
-        id: 'translate',
-        icon: (
-          <IconLanguage size={18} className="text-teal-500 flex-shrink-0" />
-        ),
-        label: t('translateTextDropdown'),
-        infoTooltip: t('dropdown.translateTooltip'),
-        onClick: () => {
-          setIsTranslateOpen(true);
-          closeDropdown();
-        },
-        category: 'transform',
-        opensDialog: true,
-      },
-      ...(isExtractionEnabled
-        ? [
-            {
-              id: 'extract',
-              icon: (
-                <IconBraces size={18} className="text-blue-500 flex-shrink-0" />
-              ),
-              label: t('extraction.toggleLabel'),
-              infoTooltip: t('extraction.trayInfo'),
-              onClick: () => {
-                setExtractionMode(!extractionMode);
-                closeDropdown();
-              },
-              category: 'transform' as const,
-              toggle: true,
-              checked: extractionMode,
-            },
-          ]
-        : []),
-      {
-        id: 'translateDocument',
-        icon: (
-          <IconFileText size={18} className="text-indigo-500 flex-shrink-0" />
-        ),
-        label: t('translateDocumentDropdown'),
-        infoTooltip: t('dropdown.translateDocumentTooltip'),
-        onClick: handleDocumentTranslateClick,
-        category: 'transform',
-        opensDialog: true,
-      },
-      ...(isM365TranslationEnabled
-        ? [
-            {
-              id: 'translateM365Document',
-              icon: (
-                <IconBrandOnedrive
-                  size={18}
-                  className="text-blue-500 flex-shrink-0"
-                />
-              ),
-              label: tM365('translate.menuLabel'),
-              infoTooltip: tM365('translate.menuTooltip'),
-              onClick: () => {
-                // No local file: the modal opens straight into the picker.
-                setDocumentToTranslate(null);
-                setIsDocumentTranslateOpen(true);
-                closeDropdown();
-              },
-              category: 'transform' as const,
-              opensDialog: true,
-            },
-          ]
-        : []),
-      ...(isM365MeetingsEnabled
-        ? [
-            {
-              id: 'attachMeeting',
-              icon: (
-                <IconCalendarEvent
-                  size={18}
-                  className="text-indigo-500 flex-shrink-0"
-                />
-              ),
-              label: tM365('meetings.menuLabel'),
-              infoTooltip: tM365('meetings.menuTooltip'),
-              onClick: () => {
-                setIsMeetingImportOpen(true);
-                closeDropdown();
-              },
-              category: 'transform' as const,
-              opensDialog: true,
-            },
-          ]
-        : []),
-      ...(hasCameraSupport
-        ? [
-            {
-              id: 'camera',
-              icon: (
-                <IconCamera size={18} className="text-red-500 flex-shrink-0" />
-              ),
-              label: t('cameraDropdown'),
-              infoTooltip: t('dropdown.cameraTooltip'),
-              onClick: () => {
-                onCameraClick();
-                closeDropdown();
-              },
-              category: 'media' as 'web' | 'media' | 'transform',
-              opensDialog: true,
-            },
+              category: 'start' as const,
+              parentId: 'm365Playbooks',
+            })),
           ]
         : []),
     ],
@@ -1184,16 +1223,18 @@ const Dropdown: React.FC<DropdownProps> = ({
       t,
       tUrl,
       tM365,
-      isM365FilesEnabled,
-      isM365MailEnabled,
+      tAdd,
+      attachUsesPicker,
+      translateUsesPicker,
+      transcribeUsesPicker,
+      canConnectM365,
+      openAddDialog,
       builtinM365Active,
       builtinM365Available,
       m365ToolsUserEnabled,
       setM365ToolsUserEnabled,
       selectedConversation,
       updateConversation,
-      isM365TranslationEnabled,
-      isM365MeetingsEnabled,
       isM365PlaybooksEnabled,
       visibleM365Playbooks,
       searchMode,
@@ -1211,7 +1252,6 @@ const Dropdown: React.FC<DropdownProps> = ({
       searchLockReason,
       interpreterLockReason,
       connectorsLockReason,
-      hasAiToolChildren,
       showConnectors,
       activeConnectorCount,
       mcpServers,
@@ -1235,11 +1275,11 @@ const Dropdown: React.FC<DropdownProps> = ({
     ],
   );
 
-  // Tools that start life in the "More" section: camera (always, when present),
-  // tone when the user has no tones, and extract when there are no recipes set
-  // up. The user can still pull any of these out (revealedToolIds) or pin them.
+  // Tools that start life in the "More" section: tone when the user has no
+  // tones, and extract when there are no recipes set up. The user can still
+  // pull any of these out (revealedToolIds) or pin them.
   const defaultHiddenIds = useMemo(() => {
-    const ids = ['camera'];
+    const ids: string[] = [];
     if (tones.length === 0) ids.push('tone');
     if (isExtractionEnabled && savedStructures.length === 0) {
       ids.push('extract');
@@ -1302,7 +1342,9 @@ const Dropdown: React.FC<DropdownProps> = ({
   const { sections, childrenByParent, flatVisibleItems } = useMemo(() => {
     if (isFiltering) {
       const filtered = trackedItems.filter((item) =>
-        normalizeForSearch(item.label, locale).includes(normalizedQuery),
+        [item.label, ...(item.keywords ?? [])].some((text) =>
+          normalizeForSearch(text, locale).includes(normalizedQuery),
+        ),
       );
       // Search flattens the hierarchy: every source is its own hit, so typing
       // "link" finds the nested link row without expanding anything.
@@ -1371,26 +1413,24 @@ const Dropdown: React.FC<DropdownProps> = ({
         items: frequent,
       },
       {
-        key: 'web',
-        label: t('dropdown.categoryWeb'),
-        items: byCategory('web'),
+        key: 'add',
+        label: t('dropdown.categoryAdd'),
+        items: byCategory('add'),
       },
       {
-        key: 'media',
-        label: t('dropdown.categoryMedia'),
-        items: byCategory('media'),
+        key: 'do',
+        label: t('dropdown.categoryDo'),
+        items: byCategory('do'),
       },
       {
-        key: 'transform',
-        label: t('dropdown.categoryTransform'),
-        items: byCategory('transform'),
+        key: 'chat',
+        label: t('dropdown.categoryChat'),
+        items: byCategory('chat'),
       },
-      // Capability toggles + connectors sit LAST among the regular
-      // sections, directly above "More".
       {
-        key: 'tools',
-        label: t('dropdown.categoryTools'),
-        items: byCategory('tools'),
+        key: 'start',
+        label: t('dropdown.categoryStart'),
+        items: byCategory('start'),
       },
       { key: 'more', label: t('dropdown.sectionMore'), items: hiddenItems },
     ].filter((section) => section.items.length > 0);
@@ -1781,14 +1821,29 @@ const Dropdown: React.FC<DropdownProps> = ({
         onClose={() => setUrlModalOpen(false)}
       />
 
-      <M365FilePickerModal
-        isOpen={m365PickerOpen}
-        onClose={() => setM365PickerOpen(false)}
-      />
-
-      <M365MailImportModal
-        isOpen={m365MailOpen}
-        onClose={() => setM365MailOpen(false)}
+      {/* One picker for every source, when there is a Microsoft 365 source
+          to choose from. */}
+      <AddToChatDialog
+        isOpen={addDialogIntent !== null}
+        onClose={() => setAddDialogIntent(null)}
+        initialIntent={addDialogIntent ?? 'attach'}
+        capabilities={addCapabilities}
+        onBrowseDevice={browseDevice}
+        onDeviceFiles={handlePickerDeviceFiles}
+        onOpenCamera={onCameraClick}
+        onTranslateDriveItem={(entry) => {
+          setDocumentToTranslate(null);
+          setM365DocumentToTranslate({
+            driveId: entry.driveId,
+            itemId: entry.itemId,
+            name: entry.name,
+            ...(entry.size !== undefined && { size: entry.size }),
+          });
+          setIsDocumentTranslateOpen(true);
+        }}
+        onImportTranscript={(transcript, meeting) => {
+          void handleMeetingTranscriptImport(transcript, meeting);
+        }}
       />
 
       {/* Hidden file input for all file types: images, documents, data, code, audio, and video */}
@@ -1797,11 +1852,13 @@ const Dropdown: React.FC<DropdownProps> = ({
         type="file"
         accept={ATTACH_ACCEPT_TYPES}
         onChange={async (e) => {
-          if (e.target.files) {
-            await handleFileUpload(Array.from(e.target.files));
-          }
+          const files = e.target.files ? Array.from(e.target.files) : [];
           // Reset so the same file can be selected again
           e.target.value = '';
+          if (files.length === 0) return;
+          // Files chosen from the picker's Browse button end the picker.
+          setAddDialogIntent(null);
+          await handleFileUpload(files);
         }}
         className="hidden"
         multiple
@@ -1813,11 +1870,13 @@ const Dropdown: React.FC<DropdownProps> = ({
         type="file"
         accept={TRANSCRIPTION_ACCEPT_TYPES}
         onChange={async (e) => {
-          if (e.target.files) {
-            await handleFileUpload(Array.from(e.target.files));
-          }
+          const files = e.target.files ? Array.from(e.target.files) : [];
           // Reset so the same file can be selected again
           e.target.value = '';
+          if (files.length === 0) return;
+          // Files chosen from the picker's Browse button end the picker.
+          setAddDialogIntent(null);
+          await handleFileUpload(files);
         }}
         className="hidden"
       />
@@ -1830,8 +1889,8 @@ const Dropdown: React.FC<DropdownProps> = ({
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) {
-            setDocumentToTranslate(file);
-            setIsDocumentTranslateOpen(true);
+            setAddDialogIntent(null);
+            translateLocalDocument(file);
           }
           // Reset input so the same file can be selected again
           e.target.value = '';
@@ -1845,20 +1904,13 @@ const Dropdown: React.FC<DropdownProps> = ({
         onClose={() => {
           setIsDocumentTranslateOpen(false);
           setDocumentToTranslate(null);
+          setM365DocumentToTranslate(null);
         }}
         documentFile={documentToTranslate}
         allowM365Source={isM365TranslationEnabled}
+        initialM365Source={m365DocumentToTranslate}
         onTranslationComplete={handleDocumentTranslationComplete}
         onTranslationPending={handleDocumentTranslationPending}
-      />
-
-      {/* Meeting import (§4) */}
-      <M365MeetingImportModal
-        isOpen={isMeetingImportOpen}
-        onClose={() => setIsMeetingImportOpen(false)}
-        onImportTranscript={(transcript, meeting) => {
-          void handleMeetingTranscriptImport(transcript, meeting);
-        }}
       />
     </div>
   );
