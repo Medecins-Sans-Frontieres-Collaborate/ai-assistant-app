@@ -18,7 +18,7 @@ describe('DropdownMenuItem', () => {
     label: 'Test Item',
     tooltip: 'Test Tooltip',
     onClick: vi.fn(),
-    category: 'web',
+    category: 'chat',
     ...overrides,
   });
 
@@ -125,23 +125,23 @@ describe('DropdownMenuItem', () => {
   });
 
   describe('Different Categories', () => {
-    it('works with web category', () => {
-      const item = createMenuItem({ category: 'web', label: 'Web Search' });
+    it('works with the chat category', () => {
+      const item = createMenuItem({ category: 'chat', label: 'Web Search' });
       render(<DropdownMenuItem item={item} isSelected={false} />);
 
       expect(screen.getByText('Web Search')).toBeInTheDocument();
     });
 
-    it('works with media category', () => {
-      const item = createMenuItem({ category: 'media', label: 'Upload Image' });
+    it('works with the add category', () => {
+      const item = createMenuItem({ category: 'add', label: 'Upload Image' });
       render(<DropdownMenuItem item={item} isSelected={false} />);
 
       expect(screen.getByText('Upload Image')).toBeInTheDocument();
     });
 
-    it('works with transform category', () => {
+    it('works with the do category', () => {
       const item = createMenuItem({
-        category: 'transform',
+        category: 'do',
         label: 'Translate',
       });
       render(<DropdownMenuItem item={item} isSelected={false} />);
