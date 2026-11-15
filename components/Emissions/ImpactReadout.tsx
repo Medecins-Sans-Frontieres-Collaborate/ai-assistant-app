@@ -10,17 +10,15 @@ import {
   EmissionsChipVisibility,
   activityDurationParts,
   estimateActivityEquivalents,
+  formatGrams,
 } from '@/lib/utils/shared/emissions';
+
+import { BudgetSummary } from '@/components/Emissions/BudgetSummary';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
-/** <1 g shows decimals ("0.42"); larger values round to whole grams. */
-export const formatGrams = (grams: number): string =>
-  grams < 1
-    ? grams.toFixed(2)
-    : grams < 10
-      ? grams.toFixed(1)
-      : `${Math.round(grams)}`;
+// Re-exported: callers have always imported the formatter from here.
+export { formatGrams };
 
 export interface ImpactRow {
   label: string;
@@ -148,6 +146,11 @@ export const ImpactReadout: FC<ImpactReadoutProps> = ({
           })}
         </div>
       </div>
+
+      {/* Personal budgets, when the user has set any (renders nothing
+          otherwise). Here so the chat chip and the workflow badge both
+          carry it. */}
+      <BudgetSummary />
 
       <p className="mt-2 border-t border-gray-200 pt-2 text-[10px] leading-snug text-gray-500 dark:border-gray-700 dark:text-gray-400">
         {t(disclaimerKey, { version: ASSUMPTIONS_VERSION })}
