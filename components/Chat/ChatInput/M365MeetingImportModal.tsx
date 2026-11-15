@@ -85,7 +85,7 @@ type ResourceState = M365MeetingResources | 'loading' | 'forbidden' | 'error';
  * original lazy per-meeting resolve, which is the escape hatch whenever the
  * probe could not reach a verdict (denied, throttled, out of budget).
  */
-const M365MeetingImportBody: FC<{
+export const M365MeetingImportBody: FC<{
   onClose: () => void;
   onImportTranscript: M365MeetingImportModalProps['onImportTranscript'];
 }> = ({ onClose, onImportTranscript }) => {
