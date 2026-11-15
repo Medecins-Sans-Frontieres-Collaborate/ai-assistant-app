@@ -21,6 +21,7 @@ import {
   destinationToTarget,
 } from '@/client/hooks/document/useM365Save';
 import { useAvailableGuides } from '@/client/hooks/settings/useAvailableGuides';
+import { useBudgetGate } from '@/client/hooks/settings/useUsageBudgets';
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
@@ -537,6 +538,9 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     state?.specGuideId,
     state?.toneGuideId,
   ]);
+
+  // Runs answer to the user's personal budgets (BudgetRunDialog explains).
+  const { guard: guardBudget } = useBudgetGate();
 
   const handleRun = useCallback(async () => {
     // Held pastes are part of the instruction, so a chip alone is enough to
@@ -1766,7 +1770,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
-              void handleRun();
+              guardBudget(() => void handleRun(), 'run');
             }
           }}
           rows={2}
@@ -1792,7 +1796,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         ) : (
           <button
             type="button"
-            onClick={() => void handleRun()}
+            onClick={() => guardBudget(() => void handleRun(), 'run')}
             disabled={(!instruction.trim() && !hasChips) || composerBlocked}
             className="flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg bg-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
           >
