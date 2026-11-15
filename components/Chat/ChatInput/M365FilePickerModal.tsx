@@ -1271,7 +1271,7 @@ export const M365FilePickerBody: FC<{
     <div className="flex h-[420px] flex-col gap-3">
       {/* Tabs */}
       <div
-        className="flex gap-1 rounded-lg bg-gray-100 p-1 dark:bg-neutral-700/50"
+        className="flex gap-1 rounded-lg bg-gray-100 p-1 dark:bg-neutral-700/50 max-sm:overflow-x-auto"
         role="tablist"
         onKeyDown={handleTabListKeyDown}
       >
@@ -1285,7 +1285,7 @@ export const M365FilePickerBody: FC<{
             aria-controls="m365-picker-panel"
             tabIndex={tab === candidate ? 0 : -1}
             onClick={() => switchTab(candidate)}
-            className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
+            className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors max-sm:flex-auto max-sm:whitespace-nowrap ${
               tab === candidate
                 ? 'bg-white text-gray-900 shadow-sm dark:bg-neutral-800 dark:text-gray-100'
                 : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'
@@ -1818,7 +1818,14 @@ export const M365FilePickerBody: FC<{
                     >
                       <M365FileTypeIcon entry={entry} size={18} />
                       <span className="min-w-0 flex-1" title={entry.name}>
-                        <span className="block truncate">{entry.name}</span>
+                        {/* File names keep their own reading direction inside a
+                          right-to-left interface. */}
+                        <span
+                          dir="auto"
+                          className="block truncate text-left rtl:text-right"
+                        >
+                          {entry.name}
+                        </span>
                         {/* Mixed-source listings (search spans every site;
                           recent/shared mix drives) show WHERE the item
                           lives — same-named files across sites are
@@ -1842,7 +1849,9 @@ export const M365FilePickerBody: FC<{
                           ? entry.childCount !== undefined
                             ? t('itemCount', { count: entry.childCount })
                             : ''
-                          : formatSize(entry.size)}
+                          : entry.size !== undefined && (
+                              <bdi>{formatSize(entry.size)}</bdi>
+                            )}
                       </span>
                     </button>
                     {onPick && entry.isFolder && (
