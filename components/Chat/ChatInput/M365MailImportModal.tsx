@@ -407,7 +407,9 @@ const MailRow: FC<{
  * never fetched (the imported document lists their names), and nothing is
  * written back to the mailbox.
  */
-const M365MailImportBody: FC<{ onClose: () => void }> = ({ onClose }) => {
+export const M365MailImportBody: FC<{ onClose: () => void }> = ({
+  onClose,
+}) => {
   const t = useTranslations('m365.mail');
   const { attachMail } = useM365Attachment();
 
