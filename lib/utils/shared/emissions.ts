@@ -327,6 +327,14 @@ export function clampEmissionsChipAutoHideMs(ms: number): number {
   );
 }
 
+/** <1 g shows decimals ("0.42"); larger values round to whole grams. */
+export const formatGrams = (grams: number): string =>
+  grams < 1
+    ? grams.toFixed(2)
+    : grams < 10
+      ? grams.toFixed(1)
+      : `${Math.round(grams)}`;
+
 export interface ActivityDurationParts {
   /** i18n key suffix under `emissions.duration.*`. */
   unit: 'lessThanSecond' | 'seconds' | 'minutes' | 'hours';
