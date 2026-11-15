@@ -902,7 +902,8 @@
       "MODEL_RATE_LIMITED": "Модель зараз отримує занадто багато запитів. Спробу виконано автоматично ще раз; будь ласка, повторіть спробу пізніше.",
       "MODEL_QUOTA_EXCEEDED": "Вичерпано квоту моделі. Спробуйте іншу модель або повторіть спробу пізніше.",
       "MODEL_AUTH_FAILED": "Не вдалося автентифікуватися в сервісі моделі. Це проблема конфігурації — зверніться до служби підтримки."
-    }
+    },
+    "messageLimitExceeded": "Обмеження на повідомлення — {maxLength} символів. Ви ввели {valueLength} символів."
   },
   "sidebar": {
     "collapseSidebar": "Згорнути бічну панель",
@@ -1342,14 +1343,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Якщо ви не маєте ключа OpenAI API, отримайте його тут: ",
   "Loading_ellipsis": "Завантаження...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Переконайтеся, що ваш OpenAI API ключ вказано у нижньому лівому куті бічної панелі.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Обмеження на повідомлення — {{maxLength}} символів. Ви ввели {{valueLength}} символів.",
   "Model": "Модель",
   "OR": "АБО",
   "OpenAI API Key Required": "Потрібен ключ OpenAI API",
   "Please enter a message": "Будь ласка, введіть повідомлення",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Будь ласка, задайте ваш OpenAI API ключ у нижньому лівому куті бічної панелі.",
-  "Prompt limit is {{maxLength}} characters": "Обмеження підказки — {{maxLength}} символів",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Обмеження підказки — {{maxLength}} символів. Ви ввели {{valueLength}} символів.",
   "Regenerate response": "Згенерувати відповідь знову",
   "Run Typewriter Intro": "Запустити Typewriter Intro",
   "Save & Submit": "Зберегти й надіслати",

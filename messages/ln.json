@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Soki ozali na OpenAI API key te, okoki kozwa yango awa: ",
   "Loading_ellipsis": "Kozwa...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Kangisa ete clé OpenAI API na yo etyami na se ya ngambo ya mwati.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Nsango ekoki kokóma na ba ndenge {{maxLength}} te. Otindi {{valueLength}}.",
   "Model": "Model",
   "OR": "TO",
   "OpenAI API Key Required": "OpenAI API Key esengeli",
   "Please enter a message": "Svp, koma nsango",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Tya clé OpenAI API na se ya ngambo ya mwati.",
-  "Prompt limit is {{maxLength}} characters": "Mokuse ekoki kozala mwa {{maxLength}}",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Mokuse ekoki kozala mwa {{maxLength}}. Osili kokoma {{valueLength}}.",
   "Regenerate response": "Bongisa eyano lisusu",
   "Run Typewriter Intro": "Kebisa bobandeli ya Typewriter",
   "Save & Submit": "Bomba & Tinda",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Model ezali kozwa batunaka mingi mingi sik’oyo. Ezali komibongisa ye moko; s’il vous plaît, meka lisusu sima moke.",
       "MODEL_QUOTA_EXCEEDED": "Quota ya capacité ya model esili. Meka model mosusu, to teka sima moke.",
       "MODEL_AUTH_FAILED": "Application ekoki te koyeba na service ya model. Problème ya configuration — s’il vous plaît, kontakte support."
-    }
+    },
+    "messageLimitExceeded": "Nsango ekoki kokóma na ba ndenge {maxLength} te. Otindi {valueLength}."
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",

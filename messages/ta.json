@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "உங்களிடம் OpenAI API சாவி இல்லையென்றால், இங்கே ஒன்றைப் பெறலாம்: ",
   "Loading_ellipsis": "ஏற்றுகிறது...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "உங்கள் OpenAI API சாவி பக்கப்பட்டியின் கீழ் இடதுபுறத்தில் அமைக்கப்பட்டிருப்பதை உறுதிசெய்யுங்கள்.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "செய்தி வரம்பு {{maxLength}} எழுத்துகள். நீங்கள் {{valueLength}} எழுத்துகளை உள்ளிட்டுள்ளீர்கள்.",
   "Model": "மாதிரி",
   "OR": "அல்லது",
   "OpenAI API Key Required": "OpenAI API சாவி தேவை",
   "Please enter a message": "ஒரு செய்தியை உள்ளிடுங்கள்",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "உங்கள் OpenAI API சாவியை பக்கப்பட்டியின் கீழ் இடதுபுறத்தில் அமைக்கவும்.",
-  "Prompt limit is {{maxLength}} characters": "ப்ராம்ப்ட் வரம்பு {{maxLength}} எழுத்துகள்",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "ப்ராம்ப்ட் வரம்பு {{maxLength}} எழுத்துகள். நீங்கள் {{valueLength}} எழுத்துகளை உள்ளிட்டுள்ளீர்கள்.",
   "Regenerate response": "பதிலை மீண்டும் உருவாக்கு",
   "Run Typewriter Intro": "தட்டச்சு இயந்திர அறிமுகத்தை இயக்கு",
   "Save & Submit": "சேமி & சமர்ப்பி",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "இப்போது மாடலுக்கு அதிகமான கோரிக்கைகள் வருகிறது. தானாக மீண்டும் முயற்சிக்கப்பட்டது; தயவு செய்து சிறிது நேரத்தில் மீண்டும் முயற்சிக்கவும்.",
       "MODEL_QUOTA_EXCEEDED": "மாடலின் கொள்ளளவு முழுமையாக பயன்படுத்தப்பட்டுள்ளது. வேறு மாடலை முயற்சிக்கவும், அல்லது பிறகு முயற்சிக்கவும்.",
       "MODEL_AUTH_FAILED": "மாடல் சேவையுடன் செயலியை உறுதிப்படுத்த முடியவில்லை. இது கட்டமைப்பு பிரச்சனை — தயவு செய்து ஆதரவுடன் தொடர்புகொள்ளவும்."
-    }
+    },
+    "messageLimitExceeded": "செய்தி வரம்பு {maxLength} எழுத்துகள். நீங்கள் {valueLength} எழுத்துகளை உள்ளிட்டுள்ளீர்கள்."
   },
   "transcript": {
     "originalTranscript": "அசல் எழுத்தாக்கம்",

@@ -4,7 +4,6 @@
   "OpenAI API Key Required": "OpenAI API Anahtarı Gerekli",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Lütfen OpenAI API anahtarınızı yan çubuğun sol altından ayarlayın.",
   "Stop Generating": "Oluşturmayı Durdur",
-  "Prompt limit is {{maxLength}} characters": "İstem sınırı {{maxLength}} karakterdir",
   "System Prompt": "Sistem İstemi",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Siz ChatGPT'siniz, OpenAI tarafından eğitilmiş büyük bir dil modelisiniz. Kullanıcının talimatlarını dikkatlice izleyin. Markdown kullanarak yanıt verin.",
   "Enter a prompt": "Bir istem girin",
@@ -23,7 +22,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "OpenAI API anahtarınızın yan çubuğun sol altında ayarlandığından emin olun.",
   "If you completed this step, OpenAI may be experiencing issues_": "Bu adımı tamamladıysanız, OpenAI sorun yaşıyor olabilir.",
   "click if using a _env_local file": ".env.local dosyası kullanıyorsanız tıklayın",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Mesaj sınırı {{maxLength}} karakterdir. {{valueLength}} karakter girdiniz.",
   "Please enter a message": "Lütfen bir mesaj girin",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI, ChatGPT'nin arayüz ve işlevselliğini taklit etmeyi amaçlayan OpenAI'nin sohbet modelleri için gelişmiş bir sohbetbot kitidir.",
   "Are you sure you want to clear all messages?": "Tüm mesajları temizlemek istediğinizden emin misiniz?",
@@ -217,7 +215,6 @@
   "Capture Image": "Resim Çek",
   "Default": "Varsayılan",
   "*Note that these default settings only apply to new conversations once saved_": "*Bu varsayılan ayarların yalnızca kaydedildikten sonra yeni konuşmalara uygulanacağını unutmayın.",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "İstem sınırı {{maxLength}} karakterdir. {{valueLength}} karakter girdiniz.",
   "Terms and Conditions": "Şartlar ve Koşullar",
   "Loading terms and conditions_ellipsis": "Şartlar ve koşullar yükleniyor...",
   "Retry": "Yeniden dene",
@@ -985,7 +982,8 @@
       "MODEL_RATE_LIMITED": "Model şu anda çok fazla istek alıyor. Otomatik olarak tekrar denendi; lütfen kısa bir süre sonra tekrar deneyin.",
       "MODEL_QUOTA_EXCEEDED": "Modelin kapasite kotası doldu. Başka bir model deneyin veya daha sonra tekrar deneyin.",
       "MODEL_AUTH_FAILED": "Uygulama, model servisiyle kimlik doğrulaması yapamadı. Bu bir yapılandırma sorunu — lütfen destek ile iletişime geçin."
-    }
+    },
+    "messageLimitExceeded": "Mesaj sınırı {maxLength} karakterdir. {valueLength} karakter girdiniz."
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",

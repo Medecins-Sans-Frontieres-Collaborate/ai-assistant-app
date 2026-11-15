@@ -543,7 +543,6 @@
   "Loading terms and conditions_ellipsis": "Inapakia masharti na vigezo...",
   "Loading_ellipsis": "Inapakia...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Hakikisha ufunguo wako wa API wa OpenAI umewekwa upande wa kushoto chini wa upau wa kando.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Kikomo cha ujumbe ni herufi {{maxLength}}. Umeingiza herufi {{valueLength}}.",
   "Model": "Modeli",
   "Name": "Jina",
   "New conversation": "Mazungumzo mapya",
@@ -560,8 +559,6 @@
   "Privacy Policy": "Sera ya Faragha",
   "Prompt": "Kidokezo",
   "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Maudhui ya kidokezo. Tumia '{{}}' kuonyesha kigezo. Mfano: '{{name}}' ni '{{adjective}}' '{{noun}}'",
-  "Prompt limit is {{maxLength}} characters": "Kikomo cha maelekezo ni {{maxLength}} herufi",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Kikomo cha kidokezo ni herufi {{maxLength}}. Umeingiza herufi {{valueLength}}.",
   "Regenerate response": "Tengeneza jibu upya",
   "Retry": "Jaribu tena",
   "Run Typewriter Intro": "Endesha Utangulizi wa Typewriter",
@@ -985,7 +982,8 @@
       "MODEL_RATE_LIMITED": "Mfumo unapokea maombi mengi sana kwa sasa. Imejaribiwa tena kiotomatiki; tafadhali jaribu tena baada ya muda.",
       "MODEL_QUOTA_EXCEEDED": "Kiwango cha uwezo wa mfumo kimeisha. Jaribu mfumo mwingine, au jaribu tena baadaye.",
       "MODEL_AUTH_FAILED": "App haikuweza kuthibitisha na huduma ya mfumo. Hili ni tatizo la usanidi — tafadhali wasiliana na msaada."
-    }
+    },
+    "messageLimitExceeded": "Kikomo cha ujumbe ni herufi {maxLength}. Umeingiza herufi {valueLength}."
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",

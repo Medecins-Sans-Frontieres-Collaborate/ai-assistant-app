@@ -2,8 +2,6 @@
   "OpenAI API Key Required": "Klucz do OpenAI API jest wymagany",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Proszę wprowadzić swój klucz do OpenAI API na pasku bocznym w lewym dolnym rogu",
   "Stop Generating": "Zatrzymaj generowanie",
-  "Prompt limit is {{maxLength}} characters": "Limit liczby znaków to {{maxLength}}",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Limit prompta wynosi {{maxLength}} znaków. Wprowadziłeś {{valueLength}} znaków.",
   "System Prompt": "Prompt systemowy",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Jesteś ChatGPT, duży model językowy wytrenowany przez OpenAI. Postępuj zgodnie z instrukcjami użytkownika. Odpowiedz za pomocą formatu markdown.",
   "Enter a prompt": "Wprowadź prompt",
@@ -22,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Upewnij się, że wprowadziłeś swój klucz do OpenAI API na pasku bocznym w lewym dolnym rogu",
   "If you completed this step, OpenAI may be experiencing issues_": "Jeśli wykonałeś ten krok to oznacza, że mogą występować problemy po stronie OpenAI.",
   "click if using a _env_local file": "kliknij jeśli używasz pliku .env.local",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Limit wiadomości wynosi {{maxLength}} znaków. Wprowadziłeś {{valueLength}} znaków.",
   "Please enter a message": "Proszę wpisać swoją wiadomość",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI to zaawansowane narzędzie chatbotów dla modeli czatów od OpenAI, którego celem jest naśladowanie interfejsu i funkcjonalności ChatGPT.",
   "Are you sure you want to clear all messages?": "Czy na pewno chcesz usunąć wszystkie wiadomości?",
@@ -982,7 +979,8 @@
       "MODEL_RATE_LIMITED": "Model otrzymuje obecnie zbyt wiele żądań. Próba została automatycznie ponowiona; spróbuj ponownie za chwilę.",
       "MODEL_QUOTA_EXCEEDED": "Limit pojemności modelu został wyczerpany. Spróbuj innego modelu lub ponów próbę później.",
       "MODEL_AUTH_FAILED": "Aplikacji nie udało się uwierzytelnić w usłudze modelu. To problem z konfiguracją — skontaktuj się z pomocą techniczną."
-    }
+    },
+    "messageLimitExceeded": "Limit wiadomości wynosi {maxLength} znaków. Wprowadziłeś {valueLength} znaków."
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",

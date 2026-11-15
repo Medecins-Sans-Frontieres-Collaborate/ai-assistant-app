@@ -12,7 +12,6 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Als je geen OpenAI API-sleutel hebt, kun je er hier een krijgen: ",
   "Loading_ellipsis": "Laden...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Zorg ervoor dat je OpenAI API-sleutel is ingesteld in de linkeronderhoek van de zijbalk.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "De berichtlimiet is {{maxLength}} tekens. Je hebt {{valueLength}} tekens ingevoerd.",
   "Model": "Model",
   "Neutral": "Neutraal",
   "New Conversation": "Nieuw gesprek",
@@ -21,7 +20,6 @@
   "Please enter a message": "Voer een bericht in",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Stel je OpenAI API-sleutel in de linkeronderhoek van de zijbalk in.",
   "Precise": "Nauwkeurig",
-  "Prompt limit is {{maxLength}} characters": "Promptlimiet is {{maxLength}} tekens",
   "Regenerate response": "Antwoord opnieuw genereren",
   "Save & Submit": "Opslaan & Verzenden",
   "Search_ellipsis": "Zoeken...",
@@ -950,7 +948,8 @@
       "MODEL_RATE_LIMITED": "Het model ontvangt momenteel te veel verzoeken. Er is automatisch opnieuw geprobeerd; probeer het zo meteen opnieuw.",
       "MODEL_QUOTA_EXCEEDED": "De capaciteitsquota van het model zijn bereikt. Probeer een ander model of probeer het later opnieuw.",
       "MODEL_AUTH_FAILED": "De app kon niet verifiëren bij de modelservice. Dit is een configuratiefout — neem contact op met support."
-    }
+    },
+    "messageLimitExceeded": "De berichtlimiet is {maxLength} tekens. Je hebt {valueLength} tekens ingevoerd."
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -1435,7 +1434,6 @@
   "No prompts found": "Geen prompts gevonden",
   "OpenAI API Key": "OpenAI API-sleutel",
   "Plugin Keys": "Plugin-sleutels",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Promptlimiet is {{maxLength}} tekens. U hebt {{valueLength}} tekens ingevoerd.",
   "Run Typewriter Intro": "Typemachine-intro uitvoeren",
   "Saved Prompts": "Opgeslagen prompts",
   "Select a prompt to view details": "Selecteer een prompt om details te bekijken",

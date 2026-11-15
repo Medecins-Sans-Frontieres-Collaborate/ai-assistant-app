@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Uma ungenayo ikhiye le-API ye-OpenAI, ungayithola lapha: ",
   "Loading_ellipsis": "Kuyalayisha...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Qiniseka ukuthi ikhiye lakho le-API ye-OpenAI lisetwe ngezansi kwesokunxele sebha eceleni.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Umkhawulo womlayezo ungu-{{maxLength}} wezinhlamvu. Ufake izinhlamvu ezingu-{{valueLength}}.",
   "Model": "Imodeli",
   "OR": "NOMA",
   "OpenAI API Key Required": "Kudingeka Ikhiye Le-API Ye-OpenAI",
   "Please enter a message": "Sicela ufake umlayezo",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Sicela usethe ikhiye lakho le-API ye-OpenAI ngezansi kwesokunxele sebha eceleni.",
-  "Prompt limit is {{maxLength}} characters": "Umkhawulo wesiqondiso ungu-{{maxLength}} wezinhlamvu",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Umkhawulo wesiqondiso ungu-{{maxLength}} wezinhlamvu. Ufake izinhlamvu ezingu-{{valueLength}}.",
   "Regenerate response": "Phinda wenze impendulo",
   "Run Typewriter Intro": "Sebenzisa Isingeniso Somshini Wokuthayipha",
   "Save & Submit": "Gcina Futhi Uthumele",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Imodeli ithola izicelo eziningi ngesikhathi esifanayo. Iphinde yazama ngokuzenzakalelayo; sicela uzame futhi kungakapheli isikhathi.",
       "MODEL_QUOTA_EXCEEDED": "Umkhawulo wemodeli uphelile. Zama enye imodeli, noma uzame futhi ngemuva kwesikhathi.",
       "MODEL_AUTH_FAILED": "Uhlelo alukwazanga ukuzazisa kusevisi yemodeli. Le yinkinga yokumiswa kohlelo — sicela uthinte ukwesekwa."
-    }
+    },
+    "messageLimitExceeded": "Umkhawulo womlayezo ungu-{maxLength} wezinhlamvu. Ufake izinhlamvu ezingu-{valueLength}."
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",

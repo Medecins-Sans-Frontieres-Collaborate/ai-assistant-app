@@ -18,7 +18,6 @@
   "Invalid folder file": "Ungültige Ordnerdatei",
   "New conversation": "Neue Konversation",
   "No prompts found": "Keine Eingabeaufforderungen gefunden",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Das Eingabeaufforderungslimit beträgt {{maxLength}} Zeichen. Sie haben {{valueLength}} Zeichen eingegeben.",
   "Run Typewriter Intro": "Schreibmaschinen-Intro ausführen",
   "Saved Prompts": "Gespeicherte Eingabeaufforderungen",
   "Select a prompt to view details": "Wählen Sie eine Eingabeaufforderung aus, um Details anzuzeigen",
@@ -27,7 +26,6 @@
   "OpenAI API Key Required": "OpenAI API-Schlüssel erforderlich",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Bitte trage deinen OpenAI API-Schlüssel in der linken unteren Ecke der Seitenleiste ein.",
   "Stop Generating": "Generieren stoppen",
-  "Prompt limit is {{maxLength}} characters": "Die Eingabe ist auf {{maxLength}} Zeichen begrenzt.",
   "System Prompt": "Systemaufforderung",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Du bist ChatGPT, ein großes Sprachmodell, das von OpenAI trainiert wurde. Befolge die Anweisungen des Benutzers sorgfältig. Antworte in Markdown-Format.",
   "Enter a prompt": "Gib eine Anweisung ein",
@@ -46,7 +44,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Stelle sicher, dass dein OpenAI API-Schlüssel in der unteren linken Ecke der Seitenleiste eingetragen ist.",
   "If you completed this step, OpenAI may be experiencing issues_": "Wenn dies der Fall ist, könnte OpenAI möglicherweise momentan Probleme haben.",
   "click if using a _env_local file": "click if using a .env.local file",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Das Nachrichtenlimit beträgt {{maxLength}} Zeichen. Du hast bereits {{valueLength}} Zeichen eingegeben.",
   "Please enter a message": "Bitte gib eine Nachricht ein",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI ist ein fortschrittliches Chatbot-Toolkit für OpenAI's Chat-Modelle, das darauf abzielt, die Benutzeroberfläche und Funktionalität von ChatGPT nachzuahmen.",
   "Are you sure you want to clear all messages?": "Bist du sicher, dass du alle Nachrichten löschen möchtest?",
@@ -931,7 +928,8 @@
       "MODEL_RATE_LIMITED": "Das Modell erhält derzeit zu viele Anfragen. Es wurde automatisch erneut versucht; bitte versuchen Sie es in Kürze erneut.",
       "MODEL_QUOTA_EXCEEDED": "Das Kapazitätskontingent des Modells ist erschöpft. Versuchen Sie ein anderes Modell oder versuchen Sie es später erneut.",
       "MODEL_AUTH_FAILED": "Die App konnte sich nicht beim Modelldienst authentifizieren. Dies ist ein Konfigurationsproblem — bitte wenden Sie sich an den Support."
-    }
+    },
+    "messageLimitExceeded": "Das Nachrichtenlimit beträgt {maxLength} Zeichen. Du hast bereits {valueLength} Zeichen eingegeben."
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",

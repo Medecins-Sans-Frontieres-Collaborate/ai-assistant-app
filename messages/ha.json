@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Idan ba ka da maɓallin OpenAI API, zaka iya samu a nan: ",
   "Loading_ellipsis": "Ana loda...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Tabbatar an saita maɓallin OpenAI API a ƙasan hagu na gefen menu.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Iyakar saƙo shine haruffa {{maxLength}}. Ka shigar da haruffa {{valueLength}}.",
   "Model": "Samfuri",
   "OR": "KO",
   "OpenAI API Key Required": "Ana Bukatar Maɓallin OpenAI API",
   "Please enter a message": "Da fatan za a shigar da saƙo",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Don Allah saita maɓallin OpenAI API ɗinka a ƙasan hagu na gefen menu.",
-  "Prompt limit is {{maxLength}} characters": "Iyakar ƙira shine haruffa {{maxLength}}",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Iyakar ƙira shine haruffa {{maxLength}}. Ka shigar da haruffa {{valueLength}}.",
   "Regenerate response": "Sake ƙirƙirar amsa",
   "Run Typewriter Intro": "Gudanar da Gabatarwar Typewriter",
   "Save & Submit": "Ajiye & Mikawa",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Ana aika wa samfurin da buƙatu da yawa a lokaci guda. An sake gwadawa ta atomatik; don Allah a gwada baya maɗan lokaci kaɗan.",
       "MODEL_QUOTA_EXCEEDED": "An ƙare da damar amfani da samfurin. Gwada wani samfurin, ko kuma a sake gwadawa daga baya.",
       "MODEL_AUTH_FAILED": "Manhaja ba ta samu izinin haɗawa da sabis ɗin samfurin ba. Wannan matsalar saitawa ce — don Allah a tuntuɓi goyon bayan fasaha."
-    }
+    },
+    "messageLimitExceeded": "Iyakar saƙo shine haruffa {maxLength}. Ka shigar da haruffa {valueLength}."
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",

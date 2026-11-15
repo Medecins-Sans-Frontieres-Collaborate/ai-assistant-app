@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Nimba udafise urufunguzo rwa OpenAI API, urashobora kuronka rumwe hano: ",
   "Loading_ellipsis": "Biriko birapakira...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Banza wemeze ko urufunguzo rwawe rwa OpenAI API rushizwe hasi ibubamfu bw'uruhande.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Urugero rw'ubutumwa ni {{maxLength}} imyandikire. Wanditse {{valueLength}} imyandikire.",
   "Model": "Modeli",
   "OR": "CANKE",
   "OpenAI API Key Required": "Urufunguzo rwa OpenAI API rurakenewe",
   "Please enter a message": "Nyamuneka andika ubutumwa",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Nyamuneka shira urufunguzo rwawe rwa OpenAI API hasi ibubamfu bw'uruhande.",
-  "Prompt limit is {{maxLength}} characters": "Urugero rw'ikibazo ni {{maxLength}} imyandikire",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Urugero rw'ikibazo ni {{maxLength}} imyandikire. Wanditse {{valueLength}} imyandikire.",
   "Regenerate response": "Subira ukore ikisubizo",
   "Run Typewriter Intro": "Tangura intangamarara y'ukwandika",
   "Save & Submit": "Bika kandi utume",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Model iriko iraronka ibisabwa vyinshi cane. Vyasubitswe vyikora; gira ico usubira nyuma y'akanya gato.",
       "MODEL_QUOTA_EXCEEDED": "Ubushobozi bwa model bwararangiye. Gerageza model iyindi, canke subira ugerageze hanyuma.",
       "MODEL_AUTH_FAILED": "Porogaramu ntiyashoboye kwemezwa kuri serivisi ya model. Ni ikibazo c'ubushirizamwo — nyamuneka hamagara abajejwe gufasha."
-    }
+    },
+    "messageLimitExceeded": "Urugero rw'ubutumwa ni {maxLength} imyandikire. Wanditse {valueLength} imyandikire."
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",

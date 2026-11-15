@@ -902,7 +902,8 @@
       "MODEL_RATE_LIMITED": "โมเดลได้รับคำขอมากเกินไปในขณะนี้ ระบบลองใหม่โดยอัตโนมัติ กรุณาลองใหม่อีกครั้งในภายหลัง",
       "MODEL_QUOTA_EXCEEDED": "โควตาความจุของโมเดลหมดแล้ว กรุณาเลือกโมเดลอื่น หรือกลับมาลองใหม่ภายหลัง",
       "MODEL_AUTH_FAILED": "แอปไม่สามารถยืนยันตัวตนกับบริการโมเดลได้ เกิดปัญหาการตั้งค่า กรุณาติดต่อฝ่ายสนับสนุน"
-    }
+    },
+    "messageLimitExceeded": "จำกัดข้อความที่ {maxLength} ตัวอักษร คุณป้อนแล้ว {valueLength} ตัวอักษร"
   },
   "sidebar": {
     "collapseSidebar": "ยุบแถบด้านข้าง",
@@ -1342,14 +1343,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "หากคุณยังไม่มี OpenAI API key คุณสามารถขอได้ที่นี่: ",
   "Loading_ellipsis": "กำลังโหลด...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "โปรดตรวจสอบว่าได้ตั้งค่า OpenAI API key ที่มุมล่างซ้ายของแถบด้านข้างแล้ว",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "จำกัดข้อความที่ {{maxLength}} ตัวอักษร คุณป้อนแล้ว {{valueLength}} ตัวอักษร",
   "Model": "โมเดล",
   "OR": "หรือ",
   "OpenAI API Key Required": "ต้องใช้ OpenAI API Key",
   "Please enter a message": "กรุณาป้อนข้อความ",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "โปรดตั้งค่า OpenAI API key ที่มุมล่างซ้ายของแถบด้านข้าง",
-  "Prompt limit is {{maxLength}} characters": "จำกัดความยาวที่ {{maxLength}} อักขระ",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "จำกัดพรอมต์ที่ {{maxLength}} ตัวอักษร คุณป้อนแล้ว {{valueLength}} ตัวอักษร",
   "Regenerate response": "สร้างคำตอบใหม่",
   "Run Typewriter Intro": "เริ่มต้นแนะนำแบบพิมพ์ดีด",
   "Save & Submit": "บันทึกและส่ง",

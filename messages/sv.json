@@ -23,7 +23,6 @@
   "New conversation": "Ny konversation",
   "No prompts found": "Inga prompter hittades",
   "Privacy Policy": "Integritetspolicy",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Promptgränsen är {{maxLength}} tecken. Du har angett {{valueLength}} tecken.",
   "Retry": "Försök igen",
   "Saved Prompts": "Sparade prompter",
   "Select a prompt to view details": "Välj en prompt för att visa detaljer",
@@ -35,7 +34,6 @@
   "OpenAI API Key Required": "OpenAI API-nyckel krävs",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Vänligen ange din OpenAI API-nyckel längst ner till vänster i sidofältet.",
   "Stop Generating": "Sluta generera",
-  "Prompt limit is {{maxLength}} characters": "Gränsen för prompt är {{maxLength}} tecken",
   "System Prompt": "System prompt",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Du är ChatGPT, en stor språkmodell tränad av OpenAI. Följ användarens instruktioner noggrant. Svara genom att använda markdown.",
   "Enter a prompt": "Ange en prompt",
@@ -54,7 +52,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Se till att du har angett din OpenAI API-nyckel längst ner till vänster i sidofältet.",
   "If you completed this step, OpenAI may be experiencing issues_": "Om du slutförde det här steget kan OpenAI ha problem.",
   "click if using a _env_local file": "klicka om du använder en .env.local-fil",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Meddelandegränsen är {{maxLength}} tecken. Du har angett {{valueLength}} tecken.",
   "Please enter a message": "Vänligen ange ett meddelande",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI är ett avancerat chatbot-kit för OpenAI:s chattmodeller som syftar till att efterlikna ChatGPT:s gränssnitt och funktionalitet.",
   "Are you sure you want to clear all messages?": "Är du säker på att du vill rensa alla meddelanden?",
@@ -985,7 +982,8 @@
       "MODEL_RATE_LIMITED": "Modellen får för många förfrågningar just nu. Omförsöktes automatiskt; försök igen om en stund.",
       "MODEL_QUOTA_EXCEEDED": "Modellens kapacitetskvot är förbrukad. Prova en annan modell eller försök senare.",
       "MODEL_AUTH_FAILED": "Appen kunde inte autentisera mot modelltjänsten. Detta är ett konfigurationsproblem — kontakta supporten."
-    }
+    },
+    "messageLimitExceeded": "Meddelandegränsen är {maxLength} tecken. Du har angett {valueLength} tecken."
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",

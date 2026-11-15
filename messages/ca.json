@@ -2,7 +2,6 @@
   "OpenAI API Key Required": "Cal la clau d'API d'OpenAI",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Si us plau, introdueix la teva clau d'API d'OpenAI a la cantonada inferior esquerra de la barra lateral.",
   "Stop Generating": "Parar de generar",
-  "Prompt limit is {{maxLength}} characters": "El límit del prompt és de {{maxLength}} caràcters",
   "System Prompt": "Missatge del sistema",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Ets ChatGPT, un model de llenguatge gran entrenat per OpenAI. Segueix les instruccions de l'usuari amb cura. Respon utilitzant markdown.",
   "Enter a prompt": "Introdueix un missatge",
@@ -21,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Assegura't que has introduït la clau d'API d'OpenAI a la cantonada inferior esquerra de la barra lateral.",
   "If you completed this step, OpenAI may be experiencing issues_": "Si has completat aquest pas, OpenAI podria estar experimentant problemes.",
   "click if using a _env_local file": "fes clic si estàs utilitzant un fitxer .env.local",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "El límit del missatge és de {{maxLength}} caràcters. Has introduït {{valueLength}} caràcters.",
   "Please enter a message": "Si us plau, introdueix un missatge",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI és un kit avançat de chatbot per als models de xat d'OpenAI que busca imitar la interfície i funcionalitat de ChatGPT.",
   "Are you sure you want to clear all messages?": "Estàs segur que vols esborrar tots els missatges?",
@@ -960,7 +958,8 @@
       "MODEL_RATE_LIMITED": "El model rep massa sol·licituds en aquest moment. S'ha tornat a intentar automàticament; torna-ho a provar d'aquí a un moment.",
       "MODEL_QUOTA_EXCEEDED": "La quota de capacitat del model està exhaurida. Prova un altre model o intenta-ho més tard.",
       "MODEL_AUTH_FAILED": "L'aplicació no ha pogut autenticar-se amb el servei del model. Això és un problema de configuració — contacta amb el suport."
-    }
+    },
+    "messageLimitExceeded": "El límit del missatge és de {maxLength} caràcters. Has introduït {valueLength} caràcters."
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -1382,7 +1381,6 @@
   "Chat Settings": "Configuració del xat",
   "Default System Prompt": "Prompt de sistema per defecte",
   "Email": "Correu electrònic",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "El límit del prompt és de {{maxLength}} caràcters. N'heu introduït {{valueLength}}.",
   "Run Typewriter Intro": "Executa la introducció Typewriter",
   "Conversation exported successfully": "Conversa exportada correctament",
   "Failed to export conversation": "No s'ha pogut exportar la conversa",

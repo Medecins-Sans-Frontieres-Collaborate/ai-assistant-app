@@ -93,14 +93,11 @@
   "Invalid folder file": "Fichier de dossier invalide",
   "Loading_ellipsis": "Chargement...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Assurez-vous que votre clé API OpenAI est définie en bas à gauche de la barre latérale.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "La limite de message est de {{maxLength}} caractères. Vous avez saisi {{valueLength}} caractères.",
   "Model": "Modèle",
   "OR": "OU",
   "OpenAI API Key Required": "Clé API OpenAI requise",
   "Please enter a message": "Veuillez entrer un message",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Veuillez définir votre clé API OpenAI en bas à gauche de la barre latérale.",
-  "Prompt limit is {{maxLength}} characters": "La limite de saisie est de {{maxLength}} caractères",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "La limite d'invite est de {{maxLength}} caractères. Vous avez saisi {{valueLength}} caractères.",
   "Regenerate response": "Régénérer la réponse",
   "Run Typewriter Intro": "Exécuter l'intro machine à écrire",
   "Save & Submit": "Enregistrer et soumettre",
@@ -931,7 +928,8 @@
       "MODEL_RATE_LIMITED": "Le modèle reçoit trop de requêtes actuellement. Une nouvelle tentative a été effectuée automatiquement ; veuillez réessayer dans un instant.",
       "MODEL_QUOTA_EXCEEDED": "Le quota de capacité du modèle est atteint. Essayez un autre modèle ou réessayez plus tard.",
       "MODEL_AUTH_FAILED": "L’application n’a pas pu s’authentifier auprès du service du modèle. Il s’agit d’un problème de configuration — veuillez contacter le support."
-    }
+    },
+    "messageLimitExceeded": "La limite de message est de {maxLength} caractères. Vous avez saisi {valueLength} caractères."
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",

@@ -910,7 +910,8 @@
       "MODEL_RATE_LIMITED": "مدل در حال حاضر درخواست‌های زیادی دریافت می‌کند. به صورت خودکار تلاش مجدد شد؛ لطفاً لحظاتی بعد دوباره امتحان کنید.",
       "MODEL_QUOTA_EXCEEDED": "سهمیه ظرفیت مدل به پایان رسیده است. مدل دیگری را امتحان کنید یا بعداً دوباره تلاش نمایید.",
       "MODEL_AUTH_FAILED": "برنامه نتوانست با سرویس مدل احراز هویت کند. این یک مشکل تنظیمات است — لطفاً با پشتیبانی تماس بگیرید."
-    }
+    },
+    "messageLimitExceeded": "محدودیت پیام {maxLength} کاراکتر است. شما {valueLength} کاراکتر وارد کرده‌اید."
   },
   "sidebar": {
     "collapseSidebar": "بستن نوار کناری",
@@ -1350,14 +1351,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "اگر کلید OpenAI API ندارید، می‌توانید از اینجا دریافت کنید: ",
   "Loading_ellipsis": "در حال بارگذاری...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "اطمینان حاصل کنید که کلید OpenAI API شما در پایین سمت چپ نوار کناری تنظیم شده است.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "محدودیت پیام {{maxLength}} کاراکتر است. شما {{valueLength}} کاراکتر وارد کرده‌اید.",
   "Model": "مدل",
   "OR": "یا",
   "OpenAI API Key Required": "نیاز به کلید OpenAI API",
   "Please enter a message": "لطفاً یک پیام وارد کنید",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "لطفاً کلید OpenAI API خود را در پایین سمت چپ نوار کناری تنظیم کنید.",
-  "Prompt limit is {{maxLength}} characters": "حداکثر تعداد کاراکتر مجاز برای راهنما {{maxLength}} است",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "محدودیت پرامپت {{maxLength}} کاراکتر است. شما {{valueLength}} کاراکتر وارد کرده‌اید.",
   "Regenerate response": "تولید مجدد پاسخ",
   "Run Typewriter Intro": "اجرای مقدمه ماشین‌تحریر",
   "Save & Submit": "ذخیره و ارسال",

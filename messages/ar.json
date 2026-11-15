@@ -21,8 +21,6 @@
   "Invalid folder file": "ملف مجلد غير صالح",
   "New conversation": "محادثة جديدة",
   "No prompts found": "لم يتم العثور على موجهات",
-  "Prompt limit is {{maxLength}} characters": "الحد الأقصى للطَلب هو {{maxLength}} حرفاً",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "حد الموجه {{maxLength}} حرفًا. لقد أدخلت {{valueLength}} حرفًا.",
   "System Prompt": "مطالبة النظام",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "أنت شات جبت نموذج لغة كبير تم تدريبه بواسطة أوبن أيه أي. اتبع تعليمات المستخدم بعناية. الرد باستخدام الماركداون",
   "Enter a prompt": "أدخل المطالبة",
@@ -46,7 +44,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "تأكد من تعيين مفتاح واجهة برمجة تطبيقات الخاص بك في الجزء السفلي الأيسر من الشريط",
   "If you completed this step, OpenAI may be experiencing issues_": "من مشاكل OpenAI إذا اكتملت هذه الخطوة، فقد يعاني",
   "click if using a _env_local file": ".env.local انقر إذا كنت تستخدم ملف",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "حرفًا {{maxLength}}  حد الرسالة هو {{valueLength}} لقد أدخلت ",
   "Please enter a message": "يرجى إدخال رسالة",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI هي مجموعة متقدمة للدردشة تستخدم",
   "Are you sure you want to clear all messages?": "هل أنت متأكد أنك تريد مسح كافة الرسائل؟",
@@ -931,7 +928,8 @@
       "MODEL_RATE_LIMITED": "يتلقى النموذج عدداً كبيراً من الطلبات الآن. تمت إعادة المحاولة تلقائياً؛ يرجى المحاولة مرة أخرى بعد قليل.",
       "MODEL_QUOTA_EXCEEDED": "تم استنفاد حصة سعة النموذج. جرب نموذجاً آخر أو حاول مرة أخرى لاحقاً.",
       "MODEL_AUTH_FAILED": "تعذر على التطبيق التحقق من الهوية لدى خدمة النموذج. هذه مشكلة إعدادات — يرجى التواصل مع الدعم الفني."
-    }
+    },
+    "messageLimitExceeded": "حد الرسالة هو {maxLength} حرفًا. لقد أدخلت {valueLength} حرفًا."
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",

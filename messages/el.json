@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Εάν δεν έχετε κλειδί API του OpenAI, μπορείτε να αποκτήσετε ένα εδώ: ",
   "Loading_ellipsis": "Φόρτωση...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Βεβαιωθείτε ότι το κλειδί API του OpenAI σας έχει οριστεί στο κάτω αριστερά της πλαϊνής μπάρας.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Το όριο μηνύματος είναι {{maxLength}} χαρακτήρες. Έχετε εισάγει {{valueLength}} χαρακτήρες.",
   "Model": "Μοντέλο",
   "OR": "Ή",
   "OpenAI API Key Required": "Απαιτείται Κλειδί API του OpenAI",
   "Please enter a message": "Παρακαλώ εισάγετε ένα μήνυμα",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Παρακαλώ ορίστε το κλειδί API του OpenAI σας στο κάτω αριστερά της πλαϊνής μπάρας.",
-  "Prompt limit is {{maxLength}} characters": "Το όριο προτροπής είναι {{maxLength}} χαρακτήρες",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Το όριο προτροπής είναι {{maxLength}} χαρακτήρες. Έχετε εισάγει {{valueLength}} χαρακτήρες.",
   "Regenerate response": "Αναδημιουργία απάντησης",
   "Run Typewriter Intro": "Εκτέλεση Εισαγωγής Γραφομηχανής",
   "Save & Submit": "Αποθήκευση & Υποβολή",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Το μοντέλο λαμβάνει πάρα πολλά αιτήματα αυτή τη στιγμή. Η προσπάθεια έγινε αυτόματα ξανά· προσπαθήστε ξανά σε λίγο.",
       "MODEL_QUOTA_EXCEEDED": "Εξαντλήθηκε η χωρητικότητα του μοντέλου. Δοκιμάστε άλλο μοντέλο ή προσπαθήστε αργότερα.",
       "MODEL_AUTH_FAILED": "Η εφαρμογή δεν μπόρεσε να πιστοποιηθεί με την υπηρεσία του μοντέλου. Πρόκειται για πρόβλημα ρύθμισης — επικοινωνήστε με την υποστήριξη."
-    }
+    },
+    "messageLimitExceeded": "Το όριο μηνύματος είναι {maxLength} χαρακτήρες. Έχετε εισάγει {valueLength} χαρακτήρες."
   },
   "transcript": {
     "originalTranscript": "Αρχική Μεταγραφή",

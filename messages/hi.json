@@ -18,7 +18,6 @@
   "Invalid folder file": "अमान्य फ़ोल्डर फ़ाइल",
   "New conversation": "नई बातचीत",
   "No prompts found": "कोई प्रॉम्प्ट नहीं मिला",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "प्रॉम्प्ट सीमा {{maxLength}} वर्ण है। आपने {{valueLength}} वर्ण दर्ज किए हैं।",
   "Saved Prompts": "सहेजे गए प्रॉम्प्ट",
   "Select a prompt to view details": "विवरण देखने के लिए एक प्रॉम्प्ट चुनें",
   "Unrecognized file format": "अपरिचित फ़ाइल प्रारूप",
@@ -116,9 +115,7 @@
   "translatorTranslationDomainMedical": "चिकित्सा",
   "Search_ellipsis": "खोजें...",
   "translatorTranslationTypeLabel": "अनुवाद प्रकार",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "संदेश सीमा {{maxLength}} अक्षर है। आपने {{valueLength}} अक्षर दर्ज किए हैं।",
   "OpenAI API Key Required": "OpenAI API Key आवश्यक है",
-  "Prompt limit is {{maxLength}} characters": "प्रॉम्प्ट की सीमा {{maxLength}} अक्षर है।",
   "Regenerate response": "प्रतिक्रिया पुनः उत्पन्न करें",
   "cancelButton": "रद्द करें",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI एक उन्नत चैटबॉट किट है जो OpenAI के चैट मॉडल के लिए ChatGPT के इंटरफ़ेस और कार्यक्षमता की नकल करने का लक्ष्य रखती है।",
@@ -985,7 +982,8 @@
       "MODEL_RATE_LIMITED": "मॉडल को अभी बहुत अधिक अनुरोध मिल रहे हैं। स्वचालित रूप से फिर कोशिश की गई; कृपया थोड़ी देर में फिर प्रयास करें।",
       "MODEL_QUOTA_EXCEEDED": "मॉडल की क्षमता सीमा समाप्त हो गई है। दूसरा मॉडल चुनें या बाद में फिर प्रयास करें।",
       "MODEL_AUTH_FAILED": "ऐप मॉडल सेवा के साथ प्रमाणीकृत नहीं हो सका। यह कॉन्फ़िगरेशन समस्या है — कृपया सहायता से संपर्क करें।"
-    }
+    },
+    "messageLimitExceeded": "संदेश सीमा {maxLength} अक्षर है। आपने {valueLength} अक्षर दर्ज किए हैं।"
   },
   "sidebar": {
     "collapseSidebar": "साइडबार संक्षिप्त करें",

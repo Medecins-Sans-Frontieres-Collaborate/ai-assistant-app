@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Si ou pa gen yon kle API OpenAI, ou ka jwenn youn isit: ",
   "Loading_ellipsis": "Ap chaje...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Asire w kle API OpenAI ou a konfigire nan ba agoch ba lateral la.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Limit mesaj la se {{maxLength}} karaktè. Ou antre {{valueLength}} karaktè.",
   "Model": "Modèl",
   "OR": "OSWA",
   "OpenAI API Key Required": "Kle API OpenAI Obligatwa",
   "Please enter a message": "Tanpri antre yon mesaj",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Tanpri mete kle API OpenAI ou a nan ba agoch ba lateral la.",
-  "Prompt limit is {{maxLength}} characters": "Limit enstriksyon se {{maxLength}} karaktè",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Limit enstriksyon se {{maxLength}} karaktè. Ou antre {{valueLength}} karaktè.",
   "Regenerate response": "Rejenerasyon repons",
   "Run Typewriter Intro": "Lanse Entwodiksyon Machin",
   "Save & Submit": "Anrejistre & Soumèt",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Modèl la resevwa twòp demann kounye a. Li te re-eseye otomatikman; souple eseye ankò apre yon ti tan.",
       "MODEL_QUOTA_EXCEEDED": "Kantite kapasite modèl la depase. Eseye yon lòt modèl oswa eseye ankò pita.",
       "MODEL_AUTH_FAILED": "Aplikasyon an pa ka otantifye ak sèvis modèl la. Sa a gen rapò ak konfigirasyon — tanpri kontakte sipò teknik."
-    }
+    },
+    "messageLimitExceeded": "Limit mesaj la se {maxLength} karaktè. Ou antre {valueLength} karaktè."
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",

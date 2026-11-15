@@ -2,8 +2,6 @@
   "OpenAI API Key Required": "A API Key da OpenAI é necessária",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Por favor, insira sua API Key da OpenAI no canto inferior esquerdo da barra lateral.",
   "Stop Generating": "Parar de gerar",
-  "Prompt limit is {{maxLength}} characters": "O limite do prompt é de {{maxLength}} caracteres",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "O limite do prompt é de {{maxLength}} caracteres. Você inseriu {{valueLength}} caracteres.",
   "System Prompt": "Mensagem do sistema",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Você é o ChatGPT, um grande modelo de linguagem treinado pela OpenAI. Siga as instruções do usuário cuidadosamente. Responda usando markdown.",
   "Enter a prompt": "Insira uma mensagem",
@@ -23,7 +21,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Certifique-se de que sua API Key da OpenAI esteja definida na parte inferior esquerda da barra lateral.",
   "If you completed this step, OpenAI may be experiencing issues_": "Se você concluiu esta etapa, o OpenAI pode estar com problemas.",
   "click if using a _env_local file": "clique se estiver usando um arquivo .env.local",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "O limite de mensagens é de {{maxLength}} caracteres. Você inseriu {{valueLength}} caracteres",
   "Please enter a message": "Por favor, insira uma mensagem",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI é um kit de chatbot avançado para os modelos de chat do OpenAI com o objetivo de imitar a interface e a funcionalidade do ChatGPT.",
   "Are you sure you want to clear all messages?": "Tem certeza de que deseja limpar todas as mensagens?",
@@ -931,7 +928,8 @@
       "MODEL_RATE_LIMITED": "O modelo está recebendo muitos pedidos no momento. A tentativa foi automática; tente novamente em breve.",
       "MODEL_QUOTA_EXCEEDED": "A cota de capacidade do modelo está esgotada. Experimente outro modelo ou tente mais tarde.",
       "MODEL_AUTH_FAILED": "O aplicativo não conseguiu autenticar com o serviço do modelo. Trata-se de um problema de configuração — por favor, entre em contato com o suporte."
-    }
+    },
+    "messageLimitExceeded": "O limite de mensagens é de {maxLength} caracteres. Você inseriu {valueLength} caracteres"
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",

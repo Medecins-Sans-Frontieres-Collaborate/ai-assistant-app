@@ -21,8 +21,6 @@
   "Invalid folder file": "Недопустимый файл папки",
   "New conversation": "Новый разговор",
   "No prompts found": "Подсказки не найдены",
-  "Prompt limit is {{maxLength}} characters": "Ограничение запроса — {{maxLength}} символов",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Лимит сообщения: {{maxLength}} символов. Вы ввели {{valueLength}} символов.",
   "System Prompt": "Системное сообщение",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Вы ChatGPT, большая языковая модель, созданная компанией OpenAI. Следуйте инструкциям пользователя. Отвечайте на сообщения, используя Markdown",
   "Enter a prompt": "Введите сообщение",
@@ -46,7 +44,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Убедитесь, что вы ввели API-ключ OpenAI.",
   "If you completed this step, OpenAI may be experiencing issues_": "Если вы выполнили этот шаг, то возможно OpenAI может испытывать проблемы",
   "click if using a _env_local file": "click if using a .env.local file",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Лимит сообщения: {{maxLength}} символов. Вы ввели {{valueLength}} символов.",
   "Please enter a message": "Пожалуйста введите сообщение",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI - продвинутый интерфейс чатбота для чат-моделей OpenAI, имитирующий интерфейс ChatGPT",
   "Are you sure you want to clear all messages?": "Вы уверены, что хотите удалить все сообщения?",
@@ -985,7 +982,8 @@
       "MODEL_RATE_LIMITED": "Сейчас модель получает слишком много запросов. Повтор выполнен автоматически; попробуйте еще раз через некоторое время.",
       "MODEL_QUOTA_EXCEEDED": "Квота мощности модели исчерпана. Попробуйте другую модель или повторите попытку позже.",
       "MODEL_AUTH_FAILED": "Приложение не смогло пройти аутентификацию в сервисе модели. Это проблема конфигурации — обратитесь в поддержку."
-    }
+    },
+    "messageLimitExceeded": "Лимит сообщения: {maxLength} символов. Вы ввели {valueLength} символов."
   },
   "sidebar": {
     "collapseSidebar": "Свернуть боковую панель",

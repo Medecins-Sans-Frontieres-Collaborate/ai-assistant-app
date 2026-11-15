@@ -8,8 +8,6 @@
   "Default System Prompt": "默认系统提示",
   "Edit": "编辑",
   "Email": "电子邮件",
-  "Prompt limit is {{maxLength}} characters": "提示长度上限为 {{maxLength}} 个字符",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "提示字数限制为 {{maxLength}} 个字符。您已输入 {{valueLength}} 个字符。",
   "New conversation": "新对话",
   "New Conversation": "新的聊天",
   "No prompts found": "未找到提示",
@@ -46,7 +44,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "请确保您的 OpenAI API 密钥已在侧边栏左下角设置。",
   "If you completed this step, OpenAI may be experiencing issues_": "如果您已完成此步骤，OpenAI 可能遇到了问题。",
   "click if using a _env_local file": "click if using a .env.local file",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "消息字数限制为 {{maxLength}} 个字符。您已输入 {{valueLength}} 个字符。",
   "Please enter a message": "请输入一条消息",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI 是一个高级聊天机器人工具包，旨在模仿 OpenAI 聊天模型的 ChatGPT 界面和功能。",
   "Are you sure you want to clear all messages?": "你确定要清除所有的消息吗？",
@@ -1016,7 +1013,8 @@
       "MODEL_RATE_LIMITED": "模型当前请求过多。已自动重试，请稍后再试。",
       "MODEL_QUOTA_EXCEEDED": "模型容量配额已用尽。请尝试其他模型或稍后再试。",
       "MODEL_AUTH_FAILED": "应用无法通过模型服务认证。配置出现问题——请联系支持人员。"
-    }
+    },
+    "messageLimitExceeded": "消息字数限制为 {maxLength} 个字符。您已输入 {valueLength} 个字符。"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",

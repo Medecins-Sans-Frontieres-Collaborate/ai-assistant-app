@@ -2,8 +2,6 @@
   "OpenAI API Key Required": "OpenAI API key বাধ্যতামূলক",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "দয়া করে আপনার OpenAI API key বামে সাইডবারের নিচের দিকে সেট করুন।",
   "Stop Generating": "বার্তা জেনারেট করা বন্ধ করুন",
-  "Prompt limit is {{maxLength}} characters": "প্রম্পটের সীমা {{maxLength}} অক্ষর",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "প্রম্পট সীমা {{maxLength}} অক্ষর। আপনি {{valueLength}} অক্ষর লিখেছেন।",
   "System Prompt": "সিস্টেম নির্দেশনা (বার্তা)",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "তুমি ChatGPT, OpenAI দ্বারা প্রশিক্ষিত একটি বড় ভাষা মডেল। সাবধানে ব্যবহারকারীর নির্দেশাবলী অনুসরণ করুন. মার্কডাউন ব্যবহার করে উত্তর দিন।",
   "Enter a prompt": "একটি নির্দেশনা (বার্তা) দিন",
@@ -23,7 +21,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "নিশ্চিত করুন যে আপনার OpenAI API key সাইডবারের নীচে বাম দিকে সেট করা আছে।",
   "If you completed this step, OpenAI may be experiencing issues_": "আপনি এই ধাপটি সম্পন্ন করে থাকলে, হতে পারে যে OpenAI কোনো সমস্যার সম্মুখীন হয়েছে।",
   "click if using a _env_local file": "একটি .env.local ফাইল ব্যবহার করলে এখানে ক্লিক করুন",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "বার্তার সর্বোচ্চ সীমা হল {{maxLength}} অক্ষর৷ আপনি {{valueLength}} অক্ষর লিখেছেন।",
   "Please enter a message": "দয়া করে একটি মেসেজ লিখুন",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI হল OpenAI-এর চ্যাট মডেলগুলির জন্য একটি উন্নত চ্যাটবট কিট যার লক্ষ্য হল ChatGPT-এর ইন্টারফেস এবং কার্যকারিতা অনুকরণ করা।",
   "Are you sure you want to clear all messages?": "সমস্ত বার্তা মুছে ফেলতে আপনি কি নিশ্চিত?",
@@ -931,7 +928,8 @@
       "MODEL_RATE_LIMITED": "মডেলটি বর্তমানে অতিরিক্ত অনুরোধ পাচ্ছে। স্বয়ংক্রিয়ভাবে আবার চেষ্টা করা হয়েছে; অনুগ্রহ করে একটু পর চেষ্টা করুন।",
       "MODEL_QUOTA_EXCEEDED": "মডেলের ক্যাপাসিটি কোটার সীমা অতিক্রম করেছে। অন্য একটি মডেল চেষ্টা করুন অথবা পরে আবার চেষ্টা করুন।",
       "MODEL_AUTH_FAILED": "অ্যাপটি মডেল সার্ভিসের সাথে প্রমাণীকরণ করতে পারেনি। এটি কনফিগারেশন সমস্যা — অনুগ্রহ করে সাপোর্টের সাথে যোগাযোগ করুন।"
-    }
+    },
+    "messageLimitExceeded": "বার্তার সর্বোচ্চ সীমা হল {maxLength} অক্ষর৷ আপনি {valueLength} অক্ষর লিখেছেন।"
   },
   "sidebar": {
     "collapseSidebar": "সাইডবার সংকুচিত করুন",

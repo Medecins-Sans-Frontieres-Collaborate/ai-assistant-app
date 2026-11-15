@@ -2,7 +2,6 @@
   "OpenAI API Key Required": "OpenAI API යතුර අවශ්‍යයි",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "කරුණාකර ඔබේ OpenAI API යතුර පැති තීරුවේ පහළ වම්පසින් සකසන්න.",
   "Stop Generating": "උත්පාදනය නවත්වන්න",
-  "Prompt limit is {{maxLength}} characters": "උත්ප්‍රේරණයේ සීමාව අක්ෂර {{maxLength}}කි",
   "System Prompt": "පද්ධති ඉඟිය",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "ඔබ ChatGPT, OpenAI විසින් පුහුණු කරන ලද විශාල භාෂා ආකෘතියකි. පරිශීලක උපදෙස් ප්රවේශමෙන් අනුගමනය කරන්න. මාර්ක්ඩවුන් භාවිතයෙන් ප්‍රතිචාර දක්වන්න.",
   "Enter a prompt": "ප්‍රේරකයක් ඇතුළු කරන්න",
@@ -21,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "ඔබේ OpenAI API යතුර පැති තීරුවේ පහළ වම්පස සකසා ඇති බවට වග බලා ගන්න.",
   "If you completed this step, OpenAI may be experiencing issues_": "ඔබ මෙම පියවර සම්පූර්ණ කළේ නම්, OpenAI හි ගැටලුවක් විය හැකිය.",
   "click if using a _env_local file": "click if using a .env.local file",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "පණිවිඩ සීමාව අකුරු {{maxLength}} කි. ඔබ අක්ෂර {{valueLength}} ඇතුළත් කර ඇත.",
   "Please enter a message": "කරුණාකර පණිවිඩයක් ඇතුළු කරන්න",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI යනු ChatGPT හි අතුරු මුහුණත සහ ක්‍රියාකාරීත්වය අනුකරණය කිරීම අරමුණු කරගත් OpenAI හි චැට් මාදිලි සඳහා වන උසස් චැට්බෝට් කට්ටලයකි.",
   "Are you sure you want to clear all messages?": "ඔබට සියලු පණිවිඩ හිස් කිරීමට අවශ්‍ය බව විශ්වාසද?",
@@ -952,7 +950,8 @@
       "MODEL_RATE_LIMITED": "මාදිලියට දැන් ඉතා වැඩි ඉල්ලීම් ලැබේ. ස්වයංක්‍රීයව නැවත උත්සාහ කරන ලදි; ටික වෙලාවකට පසුව නැවත උත්සාහ කරන්න.",
       "MODEL_QUOTA_EXCEEDED": "මාදිලි ධාරිතාව සීමාව වියදම් වී ඇත. වෙනත් මාදිලියක් උත්සාහ කරන්න, හෝ පසුව නැවත උත්සාහ කරන්න.",
       "MODEL_AUTH_FAILED": "යෙදුමට මාදිලි සේවාව සමඟ සත්‍යාපනය කළ නොහැකිය. මෙය සැකසුම් ගැටලෙකි — කරුණු කටයුතු සඳහා සහාය සම්බන්ධ කරන්න."
-    }
+    },
+    "messageLimitExceeded": "පණිවිඩ සීමාව අකුරු {maxLength} කි. ඔබ අක්ෂර {valueLength} ඇතුළත් කර ඇත."
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",
@@ -1374,7 +1373,6 @@
   "Chat Settings": "සංවාද සැකසුම්",
   "Default System Prompt": "පෙරනිමි පද්ධති ප්‍රේරණය",
   "Email": "ඊ-මේල්",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "ප්‍රේරණයේ සීමාව අකුරු {{maxLength}} කි. ඔබ ඇතුළත් කර ඇත්තේ අකුරු {{valueLength}} ක්.",
   "Run Typewriter Intro": "Typewriter හැඳින්වීම ක්‍රියාත්මක කරන්න",
   "Terms and Conditions": "නියමයන් හා කොන්දේසි",
   "Loading terms and conditions_ellipsis": "නියමයන් හා කොන්දේසි පූරණය වෙමින්...",

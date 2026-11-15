@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "ናይ OpenAI API ቁልፊ እንተ ዘይብልካ፣ ኣብዚ ክትረክብ ትኽእል: ",
   "Loading_ellipsis": "ይጽዕን ኣሎ...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "ናይ OpenAI API ቁልፊኻ ኣብ ታሕቲ ጸጋም ናይ ጎድናዊ ባር ከም ዝተቐመጠ ኣረጋግጽ።",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "ናይ መልእኽቲ ደረት {{maxLength}} ፊደላት እዩ። {{valueLength}} ፊደላት ኣእቲኻ ኣለኻ።",
   "Model": "ሞዴል",
   "OR": "ወይ",
   "OpenAI API Key Required": "ናይ OpenAI API ቁልፊ የድሊ",
   "Please enter a message": "በጃኻ መልእኽቲ ኣእቱ",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "በጃኻ ናይ OpenAI API ቁልፊኻ ኣብ ታሕቲ ጸጋም ናይ ጎድናዊ ባር ኣቐምጥ።",
-  "Prompt limit is {{maxLength}} characters": "ናይ ፕሮምፕት ደረት {{maxLength}} ፊደላት እዩ",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "ናይ ፕሮምፕት ደረት {{maxLength}} ፊደላት እዩ። {{valueLength}} ፊደላት ኣእቲኻ ኣለኻ።",
   "Regenerate response": "መልሲ ዳግም ፍጠር",
   "Run Typewriter Intro": "ናይ ታይፕራይተር መእተዊ ኣካይድ",
   "Save & Submit": "ዓቅብን ኣቕርብን",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "ሞዴል ብዚኣ ዘይበዝነ ምድላው የቐምጸ። ብኣጋጢሙ ደግመን ተፈቱ። ንኦፋ ዝሓለፈ ደገመን ሞኽር።",
       "MODEL_QUOTA_EXCEEDED": "ናይ ሞዴል ኣብዚ ኣቃው ተሪፍኩዎ። ሞዴል ካልኣይ ምርጽ፡ ወይ ደገመን ቶም።",
       "MODEL_AUTH_FAILED": "ኣፕ ብሞዴል ሰርቪስ ክትተረጋገጽ ኣይተተኣምረን። ስርዓት ፍቓድ ጸጋዕ ይኹና። ንደገወል ግዛ፡ ውድሓን ሰርቪስ ንምርካብ።"
-    }
+    },
+    "messageLimitExceeded": "ናይ መልእኽቲ ደረት {maxLength} ፊደላት እዩ። {valueLength} ፊደላት ኣእቲኻ ኣለኻ።"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",

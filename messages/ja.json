@@ -18,7 +18,6 @@
   "Invalid folder file": "無効なフォルダファイル",
   "New conversation": "新しい会話",
   "No prompts found": "プロンプトが見つかりません",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "プロンプトの文字数は{{maxLength}}文字までです。{{valueLength}}文字を入力しました。",
   "Run Typewriter Intro": "タイプライターイントロを実行",
   "Saved Prompts": "保存されたプロンプト",
   "Select a prompt to view details": "詳細を表示するプロンプトを選択",
@@ -27,7 +26,6 @@
   "OpenAI API Key Required": "OpenAIのAPIキーが必要です",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "左下のサイドバーでOpenAIのAPIキーを設定してください",
   "Stop Generating": "回答をストップ",
-  "Prompt limit is {{maxLength}} characters": "プロンプトの上限は{{maxLength}}文字です",
   "System Prompt": "システムのプロンプト",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "あなたはOpenAIによってトレーニングされた大規模言語モデルのChatGPTです。ユーザーの指示には注意深く従ってください。マークダウンを使用して応答してください。",
   "Enter a prompt": "プロンプトを入力してください",
@@ -46,7 +44,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "OpenAIのAPIキーがサイドバーの左下に設定されていることを確認してください。",
   "If you completed this step, OpenAI may be experiencing issues_": "このステップを完了した場合、OpenAIに問題が発生している可能性があります。",
   "click if using a _env_local file": "もし.env.localファイルを使用している場合はこちらをクリックしてください",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "メッセージの文字数は{{maxLength}}文字までです。あなたは{{valueLength}}文字を入力しました。",
   "Please enter a message": "メッセージを入力してください",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UIは、ChatGPTと同様のインターフェイスと機能を実現するための、チャットボットキットです。",
   "Are you sure you want to clear all messages?": "すべてのメッセージを削除してもよろしいですか？",
@@ -985,7 +982,8 @@
       "MODEL_RATE_LIMITED": "現在、モデルへのリクエストが集中しています。自動で再試行されましたので、少し経ってから再度お試しください。",
       "MODEL_QUOTA_EXCEEDED": "モデルの利用枠が上限に達しました。別のモデルを試すか、しばらくしてから再度お試しください。",
       "MODEL_AUTH_FAILED": "アプリがモデルサービスと認証できませんでした。設定に問題がありますので、サポートへご連絡ください。"
-    }
+    },
+    "messageLimitExceeded": "メッセージの文字数は{maxLength}文字までです。あなたは{valueLength}文字を入力しました。"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",

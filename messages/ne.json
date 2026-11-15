@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "यदि तपाईंसँग OpenAI API कुञ्जी छैन भने, यहाँबाट प्राप्त गर्न सक्नुहुन्छ: ",
   "Loading_ellipsis": "लोड हुँदैछ...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "साइडबारको तल बायाँतिर तपाईंको OpenAI API कुञ्जी सेट गरिएको सुनिश्चित गर्नुहोस्।",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "सन्देशको सीमा {{maxLength}} अक्षर हो। तपाईंले {{valueLength}} अक्षर प्रविष्ट गर्नुभएको छ।",
   "Model": "मोडेल",
   "OR": "वा",
   "OpenAI API Key Required": "OpenAI API कुञ्जी आवश्यक छ",
   "Please enter a message": "कृपया सन्देश प्रविष्ट गर्नुहोस्",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "कृपया साइडबारको तल बायाँतिर आफ्नो OpenAI API कुञ्जी सेट गर्नुहोस्।",
-  "Prompt limit is {{maxLength}} characters": "प्रम्प्टको सीमा {{maxLength}} अक्षर हो",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "प्रम्प्टको सीमा {{maxLength}} अक्षर हो। तपाईंले {{valueLength}} अक्षर प्रविष्ट गर्नुभएको छ।",
   "Regenerate response": "प्रतिक्रिया पुन: उत्पन्न गर्नुहोस्",
   "Run Typewriter Intro": "टाइपराइटर परिचय चलाउनुहोस्",
   "Save & Submit": "सुरक्षित गर्नुहोस् र पेश गर्नुहोस्",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "मोडेलले अहिले धेरै अनुरोधहरू प्राप्त गर्दैछ। स्वचालित रूपले पुन: प्रयास भयो; कृपया केही समय पछि पुन: प्रयास गर्नुहोस्।",
       "MODEL_QUOTA_EXCEEDED": "मोडेलको क्षमता कोटा सकिएको छ। अर्को मोडेल प्रयास गर्नुहोस्, वा केही समयपछि पुन: प्रयास गर्नुहोस्।",
       "MODEL_AUTH_FAILED": "एपले मोडेल सेवासँग प्रमाणीकरण गर्न सकेन। यो कन्फिगरेसन समस्या हो — सहयोगका लागि सम्पर्क गर्नुहोस्।"
-    }
+    },
+    "messageLimitExceeded": "सन्देशको सीमा {maxLength} अक्षर हो। तपाईंले {valueLength} अक्षर प्रविष्ट गर्नुभएको छ।"
   },
   "transcript": {
     "originalTranscript": "मूल ट्रान्सक्रिप्ट",

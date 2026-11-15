@@ -2,7 +2,6 @@
   "OpenAI API Key Required": "ఒపెన్ ఎయి ఐ API కీ అవసరం",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "దయచేసి మీ OpenAI API కీని సైడ్ బార్ యొక్క దిగువ ఎడమ భాగంలో సెట్ చేయండి.",
   "Stop Generating": "జెనరేట్ చేస్తున్న ప్రక్రియ నిలిపేయి",
-  "Prompt limit is {{maxLength}} characters": "ప్రాంప్ట్ పరిమితం {{maxLength}} అక్షరాలు",
   "System Prompt": "సిస్టమ్ ప్రాంప్ట్",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "మీరు ChatGPT, ఒక పెద్ద భాషా మోడల్ ఓపెన్‌ఏఐ ద్వారా ట్రైన్ చేయబడింది. యూజర్ ఇన్స్ట్రక్షన్స్ కనుగొనండి. మార్క్‌డౌన్ ఉపయోగించి సమాధానం ఇవ్వండి.",
   "Enter a prompt": "ఒక ప్రాంప్ట్(సంకేతం) నమోదు చేయండి",
@@ -21,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "మీరు ఖాళీలో ఎడమ ఎరుగులో మీ OpenAI API కీను సెట్ చేస్తున్నారని ఖచ్చితం చేయండి.",
   "If you completed this step, OpenAI may be experiencing issues_": "మీరు ఈ హంతం పూర్తి చేసినా, OpenAI సమస్యలు ఉన్నట్లు ఉంటాయి.",
   "click if using a _env_local file": "click if using a .env.local file",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "సందేశం పరిమితి {{maxLength}} అక్షరాలు. మీరు {{valueLength}} అక్షరాలు నమోదు చేసారు.",
   "Please enter a message": "దయచేసి ఒక సందేశం నమోదు చేయండి",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI ఒక అభ్యంతర సంవిధానం మరియు కార్యాచరణ లక్ష్యం తీసుకున్న OpenAI ఛాట్ మోడల్లలో మార్పులు చేయడానికి ప్రయత్నిస్తుంది, ChatGPT ఇంటర్ఫేస్ మరియు కార్యాచరణను అనుకరించడానికి.",
   "Are you sure you want to clear all messages?": "మీరు అన్ని సందేశాలను తొలగించాలా?",
@@ -249,7 +247,6 @@
   "Prompt name": "ప్రాంప్ట్ పేరు",
   "Prompt content": "ప్రాంప్ట్ కంటెంట్",
   "Are you sure you want to delete this prompt?": "మీరు ఖచ్చితంగా ఈ ప్రాంప్ట్‌ను తొలగించాలనుకుంటున్నారా?",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "ప్రాంప్ట్ పరిమితి {{maxLength}} అక్షరాలు. మీరు {{valueLength}} అక్షరాలు నమోదు చేసారు.",
   "Import data from sidebar": "చాట్ చరిత్రను పునరుద్ధరించండి",
   "Export data from sidebar": "చాట్ చరిత్రను బ్యాకప్ చేయండి",
   "Search chats": "చాట్‌లను శోధించండి",
@@ -983,7 +980,8 @@
       "MODEL_RATE_LIMITED": "ప్రస్తుతం మోడల్‌కు ఎక్కువ అభ్యర్థనలు వస్తున్నాయి. దాన్ని ఆటోమేటిక్‌గా మళ్ళీ ప్రయత్నించింది; దయచేసి కొద్దిసేపటి తరువాత మళ్ళీ ప్రయత్నించండి.",
       "MODEL_QUOTA_EXCEEDED": "మోడల్ యొక్క సామర్థ్య క్వోటా తీరిపోయింది. మరో మోడల్ ప్రయత్నించండి లేక వెళ్ళిపోతే మళ్ళీ ప్రయత్నించండి.",
       "MODEL_AUTH_FAILED": "యాప్ మోడల్ సర్వీస్‌తో ప్రామాణీకరణ చేయలేదు. ఇది కాన్ఫిగరేషన్ సమస్య — దయచేసి సపోర్ట్‌ని సంప్రదించండి."
-    }
+    },
+    "messageLimitExceeded": "సందేశం పరిమితి {maxLength} అక్షరాలు. మీరు {valueLength} అక్షరాలు నమోదు చేసారు."
   },
   "sidebar": {
     "collapseSidebar": "సైడ్‌బార్‌ను కుదించండి",

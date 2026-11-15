@@ -84,14 +84,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "If you don't have an OpenAI API key, you can get one here: ",
   "Loading_ellipsis": "Loading...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Make sure your OpenAI API key is set in the bottom left of the sidebar.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Message limit is {{maxLength}} characters. You have entered {{valueLength}} characters.",
   "Model": "Model",
   "OR": "OR",
   "OpenAI API Key Required": "OpenAI API Key Required",
   "Please enter a message": "Please enter a message",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Please set your OpenAI API key in the bottom left of the sidebar.",
-  "Prompt limit is {{maxLength}} characters": "Prompt limit is {{maxLength}} characters",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Prompt limit is {{maxLength}} characters. You have entered {{valueLength}} characters.",
   "Regenerate response": "Regenerate response",
   "Run Typewriter Intro": "Run Typewriter Intro",
   "Save & Submit": "Save & Submit",
@@ -1063,7 +1060,8 @@
       "MODEL_RATE_LIMITED": "The model is receiving too many requests right now. It was retried automatically; please try again in a moment.",
       "MODEL_QUOTA_EXCEEDED": "The model's capacity quota is exhausted. Try another model, or try again later.",
       "MODEL_AUTH_FAILED": "The app could not authenticate with the model service. This is a configuration problem — please contact support."
-    }
+    },
+    "messageLimitExceeded": "Message limit is {maxLength} characters. You have entered {valueLength} characters."
   },
   "transcript": {
     "originalTranscript": "Original Transcript",

@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "បើអ្នកមិនមានសោ OpenAI API អ្នកអាចទទួលបាននៅទីនេះ៖ ",
   "Loading_ellipsis": "កំពុងផ្ទុក...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "សូមប្រាកដថាសោ OpenAI API របស់អ្នកត្រូវបានកំណត់នៅផ្នែកខាងឆ្វេងខាងក្រោមរបារចំហៀង។",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "ដែនកំណត់សារគឺ {{maxLength}} តួអក្សរ។ អ្នកបានបញ្ចូល {{valueLength}} តួអក្សរ។",
   "Model": "ម៉ូដែល",
   "OR": "ឬ",
   "OpenAI API Key Required": "ត្រូវការសោ OpenAI API",
   "Please enter a message": "សូមបញ្ចូលសារ",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "សូមកំណត់សោ OpenAI API របស់អ្នកនៅផ្នែកខាងឆ្វេងខាងក្រោមរបារចំហៀង។",
-  "Prompt limit is {{maxLength}} characters": "ដែនកំណត់ការណែនាំគឺ {{maxLength}} តួអក្សរ",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "ដែនកំណត់ការណែនាំគឺ {{maxLength}} តួអក្សរ។ អ្នកបានបញ្ចូល {{valueLength}} តួអក្សរ។",
   "Regenerate response": "បង្កើតចម្លើយថ្មី",
   "Run Typewriter Intro": "ដំណើរការការណែនាំម៉ាស៊ីនវាយ",
   "Save & Submit": "រក្សាទុក និងដាក់ស្នើ",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "ម៉ូដែលកំពុងទទួលសំណើច្រើនពេលនេះ។ វាត្រូវបានព្យាយាមស្វ័យប្រវត្តិ; សូមព្យាយាមម្តងទៀតបន្តិច។",
       "MODEL_QUOTA_EXCEEDED": "កវីតា (quota) សមត្ថភាពម៉ូដែលអស់ហើយ។ សូមសាកល្បងម៉ូដែលផ្សេង ឬព្យាយាមម្តងទៀតក្រោយមក។",
       "MODEL_AUTH_FAILED": "កម្មវិធីមិនអាចបញ្ជាក់អត្តសញ្ញាណជាមួយសេវាបម្រើម៉ូដែលបានទេ។ នេះជាបញ្ហាកំណត់រចនា — សូមទាក់ទងគាំទ្រ។"
-    }
+    },
+    "messageLimitExceeded": "ដែនកំណត់សារគឺ {maxLength} តួអក្សរ។ អ្នកបានបញ្ចូល {valueLength} តួអក្សរ។"
   },
   "transcript": {
     "originalTranscript": "អត្ថបទសម្រង់ដើម",

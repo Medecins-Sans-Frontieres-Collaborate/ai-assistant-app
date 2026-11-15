@@ -18,7 +18,6 @@
   "If you don't have an OpenAI API key, you can get one here: ": "OpenAI API သော့မရှိပါက ဤနေရာတွင် ရယူနိုင်သည်: ",
   "Loading_ellipsis": "ဖွင့်နေသည်...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "သင့် OpenAI API သော့ကို ဘယ်ဘက်အောက်ခြေ ဘေးတန်းတွင် သတ်မှတ်ထားကြောင်း သေချာပါစေ။",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "စာကန့်သတ်ချက်သည် စာလုံး {{maxLength}} ဖြစ်သည်။ သင်သည် စာလုံး {{valueLength}} ရိုက်ထည့်ပြီးပါပြီ။",
   "Model": "မော်ဒယ်",
   "Neutral": "ကြားနေ",
   "New Conversation": "စကားဝိုင်းအသစ်",
@@ -27,7 +26,6 @@
   "Please enter a message": "ကျေးဇူးပြု၍ စာတစ်စောင် ရိုက်ထည့်ပါ",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "ကျေးဇူးပြု၍ သင့် OpenAI API သော့ကို ဘယ်ဘက်အောက်ခြေ ဘေးတန်းတွင် သတ်မှတ်ပါ။",
   "Precise": "တိကျသော",
-  "Prompt limit is {{maxLength}} characters": "မေးခွန်းအရှည် အထက်ဆုံး {{maxLength}} အက္ခရာသာ ခွင့်ပြုပါတယ်။",
   "Regenerate response": "တုံ့ပြန်မှုကို ပြန်လည်ထုတ်လုပ်ရန်",
   "Save & Submit": "သိမ်းဆည်း & တင်သွင်းရန်",
   "Search_ellipsis": "ရှာဖွေရန်...",
@@ -960,7 +958,8 @@
       "MODEL_RATE_LIMITED": "မော်ဒယ်သို့ တောင်းဆိုချက်များအရမ်းများနေသည်။ မော်ဒယ်က အလိုအလျောက် ပြန်လည်ကြိုးစားပေးပြီး ဖြစ်သည်။ ခဏစောင့်ပြီး ပြန်ကြိုးစားပါ။",
       "MODEL_QUOTA_EXCEEDED": "မော်ဒယ်၏အရင်းအနှီး ဒေတာခွဲဝေမှုပြီးဆုံးသွားပါသည်။ မော်ဒယ်အခြားတစ်ခုကို ချိတ်သုံးပါ၊ သို့မဟုတ် ခဏနောက်မှ ပြန်ကြိုးစားပါ။",
       "MODEL_AUTH_FAILED": "မော်ဒယ်ဝန်ဆောင်မှုနှင့် အက်ပ်အတည်ပြုမှု မအောင်မြင်ပါ။ ဤသည်သည် စီစဉ်ပြင်ဆင်မှုအပြုအမွန်ဖြစ်သည် — support ကို ဆက်သွယ်ပါ။"
-    }
+    },
+    "messageLimitExceeded": "စာကန့်သတ်ချက်သည် စာလုံး {maxLength} ဖြစ်သည်။ သင်သည် စာလုံး {valueLength} ရိုက်ထည့်ပြီးပါပြီ။"
   },
   "sidebar": {
     "collapseSidebar": "ဘေးဘားကို ကျုံ့ပါ",
@@ -1382,7 +1381,6 @@
   "Chat Settings": "ချတ်ဆက်တင်များ",
   "Default System Prompt": "မူလ System Prompt",
   "Email": "အီးမေးလ်",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Prompt သည် {{maxLength}} စာလုံးအထိသာ ခွင့်ပြုသည်။ ကျွန်ုပ်ထည့်သွင်းထားသည်မှာ {{valueLength}} စာလုံးဖြစ်သည်။",
   "Run Typewriter Intro": "Typewriter ခေါင်းစဉ်ကို မောင်းနှင်မည်",
   "Conversation exported successfully": "ဆွေးနွေးမှုကို အောင်မြင်စွာ ထုတ်ယူပြီး",
   "Failed to export conversation": "ဆွေးနွေးမှု ထုတ်ယူခြင်း မအောင်မြင်ပါ",

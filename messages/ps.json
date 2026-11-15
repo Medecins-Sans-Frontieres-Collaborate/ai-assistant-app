@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "که تاسو د OpenAI API کیلي نلرئ، دلته یې ترلاسه کولی شئ: ",
   "Loading_ellipsis": "بارېږي...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "ډاډه شئ چې ستاسو د OpenAI API کیلي د اړخیزې ښکته کېڼ اړخ کې ایښودل شوې ده.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "د پیغام حد {{maxLength}} توري دي. تاسو {{valueLength}} توري دننه کړي دي.",
   "Model": "ماډل",
   "OR": "یا",
   "OpenAI API Key Required": "د OpenAI API کیلي ته اړتیا ده",
   "Please enter a message": "مهرباني وکړئ پیغام ولیکئ",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "مهرباني وکړئ خپله د OpenAI API کیلي د اړخیزې ښکته کېڼ اړخ کې ځای په ځای کړئ.",
-  "Prompt limit is {{maxLength}} characters": "د پرامپټ حد {{maxLength}} توري دي",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "د پرامپټ حد {{maxLength}} توري دي. تاسو {{valueLength}} توري دننه کړي دي.",
   "Regenerate response": "ځواب بیا جوړ کړئ",
   "Run Typewriter Intro": "د ټایپرایټر پیل",
   "Save & Submit": "خوندي او وسپارئ",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "ماډل ته دا مهال ډېرې غوښتنې روانې دي. هڅه اتوماتاً بیا شوې؛ مهرباني وکړئ لږ وروسته بیا هڅه وکړئ.",
       "MODEL_QUOTA_EXCEEDED": "د ماډل ظرفیت کوټه ختمه شوې ده. بل ماډل وکاروئ یا وروسته بیا هڅه وکړئ.",
       "MODEL_AUTH_FAILED": "ایپ نشو کولای له ماډل خدمت سره تصدیق وکړي. دا د تنظیم ستونزه ده — مهرباني وکړئ له ملاتړ سره اړیکه ونیسئ."
-    }
+    },
+    "messageLimitExceeded": "د پیغام حد {maxLength} توري دي. تاسو {valueLength} توري دننه کړي دي."
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",

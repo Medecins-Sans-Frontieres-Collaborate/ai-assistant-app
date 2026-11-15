@@ -37,7 +37,6 @@
   "Invalid folder file": "Neplatný soubor složky",
   "Loading_ellipsis": "Načítání...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Ujistěte se, že váš klíč API OpenAI je nastaven v levém dolním rohu postranního panelu.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Limit zprávy je {{maxLength}} znaků. Zadali jste {{valueLength}} znaků.",
   "Model": "Model",
   "Name": "Název",
   "New conversation": "Nová konverzace",
@@ -53,8 +52,6 @@
   "Plugin Keys": "Klíče pluginů",
   "Prompt": "Výzva",
   "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Obsah výzvy. Použijte '{{}}' k označení proměnné. Např.: '{{name}}' je '{{adjective}}' '{{noun}}'",
-  "Prompt limit is {{maxLength}} characters": "Limit pro zadání je {{maxLength}} znaků.",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Limit výzvy je {{maxLength}} znaků. Zadali jste {{valueLength}} znaků.",
   "Regenerate response": "Regenerovat odpověď",
   "Save & Submit": "Uložit a odeslat",
   "Saved Prompts": "Uložené výzvy",
@@ -985,7 +982,8 @@
       "MODEL_RATE_LIMITED": "Model právě přijímá příliš mnoho požadavků. Proběhl automatický opakovaný pokus; zkuste to prosím za chvíli znovu.",
       "MODEL_QUOTA_EXCEEDED": "Kapacitní kvóta modelu byla vyčerpána. Zkuste jiný model nebo to zkuste později.",
       "MODEL_AUTH_FAILED": "Aplikaci se nepodařilo ověřit u služby modelu. Jedná se o problém s nastavením — kontaktujte prosím podporu."
-    }
+    },
+    "messageLimitExceeded": "Limit zprávy je {maxLength} znaků. Zadali jste {valueLength} znaků."
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",

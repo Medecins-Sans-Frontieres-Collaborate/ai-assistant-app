@@ -139,14 +139,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "የOpenAI API ቁልፍ ከሌለዎት እዚህ ማግኘት ይችላሉ: ",
   "Loading_ellipsis": "በመጫን ላይ...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "የOpenAI API ቁልፍዎ በጎን አሞሌው ግርጌ በስተግራ መቀመጡን ያረጋግጡ።",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "የመልእክት ገደብ {{maxLength}} ቁምፊዎች ነው። {{valueLength}} ቁምፊዎች አስገብተዋል።",
   "Model": "ሞዴል",
   "OR": "ወይም",
   "OpenAI API Key Required": "የOpenAI API ቁልፍ ያስፈልጋል",
   "Please enter a message": "እባኮትን መልእክት ያስገቡ",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "እባኮትን የOpenAI API ቁልፍዎን በጎን አሞሌው ግርጌ በስተግራ ያስቀምጡ።",
-  "Prompt limit is {{maxLength}} characters": "የማስጠንቀቂያው ገደብ {{maxLength}} ቁምፊዎች ነው",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "የጥያቄ ገደብ {{maxLength}} ቁምፊዎች ነው። {{valueLength}} ቁምፊዎች አስገብተዋል።",
   "Regenerate response": "ምላሽ እንደገና አመንጭ",
   "Run Typewriter Intro": "የጸሐፊ መግቢያ አሂድ",
   "Save & Submit": "አስቀምጥ እና አስገባ",
@@ -928,7 +925,8 @@
       "MODEL_RATE_LIMITED": "ሞዴሉ አብዛኛውን ጥያቄዎች አገናኞበት። ሞከር በራሱ ተደጋጋሚ ተካፋፍ፣ እባክዎ ከትንሹ ጊዜ በኋላ ይሞክሩ።",
       "MODEL_QUOTA_EXCEEDED": "የሞዴሉ ችሎታ quota ተጠናቀቀ። ሌላ ሞዴል ይሞክሩ፣ ወይም ከትንሹ ጊዜ በኋላ ይሞክሩ።",
       "MODEL_AUTH_FAILED": "መተግበሪያው ከሞዴል አገልግሎት ጋር ማረጋጋት አልተቻለም። ይህ የማዋቀር ችግር ነው — እባክዎ ድጋፍ ያግኙ።"
-    }
+    },
+    "messageLimitExceeded": "የመልእክት ገደብ {maxLength} ቁምፊዎች ነው። {valueLength} ቁምፊዎች አስገብተዋል።"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",

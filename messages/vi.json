@@ -2,7 +2,6 @@
   "OpenAI API Key Required": "Yêu cầu nhập API Key từ tài khoản OpenAI",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Vui lòng nhập API Key từ tài khoản OpenAI của bạn vào ô dưới cùng của thanh bên trái.",
   "Stop Generating": "Dừng tạo",
-  "Prompt limit is {{maxLength}} characters": "Giới hạn là {{maxLength}} ký tự",
   "System Prompt": "Prompt hệ thống",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Bạn là ChatGPT, một mô hình ngôn ngữ lớn được đào tạo bởi OpenAI. Hãy tuân theo hướng dẫn của người dùng một cách cẩn thận. Phản hồi bằng cách sử dụng định dạng markdown.",
   "Enter a prompt": "Nhập một Prompt",
@@ -21,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Hãy đảm bảo rằng khóa API từ tài khoản OpenAI của bạn đã được nhập vào ô dưới cùng của thanh bên trái.",
   "If you completed this step, OpenAI may be experiencing issues_": "Nếu bạn đã hoàn thành bước này, OpenAI có thể đang gặp sự cố.",
   "click if using a _env_local file": "Bấm vào đây nếu dùng tệp .env.local",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Giới hạn tin nhắn là {{maxLength}} ký tự. Bạn đã nhập {{valueLength}} ký tự.",
   "Please enter a message": "Vui lòng nhập một tin nhắn",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI là một bộ công cụ chatbot tiên tiến cho các mô hình chat của OpenAI nhằm mô phỏng giao diện và chức năng của ChatGPT.",
   "Are you sure you want to clear all messages?": "Bạn có chắc chắn muốn xóa tất cả tin nhắn không?",
@@ -986,7 +984,8 @@
       "MODEL_RATE_LIMITED": "Mô hình đang nhận quá nhiều yêu cầu cùng lúc. Hệ thống đã tự động thử lại; vui lòng thử lại sau một lúc.",
       "MODEL_QUOTA_EXCEEDED": "Mô hình đã hết hạn mức sử dụng. Hãy thử mô hình khác hoặc thử lại sau.",
       "MODEL_AUTH_FAILED": "Ứng dụng không thể xác thực với dịch vụ mô hình. Đây là lỗi cấu hình — vui lòng liên hệ bộ phận hỗ trợ."
-    }
+    },
+    "messageLimitExceeded": "Giới hạn tin nhắn là {maxLength} ký tự. Bạn đã nhập {valueLength} ký tự."
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -1408,7 +1407,6 @@
   "Chat Settings": "Cài đặt trò chuyện",
   "Default System Prompt": "Nhắc nhở hệ thống mặc định",
   "Email": "Email",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Giới hạn nhắc nhở là {{maxLength}} ký tự. Bạn đã nhập {{valueLength}} ký tự.",
   "Run Typewriter Intro": "Chạy phần giới thiệu Typewriter",
   "Terms and Conditions": "Điều khoản và điều kiện",
   "Loading terms and conditions_ellipsis": "Đang tải điều khoản và điều kiện...",

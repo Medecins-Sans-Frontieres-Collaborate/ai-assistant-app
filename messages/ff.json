@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "So a alaa cokitirgal API OpenAI, aɗa waawi heɓde ɗum ɗoo: ",
   "Loading_ellipsis": "Ina loowa...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Tabbintina cokitirgal maa API OpenAI waɗaama e les-nano palal ngal.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Keewal neldol ko {{maxLength}} tafngo. Aɗa naatni {{valueLength}} tafngo.",
   "Model": "Masiŋ",
   "OR": "WALLA",
   "OpenAI API Key Required": "Cokitirgal API OpenAI Ena Hatojini",
   "Please enter a message": "Tiiɗno naatnu neldol",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Tiiɗno waɗ cokitirgal maa API OpenAI e les-nano palal ngal.",
-  "Prompt limit is {{maxLength}} characters": "Keewal tinndinol ko {{maxLength}} tafngo",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Keewal tinndinol ko {{maxLength}} tafngo. Aɗa naatni {{valueLength}} tafngo.",
   "Regenerate response": "Hesɗitin jaabtol",
   "Run Typewriter Intro": "Hurmin Naatirde Winndiyanke",
   "Save & Submit": "Danndina & Neldu",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Model njoɓata jawlii ɓurndi. Fuɗɗani re-njoɓani, miyet fuɗɗo sa'an.",
       "MODEL_QUOTA_EXCEEDED": "Quota moodel woodani. Fuɗɗo model leydi, walla fuɗɗo harre leydi.",
       "MODEL_AUTH_FAILED": "App waawani yoogude e service model. Ko problem configuration — mbuɗo support."
-    }
+    },
+    "messageLimitExceeded": "Keewal neldol ko {maxLength} tafngo. Aɗa naatni {valueLength} tafngo."
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",

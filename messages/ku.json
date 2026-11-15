@@ -572,7 +572,8 @@
     "expandThinking": "فکر فراوان بکە",
     "actionsDisabledForEmbed": "بەکارهێنەران لە ناوەڕۆکی جێگیرکراو سەرەوە",
     "ttsRightClickHint": "کلیکە راست بکە بۆ هەڵبژاردنی دەنگ",
-    "voiceInputTranscribing": "لە نووسینەوە..."
+    "voiceInputTranscribing": "لە نووسینەوە...",
+    "messageLimitExceeded": "سنووری پەیام {maxLength} پیتە. تۆ {valueLength} پیت تێخڕاوت."
   },
   "transcript": {
     "saveToOneDrive": "پاشەکەوت کردن بۆ OneDrive",
@@ -7867,13 +7868,10 @@
   "If you don't have an OpenAI API key, you can get one here: ": "ئەگەر OpenAI API key نیە، لێرە دەتوانیت وەرگرت:",
   "Loading_ellipsis": "بارکردن...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "بەڵگە پەیوەندی APIی OpenAI لە خوارەوەی چەپ لە شری پەسەند بکە.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "سنووری پەیام {{maxLength}} پیتە. تۆ {{valueLength}} پیت تێخڕاوت.",
   "OR": "یان",
   "OpenAI API Key Required": "API Keyی OpenAI پێویست",
   "Please enter a message": "تکایە پەیامێک بنووسە",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "تکایە API keyی OpenAI لە خوارەوەی چەپ لە شری بپەسەندە.",
-  "Prompt limit is {{maxLength}} characters": "سنووری داواکردن {{maxLength}} پیتە",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "سنووری داواکردن {{maxLength}} پیتە. تۆ {{valueLength}} پیت تێخڕاوت.",
   "Regenerate response": "وەڵامەکە نوێ بکە",
   "Run Typewriter Intro": "پەڕەی پێشەکی Typewriter بەرەوپێش ببرە",
   "Save & Submit": "پاشەکەوت بکە و بنێرە",

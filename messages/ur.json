@@ -92,10 +92,7 @@
   "translatorTranslationDomainMedical": "طبی",
   "Search_ellipsis": "تلاش کریں...",
   "translatorTranslationTypeLabel": "ترجمہ کی قسم",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "پیغام کی حد {{maxLength}} حروف ہے۔ آپ نے {{valueLength}} حروف درج کیے ہیں۔",
   "OpenAI API Key Required": "OpenAI API کلید درکار ہے",
-  "Prompt limit is {{maxLength}} characters": "پرومپٹ کی حد {{maxLength}} حروف ہے",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "پرامپٹ کی حد {{maxLength}} حروف ہے۔ آپ نے {{valueLength}} حروف درج کیے ہیں۔",
   "Regenerate response": "جواب دوبارہ تیار کریں",
   "cancelButton": "منسوخ کریں",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "چیٹ بوٹ UI ایک جدید چیٹ بوٹ کٹ ہے جو ChatGPT کے انٹرفیس اور فعالیت کی نقل کرنے کا مقصد رکھنے والے OpenAI کے چیٹ ماڈلز کے لیے ہے۔",
@@ -986,7 +983,8 @@
       "MODEL_RATE_LIMITED": "ماڈل اس وقت بہت زیادہ درخواستیں وصول کر رہا ہے۔ خودکار طور پر دوبارہ کوشش کی گئی؛ براہ کرم تھوڑی دیر بعد دوبارہ کوشش کریں۔",
       "MODEL_QUOTA_EXCEEDED": "ماڈل کی capacity quota ختم ہو گئی ہے۔ دوسرا ماڈل آزمائیں یا بعد میں دوبارہ کوشش کریں۔",
       "MODEL_AUTH_FAILED": "ایپ ماڈل سروس کے ساتھ تصدیق نہیں کر سکی۔ یہ configuration کا مسئلہ ہے — براہ کرم سپورٹ سے رابطہ کریں۔"
-    }
+    },
+    "messageLimitExceeded": "پیغام کی حد {maxLength} حروف ہے۔ آپ نے {valueLength} حروف درج کیے ہیں۔"
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",

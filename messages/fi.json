@@ -2,7 +2,6 @@
   "OpenAI API Key Required": "OpenAI API-avain tarvitaan",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Ole hyvä ja aseta OpenAI API-avaimesi sivupalkin vasemmassa alareunassa.",
   "Stop Generating": "Lopeta generointi",
-  "Prompt limit is {{maxLength}} characters": "Kehotteen pituusraja on {{maxLength}} merkkiä",
   "System Prompt": "System prompt",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Sinä olet ChatGPT, OpenAI:n opettama laaja kielimalli. Seuraa käyttäjän ohjeita tarkasti. Vastaa käyttäen markdownia.",
   "Enter a prompt": "Syötä prompti",
@@ -22,7 +21,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Varmista että OpenAI API-avaimesi on asetettu sivupalkin vasemmassa alareunassa.",
   "If you completed this step, OpenAI may be experiencing issues_": "Jos olet suorittanut tämän kohdan, OpenAI:lla saattaa olla tällä hetkellä ongelmia.",
   "click if using a _env_local file": "klikkaa jos käytät .env.local-tiedostoa",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Viestin maksimipituus on {{maxLength}} merkkiä. Olet käyttänyt {{valueLength}} merkkiä.",
   "Please enter a message": "Ole hyvä ja syötä viesti",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI on OpenAI:n keskustelumalleille tarkoitettu käyttöliittymä joka pyrkii jäljittelemään ChatGPT:n käyttöliittymää ja toiminnallisuuksia.",
   "Are you sure you want to clear all messages?": "Haluatko varmasti poistaa kaikki viestit?",
@@ -960,7 +958,8 @@
       "MODEL_RATE_LIMITED": "Malliin lähetetään tällä hetkellä liikaa pyyntöjä. Järjestelmä yritti automaattisesti uudelleen; yritä hetken kuluttua uudelleen.",
       "MODEL_QUOTA_EXCEEDED": "Mallin kapasiteettikiintiö on täynnä. Kokeile toista mallia tai yritä myöhemmin uudelleen.",
       "MODEL_AUTH_FAILED": "Sovellus ei voinut tunnistautua mallipalveluun. Kyseessä on määritysongelma — ota yhteyttä tukeen."
-    }
+    },
+    "messageLimitExceeded": "Viestin maksimipituus on {maxLength} merkkiä. Olet käyttänyt {valueLength} merkkiä."
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -1382,7 +1381,6 @@
   "Chat Settings": "Keskustelun asetukset",
   "Default System Prompt": "Järjestelmän oletuskehote",
   "Email": "Sähköposti",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Kehotteen enimmäispituus on {{maxLength}} merkkiä. Olet syöttänyt {{valueLength}} merkkiä.",
   "Run Typewriter Intro": "Käynnistä kirjoituskoneintro",
   "Conversation exported successfully": "Keskustelu vietiin onnistuneesti",
   "Failed to export conversation": "Keskustelun vienti epäonnistui",

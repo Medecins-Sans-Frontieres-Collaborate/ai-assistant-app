@@ -2,7 +2,6 @@
   "OpenAI API Key Required": "Memerlukan Kunci API OpenAI",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Silakan atur kunci API OpenAI Anda di bagian kiri bawah bilah sisi.",
   "Stop Generating": "Berhenti Menghasilkan",
-  "Prompt limit is {{maxLength}} characters": "Batas prompt adalah {{maxLength}} karakter",
   "System Prompt": "Prompt Sistem",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Anda adalah ChatGPT, model bahasa besar yang dilatih oleh OpenAI. Ikuti instruksi pengguna dengan hati-hati. Balas menggunakan markdown.",
   "Enter a prompt": "Masukkan sebuah prompt",
@@ -21,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Pastikan kunci API OpenAI Anda diatur di bagian kiri bawah bilah sisi.",
   "If you completed this step, OpenAI may be experiencing issues_": "Jika Anda telah menyelesaikan langkah ini, OpenAI mungkin mengalami masalah.",
   "click if using a _env_local file": "klik jika menggunakan file .env.local",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Batas karakter untuk pesan adalah {{maxLength}} karakter. Anda telah memasukkan {{valueLength}} karakter.",
   "Please enter a message": "Silakan masukkan sebuah pesan",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI adalah kit chatbot canggih untuk model obrolan OpenAI yang bertujuan meniru antarmuka dan fungsionalitas ChatGPT.",
   "Are you sure you want to clear all messages?": "Apakah Anda yakin ingin menghapus semua pesan?",
@@ -952,7 +950,8 @@
       "MODEL_RATE_LIMITED": "Model sedang menerima terlalu banyak permintaan. Sistem telah mencoba ulang secara otomatis; silakan coba lagi sebentar lagi.",
       "MODEL_QUOTA_EXCEEDED": "Kuota kapasitas model telah habis. Coba gunakan model lain atau coba lagi nanti.",
       "MODEL_AUTH_FAILED": "Aplikasi tidak dapat melakukan autentikasi dengan layanan model. Ini adalah masalah konfigurasi — silakan hubungi dukungan."
-    }
+    },
+    "messageLimitExceeded": "Batas karakter untuk pesan adalah {maxLength} karakter. Anda telah memasukkan {valueLength} karakter."
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -1540,7 +1539,6 @@
   "Invalid folder file": "File folder tidak valid",
   "New conversation": "Percakapan baru",
   "No prompts found": "Tidak ada prompt ditemukan",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Batas prompt adalah {{maxLength}} karakter. Anda telah memasukkan {{valueLength}} karakter.",
   "Run Typewriter Intro": "Jalankan Intro Mesin Ketik",
   "Saved Prompts": "Prompt Tersimpan",
   "Select a prompt to view details": "Pilih prompt untuk melihat detail",

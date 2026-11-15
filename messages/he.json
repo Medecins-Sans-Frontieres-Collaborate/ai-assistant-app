@@ -2,7 +2,6 @@
   "OpenAI API Key Required": "מפתח openAI API",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "עליך להזין את המפתח האישי שלך בצידו השמאלי התחתון של תפריט הניווט.",
   "Stop Generating": "עצור תהליך הפקת התשובה",
-  "Prompt limit is {{maxLength}} characters": "המגבלה היא {{maxLength}} תווים",
   "System Prompt": "הגדרת בסיס לכל תשובה של המערכת",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "You are Hebrew speaking ChatGPT, a large language model trained by OpenAI which responds in Hebrew to any question or User comment. Follow the user's instructions carefully. Respond in Hebrew using markdown.",
   "Enter a prompt": "הקלד הודעה",
@@ -21,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "עליך לוודא שמפתח האישי שלך מוזן בתפריט מצד שמאל",
   "If you completed this step, OpenAI may be experiencing issues_": "אם טרם השלמת חלק זה יש סבירות גבוהה להתרחשות תקלה",
   "click if using a _env_local file": "click if using a .env.local file",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "מגבלת תווים היא {{maxLength}}. אתה הקלדת עד עכשיו {{valueLength}} תווים.",
   "Please enter a message": "הקלד את הודעתך",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "מערכת הצאטבוט היא ערכה מתקדמת לניהול שיחה המכוונת לחקות את המראה והפונקציונאלית של ChatGPT",
   "Are you sure you want to clear all messages?": "האם אתה בטוח שברצונך למחוק את כל ההודעות?",
@@ -960,7 +958,8 @@
       "MODEL_RATE_LIMITED": "המודל מקבל כעת יותר מדי בקשות. הבקשה ניסתה מחדש אוטומטית; נסה שוב בעוד רגע.",
       "MODEL_QUOTA_EXCEEDED": "מכסת הקיבולת של המודל מוצתה. נסה מודל אחר או נסה שוב מאוחר יותר.",
       "MODEL_AUTH_FAILED": "האפליקציה לא הצליחה לאמת מול שירות המודל. זו בעיית הגדרות — יש לפנות לתמיכה."
-    }
+    },
+    "messageLimitExceeded": "מגבלת תווים היא {maxLength}. אתה הקלדת עד עכשיו {valueLength} תווים."
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -1382,7 +1381,6 @@
   "Chat Settings": "הגדרות שיחה",
   "Default System Prompt": "הנחיית מערכת ברירת מחדל",
   "Email": "דוא\"ל",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "המגבלה להנחיה היא {{maxLength}} תווים. הזנת {{valueLength}} תווים.",
   "Run Typewriter Intro": "הרץ מבוא Typewriter",
   "Conversation exported successfully": "השיחה יוצאה בהצלחה",
   "Failed to export conversation": "ייצוא השיחה נכשל",
