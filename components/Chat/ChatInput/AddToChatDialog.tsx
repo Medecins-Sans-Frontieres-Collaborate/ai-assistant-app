@@ -142,6 +142,14 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
   );
   const [isDraggingFiles, setIsDraggingFiles] = useState(false);
 
+  // On phones the sources are a scrolling strip: keep the chosen one in
+  // view, including when the picker opens on a source far along it. A ref
+  // callback rather than an effect, because the dialog's content is not in
+  // the document yet when this component's first effects run.
+  const keepInView = useCallback((node: HTMLButtonElement | null) => {
+    node?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+  }, []);
+
   const sources = useMemo(() => visibleSources(capabilities), [capabilities]);
   const selectedEntries = useMemo(() => [...selected.values()], [selected]);
   const selectedNames = useMemo(
@@ -261,6 +269,7 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
       <button
         key={candidate}
         type="button"
+        ref={active ? keepInView : undefined}
         data-source-id={candidate}
         disabled={!usable}
         aria-current={active ? 'true' : undefined}
@@ -346,6 +355,9 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
       onClose={onClose}
       title={t(TITLE_KEYS[intent])}
       size="xl"
+      // The close control sits inside the header: the default one hangs off
+      // the panel's corner, which is off-screen on a full-screen phone sheet.
+      closeWithButton={false}
       className="max-sm:min-h-dvh max-sm:max-w-none max-sm:rounded-none"
     >
       <div
