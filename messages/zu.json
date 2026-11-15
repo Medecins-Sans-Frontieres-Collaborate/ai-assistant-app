@@ -8319,5 +8319,102 @@
       "connect": "Xhuma Microsoft 365",
       "connectNote": "Engeza kusuka ku-OneDrive, i-imeyili kanye nemihlangano"
     }
+  },
+  "usageBudgets": {
+    "title": "Izabelomali zakho",
+    "description": "Imingcele oyiqokele kuwe kulo mshini. Khetha isabelomali, bese unquma okwenzekayo uma usondela noma wedlula umngcele. Izabelomali zibala izingxoxo nokusebenza kusukela ekuqaleni kwesikhathi ngasinye.",
+    "metric": {
+      "emissions": "Isabelomali sokukhishwa",
+      "cost": "Isabelomali sezindleko"
+    },
+    "metricShort": {
+      "emissions": "Ukukhishwa",
+      "cost": "Izindleko"
+    },
+    "off": "Ayikho isabelomali esibekiwe.",
+    "measureAs": "Linganisela njengo",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Ukushaja ifoni",
+      "usd": "Ama-dollar ase-US"
+    },
+    "amountLabel": "Isabelomali",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "amahora",
+      "smartphoneCharge": "ukushaja",
+      "usd": "Ama-dollar ase-US"
+    },
+    "periodLabel": "Iqalwa kabusha njalo",
+    "period": {
+      "day": "Usuku",
+      "week": "Iviki",
+      "month": "Inyanga"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Kulinganiselwa kusuka kumazinga entengo: umkhawulo ophezulu, akuyona i-invoice.",
+    "chargesValue": "{count} ukushaja ifoni",
+    "percent": "{percent}%",
+    "usedOf": "{used} kwe-{limit} kusetshenziswe ({percent}%)",
+    "usedOfShort": "{used} kwe-{limit}",
+    "resets": "Iqalwa kabusha {date}",
+    "budgetMarker": "Isabelomali",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Phakathi kwesabelomali",
+      "warn": "Isixwayiso sibonisiwe",
+      "ask": "Kubuza ngaphambi komlayezo ngamunye",
+      "stop": "Ukuthumela kumisiwe"
+    },
+    "stage": {
+      "warn": {
+        "title": "Yexwayisa",
+        "tag": "Saziso",
+        "description": "Khombisa isaziso engxoxweni kusuka kule ngxenye yesabelomali."
+      },
+      "ask": {
+        "title": "Buza kuqala",
+        "tag": "Ukuvimba okubuthakathaka",
+        "description": "Buza ukuthi ngiqinisekise umyalezo ngamunye kusuka kule ngxenye yesabelomali."
+      },
+      "stop": {
+        "title": "Yeka",
+        "tag": "Ukuvimba okuqinile",
+        "description": "Yeka ukuthumela kusuka kule ngxenye yesabelomali kuze kube iqalwa kabusha noma ngikhuphule lapha."
+      }
+    },
+    "thresholdLabel": "{stage} umkhawulo, amaphesenti esabelomali",
+    "notice": {
+      "warn": {
+        "emissions": "Usebenzise {percent}% wesabelomali sakho sokukhishwa.",
+        "cost": "Usebenzise {percent}% wesabelomali sakho sezindleko."
+      },
+      "ask": {
+        "emissions": "Usebenzise {percent}% wesabelomali sakho sokukhishwa. Ngithumele lo myalezo?",
+        "cost": "Usebenzise {percent}% wesabelomali sakho sezindleko. Ngithumele lo myalezo?"
+      },
+      "askRun": {
+        "emissions": "Usebenzise {percent}% wesabelomali sakho sokukhishwa. Ngabe ngiqale lokhu ukusebenza?",
+        "cost": "Usebenzise {percent}% wesabelomali sakho sezindleko. Ngabe ngiqale lokhu ukusebenza?"
+      },
+      "stop": {
+        "emissions": "Iphuzu lokuma kwesabelomali sokukhishwa selifinyelelwe. Ukuthumela kumisiwe kuze kube ngu-{date}.",
+        "cost": "Iphuzu lokumisa kwesabelomali sezezimali selifikiwe. Ukuthumela kumiswe kuze kube ngu-{date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Buka isabelomali",
+      "dismiss": "Susa",
+      "sendAnyway": "Thumela noma kunjalo",
+      "runAnyway": "Qalisa noma kunjalo",
+      "dontSend": "Ungathumeli",
+      "dontAskToday": "Ungaphindi ubuze namhlanje",
+      "openSettings": "Vula izilungiselelo zesabelomali",
+      "edit": "Hlela"
+    },
+    "composerPaused": "Ukuthumela kumiswe isabelomali sakho",
+    "summaryTitle": "Izabelomali zakho",
+    "chipAria": "Isabelomali se-{metric}: {percent}% isisetshenzisiwe.",
+    "runProjection": "Isabelomali sokukhishwa kwegesi {from}% → {to}%"
   }
 }

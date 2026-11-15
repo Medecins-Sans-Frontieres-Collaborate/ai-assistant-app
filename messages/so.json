@@ -8319,5 +8319,102 @@
       "connect": "Ku xidh Microsoft 365",
       "connectNote": "Ka dar OneDrive, email iyo kulammo"
     }
+  },
+  "usageBudgets": {
+    "title": "Miisaaniyaddaada",
+    "description": "Xaddid aad adigu is dejisay qalabkan. Dooro miisaaniyad, ka dibna go'aanso wixii dhici doona markaad ku sii dhowaaneyso ama dhaafto. Miisaaniyaddu waxay tirisaa fariimaha iyo hab-raaca bilowga muddada kasta.",
+    "metric": {
+      "emissions": "Miisaaniyadda qiiqa",
+      "cost": "Miisaaniyadda kharashka"
+    },
+    "metricShort": {
+      "emissions": "Qiiqa",
+      "cost": "Kharash"
+    },
+    "off": "Miisaaniyad lama dejin.",
+    "measureAs": "Cabbir sidan",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Dallacaada taleefanka",
+      "usd": "Doollar Mareykanka"
+    },
+    "amountLabel": "Miisaaniyad",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "saacadood",
+      "smartphoneCharge": "dallacaad",
+      "usd": "Doollar Mareykanka"
+    },
+    "periodLabel": "Dib u bilaabanaya",
+    "period": {
+      "day": "Maalin",
+      "week": "Usbuuc",
+      "month": "Bil"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Qiimayn laga sameeyay qiimaha liiska: waa xadka ugu badan, ma aha biil rasmi ah.",
+    "chargesValue": "{count} dallacaada taleefanka",
+    "percent": "{percent}%",
+    "usedOf": "{used} laga isticmaalay {limit} ({percent}%)",
+    "usedOfShort": "{used} ka mid ah {limit}",
+    "resets": "Dib ayaa loo bilaabayaa {date}",
+    "budgetMarker": "Miisaaniyad",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Waxaad ku jirtaa miisaaniyadda",
+      "warn": "Digniin la muujiyay",
+      "ask": "Weyddiin ka hor fariin kasta",
+      "stop": "Dirista waa la hakiyay"
+    },
+    "stage": {
+      "warn": {
+        "title": "Digniin",
+        "tag": "Ogaansho",
+        "description": "Muuji ogeysiis ku jira sheekada marka la gaaro heerkan miisaaniyadda."
+      },
+      "ask": {
+        "title": "Weydii marka hore",
+        "tag": "Xannib jilicsan",
+        "description": "Weydii inaad xaqiijiso fariin kasta laga bilaabo heerkan miisaaniyadda."
+      },
+      "stop": {
+        "title": "Jooji",
+        "tag": "Xannib adag",
+        "description": "Jooji dirista laga bilaabo heerkan miisaaniyadda ilaa ay dib u bilaabato ama aan kor u qaado halkan."
+      }
+    },
+    "thresholdLabel": "Xadka {stage}, boqolkiiba miisaaniyadda",
+    "notice": {
+      "warn": {
+        "emissions": "Waxaad isticmaashay {percent}% miisaaniyaddaada qiiqa.",
+        "cost": "Waxaad isticmaashay {percent}% miisaaniyaddaada kharashka."
+      },
+      "ask": {
+        "emissions": "Waxaad isticmaashay {percent}% miisaaniyaddaada qiiqa. Fariintan ma dirtaa?",
+        "cost": "Waxaad isticmaashay {percent}% miisaaniyaddaada kharashka. Fariintan ma dirtaa?"
+      },
+      "askRun": {
+        "emissions": "Waxaad isticmaashay {percent}% miisaaniyaddaada qiiqa. Ma bilaabaa hawshan?",
+        "cost": "Waxaad isticmaashay {percent}% miisaaniyaddaada kharashka. Ma bilaabaa hawshan?"
+      },
+      "stop": {
+        "emissions": "Waxaa la gaaray barta joojinta miisaaniyadda qiiqa. Diristu way hakad gashay ilaa {date}.",
+        "cost": "Meesha xadka kharashka la gaaray. Diritaanka waa la hakiyey ilaa {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Eeg miisaaniyadda",
+      "dismiss": "Ka saar",
+      "sendAnyway": "Sii dir hadana",
+      "runAnyway": "Sii soco hadana",
+      "dontSend": "Ha dirin",
+      "dontAskToday": "Ha weydiin mar kale maanta",
+      "openSettings": "Fur dejinta miisaaniyadda",
+      "edit": "Tafatir"
+    },
+    "composerPaused": "Diritaanka waxaa hakiyay miisaaniyaddaada",
+    "summaryTitle": "Miisaaniyadahaaga",
+    "chipAria": "Miisaaniyadda {metric}: {percent}% la isticmaalay.",
+    "runProjection": "Miisaaniyadda qiiqa {from}% → {to}%"
   }
 }

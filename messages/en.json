@@ -4594,6 +4594,103 @@
     "costDisclosure": "Cost at list prices as of {asOf} (Global Standard rate, no cached-input discount): an upper bound, not a bill. Web search, code execution, transcription, speech, translation and document indexing are not included.",
     "costUnpriced": "{count, plural, one {# request without a list price is} other {# requests without a list price are}} not included."
   },
+  "usageBudgets": {
+    "title": "Your budgets",
+    "description": "Limits you set for yourself on this device. Pick a budget, then choose what happens as you approach and pass it. Budgets count chat and workflow runs from the start of each period.",
+    "metric": {
+      "emissions": "Emissions budget",
+      "cost": "Cost budget"
+    },
+    "metricShort": {
+      "emissions": "Emissions",
+      "cost": "Cost"
+    },
+    "off": "No budget set.",
+    "measureAs": "Measure it as",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Phone charges",
+      "usd": "US dollars"
+    },
+    "amountLabel": "Budget",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "hours",
+      "smartphoneCharge": "charges",
+      "usd": "US dollars"
+    },
+    "periodLabel": "Resets every",
+    "period": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Estimated from list prices: an upper bound, not a bill.",
+    "chargesValue": "{count} phone charges",
+    "percent": "{percent}%",
+    "usedOf": "{used} of {limit} used ({percent}%)",
+    "usedOfShort": "{used} of {limit}",
+    "resets": "Resets {date}",
+    "budgetMarker": "Budget",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Within budget",
+      "warn": "Warning shown",
+      "ask": "Asking before every message",
+      "stop": "Sending paused"
+    },
+    "stage": {
+      "warn": {
+        "title": "Warn",
+        "tag": "Heads-up",
+        "description": "Show a notice in chat from this share of the budget."
+      },
+      "ask": {
+        "title": "Ask first",
+        "tag": "Soft block",
+        "description": "Ask me to confirm every message from this share of the budget."
+      },
+      "stop": {
+        "title": "Stop",
+        "tag": "Hard block",
+        "description": "Stop sending from this share of the budget until it resets or I raise it here."
+      }
+    },
+    "thresholdLabel": "{stage} threshold, percent of budget",
+    "notice": {
+      "warn": {
+        "emissions": "You've used {percent}% of your emissions budget.",
+        "cost": "You've used {percent}% of your cost budget."
+      },
+      "ask": {
+        "emissions": "You've used {percent}% of your emissions budget. Send this message?",
+        "cost": "You've used {percent}% of your cost budget. Send this message?"
+      },
+      "askRun": {
+        "emissions": "You've used {percent}% of your emissions budget. Start this run?",
+        "cost": "You've used {percent}% of your cost budget. Start this run?"
+      },
+      "stop": {
+        "emissions": "Emissions budget stop point reached. Sending is paused until {date}.",
+        "cost": "Cost budget stop point reached. Sending is paused until {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "View budget",
+      "dismiss": "Dismiss",
+      "sendAnyway": "Send anyway",
+      "runAnyway": "Run anyway",
+      "dontSend": "Don't send",
+      "dontAskToday": "Don't ask again today",
+      "openSettings": "Open budget settings",
+      "edit": "Edit"
+    },
+    "composerPaused": "Sending paused by your budget",
+    "summaryTitle": "Your budgets",
+    "chipAria": "{metric} budget: {percent}% used.",
+    "runProjection": "Emissions budget {from}% → {to}%"
+  },
   "connectors": {
     "title": "Connectors",
     "description": "Connect external tools through the Model Context Protocol (MCP). Connected tools become available to models in chat, and every tool call runs only after you approve it.",

@@ -8335,5 +8335,102 @@
       "connect": "Conectar Microsoft 365",
       "connectNote": "Adicionar de OneDrive, email e reuniões"
     }
+  },
+  "usageBudgets": {
+    "title": "Seus orçamentos",
+    "description": "Limites que você define neste dispositivo. Escolha um orçamento e então selecione o que acontece ao se aproximar ou ultrapassá-lo. Orçamentos contabilizam conversas e execuções de fluxo desde o início de cada período.",
+    "metric": {
+      "emissions": "Orçamento de emissões",
+      "cost": "Orçamento de custos"
+    },
+    "metricShort": {
+      "emissions": "Emissões",
+      "cost": "Custo"
+    },
+    "off": "Nenhum orçamento definido.",
+    "measureAs": "Medir como",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Cargas de telefone",
+      "usd": "Dólares americanos"
+    },
+    "amountLabel": "Orçamento",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "horas",
+      "smartphoneCharge": "cargas",
+      "usd": "dólares americanos"
+    },
+    "periodLabel": "Reinicia a cada",
+    "period": {
+      "day": "Dia",
+      "week": "Semana",
+      "month": "Mês"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Estimado a partir dos preços de tabela: um valor máximo, não uma fatura.",
+    "chargesValue": "{count} cargas de telefone",
+    "percent": "{percent}%",
+    "usedOf": "{used} de {limit} usados ({percent}%)",
+    "usedOfShort": "{used} de {limit}",
+    "resets": "Reinicia {date}",
+    "budgetMarker": "Orçamento",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Dentro do orçamento",
+      "warn": "Aviso exibido",
+      "ask": "Solicitar antes de cada mensagem",
+      "stop": "Envio pausado"
+    },
+    "stage": {
+      "warn": {
+        "title": "Aviso",
+        "tag": "Alerta",
+        "description": "Mostrar um aviso no chat a partir desta porcentagem do orçamento."
+      },
+      "ask": {
+        "title": "Solicitar confirmação",
+        "tag": "Bloqueio suave",
+        "description": "Solicitar confirmação para cada mensagem a partir desta porcentagem do orçamento."
+      },
+      "stop": {
+        "title": "Parar",
+        "tag": "Bloqueio rígido",
+        "description": "Parar o envio a partir desta porcentagem do orçamento até reiniciar ou aumentar o limite aqui."
+      }
+    },
+    "thresholdLabel": "Limite de {stage}, percentual do orçamento",
+    "notice": {
+      "warn": {
+        "emissions": "Você usou {percent}% do seu orçamento de emissões.",
+        "cost": "Você usou {percent}% do seu orçamento de custos."
+      },
+      "ask": {
+        "emissions": "Você usou {percent}% do seu orçamento de emissões. Enviar esta mensagem?",
+        "cost": "Você usou {percent}% do seu orçamento de custos. Enviar esta mensagem?"
+      },
+      "askRun": {
+        "emissions": "Você usou {percent}% do seu orçamento de emissões. Iniciar esta execução?",
+        "cost": "Você usou {percent}% do seu orçamento de custos. Iniciar esta execução?"
+      },
+      "stop": {
+        "emissions": "O ponto de parada do orçamento de emissões foi atingido. O envio ficará pausado até {date}.",
+        "cost": "Limite do orçamento de custos atingido. O envio está pausado até {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Ver orçamento",
+      "dismiss": "Dispensar",
+      "sendAnyway": "Enviar mesmo assim",
+      "runAnyway": "Executar mesmo assim",
+      "dontSend": "Não enviar",
+      "dontAskToday": "Não perguntar novamente hoje",
+      "openSettings": "Abrir configurações de orçamento",
+      "edit": "Editar"
+    },
+    "composerPaused": "Envio pausado pelo seu orçamento",
+    "summaryTitle": "Seus orçamentos",
+    "chipAria": "Orçamento de {metric}: {percent}% utilizado.",
+    "runProjection": "Orçamento de emissões {from}% → {to}%"
   }
 }

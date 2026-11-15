@@ -8335,5 +8335,102 @@
       "connect": "Microsoft 365 に接続",
       "connectNote": "OneDrive、メール、会議から追加"
     }
+  },
+  "usageBudgets": {
+    "title": "ご利用予算",
+    "description": "この端末で設定したご自身の利用制限です。予算を選び、達成・超過時にどうするか選んでください。予算は各期間の開始からチャットとワークフロー実行回数をカウントします。",
+    "metric": {
+      "emissions": "排出量予算",
+      "cost": "費用予算"
+    },
+    "metricShort": {
+      "emissions": "排出量",
+      "cost": "費用"
+    },
+    "off": "予算は設定されていません。",
+    "measureAs": "測定単位",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "スマホ充電回数",
+      "usd": "米ドル"
+    },
+    "amountLabel": "予算",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "時間",
+      "smartphoneCharge": "回",
+      "usd": "米ドル"
+    },
+    "periodLabel": "リセット周期",
+    "period": {
+      "day": "日",
+      "week": "週",
+      "month": "月"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "表示価格から算出した推定値です。請求額ではありません。",
+    "chargesValue": "{count}回スマホ充電",
+    "percent": "{percent}%",
+    "usedOf": "{limit}中{used}使用済み（{percent}%）",
+    "usedOfShort": "{limit}中{used}",
+    "resets": "{date}にリセット",
+    "budgetMarker": "予算",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "予算内",
+      "warn": "警告表示",
+      "ask": "毎回確認",
+      "stop": "送信一時停止"
+    },
+    "stage": {
+      "warn": {
+        "title": "警告",
+        "tag": "注意喚起",
+        "description": "予算のこの割合からチャットで通知を表示します。"
+      },
+      "ask": {
+        "title": "事前確認",
+        "tag": "ソフトブロック",
+        "description": "予算のこの割合から毎メッセージの確認を求めます。"
+      },
+      "stop": {
+        "title": "停止",
+        "tag": "ハードブロック",
+        "description": "予算のこの割合から送信をリセットや引き上げ操作まで停止します。"
+      }
+    },
+    "thresholdLabel": "{stage}閾値（予算に対する割合）",
+    "notice": {
+      "warn": {
+        "emissions": "排出量予算の{percent}%を使用しました。",
+        "cost": "費用予算の{percent}%を使用しました。"
+      },
+      "ask": {
+        "emissions": "排出量予算の{percent}%を使用しました。メッセージを送信しますか？",
+        "cost": "費用予算の{percent}%を使用しました。メッセージを送信しますか？"
+      },
+      "askRun": {
+        "emissions": "排出量予算の{percent}%を使用しました。実行を開始しますか？",
+        "cost": "費用予算の{percent}%を使用しました。実行を開始しますか？"
+      },
+      "stop": {
+        "emissions": "排出量予算停止点に到達しました。{date}まで送信は一時停止されます。",
+        "cost": "コスト予算の停止ポイントに達しました。{date}まで送信は一時停止されます。"
+      }
+    },
+    "actions": {
+      "viewBudget": "予算を見る",
+      "dismiss": "閉じる",
+      "sendAnyway": "強制的に送信",
+      "runAnyway": "強制的に実行",
+      "dontSend": "送信しない",
+      "dontAskToday": "今日は再度通知しない",
+      "openSettings": "予算設定を開く",
+      "edit": "編集"
+    },
+    "composerPaused": "予算により送信が一時停止されています",
+    "summaryTitle": "あなたの予算",
+    "chipAria": "{metric}予算：{percent}%使用済み。",
+    "runProjection": "排出量予算 {from}% → {to}%"
   }
 }

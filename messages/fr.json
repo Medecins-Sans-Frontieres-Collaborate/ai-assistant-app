@@ -8335,5 +8335,102 @@
       "connect": "Connecter Microsoft 365",
       "connectNote": "Ajouter depuis OneDrive, e-mail et réunions"
     }
+  },
+  "usageBudgets": {
+    "title": "Vos budgets",
+    "description": "Limites définies par vous-même sur cet appareil. Choisissez un budget, puis indiquez la marche à suivre lorsque vous vous en approchez ou le dépassez. Les budgets comptabilisent les chats et les exécutions de workflow à partir du début de chaque période.",
+    "metric": {
+      "emissions": "Budget d'émissions",
+      "cost": "Budget de coût"
+    },
+    "metricShort": {
+      "emissions": "Émissions",
+      "cost": "Coût"
+    },
+    "off": "Aucun budget défini.",
+    "measureAs": "Mesurer comme",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Charges de téléphone",
+      "usd": "Dollars US"
+    },
+    "amountLabel": "Budget",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "heures",
+      "smartphoneCharge": "charges",
+      "usd": "Dollars US"
+    },
+    "periodLabel": "Réinitialise tous les",
+    "period": {
+      "day": "Jour",
+      "week": "Semaine",
+      "month": "Mois"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Estimé à partir des prix catalogue : une limite supérieure, pas une facture.",
+    "chargesValue": "{count} charges de téléphone",
+    "percent": "{percent}%",
+    "usedOf": "{used} sur {limit} utilisés ({percent}%)",
+    "usedOfShort": "{used} sur {limit}",
+    "resets": "Réinitialise le {date}",
+    "budgetMarker": "Budget",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Dans le budget",
+      "warn": "Avertissement affiché",
+      "ask": "Demande avant chaque message",
+      "stop": "Envoi suspendu"
+    },
+    "stage": {
+      "warn": {
+        "title": "Avertir",
+        "tag": "Prévenez",
+        "description": "Afficher un avertissement dans le chat dès ce seuil du budget."
+      },
+      "ask": {
+        "title": "Demander d'abord",
+        "tag": "Blocage souple",
+        "description": "Me demander de confirmer chaque message à partir de ce seuil du budget."
+      },
+      "stop": {
+        "title": "Arrêter",
+        "tag": "Blocage dur",
+        "description": "Arrêter l'envoi dès ce seuil du budget jusqu'à sa réinitialisation ou modification ici."
+      }
+    },
+    "thresholdLabel": "Seuil {stage}, pourcentage du budget",
+    "notice": {
+      "warn": {
+        "emissions": "Vous avez utilisé {percent}% de votre budget d'émissions.",
+        "cost": "Vous avez utilisé {percent}% de votre budget de coût."
+      },
+      "ask": {
+        "emissions": "Vous avez utilisé {percent}% de votre budget d'émissions. Envoyer ce message ?",
+        "cost": "Vous avez utilisé {percent}% de votre budget de coût. Envoyer ce message ?"
+      },
+      "askRun": {
+        "emissions": "Vous avez utilisé {percent}% de votre budget d'émissions. Lancer cette exécution ?",
+        "cost": "Vous avez utilisé {percent}% de votre budget de coût. Lancer cette exécution ?"
+      },
+      "stop": {
+        "emissions": "Seuil d'arrêt du budget d'émissions atteint. L'envoi est suspendu jusqu'au {date}.",
+        "cost": "Le seuil du budget de coûts a été atteint. L'envoi est suspendu jusqu'au {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Afficher le budget",
+      "dismiss": "Ignorer",
+      "sendAnyway": "Envoyer quand même",
+      "runAnyway": "Exécuter quand même",
+      "dontSend": "Ne pas envoyer",
+      "dontAskToday": "Ne plus demander aujourd’hui",
+      "openSettings": "Ouvrir les paramètres du budget",
+      "edit": "Modifier"
+    },
+    "composerPaused": "Envoi suspendu par votre budget",
+    "summaryTitle": "Vos budgets",
+    "chipAria": "Budget {metric} : {percent}% utilisé.",
+    "runProjection": "Budget d’émissions {from}% → {to}%"
   }
 }

@@ -8335,5 +8335,102 @@
       "connect": "Připojit Microsoft 365",
       "connectNote": "Přidat z OneDrive, e-mailu a schůzek"
     }
+  },
+  "usageBudgets": {
+    "title": "Vaše rozpočty",
+    "description": "Limity, které si nastavíte na tomto zařízení. Vyberte rozpočet a určete, co se stane, když se limitu blížíte nebo jej překročíte. Do rozpočtů se započítávají spuštění chatu a workflow od začátku každého období.",
+    "metric": {
+      "emissions": "Rozpočet emisí",
+      "cost": "Rozpočet nákladů"
+    },
+    "metricShort": {
+      "emissions": "Emise",
+      "cost": "Náklady"
+    },
+    "off": "Není nastaven žádný rozpočet.",
+    "measureAs": "Měřit jako",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Nabití telefonu",
+      "usd": "Americké dolary"
+    },
+    "amountLabel": "Rozpočet",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "hodin",
+      "smartphoneCharge": "nabití",
+      "usd": "americké dolary"
+    },
+    "periodLabel": "Obnovuje se každých",
+    "period": {
+      "day": "Den",
+      "week": "Týden",
+      "month": "Měsíc"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Odhad dle ceníkových cen: horní hranice, ne fakturace.",
+    "chargesValue": "{count} nabití telefonu",
+    "percent": "{percent}%",
+    "usedOf": "Použito {used} z {limit} ({percent}%)",
+    "usedOfShort": "{used} z {limit}",
+    "resets": "Obnovuje se {date}",
+    "budgetMarker": "Rozpočet",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "V rámci rozpočtu",
+      "warn": "Zobrazena výstraha",
+      "ask": "Dotaz před každou zprávou",
+      "stop": "Odesílání pozastaveno"
+    },
+    "stage": {
+      "warn": {
+        "title": "Varování",
+        "tag": "Upozornění",
+        "description": "V chatu zobrazit oznámení od tohoto podílu rozpočtu."
+      },
+      "ask": {
+        "title": "Nejprve se zeptat",
+        "tag": "Měkký blok",
+        "description": "Od tohoto podílu rozpočtu se na každou zprávu vyžaduje potvrzení."
+      },
+      "stop": {
+        "title": "Zastavit",
+        "tag": "Tvrdý blok",
+        "description": "Zastavit odesílání od tohoto podílu rozpočtu, dokud se nerozpočítá nebo jej zde nezvýším."
+      }
+    },
+    "thresholdLabel": "Práh {stage}, procento rozpočtu",
+    "notice": {
+      "warn": {
+        "emissions": "Spotřebovali jste {percent}% rozpočtu emisí.",
+        "cost": "Spotřebovali jste {percent}% rozpočtu nákladů."
+      },
+      "ask": {
+        "emissions": "Spotřebovali jste {percent}% rozpočtu emisí. Odeslat tuto zprávu?",
+        "cost": "Spotřebovali jste {percent}% rozpočtu nákladů. Odeslat tuto zprávu?"
+      },
+      "askRun": {
+        "emissions": "Spotřebovali jste {percent}% rozpočtu emisí. Spustit tento běh?",
+        "cost": "Spotřebovali jste {percent}% rozpočtu nákladů. Spustit tento běh?"
+      },
+      "stop": {
+        "emissions": "Byl dosažen bod zastavení rozpočtu emisí. Odesílání je pozastaveno do {date}.",
+        "cost": "Byl dosažen limit rozpočtu na náklady. Odesílání je pozastaveno do {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Zobrazit rozpočet",
+      "dismiss": "Zavřít",
+      "sendAnyway": "Odeslat i přesto",
+      "runAnyway": "Spustit i přesto",
+      "dontSend": "Neodesílat",
+      "dontAskToday": "Dnes se již neptat",
+      "openSettings": "Otevřít nastavení rozpočtu",
+      "edit": "Upravit"
+    },
+    "composerPaused": "Odesílání pozastaveno kvůli vašemu rozpočtu",
+    "summaryTitle": "Vaše rozpočty",
+    "chipAria": "Rozpočet {metric}: využito {percent}%.",
+    "runProjection": "Emisní rozpočet {from}% → {to}%"
   }
 }

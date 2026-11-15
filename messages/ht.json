@@ -8319,5 +8319,102 @@
       "connect": "Konekte Microsoft 365",
       "connectNote": "Ajoute soti nan OneDrive, imèl ak reyinyon"
     }
+  },
+  "usageBudgets": {
+    "title": "Bidjè ou yo",
+    "description": "Limit ou mete pou tèt ou sou aparèy sa a. Chwazi yon bidjè, epi deside sa k ap pase lè ou pwoche oswa depase li. Bidjè konte konvèsasyon ak ekzekisyon workflow depi kòmansman chak peryòd.",
+    "metric": {
+      "emissions": "Bidjè emisyon",
+      "cost": "Bidjè depans"
+    },
+    "metricShort": {
+      "emissions": "Emisyon",
+      "cost": "Depans"
+    },
+    "off": "Pa gen okenn bidjè defini.",
+    "measureAs": "Mezire li kòm",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Chaj telefòn",
+      "usd": "Dola ameriken"
+    },
+    "amountLabel": "Bidjè",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "èdtan",
+      "smartphoneCharge": "chaj",
+      "usd": "dola ameriken"
+    },
+    "periodLabel": "Reyajiste chak",
+    "period": {
+      "day": "Jou",
+      "week": "Semèn",
+      "month": "Mwa"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Estimasyon pri lis: sa a se yon limit siperyè, pa yon bòdwo.",
+    "chargesValue": "{count} chaj telefòn",
+    "percent": "{percent}%",
+    "usedOf": "{used} sou {limit} itilize ({percent}%)",
+    "usedOfShort": "{used} sou {limit}",
+    "resets": "Reyajiste {date}",
+    "budgetMarker": "Bidjè",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Anndan bidjè",
+      "warn": "Avekisman montre",
+      "ask": "Mande avan chak mesaj",
+      "stop": "Voye an poz"
+    },
+    "stage": {
+      "warn": {
+        "title": "Avekse",
+        "tag": "Avekisman",
+        "description": "Montre yon avi nan chat soti nan pousantaj sa a nan bidjè a."
+      },
+      "ask": {
+        "title": "Mande avan",
+        "tag": "Bloke mjòd",
+        "description": "Mande m konfime chak mesaj depi nivo bidjè sa a."
+      },
+      "stop": {
+        "title": "Sispann",
+        "tag": "Bloke nèt",
+        "description": "Sispann voye depi nivo sa a nan bidjè a jouk li reyajiste oswa mwen ogmante li isit la."
+      }
+    },
+    "thresholdLabel": "Limit {stage}, pousantaj bidjè",
+    "notice": {
+      "warn": {
+        "emissions": "Ou itilize {percent}% nan bidjè emisyon ou.",
+        "cost": "Ou itilize {percent}% nan bidjè depans ou."
+      },
+      "ask": {
+        "emissions": "Ou itilize {percent}% nan bidjè emisyon ou. Voye mesaj sa a?",
+        "cost": "Ou itilize {percent}% nan bidjè depans ou. Voye mesaj sa a?"
+      },
+      "askRun": {
+        "emissions": "Ou itilize {percent}% nan bidjè emisyon ou. Kòmanse ekzekisyon sa a?",
+        "cost": "Ou itilize {percent}% nan bidjè depans ou. Kòmanse ekzekisyon sa a?"
+      },
+      "stop": {
+        "emissions": "Bidjè emisyon rive nan limit. Voye an poz jouk {date}.",
+        "cost": "Limit depans pou bidjè a rive. Voye mesaj la suspend jiskaske {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Gade bidjè a",
+      "dismiss": "Fèmen",
+      "sendAnyway": "Voye kanmenm",
+      "runAnyway": "Lanse kanmenm",
+      "dontSend": "Pa voye",
+      "dontAskToday": "Pa mande ankò jodi a",
+      "openSettings": "Louvri paramèt bidjè a",
+      "edit": "Modifye"
+    },
+    "composerPaused": "Voye mesaj la sispann pa bidjè ou",
+    "summaryTitle": "Bidjè ou yo",
+    "chipAria": "Bidjè {metric}: {percent}% itilize.",
+    "runProjection": "Projè bidjè emisyon {from}% → {to}%"
   }
 }

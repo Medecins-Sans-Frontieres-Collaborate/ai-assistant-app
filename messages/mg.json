@@ -8319,5 +8319,102 @@
       "connect": "Ampifandraiso amin'ny Microsoft 365",
       "connectNote": "Ampio avy amin'ny OneDrive, mailaka sy fivoriana"
     }
+  },
+  "usageBudgets": {
+    "title": "Ny teti-bolanao",
+    "description": "Fetra napetrakao ho an'ny tenanao amin'ity fitaovana ity. Safidio ny teti-bola, dia farito izay hatao rehefa manakaiky na mihoatra azy ianao. Isaina ao anaty teti-bola ny resaka sy ny fandefasana workflow manomboka amin'ny fiandohan'ny vanim-potoana tsirairay.",
+    "metric": {
+      "emissions": "Teti-bola amin'ny entona CO₂e",
+      "cost": "Teti-bola amin'ny vola"
+    },
+    "metricShort": {
+      "emissions": "Entona CO₂e",
+      "cost": "Vola"
+    },
+    "off": "Tsy misy teti-bola napetraka.",
+    "measureAs": "Refesina amin'ny",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Famahanana finday",
+      "usd": "Dolara amerikana"
+    },
+    "amountLabel": "Teti-bola",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ora",
+      "smartphoneCharge": "famahanana",
+      "usd": "dolara amerikana"
+    },
+    "periodLabel": "Averina isaky ny",
+    "period": {
+      "day": "Andro",
+      "week": "Herinandro",
+      "month": "Volana"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Vinavinaina avy amin'ny vidy ho anisan'ny ambony indrindra, fa tsy faktiora.",
+    "chargesValue": "{count} famahanana finday",
+    "percent": "{percent}%",
+    "usedOf": "{used} amin'ny {limit} no efa lany ({percent}%)",
+    "usedOfShort": "{used} amin'ny {limit}",
+    "resets": "Averina {date}",
+    "budgetMarker": "Teti-bola",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Ao anatin'ny teti-bola",
+      "warn": "Fampitandremana naseho",
+      "ask": "Mangataka isaky ny hafatra",
+      "stop": "Naaton'ireo fandefasana"
+    },
+    "stage": {
+      "warn": {
+        "title": "Fampitandremana",
+        "tag": "Fampahafantarana",
+        "description": "Asehoy ny fampilazana ao amin'ny chat manomboka amin'ity ampahany amin'ny teti-bola ity."
+      },
+      "ask": {
+        "title": "Mangataka aloha",
+        "tag": "Sakana tsotra",
+        "description": "Mangataha fanamafisana amin'ny hafatra rehetra manomboka amin'ity ampahany amin'ny teti-bola ity."
+      },
+      "stop": {
+        "title": "Atsaharo",
+        "tag": "Sakana tanteraka",
+        "description": "Atsaharo ny fandefasana manomboka amin'ity ampahany amin'ny teti-bola ity mandra-piova na ampitomboiko eto."
+      }
+    },
+    "thresholdLabel": "Fetra {stage}, isan-jaton'ny teti-bola",
+    "notice": {
+      "warn": {
+        "emissions": "Efa lany {percent}% amin'ny teti-bolanao amin'ny entona CO₂e.",
+        "cost": "Efa lany {percent}% amin'ny teti-bolanao amin'ny vola."
+      },
+      "ask": {
+        "emissions": "Efa lany {percent}% amin'ny teti-bolanao amin'ny entona CO₂e. Alefa ity hafatra ity?",
+        "cost": "Efa lany {percent}% amin'ny teti-bolanao amin'ny vola. Alefa ity hafatra ity?"
+      },
+      "askRun": {
+        "emissions": "Efa lany {percent}% amin'ny teti-bolanao amin'ny entona CO₂e. Atomboka ity fihodinana ity?",
+        "cost": "Efa lany {percent}% amin'ny teti-bolanao amin'ny vola. Atomboka ity fihodinana ity?"
+      },
+      "stop": {
+        "emissions": "Tonga amin'ny fetra farany amin'ny teti-bola amin'ny entona CO₂e. Naatona ny fandefasana mandra-pahatongan'ny {date}.",
+        "cost": "Vita ny teti-bola amin'ny vidiny. Atsahatra ny fandefasana mandra-pahatongan'ny {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Jereo ny teti-bola",
+      "dismiss": "Apetraho",
+      "sendAnyway": "Alefa ihany",
+      "runAnyway": "Atsangano ihany",
+      "dontSend": "Aza alefa",
+      "dontAskToday": "Aza anontaniana intsony anio",
+      "openSettings": "Sokafy ny fikirakirana ny teti-bola",
+      "edit": "Ahitsio"
+    },
+    "composerPaused": "Naato noho ny teti-bolanao ny fandefasana",
+    "summaryTitle": "Ny teti-bolanao",
+    "chipAria": "Teti-bola {metric}: {percent}% voaampiasaina.",
+    "runProjection": "Teti-bola emissions {from}% → {to}%"
   }
 }

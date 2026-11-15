@@ -8335,5 +8335,102 @@
       "connect": "Conectar Microsoft 365",
       "connectNote": "Agregar desde OneDrive, correo electrónico y reuniones"
     }
+  },
+  "usageBudgets": {
+    "title": "Sus presupuestos",
+    "description": "Límites que establece para usted mismo en este dispositivo. Elija un presupuesto y luego decida qué sucede al acercarse y superarlo. Los presupuestos contabilizan los chats y ejecuciones de workflows desde el inicio de cada periodo.",
+    "metric": {
+      "emissions": "Presupuesto de emisiones",
+      "cost": "Presupuesto de costos"
+    },
+    "metricShort": {
+      "emissions": "Emisiones",
+      "cost": "Costos"
+    },
+    "off": "No hay presupuesto establecido.",
+    "measureAs": "Mídalo como",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Cargas de teléfono",
+      "usd": "Dólares estadounidenses"
+    },
+    "amountLabel": "Presupuesto",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "horas",
+      "smartphoneCharge": "cargas",
+      "usd": "Dólares estadounidenses"
+    },
+    "periodLabel": "Se restablece cada",
+    "period": {
+      "day": "Día",
+      "week": "Semana",
+      "month": "Mes"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Estimado a partir de los precios de lista: un límite superior, no una factura.",
+    "chargesValue": "{count} cargas de teléfono",
+    "percent": "{percent}%",
+    "usedOf": "{used} de {limit} usados ({percent}%)",
+    "usedOfShort": "{used} de {limit}",
+    "resets": "Se restablece {date}",
+    "budgetMarker": "Presupuesto",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Dentro del presupuesto",
+      "warn": "Aviso mostrado",
+      "ask": "Pregunta antes de cada mensaje",
+      "stop": "Envio pausado"
+    },
+    "stage": {
+      "warn": {
+        "title": "Avisar",
+        "tag": "Advertencia",
+        "description": "Mostrar un aviso en el chat desde este porcentaje del presupuesto."
+      },
+      "ask": {
+        "title": "Preguntar primero",
+        "tag": "Bloqueo suave",
+        "description": "Solicitar confirmación para cada mensaje a partir de este porcentaje del presupuesto."
+      },
+      "stop": {
+        "title": "Detener",
+        "tag": "Bloqueo total",
+        "description": "Detener el envío desde este porcentaje del presupuesto hasta que se restablezca o lo aumente aquí."
+      }
+    },
+    "thresholdLabel": "Umbral de {stage}, porcentaje del presupuesto",
+    "notice": {
+      "warn": {
+        "emissions": "Ha usado el {percent}% de su presupuesto de emisiones.",
+        "cost": "Ha usado el {percent}% de su presupuesto de costos."
+      },
+      "ask": {
+        "emissions": "Ha usado el {percent}% de su presupuesto de emisiones. ¿Enviar este mensaje?",
+        "cost": "Ha usado el {percent}% de su presupuesto de costos. ¿Enviar este mensaje?"
+      },
+      "askRun": {
+        "emissions": "Ha usado el {percent}% de su presupuesto de emisiones. ¿Iniciar esta ejecución?",
+        "cost": "Ha usado el {percent}% de su presupuesto de costos. ¿Iniciar esta ejecución?"
+      },
+      "stop": {
+        "emissions": "Punto de detención del presupuesto de emisiones alcanzado. El envío está pausado hasta {date}.",
+        "cost": "Se alcanzó el límite del presupuesto de costos. El envío está pausado hasta el {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Ver presupuesto",
+      "dismiss": "Descartar",
+      "sendAnyway": "Enviar de todas formas",
+      "runAnyway": "Ejecutar de todas formas",
+      "dontSend": "No enviar",
+      "dontAskToday": "No volver a preguntar hoy",
+      "openSettings": "Abrir configuración del presupuesto",
+      "edit": "Editar"
+    },
+    "composerPaused": "El envío está pausado por su presupuesto",
+    "summaryTitle": "Sus presupuestos",
+    "chipAria": "Presupuesto de {metric}: {percent}% utilizado.",
+    "runProjection": "Presupuesto de emisiones {from}% → {to}%"
   }
 }

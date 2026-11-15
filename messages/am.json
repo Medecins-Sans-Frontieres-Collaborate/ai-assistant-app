@@ -8335,5 +8335,102 @@
       "connect": "Microsoft 365 ያገናኙ",
       "connectNote": "ከOneDrive፣ ኢ-ሜይልና ስብሰባዎች ይያዙ"
     }
+  },
+  "usageBudgets": {
+    "title": "ባጀቶችዎ",
+    "description": "በዚህ መሣሪያ ላይ ለራስዎ የሚያዘጋጁት የገደብ ግዴታዎች ናቸው። ባጀት ይምረጡ፣ እና እያካተቱና ያልፉባት ጊዜ ምን እንደሚሆን ይወስኑ። ባጀቶች በእያንዳንዱ ጊዜ መጀመሪያ ወቅት የቻትና የወርክፍሎ እንቅስቃሴዎችን ይቆጠራሉ።",
+    "metric": {
+      "emissions": "የተለቀ ጉም ባጀት",
+      "cost": "የወጪ ባጀት"
+    },
+    "metricShort": {
+      "emissions": "ተለቀ ጉም",
+      "cost": "ወጪ"
+    },
+    "off": "ባጀት አልተቀመጠም።",
+    "measureAs": "እንደ ዚህ መለከም",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "የስልክ አንሳፋፊዎች",
+      "usd": "የአሜሪካ ዶላር"
+    },
+    "amountLabel": "ባጀት",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ሰአታት",
+      "smartphoneCharge": "ጊዜያት",
+      "usd": "የአሜሪካ ዶላር"
+    },
+    "periodLabel": "በየ... ዳግም ይቀመጣል",
+    "period": {
+      "day": "ቀን",
+      "week": "ሳምንት",
+      "month": "ወር"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "ከዝርዝር ዋጋዎች የተገመተ፡ ከፍተኛ ገደብ ነው፣ አይሁን የክፍያ ደብዳቤ አይደለም።",
+    "chargesValue": "{count} የስልክ አንሳፋፊዎች",
+    "percent": "{percent}%",
+    "usedOf": "{limit} ውስጥ {used} ተጠቅመዋል ({percent}%)",
+    "usedOfShort": "{limit} ውስጥ {used}",
+    "resets": "{date} ዳግም ይቀመጣል",
+    "budgetMarker": "ባጀት",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "በባጀት ውስጥ",
+      "warn": "ማስጠንቀቂያ ታይቷል",
+      "ask": "ለእያንዳንዱ መልእክት ማረጋገጫ ይጠየቃል",
+      "stop": "መላክ ቆመ"
+    },
+    "stage": {
+      "warn": {
+        "title": "ማስጠንቀቂያ",
+        "tag": "ማስጠንቀቂያ",
+        "description": "ከዚህ የባጀት ተግባር ጀምሮ ማስታወቂያ በቻት ውስጥ አሳይ።"
+      },
+      "ask": {
+        "title": "አስቀድሞ ጠይቅ",
+        "tag": "ማቋረጫ ቀላል",
+        "description": "ከዚህ የባጀት ተግባር ጀምሮ ለእያንዳንዱ መልእክት ማረጋገጫ ጠይቀኝ።"
+      },
+      "stop": {
+        "title": "ቆም",
+        "tag": "ከባድ መከልከያ",
+        "description": "ከዚህ የባጀት ተግባር ጀምሮ ዳግም ድረስ ወይም ከዚህ በላይ እስካሳድግ ድረስ መላክን አቁም።"
+      }
+    },
+    "thresholdLabel": "{stage} ደረጃ፣ ከባጀቱ መቶኛ",
+    "notice": {
+      "warn": {
+        "emissions": "ከየተለቀ ጉም ባጀትዎ ውስጥ {percent}% ብቻ ተጠቅመዋል።",
+        "cost": "ከየወጪ ባጀትዎ ውስጥ {percent}% ብቻ ተጠቅመዋል።"
+      },
+      "ask": {
+        "emissions": "ከየተለቀ ጉም ባጀትዎ {percent}% ተጠቅመዋል። ይህን መልእክት እንልክ?",
+        "cost": "ከየወጪ ባጀትዎ {percent}% ተጠቅመዋል። ይህን መልእክት እንልክ?"
+      },
+      "askRun": {
+        "emissions": "ከየተለቀ ጉም ባጀትዎ {percent}% ተጠቅመዋል። ይህን ውጤት እንጀምር?",
+        "cost": "ከየወጪ ባጀትዎ {percent}% ተጠቅመዋል። ይህን ውጤት እንጀምር?"
+      },
+      "stop": {
+        "emissions": "የተለቀ ጉም ባጀት ማቆሚያ ነጥብ ደርሷል። ማስተላለፍ እስከ {date} ድረስ ቆሟል።",
+        "cost": "የወጪ በጀት የቆም ነጥብ ደርሷል። ልክ እስከ {date} ድረስ ቆልፏል።"
+      }
+    },
+    "actions": {
+      "viewBudget": "በጀቱን ይመልከቱ",
+      "dismiss": "ያጠፉ",
+      "sendAnyway": "አያግኙ፤ ልኩን",
+      "runAnyway": "አያግኙ፤ አስኪዩ",
+      "dontSend": "አትልኩ",
+      "dontAskToday": "ዛሬ አይጠይቁኝ",
+      "openSettings": "የበጀት ቅንብሮችን ይክፈቱ",
+      "edit": "ያርታሙ"
+    },
+    "composerPaused": "ልኩ በበጀትዎ ቆልፏል",
+    "summaryTitle": "በጀቶችዎ",
+    "chipAria": "{metric} በጀት፡ {percent}% ተጠቅመዋል።",
+    "runProjection": "የተፈጠረ በጀት {from}% → {to}%"
   }
 }

@@ -8335,5 +8335,102 @@
       "connect": "Collega Microsoft 365",
       "connectNote": "Aggiungi da OneDrive, email e riunioni"
     }
+  },
+  "usageBudgets": {
+    "title": "I tuoi budget",
+    "description": "Limiti che imposti per te stesso su questo dispositivo. Scegli un budget, poi decidi cosa succede quando ti avvicini o superi il limite. I budget includono chat e avvii dei workflow dall'inizio di ogni periodo.",
+    "metric": {
+      "emissions": "Budget emissioni",
+      "cost": "Budget costi"
+    },
+    "metricShort": {
+      "emissions": "Emissioni",
+      "cost": "Costi"
+    },
+    "off": "Nessun budget impostato.",
+    "measureAs": "Misuralo come",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Ricariche telefono",
+      "usd": "Dollari USA"
+    },
+    "amountLabel": "Budget",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ore",
+      "smartphoneCharge": "ricariche",
+      "usd": "Dollari USA"
+    },
+    "periodLabel": "Si azzera ogni",
+    "period": {
+      "day": "Giorno",
+      "week": "Settimana",
+      "month": "Mese"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Stima basata sui prezzi di listino: è un limite massimo, non una fattura.",
+    "chargesValue": "{count} ricariche telefono",
+    "percent": "{percent}%",
+    "usedOf": "{used} su {limit} usati ({percent}%)",
+    "usedOfShort": "{used} su {limit}",
+    "resets": "Si azzera il {date}",
+    "budgetMarker": "Budget",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Entro il budget",
+      "warn": "Avviso visualizzato",
+      "ask": "Richiesta prima di ogni messaggio",
+      "stop": "Invio in pausa"
+    },
+    "stage": {
+      "warn": {
+        "title": "Avviso",
+        "tag": "Preavviso",
+        "description": "Mostra un avviso nella chat a partire da questa quota del budget."
+      },
+      "ask": {
+        "title": "Chiedi prima",
+        "tag": "Blocco soft",
+        "description": "Chiedi conferma per ogni messaggio da questa quota di budget."
+      },
+      "stop": {
+        "title": "Blocca",
+        "tag": "Blocco totale",
+        "description": "Blocca l'invio da questa quota di budget finché non si azzera o lo aumento qui."
+      }
+    },
+    "thresholdLabel": "Soglia {stage}, percentuale del budget",
+    "notice": {
+      "warn": {
+        "emissions": "Hai utilizzato il {percent}% del tuo budget emissioni.",
+        "cost": "Hai utilizzato il {percent}% del tuo budget costi."
+      },
+      "ask": {
+        "emissions": "Hai utilizzato il {percent}% del tuo budget emissioni. Invia questo messaggio?",
+        "cost": "Hai utilizzato il {percent}% del tuo budget costi. Invia questo messaggio?"
+      },
+      "askRun": {
+        "emissions": "Hai utilizzato il {percent}% del tuo budget emissioni. Avvia questa esecuzione?",
+        "cost": "Hai utilizzato il {percent}% del tuo budget costi. Avvia questa esecuzione?"
+      },
+      "stop": {
+        "emissions": "Raggiunto il limite del budget emissioni. Invio in pausa fino al {date}.",
+        "cost": "Raggiunto il limite del budget per i costi. L'invio è in pausa fino al {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Visualizza budget",
+      "dismiss": "Ignora",
+      "sendAnyway": "Invia comunque",
+      "runAnyway": "Esegui comunque",
+      "dontSend": "Non inviare",
+      "dontAskToday": "Non chiedere di nuovo oggi",
+      "openSettings": "Apri impostazioni budget",
+      "edit": "Modifica"
+    },
+    "composerPaused": "Invio in pausa a causa del tuo budget",
+    "summaryTitle": "I tuoi budget",
+    "chipAria": "Budget {metric}: utilizzato il {percent}%.",
+    "runProjection": "Budget emissioni {from}% → {to}%"
   }
 }

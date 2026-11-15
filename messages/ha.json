@@ -8319,5 +8319,102 @@
       "connect": "Haɗa Microsoft 365",
       "connectNote": "Ƙara daga OneDrive, imel da taron"
     }
+  },
+  "usageBudgets": {
+    "title": "Kudaden kasafin ku",
+    "description": "Iyakar da kuka sa wa kanku a wannan na'ura. Zaɓi kasafi, sannan zaɓi abin da zai faru lokacin da kuka kusanci ko wuce iyakar. Kasafin yana ƙididdige yawan hira da aikin workflow tun farkon kowanne lokaci.",
+    "metric": {
+      "emissions": "Kasafin hayaki",
+      "cost": "Kasafin kuɗi"
+    },
+    "metricShort": {
+      "emissions": "Hayaki",
+      "cost": "Kuɗi"
+    },
+    "off": "Ba a saita kasafi ba.",
+    "measureAs": "Auna shi azaman",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Cajin waya",
+      "usd": "Dalar Amurka"
+    },
+    "amountLabel": "Kasafi",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "awanni",
+      "smartphoneCharge": "caji",
+      "usd": "Dalar Amurka"
+    },
+    "periodLabel": "Ana sake saiti kowane",
+    "period": {
+      "day": "Rana",
+      "week": "Mako",
+      "month": "Wata"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Kimanta daga farashin da aka jera: iyaka mafi girma, ba lissafi ba.",
+    "chargesValue": "{count} caji na waya",
+    "percent": "{percent}%",
+    "usedOf": "An yi amfani da {used} daga cikin {limit} ({percent}%)",
+    "usedOfShort": "{used} daga cikin {limit}",
+    "resets": "Ana sake saiti {date}",
+    "budgetMarker": "Kasafi",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "A cikin kasafi",
+      "warn": "An nuna gargadi",
+      "ask": "Ana tambaya kafin kowane saƙo",
+      "stop": "An dakatar da aikawa"
+    },
+    "stage": {
+      "warn": {
+        "title": "Gargadi",
+        "tag": "Sanarwa",
+        "description": "Nuna sanarwa a hira daga wannan kaso na kasafin."
+      },
+      "ask": {
+        "title": "Tambaya da farko",
+        "tag": "Tsare mai laushi",
+        "description": "A tambaye ni in tabbatar da kowane saƙo daga wannan kaso na kasafin."
+      },
+      "stop": {
+        "title": "Tsaya",
+        "tag": "Tsare mai ƙarfi",
+        "description": "Dakatar da aikawa daga wannan kaso na kasafin har sai an sake saiti ko na ƙara kasafi a nan."
+      }
+    },
+    "thresholdLabel": "Matakan {stage}, kashi na kasafi",
+    "notice": {
+      "warn": {
+        "emissions": "Kun yi amfani da {percent}% na kasafin hayakin ku.",
+        "cost": "Kun yi amfani da {percent}% na kasafin kuɗin ku."
+      },
+      "ask": {
+        "emissions": "Kun yi amfani da {percent}% na kasafin hayakin ku. A tura wannan saƙon?",
+        "cost": "Kun yi amfani da {percent}% na kasafin kuɗin ku. A tura wannan saƙon?"
+      },
+      "askRun": {
+        "emissions": "Kun yi amfani da {percent}% na kasafin hayakin ku. A fara wannan aiki?",
+        "cost": "Kun yi amfani da {percent}% na kasafin kuɗin ku. A fara wannan aiki?"
+      },
+      "stop": {
+        "emissions": "An kai iyakar hayakin kasafi. An dakatar da aikawa har sai {date}.",
+        "cost": "An kai iyakar kasafin kuɗi. An dakatar da aika saƙonni har sai {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Duba kasafin kuɗi",
+      "dismiss": "Rufe",
+      "sendAnyway": "Aika duk da haka",
+      "runAnyway": "Gudu duk da haka",
+      "dontSend": "Kada a aika",
+      "dontAskToday": "Kada a tambaya yau",
+      "openSettings": "Buɗe saitunan kasafin kuɗi",
+      "edit": "Gyara"
+    },
+    "composerPaused": "Aika ya tsaya saboda kasafin kuɗi",
+    "summaryTitle": "Kasafin kuɗinku",
+    "chipAria": "Kasafin {metric}: an yi amfani da {percent}%.",
+    "runProjection": "Kasafin hayaƙi {from}% → {to}%"
   }
 }

@@ -8319,5 +8319,102 @@
       "connect": "Microsoft 365 ኣታሓባ",
       "connectNote": "ኣብ OneDrive፣ ኢመይልን ምዕራፍን ወሰን"
     }
+  },
+  "usageBudgets": {
+    "title": "ባጀታትካ",
+    "description": "በዚ መሳርያ ዝምስላካ ዝሓዘካ ኣቀማጣ. ባጀታ ትፍለጥ፡ ካብታ ዘጠገንካን ዘርፉካን ግንዛብ ትርገም. ባጀታት chat ን፡ workflow ዝምልከት ካብ መጀመሪ ምድግጋዊ ዝኸውን ይቍጽጽ.",
+    "metric": {
+      "emissions": "ባጀታ ናይ ኤሚሽን",
+      "cost": "ባጀታ ናይ ወጽኢ"
+    },
+    "metricShort": {
+      "emissions": "ኤሚሽን",
+      "cost": "ወጽኢ"
+    },
+    "off": "ባጀታ ዘሰተወ የለወ.",
+    "measureAs": "እንተኾነ ትንስስ",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "ሓመድ ስልኪ",
+      "usd": "US dollars"
+    },
+    "amountLabel": "ባጀታ",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ሰዓታት",
+      "smartphoneCharge": "ሓመድ",
+      "usd": "US dollars"
+    },
+    "periodLabel": "ምድግጋዊ የተሓሓዘ",
+    "period": {
+      "day": "መዓልቲ",
+      "week": "ሰገራ",
+      "month": "ወርሒ"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "ካብ ተመደበ ዋጋታት ተገምግምቲ፡ ከም ዝተሓዘ ዋጋ ኣይተቢል ኣይኮነን.",
+    "chargesValue": "{count} ሓመድ ስልኪ",
+    "percent": "{percent}%",
+    "usedOf": "{used} ካብ {limit} ተጠቒሙ ({percent}%)",
+    "usedOfShort": "{used} ካብ {limit}",
+    "resets": "{date} ዝምድግጋዊ",
+    "budgetMarker": "ባጀታ",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "ክሳብ ባጀታ ይግበሩ",
+      "warn": "ማሕተም ተሃዘ",
+      "ask": "ካብ መልእኽት እትሕተት ትሕፀ",
+      "stop": "ምልኣኽ ዕጽበየ"
+    },
+    "stage": {
+      "warn": {
+        "title": "ማሕተም",
+        "tag": "ምግባን",
+        "description": "ካብ እዚ ክፍሊ ባጀታ ዝሕበ ማሕተም ብchat ኣርእይ."
+      },
+      "ask": {
+        "title": "ቅድሚ ምልኣኽ ይብል",
+        "tag": "ዝንጉዓይ ምሕታም",
+        "description": "ካብ እዚ ክፍሊ ባጀታ ኣብ መልእኽት ኩሉ ክርግዝ ይቕጽጽ."
+      },
+      "stop": {
+        "title": "አትዕ",
+        "tag": "ዝቃኑዕ ምሕታም",
+        "description": "ካብ እዚ ክፍሊ ባጀታ ዝካየድ ምልኣኽ ክዕጽበይ ድሕሪ ዝምድግጋዊ ወይ ምምዕመን ነዚ መዳረይ."
+      }
+    },
+    "thresholdLabel": "{stage} ሰኣን ዝኣኽለ ባጀታ ፐርሰንት",
+    "notice": {
+      "warn": {
+        "emissions": "{percent}% ናይ ኤሚሽን ባጀታትካ ተጠቂሙ.",
+        "cost": "{percent}% ናይ ወጽኢ ባጀታትካ ተጠቂሙ."
+      },
+      "ask": {
+        "emissions": "{percent}% ናይ ኤሚሽን ባጀታትካ ተጠቒሙ. እዚ መልእኽቲ ክተልኣኽ?",
+        "cost": "{percent}% ናይ ወጽኢ ባጀታትካ ተጠቒሙ. እዚ መልእኽቲ ክተልኣኽ?"
+      },
+      "askRun": {
+        "emissions": "{percent}% ናይ ኤሚሽን ባጀታትካ ተጠቒሙ. እዚ ምልኣኽ ክትጀመር?",
+        "cost": "{percent}% ናይ ወጽኢ ባጀታትካ ተጠቒሙ. እዚ ምልኣኽ ክትጀመር?"
+      },
+      "stop": {
+        "emissions": "ደረበ ናይ ኤሚሽን ባጀታ አትዕ ቦታ ኣኸበል. ምልኣኽ ክዕጽበይ ክሳብ {date}.",
+        "cost": "ናይ ወጪ ባጀት ዝወደደ ነገር ተረኺቡ። መልኣኽ ክተላእኽ ገይሩ ኣብ {date} ድማ ይጸንቕ።"
+      }
+    },
+    "actions": {
+      "viewBudget": "ባጀት ርእየ",
+      "dismiss": "ጥፍኣ",
+      "sendAnyway": "እንተዘይ ተኽእሎ ልኣ",
+      "runAnyway": "ብሕንዳ ግድፍ",
+      "dontSend": "ዘይ ልኣ",
+      "dontAskToday": "ሎሚ ደሓን አትጠይቕ",
+      "openSettings": "ባጀት ምቅላዕ settings ክፈት",
+      "edit": "ኣርባ"
+    },
+    "composerPaused": "ብባጀትካ ምልኣኽ ተጸንቐ",
+    "summaryTitle": "ባጀቶትካ",
+    "chipAria": "{metric} ባጀት፡ {percent}% ተጠቓሚ ይሕሸ.",
+    "runProjection": "ዝኸደ ባጀት ምፍላጥ {from}% → {to}%"
   }
 }

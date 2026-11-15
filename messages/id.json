@@ -8335,5 +8335,102 @@
       "connect": "Hubungkan Microsoft 365",
       "connectNote": "Tambah dari OneDrive, email, dan rapat"
     }
+  },
+  "usageBudgets": {
+    "title": "Anggaran Anda",
+    "description": "Batas yang Anda tetapkan sendiri pada perangkat ini. Pilih anggaran, lalu tentukan tindakan saat Anda mendekati dan melewati batas tersebut. Anggaran menghitung chat dan proses workflow dari awal setiap periode.",
+    "metric": {
+      "emissions": "Anggaran emisi",
+      "cost": "Anggaran biaya"
+    },
+    "metricShort": {
+      "emissions": "Emisi",
+      "cost": "Biaya"
+    },
+    "off": "Tidak ada anggaran yang ditetapkan.",
+    "measureAs": "Ukur sebagai",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Pengisian telepon",
+      "usd": "Dolar AS"
+    },
+    "amountLabel": "Anggaran",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "jam",
+      "smartphoneCharge": "kali pengisian",
+      "usd": "Dolar AS"
+    },
+    "periodLabel": "Reset setiap",
+    "period": {
+      "day": "Hari",
+      "week": "Minggu",
+      "month": "Bulan"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Perkiraan dari harga daftar: batas atas, bukan tagihan.",
+    "chargesValue": "{count} kali pengisian telepon",
+    "percent": "{percent}%",
+    "usedOf": "{used} dari {limit} telah digunakan ({percent}%)",
+    "usedOfShort": "{used} dari {limit}",
+    "resets": "Reset {date}",
+    "budgetMarker": "Anggaran",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Dalam anggaran",
+      "warn": "Peringatan ditampilkan",
+      "ask": "Konfirmasi sebelum setiap pesan",
+      "stop": "Pengiriman dijeda"
+    },
+    "stage": {
+      "warn": {
+        "title": "Peringatkan",
+        "tag": "Pemberitahuan",
+        "description": "Tampilkan pemberitahuan di chat mulai dari bagian anggaran ini."
+      },
+      "ask": {
+        "title": "Konfirmasi terlebih dahulu",
+        "tag": "Blokir lunak",
+        "description": "Minta konfirmasi untuk setiap pesan mulai dari bagian anggaran ini."
+      },
+      "stop": {
+        "title": "Hentikan",
+        "tag": "Blokir keras",
+        "description": "Pengiriman dihentikan dari bagian anggaran ini sampai anggaran di-reset atau dinaikkan di sini."
+      }
+    },
+    "thresholdLabel": "Ambang {stage}, persen dari anggaran",
+    "notice": {
+      "warn": {
+        "emissions": "Anda telah menggunakan {percent}% dari anggaran emisi Anda.",
+        "cost": "Anda telah menggunakan {percent}% dari anggaran biaya Anda."
+      },
+      "ask": {
+        "emissions": "Anda telah menggunakan {percent}% dari anggaran emisi Anda. Kirim pesan ini?",
+        "cost": "Anda telah menggunakan {percent}% dari anggaran biaya Anda. Kirim pesan ini?"
+      },
+      "askRun": {
+        "emissions": "Anda telah menggunakan {percent}% dari anggaran emisi Anda. Mulai proses ini?",
+        "cost": "Anda telah menggunakan {percent}% dari anggaran biaya Anda. Mulai proses ini?"
+      },
+      "stop": {
+        "emissions": "Titik stop anggaran emisi tercapai. Pengiriman dijeda hingga {date}.",
+        "cost": "Titik batas anggaran biaya telah tercapai. Pengiriman dijeda hingga {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Lihat anggaran",
+      "dismiss": "Tutup",
+      "sendAnyway": "Kirim tetap",
+      "runAnyway": "Jalankan tetap",
+      "dontSend": "Jangan kirim",
+      "dontAskToday": "Jangan tanya lagi hari ini",
+      "openSettings": "Buka pengaturan anggaran",
+      "edit": "Edit"
+    },
+    "composerPaused": "Pengiriman dijeda oleh anggaran Anda",
+    "summaryTitle": "Anggaran Anda",
+    "chipAria": "Anggaran {metric}: {percent}% digunakan.",
+    "runProjection": "Anggaran emisi {from}% → {to}%"
   }
 }

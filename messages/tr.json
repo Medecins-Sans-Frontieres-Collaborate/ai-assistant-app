@@ -8335,5 +8335,102 @@
       "connect": "Microsoft 365'e bağlan",
       "connectNote": "OneDrive, e-posta ve toplantılardan ekle"
     }
+  },
+  "usageBudgets": {
+    "title": "Bütçeleriniz",
+    "description": "Bu cihazda kendiniz için belirlediğiniz sınırlar. Bir bütçe seçin, ardından ona yaklaştıkça ve geçtiğinizde ne olacağını belirleyin. Bütçeler, her dönemin başından itibaren sohbet ve iş akışı çalıştırmalarını sayar.",
+    "metric": {
+      "emissions": "Emisyon bütçesi",
+      "cost": "Maliyet bütçesi"
+    },
+    "metricShort": {
+      "emissions": "Emisyon",
+      "cost": "Maliyet"
+    },
+    "off": "Bütçe ayarlanmadı.",
+    "measureAs": "Şu ölçüyle",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Telefon şarjı",
+      "usd": "ABD doları"
+    },
+    "amountLabel": "Bütçe",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "saat",
+      "smartphoneCharge": "şarj",
+      "usd": "ABD doları"
+    },
+    "periodLabel": "Her seferinde sıfırlanır",
+    "period": {
+      "day": "Gün",
+      "week": "Hafta",
+      "month": "Ay"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Liste fiyatlarından tahmini: üst sınırdır, fatura değildir.",
+    "chargesValue": "{count} telefon şarjı",
+    "percent": "{percent}%",
+    "usedOf": "{limit} üzerinden {used} kullanıldı ({percent}%)",
+    "usedOfShort": "{limit} üzerinden {used}",
+    "resets": "{date} tarihinde sıfırlanır",
+    "budgetMarker": "Bütçe",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Bütçe dahilinde",
+      "warn": "Uyarı gösterildi",
+      "ask": "Her mesajdan önce soruluyor",
+      "stop": "Gönderme duraklatıldı"
+    },
+    "stage": {
+      "warn": {
+        "title": "Uyar",
+        "tag": "Bilgilendirme",
+        "description": "Bütçenin bu oranında sohbet içi bildirim göster."
+      },
+      "ask": {
+        "title": "Önce sor",
+        "tag": "Yumuşak engel",
+        "description": "Bütçenin bu oranında her mesajı onaylamamı iste."
+      },
+      "stop": {
+        "title": "Durdur",
+        "tag": "Kesin engel",
+        "description": "Bütçenin bu oranında gönderme, sıfırlanana veya burada artırılana kadar durur."
+      }
+    },
+    "thresholdLabel": "{stage} eşiği, bütçenin yüzdesi",
+    "notice": {
+      "warn": {
+        "emissions": "Emisyon bütçenizin %{percent}'ini kullandınız.",
+        "cost": "Maliyet bütçenizin %{percent}'ini kullandınız."
+      },
+      "ask": {
+        "emissions": "Emisyon bütçenizin %{percent}'ini kullandınız. Bu mesaj gönderilsin mi?",
+        "cost": "Maliyet bütçenizin %{percent}'ini kullandınız. Bu mesaj gönderilsin mi?"
+      },
+      "askRun": {
+        "emissions": "Emisyon bütçenizin %{percent}'ini kullandınız. Bu çalıştırmayı başlatmak ister misiniz?",
+        "cost": "Maliyet bütçenizin %{percent}'ini kullandınız. Bu çalıştırmayı başlatmak ister misiniz?"
+      },
+      "stop": {
+        "emissions": "Emisyon bütçesi durma noktasına ulaşıldı. Gönderme {date} tarihine kadar duraklatıldı.",
+        "cost": "Maliyet bütçesi durma noktasına ulaşıldı. Gönderim {date} tarihine kadar duraklatıldı."
+      }
+    },
+    "actions": {
+      "viewBudget": "Bütçeyi görüntüle",
+      "dismiss": "Kapat",
+      "sendAnyway": "Yine de gönder",
+      "runAnyway": "Yine de çalıştır",
+      "dontSend": "Gönderme",
+      "dontAskToday": "Bugün tekrar sorma",
+      "openSettings": "Bütçe ayarlarını aç",
+      "edit": "Düzenle"
+    },
+    "composerPaused": "Gönderim bütçeniz tarafından duraklatıldı",
+    "summaryTitle": "Bütçeleriniz",
+    "chipAria": "{metric} bütçesi: %{percent} kullanıldı.",
+    "runProjection": "Emisyon bütçesi %{from} → %{to}"
   }
 }

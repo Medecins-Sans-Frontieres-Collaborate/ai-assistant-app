@@ -8319,5 +8319,102 @@
       "connect": "Kokangisa Microsoft 365",
       "connectNote": "Kobakisa uta OneDrive, email mpe bapanzi"
     }
+  },
+  "usageBudgets": {
+    "title": "Budget na yo",
+    "description": "Otomisi bisika na yo moko na ekiti oyo. Pona budget, sima pona likambo ekosalema soki oyekoli to koleka yango. Budget ezali kompa ba chat na ba workflow oyo ebandi na ebandeli ya etando moko na moko.",
+    "metric": {
+      "emissions": "Budget ya émissions",
+      "cost": "Budget ya motuya"
+    },
+    "metricShort": {
+      "emissions": "Émissions",
+      "cost": "Motuya"
+    },
+    "off": "Budget esalemi te.",
+    "measureAs": "Tala yango lokola",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Chargement ya telefone",
+      "usd": "Mbongo ya US"
+    },
+    "amountLabel": "Budget",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ngonga",
+      "smartphoneCharge": "ba chargements",
+      "usd": "Mbongo ya US"
+    },
+    "periodLabel": "Ekomipekisa sikoyo",
+    "period": {
+      "day": "Mokolo",
+      "week": "Semɛne",
+      "month": "Sańzá"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Esengeli kotala na motuya ya libanda: eleki naino efuti te.",
+    "chargesValue": "{count} chargement ya telefone",
+    "percent": "{percent}%",
+    "usedOf": "{used} na kati ya {limit} esalemi ({percent}%)",
+    "usedOfShort": "{used} na {limit}",
+    "resets": "Ekomipekisa {date}",
+    "budgetMarker": "Budget",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Ozali na kati ya budget",
+      "warn": "Avɛrtisɛman emonisami",
+      "ask": "Kotuna liboso ya mokanda moko na moko",
+      "stop": "Kotisaka epai epasi"
+    },
+    "stage": {
+      "warn": {
+        "title": "Avertir",
+        "tag": "Esengo liboso",
+        "description": "Ekomonisa liyebisi na chat soki okuisi etando oyo ya budget."
+      },
+      "ask": {
+        "title": "Tuná liboso",
+        "tag": "Kobatela polele",
+        "description": "Kotuna ngai pona ndingisa ya mokanda na mokanda banda okomi na etando oyo ya budget."
+      },
+      "stop": {
+        "title": "Koma",
+        "tag": "Kobatela makasi",
+        "description": "Kotisaka epai epasi banda okomi na etando oyo ya budget ti ekomipekisi to natomboli yango awa."
+      }
+    },
+    "thresholdLabel": "{stage} threshold, pourcentage ya budget",
+    "notice": {
+      "warn": {
+        "emissions": "Osaleli {percent}% ya budget na yo ya émissions.",
+        "cost": "Osaleli {percent}% ya budget na yo ya motuya."
+      },
+      "ask": {
+        "emissions": "Osaleli {percent}% ya budget na yo ya émissions. Kotinda mokanda oyo?",
+        "cost": "Osaleli {percent}% ya budget na yo ya motuya. Kotinda mokanda oyo?"
+      },
+      "askRun": {
+        "emissions": "Osaleli {percent}% ya budget na yo ya émissions. Kobanda {percent}?",
+        "cost": "Osaleli {percent}% ya budget na yo ya motuya. Kobanda {percent}?"
+      },
+      "stop": {
+        "emissions": "Esíká ya kotelema na budget ya émissions ekomi. Kotinda eboyi ti {date}.",
+        "cost": "Point d'arrêt ya budget ya malamu ebimeli. Kotinda ekomi kozwama tii na {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Luka budget",
+      "dismiss": "Longola",
+      "sendAnyway": "Tinda kaka",
+      "runAnyway": "Tungisa kaka",
+      "dontSend": "Kotinda te",
+      "dontAskToday": "Koluka lisusu te lelo",
+      "openSettings": "Fungola ba paramètres ya budget",
+      "edit": "Edita"
+    },
+    "composerPaused": "Kotinda epekisami na budget na yo",
+    "summaryTitle": "Ba budget na yo",
+    "chipAria": "Budget ya {metric}: {percent}% esalami.",
+    "runProjection": "Budget ya émissions {from}% → {to}%"
   }
 }

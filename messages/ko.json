@@ -8335,5 +8335,102 @@
       "connect": "Microsoft 365 연결",
       "connectNote": "OneDrive, 이메일, 회의에서 추가"
     }
+  },
+  "usageBudgets": {
+    "title": "예산",
+    "description": "이 기기에서 스스로 설정한 한도입니다. 예산을 선택한 후, 해당 예산에 가까워지거나 초과할 때 할 일을 선택하세요. 예산은 각 기간의 시작부터 채팅과 워크플로우 실행 횟수를 집계합니다.",
+    "metric": {
+      "emissions": "배출 한도",
+      "cost": "비용 한도"
+    },
+    "metricShort": {
+      "emissions": "배출",
+      "cost": "비용"
+    },
+    "off": "예산이 설정되지 않았습니다.",
+    "measureAs": "측정 단위",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "휴대폰 충전",
+      "usd": "미국 달러"
+    },
+    "amountLabel": "예산",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "시간",
+      "smartphoneCharge": "회",
+      "usd": "미국 달러"
+    },
+    "periodLabel": "매 기간마다 초기화",
+    "period": {
+      "day": "일",
+      "week": "주",
+      "month": "월"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "정가 기준 추정치입니다. 청구 금액이 아닌 최대값입니다.",
+    "chargesValue": "{count}회 휴대폰 충전",
+    "percent": "{percent}%",
+    "usedOf": "총 {limit} 중 {used} 사용됨 ({percent}%)",
+    "usedOfShort": "총 {limit} 중 {used}",
+    "resets": "{date}에 초기화",
+    "budgetMarker": "예산",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "예산 내 사용",
+      "warn": "경고 표시",
+      "ask": "매 메시지마다 확인 요청",
+      "stop": "전송 일시 중지"
+    },
+    "stage": {
+      "warn": {
+        "title": "경고",
+        "tag": "알림",
+        "description": "해당 예산 비율부터 채팅에 알림을 표시합니다."
+      },
+      "ask": {
+        "title": "확인 요청",
+        "tag": "임시 차단",
+        "description": "해당 예산 비율부터 모든 메시지에 대해 확인을 요청합니다."
+      },
+      "stop": {
+        "title": "중지",
+        "tag": "완전 차단",
+        "description": "해당 예산 비율부터 초기화되거나 예산을 올릴 때까지 전송이 중지됩니다."
+      }
+    },
+    "thresholdLabel": "{stage} 임계값, 예산 비율",
+    "notice": {
+      "warn": {
+        "emissions": "배출 예산의 {percent}%를 사용했습니다.",
+        "cost": "비용 예산의 {percent}%를 사용했습니다."
+      },
+      "ask": {
+        "emissions": "배출 예산의 {percent}%를 사용했습니다. 이 메시지를 보내시겠습니까?",
+        "cost": "비용 예산의 {percent}%를 사용했습니다. 이 메시지를 보내시겠습니까?"
+      },
+      "askRun": {
+        "emissions": "배출 예산의 {percent}%를 사용했습니다. 이 실행을 시작하시겠습니까?",
+        "cost": "비용 예산의 {percent}%를 사용했습니다. 이 실행을 시작하시겠습니까?"
+      },
+      "stop": {
+        "emissions": "배출 예산 중지점에 도달했습니다. {date}까지 전송이 일시 중지됩니다.",
+        "cost": "비용 예산 한도에 도달했습니다. {date}까지 전송이 일시 중지됩니다."
+      }
+    },
+    "actions": {
+      "viewBudget": "예산 보기",
+      "dismiss": "닫기",
+      "sendAnyway": "그래도 보내기",
+      "runAnyway": "그래도 실행하기",
+      "dontSend": "보내지 않기",
+      "dontAskToday": "오늘 더 이상 묻지 않기",
+      "openSettings": "예산 설정 열기",
+      "edit": "편집"
+    },
+    "composerPaused": "예산에 의해 전송이 일시 중지됨",
+    "summaryTitle": "내 예산",
+    "chipAria": "{metric} 예산: {percent}% 사용됨.",
+    "runProjection": "배출 예산 {from}% → {to}%"
   }
 }

@@ -8335,5 +8335,102 @@
       "connect": "Anslut Microsoft 365",
       "connectNote": "Lägg till från OneDrive, e-post och möten"
     }
+  },
+  "usageBudgets": {
+    "title": "Dina budgetar",
+    "description": "Gränser du har satt på den här enheten. Välj en budget och bestäm sedan vad som ska hända när du närmar dig eller passerar den. Budgetar räknar chatt- och arbetsflödeskörningar från periodens början.",
+    "metric": {
+      "emissions": "Utsläppsbudget",
+      "cost": "Kostnadsbudget"
+    },
+    "metricShort": {
+      "emissions": "Utsläpp",
+      "cost": "Kostnad"
+    },
+    "off": "Ingen budget vald.",
+    "measureAs": "Mät som",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Mobilladdningar",
+      "usd": "US dollar"
+    },
+    "amountLabel": "Budget",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "timmar",
+      "smartphoneCharge": "laddningar",
+      "usd": "US dollar"
+    },
+    "periodLabel": "Återställs varje",
+    "period": {
+      "day": "Dag",
+      "week": "Vecka",
+      "month": "Månad"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Uträkning från listpriser: ett tak, inte en faktura.",
+    "chargesValue": "{count} mobilladdningar",
+    "percent": "{percent}%",
+    "usedOf": "{used} av {limit} använt ({percent}%)",
+    "usedOfShort": "{used} av {limit}",
+    "resets": "Återställs {date}",
+    "budgetMarker": "Budget",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Inom budget",
+      "warn": "Varning visad",
+      "ask": "Fråga före varje meddelande",
+      "stop": "Skickande pausat"
+    },
+    "stage": {
+      "warn": {
+        "title": "Varning",
+        "tag": "Tänk på",
+        "description": "Visa en avisering i chatten från denna del av budgeten."
+      },
+      "ask": {
+        "title": "Fråga först",
+        "tag": "Mjuk blockering",
+        "description": "Be mig bekräfta varje meddelande från denna del av budgeten."
+      },
+      "stop": {
+        "title": "Stoppa",
+        "tag": "Hård blockering",
+        "description": "Sluta skicka från denna del av budgeten tills den återställs eller jag höjer den här."
+      }
+    },
+    "thresholdLabel": "{stage}-tröskel, procent av budget",
+    "notice": {
+      "warn": {
+        "emissions": "Du har använt {percent}% av din utsläppsbudget.",
+        "cost": "Du har använt {percent}% av din kostnadsbudget."
+      },
+      "ask": {
+        "emissions": "Du har använt {percent}% av din utsläppsbudget. Skicka detta meddelande?",
+        "cost": "Du har använt {percent}% av din kostnadsbudget. Skicka detta meddelande?"
+      },
+      "askRun": {
+        "emissions": "Du har använt {percent}% av din utsläppsbudget. Starta denna körning?",
+        "cost": "Du har använt {percent}% av din kostnadsbudget. Starta denna körning?"
+      },
+      "stop": {
+        "emissions": "Utsläppsbudgetens stoppunkt nådd. Skickande är pausat till {date}.",
+        "cost": "Kostnadsbudgetens stoppunkt har nåtts. Utskick är pausat till {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Visa budget",
+      "dismiss": "Avfärda",
+      "sendAnyway": "Skicka ändå",
+      "runAnyway": "Kör ändå",
+      "dontSend": "Skicka inte",
+      "dontAskToday": "Fråga inte igen idag",
+      "openSettings": "Öppna budgetinställningar",
+      "edit": "Redigera"
+    },
+    "composerPaused": "Utskick pausat av din budget",
+    "summaryTitle": "Dina budgetar",
+    "chipAria": "{metric}-budget: {percent}% använt.",
+    "runProjection": "Utsläppsbudget {from}% → {to}%"
   }
 }

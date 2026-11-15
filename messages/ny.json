@@ -8319,5 +8319,102 @@
       "connect": "Lumikizani Microsoft 365",
       "connectNote": "Onjezerani ku OneDrive, imelo ndi misonkhano"
     }
+  },
+  "usageBudgets": {
+    "title": "Bajeti zanu",
+    "description": "Malire omwe mwadziikira pa chipangizo ichi. Sankhani bajeti, kenako mudziwe zomwe zichitike mukayandikira kapena kupitirira malirewo. Bajeti imawerengera macheza ndi ntchito kuyambira pachiyambi cha nthawi iliyonse.",
+    "metric": {
+      "emissions": "Bajeti ya mpweya",
+      "cost": "Bajeti yamtengo"
+    },
+    "metricShort": {
+      "emissions": "Mpweya",
+      "cost": "Mtengo"
+    },
+    "off": "Bajeti silinakhazikitsidwe.",
+    "measureAs": "Yezani monga",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Kuyitanitsa foni",
+      "usd": "Madola a US"
+    },
+    "amountLabel": "Bajeti",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "maola",
+      "smartphoneCharge": "kuyitanitsa",
+      "usd": "Madola a US"
+    },
+    "periodLabel": "Imazera nthawi iliyonse",
+    "period": {
+      "day": "Tsiku",
+      "week": "Sabata",
+      "month": "Mwezi"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Kuwerengera kutengera mitengo ya m'gulu: malire apamwamba, osati bilu yeniyeni.",
+    "chargesValue": "{count} kuyitanitsa foni",
+    "percent": "{percent}%",
+    "usedOf": "{used} mwa {limit} wagwiritsidwa ntchito ({percent}%)",
+    "usedOfShort": "{used} mwa {limit}",
+    "resets": "Imazera {date}",
+    "budgetMarker": "Bajeti",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Mkati mwa bajeti",
+      "warn": "Chenjezo chiwonetsedwa",
+      "ask": "Funso musanatumize uthenga uliwonse",
+      "stop": "Kutumiza kwaiyimitsidwa"
+    },
+    "stage": {
+      "warn": {
+        "title": "Chenjezo",
+        "tag": "Chenjerani",
+        "description": "Onetsani chidziwitso mu macheza kuyambira pomwe mwagwiritsa ntchito gawo ili la bajeti."
+      },
+      "ask": {
+        "title": "Funsani kaye",
+        "tag": "Cholepheretsa chofewa",
+        "description": "Ndimufunseni kuti nditsimikizire uthenga uliwonse kuyambira pomwe mwafikira gawo ili la bajeti."
+      },
+      "stop": {
+        "title": "Lekani",
+        "tag": "Cholepheretsa cholimba",
+        "description": "Lekani kutumiza kuchokera mu gawo ili la bajeti mpaka izere kapena ndikakweza apa."
+      }
+    },
+    "thresholdLabel": "{stage} malire, centi ya bajeti",
+    "notice": {
+      "warn": {
+        "emissions": "Mwawononga {percent}% ya bajeti yanu ya mpweya.",
+        "cost": "Mwawononga {percent}% ya bajeti yanu yamtengo."
+      },
+      "ask": {
+        "emissions": "Mwawononga {percent}% ya bajeti yanu ya mpweya. Tumizani uthengawu?",
+        "cost": "Mwawononga {percent}% ya bajeti yanu yamtengo. Tumizani uthengawu?"
+      },
+      "askRun": {
+        "emissions": "Mwawononga {percent}% ya bajeti yanu ya mpweya. Yambani ntchito iyi?",
+        "cost": "Mwawononga {percent}% ya bajeti yanu yamtengo. Yambani ntchito iyi?"
+      },
+      "stop": {
+        "emissions": "Bajeti ya mpweya yafika pa malire. Kutumiza kwaiyimitsidwa mpaka {date}.",
+        "cost": "Mafikira a bajeti ya mtengo affika. Kutumiza kwaiyimitsidwa mpaka {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Onerani bajeti",
+      "dismiss": "Tsekani",
+      "sendAnyway": "Tumizani ngakhale choncho",
+      "runAnyway": "Pitirizani ngakhale choncho",
+      "dontSend": "Osatumiza",
+      "dontAskToday": "Osafunsanso lero",
+      "openSettings": "Tsegulani zoikamo za bajeti",
+      "edit": "Sinthani"
+    },
+    "composerPaused": "Kutumiza kwaiyimitsidwa ndi bajeti yanu",
+    "summaryTitle": "Mabajeti anu",
+    "chipAria": "Bajeti ya {metric}: {percent}% yagwiritsidwa ntchito.",
+    "runProjection": "Bajeti ya maemission {from}% → {to}%"
   }
 }

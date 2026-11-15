@@ -8335,5 +8335,102 @@
       "connect": "Połącz z Microsoft 365",
       "connectNote": "Dodaj z OneDrive, e-maila i spotkań"
     }
+  },
+  "usageBudgets": {
+    "title": "Twoje budżety",
+    "description": "Limity, które ustalasz dla siebie na tym urządzeniu. Wybierz budżet, a następnie zdecyduj, co ma się stać po jego przekroczeniu. Budżety obejmują czaty i uruchomienia workflow od początku każdego okresu.",
+    "metric": {
+      "emissions": "Budżet emisji",
+      "cost": "Budżet kosztów"
+    },
+    "metricShort": {
+      "emissions": "Emisje",
+      "cost": "Koszt"
+    },
+    "off": "Nie ustawiono budżetu.",
+    "measureAs": "Mierz jako",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Ładowania telefonu",
+      "usd": "Dolary amerykańskie"
+    },
+    "amountLabel": "Budżet",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "godzin",
+      "smartphoneCharge": "ładowań",
+      "usd": "dolary amerykańskie"
+    },
+    "periodLabel": "Resetuj co",
+    "period": {
+      "day": "Dzień",
+      "week": "Tydzień",
+      "month": "Miesiąc"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Szacowane na podstawie cen katalogowych: wartość maksymalna, nie faktura.",
+    "chargesValue": "{count} ładowań telefonu",
+    "percent": "{percent}%",
+    "usedOf": "Zużyto {used} z {limit} ({percent}%)",
+    "usedOfShort": "{used} z {limit}",
+    "resets": "Reset: {date}",
+    "budgetMarker": "Budżet",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "W granicach budżetu",
+      "warn": "Wyświetlono ostrzeżenie",
+      "ask": "Pytanie przed każdą wiadomością",
+      "stop": "Wysyłanie wstrzymane"
+    },
+    "stage": {
+      "warn": {
+        "title": "Ostrzeżenie",
+        "tag": "Powiadomienie",
+        "description": "Wyświetl powiadomienie w czacie od tego progu budżetu."
+      },
+      "ask": {
+        "title": "Zapytaj najpierw",
+        "tag": "Miękka blokada",
+        "description": "Poproś mnie o potwierdzenie każdej wiadomości od tego progu budżetu."
+      },
+      "stop": {
+        "title": "Zatrzymaj",
+        "tag": "Twarda blokada",
+        "description": "Wstrzymaj wysyłanie od tego progu budżetu do czasu resetu lub zwiększenia limitu."
+      }
+    },
+    "thresholdLabel": "Próg {stage}, procent budżetu",
+    "notice": {
+      "warn": {
+        "emissions": "Wykorzystano {percent}% budżetu na emisje.",
+        "cost": "Wykorzystano {percent}% budżetu kosztowego."
+      },
+      "ask": {
+        "emissions": "Wykorzystano {percent}% budżetu na emisje. Wysłać tę wiadomość?",
+        "cost": "Wykorzystano {percent}% budżetu kosztowego. Wysłać tę wiadomość?"
+      },
+      "askRun": {
+        "emissions": "Wykorzystano {percent}% budżetu na emisje. Uruchomić?",
+        "cost": "Wykorzystano {percent}% budżetu kosztowego. Uruchomić?"
+      },
+      "stop": {
+        "emissions": "Osiągnięto limit emisji. Wysyłka wstrzymana do {date}.",
+        "cost": "Osiągnięto limit budżetu kosztów. Wysyłanie wstrzymane do {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Zobacz budżet",
+      "dismiss": "Zamknij",
+      "sendAnyway": "Wyślij mimo to",
+      "runAnyway": "Uruchom mimo to",
+      "dontSend": "Nie wysyłaj",
+      "dontAskToday": "Nie pytaj dziś ponownie",
+      "openSettings": "Otwórz ustawienia budżetu",
+      "edit": "Edytuj"
+    },
+    "composerPaused": "Wysyłanie wstrzymane przez Twój budżet",
+    "summaryTitle": "Twoje budżety",
+    "chipAria": "Budżet {metric}: wykorzystano {percent}%.",
+    "runProjection": "Budżet emisji {from}% → {to}%"
   }
 }

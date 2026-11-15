@@ -8335,5 +8335,102 @@
       "connect": "Microsoft 365 verbinden",
       "connectNote": "Hinzufügen von OneDrive, E-Mail und Meetings"
     }
+  },
+  "usageBudgets": {
+    "title": "Ihre Budgets",
+    "description": "Grenzwerte, die Sie für dieses Gerät festlegen. Wählen Sie ein Budget und bestimmen Sie, was passieren soll, wenn Sie sich dem Limit nähern oder es überschreiten. Budgets zählen Chat- und Workflow-Ausführungen ab Beginn jedes Zeitraums.",
+    "metric": {
+      "emissions": "Emissionsbudget",
+      "cost": "Kostenbudget"
+    },
+    "metricShort": {
+      "emissions": "Emissionen",
+      "cost": "Kosten"
+    },
+    "off": "Kein Budget festgelegt.",
+    "measureAs": "Messen als",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Ladevorgänge",
+      "usd": "US-Dollar"
+    },
+    "amountLabel": "Budget",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "Stunden",
+      "smartphoneCharge": "Ladevorgänge",
+      "usd": "US-Dollar"
+    },
+    "periodLabel": "Setzt zurück alle",
+    "period": {
+      "day": "Tag",
+      "week": "Woche",
+      "month": "Monat"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Geschätzt nach Listenpreisen: ein Höchstwert, keine Rechnung.",
+    "chargesValue": "{count} Ladevorgänge",
+    "percent": "{percent}%",
+    "usedOf": "{used} von {limit} verbraucht ({percent}%)",
+    "usedOfShort": "{used} von {limit}",
+    "resets": "Setzt zurück am {date}",
+    "budgetMarker": "Budget",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Innerhalb des Budgets",
+      "warn": "Warnung angezeigt",
+      "ask": "Vor jeder Nachricht fragen",
+      "stop": "Senden pausiert"
+    },
+    "stage": {
+      "warn": {
+        "title": "Warnen",
+        "tag": "Hinweis",
+        "description": "Ab diesem Anteil am Budget eine Benachrichtigung im Chat anzeigen."
+      },
+      "ask": {
+        "title": "Vorher fragen",
+        "tag": "Soft Block",
+        "description": "Ab diesem Anteil am Budget vor jeder Nachricht um Bestätigung bitten."
+      },
+      "stop": {
+        "title": "Anhalten",
+        "tag": "Hard Block",
+        "description": "Das Senden ab diesem Anteil am Budget stoppen, bis das Budget zurückgesetzt wird oder Sie es hier erhöhen."
+      }
+    },
+    "thresholdLabel": "{stage}-Grenzwert, Prozent des Budgets",
+    "notice": {
+      "warn": {
+        "emissions": "Sie haben {percent}% Ihres Emissionsbudgets verwendet.",
+        "cost": "Sie haben {percent}% Ihres Kostenbudgets verwendet."
+      },
+      "ask": {
+        "emissions": "Sie haben {percent}% Ihres Emissionsbudgets verwendet. Diese Nachricht senden?",
+        "cost": "Sie haben {percent}% Ihres Kostenbudgets verwendet. Diese Nachricht senden?"
+      },
+      "askRun": {
+        "emissions": "Sie haben {percent}% Ihres Emissionsbudgets verwendet. Diesen Lauf starten?",
+        "cost": "Sie haben {percent}% Ihres Kostenbudgets verwendet. Diesen Lauf starten?"
+      },
+      "stop": {
+        "emissions": "Emissionsbudget-Stoppunkt erreicht. Senden ist bis {date} pausiert.",
+        "cost": "Kostenbudget erreicht. Versand ist bis {date} pausiert."
+      }
+    },
+    "actions": {
+      "viewBudget": "Budget anzeigen",
+      "dismiss": "Schließen",
+      "sendAnyway": "Trotzdem senden",
+      "runAnyway": "Trotzdem ausführen",
+      "dontSend": "Nicht senden",
+      "dontAskToday": "Heute nicht mehr fragen",
+      "openSettings": "Budgeteinstellungen öffnen",
+      "edit": "Bearbeiten"
+    },
+    "composerPaused": "Versand durch Ihr Budget pausiert",
+    "summaryTitle": "Ihre Budgets",
+    "chipAria": "{metric}-Budget: {percent}% verwendet.",
+    "runProjection": "Emissionsbudget {from}% → {to}%"
   }
 }

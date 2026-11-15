@@ -8319,5 +8319,102 @@
       "connect": "Hunga Microsoft 365",
       "connectNote": "Ongeraho uturutse kuri OneDrive, imeyili n'inama"
     }
+  },
+  "usageBudgets": {
+    "title": "Ingengo yawe",
+    "description": "Ni imbibi wihaye kuri ubu buryo. Hitamo ingengo, hanyuma uhitemo icyo bizakora iyo uri hafi kuyigeraho cyangwa uyirenze. Ingengo ibarwa na chat n'imikoreshereze guhera itangira ry'igihe cyose.",
+    "metric": {
+      "emissions": "Ingengo y’ibyuka bihumanya",
+      "cost": "Ingengo y’igiciro"
+    },
+    "metricShort": {
+      "emissions": "Ibyuka bihumanya",
+      "cost": "Igiciro"
+    },
+    "off": "Nta ngengo yashyizweho.",
+    "measureAs": "Bipime nk’",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Inshuro zisharije telefoni",
+      "usd": "Amadolari ya Amerika"
+    },
+    "amountLabel": "Ingengo",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "amasaha",
+      "smartphoneCharge": "inshuro",
+      "usd": "Amadolari ya Amerika"
+    },
+    "periodLabel": "Igaruka buri",
+    "period": {
+      "day": "Umunsi",
+      "week": "Icyumweru",
+      "month": "Ukwezi"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Byagenwe ukurikije igiciro kiri ku rutonde: ni umupaka wo hejuru, si fagitire.",
+    "chargesValue": "{count} inshuro zisharije telefoni",
+    "percent": "{percent}%",
+    "usedOf": "{used} kuri {limit} bimaze gukoreshwa ({percent}%)",
+    "usedOfShort": "{used} kuri {limit}",
+    "resets": "Igaruka {date}",
+    "budgetMarker": "Ingengo",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Uri mu ngengo",
+      "warn": "Icyitonderwa cyagaragajwe",
+      "ask": "Kubaza mbere ya buri butumwa",
+      "stop": "Kohereza byahagaritswe"
+    },
+    "stage": {
+      "warn": {
+        "title": "Kuburira",
+        "tag": "Kubanza kumenyesha",
+        "description": "Garagaza ubutumwa mu kiganiro guhera kuri iyi ngero y’ingengo."
+      },
+      "ask": {
+        "title": "Kubanza kubaza",
+        "tag": "Block yoroshye",
+        "description": "Mbanze nsabwe kwemeza buri butumwa bwavuye kuri iyi ngero y’ingengo."
+      },
+      "stop": {
+        "title": "Guhagarika",
+        "tag": "Block ikomeye",
+        "description": "Hagarika kohereza guhera kuri iyi ngero y’ingengo kugeza yigaruye cyangwa nongerere ingengo hano."
+      }
+    },
+    "thresholdLabel": "Urugero rwa {stage}, igipimo cy’ingengo",
+    "notice": {
+      "warn": {
+        "emissions": "Umaze gukoresha {percent}% by’ingengo y’ibyuka bihumanya.",
+        "cost": "Umaze gukoresha {percent}% by’ingengo y’igiciro."
+      },
+      "ask": {
+        "emissions": "Umaze gukoresha {percent}% by’ingengo y’ibyuka bihumanya. Ushaka kohereza ubu butumwa?",
+        "cost": "Umaze gukoresha {percent}% by’ingengo y’igiciro. Ushaka kohereza ubu butumwa?"
+      },
+      "askRun": {
+        "emissions": "Umaze gukoresha {percent}% by’ingengo y’ibyuka bihumanya. Ushaka gutangira iyi mikorere?",
+        "cost": "Umaze gukoresha {percent}% by’ingengo y’igiciro. Ushaka gutangira iyi mikorere?"
+      },
+      "stop": {
+        "emissions": "Ingingo yo guhagarika ingengo y’ibyuka bihumanya igezeho. Kohereza byahagaritswe kugeza {date}.",
+        "cost": "Inzira yo gukoresha amafaranga yageze ku iherezo. Kohereza birahagaritswe kugeza {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Reba ingengo y'imari",
+      "dismiss": "Horera",
+      "sendAnyway": "Twohereze nubwo",
+      "runAnyway": "Tuyikoreshe nubwo",
+      "dontSend": "Ntukohereze",
+      "dontAskToday": "Ntuzabaze uyu munsi",
+      "openSettings": "Fungura ibyo gufunga ingengo y'imari",
+      "edit": "Hindura"
+    },
+    "composerPaused": "Kohereza byahagaritswe n’ingengo y’imari yawe",
+    "summaryTitle": "Ingengo y’imari zawe",
+    "chipAria": "Ingengo y'imari ya {metric}: {percent}% byakoreshejwe.",
+    "runProjection": "Ingingo y’imari y’ibyoherezwa {from}% → {to}%"
   }
 }

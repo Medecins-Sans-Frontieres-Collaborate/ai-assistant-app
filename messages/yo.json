@@ -8319,5 +8319,102 @@
       "connect": "So pọ mọ́ Microsoft 365",
       "connectNote": "Fi kun láti OneDrive, ímẹ́lì àti àwọn ipàdé"
     }
+  },
+  "usageBudgets": {
+    "title": "Isuna rẹ",
+    "description": "Iwọn to fi le ara rẹ lórí ẹrọ yi. Yàn isuna, lẹhinna yan ohun to yẹ kí o ṣẹlẹ nigba ti o ba sunmọ tabi kọja aala naa. Isuna máa ka awọn ijiroro ati iṣẹ ṣiṣe lati ibẹrẹ kọọkan akoko.",
+    "metric": {
+      "emissions": "Isuna itujade",
+      "cost": "Isuna ìnáwó"
+    },
+    "metricShort": {
+      "emissions": "Itujade",
+      "cost": "Ìnáwó"
+    },
+    "off": "Ko si isuna ti a ṣeto.",
+    "measureAs": "Fún un níwọn gége bí",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Gbigbá foonu",
+      "usd": "Dọla AMẸRIKA"
+    },
+    "amountLabel": "Isuna",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "wákàtí",
+      "smartphoneCharge": "ìgbàgbá",
+      "usd": "Dọla AMẸRIKA"
+    },
+    "periodLabel": "Tún bẹrẹ lojoojúmọ",
+    "period": {
+      "day": "Ọjọ",
+      "week": "Ọsẹ",
+      "month": "Oṣù"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Ìṣírò lati owo ìtajà: òkè to pọ ju, kii ṣe gbese.",
+    "chargesValue": "{count} ìgbàgbá foonu",
+    "percent": "{percent}%",
+    "usedOf": "{used} nínú {limit} lò ({percent}%)",
+    "usedOfShort": "{used} nínú {limit}",
+    "resets": "Tun bẹrẹ {date}",
+    "budgetMarker": "Isuna",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Nínú isuna",
+      "warn": "Ìkìlọ́ yàn",
+      "ask": "Ní beere ṣáájú gbogbo ìfiranṣẹ",
+      "stop": "Fífiranṣẹ ti dá duro"
+    },
+    "stage": {
+      "warn": {
+        "title": "Kílọ̀",
+        "tag": "Ìkìlọ́",
+        "description": "Fi ìkìlọ́ han nínú ijiroro láti ipin yi ti isuna."
+      },
+      "ask": {
+        "title": "Beere kọ́kọ́",
+        "tag": "Ìdènà díẹ",
+        "description": "Beere kí n fìdí gbogbo ìfiranṣẹ múlẹ́ látọ̀dọ̀ ipin yi ti isuna."
+      },
+      "stop": {
+        "title": "Dákẹ́",
+        "tag": "Ìdènà pátápátá",
+        "description": "Dákẹ́ fifiranṣẹ látọ̀dọ̀ ipin yi ti isuna títí tí a ó fi tún pada tabi mo ba fa a soke nibi."
+      }
+    },
+    "thresholdLabel": "{stage} aala, ogorun isuna",
+    "notice": {
+      "warn": {
+        "emissions": "O ti lo {percent}% ninu isuna itujade rẹ.",
+        "cost": "O ti lo {percent}% ninu isuna ìnáwó rẹ."
+      },
+      "ask": {
+        "emissions": "O ti lo {percent}% ninu isuna itujade rẹ. Firanṣẹ ìfiranṣẹ yi?",
+        "cost": "O ti lo {percent}% ninu isuna ìnáwó rẹ. Firanṣẹ ìfiranṣẹ yi?"
+      },
+      "askRun": {
+        "emissions": "O ti lo {percent}% ninu isuna itujade rẹ. Bẹrẹ iṣẹ yi?",
+        "cost": "O ti lo {percent}% ninu isuna ìnáwó rẹ. Bẹrẹ iṣẹ yi?"
+      },
+      "stop": {
+        "emissions": "A ti dé aala isuna itujade. Fífiranṣẹ ti dá duro títí di {date}.",
+        "cost": "A ti de opin inawo eto isuna. Fifiranṣẹ ti da duro titi di {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Wo isuna",
+      "dismiss": "Pa kuro",
+      "sendAnyway": "Fi ranṣẹ sibẹ",
+      "runAnyway": "Ṣiṣe sibẹ",
+      "dontSend": "Ma ṣe fi ranṣẹ",
+      "dontAskToday": "Ma ṣe béèrè loni mọ́",
+      "openSettings": "Ṣí eto isuna",
+      "edit": "Ṣatúnṣe"
+    },
+    "composerPaused": "Fifiranṣẹ ti duro nitori isuna rẹ",
+    "summaryTitle": "Awọn isuna rẹ",
+    "chipAria": "{metric} isuna: {percent}% lo.",
+    "runProjection": "Eto isuna eefi {from}% → {to}%"
   }
 }

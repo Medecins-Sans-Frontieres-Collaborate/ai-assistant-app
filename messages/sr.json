@@ -8319,5 +8319,102 @@
       "connect": "Poveži Microsoft 365",
       "connectNote": "Dodaj iz OneDrive-a, emaila i sastanaka"
     }
+  },
+  "usageBudgets": {
+    "title": "Vaši budžeti",
+    "description": "Ograničenja koja ste postavili na ovom uređaju. Izaberite budžet, zatim odredite šta se dešava kada se približavate ili premašite ograničenje. Budžeti broje chat i pokretanja radnog toka od početka svakog perioda.",
+    "metric": {
+      "emissions": "Budžet emisija",
+      "cost": "Budžet troškova"
+    },
+    "metricShort": {
+      "emissions": "Emisije",
+      "cost": "Trošak"
+    },
+    "off": "Budžet nije postavljen.",
+    "measureAs": "Izmerite kao",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Punjenja telefona",
+      "usd": "Američki dolari"
+    },
+    "amountLabel": "Budžet",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "sati",
+      "smartphoneCharge": "punjenja",
+      "usd": "američki dolari"
+    },
+    "periodLabel": "Resetuje se svako",
+    "period": {
+      "day": "Dan",
+      "week": "Nedelja",
+      "month": "Mesec"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Procena na osnovu cenovnika: gornja granica, nije račun.",
+    "chargesValue": "{count} punjenja telefona",
+    "percent": "{percent}%",
+    "usedOf": "Iskorišćeno {used} od {limit} ({percent}%)",
+    "usedOfShort": "{used} od {limit}",
+    "resets": "Resetuje se {date}",
+    "budgetMarker": "Budžet",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "U okviru budžeta",
+      "warn": "Prikazano upozorenje",
+      "ask": "Traži potvrdu za svaku poruku",
+      "stop": "Slanje je pauzirano"
+    },
+    "stage": {
+      "warn": {
+        "title": "Upozori",
+        "tag": "Najava",
+        "description": "Prikaži obaveštenje u chatu od ovog dela budžeta."
+      },
+      "ask": {
+        "title": "Najpre pitaj",
+        "tag": "Meko blokiranje",
+        "description": "Traži potvrdu pre svake poruke od ovog dela budžeta."
+      },
+      "stop": {
+        "title": "Zaustavi",
+        "tag": "Tvrdo blokiranje",
+        "description": "Zaustavi slanje od ovog dela budžeta dok se ne resetuje ili dok ga ovde ne povećam."
+      }
+    },
+    "thresholdLabel": "{stage} prag, procenat budžeta",
+    "notice": {
+      "warn": {
+        "emissions": "Iskoristili ste {percent}% budžeta emisija.",
+        "cost": "Iskoristili ste {percent}% budžeta troškova."
+      },
+      "ask": {
+        "emissions": "Iskoristili ste {percent}% budžeta emisija. Da li da pošaljem ovu poruku?",
+        "cost": "Iskoristili ste {percent}% budžeta troškova. Da li da pošaljem ovu poruku?"
+      },
+      "askRun": {
+        "emissions": "Iskoristili ste {percent}% budžeta emisija. Pokrenuti ovu radnju?",
+        "cost": "Iskoristili ste {percent}% budžeta troškova. Pokrenuti ovu radnju?"
+      },
+      "stop": {
+        "emissions": "Dostignut je kraj budžeta emisija. Slanje je pauzirano do {date}.",
+        "cost": "Pređena je granica budžeta za troškove. Slanje je pauzirano do {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Prikaži budžet",
+      "dismiss": "Zatvori",
+      "sendAnyway": "Pošalji ipak",
+      "runAnyway": "Pokreni ipak",
+      "dontSend": "Ne šalji",
+      "dontAskToday": "Ne pitaj ponovo danas",
+      "openSettings": "Otvori podešavanja budžeta",
+      "edit": "Izmeni"
+    },
+    "composerPaused": "Slanje je pauzirano zbog vašeg budžeta",
+    "summaryTitle": "Vaši budžeti",
+    "chipAria": "{metric} budžet: iskorišćeno {percent}%.",
+    "runProjection": "Budžet emisija {from}% → {to}%"
   }
 }

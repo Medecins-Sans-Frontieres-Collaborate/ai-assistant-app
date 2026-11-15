@@ -8319,5 +8319,102 @@
       "connect": "Kêtî Microsoft 365",
       "connectNote": "Gbâ na OneDrive, email na kufûtî"
     }
+  },
+  "usageBudgets": {
+    "title": "Budget ti oko",
+    "description": "Limit ti oko agbenge lo na na lo device ti oko. Yeke sala budget, bongo sala mo ti oko oko yeke kufa wa ayeke te oko ape ti lo. Budgets akpesi koko chat na workflow ti oko na mbutu wa na yeke lo period ye.",
+    "metric": {
+      "emissions": "Budget ti emissions",
+      "cost": "Budget ti cost"
+    },
+    "metricShort": {
+      "emissions": "Emissions",
+      "cost": "Cost"
+    },
+    "off": "Budget ala yeke sala.",
+    "measureAs": "Yeke gata lo so",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Kupe ti télé",
+      "usd": "US dollars"
+    },
+    "amountLabel": "Budget",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ngbi",
+      "smartphoneCharge": "kupe",
+      "usd": "US dollars"
+    },
+    "periodLabel": "Yeke vina so pe",
+    "period": {
+      "day": "Lendu",
+      "week": "Saba",
+      "month": "Nyenye"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Mbiamu ti liste ti pri: peke na mbi yeke benga factura.",
+    "chargesValue": "{count} kupe ti télé",
+    "percent": "{percent}%",
+    "usedOf": "{used} lo {limit} ti lo ape ({percent}%)",
+    "usedOfShort": "{used} lo {limit}",
+    "resets": "Yeke vina so {date}",
+    "budgetMarker": "Budget",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Wete na budget",
+      "warn": "Koko ti dzia yeke montrée",
+      "ask": "Yeke kobaya kété sôti wa mesaje kété",
+      "stop": "Ko yeke kanga"
+    },
+    "stage": {
+      "warn": {
+        "title": "Koko",
+        "tag": "Kudro",
+        "description": "Yeke montrée doka na chat so ti wa budget na kupe ti lo."
+      },
+      "ask": {
+        "title": "Kobaya liboso",
+        "tag": "Block moto",
+        "description": "Kobaya mbi kété sôti wa mesaje kété so ti wa budget na kupe ti lo."
+      },
+      "stop": {
+        "title": "Kanga",
+        "tag": "Block mingi",
+        "description": "Kanga ko so ti wa budget na kupe ti lo sambu na vina so to ayeke lo ape yeke tangu na mbi ape to mbi ayeke tî la na kè."
+      }
+    },
+    "thresholdLabel": "{stage} limite, pourcentage ti budget",
+    "notice": {
+      "warn": {
+        "emissions": "Oko akpesi {percent}% ti wa budget ti emissions.",
+        "cost": "Oko akpesi {percent}% ti wa budget ti cost."
+      },
+      "ask": {
+        "emissions": "Oko akpesi {percent}% ti wa budget ti emissions. Ayeke zia mesaje so na?",
+        "cost": "Oko akpesi {percent}% ti wa budget ti cost. Ayeke zia mesaje so na?"
+      },
+      "askRun": {
+        "emissions": "Oko akpesi {percent}% ti wa budget ti emissions. Ayeke yeke tî lo so?",
+        "cost": "Oko akpesi {percent}% ti wa budget ti cost. Ayeke yeke tî lo so?"
+      },
+      "stop": {
+        "emissions": "Budget ti emissions abû stop. Ko yeke kanga tî {date}.",
+        "cost": "Budu ti na mbongo ti cost a yeke. La ko be send ti la pa na {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Vinga budu",
+      "dismiss": "Finga",
+      "sendAnyway": "Send so na wa",
+      "runAnyway": "Yeke so na wa",
+      "dontSend": "La pa send",
+      "dontAskToday": "La pa senga so na mo ana",
+      "openSettings": "Fungba settings ti budu",
+      "edit": "Gbenza"
+    },
+    "composerPaused": "La ko be send ti na budu ti mo",
+    "summaryTitle": "Budu ti mo",
+    "chipAria": "Budu ti {metric}: {percent}% a gbugba.",
+    "runProjection": "Budu ti emissions {from}% → {to}%"
   }
 }

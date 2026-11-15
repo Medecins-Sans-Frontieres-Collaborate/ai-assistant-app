@@ -8335,5 +8335,102 @@
       "connect": "Yhdistä Microsoft 365",
       "connectNote": "Lisää OneDrivesta, sähköpostista ja kokouksista"
     }
+  },
+  "usageBudgets": {
+    "title": "Budjettisi",
+    "description": "Rajasi, jotka asetat itsellesi tällä laitteella. Valitse budjetti ja määritä, mitä tapahtuu, kun lähestyt sitä tai ylität sen. Budjetit laskevat keskustelu- ja työnkulkusuoritukset jokaisen jakson alusta.",
+    "metric": {
+      "emissions": "Päästöbudjetti",
+      "cost": "Kustannusbudjetti"
+    },
+    "metricShort": {
+      "emissions": "Päästöt",
+      "cost": "Kustannus"
+    },
+    "off": "Ei budjettia asetettu.",
+    "measureAs": "Mittaa näin",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Puhelimen latausta",
+      "usd": "Yhdysvaltain dollaria"
+    },
+    "amountLabel": "Budjetti",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "tuntia",
+      "smartphoneCharge": "latausta",
+      "usd": "Yhdysvaltain dollaria"
+    },
+    "periodLabel": "Nollataan joka",
+    "period": {
+      "day": "Päivä",
+      "week": "Viikko",
+      "month": "Kuukausi"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Arvioitu listahinnoista: yläraja, ei lasku.",
+    "chargesValue": "{count} puhelimen latausta",
+    "percent": "{percent}%",
+    "usedOf": "Käytetty {used} / {limit} ({percent}%)",
+    "usedOfShort": "{used} / {limit}",
+    "resets": "Nollautuu {date}",
+    "budgetMarker": "Budjetti",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Budjetin sisällä",
+      "warn": "Varoitus näytetty",
+      "ask": "Varmistus ennen jokaista viestiä",
+      "stop": "Lähetys keskeytetty"
+    },
+    "stage": {
+      "warn": {
+        "title": "Varoita",
+        "tag": "Huomio",
+        "description": "Näytä ilmoitus keskustelussa tästä budjetin osuudesta alkaen."
+      },
+      "ask": {
+        "title": "Varmista",
+        "tag": "Pehmeä esto",
+        "description": "Pyydä vahvistus jokaiselle viestille tästä budjetin osuudesta alkaen."
+      },
+      "stop": {
+        "title": "Pysäytä",
+        "tag": "Kova esto",
+        "description": "Lähetys pysäytetään tästä budjetin osuudesta kunnes budjetti nollautuu tai nostan sen täällä."
+      }
+    },
+    "thresholdLabel": "{stage}-kynnys, budjetin prosenttiosuus",
+    "notice": {
+      "warn": {
+        "emissions": "Olet käyttänyt {percent}% päästöbudjetistasi.",
+        "cost": "Olet käyttänyt {percent}% kustannusbudjetistasi."
+      },
+      "ask": {
+        "emissions": "Olet käyttänyt {percent}% päästöbudjetistasi. Lähetetäänkö tämä viesti?",
+        "cost": "Olet käyttänyt {percent}% kustannusbudjetistasi. Lähetetäänkö tämä viesti?"
+      },
+      "askRun": {
+        "emissions": "Olet käyttänyt {percent}% päästöbudjetistasi. Alkaako tämä suoritus?",
+        "cost": "Olet käyttänyt {percent}% kustannusbudjetistasi. Alkaako tämä suoritus?"
+      },
+      "stop": {
+        "emissions": "Päästöbudjetin pysäytyskohta saavutettu. Lähetys on tauolla {date} asti.",
+        "cost": "Kustannusbudjetin raja saavutettu. Lähetys on keskeytetty kunnes {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Näytä budjetti",
+      "dismiss": "Ohita",
+      "sendAnyway": "Lähetä silti",
+      "runAnyway": "Suorita silti",
+      "dontSend": "Älä lähetä",
+      "dontAskToday": "Älä kysy tänään uudelleen",
+      "openSettings": "Avaa budjetin asetukset",
+      "edit": "Muokkaa"
+    },
+    "composerPaused": "Budjettisi on keskeyttänyt lähetyksen",
+    "summaryTitle": "Budjettisi",
+    "chipAria": "{metric} budjetista käytetty {percent}%.",
+    "runProjection": "Päästöbudjetti {from}% → {to}%"
   }
 }

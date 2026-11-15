@@ -8366,5 +8366,102 @@
       "connect": "Kết nối Microsoft 365",
       "connectNote": "Thêm từ OneDrive, email và cuộc họp"
     }
+  },
+  "usageBudgets": {
+    "title": "Ngân sách của bạn",
+    "description": "Giới hạn bạn tự đặt cho thiết bị này. Chọn một ngân sách, sau đó chọn hành động khi bạn tiến gần và vượt qua nó. Ngân sách tính số lượt chat và quy trình từ đầu mỗi kỳ.",
+    "metric": {
+      "emissions": "Ngân sách phát thải",
+      "cost": "Ngân sách chi phí"
+    },
+    "metricShort": {
+      "emissions": "Phát thải",
+      "cost": "Chi phí"
+    },
+    "off": "Chưa đặt ngân sách.",
+    "measureAs": "Đo lường theo",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Lần sạc điện thoại",
+      "usd": "Đô la Mỹ"
+    },
+    "amountLabel": "Ngân sách",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "giờ",
+      "smartphoneCharge": "lần sạc",
+      "usd": "đô la Mỹ"
+    },
+    "periodLabel": "Đặt lại mỗi",
+    "period": {
+      "day": "Ngày",
+      "week": "Tuần",
+      "month": "Tháng"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Ước tính dựa trên giá niêm yết: là mức tối đa, không phải hóa đơn.",
+    "chargesValue": "{count} lần sạc điện thoại",
+    "percent": "{percent}%",
+    "usedOf": "Đã dùng {used} trên tổng {limit} ({percent}%)",
+    "usedOfShort": "{used} trên {limit}",
+    "resets": "Đặt lại {date}",
+    "budgetMarker": "Ngân sách",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Trong giới hạn ngân sách",
+      "warn": "Đã hiển thị cảnh báo",
+      "ask": "Hỏi trước mỗi tin nhắn",
+      "stop": "Tạm dừng gửi"
+    },
+    "stage": {
+      "warn": {
+        "title": "Cảnh báo",
+        "tag": "Thông báo",
+        "description": "Hiện thông báo trong chat khi sử dụng đến mức này của ngân sách."
+      },
+      "ask": {
+        "title": "Hỏi trước",
+        "tag": "Chặn nhẹ",
+        "description": "Yêu cầu xác nhận từng tin nhắn khi sử dụng đến mức này của ngân sách."
+      },
+      "stop": {
+        "title": "Dừng lại",
+        "tag": "Chặn hoàn toàn",
+        "description": "Dừng gửi từ mức này của ngân sách cho đến khi kỳ đặt lại hoặc tôi điều chỉnh tại đây."
+      }
+    },
+    "thresholdLabel": "Ngưỡng {stage}, phần trăm ngân sách",
+    "notice": {
+      "warn": {
+        "emissions": "Bạn đã sử dụng {percent}% ngân sách phát thải.",
+        "cost": "Bạn đã sử dụng {percent}% ngân sách chi phí."
+      },
+      "ask": {
+        "emissions": "Bạn đã sử dụng {percent}% ngân sách phát thải. Gửi tin nhắn này?",
+        "cost": "Bạn đã sử dụng {percent}% ngân sách chi phí. Gửi tin nhắn này?"
+      },
+      "askRun": {
+        "emissions": "Bạn đã sử dụng {percent}% ngân sách phát thải. Bắt đầu chạy này?",
+        "cost": "Bạn đã sử dụng {percent}% ngân sách chi phí. Bắt đầu chạy này?"
+      },
+      "stop": {
+        "emissions": "Đã đến điểm dừng ngân sách phát thải. Tạm dừng gửi đến {date}.",
+        "cost": "Đã đạt ngưỡng chi phí ngân sách. Việc gửi sẽ tạm dừng đến {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Xem ngân sách",
+      "dismiss": "Bỏ qua",
+      "sendAnyway": "Vẫn gửi",
+      "runAnyway": "Vẫn chạy",
+      "dontSend": "Không gửi",
+      "dontAskToday": "Không hỏi lại hôm nay",
+      "openSettings": "Mở cài đặt ngân sách",
+      "edit": "Chỉnh sửa"
+    },
+    "composerPaused": "Việc gửi đã bị tạm dừng do ngân sách của bạn",
+    "summaryTitle": "Ngân sách của bạn",
+    "chipAria": "Ngân sách {metric}: đã dùng {percent}%.",
+    "runProjection": "Ngân sách phát thải {from}% → {to}%"
   }
 }

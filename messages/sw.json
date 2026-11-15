@@ -8335,5 +8335,102 @@
       "connect": "Unganisha Microsoft 365",
       "connectNote": "Ongeza kutoka OneDrive, barua pepe na mikutano"
     }
+  },
+  "usageBudgets": {
+    "title": "Bajeti zako",
+    "description": "Mipaka uliyojiwekea kwenye kifaa hiki. Chagua bajeti, kisha uchague nini kitafanyika unapokaribia na unapopita bajeti. Bajeti zinahesabu matumizi ya gumzo na michakato tangu mwanzo wa kila kipindi.",
+    "metric": {
+      "emissions": "Bajeti ya utoaji wa hewa",
+      "cost": "Bajeti ya gharama"
+    },
+    "metricShort": {
+      "emissions": "Utoaji wa hewa",
+      "cost": "Gharama"
+    },
+    "off": "Hakuna bajeti iliyowekwa.",
+    "measureAs": "Ipime kama",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Chaji za simu",
+      "usd": "Dola za Marekani"
+    },
+    "amountLabel": "Bajeti",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "masaa",
+      "smartphoneCharge": "chaji",
+      "usd": "Dola za Marekani"
+    },
+    "periodLabel": "Inaanza upya kila",
+    "period": {
+      "day": "Siku",
+      "week": "Wiki",
+      "month": "Mwezi"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Imehesabiwa kutoka bei ya orodha: ni kiwango cha juu, si bili halisi.",
+    "chargesValue": "{count} chaji za simu",
+    "percent": "{percent}%",
+    "usedOf": "{used} kati ya {limit} umetumika ({percent}%)",
+    "usedOfShort": "{used} kati ya {limit}",
+    "resets": "Inaanza upya {date}",
+    "budgetMarker": "Bajeti",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Ndani ya bajeti",
+      "warn": "Onyo limeonyeshwa",
+      "ask": "Inauliza kabla ya kila ujumbe",
+      "stop": "Kutuma kumesitishwa"
+    },
+    "stage": {
+      "warn": {
+        "title": "Onya",
+        "tag": "Tahadhari",
+        "description": "Onyesha taarifa katika gumzo kuanzia sehemu hii ya bajeti."
+      },
+      "ask": {
+        "title": "Uliza kwanza",
+        "tag": "Kizuizi laini",
+        "description": "Niruhusu kuthibitisha kila ujumbe kuanzia sehemu hii ya bajeti."
+      },
+      "stop": {
+        "title": "Simamisha",
+        "tag": "Kizuizi kigumu",
+        "description": "Simamisha kutuma kutoka sehemu hii ya bajeti hadi ianze upya au niongeze bajeti hapa."
+      }
+    },
+    "thresholdLabel": "Kiwango cha {stage}, asilimia ya bajeti",
+    "notice": {
+      "warn": {
+        "emissions": "Umetumia {percent}% ya bajeti yako ya utoaji wa hewa.",
+        "cost": "Umetumia {percent}% ya bajeti yako ya gharama."
+      },
+      "ask": {
+        "emissions": "Umetumia {percent}% ya bajeti yako ya utoaji wa hewa. Tuma ujumbe huu?",
+        "cost": "Umetumia {percent}% ya bajeti yako ya gharama. Tuma ujumbe huu?"
+      },
+      "askRun": {
+        "emissions": "Umetumia {percent}% ya bajeti yako ya utoaji wa hewa. Anza mchakato huu?",
+        "cost": "Umetumia {percent}% ya bajeti yako ya gharama. Anza mchakato huu?"
+      },
+      "stop": {
+        "emissions": "Umefikia kikomo cha bajeti ya utoaji wa hewa. Kutuma kumesitishwa hadi {date}.",
+        "cost": "Kiwango cha matumizi ya bajeti kimefikiwa. Kutuma kumesitishwa hadi {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Tazama bajeti",
+      "dismiss": "Futa",
+      "sendAnyway": "Tuma hata hivyo",
+      "runAnyway": "Endesha hata hivyo",
+      "dontSend": "Usitume",
+      "dontAskToday": "Usiulize tena leo",
+      "openSettings": "Fungua mipangilio ya bajeti",
+      "edit": "Hariri"
+    },
+    "composerPaused": "Kutuma kumesitishwa na bajeti yako",
+    "summaryTitle": "Bajeti zako",
+    "chipAria": "Bajeti ya {metric}: {percent}% imetumika.",
+    "runProjection": "Bajeti ya utoaji {from}% → {to}%"
   }
 }

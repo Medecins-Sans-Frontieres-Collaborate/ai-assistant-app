@@ -8335,5 +8335,102 @@
       "connect": "חבר Microsoft 365",
       "connectNote": "הוסף מ-OneDrive, דוא\"ל ופגישות"
     }
+  },
+  "usageBudgets": {
+    "title": "התקציבים שלך",
+    "description": "הגבלות שאתה קובע לעצמך במכשיר זה. בחר תקציב, ואז החלט מה קורה כאשר אתה מתקרב אליו ועובר אותו. התקציבים סופרים הפעלות צ'אט ותהליכים מהתחלת כל תקופה.",
+    "metric": {
+      "emissions": "תקציב פליטות",
+      "cost": "תקציב עלות"
+    },
+    "metricShort": {
+      "emissions": "פליטות",
+      "cost": "עלות"
+    },
+    "off": "לא נקבע תקציב.",
+    "measureAs": "מדוד כ",
+    "unit": {
+      "grams": "גרם CO₂e",
+      "smartphoneCharge": "הטענות טלפון",
+      "usd": "דולרים אמריקאיים"
+    },
+    "amountLabel": "תקציב",
+    "amountSuffix": {
+      "grams": "גרם CO₂e",
+      "hours": "שעות",
+      "smartphoneCharge": "הטענות",
+      "usd": "דולרים אמריקאיים"
+    },
+    "periodLabel": "איפוס כל",
+    "period": {
+      "day": "יום",
+      "week": "שבוע",
+      "month": "חודש"
+    },
+    "equalsGrams": "= {grams} גרם CO₂e",
+    "costNote": "מבוסס על מחירים רשמיים: סכום עליון, לא חשבון בפועל.",
+    "chargesValue": "{count} הטענות טלפון",
+    "percent": "{percent}%",
+    "usedOf": "{used} מתוך {limit} נעשה שימוש ({percent}%)",
+    "usedOfShort": "{used} מתוך {limit}",
+    "resets": "איפוס {date}",
+    "budgetMarker": "תקציב",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "בתוך התקציב",
+      "warn": "הוצגה אזהרה",
+      "ask": "שואל לפני כל הודעה",
+      "stop": "השליחה הושהתה"
+    },
+    "stage": {
+      "warn": {
+        "title": "אזהרה",
+        "tag": "לתשומת לבך",
+        "description": "הצג התראה בצ'אט משיעור זה של התקציב."
+      },
+      "ask": {
+        "title": "שאל קודם",
+        "tag": "חסימה רכה",
+        "description": "בקש ממני לאשר כל הודעה משיעור זה של התקציב."
+      },
+      "stop": {
+        "title": "עצור",
+        "tag": "חסימה מוחלטת",
+        "description": "עצור שליחה משיעור זה של התקציב עד האיפוס או העלאת התקציב כאן."
+      }
+    },
+    "thresholdLabel": "סף {stage}, אחוז מהתקציב",
+    "notice": {
+      "warn": {
+        "emissions": "השתמשת ב-{percent}% מתקציב הפליטות שלך.",
+        "cost": "השתמשת ב-{percent}% מתקציב העלות שלך."
+      },
+      "ask": {
+        "emissions": "השתמשת ב-{percent}% מתקציב הפליטות שלך. לשלוח הודעה זו?",
+        "cost": "השתמשת ב-{percent}% מתקציב העלות שלך. לשלוח הודעה זו?"
+      },
+      "askRun": {
+        "emissions": "השתמשת ב-{percent}% מתקציב הפליטות שלך. להתחיל הפעלה זו?",
+        "cost": "השתמשת ב-{percent}% מתקציב העלות שלך. להתחיל הפעלה זו?"
+      },
+      "stop": {
+        "emissions": "הגעת לנקודת עצירה בתקציב הפליטות. השליחה מושהית עד {date}.",
+        "cost": "הגעתם לנקודת עצירה של תקציב העלות. השליחה הושהתה עד ל-{{date}}."
+      }
+    },
+    "actions": {
+      "viewBudget": "הצג תקציב",
+      "dismiss": "התעלם",
+      "sendAnyway": "שלח בכל זאת",
+      "runAnyway": "הרץ בכל זאת",
+      "dontSend": "אל תשלח",
+      "dontAskToday": "לא לשאול שוב היום",
+      "openSettings": "פתח הגדרות תקציב",
+      "edit": "ערוך"
+    },
+    "composerPaused": "השליחה הושהתה על ידי התקציב שלך",
+    "summaryTitle": "התקציבים שלך",
+    "chipAria": "תקציב עבור {metric}: {percent}% נוצל.",
+    "runProjection": "תקציב פליטות {from}% → {to}%"
   }
 }

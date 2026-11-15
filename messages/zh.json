@@ -8366,5 +8366,102 @@
       "connect": "连接 Microsoft 365",
       "connectNote": "可从 OneDrive、电子邮件和会议添加"
     }
+  },
+  "usageBudgets": {
+    "title": "您的预算",
+    "description": "您为此设备设置的使用限额。选择一个预算，然后决定在接近和超过限额时的应对方式。预算会从每个周期开始时统计聊天和工作流运行次数。",
+    "metric": {
+      "emissions": "碳排放预算",
+      "cost": "费用预算"
+    },
+    "metricShort": {
+      "emissions": "碳排放",
+      "cost": "费用"
+    },
+    "off": "未设置预算。",
+    "measureAs": "计量方式",
+    "unit": {
+      "grams": "克 CO₂e",
+      "smartphoneCharge": "手机充电次数",
+      "usd": "美元"
+    },
+    "amountLabel": "预算",
+    "amountSuffix": {
+      "grams": "克 CO₂e",
+      "hours": "小时",
+      "smartphoneCharge": "次充电",
+      "usd": "美元"
+    },
+    "periodLabel": "每周期重置",
+    "period": {
+      "day": "天",
+      "week": "周",
+      "month": "月"
+    },
+    "equalsGrams": "= {grams} 克CO₂e",
+    "costNote": "按标价估算：为上限，仅供参考。",
+    "chargesValue": "{count} 次手机充电",
+    "percent": "{percent}%",
+    "usedOf": "已用 {used} / {limit}（{percent}%）",
+    "usedOfShort": "已用 {used} / {limit}",
+    "resets": "将于 {date} 重置",
+    "budgetMarker": "预算",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "预算范围内",
+      "warn": "已显示警告",
+      "ask": "每条消息前需确认",
+      "stop": "已暂停发送"
+    },
+    "stage": {
+      "warn": {
+        "title": "警告",
+        "tag": "提醒",
+        "description": "当预算达到此比例时，在聊天中显示通知。"
+      },
+      "ask": {
+        "title": "先询问",
+        "tag": "软限制",
+        "description": "预算达到此比例后，每条消息需我确认。"
+      },
+      "stop": {
+        "title": "停止",
+        "tag": "硬限制",
+        "description": "从此预算比例起停止发送，直到重置或我在此提高限额。"
+      }
+    },
+    "thresholdLabel": "{stage} 阈值，占预算百分比",
+    "notice": {
+      "warn": {
+        "emissions": "您已使用碳排放预算的 {percent}%。",
+        "cost": "您已使用费用预算的 {percent}%。"
+      },
+      "ask": {
+        "emissions": "您已使用碳排放预算的 {percent}%。是否发送此消息？",
+        "cost": "您已使用费用预算的 {percent}%。是否发送此消息？"
+      },
+      "askRun": {
+        "emissions": "您已使用碳排放预算的 {percent}%。是否启动此运行？",
+        "cost": "您已使用费用预算的 {percent}%。是否启动此运行？"
+      },
+      "stop": {
+        "emissions": "已达碳排放预算停止点。发送将暂停至 {date}。",
+        "cost": "已达到成本预算上限。发送操作暂停至 {date}。"
+      }
+    },
+    "actions": {
+      "viewBudget": "查看预算",
+      "dismiss": "关闭",
+      "sendAnyway": "仍然发送",
+      "runAnyway": "仍然运行",
+      "dontSend": "不发送",
+      "dontAskToday": "今天不再询问",
+      "openSettings": "打开预算设置",
+      "edit": "编辑"
+    },
+    "composerPaused": "已由您的预算暂停发送",
+    "summaryTitle": "您的预算",
+    "chipAria": "{metric} 预算：已用 {percent}%。",
+    "runProjection": "排放预算 {from}% → {to}%"
   }
 }

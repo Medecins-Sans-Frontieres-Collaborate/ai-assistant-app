@@ -8319,5 +8319,102 @@
       "connect": "Fata Microsoft 365",
       "connectNote": "Ongerako uvuye kuri OneDrive, imeyili n'inama"
     }
+  },
+  "usageBudgets": {
+    "title": "Ubushobozi bwawe",
+    "description": "Amabwirizwa ugenera iyi mashini. Hitamwo ubushobozi, hanyuma uhitamwo ico bikorwa igihe bugiye kurangira canke bwarangiye. Ubushobozi bureba ibiganiro na workflow kuva itanguriro ry’igihe cagenwe.",
+    "metric": {
+      "emissions": "Ubushobozi bw’imyuka ihumanya",
+      "cost": "Ubushobozi bw’amafaranga"
+    },
+    "metricShort": {
+      "emissions": "Imyuka ihumanya",
+      "cost": "Amafaranga"
+    },
+    "off": "Nta bushobozi bwashinzwe.",
+    "measureAs": "Bipime nka",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Amashanyarazi ya telefone",
+      "usd": "Amadolari ya USA"
+    },
+    "amountLabel": "Ubushobozi",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "amasaha",
+      "smartphoneCharge": "gusubiriza umuriro",
+      "usd": "Amadolari ya USA"
+    },
+    "periodLabel": "Bisubira buri",
+    "period": {
+      "day": "Munsi",
+      "week": "Indwi",
+      "month": "Ukwezi"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Bishingiye ku mafaranga yanditse: ntibisigura fagitire.",
+    "chargesValue": "{count} gusubiriza umuriro kwa telefone",
+    "percent": "{percent}%",
+    "usedOf": "{used} kuri {limit} vyakoreshejwe ({percent}%)",
+    "usedOfShort": "{used} kuri {limit}",
+    "resets": "Bisubira {date}",
+    "budgetMarker": "Ubushobozi",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Uri mu bushobozi",
+      "warn": "Ubutumwa bw’imburi bwerekanwe",
+      "ask": "Kubaza imbere y’ubutumwa bwose",
+      "stop": "Kwohereza kwahagaritswe"
+    },
+    "stage": {
+      "warn": {
+        "title": "Kuburira",
+        "tag": "Kuburira hakiri kare",
+        "description": "Erekana ubutumwa bwo kuburira mu kiganiro uvuye kuri uru rugero rw’ubushobozi."
+      },
+      "ask": {
+        "title": "Kubanza kubaza",
+        "tag": "Kuburira buoroheje",
+        "description": "Tubaza kuri buri butumwa kuva kuri uru rugero rw’ubushobozi."
+      },
+      "stop": {
+        "title": "Guhagarika",
+        "tag": "Kubangamira kwinshi",
+        "description": "Hagarika ko wohereza kuva kuri uru rugero rw’ubushobozi gushika bisubiriye canke mugitse ubushobozi."
+      }
+    },
+    "thresholdLabel": "Intambamyi ya {stage}, ijana ku bushobozi",
+    "notice": {
+      "warn": {
+        "emissions": "Wamaze gukoresha {percent}% vy’ubushobozi bwawe bw’imyuka ihumanya.",
+        "cost": "Wamaze gukoresha {percent}% vy’ubushobozi bwawe bw’amafaranga."
+      },
+      "ask": {
+        "emissions": "Wamaze gukoresha {percent}% vy’ubushobozi bwawe bw’imyuka ihumanya. Wohereza ubu butumwa?",
+        "cost": "Wamaze gukoresha {percent}% vy’ubushobozi bwawe bw’amafaranga. Wohereza ubu butumwa?"
+      },
+      "askRun": {
+        "emissions": "Wamaze gukoresha {percent}% vy’ubushobozi bwawe bw’imyuka ihumanya. Wotangura iyi operation?",
+        "cost": "Wamaze gukoresha {percent}% vy’ubushobozi bwawe bw’amafaranga. Wotangura iyi operation?"
+      },
+      "stop": {
+        "emissions": "Ingingo y’ihagarikwa y’ubushobozi bw’imyuka ihumanya igeze. Kwohereza vyahagaritswe gushika {date}.",
+        "cost": "Igihe ntarengwa c'ingengo y'imari mu gukoresha bwagezweho. Kohereza birahagaritswe gushika ku {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Raba ingengo y'imari",
+      "dismiss": "Hinura",
+      "sendAnyway": "Ohereza n'ubwo biri uko",
+      "runAnyway": "Shira mu bikorwa n'ubwo biri uko",
+      "dontSend": "Ntutohereze",
+      "dontAskToday": "Ntuzosubire kubibaza uyu munsi",
+      "openSettings": "Fungura ivyo gutunganya ingengo y'imari",
+      "edit": "Hindura"
+    },
+    "composerPaused": "Kohereza kwarahagaritswe n'ingengo y'imari yawe",
+    "summaryTitle": "Ingingo z'ingengo y'imari yawe",
+    "chipAria": "Ingengo y'imari ya {metric}: {percent}% vyarakoreshejwe.",
+    "runProjection": "Ingingo y'imari y'ivyohumanya {from}% → {to}%"
   }
 }

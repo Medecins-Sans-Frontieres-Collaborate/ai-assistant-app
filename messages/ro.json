@@ -8335,5 +8335,102 @@
       "connect": "Conectați Microsoft 365",
       "connectNote": "Adăugați din OneDrive, e-mail și întâlniri"
     }
+  },
+  "usageBudgets": {
+    "title": "Bugetele tale",
+    "description": "Limite pe care le setezi pentru acest dispozitiv. Alege un buget, apoi selectează ce se întâmplă pe măsură ce te apropii și depășești limita. Bugetele contorizează discuțiile și execuțiile de workflow din începutul fiecărei perioade.",
+    "metric": {
+      "emissions": "Buget de emisii",
+      "cost": "Buget de cost"
+    },
+    "metricShort": {
+      "emissions": "Emisii",
+      "cost": "Cost"
+    },
+    "off": "Niciun buget setat.",
+    "measureAs": "Măsoară ca",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Încărcări de telefon",
+      "usd": "Dolari SUA"
+    },
+    "amountLabel": "Buget",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ore",
+      "smartphoneCharge": "încărcări",
+      "usd": "Dolari SUA"
+    },
+    "periodLabel": "Se resetează la fiecare",
+    "period": {
+      "day": "Zi",
+      "week": "Săptămână",
+      "month": "Lună"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Estimare pe baza prețurilor de listă: limită maximă, nu factură.",
+    "chargesValue": "{count} încărcări de telefon",
+    "percent": "{percent}%",
+    "usedOf": "{used} din {limit} utilizat ({percent}%)",
+    "usedOfShort": "{used} din {limit}",
+    "resets": "Se resetează {date}",
+    "budgetMarker": "Buget",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "În limită",
+      "warn": "Avertisment afișat",
+      "ask": "Solicită confirmare la fiecare mesaj",
+      "stop": "Trimiterea a fost întreruptă"
+    },
+    "stage": {
+      "warn": {
+        "title": "Avertizează",
+        "tag": "Atenționare",
+        "description": "Afișează o notificare în chat de la acest procent din buget."
+      },
+      "ask": {
+        "title": "Solicită confirmare",
+        "tag": "Blocare temporară",
+        "description": "Solicită confirmarea mea pentru fiecare mesaj de la acest procent din buget."
+      },
+      "stop": {
+        "title": "Oprește",
+        "tag": "Blocare totală",
+        "description": "Oprește trimiterea de la acest procent din buget până la resetare sau dacă măresc limita aici."
+      }
+    },
+    "thresholdLabel": "Prag {stage}, procent din buget",
+    "notice": {
+      "warn": {
+        "emissions": "Ați folosit {percent}% din bugetul de emisii.",
+        "cost": "Ați folosit {percent}% din bugetul de cost."
+      },
+      "ask": {
+        "emissions": "Ați folosit {percent}% din bugetul de emisii. Trimiteți acest mesaj?",
+        "cost": "Ați folosit {percent}% din bugetul de cost. Trimiteți acest mesaj?"
+      },
+      "askRun": {
+        "emissions": "Ați folosit {percent}% din bugetul de emisii. Porniți această execuție?",
+        "cost": "Ați folosit {percent}% din bugetul de cost. Porniți această execuție?"
+      },
+      "stop": {
+        "emissions": "S-a atins limita bugetului de emisii. Trimiterea este întreruptă până la {date}.",
+        "cost": "Pragul bugetului de cost a fost atins. Trimiterea este suspendată până la {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Vezi bugetul",
+      "dismiss": "Închide",
+      "sendAnyway": "Trimite oricum",
+      "runAnyway": "Rulează oricum",
+      "dontSend": "Nu trimite",
+      "dontAskToday": "Nu întreba din nou azi",
+      "openSettings": "Deschide setările bugetului",
+      "edit": "Editează"
+    },
+    "composerPaused": "Trimiterea este suspendată de bugetul tău",
+    "summaryTitle": "Bugetele tale",
+    "chipAria": "Bugetul pentru {metric}: {percent}% utilizat.",
+    "runProjection": "Bugetul de emisii {from}% → {to}%"
   }
 }

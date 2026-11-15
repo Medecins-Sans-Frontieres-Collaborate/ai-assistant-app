@@ -8319,5 +8319,102 @@
       "connect": "Ɓeydu Microsoft 365",
       "connectNote": "Ɓeydu e OneDrive, email walla konngol"
     }
+  },
+  "usageBudgets": {
+    "title": "Kiɗɗe maa",
+    "description": "Mbinduɓe ɗe kuɗɗitin ɗum loownde nde. Suɓo kiɗɗe, ɗaɓɓit ɓay e heɓa ɗum. Kiɗɗe gaddan moƴƴi e run chat e workflow e njahi waare.",
+    "metric": {
+      "emissions": "Kiɗɗe ngarta",
+      "cost": "Kiɗɗe juulnde"
+    },
+    "metricShort": {
+      "emissions": "Ngarta",
+      "cost": "Juulnde"
+    },
+    "off": "Kiɗɗe ndiyam waawani.",
+    "measureAs": "Namndee ɗum ko",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Hoore telefona",
+      "usd": "doolare US"
+    },
+    "amountLabel": "Kiɗɗe",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "guuru",
+      "smartphoneCharge": "hoore",
+      "usd": "doolare US"
+    },
+    "periodLabel": "Sappo njahi waare",
+    "period": {
+      "day": "Njaari",
+      "week": "Lewru",
+      "month": "Lewru"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Gollitii e Mbindu: Dirka njoba, ndin bill handi.",
+    "chargesValue": "{count} hoore telefona",
+    "percent": "{percent}%",
+    "usedOf": "{used} e {limit} ko moƴƴi ({percent}%)",
+    "usedOfShort": "{used} e {limit}",
+    "resets": "Sappo {date}",
+    "budgetMarker": "Kiɗɗe",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Dow kiɗɗe",
+      "warn": "Jaɗtin e haɓana",
+      "ask": "Ndartan tun e mesaj jine",
+      "stop": "Naanude send ngam"
+    },
+    "stage": {
+      "warn": {
+        "title": "Jaɗtin",
+        "tag": "Jaɗtin",
+        "description": "Jannani e chat ɗum nder jinna kiɗɗe."
+      },
+      "ask": {
+        "title": "Ndartan tun",
+        "tag": "Teelta tun",
+        "description": "Ndartan min e caggal mesaj fuu nder jinna kiɗɗe."
+      },
+      "stop": {
+        "title": "Daggann",
+        "tag": "Teelta waawi",
+        "description": "Daggann send nder jinna kiɗɗe haa sappo waare walla ɗaɓɓit e jam."
+      }
+    },
+    "thresholdLabel": "{stage} njoɓdi, juulde kiɗɗe",
+    "notice": {
+      "warn": {
+        "emissions": "Kuɗɗitin {percent}% e kiɗɗe ngarta maa.",
+        "cost": "Kuɗɗitin {percent}% e kiɗɗe juulnde maa."
+      },
+      "ask": {
+        "emissions": "Kuɗɗitin {percent}% e kiɗɗe ngarta maa. Send mesaj ɗum?",
+        "cost": "Kuɗɗitin {percent}% e kiɗɗe juulnde maa. Send mesaj ɗum?"
+      },
+      "askRun": {
+        "emissions": "Kuɗɗitin {percent}% e kiɗɗe ngarta maa. Nab run ɗum?",
+        "cost": "Kuɗɗitin {percent}% e kiɗɗe juulnde maa. Nab run ɗum?"
+      },
+      "stop": {
+        "emissions": "Kiɗɗe ngarta sappo ndiyam. Naanude send nga daggann haa {date}.",
+        "cost": "Faɓtude maantore cost ndaarani. Sendude yamani hida {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Jokkondir maantore",
+      "dismiss": "Danndol",
+      "sendAnyway": "Sendu tan",
+      "runAnyway": "Feñtu tan",
+      "dontSend": "Majjii sendude",
+      "dontAskToday": "Hal kadi waawa jangii jooni",
+      "openSettings": "Uddit maantore settings",
+      "edit": "Taƴ"
+    },
+    "composerPaused": "Sendude yamani ɗoo maantore maa",
+    "summaryTitle": "Maantore maa",
+    "chipAria": "Maantore {metric}: {percent}% woni.",
+    "runProjection": "Maantore emissions {from}% → {to}%"
   }
 }

@@ -8335,5 +8335,102 @@
       "connect": "Connecta Microsoft 365",
       "connectNote": "Afegeix des de OneDrive, correu i reunions"
     }
+  },
+  "usageBudgets": {
+    "title": "Els teus pressupostos",
+    "description": "Límits que t’estableixes en aquest dispositiu. Tria un pressupost i decideix què passa a mesura que t’hi aproximis o el superis. Els pressupostos tenen en compte xats i execucions de fluxos de treball des de l’inici de cada període.",
+    "metric": {
+      "emissions": "Pressupost d’emissions",
+      "cost": "Pressupost de cost"
+    },
+    "metricShort": {
+      "emissions": "Emissions",
+      "cost": "Cost"
+    },
+    "off": "No s’ha establert cap pressupost.",
+    "measureAs": "Mesura-ho com",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Càrregues de telèfon",
+      "usd": "Dòlars americans"
+    },
+    "amountLabel": "Pressupost",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "hores",
+      "smartphoneCharge": "càrregues",
+      "usd": "dòlars americans"
+    },
+    "periodLabel": "Es reinicia cada",
+    "period": {
+      "day": "Dia",
+      "week": "Setmana",
+      "month": "Mes"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Estimació segons preus de llista: límit superior, no una factura.",
+    "chargesValue": "{count} càrregues de telèfon",
+    "percent": "{percent}%",
+    "usedOf": "{used} de {limit} utilitzats ({percent}%)",
+    "usedOfShort": "{used} de {limit}",
+    "resets": "Es reinicia {date}",
+    "budgetMarker": "Pressupost",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Dins el pressupost",
+      "warn": "Avís mostrat",
+      "ask": "Confirma abans de cada missatge",
+      "stop": "L'enviament està en pausa"
+    },
+    "stage": {
+      "warn": {
+        "title": "Avisar",
+        "tag": "Alerta",
+        "description": "Mostra un avís al xat a partir d’aquest percentatge del pressupost."
+      },
+      "ask": {
+        "title": "Demanar primer",
+        "tag": "Blocatge suau",
+        "description": "Demana’m confirmació per a cada missatge a partir d’aquest percentatge del pressupost."
+      },
+      "stop": {
+        "title": "Aturar",
+        "tag": "Blocatge dur",
+        "description": "Atura l’enviament a partir d’aquest percentatge del pressupost fins que es reiniciï o l’augmenti aquí."
+      }
+    },
+    "thresholdLabel": "Llindar de {stage}, percentatge del pressupost",
+    "notice": {
+      "warn": {
+        "emissions": "Has utilitzat el {percent}% del teu pressupost d’emissions.",
+        "cost": "Has utilitzat el {percent}% del teu pressupost de cost."
+      },
+      "ask": {
+        "emissions": "Has utilitzat el {percent}% del teu pressupost d’emissions. Vols enviar aquest missatge?",
+        "cost": "Has utilitzat el {percent}% del teu pressupost de cost. Vols enviar aquest missatge?"
+      },
+      "askRun": {
+        "emissions": "Has utilitzat el {percent}% del teu pressupost d’emissions. Vols iniciar aquesta execució?",
+        "cost": "Has utilitzat el {percent}% del teu pressupost de cost. Vols iniciar aquesta execució?"
+      },
+      "stop": {
+        "emissions": "S’ha arribat al límit del pressupost d’emissions. L’enviament està en pausa fins al {date}.",
+        "cost": "S'ha arribat al límit de despesa del pressupost. L'enviament està en pausa fins al {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Veure pressupost",
+      "dismiss": "Descartar",
+      "sendAnyway": "Envia igualment",
+      "runAnyway": "Executa igualment",
+      "dontSend": "No enviïs",
+      "dontAskToday": "No ho tornis a preguntar avui",
+      "openSettings": "Obre la configuració del pressupost",
+      "edit": "Edita"
+    },
+    "composerPaused": "Enviament pausat pel teu pressupost",
+    "summaryTitle": "Els teus pressupostos",
+    "chipAria": "Pressupost de {metric}: {percent}% utilitzat.",
+    "runProjection": "Pressupost d'emissions {from}% → {to}%"
   }
 }

@@ -8335,5 +8335,102 @@
       "connect": "Microsoft 365 koppelen",
       "connectNote": "Toevoegen vanuit OneDrive, e-mail en vergaderingen"
     }
+  },
+  "usageBudgets": {
+    "title": "Uw budgetten",
+    "description": "Limieten die u voor uzelf heeft ingesteld op dit apparaat. Kies een budget en bepaal vervolgens wat er gebeurt als u het nadert of overschrijdt. Budgetten tellen chats en workflow-uitvoeringen vanaf het begin van elke periode.",
+    "metric": {
+      "emissions": "Emissiebudget",
+      "cost": "Kostenbudget"
+    },
+    "metricShort": {
+      "emissions": "Emissies",
+      "cost": "Kosten"
+    },
+    "off": "Geen budget ingesteld.",
+    "measureAs": "Meten als",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Telefoonladingen",
+      "usd": "Amerikaanse dollars"
+    },
+    "amountLabel": "Budget",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "uur",
+      "smartphoneCharge": "ladingen",
+      "usd": "Amerikaanse dollars"
+    },
+    "periodLabel": "Wordt gereset elke",
+    "period": {
+      "day": "Dag",
+      "week": "Week",
+      "month": "Maand"
+    },
+    "equalsGrams": "= {grams} g CO₂e",
+    "costNote": "Geschat op basis van catalogusprijzen: een bovengrens, geen factuur.",
+    "chargesValue": "{count} telefoonladingen",
+    "percent": "{percent}%",
+    "usedOf": "{used} van {limit} gebruikt ({percent}%)",
+    "usedOfShort": "{used} van {limit}",
+    "resets": "Wordt gereset op {date}",
+    "budgetMarker": "Budget",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Binnen budget",
+      "warn": "Waarschuwing getoond",
+      "ask": "Vragen voor elk bericht",
+      "stop": "Verzenden gepauzeerd"
+    },
+    "stage": {
+      "warn": {
+        "title": "Waarschuwen",
+        "tag": "Let op",
+        "description": "Toon een melding in de chat vanaf dit deel van het budget."
+      },
+      "ask": {
+        "title": "Eerst vragen",
+        "tag": "Zachte blokkade",
+        "description": "Vraag mij om elke boodschap te bevestigen vanaf dit deel van het budget."
+      },
+      "stop": {
+        "title": "Stoppen",
+        "tag": "Strikte blokkade",
+        "description": "Stop met versturen vanaf dit deel van het budget tot het reset of ik het hier verhoog."
+      }
+    },
+    "thresholdLabel": "{stage}-drempel, percentage van budget",
+    "notice": {
+      "warn": {
+        "emissions": "U heeft {percent}% van uw emissiebudget gebruikt.",
+        "cost": "U heeft {percent}% van uw kostenbudget gebruikt."
+      },
+      "ask": {
+        "emissions": "U heeft {percent}% van uw emissiebudget gebruikt. Dit bericht versturen?",
+        "cost": "U heeft {percent}% van uw kostenbudget gebruikt. Dit bericht versturen?"
+      },
+      "askRun": {
+        "emissions": "U heeft {percent}% van uw emissiebudget gebruikt. Deze run starten?",
+        "cost": "U heeft {percent}% van uw kostenbudget gebruikt. Deze run starten?"
+      },
+      "stop": {
+        "emissions": "Emissiebudget bereikt. Verzenden is gepauzeerd tot {date}.",
+        "cost": "Kostenbudget bereikt. Verzenden is gepauzeerd tot {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Bekijk budget",
+      "dismiss": "Sluiten",
+      "sendAnyway": "Toch verzenden",
+      "runAnyway": "Toch uitvoeren",
+      "dontSend": "Niet verzenden",
+      "dontAskToday": "Vandaag niet meer vragen",
+      "openSettings": "Budgetinstellingen openen",
+      "edit": "Bewerken"
+    },
+    "composerPaused": "Verzenden gepauzeerd door uw budget",
+    "summaryTitle": "Uw budgetten",
+    "chipAria": "{metric} budget: {percent}% gebruikt.",
+    "runProjection": "Emissiebudget {from}% → {to}%"
   }
 }
