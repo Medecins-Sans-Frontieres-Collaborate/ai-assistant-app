@@ -20,6 +20,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useBudgetGate } from '@/client/hooks/settings/useUsageBudgets';
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
 import { useCameraSupport } from '@/client/hooks/ui/useCameraSupport';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
@@ -714,6 +715,9 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     }
     if (ingestCheckSourceId) await runIngestCheck(ingestCheckSourceId);
   };
+
+  // Runs answer to the user's personal budgets (BudgetRunDialog explains).
+  const { guard: guardBudget } = useBudgetGate();
 
   const handleTransform = async () => {
     // Held pastes are part of the instruction, so a chip alone is enough.
@@ -1743,7 +1747,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
-                  void handleTransform();
+                  guardBudget(() => void handleTransform(), 'run');
                 }
               }}
               rows={1}
@@ -1753,7 +1757,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             />
             <button
               type="button"
-              onClick={() => void handleTransform()}
+              onClick={() => guardBudget(() => void handleTransform(), 'run')}
               disabled={(!instruction.trim() && !hasChips) || busy !== null}
               className="flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg bg-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
             >
