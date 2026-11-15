@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Ngati mulibe kiyi ya OpenAI API, mutha kuipeza pano: ",
   "Loading_ellipsis": "Kukweza...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Onetsetsani kuti kiyi yanu ya OpenAI API yakhazikitsidwa kumanzere kwa pansi pa gawo lakumbali.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Malire a uthenga ndi zilembo {{maxLength}}. Mwalowetsa zilembo {{valueLength}}.",
   "Model": "Mtundu",
   "OR": "KAPENA",
   "OpenAI API Key Required": "Kiyi ya OpenAI API Ikufunika",
   "Please enter a message": "Chonde lowetsani uthenga",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Chonde khazikitsani kiyi yanu ya OpenAI API kumanzere kwa pansi pa gawo lakumbali.",
-  "Prompt limit is {{maxLength}} characters": "Malire a lamulo ndi zilembo {{maxLength}}",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Malire a lamulo ndi zilembo {{maxLength}}. Mwalowetsa zilembo {{valueLength}}.",
   "Regenerate response": "Pangani yankho latsopano",
   "Run Typewriter Intro": "Yambitsani Mawu Oyamba a Typewriter",
   "Save & Submit": "Sungani ndi Kutumiza",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Chitsanzo chikulandira mapempho ambiri panopa. Chiyesedwanso zokha; chonde yesani pakapita nthawi.",
       "MODEL_QUOTA_EXCEEDED": "Chitsanzo chafika malire a mphamvu yake. Yesani chitsanzo china, kapena yesani nthawi ina.",
       "MODEL_AUTH_FAILED": "App siyathe kukonza kulumikizana ndi chitsanzo. Iyi ndi vuto la makonzedwe — chonde lemberani support."
-    }
+    },
+    "messageLimitExceeded": "Malire a uthenga ndi zilembo {maxLength}. Mwalowetsa zilembo {valueLength}."
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -5470,7 +5468,7 @@
     "m365AgentLimitBadge": "Malire {limit} (wakhazikitsa {who})",
     "m365PlanTrimHint": "Sankhani zomwe muyike: chotsani ma subfolder kapena mafayela, sungani mitundu ya mafayela, kapena siyani za tsopano zokha.",
     "m365PlanKeepNewest": "Sungani {count, plural, one {# fayilo yatsopano kwambiri} other {# mafayilo atsopano kwambiri}}",
-    "m365PlanKeepNewestConfirm": "Sungani {keep, plural, one {# fayilo yomwe yasintha posachedwa kwambiri} other {# mafayilo omwe asinthidwa posachedwa kwambiri}} ndikutulutsa {exclude, plural, one {# fayilo} other {# mafayilo} ena}?",
+    "m365PlanKeepNewestConfirm": "Sungani {keep, plural, one {# fayilo yomwe yasintha posachedwa kwambiri} other {# mafayilo omwe asinthidwa posachedwa kwambiri}} ndikutulutsa {exclude, plural, one {# fayilo} other {# mafayilo ena}}?",
     "m365PlanIncludeAll": "Ikani zonse kachiwiri ({count, plural, one {# fayilo yatulutsidwa} other {# mafayilo atulutsidwa}})",
     "m365PlanIncludeFile": "Ikani {name}",
     "m365PlanFileExcluded": "yachotsedwa",

@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Tí o kò bá ní kọ́kọ́rọ́ API OpenAI, o lè gba ọ̀kan níbí: ",
   "Loading_ellipsis": "Ń ṣí sílẹ̀...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Rí i dájú pé kọ́kọ́rọ́ API OpenAI rẹ ti ṣètò ní ìsàlẹ̀ òsì ti ẹ̀gbẹ́-ojú.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Ìwọ̀n ìránṣẹ́ jẹ́ àwọn lẹ́tà {{maxLength}}. O ti tẹ àwọn lẹ́tà {{valueLength}} sínú.",
   "Model": "Àwòṣe",
   "OR": "TÀBÍ",
   "OpenAI API Key Required": "Kọ́kọ́rọ́ API OpenAI Nílò",
   "Please enter a message": "Jọ̀wọ́ tẹ ìránṣẹ́ kan sínú",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Jọ̀wọ́ ṣètò kọ́kọ́rọ́ API OpenAI rẹ ní ìsàlẹ̀ òsì ti ẹ̀gbẹ́-ojú.",
-  "Prompt limit is {{maxLength}} characters": "Ìwọ̀n ìtọ́sọ́nà jẹ́ àwọn lẹ́tà {{maxLength}}",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Ìwọ̀n ìtọ́sọ́nà jẹ́ àwọn lẹ́tà {{maxLength}}. O ti tẹ àwọn lẹ́tà {{valueLength}} sínú.",
   "Regenerate response": "Tún èsì ṣe",
   "Run Typewriter Intro": "Ṣe Ìfihàn Typewriter",
   "Save & Submit": "Tọ́jú àti Fí Sílẹ̀",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Àwọ̀nṣàpẹẹrẹ ń gba ìbéèrè jù lọ ní báyìí. Ti gbìyànjú laifọwọyi; jọwọ gbìyànjú lẹ́ẹ̀kàn sí i lẹ́yìn ìgbà díẹ.",
       "MODEL_QUOTA_EXCEEDED": "Kòtà àwọ̀nṣàpẹẹrẹ ti parí. Gbìyànjú àwọ̀nṣàpẹẹrẹ mìíràn, tàbí gbìyànjú nígbà míì.",
       "MODEL_AUTH_FAILED": "Ìṣàkóso àpamọ́ app kọ̀ láti fà áwọ̀nṣàpẹẹrẹ sílẹ̀. Èyí jẹ́ iṣòro amúṣiṣẹpọ — jọwọ kan si ìtẹ́wọ́gbà."
-    }
+    },
+    "messageLimitExceeded": "Ìwọ̀n ìránṣẹ́ jẹ́ àwọn lẹ́tà {maxLength}. O ti tẹ àwọn lẹ́tà {valueLength} sínú."
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -2559,7 +2557,7 @@
     "saveForbidden": "O kò ní àṣẹ láti kọ sínú àpamọ́ yìí — yan omiran pẹ̀lú “Fipamọ́ sí OneDrive”.",
     "saveToOneDriveFailed": "A kò lè fipamọ́ sí OneDrive — jọ̀wọ́ gbìyànjú lẹ́ẹ̀kansi.",
     "textVersion": "Èdà ọrọ̀ (DOCX)",
-    "textVersionHint": "Fáìlì Word tí èèyàn lè ṣàtúnṣe pẹ̀lú itumọ̀ ọrọ̀, oju-iwe kọọkan fún orísun akọwé kọọkan. Fáìlì tó túmọ̀ náà máa pa ipa àtẹ̀jáde.</br>"
+    "textVersionHint": "Fáìlì Word tí èèyàn lè ṣàtúnṣe pẹ̀lú itumọ̀ ọrọ̀, oju-iwe kọọkan fún orísun akọwé kọọkan. Fáìlì tó túmọ̀ náà máa pa ipa àtẹ̀jáde."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -3113,7 +3111,7 @@
       "documentSubmitFailed": "A ko le fi iwe ranṣẹ fun itumọ: {message}",
       "documentProgressLabel": "Ilọsiwaju itumọ iwe",
       "documentStepUploaded": "Ti gbe kalẹ",
-      "documentStepPreparing": "Ní ṣíṣe àtẹ́yẹ</>",
+      "documentStepPreparing": "Ní ṣíṣe àtẹ́yẹ",
       "documentTypicalDuration": "nígbà míì díẹ",
       "documentCanLeave": "O le kuro lori oju-iwe yii. Itumọ naa n tẹsiwaju ati pe yoo wa nibi nigba ti o pada.",
       "documentStalled": "A ko le ṣayẹwo ilọsiwaju itumọ. Ó ṣeé ṣe kí o ṣi ń ṣiṣẹ.",

@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Raha tsy manana lakilen'ny API OpenAI ianao, afaka mahazo iray eto: ",
   "Loading_ellipsis": "Miandry...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Ataovy azo antoka fa ny lakilen'ny API OpenAI dia napetraka eo ambany havia amin'ny sisiny.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Ny fetra ny hafatra dia {{maxLength}} litera. Efa nampiditra {{valueLength}} litera ianao.",
   "Model": "Modely",
   "OR": "NA",
   "OpenAI API Key Required": "Ilaina ny lakilen'ny API OpenAI",
   "Please enter a message": "Azafady ampidiro ny hafatra",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Azafady apetraho ny lakilen'ny API OpenAI anao eo ambany havia amin'ny sisiny.",
-  "Prompt limit is {{maxLength}} characters": "Ny fetra ny toro-hevitra dia {{maxLength}} litera",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Ny fetra ny toro-hevitra dia {{maxLength}} litera. Efa nampiditra {{valueLength}} litera ianao.",
   "Regenerate response": "Avereno ny valiny",
   "Run Typewriter Intro": "Alefaso ny fampidirana mpanonta",
   "Save & Submit": "Tehirizo sy Alefaso",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Maro loatra izao ny fangatahana raisin'ny modely. Niezaka ho azy indray izy; andramo azafady afaka kelikely.",
       "MODEL_QUOTA_EXCEEDED": "Tapitra ny fetran'ny fahafahan'ny modely. Andramo modely hafa, na avereno manandrana amin'ny manaraka.",
       "MODEL_AUTH_FAILED": "Tsy afaka nampifandray amin'ny tolotra modely ny app. Olana amin'ny fikirakirana izany — mifandraisa amin'ny fanohanana azafady."
-    }
+    },
+    "messageLimitExceeded": "Ny fetra ny hafatra dia {maxLength} litera. Efa nampiditra {valueLength} litera ianao."
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -6019,7 +6017,7 @@
     "delegationMaxOverridesHint": "Firy ny override azon'ny admins-n'ny delegation iray atontosa tanteraka.",
     "delegationAnchorWarning": "Tsy misy email domain na olona ao anatin'ity fari-piadidiana ity. Ny fitovian'ny vondrona sy toetra dia tsapaina rehefa miditra ary indraindray mety tsy ho hita, ka mety tsy mihatra mangina ny fetra — ary tsy azo jerena mialoha amin'ny alalan'ny email. Ampio domain ho anchor.",
     "anchorChip": "Tsy anchora",
-    "delegationNarrowingPreview": "{count, plural, one {# override misy ankehitriny no ivelan’} other {# overrides misy ankehitriny no ivelan’}}’ity fari-piadidiana ity araka ny draft. Tsy mihatra amin’ireo kendrena ireo intsony izany rehefa voatahiry.",
+    "delegationNarrowingPreview": "{count, plural, one {# override misy ankehitriny no ivelan’} other {# overrides misy ankehitriny no ivelan’}}ity fari-piadidiana ity araka ny draft. Tsy mihatra amin’ireo kendrena ireo intsony izany rehefa voatahiry.",
     "delegationLiftableTitle": "Defaults azon'ny scoped admin ampitomboina",
     "delegationLiftableHint": "Ireo defaults global tsy misy hard ceiling dia azo ampitomboin'ny delegations rehetra. Apetraho ceiling raha te hampatsingivana.",
     "delegationLiftableNone": "Samy manana ceiling ny default rehetra napetraka.",

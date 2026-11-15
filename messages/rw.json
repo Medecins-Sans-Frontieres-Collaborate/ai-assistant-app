@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Niba udafite urufunguzo rwa OpenAI API, ushobora kurubona hano: ",
   "Loading_ellipsis": "Gutegereza...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Menya neza ko urufunguzo rwawe rwa OpenAI API rushyizwe mu buryo bw'ibumoso hasi mu murongo w'uruhande.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Ubutumwa ntibugomba kurenza {{maxLength}} inyuguti. Wanditse {{valueLength}} inyuguti.",
   "Model": "Modeli",
   "OR": "CYANGWA",
   "OpenAI API Key Required": "Urufunguzo rwa OpenAI API Rurakenewe",
   "Please enter a message": "Nyamuneka andika ubutumwa",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Nyamuneka shyira urufunguzo rwawe rwa OpenAI API mu buryo bw'ibumoso hasi mu murongo w'uruhande.",
-  "Prompt limit is {{maxLength}} characters": "Ibwiriza ntirirenze {{maxLength}} inyuguti",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Ibwiriza ntirirenze {{maxLength}} inyuguti. Wanditse {{valueLength}} inyuguti.",
   "Regenerate response": "Subiza igisubizo",
   "Run Typewriter Intro": "Koresha Intangiriro y'Imashini yo Kwandika",
   "Save & Submit": "Bika & Ohereza",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Model iri kwakira ubusabe bwinshi cyane nonaha. Byageragejwe kongera, nyamuneka ongera ugerageze nyuma y’akanya gato.",
       "MODEL_QUOTA_EXCEEDED": "Ubushobozi model yemerewe burarangiye. Gerageza indi model, cyangwa ugerageze nyuma.",
       "MODEL_AUTH_FAILED": "Porogaramu ntishoboye kwemezwa kuri serivisi ya model. Ni ikibazo mu ishyirwaho rya gahunda — nyamuneka hamagara ubufasha."
-    }
+    },
+    "messageLimitExceeded": "Ubutumwa ntibugomba kurenza {maxLength} inyuguti. Wanditse {valueLength} inyuguti."
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",
@@ -6306,7 +6304,7 @@
     "previewSourceModelAccess": "Kwemeza model — {list}",
     "groupMembershipDegradedStructural": "Kugenzura abanyamuryango b’amatsinda biri kunanirana kuri uyu muyoboro ({reason}). Amabwiriza n’uburenganzira bishingiye ku matsinda ntibiri gushyirwa mu bikorwa ku bantu babangamiwe—suzuma Group.Read.All consent ya tenant hamwe na app registration.",
     "groupMembershipDegradedRetryable": "Bimwe mu bigenzura by’abanyamuryango b’amatsinda byanze kuri uyu muyoboro mu minota mike ishize ({reason}). Amabwiriza ashingiye ku matsinda ntashobora gukurikizwa kuri abo bantu kugeza ku munota umwe mu gihe byongeye kugeragezwa.",
-    "groupMembershipDegradedUsers": "Abantu {count, plural, one {# umwe} other {#} bari} bafite ikibazo kuri uyu muyoboro.",
+    "groupMembershipDegradedUsers": "Abantu {count, plural, one {# umwe} other {# bari}} bafite ikibazo kuri uyu muyoboro.",
     "previewDirectoryNotFound": "Nta mukoresha wa directory ufite iyi email, bityo amabwiriza ya departema/sosiyete/ofisi n’itsinda byafashwe nk'aho uwo muntu atabarizwamo na hamwe."
   },
   "m365": {

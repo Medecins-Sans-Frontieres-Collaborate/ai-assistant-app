@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Агар шумо калиди OpenAI API надоред, метавонед онро аз ин ҷо дастрас намоед: ",
   "Loading_ellipsis": "Боргирӣ...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Мутмаин шавед, ки калиди OpenAI API-и шумо дар тарафи чапи поёни менюи тарафӣ танзим шудааст.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Маҳдудияти паём {{maxLength}} аломат аст. Шумо {{valueLength}} аломат ворид кардед.",
   "Model": "Модель",
   "OR": "Ё",
   "OpenAI API Key Required": "OpenAI API Key талаб мешавад",
   "Please enter a message": "Лутфан паём ворид кунед",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Лутфан калиди OpenAI API-и худро дар чапи поёни менюи тарафӣ танзим кунед.",
-  "Prompt limit is {{maxLength}} characters": "Маҳдудияти тақозо {{maxLength}} аломат аст",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Маҳдудияти тақозо {{maxLength}} аломат аст. Шумо {{valueLength}} аломат ворид кардед.",
   "Regenerate response": "Бозсозии посух",
   "Run Typewriter Intro": "Чархонидани муаррифии Typewriter",
   "Save & Submit": "Захира ва ирсол",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Модел ҳоло дархостҳои зиёд дарёфт мекунад. Кӯшиши такрорӣ ба таври автоматикӣ сурат гирифт; лутфан баъдтар боз кӯшиш кунед.",
       "MODEL_QUOTA_EXCEEDED": "Ҳадди иқтидори модел тамом шуд. Модели дигарро санҷед ё баъдтар кӯшиш кунед.",
       "MODEL_AUTH_FAILED": "Барнома натавонист бо хидмати модел аутентификатсия шавад. Ин мушкили танзимот аст — лутфан бо дастгирӣ тамос гиред."
-    }
+    },
+    "messageLimitExceeded": "Маҳдудияти паём {maxLength} аломат аст. Шумо {valueLength} аломат ворид кардед."
   },
   "transcript": {
     "originalTranscript": "Нусхаи аслӣ",
@@ -5469,7 +5467,7 @@
     "m365CapAboveRole": "Ин меъёр аз ваколати нақши шумо зиёд аст — ба маъмури умумӣ муроҷиат кунед.",
     "m365AgentLimitBadge": "Меъёр {limit} (муайяншуда аз ҷониби {who})",
     "m365PlanTrimHint": "Чиро дохил карданро ихтисор кунед: зерпапкаҳо ё файлҳоро ғайрифаъол кунед, аз рӯи намуд филтр кунед ё танҳо файлҳои навтаринро нигоҳ доред.",
-    "m365PlanKeepNewest": "Навтарин {count, plural, one {# файл} other {# файл}-ро нигоҳ доред}",
+    "m365PlanKeepNewest": "Навтарин {count, plural, one {# файл} other {# файл}}-ро нигоҳ доред",
     "m365PlanKeepNewestConfirm": "Оё мехоҳед {keep, plural, one {# файл, ки охирин тағйир ёфтааст} other {# файл, ки охирин тағйир ёфтанд}}-ро нигоҳ доред ва {exclude, plural, one {# файли дигар} other {# файлҳои дигар}}-ро берун кунед?",
     "m365PlanIncludeAll": "Ҳамаро дубора дохил кунед ({count, plural, one {# файл хориҷ шудааст} other {# файл хориҷ шудаанд}})",
     "m365PlanIncludeFile": "{name}-ро дохил кунед",

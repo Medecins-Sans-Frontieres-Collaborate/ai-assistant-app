@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Haddii aadan haysan furaha API ee OpenAI, waxaad ka heli kartaa halkan: ",
   "Loading_ellipsis": "Waa la soo rarayaa...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Hubi in furaha API ee OpenAI lagu dejiyay bidixda hoose ee dhinaca bar-ka.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Xadka fariinta waa {{maxLength}} xaraf. Waxaad gelisay {{valueLength}} xaraf.",
   "Model": "Moodel",
   "OR": "AMA",
   "OpenAI API Key Required": "Furaha API ee OpenAI Ayaa Loo Baahan Yahay",
   "Please enter a message": "Fadlan geli fariin",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Fadlan ku deji furaha API ee OpenAI bidixda hoose ee dhinaca bar-ka.",
-  "Prompt limit is {{maxLength}} characters": "Xadka tilmaanta waa {{maxLength}} xaraf",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Xadka tilmaanta waa {{maxLength}} xaraf. Waxaad gelisay {{valueLength}} xaraf.",
   "Regenerate response": "Dib u samee jawaabta",
   "Run Typewriter Intro": "Bilow Hordhaca Qoraalka",
   "Save & Submit": "Keydi & Gudbi",
@@ -1043,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "Qaabka waxaa hadda gaaraya codsiyo aad u badan. Si toos ah ayaa dib loogu celiyey; fadlan isku day mar kale daqiiqad kadib.",
       "MODEL_QUOTA_EXCEEDED": "Awoodda qaabka waa dhammaatay. Isku day qaab kale, ama isku day mar dambe.",
       "MODEL_AUTH_FAILED": "App-ka uma suurtogelin in uu is-aqoonsiiyo adeegga qaabka. Tani waa arrin xagga la-habaynta ah — fadlan la xiriir taageerada."
-    }
+    },
+    "messageLimitExceeded": "Xadka fariinta waa {maxLength} xaraf. Waxaad gelisay {valueLength} xaraf."
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -6716,7 +6714,7 @@
       "changePeriod": "Bedel muddada",
       "period": {
         "lastWorkday": "laga bilaabo maalintii shaqo ee ugu dambeysay",
-        "lastDays": "{count, plural, one {maalintii u dambeysay} other {#{ } maalmood ee u dambeysay}}"
+        "lastDays": "{count, plural, one {maalintii u dambeysay} other {# maalmood ee u dambeysay}}"
       },
       "source": {
         "mail": "E-mail",
