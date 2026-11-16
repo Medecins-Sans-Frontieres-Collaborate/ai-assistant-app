@@ -762,6 +762,8 @@
     "disableWebSearch": "Lêgerîna webê neçalak bike",
     "scrollToBottom": "Berjêr biçe",
     "regenerateResponse": "Bersivê ji nû ve çêke",
+    "goodResponse": "وەڵامی باش",
+    "badResponse": "وەڵامی خراپ",
     "retryMessage": "Peyamê dîsa biceribîne",
     "editMessage": "Peyamê biguherîne",
     "deleteMessage": "Peyamê jê bibe",

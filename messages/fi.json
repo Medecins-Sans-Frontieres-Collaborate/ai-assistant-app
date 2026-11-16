@@ -669,6 +669,8 @@
     "disableWebSearch": "Poista verkkohaku käytöstä",
     "scrollToBottom": "Vieritä alas",
     "regenerateResponse": "Luo vastaus uudelleen",
+    "goodResponse": "Hyvä vastaus",
+    "badResponse": "Huono vastaus",
     "retryMessage": "Yritä viestiä uudelleen",
     "editMessage": "Muokkaa viestiä",
     "deleteMessage": "Poista viesti",

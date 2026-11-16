@@ -637,6 +637,8 @@
     "disableWebSearch": "የድር ፍለጋን አሰናክል",
     "scrollToBottom": "ወደ ታች ተንከባለል",
     "regenerateResponse": "ምላሽ እንደገና አመንጭ",
+    "goodResponse": "ጥሩ ምላሽ",
+    "badResponse": "መጥፎ ምላሽ",
     "retryMessage": "መልእክት እንደገና ሞክር",
     "editMessage": "መልእክትን አርትዕ",
     "deleteMessage": "መልእክትን ሰርዝ",

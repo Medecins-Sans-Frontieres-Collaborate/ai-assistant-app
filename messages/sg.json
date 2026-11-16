@@ -762,6 +762,8 @@
     "disableWebSearch": "Sïgi gïngö na web",
     "scrollToBottom": "Gue na yâ",
     "regenerateResponse": "Sara réponse ngâ",
+    "goodResponse": "Mbîa na mbâda",
+    "badResponse": "Mbîa na mbi",
     "retryMessage": "Tëne mëngö ngâ",
     "editMessage": "Sëndä mëngö",
     "deleteMessage": "Zïa mëngö",

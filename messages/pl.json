@@ -691,6 +691,8 @@
     "disableWebSearch": "Wyłącz wyszukiwanie w sieci",
     "scrollToBottom": "Przewiń w dół",
     "regenerateResponse": "Wygeneruj odpowiedź ponownie",
+    "goodResponse": "Dobra odpowiedź",
+    "badResponse": "Zła odpowiedź",
     "retryMessage": "Ponów wiadomość",
     "editMessage": "Edytuj wiadomość",
     "deleteMessage": "Usuń wiadomość",

@@ -615,6 +615,8 @@
     "disableWebSearch": "Disattiva ricerca web",
     "scrollToBottom": "Scorri verso il basso",
     "regenerateResponse": "Rigenera risposta",
+    "goodResponse": "Risposta buona",
+    "badResponse": "Risposta scadente",
     "retryMessage": "Riprova messaggio",
     "editMessage": "Modifica messaggio",
     "deleteMessage": "Elimina messaggio",

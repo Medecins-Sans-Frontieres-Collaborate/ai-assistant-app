@@ -669,6 +669,8 @@
     "disableWebSearch": "ဝဘ်ရှာဖွေမှုကို ပိတ်ပါ",
     "scrollToBottom": "အောက်ခြေသို့ လျှောက်ပါ",
     "regenerateResponse": "တုံ့ပြန်မှုကို ပြန်လည် ထုတ်လုပ်ပါ",
+    "goodResponse": "တုံ့ပြန်မှုကောင်းတယ်",
+    "badResponse": "တုံ့ပြန်မှုမကောင်းပါ",
     "retryMessage": "မက်ဆေ့ခ်ျကို ပြန်စမ်းကြည့်ပါ",
     "editMessage": "မက်ဆေ့ခ်ျကို တည်းဖြတ်ပါ",
     "deleteMessage": "မက်ဆေ့ခ်ျကို ဖျက်ပါ",

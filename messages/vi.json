@@ -695,6 +695,8 @@
     "disableWebSearch": "Tắt tìm kiếm web",
     "scrollToBottom": "Cuộn xuống dưới cùng",
     "regenerateResponse": "Tạo lại phản hồi",
+    "goodResponse": "Phản hồi tốt",
+    "badResponse": "Phản hồi không tốt",
     "retryMessage": "Thử lại tin nhắn",
     "editMessage": "Chỉnh sửa tin nhắn",
     "deleteMessage": "Xóa tin nhắn",

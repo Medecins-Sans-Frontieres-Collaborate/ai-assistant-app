@@ -762,6 +762,8 @@
     "disableWebSearch": "Letsani kusakira pa intaneti",
     "scrollToBottom": "Pitirizani pansi",
     "regenerateResponse": "Pangani yankho latsopano",
+    "goodResponse": "Yankho labwino",
+    "badResponse": "Yankho loipa",
     "retryMessage": "Yesaninso uthenga",
     "editMessage": "Sinthani uthenga",
     "deleteMessage": "Chotsani uthenga",

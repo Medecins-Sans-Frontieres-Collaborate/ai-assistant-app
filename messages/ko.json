@@ -694,6 +694,8 @@
     "disableWebSearch": "웹 검색 비활성화",
     "scrollToBottom": "맨 아래로 스크롤",
     "regenerateResponse": "응답 재생성",
+    "goodResponse": "좋은 답변",
+    "badResponse": "나쁜 답변",
     "retryMessage": "메시지 재시도",
     "editMessage": "메시지 편집",
     "deleteMessage": "메시지 삭제",

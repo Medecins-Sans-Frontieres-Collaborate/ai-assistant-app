@@ -762,6 +762,8 @@
     "disableWebSearch": "Dami raadinta shabakadda",
     "scrollToBottom": "Hoos u dhaqaaqi",
     "regenerateResponse": "Dib u samee jawaabta",
+    "goodResponse": "Jawaab wanaagsan",
+    "badResponse": "Jawaab xun",
     "retryMessage": "Dib u isku day fariinta",
     "editMessage": "Wax ka beddel fariinta",
     "deleteMessage": "Tirtir fariinta",

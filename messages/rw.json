@@ -762,6 +762,8 @@
     "disableWebSearch": "Hagarika gushakisha ku rubuga",
     "scrollToBottom": "Manukira hasi",
     "regenerateResponse": "Subiza igisubizo",
+    "goodResponse": "Igisubizo cyiza",
+    "badResponse": "Igisubizo kitari cyiza",
     "retryMessage": "Ongera ugerageze ubutumwa",
     "editMessage": "Hindura ubutumwa",
     "deleteMessage": "Siba ubutumwa",

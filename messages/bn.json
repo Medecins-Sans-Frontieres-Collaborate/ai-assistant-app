@@ -640,6 +640,8 @@
     "disableWebSearch": "ওয়েব অনুসন্ধান নিষ্ক্রিয় করুন",
     "scrollToBottom": "নীচে স্ক্রোল করুন",
     "regenerateResponse": "পুনরায় উত্তর তৈরি করুন",
+    "goodResponse": "ভালো উত্তর",
+    "badResponse": "খারাপ উত্তর",
     "retryMessage": "বার্তা পুনরায় চেষ্টা করুন",
     "editMessage": "বার্তা সম্পাদনা করুন",
     "deleteMessage": "বার্তা মুছুন",

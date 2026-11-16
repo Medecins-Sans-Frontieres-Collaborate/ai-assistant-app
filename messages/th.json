@@ -611,6 +611,8 @@
     "disableWebSearch": "ปิดการใช้งานการค้นหาเว็บ",
     "scrollToBottom": "เลื่อนไปด้านล่างสุด",
     "regenerateResponse": "สร้างการตอบกลับใหม่",
+    "goodResponse": "ตอบกลับได้ดี",
+    "badResponse": "ตอบกลับไม่ดี",
     "retryMessage": "ลองส่งข้อความอีกครั้ง",
     "editMessage": "แก้ไขข้อความ",
     "deleteMessage": "ลบข้อความ",

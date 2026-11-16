@@ -640,6 +640,8 @@
     "disableWebSearch": "Websuche deaktivieren",
     "scrollToBottom": "Nach unten scrollen",
     "regenerateResponse": "Antwort neu generieren",
+    "goodResponse": "Gute Antwort",
+    "badResponse": "Schlechte Antwort",
     "retryMessage": "Nachricht erneut versuchen",
     "editMessage": "Nachricht bearbeiten",
     "deleteMessage": "Nachricht löschen",

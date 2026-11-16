@@ -619,6 +619,8 @@
     "disableWebSearch": "غیرفعال کردن جستجوی وب",
     "scrollToBottom": "پیمایش به پایین",
     "regenerateResponse": "تولید مجدد پاسخ",
+    "goodResponse": "پاسخ مناسب",
+    "badResponse": "پاسخ نامناسب",
     "retryMessage": "تلاش مجدد پیام",
     "editMessage": "ویرایش پیام",
     "deleteMessage": "حذف پیام",

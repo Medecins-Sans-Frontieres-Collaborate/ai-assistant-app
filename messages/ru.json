@@ -694,6 +694,8 @@
     "disableWebSearch": "Отключить веб-поиск",
     "scrollToBottom": "Прокрутить вниз",
     "regenerateResponse": "Перегенерировать ответ",
+    "goodResponse": "Хороший ответ",
+    "badResponse": "Плохой ответ",
     "retryMessage": "Повторить сообщение",
     "editMessage": "Редактировать сообщение",
     "deleteMessage": "Удалить сообщение",

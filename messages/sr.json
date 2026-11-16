@@ -762,6 +762,8 @@
     "disableWebSearch": "Искључи веб претрагу",
     "scrollToBottom": "Скролуј на дно",
     "regenerateResponse": "Поново генериши одговор",
+    "goodResponse": "Dobar odgovor",
+    "badResponse": "Loš odgovor",
     "retryMessage": "Покушај поруку поново",
     "editMessage": "Уреди поруку",
     "deleteMessage": "Обриши поруку",

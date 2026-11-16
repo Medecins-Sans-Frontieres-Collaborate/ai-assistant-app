@@ -692,6 +692,8 @@
     "disableWebSearch": "వెబ్ శోధనను నిలిపివేయండి",
     "scrollToBottom": "దిగువకు స్క్రోల్ చేయండి",
     "regenerateResponse": "ప్రతిస్పందనను పునరుత్పత్తి చేయండి",
+    "goodResponse": "మంచి ప్రతిస్పందన",
+    "badResponse": "చెడు ప్రతిస్పందన",
     "retryMessage": "సందేశం మళ్లీ ప్రయత్నించండి",
     "editMessage": "సందేశం సవరించండి",
     "deleteMessage": "సందేశం తొలగించండి",

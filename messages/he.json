@@ -669,6 +669,8 @@
     "disableWebSearch": "השבתת חיפוש באינטרנט",
     "scrollToBottom": "גלילה למטה",
     "regenerateResponse": "יצירת תגובה מחדש",
+    "goodResponse": "תגובה טובה",
+    "badResponse": "תגובה לא טובה",
     "retryMessage": "ניסיון חוזר להודעה",
     "editMessage": "עריכת הודעה",
     "deleteMessage": "מחיקת הודעה",

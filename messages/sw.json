@@ -694,6 +694,8 @@
     "disableWebSearch": "Lemaza utaftaji wa wavuti",
     "scrollToBottom": "Sogeza chini kabisa",
     "regenerateResponse": "Zalisha jibu upya",
+    "goodResponse": "Jibu zuri",
+    "badResponse": "Jibu baya",
     "retryMessage": "Jaribu ujumbe tena",
     "editMessage": "Hariri ujumbe",
     "deleteMessage": "Futa ujumbe",

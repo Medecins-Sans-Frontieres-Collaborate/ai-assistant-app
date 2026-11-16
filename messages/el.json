@@ -762,6 +762,8 @@
     "disableWebSearch": "Απενεργοποίηση αναζήτησης ιστού",
     "scrollToBottom": "Κύλιση προς τα κάτω",
     "regenerateResponse": "Αναδημιουργία απάντησης",
+    "goodResponse": "Καλή απάντηση",
+    "badResponse": "Κακή απάντηση",
     "retryMessage": "Επανάληψη μηνύματος",
     "editMessage": "Επεξεργασία μηνύματος",
     "deleteMessage": "Διαγραφή μηνύματος",

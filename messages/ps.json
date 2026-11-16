@@ -762,6 +762,8 @@
     "disableWebSearch": "ویب لټون غیر فعال کړئ",
     "scrollToBottom": "بېخ ته لاړ شئ",
     "regenerateResponse": "ځواب بیا جوړ کړئ",
+    "goodResponse": "ښه ځواب",
+    "badResponse": "بد ځواب",
     "retryMessage": "پیغام بیا هڅه وکړئ",
     "editMessage": "پیغام سم کړئ",
     "deleteMessage": "پیغام ړنګ کړئ",

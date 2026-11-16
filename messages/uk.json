@@ -611,6 +611,8 @@
     "disableWebSearch": "Вимкнути веб-пошук",
     "scrollToBottom": "Прокрутити вниз",
     "regenerateResponse": "Перегенерувати відповідь",
+    "goodResponse": "Гарна відповідь",
+    "badResponse": "Погана відповідь",
     "retryMessage": "Повторити повідомлення",
     "editMessage": "Редагувати повідомлення",
     "deleteMessage": "Видалити повідомлення",
