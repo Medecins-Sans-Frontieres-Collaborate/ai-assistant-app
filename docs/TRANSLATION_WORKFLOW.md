@@ -19,6 +19,95 @@ target languages, evaluates quality, and manages revisions. Server side:
 - The server receives the language as a **display label** (≤80 chars,
   free text by design), not a locale code.
 
+## Documents larger than one batch
+
+A run takes at most 60,000 source characters. An uploaded document over
+that is not rejected: `lib/utils/shared/translation/pageBatches.ts` splits
+the extracted text into pages, the first batch of consecutive pages that
+fits is loaded, and `SourcePageSelector` (a strip above the source pane)
+lets the user type a page range or step to the previous/next batch. A
+selection is applied only if it fits the budget.
+
+- Workflow state keeps a **reference** (`sourceDocument`: name, blob url,
+  last page, selected pages) plus the bounded source text, never the whole
+  document. After a reload the pages are re-read on demand through
+  `/api/file/process`, which is cached server-side.
+- Splitting also removes the extractor's `--- Page N ---` markers, for small
+  documents too.
+- A file with no server copy (plain text read in the browser) or a single
+  page over the budget still gets the "too long" message.
+
+Whole-file, layout-preserving translation is the separate chat feature
+(`/api/document-translation/*`). For PDFs it also offers:
+
+- `GET /api/document-translation/pages/{jobId}?from=&to=`: source and
+  translated text per page (built once, cached as a blob), at most 25 pages
+  per read.
+- `PUT /api/document-translation/pages/{jobId}`: the user's corrected text
+  for one page (`text: null` clears it), stored as a blob.
+- `GET /api/document-translation/export/{jobId}?format=docx`: the text
+  version, one Word page per source page, corrections applied. The
+  translated PDF itself is never modified.
+- `feature.translation.pagesPerDay`: admin-configurable daily page
+  allowance, charged per PDF page at submit and returned if the submission
+  fails.
+
+## Uploaded documents as page sheets
+
+An uploaded document that keeps its file reference (`sourceDocument`) is shown
+in the source pane as a file card followed by one sheet per page, instead of
+one run of text.
+
+- **File card** (`SourceDocumentCard`): name, page count, size (`size` on
+  `TranslationSourceDocument`, when known) and a remove button, which clears
+  the document and its text.
+- **Sheets** (`SourcePageSheets`): each page is a card with its number as a
+  label outside the text. A marker in the corner shows the page in view
+  ("Page 12 of 409") and opens a field to jump to a page. Off-screen sheets
+  are skipped with CSS `content-visibility`.
+- **Which pages**: Quick and Reviewed show the pages loaded as source text;
+  Whole document shows every page, because the file itself is translated.
+- **Printed page counters** ("Page 3 / 409") are removed from the start or end
+  of a sheet when at least half the pages carry one naming their own page
+  (`stripPageCounters` in `lib/utils/shared/translation/pageSheets.ts`). This
+  is display only: the text sent for translation is unchanged.
+- **Editing**: sheets are read-only. "Edit as text" on the card switches to the
+  text field (not offered in Whole document mode). Once the text no longer
+  equals the loaded pages, the sheets are not offered, since they would show
+  something other than what is translated.
+- **After a reload** the pages are no longer in memory; the card offers "Show
+  pages", which reads the stored file again.
+
+## Progress and the analysis strip
+
+Work with distinct phases shows named steps (`Shared/Progress/ProgressSteps`)
+instead of a bare spinner:
+
+- **Reviewed run**: Analyzing, Translating, Reviewing, Done, at the top of
+  the translation pane (`TranslationRunStatus`). The step comes from the
+  run's latest activity key; the keys live in `TRANSLATION_ACTIVITY`
+  (`lib/utils/shared/translation/runProgress.ts`), which the orchestrator and
+  the workspace both import. The text is labelled "Draft" and faded until the
+  last review round finishes.
+- **Quick run**: one pass, so a progress bar and placeholder lines, no steps.
+- **Assessment**: the quality column opens at once and lists the criteria
+  being checked (`AssessmentProgress`). The assessment is a single request,
+  so the criteria are shown in progress together, not one by one.
+- **Upload**: Uploading, Reading text, Ready, in the source pane
+  (`UploadProgress`), with Cancel.
+
+Run, assessment and upload can each be stopped; a stop is not reported as an
+error.
+
+The paper trail (analysis, review rounds, glossary check) lives in
+`AnalysisStrip` under the panes. It shows as a one-line header, expands on
+click, and goes back to the header when a run completes. The expanded strip
+is resizable by dragging its top edge or with the arrow keys (up grows).
+Dismissing it and its height are **user preferences** in the settings store
+(`translationAnalysisHidden`, `translationAnalysisHeight`), so they apply to
+every translation; a dismissed strip is reopened from a pill in the
+translation pane header.
+
 ## Working translation & editable output
 
 `TranslationWorkflowState.finalText` is the **working translation** —
@@ -75,3 +164,107 @@ Mixing them in one collapsed strip buried the interactive part.
 above its trigger but flips below when the space above can't fit it (the
 workspace trigger sits at the top of the window), clamps horizontally,
 and repositions on scroll/resize while open.
+
+## Whole-document mode
+
+A third mode beside Quick and Reviewed. It sends the uploaded PDF through
+document translation (`/api/document-translation/translate`), which keeps the
+layout, and then reads the result page by page.
+
+- **Availability** (`wholeDocumentEligibility`): a PDF kept on the server and a
+  target language that document translation supports. Custom languages and
+  other formats are refused with a message; glossaries and review rounds do
+  not apply and the glossary control is disabled.
+- **State**: only a job reference (`documentJob`) is stored in workflow state.
+  Page text is fetched five pages at a time and cached in memory.
+- **Progress**: Uploaded, Translating, Preparing pages, Ready, shown in the
+  translation pane with time since submission. The job is followed while the
+  workspace is mounted, in any mode, and resumes after a reload. After 15
+  failed status checks in a row checking stops and "Check again" is offered.
+- **Pane ownership**: the page in view is placed in `finalText`, so editing,
+  quality assessment and suggested edits work on a page as they do on pasted
+  text. The text-mode result is set aside in `textModeResult` and restored on
+  leaving the mode. The convention is documented once, in
+  `lib/utils/shared/translation/documentMode.ts`.
+- **Corrections**: any change to the page (typing or an accepted suggestion)
+  is saved as that page's correction after a 700 ms pause, and immediately
+  when the page is turned, the mode is left or the workspace closes. Text
+  equal to the machine translation removes the correction ("Restore").
+- **Downloads**: the translated PDF (original layout, without corrections)
+  and the text version DOCX (with corrections).
+- **Limits**: the daily page allowance is charged by the translate route; the
+  toolbar shows pages left today when limits are enforced. Translating a
+  finished document again asks first, since it charges the pages again.
+- **Leaving a page with suggestions pending**: turning the page or leaving
+  the mode opens the accept all / reject all dialog first, because
+  suggestions belong to the page they were made for.
+- **Stated limits**: a line says attached glossaries are not applied, and the
+  introduction, the progress pane and the translate-again dialog say a
+  started document translation cannot be stopped.
+
+## OCR for scanned PDFs
+
+`POST /api/file/ocr` reads a stored PDF with Azure Document Intelligence
+(`prebuilt-read`, the client shared with grants and agent indexing).
+
+- **When it is offered**: a PDF with no extractable text gets an offer in the
+  source pane instead of an error; a PDF whose text is sparse
+  (`looksLikeSparseText`: under 120 characters per page, or text on fewer than
+  half the pages) gets a suggestion strip; any loaded PDF has a "Read with
+  OCR" button. Nothing runs until the user confirms on the offer, which states
+  the cost. Offers appear only when the server reports OCR as configured
+  (`ocrAvailable` on `/api/file/process` responses).
+- **Cost control**: the file's pages are charged to `feature.ocr.pagesPerDay`
+  before analysis and refunded when OCR fails, is cancelled, or finds no
+  text. One request reads at most `MAX_OCR_PAGES` (500). A file whose pages
+  cannot be counted is refused rather than analysed unmetered.
+- **Result**: text in the extractors' `--- Page N ---` format, written to the
+  file's text cache. `/api/file/process` therefore returns the OCR text for
+  that file afterwards, which is what page selection re-reads after a reload.
+- **Configuration**: `AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT` and
+  `AZURE_DOCUMENT_INTELLIGENCE_KEY`. The resource is regional; see the
+  residency note in `lib/services/documentIntelligence/client.ts`.
+- **Scanned PDF to whole-document mode**: the no-text offer also has
+  "Translate whole document", shown whether or not OCR is configured.
+  Document translation reads scanned pages itself, so the file reference is
+  kept with `noText: true`, the source text is left empty and the mode
+  switches to Whole document. In the reader the source side of such a page
+  has no text, so quality assessment is unavailable for it; reading the file
+  with OCR first gives a source to compare against.
+
+## Change requests
+
+The user can ask for a change to a translation in words ("make it more
+formal", "say tableta"). The request never rewrites the text: it comes back
+as individual edits in the review column, each accepted or rejected on its
+own.
+
+- **Three ways in, one path.** The bar under the panes
+  (`ChangeRequestBar`), a popover on highlighted text
+  (`SelectionChangeRequest`) and the conversation rail all end in
+  `runChangeRequest` in `TranslationWorkspace`.
+- **Server.** `POST /api/workflows/translation/revise` takes the
+  instruction, the source (optional: a scanned page has none), the
+  translation, the target language, the glossaries, an optional
+  `selection {text, start}` and the UI locale. It returns `{reply, edits}`
+  from one structured call (`runTranslationChangeRequest`). A message that
+  is a question returns a reply and no edits.
+- **Where the edits live.** In the same `assessment` slot as quality
+  assessment edits, marked by `assessment.request` (`criteria` is empty and
+  `overallSummary` holds the reply). Accept, reject, undo, the highlights,
+  the pending-suggestions dialog and, in Whole document mode, saving the
+  page correction are therefore the assessment code paths, not copies.
+  A request that produces no edits leaves the slot untouched.
+- **Selections.** Edits must lie inside the selected passage (enforced in
+  the prompt and by `sanitizeChangeEdits`) and are anchored with
+  `stampSelectionAnchors`, so a phrase that also occurs elsewhere changes
+  only where it was highlighted.
+- **The rail.** `translationRailChat.sendRailMessage` parks the instruction
+  in `workflowRailStore.workspaceRequests`; the workspace takes it, runs it
+  and calls `settle(reply)`, which the rail posts as the assistant message.
+  The shell mounts a workspace per layout and hides one with CSS, so only
+  the copy on screen takes a request (`checkVisibility`). If no workspace
+  takes it within `WORKSPACE_PICKUP_TIMEOUT_MS` the rail answers for itself.
+- **Limits.** Instruction `MAX_CHANGE_INSTRUCTION_CHARS` (2,000), at most
+  `MAX_CHANGE_EDITS` (20) edits, texts up to 60,000 characters. Runs debit
+  the shared token budget like every workflow call.

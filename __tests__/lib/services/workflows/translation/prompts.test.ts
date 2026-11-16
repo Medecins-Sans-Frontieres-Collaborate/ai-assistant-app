@@ -1,6 +1,8 @@
 import { mergeGlossaryEntries } from '@/lib/services/workflows/shared/glossaryPrompts';
 import {
   analysisToNotes,
+  buildChangeRequestSystemPrompt,
+  buildChangeRequestUserPrompt,
   buildGlossaryBlock,
   buildTranslationSystemPrompt,
 } from '@/lib/services/workflows/translation/prompts';
@@ -166,5 +168,48 @@ describe('translation glossary prompt injection — issue #131', () => {
       { source: 'WHO', target: 'OMS' },
       { source: 'who', target: 'qui', kind: 'term' },
     ]);
+  });
+});
+
+describe('change request prompts', () => {
+  it('limits edits to the selection only when there is one', () => {
+    const rule = 'must lie entirely inside that passage';
+    expect(buildChangeRequestSystemPrompt('', true)).toContain(rule);
+    expect(buildChangeRequestSystemPrompt('', false)).not.toContain(rule);
+  });
+
+  it('names the interface locale as the tiebreak for the reply language', () => {
+    expect(buildChangeRequestSystemPrompt('', false, 'pt-BR')).toContain(
+      'locale "pt-BR"',
+    );
+    expect(buildChangeRequestSystemPrompt('', false)).not.toContain('locale "');
+  });
+
+  it('appends the glossary block and tells the model edits are suggestions', () => {
+    const prompt = buildChangeRequestSystemPrompt('\n\nGLOSSARY-BLOCK', false);
+    expect(prompt.endsWith('GLOSSARY-BLOCK')).toBe(true);
+    expect(prompt).toContain('never that the text has been changed');
+  });
+
+  it('puts the instruction, the texts and the selected passage in the user prompt', () => {
+    const prompt = buildChangeRequestUserPrompt({
+      sourceText: 'Take 1 tab.',
+      translation: 'Tome 1 comprimido.',
+      targetLanguage: 'Spanish',
+      instruction: 'say tableta',
+      selectedText: '1 comprimido',
+    });
+    expect(prompt).toContain('Take 1 tab.');
+    expect(prompt).toContain('Translation into Spanish');
+    expect(prompt).toContain('say tableta');
+    expect(prompt).toContain('Selected passage');
+    expect(
+      buildChangeRequestUserPrompt({
+        sourceText: '  ',
+        translation: 'Tome.',
+        targetLanguage: 'Spanish',
+        instruction: 'x',
+      }),
+    ).toMatch(/Source text: not available\.[\s\S]*Tome\./);
   });
 });

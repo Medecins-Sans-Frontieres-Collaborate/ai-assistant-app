@@ -1,6 +1,12 @@
 /**
  * Azure OpenAI client factory for the grant extraction pipeline.
+ *
+ * Authenticates as the application identity (Entra ID); the identity needs
+ * Cognitive Services OpenAI User on the account behind the endpoint. There is
+ * no key path: the pipeline's account has local (key) authentication disabled.
  */
+import { getCognitiveServicesTokenProvider } from '@/lib/utils/server/azure/cognitiveServicesAuth';
+
 import { AzureOpenAI } from 'openai';
 
 const DEFAULT_API_VERSION = '2024-10-21';
@@ -21,16 +27,17 @@ function openaiDeployment(): string {
   );
 }
 
-function openaiKey(): string {
-  return (
-    process.env.GRANT_PIPELINE_OPENAI_KEY || process.env.OPENAI_API_KEY || ''
-  );
-}
-
 function apiVersion(): string {
   return process.env.OPENAI_API_VERSION || DEFAULT_API_VERSION;
 }
 
+/**
+ * Builds the grant pipeline's Azure OpenAI client.
+ *
+ * @returns A client authenticated with the application identity
+ * @throws Error when no endpoint is configured (GRANT_PIPELINE_OPENAI_ENDPOINT
+ *   or AZURE_OPENAI_ENDPOINT)
+ */
 export function getGrantOpenAIClient(): AzureOpenAI {
   const ep = openaiEndpoint();
   if (!ep) {
@@ -39,17 +46,12 @@ export function getGrantOpenAIClient(): AzureOpenAI {
     );
   }
 
-  const key = openaiKey();
-  if (!key) {
-    throw new Error(
-      'No Azure OpenAI API key configured. Set GRANT_PIPELINE_OPENAI_KEY or OPENAI_API_KEY.',
-    );
-  }
-
   return new AzureOpenAI({
     endpoint: ep,
-    apiKey: key,
+    apiKey: '', // Suppress the SDK's ambient OPENAI_API_KEY default.
+    baseURL: '', // Derive from the explicit Azure endpoint, never OPENAI_BASE_URL.
     apiVersion: apiVersion(),
+    azureADTokenProvider: getCognitiveServicesTokenProvider(),
   });
 }
 

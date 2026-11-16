@@ -125,3 +125,19 @@ describe('appendCitationsToMarkdown', () => {
     expect(result).toContain('## Fuentes');
   });
 });
+
+describe('source origins in exports', () => {
+  it('says in words whether an entry is an agent document or a web page', () => {
+    const result = formatCitationsAsMarkdown([
+      citation({ origin: 'knowledge', date: '' }),
+      citation({ origin: 'web' }),
+      citation({ date: '' }),
+    ]);
+
+    expect(result.split('\n').slice(2)).toEqual([
+      '1. [Example Title](https://example.com/article) (agent document)',
+      '2. [Example Title](https://example.com/article) — 2026-01-15 (web)',
+      '3. [Example Title](https://example.com/article)',
+    ]);
+  });
+});

@@ -462,7 +462,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
                 {tag}
                 <button
                   onClick={() => handleRemoveTag(tag)}
-                  className="ml-1 hover:text-gray-900 dark:hover:text-gray-100"
+                  className="ms-1 hover:text-gray-900 dark:hover:text-gray-100"
                 >
                   <IconX size={14} />
                 </button>

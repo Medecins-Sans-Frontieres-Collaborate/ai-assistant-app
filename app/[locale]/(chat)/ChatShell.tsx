@@ -135,8 +135,8 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
               ? 'flex min-w-0 flex-1'
               : `sidebar-width-target flex min-w-0 flex-1 transition-all duration-300 ease-in-out ${
                   showChatbar
-                    ? 'md:ml-[var(--sidebar-width,260px)]'
-                    : 'md:ml-14'
+                    ? 'md:ms-[var(--sidebar-width,260px)]'
+                    : 'md:ms-14'
                 }`
           }
         >

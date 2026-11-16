@@ -2,7 +2,6 @@
   "OpenAI API Key Required": "OpenAI API යතුර අවශ්‍යයි",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "කරුණාකර ඔබේ OpenAI API යතුර පැති තීරුවේ පහළ වම්පසින් සකසන්න.",
   "Stop Generating": "උත්පාදනය නවත්වන්න",
-  "Prompt limit is {{maxLength}} characters": "උත්ප්‍රේරණයේ සීමාව අක්ෂර {{maxLength}}කි",
   "System Prompt": "පද්ධති ඉඟිය",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "ඔබ ChatGPT, OpenAI විසින් පුහුණු කරන ලද විශාල භාෂා ආකෘතියකි. පරිශීලක උපදෙස් ප්රවේශමෙන් අනුගමනය කරන්න. මාර්ක්ඩවුන් භාවිතයෙන් ප්‍රතිචාර දක්වන්න.",
   "Enter a prompt": "ප්‍රේරකයක් ඇතුළු කරන්න",
@@ -21,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "ඔබේ OpenAI API යතුර පැති තීරුවේ පහළ වම්පස සකසා ඇති බවට වග බලා ගන්න.",
   "If you completed this step, OpenAI may be experiencing issues_": "ඔබ මෙම පියවර සම්පූර්ණ කළේ නම්, OpenAI හි ගැටලුවක් විය හැකිය.",
   "click if using a _env_local file": "click if using a .env.local file",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "පණිවිඩ සීමාව අකුරු {{maxLength}} කි. ඔබ අක්ෂර {{valueLength}} ඇතුළත් කර ඇත.",
   "Please enter a message": "කරුණාකර පණිවිඩයක් ඇතුළු කරන්න",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI යනු ChatGPT හි අතුරු මුහුණත සහ ක්‍රියාකාරීත්වය අනුකරණය කිරීම අරමුණු කරගත් OpenAI හි චැට් මාදිලි සඳහා වන උසස් චැට්බෝට් කට්ටලයකි.",
   "Are you sure you want to clear all messages?": "ඔබට සියලු පණිවිඩ හිස් කිරීමට අවශ්‍ය බව විශ්වාසද?",
@@ -167,8 +165,8 @@
   "uploadAudioVideoFile": "ශ්‍රව්‍ය හෝ දෘශ්‍ය ගොනුව උඩුගත කරන්න",
   "uploadingFile": "ගොනුව උඩුගත වෙමින්...",
   "removeFile": "ඉවත් කර වෙනත් ගොනුවක් තෝරන්න",
-  "transcriptionErrorAttempt": "පිටපත් කිරීමේ දෝෂයකි (අත්හදා බැලීම {{attempt}} 3 න්). නැවත උත්සාහ කරන්න...",
-  "rateLimitExceededWaiting": "අනුපාත සීමාව ඉක්මවා ඇත. නැවත උත්සාහ කිරීමට පෙර {{seconds}} තත්පරක් රැඳී සිටිමින්...",
+  "transcriptionErrorAttempt": "පිටපත් කිරීමේ දෝෂයකි (අත්හදා බැලීම {attempt} 3 න්). නැවත උත්සාහ කරන්න...",
+  "rateLimitExceededWaiting": "අනුපාත සීමාව ඉක්මවා ඇත. නැවත උත්සාහ කිරීමට පෙර {seconds} තත්පරක් රැඳී සිටිමින්...",
   "Conversations": "සංවාද",
   "Prompts": "ප්‍රේරක",
   "Close sidebar": "පැති තීරුව වසන්න",
@@ -579,7 +577,8 @@
     "clear": "පිරිසිඳු කරන්න",
     "undo": "අහෝසි කරන්න",
     "durationSeconds": "{count, plural, one {තත්පර #} other {තත්පර #}}",
-    "durationMinutes": "{count, plural, one {විනාඩි #} other {විනාඩි #}}"
+    "durationMinutes": "{count, plural, one {විනාඩි #} other {විනාඩි #}}",
+    "clearSearch": "සෙවීම මකන්න"
   },
   "errors": {
     "unexpectedErrorOccurred": "අනපේක්ෂිත දෝෂයක් සිදු විය",
@@ -867,7 +866,13 @@
     "ttsError": "ධවනි සකස් කිරීමේ දෝෂයක්. කරුණාකර නැවත උත්සාහ කරන්න.",
     "unsupportedMessageType": "පණිවිඩය ප්‍රදර්ශනයේ දෝෂය: සහය නොදක්වන පණිවිඩ වර්ගය",
     "addLanguageOption": "\"{name}\" එකතු කරන්න…",
-    "sources": "මූලාශ්‍ර",
+    "sources": {
+      "fromDocuments": "ඇජන්ට් ලේඛන",
+      "fromWeb": "වෙබ්",
+      "fromDocumentsHint": "මෙම ඇජන්ටියගේම ලේඛන වලින් පාඨ",
+      "fromWebHint": "වෙබ් සෙවුමක් මගින් සෙවූ පොදු පිටු",
+      "heading": "{count, plural, one {මූලාශ්‍රය} other {මූලාශ්‍ර}}"
+    },
     "interpreterBadge": "කේතය ක්‍රියාත්මක කරන්න",
     "disableCodeInterpreter": "කේත ක්‍රියාත්මක කිරීම අක්‍රිය කරන්න",
     "interimSearch": {
@@ -945,7 +950,8 @@
       "MODEL_RATE_LIMITED": "මාදිලියට දැන් ඉතා වැඩි ඉල්ලීම් ලැබේ. ස්වයංක්‍රීයව නැවත උත්සාහ කරන ලදි; ටික වෙලාවකට පසුව නැවත උත්සාහ කරන්න.",
       "MODEL_QUOTA_EXCEEDED": "මාදිලි ධාරිතාව සීමාව වියදම් වී ඇත. වෙනත් මාදිලියක් උත්සාහ කරන්න, හෝ පසුව නැවත උත්සාහ කරන්න.",
       "MODEL_AUTH_FAILED": "යෙදුමට මාදිලි සේවාව සමඟ සත්‍යාපනය කළ නොහැකිය. මෙය සැකසුම් ගැටලෙකි — කරුණු කටයුතු සඳහා සහාය සම්බන්ධ කරන්න."
-    }
+    },
+    "messageLimitExceeded": "පණිවිඩ සීමාව අකුරු {maxLength} කි. ඔබ අක්ෂර {valueLength} ඇතුළත් කර ඇත."
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",
@@ -1367,7 +1373,6 @@
   "Chat Settings": "සංවාද සැකසුම්",
   "Default System Prompt": "පෙරනිමි පද්ධති ප්‍රේරණය",
   "Email": "ඊ-මේල්",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "ප්‍රේරණයේ සීමාව අකුරු {{maxLength}} කි. ඔබ ඇතුළත් කර ඇත්තේ අකුරු {{valueLength}} ක්.",
   "Run Typewriter Intro": "Typewriter හැඳින්වීම ක්‍රියාත්මක කරන්න",
   "Terms and Conditions": "නියමයන් හා කොන්දේසි",
   "Loading terms and conditions_ellipsis": "නියමයන් හා කොන්දේසි පූරණය වෙමින්...",
@@ -2413,20 +2418,18 @@
     "sectionPinned": "ඉවිත",
     "sectionFrequent": "නිති භාවිතා කරන",
     "sectionMore": "තවත්",
-    "categoryWeb": "වෙබ්",
-    "categoryMedia": "මාධ්‍ය සහ ගොනු",
-    "categoryTransform": "පරිවර්තනය",
     "pin": "ඉහළට ඉවින්න",
     "unpin": "ඉවිත ඉවත් කරන්න",
     "moveToMore": "\"තවත්\" වෙත ගෙන යන්න",
     "moveOutOfMore": "මෙනුවේ පෙන්වන්න",
     "showSources": "වෙනත් මූලාශ්‍ර පෙන්වන්න",
     "hideSources": "වෙනත් මූලාශ්‍ර සඟවන්න",
-    "aiTools": "AI මෙවලම්",
-    "aiToolsTooltip": "උත්තර ලබාදීමට සහාය ලබාදෙන හැකියාවන්: සජීවි වෙබ් සෙවුම්, කේත ක්‍රියාත්මක කිරීම සහ සම්බන්ධිත සේවා.",
     "codeInterpreterTooltip": "එදා ඕනෑම පණිවිඩයක Python කේතයක් ආරක්ෂිත sandbox එකක ක්‍රියාත්මක කරන්න.\n\nඇමුණුම් කළ ගොනු වලින් දත්ත විශ්ලේෂණය, ගණනය සහ ආකෘති නිර්මාණය සඳහා සුදුසුය.",
-    "categoryTools": "මෙවලම් සහ සම්බන්ධක",
-    "translationConversationTitle": "පරිවර්තනය: {filename}"
+    "translationConversationTitle": "පරිවර්තනය: {filename}",
+    "categoryAdd": "එක් කරන්න",
+    "categoryDo": "කිරීමට",
+    "categoryChat": "මෙම සංවාදයේ",
+    "categoryStart": "ආරම්භ කරන්න"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI එකේ ප්‍රතිචාර ගැලපෙන්න ඔබගේ පුද්ගලික උපදෙස් එක් කරන්න. මෙවා උදව්कारी, නිවැරදි සහ නිසි ආරක්ෂාවක් ඇති ප්‍රතිචාර ගෙදීමට වන මූලික හැසිරීම් මාර්ගෝපදේශ සමඟ ඒකාබද්ධ වේ.",
   "Tip: Type \"/\" to select from saved prompt templates_": "ඉඟිය: සුරක්ෂිත උත්ප්‍රේරණ සැදීම් තෝරා ගැනීමට \"/\" ටයිප් කරන්න.",
@@ -2554,7 +2557,9 @@
     "savedToOneDrive": "{name} OneDrive වෙත සුරක්ෂිත කර ඇත.",
     "openInOneDrive": "විවෘත කරන්න",
     "saveForbidden": "ඔබට එම ෆෝල්ඩරයට ලිවීමට අවසර නැත — “OneDrive වෙත සුරකින්න” මඟින් වෙනත් එකක් තෝරන්න.",
-    "saveToOneDriveFailed": "OneDrive වෙත සුරැකීමට නොහැකි විය — කරුණාකර නැවත උත්සාහ කරන්න."
+    "saveToOneDriveFailed": "OneDrive වෙත සුරැකීමට නොහැකි විය — කරුණාකර නැවත උත්සාහ කරන්න.",
+    "textVersion": "පෙළ සංස්කරණය (DOCX)",
+    "textVersionHint": "පරිවර්තිත පෙළ සහිත සංස්කරණයට හැකි Word ගොනුවක්, හැරී හැම මූලාශ්‍ර පිටුවකටම පිටුවක්. පරිවර්තිත ගොනුව මුල් ආකෘතිය තැන්පත් කරයි."
   },
   "terms": {
     "officialLanguages": "නිළ අනුවාදය:",
@@ -2740,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "තවම භාවිතය සලකා බැලී නැත. ඔබ කතා කිරීමට පසු ඔබගේ ටෝකන් භාවිතය හා ඇස්තමේන්තු කළ නිකත් වීම මෙහි පෙනෙනු ඇත.",
-    "co2Value": "{grams} ග්‍රෑම් CO₂e",
     "equivalence": "≈ {count} දුරකථන පාරිබාහික ගාස්තු",
     "requests": "ඉල්ලීම්",
     "promptTokens": "ප්‍රෝම්ප්ට් ටෝකන්",
@@ -2902,7 +2906,7 @@
       "addedByYou": "ඔබ විසින් එකතු කළ",
       "glossary": "නර්ථනාගාරය",
       "noGlossary": "නර්ථනාගාරයක් නැත",
-      "manageGlossaries": "නර්ථනාගාර",
+      "manageGlossaries": "ශබ්දකෝෂ කළමනාකරණය කරන්න",
       "glossaries": "නර්ථනාගාර",
       "closeGlossaries": "නර්ථනාගාර වසාදමන්න",
       "glossariesEmpty": "විශේෂ පද පරිවර්තන රීති සුරැකි නර්ථනාගාරයක් තනාගන්න. නර්ථනාගාර ඔබේ මෙවලමේ සුරකින්නේය සහ පරිවර්තන සඳහා නැවත භාවිතා කළ හැක.",
@@ -3067,7 +3071,145 @@
       "importTooLarge": "そのファイルはインポートするには大きすぎます（උපරිම 5 MB).",
       "importNothing": "ඉල්ලීය යාන්ත්‍රණ පේළි කිසිවක් හමු නොවීය ({skipped} හැර දක්වයි).",
       "importSummary": "{added} එකතු කළා, {replaced} ප්‍රතිස්ථාපනය කළා, {skipped} හැරි.",
-      "entriesTooManyToShow": "පද {count}ක් — මෙහි පෙන්වීමට ඉතා වැඩියි. ඒවා සමාලෝචනයට නිර්යාත කරන්න හෝ පද ප්‍රතිස්ථාපනයට ගොනුවක් ආයාත කරන්න."
+      "entriesTooManyToShow": "පද {count}ක් — මෙහි පෙන්වීමට ඉතා වැඩියි. ඒවා සමාලෝචනයට නිර්යාත කරන්න හෝ පද ප්‍රතිස්ථාපනයට ගොනුවක් ආයාත කරන්න.",
+      "pagesLoaded": "පිටු {selected} ක් සිට {total} දක්වා පැටවී ඇත",
+      "pagesLabel": "පිටු",
+      "pagesApply": "පිටු පූරණය කරන්න",
+      "pagesPrevious": "පෙර කේතය",
+      "pagesNext": "ඊළඟ කේතය",
+      "pagesBudget": "අක්‍ෂර {used} / {max}",
+      "pagesChange": "පිටු වෙනස් කරන්න",
+      "pagesLoading": "පිටු පූරණය වෙමින්…",
+      "pagesInvalid": "පිටු අංක හෝ පරාසය ඇතුළත් කරන්න, උදාහරණයක් ලෙස 1-40, 45.",
+      "pagesUnavailable": "එම පිටු වල කිසිවක් පෙළ නොමැත.",
+      "pagesTooMany": "එම තේරීම අක්‍ෂර {used} ක් වන අතර එක් කේතයක නවතම ලෙස {max} අඩංගු වේ. කරුණාකර පහතින් පිටු තෝරන්න.",
+      "stop": "නවතන්න",
+      "stepAnalyzing": "විකුණා දැක්වීම",
+      "stepTranslating": "පරිවර්තනය වෙමින්",
+      "stepReviewing": "සමාලෝචනය",
+      "stepDone": "සම්පූර්ණයි",
+      "runProgressLabel": "පරිවර්තන ප්‍රගතිය",
+      "runHintAnalyzing": "සංකීර්ණ වචන සහ නොපැහැදිලිත්වයන් සඳහා මූලාශ්‍රය කියවීම.",
+      "runHintTranslating": "පරිවර්තනය ලියමින්.",
+      "runHintReviewing": "කැඩැල්ල මූලාශ්‍රය සමඟ පරීක්ෂා කිරීම.",
+      "runHintReviewingRound": "කැඩැල්ල මූලාශ්‍රය සමඟ පරීක්ෂා කිරීම · වටය {round} / {total}.",
+      "runRound": "වටය {round} / {total}",
+      "draftLabel": "උප්පැන්නය",
+      "sourceLocked": "පරිවර්තනය වීමේදී අගුළු දමා ඇත",
+      "analysisNotes": "{count, plural, one {සටහන #} other {සටහන් #}}",
+      "analysisPill": "{count, plural, one {විශ්ලේෂණය · සටහන #} other {විශ්ලේෂණය · සටහන් #}}",
+      "reviewSummary": "{count, plural, one {සමාලෝචනය: වටය #, {verdict}} other {සමාලෝචනය: වට #, {verdict}}}",
+      "analysisDismiss": "සියළු පරිවර්තන සඳහා සඟවන්න",
+      "analysisShow": "පූර්ව-පරිවර්තන විශ්ලේෂණය පෙන්වන්න",
+      "analysisResize": "විශ්ලේෂණ පැනලය ප්‍රතිඅතින් සැකසන්න",
+      "assessingCriteria": "{count, plural, one {මට්ටම # පරීක්ෂා කිරීම} other {මට්ටම් # පරීක්ෂා කිරීම}}",
+      "editsPending": "ඉදිරිපත් කළ සංශෝධන ඇගයීම නිමා වූ විට මෙහි පෙනේ.",
+      "uploadProgressLabel": "උඩුගත කිරීමේ ප්‍රගතිය",
+      "uploadStepUploading": "උඩුගත වෙමින්",
+      "uploadStepReading": "පෙළ කියවමින්",
+      "uploadStepReady": "සූදානම්",
+      "uploadCancel": "අවලංගු කරන්න",
+      "modeDocument": "සම්පූර්ණ ලේඛනය",
+      "modeDocumentHint": "උඩුගත කළ PDF පූර්ණයෙන් පරිවර්තනය කර එහි අකාරයක් සුරක්ෂිත කරයි. ප්‍රතිඵලය පිටුවෙන් පිටුවක් කියවී නිවැරදි කරන්න.",
+      "translateDocument": "ලේඛනය පරිවර්තනය කරන්න",
+      "documentSubmitting": "යවන 중…",
+      "documentIntroTitle": "සම්පූර්ණ ලේඛනය පරිවර්තනය කරන්න",
+      "documentIntro": "උඩුගත කල PDF ගොනුව මුළුමනින්ම, එහි සැලසුම රැකගෙන පරිවර්තනය කරයි. එය සූදානම් වූ විට ඔබට මුල් පිටපතට යටින් පිටුවෙන් පිටුවකින් කියවිය හැක, නිවැරදි කිරීමක් කල හැක, ගුණාත්මකභාවය පරීක්ෂා කල හැක, සහ ප්‍රතිඵලය බාගත කල හැක. මෙම ප්‍රකාරයේදී ශබ්දකෝෂ සහ සමාලෝචන වටයන් අදාළ නොවේ. ආරම්භ වූ පසු, ලියවිලි පරිවර්තනය නවතා දැමිය නොහැකි අතර, ඒ පිටු අද ලබාදෙන සීමාවට ගණනය වේ.",
+      "documentNeedsFile": "සම්පූර්ණ ලේඛනයක් පරිවර්තනය කිරීමට PDF එකක් උඩුගත කරන්න.",
+      "documentNeedsPdf": "පිටුවෙන් පිටුවක් නරඹමින් සම්පූර්ණ ලේඛන පරිවර්තනය PDF ගොනු සඳහා පමණි.",
+      "documentNeedsLanguage": "ලේඛනය පරිවර්තනය සඳහා ඉලක්ක භාෂාවක් තෝරන්න.",
+      "documentLanguageUnsupported": "මෙම භාෂාව සඳහා සම්පූර්ණ ලේඛන පරිවර්තනය ලබා නොදේ. සාමාන්‍ය හෝ සමාලෝචනය කල විකල්ප භාවිත කරන්න.",
+      "documentNoGlossaries": "සම්පූර්ණ ලේඛන පරිවර්තනය සඳහා ශබ්ද කෝෂ භාවිත නොවේ",
+      "documentPagesLeft": "{count, plural, one {අද පිටුවක් ඉතිරිව ඇත} other {අද පිටු #ක් ඉතිරිව ඇත}}",
+      "documentLimitReached": "මෙම ලේඛනයේ පිටු ගණන අද ඔබට ඉතිරිව ඇති තරම්ට වඩා වැඩිය. තෝරාගත් පිටු Quick හෝ Reviewed මගින් පරිවර්තනය කරන්න, හෝ හෙට නැවත උත්සාහ කරන්න.",
+      "documentUnavailable": "මෙම සර්වරයේ සම්පූර්ණ ලේඛන පරිවර්තනය සකසා නැත.",
+      "documentSubmitFailed": "ලේඛනය පරිවර්තනය කරවීමට යවිය නොහැකි විය: {message}",
+      "documentProgressLabel": "ලේඛන පරිවර්තන ප්‍රගතිය",
+      "documentStepUploaded": "උඩුගත කළා",
+      "documentStepPreparing": "පිටු සූදානම් කරමින්",
+      "documentTypicalDuration": "සාමාන්‍යයෙන් මිනිත්තු කිහිපයකට",
+      "documentCanLeave": "ඔබට මෙම පිටුව අතහරින්න පුළුවන්. පරිවර්තනය ක්‍රමයෙන් සිදුවෙයිත් ඔබ ආපසු පැමිණිවිට මෙහි තිබේ.",
+      "documentStalled": "පරිවර්තන ප්‍රගතිය පරීක්ෂා කළ නොහැකි විය. තවදුරටත් ක්‍රියාත්මක විය හැකිය.",
+      "documentCheckAgain": "නැවත පරීක්ෂා කරන්න",
+      "documentFailed": "පරිවර්තනය කළ නොහැක: {message}",
+      "documentGone": "මෙම පරිවර්තනය දැක්විය නොහැක. නැවත ලේඛනය පරිවර්තනය කර කියවන්න.",
+      "documentPageFailed": "මෙම පිටුව ප්‍රවේශ විය නොහැක: {message}",
+      "documentPagesNotAligned": "පරිවර්තන ගොනුවේ පිටු ගණන වෙනස් බැවින්, එකම පිටුවෙන් දෙපැත්තේ එකම අන්තර්ගතය අවශ්‍යව ඇති නැහැ.",
+      "documentAvailableUntil": "{date} දක්වා ඇති",
+      "documentRetranslateTitle": "නැවතලේඛනය පරිවර්තනය කරන්නද?",
+      "documentRetranslateMessage": "මෙය නව පරිවර්තනයක් ආරම්භ කර බවත්, ඒ පිටු අද ලබාදෙන සීමාවට නැවත ගණනය වන බවත් සලකන්න. ආරම්භ වූ පසු නවතා දැමිය නොහැක. වත්මන් පරිවර්තනය සහ එහි නිවැරදි කිරීම් කල් ඉකුත් වන තුරු සේවාදායකයේ තැන්පත් වනු ඇත, නමුත් මෙතැන දර්ශනය නොවේ.",
+      "retry": "නැවත උත්සාහ කරන්න",
+      "pageLabel": "පිටුව",
+      "pageOf": "එක්සේ {total}",
+      "pageNumber": "· පිටුව {page}",
+      "pagePrevious": "පෙර පිටුව",
+      "pageNext": "ඊළඟ පිටුව",
+      "correctedLabel": "නිවැරදි කළා",
+      "correctedPages": "නිවැරදි කළ පිටු:",
+      "correctedPagesMore": "+{count} තව",
+      "correctionRestore": "ප්‍රත්‍යාවරණය කරන්න",
+      "correctionRestoreHint": "මෙම පිටුව සදහා ඔබ කළ වෙනස්කම් ඉවත දමා යන්ත්‍ර පරිවර්තනයට ආපසු යන්න",
+      "correctionSaving": "සුරැකි වේ…",
+      "correctionSaved": "සුරැකි විය",
+      "correctionSaveFailed": "සුරැකි වී නැත. නැවත උත්සාහ කිරීමට පෙළ වෙනස් කරන්න.",
+      "download": "බාගන්න",
+      "downloading": "බාගනිමින්…",
+      "downloadFailed": "බාගැනීම අසාර්ථකයි: {message}",
+      "downloadTranslated": "පරිවර්තනය කළ {format}",
+      "downloadTranslatedHint": "මූලික ආකෘතිය. ඔබ කළ නිවැරදි කිරීම් ඇතුළත් නොවේ.",
+      "downloadTextVersion": "පෙළ අනුවාදය (DOCX)",
+      "downloadTextVersionHint": "සදහන් පෙළ, පිටුවකට පිටුවක්, ඔබ කළ නිවැරදිව සමඟ.",
+      "documentNoCancel": "ලේඛනයක් පරිවර්තනය ආරම්භ වූ පසු එය නවතා දැමිය නොහැක.",
+      "documentGlossariesIgnored": "{count, plural, one {ඔබ තේරූ පද සංඛ්‍යාව මෙම ප්‍රකාරයට යොදන නැත.} other {ඔබ තේරූ පද සංඛ්‍යාව # මෙම ප්‍රකාරයට යොදන නැත.}} පද ප්‍රමිතිය පිටුවෙන් පිටුවකට Assess quality හරහා පරීක්ෂා කරන්න, හෝ Quick හෝ Reviewed භාවිතා කරන්න.",
+      "pendingLeavePage": "යෝජනා මෙම පිටුවට අයත් වන අතර ඔබ පිටුවින් ඉවත් වූ විට ඒවා තබා නොගනු ලැබේ. ඉතිරි යෝජනා පළමුව තීරණය කරන්න.",
+      "uploadStepOcr": "OCR භාවිතයෙන් කියවීම",
+      "ocrButton": "OCR සමඟ කියවන්න",
+      "ocrButtonHint": "මෙම PDF යළි කියවන්න පෙරළූ පිටු හෝ වැරදි ලෙස කියවුනු පෙළ සඳහා පෙළ හඳුනා ගැනීම සමඟ",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "මෙම පෙළ පිටු වලින් පෙළ හඳුනා ගැනීම භාවිතයෙන් කියවිනි. මුල් පිටපත සමඟ පරීක්ෂා කරන්න.",
+      "ocrReasonNoText": "{name} හි කිසිඳු පෙළක් හමු නොවීය. මෙය පෙන්වන්නේ ස්කෑන් කළ ලේඛනයක් ලෙසයි.",
+      "ocrReasonSparse": "{name} හි ඉතා අඩු පෙළක් සොයාගෙන ඇත. සමහර ඒවා ස්කෑන් කර ඇති වේ.",
+      "ocrReasonManual": "{name} යළි පෙළ හඳුනා ගැනීමෙන් කියවන්නද?",
+      "ocrExplanation": "OCR එක පිටු රූපයන්වලින් පෙළ කියවයි. සාමාන්‍ය උඩුගත කිරීමකට වඩා වැඩි කාලයක් ගත වන අතර, ගොනුවේ සෑම පිටුවක්ම ඔබගේ දවසේ OCR සීමාවට ගණන් වන අතර, නුසුදුසු ස්කෑන්, අතින් ලියන අකුරු සහ වගු වැරදි ලෙස කියවිය හැක.",
+      "ocrPagesLeft": "{count, plural, one {අද ඉතිරි පිටුව 1 ක් OCR සඳහා.} other {අද OCR සඳහා ඉතිරි පිටු # ක්.}}",
+      "ocrRun": "OCR සමඟ කියවන්න",
+      "ocrDismiss": "දැන් නැත",
+      "ocrSparseHint": "මෙම PDF හි ඉතා අඩු පෙළක් සොයාගෙන ඇත. සමහර පිටු ස්කෑන් කර තිබිය හැක.",
+      "ocrLimitReached": "මෙම ලේඛනයේ පිටු ගණන ඔබගේ අදගේ OCR සීමාවට වඩා වැඩිය.",
+      "ocrTooManyPages": "මෙම ලේඛනය OCR සඳහා බොහොම දීර්ඝයි; උපරිමය {max} පිටු පමණක් කියවයි. PDF එක වෙන් කර කොටසක් උඩුගත කරන්න.",
+      "ocrUnavailable": "මෙම සේවාදායකයේ OCR සකසා නැත.",
+      "ocrNoText": "මෙම ලේඛනයේද OCR විසින් කිසිදු පෙළක් හමු නොවීය.",
+      "ocrFailed": "ලිවීම OCR එකෙන් කියවිය නොහැකිය. නැවත උත්සාහ කරන්න.",
+      "scannedWholeExplanation": "ඉඩ ඇත්නම්, පූර්ණ ලේඛනයත් පරිවර්තනය කළ හැකියි: එය ස්ක්‍යාන් කළ පිටු ස්වයන් රීඩ් කරමින් පිරිනමයි, සැලසුම පවත්වාගෙන යයි, හා ඔබගේ දෛනික පරිවර්තන වසරේ පිටු ගණන ලෙස ගණන් කරයි.",
+      "scannedUseWholeDocument": "පූර්ණ ලේඛනය පරිවර්තනය කරන්න",
+      "scannedSourceNote": "{name} සතුව මෙහි පෙන්වීමට පෙළක් නැත. පූර්ණ ලේඛන පරිවර්තනයේදී පිටු සෘජුවම කියවයි. ඔබ මෙහි ඔබගේම පෙළ යොදන්නේ නම්, එය මූලික ලේඛනය ප්‍රතිස්ථාපනය කරයි.",
+      "scannedPageNote": "මූලිකයේ මෙම පිටුවෙන් පෙළ කියවිය නොහැකි විය. ආසන්නවම ලේඛනය සමඟ සසඳන්න.",
+      "changeLabel": "පරිවර්ථනය වෙනස් කිරීමට ඉල්ලීමක් කරන්න",
+      "changePlaceholder": "වෙනසක් ඉල්ලන්න, උදාහරණයක් ලෙස වැඩි නිල වශයෙන් කරන්න",
+      "changePlaceholderAnother": "තවත් වෙනසක් ඉල්ලන්න",
+      "changeSend": "ඉල්ලීම යවන්න",
+      "changeWorking": "වෙනස්කම් සකසමින්",
+      "changeNothingApplied": "ඔබ පිළිගනු දක්වා කිසිවක් වෙනස් නොවේ",
+      "changeSelectionLabel": "තෝරාගත් පෙළ වෙනස් කිරීමට ඉල්ලීමක් කරන්න",
+      "changeSelectionPlaceholder": "මෙය වෙනස් කරන්න, උදා. tableta කියන්න",
+      "changeSelectionScope": "මෙය තෝරාගත් පෙළට පමණක් ඇතුළත් වේ",
+      "changeSelectionClose": "වසන්න",
+      "changeTitle": "ඉල්ලූ වෙනස්කම්",
+      "changeSelectedLabel": "තෝරාගත් පෙළ",
+      "changeNoEdits": "そのリクエストには කිසිදු වෙනස්කමක් අවශ්‍ය නැත.",
+      "changeReplyPending": "{count, plural, one {# යෝජිත සංස්කරණයක් වැඩමුළුවේ ඇත.} other {# යෝජිත සංස්කරණ ඇති වැඩමුළුවේ ඇත.}} ඔබ පිළිගනී දක්වා කිසිවක් වෙනස් නොවේ.",
+      "changeStopped": "නවත්වා ඇත. කිසිවක් වෙනස්කර නොමැත.",
+      "changeFailed": "වෙනස ඉල්ලීම අසාර්ථකයි. නැවත උත්සහ කරන්න.",
+      "changeNoTranslation": "වෙනස් කිරීමට තවමත් පරිවර්තනයක් නොමැත. පළමුව පෙළ පරිවර්තනය කරන්න.",
+      "changeBusy": "වත්මන් ක්‍රියාව අවසන් වනතෙක් රැඳී සිටින්න, පසුව නැවත ඉල්ලන්න.",
+      "changeHeld": "යවා නැත: තීරණයක් සඳහා තවමත් යෝජිත සංස්කරණ තිබේ.",
+      "pendingRunActionRequest": "වෙනසක් ඉල්ලමින්",
+      "railPlaceholder": "වෙනසක් හෝ ප්‍රශ්නයක් ඉල්ලන්න…",
+      "documentPageCount": "{count, plural, one {පිටුව #} other {පිටු #}}",
+      "sourceShowPages": "පිටු පෙන්වන්න",
+      "sourceEditText": "පාඨ ලෙස සංස්කරණය කරන්න",
+      "sourceRemoveDocument": "ලේඛනය යළි ඉවත් කරන්න",
+      "sourceJumpToPage": "පිටුවකට යන්න"
     },
     "document": {
       "emptyTitle": "ඔබට අවශ්‍ය ලිපිය විස්තර කරන්න",
@@ -3695,7 +3837,7 @@
       "guideTargetTerm": "අවශ්‍ය පරිවර්තනය",
       "guideNote": "Catsප්‍රස්ථාව",
       "pendingRun": {
-        "title": "සිත් විමසුම් {count}ක් තවමත් බාහැර ඇත",
+        "title": "{count, plural, one {යතුරුපැදි තවත් අනුමත වීමට ඇත} other {යතුරුපැදි තවමත් අනුමත විය යුතුය}}",
         "body": "{action} මඟින් ඔබ තීරණය නොකළ යෝජනා සහිත කොටස් ඇතුළු පිවිසුමක ඕනෑම කොටසක් වෙනස් කළ හැකි අතර, නව විමසුමක් දැන්වීමේ ලැයිස්තුව වෙනස් කරයි. ඉතිරි වූ යෝජනා ප්‍රථමයෙන් තීරණය කරන්න.",
         "acceptAll": "ඉතිරි සියල්ල පිළිගන්න",
         "rejectAll": "සියල්ල ප්‍රතික්ෂේප කරන්න",
@@ -3757,7 +3899,7 @@
         "list<number>": "අංක ලැයිස්තුව"
       },
       "layout": "පිරිසැලසුම",
-      "layoutHint": "{{field:id}} slots සහිත Markdown — නිර්යාතයට සහ පෙරදසුනට භාවිතා කරයි.",
+      "layoutHint": "'{{field:id}}' slots සහිත Markdown — නිර්යාතයට සහ පෙරදසුනට භාවිතා කරයි.",
       "saveTemplate": "ආකෘතිය සුරකින්න",
       "deleteTemplate": "ආකෘතිය මකාදමන්න",
       "cancel": "ඉවතලන්න",
@@ -4242,7 +4384,7 @@
       "chooseSource": "ප読නය සඳහා මූලාශ්‍රය",
       "loadingSource": "මූලාශ්‍රය විවෘත වෙමින්",
       "selectToAdd": "එය සාරාංශයට එක් කිරීමට මූලාශ්‍රයේ වචන තෝරන්න.",
-      "selectionChars": "{count, plural, one {අක්ෂරය 1 තෝරා ඇත} other {අක්ෂර {#} ක් තෝරා ඇත}}",
+      "selectionChars": "{count, plural, one {අක්ෂරය 1 තෝරා ඇත} other {අක්ෂර # ක් තෝරා ඇත}}",
       "addAsQuote": "උපුටා දැක්වීමක් ලෙස එක් කරන්න",
       "addAsFact": "තොරතුරක් ලෙස එක් කරන්න",
       "resolveQuoteHint": "මූලාශ්‍රයේ නිවැරදි වචන තෝරන්න. ඔබ තෝරාගන එය උපුටා දැක්වීම බවට පත්වේ.",
@@ -4584,6 +4726,10 @@
         "noPriceData": "වියදමක් නොදක්වනවා: මෙම සංවාදයේ මෝඩලය සඳහා මිල ලැයිස්තු මිලක් නොමැත (තමන්ගේ මූලාශ්‍ර, දේශීය විධික්‍රියාවන් සහ නියෝජිතයන් මිලක් නැහැ).",
         "note": "{asOf} දින සිට ලැයිස්තු මිලවල වියදම (ජාත්‍යන්තර පූර්ණ මිල, නිවැරදි අදාන වට්ටම් නොමැතිය): උපරිම සීමාවකි, බිල් බඳුනක් නොවේ. වෙබ් සෙවීම, කේත ක්‍රියාව, ලේඛන, හඬ, පරිවර්තනය සහ ලේඛන සූචි කිරීම ඇතුළත් නොවේ."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "මෙම වැඩබිම (ඇස්තමේන්තුගත)",
@@ -5399,7 +5545,9 @@
     "indexedDocumentSummary": "{indexed, plural, one { ලේඛනය # ක්} other { ලේඛන # ක්}} indexed",
     "m365CapImmediateHelp": "යාවත්කාලීන කරීමෙන් සීමාව වහාම සුරක්ෂිත වේ. අනෙකුත් වෙනස්කම් සුරැකිමට Save අවිස්සාවක් අවශ්‍යවේ.",
     "m365CapDraftHelp": "ඔබ නියෝජිතයා සෑදීමේදී සීමාව සුරක්ෂිත වේ.",
-    "m365CapSaved": "ළිපිගොනු සීමාව සුරකින්නායි: {limit}."
+    "m365CapSaved": "ළිපිගොනු සීමාව සුරකින්නායි: {limit}.",
+    "m365AgentAllowWebSearchHelp": "පෙරනිමියෙන් වසා ඇත: පරිශීලකයා තෝරාගත් සෙවුම් පිහිටීම කුමක් වුණත්, ඇජන්ටිය පිළිතුරු ලබාදෙන්නේ තම ලේඛන වලින් පමණි, web සෙවීමක් නොකරයි. මෙම අභිප්රේතය සක්‍රීය කරන විට, web සෙවීමක් පවත්වා ගැනීම සහ යොදාගැනීමට ඉඩ ඇති වෙබ් අඩවි ඇජන්ටියගේ උපදෙස් අනුව තීරණය කෙරේ. වෙබ් මූලාශ්‍ර සාමන්‍යයෙන් ඇජන්ටියගේ ලේඛනවලින් වෙන්ව පෙන්වයි.",
+    "promptAgentAllowWebSearchHelp": "පෙරනිමියෙන් සක්‍රීයයි. වසා ඇති විට, පරිශීලකයා තෝරාගත් සෙවුම් පිහිටාව කුමක් වුණත් මෙය වෙබ් සෙවීමක් කිසිවිටෙකත් නොකරයි."
   },
   "localModels": {
     "title": "ප්‍රාදේශීය ආදර්ශ",
@@ -5706,7 +5854,9 @@
       "m365MailReadsPerDay": "දිනයකට මින් පණිවිඩ කියවීම්",
       "m365MailDraftsPerDay": "දිනයකට පණිවිඩ කුඨි ප්‍රති-ව්‍යුහ",
       "m365MailDeepScansPerDay": "දිනයකට පණිවිඩ ගැඹුරු පරිලෝකන",
-      "m365DigestRunsPerDay": "දිනපතා Digest ක්‍රියාත්මක වීමේ සංඛ්‍යාව"
+      "m365DigestRunsPerDay": "දිනපතා Digest ක්‍රියාත්මක වීමේ සංඛ්‍යාව",
+      "translationPagesPerDay": "දිනයකට ලේඛන පරිවර්තන පිටු",
+      "ocrPagesPerDay": "දවසකට OCR පිටු"
     },
     "valueModeLabel": "සීමා වර්ගය",
     "valueAmountLabel": "සීමාවේ ප්‍රමාණය",
@@ -5729,7 +5879,8 @@
       "jobs": "කාර්යයන්",
       "rounds": "වට",
       "documents": "ලේඛන",
-      "boolean": ""
+      "boolean": "",
+      "pages": "පිටු"
     },
     "window": {
       "day": "දවස",
@@ -5787,7 +5938,9 @@
       "m365MailReadsPerDay": "දිනකට තැපැල් සෙවීම් සහ පණිවුඩ/තරඟ කියවීම්. සීමාව ඉක්මුවහොත් 'හෙට නැවත උත්සාහ කරන්න' යන ප්‍රතිඵලයක් ලැබේ.",
       "m365MailDraftsPerDay": "සායකයා විසින් දිනකට නිර්මාණය කළ හැකි ඊමේල් කෙටියි - එකින් එක තහවුරු කළ යුතුය. හෘදයාංගමව තද සීමාවකි.",
       "m365MailDeepScansPerDay": "යුතුකමි (digests, deep search, commitments) වැනි සංයුක්ත තැපැල් විශ්ලේෂණය දිනකට. ඇසුරුමක් තුළ කියවීම් ගණන නොසලකා එක් එක විශ්ලේෂණයක් තනි ඒකකයකි.",
-      "m365DigestRunsPerDay": "Microsoft 365 දෛනික Digest ක්‍රියාත්මක වන සංඛ්‍යාව. එක් වරක් ධාවනය වීමෙන් වැඩි ගණනක් Graph කියවීම් සහ විශ්ලේෂණ මාදිලි ඇමතුම් දෙකක් සිදු වේ; කාල පරාසය තෝරනය යළි ධාවනය ඉතා පහසු මොළමක් නිසා පෙරනිමි අගය තදකි."
+      "m365DigestRunsPerDay": "Microsoft 365 දෛනික Digest ක්‍රියාත්මක වන සංඛ්‍යාව. එක් වරක් ධාවනය වීමෙන් වැඩි ගණනක් Graph කියවීම් සහ විශ්ලේෂණ මාදිලි ඇමතුම් දෙකක් සිදු වේ; කාල පරාසය තෝරනය යළි ධාවනය ඉතා පහසු මොළමක් නිසා පෙරනිමි අගය තදකි.",
+      "translationPagesPerDay": "PDF ලේඛන පරිවර්තනය සඳහා දිනයකට ඉදිරිපත් කළ පිටු.",
+      "ocrPagesPerDay": "දවසකට OCR (ස්කෑන් ලේඛන සඳහා පෙළ හඳුනා ගැනීම) සමඟ කියවන PDF පිටු."
     },
     "scopeFamily": "පවුල",
     "scopeModel": "මාදිලිය",
@@ -6042,7 +6195,7 @@
           "unknown-model": "නොදන්නා මොඩලය"
         },
         "noPrice": "මිල දත්ත නැත",
-        "incomplete": "අසම්පූර්ණයි — {count, plural, one {mix එකේ මොඩලයක්} other {mix එකේ මොඩල {#}ක්}} සඳහා මිල නැත; එහි කොටස $0 ලෙස ගණන කිරීම නිසා, සමස්ථ වියදම අඩුවට පෙන්වේ.",
+        "incomplete": "අසම්පූර්ණයි — {count, plural, one {mix එකේ මොඩලයක්} other {mix එකේ මොඩල #ක්}} සඳහා මිල නැත; එහි කොටස $0 ලෙස ගණන කිරීම නිසා, සමස්ථ වියදම අඩුවට පෙන්වේ.",
         "lessThan": "< {amount}",
         "perThousand": "1,000 ඉල්ලීම්කට {amount}",
         "totalPerRequest": "එක් ඉල්ලීමකට (mix)",
@@ -8095,7 +8248,13 @@
       "skills": "දක්ෂතාව තේරීම",
       "tools": "උපකරණ Routing",
       "trim": "වර්ගීකරණය කපන්න",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "සෙවීමේ උපදෙස් යළි ලිවීම",
+      "mailScreen": "Mail phishing තිරය",
+      "mailAnalysis": "Mail සහ digest විශ්ලේෂණය",
+      "schemaProposal": "Extraction schema යෝජනාව",
+      "mcpPlan": "Connector සැලැස්ම",
+      "vision": "පිළිඹිඹු සහ පිටු කියවීම"
     },
     "reason": {
       "endpoint_missing": "Endpoint නැත හෝ ගිණුම් බැඳීම නැත",
@@ -8116,6 +8275,164 @@
       "endpoint_account_mismatch": "Endpoint සහ ARM resource ID වෙනස් ගිණුම් වලට අයත්ය. Deployment වින්‍යාසය නිවැරදි කරන්න.",
       "inventory_refresh_failed": "ඉන්වෙන්ටරි යාවත්කාලීන කිරීම අසාර්ථකයි. App identity හි Reader ප්‍රවේශය සහ ගිණුම් සම්බන්ධතාව පරීක්ෂා කරන්න.",
       "credential_unavailable": "මෙම app එකට එහි ඉන්වෙන්ටරි credential ලබාගත නොහැක. Deployment identity වින්‍යාසය පරීක්ෂා කරන්න."
+    },
+    "notSupported": "මෙම ආදර්ශය විසින් සහය නොදක්වනවා",
+    "unservedOperations": "මෙම සංකේතාත්මක ශ්‍රේණියේ කිසිදු ආදර්ශයකි {operations} සඳහා සහය නොදක්වයි. එය සහය දක්වන ආදර්ශයක් යොදන්න."
+  },
+  "filePreview": {
+    "preview": "පූර්වදර්ශනය",
+    "download": "බාගන්න",
+    "loading": "පූර්වදර්ශනය සකස් කරමින්...",
+    "failed": "මෙම ගොනුව පූර්වදර්ශනය කළ නොහැක. ඔබට තවමත් එය බාගත කළ හැක.",
+    "pageOf": "පිටුව {page} / {total}",
+    "truncated": "පළමු පිටු {shown} / {total} පෙන්වයි. ඉතිරි ඒවා බැලීමට ගොනුව බාගන්න.",
+    "enlarge": "{name} විශාල කරන්න"
+  },
+  "addToChat": {
+    "title": "සංවාදයට එක් කරන්න",
+    "titleTranslate": " ලේඛනය පරිවර්තනය කරන්න",
+    "titleTranscribe": "ශ්‍රව්‍ය හෝ දෘශ්‍ය ලිවීම",
+    "sourcesLabel": "මේ ලබා ගන්න",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "මෙම ක්‍රියාව සඳහා නොමැත",
+    "sources": {
+      "device": "මෙම උපාංගය",
+      "link": "සබැඳි",
+      "camera": "කැමරා",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ඊමේල්",
+      "meetings": "රැස්වීම්"
+    },
+    "device": {
+      "browse": "මෙම උපාංගය සොයා බලන්න",
+      "dropHint": "හෝ මෙම කවුළුවට ගොනු ඇද දමන්න, හෝ ඇලවන්න",
+      "rejected": "මෙහි යොදා ගතහැකි ගොනු නැත.",
+      "hint": {
+        "attach": "ලේඛන, පින්තූර, ශ්‍රව්‍ය සහ දෘශ්‍ය.",
+        "translate": "එක ලේඛනයක්: Word, Excel, PowerPoint, PDF, HTML හෝ පෙළ.",
+        "transcribe": "ශ්‍රව්‍ය හෝ දෘශ්‍යය. ඔබේ පණිවිඩය යවන්නට පසු ලිවීම සිදු කෙරේ."
+      }
+    },
+    "selection": {
+      "then": "එවිට",
+      "intents": {
+        "attach": "ඇමුණුම් කරන්න",
+        "translate": "පරිවර්තනය කරන්න",
+        "transcribe": "ලිවීම කරන්න"
+      },
+      "confirm": {
+        "attach": "එක් කරන්න",
+        "translate": "පරිවර්තනය කරන්න",
+        "transcribe": "ලිවීම කරන්න"
+      },
+      "unfit": {
+        "attach": "මෙම ගොනු අමුණන්න නොහැක",
+        "translate": "පරිවර්තනය කිරීම සඳහා එක් වාරයක ලේඛනයක් පමණි",
+        "transcribe": "ශ්‍රව්‍ය හා දෘශ්‍ය පමණක් ලිවිය හැක"
+      }
+    },
+    "menu": {
+      "addToChatNote": "මෙම උපාංගය, සබැඳි, Microsoft 365",
+      "filesOrPhotos": "ගොනු හෝ පින්තූර",
+      "fromThisDevice": "මෙම උපාංගයෙන්",
+      "connect": "Microsoft 365 සම්බන්ධ කරන්න",
+      "connectNote": "OneDrive, ඊමේල් සහ රැස්වීම්වලින් ලබා ගන්න"
     }
+  },
+  "usageBudgets": {
+    "title": "ඔබේ බජට්",
+    "description": "මෙම උපාංගයේ ඔබ විසින් සීමා කළ සීමානිය. බජට් එකක් තෝරන්න, පසුව එය ළඟා වීමට හා ආසන්න වීමට සිදුවන දේ තෝරන්න. බජට් යනු සෑම කාල පරියෝගයක අරඹේ සිට කළ සංවාද සහ වැරදිවීම් ප්‍රමාණයයි.",
+    "metric": {
+      "emissions": "අනිකැරණි වායු බජට්",
+      "cost": "පිරිවැය බජට්"
+    },
+    "metricShort": {
+      "emissions": "අනිකැරණි වායු",
+      "cost": "පිරිවැය"
+    },
+    "off": "කිසිඳු බජට් එකක් සැකසී නැත.",
+    "measureAs": "මේවා මනින්න",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "දුරකථන රිචාජ්",
+      "usd": "ඇමරිකානු ඩොලර්"
+    },
+    "amountLabel": "බජට්",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "පැය",
+      "smartphoneCharge": "රිචාජ්",
+      "usd": "ඇමරිකානු ඩොලර්"
+    },
+    "periodLabel": "සෑම විටකම ප්‍රාරම්භ වෙයි",
+    "period": {
+      "day": "දින",
+      "week": "සතිය",
+      "month": "මාසය"
+    },
+    "costNote": "ලැයිස්තු මිල අනුව ඇස්තමේන්තු කර ඇත: ගිණුමක් නොව ඉහළ සීමාවකි.",
+    "chargesValue": "දුරකථන රිචාජ් {count}ක්",
+    "percent": "{percent}%",
+    "usedOf": "{limit} කින් {used} යෙදී ඇත ({percent}%)",
+    "usedOfShort": "{limit} කින් {used}",
+    "resets": "{date} දින ප්‍රාරම්භ වේ",
+    "budgetMarker": "බජට්",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "බජට් සීමාව ඇතුළතයි",
+      "warn": "අවවාදයක් පෙන්වා ඇත",
+      "ask": "සෑම පණිවිඩයක්ම පෙර අසයි",
+      "stop": "යැවීම තාවකාලිකව නවතා ඇත"
+    },
+    "stage": {
+      "warn": {
+        "title": "අවවාද",
+        "tag": "දැනුම්දීම",
+        "description": "බජට් එකේ මේ කොටස ඇතුළත සංවාදයේ දැනුම්දීමක් පෙන්වන්න."
+      },
+      "ask": {
+        "title": "පළමුව අසන්න",
+        "tag": "සෙම නතර",
+        "description": "බජට් එකේ මේ කොටස අභ්‍යන්තරයෙන් සෑම පණිවිඩයක්ම තහවුරු කරන්න මට අසන්න."
+      },
+      "stop": {
+        "title": "නවතන්න",
+        "tag": "දඩ වැඩ නතර",
+        "description": "මෙම කොටස සඳහා බජට් යළි සකසන තුරු හෝ මෙහිදී ඉහළ දැමෙන තුරු යැවීම නවතන්න."
+      }
+    },
+    "thresholdLabel": "{stage} සීමාව, බජට් ශතයේ ප්‍රතිශතය",
+    "notice": {
+      "warn": {
+        "emissions": "ඔබගේ අනිකැරණි වායු බජට් {percent}%ක් භාවිතා කර ඇත.",
+        "cost": "ඔබගේ පිරිවැය බජට් {percent}%ක් භාවිතා කර ඇත."
+      },
+      "ask": {
+        "emissions": "ඔබගේ අනිකැරණි වායු බජට් {percent}%ක් භාවිතා කර ඇත. මේ පණිවිඩය යවන්නද?",
+        "cost": "ඔබගේ පිරිවැය බජට් {percent}%ක් භාවිතා කර ඇත. මේ පණිවිඩය යවන්නද?"
+      },
+      "askRun": {
+        "emissions": "ඔබගේ අනිකැරණි වායු බජට් {percent}%ක් භාවිතා කර ඇත. මේ ක්‍රියාව ආරම්භ කරන්නද?",
+        "cost": "ඔබගේ පිරිවැය බජට් {percent}%ක් භාවිතා කර ඇත. මේ ක්‍රියාව ආරම්භ කරන්නද?"
+      },
+      "stop": {
+        "emissions": "අනිකැරණි වායු බජට් නවතන ලක්ෂ්‍යය වෙත ළඟා වී ඇත. {date} දක්වා යැවීම තාවකාලිකව නවතා ඇත.",
+        "cost": "පිරිවැය අයවැය නවත්වන ලක්ෂ්‍යයට පැමිණ ඇත. යැවීම {date} දක්වා තාවකාලිකව නවතා ඇත."
+      }
+    },
+    "actions": {
+      "viewBudget": "අයවැය බලන්න",
+      "dismiss": "අප‍්‍රයෝජනය කරන්න",
+      "sendAnyway": "එසේම යවන්න",
+      "runAnyway": "එසේම ක්‍රියාත්මක කරන්න",
+      "dontSend": "යවන්න එපා",
+      "dontAskToday": "අද තවත් නො අසන්න",
+      "openSettings": "අයවැය සැකසුම් විවෘත කරන්න",
+      "edit": "සංස්කරණය කරන්න"
+    },
+    "composerPaused": "ඔබගේ අයවැය හේතුවෙන් යැවීම නවතා ඇත",
+    "summaryTitle": "ඔබගේ අයවැයන්",
+    "chipAria": "{metric} අයවැය: {percent}% භාවිතා වී ඇත.",
+    "runProjection": "ප්‍රතිහිම අයවැය {from}% → {to}%"
   }
 }

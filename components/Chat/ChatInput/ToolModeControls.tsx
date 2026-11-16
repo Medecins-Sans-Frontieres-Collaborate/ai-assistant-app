@@ -191,14 +191,14 @@ export const ToolModeControls: FC = () => {
   ) => {
     if (gate.blocked) {
       return (
-        <p className="pl-6 text-[11px] text-gray-500 dark:text-gray-400">
+        <p className="ps-6 text-[11px] text-gray-500 dark:text-gray-400">
           {lockReason}
         </p>
       );
     }
     if (gate.exhausted) {
       return (
-        <p className="pl-6 text-[11px] text-amber-700 dark:text-amber-400">
+        <p className="ps-6 text-[11px] text-amber-700 dark:text-amber-400">
           {resetLabel
             ? tGates('exhaustedResets', { resets: resetLabel })
             : tGates('exhausted')}
@@ -207,7 +207,7 @@ export const ToolModeControls: FC = () => {
     }
     if (gate.low && gate.budget) {
       return (
-        <p className="pl-6 text-[11px] text-gray-500 dark:text-gray-400">
+        <p className="ps-6 text-[11px] text-gray-500 dark:text-gray-400">
           {tGates('remaining', { count: gate.budget.remaining })}
         </p>
       );

@@ -1,11 +1,6 @@
-import { Session } from 'next-auth';
+import type { TextCompleter } from '@/lib/services/chat/textCompletion';
 
-import {
-  CHUNK_CONFIG,
-  OPENAI_API_VERSION,
-  TOKEN_ESTIMATION,
-} from '@/lib/utils/app/const';
-import { createAzureOpenAIStreamProcessor } from '@/lib/utils/app/stream/streamProcessor';
+import { CHUNK_CONFIG, TOKEN_ESTIMATION } from '@/lib/utils/app/const';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 import {
@@ -13,17 +8,8 @@ import {
   applyAdmissionCeiling,
 } from '@/lib/utils/shared/modelThroughput';
 
-import { ImageMessageContent } from '@/types/chat';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
-import { env } from '@/config/environment';
-import {
-  DefaultAzureCredential,
-  getBearerTokenProvider,
-} from '@azure/identity';
-import OpenAI from 'openai';
-import { AzureOpenAI } from 'openai';
-import { ChatCompletion } from 'openai/resources';
 import { performance } from 'perf_hooks';
 
 /**
@@ -198,14 +184,19 @@ export function calculateChunkConfig(
   return { chunkSize, batchSize, maxCompletionTokens, maxSummaryLength };
 }
 
-interface ParseAndQueryFilterOpenAIArguments {
+/** Arguments for {@link summarizeDocumentForQuery}. */
+interface SummarizeDocumentArguments {
+  /** The uploaded document; read only when `preExtractedText` is absent. */
   file: File;
+  /** The user's question; the summary keeps what is relevant to it. */
   prompt: string;
+  /** Catalog id of the chat model, used to size chunks and batches. */
   modelId: string;
-  user: Session['user'];
-  botId?: string;
-  stream?: boolean;
-  images?: ImageMessageContent[];
+  /**
+   * Runs one completion on the turn's chat model, under the turn's region
+   * or custom-source routing (see lib/services/chat/textCompletion.ts).
+   */
+  complete: TextCompleter;
   /** Pre-extracted text content to avoid double extraction when caller already loaded the document */
   preExtractedText?: string;
   /**
@@ -222,116 +213,92 @@ interface ParseAndQueryFilterOpenAIArguments {
   servingTokensPerMinute?: number;
 }
 
+/** Outcome of one chunk: its summary text, or the error that lost it. */
+type ChunkSummaryResult =
+  | { ok: true; summary: string }
+  | { ok: false; error: unknown };
+
+const CHUNK_SUMMARY_SYSTEM_PROMPT =
+  'You are an AI Text summarizer. You take the prompt of a user and rather than conclusively answering, you pull together all the relevant information for that prompt in a particular chunk of text and reshape that into brief statements capturing the nuanced intent of the original text.';
+
+const FINAL_SUMMARY_SYSTEM_PROMPT =
+  "You are a document content extractor. Your job is to produce a clear, comprehensive summary of document content relevant to the user's query. Preserve key details, numbers, names, and structure. Do NOT answer the user's query — the summary you produce will be passed to another AI that will answer it.";
+
+/** Low temperature: the summary should restate the document, not riff on it. */
+const SUMMARY_TEMPERATURE = 0.1;
+
 /**
  * Summarizes a single chunk of document text with relevance to the user's prompt.
+ * A failure is returned rather than thrown, so one bad chunk does not sink
+ * the batch; the caller decides whether enough of the document survived.
  *
- * @param azureOpenai - The OpenAI client instance
- * @param modelId - The model identifier to use for summarization
+ * @param complete - Completion function bound to the turn's chat model
  * @param prompt - The user's original prompt to guide relevance filtering
  * @param chunk - The text chunk to summarize
- * @param user - The session user for API attribution
  * @param maxCompletionTokens - Maximum tokens for the completion response
- * @returns The summarized text, or null if summarization fails
+ * @returns The chunk's summary (possibly empty when nothing is relevant), or the error
  */
 async function summarizeChunk(
-  azureOpenai: OpenAI,
-  modelId: string,
+  complete: TextCompleter,
   prompt: string,
   chunk: string,
-  user: Session['user'],
   maxCompletionTokens: number,
-): Promise<string | null> {
+): Promise<ChunkSummaryResult> {
   const summaryPrompt: string = `Summarize the following text with relevance to the prompt, but keep enough details to maintain the tone, character, and content of the original. If nothing is relevant, then return an empty string:\n\n\`\`\`prompt\n${prompt}\`\`\`\n\n\`\`\`text\n${chunk}\n\`\`\``;
-
-  // Check if model supports custom temperature values
-  const modelConfig = Object.values(OpenAIModels).find((m) => m.id === modelId);
-  const supportsTemperature = modelConfig?.supportsTemperature !== false;
 
   try {
     const perfLlmStart = performance.now();
-    const chunkSummary = await azureOpenai.chat.completions.create({
-      model: modelId,
-      messages: [
-        {
-          role: 'system',
-          content:
-            'You are an AI Text summarizer. You take the prompt of a user and rather than conclusively answering, you pull together all the relevant information for that prompt in a particular chunk of text and reshape that into brief statements capturing the nuanced intent of the original text.',
-        },
-        {
-          role: 'user',
-          content: summaryPrompt,
-        },
-      ],
-      ...(supportsTemperature && { temperature: 0.1 }),
-      max_completion_tokens: maxCompletionTokens,
-      stream: false,
-      ...userFieldFor(modelConfig, user),
+    const summary = await complete({
+      systemPrompt: CHUNK_SUMMARY_SYSTEM_PROMPT,
+      userPrompt: summaryPrompt,
+      maxTokens: maxCompletionTokens,
+      temperature: SUMMARY_TEMPERATURE,
     });
-
     console.log(
       `[Perf] summarizeChunk LLM call: ${(performance.now() - perfLlmStart).toFixed(1)}ms`,
     );
-
-    return chunkSummary?.choices?.[0]?.message?.content?.trim() ?? '';
+    return { ok: true, summary };
   } catch (error: unknown) {
-    console.error('Error summarizing chunk:', error);
-    return null;
+    console.error('Error summarizing chunk:', sanitizeForLog(error));
+    return { ok: false, error };
   }
 }
 
 /**
- * Parses a document file, summarizes its content, and queries an LLM with the user's prompt.
+ * Condenses a document too large to inline into a summary of the content
+ * relevant to the user's query, for the main chat model to answer from.
  *
- * This function handles large documents by:
- * 1. Loading the document and splitting into chunks (size based on model context window)
- * 2. Summarizing each chunk in parallel batches (batch size based on model capabilities)
- * 3. Combining summaries and sending to LLM with the user's prompt
+ * 1. Loads the document (unless pre-extracted) and splits it into chunks
+ *    sized to the model's context window and throughput.
+ * 2. Summarizes the chunks in parallel batches.
+ * 3. Asks the model for one consolidated, query-focused summary.
  *
- * @param args - Configuration for document processing
- * @returns A ReadableStream for streaming responses, or a string for non-streaming
+ * Every call goes through `complete`, so the summary runs on the same model,
+ * SDK and region (or custom-source account) as the chat answer itself.
+ *
+ * @param args - See {@link SummarizeDocumentArguments}
+ * @returns The consolidated summary text (never empty)
+ * @throws When every chunk failed (rethrowing the first failure, so the
+ *         cause reaches the logs instead of an empty summary reaching the
+ *         model), when the final completion fails, or when it comes back empty.
  */
-/**
- * Builds the optional `user` request field for a summarization call.
- *
- * Both helpers in this file are invoked with the *selected chat model*
- * (`FileProcessor` passes `context.modelId`), so a third-party Foundry model
- * such as Mistral can land here. Those serving containers validate the body
- * strictly (Pydantic `extra="forbid"`) and 422 on any key outside their
- * schema — `user` included, regardless of how small the value is.
- *
- * Only the Azure OpenAI path is known to accept it. Fails safe: an unknown or
- * unmapped model omits the field, since dropping it costs only provider-side
- * abuse telemetry while sending it can fail the whole request.
- */
-function userFieldFor(
-  modelConfig: OpenAIModel | undefined,
-  user: Session['user'],
-): { user: string } | Record<string, never> {
-  return modelConfig?.sdk === 'azure-openai' ? { user: user.id } : {};
-}
-
-export async function parseAndQueryFileOpenAI({
+export async function summarizeDocumentForQuery({
   file,
   prompt,
   modelId,
-  user,
-  botId,
-  stream = true,
-  images = [],
+  complete,
   preExtractedText,
   onProgress,
   servingTokensPerMinute,
-}: ParseAndQueryFilterOpenAIArguments): Promise<ReadableStream | string> {
+}: SummarizeDocumentArguments): Promise<string> {
   console.log(
-    '[parseAndQueryFileOpenAI] Starting with file:',
+    '[summarizeDocumentForQuery] Starting with file:',
     sanitizeForLog(file.name),
     'size:',
     sanitizeForLog(file.size),
-    'stream:',
-    sanitizeForLog(stream),
   );
   console.log(
-    '[parseAndQueryFileOpenAI] Prompt length:',
+    '[summarizeDocumentForQuery] Prompt length:',
     sanitizeForLog(prompt.length),
   );
 
@@ -341,91 +308,83 @@ export async function parseAndQueryFileOpenAI({
   const perfLoadStart = performance.now();
   const fileContent = preExtractedText ?? (await loadDocument(file));
   console.log(
-    `[Perf] parseAndQueryFileOpenAI.loadContent: ${(performance.now() - perfLoadStart).toFixed(1)}ms (${preExtractedText ? 'pre-extracted' : 'loaded from file'})`,
+    `[Perf] summarizeDocumentForQuery.loadContent: ${(performance.now() - perfLoadStart).toFixed(1)}ms (${preExtractedText ? 'pre-extracted' : 'loaded from file'})`,
   );
   console.log(
-    '[parseAndQueryFileOpenAI] File content loaded, length:',
+    '[summarizeDocumentForQuery] File content loaded, length:',
     fileContent.length,
   );
 
   // Get model configuration for dynamic chunk sizing using direct key access
-  console.log('[parseAndQueryFileOpenAI] Looking up model:', modelId);
+  console.log('[summarizeDocumentForQuery] Looking up model:', modelId);
   const catalogConfig = OpenAIModels[modelId as OpenAIModelID];
   const modelConfig = catalogConfig
     ? applyAdmissionCeiling(catalogConfig, servingTokensPerMinute)
     : undefined;
   if (!modelConfig) {
     console.log(
-      '[parseAndQueryFileOpenAI] Model not found in OpenAIModels, using defaults',
+      '[summarizeDocumentForQuery] Model not found in OpenAIModels, using defaults',
     );
   }
 
   // Estimate chars per token based on content script type
   const charsPerToken = estimateCharsPerToken(fileContent);
   console.log(
-    '[parseAndQueryFileOpenAI] Estimated chars per token:',
+    '[summarizeDocumentForQuery] Estimated chars per token:',
     charsPerToken,
   );
 
   const chunkConfig = calculateChunkConfig(modelConfig, charsPerToken);
 
   const perfChunkStart = performance.now();
-  let chunks: string[] = splitIntoChunks(fileContent, chunkConfig.chunkSize);
+  const chunks: string[] = splitIntoChunks(fileContent, chunkConfig.chunkSize);
   console.log(
-    `[Perf] parseAndQueryFileOpenAI.splitIntoChunks: ${(performance.now() - perfChunkStart).toFixed(1)}ms (${chunks.length} chunks)`,
+    `[Perf] summarizeDocumentForQuery.splitIntoChunks: ${(performance.now() - perfChunkStart).toFixed(1)}ms (${chunks.length} chunks)`,
   );
   console.log(
-    '[parseAndQueryFileOpenAI] Split into chunks:',
+    '[summarizeDocumentForQuery] Split into chunks:',
     chunks.length,
     'chunk size:',
     chunkConfig.chunkSize,
   );
 
-  const scope = 'https://cognitiveservices.azure.com/.default';
-  const azureADTokenProvider = getBearerTokenProvider(
-    new DefaultAzureCredential(),
-    scope,
-  );
-
-  const client = new AzureOpenAI({
-    azureADTokenProvider,
-    deployment: modelId,
-    apiVersion: OPENAI_API_VERSION,
-  });
-
   let combinedSummary: string = '';
   let processedChunkCount = 0;
+  let firstChunkError: unknown;
   const totalChunks = chunks.length;
   let attemptedChunkCount = 0;
 
   while (chunks.length > 0) {
     const currentChunks = chunks.splice(0, chunkConfig.batchSize);
     console.log(
-      `[parseAndQueryFileOpenAI] Processing batch of ${currentChunks.length} chunks, ${chunks.length} remaining`,
-    );
-
-    const summaryPromises = currentChunks.map((chunk) =>
-      summarizeChunk(
-        client,
-        modelId,
-        prompt,
-        chunk,
-        user,
-        chunkConfig.maxCompletionTokens,
-      ),
+      `[summarizeDocumentForQuery] Processing batch of ${currentChunks.length} chunks, ${chunks.length} remaining`,
     );
 
     const perfBatchStart = performance.now();
-    const summaries = await Promise.all(summaryPromises);
-    console.log(
-      `[Perf] parseAndQueryFileOpenAI.batch: ${(performance.now() - perfBatchStart).toFixed(1)}ms (${currentChunks.length} chunks)`,
+    const results = await Promise.all(
+      currentChunks.map((chunk) =>
+        summarizeChunk(
+          complete,
+          prompt,
+          chunk,
+          chunkConfig.maxCompletionTokens,
+        ),
+      ),
     );
     console.log(
-      '[parseAndQueryFileOpenAI] Batch completed, summaries received:',
-      summaries.filter((s) => s !== null).length,
+      `[Perf] summarizeDocumentForQuery.batch: ${(performance.now() - perfBatchStart).toFixed(1)}ms (${currentChunks.length} chunks)`,
     );
 
-    const validSummaries = summaries.filter((summary) => summary !== null);
+    const validSummaries: string[] = [];
+    for (const result of results) {
+      if (result.ok) validSummaries.push(result.summary);
+      else if (firstChunkError === undefined) firstChunkError = result.error;
+    }
+    console.log(
+      '[summarizeDocumentForQuery] Batch completed, summaries received:',
+      validSummaries.length,
+    );
+
     processedChunkCount += validSummaries.length;
     // Progress counts attempts (not successes) so a failed chunk still moves
     // the loader instead of stalling it.
@@ -444,118 +403,48 @@ export async function parseAndQueryFileOpenAI({
   }
 
   console.log(
-    '[parseAndQueryFileOpenAI] Summarization complete, processed chunks:',
+    '[summarizeDocumentForQuery] Summarization complete, processed chunks:',
     processedChunkCount,
     'combined summary length:',
     combinedSummary.length,
   );
 
-  // When non-streaming (pipeline mode), produce a content summary for the main LLM
-  // to process with the user's query. When streaming, produce a direct response.
-  const finalPrompt: string = stream
-    ? `${combinedSummary}\n\nUser prompt: ${prompt}`
-    : `${combinedSummary}\n\nThe user's query is: "${prompt}"\n\nProduce a comprehensive summary of the document content that is relevant to the user's query. Include key details, data, and context. Do NOT answer the query directly — just extract and organize the relevant content.`;
+  // Nothing of the document survived: a final call would only summarize an
+  // empty string. Surface the real cause (deployment missing, auth, ...).
+  if (totalChunks > 0 && processedChunkCount === 0) {
+    throw firstChunkError instanceof Error
+      ? firstChunkError
+      : new Error(
+          `Every chunk of the document failed to summarize: ${String(firstChunkError)}`,
+        );
+  }
 
-  const systemPrompt = stream
-    ? 'You are a document analyzer AI Assistant. You perform all tasks the user requests of you, careful to make sure you are responding to the spirit and intentions behind their request. You make it clear how your responses relate to the base text that you are processing and provide your responses in markdown format when special formatting is necessary.'
-    : "You are a document content extractor. Your job is to produce a clear, comprehensive summary of document content relevant to the user's query. Preserve key details, numbers, names, and structure. Do NOT answer the user's query — the summary you produce will be passed to another AI that will answer it.";
+  const finalPrompt = `${combinedSummary}\n\nThe user's query is: "${prompt}"\n\nProduce a comprehensive summary of the document content that is relevant to the user's query. Include key details, data, and context. Do NOT answer the query directly — just extract and organize the relevant content.`;
 
-  // Build user message content - include images if present
-  const userMessageContent:
-    | string
-    | OpenAI.Chat.Completions.ChatCompletionContentPart[] =
-    images.length > 0
-      ? [
-          ...images.map((img) => ({
-            type: 'image_url' as const,
-            image_url: img.image_url,
-          })),
-          {
-            type: 'text' as const,
-            text: finalPrompt,
-          },
-        ]
-      : finalPrompt;
-
-  // Check if model supports custom temperature values (reuse modelConfig from above)
-  const supportsTemperature = modelConfig?.supportsTemperature !== false;
-
-  const commonParams = {
-    model: modelId,
-    messages: [
-      {
-        role: 'system',
-        content: systemPrompt,
-      },
-      {
-        role: 'user',
-        content: userMessageContent,
-      },
-    ] as OpenAI.Chat.Completions.ChatCompletionMessageParam[],
-    ...(supportsTemperature && { temperature: 0.1 }),
-    max_completion_tokens: chunkConfig.maxCompletionTokens,
-    stream: stream,
-    ...userFieldFor(modelConfig, user),
-  };
-
-  console.log(
-    '[parseAndQueryFileOpenAI] Creating chat completion, botId:',
-    sanitizeForLog(botId),
-  );
+  // Never grounded on a knowledge base here. Knowledge-base agents get their
+  // index search from RAGEnricher, which runs after this summary is built and
+  // injects both into the final request. (The Azure "On Your Data"
+  // data_sources grounding this used to send has been retired by Azure.)
   const perfFinalLlmStart = performance.now();
-  let response;
-  if (botId) {
-    console.log('[parseAndQueryFileOpenAI] Using bot with data sources');
-    response = await client.chat.completions.create({
-      ...commonParams,
-      //@ts-ignore
-      data_sources: [
-        {
-          type: 'azure_search',
-          parameters: {
-            endpoint: env.SEARCH_ENDPOINT,
-            index_name: env.SEARCH_INDEX,
-            authentication: {
-              type: 'api_key',
-              key: env.SEARCH_ENDPOINT_API_KEY,
-            },
-          },
-        },
-      ],
-    });
-  } else {
-    console.log('[parseAndQueryFileOpenAI] Using standard chat completion');
-    response = await client.chat.completions.create(commonParams);
-  }
+  const completionText = await complete({
+    systemPrompt: FINAL_SUMMARY_SYSTEM_PROMPT,
+    userPrompt: finalPrompt,
+    maxTokens: chunkConfig.maxCompletionTokens,
+    temperature: SUMMARY_TEMPERATURE,
+  });
   console.log(
-    `[Perf] parseAndQueryFileOpenAI.finalCompletion: ${(performance.now() - perfFinalLlmStart).toFixed(1)}ms`,
+    `[Perf] summarizeDocumentForQuery.finalCompletion: ${(performance.now() - perfFinalLlmStart).toFixed(1)}ms`,
+  );
+  console.log(
+    `[Perf] summarizeDocumentForQuery total: ${(performance.now() - perfTotalStart).toFixed(1)}ms`,
   );
 
-  console.log(
-    '[parseAndQueryFileOpenAI] Got response, stream:',
-    sanitizeForLog(stream),
-  );
-
-  console.log(
-    `[Perf] parseAndQueryFileOpenAI total: ${(performance.now() - perfTotalStart).toFixed(1)}ms`,
-  );
-
-  if (stream) {
-    return createAzureOpenAIStreamProcessor(
-      response as AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>,
+  if (!completionText) {
+    throw new Error(
+      `The model returned an empty document summary for ${sanitizeForLog(file.name)}`,
     );
-  } else {
-    const completionText =
-      (response as ChatCompletion)?.choices?.[0]?.message?.content?.trim() ??
-      '';
-    if (!completionText) {
-      throw new Error(
-        `Empty response returned from API! ${JSON.stringify(response)}`,
-      );
-    }
-
-    return completionText;
   }
+  return completionText;
 }
 
 /**

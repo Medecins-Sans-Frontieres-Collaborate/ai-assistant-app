@@ -54,7 +54,7 @@ export const BarList: FC<BarListProps> = ({ items, unit, ariaLabel }) => {
             {/* The track is the plot area; the bar grows from its left edge. */}
             <span className="relative h-3 min-w-0 flex-1">
               <span
-                className={`absolute inset-y-0 left-0 rounded-r ${
+                className={`absolute inset-y-0 start-0 rounded-e ${
                   (item.muted ? OTHER : SERIES[0]).swatch
                 }`}
                 style={{
@@ -63,7 +63,7 @@ export const BarList: FC<BarListProps> = ({ items, unit, ariaLabel }) => {
               />
             </span>
             <span
-              className="w-20 shrink-0 text-right tabular-nums text-black dark:text-white"
+              className="w-20 shrink-0 text-end tabular-nums text-black dark:text-white"
               title={formatFull(item.value, locale)}
             >
               {formatCompact(item.value, locale)}
@@ -127,7 +127,7 @@ export const DivergingBarList: FC<DivergingBarListProps> = ({
                 />
               </span>
               <span
-                className="w-24 shrink-0 text-right tabular-nums text-black dark:text-white"
+                className="w-24 shrink-0 text-end tabular-nums text-black dark:text-white"
                 title={formatFull(item.value, locale)}
               >
                 {positive ? '+' : '−'}

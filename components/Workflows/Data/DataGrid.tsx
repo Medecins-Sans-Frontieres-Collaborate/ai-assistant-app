@@ -314,7 +314,7 @@ export function DataGrid({
               return (
                 <tr
                   key={row.id}
-                  className={`absolute left-0 top-0 flex w-full min-w-max border-b border-gray-100 dark:border-gray-800 ${
+                  className={`absolute start-0 top-0 flex w-full min-w-max border-b border-gray-100 dark:border-gray-800 ${
                     selectedRows.has(row.id)
                       ? 'bg-blue-50 dark:bg-blue-900/20'
                       : 'bg-white dark:bg-surface-dark'

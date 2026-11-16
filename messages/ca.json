@@ -2,7 +2,6 @@
   "OpenAI API Key Required": "Cal la clau d'API d'OpenAI",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Si us plau, introdueix la teva clau d'API d'OpenAI a la cantonada inferior esquerra de la barra lateral.",
   "Stop Generating": "Parar de generar",
-  "Prompt limit is {{maxLength}} characters": "El límit del prompt és de {{maxLength}} caràcters",
   "System Prompt": "Missatge del sistema",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Ets ChatGPT, un model de llenguatge gran entrenat per OpenAI. Segueix les instruccions de l'usuari amb cura. Respon utilitzant markdown.",
   "Enter a prompt": "Introdueix un missatge",
@@ -21,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Assegura't que has introduït la clau d'API d'OpenAI a la cantonada inferior esquerra de la barra lateral.",
   "If you completed this step, OpenAI may be experiencing issues_": "Si has completat aquest pas, OpenAI podria estar experimentant problemes.",
   "click if using a _env_local file": "fes clic si estàs utilitzant un fitxer .env.local",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "El límit del missatge és de {{maxLength}} caràcters. Has introduït {{valueLength}} caràcters.",
   "Please enter a message": "Si us plau, introdueix un missatge",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI és un kit avançat de chatbot per als models de xat d'OpenAI que busca imitar la interfície i funcionalitat de ChatGPT.",
   "Are you sure you want to clear all messages?": "Estàs segur que vols esborrar tots els missatges?",
@@ -167,8 +165,8 @@
   "uploadAudioVideoFile": "Carrega un fitxer d'àudio o vídeo",
   "uploadingFile": "Carregant fitxer...",
   "removeFile": "Elimina i selecciona un fitxer diferent",
-  "transcriptionErrorAttempt": "Error durant la transcripció (Intent {{attempt}} de 3). Reintentant...",
-  "rateLimitExceededWaiting": "Límit de taxa superat. Esperant {{seconds}} segons abans de tornar-ho a intentar...",
+  "transcriptionErrorAttempt": "Error durant la transcripció (Intent {attempt} de 3). Reintentant...",
+  "rateLimitExceededWaiting": "Límit de taxa superat. Esperant {seconds} segons abans de tornar-ho a intentar...",
   "Conversations": "Converses",
   "Prompts": "Avisos",
   "Close sidebar": "Tanca la barra lateral",
@@ -587,7 +585,8 @@
     "clear": "Neteja",
     "undo": "Desfés",
     "durationSeconds": "{count, plural, one {# segon} other {# segons}}",
-    "durationMinutes": "{count, plural, one {# minut} other {# minuts}}"
+    "durationMinutes": "{count, plural, one {# minut} other {# minuts}}",
+    "clearSearch": "Neteja la cerca"
   },
   "errors": {
     "unexpectedErrorOccurred": "S'ha produït un error inesperat",
@@ -875,7 +874,13 @@
     "ttsError": "Error en generar l'àudio. Torni-ho a provar.",
     "unsupportedMessageType": "Error en mostrar el missatge: tipus de missatge no compatible",
     "addLanguageOption": "Afegeix \"{name}\"…",
-    "sources": "Fonts",
+    "sources": {
+      "fromDocuments": "Documents de l'agent",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Fragments dels propis documents d’aquest agent",
+      "fromWebHint": "Pàgines públiques trobades amb una cerca web",
+      "heading": "{count, plural, one {Font} other {Fonts}}"
+    },
     "interpreterBadge": "Executa codi",
     "disableCodeInterpreter": "Desactiva l'execució de codi",
     "interimSearch": {
@@ -953,7 +958,8 @@
       "MODEL_RATE_LIMITED": "El model rep massa sol·licituds en aquest moment. S'ha tornat a intentar automàticament; torna-ho a provar d'aquí a un moment.",
       "MODEL_QUOTA_EXCEEDED": "La quota de capacitat del model està exhaurida. Prova un altre model o intenta-ho més tard.",
       "MODEL_AUTH_FAILED": "L'aplicació no ha pogut autenticar-se amb el servei del model. Això és un problema de configuració — contacta amb el suport."
-    }
+    },
+    "messageLimitExceeded": "El límit del missatge és de {maxLength} caràcters. Has introduït {valueLength} caràcters."
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -1375,7 +1381,6 @@
   "Chat Settings": "Configuració del xat",
   "Default System Prompt": "Prompt de sistema per defecte",
   "Email": "Correu electrònic",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "El límit del prompt és de {{maxLength}} caràcters. N'heu introduït {{valueLength}}.",
   "Run Typewriter Intro": "Executa la introducció Typewriter",
   "Conversation exported successfully": "Conversa exportada correctament",
   "Failed to export conversation": "No s'ha pogut exportar la conversa",
@@ -2413,20 +2418,18 @@
     "sectionPinned": "Fixats",
     "sectionFrequent": "Ús freqüent",
     "sectionMore": "Més",
-    "categoryWeb": "Web",
-    "categoryMedia": "Mitjans i fitxers",
-    "categoryTransform": "Transforma",
     "pin": "Fixa a dalt",
     "unpin": "Desfés fixació",
     "moveToMore": "Mou a Més",
     "moveOutOfMore": "Mostra al menú",
     "showSources": "Mostra altres fonts",
     "hideSources": "Amaga altres fonts",
-    "aiTools": "Eines d'IA",
-    "aiToolsTooltip": "Capacitats que l'assistent pot utilitzar mentre respon: cerca web en temps real, execució de codi i serveis connectats.",
     "codeInterpreterTooltip": "Executa codi Python en una sandbox segura per a cada missatge.\n\nIdeal per a l'anàlisi de dades, càlculs i generació de gràfics a partir d'arxius adjunts.",
-    "categoryTools": "Eines i connectors",
-    "translationConversationTitle": "Traducció: {filename}"
+    "translationConversationTitle": "Traducció: {filename}",
+    "categoryAdd": "Afegeix",
+    "categoryDo": "Fes",
+    "categoryChat": "En aquest xat",
+    "categoryStart": "Comença des de"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Afegeix les teves instruccions personals per personalitzar com respon la IA. Aquestes es combinen amb les directrius bàsiques de comportament que garanteixen respostes útils, precises i segures.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Consell: Escriu \"/\" per seleccionar d'entre les plantilles de prompt desades.",
@@ -2554,7 +2557,9 @@
     "savedToOneDrive": "S'ha desat {name} a OneDrive.",
     "openInOneDrive": "Obre",
     "saveForbidden": "No tens permís per escriure en aquesta carpeta — tria'n una altra amb “Desa a OneDrive”.",
-    "saveToOneDriveFailed": "No s'ha pogut desar a OneDrive — torna-ho a intentar."
+    "saveToOneDriveFailed": "No s'ha pogut desar a OneDrive — torna-ho a intentar.",
+    "textVersion": "Versió de text (DOCX)",
+    "textVersionHint": "Un fitxer Word editable amb el text traduït, una pàgina per cada pàgina d’origen. El fitxer traduït manté la disposició original."
   },
   "terms": {
     "officialLanguages": "Versió oficial:",
@@ -2740,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Encara no s'ha registrat cap ús. El teu consum de tokens i les emissions estimades apareixeran aquí després de xatejar.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} càrregues de telèfon intel·ligent",
     "requests": "Sol·licituds",
     "promptTokens": "Tokens de prompt",
@@ -2772,7 +2776,7 @@
     "chipLabelBoth": "Ambdós",
     "costTile": "Cost estimat",
     "costDisclosure": "Cost segons preus de llista a data de {asOf} (tarifa Estàndard Global, sense descompte per entrada en memòria cau): és un límit superior, no una factura. Cerca web, execució de codi, transcripció, veu, traducció i indexació de documents no estan inclosos.",
-    "costUnpriced": "{count, plural, one {# sol·licitud sense preu de llista no s'} other {# sol·licituds sense preu de llista no s'}}inclouen."
+    "costUnpriced": "{count, plural, one {# sol·licitud sense preu de llista no s’} other {# sol·licituds sense preu de llista no s’}}inclouen."
   },
   "extraction": {
     "toggleLabel": "Extreu dades estructurades",
@@ -2902,7 +2906,7 @@
       "addedByYou": "Afegit per vosaltres",
       "glossary": "Glossari",
       "noGlossary": "Cap glossari",
-      "manageGlossaries": "Glossaris",
+      "manageGlossaries": "Gestiona els glossaris",
       "glossaries": "Glossaris",
       "closeGlossaries": "Tanca els glossaris",
       "glossariesEmpty": "Creeu un glossari per definir com es tradueixen termes específics. Els glossaris es desen en aquest dispositiu i es poden reutilitzar en altres traduccions.",
@@ -3067,7 +3071,145 @@
       "importTooLarge": "El fitxer és massa gran per importar (màxim 5 MB).",
       "importNothing": "No s'han trobat files útils ({skipped} omeses).",
       "importSummary": "{added} afegits, {replaced} reemplaçats, {skipped} omesos.",
-      "entriesTooManyToShow": "{count} termes — massa per llistar aquí. Exporta per revisar-los, o importa un fitxer per reemplaçar termes."
+      "entriesTooManyToShow": "{count} termes — massa per llistar aquí. Exporta per revisar-los, o importa un fitxer per reemplaçar termes.",
+      "pagesLoaded": "pàgines {selected} de {total} carregades",
+      "pagesLabel": "Pàgines",
+      "pagesApply": "Carregar pàgines",
+      "pagesPrevious": "Lot anterior",
+      "pagesNext": "Lot següent",
+      "pagesBudget": "{used} / {max} caràcters",
+      "pagesChange": "Canvia pàgines",
+      "pagesLoading": "S’estan carregant les pàgines…",
+      "pagesInvalid": "Introduïu números de pàgina o intervals, per exemple 1-40, 45.",
+      "pagesUnavailable": "Cap d’aquestes pàgines conté text.",
+      "pagesTooMany": "Aquesta selecció ocupa {used} caràcters i un lot en pot contenir {max}. Trieu menys pàgines.",
+      "stop": "Atura",
+      "stepAnalyzing": "S'està analitzant",
+      "stepTranslating": "S'està traduint",
+      "stepReviewing": "S'està revisant",
+      "stepDone": "Fet",
+      "runProgressLabel": "Progrés de la traducció",
+      "runHintAnalyzing": "S'està llegint l'original per identificar termes difícils i ambigüitats.",
+      "runHintTranslating": "S'està escrivint la traducció.",
+      "runHintReviewing": "S'està comprovant el primer esborrany amb l'original.",
+      "runHintReviewingRound": "S'està comprovant el primer esborrany amb l'original · volta {round} de fins a {total}.",
+      "runRound": "Volta {round} de fins a {total}",
+      "draftLabel": "Esborrany",
+      "sourceLocked": "Blocat durant la traducció",
+      "analysisNotes": "{count, plural, one {# nota} other {# notes}}",
+      "analysisPill": "{count, plural, one {Anàlisi · # nota} other {Anàlisi · # notes}}",
+      "reviewSummary": "{count, plural, one {Revisió: # volta, {verdict}} other {Revisions: # voltes, {verdict}}}",
+      "analysisDismiss": "Amaga per a totes les traduccions",
+      "analysisShow": "Mostra l'anàlisi prèvia a la traducció",
+      "analysisResize": "Canvia la mida del panell d'anàlisi",
+      "assessingCriteria": "{count, plural, one {S'està comprovant # criteri} other {S'estan comprovant # criteris}}",
+      "editsPending": "Les edicions suggerides apareixeran aquí quan finalitzi l'avaluació.",
+      "uploadProgressLabel": "Progrés de la càrrega",
+      "uploadStepUploading": "S'està carregant",
+      "uploadStepReading": "S'està llegint el text",
+      "uploadStepReady": "Preparat",
+      "uploadCancel": "Cancel·la",
+      "modeDocument": "Document sencer",
+      "modeDocumentHint": "Traduïx el PDF carregat completament i en manté el format. Llig i corregeix el resultat pàgina per pàgina.",
+      "translateDocument": "Traduir document",
+      "documentSubmitting": "S'està enviant…",
+      "documentIntroTitle": "Traduir tot el document",
+      "documentIntro": "El PDF pujat es tradueix completament, mantenint-ne el format. Quan estigui llest, el podrà llegir pàgina a pàgina al costat de l'original, corregir pàgines, comprovar-ne la qualitat i descarregar el resultat. En aquest mode no s'apliquen glossaris ni rondes de revisió. Un cop iniciada, la traducció d'un document no es pot aturar i les pàgines es descompten de la quota diària.",
+      "documentNeedsFile": "Carrega un PDF per traduir un document sencer.",
+      "documentNeedsPdf": "La traducció de tot el document amb vista pàgina per pàgina només funciona amb fitxers PDF.",
+      "documentNeedsLanguage": "Tria un idioma de destinació per traduir el document.",
+      "documentLanguageUnsupported": "La traducció de tot el document no està disponible per a aquest idioma. Utilitza la traducció ràpida o revisada.",
+      "documentNoGlossaries": "Els glossaris no s'utilitzen en la traducció de tot el document",
+      "documentPagesLeft": "{count, plural, one {# pàgina restant avui} other {# pàgines restants avui}}",
+      "documentLimitReached": "Aquest document té més pàgines de les que pots traduir avui. Traduïx pàgines seleccionades amb la traducció ràpida o revisada, o torna-ho a intentar demà.",
+      "documentUnavailable": "La traducció de tot el document no està configurada en aquest servidor.",
+      "documentSubmitFailed": "No s'ha pogut enviar el document per a la traducció: {message}",
+      "documentProgressLabel": "Progrés de la traducció del document",
+      "documentStepUploaded": "Carregat",
+      "documentStepPreparing": "S'estan preparant les pàgines",
+      "documentTypicalDuration": "normalment uns minuts",
+      "documentCanLeave": "Pots eixir d'aquesta pàgina. La traducció continuarà i estarà disponible quan hi tornis.",
+      "documentStalled": "No s'ha pogut comprovar el progrés de la traducció. Potser encara s'està executant.",
+      "documentCheckAgain": "Torna a comprovar",
+      "documentFailed": "No s'ha pogut traduir el document: {message}",
+      "documentGone": "Aquesta traducció ja no està disponible. Torna a traduir el document per poder llegir-lo.",
+      "documentPageFailed": "No s'ha pogut carregar aquesta pàgina: {message}",
+      "documentPagesNotAligned": "El fitxer traduït té un nombre diferent de pàgines, per la qual cosa pot ser que una pàgina no mostri el mateix contingut als dos costats.",
+      "documentAvailableUntil": "Disponible fins a {date}",
+      "documentRetranslateTitle": "Vols tornar a traduir el document?",
+      "documentRetranslateMessage": "Això inicia una nova traducció i les pàgines tornen a comptar per a la quota diària. Un cop iniciada, no es pot aturar. La traducció actual i les seves correccions es mantindran al servidor fins que caduquin, però ja no es mostraran aquí.",
+      "retry": "Torna-ho a intentar",
+      "pageLabel": "Pàgina",
+      "pageOf": "de {total}",
+      "pageNumber": "· pàgina {page}",
+      "pagePrevious": "Pàgina anterior",
+      "pageNext": "Pàgina següent",
+      "correctedLabel": "Corregida",
+      "correctedPages": "Pàgines corregides:",
+      "correctedPagesMore": "+{count} més",
+      "correctionRestore": "Restaura",
+      "correctionRestoreHint": "Descarta els teus canvis en aquesta pàgina i torna a la traducció automàtica",
+      "correctionSaving": "S'està guardant…",
+      "correctionSaved": "Guardat",
+      "correctionSaveFailed": "No s'ha pogut guardar. Modifica el text i torna-ho a provar.",
+      "download": "Descarrega",
+      "downloading": "S'està descarregant…",
+      "downloadFailed": "No s'ha pogut descarregar: {message}",
+      "downloadTranslated": "Traduït {format}",
+      "downloadTranslatedHint": "Format original. No inclou les teves correccions.",
+      "downloadTextVersion": "Versió de text (DOCX)",
+      "downloadTextVersionHint": "Text pla, una pàgina per full, amb les teves correccions.",
+      "documentNoCancel": "No es pot aturar la traducció d’un document un cop ha començat.",
+      "documentGlossariesIgnored": "{count, plural, one {El vostre glossari seleccionat no s’aplica en aquest mode.} other {Els vostres # glossaris seleccionats no s’apliquen en aquest mode.}} Comproveu la terminologia pàgina per pàgina amb Avalua la qualitat o feu servir Ràpida o Revisada.",
+      "pendingLeavePage": "Les suggeriments pertanyen a aquesta pàgina i no es conserven quan la deixeu. Acabeu de decidir els suggeriments restants primer.",
+      "uploadStepOcr": "Lectura amb OCR",
+      "ocrButton": "Llegeix amb OCR",
+      "ocrButtonHint": "Torna a llegir aquest PDF amb reconeixement de text, per a pàgines escanejades o textos mal llegits",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Aquest text s’ha obtingut mitjançant reconeixement de text de les pàgines. Comprova’l amb l’original.",
+      "ocrReasonNoText": "No s’ha trobat cap text a {name}. Sembla que és un document escanejat.",
+      "ocrReasonSparse": "S’ha trobat molt poc text a {name}. Part del contingut podria estar escanejat.",
+      "ocrReasonManual": "Vols tornar a llegir {name} amb reconeixement de text?",
+      "ocrExplanation": "L’OCR extreu el text de les imatges de les pàgines. Tarda més que una pujada normal, compta cada pàgina del fitxer dintre del teu límit diari d’OCR, i pot llegir erròniament escaneigs defectuosos, escriptura a mà i taules.",
+      "ocrPagesLeft": "{count, plural, one {# pàgina OCR disponible per avui.} other {# pàgines OCR disponibles per avui.}}",
+      "ocrRun": "Llegeix amb OCR",
+      "ocrDismiss": "Ara no",
+      "ocrSparseHint": "S’ha trobat molt poc text en aquest PDF. Algunes pàgines podrien estar escanejades.",
+      "ocrLimitReached": "Aquest document té més pàgines de les permeses pel teu límit d’OCR per avui.",
+      "ocrTooManyPages": "Aquest document és massa llarg per a l’OCR, que llegeix com a màxim {max} pàgines. Divideix el PDF i puja’n una part.",
+      "ocrUnavailable": "L’OCR no està configurat en aquest servidor.",
+      "ocrNoText": "L’OCR tampoc no ha trobat text en aquest document.",
+      "ocrFailed": "No s’ha pogut llegir el document amb OCR. Torna-ho a provar.",
+      "scannedWholeExplanation": "També podeu traduir tot el document: llegeix automàticament les pàgines escanejades, manté el format i descompta les pàgines del vostre límit diari de traducció.",
+      "scannedUseWholeDocument": "Traduïu tot el document",
+      "scannedSourceNote": "{name} no té cap text per mostrar aquí. La traducció de tot el document llegeix directament les seves pàgines. Si escriviu el vostre propi text aquí, substituireu el document.",
+      "scannedPageNote": "No s'ha pogut llegir cap text d'aquesta pàgina de l'original. Compareu-ho amb el fitxer mateix.",
+      "changeLabel": "Sol·licita un canvi en la traducció",
+      "changePlaceholder": "Demana un canvi, p. ex., fer-la més formal",
+      "changePlaceholderAnother": "Demana un altre canvi",
+      "changeSend": "Envia la sol·licitud",
+      "changeWorking": "S'estan aplicant els canvis",
+      "changeNothingApplied": "No es canviarà res fins que acceptis",
+      "changeSelectionLabel": "Sol·licita un canvi al text seleccionat",
+      "changeSelectionPlaceholder": "Modifica això, p. ex., escriu «tableta»",
+      "changeSelectionScope": "S'aplica només al text seleccionat",
+      "changeSelectionClose": "Tanca",
+      "changeTitle": "Canvis sol·licitats",
+      "changeSelectedLabel": "Text seleccionat",
+      "changeNoEdits": "No calia cap canvi per a aquesta sol·licitud.",
+      "changeReplyPending": "{count, plural, one {# modificació suggerida és a l'espai de treball.} other {# modificacions suggerides són a l'espai de treball.}} No es canviarà res fins que acceptis.",
+      "changeStopped": "Aturat. No s'ha fet cap canvi.",
+      "changeFailed": "La sol·licitud de canvi ha fallat. Torna-ho a provar.",
+      "changeNoTranslation": "Encara no hi ha cap traducció per canviar. Tradueix el text primer.",
+      "changeBusy": "Espera que acabi l'execució actual i torna-ho a demanar.",
+      "changeHeld": "No s'ha enviat: hi ha modificacions suggerides pendents de decisió.",
+      "pendingRunActionRequest": "Sol·licitant un canvi",
+      "railPlaceholder": "Demana un canvi o fes una pregunta…",
+      "documentPageCount": "{count, plural, one {# pàgina} other {# pàgines}}",
+      "sourceShowPages": "Mostra les pàgines",
+      "sourceEditText": "Edita com a text",
+      "sourceRemoveDocument": "Elimina el document",
+      "sourceJumpToPage": "Vés a una pàgina"
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",
@@ -3695,7 +3837,7 @@
       "guideTargetTerm": "Traducció requerida",
       "guideNote": "Nota",
       "pendingRun": {
-        "title": "{count} suggeriments encara pendents",
+        "title": "{count, plural, one {Encara queda # suggeriment pendent} other {Encara queden # suggeriments pendents}}",
         "body": "{action} pot modificar qualsevol part del text, inclosos els fragments amb suggeriments pendents, i una nova avaluació substituirà la llista actual. Decideix primer sobre els suggeriments pendents.",
         "acceptAll": "Accepta tots els pendents",
         "rejectAll": "Rebutja'ls tots",
@@ -3757,7 +3899,7 @@
         "list<number>": "Llista de números"
       },
       "layout": "Disseny",
-      "layoutHint": "Markdown amb espais per a {{field:id}} — s'utilitza per a l'exportació renderitzada i la vista prèvia.",
+      "layoutHint": "Markdown amb espais per a '{{field:id}}' — s'utilitza per a l'exportació renderitzada i la vista prèvia.",
       "saveTemplate": "Desa plantilla",
       "deleteTemplate": "Elimina plantilla",
       "cancel": "Cancel·la",
@@ -4580,10 +4722,14 @@
       "cost": {
         "lessThan": "< {amount}",
         "rowUnpriced": "No hi ha preu de llista per a les sol·licituds d’aquesta fila",
-        "unpriced": "{count, plural, one {# sol·licitud sense preu de llista no s'} other {# sol·licituds sense preu de llista no s'}}inclouen en el cost.",
+        "unpriced": "{count, plural, one {# sol·licitud sense preu de llista no s’} other {# sol·licituds sense preu de llista no s’}}inclouen en el cost.",
         "noPriceData": "No es mostra cap cost: el model d’aquesta conversa no té preu de llista (fonts pròpies, execució local i agents no tenen preu assignat).",
         "note": "Cost segons preus de llista a data de {asOf} (tarifa Estàndard Global, sense descompte per entrada en memòria cau): és un límit superior, no una factura. Cerca web, execució de codi, transcripció, veu, traducció i indexació de documents no estan inclosos."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Aquest espai de treball (estimació)",
@@ -5399,7 +5545,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documents}} indexats",
     "m365CapImmediateHelp": "En fer clic a Aplicar, el límit es desa immediatament. Altres canvis requereixen Desa.",
     "m365CapDraftHelp": "El límit es desa quan creeu l'agent.",
-    "m365CapSaved": "Límit de documents desat: {limit}."
+    "m365CapSaved": "Límit de documents desat: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Desactivat per defecte: l’agent només respon amb els seus propis documents i mai no cerca al web, independentment de la configuració de cerca de l’usuari. Quan està activat, les instruccions de l’agent decideixen quan es fa una cerca web i quins llocs web es poden utilitzar, i les fonts web sempre es mostren separadament dels documents de l’agent.",
+    "promptAgentAllowWebSearchHelp": "Activat per defecte. Si es desactiva, aquest agent mai no cerca al web, sigui quina sigui la configuració de cerca de l’usuari."
   },
   "localModels": {
     "title": "Models locals",
@@ -5706,7 +5854,9 @@
       "m365MailReadsPerDay": "Lectures de correus per dia",
       "m365MailDraftsPerDay": "Esborranys de correus per dia",
       "m365MailDeepScansPerDay": "Anàlisis profundes de correus per dia",
-      "m365DigestRunsPerDay": "Execucions diàries del resum per dia"
+      "m365DigestRunsPerDay": "Execucions diàries del resum per dia",
+      "translationPagesPerDay": "Pàgines de traducció de documents per dia",
+      "ocrPagesPerDay": "Pàgines OCR al dia"
     },
     "valueModeLabel": "Tipus de límit",
     "valueAmountLabel": "Quantitat límit",
@@ -5729,7 +5879,8 @@
       "jobs": "tascas",
       "rounds": "voltes",
       "documents": "documents",
-      "boolean": ""
+      "boolean": "",
+      "pages": "pàgines"
     },
     "window": {
       "day": "dia",
@@ -5787,7 +5938,9 @@
       "m365MailReadsPerDay": "Cerques de correu i lectures de missatges/converses al dia. Superat el límit, les eines de correu et donaran el resultat \"torna-ho a provar demà\".",
       "m365MailDraftsPerDay": "Esborranys de correu electrònic que l'assistent pot crear cada dia — cadascun confirmat individualment. Límit intencionadament restrictiu.",
       "m365MailDeepScansPerDay": "Anàlisis de correu compostes (resums, cerques profundes, compromisos) al dia. Cada anàlisi compta com una unitat del pressupost, independentment de les lectures internes.",
-      "m365DigestRunsPerDay": "Execucions del resum diari de Microsoft 365 per dia. Cada execució implica desenes de lectures Graph i dues trucades als models d'anàlisi; l’eina de selecció de període fa que repetir execucions sigui fàcil, per això el valor predeterminat és restrictiu."
+      "m365DigestRunsPerDay": "Execucions del resum diari de Microsoft 365 per dia. Cada execució implica desenes de lectures Graph i dues trucades als models d'anàlisi; l’eina de selecció de període fa que repetir execucions sigui fàcil, per això el valor predeterminat és restrictiu.",
+      "translationPagesPerDay": "Pàgines PDF enviades per a la traducció de documents cada dia.",
+      "ocrPagesPerDay": "Pàgines PDF llegides amb OCR (reconeixement de text per a documents escanejats) per dia."
     },
     "scopeFamily": "Família",
     "scopeModel": "Model",
@@ -8095,7 +8248,13 @@
       "skills": "Selecció d'habilitats",
       "tools": "Enrutament d'eines",
       "trim": "Classificació d'escurçament",
-      "assessment": "Avaluació de cerca"
+      "assessment": "Avaluació de cerca",
+      "query": "Reescriptura de consulta de cerca",
+      "mailScreen": "Pantalla de phishing de correu",
+      "mailAnalysis": "Anàlisi de correus i resums",
+      "schemaProposal": "Proposta d’esquema d’extracció",
+      "mcpPlan": "Pla de connector",
+      "vision": "Lectura d’imatges i pàgines"
     },
     "reason": {
       "endpoint_missing": "Falta vinculació d'endpoint o compte",
@@ -8116,6 +8275,164 @@
       "endpoint_account_mismatch": "L'endpoint i l'ID de recurs ARM identifiquen comptes diferents. Corregeix la configuració del desplegament.",
       "inventory_refresh_failed": "No s'ha pogut actualitzar l'inventari. Comprova l'accés de Lector de la identitat de l'aplicació i la connectivitat del compte.",
       "credential_unavailable": "L'aplicació no ha pogut obtenir la seva credencial d'inventari. Comprova la configuració de la identitat de desplegament."
+    },
+    "notSupported": "No és compatible amb aquest model",
+    "unservedOperations": "Cap model d’aquesta cadena admet: {operations}. Afegeix un model que sí que ho faci."
+  },
+  "filePreview": {
+    "preview": "Previsualització",
+    "download": "Descarrega",
+    "loading": "S’està preparant la previsualització…",
+    "failed": "No s’ha pogut previsualitzar aquest fitxer. Encara el pots descarregar.",
+    "pageOf": "Pàgina {page} de {total}",
+    "truncated": "Es mostren les primeres {shown} de {total} pàgines. Descarrega el fitxer per veure la resta.",
+    "enlarge": "Amplia {name}"
+  },
+  "addToChat": {
+    "title": "Afegeix al xat",
+    "titleTranslate": "Traduir un document",
+    "titleTranscribe": "Transcriure àudio o vídeo",
+    "sourcesLabel": "Afegeix des de",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "No disponible per a aquesta acció",
+    "sources": {
+      "device": "Aquest dispositiu",
+      "link": "Enllaç",
+      "camera": "Càmera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Correu electrònic",
+      "meetings": "Reunions"
+    },
+    "device": {
+      "browse": "Cerca en aquest dispositiu",
+      "dropHint": "o deixa fitxers en qualsevol lloc d’aquesta finestra, o enganxa",
+      "rejected": "Cap d'aquests fitxers es pot utilitzar aquí.",
+      "hint": {
+        "attach": "Documents, imatges, àudio i vídeo.",
+        "translate": "Un document: Word, Excel, PowerPoint, PDF, HTML o text.",
+        "transcribe": "Àudio o vídeo. Es transcriu quan envies el missatge."
+      }
+    },
+    "selection": {
+      "then": "A continuació",
+      "intents": {
+        "attach": "Adjunta",
+        "translate": "Tradueix",
+        "transcribe": "Transcriu"
+      },
+      "confirm": {
+        "attach": "Afegeix",
+        "translate": "Tradueix",
+        "transcribe": "Transcriu"
+      },
+      "unfit": {
+        "attach": "Aquests fitxers no es poden adjuntar",
+        "translate": "La traducció admet un document cada vegada",
+        "transcribe": "Només es poden transcriure àudios i vídeos"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Aquest dispositiu, enllaços, Microsoft 365",
+      "filesOrPhotos": "Fitxers o fotos",
+      "fromThisDevice": "Des d’aquest dispositiu",
+      "connect": "Connecta Microsoft 365",
+      "connectNote": "Afegeix des de OneDrive, correu i reunions"
     }
+  },
+  "usageBudgets": {
+    "title": "Els teus pressupostos",
+    "description": "Límits que t’estableixes en aquest dispositiu. Tria un pressupost i decideix què passa a mesura que t’hi aproximis o el superis. Els pressupostos tenen en compte xats i execucions de fluxos de treball des de l’inici de cada període.",
+    "metric": {
+      "emissions": "Pressupost d’emissions",
+      "cost": "Pressupost de cost"
+    },
+    "metricShort": {
+      "emissions": "Emissions",
+      "cost": "Cost"
+    },
+    "off": "No s’ha establert cap pressupost.",
+    "measureAs": "Mesura-ho com",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Càrregues de telèfon",
+      "usd": "Dòlars americans"
+    },
+    "amountLabel": "Pressupost",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "hores",
+      "smartphoneCharge": "càrregues",
+      "usd": "dòlars americans"
+    },
+    "periodLabel": "Es reinicia cada",
+    "period": {
+      "day": "Dia",
+      "week": "Setmana",
+      "month": "Mes"
+    },
+    "costNote": "Estimació segons preus de llista: límit superior, no una factura.",
+    "chargesValue": "{count} càrregues de telèfon",
+    "percent": "{percent}%",
+    "usedOf": "{used} de {limit} utilitzats ({percent}%)",
+    "usedOfShort": "{used} de {limit}",
+    "resets": "Es reinicia {date}",
+    "budgetMarker": "Pressupost",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Dins el pressupost",
+      "warn": "Avís mostrat",
+      "ask": "Confirma abans de cada missatge",
+      "stop": "L'enviament està en pausa"
+    },
+    "stage": {
+      "warn": {
+        "title": "Avisar",
+        "tag": "Alerta",
+        "description": "Mostra un avís al xat a partir d’aquest percentatge del pressupost."
+      },
+      "ask": {
+        "title": "Demanar primer",
+        "tag": "Blocatge suau",
+        "description": "Demana’m confirmació per a cada missatge a partir d’aquest percentatge del pressupost."
+      },
+      "stop": {
+        "title": "Aturar",
+        "tag": "Blocatge dur",
+        "description": "Atura l’enviament a partir d’aquest percentatge del pressupost fins que es reiniciï o l’augmenti aquí."
+      }
+    },
+    "thresholdLabel": "Llindar de {stage}, percentatge del pressupost",
+    "notice": {
+      "warn": {
+        "emissions": "Has utilitzat el {percent}% del teu pressupost d’emissions.",
+        "cost": "Has utilitzat el {percent}% del teu pressupost de cost."
+      },
+      "ask": {
+        "emissions": "Has utilitzat el {percent}% del teu pressupost d’emissions. Vols enviar aquest missatge?",
+        "cost": "Has utilitzat el {percent}% del teu pressupost de cost. Vols enviar aquest missatge?"
+      },
+      "askRun": {
+        "emissions": "Has utilitzat el {percent}% del teu pressupost d’emissions. Vols iniciar aquesta execució?",
+        "cost": "Has utilitzat el {percent}% del teu pressupost de cost. Vols iniciar aquesta execució?"
+      },
+      "stop": {
+        "emissions": "S’ha arribat al límit del pressupost d’emissions. L’enviament està en pausa fins al {date}.",
+        "cost": "S'ha arribat al límit de despesa del pressupost. L'enviament està en pausa fins al {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Veure pressupost",
+      "dismiss": "Descartar",
+      "sendAnyway": "Envia igualment",
+      "runAnyway": "Executa igualment",
+      "dontSend": "No enviïs",
+      "dontAskToday": "No ho tornis a preguntar avui",
+      "openSettings": "Obre la configuració del pressupost",
+      "edit": "Edita"
+    },
+    "composerPaused": "Enviament pausat pel teu pressupost",
+    "summaryTitle": "Els teus pressupostos",
+    "chipAria": "Pressupost de {metric}: {percent}% utilitzat.",
+    "runProjection": "Pressupost d'emissions {from}% → {to}%"
   }
 }

@@ -50,7 +50,7 @@ export const DashboardModal: FC<DashboardModalProps> = ({
         {/* Header */}
         <div className="flex-shrink-0 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-surface-dark-recessed px-4 md:px-6 py-3 md:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex-1 min-w-0 mr-4">
+            <div className="flex-1 min-w-0 me-4">
               <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white truncate">
                 {title}
               </h2>
@@ -104,7 +104,7 @@ export const DashboardModal: FC<DashboardModalProps> = ({
         <div className="flex-1 overflow-hidden flex">
           {/* Left Panel - Form */}
           <div
-            className={`flex-1 flex flex-col overflow-hidden md:border-r border-gray-200 dark:border-gray-700 ${
+            className={`flex-1 flex flex-col overflow-hidden md:border-e border-gray-200 dark:border-gray-700 ${
               mobileActivePanel === 'ai' ? 'hidden md:flex' : 'flex'
             }`}
           >

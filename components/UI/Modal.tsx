@@ -149,7 +149,7 @@ const Modal: React.FC<ModalProps> = ({
       >
         {/* Beta badge positioning */}
         {betaBadge && (
-          <div className="absolute -top-4 -left-4">{betaBadge}</div>
+          <div className="absolute -top-4 -start-4">{betaBadge}</div>
         )}
 
         {/* Close button - standalone if not in header */}
@@ -158,8 +158,8 @@ const Modal: React.FC<ModalProps> = ({
             onClick={onClose}
             className={`text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors ${
               closeWithButton
-                ? 'absolute -top-4 -right-4 p-1 bg-gray-200 dark:bg-gray-700 rounded-full'
-                : 'absolute top-4 right-4'
+                ? 'absolute -top-4 -end-4 p-1 bg-gray-200 dark:bg-gray-700 rounded-full'
+                : 'absolute top-4 end-4'
             }`}
             aria-label={t('common.closeModal')}
           >
@@ -190,7 +190,7 @@ const Modal: React.FC<ModalProps> = ({
             className={`flex justify-between items-center ${showDivider ? 'border-b dark:border-gray-700 pb-3 mb-4' : 'mb-4'} ${headerClassName}`}
           >
             <div className="flex items-center">
-              {icon && <div className="mr-2">{icon}</div>}
+              {icon && <div className="me-2">{icon}</div>}
               {title &&
                 (typeof title === 'string' ? (
                   <h3
@@ -207,7 +207,7 @@ const Modal: React.FC<ModalProps> = ({
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className={`text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors ${closeWithButton ? 'absolute -top-4 -right-4 p-1 bg-gray-200 dark:bg-gray-700 rounded-full' : ''}`}
+                className={`text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors ${closeWithButton ? 'absolute -top-4 -end-4 p-1 bg-gray-200 dark:bg-gray-700 rounded-full' : ''}`}
                 aria-label={t('common.closeModal')}
               >
                 {closeWithButton ? (

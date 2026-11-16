@@ -400,6 +400,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
         modelType: undefined,
         agentId: undefined,
         isOrganizationAgent: true,
+        allowWebSearch: agent.allowWebSearch !== false,
       }));
 
     // M365 file-backed agents (type: 'm365') ride the same org- convention
@@ -415,6 +416,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
         modelType: undefined,
         agentId: undefined,
         isOrganizationAgent: true,
+        allowWebSearch: agent.allowWebSearch === true,
       }));
 
     // Admin-authored org RAG agents (type: 'org') ride the same org- id

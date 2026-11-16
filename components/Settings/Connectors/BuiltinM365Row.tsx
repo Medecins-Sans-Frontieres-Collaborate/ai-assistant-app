@@ -61,7 +61,7 @@ export const BuiltinM365Row: FC = () => {
           <div className="min-w-0">
             <div className="font-medium text-gray-900 dark:text-gray-100">
               {M365_BUILTIN_SERVER_LABEL}
-              <span className="ml-2 rounded-full border border-neutral-300 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-gray-500 dark:border-neutral-600 dark:text-gray-400">
+              <span className="ms-2 rounded-full border border-neutral-300 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-gray-500 dark:border-neutral-600 dark:text-gray-400">
                 {t('builtinBadge')}
               </span>
             </div>

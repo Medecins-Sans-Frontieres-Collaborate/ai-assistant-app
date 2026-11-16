@@ -96,7 +96,7 @@ export const ToolCallSummary: FC<ToolCallSummaryProps> = ({
         <span>
           {t('usedTools', { count: toolCalls.length })}
           {failureCount > 0 && (
-            <span className="ml-1 text-red-600 dark:text-red-400">
+            <span className="ms-1 text-red-600 dark:text-red-400">
               · {t('failedCount', { count: failureCount })}
             </span>
           )}
@@ -104,7 +104,7 @@ export const ToolCallSummary: FC<ToolCallSummaryProps> = ({
       </button>
 
       {expanded && (
-        <ul className="mt-2 space-y-1.5 border-l-2 border-gray-200 pl-3 dark:border-gray-700">
+        <ul className="mt-2 space-y-1.5 border-s-2 border-gray-200 ps-3 dark:border-gray-700">
           {toolCalls.map((call) => (
             <ToolCallRow
               key={call.id}
@@ -181,7 +181,7 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
         type="button"
         onClick={() => hasDetails && setDetailsOpen((v) => !v)}
         disabled={!hasDetails}
-        className="flex w-full items-center gap-2 rounded text-left text-gray-700 transition-colors dark:text-gray-300 disabled:cursor-default"
+        className="flex w-full items-center gap-2 rounded text-start text-gray-700 transition-colors dark:text-gray-300 disabled:cursor-default"
       >
         <StatusIcon
           size={12}
@@ -196,7 +196,7 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
             {t('viaService', { service: call.server_label })}
           </span>
         )}
-        <span className={`ml-auto pl-2 ${statusClass}`}>{statusLabel}</span>
+        <span className={`ms-auto ps-2 ${statusClass}`}>{statusLabel}</span>
         {typeof call.duration_ms === 'number' && (
           <span className="text-gray-400 dark:text-gray-500">
             · {formatDuration(call.duration_ms)}
@@ -205,7 +205,7 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
       </button>
 
       {detailsOpen && (
-        <div className="mt-1 space-y-1 pl-5">
+        <div className="mt-1 space-y-1 ps-5">
           {prettyArgs && (
             <pre className="max-h-32 max-w-full overflow-auto rounded border border-gray-200 bg-gray-50 px-2 py-1 text-[0.7rem] leading-snug text-gray-700 dark:border-gray-700/60 dark:bg-gray-900/60 dark:text-gray-300">
               <code className="font-mono">
@@ -230,7 +230,14 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
                   {t('codeOutput')}
                 </div>
               )}
-              <pre className="max-h-32 max-w-full overflow-auto rounded border border-emerald-200/60 bg-emerald-50 px-2 py-1 text-[0.7rem] leading-snug text-emerald-900 dark:border-emerald-700/40 dark:bg-emerald-900/15 dark:text-emerald-100">
+              {/* Code output keeps its columns; every other outcome is
+                  prose (what a search found and why it ran) and wraps so
+                  it reads without sideways scrolling. */}
+              <pre
+                className={`max-h-32 max-w-full overflow-auto rounded border border-emerald-200/60 bg-emerald-50 px-2 py-1 text-[0.7rem] leading-snug text-emerald-900 dark:border-emerald-700/40 dark:bg-emerald-900/15 dark:text-emerald-100 ${
+                  isCodeInterpreter ? '' : 'whitespace-pre-wrap break-words'
+                }`}
+              >
                 {call.output}
               </pre>
             </div>

@@ -338,6 +338,7 @@ const ActiveFileSchema = z.object({
   lastUsedAt: z.string().optional(),
   errorMessage: z.string().optional(),
   pinned: z.boolean().optional(),
+  autoPinned: z.boolean().optional(),
   processedContent: ActiveFileProcessedContentSchema.optional(),
   mimeType: z.string().optional(),
   sizeBytes: z.number().int().nonnegative().optional(),

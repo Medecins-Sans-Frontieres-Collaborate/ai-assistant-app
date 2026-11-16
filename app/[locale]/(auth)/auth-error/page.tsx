@@ -51,9 +51,9 @@ export default function AuthErrorPage() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-8 pb-24 md:py-12 md:pr-[5%]">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-8 pb-24 md:py-12 md:pe-[5%]">
         {/* Container for logo and card */}
-        <div className="w-full max-w-md lg:max-w-lg 2xl:max-w-2xl opacity-0 animate-fade-in-bottom md:ml-auto md:mr-8 space-y-6 md:space-y-8">
+        <div className="w-full max-w-md lg:max-w-lg 2xl:max-w-2xl opacity-0 animate-fade-in-bottom md:ms-auto md:me-8 space-y-6 md:space-y-8">
           {/* Logo and Title - Outside glass card */}
           <div className="text-center">
             <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3">
@@ -75,7 +75,7 @@ export default function AuthErrorPage() {
             <div className="absolute inset-0 bg-gradient-to-tl from-zinc-800/[0.05] to-transparent" />
 
             {/* Frosted glass edge highlight */}
-            <div className="absolute inset-0 rounded-2xl md:rounded-3xl border-t border-l border-white/[0.1]" />
+            <div className="absolute inset-0 rounded-2xl md:rounded-3xl border-t border-s border-white/[0.1]" />
 
             {/* Noise texture overlay for glass effect */}
             <div
@@ -148,7 +148,7 @@ export default function AuthErrorPage() {
       </div>
 
       {/* Footer - Version Info and Contact */}
-      <div className="absolute bottom-0 right-0 left-0 p-3 md:p-6 z-20">
+      <div className="absolute bottom-0 end-0 start-0 p-3 md:p-6 z-20">
         <div className="flex items-center justify-between gap-2 md:gap-4">
           {/* Version info */}
           <span className="text-[10px] md:text-xs text-gray-400/70">

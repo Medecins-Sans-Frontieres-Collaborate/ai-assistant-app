@@ -2,14 +2,14 @@
  * Unit Tests for RAGService
  *
  * Tests the service that handles Retrieval-Augmented Generation (RAG) operations
- * including Azure AI Search queries and query reformulation using the Foundry LLM.
+ * including Azure AI Search queries and residency-routed query reformulation.
  */
 // Import after mocks are set up
 import { RAGService } from '@/lib/services/ragService';
+import type { QueryReformulationRouting } from '@/lib/services/search/queryReformulation';
 
 import { Message } from '@/types/chat';
 
-import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Create mock search function that we can control
@@ -28,14 +28,10 @@ vi.mock('@azure/identity', () => ({
   DefaultAzureCredential: vi.fn(),
 }));
 
-// Mock organization agents
-vi.mock('@/lib/organizationAgents', () => ({
-  getOrganizationAgentById: vi.fn(),
-}));
-
 describe('RAGService', () => {
   let ragService: RAGService;
-  let mockOpenAIClient: any;
+  let mockReformulator: { reformulate: ReturnType<typeof vi.fn> };
+  const routing: QueryReformulationRouting = { region: 'EU' };
 
   const mockOrganizationAgent = {
     id: 'msf_communications',
@@ -99,32 +95,20 @@ describe('RAGService', () => {
     mockSearch.mockReset();
     mockSearch.mockReturnValue(createMockSearchResults(defaultSearchDocs));
 
-    // Mock OpenAI client for query reformulation
-    mockOpenAIClient = {
-      chat: {
-        completions: {
-          create: vi.fn().mockResolvedValue({
-            choices: [
-              {
-                message: {
-                  content: 'reformulated search query',
-                },
-              },
-            ],
-          }),
-        },
-      },
+    // Mock the residency-routed reformulator
+    mockReformulator = {
+      reformulate: vi.fn().mockResolvedValue({
+        query: 'reformulated search query',
+        source: 'auxiliary',
+      }),
     };
 
     // Create RAGService instance
     ragService = new RAGService(
       'https://search.example.com',
       'test-index',
-      mockOpenAIClient,
+      mockReformulator as any,
     );
-
-    // Mock organization agent lookup
-    (getOrganizationAgentById as any).mockReturnValue(mockOrganizationAgent);
   });
 
   describe('performSearch', () => {
@@ -152,6 +136,7 @@ describe('RAGService', () => {
         messages,
         mockOrganizationAgent as any,
         mockUser as any,
+        routing,
       );
 
       expect(mockSearch).toHaveBeenCalled();
@@ -168,6 +153,7 @@ describe('RAGService', () => {
         messages,
         mockOrganizationAgent as any,
         mockUser as any,
+        routing,
       );
 
       // Fetches topK * 2 (max 20) for deduplication buffer
@@ -189,6 +175,7 @@ describe('RAGService', () => {
         messages,
         mockOrganizationAgent as any,
         mockUser as any,
+        routing,
       );
 
       // Verify search was called with semantic search options
@@ -251,6 +238,7 @@ describe('RAGService', () => {
         messages,
         mockOrganizationAgent as any,
         mockUser as any,
+        routing,
       );
 
       // Should have 3 results:
@@ -293,29 +281,11 @@ describe('RAGService', () => {
         messages,
         mockOrganizationAgent as any,
         mockUser as any,
+        routing,
       );
 
       expect(result.searchMetadata.dateRange.oldest).toBe('2025-12-01');
       expect(result.searchMetadata.dateRange.newest).toBe('2025-12-20');
-    });
-
-    it('augmentMessages throws when the agent id cannot be resolved', async () => {
-      // performSearch now takes the resolved agent object (callers resolve
-      // through the org-agent registry); the id lookup only remains on the
-      // legacy augmentMessages entry point.
-      (getOrganizationAgentById as any).mockReturnValue(undefined);
-
-      const messages = createTestMessages('Test query');
-
-      await expect(
-        ragService.augmentMessages(
-          messages,
-          'unknown_agent',
-          'gpt-4.1',
-          false,
-          mockUser as any,
-        ),
-      ).rejects.toThrow('Organization agent unknown_agent not found');
     });
 
     it('should use reformulated query for follow-up questions', async () => {
@@ -331,10 +301,14 @@ describe('RAGService', () => {
         messages,
         mockOrganizationAgent as any,
         mockUser as any,
+        routing,
       );
 
-      // Should have called OpenAI for query reformulation
-      expect(mockOpenAIClient.chat.completions.create).toHaveBeenCalled();
+      // Should have asked the reformulator, under the turn's routing
+      expect(mockReformulator.reformulate).toHaveBeenCalledWith(
+        expect.objectContaining({ userPrompt: expect.any(String) }),
+        routing,
+      );
 
       // Search should use the reformulated query
       expect(mockSearch).toHaveBeenCalledWith(
@@ -352,10 +326,11 @@ describe('RAGService', () => {
         messages,
         mockOrganizationAgent as any,
         mockUser as any,
+        routing,
       );
 
-      // Should have called OpenAI for query reformulation (now runs on all queries)
-      expect(mockOpenAIClient.chat.completions.create).toHaveBeenCalled();
+      // Reformulation runs on every query, not just follow-ups
+      expect(mockReformulator.reformulate).toHaveBeenCalledTimes(1);
 
       // Search should use the reformulated query
       expect(mockSearch).toHaveBeenCalledWith(
@@ -366,61 +341,74 @@ describe('RAGService', () => {
   });
 
   describe('reformulateQuery', () => {
-    it('should call gpt-5-mini for query reformulation', async () => {
-      const messages: Message[] = [{ role: 'user', content: 'Original query' }];
-
-      await ragService.reformulateQuery(messages);
-
-      expect(mockOpenAIClient.chat.completions.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          model: 'gpt-5-mini',
-        }),
-      );
-    });
-
-    it('should include conversation history in reformulation request', async () => {
+    it('sends the conversation history and the latest question', async () => {
       const messages: Message[] = [
         { role: 'user', content: 'First question' },
         { role: 'assistant', content: 'First answer' },
         { role: 'user', content: 'Follow up question' },
       ];
 
-      await ragService.reformulateQuery(messages);
+      await ragService.reformulateQuery(messages, routing);
 
-      // Check that conversation history was included
-      const call = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
-      const userMessage = call.messages.find(
-        (m: any) => m.role === 'user',
-      )?.content;
-
-      expect(userMessage).toContain('First question');
-      expect(userMessage).toContain('First answer');
-      expect(userMessage).toContain('Follow up question');
+      const [prompt, passedRouting] =
+        mockReformulator.reformulate.mock.calls[0];
+      expect(prompt.userPrompt).toContain('First question');
+      expect(prompt.userPrompt).toContain('First answer');
+      expect(prompt.userPrompt).toContain('Original query: Follow up question');
+      expect(prompt.systemPrompt).toContain('search query optimizer');
+      expect(passedRouting).toBe(routing);
     });
 
-    it('should return original query on error', async () => {
-      mockOpenAIClient.chat.completions.create.mockRejectedValue(
-        new Error('API error'),
+    it('returns the rewrite when one is produced', async () => {
+      const result = await ragService.reformulateQuery(
+        [{ role: 'user', content: 'Original query' }],
+        routing,
+      );
+      expect(result).toBe('reformulated search query');
+    });
+
+    it('falls back to the question text of a turn that carries an attachment', async () => {
+      mockReformulator.reformulate.mockResolvedValue(undefined);
+
+      const result = await ragService.reformulateQuery(
+        [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: 'What does the memo say about Gaza?' },
+              { type: 'file_url', url: 'https://blob/memo.txt' },
+            ],
+          } as Message,
+        ],
+        routing,
       );
 
-      const messages: Message[] = [{ role: 'user', content: 'Original query' }];
-
-      const result = await ragService.reformulateQuery(messages);
-
-      // Should fall back to original query
-      expect(result).toBe('Original query');
+      // Never empty: an empty query fails the vector search outright.
+      expect(result).toBe('What does the memo say about Gaza?');
     });
 
-    it('sends no temperature (the gpt-5 utility model rejects non-default values)', async () => {
-      const messages: Message[] = [{ role: 'user', content: 'Test query' }];
+    it('keeps inlined documents out of the rewrite history', async () => {
+      await ragService.reformulateQuery(
+        [
+          { role: 'system', content: 'Document: ' + 'z'.repeat(20_000) },
+          { role: 'user', content: 'Latest news?' },
+        ] as Message[],
+        routing,
+      );
 
-      await ragService.reformulateQuery(messages);
+      const [prompt] = mockReformulator.reformulate.mock.calls[0];
+      expect(prompt.userPrompt).not.toContain('zzzz');
+    });
 
-      const call = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
+    it('falls back to the raw question when no path produced a rewrite', async () => {
+      mockReformulator.reformulate.mockResolvedValue(undefined);
 
-      // A rejected call silently fell back to the raw query before; the
-      // parameter must stay off so reformulation actually runs.
-      expect(call.temperature).toBeUndefined();
+      const result = await ragService.reformulateQuery(
+        [{ role: 'user', content: 'Original query' }],
+        routing,
+      );
+
+      expect(result).toBe('Original query');
     });
   });
 

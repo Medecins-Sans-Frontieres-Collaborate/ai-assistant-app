@@ -115,6 +115,10 @@ export interface MessageWindowOptions {
   windowTokens?: number;
 }
 
+/** Stands in for an earlier assistant turn that produced no text. */
+export const EMPTY_ASSISTANT_TURN_PLACEHOLDER =
+  '(No answer was produced for the previous message: the request failed.)';
+
 /**
  * Trims a conversation to what a turn may carry: the latest message always,
  * then older messages (newest first) while they fit `tokenLimit` — the
@@ -140,6 +144,18 @@ export const getMessagesToSend = async (
   for (let i = messages.length - 1; i >= 0; i--) {
     let message = messages[i];
     delete message.messageType;
+    // A turn that failed (timeout, content filter, provider error) is
+    // stored as an assistant message with no text. Some providers reject
+    // the whole request over one empty assistant message, which would make
+    // every later turn of the conversation fail too. Keep the turn in
+    // place (so user/assistant alternation holds) and say what happened.
+    if (
+      message.role === 'assistant' &&
+      typeof message.content === 'string' &&
+      message.content.trim() === ''
+    ) {
+      message = { ...message, content: EMPTY_ASSISTANT_TURN_PLACEHOLDER };
+    }
     const isLastMessage: boolean = messages.length - 1 === i;
 
     // Inject artifact context for user messages

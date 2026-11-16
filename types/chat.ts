@@ -741,6 +741,19 @@ export interface ToolRouterResponse {
    * degraded routing (keeps the base platform help, reports the outage).
    */
   skillSelectionDegraded?: boolean;
+  /**
+   * The classifier's read of whether the agent's retrieved passages answer
+   * the question. Only produced when the request carried `agentGuidance`
+   * with a knowledge search; it is the condition behind an owner's
+   * "otherwise search the web" rule.
+   */
+  knowledgeBaseAnswers?: boolean;
+  /**
+   * Websites the agent's rules restrict this search to (bare hostnames).
+   * `searchQuery`/`searchQueries` are already restricted to them; the list
+   * is carried so searches planned later in the turn can be held to it too.
+   */
+  searchSites?: string[];
   reasoning?: string; // Optional reasoning for debugging
 }
 
@@ -803,6 +816,14 @@ export interface ToolRouterRequest {
    * public feeds need.
    */
   searchFanOut?: boolean;
+  /**
+   * The answering agent's own web-search rules and this turn's knowledge
+   * search outcome. When present the classifier follows the owner's
+   * instructions (fallback search when the knowledge base lacks the answer,
+   * site and topic limits) instead of the generic lists alone, and reports
+   * `knowledgeBaseAnswers`. Absent → the prompt and schema are unchanged.
+   */
+  agentGuidance?: import('@/lib/services/chat/routing/agentSearchGuidance').AgentSearchGuidance;
 }
 
 // Persistent File Context types
@@ -818,6 +839,13 @@ export interface ActiveFile {
   lastUsedAt?: string;
   errorMessage?: string;
   pinned?: boolean;
+  /**
+   * True when `pinned` came from the "auto-pin uploads" setting rather than
+   * the user pinning this file. Auto-pinned files give way to newer uploads
+   * at the active-file cap (see evictActiveFilesOverCap); cleared as soon
+   * as the user pins or unpins the file themselves.
+   */
+  autoPinned?: boolean;
 
   // Cached processed content (populated after first use)
   processedContent?: {

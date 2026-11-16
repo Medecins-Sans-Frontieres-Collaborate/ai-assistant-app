@@ -163,7 +163,7 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
             <button
               type="button"
               onClick={() => onSelect(agent)}
-              className="flex-1 min-w-0 text-left px-3 py-2 flex items-center justify-between gap-2"
+              className="flex-1 min-w-0 text-start px-3 py-2 flex items-center justify-between gap-2"
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <IconComp

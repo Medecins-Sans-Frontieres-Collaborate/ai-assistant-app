@@ -166,7 +166,7 @@ export const MobileSettingsHeader: FC<MobileSettingsHeaderProps> = ({
             <p className="mb-4 text-gray-700 dark:text-gray-300">
               {t('settings.Reset Confirmation Message')}
             </p>
-            <div className="flex justify-end space-x-3">
+            <div className="flex justify-end gap-3">
               <button
                 className="rounded-md bg-gray-200 px-4 py-2 text-black transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
                 onClick={() => setShowResetConfirmation(false)}

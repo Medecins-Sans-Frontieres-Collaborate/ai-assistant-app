@@ -6,7 +6,7 @@ import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 import {
   calculateChunkConfig,
   estimateCharsPerToken,
-  parseAndQueryFileOpenAI,
+  summarizeDocumentForQuery,
 } from '@/lib/utils/app/stream/documentSummary';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 
@@ -31,11 +31,13 @@ vi.mock('@/lib/utils/app/stream/documentSummary', () => ({
     maxCompletionTokens: 5000,
     maxSummaryLength: 32000,
   }),
-  parseAndQueryFileOpenAI: vi.fn().mockResolvedValue('Mocked summary'),
+  summarizeDocumentForQuery: vi.fn().mockResolvedValue('Mocked summary'),
 }));
 
 const mockLoadDocument = vi.mocked(loadDocument);
-const mockParseAndQuery = vi.mocked(parseAndQueryFileOpenAI);
+const mockSummarize = vi.mocked(summarizeDocumentForQuery);
+const mockCompleteText = vi.fn(async () => 'model reply');
+const textCompletionProvider = { completeText: mockCompleteText };
 const mockCalcChunkConfig = vi.mocked(calculateChunkConfig);
 
 describe('FileProcessor', () => {
@@ -64,6 +66,8 @@ describe('FileProcessor', () => {
       fileProcessor = new FileProcessor(
         mockFileService as any,
         mockValidator as any,
+        undefined,
+        textCompletionProvider,
       );
     });
 
@@ -375,6 +379,8 @@ describe('FileProcessor', () => {
       fileProcessor = new FileProcessor(
         mockFileService as any,
         mockValidator as any,
+        undefined,
+        textCompletionProvider,
       );
     });
 
@@ -408,8 +414,8 @@ describe('FileProcessor', () => {
 
       const result = await fileProcessor.execute(context);
 
-      // Should NOT call parseAndQueryFileOpenAI for small files
-      expect(mockParseAndQuery).not.toHaveBeenCalled();
+      // Should NOT call summarizeDocumentForQuery for small files
+      expect(mockSummarize).not.toHaveBeenCalled();
 
       // Should populate inlineFiles
       expect(result.processedContent?.inlineFiles).toEqual([
@@ -429,7 +435,7 @@ describe('FileProcessor', () => {
         maxCompletionTokens: 5000,
         maxSummaryLength: 32000,
       });
-      mockParseAndQuery.mockResolvedValue('Summarized large document.');
+      mockSummarize.mockResolvedValue('Summarized large document.');
 
       const context = createTestChatContext({
         hasFiles: true,
@@ -451,11 +457,11 @@ describe('FileProcessor', () => {
 
       const result = await fileProcessor.execute(context);
 
-      // Should call parseAndQueryFileOpenAI with preExtractedText
-      expect(mockParseAndQuery).toHaveBeenCalledWith(
+      // Should call summarizeDocumentForQuery with preExtractedText
+      expect(mockSummarize).toHaveBeenCalledWith(
         expect.objectContaining({
           preExtractedText: largeText,
-          stream: false,
+          complete: expect.any(Function),
         }),
       );
 
@@ -473,101 +479,132 @@ describe('FileProcessor', () => {
       expect(result.attachmentTexts).toEqual({ 'large-report.txt': largeText });
     });
 
-    it('forwards botId to summarization for org KB agents (no promptAgent)', async () => {
-      const largeText = 'A'.repeat(60000);
-      mockLoadDocument.mockResolvedValue(largeText);
-      mockCalcChunkConfig.mockReturnValue({
-        chunkSize: 50000,
-        batchSize: 3,
-        maxCompletionTokens: 5000,
-        maxSummaryLength: 32000,
-      });
-      mockParseAndQuery.mockResolvedValue('KB-grounded summary.');
-
-      const context = createTestChatContext({
-        hasFiles: true,
-        botId: 'msf_communications',
-        messages: [
+    describe('summary completions', () => {
+      const largeFileMessage = {
+        role: 'user' as const,
+        content: [
+          { type: 'text' as const, text: 'Analyze this file' },
           {
-            role: 'user',
-            content: [
-              { type: 'text', text: 'Analyze this file' },
-              {
-                type: 'file_url',
-                url: 'https://blob.com/large-report.txt',
-                originalFilename: 'large-report.txt',
-              },
-            ],
-            messageType: MessageType.FILE,
+            type: 'file_url' as const,
+            url: 'https://blob.com/large-report.txt',
+            originalFilename: 'large-report.txt',
           },
         ],
-      });
-
-      await fileProcessor.execute(context);
-
-      expect(mockParseAndQuery).toHaveBeenCalledWith(
-        expect.objectContaining({ botId: 'msf_communications' }),
-      );
-    });
-
-    it('suppresses KB grounding for prompt-agent chats (botId not forwarded)', async () => {
-      // Prompt agents arrive via botId but must never trigger a
-      // knowledge-base search (mirrors RAGEnricher): a truthy botId would
-      // turn the large-file summarization into an Azure "On Your Data"
-      // request grounded on the org KB index.
-      const largeText = 'A'.repeat(60000);
-      mockLoadDocument.mockResolvedValue(largeText);
-      mockCalcChunkConfig.mockReturnValue({
-        chunkSize: 50000,
-        batchSize: 3,
-        maxCompletionTokens: 5000,
-        maxSummaryLength: 32000,
-      });
-      mockParseAndQuery.mockResolvedValue('Plain summary.');
-
-      const context = createTestChatContext({
-        hasFiles: true,
-        botId: 'prompt-abc123def456',
-        messages: [
-          {
-            role: 'user',
-            content: [
-              { type: 'text', text: 'Analyze this file' },
-              {
-                type: 'file_url',
-                url: 'https://blob.com/large-report.txt',
-                originalFilename: 'large-report.txt',
-              },
-            ],
-            messageType: MessageType.FILE,
-          },
-        ],
-      });
-      context.promptAgent = {
-        version: 1,
-        id: 'prompt-abc123def456',
-        name: 'Persona',
-        description: '',
-        systemPrompt: 'You are a persona.',
-        modelId: 'gpt-5.2',
-        createdBy: 'admin@msf.org',
-        createdAt: '2026-07-18T00:00:00.000Z',
-        updatedBy: 'admin@msf.org',
-        updatedAt: '2026-07-18T00:00:00.000Z',
+        messageType: MessageType.FILE,
       };
 
-      const result = await fileProcessor.execute(context);
+      beforeEach(() => {
+        mockLoadDocument.mockResolvedValue('A'.repeat(60000));
+        mockCalcChunkConfig.mockReturnValue({
+          chunkSize: 50000,
+          batchSize: 3,
+          maxCompletionTokens: 5000,
+          maxSummaryLength: 32000,
+        });
+        mockSummarize.mockResolvedValue('Plain summary.');
+      });
 
-      expect(mockParseAndQuery).toHaveBeenCalledWith(
-        expect.objectContaining({ botId: undefined }),
+      /** Runs the stage and invokes the completer it handed the summarizer. */
+      async function runAndComplete(
+        context: ReturnType<typeof createTestChatContext>,
+      ) {
+        await fileProcessor.execute(context);
+        expect(mockSummarize).toHaveBeenCalledTimes(1);
+        const { complete } = mockSummarize.mock.calls[0][0];
+        await complete({
+          systemPrompt: 'sys',
+          userPrompt: 'chunk',
+          maxTokens: 100,
+          temperature: 0.1,
+        });
+      }
+
+      it.each([
+        ['an org knowledge-base agent', 'msf_communications'],
+        ['a prompt agent', 'prompt-abc123def456'],
+      ])(
+        'never asks the summarizer for knowledge-base grounding (%s)',
+        async (_label, botId) => {
+          // The knowledge-base search belongs to RAGEnricher, which runs
+          // after this stage; the summarizer only condenses the document.
+          const context = createTestChatContext({
+            hasFiles: true,
+            botId,
+            messages: [largeFileMessage],
+          });
+
+          const result = await fileProcessor.execute(context);
+
+          expect(mockSummarize).toHaveBeenCalledTimes(1);
+          expect(mockSummarize.mock.calls[0][0]).not.toHaveProperty('botId');
+          expect(result.processedContent?.fileSummaries).toEqual([
+            expect.objectContaining({
+              filename: 'large-report.txt',
+              summary: 'Plain summary.',
+            }),
+          ]);
+        },
       );
-      // The summarization itself still runs on the standard path.
-      expect(result.processedContent?.fileSummaries).toEqual([
-        expect.objectContaining({
-          filename: 'large-report.txt',
-          summary: 'Plain summary.',
-        }),
-      ]);
+
+      it('runs on the turn model in the user region, as the user', async () => {
+        const context = createTestChatContext({
+          hasFiles: true,
+          messages: [largeFileMessage],
+          model: { id: 'Mistral-Large-3', sdk: 'openai' } as any,
+          session: { user: { region: 'EU' } } as any,
+        });
+        context.hostedRegion = 'EU';
+
+        await runAndComplete(context);
+
+        expect(mockCompleteText).toHaveBeenCalledWith(
+          {
+            model: context.model,
+            userRegion: 'EU',
+            hostedRegion: 'EU',
+            customSource: undefined,
+          },
+          expect.objectContaining({ userPrompt: 'chunk', user: context.user }),
+          undefined,
+        );
+      });
+
+      it("routes a custom-source model to the user's own account", async () => {
+        const credential = { getToken: vi.fn() };
+        const context = createTestChatContext({
+          hasFiles: true,
+          messages: [largeFileMessage],
+          model: { id: 'byom-model', isCustomSourceModel: true } as any,
+        });
+        context.foundryEndpoint = 'https://user-account.services.ai.azure.com';
+        context.userCredential = credential as any;
+
+        await runAndComplete(context);
+
+        expect(mockCompleteText).toHaveBeenCalledWith(
+          expect.objectContaining({
+            customSource: {
+              endpoint: 'https://user-account.services.ai.azure.com',
+              credential,
+            },
+          }),
+          expect.anything(),
+          undefined,
+        );
+      });
+
+      it('fails a custom-source turn that lost its endpoint instead of using app clients', async () => {
+        const context = createTestChatContext({
+          hasFiles: true,
+          messages: [largeFileMessage],
+          model: { id: 'byom-model', isCustomSourceModel: true } as any,
+        });
+
+        await fileProcessor.execute(context);
+
+        expect(mockSummarize).not.toHaveBeenCalled();
+        expect(mockCompleteText).not.toHaveBeenCalled();
+      });
     });
 
     it('should handle mix of small and large files', async () => {
@@ -584,7 +621,7 @@ describe('FileProcessor', () => {
         maxCompletionTokens: 5000,
         maxSummaryLength: 32000,
       });
-      mockParseAndQuery.mockResolvedValue('Summary of large file.');
+      mockSummarize.mockResolvedValue('Summary of large file.');
 
       const context = createTestChatContext({
         hasFiles: true,
@@ -624,8 +661,8 @@ describe('FileProcessor', () => {
         }),
       ]);
 
-      // parseAndQueryFileOpenAI should only be called once (for the large file)
-      expect(mockParseAndQuery).toHaveBeenCalledTimes(1);
+      // summarizeDocumentForQuery should only be called once (for the large file)
+      expect(mockSummarize).toHaveBeenCalledTimes(1);
     });
 
     const twoFileContext = (
@@ -668,7 +705,7 @@ describe('FileProcessor', () => {
         maxCompletionTokens: 5000,
         maxSummaryLength: 32000,
       });
-      mockParseAndQuery.mockResolvedValue('Summary of WB27.');
+      mockSummarize.mockResolvedValue('Summary of WB27.');
 
       const result = await fileProcessor.execute(twoFileContext());
 
@@ -693,7 +730,7 @@ describe('FileProcessor', () => {
 
       const result = await fileProcessor.execute(twoFileContext());
 
-      expect(mockParseAndQuery).not.toHaveBeenCalled();
+      expect(mockSummarize).not.toHaveBeenCalled();
       expect(result.processedContent?.inlineFiles).toHaveLength(2);
     });
 
@@ -722,7 +759,7 @@ describe('FileProcessor', () => {
         }),
         expect.any(Number),
       );
-      expect(mockParseAndQuery).toHaveBeenCalledWith(
+      expect(mockSummarize).toHaveBeenCalledWith(
         expect.objectContaining({ servingTokensPerMinute: 250000 }),
       );
     });
@@ -788,7 +825,7 @@ describe('FileProcessor', () => {
           interpreterTurn(InterpreterMode.INTELLIGENT),
         );
 
-        expect(mockParseAndQuery).not.toHaveBeenCalled();
+        expect(mockSummarize).not.toHaveBeenCalled();
         const [ib26, wb27] = result.processedContent?.inlineFiles ?? [];
         expect(ib26.content).toBe('A'.repeat(budgetChars / 2));
         expect(wb27.filename).toBe('WB27.xlsx');
@@ -876,7 +913,7 @@ describe('FileProcessor', () => {
         }),
       );
 
-      expect(mockParseAndQuery).not.toHaveBeenCalled();
+      expect(mockSummarize).not.toHaveBeenCalled();
       expect(result.processedContent?.inlineFiles).toHaveLength(1);
     });
 
@@ -911,7 +948,7 @@ describe('FileProcessor', () => {
       const result = await fileProcessor.execute(context);
 
       // At exactly chunkSize, should be inlined (text.length <= chunkSize)
-      expect(mockParseAndQuery).not.toHaveBeenCalled();
+      expect(mockSummarize).not.toHaveBeenCalled();
       expect(result.processedContent?.inlineFiles).toEqual([
         { filename: 'boundary.txt', content: boundaryText },
       ]);

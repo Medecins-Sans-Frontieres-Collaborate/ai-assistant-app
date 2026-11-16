@@ -84,3 +84,34 @@ export const REVIEW_SCHEMA = {
   required: ['verdict', 'issues', 'revisedText'],
   additionalProperties: false,
 } as const;
+
+/** Structured answer to a change request: a short reply plus the edits. */
+export const CHANGE_REQUEST_SCHEMA = {
+  type: 'object',
+  properties: {
+    reply: {
+      type: 'string',
+      description:
+        'One or two sentences to the user: what changed, why nothing did, or the answer to a question',
+    },
+    edits: {
+      type: 'array',
+      description: 'Proposed changes (empty for a question)',
+      items: {
+        type: 'object',
+        properties: {
+          before: {
+            type: 'string',
+            description: 'Verbatim substring of the translation',
+          },
+          after: { type: 'string' },
+          reason: { type: 'string' },
+        },
+        required: ['before', 'after', 'reason'],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ['reply', 'edits'],
+  additionalProperties: false,
+} as const;

@@ -24,7 +24,7 @@ describe('DropdownItemRows', () => {
     icon: <TestIcon />,
     label,
     onClick: vi.fn(),
-    category: 'media',
+    category: 'add',
     ...overrides,
   });
 

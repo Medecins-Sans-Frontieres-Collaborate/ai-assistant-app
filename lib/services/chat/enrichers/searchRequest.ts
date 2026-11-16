@@ -6,8 +6,13 @@ import type { ChatContext } from '../pipeline/ChatContext';
 
 /**
  * Whether web search is requested for this turn: search mode is auto or
- * forced, and an org agent (if any) allows it. Prompt and M365 agents ride
- * the standard path and follow the mode alone.
+ * forced, AND the agent answering the turn (if any) allows it. The agent's
+ * setting is a hard gate — neither the user's search mode nor the agent's
+ * instructions can open it:
+ * - M365 agents search only when their owner opted in (off by default, so
+ *   answers stay within the agent's documents);
+ * - prompt agents search unless their owner opted out;
+ * - org agents search only when their record allows it.
  *
  * Shared by the tool router (which acts on it) and the turn budget (which
  * sizes timers for it), so the two can never disagree.
@@ -25,7 +30,9 @@ export function searchRequested(
     context.searchMode === SearchMode.INTELLIGENT ||
     context.searchMode === SearchMode.ALWAYS;
   if (!modeActive) return false;
-  if (context.botId && !context.promptAgent && !context.m365Agent) {
+  if (context.m365Agent) return context.m365Agent.allowWebSearch === true;
+  if (context.promptAgent) return context.promptAgent.allowWebSearch !== false;
+  if (context.botId) {
     // Sync snapshot peek (shouldRun cannot await): admin records win over
     // the static config; a cold snapshot denies — fail closed.
     const agent = peekOrgAgentById(context.botId);

@@ -243,6 +243,12 @@ export const PromptAgentSchema = z.object({
   /** Optional on read so stored personas keep parsing; absent = 'inherit'. */
   skillAccess: PromptAgentSkillAccessSchema.optional(),
   skillIds: z.array(z.string().min(1).max(64)).max(20).optional(),
+  /**
+   * Whether turns answered by this persona may search the web. Optional on
+   * read so stored personas keep parsing; absent = allowed (a persona has
+   * no documents of its own to keep apart from public sources).
+   */
+  allowWebSearch: z.boolean().optional(),
   createdBy: z.string(),
   createdAt: z.string(),
   updatedBy: z.string(),
@@ -596,6 +602,13 @@ export const M365AgentSchema = z.object({
    * `noText` with the Prepare offer.
    */
   autoOcr: z.boolean().default(false),
+  /**
+   * Whether turns answered by this agent may search the web at all. Off by
+   * default: the agent then answers from its documents only, whatever the
+   * user's search mode or the instructions say. On hands the decision to
+   * the owner's instructions (agentSearchGuidance.ts).
+   */
+  allowWebSearch: z.boolean().default(false),
   /**
    * Per-agent document cap (replaces the env default when set). Bounded at
    * save by the setter's role ceiling and at index time by the global

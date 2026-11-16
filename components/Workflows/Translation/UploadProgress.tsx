@@ -1,0 +1,89 @@
+'use client';
+
+import { IconFileText } from '@tabler/icons-react';
+
+import { useTranslations } from 'next-intl';
+
+import { UploadStage } from '@/client/services/workflows/fileTextExtraction';
+
+import { formatBytes } from '@/lib/utils/app/storage/storageUtils';
+import { buildProgressSteps } from '@/lib/utils/shared/translation/runProgress';
+
+import { ElapsedTime } from '../Shared/Progress/ElapsedTime';
+import { ProgressSteps } from '../Shared/Progress/ProgressSteps';
+
+interface UploadProgressProps {
+  fileName: string;
+  /** File size in bytes, when known. */
+  fileSize?: number;
+  /** The step in progress. */
+  stage: UploadStage;
+  onCancel: () => void;
+}
+
+type UploadStep = UploadStage | 'uploaded' | 'ready';
+
+const UPLOAD_STEP_ORDER: readonly UploadStep[] = [
+  'uploading',
+  'reading',
+  'ready',
+];
+/** OCR reads a file that is already stored, so its first step is done. */
+const OCR_STEP_ORDER: readonly UploadStep[] = ['uploaded', 'ocr', 'ready'];
+
+const STEP_LABEL_KEY: Record<UploadStep, string> = {
+  uploading: 'translation.uploadStepUploading',
+  uploaded: 'translation.documentStepUploaded',
+  reading: 'translation.uploadStepReading',
+  ocr: 'translation.uploadStepOcr',
+  ready: 'translation.uploadStepReady',
+};
+
+/**
+ * Progress of a document upload, shown in the source pane where the text
+ * will land: the file, the step it is on, how long it has taken, and a way
+ * to give up on it.
+ */
+export function UploadProgress({
+  fileName,
+  fileSize,
+  stage,
+  onCancel,
+}: UploadProgressProps) {
+  const t = useTranslations('workflows');
+
+  return (
+    <div
+      role="status"
+      className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 p-6 text-center"
+    >
+      <span className="inline-flex max-w-full items-center gap-2 rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-800 dark:border-gray-600 dark:text-gray-200">
+        <IconFileText size={16} className="shrink-0" aria-hidden />
+        <span className="truncate font-medium">{fileName}</span>
+        {fileSize !== undefined && (
+          <span className="shrink-0 text-gray-500 dark:text-gray-400">
+            {formatBytes(fileSize)}
+          </span>
+        )}
+      </span>
+      <ProgressSteps
+        label={t('translation.uploadProgressLabel')}
+        steps={buildProgressSteps(
+          stage === 'ocr' ? OCR_STEP_ORDER : UPLOAD_STEP_ORDER,
+          stage,
+        ).map((step) => ({
+          ...step,
+          label: t(STEP_LABEL_KEY[step.id]),
+        }))}
+      />
+      <ElapsedTime className="text-xs text-gray-500 dark:text-gray-400" />
+      <button
+        type="button"
+        onClick={onCancel}
+        className="rounded-lg border border-gray-300 px-3 py-1 text-xs text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+      >
+        {t('translation.uploadCancel')}
+      </button>
+    </div>
+  );
+}

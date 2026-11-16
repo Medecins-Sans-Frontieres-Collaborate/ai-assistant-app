@@ -51,7 +51,7 @@ const FoundryAgentRow: FC<{
     <button
       type="button"
       onClick={onClick}
-      className="flex-1 min-w-0 text-left px-3 py-2 flex items-center justify-between gap-2"
+      className="flex-1 min-w-0 text-start px-3 py-2 flex items-center justify-between gap-2"
     >
       <div className="flex items-center gap-2.5 min-w-0">
         <IconHexagon
@@ -59,7 +59,10 @@ const FoundryAgentRow: FC<{
           className="shrink-0"
           style={{ color: colorForAgent(name) }}
         />
-        <span className="font-medium text-sm text-gray-900 dark:text-white truncate">
+        <span
+          className="font-medium text-sm text-gray-900 dark:text-white truncate"
+          dir="auto"
+        >
           {name}
         </span>
       </div>
@@ -747,11 +750,17 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                               style={{ color: colorForAgent(agent.name) }}
                             />
                             <div className="min-w-0 flex-1">
-                              <div className="text-sm font-medium text-gray-900 dark:text-white">
+                              <div
+                                className="text-sm font-medium text-gray-900 dark:text-white"
+                                dir="auto"
+                              >
                                 {agent.name}
                               </div>
                               {agent.description && (
-                                <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+                                <div
+                                  className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2"
+                                  dir="auto"
+                                >
                                   {agent.description}
                                 </div>
                               )}

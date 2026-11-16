@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "که تاسو د OpenAI API کیلي نلرئ، دلته یې ترلاسه کولی شئ: ",
   "Loading_ellipsis": "بارېږي...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "ډاډه شئ چې ستاسو د OpenAI API کیلي د اړخیزې ښکته کېڼ اړخ کې ایښودل شوې ده.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "د پیغام حد {{maxLength}} توري دي. تاسو {{valueLength}} توري دننه کړي دي.",
   "Model": "ماډل",
   "OR": "یا",
   "OpenAI API Key Required": "د OpenAI API کیلي ته اړتیا ده",
   "Please enter a message": "مهرباني وکړئ پیغام ولیکئ",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "مهرباني وکړئ خپله د OpenAI API کیلي د اړخیزې ښکته کېڼ اړخ کې ځای په ځای کړئ.",
-  "Prompt limit is {{maxLength}} characters": "د پرامپټ حد {{maxLength}} توري دي",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "د پرامپټ حد {{maxLength}} توري دي. تاسو {{valueLength}} توري دننه کړي دي.",
   "Regenerate response": "ځواب بیا جوړ کړئ",
   "Run Typewriter Intro": "د ټایپرایټر پیل",
   "Save & Submit": "خوندي او وسپارئ",
@@ -715,7 +712,8 @@
     "clear": "پاک کړئ",
     "undo": "بیرته واخلئ",
     "durationSeconds": "{count, plural, one {# ثانیه} other {# ثانیې}}",
-    "durationMinutes": "{count, plural, one {# دقیقه} other {# دقیقې}}"
+    "durationMinutes": "{count, plural, one {# دقیقه} other {# دقیقې}}",
+    "clearSearch": "لټون پاک کړئ"
   },
   "terms": {
     "officialLanguages": "رسمي نسخه:",
@@ -958,7 +956,13 @@
     "ttsError": "د غږ جوړولو تېروتنه. مهرباني وکړئ بیا هڅه وکړئ.",
     "unsupportedMessageType": "د پیغام ښودلو تېروتنه: نه ملاتړېدونکی ډول",
     "addLanguageOption": "\"{name}\" اضافه کړئ...",
-    "sources": "سرچینې",
+    "sources": {
+      "fromDocuments": "د اجنټ اسناد",
+      "fromWeb": "ویب",
+      "fromDocumentsHint": "د دې اجنټ د خپلو اسنادو برخې",
+      "fromWebHint": "هغه عامې پاڼې چې د ویب لټون له لارې موندل شوي",
+      "heading": "{count, plural, one {سرچينه} other {سرچينې}}"
+    },
     "interpreterBadge": "کوډ وچلوئ",
     "disableCodeInterpreter": "د کوډ اجرا کول غیر فعال کړئ",
     "interimSearch": {
@@ -1036,7 +1040,8 @@
       "MODEL_RATE_LIMITED": "ماډل ته دا مهال ډېرې غوښتنې روانې دي. هڅه اتوماتاً بیا شوې؛ مهرباني وکړئ لږ وروسته بیا هڅه وکړئ.",
       "MODEL_QUOTA_EXCEEDED": "د ماډل ظرفیت کوټه ختمه شوې ده. بل ماډل وکاروئ یا وروسته بیا هڅه وکړئ.",
       "MODEL_AUTH_FAILED": "ایپ نشو کولای له ماډل خدمت سره تصدیق وکړي. دا د تنظیم ستونزه ده — مهرباني وکړئ له ملاتړ سره اړیکه ونیسئ."
-    }
+    },
+    "messageLimitExceeded": "د پیغام حد {maxLength} توري دي. تاسو {valueLength} توري دننه کړي دي."
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -2335,20 +2340,18 @@
     "sectionPinned": "ټومبل شوي",
     "sectionFrequent": "پرله پسې کارول شوي",
     "sectionMore": "نور",
-    "categoryWeb": "ویب",
-    "categoryMedia": "رسنۍ او فایلونه",
-    "categoryTransform": "بدلون ورکول",
     "pin": "پورته يې ټومبل",
     "unpin": "ناټومبل",
     "moveToMore": "نور ته ولیږدول",
     "moveOutOfMore": "په مینو کې ښکاره کړئ",
     "showSources": "نورې سرچینې وښایاست",
     "hideSources": "نورې سرچینې پټې کړئ",
-    "aiTools": "AI وسیلې",
-    "aiToolsTooltip": "هغه وړتیاوې چې مرستندوی یې کارولای شي: ژوندی ویب لټون، کوډ چلول، او تړلي خدمتونه.",
     "codeInterpreterTooltip": "Python کوډ په خوندي sandbox کې د هر پیغام لپاره وچلوي.\n\nد معلوماتو شننې، حسابونو او له ضمیمه شوو فایلونو نه د جدول جوړولو لپاره غوره ده.",
-    "categoryTools": "وسايل او وصلوونکي",
-    "translationConversationTitle": "ژباړه: {filename}"
+    "translationConversationTitle": "ژباړه: {filename}",
+    "categoryAdd": "اضافه کړئ",
+    "categoryDo": "اجرا کړئ",
+    "categoryChat": "په دې چټ کې",
+    "categoryStart": "پیل کړئ له"
   },
   "transcription": {
     "transcribesOnSend": "په استولو سره ټرانسکرېپشن کېږي",
@@ -2552,7 +2555,9 @@
     "savedToOneDrive": "{name} OneDrive ته خوندي شو.",
     "openInOneDrive": "پرانیستل",
     "saveForbidden": "تاسو ته دلته لیکلو اجازه نشته — له “OneDrive ته خوندي کړئ” سره بل فولډر غوره کړئ.",
-    "saveToOneDriveFailed": "OneDrive ته خوندي نشو — مهرباني وکړئ بیا هڅه وکړئ."
+    "saveToOneDriveFailed": "OneDrive ته خوندي نشو — مهرباني وکړئ بیا هڅه وکړئ.",
+    "textVersion": "د متن بڼه (DOCX)",
+    "textVersionHint": "د ایډیټ وړ Word فایل چې ژباړل شوی متن لري، هره پاڼه د سرچینې هرې پاڼې لپاره. ژباړل شوی فایل خپله اصلي بڼه ساتي."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -2724,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "تر اوسه کوم کارونه نه دي ثبت شوي. ستاسو د توکن کارونه او اټکليز اخراج به دلته ښکاره شي وروسته له چټ کولو.",
-    "co2Value": "{grams} ګرامه CO₂e",
     "equivalence": "≈ {count} د سمارټ فون چارجونه",
     "requests": "درخواستونه",
     "promptTokens": "د پرامپټ ټوکنونه",
@@ -2886,7 +2890,7 @@
       "addedByYou": "ستاسو لخوا زياته شوې",
       "glossary": "ګلاسري",
       "noGlossary": "ګلاسري نشته",
-      "manageGlossaries": "ګلاسريان",
+      "manageGlossaries": "ګلاسري مدیریت کړئ",
       "glossaries": "ګلاسريان",
       "closeGlossaries": "ګلاسريان وتړئ",
       "glossariesEmpty": "يو ګلاسري جوړ کړئ څو ځانګړي اصطلاحات يو ډول وژباړل شي. ګلاسريان په همدې آله کې خوندي وي او په مختلفو ژباړو کې کارېدلی شي.",
@@ -3051,7 +3055,145 @@
       "importTooLarge": "دا فایل د واردولو لپاره ډېره لوی ده (اعظمي ۵ MB).",
       "importNothing": "هیڅ قابل استفاده کتار ونه موندل شو ({skipped} له پامه وغورځول شول).",
       "importSummary": "{added} زیات شول، {replaced} تعویض شول، {skipped} له پامه وغورځول شول.",
-      "entriesTooManyToShow": "{count} اصطلاحات — دلته ښودلو ته ډېر زیات دي. د کتلو لپاره صادر کړئ، یا د بدلولو لپاره فایل وارد کړئ."
+      "entriesTooManyToShow": "{count} اصطلاحات — دلته ښودلو ته ډېر زیات دي. د کتلو لپاره صادر کړئ، یا د بدلولو لپاره فایل وارد کړئ.",
+      "pagesLoaded": "{total} څخه {selected} پاڼې پورته شوې",
+      "pagesLabel": "پاڼې",
+      "pagesApply": "پاڼې پورته کړئ",
+      "pagesPrevious": "تېر دسته",
+      "pagesNext": "راتلونکی دسته",
+      "pagesBudget": "{max} کې {used} توري",
+      "pagesChange": "پاڼې بدل کړئ",
+      "pagesLoading": "پاڼې پورته کېږي…",
+      "pagesInvalid": "د پاڼو شمېرې یا سلسلې دننه کړئ، لکه ۱–۴۰، ۴۵.",
+      "pagesUnavailable": "په دې پاڼو کې هیڅ متن نشته.",
+      "pagesTooMany": "ستاسو ټاکنه {used} توري لري او یوه دسته {max} توري لري. لږ پاڼې وټاکئ.",
+      "stop": "درول",
+      "stepAnalyzing": "تحلیل روان دی",
+      "stepTranslating": "ژباړه روانه ده",
+      "stepReviewing": "کتنه روانه ده",
+      "stepDone": "پای ته ورسېد",
+      "runProgressLabel": "د ژباړې پرمختګ",
+      "runHintAnalyzing": "د سرچینې ستونزمن اصطلاحات او ناڅرګندۍ لوستل.",
+      "runHintTranslating": "ژباړه لیکل.",
+      "runHintReviewing": "د مسودې معاینه د اصل متن سره.",
+      "runHintReviewingRound": "د مسودې معاینه د اصل سره · پړاو {round} له اعظمي {total} څخه.",
+      "runRound": "پړاو {round} له اعظمي {total} څخه",
+      "draftLabel": "مسوده",
+      "sourceLocked": "د ژباړې پر مهال تړل شوی",
+      "analysisNotes": "{count, plural, one {# یادونه} other {# یادونې}}",
+      "analysisPill": "{count, plural, one {تحلیل · # یادونه} other {تحلیل · # یادونې}}",
+      "reviewSummary": "{count, plural, one {کتنه: # پړاو، {verdict}} other {کتنه: # پړاوونه، {verdict}}}",
+      "analysisDismiss": "ټولو ژباړو لپاره پټه کړئ",
+      "analysisShow": "د ژباړې مخکې تحلیل وښایئ",
+      "analysisResize": "د تحلیل پینل اندازه بدل کړئ",
+      "assessingCriteria": "{count, plural, one {# معیار ارزونه روانه ده} other {# معیارونه ارزول کېږي}}",
+      "editsPending": "اړ پیشنهاد شوي تعدیلات به دلته ښکاره شي کله چې ارزونه پای ته ورسېږي.",
+      "uploadProgressLabel": "د پورته کولو پرمختګ",
+      "uploadStepUploading": "برېښنالیک ته پورته کول",
+      "uploadStepReading": "متن لوستل",
+      "uploadStepReady": "چمتو",
+      "uploadCancel": "لغوه کړئ",
+      "modeDocument": "ټوله سند",
+      "modeDocumentHint": "اپلوډ شوی PDF په بشپړ ډول ژباړي او ترتیب یې ساتي. پایله پاڼه په پاڼه ولولئ او سمون ورکړئ.",
+      "translateDocument": "سند ژباړه",
+      "documentSubmitting": "لېږل کیږي...",
+      "documentIntroTitle": "ټوله سند ژباړه",
+      "documentIntro": "پورته شوی PDF به بشپړ ترجمه شي، د اصلي ترتیب ساتلو سره. کله چې چمتو شي، تاسو کولی شئ هره صفحه د اصلي سند تر څنګ ولولئ، صفحات اصلاح کړئ، د کیفیت ارزونه وکړئ، او پایله ډاونلوډ کړئ. ګلوسری او د بیا کتنې راونډونه په دې طریقه کې نه تطبیقېږي. یو ځل چې سند ترجمه پیل شي، ودرول کېدای نشي او هغه صفحات د نن ورځې محدودیت کې شمېرل کېږي.",
+      "documentNeedsFile": "د ټول سند د ژباړې لپاره PDF اپلوډ کړئ.",
+      "documentNeedsPdf": "د پاڼه په پاڼه لید سره د ټول سند ژباړه یوازې له PDF فایلونو سره کار کوي.",
+      "documentNeedsLanguage": "د سند ژباړې لپاره هدف ژبه وټاکئ.",
+      "documentLanguageUnsupported": "د ټول سند ژباړه د دې ژبې لپاره شتون نه لري. د Quick یا Reviewed گزینه وکاروئ.",
+      "documentNoGlossaries": "د ټول سند ژباړې لپاره ګلوسري نه کارول کیږي",
+      "documentPagesLeft": "{count, plural, one {# پاڼه پاتې ده نن} other {# پاڼې پاتې دي نن}}",
+      "documentLimitReached": "دا سند له هغو پاڼو څخه زیات دی چې نن پاتې شته. ټاکل شوې پاڼې د Quick یا Reviewed سره ژباړئ، یا سبا بیا هڅه وکړئ.",
+      "documentUnavailable": "په دې سرور کې د ټول سند ژباړه نه ده فعاله.",
+      "documentSubmitFailed": "سند د ژباړې لپاره نه شو لېږل کېدای: {message}",
+      "documentProgressLabel": "د سند ژباړې پرمختګ",
+      "documentStepUploaded": "اپلوډ شوی",
+      "documentStepPreparing": "پاڼې چمتو کیږي",
+      "documentTypicalDuration": "اکثراً څو دقیقې",
+      "documentCanLeave": "تاسو د دې پاڼې پرېښودلو اجازه لرئ. ژباړه روانه ده او دلته به وي کله چې بېرته راشئ.",
+      "documentStalled": "د ژباړې پرمختګ نه شو معلومولای. کېدای شي لا روانه وي.",
+      "documentCheckAgain": "بیا وګورئ",
+      "documentFailed": "سند نه شو ژباړل کېدای: {message}",
+      "documentGone": "دا ژباړه نور شتون نه لري. سند بیا ژباړئ تر څو ولوستل شي.",
+      "documentPageFailed": "دا پاڼه نه شو لوستلی: {message}",
+      "documentPagesNotAligned": "ژباړل شوی فایل له اصلي فایل څخه د پاڼو شمېر فرق لري، نو کېدای شي پاڼه دواړو خواوو کې یو شان محتوا ونه لري.",
+      "documentAvailableUntil": "تر {date} پورې شتون لري",
+      "documentRetranslateTitle": "سند بیا ژباړئ؟",
+      "documentRetranslateMessage": "دا نوې ترجمه پیلوي او صفحات یې بیا د نن ورځې محدودیت کې شمېرل کېږي. یو ځل چې پیل شي، ودرول کېدای نشي. اوسنی ترجمه او اصلاحات به تر ختمېدو پورې په سرور کې پاتې شي، خو دلته به نور ونه ښودل شي.",
+      "retry": "بیا هڅه وکړئ",
+      "pageLabel": "پاڼه",
+      "pageOf": "د {total} څخه",
+      "pageNumber": "· پاڼه {page}",
+      "pagePrevious": "مخکینیه پاڼه",
+      "pageNext": "راتلونکې پاڼه",
+      "correctedLabel": "اصلاح شوې",
+      "correctedPages": "اصلاح شوې پاڼې:",
+      "correctedPagesMore": "+{count} نورې",
+      "correctionRestore": "بیرته راولي",
+      "correctionRestoreHint": "ستاسو بدلونونه رد کړئ او د ماشین ژباړې ته ستن شئ",
+      "correctionSaving": "ثبتول…",
+      "correctionSaved": "ثبت شوی",
+      "correctionSaveFailed": "ثبت نه شو. متن بدل کړئ او بیا هڅه وکړئ.",
+      "download": "ډاونلوډ",
+      "downloading": "ډاونلوډېږي...",
+      "downloadFailed": "ډاونلوډ ناکام شو: {message}",
+      "downloadTranslated": "ژباړل شوی {format}",
+      "downloadTranslatedHint": "اصلي ترتیب. ستاسو اصلاحات نه لري.",
+      "downloadTextVersion": "د متن نسخه (DOCX)",
+      "downloadTextVersionHint": "پاک متن، هره پاڼه جلا، ستاسو اصلاحاتو سره.",
+      "documentNoCancel": "د یو سند ژباړه وروسته له پیل څخه نه شي درول کېدای.",
+      "documentGlossariesIgnored": "{count, plural, one {ستاسو ټاکل شوی ګلاسري په دې حالت کې نه تطبیقېږي.} other {ستاسو # ټاکل شوي ګلاسري په دې حالت کې نه تطبیقېږي.}} له اسیس کیفیت سره هره پاڼه کې اصطلاحات وګورئ، یا له Quick یا Reviewed کار واخلئ.",
+      "pendingLeavePage": "سپارښتنې یوازې دې پاڼې پورې اړوند دي او که دا پرېږدئ، نه ساتل کېږي. لومړی پاتې سپارښتنې حل کړئ.",
+      "uploadStepOcr": "د OCR سره لوستل",
+      "ocrButton": "د OCR سره ولولئ",
+      "ocrButtonHint": "دا PDF بیا د متن پېژندنې سره ولولئ، د اسکن شوو پاڼو یا ناسم راووتلی متن لپاره",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "دا متن له پاڼو د متن پېژندنې له لارې لوستل شوی. مهرباني وکړئ له اصل سره یې پرتله کړئ.",
+      "ocrReasonNoText": "په {name} کې هیڅ متن ونه موندل شو. داسې ښکاري چې دا اسکن شوی سند دی.",
+      "ocrReasonSparse": "په {name} کې ډېر لږ متن پیدا شو. بعضې یې ښايي اسکن شوي وي.",
+      "ocrReasonManual": "آیا غواړئ {name} بیا د متن پېژندنې سره ولولئ؟",
+      "ocrExplanation": "OCR د پاڼو له انځورونو څخه متن لولي. دا وخت ډېره نیسي تر یوې عادي پورته کولو، د فایل هره پاڼه ستاسو ورځنۍ OCR محدودیت ته شمېري، او ممکن خراب اسکنونه، لاس لیک او جدولونه غلط ولولي.",
+      "ocrPagesLeft": "{count, plural, one {نن یو OCR صفحه پاتې ده.} other {نن # OCR صفحې پاتې دي.}}",
+      "ocrRun": "د OCR سره ولولئ",
+      "ocrDismiss": "اوس نه",
+      "ocrSparseHint": "په دې PDF کې ډېر لږ متن پیدا شو. بعضې پاڼې ښايي اسکن شوي وي.",
+      "ocrLimitReached": "دا سند د نن لپاره ستاسو د OCR محدودیت څخه زیاتې پاڼې لري.",
+      "ocrTooManyPages": "دا سند د OCR لپاره ډېر اوږد دی، چې تر {max} پاڼو ډېر نه شي لوستلی. PDF تقسیم کړئ او یوه برخه اپلوډ کړئ.",
+      "ocrUnavailable": "OCR په دې سرور کې نه دی فعال شوی.",
+      "ocrNoText": "OCR په دې سند کې هم هیڅ متن ونه موند.",
+      "ocrFailed": "سند د OCR لخوا ولوستل نشو. بیا هڅه وکړئ.",
+      "scannedWholeExplanation": "تاسو کولی شئ ټول سند هم وژباړئ: دا پخپله سکین شوي مخونه لولي، ترتیب ساتي، او مخونه مو د ورځنۍ ژباړې محدودیت ته شمېري.",
+      "scannedUseWholeDocument": "ټول سند وژباړئ",
+      "scannedSourceNote": "په {name} کې دلته هیڅ متن نشته. د ټول سند ژباړه یې مخونه مستقیم لولي. که دلته خپله متن ولیکئ، سند به بدل شي.",
+      "scannedPageNote": "د اصل سند د دې مخ نه هیڅ متن نه دی لوستل شوی. لطفاً له فایل سره پرتله وکړئ.",
+      "changeLabel": "د ژباړې د بدلولو غوښتنه وکړئ",
+      "changePlaceholder": "د بدلون غوښتنه وکړئ، مثلاً دا ډېر رسمي کړئ",
+      "changePlaceholderAnother": "د بل بدلون غوښتنه وکړئ",
+      "changeSend": "غوښتنه واستوئ",
+      "changeWorking": "بدلونونه چمتو کېږي",
+      "changeNothingApplied": "تر څو چې تاسې ونه منئ، هېڅ نه بدلېږي",
+      "changeSelectionLabel": "د ټاکل شوي متن د بدلولو غوښتنه وکړئ",
+      "changeSelectionPlaceholder": "دا بدل کړئ، مثلاً tableta ووايئ",
+      "changeSelectionScope": "یوازې ټاکل شوي متن ته تطبیقېږي",
+      "changeSelectionClose": "بند کړئ",
+      "changeTitle": "غوښتل شوي بدلونونه",
+      "changeSelectedLabel": "ټاکل شوی متن",
+      "changeNoEdits": "د دې غوښتنې لپاره بدلون ته اړتیا نشته.",
+      "changeReplyPending": "{count, plural, one {# وړاندیز شوی سمون اوس د کاري ساحې کې دی.} other {# وړاندیز شوي سمونونه اوس د کاري ساحې کې دي.}} تر څو چې تاسې ونه منئ، هېڅ نه بدلېږي.",
+      "changeStopped": "درول شوي. هېڅ نه دي بدل شوي.",
+      "changeFailed": "د بدلون غوښتنه ناکامه شوه. بیا هڅه وکړئ.",
+      "changeNoTranslation": "د بدلولو لپاره لا ژباړه نشته. لومړی متن ژباړئ.",
+      "changeBusy": "د روان بهیر تر پای ته رسېدو انتظار وکړئ، بیا بیا وغواړئ.",
+      "changeHeld": "نه دي استول شوي: لا هم وړاندیز شوي سمونونه د پرېکړې په تمه دي.",
+      "pendingRunActionRequest": "د بدلون غوښتنه روانه ده",
+      "railPlaceholder": "د بدلون یا پوښتنې غوښتنه وکړئ…",
+      "documentPageCount": "{count, plural, one {# صفحه} other {# صفحې}}",
+      "sourceShowPages": "صفحات وښایاست",
+      "sourceEditText": "د متن په توګه سم کړئ",
+      "sourceRemoveDocument": "سند لیرې کړئ",
+      "sourceJumpToPage": "صفحه ته لاړ شئ"
     },
     "document": {
       "emptyTitle": "هغه سند تشریح کړئ چې غواړئ",
@@ -3679,7 +3821,7 @@
       "guideTargetTerm": "اړینه ژباړه",
       "guideNote": "یادونه",
       "pendingRun": {
-        "title": "{count} وړاندیزونه لا هم پاتې دي",
+        "title": "{count, plural, one {# وړاندیز لا هم پاتې دی} other {# وړاندیزونه لا هم پاتې دي}}",
         "body": "{action} کولای شي د متن هره برخه بدله کړي، حتا هغه ټوټې چې لا یې وړاندیزونه نه دي منل شوي، او نوی ارزیابي به اوسنی لیست بدل کړي. اول پاتې وړاندیزونه وټاکئ.",
         "acceptAll": "ټول پاتې ومنئ",
         "rejectAll": "ټول رد کړئ",
@@ -3741,7 +3883,7 @@
         "list<number>": "د شمېرونو لیست"
       },
       "layout": "ترتیب",
-      "layoutHint": "Markdown د {{field:id}} ځایونو سره — د صادر شوي سند او مخکتنې لپاره کارېږي.",
+      "layoutHint": "Markdown د '{{field:id}}' ځایونو سره — د صادر شوي سند او مخکتنې لپاره کارېږي.",
       "saveTemplate": "ټیمپلیټ ذخیره کړئ",
       "deleteTemplate": "ټیمپلیټ حذف کړئ",
       "cancel": "لغوه کړئ",
@@ -4569,6 +4711,10 @@
         "note": "د لیست قیمتونو مطابق لګښت د {asOf} وضعیت ته (د نړیوال معیار نرخ، د کیش‌شوي داخلې تخفیف نه لري): تر ټولو لوړ حد، نه واقعی بیل. ویب لټون، کود اجراوې، نقل، غږ، ژباړه او سند اندکس شامل نه دي."
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "دا کاري ساحه (ارزول شوې)",
       "workspace": "دا کاري ساحه",
@@ -5383,7 +5529,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# سند} other {# اسناد}} ثبت شوي",
     "m365CapImmediateHelp": "د Apply سره محدوده سمدستي ثبتېږي. نور بدلونونه لاهم Save ته اړتیا لري.",
     "m365CapDraftHelp": "محدوده هغه مهال ثبتېږي کله چې تاسو عامل جوړ کړئ.",
-    "m365CapSaved": "د اسنادو محدوده ثبت شوه: {limit}."
+    "m365CapSaved": "د اسنادو محدوده ثبت شوه: {limit}.",
+    "m365AgentAllowWebSearchHelp": "په تلواله توګه بند: اجنټ یوازې له خپلو اسنادو ځواب ورکوي او هیڅکله ویب نه لټوي، حتی که کارونکي بل ډول لټون ټاکلی وي. کله چې فعال شي، اجنټ لارښونې پرېکړه کوي چې ویب لټون کله ترسره شي او کومې ویب پاڼې کارول کېږي، او د ویب سرچینې تل له اجنټ اسنادو جلا ښودل کېږي.",
+    "promptAgentAllowWebSearchHelp": "په تلواله توګه فعال. که بند شي، دا اجنټ هیڅکله ویب نه لټوي، حتی که کارونکي بل ډول لټون ټاکلی وي."
   },
   "localModels": {
     "title": "محلي ماډلونه",
@@ -5690,7 +5838,9 @@
       "m365MailReadsPerDay": "د ایمیل لوستل هره ورځ",
       "m365MailDraftsPerDay": "د ایمیل مسودې هره ورځ",
       "m365MailDeepScansPerDay": "د ایمیل ژور اسکن هره ورځ",
-      "m365DigestRunsPerDay": "د ورځني Digest چلولو شمېر په ورځ کې"
+      "m365DigestRunsPerDay": "د ورځني Digest چلولو شمېر په ورځ کې",
+      "translationPagesPerDay": "د ورځې د سند ژباړې پاڼې",
+      "ocrPagesPerDay": "د ورځې OCR صفحې"
     },
     "valueModeLabel": "د محدویت ډول",
     "valueAmountLabel": "د محدویت اندازه",
@@ -5713,7 +5863,8 @@
       "jobs": "کارونه",
       "rounds": "گردشونه",
       "documents": "اسناد",
-      "boolean": ""
+      "boolean": "",
+      "pages": "پاڼې"
     },
     "window": {
       "day": "ورځ",
@@ -5771,7 +5922,9 @@
       "m365MailReadsPerDay": "په ورځ کې د ایمیل لټون او د پیغام/تار لوستلو شمېر. له حده زیات، د ایمیل وسیلې \"سبا بیا هڅه وکړئ\" نتیجه ورکوي.",
       "m365MailDraftsPerDay": "په ورځ کې دومره ایمیل مسودې چې مرسته کوونکی یې جوړولی شي — هره یوه جلا تاییدېږي. قصدي محدوده ده.",
       "m365MailDeepScansPerDay": "مخلوط د ایمیل ژورې شننې (هضم، ژوره لټون، ژمنتیاوې) په ورځ کې. هره شننه یوه واحده اندازه ګڼل کېږي، که څه هم دننه څو لوستنې لري.",
-      "m365DigestRunsPerDay": "Microsoft 365 ورځنی Digest چلولو شمېر په ورځ کې. یو چلول ګڼ شمېر Graph لوستل او دوه analysis-model اړیکې لري؛ د مودې غوره کولو وسیله بیا چلول آسانه کوي، نو معمول محدودیت جدي ټاکل شوی."
+      "m365DigestRunsPerDay": "Microsoft 365 ورځنی Digest چلولو شمېر په ورځ کې. یو چلول ګڼ شمېر Graph لوستل او دوه analysis-model اړیکې لري؛ د مودې غوره کولو وسیله بیا چلول آسانه کوي، نو معمول محدودیت جدي ټاکل شوی.",
+      "translationPagesPerDay": "هره ورځ د سند ژباړې لپاره PDF پاڼې سپارل کېږي.",
+      "ocrPagesPerDay": "PDF صفحې چې د OCR سره ولوستل شوي (د اسکن شویو اسنادو لپاره متن پېژندنه) د ورځې."
     },
     "scopeFamily": "کورنۍ",
     "scopeModel": "ماډل",
@@ -7568,7 +7721,7 @@
         "activeUsers": "فعاله کسان",
         "requests": "درخواستونه",
         "tokens": "توکنونه",
-        "vsDelivered": "{{delta}} د راپور د خپلې اټکلونو سره پرتله",
+        "vsDelivered": "{delta} د راپور د خپلې اټکلونو سره پرتله",
         "sameAsDelivered": "د راپور د خپلې اټکلونو سره برابر",
         "unpriced": "{count, plural, one {# درخواست داسې موډل کاروي چې د دغو اټکلونو لپاره شمېر نشته، او} other {# درخواستونه داسې موډل کاروي چې د دغو اټکلونو لپاره شمېر نشته، او}} {count, plural, one {شامل نه دی.} other {شامل نه دي.}}",
         "byDepartment": "د څانګې له مخې خارجات",
@@ -8079,7 +8232,13 @@
       "skills": "د مهارت ټاکنه",
       "tools": "د وسیلو رهنمایي",
       "trim": "د لنډیز طبقه بندي",
-      "assessment": "د پلټنې ارزونه"
+      "assessment": "د پلټنې ارزونه",
+      "query": "د لټون پوښتنې بیا لیکنه",
+      "mailScreen": "د بریښنالیک فیشنګ سکرین",
+      "mailAnalysis": "د بریښنالیک او خلاصې تحلیل",
+      "schemaProposal": "د استخراج سکیمه وړاندیز",
+      "mcpPlan": "د کنیکټر پلان",
+      "vision": "تصویر او پاڼې لوستنه"
     },
     "reason": {
       "endpoint_missing": "اینډپواینټ یا اکاونټ تړنه نشته",
@@ -8100,6 +8259,164 @@
       "endpoint_account_mismatch": "اینډپواینټ او ARM resource ID مختلف اکاونټونه ښيي. د ډیپلویمنټ تنظیم سم کړئ.",
       "inventory_refresh_failed": "د انوینټري نوي کول ناکام شول. د اپ هویت د Reader لاسرسی او د اکاونټ اتصال وګورئ.",
       "credential_unavailable": "اپ نه شو کولی خپله انوینټري تصدیق ترلاسه کړي. د ډیپلویمنټ هویت تنظیم وګورئ."
+    },
+    "notSupported": "پدې ماډل کې نه ملاتړ کېږي",
+    "unservedOperations": "په دې سلسله کې هېڅ ماډل {operations} نه ملاتړ کوي. یو داسې ماډل اضافه کړئ چې دا ملاتړ کوي."
+  },
+  "filePreview": {
+    "preview": "مسوده وګورئ",
+    "download": "ډاونلوډ کړئ",
+    "loading": "د مسودې چمتو کول...",
+    "failed": "دا فایل نه شي ښودل کېدای. تاسې لا هم کولی شئ دا ډاونلوډ کړئ.",
+    "pageOf": "پاڼه {page} د {total} څخه",
+    "truncated": "لومړۍ {shown} پاڼې د {total} څخه ښيي. د پاتې پاڼو لپاره فایل ډاونلوډ کړئ.",
+    "enlarge": "{name} غټ کړئ"
+  },
+  "addToChat": {
+    "title": "چټ ته اضافه کړئ",
+    "titleTranslate": "یو سند وژباړئ",
+    "titleTranscribe": "آډیو یا ویدیو نقل کړئ",
+    "sourcesLabel": "اضافه کړئ له",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "د دې عمل لپاره شتون نلري",
+    "sources": {
+      "device": "دا وسیله",
+      "link": "لینک",
+      "camera": "کامره",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ایمیل",
+      "meetings": "ناستې"
+    },
+    "device": {
+      "browse": "په دې وسیله کې وګورئ",
+      "dropHint": "یا فایلونه هرچیرې په دې کړکۍ کې وغورځوئ، یا یې پیسټ کړئ",
+      "rejected": "له دغو فایلونو څخه هیڅ یو دلته نه کارول کېږي.",
+      "hint": {
+        "attach": "سندونه، انځورونه، آډیو او ویدیو.",
+        "translate": "یوه سند: Word، Excel، PowerPoint، PDF، HTML یا متن.",
+        "transcribe": "آډیو یا ویدیو. کله چې پیغام واستوئ، نقل به شي."
+      }
+    },
+    "selection": {
+      "then": "بیا",
+      "intents": {
+        "attach": "ملحق کړئ",
+        "translate": "ژباړئ",
+        "transcribe": "نقل کړئ"
+      },
+      "confirm": {
+        "attach": "اضافه کړئ",
+        "translate": "ژباړئ",
+        "transcribe": "نقل کړئ"
+      },
+      "unfit": {
+        "attach": "دا فایلونه نشي ضمیمه کېدلی",
+        "translate": "ژباړه یوازې یو سند په یو وخت کې اخلي",
+        "transcribe": "یوازې آډیو او ویدیو نقل کېدای شي"
+      }
+    },
+    "menu": {
+      "addToChatNote": "دا وسیله، لینکونه، Microsoft 365",
+      "filesOrPhotos": "فایلونه یا انځورونه",
+      "fromThisDevice": "له دې وسیلې څخه",
+      "connect": "Microsoft 365 ونښلوئ",
+      "connectNote": "د OneDrive، ایمیل او ناستو څخه اضافه کړئ"
     }
+  },
+  "usageBudgets": {
+    "title": "ستاسې بودیجې",
+    "description": "هغه محدودیتونه چې تاسې په دې وسیله کې خپل ځان ته ټاکلي دي. یوه بودیجه انتخاب کړئ، بیا دا وټاکئ چې نږدې یا له حدودو تیرېدو سره څه کېږي. بودیجې د هرې دورې له پیل نه د چیټ او کاري جریان شمېرې حسابوي.",
+    "metric": {
+      "emissions": "د خپرونو بودیجه",
+      "cost": "د لګښت بودیجه"
+    },
+    "metricShort": {
+      "emissions": "خپرونې",
+      "cost": "لګښت"
+    },
+    "off": "هیڅ بودیجه نه ده ټاکل شوې.",
+    "measureAs": "دا د... په توګه اندازه کړئ",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "د تلیفون چارجونه",
+      "usd": "امریکایي ډالر"
+    },
+    "amountLabel": "بوديجه",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ساعتونه",
+      "smartphoneCharge": "چارجونه",
+      "usd": "امریکایي ډالر"
+    },
+    "periodLabel": "هر ځل بیا تنظیمېږي",
+    "period": {
+      "day": "ورځ",
+      "week": "اوونۍ",
+      "month": "میاشت"
+    },
+    "costNote": "د لست بیو څخه اټکل شوی: دا یواځې لوړ حد دی، حساب نه دی.",
+    "chargesValue": "{count} د تلیفون چارجونه",
+    "percent": "{percent}%",
+    "usedOf": "{limit} کې {used} کارول شوې ({percent}%)",
+    "usedOfShort": "{limit} کې {used}",
+    "resets": "{date} بیا تنظیمېږي",
+    "budgetMarker": "بوديجه",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "له بودیجې دننه",
+      "warn": "خبرتیا ښودل شوې",
+      "ask": "له هر پیغام مخکې پوښتنه",
+      "stop": "استول بند شوي"
+    },
+    "stage": {
+      "warn": {
+        "title": "خبرتیا",
+        "tag": "مخکې خبرداری",
+        "description": "د بودیجې له دې برخې نه چیټ کې خبرداری ښکاره کړئ."
+      },
+      "ask": {
+        "title": "لومړی پوښتنه وکړئ",
+        "tag": "نرم بندیز",
+        "description": "د بودیجې له دې برخې نه هر پیغام تایید ته پوښتنه وکړئ."
+      },
+      "stop": {
+        "title": "بند کړي",
+        "tag": "سخت بندیز",
+        "description": "له بودیجې په دې برخه کې د استولو بند کړئ تر څو یا دا بیا تنظیم شي یا زه دلته دا لوړ کړم."
+      }
+    },
+    "thresholdLabel": "{stage} حد، د بودیجې سلنه",
+    "notice": {
+      "warn": {
+        "emissions": "تاسو د خپرونو بودیجې {percent}% کارولې ده.",
+        "cost": "تاسو د لګښت بودیجې {percent}% کارولې ده."
+      },
+      "ask": {
+        "emissions": "تاسو د خپرونو بودیجې {percent}% کارولې ده. دا پیغام واستوئ؟",
+        "cost": "تاسو د لګښت بودیجې {percent}% کارولې ده. دا پیغام واستوئ؟"
+      },
+      "askRun": {
+        "emissions": "تاسو د خپرونو بودیجې {percent}% کارولې ده. دا اجرا شروع کړئ؟",
+        "cost": "تاسو د لګښت بودیجې {percent}% کارولې ده. دا اجرا شروع کړئ؟"
+      },
+      "stop": {
+        "emissions": "د خپرونو بودیجې بند ټکی ته رسیدلي. استول تر {date} پورې بند دي.",
+        "cost": "د لګښت بودیجې حد ته رسیدلي یاست. استول تر {date} پورې درول شوي."
+      }
+    },
+    "actions": {
+      "viewBudget": "بوديجې وګورئ",
+      "dismiss": "لغوه کړه",
+      "sendAnyway": "بیا هم واستوئ",
+      "runAnyway": "بیا هم اجرا کړئ",
+      "dontSend": "مه یې استوئ",
+      "dontAskToday": "نن بیا مه پوښتئ",
+      "openSettings": "د بوديجې تنظیمات پرانیزئ",
+      "edit": "ایډیټ"
+    },
+    "composerPaused": "استول ستاسو له بوديجې له امله درول شوي",
+    "summaryTitle": "ستاسې بوديجې",
+    "chipAria": "{metric} بوديجه: {percent}% کارول شوې.",
+    "runProjection": "د اخراج بوديجه {from}% → {to}%"
   }
 }

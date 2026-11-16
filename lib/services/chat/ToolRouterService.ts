@@ -2,12 +2,22 @@ import {
   type AuxiliaryModelExecutor,
   AuxiliaryUnavailableError,
 } from '@/lib/services/auxiliary/AuxiliaryModelExecutor';
+import { AuxiliaryCompletionService } from '@/lib/services/auxiliary/auxiliaryCompletion';
 import { matchesAuxiliarySchema } from '@/lib/services/auxiliary/schemaValidation';
 import {
   type AuxiliaryOperation,
   DEFAULT_AUXILIARY_ROUTING_MODEL,
 } from '@/lib/services/auxiliary/types';
-import type { StructuredDecisionFallback } from '@/lib/services/chat/routing/structuredDecisionFallback';
+import {
+  MAX_SEARCH_SITES,
+  agentSearchGuidancePrompt,
+  normalizeSearchSites,
+  restrictQueriesToSites,
+} from '@/lib/services/chat/routing/agentSearchGuidance';
+import {
+  STRUCTURED_DECISION_FALLBACK_TIMEOUT_MS,
+  type StructuredDecisionFallback,
+} from '@/lib/services/chat/routing/structuredDecisionFallback';
 import {
   SkillRoutingEntry,
   selectedSkillIds,
@@ -170,17 +180,28 @@ export function describeAuxiliaryFailure(
 export class ToolRouterService {
   private tracer = trace.getTracer('tool-router-service');
 
+  /** The shared helper-model path on the executor; absent without one. */
+  private readonly completions?: AuxiliaryCompletionService;
+
   constructor(
     private openAIClient: OpenAI,
     private regionalClient?: (region: 'US' | 'EU') => OpenAI | undefined,
-    private executor?: AuxiliaryModelExecutor,
-  ) {}
+    executor?: AuxiliaryModelExecutor,
+  ) {
+    this.completions = executor
+      ? new AuxiliaryCompletionService(executor)
+      : undefined;
+  }
 
   /**
-   * One auxiliary decision call. When the auxiliary chain fails and the
-   * caller supplied `fallback` (the user's chat model), the same request is
-   * made there and held to the same validation; the original error is
-   * rethrown if the fallback fails too.
+   * One auxiliary decision call, through the shared helper-model path
+   * (AuxiliaryCompletionService): the region's auxiliary chain, then the
+   * caller's chat-model fallback when supplied, both held to
+   * acceptDecision. Without an executor (readiness probe capture, tests)
+   * the plain regional client stands in for the chain.
+   *
+   * @throws The ORIGINAL auxiliary error when no path produced a valid
+   *         decision, so the caller's degraded-routing log names the cause.
    */
   private async complete(
     region: 'US' | 'EU' | undefined,
@@ -189,80 +210,30 @@ export class ToolRouterService {
     options?: {
       signal?: AbortSignal;
       timeout?: number;
-      maxRetries?: number;
       onUsage?: AuxiliaryUsageSink;
       fallback?: StructuredDecisionFallback;
     },
   ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
-    try {
-      return await this.completeOnAuxiliary(region, operation, params, options);
-    } catch (error) {
-      if (!options?.fallback || options.signal?.aborted) throw error;
-      return await this.completeOnFallback(operation, params, options, error);
-    }
-  }
-
-  /**
-   * The chat-model second chance for {@link complete}.
-   *
-   * @throws The ORIGINAL auxiliary error when the fallback also fails, so
-   *         the caller's degraded-routing log names the real cause.
-   */
-  private async completeOnFallback(
-    operation: AuxiliaryOperation,
-    params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
-    options: {
-      signal?: AbortSignal;
-      onUsage?: AuxiliaryUsageSink;
-      fallback?: StructuredDecisionFallback;
-    },
-    auxiliaryError: unknown,
-  ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
-    const reason =
-      auxiliaryError instanceof Error ? auxiliaryError.message : auxiliaryError;
-    try {
-      const result = await options.fallback!(params, options.signal);
-      const response = {
-        id: 'chat-model-fallback',
-        object: 'chat.completion',
-        created: Math.floor(Date.now() / 1000),
-        model: result.model.id,
-        choices: [
-          {
-            index: 0,
-            finish_reason: 'stop',
-            logprobs: null,
-            message: { role: 'assistant', content: result.text, refusal: null },
-          },
-        ],
-      } as OpenAI.Chat.Completions.ChatCompletion;
-      if (result.usage)
-        options.onUsage?.(
-          { ...result.usage, modelId: result.model.id, region: result.region },
-          result.model,
-          result.region,
-        );
-      const accepted = ToolRouterService.acceptDecision(
-        operation,
-        params,
-        response,
-      );
-      if (!accepted)
-        throw new Error(
-          `${result.model.id} returned an invalid ${operation} decision`,
-        );
-      console.warn(
-        `[ToolRouterService] Auxiliary ${operation} decision unavailable (${reason}); decided by the chat model ${result.model.id} instead`,
-      );
+    const completions =
+      this.completions ??
+      new AuxiliaryCompletionService(undefined, () => this.clientFor(region));
+    const answer = await completions.completeJson({
+      operation,
+      region: region ?? 'EU',
+      params,
+      accept: (response) =>
+        ToolRouterService.acceptDecision(operation, params, response),
+      timeoutMs: options?.timeout ?? SKILL_LIMITS.routingTimeoutMs,
+      // A chat model may be large; it keeps its own budget rather than
+      // whatever the auxiliary chain left over.
+      fallbackTimeoutMs: STRUCTURED_DECISION_FALLBACK_TIMEOUT_MS,
+      signal: options?.signal,
+      onUsage: options?.onUsage,
+      fallback: options?.fallback,
+    });
+    if (answer.source === 'chat_model')
       ToolRouterService.markDecidedBy(operation, 'chat_model');
-      return accepted;
-    } catch (fallbackError) {
-      console.warn(
-        `[ToolRouterService] Chat-model fallback for the ${operation} decision failed:`,
-        fallbackError instanceof Error ? fallbackError.message : fallbackError,
-      );
-      throw auxiliaryError;
-    }
+    return answer.value;
   }
 
   /**
@@ -280,55 +251,6 @@ export class ToolRouterService {
     } catch {
       // Tracing unavailable; the log line above already names the decider.
     }
-  }
-
-  /** The auxiliary chain (or the plain regional client when none is wired). */
-  private async completeOnAuxiliary(
-    region: 'US' | 'EU' | undefined,
-    operation: AuxiliaryOperation,
-    params: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
-    options?: {
-      signal?: AbortSignal;
-      timeout?: number;
-      maxRetries?: number;
-      onUsage?: AuxiliaryUsageSink;
-    },
-  ): Promise<OpenAI.Chat.Completions.ChatCompletion> {
-    if (!this.executor)
-      return this.clientFor(region).chat.completions.create(params, {
-        signal: options?.signal,
-        timeout: options?.timeout,
-        maxRetries: options?.maxRetries,
-      });
-    return this.executor.execute(
-      params,
-      (response) =>
-        ToolRouterService.acceptDecision(operation, params, response),
-      {
-        region: region ?? 'EU',
-        operation,
-        signal: options?.signal,
-        timeoutMs: options?.timeout ?? SKILL_LIMITS.routingTimeoutMs,
-        onUsage: (response, candidate) => {
-          const servingRegion =
-            candidate.reference.accountBinding === 'default'
-              ? null
-              : candidate.reference.accountBinding;
-          if (response.usage)
-            options?.onUsage?.(
-              {
-                modelId: candidate.deployment.modelName,
-                region: servingRegion,
-                promptTokens: response.usage.prompt_tokens,
-                completionTokens: response.usage.completion_tokens,
-                totalTokens: response.usage.total_tokens,
-              },
-              candidate.model,
-              servingRegion,
-            );
-        },
-      },
-    );
   }
 
   /**
@@ -488,7 +410,6 @@ export class ToolRouterService {
               request.timeoutMs ?? SKILL_LIMITS.routingTimeoutMs,
             ),
           ),
-          maxRetries: 0,
           onUsage: request.onUsage,
         },
       );
@@ -590,7 +511,6 @@ When either is true: set targetValue and targetUnit. When both are false: target
         {
           signal: request.signal,
           timeout: SKILL_LIMITS.routingTimeoutMs,
-          maxRetries: 0,
           onUsage: request.onUsage,
           fallback: request.decisionFallback,
         },
@@ -709,7 +629,11 @@ When either is true: set targetValue and targetUnit. When both are false: target
             hasUserProvidedContent,
             searchDecided,
             searchFanOut,
+            agentGuidance,
           } = request;
+          // The agent's knowledge search is judged only when one ran for
+          // this turn; instructions alone still steer the search decision.
+          const judgesKnowledge = agentGuidance?.knowledge !== undefined;
           const considerCodeExecution =
             request.considerCodeExecution || forceCodeInterpreter;
 
@@ -759,13 +683,22 @@ Code execution is needed for:
 - Non-trivial calculations, statistics, simulations, or numeric verification
 - File transformations (parse, filter, aggregate, convert, export)
 - Producing downloadable files (Excel, CSV, Word, charts) from data or content in the conversation — e.g. "export this as a spreadsheet", "make a document out of these notes"
-- Editing an ATTACHED document into a new version of itself — shortening or trimming it to a target length (words, characters, or pages), lengthening or expanding it, restructuring, reformatting, or converting it — the deliverable is a new file in the original format
+- Editing an ATTACHED document into a new version of itself — shortening or trimming it to a target length (words, characters, or pages), lengthening or expanding it, restructuring, reformatting, converting, or translating it as a whole — the deliverable is a new file in the original format
+- Changing an attached presentation, spreadsheet, or dataset in any way (slides, titles, cells, sheets) — these can only be delivered as a file
 
 Code execution is NOT needed for:
 - Writing code examples or tutorials for the user to run themselves
 - Explaining concepts, debugging by inspection, code review
 - Simple arithmetic a model can do reliably
-- Pure text tasks answered directly in chat (writing, translating, or summarizing pasted text). But when the request is to shorten, lengthen, rewrite, translate, or reformat an ATTACHED FILE, that is a file transformation and DOES need code execution — regardless of whether the target is expressed in words, characters, or pages
+- Pure text tasks answered directly in chat (writing, translating, or summarizing pasted text)
+- Questions about, summaries of, or extractions from an attachment or an attached web page — the answer is text in chat
+- Rewording, polishing, correcting, shortening, translating, or replying to a SHORT MESSAGE that happens to be attached — an email, chat message, letter, note, post, or pasted text saved as a file. The user will paste the result somewhere, so the deliverable is text in chat, not a file
+- Improving a sentence, paragraph, or passage of an attached document when the user does not ask for the document back
+
+Decide by the DELIVERABLE, not by whether a file is attached: is the user expecting a FILE back, or TEXT in the chat?
+- An explicit request for a file, document, download, or "the updated version" always means a file — even for a short message
+- A whole-document edit of a formatted document (report, memo, proposal, policy, CV) means a file, whether the target is expressed in words, characters, or pages
+- Otherwise prefer text in chat: an unwanted file hides the answer behind a download
 
 IMPORTANT: Always provide codeTask in your response:
 - If needsCodeExecution is true, provide a self-contained task description (what to compute/produce, referencing attached files by their exact names from the manifest — current-turn OR earlier-turn)
@@ -841,7 +774,7 @@ Also tune the search when needsWebSearch is true:
 - searchRecency: "day" for breaking news/live data, "week" or "month" for recent developments, "none" when age doesn't matter
 - searchComprehensive: true for research-style questions wanting breadth (comparisons, overviews, "what are my options"), false for single-fact lookups
 - searchCategory: which kind of source answers best — "news" for current events, recent developments and open-ended "what is happening in/with X" questions; "science" for medical, clinical, public-health and academic research questions (journals, studies, MSF research publications); "it" for programming, software and technical documentation; "humanitarian" for humanitarian crises, operations and datasets (displacement, outbreaks, country situations); "general" for everything else or when unsure
-${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecutionPromptSection}${catalog.length ? skillRoutingPrompt(catalog) : ''}`;
+${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecutionPromptSection}${catalog.length ? skillRoutingPrompt(catalog) : ''}${agentGuidance ? agentSearchGuidancePrompt(agentGuidance) : ''}`;
 
             // Include recent conversation history for context-aware decisions
             // Take last 3 message pairs (6 messages max) to keep it efficient
@@ -881,6 +814,29 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
             // The cap grows when code execution is considered because the
             // schema then carries a codeTask sentence as well.
             const schemaProperties: Record<string, unknown> = {
+              // Declared first so the model commits to this reading before
+              // it decides the search that depends on it.
+              ...(judgesKnowledge
+                ? {
+                    knowledgeBaseAnswers: {
+                      type: 'boolean',
+                      description:
+                        "Whether the agent's retrieved knowledge-base passages contain the specific information the user's last message asks for",
+                    },
+                  }
+                : {}),
+              // Asked as its own yes/no, before the search decision: left
+              // implicit, the topic limit was honoured in one language and
+              // skipped in another for the same question.
+              ...(agentGuidance
+                ? {
+                    instructionsAllowSearch: {
+                      type: 'boolean',
+                      description:
+                        "Whether the agent owner's instructions permit a web search for the topic of the user's last message. False when they limit web search to certain topics and this one is outside them, or when they forbid web search. True when the topic is one they allow, or when they say nothing about web search",
+                    },
+                  }
+                : {}),
               needsWebSearch: {
                 type: 'boolean',
                 description: 'Whether web search is needed for this query',
@@ -921,7 +877,20 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                   : 'Usually empty. Extra queries ONLY for clearly separable aspects one query cannot cover (max 4)',
               },
             };
+            if (agentGuidance) {
+              schemaProperties.searchSites = {
+                type: 'array',
+                items: { type: 'string' },
+                maxItems: MAX_SEARCH_SITES,
+                description:
+                  'Bare domains the agent instructions restrict the web search to; empty when they name none or no search is needed',
+              };
+            }
             const requiredFields = [
+              ...(judgesKnowledge ? ['knowledgeBaseAnswers'] : []),
+              ...(agentGuidance
+                ? ['instructionsAllowSearch', 'searchSites']
+                : []),
               'needsWebSearch',
               'searchQuery',
               'searchRecency',
@@ -981,6 +950,9 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                   12 +
                   // A planned fan-out is up to four more keyword queries.
                   (searchFanOut ? 80 : 0) +
+                  // An agent's site limits can need one query per site,
+                  // plus the knowledgeBaseAnswers flag.
+                  (agentGuidance ? 100 : 0) +
                   (catalog.length ? 256 : 0),
                 response_format: {
                   type: 'json_schema',
@@ -1000,7 +972,6 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                 ? {
                     signal: request.signal,
                     timeout: SKILL_LIMITS.routingTimeoutMs,
-                    maxRetries: 0,
                     onUsage: request.onUsage,
                     fallback: request.decisionFallback,
                   }
@@ -1023,6 +994,11 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
             // stand, and only the skill side is reported as degraded.
             const skillSelectionDegraded =
               catalog.length > 0 && !Array.isArray(result.relevantSkills);
+            const knowledgeBaseAnswers =
+              judgesKnowledge &&
+              typeof result.knowledgeBaseAnswers === 'boolean'
+                ? { knowledgeBaseAnswers: result.knowledgeBaseAnswers }
+                : {};
             if (skillSelectionDegraded) {
               console.warn(
                 '[ToolRouterService] Skill selection missing from the tool router response; tools decision kept, skills treated as degraded',
@@ -1033,6 +1009,21 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               span.setAttribute('tool_router.skills', relevantSkills);
 
             console.log('[ToolRouterService] AI decision:', result);
+            // An agent's document search that could not run says nothing
+            // about what the documents hold, so the model's decision to
+            // fall back to the web is overruled: answering from the web
+            // could bypass documents that do have the answer. Enforced
+            // here because the model alone held this rule only most of the
+            // time. A search the user switched on (below) still runs.
+            if (agentGuidance?.knowledge?.status === 'failed') {
+              result.needsWebSearch = false;
+            }
+            // The owner's topic limit binds whatever else the model wrote:
+            // a question it judged outside the allowed topics is not
+            // searched, and neither is one the user asks to have searched.
+            if (agentGuidance && result.instructionsAllowSearch === false) {
+              result.needsWebSearch = false;
+            }
             // The search was decided upstream; the model only planned it.
             if (searchDecided) result.needsWebSearch = true;
 
@@ -1078,7 +1069,11 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
             const primaryQuery = result.needsWebSearch
               ? result.searchQuery || currentMessage
               : undefined;
-            const searchQueries = primaryQuery
+            const searchSites =
+              agentGuidance && result.needsWebSearch
+                ? normalizeSearchSites(result.searchSites)
+                : [];
+            const plannedQueries = primaryQuery
               ? [
                   primaryQuery,
                   ...(Array.isArray(result.additionalSearchQueries)
@@ -1091,6 +1086,11 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                     : []),
                 ].slice(0, 5)
               : undefined;
+            // An agent's website limit is applied here, in code, rather
+            // than left to the model to write into each query.
+            const searchQueries = plannedQueries
+              ? restrictQueriesToSites(plannedQueries, searchSites)
+              : undefined;
 
             if (tools.length > 0 || searchFollowUp) {
               const recency = result.searchRecency;
@@ -1098,7 +1098,9 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
                 tools,
                 relevantSkills,
                 ...(skillSelectionDegraded ? { skillSelectionDegraded } : {}),
-                searchQuery: primaryQuery,
+                ...knowledgeBaseAnswers,
+                ...(searchSites.length ? { searchSites } : {}),
+                searchQuery: searchQueries?.[0] ?? primaryQuery,
                 searchQueries,
                 searchRecency:
                   result.needsWebSearch &&
@@ -1129,6 +1131,7 @@ ${fanOutInstruction}${followUpPromptSection}${continuePromptSection}${codeExecut
               tools: [] as ToolType[],
               relevantSkills,
               ...(skillSelectionDegraded ? { skillSelectionDegraded } : {}),
+              ...knowledgeBaseAnswers,
               reasoning: 'No tools needed',
             };
           } catch (error) {

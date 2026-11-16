@@ -28,7 +28,6 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 // Stub env so the constructor doesn't require real Azure configuration.
 vi.mock('@/config/environment', () => ({
   env: {
-    OPENAI_API_KEY: 'test-key',
     AZURE_OPENAI_ENDPOINT: 'https://example.openai.azure.com',
     OPENAI_API_VERSION: '2024-06-01',
   },
@@ -67,12 +66,11 @@ vi.mock('fs', async (importOriginal) => {
   };
 });
 
-// Avoid pulling in @azure/identity (DefaultAzureCredential) — the env stub
-// above sets OPENAI_API_KEY so the API-key branch is taken, but the import
-// still resolves; mock it to keep the test hermetic.
+// The service authenticates with the application identity; mock it so no
+// real credential chain runs.
 vi.mock('@azure/identity', () => ({
   DefaultAzureCredential: vi.fn(),
-  getBearerTokenProvider: vi.fn(),
+  getBearerTokenProvider: vi.fn(() => async () => 'test-entra-token'),
 }));
 
 function makeApiError(

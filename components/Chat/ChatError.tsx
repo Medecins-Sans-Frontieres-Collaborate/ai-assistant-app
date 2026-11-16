@@ -356,13 +356,13 @@ export const ChatError: React.FC<ChatErrorProps> = ({
     !!onResendWithoutFeature && !!resendableFeature;
 
   return (
-    <div className="absolute bottom-[160px] left-0 right-0 px-4 py-2">
+    <div className="absolute bottom-[160px] start-0 end-0 px-4 py-2">
       <div className="mx-auto max-w-3xl rounded-lg bg-red-100 p-4 text-red-800 dark:bg-red-900 dark:text-red-200">
         <div className="flex items-start justify-between">
           <span className="flex-1 whitespace-pre-wrap" title={effectiveError}>
             {renderedError}
           </span>
-          <div className="flex items-center gap-2 ml-4 flex-shrink-0">
+          <div className="flex items-center gap-2 ms-4 flex-shrink-0">
             {actionLabel && onActionClick && (
               <button
                 onClick={onActionClick}

@@ -15,18 +15,25 @@ interface AnalysisPanelProps {
   rounds: TranslationReviewRound[];
   /** Deterministic glossary verdict on the final text (issue #131). */
   glossaryCheck?: TranslationGlossaryCheck;
+  /**
+   * False omits the "Pre-translation analysis" heading, for a container
+   * that already shows it (the analysis strip's header).
+   */
+  showAnalysisHeading?: boolean;
 }
 
 /**
  * The run's paper trail: pre-translation analysis findings, the verdict of
- * each review round, and the glossary check. Collapsible section under the
- * panes. The glossary section only renders when a glossary term actually
+ * each review round, and the glossary check. Content only: the container
+ * (AnalysisStrip) owns the border, scrolling, and collapsing. The glossary
+ * section only renders when a glossary term actually
  * occurred in the source — a run with nothing to check says nothing.
  */
 export function AnalysisPanel({
   analysis,
   rounds,
   glossaryCheck,
+  showAnalysisHeading = true,
 }: AnalysisPanelProps) {
   const t = useTranslations('workflows');
 
@@ -34,12 +41,14 @@ export function AnalysisPanel({
   if (!analysis && rounds.length === 0 && !showGlossary) return null;
 
   return (
-    <div className="space-y-4 overflow-y-auto border-t border-gray-200 px-4 py-3 dark:border-gray-700">
+    <div className="space-y-4 px-4 py-3">
       {analysis && (
         <section>
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-            {t('translation.analysisTitle')}
-          </h3>
+          {showAnalysisHeading && (
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              {t('translation.analysisTitle')}
+            </h3>
+          )}
           {analysis.register && (
             <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">
               {t('translation.register')}: {analysis.register}

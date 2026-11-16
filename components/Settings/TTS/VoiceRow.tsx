@@ -70,7 +70,7 @@ export const VoiceRow: FC<VoiceRowProps> = ({
   return (
     <button
       onClick={onSelect}
-      className={`w-full flex items-center gap-2 px-3 py-2 text-left transition-colors ${
+      className={`w-full flex items-center gap-2 px-3 py-2 text-start transition-colors ${
         isSelected
           ? 'bg-gray-100 dark:bg-gray-700'
           : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'

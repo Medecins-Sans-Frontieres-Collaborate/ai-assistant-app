@@ -23,7 +23,7 @@ export const InterpreterModeBadge: React.FC<InterpreterModeBadgeProps> = ({
       <span>{t('chat.interpreterBadge')}</span>
       <button
         onClick={onRemove}
-        className="ml-0.5 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full p-1 transition-colors"
+        className="ms-0.5 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full p-1 transition-colors"
         aria-label={t('chat.disableCodeInterpreter')}
       >
         <svg

@@ -164,7 +164,7 @@ export const HelpSupportSection: FC = () => {
           <button
             type="button"
             onClick={() => setShowReleaseNotes(true)}
-            className="group border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-500 dark:hover:border-blue-400 transition-all hover:shadow-md text-left"
+            className="group border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-blue-500 dark:hover:border-blue-400 transition-all hover:shadow-md text-start"
           >
             <div className="flex items-start gap-3">
               <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded-lg group-hover:bg-amber-200 dark:group-hover:bg-amber-900/50 transition-colors">
@@ -210,7 +210,7 @@ export const HelpSupportSection: FC = () => {
                   onClick={() =>
                     setExpandedFaq(expandedFaq === index ? null : index)
                   }
-                  className="w-full flex items-center justify-between gap-3 p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                  className="w-full flex items-center justify-between gap-3 p-3 text-start hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
                 >
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
                     {faq.question}

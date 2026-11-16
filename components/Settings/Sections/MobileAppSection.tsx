@@ -54,7 +54,7 @@ export const MobileAppSection: FC = () => {
           <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
             <li className="flex items-start">
               <IconCheck
-                className="mr-2 mt-0.5 text-blue-600 dark:text-blue-400 shrink-0"
+                className="me-2 mt-0.5 text-blue-600 dark:text-blue-400 shrink-0"
                 size={16}
               />
               <span>
@@ -63,7 +63,7 @@ export const MobileAppSection: FC = () => {
             </li>
             <li className="flex items-start">
               <IconCheck
-                className="mr-2 mt-0.5 text-blue-600 dark:text-blue-400 shrink-0"
+                className="me-2 mt-0.5 text-blue-600 dark:text-blue-400 shrink-0"
                 size={16}
               />
               <span>
@@ -72,14 +72,14 @@ export const MobileAppSection: FC = () => {
             </li>
             <li className="flex items-start">
               <IconCheck
-                className="mr-2 mt-0.5 text-blue-600 dark:text-blue-400 shrink-0"
+                className="me-2 mt-0.5 text-blue-600 dark:text-blue-400 shrink-0"
                 size={16}
               />
               <span>{t('settings.Faster loading and better performance')}</span>
             </li>
             <li className="flex items-start">
               <IconCheck
-                className="mr-2 mt-0.5 text-blue-600 dark:text-blue-400 shrink-0"
+                className="me-2 mt-0.5 text-blue-600 dark:text-blue-400 shrink-0"
                 size={16}
               />
               <span>{t('settings.Native app-like experience')}</span>
@@ -91,7 +91,7 @@ export const MobileAppSection: FC = () => {
         <div className="bg-white dark:bg-surface-dark rounded-lg p-4 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center mb-3">
             <IconBrandApple
-              className="mr-2 text-gray-700 dark:text-gray-300"
+              className="me-2 text-gray-700 dark:text-gray-300"
               size={24}
             />
             <h3 className="text-sm font-bold text-black dark:text-white">
@@ -132,7 +132,7 @@ export const MobileAppSection: FC = () => {
         <div className="bg-white dark:bg-surface-dark rounded-lg p-4 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center mb-3">
             <IconBrandAndroid
-              className="mr-2 text-gray-700 dark:text-gray-300"
+              className="me-2 text-gray-700 dark:text-gray-300"
               size={24}
             />
             <h3 className="text-sm font-bold text-black dark:text-white">
@@ -173,7 +173,7 @@ export const MobileAppSection: FC = () => {
             rel="noopener noreferrer"
             className="flex items-center text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
           >
-            <IconExternalLink size={14} className="mr-1" />
+            <IconExternalLink size={14} className="me-1" />
             {t('settings.Learn more about Progressive Web Apps')}
           </a>
         </div>

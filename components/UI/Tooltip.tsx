@@ -3,9 +3,16 @@
 import { ReactNode, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { isRtlElement, mirrorSide } from '@/lib/utils/client/textDirection';
+
 interface TooltipProps {
   content: string;
   children: ReactNode;
+  /**
+   * Side of the trigger the tooltip opens on. 'left' and 'right' are
+   * authored for left-to-right layouts and mirror in right-to-left ones, so
+   * 'right' always means "toward the end edge".
+   */
   position?: 'top' | 'bottom' | 'left' | 'right';
   /**
    * When true, allows the tooltip content to wrap across multiple lines and
@@ -24,10 +31,15 @@ const TRIGGER_GAP = 8;
 export function Tooltip({
   content,
   children,
-  position = 'top',
+  position: authoredPosition = 'top',
   multiline = false,
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [isRtl, setIsRtl] = useState(false);
+  const position =
+    authoredPosition === 'left' || authoredPosition === 'right'
+      ? mirrorSide(authoredPosition, isRtl)
+      : authoredPosition;
   const wrapperRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState<{ left: number; top: number } | null>(
@@ -92,7 +104,10 @@ export function Tooltip({
     };
   }, [isVisible, multiline, position, content]);
 
-  const show = () => setIsVisible(true);
+  const show = () => {
+    setIsRtl(isRtlElement(wrapperRef.current));
+    setIsVisible(true);
+  };
   const hide = () => {
     setIsVisible(false);
     setCoords(null);

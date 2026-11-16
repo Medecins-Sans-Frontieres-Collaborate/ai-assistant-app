@@ -1,25 +1,31 @@
 import { Session } from 'next-auth';
 
-import { createAzureOpenAIStreamProcessor } from '@/lib/utils/app/stream/streamProcessor';
+import {
+  type QueryReformulationRouting,
+  type QueryReformulator,
+  buildKnowledgeBaseReformulationPrompt,
+  messageText,
+  rewriteConversationHistory,
+} from '@/lib/services/search/queryReformulation';
+
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { Message } from '@/types/chat';
 import { OrganizationAgent } from '@/types/organizationAgent';
 import { Citation, SearchResult } from '@/types/rag';
 
-import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { DefaultAzureCredential } from '@azure/identity';
 import { SearchClient } from '@azure/search-documents';
-import OpenAI from 'openai';
-import { ChatCompletion } from 'openai/resources';
+import type OpenAI from 'openai';
 
 /**
- * Service for handling Retrieval-Augmented Generation (RAG) operations.
- * Integrates search functionality with OpenAI chat completions.
+ * Service for handling Retrieval-Augmented Generation (RAG) operations:
+ * knowledge-base search (with a residency-routed query rewrite) and the
+ * citation bookkeeping for the answer that cites it.
  */
 export class RAGService {
   private searchClient: SearchClient<SearchResult>;
-  private openAIClient: OpenAI;
+  private reformulator: QueryReformulator;
   private searchIndex: string;
   public searchDocs: SearchResult[] = [];
 
@@ -37,12 +43,12 @@ export class RAGService {
    * Creates a new instance of RAGService.
    * @param {string} searchEndpoint - The endpoint URL for the Azure Search service.
    * @param {string} searchIndex - The name of the search index to query.
-   * @param {OpenAI} openAIClient - Client for making OpenAI API calls (Foundry endpoint).
+   * @param {QueryReformulator} reformulator - Rewrites search queries under the user's residency.
    */
   constructor(
     searchEndpoint: string,
     searchIndex: string,
-    openAIClient: OpenAI,
+    reformulator: QueryReformulator,
   ) {
     // Use DefaultAzureCredential for managed identity authentication
     this.searchClient = new SearchClient<SearchResult>(
@@ -50,243 +56,38 @@ export class RAGService {
       searchIndex,
       new DefaultAzureCredential(),
     );
-    this.openAIClient = openAIClient;
+    this.reformulator = reformulator;
     this.searchIndex = searchIndex;
   }
 
   /**
-   * Augments chat messages with relevant search results and generates a completion.
-   * Supports both streaming and non-streaming responses.
-   *
-   * @param {Message[]} messages - The conversation messages to augment.
-   * @param {string} agentId - The ID of the organization agent to use for the completion.
-   * @param {string} modelId - The ID of the model to use for completion.
-   * @param {boolean} [stream=false] - Whether to stream the response.
-   * @param {Session['user']} user - User information for logging.
-   * @returns {Promise<ReadableStream | ChatCompletion>}
-   *          Returns either a streaming response or chat completion depending on the stream parameter.
-   * @throws {Error} If the specified agent is not found.
-   */
-  async augmentMessages(
-    messages: Message[],
-    agentId: string,
-    modelId: string,
-    stream: boolean = false,
-    user: Session['user'],
-  ): Promise<ReadableStream | ChatCompletion> {
-    const startTime = Date.now();
-
-    try {
-      // Initialize citation tracking for this request
-      this.initCitationTracking(true);
-
-      // Static-config lookup only: this legacy entry point is not used by
-      // the pipeline (RAGEnricher resolves agents through the org-agent
-      // registry and calls performSearch directly with the agent object).
-      const agent = getOrganizationAgentById(agentId);
-      if (!agent) throw new Error(`Organization agent ${agentId} not found`);
-
-      const { searchDocs, searchMetadata } = await this.performSearch(
-        messages,
-        agent,
-        user,
-      );
-      this.searchDocs = searchDocs;
-
-      const systemPrompt = agent.systemPrompt || '';
-
-      const enhancedMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-        {
-          role: 'system',
-          content: `${systemPrompt}
-
-CRITICAL CITATION RULES - YOU MUST FOLLOW THESE:
-- Cite sources inline using [#] notation immediately after the relevant information
-- Use SEPARATE brackets for each source like [1][2][3] - NEVER group them like [1,2,3]
-- NEVER include a "Sources:", "References:", or similar section listing sources
-- NEVER list sources at the end of your response - the frontend handles this automatically
-- NEVER create bullet points or numbered lists of sources with titles/dates
-- Only use citation numbers that exist in the provided sources (e.g., [1], [2])
-- The user interface will display clickable source cards - your job is ONLY to cite inline with [#]
-
-Example of CORRECT formatting:
-"The outbreak affected thousands of people [1][2]. Vaccination rates remain low [3]."
-
-Example of WRONG formatting (DO NOT DO THIS):
-"The outbreak affected thousands of people [1,2]."
-
-Example of WRONG formatting (DO NOT DO THIS):
-"Sources:
-[1] Article Title, Date
-[2] Another Article, Date"
-
-The frontend automatically shows source information. Just cite inline and end your response naturally.`,
-        },
-        ...this.getCompletionMessages(messages, agent, searchDocs),
-      ];
-
-      if (stream) {
-        const streamResponse = await this.openAIClient.chat.completions.create({
-          model: modelId,
-          messages: enhancedMessages,
-          temperature: 0.5,
-          stream: true,
-        });
-
-        // Process the stream and log after citations are processed
-        const processedStream = createAzureOpenAIStreamProcessor(
-          streamResponse,
-          this,
-        );
-
-        // Log completion
-        console.log('[RAGService] Chat completion (streaming):', {
-          duration: Date.now() - startTime,
-          modelId,
-          messageCount: messages.length,
-          agentId,
-          userId: user?.id,
-        });
-
-        return processedStream;
-      } else {
-        const completion = await this.openAIClient.chat.completions.create({
-          model: modelId,
-          messages: enhancedMessages,
-          temperature: 0.5,
-          stream: false,
-        });
-
-        const content = completion.choices[0]?.message?.content || '';
-
-        // Process citations but preserve the source mapping
-        const citations = this.processCitationsInContent(content);
-
-        // Deduplicate citations for display
-        const uniqueCitations = this.deduplicateCitations(citations);
-
-        // Format the content to include metadata at the end
-        const metadataSection = `\n\nSources used: ${uniqueCitations
-          .map((c) => `[${c.number}] ${c.title}`)
-          .join(', ')}
-        Date range: ${searchMetadata.dateRange.oldest || 'N/A'} to ${
-          searchMetadata.dateRange.newest || 'N/A'
-        }
-        Total sources: ${uniqueCitations.length}`;
-
-        // Update the completion with the enhanced content
-        completion.choices[0].message.content = content + metadataSection;
-
-        // Log completion
-        console.log('[RAGService] Chat completion (non-streaming):', {
-          duration: Date.now() - startTime,
-          modelId,
-          messageCount: messages.length,
-          agentId,
-          userId: user?.id,
-        });
-
-        return completion;
-      }
-    } catch (error) {
-      console.error('Error in augmentMessages:', sanitizeForLog(error));
-      throw error;
-    }
-  }
-
-  /**
-   * Uses an LLM to reformulate the query with full conversation context
-   * for improved search results on follow-up questions.
+   * Rewrites the latest question into a search query, using the
+   * conversation to resolve follow-ups and turning relative dates into
+   * explicit months. Runs under the user's residency (see
+   * lib/services/search/queryReformulation.ts); any failure falls back to
+   * the raw question, so retrieval quality degrades but the search runs.
    *
    * @param {Message[]} messages - The conversation messages to analyze.
-   * @returns {Promise<string>} The reformulated query with context.
+   * @param {QueryReformulationRouting} routing - Residency region and chat-model fallback.
+   * @returns {Promise<string>} The reformulated query, or the raw question.
    */
-  async reformulateQuery(messages: Message[]): Promise<string> {
-    try {
-      // Extract original query from the last user message
-      const originalQuery = this.extractQuery(messages);
+  async reformulateQuery(
+    messages: Message[],
+    routing: QueryReformulationRouting,
+  ): Promise<string> {
+    const originalQuery = this.extractQuery(messages);
+    const conversationHistory = rewriteConversationHistory(messages);
 
-      // Get relevant conversation history (last few messages)
-      const conversationHistory = messages
-        .slice(-5)
-        .map(
-          (m) =>
-            `${m.role}: ${
-              typeof m.content === 'string'
-                ? m.content
-                : JSON.stringify(m.content)
-            }`,
-        )
-        .join('\n');
-
-      console.log('Reformulating query with conversation context');
-
-      // Get current date for temporal reference conversion
-      const now = new Date();
-      const currentMonth = now.toLocaleString('en-US', { month: 'long' });
-      const currentYear = now.getFullYear();
-      const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-      const lastMonthName = lastMonth.toLocaleString('en-US', {
-        month: 'long',
-      });
-      const lastMonthYear = lastMonth.getFullYear();
-
-      // Azure-optimized system prompt
-      const systemPrompt = `You are a search query optimizer for Azure AI Search. Today is ${currentMonth} ${now.getDate()}, ${currentYear}.
-
-        Your task is to create concise, effective search queries that:
-        1. CONVERT temporal references to ACTUAL dates/months (this is critical for vector search)
-        2. Include key entities and concepts from the original query
-        3. Work effectively with Azure AI Search semantic ranking
-
-        CRITICAL - TEMPORAL CONVERSION RULES:
-        - "this week" / "recent" / "latest" / "current" → "${currentMonth} ${currentYear}"
-        - "last week" / "last month" → "${lastMonthName} ${lastMonthYear}" or "${currentMonth} ${currentYear}"
-        - "today" / "now" → "${currentMonth} ${now.getDate()} ${currentYear}"
-        - "this year" → "${currentYear}"
-        - Keep historical queries unchanged (e.g., "2023 earthquake" stays as-is)
-
-        GUIDELINES FOR AZURE AI SEARCH:
-        - Keep queries CONCISE (under 20 words)
-        - Focus on CORE CONCEPTS and ENTITIES
-        - Use NATURAL LANGUAGE phrasing
-        - ALWAYS include the actual month/year when recency is implied
-        - Avoid complex boolean operators or syntax
-
-        EXAMPLES:
-        - "what did MSF say about Pakistan this week" → "MSF Pakistan ${currentMonth} ${currentYear}"
-        - "latest news on Gaza" → "Gaza humanitarian crisis ${currentMonth} ${currentYear}"
-        - "recent updates Sudan" → "Sudan ${currentMonth} ${currentYear} updates"
-        - "MSF response to 2023 earthquake" → "MSF 2023 earthquake response" (historical, no change)
-
-        Return ONLY the reformulated search query with no additional text.`;
-
-      // Ask the model to generate an improved search query. No temperature:
-      // the gpt-5 family rejects non-default values, and a rejected call
-      // silently falls back to the raw query.
-      const completion = await this.openAIClient.chat.completions.create({
-        model: 'gpt-5-mini',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          {
-            role: 'user',
-            content: `Conversation history:\n${conversationHistory}\n\nOriginal query: ${originalQuery}\n\nGenerate an improved Azure AI Search query that captures the key concepts and appropriately handles recency.`,
-          },
-        ],
-      });
-
-      const expandedQuery =
-        completion.choices[0]?.message?.content?.trim() || originalQuery;
-
-      console.log(`Original query: "${sanitizeForLog(originalQuery)}"`);
-      console.log(`Expanded query: "${sanitizeForLog(expandedQuery)}"`);
-
-      return expandedQuery;
-    } catch (error) {
-      console.error('Error reformulating query:', sanitizeForLog(error));
-      // Fall back to the original query if reformulation fails
-      return this.extractQuery(messages);
-    }
+    const result = await this.reformulator.reformulate(
+      buildKnowledgeBaseReformulationPrompt(conversationHistory, originalQuery),
+      routing,
+    );
+    const query = result?.query ?? originalQuery;
+    console.log(`Original query: "${sanitizeForLog(originalQuery)}"`);
+    console.log(
+      `Expanded query: "${sanitizeForLog(query)}" (${result?.source ?? 'raw question'})`,
+    );
+    return query;
   }
 
   /**
@@ -304,12 +105,13 @@ The frontend automatically shows source information. Just cite inline and end yo
     messages: Message[],
     agent: OrganizationAgent,
     user: Session['user'],
+    routing: QueryReformulationRouting,
   ) {
     const startTime = Date.now();
 
     try {
       // Always reformulate queries to handle temporal references and improve search
-      const query = await this.reformulateQuery(messages);
+      const query = await this.reformulateQuery(messages, routing);
 
       // Get ragConfig from agent (if available)
       const ragConfig = agent.ragConfig || {};
@@ -570,9 +372,7 @@ The frontend automatically shows source information. Just cite inline and end yo
       .reverse()
       .find((m) => m.role === 'user');
     if (!lastUserMessage?.content) throw new Error('No user message found');
-    return typeof lastUserMessage.content === 'string'
-      ? lastUserMessage.content
-      : '';
+    return messageText(lastUserMessage.content);
   }
 
   /**

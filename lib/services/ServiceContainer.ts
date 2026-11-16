@@ -7,6 +7,7 @@ import { FileProcessingService } from './chat/FileProcessingService';
 import { StandardChatService } from './chat/StandardChatService';
 import { ToolRouterService } from './chat/ToolRouterService';
 import { SearchAssessor } from './chat/tools/searchAssessor';
+import { QueryReformulator } from './search/queryReformulation';
 import { ModelSelector, StreamingService, ToneService } from './shared';
 
 import { env } from '@/config/environment';
@@ -65,6 +66,7 @@ export class ServiceContainer {
   private streamingService!: StreamingService;
   private fileProcessingService!: FileProcessingService;
   private toolRouterService!: ToolRouterService;
+  private queryReformulator!: QueryReformulator;
   private searchAssessor!: SearchAssessor;
   private auxiliaryModelService!: AuxiliaryModelService;
   private aiFoundryAgentHandler!: AIFoundryAgentHandler;
@@ -151,6 +153,11 @@ export class ServiceContainer {
         return regional.openAIClient ?? regional.azureOpenAIClient;
       },
       this.auxiliaryModelService.executor,
+    );
+    // Knowledge-base query rewrites ride the same residency-filtered
+    // auxiliary chains as the router (operation `query`).
+    this.queryReformulator = new QueryReformulator(
+      this.auxiliaryModelService.completions,
     );
     // Singleton on purpose: it remembers which assessor models failed
     // recently, so a missing deployment is not retried on every search.
@@ -312,6 +319,11 @@ export class ServiceContainer {
 
   public getAzureOpenAIClient(): AzureOpenAI {
     return this.azureOpenAIClient;
+  }
+
+  /** Residency-routed search-query rewriter for knowledge-base retrieval. */
+  public getQueryReformulator(): QueryReformulator {
+    return this.queryReformulator;
   }
 
   public getOpenAIClient(): OpenAI {

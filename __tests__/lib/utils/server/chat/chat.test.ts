@@ -1,4 +1,5 @@
 import {
+  EMPTY_ASSISTANT_TURN_PLACEHOLDER,
   IMAGE_TOKENS_HIGH_DETAIL,
   IMAGE_TOKENS_LOW_DETAIL,
   countMessageTokens,
@@ -326,5 +327,43 @@ describe('getMessagesToSend – minimum recent messages', () => {
       { minRecentMessages: 3, windowTokens: 2000 },
     );
     expect(result).toHaveLength(5);
+  });
+});
+
+describe('getMessagesToSend – turns that produced no answer', () => {
+  const send = (messages: Message[]) =>
+    getMessagesToSend(messages, makeEncoding(), 0, 10_000, {
+      id: 'u1',
+    } as never);
+
+  it('replaces an empty assistant turn so later turns are not rejected', async () => {
+    const result = await send([
+      textMessage('first question'),
+      textMessage('   ', 'assistant'),
+      textMessage('second question'),
+    ]);
+
+    expect(result.map((message) => message.role)).toEqual([
+      'user',
+      'assistant',
+      'user',
+    ]);
+    expect(result[1].content).toBe(EMPTY_ASSISTANT_TURN_PLACEHOLDER);
+  });
+
+  it('leaves an assistant turn with text untouched', async () => {
+    const result = await send([
+      textMessage('first question'),
+      textMessage('an answer', 'assistant'),
+      textMessage('second question'),
+    ]);
+
+    expect(result[1].content).toBe('an answer');
+  });
+
+  it('never rewrites an empty user message', async () => {
+    const result = await send([textMessage('')]);
+
+    expect(result[0].content).toBe('');
   });
 });

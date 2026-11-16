@@ -13,6 +13,7 @@ import { NextRequest } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { withGraphTokenCache } from '@/lib/services/m365/graphApi';
+import { mailUtilityRegion } from '@/lib/services/m365/tools/mailOrchestration';
 
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -319,11 +320,13 @@ async function runDigestJobBody(
     await heartbeat(storage, userId, jobId, 'classifying', reports);
     // Priority order, so the result cap never drops an open ask for a
     // burst of channel posts (collectors finish in arbitrary order).
+    const region = mailUtilityRegion(session);
     const classified = await classifyDigestItems(
       sortByDigestPriority(items).slice(0, MAX_ITEMS_IN_RESULT),
+      region,
     );
     await heartbeat(storage, userId, jobId, 'summarizing', reports);
-    const insights = await extractDigestInsights(classified.items);
+    const insights = await extractDigestInsights(classified.items, region);
 
     const counts = emptyCounts();
     for (const item of classified.items) counts[item.category] += 1;

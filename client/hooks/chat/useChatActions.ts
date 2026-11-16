@@ -21,6 +21,7 @@ import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { QueuedSend, useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { DEFAULT_ACTIVE_FILES_MAX_COUNT } from '@/lib/constants/activeFileQuotas';
 import { v4 as uuidv4 } from 'uuid';
 
 /** Put a queued message's text back into the composer (appended if it has text). */
@@ -192,7 +193,10 @@ export function useChatActions({
         const conversationWithMessage = {
           ...newConversation,
           messages: [message],
-          activeFiles: (initialActiveFiles ?? []).slice(0, 5),
+          activeFiles: (initialActiveFiles ?? []).slice(
+            0,
+            DEFAULT_ACTIVE_FILES_MAX_COUNT,
+          ),
         };
 
         // Add and select the new conversation

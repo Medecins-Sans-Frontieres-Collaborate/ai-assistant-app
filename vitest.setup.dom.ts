@@ -42,6 +42,17 @@ const mockMessages: Record<string, unknown> = {
     noMatches: 'No directory matches — you can enter the address manually',
   },
   transcript: { copy: 'Copy' },
+  // Mirrors messages/en.json.
+  filePreview: {
+    preview: 'Preview',
+    download: 'Download',
+    loading: 'Preparing preview…',
+    failed: 'This file could not be previewed. You can still download it.',
+    pageOf: 'Page {page} of {total}',
+    truncated:
+      'Showing the first {shown} of {total} pages. Download the file to see the rest.',
+    enlarge: 'Enlarge {name}',
+  },
   announcements: { more: 'More' },
   analyticsAdmin: { health: { total: { files: 'Files' } } },
   common: {
@@ -54,7 +65,9 @@ const mockMessages: Record<string, unknown> = {
     normal: 'Normal',
     variable: 'Variable',
     variables: 'Variables',
-    search: 'Search',
+    // Mirrors messages/en.json: there is no common.search key, and a mock
+    // entry for one hid a raw-key bug in the agents admin search box.
+    searchEllipsis: 'Search...',
     beta: 'Beta',
     tryAgain: 'Try again',
     // The real keys are ICU plurals; the mock t() only does {param}
@@ -1008,9 +1021,13 @@ const mockMessages: Record<string, unknown> = {
       freshness_any: 'Any time',
     },
   },
+  // Only the template whose interpolated output tests assert on; every other
+  // usageBudgets key still falls through to its own name.
+  usageBudgets: {
+    usedOfShort: '{used} of {limit}',
+  },
   usageImpact: {
     empty: 'No usage tracked yet.',
-    co2Value: '{grams} g CO2e',
     equivalence: '~ {count} smartphone charges',
     requests: 'Requests',
     promptTokens: 'Prompt tokens',
@@ -1058,6 +1075,10 @@ const mockMessages: Record<string, unknown> = {
       seconds: '{value} s',
       minutes: '{value} min',
       hours: '{value} h',
+    },
+    mass: {
+      grams: '{value} g CO2e',
+      kilograms: '{value} kg CO2e',
     },
     chip: {
       label: '{grams} g CO2e',

@@ -14,32 +14,9 @@ import {
   getBlobBase64String,
 } from '@/lib/utils/server/blob/blob';
 import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
+import { isValidFileId } from '@/lib/utils/server/file/fileId';
 
 import { auth } from '@/auth';
-
-// Buffered uploads/imports are content-hash-named (sha256); streamed M365
-// imports and chunked uploads are UUID-named. Both are valid references.
-const VALID_HASH_REGEX: RegExp = /^[0-9a-f]{64}$/;
-const VALID_UUID_REGEX: RegExp =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-// Matches sanitizeBlobExtension's bound (alphanumeric, up to 12 chars).
-const VALID_EXTENSION_REGEX: RegExp = /^[A-Za-z0-9]{1,12}$/;
-
-const isValidFileId = (id: string | string[] | undefined): boolean => {
-  if (typeof id !== 'string' || id.length < 1) {
-    console.error(
-      `Invalid id type '${typeof id}' for object: ${JSON.stringify(id)}`,
-    );
-    return false;
-  }
-  const idParts: string[] = id.split('.');
-  if (idParts.length > 2) return false;
-
-  const [idBase, idExtension] = idParts;
-  if (idExtension && !VALID_EXTENSION_REGEX.test(idExtension)) return false;
-
-  return VALID_HASH_REGEX.test(idBase) || VALID_UUID_REGEX.test(idBase);
-};
 
 export async function GET(
   request: NextRequest,

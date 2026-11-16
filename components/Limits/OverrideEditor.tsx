@@ -300,7 +300,7 @@ export const OverrideEditor: FC<OverrideEditorProps> = ({
       <div className="flex items-start gap-2">
         <button
           type="button"
-          className="flex min-w-0 flex-1 flex-wrap items-center gap-2 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          className="flex min-w-0 flex-1 flex-wrap items-center gap-2 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
           aria-label={expanded ? t('collapseOverride') : t('expandOverride')}
@@ -327,7 +327,7 @@ export const OverrideEditor: FC<OverrideEditorProps> = ({
               {t('verdictOutOfScopeChip')}
             </span>
           )}
-          <span className={`ml-auto ${ADMIN_MUTED}`}>
+          <span className={`ms-auto ${ADMIN_MUTED}`}>
             {t('targetsCount', { count: override.targets.length })} ·{' '}
             {t('limitsCount', { count: override.entries.length })}
           </span>

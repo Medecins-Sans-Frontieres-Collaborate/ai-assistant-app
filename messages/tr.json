@@ -4,7 +4,6 @@
   "OpenAI API Key Required": "OpenAI API Anahtarı Gerekli",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Lütfen OpenAI API anahtarınızı yan çubuğun sol altından ayarlayın.",
   "Stop Generating": "Oluşturmayı Durdur",
-  "Prompt limit is {{maxLength}} characters": "İstem sınırı {{maxLength}} karakterdir",
   "System Prompt": "Sistem İstemi",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Siz ChatGPT'siniz, OpenAI tarafından eğitilmiş büyük bir dil modelisiniz. Kullanıcının talimatlarını dikkatlice izleyin. Markdown kullanarak yanıt verin.",
   "Enter a prompt": "Bir istem girin",
@@ -23,7 +22,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "OpenAI API anahtarınızın yan çubuğun sol altında ayarlandığından emin olun.",
   "If you completed this step, OpenAI may be experiencing issues_": "Bu adımı tamamladıysanız, OpenAI sorun yaşıyor olabilir.",
   "click if using a _env_local file": ".env.local dosyası kullanıyorsanız tıklayın",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Mesaj sınırı {{maxLength}} karakterdir. {{valueLength}} karakter girdiniz.",
   "Please enter a message": "Lütfen bir mesaj girin",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI, ChatGPT'nin arayüz ve işlevselliğini taklit etmeyi amaçlayan OpenAI'nin sohbet modelleri için gelişmiş bir sohbetbot kitidir.",
   "Are you sure you want to clear all messages?": "Tüm mesajları temizlemek istediğinizden emin misiniz?",
@@ -169,8 +167,8 @@
   "uploadAudioVideoFile": "Ses veya video dosyası yükleyin",
   "uploadingFile": "Dosya yükleniyor...",
   "removeFile": "Kaldır ve farklı bir dosya seç",
-  "transcriptionErrorAttempt": "Transkripsiyon sırasında hata (3 denemeden {{attempt}}). Yeniden deneniyor...",
-  "rateLimitExceededWaiting": "Hız limiti aşıldı. Tekrar denemeden önce {{seconds}} saniye bekleniyor...",
+  "transcriptionErrorAttempt": "Transkripsiyon sırasında hata (3 denemeden {attempt}). Yeniden deneniyor...",
+  "rateLimitExceededWaiting": "Hız limiti aşıldı. Tekrar denemeden önce {seconds} saniye bekleniyor...",
   "Conversations": "Konuşmalar",
   "Prompts": "İstemler",
   "Saved Prompts": "Kaydedilmiş İstemler",
@@ -217,7 +215,6 @@
   "Capture Image": "Resim Çek",
   "Default": "Varsayılan",
   "*Note that these default settings only apply to new conversations once saved_": "*Bu varsayılan ayarların yalnızca kaydedildikten sonra yeni konuşmalara uygulanacağını unutmayın.",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "İstem sınırı {{maxLength}} karakterdir. {{valueLength}} karakter girdiniz.",
   "Terms and Conditions": "Şartlar ve Koşullar",
   "Loading terms and conditions_ellipsis": "Şartlar ve koşullar yükleniyor...",
   "Retry": "Yeniden dene",
@@ -612,7 +609,8 @@
     "clear": "Temizle",
     "undo": "Geri al",
     "durationSeconds": "{count, plural, one {# saniye} other {# saniye}}",
-    "durationMinutes": "{count, plural, one {# dakika} other {# dakika}}"
+    "durationMinutes": "{count, plural, one {# dakika} other {# dakika}}",
+    "clearSearch": "Aramayı temizle"
   },
   "errors": {
     "unexpectedErrorOccurred": "Beklenmeyen bir hata oluştu",
@@ -900,7 +898,13 @@
     "ttsError": "Ses oluşturulurken hata oluştu. Lütfen tekrar deneyin.",
     "unsupportedMessageType": "Mesaj görüntülenemedi: Desteklenmeyen mesaj türü",
     "addLanguageOption": "\"{name}\" ekle…",
-    "sources": "Kaynaklar",
+    "sources": {
+      "fromDocuments": "Agent dokümanları",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Bu agent'ın kendi dokümanlarından alınan pasajlar",
+      "fromWebHint": "Web aramasıyla bulunan herkese açık sayfalar",
+      "heading": "{count, plural, one {Kaynak} other {Kaynaklar}}"
+    },
     "interpreterBadge": "Kodu çalıştır",
     "disableCodeInterpreter": "Kod çalıştırmayı devre dışı bırak",
     "interimSearch": {
@@ -978,7 +982,8 @@
       "MODEL_RATE_LIMITED": "Model şu anda çok fazla istek alıyor. Otomatik olarak tekrar denendi; lütfen kısa bir süre sonra tekrar deneyin.",
       "MODEL_QUOTA_EXCEEDED": "Modelin kapasite kotası doldu. Başka bir model deneyin veya daha sonra tekrar deneyin.",
       "MODEL_AUTH_FAILED": "Uygulama, model servisiyle kimlik doğrulaması yapamadı. Bu bir yapılandırma sorunu — lütfen destek ile iletişime geçin."
-    }
+    },
+    "messageLimitExceeded": "Mesaj sınırı {maxLength} karakterdir. {valueLength} karakter girdiniz."
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -2413,20 +2418,18 @@
     "sectionPinned": "Sabitlenenler",
     "sectionFrequent": "Sık kullanılanlar",
     "sectionMore": "Daha fazla",
-    "categoryWeb": "Web",
-    "categoryMedia": "Medya ve dosyalar",
-    "categoryTransform": "Dönüştür",
     "pin": "Üste sabitle",
     "unpin": "Sabitlemeyi kaldır",
     "moveToMore": "Daha Fazlaya taşı",
     "moveOutOfMore": "Menüde göster",
     "showSources": "Diğer kaynakları göster",
     "hideSources": "Diğer kaynakları gizle",
-    "aiTools": "Yapay Zeka Araçları",
-    "aiToolsTooltip": "Asistanın cevap verirken kullanabileceği yetenekler: canlı web araması, kod çalıştırma ve bağlı servisler.",
     "codeInterpreterTooltip": "Her mesaj için güvenli bir sandıkta Python kodu çalıştırır.\n\nEkli dosyalardan veri analizi, hesaplama ve grafik oluşturma için idealdir.",
-    "categoryTools": "Araçlar ve bağlayıcılar",
-    "translationConversationTitle": "Çeviri: {filename}"
+    "translationConversationTitle": "Çeviri: {filename}",
+    "categoryAdd": "Ekle",
+    "categoryDo": "Yap",
+    "categoryChat": "Bu sohbet içinde",
+    "categoryStart": "Başlangıç noktası"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Yapay zekanın nasıl yanıt vereceğini özelleştirmek için kişisel talimatlarınızı ekleyin. Bunlar, yardımcı, doğru ve güvenli yanıtları garanti altına alan temel davranış yönergeleriyle birleştirilir.",
   "Tip: Type \"/\" to select from saved prompt templates_": "İpucu: Kayıtlı istem şablonlarından seçmek için \"/\" yazın.",
@@ -2554,7 +2557,9 @@
     "savedToOneDrive": "{name}, OneDrive'a kaydedildi.",
     "openInOneDrive": "Aç",
     "saveForbidden": "Bu klasöre yazma izniniz yok — “OneDrive'a kaydet” ile başka bir klasör seçin.",
-    "saveToOneDriveFailed": "OneDrive'a kaydedilemedi — lütfen tekrar deneyin."
+    "saveToOneDriveFailed": "OneDrive'a kaydedilemedi — lütfen tekrar deneyin.",
+    "textVersion": "Metin sürümü (DOCX)",
+    "textVersionHint": "Her kaynak sayfa için birer olmak üzere, çevrilmiş metni içeren düzenlenebilir bir Word dosyası. Çevirisi yapılan dosya orijinal düzeni korur."
   },
   "terms": {
     "officialLanguages": "Resmi sürüm:",
@@ -2740,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Henüz kullanım izlenmedi. Sohbet ettikten sonra token kullanımınız ve tahmini emisyonlarınız burada görünecek.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} akıllı telefon şarjı",
     "requests": "İstekler",
     "promptTokens": "İstem tokenları",
@@ -2902,7 +2906,7 @@
       "addedByYou": "Sizin eklediğiniz",
       "glossary": "Sözlük",
       "noGlossary": "Sözlük yok",
-      "manageGlossaries": "Sözlükler",
+      "manageGlossaries": "Sözlükleri yönet",
       "glossaries": "Sözlükler",
       "closeGlossaries": "Sözlükleri kapat",
       "glossariesEmpty": "Belirli terimlerin nasıl çevrileceğini sabitlemek için sözlük oluşturun. Sözlükler bu cihazda kaydedilir ve çeviriler arasında tekrar kullanılabilir.",
@@ -3067,7 +3071,145 @@
       "importTooLarge": "Bu dosya içe aktarmak için çok büyük (en fazla 5 MB).",
       "importNothing": "Kullanılabilir satır bulunamadı ({skipped} atlandı).",
       "importSummary": "{added} eklendi, {replaced} değiştirildi, {skipped} atlandı.",
-      "entriesTooManyToShow": "{count} terim — burada listelenemeyecek kadar fazla. Gözden geçirmek için dışa aktarın veya terimleri değiştirmek için bir dosya içe aktarın."
+      "entriesTooManyToShow": "{count} terim — burada listelenemeyecek kadar fazla. Gözden geçirmek için dışa aktarın veya terimleri değiştirmek için bir dosya içe aktarın.",
+      "pagesLoaded": "{total} sayfanın {selected} tanesi yüklendi",
+      "pagesLabel": "Sayfalar",
+      "pagesApply": "Sayfaları yükle",
+      "pagesPrevious": "Önceki grup",
+      "pagesNext": "Sonraki grup",
+      "pagesBudget": "{used} / {max} karakter",
+      "pagesChange": "Sayfaları değiştir",
+      "pagesLoading": "Sayfalar yükleniyor…",
+      "pagesInvalid": "Lütfen sayfa numaralarını veya aralıklarını girin, örneğin 1-40, 45.",
+      "pagesUnavailable": "Bu sayfaların hiçbirinde metin yok.",
+      "pagesTooMany": "Bu seçim {used} karakter ve bir grupta en fazla {max} karakter olabilir. Daha az sayfa seçin.",
+      "stop": "Durdur",
+      "stepAnalyzing": "Analiz ediliyor",
+      "stepTranslating": "Çevriliyor",
+      "stepReviewing": "Gözden geçiriliyor",
+      "stepDone": "Tamamlandı",
+      "runProgressLabel": "Çeviri ilerlemesi",
+      "runHintAnalyzing": "Zor terimler ve belirsizlikler için kaynak metin okunuyor.",
+      "runHintTranslating": "Çeviri yazılıyor.",
+      "runHintReviewing": "Taslak, kaynak ile karşılaştırılıyor.",
+      "runHintReviewingRound": "Taslak, kaynak ile karşılaştırılıyor · {total} adede kadar {round}. tur.",
+      "runRound": "{total} adede kadar {round}. tur",
+      "draftLabel": "Taslak",
+      "sourceLocked": "Çeviri sırasında kilitli",
+      "analysisNotes": "{count, plural, one {# not} other {# not}}",
+      "analysisPill": "{count, plural, one {Analiz · # not} other {Analiz · # not}}",
+      "reviewSummary": "{count, plural, one {İnceleme: # tur, {verdict}} other {İnceleme: # tur, {verdict}}}",
+      "analysisDismiss": "Tüm çeviriler için gizle",
+      "analysisShow": "Ön çeviri analizini göster",
+      "analysisResize": "Analiz panelini yeniden boyutlandır",
+      "assessingCriteria": "{count, plural, one {# kriter kontrol ediliyor} other {# kriter kontrol ediliyor}}",
+      "editsPending": "Değerlendirme sona erdiğinde önerilen düzenlemeler burada görünecek.",
+      "uploadProgressLabel": "Yükleme ilerlemesi",
+      "uploadStepUploading": "Yükleniyor",
+      "uploadStepReading": "Metin okunuyor",
+      "uploadStepReady": "Hazır",
+      "uploadCancel": "İptal et",
+      "modeDocument": "Tüm belge",
+      "modeDocumentHint": "Yüklenen PDF'i tamamen çevirir ve düzenini korur. Sonucu sayfa sayfa okuyup düzeltebilirsiniz.",
+      "translateDocument": "Belgeyi çevir",
+      "documentSubmitting": "Gönderiliyor…",
+      "documentIntroTitle": "Tüm belgeyi çevir",
+      "documentIntro": "Yüklenen PDF, düzeni korunarak tamamen çevrilecektir. Hazır olduğunda, orijinaliyle yan yana sayfa sayfa okuyabilir, sayfaları düzeltebilir, kaliteyi kontrol edebilir ve sonucu indirebilirsiniz. Bu modda sözlükler ve inceleme turları geçerli değildir. Çeviri başladıktan sonra durdurulamaz ve sayfaları, bugünkü hakkınızdan düşülür.",
+      "documentNeedsFile": "Tüm belgeyi çevirmek için bir PDF yükleyin.",
+      "documentNeedsPdf": "Sayfa sayfa görünümle tüm belge çevirisi sadece PDF dosyalarında çalışır.",
+      "documentNeedsLanguage": "Belgeyi çevirmek için hedef dili seçin.",
+      "documentLanguageUnsupported": "Tüm belge çeviri bu dil için mevcut değil. Bunun yerine Hızlı veya Gözden Geçirilmiş'i kullanın.",
+      "documentNoGlossaries": "Tüm belge çevirisinde sözlükler kullanılmaz",
+      "documentPagesLeft": "{count, plural, one {Bugün # sayfa kaldı} other {Bugün # sayfa kaldı}}",
+      "documentLimitReached": "Bu belgede, bugün kalan sayfa limitinizden fazla sayfa var. Seçili sayfaları Hızlı veya Gözden Geçirilmiş ile çevirin ya da yarın tekrar deneyin.",
+      "documentUnavailable": "Tüm belge çeviri bu sunucuda etkin değil.",
+      "documentSubmitFailed": "Belge çeviri için gönderilemedi: {message}",
+      "documentProgressLabel": "Belge çeviri ilerlemesi",
+      "documentStepUploaded": "Yüklendi",
+      "documentStepPreparing": "Sayfalar hazırlanıyor",
+      "documentTypicalDuration": "genellikle birkaç dakika",
+      "documentCanLeave": "Bu sayfadan ayrılabilirsiniz. Çeviri devam ediyor ve geri döndüğünüzde burada olacak.",
+      "documentStalled": "Çeviri ilerlemesi kontrol edilemedi. Hâlâ çalışıyor olabilir.",
+      "documentCheckAgain": "Tekrar kontrol et",
+      "documentFailed": "Belge çevrilemedi: {message}",
+      "documentGone": "Bu çeviriye artık ulaşılamıyor. Belgeyi tekrar çevirerek okuyabilirsiniz.",
+      "documentPageFailed": "Bu sayfa yüklenemedi: {message}",
+      "documentPagesNotAligned": "Çevrilen dosyada sayfa sayısı farklı, bu nedenle bir sayfada iki tarafta aynı içerik olmayabilir.",
+      "documentAvailableUntil": "{date} tarihine kadar mevcut",
+      "documentRetranslateTitle": "Belgeyi tekrar çevirmek ister misiniz?",
+      "documentRetranslateMessage": "Bu işlem yeni bir çeviri başlatır ve sayfaları tekrar bugünkü hakkınıza sayılır. Başladıktan sonra durdurulamaz. Mevcut çeviri ve düzeltmeleri, süresi dolana kadar sunucuda kalır ancak burada artık gösterilmez.",
+      "retry": "Tekrar deneyin",
+      "pageLabel": "Sayfa",
+      "pageOf": "/ {total}",
+      "pageNumber": "· {page}. sayfa",
+      "pagePrevious": "Önceki sayfa",
+      "pageNext": "Sonraki sayfa",
+      "correctedLabel": "Düzeltilmiş",
+      "correctedPages": "Düzeltilen sayfalar:",
+      "correctedPagesMore": "+{count} fazlası",
+      "correctionRestore": "Geri yükle",
+      "correctionRestoreHint": "Bu sayfadaki değişikliklerinizi iptal edip makine çevirisine dönün",
+      "correctionSaving": "Kaydediliyor…",
+      "correctionSaved": "Kaydedildi",
+      "correctionSaveFailed": "Kaydedilmedi. Yeniden denemek için metni değiştirin.",
+      "download": "İndir",
+      "downloading": "İndiriliyor…",
+      "downloadFailed": "İndirme başarısız: {message}",
+      "downloadTranslated": "Çevrilmiş {format}",
+      "downloadTranslatedHint": "Orijinal düzen. Düzeltmelerinizi içermez.",
+      "downloadTextVersion": "Metin sürümü (DOCX)",
+      "downloadTextVersionHint": "Düzeltilmiş metninizle, sayfa başına bir sayfa düz metin.",
+      "documentNoCancel": "Bir belge çevirisi başladıktan sonra durdurulamaz.",
+      "documentGlossariesIgnored": "{count, plural, one {Seçtiğiniz sözlük bu modda uygulanmaz.} other {Seçtiğiniz # sözlük bu modda uygulanmaz.}} Terimleri kaliteyi değerlendir ile sayfa sayfa kontrol edin ya da Hızlı veya Gözden Geçirilmiş seçeneklerini kullanın.",
+      "pendingLeavePage": "Öneriler bu sayfaya aittir ve sayfadan ayrıldığınızda saklanmaz. Önce kalan öneriler hakkında karar verin.",
+      "uploadStepOcr": "OCR ile okuma",
+      "ocrButton": "OCR ile oku",
+      "ocrButtonHint": "Taranmış sayfalar veya yanlış algılanan metinler için bu PDF’yi metin tanıma ile tekrar okuyun",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Bu metin, sayfalardan metin tanıma ile okundu. Aslıyla karşılaştırın.",
+      "ocrReasonNoText": "{name} içinde metin bulunamadı. Görünüşe göre bu bir taranmış belge.",
+      "ocrReasonSparse": "{name} içinde çok az metin bulundu. Bazı bölümleri taranmış olabilir.",
+      "ocrReasonManual": "{name} metin tanıma ile yeniden okunsun mu?",
+      "ocrExplanation": "OCR, metni sayfa görsellerinden okur. Bu işlem normal yüklemeye göre daha uzun sürer, dosyanın her sayfası günlük OCR hakkınıza sayılır ve zayıf taramalarda, el yazısında ve tablolarda hata yapabilir.",
+      "ocrPagesLeft": "{count, plural, one {Bugün # OCR sayfa hakkınız kaldı.} other {Bugün # OCR sayfa hakkınız kaldı.}}",
+      "ocrRun": "OCR ile oku",
+      "ocrDismiss": "Şimdi değil",
+      "ocrSparseHint": "Bu PDF’de çok az metin bulundu. Bazı sayfalar taranmış olabilir.",
+      "ocrLimitReached": "Bu belgedeki sayfa sayısı, bugünkü OCR hakkınızdan fazla.",
+      "ocrTooManyPages": "Bu belge, OCR için çok uzun; en fazla {max} sayfa okunabiliyor. PDF’yi bölüp bir kısmını yükleyin.",
+      "ocrUnavailable": "Bu sunucuda OCR kurulmamış.",
+      "ocrNoText": "OCR bu belgede de metin bulamadı.",
+      "ocrFailed": "Belge OCR ile okunamadı. Tekrar deneyin.",
+      "scannedWholeExplanation": "Tüm belgeyi de çevirebilirsiniz: taranmış sayfaları kendisi okur, biçimi korur ve çevrilen sayfa sayısını günlük çeviri limitinize sayar.",
+      "scannedUseWholeDocument": "Tüm belgeyi çevir",
+      "scannedSourceNote": "{name} burada gösterilecek bir metin içermiyor. Tüm belge çevirisi, sayfalarını doğrudan okur. Buraya kendi metninizi yazarsanız belgeyi değiştirirsiniz.",
+      "scannedPageNote": "Orijinalin bu sayfasından metin okunamadı. Dosyanın kendisiyle karşılaştırın.",
+      "changeLabel": "Çeviride değişiklik iste",
+      "changePlaceholder": "Bir değişiklik isteyin, ör. daha resmi yapın",
+      "changePlaceholderAnother": "Başka bir değişiklik isteyin",
+      "changeSend": "İsteği gönder",
+      "changeWorking": "Değişiklikler hazırlanıyor",
+      "changeNothingApplied": "Kabul etmeden hiçbir şey değişmez",
+      "changeSelectionLabel": "Seçili metinde değişiklik isteyin",
+      "changeSelectionPlaceholder": "Bunu değiştirin, ör. 'tableta' olarak söyleyin",
+      "changeSelectionScope": "Yalnızca seçili metni etkiler",
+      "changeSelectionClose": "Kapat",
+      "changeTitle": "İstenen değişiklikler",
+      "changeSelectedLabel": "Seçili metin",
+      "changeNoEdits": "Bu istek için değişiklik gerekmedi.",
+      "changeReplyPending": "{count, plural, one {Çalışma alanında # önerilen düzenleme var.} other {Çalışma alanında # önerilen düzenleme var.}} Kabul etmeden hiçbir şey değişmez.",
+      "changeStopped": "Durduruldu. Hiçbir şey değişmedi.",
+      "changeFailed": "Değişiklik isteği başarısız oldu. Tekrar deneyin.",
+      "changeNoTranslation": "Henüz değiştirilecek bir çeviri yok. Önce metni çevirin.",
+      "changeBusy": "Mevcut işlem bitene kadar bekleyin, sonra tekrar deneyin.",
+      "changeHeld": "Gönderilmedi: Karar bekleyen önerilen düzenlemeler var.",
+      "pendingRunActionRequest": "Değişiklik isteniyor",
+      "railPlaceholder": "Değişiklik ya da soru isteyin…",
+      "documentPageCount": "{count, plural, one {# sayfa} other {# sayfa}}",
+      "sourceShowPages": "Sayfaları göster",
+      "sourceEditText": "Metin olarak düzenle",
+      "sourceRemoveDocument": "Belgeyi kaldır",
+      "sourceJumpToPage": "Sayfaya git"
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",
@@ -3695,7 +3837,7 @@
       "guideTargetTerm": "Gerekli çeviri",
       "guideNote": "Not",
       "pendingRun": {
-        "title": "{count} öneri hâlâ beklemede",
+        "title": "{count, plural, one {# öneri hâlâ beklemede} other {# öneri hâlâ beklemede}}",
         "body": "{action}, daha karar vermediğiniz öneriler dahil metnin her bölümünü değiştirebilir ve yeni bir değerlendirme mevcut listeyi değiştirir. Kalan önerileri önce karara bağlayın.",
         "acceptAll": "Tüm kalanları kabul et",
         "rejectAll": "Tümünü reddet",
@@ -3757,7 +3899,7 @@
         "list<number>": "Sayı listesi"
       },
       "layout": "Düzen",
-      "layoutHint": "{{field:id}} alanlarıyla markdown — dışa aktarım ve önizlemede kullanılır.",
+      "layoutHint": "'{{field:id}}' alanlarıyla markdown — dışa aktarım ve önizlemede kullanılır.",
       "saveTemplate": "Şablonu kaydet",
       "deleteTemplate": "Şablonu sil",
       "cancel": "İptal",
@@ -4585,6 +4727,10 @@
         "note": "{asOf} tarihindeki liste fiyatlarıyla maliyet (Global Standard oranı, önbellekli girdilere indirim yok): bu bir üst sınırdır, fatura değildir. Web araması, kod çalıştırma, transkripsiyon, konuşma, çeviri ve belge indeksleme dahil değildir."
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "Bu çalışma alanı (tahmini)",
       "workspace": "Bu çalışma alanı",
@@ -5399,7 +5545,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# doküman} other {# doküman}} indekslendi",
     "m365CapImmediateHelp": "Uygula, limiti hemen kaydeder. Diğer değişiklikler için yine de Kaydet gerekir.",
     "m365CapDraftHelp": "Limit, ajanı oluşturduğunuzda kaydedilir.",
-    "m365CapSaved": "Belge limiti kaydedildi: {limit}."
+    "m365CapSaved": "Belge limiti kaydedildi: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Varsayılan olarak kapalıdır: agent sadece kendi dokümanlarından yanıt verir ve kullanıcı hangi arama ayarını seçerse seçsin asla web'de arama yapmaz. Açık olduğunda ise, agent'ın talimatları web aramasının ne zaman yapılacağını ve hangi sitelerin kullanılacağını belirler; web kaynakları her zaman agent'ın dokümanlarından ayrı olarak gösterilir.",
+    "promptAgentAllowWebSearchHelp": "Varsayılan olarak açıktır. Kapalıysa, bu agent, kullanıcı hangi arama ayarını seçerse seçsin asla web'de arama yapmaz."
   },
   "localModels": {
     "title": "Yerel modeller",
@@ -5706,7 +5854,9 @@
       "m365MailReadsPerDay": "Günde e-posta okuma",
       "m365MailDraftsPerDay": "Günde e-posta taslakları",
       "m365MailDeepScansPerDay": "Günde e-posta derin taramaları",
-      "m365DigestRunsPerDay": "Günlük özeti çalışma sayısı"
+      "m365DigestRunsPerDay": "Günlük özeti çalışma sayısı",
+      "translationPagesPerDay": "Günlük belge çevirisi sayfa limiti",
+      "ocrPagesPerDay": "Günlük OCR sayfa hakkı"
     },
     "valueModeLabel": "Sınır türü",
     "valueAmountLabel": "Sınır miktarı",
@@ -5729,7 +5879,8 @@
       "jobs": "iş",
       "rounds": "tur",
       "documents": "belge",
-      "boolean": ""
+      "boolean": "",
+      "pages": "sayfa"
     },
     "window": {
       "day": "gün",
@@ -5787,7 +5938,9 @@
       "m365MailReadsPerDay": "Günlük e-posta aramaları ve mesaj/konu okumaları. Limit aşılırsa, e-posta araçları 'yarın tekrar deneyin' sonucu döndürür.",
       "m365MailDraftsPerDay": "Yardımcının günde oluşturabileceği e-posta taslakları — her biri tek tek onaylanır. Kasıtlı olarak sıkı tutulmuştur.",
       "m365MailDeepScansPerDay": "Bileşik e-posta analizleri (özetler, derin arama, taahhütler) günlük limiti. Her tarama, içine kaç okuma girerse girsin bir bütçe birimidir.",
-      "m365DigestRunsPerDay": "Microsoft 365 günlük özeti çalışma sayısı. Bir çalışma, onlarca Graph okuması ve iki analiz modeli çağrısı içerir; dönem seçicisi tekrar çalıştırmaları kolaylaştırır, bu yüzden varsayılan sınır sıkıdır."
+      "m365DigestRunsPerDay": "Microsoft 365 günlük özeti çalışma sayısı. Bir çalışma, onlarca Graph okuması ve iki analiz modeli çağrısı içerir; dönem seçicisi tekrar çalıştırmaları kolaylaştırır, bu yüzden varsayılan sınır sıkıdır.",
+      "translationPagesPerDay": "Belge çevirisi için gönderilen PDF sayfa sayısı (günlük).",
+      "ocrPagesPerDay": "Günde OCR ile okunan PDF sayfa sayısı (taranmış belgeler için metin tanıma)."
     },
     "scopeFamily": "Aile",
     "scopeModel": "Model",
@@ -8095,7 +8248,13 @@
       "skills": "Yetenek seçimi",
       "tools": "Araç yönlendirme",
       "trim": "Kısaltma sınıflandırması",
-      "assessment": "Arama değerlendirmesi"
+      "assessment": "Arama değerlendirmesi",
+      "query": "Arama sorgusunu yeniden yaz",
+      "mailScreen": "E-posta oltalama ekranı",
+      "mailAnalysis": "E-posta ve derleme analizi",
+      "schemaProposal": "Çıkarma şeması önerisi",
+      "mcpPlan": "Bağlayıcı planı",
+      "vision": "Görüntü ve sayfa okuma"
     },
     "reason": {
       "endpoint_missing": "Uç nokta veya hesap bağlantısı eksik",
@@ -8116,6 +8275,164 @@
       "endpoint_account_mismatch": "Uç nokta ile ARM kaynak kimliği farklı hesapları göstermektedir. Dağıtım yapılandırmasını düzeltin.",
       "inventory_refresh_failed": "Envanter yenilemesi başarısız oldu. Uygulama kimliğinin Okuyucu iznini ve hesap bağlantısını kontrol edin.",
       "credential_unavailable": "Uygulama envanter yetkilendirmesini alamadı. Dağıtım kimlik yapılandırmasını kontrol edin."
+    },
+    "notSupported": "Bu model tarafından desteklenmiyor",
+    "unservedOperations": "Bu zincirdeki hiçbir model şu işlemleri desteklemiyor: {operations}. Destekleyen bir model ekleyin."
+  },
+  "filePreview": {
+    "preview": "Önizleme",
+    "download": "İndir",
+    "loading": "Önizleme hazırlanıyor…",
+    "failed": "Bu dosya önizlenemedi. Yine de indirebilirsiniz.",
+    "pageOf": "Sayfa {page} / {total}",
+    "truncated": "İlk {shown} sayfa gösteriliyor (toplam {total}). Devamını görmek için dosyayı indirin.",
+    "enlarge": "{name} öğesini büyüt"
+  },
+  "addToChat": {
+    "title": "Sohbete ekle",
+    "titleTranslate": "Belge çevir",
+    "titleTranscribe": "Ses veya videoyu deşifre et",
+    "sourcesLabel": "Şuradan ekle",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Bu işlem için mevcut değil",
+    "sources": {
+      "device": "Bu cihaz",
+      "link": "Bağlantı",
+      "camera": "Kamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "E-posta",
+      "meetings": "Toplantılar"
+    },
+    "device": {
+      "browse": "Bu cihazda göz at",
+      "dropHint": "veya dosyaları bu pencereye bırakın ya da yapıştırın",
+      "rejected": "Bu dosyaların hiçbiri burada kullanılamaz.",
+      "hint": {
+        "attach": "Belgeler, resimler, ses ve video.",
+        "translate": "Bir belge: Word, Excel, PowerPoint, PDF, HTML veya metin.",
+        "transcribe": "Ses veya video. Mesajı gönderdiğinizde deşifre edilir."
+      }
+    },
+    "selection": {
+      "then": "Sonra",
+      "intents": {
+        "attach": "Ekle",
+        "translate": "Çevir",
+        "transcribe": "Deşifre et"
+      },
+      "confirm": {
+        "attach": "Ekle",
+        "translate": "Çevir",
+        "transcribe": "Deşifre et"
+      },
+      "unfit": {
+        "attach": "Bu dosyalar eklenemez",
+        "translate": "Çeviri her seferinde bir belge ile yapılır",
+        "transcribe": "Sadece ses ve video deşifre edilebilir"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Bu cihaz, bağlantılar, Microsoft 365",
+      "filesOrPhotos": "Dosyalar veya fotoğraflar",
+      "fromThisDevice": "Bu cihazdan",
+      "connect": "Microsoft 365'e bağlan",
+      "connectNote": "OneDrive, e-posta ve toplantılardan ekle"
     }
+  },
+  "usageBudgets": {
+    "title": "Bütçeleriniz",
+    "description": "Bu cihazda kendiniz için belirlediğiniz sınırlar. Bir bütçe seçin, ardından ona yaklaştıkça ve geçtiğinizde ne olacağını belirleyin. Bütçeler, her dönemin başından itibaren sohbet ve iş akışı çalıştırmalarını sayar.",
+    "metric": {
+      "emissions": "Emisyon bütçesi",
+      "cost": "Maliyet bütçesi"
+    },
+    "metricShort": {
+      "emissions": "Emisyon",
+      "cost": "Maliyet"
+    },
+    "off": "Bütçe ayarlanmadı.",
+    "measureAs": "Şu ölçüyle",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Telefon şarjı",
+      "usd": "ABD doları"
+    },
+    "amountLabel": "Bütçe",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "saat",
+      "smartphoneCharge": "şarj",
+      "usd": "ABD doları"
+    },
+    "periodLabel": "Her seferinde sıfırlanır",
+    "period": {
+      "day": "Gün",
+      "week": "Hafta",
+      "month": "Ay"
+    },
+    "costNote": "Liste fiyatlarından tahmini: üst sınırdır, fatura değildir.",
+    "chargesValue": "{count} telefon şarjı",
+    "percent": "{percent}%",
+    "usedOf": "{limit} üzerinden {used} kullanıldı ({percent}%)",
+    "usedOfShort": "{limit} üzerinden {used}",
+    "resets": "{date} tarihinde sıfırlanır",
+    "budgetMarker": "Bütçe",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Bütçe dahilinde",
+      "warn": "Uyarı gösterildi",
+      "ask": "Her mesajdan önce soruluyor",
+      "stop": "Gönderme duraklatıldı"
+    },
+    "stage": {
+      "warn": {
+        "title": "Uyar",
+        "tag": "Bilgilendirme",
+        "description": "Bütçenin bu oranında sohbet içi bildirim göster."
+      },
+      "ask": {
+        "title": "Önce sor",
+        "tag": "Yumuşak engel",
+        "description": "Bütçenin bu oranında her mesajı onaylamamı iste."
+      },
+      "stop": {
+        "title": "Durdur",
+        "tag": "Kesin engel",
+        "description": "Bütçenin bu oranında gönderme, sıfırlanana veya burada artırılana kadar durur."
+      }
+    },
+    "thresholdLabel": "{stage} eşiği, bütçenin yüzdesi",
+    "notice": {
+      "warn": {
+        "emissions": "Emisyon bütçenizin %{percent}'ini kullandınız.",
+        "cost": "Maliyet bütçenizin %{percent}'ini kullandınız."
+      },
+      "ask": {
+        "emissions": "Emisyon bütçenizin %{percent}'ini kullandınız. Bu mesaj gönderilsin mi?",
+        "cost": "Maliyet bütçenizin %{percent}'ini kullandınız. Bu mesaj gönderilsin mi?"
+      },
+      "askRun": {
+        "emissions": "Emisyon bütçenizin %{percent}'ini kullandınız. Bu çalıştırmayı başlatmak ister misiniz?",
+        "cost": "Maliyet bütçenizin %{percent}'ini kullandınız. Bu çalıştırmayı başlatmak ister misiniz?"
+      },
+      "stop": {
+        "emissions": "Emisyon bütçesi durma noktasına ulaşıldı. Gönderme {date} tarihine kadar duraklatıldı.",
+        "cost": "Maliyet bütçesi durma noktasına ulaşıldı. Gönderim {date} tarihine kadar duraklatıldı."
+      }
+    },
+    "actions": {
+      "viewBudget": "Bütçeyi görüntüle",
+      "dismiss": "Kapat",
+      "sendAnyway": "Yine de gönder",
+      "runAnyway": "Yine de çalıştır",
+      "dontSend": "Gönderme",
+      "dontAskToday": "Bugün tekrar sorma",
+      "openSettings": "Bütçe ayarlarını aç",
+      "edit": "Düzenle"
+    },
+    "composerPaused": "Gönderim bütçeniz tarafından duraklatıldı",
+    "summaryTitle": "Bütçeleriniz",
+    "chipAria": "{metric} bütçesi: %{percent} kullanıldı.",
+    "runProjection": "Emisyon bütçesi %{from} → %{to}"
   }
 }

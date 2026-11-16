@@ -54,7 +54,7 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
   };
 
   return (
-    <div className="hidden md:block md:w-64 md:min-w-64 md:border-r border-gray-300 dark:border-gray-700 p-4 overflow-y-auto flex flex-col h-full">
+    <div className="hidden md:block md:w-64 md:min-w-64 md:border-e border-gray-300 dark:border-gray-700 p-4 overflow-y-auto flex flex-col h-full">
       <div className="flex-grow">
         <h2 className="text-lg font-bold mb-4 text-black dark:text-white">
           {t('settings.Settings')}
@@ -66,10 +66,10 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center w-full text-left p-3 my-1 rounded-lg text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="flex items-center w-full text-start p-3 my-1 rounded-lg text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={onClose}
               >
-                <span className="mr-3">
+                <span className="me-3">
                   {createElement(item.icon, { size: 18 })}
                 </span>
                 <span>{item.label}</span>
@@ -100,7 +100,7 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
           aria-label={t('settings.Reset Settings')}
           title={t('settings.Reset Settings')}
         >
-          <IconRefresh size={18} className="mr-2" />
+          <IconRefresh size={18} className="me-2" />
           <span className="font-medium">{t('settings.Reset Settings')}</span>
         </button>
       </div>
@@ -115,7 +115,7 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
             <p className="text-gray-700 dark:text-gray-300 mb-4">
               {t('settings.Reset Confirmation Message')}
             </p>
-            <div className="flex justify-end space-x-3">
+            <div className="flex justify-end gap-3">
               <button
                 className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors text-black dark:text-white"
                 onClick={handleCancelReset}

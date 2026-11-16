@@ -67,7 +67,7 @@ export const RelevantRulesPopover: FC<RelevantRulesPopoverProps> = ({
         <div
           id={id}
           role="tooltip"
-          className={`absolute right-0 top-full z-20 mt-1 w-72 shadow-lg ${LIMITS_NOTE_CARD}`}
+          className={`absolute end-0 top-full z-20 mt-1 w-72 shadow-lg ${LIMITS_NOTE_CARD}`}
         >
           <p className="mb-1.5 text-xs font-semibold text-black dark:text-white">
             {t('relevantRulesTitle')}

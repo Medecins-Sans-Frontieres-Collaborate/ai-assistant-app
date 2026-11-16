@@ -22,6 +22,19 @@ vi.mock('@/components/Chat/Citations/CitationListItem', () => ({
   ),
 }));
 
+// The shared next-intl mock does not format ICU plurals; resolve this
+// component's few strings the way the English catalog does.
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string, params?: { count?: number }) =>
+    ({
+      heading: params?.count === 1 ? 'Source' : 'Sources',
+      fromDocuments: 'Agent documents',
+      fromWeb: 'Web',
+      fromDocumentsHint: "Passages from this agent's own documents",
+      fromWebHint: 'Public pages found by a web search',
+    })[key] ?? key,
+}));
+
 // Mock next/link
 vi.mock('next/link', () => ({
   default: ({ children, ...props }: any) => <a {...props}>{children}</a>,
@@ -48,6 +61,49 @@ describe('CitationList', () => {
       number: 3,
     },
   ];
+
+  describe('Source origins', () => {
+    const mixed: Citation[] = [
+      { ...mockCitations[0], title: 'Handbook', origin: 'knowledge' },
+      { ...mockCitations[1], title: 'DOL page', origin: 'web' },
+      { ...mockCitations[2], title: 'IRS page', origin: 'web' },
+    ];
+
+    it('lists agent documents and web pages under separate headings', () => {
+      render(<CitationList citations={mixed} />);
+
+      const documents = screen.getByTestId('source-origin-knowledge');
+      const web = screen.getByTestId('source-origin-web');
+      expect(documents.parentElement).toContainElement(
+        screen.getByTestId('citation-1'),
+      );
+      expect(documents.parentElement).not.toContainElement(
+        screen.getByTestId('citation-2'),
+      );
+      expect(web.parentElement).toContainElement(
+        screen.getByTestId('citation-2'),
+      );
+      expect(web.parentElement).toContainElement(
+        screen.getByTestId('citation-3'),
+      );
+      expect(screen.getByTestId('source-origin-summary')).toBeInTheDocument();
+    });
+
+    it('shows no origin headings for citations stored without one', () => {
+      render(<CitationList citations={mockCitations} />);
+
+      expect(screen.queryByTestId('source-origin-knowledge')).toBeNull();
+      expect(screen.queryByTestId('source-origin-web')).toBeNull();
+      expect(screen.queryByTestId('source-origin-summary')).toBeNull();
+    });
+
+    it('shows a single heading and no breakdown when every source is web', () => {
+      render(<CitationList citations={mixed.slice(1)} />);
+
+      expect(screen.getByTestId('source-origin-web')).toBeInTheDocument();
+      expect(screen.queryByTestId('source-origin-summary')).toBeNull();
+    });
+  });
 
   describe('Rendering', () => {
     it('renders citation list with count', () => {

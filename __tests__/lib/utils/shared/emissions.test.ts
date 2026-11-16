@@ -5,6 +5,7 @@ import {
   EMISSIONS_CHIP_AUTOHIDE_MIN_MS,
   activityDurationParts,
   clampEmissionsChipAutoHideMs,
+  co2eMassParts,
   estimateActivityEquivalents,
   estimateCO2Grams,
   estimateTypicalRequestCO2,
@@ -242,6 +243,31 @@ describe('activityDurationParts', () => {
       unit: 'hours',
       value: '26',
     });
+  });
+});
+
+describe('co2eMassParts', () => {
+  it('keeps sub-kilogram figures in grams', () => {
+    expect(co2eMassParts(0.42)).toEqual({ unit: 'grams', value: '0.42' });
+    expect(co2eMassParts(4.25)).toEqual({ unit: 'grams', value: '4.3' });
+    expect(co2eMassParts(184)).toEqual({ unit: 'grams', value: '184' });
+  });
+
+  it('switches to kilograms exactly where grams would read "1000"', () => {
+    // Either side of the display boundary: 999.4 still rounds to 999 g.
+    expect(co2eMassParts(999.4)).toEqual({ unit: 'grams', value: '999' });
+    expect(co2eMassParts(999.5)).toEqual({ unit: 'kilograms', value: '1.00' });
+    expect(co2eMassParts(1000)).toEqual({ unit: 'kilograms', value: '1.00' });
+  });
+
+  it('holds three significant figures as kilograms grow', () => {
+    expect(co2eMassParts(1254)).toEqual({ unit: 'kilograms', value: '1.25' });
+    expect(co2eMassParts(9994)).toEqual({ unit: 'kilograms', value: '9.99' });
+    // Would be "10.00" if the two-decimal form were kept past its bound.
+    expect(co2eMassParts(9996)).toEqual({ unit: 'kilograms', value: '10.0' });
+    expect(co2eMassParts(12_500)).toEqual({ unit: 'kilograms', value: '12.5' });
+    expect(co2eMassParts(99_960)).toEqual({ unit: 'kilograms', value: '100' });
+    expect(co2eMassParts(125_400)).toEqual({ unit: 'kilograms', value: '125' });
   });
 });
 

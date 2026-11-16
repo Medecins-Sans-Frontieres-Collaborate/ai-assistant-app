@@ -2,7 +2,6 @@
   "OpenAI API Key Required": "Memerlukan Kunci API OpenAI",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Silakan atur kunci API OpenAI Anda di bagian kiri bawah bilah sisi.",
   "Stop Generating": "Berhenti Menghasilkan",
-  "Prompt limit is {{maxLength}} characters": "Batas prompt adalah {{maxLength}} karakter",
   "System Prompt": "Prompt Sistem",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Anda adalah ChatGPT, model bahasa besar yang dilatih oleh OpenAI. Ikuti instruksi pengguna dengan hati-hati. Balas menggunakan markdown.",
   "Enter a prompt": "Masukkan sebuah prompt",
@@ -21,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Pastikan kunci API OpenAI Anda diatur di bagian kiri bawah bilah sisi.",
   "If you completed this step, OpenAI may be experiencing issues_": "Jika Anda telah menyelesaikan langkah ini, OpenAI mungkin mengalami masalah.",
   "click if using a _env_local file": "klik jika menggunakan file .env.local",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Batas karakter untuk pesan adalah {{maxLength}} karakter. Anda telah memasukkan {{valueLength}} karakter.",
   "Please enter a message": "Silakan masukkan sebuah pesan",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI adalah kit chatbot canggih untuk model obrolan OpenAI yang bertujuan meniru antarmuka dan fungsionalitas ChatGPT.",
   "Are you sure you want to clear all messages?": "Apakah Anda yakin ingin menghapus semua pesan?",
@@ -167,8 +165,8 @@
   "uploadAudioVideoFile": "Unggah file audio atau video",
   "uploadingFile": "Mengunggah file...",
   "removeFile": "Hapus dan pilih file yang berbeda",
-  "transcriptionErrorAttempt": "Kesalahan selama transkripsi (Percobaan {{attempt}} dari 3). Mencoba lagi...",
-  "rateLimitExceededWaiting": "Batas kecepatan terlampaui. Menunggu {{seconds}} detik sebelum mencoba ulang...",
+  "transcriptionErrorAttempt": "Kesalahan selama transkripsi (Percobaan {attempt} dari 3). Mencoba lagi...",
+  "rateLimitExceededWaiting": "Batas kecepatan terlampaui. Menunggu {seconds} detik sebelum mencoba ulang...",
   "Conversations": "Percakapan",
   "Prompts": "Prompt",
   "Close sidebar": "Tutup bilah sisi",
@@ -579,7 +577,8 @@
     "clear": "Bersihkan",
     "undo": "Urungkan",
     "durationSeconds": "{count, plural, one {# detik} other {# detik}}",
-    "durationMinutes": "{count, plural, one {# menit} other {# menit}}"
+    "durationMinutes": "{count, plural, one {# menit} other {# menit}}",
+    "clearSearch": "Hapus pencarian"
   },
   "errors": {
     "unexpectedErrorOccurred": "Terjadi kesalahan yang tidak terduga",
@@ -867,7 +866,13 @@
     "ttsError": "Terjadi kesalahan saat membuat audio. Silakan coba lagi.",
     "unsupportedMessageType": "Galat saat menampilkan pesan: Jenis pesan tidak didukung",
     "addLanguageOption": "Tambahkan \"{name}\"…",
-    "sources": "Sumber",
+    "sources": {
+      "fromDocuments": "Dokumen agen",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Bagian dari dokumen milik agen ini",
+      "fromWebHint": "Halaman publik yang ditemukan lewat pencarian web",
+      "heading": "{count, plural, one {Sumber} other {Sumber}}"
+    },
     "interpreterBadge": "Jalankan kode",
     "disableCodeInterpreter": "Nonaktifkan eksekusi kode",
     "interimSearch": {
@@ -945,7 +950,8 @@
       "MODEL_RATE_LIMITED": "Model sedang menerima terlalu banyak permintaan. Sistem telah mencoba ulang secara otomatis; silakan coba lagi sebentar lagi.",
       "MODEL_QUOTA_EXCEEDED": "Kuota kapasitas model telah habis. Coba gunakan model lain atau coba lagi nanti.",
       "MODEL_AUTH_FAILED": "Aplikasi tidak dapat melakukan autentikasi dengan layanan model. Ini adalah masalah konfigurasi — silakan hubungi dukungan."
-    }
+    },
+    "messageLimitExceeded": "Batas karakter untuk pesan adalah {maxLength} karakter. Anda telah memasukkan {valueLength} karakter."
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -1533,7 +1539,6 @@
   "Invalid folder file": "File folder tidak valid",
   "New conversation": "Percakapan baru",
   "No prompts found": "Tidak ada prompt ditemukan",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Batas prompt adalah {{maxLength}} karakter. Anda telah memasukkan {{valueLength}} karakter.",
   "Run Typewriter Intro": "Jalankan Intro Mesin Ketik",
   "Saved Prompts": "Prompt Tersimpan",
   "Select a prompt to view details": "Pilih prompt untuk melihat detail",
@@ -2413,20 +2418,18 @@
     "sectionPinned": "Disematkan",
     "sectionFrequent": "Sering digunakan",
     "sectionMore": "Lainnya",
-    "categoryWeb": "Web",
-    "categoryMedia": "Media & file",
-    "categoryTransform": "Transformasi",
     "pin": "Sematkan ke atas",
     "unpin": "Lepaskan sematan",
     "moveToMore": "Pindahkan ke Lainnya",
     "moveOutOfMore": "Tampilkan di menu",
     "showSources": "Tampilkan sumber lain",
     "hideSources": "Sembunyikan sumber lain",
-    "aiTools": "Alat AI",
-    "aiToolsTooltip": "Kemampuan yang dapat digunakan asisten saat menjawab: pencarian web langsung, eksekusi kode, dan layanan terhubung.",
     "codeInterpreterTooltip": "Jalankan kode Python di sandbox yang aman untuk setiap pesan.\n\nSangat cocok untuk analisis data, perhitungan, dan pembuatan grafik dari file terlampir.",
-    "categoryTools": "Alat & konektor",
-    "translationConversationTitle": "Terjemahan: {filename}"
+    "translationConversationTitle": "Terjemahan: {filename}",
+    "categoryAdd": "Tambah",
+    "categoryDo": "Lakukan",
+    "categoryChat": "Di obrolan ini",
+    "categoryStart": "Mulai dari"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Tambahkan instruksi pribadi Anda untuk menyesuaikan respons AI. Instruksi ini akan digabungkan dengan pedoman utama untuk memastikan respons yang bermanfaat, akurat, dan aman.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Ketik \"/\" untuk memilih dari template prompt yang tersimpan.",
@@ -2554,7 +2557,9 @@
     "savedToOneDrive": "{name} disimpan ke OneDrive.",
     "openInOneDrive": "Buka",
     "saveForbidden": "Anda tidak memiliki izin menulis ke folder tersebut — pilih folder lain dengan 'Simpan ke OneDrive'.",
-    "saveToOneDriveFailed": "Tidak dapat menyimpan ke OneDrive — silakan coba lagi."
+    "saveToOneDriveFailed": "Tidak dapat menyimpan ke OneDrive — silakan coba lagi.",
+    "textVersion": "Versi teks (DOCX)",
+    "textVersionHint": "File Word yang dapat diedit dengan teks terjemahan, satu halaman untuk setiap halaman sumber. File terjemahan tetap mempertahankan tata letak asli."
   },
   "terms": {
     "officialLanguages": "Versi resmi:",
@@ -2740,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Belum ada penggunaan yang tercatat. Penggunaan token dan estimasi emisi Anda akan muncul di sini setelah Anda melakukan chat.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} kali pengisian daya smartphone",
     "requests": "Permintaan",
     "promptTokens": "Token prompt",
@@ -2902,7 +2906,7 @@
       "addedByYou": "Ditambahkan oleh Anda",
       "glossary": "Glosarium",
       "noGlossary": "Tidak ada glosarium",
-      "manageGlossaries": "Glosarium",
+      "manageGlossaries": "Kelola glosarium",
       "glossaries": "Glosarium",
       "closeGlossaries": "Tutup glosarium",
       "glossariesEmpty": "Buat glosarium untuk memastikan istilah tertentu diterjemahkan dengan tepat. Glosarium disimpan di perangkat ini dan dapat digunakan ulang di terjemahan lain.",
@@ -3067,7 +3071,145 @@
       "importTooLarge": "Berkas tersebut terlalu besar untuk diimpor (maksimal 5 MB).",
       "importNothing": "Tidak ditemukan baris yang dapat digunakan ({skipped} dilewati).",
       "importSummary": "{added} ditambahkan, {replaced} diganti, {skipped} dilewati.",
-      "entriesTooManyToShow": "{count} istilah — terlalu banyak untuk ditampilkan di sini. Ekspor untuk meninjau, atau impor file untuk mengganti istilah."
+      "entriesTooManyToShow": "{count} istilah — terlalu banyak untuk ditampilkan di sini. Ekspor untuk meninjau, atau impor file untuk mengganti istilah.",
+      "pagesLoaded": "halaman {selected} dari {total} sudah dimuat",
+      "pagesLabel": "Halaman",
+      "pagesApply": "Muat halaman",
+      "pagesPrevious": "Batch sebelumnya",
+      "pagesNext": "Batch berikutnya",
+      "pagesBudget": "{used} / {max} karakter",
+      "pagesChange": "Ubah halaman",
+      "pagesLoading": "Memuat halaman…",
+      "pagesInvalid": "Masukkan nomor atau rentang halaman, misal 1-40, 45.",
+      "pagesUnavailable": "Tidak ada teks di halaman tersebut.",
+      "pagesTooMany": "Pilihan ini memiliki {used} karakter, sedangkan satu batch maksimal {max}. Pilih halaman lebih sedikit.",
+      "stop": "Berhenti",
+      "stepAnalyzing": "Menganalisis",
+      "stepTranslating": "Menerjemahkan",
+      "stepReviewing": "Meninjau",
+      "stepDone": "Selesai",
+      "runProgressLabel": "Kemajuan terjemahan",
+      "runHintAnalyzing": "Membaca sumber untuk istilah yang sulit dan ambiguitas.",
+      "runHintTranslating": "Menulis terjemahan.",
+      "runHintReviewing": "Memeriksa draft dengan sumber.",
+      "runHintReviewingRound": "Memeriksa draft dengan sumber · putaran {round} dari maksimal {total}.",
+      "runRound": "Putaran {round} dari maksimal {total}",
+      "draftLabel": "Draft",
+      "sourceLocked": "Terkunci saat menerjemahkan",
+      "analysisNotes": "{count, plural, one {# catatan} other {# catatan}}",
+      "analysisPill": "{count, plural, one {Analisis · # catatan} other {Analisis · # catatan}}",
+      "reviewSummary": "{count, plural, one {Tinjauan: # putaran, {verdict}} other {Tinjauan: # putaran, {verdict}}}",
+      "analysisDismiss": "Sembunyikan untuk semua terjemahan",
+      "analysisShow": "Tampilkan analisis pra-terjemahan",
+      "analysisResize": "Ubah ukuran panel analisis",
+      "assessingCriteria": "{count, plural, one {Memeriksa # kriteria} other {Memeriksa # kriteria}}",
+      "editsPending": "Suntingan yang disarankan akan muncul di sini setelah penilaian selesai.",
+      "uploadProgressLabel": "Kemajuan unggahan",
+      "uploadStepUploading": "Mengunggah",
+      "uploadStepReading": "Membaca teks",
+      "uploadStepReady": "Siap",
+      "uploadCancel": "Batalkan",
+      "modeDocument": "Seluruh dokumen",
+      "modeDocumentHint": "Menerjemahkan PDF yang diunggah secara keseluruhan dan mempertahankan tata letaknya. Baca dan koreksi hasilnya halaman demi halaman.",
+      "translateDocument": "Terjemahkan dokumen",
+      "documentSubmitting": "Mengirim…",
+      "documentIntroTitle": "Terjemahkan seluruh dokumen",
+      "documentIntro": "PDF yang diunggah akan diterjemahkan secara penuh dengan mempertahankan tata letaknya. Setelah siap, Anda dapat membaca halaman demi halaman di samping versi asli, memperbaiki halaman, memeriksa kualitasnya, dan mengunduh hasilnya. Glosarium dan putaran review tidak berlaku dalam mode ini. Setelah dimulai, penerjemahan dokumen tidak dapat dihentikan dan jumlah halamannya dihitung dalam batas harian Anda.",
+      "documentNeedsFile": "Unggah PDF untuk menerjemahkan seluruh dokumen.",
+      "documentNeedsPdf": "Terjemahan seluruh dokumen dengan tampilan halaman demi halaman hanya dapat dilakukan dengan file PDF.",
+      "documentNeedsLanguage": "Pilih bahasa tujuan untuk menerjemahkan dokumen.",
+      "documentLanguageUnsupported": "Terjemahan seluruh dokumen tidak tersedia untuk bahasa ini. Gunakan mode Quick atau Reviewed.",
+      "documentNoGlossaries": "Glosarium tidak digunakan untuk terjemahan seluruh dokumen",
+      "documentPagesLeft": "{count, plural, one {# halaman tersisa hari ini} other {# halaman tersisa hari ini}}",
+      "documentLimitReached": "Dokumen ini memiliki lebih banyak halaman daripada sisa kuota hari ini. Terjemahkan halaman yang dipilih dengan mode Quick atau Reviewed, atau coba lagi besok.",
+      "documentUnavailable": "Terjemahan seluruh dokumen belum diatur di server ini.",
+      "documentSubmitFailed": "Dokumen tidak dapat dikirim untuk diterjemahkan: {message}",
+      "documentProgressLabel": "Progres terjemahan dokumen",
+      "documentStepUploaded": "Diunggah",
+      "documentStepPreparing": "Menyiapkan halaman",
+      "documentTypicalDuration": "biasanya beberapa menit",
+      "documentCanLeave": "Anda dapat meninggalkan halaman ini. Terjemahan akan terus berjalan dan tersedia saat Anda kembali.",
+      "documentStalled": "Progres terjemahan tidak dapat diperiksa. Mungkin masih berjalan.",
+      "documentCheckAgain": "Periksa lagi",
+      "documentFailed": "Dokumen tidak dapat diterjemahkan: {message}",
+      "documentGone": "Terjemahan ini tidak lagi tersedia. Terjemahkan dokumen lagi untuk membacanya.",
+      "documentPageFailed": "Halaman ini tidak dapat dimuat: {message}",
+      "documentPagesNotAligned": "Jumlah halaman file hasil terjemahan berbeda, sehingga konten pada kedua sisi mungkin tidak sama.",
+      "documentAvailableUntil": "Tersedia hingga {date}",
+      "documentRetranslateTitle": "Terjemahkan dokumen lagi?",
+      "documentRetranslateMessage": "Ini akan memulai penerjemahan baru dan jumlah halamannya akan kembali dihitung dalam batas harian Anda. Penerjemahan tidak dapat dihentikan setelah dimulai. Penerjemahan saat ini dan koreksinya akan tetap di server hingga kadaluarsa, tetapi tidak akan ditampilkan di sini lagi.",
+      "retry": "Coba lagi",
+      "pageLabel": "Halaman",
+      "pageOf": "dari {total}",
+      "pageNumber": "· halaman {page}",
+      "pagePrevious": "Halaman sebelumnya",
+      "pageNext": "Halaman berikutnya",
+      "correctedLabel": "Terkoreksi",
+      "correctedPages": "Halaman yang telah dikoreksi:",
+      "correctedPagesMore": "+{count} lagi",
+      "correctionRestore": "Kembalikan",
+      "correctionRestoreHint": "Buang perubahan Anda pada halaman ini dan kembali ke terjemahan mesin",
+      "correctionSaving": "Menyimpan…",
+      "correctionSaved": "Disimpan",
+      "correctionSaveFailed": "Tidak disimpan. Ubah teks untuk mencoba lagi.",
+      "download": "Unduh",
+      "downloading": "Mengunduh…",
+      "downloadFailed": "Gagal mengunduh: {message}",
+      "downloadTranslated": "Terjemahan {format}",
+      "downloadTranslatedHint": "Tata letak asli. Tidak termasuk koreksi Anda.",
+      "downloadTextVersion": "Versi teks (DOCX)",
+      "downloadTextVersionHint": "Teks polos, satu halaman per halaman, dengan koreksi Anda.",
+      "documentNoCancel": "Terjemahan dokumen tidak dapat dihentikan setelah dimulai.",
+      "documentGlossariesIgnored": "{count, plural, one {Glosarium yang Anda pilih tidak diterapkan dalam mode ini.} other {# glosarium yang Anda pilih tidak diterapkan dalam mode ini.}} Periksa terminologi halaman demi halaman dengan Assess quality, atau gunakan Quick atau Reviewed.",
+      "pendingLeavePage": "Saran terkait dengan halaman ini dan tidak akan disimpan jika Anda meninggalkannya. Putuskan saran yang tersisa terlebih dahulu.",
+      "uploadStepOcr": "Membaca dengan OCR",
+      "ocrButton": "Baca dengan OCR",
+      "ocrButtonHint": "Baca PDF ini lagi dengan pengenalan teks, untuk halaman hasil scan atau teks yang keluar salah",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Teks ini dibaca dari halaman dengan pengenalan teks. Periksa dengan aslinya.",
+      "ocrReasonNoText": "Tidak ditemukan teks dalam {name}. Tampaknya merupakan dokumen hasil scan.",
+      "ocrReasonSparse": "Sangat sedikit teks ditemukan dalam {name}. Sebagian mungkin hasil scan.",
+      "ocrReasonManual": "Baca {name} lagi dengan pengenalan teks?",
+      "ocrExplanation": "OCR membaca teks dari gambar halaman. Proses ini lebih lama dari unggahan biasa, menghitung setiap halaman file dengan jatah OCR harian Anda, dan bisa salah membaca hasil scan yang buruk, tulisan tangan, serta tabel.",
+      "ocrPagesLeft": "{count, plural, one {# halaman OCR tersisa hari ini.} other {# halaman OCR tersisa hari ini.}}",
+      "ocrRun": "Baca dengan OCR",
+      "ocrDismiss": "Tidak sekarang",
+      "ocrSparseHint": "Sangat sedikit teks ditemukan dalam PDF ini. Beberapa halaman mungkin hasil scan.",
+      "ocrLimitReached": "Dokumen ini memiliki lebih banyak halaman dari sisa jatah OCR Anda hari ini.",
+      "ocrTooManyPages": "Dokumen ini terlalu panjang untuk OCR, yang membaca maksimal {max} halaman. Pisahkan PDF dan unggah bagian.",
+      "ocrUnavailable": "OCR belum diatur di server ini.",
+      "ocrNoText": "OCR juga tidak menemukan teks dalam dokumen ini.",
+      "ocrFailed": "Dokumen tidak dapat dibaca dengan OCR. Coba lagi.",
+      "scannedWholeExplanation": "Anda juga dapat menerjemahkan seluruh dokumen: sistem akan membaca halaman yang dipindai secara otomatis, menjaga tata letak, dan menghitung jumlah halaman terhadap jatah terjemahan harian Anda.",
+      "scannedUseWholeDocument": "Terjemahkan seluruh dokumen",
+      "scannedSourceNote": "{name} tidak memiliki teks untuk ditampilkan di sini. Terjemahan dokumen secara keseluruhan membaca halaman-halamannya secara langsung. Jika Anda mengetik teks sendiri di sini, dokumen akan digantikan.",
+      "scannedPageNote": "Tidak ada teks yang dapat dibaca dari halaman ini pada dokumen asli. Silakan bandingkan dengan file aslinya.",
+      "changeLabel": "Minta perubahan pada terjemahan",
+      "changePlaceholder": "Minta perubahan, misalnya buat lebih formal",
+      "changePlaceholderAnother": "Minta perubahan lain",
+      "changeSend": "Kirim permintaan",
+      "changeWorking": "Memproses perubahan",
+      "changeNothingApplied": "Tidak ada yang berubah sampai Anda menyetujui",
+      "changeSelectionLabel": "Minta perubahan pada teks yang dipilih",
+      "changeSelectionPlaceholder": "Ubah ini, misal katakan tableta",
+      "changeSelectionScope": "Hanya berlaku untuk teks yang dipilih",
+      "changeSelectionClose": "Tutup",
+      "changeTitle": "Perubahan yang diminta",
+      "changeSelectedLabel": "Teks yang dipilih",
+      "changeNoEdits": "Tidak ada perubahan yang diperlukan untuk permintaan itu.",
+      "changeReplyPending": "{count, plural, one {# suntingan yang disarankan ada di ruang kerja.} other {# suntingan yang disarankan ada di ruang kerja.}} Tidak ada yang berubah sampai Anda menyetujui.",
+      "changeStopped": "Dihentikan. Tidak ada yang diubah.",
+      "changeFailed": "Permintaan perubahan gagal. Silakan coba lagi.",
+      "changeNoTranslation": "Belum ada terjemahan yang bisa diubah. Terjemahkan teks terlebih dahulu.",
+      "changeBusy": "Tunggu proses saat ini selesai, lalu ajukan lagi.",
+      "changeHeld": "Belum dikirim: masih ada suntingan yang disarankan menunggu keputusan.",
+      "pendingRunActionRequest": "Meminta perubahan",
+      "railPlaceholder": "Ajukan perubahan atau pertanyaan…",
+      "documentPageCount": "{count, plural, one {# halaman} other {# halaman}}",
+      "sourceShowPages": "Tampilkan halaman",
+      "sourceEditText": "Edit sebagai teks",
+      "sourceRemoveDocument": "Hapus dokumen",
+      "sourceJumpToPage": "Pergi ke halaman"
     },
     "document": {
       "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",
@@ -3695,7 +3837,7 @@
       "guideTargetTerm": "Terjemahan wajib",
       "guideNote": "Catatan",
       "pendingRun": {
-        "title": "{count} saran masih tertunda",
+        "title": "{count, plural, one {# saran masih tertunda} other {# saran masih tertunda}}",
         "body": "{action} dapat mengubah bagian mana pun dari teks, termasuk bagian yang memiliki saran yang belum Anda putuskan, dan penilaian baru akan menggantikan daftar saat ini. Selesaikan sisa saran terlebih dahulu.",
         "acceptAll": "Terima semua sisa",
         "rejectAll": "Tolak semua",
@@ -3757,7 +3899,7 @@
         "list<number>": "Daftar angka"
       },
       "layout": "Tata letak",
-      "layoutHint": "Markdown dengan slot {{field:id}} — digunakan untuk ekspor hasil dan pratinjau.",
+      "layoutHint": "Markdown dengan slot '{{field:id}}' — digunakan untuk ekspor hasil dan pratinjau.",
       "saveTemplate": "Simpan template",
       "deleteTemplate": "Hapus template",
       "cancel": "Batal",
@@ -4585,6 +4727,10 @@
         "note": "Biaya berdasarkan harga daftar per {asOf} (tarif Global Standard, tanpa diskon input cache): batas atas, bukan tagihan. Pencarian web, eksekusi kode, transkripsi, suara, terjemahan, dan pengindeksan dokumen tidak termasuk."
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "Workspace ini (perkiraan)",
       "workspace": "Workspace ini",
@@ -5399,7 +5545,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# dokumen} other {# dokumen}} diindeks",
     "m365CapImmediateHelp": "Terapkan akan menyimpan batasan secara langsung. Edit lainnya tetap perlu disimpan dengan Save.",
     "m365CapDraftHelp": "Batasan akan disimpan saat Anda membuat agen.",
-    "m365CapSaved": "Batas dokumen tersimpan: {limit}."
+    "m365CapSaved": "Batas dokumen tersimpan: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Nonaktif secara default: agen hanya menjawab dari dokumennya dan tidak pernah mencari di web, apa pun pengaturan pencarian yang dipilih pengguna. Jika diaktifkan, instruksi agen menentukan kapan pencarian web dilakukan dan situs web mana yang dapat digunakan, serta sumber web selalu ditampilkan terpisah dari dokumen agen.",
+    "promptAgentAllowWebSearchHelp": "Aktif secara default. Jika dinonaktifkan, agen ini tidak pernah mencari di web, apa pun pengaturan pencarian yang dipilih pengguna."
   },
   "localModels": {
     "title": "Model lokal",
@@ -5706,7 +5854,9 @@
       "m365MailReadsPerDay": "Pembacaan email per hari",
       "m365MailDraftsPerDay": "Draft email per hari",
       "m365MailDeepScansPerDay": "Deep scan email per hari",
-      "m365DigestRunsPerDay": "Ringkasan harian per hari"
+      "m365DigestRunsPerDay": "Ringkasan harian per hari",
+      "translationPagesPerDay": "Halaman terjemahan dokumen per hari",
+      "ocrPagesPerDay": "Halaman OCR per hari"
     },
     "valueModeLabel": "Jenis batas",
     "valueAmountLabel": "Jumlah batas",
@@ -5729,7 +5879,8 @@
       "jobs": "pekerjaan",
       "rounds": "putaran",
       "documents": "dokumen",
-      "boolean": ""
+      "boolean": "",
+      "pages": "halaman"
     },
     "window": {
       "day": "hari",
@@ -5787,7 +5938,9 @@
       "m365MailReadsPerDay": "Pencarian email dan pembacaan pesan/percakapan per hari. Jika melewati batas, alat email akan menampilkan hasil 'coba lagi besok'.",
       "m365MailDraftsPerDay": "Draft email yang dapat dibuat asisten per hari — masing-masing dikonfirmasi secara individual. Dibatasi secara ketat.",
       "m365MailDeepScansPerDay": "Analisis email komposit (ringkasan, pencarian mendalam, komitmen) per hari. Setiap pemindaian dihitung satu unit anggaran tanpa melihat jumlah pembacaan di dalamnya.",
-      "m365DigestRunsPerDay": "Microsoft 365 ringkasan harian per hari. Satu jalankan terdiri dari puluhan pembacaan Graph dan dua panggilan model analisis; pemilih periode membuat permintaan ulang menjadi mudah, sehingga batas default ketat."
+      "m365DigestRunsPerDay": "Microsoft 365 ringkasan harian per hari. Satu jalankan terdiri dari puluhan pembacaan Graph dan dua panggilan model analisis; pemilih periode membuat permintaan ulang menjadi mudah, sehingga batas default ketat.",
+      "translationPagesPerDay": "Halaman PDF yang dikirim untuk terjemahan dokumen per hari.",
+      "ocrPagesPerDay": "Halaman PDF yang dibaca dengan OCR (pengenalan teks untuk dokumen hasil scan) per hari."
     },
     "scopeFamily": "Keluarga",
     "scopeModel": "Model",
@@ -8095,7 +8248,13 @@
       "skills": "Pemilihan skill",
       "tools": "Routing alat",
       "trim": "Klasifikasi trim",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "Tulis ulang permintaan pencarian",
+      "mailScreen": "Layar phishing email",
+      "mailAnalysis": "Analisis email dan ringkasan",
+      "schemaProposal": "Usulan skema ekstraksi",
+      "mcpPlan": "Rencana konektor",
+      "vision": "Pembacaan gambar dan halaman"
     },
     "reason": {
       "endpoint_missing": "Endpoint atau pengikatan akun belum ada",
@@ -8116,6 +8275,164 @@
       "endpoint_account_mismatch": "Endpoint dan ARM resource ID menunjuk ke akun yang berbeda. Perbaiki konfigurasi deployment.",
       "inventory_refresh_failed": "Pembaruan inventaris gagal. Periksa akses Reader dan koneksi akun pada identitas aplikasi.",
       "credential_unavailable": "Aplikasi tidak dapat memperoleh kredensial inventarisnya. Periksa konfigurasi identitas deployment."
+    },
+    "notSupported": "Tidak didukung oleh model ini",
+    "unservedOperations": "Tidak ada model dalam rantai ini yang mendukung: {operations}. Tambahkan model yang mendukung."
+  },
+  "filePreview": {
+    "preview": "Pratinjau",
+    "download": "Unduh",
+    "loading": "Menyiapkan pratinjau…",
+    "failed": "Berkas ini tidak dapat dipratinjau. Anda tetap bisa mengunduhnya.",
+    "pageOf": "Halaman {page} dari {total}",
+    "truncated": "Menampilkan {shown} halaman pertama dari {total} halaman. Unduh berkas untuk melihat sisanya.",
+    "enlarge": "Perbesar {name}"
+  },
+  "addToChat": {
+    "title": "Tambah ke obrolan",
+    "titleTranslate": "Terjemahkan dokumen",
+    "titleTranscribe": "Transkripsi audio atau video",
+    "sourcesLabel": "Tambah dari",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Tidak tersedia untuk aksi ini",
+    "sources": {
+      "device": "Perangkat ini",
+      "link": "Tautan",
+      "camera": "Kamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Email",
+      "meetings": "Rapat"
+    },
+    "device": {
+      "browse": "Cari di perangkat ini",
+      "dropHint": "atau jatuhkan berkas di jendela ini, atau tempel",
+      "rejected": "Tidak ada berkas yang dapat digunakan di sini.",
+      "hint": {
+        "attach": "Dokumen, gambar, audio, dan video.",
+        "translate": "Satu dokumen: Word, Excel, PowerPoint, PDF, HTML, atau teks.",
+        "transcribe": "Audio atau video. Akan ditranskripsi saat Anda mengirim pesan."
+      }
+    },
+    "selection": {
+      "then": "Lalu",
+      "intents": {
+        "attach": "Lampirkan",
+        "translate": "Terjemahkan",
+        "transcribe": "Transkripsi"
+      },
+      "confirm": {
+        "attach": "Tambah",
+        "translate": "Terjemahkan",
+        "transcribe": "Transkripsi"
+      },
+      "unfit": {
+        "attach": "Berkas-berkas ini tidak bisa dilampirkan",
+        "translate": "Terjemahan hanya menerima satu dokumen saja",
+        "transcribe": "Hanya audio dan video yang dapat ditranskripsi"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Perangkat ini, tautan, Microsoft 365",
+      "filesOrPhotos": "Berkas atau foto",
+      "fromThisDevice": "Dari perangkat ini",
+      "connect": "Hubungkan Microsoft 365",
+      "connectNote": "Tambah dari OneDrive, email, dan rapat"
     }
+  },
+  "usageBudgets": {
+    "title": "Anggaran Anda",
+    "description": "Batas yang Anda tetapkan sendiri pada perangkat ini. Pilih anggaran, lalu tentukan tindakan saat Anda mendekati dan melewati batas tersebut. Anggaran menghitung chat dan proses workflow dari awal setiap periode.",
+    "metric": {
+      "emissions": "Anggaran emisi",
+      "cost": "Anggaran biaya"
+    },
+    "metricShort": {
+      "emissions": "Emisi",
+      "cost": "Biaya"
+    },
+    "off": "Tidak ada anggaran yang ditetapkan.",
+    "measureAs": "Ukur sebagai",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Pengisian telepon",
+      "usd": "Dolar AS"
+    },
+    "amountLabel": "Anggaran",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "jam",
+      "smartphoneCharge": "kali pengisian",
+      "usd": "Dolar AS"
+    },
+    "periodLabel": "Reset setiap",
+    "period": {
+      "day": "Hari",
+      "week": "Minggu",
+      "month": "Bulan"
+    },
+    "costNote": "Perkiraan dari harga daftar: batas atas, bukan tagihan.",
+    "chargesValue": "{count} kali pengisian telepon",
+    "percent": "{percent}%",
+    "usedOf": "{used} dari {limit} telah digunakan ({percent}%)",
+    "usedOfShort": "{used} dari {limit}",
+    "resets": "Reset {date}",
+    "budgetMarker": "Anggaran",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Dalam anggaran",
+      "warn": "Peringatan ditampilkan",
+      "ask": "Konfirmasi sebelum setiap pesan",
+      "stop": "Pengiriman dijeda"
+    },
+    "stage": {
+      "warn": {
+        "title": "Peringatkan",
+        "tag": "Pemberitahuan",
+        "description": "Tampilkan pemberitahuan di chat mulai dari bagian anggaran ini."
+      },
+      "ask": {
+        "title": "Konfirmasi terlebih dahulu",
+        "tag": "Blokir lunak",
+        "description": "Minta konfirmasi untuk setiap pesan mulai dari bagian anggaran ini."
+      },
+      "stop": {
+        "title": "Hentikan",
+        "tag": "Blokir keras",
+        "description": "Pengiriman dihentikan dari bagian anggaran ini sampai anggaran di-reset atau dinaikkan di sini."
+      }
+    },
+    "thresholdLabel": "Ambang {stage}, persen dari anggaran",
+    "notice": {
+      "warn": {
+        "emissions": "Anda telah menggunakan {percent}% dari anggaran emisi Anda.",
+        "cost": "Anda telah menggunakan {percent}% dari anggaran biaya Anda."
+      },
+      "ask": {
+        "emissions": "Anda telah menggunakan {percent}% dari anggaran emisi Anda. Kirim pesan ini?",
+        "cost": "Anda telah menggunakan {percent}% dari anggaran biaya Anda. Kirim pesan ini?"
+      },
+      "askRun": {
+        "emissions": "Anda telah menggunakan {percent}% dari anggaran emisi Anda. Mulai proses ini?",
+        "cost": "Anda telah menggunakan {percent}% dari anggaran biaya Anda. Mulai proses ini?"
+      },
+      "stop": {
+        "emissions": "Titik stop anggaran emisi tercapai. Pengiriman dijeda hingga {date}.",
+        "cost": "Titik batas anggaran biaya telah tercapai. Pengiriman dijeda hingga {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Lihat anggaran",
+      "dismiss": "Tutup",
+      "sendAnyway": "Kirim tetap",
+      "runAnyway": "Jalankan tetap",
+      "dontSend": "Jangan kirim",
+      "dontAskToday": "Jangan tanya lagi hari ini",
+      "openSettings": "Buka pengaturan anggaran",
+      "edit": "Edit"
+    },
+    "composerPaused": "Pengiriman dijeda oleh anggaran Anda",
+    "summaryTitle": "Anggaran Anda",
+    "chipAria": "Anggaran {metric}: {percent}% digunakan.",
+    "runProjection": "Anggaran emisi {from}% → {to}%"
   }
 }

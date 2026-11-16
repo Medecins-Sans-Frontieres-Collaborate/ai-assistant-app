@@ -355,7 +355,7 @@ export const MigrationDialog: FC<MigrationDialogProps> = ({
               </button>
 
               {showAdvanced && (
-                <div className="mt-2 pl-5 space-y-2">
+                <div className="mt-2 ps-5 space-y-2">
                   <label className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300 cursor-pointer">
                     <input
                       type="checkbox"

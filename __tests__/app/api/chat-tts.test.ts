@@ -8,6 +8,7 @@ import {
 
 import { POST } from '@/app/api/chat/tts/route';
 import { auth } from '@/auth';
+import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Hoist mocks before imports
@@ -43,7 +44,7 @@ vi.mock('@/lib/data/ttsVoices', () => ({
 // The mock synthesizer calls the error callback immediately to prevent hanging
 vi.mock('microsoft-cognitiveservices-speech-sdk', () => ({
   SpeechConfig: {
-    fromSubscription: vi.fn(() => ({
+    fromEndpoint: vi.fn(() => ({
       speechSynthesisOutputFormat: null,
       speechSynthesisVoiceName: null,
     })),
@@ -91,14 +92,12 @@ vi.mock('microsoft-cognitiveservices-speech-sdk', () => ({
   },
 }));
 
-// Mock @azure/identity to fail immediately when no API key is configured
-// This prevents timeout when the route falls back to managed identity
-vi.mock('@azure/identity', () => ({
-  DefaultAzureCredential: vi.fn(() => ({
-    getToken: vi
-      .fn()
-      .mockRejectedValue(new Error('Mock: No credentials available')),
-  })),
+// The application identity and the Speech endpoint it authenticates against.
+const APPLICATION_CREDENTIAL = vi.hoisted(() => ({ getToken: vi.fn() }));
+const mockResolveSpeechEndpoint = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/utils/server/azure/cognitiveServicesAuth', () => ({
+  getApplicationCredential: () => APPLICATION_CREDENTIAL,
+  resolveSpeechEndpoint: mockResolveSpeechEndpoint,
 }));
 
 /**
@@ -130,8 +129,9 @@ describe('/api/chat/tts', () => {
       locale.split('-')[0].toLowerCase(),
     );
 
-    // Mock environment variable - route checks AZURE_SPEECH_KEY, not OPENAI_API_KEY
-    process.env.AZURE_SPEECH_KEY = 'test-api-key';
+    mockResolveSpeechEndpoint.mockReturnValue(
+      'https://test-account.cognitiveservices.azure.com',
+    );
   });
 
   const createTTSRequest = (options: {
@@ -274,18 +274,24 @@ describe('/api/chat/tts', () => {
   });
 
   describe('Configuration', () => {
-    it('returns error when API key is not configured', async () => {
-      delete process.env.AZURE_SPEECH_KEY;
+    it('authenticates with the application identity on the account endpoint', async () => {
+      await POST(createTTSRequest({}));
 
-      const request = createTTSRequest({});
-      const response = await POST(request);
+      expect(sdk.SpeechConfig.fromEndpoint).toHaveBeenCalledWith(
+        new URL('https://test-account.cognitiveservices.azure.com'),
+        APPLICATION_CREDENTIAL,
+      );
+    });
+
+    it('returns 503 without synthesizing when no Speech endpoint is configured', async () => {
+      mockResolveSpeechEndpoint.mockReturnValue(undefined);
+
+      const response = await POST(createTTSRequest({}));
       const data = await parseJsonResponse(response);
 
-      expect(response.status).toBe(500);
-      expect(data.error).toBe('Internal server error');
-
-      // Restore for other tests
-      process.env.AZURE_SPEECH_KEY = 'test-api-key';
+      expect(response.status).toBe(503);
+      expect(data.error).toMatch(/AZURE_SPEECH_ENDPOINT/);
+      expect(sdk.SpeechConfig.fromEndpoint).not.toHaveBeenCalled();
     });
   });
 
