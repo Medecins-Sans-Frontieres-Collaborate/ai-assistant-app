@@ -1568,7 +1568,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   onDataChanged,
 }) => {
   const t = useAdminAgentTranslations();
-  const tSearch = useTranslations('m365.files');
+  const tSearch = useTranslations('m365.picker');
   const tFiles = useTranslations('analyticsAdmin.health.total');
   const queryClient = useQueryClient();
   const { agentsEnabled } = useM365Enabled();
