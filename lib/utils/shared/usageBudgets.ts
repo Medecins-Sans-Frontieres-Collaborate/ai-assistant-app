@@ -61,6 +61,16 @@ export const BUDGET_UNITS: Readonly<
   cost: ['usd'],
 };
 
+/**
+ * The unit each metric is EVALUATED in (see the conventions above). Readouts
+ * that report usage against a budget use this, whatever unit the budget was
+ * set in: the activity units are a way of choosing a limit, not of measuring.
+ */
+export const BUDGET_BASE_UNIT: Readonly<Record<BudgetMetric, BudgetUnit>> = {
+  emissions: 'grams',
+  cost: 'usd',
+};
+
 export interface BudgetStageRule {
   enabled: boolean;
   /** Percentage of the budget at which the stage is reached. */
