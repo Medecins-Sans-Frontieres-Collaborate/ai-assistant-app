@@ -6,6 +6,7 @@ import { FC, useMemo } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
 
+import { useCo2eFormat } from '@/client/hooks/settings/useCo2eFormat';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
 import { formatUsdLabel } from '@/lib/utils/shared/chat/requestCost';
@@ -44,6 +45,7 @@ const WORKFLOW_I18N_KEY: Record<string, string> = {
 export const UsageImpactSection: FC = () => {
   const t = useTranslations();
   const locale = useLocale();
+  const formatCo2e = useCo2eFormat();
   const { showUsageCost } = useFlags();
   const tokenUsageStats = useSettingsStore((s) => s.tokenUsageStats);
   const workflowUsageStats = useSettingsStore((s) => s.workflowUsageStats);
@@ -210,9 +212,7 @@ export const UsageImpactSection: FC = () => {
           {/* Headline estimate */}
           <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-surface-dark p-4">
             <p className="text-3xl font-bold text-black dark:text-white">
-              {t('usageImpact.co2Value', {
-                grams: numberFmt.format(Math.round(summary.totalCO2)),
-              })}
+              {formatCo2e(summary.totalCO2)}
             </p>
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
               {t('usageImpact.equivalence', {
