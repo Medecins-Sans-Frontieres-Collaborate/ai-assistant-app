@@ -335,6 +335,55 @@ export const formatGrams = (grams: number): string =>
       ? grams.toFixed(1)
       : `${Math.round(grams)}`;
 
+const GRAMS_PER_KILOGRAM = 1000;
+
+/**
+ * Grams from which a figure is shown in kilograms. Half a gram under the
+ * kilogram, because that is where {@link formatGrams} would start printing
+ * "1000": the switch is made on what would be DISPLAYED, not the raw value.
+ */
+const KILOGRAM_DISPLAY_FROM_GRAMS = GRAMS_PER_KILOGRAM - 0.5;
+
+export interface Co2eMassParts {
+  /** i18n key suffix under `emissions.mass.*`. */
+  unit: 'grams' | 'kilograms';
+  /** Pre-formatted magnitude in that unit. */
+  value: string;
+}
+
+/**
+ * Three significant figures for a kilogram magnitude ("1.25", "12.5", "125").
+ * Each bound sits where the shorter form would round up into the next one, so
+ * 9.996 reads "10.0" rather than "10.00".
+ */
+const formatKilograms = (kilograms: number): string =>
+  kilograms < 9.995
+    ? kilograms.toFixed(2)
+    : kilograms < 99.95
+      ? kilograms.toFixed(1)
+      : `${Math.round(kilograms)}`;
+
+/**
+ * Picks the display unit for a CO2e mass: grams below a kilogram, kilograms
+ * from there up, so a month's total reads "12.5 kg" rather than "12500 g".
+ * Pure so the rounding rules are testable; components interpolate `value`
+ * into the localized `emissions.mass.<unit>` template (see `useCo2eFormat`).
+ *
+ * @param grams - Mass in grams of CO2e (non-negative).
+ * @returns The unit to display in and the magnitude formatted for it.
+ * @example co2eMassParts(184)   // { unit: 'grams', value: '184' }
+ * @example co2eMassParts(12500) // { unit: 'kilograms', value: '12.5' }
+ */
+export function co2eMassParts(grams: number): Co2eMassParts {
+  if (grams < KILOGRAM_DISPLAY_FROM_GRAMS) {
+    return { unit: 'grams', value: formatGrams(grams) };
+  }
+  return {
+    unit: 'kilograms',
+    value: formatKilograms(grams / GRAMS_PER_KILOGRAM),
+  };
+}
+
 export interface ActivityDurationParts {
   /** i18n key suffix under `emissions.duration.*`. */
   unit: 'lessThanSecond' | 'seconds' | 'minutes' | 'hours';
