@@ -12,6 +12,11 @@ interface PendingEditsDialogProps {
   pendingCount: number;
   /** What the user asked for, already localized ("Revising", "Translating"). */
   actionLabel: string;
+  /**
+   * Replaces the default explanation, for an action that is not an AI run
+   * (e.g. leaving the text the suggestions belong to). Already localized.
+   */
+  message?: string;
   onAcceptAll: () => void;
   onRejectAll: () => void;
   onCancel: () => void;
@@ -32,6 +37,7 @@ export const PendingEditsDialog: FC<PendingEditsDialogProps> = ({
   isOpen,
   pendingCount,
   actionLabel,
+  message,
   onAcceptAll,
   onRejectAll,
   onCancel,
@@ -72,7 +78,7 @@ export const PendingEditsDialog: FC<PendingEditsDialogProps> = ({
       }
     >
       <p className="text-sm text-gray-700 dark:text-gray-300">
-        {t('body', { action: actionLabel })}
+        {message ?? t('body', { action: actionLabel })}
       </p>
     </Modal>
   );

@@ -27,6 +27,12 @@ vi.mock('@/lib/services/ragService', () => ({
   },
 }));
 
+// Capture the search analytics event
+const mockLogSearch = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/services/observability', () => ({
+  getAzureMonitorLogger: () => ({ logSearch: mockLogSearch }),
+}));
+
 // Mock organization agents
 vi.mock('@/lib/organizationAgents', () => ({
   getOrganizationAgentById: vi.fn(),
@@ -65,7 +71,7 @@ vi.mock('@opentelemetry/api', () => ({
 
 describe('RAGEnricher', () => {
   let enricher: RAGEnricher;
-  let mockOpenAIClient: any;
+  const mockReformulator = { reformulate: vi.fn() };
 
   const mockOrganizationAgent = {
     id: 'msf_communications',
@@ -99,15 +105,6 @@ describe('RAGEnricher', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Mock OpenAI client
-    mockOpenAIClient = {
-      chat: {
-        completions: {
-          create: vi.fn(),
-        },
-      },
-    };
-
     // Setup default performSearch mock
     mockPerformSearch.mockResolvedValue({
       searchDocs: mockSearchResults,
@@ -124,8 +121,52 @@ describe('RAGEnricher', () => {
     enricher = new RAGEnricher(
       'https://search.example.com',
       'test-index',
-      mockOpenAIClient,
+      mockReformulator as any,
     );
+  });
+
+  describe('query rewrite residency', () => {
+    beforeEach(() => {
+      (getOrganizationAgentById as any).mockReturnValue(mockOrganizationAgent);
+    });
+
+    it("passes the turn's residency routing to the search", async () => {
+      const context = createTestChatContext({ botId: 'msf_communications' });
+      context.user = { ...context.user, region: 'EU' } as typeof context.user;
+
+      await enricher.execute(context);
+
+      const routing = mockPerformSearch.mock.calls[0][3];
+      expect(routing.region).toBe('EU');
+      // No provider wired in this enricher: no chat-model fallback.
+      expect(routing.textFallback).toBeUndefined();
+    });
+
+    it("offers the user's chat model as the rewrite fallback when wired", async () => {
+      const withFallback = new RAGEnricher(
+        'https://search.example.com',
+        'test-index',
+        mockReformulator as any,
+        { completeText: vi.fn() },
+      );
+
+      await withFallback.execute(
+        createTestChatContext({ botId: 'msf_communications' }),
+      );
+
+      expect(mockPerformSearch.mock.calls[0][3].textFallback).toEqual(
+        expect.any(Function),
+      );
+    });
+
+    it('logs the real result count', async () => {
+      await enricher.execute(
+        createTestChatContext({ botId: 'msf_communications' }),
+      );
+      expect(mockLogSearch).toHaveBeenCalledWith(
+        expect.objectContaining({ resultCount: 2 }),
+      );
+    });
   });
 
   describe('shouldRun', () => {

@@ -521,8 +521,18 @@ describe('ToolRouter Enricher', () => {
 
         // Citations should be merged with number property for proper ordering
         expect(result.processedContent?.metadata?.citations).toEqual([
-          { title: 'AI News 1', url: 'https://example.com/1', number: 1 },
-          { title: 'AI News 2', url: 'https://example.com/2', number: 2 },
+          {
+            title: 'AI News 1',
+            url: 'https://example.com/1',
+            number: 1,
+            origin: 'web',
+          },
+          {
+            title: 'AI News 2',
+            url: 'https://example.com/2',
+            number: 2,
+            origin: 'web',
+          },
         ]);
       });
 
@@ -588,11 +598,13 @@ describe('ToolRouter Enricher', () => {
           title: 'Web Source 1',
           url: 'https://web1.com',
           number: 3, // Continues from RAG citation #2
+          origin: 'web',
         });
         expect(result.processedContent?.metadata?.citations?.[3]).toEqual({
           title: 'Web Source 2',
           url: 'https://web2.com',
           number: 4,
+          origin: 'web',
         });
       });
 
@@ -1020,6 +1032,271 @@ describe('ToolRouter Enricher', () => {
       expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
         expect.objectContaining({ resultCount: 12 }),
       );
+    });
+  });
+
+  describe('agent turns (owner rules + knowledge search)', () => {
+    const m365Agent = {
+      id: 'm365-abc',
+      name: 'Field HR',
+      systemPrompt: 'If the documents lack it, search who.int.',
+      allowWebSearch: true,
+    } as any;
+    const agentKnowledge = {
+      status: 'searched' as const,
+      passages: [{ title: 'Leave.pdf', text: '30 days of leave' }],
+    };
+    const knowledgeMessage = {
+      role: 'system',
+      content: 'You have access to the following knowledge base sources…',
+      messageType: MessageType.TEXT,
+    } as Message;
+    // The factory copies only the fields it knows, so the agent fields are
+    // laid over its result the way the pipeline's earlier stages set them.
+    const agentContext = (overrides: Record<string, unknown> = {}) => ({
+      ...createTestChatContext({
+        searchMode: SearchMode.INTELLIGENT,
+        botId: 'm365-abc',
+        messages: [createTestMessage({ content: 'Vaccinations for Uganda?' })],
+      }),
+      m365Agent,
+      agentKnowledge,
+      enrichedMessages: [
+        knowledgeMessage,
+        createTestMessage({ content: 'Vaccinations for Uganda?' }),
+      ],
+      ...overrides,
+    });
+
+    beforeEach(() => {
+      mockToolRouterService.determineTool.mockResolvedValue({ tools: [] });
+    });
+
+    it('hands the router the rules and passages, without the retrieval system message', async () => {
+      await enricher.execute(agentContext());
+
+      const request = mockToolRouterService.determineTool.mock.calls[0][0];
+      expect(request.agentGuidance).toEqual({
+        agentName: 'Field HR',
+        instructions: 'If the documents lack it, search who.int.',
+        knowledge: agentKnowledge,
+      });
+      expect(request.messages.map((m: Message) => m.role)).toEqual(['user']);
+    });
+
+    it('still weighs the passages when the agent has no instructions', async () => {
+      await enricher.execute(
+        agentContext({ m365Agent: { ...m365Agent, systemPrompt: '' } }),
+      );
+
+      const request = mockToolRouterService.determineTool.mock.calls[0][0];
+      expect(request.agentGuidance).toEqual({
+        agentName: 'Field HR',
+        instructions: '',
+        knowledge: agentKnowledge,
+      });
+    });
+
+    describe('the owner switch for web search', () => {
+      // Both sides of the gate, for every search mode that could open it.
+      it.each([SearchMode.INTELLIGENT, SearchMode.ALWAYS])(
+        'never routes or searches for an M365 agent with web search off (%s)',
+        async (searchMode) => {
+          const closed = { ...m365Agent, allowWebSearch: false };
+          const context = agentContext({ m365Agent: closed, searchMode });
+
+          expect(enricher.shouldRun(context as any)).toBe(false);
+          const result = await enricher.execute(context as any);
+
+          expect(mockToolRouterService.determineTool).not.toHaveBeenCalled();
+          expect(
+            (enricher as any).webSearchTool.execute,
+          ).not.toHaveBeenCalled();
+          expect(result.enrichedMessages).toEqual(context.enrichedMessages);
+        },
+      );
+
+      it('treats an M365 agent stored before the setting existed as off', () => {
+        const { allowWebSearch: _unset, ...legacy } = m365Agent;
+        expect(
+          enricher.shouldRun(agentContext({ m365Agent: legacy }) as any),
+        ).toBe(false);
+      });
+
+      it('lets an M365 agent with web search on reach the router', () => {
+        expect(enricher.shouldRun(agentContext() as any)).toBe(true);
+      });
+
+      it('searches for a prompt agent unless its owner switched it off', () => {
+        const promptContext = (allowWebSearch?: boolean) => ({
+          ...createTestChatContext({
+            searchMode: SearchMode.ALWAYS,
+            botId: 'prompt-abc',
+          }),
+          promptAgent: { id: 'prompt-abc', name: 'P', allowWebSearch } as any,
+        });
+        expect(enricher.shouldRun(promptContext() as any)).toBe(true);
+        expect(enricher.shouldRun(promptContext(true) as any)).toBe(true);
+        expect(enricher.shouldRun(promptContext(false) as any)).toBe(false);
+      });
+    });
+
+    it('runs the fallback search the router decided, scoped to the named websites', async () => {
+      mockToolRouterService.determineTool.mockResolvedValue({
+        tools: ['web_search'],
+        knowledgeBaseAnswers: false,
+        searchSites: ['who.int'],
+        searchQuery: 'Uganda vaccinations site:who.int',
+        searchQueries: ['Uganda vaccinations site:who.int'],
+      });
+      (enricher as any).webSearchTool.execute.mockResolvedValue({
+        text: 'Yellow fever certificate required [1]',
+        citations: [
+          { number: 1, title: 'WHO', url: 'https://www.who.int/uganda' },
+        ],
+      });
+      const emitMarker = vi.fn().mockResolvedValue(undefined);
+
+      const result = await enricher.execute(
+        agentContext({
+          processedContent: {
+            metadata: {
+              citations: [
+                {
+                  number: 1,
+                  title: 'Leave.pdf',
+                  url: 'https://sp/leave',
+                  origin: 'knowledge',
+                },
+              ],
+            },
+          },
+          emitMarker,
+        }),
+      );
+
+      const params = (enricher as any).webSearchTool.execute.mock.calls[0][0];
+      expect(JSON.stringify(params)).toContain(
+        'Uganda vaccinations site:who.int',
+      );
+      // Web sources are numbered after the agent's own document citations.
+      const citations = result.processedContent?.metadata?.citations ?? [];
+      expect(citations.map((c: any) => [c.number, c.title, c.origin])).toEqual([
+        [1, 'Leave.pdf', 'knowledge'],
+        [2, 'WHO', 'web'],
+      ]);
+      // The model is told which numbers are documents and which are web.
+      const last =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      expect(last.content).toContain(
+        "sources [1] are passages from this agent's own documents; sources [2] are public web pages",
+      );
+      // The search's record says why the agent went to the web, and where.
+      const record = emitMarker.mock.calls
+        .map((call) => call[0] as string)
+        .find((marker) => marker.includes('web_search'));
+      expect(record).toContain('did not contain the answer');
+      expect(record).toContain('Limited to: who.int');
+      // The knowledge passages stay in front of the model.
+      expect(result.enrichedMessages?.[0]).toBe(knowledgeMessage);
+    });
+
+    it('does not let "always search" override the owner rules', async () => {
+      // The router says no search is called for; the user's mode is ALWAYS.
+      mockToolRouterService.determineTool.mockResolvedValue({
+        tools: [],
+        knowledgeBaseAnswers: true,
+      });
+
+      await enricher.execute(agentContext({ searchMode: SearchMode.ALWAYS }));
+
+      const request = mockToolRouterService.determineTool.mock.calls[0][0];
+      expect(request.searchDecided).toBeFalsy();
+      expect(request.agentGuidance).toEqual(
+        expect.objectContaining({ agentName: 'Field HR' }),
+      );
+      expect((enricher as any).webSearchTool.execute).not.toHaveBeenCalled();
+    });
+
+    it('still forces the search in "always" mode without an agent', async () => {
+      (enricher as any).webSearchTool.execute.mockResolvedValue({
+        text: 'x [1]',
+        citations: [{ number: 1, title: 'X', url: 'https://x.org/' }],
+      });
+
+      await enricher.execute(
+        createTestChatContext({
+          searchMode: SearchMode.ALWAYS,
+          messages: [
+            createTestMessage({ content: 'Vaccinations for Uganda?' }),
+          ],
+        }),
+      );
+
+      expect((enricher as any).webSearchTool.execute).toHaveBeenCalled();
+    });
+
+    it('tells the model no web search ran when the router decides against one', async () => {
+      const context = agentContext({
+        processedContent: {
+          metadata: {
+            citations: [
+              {
+                number: 1,
+                title: 'Leave.pdf',
+                url: 'https://sp/leave',
+                origin: 'knowledge',
+              },
+            ],
+          },
+        },
+      });
+
+      const result = await enricher.execute(context as any);
+
+      const last =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      expect(last.content).toContain('NO web search was run for this message');
+      expect(last.content).toContain(
+        'The only sources for this message are [1]',
+      );
+      expect(last.content).toContain('Vaccinations for Uganda?');
+    });
+
+    it('adds no such note to a plain turn without a search', async () => {
+      const context = createTestChatContext({
+        searchMode: SearchMode.INTELLIGENT,
+        messages: [createTestMessage({ content: 'Hello there' })],
+      });
+
+      const result = await enricher.execute(context);
+
+      expect(result.enrichedMessages ?? result.messages).toEqual(
+        context.enrichedMessages ?? context.messages,
+      );
+    });
+
+    it('reports both misses instead of inviting an unlabelled answer when the fallback finds nothing', async () => {
+      mockToolRouterService.determineTool.mockResolvedValue({
+        tools: ['web_search'],
+        knowledgeBaseAnswers: false,
+        searchQuery: 'Uganda vaccinations',
+        searchQueries: ['Uganda vaccinations'],
+      });
+      (enricher as any).webSearchTool.execute.mockResolvedValue({
+        text: '',
+        citations: [],
+      });
+
+      const result = await enricher.execute(agentContext());
+
+      const last =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      expect(last.content).toContain(
+        'knowledge base did not contain the answer',
+      );
+      expect(last.content).toContain('follow your instructions');
+      expect(last.content).not.toContain('question confidently');
     });
   });
 

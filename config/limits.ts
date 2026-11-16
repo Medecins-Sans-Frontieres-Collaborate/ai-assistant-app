@@ -29,6 +29,7 @@ export type LimitUnit =
   | 'megabytes'
   | 'minutes'
   | 'jobs'
+  | 'pages'
   | 'rounds'
   | 'documents'
   | 'boolean';
@@ -290,6 +291,28 @@ export const LIMIT_DEFINITIONS: readonly LimitDefinition[] = [
     category: 'documents',
     enforcedAt: 'app/api/document-translation/translate/route.ts POST',
     labelKey: 'translationJobsPerDay',
+  },
+  {
+    key: 'feature.translation.pagesPerDay',
+    kind: 'counter',
+    unit: 'pages',
+    window: 'day',
+    perModel: false,
+    defaultValue: null,
+    category: 'documents',
+    enforcedAt: 'app/api/document-translation/translate/route.ts POST',
+    labelKey: 'translationPagesPerDay',
+  },
+  {
+    key: 'feature.ocr.pagesPerDay',
+    kind: 'counter',
+    unit: 'pages',
+    window: 'day',
+    perModel: false,
+    defaultValue: null,
+    category: 'documents',
+    enforcedAt: 'app/api/file/ocr/route.ts POST',
+    labelKey: 'ocrPagesPerDay',
   },
   {
     key: 'feature.webSearch.callsPerDay',

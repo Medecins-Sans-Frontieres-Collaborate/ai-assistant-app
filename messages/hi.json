@@ -18,7 +18,6 @@
   "Invalid folder file": "अमान्य फ़ोल्डर फ़ाइल",
   "New conversation": "नई बातचीत",
   "No prompts found": "कोई प्रॉम्प्ट नहीं मिला",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "प्रॉम्प्ट सीमा {{maxLength}} वर्ण है। आपने {{valueLength}} वर्ण दर्ज किए हैं।",
   "Saved Prompts": "सहेजे गए प्रॉम्प्ट",
   "Select a prompt to view details": "विवरण देखने के लिए एक प्रॉम्प्ट चुनें",
   "Unrecognized file format": "अपरिचित फ़ाइल प्रारूप",
@@ -116,9 +115,7 @@
   "translatorTranslationDomainMedical": "चिकित्सा",
   "Search_ellipsis": "खोजें...",
   "translatorTranslationTypeLabel": "अनुवाद प्रकार",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "संदेश सीमा {{maxLength}} अक्षर है। आपने {{valueLength}} अक्षर दर्ज किए हैं।",
   "OpenAI API Key Required": "OpenAI API Key आवश्यक है",
-  "Prompt limit is {{maxLength}} characters": "प्रॉम्प्ट की सीमा {{maxLength}} अक्षर है।",
   "Regenerate response": "प्रतिक्रिया पुनः उत्पन्न करें",
   "cancelButton": "रद्द करें",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI एक उन्नत चैटबॉट किट है जो OpenAI के चैट मॉडल के लिए ChatGPT के इंटरफ़ेस और कार्यक्षमता की नकल करने का लक्ष्य रखती है।",
@@ -182,7 +179,7 @@
   "Copied!": "कॉपी हो गया!",
   "injectIntoChat": "चैट में डालें",
   "transcribingStatus": "प्रतिलेखन हो रहा है... इसमें कुछ समय लग सकता है।",
-  "rateLimitExceededWaiting": "दर सीमा पार हो गई। पुनः प्रयास करने से पहले {{seconds}} सेकंड प्रतीक्षा कर रहा है...",
+  "rateLimitExceededWaiting": "दर सीमा पार हो गई। पुनः प्रयास करने से पहले {seconds} सेकंड प्रतीक्षा कर रहा है...",
   "pleaseSelectFile": "कृपया प्रतिलेखन के लिए एक फ़ाइल चुनें।",
   "transcriptionResult": "प्रतिलेखन परिणाम",
   "uploadAudioVideoFile": "ऑडियो या वीडियो फ़ाइल अपलोड करें",
@@ -193,7 +190,7 @@
   "selectedFile": "चयनित फ़ाइल",
   "removeFile": "हटाएं और एक अलग फ़ाइल चुनें",
   "supportedFormats": "समर्थित प्रारूप",
-  "transcriptionErrorAttempt": "प्रतिलेखन के दौरान त्रुटि (प्रयास {{attempt}}/3)। पुनः प्रयास कर रहा है...",
+  "transcriptionErrorAttempt": "प्रतिलेखन के दौरान त्रुटि (प्रयास {attempt}/3)। पुनः प्रयास कर रहा है...",
   "unsupportedFileType": "असमर्थित फ़ाइल प्रकार। कृपया एक ऑडियो या वीडियो फ़ाइल चुनें।",
   "copyToClipboard": "क्लिपबोर्ड पर कॉपी करें",
   "copiedToClipboard": "क्लिपबोर्ड पर कॉपी किया गया",
@@ -612,7 +609,8 @@
     "clear": "साफ़ करें",
     "undo": "पूर्ववत करें",
     "durationSeconds": "{count, plural, one {# सेकंड} other {# सेकंड}}",
-    "durationMinutes": "{count, plural, one {# मिनट} other {# मिनट}}"
+    "durationMinutes": "{count, plural, one {# मिनट} other {# मिनट}}",
+    "clearSearch": "खोज साफ करें"
   },
   "errors": {
     "unexpectedErrorOccurred": "एक अप्रत्याशित त्रुटि हुई",
@@ -900,7 +898,13 @@
     "ttsError": "ऑडियो बनाने में त्रुटि। कृपया फिर से प्रयास करें।",
     "unsupportedMessageType": "संदेश दिखाने में त्रुटि: असमर्थित संदेश प्रकार",
     "addLanguageOption": "\"{name}\" जोड़ें…",
-    "sources": "स्रोत",
+    "sources": {
+      "fromDocuments": "एजेंट दस्तावेज़",
+      "fromWeb": "वेब",
+      "fromDocumentsHint": "इस एजेंट के अपने दस्तावेज़ों से अंश",
+      "fromWebHint": "वेब खोज से मिली सार्वजनिक पृष्ठ",
+      "heading": "{count, plural, one {स्रोत} other {स्रोत}}"
+    },
     "interpreterBadge": "कोड चलाएँ",
     "disableCodeInterpreter": "कोड निष्पादन अक्षम करें",
     "interimSearch": {
@@ -978,7 +982,8 @@
       "MODEL_RATE_LIMITED": "मॉडल को अभी बहुत अधिक अनुरोध मिल रहे हैं। स्वचालित रूप से फिर कोशिश की गई; कृपया थोड़ी देर में फिर प्रयास करें।",
       "MODEL_QUOTA_EXCEEDED": "मॉडल की क्षमता सीमा समाप्त हो गई है। दूसरा मॉडल चुनें या बाद में फिर प्रयास करें।",
       "MODEL_AUTH_FAILED": "ऐप मॉडल सेवा के साथ प्रमाणीकृत नहीं हो सका। यह कॉन्फ़िगरेशन समस्या है — कृपया सहायता से संपर्क करें।"
-    }
+    },
+    "messageLimitExceeded": "संदेश सीमा {maxLength} अक्षर है। आपने {valueLength} अक्षर दर्ज किए हैं।"
   },
   "sidebar": {
     "collapseSidebar": "साइडबार संक्षिप्त करें",
@@ -2261,20 +2266,18 @@
     "sectionPinned": "पिन किया गया",
     "sectionFrequent": "अक्सर उपयोग किए गए",
     "sectionMore": "और भी",
-    "categoryWeb": "वेब",
-    "categoryMedia": "मीडिया और फ़ाइलें",
-    "categoryTransform": "परिवर्तित करें",
     "pin": "ऊपर पिन करें",
     "unpin": "पिन हटाएँ",
     "moveToMore": "'और भी' में भेजें",
     "moveOutOfMore": "मेन्यू में दिखाएँ",
     "showSources": "अन्य स्रोत दिखाएं",
     "hideSources": "अन्य स्रोत छिपाएं",
-    "aiTools": "AI टूल्स",
-    "aiToolsTooltip": "वे क्षमताएँ जिन्हें सहायक उत्तर देते समय इस्तेमाल कर सकता है: लाइव वेब सर्च, कोड निष्पादन और कनेक्टेड सर्विसेज़।",
     "codeInterpreterTooltip": "हर संदेश के लिए एक सुरक्षित सैंडबॉक्स में Python कोड चलाएँ।\n\nसंलग्न फ़ाइलों से डेटा विश्लेषण, गणना और चार्ट जनरेट करने के लिए उपयुक्त।",
-    "categoryTools": "उपकरण और कनेक्टर",
-    "translationConversationTitle": "अनुवाद: {filename}"
+    "translationConversationTitle": "अनुवाद: {filename}",
+    "categoryAdd": "जोड़ें",
+    "categoryDo": "करें",
+    "categoryChat": "इस चैट में",
+    "categoryStart": "से शुरू करें"
   },
   "transcription": {
     "addInstructions": "निर्देश जोड़ें",
@@ -2554,7 +2557,9 @@
     "savedToOneDrive": "{name} को OneDrive में सहेजा गया।",
     "openInOneDrive": "खोलें",
     "saveForbidden": "आपको उस फ़ोल्डर में लिखने की अनुमति नहीं है — “OneDrive में सहेजें” के साथ कोई अन्य चुनें।",
-    "saveToOneDriveFailed": "OneDrive में सहेज नहीं सके — कृपया फिर प्रयास करें।"
+    "saveToOneDriveFailed": "OneDrive में सहेज नहीं सके — कृपया फिर प्रयास करें।",
+    "textVersion": "पाठ संस्करण (DOCX)",
+    "textVersionHint": "अनुवादित पाठ के साथ एक संपादन योग्य Word फ़ाइल, स्रोत के हर पृष्ठ के लिए एक पृष्ठ. अनुवादित फ़ाइल में मूल लेआउट ही रहता है."
   },
   "terms": {
     "officialLanguages": "आधिकारिक संस्करण:",
@@ -2740,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "अभी तक कोई उपयोग ट्रैक नहीं हुआ है। आपकी टोकन उपयोगिता और अनुमानित उत्सर्जन यहाँ आपके चैट करने के बाद दिखाई देगा।",
-    "co2Value": "{grams} ग्राम CO₂e",
     "equivalence": "≈ {count} स्मार्टफोन चार्ज",
     "requests": "अनुरोध",
     "promptTokens": "प्रॉम्प्ट टोकन",
@@ -2902,7 +2906,7 @@
       "addedByYou": "आपके द्वारा जोड़ा गया",
       "glossary": "शब्दकोश",
       "noGlossary": "कोई शब्दकोश नहीं",
-      "manageGlossaries": "शब्दकोश",
+      "manageGlossaries": "शब्दावलियाँ प्रबंधित करें",
       "glossaries": "शब्दकोश",
       "closeGlossaries": "शब्दकोश बंद करें",
       "glossariesEmpty": "विशेष शब्दों को कैसे अनुवादित किया जाए, इसे लॉक करने के लिए शब्दकोश बनाएँ। शब्दकोश इस डिवाइस पर सेव होते हैं और सभी अनुवादों में इस्तेमाल किए जा सकते हैं।",
@@ -3067,7 +3071,145 @@
       "importTooLarge": "यह फ़ाइल आयात करने के लिए बहुत बड़ी है (अधिकतम 5 MB)।",
       "importNothing": "कोई उपयोगी पंक्ति नहीं मिली ({skipped} पंक्तियाँ छोड़ी गईं)।",
       "importSummary": "{added} जोड़ी गई, {replaced} बदली गई, {skipped} छोड़ी गई।",
-      "entriesTooManyToShow": "{count} शब्द — यहाँ दिखाने के लिए बहुत अधिक हैं। समीक्षा हेतु निर्यात करें या शब्द बदलने के लिए फ़ाइल आयात करें।"
+      "entriesTooManyToShow": "{count} शब्द — यहाँ दिखाने के लिए बहुत अधिक हैं। समीक्षा हेतु निर्यात करें या शब्द बदलने के लिए फ़ाइल आयात करें।",
+      "pagesLoaded": "{selected} में से {total} पृष्ठ लोड हो चुके हैं",
+      "pagesLabel": "पृष्ठ",
+      "pagesApply": "पृष्ठ लोड करें",
+      "pagesPrevious": "पहली बैच",
+      "pagesNext": "अगली बैच",
+      "pagesBudget": "{used} / {max} वर्ण",
+      "pagesChange": "पृष्ठ बदलें",
+      "pagesLoading": "पृष्ठ लोड हो रहे हैं…",
+      "pagesInvalid": "पृष्ठ संख्या या रेंज दर्ज करें, उदाहरण के लिए 1-40, 45.",
+      "pagesUnavailable": "इन पृष्ठों में कोई पाठ नहीं है.",
+      "pagesTooMany": "यह चयन {used} वर्णों का है और एक बैच में {max} हो सकते हैं. कम पृष्ठ चुनें.",
+      "stop": "रोकें",
+      "stepAnalyzing": "विश्लेषण कर रहे हैं",
+      "stepTranslating": "अनुवाद कर रहे हैं",
+      "stepReviewing": "समीक्षा कर रहे हैं",
+      "stepDone": "पूर्ण",
+      "runProgressLabel": "अनुवाद प्रक्रिया",
+      "runHintAnalyzing": "सूत्र में जटिल शब्दों और अस्पष्टताओं को पढ़ रहे हैं।",
+      "runHintTranslating": "अनुवाद लिख रहे हैं।",
+      "runHintReviewing": "मूल के साथ प्रारूप की जांच कर रहे हैं।",
+      "runHintReviewingRound": "मूल के साथ प्रारूप की जांच कर रहे हैं · {total} में से {round} दौर।",
+      "runRound": "{total} में से {round} दौर",
+      "draftLabel": "प्रारूप",
+      "sourceLocked": "अनुवाद के दौरान लॉक किया गया",
+      "analysisNotes": "{count, plural, one {# नोट} other {# नोट्स}}",
+      "analysisPill": "{count, plural, one {विश्लेषण · # नोट} other {विश्लेषण · # नोट्स}}",
+      "reviewSummary": "{count, plural, one {समीक्षा: # दौर, {verdict}} other {समीक्षा: # दौर, {verdict}}}",
+      "analysisDismiss": "सभी अनुवादों के लिए छुपाएं",
+      "analysisShow": "पूर्व-अनुवाद विश्लेषण दिखाएं",
+      "analysisResize": "विश्लेषण पैनल का आकार बदलें",
+      "assessingCriteria": "{count, plural, one {# मापदंड की जांच कर रहे हैं} other {# मापदंडों की जांच कर रहे हैं}}",
+      "editsPending": "निर्णय पूर्ण होने पर सुझाए गए संपादन यहाँ दिखेंगे।",
+      "uploadProgressLabel": "अपलोड प्रक्रिया",
+      "uploadStepUploading": "अपलोड कर रहे हैं",
+      "uploadStepReading": "पाठ पढ़ रहे हैं",
+      "uploadStepReady": "तैयार",
+      "uploadCancel": "रद्द करें",
+      "modeDocument": "पूरा दस्तावेज़",
+      "modeDocumentHint": "अपलोड किए गए PDF का पूरा अनुवाद किया जाता है और उसका लेआउट बरकरार रहता है। परिणाम को पृष्ठ दर पृष्ठ पढ़ें और सुधारें।",
+      "translateDocument": "दस्तावेज़ का अनुवाद करें",
+      "documentSubmitting": "भेज रहे हैं…",
+      "documentIntroTitle": "पूरा दस्तावेज़ अनुवाद करें",
+      "documentIntro": "अपलोड किया गया PDF पूरी तरह से अनुवादित किया जाता है, और उसका लेआउट बरकरार रहता है। जब यह तैयार हो जाता है, तो आप इसे मूल के साथ पृष्ठ दर पृष्ठ पढ़ सकते हैं, पृष्ठों को सुधार सकते हैं, उनकी गुणवत्ता जांच सकते हैं, और परिणाम डाउनलोड कर सकते हैं। इस मोड में शब्दकोश और पुनः समीक्षा लागू नहीं होते। एक बार शुरू होने के बाद, दस्तावेज़ अनुवाद को रोका नहीं जा सकता और इसके पृष्ठ आज की अनुमति में गिने जाते हैं।",
+      "documentNeedsFile": "पूरा दस्तावेज़ अनुवाद करने के लिए PDF अपलोड करें।",
+      "documentNeedsPdf": "पूरा दस्तावेज़ अनुवाद (पृष्ठ दर पृष्ठ दृश्य) केवल PDF फाइलों के लिए उपलब्ध है।",
+      "documentNeedsLanguage": "दस्तावेज़ का अनुवाद करने के लिए लक्षित भाषा चुनें।",
+      "documentLanguageUnsupported": "इस भाषा के लिए पूरा दस्तावेज़ अनुवाद उपलब्ध नहीं है। 'Quick' या 'Reviewed' विकल्पों का उपयोग करें।",
+      "documentNoGlossaries": "पूरा दस्तावेज़ अनुवाद में शब्दकोशों का उपयोग नहीं किया जाता",
+      "documentPagesLeft": "{count, plural, one {आज # पृष्ठ शेष} other {आज # पृष्ठ शेष}}",
+      "documentLimitReached": "इस दस्तावेज़ में आज आपके शेष पृष्ठों से अधिक हैं। चयनित पृष्ठों का 'Quick' या 'Reviewed' से अनुवाद करें या कल फिर प्रयास करें।",
+      "documentUnavailable": "इस सर्वर पर पूरा दस्तावेज़ अनुवाद सेटअप नहीं है।",
+      "documentSubmitFailed": "दस्तावेज़ अनुवाद के लिए नहीं भेजा जा सका: {message}",
+      "documentProgressLabel": "दस्तावेज़ अनुवाद की प्रगति",
+      "documentStepUploaded": "अपलोड किया गया",
+      "documentStepPreparing": "पृष्ठ तैयार हो रहे हैं",
+      "documentTypicalDuration": "आमतौर पर कुछ मिनट",
+      "documentCanLeave": "आप इस पृष्ठ से जा सकते हैं। अनुवाद जारी रहेगा और वापस आने पर यहां मिलेगा।",
+      "documentStalled": "अनुवाद की प्रगति जांच नहीं सकी। यह अभी भी चल सकता है।",
+      "documentCheckAgain": "फिर से जांचें",
+      "documentFailed": "दस्तावेज़ का अनुवाद नहीं हो सका: {message}",
+      "documentGone": "यह अनुवाद अब उपलब्ध नहीं है। पढ़ने के लिए फिर दस्तावेज़ का अनुवाद करें।",
+      "documentPageFailed": "यह पृष्ठ लोड नहीं हो सका: {message}",
+      "documentPagesNotAligned": "अनुवादित फ़ाइल में पृष्ठों की संख्या अलग है, इसलिए किसी पृष्ठ पर दोनों तरफ एक ही सामग्री नहीं दिख सकती।",
+      "documentAvailableUntil": "{date} तक उपलब्ध",
+      "documentRetranslateTitle": "दस्तावेज़ फिर से अनुवाद करें?",
+      "documentRetranslateMessage": "यह एक नया अनुवाद शुरू करता है और उसके पृष्ठ आज की अनुमति में फिर से गिने जाते हैं। एक बार शुरू होने के बाद इसे रोका नहीं जा सकता। वर्तमान अनुवाद और उसके सुधार सर्वर पर तब तक रहते हैं जब तक वे समाप्त नहीं हो जाते, लेकिन यहां अब दिखाई नहीं देंगे।",
+      "retry": "फिर प्रयास करें",
+      "pageLabel": "पृष्ठ",
+      "pageOf": "{total} में से",
+      "pageNumber": "· पृष्ठ {page}",
+      "pagePrevious": "पिछला पृष्ठ",
+      "pageNext": "अगला पृष्ठ",
+      "correctedLabel": "सुधारित",
+      "correctedPages": "सुधारित पृष्ठ:",
+      "correctedPagesMore": "+{count} और",
+      "correctionRestore": "पूर्ववत करें",
+      "correctionRestoreHint": "इस पृष्ठ में किए गए बदलाव छोड़ें और मशीन अनुवाद पर वापस जाएं",
+      "correctionSaving": "सहेज रहे हैं…",
+      "correctionSaved": "सहेजा गया",
+      "correctionSaveFailed": "सहेजा नहीं गया। फिर प्रयास करने के लिए पाठ बदलें।",
+      "download": "डाउनलोड",
+      "downloading": "डाउनलोड हो रहा है…",
+      "downloadFailed": "डाउनलोड असफल रहा: {message}",
+      "downloadTranslated": "अनुवादित {format}",
+      "downloadTranslatedHint": "मूल लेआउट। इसमें आपके सुधार शामिल नहीं हैं।",
+      "downloadTextVersion": "पाठ संस्करण (DOCX)",
+      "downloadTextVersionHint": "सादा पाठ, प्रति पृष्ठ एक पृष्ठ, आपके सुधार सहित।",
+      "documentNoCancel": "एक दस्तावेज़ का अनुवाद शुरू होने के बाद रोका नहीं जा सकता।",
+      "documentGlossariesIgnored": "{count, plural, one {आपका चयनित शब्दकोश इस मोड में लागू नहीं होता।} other {आपके # चयनित शब्दकोश इस मोड में लागू नहीं होते।}} गुणवत्ता आंकें के साथ पेज दर पेज शब्दावली जांचें, या Quick या Reviewed का उपयोग करें।",
+      "pendingLeavePage": "सुझाव इसी पेज से संबंधित हैं और पेज छोड़ने पर नहीं रखे जाते। पहले बाकी सुझावों का निर्णय लें।",
+      "uploadStepOcr": "OCR के साथ पढ़ना",
+      "ocrButton": "OCR से पढ़ें",
+      "ocrButtonHint": "इस PDF को फिर से पाठ पहचान के साथ पढ़ें, स्कैन की गई पृष्ठों या गलत निकले पाठ के लिए",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "यह पाठ पृष्ठों से पाठ पहचान द्वारा पढ़ा गया है। इसे मूल दस्तावेज़ से मिलाएं।",
+      "ocrReasonNoText": "{name} में कोई पाठ नहीं मिला। यह स्कैन किया हुआ दस्तावेज़ लगता है।",
+      "ocrReasonSparse": "{name} में बहुत कम पाठ मिला। कुछ हिस्सा स्कैन किया हुआ हो सकता है।",
+      "ocrReasonManual": "{name} को पाठ पहचान के साथ फिर से पढ़ें?",
+      "ocrExplanation": "OCR पृष्ठ छवियों से पाठ पढ़ता है। यह सामान्य अपलोड की तुलना में अधिक समय लेता है, फाइल के हर पृष्ठ को आपकी दैनिक OCR सीमा में गिनता है, और खराब स्कैन, हस्तलिपि और तालिकाओं में गलती कर सकता है।",
+      "ocrPagesLeft": "{count, plural, one {आज # OCR पृष्ठ शेष है।} other {आज # OCR पृष्ठ शेष हैं।}}",
+      "ocrRun": "OCR से पढ़ें",
+      "ocrDismiss": "अभी नहीं",
+      "ocrSparseHint": "इस PDF में बहुत कम पाठ मिला। कुछ पृष्ठ स्कैन किए हुए हो सकते हैं।",
+      "ocrLimitReached": "इस दस्तावेज़ में आज आपकी OCR सीमा से अधिक पृष्ठ हैं।",
+      "ocrTooManyPages": "यह दस्तावेज़ OCR के लिए बहुत लंबा है, जो अधिकतम {max} पृष्ठ पढ़ सकता है। PDF को विभाजित करें और एक भाग अपलोड करें।",
+      "ocrUnavailable": "इस सर्वर पर OCR सेटअप नहीं है।",
+      "ocrNoText": "OCR ने इस दस्तावेज़ में भी कोई पाठ नहीं पाया।",
+      "ocrFailed": "दस्तावेज़ को OCR से पढ़ा नहीं जा सका। फिर से प्रयास करें।",
+      "scannedWholeExplanation": "आप संपूर्ण दस्तावेज़ का अनुवाद भी कर सकते हैं: यह स्वयं स्कैन की गई पृष्ठों को पढ़ता है, लेआउट संरक्षित रखता है, और प्रतिदिन के अनुवाद भत्ते में पृष्ठों की गिनती करता है।",
+      "scannedUseWholeDocument": "संपूर्ण दस्तावेज़ अनुवाद करें",
+      "scannedSourceNote": "{name} में यहाँ दिखाने के लिए कोई पाठ नहीं है। संपूर्ण दस्तावेज़ अनुवाद इसकी पृष्ठों को सीधे पढ़ता है। यहाँ अपना पाठ टाइप करने से दस्तावेज़ की जगह लेगी।",
+      "scannedPageNote": "मूल दस्तावेज़ के इस पृष्ठ से कोई पाठ नहीं पढ़ा जा सका। फ़ाइल से स्वयं तुलना करें।",
+      "changeLabel": "अनुवाद में बदलाव की अनुरोध करें",
+      "changePlaceholder": "बदलाव पूछें, उदाहरण के लिए इसे अधिक औपचारिक बनाएं",
+      "changePlaceholderAnother": "एक और बदलाव पूछें",
+      "changeSend": "अनुरोध भेजें",
+      "changeWorking": "बदलाव पर काम हो रहा है",
+      "changeNothingApplied": "जब तक आप स्वीकार नहीं करते, कुछ नहीं बदलेगा",
+      "changeSelectionLabel": "चयनित पाठ में बदलाव की अनुरोध करें",
+      "changeSelectionPlaceholder": "इसे बदलें, जैसे tableta लिखें",
+      "changeSelectionScope": "यह केवल चयनित पाठ पर लागू होता है",
+      "changeSelectionClose": "बंद करें",
+      "changeTitle": "अनुरोधित बदलाव",
+      "changeSelectedLabel": "चयनित पाठ",
+      "changeNoEdits": "उस अनुरोध के लिए कुछ भी बदलने की जरूरत नहीं थी।",
+      "changeReplyPending": "{count, plural, one {# सुझाया गया संपादन workspace में है।} other {# सुझाए गए संपादन workspace में हैं।}} जब तक आप स्वीकार नहीं करते, कुछ नहीं बदलेगा।",
+      "changeStopped": "रोक दिया गया। कुछ नहीं बदला गया।",
+      "changeFailed": "बदलाव का अनुरोध विफल हुआ। फिर से प्रयास करें।",
+      "changeNoTranslation": "बदलाव के लिए अभी कोई अनुवाद नहीं है। पहले पाठ का अनुवाद करें।",
+      "changeBusy": "वर्तमान प्रक्रिया के पूरा होने की प्रतीक्षा करें, फिर फिर से पूछें।",
+      "changeHeld": "नहीं भेजा गया: निर्णय का इंतजार कर रहे सुझाए गए संपादन हैं।",
+      "pendingRunActionRequest": "बदलाव की अनुरोध की जा रही है",
+      "railPlaceholder": "बदलाव या कोई सवाल पूछें…",
+      "documentPageCount": "{count, plural, one {# पृष्ठ} other {# पृष्ठ}}",
+      "sourceShowPages": "पृष्ठ दिखाएँ",
+      "sourceEditText": "पाठ के रूप में संपादित करें",
+      "sourceRemoveDocument": "दस्तावेज़ हटाएँ",
+      "sourceJumpToPage": "पृष्ठ पर जाएँ"
     },
     "document": {
       "emptyTitle": "वांछित दस्तावेज़ का वर्णन करें",
@@ -3695,7 +3837,7 @@
       "guideTargetTerm": "आवश्यक अनुवाद",
       "guideNote": "नोट",
       "pendingRun": {
-        "title": "{count} सुझाव अभी भी लंबित हैं",
+        "title": "{count, plural, one {# सुझाव अभी लंबित है} other {# सुझाव अभी लंबित हैं}}",
         "body": "{action} पाठ के किसी भी भाग को बदल सकता है, जिनमें वे अंश भी शामिल हैं जिनके सुझावों पर आपने अभी निर्णय नहीं लिया है, और नया मूल्यांकन वर्तमान सूची को बदल देगा। पहले शेष सुझावों पर निर्णय लें।",
         "acceptAll": "सभी शेष स्वीकृत करें",
         "rejectAll": "सभी अस्वीकृत करें",
@@ -3757,7 +3899,7 @@
         "list<number>": "संख्याओं की सूची"
       },
       "layout": "लेआउट",
-      "layoutHint": "{{field:id}} स्लॉट के साथ मार्कडाउन — रेंडर्ड एक्सपोर्ट और प्रीव्यू के लिए उपयोग होता है।",
+      "layoutHint": "'{{field:id}}' स्लॉट के साथ मार्कडाउन — रेंडर्ड एक्सपोर्ट और प्रीव्यू के लिए उपयोग होता है।",
       "saveTemplate": "टेम्पलेट सहेजें",
       "deleteTemplate": "टेम्पलेट हटाएं",
       "cancel": "रद्द करें",
@@ -4585,6 +4727,10 @@
         "note": "{asOf} की सूची कीमतों पर लागत (ग्लोबल स्टैंडर्ड दर, बिना cached-input छूट): एक ऊपरी सीमा, बिल नहीं। वेब खोज, कोड निष्पादन, प्रतिलेखन, भाषण, अनुवाद और दस्तावेज़ अनुक्रमण शामिल नहीं हैं।"
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "यह वर्कस्पेस (अनुमानित)",
       "workspace": "यह वर्कस्पेस",
@@ -5399,7 +5545,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# दस्तावेज़} other {# दस्तावेज़} } सूचीबद्ध",
     "m365CapImmediateHelp": "Apply करने से सीमा तुरंत सहेज ली जाती है। अन्य बदलावों के लिए अभी भी Save करना ज़रूरी है।",
     "m365CapDraftHelp": "सीमा तब सहेजी जाती है जब आप एजेंट बनाते हैं।",
-    "m365CapSaved": "दस्तावेज़ सीमा सहेजी गई: {limit}."
+    "m365CapSaved": "दस्तावेज़ सीमा सहेजी गई: {limit}.",
+    "m365AgentAllowWebSearchHelp": "डिफ़ॉल्ट रूप से बंद: एजेंट केवल अपने दस्तावेज़ों से उत्तर देता है और कभी भी वेब पर खोज नहीं करता, चाहे उपयोगकर्ता ने कोई भी खोज सेटिंग चुनी हो। चालू करने पर, वेब खोज कब चलेगी और किन वेबसाइटों का उपयोग होगा, इसका निर्णय एजेंट के निर्देशों द्वारा होता है, और वेब स्रोत हमेशा एजेंट के दस्तावेज़ों से अलग दिखाए जाते हैं।",
+    "promptAgentAllowWebSearchHelp": "डिफ़ॉल्ट रूप से चालू। बंद करने पर, यह एजेंट कभी भी वेब पर खोज नहीं करता, चाहे उपयोगकर्ता ने कोई भी खोज सेटिंग चुनी हो।"
   },
   "localModels": {
     "title": "स्थानीय मॉडल्स",
@@ -5706,7 +5854,9 @@
       "m365MailReadsPerDay": "प्रति दिन मेल रीड्स",
       "m365MailDraftsPerDay": "प्रति दिन मेल ड्राफ्ट्स",
       "m365MailDeepScansPerDay": "प्रति दिन मेल डीप स्कैन्स",
-      "m365DigestRunsPerDay": "प्रतिदिन डाइजेस्ट रन"
+      "m365DigestRunsPerDay": "प्रतिदिन डाइजेस्ट रन",
+      "translationPagesPerDay": "प्रति दिन दस्तावेज़ अनुवाद के पृष्ठ",
+      "ocrPagesPerDay": "प्रति दिन OCR पृष्ठ"
     },
     "valueModeLabel": "सीमा प्रकार",
     "valueAmountLabel": "सीमा राशि",
@@ -5729,7 +5879,8 @@
       "jobs": "जॉब्स",
       "rounds": "राउंड्स",
       "documents": "दस्तावेज़",
-      "boolean": ""
+      "boolean": "",
+      "pages": "पृष्ठ"
     },
     "window": {
       "day": "दिन",
@@ -5787,7 +5938,9 @@
       "m365MailReadsPerDay": "मेल सर्च और संदेश/थ्रेड पढ़ने की सीमा प्रति दिन। सीमा पार होने पर, मेल टूल 'कल फिर प्रयास करें' संदेश लौटाते हैं।",
       "m365MailDraftsPerDay": "सहायक द्वारा प्रतिदिन बनाए जा सकने वाले ईमेल ड्राफ्ट — प्रत्येक की पुष्टि आवश्यक। सीमा जानबूझकर कम रखी गई है।",
       "m365MailDeepScansPerDay": "कम्पोजिट मेल विश्लेषण (डाइजेस्ट, डीप सर्च, कमिटमेंट्स) प्रति दिन। हर स्कैन एक बजट यूनिट होता है, चाहे इसमें जितने भी इंटरनल रीड हों।",
-      "m365DigestRunsPerDay": "Microsoft 365 प्रतिदिन डाइजेस्ट रन। एक रन में दर्जनों Graph रीड्स और दो analysis-model कॉल होते हैं; पीरियड पिकर से पुनः रन करना आसान है, इसलिए डिफॉल्ट सीमा तंग है।"
+      "m365DigestRunsPerDay": "Microsoft 365 प्रतिदिन डाइजेस्ट रन। एक रन में दर्जनों Graph रीड्स और दो analysis-model कॉल होते हैं; पीरियड पिकर से पुनः रन करना आसान है, इसलिए डिफॉल्ट सीमा तंग है।",
+      "translationPagesPerDay": "दस्तावेज़ अनुवाद के लिए प्रति दिन PDF पृष्ठ जमा किए जाते हैं.",
+      "ocrPagesPerDay": "प्रति दिन PDF पृष्ठ जो OCR (स्कैन दस्तावेज़ों के लिए पाठ पहचान) से पढ़े गए।"
     },
     "scopeFamily": "परिवार",
     "scopeModel": "मॉडल",
@@ -6223,7 +6376,7 @@
       "tabs": {
         "onedrive": "मेरी फ़ाइलें",
         "recent": "हाल ही की",
-        "shared": "मेरे साथ साझा किया गया",
+        "shared": "साझा किया गया",
         "sharepoint": "SharePoint",
         "teams": "टीम्स"
       },
@@ -8095,7 +8248,13 @@
       "skills": "स्किल चयन",
       "tools": "टूल रूटिंग",
       "trim": "ट्रिम वर्गीकरण",
-      "assessment": "सर्च असेसमेंट"
+      "assessment": "सर्च असेसमेंट",
+      "query": "खोज क्वेरी पुनःलेखन",
+      "mailScreen": "मेल फ़िशिंग स्क्रीन",
+      "mailAnalysis": "मेल और डाइजेस्ट विश्लेषण",
+      "schemaProposal": "एक्सट्रैक्शन स्कीमा प्रस्ताव",
+      "mcpPlan": "कनेक्टर प्लान",
+      "vision": "छवि और पृष्ठ पढ़ना"
     },
     "reason": {
       "endpoint_missing": "एंडपॉइंट या अकाउंट बाइंडिंग नहीं है",
@@ -8116,6 +8275,164 @@
       "endpoint_account_mismatch": "एंडपॉइंट और ARM रिसोर्स ID अलग अकाउंट दर्शाते हैं। डिप्लॉयमेंट कॉन्फ़िगरेशन सही करें।",
       "inventory_refresh_failed": "इंवेंटरी रिफ्रेश असफल हुआ। ऐप की पहचान के रीडर एक्सेस व अकाउंट कनेक्टिविटी जांचें।",
       "credential_unavailable": "ऐप अपनी इन्वेंटरी क्रेडेंशियल प्राप्त नहीं कर सका। डिप्लॉयमेंट पहचान कॉन्फ़िगरेशन जांचें।"
+    },
+    "notSupported": "यह मॉडल समर्थित नहीं है",
+    "unservedOperations": "इस श्रृंखला में कोई मॉडल {operations} का समर्थन नहीं करता। कृपया ऐसा मॉडल जोड़ें जो समर्थन करता हो।"
+  },
+  "filePreview": {
+    "preview": "पूर्वावलोकन",
+    "download": "डाउनलोड करें",
+    "loading": "पूर्वावलोकन तैयार किया जा रहा है…",
+    "failed": "इस फ़ाइल का पूर्वावलोकन नहीं किया जा सकता। आप इसे डाउनलोड कर सकते हैं।",
+    "pageOf": "पृष्ठ {page} में से {total}",
+    "truncated": "पहले {shown} में से {total} पृष्ठ दिखा रहे हैं। बाकी देखने के लिए फ़ाइल डाउनलोड करें।",
+    "enlarge": "{name} बड़ा करें"
+  },
+  "addToChat": {
+    "title": "चैट में जोड़ें",
+    "titleTranslate": "दस्तावेज़ का अनुवाद करें",
+    "titleTranscribe": "ऑडियो या वीडियो ट्रांसक्राइब करें",
+    "sourcesLabel": "से जोड़ें",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "यह क्रिया उपलब्ध नहीं है",
+    "sources": {
+      "device": "यह डिवाइस",
+      "link": "लिंक",
+      "camera": "कैमरा",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ईमेल",
+      "meetings": "मीटिंग्स"
+    },
+    "device": {
+      "browse": "इस डिवाइस में ब्राउज़ करें",
+      "dropHint": "या फाइलें इस विंडो में कहीं भी ड्रॉप करें, या पेस्ट करें",
+      "rejected": "इनमें से कोई भी फाइल यहाँ उपयोग नहीं की जा सकती।",
+      "hint": {
+        "attach": "दस्तावेज़, छवियाँ, ऑडियो और वीडियो।",
+        "translate": "एक दस्तावेज़: Word, Excel, PowerPoint, PDF, HTML या टेक्स्ट।",
+        "transcribe": "ऑडियो या वीडियो। भेजने पर ट्रांसक्राइब किया जाता है।"
+      }
+    },
+    "selection": {
+      "then": "फिर",
+      "intents": {
+        "attach": "संलग्न करें",
+        "translate": "अनुवाद करें",
+        "transcribe": "ट्रांसक्राइब करें"
+      },
+      "confirm": {
+        "attach": "जोड़ें",
+        "translate": "अनुवाद करें",
+        "transcribe": "ट्रांसक्राइब करें"
+      },
+      "unfit": {
+        "attach": "इन फाइलों को संलग्न नहीं किया जा सकता",
+        "translate": "अनुवाद एक बार में एक दस्तावेज़ लेता है",
+        "transcribe": "केवल ऑडियो और वीडियो ट्रांसक्राइब किए जा सकते हैं"
+      }
+    },
+    "menu": {
+      "addToChatNote": "यह डिवाइस, लिंक, Microsoft 365",
+      "filesOrPhotos": "फाइलें या फोटो",
+      "fromThisDevice": "इस डिवाइस से",
+      "connect": "Microsoft 365 कनेक्ट करें",
+      "connectNote": "OneDrive, ईमेल और मीटिंग्स से जोड़ें"
     }
+  },
+  "usageBudgets": {
+    "title": "आपका बजट",
+    "description": "इस डिवाइस पर आपके द्वारा निर्धारित सीमाएँ। एक बजट चुनें, फिर चुनें कि उसके करीब या पार पहुंचने पर क्या हो। बजट प्रत्येक अवधि की शुरुआत से चैट और वर्कफ़्लो रन की गिनती करते हैं।",
+    "metric": {
+      "emissions": "उत्सर्जन बजट",
+      "cost": "लागत बजट"
+    },
+    "metricShort": {
+      "emissions": "उत्सर्जन",
+      "cost": "लागत"
+    },
+    "off": "कोई बजट निर्धारित नहीं है।",
+    "measureAs": "इसे मापें",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "फ़ोन चार्ज",
+      "usd": "US डॉलर"
+    },
+    "amountLabel": "बजट",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "घंटे",
+      "smartphoneCharge": "चार्ज",
+      "usd": "US डॉलर"
+    },
+    "periodLabel": "हर बार रीसेट होता है",
+    "period": {
+      "day": "दिन",
+      "week": "सप्ताह",
+      "month": "महीना"
+    },
+    "costNote": "सूची कीमतों से अनुमानित: यह अधिकतम सीमा है, बिल नहीं।",
+    "chargesValue": "{count} फ़ोन चार्ज",
+    "percent": "{percent}%",
+    "usedOf": "{used} में से {limit} उपयोग किया गया ({percent}%)",
+    "usedOfShort": "{used} में से {limit}",
+    "resets": "{date} को रीसेट होता है",
+    "budgetMarker": "बजट",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "बजट के भीतर",
+      "warn": "चेतावनी दिखाई गई",
+      "ask": "हर संदेश से पहले पूछें",
+      "stop": "भेजना रोक दिया गया"
+    },
+    "stage": {
+      "warn": {
+        "title": "चेतावनी",
+        "tag": "सूचना",
+        "description": "बजट के इस हिस्से से चैट में सूचना दिखाएँ।"
+      },
+      "ask": {
+        "title": "पहले पूछें",
+        "tag": "सॉफ्ट ब्लॉक",
+        "description": "बजट के इस हिस्से से हर संदेश की पुष्टि करने के लिए पूछें।"
+      },
+      "stop": {
+        "title": "रोकें",
+        "tag": "हार्ड ब्लॉक",
+        "description": "बजट के इस हिस्से से भेजना रोकें जब तक कि बजट रीसेट न हो या आप यहाँ उसे बढ़ा न दें।"
+      }
+    },
+    "thresholdLabel": "{stage} सीमा, बजट का प्रतिशत",
+    "notice": {
+      "warn": {
+        "emissions": "आपने अपने उत्सर्जन बजट का {percent}% उपयोग किया है।",
+        "cost": "आपने अपने लागत बजट का {percent}% उपयोग किया है।"
+      },
+      "ask": {
+        "emissions": "आपने अपने उत्सर्जन बजट का {percent}% उपयोग किया है। यह संदेश भेजें?",
+        "cost": "आपने अपने लागत बजट का {percent}% उपयोग किया है। यह संदेश भेजें?"
+      },
+      "askRun": {
+        "emissions": "आपने अपने उत्सर्जन बजट का {percent}% उपयोग किया है। यह रन शुरू करें?",
+        "cost": "आपने अपने लागत बजट का {percent}% उपयोग किया है। यह रन शुरू करें?"
+      },
+      "stop": {
+        "emissions": "उत्सर्जन बजट की सीमा पहुँच गई है। भेजना {date} तक रोका गया है।",
+        "cost": "लागत बजट की अधिकतम सीमा पहुँच गई है। {date} तक भेजना रोका गया है।"
+      }
+    },
+    "actions": {
+      "viewBudget": "बजट देखें",
+      "dismiss": "खारिज करें",
+      "sendAnyway": "फिर भी भेजें",
+      "runAnyway": "फिर भी चलाएँ",
+      "dontSend": "ना भेजें",
+      "dontAskToday": "आज फिर मत पूछें",
+      "openSettings": "बजट सेटिंग्स खोलें",
+      "edit": "संपादित करें"
+    },
+    "composerPaused": "आपके बजट द्वारा भेजना रोका गया है",
+    "summaryTitle": "आपके बजट",
+    "chipAria": "{metric} बजट: {percent}% उपयोग हो चुका है।",
+    "runProjection": "उत्सर्जन बजट {from}% → {to}%"
   }
 }

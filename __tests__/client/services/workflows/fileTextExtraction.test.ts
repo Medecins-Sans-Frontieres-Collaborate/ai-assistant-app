@@ -1,5 +1,6 @@
 import {
   FileTextExtractionError,
+  ocrUploadedFile,
   uploadAndExtractText,
 } from '@/client/services/workflows/fileTextExtraction';
 
@@ -47,6 +48,7 @@ describe('uploadAndExtractText', () => {
       url,
       name: file.name,
       text: 'Extracted document',
+      ocrAvailable: false,
     });
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(fetchMock).toHaveBeenNthCalledWith(2, '/api/file/process', {
@@ -151,6 +153,7 @@ describe('uploadAndExtractText', () => {
       url: '',
       name: 'notes.txt',
       text: 'Translate this',
+      ocrAvailable: false,
     });
     expect(fetchMock).not.toHaveBeenCalled();
   });
@@ -168,5 +171,101 @@ describe('uploadAndExtractText', () => {
       text: 'Parsed PDF text',
     });
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('OCR in the extraction service', () => {
+  const fetchMock = vi.fn<typeof fetch>();
+  const url = '/api/file/scan.pdf';
+  const file = new File(['scan'], 'scan.pdf', { type: 'application/pdf' });
+
+  beforeEach(() => {
+    fetchMock.mockReset();
+    vi.stubGlobal('fetch', fetchMock);
+    vi.stubGlobal(
+      'FileReader',
+      class {
+        result = 'data:application/pdf;base64,c2Nhbg==';
+        onloadend?: () => void;
+        readAsDataURL() {
+          this.onloadend?.();
+        }
+      },
+    );
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('reports whether the server offers OCR for an extracted file', async () => {
+    fetchMock
+      .mockResolvedValueOnce(successResponse({ uri: url }))
+      .mockResolvedValueOnce(
+        Response.json({ results: [{ content: 'thin' }], ocrAvailable: true }),
+      );
+    await expect(uploadAndExtractText(file)).resolves.toMatchObject({
+      ocrAvailable: true,
+    });
+  });
+
+  it('keeps the stored file and the OCR offer on a no-text failure', async () => {
+    fetchMock
+      .mockResolvedValueOnce(successResponse({ uri: url }))
+      .mockResolvedValueOnce(
+        Response.json(
+          { error: 'none', code: 'NO_EXTRACTABLE_TEXT', ocrAvailable: true },
+          { status: 422 },
+        ),
+      );
+    const error = await uploadAndExtractText(file).catch((e) => e);
+    expect(error).toBeInstanceOf(FileTextExtractionError);
+    expect(error.code).toBe('NO_EXTRACTABLE_TEXT');
+    expect(error.context).toEqual({ url, ocrAvailable: true, status: 422 });
+  });
+
+  it('does not claim OCR when the server does not say so', async () => {
+    fetchMock
+      .mockResolvedValueOnce(successResponse({ uri: url }))
+      .mockResolvedValueOnce(
+        Response.json({ error: 'none', code: 'X' }, { status: 422 }),
+      );
+    const error = await uploadAndExtractText(file).catch((e) => e);
+    expect(error.context.ocrAvailable).toBe(false);
+  });
+
+  it('returns OCR text and the pages read', async () => {
+    fetchMock.mockResolvedValueOnce(
+      successResponse({ content: '--- Page 1 ---\nTexto', pageCount: 3 }),
+    );
+    await expect(ocrUploadedFile(url)).resolves.toEqual({
+      text: '--- Page 1 ---\nTexto',
+      pageCount: 3,
+    });
+    const [target, init] = fetchMock.mock.calls[0];
+    expect(target).toBe('/api/file/ocr');
+    expect(JSON.parse(init?.body as string)).toEqual({ url });
+  });
+
+  it('carries the server code and status when OCR is refused', async () => {
+    fetchMock.mockResolvedValueOnce(
+      Response.json(
+        { error: 'Too long', code: 'OCR_TOO_MANY_PAGES' },
+        { status: 413 },
+      ),
+    );
+    const error = await ocrUploadedFile(url).catch((e) => e);
+    expect(error).toBeInstanceOf(FileTextExtractionError);
+    expect(error).toMatchObject({
+      message: 'Too long',
+      code: 'OCR_TOO_MANY_PAGES',
+      context: { url, status: 413 },
+    });
+  });
+
+  it('rejects a success response without the text', async () => {
+    fetchMock.mockResolvedValueOnce(successResponse({ pageCount: 3 }));
+    await expect(ocrUploadedFile(url)).rejects.toThrow(
+      'OCR failed: server response is missing the result',
+    );
   });
 });

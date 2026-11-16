@@ -18,6 +18,7 @@ import {
   LanguageOption,
   filterLanguageOptions,
 } from '@/lib/utils/app/languagePickerHelpers';
+import { isRtlElement } from '@/lib/utils/client/textDirection';
 
 export interface LanguagePickerProps {
   /** Ref to the button that opens this picker. Used for click-outside + positioning. */
@@ -121,7 +122,10 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
       if (!trigger) return;
       const rect = trigger.getBoundingClientRect();
 
-      let left = rect.right - DROPDOWN_WIDTH_PX;
+      // The dropdown shares the trigger's end edge.
+      let left = isRtlElement(trigger)
+        ? rect.left
+        : rect.right - DROPDOWN_WIDTH_PX;
       left = Math.min(
         Math.max(left, OFFSET_PX),
         Math.max(window.innerWidth - DROPDOWN_WIDTH_PX - OFFSET_PX, OFFSET_PX),
@@ -281,7 +285,7 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
         <div className="relative">
           <IconSearch
             size={16}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute start-2.5 top-1/2 -translate-y-1/2 text-gray-400"
           />
           <input
             ref={searchInputRef}
@@ -289,12 +293,12 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={resolvedSearchPlaceholder}
-            className="w-full pl-8 pr-8 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white placeholder-gray-500"
+            className="w-full ps-8 pe-8 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white placeholder-gray-500"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              className="absolute end-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               aria-label={t('common.clearSearch') || 'Clear search'}
             >
               <IconX size={14} />
@@ -309,7 +313,7 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
             <button
               onClick={() => handleSelect(null)}
               disabled={disabled}
-              className={`w-full px-3 py-2 text-left text-sm flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+              className={`w-full px-3 py-2 text-start text-sm flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
                 selectedIndex === 0 ? 'bg-gray-100 dark:bg-gray-700' : ''
               }`}
               role="option"
@@ -338,7 +342,7 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
               key={opt.code}
               onClick={() => handleSelect(opt.code)}
               disabled={disabled}
-              className={`w-full px-3 py-2 text-left text-sm flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+              className={`w-full px-3 py-2 text-start text-sm flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
                 isHighlighted ? 'bg-gray-100 dark:bg-gray-700' : ''
               } ${isSelected ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}
               role="option"
@@ -387,7 +391,7 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
               onClose();
             }}
             disabled={disabled}
-            className="w-full px-3 py-2 text-left text-sm flex items-center gap-2 border-t border-gray-200 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+            className="w-full px-3 py-2 text-start text-sm flex items-center gap-2 border-t border-gray-200 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
             role="option"
             aria-selected={false}
           >

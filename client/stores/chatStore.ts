@@ -1477,7 +1477,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // When the model carries a boolean it wins — for overrides of static
     // ids it is fresher than the bundled config.
     const orgAgentSearchAllowed = isPromptAgentPersona
-      ? true
+      ? // Search is on for a persona unless its owner switched it off.
+        conversation.model.allowWebSearch !== false
       : isOrganizationAgent && conversation.model.id.startsWith('org-')
         ? typeof conversation.model.allowWebSearch === 'boolean'
           ? conversation.model.allowWebSearch

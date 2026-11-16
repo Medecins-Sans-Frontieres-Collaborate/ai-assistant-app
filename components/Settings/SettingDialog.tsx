@@ -37,6 +37,8 @@ import { UsageImpactSection } from './Sections/UsageImpactSection';
 import { SettingsSidebar } from './SettingsSidebar';
 import { SettingsSection } from './types';
 
+import { useUIStore } from '@/client/stores/uiStore';
+
 const version = packageJson.version;
 const build = process.env.NEXT_PUBLIC_BUILD || 'Unknown';
 const env = process.env.NEXT_PUBLIC_ENV || 'development';
@@ -136,6 +138,19 @@ export function SettingDialog() {
       window.removeEventListener('mousedown', handleMouseDown);
     };
   }, [isSettingsOpen, setIsSettingsOpen, showMigrationDialog]);
+
+  // Land on the section the opener asked for (e.g. "Connect Microsoft
+  // 365" → Connections), then clear the request so the next plain opening
+  // starts on the default section.
+  const requestedSection = useUIStore((s) => s.settingsInitialSection);
+  const setSettingsInitialSection = useUIStore(
+    (s) => s.setSettingsInitialSection,
+  );
+  useEffect(() => {
+    if (!isSettingsOpen || !requestedSection) return;
+    setActiveSection(requestedSection);
+    setSettingsInitialSection(null);
+  }, [isSettingsOpen, requestedSection, setSettingsInitialSection]);
 
   // Update storage data when dialog opens
   useEffect(() => {
@@ -298,7 +313,7 @@ export function SettingDialog() {
 
           <div
             ref={modalRef}
-            className="dark:border-netural-400 inline-block transform rounded-lg border border-gray-300 bg-white text-left align-bottom shadow-xl transition-all dark:bg-surface-dark-base sm:my-8 w-full md:max-w-[800px] lg:max-w-[900px] xl:max-w-[1000px] sm:align-middle animate-modal-in"
+            className="dark:border-netural-400 inline-block transform rounded-lg border border-gray-300 bg-white text-start align-bottom shadow-xl transition-all dark:bg-surface-dark-base sm:my-8 w-full md:max-w-[800px] lg:max-w-[900px] xl:max-w-[1000px] sm:align-middle animate-modal-in"
             role="dialog"
           >
             <div className="flex flex-col md:flex-row h-[550px] md:h-[700px]">

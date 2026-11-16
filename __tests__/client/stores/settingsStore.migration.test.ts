@@ -1319,3 +1319,51 @@ describe('settingsStore.setLastChannelIds', () => {
     expect(rows['set-new']).toEqual(['x']);
   });
 });
+
+/**
+ * v74 → v75: Translation analysis strip preferences. Shown, at the default
+ * height — what these users already had. The height is clamped on the way
+ * in because it round-trips through localStorage.
+ */
+describe('settingsStore migration (v74 → v75)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+  const DEFAULT_HEIGHT = 224;
+  const MIN_HEIGHT = 96;
+  const MAX_HEIGHT = 560;
+
+  it('backfills a visible strip at the default height from v74', () => {
+    const result = migrate({ m365Connected: true }, 74) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.translationAnalysisHidden).toBe(false);
+    expect(result.translationAnalysisHeight).toBe(DEFAULT_HEIGHT);
+    expect(result.m365Connected).toBe(true);
+  });
+
+  it('preserves existing preferences on a current-version store', () => {
+    const result = migrate(
+      { translationAnalysisHidden: true, translationAnalysisHeight: 300 },
+      75,
+    ) as Record<string, unknown>;
+
+    expect(result.translationAnalysisHidden).toBe(true);
+    expect(result.translationAnalysisHeight).toBe(300);
+  });
+
+  it('repairs a non-boolean flag and clamps an out-of-range height', () => {
+    const tooTall = migrate(
+      { translationAnalysisHidden: 'yes', translationAnalysisHeight: 9000 },
+      74,
+    ) as Record<string, unknown>;
+    expect(tooTall.translationAnalysisHidden).toBe(false);
+    expect(tooTall.translationAnalysisHeight).toBe(MAX_HEIGHT);
+
+    const tooShort = migrate({ translationAnalysisHeight: 1 }, 74) as Record<
+      string,
+      unknown
+    >;
+    expect(tooShort.translationAnalysisHeight).toBe(MIN_HEIGHT);
+  });
+});

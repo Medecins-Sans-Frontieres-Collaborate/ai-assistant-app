@@ -211,6 +211,8 @@ describe('index job routes', () => {
       expect.anything(),
       AGENT_ID,
       JOB_ID,
+      // Auto-OCR reads page images in EU (agent content residency).
+      { vision: expect.objectContaining({ region: 'EU' }) },
     );
 
     const cancelled = await cancelPOST(

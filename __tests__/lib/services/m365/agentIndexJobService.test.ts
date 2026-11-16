@@ -329,9 +329,9 @@ describe('stepIndexJob', () => {
       m365Agent: raised,
       etag: '"raised-etag"',
     });
-    await stepIndexJob(req, storage, agent.id, jobId, 0);
-    await stepIndexJob(req, storage, agent.id, jobId, 0);
-    await stepIndexJob(req, storage, agent.id, jobId, 0);
+    await stepIndexJob(req, storage, agent.id, jobId, { budgetMs: 0 });
+    await stepIndexJob(req, storage, agent.id, jobId, { budgetMs: 0 });
+    await stepIndexJob(req, storage, agent.id, jobId, { budgetMs: 0 });
     const written = mockStore.writeM365Agent.mock.calls.at(-1)!;
     expect(written[2]).toBe('"raised-etag"');
     const reloaded = M365AgentSchema.parse(
@@ -353,7 +353,9 @@ describe('stepIndexJob', () => {
       'admin@example.org',
     );
     // Budget 0: one claim batch per step (2 items, per the mocked concurrency).
-    const first = await stepIndexJob(req, storage, agent.id, jobId, 0);
+    const first = await stepIndexJob(req, storage, agent.id, jobId, {
+      budgetMs: 0,
+    });
     expect(first).toMatchObject({
       status: 'running',
       done: 2,
@@ -362,10 +364,14 @@ describe('stepIndexJob', () => {
     });
     expect(mockIndex.indexJobItem).toHaveBeenCalledTimes(2);
 
-    const second = await stepIndexJob(req, storage, agent.id, jobId, 0);
+    const second = await stepIndexJob(req, storage, agent.id, jobId, {
+      budgetMs: 0,
+    });
     expect(second).toMatchObject({ status: 'running', done: 3 });
 
-    const third = await stepIndexJob(req, storage, agent.id, jobId, 0);
+    const third = await stepIndexJob(req, storage, agent.id, jobId, {
+      budgetMs: 0,
+    });
     expect(third.status).toBe('succeeded');
     expect(mockIndex.reconcileAgentChunks).toHaveBeenCalledTimes(1);
     expect(mockStore.writeM365AgentManifest).toHaveBeenCalledWith(
@@ -392,7 +398,9 @@ describe('stepIndexJob', () => {
       error: 'boom',
     });
     // Sticky: stepping a finished job is a no-op.
-    const again = await stepIndexJob(req, storage, agent.id, jobId, 0);
+    const again = await stepIndexJob(req, storage, agent.id, jobId, {
+      budgetMs: 0,
+    });
     expect(again.status).toBe('succeeded');
     expect(mockIndex.indexJobItem).toHaveBeenCalledTimes(3);
   });
@@ -412,7 +420,9 @@ describe('stepIndexJob', () => {
       body: JSON.stringify(current),
       etag: '"stale"',
     });
-    const summary = await stepIndexJob(req, storage, agent.id, jobId, 0);
+    const summary = await stepIndexJob(req, storage, agent.id, jobId, {
+      budgetMs: 0,
+    });
     expect(summary.done).toBe(2);
     expect(
       mockIndex.indexJobItem.mock.calls.map(
@@ -439,7 +449,7 @@ describe('stepIndexJob', () => {
       'u1',
       'admin@example.org',
     );
-    await stepIndexJob(req, storage, agent.id, jobId, 0);
+    await stepIndexJob(req, storage, agent.id, jobId, { budgetMs: 0 });
     const options = mockIndex.indexJobItem.mock.calls[0][6];
     expect(options).toMatchObject({
       autoOcr: { remainingPages: 200, maxPagesPerFile: 50 },
@@ -485,7 +495,7 @@ describe('stepIndexJob', () => {
       'u1',
       'admin@example.org',
     );
-    await stepIndexJob(req, storage, agent.id, second.jobId, 0);
+    await stepIndexJob(req, storage, agent.id, second.jobId, { budgetMs: 0 });
     expect(mockIndex.indexJobItem.mock.calls[0][6]).toBeUndefined();
   });
 
@@ -538,7 +548,9 @@ describe('stepIndexJob', () => {
       'admin@example.org',
     );
     mockIndex.indexJobItem.mockRejectedValue(new Error('token expired'));
-    const summary = await stepIndexJob(req, storage, agent.id, jobId, 0);
+    const summary = await stepIndexJob(req, storage, agent.id, jobId, {
+      budgetMs: 0,
+    });
     expect(summary).toMatchObject({ status: 'failed', error: 'token expired' });
     const stored = (await readIndexJob(storage, agent.id))!.job;
     expect(stored.sources[0].items.every((i) => i.status === 'pending')).toBe(
@@ -582,7 +594,9 @@ describe('stepIndexJob', () => {
       'u1',
       'admin@example.org',
     );
-    const summary = await stepIndexJob(req, storage, fileAgent.id, jobId, 0);
+    const summary = await stepIndexJob(req, storage, fileAgent.id, jobId, {
+      budgetMs: 0,
+    });
     expect(summary.status).toBe('succeeded');
     expect(mockIndex.indexJobItem).not.toHaveBeenCalled();
     const stamped = mockStore.writeM365Agent.mock.calls.at(-1)![1] as M365Agent;
@@ -625,9 +639,13 @@ describe('stepIndexJob', () => {
       'u1',
       'admin@example.org',
     );
-    let summary = await stepIndexJob(req, storage, staleAgent.id, jobId, 0);
+    let summary = await stepIndexJob(req, storage, staleAgent.id, jobId, {
+      budgetMs: 0,
+    });
     while (summary.status === 'running') {
-      summary = await stepIndexJob(req, storage, staleAgent.id, jobId, 0);
+      summary = await stepIndexJob(req, storage, staleAgent.id, jobId, {
+        budgetMs: 0,
+      });
     }
     const stamped = mockStore.writeM365Agent.mock.calls.at(-1)![1] as M365Agent;
     expect(stamped.sources[0]).toMatchObject({
@@ -640,7 +658,7 @@ describe('stepIndexJob', () => {
   it('rejects a mismatched job id', async () => {
     await startIndexJob(req, storage, agent, 'u1', 'admin@example.org');
     await expect(
-      stepIndexJob(req, storage, agent.id, 'job-ffffffffffff', 0),
+      stepIndexJob(req, storage, agent.id, 'job-ffffffffffff', { budgetMs: 0 }),
     ).rejects.toThrow(/does not match/);
   });
 });
@@ -728,7 +746,9 @@ describe('cancelIndexJob', () => {
     const marked = mockStore.writeM365Agent.mock.calls.at(-1)![1] as M365Agent;
     expect(marked.sources[0].status).toBe('pending');
     expect(await cancelIndexJob(storage, agent.id, jobId)).toBeNull();
-    const after = await stepIndexJob(req, storage, agent.id, jobId, 0);
+    const after = await stepIndexJob(req, storage, agent.id, jobId, {
+      budgetMs: 0,
+    });
     expect(after.status).toBe('cancelled');
     expect(mockIndex.indexJobItem).not.toHaveBeenCalled();
   });

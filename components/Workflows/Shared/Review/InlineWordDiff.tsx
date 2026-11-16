@@ -7,7 +7,11 @@ interface InlineWordDiffProps {
   after: string;
 }
 
-/** Word-level inline diff: red strikethrough deletions, green insertions. */
+/**
+ * Word-level inline diff: red strikethrough deletions, green insertions.
+ * A deletion directly followed by its replacement gets a small gap, so the
+ * two words do not read as one.
+ */
 export function InlineWordDiff({ before, after }: InlineWordDiffProps) {
   const parts = diffWords(before, after);
   return (
@@ -18,7 +22,9 @@ export function InlineWordDiff({ before, after }: InlineWordDiffProps) {
         ) : part.kind === 'del' ? (
           <del
             key={i}
-            className="rounded-sm bg-red-50 text-red-700 decoration-red-400 dark:bg-red-900/20 dark:text-red-400"
+            className={`rounded-sm bg-red-50 text-red-700 decoration-red-400 dark:bg-red-900/20 dark:text-red-400 ${
+              parts[i + 1]?.kind === 'ins' ? 'me-1' : ''
+            }`}
           >
             {part.text}
           </del>

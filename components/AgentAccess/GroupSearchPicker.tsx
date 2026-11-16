@@ -156,7 +156,7 @@ export const GroupSearchPicker: FC<GroupSearchPickerProps> = ({
             <li key={group.id}>
               <button
                 type="button"
-                className="flex w-full items-baseline gap-2 px-2 py-1.5 text-left text-sm text-black hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                className="flex w-full items-baseline gap-2 px-2 py-1.5 text-start text-sm text-black hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 onClick={() => addGroup(group)}
               >
                 <span>{group.name}</span>

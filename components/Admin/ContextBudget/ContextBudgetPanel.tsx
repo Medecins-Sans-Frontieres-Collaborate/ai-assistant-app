@@ -238,7 +238,10 @@ export const ContextBudgetPanel: FC = () => {
               })
             }
           />
-          <span className={ADMIN_MUTED}>{t('rangeHint', { min, max })}</span>
+          {/* A numeric range reads low to high in every language. */}
+          <span className={ADMIN_MUTED} dir="ltr">
+            {t('rangeHint', { min, max })}
+          </span>
         </div>
         <p className={ADMIN_HINT}>{t(descriptionKey)}</p>
         <p className={ADMIN_HINT}>
@@ -404,13 +407,13 @@ export const ContextBudgetPanel: FC = () => {
         <table className="mt-2 w-full text-sm">
           <thead>
             <tr className={ADMIN_MUTED}>
-              <th scope="col" className="py-1 text-left font-medium">
+              <th scope="col" className="py-1 text-start font-medium">
                 {t('effectiveColumnModel')}
               </th>
-              <th scope="col" className="py-1 text-right font-medium">
+              <th scope="col" className="py-1 text-end font-medium">
                 {t('effectiveColumnWindow')}
               </th>
-              <th scope="col" className="py-1 text-right font-medium">
+              <th scope="col" className="py-1 text-end font-medium">
                 {t('effectiveColumnBudget')}
               </th>
             </tr>
@@ -420,15 +423,15 @@ export const ContextBudgetPanel: FC = () => {
               const budget = resolveHistoryBudget(model, draft);
               return (
                 <tr key={model.id} className="text-black dark:text-white">
-                  <td className="py-0.5 pr-2">
+                  <td className="py-0.5 pe-2">
                     {model.name}
                     <span className={`ms-1 ${ADMIN_MUTED}`}>({model.id})</span>
                   </td>
-                  <td className="py-0.5 text-right tabular-nums">
+                  <td className="py-0.5 text-end tabular-nums">
                     {formatTokens(model.maxLength)}
                   </td>
                   <td
-                    className="py-0.5 text-right tabular-nums"
+                    className="py-0.5 text-end tabular-nums"
                     data-testid={`budget-${model.id}`}
                   >
                     {formatTokens(budget.tokens)}

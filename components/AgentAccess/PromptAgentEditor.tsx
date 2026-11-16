@@ -100,6 +100,9 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
   const [skillIds, setSkillIds] = useState<string[]>(
     existing?.agent.skillIds ?? [],
   );
+  const [allowWebSearch, setAllowWebSearch] = useState(
+    existing?.agent.allowWebSearch ?? true,
+  );
   const skillsQuery = useSkillsAdmin().query;
   const skillOptions = (skillsQuery.data?.skills ?? []).filter(
     (entry) => entry.skill.activation !== 'off',
@@ -156,6 +159,7 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
           modelId,
           skillAccess,
           skillIds: skillAccess === 'selected' ? skillIds : [],
+          allowWebSearch,
         }),
       });
       if (response.status === 409) {
@@ -278,6 +282,21 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label className="flex items-center gap-2 text-sm font-medium text-black dark:text-white">
+            <input
+              type="checkbox"
+              checked={allowWebSearch}
+              onChange={(e) => setAllowWebSearch(e.target.checked)}
+              className="h-4 w-4 accent-blue-600"
+            />
+            {t('orgAgentAllowWebSearch')}
+          </label>
+          <p className="ms-6 mt-1 text-xs text-gray-600 dark:text-gray-400">
+            {t('promptAgentAllowWebSearchHelp')}
+          </p>
         </div>
 
         <fieldset>

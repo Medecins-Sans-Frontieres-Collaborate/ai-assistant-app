@@ -175,7 +175,7 @@ describe('DropdownSearchInput', () => {
       const { container } = render(<DropdownSearchInput {...defaultProps} />);
 
       // First SVG should be the search icon
-      const searchIcon = container.querySelector('.absolute.left-3');
+      const searchIcon = container.querySelector('.absolute.start-3');
       expect(searchIcon).toBeInTheDocument();
     });
 

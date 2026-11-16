@@ -10,7 +10,7 @@ import {
 
 import type { Message } from '@/types/chat';
 
-import { getEvalClients } from './lib/clients';
+import { getEvalClients, getRouterEvalClient } from './lib/clients';
 import { loadEvalEnv } from './lib/env';
 
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -100,7 +100,7 @@ const cases: {
 
 describe.skipIf(process.env.EVAL_SKILLS !== '1')('live skill selection', () => {
   it('checks multilingual matches and negative boundaries on both routing paths', async () => {
-    const router = new ToolRouterService(getEvalClients().openAICompat);
+    const router = new ToolRouterService(getRouterEvalClient());
     const results = [];
     for (const fixture of cases) {
       const messages = [

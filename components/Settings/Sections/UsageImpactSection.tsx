@@ -6,12 +6,10 @@ import { FC, useMemo } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
 
+import { useCo2eFormat } from '@/client/hooks/settings/useCo2eFormat';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
-import {
-  estimateRequestUsd,
-  formatUsdLabel,
-} from '@/lib/utils/shared/chat/requestCost';
+import { formatUsdLabel } from '@/lib/utils/shared/chat/requestCost';
 import {
   ASSUMPTIONS_VERSION,
   SMARTPHONE_CHARGE_GRAMS,
@@ -19,32 +17,15 @@ import {
   estimateActivityEquivalents,
   estimateCO2Grams,
 } from '@/lib/utils/shared/emissions';
+import { estimateBucketImpact } from '@/lib/utils/shared/usageImpact';
 
-import {
-  OpenAIModelID,
-  OpenAIModels,
-  PRICING_AS_OF,
-  getModelSizeClass,
-} from '@/types/openai';
+import { PRICING_AS_OF } from '@/types/openai';
 
 import { EmissionsChipSetting } from '@/components/Settings/EmissionsChipSetting';
 import { YourLimitsTable } from '@/components/Settings/Sections/YourLimitsTable';
+import { UsageBudgetsSetting } from '@/components/Settings/UsageBudgetsSetting';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
-
-/** Splits a `modelId|region|effort` bucket key back into its parts. */
-function parseKey(key: string): {
-  modelId: string;
-  region: 'US' | 'EU' | 'default';
-  effort: 'none' | 'minimal' | 'low' | 'medium' | 'high';
-} {
-  const [modelId, region, effort] = key.split('|');
-  return {
-    modelId,
-    region: region as 'US' | 'EU' | 'default',
-    effort: effort as 'none' | 'minimal' | 'low' | 'medium' | 'high',
-  };
-}
 
 const numberFmt = new Intl.NumberFormat();
 
@@ -64,6 +45,7 @@ const WORKFLOW_I18N_KEY: Record<string, string> = {
 export const UsageImpactSection: FC = () => {
   const t = useTranslations();
   const locale = useLocale();
+  const formatCo2e = useCo2eFormat();
   const { showUsageCost } = useFlags();
   const tokenUsageStats = useSettingsStore((s) => s.tokenUsageStats);
   const workflowUsageStats = useSettingsStore((s) => s.workflowUsageStats);
@@ -100,32 +82,19 @@ export const UsageImpactSection: FC = () => {
       isEstimated: boolean,
     ) => {
       for (const [key, bucket] of Object.entries(stats)) {
-        const { modelId, region, effort } = parseKey(key);
-        const model =
-          models.find((m) => m.id === modelId) ??
-          OpenAIModels[modelId as OpenAIModelID];
-        const { gCO2e } = estimateCO2Grams({
-          promptTokens: bucket.promptTokens,
-          completionTokens: bucket.completionTokens,
-          sizeClass: getModelSizeClass(model ?? {}),
-          isDedicatedReasoner: model?.modelType === 'reasoning',
-          reasoningEffort: effort === 'none' ? undefined : effort,
-          region: region === 'default' ? null : region,
-        });
+        // The one bucket-pricing routine, shared with the budget meters.
+        const { modelId, region, model, gCO2e, usd } = estimateBucketImpact(
+          key,
+          bucket,
+          models,
+        );
 
         totalRequests += bucket.requests;
         totalPrompt += bucket.promptTokens;
         totalCompletion += bucket.completionTokens;
         totalCO2 += gCO2e;
-        const cost = estimateRequestUsd({
-          modelId,
-          promptTokens: bucket.promptTokens,
-          completionTokens: bucket.completionTokens,
-          reasoningEffort: effort === 'none' ? undefined : effort,
-          liveModels: models,
-        });
-        if (cost.usd !== undefined) {
-          totalUsd += cost.usd;
+        if (usd !== undefined) {
+          totalUsd += usd;
           pricedRequests += bucket.requests;
         } else {
           unpricedRequests += bucket.requests;
@@ -228,6 +197,12 @@ export const UsageImpactSection: FC = () => {
           caller, so most users never see this block. */}
       <YourLimitsTable />
 
+      {/* Limits the user sets for themselves. Above the empty-state branch
+          too: a budget can be set before anything has been spent. */}
+      <div className="mb-6 border-b border-gray-200 pb-6 dark:border-gray-700">
+        <UsageBudgetsSetting />
+      </div>
+
       {summary.isEmpty ? (
         <p className="text-sm text-gray-600 dark:text-gray-400">
           {t('usageImpact.empty')}
@@ -237,9 +212,7 @@ export const UsageImpactSection: FC = () => {
           {/* Headline estimate */}
           <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-surface-dark p-4">
             <p className="text-3xl font-bold text-black dark:text-white">
-              {t('usageImpact.co2Value', {
-                grams: numberFmt.format(Math.round(summary.totalCO2)),
-              })}
+              {formatCo2e(summary.totalCO2)}
             </p>
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
               {t('usageImpact.equivalence', {

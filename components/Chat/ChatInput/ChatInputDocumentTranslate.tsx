@@ -58,6 +58,14 @@ import {
 /** Daily document-translation counter (docs/LIMITS.md); `null` = unlimited. */
 const TRANSLATION_DAY_LIMIT_KEY = 'feature.translation.jobsPerDay';
 
+/** A OneDrive/SharePoint document to translate, addressed by drive item. */
+export interface DocumentTranslationM365Source {
+  driveId: string;
+  itemId: string;
+  name: string;
+  size?: number;
+}
+
 interface ChatInputDocumentTranslateProps {
   /** Whether the modal is open */
   isOpen: boolean;
@@ -70,6 +78,13 @@ interface ChatInputDocumentTranslateProps {
    * local file was chosen. Callers gate on flag + m365Connected.
    */
   allowM365Source?: boolean;
+  /**
+   * A OneDrive/SharePoint document already chosen elsewhere (the "Add to
+   * chat" picker): the form opens on it instead of on its own picker. Keep
+   * the reference stable while the modal is open — a new object resets the
+   * form.
+   */
+  initialM365Source?: DocumentTranslationM365Source | null;
   /** Callback when translation completes successfully */
   onTranslationComplete: (reference: DocumentTranslationReference) => void;
   /**
@@ -94,6 +109,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
   onClose,
   documentFile,
   allowM365Source = false,
+  initialM365Source = null,
   onTranslationComplete,
   onTranslationPending,
 }) => {
@@ -109,12 +125,8 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
 
   // M365 source (mutually exclusive with documentFile — the caller passes
   // one or the other; the picker fills this when no local file was given).
-  const [m365Source, setM365Source] = useState<{
-    driveId: string;
-    itemId: string;
-    name: string;
-    size?: number;
-  } | null>(null);
+  const [m365Source, setM365Source] =
+    useState<DocumentTranslationM365Source | null>(null);
   const [m365PickerOpen, setM365PickerOpen] = useState(false);
   const sourceName = documentFile?.name ?? m365Source?.name ?? null;
 
@@ -175,11 +187,12 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
       setTargetSearch('');
       setSourceSearch('');
       setShowAdvancedOptions(false);
-      setM365Source(null);
-      // M365-mode open with no file goes straight to the picker.
-      setM365PickerOpen(allowM365Source && !documentFile);
+      setM365Source(initialM365Source);
+      // M365-mode open with no file and no document chosen yet goes
+      // straight to the picker.
+      setM365PickerOpen(allowM365Source && !documentFile && !initialM365Source);
     }
-  }, [isOpen, documentFile, allowM365Source]);
+  }, [isOpen, documentFile, allowM365Source, initialM365Source]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -462,11 +475,11 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
             }}
             onFocus={() => setShowTargetDropdown(true)}
             placeholder={t('documentTranslation.searchLanguage')}
-            className="w-full pl-10 pr-4 py-3 text-base bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
+            className="w-full ps-10 pe-4 py-3 text-base bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
           />
           <IconLanguage
             size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute start-3 top-1/2 -translate-y-1/2 text-gray-400"
           />
         </div>
         {showTargetDropdown && (
@@ -486,7 +499,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                     key={lang.code}
                     type="button"
                     onClick={() => selectTargetLanguage(lang.code)}
-                    className={`w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                    className={`w-full flex items-center gap-2 text-start px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
                       targetLanguage === lang.code
                         ? 'bg-blue-50 dark:bg-blue-900/20'
                         : ''
@@ -503,7 +516,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                     {!lang.officiallySupported && (
                       <IconAlertTriangle
                         size={14}
-                        className="ml-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
+                        className="ms-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
                         aria-label={t(
                           'documentTranslation.unofficialBadgeLabel',
                         )}
@@ -541,7 +554,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
               >
                 <span>
                   {t('documentTranslation.sourceLanguage')}
-                  <span className="ml-2 text-xs font-normal text-gray-500 dark:text-gray-400">
+                  <span className="ms-2 text-xs font-normal text-gray-500 dark:text-gray-400">
                     ({t('documentTranslation.autoDetect')})
                   </span>
                 </span>
@@ -579,17 +592,17 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                   }}
                   onFocus={() => setShowSourceDropdown(true)}
                   placeholder={t('documentTranslation.searchLanguage')}
-                  className="w-full pl-10 pr-10 py-2.5 text-sm bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
+                  className="w-full ps-10 pe-10 py-2.5 text-sm bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
                 />
                 <IconLanguage
                   size={16}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  className="absolute start-3 top-1/2 -translate-y-1/2 text-gray-400"
                 />
                 {sourceLanguage && (
                   <button
                     type="button"
                     onClick={clearSourceLanguage}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    className="absolute end-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                   >
                     <IconX size={14} />
                   </button>
@@ -615,7 +628,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                           key={lang.code}
                           type="button"
                           onClick={() => selectSourceLanguage(lang.code)}
-                          className={`w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                          className={`w-full flex items-center gap-2 text-start px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
                             sourceLanguage === lang.code
                               ? 'bg-blue-50 dark:bg-blue-900/20'
                               : ''
@@ -632,7 +645,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                           {!lang.officiallySupported && (
                             <IconAlertTriangle
                               size={14}
-                              className="ml-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
+                              className="ms-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
                               aria-label={t(
                                 'documentTranslation.unofficialBadgeLabel',
                               )}

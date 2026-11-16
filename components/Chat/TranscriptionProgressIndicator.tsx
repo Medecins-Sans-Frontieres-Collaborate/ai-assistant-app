@@ -208,7 +208,7 @@ export function TranscriptionProgressIndicator({
           disabled={isCancelling}
           aria-label={t('cancel')}
           title={t('cancel')}
-          className="absolute top-2 right-2 p-1 rounded-full text-gray-500 hover:text-gray-800 hover:bg-gray-200 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
+          className="absolute top-2 end-2 p-1 rounded-full text-gray-500 hover:text-gray-800 hover:bg-gray-200 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
         >
           <IconX size={16} />
         </button>

@@ -66,7 +66,11 @@ function DiffedSpan({
         ) : part.kind === 'del' ? (
           <del
             key={i}
-            className="bg-red-100 text-red-700 decoration-red-400 dark:bg-red-900/40 dark:text-red-300"
+            // Same gap as InlineWordDiff: a removed word and its replacement
+            // must not read as one word.
+            className={`bg-red-100 text-red-700 decoration-red-400 dark:bg-red-900/40 dark:text-red-300 ${
+              parts[i + 1]?.kind === 'ins' ? 'me-1' : ''
+            }`}
           >
             {part.text}
           </del>

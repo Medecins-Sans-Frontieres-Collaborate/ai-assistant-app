@@ -40,7 +40,7 @@ vi.mock('@/lib/utils/server/file/fileHandling', () => ({
 vi.mock('@/lib/utils/app/stream/documentSummary', () => ({
   estimateCharsPerToken: vi.fn(),
   calculateChunkConfig: vi.fn(),
-  parseAndQueryFileOpenAI: vi.fn(),
+  summarizeDocumentForQuery: vi.fn(),
 }));
 
 // FFmpeg availability + audio extraction. Programmable per test.

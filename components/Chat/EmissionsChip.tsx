@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import { useConversationCost } from '@/client/hooks/chat/useConversationCost';
 import { useConversationEmissions } from '@/client/hooks/chat/useConversationEmissions';
+import { useUsageBudgetsStatus } from '@/client/hooks/settings/useUsageBudgets';
 
 import { formatUsdLabel } from '@/lib/utils/shared/chat/requestCost';
 import {
@@ -15,6 +16,7 @@ import {
 
 import { Conversation } from '@/types/chat';
 
+import { BudgetBars } from '@/components/Emissions/BudgetBars';
 import { CostFootnote } from '@/components/Emissions/CostFootnote';
 import {
   ImpactReadout,
@@ -46,6 +48,7 @@ export const EmissionsChip: FC<EmissionsChipProps> = ({ conversation }) => {
   const { showUsageImpact, showUsageCost } = useFlags();
   const summary = useConversationEmissions(conversation);
   const cost = useConversationCost(conversation);
+  const budgets = useUsageBudgetsStatus();
   const visibility = useSettingsStore((s) => s.emissionsChipVisibility);
   const labelMode = useSettingsStore((s) => s.emissionsChipLabelMode);
   const autoHideMs = useSettingsStore((s) => s.emissionsChipAutoHideMs);
@@ -216,7 +219,17 @@ export const EmissionsChip: FC<EmissionsChipProps> = ({ conversation }) => {
     ) +
     (collapsedUsd !== null && effectiveMode !== 'emissions'
       ? ` ${t('emissions.chip.costAria', { cost: collapsedUsd })}`
-      : '');
+      : '') +
+    // The bars are wordless, so their content is spoken here instead.
+    budgets.active
+      .map(
+        (status) =>
+          ` ${t('usageBudgets.chipAria', {
+            metric: t(`usageBudgets.metricShort.${status.metric}`),
+            percent: Math.round(status.percent),
+          })}`,
+      )
+      .join('');
   const Icon = effectiveMode === 'cost' ? IconCoin : IconLeaf;
 
   return (
@@ -249,7 +262,7 @@ export const EmissionsChip: FC<EmissionsChipProps> = ({ conversation }) => {
       }`}
     >
       {isOpen && (
-        <div className="absolute bottom-full right-0 mb-2 w-72 rounded-lg border border-gray-200 bg-white p-3 text-xs shadow-lg dark:border-gray-700 dark:bg-surface-dark z-[10000]">
+        <div className="absolute bottom-full end-0 mb-2 w-72 rounded-lg border border-gray-200 bg-white p-3 text-xs shadow-lg dark:border-gray-700 dark:bg-surface-dark z-[10000]">
           <ImpactReadout
             title={t('emissions.chip.title')}
             rows={rows}
@@ -271,6 +284,7 @@ export const EmissionsChip: FC<EmissionsChipProps> = ({ conversation }) => {
       >
         <Icon size={16} aria-hidden="true" />
         <span className="hidden md:inline">{collapsedLabel}</span>
+        <BudgetBars statuses={budgets.active} />
       </button>
     </div>
   );

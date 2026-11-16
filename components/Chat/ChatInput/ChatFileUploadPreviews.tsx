@@ -52,7 +52,7 @@ const Lightbox: FC<LightboxProps> = ({ imageUrl, onClose }) => {
       onClick={onClose}
     >
       <button
-        className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
+        className="absolute top-4 end-4 text-white hover:text-gray-300 transition-colors"
         onClick={onClose}
         aria-label={t('common.close')}
       >
@@ -220,7 +220,7 @@ export const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
           }
           value={filePreview.transcriptionLanguage || ''}
           onChange={handleLanguageChange}
-          className="w-full min-h-11 text-xs px-2 py-1 pr-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full min-h-11 text-xs px-2 py-1 pe-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
           onClick={(e) => e.stopPropagation()}
         >
           <option value="">{t('transcription.languages.autoDetect')}</option>
@@ -245,7 +245,7 @@ export const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
         </select>
         <IconChevronDown
           size={12}
-          className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
+          className="absolute end-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
         />
       </div>
 
@@ -259,7 +259,7 @@ export const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
             id={engineId}
             value={engine}
             onChange={handleEngineChange}
-            className="w-full min-h-11 text-xs px-2 py-1 pr-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full min-h-11 text-xs px-2 py-1 pe-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={(e) => e.stopPropagation()}
           >
             <option value="whisper">
@@ -279,7 +279,7 @@ export const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
           </select>
           <IconChevronDown
             size={12}
-            className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
+            className="absolute end-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
           />
         </div>
       )}
@@ -773,7 +773,7 @@ const ChatFileUploadPreview: FC<ChatFileUploadPreviewProps> = ({
 
         {/* Remove button */}
         <button
-          className={`absolute top-2 right-2 z-10 rounded-full bg-white dark:bg-gray-800 shadow-lg ${
+          className={`absolute top-2 end-2 z-10 rounded-full bg-white dark:bg-gray-800 shadow-lg ${
             isHovered ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100'
           } transition-all duration-200 hover:scale-110 hover:rotate-90 hover:bg-red-50 dark:hover:bg-red-900/30 active:scale-95`}
           onClick={(event) => removeFilePreview(event, filePreview)}

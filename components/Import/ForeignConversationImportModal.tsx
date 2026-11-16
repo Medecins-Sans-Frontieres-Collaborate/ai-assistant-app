@@ -177,7 +177,7 @@ export const ForeignConversationImportModal: FC<Props> = ({
           <div className="relative flex-1">
             <IconSearch
               size={14}
-              className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute start-2 top-1/2 -translate-y-1/2 text-gray-400"
             />
             <input
               type="search"
@@ -185,7 +185,7 @@ export const ForeignConversationImportModal: FC<Props> = ({
               onChange={(e) => setFilter(e.target.value)}
               placeholder={t('searchPlaceholder')}
               aria-label={t('searchPlaceholder')}
-              className="w-full pl-7 pr-2 py-1.5 text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+              className="w-full ps-7 pe-2 py-1.5 text-sm rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             />
           </div>
           <button

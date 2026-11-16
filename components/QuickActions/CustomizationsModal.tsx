@@ -91,7 +91,7 @@ export function CustomizationsModal({
         {/* Header with Tabs */}
         <div className="flex-shrink-0 px-4 md:px-6 py-3 md:py-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-3 md:mb-4">
-            <div className="flex-1 min-w-0 mr-4">
+            <div className="flex-1 min-w-0 me-4">
               <h3 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white truncate">
                 {t('Quick Actions')}
               </h3>
@@ -118,7 +118,7 @@ export function CustomizationsModal({
                     <span className="sm:hidden">
                       <IconSparkles size={16} />
                     </span>
-                    <span className="ml-1">({prompts.length})</span>
+                    <span className="ms-1">({prompts.length})</span>
                   </>
                 ),
                 icon: <IconSparkles size={16} className="hidden sm:block" />,
@@ -132,7 +132,7 @@ export function CustomizationsModal({
                     <span className="sm:hidden">
                       <IconVolume size={16} />
                     </span>
-                    <span className="ml-1">({tones.length})</span>
+                    <span className="ms-1">({tones.length})</span>
                   </>
                 ),
                 icon: <IconVolume size={16} className="hidden sm:block" />,
@@ -150,7 +150,7 @@ export function CustomizationsModal({
                           <span className="sm:hidden">
                             <IconBraces size={16} />
                           </span>
-                          <span className="ml-1">
+                          <span className="ms-1">
                             ({savedStructures.length})
                           </span>
                         </>

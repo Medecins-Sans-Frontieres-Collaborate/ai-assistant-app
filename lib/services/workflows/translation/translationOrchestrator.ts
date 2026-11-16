@@ -1,7 +1,17 @@
 import { criterionRubricLine } from '@/lib/utils/shared/review/customCriteria';
+import {
+  ChangeEdit,
+  ChangeSelection,
+  sanitizeChangeEdits,
+} from '@/lib/utils/shared/translation/changeRequest';
+import {
+  createDelimiterEchoFilter,
+  stripEchoedDelimiters,
+} from '@/lib/utils/shared/translation/delimiterEcho';
 import { computeSegmentChanges } from '@/lib/utils/shared/translation/editApplication';
 import { checkGlossaryCompliance } from '@/lib/utils/shared/translation/glossaryMatch';
 import { builtinRubricLine } from '@/lib/utils/shared/translation/qualityCriteria';
+import { TRANSLATION_ACTIVITY } from '@/lib/utils/shared/translation/runProgress';
 
 import {
   GlossaryEntry,
@@ -30,6 +40,8 @@ import {
   buildAnalysisUserPrompt,
   buildAssessmentSystemPrompt,
   buildAssessmentUserPrompt,
+  buildChangeRequestSystemPrompt,
+  buildChangeRequestUserPrompt,
   buildGlossaryBlock,
   buildReviewSystemPrompt,
   buildReviewUserPrompt,
@@ -38,6 +50,7 @@ import {
 } from './prompts';
 import {
   ANALYSIS_SCHEMA,
+  CHANGE_REQUEST_SCHEMA,
   REVIEW_SCHEMA,
   buildAssessmentSchema,
 } from './schemas';
@@ -94,7 +107,7 @@ export async function runTranslationWorkflow(
   // Phase 1 — analysis (agentic only)
   let analysis: TranslationAnalysis | undefined;
   if (mode === 'agentic') {
-    writer.activity('chat.activity.workflow.analyzingSource');
+    writer.activity(TRANSLATION_ACTIVITY.analyzing);
     analysis = await callStructured<TranslationAnalysis>({
       client,
       model: modelId,
@@ -114,7 +127,13 @@ export async function runTranslationWorkflow(
 
   // Phase 2 — translation, streamed as display text so the target pane
   // fills live.
-  writer.activity('chat.activity.workflow.translating');
+  writer.activity(TRANSLATION_ACTIVITY.translating);
+  // Models sometimes echo the prompt's fence around the answer; it is kept
+  // off the screen while streaming and out of the text the run works with.
+  const echoFilter = createDelimiterEchoFilter(sourceText);
+  const writeText = (text: string) => {
+    if (text) writer.text(text);
+  };
   let translation = await callStreamedText({
     client,
     model: modelId,
@@ -123,11 +142,13 @@ export async function runTranslationWorkflow(
       analysis ? analysisToNotes(analysis) : undefined,
     ),
     user: buildTranslationUserPrompt(sourceText, targetLanguage),
-    onDelta: (delta) => writer.text(delta),
+    onDelta: (delta) => writeText(echoFilter.push(delta)),
     signal,
     usage,
     usageLabel: 'translate',
   });
+  writeText(echoFilter.end());
+  translation = stripEchoedDelimiters(translation, sourceText);
 
   // Deterministic glossary check (issue #131): the model was TOLD the
   // terminology; this verifies it. Recomputed on every revision, since a
@@ -141,7 +162,7 @@ export async function runTranslationWorkflow(
     const priorIssues: string[] = [];
     for (let round = 1; round <= maxRounds; round++) {
       if (signal?.aborted) return;
-      writer.activity('chat.activity.workflow.reviewingTranslation', {
+      writer.activity(TRANSLATION_ACTIVITY.reviewing, {
         round: String(round),
         total: String(maxRounds),
       });
@@ -166,6 +187,12 @@ export async function runTranslationWorkflow(
         usageLabel: `review:${round}`,
       });
 
+      // The review prompt fences both texts too, so a revision can come back
+      // fenced; normalize it once, before it is compared or used.
+      const revisedText = review.revisedText?.trim()
+        ? stripEchoedDelimiters(review.revisedText, sourceText)
+        : '';
+
       rounds = round;
       writer.event({
         workflow: 'translation',
@@ -178,19 +205,17 @@ export async function runTranslationWorkflow(
       // rounds remain, unless the reviewer also produced no fix — a
       // round that changes nothing would only repeat itself.
       if (review.verdict === 'approve') {
-        const hasFix =
-          !!review.revisedText?.trim() &&
-          review.revisedText.trim() !== translation.trim();
+        const hasFix = !!revisedText && revisedText !== translation.trim();
         if (violationsBefore.length === 0 || !hasFix) break;
       }
 
       priorIssues.push(
         ...review.issues.map((i) => `${i.excerpt}: ${i.problem}`),
       );
-      if (review.revisedText && review.revisedText.trim()) {
+      if (revisedText) {
         // Computed diff (not model self-report) — honest by construction.
-        const changes = computeSegmentChanges(translation, review.revisedText);
-        translation = review.revisedText;
+        const changes = computeSegmentChanges(translation, revisedText);
+        translation = revisedText;
         // Revisions replace the pane content — sent as an event, not
         // display text, so the client swaps rather than appends.
         writer.event({
@@ -336,4 +361,69 @@ export async function runTranslationAssessment(
     .slice(0, MAX_ASSESSMENT_EDITS);
 
   return { criteria, overallSummary: result.overallSummary, edits };
+}
+
+export interface TranslationChangeRequestOptions {
+  /** May be empty: a scanned page has a translation but no source text. */
+  sourceText: string;
+  translation: string;
+  targetLanguage: string;
+  /** What the user asked for, in their own words. */
+  instruction: string;
+  /** Limits the edits to one passage of the translation. */
+  selection?: ChangeSelection;
+  /** The user's UI locale; decides the reply language when in doubt. */
+  interfaceLocale?: string;
+  glossaryEntries: GlossaryEntry[];
+  modelId?: string;
+  usage?: WorkflowUsageCollector;
+}
+
+export interface TranslationChangeRequestResult {
+  /** Short message to the user: what changed, or the answer to a question. */
+  reply: string;
+  edits: ChangeEdit[];
+}
+
+/**
+ * Turns a change the user asked for in words into individual edits on an
+ * existing translation. One strict structured call; nothing is applied
+ * here, the client shows each edit for the user to accept or reject.
+ *
+ * @param options - The texts, the instruction and optional scope.
+ * @returns The reply and the usable edits (possibly none: a question, or a
+ *   translation that already does what was asked).
+ * @throws When the model call fails.
+ */
+export async function runTranslationChangeRequest(
+  options: TranslationChangeRequestOptions,
+): Promise<TranslationChangeRequestResult> {
+  const result = await callStructured<{ reply: string; edits: unknown }>({
+    client: createAzureClient(),
+    model: options.modelId,
+    system: buildChangeRequestSystemPrompt(
+      buildGlossaryBlock(options.glossaryEntries, options.sourceText),
+      Boolean(options.selection),
+      options.interfaceLocale,
+    ),
+    user: buildChangeRequestUserPrompt({
+      sourceText: options.sourceText,
+      translation: options.translation,
+      targetLanguage: options.targetLanguage,
+      instruction: options.instruction,
+      selectedText: options.selection?.text,
+    }),
+    schemaName: 'translation_change_request',
+    schema: CHANGE_REQUEST_SCHEMA,
+    usage: options.usage,
+    usageLabel: 'revise',
+  });
+  return {
+    reply: typeof result.reply === 'string' ? result.reply.trim() : '',
+    edits: sanitizeChangeEdits(
+      result.edits,
+      options.translation,
+      options.selection,
+    ),
+  };
 }

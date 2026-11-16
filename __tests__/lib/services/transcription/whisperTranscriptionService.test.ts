@@ -17,6 +17,7 @@ import {
   getUnofficialTranscriptionLanguages,
 } from '@/lib/constants/transcriptionLanguages';
 import fs from 'fs';
+import { AzureOpenAI } from 'openai';
 import os from 'os';
 import path from 'path';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
@@ -24,10 +25,16 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 // Stub env so the constructor doesn't require real Azure configuration.
 vi.mock('@/config/environment', () => ({
   env: {
-    OPENAI_API_KEY: 'test-key',
     AZURE_OPENAI_ENDPOINT: 'https://example.openai.azure.com',
     OPENAI_API_VERSION: '2024-06-01',
   },
+}));
+
+// The application identity (Entra ID): the only way the service authenticates.
+const entraTokenProvider = vi.hoisted(() => vi.fn(async () => 'entra-token'));
+vi.mock('@azure/identity', () => ({
+  DefaultAzureCredential: vi.fn(),
+  getBearerTokenProvider: vi.fn(() => entraTokenProvider),
 }));
 
 const createTranscription = vi.hoisted(() => vi.fn());
@@ -36,6 +43,24 @@ vi.mock('openai', () => ({
     return { audio: { transcriptions: { create: createTranscription } } };
   }),
 }));
+
+describe('WhisperTranscriptionService authentication', () => {
+  it('authenticates with the application identity and never an account key', () => {
+    process.env.OPENAI_API_KEY = 'stale-account-key';
+    try {
+      new WhisperTranscriptionService();
+      expect(AzureOpenAI).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          apiKey: '',
+          azureADTokenProvider: entraTokenProvider,
+          endpoint: 'https://example.openai.azure.com',
+        }),
+      );
+    } finally {
+      delete process.env.OPENAI_API_KEY;
+    }
+  });
+});
 
 describe('WhisperTranscriptionService size limit', () => {
   let workDir: string;

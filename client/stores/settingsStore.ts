@@ -7,6 +7,7 @@ import {
 } from '@/lib/services/m365/digest/digestWindow';
 import { normalizeUserSkills } from '@/lib/services/skills/userSkills';
 
+import type { AddSourceId } from '@/lib/utils/app/addToChat';
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import {
@@ -37,6 +38,20 @@ import {
   clampPasteAttachmentChars,
 } from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
+import {
+  ANALYSIS_STRIP_HEIGHT,
+  clampAnalysisStripHeight,
+} from '@/lib/utils/shared/translation/runProgress';
+import {
+  BudgetMetric,
+  DEFAULT_USAGE_BUDGETS,
+  DailyTokenUsage,
+  UsageBudget,
+  UsageBudgets,
+  recordDailyUsage,
+  sanitizeDailyTokenUsage,
+  sanitizeUsageBudgets,
+} from '@/lib/utils/shared/usageBudgets';
 
 import { VoiceSet } from '@/types/drafter';
 import { FormTemplate } from '@/types/formFill';
@@ -420,6 +435,25 @@ interface SettingsStore {
    * conversations imported later (accepted limitation).
    */
   historicalUsageBackfilledAt: string | null;
+  /**
+   * The same RAW usage as tokenUsageStats, additionally bucketed by local
+   * day so personal budgets can total "this day / week / month". Pruned to
+   * DAILY_USAGE_RETENTION_DAYS on every write (usageBudgets.ts).
+   */
+  dailyTokenUsage: DailyTokenUsage;
+  /**
+   * Limits the user sets for themselves on estimated emissions and cost
+   * (lib/utils/shared/usageBudgets.ts). Off by default.
+   */
+  usageBudgets: UsageBudgets;
+  /**
+   * The budget period (its start, as a local day key) in which the user
+   * dismissed the "warn" notice, per metric — so it stays dismissed until
+   * the next period rather than returning on every render.
+   */
+  usageBudgetWarnDismissed: Partial<Record<BudgetMetric, string>>;
+  /** Local day key on which "Don't ask again today" was chosen, if any. */
+  usageBudgetAskSnoozedDay: string | null;
 
   /**
    * Provenance of the current `models` list (from /api/models). Runtime-only,
@@ -650,6 +684,10 @@ interface SettingsStore {
     counts: { promptTokens: number; completionTokens: number },
   ) => void;
   resetTokenUsageStats: () => void;
+  /** Merges a change into one metric's budget; the result is sanitized. */
+  setUsageBudget: (metric: BudgetMetric, change: Partial<UsageBudget>) => void;
+  dismissUsageBudgetWarning: (metric: BudgetMetric, periodKey: string) => void;
+  snoozeUsageBudgetAsk: (dayKey: string) => void;
   /**
    * Folds back-calculated historical buckets into estimatedUsageStats AND
    * stamps historicalUsageBackfilledAt in one atomic set — a re-invoked
@@ -848,6 +886,15 @@ interface SettingsStore {
   setConfirmStopFromKeyboard: (enabled: boolean) => void;
   setAutoClearResolvedEdits: (enabled: boolean) => void;
   setReviewOverwriteAcknowledged: (acknowledged: boolean) => void;
+  /**
+   * Hides the Translation workspace's analysis strip. A preference of the
+   * person, not of one conversation: it applies to every translation.
+   */
+  translationAnalysisHidden: boolean;
+  setTranslationAnalysisHidden: (hidden: boolean) => void;
+  /** Height of the expanded analysis strip, in CSS pixels. */
+  translationAnalysisHeight: number;
+  setTranslationAnalysisHeight: (height: number) => void;
   setMapImportDefaultConfidence: (value: 'high' | 'medium' | 'low') => void;
   setSuggestRevisions: (enabled: boolean) => void;
   setSuggestRevisionsException: (
@@ -936,6 +983,14 @@ interface SettingsStore {
    */
   m365PickerLocation: M365PickerLocation | null;
   setM365PickerLocation: (location: M365PickerLocation | null) => void;
+
+  /**
+   * The source the "Add to chat" picker was last used on, so it reopens
+   * there. null = this device. Validated on read (a source can be switched
+   * off between sessions), so a stale value is harmless.
+   */
+  addToChatLastSource: AddSourceId | null;
+  setAddToChatLastSource: (source: AddSourceId | null) => void;
 
   // Reset
   resetSettings: () => void;
@@ -1070,6 +1125,10 @@ export const useSettingsStore = create<SettingsStore>()(
       estimatedUsageStats: {},
       workflowUsageStats: {},
       historicalUsageBackfilledAt: null,
+      dailyTokenUsage: {},
+      usageBudgets: DEFAULT_USAGE_BUDGETS,
+      usageBudgetWarnDismissed: {},
+      usageBudgetAskSnoozedDay: null,
       modelListSource: null,
       userRegion: null,
       modelRetirementsApplied: {},
@@ -1134,6 +1193,8 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
       reviewOverwriteAcknowledged: false,
+      translationAnalysisHidden: false,
+      translationAnalysisHeight: ANALYSIS_STRIP_HEIGHT.default,
       mapImportDefaultConfidence: 'high',
       m365Connected: true,
       m365ConnectedUserSet: false,
@@ -1147,6 +1208,7 @@ export const useSettingsStore = create<SettingsStore>()(
       m365SaveDestination: null,
       m365SaveSkipPicker: false,
       m365PickerLocation: null,
+      addToChatLastSource: null,
       suggestRevisions: true,
       suggestRevisionsExceptions: {
         largeRewrites: true,
@@ -1645,6 +1707,12 @@ export const useSettingsStore = create<SettingsStore>()(
             },
             tokenUsageFirstTrackedAt:
               state.tokenUsageFirstTrackedAt ?? new Date().toISOString(),
+            dailyTokenUsage: recordDailyUsage(
+              state.dailyTokenUsage,
+              key,
+              usage,
+              new Date(),
+            ),
           };
         }),
 
@@ -1673,7 +1741,29 @@ export const useSettingsStore = create<SettingsStore>()(
           // Stamp (not null) so the one-time backfill doesn't resurrect the
           // history the user just chose to clear.
           historicalUsageBackfilledAt: new Date().toISOString(),
+          // The budget meters read this ledger; "reset" that left them
+          // untouched would show cleared totals beside a full meter.
+          dailyTokenUsage: {},
         }),
+
+      setUsageBudget: (metric, change) =>
+        set((state) => ({
+          usageBudgets: sanitizeUsageBudgets({
+            ...state.usageBudgets,
+            [metric]: { ...state.usageBudgets[metric], ...change },
+          }),
+        })),
+
+      dismissUsageBudgetWarning: (metric, periodKey) =>
+        set((state) => ({
+          usageBudgetWarnDismissed: {
+            ...state.usageBudgetWarnDismissed,
+            [metric]: periodKey,
+          },
+        })),
+
+      snoozeUsageBudgetAsk: (dayKey) =>
+        set({ usageBudgetAskSnoozedDay: dayKey }),
 
       mergeEstimatedUsage: (entries) =>
         set((state) => {
@@ -1979,6 +2069,10 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ autoClearResolvedEdits: enabled }),
       setReviewOverwriteAcknowledged: (acknowledged) =>
         set({ reviewOverwriteAcknowledged: acknowledged }),
+      setTranslationAnalysisHidden: (hidden) =>
+        set({ translationAnalysisHidden: hidden }),
+      setTranslationAnalysisHeight: (height) =>
+        set({ translationAnalysisHeight: clampAnalysisStripHeight(height) }),
       setMapImportDefaultConfidence: (value) =>
         set({ mapImportDefaultConfidence: value }),
 
@@ -2041,6 +2135,7 @@ export const useSettingsStore = create<SettingsStore>()(
       setM365SaveSkipPicker: (skip) => set({ m365SaveSkipPicker: skip }),
       setM365PickerLocation: (location) =>
         set({ m365PickerLocation: location }),
+      setAddToChatLastSource: (source) => set({ addToChatLastSource: source }),
 
       setSuggestRevisionsException: (key, enabled) =>
         set((state) => ({
@@ -2090,6 +2185,10 @@ export const useSettingsStore = create<SettingsStore>()(
           tokenUsageFirstTrackedAt: null,
           estimatedUsageStats: {},
           historicalUsageBackfilledAt: null,
+          dailyTokenUsage: {},
+          usageBudgets: DEFAULT_USAGE_BUDGETS,
+          usageBudgetWarnDismissed: {},
+          usageBudgetAskSnoozedDay: null,
           savedStructures: [],
           streamingSpeed: DEFAULT_STREAMING_SPEED,
           includeUserInfoInPrompt: false,
@@ -2120,6 +2219,8 @@ export const useSettingsStore = create<SettingsStore>()(
           confirmStopFromKeyboard: true,
           autoClearResolvedEdits: false,
           reviewOverwriteAcknowledged: false,
+          translationAnalysisHidden: false,
+          translationAnalysisHeight: ANALYSIS_STRIP_HEIGHT.default,
           mapImportDefaultConfidence: 'high',
           suggestRevisions: true,
           suggestRevisionsExceptions: {
@@ -2141,7 +2242,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 74, // v74: m365Digest* (daily digest defaults)
+      version: 76, // v76: personal usage budgets + the daily usage ledger
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2212,6 +2313,10 @@ export const useSettingsStore = create<SettingsStore>()(
         estimatedUsageStats: state.estimatedUsageStats,
         workflowUsageStats: state.workflowUsageStats,
         historicalUsageBackfilledAt: state.historicalUsageBackfilledAt,
+        dailyTokenUsage: state.dailyTokenUsage,
+        usageBudgets: state.usageBudgets,
+        usageBudgetWarnDismissed: state.usageBudgetWarnDismissed,
+        usageBudgetAskSnoozedDay: state.usageBudgetAskSnoozedDay,
         savedStructures: state.savedStructures,
         streamingSpeed: state.streamingSpeed,
         includeUserInfoInPrompt: state.includeUserInfoInPrompt,
@@ -2246,6 +2351,8 @@ export const useSettingsStore = create<SettingsStore>()(
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
         autoClearResolvedEdits: state.autoClearResolvedEdits,
         reviewOverwriteAcknowledged: state.reviewOverwriteAcknowledged,
+        translationAnalysisHidden: state.translationAnalysisHidden,
+        translationAnalysisHeight: state.translationAnalysisHeight,
         mapImportDefaultConfidence: state.mapImportDefaultConfidence,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
@@ -2262,6 +2369,7 @@ export const useSettingsStore = create<SettingsStore>()(
         m365SaveDestination: state.m365SaveDestination,
         m365SaveSkipPicker: state.m365SaveSkipPicker,
         m365PickerLocation: state.m365PickerLocation,
+        addToChatLastSource: state.addToChatLastSource,
         suggestRevisionsExceptions: state.suggestRevisionsExceptions,
         suggestRevisionsLargeRewriteRatio:
           state.suggestRevisionsLargeRewriteRatio,
@@ -3005,6 +3113,39 @@ export const useSettingsStore = create<SettingsStore>()(
             : [];
         }
 
+        // Version 74 → 75: Translation analysis strip preferences. Shown at
+        // the default height — what these users already had. The height is
+        // clamped, not trusted: it round-trips through localStorage.
+        if (version < 75) {
+          if (typeof state.translationAnalysisHidden !== 'boolean') {
+            state.translationAnalysisHidden = false;
+          }
+          state.translationAnalysisHeight = clampAnalysisStripHeight(
+            typeof state.translationAnalysisHeight === 'number'
+              ? state.translationAnalysisHeight
+              : ANALYSIS_STRIP_HEIGHT.default,
+          );
+        }
+
+        // Version 75 → 76: personal usage budgets. Nobody has one yet, and
+        // the daily ledger starts empty: lifetime totals carry no dates, so
+        // there is nothing honest to seed the current period with.
+        if (version < 76) {
+          state.dailyTokenUsage = sanitizeDailyTokenUsage(
+            state.dailyTokenUsage,
+          );
+          state.usageBudgets = sanitizeUsageBudgets(state.usageBudgets);
+          if (
+            state.usageBudgetWarnDismissed == null ||
+            typeof state.usageBudgetWarnDismissed !== 'object'
+          ) {
+            state.usageBudgetWarnDismissed = {};
+          }
+          if (typeof state.usageBudgetAskSnoozedDay !== 'string') {
+            state.usageBudgetAskSnoozedDay = null;
+          }
+        }
+
         // Whatever version it came from, the per-set rows are only kept as
         // clean string arrays (the workspace iterates them on load).
         state.lastChannelIdsBySet = coerceChannelIdsBySet(
@@ -3094,6 +3235,14 @@ export const useSettingsStore = create<SettingsStore>()(
           if (!Array.isArray(state.mcpServers)) {
             state.mcpServers = [];
           }
+
+          // Budgets decide whether a message is sent, so a corrupt or
+          // hand-edited value is normalized on every load, not only when
+          // the version changes.
+          state.usageBudgets = sanitizeUsageBudgets(state.usageBudgets);
+          state.dailyTokenUsage = sanitizeDailyTokenUsage(
+            state.dailyTokenUsage,
+          );
 
           // SECURITY: localRuntimePorts is the only persisted value that
           // steers where a local chat request is sent, so a tampered or

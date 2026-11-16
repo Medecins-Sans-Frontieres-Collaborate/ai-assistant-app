@@ -54,7 +54,7 @@ export const SettingsFooter: FC<SettingsFooterProps> = ({
         >
           <IconExternalLink
             size={16}
-            className={'inline mr-1 text-black dark:text-white'}
+            className={'inline me-1 text-black dark:text-white'}
           />
           {t('sendFeedback')}
         </a>

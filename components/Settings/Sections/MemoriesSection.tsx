@@ -154,7 +154,7 @@ export const MemoriesSection: FC = () => {
           the feature itself is off, but the control stays visible so the
           option is discoverable rather than appearing out of nowhere. */}
       <label
-        className={`mt-3 ml-7 flex items-start gap-3 ${
+        className={`mt-3 ms-7 flex items-start gap-3 ${
           memoriesEnabled ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'
         }`}
       >

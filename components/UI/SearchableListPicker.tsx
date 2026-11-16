@@ -19,6 +19,7 @@ import {
   filterSearchableOptions,
   shouldOfferCreate,
 } from '@/lib/utils/app/searchableListPicker';
+import { isRtlElement, mirrorSide } from '@/lib/utils/client/textDirection';
 
 export interface SearchableListPickerOption extends SearchableListOption {
   /** Optional leading icon for the row. */
@@ -169,7 +170,9 @@ export const SearchableListPicker: FC<SearchableListPickerProps> = ({
       );
       const top = Math.min(Math.max(rawTop, VIEWPORT_INSET_PX), maxTop);
 
-      const rawLeft = align === 'right' ? rect.right - widthPx : rect.left;
+      // `align` is authored for left-to-right and mirrors in right-to-left.
+      const side = mirrorSide(align, isRtlElement(trigger));
+      const rawLeft = side === 'right' ? rect.right - widthPx : rect.left;
       const maxLeft = Math.max(
         VIEWPORT_INSET_PX,
         vw - widthPx - VIEWPORT_INSET_PX,
@@ -274,7 +277,7 @@ export const SearchableListPicker: FC<SearchableListPickerProps> = ({
   if (!isOpen || typeof document === 'undefined') return null;
 
   const rowClass = (active: boolean, selected: boolean) =>
-    `flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 ${
+    `flex w-full items-center justify-between gap-2 px-3 py-2 text-start text-sm transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 ${
       active ? 'bg-gray-100 dark:bg-gray-700' : ''
     } ${selected ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`;
 
@@ -300,7 +303,7 @@ export const SearchableListPicker: FC<SearchableListPickerProps> = ({
             <IconSearch
               size={16}
               aria-hidden
-              className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute start-2.5 top-1/2 -translate-y-1/2 text-gray-400"
             />
             <input
               ref={searchInputRef}
@@ -313,13 +316,13 @@ export const SearchableListPicker: FC<SearchableListPickerProps> = ({
               placeholder={searchPlaceholder}
               aria-label={searchPlaceholder}
               aria-controls={listId}
-              className="w-full rounded-md border-0 bg-gray-100 py-1.5 pl-8 pr-8 text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              className="w-full rounded-md border-0 bg-gray-100 py-1.5 ps-8 pe-8 text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             />
             {query && (
               <button
                 type="button"
                 onClick={() => setQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                className="absolute end-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 aria-label={clearSearchLabel ?? 'Clear'}
               >
                 <IconX size={14} />

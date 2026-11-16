@@ -16,6 +16,101 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Right-to-left documents (see RTL_LOCALES in lib/utils/app/locales.ts).
+   Layout mirrors through logical utilities (ms-/pe-/start-/text-start);
+   these rules cover what utilities cannot. */
+/* Icons that point along the reading direction mirror with it. `scale`
+   is used, not `transform`, so state rotations (rotate-90 on an expanded
+   chevron) still compose with the flip. Kept outside @layer: Tailwind
+   removes layered rules whose class names it cannot find in the source. */
+[dir='rtl'] .tabler-icon-chevron-right,
+[dir='rtl'] .tabler-icon-chevron-left,
+[dir='rtl'] .tabler-icon-chevrons-right,
+[dir='rtl'] .tabler-icon-chevrons-left,
+[dir='rtl'] .tabler-icon-arrow-right,
+[dir='rtl'] .tabler-icon-arrow-left,
+[dir='rtl'] .tabler-icon-arrow-back-up,
+[dir='rtl'] .tabler-icon-send,
+[dir='rtl'] .tabler-icon-send-2,
+[dir='rtl'] .tabler-icon-login,
+[dir='rtl'] .tabler-icon-logout,
+[dir='rtl'] .tabler-icon-list,
+[dir='rtl'] .tabler-icon-list-check {
+  scale: -1 1;
+}
+
+@layer base {
+  /* Code and maths are always written left to right. */
+  [dir='rtl'] pre,
+  [dir='rtl'] code,
+  [dir='rtl'] [data-streamdown='code-block'],
+  [dir='rtl'] .katex {
+    direction: ltr;
+    text-align: left;
+    unicode-bidi: isolate;
+  }
+}
+
+/* Chat content is often in a different language from the interface (an
+   English answer in the Arabic UI, an Arabic question in the English one).
+   Each block takes its direction, and so its alignment, from its own first
+   strong character instead of from the page. */
+.prose :where(p, h1, h2, h3, h4, h5, h6, blockquote, td, th) {
+  unicode-bidi: plaintext;
+  text-align: start;
+}
+
+/* The text a person typed, inside their message bubble (UserMessage).
+   One place for its rhythm, so a message reads the same with or without an
+   upload above it. The bubble supplies the outer padding; the text block
+   itself starts and ends flush. */
+.user-message-text > :first-child,
+.user-message-text > :first-child > :first-child {
+  margin-top: 0;
+}
+.user-message-text > :last-child,
+.user-message-text > :last-child > :last-child {
+  margin-bottom: 0;
+}
+.user-message-text :where(p) {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+/* Lists read as one block: items sit close together, and a paragraph inside
+   an item adds no space of its own. */
+.user-message-text :where(ul, ol) {
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+.user-message-text :where(li) {
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
+  /* The markdown renderer pads every item; that padding is what made a
+     short list look double spaced. */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.user-message-text :where(li) > :where(p) {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+/* Inline code is a quiet pill; the typography plugin's literal backticks
+   are removed. Code blocks keep their own styling. */
+.user-message-text :not(pre) > code {
+  padding: 0.1em 0.4em;
+  border-radius: 0.375rem;
+  background-color: rgb(0 0 0 / 0.08);
+  font-size: 0.875em;
+  font-weight: 500;
+}
+.dark .user-message-text :not(pre) > code {
+  background-color: rgb(255 255 255 / 0.12);
+}
+.user-message-text :not(pre) > code::before,
+.user-message-text :not(pre) > code::after {
+  content: none;
+}
+
 /* Override prose max-width to prevent text wrapping in message bubbles */
 .prose.max-w-none,
 .prose.max-w-none > *,
@@ -264,7 +359,7 @@ select {
 .prose-invert th {
   background-color: #f3f4f6;
   font-weight: 600;
-  text-align: left;
+  text-align: start;
 }
 
 .dark .prose th,
@@ -421,7 +516,7 @@ select {
 
 .dark .prose blockquote,
 .dark .prose-invert blockquote {
-  border-left-color: #4b5563;
+  border-inline-start-color: #4b5563;
   color: #d1d5db;
 }
 

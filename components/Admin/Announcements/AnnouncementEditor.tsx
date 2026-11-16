@@ -69,7 +69,7 @@ interface AnnouncementEditorProps {
 function CharCount({ value, max }: { value: string; max: number }) {
   return (
     <span
-      className={`ml-2 text-[11px] ${
+      className={`ms-2 text-[11px] ${
         value.length > max
           ? 'text-red-600 dark:text-red-400'
           : 'text-gray-400 dark:text-gray-500'
@@ -481,7 +481,7 @@ export const AnnouncementEditor: FC<AnnouncementEditorProps> = ({
             <p className={`mt-2 ${ADMIN_BANNER_WARN}`} role="note">
               <IconAlertTriangle
                 size={14}
-                className="mr-1 inline"
+                className="me-1 inline"
                 aria-hidden
               />
               {t('everyoneWarning')}
@@ -568,7 +568,7 @@ export const AnnouncementEditor: FC<AnnouncementEditorProps> = ({
         </div>
         {!draft.dismissible && (
           <p className={ADMIN_BANNER_WARN} role="alert">
-            <IconAlertTriangle size={14} className="mr-1 inline" aria-hidden />
+            <IconAlertTriangle size={14} className="me-1 inline" aria-hidden />
             {t('nonDismissibleWarning', { hours: MAX_NON_DISMISSIBLE_HOURS })}
           </p>
         )}

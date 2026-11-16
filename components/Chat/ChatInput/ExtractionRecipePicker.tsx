@@ -92,7 +92,7 @@ export const ExtractionRecipePicker: FC<ExtractionRecipePickerProps> = ({
       ref={popoverRef}
       role="dialog"
       aria-label={t('section')}
-      className="absolute bottom-full left-0 mb-2 w-80 z-30 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1c1c1c] shadow-lg overflow-hidden"
+      className="absolute bottom-full start-0 mb-2 w-80 z-30 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1c1c1c] shadow-lg overflow-hidden"
     >
       <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700">
         <input
@@ -123,7 +123,7 @@ export const ExtractionRecipePicker: FC<ExtractionRecipePickerProps> = ({
             <button
               type="button"
               onClick={() => handlePick(recipe.id)}
-              className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 focus:bg-gray-50 dark:focus:bg-gray-800 focus:outline-none transition-colors"
+              className="w-full text-start px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 focus:bg-gray-50 dark:focus:bg-gray-800 focus:outline-none transition-colors"
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm font-medium truncate text-gray-900 dark:text-gray-100">
@@ -148,13 +148,13 @@ export const ExtractionRecipePicker: FC<ExtractionRecipePickerProps> = ({
         <button
           type="button"
           onClick={handleCreateNew}
-          className="w-full text-left px-3 py-2.5 text-sm flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 focus:bg-blue-50 dark:focus:bg-blue-900/30 focus:outline-none transition-colors"
+          className="w-full text-start px-3 py-2.5 text-sm flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 focus:bg-blue-50 dark:focus:bg-blue-900/30 focus:outline-none transition-colors"
         >
           <IconPlus size={16} />
           <span>{t('newRecipe')}</span>
           <IconSparkles
             size={14}
-            className="ml-auto text-gray-400 dark:text-gray-500"
+            className="ms-auto text-gray-400 dark:text-gray-500"
             aria-hidden="true"
           />
         </button>

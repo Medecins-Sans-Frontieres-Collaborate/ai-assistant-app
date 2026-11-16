@@ -14,6 +14,7 @@ import {
 import { type OpenAIModel, OpenAIModels } from '@/types/openai';
 
 import { isEuProcessing } from './bindings';
+import { modelCapabilities } from './capabilities';
 import {
   AUXILIARY_LIMITS,
   type AuxiliaryCandidate,
@@ -123,6 +124,7 @@ export function resolveAuxiliaryCandidate(
   )
     return { status: { ...status, reason: 'incompatible' } };
   status.eligible = true;
+  status.capabilities = modelCapabilities(model);
   return {
     status,
     candidate: {

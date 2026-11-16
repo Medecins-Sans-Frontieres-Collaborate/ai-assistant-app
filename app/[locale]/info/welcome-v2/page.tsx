@@ -88,7 +88,7 @@ export default function WelcomeV2Page() {
               <p className="text-gray-600 dark:text-gray-400 mb-2">
                 {t('welcomeV2.webSearch.setAsDefaultInstructions')}
               </p>
-              <ul className="space-y-2 ml-4">
+              <ul className="space-y-2 ms-4">
                 <li className="flex items-start gap-2">
                   <span className="text-blue-500 mt-1">•</span>
                   <div>
@@ -233,7 +233,7 @@ export default function WelcomeV2Page() {
                 />
                 3. {t('welcomeV2.aiAssist.step3')}
               </p>
-              <ul className="space-y-2 ml-4">
+              <ul className="space-y-2 ms-4">
                 <li className="flex items-start gap-2 text-gray-600 dark:text-gray-400">
                   <span className="text-pink-500 mt-1">✨</span>
                   <div>
@@ -318,7 +318,7 @@ export default function WelcomeV2Page() {
               <p className="font-medium text-gray-900 dark:text-white mb-2">
                 {t('welcomeV2.customAgents.whatYouCanDo')}
               </p>
-              <ul className="space-y-1.5 ml-4 text-gray-600 dark:text-gray-400">
+              <ul className="space-y-1.5 ms-4 text-gray-600 dark:text-gray-400">
                 <li className="flex items-start gap-2">
                   <span className="text-blue-500 mt-1">•</span>
                   <span>{t('welcomeV2.customAgents.configureAgents')}</span>
@@ -360,7 +360,7 @@ export default function WelcomeV2Page() {
               <p className="font-medium text-gray-900 dark:text-white mb-2">
                 {t('welcomeV2.audioTranslation.howToUse')}
               </p>
-              <ol className="space-y-1.5 ml-4 text-gray-600 dark:text-gray-400">
+              <ol className="space-y-1.5 ms-4 text-gray-600 dark:text-gray-400">
                 <li>1. {t('welcomeV2.audioTranslation.step1')}</li>
                 <li>2. {t('welcomeV2.audioTranslation.step2')}</li>
                 <li>3. {t('welcomeV2.audioTranslation.step3')}</li>
@@ -493,7 +493,7 @@ export default function WelcomeV2Page() {
               <p className="font-medium text-gray-900 dark:text-white mb-2">
                 {t('welcomeV2.pwa.howToInstall')}
               </p>
-              <ol className="space-y-1.5 ml-4 text-gray-600 dark:text-gray-400">
+              <ol className="space-y-1.5 ms-4 text-gray-600 dark:text-gray-400">
                 <li>1. {t('welcomeV2.pwa.step1')}</li>
                 <li>2. {t('welcomeV2.pwa.step2')}</li>
                 <li>3. {t('welcomeV2.pwa.step3')}</li>
@@ -506,7 +506,7 @@ export default function WelcomeV2Page() {
               <p className="font-medium text-gray-900 dark:text-white mb-2">
                 {t('welcomeV2.pwa.benefits')}
               </p>
-              <ul className="space-y-1.5 ml-4">
+              <ul className="space-y-1.5 ms-4">
                 <li className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                   <IconCheck
                     size={16}

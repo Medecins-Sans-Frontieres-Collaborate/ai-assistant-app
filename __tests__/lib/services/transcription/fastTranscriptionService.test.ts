@@ -8,6 +8,8 @@ import {
   FastTranscriptionService,
 } from '@/lib/services/transcription/fastTranscriptionService';
 
+import { resetCognitiveServicesAuthForTests } from '@/lib/utils/server/azure/cognitiveServicesAuth';
+
 import { TranscriptionError } from '@/types/transcription';
 
 import fs from 'fs';
@@ -17,17 +19,27 @@ import {
   afterAll,
   afterEach,
   beforeAll,
+  beforeEach,
   describe,
   expect,
   it,
   vi,
 } from 'vitest';
 
-vi.mock('@/config/environment', () => ({
-  env: {
-    AZURE_SPEECH_KEY: 'test-speech-key',
-    AZURE_SPEECH_REGION: 'westeurope',
-  },
+const SPEECH_ENDPOINT = 'https://test-account.cognitiveservices.azure.com';
+
+/** Mutable so a test can point the service at another endpoint. */
+const mockEnv = vi.hoisted(
+  () =>
+    ({}) as { AZURE_SPEECH_ENDPOINT?: string; AZURE_OPENAI_ENDPOINT?: string },
+);
+vi.mock('@/config/environment', () => ({ env: mockEnv }));
+
+/** The application identity: issues a fixed token unless a test makes it fail. */
+const tokenProvider = vi.hoisted(() => vi.fn());
+vi.mock('@azure/identity', () => ({
+  DefaultAzureCredential: class {},
+  getBearerTokenProvider: () => tokenProvider,
 }));
 
 const fetchMock = vi.fn();
@@ -53,6 +65,14 @@ describe('FastTranscriptionService', () => {
     await fs.promises.writeFile(smallPath, 'synthetic test fixture');
   });
 
+  beforeEach(() => {
+    resetCognitiveServicesAuthForTests();
+    delete mockEnv.AZURE_SPEECH_ENDPOINT;
+    mockEnv.AZURE_OPENAI_ENDPOINT = `${SPEECH_ENDPOINT}/`;
+    tokenProvider.mockReset();
+    tokenProvider.mockResolvedValue('test-entra-token');
+  });
+
   afterEach(() => {
     fetchMock.mockReset();
   });
@@ -73,9 +93,11 @@ describe('FastTranscriptionService', () => {
 
     const [url, init] = fetchMock.mock.calls[0];
     expect(url).toBe(
-      'https://westeurope.api.cognitive.microsoft.com/speechtotext/transcriptions:transcribe?api-version=2025-10-15',
+      `${SPEECH_ENDPOINT}/speechtotext/transcriptions:transcribe?api-version=2025-10-15`,
     );
-    expect(init.headers['Ocp-Apim-Subscription-Key']).toBe('test-speech-key');
+    expect(init.headers).toEqual({
+      Authorization: 'Bearer test-entra-token',
+    });
     const definition = JSON.parse(init.body.get('definition'));
     expect(definition).toEqual({
       locales: ['so-SO'],
@@ -139,6 +161,50 @@ describe('FastTranscriptionService', () => {
     await expect(
       service.transcribe(oversizedPath, { language: 'so' }),
     ).rejects.toMatchObject({ errorClass: 'permanent' });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('prefers AZURE_SPEECH_ENDPOINT over the OpenAI account endpoint', async () => {
+    mockEnv.AZURE_SPEECH_ENDPOINT =
+      'https://speech-only.cognitiveservices.azure.com/';
+    fetchMock.mockResolvedValueOnce(jsonResponse(200, { combinedPhrases: [] }));
+    await new FastTranscriptionService().transcribe(smallPath, {
+      language: 'so',
+    });
+    expect(fetchMock.mock.calls[0][0]).toMatch(
+      /^https:\/\/speech-only\.cognitiveservices\.azure\.com\/speechtotext\//,
+    );
+  });
+
+  it('is unavailable without an endpoint and does not call the API', async () => {
+    delete mockEnv.AZURE_OPENAI_ENDPOINT;
+    const service = new FastTranscriptionService();
+    expect(service.isAvailable()).toBe(false);
+    await expect(
+      service.transcribe(smallPath, { language: 'so' }),
+    ).rejects.toMatchObject({ errorClass: 'permanent' });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('refuses a regional endpoint, which cannot accept Entra tokens', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    mockEnv.AZURE_SPEECH_ENDPOINT =
+      'https://westeurope.api.cognitive.microsoft.com';
+    expect(new FastTranscriptionService().isAvailable()).toBe(false);
+    expect(warn).toHaveBeenCalledOnce();
+    warn.mockRestore();
+  });
+
+  it('reports an identity that cannot get a token as permanent, without calling the API', async () => {
+    tokenProvider.mockRejectedValueOnce(
+      new Error('CredentialUnavailableError: no identity'),
+    );
+    await expect(
+      new FastTranscriptionService().transcribe(smallPath, { language: 'so' }),
+    ).rejects.toMatchObject({
+      errorClass: 'permanent',
+      message: expect.stringContaining('application identity'),
+    });
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });

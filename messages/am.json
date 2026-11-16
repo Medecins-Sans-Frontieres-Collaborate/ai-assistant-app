@@ -139,14 +139,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "የOpenAI API ቁልፍ ከሌለዎት እዚህ ማግኘት ይችላሉ: ",
   "Loading_ellipsis": "በመጫን ላይ...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "የOpenAI API ቁልፍዎ በጎን አሞሌው ግርጌ በስተግራ መቀመጡን ያረጋግጡ።",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "የመልእክት ገደብ {{maxLength}} ቁምፊዎች ነው። {{valueLength}} ቁምፊዎች አስገብተዋል።",
   "Model": "ሞዴል",
   "OR": "ወይም",
   "OpenAI API Key Required": "የOpenAI API ቁልፍ ያስፈልጋል",
   "Please enter a message": "እባኮትን መልእክት ያስገቡ",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "እባኮትን የOpenAI API ቁልፍዎን በጎን አሞሌው ግርጌ በስተግራ ያስቀምጡ።",
-  "Prompt limit is {{maxLength}} characters": "የማስጠንቀቂያው ገደብ {{maxLength}} ቁምፊዎች ነው",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "የጥያቄ ገደብ {{maxLength}} ቁምፊዎች ነው። {{valueLength}} ቁምፊዎች አስገብተዋል።",
   "Regenerate response": "ምላሽ እንደገና አመንጭ",
   "Run Typewriter Intro": "የጸሐፊ መግቢያ አሂድ",
   "Save & Submit": "አስቀምጥ እና አስገባ",
@@ -194,8 +191,8 @@
   "uploadAudioVideoFile": "የድምጽ ወይም የቪዲዮ ፋይል ያስገቡ",
   "uploadingFile": "ፋይል ማስገባት በሂደት ላይ...",
   "removeFile": "አስወግድ እና ሌላ ፋይል ይምረጡ",
-  "transcriptionErrorAttempt": "በመቅዳት ላይ ስህተት (ሙከራ {{attempt}} ከ3)። እንደገና ይሞክሩ...",
-  "rateLimitExceededWaiting": "የግምት ክፍተት ተሳልፏል። {{seconds}} ሰከንዶችን ማረፍ እየተጠበቀ...",
+  "transcriptionErrorAttempt": "በመቅዳት ላይ ስህተት (ሙከራ {attempt} ከ3)። እንደገና ይሞክሩ...",
+  "rateLimitExceededWaiting": "የግምት ክፍተት ተሳልፏል። {seconds} ሰከንዶችን ማረፍ እየተጠበቀ...",
   "Web Search": "የድህረ ገጽ ፍለጋ",
   "Transcribe Audio": "ድምጽ ቅዳ",
   "Upload Image": "ምስል ስቀል",
@@ -609,7 +606,8 @@
     "clear": "አጽዳ",
     "undo": "ተድላ",
     "durationSeconds": "{count, plural, one {# ሰከንድ} other {# ሰከንዶች}}",
-    "durationMinutes": "{count, plural, one {# ደቂቃ} other {# ደቂቃዎች}}"
+    "durationMinutes": "{count, plural, one {# ደቂቃ} other {# ደቂቃዎች}}",
+    "clearSearch": "ፍለጋውን ያጽዱ"
   },
   "chat": {
     "downloadAudio": "ድምጽን አውርድ",
@@ -843,7 +841,13 @@
     "ttsError": "ድምጽ ለመፍጠር ስህተት አጋጥሟል። እባክዎ ደግመው ይሞክሩ።",
     "unsupportedMessageType": "መልእክቱን ማሳየት ላይ ስህተት፡ የማይደገፍ ዓይነት",
     "addLanguageOption": "\"{name}\" ያክሉ…",
-    "sources": "ምንጮች",
+    "sources": {
+      "fromDocuments": "የውክልና ሰነዶች",
+      "fromWeb": "ድህረ ገጽ",
+      "fromDocumentsHint": "ከዚህ ውክልና ራሱ ከሚያውቀው ሰነድ ክፍሎች",
+      "fromWebHint": "በድህረ ገጽ ፍለጋ የተገኙ የህዝብ ገፆች",
+      "heading": "{count, plural, one {ምንጭ} other {ምንጮች}}"
+    },
     "interpreterBadge": "ኮድ አስኬድ",
     "disableCodeInterpreter": "የኮድ አፈጻጸምን አጥፋ",
     "interimSearch": {
@@ -921,7 +925,8 @@
       "MODEL_RATE_LIMITED": "ሞዴሉ አብዛኛውን ጥያቄዎች አገናኞበት። ሞከር በራሱ ተደጋጋሚ ተካፋፍ፣ እባክዎ ከትንሹ ጊዜ በኋላ ይሞክሩ።",
       "MODEL_QUOTA_EXCEEDED": "የሞዴሉ ችሎታ quota ተጠናቀቀ። ሌላ ሞዴል ይሞክሩ፣ ወይም ከትንሹ ጊዜ በኋላ ይሞክሩ።",
       "MODEL_AUTH_FAILED": "መተግበሪያው ከሞዴል አገልግሎት ጋር ማረጋጋት አልተቻለም። ይህ የማዋቀር ችግር ነው — እባክዎ ድጋፍ ያግኙ።"
-    }
+    },
+    "messageLimitExceeded": "የመልእክት ገደብ {maxLength} ቁምፊዎች ነው። {valueLength} ቁምፊዎች አስገብተዋል።"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -2261,20 +2266,18 @@
     "sectionPinned": "ተያይዞ የታመደ",
     "sectionFrequent": "በተደጋጋሚ የሚጠቀመው",
     "sectionMore": "ተጨማሪ",
-    "categoryWeb": "ዌብ",
-    "categoryMedia": "ሚዲያና ፋይሎች",
-    "categoryTransform": "መለወጥ",
     "pin": "ከፍ ላይ አስረግፍ",
     "unpin": "ከዚህ አልቀም",
     "moveToMore": "ወደ 'ተጨማሪ' አንቀሳቅስ",
     "moveOutOfMore": "በምናሌ አሳይ",
     "showSources": "ሌሎች ምንጮችን አሳይ",
     "hideSources": "ሌሎች ምንጮችን ደብቅ",
-    "aiTools": "AI መሳሪያዎች",
-    "aiToolsTooltip": "አጋሩ በመስጠት የሚጠቀሙት ችሎታዎች፡ live web search, code execution, እና የተገናኘ አገልግሎቶች።",
     "codeInterpreterTooltip": "ነጻነት ያለው ሲንዳቦክስ ውስጥ ለእያንዳንዱ መልእክት Python code አስኬድ።\n\nለውሂብ ትንተና፣ ስሌትና ከተያያዙ ፋይሎች ጋር ግብዓቶች ማቀናበር በጣም ይጠቅማል።",
-    "categoryTools": "መሳሪያዎች እና የማገናኛ አባላት",
-    "translationConversationTitle": "ትርጉም፡ {filename}"
+    "translationConversationTitle": "ትርጉም፡ {filename}",
+    "categoryAdd": "ያክሉ",
+    "categoryDo": "ይዉዱ",
+    "categoryChat": "በዚህ ውይይት",
+    "categoryStart": "ከ... ጀምር"
   },
   "transcription": {
     "transcribesOnSend": "በመላክ ጊዜ ይቀዳል",
@@ -2554,7 +2557,9 @@
     "savedToOneDrive": "{name} ወደ OneDrive ተቀመጠ።",
     "openInOneDrive": "ክፈት",
     "saveForbidden": "ወደዚያ ፎልደር ለመጻፍ ፍቃድ የሎትም — ሌላ ፎልደር “ወደ OneDrive አስቀምጥ”ን ይምረጡ።",
-    "saveToOneDriveFailed": "ወደ OneDrive ማስቀመጥ አልተቻለም — እባኮትን ደግመው ይሞክሩ።"
+    "saveToOneDriveFailed": "ወደ OneDrive ማስቀመጥ አልተቻለም — እባኮትን ደግመው ይሞክሩ።",
+    "textVersion": "የጽሑፍ እትም (DOCX)",
+    "textVersionHint": "የትርጉም ጽሑፍ ውስጥ አንድ ገፅ በየምንጩ ገፅ ላይ የሚያሳይ ማስተካከያ የሚቻለው የWord ፋይል። የተተረጎመው ፋይል አንደኛውን ቅጥ ያቆያል።"
   },
   "terms": {
     "officialLanguages": "አካባቢ ትክክለኛ ቅጽ:",
@@ -2740,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "እስካሁን ድረስ ምንም አጠቃቀም አልተመዘገበም። የቶክን አጠቃቀምዎ እና የተገመገመ ማህበረ-ተፅዕኖ ከሚያወዛውዝ በኋላ እዚህ ይታያል።",
-    "co2Value": "{grams} ግራም ኦሲዎች፣ CO₂e",
     "equivalence": "≈ የ{count} ስማርትፎን አንደበት አንደበት",
     "requests": "ጥያቄዎች",
     "promptTokens": "የጥያቄ ቶክኖች",
@@ -2902,7 +2906,7 @@
       "addedByYou": "የታከለው በእርስዎ",
       "glossary": "መዝገበ ቃላት",
       "noGlossary": "መዝገበ ቃላት የለም",
-      "manageGlossaries": "መዝገበ ቃላት",
+      "manageGlossaries": "የቃላት ዝርዝሮችን አስተዳድር",
       "glossaries": "መዝገበ ቃላት",
       "closeGlossaries": "መዝገበ ቃላትን ዝጋ",
       "glossariesEmpty": "አንዳንድ ተወላጅ ቃላት እንዴት እንደሚተረጉሙ ለማየት መዝገበ ቃላት ይፍጠሩ። መዝገበ ቃላት በዚህ መሳሪያ ላይ ይቀመጣሉ እና በትርጉማት መካከል መድገም ይችላሉ።",
@@ -3056,7 +3060,7 @@
       "copiedGlossaryName": "{name} (ኮፒ)",
       "clearStaleGlossary": "አስወግድ",
       "glossaryUnavailable": "ቃላት ዝርዝሩ አይገኝም (የጠፋ ወይም ከእርስዎ ጋር አይተጋለጠም)",
-      "showOtherLanguages": "{count, plural, one {የሌላ ቋንቋ ቃላት ዝርዝር አሳይ} other {የሌሎች ቋንቋዎች {#} ቃላት ዝርዝሮች አሳይ}}",
+      "showOtherLanguages": "{count, plural, one {የሌላ ቋንቋ ቃላት ዝርዝር አሳይ} other {የሌሎች ቋንቋዎች # ቃላት ዝርዝሮች አሳይ}}",
       "hideOtherLanguages": "ሌሎች ቋንቋዎችን ደብቅ",
       "glossarySourceLang": "የመጣበት ቋንቋ",
       "glossaryTargetLang": "የመዳረሻ ቋንቋ",
@@ -3067,7 +3071,145 @@
       "importTooLarge": "ያ ፋይል ለመስመጥ በጣም ትልቅ ነው (ከ5 MB በታች).",
       "importNothing": "ምንም መጠቀም የሚቻል ረድፎች አልተገኙም ({skipped} ተወስኗል።)",
       "importSummary": "{added} ታክሏል, {replaced} ተቀይሯል, {skipped} ተወስኗል።",
-      "entriesTooManyToShow": "{count} ቃላት — እዚህ ለማሳየት ብዙ ናቸው። ለማየት ያስመጡ ወይም ቃላቶችን ለመቀየር ፋይል ያስመጡ።"
+      "entriesTooManyToShow": "{count} ቃላት — እዚህ ለማሳየት ብዙ ናቸው። ለማየት ያስመጡ ወይም ቃላቶችን ለመቀየር ፋይል ያስመጡ።",
+      "pagesLoaded": "ገፆች {selected} ከ {total} ተጫኑ",
+      "pagesLabel": "ገፆች",
+      "pagesApply": "ገፆችን ጫን",
+      "pagesPrevious": "ቀዳሚ ስብስክ",
+      "pagesNext": "ቀጣይ ስብስክ",
+      "pagesBudget": "{used} / {max} ቁምፊዎች",
+      "pagesChange": "ገፆችን ቀይር",
+      "pagesLoading": "ገፆችን በተጫን ላይ…",
+      "pagesInvalid": "የገፅ ቁጥሮች ወይም ክልሎችን ያስገቡ፣ ለምሳሌ 1-40, 45።",
+      "pagesUnavailable": "ከነዚህ ገፆች ማንኛውም ጽሑፍ አይይዙም።",
+      "pagesTooMany": "ይዞታው {used} ቁምፊዎች ናቸው እና አንድ ስብስክ {max} ይይዛል። ዝቅተኛ ገፆች ይምረጡ።",
+      "stop": "ቆልጦ",
+      "stepAnalyzing": "ትንሳኤ ማድረግ",
+      "stepTranslating": "ትርጉም ማድረግ",
+      "stepReviewing": "መደምደም",
+      "stepDone": "ተጠናቀቀ",
+      "runProgressLabel": "የትርጉም እድገት",
+      "runHintAnalyzing": "የምንጭን ድርጊቶችና ልዩ ቃላት ማንበብ።",
+      "runHintTranslating": "ትርጉም መደርሰት።",
+      "runHintReviewing": "የዝርዝሩን ፅሁፍ ምንጩን ለድምደም መመልከት።",
+      "runHintReviewingRound": "የዝርዝሩን ፅሁፍ ምንጩን ለድምደም መመልከት · ዙር {round} ከ {total} ውስጥ።",
+      "runRound": "ዙር {round} ከ {total} ውስጥ",
+      "draftLabel": "ምልክት",
+      "sourceLocked": "በትርጉም ላይ ሲሆን የተቆለፈ",
+      "analysisNotes": "{count, plural, one {# ማስታወቂያ} other {# ማስታወቂያዎች}}",
+      "analysisPill": "{count, plural, one {ትንሳኤ · # ማስታወቂያ} other {ትንሳኤ · # ማስታወቂያዎች}}",
+      "reviewSummary": "{count, plural, one {ክርክር፡ # ዙር፣ {verdict}} other {ክርክር፡ # ዙሮች፣ {verdict}}}",
+      "analysisDismiss": "ለአጠቃላይ ትርጉሞች ደብቅ",
+      "analysisShow": "ቅድመ ትርጉም ትንሳኤን አሳይ",
+      "analysisResize": "የትንሳኤ ፓነልን መቀየር",
+      "assessingCriteria": "{count, plural, one {# መስፈርት ማረግ} other {# መስፈርቶች ማረግ}}",
+      "editsPending": "የተጠቀሰ ማሻሻያ እዚህ ይታያል ግምገማው ሲጨርስ።",
+      "uploadProgressLabel": "የመስቀመጥ እድገት",
+      "uploadStepUploading": "በመስቀመጥ ላይ",
+      "uploadStepReading": "ትንታኔ ፅሁፍ ማንበብ",
+      "uploadStepReady": "ዝግጁ",
+      "uploadCancel": "ሰርዝ",
+      "modeDocument": "የድንበር ሰነድ ትርጉም",
+      "modeDocumentHint": "የተጫኑትን PDF ሙሉ በሙሉ ይተረጉማል እና አቀማመጡ ይጠበቃል። ውጤቱን ገፅ በገፅ ይያኑና ይጠነቀቁ።",
+      "translateDocument": "ሰነዱን ይተረጉሙ",
+      "documentSubmitting": "በመላክ ላይ…",
+      "documentIntroTitle": "ሰነዱን በሙሉ ይተረጉሙ",
+      "documentIntro": "የተስተናጋጁ ፒዲኤፍ በሙሉው መተረጓወን ይፈጽማል እና እቅዱን እንዳለው ይጠብቃል። ሲዘጋጅ አንድ በአንድ ገጽ ከመመሳሰሉት ጋር ማንበብ ይችላሉ፣ ገጾችን ማስተካከል፣ ጥራቱን ማረጋገጥ እና ውጤቱን ማውረድ ይችላሉ። ግምጃ የቃላት ዝግጅና እና የግምጃ ዙሮች በዚህ አሰራር የሚያደርጉት አይሆንም። እንደጀመረው የሰነዱ ትርጉም ማቆም አይቻለም፤ገጾቹ በዛሬው ስጦታ ይቆጠራሉ።",
+      "documentNeedsFile": "የሁሉንም ሰነድ ለመተረጎም PDF ያስገቡ።",
+      "documentNeedsPdf": "የሁሉንም ሰነድ ትርጉም በገፅ በገፅ ቆሻሻ ማየት ከPDF ፋይሎች ጋር ብቻ ይሰራል።",
+      "documentNeedsLanguage": "የሰነዱን ትርጉም ለመድረስ ቴርጅት ቋንቋ ይምረጡ።",
+      "documentLanguageUnsupported": "የተሠራ ድንበር ሰነድ ትርጉም ይህን ቋንቋ አይደግፍም። አጭር ወይም የታየ ቁልፍ ይጠቀሙ።",
+      "documentNoGlossaries": "Glossaries በድንበር ሰነድ ትርጉም አይጠቀሙም",
+      "documentPagesLeft": "{count, plural, one {# ገፅ ይቀራል ዛሬ} other {# ገፆች ይቀራሉ ዛሬ}}",
+      "documentLimitReached": "ይህ ሰነድ ከዛሬ ያሉት ገፆች በላይ አለ። የተመረጡ ገፆችን በአጭር ወይም በታየ ቁልፍ ይተረጉሙ ወይም ነገ ድጋሚ ይሞክሩ።",
+      "documentUnavailable": "የድንበር ሰነድ ትርጉም በዚህ ሰርቨር አልተዘጋጅም።",
+      "documentSubmitFailed": "ሰነዱ ለትርጉም ማድረስ አልተቻለም፡ {message}",
+      "documentProgressLabel": "የሰነድ ትርጉም እድገት",
+      "documentStepUploaded": "ተጫኗል",
+      "documentStepPreparing": "ገፆችን በማዘጋጀት ላይ",
+      "documentTypicalDuration": "ብዙውን ጊዜ ጥቂት ደቂቃዎች",
+      "documentCanLeave": "ከዚህ ገፅ መውጣት ይችላሉ። ትርጉሙ ይቀጥላል እና ሲመለሱ እዚህ ያገኛሉ።",
+      "documentStalled": "የትርጉሙን እድገት ማረጋገጥ አልተቻለም። ስለሚሆንም ይቀጥላል ይሆናል።",
+      "documentCheckAgain": "እንደገና ይመርምሩ",
+      "documentFailed": "ሰነዱ ሊተረጉም አልተቻለም፡ {message}",
+      "documentGone": "ይህ ትርጉም አሁን አይገኝም። ሰነዱን እንደገና ይተረጉሙ ለማንበብ።",
+      "documentPageFailed": "ይህ ገፅ ማጫን አልተቻለም፡ {message}",
+      "documentPagesNotAligned": "የተተረጉመው ፋይል የተለየ የገፆች ቁጥር አለው፡ ስለዚህ ገፅ ላይ በሁለቱ በኩል በትክክል ሊታይ ይችላል።",
+      "documentAvailableUntil": "የሚታወቀው እስከ {date}",
+      "documentRetranslateTitle": "ሰነዱን እንደገና ልተረጉም?",
+      "documentRetranslateMessage": "ይህ አዲስ ትርጉም ይጀምራል እና ገጾቹ ድጋሚ በዛሬው ስጦታ ይቆጠራሉ። እ once የጀመረ ትርጉሙን ማቆም አይቻለም። የአሁኑ ትርጉምና የተደረጉት ጥረቃዎች በሰርቨሩ ላይ እስከሚያልቁ ይቆያሉ፣ ነገር ግን እንዲህ አይታዩበትም።",
+      "retry": "ደግሞ ይሞክሩ",
+      "pageLabel": "ገፅ",
+      "pageOf": "ከ {total}",
+      "pageNumber": "· ገፅ {page}",
+      "pagePrevious": "ቀዳሚ ገፅ",
+      "pageNext": "ቀጣይ ገፅ",
+      "correctedLabel": "ታስተካልቷል",
+      "correctedPages": "ታስተካልቱ ገፆች፡",
+      "correctedPagesMore": "+{count} ተጨማሪ",
+      "correctionRestore": "አድስ",
+      "correctionRestoreHint": "በዚህ ገፅ ያደረጉትን ለውጥ ይቆም እና ወደ ማሽን ትርጉም ይመለሱ",
+      "correctionSaving": "በማስቀመጥ ላይ...",
+      "correctionSaved": "ተቀመጠ",
+      "correctionSaveFailed": "አልተቀመጠም። ደግሞ ለማሞከር ጽሁፉን ያስተካክሉ።",
+      "download": "አውርድ",
+      "downloading": "በመውረድ ላይ...",
+      "downloadFailed": "አውርድ አልተቻለም፡ {message}",
+      "downloadTranslated": "የተተረጉመው {format}",
+      "downloadTranslatedHint": "የኦሪጅናል አቀማመጥ። እርማቶችዎ አይካተትም።",
+      "downloadTextVersion": "የጽሁፍ ስሪት (DOCX)",
+      "downloadTextVersionHint": "የቀጣይ ጽሁፍ፣ በገፅ በገፅ፣ ከእርማቶችዎ ጋር።",
+      "documentNoCancel": "የሰነዱን ትርጉም ከመጀመሩ በኋላ መቆም አይችልም።",
+      "documentGlossariesIgnored": "{count, plural, one {የተመረጠው ግምገማዎ በዚህ ዓይነት አይተገበምም።} other {# ከተመረጡት ግምገማዎች በዚህ ዓይነት አያገለግሉም።}} ቃላትን ጥራት ተገምግሞ በእያንዳንዱ ገጽ ምረጡ፣ ወይም Quick ወይም Reviewed ስር ይጠቀሙ።",
+      "pendingLeavePage": "ተስፋዎች ለዚህ ገጽ ናቸው እና መጧቸው ስትወጡ አይቀመጡም። ቀረውን ተስፋ መመርጥ ቀደም በማድረግ ይወስኑ።",
+      "uploadStepOcr": "ኦሲአር በመጠቀም ማንበብ",
+      "ocrButton": "ኦሲአር በመጠቀም ያንቡ",
+      "ocrButtonHint": "የተሰነዱ ገፆች ወይም በትክክል የማይታወቀውን ጽሑፍ ለማንበብ ይህን PDF እንደገና በጽሑፍ መለያ ይያኑት",
+      "ocrApplied": "ኦሲአር",
+      "ocrAppliedHint": "ይህ ጽሑፍ ከገፆቹ በጽሑፍ መለያ ተተኛል። ከመደበኛው ጋር ያረጋግጡ።",
+      "ocrReasonNoText": "በ{name} ምንም ጽሑፍ አልተገኘም። የተሰነደ ሰነድ መሆኑ ይመስላል።",
+      "ocrReasonSparse": "በ{name} በጣም ትንሽ ጽሑፍ ተገኝቷል። ከዚህ አንዳንዱ የተሰነደ ሊሆን ይችላል።",
+      "ocrReasonManual": "{name} እንደገና በጽሑፍ መለያ ይነቡ?",
+      "ocrExplanation": "ኦሲአር ጽሑፍን ከገፅ ምስሎች ይነባል። ከመደበኛ ስቅ ጭነት በላይ ጊዜ ይፈጅል፣ የፋይሉን የበለጠ የማንበብ ገፆች በዕለታዊ ኦሲአር መጠንዎ ውስጥ ይቆጠራል፣ እና እጅግ የተንከባ ስንኝ ምስሎች፣ እጅ የተጻፉ ጽሁፎችና ሰንጠረዦችን ስለሚያሳተፋቸው ሊያሳታል።",
+      "ocrPagesLeft": "{count, plural, one {# የኦሲአር ገፅ ቀሪ ነው ዛሬ።} other {# የኦሲአር ገፆች ቀሪ ናቸው ዛሬ።}}",
+      "ocrRun": "ኦሲአር በመጠቀም ያንቡ",
+      "ocrDismiss": "አሁን አይደለም",
+      "ocrSparseHint": "በዚህ PDF በጣም ትንሽ ጽሑፍ ተገኝቷል። አንዳንድ ገፆች ተሰነዱ ሊሆኑ ይችላሉ።",
+      "ocrLimitReached": "የዚህ ሰነድ ገፆች ከዛሬ የኦሲአር መጠንዎ በላይ ናቸው።",
+      "ocrTooManyPages": "ይህ ሰነድ ለኦሲአር በጣም የበዛ ነው፣ ኦሲአር በጣም {max} ገፆች ብቻ ይያናል። PDF እንደ ክፍል ይክፈሉና የአንዱን ክፍል ያከፍሉ።",
+      "ocrUnavailable": "ኦሲአር በዚህ ሰርቨር አልተዘጋጅም።",
+      "ocrNoText": "ኦሲአር እንኳን በዚህ ሰነድ ምንም ጽሑፍ አላገኘም።",
+      "ocrFailed": "ሰነዱ በኦሲአር ማንበብ አልተቻለም። እንደገና ይሞክሩ።",
+      "scannedWholeExplanation": "እንዲሁም ሙሉ ሰነዱን መተርጎም ይችላሉ፡፡ እሱ የተወሰኑ የተቃኘ ገፆችን ራሱ ይነባል፣ አቀማመጡን ያቆያል፣ ገፆችንም በቀናቱ የትርጉም ግዴታዎ ውስጥ ይቆጣጠራል፡፡",
+      "scannedUseWholeDocument": "ሙሉ ሰነድ ተርጉም",
+      "scannedSourceNote": "በ{name} እዚህ ለማሳየት ጽሑፍ የለውም። ሙሉ ሰነድ ትርጉም ገፆቹን በቀጥታ ይነባል። የእርስዎን ጽሑፍ እዚህ መተው ሰነዱን ይቀይራል።",
+      "scannedPageNote": "ከዚህ መስመር የመጀመሪያው ገፅ ጽሑፍ አልተወሰነም። ከፋይሉ ጋር ያነጻጽሩ።",
+      "changeLabel": "ትርጉም ለመቀየር ጠየቁ",
+      "changePlaceholder": "ለመቀየር ጠየቁ፣ ለምሳሌ የበለጠ የስህተት አካል ያድርጉት",
+      "changePlaceholderAnother": "ሌላ ለመቀየር ጠየቁ",
+      "changeSend": "መደበያ ላኩ",
+      "changeWorking": "ለመቀየር በሥራ ላይ",
+      "changeNothingApplied": "እሱን ከመቀበልዎ ድረስ ምንም አይቀየርም",
+      "changeSelectionLabel": "የተመረጠውን ጽሑፍ ለመቀየር ጠየቁ",
+      "changeSelectionPlaceholder": "ይቀየር፣ ለምሳሌ 'tableta' ተናገሩ",
+      "changeSelectionScope": "የተመረጠውን ጽሑፍ ብቻ ይፈጥራል",
+      "changeSelectionClose": "ዝጉ",
+      "changeTitle": "ተጠየቁ ለመቀየር",
+      "changeSelectedLabel": "የተመረጠው ጽሑፍ",
+      "changeNoEdits": "እርስዎ ጠየቁት ስለሆነ ማንኛውም ለመቀየር አያስፈልግም።",
+      "changeReplyPending": "{count, plural, one {# ምርምር አሻሽል በውስጥ ስፍራ ላይ ነው።} other {# ምርምር አሻሽሎች በውስጥ ስፍራ ላይ ናቸው።}} እርስዎ ከተቀበሉ ድረስ ምንም አይቀየርም።",
+      "changeStopped": "ቆሟል። ምንም አልቀየረም።",
+      "changeFailed": "የመቀየር ጥያቄው አልተሳካም። እንደገና ይሞክሩ።",
+      "changeNoTranslation": "እስካሁን ለመቀየር የትርጉም የለም። አንዳች መመርጠያ መስጠት በመጀመሪያ ትርጉም ያድርጉ።",
+      "changeBusy": "አሁን የሚከናወኑትን ሥራዎች ይጨርሱ፤ ከዚያ በኋላ ይጠይቁ።",
+      "changeHeld": "አይልኩም፤ ጥቅም ላይ የሚዋሉ ምርምር አሻሽሎች የመዉዋል ይጠብቁ።",
+      "pendingRunActionRequest": "ለመቀየር በመጠየቅ ላይ",
+      "railPlaceholder": "ለመቀየር ወይም ጥያቄ ጠየቁ…",
+      "documentPageCount": "{count, plural, one {# ገፅ} other {# ገፆች}}",
+      "sourceShowPages": "ገፆችን አሳይ",
+      "sourceEditText": "እንደ ጽሁፍ አርትዕ",
+      "sourceRemoveDocument": "ሰነዱን አስወግድ",
+      "sourceJumpToPage": "ወደ ገፅ ሂድ"
     },
     "document": {
       "emptyTitle": "የሚፈልጉትን ሰነድ ይግለጹ",
@@ -3695,7 +3837,7 @@
       "guideTargetTerm": "አስፈላጊ ትርጉም",
       "guideNote": "ማስታወሻ",
       "pendingRun": {
-        "title": "{count} ጥያቄዎች ገና በትዕዛዝ ላይ ናቸው",
+        "title": "{count, plural, one {# ጥያቄ ገና በመጠባበቅ ላይ አለ} other {# ጥያቄዎች ገና በመጠባበቅ ላይ አሉ}}",
         "body": "{action} የጽሑፉን ማንኛውንም ክፍል ሊቀይር ይችላል፣ ገና ውሳኔ ላይ ያልወሰኑትን ጥያቄዎች ጨምሮ፣ እና አዲሱ ግምገማ አሁኑን ዝርዝር ይቀይራል። ቀሪዎቹን ጥያቄዎች መመርጥ አስቀድሞ ይውሰኑ።",
         "acceptAll": "ሁሉንም ቀሪዎቹን ይቀበሉ",
         "rejectAll": "ሁሉንም ይተዉ",
@@ -3757,7 +3899,7 @@
         "list<number>": "የቁጥሮች ዝርዝር"
       },
       "layout": "ቅርጸት",
-      "layoutHint": "በMarkdown ውስጥ ከ {{field:id}} ቦታዎች ጋር — ለተዘጋጀው ውጭና ለቅድሚያ እይታ ይጠቀማል።",
+      "layoutHint": "በMarkdown ውስጥ ከ '{{field:id}}' ቦታዎች ጋር — ለተዘጋጀው ውጭና ለቅድሚያ እይታ ይጠቀማል።",
       "saveTemplate": "መደብ አዝግብ",
       "deleteTemplate": "መደቡን ሰርዝ",
       "cancel": "ይቅር",
@@ -4585,6 +4727,10 @@
         "note": "የወጪ ዝርዝር ዋጋ እስከ {asOf} (ዓለም ጠቀላላ መደበኛ ደረጃ፣ የተቆሰለ ግብዓት ቅናሽ የለውም): በላይ የሚገምት ዋጋ ነው፣ የተከፈለ ዋጋ አይደለም። የድረ ገፅ ፍለጋ፣ ኮድ አከል፣ የመጻፍ መቀየር፣ ንግግር፣ ትርጉምና ደብዳቤ አሰናዳድ አካትተው አይመለከቱም።"
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "ይህ የስራ ቦታ (የተገመተው)",
       "workspace": "ይህ የስራ ቦታ",
@@ -5399,7 +5545,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# ሰነድ} other {# ሰነዶች}} ተሰናዳ",
     "m365CapImmediateHelp": "ተግባሩ ወዲያውኑ ገደቡን ይቀመጣል። ሌሎች ማስተካከያዎች ግን ማስቀመጥ ያስፈልጋሉ።",
     "m365CapDraftHelp": "ወኪሉን ሲፈጥሩ ገደቡ ይቀመጣል።",
-    "m365CapSaved": "የሰነድ ገደብ ተቀምጧል፡ {limit}።"
+    "m365CapSaved": "የሰነድ ገደብ ተቀምጧል፡ {limit}።",
+    "m365AgentAllowWebSearchHelp": "ነቅቷ የለም፡ ውክልናው ምላሹን ሁሉ በራሱ ሰነዶች ብቻ ይሰጣል፣ ተጠቃሚው የፍለጋ ቅኝቱን ምንም ቢመርጥ። እሱ ሲነቃ፣ ውክልናው መመሪያዎቹ መቼ የድህረገፅ ፍለጋ እንደሚወጣና ምን ድህረገፆች እንደሚጠቀም ይወስናሉ፣ ከውክልና ሰነዶች ድህረገፅ ምንጮች ሁልጊዜ በተለይ ይታያሉ።",
+    "promptAgentAllowWebSearchHelp": "በነቅቷ ነው የተዘጋጅቷ። ሲዘጋ፣ ይህ ውክልና ተጠቃሚው የፍለጋ ቅኝቱን ምንም ቢመርጥ ድህረገፅ ፍለጋ አያደርግም።"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",
@@ -5706,7 +5854,9 @@
       "m365MailReadsPerDay": "የኢሜይል ንባቦች በቀን",
       "m365MailDraftsPerDay": "የኢሜይል ረቂቅ በቀን",
       "m365MailDeepScansPerDay": "የኢሜይል ደርድር በቀን",
-      "m365DigestRunsPerDay": "ዕንድነት በዕለት የሚሰራው ማጠቃለያ"
+      "m365DigestRunsPerDay": "ዕንድነት በዕለት የሚሰራው ማጠቃለያ",
+      "translationPagesPerDay": "በቀን የሰነድ ትርጉም ገፆች",
+      "ocrPagesPerDay": "ዕለት በየቀኑ የኦሲአር ገፆች"
     },
     "valueModeLabel": "የገደብ አይነት",
     "valueAmountLabel": "የገደብ መጠን",
@@ -5729,7 +5879,8 @@
       "jobs": "ስራዎች",
       "rounds": "ዙሮች",
       "documents": "ሰነዶች",
-      "boolean": ""
+      "boolean": "",
+      "pages": "ገፆች"
     },
     "window": {
       "day": "ቀን",
@@ -5787,7 +5938,9 @@
       "m365MailReadsPerDay": "የኢሜይል ፍለጋና መልእክት/ክፍል ንባቦች በቀን። ከገደቡ በላይ፣ የኢሜይል መሳሪያዎች \"እባክዎ ነገ ይደግሙ\" ይመልሳሉ።",
       "m365MailDraftsPerDay": "የአጋሩ በቀን ሊፈጥሩት የሚችሉ የኢሜይል ረቂቅ። እያንዳንዳቸው በተናጽፎ ይረጋገጣሉ። በትክክል የተጠበቀ።",
       "m365MailDeepScansPerDay": "የተደበቀ የኢሜይል አስተ تحليل (ዳይጀስት፣ ጥልቅ ፍለጋ፣ ተግባራት) በቀን። እያንዳንዱ ፍለጋ አንድ ጀብዱ ነው፤ የውስጥ ንባቦች አይቀመጡበትም።",
-      "m365DigestRunsPerDay": "Microsoft 365 ዕለታዊ ማጠቃለያ በዕለት የሚሰራው፡ አንድ ማጠቃለያ ብዙ የGraph እየተነበበ ከመድረክ ተጠቃሚዎች ተጠቃሚዎችን ያካትታል፣ እና ሁለት የትንበያ-ሞዴል ጥሪዎች አሉ፡ የፈተናው የወቅት መለያያ እንደገና ማድረግ አሳካኝ ያደርገዋል፣ ስለዚህ የችሎታው ድፍረት አጠቃላይ ነው።"
+      "m365DigestRunsPerDay": "Microsoft 365 ዕለታዊ ማጠቃለያ በዕለት የሚሰራው፡ አንድ ማጠቃለያ ብዙ የGraph እየተነበበ ከመድረክ ተጠቃሚዎች ተጠቃሚዎችን ያካትታል፣ እና ሁለት የትንበያ-ሞዴል ጥሪዎች አሉ፡ የፈተናው የወቅት መለያያ እንደገና ማድረግ አሳካኝ ያደርገዋል፣ ስለዚህ የችሎታው ድፍረት አጠቃላይ ነው።",
+      "translationPagesPerDay": "በቀን ለሰነድ ትርጉም የሚቀርቡ የPDF ገፆች።",
+      "ocrPagesPerDay": "በኦሲአር (የተሰነዱ ሰነዶች ተግባራዊ ጽሑፍ መለያ) የተነቡ የPDF ገፆች በየቀኑ።"
     },
     "scopeFamily": "ቤተሰብ",
     "scopeModel": "ሞዴል",
@@ -6466,21 +6619,21 @@
       "emptyFiltered": "ባለፉት 14 ቀናት ውስጥ የሚደርሱበት የትርጉም ወይም መዝገብ ያላቸው ስብሰባዎች የሉም",
       "showAll": "ሁሉንም ስብሰባዎች አሳይ",
       "filterUnavailable": "ለማይገኙ ይዟል ስብሰባዎች መዝገብ መፈተሽ አልተቻለም — ሁሉንም ስብሰባዎች እየታየ ነው።",
-      "showAllWithCount": "ሁሉንም ስብሰባዎች አሳይ ({{count}} ተደብቆ ነው)",
+      "showAllWithCount": "ሁሉንም ስብሰባዎች አሳይ ({count} ተደብቆ ነው)",
       "showFiltered": "የትርጉም ወይም መዝገብ ያላቸውን ስብሰባዎች ብቻ አሳይ",
       "badgeTranscript": "ትርጉም",
-      "badgeTranscripts": "{{count}} ትርጉሞች",
+      "badgeTranscripts": "{count} ትርጉሞች",
       "badgeRecording": "መዝገብ",
-      "badgeRecordings": "{{count}} መዝገቦች",
+      "badgeRecordings": "{count} መዝገቦች",
       "badgeNoAccess": "መድረሻ የለም",
       "badgePending": "በቅድሚያ ላይ ሊሆን ይችላል",
       "pendingHint": "ይህ ስብሰባ በቅርቡ ተዛረበ — በTeams ትርጉሙን ለማቅረብ ጥቂት ደቂቃዎች ይወስዳል።",
       "someUnchecked": "{count, plural, one {አንድ ስብሰባ በጊዜው መፈተሽ አልተቻለም — ለመድረስ ሁሉንም ስብሰባዎች አሳይ።} other {# ስብሰባዎች በጊዜው መፈተሽ አልተቻለም — ለመድረስ ሁሉንም ስብሰባዎች አሳይ።}}",
       "throttledNote": "Microsoft 365 ጥያቄዎችን እያገደበ ነው፣ ስለዚህ አንዳንድ ስብሰባዎች አልተፈተሸም።",
       "windowTruncated": "የእርስዎ የቀን መቁጠሪያ በጅምላ ስተዋት ነበር፣ ስለዚህ ባለፉት 14 ቀናት ያሉ አሮጌ ስብሰባዎች አልተፈተሹም።",
-      "occurrences": "{{count}} ጊዜያት",
-      "importTranscriptFrom": "ትርጉም አስመጣ ({{when}})",
-      "importRecordingFrom": "መዝገብ አስመጣ ({{when}})"
+      "occurrences": "{count} ጊዜያት",
+      "importTranscriptFrom": "ትርጉም አስመጣ ({when})",
+      "importRecordingFrom": "መዝገብ አስመጣ ({when})"
     },
     "todo": {
       "title": "የMicrosoft To Do ስራዎችን ይፍጠሩ",
@@ -7584,7 +7737,7 @@
         "activeUsers": "ንቁ ሰዎች",
         "requests": "ጥያቄዎች",
         "tokens": "ቶክኖች",
-        "vsDelivered": "{{delta}} ከሪፖርቱ ራሱ ግምቶች ጋር",
+        "vsDelivered": "{delta} ከሪፖርቱ ራሱ ግምቶች ጋር",
         "sameAsDelivered": "ከሪፖርቱ ራሱ ግምቶች ጋር ተመሳሳይ",
         "unpriced": "{count, plural, one {# ጥያቄ ይጠቀማል} other {# ጥያቄዎች ይጠቀማሉ}} ለእነዚህ ግምቶች ቁጥር የሌላቸው የሞዴል መጠን ነው፣ እና {count, plural, one {ተወውበት ተውቷል} other {ተውተዋል}}።",
         "byDepartment": "በመድረክ የተፈጠሩ ማህበረ-ኃይሎች",
@@ -8095,7 +8248,13 @@
       "skills": "ክነውነት ምርጫ",
       "tools": "መሳሪያ መሪ አቀራረብ",
       "trim": "አይነት መድብስ",
-      "assessment": "የፍለጋ ግምገማ"
+      "assessment": "የፍለጋ ግምገማ",
+      "query": "የፍለጋ ጥያቄ እንደገና መፃፊያ",
+      "mailScreen": "የኢሜይል ፊሺንግ ማቅረብ ማያ",
+      "mailAnalysis": "የኢሜይል እና የማጠራረቅ ትንተና",
+      "schemaProposal": "የማርጠኛ ስኪማ ጥያቄ",
+      "mcpPlan": "የመገናኛ እቅድ",
+      "vision": "ምስልና ገጽ እንቅስቃሴ አንበብ"
     },
     "reason": {
       "endpoint_missing": "መጨረሻ ወይም የመለያ ግንኙነት አለመኖሩ",
@@ -8116,6 +8275,164 @@
       "endpoint_account_mismatch": "መጨረሻውና ARM resource ID በተለያየ መለያዎች ይገናኛሉ። የዝውውር አዋጁን ያስተካክሉ።",
       "inventory_refresh_failed": "ዝርዝር አድሱን ማድረግ አልተሳካም። የመተግበሪያውን Reader መዳረሻና የመለያውን ግንኙነት ያረጋግጡ።",
       "credential_unavailable": "መተግበሪያው የዝርዝር credential ማግኘት አልቻለም። የዝውውር መታወቂያ አዋጁን ያረጋግጡ።"
+    },
+    "notSupported": "ይህ ሞዴል አይደግፍም",
+    "unservedOperations": "ይህ ሰንሰለት ውስጥ ምንም ሞዴል {operations} አይደግፍም። እንዲደግፉ ሞዴሎችን ያክሉ።"
+  },
+  "filePreview": {
+    "preview": "ቅድመ እይታ",
+    "download": "ያውርዱ",
+    "loading": "ቅድመ እይታን ማዘጋጅ...",
+    "failed": "ይህ ፋይል ማቅድመ እይታ አልተቻለም። ነገር ግን እስካሁን ማውረድ ይችላሉ።",
+    "pageOf": "ገጽ {page} ከ {total}",
+    "enlarge": "{name}ን የማትዋላት",
+    "truncated": "የመጀመሪያ {shown} ከ {total} ገጾች ታየ። ቀሪውን ለማየት ፋይሉን ያውርዱ።"
+  },
+  "addToChat": {
+    "title": "ወደ ውይይት ያክሉ",
+    "titleTranslate": "ሰነድ ይተረጉሙ",
+    "titleTranscribe": "ድምፅ ወይም ቪዲዮ ያስተርጓሙ",
+    "sourcesLabel": "ይያዙ ከ",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "ለዚህ ተግባር የለም",
+    "sources": {
+      "device": "ይህ መሣሪያ",
+      "link": "አገናኝ",
+      "camera": "ካሜራ",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ኢ-ሜይል",
+      "meetings": "ስብሰባዎች"
+    },
+    "device": {
+      "browse": "በዚህ መሣሪያ ይመልከቱ",
+      "dropHint": "ወይም ፋይሎችን በዚህ መስክ ላይ ያዝዙ፣ ወይም ይላጩ",
+      "rejected": "ከእነዚህ ፋይሎች ማንኛውም አይቻልም።",
+      "hint": {
+        "attach": "ሰነዶች፣ ምስሎች፣ ድምፅና ቪዲዮ.",
+        "translate": "አንድ ሰነድ፡ Word፣ Excel፣ PowerPoint፣ PDF፣ HTML ወይም የጽሑፍ.",
+        "transcribe": "ድምፅ ወይም ቪዲዮ። መልኩን ሲልኩ ይተርጉማል።"
+      }
+    },
+    "selection": {
+      "then": "ከዚያ",
+      "intents": {
+        "attach": "ያካትቱ",
+        "translate": "ይተረጉሙ",
+        "transcribe": "ያስተርጓሙ"
+      },
+      "confirm": {
+        "attach": "ያክሉ",
+        "translate": "ይተረጉሙ",
+        "transcribe": "ያስተርጓሙ"
+      },
+      "unfit": {
+        "attach": "እነዚህ ፋይሎች ማካተት አይችሉም",
+        "translate": "አንድ ሰነድ ብቻ ይተረጉማል",
+        "transcribe": "ድምፅና ቪዲዮ ብቻ ሊተረጉም ይችላል"
+      }
+    },
+    "menu": {
+      "addToChatNote": "ይህ መሣሪያ፣ አገናኞች፣ Microsoft 365",
+      "filesOrPhotos": "ፋይሎች ወይም ፎቶዎች",
+      "fromThisDevice": "ከዚህ መሣሪያ",
+      "connect": "Microsoft 365 ያገናኙ",
+      "connectNote": "ከOneDrive፣ ኢ-ሜይልና ስብሰባዎች ይያዙ"
     }
+  },
+  "usageBudgets": {
+    "title": "ባጀቶችዎ",
+    "description": "በዚህ መሣሪያ ላይ ለራስዎ የሚያዘጋጁት የገደብ ግዴታዎች ናቸው። ባጀት ይምረጡ፣ እና እያካተቱና ያልፉባት ጊዜ ምን እንደሚሆን ይወስኑ። ባጀቶች በእያንዳንዱ ጊዜ መጀመሪያ ወቅት የቻትና የወርክፍሎ እንቅስቃሴዎችን ይቆጠራሉ።",
+    "metric": {
+      "emissions": "የተለቀ ጉም ባጀት",
+      "cost": "የወጪ ባጀት"
+    },
+    "metricShort": {
+      "emissions": "ተለቀ ጉም",
+      "cost": "ወጪ"
+    },
+    "off": "ባጀት አልተቀመጠም።",
+    "measureAs": "እንደ ዚህ መለከም",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "የስልክ አንሳፋፊዎች",
+      "usd": "የአሜሪካ ዶላር"
+    },
+    "amountLabel": "ባጀት",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ሰአታት",
+      "smartphoneCharge": "ጊዜያት",
+      "usd": "የአሜሪካ ዶላር"
+    },
+    "periodLabel": "በየ... ዳግም ይቀመጣል",
+    "period": {
+      "day": "ቀን",
+      "week": "ሳምንት",
+      "month": "ወር"
+    },
+    "costNote": "ከዝርዝር ዋጋዎች የተገመተ፡ ከፍተኛ ገደብ ነው፣ አይሁን የክፍያ ደብዳቤ አይደለም።",
+    "chargesValue": "{count} የስልክ አንሳፋፊዎች",
+    "percent": "{percent}%",
+    "usedOf": "{limit} ውስጥ {used} ተጠቅመዋል ({percent}%)",
+    "usedOfShort": "{limit} ውስጥ {used}",
+    "resets": "{date} ዳግም ይቀመጣል",
+    "budgetMarker": "ባጀት",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "በባጀት ውስጥ",
+      "warn": "ማስጠንቀቂያ ታይቷል",
+      "ask": "ለእያንዳንዱ መልእክት ማረጋገጫ ይጠየቃል",
+      "stop": "መላክ ቆመ"
+    },
+    "stage": {
+      "warn": {
+        "title": "ማስጠንቀቂያ",
+        "tag": "ማስጠንቀቂያ",
+        "description": "ከዚህ የባጀት ተግባር ጀምሮ ማስታወቂያ በቻት ውስጥ አሳይ።"
+      },
+      "ask": {
+        "title": "አስቀድሞ ጠይቅ",
+        "tag": "ማቋረጫ ቀላል",
+        "description": "ከዚህ የባጀት ተግባር ጀምሮ ለእያንዳንዱ መልእክት ማረጋገጫ ጠይቀኝ።"
+      },
+      "stop": {
+        "title": "ቆም",
+        "tag": "ከባድ መከልከያ",
+        "description": "ከዚህ የባጀት ተግባር ጀምሮ ዳግም ድረስ ወይም ከዚህ በላይ እስካሳድግ ድረስ መላክን አቁም።"
+      }
+    },
+    "thresholdLabel": "{stage} ደረጃ፣ ከባጀቱ መቶኛ",
+    "notice": {
+      "warn": {
+        "emissions": "ከየተለቀ ጉም ባጀትዎ ውስጥ {percent}% ብቻ ተጠቅመዋል።",
+        "cost": "ከየወጪ ባጀትዎ ውስጥ {percent}% ብቻ ተጠቅመዋል።"
+      },
+      "ask": {
+        "emissions": "ከየተለቀ ጉም ባጀትዎ {percent}% ተጠቅመዋል። ይህን መልእክት እንልክ?",
+        "cost": "ከየወጪ ባጀትዎ {percent}% ተጠቅመዋል። ይህን መልእክት እንልክ?"
+      },
+      "askRun": {
+        "emissions": "ከየተለቀ ጉም ባጀትዎ {percent}% ተጠቅመዋል። ይህን ውጤት እንጀምር?",
+        "cost": "ከየወጪ ባጀትዎ {percent}% ተጠቅመዋል። ይህን ውጤት እንጀምር?"
+      },
+      "stop": {
+        "emissions": "የተለቀ ጉም ባጀት ማቆሚያ ነጥብ ደርሷል። ማስተላለፍ እስከ {date} ድረስ ቆሟል።",
+        "cost": "የወጪ በጀት የቆም ነጥብ ደርሷል። ልክ እስከ {date} ድረስ ቆልፏል።"
+      }
+    },
+    "actions": {
+      "viewBudget": "በጀቱን ይመልከቱ",
+      "dismiss": "ያጠፉ",
+      "sendAnyway": "አያግኙ፤ ልኩን",
+      "runAnyway": "አያግኙ፤ አስኪዩ",
+      "dontSend": "አትልኩ",
+      "dontAskToday": "ዛሬ አይጠይቁኝ",
+      "openSettings": "የበጀት ቅንብሮችን ይክፈቱ",
+      "edit": "ያርታሙ"
+    },
+    "composerPaused": "ልኩ በበጀትዎ ቆልፏል",
+    "summaryTitle": "በጀቶችዎ",
+    "chipAria": "{metric} በጀት፡ {percent}% ተጠቅመዋል።",
+    "runProjection": "የተፈጠረ በጀት {from}% → {to}%"
   }
 }

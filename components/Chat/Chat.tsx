@@ -15,6 +15,7 @@ import { useSmoothStreaming } from '@/client/hooks/chat/useSmoothStreaming';
 import { useClearConversation } from '@/client/hooks/conversation/useClearConversation';
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
+import { useBudgetGate } from '@/client/hooks/settings/useUsageBudgets';
 import { useAutoDismissError } from '@/client/hooks/ui/useAutoDismissError';
 import { useAutoFocusChatInput } from '@/client/hooks/ui/useAutoFocusChatInput';
 import { useKeyboardShortcuts } from '@/client/hooks/ui/useKeyboardShortcuts';
@@ -33,6 +34,7 @@ import {
   escalateModelTimeoutSeconds,
   isModelTimeoutErrorCode,
 } from '@/lib/utils/shared/chat/modelTimeout';
+import { rewriteSandboxLinks } from '@/lib/utils/shared/chat/sandboxLinks';
 
 import { ErrorCode } from '@/types/errors';
 import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
@@ -42,6 +44,7 @@ import { KeyboardShortcutsModal } from '@/components/KeyboardShortcuts';
 import { PromptModal } from '@/components/Prompts/PromptModal';
 import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 
+import { BudgetNotice } from './BudgetNotice';
 import { ChatError } from './ChatError';
 import { ChatInput } from './ChatInput';
 import { PasteOptionsMenu } from './ChatInput/PasteOptionsMenu';
@@ -422,7 +425,9 @@ export function Chat({
       }
     }
     if (lastContent) {
-      navigator.clipboard.writeText(lastContent);
+      // Stored text can still carry the interpreter's container links,
+      // which resolve nowhere outside the sandbox.
+      navigator.clipboard.writeText(rewriteSandboxLinks(lastContent));
     }
   }, [selectedConversation?.messages]);
 
@@ -442,12 +447,28 @@ export function Chat({
     handleEditMessage,
     handleSend,
     handleSelectPrompt,
-    handleRegenerate,
-    handleGenerateResponse,
+    handleRegenerate: regenerateUngated,
+    handleGenerateResponse: generateResponseUngated,
   } = useChatActions({
     updateConversation,
     sendMessage,
   });
+
+  // Regenerating and generating spend tokens exactly as a new message does,
+  // so they answer to the same personal-budget gate as the composer.
+  const { guard: guardBudget } = useBudgetGate();
+  const handleRegenerate = useCallback(
+    (...args: Parameters<typeof regenerateUngated>) => {
+      guardBudget(() => void regenerateUngated(...args));
+    },
+    [guardBudget, regenerateUngated],
+  );
+  const handleGenerateResponse = useCallback(
+    (...args: Parameters<typeof generateResponseUngated>) => {
+      guardBudget(() => void generateResponseUngated(...args));
+    },
+    [guardBudget, generateResponseUngated],
+  );
 
   const handleGenerateOrRetry = useCallback(() => {
     const conversationState = useConversationStore.getState();
@@ -838,6 +859,7 @@ export function Chat({
                     onChooseModel={handleOpenModelSelector}
                   />
                   <ModelRetirementNotice conversation={selectedConversation} />
+                  <BudgetNotice onChooseModel={handleOpenModelSelector} />
                   <ChatInput
                     onSend={handleSend}
                     onRegenerate={handleRegenerate}
@@ -955,6 +977,11 @@ export function Chat({
         {/* Selected model retires soon — say when it moves, offer it now. */}
         {hasMessages && (
           <ModelRetirementNotice conversation={selectedConversation} />
+        )}
+
+        {/* Personal budget: heads-up, send confirmation, or paused. */}
+        {hasMessages && (
+          <BudgetNotice onChooseModel={handleOpenModelSelector} />
         )}
 
         {/* Chat Input - Bottom position (hidden in empty state) */}

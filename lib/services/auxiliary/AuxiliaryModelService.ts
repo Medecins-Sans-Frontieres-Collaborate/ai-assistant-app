@@ -4,10 +4,11 @@ import { ModelDiscoveryService } from '@/lib/services/models/ModelDiscoveryServi
 import { WebSearchConfigService } from '@/lib/services/webSearch/config/WebSearchConfigService';
 
 import { AuxiliaryModelExecutor } from './AuxiliaryModelExecutor';
+import { AuxiliaryCompletionService } from './auxiliaryCompletion';
 import { auxiliaryAccount, auxiliaryEnvironment } from './bindings';
 import { auxiliaryClientResolver } from './clients';
 import { withAuxiliaryDeadline } from './deadline';
-import { auxiliaryProbeRequest, matchesAuxiliarySchema } from './probes';
+import { auxiliaryProbeAccepts, auxiliaryProbeRequest } from './probes';
 import { resolveAuxiliaryCandidate } from './resolution';
 import {
   type AuxiliaryState,
@@ -36,7 +37,9 @@ import {
   type AuxiliaryRegion,
   DEFAULT_AUXILIARY_ROUTING_MODEL,
   PURPOSE_OPERATIONS,
+  operationsServed,
   referenceKey,
+  servesOperation,
 } from './types';
 
 import { env } from '@/config/environment';
@@ -89,10 +92,25 @@ export function auxiliaryBootstrap(
   };
 }
 
+/**
+ * Process-wide slot for the singleton. Next.js compiles instrumentation and
+ * each route into separate bundles, so a module-level static would give the
+ * boot-time readiness warm-up (instrumentation.ts) its own copy and leave
+ * the routes' copy cold: the first auxiliary call on every replica then
+ * spent its whole deadline loading policy and inventory. globalThis is the
+ * one object every bundle in the Node process shares.
+ */
+const INSTANCE_SLOT = Symbol.for('ai-assistant.auxiliaryModelService');
+const instanceSlot = globalThis as unknown as Record<
+  symbol,
+  AuxiliaryModelService | undefined
+>;
+
 /** Environment-local auxiliary service shared by runtime, readiness and administration. */
 export class AuxiliaryModelService {
-  private static instance: AuxiliaryModelService | undefined;
   readonly executor: AuxiliaryModelExecutor;
+  /** The one entry point for helper-model calls (see auxiliaryCompletion.ts). */
+  readonly completions: AuxiliaryCompletionService;
   private policy: AuxiliaryPolicy | null = null;
   private etag: string | null = null;
   private policyAt = 0;
@@ -128,13 +146,14 @@ export class AuxiliaryModelService {
       client: (candidate) => this.clientFor(candidate.reference.accountBinding),
       observe: (entry) => this.observe(entry),
     });
+    this.completions = new AuxiliaryCompletionService(this.executor);
   }
 
   /** Shared app-credential service, available even when main chat clients cannot initialize. */
   static getInstance(): AuxiliaryModelService {
-    if (!this.instance) {
+    if (!instanceSlot[INSTANCE_SLOT]) {
       const credential = new DefaultAzureCredential();
-      this.instance = new AuxiliaryModelService(
+      instanceSlot[INSTANCE_SLOT] = new AuxiliaryModelService(
         auxiliaryClientResolver(credential),
         async () => {
           const config = WebSearchConfigService.getInstance();
@@ -144,13 +163,13 @@ export class AuxiliaryModelService {
         credential,
       );
     }
-    return this.instance;
+    return instanceSlot[INSTANCE_SLOT];
   }
 
   /** Dispose timers and reset the singleton for isolated tests. */
   static reset(): void {
-    this.instance?.dispose();
-    this.instance = undefined;
+    instanceSlot[INSTANCE_SLOT]?.dispose();
+    instanceSlot[INSTANCE_SLOT] = undefined;
   }
 
   /** Invalidate policy/cooldowns following an administrator's CAS write. */
@@ -511,27 +530,19 @@ export class AuxiliaryModelService {
       ))
     )
       throw new Error('PROBE_RATE_LIMIT');
-    for (const operation of PURPOSE_OPERATIONS[purpose]) {
+    // Only what this model can serve (vision only on vision models).
+    for (const operation of operationsServed(
+      purpose,
+      resolved.status.capabilities,
+    )) {
       const params = await auxiliaryProbeRequest(operation);
-      const schema =
-        params.response_format?.type === 'json_schema'
-          ? params.response_format.json_schema.schema
-          : undefined;
       try {
         await this.executor.execute(
           params,
-          (response) => {
-            try {
-              const value = JSON.parse(
-                response.choices[0]?.message.content ?? 'null',
-              );
-              return schema && matchesAuxiliarySchema(value, schema)
-                ? true
-                : undefined;
-            } catch {
-              return undefined;
-            }
-          },
+          (response) =>
+            auxiliaryProbeAccepts(operation, params, response)
+              ? true
+              : undefined,
           {
             operation,
             region,
@@ -638,13 +649,33 @@ export class AuxiliaryModelService {
             ).status,
         );
         const usable = candidates.filter((entry) => entry.eligible);
-        const ready = usable.find(
-          (entry) =>
-            entry.fingerprint &&
-            PURPOSE_OPERATIONS[purpose].every((operation) =>
-              this.compatible(entry.fingerprint!, operation),
+        // A model is held only to the operations it can serve; every
+        // operation some usable model can serve must have passed somewhere.
+        const unservedOperations = PURPOSE_OPERATIONS[purpose].filter(
+          (operation) =>
+            !usable.some((entry) =>
+              servesOperation(operation, entry.capabilities ?? []),
             ),
         );
+        const covered = PURPOSE_OPERATIONS[purpose]
+          .filter((operation) => !unservedOperations.includes(operation))
+          .every((operation) =>
+            usable.some(
+              (entry) =>
+                entry.fingerprint &&
+                servesOperation(operation, entry.capabilities ?? []) &&
+                this.compatible(entry.fingerprint, operation),
+            ),
+          );
+        const ready = covered
+          ? usable.find(
+              (entry) =>
+                entry.fingerprint &&
+                operationsServed(purpose, entry.capabilities).every(
+                  (operation) => this.compatible(entry.fingerprint!, operation),
+                ),
+            )
+          : undefined;
         chains.push({
           runtimeFallback: candidates.some((entry) =>
             entry.observations.some(
@@ -659,6 +690,9 @@ export class AuxiliaryModelService {
           purpose,
           region,
           candidates,
+          ...(usable.length && unservedOperations.length
+            ? { unservedOperations }
+            : {}),
           redundancy: new Set(usable.map((entry) => entry.fingerprint)).size,
           state:
             this.configUnavailable ||

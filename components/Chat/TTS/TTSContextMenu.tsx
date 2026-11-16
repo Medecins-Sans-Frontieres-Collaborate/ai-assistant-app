@@ -190,7 +190,7 @@ export const TTSContextMenu: FC<TTSContextMenuProps> = ({
             <button
               key={voice.name}
               onClick={() => setOverrideVoice(voice.name)}
-              className={`w-full flex items-center gap-2 px-2 py-1.5 text-left rounded transition-colors text-sm ${
+              className={`w-full flex items-center gap-2 px-2 py-1.5 text-start rounded transition-colors text-sm ${
                 effectiveVoiceName === voice.name
                   ? 'bg-gray-100 dark:bg-gray-700'
                   : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'

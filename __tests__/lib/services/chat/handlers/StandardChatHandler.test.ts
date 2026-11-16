@@ -202,6 +202,57 @@ describe('StandardChatHandler.buildFinalMessages', () => {
   });
 });
 
+describe('StandardChatHandler.buildFinalMessages — earlier uploads in history', () => {
+  const upload = (filename: string, text?: string): Message =>
+    ({
+      role: 'user',
+      content: [
+        ...(text ? [{ type: 'text', text }] : []),
+        {
+          type: 'file_url',
+          url: `/api/file/${filename}`,
+          originalFilename: filename,
+        },
+      ],
+      messageType: MessageType.FILE,
+    }) as unknown as Message;
+
+  const build = (messages: Message[]): Message[] =>
+    createHandler().buildFinalMessages(createTestChatContext({ messages }));
+
+  it('names a file-only history message instead of reporting a processing failure', () => {
+    const result = build([
+      upload('Strategy.docx'),
+      { role: 'assistant', content: 'Got it.', messageType: MessageType.TEXT },
+      { role: 'user', content: 'Compare them', messageType: MessageType.TEXT },
+    ]);
+
+    expect(result[0].content).toBe(
+      '[Attached file: Strategy.docx. Its content is not repeated in this message.]',
+    );
+    expect(JSON.stringify(result)).not.toContain('could not be processed');
+    expect(JSON.stringify(result)).not.toContain('file_url');
+  });
+
+  it('keeps the user text and appends the file reference to it', () => {
+    const result = build([
+      upload('Trends.docx', 'Here is the report'),
+      { role: 'user', content: 'Thoughts?', messageType: MessageType.TEXT },
+    ]);
+
+    expect(result[0].content).toBe(
+      'Here is the report\n\n[Attached file: Trends.docx. Its content is not repeated in this message.]',
+    );
+  });
+
+  it('leaves messages without attachments untouched', () => {
+    const messages: Message[] = [
+      { role: 'user', content: 'Hello', messageType: MessageType.TEXT },
+    ];
+    expect(build(messages)).toEqual(messages);
+  });
+});
+
 describe('StandardChatHandler — custom-source (byom) glue', () => {
   const BYOM_ENDPOINT = 'https://my-acct.services.ai.azure.com';
 

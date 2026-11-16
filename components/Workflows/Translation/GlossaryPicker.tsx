@@ -316,7 +316,11 @@ export function GlossaryPicker({
     <div
       role="dialog"
       aria-label={t('glossaryPickerTitle')}
-      className="absolute bottom-full start-0 z-[1000] mb-2 w-96 max-w-[calc(100vw-2rem)] rounded-lg border border-gray-200 bg-white p-2 shadow-lg dark:border-gray-700 dark:bg-surface-dark"
+      // Opens downward: the trigger sits in the toolbar at the top of the
+      // workspace, and the pane clips whatever rises above it.
+      // On a phone it spans the screen instead of hanging off the button,
+      // which may sit anywhere along a wrapped toolbar.
+      className="fixed inset-x-4 z-[1000] mt-2 rounded-lg sm:absolute sm:inset-x-auto sm:start-0 sm:top-full sm:w-96 sm:max-w-[calc(100vw-2rem)] border border-gray-200 bg-white p-2 shadow-lg dark:border-gray-700 dark:bg-surface-dark"
     >
       <div className="mb-1 flex items-center justify-between px-1">
         <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">

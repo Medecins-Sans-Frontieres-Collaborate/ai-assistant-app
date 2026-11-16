@@ -97,7 +97,7 @@ export const AnalyticsViewer: FC = () => {
         {tree.data?.canAdmin && (
           <Link
             href="/admin/analytics"
-            className={`${ADMIN_BTN_SECONDARY} ml-auto`}
+            className={`${ADMIN_BTN_SECONDARY} ms-auto`}
           >
             <IconSettings size={16} aria-hidden="true" />
             {t('manage')}
@@ -196,7 +196,7 @@ const FolderTree: FC<{
   return (
     <nav
       aria-label={t('foldersHeading')}
-      className="max-h-56 shrink-0 overflow-y-auto border-b border-gray-200 p-3 dark:border-gray-700 md:max-h-none md:w-72 md:border-b-0 md:border-r"
+      className="max-h-56 shrink-0 overflow-y-auto border-b border-gray-200 p-3 dark:border-gray-700 md:max-h-none md:w-72 md:border-b-0 md:border-e"
     >
       <ul className="space-y-0.5">
         {rows.map((folder) => {
@@ -220,7 +220,7 @@ const FolderTree: FC<{
                   type="button"
                   aria-current={isActive ? 'true' : undefined}
                   onClick={() => onSelect(folder.path)}
-                  className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                  className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-start text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                     isActive
                       ? 'bg-gray-100 font-medium text-black dark:bg-gray-800 dark:text-white'
                       : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800/60'
@@ -322,7 +322,7 @@ const FileTable: FC<{
   const locale = useLocale();
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-      <table className="w-full text-left text-sm">
+      <table className="w-full text-start text-sm">
         <thead className="border-b border-gray-200 text-xs text-gray-500 dark:border-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="px-3 py-2 font-medium">
@@ -334,7 +334,7 @@ const FileTable: FC<{
             <th scope="col" className="px-3 py-2 font-medium">
               {t('col.delivered')}
             </th>
-            <th scope="col" className="px-3 py-2 text-right font-medium">
+            <th scope="col" className="px-3 py-2 text-end font-medium">
               {t('col.size')}
             </th>
             <th scope="col" className="px-3 py-2 font-medium">
@@ -354,7 +354,7 @@ const FileTable: FC<{
                     type="button"
                     onClick={() => onOpen(file.id)}
                     aria-label={t('openAria', { name: file.name })}
-                    className="break-all text-left font-medium text-blue-700 underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-300"
+                    className="break-all text-start font-medium text-blue-700 underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-blue-300"
                   >
                     {file.name}
                   </button>
@@ -369,13 +369,13 @@ const FileTable: FC<{
               <td className="whitespace-nowrap px-3 py-2 text-gray-700 dark:text-gray-300">
                 {formatDay(file.deliveredAt, locale)}
               </td>
-              <td className="whitespace-nowrap px-3 py-2 text-right tabular-nums text-gray-700 dark:text-gray-300">
+              <td className="whitespace-nowrap px-3 py-2 text-end tabular-nums text-gray-700 dark:text-gray-300">
                 {formatBytes(file.size)}
               </td>
               <td className="whitespace-nowrap px-3 py-2 text-gray-700 dark:text-gray-300">
                 {formatDay(file.expiresAt, locale)}
               </td>
-              <td className="px-3 py-2 text-right">
+              <td className="px-3 py-2 text-end">
                 {file.canDownload ? (
                   <a
                     href={analyticsDownloadUrl(file.id)}

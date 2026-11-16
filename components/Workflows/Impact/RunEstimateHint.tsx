@@ -5,6 +5,7 @@ import { FC } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useUsageBudgetsStatus } from '@/client/hooks/settings/useUsageBudgets';
 import {
   RunEstimateInput,
   formatEstimate,
@@ -12,6 +13,9 @@ import {
 } from '@/client/hooks/workflows/useRunEstimate';
 
 import { ASSUMPTIONS_VERSION } from '@/lib/utils/shared/emissions';
+import { evaluateBudget } from '@/lib/utils/shared/usageBudgets';
+
+import { BUDGET_STATE_TEXT } from '@/components/Emissions/BudgetBars';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
@@ -42,11 +46,21 @@ export const RunEstimateHint: FC<RunEstimateHintProps> = ({
   const { showUsageImpact } = useFlags();
   const visibility = useSettingsStore((s) => s.emissionsChipVisibility);
   const estimate = useRunEstimate(input);
+  const { active } = useUsageBudgetsStatus();
 
   // Same fail-open gate as the chip: only an explicit `false` hides it.
   if (showUsageImpact === false) return null;
   if (visibility === 'hidden') return null;
   if (!estimate) return null;
+
+  // Where this run would leave the emissions budget, when there is one. The
+  // figure the user can still act on is the one AFTER the run, so it is
+  // coloured by the stage the run would reach, not the one they are in.
+  const budget = active.find((status) => status.metric === 'emissions');
+  const projected =
+    budget && budget.limit > 0
+      ? evaluateBudget(budget.budget, budget.used + estimate.gCO2e)
+      : null;
 
   return (
     <span
@@ -63,6 +77,18 @@ export const RunEstimateHint: FC<RunEstimateHintProps> = ({
           passes: String(estimate.passes),
           grams: formatEstimate(estimate.gCO2e),
         },
+      )}
+      {budget && projected && (
+        <span
+          className={`ms-1.5 ${projected.state === 'ok' ? '' : `font-medium ${BUDGET_STATE_TEXT[projected.state]}`}`}
+          data-testid="run-budget-projection"
+        >
+          {'· '}
+          {t('usageBudgets.runProjection', {
+            from: Math.round(budget.percent),
+            to: Math.round(projected.percent),
+          })}
+        </span>
       )}
     </span>
   );

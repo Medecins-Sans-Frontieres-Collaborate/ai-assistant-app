@@ -125,19 +125,48 @@ describe('selectInterpreterInputRefs', () => {
     expect(names(refs)).toEqual(['script.vbs']);
   });
 
-  it('skips active files the injector dropped, errored files, transcripts and data urls', () => {
+  it('mounts active files whose text was left out of the prompt, after the ones in it, and flags them', () => {
+    const refs = selectInterpreterInputRefs({
+      messages: [text('user', 'compare everything')],
+      activeFiles: [
+        active('over.xlsx', 'over-budget.xlsx', { pinned: true }),
+        active('kept.xlsx', 'kept.xlsx'),
+      ],
+      droppedActiveFileIds: ['af-over.xlsx'],
+    });
+    expect(names(refs)).toEqual(['kept.xlsx', 'over-budget.xlsx']);
+    expect(refs.map((r) => r.textOmittedFromPrompt ?? false)).toEqual([
+      false,
+      true,
+    ]);
+  });
+
+  it('lets files that are in the prompt win the file cap over ones left out of it', () => {
+    const refs = selectInterpreterInputRefs(
+      {
+        messages: [text('user', 'go')],
+        activeFiles: [
+          active('over.xlsx', 'over-budget.xlsx'),
+          active('kept.xlsx', 'kept.xlsx'),
+        ],
+        droppedActiveFileIds: ['af-over.xlsx'],
+      },
+      1,
+    );
+    expect(names(refs)).toEqual(['kept.xlsx']);
+  });
+
+  it('skips errored files, transcripts and data urls', () => {
     const refs = selectInterpreterInputRefs({
       messages: [text('user', 'compare everything')],
       activeFiles: [
         active('kept.xlsx', 'kept.xlsx'),
-        active('over.xlsx', 'over-budget.xlsx'),
         active('bad.xlsx', 'bad.xlsx', { status: 'error' }),
         active('t', 'call.transcript.txt', {
           url: 'transcript://sync/call',
         }),
         active('d', 'inline.png', { url: 'data:image/png;base64,AAAA' }),
       ],
-      droppedActiveFileIds: ['af-over.xlsx'],
     });
     expect(names(refs)).toEqual(['kept.xlsx']);
   });

@@ -14,6 +14,11 @@ interface EditSuggestionCardProps {
   resolveCriterionLabel: (id: string) => string;
   /** e.g. 'workflows.translation' — provides the review-chrome strings. */
   i18nNamespace: string;
+  /**
+   * Omits the severity and criterion chips, for edits that answer a request
+   * rather than a rubric and so have neither.
+   */
+  hideLabels?: boolean;
   /** Where the edit applies (e.g. "row 3f · Amount") for non-text targets. */
   locationLabel?: string;
   onAccept: (id: string) => void;
@@ -37,6 +42,7 @@ export function EditSuggestionCard({
   edit,
   resolveCriterionLabel,
   i18nNamespace,
+  hideLabels,
   locationLabel,
   onAccept,
   onReject,
@@ -67,14 +73,18 @@ export function EditSuggestionCard({
       }`}
     >
       <div className="flex flex-wrap items-center gap-1.5">
-        <span
-          className={`rounded-sm px-1.5 py-0.5 text-[10px] font-medium ${SEVERITY_BADGE[edit.severity]}`}
-        >
-          {t(`severity.${edit.severity}`)}
-        </span>
-        <span className="rounded-sm bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-600 dark:bg-surface-dark-elevated dark:text-gray-400">
-          {resolveCriterionLabel(edit.criterion)}
-        </span>
+        {!hideLabels && (
+          <>
+            <span
+              className={`rounded-sm px-1.5 py-0.5 text-[10px] font-medium ${SEVERITY_BADGE[edit.severity]}`}
+            >
+              {t(`severity.${edit.severity}`)}
+            </span>
+            <span className="rounded-sm bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-600 dark:bg-surface-dark-elevated dark:text-gray-400">
+              {resolveCriterionLabel(edit.criterion)}
+            </span>
+          </>
+        )}
         {resolved && (
           <span className="text-xs text-gray-500 dark:text-gray-400">
             {edit.status === 'accepted'

@@ -108,7 +108,7 @@ export function SourceViewer(props: SourceViewerProps) {
     >
       <div className="flex items-center gap-2 border-b border-gray-200 px-3 py-2 dark:border-gray-700">
         <button type="button" className={ghostButton} onClick={props.onClose}>
-          <IconArrowLeft size={14} aria-hidden className="rtl:-scale-x-100" />
+          <IconArrowLeft size={14} aria-hidden />
           {t('backToBrief')}
         </button>
         <select

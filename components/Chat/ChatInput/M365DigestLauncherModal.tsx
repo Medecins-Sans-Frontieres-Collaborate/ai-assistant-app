@@ -429,7 +429,7 @@ export const M365DigestLauncherModal: FC = () => {
                   {channels.map((channel) => (
                     <li
                       key={`${channel.teamId}/${channel.channelId}`}
-                      className="inline-flex items-center gap-1 rounded-full border border-gray-300 pl-2 pr-1 py-0.5 text-xs dark:border-gray-600"
+                      className="inline-flex items-center gap-1 rounded-full border border-gray-300 ps-2 pe-1 py-0.5 text-xs dark:border-gray-600"
                     >
                       {channel.name}
                       <button

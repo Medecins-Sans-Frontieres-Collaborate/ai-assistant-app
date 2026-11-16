@@ -225,7 +225,7 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
       <div className="flex items-start gap-2">
         <button
           type="button"
-          className="flex min-w-0 flex-1 flex-wrap items-center gap-2 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          className="flex min-w-0 flex-1 flex-wrap items-center gap-2 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
           aria-label={
@@ -259,7 +259,7 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
           {!anchored && !jurisdictionEmpty && (
             <span className={LIMITS_CHIP_WARN}>{t('anchorChip')}</span>
           )}
-          <span className={`ml-auto ${ADMIN_MUTED}`}>
+          <span className={`ms-auto ${ADMIN_MUTED}`}>
             {t('delegationAdminsCount', { count: delegation.admins.length })} ·{' '}
             {t('delegationOverrideCount', {
               count,
@@ -442,7 +442,7 @@ export const DelegationEditor: FC<DelegationEditorProps> = ({
                     </span>
                     <button
                       type="button"
-                      className={`ml-auto ${ADMIN_BTN_ICON_DANGER}`}
+                      className={`ms-auto ${ADMIN_BTN_ICON_DANGER}`}
                       onClick={() =>
                         update({
                           jurisdiction: delegation.jurisdiction.filter(

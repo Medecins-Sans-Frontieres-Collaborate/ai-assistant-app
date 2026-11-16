@@ -27,7 +27,7 @@ describe('DropdownCategoryGroup', () => {
   const createMenuItem = (
     id: string,
     label: string,
-    category: 'web' | 'media' | 'transform' = 'web',
+    category: MenuItem['category'] = 'add',
   ): MenuItem => ({
     id,
     icon: <TestIcon />,

@@ -534,6 +534,9 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   );
   // Off by default: OCR is billed per page, so it is an explicit opt-in.
   const [autoOcr, setAutoOcr] = useState(existing?.agent.autoOcr ?? false);
+  const [allowWebSearch, setAllowWebSearch] = useState(
+    existing?.agent.allowWebSearch ?? false,
+  );
   /**
    * Per-agent document cap (null = the env default). Raising it is a
    * deliberate, confirmed act: the point is to make the admin reconsider
@@ -830,6 +833,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       systemPrompt.trim() !== existing.agent.systemPrompt ||
       (chatModelId || null) !== (existing.agent.chatModelId ?? null) ||
       autoOcr !== (existing.agent.autoOcr ?? false) ||
+      allowWebSearch !== (existing.agent.allowWebSearch ?? false) ||
       (maxDocumentsOverride ?? null) !==
         (existing.agent.maxDocumentsOverride ?? null) ||
       JSON.stringify(sources.map(toSourcePayload)) !==
@@ -973,6 +977,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           chatModelId: chatModelId || null,
           topK: existing?.agent.ragConfig.topK ?? 10,
           autoOcr,
+          allowWebSearch,
           // Existing limits have their own immediate, cap-only write. An
           // ordinary metadata save must not clear or replay a stale raise.
           ...(!existing && { maxDocumentsOverride }),
@@ -1107,11 +1112,25 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
             />
             <span className="font-semibold">{t('m365AgentAutoOcrLabel')}</span>
           </label>
-          <p className="ml-6 mt-1 text-xs text-gray-500 dark:text-gray-400">
+          <p className="ms-6 mt-1 text-xs text-gray-500 dark:text-gray-400">
             {t('m365AgentAutoOcrHelp', {
               perRun: autoOcrMaxPagesPerRun,
               perFile: autoOcrMaxPagesPerFile,
             })}
+          </p>
+        </div>
+        <div>
+          <label className="flex items-start gap-2 text-xs text-gray-700 dark:text-gray-300">
+            <input
+              type="checkbox"
+              checked={allowWebSearch}
+              onChange={(e) => setAllowWebSearch(e.target.checked)}
+              className="mt-0.5 h-4 w-4 accent-blue-600"
+            />
+            <span className="font-semibold">{t('orgAgentAllowWebSearch')}</span>
+          </label>
+          <p className="ms-6 mt-1 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentAllowWebSearchHelp')}
           </p>
         </div>
 
@@ -1300,7 +1319,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                 })}
               </span>
               {maxDocumentsOverride !== null && (
-                <span className="ml-2 text-gray-600 dark:text-gray-400">
+                <span className="ms-2 text-gray-600 dark:text-gray-400">
                   {t('m365CapOverrideNote', { limit: maxDocumentsOverride })}
                 </span>
               )}
@@ -1310,7 +1329,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                 max: formatBytes(maxBytes),
               })}
               {planLoading && (
-                <span className="ml-2 text-gray-500 dark:text-gray-400">
+                <span className="ms-2 text-gray-500 dark:text-gray-400">
                   {t('m365PlanScanning')}
                 </span>
               )}

@@ -16,6 +16,7 @@ import {
   stepIndexJob,
 } from '@/lib/services/m365/agentIndexJobService';
 import { M365Error, m365ErrorResponse } from '@/lib/services/m365/graphApi';
+import { visionRoutingFor } from '@/lib/services/m365/visionTranscription';
 
 import {
   badRequestResponse,
@@ -60,6 +61,8 @@ export async function POST(request: NextRequest) {
         createAgentAccessBlobStorage(),
         parsed.data.id,
         parsed.data.jobId,
+        // Auto-OCR reads page images in EU (agent content residency).
+        { vision: visionRoutingFor(authz.context.session) },
       );
     } catch (error) {
       if (error instanceof IndexJobMismatchError) {
