@@ -4,6 +4,8 @@ import { FC, ReactNode } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useCo2eFormat } from '@/client/hooks/settings/useCo2eFormat';
+
 import {
   ASSUMPTIONS_VERSION,
   EMISSIONS_CHIP_VISIBILITY_OPTIONS,
@@ -64,6 +66,7 @@ export const ImpactReadout: FC<ImpactReadoutProps> = ({
   children,
 }) => {
   const t = useTranslations();
+  const formatCo2e = useCo2eFormat();
   const visibility = useSettingsStore((s) => s.emissionsChipVisibility);
   const setVisibility = useSettingsStore((s) => s.setEmissionsChipVisibility);
   const hasUsd = rows.some((row) => row.usd !== undefined);
@@ -93,11 +96,7 @@ export const ImpactReadout: FC<ImpactReadoutProps> = ({
                     : 'text-gray-900 dark:text-gray-100'
                 }`}
               >
-                <span>
-                  {t('emissions.chip.label', {
-                    grams: formatGrams(row.grams),
-                  })}
-                </span>
+                <span>{formatCo2e(row.grams)}</span>
                 {hasUsd && (
                   <span
                     className="min-w-[3.25rem] text-end tabular-nums"
