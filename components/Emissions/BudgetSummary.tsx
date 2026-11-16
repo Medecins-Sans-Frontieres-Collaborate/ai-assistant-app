@@ -7,6 +7,8 @@ import { useTranslations } from 'next-intl';
 import { useBudgetFormat } from '@/client/hooks/settings/useBudgetFormat';
 import { useUsageBudgetsStatus } from '@/client/hooks/settings/useUsageBudgets';
 
+import { BUDGET_BASE_UNIT } from '@/lib/utils/shared/usageBudgets';
+
 import {
   BUDGET_STATE_TEXT,
   budgetFillClass,
@@ -19,7 +21,10 @@ import { useUIStore } from '@/client/stores/uiStore';
 /**
  * "Your budgets" block of the emissions popover: the words behind the chip's
  * wordless bars. One row per active budget — how much is used, in the unit
- * the user set it in — and a link to change it.
+ * the budget is MEASURED in (CO₂e or dollars), not the activity it may have
+ * been set by: the rows above already give this conversation's equivalents,
+ * and an equivalent of a period total is an estimate of an estimate — and a
+ * link to change it.
  *
  * Renders nothing when the user has no budget switched on, so the popover is
  * unchanged for everyone who has not asked for this.
@@ -71,8 +76,8 @@ export const BudgetSummary: FC = () => {
           </div>
           <p className="mt-1 text-gray-500 dark:text-gray-400">
             {t('usageBudgets.usedOfShort', {
-              used: format(status.used, status.budget.unit),
-              limit: format(status.limit, status.budget.unit),
+              used: format(status.used, BUDGET_BASE_UNIT[status.metric]),
+              limit: format(status.limit, BUDGET_BASE_UNIT[status.metric]),
             })}
           </p>
         </div>
