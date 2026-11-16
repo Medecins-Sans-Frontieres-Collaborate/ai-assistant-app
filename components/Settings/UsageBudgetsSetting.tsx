@@ -15,9 +15,9 @@ import {
 import {
   activityDurationParts,
   estimateActivityEquivalents,
-  formatGrams,
 } from '@/lib/utils/shared/emissions';
 import {
+  BUDGET_BASE_UNIT,
   BUDGET_PERIODS,
   BUDGET_STAGES,
   BUDGET_UNITS,
@@ -207,6 +207,7 @@ const BudgetCard: FC<BudgetCardProps> = ({ metric, status }) => {
   const Icon = metric === 'emissions' ? IconLeaf : IconCoin;
   const amountId = `usage-budget-${metric}-amount`;
   const limit = budgetLimit(budget);
+  const baseUnit = BUDGET_BASE_UNIT[metric];
 
   const unitLabel = (unit: BudgetUnit): string =>
     isActivityUnit(unit)
@@ -351,18 +352,9 @@ const BudgetCard: FC<BudgetCardProps> = ({ metric, status }) => {
             <p className="text-xs text-gray-500 dark:text-gray-400">
               {metric === 'cost'
                 ? t('usageBudgets.costNote')
-                : [
-                    budget.unit === 'grams'
-                      ? null
-                      : t('usageBudgets.equalsGrams', {
-                          grams: formatGrams(limit),
-                        }),
-                    equivalents.length > 0
-                      ? `${t('emissions.equivalents.title')} ${equivalents.join(', ')}`
-                      : null,
-                  ]
-                    .filter(Boolean)
-                    .join(' · ')}
+                : equivalents.length > 0
+                  ? `${t('emissions.equivalents.title')} ${equivalents.join(', ')}`
+                  : null}
             </p>
           </div>
 
@@ -382,6 +374,18 @@ const BudgetCard: FC<BudgetCardProps> = ({ metric, status }) => {
                   {t(`usageBudgets.status.${status.state}`)}
                 </span>
               </div>
+              {/* Set by activity, measured in CO₂e: say what it comes to. */}
+              {budget.unit !== baseUnit && (
+                <p
+                  className="mt-0.5 text-xs tabular-nums text-gray-600 dark:text-gray-400"
+                  data-testid={`usage-budget-${metric}-base`}
+                >
+                  {t('usageBudgets.usedOfShort', {
+                    used: format(status.used, baseUnit),
+                    limit: format(status.limit, baseUnit),
+                  })}
+                </p>
+              )}
               <BudgetMeter status={status} />
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                 {t('usageBudgets.resets', {
