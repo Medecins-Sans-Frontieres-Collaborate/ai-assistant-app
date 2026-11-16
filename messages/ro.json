@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Nu a fost înregistrată încă nicio utilizare. Utilizarea token-urilor și emisiile estimate vor apărea aici după ce veți conversa.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} încărcări smartphone",
     "requests": "Cereri",
     "promptTokens": "Token-uri prompt",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Nu se afișează costul: modelul acestei conversații nu are preț de listă (surse proprii, runtime-uri locale și agenți nu au preț).",
         "note": "Cost la prețurile de listă de la {asOf} (tarif Global Standard, fără discount pentru input-uri cache): un prag maxim, nu o factură. Căutarea web, execuția codului, transcrierea, vorbirea, traducerea și indexarea documentelor nu sunt incluse."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Acest spațiu de lucru (estimat)",
@@ -8367,7 +8370,6 @@
       "week": "Săptămână",
       "month": "Lună"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Estimare pe baza prețurilor de listă: limită maximă, nu factură.",
     "chargesValue": "{count} încărcări de telefon",
     "percent": "{percent}%",

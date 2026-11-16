@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Nessun utilizzo rilevato finora. L'utilizzo dei token e le emissioni stimate saranno visibili qui dopo aver chattato.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} ricariche smartphone",
     "requests": "Richieste",
     "promptTokens": "Token prompt",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Nessun costo mostrato: il modello della conversazione non ha un prezzo di listino (fonti proprie, runtime locali e agenti non sono prezzati).",
         "note": "Costo ai prezzi di listino al {asOf} (tariffa Global Standard, senza sconto per input in cache): un limite superiore, non una fattura. Ricerca web, esecuzione di codice, trascrizione, sintesi vocale, traduzione e indicizzazione documenti non sono inclusi."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Questo workspace (stimato)",
@@ -8367,7 +8370,6 @@
       "week": "Settimana",
       "month": "Mese"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Stima basata sui prezzi di listino: è un limite massimo, non una fattura.",
     "chargesValue": "{count} ricariche telefono",
     "percent": "{percent}%",

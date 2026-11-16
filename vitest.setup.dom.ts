@@ -1021,9 +1021,13 @@ const mockMessages: Record<string, unknown> = {
       freshness_any: 'Any time',
     },
   },
+  // Only the template whose interpolated output tests assert on; every other
+  // usageBudgets key still falls through to its own name.
+  usageBudgets: {
+    usedOfShort: '{used} of {limit}',
+  },
   usageImpact: {
     empty: 'No usage tracked yet.',
-    co2Value: '{grams} g CO2e',
     equivalence: '~ {count} smartphone charges',
     requests: 'Requests',
     promptTokens: 'Prompt tokens',
@@ -1071,6 +1075,10 @@ const mockMessages: Record<string, unknown> = {
       seconds: '{value} s',
       minutes: '{value} min',
       hours: '{value} h',
+    },
+    mass: {
+      grams: '{value} g CO2e',
+      kilograms: '{value} kg CO2e',
     },
     chip: {
       label: '{grams} g CO2e',

@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Ingen användning har spårats ännu. Din tokenanvändning och uppskattade utsläpp visas här efter att du har chattat.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} mobiluppladdningar",
     "requests": "Förfrågningar",
     "promptTokens": "Prompt-tokens",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Ingen kostnad visas: modellen för denna konversation har inget listpris (egna källor, lokala miljöer och agenter är inte prissatta).",
         "note": "Kostnad enligt listpriser per {asOf} (Global Standard rate, ingen rabatt för cachad indata): en övre gräns, ingen faktura. Webbsökning, kodkörning, transkribering, tal, översättning och dokumentindexering ingår ej."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Detta arbetsutrymme (uppskattat)",
@@ -8367,7 +8370,6 @@
       "week": "Vecka",
       "month": "Månad"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Uträkning från listpriser: ett tak, inte en faktura.",
     "chargesValue": "{count} mobilladdningar",
     "percent": "{percent}%",

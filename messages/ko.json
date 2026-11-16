@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "아직 사용 내역이 없습니다. 채팅 후에 토큰 사용량과 예상 배출량이 여기에 표시됩니다.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count}회 스마트폰 충전",
     "requests": "요청",
     "promptTokens": "프롬프트 토큰",
@@ -4727,6 +4726,10 @@
         "noPriceData": "비용이 표시되지 않습니다: 이 대화의 모델에는 목록가가 없습니다(자체 소스, 로컬 런타임, agent는 가격이 매겨지지 않음).",
         "note": "{asOf} 기준 목록가(Global Standard rate, 입력 캐시 할인 미적용)로 산정된 비용입니다. 청구 금액이 아니라 최대치입니다. 웹 검색, 코드 실행, 전사, 음성, 번역, 문서 색인은 포함되지 않습니다."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "이 작업 공간(추정)",
@@ -8367,7 +8370,6 @@
       "week": "주",
       "month": "월"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "정가 기준 추정치입니다. 청구 금액이 아닌 최대값입니다.",
     "chargesValue": "{count}회 휴대폰 충전",
     "percent": "{percent}%",

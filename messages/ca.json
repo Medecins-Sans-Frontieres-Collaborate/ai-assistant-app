@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Encara no s'ha registrat cap ús. El teu consum de tokens i les emissions estimades apareixeran aquí després de xatejar.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} càrregues de telèfon intel·ligent",
     "requests": "Sol·licituds",
     "promptTokens": "Tokens de prompt",
@@ -4727,6 +4726,10 @@
         "noPriceData": "No es mostra cap cost: el model d’aquesta conversa no té preu de llista (fonts pròpies, execució local i agents no tenen preu assignat).",
         "note": "Cost segons preus de llista a data de {asOf} (tarifa Estàndard Global, sense descompte per entrada en memòria cau): és un límit superior, no una factura. Cerca web, execució de codi, transcripció, veu, traducció i indexació de documents no estan inclosos."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Aquest espai de treball (estimació)",
@@ -8367,7 +8370,6 @@
       "week": "Setmana",
       "month": "Mes"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Estimació segons preus de llista: límit superior, no una factura.",
     "chargesValue": "{count} càrregues de telèfon",
     "percent": "{percent}%",

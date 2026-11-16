@@ -4527,6 +4527,10 @@
         "note": "Cost at list prices as of {asOf} (Global Standard rate, no cached-input discount): an upper bound, not a bill. Web search, code execution, transcription, speech, translation and document indexing are not included."
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "This workspace (estimated)",
       "workspace": "This workspace",
@@ -4560,7 +4564,6 @@
   },
   "usageImpact": {
     "empty": "No usage tracked yet. Your token usage and estimated emissions will appear here after you chat.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} smartphone charges",
     "requests": "Requests",
     "promptTokens": "Prompt tokens",
@@ -4625,7 +4628,6 @@
       "week": "Week",
       "month": "Month"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Estimated from list prices: an upper bound, not a bill.",
     "chargesValue": "{count} phone charges",
     "percent": "{percent}%",

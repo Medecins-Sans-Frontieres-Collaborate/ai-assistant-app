@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Zatím nebylo zaznamenáno žádné využití. Po chatování se zde zobrazí vaše spotřeba tokenů a odhadované emise.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} nabití smartphonu",
     "requests": "Požadavky",
     "promptTokens": "Tokeny zadání",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Cena není zobrazena: model tohoto rozhovoru nemá uvedenou cenu (vlastní zdroje, lokální prostředí a agenti nejsou oceňováni).",
         "note": "Cena dle ceníku k {asOf} (globální standardní sazba, bez slevy za cachovaný vstup): horní hranice, nikoli faktura. Vyhledávání na webu, spouštění kódu, přepis, řeč, překlad a indexace dokumentů nejsou zahrnuty."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Tento pracovní prostor (odhadováno)",
@@ -8367,7 +8370,6 @@
       "week": "Týden",
       "month": "Měsíc"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Odhad dle ceníkových cen: horní hranice, ne fakturace.",
     "chargesValue": "{count} nabití telefonu",
     "percent": "{percent}%",

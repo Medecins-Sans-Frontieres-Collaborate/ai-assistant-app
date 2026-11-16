@@ -2729,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "Ba a samo bayanin amfani ba tukuna. Amfanin takardunku da kididdigar hayaƙi za su bayyana anan bayan kun yi hira.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} cajin wayar hannu",
     "requests": "Buƙatu",
     "promptTokens": "Alamomin umarni",
@@ -4711,6 +4710,10 @@
         "noPriceData": "Ba a nuna kudin ba: Samfurin wannan tattaunawar ba shi da farashi a jerin (tushen kai, yanayin gida da wakilai ba a ƙididdige farashinsu ba).",
         "note": "Kudin a farashin jerin kamar na {asOf} (Farashin Matsayin Duniya, ba tare da rangwamen bayanan da aka adana ba): iyakar kima ne, ba takardar biyan kuɗi ba. Bincike a yanar gizo, aiwatar da lamba, fassara, magana, fassarar magana da kimanta takardu ba a haɗa su ba."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Wannan wurin aiki (kimantawa)",
@@ -8351,7 +8354,6 @@
       "week": "Mako",
       "month": "Wata"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Kimanta daga farashin da aka jera: iyaka mafi girma, ba lissafi ba.",
     "chargesValue": "{count} caji na waya",
     "percent": "{percent}%",

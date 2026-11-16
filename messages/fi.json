@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Käyttöä ei ole vielä seurattu. Tokenien käyttösi ja arvioidut päästöt näkyvät tässä keskustelun jälkeen.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} älypuhelimen latausta",
     "requests": "Pyynnöt",
     "promptTokens": "Syötetokenit",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Kustannusta ei näytetä: tämän keskustelun mallilla ei ole listahintaa (omat lähteet, paikalliset suoritukset ja agentit eivät ole hinnoiteltuja).",
         "note": "Kustannus listahinnoilla {asOf} (globaali vakiotaksa, ei välimuistialennusta): yläraja, ei lasku. Verkkohaku, koodin suoritus, transkriptio, puhe, käännös ja asiakirjojen indeksointi eivät sisälly."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Tämä työtila (arvio)",
@@ -8367,7 +8370,6 @@
       "week": "Viikko",
       "month": "Kuukausi"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Arvioitu listahinnoista: yläraja, ei lasku.",
     "chargesValue": "{count} puhelimen latausta",
     "percent": "{percent}%",

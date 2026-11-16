@@ -2729,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "Pa gen itilizasyon ki anrejistre ankò. Itilizasyon tokèn ou ak emisyon estime yo ap parèt isit la apre ou fin pale.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} chaj telefòn entelijan",
     "requests": "Demand",
     "promptTokens": "Tokèn pou demann",
@@ -4711,6 +4710,10 @@
         "noPriceData": "Pa gen pri ki parèt: modèl konvèsasyon sa a pa gen pri sou lis (resous pwòp yo, ekzekisyon lokal yo ak ajan pa gen pri).",
         "note": "Pri sou lis jan li ye nan {asOf} (To Global Standard, pa gen rabè pou antre kach): yon limit siperyè, pa yon bòdwo. Rechèch sou entènèt, ekzekisyon kòd, transkripsyon, pale, tradiksyon ak endèks dokiman pa enkli."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Espas travay sa a (evalye)",
@@ -8351,7 +8354,6 @@
       "week": "Semèn",
       "month": "Mwa"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Estimasyon pri lis: sa a se yon limit siperyè, pa yon bòdwo.",
     "chargesValue": "{count} chaj telefòn",
     "percent": "{percent}%",

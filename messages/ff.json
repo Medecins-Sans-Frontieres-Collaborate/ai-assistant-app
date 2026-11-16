@@ -2729,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "Jumɗe yettaa arii. Jumɗe token maa e naatal co2maa maa teeɗaniima fii hitaande batta a waawi chat.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} caasaaji smartphone",
     "requests": "Ñaɗɗo",
     "promptTokens": "Token ndaarol",
@@ -4711,6 +4710,10 @@
         "noPriceData": "Hibii njaajeendi ngoni: njoɓdi nandiral njoɓdi njoɓaani (lowre mum, duniyankaani nda agentji njoɓaani njaajeendi).",
         "note": "Njaajeendi njoɓdi nandiral {asOf} (rate Global Standard, waawut njaajeendi cashed-input): njaajeendi balɗe, waawut loowo. Finnde web, code execution, transcription, speech, translation e document indexing wonaa e mum."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Wormegol ngol (caggal ndaare)",
@@ -8351,7 +8354,6 @@
       "week": "Lewru",
       "month": "Lewru"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Gollitii e Mbindu: Dirka njoba, ndin bill handi.",
     "chargesValue": "{count} hoore telefona",
     "percent": "{percent}%",

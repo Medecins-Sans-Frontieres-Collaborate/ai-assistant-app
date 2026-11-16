@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Belum ada penggunaan yang tercatat. Penggunaan token dan estimasi emisi Anda akan muncul di sini setelah Anda melakukan chat.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} kali pengisian daya smartphone",
     "requests": "Permintaan",
     "promptTokens": "Token prompt",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Tidak ada biaya yang ditampilkan: model percakapan ini tidak memiliki harga daftar (sumber sendiri, local runtimes, dan agen tidak diberi harga).",
         "note": "Biaya berdasarkan harga daftar per {asOf} (tarif Global Standard, tanpa diskon input cache): batas atas, bukan tagihan. Pencarian web, eksekusi kode, transkripsi, suara, terjemahan, dan pengindeksan dokumen tidak termasuk."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Workspace ini (perkiraan)",
@@ -8367,7 +8370,6 @@
       "week": "Minggu",
       "month": "Bulan"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Perkiraan dari harga daftar: batas atas, bukan tagihan.",
     "chargesValue": "{count} kali pengisian telepon",
     "percent": "{percent}%",

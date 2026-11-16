@@ -2729,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "अहिलेसम्म कुनै प्रयोग ट्र्याक गरिएको छैन। तपाईंले कुरा गरेपछि तपाईंको टोकन प्रयोग र अनुमानित उत्सर्जन यहाँ देखिनेछ।",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} स्मार्टफोन चार्ज",
     "requests": "अनुरोधहरू",
     "promptTokens": "प्रोम्प्ट टोकनहरू",
@@ -4711,6 +4710,10 @@
         "noPriceData": "कुनै लागत देखाइएको छैन: यो कुराकानीको मोडलको सूची मूल्य छैन (आफ्नै स्रोत, स्थानीय रनटाइम र एजेन्टहरू मूल्याङ्कन गरिएको छैन)।",
         "note": "{asOf} मितिको सूची मूल्यमा लागत (Global Standard दर, कुनै cached-input छुट छैन): यो माथिल्लो सीमा हो, बिल होइन। Web search, code execution, transcription, speech, translation र document indexing समावेश छैनन्।"
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "यो कार्यक्षेत्र (अनुमानित)",
@@ -8351,7 +8354,6 @@
       "week": "हप्ता",
       "month": "महिना"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "सूचीकृत मुल्यबाट अनुमान: उच्चतम सीमा, बिल होइन।",
     "chargesValue": "{count} फोन चार्जहरू",
     "percent": "{percent}%",

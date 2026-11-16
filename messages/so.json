@@ -2729,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "Weli lama diiwaangelin isticmaal. Isticmaalkaaga token-ka iyo qiyaasta qiiqa ayaa halkan ka muuqan doona marka aad sheekaysato kadib.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} jeer oo moobil la dallaco",
     "requests": "Codsiyo",
     "promptTokens": "Prompt tokens",
@@ -4711,6 +4710,10 @@
         "noPriceData": "Lama soo bandhigin qiimo: moodeelka wada hadalkan ma laha qiime liis (ilaha gaarka ah, nidaamyada maxalliga ah iyo wakiilladu lama qiimeeyo).",
         "note": "Qiimaha ayaa ah mid ku saleysan liis qiimo sida {asOf} (Heerka Caalamiga ah ee Standard, qiimo dhimis ma jiro waxyaabo keydsan): waa xadka ugu sarreeya, looma arko biil. Raadinta web, fulinta koodh, qoraal qoraal ah, hadal, tarjumaad iyo tusmada dukumentiyadu kuma jiraan."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Meesha shaqadan (qiyaas ah)",
@@ -8351,7 +8354,6 @@
       "week": "Usbuuc",
       "month": "Bil"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Qiimayn laga sameeyay qiimaha liiska: waa xadka ugu badan, ma aha biil rasmi ah.",
     "chargesValue": "{count} dallacaada taleefanka",
     "percent": "{percent}%",

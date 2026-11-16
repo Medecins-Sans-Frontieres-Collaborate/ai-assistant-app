@@ -2776,7 +2776,6 @@
   },
   "usageImpact": {
     "empty": "尚无使用记录。聊天后，您的令牌使用量和预计碳排放将在此显示。",
-    "co2Value": "{grams} 克 CO₂e",
     "equivalence": "≈ {count} 次智能手机充电",
     "requests": "请求数",
     "promptTokens": "提示令牌",
@@ -4758,6 +4757,10 @@
         "noPriceData": "未显示费用：本对话模型无列表价格（自有来源、本地运行时及代理不计价）。",
         "note": "费用以 {asOf} 当天的列表价格计算（全球标准费率，无缓存输入折扣）：为上限估算，非账单。网页搜索、代码执行、转录、语音、翻译和文档索引未计入。"
       }
+    },
+    "mass": {
+      "grams": "{value} 克 CO₂e",
+      "kilograms": "{value} 千克 CO₂e"
     },
     "workflow": {
       "title": "此工作区（预估）",
@@ -8398,7 +8401,6 @@
       "week": "周",
       "month": "月"
     },
-    "equalsGrams": "= {grams} 克CO₂e",
     "costNote": "按标价估算：为上限，仅供参考。",
     "chargesValue": "{count} 次手机充电",
     "percent": "{percent}%",

@@ -2729,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "Tsy mbola nisy fampiasana voarakitra. Hiseho eto ny fampiasanao token sy tomban’ny entona mivoaka aorian’ny fifanakalozanao.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} famahanana finday",
     "requests": "Fangatahana",
     "promptTokens": "Prompt tokens",
@@ -4711,6 +4710,10 @@
         "noPriceData": "Tsy aseho ny vidiny: tsy misy vidiny voatanisa amin’ny modely amin’ity fifanakalozan-kevitra ity (tsy voavidy ireo loharano manokana, fandehanan-draharaha eo an-toerana sy agent).",
         "note": "Vidiny amin’ny lisitra voatanisa amin’ny {asOf} (Global Standard rate, tsy misy fihenam-bidy cached-input): ambony indrindra, fa tsy faktiora. Tsy tafiditra ny fikarohana web, fanaovana code, fandikàna feo sy lahatsoratra, fandikana teny ary fanasokajiana antontan-taratasy."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Ity sehatra ity (tombanana)",
@@ -8351,7 +8354,6 @@
       "week": "Herinandro",
       "month": "Volana"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Vinavinaina avy amin'ny vidy ho anisan'ny ambony indrindra, fa tsy faktiora.",
     "chargesValue": "{count} famahanana finday",
     "percent": "{percent}%",

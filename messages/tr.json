@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Henüz kullanım izlenmedi. Sohbet ettikten sonra token kullanımınız ve tahmini emisyonlarınız burada görünecek.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} akıllı telefon şarjı",
     "requests": "İstekler",
     "promptTokens": "İstem tokenları",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Maliyet gösterilmiyor: bu konuşmanın modelinin liste fiyatı yok (kendi kaynakları, yerel çalışma ortamları ve ajanlar fiyatlandırılmamıştır).",
         "note": "{asOf} tarihindeki liste fiyatlarıyla maliyet (Global Standard oranı, önbellekli girdilere indirim yok): bu bir üst sınırdır, fatura değildir. Web araması, kod çalıştırma, transkripsiyon, konuşma, çeviri ve belge indeksleme dahil değildir."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Bu çalışma alanı (tahmini)",
@@ -8367,7 +8370,6 @@
       "week": "Hafta",
       "month": "Ay"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Liste fiyatlarından tahmini: üst sınırdır, fatura değildir.",
     "chargesValue": "{count} telefon şarjı",
     "percent": "{percent}%",

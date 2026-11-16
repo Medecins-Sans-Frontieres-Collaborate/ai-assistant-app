@@ -2729,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "Akukabhalwa ukusetshenziswa. Ukusetshenziswa kwakho kwama-token nokulinganiselwa kokukhishwa kuzovela lapha ngemva kokuxoxa.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} ukukhokhisa kwe-smartphone",
     "requests": "Izicelo",
     "promptTokens": "Ama-prompt tokens",
@@ -4711,6 +4710,10 @@
         "note": "Izindleko zentengo ehleliwe kusukela ngo-{asOf} (Izinga Lomhlaba Wonke, akukho isaphulelo sokufakwa okuphindayo): isilinganiso esiphezulu, hhayi i-invoyisi. Ukusesha kwewebhu, ukugijima kwekhodi, ukurekhoda, inkulumo, ukuhumusha nokufakwa kwemibhalo akufakiwe.",
         "unpriced": "{count, plural, one {# isicelo elingenayo intengo alifakwanga} other {# izicelo ezingekho intengo azifakwanga}} kumali."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Le workspace (okulinganiselwe)",
@@ -8351,7 +8354,6 @@
       "week": "Iviki",
       "month": "Inyanga"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Kulinganiselwa kusuka kumazinga entengo: umkhawulo ophezulu, akuyona i-invoice.",
     "chargesValue": "{count} ukushaja ifoni",
     "percent": "{percent}%",

@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Nie śledzono jeszcze użycia. Po rozpoczęciu rozmowy pojawi się tu zużycie tokenów i szacowana emisja.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} ładowań smartfona",
     "requests": "Żądania",
     "promptTokens": "Tokeny promptu",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Koszt nie jest wyświetlany: model tej rozmowy nie posiada ceny katalogowej (własne źródła, lokalne środowiska i agenci nie są wyceniani).",
         "note": "Koszt według cen katalogowych na dzień {asOf} (stawka Global Standard, bez rabatu za pamięć podręczną): wartość maksymalna, nie rachunek. Wyszukiwanie internetowe, wykonywanie kodu, transkrypcja, mowa, tłumaczenie i indeksowanie dokumentów nie są wliczone."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "To środowisko pracy (szacowane)",
@@ -8367,7 +8370,6 @@
       "week": "Tydzień",
       "month": "Miesiąc"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Szacowane na podstawie cen katalogowych: wartość maksymalna, nie faktura.",
     "chargesValue": "{count} ładowań telefonu",
     "percent": "{percent}%",

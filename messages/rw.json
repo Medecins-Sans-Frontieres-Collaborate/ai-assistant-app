@@ -2729,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "Nta gukoresha kwabonetse kugeza ubu. Uko wakoresheje token na gaz ihwanye nayo bizagaragara hano nyuma yo kuganira.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} inshuro zo kurarika smartphone",
     "requests": "Ibisabwa",
     "promptTokens": "Prompt tokens",
@@ -4711,6 +4710,10 @@
         "noPriceData": "Nta giciro kigaragajwe: icyitegererezo cy'iki kiganiro nta giciro gifite (amasoko yacyo bwite, imikorere yegereyeho n'abakozi ntibigira igiciro).",
         "note": "Igiciro ku biteganijwe guhera {asOf} (Igipimo Mpuzamahanga, nta kunoza kwinjiza): ni igice ntarengwa, si fagitire. Gushakisha kuri internet, kwandika no gushyira mu majwi, kuvuga, guhindura n'ubika inyandiko ntibibarwa."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Ubu butangamo akazi (ikigereranyo)",
@@ -8351,7 +8354,6 @@
       "week": "Icyumweru",
       "month": "Ukwezi"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Byagenwe ukurikije igiciro kiri ku rutonde: ni umupaka wo hejuru, si fagitire.",
     "chargesValue": "{count} inshuro zisharije telefoni",
     "percent": "{percent}%",

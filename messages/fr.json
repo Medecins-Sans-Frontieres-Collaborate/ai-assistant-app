@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Aucune utilisation enregistrée pour le moment. Votre utilisation de jetons et les émissions estimées apparaîtront ici après votre conversation.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} recharges de smartphone",
     "requests": "Requêtes",
     "promptTokens": "Jetons d’invite",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Aucun coût affiché : le modèle de cette conversation n’a pas de prix catalogue (sources propres, exécutions locales et agents ne sont pas tarifés).",
         "note": "Coût selon les prix catalogue au {asOf} (tarif Standard Global, sans réduction sur l’entrée en cache) : valeur haute, non une facture. Recherche web, exécution de code, transcription, parole, traduction et indexation de documents ne sont pas inclus."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Cet espace de travail (estimation)",
@@ -8367,7 +8370,6 @@
       "week": "Semaine",
       "month": "Mois"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Estimé à partir des prix catalogue : une limite supérieure, pas une facture.",
     "chargesValue": "{count} charges de téléphone",
     "percent": "{percent}%",

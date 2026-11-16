@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Hakuna matumizi yaliyofuatiliwa bado. Matumizi yako ya tokeni na makadirio ya uzalishaji yataonekana hapa baada ya kuzungumza.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} chaji za simu",
     "requests": "Maombi",
     "promptTokens": "Tokeni za msukumo",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Hakuna gharama inayoonyeshwa: mfano wa mazungumzo haya hauna bei ya orodha (vyanzo binafsi, matumizi ya ndani na mawakala havina bei).",
         "note": "Gharama kwa bei za orodha kufikia {asOf} (Kiwango cha Global Standard, hakuna punguzo la ingizo lililohifadhiwa): kiwango cha juu, si bili. Utafutaji wa wavuti, utekelezaji wa msimbo, unukuu, sauti, tafsiri na kuweka faharisi nyaraka havijajumuishwa."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Sehemu hii ya kazi (kadirio)",
@@ -8367,7 +8370,6 @@
       "week": "Wiki",
       "month": "Mwezi"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Imehesabiwa kutoka bei ya orodha: ni kiwango cha juu, si bili halisi.",
     "chargesValue": "{count} chaji za simu",
     "percent": "{percent}%",

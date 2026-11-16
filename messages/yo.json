@@ -2729,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "Ko si lilo tọwọ-tẹlọlọwọ. Lilo token rẹ ati iṣiro itujade yoo han nibi lẹyin ti o ba bá wa sọrọ.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} igbesẹ foonu alagbeka",
     "requests": "Ìbéèrè",
     "promptTokens": "Ami àbájáde ṣíṣe",
@@ -4711,6 +4710,10 @@
         "noPriceData": "Kò sí owó tó hàn: àpẹrẹ àjíròrò yìí kò ní owó àtòjọ (orísun tirẹ̀, iṣẹ́ ìjọba agbègbè àti aṣojú kò ní owó àtòjọ).",
         "note": "Ìye owó ní owó àtòjọ gẹ́gẹ́ bíi {asOf} (Oṣùpá Àgbáyé, kò sí ìdin owó ìwọlé fún input tó fàálà): iye tó pọ̀ jù, kì í ṣe ìwé ọnà. Wiwá lórí wẹ́bù, ṣiṣe kóòdù, àtúnyẹ̀wò, èdè, ìtumọ̀ àti ìtòsí àkọọ́lẹ̀ kò wà nínú rẹ."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Ibi iṣẹ́ yìí (àfikún)",
@@ -8351,7 +8354,6 @@
       "week": "Ọsẹ",
       "month": "Oṣù"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Ìṣírò lati owo ìtajà: òkè to pọ ju, kii ṣe gbese.",
     "chargesValue": "{count} ìgbàgbá foonu",
     "percent": "{percent}%",

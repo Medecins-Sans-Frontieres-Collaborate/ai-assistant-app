@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Noch keine Nutzung erfasst. Ihr Tokenverbrauch und die geschätzten Emissionen werden nach dem Chat hier angezeigt.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} Smartphone-Ladungen",
     "requests": "Anfragen",
     "promptTokens": "Prompt-Token",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Keine Kosten angezeigt: Das Modell dieses Gesprächs hat keinen Listenpreis (eigene Quellen, lokale Laufzeiten und Agents werden nicht bepreist).",
         "note": "Kosten zu Listenpreisen mit Stand {asOf} (Global-Standard-Tarif, kein Rabatt für zwischengespeicherte Eingaben): ein Höchstbetrag, keine Rechnung. Websuche, Code-Ausführung, Transkription, Sprache, Übersetzung und Dokumentenindexierung sind nicht enthalten."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Dieser Arbeitsbereich (geschätzt)",
@@ -8367,7 +8370,6 @@
       "week": "Woche",
       "month": "Monat"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Geschätzt nach Listenpreisen: ein Höchstwert, keine Rechnung.",
     "chargesValue": "{count} Ladevorgänge",
     "percent": "{percent}%",

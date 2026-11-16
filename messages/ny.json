@@ -2729,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "Palibe kagwiritsidwe kanatsatidwa pano. Kugwiritsa ntchito token yanu ndi kuchuluka kwa mpweya wotulutsidwa zidzawonekera pano mutatha kucheza.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} nthawi zolipiritsa mafoni",
     "requests": "Zopempha",
     "promptTokens": "Ma token oyambitsa",
@@ -4711,6 +4710,10 @@
         "noPriceData": "Mtengo sulikuwonetsedwa: chitsanzo cha mauthenga anu mulibe mtengo (zinthu zanu, ntchito zamlokal komanso ma agent alibe mtengo).",
         "note": "Mtengo kugwiritsa ntchito mitengo yakunja pa {asOf} (Global Standard rate, palibe kuchotsera ya cached-input): ndi malire apamwamba, si bili. Kusaka pa web, kuchita code, transcription, speech, translation komanso indexing wa zikalata sizikuphatikizidwa."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Malo ogwirira ntchito awa (zowerengeka)",
@@ -8351,7 +8354,6 @@
       "week": "Sabata",
       "month": "Mwezi"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Kuwerengera kutengera mitengo ya m'gulu: malire apamwamba, osati bilu yeniyeni.",
     "chargesValue": "{count} kuyitanitsa foni",
     "percent": "{percent}%",

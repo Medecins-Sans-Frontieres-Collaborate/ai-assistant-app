@@ -2729,7 +2729,6 @@
   },
   "usageImpact": {
     "empty": "Amo usage ayeke zo sô. Usage ti mo na token na sô ti emissions zo apepe na mbênî lôko mo ti yâmu.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} chargement ti smartphone",
     "requests": "Demande",
     "promptTokens": "Token ti demande",
@@ -4711,6 +4710,10 @@
         "noPriceData": "Gbɛnɛ ala na fa: model tî konversio ane ala na ni kɔlɛ (source tî mbirî, runtime tî local na agent ala na kɔlɛ).",
         "note": "Gbɛnɛ tî kɔlɛ tî yeke na {asOf} (Global Standard rate, mo na discount tî cached-input): ti te mbule mbula, mo tî bill. Web search, code execution, transcription, speech, translation na document indexing ala na fa wa."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Workplace âli (sômbéni)",
@@ -8351,7 +8354,6 @@
       "week": "Saba",
       "month": "Nyenye"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Mbiamu ti liste ti pri: peke na mbi yeke benga factura.",
     "chargesValue": "{count} kupe ti télé",
     "percent": "{percent}%",

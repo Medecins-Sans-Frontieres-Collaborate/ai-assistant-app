@@ -2776,7 +2776,6 @@
   },
   "usageImpact": {
     "empty": "Chưa có dữ liệu sử dụng. Việc sử dụng token và ước tính phát thải sẽ hiển thị tại đây sau khi bạn trò chuyện.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} lần sạc điện thoại thông minh",
     "requests": "Yêu cầu",
     "promptTokens": "Token nhắc (prompt)",
@@ -4758,6 +4757,10 @@
         "noPriceData": "Không hiển thị chi phí: mô hình cuộc hội thoại này không có giá niêm yết (nguồn riêng, thời gian chạy cục bộ và agent không được định giá).",
         "note": "Chi phí theo giá niêm yết tại thời điểm {asOf} (tỉ giá Chuẩn Toàn Cầu, không áp dụng giảm giá đầu vào được lưu sẵn): là mức chi phí cao nhất, không phải hóa đơn. Tìm kiếm web, thực thi mã, chuyển âm, giọng nói, dịch thuật và lập chỉ mục tài liệu không được tính vào."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Không gian làm việc này (ước tính)",
@@ -8398,7 +8401,6 @@
       "week": "Tuần",
       "month": "Tháng"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Ước tính dựa trên giá niêm yết: là mức tối đa, không phải hóa đơn.",
     "chargesValue": "{count} lần sạc điện thoại",
     "percent": "{percent}%",

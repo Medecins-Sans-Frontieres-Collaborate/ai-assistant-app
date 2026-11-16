@@ -2745,7 +2745,6 @@
   },
   "usageImpact": {
     "empty": "Er is nog geen gebruik geregistreerd. Je tokengebruik en de geschatte uitstoot verschijnen hier nadat je hebt gechat.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} smartphone-oplaadbeurten",
     "requests": "Verzoeken",
     "promptTokens": "Prompt-tokens",
@@ -4727,6 +4726,10 @@
         "noPriceData": "Er worden geen kosten getoond: het model van dit gesprek heeft geen lijstprijs (eigen bronnen, lokale runtimes en agents worden niet geprijsd).",
         "note": "Kosten volgens lijstprijzen per {asOf} (Global Standard-tarief, geen korting voor gecachte invoer): een bovengrens, geen rekening. Webzoekopdrachten, code-uitvoering, transcriptie, spraak, vertaling en documentindexering zijn niet inbegrepen."
       }
+    },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
     },
     "workflow": {
       "title": "Deze werkruimte (geschat)",
@@ -8367,7 +8370,6 @@
       "week": "Week",
       "month": "Maand"
     },
-    "equalsGrams": "= {grams} g CO₂e",
     "costNote": "Geschat op basis van catalogusprijzen: een bovengrens, geen factuur.",
     "chargesValue": "{count} telefoonladingen",
     "percent": "{percent}%",
