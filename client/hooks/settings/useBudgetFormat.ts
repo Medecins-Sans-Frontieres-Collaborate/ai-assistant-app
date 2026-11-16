@@ -4,11 +4,10 @@ import { useCallback } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
 
+import { useCo2eFormat } from '@/client/hooks/settings/useCo2eFormat';
+
 import { formatUsdLabel } from '@/lib/utils/shared/chat/requestCost';
-import {
-  activityDurationParts,
-  formatGrams,
-} from '@/lib/utils/shared/emissions';
+import { activityDurationParts } from '@/lib/utils/shared/emissions';
 import {
   BudgetUnit,
   fromBaseUnits,
@@ -25,7 +24,8 @@ export type BudgetQuantityFormatter = (
 
 /**
  * Localized display of a budget quantity in the unit the user chose:
- * "4.1 h" for an activity, "184 g CO₂e", "13.6 phone charges", "$13.10".
+ * "4.1 h" for an activity, "184 g CO₂e" (or "1.25 kg CO₂e"), "13.6 phone
+ * charges", "$13.10".
  *
  * Reuses the chip's formatters (grams, durations, dollars) so a figure reads
  * the same in the budget meter as it does everywhere else.
@@ -33,6 +33,7 @@ export type BudgetQuantityFormatter = (
 export function useBudgetFormat(): BudgetQuantityFormatter {
   const t = useTranslations();
   const locale = useLocale();
+  const formatCo2e = useCo2eFormat();
 
   return useCallback(
     (base, unit) => {
@@ -42,7 +43,7 @@ export function useBudgetFormat(): BudgetQuantityFormatter {
         );
       }
       if (unit === 'grams') {
-        return t('emissions.chip.label', { grams: formatGrams(base) });
+        return formatCo2e(base);
       }
       const value = fromBaseUnits(base, unit);
       if (isActivityUnit(unit)) {
@@ -53,6 +54,6 @@ export function useBudgetFormat(): BudgetQuantityFormatter {
         count: value < 10 ? value.toFixed(1) : `${Math.round(value)}`,
       });
     },
-    [t, locale],
+    [t, locale, formatCo2e],
   );
 }
