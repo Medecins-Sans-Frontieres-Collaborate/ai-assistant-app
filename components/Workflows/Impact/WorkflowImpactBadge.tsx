@@ -6,6 +6,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useCo2eFormat } from '@/client/hooks/settings/useCo2eFormat';
 import { useUsageBudgetsStatus } from '@/client/hooks/settings/useUsageBudgets';
 import { useWorkflowEmissions } from '@/client/hooks/workflows/useWorkflowEmissions';
 
@@ -61,6 +62,7 @@ export const WorkflowImpactBadge: FC<WorkflowImpactBadgeProps> = ({
   conversation,
 }) => {
   const t = useTranslations();
+  const formatCo2e = useCo2eFormat();
   const { showUsageImpact } = useFlags();
   const budgets = useUsageBudgetsStatus();
   const summary = useWorkflowEmissions(conversation);
@@ -208,9 +210,7 @@ export const WorkflowImpactBadge: FC<WorkflowImpactBadgeProps> = ({
                         {actionLabel(row.action, t)}
                       </span>
                       <span className="text-gray-900 dark:text-gray-100 shrink-0">
-                        {t('emissions.chip.label', {
-                          grams: formatGrams(row.gCO2e),
-                        })}
+                        {formatCo2e(row.gCO2e)}
                       </span>
                     </div>
                   ))}
