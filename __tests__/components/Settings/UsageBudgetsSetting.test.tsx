@@ -1,6 +1,9 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 
-import { EMISSIONS_ASSUMPTIONS } from '@/lib/utils/shared/emissions';
+import {
+  EMISSIONS_ASSUMPTIONS,
+  co2eMassParts,
+} from '@/lib/utils/shared/emissions';
 import {
   DEFAULT_USAGE_BUDGETS,
   UsageBudget,
@@ -97,6 +100,37 @@ describe('UsageBudgetsSetting', () => {
     fireEvent.click(unitButton('grams'));
     expect(emissions().unit).toBe('grams');
     expect(budgetLimit(emissions())).toBeCloseTo(before, -1);
+  });
+
+  it('adds the CO2e figures beneath a budget set by activity', () => {
+    enabledEmissions({ amount: 5, unit: 'netflixHd' });
+    render(<UsageBudgetsSetting />);
+    const used = co2eMassParts(USED_GRAMS);
+    const limit = co2eMassParts(budgetLimit(emissions()));
+    // The fixture must sit below a kilogram for the gram wording to apply.
+    expect(used.unit).toBe('grams');
+    expect(limit.unit).toBe('grams');
+    expect(screen.getByTestId('usage-budget-emissions-base')).toHaveTextContent(
+      `${used.value} g CO2e of ${limit.value} g CO2e`,
+    );
+  });
+
+  it('scales the CO2e figure to kilograms for a large budget', () => {
+    enabledEmissions({ amount: 500, unit: 'netflixHd' });
+    render(<UsageBudgetsSetting />);
+    const limit = co2eMassParts(budgetLimit(emissions()));
+    expect(limit.unit).toBe('kilograms');
+    expect(screen.getByTestId('usage-budget-emissions-base')).toHaveTextContent(
+      `of ${limit.value} kg CO2e`,
+    );
+  });
+
+  it('does not repeat the figure when the budget is already in CO2e', () => {
+    enabledEmissions({ amount: 200, unit: 'grams' });
+    render(<UsageBudgetsSetting />);
+    expect(
+      screen.queryByTestId('usage-budget-emissions-base'),
+    ).not.toBeInTheDocument();
   });
 
   it('commits a typed amount on blur, not on every keystroke', () => {
