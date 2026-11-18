@@ -64,15 +64,22 @@ vi.mock('@/lib/services/limits/principal', () => ({
     groupIds: [],
   }),
 }));
+// The run's storage is a stand-in: these tests are about limits.
 vi.mock('@/lib/services/documentTranslation/native/nativePdfStorage', () => ({
-  storeNativeFile: storeFile,
-  storeNativeRebuild: vi.fn(async () => ({
-    pdfUrl: '/out.pdf',
-    pageImages: [],
+  parseRunLocation: () => ({
+    ok: true,
+    location: { runId: 'run', backend: 'app' },
+  }),
+  openNativeRunStore: vi.fn(async () => ({
+    get: readFile,
+    put: storeFile,
+    putRebuild: vi.fn(async () => ({ pdfUrl: '/out.pdf', pageImages: [] })),
   })),
-  readNativeFile: readFile,
   isNativeFileId: (id: unknown, kind: string) =>
     typeof id === 'string' && id.endsWith(`.${kind}`),
+}));
+vi.mock('@/lib/services/documentTranslation/native/nativeRunResponses', () => ({
+  runStorageErrorResponse: () => null,
 }));
 vi.mock('@/lib/services/documentTranslation/native/nativePdfGlossary', () => ({
   resolveRequestGlossary: vi.fn(),
