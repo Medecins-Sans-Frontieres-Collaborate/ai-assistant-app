@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "번역됨",
           "later": "다음 배치",
-          "locked": "제한 초과"
+          "locked": "제한 초과",
+          "removed": "제거됨"
         },
         "pageReason": {
           "later": "이 배치가 가득 찼습니다. 해당 페이지는 다음 배치에 포함할 수 있습니다.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "대신 번역된 페이지에 추가",
         "progressNoteParts": "중지하면 완료된 부분은 유지되고 진행 중인 부분은 폐기됩니다.",
         "progressPart": "{parts} 중 {part} 파트",
-        "progressAssembling": "페이지를 하나의 문서로 합치는 중"
+        "progressAssembling": "페이지를 하나의 문서로 합치는 중",
+        "pageUntranslated": "번역되지 않음",
+        "pageUntranslatedNote": "이 페이지는 번역되지 않았습니다. 다운로드에는 원본 그대로 저장됩니다.",
+        "pageRemovedNote": "이 페이지는 다운로드에서 제거되었습니다.",
+        "removePage": "다운로드에서 {page} 페이지를 제거",
+        "restorePage": "다운로드에 {page} 페이지 다시 추가",
+        "translateThisPage": "이 페이지 번역",
+        "railSelectNext": "{count, plural, one {다음 페이지 선택} other {다음 #개 페이지 선택}}",
+        "railTickHint": "또는 다음으로 번역할 페이지를 체크하세요.",
+        "railClear": "선택 해제",
+        "railOtherLanguage": "이 페이지들은 {language}(으)로 되어 있습니다. 더 많은 페이지를 추가하려면 {language}를 다시 선택하세요.",
+        "pagesPending": "페이지 변경 내용이 아직 다운로드에 반영되지 않았습니다.",
+        "undoPageChanges": "페이지 변경 취소",
+        "updateDownload": "다운로드 업데이트",
+        "pdfBehindPages": "PDF가 페이지 변경 내용보다 뒤처져 있습니다."
       },
       "kind": "번역할 항목",
       "kindText": "텍스트",

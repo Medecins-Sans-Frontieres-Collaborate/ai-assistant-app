@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "පරිවර්තනය කර ඇත",
           "later": "ඊළඟ කණ්ඩායම",
-          "locked": "සීමාව ඉක්මවා ඇත"
+          "locked": "සීමාව ඉක්මවා ඇත",
+          "removed": "ඉවත් කරන ලදී"
         },
         "pageReason": {
           "later": "මෙම කණ්ඩායම පිරී ඇත. මෙම පිටු ඊළඟ කණ්ඩායමට එක් කළ හැක.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "පරිවර්තිත පිටු වලට එක් කරන්න",
         "progressNoteParts": "නවතින්නේ අවසන් කොටස් තබා ඉතිරිව ඇති එක ඉවත් කරයි.",
         "progressPart": "කොටස {part} / {parts}",
-        "progressAssembling": "සියලු පිටු එක් ලේඛනයකට එක් කරයි"
+        "progressAssembling": "සියලු පිටු එක් ලේඛනයකට එක් කරයි",
+        "pageUntranslated": "පරිවර්තනය කර නොමැත",
+        "pageUntranslatedNote": "මෙම පිටුව පරිවර්තනය කර නැත. බාගත කිරීමේදී එය මුල් පිටපතක් ලෙස පවතී.",
+        "pageRemovedNote": "මෙම පිටුව බාගත කිරීමෙන් ඉවත් කර ඇත.",
+        "removePage": "පිටුව {page} බාගත කිරීමෙන් ඉවත් කරන්න",
+        "restorePage": "පිටුව {page} නැවත බාගත කිරීමට එක් කරන්න",
+        "translateThisPage": "මෙම පිටුව පරිවර්තනය කරන්න",
+        "railSelectNext": "{count, plural, one {ඊළඟ පිටුව තෝරන්න} other {ඊළඟ පිටු # තෝරන්න}}",
+        "railTickHint": "හෝ පසුව පරිවර්තනය කිරීම සඳහා පිටු ටික් කරන්න.",
+        "railClear": "තේරීම් මකන්න",
+        "railOtherLanguage": "මෙම පිටු {language} භාෂාවේ වේ. තවත් පිටු එක් කිරීමට {language} නැවත තෝරන්න.",
+        "pagesPending": "ඔබගේ පිටු වෙනස්කම් තවම බාගත කිරීමට ඇතුළත් කර නොමැත",
+        "undoPageChanges": "පිටු වෙනස්කම් පෙර තත්වයට පයන්න",
+        "updateDownload": "බාගත කිරීම යාවත්කාලීන කරන්න",
+        "pdfBehindPages": "PDF එක ඔබගේ පිටු වෙනස්කම්ට යාලුවක් නොවේ"
       },
       "kind": "පරිවර්තනය කළ යුතු දේ",
       "kindText": "පෙළ",

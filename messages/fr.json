@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Traduit",
           "later": "Lot suivant",
-          "locked": "Au-delà de la limite"
+          "locked": "Au-delà de la limite",
+          "removed": "Supprimée"
         },
         "pageReason": {
           "later": "Ce lot est complet. Ces pages peuvent être incluses dans le lot suivant.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Ajouter aux pages traduites à la place",
         "progressNoteParts": "En arrêtant, seules les parties terminées sont conservées et celle en cours est supprimée.",
         "progressPart": "Partie {part} sur {parts}",
-        "progressAssembling": "Assemblage des pages dans un seul document"
+        "progressAssembling": "Assemblage des pages dans un seul document",
+        "pageUntranslated": "Non traduite",
+        "pageUntranslatedNote": "Cette page n'est pas traduite. Le téléchargement la conserve telle qu'elle figure dans l'original.",
+        "pageRemovedNote": "Cette page est supprimée du téléchargement.",
+        "removePage": "Supprimer la page {page} du téléchargement",
+        "restorePage": "Ajouter de nouveau la page {page} au téléchargement",
+        "translateThisPage": "Traduire cette page",
+        "railSelectNext": "{count, plural, one {Sélectionner la page suivante} other {Sélectionner les # pages suivantes}}",
+        "railTickHint": "Ou cochez les pages à traduire ensuite.",
+        "railClear": "Annuler la sélection",
+        "railOtherLanguage": "Ces pages sont en {language}. Choisissez {language} à nouveau pour ajouter d'autres pages.",
+        "pagesPending": "Vos modifications de pages ne figurent pas encore dans le téléchargement",
+        "undoPageChanges": "Annuler les modifications de pages",
+        "updateDownload": "Mettre à jour le téléchargement",
+        "pdfBehindPages": "Le PDF n'intègre pas encore vos modifications de pages"
       },
       "kind": "Que traduire",
       "kindText": "Texte",

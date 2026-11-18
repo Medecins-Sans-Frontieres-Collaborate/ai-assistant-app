@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "Voadika",
           "later": "Batch manaraka",
-          "locked": "Mihoatra ny fetra"
+          "locked": "Mihoatra ny fetra",
+          "removed": "Voafafa"
         },
         "pageReason": {
           "later": "Feno ity batch ity. Afaka asiana amin'ny batch manaraka ireo pejy ireo.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "Ampio amin'ny pejy efa voadika kosa",
         "progressNoteParts": "Ajanona dia mitahiry ireo ampahany vita ary manary izay mbola eo ampandehanana.",
         "progressPart": "Ampahany {part} amin'ny {parts}",
-        "progressAssembling": "Ampifangaroina ho taratasy iray ireo pejy"
+        "progressAssembling": "Ampifangaroina ho taratasy iray ireo pejy",
+        "pageUntranslated": "Tsy mbola voadika",
+        "pageUntranslatedNote": "Tsy mbola voadika ity pejy ity. Ny fisintomana dia mitahiry azy amin'ny endriny tany am-boalohany.",
+        "pageRemovedNote": "Voafafa tamin'ny fisintomana ity pejy ity.",
+        "removePage": "Esory amin'ny fisintomana ny pejy {page}",
+        "restorePage": "Avereno amin'ny fisintomana ny pejy {page}",
+        "translateThisPage": "Dikao ity pejy ity",
+        "railSelectNext": "{count, plural, one {Safidio ny pejy manaraka} other {Safidio pejy manaraka #}}",
+        "railTickHint": "Na mariho ireo pejy kasaina hadika manaraka.",
+        "railClear": "Afaho ny safidy",
+        "railOtherLanguage": "Misy amin'ny fiteny {language} ireo pejy ireo. Safidio indray {language} raha hanampy pejy vaovao.",
+        "pagesPending": "Tsy mbola tafiditra ao amin'ny fisintomana ny fanovàna nataonao amin'ny pejy",
+        "undoPageChanges": "Avereno ny fanovàna natao tamin'ny pejy",
+        "updateDownload": "Havaozy ny fisintomana",
+        "pdfBehindPages": "Tara amin'ny fanovàna pejy nataonao ny PDF"
       },
       "kind": "Inona no adika",
       "kindText": "Lahatsoratra",

@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Tradus",
           "later": "Lotul următor",
-          "locked": "Peste limită"
+          "locked": "Peste limită",
+          "removed": "Eliminat"
         },
         "pageReason": {
           "later": "Acest lot este plin. Aceste pagini pot fi adăugate în lotul următor.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Adăugați la paginile traduse",
         "progressNoteParts": "Oprirea păstrează părțile finalizate și renunță la cea în curs.",
         "progressPart": "Partea {part} din {parts}",
-        "progressAssembling": "Se adună paginile într-un singur document"
+        "progressAssembling": "Se adună paginile într-un singur document",
+        "pageUntranslated": "Net radusă",
+        "pageUntranslatedNote": "Această pagină nu este tradusă. Descărcarea o conține exact ca în original.",
+        "pageRemovedNote": "Această pagină a fost eliminată din descărcare.",
+        "removePage": "Eliminați pagina {page} din descărcare",
+        "restorePage": "Reinserați pagina {page} în descărcare",
+        "translateThisPage": "Traduceți această pagină",
+        "railSelectNext": "{count, plural, one {Selectați pagina următoare} other {Selectați următoarele # pagini}}",
+        "railTickHint": "Sau bifați paginile pe care să le traduceți în continuare.",
+        "railClear": "Ștergeți selecția",
+        "railOtherLanguage": "Aceste pagini sunt în {language}. Alegeți din nou {language} pentru a adăuga mai multe pagini.",
+        "pagesPending": "Modificările paginilor dvs. nu sunt încă în descărcare",
+        "undoPageChanges": "Anulați modificările de pagină",
+        "updateDownload": "Actualizați descărcarea",
+        "pdfBehindPages": "PDF-ul nu include ultimele modificări ale paginilor"
       },
       "kind": "Ce se traduce",
       "kindText": "Text",

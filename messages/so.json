@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "La turjumay",
           "later": "Baakada xigta",
-          "locked": "Waa ka badan yahay xadka"
+          "locked": "Waa ka badan yahay xadka",
+          "removed": "La saaray"
         },
         "pageReason": {
           "later": "Baakadan waa buuxdaa. Bogaggaani waxay gali karaan baakada xigta.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "Kudar bogagga la turjumay halkii",
         "progressNoteParts": "Joojintu waxay haynaysaa qaybaha dhamaaday waxayna tuuraysaa qaybta socda.",
         "progressPart": "Qaybta {part} ee {parts}",
-        "progressAssembling": "Bogagga ayaa la isu keenayaa hal dukumeenti"
+        "progressAssembling": "Bogagga ayaa la isu keenayaa hal dukumeenti",
+        "pageUntranslated": "Lama turjum",
+        "pageUntranslatedNote": "Boggan lama turjun. Soo dejintu waxay ku jirtaa sidii asalka ahayd.",
+        "pageRemovedNote": "Boggan waa laga saaray soo dejinta.",
+        "removePage": "Ka saar bogga {page} soo dejinta",
+        "restorePage": "Ku celi bogga {page} soo dejinta",
+        "translateThisPage": "Boggan turjum",
+        "railSelectNext": "{count, plural, one {Dooro bogga xiga} other {Dooro # bog ee xiga}}",
+        "railTickHint": "Ama calaamadee bogagga aad rabto in aad markale turjunto.",
+        "railClear": "Tirtir xulashada",
+        "railOtherLanguage": "Bogaggani waxay ku qoran yihiin {language}. Dooro {language} mar kale si aad bogag kale ugu darto.",
+        "pagesPending": "Isbedelada boggaagu weli kuma jiraan soo dejinta",
+        "undoPageChanges": "Ka noqosho isbedelada bogga",
+        "updateDownload": "Cusbooneysii soo dejinta",
+        "pdfBehindPages": "PDF-ku waxa uu ka danbeeyaa isbedelada bogaggaaga"
       },
       "kind": "Waa maxay in la turjumo",
       "kindText": "Qoraal",

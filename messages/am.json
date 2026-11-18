@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "ተተርጎሟል",
           "later": "በሚቀጥለው ዕቅድ",
-          "locked": "ከገደቡ በላይ"
+          "locked": "ከገደቡ በላይ",
+          "removed": "ተወግዷል"
         },
         "pageReason": {
           "later": "ይህ ዕቅድ ተሞልቷል። እነዚህ ገፆች በሚቀጥለው ዕቅድ ሊጨመሩ ይችላሉ።",
@@ -3384,7 +3385,21 @@
         "keepAdding": "በተተርጎመው ገፆች ላይ ያክሉ",
         "progressNoteParts": "መቆም ተጨማሪ የተጠናቀቁትን ክፍሎች ይጠብቃል እና በሂደት ላይ ያለውን ይጣል።",
         "progressPart": "ክፍል {part} ከ{parts}",
-        "progressAssembling": "ገፆቹን በአንድ ሰነድ ውስጥ በመዋደቅ ላይ"
+        "progressAssembling": "ገፆቹን በአንድ ሰነድ ውስጥ በመዋደቅ ላይ",
+        "pageUntranslated": "አልተተረጎመም",
+        "pageUntranslatedNote": "ይህ ገፅ አልተተረጎመም። ማውረዱ ግን በመጀመሪያው እንደሆነ ይዞታውን ያሳያል።",
+        "pageRemovedNote": "ይህ ገፅ ከማውረዱ ተወግዷል።",
+        "removePage": "ገፅ {page} ከማውረዱ ያውጡ",
+        "restorePage": "ገፅ {page} ወደ ማውረዱ አስመልሱ",
+        "translateThisPage": "ይህን ገፅ ተርጉም",
+        "railSelectNext": "{count, plural, one {የቀጣዩን ገፅ ይምረጡ} other {ቀጣዩ # ገፆችን ይምረጡ}}",
+        "railTickHint": "ወይም ለሚቀጥሉ ትርጉሞች ገፆቹን ይምረጡ።",
+        "railClear": "ምርጫውን ያጥፉ",
+        "railOtherLanguage": "እነዚህ ገፆች በ{language} ናቸው። ተጨማሪ ገፆችን ለመጨመር እንደገና {language} ይምረጡ።",
+        "pagesPending": "የሚለዋወጡት ገፆች ገና ከማውረዱ ውስጥ አይገቡም",
+        "undoPageChanges": "የገፅ ለዋወጦችን ይተዉ",
+        "updateDownload": "ማውረዱን ያዘምኑ",
+        "pdfBehindPages": "PDF የሚለዋወጡትን ገፆች አላከበረም"
       },
       "kind": "ምን ማትረጉም ይፈልጋሉ",
       "kindText": "ጽሁፍ",

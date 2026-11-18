@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Översatt",
           "later": "Nästa paket",
-          "locked": "Över gränsen"
+          "locked": "Över gränsen",
+          "removed": "Borttagen"
         },
         "pageReason": {
           "later": "Detta paket är fullt. Dessa sidor kan tas med i nästa paket.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Lägg till de översatta sidorna istället",
         "progressNoteParts": "Om du stoppar sparas de delar som är klara och den som pågår tas bort.",
         "progressPart": "Del {part} av {parts}",
-        "progressAssembling": "Sammanfogar sidorna till ett dokument"
+        "progressAssembling": "Sammanfogar sidorna till ett dokument",
+        "pageUntranslated": "Ej översatt",
+        "pageUntranslatedNote": "Denna sida är inte översatt. Nedladdningen inkluderar den i originalversionen.",
+        "pageRemovedNote": "Denna sida är borttagen från nedladdningen.",
+        "removePage": "Ta bort sidan {page} från nedladdningen",
+        "restorePage": "Lägg tillbaka sidan {page} i nedladdningen",
+        "translateThisPage": "Översätt denna sida",
+        "railSelectNext": "{count, plural, one {Välj nästa sida} other {Välj nästa # sidor}}",
+        "railTickHint": "Eller kryssa i sidor att översätta härnäst.",
+        "railClear": "Rensa urval",
+        "railOtherLanguage": "Dessa sidor är på {language}. Välj {language} igen för att lägga till fler sidor.",
+        "pagesPending": "Dina ändringar på sidorna finns ännu inte i nedladdningen",
+        "undoPageChanges": "Ångra ändringar på sidor",
+        "updateDownload": "Uppdatera nedladdningen",
+        "pdfBehindPages": "PDF-filen ligger efter dina sidändringar"
       },
       "kind": "Vad som ska översättas",
       "kindText": "Text",

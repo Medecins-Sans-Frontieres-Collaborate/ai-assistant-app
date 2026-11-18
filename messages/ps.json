@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "ژباړل شوې",
           "later": "بله ډله",
-          "locked": "د حد نه زیات"
+          "locked": "د حد نه زیات",
+          "removed": "لرې شوی"
         },
         "pageReason": {
           "later": "دا ډله ډکه ده. دا پاڼې راتلونکې ډلې ته داخلېدای شي.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "د ژباړل شوو پاڼو سره اضافه کړئ",
         "progressNoteParts": "درول شوې پروسه پای ته رسیدلي برخې ساتي او روانه برخه حذف کوي.",
         "progressPart": "برخه {part} له {parts} څخه",
-        "progressAssembling": "پاڼې یو سند ته سره تړل کېږي"
+        "progressAssembling": "پاڼې یو سند ته سره تړل کېږي",
+        "pageUntranslated": "نه دی ژباړل شوی",
+        "pageUntranslatedNote": "دا پاڼه نه ده ژباړل شوې. ډاونلوډ کې به یې اصلي بڼه پاتې وي.",
+        "pageRemovedNote": "دا پاڼه له ډاونلوډ څخه لرې شوې ده.",
+        "removePage": "پاڼه {page} له ډاونلوډ څخه لرې کړئ",
+        "restorePage": "پاڼه {page} بیا ډاونلوډ ته واچوئ",
+        "translateThisPage": "دا پاڼه ژباړئ",
+        "railSelectNext": "{count, plural, one {بله پاڼه انتخاب کړئ} other {بلې #{count} پاڼې انتخاب کړئ}}",
+        "railTickHint": "یا د ژباړې لپاره راتلونکې پاڼې وټاکئ.",
+        "railClear": "انتخاب پاک کړئ",
+        "railOtherLanguage": "دا پاڼې په {language} دي. د نورو پاڼو لپاره {language} بیا انتخاب کړئ.",
+        "pagesPending": "ستاسو د پاڼو بدلونونه لا ډاونلوډ کې نه دي شامل شوي",
+        "undoPageChanges": "د پاڼو بدلونونه شاتړئ",
+        "updateDownload": "ډاونلوډ تازه کړئ",
+        "pdfBehindPages": "PDF ستاسو د پاڼو بدلونونو څخه وروسته دی"
       },
       "kind": "څه ژباړل کیږي",
       "kindText": "متن",

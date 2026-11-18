@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Traducida",
           "later": "Próximo lote",
-          "locked": "Fuera del límite"
+          "locked": "Fuera del límite",
+          "removed": "Eliminada"
         },
         "pageReason": {
           "later": "Este lote está lleno. Estas páginas pueden agregarse en el próximo lote.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Agregar a las páginas ya traducidas",
         "progressNoteParts": "Si detiene, mantiene las partes finalizadas y descarta la que está en curso.",
         "progressPart": "Parte {part} de {parts}",
-        "progressAssembling": "Uniendo las páginas en un documento"
+        "progressAssembling": "Uniendo las páginas en un documento",
+        "pageUntranslated": "Sin traducir",
+        "pageUntranslatedNote": "Esta página no está traducida. La descarga la incluye tal como está en el original.",
+        "pageRemovedNote": "Esta página está eliminada de la descarga.",
+        "removePage": "Eliminar la página {page} de la descarga",
+        "restorePage": "Volver a añadir la página {page} a la descarga",
+        "translateThisPage": "Traducir esta página",
+        "railSelectNext": "{count, plural, one {Seleccione la siguiente página} other {Seleccione las próximas # páginas}}",
+        "railTickHint": "O marque las páginas que desea traducir a continuación.",
+        "railClear": "Limpiar selección",
+        "railOtherLanguage": "Estas páginas están en {language}. Elija {language} de nuevo para añadir más páginas.",
+        "pagesPending": "Sus cambios de página aún no están en la descarga",
+        "undoPageChanges": "Deshacer cambios de página",
+        "updateDownload": "Actualizar la descarga",
+        "pdfBehindPages": "El PDF está atrasado respecto a sus cambios de página"
       },
       "kind": "Qué traducir",
       "kindText": "Texto",

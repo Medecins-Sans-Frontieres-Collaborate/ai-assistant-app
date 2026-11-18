@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "Hollitaama",
           "later": "Dimo doole",
-          "locked": "Booyaani"
+          "locked": "Booyaani",
+          "removed": "Naanondiri"
         },
         "pageReason": {
           "later": "Dimo ngol paɗii. Helloji ɓe waɗaani e dimo doole.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "Ɓoɗɗitol e helloji hollitaama",
         "progressNoteParts": "Naatnude waɗii mo fen no waɗiri, jonnude mo jogii.",
         "progressPart": "Makko {part} e {parts}",
-        "progressAssembling": "Nastude helloji e dokumɛntal goɗɗo"
+        "progressAssembling": "Nastude helloji e dokumɛntal goɗɗo",
+        "pageUntranslated": "Al yettude",
+        "pageUntranslatedNote": "Hello ka nyaaɓnirde. Ko fayda huɗii fii waawnaayi mburnde.",
+        "pageRemovedNote": "Hello naanondiri e fayda huɗii.",
+        "removePage": "Naanondir hello {page} e fayda huɗii",
+        "restorePage": "Duɓir hello {page} e fayda huɗii",
+        "translateThisPage": "Yettude hello ɗon",
+        "railSelectNext": "{count, plural, one {Suɓo hello law} other {Suɓo hallo {count} ɗi law}}",
+        "railTickHint": "Wallay suɓo hallo ɗi ɗee waɗtani yettude.",
+        "railClear": "Momtu suɓorgo",
+        "railOtherLanguage": "Hollooji ɗaa wonaa e {language}. Suɓo {language} tawii tun ngadda hallo ɓe ley.",
+        "pagesPending": "Mbuɗɗe ɗaa yettinii e fayda huɗii waawataa.",
+        "undoPageChanges": "Fetir awti e mbuɗɗe hello",
+        "updateDownload": "Soppu fayda huɗii",
+        "pdfBehindPages": "PDF ngol waawataa sukkondirde e mbuɗɗe hello ɗaa"
       },
       "kind": "Ko woni hollitaade",
       "kindText": "Kalmaaji",

@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "Iguquliwe",
           "later": "I-batch elandelayo",
-          "locked": "Ngaphandle komkhawulo"
+          "locked": "Ngaphandle komkhawulo",
+          "removed": "Ikhishwe"
         },
         "pageReason": {
           "later": "Le batch igcwele. Lawa makhasi angafakwa ku-batch elandelayo.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "Engeza kumakhasi aguqile",
         "progressNoteParts": "Ukuma kugcina izigaba eziqediwe, bese kushiywa esesakhiwa.",
         "progressPart": "Ingxenye {part} kwe-{parts}",
-        "progressAssembling": "Ukuhlanganisa amakhasi edokhumenti eyodwa"
+        "progressAssembling": "Ukuhlanganisa amakhasi edokhumenti eyodwa",
+        "pageUntranslated": "Ayiguqulwe",
+        "pageUntranslatedNote": "Le khasi ayiguqulwe. Ukulayisha kuqukethe njengoba injengoba iyiyo kuqaloriginal.",
+        "pageRemovedNote": "Le khasi ikhishwe ekulayisheni.",
+        "removePage": "Susa ikhasi {page} ekulayisheni",
+        "restorePage": "Buyisela ikhasi {page} ekulayisheni",
+        "translateThisPage": "Guqulela le khasi",
+        "railSelectNext": "{count, plural, one {Khetha ikhasi elilandelayo} other {Khetha amakhasi alandelayo #}}",
+        "railTickHint": "Noma bhala amakhasi ofuna ukuwaguqula okulandelayo.",
+        "railClear": "Sula okukhethiwe",
+        "railOtherLanguage": "La makhasi ase-{language}. Khetha {language} futhi ukuze ungeze amakhasi amaningi.",
+        "pagesPending": "Izinguquko zakho zamakhasi azikalayishiwe okwamanje",
+        "undoPageChanges": "Buyisela izinguquko zamakhasi emuva",
+        "updateDownload": "Buyekeza ukulayisha",
+        "pdfBehindPages": "I-PDF isale emva kwezinguquko zamakhasi"
       },
       "kind": "Okuzoguqulwa",
       "kindText": "Umbhalo",

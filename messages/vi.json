@@ -3397,7 +3397,8 @@
         "pageState": {
           "translated": "Đã dịch",
           "later": "Đợt tiếp theo",
-          "locked": "Vượt giới hạn"
+          "locked": "Vượt giới hạn",
+          "removed": "Đã xóa"
         },
         "pageReason": {
           "later": "Đợt này đã đầy. Các trang này sẽ được đưa vào đợt tiếp theo.",
@@ -3415,7 +3416,21 @@
         "keepAdding": "Thêm vào các trang đã dịch",
         "progressNoteParts": "Dừng sẽ giữ các phần đã hoàn thành và bỏ phần đang xử lý.",
         "progressPart": "Phần {part} trong tổng số {parts}",
-        "progressAssembling": "Đang ghép các trang vào một tài liệu"
+        "progressAssembling": "Đang ghép các trang vào một tài liệu",
+        "pageUntranslated": "Chưa được dịch",
+        "pageUntranslatedNote": "Trang này chưa được dịch. Tải xuống sẽ giữ nguyên như bản gốc.",
+        "pageRemovedNote": "Trang này đã bị xóa khỏi bản tải xuống.",
+        "removePage": "Xóa trang {page} khỏi bản tải xuống",
+        "restorePage": "Đưa trang {page} trở lại bản tải xuống",
+        "translateThisPage": "Dịch trang này",
+        "railSelectNext": "{count, plural, one {Chọn trang tiếp theo} other {Chọn # trang tiếp theo}}",
+        "railTickHint": "Hoặc đánh dấu các trang sẽ dịch tiếp theo.",
+        "railClear": "Xóa lựa chọn",
+        "railOtherLanguage": "Các trang này đang ở {language}. Chọn lại {language} để thêm trang khác.",
+        "pagesPending": "Các thay đổi trang của bạn chưa có trong bản tải xuống",
+        "undoPageChanges": "Hoàn tác thay đổi trang",
+        "updateDownload": "Cập nhật bản tải xuống",
+        "pdfBehindPages": "PDF chưa cập nhật các thay đổi trang của bạn"
       },
       "kind": "Nội dung cần dịch",
       "kindText": "Văn bản",

@@ -2880,7 +2880,8 @@
         "pageState": {
           "translated": "وەرگێڕدرا",
           "later": "باچی داهاتوو",
-          "locked": "لە سنووردە"
+          "locked": "لە سنووردە",
+          "removed": "سڕاوە"
         },
         "pageReason": {
           "later": "ئەم باچە پڕبوو. ئەم پەرەکانە دەتوانن لە باچی داهاتوو بژێرێن.",
@@ -2898,7 +2899,21 @@
         "keepAdding": "زیاد بکە بۆ پەرەی وەرگێڕدراو",
         "progressNoteParts": "وەستاندن تەنها بەشەکانەوەی تەواوبوو پارێز دەکات و ئەوەی لە پڕۆسەیدا دەست دەکات.",
         "progressPart": "بەشی {part} لە {parts}",
-        "progressAssembling": "پەرەکان لە یەک بەڵگەنامەدا دەخرێن"
+        "progressAssembling": "پەرەکان لە یەک بەڵگەنامەدا دەخرێن",
+        "pageUntranslated": "وەڵام نەپێدرا",
+        "pageUntranslatedNote": "ئەم پەڕە وەڵام نەپێدراوە. داگرتنەکە زیادکراوە بە شێوەیەکی سەرەکی.",
+        "pageRemovedNote": "ئەم پەڕە لە داگرتنەکە سڕاوە.",
+        "removePage": "پەڕەی {page} لە داگرتنەکە بسڕەوە",
+        "restorePage": "پەڕەی {page} بگەڕێنەوە بۆ داگرتنەکە",
+        "translateThisPage": "ئەم پەڕە وەڵام بدە",
+        "railSelectNext": "{count, plural, one {پەڕەی داهاتوو هەلبژێرە} other {# پەڕەی داهاتوو هەلبژێرە}}",
+        "railTickHint": "یان پەڕەکان تیک بکە بۆ وەڵامدانی داهاتوو.",
+        "railClear": "هەلبژاردن بسڕەوە",
+        "railOtherLanguage": "ئەم پەڕەکان بە {language} دەن. دوبارە {language} هەلبژێرە بۆ زیادکردنی پەڕەی زیاتر.",
+        "pagesPending": "گۆڕانکاری پەڕەکانت هێشتا لە داگرتنەکە نییە",
+        "undoPageChanges": "گۆڕانکاری پەڕەکان ڕگەڕاندنەوە",
+        "updateDownload": "داگرتنەکە نوێ بکە",
+        "pdfBehindPages": "PDF-ەکە لە گۆڕانکاری پەڕەکانت پاشە"
       },
       "kind": "چی وەرگێڕدرێت",
       "kindText": "دەق",

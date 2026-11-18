@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Übersetzt",
           "later": "Nächster Stapel",
-          "locked": "Über dem Limit"
+          "locked": "Über dem Limit",
+          "removed": "Entfernt"
         },
         "pageReason": {
           "later": "Dieser Stapel ist voll. Diese Seiten können im nächsten Stapel bearbeitet werden.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Stattdessen zu den übersetzten Seiten hinzufügen",
         "progressNoteParts": "Beim Anhalten bleiben die abgeschlossenen Teile erhalten, und der gerade laufende wird verworfen.",
         "progressPart": "Teil {part} von {parts}",
-        "progressAssembling": "Seiten werden in ein Dokument zusammengefügt"
+        "progressAssembling": "Seiten werden in ein Dokument zusammengefügt",
+        "pageUntranslated": "Nicht übersetzt",
+        "pageUntranslatedNote": "Diese Seite ist nicht übersetzt. Der Download enthält sie im Original.",
+        "pageRemovedNote": "Diese Seite wurde aus dem Download entfernt.",
+        "removePage": "Seite {page} aus dem Download entfernen",
+        "restorePage": "Seite {page} wieder zum Download hinzufügen",
+        "translateThisPage": "Diese Seite übersetzen",
+        "railSelectNext": "{count, plural, one {Nächste Seite auswählen} other {Nächste # Seiten auswählen}}",
+        "railTickHint": "Oder wählen Sie die zu übersetzenden Seiten aus.",
+        "railClear": "Auswahl aufheben",
+        "railOtherLanguage": "Diese Seiten sind auf {language}. Wählen Sie {language} erneut, um weitere Seiten hinzuzufügen.",
+        "pagesPending": "Ihre Seitenänderungen sind noch nicht im Download enthalten",
+        "undoPageChanges": "Seitenänderungen rückgängig machen",
+        "updateDownload": "Download aktualisieren",
+        "pdfBehindPages": "Das PDF ist nicht auf dem Stand Ihrer Seitenänderungen"
       },
       "kind": "Was soll übersetzt werden",
       "kindText": "Text",

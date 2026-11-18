@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Çevrildi",
           "later": "Sonraki grup",
-          "locked": "Limitin üzerinde"
+          "locked": "Limitin üzerinde",
+          "removed": "Kaldırıldı"
         },
         "pageReason": {
           "later": "Bu grup dolu. Bu sayfalar bir sonraki gruba eklenebilir.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Bunun yerine çevrilmiş sayfalara ekle",
         "progressNoteParts": "Durdurursanız, tamamlanan parçalar korunur ve işlenmekte olan parça atılır.",
         "progressPart": "{parts} parçadan {part}. parça",
-        "progressAssembling": "Sayfalar tek belgede birleştiriliyor"
+        "progressAssembling": "Sayfalar tek belgede birleştiriliyor",
+        "pageUntranslated": "Çevrilmedi",
+        "pageUntranslatedNote": "Bu sayfa çevrilmemiştir. İndirme, sayfayı orijinal haliyle tutar.",
+        "pageRemovedNote": "Bu sayfa indirmeden kaldırıldı.",
+        "removePage": "Sayfa {page}'i indirmeden kaldır",
+        "restorePage": "Sayfa {page}'i indirmenin içine geri koy",
+        "translateThisPage": "Bu sayfayı çevir",
+        "railSelectNext": "{count, plural, one {Sonraki sayfayı seç} other {Sonraki # sayfayı seç}}",
+        "railTickHint": "Ya da çevirmek istediğiniz sonraki sayfaları işaretleyin.",
+        "railClear": "Seçimi temizle",
+        "railOtherLanguage": "Bu sayfalar {language} dilinde. Daha fazla sayfa eklemek için tekrar {language} seçin.",
+        "pagesPending": "Sayfa değişiklikleriniz henüz indirmede değil",
+        "undoPageChanges": "Sayfa değişikliklerini geri al",
+        "updateDownload": "İndirmeyi güncelle",
+        "pdfBehindPages": "PDF, sayfa değişikliklerinizin gerisinde"
       },
       "kind": "Ne çevrilecek",
       "kindText": "Metin",

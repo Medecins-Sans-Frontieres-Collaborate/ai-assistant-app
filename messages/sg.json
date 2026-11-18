@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "Page yï bango",
           "later": "Batch tî yângâ",
-          "locked": "Bé ti mbênî"
+          "locked": "Bé ti mbênî",
+          "removed": "Kété"
         },
         "pageReason": {
           "later": "Batch tî azo yéké. Pages tî kâdène kö na batch tî yângâ.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "Gbâré ka pages tî yë na bango",
         "progressNoteParts": "Mbï kugbä ti mo so ti fini na mo parts, mbi kpê ti mo na progress.",
         "progressPart": "Part {part} na {parts}",
-        "progressAssembling": "Mbï kö pages na document yô"
+        "progressAssembling": "Mbï kö pages na document yô",
+        "pageUntranslated": "A ködö lingbi",
+        "pageUntranslatedNote": "Sé té na lingbi. Gbé ti téléchargement azo ape so ngangu tî nzönî.",
+        "pageRemovedNote": "Sé azo a kété so gbé ti téléchargement.",
+        "removePage": "Kété sé {page} so gbé ti téléchargement",
+        "restorePage": "Dossi sé {page} so gbé ti téléchargement",
+        "translateThisPage": "Lingbi sé a",
+        "railSelectNext": "{count, plural, one {Séléksionné sé ti nzönî a ye} other {Séléksionné nzönî # so kuê}}",
+        "railTickHint": "Ohu séléksionné nzönî si bale lingbi.",
+        "railClear": "Fara séléksion",
+        "railOtherLanguage": "Nzönî ago lé {language}. Séléksionné {language} na sô ti tî sina nzönî mbîrî.",
+        "pagesPending": "Kêtê tî nzönî so zo yeke na téléchargement tî o pékê.",
+        "undoPageChanges": "Zua kêtê tî nzönî",
+        "updateDownload": "Kêtê téléchargement",
+        "pdfBehindPages": "PDF azo na yé ti kêtê nzönî so zo"
       },
       "kind": "Mo so ti bango",
       "kindText": "Text",

@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Imetafsiriwa",
           "later": "Kundi linalofuata",
-          "locked": "Zaidi ya kikomo"
+          "locked": "Zaidi ya kikomo",
+          "removed": "Imeondolewa"
         },
         "pageReason": {
           "later": "Kundi hili limejaa. Kurasa hizi zinaweza kwenda kwenye kundi linalofuata.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Ongeza kwenye kurasa zilizotafsiriwa badala yake",
         "progressNoteParts": "Kusitisha kunabaki na sehemu zilizokamilika na kutupilia mbali ile inayofanyika.",
         "progressPart": "Sehemu ya {part} kati ya {parts}",
-        "progressAssembling": "Kuweka kurasa pamoja kwenye hati moja"
+        "progressAssembling": "Kuweka kurasa pamoja kwenye hati moja",
+        "pageUntranslated": "Haijatafsiriwa",
+        "pageUntranslatedNote": "Ukurasa huu haujatafsiriwa. Upakuaji utashikilia kama ulivyo katika asili.",
+        "pageRemovedNote": "Ukurasa huu umeondolewa kwenye upakuaji.",
+        "removePage": "Ondoa ukurasa {page} kutoka kwenye upakuaji",
+        "restorePage": "Rudisha ukurasa {page} kwenye upakuaji",
+        "translateThisPage": "Tafsiri ukurasa huu",
+        "railSelectNext": "{count, plural, one {Chagua ukurasa unaofuata} other {Chagua kurasa # zinazofuata}}",
+        "railTickHint": "Au weka tiki kwenye kurasa za kutafsiri zinazofuata.",
+        "railClear": "Futa uteuzi",
+        "railOtherLanguage": "Kurasa hizi ziko katika {language}. Chagua {language} tena kuongeza kurasa zaidi.",
+        "pagesPending": "Mabadiliko yako ya kurasa bado hayamo kwenye upakuaji",
+        "undoPageChanges": "Rudisha mabadiliko ya kurasa",
+        "updateDownload": "Sasisha upakuaji",
+        "pdfBehindPages": "PDF iko nyuma ya mabadiliko yako ya kurasa"
       },
       "kind": "Nini kitafsiriwe",
       "kindText": "Maandishi",

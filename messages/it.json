@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Tradotto",
           "later": "Prossimo batch",
-          "locked": "Oltre il limite"
+          "locked": "Oltre il limite",
+          "removed": "Rimosso"
         },
         "pageReason": {
           "later": "Questo batch è pieno. Queste pagine possono andare nel prossimo batch.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Aggiungi invece alle pagine tradotte",
         "progressNoteParts": "Se interrompi, mantieni le parti completate e scarti quella in corso.",
         "progressPart": "Parte {part} di {parts}",
-        "progressAssembling": "Unire le pagine in un unico documento"
+        "progressAssembling": "Unire le pagine in un unico documento",
+        "pageUntranslated": "Non tradotta",
+        "pageUntranslatedNote": "Questa pagina non è tradotta. Il download la include così come nell'originale.",
+        "pageRemovedNote": "Questa pagina è stata rimossa dal download.",
+        "removePage": "Rimuovi la pagina {page} dal download",
+        "restorePage": "Reinserisci la pagina {page} nel download",
+        "translateThisPage": "Traduci questa pagina",
+        "railSelectNext": "{count, plural, one {Seleziona la prossima pagina} other {Seleziona le prossime # pagine}}",
+        "railTickHint": "Oppure seleziona le pagine da tradurre dopo.",
+        "railClear": "Cancella selezione",
+        "railOtherLanguage": "Queste pagine sono in {language}. Scegli ancora {language} per aggiungere altre pagine.",
+        "pagesPending": "Le modifiche alle pagine non sono ancora nel download",
+        "undoPageChanges": "Annulla le modifiche alle pagine",
+        "updateDownload": "Aggiorna il download",
+        "pdfBehindPages": "Il PDF non è aggiornato con le modifiche alle pagine"
       },
       "kind": "Cosa tradurre",
       "kindText": "Testo",

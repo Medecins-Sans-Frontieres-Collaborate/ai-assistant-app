@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "Byahinduwe",
           "later": "Muri gahunda ikurikira",
-          "locked": "Harengeje urugero"
+          "locked": "Harengeje urugero",
+          "removed": "Byakuweho"
         },
         "pageReason": {
           "later": "Uyu mubare wuzuye. Izi mpapuro zizajyamo ubutaha.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "Ongeraho ku mpapuro zahinduwe",
         "progressNoteParts": "Guhagarika bisiga ibirangiye, bikajugunya biri mu bikorwa.",
         "progressPart": "Igice {part} muri {parts}",
-        "progressAssembling": "Gushyira impapuro hamwe mu gitekerezo kimwe"
+        "progressAssembling": "Gushyira impapuro hamwe mu gitekerezo kimwe",
+        "pageUntranslated": "Ntibyashyizwe mu Kinyarwanda",
+        "pageUntranslatedNote": "Iyi paji ntishyizwe mu Kinyarwanda. Ishyirwa muri download uko imeze mu mwandiko w'umwimerere.",
+        "pageRemovedNote": "Iyi paji yakuweho muri download.",
+        "removePage": "Kura paji {page} muri download",
+        "restorePage": "Subiza paji {page} muri download",
+        "translateThisPage": "Hindura iyi paji mu Kinyarwanda",
+        "railSelectNext": "{count, plural, one {Hitamo indi paji ikurikira} other {Hitamo izindi paji # zikurikiraho}}",
+        "railTickHint": "Cyangwa shyiraho akamenyetso kuri paji ushaka guhindura ikurikira.",
+        "railClear": "Sukura ibyo wahisemo",
+        "railOtherLanguage": "Izi paji ziri mu {language}. Hitamo {language} kongera kugira ngo wongere izindi paji.",
+        "pagesPending": "Impinduka zakozwe kuri paji ntiziri muri download",
+        "undoPageChanges": "Subiramo impinduka zakozwe kuri paji",
+        "updateDownload": "Hindura download",
+        "pdfBehindPages": "PDF iracyari inyuma y'impinduka zakozwe kuri paji"
       },
       "kind": "Ihinduza ushaka gukora",
       "kindText": "Ibuririro",

@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Přeloženo",
           "later": "Příští dávka",
-          "locked": "Nad limitem"
+          "locked": "Nad limitem",
+          "removed": "Odebráno"
         },
         "pageReason": {
           "later": "Tato dávka je plná. Tyto stránky mohou být v příští dávce.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Přidat ke přeloženým stránkám",
         "progressNoteParts": "Zastavení zachová dokončené části a zahodí tu běžící.",
         "progressPart": "Část {part} z {parts}",
-        "progressAssembling": "Spojují se stránky do jednoho dokumentu"
+        "progressAssembling": "Spojují se stránky do jednoho dokumentu",
+        "pageUntranslated": "Nepřeloženo",
+        "pageUntranslatedNote": "Tato stránka není přeložená. Stažení ji obsahuje v původní podobě.",
+        "pageRemovedNote": "Tato stránka byla ze stažení odebrána.",
+        "removePage": "Odebrat stránku {page} ze stažení",
+        "restorePage": "Vrátit stránku {page} zpět do stažení",
+        "translateThisPage": "Přeložit tuto stránku",
+        "railSelectNext": "{count, plural, one {Vyberte následující stránku} other {Vyberte následujících # stránek}}",
+        "railTickHint": "Nebo zaškrtněte stránky k dalšímu překladu.",
+        "railClear": "Zrušit výběr",
+        "railOtherLanguage": "Tyto stránky jsou v {language}. Vyberte {language} znovu pro přidání dalších stránek.",
+        "pagesPending": "Změny stránek zatím nejsou ve stažení",
+        "undoPageChanges": "Zrušit změny stránek",
+        "updateDownload": "Aktualizovat stažení",
+        "pdfBehindPages": "PDF je pozadu za vašimi změnami stránek"
       },
       "kind": "Co překládat",
       "kindText": "Text",

@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Traduïda",
           "later": "Propera tanda",
-          "locked": "Fora del límit"
+          "locked": "Fora del límit",
+          "removed": "Eliminada"
         },
         "pageReason": {
           "later": "Aquest lot és ple. Aquestes pàgines poden anar a la propera tanda.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Afegeix a les pàgines traduïdes en lloc d’això",
         "progressNoteParts": "Si atures, es mantenen les parts finalitzades i es descarta la que està en procés.",
         "progressPart": "Part {part} de {parts}",
-        "progressAssembling": "Ajuntant les pàgines en un sol document"
+        "progressAssembling": "Ajuntant les pàgines en un sol document",
+        "pageUntranslated": "No traduïda",
+        "pageUntranslatedNote": "Aquesta pàgina no està traduïda. La descàrrega la mantindrà tal com és a l’original.",
+        "pageRemovedNote": "Aquesta pàgina s’ha eliminat de la descàrrega.",
+        "removePage": "Elimina la pàgina {page} de la descàrrega",
+        "restorePage": "Torna a incloure la pàgina {page} a la descàrrega",
+        "translateThisPage": "Traduir aquesta pàgina",
+        "railSelectNext": "{count, plural, one {Selecciona la següent pàgina} other {Selecciona les següents # pàgines}}",
+        "railTickHint": "O marca les pàgines que vols traduir a continuació.",
+        "railClear": "Esborra la selecció",
+        "railOtherLanguage": "Aquestes pàgines són en {language}. Torna a triar {language} per afegir més pàgines.",
+        "pagesPending": "Els canvis de pàgina encara no són a la descàrrega",
+        "undoPageChanges": "Desfés els canvis de pàgina",
+        "updateDownload": "Actualitza la descàrrega",
+        "pdfBehindPages": "El PDF no està actualitzat amb els canvis de pàgina"
       },
       "kind": "Què traduir",
       "kindText": "Text",

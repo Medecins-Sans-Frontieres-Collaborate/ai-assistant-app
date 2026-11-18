@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "Ekomami",
           "later": "Lotome elandi",
-          "locked": "Likolo ya ndelo"
+          "locked": "Likolo ya ndelo",
+          "removed": "Elongwaki"
         },
         "pageReason": {
           "later": "Lotome oyo efuli. Mapɛji oyo ekokende na lotome elandi.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "Kokɔtisa na mapɛji ekómami na esika",
         "progressNoteParts": "Kotika ekotikala biteni esilaki, mpe ekolongola oyo ezali na mosala.",
         "progressPart": "Biteni {part} na {parts}",
-        "progressAssembling": "Kokangisa mapɛji na mokanda moko"
+        "progressAssembling": "Kokangisa mapɛji na mokanda moko",
+        "pageUntranslated": "Ezalaki te na traduction",
+        "pageUntranslatedNote": "Lokasa oyo bazalaka te na traduction. Téléchargement ekozwa yango ndenge ezali na original.",
+        "pageRemovedNote": "Lokasa oyo elongwaki na téléchargement.",
+        "removePage": "Longwa lokasa {page} na téléchargement",
+        "restorePage": "Zongisa lokasa {page} na téléchargement",
+        "translateThisPage": "Traduction lokasa oyo",
+        "railSelectNext": "{count, plural, one {Pona lokasa elandi} other {Pona bilokasa {count} elandi}}",
+        "railTickHint": "To tika bilokasa opesa traduction sima.",
+        "railClear": "Sengwa boponami",
+        "railOtherLanguage": "Bilokasa oyo ezali na {language}. Pona {language} lisusu mpo na kobongisa bilokasa mosusu.",
+        "pagesPending": "Mbongwana na bilokasa na yo ezalaki te na téléchargement",
+        "undoPageChanges": "Retirer mbongwana ya lokasa",
+        "updateDownload": "Bomisa téléchargement",
+        "pdfBehindPages": "PDF ezali sima na mbongwana ya bilokasa na yo"
       },
       "kind": "Nini okolinga kokómisa",
       "kindText": "Maloba",

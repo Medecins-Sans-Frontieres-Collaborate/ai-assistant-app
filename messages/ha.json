@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "An fassara",
           "later": "Rukuni na gaba",
-          "locked": "An fi iyaka"
+          "locked": "An fi iyaka",
+          "removed": "An cire"
         },
         "pageReason": {
           "later": "Wannan rukuni ya cika. Wadannan shafuka za su iya shiga rukuni na gaba.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "Ci gaba da ƙara ga shafukan da aka fassara maimakon haka",
         "progressNoteParts": "Tsayawa yana ajiye sassan da suka gama sannan yana watsar da wanda ke ci gaba.",
         "progressPart": "Sashi {part} daga {parts}",
-        "progressAssembling": "Ana haɗa shafukan zuwa takarda guda"
+        "progressAssembling": "Ana haɗa shafukan zuwa takarda guda",
+        "pageUntranslated": "Ba a fassara ba",
+        "pageUntranslatedNote": "Ba a fassara wannan shafi ba. Zazzagewar za ta ajiye shi yadda yake a asali.",
+        "pageRemovedNote": "An cire wannan shafi daga zazzagewar.",
+        "removePage": "Cire shafi {page} daga cikin zazzagewar",
+        "restorePage": "Mayar da shafi {page} cikin zazzagewar",
+        "translateThisPage": "Fassara wannan shafi",
+        "railSelectNext": "{count, plural, one {Zaɓi shafi na gaba} other {Zaɓi shafuka # na gaba}}",
+        "railTickHint": "Ko dubi shafukan da za a fassara gaba.",
+        "railClear": "Cire zaɓi",
+        "railOtherLanguage": "Waɗannan shafukan suna cikin {language}. Zaɓi {language} kuma don ƙara shafuka.",
+        "pagesPending": "Canjin da kuka yi a shafukan bai shiga zazzagewar ba tukuna",
+        "undoPageChanges": "Soke canjin shafi",
+        "updateDownload": "Sabunta zazzagewar",
+        "pdfBehindPages": "PDF ɗin bai dace da canjin shafukanku ba"
       },
       "kind": "Abin da za a fassara",
       "kindText": "Rubutu",

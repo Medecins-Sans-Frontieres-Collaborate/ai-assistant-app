@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "Harahinduwe",
           "later": "Rukurikirane rukurikira",
-          "locked": "Birengeye urugero"
+          "locked": "Birengeye urugero",
+          "removed": "Yakuwe"
         },
         "pageReason": {
           "later": "Rukurikirane rwuzuye. Izi mpapuro zishobora gushirwa mu rukurikirane rukurikira.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "Ongerako ku mpapuro zahinduwe",
         "progressNoteParts": "Guhagarika bigumiza ibice vyarangiye, bikajanika ibiri mu nzira.",
         "progressPart": "Igice {part} kuri {parts}",
-        "progressAssembling": "Gushira impapuro hamwe mu idoocument imwe"
+        "progressAssembling": "Gushira impapuro hamwe mu idoocument imwe",
+        "pageUntranslated": "Ntirasemuwe",
+        "pageUntranslatedNote": "Iyi paji ntiyasemuwe. Iyo uyikurako iraboneka uko yari mu rurimi rw'umwimerere.",
+        "pageRemovedNote": "Iyi paji yakuwe mu download.",
+        "removePage": "Kuraho paji {page} mu download",
+        "restorePage": "Subiza paji {page} mu download",
+        "translateThisPage": "Semuza iyi paji",
+        "railSelectNext": "{count, plural, one {Hitamo paji ikurikira} other {Hitamo izindi paji # zikurikira}}",
+        "railTickHint": "Cana ku mapaji ushaka gusemuza ikurikira.",
+        "railClear": "Sukura vyahitwe",
+        "railOtherLanguage": "Izi paji ziri mu {language}. Hitamo {language} kugira wongere utere izindi paji.",
+        "pagesPending": "Impinduka zakoze kuri paji ntiziri muri download",
+        "undoPageChanges": "Subira inyuma impinduka zakoze kuri paji",
+        "updateDownload": "Hindura download",
+        "pdfBehindPages": "PDF iri inyuma y'impinduka wakoze kuri paji"
       },
       "kind": "Ivyohindurwa",
       "kindText": "Inyandiko",

@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "Tradui",
           "later": "Nan pwochen pakè",
-          "locked": "Depase limit"
+          "locked": "Depase limit",
+          "removed": "Retire"
         },
         "pageReason": {
           "later": "Pakè sa a chaje deja. Paj sa yo ap ka antre nan pwochen pakè a.",
@@ -3368,7 +3369,21 @@
         "progressNoteParts": "Sispann pwosesis la ap kenbe pati ki fini epi lage sa k ap fèt la.",
         "progressPart": "Pati {part} sou {parts}",
         "progressAssembling": "Ap mete tout paj yo ansanm nan yon sèl dokiman",
-        "earlierReplacing": "{count, plural, one {Rekòmanse ap ranplase # paj ki tradui} other {Rekòmanse ap ranplase # paj ki tradui yo}} lè nouvo tradiksyon an fini."
+        "earlierReplacing": "{count, plural, one {Rekòmanse ap ranplase # paj ki tradui} other {Rekòmanse ap ranplase # paj ki tradui yo}} lè nouvo tradiksyon an fini.",
+        "pageUntranslated": "Pa tradui",
+        "pageUntranslatedNote": "Paj sa a pa tradui. Telechajman an kenbe li jan li ye nan original la.",
+        "pageRemovedNote": "Paj sa a retire nan telechajman an.",
+        "removePage": "Retire paj {page} nan telechajman an",
+        "restorePage": "Retounen paj {page} nan telechajman an",
+        "translateThisPage": "Tradui paj sa a",
+        "railSelectNext": "{count, plural, one {Chwazi pwochen paj la} other {Chwazi # pwochen paj yo}}",
+        "railTickHint": "Oswa make paj ou vle tradui pwochen.",
+        "railClear": "Netwaye seleksyon",
+        "railOtherLanguage": "Paj sa yo ekri an {language}. Chwazi {language} ankò pou ajoute plis paj.",
+        "pagesPending": "Chanjman ou fè sou paj yo pa anndan telechajman an ankò",
+        "undoPageChanges": "Anile chanjman sou paj yo",
+        "updateDownload": "Mete telechajman an ajou",
+        "pdfBehindPages": "PDF la pa gen dènye chanjman sou paj yo"
       },
       "kind": "Kisa pou tradui",
       "kindText": "Tèks",

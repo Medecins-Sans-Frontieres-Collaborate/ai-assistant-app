@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "翻訳済み",
           "later": "次のバッチ",
-          "locked": "上限超過"
+          "locked": "上限超過",
+          "removed": "削除済み"
         },
         "pageReason": {
           "later": "このバッチは満杯です。これらのページは次のバッチにできます。",
@@ -3384,7 +3385,21 @@
         "keepAdding": "翻訳済みページに追加する",
         "progressNoteParts": "停止すると、完了したパートは保持され、進行中のパートは破棄されます。",
         "progressPart": "{parts}中{part}パート",
-        "progressAssembling": "ページを1つのドキュメントにまとめています"
+        "progressAssembling": "ページを1つのドキュメントにまとめています",
+        "pageUntranslated": "未翻訳",
+        "pageUntranslatedNote": "このページは未翻訳です。ダウンロードには原文のまま含まれます。",
+        "pageRemovedNote": "このページはダウンロードから削除されました。",
+        "removePage": "ページ{page}をダウンロードから削除する",
+        "restorePage": "ページ{page}をダウンロードに戻す",
+        "translateThisPage": "このページを翻訳する",
+        "railSelectNext": "{count, plural, one {次のページを選択} other {次の#ページを選択}}",
+        "railTickHint": "または、次に翻訳するページにチェックを入れてください。",
+        "railClear": "選択をクリア",
+        "railOtherLanguage": "これらのページは{language}です。追加するには{language}を再度選んでください。",
+        "pagesPending": "ページの変更はまだダウンロードに反映されていません",
+        "undoPageChanges": "ページ変更を元に戻す",
+        "updateDownload": "ダウンロードを更新",
+        "pdfBehindPages": "PDFがページの変更に追いついていません"
       },
       "kind": "翻訳する対象",
       "kindText": "テキスト",

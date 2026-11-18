@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "תורגם",
           "later": "באצווה הבאה",
-          "locked": "מעבר למגבלה"
+          "locked": "מעבר למגבלה",
+          "removed": "הוסר"
         },
         "pageReason": {
           "later": "אצווה זו מלאה. העמודים האלה ייכנסו לאצווה הבאה.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "הוסף לעמודים המתורגמים במקום",
         "progressNoteParts": "הפסקה תשאיר את החלקים שהסתיימו ותבטל את החלק בתהליך.",
         "progressPart": "חלק {part} מתוך {parts}",
-        "progressAssembling": "מאחד את העמודים למסמך אחד"
+        "progressAssembling": "מאחד את העמודים למסמך אחד",
+        "pageUntranslated": "לא תורגם",
+        "pageUntranslatedNote": "דף זה לא תורגם. ההורדה מכילה אותו כפי שהוא במקור.",
+        "pageRemovedNote": "דף זה הוסר מההורדה.",
+        "removePage": "הסר את הדף {page} מההורדה",
+        "restorePage": "הוסף מחדש את הדף {page} להורדה",
+        "translateThisPage": "תרגם דף זה",
+        "railSelectNext": "{count, plural, one {בחר את הדף הבא} other {בחר את # הדפים הבאים}}",
+        "railTickHint": "או סמנו את הדפים לתרגום הבא.",
+        "railClear": "נקה בחירה",
+        "railOtherLanguage": "דפים אלו הם ב־{language}. בחר/י {language} שוב כדי להוסיף דפים נוספים.",
+        "pagesPending": "שינויים בדפים שלך טרם נכנסו להורדה",
+        "undoPageChanges": "בטל שינויים בדפים",
+        "updateDownload": "עדכן את ההורדה",
+        "pdfBehindPages": "ה-PDF לא מעודכן מול שינויי הדפים שלך"
       },
       "kind": "מה לתרגם",
       "kindText": "טקסט",

@@ -3397,7 +3397,8 @@
         "pageState": {
           "translated": "已翻译",
           "later": "下批处理",
-          "locked": "超出上限"
+          "locked": "超出上限",
+          "removed": "已移除"
         },
         "pageReason": {
           "later": "本批次已满。这些页面将进入下一个批次。",
@@ -3415,7 +3416,21 @@
         "keepAdding": "改为添加到已翻译页面",
         "progressNoteParts": "停止后将保留已完成部分，放弃正在进行中的部分。",
         "progressPart": "第 {part} 部分，共 {parts} 部分",
-        "progressAssembling": "正在将页面组合成一个文档"
+        "progressAssembling": "正在将页面组合成一个文档",
+        "pageUntranslated": "未翻译",
+        "pageUntranslatedNote": "此页面尚未翻译。下载时将保留原文内容。",
+        "pageRemovedNote": "此页面已从下载内容中移除。",
+        "removePage": "从下载中移除第 {page} 页",
+        "restorePage": "将第 {page} 页重新加入下载内容",
+        "translateThisPage": "翻译此页面",
+        "railSelectNext": "{count, plural, one {选择下一页} other {选择接下来的 # 页}}",
+        "railTickHint": "或勾选要下一步翻译的页面。",
+        "railClear": "清除选择",
+        "railOtherLanguage": "这些页面使用 {language}。再次选择 {language} 可添加更多页面。",
+        "pagesPending": "您的页面更改尚未加入下载内容",
+        "undoPageChanges": "撤销页面更改",
+        "updateDownload": "更新下载内容",
+        "pdfBehindPages": "PDF 版本未包含您的页面更改"
       },
       "kind": "翻译内容",
       "kindText": "文本",

@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Vertaald",
           "later": "Volgende batch",
-          "locked": "Boven limiet"
+          "locked": "Boven limiet",
+          "removed": "Verwijderd"
         },
         "pageReason": {
           "later": "Deze batch is vol. Deze pagina's kunnen in de volgende batch mee.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "In plaats daarvan toevoegen aan de vertaalde pagina's",
         "progressNoteParts": "Bij stoppen worden de afgeronde delen bewaard en het deel dat bezig is wordt verwijderd.",
         "progressPart": "Deel {part} van {parts}",
-        "progressAssembling": "De pagina's samenvoegen tot één document"
+        "progressAssembling": "De pagina's samenvoegen tot één document",
+        "pageUntranslated": "Niet vertaald",
+        "pageUntranslatedNote": "Deze pagina is niet vertaald. De download bevat deze zoals in het origineel.",
+        "pageRemovedNote": "Deze pagina is uit de download verwijderd.",
+        "removePage": "Verwijder pagina {page} uit de download",
+        "restorePage": "Zet pagina {page} terug in de download",
+        "translateThisPage": "Vertaal deze pagina",
+        "railSelectNext": "{count, plural, one {Selecteer de volgende pagina} other {Selecteer de volgende # pagina's}}",
+        "railTickHint": "Of vink de pagina's aan die u als volgende wilt vertalen.",
+        "railClear": "Selectie wissen",
+        "railOtherLanguage": "Deze pagina's zijn in {language}. Kies {language} opnieuw om meer pagina's toe te voegen.",
+        "pagesPending": "Uw pagina-aanpassingen zitten nog niet in de download",
+        "undoPageChanges": "Wijzigingen op pagina's ongedaan maken",
+        "updateDownload": "Download bijwerken",
+        "pdfBehindPages": "De PDF loopt achter op uw pagina-aanpassingen"
       },
       "kind": "Wat vertalen",
       "kindText": "Tekst",

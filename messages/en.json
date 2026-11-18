@@ -2493,7 +2493,8 @@
         "pageState": {
           "translated": "Translated",
           "later": "Next batch",
-          "locked": "Over the limit"
+          "locked": "Over the limit",
+          "removed": "Removed"
         },
         "pageReason": {
           "later": "This batch is full. These pages can go in the next batch.",
@@ -2511,7 +2512,21 @@
         "keepAdding": "Add to the translated pages instead",
         "progressNoteParts": "Stopping keeps the parts that have finished and discards the one in progress.",
         "progressPart": "Part {part} of {parts}",
-        "progressAssembling": "Putting the pages into one document"
+        "progressAssembling": "Putting the pages into one document",
+        "pageUntranslated": "Not translated",
+        "pageUntranslatedNote": "This page is not translated. The download holds it as it is in the original.",
+        "pageRemovedNote": "This page is removed from the download.",
+        "removePage": "Remove page {page} from the download",
+        "restorePage": "Put page {page} back in the download",
+        "translateThisPage": "Translate this page",
+        "railSelectNext": "{count, plural, one {Select the next page} other {Select next # pages}}",
+        "railTickHint": "Or tick the pages to translate next.",
+        "railClear": "Clear selection",
+        "railOtherLanguage": "These pages are in {language}. Choose {language} again to add more pages.",
+        "pagesPending": "Your page changes are not in the download yet",
+        "undoPageChanges": "Undo page changes",
+        "updateDownload": "Update the download",
+        "pdfBehindPages": "The PDF is behind your page changes"
       },
       "kind": "What to translate",
       "kindText": "Text",

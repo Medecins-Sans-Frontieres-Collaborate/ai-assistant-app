@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "تمت الترجمة",
           "later": "الدفعة التالية",
-          "locked": "يتجاوز الحد"
+          "locked": "يتجاوز الحد",
+          "removed": "تمت إزالته"
         },
         "pageReason": {
           "later": "هذه الدفعة ممتلئة. يمكن وضع هذه الصفحات في الدفعة التالية.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "أضف إلى الصفحات المترجمة بدلاً من ذلك",
         "progressNoteParts": "إيقاف الترجمة يحتفظ بالأجزاء التي اكتملت ويستبعد الجزء الجاري العمل عليه.",
         "progressPart": "الجزء {part} من {parts}",
-        "progressAssembling": "جمع الصفحات في وثيقة واحدة"
+        "progressAssembling": "جمع الصفحات في وثيقة واحدة",
+        "pageUntranslated": "غير مترجمة",
+        "pageUntranslatedNote": "هذه الصفحة غير مترجمة. سيتم تنزيلها كما هي في النسخة الأصلية.",
+        "pageRemovedNote": "تمت إزالة هذه الصفحة من التنزيل.",
+        "removePage": "إزالة الصفحة {page} من التنزيل",
+        "restorePage": "إرجاع الصفحة {page} إلى التنزيل",
+        "translateThisPage": "ترجمة هذه الصفحة",
+        "railSelectNext": "{count, plural, one {اختر الصفحة التالية} other {اختر # صفحات تالية}}",
+        "railTickHint": "أو حدد الصفحات لترجمتها لاحقًا.",
+        "railClear": "إلغاء التحديد",
+        "railOtherLanguage": "هذه الصفحات باللغة {language}. اختر {language} مرة أخرى لإضافة صفحات أخرى.",
+        "pagesPending": "تغييرات صفحاتك غير مضافة للتنزيل بعد",
+        "undoPageChanges": "تراجع عن تغييرات الصفحات",
+        "updateDownload": "تحديث التنزيل",
+        "pdfBehindPages": "ملف PDF متأخر عن تغييرات الصفحات الخاصة بك"
       },
       "kind": "ما الذي تريد ترجمته",
       "kindText": "نص",

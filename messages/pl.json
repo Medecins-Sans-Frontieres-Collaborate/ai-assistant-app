@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Przetłumaczone",
           "later": "Następna partia",
-          "locked": "Przekroczono limit"
+          "locked": "Przekroczono limit",
+          "removed": "Usunięto"
         },
         "pageReason": {
           "later": "Ta partia jest pełna. Te strony trafią do następnej partii.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Dodaj do przetłumaczonych stron",
         "progressNoteParts": "Zatrzymanie pozostawi ukończone części, a przerwie tę w trakcie.",
         "progressPart": "Część {part} z {parts}",
-        "progressAssembling": "Scalanie stron w jeden dokument"
+        "progressAssembling": "Scalanie stron w jeden dokument",
+        "pageUntranslated": "Nieprzetłumaczono",
+        "pageUntranslatedNote": "Ta strona nie została przetłumaczona. Pobieranie zawiera ją w oryginalnej wersji.",
+        "pageRemovedNote": "Ta strona została usunięta z pobierania.",
+        "removePage": "Usuń stronę {page} z pobierania",
+        "restorePage": "Przywróć stronę {page} do pobierania",
+        "translateThisPage": "Przetłumacz tę stronę",
+        "railSelectNext": "{count, plural, one {Wybierz następną stronę} other {Wybierz następne # strony}}",
+        "railTickHint": "Lub zaznacz strony do kolejnego tłumaczenia.",
+        "railClear": "Wyczyść wybór",
+        "railOtherLanguage": "Te strony są w języku {language}. Wybierz ponownie {language}, aby dodać kolejne strony.",
+        "pagesPending": "Zmiany na stronach nie zostały jeszcze uwzględnione w pobieraniu",
+        "undoPageChanges": "Cofnij zmiany na stronach",
+        "updateDownload": "Zaktualizuj pobieranie",
+        "pdfBehindPages": "PDF jest nieaktualny względem zmian stron"
       },
       "kind": "Co tłumaczyć",
       "kindText": "Tekst",

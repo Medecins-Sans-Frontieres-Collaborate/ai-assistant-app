@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "ተተርጎሞ",
           "later": "ባቶም ቀጺሉ",
-          "locked": "ቅድሚ ደረበ"
+          "locked": "ቅድሚ ደረበ",
+          "removed": "ተወጸነ"
         },
         "pageReason": {
           "later": "እዚ ባቶም ዝተልዓለ። እዚ ገጽታት ኣብ ባቶም ቀጺሉ ክኸውኑ ይኽእሉ.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "ኣብ ተተርጎመ ገጽታት ደምስሱ",
         "progressNoteParts": "ምቁራብ እዋነት ዝተዋጽኡ ክፋል ይዕበዩ፡ እዚ ተርጉም ዝተግበሩ እውዒ.",
         "progressPart": "ክፋል {part} ካብ {parts}",
-        "progressAssembling": "ገጽታት ኣብ ሓደ ደብዳይ ይኣእትዉ"
+        "progressAssembling": "ገጽታት ኣብ ሓደ ደብዳይ ይኣእትዉ",
+        "pageUntranslated": "ኣይተተረጎምን",
+        "pageUntranslatedNote": "እዚ ገጽ ኣይተተረጎምን። ዝውሃበሉ ሓሳብ ኣብ ናይ መጀመርነ ፅሑፍ እንዳበቃዕዎ ኣሎ።",
+        "pageRemovedNote": "እዚ ገጽ ካብ ዝውሃበሉ ተወጸነ።",
+        "removePage": "ገጽ {page} ካብ ዝውሃበሉ ወጽን",
+        "restorePage": "ገጽ {page} ኣብ ዝውሃበሉ ደፍለ",
+        "translateThisPage": "እዚ ገጽ ተረጉም",
+        "railSelectNext": "{count, plural, one {ንዝቀጠለ ገጽ ምረፅ} other {ዝቀጠሉ # ገፆም ምረፅ}}",
+        "railTickHint": "ወይ ገፆም ተደርሲ ንምትረጉም ምረፅ።",
+        "railClear": "ዝተመረፁ ምስጢራት ኣልማዝ",
+        "railOtherLanguage": "እዚ ገፆም ኣብ {language} ኣሎ። {language} እንደገና ምረፅ ንተወሳኺ ገፆም ንምዝያዝ.",
+        "pagesPending": "ሕይሽቶም ገፆም ኣይኮኑን ተወሲዱ ዝውሃበሉ እስካ ሓደሽ ኣሎ.",
+        "undoPageChanges": "ሕይሽቶም ገፆም ምተንሳነ",
+        "updateDownload": "ዝውሃበሉ ሓደስ",
+        "pdfBehindPages": "PDF ካብ ሕይሽቶም ገፆም ባሕሪ ኣሎ"
       },
       "kind": "ንመተርጎም ዝግበሩ",
       "kindText": "ጽሑፋ",

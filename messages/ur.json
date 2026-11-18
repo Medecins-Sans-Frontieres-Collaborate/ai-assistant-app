@@ -3396,7 +3396,8 @@
         "pageState": {
           "translated": "ترجمہ شدہ",
           "later": "اگلا بیچ",
-          "locked": "حد سے زیادہ"
+          "locked": "حد سے زیادہ",
+          "removed": "حذف کردیا گیا"
         },
         "pageReason": {
           "later": "یہ بیچ مکمل ہو چکا ہے۔ یہ صفحات اگلے بیچ میں شامل کیے جا سکتے ہیں۔",
@@ -3414,7 +3415,21 @@
         "keepAdding": "ترجمہ شدہ صفحات میں مزید شامل کریں",
         "progressNoteParts": "رکنے پر مکمل شدہ حصے محفوظ رہیں گے اور جاری عمل کو ختم کر دیا جائے گا۔",
         "progressPart": "حصہ {part} / {parts}",
-        "progressAssembling": "صفحات کو ایک دستاویز میں جوڑ رہے ہیں"
+        "progressAssembling": "صفحات کو ایک دستاویز میں جوڑ رہے ہیں",
+        "pageUntranslated": "ترجمہ نہیں ہوا",
+        "pageUntranslatedNote": "اس صفحے کا ترجمہ نہیں ہوا۔ ڈاؤن لوڈ میں یہ صفحہ اصل حالت میں شامل ہے۔",
+        "pageRemovedNote": "یہ صفحہ ڈاؤن لوڈ سے ہٹا دیا گیا ہے۔",
+        "removePage": "صفحہ {page} کو ڈاؤن لوڈ سے ہٹائیں",
+        "restorePage": "صفحہ {page} کو دوبارہ ڈاؤن لوڈ میں شامل کریں",
+        "translateThisPage": "اس صفحے کا ترجمہ کریں",
+        "railSelectNext": "{count, plural, one {اگلا صفحہ منتخب کریں} other {اگلے # صفحات منتخب کریں}}",
+        "railTickHint": "یا اگلے ترجمے کے لیے صفحات پر نشان لگائیں۔",
+        "railClear": "انتخاب صاف کریں",
+        "railOtherLanguage": "یہ صفحات {language} میں ہیں۔ مزید صفحات شامل کرنے کے لیے دوبارہ {language} منتخب کریں۔",
+        "pagesPending": "آپ کی صفحہ تبدیلیاں ابھی ڈاؤن لوڈ میں شامل نہیں ہوئیں",
+        "undoPageChanges": "صفحہ تبدیلیاں واپس لیں",
+        "updateDownload": "ڈاؤن لوڈ کو اپڈیٹ کریں",
+        "pdfBehindPages": "PDF آپ کی صفحہ تبدیلیوں سے پیچھے ہے"
       },
       "kind": "کیا ترجمہ کرنا ہے",
       "kindText": "متن",

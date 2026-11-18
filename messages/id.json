@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Sudah diterjemahkan",
           "later": "Batch berikutnya",
-          "locked": "Melebihi batas"
+          "locked": "Melebihi batas",
+          "removed": "Dihapus"
         },
         "pageReason": {
           "later": "Batch ini sudah penuh. Halaman-halaman ini bisa masuk batch berikutnya.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Tambahkan ke halaman yang diterjemahkan",
         "progressNoteParts": "Penghentian akan menyimpan bagian yang telah selesai dan membuang yang sedang berjalan.",
         "progressPart": "Bagian {part} dari {parts}",
-        "progressAssembling": "Menggabungkan halaman ke satu dokumen"
+        "progressAssembling": "Menggabungkan halaman ke satu dokumen",
+        "pageUntranslated": "Belum diterjemahkan",
+        "pageUntranslatedNote": "Halaman ini belum diterjemahkan. Unduhan akan tetap menyimpan halaman ini sesuai aslinya.",
+        "pageRemovedNote": "Halaman ini telah dihapus dari unduhan.",
+        "removePage": "Hapus halaman {page} dari unduhan",
+        "restorePage": "Kembalikan halaman {page} ke unduhan",
+        "translateThisPage": "Terjemahkan halaman ini",
+        "railSelectNext": "{count, plural, one {Pilih halaman berikutnya} other {Pilih # halaman berikutnya}}",
+        "railTickHint": "Atau centang halaman yang ingin diterjemahkan berikutnya.",
+        "railClear": "Hapus pilihan",
+        "railOtherLanguage": "Halaman-halaman ini berbahasa {language}. Pilih {language} lagi untuk menambah lebih banyak halaman.",
+        "pagesPending": "Perubahan halaman Anda belum masuk ke unduhan",
+        "undoPageChanges": "Batalkan perubahan halaman",
+        "updateDownload": "Perbarui unduhan",
+        "pdfBehindPages": "PDF belum mengikuti perubahan halaman Anda"
       },
       "kind": "Apa yang akan diterjemahkan",
       "kindText": "Teks",

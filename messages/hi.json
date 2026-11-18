@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "अनुवादित",
           "later": "अगला बैच",
-          "locked": "सीमा से अधिक"
+          "locked": "सीमा से अधिक",
+          "removed": "हटा दिया गया"
         },
         "pageReason": {
           "later": "यह बैच पूरा है। ये पृष्ठ अगले बैच में जा सकते हैं।",
@@ -3384,7 +3385,21 @@
         "keepAdding": "इसके बजाय अनुवादित पृष्ठों में जोड़ें",
         "progressNoteParts": "रोकने पर पूर्ण हुए भाग सुरक्षित रहते हैं और प्रगति पर भाग हट जाता है।",
         "progressPart": "भाग {part} / {parts}",
-        "progressAssembling": "सभी पृष्ठों को एक दस्तावेज़ में जोड़ रहे हैं"
+        "progressAssembling": "सभी पृष्ठों को एक दस्तावेज़ में जोड़ रहे हैं",
+        "pageUntranslated": "अनुवाद नहीं हुआ",
+        "pageUntranslatedNote": "यह पृष्ठ अनुवादित नहीं है। डाउनलोड में यह अपने मूल रूप में ही रहेगा।",
+        "pageRemovedNote": "यह पृष्ठ डाउनलोड से हटा दिया गया है।",
+        "removePage": "डाउनलोड से पृष्ठ {page} हटाएँ",
+        "restorePage": "डाउनलोड में पृष्ठ {page} पुनः जोड़ें",
+        "translateThisPage": "इस पृष्ठ का अनुवाद करें",
+        "railSelectNext": "{count, plural, one {अगला पृष्ठ चुनें} other {अगले # पृष्ठ चुनें}}",
+        "railTickHint": "या अनुवाद के लिए अगले पृष्ठ चुनें।",
+        "railClear": "चयन हटाएँ",
+        "railOtherLanguage": "ये पृष्ठ {language} में हैं। और पृष्ठ जोड़ने के लिए पुनः {language} चुनें।",
+        "pagesPending": "आपके पृष्ठ परिवर्तन अभी डाउनलोड में नहीं हैं",
+        "undoPageChanges": "पृष्ठ परिवर्तनों को पूर्ववत करें",
+        "updateDownload": "डाउनलोड अपडेट करें",
+        "pdfBehindPages": "PDF आपके पृष्ठ परिवर्तनों से पीछे है"
       },
       "kind": "क्या अनुवादित करना है",
       "kindText": "पाठ",

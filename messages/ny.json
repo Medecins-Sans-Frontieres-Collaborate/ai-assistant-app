@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "Yamasuliridwa",
           "later": "Batch yotsatira",
-          "locked": "Kupitirira malire"
+          "locked": "Kupitirira malire",
+          "removed": "Chuchotsedwa"
         },
         "pageReason": {
           "later": "Batch iyi yazadza. Masamba awa atha kuyikidwa mu batch yotsatira.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "Onjezani ku masamba amamasuliridwa m'malo mwake",
         "progressNoteParts": "Kusiya kusunga zigawo zomalizidwa ndikuchotsa zomwe zikuchitika.",
         "progressPart": "Gawo {part} mwa {parts}",
-        "progressAssembling": "Kuphatikiza masamba mu chikalata chimodzi"
+        "progressAssembling": "Kuphatikiza masamba mu chikalata chimodzi",
+        "pageUntranslated": "Sanasinthidwe",
+        "pageUntranslatedNote": "Tsambali sanasinthidwe. Kutsitsa kukuyikapo tsambali monga momwe lili kapena zinenero zoyambirira.",
+        "pageRemovedNote": "Tsambali chuchotsedwa pa kutsitsa.",
+        "removePage": "Chotsani tsamba {page} pa kutsitsa",
+        "restorePage": "Bwezeretsani tsamba {page} m'kutsitsa",
+        "translateThisPage": "Sinthani tsambali",
+        "railSelectNext": "{count, plural, one {Sankhani tsamba lotsatira} other {Sankhani masamba # otsatira}}",
+        "railTickHint": "Kapena chekeni masamba omwe mukufuna kusintha otsatira.",
+        "railClear": "Chotsani zomwe mwasankha",
+        "railOtherLanguage": "Masamba awa ali mu {language}. Sankhani {language} kachiwiri kuti muwonjezere masamba.",
+        "pagesPending": "Kusintha kwanu pa masamba sikunakhale mu kutsitsa",
+        "undoPageChanges": "Bwererani kutsopano pa kusintha kwa tsamba",
+        "updateDownload": "Sinthani kutsitsa",
+        "pdfBehindPages": "PDF imakhala yotsatira kusintha kwanu pa masamba"
       },
       "kind": "Choti masulire",
       "kindText": "Malemba",

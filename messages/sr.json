@@ -3350,7 +3350,8 @@
         "pageState": {
           "translated": "Prevedeno",
           "later": "Sledeća serija",
-          "locked": "Preko limita"
+          "locked": "Preko limita",
+          "removed": "Uklonjeno"
         },
         "pageReason": {
           "later": "Ova serija je puna. Ove stranice se mogu prevesti u sledećoj seriji.",
@@ -3368,7 +3369,21 @@
         "keepAdding": "Umesto toga dodajte novo prevedenim stranicama",
         "progressNoteParts": "Zaustavljanjem se čuvaju završeni delovi, a odbacuje onaj u toku.",
         "progressPart": "Deo {part} od {parts}",
-        "progressAssembling": "Spajanje stranica u jedan dokument"
+        "progressAssembling": "Spajanje stranica u jedan dokument",
+        "pageUntranslated": "Nije prevedeno",
+        "pageUntranslatedNote": "Ova stranica nije prevedena. Preuzimanje je prikazuje onako kako je u originalu.",
+        "pageRemovedNote": "Ova stranica je uklonjena iz preuzimanja.",
+        "removePage": "Uklonite stranicu {page} iz preuzimanja",
+        "restorePage": "Vratite stranicu {page} u preuzimanje",
+        "translateThisPage": "Prevedite ovu stranicu",
+        "railSelectNext": "{count, plural, one {Izaberite sledeću stranicu} other {Izaberite sledećih # stranica}}",
+        "railTickHint": "Ili označite stranice koje želite da prevedete sledeće.",
+        "railClear": "Obrišite izbor",
+        "railOtherLanguage": "Ove stranice su na jeziku {language}. Izaberite {language} ponovo da dodate još stranica.",
+        "pagesPending": "Vaše promene stranica još nisu uključene u preuzimanje",
+        "undoPageChanges": "Poništite promene stranica",
+        "updateDownload": "Ažurirajte preuzimanje",
+        "pdfBehindPages": "PDF zaostaje za vašim promenama stranica"
       },
       "kind": "Šta prevoditi",
       "kindText": "Tekst",

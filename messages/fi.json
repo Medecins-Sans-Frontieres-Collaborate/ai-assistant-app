@@ -3366,7 +3366,8 @@
         "pageState": {
           "translated": "Käännetty",
           "later": "Seuraava erä",
-          "locked": "Ylittää rajan"
+          "locked": "Ylittää rajan",
+          "removed": "Poistettu"
         },
         "pageReason": {
           "later": "Tämä erä on täynnä. Nämä sivut voidaan lisätä seuraavaan erään.",
@@ -3384,7 +3385,21 @@
         "keepAdding": "Lisää käännettyihin sivuihin sen sijaan",
         "progressNoteParts": "Pysäyttäminen säilyttää valmiit osat ja keskeyttää käynnissä olevan.",
         "progressPart": "Osa {part} / {parts}",
-        "progressAssembling": "Sivuja yhdistetään yhdeksi dokumentiksi"
+        "progressAssembling": "Sivuja yhdistetään yhdeksi dokumentiksi",
+        "pageUntranslated": "Ei käännetty",
+        "pageUntranslatedNote": "Tätä sivua ei ole käännetty. Lataus sisältää sen alkuperäisessä muodossa.",
+        "pageRemovedNote": "Tämä sivu on poistettu latauksesta.",
+        "removePage": "Poista sivu {page} latauksesta",
+        "restorePage": "Palauta sivu {page} lataukseen",
+        "translateThisPage": "Käännä tämä sivu",
+        "railSelectNext": "{count, plural, one {Valitse seuraava sivu} other {Valitse seuraavat # sivua}}",
+        "railTickHint": "Tai valitse sivut, jotka haluat kääntää seuraavaksi.",
+        "railClear": "Tyhjennä valinta",
+        "railOtherLanguage": "Nämä sivut ovat kielellä {language}. Valitse {language} uudelleen lisätäksesi lisää sivuja.",
+        "pagesPending": "Sivumuutoksesi eivät ole vielä latauksessa",
+        "undoPageChanges": "Kumoa sivumuutokset",
+        "updateDownload": "Päivitä lataus",
+        "pdfBehindPages": "PDF ei ole ajan tasalla sivumuutostesi kanssa"
       },
       "kind": "Mitä käännetään",
       "kindText": "Teksti",
