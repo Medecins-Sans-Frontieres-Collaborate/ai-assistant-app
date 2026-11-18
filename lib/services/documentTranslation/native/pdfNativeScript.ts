@@ -419,8 +419,13 @@ def command_rebuild(job):
                                                archive=archive, scale_low=MIN_SCALE)
             report.append({'id': unit['id'], 'page': page_no, 'n': unit['n'],
                            'scale': round(scale, 3), 'fits': spare >= 0})
+    # Images are the slow, heavy part of the output: a caller that already holds a page's
+    # images (it did not change) asks for the others only. Absent means every rebuilt page.
+    image_pages = job.get('imagePages')
     files = {}
     for page_no in pages:
+        if image_pages is not None and page_no not in image_pages:
+            continue
         labelled = [u for u in units if u['page'] == page_no and u['id'] in translations]
         files['check_%d.png' % page_no] = side_by_side(render(original[page_no - 1]),
                                                        render(doc[page_no - 1], labelled, outline='room'))
