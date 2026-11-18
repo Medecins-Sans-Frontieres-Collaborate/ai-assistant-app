@@ -290,6 +290,22 @@ was, a batch of pages at a time. The rules live in
   batch's `unitsIds`, which returns one PDF of the whole document with the
   translated pages replaced, and one extraction id for later re-renders.
   A different target language starts over instead of adding.
+- **Page list of a finished translation**
+  (`Formatted/FormattedPageRail.tsx`): every page of the source, as the
+  download will hold it. Translated pages show their rebuilt image; pages
+  not translated are dimmed and marked, and open as their original; removed
+  pages are greyed out with a way back. Untranslated pages have a tick box:
+  "Select next N" ticks the next batch, and "Translate N pages" runs the
+  ticked pages with the run's own depth and adds them
+  (`planTickedBatch`; the same limits as the setup).
+- **Removing pages from the download**: `run.removedPages` is what the
+  person wants left out, `run.pdfRemovedPages` what the stored PDF leaves
+  out (convention in `formattedDocument.ts`). A difference is a pending
+  change in the same banner as edits; "Update the download" renders with
+  `omitPages`, which the rebuild script applies last, so page numbers
+  always mean source pages. A removed page keeps its translation, is never
+  put in a batch, and the last page left cannot be removed (the render
+  route answers 400 `NO_PAGES_LEFT`).
 - **Enforcement**: the run route refuses more pages than a request or the
   person's largest batch; the render route refuses a result with more
   translated pages than the document limit (`DOCUMENT_PAGE_LIMIT`). The
