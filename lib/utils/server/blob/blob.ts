@@ -46,6 +46,8 @@ export interface UploadStreamAzureStorageArgs {
 }
 
 export interface BlobStorage {
+  /** Restarts a blob's lifecycle clock; false when it does not exist. */
+  touch(blobName: string): Promise<boolean>;
   upload(
     blobName: string,
     content: string | Buffer,
@@ -391,6 +393,31 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       { label: 'blob.deleteIfExists' },
     );
     return result.succeeded;
+  }
+
+  /**
+   * Marks a blob as written now without changing its content, so a
+   * lifecycle rule counting days since the last modification starts over.
+   * (Setting a blob's metadata updates its Last-Modified time.)
+   *
+   * @param blobName - The blob.
+   * @returns False when the blob does not exist.
+   */
+  async touch(blobName: string): Promise<boolean> {
+    const blockBlobClient = this.blobServiceClient
+      .getContainerClient(this.containerName as string)
+      .getBlockBlobClient(blobName);
+    try {
+      await withAzureRetry(
+        () =>
+          blockBlobClient.setMetadata({ touched: new Date().toISOString() }),
+        { label: 'blob.touch' },
+      );
+      return true;
+    } catch (error) {
+      if ((error as { statusCode?: number }).statusCode === 404) return false;
+      throw error;
+    }
   }
 
   async listBlobs(prefix: string): Promise<string[]> {
