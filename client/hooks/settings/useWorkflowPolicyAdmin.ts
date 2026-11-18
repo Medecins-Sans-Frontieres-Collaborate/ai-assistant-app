@@ -6,6 +6,7 @@ import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 
 import {
   WorkflowFeatureId,
+  WorkflowFeatureSetting,
   WorkflowPolicy,
 } from '@/lib/services/workflows/policy/types';
 
@@ -44,7 +45,7 @@ export function useWorkflowPolicyAdmin() {
   const save = useMutation({
     mutationFn: async (input: {
       workflows: Record<ConversationWorkflowType, { enabled: boolean }>;
-      features: Record<WorkflowFeatureId, { enabled: boolean }>;
+      features: Record<WorkflowFeatureId, WorkflowFeatureSetting>;
       etag: string | null;
     }) => {
       const response = await fetch('/api/workflows/policy', {
