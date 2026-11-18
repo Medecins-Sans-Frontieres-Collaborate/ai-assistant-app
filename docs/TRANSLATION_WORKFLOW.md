@@ -165,10 +165,41 @@ above its trigger but flips below when the space above can't fit it (the
 workspace trigger sits at the top of the window), clamps horizontally,
 and repositions on scroll/resize while open.
 
+## Text or Document, Quick or Reviewed
+
+The toolbar offers two things to translate, and a row beneath it holds the
+choices that belong to each:
+
+| Choice      | Where         | Options                                                       |
+| ----------- | ------------- | ------------------------------------------------------------- |
+| What        | toolbar       | **Text** (the source pane) or **Document** (the uploaded PDF) |
+| Layout      | row, Document | **Text only** (default) or **Preserve formatting**            |
+| Translation | row           | **Quick** or **Reviewed**; not shown for Document > Text only |
+
+- **State**: `mode` is still `quick`, `agentic` or `document`. Text and
+  Document each keep their own depth: `textMode` remembers the text mode
+  while in Document (absent means `agentic`), and `documentDepth` is the
+  formatted layout's (absent means `quick`).
+- **Document > Text only** is translated by the document service in one
+  pass, so it has no Quick / Reviewed choice.
+- **A PDF uploaded into Text** is read as text. A strip then offers
+  "Translate as a document", which switches to Document with the file
+  kept; "Keep as text" dismisses it for that file.
+- **Upload document**: with OneDrive / SharePoint available to the person
+  (the Microsoft 365 files flag and their connect opt-in), the button
+  opens the chat's "Add to chat" picker, hosted (`AddToChatHost` in
+  `components/Chat/ChatInput/AddToChatDialog.tsx`) with two sources, this
+  device and OneDrive / SharePoint / Teams files, and the workspace's file
+  types. A picked file is downloaded and loaded exactly as a device upload
+  is. Without Microsoft 365 the button opens the system file dialog.
+- **No target language**: Translate is not disabled for that alone. The
+  language control is marked and says "Choose a target language to
+  translate" while it is the only thing missing, and pressing Translate
+  opens the picker (`languageMissing` / `askForLanguage` in the workspace).
+
 ## Document mode
 
-A third mode beside Quick and Reviewed, for translating the uploaded PDF
-itself. It has two layouts, chosen in a row under the toolbar. The row
+For translating the uploaded PDF itself. It has two layouts, chosen in a row under the toolbar. The row
 appears while the "Preserve formatting for PDFs" feature is on in
 Admin > Workflows (under Translation; on by default). With the feature off
 there is one layout and no row, and the server refuses the pipeline's
@@ -219,8 +250,8 @@ page.
 
 ## Document mode: preserve formatting
 
-Rebuilds up to `NATIVE_PDF_MAX_PAGES` (6) pages of a PDF with the translation
-laid out where the source text was. The rules live in
+Rebuilds pages of a PDF with the translation laid out where the source text
+was, a batch of pages at a time. The rules live in
 `lib/utils/shared/translation/nativePdf.ts` (pipeline) and
 `formattedDocument.ts` (screen); the screens are in
 `components/Workflows/Translation/Formatted/`.
@@ -239,24 +270,56 @@ laid out where the source text was. The rules live in
   streams one JSON line per step, then the result; `POST /render` lays the
   pages out again from edited text without translating anything;
   `POST /unit` rewrites one block (shorten, change as instructed, translate).
-- **State**: the run is stored in workflow state as `formattedRun`. It holds
-  ids of the stored source and extraction, so a re-render needs nothing else
-  from the server. A run belongs to the document it was made from.
+- **Batches and limits**: a document is translated in batches. Three
+  numbers, set in Admin > Workflows under the feature, bound them: the
+  pages a batch takes by default, the largest batch a person may raise it
+  to (in the setup, "Pages per batch"), and the pages of one document that
+  may be translated in total. Overrides give other numbers to named
+  people, a mail domain or a directory attribute (person outranks
+  attribute outranks domain). Compiled bounds in `WORKFLOW_FEATURES`
+  (`lib/services/workflows/policy/types.ts`) hold whatever is saved.
+- **Page states** (`planBatch` / `batchPageState`): each preview is in this
+  batch, free to add, translated by an earlier batch, waiting for a later
+  batch (this one is full), or over the document limit. Only the first two
+  have a checkbox.
+- **Requests**: one request takes `NATIVE_PDF_MAX_PAGES` (6) pages. A
+  larger batch is sent as several requests in turn; what finished is kept
+  if a later one fails or the person stops.
+- **One result**: after a finished run the toolbar offers "Add pages". The
+  new batch is joined to the earlier ones by `POST /render` with every
+  batch's `unitsIds`, which returns one PDF of the whole document with the
+  translated pages replaced, and one extraction id for later re-renders.
+  A different target language starts over instead of adding.
+- **Enforcement**: the run route refuses more pages than a request or the
+  person's largest batch; the render route refuses a result with more
+  translated pages than the document limit (`DOCUMENT_PAGE_LIMIT`). The
+  server keeps no count per document, so the limit holds per result, not
+  across separate conversations.
+- **State**: the run is stored in workflow state as `formattedRun` and
+  holds every batch so far. It holds ids of the stored source and
+  extraction, so a re-render needs nothing else from the server. A run
+  belongs to the document it was made from.
 - **Editing convention** (stated once, in `formattedDocument.ts`):
   `units[].translation` is what the last render shows; `edits[id]` is a
   pending change (`null` = keep as written) and exists only while it differs.
   Text is typed as plain text, on the page or in the block list; inline
   formatting is put back where its words survive (`retagEditedText`).
 - **Re-render**: edits wait in a banner until "Re-render pages". Every
-  render starts from the original PDF. The layout check afterwards is
-  optional and covers only the pages that changed.
+  render starts from the original PDF and returns images of the changed
+  pages only. The layout check afterwards is optional and covers only the
+  pages that changed.
+- **Broken character escapes**: a model now and then writes `\u0000e9`
+  for "é", which would cut a block off where it is drawn. `callStructured`
+  asks once more for such an answer and repairs what the second one still
+  holds; the rules are in `lib/services/workflows/shared/modelTextRepair.ts`.
 - **Layout check failures**: the check is advice about pages that are
   already built. A page whose check fails (for example on a dropped
   connection) is listed in `uncheckedPages` and the run still finishes.
 - **Limits**: scanned pages have no text to rebuild and are left out;
   translated text is set in the closest installed font, not the document's
   own; JPEG 2000 images are missing from the page previews (not from the
-  PDF); stopping a run keeps nothing.
+  PDF); stopping keeps the requests of a batch that already finished and
+  discards the one in progress; text that is not horizontal is not handled.
 
 ## OCR for scanned PDFs
 
