@@ -3,9 +3,11 @@ import { NextRequest } from 'next/server';
 import { resolveRequestGlossary } from '@/lib/services/documentTranslation/native/nativePdfGlossary';
 import { runNativePdfTranslation } from '@/lib/services/documentTranslation/native/nativePdfPipeline';
 import {
-  storeNativeFile,
-  storeNativeRebuild,
+  NativeRunStore,
+  openNativeRunStore,
+  parseRunLocation,
 } from '@/lib/services/documentTranslation/native/nativePdfStorage';
+import { runStorageErrorResponse } from '@/lib/services/documentTranslation/native/nativeRunResponses';
 import {
   getWorkflowFeatureLimits,
   isWorkflowFeatureEnabled,
@@ -105,6 +107,12 @@ export async function GET() {
  *   glossaryGuideIds optional JSON array of organization glossary ids
  *   modelId         optional workflow model
  *   refitRounds     optional 0..NATIVE_PDF_MAX_REFIT_ROUNDS
+ *   runId           the run the files belong to (a UUID the client made
+ *                   for the document's first batch and sends ever after)
+ *   storage         "app" or "onedrive": where the run's files live
+ *
+ * A run that is encrypted sends its key in the RUN_KEY_HEADER header (see
+ * nativeRunStorage.ts); everything stored is then encrypted with it.
  *
  * Refused (403) while an admin has the Preserve formatting feature or the
  * translation workflow switched off (Admin > Workflows).
@@ -186,6 +194,21 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const where = parseRunLocation(
+    { runId: form.get('runId'), storage: form.get('storage') },
+    req,
+  );
+  if (!where.ok) return badRequestResponse(where.error);
+  let store: NativeRunStore;
+  try {
+    // Opened before any tokens are spent: OneDrive must be reachable.
+    store = await openNativeRunStore(req, session, where.location);
+  } catch (error) {
+    const response = runStorageErrorResponse(error);
+    if (response) return response;
+    throw error;
+  }
+
   const { denied, usage } = await beginWorkflowRun(
     session,
     'native-pdf-translate',
@@ -237,9 +260,9 @@ export async function POST(req: NextRequest) {
       // The source and the extraction are kept so the pages can be laid out
       // again with edited translations (POST .../native/render).
       const [rebuild, source, units] = await Promise.all([
-        storeNativeRebuild(session, { pdf, outputs }),
-        storeNativeFile(session, document, 'pdf'),
-        storeNativeFile(session, unitsFile, 'json'),
+        store.putRebuild({ pdf, outputs }),
+        store.put(document, 'pdf'),
+        store.put(unitsFile, 'json'),
       ]);
       const data: NativePdfRunReport = {
         ...report,
