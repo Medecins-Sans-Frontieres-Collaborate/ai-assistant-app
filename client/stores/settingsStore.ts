@@ -39,6 +39,10 @@ import {
 } from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
 import {
+  NativePdfStepInstructions,
+  sanitizeStepInstructions,
+} from '@/lib/utils/shared/translation/nativePdf';
+import {
   ANALYSIS_STRIP_HEIGHT,
   clampAnalysisStripHeight,
 } from '@/lib/utils/shared/translation/runProgress';
@@ -895,6 +899,14 @@ interface SettingsStore {
   /** Height of the expanded analysis strip, in CSS pixels. */
   translationAnalysisHeight: number;
   setTranslationAnalysisHeight: (height: number) => void;
+  /**
+   * Instructions the person adds to the steps of a formatting-preserving
+   * document translation, remembered for their next documents.
+   */
+  formattedStepInstructions: NativePdfStepInstructions;
+  setFormattedStepInstructions: (
+    instructions: NativePdfStepInstructions,
+  ) => void;
   setMapImportDefaultConfidence: (value: 'high' | 'medium' | 'low') => void;
   setSuggestRevisions: (enabled: boolean) => void;
   setSuggestRevisionsException: (
@@ -1195,6 +1207,7 @@ export const useSettingsStore = create<SettingsStore>()(
       reviewOverwriteAcknowledged: false,
       translationAnalysisHidden: false,
       translationAnalysisHeight: ANALYSIS_STRIP_HEIGHT.default,
+      formattedStepInstructions: {},
       mapImportDefaultConfidence: 'high',
       m365Connected: true,
       m365ConnectedUserSet: false,
@@ -2073,6 +2086,10 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ translationAnalysisHidden: hidden }),
       setTranslationAnalysisHeight: (height) =>
         set({ translationAnalysisHeight: clampAnalysisStripHeight(height) }),
+      setFormattedStepInstructions: (instructions) =>
+        set({
+          formattedStepInstructions: sanitizeStepInstructions(instructions),
+        }),
       setMapImportDefaultConfidence: (value) =>
         set({ mapImportDefaultConfidence: value }),
 
@@ -2221,6 +2238,7 @@ export const useSettingsStore = create<SettingsStore>()(
           reviewOverwriteAcknowledged: false,
           translationAnalysisHidden: false,
           translationAnalysisHeight: ANALYSIS_STRIP_HEIGHT.default,
+          formattedStepInstructions: {},
           mapImportDefaultConfidence: 'high',
           suggestRevisions: true,
           suggestRevisionsExceptions: {
@@ -2242,7 +2260,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 76, // v76: personal usage budgets + the daily usage ledger
+      version: 77, // v77: remembered formatted-translation step instructions
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2353,6 +2371,7 @@ export const useSettingsStore = create<SettingsStore>()(
         reviewOverwriteAcknowledged: state.reviewOverwriteAcknowledged,
         translationAnalysisHidden: state.translationAnalysisHidden,
         translationAnalysisHeight: state.translationAnalysisHeight,
+        formattedStepInstructions: state.formattedStepInstructions,
         mapImportDefaultConfidence: state.mapImportDefaultConfidence,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
@@ -3144,6 +3163,15 @@ export const useSettingsStore = create<SettingsStore>()(
           if (typeof state.usageBudgetAskSnoozedDay !== 'string') {
             state.usageBudgetAskSnoozedDay = null;
           }
+        }
+
+        // Version 76 → 77: remembered step instructions for formatted
+        // document translation. Sanitized, not trusted: they round-trip
+        // through localStorage and end up in prompts.
+        if (version < 77) {
+          state.formattedStepInstructions = sanitizeStepInstructions(
+            state.formattedStepInstructions,
+          );
         }
 
         // Whatever version it came from, the per-set rows are only kept as
