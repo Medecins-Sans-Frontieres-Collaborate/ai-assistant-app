@@ -72,8 +72,16 @@ describe('WorkflowPolicyPanel features', () => {
 
     await vi.waitFor(() => expect(mutateAsync).toHaveBeenCalledTimes(1));
     const sent = mutateAsync.mock.calls[0][0];
+    // With no limits saved, the defaults shown are what is saved.
     expect(sent.features).toEqual({
-      'translation-preserve-formatting': { enabled: true },
+      'translation-preserve-formatting': {
+        enabled: true,
+        limits: {
+          defaultBatchPages: 6,
+          maxBatchPages: 12,
+          maxDocumentPages: 30,
+        },
+      },
     });
     expect(sent.workflows.translation).toEqual({ enabled: true });
     expect(sent.etag).toBe('"e1"');
@@ -87,5 +95,117 @@ describe('WorkflowPolicyPanel features', () => {
     expect(feature).toBeDisabled();
     expect(feature).toBeChecked();
     expect(screen.getByText('featureNeedsWorkflow')).toBeInTheDocument();
+  });
+
+  const limitField = (key: string, within: HTMLElement = document.body) =>
+    [...within.querySelectorAll('label')]
+      .find((label) => label.textContent?.includes(`.limits.${key}`))
+      ?.querySelector('input') as HTMLInputElement;
+  const save = () =>
+    fireEvent.click(screen.getByRole('button', { name: 'save' }));
+
+  it('shows saved limits and saves a change to one', async () => {
+    queryData.current = savedPolicy({
+      'translation-preserve-formatting': {
+        enabled: true,
+        limits: {
+          defaultBatchPages: 4,
+          maxBatchPages: 8,
+          maxDocumentPages: 20,
+        },
+      } as never,
+    });
+    render(<WorkflowPolicyPanel />);
+    expect(limitField('maxBatchPages').value).toBe('8');
+    fireEvent.change(limitField('maxDocumentPages'), {
+      target: { value: '40' },
+    });
+    save();
+    await vi.waitFor(() => expect(mutateAsync).toHaveBeenCalledTimes(1));
+    expect(
+      mutateAsync.mock.calls[0][0].features['translation-preserve-formatting'],
+    ).toEqual({
+      enabled: true,
+      limits: { defaultBatchPages: 4, maxBatchPages: 8, maxDocumentPages: 40 },
+    });
+  });
+
+  it('does not save a limit outside its range', async () => {
+    queryData.current = savedPolicy();
+    render(<WorkflowPolicyPanel />);
+    // 100 is the compiled ceiling for a document; one more is refused.
+    fireEvent.change(limitField('maxDocumentPages'), {
+      target: { value: '101' },
+    });
+    save();
+    expect(mutateAsync).not.toHaveBeenCalled();
+    fireEvent.change(limitField('maxDocumentPages'), {
+      target: { value: '100' },
+    });
+    save();
+    await vi.waitFor(() => expect(mutateAsync).toHaveBeenCalledTimes(1));
+  });
+
+  it('saves an override with only the limits it sets, and drops one naming nobody', async () => {
+    queryData.current = savedPolicy();
+    render(<WorkflowPolicyPanel />);
+    const add = screen.getByRole('button', { name: 'overrideAdd' });
+    fireEvent.click(add);
+    fireEvent.click(add);
+    const first = screen.getByTestId(
+      'feature-override-translation-preserve-formatting-0',
+    );
+    fireEvent.change(
+      first.querySelector('input[type="text"]') as HTMLInputElement,
+      { target: { value: 'lead@example.org, deputy@example.org' } },
+    );
+    fireEvent.change(limitField('maxDocumentPages', first), {
+      target: { value: '60' },
+    });
+    // The second override is left without anyone to apply to.
+    save();
+    await vi.waitFor(() => expect(mutateAsync).toHaveBeenCalledTimes(1));
+    expect(
+      mutateAsync.mock.calls[0][0].features['translation-preserve-formatting']
+        .overrides,
+    ).toEqual([
+      {
+        scope: 'user',
+        targets: ['lead@example.org', 'deputy@example.org'],
+        limits: { maxDocumentPages: 60 },
+      },
+    ]);
+  });
+
+  it('shows saved overrides and removes one', async () => {
+    queryData.current = savedPolicy({
+      'translation-preserve-formatting': {
+        enabled: true,
+        overrides: [
+          {
+            scope: 'domain',
+            targets: ['example.org'],
+            limits: { maxBatchPages: 10 },
+          },
+        ],
+      } as never,
+    });
+    render(<WorkflowPolicyPanel />);
+    const row = screen.getByTestId(
+      'feature-override-translation-preserve-formatting-0',
+    );
+    expect(row.querySelector('select')).toHaveValue('domain');
+    expect(limitField('maxBatchPages', row).value).toBe('10');
+    // A limit the override leaves out shows what it inherits.
+    expect(limitField('maxDocumentPages', row).placeholder).toBe(
+      'overrideInherit',
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'overrideRemove' }));
+    save();
+    await vi.waitFor(() => expect(mutateAsync).toHaveBeenCalledTimes(1));
+    expect(
+      mutateAsync.mock.calls[0][0].features['translation-preserve-formatting']
+        .overrides,
+    ).toBeUndefined();
   });
 });
