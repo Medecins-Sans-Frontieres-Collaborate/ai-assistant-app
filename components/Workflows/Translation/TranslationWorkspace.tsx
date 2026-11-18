@@ -43,6 +43,7 @@ import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
 import { useFormattedDocument } from '@/client/hooks/workflows/useFormattedDocument';
 import { useFormattedRunStorage } from '@/client/hooks/workflows/useFormattedRunStorage';
 import { usePdfPages } from '@/client/hooks/workflows/usePdfPages';
+import { useStoredSourceText } from '@/client/hooks/workflows/useStoredSourceText';
 import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
 import { downloadDriveItem } from '@/client/services/m365/m365Client';
@@ -211,7 +212,10 @@ import { DocumentJobProgress } from './DocumentJobProgress';
 import { DocumentReaderBar } from './DocumentReaderBar';
 import { FormattedProgress } from './Formatted/FormattedProgress';
 import { FormattedReview } from './Formatted/FormattedReview';
-import { FormattedRunUnavailable } from './Formatted/FormattedRunStorageNotice';
+import {
+  FormattedRunExpiryWarning,
+  FormattedRunUnavailable,
+} from './Formatted/FormattedRunStorageNotice';
 import { EarlierTranslation, FormattedSetup } from './Formatted/FormattedSetup';
 import { TranslationOptionsBar } from './Formatted/TranslationOptionsBar';
 import { GlossaryManager } from './GlossaryManager';
@@ -221,6 +225,7 @@ import { SelectionChangeRequest } from './SelectionChangeRequest';
 import { SourceDocumentCard } from './SourceDocumentCard';
 import { SourcePageSelector } from './SourcePageSelector';
 import { SourcePageSheets } from './SourcePageSheets';
+import { SourceTextStorageNotice } from './SourceTextStorageNotice';
 import { TranslationRunStatus } from './TranslationRunStatus';
 import { UploadProgress } from './UploadProgress';
 
@@ -2099,6 +2104,12 @@ export function TranslationWorkspace({
   /** OneDrive when the person uses Microsoft 365 files, else app storage. */
   const formattedBackend: NativeRunBackend =
     m365FilesFlag && m365Connected ? 'onedrive' : 'app';
+  // A large source text is kept in the same place, not in the browser.
+  const sourceStorage = useStoredSourceText({
+    conversationId,
+    state,
+    backend: formattedBackend,
+  });
   const formatted = useFormattedDocument({
     conversationId,
     run: formattedStorage.run,
@@ -3090,6 +3101,13 @@ export function TranslationWorkspace({
                   lastPage={loadedDocument.lastPage}
                 />
               )}
+              <FormattedRunExpiryWarning
+                subject="sourceText"
+                expiresAt={sourceStorage.expiresAt}
+                keeping={sourceStorage.keeping}
+                onKeep={() => void sourceStorage.keep()}
+              />
+              <SourceTextStorageNotice storage={sourceStorage} />
               <textarea
                 ref={sourceRef}
                 hidden={
@@ -3110,8 +3128,18 @@ export function TranslationWorkspace({
                     }),
                   })
                 }
-                disabled={isRunning || uploading}
-                placeholder={t('translation.sourcePlaceholder')}
+                // A text still being fetched must not be typed over.
+                disabled={
+                  isRunning ||
+                  uploading ||
+                  sourceStorage.loading ||
+                  sourceStorage.problem !== null
+                }
+                placeholder={
+                  sourceStorage.loading || sourceStorage.problem
+                    ? ''
+                    : t('translation.sourcePlaceholder')
+                }
                 className="min-h-0 flex-1 resize-none bg-transparent p-3 text-sm text-gray-900 placeholder-gray-500 focus:outline-none disabled:opacity-70 dark:text-gray-100 dark:placeholder-gray-400"
               />
             </div>
