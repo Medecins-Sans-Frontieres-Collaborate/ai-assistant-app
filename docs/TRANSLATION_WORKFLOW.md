@@ -437,6 +437,46 @@ is kept in the browser. The conventions are written once, in
 - **Deleting**: a run replaced by a new one, or discarded after its files
   expired, is deleted (`DELETE .../native/run`).
 
+## Large source texts are kept in storage
+
+Conversations live in localStorage, about 5 million characters for the
+whole app. A translation keeps its source, a translation about as long
+again, and the review around both: roughly 2.5 characters per source
+character. From `STORED_SOURCE_TEXT_MIN_CHARS` (20,000 characters, about
+seven pages) one translation takes a hundredth of that quota, and its
+source text is kept in storage instead. The numbers and the conventions are
+in `lib/utils/shared/translation/storedSourceText.ts`.
+
+- **In memory nothing changes.** `sourceText` always holds the text; no
+  reader of workflow state knows about storage.
+- **What the browser keeps** (`conversationForBrowser` in
+  `conversationStore`): when `sourceTextRef` is current (its fingerprint is
+  that of `sourceText`), the conversation is written without the text and
+  the reference is marked `detached`. With a stale or absent reference the
+  text is written in full, so a text is never only in memory.
+- **Saving** (`useStoredSourceText`): a large text storage does not hold as
+  it now is gets saved `SOURCE_TEXT_STORE_DELAY_MS` after its last change,
+  over the previous copy. If storage refuses, the text stays in the browser
+  and the next change tries again. A text cut below the threshold goes back
+  to the browser and its stored copy is deleted.
+- **Opening**: a `detached` text is fetched and put back with
+  `hydrateWorkflowState`, which does not mark the conversation as edited.
+  Until it arrives the source pane says so and cannot be typed in.
+- **Where, how long, encrypted or not**: the rules of "Where a formatted
+  translation is kept". OneDrive (`Translations/<deployment>/Source
+texts/<id>/`) or app storage (`<user>/translation-texts/<id>/`); in app
+  storage the text is deleted 5 days after its last write, changes to the
+  conversation keep it alive, and a warning with "Keep for 5 more days"
+  shows in the source pane from 2 days before. A text that is gone says so;
+  the translation itself is still in the browser. With a backup key on the
+  device the text is encrypted in the browser before it is sent, and here
+  the server never holds a key: nothing on the server reads the text.
+- **Route**: `/api/workflows/translation/source-text?id=&storage=` (`PUT`
+  stores, `GET` reads, `POST` keeps alive or asks, `DELETE`).
+- **Not covered**: the translation (`finalText`) and other workflows stay
+  in the browser. A conversation exported or backed up before its text was
+  fetched in that session carries the reference, not the text.
+
 ## OCR for scanned PDFs
 
 `POST /api/file/ocr` reads a stored PDF with Azure Document Intelligence
