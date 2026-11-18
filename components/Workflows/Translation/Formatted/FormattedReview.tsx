@@ -11,18 +11,26 @@ import { fetchNativePdfImage } from '@/client/services/workflows/nativePdfTransl
 
 import {
   FormattedDocumentRun,
+  batchPageState,
   currentTranslation,
   editedUnits,
   fitEstimate,
   issueKey,
   openIssues,
   plainText,
+  planBatch,
+  planTickedBatch,
+  removalPending,
+  removedPages,
   retagEditedText,
   stalePages,
+  translatedPages,
+  withPageRemoved,
   withUnitEdit,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import {
   NativePdfIssue,
+  NativePdfLimits,
   NativePdfStepInstructions,
   NativePdfUnitAction,
   NativePdfUnitResult,
@@ -30,6 +38,7 @@ import {
 } from '@/lib/utils/shared/translation/nativePdf';
 
 import { FormattedBlockActions } from './FormattedBlockActions';
+import { FormattedPageRail } from './FormattedPageRail';
 import { FormattedPageView } from './FormattedPageView';
 
 type Filter = 'all' | 'shrunk' | 'kept' | 'edited';
@@ -38,8 +47,24 @@ type PageSide = 'translated' | 'original';
 /** Width the original page is rendered at, in CSS pixels. */
 const ORIGINAL_WIDTH = 576;
 
+/** What the page list needs to translate more pages of the document. */
+export interface FormattedReviewBatch {
+  /** The person's limits. */
+  limits: NativePdfLimits;
+  /** Pages per batch the person chose, if any. */
+  batchPages?: number;
+  /** Translates the pages and adds them to this run. */
+  onTranslate: (pages: number[]) => void;
+}
+
 interface FormattedReviewProps {
   run: FormattedDocumentRun;
+  /** Pages in the source document, as far as the workspace knows. */
+  pageCount: number;
+  /** Present when pages can be added to the run from the page list. */
+  batch?: FormattedReviewBatch;
+  /** Why pages cannot be added, when there is a reason worth telling. */
+  batchBlocked?: string;
   controller: FormattedDocumentController;
   /** The source document, for the Original view. */
   pdf: PdfPages;
@@ -63,9 +88,17 @@ const isShrunk = (unit: NativePdfUnitResult): boolean =>
  * in view, and everything a person can do to them. Text is typed either on
  * the page or in the block list (one edit, two places); edits wait in a
  * banner until the pages are re-rendered.
+ *
+ * The page list shows the whole document as the download will hold it.
+ * Pages can be removed from the download or put back (pending in the same
+ * banner as edits), and untranslated pages can be ticked and translated as
+ * the next batch.
  */
 export function FormattedReview({
   run,
+  pageCount,
+  batch,
+  batchBlocked,
   controller,
   pdf,
   instructions,
@@ -87,6 +120,30 @@ export function FormattedReview({
     page: number;
     image: string | null;
   } | null>(null);
+  // Untranslated pages ticked in the page list for the next batch.
+  const [ticked, setTicked] = useState<number[]>([]);
+
+  const pageStats = run.pages.find((page) => page.page === run.page);
+  // A page without a translation has only its original to show.
+  const untranslated = !pageStats;
+  const showOriginal = side === 'original' || untranslated;
+  const pageTotal = Math.max(pageCount, run.pageCount, pdf.pageCount);
+  const donePages = useMemo(() => translatedPages(run), [run]);
+  const removed = useMemo(() => removedPages(run), [run]);
+  const batchInput = batch && {
+    pageCount: pageTotal,
+    translated: donePages,
+    removed,
+    batchPages: batch.batchPages,
+    limits: batch.limits,
+  };
+  const tickedPlan = batchInput
+    ? planTickedBatch({ ...batchInput, ticked })
+    : null;
+  const nextPages = batchInput
+    ? planBatch({ ...batchInput, spec: '' }).pages
+    : [];
+  const pagesPending = removalPending(run);
 
   // Page images are stored files answered as data URLs; each is read once.
   useEffect(() => {
@@ -104,7 +161,7 @@ export function FormattedReview({
   }, [run.pageImages]);
 
   useEffect(() => {
-    if (side !== 'original' || pdf.status !== 'ready') return;
+    if (!showOriginal || pdf.status !== 'ready') return;
     let cancelled = false;
     void pdf.renderPage(run.page, ORIGINAL_WIDTH).then((image) => {
       if (!cancelled) setOriginal({ page: run.page, image });
@@ -112,9 +169,8 @@ export function FormattedReview({
     return () => {
       cancelled = true;
     };
-  }, [side, pdf, run.page]);
+  }, [showOriginal, pdf, run.page]);
 
-  const pageStats = run.pages.find((page) => page.page === run.page);
   const pageUnits = useMemo(
     () => run.units.filter((unit) => unit.page === run.page),
     [run.units, run.page],
@@ -123,14 +179,14 @@ export function FormattedReview({
     (image) => image.page === run.page,
   )?.previewUrl;
   const translatedImage = previewUrl ? (previews[previewUrl] ?? null) : null;
-  const image =
-    side === 'original'
-      ? original?.page === run.page
-        ? original.image
-        : null
-      : translatedImage;
+  const image = showOriginal
+    ? original?.page === run.page
+      ? original.image
+      : null
+    : translatedImage;
 
   const stale = stalePages(run);
+  const pdfBehind = stale.length > 0 || pagesPending;
   const editCount = editedUnits(run).length;
   const issues = openIssues(run, run.page);
   const selected = pageUnits.find((unit) => unit.id === selectedId) ?? null;
@@ -197,6 +253,31 @@ export function FormattedReview({
     setDraft(null);
     onUpdateRun((latest) => ({ ...latest, edits: {} }));
   };
+  /** Ticks a page for the next batch, or unticks it. */
+  const tickPage = (page: number) =>
+    setTicked((current) => {
+      const kept = tickedPlan?.pages ?? current;
+      return kept.includes(page)
+        ? kept.filter((other) => other !== page)
+        : [...kept, page];
+    });
+  const removePage = (page: number, remove: boolean) => {
+    if (remove) setTicked((current) => current.filter((p) => p !== page));
+    onUpdateRun((latest) => withPageRemoved(latest, page, remove, pageTotal));
+  };
+  /** Puts the page list back to what the download holds. */
+  const undoPageChanges = () =>
+    onUpdateRun((latest) => ({
+      ...latest,
+      removedPages: latest.pdfRemovedPages,
+    }));
+  const pageRemoved = removed.includes(run.page);
+  const pageBatchState = tickedPlan
+    ? batchPageState(tickedPlan, run.page)
+    : null;
+  const pageTranslatable =
+    untranslated &&
+    (pageBatchState === 'selected' || pageBatchState === 'available');
 
   const actionsFor = (unit: NativePdfUnitResult, compact: boolean) => (
     <FormattedBlockActions
@@ -265,16 +346,18 @@ export function FormattedReview({
         >
           {t('translation.formatted.changeOptions')}
         </button>
-        {stale.length > 0 && (
+        {pdfBehind && (
           <span className="ms-auto text-amber-700 dark:text-amber-400">
-            {t('translation.formatted.pdfBehind')}
+            {stale.length > 0
+              ? t('translation.formatted.pdfBehind')
+              : t('translation.formatted.pdfBehindPages')}
           </span>
         )}
         <a
           href={run.pdfUrl}
           download={run.sourceName.replace(/\.pdf$/i, '') + '.translated.pdf'}
           className={`rounded-lg border border-gray-300 px-2.5 py-1 font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-surface-dark-elevated ${
-            stale.length > 0 ? '' : 'ms-auto'
+            pdfBehind ? '' : 'ms-auto'
           }`}
         >
           {t('translation.formatted.download')}
@@ -286,63 +369,25 @@ export function FormattedReview({
           stacked ? 'flex-col overflow-y-auto' : 'flex-row'
         }`}
       >
-        <nav
-          aria-label={t('translation.formatted.pages')}
-          className={`flex shrink-0 gap-3.5 border-gray-200 p-3 dark:border-gray-700 ${
-            stacked
-              ? 'flex-row overflow-x-auto border-b'
-              : 'w-[104px] flex-col overflow-y-auto border-e'
-          }`}
-        >
-          {run.pageImages.map(({ page, previewUrl: url }) => {
-            const current = page === run.page;
-            const edits = run.units.filter(
-              (unit) => unit.page === page && unit.id in run.edits,
-            ).length;
-            return (
-              <button
-                key={page}
-                type="button"
-                aria-current={current ? 'page' : undefined}
-                onClick={() => goToPage(page)}
-                className={`flex shrink-0 flex-col gap-1 text-start text-[11px] ${
-                  stacked ? 'w-20' : ''
-                } ${
-                  current
-                    ? 'font-semibold text-gray-900 dark:text-gray-100'
-                    : 'text-gray-500 dark:text-gray-400'
-                }`}
-              >
-                {previews[url] ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={previews[url]}
-                    alt=""
-                    className={`w-full rounded-sm ${
-                      current
-                        ? 'outline outline-2 outline-offset-2 outline-blue-500'
-                        : ''
-                    }`}
-                  />
-                ) : (
-                  <span className="block aspect-[210/297] w-full animate-pulse rounded-sm bg-gray-200 dark:bg-surface-dark-elevated" />
-                )}
-                <span
-                  className={
-                    edits > 0 ? 'text-amber-700 dark:text-amber-400' : ''
-                  }
-                >
-                  {edits > 0
-                    ? t('translation.formatted.pageEdits', {
-                        page,
-                        count: edits,
-                      })
-                    : t('translation.formatted.pageLabel', { page })}
-                </span>
-              </button>
-            );
-          })}
-        </nav>
+        <FormattedPageRail
+          run={run}
+          pageCount={pageTotal}
+          pdf={pdf}
+          previews={previews}
+          stacked={stacked}
+          plan={tickedPlan}
+          nextPages={nextPages}
+          blocked={batchBlocked}
+          busy={controller.rendering}
+          onOpenPage={goToPage}
+          onTickPage={tickPage}
+          onSelectNext={() => setTicked(nextPages)}
+          onClearTicked={() => setTicked([])}
+          onTranslateTicked={() =>
+            tickedPlan && batch?.onTranslate(tickedPlan.pages)
+          }
+          onRemovePage={removePage}
+        />
 
         <section
           className={`flex min-w-0 flex-col border-gray-200 dark:border-gray-700 ${
@@ -358,7 +403,7 @@ export function FormattedReview({
               <button
                 type="button"
                 role="radio"
-                aria-checked={side === 'original'}
+                aria-checked={showOriginal}
                 disabled={pdf.status !== 'ready'}
                 title={
                   pdf.status === 'failed'
@@ -366,16 +411,17 @@ export function FormattedReview({
                     : undefined
                 }
                 onClick={() => setSide('original')}
-                className={segment(side === 'original')}
+                className={segment(showOriginal)}
               >
                 {t('translation.formatted.viewOriginal')}
               </button>
               <button
                 type="button"
                 role="radio"
-                aria-checked={side === 'translated'}
+                aria-checked={!showOriginal}
+                disabled={untranslated}
                 onClick={() => setSide('translated')}
-                className={segment(side === 'translated')}
+                className={segment(!showOriginal)}
               >
                 {t('translation.formatted.viewTranslated')}
               </button>
@@ -395,9 +441,13 @@ export function FormattedReview({
                   : 'text-gray-500 dark:text-gray-400'
               }`}
             >
-              {stale.includes(run.page)
-                ? t('translation.formatted.lastRender')
-                : t('translation.formatted.clickToEdit')}
+              {pageRemoved
+                ? t('translation.formatted.pageRemovedNote')
+                : untranslated
+                  ? t('translation.formatted.pageUntranslatedNote')
+                  : stale.includes(run.page)
+                    ? t('translation.formatted.lastRender')
+                    : t('translation.formatted.clickToEdit')}
             </span>
           </div>
           <div
@@ -405,6 +455,23 @@ export function FormattedReview({
               stacked ? '' : 'min-h-0 flex-1 overflow-auto'
             }`}
           >
+            {untranslated &&
+              (image ? (
+                // A rendered page of the user's own file, as a data URL.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={image}
+                  alt={t('translation.formatted.pageLabel', {
+                    page: run.page,
+                  })}
+                  data-testid="untranslated-page"
+                  className={`h-fit w-full max-w-[576px] shadow ${
+                    pageRemoved ? 'opacity-40 grayscale' : ''
+                  }`}
+                />
+              ) : (
+                <span className="block aspect-[210/297] w-full max-w-[576px] animate-pulse bg-gray-200 dark:bg-surface-dark-elevated" />
+              ))}
             {pageStats && (
               <FormattedPageView
                 image={image}
@@ -429,48 +496,110 @@ export function FormattedReview({
             stacked ? '' : 'min-h-0 w-[26rem] max-w-[40%] shrink-0'
           }`}
         >
-          {editCount > 0 && (
-            <div className="border-b border-amber-300 bg-amber-50 px-3 py-2.5 dark:border-amber-700/60 dark:bg-amber-950/40">
+          {(editCount > 0 || pagesPending) && (
+            <div
+              data-testid="pending-changes"
+              className="border-b border-amber-300 bg-amber-50 px-3 py-2.5 dark:border-amber-700/60 dark:bg-amber-950/40"
+            >
               <div className="flex flex-wrap items-center gap-2.5">
                 <div className="min-w-[11rem] flex-1">
-                  <div className="text-sm font-medium text-amber-900 dark:text-amber-200">
-                    {t('translation.formatted.editsPending', {
-                      count: editCount,
-                    })}
-                  </div>
+                  {editCount > 0 && (
+                    <div className="text-sm font-medium text-amber-900 dark:text-amber-200">
+                      {t('translation.formatted.editsPending', {
+                        count: editCount,
+                      })}
+                    </div>
+                  )}
+                  {pagesPending && (
+                    <div className="text-sm font-medium text-amber-900 dark:text-amber-200">
+                      {t('translation.formatted.pagesPending')}
+                    </div>
+                  )}
                   <div className="text-xs text-amber-800 dark:text-amber-200/80">
                     {t('translation.formatted.rerenderNote')}
                   </div>
                 </div>
-                <button
-                  type="button"
-                  disabled={controller.rendering}
-                  onClick={discard}
-                  className="min-h-[36px] rounded-lg px-2.5 text-[13px] text-amber-900 hover:underline disabled:opacity-50 dark:text-amber-200"
-                >
-                  {t('translation.formatted.discard')}
-                </button>
+                {editCount > 0 && (
+                  <button
+                    type="button"
+                    disabled={controller.rendering}
+                    onClick={discard}
+                    className="min-h-[36px] rounded-lg px-2.5 text-[13px] text-amber-900 hover:underline disabled:opacity-50 dark:text-amber-200"
+                  >
+                    {t('translation.formatted.discard')}
+                  </button>
+                )}
+                {pagesPending && (
+                  <button
+                    type="button"
+                    disabled={controller.rendering}
+                    onClick={undoPageChanges}
+                    className="min-h-[36px] rounded-lg px-2.5 text-[13px] text-amber-900 hover:underline disabled:opacity-50 dark:text-amber-200"
+                  >
+                    {t('translation.formatted.undoPageChanges')}
+                  </button>
+                )}
                 <button
                   type="button"
                   disabled={controller.rendering}
                   onClick={() =>
-                    void controller.rerender(checkAfter, instructions)
+                    void controller.rerender(
+                      checkAfter && editCount > 0,
+                      instructions,
+                    )
                   }
                   className="min-h-[36px] rounded-lg bg-amber-400 px-3.5 text-sm font-semibold text-gray-900 hover:bg-amber-300 disabled:opacity-60"
                 >
                   {controller.rendering
                     ? t('translation.formatted.rerendering')
-                    : t('translation.formatted.rerender')}
+                    : editCount > 0
+                      ? t('translation.formatted.rerender')
+                      : t('translation.formatted.updateDownload')}
                 </button>
               </div>
-              <label className="mt-1.5 flex items-center gap-2 text-xs text-amber-900 dark:text-amber-200/80">
-                <input
-                  type="checkbox"
-                  checked={checkAfter}
-                  onChange={(event) => setCheckAfter(event.target.checked)}
-                />
-                {t('translation.formatted.checkAfter')}
-              </label>
+              {editCount > 0 && (
+                <label className="mt-1.5 flex items-center gap-2 text-xs text-amber-900 dark:text-amber-200/80">
+                  <input
+                    type="checkbox"
+                    checked={checkAfter}
+                    onChange={(event) => setCheckAfter(event.target.checked)}
+                  />
+                  {t('translation.formatted.checkAfter')}
+                </label>
+              )}
+            </div>
+          )}
+          {untranslated && (
+            <div
+              data-testid="untranslated-panel"
+              className="flex flex-col items-start gap-2 border-b border-gray-200 px-3 py-3 dark:border-gray-700"
+            >
+              <p className="text-[13px] text-gray-700 dark:text-gray-300">
+                {pageRemoved
+                  ? t('translation.formatted.pageRemovedNote')
+                  : t('translation.formatted.pageUntranslatedNote')}
+              </p>
+              {pageRemoved ? (
+                <button
+                  type="button"
+                  disabled={controller.rendering}
+                  onClick={() => removePage(run.page, false)}
+                  className="min-h-[36px] rounded-lg border border-gray-300 px-3 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-surface-dark-elevated"
+                >
+                  {t('translation.formatted.restore')}
+                </button>
+              ) : (
+                pageTranslatable && (
+                  <button
+                    type="button"
+                    disabled={controller.rendering}
+                    onClick={() => batch?.onTranslate([run.page])}
+                    className="min-h-[36px] rounded-lg bg-blue-600 px-3 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {t('translation.formatted.translateThisPage')}
+                  </button>
+                )
+              )}
             </div>
           )}
           {(controller.renderError || controller.unitError) && (
@@ -543,7 +672,11 @@ export function FormattedReview({
             </div>
           )}
 
-          <div className="flex flex-wrap items-center gap-1.5 border-b border-gray-200 px-3 py-2 dark:border-gray-700">
+          <div
+            className={`flex flex-wrap items-center gap-1.5 border-b border-gray-200 px-3 py-2 dark:border-gray-700 ${
+              untranslated ? 'hidden' : ''
+            }`}
+          >
             <h3 className="me-1.5 text-xs font-medium text-gray-700 dark:text-gray-300">
               {t('translation.formatted.blocks')}
             </h3>
