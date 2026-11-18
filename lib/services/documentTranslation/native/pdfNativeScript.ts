@@ -39,6 +39,15 @@ CONVENTIONS (stated once; everything below cites these)
     They are derived separately and never used for each other's purpose.
   - Inline formatting travels as numbered tags (<g1>..</g1>); bold and italic
     stay literal (<b>, <i>). 'tags' maps each numbered tag back to its HTML.
+  - STYLE OVERRIDES: a rebuild job may carry 'styles', unit id -> any of 'size' (points),
+    'color' ('#rrggbb'), 'dx' and 'dy' (points; +x is right, +y is down, as the coordinates
+    above). They change how and where the TRANSLATION is laid out (see styled_room); the
+    source text is still removed from where it was measured. A size applies to the whole
+    unit: parts set in another size keep their proportion to it. A colour applies to the
+    unit's main text: links and parts set in their own colour keep it.
+  - PANELS: a filled or outlined shape that a unit sits inside (a card, a table cell, a
+    coloured box) is the unit's 'panel'. A room never reaches outside its unit's panel
+    (see assign_room): free space beyond a panel's edge belongs to something else.
   - Nothing is ever painted over the page: source text is removed from the
     content stream, so there is no cover-up rectangle to show through.
 """
@@ -50,11 +59,15 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ICON_FONT = re.compile(r'fontawesome|symbol|dingbat|wingding|icon|glyph|material', re.I)
 SERIF_FONT = re.compile(r'times|serif|roman|georgia|garamond|minion|cambria|palatino|nimbusrom|cmr', re.I)
 PREVIEW_DPI = 100
+PAGE_IMAGE_DPI = 144      # the page image a person looks at, and zooms into
 GAP = 2.0                 # points kept clear between a unit's room and its neighbour
 MIN_SCALE = 0.5           # the layout engine will not shrink text below this
 SAME_LEFT_EDGE = 3.0      # lines within this many points share a paragraph's left edge
 UNDERLINE_MAX_HEIGHT = 1.5
 MAX_GROWTH = 0.35         # share of its own height a unit's room may extend downward
+PANEL_MAX_SHARE = 0.9     # a filled shape covering more of the page than this is its background
+PANEL_MAX_INSET = 8.0     # most that a room is kept clear of its panel's edge, in points
+PANEL_TOLERANCE = 1.0     # a unit this far outside a shape's edge still counts as inside it
 
 
 def load_job():
@@ -169,12 +182,40 @@ def page_obstacles(page, blocks):
     return [r for r in rects if r.get_area() < 0.25 * page_area]
 
 
-def assign_room(units, obstacles, page_rect):
+def page_panels(page):
+    """Shapes that text sits inside: filled or outlined drawings smaller than the page (see PANELS)."""
+    limit = PANEL_MAX_SHARE * page.rect.get_area()
+    panels = []
+    for drawing in page.get_drawings():
+        rect = drawing['rect']
+        if drawing.get('fill') is None and drawing.get('color') is None:
+            continue
+        if rect.width > UNDERLINE_MAX_HEIGHT * 4 and rect.height > UNDERLINE_MAX_HEIGHT * 4 \
+                and rect.get_area() < limit:
+            panels.append(fitz.Rect(rect))
+    return panels
+
+
+def panel_of(box, panels):
+    """The smallest panel holding a unit's source text, or None."""
+    grown = [p for p in panels
+             if (p + (-PANEL_TOLERANCE, -PANEL_TOLERANCE, PANEL_TOLERANCE, PANEL_TOLERANCE)).contains(box)]
+    return min(grown, key=lambda p: p.get_area()) if grown else None
+
+
+def assign_room(units, obstacles, page_rect, panels=()):
     """Derives each unit's 'room' (where its translation may go) from the free space around it."""
     for unit in units:
         box = fitz.Rect(unit['bbox'])
         right_limit = page_rect.x1 - min(box.x0, page_rect.width * 0.08)
         bottom_limit = page_rect.y1 - 18
+        panel = panel_of(box, panels)
+        if panel is not None:
+            # Kept as clear of the panel's far edges as the source is of its near one.
+            inset = min(max(box.x0 - panel.x0, 0.0), PANEL_MAX_INSET)
+            right_limit = min(right_limit, max(panel.x1 - inset, box.x1))
+            bottom_limit = min(bottom_limit, max(panel.y1 - inset, box.y1))
+            unit['panel'] = [round(v, 2) for v in panel]
         others = [fitz.Rect(o['bbox']) for o in units if o is not unit]
         for o in others + obstacles:
             same_row = o.y0 < box.y1 - 1 and o.y1 > box.y0 + 1
@@ -186,8 +227,9 @@ def assign_room(units, obstacles, page_rect):
             # Adjacent lines' boxes overlap by their ascenders, so "below" means starting lower.
             if same_column and o.y0 > box.y0 + 1:
                 bottom_limit = min(bottom_limit, o.y0 - GAP)
-        # Paragraphs keep their column width; single lines may grow sideways into free space.
-        x1 = box.x1 if unit['lines'] > 1 else max(box.x1, right_limit)
+        # Paragraphs keep their column width, unless a panel says how wide the column really
+        # is; single lines may grow sideways into free space.
+        x1 = box.x1 if unit['lines'] > 1 and panel is None else max(box.x1, right_limit)
         first_line_bottom = box.y0 + unit['size'] * 1.3
         # Growth downward is capped: free space below a block is often a different background.
         y1 = min(bottom_limit, box.y1 + MAX_GROWTH * box.height + unit['size'])
@@ -215,7 +257,7 @@ def extract_units(doc, pages):
                 unit = build_unit('p%d-b%d-%d' % (page_no, bi, gi), page_no, group, links)
                 if unit:
                     page_units.append(unit)
-        assign_room(page_units, page_obstacles(page, blocks), page.rect)
+        assign_room(page_units, page_obstacles(page, blocks), page.rect, page_panels(page))
         for number, unit in enumerate(page_units, start=1):
             unit['n'] = number
         units.extend(page_units)
@@ -371,10 +413,34 @@ def link_underlines(page, unit):
     return found
 
 
+def resize_inline(markup, factor):
+    """Scales the sizes that parts of a unit carry inline, so they keep their proportion to it."""
+    return re.sub(r'font-size:([0-9.]+)pt',
+                  lambda match: 'font-size:%.1fpt' % (float(match.group(1)) * factor), markup)
+
+
+def styled_room(unit, style, bounds):
+    """Where a unit's translation is laid out once the person's style is applied.
+
+    The room moves by ('dx', 'dy') as far as the page allows. A font size larger than the
+    source's needs more height than the room was measured for, so the room then reaches down
+    to the page's lower edge: text is set from the top, and only the height it uses is drawn on.
+    """
+    room = fitz.Rect(unit['room'])
+    dx = min(max(style.get('dx', 0), bounds.x0 - room.x0), bounds.x1 - room.x1)
+    dy = min(max(style.get('dy', 0), bounds.y0 - room.y0), bounds.y1 - room.y1)
+    room = room + (dx, dy, dx, dy)
+    if style.get('size', 0) > unit['size']:
+        room.y1 = bounds.y1
+    return room
+
+
 def command_rebuild(job):
     with open(os.path.join(HERE, job['units']), encoding='utf-8') as handle:
         extracted = json.load(handle)
     units, translations = extracted['units'], job['translations']
+    styles = job.get('styles') or {}
+    rooms = {}
     doc = fitz.open(os.path.join(HERE, job['source']))
     original = fitz.open(os.path.join(HERE, job['source']))
     families = installed_fonts()
@@ -410,15 +476,27 @@ def command_rebuild(job):
                     page.delete_link(link)
         for unit in page_units:
             markup = restore_tags(translations[unit['id']], unit['tags'])
+            style = styles.get(unit['id']) or {}
+            rooms[unit['id']] = styled_room(unit, style, page.rect)
+            if 'size' in style and unit['size']:
+                markup = resize_inline(markup, style['size'] / unit['size'])
             css = css_fonts + (
                 '* {font-family:%s;} p {margin:0;font-size:%spt;line-height:%s;color:%s;font-weight:%s;font-style:%s;}'
                 ' a {color:inherit;text-decoration:underline;}' % (
-                    'serifbody' if unit['serif'] else 'sansbody', unit['size'], unit['leading'], unit['color'],
+                    'serifbody' if unit['serif'] else 'sansbody', style.get('size', unit['size']),
+                    unit['leading'], style.get('color', unit['color']),
                     'bold' if unit['bold'] else 'normal', 'italic' if unit['italic'] else 'normal'))
-            spare, scale = page.insert_htmlbox(fitz.Rect(unit['room']), '<p>%s</p>' % markup, css=css,
+            spare, scale = page.insert_htmlbox(rooms[unit['id']], '<p>%s</p>' % markup, css=css,
                                                archive=archive, scale_low=MIN_SCALE)
+            if spare > 0 and style.get('size', 0) > unit['size']:
+                # A room stretched for larger text is reported as the height the text used.
+                rooms[unit['id']].y1 = max(rooms[unit['id']].y1 - spare, rooms[unit['id']].y0)
+            # Text is set from the top of its room, so what it left unused is at the bottom.
+            used = fitz.Rect(rooms[unit['id']])
+            used.y1 = max(used.y1 - max(spare, 0), used.y0)
             report.append({'id': unit['id'], 'page': page_no, 'n': unit['n'],
-                           'scale': round(scale, 3), 'fits': spare >= 0})
+                           'scale': round(scale, 3), 'fits': spare >= 0,
+                           'used': [round(v, 1) for v in used]})
     # Images are the slow, heavy part of the output: a caller that already holds a page's
     # images (it did not change) asks for the others only. Absent means every rebuilt page.
     image_pages = job.get('imagePages')
@@ -426,10 +504,12 @@ def command_rebuild(job):
     for page_no in pages:
         if image_pages is not None and page_no not in image_pages:
             continue
-        labelled = [u for u in units if u['page'] == page_no and u['id'] in translations]
+        # Outlined where each translation was actually laid out.
+        labelled = [dict(u, room=list(rooms[u['id']])) for u in units
+                    if u['page'] == page_no and u['id'] in translations]
         files['check_%d.png' % page_no] = side_by_side(render(original[page_no - 1]),
                                                        render(doc[page_no - 1], labelled, outline='room'))
-        files['preview_%d.png' % page_no] = render(doc[page_no - 1])
+        files['preview_%d.png' % page_no] = render(doc[page_no - 1], dpi=PAGE_IMAGE_DPI)
     # Which pages the output holds. Page images above are made first and are named by the
     # page's number in the SOURCE, so leaving pages out never renumbers anything a caller
     # holds. 'omitPages' are source page numbers the person removed from the result.
