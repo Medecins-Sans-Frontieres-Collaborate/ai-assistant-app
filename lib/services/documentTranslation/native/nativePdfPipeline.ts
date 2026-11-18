@@ -44,7 +44,7 @@ import {
 } from './nativePdfPrompts';
 import { SandboxInputFile, runSandboxScript } from './sandboxScriptRunner';
 
-import { strFromU8 } from 'fflate';
+import { strFromU8, strToU8 } from 'fflate';
 import type { AzureOpenAI } from 'openai';
 
 /**
@@ -124,8 +124,18 @@ export interface NativePdfResult {
 export interface NativePdfRerenderParams {
   /** The original PDF bytes. */
   document: Buffer;
-  /** `unitsFile` of the run being edited. */
-  unitsFile: Uint8Array;
+  /**
+   * The extractions of the document's batches, oldest first: one for a
+   * single batch, several when batches are being put together.
+   */
+  unitsFiles: Uint8Array[];
+  /**
+   * Pages to return images of; absent means every translated page. The
+   * pages in `checkPages` are always included.
+   */
+  imagePages?: number[];
+  /** Most pages of the document that may carry a translation. */
+  maxDocumentPages: number;
   /** Untrusted: unit id to translation; null or absent keeps the unit as written. */
   translations: unknown;
   /** Pages to run the layout check on afterwards; empty skips the check. */
@@ -149,6 +159,21 @@ export interface NativePdfRerenderResult {
   tooLong: string[];
   pdf: Uint8Array;
   outputs: NativePdfPageOutput[];
+  /** The extraction that was laid out: the only one sent, or all combined. */
+  unitsFile: Uint8Array;
+}
+
+/** Thrown when a re-render would translate more pages than the limit. */
+export class NativePdfDocumentLimitError extends Error {
+  constructor(
+    readonly pages: number,
+    readonly limit: number,
+  ) {
+    super(
+      `This document already has translations on ${pages} pages; at most ${limit} pages of one document can be translated`,
+    );
+    this.name = 'NativePdfDocumentLimitError';
+  }
 }
 
 interface ExtractPayload {
@@ -395,6 +420,7 @@ async function rebuild(
   unitsFile: Uint8Array,
   translations: Map<string, string>,
   usage: WorkflowUsageCollector,
+  imagePages?: number[],
 ): Promise<RebuildOutcome> {
   const run = await runSandboxScript(
     'rebuild',
@@ -413,7 +439,10 @@ async function rebuild(
         source: SOURCE_FILENAME,
         units: UNITS_FILENAME,
         translations: Object.fromEntries(translations),
-        onlyTranslatedPages: true,
+        // The result is the whole document with the translated pages
+        // replaced, so batches add up to one file.
+        onlyTranslatedPages: false,
+        ...(imagePages ? { imagePages } : {}),
       }),
     ],
     usage,
@@ -421,9 +450,9 @@ async function rebuild(
   const report = JSON.parse(
     strFromU8(requireFile(run.files, 'report.json')),
   ) as { fonts: { sans: string; serif: string }; units: NativePdfFitReport[] };
-  const pages = [...new Set(report.units.map((unit) => unit.page))].sort(
-    (a, b) => a - b,
-  );
+  const pages = [...new Set(report.units.map((unit) => unit.page))]
+    .filter((page) => !imagePages || imagePages.includes(page))
+    .sort((a, b) => a - b);
   return {
     fits: report.units,
     fonts: report.fonts,
@@ -609,6 +638,50 @@ async function verifyPages(options: {
 }
 
 /**
+ * Puts the extractions of several batches of ONE document together. Where
+ * two hold the same page, the later one's units and page record replace the
+ * earlier one's entirely: a page translated again is laid out from its
+ * newest extraction only.
+ *
+ * @param files - The extractions as stored, oldest first; at least one.
+ * @returns One extraction in page order, as bytes ready to store or upload.
+ * @throws Error when a file is not a readable extraction.
+ */
+export function combineExtractions(files: Uint8Array[]): Uint8Array {
+  const parsed = files.map((file) => {
+    let payload: ExtractPayload;
+    try {
+      payload = JSON.parse(strFromU8(file)) as ExtractPayload;
+    } catch {
+      throw new Error('The stored extraction for this document is unreadable');
+    }
+    if (!Array.isArray(payload.units) || !Array.isArray(payload.pages)) {
+      throw new Error('The stored extraction for this document is unreadable');
+    }
+    return payload;
+  });
+  if (parsed.length === 1) return files[0];
+  const pages = new Map<number, NativePdfPageStats>();
+  const units = new Map<number, NativePdfUnit[]>();
+  for (const payload of parsed) {
+    const held = new Set(payload.pages.map((page) => page.page));
+    for (const page of payload.pages) pages.set(page.page, page);
+    for (const page of held) units.set(page, []);
+    for (const unit of payload.units) {
+      if (!units.has(unit.page)) units.set(unit.page, []);
+      units.get(unit.page)?.push(unit);
+    }
+  }
+  const order = [...units.keys()].sort((a, b) => a - b);
+  const combined: ExtractPayload = {
+    pageCount: parsed[0].pageCount,
+    pages: [...pages.values()].sort((a, b) => a.page - b.page),
+    units: order.flatMap((page) => units.get(page) ?? []),
+  };
+  return strToU8(JSON.stringify(combined));
+}
+
+/**
  * Lays a run's pages out again with translations a person has edited.
  *
  * Only the rebuild step runs, plus the layout check on the pages asked for:
@@ -619,30 +692,39 @@ async function verifyPages(options: {
  *   translations as the client now has them.
  * @returns The new PDF and page images, each unit's fit, and the findings
  *   for the checked pages.
+ * @throws NativePdfDocumentLimitError when more pages would carry a
+ *   translation than `maxDocumentPages`.
  * @throws Error when the extraction cannot be read, no unit is left with a
  *   translation, or the sandbox step fails.
  */
 export async function rerenderNativePdf(
   params: NativePdfRerenderParams,
 ): Promise<NativePdfRerenderResult> {
-  let extracted: ExtractPayload;
-  try {
-    extracted = JSON.parse(strFromU8(params.unitsFile)) as ExtractPayload;
-  } catch {
-    throw new Error('The stored extraction for this document is unreadable');
-  }
-  if (!Array.isArray(extracted.units)) {
-    throw new Error('The stored extraction for this document is unreadable');
-  }
+  const unitsFile = combineExtractions(params.unitsFiles);
+  const extracted = JSON.parse(strFromU8(unitsFile)) as ExtractPayload;
   const edits = sanitizeTranslationEdits(params.translations, extracted.units);
   if (edits.translations.size === 0) {
     throw new Error('No translated text was given to lay out');
   }
+  const translatedPages = new Set(
+    extracted.units
+      .filter((unit) => edits.translations.has(unit.id))
+      .map((unit) => unit.page),
+  );
+  if (translatedPages.size > params.maxDocumentPages) {
+    throw new NativePdfDocumentLimitError(
+      translatedPages.size,
+      params.maxDocumentPages,
+    );
+  }
   const built = await rebuild(
     params.document,
-    params.unitsFile,
+    unitsFile,
     edits.translations,
     params.usage,
+    params.imagePages && [
+      ...new Set([...params.imagePages, ...params.checkPages]),
+    ],
   );
   const wanted = new Set(params.checkPages);
   const toCheck = built.outputs.filter((output) => wanted.has(output.page));
@@ -668,6 +750,7 @@ export async function rerenderNativePdf(
     tooLong: edits.tooLong,
     pdf: built.pdf,
     outputs: built.outputs,
+    unitsFile,
   };
 }
 
