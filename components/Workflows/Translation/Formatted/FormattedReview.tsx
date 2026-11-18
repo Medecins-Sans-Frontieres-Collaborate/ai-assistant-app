@@ -9,6 +9,7 @@ import { FormattedDocumentController } from '@/client/hooks/workflows/useFormatt
 import { PdfPages } from '@/client/hooks/workflows/usePdfPages';
 
 import { fetchNativePdfImage } from '@/client/services/workflows/nativePdfTranslation';
+import { downloadRunFile } from '@/client/services/workflows/nativeRunStorage';
 
 import {
   DEFAULT_PAGE_ZOOM,
@@ -43,11 +44,16 @@ import {
   NativePdfUnitResult,
   SCALE_EPSILON,
 } from '@/lib/utils/shared/translation/nativePdf';
+import { NativeRunRef } from '@/lib/utils/shared/translation/nativeRunStorage';
 
 import { FormattedBlockActions } from './FormattedBlockActions';
 import { FormattedBlockStyle } from './FormattedBlockStyle';
 import { FormattedPageRail } from './FormattedPageRail';
 import { FormattedPageView, PAGE_WIDTH } from './FormattedPageView';
+import {
+  FormattedRunExpiryWarning,
+  FormattedRunStorageLine,
+} from './FormattedRunStorageNotice';
 
 type Filter = 'all' | 'shrunk' | 'kept' | 'edited';
 type PageSide = 'translated' | 'original';
@@ -81,6 +87,16 @@ interface FormattedReviewProps {
   glossaryCount: number;
   /** Not enough width for page and blocks side by side. */
   stacked: boolean;
+  /** Where the run is stored, and what keeps it there. */
+  storage?: {
+    runRef: NativeRunRef;
+    /** The last save did not reach storage. */
+    saveFailed: boolean;
+    /** A keep request is in flight. */
+    keeping: boolean;
+    /** Keeps the run's files for another retention period. */
+    onKeep: () => void;
+  };
   onUpdateRun: (
     update: (run: FormattedDocumentRun) => FormattedDocumentRun,
   ) => void;
@@ -112,6 +128,7 @@ export function FormattedReview({
   instructions,
   glossaryCount,
   stacked,
+  storage,
   onUpdateRun,
   onChangeOptions,
 }: FormattedReviewProps) {
@@ -129,6 +146,7 @@ export function FormattedReview({
     image: string | null;
   } | null>(null);
   const [zoom, setZoom] = useState<number>(DEFAULT_PAGE_ZOOM);
+  const [download, setDownload] = useState<'idle' | 'busy' | 'failed'>('idle');
   // Untranslated pages ticked in the page list for the next batch.
   const [ticked, setTicked] = useState<number[]>([]);
 
@@ -339,8 +357,29 @@ export function FormattedReview({
         : 'text-gray-600 dark:text-gray-400'
     }`;
 
+  /** Saves the translated PDF; stored files are read through the app. */
+  const downloadPdf = async () => {
+    setDownload('busy');
+    try {
+      await downloadRunFile(
+        run.pdfUrl,
+        run.sourceName.replace(/\.pdf$/i, '') + '.translated.pdf',
+      );
+      setDownload('idle');
+    } catch {
+      setDownload('failed');
+    }
+  };
+
   return (
     <div className="flex min-h-0 flex-1 flex-col">
+      {storage && (
+        <FormattedRunExpiryWarning
+          expiresAt={storage.runRef.expiresAt}
+          keeping={storage.keeping}
+          onKeep={storage.onKeep}
+        />
+      )}
       <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 border-b border-gray-200 px-3 py-1.5 text-xs text-gray-500 dark:border-gray-700 dark:text-gray-400">
         <span className="max-w-[16rem] truncate font-medium text-gray-700 dark:text-gray-300">
           {run.sourceName}
@@ -368,6 +407,12 @@ export function FormattedReview({
         >
           {t('translation.formatted.changeOptions')}
         </button>
+        {storage && (
+          <FormattedRunStorageLine
+            runRef={storage.runRef}
+            saveFailed={storage.saveFailed}
+          />
+        )}
         {pdfBehind && (
           <span className="ms-auto text-amber-700 dark:text-amber-400">
             {stale.length > 0
@@ -375,15 +420,21 @@ export function FormattedReview({
               : t('translation.formatted.pdfBehindPages')}
           </span>
         )}
-        <a
-          href={run.pdfUrl}
-          download={run.sourceName.replace(/\.pdf$/i, '') + '.translated.pdf'}
-          className={`rounded-lg border border-gray-300 px-2.5 py-1 font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-surface-dark-elevated ${
-            pdfBehind ? '' : 'ms-auto'
+        {download === 'failed' && (
+          <span role="alert" className="text-red-700 dark:text-red-400">
+            {t('translation.formatted.downloadFailed')}
+          </span>
+        )}
+        <button
+          type="button"
+          disabled={download === 'busy'}
+          onClick={() => void downloadPdf()}
+          className={`rounded-lg border border-gray-300 px-2.5 py-1 font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-surface-dark-elevated ${
+            pdfBehind || download === 'failed' ? '' : 'ms-auto'
           }`}
         >
           {t('translation.formatted.download')}
-        </a>
+        </button>
       </div>
 
       <div
