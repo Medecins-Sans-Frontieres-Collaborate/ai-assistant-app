@@ -430,8 +430,16 @@ def command_rebuild(job):
         files['check_%d.png' % page_no] = side_by_side(render(original[page_no - 1]),
                                                        render(doc[page_no - 1], labelled, outline='room'))
         files['preview_%d.png' % page_no] = render(doc[page_no - 1])
-    if job.get('onlyTranslatedPages'):
-        doc.select([p - 1 for p in pages])
+    # Which pages the output holds. Page images above are made first and are named by the
+    # page's number in the SOURCE, so leaving pages out never renumbers anything a caller
+    # holds. 'omitPages' are source page numbers the person removed from the result.
+    omitted = set(job.get('omitPages') or [])
+    kept = [p for p in (pages if job.get('onlyTranslatedPages') else range(1, doc.page_count + 1))
+            if p not in omitted]
+    if not kept:
+        raise SystemExit('NATIVE_REBUILD_FAILED every page of the document was left out')
+    if len(kept) < doc.page_count:
+        doc.select([p - 1 for p in kept])
     doc.subset_fonts()
     files['translated.pdf'] = doc.tobytes(garbage=3, deflate=True)
     files['report.json'] = json.dumps({'fonts': {'sans': sans_name, 'serif': serif_name or sans_name},
