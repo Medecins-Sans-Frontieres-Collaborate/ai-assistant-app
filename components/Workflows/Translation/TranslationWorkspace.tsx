@@ -122,6 +122,7 @@ import {
   TranslationDocumentLayout,
   formattedEligibility,
   planBatch,
+  removedPages,
   translatedPages,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import { mergeGlossaryEntries } from '@/lib/utils/shared/translation/glossaryMatch';
@@ -2110,6 +2111,7 @@ export function TranslationWorkspace({
     spec: formattedOptions.pages,
     pageCount: formattedPageCount,
     translated: formattedAdding ? formattedDonePages : [],
+    removed: formattedAdding ? removedPages(formattedRun) : [],
     batchPages: formattedOptions.batchPages,
     limits: formattedLimits,
   });
@@ -2151,6 +2153,32 @@ export function TranslationWorkspace({
         patchState({ formattedOptions: { ...formattedOptions, pages: '' } });
         setFormattedAddingChoice(true);
       });
+  };
+  /**
+   * Translates pages ticked in the finished translation's page list and
+   * adds them to it, with the run's own depth and the current instructions.
+   */
+  const addFormattedPages = (pages: number[]) => {
+    if (
+      !formattedRun ||
+      !formattedSourceUrl ||
+      !targetLanguage ||
+      pages.length === 0 ||
+      formatted.running
+    ) {
+      return;
+    }
+    void formatted.start({
+      loadFile: loadFormattedFile,
+      sourceUrl: formattedSourceUrl,
+      sourceName: formattedSourceName,
+      targetLanguage: targetLanguage.label,
+      options: formattedOptions,
+      depth: formattedRun.depth,
+      pages,
+      requestPages: formattedService?.maxPages,
+      base: formattedRun,
+    });
   };
   /** Opens the setup to add pages, or to start over when none can be added. */
   const openFormattedSetup = () => {
@@ -2743,6 +2771,23 @@ export function TranslationWorkspace({
         ) : showFormattedReview && formattedRun ? (
           <FormattedReview
             run={formattedRun}
+            pageCount={formattedPageCount}
+            batch={
+              formattedEarlier?.sameLanguage && targetLanguage
+                ? {
+                    limits: formattedLimits,
+                    batchPages: formattedOptions.batchPages,
+                    onTranslate: addFormattedPages,
+                  }
+                : undefined
+            }
+            batchBlocked={
+              formattedEarlier && !formattedEarlier.sameLanguage
+                ? t('translation.formatted.railOtherLanguage', {
+                    language: formattedRun.targetLanguage,
+                  })
+                : undefined
+            }
             controller={formatted}
             pdf={pdfPages}
             instructions={formattedOptions.instructions}
