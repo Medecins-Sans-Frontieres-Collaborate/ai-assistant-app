@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
+  act,
   fireEvent,
   render,
   screen,
@@ -12,8 +13,19 @@ import {
   renderNativePdf,
   runNativePdf,
 } from '@/client/services/workflows/nativePdfTranslation';
+import type * as RunStorageModule from '@/client/services/workflows/nativeRunStorage';
+import {
+  RunMissingError,
+  deleteRun,
+  downloadRunFile,
+  loadRunRecord,
+  syncRun,
+} from '@/client/services/workflows/nativeRunStorage';
 
+import { FormattedDocumentRun } from '@/lib/utils/shared/translation/formattedDocument';
 import { NativePdfRunReport } from '@/lib/utils/shared/translation/nativePdf';
+import type * as RunRulesModule from '@/lib/utils/shared/translation/nativeRunStorage';
+import { NativeRunRef } from '@/lib/utils/shared/translation/nativeRunStorage';
 
 import { Conversation } from '@/types/chat';
 import { TranslationWorkflowState } from '@/types/workflow';
@@ -21,6 +33,7 @@ import { TranslationWorkflowState } from '@/types/workflow';
 import { TranslationWorkspace } from '@/components/Workflows/Translation/TranslationWorkspace';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -30,6 +43,31 @@ vi.mock('@/client/hooks/workflows/useWorkflowStream', () => ({
 vi.mock('@/client/services/workflows/workflowTitle', () => ({
   nameWorkflowConversation: vi.fn(),
 }));
+// Storage is an in-memory record: what the workspace saved last.
+let savedRecord: FormattedDocumentRun | undefined;
+vi.mock('@/client/services/workflows/nativeRunStorage', async (original) => ({
+  ...(await original<typeof RunStorageModule>()),
+  newRunAccess: vi.fn((backend: string) =>
+    Promise.resolve({ runId: RUN_ID, backend }),
+  ),
+  saveRunRecord: vi.fn((_access: unknown, run: FormattedDocumentRun) => {
+    savedRecord = run;
+    return Promise.resolve();
+  }),
+  loadRunRecord: vi.fn(),
+  syncRun: vi.fn(() => Promise.resolve({})),
+  deleteRun: vi.fn(() => Promise.resolve(true)),
+  fetchRunFile: vi.fn(() => Promise.resolve(new Uint8Array())),
+  downloadRunFile: vi.fn(() => Promise.resolve()),
+}));
+// Changes are saved without the quiet period.
+vi.mock(
+  '@/lib/utils/shared/translation/nativeRunStorage',
+  async (original) => ({
+    ...(await original<typeof RunRulesModule>()),
+    RUN_SAVE_DELAY_MS: 0,
+  }),
+);
 vi.mock('@/client/services/workflows/nativePdfTranslation', () => ({
   fetchNativePdfAvailability: vi.fn(),
   runNativePdf: vi.fn(),
@@ -158,6 +196,15 @@ const pageStates = () =>
   );
 const batchSummary = () => screen.getByTestId('batch-summary').textContent;
 
+const RUN_ID = '11111111-2222-4333-8444-555555555555';
+/** The run as storage last received it. */
+const savedRun = (): FormattedDocumentRun | undefined => savedRecord;
+/** Lets a pending save reach storage. */
+const flushSaves = () =>
+  act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  });
+
 function workflowState(): TranslationWorkflowState {
   return useConversationStore.getState().conversations[0]
     .workflowState as TranslationWorkflowState;
@@ -230,6 +277,7 @@ const checked = (group: HTMLElement) =>
 
 beforeEach(() => {
   vi.clearAllMocks();
+  savedRecord = undefined;
   vi.mocked(fetchNativePdfAvailability).mockResolvedValue({
     enabled: true,
     maxPages: MAX_PAGES,
@@ -407,13 +455,11 @@ describe('document mode: preserve formatting', () => {
       pages: '1-2',
       conversationId: 'formatted',
     });
-    await waitFor(() =>
-      expect(workflowState().formattedRun?.sourceUrl).toBe(SOURCE_URL),
-    );
+    await waitFor(() => expect(savedRun()?.sourceUrl).toBe(SOURCE_URL));
     // One request, nothing to join.
     expect(renderNativePdf).not.toHaveBeenCalled();
     expect(
-      await screen.findByRole('link', {
+      await screen.findByRole('button', {
         name: 'translation.formatted.download',
       }),
     ).toBeTruthy();
@@ -446,10 +492,9 @@ describe('document mode: preserve formatting', () => {
       checkPages: [],
       imagePages: [],
     });
-    await waitFor(() =>
-      expect(workflowState().formattedRun?.unitsId).toBe('units-all'),
-    );
-    const run = workflowState().formattedRun;
+    await waitFor(() => expect(savedRun()?.unitsId).toBe('units-all'));
+    await flushSaves();
+    const run = savedRun();
     expect(run?.units.map((unit) => unit.page)).toEqual([1, 2, 3]);
     expect(run?.pageImages.map((image) => image.page)).toEqual([1, 2, 3]);
     expect(run?.pdfUrl).toBe('/api/file/out2.pdf');
@@ -466,7 +511,7 @@ describe('document mode: preserve formatting', () => {
         name: 'translation.formatted.translatePages 2',
       }),
     );
-    await waitFor(() => expect(workflowState().formattedRun).toBeDefined());
+    await waitFor(() => expect(savedRun()).toBeDefined());
 
     // The finished result offers the way on.
     fireEvent.click(
@@ -497,13 +542,11 @@ describe('document mode: preserve formatting', () => {
       sourceId: 'source-id',
       unitsIds: ['units-1-2', 'units-3-4'],
     });
-    await waitFor(() =>
-      expect(workflowState().formattedRun?.unitsId).toBe('units-all'),
-    );
-    expect(
-      workflowState().formattedRun?.units.map((unit) => unit.page),
-    ).toEqual([1, 2, 3, 4]);
-    expect(workflowState().formattedRun?.batches).toBe(2);
+    await waitFor(() => expect(savedRun()?.unitsId).toBe('units-all'));
+    await flushSaves();
+    expect(savedRun()?.units.map((unit) => unit.page)).toEqual([1, 2, 3, 4]);
+    await flushSaves();
+    expect(savedRun()?.batches).toBe(2);
     // The limit is used up: there is nothing left to add, only to redo.
     expect(
       await screen.findByRole('button', {
@@ -522,7 +565,7 @@ describe('document mode: preserve formatting', () => {
         name: 'translation.formatted.translatePages 2',
       }),
     );
-    await waitFor(() => expect(workflowState().formattedRun).toBeDefined());
+    await waitFor(() => expect(savedRun()).toBeDefined());
     fireEvent.click(
       await screen.findByRole('button', {
         name: 'translation.formatted.addPages',
@@ -553,25 +596,23 @@ describe('document mode: preserve formatting', () => {
         name: `translation.formatted.translatePages ${MAX_PAGES}`,
       }),
     );
-    await waitFor(() => expect(workflowState().formattedRun).toBeDefined());
+    await waitFor(() => expect(savedRun()).toBeDefined());
     fireEvent.click(await screen.findByText('Informe anual'));
     // One edit, two places: the field on the page and the one in the list.
     const fields = screen.getAllByDisplayValue('Informe anual');
     expect(fields).toHaveLength(2);
     fireEvent.change(fields[0], { target: { value: 'Memoria anual' } });
     expect(screen.getAllByDisplayValue('Memoria anual')).toHaveLength(2);
-    expect(workflowState().formattedRun?.edits).toEqual({
+    await flushSaves();
+    expect(savedRun()?.edits).toEqual({
       p1u1: 'Memoria anual',
     });
-    expect(workflowState().formattedRun?.units[0].translation).toBe(
-      'Informe anual',
-    );
+    await flushSaves();
+    expect(savedRun()?.units[0].translation).toBe('Informe anual');
     fireEvent.click(
       screen.getByRole('button', { name: 'translation.formatted.rerender' }),
     );
-    await waitFor(() =>
-      expect(workflowState().formattedRun?.pdfUrl).toBe('/api/file/out2.pdf'),
-    );
+    await waitFor(() => expect(savedRun()?.pdfUrl).toBe('/api/file/out2.pdf'));
     expect(vi.mocked(renderNativePdf).mock.calls[0][0]).toMatchObject({
       sourceId: 'source-id',
       unitsIds: ['units-1-2'],
@@ -579,12 +620,13 @@ describe('document mode: preserve formatting', () => {
       // Only the edited page is drawn again.
       imagePages: [1],
     });
-    expect(workflowState().formattedRun?.edits).toEqual({});
-    expect(workflowState().formattedRun?.units[0].translation).toBe(
-      'Memoria anual',
-    );
+    await flushSaves();
+    expect(savedRun()?.edits).toEqual({});
+    await flushSaves();
+    expect(savedRun()?.units[0].translation).toBe('Memoria anual');
     // The page that did not change keeps its image.
-    expect(workflowState().formattedRun?.pageImages).toEqual([
+    await flushSaves();
+    expect(savedRun()?.pageImages).toEqual([
       { page: 1, previewUrl: '/api/file/p1b.png', checkUrl: '' },
       { page: 2, previewUrl: '/api/file/p2.png', checkUrl: '' },
     ]);
@@ -649,7 +691,7 @@ describe('finished translation: the page list', () => {
         name: 'translation.formatted.translatePages 2',
       }),
     );
-    await waitFor(() => expect(workflowState().formattedRun).toBeDefined());
+    await waitFor(() => expect(savedRun()).toBeDefined());
     await screen.findByRole('button', {
       name: 'translation.formatted.removePage 5',
     });
@@ -672,7 +714,8 @@ describe('finished translation: the page list', () => {
   it('shows an untranslated page as its original, with a way to translate it', async () => {
     await finishFirstBatch();
     fireEvent.click(button('translation.formatted.pageLabel 3'));
-    expect(workflowState().formattedRun?.page).toBe(3);
+    await flushSaves();
+    expect(savedRun()?.page).toBe(3);
     const panel = screen.getByTestId('untranslated-panel');
     expect(panel).toHaveTextContent(
       'translation.formatted.pageUntranslatedNote',
@@ -714,9 +757,7 @@ describe('finished translation: the page list', () => {
       omitPages: [],
     });
     await waitFor(() =>
-      expect(
-        workflowState().formattedRun?.units.map((unit) => unit.page),
-      ).toEqual([1, 2, 3, 4]),
+      expect(savedRun()?.units.map((unit) => unit.page)).toEqual([1, 2, 3, 4]),
     );
   });
 
@@ -764,9 +805,11 @@ describe('finished translation: the page list', () => {
     expect(screen.queryByTestId('pending-changes')).toBeNull();
     fireEvent.click(button('translation.formatted.removePage 5'));
     expect(pageLooks()[4]).toBe('removed');
-    expect(workflowState().formattedRun?.removedPages).toEqual([5]);
+    await flushSaves();
+    expect(savedRun()?.removedPages).toEqual([5]);
     // Still the old file until it is built again.
-    expect(workflowState().formattedRun?.pdfUrl).toBe('/api/file/out.pdf');
+    await flushSaves();
+    expect(savedRun()?.pdfUrl).toBe('/api/file/out.pdf');
     expect(screen.getByTestId('pending-changes')).toHaveTextContent(
       'translation.formatted.pagesPending',
     );
@@ -775,16 +818,15 @@ describe('finished translation: the page list', () => {
     ).toBeTruthy();
 
     fireEvent.click(button('translation.formatted.updateDownload'));
-    await waitFor(() =>
-      expect(workflowState().formattedRun?.pdfUrl).toBe('/api/file/out2.pdf'),
-    );
+    await waitFor(() => expect(savedRun()?.pdfUrl).toBe('/api/file/out2.pdf'));
     expect(vi.mocked(renderNativePdf).mock.calls[0][0]).toMatchObject({
       omitPages: [5],
       // Nothing was edited: no page is drawn or checked again.
       imagePages: [],
       checkPages: [],
     });
-    expect(workflowState().formattedRun?.pdfRemovedPages).toEqual([5]);
+    await flushSaves();
+    expect(savedRun()?.pdfRemovedPages).toEqual([5]);
     expect(screen.queryByTestId('pending-changes')).toBeNull();
   });
 
@@ -800,9 +842,11 @@ describe('finished translation: the page list', () => {
       'untranslated',
     ]);
     fireEvent.click(button('translation.formatted.restorePage 4'));
-    expect(workflowState().formattedRun?.removedPages).toEqual([1]);
+    await flushSaves();
+    expect(savedRun()?.removedPages).toEqual([1]);
     fireEvent.click(button('translation.formatted.undoPageChanges'));
-    expect(workflowState().formattedRun?.removedPages ?? []).toEqual([]);
+    await flushSaves();
+    expect(savedRun()?.removedPages ?? []).toEqual([]);
     expect(screen.queryByTestId('pending-changes')).toBeNull();
     expect(renderNativePdf).not.toHaveBeenCalled();
   });
@@ -830,7 +874,8 @@ describe('finished translation: the page list', () => {
     for (const page of [1, 2, 3, 4]) {
       fireEvent.click(button(`translation.formatted.removePage ${page}`));
     }
-    expect(workflowState().formattedRun?.removedPages).toEqual([1, 2, 3, 4]);
+    await flushSaves();
+    expect(savedRun()?.removedPages).toEqual([1, 2, 3, 4]);
     expect(
       screen.queryByRole('button', {
         name: 'translation.formatted.removePage 5',
@@ -873,7 +918,7 @@ describe('finished translation: zoom and the look of a block', () => {
         name: 'translation.formatted.translatePages 1',
       }),
     );
-    await waitFor(() => expect(workflowState().formattedRun).toBeDefined());
+    await waitFor(() => expect(savedRun()).toBeDefined());
     await screen.findByTestId('formatted-page');
   }
   const pageWidth = () => screen.getByTestId('formatted-page').style.width;
@@ -938,7 +983,8 @@ describe('finished translation: zoom and the look of a block', () => {
       screen.getByLabelText('translation.formatted.styleColorOf 1'),
       { target: { value: '#ff0000' } },
     );
-    expect(workflowState().formattedRun?.styles).toEqual({
+    await flushSaves();
+    expect(savedRun()?.styles).toEqual({
       p1u1: { size: 11, dx: 2, dy: -2, color: '#ff0000' },
     });
     expect(look).toHaveTextContent('translation.formatted.styleSizeValue 11');
@@ -949,7 +995,8 @@ describe('finished translation: zoom and the look of a block', () => {
       'translation.formatted.editsPending 1',
     );
     // The PDF is the old one still.
-    expect(workflowState().formattedRun?.pdfUrl).toBe('/api/file/out.pdf');
+    await flushSaves();
+    expect(savedRun()?.pdfUrl).toBe('/api/file/out.pdf');
     // The outline shows where the block will go before anything is rendered.
     fireEvent.click(button('translation.formatted.done'));
     expect(button('translation.formatted.blockLabel 1').style.left).not.toBe(
@@ -957,15 +1004,14 @@ describe('finished translation: zoom and the look of a block', () => {
     );
 
     fireEvent.click(button('translation.formatted.rerender'));
-    await waitFor(() =>
-      expect(workflowState().formattedRun?.pdfUrl).toBe('/api/file/out2.pdf'),
-    );
+    await waitFor(() => expect(savedRun()?.pdfUrl).toBe('/api/file/out2.pdf'));
     expect(vi.mocked(renderNativePdf).mock.calls[0][0]).toMatchObject({
       styles: { p1u1: { size: 11, dx: 2, dy: -2, color: '#ff0000' } },
       // The restyled block's page is drawn again.
       imagePages: [1],
     });
-    expect(workflowState().formattedRun?.pdfStyles).toEqual({
+    await flushSaves();
+    expect(savedRun()?.pdfStyles).toEqual({
       p1u1: { size: 11, dx: 2, dy: -2, color: '#ff0000' },
     });
     expect(screen.queryByTestId('pending-changes')).toBeNull();
@@ -975,17 +1021,20 @@ describe('finished translation: zoom and the look of a block', () => {
     await finishOnePage();
     fireEvent.click(await screen.findByText('Informe anual'));
     fireEvent.click(button('translation.formatted.styleSmaller'));
-    expect(workflowState().formattedRun?.styles).toEqual({
+    await flushSaves();
+    expect(savedRun()?.styles).toEqual({
       p1u1: { size: 9.5 },
     });
     fireEvent.click(button('translation.formatted.styleReset'));
-    expect(workflowState().formattedRun?.styles).toEqual({});
+    await flushSaves();
+    expect(savedRun()?.styles).toEqual({});
     expect(screen.queryByTestId('pending-changes')).toBeNull();
 
     fireEvent.click(button('translation.formatted.moveDown'));
     expect(screen.getByTestId('pending-changes')).toBeTruthy();
     fireEvent.click(button('translation.formatted.discard'));
-    expect(workflowState().formattedRun?.styles ?? {}).toEqual({});
+    await flushSaves();
+    expect(savedRun()?.styles ?? {}).toEqual({});
     expect(screen.queryByTestId('pending-changes')).toBeNull();
     expect(renderNativePdf).not.toHaveBeenCalled();
   });
@@ -1020,6 +1069,158 @@ describe('finished translation: zoom and the look of a block', () => {
       expect(vi.mocked(renderNativePdf).mock.calls[0]?.[0]).toMatchObject({
         styles: {},
       }),
+    );
+  });
+});
+
+describe('TranslationWorkspace — where a formatted translation is kept', () => {
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  const fromNow = (days: number) =>
+    new Date(Date.now() + days * DAY_MS).toISOString();
+  const runRef = (extra: Partial<NativeRunRef> = {}): NativeRunRef => ({
+    runId: RUN_ID,
+    backend: 'app',
+    sourceUrl: SOURCE_URL,
+    sourceId: 'source.pdf',
+    ...extra,
+  });
+
+  /** Translates pages 1-2 and waits for the review. */
+  async function translateOnce() {
+    mountWorkspace({ documentLayout: 'formatted' });
+    fireEvent.click(
+      await screen.findByRole('button', {
+        name: `translation.formatted.translatePages ${MAX_PAGES}`,
+      }),
+    );
+    await waitFor(() => expect(savedRun()).toBeDefined());
+  }
+
+  /** Opens a conversation whose run is in storage. */
+  async function reopen(ref: NativeRunRef) {
+    await translateOnce();
+    const record = savedRun() as FormattedDocumentRun;
+    vi.mocked(loadRunRecord).mockResolvedValue(record);
+    document.body.innerHTML = '';
+    mountWorkspace({ documentLayout: 'formatted', formattedRunRef: ref });
+  }
+
+  it('keeps only a reference in the browser, and the run in storage', async () => {
+    await translateOnce();
+    const state = workflowState();
+    // Microsoft 365 files are on here, so the run goes to OneDrive.
+    expect(state.formattedRunRef).toEqual({
+      runId: RUN_ID,
+      backend: 'onedrive',
+      sourceUrl: SOURCE_URL,
+      sourceId: savedRun()?.sourceId,
+    });
+    // Nothing of the run's content is in workflow state.
+    expect(JSON.stringify(state)).not.toContain('Informe anual');
+    expect(savedRun()?.units[0].translation).toBe('Informe anual');
+    await waitFor(() => expect(syncRun).toHaveBeenCalled());
+  });
+
+  it('uses app storage for someone who does not use Microsoft 365', async () => {
+    useSettingsStore.setState({ m365Connected: false });
+    try {
+      await translateOnce();
+      expect(vi.mocked(runNativePdf).mock.calls[0][0].run.backend).toBe('app');
+      expect(workflowState().formattedRunRef?.backend).toBe('app');
+    } finally {
+      useSettingsStore.setState({ m365Connected: true });
+    }
+  });
+
+  it('falls back to app storage when OneDrive cannot be used', async () => {
+    vi.mocked(runNativePdf).mockRejectedValueOnce(
+      Object.assign(new Error('Consent is missing'), {
+        code: 'M365_CONSENT_MISSING',
+      }),
+    );
+    await translateOnce();
+    const backends = vi
+      .mocked(runNativePdf)
+      .mock.calls.map(([input]) => input.run.backend);
+    expect(backends).toEqual(['onedrive', 'app']);
+    expect(workflowState().formattedRunRef?.backend).toBe('app');
+  });
+
+  it('loads a stored run when the conversation is opened again', async () => {
+    await reopen(runRef());
+    expect(
+      await screen.findByRole('button', {
+        name: 'translation.formatted.download',
+      }),
+    ).toBeInTheDocument();
+    // Looking at a run asks when it expires without extending it.
+    await waitFor(() =>
+      expect(syncRun).toHaveBeenLastCalledWith(
+        expect.objectContaining({ runId: RUN_ID }),
+        expect.any(Array),
+        false,
+      ),
+    );
+  });
+
+  it('warns two days before the files expire, not three', async () => {
+    await reopen(runRef({ expiresAt: fromNow(3) }));
+    await screen.findByTestId('run-storage');
+    expect(screen.queryByTestId('run-expiry-warning')).toBeNull();
+
+    document.body.innerHTML = '';
+    vi.mocked(syncRun).mockResolvedValue({ expiresAt: fromNow(1.5) });
+    mountWorkspace({
+      documentLayout: 'formatted',
+      formattedRunRef: runRef({ runId: RUN_ID.replace(/^1/, '2') }),
+    });
+    const warning = await screen.findByTestId('run-expiry-warning');
+    expect(warning).toHaveTextContent(
+      'translation.formatted.storage.expiresSoon 2',
+    );
+
+    // Keeping it touches the files and clears the warning.
+    vi.mocked(syncRun).mockResolvedValue({ expiresAt: fromNow(5) });
+    fireEvent.click(within(warning).getByRole('button'));
+    await waitFor(() =>
+      expect(screen.queryByTestId('run-expiry-warning')).toBeNull(),
+    );
+    expect(vi.mocked(syncRun).mock.lastCall?.[2]).toBeUndefined();
+  });
+
+  it('says so when the files are gone, and lets the document be translated again', async () => {
+    vi.mocked(loadRunRecord).mockRejectedValue(new RunMissingError());
+    mountWorkspace({ documentLayout: 'formatted', formattedRunRef: runRef() });
+    const notice = await screen.findByTestId('run-unavailable');
+    expect(notice).toHaveTextContent(
+      'translation.formatted.storage.missingTitle',
+    );
+    fireEvent.click(
+      within(notice).getByRole('button', {
+        name: 'translation.formatted.storage.startOver',
+      }),
+    );
+    expect(workflowState().formattedRunRef).toBeUndefined();
+    expect(deleteRun).toHaveBeenCalled();
+    expect(
+      await screen.findByRole('button', {
+        name: `translation.formatted.translatePages ${MAX_PAGES}`,
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it('downloads the PDF through the app, so an encrypted one is readable', async () => {
+    await translateOnce();
+    fireEvent.click(
+      await screen.findByRole('button', {
+        name: 'translation.formatted.download',
+      }),
+    );
+    await waitFor(() =>
+      expect(downloadRunFile).toHaveBeenCalledWith(
+        '/api/file/out.pdf',
+        'manual.translated.pdf',
+      ),
     );
   });
 });
