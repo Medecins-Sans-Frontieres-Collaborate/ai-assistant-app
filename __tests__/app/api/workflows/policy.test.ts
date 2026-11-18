@@ -164,6 +164,53 @@ describe('/api/workflows/policy', () => {
     ).toBe(400);
   });
 
+  it('PUT stores feature limits and overrides, and refuses ones out of range', async () => {
+    const setting = {
+      enabled: true,
+      limits: { defaultBatchPages: 4, maxBatchPages: 8, maxDocumentPages: 20 },
+      overrides: [
+        {
+          scope: 'user',
+          targets: ['lead@example.com'],
+          limits: { maxDocumentPages: 60 },
+        },
+      ],
+    };
+    const features = { 'translation-preserve-formatting': setting };
+    expect((await PUT(putRequest({ ...validBody, features }))).status).toBe(
+      200,
+    );
+    expect(vi.mocked(writeWorkflowPolicy).mock.calls[0][1].features).toEqual(
+      features,
+    );
+
+    const refused = async (change: Record<string, unknown>) =>
+      (
+        await PUT(
+          putRequest({
+            ...validBody,
+            features: {
+              'translation-preserve-formatting': { ...setting, ...change },
+            },
+          }),
+        )
+      ).status;
+    expect(await refused({ limits: { maxDocumentPages: 100000 } })).toBe(400);
+    expect(await refused({ limits: { unknownLimit: 3 } })).toBe(400);
+    expect(await refused({ somethingElse: true })).toBe(400);
+    expect(
+      await refused({
+        overrides: [{ scope: 'group', targets: ['x'], limits: {} }],
+      }),
+    ).toBe(400);
+    expect(
+      await refused({
+        overrides: [{ scope: 'user', targets: [], limits: {} }],
+      }),
+    ).toBe(400);
+    expect(writeWorkflowPolicy).toHaveBeenCalledTimes(1);
+  });
+
   it('PUT without features leaves them to their defaults', async () => {
     expect((await PUT(putRequest(validBody))).status).toBe(200);
     expect(
