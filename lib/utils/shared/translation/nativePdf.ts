@@ -42,6 +42,12 @@ export type NativePdfStepInstructions = Partial<
 
 export const MAX_STEP_INSTRUCTION_CHARS = 2_000;
 
+/**
+ * The admin-policy feature that switches this pipeline on or off
+ * (Admin > Workflows, under Translation).
+ */
+export const NATIVE_PDF_FEATURE = 'translation-preserve-formatting';
+
 /** Pages one synchronous run may process: it bounds cost and request time. */
 export const NATIVE_PDF_MAX_PAGES = 6;
 
