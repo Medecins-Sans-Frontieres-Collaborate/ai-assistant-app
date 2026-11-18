@@ -7,6 +7,13 @@
  * standard chat. The type is fixed at creation time: it is only ever set on
  * an empty conversation and never changed afterward.
  */
+import {
+  FormattedDocumentOptions,
+  FormattedDocumentRun,
+  TranslationDocumentLayout,
+} from '@/lib/utils/shared/translation/formattedDocument';
+import { NativePdfDepth } from '@/lib/utils/shared/translation/nativePdf';
+
 import { ChannelDrafterWorkflowState } from './drafter';
 import { FormFillWorkflowState } from './formFill';
 import { TabularFieldType } from './structure';
@@ -336,6 +343,17 @@ export interface TranslationWorkflowState {
    * `document` mode.
    */
   textModeResult?: TranslationTextResult;
+  /**
+   * How `document` mode produces its result; absent means `text` (see
+   * DEFAULT_DOCUMENT_LAYOUT).
+   */
+  documentLayout?: TranslationDocumentLayout;
+  /** Translation depth of the `formatted` layout; absent means `quick`. */
+  documentDepth?: NativePdfDepth;
+  /** The person's choices for the next `formatted` run. */
+  formattedOptions?: FormattedDocumentOptions;
+  /** The last `formatted` run of `sourceDocument` and the edits made to it. */
+  formattedRun?: FormattedDocumentRun;
   sourceLang?: string;
   /** Legacy locale-code field; superseded by targetLanguage. */
   targetLang?: string;
@@ -362,8 +380,9 @@ export interface TranslationWorkflowState {
   glossaryGuideIds?: string[];
   /**
    * `quick` and `agentic` translate the source text with the language
-   * model. `document` sends the whole uploaded file through document
-   * translation (layout kept) and reads the result page by page.
+   * model. `document` works on the uploaded file itself: either through
+   * document translation, read page by page as text, or rebuilt page by
+   * page with its formatting kept (see `documentLayout`).
    */
   mode: TranslationMode;
   analysis?: TranslationAnalysis;
