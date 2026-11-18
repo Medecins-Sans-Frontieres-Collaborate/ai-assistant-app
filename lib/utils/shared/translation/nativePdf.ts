@@ -278,6 +278,13 @@ export interface NativePdfUnit {
   room: [number, number, number, number];
   /** The card, cell or box the unit sits inside, which its room stays in. */
   panel?: [number, number, number, number];
+  /**
+   * Names the units of the page set in the same style (the items of a
+   * list, the headings of a row of cards). Peers are kept at one size.
+   */
+  peer?: string;
+  /** How the source text is aligned; the translation is laid out the same. */
+  align?: 'left' | 'center' | 'right';
   /** `room` area over `bbox` area: how much more space there is than was used. */
   roomFactor: number;
   lines: number;
@@ -611,10 +618,12 @@ function clamp(value: number, min: number, max: number): number {
  *    far it was shrunk.
  *  - The visual check prescribed a fix for it (NativePdfLayoutFix): that
  *    fix, held inside the automatic limits. A major finding is preferred
- *    over a minor one. `smaller` sets a font size counted from the size the
+ *    over a minor one, and a move is made for a major finding only.
+ *    `smaller` sets a font size counted from the size the
  *    text is SHOWN at (its size times the layout's shrink), never below
  *    {@link AUTO_MIN_SIZE_RATIO} of the source's; where that floor leaves
- *    nothing to take off, the unit is shortened instead.
+ *    nothing to take off, the unit is shortened instead. The size is given
+ *    to the unit's peers on the page too (NativePdfUnit.peer).
  *  - The check raised a major fit issue without prescribing anything: a
  *    shorter translation.
  * Minor remarks without a prescription change nothing.
@@ -631,12 +640,33 @@ export function planLayoutFixes(input: {
   fits: readonly NativePdfFitReport[];
   issues: readonly NativePdfIssue[];
   lengths: ReadonlyMap<string, number>;
-  units?: readonly Pick<NativePdfUnit, 'id' | 'size'>[];
+  units?: readonly Pick<NativePdfUnit, 'id' | 'size' | 'peer'>[];
   styles?: Readonly<Record<string, NativePdfUnitStyle>>;
 }): LayoutFixPlan {
   const sizeById = new Map(
     (input.units ?? []).map((unit) => [unit.id, unit.size]),
   );
+  const peerById = new Map(
+    (input.units ?? []).map((unit) => [unit.id, unit.peer]),
+  );
+  /** Sets a unit's font size and, so a list never mixes sizes, its peers'. */
+  const resize = (fit: NativePdfFitReport, size: number): void => {
+    const peer = peerById.get(fit.id);
+    for (const other of input.fits) {
+      const isPeer =
+        other.id === fit.id ||
+        (peer !== undefined &&
+          other.page === fit.page &&
+          peerById.get(other.id) === peer);
+      const otherSize = sizeById.get(other.id);
+      if (!isPeer || !otherSize || !input.lengths.get(other.id)) continue;
+      const style = plan.styles[other.id] ?? {};
+      // A peer already set smaller than this keeps its size.
+      if ((style.size ?? otherSize) <= size + SCALE_EPSILON) continue;
+      plan.styles[other.id] = { ...style, size };
+      if (!plan.resized.includes(other.id)) plan.resized.push(other.id);
+    }
+  };
   const plan: LayoutFixPlan = {
     targets: [],
     styles: { ...(input.styles ?? {}) },
@@ -689,6 +719,9 @@ export function planLayoutFixes(input: {
     }
     const style = plan.styles[fit.id] ?? {};
     if (fix.action === 'move') {
+      // Nudging one item of a list for a minor remark unsettles its rhythm
+      // more than the remark was worth.
+      if (prescribed?.severity !== 'major') continue;
       const dx = clamp(fix.dx, -AUTO_MAX_SHIFT, AUTO_MAX_SHIFT);
       const dy = clamp(fix.dy, -AUTO_MAX_SHIFT, AUTO_MAX_SHIFT);
       const moved = sanitizeUnitStyle({
@@ -720,8 +753,7 @@ export function planLayoutFixes(input: {
         Math.floor(Math.max(shown * ratio, floor) / NATIVE_PDF_FONT_SIZE_STEP) *
         NATIVE_PDF_FONT_SIZE_STEP;
       if (next >= floor - SCALE_EPSILON && next < current - SCALE_EPSILON) {
-        plan.styles[fit.id] = { ...style, size: next };
-        plan.resized.push(fit.id);
+        resize(fit, next);
         continue;
       }
     }
