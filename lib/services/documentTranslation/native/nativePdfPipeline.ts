@@ -14,6 +14,7 @@ import {
   NativePdfFitReport,
   NativePdfIssue,
   NativePdfIssueKind,
+  NativePdfLayoutFix,
   NativePdfPageStats,
   NativePdfRole,
   NativePdfStepId,
@@ -22,10 +23,14 @@ import {
   NativePdfUnit,
   NativePdfUnitAction,
   NativePdfUnitResult,
+  NativePdfUnitStyle,
   charBudget,
+  hasLayoutFixes,
+  layoutScore,
+  planLayoutFixes,
   repairTranslationTags,
   sanitizeTranslationEdits,
-  selectRefitTargets,
+  sanitizeUnitStyles,
   visibleLength,
 } from '@/lib/utils/shared/translation/nativePdf';
 
@@ -57,7 +62,8 @@ import type { AzureOpenAI } from 'openai';
  *   translate text      one structured call per page, with a length budget per unit
  *   rebuild   sandbox   source text removed, translations laid out in its place
  *   verify    vision    original beside translated, layout defects reported
- *   refit     text      shorter wording for what did not fit, then rebuild and verify again
+ *   refit     text      what the check prescribed (shorter wording, a smaller font, a move),
+ *                       then rebuild and verify again; a page made worse is put back
  *
  * Every step runs on every call, in that order (see NATIVE_PDF_STEPS). The
  * caller can add instructions to the model steps; it cannot skip a step.
@@ -110,6 +116,8 @@ export interface NativePdfResult {
   uncheckedPages: number[];
   fonts: { sans: string; serif: string };
   refitRounds: number;
+  /** Unit id to the look the automatic fixes gave it; the PDF uses these. */
+  styles: Record<string, NativePdfUnitStyle>;
   /** The translated pages as a PDF. */
   pdf: Uint8Array;
   outputs: NativePdfPageOutput[];
@@ -139,6 +147,8 @@ export interface NativePdfRerenderParams {
    * still laid out, so putting a page back needs nothing but another render.
    */
   omitPages?: number[];
+  /** Untrusted: unit id to the person's style for it (see NativePdfUnitStyle). */
+  styles?: unknown;
   /** Most pages of the document that may carry a translation. */
   maxDocumentPages: number;
   /** Untrusted: unit id to translation; null or absent keeps the unit as written. */
@@ -389,6 +399,8 @@ async function verifyPage(options: {
   check: Uint8Array;
   /** Per-page labels of units deliberately left as written. */
   kept: number[];
+  /** The page's size and its units' measurements, for prescribing fixes. */
+  facts: string;
   usage: WorkflowUsageCollector;
 }): Promise<NativePdfIssue[]> {
   const result = await callStructured<{
@@ -397,6 +409,7 @@ async function verifyPage(options: {
       kind: NativePdfIssueKind;
       severity: 'minor' | 'major';
       note: string;
+      fix: NativePdfLayoutFix;
     }>;
   }>({
     client: options.client,
@@ -411,7 +424,10 @@ async function verifyPage(options: {
           options.kept.length > 0
             ? `Units left in the source language on purpose (names, codes, figures); their text being unchanged is correct: ${options.kept.join(', ')}.`
             : 'Every unit on this page was meant to be translated.',
-        ].join('\n'),
+          options.facts,
+        ]
+          .filter(Boolean)
+          .join('\n'),
       },
       {
         type: 'image_url',
@@ -427,12 +443,51 @@ async function verifyPage(options: {
   return result.issues.map((issue) => ({ ...issue, page: options.page }));
 }
 
+/**
+ * What the check is told about a page besides its picture: the page's size
+ * and each laid-out unit's font size, shrink and area, in points. Without
+ * these a prescribed move or size has nothing to be measured against.
+ *
+ * @returns The lines to add to the check's message; empty when the page's
+ *   size or layout report is not known.
+ */
+function checkFacts(options: {
+  page: number;
+  pages?: NativePdfPageStats[];
+  units: NativePdfUnit[];
+  fits?: NativePdfFitReport[];
+  styles?: Record<string, NativePdfUnitStyle>;
+}): string {
+  const stats = options.pages?.find((entry) => entry.page === options.page);
+  const fits = (options.fits ?? []).filter((fit) => fit.page === options.page);
+  if (!stats || fits.length === 0) return '';
+  const unitById = new Map(options.units.map((unit) => [unit.id, unit]));
+  const box = (values: number[]) => values.map(Math.round).join(', ');
+  const lines = fits.flatMap((fit) => {
+    const unit = unitById.get(fit.id);
+    if (!unit) return [];
+    const size = options.styles?.[fit.id]?.size ?? unit.size;
+    return [
+      `${fit.n}: ${size} pt` +
+        (fit.scale < 1 ? `, shrunk to ${Math.round(fit.scale * 100)}%` : '') +
+        (fit.used ? `, text takes up [${box(fit.used)}]` : '') +
+        (unit.panel ? `, inside a box at [${box(unit.panel)}]` : ''),
+    ];
+  });
+  return [
+    `The page is ${stats.width} by ${stats.height} points. Areas are [left, top, right, bottom] from the top-left corner.`,
+    `Units as laid out:\n${lines.join('\n')}`,
+  ].join('\n');
+}
+
 /** What a rebuild returns besides the translated pages themselves. */
 interface RebuildOutput {
   /** Pages to return images of; absent means every translated page. */
   imagePages?: number[];
   /** Source pages to leave out of the PDF. */
   omitPages?: number[];
+  /** Unit id to the person's style for it, already sanitized. */
+  styles?: Record<string, NativePdfUnitStyle>;
 }
 
 /** Lays the current translations into the original document. */
@@ -443,7 +498,7 @@ async function rebuild(
   usage: WorkflowUsageCollector,
   output: RebuildOutput = {},
 ): Promise<RebuildOutcome> {
-  const { imagePages, omitPages } = output;
+  const { imagePages, omitPages, styles } = output;
   const run = await runSandboxScript(
     'rebuild',
     [
@@ -466,6 +521,7 @@ async function rebuild(
         onlyTranslatedPages: false,
         ...(imagePages ? { imagePages } : {}),
         ...(omitPages?.length ? { omitPages } : {}),
+        ...(styles && Object.keys(styles).length > 0 ? { styles } : {}),
       }),
     ],
     usage,
@@ -616,6 +672,10 @@ async function verifyPages(options: {
   units: NativePdfUnit[];
   /** Ids of the units that were laid out translated. */
   translated: ReadonlySet<string>;
+  /** Page sizes, the layout report and the styles in force (see checkFacts). */
+  pages?: NativePdfPageStats[];
+  fits?: NativePdfFitReport[];
+  styles?: Record<string, NativePdfUnitStyle>;
   usage: WorkflowUsageCollector;
   signal?: AbortSignal;
 }): Promise<LayoutCheck> {
@@ -634,6 +694,7 @@ async function verifyPages(options: {
               unit.page === output.page && !options.translated.has(unit.id),
           )
           .map((unit) => unit.n),
+        facts: checkFacts({ ...options, page: output.page }),
         usage: options.usage,
       }),
     ),
@@ -747,6 +808,7 @@ export async function rerenderNativePdf(
   if (extracted.pageCount > 0 && omitted.length >= extracted.pageCount) {
     throw new NativePdfNoPagesLeftError();
   }
+  const styles = sanitizeUnitStyles(params.styles, extracted.units);
   const built = await rebuild(
     params.document,
     unitsFile,
@@ -757,6 +819,7 @@ export async function rerenderNativePdf(
         ...new Set([...params.imagePages, ...params.checkPages]),
       ],
       omitPages: omitted,
+      styles,
     },
   );
   const wanted = new Set(params.checkPages);
@@ -771,11 +834,15 @@ export async function rerenderNativePdf(
           outputs: toCheck,
           units: extracted.units,
           translated: new Set(edits.translations.keys()),
+          pages: extracted.pages,
+          fits: built.fits,
+          styles,
           usage: params.usage,
         });
   return {
     fits: built.fits,
-    issues: check.issues,
+    // The prescriptions are for the automatic rounds of a first run.
+    issues: check.issues.map(({ fix: _fix, ...issue }) => issue),
     checkedPages: check.checkedPages,
     uncheckedPages: check.uncheckedPages,
     fonts: built.fonts,
@@ -986,7 +1053,10 @@ export async function runNativePdfTranslation(
 
   // ── verify ─────────────────────────────────────────────────────────────
   startedAt = begin('verify');
-  const verify = (outputs: NativePdfPageOutput[]) =>
+  const verify = (
+    outputs: NativePdfPageOutput[],
+    styles: Record<string, NativePdfUnitStyle> = {},
+  ) =>
     verifyPages({
       client,
       model: visionModel,
@@ -994,6 +1064,9 @@ export async function runNativePdfTranslation(
       outputs,
       units: extracted.units,
       translated: new Set(translations.keys()),
+      pages: extracted.pages,
+      fits: built.fits,
+      styles,
       usage,
       signal: params.signal,
     });
@@ -1010,52 +1083,75 @@ export async function runNativePdfTranslation(
   );
 
   // ── refit ──────────────────────────────────────────────────────────────
+  // Each round takes the check's prescriptions (a shorter wording, a smaller
+  // font, a move), lays the pages out again and looks at the changed ones
+  // again. A page a round made worse is put back as it was and left alone.
   startedAt = begin('refit');
-  const refitted = new Set<string>();
+  const firstTranslations = new Map(translations);
+  let styles: Record<string, NativePdfUnitStyle> = {};
+  const undonePages = new Set<number>();
   let rounds = 0;
   while (rounds < params.maxRefitRounds) {
     const lengths = new Map(
       [...translations].map(([id, text]) => [id, visibleLength(text)]),
     );
-    const targets = selectRefitTargets(built.fits, issues, lengths);
-    if (targets.length === 0) break;
+    const plan = planLayoutFixes({
+      fits: built.fits.filter((fit) => !undonePages.has(fit.page)),
+      issues: issues.filter((issue) => !undonePages.has(issue.page)),
+      lengths,
+      units: extracted.units,
+      styles,
+    });
+    if (!hasLayoutFixes(plan)) break;
     params.signal?.throwIfAborted();
     rounds += 1;
-    const shortened = await callStructured<{
-      units: Array<{ id: string; text: string }>;
-    }>({
-      client,
-      model: params.modelId,
-      system: SHORTEN_PROMPT,
-      user: [
-        `Language: ${targetLanguage}`,
-        `Units:\n${JSON.stringify(
-          targets.map((target) => ({
-            id: target.id,
-            targetChars: target.targetChars,
-            text: translations.get(target.id),
-          })),
-        )}`,
-      ].join('\n\n'),
-      schemaName: 'native_pdf_shorten',
-      schema: TRANSLATE_SCHEMA,
-      maxTokens: TRANSLATE_MAX_TOKENS,
-      usage,
-      usageLabel: 'native-pdf-refit',
-    });
-    const wanted = new Set(targets.map((target) => target.id));
-    for (const unit of shortened.units) {
-      if (!wanted.has(unit.id)) continue;
-      accept(unit.id, unit.text);
-      refitted.add(unit.id);
+    const before = {
+      translations: new Map(translations),
+      styles,
+      issues,
+      fits: built.fits,
+    };
+    if (plan.targets.length > 0) {
+      const shortened = await callStructured<{
+        units: Array<{ id: string; text: string }>;
+      }>({
+        client,
+        model: params.modelId,
+        system: SHORTEN_PROMPT,
+        user: [
+          `Language: ${targetLanguage}`,
+          `Units:\n${JSON.stringify(
+            plan.targets.map((target) => ({
+              id: target.id,
+              targetChars: target.targetChars,
+              text: translations.get(target.id),
+            })),
+          )}`,
+        ].join('\n\n'),
+        schemaName: 'native_pdf_shorten',
+        schema: TRANSLATE_SCHEMA,
+        maxTokens: TRANSLATE_MAX_TOKENS,
+        usage,
+        usageLabel: 'native-pdf-refit',
+      });
+      const wanted = new Set(plan.targets.map((target) => target.id));
+      for (const unit of shortened.units) {
+        if (wanted.has(unit.id)) accept(unit.id, unit.text);
+      }
     }
-    built = await rebuild(document, unitsFile, translations, usage);
+    styles = plan.styles;
+    built = await rebuild(document, unitsFile, translations, usage, { styles });
     // Only the pages that changed are looked at again; the rest keep their findings.
     const changedPages = new Set(
-      targets.map((target) => unitById.get(target.id)?.page),
+      [
+        ...plan.targets.map((target) => target.id),
+        ...plan.resized,
+        ...plan.moved,
+      ].map((id) => unitById.get(id)?.page),
     );
     const rechecked = await verify(
       built.outputs.filter((output) => changedPages.has(output.page)),
+      styles,
     );
     // A page whose recheck failed shows changed text: its old findings no
     // longer describe it, so they go and the page counts as unchecked.
@@ -1065,13 +1161,69 @@ export async function runNativePdfTranslation(
     ];
     rechecked.checkedPages.forEach((page) => unchecked.delete(page));
     rechecked.uncheckedPages.forEach((page) => unchecked.add(page));
+    // Do no harm: a page that reads worse than before the round goes back.
+    const scoreOf = (
+      page: number,
+      state: { fits: NativePdfFitReport[]; issues: NativePdfIssue[] },
+    ): number =>
+      layoutScore(
+        state.fits.filter((fit) => fit.page === page),
+        state.issues.filter((issue) => issue.page === page),
+      );
+    const worse = new Set(
+      rechecked.checkedPages.filter(
+        (page) =>
+          scoreOf(page, { fits: built.fits, issues }) > scoreOf(page, before),
+      ),
+    );
+    if (worse.size > 0) {
+      const restored = { ...styles };
+      for (const unit of extracted.units) {
+        if (!worse.has(unit.page)) continue;
+        const text = before.translations.get(unit.id);
+        if (text === undefined) translations.delete(unit.id);
+        else translations.set(unit.id, text);
+        if (before.styles[unit.id]) restored[unit.id] = before.styles[unit.id];
+        else delete restored[unit.id];
+      }
+      styles = restored;
+      issues = [
+        ...issues.filter((issue) => !worse.has(issue.page)),
+        ...before.issues.filter((issue) => worse.has(issue.page)),
+      ];
+      worse.forEach((page) => undonePages.add(page));
+      // The pages on file still show the undone fixes.
+      built = await rebuild(document, unitsFile, translations, usage, {
+        styles,
+      });
+    }
   }
+  const refitted = new Set(
+    [...translations]
+      .filter(([id, text]) => firstTranslations.get(id) !== text)
+      .map(([id]) => id),
+  );
+  const count = (field: keyof NativePdfUnitStyle): number =>
+    Object.values(styles).filter((style) => style[field] !== undefined).length;
+  const resizedCount = count('size');
+  const movedCount = Object.values(styles).filter(
+    (style) => style.dx !== undefined || style.dy !== undefined,
+  ).length;
+  const changes = [
+    refitted.size > 0 ? `${refitted.size} shortened` : '',
+    resizedCount > 0 ? `${resizedCount} set smaller` : '',
+    movedCount > 0 ? `${movedCount} moved` : '',
+  ].filter(Boolean);
   record(
     'refit',
     startedAt,
     rounds === 0
-      ? 'Nothing needed a shorter translation'
-      : `${refitted.size} units shortened over ${rounds} round${rounds > 1 ? 's' : ''}; ${issues.length} issues remain`,
+      ? 'Nothing needed adjusting'
+      : `${changes.length > 0 ? `Units ${changes.join(', ')}` : 'No fix kept'} over ${rounds} round${rounds > 1 ? 's' : ''}` +
+          (undonePages.size > 0
+            ? `; fixes undone on page ${[...undonePages].sort((a, b) => a - b).join(', ')} where they made things worse`
+            : '') +
+          `; ${issues.length} issues remain`,
     rounds === 0 ? 'skipped' : 'done',
   );
 
@@ -1097,6 +1249,8 @@ export async function runNativePdfTranslation(
         bbox: unit.bbox,
         room: unit.room,
         budgetChars: charBudget(unit),
+        size: unit.size,
+        ...(unit.color ? { color: unit.color } : {}),
         translation: translations.get(unit.id) ?? null,
         scale: fit?.scale ?? null,
         fits: fit?.fits ?? null,
@@ -1104,10 +1258,12 @@ export async function runNativePdfTranslation(
         refitted: refitted.has(unit.id),
       };
     }),
-    issues,
+    // A prescription is for the fix rounds; what is reported is the finding.
+    issues: issues.map(({ fix: _fix, ...issue }) => issue),
     uncheckedPages: [...unchecked].sort((a, b) => a - b),
     fonts: built.fonts,
     refitRounds: rounds,
+    styles,
     pdf: built.pdf,
     outputs: built.outputs,
     unitsFile,
