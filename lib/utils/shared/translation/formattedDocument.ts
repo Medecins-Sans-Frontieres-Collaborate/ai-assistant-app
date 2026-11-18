@@ -16,6 +16,12 @@
  *    when the run has a unit on it ({@link translatedPages}). One batch may
  *    take several requests (splitIntoRequests in nativePdf.ts); the pieces
  *    are joined by {@link combineRuns} and one render.
+ *  - The DOWNLOAD is the whole document: translated pages replaced, every
+ *    other page as it is in the source. `run.removedPages` are the source
+ *    pages the person wants left out of it; `run.pdfRemovedPages` are the
+ *    ones the PDF at `run.pdfUrl` actually leaves out. The two differ only
+ *    until the next render ({@link removalPending}). Page numbers always
+ *    mean pages of the SOURCE, whatever the download leaves out.
  *  - Positions are page points from the top-left corner; the screen places
  *    them as percentages of the page (see {@link unitBox}).
  */
@@ -86,6 +92,10 @@ export interface FormattedDocumentRun extends NativePdfRunReport {
   dismissed: string[];
   /** Batches put into this run so far; absent on runs of a single batch. */
   batches?: number;
+  /** Source pages to leave out of the download (see the conventions). */
+  removedPages?: number[];
+  /** Source pages the PDF at `pdfUrl` leaves out. */
+  pdfRemovedPages?: number[];
 }
 
 export { NATIVE_PDF_DEFAULT_DEPTH, NATIVE_PDF_MAX_PAGES };
@@ -202,6 +212,54 @@ export function stalePages(run: FormattedDocumentRun): number[] {
   );
 }
 
+/** Source pages the person wants left out of the download, ascending. */
+export function removedPages(
+  run: Pick<FormattedDocumentRun, 'removedPages'> | undefined,
+): number[] {
+  return [...new Set(run?.removedPages ?? [])].sort((a, b) => a - b);
+}
+
+/**
+ * Whether the download does not yet leave out exactly the pages the person
+ * removed (a page was removed or put back since the last render).
+ */
+export function removalPending(
+  run: Pick<FormattedDocumentRun, 'removedPages' | 'pdfRemovedPages'>,
+): boolean {
+  const wanted = removedPages(run);
+  const inPdf = removedPages({ removedPages: run.pdfRemovedPages });
+  return (
+    wanted.length !== inPdf.length ||
+    wanted.some((page, index) => page !== inPdf[index])
+  );
+}
+
+/**
+ * Removes a page from the download, or puts it back.
+ *
+ * The last page left cannot be removed: a download needs a page. The run
+ * is then returned unchanged.
+ *
+ * @param run - The run.
+ * @param page - 1-based source page.
+ * @param removed - True to leave the page out, false to put it back.
+ * @param pageCount - Pages in the source document.
+ */
+export function withPageRemoved(
+  run: FormattedDocumentRun,
+  page: number,
+  removed: boolean,
+  pageCount: number,
+): FormattedDocumentRun {
+  const current = removedPages(run);
+  if (removed === current.includes(page)) return run;
+  if (removed && current.length >= pageCount - 1) return run;
+  const next = removed
+    ? [...current, page].sort((a, b) => a - b)
+    : current.filter((other) => other !== page);
+  return { ...run, removedPages: next };
+}
+
 /**
  * Every unit's translation for a re-render: the edits over the rendered
  * text. A unit kept as written has no entry.
@@ -266,6 +324,8 @@ export function applyRenderReport(
     ],
     fonts: report.fonts,
     pdfUrl: report.pdfUrl,
+    // The render left out the pages removed in the run as it was sent.
+    pdfRemovedPages: removedPages(run),
     // The render returns images of the pages that changed only.
     pageImages: mergeByPage(run.pageImages, report.pageImages),
     unitsId: report.unitsId ?? run.unitsId,
@@ -370,7 +430,8 @@ export type BatchPageState =
   | 'selected'
   | 'available'
   | 'later'
-  | 'locked';
+  | 'locked'
+  | 'removed';
 
 /** Why a selection cannot be run as it is. */
 export type BatchProblem = 'unreadable' | 'over-batch' | 'none-left';
@@ -390,6 +451,8 @@ export interface BatchPlan {
   allowance: number;
   /** Pages earlier batches translated, ascending. */
   translated: number[];
+  /** Pages removed from the download, ascending; never part of a batch. */
+  removed: number[];
   limits: NativePdfLimits;
 }
 
@@ -403,6 +466,7 @@ export interface BatchPlan {
  * @param input.spec - The selection as typed.
  * @param input.pageCount - Pages in the document (0 while unknown).
  * @param input.translated - Pages earlier batches translated.
+ * @param input.removed - Pages the person removed from the download.
  * @param input.batchPages - Pages per batch the person asked for, if any.
  * @param input.limits - The person's limits.
  */
@@ -410,19 +474,22 @@ export function planBatch(input: {
   spec: string;
   pageCount: number;
   translated: number[];
+  removed?: number[];
   batchPages?: number;
   limits: NativePdfLimits;
 }): BatchPlan {
   const { limits } = input;
   const translated = [...new Set(input.translated)].sort((a, b) => a - b);
-  const done = new Set(translated);
+  const removed = removedPages({ removedPages: input.removed });
+  // Out of reach for a batch: done already, or not wanted in the download.
+  const done = new Set([...translated, ...removed]);
   const batchPages = Math.min(
     Math.max(Math.floor(input.batchPages ?? limits.defaultBatchPages), 1),
     limits.maxBatchPages,
   );
   const allowance = Math.max(limits.maxDocumentPages - translated.length, 0);
   const capacity = Math.min(batchPages, allowance);
-  const plan = { batchPages, capacity, allowance, translated, limits };
+  const plan = { batchPages, capacity, allowance, translated, removed, limits };
   const open = Array.from(
     { length: input.pageCount },
     (_, index) => index + 1,
@@ -447,11 +514,40 @@ export function planBatch(input: {
   return { ...plan, pages };
 }
 
+/**
+ * The plan for a batch made of exactly the pages a person ticked, as on the
+ * finished translation's page list. Unlike {@link planBatch}, ticking
+ * nothing means an empty batch, not the first pages.
+ *
+ * @param input.ticked - The ticked pages, in any order.
+ * @returns A plan whose `pages` are the ticked pages a batch can take:
+ *   untranslated, not removed, inside the document, and no more than the
+ *   batch's capacity (the lowest page numbers are kept).
+ */
+export function planTickedBatch(input: {
+  ticked: number[];
+  pageCount: number;
+  translated: number[];
+  removed?: number[];
+  batchPages?: number;
+  limits: NativePdfLimits;
+}): BatchPlan {
+  const { ticked, ...rest } = input;
+  const plan = planBatch({ ...rest, spec: '' });
+  const closed = new Set([...plan.translated, ...plan.removed]);
+  const pages = [...new Set(ticked)]
+    .filter((page) => page >= 1 && page <= input.pageCount && !closed.has(page))
+    .sort((a, b) => a - b)
+    .slice(0, plan.capacity);
+  return { ...plan, pages, problem: undefined };
+}
+
 /** Most pages a typed selection may name before it is refused as unreadable. */
 const MAX_NAMED_PAGES = 5_000;
 
 /** Where one page stands under a plan (see {@link BatchPageState}). */
 export function batchPageState(plan: BatchPlan, page: number): BatchPageState {
+  if (plan.removed.includes(page)) return 'removed';
   if (plan.translated.includes(page)) return 'translated';
   if (plan.pages.includes(page)) return 'selected';
   if (plan.pages.length < plan.capacity) return 'available';
