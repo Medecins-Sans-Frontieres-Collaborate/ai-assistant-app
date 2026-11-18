@@ -1,5 +1,6 @@
 import {
   NativePdfDocumentLimitError,
+  NativePdfNoPagesLeftError,
   combineExtractions,
   rerenderNativePdf,
 } from '@/lib/services/documentTranslation/native/nativePdfPipeline';
@@ -150,6 +151,64 @@ describe('rerenderNativePdf: document page limit', () => {
   it('refuses one page more, before any sandbox work', async () => {
     await expect(rerenderNativePdf(params([1, 2, 3], 2))).rejects.toThrow(
       NativePdfDocumentLimitError,
+    );
+    expect(runSandboxScript).not.toHaveBeenCalled();
+  });
+});
+
+describe('rerenderNativePdf: pages left out of the result', () => {
+  // A 3-page document with a translation on page 1.
+  const params = (omitPages: number[] | undefined) => ({
+    document: Buffer.from('%PDF-1.4'),
+    unitsFiles: [extraction({ 1: 1 }, 3)],
+    translations: { 'p1-b0-1': 'traduit' },
+    checkPages: [],
+    imagePages: [],
+    omitPages,
+    maxDocumentPages: 5,
+    instructions: {},
+    modelId: 'model',
+    usage: {} as never,
+  });
+  const job = () =>
+    JSON.parse(
+      vi
+        .mocked(runSandboxScript)
+        .mock.calls[0][1].find((file) => file.filename === 'job.json')
+        ?.data.toString() ?? '{}',
+    );
+
+  beforeEach(() => {
+    vi.mocked(runSandboxScript).mockReset();
+    vi.mocked(runSandboxScript).mockResolvedValue({
+      files: new Map([
+        [
+          'report.json',
+          strToU8(
+            JSON.stringify({ fonts: { sans: 'A', serif: 'B' }, units: [] }),
+          ),
+        ],
+        ['translated.pdf', strToU8('%PDF-out')],
+      ]),
+    } as never);
+  });
+
+  it('asks for nothing to be left out by default', async () => {
+    await rerenderNativePdf(params(undefined));
+    expect(job()).not.toHaveProperty('omitPages');
+  });
+
+  it('passes the pages on, once each, and only pages the document has', async () => {
+    await rerenderNativePdf(params([2, 2, 7]));
+    expect(job().omitPages).toEqual([2]);
+  });
+
+  it('leaves out all pages but one, and refuses to leave out every page', async () => {
+    await rerenderNativePdf(params([1, 2]));
+    expect(job().omitPages).toEqual([1, 2]);
+    vi.mocked(runSandboxScript).mockClear();
+    await expect(rerenderNativePdf(params([1, 2, 3]))).rejects.toThrow(
+      NativePdfNoPagesLeftError,
     );
     expect(runSandboxScript).not.toHaveBeenCalled();
   });
