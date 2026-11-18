@@ -13,6 +13,7 @@ import {
 } from '@/lib/utils/shared/translation/formattedDocument';
 import { NativePdfDepth } from '@/lib/utils/shared/translation/nativePdf';
 import { NativeRunRef } from '@/lib/utils/shared/translation/nativeRunStorage';
+import { StoredSourceTextRef } from '@/lib/utils/shared/translation/storedSourceText';
 
 import { ChannelDrafterWorkflowState } from './drafter';
 import { FormFillWorkflowState } from './formFill';
@@ -337,7 +338,14 @@ export interface TranslationTextResult {
 
 export interface TranslationWorkflowState {
   kind: 'translation';
+  /**
+   * The text to translate. Always the text itself in memory; a large one
+   * is kept in storage and left out of what the browser saves (see
+   * storedSourceText.ts).
+   */
   sourceText: string;
+  /** Where a large `sourceText` is stored. */
+  sourceTextRef?: StoredSourceTextRef;
   /**
    * Set while `sourceText` holds a selection of pages from a document too
    * large to translate in one batch.
