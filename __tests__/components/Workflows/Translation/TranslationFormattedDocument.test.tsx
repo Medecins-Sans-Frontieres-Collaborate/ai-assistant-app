@@ -1119,6 +1119,8 @@ describe('TranslationWorkspace — where a formatted translation is kept', () =>
     expect(JSON.stringify(state)).not.toContain('Informe anual');
     expect(savedRun()?.units[0].translation).toBe('Informe anual');
     await waitFor(() => expect(syncRun).toHaveBeenCalled());
+    // The run is already in memory: it is not read back from storage.
+    expect(loadRunRecord).not.toHaveBeenCalled();
   });
 
   it('uses app storage for someone who does not use Microsoft 365', async () => {
