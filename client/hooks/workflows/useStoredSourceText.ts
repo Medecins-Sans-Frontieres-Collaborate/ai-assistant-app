@@ -21,7 +21,6 @@ import {
   attachSourceText,
   hasCurrentSourceTextRef,
   isLargeSourceText,
-  sourceTextFingerprint,
 } from '@/lib/utils/shared/translation/storedSourceText';
 
 import { TranslationWorkflowState } from '@/types/workflow';
@@ -65,10 +64,12 @@ function change(
   edited: boolean,
   update: (state: TranslationWorkflowState) => TranslationWorkflowState,
 ): void {
+  // Read first: there is nothing to change in a conversation that is gone.
+  if (!readState(id)) return;
   const store = useConversationStore.getState();
   const apply = (previous: unknown) => {
-    const state = previous as TranslationWorkflowState | undefined;
-    return state?.kind === 'translation' ? update(state) : (state as never);
+    const state = previous as TranslationWorkflowState;
+    return state.kind === 'translation' ? update(state) : state;
   };
   if (edited) store.updateWorkflowState(id, apply);
   else store.hydrateWorkflowState(id, apply);
@@ -174,18 +175,16 @@ export function useStoredSourceText(input: UseStoredSourceTextInput) {
     if (hasCurrentSourceTextRef({ sourceText, sourceTextRef: ref })) return;
     const timer = setTimeout(() => {
       if (saves.has(conversationId)) return;
-      const fingerprint = sourceTextFingerprint(sourceText);
       const save = storeSourceText(sourceText, backendNow.current, ref)
         .then((stored) => {
           if (ref && ref.id !== stored.id) void deleteSourceText(ref);
           lastTouch.set(stored.id, Date.now());
           // Kept only if this is still the text; an edit made meanwhile
           // leaves the reference stale and is saved in its turn.
-          change(conversationId, true, (latest) =>
-            sourceTextFingerprint(latest.sourceText) === fingerprint
-              ? { ...latest, sourceTextRef: stored }
-              : { ...latest, sourceTextRef: { ...stored, fingerprint } },
-          );
+          change(conversationId, true, (latest) => ({
+            ...latest,
+            sourceTextRef: stored,
+          }));
         })
         // The text stays in the browser; the next change tries again.
         .catch(() => undefined)
