@@ -284,6 +284,14 @@ export type TranslationMode = 'quick' | 'agentic' | 'document';
 export type TranslationTextMode = Exclude<TranslationMode, 'document'>;
 
 /**
+ * What the workspace translates, as the person chooses it: `text` is the
+ * source text (`quick` or `agentic` mode), `document` the uploaded file
+ * (`document` mode). Quick or Reviewed is a second, separate choice.
+ */
+export const TRANSLATION_KINDS = ['text', 'document'] as const;
+export type TranslationKind = (typeof TRANSLATION_KINDS)[number];
+
+/**
  * A whole-document translation the conversation refers to. A reference
  * only: the files, the per-page text and the corrections live on the
  * server, never in workflow state.
@@ -343,6 +351,12 @@ export interface TranslationWorkflowState {
    * `document` mode.
    */
   textModeResult?: TranslationTextResult;
+  /**
+   * The text mode (`quick` or `agentic`) the workspace was in before
+   * `document` mode, which it returns to: Text and Document each keep
+   * their own Quick / Reviewed choice. Absent means `agentic`.
+   */
+  textMode?: TranslationTextMode;
   /**
    * How `document` mode produces its result; absent means `text` (see
    * DEFAULT_DOCUMENT_LAYOUT).
