@@ -13,12 +13,18 @@ import {
 } from '@/client/hooks/settings/useWorkflowPolicyAdmin';
 
 import {
+  MAX_FEATURE_OVERRIDES,
   WORKFLOW_FEATURES,
   WORKFLOW_FEATURE_IDS,
+  WORKFLOW_FEATURE_OVERRIDE_SCOPES,
   WORKFLOW_POLICY_DEFAULTS,
   WorkflowFeatureId,
+  WorkflowFeatureOverrideScope,
+  WorkflowFeatureSetting,
   WorkflowPolicy,
+  featureSettingProblem,
   resolveAllWorkflowsEnabled,
+  resolveWorkflowFeatureLimits,
   resolveWorkflowFeatureSetting,
   workflowFeaturesOf,
 } from '@/lib/services/workflows/policy/types';
@@ -36,6 +42,7 @@ import {
   ADMIN_BTN_SECONDARY,
   ADMIN_CARD,
   ADMIN_CHECKBOX,
+  ADMIN_FIELD,
   ADMIN_HINT,
   ADMIN_MUTED,
   ADMIN_ROW,
@@ -44,6 +51,73 @@ import { WORKFLOW_META } from '@/components/Workflows/registryMeta';
 
 type Draft = Record<ConversationWorkflowType, boolean>;
 type FeatureDraft = Record<WorkflowFeatureId, boolean>;
+
+/**
+ * A feature's limits as typed. Numbers are kept as text while editing so a
+ * field can be cleared; in an override an empty field means "inherit".
+ */
+interface OverrideDraft {
+  scope: WorkflowFeatureOverrideScope;
+  /** Comma-separated, as typed. */
+  targets: string;
+  limits: Record<string, string>;
+}
+interface LimitsDraft {
+  limits: Record<string, string>;
+  overrides: OverrideDraft[];
+}
+type LimitsDrafts = Record<WorkflowFeatureId, LimitsDraft>;
+
+/** Every feature's limits and overrides under a (possibly absent) policy. */
+function limitsDraftsFrom(policy: WorkflowPolicy | null): LimitsDrafts {
+  const drafts = {} as LimitsDrafts;
+  const asText = (limits: Record<string, number>): Record<string, string> =>
+    Object.fromEntries(
+      Object.entries(limits).map(([key, value]) => [key, String(value)]),
+    );
+  for (const id of WORKFLOW_FEATURE_IDS) {
+    drafts[id] = {
+      limits: asText(resolveWorkflowFeatureLimits(policy, id)),
+      overrides: (policy?.features?.[id]?.overrides ?? []).map((override) => ({
+        scope: override.scope,
+        targets: override.targets.join(', '),
+        limits: asText(override.limits),
+      })),
+    };
+  }
+  return drafts;
+}
+
+/** Typed limits as numbers; fields left empty are left out. */
+function numbersFrom(limits: Record<string, string>): Record<string, number> {
+  const numbers: Record<string, number> = {};
+  for (const [key, text] of Object.entries(limits)) {
+    if (text.trim()) numbers[key] = Number(text);
+  }
+  return numbers;
+}
+
+/** The setting to save for one feature; overrides naming nobody are dropped. */
+function featureSettingFrom(
+  enabled: boolean,
+  draft: LimitsDraft,
+): WorkflowFeatureSetting {
+  const overrides = draft.overrides
+    .map((override) => ({
+      scope: override.scope,
+      targets: override.targets
+        .split(',')
+        .map((target) => target.trim())
+        .filter(Boolean),
+      limits: numbersFrom(override.limits),
+    }))
+    .filter((override) => override.targets.length > 0);
+  return {
+    enabled,
+    limits: numbersFrom(draft.limits),
+    ...(overrides.length > 0 ? { overrides } : {}),
+  };
+}
 
 /** Each feature's own switch under a (possibly absent) saved policy. */
 function featureDraftFrom(policy: WorkflowPolicy | null): FeatureDraft {
@@ -74,6 +148,9 @@ export const WorkflowPolicyPanel: FC = () => {
   const [featureDraft, setFeatureDraft] = useState<FeatureDraft>(() =>
     featureDraftFrom(null),
   );
+  const [limitsDrafts, setLimitsDrafts] = useState<LimitsDrafts>(() =>
+    limitsDraftsFrom(null),
+  );
   const [etag, setEtag] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   // Seed the draft from each NEW server response during render (the
@@ -92,6 +169,7 @@ export const WorkflowPolicyPanel: FC = () => {
     setEtag(query.data.etag);
     setDraft(resolveAllWorkflowsEnabled(query.data.policy));
     setFeatureDraft(featureDraftFrom(query.data.policy));
+    setLimitsDrafts(limitsDraftsFrom(query.data.policy));
     setDirty(false);
   }
 
@@ -104,6 +182,25 @@ export const WorkflowPolicyPanel: FC = () => {
     setFeatureDraft(nextFeatures);
     setDirty(true);
   };
+
+  const editLimits = (
+    id: WorkflowFeatureId,
+    update: (draft: LimitsDraft) => LimitsDraft,
+  ) => {
+    setLimitsDrafts((prev) => ({ ...prev, [id]: update(prev[id]) }));
+    setDirty(true);
+  };
+  const editOverride = (
+    id: WorkflowFeatureId,
+    index: number,
+    update: (override: OverrideDraft) => OverrideDraft,
+  ) =>
+    editLimits(id, (draft) => ({
+      ...draft,
+      overrides: draft.overrides.map((override, at) =>
+        at === index ? update(override) : override,
+      ),
+    }));
 
   const toggleFeature = (id: WorkflowFeatureId) => {
     setFeatureDraft((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -123,9 +220,15 @@ export const WorkflowPolicyPanel: FC = () => {
     for (const type of CONVERSATION_WORKFLOW_TYPES) {
       workflows[type] = { enabled: draft[type] };
     }
-    const features = {} as Record<WorkflowFeatureId, { enabled: boolean }>;
+    const features = {} as Record<WorkflowFeatureId, WorkflowFeatureSetting>;
     for (const id of WORKFLOW_FEATURE_IDS) {
-      features[id] = { enabled: featureDraft[id] };
+      features[id] = featureSettingFrom(featureDraft[id], limitsDrafts[id]);
+      // The server refuses the same things; saying so here keeps the
+      // admin's other unsaved changes on the page.
+      if (featureSettingProblem(id, features[id])) {
+        toast.error(t('limitsInvalid'));
+        return;
+      }
     }
     try {
       const result = await save.mutateAsync({ workflows, features, etag });
@@ -140,6 +243,165 @@ export const WorkflowPolicyPanel: FC = () => {
       }
       toast.error(t('saveError'));
     }
+  };
+
+  /** The limit fields and overrides of one feature, when it has limits. */
+  const renderLimits = (id: WorkflowFeatureId, active: boolean) => {
+    const definitions = Object.entries(WORKFLOW_FEATURES[id].limits ?? {});
+    if (definitions.length === 0) return null;
+    const draftOf = limitsDrafts[id];
+    const field = (
+      key: string,
+      value: string,
+      onChange: (text: string) => void,
+      inherit?: string,
+    ) => {
+      const definition = WORKFLOW_FEATURES[id].limits?.[key];
+      return (
+        <label key={key} className="flex min-w-[9rem] flex-1 flex-col gap-1">
+          <span className="text-xs text-gray-700 dark:text-gray-300">
+            {t(`features.${id}.limits.${key}`)}
+          </span>
+          <input
+            type="number"
+            inputMode="numeric"
+            min={definition?.min}
+            max={definition?.max}
+            value={value}
+            placeholder={inherit}
+            onChange={(event) => onChange(event.target.value)}
+            className={`${ADMIN_FIELD} w-full`}
+          />
+          <span className={ADMIN_HINT}>
+            {t('limitRange', {
+              min: definition?.min ?? 0,
+              max: definition?.max ?? 0,
+            })}
+          </span>
+        </label>
+      );
+    };
+    return (
+      <fieldset
+        disabled={!active}
+        className={`basis-full space-y-3 ps-7 ${active ? '' : 'opacity-60'}`}
+      >
+        <legend className="sr-only">{t('limitsTitle')}</legend>
+        <div className="flex flex-wrap gap-3">
+          {definitions.map(([key]) =>
+            field(key, draftOf.limits[key] ?? '', (text) =>
+              editLimits(id, (current) => ({
+                ...current,
+                limits: { ...current.limits, [key]: text },
+              })),
+            ),
+          )}
+        </div>
+        <p className={ADMIN_HINT}>{t(`features.${id}.limitsNote`)}</p>
+
+        <div className="space-y-2">
+          <h4 className="text-sm font-medium text-black dark:text-white">
+            {t('overridesTitle')}
+          </h4>
+          <p className={ADMIN_HINT}>{t('overridesNote')}</p>
+          {draftOf.overrides.map((override, index) => (
+            <div
+              key={index}
+              className={`${ADMIN_ROW} space-y-2`}
+              data-testid={`feature-override-${id}-${index}`}
+            >
+              <div className="flex flex-wrap items-end gap-3">
+                <label className="flex flex-col gap-1">
+                  <span className="text-xs text-gray-700 dark:text-gray-300">
+                    {t('overrideScope')}
+                  </span>
+                  <select
+                    value={override.scope}
+                    onChange={(event) =>
+                      editOverride(id, index, (current) => ({
+                        ...current,
+                        scope: event.target
+                          .value as WorkflowFeatureOverrideScope,
+                      }))
+                    }
+                    className={ADMIN_FIELD}
+                  >
+                    {WORKFLOW_FEATURE_OVERRIDE_SCOPES.map((scope) => (
+                      <option key={scope} value={scope}>
+                        {t(`overrideScopes.${scope}.label`)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex min-w-[14rem] flex-1 flex-col gap-1">
+                  <span className="text-xs text-gray-700 dark:text-gray-300">
+                    {t('overrideTargets')}
+                  </span>
+                  <input
+                    type="text"
+                    value={override.targets}
+                    placeholder={t(
+                      `overrideScopes.${override.scope}.placeholder`,
+                    )}
+                    onChange={(event) =>
+                      editOverride(id, index, (current) => ({
+                        ...current,
+                        targets: event.target.value,
+                      }))
+                    }
+                    className={`${ADMIN_FIELD} w-full`}
+                  />
+                </label>
+                <button
+                  type="button"
+                  className={ADMIN_BTN_SECONDARY}
+                  onClick={() =>
+                    editLimits(id, (current) => ({
+                      ...current,
+                      overrides: current.overrides.filter(
+                        (_, at) => at !== index,
+                      ),
+                    }))
+                  }
+                >
+                  {t('overrideRemove')}
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {definitions.map(([key]) =>
+                  field(
+                    key,
+                    override.limits[key] ?? '',
+                    (text) =>
+                      editOverride(id, index, (current) => ({
+                        ...current,
+                        limits: { ...current.limits, [key]: text },
+                      })),
+                    t('overrideInherit', { value: draftOf.limits[key] ?? '' }),
+                  ),
+                )}
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            className={ADMIN_BTN_SECONDARY}
+            disabled={draftOf.overrides.length >= MAX_FEATURE_OVERRIDES}
+            onClick={() =>
+              editLimits(id, (current) => ({
+                ...current,
+                overrides: [
+                  ...current.overrides,
+                  { scope: 'user', targets: '', limits: {} },
+                ],
+              }))
+            }
+          >
+            {t('overrideAdd')}
+          </button>
+        </div>
+      </fieldset>
+    );
   };
 
   if (query.isLoading) {
@@ -258,7 +520,10 @@ export const WorkflowPolicyPanel: FC = () => {
                       const featureInputId = `workflow-feature-${id}`;
                       const on = featureDraft[id];
                       return (
-                        <li key={id} className="flex items-start gap-3">
+                        <li
+                          key={id}
+                          className="flex flex-wrap items-start gap-3"
+                        >
                           <input
                             id={featureInputId}
                             type="checkbox"
@@ -288,6 +553,7 @@ export const WorkflowPolicyPanel: FC = () => {
                                 : t('featureNeedsWorkflow')}
                             </span>
                           </label>
+                          {renderLimits(id, draft[type] && on)}
                         </li>
                       );
                     })}
