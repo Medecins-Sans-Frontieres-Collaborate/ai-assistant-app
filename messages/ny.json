@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Sungani ngati malemba",
       "uploadPickerTitle": "Kweza chikalata",
       "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown kapena XML. Chikalata chimodzi pa nthawi.",
-      "uploadPickerConfirm": "Gwiritsa ntchito chikalata ichi"
+      "uploadPickerConfirm": "Gwiritsa ntchito chikalata ichi",
+      "sourceStorage": {
+        "loading": "Kutsitsa mawu oyambirira…",
+        "expiresSoon": "{count, plural, one {Mawu oyambirira osungidwa adzafufutidwa pa tsiku limodzi.} other {Mawu oyambirira osungidwa adzafufutidwa pa masiku #.}}",
+        "missingTitle": "Mawu oyambirira sakusungidwanso",
+        "missingBody": "Idafufutidwa patapita {days} masiku popanda kusintha. Mawu omasulira akadali pano.",
+        "noKeyTitle": "Mawu oyambirira ali pa encryption",
+        "noKeyBody": "Ida-encrypt ndi backup key yanu, yomwe siili pa chipangizo ichi. Onjezerani key pansi pa Settings kuti muwerenge pano.",
+        "otherKeyTitle": "Mawu oyambirira a-encrypt ndi key ina",
+        "otherKeyBody": "Backup key ili pa chipangizo ichi siili yomwe idachita encrypt mawu awa.",
+        "failedTitle": "Mawu oyambirira alephera kutsitsa",
+        "failedBody": "Sikutha kufika pa mawuwa. Onani kulumikizako ndikuyesanso.",
+        "forget": "Pitiliza popanda mawu oyambirira"
+      }
     },
     "document": {
       "emptyTitle": "Fotokozani chikalata chomwe mukufuna",

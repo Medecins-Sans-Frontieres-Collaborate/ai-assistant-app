@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Ṣètọju gẹ́gẹ́ bí ọrọ̀",
       "uploadPickerTitle": "Gbe iwe kan wọle",
       "uploadPickerHint": "PDF, Word, PowerPoint, ọrọ, Markdown tàbí XML. Iwe kan pere ni igba kọọkan.",
-      "uploadPickerConfirm": "Lo iwe yi"
+      "uploadPickerConfirm": "Lo iwe yi",
+      "sourceStorage": {
+        "loading": "Nṣiṣẹ lati gbe ọrọ orisun wá…",
+        "expiresSoon": "{count, plural, one {A yoo paarẹ ọrọ orisun ti o fipamọ́ ní Ọjọ́ kan.} other {A yoo paarẹ ọrọ orisun ti o fipamọ́ ní ọjọ́ #.}}",
+        "missingTitle": "A ko si ọrọ orisun mọ",
+        "missingBody": "A ti paarẹ́ rẹ lẹhin ọjọ́ {days} laisi ayipada kankan. Itumọ náà ṣi wa nibi.",
+        "noKeyTitle": "A ti fi ọrọ orisun pamọ mọ",
+        "noKeyBody": "A ti fi bọtini afẹyinti rẹ ṣe ọrọ aṣiri rẹ, ṣugbọn bọtini naa kò sí lori ẹrọ yii. Fi bọtini kun labe Eto lati ka a nibi.",
+        "otherKeyTitle": "A ti fi bọtini miiran ṣe ọrọ orisun asiri",
+        "otherKeyBody": "Bọtini afẹyinti to wa lori ẹrọ yii kii ṣe ti a fi ṣe ọrọ yii ni aṣiri.",
+        "failedTitle": "A ko le gbe ọrọ orisun wá",
+        "failedBody": "A kò le wọle si rẹ. Ṣayẹwo asopọ rẹ ki o gbiyanju lẹẹkansi.",
+        "forget": "Tesiwaju lai lo"
+      }
     },
     "document": {
       "emptyTitle": "Ṣàpèjúwe iwe ti o fẹ",

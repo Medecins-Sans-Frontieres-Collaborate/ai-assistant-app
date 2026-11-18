@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Tazomy ho lahatsoratra",
       "uploadPickerTitle": "Ampidiro rakitra",
       "uploadPickerHint": "PDF, Word, PowerPoint, lahatsoratra, Markdown na XML. Rakitra iray isaky ny mandeha.",
-      "uploadPickerConfirm": "Ampiasao ity rakitra ity"
+      "uploadPickerConfirm": "Ampiasao ity rakitra ity",
+      "sourceStorage": {
+        "loading": "Manokatra ny soratra fototra…",
+        "expiresSoon": "{count, plural, one {Ho fafana ao anatin'ny # andro ny soratra fototra voatahiry.} other {Ho fafana ao anatin'ny # andro ny soratra fototra voatahiry.}}",
+        "missingTitle": "Tsy voatahiry intsony ny soratra fototra",
+        "missingBody": "Voafafa izany rehefa tsy nisy fiovana nandritra ny {days} andro. Eto ihany ny fandikan-teny.",
+        "noKeyTitle": "Voaaro amin'ny tenimiafina ny soratra fototra",
+        "noKeyBody": "Voaaro amin'ny backup key anao io, izay tsy eto amin'ity fitaovana ity. Ampio ao amin'ny Settings ny key raha te hamaky azy eto.",
+        "otherKeyTitle": "Voaaro amin'ny key hafa ny soratra fototra",
+        "otherKeyBody": "Tsy io key anaty backup eto amin'ity fitaovana ity no nampiasaina niarovana ity soratra ity.",
+        "failedTitle": "Tsy afaka nakarina ny soratra fototra",
+        "failedBody": "Tsy tratra izany. Hamarino ny fifandraisanao ary andramo indray.",
+        "forget": "Tohizo tsy misy izany"
+      }
     },
     "document": {
       "emptyTitle": "Lazao ny antontan-taratasy ilainao",

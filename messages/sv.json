@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Behåll som text",
       "uploadPickerTitle": "Ladda upp ett dokument",
       "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown eller XML. Endast ett dokument åt gången.",
-      "uploadPickerConfirm": "Använd detta dokument"
+      "uploadPickerConfirm": "Använd detta dokument",
+      "sourceStorage": {
+        "loading": "Laddar originaltext…",
+        "expiresSoon": "{count, plural, one {Den lagrade originaltexten kommer att raderas om # dag.} other {Den lagrade originaltexten kommer att raderas om # dagar.}}",
+        "missingTitle": "Originaltexten finns inte längre lagrad",
+        "missingBody": "Den raderades efter {days} dagar utan ändringar. Översättningen finns fortfarande kvar.",
+        "noKeyTitle": "Originaltexten är krypterad",
+        "noKeyBody": "Den krypterades med din säkerhetsnyckel, som inte finns på denna enhet. Lägg till nyckeln under Inställningar för att läsa den här.",
+        "otherKeyTitle": "Originaltexten är krypterad med en annan nyckel",
+        "otherKeyBody": "Säkerhetsnyckeln på denna enhet är inte den som denna text krypterades med.",
+        "failedTitle": "Originaltexten kunde inte laddas",
+        "failedBody": "Den kunde inte nås. Kontrollera din anslutning och försök igen.",
+        "forget": "Fortsätt utan den"
+      }
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",

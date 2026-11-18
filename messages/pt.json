@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Manter como texto",
       "uploadPickerTitle": "Carregar um documento",
       "uploadPickerHint": "PDF, Word, PowerPoint, texto, Markdown ou XML. Um documento por vez.",
-      "uploadPickerConfirm": "Usar este documento"
+      "uploadPickerConfirm": "Usar este documento",
+      "sourceStorage": {
+        "loading": "Carregando o texto de origem...",
+        "expiresSoon": "{count, plural, one {O texto de origem armazenado será excluído em # dia.} other {O texto de origem armazenado será excluído em # dias.}}",
+        "missingTitle": "O texto de origem não está mais armazenado",
+        "missingBody": "Ele foi excluído após {days} dias sem alterações. A tradução ainda está disponível.",
+        "noKeyTitle": "O texto de origem está criptografado",
+        "noKeyBody": "Foi criptografado com sua chave de backup, que não está neste dispositivo. Adicione a chave em Configurações para ler aqui.",
+        "otherKeyTitle": "O texto de origem está criptografado com outra chave",
+        "otherKeyBody": "A chave de backup neste dispositivo não é a mesma com que este texto foi criptografado.",
+        "failedTitle": "Não foi possível carregar o texto de origem",
+        "failedBody": "Não foi possível acessá-lo. Verifique sua conexão e tente novamente.",
+        "forget": "Continuar sem ele"
+      }
     },
     "document": {
       "emptyTitle": "Descreva o documento desejado",

@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Birekwe nk'inyandiko",
       "uploadPickerTitle": "Tereza idokument",
       "uploadPickerHint": "PDF, Word, PowerPoint, inyandiko, Markdown canke XML. Idocument imwe ku nshuro.",
-      "uploadPickerConfirm": "Koresha iri dokumenti"
+      "uploadPickerConfirm": "Koresha iri dokumenti",
+      "sourceStorage": {
+        "loading": "Ndiko ndarindira inyandiko y'inkomoko...",
+        "expiresSoon": "{count, plural, one {Inyandiko y'inkomoko izosibwa mu munsi 1.} other {Inyandiko y'inkomoko izosibwa mu minsi #.}}",
+        "missingTitle": "Inyandiko y'inkomoko ntikibitswe",
+        "missingBody": "Yasibwe inyuma y'iminsi {days} ata gihindutse. Inyandiko y'ubusobanuro iracari hano.",
+        "noKeyTitle": "Inyandiko y'inkomoko yibitswe n'ikimenyetso",
+        "noKeyBody": "Yabitswe n'ikimenyetso cawe ca backup, kitari kuri iki gikoresho. Ongeramwo ikimenyetso muri Settings kugira uyisome hano.",
+        "otherKeyTitle": "Inyandiko y'inkomoko yibitswe n'ikindi kimenyetso",
+        "otherKeyBody": "Ikimenyetso ca backup kuri iki gikoresho nticari ico inyandiko iyi yabitsweko.",
+        "failedTitle": "Inyandiko y'inkomoko ntishoboye kuronka",
+        "failedBody": "Ntishoboye kuronka. Raba ko ufise umuyagankwiko maze ugerageze gusubira.",
+        "forget": "Bandanya ata yo ukoresheje"
+      }
     },
     "document": {
       "emptyTitle": "Sobanura igitabo ushaka",

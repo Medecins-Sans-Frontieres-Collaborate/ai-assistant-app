@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "テキストのまま保持",
       "uploadPickerTitle": "ドキュメントをアップロード",
       "uploadPickerHint": "PDF、Word、PowerPoint、テキスト、Markdown、またはXML。1回につき1つのドキュメントのみ対応。",
-      "uploadPickerConfirm": "このドキュメントを使用する"
+      "uploadPickerConfirm": "このドキュメントを使用する",
+      "sourceStorage": {
+        "loading": "ソーステキストを読み込み中…",
+        "expiresSoon": "{count, plural, one {保存されたソーステキストは#日後に削除されます。} other {保存されたソーステキストは#日後に削除されます。}}",
+        "missingTitle": "ソーステキストはもう保存されていません",
+        "missingBody": "{days}日間変更がなかったため削除されました。翻訳はこのまま残っています。",
+        "noKeyTitle": "ソーステキストは暗号化されています",
+        "noKeyBody": "バックアップキーで暗号化されていますが、この端末にはありません。設定からキーを追加すると、ここで表示できます。",
+        "otherKeyTitle": "ソーステキストは別のキーで暗号化されています",
+        "otherKeyBody": "この端末のバックアップキーでは、このテキストの復号はできません。",
+        "failedTitle": "ソーステキストを読み込めませんでした",
+        "failedBody": "アクセスできませんでした。接続を確認し、再度お試しください。",
+        "forget": "このまま続行する"
+      }
     },
     "document": {
       "emptyTitle": "作成したい文書の説明",

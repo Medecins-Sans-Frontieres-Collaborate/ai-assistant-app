@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Gumana nk’inyandiko",
       "uploadPickerTitle": "Ohereza inyandiko",
       "uploadPickerHint": "PDF, Word, PowerPoint, inyandiko, Markdown cyangwa XML. Inyandiko imwe icya rimwe.",
-      "uploadPickerConfirm": "Koresha iyi nyandiko"
+      "uploadPickerConfirm": "Koresha iyi nyandiko",
+      "sourceStorage": {
+        "loading": "Gutegereza inyandiko y'umwimerere...",
+        "expiresSoon": "{count, plural, one {Inyandiko y'umwimerere izasibwa nyuma y'umunsi #.} other {Inyandiko y'umwimerere izasibwa nyuma y'iminsi #.}}",
+        "missingTitle": "Inyandiko y'umwimerere ntikiri kubikwa",
+        "missingBody": "Yasibwe nyuma y'iminsi {days} nta mpinduka zabayeho. Ihindurakanyamagambo iracyari hano.",
+        "noKeyTitle": "Inyandiko y'umwimerere irakingiwe",
+        "noKeyBody": "Yakingiwe n'urufunguzo rw'abikuzi rwawe, rutari kuri iki gikoresho. Ongera urufunguzo muri Settings kugira ngo usome hano.",
+        "otherKeyTitle": "Inyandiko y'umwimerere yashyizweho urundi rufunguzo",
+        "otherKeyBody": "Urufunguzo rw'abikuzi ruri kuri iki gikoresho si rwo rwakoreshejwe mu gukinga iyi nyandiko.",
+        "failedTitle": "Inyandiko y'umwimerere ntishoboye gufungurwa",
+        "failedBody": "Ntibyashobotse kuyigeraho. Reba uko uri kuhuzwa n'iyindi mikorere maze ugerageze indi nshuro.",
+        "forget": "Komeza utayikoresheje"
+      }
     },
     "document": {
       "emptyTitle": "Sobanura inyandiko ushaka",

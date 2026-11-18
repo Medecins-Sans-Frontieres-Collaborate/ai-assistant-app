@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "እንደ ጽሁፍ ይቆይ",
       "uploadPickerTitle": "ሰነድ ያስገቡ",
       "uploadPickerHint": "PDF፣ Word፣ PowerPoint፣ ጽሑፍ፣ Markdown ወይም XML። አንድ ሰነድ ብቻ ተቀባይነት አለው።",
-      "uploadPickerConfirm": "ይህን ሰነድ ይጠቀሙ"
+      "uploadPickerConfirm": "ይህን ሰነድ ይጠቀሙ",
+      "sourceStorage": {
+        "loading": "የምንጭ ጽሑፉን በመጫን ላይ…",
+        "expiresSoon": "{count, plural, one {የተያዘው የምንጭ ጽሑፍ በ # ቀን ውስጥ ይሰረያል።} other {የተያዘው የምንጭ ጽሑፍ በ # ቀናት ውስጥ ይሰረያል።}}",
+        "missingTitle": "የምንጭ ጽሑፉ አልተያዘም",
+        "missingBody": "በ {days} ቀናት ውስጥ ምንም ለውጥ ሳይደረግ ተሰርዟል። ትርጉሙ ገና አለ።",
+        "noKeyTitle": "የምንጭ ጽሑፉ ተደክሞ ተቀመጠ",
+        "noKeyBody": "የምንጭ ጽሑፉ በባክን ቁልፉ ተደክሟል፣ ይህ ቁልፍ በዚህ መሳሪያ ላይ አይገኝም። ቁልፉን ከ\"Settings\" በሚባለው ቦታ ያክሉ እንዲታዩ።",
+        "otherKeyTitle": "የምንጭ ጽሑፉ በሌላ ቁልፍ ተደክሞ ተቀመጠ",
+        "otherKeyBody": "በዚህ መሳሪያ ላይ ያለው ባክን ቁልፍ እንዲያደክም የተጠቀመው ቁልፍ አይደለም።",
+        "failedTitle": "የምንጭ ጽሑፉ መጫን አልተቻለም",
+        "failedBody": "ማድረስ አልተቻለም። ግንኙነትዎን ያረጋግጡ እና ደግመው ይሞክሩ።",
+        "forget": "ያን ያልተጠቀመ ቀጥል"
+      }
     },
     "document": {
       "emptyTitle": "የሚፈልጉትን ሰነድ ይግለጹ",

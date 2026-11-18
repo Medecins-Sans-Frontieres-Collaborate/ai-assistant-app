@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Garder comme texte",
       "uploadPickerTitle": "Télécharger un document",
       "uploadPickerHint": "PDF, Word, PowerPoint, texte, Markdown ou XML. Un document à la fois.",
-      "uploadPickerConfirm": "Utiliser ce document"
+      "uploadPickerConfirm": "Utiliser ce document",
+      "sourceStorage": {
+        "loading": "Chargement du texte source…",
+        "expiresSoon": "{count, plural, one {Le texte source stocké sera supprimé dans # jour.} other {Le texte source stocké sera supprimé dans # jours.}}",
+        "missingTitle": "Le texte source n’est plus stocké",
+        "missingBody": "Il a été supprimé après {days} jours sans modification. La traduction est toujours disponible.",
+        "noKeyTitle": "Le texte source est chiffré",
+        "noKeyBody": "Il a été chiffré avec votre clé de sauvegarde, qui n’est pas sur cet appareil. Ajoutez la clé dans les paramètres pour le lire ici.",
+        "otherKeyTitle": "Le texte source est chiffré avec une autre clé",
+        "otherKeyBody": "La clé de sauvegarde sur cet appareil n’est pas celle utilisée pour chiffrer ce texte.",
+        "failedTitle": "Impossible de charger le texte source",
+        "failedBody": "Le texte n’a pas pu être atteint. Vérifiez votre connexion et réessayez.",
+        "forget": "Continuer sans"
+      }
     },
     "document": {
       "emptyTitle": "Décrivez le document souhaité",

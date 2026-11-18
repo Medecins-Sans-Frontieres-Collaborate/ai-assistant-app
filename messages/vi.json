@@ -3484,7 +3484,20 @@
       "pdfAsTextKeep": "Giữ ở dạng văn bản",
       "uploadPickerTitle": "Tải lên tài liệu",
       "uploadPickerHint": "PDF, Word, PowerPoint, văn bản, Markdown hoặc XML. Chỉ chọn một tài liệu mỗi lần.",
-      "uploadPickerConfirm": "Dùng tài liệu này"
+      "uploadPickerConfirm": "Dùng tài liệu này",
+      "sourceStorage": {
+        "loading": "Đang tải văn bản nguồn…",
+        "expiresSoon": "{count, plural, one {Văn bản nguồn đã lưu sẽ bị xóa sau # ngày.} other {Văn bản nguồn đã lưu sẽ bị xóa sau # ngày.}}",
+        "missingTitle": "Văn bản nguồn không còn được lưu trữ",
+        "missingBody": "Văn bản này đã bị xóa sau {days} ngày không có thay đổi. Bản dịch vẫn còn ở đây.",
+        "noKeyTitle": "Văn bản nguồn đã được mã hóa",
+        "noKeyBody": "Văn bản này đã được mã hóa bằng khóa dự phòng của bạn, khóa này không có trên thiết bị này. Thêm khóa trong phần Cài đặt để đọc văn bản tại đây.",
+        "otherKeyTitle": "Văn bản nguồn được mã hóa bằng khóa khác",
+        "otherKeyBody": "Khóa dự phòng trên thiết bị này không phải là khóa đã dùng để mã hóa văn bản này.",
+        "failedTitle": "Không thể tải văn bản nguồn",
+        "failedBody": "Không thể truy cập văn bản nguồn. Vui lòng kiểm tra kết nối và thử lại.",
+        "forget": "Tiếp tục mà không cần văn bản này"
+      }
     },
     "document": {
       "emptyTitle": "Mô tả tài liệu bạn muốn",

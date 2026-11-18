@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Tika lokola maloba",
       "uploadPickerTitle": "Yelekisa ndakisa ya mokanda",
       "uploadPickerHint": "PDF, Word, PowerPoint, mokanda ya nkiti, Markdown to XML. Mokanda moko na moko.",
-      "uploadPickerConfirm": "Salisa mokanda oyo"
+      "uploadPickerConfirm": "Salisa mokanda oyo",
+      "sourceStorage": {
+        "loading": "Ekomisaka kati ndakisa ya mokanda...",
+        "expiresSoon": "{count, plural, one {Ndakisa ya mokanda ekosila na mikolo moko.} other {Ndakisa ya mokanda ekosila na mikolo #.}}",
+        "missingTitle": "Ndakisa ya mokanda ezalaka lisusu te",
+        "missingBody": "Epesami libula nsima ya mikolo {days} na kozanga mibongiseli. Traduction ezali kaka awa.",
+        "noKeyTitle": "Ndakisa ya mokanda ebombami",
+        "noKeyBody": "Ekomaki na backup key ya yo, kasi ekoteli na appareil oyo te. Yebisa key na 'Settings' mpo omona yango awa.",
+        "otherKeyTitle": "Ndakisa ya mokanda ebombami na motiki mosusu",
+        "otherKeyBody": "Backup key na appareil oyo ezalaka motiki oyo ebombaki mokanda te.",
+        "failedTitle": "Ndakisa ya mokanda ekoki ko ekomisama te",
+        "failedBody": "Ekomaki te. Talaka connexion na yo mpe tunal again.",
+        "forget": "Koba na kosalaka na yango te"
+      }
     },
     "document": {
       "emptyTitle": "Sosola mokanda olingi",

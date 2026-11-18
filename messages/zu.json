@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Gcina njengombhalo",
       "uploadPickerTitle": "Layisha umbhalo",
       "uploadPickerHint": "PDF, Word, PowerPoint, umbhalo, Markdown noma XML. Umbhalo owodwa ngesikhathi.",
-      "uploadPickerConfirm": "Sebenzisa lo mbhalo"
+      "uploadPickerConfirm": "Sebenzisa lo mbhalo",
+      "sourceStorage": {
+        "loading": "Kulayishwa umbhalo oyisisekelo…",
+        "expiresSoon": "{count, plural, one {Umbhalo oyisisekelo ogciniwe uzosuswa ngosuku olulodwa.} other {Umbhalo oyisisekelo ogciniwe uzosuswa emadeni amaningi.}}",
+        "missingTitle": "Umbhalo oyisisekelo awusagcinwanga",
+        "missingBody": "Ususwe ngemva kwezinsuku ezingu-{days} ngaphandle kwezikuguquko. Ingxenye yokuhumusha isekhona.",
+        "noKeyTitle": "Umbhalo oyisisekelo ufihliwe",
+        "noKeyBody": "Ufihlwe ngesikhiye sakho sokusekelwa, esingekho kule divayisi. Engeza isikhiye ngaphansi kwe Izilungiselelo ukuze uwufunde lapha.",
+        "otherKeyTitle": "Umbhalo oyisisekelo ufihlwe ngesinye isikhiye",
+        "otherKeyBody": "Isikhiye sokusekelwa esikule divayisi asiyona leyo ebifihle lo mbhalo.",
+        "failedTitle": "Umbhalo oyisisekelo akakwazanga kulayishwa",
+        "failedBody": "Awutholakali. Hlola ukuxhumana kwakho bese uzama futhi.",
+        "forget": "Qhubeka ngaphandle kwawo"
+      }
     },
     "document": {
       "emptyTitle": "Chaza umbhalo ofunayo",

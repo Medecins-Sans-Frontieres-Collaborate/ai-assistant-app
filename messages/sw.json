@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Bakiza kama maandishi",
       "uploadPickerTitle": "Pakia hati",
       "uploadPickerHint": "PDF, Word, PowerPoint, maandishi, Markdown au XML. Hati moja kwa wakati.",
-      "uploadPickerConfirm": "Tumia hati hii"
+      "uploadPickerConfirm": "Tumia hati hii",
+      "sourceStorage": {
+        "loading": "Inapakia maandishi ya chanzo...",
+        "expiresSoon": "{count, plural, one {Maandishi ya chanzo yaliyohifadhiwa yatafutwa baada ya siku #.} other {Maandishi ya chanzo yaliyohifadhiwa yatafutwa baada ya siku #.}}",
+        "missingTitle": "Maandishi ya chanzo hayajahifadhiwa tena",
+        "missingBody": "Yalifutwa baada ya {days} bila mabadiliko. Tafsiri bado ipo hapa.",
+        "noKeyTitle": "Maandishi ya chanzo yamefichwa",
+        "noKeyBody": "Yamefichwa na ufunguo wako wa akiba, ambao haupo kwenye kifaa hiki. Ongeza ufunguo kwenye Mipangilio ili kuyasoma hapa.",
+        "otherKeyTitle": "Maandishi ya chanzo yamefichwa na ufunguo mwingine",
+        "otherKeyBody": "Ufunguo wa akiba kwenye kifaa hiki si ule uliotumiwa kuficha maandishi haya.",
+        "failedTitle": "Maandishi ya chanzo haikuweza kupakiwa",
+        "failedBody": "Hayakuweza kufikiwa. Hakikisha umeunganisha mtandao na jaribu tena.",
+        "forget": "Endelea bila hayo"
+      }
     },
     "document": {
       "emptyTitle": "Eleza unachohitaji kwenye hati",

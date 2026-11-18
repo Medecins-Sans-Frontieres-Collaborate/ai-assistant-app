@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Hakkil mo kalmaaji",
       "uploadPickerTitle": "Naɗnu dogon fayde",
       "uploadPickerHint": "PDF, Word, PowerPoint, binndi, Markdown walla XML. Dogon fayde goɗɗo tan.",
-      "uploadPickerConfirm": "Naatnu dogon fayde ɗee"
+      "uploadPickerConfirm": "Naatnu dogon fayde ɗee",
+      "sourceStorage": {
+        "loading": "Nana loɗii binndi ndaaru…",
+        "expiresSoon": "{count, plural, one {Binndi ndaaru maa woni fowli to # ñalngu.} other {Binndi ndaaru maa woni fowli to # ñalɗe.}}",
+        "missingTitle": "Binndi ndaaru fowataa",
+        "missingBody": "Fowtii to {days} ñalɗe e jamma walaa hirnaaji. Njaajeendi ɗon waɗii toon.",
+        "noKeyTitle": "Binndi ndaaru ɗon waɗii e sifondiral",
+        "noKeyBody": "Ndaari ko e kelol ngol nduttu maa, ko mo ndattaa wa e geese maa. Nattir kelol ngol e Tafkiiraa noon e tawtin no mo woni.",
+        "otherKeyTitle": "Binndi ndaaru ɗon ndaari e kelol gooto",
+        "otherKeyBody": "Kelol nduttu gootol e geese maa walaa ko fayde ndaari binndi ndaaru ɗon.",
+        "failedTitle": "Binndi ndaaru alaa laawol loɗde",
+        "failedBody": "Alaa laawol loɗde. Tawi luugal maa e fuɗɗiti.",
+        "forget": "Jokkondir e ɗum fow"
+      }
     },
     "document": {
       "emptyTitle": "Winndu lan binndi dannde maa",

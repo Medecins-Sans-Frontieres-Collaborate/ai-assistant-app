@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Bar shi azaman rubutu",
       "uploadPickerTitle": "Loda takarda",
       "uploadPickerHint": "PDF, Word, PowerPoint, rubutu, Markdown ko XML. Takarda ɗaya a lokaci.",
-      "uploadPickerConfirm": "Yi amfani da wannan takarda"
+      "uploadPickerConfirm": "Yi amfani da wannan takarda",
+      "sourceStorage": {
+        "loading": "Ana ɗora rubutun asali…",
+        "expiresSoon": "{count, plural, one {Za a share rubutun asali da aka adana a cikin kwana ɗaya.} other {Za a share rubutun asali da aka adana a cikin kwanaki #.}}",
+        "missingTitle": "Rubutun asali ba a adana shi yanzu",
+        "missingBody": "An share shi bayan {days} ba tare da an yi canji ba. Fassararsa tana nan a yanzu.",
+        "noKeyTitle": "Rubutun asali an encrypt shi",
+        "noKeyBody": "An encrypt shi da backup key ɗinka, wanda ba ya kan wannan na’urar. Sanya key ɗin a cikin Saituna domin karanta shi nan.",
+        "otherKeyTitle": "Rubutun asali an encrypt shi da wani key",
+        "otherKeyBody": "Backup key ɗin da ke wannan na’ura ba shine aka encrypt wannan rubutu da shi ba.",
+        "failedTitle": "Ba a iya ɗora rubutun asali ba",
+        "failedBody": "Ba a iya samun sa ba. Tabbatar da haɗin ka sannan ka sake gwadawa.",
+        "forget": "Ci gaba ba tare da shi ba"
+      }
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",

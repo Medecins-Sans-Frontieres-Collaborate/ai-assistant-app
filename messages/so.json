@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Ku hay qoraal ahaan",
       "uploadPickerTitle": "Soo geli dukumeenti",
       "uploadPickerHint": "PDF, Word, PowerPoint, qoraal, Markdown ama XML. Hal dukumeenti mar kasta.",
-      "uploadPickerConfirm": "Isticmaal dukumeentigan"
+      "uploadPickerConfirm": "Isticmaal dukumeentigan",
+      "sourceStorage": {
+        "loading": "Waxaa la soo rarayaa qoraalka asalka ah…",
+        "expiresSoon": "{count, plural, one {Qoraalka asalka ah ee la kaydiyay waa la tirtiri doonaa 1 maalin gudahood.} other {Qoraalka asalka ah ee la kaydiyay waa la tirtiri doonaa # maalmood gudahood.}}",
+        "missingTitle": "Qoraalka asalka ah lama kaydin",
+        "missingBody": "Waa la tirtiray kadib {days} maalmo aan wax isbeddel ah la samayn. Tarjumadu weli waa halkan.",
+        "noKeyTitle": "Qoraalka asalka ah waa la siray",
+        "noKeyBody": "Waa lagu siray fure kayd ah oo adiga kuu gaar ah, kaas oo aan ku jirin qalabkan. Ku dar fureha qaybta Dejinta si aad u akhrido halkan.",
+        "otherKeyTitle": "Qoraalka asalka ah waxa lagu siray fure kale",
+        "otherKeyBody": "Fureha kaydka ee qalabkan kujira ma ahan midka qoraalkan lagu siray.",
+        "failedTitle": "Qoraalka asalka ah lama soo xajin karo",
+        "failedBody": "Lama heli karo. Hubi xiriirkaaga oo isku day mar kale.",
+        "forget": "Sii wad adigoon isticmaalin"
+      }
     },
     "document": {
       "emptyTitle": "Sharax dukumintiga aad rabto",

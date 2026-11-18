@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "השאר כטקסט",
       "uploadPickerTitle": "העלאת מסמך",
       "uploadPickerHint": "PDF, Word, PowerPoint, טקסט, Markdown או XML. מסמך אחד בכל פעם.",
-      "uploadPickerConfirm": "השתמש במסמך זה"
+      "uploadPickerConfirm": "השתמש במסמך זה",
+      "sourceStorage": {
+        "loading": "טוען את הטקסט המקורי…",
+        "expiresSoon": "{count, plural, one {הטקסט המקורי השמור יימחק בעוד יום.} other {הטקסט המקורי השמור יימחק בעוד # ימים.}}",
+        "missingTitle": "הטקסט המקורי כבר לא שמור",
+        "missingBody": "הוא נמחק לאחר {days} ימים ללא שינויים. התרגום עדיין זמין כאן.",
+        "noKeyTitle": "הטקסט המקורי מוצפן",
+        "noKeyBody": "הוא הוצפן עם מפתח הגיבוי שלך, שאינו נמצא במכשיר זה. הוסף את המפתח תחת הגדרות כדי לצפות בו כאן.",
+        "otherKeyTitle": "הטקסט המקורי מוצפן עם מפתח אחר",
+        "otherKeyBody": "מפתח הגיבוי במכשיר זה אינו המפתח שבו הוצפן טקסט זה.",
+        "failedTitle": "לא ניתן לטעון את הטקסט המקורי",
+        "failedBody": "לא ניתן היה להגיע אליו. בדוק את החיבור ונסה שוב.",
+        "forget": "המשך בלעדיו"
+      }
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",

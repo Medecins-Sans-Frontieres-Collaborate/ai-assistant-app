@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Zachovat jako text",
       "uploadPickerTitle": "Nahrát dokument",
       "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown nebo XML. Jeden dokument najednou.",
-      "uploadPickerConfirm": "Použít tento dokument"
+      "uploadPickerConfirm": "Použít tento dokument",
+      "sourceStorage": {
+        "loading": "Načítání zdrojového textu…",
+        "expiresSoon": "{count, plural, one {Uložený zdrojový text bude smazán za # den.} other {Uložený zdrojový text bude smazán za # dní.}}",
+        "missingTitle": "Zdrojový text již není uložen",
+        "missingBody": "Byl smazán po {days} dnech bez změn. Překlad zde zůstává.",
+        "noKeyTitle": "Zdrojový text je zašifrován",
+        "noKeyBody": "Text byl zašifrován vaším záložním klíčem, který není na tomto zařízení. Přidejte klíč v Nastavení, abyste jej zde mohli číst.",
+        "otherKeyTitle": "Zdrojový text je zašifrován jiným klíčem",
+        "otherKeyBody": "Záložní klíč na tomto zařízení není ten, kterým byl tento text zašifrován.",
+        "failedTitle": "Zdrojový text nelze načíst",
+        "failedBody": "Nelze jej načíst. Zkontrolujte své připojení a zkuste to znovu.",
+        "forget": "Pokračovat bez něj"
+      }
     },
     "document": {
       "emptyTitle": "Popište požadovaný dokument",

@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "ኣብ ጽሑፍ ምርካት",
       "uploadPickerTitle": "ተሰናዳዕ መዘኻኽያ ሓሳው",
       "uploadPickerHint": "PDF, Word, PowerPoint, ናይ ጽሑፍ ፋይል, Markdown ወይ XML፡ ንኽንደይ ሓዚ መዘኻኽያ ፡፡",
-      "uploadPickerConfirm": "ንእዚ መዘኻኽያ ተጠቀም"
+      "uploadPickerConfirm": "ንእዚ መዘኻኽያ ተጠቀም",
+      "sourceStorage": {
+        "loading": "መዝሓን መጽናዕ ጽሑፍ…",
+        "expiresSoon": "{count, plural, one {ዝተኣካይ መጽናዕ ጽሑፍ ኣብ ፍሓት # መዓልቲ ይሰረይ።} other {ዝተኣካይ መጽናዕ ጽሑፍ ኣብ ፍሓት # መዓልታት ይሰረይ።}}",
+        "missingTitle": "መጽናዕ ጽሑፍ አይተዓከየን።",
+        "missingBody": "ድሕሪ {days} መዓልታት ዘይምቕያር ይሰረየ። ትርጉም እምበኻውን ገና ኣሎ።",
+        "noKeyTitle": "መጽናዕ ጽሑፍ ተዓብዪ ኣሎ።",
+        "noKeyBody": "ብዝሓዘካ backup key ተዓብዪ ኣሎ፣ እዚ በትኽክል ኣይኮነን። ኣብ Settings ቁዕሪ ኣእትዋ እቲ ትኣቱ ከይትነብረካ።",
+        "otherKeyTitle": "መጽናዕ ጽሑፍ ብካልእ ቁዕሪ ተዓብዪ ኣሎ።",
+        "otherKeyBody": "ነዚ ዝሓዘካ backup key እዚ ኣይኮነን ኣብቲ ጽሑፍ ተዓብዪ ዘሎ።",
+        "failedTitle": "መጽናዕ ጽሑፍ ኣይተቐየረን።",
+        "failedBody": "ምትሕታን ኣይተኣተወን። መድረኽን ኣብ ደገ ፈተንካ።",
+        "forget": "ዘይእተወ ቀጽል"
+      }
     },
     "document": {
       "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",

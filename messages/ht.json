@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Kenbe kòm tèks",
       "uploadPickerTitle": "Telechaje yon dokiman",
       "uploadPickerHint": "PDF, Word, PowerPoint, tèks, Markdown oswa XML. Youn dokiman chak fwa.",
-      "uploadPickerConfirm": "Itilize dokiman sa a"
+      "uploadPickerConfirm": "Itilize dokiman sa a",
+      "sourceStorage": {
+        "loading": "Y ap chaje tèks sous la…",
+        "expiresSoon": "{count, plural, one {Tèks sous ki estoke a pral efase nan # jou.} other {Tèks sous ki estoke a pral efase nan # jou.}}",
+        "missingTitle": "Tèks sous la pa estoke ankò",
+        "missingBody": "Yo te efase li apre {days} jou san chanjman. Tradiksyon an toujou la.",
+        "noKeyTitle": "Tèks sous la chifre",
+        "noKeyBody": "Yo te chifre li ak kle sovgad ou a, ki pa sou aparèy sa a. Ajoute kle a anba Anviwònman pou ka li li isit la.",
+        "otherKeyTitle": "Tèks sous la chifre ak yon lòt kle",
+        "otherKeyBody": "Kle sovgad sou aparèy sa a pa menm ak sa yo te chifre tèks sa a a.",
+        "failedTitle": "Pa t ka chaje tèks sous la",
+        "failedBody": "Li pa t aksesib. Tcheke koneksyon ou epi eseye ankò.",
+        "forget": "Kontinye san li"
+      }
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",

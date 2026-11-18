@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Pidä tekstinä",
       "uploadPickerTitle": "Lataa asiakirja",
       "uploadPickerHint": "PDF, Word, PowerPoint, teksti, Markdown tai XML. Yksi asiakirja kerrallaan.",
-      "uploadPickerConfirm": "Käytä tätä asiakirjaa"
+      "uploadPickerConfirm": "Käytä tätä asiakirjaa",
+      "sourceStorage": {
+        "loading": "Ladataan lähdetekstiä…",
+        "expiresSoon": "{count, plural, one {Tallennettu lähdeteksti poistetaan # päivän kuluttua.} other {Tallennettu lähdeteksti poistetaan # päivän kuluttua.}}",
+        "missingTitle": "Lähdetekstiä ei enää ole tallennettuna",
+        "missingBody": "Se poistettiin {days} päivän muokkaamattomuuden jälkeen. Käännös on yhä tallella.",
+        "noKeyTitle": "Lähdeteksti on salattu",
+        "noKeyBody": "Se on salattu varmuusavaimellasi, jota ei ole tällä laitteella. Lisää avain Asetuksista lukeaksesi tekstin täällä.",
+        "otherKeyTitle": "Lähdeteksti on salattu toisella avaimella",
+        "otherKeyBody": "Tämän laitteen varmuusavain ei ole sama, jolla tämä teksti on salattu.",
+        "failedTitle": "Lähdetekstiä ei voitu ladata",
+        "failedBody": "Tekstiin ei saatu yhteyttä. Tarkista yhteytesi ja yritä uudelleen.",
+        "forget": "Jatka ilman sitä"
+      }
     },
     "document": {
       "emptyTitle": "Kuvaile haluamaasi asiakirjaa",

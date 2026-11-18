@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Mbï yë na text",
       "uploadPickerTitle": "Kangbi dokuma",
       "uploadPickerHint": "PDF, Word, PowerPoint, dokuma na zo na na Markdown na XML. Dokuma mo so ti kangbi.",
-      "uploadPickerConfirm": "Sambisa dokuma ti asi"
+      "uploadPickerConfirm": "Sambisa dokuma ti asi",
+      "sourceStorage": {
+        "loading": "Ndɔko ti lo na sômbâ nde…",
+        "expiresSoon": "{count, plural, one {Sômbâ nde a kodro na # mo kûê.} other {Sômbâ nde a kodro na # mo kûê.}}",
+        "missingTitle": "Sômbâ nde alîkô dênî na kodro",
+        "missingBody": "A kodro na {days} mo lâ tâ sô ndâ tî ayeke ti bale. Nze ayeke ti bale zo a mô.",
+        "noKeyTitle": "Sômbâ nde a kodro na clé kô",
+        "noKeyBody": "A kodro na clé tî backup tî ôko, mé clé ôko ala na appareil aîni. Sô clé aî na Paramètres ôko ôko tî gbenê ndê.",
+        "otherKeyTitle": "Sômbâ nde a kodro na clé kô mô ayeke",
+        "otherKeyBody": "Clé tî backup na appareil aîni ala yeke clé a kodro nde mo ayeke na yângâ.",
+        "failedTitle": "Ndɔko ti lo ti sômbâ nde apê oko",
+        "failedBody": "A apê oko tî ti yângâ. Gbalê connexion ôko na bêtî oko",
+        "forget": "Tî songo na yângâ na lâ"
+      }
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",

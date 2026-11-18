@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Als tekst houden",
       "uploadPickerTitle": "Upload een document",
       "uploadPickerHint": "PDF, Word, PowerPoint, tekst, Markdown of XML. Eén document tegelijk.",
-      "uploadPickerConfirm": "Dit document gebruiken"
+      "uploadPickerConfirm": "Dit document gebruiken",
+      "sourceStorage": {
+        "loading": "Brontekst wordt geladen…",
+        "expiresSoon": "{count, plural, one {De opgeslagen brontekst wordt over # dag verwijderd.} other {De opgeslagen brontekst wordt over # dagen verwijderd.}}",
+        "missingTitle": "De brontekst is niet meer opgeslagen",
+        "missingBody": "Deze is verwijderd na {days} dagen zonder wijzigingen. De vertaling is nog steeds beschikbaar.",
+        "noKeyTitle": "De brontekst is versleuteld",
+        "noKeyBody": "Deze is versleuteld met uw back-up-sleutel, die niet op dit apparaat staat. Voeg de sleutel toe onder Instellingen om het hier te lezen.",
+        "otherKeyTitle": "De brontekst is versleuteld met een andere sleutel",
+        "otherKeyBody": "De back-up-sleutel op dit apparaat komt niet overeen met de sleutel waarmee deze tekst is versleuteld.",
+        "failedTitle": "De brontekst kon niet worden geladen",
+        "failedBody": "De tekst kon niet worden bereikt. Controleer uw verbinding en probeer het opnieuw.",
+        "forget": "Doorgaan zonder deze"
+      }
     },
     "document": {
       "emptyTitle": "Beschrijf het gewenste document",

@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Păstrați ca text",
       "uploadPickerTitle": "Încărcați un document",
       "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown sau XML. Un singur document la un moment dat.",
-      "uploadPickerConfirm": "Folosiți acest document"
+      "uploadPickerConfirm": "Folosiți acest document",
+      "sourceStorage": {
+        "loading": "Se încarcă textul sursă…",
+        "expiresSoon": "{count, plural, one {Textul sursă stocat va fi șters în # zi.} other {Textul sursă stocat va fi șters în # zile.}}",
+        "missingTitle": "Textul sursă nu mai este stocat",
+        "missingBody": "A fost șters după {days} zile fără modificări. Traducerea este în continuare aici.",
+        "noKeyTitle": "Textul sursă este criptat",
+        "noKeyBody": "A fost criptat cu cheia dumneavoastră de backup, care nu se află pe acest dispozitiv. Adăugați cheia în Setări pentru a o putea citi aici.",
+        "otherKeyTitle": "Textul sursă este criptat cu altă cheie",
+        "otherKeyBody": "Cheia de backup de pe acest dispozitiv nu este cea cu care a fost criptat acest text.",
+        "failedTitle": "Nu s-a putut încărca textul sursă",
+        "failedBody": "Nu a putut fi accesat. Verificați conexiunea și încercați din nou.",
+        "forget": "Continuați fără el"
+      }
     },
     "document": {
       "emptyTitle": "Descrieți documentul dorit",

@@ -3437,7 +3437,20 @@
       "pdfAsTextKeep": "Zadrži kao tekst",
       "uploadPickerTitle": "Otpremite dokument",
       "uploadPickerHint": "PDF, Word, PowerPoint, tekst, Markdown ili XML. Jedan dokument u isto vreme.",
-      "uploadPickerConfirm": "Upotrebite ovaj dokument"
+      "uploadPickerConfirm": "Upotrebite ovaj dokument",
+      "sourceStorage": {
+        "loading": "Učitavanje izvornog teksta...",
+        "expiresSoon": "{count, plural, one {Skladišteni izvorni tekst biće obrisan za # dan.} other {Skladišteni izvorni tekst biće obrisan za # dana.}}",
+        "missingTitle": "Izvorni tekst više nije sačuvan",
+        "missingBody": "Obrisan je nakon {days} dana bez promena. Prevod je i dalje ovde.",
+        "noKeyTitle": "Izvorni tekst je šifrovan",
+        "noKeyBody": "Šifrovan je Vašim rezervnim ključem, koji nije na ovom uređaju. Dodajte ključ u Podešavanjima da biste ga pročitali ovde.",
+        "otherKeyTitle": "Izvorni tekst je šifrovan drugim ključem",
+        "otherKeyBody": "Rezervni ključ na ovom uređaju nije onaj kojim je ovaj tekst šifrovan.",
+        "failedTitle": "Izvorni tekst nije moguće učitati",
+        "failedBody": "Nije moguće pristupiti tekstu. Proverite vezu i pokušajte ponovo.",
+        "forget": "Nastavite bez njega"
+      }
     },
     "document": {
       "emptyTitle": "Opišite dokument koji želite",

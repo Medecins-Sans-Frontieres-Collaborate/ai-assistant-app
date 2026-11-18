@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Pozostaw jako tekst",
       "uploadPickerTitle": "Prześlij dokument",
       "uploadPickerHint": "PDF, Word, PowerPoint, tekst, Markdown lub XML. Jeden dokument jednocześnie.",
-      "uploadPickerConfirm": "Użyj tego dokumentu"
+      "uploadPickerConfirm": "Użyj tego dokumentu",
+      "sourceStorage": {
+        "loading": "Ładowanie tekstu źródłowego…",
+        "expiresSoon": "{count, plural, one {Zapisany tekst źródłowy zostanie usunięty za # dzień.} other {Zapisany tekst źródłowy zostanie usunięty za # dni.}}",
+        "missingTitle": "Tekst źródłowy nie jest już zapisany",
+        "missingBody": "Został usunięty po {days} dniach bez zmian. Tłumaczenie nadal jest dostępne.",
+        "noKeyTitle": "Tekst źródłowy jest zaszyfrowany",
+        "noKeyBody": "Został zaszyfrowany Twoim kluczem kopii zapasowej, którego nie ma na tym urządzeniu. Dodaj klucz w Ustawieniach, aby zobaczyć tekst tutaj.",
+        "otherKeyTitle": "Tekst źródłowy jest zaszyfrowany innym kluczem",
+        "otherKeyBody": "Klucz kopii zapasowej na tym urządzeniu nie jest tym, którym został zaszyfrowany ten tekst.",
+        "failedTitle": "Nie można załadować tekstu źródłowego",
+        "failedBody": "Nie można go było pobrać. Sprawdź połączenie i spróbuj ponownie.",
+        "forget": "Kontynuuj bez niego"
+      }
     },
     "document": {
       "emptyTitle": "Opisz dokument, który chcesz uzyskać",

@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Als Text belassen",
       "uploadPickerTitle": "Dokument hochladen",
       "uploadPickerHint": "PDF, Word, PowerPoint, Text, Markdown oder XML. Ein Dokument gleichzeitig.",
-      "uploadPickerConfirm": "Dieses Dokument verwenden"
+      "uploadPickerConfirm": "Dieses Dokument verwenden",
+      "sourceStorage": {
+        "loading": "Quelltext wird geladen…",
+        "expiresSoon": "{count, plural, one {Der gespeicherte Quelltext wird in # Tag gelöscht.} other {Der gespeicherte Quelltext wird in # Tagen gelöscht.}}",
+        "missingTitle": "Der Quelltext ist nicht mehr gespeichert",
+        "missingBody": "Er wurde nach {days} Tagen ohne Änderungen gelöscht. Die Übersetzung ist weiterhin verfügbar.",
+        "noKeyTitle": "Der Quelltext ist verschlüsselt",
+        "noKeyBody": "Er wurde mit Ihrem Backup-Schlüssel verschlüsselt, der auf diesem Gerät nicht vorhanden ist. Fügen Sie den Schlüssel unter Einstellungen hinzu, um ihn hier zu lesen.",
+        "otherKeyTitle": "Der Quelltext ist mit einem anderen Schlüssel verschlüsselt",
+        "otherKeyBody": "Der auf diesem Gerät hinterlegte Backup-Schlüssel stimmt nicht mit dem Schlüssel überein, mit dem dieser Text verschlüsselt wurde.",
+        "failedTitle": "Der Quelltext konnte nicht geladen werden",
+        "failedBody": "Der Zugriff war nicht möglich. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "forget": "Ohne Quelltext fortfahren"
+      }
     },
     "document": {
       "emptyTitle": "Beschreiben Sie das gewünschte Dokument",

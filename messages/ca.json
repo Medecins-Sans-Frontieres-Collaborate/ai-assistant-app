@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Mantén com a text",
       "uploadPickerTitle": "Puja un document",
       "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown o XML. Només un document a la vegada.",
-      "uploadPickerConfirm": "Utilitza aquest document"
+      "uploadPickerConfirm": "Utilitza aquest document",
+      "sourceStorage": {
+        "loading": "S'està carregant el text original…",
+        "expiresSoon": "{count, plural, one {El text original desat s'eliminarà d'aquí a # dia.} other {El text original desat s'eliminarà d'aquí a # dies.}}",
+        "missingTitle": "El text original ja no està desat",
+        "missingBody": "S'ha eliminat després de {days} dies sense canvis. La traducció encara és aquí.",
+        "noKeyTitle": "El text original està xifrat",
+        "noKeyBody": "S'ha xifrat amb la teva clau de còpia de seguretat, que no es troba en aquest dispositiu. Afegeix la clau a Configuració per poder-lo llegir aquí.",
+        "otherKeyTitle": "El text original està xifrat amb una altra clau",
+        "otherKeyBody": "La clau de còpia de seguretat d'aquest dispositiu no és la mateixa amb què s'ha xifrat aquest text.",
+        "failedTitle": "No s'ha pogut carregar el text original",
+        "failedBody": "No s'ha pogut accedir-hi. Comproveu la connexió i torneu-ho a provar.",
+        "forget": "Continua sense ell"
+      }
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",

@@ -3484,7 +3484,20 @@
       "pdfAsTextKeep": "继续作为文本处理",
       "uploadPickerTitle": "上传文档",
       "uploadPickerHint": "支持 PDF、Word、PowerPoint、文本、Markdown 或 XML。一次仅限一个文档。",
-      "uploadPickerConfirm": "使用此文档"
+      "uploadPickerConfirm": "使用此文档",
+      "sourceStorage": {
+        "loading": "正在加载原文…",
+        "expiresSoon": "{count, plural, one {存储的原文将在 # 天后被删除。} other {存储的原文将在 # 天后被删除。}}",
+        "missingTitle": "原文已不再存储",
+        "missingBody": "由于 {days} 天未更改，原文已被删除。翻译仍然保留在此。",
+        "noKeyTitle": "原文已加密",
+        "noKeyBody": "原文已使用您的备份密钥加密，但该密钥未在此设备中。请在“设置”中添加密钥以读取原文。",
+        "otherKeyTitle": "原文使用其他密钥加密",
+        "otherKeyBody": "此设备上的备份密钥不是加密该原文所用的密钥。",
+        "failedTitle": "无法加载原文",
+        "failedBody": "无法读取原文。请检查您的网络连接并重试。",
+        "forget": "继续，不使用原文"
+      }
     },
     "document": {
       "emptyTitle": "描述您需要的文档",

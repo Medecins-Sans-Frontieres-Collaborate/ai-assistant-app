@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Metin olarak tut",
       "uploadPickerTitle": "Bir belge yükle",
       "uploadPickerHint": "PDF, Word, PowerPoint, metin, Markdown veya XML. Her seferinde bir belge.",
-      "uploadPickerConfirm": "Bu belgeyi kullan"
+      "uploadPickerConfirm": "Bu belgeyi kullan",
+      "sourceStorage": {
+        "loading": "Kaynak metin yükleniyor…",
+        "expiresSoon": "{count, plural, one {Kaydedilen kaynak metin # gün içinde silinecek.} other {Kaydedilen kaynak metin # gün içinde silinecek.}}",
+        "missingTitle": "Kaynak metin artık saklanmıyor",
+        "missingBody": "{days} gün boyunca değişiklik yapılmadığı için silindi. Çeviriniz burada duruyor.",
+        "noKeyTitle": "Kaynak metin şifrelenmiş",
+        "noKeyBody": "Yedek anahtarınız ile şifrelendi, ancak bu anahtar bu cihazda bulunmuyor. Metni burada okumak için Ayarlar'dan anahtarı ekleyiniz.",
+        "otherKeyTitle": "Kaynak metin başka bir anahtar ile şifrelenmiş",
+        "otherKeyBody": "Bu cihazdaki yedek anahtar, bu metnin şifrelendiği anahtar değil.",
+        "failedTitle": "Kaynak metin yüklenemedi",
+        "failedBody": "Ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyiniz.",
+        "forget": "Onsuz devam et"
+      }
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",

@@ -3453,7 +3453,20 @@
       "pdfAsTextKeep": "Mantener como texto",
       "uploadPickerTitle": "Subir un documento",
       "uploadPickerHint": "PDF, Word, PowerPoint, texto, Markdown o XML. Un documento a la vez.",
-      "uploadPickerConfirm": "Usar este documento"
+      "uploadPickerConfirm": "Usar este documento",
+      "sourceStorage": {
+        "loading": "Cargando el texto original…",
+        "expiresSoon": "{count, plural, one {El texto original guardado se eliminará en # día.} other {El texto original guardado se eliminará en # días.}}",
+        "missingTitle": "El texto original ya no está guardado",
+        "missingBody": "Se eliminó después de {days} días sin cambios. La traducción sigue disponible aquí.",
+        "noKeyTitle": "El texto original está cifrado",
+        "noKeyBody": "Fue cifrado con su clave de respaldo, que no está en este dispositivo. Agregue la clave en Configuración para poder verlo aquí.",
+        "otherKeyTitle": "El texto original está cifrado con otra clave",
+        "otherKeyBody": "La clave de respaldo en este dispositivo no es la utilizada para cifrar este texto.",
+        "failedTitle": "No se pudo cargar el texto original",
+        "failedBody": "No se pudo acceder. Verifique su conexión e intente nuevamente.",
+        "forget": "Continuar sin él"
+      }
     },
     "document": {
       "emptyTitle": "Describa el documento que desea",

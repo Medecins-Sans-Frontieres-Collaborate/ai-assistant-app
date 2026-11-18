@@ -2577,7 +2577,20 @@
       "languageNeeded": "Choose a target language to translate",
       "pdfAsTextOffer": "{name} was loaded as text. To translate the PDF itself, page by page, switch to Document.",
       "pdfAsTextSwitch": "Translate as a document",
-      "pdfAsTextKeep": "Keep as text"
+      "pdfAsTextKeep": "Keep as text",
+      "sourceStorage": {
+        "loading": "Loading the source text…",
+        "expiresSoon": "{count, plural, one {The stored source text will be deleted in # day.} other {The stored source text will be deleted in # days.}}",
+        "missingTitle": "The source text is no longer stored",
+        "missingBody": "It was deleted after {days} days without changes. The translation is still here.",
+        "noKeyTitle": "The source text is encrypted",
+        "noKeyBody": "It was encrypted with your backup key, which is not on this device. Add the key under Settings to read it here.",
+        "otherKeyTitle": "The source text is encrypted with another key",
+        "otherKeyBody": "The backup key on this device is not the one this text was encrypted with.",
+        "failedTitle": "The source text could not be loaded",
+        "failedBody": "It could not be reached. Check your connection and try again.",
+        "forget": "Continue without it"
+      }
     },
     "document": {
       "emptyTitle": "Describe the document you want",
