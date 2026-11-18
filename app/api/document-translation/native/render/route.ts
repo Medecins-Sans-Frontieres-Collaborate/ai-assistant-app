@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 
 import {
   NativePdfDocumentLimitError,
+  NativePdfNoPagesLeftError,
   rerenderNativePdf,
 } from '@/lib/services/documentTranslation/native/nativePdfPipeline';
 import {
@@ -31,6 +32,7 @@ import {
   NATIVE_PDF_FEATURE,
   NATIVE_PDF_MAX_CHECK_PAGES,
   NATIVE_PDF_MAX_EXTRACTIONS,
+  NATIVE_PDF_MAX_OMITTED_PAGES,
   NATIVE_PDF_MAX_PAGES,
   NATIVE_PDF_MAX_UNITS,
   nativePdfLimits,
@@ -57,6 +59,8 @@ interface RenderRequest {
   checkPages?: unknown;
   /** Pages to return images of; absent means every translated page. */
   imagePages?: unknown;
+  /** Source pages to leave out of the PDF. */
+  omitPages?: unknown;
   instructions?: unknown;
   modelId?: string;
   conversationId?: unknown;
@@ -92,7 +96,8 @@ function parseUnitsIds(body: RenderRequest): string[] | null {
  *
  * JSON body: `sourceId` and `unitsId` from the run, `translations` (every
  * unit that should be translated, by id), optional `checkPages`,
- * `imagePages`, `instructions` (only `verify` applies), `modelId`,
+ * `imagePages`, `omitPages` (source pages to leave out of the PDF; 400
+ * `NO_PAGES_LEFT` when that is every page), `instructions` (only `verify` applies), `modelId`,
  * `conversationId`.
  *
  * This is also how batches of one document become one file: send
@@ -163,6 +168,13 @@ export async function POST(req: NextRequest) {
   if (imagePages === null) {
     return badRequestResponse('imagePages must be a list of page numbers');
   }
+  const omitPages = parsePageList(
+    body.omitPages ?? [],
+    NATIVE_PDF_MAX_OMITTED_PAGES,
+  );
+  if (!omitPages) {
+    return badRequestResponse('omitPages must be a list of page numbers');
+  }
 
   let document: Buffer;
   let unitsFiles: Buffer[];
@@ -193,6 +205,7 @@ export async function POST(req: NextRequest) {
       translations,
       checkPages,
       imagePages,
+      omitPages,
       maxDocumentPages: limits.maxDocumentPages,
       instructions: sanitizeStepInstructions(body.instructions),
       modelId: resolveWorkflowModelId(body.modelId),
@@ -218,6 +231,9 @@ export async function POST(req: NextRequest) {
         undefined,
         'DOCUMENT_PAGE_LIMIT',
       );
+    }
+    if (error instanceof NativePdfNoPagesLeftError) {
+      return errorResponse(error.message, 400, undefined, 'NO_PAGES_LEFT');
     }
     console.error('[document-translation/native/render] Failed:', error);
     return handleApiError(error, 'Re-rendering the pages failed');
