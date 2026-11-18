@@ -15,6 +15,7 @@ import {
   applyRenderReport,
   combineRuns,
   formatPageSelection,
+  removedPages,
   runFromReport,
   stalePages,
   translationsForRender,
@@ -221,6 +222,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
                 // Every page's image is already here, except pages whose
                 // edits this render puts on the page for the first time.
                 imagePages: stalePages(combined),
+                omitPages: removedPages(combined),
                 instructions: {},
                 modelId,
                 conversationId,
@@ -256,7 +258,8 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
   const stop = useCallback(() => runAbort.current?.abort(), []);
 
   /**
-   * Lays the pages out again with the person's edits.
+   * Lays the pages out again with the person's edits, leaving out the
+   * pages they removed from the download.
    *
    * @param check - Also run the layout check on the edited pages.
    * @param instructions - Step instructions; only the check's applies.
@@ -277,6 +280,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
             ? stalePages(run).slice(0, NATIVE_PDF_MAX_CHECK_PAGES)
             : [],
           imagePages: stalePages(run),
+          omitPages: removedPages(run),
           instructions,
           modelId,
           conversationId,
@@ -289,7 +293,13 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
           for (const [id, text] of Object.entries(latest.edits)) {
             if (run.edits[id] !== text) next = withUnitEdit(next, id, text);
           }
-          return { ...next, page: latest.page, dismissed: latest.dismissed };
+          return {
+            ...next,
+            page: latest.page,
+            dismissed: latest.dismissed,
+            // A page removed or put back while waiting is still pending.
+            removedPages: latest.removedPages,
+          };
         });
       } catch (error) {
         if (!isAbort(error)) setRenderError(message(error));
