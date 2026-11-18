@@ -49,6 +49,51 @@ export const WORKFLOW_POLICY_DEFAULTS: Record<
   'channel-drafter': true,
 };
 
+/**
+ * Optional parts of a workflow that an admin can switch on or off on their
+ * own, without touching the workflow itself. A feature is only ever
+ * available while its workflow is enabled, so switching a workflow off
+ * switches off everything under it.
+ *
+ * To add one: add its id here with the workflow it belongs to and its
+ * default, add `workflowsAdmin.features.<id>` strings, and gate the routes
+ * with `isWorkflowFeatureEnabled` (guard.ts). The admin panel lists it under
+ * its workflow automatically.
+ */
+export const WORKFLOW_FEATURE_IDS = [
+  'translation-preserve-formatting',
+] as const;
+
+export type WorkflowFeatureId = (typeof WORKFLOW_FEATURE_IDS)[number];
+
+export interface WorkflowFeatureDefinition {
+  /** The workflow the feature belongs to and depends on. */
+  workflow: ConversationWorkflowType;
+  /** State when no policy is saved, or the saved one does not mention it. */
+  defaultEnabled: boolean;
+}
+
+export const WORKFLOW_FEATURES: Record<
+  WorkflowFeatureId,
+  WorkflowFeatureDefinition
+> = {
+  // Document mode's "Preserve formatting" layout: the native PDF pipeline
+  // behind /api/document-translation/native.
+  'translation-preserve-formatting': {
+    workflow: 'translation',
+    defaultEnabled: true,
+  },
+};
+
+/** The features that belong to one workflow, in declaration order. */
+export function workflowFeaturesOf(
+  type: ConversationWorkflowType,
+): WorkflowFeatureId[] {
+  return WORKFLOW_FEATURE_IDS.filter(
+    (id) => WORKFLOW_FEATURES[id].workflow === type,
+  );
+}
+
 export const WorkflowSettingSchema = z.object({
   enabled: z.boolean(),
 });
@@ -62,6 +107,8 @@ export type WorkflowSetting = z.infer<typeof WorkflowSettingSchema>;
 export const WorkflowPolicySchema = z.object({
   version: z.literal(1),
   workflows: z.record(z.string(), WorkflowSettingSchema).default({}),
+  /** Per-feature switches (WORKFLOW_FEATURES); absent in older documents. */
+  features: z.record(z.string(), WorkflowSettingSchema).optional(),
   updatedBy: z.string(),
   updatedAt: z.string(),
 });
@@ -94,6 +141,44 @@ export function resolveAllWorkflowsEnabled(
   const out = {} as Record<ConversationWorkflowType, boolean>;
   for (const type of CONVERSATION_WORKFLOW_TYPES) {
     out[type] = resolveWorkflowEnabled(policy, type);
+  }
+  return out;
+}
+
+/**
+ * The admin's own switch for one feature, ignoring its workflow: the saved
+ * setting, or the feature's default. This is what the admin panel edits.
+ */
+export function resolveWorkflowFeatureSetting(
+  policy: WorkflowPolicy | null | undefined,
+  id: WorkflowFeatureId,
+): boolean {
+  const setting = policy?.features?.[id];
+  if (setting) return setting.enabled;
+  return WORKFLOW_FEATURES[id].defaultEnabled;
+}
+
+/**
+ * Whether a feature is actually available: its own switch is on AND its
+ * workflow is enabled. This is what enforcement and the workspace use.
+ */
+export function resolveWorkflowFeatureEnabled(
+  policy: WorkflowPolicy | null | undefined,
+  id: WorkflowFeatureId,
+): boolean {
+  return (
+    resolveWorkflowEnabled(policy, WORKFLOW_FEATURES[id].workflow) &&
+    resolveWorkflowFeatureSetting(policy, id)
+  );
+}
+
+/** Effective availability of every known feature — what `/me` returns. */
+export function resolveAllWorkflowFeaturesEnabled(
+  policy: WorkflowPolicy | null | undefined,
+): Record<WorkflowFeatureId, boolean> {
+  const out = {} as Record<WorkflowFeatureId, boolean>;
+  for (const id of WORKFLOW_FEATURE_IDS) {
+    out[id] = resolveWorkflowFeatureEnabled(policy, id);
   }
   return out;
 }
