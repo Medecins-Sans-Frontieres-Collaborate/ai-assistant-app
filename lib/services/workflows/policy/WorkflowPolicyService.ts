@@ -13,9 +13,12 @@
  * would not be a kill switch.
  */
 import {
+  WorkflowFeatureId,
   WorkflowPolicy,
+  resolveAllWorkflowFeaturesEnabled,
   resolveAllWorkflowsEnabled,
   resolveWorkflowEnabled,
+  resolveWorkflowFeatureEnabled,
 } from '@/lib/services/workflows/policy/types';
 import {
   createWorkflowPolicyBlobStorage,
@@ -107,6 +110,15 @@ export class WorkflowPolicyService {
 
   allEnabled(): Record<ConversationWorkflowType, boolean> {
     return resolveAllWorkflowsEnabled(this.policy);
+  }
+
+  /** Whether a feature is available: its switch and its workflow are on. */
+  isFeatureEnabled(id: WorkflowFeatureId): boolean {
+    return resolveWorkflowFeatureEnabled(this.policy, id);
+  }
+
+  allFeaturesEnabled(): Record<WorkflowFeatureId, boolean> {
+    return resolveAllWorkflowFeaturesEnabled(this.policy);
   }
 
   private getStorage(): BlobStorage {
