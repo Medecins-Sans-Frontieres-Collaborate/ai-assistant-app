@@ -3,11 +3,14 @@ import {
   WORKFLOW_FEATURES,
   WORKFLOW_FEATURE_IDS,
   WORKFLOW_POLICY_DEFAULTS,
+  WorkflowFeatureOverride,
   WorkflowPolicy,
+  featureSettingProblem,
   resolveAllWorkflowFeaturesEnabled,
   resolveAllWorkflowsEnabled,
   resolveWorkflowEnabled,
   resolveWorkflowFeatureEnabled,
+  resolveWorkflowFeatureLimits,
   resolveWorkflowFeatureSetting,
   workflowFeaturesOf,
 } from '@/lib/services/workflows/policy/types';
@@ -136,6 +139,167 @@ describe('workflow feature resolution', () => {
     await service.ensureFresh();
     expect(service.isFeatureEnabled(FEATURE)).toBe(false);
     expect(service.allFeaturesEnabled()).toEqual({ [FEATURE]: false });
+  });
+});
+
+describe('workflow feature limits', () => {
+  const FEATURE = 'translation-preserve-formatting' as const;
+  const definitions = WORKFLOW_FEATURES[FEATURE].limits ?? {};
+  const person = (mail: string, attributes: string[] = []) => ({
+    userId: 'oid',
+    mail,
+    domain: mail.split('@')[1],
+    attributes,
+    groupIds: [],
+  });
+  const withLimits = (
+    limits: Record<string, number>,
+    overrides: WorkflowFeatureOverride[] = [],
+  ): WorkflowPolicy => ({
+    ...policy({}),
+    features: { [FEATURE]: { enabled: true, limits, overrides } },
+  });
+
+  it('declares defaults inside their own bounds and in order', () => {
+    for (const definition of Object.values(definitions)) {
+      expect(definition.default).toBeGreaterThanOrEqual(definition.min);
+      expect(definition.default).toBeLessThanOrEqual(definition.max);
+    }
+    expect(definitions.defaultBatchPages.default).toBeLessThanOrEqual(
+      definitions.maxBatchPages.default,
+    );
+    expect(definitions.maxBatchPages.default).toBeLessThanOrEqual(
+      definitions.maxDocumentPages.default,
+    );
+  });
+
+  it('answers the defaults with no policy, and with one that sets nothing', () => {
+    const defaults = Object.fromEntries(
+      Object.entries(definitions).map(([key, d]) => [key, d.default]),
+    );
+    expect(resolveWorkflowFeatureLimits(null, FEATURE)).toEqual(defaults);
+    expect(resolveWorkflowFeatureLimits(policy({}), FEATURE)).toEqual(defaults);
+  });
+
+  it('takes saved values and keeps the default of a limit left out', () => {
+    expect(
+      resolveWorkflowFeatureLimits(withLimits({ maxBatchPages: 9 }), FEATURE),
+    ).toMatchObject({
+      maxBatchPages: 9,
+      maxDocumentPages: definitions.maxDocumentPages.default,
+    });
+  });
+
+  it('holds a saved value inside the compiled bounds', () => {
+    const { min, max } = definitions.maxDocumentPages;
+    const resolved = (value: number) =>
+      resolveWorkflowFeatureLimits(
+        withLimits({ maxDocumentPages: value }),
+        FEATURE,
+      ).maxDocumentPages;
+    // At each bound the value stands; one past it is brought back.
+    expect(resolved(max)).toBe(max);
+    expect(resolved(max + 1)).toBe(max);
+    expect(resolved(min)).toBe(min);
+    expect(resolved(min - 1)).toBe(min);
+  });
+
+  it('applies an override only to the people it names', () => {
+    const p = withLimits({ maxDocumentPages: 20 }, [
+      {
+        scope: 'user',
+        targets: ['Lead@Example.org'],
+        limits: { maxDocumentPages: 60 },
+      },
+    ]);
+    const limit = (mail?: string) =>
+      resolveWorkflowFeatureLimits(p, FEATURE, mail ? person(mail) : null)
+        .maxDocumentPages;
+    expect(limit('lead@example.org')).toBe(60);
+    expect(limit('other@example.org')).toBe(20);
+    // Nobody asking: no override applies.
+    expect(limit()).toBe(20);
+  });
+
+  it('inherits the limits an override leaves out', () => {
+    const p = withLimits({ maxBatchPages: 8, maxDocumentPages: 20 }, [
+      {
+        scope: 'domain',
+        targets: ['example.org'],
+        limits: { maxBatchPages: 10 },
+      },
+    ]);
+    expect(
+      resolveWorkflowFeatureLimits(p, FEATURE, person('a@example.org')),
+    ).toMatchObject({ maxBatchPages: 10, maxDocumentPages: 20 });
+  });
+
+  it('lets the person outrank the attribute, and the attribute the domain', () => {
+    const overrides: WorkflowFeatureOverride[] = [
+      // Listed most specific first, to show order in the list is not it.
+      {
+        scope: 'user',
+        targets: ['a@example.org'],
+        limits: { maxDocumentPages: 70 },
+      },
+      {
+        scope: 'attribute',
+        targets: ['department:health'],
+        limits: { maxDocumentPages: 50 },
+      },
+      {
+        scope: 'domain',
+        targets: ['example.org'],
+        limits: { maxDocumentPages: 40 },
+      },
+    ];
+    const p = withLimits({}, overrides);
+    const limit = (mail: string, attributes: string[] = []) =>
+      resolveWorkflowFeatureLimits(p, FEATURE, person(mail, attributes))
+        .maxDocumentPages;
+    expect(limit('a@example.org', ['department:health'])).toBe(70);
+    expect(limit('b@example.org', ['department:health'])).toBe(50);
+    expect(limit('b@example.org')).toBe(40);
+    expect(limit('b@elsewhere.org')).toBe(definitions.maxDocumentPages.default);
+  });
+
+  it('holds an override inside the compiled bounds too', () => {
+    const { max } = definitions.maxBatchPages;
+    const p = withLimits({}, [
+      {
+        scope: 'user',
+        targets: ['a@example.org'],
+        limits: { maxBatchPages: max + 50 },
+      },
+    ]);
+    expect(
+      resolveWorkflowFeatureLimits(p, FEATURE, person('a@example.org'))
+        .maxBatchPages,
+    ).toBe(max);
+  });
+
+  it('refuses a setting it cannot honour, and accepts the bounds themselves', () => {
+    const { min, max } = definitions.maxBatchPages;
+    const problem = (limits: Record<string, number>) =>
+      featureSettingProblem(FEATURE, { enabled: true, limits });
+    expect(problem({ maxBatchPages: max })).toBeNull();
+    expect(problem({ maxBatchPages: min })).toBeNull();
+    expect(problem({ maxBatchPages: max + 1 })).toMatch(/maxBatchPages/);
+    expect(problem({ maxBatchPages: min - 1 })).toMatch(/maxBatchPages/);
+    expect(problem({ maxBatchPages: 2.5 })).toMatch(/whole number/);
+    expect(problem({ pagesPerMoon: 3 })).toMatch(/unknown limit/);
+    expect(
+      featureSettingProblem(FEATURE, {
+        enabled: true,
+        overrides: [
+          {
+            scope: 'user',
+            targets: ['a@example.org'],
+            limits: { maxBatchPages: max + 1 },
+          },
+        ],
+      }),
+    ).toMatch(/override 1/);
   });
 });
 
