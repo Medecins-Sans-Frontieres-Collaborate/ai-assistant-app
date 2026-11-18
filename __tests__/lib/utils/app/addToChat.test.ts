@@ -4,7 +4,9 @@ import {
   TRANSLATABLE_EXTENSIONS,
   acceptedExtensions,
   effectiveIntent,
+  filesForExtensions,
   filesForIntent,
+  hostedSources,
   initialSource,
   intentsForSelection,
   isTranscribableName,
@@ -243,5 +245,37 @@ describe('addToChat — narrowing files to an intent', () => {
       filesForIntent([file('x.mp4'), first, file('b.pdf')], 'translate'),
     ).toEqual([first]);
     expect(filesForIntent([file('x.mp4')], 'translate')).toEqual([]);
+  });
+});
+
+describe('a picker hosted by another surface', () => {
+  const named = (name: string) => new File(['x'], name);
+
+  it('lists only the sources both the person and the host have', () => {
+    const everything = { ...NOTHING, m365Files: true, m365Mail: true };
+    expect(hostedSources(everything, ['device', 'onedrive'])).toEqual([
+      'device',
+      'onedrive',
+    ]);
+    // The host takes OneDrive, the person does not have it.
+    expect(hostedSources(NOTHING, ['device', 'onedrive'])).toEqual(['device']);
+    // The person has mail, the host does not take it.
+    expect(hostedSources(everything, ['device'])).toEqual(['device']);
+  });
+
+  it('keeps the first file of an accepted type, whatever the case', () => {
+    const pdf = named('Report.PDF');
+    expect(
+      filesForExtensions(
+        [named('a.mp4'), pdf, named('b.docx')],
+        ['pdf', 'docx'],
+      ),
+    ).toEqual([pdf]);
+  });
+
+  it('keeps nothing when no file is of an accepted type', () => {
+    expect(filesForExtensions([named('a.mp4'), named('pdf')], ['pdf'])).toEqual(
+      [],
+    );
   });
 });
