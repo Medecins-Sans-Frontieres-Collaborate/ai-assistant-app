@@ -10,6 +10,9 @@
  * 403 with a stable code lets the client tell "disabled by an admin" apart
  * from an ordinary authorization failure.
  */
+import { Session } from 'next-auth';
+
+import { buildPrincipal } from '@/lib/services/limits/principal';
 import { WorkflowPolicyService } from '@/lib/services/workflows/policy/WorkflowPolicyService';
 import { WorkflowFeatureId } from '@/lib/services/workflows/policy/types';
 
@@ -61,4 +64,23 @@ export function workflowFeatureDisabledResponse(id: WorkflowFeatureId) {
     undefined,
     WORKFLOW_FEATURE_DISABLED_CODE,
   );
+}
+
+/**
+ * A feature's admin-set limits as they apply to the signed-in person,
+ * overrides included.
+ *
+ * @param id The feature.
+ * @param session The request's session; its mail, domain and directory
+ *   attributes decide which overrides match.
+ * @returns One value per limit the feature declares, each inside its
+ *   compiled bounds (defaults when no policy is readable).
+ */
+export async function getWorkflowFeatureLimits(
+  id: WorkflowFeatureId,
+  session: Session | null,
+): Promise<Record<string, number>> {
+  const service = WorkflowPolicyService.getInstance();
+  await service.ensureFresh();
+  return service.featureLimits(id, buildPrincipal(session));
 }
