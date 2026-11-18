@@ -55,6 +55,8 @@ interface RenderRequest {
   unitsIds?: unknown;
   /** Unit id to translation; null or absent keeps the unit as written. */
   translations?: unknown;
+  /** Unit id to the person's style for it: size, colour, position. */
+  styles?: unknown;
   /** Pages to run the layout check on afterwards. */
   checkPages?: unknown;
   /** Pages to return images of; absent means every translated page. */
@@ -96,7 +98,8 @@ function parseUnitsIds(body: RenderRequest): string[] | null {
  *
  * JSON body: `sourceId` and `unitsId` from the run, `translations` (every
  * unit that should be translated, by id), optional `checkPages`,
- * `imagePages`, `omitPages` (source pages to leave out of the PDF; 400
+ * `imagePages`, `styles` (unit id to `size`, `color`, `dx`, `dy`; anything
+ * invalid is dropped), `omitPages` (source pages to leave out of the PDF; 400
  * `NO_PAGES_LEFT` when that is every page), `instructions` (only `verify` applies), `modelId`,
  * `conversationId`.
  *
@@ -206,6 +209,7 @@ export async function POST(req: NextRequest) {
       checkPages,
       imagePages,
       omitPages,
+      styles: body.styles,
       maxDocumentPages: limits.maxDocumentPages,
       instructions: sanitizeStepInstructions(body.instructions),
       modelId: resolveWorkflowModelId(body.modelId),
