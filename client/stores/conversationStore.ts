@@ -12,6 +12,7 @@ import {
   ActiveFile,
   AssistantMessageVersion,
   Conversation,
+  MessageFeedback,
   MessageToolArtifacts,
   ToolCallRecord,
   isAssistantMessageGroup,
@@ -158,6 +159,15 @@ interface ConversationStore {
     conversationId: string,
     messageIndex: number,
     version: AssistantMessageVersion,
+  ) => void;
+  /**
+   * Records the user's feedback rating on an assistant message. On a versioned
+   * entry it lands on the active version, so each regeneration is rated independently.
+   */
+  setMessageFeedback: (
+    conversationId: string,
+    messageIndex: number,
+    feedback: MessageFeedback,
   ) => void;
 
   /**
@@ -563,6 +573,31 @@ export const useConversationStore = create<ConversationStore>()(
                 versions: [...entry.versions, version],
                 activeIndex: entry.versions.length, // Point to new version
               };
+            }
+
+            return { ...c, messages, updatedAt: new Date().toISOString() };
+          }),
+        })),
+
+      setMessageFeedback: (conversationId, messageIndex, feedback) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+
+            const messages = [...c.messages];
+            const entry = messages[messageIndex];
+
+            if (isAssistantMessageGroup(entry)) {
+              const versions = [...entry.versions];
+              versions[entry.activeIndex] = {
+                ...versions[entry.activeIndex],
+                feedback,
+              };
+              messages[messageIndex] = { ...entry, versions };
+            } else if (entry?.role === 'assistant') {
+              messages[messageIndex] = { ...entry, feedback };
+            } else {
+              return c;
             }
 
             return { ...c, messages, updatedAt: new Date().toISOString() };
