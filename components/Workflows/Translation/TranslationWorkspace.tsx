@@ -37,6 +37,8 @@ import { useElementWidth } from '@/client/hooks/ui/useElementWidth';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 import { useDocumentTranslationReader } from '@/client/hooks/workflows/useDocumentTranslationReader';
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
+import { useFormattedDocument } from '@/client/hooks/workflows/useFormattedDocument';
+import { usePdfPages } from '@/client/hooks/workflows/usePdfPages';
 import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
 import {
@@ -51,6 +53,10 @@ import {
   ocrUploadedFile,
   uploadAndExtractText,
 } from '@/client/services/workflows/fileTextExtraction';
+import {
+  NativePdfAvailability,
+  fetchNativePdfAvailability,
+} from '@/client/services/workflows/nativePdfTranslation';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
 import { assessTranslation } from '@/client/services/workflows/translationAssessment';
 import { requestTranslationChange } from '@/client/services/workflows/translationChangeRequest';
@@ -99,12 +105,22 @@ import {
   applyEdit,
   applyEditsInOrder,
 } from '@/lib/utils/shared/translation/editApplication';
+import {
+  DEFAULT_DOCUMENT_LAYOUT,
+  DEFAULT_FORMATTED_OPTIONS,
+  FormattedDocumentOptions,
+  FormattedDocumentRun,
+  TranslationDocumentLayout,
+  formattedEligibility,
+  selectedPages,
+} from '@/lib/utils/shared/translation/formattedDocument';
 import { mergeGlossaryEntries } from '@/lib/utils/shared/translation/glossaryMatch';
 import {
   TRANSLATION_LANGUAGES,
   findTranslationLanguage,
   translationLanguageLabel,
 } from '@/lib/utils/shared/translation/languages';
+import { NATIVE_PDF_DEFAULT_DEPTH } from '@/lib/utils/shared/translation/nativePdf';
 import {
   SourcePage,
   formatPageSelection,
@@ -162,6 +178,10 @@ import { ChangeRequestBar } from './ChangeRequestBar';
 import { DocumentDownloadMenu } from './DocumentDownloadMenu';
 import { DocumentJobProgress } from './DocumentJobProgress';
 import { DocumentReaderBar } from './DocumentReaderBar';
+import { DocumentOptionsBar } from './Formatted/DocumentOptionsBar';
+import { FormattedProgress } from './Formatted/FormattedProgress';
+import { FormattedReview } from './Formatted/FormattedReview';
+import { FormattedSetup } from './Formatted/FormattedSetup';
 import { GlossaryManager } from './GlossaryManager';
 import { GlossaryPicker, languageFit } from './GlossaryPicker';
 import { OcrOffer, OcrOfferReason } from './OcrOffer';
@@ -458,8 +478,29 @@ export function TranslationWorkspace({
   });
   const targetText = targetDraft ?? state?.finalText ?? '';
 
-  // --- Whole-document mode ------------------------------------------------
-  const documentMode = state?.mode === 'document';
+  // --- Document mode ------------------------------------------------------
+  // Document mode has two layouts (see formattedDocument.ts). `documentMode`
+  // below means the TEXT layout, which is what all the reader code in this
+  // file is about; `formattedMode` is the formatting-preserving layout,
+  // which has its own screens under ./Formatted. Exactly one of the two is
+  // true in Document mode.
+  const anyDocumentMode = state?.mode === 'document';
+  const [formattedService, setFormattedService] =
+    useState<NativePdfAvailability | null>(null);
+  // Asked once when the workspace opens, in any mode, so the layout row is
+  // already there when Document is chosen instead of appearing a moment later.
+  useEffect(() => {
+    const abort = new AbortController();
+    void fetchNativePdfAvailability(abort.signal).then((availability) => {
+      if (!abort.signal.aborted) setFormattedService(availability);
+    });
+    return () => abort.abort();
+  }, []);
+  const formattedMode =
+    anyDocumentMode &&
+    !!formattedService?.enabled &&
+    (state?.documentLayout ?? DEFAULT_DOCUMENT_LAYOUT) === 'formatted';
+  const documentMode = anyDocumentMode && !formattedMode;
   const documentJob = state?.documentJob;
   // The file as uploaded in this session, to submit without re-downloading.
   const uploadedFileRef = useRef<{ url: string; file: File } | null>(null);
@@ -1878,6 +1919,131 @@ export function TranslationWorkspace({
     leavePageEvent(queuedDeparture);
   }, [queuedDeparture, hasUnresolvedEdits]);
 
+  // --- Document mode, formatting-preserving layout -------------------------
+  const savedStepInstructions = useSettingsStore(
+    (s) => s.formattedStepInstructions,
+  );
+  const setSavedStepInstructions = useSettingsStore(
+    (s) => s.setFormattedStepInstructions,
+  );
+  const [rememberInstructions, setRememberInstructions] = useState(true);
+  const [formattedSetupOpen, setFormattedSetupOpen] = useState(false);
+  const formattedSource = state?.sourceDocument;
+  const formattedSourceUrl = formattedSource?.url;
+  const formattedSourceName = formattedSource?.name ?? '';
+  const formattedCheck = formattedEligibility(
+    formattedSource,
+    targetLanguage?.label,
+  );
+  const loadFormattedFile = useCallback(async (): Promise<File> => {
+    if (!formattedSourceUrl) throw new Error('No document is loaded');
+    const kept = uploadedFileRef.current;
+    return kept?.url === formattedSourceUrl
+      ? kept.file
+      : fetchStoredFile(formattedSourceUrl, formattedSourceName);
+  }, [formattedSourceUrl, formattedSourceName]);
+  /** The setup and review screens need a PDF to show; a blocker hides them. */
+  const formattedHasPdf =
+    formattedMode &&
+    !!formattedSourceUrl &&
+    !uploading &&
+    (formattedCheck.ok || formattedCheck.reason === 'no-language');
+  const pdfPages = usePdfPages(
+    loadFormattedFile,
+    formattedHasPdf ? (formattedSourceUrl ?? null) : null,
+  );
+  const setFormattedRun = useCallback(
+    (run: FormattedDocumentRun) => {
+      patchState({ formattedRun: run });
+      setFormattedSetupOpen(false);
+    },
+    [patchState],
+  );
+  const updateFormattedRun = useCallback(
+    (update: (run: FormattedDocumentRun) => FormattedDocumentRun) => {
+      updateWorkflowState(conversationId, (prev) => {
+        const p = prev as TranslationWorkflowState;
+        return p.formattedRun
+          ? {
+              ...p,
+              formattedRun: update(p.formattedRun),
+              updatedAt: new Date().toISOString(),
+            }
+          : p;
+      });
+    },
+    [conversationId, updateWorkflowState],
+  );
+  const formatted = useFormattedDocument({
+    conversationId,
+    run: state?.formattedRun,
+    setRun: setFormattedRun,
+    updateRun: updateFormattedRun,
+    glossaries: {
+      glossaryEntries: activeGlossaryEntries,
+      glossaryGuideIds: selectedOrgIds,
+    },
+    modelId: conversation?.model?.id,
+    onSpent: refetchLimits,
+  });
+  const formattedOptions: FormattedDocumentOptions =
+    state?.formattedOptions ?? {
+      ...DEFAULT_FORMATTED_OPTIONS,
+      instructions: savedStepInstructions,
+    };
+  const formattedDepth = state?.documentDepth ?? NATIVE_PDF_DEFAULT_DEPTH;
+  const formattedMaxPages = formattedService?.maxPages ?? 0;
+  const formattedPageCount =
+    pdfPages.pageCount || formattedSource?.lastPage || 0;
+  const formattedSelection = selectedPages(
+    formattedOptions.pages,
+    formattedPageCount,
+    formattedMaxPages,
+  );
+  const formattedSelectedCount = formattedSelection.ok
+    ? formattedSelection.pages.length
+    : 0;
+  // A run belongs to the document it was made from; another document
+  // starts at the setup.
+  const formattedRun =
+    state?.formattedRun && state.formattedRun.sourceUrl === formattedSourceUrl
+      ? state.formattedRun
+      : undefined;
+  const showFormattedReview =
+    !!formattedRun && !formattedSetupOpen && !formatted.running;
+  const canTranslateFormatted =
+    formattedMode &&
+    formattedCheck.ok &&
+    formattedSelectedCount > 0 &&
+    !formatted.running &&
+    !uploading;
+  const startFormatted = () => {
+    if (!canTranslateFormatted || !formattedSourceUrl || !targetLanguage) {
+      return;
+    }
+    if (rememberInstructions) {
+      setSavedStepInstructions(formattedOptions.instructions);
+    }
+    void formatted.start({
+      loadFile: loadFormattedFile,
+      sourceUrl: formattedSourceUrl,
+      sourceName: formattedSourceName,
+      targetLanguage: targetLanguage.label,
+      options: formattedOptions,
+      depth: formattedDepth,
+      pageCount: formattedSelectedCount,
+    });
+  };
+  const changeDocumentLayout = (layout: TranslationDocumentLayout) => {
+    if (!state) return;
+    setEditingTarget(false);
+    patchState({
+      documentLayout: layout,
+      // The text reader gives the pane back before the layout changes.
+      ...(layout === 'formatted' ? leaveDocumentReader(state) : {}),
+    });
+  };
+
   if (!state) return null;
 
   const canTranslate =
@@ -1897,7 +2063,7 @@ export function TranslationWorkspace({
     selectedCriteria.size > 0 &&
     // In the reader, only a page that is actually in the pane is assessed.
     (!documentMode || pageInPane);
-  const tooLong = !documentMode && sourceText.length > MAX_SOURCE_CHARS;
+  const tooLong = !anyDocumentMode && sourceText.length > MAX_SOURCE_CHARS;
   const canTranslateDocument =
     documentEligibility.ok &&
     !submittingDocument &&
@@ -1922,7 +2088,15 @@ export function TranslationWorkspace({
   // A Reviewed run's text is a draft until the last review round is done.
   const isDraft = isRunning && state.mode === 'agentic' && targetText !== '';
   const paperTrailHidden =
-    !documentMode && analysisHidden && hasPaperTrail(state);
+    !anyDocumentMode && analysisHidden && hasPaperTrail(state);
+  const formattedBlockerKey: Record<string, string> = {
+    'no-document': 'translation.formatted.needsFile',
+    'not-pdf': 'translation.formatted.needsPdf',
+    'no-language': 'translation.documentNeedsLanguage',
+  };
+  const formattedBlocker = formattedCheck.ok
+    ? null
+    : t(formattedBlockerKey[formattedCheck.reason]);
   const showAnalysis = () => {
     setAnalysisHidden(false);
     setAnalysisExpanded(true);
@@ -2050,7 +2224,7 @@ export function TranslationWorkspace({
               role="radio"
               aria-checked={state.mode === mode}
               onClick={() => requestLeavePage({ mode })}
-              disabled={isRunning || assessing}
+              disabled={isRunning || assessing || formatted.running}
               title={
                 mode === 'quick'
                   ? t('translation.modeQuickHint')
@@ -2081,7 +2255,7 @@ export function TranslationWorkspace({
             })}
           </span>
         )}
-        {!isRunning && !documentMode && (
+        {!isRunning && !anyDocumentMode && (
           <RunEstimateHint
             model={conversation?.model}
             sourceText={state.sourceText}
@@ -2112,7 +2286,37 @@ export function TranslationWorkspace({
           </span>
         )}
 
-        {isRunning ? (
+        {formattedMode ? (
+          formatted.running ? (
+            <button
+              type="button"
+              onClick={formatted.stop}
+              className="inline-flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg border border-gray-400 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-100 dark:border-gray-500 dark:text-white dark:hover:bg-surface-dark-elevated"
+            >
+              <IconPlayerStopFilled size={14} aria-hidden />
+              {t('translation.stop')}
+            </button>
+          ) : showFormattedReview ? (
+            <button
+              type="button"
+              onClick={() => setFormattedSetupOpen(true)}
+              className="min-h-[36px] rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-surface-dark-elevated"
+            >
+              {t('translation.formatted.translateAgain')}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => guardBudget(startFormatted, 'run')}
+              disabled={!canTranslateFormatted}
+              className="min-h-[36px] rounded-lg bg-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
+            >
+              {t('translation.formatted.translatePages', {
+                count: formattedSelectedCount,
+              })}
+            </button>
+          )
+        ) : isRunning ? (
           <button
             type="button"
             onClick={() => cancelRun(conversationId)}
@@ -2144,6 +2348,40 @@ export function TranslationWorkspace({
           </button>
         )}
       </div>
+
+      {anyDocumentMode && formattedService?.enabled && (
+        <DocumentOptionsBar
+          layout={state.documentLayout ?? DEFAULT_DOCUMENT_LAYOUT}
+          depth={formattedDepth}
+          disabled={
+            isRunning ||
+            assessing ||
+            submittingDocument ||
+            formatted.running ||
+            formatted.rendering ||
+            (pageInPane && hasUnresolvedEdits)
+          }
+          onLayoutChange={changeDocumentLayout}
+          onDepthChange={(depth) => patchState({ documentDepth: depth })}
+        />
+      )}
+
+      {formattedMode && (formattedBlocker || formatted.runError) && (
+        <div className="border-b border-gray-200 px-3 py-2 dark:border-gray-700">
+          {formattedBlocker && (
+            <p className="text-sm text-amber-700 dark:text-amber-400">
+              {formattedBlocker}
+            </p>
+          )}
+          {formatted.runError && (
+            <p className="text-sm text-red-700 dark:text-red-400" role="alert">
+              {t('translation.formatted.runFailed', {
+                message: formatted.runError,
+              })}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Status / errors */}
       {(run?.error ||
@@ -2239,7 +2477,7 @@ export function TranslationWorkspace({
 
       {state?.sourceDocument &&
         !state.sourceDocument.fitsOneBatch &&
-        !documentMode && (
+        !anyDocumentMode && (
           <SourcePageSelector
             key={`${state.sourceDocument.url}:${state.sourceDocument.selectedPages}`}
             document={state.sourceDocument}
@@ -2252,9 +2490,48 @@ export function TranslationWorkspace({
           />
         )}
 
-      {/* Workbench: panes (+ assess controls) with the review column beside */}
+      {formattedHasPdf &&
+        (formatted.progress ? (
+          <FormattedProgress
+            progress={formatted.progress}
+            language={targetLanguage?.label ?? ''}
+          />
+        ) : showFormattedReview && formattedRun ? (
+          <FormattedReview
+            run={formattedRun}
+            controller={formatted}
+            pdf={pdfPages}
+            instructions={formattedOptions.instructions}
+            glossaryCount={selectedOrgIds.length + selectedPersonalIds.length}
+            stacked={!layout.reviewBeside}
+            onUpdateRun={updateFormattedRun}
+            onChangeOptions={() => setFormattedSetupOpen(true)}
+          />
+        ) : (
+          <FormattedSetup
+            documentName={formattedSourceName}
+            pageCount={formattedPageCount}
+            pdf={pdfPages}
+            options={formattedOptions}
+            depth={formattedDepth}
+            maxPages={formattedMaxPages}
+            maxRefitRounds={formattedService?.maxRefitRounds ?? 0}
+            remember={rememberInstructions}
+            canGoBack={!!formattedRun}
+            onOptionsChange={(options) =>
+              patchState({ formattedOptions: options })
+            }
+            onRememberChange={setRememberInstructions}
+            onBack={() => setFormattedSetupOpen(false)}
+            onRemove={handleRemoveDocument}
+          />
+        ))}
+
+      {/* Workbench: panes (+ assess controls) with the review column beside.
+          Hidden, not unmounted, while the formatted layout shows its own
+          screens: it holds the source pane, where a document is uploaded. */}
       <div
-        className={`flex min-h-0 flex-1 ${
+        className={`min-h-0 flex-1 ${formattedHasPdf ? 'hidden' : 'flex'} ${
           // Without room for the review beside the panes, the parts stack
           // and the workbench scrolls instead of squeezing each one flat.
           layout.reviewBeside ? 'flex-row' : 'flex-col overflow-y-auto'
@@ -2866,7 +3143,7 @@ export function TranslationWorkspace({
       </div>
 
       {/* Pre-run paper trail (analysis + review rounds) — history only */}
-      {!analysisHidden && !documentMode && (
+      {!analysisHidden && !anyDocumentMode && (
         <AnalysisStrip
           analysis={state.analysis}
           rounds={state.rounds}
