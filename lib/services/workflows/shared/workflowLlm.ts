@@ -1,3 +1,7 @@
+import {
+  hasBrokenEscape,
+  repairBrokenEscapesDeep,
+} from '@/lib/services/workflows/shared/modelTextRepair';
 import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
@@ -63,8 +67,25 @@ export interface StructuredCallOptions {
 /**
  * One strict structured-output call. Throws on refusal or empty content so
  * orchestrators can convert failures into a single user-facing error.
+ *
+ * An answer holding a broken character escape is asked for a second time
+ * (both requests are counted in `usage`), and the second answer is
+ * repaired if it is broken too.
  */
 export async function callStructured<T>(
+  options: StructuredCallOptions,
+): Promise<T> {
+  const first = await requestStructured<T>(options);
+  if (!hasBrokenEscape(first)) return first;
+  // A broken character escape (see modelTextRepair.ts) is a slip of one
+  // completion: ask once more, and repair whatever the second answer
+  // still holds rather than failing the step.
+  const second = await requestStructured<T>(options);
+  return repairBrokenEscapesDeep(second);
+}
+
+/** One request of {@link callStructured}, parsed as the model wrote it. */
+async function requestStructured<T>(
   options: StructuredCallOptions,
 ): Promise<T> {
   const {
