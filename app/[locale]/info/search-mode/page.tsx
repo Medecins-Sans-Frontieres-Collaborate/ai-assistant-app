@@ -127,7 +127,7 @@ export default function SearchModeInfoPage() {
           <table className="w-full border-collapse bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-gray-100 dark:bg-gray-700">
-                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white"></th>
+                <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-start text-sm font-semibold text-gray-900 dark:text-white"></th>
                 <th className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-sm font-semibold text-gray-900 dark:text-white">
                   {t('searchMode.noSearch')}
                 </th>

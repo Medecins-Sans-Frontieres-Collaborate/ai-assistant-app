@@ -79,7 +79,7 @@ export function MobileChatHeader({ onModelSelectChange }: MobileHeaderProps) {
   };
 
   return (
-    <div className="md:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-white dark:bg-surface-dark border-b border-gray-300 dark:border-gray-700 flex items-center justify-between px-4">
+    <div className="md:hidden fixed top-0 start-0 end-0 z-40 h-14 bg-white dark:bg-surface-dark border-b border-gray-300 dark:border-gray-700 flex items-center justify-between px-4">
       <div className="flex items-center flex-1 min-w-0">
         <button
           onClick={toggleChatbar}
@@ -93,24 +93,24 @@ export function MobileChatHeader({ onModelSelectChange }: MobileHeaderProps) {
         {isLoaded && (
           <button
             onClick={() => onModelSelectChange(true)}
-            className="ml-2 flex items-center px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors min-w-0"
+            className="ms-2 flex items-center px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors min-w-0"
             aria-label={t('chat.selectModel')}
           >
             {getProviderIcon(modelProvider)}
-            <span className="font-semibold text-gray-900 dark:text-white truncate text-base ml-1.5">
+            <span className="font-semibold text-gray-900 dark:text-white truncate text-base ms-1.5">
               {displayModelName || t('chat.selectModel')}
             </span>
             {isAgent && (
               <IconTool
                 size={12}
-                className="ml-1 text-blue-600 dark:text-blue-400 shrink-0"
+                className="ms-1 text-blue-600 dark:text-blue-400 shrink-0"
                 title={t('chat.azureAIAgent')}
               />
             )}
-            <ModelLimitBadge view={modelLimit} size={14} className="ml-1" />
+            <ModelLimitBadge view={modelLimit} size={14} className="ms-1" />
             <IconChevronDown
               size={14}
-              className="ml-1 opacity-60 text-black dark:text-white shrink-0"
+              className="ms-1 opacity-60 text-black dark:text-white shrink-0"
             />
           </button>
         )}

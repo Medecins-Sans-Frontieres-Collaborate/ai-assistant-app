@@ -8,7 +8,7 @@ import type { TranscriptMetadata } from '@/lib/utils/app/metadata';
 import {
   calculateChunkConfig,
   estimateCharsPerToken,
-  parseAndQueryFileOpenAI,
+  summarizeDocumentForQuery,
 } from '@/lib/utils/app/stream/documentSummary';
 import {
   extractAudioFromVideo,
@@ -36,6 +36,11 @@ import {
 } from '../enrichers/interpreterCapability';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
+import {
+  type TextCompleter,
+  type TextCompletionProvider,
+  bindTextCompleterToTurn,
+} from '../textCompletion';
 import {
   blobIdFromUrl,
   selectInterpreterInputRefs,
@@ -90,12 +95,36 @@ export class FileProcessor extends BasePipelineStage {
   readonly name = 'FileProcessor';
   private tracer = trace.getTracer('file-processor');
 
+  /**
+   * @param fileProcessingService - Downloads and reads attachments.
+   * @param inputValidator - File-size validation.
+   * @param blobStorageClient - Blob client for batch transcription uploads.
+   * @param textCompletionProvider - Runs the large-document summarizer on
+   *        the turn's chat model and region; without it, a document too
+   *        large to inline cannot be processed.
+   */
   constructor(
     private fileProcessingService: FileProcessingService,
     private inputValidator: InputValidator,
     private blobStorageClient?: BlobStorage,
+    private textCompletionProvider?: TextCompletionProvider,
   ) {
     super();
+  }
+
+  /**
+   * The summarizer's completer for this turn (see bindTextCompleterToTurn).
+   *
+   * @throws When no provider was injected, or a custom-source model is
+   *         missing its resolved endpoint or credential.
+   */
+  private summaryCompleterFor(context: ChatContext): TextCompleter {
+    if (!this.textCompletionProvider) {
+      throw new Error(
+        'FileProcessor has no text completion provider; large documents cannot be summarized',
+      );
+    }
+    return bindTextCompleterToTurn(this.textCompletionProvider, context);
   }
 
   shouldRun(context: ChatContext): boolean {
@@ -787,27 +816,17 @@ export class FileProcessor extends BasePipelineStage {
                     },
                   );
 
-                  // Process with parseAndQueryFileOpenAI, passing pre-extracted text
-                  // Note: We get the summary as a string (non-streaming for pipeline)
-                  // Note: Images are NOT passed here - they remain in the message for the final chat
                   const perfSummaryStart = performance.now();
-                  const summary = await parseAndQueryFileOpenAI({
+                  // Images stay in the message for the final chat; the
+                  // summary is text only. It is never knowledge-base
+                  // grounded: for org KB agents, RAGEnricher runs the index
+                  // search later in the pipeline and injects this summary
+                  // alongside its results.
+                  const summary = await summarizeDocumentForQuery({
                     file: docFile,
                     prompt: prompt || 'Summarize this document',
                     modelId: context.modelId,
-                    user: context.user,
-                    // Prompt/M365 agents arrive via botId but must never
-                    // trigger a knowledge-base search (mirrors RAGEnricher):
-                    // a truthy botId turns the summarization into an Azure
-                    // "On Your Data" request grounded on the org KB index.
-                    botId:
-                      context.promptAgent || context.m365Agent
-                        ? undefined
-                        : context.botId,
-                    stream: false,
-                    // Don't pass images - blob URLs aren't accessible to Azure OpenAI during summarization
-                    // Images will be included in the final message content by StandardChatHandler
-                    images: undefined,
+                    complete: this.summaryCompleterFor(context),
                     preExtractedText: text,
                     servingTokensPerMinute: planningTpm,
                     onProgress: (processed, total) => {
@@ -826,14 +845,8 @@ export class FileProcessor extends BasePipelineStage {
                     },
                   });
                   console.log(
-                    `[Perf] FileProcessor.parseAndQueryFileOpenAI "${sanitizeForLog(filename)}": ${(performance.now() - perfSummaryStart).toFixed(1)}ms`,
+                    `[Perf] FileProcessor.summarizeDocumentForQuery "${sanitizeForLog(filename)}": ${(performance.now() - perfSummaryStart).toFixed(1)}ms`,
                   );
-
-                  if (typeof summary !== 'string') {
-                    throw new Error(
-                      'Expected string summary from parseAndQueryFileOpenAI',
-                    );
-                  }
 
                   partialTexts[filename] = text;
                   fileSummaries.push({

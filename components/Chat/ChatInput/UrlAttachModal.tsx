@@ -18,7 +18,7 @@ interface UrlAttachModalProps {
  * The form lives in its own component, mounted only while the modal is open,
  * so each opening starts blank without a reset effect.
  */
-const UrlAttachForm: FC<{ onClose: () => void }> = ({ onClose }) => {
+export const UrlAttachForm: FC<{ onClose: () => void }> = ({ onClose }) => {
   const t = useTranslations('urlFetch');
   const { attachUrl } = useUrlAttachment();
   const [value, setValue] = useState('');

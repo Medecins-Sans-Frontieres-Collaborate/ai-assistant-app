@@ -121,7 +121,7 @@ describe('PlaybackButton', () => {
       render(<PlaybackButton isPlaying={false} onToggle={vi.fn()} />);
 
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('mr-2');
+      expect(button).toHaveClass('me-2');
       expect(button).toHaveClass('p-1');
       expect(button).toHaveClass('rounded-full');
     });

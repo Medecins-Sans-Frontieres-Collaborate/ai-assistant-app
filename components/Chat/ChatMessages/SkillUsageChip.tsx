@@ -122,11 +122,7 @@ export const SkillUsageChip: FC<SkillUsageChipProps> = ({ toolCalls }) => {
         {expanded ? (
           <IconChevronDown size={12} aria-hidden="true" className="shrink-0" />
         ) : (
-          <IconChevronRight
-            size={12}
-            aria-hidden="true"
-            className="shrink-0 rtl:rotate-180"
-          />
+          <IconChevronRight size={12} aria-hidden="true" className="shrink-0" />
         )}
       </button>
       {expanded && (

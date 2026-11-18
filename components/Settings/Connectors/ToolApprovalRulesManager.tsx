@@ -102,7 +102,7 @@ export const ToolApprovalRulesManager: FC = () => {
                   <button
                     type="button"
                     onClick={() => removeRule(rule.id)}
-                    className="ml-auto flex-shrink-0 rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-red-600 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-red-400 transition-colors"
+                    className="ms-auto flex-shrink-0 rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-red-600 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-red-400 transition-colors"
                     aria-label={t('removeRule', { tool: rule.toolName })}
                     title={t('removeRule', { tool: rule.toolName })}
                   >

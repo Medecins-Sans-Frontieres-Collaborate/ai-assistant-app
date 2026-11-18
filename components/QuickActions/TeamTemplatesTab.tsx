@@ -395,7 +395,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                             >
                               {t('None')}
                             </button>
-                            <span className="flex-1 text-xs text-gray-500 dark:text-gray-400 text-right">
+                            <span className="flex-1 text-xs text-gray-500 dark:text-gray-400 text-end">
                               {selectedPromptIds.length} {t('selected')}
                             </span>
                           </div>
@@ -487,7 +487,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                           >
                             {t('None')}
                           </button>
-                          <span className="flex-1 text-xs text-gray-500 dark:text-gray-400 text-right">
+                          <span className="flex-1 text-xs text-gray-500 dark:text-gray-400 text-end">
                             {selectedToneIds.length} {t('selected')}
                           </span>
                         </div>

@@ -83,6 +83,36 @@ export const GLOSSARY_CONTENT_TYPES: Record<string, string> = {
   xliff: 'application/xliff+xml',
 };
 
+/**
+ * File extensions whose translations can be read page by page, and therefore
+ * exported as a text version (DOCX). Shared by the server routes that build
+ * the page text and the viewer that offers the download.
+ */
+const PAGED_TEXT_EXTENSIONS: ReadonlySet<string> = new Set(['pdf']);
+
+/**
+ * Whether a translated file's format supports the page-level text view and
+ * the text-version export.
+ *
+ * @param extension - File extension without the dot (case-insensitive).
+ */
+export function supportsPagedText(extension: string): boolean {
+  return PAGED_TEXT_EXTENSIONS.has(extension.toLowerCase());
+}
+
+/**
+ * Filename of a translation's text version: the translated file's name with
+ * a `.docx` extension.
+ *
+ * @example textVersionFilename('guide_es.pdf') // 'guide_es.docx'
+ */
+export function textVersionFilename(translatedFilename: string): string {
+  const lastDot = translatedFilename.lastIndexOf('.');
+  const base =
+    lastDot > 0 ? translatedFilename.slice(0, lastDot) : translatedFilename;
+  return `${base}.docx`;
+}
+
 /** Number of days before translated document expires in blob storage */
 export const TRANSLATION_EXPIRY_DAYS = 7;
 
@@ -273,3 +303,9 @@ export function generateTranslatedFilename(
   const extension = originalFilename.substring(lastDotIndex);
   return `${baseName}_${targetLanguage}${extension}`;
 }
+
+/**
+ * Limit key of the daily page allowance for document translation. Charged
+ * by the translate route; read by the UI to show what is left.
+ */
+export const TRANSLATION_PAGES_LIMIT_KEY = 'feature.translation.pagesPerDay';

@@ -112,6 +112,25 @@ interface M365FilePickerModalProps {
   acceptExtensions?: string[];
 }
 
+/**
+ * Lets a surrounding dialog own the attach-mode selection (the "Add to
+ * chat" picker decides what happens to the files, so it — not this body —
+ * shows the selection bar and acts on it). Attach mode only; ignored when
+ * `onPick` or `onPickFolder` is set.
+ */
+export interface M365HostedSelection {
+  /** The current selection, keyed by `driveId/itemId`. */
+  selected: Map<string, M365DriveEntry>;
+  /** Called with the next selection whenever a file is ticked or unticked. */
+  onChange: (next: Map<string, M365DriveEntry>) => void;
+  /**
+   * Called when a file row is clicked while nothing is selected: the quick
+   * path that acts on one file without building a selection first. The host
+   * closes the dialog itself.
+   */
+  onActivate: (entry: M365DriveEntry) => void;
+}
+
 type PickerTab = M365PickerTab;
 
 /** One drill-down step: a folder (OneDrive), or a site/library (SharePoint). */
@@ -248,12 +267,19 @@ function crumbLabels(crumbs: Crumb[]): string[] {
  * any Graph traffic happen — content stays on the picker's side of the wire
  * until a file is explicitly picked.
  */
-const M365FilePickerBody: FC<{
+export const M365FilePickerBody: FC<{
   onClose: () => void;
   onPick?: (entry: M365DriveEntry) => void;
   onPickFolder?: (destination: M365SaveDestination) => void;
-  acceptExtensions?: string[];
-}> = ({ onClose, onPick: onPickProp, onPickFolder, acceptExtensions }) => {
+  acceptExtensions?: readonly string[];
+  hosted?: M365HostedSelection;
+}> = ({
+  onClose,
+  onPick: onPickProp,
+  onPickFolder,
+  acceptExtensions,
+  hosted,
+}) => {
   const t = useTranslations('m365.picker');
   const folderMode = Boolean(onPickFolder);
   // onPickFolder wins over onPick — the modes are mutually exclusive.
@@ -342,9 +368,13 @@ const M365FilePickerBody: FC<{
   );
   // Attach-mode selection for batch attach; keyed by driveId/itemId and kept
   // across navigation and tab switches so a batch can span folders.
-  const [selected, setSelected] = useState<Map<string, M365DriveEntry>>(
+  const [ownSelected, setOwnSelected] = useState<Map<string, M365DriveEntry>>(
     () => new Map(),
   );
+  // A host dialog may own the selection instead (see M365HostedSelection).
+  const hostedSelection = attachMode ? hosted : undefined;
+  const selected = hostedSelection?.selected ?? ownSelected;
+  const setSelected = hostedSelection?.onChange ?? setOwnSelected;
   // User-facing type filter (Word/Excel/PDF/…): kept across folder
   // navigation ("find the PDF somewhere in here"), reset on tab switch like
   // sort. null = all types.
@@ -816,6 +846,10 @@ const M365FilePickerBody: FC<{
       onClose();
       return;
     }
+    if (hostedSelection) {
+      hostedSelection.onActivate(entry);
+      return;
+    }
     // Continues in the background; progress shows on the attachment tile.
     void attachDriveItem(entry);
     onClose();
@@ -825,13 +859,11 @@ const M365FilePickerBody: FC<{
     `${entry.driveId}/${entry.itemId}`;
 
   const toggleSelected = (entry: M365DriveEntry) => {
-    setSelected((prev) => {
-      const next = new Map(prev);
-      const key = entryKey(entry);
-      if (next.has(key)) next.delete(key);
-      else next.set(key, entry);
-      return next;
-    });
+    const next = new Map(selected);
+    const key = entryKey(entry);
+    if (next.has(key)) next.delete(key);
+    else next.set(key, entry);
+    setSelected(next);
   };
 
   const attachSelected = () => {
@@ -1219,7 +1251,7 @@ const M365FilePickerBody: FC<{
           setQuery('');
           setCrumbs([{ label: site.name, siteId: site.siteId }]);
         }}
-        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
+        className="flex w-full items-center gap-2 px-3 py-2 text-start text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
       >
         <IconBrandOnedrive size={18} className="flex-shrink-0 text-blue-500" />
         <span className="truncate">{site.name}</span>
@@ -1239,7 +1271,7 @@ const M365FilePickerBody: FC<{
     <div className="flex h-[420px] flex-col gap-3">
       {/* Tabs */}
       <div
-        className="flex gap-1 rounded-lg bg-gray-100 p-1 dark:bg-neutral-700/50"
+        className="flex gap-1 rounded-lg bg-gray-100 p-1 dark:bg-neutral-700/50 max-sm:overflow-x-auto"
         role="tablist"
         onKeyDown={handleTabListKeyDown}
       >
@@ -1253,7 +1285,7 @@ const M365FilePickerBody: FC<{
             aria-controls="m365-picker-panel"
             tabIndex={tab === candidate ? 0 : -1}
             onClick={() => switchTab(candidate)}
-            className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
+            className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors max-sm:flex-auto max-sm:whitespace-nowrap ${
               tab === candidate
                 ? 'bg-white text-gray-900 shadow-sm dark:bg-neutral-800 dark:text-gray-100'
                 : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'
@@ -1270,7 +1302,7 @@ const M365FilePickerBody: FC<{
           <div className="relative">
             <IconSearch
               size={16}
-              className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute start-2.5 top-1/2 -translate-y-1/2 text-gray-400"
             />
             <input
               type="text"
@@ -1295,12 +1327,12 @@ const M365FilePickerBody: FC<{
                   ? t('searchSitesPlaceholder')
                   : t('searchPlaceholder')
               }
-              className="w-full rounded-lg border border-gray-300 bg-gray-50 py-1.5 pl-8 pr-8 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder-gray-400"
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 py-1.5 ps-8 pe-8 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder-gray-400"
             />
             {searching && (
               <IconLoader2
                 size={16}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 animate-spin text-gray-400"
+                className="absolute end-2.5 top-1/2 -translate-y-1/2 animate-spin text-gray-400"
               />
             )}
           </div>
@@ -1441,7 +1473,7 @@ const M365FilePickerBody: FC<{
                       <div
                         role="menu"
                         aria-label={t('typeFilter.more')}
-                        className="absolute left-0 top-full z-20 mt-1 w-44 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
+                        className="absolute start-0 top-full z-20 mt-1 w-44 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-neutral-700 dark:bg-neutral-800"
                       >
                         {MORE_FILE_TYPE_IDS.map((id) => {
                           const [Icon, colorClass] = TYPE_FILTER_ICONS[id];
@@ -1456,7 +1488,7 @@ const M365FilePickerBody: FC<{
                                 setTypeFilter(active ? null : id);
                                 setTypeMenuOpen(false);
                               }}
-                              className={`flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs ${
+                              className={`flex w-full items-center gap-2 px-3 py-1.5 text-start text-xs ${
                                 active
                                   ? 'bg-gray-100 font-medium text-gray-900 dark:bg-neutral-700/50 dark:text-gray-100'
                                   : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-neutral-700/50'
@@ -1580,7 +1612,7 @@ const M365FilePickerBody: FC<{
                   <button
                     type="button"
                     onClick={() => openTeam(team)}
-                    className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
+                    className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-start text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
                   >
                     <IconUsersGroup
                       size={18}
@@ -1593,7 +1625,7 @@ const M365FilePickerBody: FC<{
                       type="button"
                       disabled={addingRoot}
                       onClick={() => void pickTeamFiles(team)}
-                      className="mr-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                      className="me-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
                     >
                       {t('addTeamFiles')}
                     </button>
@@ -1682,7 +1714,7 @@ const M365FilePickerBody: FC<{
                       { label: library.name, driveId: library.driveId },
                     ]);
                   }}
-                  className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
+                  className="flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-start text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
                 >
                   <IconFolder
                     size={18}
@@ -1697,7 +1729,7 @@ const M365FilePickerBody: FC<{
                     onClick={() =>
                       void pickDriveRoot(library.driveId, library.name)
                     }
-                    className="mr-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                    className="me-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
                   >
                     {t('addLibrary')}
                   </button>
@@ -1750,10 +1782,10 @@ const M365FilePickerBody: FC<{
                           checked={selected.has(entryKey(entry))}
                           onChange={() => toggleSelected(entry)}
                           aria-label={t('selectEntry', { name: entry.name })}
-                          className="ml-3 h-4 w-4 flex-shrink-0 accent-blue-600"
+                          className="ms-3 h-4 w-4 flex-shrink-0 accent-blue-600"
                         />
                       ) : (
-                        <span className="ml-3 h-4 w-4 flex-shrink-0" />
+                        <span className="ms-3 h-4 w-4 flex-shrink-0" />
                       ))}
                     {/* Folder mode and type-filtered pickers keep file rows
                       visible for orientation but inert — only folders (and
@@ -1778,7 +1810,7 @@ const M365FilePickerBody: FC<{
                           return toggleSelected(entry);
                         pickFile(entry);
                       }}
-                      className={`flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 dark:text-gray-200 ${
+                      className={`flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-start text-sm text-gray-800 dark:text-gray-200 ${
                         (folderMode || !isAccepted(entry)) && !entry.isFolder
                           ? 'cursor-default opacity-50'
                           : 'hover:bg-gray-100 dark:hover:bg-neutral-700/50'
@@ -1786,7 +1818,14 @@ const M365FilePickerBody: FC<{
                     >
                       <M365FileTypeIcon entry={entry} size={18} />
                       <span className="min-w-0 flex-1" title={entry.name}>
-                        <span className="block truncate">{entry.name}</span>
+                        {/* File names keep their own reading direction inside a
+                          right-to-left interface. */}
+                        <span
+                          dir="auto"
+                          className="block truncate text-left rtl:text-right"
+                        >
+                          {entry.name}
+                        </span>
                         {/* Mixed-source listings (search spans every site;
                           recent/shared mix drives) show WHERE the item
                           lives — same-named files across sites are
@@ -1800,17 +1839,19 @@ const M365FilePickerBody: FC<{
                             </span>
                           )}
                       </span>
-                      <span className="hidden w-24 flex-shrink-0 text-right text-xs text-gray-400 sm:inline">
+                      <span className="hidden w-24 flex-shrink-0 text-end text-xs text-gray-400 sm:inline">
                         {entry.lastModified
                           ? dateFormatter.format(new Date(entry.lastModified))
                           : ''}
                       </span>
-                      <span className="w-16 flex-shrink-0 text-right text-xs text-gray-400">
+                      <span className="w-16 flex-shrink-0 text-end text-xs text-gray-400">
                         {entry.isFolder
                           ? entry.childCount !== undefined
                             ? t('itemCount', { count: entry.childCount })
                             : ''
-                          : formatSize(entry.size)}
+                          : entry.size !== undefined && (
+                              <bdi>{formatSize(entry.size)}</bdi>
+                            )}
                       </span>
                     </button>
                     {onPick && entry.isFolder && (
@@ -1818,7 +1859,7 @@ const M365FilePickerBody: FC<{
                         type="button"
                         onClick={() => pickFile(entry)}
                         title={t('addFolderHint')}
-                        className="mr-2 flex flex-shrink-0 items-center gap-1 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                        className="me-2 flex flex-shrink-0 items-center gap-1 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
                       >
                         <IconPlus size={12} />
                         {t('addFolder')}
@@ -1831,7 +1872,7 @@ const M365FilePickerBody: FC<{
                       <button
                         type="button"
                         onClick={() => pickFolderEntry(entry)}
-                        className="mr-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                        className="me-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
                       >
                         {t('selectFolder')}
                       </button>
@@ -1923,7 +1964,7 @@ const M365FilePickerBody: FC<{
       {/* Attach-mode selection footer: appears once anything is checked.
           Selection survives navigation and tab switches, so a batch can be
           gathered from several folders before attaching. */}
-      {attachMode && selected.size > 0 && (
+      {attachMode && !hostedSelection && selected.size > 0 && (
         <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-gray-50 px-3 py-2 dark:border-neutral-700 dark:bg-neutral-800">
           <span className="min-w-0 flex-1 truncate text-xs text-gray-600 dark:text-gray-400">
             {t('selectedCount', { count: selected.size })}

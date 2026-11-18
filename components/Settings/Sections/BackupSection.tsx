@@ -447,7 +447,7 @@ export const BackupSection: FC = () => {
                   onClick={() => void handleChooseStorage(choice)}
                   disabled={busy}
                   aria-pressed={active}
-                  className={`flex items-start gap-2.5 rounded-lg border p-3 text-left transition-colors ${
+                  className={`flex items-start gap-2.5 rounded-lg border p-3 text-start transition-colors ${
                     active
                       ? 'border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-950/30'
                       : 'border-gray-300 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-800'
@@ -465,7 +465,7 @@ export const BackupSection: FC = () => {
                     <span className="block text-sm font-medium text-gray-900 dark:text-gray-100">
                       {choiceLabel(choice)}
                       {active && (
-                        <span className="ml-1.5 text-xs font-normal text-blue-600 dark:text-blue-400">
+                        <span className="ms-1.5 text-xs font-normal text-blue-600 dark:text-blue-400">
                           {t('backup.settings.storageActive')}
                         </span>
                       )}

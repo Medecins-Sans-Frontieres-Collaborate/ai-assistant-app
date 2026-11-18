@@ -41,7 +41,7 @@ export const FAQ: FC<FAQProps> = ({ faq }) => {
       {filteredFAQ.map((item, index) => (
         <div key={index} className="mb-4">
           <button
-            className="w-full rounded-lg border border-gray-200 bg-transparent px-4 py-3 text-gray-900 dark:border-gray-600 dark:text-gray-100 text-left"
+            className="w-full rounded-lg border border-gray-200 bg-transparent px-4 py-3 text-gray-900 dark:border-gray-600 dark:text-gray-100 text-start"
             onClick={() => handleExpand(index)}
           >
             {item.question}

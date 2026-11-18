@@ -28,7 +28,7 @@ describe('DropdownMoreSection', () => {
     icon: <svg />,
     label,
     onClick: vi.fn(),
-    category: 'media',
+    category: 'add',
   });
 
   const renderSection = (

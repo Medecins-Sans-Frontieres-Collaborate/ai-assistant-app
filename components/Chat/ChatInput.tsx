@@ -25,6 +25,7 @@ import { useMessageSender } from '@/client/hooks/chat/useMessageSender';
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useTones } from '@/client/hooks/settings/useTones';
+import { useBudgetGate } from '@/client/hooks/settings/useUsageBudgets';
 import { useTranscriptionPolling } from '@/client/hooks/transcription/useTranscriptionPolling';
 import { usePromptSelection } from '@/client/hooks/ui/usePromptSelection';
 
@@ -229,6 +230,8 @@ export const ChatInput = ({
     setUsedPromptVariables,
   });
 
+  const budgetGate = useBudgetGate();
+
   const [variables, setVariables] = useState<string[]>([]);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedPromptForModal, setSelectedPromptForModal] =
@@ -295,10 +298,10 @@ export const ChatInput = ({
 
     if (maxLength && value.length > maxLength) {
       alert(
-        t(
-          `Message limit is {{maxLength}} characters. You have entered {{valueLength}} characters.`,
-          { maxLength, valueLength: value.length },
-        ),
+        t('chat.messageLimitExceeded', {
+          maxLength,
+          valueLength: value.length,
+        }),
       );
       return;
     }
@@ -307,10 +310,16 @@ export const ChatInput = ({
     updatePromptListVisibilityCallback(value);
   };
 
-  const handleSend = () => {
+  /**
+   * Sends the composer's message, unless a personal budget holds it for
+   * confirmation or refuses it (useBudgetGate).
+   *
+   * @returns true when the message was sent now.
+   */
+  const handleSend = (): boolean => {
     // While streaming the message is QUEUED (useChatActions.handleSend) and
     // sent when the response finishes — no more waiting on the composer.
-    handleMessageSend();
+    if (!budgetGate.guard(handleMessageSend)) return false;
 
     if (
       window.innerWidth < UI_CONSTANTS.BREAKPOINTS.MOBILE &&
@@ -318,6 +327,7 @@ export const ChatInput = ({
     ) {
       textareaRef.current.blur();
     }
+    return true;
   };
 
   const handleStopConversation = () => {
@@ -339,7 +349,9 @@ export const ChatInput = ({
       !event.ctrlKey
     ) {
       event.preventDefault();
-      handleSend();
+      // A held or refused send keeps the draft exactly as it is, attachments
+      // included, so the reset below must not run for it.
+      if (!handleSend()) return;
       if (submitType !== 'TEXT') {
         setSubmitType('TEXT');
       }
@@ -494,6 +506,10 @@ export const ChatInput = ({
 
   const preventSubmission = (): boolean => {
     if (isTranscriptionLocked) return true;
+    // Stopped: the budget's "stop" stage is reached. Holding: a send is
+    // waiting on the "ask first" confirmation, and the draft it captured
+    // must not change underneath it.
+    if (budgetGate.isStopped || budgetGate.isHolding) return true;
     if (
       shouldPreventSubmission(
         isTranscribing,
@@ -518,11 +534,13 @@ export const ChatInput = ({
     return false;
   };
 
-  const inputPlaceholder = isTranscribing
-    ? t('transcribingChatPlaceholder')
-    : searchMode === SearchMode.ALWAYS
-      ? 'Search the web'
-      : placeholderText;
+  const inputPlaceholder = budgetGate.isStopped
+    ? t('usageBudgets.composerPaused')
+    : isTranscribing
+      ? t('transcribingChatPlaceholder')
+      : searchMode === SearchMode.ALWAYS
+        ? 'Search the web'
+        : placeholderText;
 
   // Any forced-mode/tone badge expands the composer into its two-row
   // layout: taller container, textarea padded above, badges on their own
@@ -614,7 +632,7 @@ export const ChatInput = ({
         <M365DigestLauncherModal />
 
         <div className="items-center pt-4">
-          <div className="flex justify-center items-center space-x-2 px-2 md:px-4">
+          <div className="flex justify-center items-center gap-2 px-2 md:px-4">
             <ChatInputImageCapture
               ref={cameraRef}
               setSubmitType={setSubmitType}
@@ -629,7 +647,7 @@ export const ChatInput = ({
 
             {/* min-w-0: flex-grow alone still leaves min-width:auto, so this
                 column could not shrink below the textarea's intrinsic width
-                plus its pr-24 gutter — the root of the horizontal overflow on
+                plus its pe-24 gutter — the root of the horizontal overflow on
                 narrow viewports. */}
             <div className="relative mx-auto w-full min-w-0 max-w-3xl flex-grow px-2 sm:px-4">
               <div
@@ -652,7 +670,7 @@ export const ChatInput = ({
 
                 {/* Bottom row with badges and controls */}
                 <div
-                  className={`absolute left-2 flex items-center gap-2 z-[10001] transition-all duration-200 ${
+                  className={`absolute start-2 flex items-center gap-2 z-[10001] transition-all duration-200 ${
                     hasBadgeRow || isMultiline
                       ? 'bottom-2'
                       : 'top-1/2 transform -translate-y-1/2'
@@ -675,7 +693,7 @@ export const ChatInput = ({
 
                 {/* Badges displayed after dropdown */}
                 <div
-                  className={`absolute left-14 flex items-center gap-2 z-[10000] transition-all duration-200 ${
+                  className={`absolute start-14 flex items-center gap-2 z-[10000] transition-all duration-200 ${
                     hasBadgeRow || isMultiline
                       ? 'bottom-2'
                       : 'top-1/2 transform -translate-y-1/2'
@@ -739,7 +757,7 @@ export const ChatInput = ({
                 {/* Conversation emissions estimate — right-aligned sibling of
                     the (bottom-center) scroll button, anchored to the chat
                     column so split view is respected. */}
-                <div className="absolute bottom-full mb-2 right-2 z-[9999]">
+                <div className="absolute bottom-full mb-2 end-2 z-[9999]">
                   <EmissionsChip conversation={selectedConversation} />
                 </div>
 
@@ -751,7 +769,7 @@ export const ChatInput = ({
                     follow the input in the empty-chat (centered) layout too.
                     Each renders nothing when inactive, so the default
                     conversation adds zero chrome. */}
-                <div className="absolute bottom-full mb-2 left-2 z-[9999] flex items-center gap-1.5">
+                <div className="absolute bottom-full mb-2 start-2 z-[9999] flex items-center gap-1.5">
                   <SkillBadges />
                   <AgentChip />
                   <ConnectorActivityBadge />

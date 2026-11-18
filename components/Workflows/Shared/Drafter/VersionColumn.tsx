@@ -1481,11 +1481,7 @@ export function VersionColumn({
                       props.onMove(-1);
                     }}
                   >
-                    <IconArrowLeft
-                      size={14}
-                      aria-hidden
-                      className="rtl:-scale-x-100"
-                    />
+                    <IconArrowLeft size={14} aria-hidden />
                     {t('moveEarlier')}
                   </button>
                   <button
@@ -1498,11 +1494,7 @@ export function VersionColumn({
                       props.onMove(1);
                     }}
                   >
-                    <IconArrowRight
-                      size={14}
-                      aria-hidden
-                      className="rtl:-scale-x-100"
-                    />
+                    <IconArrowRight size={14} aria-hidden />
                     {t('moveLater')}
                   </button>
                   <button

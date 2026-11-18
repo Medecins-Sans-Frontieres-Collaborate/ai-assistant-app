@@ -15,6 +15,7 @@ import { useWorkflowPolicy } from '@/client/hooks/workflows/useWorkflowPolicy';
 
 import { Tooltip } from '@/components/UI/Tooltip';
 
+import { BudgetRunDialog } from './Impact/BudgetRunDialog';
 import { WorkflowImpactBadge } from './Impact/WorkflowImpactBadge';
 import { WorkflowModelSelect } from './WorkflowModelSelect';
 import { WorkflowRail } from './WorkflowRail';
@@ -59,6 +60,18 @@ export function WorkflowShell() {
     setSeenOpenRequest(openRequest);
     setRailOpen(true);
     setMobileTab('conversation');
+  }
+
+  // The reverse request: a rail instruction whose result lands in the
+  // workspace (translation change requests) brings the workspace back.
+  const workspaceRequest = useWorkflowRailStore(
+    (state) => state.workspaceRequest,
+  );
+  const [seenWorkspaceRequest, setSeenWorkspaceRequest] =
+    useState(workspaceRequest);
+  if (workspaceRequest !== seenWorkspaceRequest) {
+    setSeenWorkspaceRequest(workspaceRequest);
+    setMobileTab('workspace');
   }
 
   const type = selectedConversation?.conversationType;
@@ -202,6 +215,9 @@ export function WorkflowShell() {
         {type !== 'grants' && (
           <WorkflowImpactBadge conversation={selectedConversation} />
         )}
+        {/* Raised by any workspace's run button when a personal budget
+            asks for confirmation or refuses the run. */}
+        <BudgetRunDialog />
 
         {/* Desktop: rail toggle */}
         <div className="hidden md:block">
@@ -211,7 +227,9 @@ export function WorkflowShell() {
                 ? t('shell.hideConversation')
                 : t('shell.showConversation')
             }
-            position="bottom"
+            // The button sits at the window's edge: a centered tooltip
+            // below it would run off screen.
+            position="left"
           >
             <button
               type="button"

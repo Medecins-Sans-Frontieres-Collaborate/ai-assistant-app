@@ -198,7 +198,7 @@ export const PreviewGrid: FC<PreviewGridProps> = ({
               <tr
                 key={virtualRow.index}
                 aria-rowindex={virtualRow.index + 2}
-                className="absolute left-0 top-0 flex w-full min-w-max border-b border-gray-100 bg-white dark:border-gray-800 dark:bg-surface-dark"
+                className="absolute start-0 top-0 flex w-full min-w-max border-b border-gray-100 bg-white dark:border-gray-800 dark:bg-surface-dark"
                 style={{
                   transform: `translateY(${virtualRow.start}px)`,
                   height: `${ROW_HEIGHT}px`,

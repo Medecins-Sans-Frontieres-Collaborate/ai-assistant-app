@@ -2,8 +2,6 @@
   "OpenAI API Key Required": "Se requiere la clave de API de OpenAI",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Por favor, ingrese su clave de API de OpenAI en la esquina inferior izquierda de la barra lateral.",
   "Stop Generating": "Dejar de generar",
-  "Prompt limit is {{maxLength}} characters": "El límite del mensaje es de {{maxLength}} caracteres",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "El límite de la instrucción es de {{maxLength}} caracteres. Has ingresado {{valueLength}} caracteres.",
   "System Prompt": "Mensaje del sistema",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Eres ChatGPT, un modelo de lenguaje grande entrenado por OpenAI. Sigue las instrucciones del usuario cuidadosamente. Responde usando markdown.",
   "Enter a prompt": "Ingrese un mensaje",
@@ -22,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Asegúrate de que hayas ingresado la clave de API de OpenAI en la esquina inferior izquierda de la barra lateral.",
   "If you completed this step, OpenAI may be experiencing issues_": "Si completaste este paso, OpenAI podría estar experimentando problemas.",
   "click if using a _env_local file": "haz clic si estás utilizando un archivo .env.local",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "El límite del mensaje es de {{maxLength}} caracteres. Has ingresado {{valueLength}} caracteres.",
   "Please enter a message": "Por favor, ingrese un mensaje",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI es un kit avanzado de chatbot para los modelos de chat de OpenAI que busca imitar la interfaz y funcionalidad de ChatGPT.",
   "Are you sure you want to clear all messages?": "¿Está seguro de que desea borrar todos los mensajes?",
@@ -171,8 +168,8 @@
   "uploadAudioVideoFile": "Sube un archivo de audio o video",
   "uploadingFile": "Subiendo archivo...",
   "removeFile": "Quitar y seleccionar un archivo diferente",
-  "transcriptionErrorAttempt": "Error durante la transcripción (Intento {{attempt}} de 3). Reintentando...",
-  "rateLimitExceededWaiting": "Límite de velocidad excedido. Esperando {{seconds}} segundos antes de reintentar...",
+  "transcriptionErrorAttempt": "Error durante la transcripción (Intento {attempt} de 3). Reintentando...",
+  "rateLimitExceededWaiting": "Límite de velocidad excedido. Esperando {seconds} segundos antes de reintentar...",
   "Conversations": "Conversaciones",
   "Prompts": "Indicaciones",
   "Saved Prompts": "Instrucciones guardadas",
@@ -612,7 +609,8 @@
     "clear": "Limpiar",
     "undo": "Deshacer",
     "durationSeconds": "{count, plural, one {# segundo} other {# segundos}}",
-    "durationMinutes": "{count, plural, one {# minuto} other {# minutos}}"
+    "durationMinutes": "{count, plural, one {# minuto} other {# minutos}}",
+    "clearSearch": "Borrar búsqueda"
   },
   "chat": {
     "downloadAudio": "Descargar audio",
@@ -848,7 +846,13 @@
     "ttsError": "Error al generar el audio. Intente nuevamente.",
     "unsupportedMessageType": "Error al mostrar el mensaje: Tipo de mensaje no compatible",
     "addLanguageOption": "Agregar \"{name}\"…",
-    "sources": "Fuentes",
+    "sources": {
+      "fromDocuments": "Documentos del agente",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Pasajes de los documentos propios de este agente",
+      "fromWebHint": "Páginas públicas encontradas mediante una búsqueda web",
+      "heading": "{count, plural, one {Fuente} other {Fuentes}}"
+    },
     "interpreterBadge": "Ejecutar código",
     "disableCodeInterpreter": "Desactivar ejecución de código",
     "interimSearch": {
@@ -926,7 +930,8 @@
       "MODEL_RATE_LIMITED": "El modelo está recibiendo demasiadas solicitudes en este momento. Se volvió a intentar automáticamente; por favor, inténtelo de nuevo en un momento.",
       "MODEL_QUOTA_EXCEEDED": "La cuota de capacidad del modelo está agotada. Pruebe con otro modelo o inténtelo más tarde.",
       "MODEL_AUTH_FAILED": "La aplicación no pudo autenticarse con el servicio del modelo. Esto es un problema de configuración — por favor, contacte al soporte."
-    }
+    },
+    "messageLimitExceeded": "El límite del mensaje es de {maxLength} caracteres. Has ingresado {valueLength} caracteres."
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",
@@ -2263,20 +2268,18 @@
     "sectionPinned": "Fijados",
     "sectionFrequent": "Usados frecuentemente",
     "sectionMore": "Más",
-    "categoryWeb": "Web",
-    "categoryMedia": "Medios y archivos",
-    "categoryTransform": "Transformar",
     "pin": "Fijar arriba",
     "unpin": "Quitar de arriba",
     "moveToMore": "Mover a Más",
     "moveOutOfMore": "Mostrar en el menú",
     "showSources": "Mostrar otras fuentes",
     "hideSources": "Ocultar otras fuentes",
-    "aiTools": "Herramientas de IA",
-    "aiToolsTooltip": "Capacidades que el asistente puede usar al responder: búsqueda web en vivo, ejecución de código y servicios conectados.",
     "codeInterpreterTooltip": "Ejecute código Python en un entorno seguro por cada mensaje.\n\nIdeal para análisis de datos, cálculos y generar gráficos a partir de archivos adjuntos.",
-    "categoryTools": "Herramientas y conectores",
-    "translationConversationTitle": "Traducción: {filename}"
+    "translationConversationTitle": "Traducción: {filename}",
+    "categoryAdd": "Agregar",
+    "categoryDo": "Realizar",
+    "categoryChat": "En este chat",
+    "categoryStart": "Comenzar desde"
   },
   "transcription": {
     "transcribesOnSend": "Transcribe al enviar",
@@ -2556,7 +2559,9 @@
     "savedToOneDrive": "{name} guardado en OneDrive.",
     "openInOneDrive": "Abrir",
     "saveForbidden": "No tiene permiso para escribir en esa carpeta — elija otra usando “Guardar en OneDrive”.",
-    "saveToOneDriveFailed": "No se pudo guardar en OneDrive — intente nuevamente."
+    "saveToOneDriveFailed": "No se pudo guardar en OneDrive — intente nuevamente.",
+    "textVersion": "Versión de texto (DOCX)",
+    "textVersionHint": "Archivo de Word editable con el texto traducido, una página por cada página original. El archivo traducido conserva el diseño original."
   },
   "terms": {
     "officialLanguages": "Versión oficial:",
@@ -2742,7 +2747,6 @@
   },
   "usageImpact": {
     "empty": "Aún no se ha registrado uso. El uso de tus tokens y las emisiones estimadas aparecerán aquí después de chatear.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} cargas de smartphone",
     "requests": "Solicitudes",
     "promptTokens": "Tokens de entrada",
@@ -2904,7 +2908,7 @@
       "addedByYou": "Añadido por usted",
       "glossary": "Glosario",
       "noGlossary": "Sin glosario",
-      "manageGlossaries": "Glosarios",
+      "manageGlossaries": "Gestionar glosarios",
       "glossaries": "Glosarios",
       "closeGlossaries": "Cerrar glosarios",
       "glossariesEmpty": "Cree un glosario para fijar cómo se traducen los términos específicos. Los glosarios se guardan en este dispositivo y pueden reutilizarse en varias traducciones.",
@@ -3069,7 +3073,145 @@
       "importTooLarge": "Ese archivo es demasiado grande para importar (máx. 5 MB).",
       "importNothing": "No se encontraron filas utilizables ({skipped} omitidas).",
       "importSummary": "{added} agregadas, {replaced} reemplazadas, {skipped} omitidas.",
-      "entriesTooManyToShow": "{count} términos: demasiados para mostrar aquí. Exporta para revisarlos, o importa un archivo para reemplazar los términos."
+      "entriesTooManyToShow": "{count} términos: demasiados para mostrar aquí. Exporta para revisarlos, o importa un archivo para reemplazar los términos.",
+      "pagesLoaded": "páginas {selected} de {total} cargadas",
+      "pagesLabel": "Páginas",
+      "pagesApply": "Cargar páginas",
+      "pagesPrevious": "Lote anterior",
+      "pagesNext": "Lote siguiente",
+      "pagesBudget": "{used} / {max} caracteres",
+      "pagesChange": "Cambiar páginas",
+      "pagesLoading": "Cargando páginas…",
+      "pagesInvalid": "Ingrese números o rangos de páginas, por ejemplo 1-40, 45.",
+      "pagesUnavailable": "Ninguna de esas páginas contiene texto.",
+      "pagesTooMany": "Esa selección tiene {used} caracteres y un lote permite {max}. Elija menos páginas.",
+      "stop": "Detener",
+      "stepAnalyzing": "Analizando",
+      "stepTranslating": "Traduciendo",
+      "stepReviewing": "Revisando",
+      "stepDone": "Finalizado",
+      "runProgressLabel": "Progreso de la traducción",
+      "runHintAnalyzing": "Leyendo el origen para encontrar términos difíciles y ambigüedades.",
+      "runHintTranslating": "Escribiendo la traducción.",
+      "runHintReviewing": "Comparando el borrador con el origen.",
+      "runHintReviewingRound": "Comparando el borrador con el origen · ronda {round} de hasta {total}.",
+      "runRound": "Ronda {round} de hasta {total}",
+      "draftLabel": "Borrador",
+      "sourceLocked": "Bloqueado mientras se traduce",
+      "analysisNotes": "{count, plural, one {# nota} other {# notas}}",
+      "analysisPill": "{count, plural, one {Análisis · # nota} other {Análisis · # notas}}",
+      "reviewSummary": "{count, plural, one {Revisión: # ronda, {verdict}} other {Revisión: # rondas, {verdict}}}",
+      "analysisDismiss": "Ocultar para todas las traducciones",
+      "analysisShow": "Mostrar el análisis previo a la traducción",
+      "analysisResize": "Cambiar tamaño del panel de análisis",
+      "assessingCriteria": "{count, plural, one {Verificando # criterio} other {Verificando # criterios}}",
+      "editsPending": "Las sugerencias de edición aparecerán aquí cuando termine la evaluación.",
+      "uploadProgressLabel": "Progreso de la carga",
+      "uploadStepUploading": "Cargando",
+      "uploadStepReading": "Leyendo el texto",
+      "uploadStepReady": "Listo",
+      "uploadCancel": "Cancelar",
+      "modeDocument": "Documento completo",
+      "modeDocumentHint": "Traduce el PDF cargado en su totalidad y mantiene su formato. Lea y corrija el resultado página por página.",
+      "translateDocument": "Traducir documento",
+      "documentSubmitting": "Enviando…",
+      "documentIntroTitle": "Traduzca el documento completo",
+      "documentIntro": "El PDF cargado se traduce en su totalidad, manteniendo su formato. Cuando esté listo podrá leerlo página por página junto al original, corregir páginas, revisar su calidad y descargar el resultado. Los glosarios y las rondas de revisión no se aplican en este modo. Una vez iniciada, la traducción de documentos no puede detenerse y las páginas cuentan para el límite diario.",
+      "documentNeedsFile": "Cargue un PDF para traducir un documento completo.",
+      "documentNeedsPdf": "La traducción de todo el documento con visualización página por página solo funciona con archivos PDF.",
+      "documentNeedsLanguage": "Elija un idioma de destino para traducir el documento.",
+      "documentLanguageUnsupported": "La traducción de todo el documento no está disponible para este idioma. Use Rápida o Revisada en su lugar.",
+      "documentNoGlossaries": "Los glosarios no se usan para la traducción de todo el documento",
+      "documentPagesLeft": "{count, plural, one {# página restante hoy} other {# páginas restantes hoy}}",
+      "documentLimitReached": "Este documento tiene más páginas de las que le quedan hoy. Traduzca páginas seleccionadas con Rápida o Revisada, o inténtelo de nuevo mañana.",
+      "documentUnavailable": "La traducción de todo el documento no está configurada en este servidor.",
+      "documentSubmitFailed": "No se pudo enviar el documento para traducción: {message}",
+      "documentProgressLabel": "Progreso de traducción del documento",
+      "documentStepUploaded": "Cargado",
+      "documentStepPreparing": "Preparando páginas",
+      "documentTypicalDuration": "normalmente unos minutos",
+      "documentCanLeave": "Puede salir de esta página. La traducción continúa y estará aquí cuando regrese.",
+      "documentStalled": "No se pudo comprobar el progreso de la traducción. Puede que aún esté en curso.",
+      "documentCheckAgain": "Comprobar de nuevo",
+      "documentFailed": "No se pudo traducir el documento: {message}",
+      "documentGone": "Esta traducción ya no está disponible. Traduzca el documento de nuevo para leerlo.",
+      "documentPageFailed": "No se pudo cargar esta página: {message}",
+      "documentPagesNotAligned": "El archivo traducido tiene un número diferente de páginas, por lo que una página puede no mostrar el mismo contenido en ambos lados.",
+      "documentAvailableUntil": "Disponible hasta {date}",
+      "documentRetranslateTitle": "¿Traducir el documento de nuevo?",
+      "documentRetranslateMessage": "Esto inicia una nueva traducción y vuelve a contar sus páginas para el límite diario. No puede detenerse una vez iniciada. La traducción actual y sus correcciones permanecen en el servidor hasta que caduquen, pero ya no se mostrarán aquí.",
+      "retry": "Inténtelo de nuevo",
+      "pageLabel": "Página",
+      "pageOf": "de {total}",
+      "pageNumber": "· página {page}",
+      "pagePrevious": "Página anterior",
+      "pageNext": "Página siguiente",
+      "correctedLabel": "Corregido",
+      "correctedPages": "Páginas corregidas:",
+      "correctedPagesMore": "+{count} más",
+      "correctionRestore": "Restaurar",
+      "correctionRestoreHint": "Elimine sus cambios en esta página y vuelva a la traducción automática",
+      "correctionSaving": "Guardando…",
+      "correctionSaved": "Guardado",
+      "correctionSaveFailed": "No se guardó. Modifique el texto para intentarlo de nuevo.",
+      "download": "Descargar",
+      "downloading": "Descargando…",
+      "downloadFailed": "Error al descargar: {message}",
+      "downloadTranslated": "Traducido {format}",
+      "downloadTranslatedHint": "Formato original. No incluye sus correcciones.",
+      "downloadTextVersion": "Versión de texto (DOCX)",
+      "downloadTextVersionHint": "Texto sencillo, una página por página, con sus correcciones.",
+      "documentNoCancel": "No se puede detener la traducción de un documento una vez que ha comenzado.",
+      "documentGlossariesIgnored": "{count, plural, one {El glosario seleccionado no se aplica en este modo.} other {Los # glosarios seleccionados no se aplican en este modo.}} Revise la terminología página por página con Evaluar calidad, o utilice Rápido o Revisado.",
+      "pendingLeavePage": "Las sugerencias pertenecen a esta página y no se conservan al salir. Decida primero las sugerencias pendientes.",
+      "uploadStepOcr": "Lectura con OCR",
+      "ocrButton": "Leer con OCR",
+      "ocrButtonHint": "Lea este PDF nuevamente con reconocimiento de texto, para páginas escaneadas o texto que salió incorrecto",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Este texto fue leído de las páginas mediante reconocimiento de texto. Verifíquelo con el original.",
+      "ocrReasonNoText": "No se encontró texto en {name}. Parece un documento escaneado.",
+      "ocrReasonSparse": "Se encontró muy poco texto en {name}. Parte puede estar escaneada.",
+      "ocrReasonManual": "¿Leer {name} nuevamente con reconocimiento de texto?",
+      "ocrExplanation": "OCR lee el texto de las imágenes de las páginas. Toma más tiempo que una carga normal, cuenta cada página del archivo en su límite diario de OCR y puede leer mal escaneos de baja calidad, manuscritos y tablas.",
+      "ocrPagesLeft": "{count, plural, one {# página OCR restante hoy.} other {# páginas OCR restantes hoy.}}",
+      "ocrRun": "Leer con OCR",
+      "ocrDismiss": "Ahora no",
+      "ocrSparseHint": "Se encontró muy poco texto en este PDF. Algunas páginas pueden estar escaneadas.",
+      "ocrLimitReached": "Este documento tiene más páginas que las permitidas por su límite de OCR hoy.",
+      "ocrTooManyPages": "Este documento es demasiado largo para OCR, que lee como máximo {max} páginas. Divida el PDF y cargue una parte.",
+      "ocrUnavailable": "OCR no está configurado en este servidor.",
+      "ocrNoText": "OCR tampoco encontró texto en este documento.",
+      "ocrFailed": "No se pudo leer el documento con OCR. Intente nuevamente.",
+      "scannedWholeExplanation": "También puede traducir todo el documento: lee las páginas escaneadas automáticamente, mantiene el formato y cuenta las páginas dentro de su límite diario de traducción.",
+      "scannedUseWholeDocument": "Traducir todo el documento",
+      "scannedSourceNote": "{name} no tiene texto para mostrar aquí. La traducción de documento completo lee las páginas directamente. Si escribe su propio texto aquí, reemplazará el documento.",
+      "scannedPageNote": "No se pudo leer texto de esta página del original. Compare con el archivo mismo.",
+      "changeLabel": "Solicitar un cambio en la traducción",
+      "changePlaceholder": "Solicite un cambio, por ejemplo, hacerlo más formal",
+      "changePlaceholderAnother": "Solicite otro cambio",
+      "changeSend": "Enviar solicitud",
+      "changeWorking": "Trabajando en los cambios",
+      "changeNothingApplied": "Nada cambia hasta que lo acepte",
+      "changeSelectionLabel": "Solicitar un cambio en el texto seleccionado",
+      "changeSelectionPlaceholder": "Cambie esto, por ejemplo, diga tableta",
+      "changeSelectionScope": "Se aplica solo al texto seleccionado",
+      "changeSelectionClose": "Cerrar",
+      "changeTitle": "Cambios solicitados",
+      "changeSelectedLabel": "Texto seleccionado",
+      "changeNoEdits": "No fue necesario cambiar nada para esa solicitud.",
+      "changeReplyPending": "{count, plural, one {# edición sugerida está en el espacio de trabajo.} other {# ediciones sugeridas están en el espacio de trabajo.}} Nada cambia hasta que lo acepte.",
+      "changeStopped": "Detenido. No se realizó ningún cambio.",
+      "changeFailed": "La solicitud de cambio falló. Intente de nuevo.",
+      "changeNoTranslation": "Todavía no hay traducción para cambiar. Traduzca el texto primero.",
+      "changeBusy": "Espere a que termine la ejecución actual y después vuelva a solicitar.",
+      "changeHeld": "No enviado: hay ediciones sugeridas pendientes de decisión.",
+      "pendingRunActionRequest": "Solicitando un cambio",
+      "railPlaceholder": "Solicite un cambio o una pregunta…",
+      "documentPageCount": "{count, plural, one {# página} other {# páginas}}",
+      "sourceShowPages": "Mostrar páginas",
+      "sourceEditText": "Editar como texto",
+      "sourceRemoveDocument": "Eliminar documento",
+      "sourceJumpToPage": "Ir a una página"
     },
     "document": {
       "emptyTitle": "Describa el documento que desea",
@@ -3697,7 +3839,7 @@
       "guideTargetTerm": "Traducción obligatoria",
       "guideNote": "Nota",
       "pendingRun": {
-        "title": "{count} sugerencias pendientes",
+        "title": "{count, plural, one {# sugerencia pendiente} other {# sugerencias pendientes}}",
         "body": "{action} puede cambiar cualquier parte del texto, incluidas las partes con sugerencias que aún no ha decidido, y una nueva evaluación reemplaza la lista actual. Decida primero sobre las sugerencias restantes.",
         "acceptAll": "Aceptar todas las restantes",
         "rejectAll": "Rechazar todas",
@@ -3759,7 +3901,7 @@
         "list<number>": "Lista de números"
       },
       "layout": "Diseño",
-      "layoutHint": "Markdown con espacios de {{field:id}} — se usa para la exportación renderizada y la vista previa.",
+      "layoutHint": "Markdown con espacios de '{{field:id}}' — se usa para la exportación renderizada y la vista previa.",
       "saveTemplate": "Guardar plantilla",
       "deleteTemplate": "Eliminar plantilla",
       "cancel": "Cancelar",
@@ -4587,6 +4729,10 @@
         "note": "Costo según precios de lista al {asOf} (tarifa Global Standard, sin descuento por entrada en caché): un máximo estimado, no una factura. Búsqueda web, ejecución de código, transcripción, voz, traducción e indexación de documentos no están incluidos."
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "Este espacio de trabajo (estimado)",
       "workspace": "Este espacio de trabajo",
@@ -5401,7 +5547,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# documento} other {# documentos}} indexados",
     "m365CapImmediateHelp": "Aplicar guarda el límite de inmediato. Los demás cambios requieren Guardar.",
     "m365CapDraftHelp": "El límite se guarda al crear el agente.",
-    "m365CapSaved": "Límite de documentos guardado: {limit}."
+    "m365CapSaved": "Límite de documentos guardado: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Desactivado por defecto: el agente responde solo usando sus documentos y nunca busca en la web, independientemente de la configuración de búsqueda elegida por el usuario. Cuando está activado, las instrucciones del agente determinan cuándo se realiza una búsqueda web y qué sitios puede utilizar, y las fuentes web siempre se muestran separadas de los documentos del agente.",
+    "promptAgentAllowWebSearchHelp": "Activado por defecto. Si se desactiva, este agente nunca busca en la web, independientemente de la configuración de búsqueda elegida por el usuario."
   },
   "localModels": {
     "title": "Modelos locales",
@@ -5708,7 +5856,9 @@
       "m365MailReadsPerDay": "Lecturas de correo por día",
       "m365MailDraftsPerDay": "Borradores de correo por día",
       "m365MailDeepScansPerDay": "Análisis profundos de correo por día",
-      "m365DigestRunsPerDay": "Ejecuciones diarias del resumen por día"
+      "m365DigestRunsPerDay": "Ejecuciones diarias del resumen por día",
+      "translationPagesPerDay": "Páginas de traducción de documentos por día",
+      "ocrPagesPerDay": "Páginas OCR por día"
     },
     "valueModeLabel": "Tipo de límite",
     "valueAmountLabel": "Cantidad límite",
@@ -5731,7 +5881,8 @@
       "jobs": "tareas",
       "rounds": "rondas",
       "documents": "documentos",
-      "boolean": ""
+      "boolean": "",
+      "pages": "páginas"
     },
     "window": {
       "day": "día",
@@ -5789,7 +5940,9 @@
       "m365MailReadsPerDay": "Búsquedas de correo y lecturas de mensajes/hilos por día. Si se supera el límite, las herramientas de correo mostrarán un mensaje de “inténtelo de nuevo mañana”.",
       "m365MailDraftsPerDay": "Borradores de correo electrónico que el asistente puede crear por día — cada uno confirmado individualmente. Deliberadamente limitado.",
       "m365MailDeepScansPerDay": "Análisis compuestos de correo (resúmenes, búsquedas avanzadas, compromisos) por día. Cada análisis cuenta como una unidad presupuestaria, sin importar el número de lecturas internas.",
-      "m365DigestRunsPerDay": "Ejecuciones del resumen diario de Microsoft 365 por día. Cada ejecución implica docenas de lecturas de Graph y dos llamadas al modelo de análisis; el selector de periodo facilita solicitar re-ejecuciones, por lo que el valor predeterminado es limitado."
+      "m365DigestRunsPerDay": "Ejecuciones del resumen diario de Microsoft 365 por día. Cada ejecución implica docenas de lecturas de Graph y dos llamadas al modelo de análisis; el selector de periodo facilita solicitar re-ejecuciones, por lo que el valor predeterminado es limitado.",
+      "translationPagesPerDay": "Páginas PDF enviadas para traducción de documentos por día.",
+      "ocrPagesPerDay": "Páginas PDF leídas con OCR (reconocimiento de texto para documentos escaneados) por día."
     },
     "scopeFamily": "Familia",
     "scopeModel": "Modelo",
@@ -8097,7 +8250,13 @@
       "skills": "Selección de habilidades",
       "tools": "Enrutamiento de herramientas",
       "trim": "Clasificación de recorte",
-      "assessment": "Evaluación de búsqueda"
+      "assessment": "Evaluación de búsqueda",
+      "query": "Reescritura de consulta de búsqueda",
+      "mailScreen": "Pantalla de phishing de correo",
+      "mailAnalysis": "Análisis de correo y resumen",
+      "schemaProposal": "Propuesta de esquema de extracción",
+      "mcpPlan": "Plan de conector",
+      "vision": "Lectura de imágenes y páginas"
     },
     "reason": {
       "endpoint_missing": "Falta endpoint o vinculación de cuenta",
@@ -8118,6 +8277,164 @@
       "endpoint_account_mismatch": "El endpoint y el ID de recurso ARM identifican cuentas diferentes. Corrija la configuración del deployment.",
       "inventory_refresh_failed": "Falló la actualización del inventario. Verifique el acceso Reader de la identidad de la app y la conectividad de la cuenta.",
       "credential_unavailable": "La app no pudo obtener su credencial de inventario. Verifique la configuración de la identidad del deployment."
+    },
+    "notSupported": "No compatible con este modelo",
+    "unservedOperations": "Ningún modelo de esta cadena admite: {operations}. Añada un modelo que lo haga."
+  },
+  "filePreview": {
+    "preview": "Vista previa",
+    "download": "Descargar",
+    "loading": "Preparando vista previa…",
+    "failed": "No se puede mostrar la vista previa de este archivo. Aun así puede descargarlo.",
+    "pageOf": "Página {page} de {total}",
+    "truncated": "Mostrando las primeras {shown} de {total} páginas. Descargue el archivo para ver el resto.",
+    "enlarge": "Ampliar {name}"
+  },
+  "addToChat": {
+    "title": "Agregar al chat",
+    "titleTranslate": "Traducir un documento",
+    "titleTranscribe": "Transcribir audio o video",
+    "sourcesLabel": "Agregar desde",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "No disponible para esta acción",
+    "sources": {
+      "device": "Este dispositivo",
+      "link": "Enlace",
+      "camera": "Cámara",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Correo electrónico",
+      "meetings": "Reuniones"
+    },
+    "device": {
+      "browse": "Buscar en este dispositivo",
+      "dropHint": "o suelte archivos en cualquier parte de esta ventana, o pegue",
+      "rejected": "Ninguno de esos archivos puede usarse aquí.",
+      "hint": {
+        "attach": "Documentos, imágenes, audio y video.",
+        "translate": "Un documento: Word, Excel, PowerPoint, PDF, HTML o texto.",
+        "transcribe": "Audio o video. Se transcribe cuando envía el mensaje."
+      }
+    },
+    "selection": {
+      "then": "Luego",
+      "intents": {
+        "attach": "Adjuntar",
+        "translate": "Traducir",
+        "transcribe": "Transcribir"
+      },
+      "confirm": {
+        "attach": "Agregar",
+        "translate": "Traducir",
+        "transcribe": "Transcribir"
+      },
+      "unfit": {
+        "attach": "Estos archivos no se pueden adjuntar",
+        "translate": "La traducción toma un documento a la vez",
+        "transcribe": "Solo se puede transcribir audio y video"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Este dispositivo, enlaces, Microsoft 365",
+      "filesOrPhotos": "Archivos o fotos",
+      "fromThisDevice": "Desde este dispositivo",
+      "connect": "Conectar Microsoft 365",
+      "connectNote": "Agregar desde OneDrive, correo electrónico y reuniones"
     }
+  },
+  "usageBudgets": {
+    "title": "Sus presupuestos",
+    "description": "Límites que establece para usted mismo en este dispositivo. Elija un presupuesto y luego decida qué sucede al acercarse y superarlo. Los presupuestos contabilizan los chats y ejecuciones de workflows desde el inicio de cada periodo.",
+    "metric": {
+      "emissions": "Presupuesto de emisiones",
+      "cost": "Presupuesto de costos"
+    },
+    "metricShort": {
+      "emissions": "Emisiones",
+      "cost": "Costos"
+    },
+    "off": "No hay presupuesto establecido.",
+    "measureAs": "Mídalo como",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Cargas de teléfono",
+      "usd": "Dólares estadounidenses"
+    },
+    "amountLabel": "Presupuesto",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "horas",
+      "smartphoneCharge": "cargas",
+      "usd": "Dólares estadounidenses"
+    },
+    "periodLabel": "Se restablece cada",
+    "period": {
+      "day": "Día",
+      "week": "Semana",
+      "month": "Mes"
+    },
+    "costNote": "Estimado a partir de los precios de lista: un límite superior, no una factura.",
+    "chargesValue": "{count} cargas de teléfono",
+    "percent": "{percent}%",
+    "usedOf": "{used} de {limit} usados ({percent}%)",
+    "usedOfShort": "{used} de {limit}",
+    "resets": "Se restablece {date}",
+    "budgetMarker": "Presupuesto",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Dentro del presupuesto",
+      "warn": "Aviso mostrado",
+      "ask": "Pregunta antes de cada mensaje",
+      "stop": "Envio pausado"
+    },
+    "stage": {
+      "warn": {
+        "title": "Avisar",
+        "tag": "Advertencia",
+        "description": "Mostrar un aviso en el chat desde este porcentaje del presupuesto."
+      },
+      "ask": {
+        "title": "Preguntar primero",
+        "tag": "Bloqueo suave",
+        "description": "Solicitar confirmación para cada mensaje a partir de este porcentaje del presupuesto."
+      },
+      "stop": {
+        "title": "Detener",
+        "tag": "Bloqueo total",
+        "description": "Detener el envío desde este porcentaje del presupuesto hasta que se restablezca o lo aumente aquí."
+      }
+    },
+    "thresholdLabel": "Umbral de {stage}, porcentaje del presupuesto",
+    "notice": {
+      "warn": {
+        "emissions": "Ha usado el {percent}% de su presupuesto de emisiones.",
+        "cost": "Ha usado el {percent}% de su presupuesto de costos."
+      },
+      "ask": {
+        "emissions": "Ha usado el {percent}% de su presupuesto de emisiones. ¿Enviar este mensaje?",
+        "cost": "Ha usado el {percent}% de su presupuesto de costos. ¿Enviar este mensaje?"
+      },
+      "askRun": {
+        "emissions": "Ha usado el {percent}% de su presupuesto de emisiones. ¿Iniciar esta ejecución?",
+        "cost": "Ha usado el {percent}% de su presupuesto de costos. ¿Iniciar esta ejecución?"
+      },
+      "stop": {
+        "emissions": "Punto de detención del presupuesto de emisiones alcanzado. El envío está pausado hasta {date}.",
+        "cost": "Se alcanzó el límite del presupuesto de costos. El envío está pausado hasta el {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Ver presupuesto",
+      "dismiss": "Descartar",
+      "sendAnyway": "Enviar de todas formas",
+      "runAnyway": "Ejecutar de todas formas",
+      "dontSend": "No enviar",
+      "dontAskToday": "No volver a preguntar hoy",
+      "openSettings": "Abrir configuración del presupuesto",
+      "edit": "Editar"
+    },
+    "composerPaused": "El envío está pausado por su presupuesto",
+    "summaryTitle": "Sus presupuestos",
+    "chipAria": "Presupuesto de {metric}: {percent}% utilizado.",
+    "runProjection": "Presupuesto de emisiones {from}% → {to}%"
   }
 }

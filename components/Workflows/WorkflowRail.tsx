@@ -118,9 +118,10 @@ export function WorkflowRail({ conversation }: WorkflowRailProps) {
     conversation,
   ]);
 
-  const ComposerAddon = conversation.conversationType
-    ? WORKFLOW_REGISTRY[conversation.conversationType]?.RailComposerAddon
+  const definition = conversation.conversationType
+    ? WORKFLOW_REGISTRY[conversation.conversationType]
     : undefined;
+  const ComposerAddon = definition?.RailComposerAddon;
 
   const onKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -147,7 +148,10 @@ export function WorkflowRail({ conversation }: WorkflowRailProps) {
             onKeyDown={onKeyDown}
             onPaste={onPaste}
             rows={2}
-            placeholder={t('shell.railInputPlaceholder')}
+            placeholder={t(
+              (definition?.railPlaceholderKey ??
+                'shell.railInputPlaceholder') as never,
+            )}
             className="min-h-[44px] flex-1 resize-none rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder-gray-400"
           />
           {streamingHere ? (

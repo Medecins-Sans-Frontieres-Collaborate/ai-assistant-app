@@ -92,10 +92,7 @@
   "translatorTranslationDomainMedical": "طبی",
   "Search_ellipsis": "تلاش کریں...",
   "translatorTranslationTypeLabel": "ترجمہ کی قسم",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "پیغام کی حد {{maxLength}} حروف ہے۔ آپ نے {{valueLength}} حروف درج کیے ہیں۔",
   "OpenAI API Key Required": "OpenAI API کلید درکار ہے",
-  "Prompt limit is {{maxLength}} characters": "پرومپٹ کی حد {{maxLength}} حروف ہے",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "پرامپٹ کی حد {{maxLength}} حروف ہے۔ آپ نے {{valueLength}} حروف درج کیے ہیں۔",
   "Regenerate response": "جواب دوبارہ تیار کریں",
   "cancelButton": "منسوخ کریں",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "چیٹ بوٹ UI ایک جدید چیٹ بوٹ کٹ ہے جو ChatGPT کے انٹرفیس اور فعالیت کی نقل کرنے کا مقصد رکھنے والے OpenAI کے چیٹ ماڈلز کے لیے ہے۔",
@@ -159,7 +156,7 @@
   "Copied!": "کاپی ہو گیا!",
   "injectIntoChat": "چیٹ میں شامل کریں",
   "transcribingStatus": "نقل ہو رہی ہے... اس میں کچھ وقت لگ سکتا ہے۔",
-  "rateLimitExceededWaiting": "شرح کی حد پار ہو گئی۔ دوبارہ کوشش کرنے سے پہلے {{seconds}} سیکنڈ انتظار کر رہا ہے...",
+  "rateLimitExceededWaiting": "شرح کی حد پار ہو گئی۔ دوبارہ کوشش کرنے سے پہلے {seconds} سیکنڈ انتظار کر رہا ہے...",
   "pleaseSelectFile": "براہ کرم نقل کرنے کے لیے ایک فائل منتخب کریں۔",
   "transcriptionResult": "نقل کا نتیجہ",
   "transcriptionComplete": "نقل مکمل ہو گئی! متن چیٹ ان پٹ میں شامل کر دیا گیا ہے۔",
@@ -171,7 +168,7 @@
   "selectedFile": "منتخب شدہ فائل",
   "removeFile": "ہٹائیں اور ایک مختلف فائل منتخب کریں",
   "supportedFormats": "معاونت شدہ فارمیٹس",
-  "transcriptionErrorAttempt": "نقل کے دوران خرابی (3 میں سے {{attempt}} کوشش)۔ دوبارہ کوشش کر رہا ہے...",
+  "transcriptionErrorAttempt": "نقل کے دوران خرابی (3 میں سے {attempt} کوشش)۔ دوبارہ کوشش کر رہا ہے...",
   "unsupportedFileType": "غیر معاونت شدہ فائل کی قسم۔ براہ کرم ایک آڈیو یا ویڈیو فائل منتخب کریں۔",
   "copyToClipboard": "کلپ بورڈ پر کاپی کریں",
   "copiedToClipboard": "کلپ بورڈ پر کاپی ہو گیا",
@@ -611,7 +608,8 @@
     "clear": "صاف کریں",
     "undo": "واپس لیں",
     "durationSeconds": "{count, plural, one {# سیکنڈ} other {# سیکنڈز}}",
-    "durationMinutes": "{count, plural, one {# منٹ} other {# منٹ}}"
+    "durationMinutes": "{count, plural, one {# منٹ} other {# منٹ}}",
+    "clearSearch": "تلاش صاف کریں"
   },
   "errors": {
     "unexpectedErrorOccurred": "ایک غیر متوقع خرابی پیش آگئی",
@@ -903,7 +901,13 @@
     "ttsError": "آڈیو تیار کرنے میں خرابی۔ براہ کرم دوبارہ کوشش کریں۔",
     "unsupportedMessageType": "پیغام ظاہر کرنے میں خرابی: غیر معاون پیغام کی قسم",
     "addLanguageOption": "\"{name}\" شامل کریں…",
-    "sources": "ذرائع",
+    "sources": {
+      "fromDocuments": "ایجنٹ دستاویزات",
+      "fromWeb": "ویب",
+      "fromDocumentsHint": "اس ایجنٹ کی اپنی دستاویزات سے اقتباسات",
+      "fromWebHint": "ویب تلاش سے ملنے والے عوامی صفحات",
+      "heading": "{count, plural, one {ماخذ} other {ماخذات}}"
+    },
     "interpreterBadge": "کوڈ چلائیں",
     "disableCodeInterpreter": "کوڈ چلانا غیر فعال کریں",
     "interimSearch": {
@@ -981,7 +985,8 @@
       "MODEL_RATE_LIMITED": "ماڈل اس وقت بہت زیادہ درخواستیں وصول کر رہا ہے۔ خودکار طور پر دوبارہ کوشش کی گئی؛ براہ کرم تھوڑی دیر بعد دوبارہ کوشش کریں۔",
       "MODEL_QUOTA_EXCEEDED": "ماڈل کی capacity quota ختم ہو گئی ہے۔ دوسرا ماڈل آزمائیں یا بعد میں دوبارہ کوشش کریں۔",
       "MODEL_AUTH_FAILED": "ایپ ماڈل سروس کے ساتھ تصدیق نہیں کر سکی۔ یہ configuration کا مسئلہ ہے — براہ کرم سپورٹ سے رابطہ کریں۔"
-    }
+    },
+    "messageLimitExceeded": "پیغام کی حد {maxLength} حروف ہے۔ آپ نے {valueLength} حروف درج کیے ہیں۔"
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",
@@ -2417,20 +2422,18 @@
     "sectionPinned": "پن کیا گیا",
     "sectionFrequent": "کثرت سے استعمال شدہ",
     "sectionMore": "مزید",
-    "categoryWeb": "ویب",
-    "categoryMedia": "میڈیا اور فائلز",
-    "categoryTransform": "تبدیل کریں",
     "pin": "اوپر پن کریں",
     "unpin": "پن ہٹائیں",
     "moveToMore": "مزید میں منتقل کریں",
     "moveOutOfMore": "مینو میں دکھائیں",
     "showSources": "دیگر ذرائع دکھائیں",
     "hideSources": "دیگر ذرائع چھپائیں",
-    "aiTools": "AI ٹولز",
-    "aiToolsTooltip": "جو صلاحیتیں اسسٹنٹ جواب دیتے وقت استعمال کر سکتا ہے: لائیو ویب سرچ، کوڈ پر عمل درآمد، اور منسلک سروسز۔",
     "codeInterpreterTooltip": "ہر پیغام پر محفوظ سینڈ باکس میں Python کوڈ چلائیں۔\n\nمنسلک فائلوں سے ڈیٹا تجزیہ، حسابات، اور چارٹ بنانے کے لئے بہترین۔",
-    "categoryTools": "اوزار اور کنیکٹرز",
-    "translationConversationTitle": "ترجمہ: {filename}"
+    "translationConversationTitle": "ترجمہ: {filename}",
+    "categoryAdd": "شامل کریں",
+    "categoryDo": "کریں",
+    "categoryChat": "اس چیٹ میں",
+    "categoryStart": "سے شروع کریں"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "اپنی ذاتی ہدایات شامل کریں تاکہ AI کے ردعمل کو اپنی مرضی کے مطابق بنا سکیں۔ یہ ہدایات بنیادی رہنمائی کے ساتھ ملائی جاتی ہیں جو مددگار، درست اور محفوظ جوابات کو یقینی بناتی ہیں۔",
   "Tip: Type \"/\" to select from saved prompt templates_": "ٹپ: محفوظ شدہ پرومپٹ ٹیمپلیٹس میں سے منتخب کرنے کے لیے \"/\" ٹائپ کریں۔",
@@ -2558,7 +2561,9 @@
     "savedToOneDrive": "{name} کو OneDrive پر محفوظ کر دیا گیا۔",
     "openInOneDrive": "کھولیں",
     "saveForbidden": "آپ کو اس فولڈر میں لکھنے کی اجازت نہیں — \"OneDrive پر محفوظ کریں\" کے ساتھ دوسرا فولڈر منتخب کریں۔",
-    "saveToOneDriveFailed": "OneDrive پر محفوظ نہیں کر سکے — دوبارہ کوشش کریں۔"
+    "saveToOneDriveFailed": "OneDrive پر محفوظ نہیں کر سکے — دوبارہ کوشش کریں۔",
+    "textVersion": "متنی ورژن (DOCX)",
+    "textVersionHint": "ایک قابل ترمیم Word فائل جس میں ترجمہ شدہ متن ہو، ہر ماخذ صفحہ کے لیے ایک صفحہ۔ ترجمہ شدہ فائل اپنا اصل لے آؤٹ برقرار رکھتی ہے۔"
   },
   "terms": {
     "officialLanguages": "سرکاری نسخہ:",
@@ -2772,7 +2777,6 @@
   },
   "usageImpact": {
     "empty": "ابھی تک کوئی استعمال ریکارڈ نہیں ہوا۔ آپ کے ٹوکن کے استعمال اور اندازاً اخراجات یہاں نظر آئیں گے جب آپ چیٹ کریں گے۔",
-    "co2Value": "{grams} گرام CO₂e",
     "equivalence": "تقریباً {count} اسمارٹ فون چارجز",
     "requests": "درخواستیں",
     "promptTokens": "پرومپٹ ٹوکنز",
@@ -2934,7 +2938,7 @@
       "addedByYou": "آپ کے ذریعہ شامل کردہ",
       "glossary": "لغت",
       "noGlossary": "کوئی لغت نہیں",
-      "manageGlossaries": "لغات",
+      "manageGlossaries": "الفاظ کی فہرستیں منظم کریں",
       "glossaries": "لغات",
       "closeGlossaries": "لغات بند کریں",
       "glossariesEmpty": "کسی خاص اصطلاح کے ترجمہ کو مقفل کرنے کے لیے لغت بنائیں۔ لغات اس ڈیوائس پر محفوظ کی جاتی ہیں اور مختلف تراجم میں استعمال کی جا سکتی ہیں۔",
@@ -3099,7 +3103,145 @@
       "importTooLarge": "یہ فائل درآمد کرنے کے لیے بہت بڑی ہے (زیادہ سے زیادہ 5MB)۔",
       "importNothing": "کوئی قابل استعمال قطار نہیں ملی ({skipped} چھوڑ دی گئیں)۔",
       "importSummary": "{added} شامل ہوئیں، {replaced} تبدیل ہوئیں، {skipped} چھوڑ دی گئیں۔",
-      "entriesTooManyToShow": "{count} اصطلاحات — یہاں فہرست کرنے کے لیے بہت زیادہ ہیں۔ جائزہ لینے کے لیے برآمد کریں یا اصطلاحات تبدیل کرنے کے لیے فائل درآمد کریں۔"
+      "entriesTooManyToShow": "{count} اصطلاحات — یہاں فہرست کرنے کے لیے بہت زیادہ ہیں۔ جائزہ لینے کے لیے برآمد کریں یا اصطلاحات تبدیل کرنے کے لیے فائل درآمد کریں۔",
+      "pagesLoaded": "{total} میں سے {selected} صفحات لوڈ ہو گئے",
+      "pagesLabel": "صفحات",
+      "pagesApply": "صفحات لوڈ کریں",
+      "pagesPrevious": "پچھلا بیچ",
+      "pagesNext": "اگلا بیچ",
+      "pagesBudget": "{max} / {used} حروف",
+      "pagesChange": "صفحات تبدیل کریں",
+      "pagesLoading": "صفحات لوڈ ہو رہے ہیں…",
+      "pagesInvalid": "صفحہ نمبر یا رینج درج کریں، مثلاً 1-40، 45۔",
+      "pagesUnavailable": "ان میں سے کوئی بھی صفحہ متن پر مشتمل نہیں ہے۔",
+      "pagesTooMany": "یہ انتخاب {used} حروف پر مشتمل ہے جبکہ ایک بیچ میں {max} آ سکتے ہیں۔ کم صفحات منتخب کریں۔",
+      "stop": "روکیں",
+      "stepAnalyzing": "تجزیہ کیا جا رہا ہے",
+      "stepTranslating": "ترجمہ کیا جا رہا ہے",
+      "stepReviewing": "نظرِ ثانی کی جا رہی ہے",
+      "stepDone": "مکمل",
+      "runProgressLabel": "ترجمہ کی پیشرفت",
+      "runHintAnalyzing": "ماخذ میں پیچیدہ اصطلاحات اور ابہام کو پڑھا جا رہا ہے۔",
+      "runHintTranslating": "ترجمہ لکھا جا رہا ہے۔",
+      "runHintReviewing": "مسودہ کو اصل سے جانچا جا رہا ہے۔",
+      "runHintReviewingRound": "مسودہ کو اصل سے جانچا جا رہا ہے · مرحلہ {round} کل {total} میں سے۔",
+      "runRound": "مرحلہ {round} کل {total} میں سے",
+      "draftLabel": "مسودہ",
+      "sourceLocked": "ترجمے کے دوران مقفل",
+      "analysisNotes": "{count, plural, one {# نوٹ} other {# نوٹس}}",
+      "analysisPill": "{count, plural, one {تجزیہ · # نوٹ} other {تجزیہ · # نوٹس}}",
+      "reviewSummary": "{count, plural, one {جائزہ: # مرحلہ، {verdict}} other {جائزہ: # مراحل، {verdict}}}",
+      "analysisDismiss": "تمام تراجم کے لیے چھپائیں",
+      "analysisShow": "پری ٹرانسلیشن تجزیہ دکھائیں",
+      "analysisResize": "تجزیہ پینل کا سائز تبدیل کریں",
+      "assessingCriteria": "{count, plural, one {# معیار کو جانچا جا رہا ہے} other {# معیارات کو جانچا جا رہا ہے}}",
+      "editsPending": "تشخیص مکمل ہونے پر تجویز کردہ ترامیم یہاں ظاہر ہوں گی۔",
+      "uploadProgressLabel": "اپ لوڈ کی پیش رفت",
+      "uploadStepUploading": "اپ لوڈ ہو رہا ہے",
+      "uploadStepReading": "متن پڑھا جا رہا ہے",
+      "uploadStepReady": "تیار",
+      "uploadCancel": "منسوخ کریں",
+      "modeDocument": "پوری دستاویز",
+      "modeDocumentHint": "درج کردہ PDF کا مکمل ترجمہ کرتا ہے اور اس کی ترتیب برقرار رکھتا ہے۔ نتیجہ صفحہ وار پڑھیں اور درست کریں۔",
+      "translateDocument": "دستاویز کا ترجمہ کریں",
+      "documentSubmitting": "بھیج رہے ہیں…",
+      "documentIntroTitle": "پوری دستاویز کا ترجمہ کریں",
+      "documentIntro": "اَپ لوڈ کردہ PDF کو مکمل طور پر ترجمہ کیا جاتا ہے اور اُس کی ترتیب برقرار رکھی جاتی ہے۔ جب یہ تیار ہو جائے تو آپ اسے اصل کے ساتھ صفحہ بہ صفحہ پڑھ سکتے ہیں، صفحات درست کر سکتے ہیں، معیار چیک کر سکتے ہیں، اور نتیجہ ڈاؤن لوڈ کر سکتے ہیں۔ اس موڈ میں گلوسری اور ریویو راؤنڈز لاگو نہیں ہوتے۔ ایک بار شروع ہونے کے بعد، دستاویز کے ترجمہ کو روکا نہیں جا سکتا اور اس کے صفحات آج کے کوٹے میں شمار ہوں گے۔",
+      "documentNeedsFile": "پوری دستاویز کے ترجمہ کے لئے PDF اپ لوڈ کریں۔",
+      "documentNeedsPdf": "پوری دستاویز کا ترجمہ اور صفحہ وار نظر صرف PDF فائلز کے ساتھ کام کرتا ہے۔",
+      "documentNeedsLanguage": "دستاویز کا ترجمہ کرنے کے لئے ہدف زبان منتخب کریں۔",
+      "documentLanguageUnsupported": "پوری دستاویز کا ترجمہ اس زبان کے لئے دستیاب نہیں۔ اس کے بجائے فوری یا جائزہ شدہ ترجمہ استعمال کریں۔",
+      "documentNoGlossaries": "پوری دستاویز کے ترجمہ میں لغات استعمال نہیں ہوتے",
+      "documentPagesLeft": "{count, plural, one {# صفحہ باقی ہے آج} other {# صفحات باقی ہیں آج}}",
+      "documentLimitReached": "اس دستاویز میں آج آپ کے باقی صفحات سے زیادہ صفحات ہیں۔ منتخب صفحات کا فوری یا جائزہ شدہ ترجمہ کریں، یا کل دوبارہ کوشش کریں۔",
+      "documentUnavailable": "پوری دستاویز کا ترجمہ اس سرور پر دستیاب نہیں۔",
+      "documentSubmitFailed": "دستاویز ترجمہ کے لئے نہیں بھیجی جا سکی: {message}",
+      "documentProgressLabel": "دستاویز کے ترجمہ کی پیش رفت",
+      "documentStepUploaded": "اپ لوڈ ہو گیا",
+      "documentStepPreparing": "صفحات تیار کیے جا رہے ہیں",
+      "documentTypicalDuration": "عام طور پر چند منٹ",
+      "documentCanLeave": "آپ اس صفحہ سے جا سکتے ہیں۔ ترجمہ جاری رہے گا اور واپس آنے پر یہ یہاں موجود ہوگا۔",
+      "documentStalled": "ترجمہ کی پیش رفت چیک نہیں ہو سکی۔ یہ ابھی بھی جاری ہو سکتا ہے۔",
+      "documentCheckAgain": "دوبارہ چیک کریں",
+      "documentFailed": "دستاویز کا ترجمہ نہیں ہو سکا: {message}",
+      "documentGone": "یہ ترجمہ اب دستیاب نہیں۔ دستاویز دوبارہ ترجمہ کریں تاکہ پڑھ سکیں۔",
+      "documentPageFailed": "یہ صفحہ لوڈ نہیں ہو سکا: {message}",
+      "documentPagesNotAligned": "ترجمہ شدہ فائل میں صفحات کی تعداد مختلف ہے، اس لیے دونوں اطراف کا مواد ایک جیسا نہیں ہو سکتا۔",
+      "documentAvailableUntil": "{date} تک دستیاب",
+      "documentRetranslateTitle": "دستاویز کا دوبارہ ترجمہ کریں؟",
+      "documentRetranslateMessage": "اس سے نیا ترجمہ شروع ہوتا ہے اور اس کے صفحات دوبارہ آج کے کوٹے میں شمار ہوں گے۔ ایک بار شروع ہونے کے بعد، اسے روکا نہیں جا سکتا۔ موجودہ ترجمہ اور اس کی درستی سرور پر اُس وقت تک رہیں گی جب تک وہ ختم نہیں ہوتے، لیکن انہیں یہاں مزید نہیں دکھایا جائے گا۔",
+      "retry": "دوبارہ کوشش کریں",
+      "pageLabel": "صفحہ",
+      "pageOf": "کل {total} میں سے",
+      "pageNumber": "· صفحہ {page}",
+      "pagePrevious": "پچھلا صفحہ",
+      "pageNext": "اگلا صفحہ",
+      "correctedLabel": "درست شدہ",
+      "correctedPages": "درست شدہ صفحات:",
+      "correctedPagesMore": "+{count} مزید",
+      "correctionRestore": "بحال کریں",
+      "correctionRestoreHint": "اس صفحہ میں اپنی تبدیلیاں رد کریں اور مشین ترجمہ پر واپس جائیں",
+      "correctionSaving": "محفوظ کر رہے ہیں…",
+      "correctionSaved": "محفوظ ہو گیا",
+      "correctionSaveFailed": "محفوظ نہیں ہوا۔ دوبارہ کوشش کرنے کے لئے متن تبدیل کریں۔",
+      "download": "ڈاؤن لوڈ کریں",
+      "downloading": "ڈاؤن لوڈ ہو رہا ہے…",
+      "downloadFailed": "ڈاؤن لوڈ ناکام: {message}",
+      "downloadTranslated": "ترجمہ شدہ {format}",
+      "downloadTranslatedHint": "اصل ترتیب۔ اس میں آپ کی اصلاحات شامل نہیں ہیں۔",
+      "downloadTextVersion": "متنی ورژن (DOCX)",
+      "downloadTextVersionHint": "سادہ متن، ہر صفحہ اپنے صفحہ پر، آپ کی اصلاحات کے ساتھ۔",
+      "documentNoCancel": "دستاویز کا ترجمہ ایک بار شروع ہونے کے بعد روکا نہیں جا سکتا۔",
+      "documentGlossariesIgnored": "{count, plural, one {آپ کا منتخب کردہ glossary اس موڈ میں لاگو نہیں ہوتا۔} other {آپ کے # منتخب کردہ glossaries اس موڈ میں لاگو نہیں ہوتے۔}} ہر صفحے کی اصطلاحات Assess quality کے ساتھ چیک کریں، یا Quick یا Reviewed استعمال کریں۔",
+      "pendingLeavePage": "تجاویز اس صفحے سے متعلق ہیں اور صفحہ چھوڑنے پر محفوظ نہیں رہتیں۔ باقی تجاویز کا پہلے فیصلہ کریں۔",
+      "uploadStepOcr": "OCR کے ساتھ پڑھ رہے ہیں",
+      "ocrButton": "OCR سے پڑھیں",
+      "ocrButtonHint": "اس PDF کو دوبارہ متن شناخت کے ساتھ پڑھیں، خاص طور پر سکین شدہ صفحات یا غلط پڑھا گیا متن",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "یہ متن صفحات سے متن شناخت کے ذریعے پڑھا گیا ہے۔ اصل کے ساتھ اس کا موازنہ کریں۔",
+      "ocrReasonNoText": "{name} میں کوئی متن نہیں ملا۔ یہ ایک سکین شدہ دستاویز معلوم ہوتی ہے۔",
+      "ocrReasonSparse": "{name} میں بہت کم متن ملا۔ کچھ حصہ ممکنہ طور پر سکین کیا گیا ہے۔",
+      "ocrReasonManual": "{name} کو دوبارہ متن شناخت کے ساتھ پڑھیں؟",
+      "ocrExplanation": "OCR صفحہ کی تصاویر سے متن پڑھتا ہے۔ یہ عام اپلوڈ سے زیادہ وقت لیتا ہے، فائل کے ہر صفحہ کو آپ کی روزانہ OCR حد میں شمار کرتا ہے، اور کم معیار کی سکیننگ، ہاتھ سے لکھے ہوئے متن یا جدولوں میں غلط پڑھ سکتا ہے۔",
+      "ocrPagesLeft": "{count, plural, one {آج # OCR صفحہ باقی ہے۔} other {آج # OCR صفحات باقی ہیں۔}}",
+      "ocrRun": "OCR سے پڑھیں",
+      "ocrDismiss": "ابھی نہیں",
+      "ocrSparseHint": "اس PDF میں بہت کم متن ملا۔ کچھ صفحات سکین ہو سکتے ہیں۔",
+      "ocrLimitReached": "اس دستاویز میں صفحات کی تعداد آپ کی آج کی OCR حد سے زیادہ ہے۔",
+      "ocrTooManyPages": "یہ دستاویز OCR کے لیے بہت طویل ہے، جو زیادہ سے زیادہ {max} صفحات پڑھتا ہے۔ PDF کو تقسیم کریں اور ایک حصہ اپلوڈ کریں۔",
+      "ocrUnavailable": "اس سرور پر OCR سیٹ نہیں ہے۔",
+      "ocrNoText": "OCR نے اس دستاویز میں بھی کوئی متن نہیں پایا۔",
+      "ocrFailed": "دستاویز OCR کے ساتھ نہیں پڑھی جا سکی۔ دوبارہ کوشش کریں۔",
+      "scannedWholeExplanation": "آپ پورا دستاویز بھی ترجمہ کر سکتے ہیں: یہ اسکین شدہ صفحات خود پڑھتا ہے، ترتیب برقرار رکھتا ہے، اور صفحات کو آپ کی روزانہ ترجمے کی حد میں شمار کرتا ہے۔",
+      "scannedUseWholeDocument": "پورا دستاویز ترجمہ کریں",
+      "scannedSourceNote": "{name} میں یہاں دکھانے کے لیے کوئی متن نہیں ہے۔ پورے دستاویز کا ترجمہ اس کے صفحات براہ راست پڑھتا ہے۔ یہاں اپنا متن لکھنے سے دستاویز تبدیل ہو جائے گی۔",
+      "scannedPageNote": "اصل کے اس صفحے سے کوئی متن نہیں پڑھا جا سکا۔ براہ کرم فائل سے موازنہ کریں۔",
+      "changeLabel": "ترجمہ میں تبدیلی کی درخواست کریں",
+      "changePlaceholder": "کوئی تبدیلی مانگیں، جیسے اسے زیادہ رسمی بنائیں",
+      "changePlaceholderAnother": "مزید تبدیلی کی درخواست کریں",
+      "changeSend": "درخواست بھیجیں",
+      "changeWorking": "تبدیلیاں تیار کی جا رہی ہیں",
+      "changeNothingApplied": "جب تک آپ قبول نہیں کرتے کوئی تبدیلی نہیں ہوگی",
+      "changeSelectionLabel": "منتخب شدہ متن میں تبدیلی کی درخواست کریں",
+      "changeSelectionPlaceholder": "یہ تبدیل کریں، مثال کے طور پر tableta لکھیں",
+      "changeSelectionScope": "صرف منتخب شدہ متن پر اطلاق ہوگا",
+      "changeSelectionClose": "بند کریں",
+      "changeTitle": "درخواست کردہ تبدیلیاں",
+      "changeSelectedLabel": "منتخب شدہ متن",
+      "changeNoEdits": "اس درخواست کے لیے کوئی تبدیلی درکار نہیں تھی۔",
+      "changeReplyPending": "{count, plural, one {# تجویز کردہ ترمیم workspace میں ہے۔} other {# تجویز کردہ ترامیم workspace میں ہیں۔}} جب تک آپ قبول نہیں کرتے کوئی تبدیلی نہیں ہوگی۔",
+      "changeStopped": "روک دیا گیا۔ کوئی تبدیلی نہیں ہوئی۔",
+      "changeFailed": "تبدیلی کی درخواست ناکام ہوگئی۔ دوبارہ کوشش کریں۔",
+      "changeNoTranslation": "تبدیلی کے لیے ابھی کوئی ترجمہ موجود نہیں۔ پہلے متن کا ترجمہ کریں۔",
+      "changeBusy": "موجودہ عمل مکمل ہونے تک انتظار کریں، پھر دوبارہ درخواست دیں۔",
+      "changeHeld": "بھیجا نہیں گیا: کچھ تجویز کردہ ترامیم ابھی فیصلے کے منتظر ہیں۔",
+      "pendingRunActionRequest": "تبدیلی کی درخواست کی جا رہی ہے",
+      "railPlaceholder": "کوئی تبدیلی یا سوال پوچھیں…",
+      "documentPageCount": "{count, plural, one {# صفحہ} other {# صفحات}}",
+      "sourceShowPages": "صفحات دکھائیں",
+      "sourceEditText": "متن کے طور پر ترمیم کریں",
+      "sourceRemoveDocument": "دستاویز ہٹائیں",
+      "sourceJumpToPage": "صفحہ پر جائیں"
     },
     "document": {
       "emptyTitle": "جس دستاویز کی وضاحت چاہتے ہیں بیان کریں",
@@ -3727,7 +3869,7 @@
       "guideTargetTerm": "درکار ترجمہ",
       "guideNote": "نوٹ",
       "pendingRun": {
-        "title": "{count} تجاویز ابھی بھی زیر التواء ہیں",
+        "title": "{count, plural, one {# تجویز ابھی باقی ہے} other {# تجاویز ابھی باقی ہیں}}",
         "body": "{action} متن کے کسی بھی حصے کو تبدیل کر سکتا ہے، ان عبارتوں سمیت جن پر آپ نے ابھی فیصلہ نہیں کیا، اور نئی جانچ موجودہ فہرست کو بدل دیتی ہے۔ پہلے باقی تجاویز پر فیصلہ کریں۔",
         "acceptAll": "تمام باقی ماندہ قبول کریں",
         "rejectAll": "تمام مسترد کریں",
@@ -3789,7 +3931,7 @@
         "list<number>": "نمبرز کی فہرست"
       },
       "layout": "لے آؤٹ",
-      "layoutHint": "Markdown کے ساتھ {{field:id}} سلاٹس — برآمد کیے جانے والے اور پیش نظارہ میں استعمال ہوتا ہے.",
+      "layoutHint": "Markdown کے ساتھ '{{field:id}}' سلاٹس — برآمد کیے جانے والے اور پیش نظارہ میں استعمال ہوتا ہے.",
       "saveTemplate": "ٹیمپلیٹ محفوظ کریں",
       "deleteTemplate": "ٹیمپلیٹ حذف کریں",
       "cancel": "منسوخ کریں",
@@ -4617,6 +4759,10 @@
         "note": "فہرست قیمت پر لاگت: {asOf} (عالمی معیاری شرح، بغیر cached-input رعایت کے)، یہ اندازاً بالائی حد ہے، بل نہیں ہے۔ ویب تلاش، کوڈ چلانا، نقل نویسی، آواز، ترجمہ اور دستاویز انڈیکسنگ شامل نہیں۔"
       }
     },
+    "mass": {
+      "grams": "{value} گرام CO₂e",
+      "kilograms": "{value} کلوگرام CO₂e"
+    },
     "workflow": {
       "title": "اس ورک سپیس (تخمینہ شدہ)",
       "workspace": "اس ورک سپیس",
@@ -5431,7 +5577,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# دستاویز} other {# دستاویزات}} اندراج شدہ",
     "m365CapImmediateHelp": "اپلائی کرنے سے حد فوراً محفوظ ہو جائے گی۔ دیگر ترامیم کے لیے اب بھی محفوظ کریں ضروری ہے۔",
     "m365CapDraftHelp": "حد اس وقت محفوظ ہوتی ہے جب آپ ایجنٹ بناتے ہیں۔",
-    "m365CapSaved": "دستاویز کی حد محفوظ ہو گئی: {limit}۔"
+    "m365CapSaved": "دستاویز کی حد محفوظ ہو گئی: {limit}۔",
+    "m365AgentAllowWebSearchHelp": "پہلے سے بند: ایجنٹ صرف اپنی دستاویزات سے جواب دیتا ہے اور ویب پر کبھی تلاش نہیں کرتا، چاہے صارف نے جو بھی تلاش کی ترتیبات منتخب کی ہوں۔ اگر آن ہو، تو ایجنٹ کی ہدایات یہ طے کرتی ہیں کہ ویب تلاش کب ہوگی اور کن ویب سائٹس کو استعمال کیا جائے گا، اور ویب ذرائع کو ہمیشہ ایجنٹ کی دستاویزات سے الگ دکھایا جائے گا۔",
+    "promptAgentAllowWebSearchHelp": "پہلے سے آن۔ اگر بند ہو، تو یہ ایجنٹ کبھی ویب پر تلاش نہیں کرتا، چاہے صارف نے جو بھی تلاش کی ترتیبات منتخب کی ہوں۔"
   },
   "localModels": {
     "title": "لوکل ماڈلز",
@@ -5738,7 +5886,9 @@
       "m365MailReadsPerDay": "میل پڑھنے کی تعداد فی دن",
       "m365MailDraftsPerDay": "میل ڈرافٹس فی دن",
       "m365MailDeepScansPerDay": "میل ڈیپ اسکینز فی دن",
-      "m365DigestRunsPerDay": "یومیہ ڈائجسٹ رنز فی دن"
+      "m365DigestRunsPerDay": "یومیہ ڈائجسٹ رنز فی دن",
+      "translationPagesPerDay": "روزانہ ترجمہ کے صفحات",
+      "ocrPagesPerDay": "فی دن OCR صفحات"
     },
     "valueModeLabel": "لیمٹ کی قسم",
     "valueAmountLabel": "لیمٹ کی مقدار",
@@ -5761,7 +5911,8 @@
       "jobs": "جوبز",
       "rounds": "راونڈز",
       "documents": "دستاویزات",
-      "boolean": ""
+      "boolean": "",
+      "pages": "صفحات"
     },
     "window": {
       "day": "دن",
@@ -5819,7 +5970,9 @@
       "m365MailReadsPerDay": "میل تلاشیں اور فی دن پیغام/تھریڈ ریڈز۔ حد سے زائد ہونے پر میل ٹولز \"کل دوبارہ کوشش کریں\" کا نتیجہ واپس کرتے ہیں۔",
       "m365MailDraftsPerDay": "ای میل ڈرافٹس جو اسسٹنٹ فی دن بنا سکتا ہے — ہر ایک کی الگ سے تصدیق کی جاتی ہے۔ جان بوجھ کر محدود رکھی گئی ہے۔",
       "m365MailDeepScansPerDay": "کمپوزٹ میل جوابات (ڈائجیسٹس، ڈیپ سرچ، کمٹمنٹس) فی دن۔ ہر اسکین ایک بجٹ یونٹ ہے، چاہے اس کے اندرونی ریڈز کتنے بھی ہوں۔",
-      "m365DigestRunsPerDay": "Microsoft 365 یومیہ ڈائجسٹ رنز فی دن۔ ایک رن میں کئی Graph ریڈز اور دو analysis-model کالز ہوتی ہیں؛ پیریڈ پککر سے دوبارہ رن آسانی سے کی جا سکتی ہے، اس لیے ڈیفالٹ محدود ہے۔"
+      "m365DigestRunsPerDay": "Microsoft 365 یومیہ ڈائجسٹ رنز فی دن۔ ایک رن میں کئی Graph ریڈز اور دو analysis-model کالز ہوتی ہیں؛ پیریڈ پککر سے دوبارہ رن آسانی سے کی جا سکتی ہے، اس لیے ڈیفالٹ محدود ہے۔",
+      "translationPagesPerDay": "روزانہ دستاویز ترجمہ کے لیے جمع شدہ PDF صفحات۔",
+      "ocrPagesPerDay": "فی دن PDF صفحات جو OCR سے پڑھے گئے (سکین شدہ دستاویزات کے لیے متن شناخت)۔"
     },
     "scopeFamily": "فیملی",
     "scopeModel": "ماڈل",
@@ -8127,7 +8280,13 @@
       "skills": "اسکل سلیکشن",
       "tools": "ٹول روٹنگ",
       "trim": "ٹرم درجہ بندی",
-      "assessment": "سرچ اسیسمنٹ"
+      "assessment": "سرچ اسیسمنٹ",
+      "query": "تلاش سوال نو لکھیں",
+      "mailScreen": "میل فِشنگ اسکرین",
+      "mailAnalysis": "میل اور ڈائجسٹ تجزیہ",
+      "schemaProposal": "ایکسٹریکشن اسکیمہ تجویز",
+      "mcpPlan": "کنیکٹر منصوبہ",
+      "vision": "تصویر اور صفحہ پڑھنا"
     },
     "reason": {
       "endpoint_missing": "اینڈ پوائنٹ یا اکاؤنٹ بائنڈنگ غائب ہے",
@@ -8148,6 +8307,164 @@
       "endpoint_account_mismatch": "اینڈ پوائنٹ اور ARM resource ID مختلف اکاؤنٹس ظاہر کرتے ہیں۔ ڈیپلائمنٹ کنفیگریشن درست کریں۔",
       "inventory_refresh_failed": "انوینٹری ریفریش ناکام۔ ایپ کی شناخت کے Reader رسائی اور اکاؤنٹ کنیکٹیویٹی چیک کریں۔",
       "credential_unavailable": "ایپ اپنی انوینٹری کریڈینشل حاصل نہیں کر سکی۔ ڈیپلائمنٹ شناخت کی ترتیبات چیک کریں۔"
+    },
+    "notSupported": "یہ ماڈل اس کی حمایت نہیں کرتا",
+    "unservedOperations": "اس سلسلے میں کوئی ماڈل {operations} کی حمایت نہیں کرتا۔ ایسا ماڈل شامل کریں جو کرے۔"
+  },
+  "filePreview": {
+    "preview": "پیش نظارہ",
+    "download": "ڈاؤن لوڈ کریں",
+    "loading": "پیش نظارہ تیار کیا جا رہا ہے…",
+    "failed": "اس فائل کا پیش نظارہ نہیں کیا جا سکا۔ آپ پھر بھی اسے ڈاؤن لوڈ کر سکتے ہیں۔",
+    "pageOf": "صفحہ {page} از {total}",
+    "truncated": "پہلے {shown} میں سے {total} صفحات دکھائے جا رہے ہیں۔ باقی دیکھنے کے لیے فائل ڈاؤن لوڈ کریں۔",
+    "enlarge": "{name} کو بڑا کریں"
+  },
+  "addToChat": {
+    "title": "چیٹ میں شامل کریں",
+    "titleTranslate": "دستاویز کا ترجمہ کریں",
+    "titleTranscribe": "آڈیو یا ویڈیو نقل کریں",
+    "sourcesLabel": "سے شامل کریں",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "یہ عمل کیلئے دستیاب نہیں",
+    "sources": {
+      "device": "اس ڈیوائس سے",
+      "link": "لنک",
+      "camera": "کیمرہ",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ای میل",
+      "meetings": "میٹنگز"
+    },
+    "device": {
+      "browse": "اس ڈیوائس کو براؤز کریں",
+      "dropHint": "یا فائلیں اس ونڈو میں کہیں بھی چھوڑیں، یا پیسٹ کریں",
+      "rejected": "یہ فائلیں یہاں استعمال نہیں ہو سکتیں۔",
+      "hint": {
+        "attach": "دستاویزات، تصاویر، آڈیو اور ویڈیو۔",
+        "translate": "ایک دستاویز: Word، Excel، PowerPoint، PDF، HTML یا ٹیکسٹ۔",
+        "transcribe": "آڈیو یا ویڈیو۔ پیغام بھیجنے پر نقل کی جائے گی۔"
+      }
+    },
+    "selection": {
+      "then": "پھر",
+      "intents": {
+        "attach": "اٹیچ کریں",
+        "translate": "ترجمہ کریں",
+        "transcribe": "نقل کریں"
+      },
+      "confirm": {
+        "attach": "شامل کریں",
+        "translate": "ترجمہ کریں",
+        "transcribe": "نقل کریں"
+      },
+      "unfit": {
+        "attach": "یہ فائلیں اٹیچ نہیں کی جا سکتیں",
+        "translate": "ترجمہ ایک وقت میں ایک دستاویز پر ہوتا ہے",
+        "transcribe": "صرف آڈیو اور ویڈیو کی نقل ہو سکتی ہے"
+      }
+    },
+    "menu": {
+      "addToChatNote": "یہ ڈیوائس، لنکس، Microsoft 365",
+      "filesOrPhotos": "فائلیں یا تصاویر",
+      "fromThisDevice": "اس ڈیوائس سے",
+      "connect": "Microsoft 365 کنیکٹ کریں",
+      "connectNote": "OneDrive، ای میل اور میٹنگز سے شامل کریں"
     }
+  },
+  "usageBudgets": {
+    "title": "آپ کے بجٹ",
+    "description": "وہ حدود جو آپ نے اس ڈیوائس پر اپنے لیے طے کی ہیں۔ بجٹ منتخب کریں، پھر یہ تعین کریں کہ اس کے قریب یا اس سے تجاوز کرنے پر کیا ہو۔ بجٹ ہر مدت کے آغاز سے چیٹ اور ورک فلو رنز کو شمار کرتا ہے۔",
+    "metric": {
+      "emissions": "اخراج کا بجٹ",
+      "cost": "لاگت کا بجٹ"
+    },
+    "metricShort": {
+      "emissions": "اخراج",
+      "cost": "لاگت"
+    },
+    "off": "کوئی بجٹ مقرر نہیں۔",
+    "measureAs": "اس کو ناپیں بطور",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "فون چارجز",
+      "usd": "امریکی ڈالر"
+    },
+    "amountLabel": "بجٹ",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "گھنٹے",
+      "smartphoneCharge": "چارجز",
+      "usd": "امریکی ڈالر"
+    },
+    "periodLabel": "ہر بار پھر سے شروع",
+    "period": {
+      "day": "دن",
+      "week": "ہفتہ",
+      "month": "مہینہ"
+    },
+    "costNote": "فہرست قیمتوں سے اندازہ لگایا گیا: یہ بل نہیں بلکہ زیادہ سے زیادہ حد ہے۔",
+    "chargesValue": "{count} فون چارجز",
+    "percent": "{percent}%",
+    "usedOf": "{used} میں سے {limit} استعمال ہوا ({percent}%)",
+    "usedOfShort": "{used} میں سے {limit}",
+    "resets": "دوبارہ مقرر ہوتا ہے {date}",
+    "budgetMarker": "بجٹ",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "بجٹ کے اندر",
+      "warn": "انتباہ دکھایا گیا",
+      "ask": "ہر پیغام سے پہلے تصدیق",
+      "stop": "بھیجنا روک دیا گیا"
+    },
+    "stage": {
+      "warn": {
+        "title": "انتباہ",
+        "tag": "آگاہی",
+        "description": "اس حصے سے چیٹ میں نوٹس دکھائیں۔"
+      },
+      "ask": {
+        "title": "پہلے پوچھیں",
+        "tag": "نرم روک",
+        "description": "اس حصے سے ہر پیغام کی تصدیق کے لیے پوچھیں۔"
+      },
+      "stop": {
+        "title": "روکیں",
+        "tag": "سخت روک",
+        "description": "اس حصے سے بھیجنا روک دیں جب تک کہ یہ دوبارہ مقرر نہ ہو یا میں یہاں اس میں اضافہ نہ کروں۔"
+      }
+    },
+    "thresholdLabel": "{stage} حد، بجٹ کا فیصد",
+    "notice": {
+      "warn": {
+        "emissions": "آپ اپنے اخراج کے بجٹ کا {percent}% استعمال کر چکے ہیں۔",
+        "cost": "آپ اپنے لاگت کے بجٹ کا {percent}% استعمال کر چکے ہیں۔"
+      },
+      "ask": {
+        "emissions": "آپ اپنے اخراج کے بجٹ کا {percent}% استعمال کر چکے ہیں۔ یہ پیغام بھیجیں؟",
+        "cost": "آپ اپنے لاگت کے بجٹ کا {percent}% استعمال کر چکے ہیں۔ یہ پیغام بھیجیں؟"
+      },
+      "askRun": {
+        "emissions": "آپ اپنے اخراج کے بجٹ کا {percent}% استعمال کر چکے ہیں۔ کیا یہ رن شروع کریں؟",
+        "cost": "آپ اپنے لاگت کے بجٹ کا {percent}% استعمال کر چکے ہیں۔ کیا یہ رن شروع کریں؟"
+      },
+      "stop": {
+        "emissions": "اخراج کے بجٹ کی حد تک پہنچ گئے۔ بھیجنا {date} تک روکا گیا ہے۔",
+        "cost": "لاگت کا بجٹ حد تک پہنچ گیا ہے۔ بھیجنا {date} تک معطل ہے۔"
+      }
+    },
+    "actions": {
+      "viewBudget": "بجٹ دیکھیں",
+      "dismiss": "بند کریں",
+      "sendAnyway": "پھر بھی بھیجیں",
+      "runAnyway": "پھر بھی چلائیں",
+      "dontSend": "نہ بھیجیں",
+      "dontAskToday": "آج دوبارہ مت پوچھیں",
+      "openSettings": "بجٹ کی سیٹنگز کھولیں",
+      "edit": "ترمیم کریں"
+    },
+    "composerPaused": "آپ کے بجٹ کی وجہ سے بھیجنا معطل ہے",
+    "summaryTitle": "آپ کے بجٹس",
+    "chipAria": "{metric} بجٹ: {percent}% استعمال ہو چکا ہے۔",
+    "runProjection": "اخراجات کا بجٹ {from}% → {to}%"
   }
 }

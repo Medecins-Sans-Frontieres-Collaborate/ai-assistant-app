@@ -205,6 +205,9 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
         <h2
           className={`text-2xl md:text-3xl font-bold ${titleClass}`}
           style={textShadow}
+          // Names and descriptions are authored in any language: each takes
+          // its direction from its own text, not from the interface.
+          dir="auto"
         >
           {localizedName}
         </h2>
@@ -276,6 +279,7 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
           <p
             className={`text-sm md:text-base ${organizationAgent?.maintainedBy ? 'mb-2' : 'mb-3'} ${descriptionClass} ${hasBackgroundImage ? 'max-w-lg' : ''}`}
             style={textShadow}
+            dir="auto"
           >
             {lead && rest ? (
               <>

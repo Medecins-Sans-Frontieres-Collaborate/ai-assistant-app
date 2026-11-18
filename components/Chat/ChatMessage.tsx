@@ -258,11 +258,6 @@ export const ChatMessage: FC<Props> = ({
           onSaveAsPrompt={handleSaveAsPromptClick}
         >
           <FileContent files={files} images={images} />
-          {text && (
-            <div className="prose dark:prose-invert prose-p:my-2 text-gray-800 dark:text-white max-w-none mt-2">
-              {text.text}
-            </div>
-          )}
         </UserMessage>
       );
     } else {
@@ -314,11 +309,6 @@ export const ChatMessage: FC<Props> = ({
           onSaveAsPrompt={handleSaveAsPromptClick}
         >
           <ImageContent images={images} />
-          {text && (
-            <div className="prose dark:prose-invert prose-p:my-2 text-gray-800 dark:text-white max-w-none mt-2">
-              {text.text}
-            </div>
-          )}
         </UserMessage>
       );
     } else {

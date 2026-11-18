@@ -6,12 +6,15 @@ import { FC, useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useCo2eFormat } from '@/client/hooks/settings/useCo2eFormat';
+import { useUsageBudgetsStatus } from '@/client/hooks/settings/useUsageBudgets';
 import { useWorkflowEmissions } from '@/client/hooks/workflows/useWorkflowEmissions';
 
 import { clampEmissionsChipAutoHideMs } from '@/lib/utils/shared/emissions';
 
 import { Conversation } from '@/types/chat';
 
+import { BudgetBars } from '@/components/Emissions/BudgetBars';
 import {
   ImpactReadout,
   ImpactRow,
@@ -59,7 +62,9 @@ export const WorkflowImpactBadge: FC<WorkflowImpactBadgeProps> = ({
   conversation,
 }) => {
   const t = useTranslations();
+  const formatCo2e = useCo2eFormat();
   const { showUsageImpact } = useFlags();
+  const budgets = useUsageBudgetsStatus();
   const summary = useWorkflowEmissions(conversation);
   const visibility = useSettingsStore((s) => s.emissionsChipVisibility);
   const autoHideMs = useSettingsStore((s) => s.emissionsChipAutoHideMs);
@@ -205,9 +210,7 @@ export const WorkflowImpactBadge: FC<WorkflowImpactBadgeProps> = ({
                         {actionLabel(row.action, t)}
                       </span>
                       <span className="text-gray-900 dark:text-gray-100 shrink-0">
-                        {t('emissions.chip.label', {
-                          grams: formatGrams(row.gCO2e),
-                        })}
+                        {formatCo2e(row.gCO2e)}
                       </span>
                     </div>
                   ))}
@@ -232,6 +235,7 @@ export const WorkflowImpactBadge: FC<WorkflowImpactBadgeProps> = ({
         <span className="hidden sm:inline">
           {t('emissions.chip.label', { grams: collapsedLabel })}
         </span>
+        <BudgetBars statuses={budgets.active} />
         {delta != null && delta > 0 && (
           <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400">
             {t('emissions.workflow.delta', { grams: formatGrams(delta) })}

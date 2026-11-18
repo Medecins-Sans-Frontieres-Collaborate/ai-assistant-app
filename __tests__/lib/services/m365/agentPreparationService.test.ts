@@ -18,8 +18,10 @@ import {
 
 import type { BlobStorage } from '@/lib/utils/server/blob/blob';
 
+import { installFakeAuxiliaryCompletions } from '../auxiliary/fakeCompletions';
+
 import { Readable } from 'stream';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockGraph = vi.hoisted(() => ({ graphJson: vi.fn() }));
 const mockIndex = vi.hoisted(() => ({ downloadItemBytes: vi.fn() }));
@@ -41,13 +43,6 @@ vi.mock('@/lib/services/m365/graphApi', async (importOriginal) => {
   return { ...actual, ...mockGraph };
 });
 vi.mock('@/lib/services/m365/agentIndexService', () => mockIndex);
-vi.mock('@/lib/services/ServiceContainer', () => ({
-  ServiceContainer: {
-    getInstance: () => ({
-      getOpenAIClient: () => ({ chat: { completions: mockVision } }),
-    }),
-  },
-}));
 vi.mock('@/lib/services/transcription/whisperTranscriptionService', () => ({
   WhisperTranscriptionService: class {
     transcribe = mockWhisper.transcribe;
@@ -114,14 +109,21 @@ const target = { driveId: 'd', itemId: 'it1' };
 
 let storage: BlobStorage;
 
+let fakeChain: ReturnType<typeof installFakeAuxiliaryCompletions>;
+
+afterEach(() => fakeChain.restore());
+
 beforeEach(() => {
   vi.clearAllMocks();
+  // Vision runs on a fake residency chain that records the routed region.
+  fakeChain = installFakeAuxiliaryCompletions(mockVision.create);
   storage = fakeStorage();
   mockIndex.downloadItemBytes.mockResolvedValue({
     buffer: Buffer.from('bytes'),
     name: 'x',
   });
   mockVision.create.mockResolvedValue({
+    model: 'gpt-5.6-luna',
     choices: [{ message: { content: 'A chart of Q1 revenue: 1.2M, 1.4M' } }],
   });
   mockWhisper.transcribe.mockResolvedValue('hello world transcript');
@@ -161,6 +163,40 @@ describe('prepareAgentItem', () => {
     });
     const text = await readDerivedText(storage, agent.id, 'it1');
     expect(text?.text).toContain('Q1 revenue');
+    // The model that read the image is recorded, not a configured label;
+    // agent content is processed in EU.
+    expect(text?.model).toBe('gpt-5.6-luna');
+    expect(fakeChain.regions).toEqual(['EU']);
+  });
+
+  it('reads agent content in EU even for a US admin', async () => {
+    mockGraph.graphJson.mockResolvedValue({
+      id: 'it1',
+      name: 'chart.png',
+      size: 1000,
+      eTag: '"v1"',
+      file: { mimeType: 'image/png' },
+    });
+    const usAdmin = {
+      ...session,
+      user: { ...session.user, region: 'US' },
+    } as never;
+    await prepareAgentItem(req, usAdmin, storage, agent, target);
+    expect(fakeChain.regions).toEqual(['EU']);
+  });
+
+  it('refuses with 503 when no vision-capable model is eligible', async () => {
+    mockGraph.graphJson.mockResolvedValue({
+      id: 'it1',
+      name: 'chart.png',
+      size: 1000,
+      eTag: '"v1"',
+      file: { mimeType: 'image/png' },
+    });
+    mockVision.create.mockRejectedValue(new Error('no eligible model'));
+    await expect(
+      prepareAgentItem(req, session, storage, agent, target),
+    ).rejects.toMatchObject({ name: 'PreparationError', status: 503 });
   });
 
   it('refuses folders, unsupported types, malware and empty files before downloading', async () => {

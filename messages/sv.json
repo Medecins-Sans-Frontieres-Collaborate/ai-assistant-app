@@ -23,7 +23,6 @@
   "New conversation": "Ny konversation",
   "No prompts found": "Inga prompter hittades",
   "Privacy Policy": "Integritetspolicy",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Promptgränsen är {{maxLength}} tecken. Du har angett {{valueLength}} tecken.",
   "Retry": "Försök igen",
   "Saved Prompts": "Sparade prompter",
   "Select a prompt to view details": "Välj en prompt för att visa detaljer",
@@ -35,7 +34,6 @@
   "OpenAI API Key Required": "OpenAI API-nyckel krävs",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Vänligen ange din OpenAI API-nyckel längst ner till vänster i sidofältet.",
   "Stop Generating": "Sluta generera",
-  "Prompt limit is {{maxLength}} characters": "Gränsen för prompt är {{maxLength}} tecken",
   "System Prompt": "System prompt",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "Du är ChatGPT, en stor språkmodell tränad av OpenAI. Följ användarens instruktioner noggrant. Svara genom att använda markdown.",
   "Enter a prompt": "Ange en prompt",
@@ -54,7 +52,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Se till att du har angett din OpenAI API-nyckel längst ner till vänster i sidofältet.",
   "If you completed this step, OpenAI may be experiencing issues_": "Om du slutförde det här steget kan OpenAI ha problem.",
   "click if using a _env_local file": "klicka om du använder en .env.local-fil",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Meddelandegränsen är {{maxLength}} tecken. Du har angett {{valueLength}} tecken.",
   "Please enter a message": "Vänligen ange ett meddelande",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI är ett avancerat chatbot-kit för OpenAI:s chattmodeller som syftar till att efterlikna ChatGPT:s gränssnitt och funktionalitet.",
   "Are you sure you want to clear all messages?": "Är du säker på att du vill rensa alla meddelanden?",
@@ -200,8 +197,8 @@
   "uploadAudioVideoFile": "Ladda upp ljud- eller videofil",
   "uploadingFile": "Laddar upp fil...",
   "removeFile": "Ta bort och välj en annan fil",
-  "transcriptionErrorAttempt": "Fel under transkribering (Försök {{attempt}} av 3). Försöker igen...",
-  "rateLimitExceededWaiting": "Gräns för hastighet överskriden. Väntar {{seconds}} sekunder innan omförsök...",
+  "transcriptionErrorAttempt": "Fel under transkribering (Försök {attempt} av 3). Försöker igen...",
+  "rateLimitExceededWaiting": "Gräns för hastighet överskriden. Väntar {seconds} sekunder innan omförsök...",
   "Conversations": "Konversationer",
   "Prompts": "Prompter",
   "Close sidebar": "Stäng sidofält",
@@ -612,7 +609,8 @@
     "clear": "Rensa",
     "undo": "Ångra",
     "durationSeconds": "{count, plural, one {# sekund} other {# sekunder}}",
-    "durationMinutes": "{count, plural, one {# minut} other {# minuter}}"
+    "durationMinutes": "{count, plural, one {# minut} other {# minuter}}",
+    "clearSearch": "Rensa sökning"
   },
   "errors": {
     "unexpectedErrorOccurred": "Ett oväntat fel uppstod",
@@ -902,7 +900,13 @@
     "ttsError": "Fel vid generering av ljud. Försök igen.",
     "unsupportedMessageType": "Fel vid visning av meddelande: Ej stödd meddelandetyp",
     "addLanguageOption": "Lägg till \"{name}\"…",
-    "sources": "Källor",
+    "sources": {
+      "fromDocuments": "Agentdokument",
+      "fromWeb": "Webb",
+      "fromDocumentsHint": "Utdrag från denna agents egna dokument",
+      "fromWebHint": "Offentliga sidor som hittats via webbsökning",
+      "heading": "{count, plural, one {Källa} other {Källor}}"
+    },
     "interpreterBadge": "Kör kod",
     "disableCodeInterpreter": "Inaktivera kodkörning",
     "interimSearch": {
@@ -980,7 +984,8 @@
       "MODEL_RATE_LIMITED": "Modellen får för många förfrågningar just nu. Omförsöktes automatiskt; försök igen om en stund.",
       "MODEL_QUOTA_EXCEEDED": "Modellens kapacitetskvot är förbrukad. Prova en annan modell eller försök senare.",
       "MODEL_AUTH_FAILED": "Appen kunde inte autentisera mot modelltjänsten. Detta är ett konfigurationsproblem — kontakta supporten."
-    }
+    },
+    "messageLimitExceeded": "Meddelandegränsen är {maxLength} tecken. Du har angett {valueLength} tecken."
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -2415,20 +2420,18 @@
     "sectionPinned": "Fästa",
     "sectionFrequent": "Frekvent använda",
     "sectionMore": "Fler",
-    "categoryWeb": "Webb",
-    "categoryMedia": "Media & filer",
-    "categoryTransform": "Transformera",
     "pin": "Fäst längst upp",
     "unpin": "Ta bort fästning",
     "moveToMore": "Flytta till Fler",
     "moveOutOfMore": "Visa i menyn",
     "showSources": "Visa andra källor",
     "hideSources": "Dölj andra källor",
-    "aiTools": "AI-verktyg",
-    "aiToolsTooltip": "Funktioner assistenten kan använda vid svar: live webbsökning, kodkörning och anslutna tjänster.",
     "codeInterpreterTooltip": "Kör Python-kod i en säker sandlåda för varje meddelande.\n\nPerfekt för dataanalys, beräkningar och diagram från bifogade filer.",
-    "categoryTools": "Verktyg & kopplingar",
-    "translationConversationTitle": "Översättning: {filename}"
+    "translationConversationTitle": "Översättning: {filename}",
+    "categoryAdd": "Lägg till",
+    "categoryDo": "Gör",
+    "categoryChat": "I denna chatt",
+    "categoryStart": "Starta från"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lägg till dina egna instruktioner för att anpassa hur AI:n svarar. Dessa kombineras med grundläggande riktlinjer som säkerställer hjälpsamma, korrekta och säkra svar.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tips: Skriv \"/\" för att välja bland sparade promptmallar.",
@@ -2556,7 +2559,9 @@
     "savedToOneDrive": "Sparade {name} till OneDrive.",
     "openInOneDrive": "Öppna",
     "saveForbidden": "Du har inte behörighet att skriva till den mappen — välj en annan med ”Spara till OneDrive”.",
-    "saveToOneDriveFailed": "Det gick inte att spara till OneDrive — försök igen."
+    "saveToOneDriveFailed": "Det gick inte att spara till OneDrive — försök igen.",
+    "textVersion": "Textversion (DOCX)",
+    "textVersionHint": "En redigerbar Word-fil med den översatta texten, en sida per källsida. Den översatta filen behåller ursprungslayouten."
   },
   "terms": {
     "officialLanguages": "Officiell version:",
@@ -2742,7 +2747,6 @@
   },
   "usageImpact": {
     "empty": "Ingen användning har spårats ännu. Din tokenanvändning och uppskattade utsläpp visas här efter att du har chattat.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} mobiluppladdningar",
     "requests": "Förfrågningar",
     "promptTokens": "Prompt-tokens",
@@ -2904,7 +2908,7 @@
       "addedByYou": "Tillagd av dig",
       "glossary": "Ordlista",
       "noGlossary": "Ingen ordlista",
-      "manageGlossaries": "Ordlistor",
+      "manageGlossaries": "Hantera ordlistor",
       "glossaries": "Ordlistor",
       "closeGlossaries": "Stäng ordlistor",
       "glossariesEmpty": "Skapa en ordlista för att säkerställa hur specifika termer översätts. Ordlistor sparas på denna enhet och kan återanvändas i flera översättningar.",
@@ -3069,7 +3073,145 @@
       "importTooLarge": "Filen är för stor för import (max 5 MB).",
       "importNothing": "Inga användbara rader hittades ({skipped} hoppades över).",
       "importSummary": "{added} tillagda, {replaced} ersatta, {skipped} hoppade över.",
-      "entriesTooManyToShow": "{count} termer — för många för att listas här. Exportera för att granska dem, eller importera en fil för att ersätta termer."
+      "entriesTooManyToShow": "{count} termer — för många för att listas här. Exportera för att granska dem, eller importera en fil för att ersätta termer.",
+      "pagesLoaded": "sidor {selected} av {total} inlästa",
+      "pagesLabel": "Sidor",
+      "pagesApply": "Ladda sidor",
+      "pagesPrevious": "Föregående omgång",
+      "pagesNext": "Nästa omgång",
+      "pagesBudget": "{used} / {max} tecken",
+      "pagesChange": "Ändra sidor",
+      "pagesLoading": "Laddar sidor…",
+      "pagesInvalid": "Ange sidnummer eller intervall, till exempel 1-40, 45.",
+      "pagesUnavailable": "Ingen av dessa sidor innehåller text.",
+      "pagesTooMany": "Det urvalet är {used} tecken och en omgång rymmer {max}. Välj färre sidor.",
+      "stop": "Stoppa",
+      "stepAnalyzing": "Analyserar",
+      "stepTranslating": "Översätter",
+      "stepReviewing": "Granskar",
+      "stepDone": "Klar",
+      "runProgressLabel": "Översättningsförlopp",
+      "runHintAnalyzing": "Läser källan för svåra termer och tvetydigheter.",
+      "runHintTranslating": "Skriver översättningen.",
+      "runHintReviewing": "Kontrollerar utkastet mot källan.",
+      "runHintReviewingRound": "Kontrollerar utkastet mot källan · omgång {round} av upp till {total}.",
+      "runRound": "Omgång {round} av upp till {total}",
+      "draftLabel": "Utkast",
+      "sourceLocked": "Låst under översättning",
+      "analysisNotes": "{count, plural, one {# anteckning} other {# anteckningar}}",
+      "analysisPill": "{count, plural, one {Analys · # anteckning} other {Analys · # anteckningar}}",
+      "reviewSummary": "{count, plural, one {Granskning: # omgång, {verdict}} other {Granskning: # omgångar, {verdict}}}",
+      "analysisDismiss": "Dölj för alla översättningar",
+      "analysisShow": "Visa föranalys",
+      "analysisResize": "Ändra storlek på analyspanelen",
+      "assessingCriteria": "{count, plural, one {Kontrollerar # kriterium} other {Kontrollerar # kriterier}}",
+      "editsPending": "Föreslagna ändringar visas här när granskningen är klar.",
+      "uploadProgressLabel": "Uppladdningsförlopp",
+      "uploadStepUploading": "Laddar upp",
+      "uploadStepReading": "Läser text",
+      "uploadStepReady": "Klar",
+      "uploadCancel": "Avbryt",
+      "modeDocument": "Hela dokumentet",
+      "modeDocumentHint": "Översätter den uppladdade PDF-filen i sin helhet och behåller dess layout. Läs och korrigera resultatet sida för sida.",
+      "translateDocument": "Översätt dokument",
+      "documentSubmitting": "Skickar…",
+      "documentIntroTitle": "Översätt hela dokumentet",
+      "documentIntro": "Den uppladdade PDF-filen översätts i sin helhet med layouten bevarad. När den är klar kan du läsa den sida för sida bredvid originalet, korrigera sidor, kontrollera kvaliteten och ladda ner resultatet. Ordlistor och granskningsomgångar gäller inte i detta läge. När översättningen har påbörjats kan den inte stoppas och sidorna räknas mot dagens tillåtelse.",
+      "documentNeedsFile": "Ladda upp en PDF för att översätta ett helt dokument.",
+      "documentNeedsPdf": "Hela dokumentsöversättningen med sida-för-sida-visning fungerar endast med PDF-filer.",
+      "documentNeedsLanguage": "Välj målspråk för att översätta dokumentet.",
+      "documentLanguageUnsupported": "Hela dokumentsöversättningen är inte tillgänglig för detta språk. Använd Snabb eller Granskad istället.",
+      "documentNoGlossaries": "Ordlistor används inte vid hela dokumentsöversättningen",
+      "documentPagesLeft": "{count, plural, one {# sida kvar idag} other {# sidor kvar idag}}",
+      "documentLimitReached": "Det här dokumentet har fler sidor än du har kvar idag. Översätt valda sidor med Snabb eller Granskad, eller försök igen imorgon.",
+      "documentUnavailable": "Hela dokumentsöversättningen är inte aktiverad på denna server.",
+      "documentSubmitFailed": "Dokumentet kunde inte skickas för översättning: {message}",
+      "documentProgressLabel": "Dokumentsöversättningsstatus",
+      "documentStepUploaded": "Uppladdad",
+      "documentStepPreparing": "Förbereder sidor",
+      "documentTypicalDuration": "vanligtvis några minuter",
+      "documentCanLeave": "Du kan lämna den här sidan. Översättningen fortsätter och finns kvar när du kommer tillbaka.",
+      "documentStalled": "Det gick inte att kontrollera översättningens status. Den kan fortfarande pågå.",
+      "documentCheckAgain": "Kontrollera igen",
+      "documentFailed": "Dokumentet kunde inte översättas: {message}",
+      "documentGone": "Denna översättning är inte längre tillgänglig. Översätt dokumentet igen för att läsa det.",
+      "documentPageFailed": "Den här sidan kunde inte laddas: {message}",
+      "documentPagesNotAligned": "Den översatta filen har ett annat antal sidor, så en sida kan visa annat innehåll på respektive sida.",
+      "documentAvailableUntil": "Tillgänglig till {date}",
+      "documentRetranslateTitle": "Översätta dokumentet igen?",
+      "documentRetranslateMessage": "Detta påbörjar en ny översättning och sidorna räknas återigen mot dagens tillåtelse. När processen har startat kan den inte stoppas. Den nuvarande översättningen och dess korrigeringar finns kvar på servern tills de löper ut, men kommer inte längre att visas här.",
+      "retry": "Försök igen",
+      "pageLabel": "Sida",
+      "pageOf": "av {total}",
+      "pageNumber": "· sida {page}",
+      "pagePrevious": "Föregående sida",
+      "pageNext": "Nästa sida",
+      "correctedLabel": "Korrigerad",
+      "correctedPages": "Korrigerade sidor:",
+      "correctedPagesMore": "+{count} fler",
+      "correctionRestore": "Återställ",
+      "correctionRestoreHint": "Ångra dina ändringar på denna sida och gå tillbaka till maskinöversättningen",
+      "correctionSaving": "Sparar…",
+      "correctionSaved": "Sparad",
+      "correctionSaveFailed": "Ej sparad. Ändra texten för att försöka igen.",
+      "download": "Ladda ner",
+      "downloading": "Laddar ner…",
+      "downloadFailed": "Nedladdning misslyckades: {message}",
+      "downloadTranslated": "Översatt {format}",
+      "downloadTranslatedHint": "Original layout. Inkluderar inte dina korrigeringar.",
+      "downloadTextVersion": "Textversion (DOCX)",
+      "downloadTextVersionHint": "Enkel text, en sida per sida, med dina korrigeringar.",
+      "documentNoCancel": "En dokumentöversättning kan inte avbrytas när den väl har påbörjats.",
+      "documentGlossariesIgnored": "{count, plural, one {Din valda ordlista används inte i detta läge.} other {Dina # valda ordlistor används inte i detta läge.}} Kontrollera terminologi sida för sida med Bedöm kvalitet, eller använd Snabb eller Granskad.",
+      "pendingLeavePage": "Förslag hör till denna sida och sparas inte om du lämnar sidan. Ta ställning till återstående förslag först.",
+      "uploadStepOcr": "Läser med OCR",
+      "ocrButton": "Läs med OCR",
+      "ocrButtonHint": "Läs denna PDF igen med textigenkänning, för inskannade sidor eller text som blev fel",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Denna text har lästs från sidorna med textigenkänning. Jämför med originalet.",
+      "ocrReasonNoText": "Ingen text hittades i {name}. Det verkar vara ett inskannat dokument.",
+      "ocrReasonSparse": "Mycket lite text hittades i {name}. En del kan vara inskannad.",
+      "ocrReasonManual": "Läsa {name} igen med textigenkänning?",
+      "ocrExplanation": "OCR läser text från sidbilder. Det tar längre tid än en vanlig uppladdning, varje sida räknas mot din dagliga OCR-gräns och den kan feltolka dåliga skanningar, handskrift och tabeller.",
+      "ocrPagesLeft": "{count, plural, one {# OCR-sida kvar idag.} other {# OCR-sidor kvar idag.}}",
+      "ocrRun": "Läs med OCR",
+      "ocrDismiss": "Inte nu",
+      "ocrSparseHint": "Mycket lite text hittades i denna PDF. Vissa sidor kan vara inskannade.",
+      "ocrLimitReached": "Detta dokument har fler sidor än din återstående OCR-gräns för idag.",
+      "ocrTooManyPages": "Detta dokument är för långt för OCR, som läser högst {max} sidor. Dela upp PDF:en och ladda upp en del.",
+      "ocrUnavailable": "OCR är inte konfigurerat på denna server.",
+      "ocrNoText": "OCR hittade inte heller någon text i detta dokument.",
+      "ocrFailed": "Dokumentet kunde inte läsas med OCR. Försök igen.",
+      "scannedWholeExplanation": "Du kan också översätta hela dokumentet: det läser in skannade sidor själv, behåller layouten och räknar sidorna mot din dagliga översättningskvot.",
+      "scannedUseWholeDocument": "Översätt hela dokumentet",
+      "scannedSourceNote": "{name} har ingen text att visa här. Översättning av hela dokumentet läser sidorna direkt. Om du skriver egen text här ersätter det dokumentet.",
+      "scannedPageNote": "Ingen text kunde läsas från denna sida i originalet. Jämför med själva filen.",
+      "changeLabel": "Be om en ändring av översättningen",
+      "changePlaceholder": "Be om en ändring, t.ex. gör den mer formell",
+      "changePlaceholderAnother": "Be om en annan ändring",
+      "changeSend": "Skicka begäran",
+      "changeWorking": "Bearbetar ändringarna",
+      "changeNothingApplied": "Inga ändringar görs förrän du godkänner",
+      "changeSelectionLabel": "Be om en ändring av den markerade texten",
+      "changeSelectionPlaceholder": "Ändra detta, t.ex. skriv tableta",
+      "changeSelectionScope": "Gäller endast vald text",
+      "changeSelectionClose": "Stäng",
+      "changeTitle": "Begärda ändringar",
+      "changeSelectedLabel": "Markerad text",
+      "changeNoEdits": "Inget behövde ändras för den begäran.",
+      "changeReplyPending": "{count, plural, one {# föreslagen ändring finns i arbetsytan.} other {# föreslagna ändringar finns i arbetsytan.}} Inga ändringar görs förrän du godkänner.",
+      "changeStopped": "Stoppad. Inget ändrades.",
+      "changeFailed": "Ändringsbegäran misslyckades. Försök igen.",
+      "changeNoTranslation": "Det finns ännu ingen översättning att ändra. Översätt texten först.",
+      "changeBusy": "Vänta tills den pågående processen är klar och försök igen.",
+      "changeHeld": "Ej skickad: det finns föreslagna ändringar som väntar på beslut.",
+      "pendingRunActionRequest": "Ber om en ändring",
+      "railPlaceholder": "Be om en ändring eller ställ en fråga…",
+      "documentPageCount": "{count, plural, one {# sida} other {# sidor}}",
+      "sourceShowPages": "Visa sidor",
+      "sourceEditText": "Redigera som text",
+      "sourceRemoveDocument": "Ta bort dokument",
+      "sourceJumpToPage": "Gå till en sida"
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",
@@ -3697,7 +3839,7 @@
       "guideTargetTerm": "Obligatorisk översättning",
       "guideNote": "Notering",
       "pendingRun": {
-        "title": "{count} förslag väntar fortfarande",
+        "title": "{count, plural, one {# förslag väntar fortfarande} other {# förslag väntar fortfarande}}",
         "body": "{action} kan ändra alla delar av texten, även avsnitt med förslag du inte bestämt om än, och en ny utvärdering ersätter den nuvarande listan. Ta ställning till de återstående förslagen först.",
         "acceptAll": "Acceptera alla återstående",
         "rejectAll": "Avslå alla",
@@ -3759,7 +3901,7 @@
         "list<number>": "Lista med nummer"
       },
       "layout": "Layout",
-      "layoutHint": "Markdown med {{field:id}}-platshållare — används för exporterad vy och förhandsgranskning.",
+      "layoutHint": "Markdown med '{{field:id}}'-platshållare — används för exporterad vy och förhandsgranskning.",
       "saveTemplate": "Spara mall",
       "deleteTemplate": "Ta bort mall",
       "cancel": "Avbryt",
@@ -4587,6 +4729,10 @@
         "note": "Kostnad enligt listpriser per {asOf} (Global Standard rate, ingen rabatt för cachad indata): en övre gräns, ingen faktura. Webbsökning, kodkörning, transkribering, tal, översättning och dokumentindexering ingår ej."
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "Detta arbetsutrymme (uppskattat)",
       "workspace": "Detta arbetsutrymme",
@@ -5401,7 +5547,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# dokument} other {# dokument}} indexerade",
     "m365CapImmediateHelp": "Verkställ sparar gränsen direkt. Andra ändringar kräver fortfarande Spara.",
     "m365CapDraftHelp": "Gränsen sparas när du skapar agenten.",
-    "m365CapSaved": "Dokumentgräns sparad: {limit}."
+    "m365CapSaved": "Dokumentgräns sparad: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Avstängt som standard: agenten svarar endast från sina egna dokument och söker aldrig på webben, oavsett vilken sökinställning användaren har valt. När funktionen är påslagen bestämmer agentens instruktioner när en webbsökning görs och vilka webbplatser som får användas, och webbkällor visas alltid separat från agentens dokument.",
+    "promptAgentAllowWebSearchHelp": "Påslaget som standard. När avstängt, söker agenten aldrig på webben, oavsett vilken sökinställning användaren har valt."
   },
   "localModels": {
     "title": "Lokala modeller",
@@ -5708,7 +5856,9 @@
       "m365MailReadsPerDay": "Mail-läsningar per dag",
       "m365MailDraftsPerDay": "Mailutkast per dag",
       "m365MailDeepScansPerDay": "Mail-djupanalyser per dag",
-      "m365DigestRunsPerDay": "Dagliga digest-körningar per dag"
+      "m365DigestRunsPerDay": "Dagliga digest-körningar per dag",
+      "translationPagesPerDay": "Sidor för dokumentöversättning per dag",
+      "ocrPagesPerDay": "OCR-sidor per dag"
     },
     "valueModeLabel": "Begränsningstyp",
     "valueAmountLabel": "Begränsningsvärde",
@@ -5731,7 +5881,8 @@
       "jobs": "jobb",
       "rounds": "omgångar",
       "documents": "dokument",
-      "boolean": ""
+      "boolean": "",
+      "pages": "sidor"
     },
     "window": {
       "day": "dag",
@@ -5789,7 +5940,9 @@
       "m365MailReadsPerDay": "E-postsökningar och läsningar av meddelanden/trådar per dag. Om gränsen överskrids returnerar e-postverktygen \"försök igen imorgon\".",
       "m365MailDraftsPerDay": "E-postutkast som assistenten får skapa per dag — varje måste bekräftas individuellt. Medvetet stramt.",
       "m365MailDeepScansPerDay": "Sammansatta e-postanalyser (sammandrag, djupsök, åtaganden) per dag. Varje skanning räknas som en budgetenhet oavsett antal interna läsningar.",
-      "m365DigestRunsPerDay": "Microsoft 365 dagliga digest-körningar per dag. En körning innebär dussintals Graph-läsningar plus två analysmodellsanrop; periodväljaren gör det billigt att köra om, därför är standardvärdet stramt."
+      "m365DigestRunsPerDay": "Microsoft 365 dagliga digest-körningar per dag. En körning innebär dussintals Graph-läsningar plus två analysmodellsanrop; periodväljaren gör det billigt att köra om, därför är standardvärdet stramt.",
+      "translationPagesPerDay": "PDF-sidor inskickade för dokumentöversättning per dag.",
+      "ocrPagesPerDay": "PDF-sidor som lästs med OCR (textigenkänning för inskannade dokument) per dag."
     },
     "scopeFamily": "Familj",
     "scopeModel": "Modell",
@@ -8097,7 +8250,13 @@
       "skills": "Färdighetsval",
       "tools": "Verktygsruttning",
       "trim": "Trimklassificering",
-      "assessment": "Sökbedömning"
+      "assessment": "Sökbedömning",
+      "query": "Omskrivning av sökfråga",
+      "mailScreen": "E-postphishing-skärm",
+      "mailAnalysis": "Analys av e-post och sammanfattning",
+      "schemaProposal": "Förslag på extraktionsschema",
+      "mcpPlan": "Connector-plan",
+      "vision": "Bild- och sidläsning"
     },
     "reason": {
       "endpoint_missing": "Slutpunkt eller kontobindning saknas",
@@ -8118,6 +8277,164 @@
       "endpoint_account_mismatch": "Slutpunkten och ARM-resurs-ID tillhör olika konton. Korrigera driftsättningskonfigurationen.",
       "inventory_refresh_failed": "Uppdatering av inventering misslyckades. Kontrollera Reader-åtkomst och kontokoppling för appens identitet.",
       "credential_unavailable": "Appen kunde inte hämta sin inventeringsbehörighet. Kontrollera konfigurationen för driftsättningsidentitet."
+    },
+    "notSupported": "Stöds inte av denna modell",
+    "unservedOperations": "Ingen modell i denna kedja stöder: {operations}. Lägg till en modell som gör det."
+  },
+  "filePreview": {
+    "preview": "Förhandsgranska",
+    "download": "Ladda ner",
+    "loading": "Förbereder förhandsvisning...",
+    "failed": "Den här filen kunde inte förhandsgranskas. Du kan fortfarande ladda ner den.",
+    "pageOf": "Sida {page} av {total}",
+    "truncated": "Visar de första {shown} av {total} sidor. Ladda ner filen för att se resten.",
+    "enlarge": "Förstora {name}"
+  },
+  "addToChat": {
+    "title": "Lägg till i chatt",
+    "titleTranslate": "Översätt ett dokument",
+    "titleTranscribe": "Transkribera ljud eller video",
+    "sourcesLabel": "Lägg till från",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Ej tillgänglig för denna åtgärd",
+    "sources": {
+      "device": "Denna enhet",
+      "link": "Länk",
+      "camera": "Kamera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "E-post",
+      "meetings": "Möten"
+    },
+    "device": {
+      "browse": "Bläddra på denna enhet",
+      "dropHint": "eller släpp filer var som helst i detta fönster, eller klistra in",
+      "rejected": "Ingen av dessa filer kan användas här.",
+      "hint": {
+        "attach": "Dokument, bilder, ljud och video.",
+        "translate": "Ett dokument: Word, Excel, PowerPoint, PDF, HTML eller text.",
+        "transcribe": "Ljud eller video. Transkriberas när du skickar meddelandet."
+      }
+    },
+    "selection": {
+      "then": "Sedan",
+      "intents": {
+        "attach": "Bifoga",
+        "translate": "Översätt",
+        "transcribe": "Transkribera"
+      },
+      "confirm": {
+        "attach": "Lägg till",
+        "translate": "Översätt",
+        "transcribe": "Transkribera"
+      },
+      "unfit": {
+        "attach": "Dessa filer kan inte bifogas",
+        "translate": "Översättning tar ett dokument åt gången",
+        "transcribe": "Endast ljud och video kan transkriberas"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Denna enhet, länkar, Microsoft 365",
+      "filesOrPhotos": "Filer eller foton",
+      "fromThisDevice": "Från denna enhet",
+      "connect": "Anslut Microsoft 365",
+      "connectNote": "Lägg till från OneDrive, e-post och möten"
     }
+  },
+  "usageBudgets": {
+    "title": "Dina budgetar",
+    "description": "Gränser du har satt på den här enheten. Välj en budget och bestäm sedan vad som ska hända när du närmar dig eller passerar den. Budgetar räknar chatt- och arbetsflödeskörningar från periodens början.",
+    "metric": {
+      "emissions": "Utsläppsbudget",
+      "cost": "Kostnadsbudget"
+    },
+    "metricShort": {
+      "emissions": "Utsläpp",
+      "cost": "Kostnad"
+    },
+    "off": "Ingen budget vald.",
+    "measureAs": "Mät som",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Mobilladdningar",
+      "usd": "US dollar"
+    },
+    "amountLabel": "Budget",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "timmar",
+      "smartphoneCharge": "laddningar",
+      "usd": "US dollar"
+    },
+    "periodLabel": "Återställs varje",
+    "period": {
+      "day": "Dag",
+      "week": "Vecka",
+      "month": "Månad"
+    },
+    "costNote": "Uträkning från listpriser: ett tak, inte en faktura.",
+    "chargesValue": "{count} mobilladdningar",
+    "percent": "{percent}%",
+    "usedOf": "{used} av {limit} använt ({percent}%)",
+    "usedOfShort": "{used} av {limit}",
+    "resets": "Återställs {date}",
+    "budgetMarker": "Budget",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Inom budget",
+      "warn": "Varning visad",
+      "ask": "Fråga före varje meddelande",
+      "stop": "Skickande pausat"
+    },
+    "stage": {
+      "warn": {
+        "title": "Varning",
+        "tag": "Tänk på",
+        "description": "Visa en avisering i chatten från denna del av budgeten."
+      },
+      "ask": {
+        "title": "Fråga först",
+        "tag": "Mjuk blockering",
+        "description": "Be mig bekräfta varje meddelande från denna del av budgeten."
+      },
+      "stop": {
+        "title": "Stoppa",
+        "tag": "Hård blockering",
+        "description": "Sluta skicka från denna del av budgeten tills den återställs eller jag höjer den här."
+      }
+    },
+    "thresholdLabel": "{stage}-tröskel, procent av budget",
+    "notice": {
+      "warn": {
+        "emissions": "Du har använt {percent}% av din utsläppsbudget.",
+        "cost": "Du har använt {percent}% av din kostnadsbudget."
+      },
+      "ask": {
+        "emissions": "Du har använt {percent}% av din utsläppsbudget. Skicka detta meddelande?",
+        "cost": "Du har använt {percent}% av din kostnadsbudget. Skicka detta meddelande?"
+      },
+      "askRun": {
+        "emissions": "Du har använt {percent}% av din utsläppsbudget. Starta denna körning?",
+        "cost": "Du har använt {percent}% av din kostnadsbudget. Starta denna körning?"
+      },
+      "stop": {
+        "emissions": "Utsläppsbudgetens stoppunkt nådd. Skickande är pausat till {date}.",
+        "cost": "Kostnadsbudgetens stoppunkt har nåtts. Utskick är pausat till {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Visa budget",
+      "dismiss": "Avfärda",
+      "sendAnyway": "Skicka ändå",
+      "runAnyway": "Kör ändå",
+      "dontSend": "Skicka inte",
+      "dontAskToday": "Fråga inte igen idag",
+      "openSettings": "Öppna budgetinställningar",
+      "edit": "Redigera"
+    },
+    "composerPaused": "Utskick pausat av din budget",
+    "summaryTitle": "Dina budgetar",
+    "chipAria": "{metric}-budget: {percent}% använt.",
+    "runProjection": "Utsläppsbudget {from}% → {to}%"
   }
 }

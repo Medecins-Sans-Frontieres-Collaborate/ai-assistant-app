@@ -12,7 +12,6 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Als je geen OpenAI API-sleutel hebt, kun je er hier een krijgen: ",
   "Loading_ellipsis": "Laden...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Zorg ervoor dat je OpenAI API-sleutel is ingesteld in de linkeronderhoek van de zijbalk.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "De berichtlimiet is {{maxLength}} tekens. Je hebt {{valueLength}} tekens ingevoerd.",
   "Model": "Model",
   "Neutral": "Neutraal",
   "New Conversation": "Nieuw gesprek",
@@ -21,7 +20,6 @@
   "Please enter a message": "Voer een bericht in",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Stel je OpenAI API-sleutel in de linkeronderhoek van de zijbalk in.",
   "Precise": "Nauwkeurig",
-  "Prompt limit is {{maxLength}} characters": "Promptlimiet is {{maxLength}} tekens",
   "Regenerate response": "Antwoord opnieuw genereren",
   "Save & Submit": "Opslaan & Verzenden",
   "Search_ellipsis": "Zoeken...",
@@ -157,8 +155,8 @@
   "uploadAudioVideoFile": "Upload een audio- of videobestand",
   "uploadingFile": "Bestand wordt geüpload...",
   "removeFile": "Verwijderen en een ander bestand selecteren",
-  "transcriptionErrorAttempt": "Fout tijdens transcriptie (Poging {{attempt}} van 3). Opnieuw proberen...",
-  "rateLimitExceededWaiting": "Limiet overschreden. Wachten {{seconds}} seconden voordat opnieuw geprobeerd wordt...",
+  "transcriptionErrorAttempt": "Fout tijdens transcriptie (Poging {attempt} van 3). Opnieuw proberen...",
+  "rateLimitExceededWaiting": "Limiet overschreden. Wachten {seconds} seconden voordat opnieuw geprobeerd wordt...",
   "Conversations": "Gesprekken",
   "Prompts": "Prompts",
   "Close sidebar": "Sluit zijbalk",
@@ -577,7 +575,8 @@
     "clear": "Wissen",
     "undo": "Ongedaan maken",
     "durationSeconds": "{count, plural, one {# seconde} other {# seconden}}",
-    "durationMinutes": "{count, plural, one {# minuut} other {# minuten}}"
+    "durationMinutes": "{count, plural, one {# minuut} other {# minuten}}",
+    "clearSearch": "Zoekopdracht wissen"
   },
   "errors": {
     "somethingWentWrong": "Er is iets misgegaan",
@@ -867,7 +866,13 @@
     "ttsError": "Fout bij het genereren van audio. Probeer het opnieuw.",
     "unsupportedMessageType": "Fout bij weergeven bericht: Niet-ondersteund berichttype",
     "addLanguageOption": "\"{name}\" toevoegen…",
-    "sources": "Bronnen",
+    "sources": {
+      "fromDocuments": "Agentdocumenten",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Fragmenten uit de documenten van deze agent",
+      "fromWebHint": "Openbare pagina's gevonden via een webzoekopdracht",
+      "heading": "{count, plural, one {Bron} other {Bronnen}}"
+    },
     "interpreterBadge": "Code uitvoeren",
     "disableCodeInterpreter": "Code-uitvoering uitschakelen",
     "interimSearch": {
@@ -945,7 +950,8 @@
       "MODEL_RATE_LIMITED": "Het model ontvangt momenteel te veel verzoeken. Er is automatisch opnieuw geprobeerd; probeer het zo meteen opnieuw.",
       "MODEL_QUOTA_EXCEEDED": "De capaciteitsquota van het model zijn bereikt. Probeer een ander model of probeer het later opnieuw.",
       "MODEL_AUTH_FAILED": "De app kon niet verifiëren bij de modelservice. Dit is een configuratiefout — neem contact op met support."
-    }
+    },
+    "messageLimitExceeded": "De berichtlimiet is {maxLength} tekens. Je hebt {valueLength} tekens ingevoerd."
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -1430,7 +1436,6 @@
   "No prompts found": "Geen prompts gevonden",
   "OpenAI API Key": "OpenAI API-sleutel",
   "Plugin Keys": "Plugin-sleutels",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Promptlimiet is {{maxLength}} tekens. U hebt {{valueLength}} tekens ingevoerd.",
   "Run Typewriter Intro": "Typemachine-intro uitvoeren",
   "Saved Prompts": "Opgeslagen prompts",
   "Select a prompt to view details": "Selecteer een prompt om details te bekijken",
@@ -2415,20 +2420,18 @@
     "sectionPinned": "Vastgemaakt",
     "sectionFrequent": "Vaak gebruikt",
     "sectionMore": "Meer",
-    "categoryWeb": "Web",
-    "categoryMedia": "Media & bestanden",
-    "categoryTransform": "Transformeren",
     "pin": "Bovenaan vastmaken",
     "unpin": "Losmaken",
     "moveToMore": "Verplaatsen naar 'Meer'",
     "moveOutOfMore": "Tonen in menu",
     "showSources": "Andere bronnen weergeven",
     "hideSources": "Andere bronnen verbergen",
-    "aiTools": "AI-tools",
-    "aiToolsTooltip": "Mogelijkheden die de assistent kan gebruiken tijdens antwoorden: live webzoekopdrachten, code-uitvoering en verbonden services.",
     "codeInterpreterTooltip": "Voer Python-code uit in een beveiligde sandbox voor elk bericht.\n\nIdeaal voor data-analyse, berekeningen en het genereren van grafieken uit bijlagen.",
-    "categoryTools": "Tools & connectors",
-    "translationConversationTitle": "Vertaling: {filename}"
+    "translationConversationTitle": "Vertaling: {filename}",
+    "categoryAdd": "Toevoegen",
+    "categoryDo": "Uitvoeren",
+    "categoryChat": "In deze chat",
+    "categoryStart": "Begin vanaf"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Voeg uw persoonlijke instructies toe om aan te passen hoe de AI reageert. Deze worden gecombineerd met de basisrichtlijnen om behulpzame, nauwkeurige en veilige antwoorden te garanderen.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Typ \"/\" om te kiezen uit opgeslagen promptsjablonen.",
@@ -2556,7 +2559,9 @@
     "savedToOneDrive": "{name} opgeslagen in OneDrive.",
     "openInOneDrive": "Openen",
     "saveForbidden": "U heeft geen toestemming om naar die map te schrijven — kies een andere met “Opslaan in OneDrive”.",
-    "saveToOneDriveFailed": "Kan niet opslaan in OneDrive — probeer het opnieuw."
+    "saveToOneDriveFailed": "Kan niet opslaan in OneDrive — probeer het opnieuw.",
+    "textVersion": "Tekstversie (DOCX)",
+    "textVersionHint": "Een bewerkbaar Word-bestand met de vertaalde tekst, één pagina per bronpagina. Het vertaalde bestand behoudt zelf de oorspronkelijke opmaak."
   },
   "terms": {
     "officialLanguages": "Officiële versie:",
@@ -2742,7 +2747,6 @@
   },
   "usageImpact": {
     "empty": "Er is nog geen gebruik geregistreerd. Je tokengebruik en de geschatte uitstoot verschijnen hier nadat je hebt gechat.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} smartphone-oplaadbeurten",
     "requests": "Verzoeken",
     "promptTokens": "Prompt-tokens",
@@ -2904,7 +2908,7 @@
       "addedByYou": "Door u toegevoegd",
       "glossary": "Glossarium",
       "noGlossary": "Geen glossarium",
-      "manageGlossaries": "Glossaria",
+      "manageGlossaries": "Beheer glossaria",
       "glossaries": "Glossaria",
       "closeGlossaries": "Glossaria sluiten",
       "glossariesEmpty": "Maak een glossarium aan om vast te leggen hoe specifieke termen worden vertaald. Glossaria worden op dit apparaat opgeslagen en zijn herbruikbaar bij vertalingen.",
@@ -3069,7 +3073,145 @@
       "importTooLarge": "Dat bestand is te groot om te importeren (max. 5 MB).",
       "importNothing": "Geen bruikbare rijen gevonden ({skipped} overgeslagen).",
       "importSummary": "{added} toegevoegd, {replaced} vervangen, {skipped} overgeslagen.",
-      "entriesTooManyToShow": "{count} termen — te veel om hier te tonen. Exporteer om ze te bekijken, of importeer een bestand om termen te vervangen."
+      "entriesTooManyToShow": "{count} termen — te veel om hier te tonen. Exporteer om ze te bekijken, of importeer een bestand om termen te vervangen.",
+      "pagesLoaded": "pagina’s {selected} van {total} geladen",
+      "pagesLabel": "Pagina’s",
+      "pagesApply": "Pagina’s laden",
+      "pagesPrevious": "Vorige batch",
+      "pagesNext": "Volgende batch",
+      "pagesBudget": "{used} / {max} tekens",
+      "pagesChange": "Pagina’s wijzigen",
+      "pagesLoading": "Pagina’s laden…",
+      "pagesInvalid": "Voer paginanummers of bereiken in, bijvoorbeeld 1-40, 45.",
+      "pagesUnavailable": "Geen van deze pagina’s bevat tekst.",
+      "pagesTooMany": "Die selectie bevat {used} tekens, terwijl één batch maximaal {max} bevat. Kies minder pagina’s.",
+      "stop": "Stoppen",
+      "stepAnalyzing": "Analyseren",
+      "stepTranslating": "Vertalen",
+      "stepReviewing": "Beoordelen",
+      "stepDone": "Klaar",
+      "runProgressLabel": "Vertaalvoortgang",
+      "runHintAnalyzing": "Brontekst wordt gelezen op lastige termen en onduidelijkheden.",
+      "runHintTranslating": "De vertaling wordt geschreven.",
+      "runHintReviewing": "Concept wordt gecontroleerd met de brontekst.",
+      "runHintReviewingRound": "Concept wordt gecontroleerd met de brontekst · ronde {round} van maximaal {total}.",
+      "runRound": "Ronde {round} van maximaal {total}",
+      "draftLabel": "Concept",
+      "sourceLocked": "Geblokkeerd tijdens vertalen",
+      "analysisNotes": "{count, plural, one {# opmerking} other {# opmerkingen}}",
+      "analysisPill": "{count, plural, one {Analyse · # opmerking} other {Analyse · # opmerkingen}}",
+      "reviewSummary": "{count, plural, one {Beoordeling: # ronde, {verdict}} other {Beoordeling: # rondes, {verdict}}}",
+      "analysisDismiss": "Verbergen voor alle vertalingen",
+      "analysisShow": "Laat de pre-vertaalanalyse zien",
+      "analysisResize": "Analysevenster wijzigen",
+      "assessingCriteria": "{count, plural, one {# criterium controleren} other {# criteria controleren}}",
+      "editsPending": "Voorgestelde bewerkingen verschijnen hier na de beoordeling.",
+      "uploadProgressLabel": "Uploadvoortgang",
+      "uploadStepUploading": "Uploaden",
+      "uploadStepReading": "Tekst lezen",
+      "uploadStepReady": "Gereed",
+      "uploadCancel": "Annuleren",
+      "modeDocument": "Hele document",
+      "modeDocumentHint": "Vertaalt het geüploade PDF volledig en behoudt de opmaak. Lees en corrigeer het resultaat pagina voor pagina.",
+      "translateDocument": "Document vertalen",
+      "documentSubmitting": "Verzenden…",
+      "documentIntroTitle": "Vertaal het hele document",
+      "documentIntro": "De geüploade PDF wordt volledig vertaald met behoud van de opmaak. Zodra het klaar is, kunt u het pagina voor pagina naast het origineel lezen, pagina's corrigeren, de kwaliteit controleren en het resultaat downloaden. Woordenlijsten en beoordelingsrondes zijn in deze modus niet van toepassing. Eenmaal gestart kan een documentvertaling niet meer worden gestopt en tellen de pagina's mee voor het daglimiet.",
+      "documentNeedsFile": "Upload een PDF om een heel document te vertalen.",
+      "documentNeedsPdf": "Volledige documentvertaling met weergave per pagina werkt alleen met PDF-bestanden.",
+      "documentNeedsLanguage": "Kies een doeltaal om het document te vertalen.",
+      "documentLanguageUnsupported": "Volledige documentvertaling is niet beschikbaar voor deze taal. Gebruik in plaats daarvan Snel of Beoordeeld.",
+      "documentNoGlossaries": "Woordenlijsten worden niet gebruikt bij volledige documentvertaling",
+      "documentPagesLeft": "{count, plural, one {# pagina over vandaag} other {# pagina's over vandaag}}",
+      "documentLimitReached": "Dit document heeft meer pagina's dan u vandaag nog heeft. Vertaal geselecteerde pagina's met Snel of Beoordeeld, of probeer het morgen opnieuw.",
+      "documentUnavailable": "Volledige documentvertaling is niet ingesteld op deze server.",
+      "documentSubmitFailed": "Het document kon niet worden verzonden voor vertaling: {message}",
+      "documentProgressLabel": "Voortgang documentvertaling",
+      "documentStepUploaded": "Geüpload",
+      "documentStepPreparing": "Pagina’s voorbereiden",
+      "documentTypicalDuration": "meestal een paar minuten",
+      "documentCanLeave": "U kunt deze pagina verlaten. De vertaling gaat door en is hier beschikbaar wanneer u terugkomt.",
+      "documentStalled": "De voortgang van de vertaling kon niet worden gecontroleerd. Mogelijk is deze nog bezig.",
+      "documentCheckAgain": "Opnieuw controleren",
+      "documentFailed": "Het document kon niet vertaald worden: {message}",
+      "documentGone": "Deze vertaling is niet langer beschikbaar. Vertaal het document opnieuw om het te bekijken.",
+      "documentPageFailed": "Deze pagina kon niet worden geladen: {message}",
+      "documentPagesNotAligned": "Het vertaalde bestand heeft een ander aantal pagina's, waardoor de inhoud op beide zijden kan verschillen.",
+      "documentAvailableUntil": "Beschikbaar tot {date}",
+      "documentRetranslateTitle": "Document opnieuw vertalen?",
+      "documentRetranslateMessage": "Hiermee start u een nieuwe vertaling, waarvan de pagina's opnieuw meetellen voor het daglimiet. Eenmaal gestart kan het proces niet meer worden gestopt. De huidige vertaling en eventuele correcties blijven op de server tot ze verlopen, maar worden hier niet langer weergegeven.",
+      "retry": "Opnieuw proberen",
+      "pageLabel": "Pagina",
+      "pageOf": "van {total}",
+      "pageNumber": "· pagina {page}",
+      "pagePrevious": "Vorige pagina",
+      "pageNext": "Volgende pagina",
+      "correctedLabel": "Gecorrigeerd",
+      "correctedPages": "Gecorrigeerde pagina’s:",
+      "correctedPagesMore": "+{count} meer",
+      "correctionRestore": "Herstellen",
+      "correctionRestoreHint": "Uw wijzigingen aan deze pagina verwijderen en teruggaan naar de automatische vertaling",
+      "correctionSaving": "Opslaan…",
+      "correctionSaved": "Opgeslagen",
+      "correctionSaveFailed": "Niet opgeslagen. Pas de tekst aan om het opnieuw te proberen.",
+      "download": "Downloaden",
+      "downloading": "Bezig met downloaden…",
+      "downloadFailed": "Downloaden mislukt: {message}",
+      "downloadTranslated": "Vertaald {format}",
+      "downloadTranslatedHint": "Originele opmaak. Bevat uw correcties niet.",
+      "downloadTextVersion": "Tekstversie (DOCX)",
+      "downloadTextVersionHint": "Platte tekst, één pagina per pagina, met uw correcties.",
+      "documentNoCancel": "Een documentvertaling kan niet worden gestopt zodra deze is gestart.",
+      "documentGlossariesIgnored": "{count, plural, one {Uw geselecteerde woordenlijst wordt in deze modus niet toegepast.} other {Uw # geselecteerde woordenlijsten worden in deze modus niet toegepast.}} Controleer de terminologie per pagina met Kwaliteit beoordelen, of gebruik Snel of Gekeurd.",
+      "pendingLeavePage": "Suggesties horen bij deze pagina en worden niet bewaard als u deze verlaat. Beslis eerst over de resterende suggesties.",
+      "uploadStepOcr": "Lezen met OCR",
+      "ocrButton": "Lezen met OCR",
+      "ocrButtonHint": "Lees deze PDF opnieuw met tekstherkenning, voor gescande pagina's of verkeerd herkende tekst",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "Deze tekst is met tekstherkenning van de pagina's gelezen. Vergelijk het met het origineel.",
+      "ocrReasonNoText": "Er is geen tekst gevonden in {name}. Dit lijkt een gescand document.",
+      "ocrReasonSparse": "Er is zeer weinig tekst gevonden in {name}. Mogelijk zijn sommige delen gescand.",
+      "ocrReasonManual": "{name} opnieuw lezen met tekstherkenning?",
+      "ocrExplanation": "OCR leest de tekst uit de paginabeelden. Dit duurt langer dan een normale upload, telt elke pagina van het bestand mee voor uw dagelijkse OCR-tegoed, en kan slecht gescande tekst, handschrift en tabellen verkeerd lezen.",
+      "ocrPagesLeft": "{count, plural, one {# OCR-pagina over vandaag.} other {# OCR-pagina's over vandaag.}}",
+      "ocrRun": "Lezen met OCR",
+      "ocrDismiss": "Niet nu",
+      "ocrSparseHint": "Er is zeer weinig tekst gevonden in deze PDF. Sommige pagina's kunnen gescand zijn.",
+      "ocrLimitReached": "Dit document heeft meer pagina's dan uw resterende OCR-tegoed voor vandaag.",
+      "ocrTooManyPages": "Dit document is te lang voor OCR, dat maximaal {max} pagina's leest. Splits de PDF en upload een deel.",
+      "ocrUnavailable": "OCR is niet ingesteld op deze server.",
+      "ocrNoText": "OCR heeft ook in dit document geen tekst gevonden.",
+      "ocrFailed": "Het document kon niet gelezen worden met OCR. Probeer het opnieuw.",
+      "scannedWholeExplanation": "U kunt ook het hele document vertalen: het leest gescande pagina's zelf, behoudt de opmaak en telt het aantal pagina's mee voor uw dagelijkse vertaallimiet.",
+      "scannedUseWholeDocument": "Vertaal het hele document",
+      "scannedSourceNote": "{name} heeft hier geen tekst om weer te geven. Bij vertaling van het hele document worden de pagina's direct gelezen. Eigen tekst typen vervangt het document.",
+      "scannedPageNote": "Van deze pagina van het origineel kon geen tekst worden gelezen. Vergelijk met het bestand zelf.",
+      "changeLabel": "Vraag om een wijziging van de vertaling",
+      "changePlaceholder": "Vraag om een wijziging, bijvoorbeeld formeler maken",
+      "changePlaceholderAnother": "Vraag om een andere wijziging",
+      "changeSend": "Verzoek verzenden",
+      "changeWorking": "Wijzigingen worden uitgewerkt",
+      "changeNothingApplied": "Er verandert niets totdat u accepteert",
+      "changeSelectionLabel": "Vraag om een wijziging van de geselecteerde tekst",
+      "changeSelectionPlaceholder": "Pas dit aan, bijvoorbeeld zeg tableta",
+      "changeSelectionScope": "Geldt alleen voor de geselecteerde tekst",
+      "changeSelectionClose": "Sluiten",
+      "changeTitle": "Aangevraagde wijzigingen",
+      "changeSelectedLabel": "Geselecteerde tekst",
+      "changeNoEdits": "Er hoefde voor dit verzoek niets aangepast te worden.",
+      "changeReplyPending": "{count, plural, one {# voorgestelde wijziging staat in de werkruimte.} other {# voorgestelde wijzigingen staan in de werkruimte.}} Er verandert niets totdat u accepteert.",
+      "changeStopped": "Gestopt. Er is niets gewijzigd.",
+      "changeFailed": "Het wijzigingsverzoek is mislukt. Probeer het opnieuw.",
+      "changeNoTranslation": "Er is nog geen vertaling om te wijzigen. Vertaal de tekst eerst.",
+      "changeBusy": "Wacht tot de huidige run is voltooid en probeer het daarna opnieuw.",
+      "changeHeld": "Niet verzonden: er wachten nog voorgestelde wijzigingen op een beslissing.",
+      "pendingRunActionRequest": "Wijziging wordt aangevraagd",
+      "railPlaceholder": "Vraag om een wijziging of stel een vraag…",
+      "documentPageCount": "{count, plural, one {# pagina} other {# pagina's}}",
+      "sourceShowPages": "Pagina's weergeven",
+      "sourceEditText": "Als tekst bewerken",
+      "sourceRemoveDocument": "Document verwijderen",
+      "sourceJumpToPage": "Ga naar een pagina"
     },
     "document": {
       "emptyTitle": "Beschrijf het gewenste document",
@@ -3697,7 +3839,7 @@
       "guideTargetTerm": "Vereiste vertaling",
       "guideNote": "Opmerking",
       "pendingRun": {
-        "title": "{count} suggesties nog in behandeling",
+        "title": "{count, plural, one {# suggestie nog in behandeling} other {# suggesties nog in behandeling}}",
         "body": "{action} kan elk deel van de tekst wijzigen, inclusief passages met suggesties waarover u nog geen beslissing hebt genomen; een nieuwe beoordeling vervangt de huidige lijst. Behandel eerst de resterende suggesties.",
         "acceptAll": "Alles accepteren",
         "rejectAll": "Alles weigeren",
@@ -3759,7 +3901,7 @@
         "list<number>": "Lijst van nummers"
       },
       "layout": "Opmaak",
-      "layoutHint": "Markdown met {{field:id}}-plaatsen — gebruikt voor de weergave-export en de preview.",
+      "layoutHint": "Markdown met '{{field:id}}'-plaatsen — gebruikt voor de weergave-export en de preview.",
       "saveTemplate": "Sjabloon opslaan",
       "deleteTemplate": "Sjabloon verwijderen",
       "cancel": "Annuleren",
@@ -4587,6 +4729,10 @@
         "note": "Kosten volgens lijstprijzen per {asOf} (Global Standard-tarief, geen korting voor gecachte invoer): een bovengrens, geen rekening. Webzoekopdrachten, code-uitvoering, transcriptie, spraak, vertaling en documentindexering zijn niet inbegrepen."
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "Deze werkruimte (geschat)",
       "workspace": "Deze werkruimte",
@@ -5401,7 +5547,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# document} other {# documenten}} geïndexeerd",
     "m365CapImmediateHelp": "Toepassen slaat de limiet direct op. Andere wijzigingen moeten nog worden opgeslagen.",
     "m365CapDraftHelp": "De limiet wordt opgeslagen wanneer u de agent aanmaakt.",
-    "m365CapSaved": "Documentlimiet opgeslagen: {limit}."
+    "m365CapSaved": "Documentlimiet opgeslagen: {limit}.",
+    "m365AgentAllowWebSearchHelp": "Standaard uitgeschakeld: de agent geeft alleen antwoorden op basis van zijn eigen documenten en voert nooit een webzoekopdracht uit, ongeacht de ingestelde zoekoptie van de gebruiker. Wanneer ingeschakeld, bepalen de instructies van de agent wanneer er een webzoekopdracht wordt uitgevoerd en welke websites gebruikt mogen worden. Webbronnen worden altijd apart getoond van de agentdocumenten.",
+    "promptAgentAllowWebSearchHelp": "Standaard ingeschakeld. Wanneer uitgeschakeld, zoekt deze agent nooit op het web, ongeacht de zoekinstelling van de gebruiker."
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -5708,7 +5856,9 @@
       "m365MailReadsPerDay": "E-mails lezen per dag",
       "m365MailDraftsPerDay": "E-mailconcepten per dag",
       "m365MailDeepScansPerDay": "Diepgaande e-mailscans per dag",
-      "m365DigestRunsPerDay": "Dagelijkse samenvattingen per dag"
+      "m365DigestRunsPerDay": "Dagelijkse samenvattingen per dag",
+      "translationPagesPerDay": "Vertaalde pagina’s per dag",
+      "ocrPagesPerDay": "OCR-pagina's per dag"
     },
     "valueModeLabel": "Limiettype",
     "valueAmountLabel": "Limietbedrag",
@@ -5731,7 +5881,8 @@
       "jobs": "taken",
       "rounds": "rondes",
       "documents": "documenten",
-      "boolean": ""
+      "boolean": "",
+      "pages": "pagina’s"
     },
     "window": {
       "day": "dag",
@@ -5789,7 +5940,9 @@
       "m365MailReadsPerDay": "E-mailzoekopdrachten en het lezen van berichten/threads per dag. Na overschrijding geeft de tool een melding 'probeer het morgen opnieuw'.",
       "m365MailDraftsPerDay": "E-mailconcepten die de assistent per dag mag aanmaken — elk exemplaar wordt afzonderlijk bevestigd. Bewust beperkt.",
       "m365MailDeepScansPerDay": "Samengestelde mailanalyses (overzichten, diepzoeken, toezeggingen) per dag. Elke scan telt als één eenheid, ongeacht het aantal interne leesacties.",
-      "m365DigestRunsPerDay": "Microsoft 365 dagelijkse samenvattingen per dag. Eén uitvoering bevat tientallen Graph-lezingen plus twee analysemodel-aanroepen; de periodekiezer maakt het eenvoudig om opnieuw uit te voeren, dus de standaardlimiet is streng."
+      "m365DigestRunsPerDay": "Microsoft 365 dagelijkse samenvattingen per dag. Eén uitvoering bevat tientallen Graph-lezingen plus twee analysemodel-aanroepen; de periodekiezer maakt het eenvoudig om opnieuw uit te voeren, dus de standaardlimiet is streng.",
+      "translationPagesPerDay": "PDF-pagina’s die per dag voor documentvertaling zijn ingediend.",
+      "ocrPagesPerDay": "PDF-pagina's die per dag met OCR (tekstherkenning voor gescande documenten) zijn gelezen."
     },
     "scopeFamily": "Familie",
     "scopeModel": "Model",
@@ -8097,7 +8250,13 @@
       "skills": "Skillselectie",
       "tools": "Toolrouting",
       "trim": "Trim-classificatie",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "Zoekopdracht herschrijven",
+      "mailScreen": "Phishingmail-scherm",
+      "mailAnalysis": "Analyse van e-mails en samenvattingen",
+      "schemaProposal": "Voorstel extractieschema",
+      "mcpPlan": "Connectorplan",
+      "vision": "Afbeeldingen en pagina's lezen"
     },
     "reason": {
       "endpoint_missing": "Endpoint of accountbinding ontbreekt",
@@ -8118,6 +8277,164 @@
       "endpoint_account_mismatch": "Het endpoint en de ARM resource-ID horen bij verschillende accounts. Corrigeer de deploymentconfiguratie.",
       "inventory_refresh_failed": "Vernieuwen van de inventaris is mislukt. Controleer de Reader-toegang en accountconnectiviteit van de app-identiteit.",
       "credential_unavailable": "De app kon de inventarisreferentie niet verkrijgen. Controleer de deploymentidentiteit-configuratie."
+    },
+    "notSupported": "Niet ondersteund door dit model",
+    "unservedOperations": "Geen enkel model in deze keten ondersteunt: {operations}. Voeg een model toe dat dit wel doet."
+  },
+  "filePreview": {
+    "preview": "Voorbeeld",
+    "download": "Downloaden",
+    "loading": "Voorbeeld wordt voorbereid…",
+    "failed": "Dit bestand kan niet worden weergegeven. U kunt het nog steeds downloaden.",
+    "pageOf": "Pagina {page} van {total}",
+    "truncated": "Eerste {shown} van {total} pagina's worden getoond. Download het bestand om de rest te zien.",
+    "enlarge": "Vergroot {name}"
+  },
+  "addToChat": {
+    "title": "Aan chat toevoegen",
+    "titleTranslate": "Vertaal een document",
+    "titleTranscribe": "Transcribeer audio of video",
+    "sourcesLabel": "Toevoegen vanuit",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Niet beschikbaar voor deze actie",
+    "sources": {
+      "device": "Dit apparaat",
+      "link": "Link",
+      "camera": "Camera",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "E-mail",
+      "meetings": "Vergaderingen"
+    },
+    "device": {
+      "browse": "Blader op dit apparaat",
+      "dropHint": "of zet bestanden ergens in dit venster, of plak",
+      "rejected": "Geen van deze bestanden kan hier worden gebruikt.",
+      "hint": {
+        "attach": "Documenten, afbeeldingen, audio en video.",
+        "translate": "Eén document: Word, Excel, PowerPoint, PDF, HTML of tekst.",
+        "transcribe": "Audio of video. Wordt getranscribeerd bij het verzenden van het bericht."
+      }
+    },
+    "selection": {
+      "then": "Vervolgens",
+      "intents": {
+        "attach": "Bijvoegen",
+        "translate": "Vertalen",
+        "transcribe": "Transcriberen"
+      },
+      "confirm": {
+        "attach": "Toevoegen",
+        "translate": "Vertalen",
+        "transcribe": "Transcriberen"
+      },
+      "unfit": {
+        "attach": "Deze bestanden kunnen niet worden bijgevoegd",
+        "translate": "Vertalen kan slechts één document per keer",
+        "transcribe": "Alleen audio en video kunnen worden getranscribeerd"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Dit apparaat, links, Microsoft 365",
+      "filesOrPhotos": "Bestanden of foto's",
+      "fromThisDevice": "Van dit apparaat",
+      "connect": "Microsoft 365 koppelen",
+      "connectNote": "Toevoegen vanuit OneDrive, e-mail en vergaderingen"
     }
+  },
+  "usageBudgets": {
+    "title": "Uw budgetten",
+    "description": "Limieten die u voor uzelf heeft ingesteld op dit apparaat. Kies een budget en bepaal vervolgens wat er gebeurt als u het nadert of overschrijdt. Budgetten tellen chats en workflow-uitvoeringen vanaf het begin van elke periode.",
+    "metric": {
+      "emissions": "Emissiebudget",
+      "cost": "Kostenbudget"
+    },
+    "metricShort": {
+      "emissions": "Emissies",
+      "cost": "Kosten"
+    },
+    "off": "Geen budget ingesteld.",
+    "measureAs": "Meten als",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Telefoonladingen",
+      "usd": "Amerikaanse dollars"
+    },
+    "amountLabel": "Budget",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "uur",
+      "smartphoneCharge": "ladingen",
+      "usd": "Amerikaanse dollars"
+    },
+    "periodLabel": "Wordt gereset elke",
+    "period": {
+      "day": "Dag",
+      "week": "Week",
+      "month": "Maand"
+    },
+    "costNote": "Geschat op basis van catalogusprijzen: een bovengrens, geen factuur.",
+    "chargesValue": "{count} telefoonladingen",
+    "percent": "{percent}%",
+    "usedOf": "{used} van {limit} gebruikt ({percent}%)",
+    "usedOfShort": "{used} van {limit}",
+    "resets": "Wordt gereset op {date}",
+    "budgetMarker": "Budget",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "Binnen budget",
+      "warn": "Waarschuwing getoond",
+      "ask": "Vragen voor elk bericht",
+      "stop": "Verzenden gepauzeerd"
+    },
+    "stage": {
+      "warn": {
+        "title": "Waarschuwen",
+        "tag": "Let op",
+        "description": "Toon een melding in de chat vanaf dit deel van het budget."
+      },
+      "ask": {
+        "title": "Eerst vragen",
+        "tag": "Zachte blokkade",
+        "description": "Vraag mij om elke boodschap te bevestigen vanaf dit deel van het budget."
+      },
+      "stop": {
+        "title": "Stoppen",
+        "tag": "Strikte blokkade",
+        "description": "Stop met versturen vanaf dit deel van het budget tot het reset of ik het hier verhoog."
+      }
+    },
+    "thresholdLabel": "{stage}-drempel, percentage van budget",
+    "notice": {
+      "warn": {
+        "emissions": "U heeft {percent}% van uw emissiebudget gebruikt.",
+        "cost": "U heeft {percent}% van uw kostenbudget gebruikt."
+      },
+      "ask": {
+        "emissions": "U heeft {percent}% van uw emissiebudget gebruikt. Dit bericht versturen?",
+        "cost": "U heeft {percent}% van uw kostenbudget gebruikt. Dit bericht versturen?"
+      },
+      "askRun": {
+        "emissions": "U heeft {percent}% van uw emissiebudget gebruikt. Deze run starten?",
+        "cost": "U heeft {percent}% van uw kostenbudget gebruikt. Deze run starten?"
+      },
+      "stop": {
+        "emissions": "Emissiebudget bereikt. Verzenden is gepauzeerd tot {date}.",
+        "cost": "Kostenbudget bereikt. Verzenden is gepauzeerd tot {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Bekijk budget",
+      "dismiss": "Sluiten",
+      "sendAnyway": "Toch verzenden",
+      "runAnyway": "Toch uitvoeren",
+      "dontSend": "Niet verzenden",
+      "dontAskToday": "Vandaag niet meer vragen",
+      "openSettings": "Budgetinstellingen openen",
+      "edit": "Bewerken"
+    },
+    "composerPaused": "Verzenden gepauzeerd door uw budget",
+    "summaryTitle": "Uw budgetten",
+    "chipAria": "{metric} budget: {percent}% gebruikt.",
+    "runProjection": "Emissiebudget {from}% → {to}%"
   }
 }

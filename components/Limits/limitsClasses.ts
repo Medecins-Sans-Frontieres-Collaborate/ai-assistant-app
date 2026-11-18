@@ -16,4 +16,4 @@ export const LIMITS_CHIP_WARN = ADMIN_CHIP_WARN;
  * reads as a note rather than a record.
  */
 export const LIMITS_NOTE_CARD =
-  'rounded-lg border border-gray-200 border-l-4 border-l-blue-400 bg-gray-50 p-3 text-sm text-gray-700 dark:border-gray-700 dark:border-l-blue-500 dark:bg-surface-dark dark:text-gray-300';
+  'rounded-lg border border-gray-200 border-s-4 border-s-blue-400 bg-gray-50 p-3 text-sm text-gray-700 dark:border-gray-700 dark:border-s-blue-500 dark:bg-surface-dark dark:text-gray-300';

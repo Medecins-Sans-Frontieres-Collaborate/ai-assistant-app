@@ -50,16 +50,16 @@ export const SpeedControl: React.FC<SpeedControlProps> = ({
         aria-label={t('chat.changePlaybackSpeed')}
         title={t('chat.changePlaybackSpeed')}
       >
-        {playbackSpeed}x <IconChevronDown size={14} className="ml-1" />
+        {playbackSpeed}x <IconChevronDown size={14} className="ms-1" />
       </button>
 
       {showDropdown && (
-        <div className="absolute right-0 bottom-full mb-1 w-20 bg-white dark:bg-gray-800 rounded shadow-lg border border-gray-200 dark:border-gray-700 z-10">
+        <div className="absolute end-0 bottom-full mb-1 w-20 bg-white dark:bg-gray-800 rounded shadow-lg border border-gray-200 dark:border-gray-700 z-10">
           {speeds.map((speed) => (
             <button
               key={speed}
               onClick={() => onChangeSpeed(speed)}
-              className={`block w-full text-left px-3 py-1.5 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 ${
+              className={`block w-full text-start px-3 py-1.5 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 ${
                 speed === playbackSpeed
                   ? 'bg-gray-100 dark:bg-gray-700 font-semibold'
                   : ''

@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "ናይ OpenAI API ቁልፊ እንተ ዘይብልካ፣ ኣብዚ ክትረክብ ትኽእል: ",
   "Loading_ellipsis": "ይጽዕን ኣሎ...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "ናይ OpenAI API ቁልፊኻ ኣብ ታሕቲ ጸጋም ናይ ጎድናዊ ባር ከም ዝተቐመጠ ኣረጋግጽ።",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "ናይ መልእኽቲ ደረት {{maxLength}} ፊደላት እዩ። {{valueLength}} ፊደላት ኣእቲኻ ኣለኻ።",
   "Model": "ሞዴል",
   "OR": "ወይ",
   "OpenAI API Key Required": "ናይ OpenAI API ቁልፊ የድሊ",
   "Please enter a message": "በጃኻ መልእኽቲ ኣእቱ",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "በጃኻ ናይ OpenAI API ቁልፊኻ ኣብ ታሕቲ ጸጋም ናይ ጎድናዊ ባር ኣቐምጥ።",
-  "Prompt limit is {{maxLength}} characters": "ናይ ፕሮምፕት ደረት {{maxLength}} ፊደላት እዩ",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "ናይ ፕሮምፕት ደረት {{maxLength}} ፊደላት እዩ። {{valueLength}} ፊደላት ኣእቲኻ ኣለኻ።",
   "Regenerate response": "መልሲ ዳግም ፍጠር",
   "Run Typewriter Intro": "ናይ ታይፕራይተር መእተዊ ኣካይድ",
   "Save & Submit": "ዓቅብን ኣቕርብን",
@@ -715,7 +712,8 @@
     "clear": "ኣጽዳቕ",
     "undo": "ኣቐላጥፍ",
     "durationSeconds": "{count, plural, one {# ሰከንድ} other {# ሰከንዳት}}",
-    "durationMinutes": "{count, plural, one {# ደቒቕ} other {# ደቒቓት}}"
+    "durationMinutes": "{count, plural, one {# ደቒቕ} other {# ደቒቓት}}",
+    "clearSearch": "ድሑረ መፈለጊ ኣርኣይ"
   },
   "terms": {
     "officialLanguages": "ወግዓዊ ሕትመት:",
@@ -960,7 +958,13 @@
     "ttsError": "ስህተት ኣብ ምፍጣር ድምጺ። እቲ ግዜ ደገ ፈትኑ።",
     "unsupportedMessageType": "ስህተት ኣብ ምርሕያብ መልእኽቲ፡ ዘይተደገፀ ዓይነት መልእኽቲ",
     "addLanguageOption": "\"{name}\" ኩናት ኣእቱ...",
-    "sources": "ምንጮታት",
+    "sources": {
+      "fromDocuments": "ጀንት ሰነዶታት",
+      "fromWeb": "ዊብ",
+      "fromDocumentsHint": "ካብ ነዚ ጀንት ሰነዶታት ዝተወገዙ መድረኽታት",
+      "fromWebHint": "ኣይቲህና ገጽታት ብ ዊብ ሰርች ዘተረፉ",
+      "heading": "{count, plural, one {መንገዲ ሓበሬታ} other {መንገዳት ሓበሬታ}}"
+    },
     "interpreterBadge": "ኮድ ኣምራ",
     "disableCodeInterpreter": "ኮድ ምፅሓፍ ምስጢር",
     "interimSearch": {
@@ -1038,7 +1042,8 @@
       "MODEL_RATE_LIMITED": "ሞዴል ብዚኣ ዘይበዝነ ምድላው የቐምጸ። ብኣጋጢሙ ደግመን ተፈቱ። ንኦፋ ዝሓለፈ ደገመን ሞኽር።",
       "MODEL_QUOTA_EXCEEDED": "ናይ ሞዴል ኣብዚ ኣቃው ተሪፍኩዎ። ሞዴል ካልኣይ ምርጽ፡ ወይ ደገመን ቶም።",
       "MODEL_AUTH_FAILED": "ኣፕ ብሞዴል ሰርቪስ ክትተረጋገጽ ኣይተተኣምረን። ስርዓት ፍቓድ ጸጋዕ ይኹና። ንደገወል ግዛ፡ ውድሓን ሰርቪስ ንምርካብ።"
-    }
+    },
+    "messageLimitExceeded": "ናይ መልእኽቲ ደረት {maxLength} ፊደላት እዩ። {valueLength} ፊደላት ኣእቲኻ ኣለኻ።"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -2337,20 +2342,18 @@
     "sectionPinned": "ዝተቐናቐኑ",
     "sectionFrequent": "ብዙሕ ዝተጠቐሙ",
     "sectionMore": "ተወሳኺ",
-    "categoryWeb": "Web",
-    "categoryMedia": "መሕደራትን ፋይልን",
-    "categoryTransform": "ምቅዋም",
     "pin": "ኣብ ላዕሊ ሓኪል",
     "unpin": "ኣይተሓከለን",
     "moveToMore": "ናብ ተወሳኺ ኣካይዱ",
     "moveOutOfMore": "ኣብ መኑ ርኣዮ",
     "showSources": "ተሓውቶ ምንጮታት ኣርኣዩ",
     "hideSources": "ተሓውቶ ምንጮታት ኣሰውሩ",
-    "aiTools": "AI መዕዛውቲ",
-    "aiToolsTooltip": "ኣብ ምልማሉ ቀሊል ክትጠቐምዎ ዝኽእል ተቋማት: ብዝኽእል ድሕሪ መለለዪ ናይ web ምድላው, ኮድ ኣፈጻጸምን ብሰርቪስታት ምትሕሳስን።",
     "codeInterpreterTooltip": "ኣብ ናይ ዕላማ ስርዓት ሓላፍነት ዝበለ Python ኮድ ኣፈጻጸም ናይቶም መልሲታት ንኣብ ንእሽቶ መልእኽቲ።\n\nብዙሕ ኣብ ትንታነ ባህሪ, ምሕሳብን ብማዕበል ፋይል መመዝገብ ፍቓድ አለዎ።",
-    "categoryTools": "መሳርሒታት እና አገናኞታት",
-    "translationConversationTitle": "ትርጉም፡ {filename}"
+    "translationConversationTitle": "ትርጉም፡ {filename}",
+    "categoryAdd": "ወሰን",
+    "categoryDo": "ኣድለ",
+    "categoryChat": "ኣብዚ ቻት",
+    "categoryStart": "ምጀመር ካብ"
   },
   "transcription": {
     "transcribesOnSend": "ኣብ ምልኣኽ ይጸሓፍ",
@@ -2554,7 +2557,9 @@
     "savedToOneDrive": "{name} ናብ OneDrive ዝተወሰኸ።",
     "openInOneDrive": "ኽፈት",
     "saveForbidden": "ንከዚ ፎልደር ምዝገብ ዝተኣክልኩም ፈቃድ የብልኩምን — ካልእ ብ “ን OneDrive ውሰኹ” ምረፁ።",
-    "saveToOneDriveFailed": "ናብ OneDrive ምዝገብ ኣይተተኻኸለን — ደጊም።"
+    "saveToOneDriveFailed": "ናብ OneDrive ምዝገብ ኣይተተኻኸለን — ደጊም።",
+    "textVersion": "ፅሑፍ ዝሓዘ ሓሳብ (DOCX)",
+    "textVersionHint": "ዝተተዛዘለ ናይ Word ፋይል ኣብኡ ዝተተርጐሞ ጽሑፍ፣ ናይ እዋኑ ገጻት ናይ ሓደ ገጽ፡ ብሓላፊ ፋይል ድማ ውድብ ስርዓት ኣዝዩ ይጽዕብ።"
   },
   "agentsTab": {
     "organizationAgents": {
@@ -2726,7 +2731,6 @@
   },
   "usageImpact": {
     "empty": "እዚ ገና ኣጠቓቕም ኣይተመዝገበን። ናይ ቶክን ኣጠቓቕምካን ብዝነብሩ ኣብዚ ምስተዓወትካ እዚ ይበጽሓ።",
-    "co2Value": "{grams} ግራም ኲፐር ኦ ብራብር (CO₂e)",
     "equivalence": "≈ ብቁጽሪ {count} ጦም ስማርትፎን።",
     "requests": "ጥያቄታት",
     "promptTokens": "ቅድሚ ቃላት ቶክን",
@@ -2888,7 +2892,7 @@
       "addedByYou": "ንኽትወሃብካ",
       "glossary": "መዝገብ ቓላት",
       "noGlossary": "መዝገብ ቓላት ኣይተሰብረን።",
-      "manageGlossaries": "መዝገቦት ቓላት",
+      "manageGlossaries": "ቃላት ዝተሓማሙትን ምስራሕ",
       "glossaries": "መዝገቦት ቓላት",
       "closeGlossaries": "መዝገቦት ቓላት ዕጽሓ።",
       "glossariesEmpty": "ምንኣብ ተለዋዋጥ ቃላት እንታይ እኮ ዝተተሓሓዙ ክትርግሙ መዝገብ በጅሉ። መዝገቦት ቓላት ኣብዚ መሳርሒት ይዓቅቡን ኩሉ ትርጉም ግን ንምጠቃም ይኻነ።",
@@ -3053,7 +3057,145 @@
       "importTooLarge": "እዚ ፋይል ብምንታይ ዝበለ ነይሩ (5 MB ድሕሪት ኣይተሳነን።)",
       "importNothing": "ምዕባለ መስርሒ ብምስካድ {skipped} ኣይተረኽበን።",
       "importSummary": "{added} ተወስነ፣ {replaced} ተቐይሩ፣ {skipped} ተርፊቱ።",
-      "entriesTooManyToShow": "{count} ቃላት — ሓደሽ ዝርዝር ከምዚ ኣይትቀርብን። ኣልፈልጢ ምርኣይ፣ ወይ CSV/TSV ምትኣንቀሳቓስ ምስክዕ።"
+      "entriesTooManyToShow": "{count} ቃላት — ሓደሽ ዝርዝር ከምዚ ኣይትቀርብን። ኣልፈልጢ ምርኣይ፣ ወይ CSV/TSV ምትኣንቀሳቓስ ምስክዕ።",
+      "pagesLoaded": "ዝተሰተዑ ገጻት {selected} ካብ {total}",
+      "pagesLabel": "ገጻት",
+      "pagesApply": "ገጻት ምጽናይ",
+      "pagesPrevious": "የቐንየሉ ሓንቲ ግብሪ",
+      "pagesNext": "ኣቐናየሉ ሓንቲ ግብሪ",
+      "pagesBudget": "ቁስሊ ፊደላት {used} / {max}",
+      "pagesChange": "ገጻት ምቕያር",
+      "pagesLoading": "ገጻት ይተሰተው…",
+      "pagesInvalid": "ቁፅሪ ገጻት ወይ ranges ኣእብዩ፡ ኣምሓራ 1-40, 45.",
+      "pagesUnavailable": "ካብ እዚኦም ገጻት ጽሑፍ የብልኩም.",
+      "pagesTooMany": "እቲ መርጠኹ ፊደላት {used} እና፡ ሓንቲ ግብሪ {max} ፊደላት ይቆጽል። ገጻት ንእሽቶ ምርጫ ግደፍ.",
+      "stop": "ይቁም",
+      "stepAnalyzing": "ኣንስናን",
+      "stepTranslating": "ትርጉም ኣደርግ",
+      "stepReviewing": "ኣተናበይ",
+      "stepDone": "ተዛየረ",
+      "runProgressLabel": "ዝተግበሩ ትርጉም",
+      "runHintAnalyzing": "ቃላት ዝተሓሳስቡ ንቀሪታቱ ንምንባብ።",
+      "runHintTranslating": "ትርጉም እዚ ኣደርግ።",
+      "runHintReviewing": "ሓሳባ ትርጉም ምቕናብ ምትእት።",
+      "runHintReviewingRound": "ሓሳባ ትርጉም ምቕናብ ምትእት · ዙር {round} ካብ {total}።",
+      "runRound": "ዙር {round} ካብ {total}",
+      "draftLabel": "ሓሳባ",
+      "sourceLocked": "እዚ ዝተፈለለ ኣብቲ ትርጉም",
+      "analysisNotes": "{count, plural, one {# ማስታወሻ} other {# ማስታወሻታት}}",
+      "analysisPill": "{count, plural, one {ትንተር፡ # ማስታወሻ} other {ትንተር፡ # ማስታወሻታት}}",
+      "reviewSummary": "{count, plural, one {ምቕናብ፡ # ዙር፡ {verdict}} other {ምቕናብ፡ # ዙርታት፡ {verdict}}}",
+      "analysisDismiss": "ንትርጉማት ኩሉ ሰብት ምርካብ",
+      "analysisShow": "ትንተር ንቅድመ-ትርጉም ምርኣይ",
+      "analysisResize": "ፓነል ትንተር ምስዕም",
+      "assessingCriteria": "{count, plural, one {# መርሓት ምምረፅ} other {# መርሓታት ምምረፅ}}",
+      "editsPending": "ቀዳሚ ምስሓዝ እዚ ንምባል ይሕይው።",
+      "uploadProgressLabel": "ዝተሰቐሐ ሕጂ",
+      "uploadStepUploading": "ምስቀሓ",
+      "uploadStepReading": "ውሽጢ ምንባብ",
+      "uploadStepReady": "ዝዘየረ",
+      "uploadCancel": "ሰርዝ",
+      "modeDocument": "ሓላፍነት ውሕስና ሰነድ",
+      "modeDocumentHint": "ተኣእቲ PDF ብሙሉ ይተርጎም እንተሰርሕ፣ ግን ጥዋቕ የስርሕ። ከምዝኣተወ ብጽሑፍ ቅጽዓት ይንብብ፣ ያስተሓሓስ፣ ቁልቁል ኣብ ምድምቅ ገጽ ቅጹዓት።",
+      "translateDocument": "ሰነድ ተርጎም",
+      "documentSubmitting": "ይተላኽ…",
+      "documentIntroTitle": "ነቲ ሓላፍነት ውሕስና ሰነድ ተርጎም",
+      "documentIntro": "ኣተሓሓየ ተሰቲ PDF ብትኽክል ዝተተረጎም እዩ፣ ምድላውቱ ተጠቒም። ተዘይብሉ ኣብ ናይ መደበ ገጽ ምበጻሕ የልኩ፣ ገጻታት ትቐናጽኡ፣ ትረኽቡን ትርኢኡን። መጠንቀቕ ንተስማማዕን ግብሪ ምምሃራን ኣብዚ ዘይተሰሪሑ። ምጅማር ኣንተይ፣ ትረጎም ሰነድ የተኽል አይኮነን፣ ገጻቱ ኣብ ናይ ሎሚ ምሕረት ይተሓሓይ።",
+      "documentNeedsFile": "PDF ኣቐምጥ ንምትርጎም ሓላፍነት ውሕስና ሰነድ።",
+      "documentNeedsPdf": "ናይ ሓላፍነት ውሕስና ብገጽ ገጽ ቅዓት ክሰርሕ PDF ብሓደ ግዜ ኣይተገበረን።",
+      "documentNeedsLanguage": "ትምህርቲ ቋንቋ መርጽ ንምትርጎም ሰነድ።",
+      "documentLanguageUnsupported": "ናይ ሓላፍነት ውሕስና ትርጉም ኣብዚ ቋንቋ ኣይተዘጋጅን። ዝተረኣየ ወይ Review ተጠቀም።",
+      "documentNoGlossaries": "ግስናታት ብናይ ሓላፍነት ውሕስና ትርጉም ኣይተጠቒምን።",
+      "documentPagesLeft": "{count, plural, one {# ገጽ ኣብዚ ዕለት ይቕርፅ} other {# ገጻት ኣብዚ ዕለት ይቕርፅ}}",
+      "documentLimitReached": "ነቲ ሰነድ ዝበዝሓ ገጻት ኣሎ ከምዚ ዕለም ታሕቲ ልብ፡ ምረጽ ገጻት ብዝተረኣየ ወይ ናይ Review ተርጎም፡ ወይ ናይ ዕለኻ ክስራሕ ግዜ።",
+      "documentUnavailable": "ናይ ሓላፍነት ውሕስና ትርጉም ኣብኣይ ተተዓዝነፍቲ ሰርቨር ኣይተገበረን።",
+      "documentSubmitFailed": "ሰነድ ንምትርጎም ኣይተተላኽን፡ {message}",
+      "documentProgressLabel": "ምዕባድ ናይ ሰነድ ትርጉም",
+      "documentStepUploaded": "ተኣእቲ",
+      "documentStepPreparing": "ገጻት ምምሕዳስ",
+      "documentTypicalDuration": "ብዙሕ ዓይነት በሓላላ",
+      "documentCanLeave": "ነዚ ገጽ ትፍጸም ይኽእል። ትርጉም ክትኸዝ ይቀጥል፣ ናትካ ትመለስ ዝተኸደን ከምዚ ይገኛ።",
+      "documentStalled": "ምዕባድ ናይ ትርጉም ኣይተረኣኸን፡ ንምዕባድ ክዝበህ ክነብህ ኣልኡ።",
+      "documentCheckAgain": "ደገ ኣርኣይ",
+      "documentFailed": "ሰነድ ኣይተተርጎምን፡ {message}",
+      "documentGone": "ናይ ትርጉም ዝሓለፈ፡ ሰነድ ግደፍ ክትትርጎም ኣሎ።",
+      "documentPageFailed": "ንዚ ገጽ ኣይተቐበለን፡ {message}",
+      "documentPagesNotAligned": "ተተረጎምቲ ፋይል በሃላይ ገጻት ኣሎ፣ ነዚ ገጽ ብትርጉም ኩሉ ዘይተመሳሰሉ ይኸውን ይኽእል።",
+      "documentAvailableUntil": "ክግበሩ ክኸውን {date}",
+      "documentRetranslateTitle": "ሰነድ ኣብ ምስራሕ ነው፧",
+      "documentRetranslateMessage": "ኣብዚ ምምሓራን ትረጎም ጀምሩ፣ ናይ ሎሚ ምሕረት ገጻቱ ይተሓሓይ። ኣንተይ ምምሓራን የተኽል አይኮነን። ንሕና ዝተረጎም ሰነድን ምቅናጽኡን ኣብ ሰርቨር ቀዳማይ ይእለ፣ ንጉስ ኣብዚ ዘይተረኽቡ።",
+      "retry": "ደገ ተግበር",
+      "pageLabel": "ገጽ",
+      "pageOf": "ን {total}",
+      "pageNumber": "· ገጽ {page}",
+      "pagePrevious": "ቀዳማይ ገጽ",
+      "pageNext": "ቀጣይ ገጽ",
+      "correctedLabel": "ተስተሓሓሰ",
+      "correctedPages": "ገጻት ተስተሓሓሰ፡",
+      "correctedPagesMore": "+{count} ተንሳፋ።",
+      "correctionRestore": "ኣስራሕ",
+      "correctionRestoreHint": "ቅንዕ ምድምቅ ክፈትሽ፡ ናይ መካነ ትርጉም ውድኣይ ከይፈልጥ።",
+      "correctionSaving": "ይኽል…",
+      "correctionSaved": "ተኽልኡ",
+      "correctionSaveFailed": "ኣይተኽልን፡ ጽሑፍ ቀይር ንደገ ተግበር።",
+      "download": "ውድኣይ",
+      "downloading": "ይውድኣይ…",
+      "downloadFailed": "ውድኣይ ኣይተሳነን፡ {message}",
+      "downloadTranslated": "ተተረጎምቲ {format}",
+      "downloadTranslatedHint": "ትውልድ ጥዋቕ፡ ቅንዕኡ ኣይተኻተትን።",
+      "downloadTextVersion": "ብጽሑፍ ኣገባብ (DOCX)",
+      "downloadTextVersionHint": "ጽሑፍ ንጹሕ፡ ብገጽ ንገጽ፣ ቅንዕኡ ይኻተት።",
+      "documentNoCancel": "ሓተታ ናይ መደብ መተርጎም ኣይተዓርፈን እዩ ሓተታ ገይሩ ንቀድሞ እንተጀምረ።",
+      "documentGlossariesIgnored": "{count, plural, one {ኣተኣለኻ ተመሓላለፊ ፍሉይ መድረክ ኣይተተገበረን እዩ እዚ ሓደጋ ሞድ።} other {ኣተኣለኻ # ተመሓላለፊ ፍሉይ መድረኻት ኣይተተገበሩን እዮም እዚ ሓደጋ ሞድ።}} ቃላት ሓበሬታ ንዝበሃል ገፅ ንገፅ ትርጉም ግበር ወይ ብ Quick ወይ Reviewed ተጠቀም።",
+      "pendingLeavePage": "ተምሃላለፊ ሓሳባት እዚ ገፅ እዚ ናይእዮም እዮም፣ ናይእውን መዓት ኣይተቆረጡን ፍልሱ ቀደም ምውዳእ።",
+      "uploadStepOcr": "ብ OCR ኣንብባ",
+      "ocrButton": "ብ OCR ኣንብባ",
+      "ocrButtonHint": "ነዚ PDF ኣብዚ ንሓደ ግዜ ኣብ OCR (ትምኒት ጽሑፍ) ኣንብብ፡ ምስ ዝተስናኽተ ገፅታት ወይ ካብዚ ዝተስናኽተ ጽሑፍ ብሓረስ ወይ ዝሰበስበ ጽሑፍ ዘሎ።",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "እዚ ጽሑፍ ካብ ገፅታት ብ OCR ተነበበ። ኣብ ትክክል ኣረኩ፡ ናይ መመልከቲ ምስ መሓላ ዘይኮነ፡ ምርኣይ ውስደው።",
+      "ocrReasonNoText": "ጽሑፍ ኣብ {name} የለን፡ ዝተስናኽተ ድንበት ኣይደለን።",
+      "ocrReasonSparse": "ጽሑፍ እዚ ብትንንታ ተረኽበ ኣብ {name}፡ ኣዋላ ምስ ዝተስናኽተ ገፅታት ክሆን ይኽእል።",
+      "ocrReasonManual": "{name} ኣብ OCR ንሓደ ግዜ ኣንብብ ክትደሊ? ",
+      "ocrExplanation": "OCR ጽሑፍ ካብ ገፅታት ኣብ ሓበሬታ ምትእቀብ ይገብር። ይኸውን ኣብ ፍሉይ መጻወቲ ዝተዛዘም ነይሩ፡ ኣብ ዓለት OCR ፍሓፍሕ ይሕሉ፡ ምስ ዝሕደስ ስካን ድንበት፡ እግሪ ብ ሕብረት ወይ ተቐባልካ ታብላታት ይተወድእ ይኽእል።",
+      "ocrPagesLeft": "{count, plural, one {# ገፅ OCR የቐንየለ ሎሚ።} other {# ገፅታት OCR የቐንየለ ሎሚ።}}",
+      "ocrRun": "ብ OCR ኣንብባ",
+      "ocrDismiss": "ሕጂ ኣይደለን",
+      "ocrSparseHint": "ጽሑፍ እዚ ብትንንታ ኣብ PDF ተረኽበ፡ ኣዋላ ገፅታት ዝተስናኽተ ክሆኑ ይኽእሉ።",
+      "ocrLimitReached": "እዚ ድንበት ምስ ገፅታት ካብ ዝሓሰበ ውድብ OCR ሰብ የተፈቐደዮም ኣይኮነን ሎሚ።",
+      "ocrUnavailable": "OCR ኣብ እዚ ተሰርተር ኣይተፈወሰን።",
+      "ocrNoText": "OCR ኣብዚ ድንበት ደሓሳስ ጽሑፍ ኣልቦ።",
+      "ocrFailed": "ድንበት ብ OCR ዝኸተተ ኣይኸተተን፡ ኣንተ ግዞ።",
+      "ocrTooManyPages": "እዚ ውክልና ብሓደ ኦቲ ይንቀሳቀስ ዝተኾነ ፈላሚ ይሕይም፥ ኦቲ ኣብ ዝተፈላለወ እዋን እንተትንቀሳቀስ ነዚ {max} ገፅ ይሓተት። ፋይል PDF ክፍተን ኣንተን ንክፍል ጨምር።",
+      "scannedWholeExplanation": "ናብዚ ሓተታ ቅድሚ ንዚ ሰነድ ምትሓስሓስ ትኽእል ፣ ዝተለምደ ገጽታ ብዝኸየ ግዘት ይዓበየ፣ ፍሉይ ስርዓት ይጥርጥር፣ ንዚ ዝተቀደሱ ቀንዲ ናይ ትሓስሓስ መደብ ነፃ፡ ይሕሸብ።",
+      "scannedUseWholeDocument": "ሓተታ ዝኾነ ሰነድ ተተሓሳስ",
+      "scannedSourceNote": "{name} ንዚ ሓበሻ ኣይተሓለተ ፡ ሓተታ ዒረት ብምብጻሕ ገጽታቱ ይተተሓሳስ። ካልእ ትርጉም ብተፃፃው ምውሳኽ ከይተፈጽሞ ፡ ሓተታን ከይተቀደሰን ይሕሸብ።",
+      "scannedPageNote": "ካብዚ ገጽ ናይ መሓደሪ ሰነድ ጽሑፍ ኣይተኣንበበን። ብመደቡ ምንጭ ሓበሻ አንፉዎ።",
+      "changeLabel": "ትርጉም ክቕየም ጥዕና ብደሓሳት ይድረፍ",
+      "changePlaceholder": "ክቕየም ኣይትሓሰብ፣ ኣብ ፍርዲ ደሓሰስ ክሰርዓ",
+      "changePlaceholderAnother": "ካልኣኽ ቕድሚ ጥዕና ጠይቅ",
+      "changeSend": "ጥዕና ልኣ",
+      "changeWorking": "ቕድሚታትን ኣርእያት ተስሊ",
+      "changeNothingApplied": "ዝቕየም ኣይተረኣየን እምበር ክቕበልካ የተረኣየን",
+      "changeSelectionLabel": "ክቕየም ናይ ተወሰነ ጽሑፍ ጠይቅ",
+      "changeSelectionPlaceholder": "ነዚን ቕየም፣ ኣታዊ ‘tableta’ ምባል",
+      "changeSelectionScope": "ንተወሰነ ጽሑፍ ብሓላፍ ምስልታስ",
+      "changeSelectionClose": "ዝግጅ",
+      "changeTitle": "ዝተጠየቐ ቕድሚታት",
+      "changeSelectedLabel": "ተወሰነ ጽሑፍ",
+      "changeNoEdits": "ዝቕየም የለን ንእኽን ጥዕና.",
+      "changeReplyPending": "{count, plural, one {# ዝተገልጸ ምስልታስ ኣብ መድረይ ስራሕ አሎ።} other {# ዝተገልጸ ምስልታት ኣብ መድረይ ስራሕ አሎ።}} ዝቕየም ኣይተረኣየን እምበር ክቕበልካ የተረኣየን.",
+      "changeStopped": "ተደሊ፡ ዝቕየም የለን።",
+      "changeFailed": "ጥዕና ይቕየም ዘይሰራሕ። ካልኣኽ ሞንጋ።",
+      "changeNoTranslation": "መቕተር ትርጉም ኣይተሰርሓን እዩ። ብመቕተር ትርጉም ጀምር ብመጀምርኡ.",
+      "changeBusy": "መድረይ ስራሕ ይዓበየ። ወደፊት ጥዕና ምጥዋዕየ ተቐባልዎ።",
+      "changeHeld": "ኣይተልኣን፡ ዝተገልጸ ምስልታት ኣብ ዕውት እዮም ክቕበል ተሓት።",
+      "pendingRunActionRequest": "ቕድም ንምጥዋዕየ እየ።",
+      "railPlaceholder": "ክቕየም ወይ ሕቶ ጠይቅ…",
+      "documentPageCount": "{count, plural, one {# ገፅ} other {# ገፅታት}}",
+      "sourceShowPages": "ገፅታት ርእዩ",
+      "sourceEditText": "ከነ ጽሑፍ ምጽናዕ",
+      "sourceRemoveDocument": "መድእታ ወጽን",
+      "sourceJumpToPage": "ገፅ ምድረድ"
     },
     "document": {
       "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",
@@ -3300,7 +3442,7 @@
       "editLocation": "ረድኤት {row} · {column}",
       "editLocationRow": "ረድኤት {row} (ምስዳድ)",
       "showReview": "ናይ ግምገማ ርኣይ",
-      "showReviewPending": "ናይ ግምገማ ርኣይ ({{count}} ናይ ምግባር ተደጊሙ)",
+      "showReviewPending": "ናይ ግምገማ ርኣይ ({count} ናይ ምግባር ተደጊሙ)",
       "assessedFiltered": "ተቕራጺ ረድፎት",
       "assessedSelection": "ተመረጹ ረድፎት",
       "assessedSample": "ናይ ናሙና {shown} ካብ {total}",
@@ -3681,7 +3823,7 @@
       "guideTargetTerm": "ኣስፈላጦ ትርጉም",
       "guideNote": "ማስታወሻ",
       "pendingRun": {
-        "title": "{count} ምምኽራት ኣላ ዘይተጽሕፉ።",
+        "title": "{count, plural, one {# ናይ ምጥንቓቕ ሓሳብ የተረኽበን} other {# ናይ ምጥንቓቕ ሓሳባት የተረኽቡን}}",
         "body": "{action} ክኸውን ይኽእል፣ በዚ ምኽራት ኣይተውሉን ምዃኑ ጽሑፋት ሙሉእ ክለውጠሉ ይኽእሉ፣ እናተሕደሰ ምዕጽማት ድማ ናይ ሕፂና ዝርዝር ክትኸውን ይኽእል። ቀደም ንነበሩ ምምኽራት ቅድሚ ዚ ሓሳብ።",
         "acceptAll": "ምስሉ ትስዕቲ ንኩሎም ተቐቢሉ",
         "rejectAll": "ኩሎም ኣልቦ",
@@ -3743,7 +3885,7 @@
         "list<number>": "ዝርዝር ቁፅራት"
       },
       "layout": "ቅደም ተከተል",
-      "layoutHint": "Markdown ብ {{field:id}}ቤት — ንኣብ ምርት ውጽኢትን ንመርኣያ ትጥቀም.",
+      "layoutHint": "Markdown ብ '{{field:id}}'ቤት — ንኣብ ምርት ውጽኢትን ንመርኣያ ትጥቀም.",
       "saveTemplate": "ናይ ናብያ ቅባል ኣኣትዉ",
       "deleteTemplate": "ናይ ቅባል ኣድልዩ",
       "cancel": "ተወ",
@@ -4571,6 +4713,10 @@
         "note": "መወጺ ብተሓሰተ ዝበለ መወጺ ናብ {asOf} (ናይ ዓለም፣ ደረጃ መስተዋድድ፣ ምስ ቲ ግባእ-ግዜ መቕረፅ ብቀይሕነት): ከም ንላዕለ መወጺ ኣይካብልን። ምስ ድሕሪውን፣ ፅሓፈት ኮድ፣ ትርጉም፣ ድምጽ፣ ትርጉምን እንተዘይኣካበለ።"
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "ዝገመተ ውህብታ ድሕሪት (workspace)",
       "workspace": "እዚ ውህብታ ድሕሪት",
@@ -5385,7 +5531,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# ሰነድ} other {# ሰነዳት}} ተተውካ",
     "m365CapImmediateHelp": "መፈጸሚ ዝተረኽበ ድማ እቲ ውሳኔ ብእተፈጸመ ይኽእል። ካልእ ምሕዳራት ግን ግን ምዝገብ እየ ይደሊ።",
     "m365CapDraftHelp": "እቲ ውሳኔ ኣብ ምፍጣር ዓገንት ምኽንያት ይኽድኡ።",
-    "m365CapSaved": "ውሳኔ ዶክመንት ዝተዛመደ፡ {limit}።"
+    "m365CapSaved": "ውሳኔ ዶክመንት ዝተዛመደ፡ {limit}።",
+    "m365AgentAllowWebSearchHelp": "ዘብዙሕት እንተዘይእተፈቐደ: ጀንት ንብጽሓ፡ ካብ ናይ ሰነዶቱ ዝወጻ ጥያቄ የርሕን ዊብ የርሕን፡ ኣብ እዋን ጥራይ ትሕደት ዘይኮነ። እንተፈቐደ ጀንት መምሕራዉ ይገበረካ፡ መበገሲ ዊብ ሰርች ከይኸውንን እንታይ ዊብሳይት ኣብስሓት ይሰጥ፡ ንኹሉ ዊብ ምንጭ ከብ ጀንት ሰነዶታት ብዝሓደስ ይብል።",
+    "promptAgentAllowWebSearchHelp": "እቲ ዳር default እዩ። እንተዘይእተፈቐደ፡ እዚ ጀንት ዊብ ብምርምር የርሕን፡ ብውሕስ search setting ተሰሪሑ."
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",
@@ -5692,7 +5840,9 @@
       "m365MailReadsPerDay": "ናይ ሜይል ምንባብ ብሕደግ",
       "m365MailDraftsPerDay": "ናይ ሜይል ማእከላይ ጽሑፍ ብሕደግ",
       "m365MailDeepScansPerDay": "ናይ ሜይል ብዝተስተዋዅነ ፍለጥ ብሕደግ",
-      "m365DigestRunsPerDay": "ዕለታዊ ዝተደገመ ማህደር ፍርዲ"
+      "m365DigestRunsPerDay": "ዕለታዊ ዝተደገመ ማህደር ፍርዲ",
+      "translationPagesPerDay": "ገጻት ናይ ደብተር ትርጉም ባህሪ ናይ ኣለዋዋሊ መዓልቲ",
+      "ocrPagesPerDay": "ገፅታት OCR ብ መዓልቲ"
     },
     "valueModeLabel": "ዓይነት መድረ",
     "valueAmountLabel": "መጠን መድረ",
@@ -5715,7 +5865,8 @@
       "jobs": "ስራሕታት",
       "rounds": "ወርድ",
       "documents": "ሰነዳት",
-      "boolean": ""
+      "boolean": "",
+      "pages": "ገጻት"
     },
     "window": {
       "day": "ኣዓል",
@@ -5773,7 +5924,9 @@
       "m365MailReadsPerDay": "ምፍታን ናይ ኢሜል እና ምንባብ ሜል/መንገዲ በዓል መዓልቲ። ቅጥዒ ኣተዉ ኣብ ዚ ተጠቂሙ፡ መገልገሲ ደገ 'ክሳብ ጽባሕ ደገም ፈትኑ' ይርከብ።",
       "m365MailDraftsPerDay": "ንመዓልቲ ኣዝዩ ዘለዎ ኢሜል ፅሑፋታት ኣስተኻኺላ፡ ካብ ሓደ ሓደ ዝተረጋገጹ። ብዝምልከት ኣግንዑ።",
       "m365MailDeepScansPerDay": "ብሓባር ዝተፈጠሩ ምምርኣይ መንጸባር ኢሜል (digest, deep search, commitments) በዓል መዓልቲ። ካብ ናይቲ ዝተረኸበ ዝግበር ውሽጢ አይተለየን።",
-      "m365DigestRunsPerDay": "Microsoft 365 ዕለታዊ ዝተደገመ ማህደር ፍርዲ ብናይ ዕለት፡ ኣንድ ፍርዲ ውስተ ዓይነት ዝኣተወ ብብርሀነት ይኸውን፡ እንተማሃበር ፋይን ብዘይ ወጻኢ ይተሓበሩ፣ ፍርዲ ኣብ ሕጂ ከተምርጡን ኣብ ቀዳማይ ምውናስ ቀሊል ክህልዉዎ ይዘይ፣ ዚኣኸውን ዘይምልከት ዘለዎ።"
+      "m365DigestRunsPerDay": "Microsoft 365 ዕለታዊ ዝተደገመ ማህደር ፍርዲ ብናይ ዕለት፡ ኣንድ ፍርዲ ውስተ ዓይነት ዝኣተወ ብብርሀነት ይኸውን፡ እንተማሃበር ፋይን ብዘይ ወጻኢ ይተሓበሩ፣ ፍርዲ ኣብ ሕጂ ከተምርጡን ኣብ ቀዳማይ ምውናስ ቀሊል ክህልዉዎ ይዘይ፣ ዚኣኸውን ዘይምልከት ዘለዎ።",
+      "translationPagesPerDay": "PDF ገጻት ትርጉም ናይ ደብተር ምህበስ ኣብ መዓልቲ.",
+      "ocrPagesPerDay": "PDF ገፅታት ብ OCR (ትምኒት ጽሑፍ ን ዝተስናኽተ ድንበት) ብ መዓልቲ።"
     },
     "scopeFamily": "ህይወታዊ ቤት",
     "scopeModel": "ሞዴል",
@@ -8081,7 +8234,13 @@
       "skills": "ስነ ክህደት ምርጫ",
       "tools": "ኣብ መሳርሒ ምዝገብ",
       "trim": "ቅጥቃጥ ምምልከት",
-      "assessment": "Search assessment"
+      "assessment": "Search assessment",
+      "query": "ምግባር ዳግማይ መታየት ኣለዎ",
+      "mailScreen": "መደበር ፡ መልእኽት ፊሺንግ",
+      "mailAnalysis": "መልእኽትን ዝመጽእ ፈተና",
+      "schemaProposal": "ቅድሚ ውጽኢት ስከማ ሓበሬታ",
+      "mcpPlan": "መበጃ ኣገናኒ",
+      "vision": "ምስእን እና ገጽ ቕይታ"
     },
     "reason": {
       "endpoint_missing": "Endpoint ወይ ብ መለለይ ኣቋራጽ ብርኪ የጎዳኣን",
@@ -8102,6 +8261,164 @@
       "endpoint_account_mismatch": "Endpointን ARM resource IDን ብቐይሩ ናይ ኣካውንት ይምልከቱ። ቅንጠታ ናይ deployment ኣድስጉ።",
       "inventory_refresh_failed": "ሓደሽቲ ብዛዕባ ድሕሪ ኣተረፈ። ፈትኑ እንተ Reader ኣብ identity ኣፕሊኬሽን እተሓታፍያን ናይ ኣካውንት ምድላውን።",
       "credential_unavailable": "ኣፕሊኬሽን ብዛዕባ ምርመራ መክትቢ ኣይተረኸበን። ቅንጠታ ናይ deployment identity ምምዝጋብ ፈትኑ።"
+    },
+    "notSupported": "ንዚ ሞዴል ይካበን ኣይደለን",
+    "unservedOperations": "ሞዴል ዝድለ ምርካብ ኣይኮነን: {operations}። ሞዴል ዘይምርካብ ወይ ጨምረ።"
+  },
+  "filePreview": {
+    "preview": "ንኣብ ቅድሚ ምርኣይ",
+    "download": "ኣውርድ",
+    "loading": "ንቅድሚ ምርኣይ ዝዘጋጅ እዩ...",
+    "failed": "ነዚ ፋይል ክርኣይ ኣልተተኻነ። ግን ኣውርድ ክትደልወሉ ትኽእል።",
+    "pageOf": "ገጽ {page} ካብ {total}",
+    "truncated": "ንቀዳሚ {shown} ካብ {total} ገጻት ይብርፅእ። ኣብሓደስ ንምርኣይ ፋይል ኣውርድ።",
+    "enlarge": "{name} ኣብዚጽው"
+  },
+  "addToChat": {
+    "title": "ኣብ ቻት ወሰን",
+    "titleTranslate": "ሰነድ ትርጉም",
+    "titleTranscribe": "ድምጺ ወይ ቪድዮ ትጽንቕ",
+    "sourcesLabel": "ምንጪ ወሰን",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "ምስ ዚ ኣገልግሎት የኾነን",
+    "sources": {
+      "device": "ኣብዚ መሳርሒ",
+      "link": "ሊንክ",
+      "camera": "ካሜራ",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ኢመይል",
+      "meetings": "ምዕራፍ"
+    },
+    "device": {
+      "browse": "ኣብዚ መሳርሒ ድሓል",
+      "dropHint": "ወይ ፋይልታት ኣብዚ መስተንክር ጣሉ ወይ ቅዳሚ የትኸፍሉ",
+      "rejected": "ካብዚ ፋይልታት ዝተመሓዘኩም ኣብዚ ኣርእዋ የትደለን",
+      "hint": {
+        "attach": "ሰነዳት፣ ምስናት፣ ድምጺን ቪድዮን",
+        "translate": "ሓደ ሰነድ፡ Word፣ Excel፣ PowerPoint፣ PDF፣ HTML ወይ ጽሑፍ",
+        "transcribe": "ድምጺ ወይ ቪድዮ፡ መልእኽቲ ምስ ተልኡ ይጽንቕ"
+      }
+    },
+    "selection": {
+      "then": "ቀጸም",
+      "intents": {
+        "attach": "ሰነድ ወስን",
+        "translate": "ትርጉም",
+        "transcribe": "ትጽንቕ"
+      },
+      "confirm": {
+        "attach": "ወሰን",
+        "translate": "ትርጉም",
+        "transcribe": "ትጽንቕ"
+      },
+      "unfit": {
+        "attach": "እዚ ፋይልታት ከም ትዝሓበል የትኸሲቡን",
+        "translate": "ትርጉም ናይ ሓደ ሰነድ እዩ ዝሓለፈ",
+        "transcribe": "ንድምጺን ቪድዮን ብብሉ ትጽንቕ ይክእል"
+      }
+    },
+    "menu": {
+      "addToChatNote": "ኣብዚ መሳርሒ፣ ሊንክ፣ Microsoft 365",
+      "filesOrPhotos": "ፋይልታት ወይ ምስናት",
+      "fromThisDevice": "ካብዚ መሳርሒ",
+      "connect": "Microsoft 365 ኣታሓባ",
+      "connectNote": "ኣብ OneDrive፣ ኢመይልን ምዕራፍን ወሰን"
     }
+  },
+  "usageBudgets": {
+    "title": "ባጀታትካ",
+    "description": "በዚ መሳርያ ዝምስላካ ዝሓዘካ ኣቀማጣ. ባጀታ ትፍለጥ፡ ካብታ ዘጠገንካን ዘርፉካን ግንዛብ ትርገም. ባጀታት chat ን፡ workflow ዝምልከት ካብ መጀመሪ ምድግጋዊ ዝኸውን ይቍጽጽ.",
+    "metric": {
+      "emissions": "ባጀታ ናይ ኤሚሽን",
+      "cost": "ባጀታ ናይ ወጽኢ"
+    },
+    "metricShort": {
+      "emissions": "ኤሚሽን",
+      "cost": "ወጽኢ"
+    },
+    "off": "ባጀታ ዘሰተወ የለወ.",
+    "measureAs": "እንተኾነ ትንስስ",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "ሓመድ ስልኪ",
+      "usd": "US dollars"
+    },
+    "amountLabel": "ባጀታ",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ሰዓታት",
+      "smartphoneCharge": "ሓመድ",
+      "usd": "US dollars"
+    },
+    "periodLabel": "ምድግጋዊ የተሓሓዘ",
+    "period": {
+      "day": "መዓልቲ",
+      "week": "ሰገራ",
+      "month": "ወርሒ"
+    },
+    "costNote": "ካብ ተመደበ ዋጋታት ተገምግምቲ፡ ከም ዝተሓዘ ዋጋ ኣይተቢል ኣይኮነን.",
+    "chargesValue": "{count} ሓመድ ስልኪ",
+    "percent": "{percent}%",
+    "usedOf": "{used} ካብ {limit} ተጠቒሙ ({percent}%)",
+    "usedOfShort": "{used} ካብ {limit}",
+    "resets": "{date} ዝምድግጋዊ",
+    "budgetMarker": "ባጀታ",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "ክሳብ ባጀታ ይግበሩ",
+      "warn": "ማሕተም ተሃዘ",
+      "ask": "ካብ መልእኽት እትሕተት ትሕፀ",
+      "stop": "ምልኣኽ ዕጽበየ"
+    },
+    "stage": {
+      "warn": {
+        "title": "ማሕተም",
+        "tag": "ምግባን",
+        "description": "ካብ እዚ ክፍሊ ባጀታ ዝሕበ ማሕተም ብchat ኣርእይ."
+      },
+      "ask": {
+        "title": "ቅድሚ ምልኣኽ ይብል",
+        "tag": "ዝንጉዓይ ምሕታም",
+        "description": "ካብ እዚ ክፍሊ ባጀታ ኣብ መልእኽት ኩሉ ክርግዝ ይቕጽጽ."
+      },
+      "stop": {
+        "title": "አትዕ",
+        "tag": "ዝቃኑዕ ምሕታም",
+        "description": "ካብ እዚ ክፍሊ ባጀታ ዝካየድ ምልኣኽ ክዕጽበይ ድሕሪ ዝምድግጋዊ ወይ ምምዕመን ነዚ መዳረይ."
+      }
+    },
+    "thresholdLabel": "{stage} ሰኣን ዝኣኽለ ባጀታ ፐርሰንት",
+    "notice": {
+      "warn": {
+        "emissions": "{percent}% ናይ ኤሚሽን ባጀታትካ ተጠቂሙ.",
+        "cost": "{percent}% ናይ ወጽኢ ባጀታትካ ተጠቂሙ."
+      },
+      "ask": {
+        "emissions": "{percent}% ናይ ኤሚሽን ባጀታትካ ተጠቒሙ. እዚ መልእኽቲ ክተልኣኽ?",
+        "cost": "{percent}% ናይ ወጽኢ ባጀታትካ ተጠቒሙ. እዚ መልእኽቲ ክተልኣኽ?"
+      },
+      "askRun": {
+        "emissions": "{percent}% ናይ ኤሚሽን ባጀታትካ ተጠቒሙ. እዚ ምልኣኽ ክትጀመር?",
+        "cost": "{percent}% ናይ ወጽኢ ባጀታትካ ተጠቒሙ. እዚ ምልኣኽ ክትጀመር?"
+      },
+      "stop": {
+        "emissions": "ደረበ ናይ ኤሚሽን ባጀታ አትዕ ቦታ ኣኸበል. ምልኣኽ ክዕጽበይ ክሳብ {date}.",
+        "cost": "ናይ ወጪ ባጀት ዝወደደ ነገር ተረኺቡ። መልኣኽ ክተላእኽ ገይሩ ኣብ {date} ድማ ይጸንቕ።"
+      }
+    },
+    "actions": {
+      "viewBudget": "ባጀት ርእየ",
+      "dismiss": "ጥፍኣ",
+      "sendAnyway": "እንተዘይ ተኽእሎ ልኣ",
+      "runAnyway": "ብሕንዳ ግድፍ",
+      "dontSend": "ዘይ ልኣ",
+      "dontAskToday": "ሎሚ ደሓን አትጠይቕ",
+      "openSettings": "ባጀት ምቅላዕ settings ክፈት",
+      "edit": "ኣርባ"
+    },
+    "composerPaused": "ብባጀትካ ምልኣኽ ተጸንቐ",
+    "summaryTitle": "ባጀቶትካ",
+    "chipAria": "{metric} ባጀት፡ {percent}% ተጠቓሚ ይሕሸ.",
+    "runProjection": "ዝኸደ ባጀት ምፍላጥ {from}% → {to}%"
   }
 }

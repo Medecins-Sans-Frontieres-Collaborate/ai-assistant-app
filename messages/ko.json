@@ -18,7 +18,6 @@
   "Invalid folder file": "잘못된 폴더 파일",
   "New conversation": "새 대화",
   "No prompts found": "프롬프트를 찾을 수 없습니다",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "프롬프트 제한은 {{maxLength}}자입니다. {{valueLength}}자를 입력했습니다.",
   "Run Typewriter Intro": "타자기 인트로 실행",
   "Saved Prompts": "저장된 프롬프트",
   "Select a prompt to view details": "세부정보를 보려면 프롬프트를 선택하세요",
@@ -27,7 +26,6 @@
   "OpenAI API Key Required": "OpenAI API 키가 필요합니다",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "사이드바 왼쪽 하단에 OpenAI API 키를 설정하세요.",
   "Stop Generating": "생성 중지",
-  "Prompt limit is {{maxLength}} characters": "프롬프트 제한은 {{maxLength}}자입니다.",
   "System Prompt": "시스템 프롬프트",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "당신은 OpenAI에서 훈련된 대규모 언어 모델 ChatGPT입니다. 사용자의 지시를 주의해서 따르세요. 마크다운을 사용하여 응답하세요.",
   "Enter a prompt": "프롬프트를 입력하세요",
@@ -46,7 +44,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "OpenAI API 키가 사이드바 왼쪽 하단에 설정되어 있는지 확인하세요.",
   "If you completed this step, OpenAI may be experiencing issues_": "이 단계를 완료한 경우 OpenAI에 문제가 있을 수도 있습니다.",
   "click if using a _env_local file": "click if using a .env.local file",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "메시지 제한은 {{maxLength}}자입니다. {{valueLength}}자를 입력했습니다.",
   "Please enter a message": "메시지를 입력하세요",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "Chatbot UI는 ChatGPT의 인터페이스와 기능을 모방하는 것을 목표로 둔 OpenAI의 채팅 모델들을 위한 고급 챗봇 키트입니다.",
   "Are you sure you want to clear all messages?": "모든 메시지를 지우시겠습니까?",
@@ -192,8 +189,8 @@
   "uploadAudioVideoFile": "오디오 또는 비디오 파일 업로드",
   "uploadingFile": "파일 업로드 중...",
   "removeFile": "제거하고 다른 파일 선택",
-  "transcriptionErrorAttempt": "전사 중 오류 (3번 중 {{attempt}}번째 시도). 다시 시도 중...",
-  "rateLimitExceededWaiting": "속도 제한 초과. {{seconds}}초 대기한 후 다시 시도...",
+  "transcriptionErrorAttempt": "전사 중 오류 (3번 중 {attempt}번째 시도). 다시 시도 중...",
+  "rateLimitExceededWaiting": "속도 제한 초과. {seconds}초 대기한 후 다시 시도...",
   "Conversations": "대화",
   "Prompts": "프롬프트",
   "Close sidebar": "사이드바 닫기",
@@ -612,7 +609,8 @@
     "clear": "지우기",
     "undo": "실행 취소",
     "durationSeconds": "{count, plural, one {#초} other {#초}}",
-    "durationMinutes": "{count, plural, one {#분} other {#분}}"
+    "durationMinutes": "{count, plural, one {#분} other {#분}}",
+    "clearSearch": "검색 지우기"
   },
   "errors": {
     "unexpectedErrorOccurred": "예기치 않은 오류가 발생했습니다",
@@ -902,7 +900,13 @@
     "ttsError": "오디오 생성 오류가 발생했습니다. 다시 시도해 주세요.",
     "unsupportedMessageType": "메시지 렌더링 오류: 지원되지 않는 메시지 유형",
     "addLanguageOption": "\"{name}\" 추가…",
-    "sources": "출처",
+    "sources": {
+      "fromDocuments": "에이전트 문서",
+      "fromWeb": "웹",
+      "fromDocumentsHint": "이 에이전트의 자체 문서에서 발췌된 내용",
+      "fromWebHint": "웹 검색으로 찾은 공개 페이지",
+      "heading": "{count, plural, one {출처} other {출처}}"
+    },
     "interpreterBadge": "코드 실행",
     "disableCodeInterpreter": "코드 실행 비활성화",
     "interimSearch": {
@@ -980,7 +984,8 @@
       "MODEL_RATE_LIMITED": "현재 모델이 너무 많은 요청을 받고 있습니다. 자동으로 재시도되었습니다; 잠시 후 다시 시도해주세요.",
       "MODEL_QUOTA_EXCEEDED": "모델의 용량 할당량이 소진되었습니다. 다른 모델을 선택하거나 나중에 다시 시도하세요.",
       "MODEL_AUTH_FAILED": "앱이 모델 서비스와 인증할 수 없습니다. 설정 문제입니다 — 지원팀에 문의하세요."
-    }
+    },
+    "messageLimitExceeded": "메시지 제한은 {maxLength}자입니다. {valueLength}자를 입력했습니다."
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -2415,20 +2420,18 @@
     "sectionPinned": "고정됨",
     "sectionFrequent": "자주 사용함",
     "sectionMore": "더 보기",
-    "categoryWeb": "웹",
-    "categoryMedia": "미디어 및 파일",
-    "categoryTransform": "변환",
     "pin": "상단에 고정",
     "unpin": "고정 해제",
     "moveToMore": "더 보기로 이동",
     "moveOutOfMore": "메뉴에 표시",
     "showSources": "다른 소스 보기",
     "hideSources": "다른 소스 숨기기",
-    "aiTools": "AI 도구",
-    "aiToolsTooltip": "어시스턴트가 답변 시 사용할 수 있는 기능: 실시간 웹 검색, 코드 실행, 연결된 서비스 등.",
     "codeInterpreterTooltip": "안전한 샌드박스에서 각 메시지마다 Python 코드를 실행합니다.\n\n첨부 파일로 데이터 분석, 계산, 차트 생성 시 유용합니다.",
-    "categoryTools": "도구 및 커넥터",
-    "translationConversationTitle": "번역: {filename}"
+    "translationConversationTitle": "번역: {filename}",
+    "categoryAdd": "추가",
+    "categoryDo": "실행",
+    "categoryChat": "이 채팅에서",
+    "categoryStart": "시작 위치"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI의 응답 방식을 맞춤화하려면 개인 지침을 추가하세요. 이는 유용하고 정확하며 안전한 응답을 보장하는 기본 행동 지침과 함께 적용됩니다.",
   "Tip: Type \"/\" to select from saved prompt templates_": "팁: \"/\"를 입력하면 저장된 프롬프트 템플릿을 선택할 수 있습니다.",
@@ -2556,7 +2559,9 @@
     "savedToOneDrive": "{name}을(를) OneDrive에 저장했습니다.",
     "openInOneDrive": "열기",
     "saveForbidden": "해당 폴더에 쓸 수 있는 권한이 없습니다 — “OneDrive에 저장”으로 다른 폴더를 선택하세요.",
-    "saveToOneDriveFailed": "OneDrive에 저장할 수 없습니다 — 다시 시도해주세요."
+    "saveToOneDriveFailed": "OneDrive에 저장할 수 없습니다 — 다시 시도해주세요.",
+    "textVersion": "텍스트 버전 (DOCX)",
+    "textVersionHint": "번역된 텍스트가 포함된 수정 가능한 Word 파일입니다. 한 페이지에 원본의 각 페이지가 매핑되며, 번역 파일은 원본 레이아웃을 유지합니다."
   },
   "terms": {
     "officialLanguages": "공식 버전:",
@@ -2742,7 +2747,6 @@
   },
   "usageImpact": {
     "empty": "아직 사용 내역이 없습니다. 채팅 후에 토큰 사용량과 예상 배출량이 여기에 표시됩니다.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count}회 스마트폰 충전",
     "requests": "요청",
     "promptTokens": "프롬프트 토큰",
@@ -3069,7 +3073,145 @@
       "importTooLarge": "파일이 너무 커서 가져올 수 없습니다(최대 5MB).",
       "importNothing": "사용 가능한 행이 없습니다({skipped}개 건너뜀).",
       "importSummary": "{added}개 추가, {replaced}개 대체, {skipped}개 건너뜀.",
-      "entriesTooManyToShow": "{count}개 용어 — 목록이 너무 많습니다. 검토하려면 내보내기를 사용하거나, 파일을 가져와 용어를 교체하세요."
+      "entriesTooManyToShow": "{count}개 용어 — 목록이 너무 많습니다. 검토하려면 내보내기를 사용하거나, 파일을 가져와 용어를 교체하세요.",
+      "pagesLoaded": "페이지 {selected} / {total} 로드됨",
+      "pagesLabel": "페이지",
+      "pagesApply": "페이지 로드",
+      "pagesPrevious": "이전 배치",
+      "pagesNext": "다음 배치",
+      "pagesBudget": "{used} / {max} 문자",
+      "pagesChange": "페이지 변경",
+      "pagesLoading": "페이지 로드 중…",
+      "pagesInvalid": "페이지 번호 또는 범위를 입력하세요. 예: 1-40, 45.",
+      "pagesUnavailable": "해당 페이지에는 텍스트가 없습니다.",
+      "pagesTooMany": "선택하신 내용은 {used} 문자이며, 한 배치에는 {max} 문자가 허용됩니다. 더 적은 페이지를 선택하세요.",
+      "stop": "중지",
+      "stepAnalyzing": "분석 중",
+      "stepTranslating": "번역 중",
+      "stepReviewing": "검토 중",
+      "stepDone": "완료",
+      "runProgressLabel": "번역 진행 상황",
+      "runHintAnalyzing": "어려운 용어나 모호한 부분을 확인하는 중입니다.",
+      "runHintTranslating": "번역을 작성하는 중입니다.",
+      "runHintReviewing": "초안을 원문과 대조하여 점검 중입니다.",
+      "runHintReviewingRound": "초안을 원문과 대조하여 점검 중 · {total}회 중 {round}번째.",
+      "runRound": "{total}회 중 {round}번째",
+      "draftLabel": "초안",
+      "sourceLocked": "번역 중 잠김",
+      "analysisNotes": "{count, plural, one {#개 메모} other {#개 메모}}",
+      "analysisPill": "{count, plural, one {분석 · #개 메모} other {분석 · #개 메모}}",
+      "reviewSummary": "{count, plural, one {검토: #회, {verdict}} other {검토: #회, {verdict}}}",
+      "analysisDismiss": "모든 번역에서 숨기기",
+      "analysisShow": "번역 전 분석 보기",
+      "analysisResize": "분석 패널 크기 조정",
+      "assessingCriteria": "{count, plural, one {#개 기준 확인 중} other {#개 기준 확인 중}}",
+      "editsPending": "평가가 완료되면 제안된 수정 사항이 여기에 표시됩니다.",
+      "uploadProgressLabel": "업로드 진행 상황",
+      "uploadStepUploading": "업로드 중",
+      "uploadStepReading": "텍스트 읽는 중",
+      "uploadStepReady": "준비 완료",
+      "uploadCancel": "취소",
+      "modeDocument": "전체 문서",
+      "modeDocumentHint": "업로드된 PDF 전체를 번역하며, 레이아웃을 유지합니다. 결과를 페이지별로 확인하고 수정하세요.",
+      "translateDocument": "문서 번역",
+      "documentSubmitting": "전송 중…",
+      "documentIntroTitle": "전체 문서 번역",
+      "documentIntro": "업로드된 PDF는 전체가 번역되며, 레이아웃이 그대로 유지됩니다. 준비가 완료되면 원본과 번역본을 나란히 보면서 페이지별로 읽고, 페이지를 수정하거나 품질을 확인하고, 결과를 다운로드할 수 있습니다. 이 모드에서는 용어집과 검토 라운드가 적용되지 않습니다. 번역을 시작하면 중단할 수 없으며, 번역된 페이지 수는 오늘의 허용량에 포함됩니다.",
+      "documentNeedsFile": "전체 문서를 번역하려면 PDF를 업로드하세요.",
+      "documentNeedsPdf": "페이지별 보기 전체 문서 번역은 PDF 파일만 지원됩니다.",
+      "documentNeedsLanguage": "번역할 문서의 대상 언어를 선택하세요.",
+      "documentLanguageUnsupported": "이 언어로 전체 문서 번역은 지원되지 않습니다. 대신 빠른 번역이나 검토 번역을 사용하세요.",
+      "documentNoGlossaries": "전체 문서 번역에는 용어집이 사용되지 않습니다.",
+      "documentPagesLeft": "{count, plural, one {오늘 남은 페이지 #} other {오늘 남은 페이지 #}}",
+      "documentLimitReached": "오늘 사용할 수 있는 페이지 수보다 문서의 페이지가 더 많습니다. 빠른 번역이나 검토 번역으로 선택한 페이지만 번역하거나 내일 다시 시도하세요.",
+      "documentUnavailable": "이 서버에서는 전체 문서 번역이 설정되어 있지 않습니다.",
+      "documentSubmitFailed": "문서를 번역에 제출할 수 없습니다: {message}",
+      "documentProgressLabel": "문서 번역 진행 상황",
+      "documentStepUploaded": "업로드됨",
+      "documentStepPreparing": "페이지 준비 중",
+      "documentTypicalDuration": "보통 몇 분",
+      "documentCanLeave": "이 페이지를 떠나도 됩니다. 번역이 계속 진행되며 돌아오시면 결과를 확인할 수 있습니다.",
+      "documentStalled": "번역 진행 상황을 확인할 수 없습니다. 아직 실행 중일 수 있습니다.",
+      "documentCheckAgain": "다시 확인",
+      "documentFailed": "문서를 번역할 수 없습니다: {message}",
+      "documentGone": "이 번역은 더 이상 제공되지 않습니다. 문서를 다시 번역하여 읽어보세요.",
+      "documentPageFailed": "이 페이지를 불러올 수 없습니다: {message}",
+      "documentPagesNotAligned": "번역된 파일의 페이지 수가 달라 양쪽의 내용이 일치하지 않을 수 있습니다.",
+      "documentAvailableUntil": "{date}까지 이용 가능",
+      "documentRetranslateTitle": "문서를 다시 번역하시겠습니까?",
+      "documentRetranslateMessage": "이 작업은 새로운 번역을 시작하며, 번역된 페이지 수가 오늘의 허용량에 다시 포함됩니다. 한번 시작하면 중단할 수 없습니다. 현재 번역과 수정 내용은 만료될 때까지 서버에 남아 있지만, 더 이상 이곳에는 표시되지 않습니다.",
+      "retry": "다시 시도",
+      "pageLabel": "페이지",
+      "pageOf": "총 {total} 중",
+      "pageNumber": "· {page} 페이지",
+      "pagePrevious": "이전 페이지",
+      "pageNext": "다음 페이지",
+      "correctedLabel": "수정됨",
+      "correctedPages": "수정된 페이지:",
+      "correctedPagesMore": "+{count} 더",
+      "correctionRestore": "복원",
+      "correctionRestoreHint": "이 페이지의 변경 사항을 취소하고 기계 번역으로 돌아갑니다",
+      "correctionSaving": "저장 중…",
+      "correctionSaved": "저장됨",
+      "correctionSaveFailed": "저장되지 않았습니다. 텍스트를 변경한 후 다시 시도하세요.",
+      "download": "다운로드",
+      "downloading": "다운로드 중…",
+      "downloadFailed": "다운로드 실패: {message}",
+      "downloadTranslated": "번역된 {format}",
+      "downloadTranslatedHint": "원본 레이아웃. 수정 사항은 포함되지 않습니다.",
+      "downloadTextVersion": "텍스트 버전 (DOCX)",
+      "downloadTextVersionHint": "페이지별로 한 페이지씩, 수정 사항이 포함된 일반 텍스트입니다.",
+      "documentNoCancel": "문서 번역이 시작되면 중단할 수 없습니다.",
+      "documentGlossariesIgnored": "{count, plural, one {선택한 용어집이 이 모드에서는 적용되지 않습니다.} other {선택한 #개의 용어집이 이 모드에서는 적용되지 않습니다.}} 용어는 품질 평가로 페이지별로 확인하거나, 빠른 번역 또는 검토된 번역을 이용하십시오.",
+      "pendingLeavePage": "제안은 이 페이지에만 속하며, 페이지를 떠나면 저장되지 않습니다. 남은 제안을 먼저 결정하십시오.",
+      "uploadStepOcr": "OCR로 읽는 중",
+      "ocrButton": "OCR로 읽기",
+      "ocrButtonHint": "스캔된 페이지이거나 인식이 잘못된 텍스트의 경우, 이 PDF를 텍스트 인식으로 다시 읽기",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "이 텍스트는 텍스트 인식으로 읽어들였습니다. 원본과 비교해 확인하세요.",
+      "ocrReasonNoText": "{name}에서 텍스트를 찾을 수 없습니다. 스캔된 문서로 보입니다.",
+      "ocrReasonSparse": "{name}에서 텍스트가 거의 발견되지 않았습니다. 일부가 스캔본일 수도 있습니다.",
+      "ocrReasonManual": "{name}을(를) 다시 텍스트 인식으로 읽으시겠습니까?",
+      "ocrExplanation": "OCR은 페이지 이미지에서 텍스트를 읽어옵니다. 일반 업로드보다 시간이 더 걸리며, 파일의 모든 페이지가 일일 OCR 할당량에 포함됩니다. 저화질 스캔, 손글씨, 표는 잘못 인식될 수 있습니다.",
+      "ocrPagesLeft": "{count, plural, one {오늘 남은 OCR 페이지 1개.} other {오늘 남은 OCR 페이지 #개.}}",
+      "ocrRun": "OCR로 읽기",
+      "ocrDismiss": "지금은 안 함",
+      "ocrSparseHint": "이 PDF에서 텍스트가 거의 발견되지 않았습니다. 일부 페이지가 스캔본일 수 있습니다.",
+      "ocrLimitReached": "이 문서는 오늘 사용 가능한 OCR 페이지 수를 초과합니다.",
+      "ocrTooManyPages": "이 문서는 OCR 처리 가능 한도를 초과했습니다. 최대 {max}페이지만 읽을 수 있습니다. PDF를 분할해 일부만 업로드하세요.",
+      "ocrUnavailable": "이 서버에는 OCR이 설정되어 있지 않습니다.",
+      "ocrNoText": "이 문서에서도 OCR이 텍스트를 찾지 못했습니다.",
+      "ocrFailed": "OCR로 문서를 읽을 수 없습니다. 다시 시도해 주세요.",
+      "scannedWholeExplanation": "전체 문서를 번역할 수도 있습니다. 스캔된 페이지를 직접 읽고, 레이아웃을 유지하며, 페이지 수가 일일 번역 허용량에 반영됩니다.",
+      "scannedUseWholeDocument": "전체 문서 번역",
+      "scannedSourceNote": "{name}에 표시할 텍스트가 없습니다. 전체 문서 번역은 페이지를 직접 읽습니다. 여기에 텍스트를 입력하면 문서가 대체됩니다.",
+      "scannedPageNote": "원본의 이 페이지에서 텍스트를 읽을 수 없습니다. 파일과 직접 비교해 주세요.",
+      "changeLabel": "번역 변경 요청하기",
+      "changePlaceholder": "변경 요청 예시: 더 격식 있게 만들어 주세요",
+      "changePlaceholderAnother": "다른 변경 요청하기",
+      "changeSend": "요청 보내기",
+      "changeWorking": "변경 사항 처리 중",
+      "changeNothingApplied": "승인하기 전까지 아무것도 변경되지 않습니다",
+      "changeSelectionLabel": "선택한 텍스트 변경 요청하기",
+      "changeSelectionPlaceholder": "변경 요청 예시: tableta라고 해주세요",
+      "changeSelectionScope": "선택한 텍스트에만 적용됩니다",
+      "changeSelectionClose": "닫기",
+      "changeTitle": "요청된 변경 사항",
+      "changeSelectedLabel": "선택된 텍스트",
+      "changeNoEdits": "해당 요청에 대해 변경이 필요하지 않습니다.",
+      "changeReplyPending": "{count, plural, one {#개의 제안된 편집이 작업 공간에 있습니다.} other {#개의 제안된 편집이 작업 공간에 있습니다.}} 승인하기 전까지 아무것도 변경되지 않습니다.",
+      "changeStopped": "중단되었습니다. 변경된 내용이 없습니다.",
+      "changeFailed": "변경 요청에 실패했습니다. 다시 시도하세요.",
+      "changeNoTranslation": "변경할 번역이 아직 없습니다. 먼저 텍스트를 번역하세요.",
+      "changeBusy": "현재 작업이 끝난 후 다시 요청하세요.",
+      "changeHeld": "전송되지 않음: 결정이 필요한 제안된 편집이 있습니다.",
+      "pendingRunActionRequest": "변경 요청 중",
+      "railPlaceholder": "변경 또는 질문을 요청하세요…",
+      "documentPageCount": "{count, plural, one {# 페이지} other {# 페이지}}",
+      "sourceShowPages": "페이지 보기",
+      "sourceEditText": "텍스트로 편집하기",
+      "sourceRemoveDocument": "문서 제거",
+      "sourceJumpToPage": "페이지로 이동"
     },
     "document": {
       "emptyTitle": "원하는 문서를 설명하세요",
@@ -3697,7 +3839,7 @@
       "guideTargetTerm": "필수 번역어",
       "guideNote": "참고",
       "pendingRun": {
-        "title": "{count}개의 제안이 아직 보류 중입니다",
+        "title": "{count, plural, one {#개 제안이 아직 처리되지 않음} other {#개 제안이 아직 처리되지 않음}}",
         "body": "{action}은 선택하지 않은 제안이 포함된 부분을 비롯해 텍스트의 모든 부분을 변경할 수 있으며, 새 평가가 현재 목록을 대체합니다. 남은 제안을 먼저 결정하세요.",
         "acceptAll": "남은 모든 항목 수락",
         "rejectAll": "모두 거부",
@@ -3759,7 +3901,7 @@
         "list<number>": "숫자 목록"
       },
       "layout": "레이아웃",
-      "layoutHint": "{{field:id}} 슬롯이 포함된 마크다운 — 렌더링된 내보내기 및 미리보기에서 사용됩니다.",
+      "layoutHint": "'{{field:id}}' 슬롯이 포함된 마크다운 — 렌더링된 내보내기 및 미리보기에서 사용됩니다.",
       "saveTemplate": "템플릿 저장",
       "deleteTemplate": "템플릿 삭제",
       "cancel": "취소",
@@ -4587,6 +4729,10 @@
         "note": "{asOf} 기준 목록가(Global Standard rate, 입력 캐시 할인 미적용)로 산정된 비용입니다. 청구 금액이 아니라 최대치입니다. 웹 검색, 코드 실행, 전사, 음성, 번역, 문서 색인은 포함되지 않습니다."
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "이 작업 공간(추정)",
       "workspace": "이 작업 공간",
@@ -5401,7 +5547,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {문서 #건} other {문서 #건}} 인덱싱됨",
     "m365CapImmediateHelp": "적용을 클릭하면 제한이 바로 저장됩니다. 다른 수정 사항은 저장이 필요합니다.",
     "m365CapDraftHelp": "제한은 에이전트를 생성할 때 저장됩니다.",
-    "m365CapSaved": "문서 제한이 저장되었습니다: {limit}."
+    "m365CapSaved": "문서 제한이 저장되었습니다: {limit}.",
+    "m365AgentAllowWebSearchHelp": "기본적으로 비활성화: 에이전트는 오직 자신의 문서에서만 답변하며, 사용자가 어떤 검색 설정을 선택하더라도 웹 검색을 수행하지 않습니다. 활성화하면 에이전트의 지침에 따라 웹 검색 여부와 사용할 웹사이트가 결정되며, 웹 출처는 항상 에이전트 문서와 별도로 표시됩니다.",
+    "promptAgentAllowWebSearchHelp": "기본적으로 활성화되어 있습니다. 비활성화하면, 사용자의 검색 설정에 관계없이 이 에이전트는 웹 검색을 수행하지 않습니다."
   },
   "localModels": {
     "title": "로컬 모델",
@@ -5708,7 +5856,9 @@
       "m365MailReadsPerDay": "메일 일일 읽기 수",
       "m365MailDraftsPerDay": "메일 일일 초안 수",
       "m365MailDeepScansPerDay": "메일 일일 심층 검사 수",
-      "m365DigestRunsPerDay": "일일 다이제스트 실행 횟수"
+      "m365DigestRunsPerDay": "일일 다이제스트 실행 횟수",
+      "translationPagesPerDay": "하루당 문서 번역 페이지 수",
+      "ocrPagesPerDay": "일일 OCR 페이지 수"
     },
     "valueModeLabel": "제한 유형",
     "valueAmountLabel": "제한 수량",
@@ -5731,7 +5881,8 @@
       "jobs": "건",
       "rounds": "회",
       "documents": "개",
-      "boolean": ""
+      "boolean": "",
+      "pages": "페이지"
     },
     "window": {
       "day": "일",
@@ -5789,7 +5940,9 @@
       "m365MailReadsPerDay": "메일 검색 및 메시지/스레드 열람의 일일 제한입니다. 한도를 초과하면 메일 도구에서 ‘내일 다시 시도하세요’라는 안내가 제공됩니다.",
       "m365MailDraftsPerDay": "어시스턴트가 하루에 생성할 수 있는 이메일 초안 수(각각 개별 확인 필요). 일부러 엄격하게 설정됨.",
       "m365MailDeepScansPerDay": "종합 메일 분석(다이제스트, 심층 검색, 약속 확인) 일일 제한입니다. 각 분석은 내부 읽기 횟수와 관계없이 1회로 계산됩니다.",
-      "m365DigestRunsPerDay": "Microsoft 365의 일일 다이제스트 실행 횟수입니다. 한 번 실행하면 여러 번의 Graph 읽기와 두 번의 분석 모델 호출이 이루어집니다. 기간 선택기를 통해 재실행 요청이 쉽게 이루어질 수 있으므로 기본값이 엄격하게 설정되어 있습니다."
+      "m365DigestRunsPerDay": "Microsoft 365의 일일 다이제스트 실행 횟수입니다. 한 번 실행하면 여러 번의 Graph 읽기와 두 번의 분석 모델 호출이 이루어집니다. 기간 선택기를 통해 재실행 요청이 쉽게 이루어질 수 있으므로 기본값이 엄격하게 설정되어 있습니다.",
+      "translationPagesPerDay": "하루에 문서 번역을 위해 제출된 PDF 페이지 수.",
+      "ocrPagesPerDay": "하루에 OCR(스캔 문서의 텍스트 인식)로 읽을 수 있는 PDF 페이지 수입니다."
     },
     "scopeFamily": "패밀리",
     "scopeModel": "모델",
@@ -8097,7 +8250,13 @@
       "skills": "기술 선택",
       "tools": "도구 라우팅",
       "trim": "트림 분류",
-      "assessment": "검색 평가"
+      "assessment": "검색 평가",
+      "query": "검색 쿼리 재작성",
+      "mailScreen": "메일 피싱 화면",
+      "mailAnalysis": "메일 및 요약 분석",
+      "schemaProposal": "추출 스키마 제안",
+      "mcpPlan": "커넥터 계획",
+      "vision": "이미지 및 페이지 읽기"
     },
     "reason": {
       "endpoint_missing": "엔드포인트 또는 계정 바인딩 누락",
@@ -8118,6 +8277,164 @@
       "endpoint_account_mismatch": "엔드포인트와 ARM 리소스 ID가 다른 계정을 식별합니다. 배포 구성을 수정하세요.",
       "inventory_refresh_failed": "인벤토리 새로고침 실패. 앱 신원의 Reader 접근 권한과 계정 연결을 확인하세요.",
       "credential_unavailable": "앱이 인벤토리 자격 증명을 가져올 수 없습니다. 배포 신원 구성을 확인하세요."
+    },
+    "notSupported": "이 모델에서 지원하지 않습니다",
+    "unservedOperations": "이 체인에 있는 어떤 모델도 지원하지 않는 작업입니다: {operations}. 해당 작업을 지원하는 모델을 추가하세요."
+  },
+  "filePreview": {
+    "preview": "미리보기",
+    "download": "다운로드",
+    "loading": "미리보기를 준비 중입니다…",
+    "failed": "이 파일은 미리보기할 수 없습니다. 그래도 다운로드는 가능합니다.",
+    "pageOf": "{total}페이지 중 {page}페이지",
+    "truncated": "전체 {total}페이지 중 처음 {shown}페이지만 표시합니다. 나머지 페이지를 보려면 파일을 다운로드하세요.",
+    "enlarge": "{name} 확대"
+  },
+  "addToChat": {
+    "title": "채팅에 추가",
+    "titleTranslate": "문서 번역",
+    "titleTranscribe": "오디오 또는 비디오 전사",
+    "sourcesLabel": "추가 위치",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "이 작업에서는 사용할 수 없습니다",
+    "sources": {
+      "device": "이 기기",
+      "link": "링크",
+      "camera": "카메라",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "이메일",
+      "meetings": "회의"
+    },
+    "device": {
+      "browse": "기기에서 찾아보기",
+      "dropHint": "또는 파일을 이 창 아무 곳에나 끌어놓거나, 붙여넣으세요",
+      "rejected": "이 파일들은 여기서 사용할 수 없습니다.",
+      "hint": {
+        "attach": "문서, 이미지, 오디오, 비디오",
+        "translate": "한 문서: Word, Excel, PowerPoint, PDF, HTML, 텍스트",
+        "transcribe": "오디오 또는 비디오. 메시지를 보내면 전사됩니다."
+      }
+    },
+    "selection": {
+      "then": "그 다음",
+      "intents": {
+        "attach": "첨부",
+        "translate": "번역",
+        "transcribe": "전사"
+      },
+      "confirm": {
+        "attach": "추가",
+        "translate": "번역",
+        "transcribe": "전사"
+      },
+      "unfit": {
+        "attach": "이 파일들은 첨부할 수 없습니다",
+        "translate": "번역은 한 번에 한 문서만 처리됩니다",
+        "transcribe": "오디오와 비디오만 전사할 수 있습니다"
+      }
+    },
+    "menu": {
+      "addToChatNote": "이 기기, 링크, Microsoft 365",
+      "filesOrPhotos": "파일 또는 사진",
+      "fromThisDevice": "이 기기에서",
+      "connect": "Microsoft 365 연결",
+      "connectNote": "OneDrive, 이메일, 회의에서 추가"
     }
+  },
+  "usageBudgets": {
+    "title": "예산",
+    "description": "이 기기에서 스스로 설정한 한도입니다. 예산을 선택한 후, 해당 예산에 가까워지거나 초과할 때 할 일을 선택하세요. 예산은 각 기간의 시작부터 채팅과 워크플로우 실행 횟수를 집계합니다.",
+    "metric": {
+      "emissions": "배출 한도",
+      "cost": "비용 한도"
+    },
+    "metricShort": {
+      "emissions": "배출",
+      "cost": "비용"
+    },
+    "off": "예산이 설정되지 않았습니다.",
+    "measureAs": "측정 단위",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "휴대폰 충전",
+      "usd": "미국 달러"
+    },
+    "amountLabel": "예산",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "시간",
+      "smartphoneCharge": "회",
+      "usd": "미국 달러"
+    },
+    "periodLabel": "매 기간마다 초기화",
+    "period": {
+      "day": "일",
+      "week": "주",
+      "month": "월"
+    },
+    "costNote": "정가 기준 추정치입니다. 청구 금액이 아닌 최대값입니다.",
+    "chargesValue": "{count}회 휴대폰 충전",
+    "percent": "{percent}%",
+    "usedOf": "총 {limit} 중 {used} 사용됨 ({percent}%)",
+    "usedOfShort": "총 {limit} 중 {used}",
+    "resets": "{date}에 초기화",
+    "budgetMarker": "예산",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "예산 내 사용",
+      "warn": "경고 표시",
+      "ask": "매 메시지마다 확인 요청",
+      "stop": "전송 일시 중지"
+    },
+    "stage": {
+      "warn": {
+        "title": "경고",
+        "tag": "알림",
+        "description": "해당 예산 비율부터 채팅에 알림을 표시합니다."
+      },
+      "ask": {
+        "title": "확인 요청",
+        "tag": "임시 차단",
+        "description": "해당 예산 비율부터 모든 메시지에 대해 확인을 요청합니다."
+      },
+      "stop": {
+        "title": "중지",
+        "tag": "완전 차단",
+        "description": "해당 예산 비율부터 초기화되거나 예산을 올릴 때까지 전송이 중지됩니다."
+      }
+    },
+    "thresholdLabel": "{stage} 임계값, 예산 비율",
+    "notice": {
+      "warn": {
+        "emissions": "배출 예산의 {percent}%를 사용했습니다.",
+        "cost": "비용 예산의 {percent}%를 사용했습니다."
+      },
+      "ask": {
+        "emissions": "배출 예산의 {percent}%를 사용했습니다. 이 메시지를 보내시겠습니까?",
+        "cost": "비용 예산의 {percent}%를 사용했습니다. 이 메시지를 보내시겠습니까?"
+      },
+      "askRun": {
+        "emissions": "배출 예산의 {percent}%를 사용했습니다. 이 실행을 시작하시겠습니까?",
+        "cost": "비용 예산의 {percent}%를 사용했습니다. 이 실행을 시작하시겠습니까?"
+      },
+      "stop": {
+        "emissions": "배출 예산 중지점에 도달했습니다. {date}까지 전송이 일시 중지됩니다.",
+        "cost": "비용 예산 한도에 도달했습니다. {date}까지 전송이 일시 중지됩니다."
+      }
+    },
+    "actions": {
+      "viewBudget": "예산 보기",
+      "dismiss": "닫기",
+      "sendAnyway": "그래도 보내기",
+      "runAnyway": "그래도 실행하기",
+      "dontSend": "보내지 않기",
+      "dontAskToday": "오늘 더 이상 묻지 않기",
+      "openSettings": "예산 설정 열기",
+      "edit": "편집"
+    },
+    "composerPaused": "예산에 의해 전송이 일시 중지됨",
+    "summaryTitle": "내 예산",
+    "chipAria": "{metric} 예산: {percent}% 사용됨.",
+    "runProjection": "배출 예산 {from}% → {to}%"
   }
 }

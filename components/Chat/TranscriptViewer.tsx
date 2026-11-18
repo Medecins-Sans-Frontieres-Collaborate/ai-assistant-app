@@ -728,7 +728,7 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
               {processedContent && (
                 <button
                   onClick={() => setExpanded(!expanded)}
-                  className="ml-2 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors"
+                  className="ms-2 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors"
                 >
                   {expanded ? t('transcript.collapse') : t('transcript.expand')}
                 </button>

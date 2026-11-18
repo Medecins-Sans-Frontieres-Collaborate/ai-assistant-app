@@ -94,6 +94,45 @@ describe('runTranslationWorkflow', () => {
     expect(events[0].data).toMatchObject({ finalText: 'Bonjour', rounds: 0 });
   });
 
+  it('keeps an echoed prompt fence off the stream and out of the result', async () => {
+    callStreamedText.mockImplementation(async (opts: any) => {
+      for (const delta of ['""', '"\nBon', 'jour\n""', '"'])
+        opts.onDelta(delta);
+      return '"""\nBonjour\n"""';
+    });
+    const { writer, events, texts } = makeWriter();
+    await runTranslationWorkflow({
+      sourceText: 'Hello',
+      targetLanguage: 'French',
+      glossaryEntries: [],
+      mode: 'quick',
+      writer,
+    });
+
+    expect(texts.join('')).toBe('Bonjour');
+    expect(texts).not.toContain('');
+    expect(events[0].data).toMatchObject({ finalText: 'Bonjour' });
+  });
+
+  it('strips a fence the reviewer echoed around a revision', async () => {
+    callStructured
+      .mockResolvedValueOnce(ANALYSIS)
+      .mockResolvedValueOnce(reviewResult('revise', '"""\nSalut\n"""'))
+      .mockResolvedValueOnce(reviewResult('approve', 'Salut'));
+    const { writer, events } = makeWriter();
+    await runTranslationWorkflow({
+      sourceText: 'Hello',
+      targetLanguage: 'French',
+      glossaryEntries: [],
+      mode: 'agentic',
+      writer,
+    });
+
+    const revision = events.find((e) => e.type === 'revision');
+    expect(revision?.data).toMatchObject({ text: 'Salut' });
+    expect(events.at(-1)?.data).toMatchObject({ finalText: 'Salut' });
+  });
+
   it('agentic mode stops early on approve', async () => {
     callStructured
       .mockResolvedValueOnce(ANALYSIS) // analysis phase

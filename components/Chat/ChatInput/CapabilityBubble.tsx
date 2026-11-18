@@ -61,7 +61,7 @@ export const CapabilityBubble: React.FC<CapabilityBubbleProps> = ({
       <span className="flex shrink-0 items-center" aria-hidden="true">
         {icon}
       </span>
-      <span className="max-w-0 overflow-hidden whitespace-nowrap transition-[max-width,margin] duration-200 ease-out group-hover:ml-1 group-hover:max-w-[12rem] group-focus-within:ml-1 group-focus-within:max-w-[12rem] motion-reduce:transition-none">
+      <span className="max-w-0 overflow-hidden whitespace-nowrap transition-[max-width,margin] duration-200 ease-out group-hover:ms-1 group-hover:max-w-[12rem] group-focus-within:ms-1 group-focus-within:max-w-[12rem] motion-reduce:transition-none">
         {label}
       </span>
     </button>

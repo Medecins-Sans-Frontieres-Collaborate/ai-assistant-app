@@ -71,7 +71,7 @@ Edit `.env.local` and add your actual credentials. The `.env.example` file conta
 
 - `AZURE_AI_FOUNDRY_ENDPOINT` - For AI agents and third-party models
 - `AZURE_BLOB_STORAGE_NAME` - For file uploads
-- `SEARCH_ENDPOINT` / `SEARCH_ENDPOINT_API_KEY` - For Azure AI Search
+- `SEARCH_ENDPOINT` / `SEARCH_INDEX` - For Azure AI Search (authenticates as the application identity; no key)
 - `LAUNCHDARKLY_CLIENT_ID` / `LAUNCHDARKLY_SDK_KEY` - For feature flags
 
 See `.env.example` for complete documentation of all variables.

@@ -52,6 +52,10 @@ import { Tone } from '@/types/tone';
 
 import { ModelSelector, StreamingService, ToneService } from '../shared';
 import {
+  auxiliaryRegionForTurn,
+  structuredFallbackForTurn,
+} from './auxiliaryTurnRouting';
+import {
   MAX_OVERFLOW_SHRINKS,
   shrinkChatHistoryForOverflow,
 } from './contextOverflowRecovery';
@@ -84,6 +88,11 @@ import {
   TRIM_CONTEXT_ACTIVITY_KEY,
   continuationNudge,
 } from './streamContinuation';
+import type {
+  TextCompletionProvider,
+  TextCompletionRequest,
+  TextCompletionTarget,
+} from './textCompletion';
 import {
   CodeInterpreterInputFile,
   persistContainerFiles,
@@ -236,7 +245,9 @@ export interface RegionClientResolver {
  *
  * Uses dependency injection for all dependencies.
  */
-export class StandardChatService implements StructuredDecisionProvider {
+export class StandardChatService
+  implements StructuredDecisionProvider, TextCompletionProvider
+{
   private azureOpenAIClient: AzureOpenAI;
   private openAIClient: OpenAI;
   private anthropicFoundryClient: AnthropicFoundry | undefined;
@@ -438,6 +449,98 @@ export class StandardChatService implements StructuredDecisionProvider {
           }
         : undefined,
     };
+  }
+
+  /**
+   * Runs one plain-text, non-streaming completion on a chat model, under the
+   * same routing as the chat answer: custom-source models on the user's own
+   * account and credential, everything else on the resolved region's clients
+   * behind the residency guard. Used by pipeline stages that need a model
+   * call of their own (the large-document summarizer).
+   *
+   * Per SDK: Anthropic models take the Messages API; Azure OpenAI takes the
+   * OpenAI-native fields; other OpenAI-compatible Foundry models get only
+   * the classic chat-completions fields, since their serving containers
+   * reject unknown keys (Mistral-Large-3 422s on `max_completion_tokens`).
+   *
+   * @param target - The chat model and the caller's residency / custom source.
+   * @param request - System and user prompt, output budget, temperature.
+   * @param signal - Aborts the call.
+   * @returns The reply text, trimmed (may be empty).
+   * @throws When the region has no client for the model's SDK, or the call fails.
+   */
+  async completeText(
+    target: TextCompletionTarget,
+    request: TextCompletionRequest,
+    signal?: AbortSignal,
+  ): Promise<string> {
+    const { model, customSource } = target;
+    let clients: ReturnType<StandardChatService['resolveClients']>;
+    if (customSource) {
+      clients = await this.buildCustomSourceClients(customSource);
+    } else {
+      const region = resolveChatRegion(target.userRegion, target.hostedRegion);
+      this.assertRegionalClient(model, region);
+      clients = this.resolveClients(region);
+    }
+    const deployment = model.deploymentName || model.id;
+    const temperature =
+      model.supportsTemperature === false ? undefined : request.temperature;
+    const temperatureField = temperature === undefined ? {} : { temperature };
+    const reasoningEffort = resolveReasoningEffort(
+      model,
+      request.reasoningEffort,
+    );
+
+    if (HandlerFactory.isAnthropicModel(model)) {
+      const client = clients.anthropicFoundryClient;
+      if (!client)
+        throw new Error(
+          `No Anthropic Foundry client configured for ${model.id}`,
+        );
+      const response = await client.messages.create(
+        {
+          model: deployment,
+          max_tokens: request.maxTokens,
+          system: request.systemPrompt,
+          messages: [{ role: 'user', content: request.userPrompt }],
+          ...temperatureField,
+        },
+        { signal },
+      );
+      return response.content
+        .map((block) => (block.type === 'text' ? block.text : ''))
+        .join('')
+        .trim();
+    }
+
+    const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
+      { role: 'system', content: request.systemPrompt },
+      { role: 'user', content: request.userPrompt },
+    ];
+    const response =
+      model.sdk === 'azure-openai'
+        ? await clients.azureOpenAIClient.chat.completions.create(
+            {
+              model: deployment,
+              messages,
+              max_completion_tokens: request.maxTokens,
+              ...temperatureField,
+              ...(reasoningEffort ? { reasoning_effort: reasoningEffort } : {}),
+              ...(request.user?.id ? { user: request.user.id } : {}),
+            },
+            { signal },
+          )
+        : await clients.openAIClient.chat.completions.create(
+            {
+              model: deployment,
+              messages,
+              max_tokens: request.maxTokens,
+              ...temperatureField,
+            },
+            { signal },
+          );
+    return response.choices[0]?.message?.content?.trim() ?? '';
   }
 
   /**
@@ -763,10 +866,6 @@ export class StandardChatService implements StructuredDecisionProvider {
     const clients = customSource
       ? await this.buildCustomSourceClients(customSource)
       : this.resolveClients(chatRegion);
-    const regionalClients =
-      !customSource && chatRegion
-        ? this.getRegionClients?.(chatRegion)
-        : undefined;
     const requireRegionalClient = (config: OpenAIModel) => {
       if (customSource) return;
       this.assertRegionalClient(config, chatRegion);
@@ -793,19 +892,32 @@ export class StandardChatService implements StructuredDecisionProvider {
     const mcpExistingPlan = request.mcpPlan
       ? (sanitizeMcpPlan(request.mcpPlan) ?? undefined)
       : undefined;
+    // Planning is a helper-model call: the residency-routed auxiliary chain,
+    // then this turn's chat model (app-hosted models only).
     const mcpPlanner = (
       userMessage: string,
-      serversWithTools: Parameters<typeof planMcpSteps>[2],
-    ) => {
-      const plannerClient =
-        chatRegion && !customSource
-          ? (regionalClients?.openAIClient ??
-            regionalClients?.azureOpenAIClient)
-          : clients.openAIClient;
-      return plannerClient
-        ? planMcpSteps(plannerClient, userMessage, serversWithTools)
-        : Promise.resolve(null);
-    };
+      serversWithTools: Parameters<typeof planMcpSteps>[1],
+    ) =>
+      planMcpSteps(userMessage, serversWithTools, {
+        region: auxiliaryRegionForTurn(request),
+        fallback: structuredFallbackForTurn(
+          {
+            model: customSource ? undefined : modelConfig,
+            user: request.user,
+            hostedRegion: request.hostedRegion,
+          },
+          this,
+        ),
+        onUsage: (usage, model) =>
+          recordTokenUsage(
+            usage,
+            model,
+            request.user,
+            false,
+            request.telemetry,
+          ),
+        signal: request.signal,
+      });
 
     if (
       HandlerFactory.isAnthropicModel(modelConfig) &&

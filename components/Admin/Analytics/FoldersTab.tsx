@@ -312,7 +312,7 @@ export const FoldersTab: FC = () => {
                 type="button"
                 aria-expanded={isOpen}
                 onClick={() => setOpen(isOpen ? null : path)}
-                className="flex w-full flex-wrap items-center gap-2 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                className="flex w-full flex-wrap items-center gap-2 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                 style={{ paddingLeft: `${folderDepth(path) * 14}px` }}
               >
                 <Chevron
@@ -326,7 +326,7 @@ export const FoldersTab: FC = () => {
                 {draft?.name && (
                   <span className={ADMIN_MUTED}>{draft.name}</span>
                 )}
-                <span className="ml-auto flex flex-wrap items-center gap-1.5">
+                <span className="ms-auto flex flex-wrap items-center gap-1.5">
                   {raw && (
                     <span className={ADMIN_CHIP_WARN}>
                       {t('folders.rawChip')}

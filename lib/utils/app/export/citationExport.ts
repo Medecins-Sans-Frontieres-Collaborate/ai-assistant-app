@@ -36,7 +36,15 @@ export function formatCitationsAsMarkdown(
       ? `[${escapeLinkText(label)}](${encodeLinkUrl(url)})`
       : escapeLinkText(label) || '—';
     const date = citation.date?.trim() ?? '';
-    return `${index + 1}. ${link}${date ? ` — ${date}` : ''}`;
+    // An exported answer leaves the app's source cards behind, so each
+    // entry says in words whether it is an agent document or a web page.
+    const origin =
+      citation.origin === 'knowledge'
+        ? ' (agent document)'
+        : citation.origin === 'web'
+          ? ' (web)'
+          : '';
+    return `${index + 1}. ${link}${date ? ` — ${date}` : ''}${origin}`;
   });
 
   return `## ${heading}\n\n${entries.join('\n')}`;

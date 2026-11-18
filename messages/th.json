@@ -117,8 +117,8 @@
   "uploadAudioVideoFile": "อัปโหลดไฟล์เสียงหรือวิดีโอ",
   "uploadingFile": "กำลังอัปโหลดไฟล์...",
   "removeFile": "นำออกและเลือกไฟล์อื่น",
-  "transcriptionErrorAttempt": "เกิดข้อผิดพลาดระหว่างการถอดเสียง (ความพยายามครั้งที่ {{attempt}} จาก 3). กำลังลองใหม่...",
-  "rateLimitExceededWaiting": "เกินขีดจำกัดอัตรา กำลังรอ {{seconds}} วินาทีก่อนลองใหม่...",
+  "transcriptionErrorAttempt": "เกิดข้อผิดพลาดระหว่างการถอดเสียง (ความพยายามครั้งที่ {attempt} จาก 3). กำลังลองใหม่...",
+  "rateLimitExceededWaiting": "เกินขีดจำกัดอัตรา กำลังรอ {seconds} วินาทีก่อนลองใหม่...",
   "Conversations": "การสนทนา",
   "Prompts": "พร้อมท์",
   "Close sidebar": "ปิดแถบด้านข้าง",
@@ -529,7 +529,8 @@
     "clear": "ล้าง",
     "undo": "ย้อนกลับ",
     "durationSeconds": "{count, plural, one {# วินาที} other {# วินาที}}",
-    "durationMinutes": "{count, plural, one {# นาที} other {# นาที}}"
+    "durationMinutes": "{count, plural, one {# นาที} other {# นาที}}",
+    "clearSearch": "ล้างการค้นหา"
   },
   "errors": {
     "unexpectedErrorOccurred": "เกิดข้อผิดพลาดที่ไม่คาดคิด",
@@ -819,7 +820,13 @@
     "ttsError": "เกิดข้อผิดพลาดในการสร้างเสียง กรุณาลองอีกครั้ง",
     "unsupportedMessageType": "เกิดข้อผิดพลาดในการแสดงข้อความ: ประเภทข้อความไม่รองรับ",
     "addLanguageOption": "เพิ่ม \"{name}\"…",
-    "sources": "แหล่งที่มา",
+    "sources": {
+      "fromDocuments": "เอกสารของเอเจนต์",
+      "fromWeb": "เว็บ",
+      "fromDocumentsHint": "ข้อความจากเอกสารของเอเจนต์นี้",
+      "fromWebHint": "หน้าสาธารณะที่พบจากการค้นหาเว็บ",
+      "heading": "{count, plural, one {แหล่งที่มา} other {แหล่งที่มา}}"
+    },
     "interpreterBadge": "รันโค้ด",
     "disableCodeInterpreter": "ปิดการรันโค้ด",
     "interimSearch": {
@@ -897,7 +904,8 @@
       "MODEL_RATE_LIMITED": "โมเดลได้รับคำขอมากเกินไปในขณะนี้ ระบบลองใหม่โดยอัตโนมัติ กรุณาลองใหม่อีกครั้งในภายหลัง",
       "MODEL_QUOTA_EXCEEDED": "โควตาความจุของโมเดลหมดแล้ว กรุณาเลือกโมเดลอื่น หรือกลับมาลองใหม่ภายหลัง",
       "MODEL_AUTH_FAILED": "แอปไม่สามารถยืนยันตัวตนกับบริการโมเดลได้ เกิดปัญหาการตั้งค่า กรุณาติดต่อฝ่ายสนับสนุน"
-    }
+    },
+    "messageLimitExceeded": "จำกัดข้อความที่ {maxLength} ตัวอักษร คุณป้อนแล้ว {valueLength} ตัวอักษร"
   },
   "sidebar": {
     "collapseSidebar": "ยุบแถบด้านข้าง",
@@ -1337,14 +1345,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "หากคุณยังไม่มี OpenAI API key คุณสามารถขอได้ที่นี่: ",
   "Loading_ellipsis": "กำลังโหลด...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "โปรดตรวจสอบว่าได้ตั้งค่า OpenAI API key ที่มุมล่างซ้ายของแถบด้านข้างแล้ว",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "จำกัดข้อความที่ {{maxLength}} ตัวอักษร คุณป้อนแล้ว {{valueLength}} ตัวอักษร",
   "Model": "โมเดล",
   "OR": "หรือ",
   "OpenAI API Key Required": "ต้องใช้ OpenAI API Key",
   "Please enter a message": "กรุณาป้อนข้อความ",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "โปรดตั้งค่า OpenAI API key ที่มุมล่างซ้ายของแถบด้านข้าง",
-  "Prompt limit is {{maxLength}} characters": "จำกัดความยาวที่ {{maxLength}} อักขระ",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "จำกัดพรอมต์ที่ {{maxLength}} ตัวอักษร คุณป้อนแล้ว {{valueLength}} ตัวอักษร",
   "Regenerate response": "สร้างคำตอบใหม่",
   "Run Typewriter Intro": "เริ่มต้นแนะนำแบบพิมพ์ดีด",
   "Save & Submit": "บันทึกและส่ง",
@@ -2415,20 +2420,18 @@
     "sectionPinned": "ปักหมุด",
     "sectionFrequent": "ใช้บ่อย",
     "sectionMore": "เพิ่มเติม",
-    "categoryWeb": "เว็บ",
-    "categoryMedia": "มีเดีย & ไฟล์",
-    "categoryTransform": "แปลงข้อมูล",
     "pin": "ปักหมุดไว้ด้านบน",
     "unpin": "เลิกปักหมุด",
     "moveToMore": "ย้ายไปที่เพิ่มเติม",
     "moveOutOfMore": "แสดงในเมนู",
     "showSources": "แสดงแหล่งข้อมูลอื่น",
     "hideSources": "ซ่อนแหล่งข้อมูลอื่น",
-    "aiTools": "เครื่องมือ AI",
-    "aiToolsTooltip": "ความสามารถที่ผู้ช่วยสามารถใช้งานขณะตอบ เช่น ค้นหาเว็บแบบเรียลไทม์, ประมวลผลโค้ด, และเชื่อมต่อบริการต่าง ๆ",
     "codeInterpreterTooltip": "รันโค้ด Python ใน sandbox ที่ปลอดภัยสำหรับแต่ละข้อความ\n\nเหมาะสำหรับการวิเคราะห์ข้อมูล, คำนวณ, และสร้างกราฟจากไฟล์ที่แนบ",
-    "categoryTools": "เครื่องมือและตัวเชื่อมต่อ",
-    "translationConversationTitle": "แปลภาษา: {filename}"
+    "translationConversationTitle": "แปลภาษา: {filename}",
+    "categoryAdd": "เพิ่ม",
+    "categoryDo": "ดำเนินการ",
+    "categoryChat": "ในแชทนี้",
+    "categoryStart": "เริ่มจาก"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "เพิ่มคำแนะนำส่วนตัวเพื่อปรับแต่งการตอบสนองของ AI โดยข้อมูลเหล่านี้จะถูกรวมกับแนวทางหลักเพื่อให้มั่นใจว่าการตอบสนองมีประโยชน์ ถูกต้อง และปลอดภัย",
   "Tip: Type \"/\" to select from saved prompt templates_": "เคล็ดลับ: พิมพ์ \"/\" เพื่อเลือกจากเทมเพลตพรอมต์ที่บันทึกไว้",
@@ -2556,7 +2559,9 @@
     "savedToOneDrive": "บันทึก {name} ลง OneDrive แล้ว",
     "openInOneDrive": "เปิด",
     "saveForbidden": "คุณไม่มีสิทธิ์บันทึกลงโฟลเดอร์นี้ — กรุณาเลือกโฟลเดอร์อื่นโดยใช้ “บันทึกลง OneDrive”",
-    "saveToOneDriveFailed": "ไม่สามารถบันทึกลง OneDrive ได้ — กรุณาลองใหม่"
+    "saveToOneDriveFailed": "ไม่สามารถบันทึกลง OneDrive ได้ — กรุณาลองใหม่",
+    "textVersion": "เวอร์ชันข้อความ (DOCX)",
+    "textVersionHint": "ไฟล์ Word ที่แก้ไขได้ พร้อมข้อความแปล ทีละหน้าของต้นฉบับ ไฟล์ที่แปลจะคงรูปแบบเดิมไว้"
   },
   "terms": {
     "officialLanguages": "ฉบับทางการ:",
@@ -2742,7 +2747,6 @@
   },
   "usageImpact": {
     "empty": "ยังไม่มีการติดตามการใช้งาน การใช้โทเคนและค่าการปล่อยคาดการณ์จะแสดงที่นี่หลังจากคุณเริ่มสนทนาแล้ว",
-    "co2Value": "{grams} กรัม CO₂e",
     "equivalence": "≈ ชาร์จสมาร์ทโฟน {count} ครั้ง",
     "requests": "คำขอ",
     "promptTokens": "โทเคนพรอมต์",
@@ -2904,7 +2908,7 @@
       "addedByYou": "คุณเป็นผู้เพิ่ม",
       "glossary": "ศัพท์เฉพาะ",
       "noGlossary": "ไม่มีศัพท์เฉพาะ",
-      "manageGlossaries": "จัดการศัพท์เฉพาะ",
+      "manageGlossaries": "จัดการอภิธานศัพท์",
       "glossaries": "ศัพท์เฉพาะ",
       "closeGlossaries": "ปิดหน้าศัพท์เฉพาะ",
       "glossariesEmpty": "สร้างศัพท์เฉพาะเพื่อกำหนดวิธีแปลคำที่เฉพาะเจาะจง ศัพท์เฉพาะจะบันทึกบนอุปกรณ์นี้และใช้ซ้ำได้กับการแปลต่าง ๆ",
@@ -3069,7 +3073,145 @@
       "importTooLarge": "ไฟล์นั้นมีขนาดใหญ่เกินไป (สูงสุด 5 MB)",
       "importNothing": "ไม่พบแถวที่ใช้งานได้ ({skipped} แถวถูกข้าม)",
       "importSummary": "เพิ่ม {added} แทนที่ {replaced} ข้าม {skipped}",
-      "entriesTooManyToShow": "{count} คำศัพท์ — จำนวนมากเกินไปที่จะแสดงที่นี่ กรุณาส่งออกเพื่อตรวจทาน หรือ นำเข้าไฟล์เพื่อแทนที่คำศัพท์"
+      "entriesTooManyToShow": "{count} คำศัพท์ — จำนวนมากเกินไปที่จะแสดงที่นี่ กรุณาส่งออกเพื่อตรวจทาน หรือ นำเข้าไฟล์เพื่อแทนที่คำศัพท์",
+      "pagesLoaded": "โหลด {selected} จาก {total} หน้าแล้ว",
+      "pagesLabel": "หน้า",
+      "pagesApply": "โหลดหน้า",
+      "pagesPrevious": "ชุดก่อนหน้า",
+      "pagesNext": "ชุดถัดไป",
+      "pagesBudget": "{used} / {max} อักขระ",
+      "pagesChange": "เปลี่ยนหน้า",
+      "pagesLoading": "กำลังโหลดหน้า…",
+      "pagesInvalid": "กรอกเลขหน้าหรือช่วงหน้า เช่น 1-40, 45",
+      "pagesUnavailable": "ไม่มีข้อความในหน้าเหล่านั้น",
+      "pagesTooMany": "การเลือกนี้มี {used} อักขระ และหนึ่งชุดรองรับได้ {max} กรุณาเลือกหน้าน้อยลง",
+      "stop": "หยุด",
+      "stepAnalyzing": "กำลังวิเคราะห์",
+      "stepTranslating": "กำลังแปล",
+      "stepReviewing": "กำลังตรวจทาน",
+      "stepDone": "เสร็จสิ้น",
+      "runProgressLabel": "ความคืบหน้าการแปล",
+      "runHintAnalyzing": "อ่านต้นฉบับเพื่อค้นหาคำศัพท์ที่ซับซ้อนและความหมายกำกวม",
+      "runHintTranslating": "กำลังเขียนคำแปล",
+      "runHintReviewing": "ตรวจสอบร่างกับต้นฉบับ",
+      "runHintReviewingRound": "ตรวจสอบร่างกับต้นฉบับ · รอบที่ {round} จากสูงสุด {total}",
+      "runRound": "รอบที่ {round} จากสูงสุด {total}",
+      "draftLabel": "ร่าง",
+      "sourceLocked": "ล็อกขณะกำลังแปล",
+      "analysisNotes": "{count, plural, one {# หมายเหตุ} other {# หมายเหตุ}}",
+      "analysisPill": "{count, plural, one {การวิเคราะห์ · # หมายเหตุ} other {การวิเคราะห์ · # หมายเหตุ}}",
+      "reviewSummary": "{count, plural, one {ตรวจทาน: # รอบ, {verdict}} other {ตรวจทาน: # รอบ, {verdict}}}",
+      "analysisDismiss": "ซ่อนสำหรับคำแปลทั้งหมด",
+      "analysisShow": "แสดงการวิเคราะห์ก่อนแปล",
+      "analysisResize": "ปรับขนาดแผงการวิเคราะห์",
+      "assessingCriteria": "{count, plural, one {ตรวจสอบ # เกณฑ์} other {ตรวจสอบ # เกณฑ์}}",
+      "editsPending": "ข้อเสนอแนะจะแสดงที่นี่เมื่อการประเมินเสร็จสิ้น",
+      "uploadProgressLabel": "ความคืบหน้าการอัปโหลด",
+      "uploadStepUploading": "กำลังอัปโหลด",
+      "uploadStepReading": "กำลังอ่านเนื้อหา",
+      "uploadStepReady": "พร้อมใช้งาน",
+      "uploadCancel": "ยกเลิก",
+      "modeDocument": "ทั้งเอกสาร",
+      "modeDocumentHint": "แปลไฟล์ PDF ที่อัปโหลดทั้งหมดและคงรูปแบบเดิมไว้ อ่านและตรวจแก้ผลลัพธ์แบบทีละหน้า",
+      "translateDocument": "แปลเอกสาร",
+      "documentSubmitting": "กำลังส่ง…",
+      "documentIntroTitle": "แปลทั้งเอกสาร",
+      "documentIntro": "ไฟล์ PDF ที่อัปโหลดจะถูกแปลทั้งหมด พร้อมคงรูปแบบไว้ เมื่อเสร็จแล้ว คุณสามารถอ่านทีละหน้าเคียงข้างต้นฉบับ ตรวจสอบความถูกต้องของแต่ละหน้า ตรวจสอบคุณภาพ และดาวน์โหลดผลลัพธ์ โกลสซารีและการตรวจทานจะไม่ถูกนำมาใช้ในโหมดนี้ เมื่อเริ่มต้นแล้ว การแปลเอกสารไม่สามารถหยุดได้ และจำนวนหน้าจะถูกนับรวมในโควต้าของวันนี้",
+      "documentNeedsFile": "อัปโหลด PDF เพื่อแปลทั้งเอกสาร",
+      "documentNeedsPdf": "การแปลทั้งเอกสารแบบดูทีละหน้ารองรับเฉพาะไฟล์ PDF เท่านั้น",
+      "documentNeedsLanguage": "เลือกภาษาปลายทางเพื่อแปลเอกสาร",
+      "documentLanguageUnsupported": "ไม่รองรับการแปลทั้งเอกสารสำหรับภาษานี้ กรุณาใช้โหมดด่วนหรือโหมดตรวจทานแทน",
+      "documentNoGlossaries": "จะไม่มีการใช้โกลซารีในการแปลทั้งเอกสาร",
+      "documentPagesLeft": "{count, plural, one {เหลืออีก # หน้าในวันนี้} other {เหลืออีก # หน้าในวันนี้}}",
+      "documentLimitReached": "เอกสารนี้มีจำนวนหน้ามากกว่าที่คุณสามารถแปลได้ในวันนี้ กรุณาแปลหน้าที่เลือกด้วยโหมดด่วนหรือโหมดตรวจทาน หรือกลับมาทำใหม่พรุ่งนี้",
+      "documentUnavailable": "ยังไม่ได้กำหนดค่าแปลทั้งเอกสารบนเซิร์ฟเวอร์นี้",
+      "documentSubmitFailed": "ไม่สามารถส่งเอกสารเพื่อแปลได้: {message}",
+      "documentProgressLabel": "ความคืบหน้าการแปลเอกสาร",
+      "documentStepUploaded": "อัปโหลดแล้ว",
+      "documentStepPreparing": "กำลังเตรียมหน้า",
+      "documentTypicalDuration": "ปกติใช้เวลาสองสามนาที",
+      "documentCanLeave": "คุณสามารถออกจากหน้านี้ได้ การแปลจะดำเนินต่อและจะแสดงที่นี่เมื่อคุณกลับมา",
+      "documentStalled": "ไม่สามารถตรวจสอบความคืบหน้าการแปลได้ อาจยังคงกำลังดำเนินการอยู่",
+      "documentCheckAgain": "ตรวจสอบอีกครั้ง",
+      "documentFailed": "ไม่สามารถแปลเอกสารได้: {message}",
+      "documentGone": "การแปลนี้ไม่สามารถใช้งานได้แล้ว กรุณาแปลเอกสารใหม่เพื่ออ่าน",
+      "documentPageFailed": "ไม่สามารถโหลดหน้านี้ได้: {message}",
+      "documentPagesNotAligned": "ไฟล์ที่แปลแล้วมีจำนวนหน้าไม่เท่ากับต้นฉบับ อาจมีหน้าที่เนื้อหาไม่ตรงกัน",
+      "documentAvailableUntil": "ใช้งานได้ถึง {date}",
+      "documentRetranslateTitle": "ต้องการแปลเอกสารนี้อีกครั้งหรือไม่",
+      "documentRetranslateMessage": "การดำเนินการนี้จะเริ่มแปลใหม่ และนับจำนวนหน้าในโควต้าของวันนี้อีกครั้ง ไม่สามารถหยุดได้เมื่อเริ่มต้นแล้ว การแปลปัจจุบันและการแก้ไขจะคงอยู่บนเซิร์ฟเวอร์จนกว่าจะหมดอายุ แต่จะไม่แสดงที่นี่อีก",
+      "retry": "ลองอีกครั้ง",
+      "pageLabel": "หน้า",
+      "pageOf": "จาก {total}",
+      "pageNumber": "· หน้า {page}",
+      "pagePrevious": "หน้าก่อนหน้า",
+      "pageNext": "หน้าถัดไป",
+      "correctedLabel": "แก้ไขแล้ว",
+      "correctedPages": "หน้าที่แก้ไขแล้ว:",
+      "correctedPagesMore": "+{count} หน้าเพิ่มเติม",
+      "correctionRestore": "ย้อนกลับ",
+      "correctionRestoreHint": "ยกเลิกการแก้ไขของคุณในหน้านี้และกลับไปใช้ข้อความแปลด้วยเครื่อง",
+      "correctionSaving": "กำลังบันทึก…",
+      "correctionSaved": "บันทึกแล้ว",
+      "correctionSaveFailed": "ไม่สามารถบันทึกได้ กรุณาแก้ไขข้อความเพื่อทดลองอีกครั้ง",
+      "download": "ดาวน์โหลด",
+      "downloading": "กำลังดาวน์โหลด…",
+      "downloadFailed": "ดาวน์โหลดไม่สำเร็จ: {message}",
+      "downloadTranslated": "แปลแล้ว {format}",
+      "downloadTranslatedHint": "รูปแบบเดิม ไม่รวมการแก้ไขของคุณ",
+      "downloadTextVersion": "เวอร์ชันข้อความ (DOCX)",
+      "downloadTextVersionHint": "ข้อความล้วน หน้าละหน้า พร้อมการแก้ไขของคุณ",
+      "documentNoCancel": "ไม่สามารถหยุดการแปลเอกสารได้เมื่อเริ่มต้นแล้ว",
+      "documentGlossariesIgnored": "{count, plural, one {กลุ่มคำศัพท์ที่คุณเลือกจะไม่ได้ถูกนำมาใช้ในโหมดนี้} other {กลุ่มคำศัพท์ที่คุณเลือก # รายการจะไม่ได้ถูกนำมาใช้ในโหมดนี้}} ตรวจสอบคำศัพท์ทีละหน้าโดยใช้ Assess quality หรือเลือกใช้ Quick หรือ Reviewed",
+      "pendingLeavePage": "คำแนะนำเหล่านี้จะอยู่กับหน้านี้เท่านั้นและจะไม่ถูกเก็บไว้เมื่อคุณออกจากหน้า กรุณาตัดสินใจคำแนะนำที่เหลือก่อน",
+      "uploadStepOcr": "กำลังอ่านด้วย OCR",
+      "ocrButton": "อ่านด้วย OCR",
+      "ocrButtonHint": "อ่าน PDF นี้อีกครั้งด้วยการรู้จำข้อความ สำหรับหน้าที่สแกนหรือข้อความที่ผิดพลาด",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "ข้อความนี้ถูกอ่านจากหน้าเอกสารด้วยการรู้จำข้อความ โปรดตรวจสอบกับต้นฉบับ",
+      "ocrReasonNoText": "ไม่พบข้อความใน {name} ดูเหมือนว่าเป็นเอกสารสแกน",
+      "ocrReasonSparse": "พบข้อความใน {name} น้อยมาก บางส่วนอาจมาจากการสแกน",
+      "ocrReasonManual": "ต้องการอ่าน {name} ใหม่ด้วยการรู้จำข้อความหรือไม่?",
+      "ocrExplanation": "OCR จะอ่านข้อความจากภาพในหน้าเอกสาร ใช้เวลานานกว่าการอัปโหลดปกติ นับจำนวนหน้าทั้งหมดในโควต้าประจำวันของคุณ และอาจอ่านผิดในไฟล์สแกนไม่ชัด ลายมือ และตาราง",
+      "ocrPagesLeft": "{count, plural, one {เหลือ # หน้า OCR วันนี้} other {เหลือ # หน้า OCR วันนี้}}",
+      "ocrRun": "อ่านด้วย OCR",
+      "ocrDismiss": "ยังไม่ใช่ตอนนี้",
+      "ocrSparseHint": "พบข้อความใน PDF นี้น้อยมาก บางหน้าอาจมาจากการสแกน",
+      "ocrLimitReached": "เอกสารนี้มีจำนวนหน้ามากกว่าที่โควต้า OCR วันนี้ของคุณเหลืออยู่",
+      "ocrTooManyPages": "เอกสารนี้ยาวเกินไปสำหรับ OCR ซึ่งอ่านได้มากสุด {max} หน้า กรุณาแบ่ง PDF และอัปโหลดบางส่วน",
+      "ocrUnavailable": "เซิร์ฟเวอร์นี้ยังไม่ได้ตั้งค่า OCR",
+      "ocrNoText": "OCR ก็ไม่พบข้อความในเอกสารนี้เช่นกัน",
+      "ocrFailed": "ไม่สามารถอ่านเอกสารนี้ด้วย OCR ได้ กรุณาลองอีกครั้ง",
+      "scannedWholeExplanation": "คุณยังสามารถแปลทั้งเอกสารได้: ระบบจะอ่านหน้าที่สแกนโดยอัตโนมัติ รักษารูปแบบของเอกสาร และนับจำนวนหน้าตามโควต้าการแปลรายวันของคุณ",
+      "scannedUseWholeDocument": "แปลทั้งเอกสาร",
+      "scannedSourceNote": "{name} ไม่มีข้อความที่จะแสดงที่นี่ การแปลทั้งเอกสารจะอ่านหน้าจากต้นฉบับโดยตรง หากคุณพิมพ์ข้อความเอง จะเป็นการแทนที่เอกสารต้นฉบับ",
+      "scannedPageNote": "ไม่สามารถอ่านข้อความจากหน้าต้นฉบับหน้านี้ได้ กรุณาตรวจสอบกับไฟล์ต้นฉบับ",
+      "changeLabel": "ขอเปลี่ยนแปลงการแปล",
+      "changePlaceholder": "ขอให้เปลี่ยน เช่น ให้เป็นทางการมากขึ้น",
+      "changePlaceholderAnother": "ขอเปลี่ยนแปลงเพิ่มเติม",
+      "changeSend": "ส่งคำขอ",
+      "changeWorking": "กำลังดำเนินการเปลี่ยนแปลง",
+      "changeNothingApplied": "จะไม่มีการเปลี่ยนแปลงจนกว่าคุณจะยอมรับ",
+      "changeSelectionLabel": "ขอเปลี่ยนแปลงข้อความที่เลือก",
+      "changeSelectionPlaceholder": "เปลี่ยนส่วนนี้ เช่น ให้พูดว่า tableta",
+      "changeSelectionScope": "ใช้กับข้อความที่เลือกเท่านั้น",
+      "changeSelectionClose": "ปิด",
+      "changeTitle": "การเปลี่ยนแปลงที่ร้องขอ",
+      "changeSelectedLabel": "ข้อความที่เลือก",
+      "changeNoEdits": "ไม่มีสิ่งใดที่ต้องเปลี่ยนแปลงสำหรับคำขอนี้",
+      "changeReplyPending": "{count, plural, one {# ข้อเสนอการแก้ไขอยู่ในพื้นที่ทำงาน} other {# ข้อเสนอการแก้ไขอยู่ในพื้นที่ทำงาน}} จะไม่มีการเปลี่ยนแปลงจนกว่าคุณจะยอมรับ",
+      "changeStopped": "หยุดแล้ว ไม่มีการเปลี่ยนแปลงใด ๆ",
+      "changeFailed": "คำขอเปลี่ยนแปลงไม่สำเร็จ โปรดลองอีกครั้ง",
+      "changeNoTranslation": "ยังไม่มีการแปลเพื่อเปลี่ยนแปลง กรุณาแปลข้อความก่อน",
+      "changeBusy": "รอการดำเนินการปัจจุบันให้เสร็จสิ้น แล้วจึงขอใหม่",
+      "changeHeld": "ยังไม่ได้ส่ง: มีข้อเสนอการแก้ไขที่รอการตัดสินใจอยู่",
+      "pendingRunActionRequest": "กำลังขอเปลี่ยนแปลง",
+      "railPlaceholder": "ขอเปลี่ยนแปลงหรือถามคำถาม…",
+      "documentPageCount": "{count, plural, one {# หน้า} other {# หน้า}}",
+      "sourceShowPages": "แสดงหน้า",
+      "sourceEditText": "แก้ไขเป็นข้อความ",
+      "sourceRemoveDocument": "ลบเอกสาร",
+      "sourceJumpToPage": "ไปยังหน้า"
     },
     "document": {
       "emptyTitle": "อธิบายประเภทเอกสารที่ต้องการ",
@@ -3697,7 +3839,7 @@
       "guideTargetTerm": "คำแปลที่ต้องใช้",
       "guideNote": "หมายเหตุ",
       "pendingRun": {
-        "title": "ยังมีข้อเสนอแนะ {count} รายการที่รอดำเนินการ",
+        "title": "{count, plural, one {# คำแนะนำที่ยังรอดำเนินการ} other {# คำแนะนำที่ยังรอดำเนินการ}}",
         "body": "{action} อาจเปลี่ยนแปลงข้อความได้ทุกส่วน รวมถึงตอนที่คุณยังไม่ได้ตัดสินใจเกี่ยวกับข้อเสนอแนะ และการประเมินใหม่จะแทนที่รายการปัจจุบัน กรุณาตัดสินใจเกี่ยวกับข้อเสนอแนะที่เหลือก่อน",
         "acceptAll": "ยอมรับทั้งหมดที่เหลืออยู่",
         "rejectAll": "ปฏิเสธทั้งหมด",
@@ -3759,7 +3901,7 @@
         "list<number>": "รายการตัวเลข"
       },
       "layout": "เลย์เอาต์",
-      "layoutHint": "Markdown พร้อมช่อง {{field:id}} — ใช้สำหรับส่งออกและดูตัวอย่าง",
+      "layoutHint": "Markdown พร้อมช่อง '{{field:id}}' — ใช้สำหรับส่งออกและดูตัวอย่าง",
       "saveTemplate": "บันทึกแม่แบบ",
       "deleteTemplate": "ลบแม่แบบ",
       "cancel": "ยกเลิก",
@@ -4587,6 +4729,10 @@
         "note": "ต้นทุนตามราคากำหนด ณ {asOf} (อัตรามาตรฐานสากล ไม่มีส่วนลดจากการกรอกข้อมูลซ้ำ): เป็นค่าสูงสุด ไม่ใช่ใบเรียกเก็บเงิน การค้นหาเว็บ, รันโค้ด, ถอดเสียง, พูด, แปล และจัดทำดัชนีเอกสาร ไม่รวมในนี้."
       }
     },
+    "mass": {
+      "grams": "{value} กรัม CO₂e",
+      "kilograms": "{value} กิโลกรัม CO₂e"
+    },
     "workflow": {
       "title": "เวิร์กสเปซนี้ (ประเมิน)",
       "workspace": "เวิร์กสเปซนี้",
@@ -4688,7 +4834,7 @@
       "submit": "กู้คืนข้อมูลสำรอง",
       "skip": "ข้าม — เริ่มใหม่บนอุปกรณ์นี้",
       "restoring": "กำลังถอดรหัสและกู้คืนการแชทของคุณ…",
-      "successBody": "{count, plural, one {กู้คืน {#} การสนทนาแล้ว} other {กู้คืน {#} การสนทนาแล้ว}}",
+      "successBody": "{count, plural, one {กู้คืน # การสนทนาแล้ว} other {กู้คืน # การสนทนาแล้ว}}",
       "wrongKey": "คีย์นี้ถูกต้องแต่ไม่สามารถปลดล็อกข้อมูลสำรองนี้ได้ หากคุณเปลี่ยนคีย์ ให้ใช้คีย์ล่าสุด",
       "corrupt": "ไม่สามารถอ่านข้อมูลสำรองนี้ได้ — อาจเสียหาย คุณสามารถเริ่มต้นใหม่บนอุปกรณ์นี้หรือพยายามอีกครั้งภายหลัง",
       "networkError": "ไม่สามารถเชื่อมต่อกับบริการสำรองข้อมูล กรุณาตรวจสอบการเชื่อมต่อและลองใหม่อีกครั้ง",
@@ -5401,7 +5547,9 @@
     "indexedDocumentSummary": "มีการจัดทำดัชนี{indexed, plural, one {เอกสาร # ฉบับ} other {เอกสาร # ฉบับ}}",
     "m365CapImmediateHelp": "การใช้ Apply จะบันทึกขีดจำกัดทันที การแก้ไขอื่น ๆ ยังต้องกด Save",
     "m365CapDraftHelp": "ขีดจำกัดจะถูกบันทึกเมื่อคุณสร้างตัวแทนแล้ว",
-    "m365CapSaved": "บันทึกขีดจำกัดเอกสารแล้ว: {limit}."
+    "m365CapSaved": "บันทึกขีดจำกัดเอกสารแล้ว: {limit}.",
+    "m365AgentAllowWebSearchHelp": "ปิดเป็นค่าเริ่มต้น: เอเจนต์จะตอบจากเอกสารของตนเองเท่านั้น และจะไม่ค้นหาเว็บ ไม่ว่าผู้ใช้จะเลือกตั้งค่าการค้นหาใด เมื่อเปิดใช้งาน คำแนะนำของเอเจนต์จะตัดสินใจว่าเมื่อใดจะค้นหาเว็บและใช้เว็บไซต์ไหน และแหล่งข้อมูลจากเว็บจะแสดงแยกต่างหากจากเอกสารของเอเจนต์เสมอ",
+    "promptAgentAllowWebSearchHelp": "เปิดเป็นค่าเริ่มต้น เมื่อปิดใช้งาน เอเจนต์นี้จะไม่ค้นหาเว็บ ไม่ว่าผู้ใช้จะตั้งค่าการค้นหาใด"
   },
   "localModels": {
     "title": "โมเดลภายในเครื่อง",
@@ -5708,7 +5856,9 @@
       "m365MailReadsPerDay": "อ่านอีเมลต่อวัน",
       "m365MailDraftsPerDay": "ฉบับร่างอีเมลต่อวัน",
       "m365MailDeepScansPerDay": "Mail deep scans ต่อวัน",
-      "m365DigestRunsPerDay": "จำนวนการสรุปรายวันต่อวัน"
+      "m365DigestRunsPerDay": "จำนวนการสรุปรายวันต่อวัน",
+      "translationPagesPerDay": "จำนวนหน้าที่แปลเอกสารได้ต่อวัน",
+      "ocrPagesPerDay": "จำนวนหน้า OCR ต่อวัน"
     },
     "valueModeLabel": "ประเภทข้อจำกัด",
     "valueAmountLabel": "ปริมาณข้อจำกัด",
@@ -5731,7 +5881,8 @@
       "jobs": "งาน",
       "rounds": "รอบ",
       "documents": "เอกสาร",
-      "boolean": ""
+      "boolean": "",
+      "pages": "หน้า"
     },
     "window": {
       "day": "วัน",
@@ -5789,7 +5940,9 @@
       "m365MailReadsPerDay": "การค้นหาและอ่านอีเมล/กระทู้ต่อวัน หากเกินขีดจำกัด เครื่องมือจะตอบว่า \"กรุณาลองใหม่พรุ่งนี้\"",
       "m365MailDraftsPerDay": "ฉบับร่างอีเมลที่ผู้ช่วยสามารถสร้างต่อวัน — ทุกฉบับต้องยืนยันทีละฉบับ กำหนดไว้อย่างเข้มงวด",
       "m365MailDeepScansPerDay": "การวิเคราะห์อีเมลแบบรวม (digest, deep search, commitments) ต่อวัน นับเป็นหน่วยละ 1 ครั้งไม่ว่าวิเคราะห์ภายในกี่ครั้ง",
-      "m365DigestRunsPerDay": "จำนวนการสรุปรายวันของ Microsoft 365 ต่อวัน การสรุปแต่ละครั้งจะมีการอ่าน Graph หลายรายการและเรียกใช้โมเดลวิเคราะห์สองครั้ง ตัวเลือกช่วงเวลาทำให้สามารถขอประมวลผลซ้ำได้ง่าย จึงกำหนดค่าเริ่มต้นไว้ให้จำกัด"
+      "m365DigestRunsPerDay": "จำนวนการสรุปรายวันของ Microsoft 365 ต่อวัน การสรุปแต่ละครั้งจะมีการอ่าน Graph หลายรายการและเรียกใช้โมเดลวิเคราะห์สองครั้ง ตัวเลือกช่วงเวลาทำให้สามารถขอประมวลผลซ้ำได้ง่าย จึงกำหนดค่าเริ่มต้นไว้ให้จำกัด",
+      "translationPagesPerDay": "จำนวนหน้า PDF ที่ส่งแปลเอกสารต่อวัน",
+      "ocrPagesPerDay": "จำนวนหน้า PDF ที่อ่านด้วย OCR (การรู้จำข้อความสำหรับเอกสารสแกน) ต่อวัน"
     },
     "scopeFamily": "ตระกูล",
     "scopeModel": "โมเดล",
@@ -8097,7 +8250,13 @@
       "skills": "การเลือกทักษะ",
       "tools": "การกำหนดเส้นทางเครื่องมือ",
       "trim": "การจัดประเภทการตัด",
-      "assessment": "การประเมินค้นหา"
+      "assessment": "การประเมินค้นหา",
+      "query": "เขียนคำค้นหาใหม่",
+      "mailScreen": "หน้าตรวจสอบฟิชชิงทางอีเมล",
+      "mailAnalysis": "การวิเคราะห์อีเมลและสรุป",
+      "schemaProposal": "ข้อเสนอรูปแบบการดึงข้อมูล",
+      "mcpPlan": "แผนการเชื่อมต่อ",
+      "vision": "การอ่านภาพและหน้าเอกสาร"
     },
     "reason": {
       "endpoint_missing": "ไม่มี endpoint หรือการเชื่อมโยงบัญชี",
@@ -8118,6 +8277,164 @@
       "endpoint_account_mismatch": "Endpoint และ ARM resource ID เป็นบัญชีที่ต่างกัน กรุณาตั้งค่าการดีพลอยใหม่",
       "inventory_refresh_failed": "รีเฟรชข้อมูลสินค้าคงคลังล้มเหลว ตรวจสอบสิทธิ์ Reader ของตัวแอปและการเชื่อมต่อบัญชี",
       "credential_unavailable": "แอปไม่สามารถขอรับ credential สำหรับสินค้าคงคลัง ตรวจสอบการตั้งค่าตัวตนการดีพลอย"
+    },
+    "notSupported": "โมเดลนี้ไม่รองรับ",
+    "unservedOperations": "ไม่มีโมเดลใดในชุดนี้รองรับ: {operations} กรุณาเพิ่มโมเดลที่รองรับ."
+  },
+  "filePreview": {
+    "preview": "แสดงตัวอย่าง",
+    "download": "ดาวน์โหลด",
+    "loading": "กำลังเตรียมแสดงตัวอย่าง...",
+    "failed": "ไม่สามารถแสดงตัวอย่างไฟล์นี้ได้ คุณยังสามารถดาวน์โหลดไฟล์นี้ได้",
+    "pageOf": "หน้า {page} จาก {total}",
+    "truncated": "แสดงหน้าแรก {shown} จากทั้งหมด {total} หน้า ดาวน์โหลดไฟล์เพื่อดูหน้าที่เหลือ",
+    "enlarge": "ขยาย {name}"
+  },
+  "addToChat": {
+    "title": "เพิ่มในแชท",
+    "titleTranslate": "แปลเอกสาร",
+    "titleTranscribe": "ถอดเสียงเสียงหรือวิดีโอ",
+    "sourcesLabel": "เพิ่มจาก",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "ไม่พร้อมใช้งานสำหรับการดำเนินการนี้",
+    "sources": {
+      "device": "อุปกรณ์นี้",
+      "link": "ลิงก์",
+      "camera": "กล้อง",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "อีเมล",
+      "meetings": "การประชุม"
+    },
+    "device": {
+      "browse": "เลือกไฟล์จากอุปกรณ์นี้",
+      "dropHint": "หรือวางไฟล์ในหน้าต่างนี้ หรือนำมาวาง",
+      "rejected": "ไม่สามารถใช้ไฟล์เหล่านี้ได้ที่นี่",
+      "hint": {
+        "attach": "เอกสาร รูปภาพ เสียง และวิดีโอ",
+        "translate": "เอกสารเดียว: Word, Excel, PowerPoint, PDF, HTML หรือข้อความ",
+        "transcribe": "ไฟล์เสียงหรือวิดีโอ ข้อความจะถูกถอดเสียงเมื่อส่งข้อความ"
+      }
+    },
+    "selection": {
+      "then": "จากนั้น",
+      "intents": {
+        "attach": "แนบไฟล์",
+        "translate": "แปลภาษา",
+        "transcribe": "ถอดเสียง"
+      },
+      "confirm": {
+        "attach": "เพิ่ม",
+        "translate": "แปลภาษา",
+        "transcribe": "ถอดเสียง"
+      },
+      "unfit": {
+        "attach": "ไม่สามารถแนบไฟล์เหล่านี้ได้",
+        "translate": "สามารถแปลได้ครั้งละหนึ่งเอกสาร",
+        "transcribe": "สามารถถอดเสียงได้เฉพาะไฟล์เสียงและวิดีโอ"
+      }
+    },
+    "menu": {
+      "addToChatNote": "อุปกรณ์นี้ ลิงก์ Microsoft 365",
+      "filesOrPhotos": "ไฟล์หรือรูปภาพ",
+      "fromThisDevice": "จากอุปกรณ์นี้",
+      "connect": "เชื่อมต่อ Microsoft 365",
+      "connectNote": "เพิ่มจาก OneDrive อีเมล และการประชุม"
     }
+  },
+  "usageBudgets": {
+    "title": "งบประมาณของคุณ",
+    "description": "ขีดจำกัดที่คุณตั้งไว้สำหรับอุปกรณ์นี้ เลือกงบประมาณ แล้วเลือกว่าให้ระบบทำอย่างไรเมื่อใกล้ถึงหรือเกินขีดจำกัด งบประมาณจะนับจำนวนแชทและการดำเนินงานตั้งแต่ต้นแต่ละรอบ",
+    "metric": {
+      "emissions": "งบประมาณการปล่อยคาร์บอน",
+      "cost": "งบประมาณค่าใช้จ่าย"
+    },
+    "metricShort": {
+      "emissions": "การปล่อยคาร์บอน",
+      "cost": "ค่าใช้จ่าย"
+    },
+    "off": "ยังไม่ได้ตั้งงบประมาณ",
+    "measureAs": "วัดผลเป็น",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "จำนวนครั้งชาร์จโทรศัพท์",
+      "usd": "US dollars"
+    },
+    "amountLabel": "งบประมาณ",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ชั่วโมง",
+      "smartphoneCharge": "ครั้ง",
+      "usd": "US dollars"
+    },
+    "periodLabel": "รีเซ็ตทุก",
+    "period": {
+      "day": "วัน",
+      "week": "สัปดาห์",
+      "month": "เดือน"
+    },
+    "costNote": "ประเมินจากราคาปกติ: เป็นขีดจำกัดสูงสุด ไม่ใช่บิลเรียกเก็บจริง",
+    "chargesValue": "{count} ครั้งชาร์จโทรศัพท์",
+    "percent": "{percent}%",
+    "usedOf": "ใช้ไป {used} จาก {limit} ({percent}%)",
+    "usedOfShort": "{used} จาก {limit}",
+    "resets": "รีเซ็ต {date}",
+    "budgetMarker": "งบประมาณ",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "อยู่ในขอบเขตงบประมาณ",
+      "warn": "มีการแจ้งเตือน",
+      "ask": "ยืนยันทุกข้อความ",
+      "stop": "หยุดการส่ง"
+    },
+    "stage": {
+      "warn": {
+        "title": "แจ้งเตือน",
+        "tag": "แจ้งล่วงหน้า",
+        "description": "แสดงการแจ้งเตือนในแชทเมื่อใช้งบประมาณถึงส่วนนี้"
+      },
+      "ask": {
+        "title": "ถามก่อน",
+        "tag": "บล็อกชั่วคราว",
+        "description": "ขอให้ยืนยันทุกข้อความเมื่อใช้งบประมาณถึงส่วนนี้"
+      },
+      "stop": {
+        "title": "หยุด",
+        "tag": "บล็อกถาวร",
+        "description": "หยุดการส่งตั้งแต่งบประมาณส่วนนี้ไปจนกว่ารีเซ็ตหรือคุณจะปรับเพิ่มที่นี่"
+      }
+    },
+    "thresholdLabel": "เกณฑ์ {stage} เป็นเปอร์เซ็นต์ของงบประมาณ",
+    "notice": {
+      "warn": {
+        "emissions": "คุณใช้ไปแล้ว {percent}% ของงบประมาณการปล่อยคาร์บอน",
+        "cost": "คุณใช้ไปแล้ว {percent}% ของงบประมาณค่าใช้จ่าย"
+      },
+      "ask": {
+        "emissions": "คุณใช้ไปแล้ว {percent}% ของงบประมาณการปล่อยคาร์บอน ส่งข้อความนี้หรือไม่?",
+        "cost": "คุณใช้ไปแล้ว {percent}% ของงบประมาณค่าใช้จ่าย ส่งข้อความนี้หรือไม่?"
+      },
+      "askRun": {
+        "emissions": "คุณใช้ไปแล้ว {percent}% ของงบประมาณการปล่อยคาร์บอน เริ่มการทำงานนี้หรือไม่?",
+        "cost": "คุณใช้ไปแล้ว {percent}% ของงบประมาณค่าใช้จ่าย เริ่มการทำงานนี้หรือไม่?"
+      },
+      "stop": {
+        "emissions": "ถึงจุดหยุดของงบประมาณการปล่อยคาร์บอนแล้ว หยุดการส่งจนถึง {date}",
+        "cost": "ถึงจุดหยุดงบประมาณค่าใช้จ่าย การส่งจะถูกพักจนถึง {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "ดูงบประมาณ",
+      "dismiss": "ปิด",
+      "sendAnyway": "ส่งต่อไป",
+      "runAnyway": "ดำเนินการต่อ",
+      "dontSend": "ไม่ส่ง",
+      "dontAskToday": "ไม่ถามอีกวันนี้",
+      "openSettings": "เปิดการตั้งค่างบประมาณ",
+      "edit": "แก้ไข"
+    },
+    "composerPaused": "การส่งถูกพักโดยงบประมาณของคุณ",
+    "summaryTitle": "งบประมาณของคุณ",
+    "chipAria": "งบประมาณ {metric}: ใช้แล้ว {percent}%.",
+    "runProjection": "งบประมาณการปล่อย {from}% → {to}%"
   }
 }

@@ -9,6 +9,13 @@ export const ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT = 90_000;
 /** Cumulative token budget per conversation session for active file injection (medium-tier baseline). */
 export const ACTIVE_FILE_SESSION_QUOTA = 300_000;
 
+/**
+ * Active files a conversation holds when it sets no `activeFilesMaxCount`.
+ * Beyond it the oldest unpinned, then auto-pinned, files are evicted (see
+ * evictActiveFilesOverCap).
+ */
+export const DEFAULT_ACTIVE_FILES_MAX_COUNT = 5;
+
 /** Floor for the per-turn active-file injection budget. */
 export const ACTIVE_FILE_PER_TURN_MIN = 2_000;
 

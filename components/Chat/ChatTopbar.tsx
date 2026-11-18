@@ -158,11 +158,11 @@ export const ChatTopbar = ({
 
   return (
     <div className="sticky top-0 z-20 py-2 text-sm text-gray-500 dark:text-gray-200 transition-all duration-300 ease-in-out bg-white dark:bg-surface-dark">
-      <div className="mr-8 px-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 transition-all duration-300">
+      <div className="me-8 px-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 transition-all duration-300">
         {/* Bot/Model Info */}
         <div className="flex items-center min-w-0 justify-center sm:justify-start">
           {botInfo && (
-            <div className="flex items-center mr-2 shrink-0">
+            <div className="flex items-center me-2 shrink-0">
               <span
                 className="font-semibold truncate sm:max-w-[200px]"
                 style={{ color: botInfo.color }}
@@ -182,7 +182,7 @@ export const ChatTopbar = ({
             >
               {getProviderIcon(selectedModelProvider)}
               <span
-                className="truncate font-bold dark:text-blue-50 text-gray-800 text-base ml-2"
+                className="truncate font-bold dark:text-blue-50 text-gray-800 text-base ms-2"
                 title={selectedModelName}
               >
                 {selectedModelName || t('chat.selectModel')}
@@ -190,19 +190,19 @@ export const ChatTopbar = ({
               {showSearchIndicator && searchMode === SearchMode.INTELLIGENT && (
                 <IconWorld
                   size={14}
-                  className="ml-1.5 text-blue-600 dark:text-blue-400"
+                  className="ms-1.5 text-blue-600 dark:text-blue-400"
                   title={t('chat.privacyFocusedSearch')}
                 />
               )}
               {isCustomAgent && (
                 <AzureAIIcon
-                  className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                  className="ms-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
                   aria-label={t('chat.customAgent')}
                 />
               )}
               <IconChevronDown
                 size={16}
-                className="ml-1.5 opacity-60 text-black dark:text-white"
+                className="ms-1.5 opacity-60 text-black dark:text-white"
               />
             </button>
           </div>
@@ -214,7 +214,7 @@ export const ChatTopbar = ({
             <button
               type="button"
               onClick={onResetAutoApprove}
-              className="ml-2 inline-flex items-center gap-1 rounded-md border border-blue-300 bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-700/60 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50"
+              className="ms-2 inline-flex items-center gap-1 rounded-md border border-blue-300 bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-700/60 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50"
               title={t('chat.consent.resetTooltip')}
               aria-label={t('chat.consent.resetTooltip')}
             >
@@ -226,7 +226,7 @@ export const ChatTopbar = ({
                       count: autoApproveCount,
                     })}
               </span>
-              <span className="ml-1 opacity-70">·</span>
+              <span className="ms-1 opacity-70">·</span>
               <span className="opacity-90">{t('chat.consent.resetShort')}</span>
             </button>
           )}
@@ -255,11 +255,11 @@ export const ChatTopbar = ({
 
               {/* Dropdown menu */}
               {showMenu && (
-                <div className="absolute right-0 top-full mt-1 z-10 w-48 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark">
+                <div className="absolute end-0 top-full mt-1 z-10 w-48 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark">
                   <div className="p-1">
                     {/* Clear option */}
                     <button
-                      className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                      className="w-full text-start px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                       onClick={() => {
                         onClearAll?.();
                         setShowMenu(false);

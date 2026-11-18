@@ -210,7 +210,7 @@ export const RecentSourcesSection: FC<RecentSourcesSectionProps> = ({
                   {truncateTitle(source.latestDoc.title, 60)}
                   <IconExternalLink
                     size={12}
-                    className="inline-block ml-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="inline-block ms-1 opacity-0 group-hover:opacity-100 transition-opacity"
                   />
                 </a>
                 <div className="flex items-center gap-2 mt-0.5">

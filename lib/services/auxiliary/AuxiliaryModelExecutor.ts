@@ -1,6 +1,9 @@
 /** Bounded, residency-filtered inference attempts shared by auxiliary operations. */
-import { countTokens } from '@/lib/utils/server/tiktoken/tiktokenCache';
-
+import {
+  countRequestTokens,
+  missingCapability,
+  requiredCapabilities,
+} from './capabilities';
 import {
   AUXILIARY_LIMITS,
   AUXILIARY_OPERATION_REVISION,
@@ -222,9 +225,12 @@ export class AuxiliaryModelExecutor {
           const candidates = options.candidates ?? resolution.candidates;
           reason = resolution.reason ?? reason;
           const inputTokens = await abortable(
-            countTokens(JSON.stringify(params)),
+            countRequestTokens(params),
             signal,
           );
+          // Capabilities come from model metadata: a candidate that cannot
+          // serve the request (e.g. images to a text-only model) is skipped.
+          const required = requiredCapabilities(options.operation, params);
           let attempts = 0;
           for (
             let index = 0;
@@ -233,6 +239,10 @@ export class AuxiliaryModelExecutor {
           ) {
             if (signal.aborted) break;
             const candidate = candidates[index];
+            if (missingCapability(candidate.model, required)) {
+              reason = 'incompatible';
+              continue;
+            }
             const adapted = auxiliaryParameters(params, candidate);
             if (
               inputTokens +

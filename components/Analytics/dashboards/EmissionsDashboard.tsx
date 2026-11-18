@@ -302,14 +302,14 @@ export const EmissionsDashboard: FC<{ view: RollupView }> = ({ view }) => {
           <p className="mb-3 mt-0.5 text-xs text-gray-600 dark:text-gray-300">
             {t('emissions.reconciliationSub')}
           </p>
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-start text-sm">
             <thead className="text-xs text-gray-500 dark:text-gray-400">
               <tr>
                 <th scope="col" className="py-1.5 font-medium" />
-                <th scope="col" className="py-1.5 text-right font-medium">
+                <th scope="col" className="py-1.5 text-end font-medium">
                   {t('emissions.col.energyWh')}
                 </th>
-                <th scope="col" className="py-1.5 text-right font-medium">
+                <th scope="col" className="py-1.5 text-end font-medium">
                   {t('emissions.col.co2g')}
                 </th>
               </tr>
@@ -337,10 +337,10 @@ export const EmissionsDashboard: FC<{ view: RollupView }> = ({ view }) => {
                   <th scope="row" className="py-1.5 font-normal">
                     {label}
                   </th>
-                  <td className="py-1.5 text-right tabular-nums">
+                  <td className="py-1.5 text-end tabular-nums">
                     {formatFull(wh, locale)}
                   </td>
-                  <td className="py-1.5 text-right tabular-nums">
+                  <td className="py-1.5 text-end tabular-nums">
                     {formatFull(grams, locale)}
                   </td>
                 </tr>

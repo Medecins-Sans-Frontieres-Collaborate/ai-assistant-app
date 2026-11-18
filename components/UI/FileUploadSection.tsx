@@ -56,28 +56,28 @@ export const FileUploadSection: FC<FileUploadSectionProps> = ({
     switch (status) {
       case 'uploading':
         return (
-          <span className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 ml-auto flex-shrink-0">
+          <span className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 ms-auto flex-shrink-0">
             <IconLoader2 size={12} className="animate-spin" />
             {t('fileUpload.uploading')}
           </span>
         );
       case 'transcribing':
         return (
-          <span className="flex items-center gap-1 text-xs text-purple-600 dark:text-purple-400 ml-auto flex-shrink-0">
+          <span className="flex items-center gap-1 text-xs text-purple-600 dark:text-purple-400 ms-auto flex-shrink-0">
             <IconLoader2 size={12} className="animate-spin" />
             {t('fileUpload.transcribing')}
           </span>
         );
       case 'completed':
         return (
-          <span className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400 ml-auto flex-shrink-0">
+          <span className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400 ms-auto flex-shrink-0">
             <IconCheck size={12} />
             {t('fileUpload.complete')}
           </span>
         );
       case 'failed':
         return (
-          <span className="flex items-center gap-1 text-xs text-red-600 dark:text-red-400 ml-auto flex-shrink-0">
+          <span className="flex items-center gap-1 text-xs text-red-600 dark:text-red-400 ms-auto flex-shrink-0">
             <IconX size={12} />
             {t('fileUpload.failed')}
           </span>
@@ -120,7 +120,7 @@ export const FileUploadSection: FC<FileUploadSectionProps> = ({
                 {status && getStatusIndicator(status)}
                 <button
                   onClick={() => onRemoveFile(index)}
-                  className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors ml-2"
+                  className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors ms-2"
                   disabled={status === 'uploading' || status === 'transcribing'}
                 >
                   <IconX size={12} className="text-gray-500" />

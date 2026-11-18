@@ -10,6 +10,8 @@ import {
   useLimitGates,
 } from '@/client/hooks/settings/useMyLimits';
 
+import type { AvailableAgent } from '@/lib/utils/app/agentAttachment';
+
 import { InterpreterMode } from '@/types/interpreterMode';
 import { SearchMode } from '@/types/searchMode';
 
@@ -17,6 +19,29 @@ import {
   getOrganizationAgentById,
   getOrganizationAgentIdFromModelId,
 } from '@/lib/organizationAgents';
+
+/**
+ * Whether an attached agent hides the web-search control, mirroring the
+ * server gate (lib/services/chat/enrichers/searchRequest.ts) so the
+ * composer never offers a search the server would refuse:
+ * - org and M365 agents opt IN (hidden unless `allowWebSearch === true`);
+ * - static RAG and prompt agents opt OUT (hidden only on an explicit false).
+ *
+ * @param agent - The attached agent, or undefined when none is attached.
+ * @returns True when the control must not be shown.
+ */
+export function attachedAgentHidesWebSearch(
+  agent: Pick<AvailableAgent, 'kind' | 'allowWebSearch'> | undefined,
+): boolean {
+  if (!agent) return false;
+  if (agent.kind === 'org' || agent.kind === 'm365') {
+    return agent.allowWebSearch !== true;
+  }
+  if (agent.kind === 'rag' || agent.kind === 'prompt') {
+    return agent.allowWebSearch === false;
+  }
+  return false;
+}
 
 /**
  * Whether the selected conversation's agent hides the web-search and
@@ -27,7 +52,8 @@ import {
  *   orchestrate their own tools — both hidden.
  * - Admin org agents opt IN (`allowWebSearch/allowCodeInterpreter === true`);
  *   static RAG agents opt OUT of search (`allowWebSearch === false`) and IN
- *   for the interpreter. Gates are read from the model object for legacy
+ *   for the interpreter. M365 agents opt IN to search and prompt agents opt
+ *   OUT, mirroring the server gate (searchRequest.ts). Gates are read from the model object for legacy
  *   selections (fresher than the static registry) and from the attached
  *   agent record for decoupled attachments.
  */
@@ -49,14 +75,7 @@ export function useAgentToolGates(): {
     if (modelId.startsWith('foundry-')) return true;
     const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
     if (!orgAgentId) {
-      if (!attachedAgent) return false;
-      if (attachedAgent.kind === 'org') {
-        return attachedAgent.allowWebSearch !== true;
-      }
-      if (attachedAgent.kind === 'rag') {
-        return attachedAgent.allowWebSearch === false;
-      }
-      return false;
+      return attachedAgentHidesWebSearch(attachedAgent);
     }
     // Admin-authored org RAG agents carry their gates on the model object
     // (they're absent from — or fresher than — the static registry).

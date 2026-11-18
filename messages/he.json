@@ -2,7 +2,6 @@
   "OpenAI API Key Required": "מפתח openAI API",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "עליך להזין את המפתח האישי שלך בצידו השמאלי התחתון של תפריט הניווט.",
   "Stop Generating": "עצור תהליך הפקת התשובה",
-  "Prompt limit is {{maxLength}} characters": "המגבלה היא {{maxLength}} תווים",
   "System Prompt": "הגדרת בסיס לכל תשובה של המערכת",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "You are Hebrew speaking ChatGPT, a large language model trained by OpenAI which responds in Hebrew to any question or User comment. Follow the user's instructions carefully. Respond in Hebrew using markdown.",
   "Enter a prompt": "הקלד הודעה",
@@ -21,7 +20,6 @@
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "עליך לוודא שמפתח האישי שלך מוזן בתפריט מצד שמאל",
   "If you completed this step, OpenAI may be experiencing issues_": "אם טרם השלמת חלק זה יש סבירות גבוהה להתרחשות תקלה",
   "click if using a _env_local file": "click if using a .env.local file",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "מגבלת תווים היא {{maxLength}}. אתה הקלדת עד עכשיו {{valueLength}} תווים.",
   "Please enter a message": "הקלד את הודעתך",
   "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality_": "מערכת הצאטבוט היא ערכה מתקדמת לניהול שיחה המכוונת לחקות את המראה והפונקציונאלית של ChatGPT",
   "Are you sure you want to clear all messages?": "האם אתה בטוח שברצונך למחוק את כל ההודעות?",
@@ -128,7 +126,7 @@
   "Description": "תיאור",
   "A description for your prompt_": "תיאור שורת הפקודה למכונה",
   "Prompt": "הנחיה",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "תיאור הפקודה. השתמש '{{}}' להגדרת משתנים. לדוגמא {{שם משתנה}} הוא {{תואר}} {{שם עצם}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "תיאור הפקודה. השתמש '{{}}' להגדרת משתנים. לדוגמא '{{שם משתנה}}' הוא '{{תואר}}' '{{שם עצם}}'",
   "Save": "שמור",
   "A name for your prompt_": "שם להנחיה שלך.",
   "New chat": "שיחה חדשה",
@@ -167,8 +165,8 @@
   "uploadAudioVideoFile": "העלה קובץ אודיו או וידאו",
   "uploadingFile": "מעלה קובץ...",
   "removeFile": "הסר ובחר קובץ אחר",
-  "transcriptionErrorAttempt": "שגיאה במהלך התמלול (ניסיון {{attempt}} מתוך 3). מנסה שוב...",
-  "rateLimitExceededWaiting": "חריגה ממגבלת הקצב. ממתין {{seconds}} שניות לפני ניסיון חוזר...",
+  "transcriptionErrorAttempt": "שגיאה במהלך התמלול (ניסיון {attempt} מתוך 3). מנסה שוב...",
+  "rateLimitExceededWaiting": "חריגה ממגבלת הקצב. ממתין {seconds} שניות לפני ניסיון חוזר...",
   "Conversations": "שיחות",
   "Prompts": "הנחיות",
   "Close sidebar": "סגור את הסרגל הצדדי",
@@ -587,7 +585,8 @@
     "clear": "נקה",
     "undo": "בטל",
     "durationSeconds": "{count, plural, one {# שנייה} other {# שניות}}",
-    "durationMinutes": "{count, plural, one {# דקה} other {# דקות}}"
+    "durationMinutes": "{count, plural, one {# דקה} other {# דקות}}",
+    "clearSearch": "נקה חיפוש"
   },
   "errors": {
     "unexpectedErrorOccurred": "אירעה שגיאה בלתי צפויה",
@@ -877,7 +876,13 @@
     "ttsError": "שגיאה ביצירת שמע. נא לנסות שוב.",
     "unsupportedMessageType": "שגיאה בהצגת ההודעה: סוג הודעה לא נתמך",
     "addLanguageOption": "הוסף \"{name}\"…",
-    "sources": "מקורות",
+    "sources": {
+      "fromDocuments": "מסמכי הסוכן",
+      "fromWeb": "אינטרנט",
+      "fromDocumentsHint": "קטעים ממסמכי הסוכן עצמו",
+      "fromWebHint": "דפים ציבוריים שנמצאו בחיפוש באינטרנט",
+      "heading": "{count, plural, one {מקור} other {מקורות}}"
+    },
     "interpreterBadge": "הרץ קוד",
     "disableCodeInterpreter": "השבת הרצת קוד",
     "interimSearch": {
@@ -955,7 +960,8 @@
       "MODEL_RATE_LIMITED": "המודל מקבל כעת יותר מדי בקשות. הבקשה ניסתה מחדש אוטומטית; נסה שוב בעוד רגע.",
       "MODEL_QUOTA_EXCEEDED": "מכסת הקיבולת של המודל מוצתה. נסה מודל אחר או נסה שוב מאוחר יותר.",
       "MODEL_AUTH_FAILED": "האפליקציה לא הצליחה לאמת מול שירות המודל. זו בעיית הגדרות — יש לפנות לתמיכה."
-    }
+    },
+    "messageLimitExceeded": "מגבלת תווים היא {maxLength}. אתה הקלדת עד עכשיו {valueLength} תווים."
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -1377,7 +1383,6 @@
   "Chat Settings": "הגדרות שיחה",
   "Default System Prompt": "הנחיית מערכת ברירת מחדל",
   "Email": "דוא\"ל",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "המגבלה להנחיה היא {{maxLength}} תווים. הזנת {{valueLength}} תווים.",
   "Run Typewriter Intro": "הרץ מבוא Typewriter",
   "Conversation exported successfully": "השיחה יוצאה בהצלחה",
   "Failed to export conversation": "ייצוא השיחה נכשל",
@@ -2415,20 +2420,18 @@
     "sectionPinned": "נעוץ",
     "sectionFrequent": "בשימוש תדיר",
     "sectionMore": "עוד",
-    "categoryWeb": "ווב",
-    "categoryMedia": "מדיה וקבצים",
-    "categoryTransform": "המרה",
     "pin": "נעץ בחלק העליון",
     "unpin": "הסר נעיצה",
     "moveToMore": "העבר ל'עוד'",
     "moveOutOfMore": "הצג בתפריט",
     "showSources": "הצג מקורות נוספים",
     "hideSources": "הסתר מקורות נוספים",
-    "aiTools": "כלי AI",
-    "aiToolsTooltip": "יכולות שהעוזר יכול להשתמש בהן כאשר עונה: חיפוש אינטרנט חי, הרצת קוד, ושירותים מחוברים.",
     "codeInterpreterTooltip": "הרץ קוד Python בסביבה מאובטחת לכל הודעה.\n\nמעולה לניתוח נתונים, חישובים ויצירת גרפים מקבצים מצורפים.",
-    "categoryTools": "כלים ומחברים",
-    "translationConversationTitle": "תרגום: {filename}"
+    "translationConversationTitle": "תרגום: {filename}",
+    "categoryAdd": "הוסף",
+    "categoryDo": "בצע",
+    "categoryChat": "בצ'אט זה",
+    "categoryStart": "התחל מ"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "הוסיפו הוראות אישיות כדי להתאים את תגובת הבינה המלאכותית. הוראות אלו משולבות עם הנחיות ליבה שמבטיחות תגובות מועילות, מדויקות ובטוחות.",
   "Tip: Type \"/\" to select from saved prompt templates_": "עצה: הקלידו \"/\" כדי לבחור מהתבניות השמורות.",
@@ -2556,7 +2559,9 @@
     "savedToOneDrive": "נשמר {name} ל-OneDrive.",
     "openInOneDrive": "פתח",
     "saveForbidden": "אין לך הרשאה לכתוב לתיקייה הזו — בחר תיקייה אחרת באמצעות 'שמור ל-OneDrive'.",
-    "saveToOneDriveFailed": "לא ניתן היה לשמור ל-OneDrive — נסה שוב."
+    "saveToOneDriveFailed": "לא ניתן היה לשמור ל-OneDrive — נסה שוב.",
+    "textVersion": "גרסת טקסט (DOCX)",
+    "textVersionHint": "קובץ Word ניתן לעריכה עם הטקסט המתורגם, עמוד אחד לכל עמוד מקור. הקובץ המתורגם שומר על העימוד המקורי."
   },
   "terms": {
     "officialLanguages": "גרסה רשמית:",
@@ -2742,7 +2747,6 @@
   },
   "usageImpact": {
     "empty": "עדיין לא נרשם שימוש. השימוש שלך בטוקנים והפליטה המוערכת יופיעו כאן לאחר שתצ'וטט.",
-    "co2Value": "{grams} גר' CO₂e",
     "equivalence": "≈ {count} טעינות סמארטפון",
     "requests": "בקשות",
     "promptTokens": "טוקנים של השאילתה",
@@ -2904,7 +2908,7 @@
       "addedByYou": "הוסף על ידך",
       "glossary": "מילון מונחים",
       "noGlossary": "אין מילון מונחים",
-      "manageGlossaries": "מילוני מונחים",
+      "manageGlossaries": "ניהול מילונים",
       "glossaries": "מילוני מונחים",
       "closeGlossaries": "סגור מילוני מונחים",
       "glossariesEmpty": "צור מילון מונחים כדי לקבוע כיצד מונחים מסוימים יתורגמו. מילונים נשמרים במכשיר זה וזמינים לשימוש חוזר בתרגומים נוספים.",
@@ -3069,7 +3073,145 @@
       "importTooLarge": "הקובץ גדול מדי לייבוא (מקסימום 5 מגה-בייט).",
       "importNothing": "לא נמצאו שורות מתאימות ({skipped} דולגו).",
       "importSummary": "{added} נוספו, {replaced} הוחלפו, {skipped} דולגו.",
-      "entriesTooManyToShow": "{count} מונחים — יותר מדי להצגה כאן. ייצא/י כדי לעיין בהם, או יבא/י קובץ להחלפת מונחים."
+      "entriesTooManyToShow": "{count} מונחים — יותר מדי להצגה כאן. ייצא/י כדי לעיין בהם, או יבא/י קובץ להחלפת מונחים.",
+      "pagesLoaded": "נטענו {selected} מתוך {total} עמודים",
+      "pagesLabel": "עמודים",
+      "pagesApply": "טען עמודים",
+      "pagesPrevious": "אצווה קודמת",
+      "pagesNext": "אצווה הבאה",
+      "pagesBudget": "{used} / {max} תווים",
+      "pagesChange": "שנה עמודים",
+      "pagesLoading": "טוען עמודים…",
+      "pagesInvalid": "נא הזן מספרי עמודים או טווחים, לדוגמה 1-40, 45.",
+      "pagesUnavailable": "אף אחד מהעמודים האלו לא מכיל טקסט.",
+      "pagesTooMany": "הבחירה הזו כוללת {used} תווים ואצווה אחת יכולה להכיל {max}. בחר פחות עמודים.",
+      "stop": "עצור",
+      "stepAnalyzing": "מנתח",
+      "stepTranslating": "מתרגם",
+      "stepReviewing": "בודק",
+      "stepDone": "הושלם",
+      "runProgressLabel": "התקדמות תרגום",
+      "runHintAnalyzing": "קורא את המקור למציאת מושגים ואתגרים.",
+      "runHintTranslating": "כותב את התרגום.",
+      "runHintReviewing": "בודק את הטיוטה מול המקור.",
+      "runHintReviewingRound": "בודק את הטיוטה מול המקור · סבב {round} מתוך עד {total}.",
+      "runRound": "סבב {round} מתוך עד {total}",
+      "draftLabel": "טיוטה",
+      "sourceLocked": "נעול במהלך התרגום",
+      "analysisNotes": "{count, plural, one {הערה אחת} other {# הערות}}",
+      "analysisPill": "{count, plural, one {ניתוח · הערה אחת} other {ניתוח · # הערות}}",
+      "reviewSummary": "{count, plural, one {סקירה: סבב אחד, {verdict}} other {סקירה: # סבבים, {verdict}}}",
+      "analysisDismiss": "הסתר לכל התרגומים",
+      "analysisShow": "הצג את ניתוח הקדם-תרגום",
+      "analysisResize": "שנה גודל חלונית הניתוח",
+      "assessingCriteria": "{count, plural, one {בודק קריטריון אחד} other {בודק # קריטריונים}}",
+      "editsPending": "הצעות עריכה יופיעו כאן לאחר סיום הערכה.",
+      "uploadProgressLabel": "התקדמות העלאה",
+      "uploadStepUploading": "מעלה",
+      "uploadStepReading": "קורא טקסט",
+      "uploadStepReady": "מוכן",
+      "uploadCancel": "ביטול",
+      "modeDocument": "כל המסמך",
+      "modeDocumentHint": "מתרגם את קובץ ה-PDF שהועלה במלואו ושומר על הפריסה שלו. יש לקרוא ולתקן את התוצאה עמוד אחר עמוד.",
+      "translateDocument": "תרגם מסמך",
+      "documentSubmitting": "נשלח…",
+      "documentIntroTitle": "תרגם את כל המסמך",
+      "documentIntro": "ה-PDF שהועלה מתורגם במלואו תוך שמירה על העימוד שלו. כשתרגום מוכן, תוכלו לקרוא אותו עמוד-אחר-עמוד לצד המקור, לתקן עמודים, לבדוק את איכותם ולהוריד את התוצאה. במצב זה, לא משתמשים בגלוסרי או בסבבי ביקורת. לאחר תחילת תרגום המסמך לא ניתן לעצור אותו, ודפי המסמך נספרים במכסה היומית.",
+      "documentNeedsFile": "העלו קובץ PDF כדי לתרגם מסמך שלם.",
+      "documentNeedsPdf": "תרגום מסמך מלא עם תצוגה עמוד-אחר-עמוד זמין רק עבור קבצי PDF.",
+      "documentNeedsLanguage": "בחרו שפת יעד לתרגום המסמך.",
+      "documentLanguageUnsupported": "תרגום מסמך שלם אינו זמין עבור שפה זו. השתמשו בתרגום מהיר או בבדוק במקום.",
+      "documentNoGlossaries": "מילונים לא זמינים בתרגום מסמך שלם",
+      "documentPagesLeft": "{count, plural, one {עמוד אחד נותר להיום} other {נותרו # עמודים להיום}}",
+      "documentLimitReached": "לקובץ זה יש יותר עמודים מהכמות המותרת להיום. תוכלו לתרגם עמודים נבחרים באמצעות תרגום מהיר או בדוק, או לנסות שוב מחר.",
+      "documentUnavailable": "תרגום מסמך שלם אינו מוגדר בשרת זה.",
+      "documentSubmitFailed": "לא ניתן היה לשלוח את המסמך לתרגום: {message}",
+      "documentProgressLabel": "התקדמות בתרגום המסמך",
+      "documentStepUploaded": "הועלה",
+      "documentStepPreparing": "מכין עמודים",
+      "documentTypicalDuration": "בדרך כלל מספר דקות",
+      "documentCanLeave": "ניתן לעזוב דף זה. התרגום ימשיך והיה זמין עם חזרתך.",
+      "documentStalled": "לא ניתן היה לבדוק את התקדמות התרגום. ייתכן שהוא עדיין פועל.",
+      "documentCheckAgain": "בדוק שוב",
+      "documentFailed": "לא ניתן לתרגם את המסמך: {message}",
+      "documentGone": "תרגום זה אינו זמין יותר. בצעו תרגום מחדש כדי לצפות במסמך.",
+      "documentPageFailed": "לא ניתן היה לטעון עמוד זה: {message}",
+      "documentPagesNotAligned": "בקובץ המתורגם יש מספר עמודים שונה, ולכן ייתכן שתוכן העמודים לא תואם.",
+      "documentAvailableUntil": "זמין עד {date}",
+      "documentRetranslateTitle": "לתרגם מחדש את המסמך?",
+      "documentRetranslateMessage": "הפעולה מתחילה תרגום חדש והעמודים שלו ייספרו שוב במכסה היומית. לא ניתן לעצור את התהליך לאחר התחלתו. התרגום הנוכחי והתיקונים שלו יישארו בשרת עד לפקיעתם, אך לא יוצגו עוד כאן.",
+      "retry": "נסה שוב",
+      "pageLabel": "עמוד",
+      "pageOf": "מתוך {total}",
+      "pageNumber": "· עמוד {page}",
+      "pagePrevious": "עמוד קודם",
+      "pageNext": "עמוד הבא",
+      "correctedLabel": "תוקן",
+      "correctedPages": "עמודים שתוקנו:",
+      "correctedPagesMore": "+{count} נוספים",
+      "correctionRestore": "שחזור",
+      "correctionRestoreHint": "בטלו את השינויים בעמוד זה וחזרו לתרגום המכונה",
+      "correctionSaving": "שומר…",
+      "correctionSaved": "נשמר",
+      "correctionSaveFailed": "לא נשמר. שנו את הטקסט ונסו שוב.",
+      "download": "הורדה",
+      "downloading": "מוריד…",
+      "downloadFailed": "ההורדה נכשלה: {message}",
+      "downloadTranslated": "מתורגם {format}",
+      "downloadTranslatedHint": "פריסה מקורית. לא כולל את התיקונים שלך.",
+      "downloadTextVersion": "גרסת טקסט (DOCX)",
+      "downloadTextVersionHint": "טקסט פשוט, עמוד לעמוד, כולל התיקונים שלך.",
+      "documentNoCancel": "לא ניתן להפסיק תרגום מסמך לאחר שהחל.",
+      "documentGlossariesIgnored": "{count, plural, one {המונחון שבחרת אינו מוחל במצב זה.} other {ה-# מונחונים שבחרת אינם מוחלים במצב זה.}} בדוק מונחים עמוד-אחר-עמוד בעזרת \"הערכת איכות\", או השתמש ב\"מהיר\" או \"מאומת\".",
+      "pendingLeavePage": "ההצעות שייכות לעמוד זה ולא יישמרו אם תעזוב אותו. החליטו תחילה לגבי ההצעות שנותרו.",
+      "uploadStepOcr": "קריאה עם OCR",
+      "ocrButton": "קריאה עם OCR",
+      "ocrButtonHint": "קרא את ה-PDF הזה שוב עם זיהוי טקסט, עבור עמודים סרוקים או טקסט שיצא שגוי",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "טקסט זה נקרא מהעמודים באמצעות זיהוי טקסט. יש לבדוק מול המקור.",
+      "ocrReasonNoText": "לא נמצא טקסט ב-{name}. זה נראה כמו מסמך סרוק.",
+      "ocrReasonSparse": "נמצא מעט מאוד טקסט ב-{name}. ייתכן שחלק ממנו סרוק.",
+      "ocrReasonManual": "להריץ שוב זיהוי טקסט על {name}?",
+      "ocrExplanation": "OCR קורא טקסט מתמונות הדפים. זה לוקח יותר זמן מהעלאה רגילה, מכליל כל עמוד במגבלת השימוש היומית שלך, ועלול לטעות בסריקות באיכות נמוכה, כתב יד וטבלאות.",
+      "ocrPagesLeft": "{count, plural, one {נותרה עוד עמוד OCR אחד להיום.} other {נותרו עוד # עמודי OCR להיום.}}",
+      "ocrRun": "קריאה עם OCR",
+      "ocrDismiss": "לא עכשיו",
+      "ocrSparseHint": "נמצא מעט מאוד טקסט ב-PDF הזה. ייתכן שחלק מהעמודים סרוקים.",
+      "ocrLimitReached": "במסמך זה יש יותר עמודים ממכסת ה-OCR היומית שלך.",
+      "ocrTooManyPages": "המסמך הזה ארוך מדי ל-OCR, שקורא עד {max} עמודים בלבד. פצל את ה-PDF ועלה חלק ממנו.",
+      "ocrUnavailable": "OCR לא מוגדר בשרת זה.",
+      "ocrNoText": "גם ב-OCR לא נמצא טקסט במסמך זה.",
+      "ocrFailed": "לא ניתן היה לקרוא את המסמך עם OCR. נסה שוב.",
+      "scannedWholeExplanation": "באפשרותך גם לתרגם את כל המסמך: המערכת קוראת בעצמה את הדפים הסרוקים, שומרת על העימוד, וסופרת את הדפים במסגרת מכסת התרגום היומית שלך.",
+      "scannedUseWholeDocument": "תרגם את כל המסמך",
+      "scannedSourceNote": "ל{name} אין טקסט להציג כאן. תרגום כל המסמך קורא את הדפים ישירות. הזנת טקסט משלך כאן תחליף את המסמך.",
+      "scannedPageNote": "לא נמצא טקסט לקריאה בדף זה של המסמך המקורי. השווה עם הקובץ עצמו.",
+      "changeLabel": "בקש שינוי בתרגום",
+      "changePlaceholder": "בקש שינוי, למשל להפוך לרשמי יותר",
+      "changePlaceholderAnother": "בקש שינוי נוסף",
+      "changeSend": "שלח בקשה",
+      "changeWorking": "מיישם את השינויים",
+      "changeNothingApplied": "שום דבר לא משתנה עד אשר תאשר",
+      "changeSelectionLabel": "בקש שינוי לטקסט הנבחר",
+      "changeSelectionPlaceholder": "שנה זאת, למשל כתוב tableta",
+      "changeSelectionScope": "חל על הטקסט הנבחר בלבד",
+      "changeSelectionClose": "סגור",
+      "changeTitle": "שינויים שבוצעו על פי בקשה",
+      "changeSelectedLabel": "טקסט נבחר",
+      "changeNoEdits": "אין צורך בשינוי בבקשה זו.",
+      "changeReplyPending": "{count, plural, one {# עריכה מוצעת נמצאת באזור העבודה.} other {# עריכות מוצעות נמצאות באזור העבודה.}} שום דבר לא משתנה עד אשר תאשר.",
+      "changeStopped": "הופסק. לא בוצע שינוי.",
+      "changeFailed": "בקשת השינוי נכשלה. נסה שוב.",
+      "changeNoTranslation": "אין עדיין תרגום לשנות. תרגם את הטקסט תחילה.",
+      "changeBusy": "יש להמתין לסיום ההרצה הנוכחית, ואז לבקש שוב.",
+      "changeHeld": "לא נשלח: נשארו עריכות מוצעות שממתינות להחלטה.",
+      "pendingRunActionRequest": "מבקש שינוי",
+      "railPlaceholder": "בקש שינוי או שאל שאלה…",
+      "documentPageCount": "{count, plural, one {דף אחד} other {# דפים}}",
+      "sourceShowPages": "הצג דפים",
+      "sourceEditText": "ערוך כטקסט",
+      "sourceRemoveDocument": "הסר מסמך",
+      "sourceJumpToPage": "עבור לדף"
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",
@@ -3697,7 +3839,7 @@
       "guideTargetTerm": "תרגום דרוש",
       "guideNote": "הערה",
       "pendingRun": {
-        "title": "{count} הצעות עדיין ממתינות",
+        "title": "{count, plural, one {הצעה אחת ממתינה לאישור} other {# הצעות ממתינות לאישור}}",
         "body": "{action} עשוי לשנות כל חלק בטקסט, כולל קטעים עם הצעות שעדיין לא החלטת עליהן, והערכה חדשה תחליף את הרשימה הנוכחית. אנא הכר תחילה לגבי ההצעות שנותרו.",
         "acceptAll": "אשר את כל הנותרים",
         "rejectAll": "דחה את כולם",
@@ -3759,7 +3901,7 @@
         "list<number>": "רשימת מספרים"
       },
       "layout": "פריסת טופס",
-      "layoutHint": "Markdown עם {{field:id}} — משמש לייצוא מוצג ולתצוגה מקדימה.",
+      "layoutHint": "Markdown עם '{{field:id}}' — משמש לייצוא מוצג ולתצוגה מקדימה.",
       "saveTemplate": "שמור תבנית",
       "deleteTemplate": "מחק תבנית",
       "cancel": "ביטול",
@@ -4587,6 +4729,10 @@
         "note": "עלות לפי מחירוני רשימה נכון ל-{asOf} (תעריף גלובלי רגיל, ללא הנחת קלט במטמון): זהו ערך גבול עליון, לא חשבונית. חיפוש באינטרנט, הרצת קוד, תמלול, דיבור, תרגום ואינדוקס מסמכים אינם כלולים."
       }
     },
+    "mass": {
+      "grams": "{value} גרם CO₂e",
+      "kilograms": "{value} ק״ג CO₂e"
+    },
     "workflow": {
       "title": "סביבת עבודה זו (הערכה)",
       "workspace": "סביבת עבודה זו",
@@ -4801,7 +4947,7 @@
     "enableToggle": "הפעל זיכרונות",
     "privacyNote": "העובדות נשמרות רק בדפדפן זה ונכללות בצ'אטים שלך להתאמת התגובות.",
     "empty": "אין עדיין זיכרונות. עובדות חשובות נשמרות אוטומטית מתוך השיחות שלך.",
-    "savedOn": "נשמר ב-{{date}}",
+    "savedOn": "נשמר ב-{date}",
     "deleteMemory": "מחק זיכרון",
     "clearAll": "נקה את כל הזיכרונות",
     "clearAllConfirmQuestion": "למחוק את כל הזיכרונות? לא ניתן לשחזר פעולה זו.",
@@ -5401,7 +5547,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {מסמך אחד} other {# מסמכים}} מאונדקסים",
     "m365CapImmediateHelp": "לחיצה על 'החל' שומרת את ההגבלה מיד. עריכות אחרות עדיין דורשות שמירה.",
     "m365CapDraftHelp": "ההגבלה נשמרת כאשר אתה יוצר את הסוכן.",
-    "m365CapSaved": "הגבלת מסמכים נשמרה: {limit}."
+    "m365CapSaved": "הגבלת מסמכים נשמרה: {limit}.",
+    "m365AgentAllowWebSearchHelp": "כבוי כברירת מחדל: הסוכן עונה רק ממסמכיו ואינו מחפש באינטרנט, ללא קשר להגדרת החיפוש שהמשתמש בחר. כאשר פועל, הוראות הסוכן קובעות מתי יתבצע חיפוש אינטרנט ואילו אתרים ניתן להיעזר בהם, ומקוררי האינטרנט מוצגים תמיד בנפרד ממסמכי הסוכן.",
+    "promptAgentAllowWebSearchHelp": "פעיל כברירת מחדל. כאשר כבוי, סוכן זה לעולם לא מחפש באינטרנט, ללא קשר להגדרת החיפוש שנבחרה על ידי המשתמש."
   },
   "localModels": {
     "title": "מודלים מקומיים",
@@ -5708,7 +5856,9 @@
       "m365MailReadsPerDay": "קריאות דואר ביום",
       "m365MailDraftsPerDay": "טיוטות דואר ביום",
       "m365MailDeepScansPerDay": "סריקות מעמיקות לדואר ביום",
-      "m365DigestRunsPerDay": "הרצות תקציר יומי ליום"
+      "m365DigestRunsPerDay": "הרצות תקציר יומי ליום",
+      "translationPagesPerDay": "עמודים לתרגום מסמכים ביום",
+      "ocrPagesPerDay": "עמודי OCR ליום"
     },
     "valueModeLabel": "סוג הגבלה",
     "valueAmountLabel": "כמות הגבלה",
@@ -5731,7 +5881,8 @@
       "jobs": "משימות",
       "rounds": "סבבים",
       "documents": "מסמכים",
-      "boolean": ""
+      "boolean": "",
+      "pages": "עמודים"
     },
     "window": {
       "day": "יום",
@@ -5789,7 +5940,9 @@
       "m365MailReadsPerDay": "חיפושי דואר וקריאת הודעות/אשכולות ביום. כשעוברים את המגבלה, כלי הדואר יחזירו הודעת \"נסה שוב מחר\".",
       "m365MailDraftsPerDay": "טיוטות אימייל שהעוזר יכול ליצור ביום — כל אחת מאושרת בנפרד. מגבלה מכוונת.",
       "m365MailDeepScansPerDay": "ניתוחי דואר מורכבים (סיכומים, חיפוש מעמיק, התחייבויות) ביום. כל סריקה נחשבת כיחידת תקציב אחת ללא קשר למספר הקריאות הפנימיות.",
-      "m365DigestRunsPerDay": "הרצות תקציר יומי של Microsoft 365 ליום. כל הרצה כוללת עשרות קריאות ל-Graph ושתי קריאות למודלים של ניתוח; בורר התקופה הופך הרצות חוזרות לקלות לביצוע, לכן ההגבלה הדיפולטיבית הדוקה."
+      "m365DigestRunsPerDay": "הרצות תקציר יומי של Microsoft 365 ליום. כל הרצה כוללת עשרות קריאות ל-Graph ושתי קריאות למודלים של ניתוח; בורר התקופה הופך הרצות חוזרות לקלות לביצוע, לכן ההגבלה הדיפולטיבית הדוקה.",
+      "translationPagesPerDay": "עמודי PDF שנשלחו לתרגום מסמכים ביום.",
+      "ocrPagesPerDay": "כמות עמודי PDF הנקראים עם OCR (זיהוי טקסט במסמכים סרוקים) ליום."
     },
     "scopeFamily": "משפחה",
     "scopeModel": "מודל",
@@ -8097,7 +8250,13 @@
       "skills": "בחירת מיומנויות",
       "tools": "ניתוב כלים",
       "trim": "סיווג קיצוץ",
-      "assessment": "הערכת חיפוש"
+      "assessment": "הערכת חיפוש",
+      "query": "שכתוב שאילתת חיפוש",
+      "mailScreen": "מסך פישינג בדוא\"ל",
+      "mailAnalysis": "ניתוח דוא\"ל ותמצית",
+      "schemaProposal": "הצעת מבנה חילוץ",
+      "mcpPlan": "תכנית מחבר",
+      "vision": "קריאת תמונות ודפים"
     },
     "reason": {
       "endpoint_missing": "חסר נקודת קצה או קישור לחשבון",
@@ -8118,6 +8277,164 @@
       "endpoint_account_mismatch": "נקודת הקצה ומזהה משאב ARM מזהים חשבונות שונים. תקן את הגדרות הפריסה.",
       "inventory_refresh_failed": "רענון המלאי נכשל. בדוק את גישת קורא של זהות האפליקציה ואת החיבור לחשבון.",
       "credential_unavailable": "האפליקציה לא הצליחה לקבל את אישור המלאי שלה. בדוק את הגדרות זיהוי הפריסה."
+    },
+    "notSupported": "לא נתמך על ידי דגם זה",
+    "unservedOperations": "אף דגם בשרשרת זו אינו תומך ב: {operations}. יש להוסיף דגם שתומך בכך."
+  },
+  "filePreview": {
+    "preview": "תצוגה מקדימה",
+    "download": "הורדה",
+    "loading": "מכין תצוגה מקדימה…",
+    "failed": "לא ניתן להציג תצוגה מקדימה של קובץ זה. באפשרותך להוריד אותו.",
+    "pageOf": "עמוד {page} מתוך {total}",
+    "truncated": "מוצגים {shown} העמודים הראשונים מתוך {total}. להורדת שאר הדפים יש להוריד את הקובץ.",
+    "enlarge": "הגדל את {name}"
+  },
+  "addToChat": {
+    "title": "הוסף לצ'אט",
+    "titleTranslate": "תרגם מסמך",
+    "titleTranscribe": "תמלל אודיו או וידאו",
+    "sourcesLabel": "הוסף מ",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "לא זמין לפעולה זו",
+    "sources": {
+      "device": "מכשיר זה",
+      "link": "קישור",
+      "camera": "מצלמה",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "דוא\"ל",
+      "meetings": "פגישות"
+    },
+    "device": {
+      "browse": "עיין במכשיר זה",
+      "dropHint": "או גרור קבצים לכל מקום בחלון זה, או הדבק",
+      "rejected": "אף אחד מהקבצים האלו לא ניתן לשימוש כאן.",
+      "hint": {
+        "attach": "מסמכים, תמונות, אודיו ווידאו.",
+        "translate": "מסמך אחד: Word, Excel, PowerPoint, PDF, HTML או טקסט.",
+        "transcribe": "אודיו או וידאו. יתומלל לאחר שליחת ההודעה."
+      }
+    },
+    "selection": {
+      "then": "לאחר מכן",
+      "intents": {
+        "attach": "צרף",
+        "translate": "תרגם",
+        "transcribe": "תמלל"
+      },
+      "confirm": {
+        "attach": "הוסף",
+        "translate": "תרגם",
+        "transcribe": "תמלל"
+      },
+      "unfit": {
+        "attach": "קבצים אלה לא ניתנים לצירוף",
+        "translate": "ניתן לתרגם מסמך אחד בכל פעם",
+        "transcribe": "ניתן לתמלל רק אודיו ווידאו"
+      }
+    },
+    "menu": {
+      "addToChatNote": "מכשיר זה, קישורים, Microsoft 365",
+      "filesOrPhotos": "קבצים או תמונות",
+      "fromThisDevice": "מהמכשיר הזה",
+      "connect": "חבר Microsoft 365",
+      "connectNote": "הוסף מ-OneDrive, דוא\"ל ופגישות"
     }
+  },
+  "usageBudgets": {
+    "title": "התקציבים שלך",
+    "description": "הגבלות שאתה קובע לעצמך במכשיר זה. בחר תקציב, ואז החלט מה קורה כאשר אתה מתקרב אליו ועובר אותו. התקציבים סופרים הפעלות צ'אט ותהליכים מהתחלת כל תקופה.",
+    "metric": {
+      "emissions": "תקציב פליטות",
+      "cost": "תקציב עלות"
+    },
+    "metricShort": {
+      "emissions": "פליטות",
+      "cost": "עלות"
+    },
+    "off": "לא נקבע תקציב.",
+    "measureAs": "מדוד כ",
+    "unit": {
+      "grams": "גרם CO₂e",
+      "smartphoneCharge": "הטענות טלפון",
+      "usd": "דולרים אמריקאיים"
+    },
+    "amountLabel": "תקציב",
+    "amountSuffix": {
+      "grams": "גרם CO₂e",
+      "hours": "שעות",
+      "smartphoneCharge": "הטענות",
+      "usd": "דולרים אמריקאיים"
+    },
+    "periodLabel": "איפוס כל",
+    "period": {
+      "day": "יום",
+      "week": "שבוע",
+      "month": "חודש"
+    },
+    "costNote": "מבוסס על מחירים רשמיים: סכום עליון, לא חשבון בפועל.",
+    "chargesValue": "{count} הטענות טלפון",
+    "percent": "{percent}%",
+    "usedOf": "{used} מתוך {limit} נעשה שימוש ({percent}%)",
+    "usedOfShort": "{used} מתוך {limit}",
+    "resets": "איפוס {date}",
+    "budgetMarker": "תקציב",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "בתוך התקציב",
+      "warn": "הוצגה אזהרה",
+      "ask": "שואל לפני כל הודעה",
+      "stop": "השליחה הושהתה"
+    },
+    "stage": {
+      "warn": {
+        "title": "אזהרה",
+        "tag": "לתשומת לבך",
+        "description": "הצג התראה בצ'אט משיעור זה של התקציב."
+      },
+      "ask": {
+        "title": "שאל קודם",
+        "tag": "חסימה רכה",
+        "description": "בקש ממני לאשר כל הודעה משיעור זה של התקציב."
+      },
+      "stop": {
+        "title": "עצור",
+        "tag": "חסימה מוחלטת",
+        "description": "עצור שליחה משיעור זה של התקציב עד האיפוס או העלאת התקציב כאן."
+      }
+    },
+    "thresholdLabel": "סף {stage}, אחוז מהתקציב",
+    "notice": {
+      "warn": {
+        "emissions": "השתמשת ב-{percent}% מתקציב הפליטות שלך.",
+        "cost": "השתמשת ב-{percent}% מתקציב העלות שלך."
+      },
+      "ask": {
+        "emissions": "השתמשת ב-{percent}% מתקציב הפליטות שלך. לשלוח הודעה זו?",
+        "cost": "השתמשת ב-{percent}% מתקציב העלות שלך. לשלוח הודעה זו?"
+      },
+      "askRun": {
+        "emissions": "השתמשת ב-{percent}% מתקציב הפליטות שלך. להתחיל הפעלה זו?",
+        "cost": "השתמשת ב-{percent}% מתקציב העלות שלך. להתחיל הפעלה זו?"
+      },
+      "stop": {
+        "emissions": "הגעת לנקודת עצירה בתקציב הפליטות. השליחה מושהית עד {date}.",
+        "cost": "הגעתם לנקודת עצירה של תקציב העלות. השליחה הושהתה עד ל-{{date}}."
+      }
+    },
+    "actions": {
+      "viewBudget": "הצג תקציב",
+      "dismiss": "התעלם",
+      "sendAnyway": "שלח בכל זאת",
+      "runAnyway": "הרץ בכל זאת",
+      "dontSend": "אל תשלח",
+      "dontAskToday": "לא לשאול שוב היום",
+      "openSettings": "פתח הגדרות תקציב",
+      "edit": "ערוך"
+    },
+    "composerPaused": "השליחה הושהתה על ידי התקציב שלך",
+    "summaryTitle": "התקציבים שלך",
+    "chipAria": "תקציב עבור {metric}: {percent}% נוצל.",
+    "runProjection": "תקציב פליטות {from}% → {to}%"
   }
 }

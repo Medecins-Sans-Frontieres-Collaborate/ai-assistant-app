@@ -117,8 +117,8 @@
   "uploadAudioVideoFile": "فایل صوتی یا ویدئویی را بارگذاری کنید",
   "uploadingFile": "در حال بارگذاری فایل...",
   "removeFile": "حذف کنید و یک فایل متفاوت را انتخاب کنید",
-  "transcriptionErrorAttempt": "خطا در حین رونویسی (تلاش {{attempt}} از 3). تلاش دوباره...",
-  "rateLimitExceededWaiting": "محدودیت نرخ عبور کرد. در حال انتظار برای {{seconds}} ثانیه قبل از تلاش مجدد...",
+  "transcriptionErrorAttempt": "خطا در حین رونویسی (تلاش {attempt} از 3). تلاش دوباره...",
+  "rateLimitExceededWaiting": "محدودیت نرخ عبور کرد. در حال انتظار برای {seconds} ثانیه قبل از تلاش مجدد...",
   "Conversations": "مکالمات",
   "Prompts": "دستورات",
   "Close sidebar": "بستن نوار کناری",
@@ -537,7 +537,8 @@
     "clear": "پاک‌سازی",
     "undo": "برگرداندن",
     "durationSeconds": "{count, plural, one {# ثانیه} other {# ثانیه}}",
-    "durationMinutes": "{count, plural, one {# دقیقه} other {# دقیقه}}"
+    "durationMinutes": "{count, plural, one {# دقیقه} other {# دقیقه}}",
+    "clearSearch": "پاک کردن جستجو"
   },
   "errors": {
     "unexpectedErrorOccurred": "یک خطای غیرمنتظره رخ داد",
@@ -827,7 +828,13 @@
     "ttsError": "خطا در تولید صدا. لطفاً دوباره تلاش کنید.",
     "unsupportedMessageType": "خطا در نمایش پیام: نوع پیام پشتیبانی نمی‌شود",
     "addLanguageOption": "افزودن «{name}»…",
-    "sources": "منابع",
+    "sources": {
+      "fromDocuments": "اسناد ایجنت",
+      "fromWeb": "وب",
+      "fromDocumentsHint": "بخش‌هایی از اسناد خود ایجنت",
+      "fromWebHint": "صفحات عمومی پیدا شده از طریق جستجوی وب",
+      "heading": "{count, plural, one {منبع} other {منابع}}"
+    },
     "interpreterBadge": "اجرای کد",
     "disableCodeInterpreter": "غیرفعال کردن اجرای کد",
     "interimSearch": {
@@ -905,7 +912,8 @@
       "MODEL_RATE_LIMITED": "مدل در حال حاضر درخواست‌های زیادی دریافت می‌کند. به صورت خودکار تلاش مجدد شد؛ لطفاً لحظاتی بعد دوباره امتحان کنید.",
       "MODEL_QUOTA_EXCEEDED": "سهمیه ظرفیت مدل به پایان رسیده است. مدل دیگری را امتحان کنید یا بعداً دوباره تلاش نمایید.",
       "MODEL_AUTH_FAILED": "برنامه نتوانست با سرویس مدل احراز هویت کند. این یک مشکل تنظیمات است — لطفاً با پشتیبانی تماس بگیرید."
-    }
+    },
+    "messageLimitExceeded": "محدودیت پیام {maxLength} کاراکتر است. شما {valueLength} کاراکتر وارد کرده‌اید."
   },
   "sidebar": {
     "collapseSidebar": "بستن نوار کناری",
@@ -1345,14 +1353,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "اگر کلید OpenAI API ندارید، می‌توانید از اینجا دریافت کنید: ",
   "Loading_ellipsis": "در حال بارگذاری...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "اطمینان حاصل کنید که کلید OpenAI API شما در پایین سمت چپ نوار کناری تنظیم شده است.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "محدودیت پیام {{maxLength}} کاراکتر است. شما {{valueLength}} کاراکتر وارد کرده‌اید.",
   "Model": "مدل",
   "OR": "یا",
   "OpenAI API Key Required": "نیاز به کلید OpenAI API",
   "Please enter a message": "لطفاً یک پیام وارد کنید",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "لطفاً کلید OpenAI API خود را در پایین سمت چپ نوار کناری تنظیم کنید.",
-  "Prompt limit is {{maxLength}} characters": "حداکثر تعداد کاراکتر مجاز برای راهنما {{maxLength}} است",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "محدودیت پرامپت {{maxLength}} کاراکتر است. شما {{valueLength}} کاراکتر وارد کرده‌اید.",
   "Regenerate response": "تولید مجدد پاسخ",
   "Run Typewriter Intro": "اجرای مقدمه ماشین‌تحریر",
   "Save & Submit": "ذخیره و ارسال",
@@ -2415,20 +2420,18 @@
     "sectionPinned": "پین شده",
     "sectionFrequent": "پرتکرار",
     "sectionMore": "سایر",
-    "categoryWeb": "وب",
-    "categoryMedia": "رسانه و فایل‌ها",
-    "categoryTransform": "تبدیل",
     "pin": "پین به بالا",
     "unpin": "برداشتن پین",
     "moveToMore": "انتقال به سایر",
     "moveOutOfMore": "نمایش در منو",
     "showSources": "نمایش منابع دیگر",
     "hideSources": "مخفی کردن منابع دیگر",
-    "aiTools": "ابزارهای هوش مصنوعی",
-    "aiToolsTooltip": "قابلیت‌هایی که دستیار هنگام پاسخ‌دهی می‌تواند استفاده کند: جستجوی زنده وب، اجرای کد و سرویس‌های متصل.",
     "codeInterpreterTooltip": "اجرای کد پایتون در یک فضای امن برای هر پیام.\n\nمناسب برای تحلیل داده، محاسبات و ساخت نمودار از فایل‌های پیوست‌شده.",
-    "categoryTools": "ابزارها و کانکتورها",
-    "translationConversationTitle": "ترجمه: {filename}"
+    "translationConversationTitle": "ترجمه: {filename}",
+    "categoryAdd": "افزودن",
+    "categoryDo": "انجام دادن",
+    "categoryChat": "در این گفتگو",
+    "categoryStart": "شروع از"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "دستورالعمل‌های شخصی خود را برای سفارشی‌سازی نحوه پاسخ‌دهی هوش مصنوعی اضافه کنید. این دستورالعمل‌ها همراه با راهنماهای اصلی رفتاری برای تضمین پاسخ‌های مفید، دقیق و ایمن ترکیب می‌شوند.",
   "Tip: Type \"/\" to select from saved prompt templates_": "نکته: با وارد کردن \"/\" می‌توانید از قالب‌های ذخیره‌شده راهنما انتخاب کنید.",
@@ -2556,7 +2559,9 @@
     "savedToOneDrive": "{name} در OneDrive ذخیره شد.",
     "openInOneDrive": "باز کردن",
     "saveForbidden": "شما اجازه نوشتن در آن پوشه را ندارید — با «ذخیره‌سازی در OneDrive» پوشه دیگری انتخاب کنید.",
-    "saveToOneDriveFailed": "ذخیره‌سازی در OneDrive موفق نبود — لطفاً دوباره تلاش کنید."
+    "saveToOneDriveFailed": "ذخیره‌سازی در OneDrive موفق نبود — لطفاً دوباره تلاش کنید.",
+    "textVersion": "نسخه متنی (DOCX)",
+    "textVersionHint": "یک فایل Word قابل ویرایش با متن ترجمه‌شده، هر صفحه برای یک صفحه منبع. فایل ترجمه‌شده چیدمان اصلی را حفظ می‌کند."
   },
   "terms": {
     "officialLanguages": "نسخه رسمی:",
@@ -2742,7 +2747,6 @@
   },
   "usageImpact": {
     "empty": "هنوز استفاده‌ای ثبت نشده است. پس از شروع گفتگو، میزان استفاده از توکن و برآورد انتشار شما اینجا نمایش داده می‌شود.",
-    "co2Value": "{grams} گرم CO₂e",
     "equivalence": "≈ {count} مرتبه شارژ گوشی هوشمند",
     "requests": "درخواست‌ها",
     "promptTokens": "توکن‌های اعلان",
@@ -2904,7 +2908,7 @@
       "addedByYou": "اضافه‌شده توسط شما",
       "glossary": "واژه‌نامه",
       "noGlossary": "بدون واژه‌نامه",
-      "manageGlossaries": "واژه‌نامه‌ها",
+      "manageGlossaries": "مدیریت واژه‌نامه‌ها",
       "glossaries": "واژه‌نامه‌ها",
       "closeGlossaries": "بستن واژه‌نامه‌ها",
       "glossariesEmpty": "با ایجاد یک واژه‌نامه می‌توانید ترجمه اصطلاحات خاص را ثابت نگه دارید. واژه‌نامه‌ها روی این دستگاه ذخیره می‌شوند و برای ترجمه‌های بعدی قابل استفاده مجدد هستند.",
@@ -3069,7 +3073,145 @@
       "importTooLarge": "این فایل برای وارد کردن بسیار بزرگ است (حداکثر ۵ مگابایت).",
       "importNothing": "هیچ سطر قابل استفاده‌ای یافت نشد ({skipped} رد شده).",
       "importSummary": "{added} اضافه شد، {replaced} جایگزین شد، {skipped} رد شد.",
-      "entriesTooManyToShow": "{count} واژه — نمایش همه ممکن نیست. برای بررسی، خروجی بگیرید یا برای جایگزینی واژه‌ها فایل وارد کنید."
+      "entriesTooManyToShow": "{count} واژه — نمایش همه ممکن نیست. برای بررسی، خروجی بگیرید یا برای جایگزینی واژه‌ها فایل وارد کنید.",
+      "pagesLoaded": "صفحات {selected} از {total} بارگذاری شده‌اند",
+      "pagesLabel": "صفحات",
+      "pagesApply": "بارگذاری صفحات",
+      "pagesPrevious": "دسته قبلی",
+      "pagesNext": "دسته بعدی",
+      "pagesBudget": "{used} / {max} کاراکتر",
+      "pagesChange": "تغییر صفحات",
+      "pagesLoading": "در حال بارگذاری صفحات...",
+      "pagesInvalid": "شماره یا بازه صفحات را وارد کنید، مثلاً ۱-۴۰، ۴۵.",
+      "pagesUnavailable": "هیچ یک از این صفحات شامل متن نیستند.",
+      "pagesTooMany": "این انتخاب {used} کاراکتر است و هر دسته {max} کاراکتر را نگه می‌دارد. صفحات کمتری انتخاب کنید.",
+      "stop": "توقف",
+      "stepAnalyzing": "در حال تحلیل",
+      "stepTranslating": "در حال ترجمه",
+      "stepReviewing": "در حال بازبینی",
+      "stepDone": "انجام شد",
+      "runProgressLabel": "پیشرفت ترجمه",
+      "runHintAnalyzing": "در حال خواندن منبع برای اصطلاحات دشوار و ابهامات.",
+      "runHintTranslating": "در حال نوشتن ترجمه.",
+      "runHintReviewing": "در حال بررسی پیش‌نویس با منبع.",
+      "runHintReviewingRound": "در حال بررسی پیش‌نویس با منبع · دور {round} از {total}.",
+      "runRound": "دور {round} از {total}",
+      "draftLabel": "پیش‌نویس",
+      "sourceLocked": "در حال ترجمه قفل است",
+      "analysisNotes": "{count, plural, one {# یادداشت} other {# یادداشت}}",
+      "analysisPill": "{count, plural, one {تحلیل · # یادداشت} other {تحلیل · # یادداشت}}",
+      "reviewSummary": "{count, plural, one {بازبینی: # دور، {verdict}} other {بازبینی: # دور، {verdict}}}",
+      "analysisDismiss": "پنهان کردن برای همه ترجمه‌ها",
+      "analysisShow": "نمایش تحلیل پیش از ترجمه",
+      "analysisResize": "تغییر اندازه پانل تحلیل",
+      "assessingCriteria": "{count, plural, one {در حال بررسی # معیار} other {در حال بررسی # معیار}}",
+      "editsPending": "ویرایش‌های پیشنهادی پس از پایان ارزیابی اینجا نمایش داده می‌شوند.",
+      "uploadProgressLabel": "پیشرفت آپلود",
+      "uploadStepUploading": "در حال آپلود",
+      "uploadStepReading": "در حال خواندن متن",
+      "uploadStepReady": "آماده",
+      "uploadCancel": "لغو",
+      "modeDocument": "کل سند",
+      "modeDocumentHint": "کل فایل PDF بارگذاری‌شده را ترجمه کرده و چینش آن را حفظ می‌کند. نتیجه را صفحه به صفحه بخوانید و اصلاح کنید.",
+      "translateDocument": "ترجمه سند",
+      "documentSubmitting": "در حال ارسال…",
+      "documentIntroTitle": "ترجمه کل سند",
+      "documentIntro": "کل فایل PDF بارگذاری‌شده ترجمه می‌شود و قالب‌بندی آن حفظ خواهد شد. پس از آماده شدن، می‌توانید هر صفحه را کنار نسخه اصلی بخوانید، صفحات را اصلاح کنید، کیفیت آن‌ها را بررسی نمایید، و نتیجه را دانلود کنید. اصطلاح‌نامه‌ها و دورهای بازبینی در این حالت قابل استفاده نیستند. با شروع ترجمه اسناد، این فرایند قابل توقف نیست و صفحات آن از سهمیه امروز شما کسر می‌شود.",
+      "documentNeedsFile": "برای ترجمه کل سند، یک فایل PDF بارگذاری کنید.",
+      "documentNeedsPdf": "ترجمه کل سند با نمایش صفحه به صفحه فقط با فایل‌های PDF امکان‌پذیر است.",
+      "documentNeedsLanguage": "برای ترجمه سند یک زبان مقصد انتخاب کنید.",
+      "documentLanguageUnsupported": "ترجمه کل سند برای این زبان موجود نیست. از حالت سریع یا بازبینی‌شده استفاده کنید.",
+      "documentNoGlossaries": "در ترجمه کل سند از واژه‌نامه‌ها استفاده نمی‌شود",
+      "documentPagesLeft": "{count, plural, one {# صفحه باقی‌مانده امروز} other {# صفحه باقی‌مانده امروز}}",
+      "documentLimitReached": "تعداد صفحات این سند بیشتر از سهمیه‌ی امروز شماست. صفحات انتخابی را به صورت سریع یا بازبینی‌شده ترجمه کنید یا فردا دوباره امتحان نمایید.",
+      "documentUnavailable": "ترجمه کل سند در این سرور فعال نیست.",
+      "documentSubmitFailed": "ارسال سند برای ترجمه امکان‌پذیر نبود: {message}",
+      "documentProgressLabel": "پیشرفت ترجمه سند",
+      "documentStepUploaded": "بارگذاری شد",
+      "documentStepPreparing": "در حال آماده‌سازی صفحات",
+      "documentTypicalDuration": "معمولاً چند دقیقه",
+      "documentCanLeave": "می‌توانید این صفحه را ترک کنید. ترجمه ادامه می‌یابد و بعداً قابل مشاهده خواهد بود.",
+      "documentStalled": "پیشرفت ترجمه قابل بررسی نیست. ممکن است هنوز در حال انجام باشد.",
+      "documentCheckAgain": "دوباره بررسی کنید",
+      "documentFailed": "امکان ترجمه سند نبود: {message}",
+      "documentGone": "این ترجمه دیگر در دسترس نیست. برای مشاهده دوباره سند را ترجمه کنید.",
+      "documentPageFailed": "بارگذاری این صفحه امکان‌پذیر نبود: {message}",
+      "documentPagesNotAligned": "تعداد صفحات فایل ترجمه شده متفاوت است؛ بنابراین ممکن است هر دو طرف یک محتوا را نمایش ندهند.",
+      "documentAvailableUntil": "در دسترس تا {date}",
+      "documentRetranslateTitle": "سند را دوباره ترجمه می‌کنید؟",
+      "documentRetranslateMessage": "این گزینه ترجمه جدیدی را آغاز می‌کند و صفحات آن دوباره از سهمیه امروز کسر می‌شوند. پس از شروع، قابل توقف نیست. ترجمه فعلی و اصلاحات آن تا زمان انقضا روی سرور باقی می‌مانند ولی دیگر در این بخش نمایش داده نخواهند شد.",
+      "retry": "دوباره امتحان کنید",
+      "pageLabel": "صفحه",
+      "pageOf": "از {total}",
+      "pageNumber": "· صفحه {page}",
+      "pagePrevious": "صفحه قبل",
+      "pageNext": "صفحه بعد",
+      "correctedLabel": "اصلاح شده",
+      "correctedPages": "صفحات اصلاح‌شده:",
+      "correctedPagesMore": "+{count} مورد بیشتر",
+      "correctionRestore": "بازگردانی",
+      "correctionRestoreHint": "تغییرات خود روی این صفحه را حذف کرده و به ترجمه ماشینی بازگردید",
+      "correctionSaving": "در حال ذخیره…",
+      "correctionSaved": "ذخیره شد",
+      "correctionSaveFailed": "ذخیره نشد. متن را تغییر دهید و دوباره امتحان کنید.",
+      "download": "دانلود",
+      "downloading": "در حال دانلود…",
+      "downloadFailed": "دانلود ناموفق بود: {message}",
+      "downloadTranslated": "ترجمه شده ({format})",
+      "downloadTranslatedHint": "چینش اصلی. اصلاحات شما را شامل نمی‌شود.",
+      "downloadTextVersion": "نسخه متنی (DOCX)",
+      "downloadTextVersionHint": "متن ساده، هر صفحه یک فایل، با اصلاحات شما.",
+      "documentNoCancel": "ترجمه یک سند پس از شروع قابل توقف نیست.",
+      "documentGlossariesIgnored": "{count, plural, one {واژه‌نامه انتخابی شما در این حالت اعمال نمی‌شود.} other {واژه‌نامه‌های انتخابی شما در این حالت اعمال نمی‌شوند.}} واژه‌ها را صفحه به صفحه با \"ارزیابی کیفیت\" بررسی کنید، یا از \"سریع\" یا \"بازبینی‌شده\" استفاده کنید.",
+      "pendingLeavePage": "پیشنهادها مربوط به این صفحه هستند و با ترک آن ذخیره نمی‌شوند. ابتدا درباره پیشنهادهای باقی‌مانده تصمیم بگیرید.",
+      "uploadStepOcr": "خواندن با OCR",
+      "ocrButton": "خواندن با OCR",
+      "ocrButtonHint": "این PDF را دوباره با شناسایی متن بخوانید، برای صفحات اسکن‌شده یا متنی که نادرست استخراج شده است",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "این متن با شناسایی متن از صفحات استخراج شده است. آن را با نسخه اصلی مقایسه کنید.",
+      "ocrReasonNoText": "متنی در {name} پیدا نشد. به نظر می‌رسد سند اسکن‌شده باشد.",
+      "ocrReasonSparse": "متن بسیار کمی در {name} یافت شد. ممکن است برخی از آن اسکن‌شده باشد.",
+      "ocrReasonManual": "دوباره {name} را با شناسایی متن بخوانیم؟",
+      "ocrExplanation": "OCR متن را از تصاویر صفحات استخراج می‌کند. این کار بیشتر از بارگذاری معمولی زمان می‌برد، هر صفحه فایل را از سهمیه روزانه شما کم می‌کند و ممکن است اسکن‌های بی‌کیفیت، دست‌نویس و جداول را اشتباه بخواند.",
+      "ocrPagesLeft": "{count, plural, one {# صفحه OCR باقی‌مانده امروز.} other {# صفحه OCR باقی‌مانده امروز.}}",
+      "ocrRun": "خواندن با OCR",
+      "ocrDismiss": "فعلاً نه",
+      "ocrSparseHint": "متن بسیار کمی در این PDF یافت شد. برخی صفحات ممکن است اسکن‌شده باشند.",
+      "ocrLimitReached": "این سند بیشتر از میزان سهمیه OCR شما برای امروز صفحه دارد.",
+      "ocrTooManyPages": "این سند برای OCR بیش از حد طولانی است و حداکثر {max} صفحه قابل خواندن است. PDF را تقسیم و بخشی را بارگذاری کنید.",
+      "ocrUnavailable": "OCR روی این سرور راه‌اندازی نشده است.",
+      "ocrNoText": "OCR نیز در این سند هیچ متنی پیدا نکرد.",
+      "ocrFailed": "سند با OCR قابل خواندن نبود. دوباره امتحان کنید.",
+      "scannedWholeExplanation": "شما می‌توانید کل سند را نیز ترجمه کنید: این گزینه صفحات اسکن‌شده را به طور خودکار می‌خواند، قالب‌بندی را حفظ می‌کند و تعداد صفحات را از سهمیه روزانه ترجمه شما کم می‌کند.",
+      "scannedUseWholeDocument": "ترجمه کل سند",
+      "scannedSourceNote": "در {name} متنی برای نمایش وجود ندارد. ترجمه کل سند، صفحات آن را مستقیماً می‌خواند. وارد کردن متن دلخواه در این بخش، سند را جایگزین می‌کند.",
+      "scannedPageNote": "متنی از این صفحه فایل اصلی شناسایی نشد. لطفاً با خود فایل مقایسه کنید.",
+      "changeLabel": "درخواست تغییر در ترجمه",
+      "changePlaceholder": "درخواست تغییر، مثلاً رسمی‌تر شود",
+      "changePlaceholderAnother": "درخواست تغییر دیگر",
+      "changeSend": "ارسال درخواست",
+      "changeWorking": "در حال اعمال تغییرات",
+      "changeNothingApplied": "تا زمانی که قبول نکنید، هیچ چیزی تغییر نمی‌کند",
+      "changeSelectionLabel": "درخواست تغییر در متن انتخاب‌شده",
+      "changeSelectionPlaceholder": "این را تغییر دهید، مثلاً بنویسید tableta",
+      "changeSelectionScope": "فقط برای متن انتخاب‌شده اعمال می‌شود",
+      "changeSelectionClose": "بستن",
+      "changeTitle": "تغییرات درخواست‌شده",
+      "changeSelectedLabel": "متن انتخاب‌شده",
+      "changeNoEdits": "درخواستی برای تغییر نیاز نبود.",
+      "changeReplyPending": "{count, plural, one {# ویرایش پیشنهادی در فضای کاری است.} other {# ویرایش پیشنهادی در فضای کاری هستند.}} تا زمانی که قبول نکنید، هیچ چیزی تغییر نمی‌کند.",
+      "changeStopped": "متوقف شد. هیچ تغییری اعمال نشد.",
+      "changeFailed": "درخواست تغییر موفق نبود. دوباره تلاش کنید.",
+      "changeNoTranslation": "هنوز ترجمه‌ای برای تغییر وجود ندارد. ابتدا متن را ترجمه کنید.",
+      "changeBusy": "صبر کنید تا اجرای فعلی تمام شود، سپس دوباره درخواست دهید.",
+      "changeHeld": "ارسال نشده: ویرایش‌های پیشنهادی هنوز منتظر تصمیم هستند.",
+      "pendingRunActionRequest": "در حال درخواست تغییر",
+      "railPlaceholder": "درخواست تغییر یا پرسش…",
+      "documentPageCount": "{count, plural, one {# صفحه} other {# صفحه}}",
+      "sourceShowPages": "نمایش صفحات",
+      "sourceEditText": "ویرایش به صورت متن",
+      "sourceRemoveDocument": "حذف سند",
+      "sourceJumpToPage": "رفتن به یک صفحه"
     },
     "document": {
       "emptyTitle": "مشخصات سند موردنظر را توضیح دهید",
@@ -3697,7 +3839,7 @@
       "guideTargetTerm": "ترجمه مورد نیاز",
       "guideNote": "یادداشت",
       "pendingRun": {
-        "title": "‏{count} پیشنهاد هنوز در انتظار است",
+        "title": "{count, plural, one {# پیشنهاد در انتظار بررسی} other {# پیشنهاد در انتظار بررسی}}",
         "body": "‏{action} می‌تواند هر بخشی از متن، از جمله بخش‌هایی با پیشنهادهای تصمیم‌نگرفته را تغییر دهد و ارزیابی جدید لیست فعلی را جایگزین می‌کند. لطفاً ابتدا درباره باقی پیشنهادها تصمیم بگیرید.",
         "acceptAll": "پذیرش همه باقی‌مانده‌ها",
         "rejectAll": "رد همه",
@@ -3759,7 +3901,7 @@
         "list<number>": "فهرست اعداد"
       },
       "layout": "چیدمان",
-      "layoutHint": "Markdown با جایگاه‌های {{field:id}} — برای خروجی رندر شده و پیش‌نمایش استفاده می‌شود.",
+      "layoutHint": "Markdown با جایگاه‌های '{{field:id}}' — برای خروجی رندر شده و پیش‌نمایش استفاده می‌شود.",
       "saveTemplate": "ذخیره قالب",
       "deleteTemplate": "حذف قالب",
       "cancel": "انصراف",
@@ -4587,6 +4729,10 @@
         "note": "هزینه بر اساس قیمت فهرست تا تاریخ {asOf} (نرخ استاندارد جهانی، بدون تخفیف برای ورودی‌های کش شده): حداکثر برآورد، نه قبض نهایی. جستجوی وب، اجرای کد، رونویسی، گفتار، ترجمه و ایندکس‌گذاری اسناد شامل نمی‌شود."
       }
     },
+    "mass": {
+      "grams": "{value} گرم CO₂e",
+      "kilograms": "{value} کیلوگرم CO₂e"
+    },
     "workflow": {
       "title": "این فضای کاری (تخمینی)",
       "workspace": "این فضای کاری",
@@ -5401,7 +5547,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {# سند} other {# سند}} فهرست شده",
     "m365CapImmediateHelp": "با کلیک روی اعمال، محدودیت بلافاصله ذخیره می‌شود. سایر تغییرات همچنان نیاز به ذخیره دارند.",
     "m365CapDraftHelp": "محدودیت هنگام ایجاد نماینده ذخیره می‌شود.",
-    "m365CapSaved": "محدودیت اسناد ذخیره شد: {limit}."
+    "m365CapSaved": "محدودیت اسناد ذخیره شد: {limit}.",
+    "m365AgentAllowWebSearchHelp": "به طور پیش‌فرض خاموش است: ایجنت فقط بر اساس اسناد خودش پاسخ می‌دهد و هرگز در وب جستجو نمی‌کند، صرف‌نظر از تنظیمات جستجوی کاربر. در حالت روشن، دستورالعمل‌های ایجنت تعیین می‌کند چه زمانی جستجوی وب انجام شود و از چه وب‌سایت‌هایی استفاده کند؛ منابع وب همیشه جدا از اسناد ایجنت نمایش داده می‌شوند.",
+    "promptAgentAllowWebSearchHelp": "به طور پیش‌فرض روشن است. هنگام خاموش بودن، این ایجنت هرگز در وب جستجو نمی‌کند، صرف‌نظر از تنظیمات کاربر."
   },
   "localModels": {
     "title": "مدل‌های محلی",
@@ -5708,7 +5856,9 @@
       "m365MailReadsPerDay": "تعداد خواندن ایمیل در روز",
       "m365MailDraftsPerDay": "تعداد پیش‌نویس ایمیل در روز",
       "m365MailDeepScansPerDay": "تعداد اسکن عمیق ایمیل در روز",
-      "m365DigestRunsPerDay": "اجرای خلاصه روزانه در هر روز"
+      "m365DigestRunsPerDay": "اجرای خلاصه روزانه در هر روز",
+      "translationPagesPerDay": "تعداد صفحات ترجمه سند در روز",
+      "ocrPagesPerDay": "صفحات OCR در روز"
     },
     "valueModeLabel": "نوع محدودیت",
     "valueAmountLabel": "مقدار محدودیت",
@@ -5731,7 +5881,8 @@
       "jobs": "فرآیند",
       "rounds": "دور",
       "documents": "سند",
-      "boolean": ""
+      "boolean": "",
+      "pages": "صفحات"
     },
     "window": {
       "day": "روز",
@@ -5789,7 +5940,9 @@
       "m365MailReadsPerDay": "جستجو و خواندن پیام/رشته‌های ایمیل در روز. پس از عبور از محدودیت، ابزارهای ایمیل پیام \"فردا دوباره امتحان کنید\" را نمایش می‌دهند.",
       "m365MailDraftsPerDay": "پیش‌نویس‌های ایمیلی که دستیار می‌تواند در هر روز ایجاد کند — هر کدام جداگانه تأیید می‌شوند. محدودیت به‌صورت عمدی کم است.",
       "m365MailDeepScansPerDay": "تجزیه‌وتحلیل‌های ترکیبی ایمیل (خلاصه‌ها، جستجوی عمیق، تعهدات) در روز. هر تجزیه‌وتحلیل یک واحد بودجه محسوب می‌شود بدون توجه به تعداد دفعات خواندن داخلی.",
-      "m365DigestRunsPerDay": "اجرای خلاصه روزانه Microsoft 365 در هر روز. هر اجرا شامل چندین خوانش Graph و دو فراخوانی مدل تحلیل است؛ انتخاب دوره، اجرای مجدد را آسان می‌کند، بنابراین مقدار پیش‌فرض محدود است."
+      "m365DigestRunsPerDay": "اجرای خلاصه روزانه Microsoft 365 در هر روز. هر اجرا شامل چندین خوانش Graph و دو فراخوانی مدل تحلیل است؛ انتخاب دوره، اجرای مجدد را آسان می‌کند، بنابراین مقدار پیش‌فرض محدود است.",
+      "translationPagesPerDay": "صفحات PDF ارسال‌شده برای ترجمه سند در روز.",
+      "ocrPagesPerDay": "تعداد صفحات PDF خوانده‌شده با OCR (شناسایی متن در اسناد اسکن‌شده) در روز."
     },
     "scopeFamily": "خانواده",
     "scopeModel": "مدل",
@@ -7586,7 +7739,7 @@
         "activeUsers": "افراد فعال",
         "requests": "درخواست‌ها",
         "tokens": "توکن‌ها",
-        "vsDelivered": "{{delta}} در مقایسه با فرضیات گزارش",
+        "vsDelivered": "{delta} در مقایسه با فرضیات گزارش",
         "sameAsDelivered": "مانند فرضیات گزارش",
         "unpriced": "{count, plural, one {# درخواست استفاده می‌کند} other {# درخواست استفاده می‌کنند}} از اندازه مدلی که فرضیات عددی برای آن ندارند و {count, plural, one {حذف شده است} other {حذف شده‌اند}}.",
         "byDepartment": "انتشار بر اساس بخش",
@@ -8097,7 +8250,13 @@
       "skills": "انتخاب مهارت",
       "tools": "مسیریابی ابزار",
       "trim": "طبقه‌بندی حذف",
-      "assessment": "ارزیابی جستجو"
+      "assessment": "ارزیابی جستجو",
+      "query": "بازنویسی درخواست جستجو",
+      "mailScreen": "صفحه فیشینگ ایمیل",
+      "mailAnalysis": "تحلیل ایمیل و خلاصه",
+      "schemaProposal": "پیشنهاد الگوی استخراج",
+      "mcpPlan": "برنامه کانکتور",
+      "vision": "خواندن تصاویر و صفحات"
     },
     "reason": {
       "endpoint_missing": "نقطه پایانی یا اتصال حساب وجود ندارد",
@@ -8118,6 +8277,164 @@
       "endpoint_account_mismatch": "نقطه پایانی و شناسه منبع ARM، حساب‌های مختلفی را نشان می‌دهند. پیکربندی استقرار را اصلاح کنید.",
       "inventory_refresh_failed": "به‌روزرسانی موجودی انجام نشد. دسترسی Reader شناسه برنامه و اتصال حساب را بررسی کنید.",
       "credential_unavailable": "برنامه به اعتبارنامه موجودی دسترسی ندارد. پیکربندی شناسه استقرار را بررسی کنید."
+    },
+    "notSupported": "این مدل پشتیبانی نمی‌کند",
+    "unservedOperations": "هیچ مدلی در این زنجیره از {operations} پشتیبانی نمی‌کند. مدلی را اضافه کنید که این قابلیت را داشته باشد."
+  },
+  "filePreview": {
+    "preview": "پیش‌نمایش",
+    "download": "دانلود",
+    "loading": "در حال آماده‌سازی پیش‌نمایش…",
+    "failed": "پیش‌نمایش این فایل ممکن نیست. هنوز هم می‌توانید آن را دانلود کنید.",
+    "pageOf": "صفحه {page} از {total}",
+    "truncated": "نمایش {shown} صفحه از مجموع {total} صفحه. برای مشاهده بقیه، فایل را دانلود کنید.",
+    "enlarge": "بزرگ‌نمایی {name}"
+  },
+  "addToChat": {
+    "title": "افزودن به گفتگو",
+    "titleTranslate": "ترجمه یک سند",
+    "titleTranscribe": "رونویسی صوت یا ویدیو",
+    "sourcesLabel": "افزودن از",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "در این اقدام قابل استفاده نیست",
+    "sources": {
+      "device": "این دستگاه",
+      "link": "لینک",
+      "camera": "دوربین",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "ایمیل",
+      "meetings": "جلسات"
+    },
+    "device": {
+      "browse": "مرور این دستگاه",
+      "dropHint": "یا فایل‌ها را هرجای این پنجره بیندازید یا جای‌گذاری کنید",
+      "rejected": "هیچ‌کدام از این فایل‌ها قابل استفاده نیستند.",
+      "hint": {
+        "attach": "اسناد، تصاویر، صوت و ویدیو.",
+        "translate": "یک سند: Word، Excel، PowerPoint، PDF، HTML یا متن.",
+        "transcribe": "صوت یا ویدیو. هنگام ارسال پیام رونویسی انجام می‌شود."
+      }
+    },
+    "selection": {
+      "then": "سپس",
+      "intents": {
+        "attach": "پیوست",
+        "translate": "ترجمه",
+        "transcribe": "رونویسی"
+      },
+      "confirm": {
+        "attach": "افزودن",
+        "translate": "ترجمه",
+        "transcribe": "رونویسی"
+      },
+      "unfit": {
+        "attach": "این فایل‌ها قابل پیوست نیستند",
+        "translate": "ترجمه فقط یک سند را همزمان انجام می‌دهد",
+        "transcribe": "فقط صوت و ویدیو قابل رونویسی هستند"
+      }
+    },
+    "menu": {
+      "addToChatNote": "این دستگاه، لینک‌ها، Microsoft 365",
+      "filesOrPhotos": "فایل‌ها یا عکس‌ها",
+      "fromThisDevice": "از این دستگاه",
+      "connect": "اتصال به Microsoft 365",
+      "connectNote": "افزودن از OneDrive، ایمیل و جلسات"
     }
+  },
+  "usageBudgets": {
+    "title": "بودجه‌های شما",
+    "description": "محدودیت‌هایی که برای این دستگاه تعیین کرده‌اید. یک بودجه انتخاب کنید و سپس مشخص کنید هنگام نزدیک شدن و عبور از آن چه اتفاقی بیفتد. بودجه‌ها تعداد پیام‌ها و اجرای گردش کار را از ابتدای هر دوره شمارش می‌کنند.",
+    "metric": {
+      "emissions": "بودجه انتشار",
+      "cost": "بودجه هزینه"
+    },
+    "metricShort": {
+      "emissions": "انتشار",
+      "cost": "هزینه"
+    },
+    "off": "هیچ بودجه‌ای تعیین نشده است.",
+    "measureAs": "اندازه‌گیری به عنوان",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "شارژ تلفن",
+      "usd": "دلار آمریکا"
+    },
+    "amountLabel": "بودجه",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "ساعت",
+      "smartphoneCharge": "بار شارژ",
+      "usd": "دلار آمریکا"
+    },
+    "periodLabel": "بازنشانی هر",
+    "period": {
+      "day": "روز",
+      "week": "هفته",
+      "month": "ماه"
+    },
+    "costNote": "برآورد شده از قیمت‌های لیست‌شده: مقدار حداکثری، نه قبض نهایی.",
+    "chargesValue": "{count} بار شارژ تلفن",
+    "percent": "{percent}%",
+    "usedOf": "{used} از {limit} مصرف شده ({percent}%)",
+    "usedOfShort": "{used} از {limit}",
+    "resets": "بازنشانی {date}",
+    "budgetMarker": "بودجه",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "در محدوده بودجه",
+      "warn": "هشدار نمایش داده شد",
+      "ask": "پرسش قبل از هر پیام",
+      "stop": "ارسال متوقف شد"
+    },
+    "stage": {
+      "warn": {
+        "title": "هشدار",
+        "tag": "یادآوری",
+        "description": "نمایش اعلان در چت از این سهم بودجه."
+      },
+      "ask": {
+        "title": "ابتدا بپرس",
+        "tag": "محدودیت ملایم",
+        "description": "برای هر پیام از این سهم بودجه تأیید بخواهد."
+      },
+      "stop": {
+        "title": "توقف",
+        "tag": "محدودیت سخت",
+        "description": "ارسال پیام از این سهم بودجه تا زمان بازنشانی یا افزایش بودجه در اینجا متوقف می‌شود."
+      }
+    },
+    "thresholdLabel": "آستانه {stage}، درصدی از بودجه",
+    "notice": {
+      "warn": {
+        "emissions": "شما {percent}% از بودجه انتشار خود را مصرف کرده‌اید.",
+        "cost": "شما {percent}% از بودجه هزینه خود را مصرف کرده‌اید."
+      },
+      "ask": {
+        "emissions": "شما {percent}% از بودجه انتشار خود را مصرف کرده‌اید. آیا این پیام ارسال شود؟",
+        "cost": "شما {percent}% از بودجه هزینه خود را مصرف کرده‌اید. آیا این پیام ارسال شود؟"
+      },
+      "askRun": {
+        "emissions": "شما {percent}% از بودجه انتشار خود را مصرف کرده‌اید. آیا این اجرا شروع شود؟",
+        "cost": "شما {percent}% از بودجه هزینه خود را مصرف کرده‌اید. آیا این اجرا شروع شود؟"
+      },
+      "stop": {
+        "emissions": "نقطه توقف بودجه انتشار رسید. ارسال پیام تا {date} متوقف است.",
+        "cost": "حد بودجه هزینه رسید. ارسال تا {date} متوقف شده است."
+      }
+    },
+    "actions": {
+      "viewBudget": "مشاهده بودجه",
+      "dismiss": "رد",
+      "sendAnyway": "ارسال به هر حال",
+      "runAnyway": "اجرا به هر حال",
+      "dontSend": "ارسال نکن",
+      "dontAskToday": "امروز دیگر نپرس",
+      "openSettings": "باز کردن تنظیمات بودجه",
+      "edit": "ویرایش"
+    },
+    "composerPaused": "ارسال توسط بودجه شما متوقف شد",
+    "summaryTitle": "بودجه‌های شما",
+    "chipAria": "بودجه {metric}: {percent}٪ استفاده شده است.",
+    "runProjection": "بودجه انتشار {from}٪ →‏ {to}٪"
   }
 }

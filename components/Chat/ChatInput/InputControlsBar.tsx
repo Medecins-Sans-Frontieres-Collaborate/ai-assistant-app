@@ -43,7 +43,7 @@ export const InputControlsBar: React.FC<InputControlsBarProps> = ({
     <>
       {/* Left controls */}
       <div
-        className={`absolute left-2 flex items-center gap-2 z-[10001] transition-all duration-200 ${
+        className={`absolute start-2 flex items-center gap-2 z-[10001] transition-all duration-200 ${
           hasBadgeRow || isMultiline
             ? 'bottom-2'
             : 'top-1/2 transform -translate-y-1/2'
@@ -59,7 +59,7 @@ export const InputControlsBar: React.FC<InputControlsBarProps> = ({
 
       {/* Right controls */}
       <div
-        className={`absolute right-2.5 flex items-center gap-2 z-[10001] transition-all duration-200 ${
+        className={`absolute end-2.5 flex items-center gap-2 z-[10001] transition-all duration-200 ${
           hasBadgeRow || isMultiline
             ? 'bottom-2'
             : 'top-1/2 transform -translate-y-1/2'

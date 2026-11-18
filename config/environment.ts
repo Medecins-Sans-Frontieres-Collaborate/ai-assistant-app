@@ -68,10 +68,10 @@ const serverEnvSchema = z.object({
   OPENAI_API_VERSION: z.string().default('2025-04-01-preview'),
   OPENAI_EMBEDDING_DEPLOYMENT: z.string().default('text-embedding'),
 
-  // Azure Speech Services (for batch and fast transcription)
-  AZURE_SPEECH_KEY: z.string().optional(),
-  AZURE_SPEECH_REGION: z.string().default('eastus'),
-  // Optional resource endpoint override (defaults to the regional host)
+  // Azure Speech (TTS, fast and batch transcription), authenticated with the
+  // application identity (Entra ID). Must be an account custom-domain endpoint
+  // (https://<name>.cognitiveservices.azure.com); defaults to
+  // AZURE_OPENAI_ENDPOINT, the same AI Services account. No key is read.
   AZURE_SPEECH_ENDPOINT: z.string().url().optional(),
 
   // Azure AI Foundry
@@ -153,7 +153,6 @@ const serverEnvSchema = z.object({
   SEARCH_SKILLSET: z.string().default('rag-skillset'),
   SEARCH_DATASOURCE: z.string().optional(),
   SEARCH_INDEXER: z.string().optional(),
-  SEARCH_ENDPOINT_API_KEY: z.string().optional(), // Legacy: Used by OpenAI data_sources feature in documentSummary.ts
   ALLOW_INDEX_DOWNTIME: booleanString(false),
   // M365 file-backed agents (docs/M365_SECOND_PASS_AGENTS_DESIGN.md).
   // Endpoint defaults to SEARCH_ENDPOINT; override to pin the shared
@@ -195,11 +194,6 @@ const serverEnvSchema = z.object({
     .min(1)
     .max(4096)
     .default(512),
-  /**
-   * Vision-capable chat deployment used to describe images and OCR scanned
-   * PDFs when an admin prepares such a file for an M365 agent (phase 4).
-   */
-  M365_AGENT_VISION_MODEL: z.string().default('gpt-5-mini'),
   /**
    * OCR engine for scanned PDFs (Prepare and auto-OCR). `auto` uses Azure
    * Document Intelligence `prebuilt-read` when AZURE_DOCUMENT_INTELLIGENCE_*
@@ -396,7 +390,6 @@ const serverEnvSchema = z.object({
   // Grant Pipeline - Azure OpenAI overrides (falls back to main Azure OpenAI config)
   GRANT_PIPELINE_OPENAI_ENDPOINT: z.string().url().optional(),
   GRANT_PIPELINE_OPENAI_DEPLOYMENT: z.string().optional(),
-  GRANT_PIPELINE_OPENAI_KEY: z.string().optional(),
 
   // Grant Pipeline - Azure Document Intelligence (falls back to main DI config)
   AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT: z.string().url().optional(),

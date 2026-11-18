@@ -107,7 +107,7 @@ export const ConnectorBrowser: FC<ConnectorBrowserProps> = ({
           onClick={() => onAdd(entry.key)}
           // The whole row is the target: a 44px-tall band is far easier to
           // hit on a phone than a trailing icon button would be.
-          className="group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          className="group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-start hover:bg-gray-100 dark:hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
           <Icon
             size={20}
@@ -149,7 +149,7 @@ export const ConnectorBrowser: FC<ConnectorBrowserProps> = ({
           <IconSearch
             size={16}
             aria-hidden="true"
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-gray-400"
           />
           <input
             type="search"
@@ -157,7 +157,7 @@ export const ConnectorBrowser: FC<ConnectorBrowserProps> = ({
             onChange={(e) => setFilter(e.target.value)}
             aria-label={t('filterLabel')}
             placeholder={t('filterPlaceholder')}
-            className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 py-2 pl-9 pr-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 py-2 ps-9 pe-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-blue-500 focus:outline-none"
           />
         </div>
       )}

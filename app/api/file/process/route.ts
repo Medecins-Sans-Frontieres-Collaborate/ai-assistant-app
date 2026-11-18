@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { FileProcessingService } from '@/lib/services/chat/FileProcessingService';
+import { isDocumentIntelligenceConfigured } from '@/lib/services/documentIntelligence/client';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
+import { isBlobUrlOwnedByUser } from '@/lib/utils/server/file/blobOwnership';
 import {
   NoExtractableTextError,
   loadDocumentFromPath,
@@ -11,29 +13,6 @@ import { getContentType } from '@/lib/utils/server/file/mimeTypes';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { auth } from '@/auth';
-
-const USER_NAMESPACE_SEGMENTS = ['uploads/files', 'uploads/images'];
-
-/**
- * True when the blob URL lives under the authenticated user's namespace.
- * We accept both absolute Azure URLs (where the path is `<container>/<userId>/uploads/...`)
- * and relative API references (`/api/file/<hash>.<ext>`) — for the latter we
- * only have the hash, so routing through the blob storage client below
- * re-applies the per-user prefix and the ownership check is implicit.
- */
-function isBlobUrlOwnedByUser(url: string, userId: string): boolean {
-  if (url.startsWith('/api/file/')) {
-    // Hash-only reference; downloadFilePreferCached prefixes with the
-    // authenticated userId, so cross-user access isn't possible.
-    return true;
-  }
-  // Absolute blob URLs must contain the user's namespace segment. We don't
-  // trust `startsWith` since the userId can appear anywhere — require
-  // `/<userId>/uploads/(files|images)` to appear as a path segment.
-  return USER_NAMESPACE_SEGMENTS.some((seg) =>
-    url.includes(`/${userId}/${seg}/`),
-  );
-}
 
 /**
  * Minimal placeholder endpoint for pre-processing files.
@@ -129,13 +108,22 @@ export async function POST(req: NextRequest): Promise<Response> {
     const failure = outcomes.find((outcome) => outcome.status === 'rejected');
     if (failure?.status === 'rejected') throw failure.reason;
     return NextResponse.json(
-      { results: results.filter(Boolean) },
+      {
+        results: results.filter(Boolean),
+        // Lets the client offer OCR for text that came out thin.
+        ocrAvailable: isDocumentIntelligenceConfigured(),
+      },
       { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   } catch (e) {
     if (e instanceof NoExtractableTextError) {
       return NextResponse.json(
-        { error: e.message, code: 'NO_EXTRACTABLE_TEXT' },
+        {
+          error: e.message,
+          code: 'NO_EXTRACTABLE_TEXT',
+          // The file is stored; the client may offer to read it with OCR.
+          ocrAvailable: isDocumentIntelligenceConfigured(),
+        },
         { status: 422, headers: { 'Content-Type': 'application/json' } },
       );
     }

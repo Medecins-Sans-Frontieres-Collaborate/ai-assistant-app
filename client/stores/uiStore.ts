@@ -1,5 +1,7 @@
 'use client';
 
+import type { SettingsSection } from '@/components/Settings/types';
+
 import { create } from 'zustand';
 
 /**
@@ -52,6 +54,12 @@ interface UIStore {
    */
   customizationsInitialTab: CustomizationsTabKey | null;
 
+  /**
+   * Section to land on when Settings next opens. Cleared once the dialog
+   * honours it, so later openings start on the default section.
+   */
+  settingsInitialSection: SettingsSection | null;
+
   /** Active encrypted-backup modal, hosted by BackupModals in ChatShell. */
   backupModalView: BackupModalView | null;
 
@@ -78,6 +86,9 @@ interface UIStore {
   setExtractionDefaultFormat: (format: ExtractionDownloadFormat) => void;
   setIsCustomizationsOpen: (isOpen: boolean) => void;
   setCustomizationsInitialTab: (tab: CustomizationsTabKey | null) => void;
+  /** Opens Settings on a given section (e.g. Connections). */
+  openSettingsAt: (section: SettingsSection) => void;
+  setSettingsInitialSection: (section: SettingsSection | null) => void;
   setBackupModalView: (view: BackupModalView | null) => void;
   setAgentBrowserOpen: (open: boolean) => void;
   openFolder: (folderId: string) => void;
@@ -94,6 +105,7 @@ export const useUIStore = create<UIStore>((set) => ({
   extractionDefaultFormat: 'csv',
   isCustomizationsOpen: false,
   customizationsInitialTab: null,
+  settingsInitialSection: null,
   backupModalView: null,
   agentBrowserOpen: false,
   openFolderId: null,
@@ -109,6 +121,10 @@ export const useUIStore = create<UIStore>((set) => ({
     set({ extractionDefaultFormat: format }),
   setIsCustomizationsOpen: (isOpen) => set({ isCustomizationsOpen: isOpen }),
   setCustomizationsInitialTab: (tab) => set({ customizationsInitialTab: tab }),
+  openSettingsAt: (section) =>
+    set({ isSettingsOpen: true, settingsInitialSection: section }),
+  setSettingsInitialSection: (section) =>
+    set({ settingsInitialSection: section }),
   setBackupModalView: (view) => set({ backupModalView: view }),
   setAgentBrowserOpen: (open) => set({ agentBrowserOpen: open }),
   openFolder: (folderId) => set({ openFolderId: folderId }),

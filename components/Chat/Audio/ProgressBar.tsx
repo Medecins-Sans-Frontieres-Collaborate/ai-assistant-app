@@ -23,7 +23,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       aria-label="Audio progress"
     >
       <div
-        className="absolute top-0 left-0 h-2 w-full origin-left rounded-full bg-blue-500 dark:bg-blue-600 transition-transform duration-100"
+        className="absolute top-0 start-0 h-2 w-full origin-left rounded-full bg-blue-500 dark:bg-blue-600 transition-transform duration-100"
         style={{ transform: `scaleX(${progress / 100})` }}
       />
     </div>

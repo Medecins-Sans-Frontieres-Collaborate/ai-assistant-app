@@ -11,12 +11,15 @@ import {
   waitFor,
   within,
 } from '@testing-library/react';
+import { useState } from 'react';
 
 import { listDrivePage, listSites } from '@/client/services/m365/m365Client';
 
 import type { M365DriveEntry, M365DrivePage } from '@/types/m365';
 
-import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
+import M365FilePickerModal, {
+  M365FilePickerBody,
+} from '@/components/Chat/ChatInput/M365FilePickerModal';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
@@ -773,6 +776,94 @@ describe('M365FilePickerModal multi-select', () => {
     render(<M365FilePickerModal isOpen onClose={vi.fn()} onPick={vi.fn()} />);
     await screen.findByText('alpha.txt');
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+  });
+});
+
+describe('M365FilePickerBody with a host-owned selection', () => {
+  /** Hosts the body the way the "Add to chat" picker does. */
+  function renderHosted(
+    initial: M365DriveEntry[] = [],
+    acceptExtensions?: string[],
+  ) {
+    const onActivate = vi.fn();
+    const onClose = vi.fn();
+    const changes: string[][] = [];
+    const Host = () => {
+      const [selected, setSelected] = useState(
+        () =>
+          new Map(initial.map((item) => [`d1/${item.itemId}`, item] as const)),
+      );
+      return (
+        <M365FilePickerBody
+          onClose={onClose}
+          acceptExtensions={acceptExtensions}
+          hosted={{
+            selected,
+            onChange: (next) => {
+              changes.push([...next.values()].map((item) => item.name));
+              setSelected(next);
+            },
+            onActivate,
+          }}
+        />
+      );
+    };
+    render(<Host />);
+    return { onActivate, onClose, changes };
+  }
+
+  beforeEach(() => {
+    listDrivePageMock.mockResolvedValue(
+      page([entry('a', 'alpha.txt'), entry('c', 'charlie.mp4')]),
+    );
+  });
+
+  it('reports ticks to the host and draws no selection bar of its own', async () => {
+    const { changes } = renderHosted();
+    await screen.findByText('alpha.txt');
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+    expect(changes).toEqual([['alpha.txt']]);
+    expect(screen.getAllByRole('checkbox')[0]).toBeChecked();
+    expect(screen.queryByText('attachSelected')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+    expect(changes).toEqual([['alpha.txt'], []]);
+  });
+
+  it('hands a row click to the host instead of attaching and closing', async () => {
+    const { onActivate, onClose } = renderHosted();
+    await screen.findByText('alpha.txt');
+
+    fireEvent.click(screen.getByText('alpha.txt'));
+    expect(onActivate).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'alpha.txt' }),
+    );
+    expect(attachDriveItemMock).not.toHaveBeenCalled();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('grows a selection the host already holds on a row click', async () => {
+    const { onActivate, changes } = renderHosted([entry('a', 'alpha.txt')]);
+    await screen.findByText('charlie.mp4');
+
+    fireEvent.click(screen.getByText('charlie.mp4'));
+    expect(onActivate).not.toHaveBeenCalled();
+    expect(changes).toEqual([['alpha.txt', 'charlie.mp4']]);
+  });
+
+  it('only lets accepted file types be ticked or opened', async () => {
+    const { onActivate } = renderHosted([], ['mp4']);
+    await screen.findByText('alpha.txt');
+
+    // One tick box: the video. The text file stays listed but inert.
+    expect(screen.getAllByRole('checkbox')).toHaveLength(1);
+    fireEvent.click(screen.getByText('alpha.txt'));
+    expect(onActivate).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByText('charlie.mp4'));
+    expect(onActivate).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'charlie.mp4' }),
+    );
   });
 });
 

@@ -80,14 +80,11 @@
   "If you don't have an OpenAI API key, you can get one here: ": "Idan ba ka da maɓallin OpenAI API, zaka iya samu a nan: ",
   "Loading_ellipsis": "Ana loda...",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Tabbatar an saita maɓallin OpenAI API a ƙasan hagu na gefen menu.",
-  "Message limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Iyakar saƙo shine haruffa {{maxLength}}. Ka shigar da haruffa {{valueLength}}.",
   "Model": "Samfuri",
   "OR": "KO",
   "OpenAI API Key Required": "Ana Bukatar Maɓallin OpenAI API",
   "Please enter a message": "Da fatan za a shigar da saƙo",
   "Please set your OpenAI API key in the bottom left of the sidebar_": "Don Allah saita maɓallin OpenAI API ɗinka a ƙasan hagu na gefen menu.",
-  "Prompt limit is {{maxLength}} characters": "Iyakar ƙira shine haruffa {{maxLength}}",
-  "Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_": "Iyakar ƙira shine haruffa {{maxLength}}. Ka shigar da haruffa {{valueLength}}.",
   "Regenerate response": "Sake ƙirƙirar amsa",
   "Run Typewriter Intro": "Gudanar da Gabatarwar Typewriter",
   "Save & Submit": "Ajiye & Mikawa",
@@ -715,7 +712,8 @@
     "clear": "Share",
     "undo": "Wani lokaci baya",
     "durationSeconds": "{count, plural, one {# daqiqa} other {# daqiqo}}",
-    "durationMinutes": "{count, plural, one {# minti} other {# mintuna}}"
+    "durationMinutes": "{count, plural, one {# minti} other {# mintuna}}",
+    "clearSearch": "Share bincike"
   },
   "terms": {
     "officialLanguages": "Fassarar hukuma:",
@@ -960,7 +958,13 @@
     "ttsError": "Kuskure wurin ƙirƙirar sauti. Da fatan za a sake gwadawa.",
     "unsupportedMessageType": "Kuskure wurin nuna saƙo: Nau'in saƙo baya dacewa",
     "addLanguageOption": "Ƙara \"{name}\"…",
-    "sources": "Tushen bayanai",
+    "sources": {
+      "fromDocuments": "Takardun wakili",
+      "fromWeb": "Web",
+      "fromDocumentsHint": "Sassaukan da ke cikin takardun wannan wakili",
+      "fromWebHint": "Shafukan jama'a da aka samo ta binciken web",
+      "heading": "{count, plural, one {Tushen Bayani} other {Tushen Bayani}}"
+    },
     "interpreterBadge": "Gudanar da lamba",
     "disableCodeInterpreter": "Kashe gudanar da lamba",
     "interimSearch": {
@@ -1038,7 +1042,8 @@
       "MODEL_RATE_LIMITED": "Ana aika wa samfurin da buƙatu da yawa a lokaci guda. An sake gwadawa ta atomatik; don Allah a gwada baya maɗan lokaci kaɗan.",
       "MODEL_QUOTA_EXCEEDED": "An ƙare da damar amfani da samfurin. Gwada wani samfurin, ko kuma a sake gwadawa daga baya.",
       "MODEL_AUTH_FAILED": "Manhaja ba ta samu izinin haɗawa da sabis ɗin samfurin ba. Wannan matsalar saitawa ce — don Allah a tuntuɓi goyon bayan fasaha."
-    }
+    },
+    "messageLimitExceeded": "Iyakar saƙo shine haruffa {maxLength}. Ka shigar da haruffa {valueLength}."
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -2337,20 +2342,18 @@
     "sectionPinned": "Adana Sama",
     "sectionFrequent": "Ana yawan amfani",
     "sectionMore": "Ƙari",
-    "categoryWeb": "Web",
-    "categoryMedia": "Kafofi & fayiloli",
-    "categoryTransform": "Sauya",
     "pin": "Adana a sama",
     "unpin": "Cire daga sama",
     "moveToMore": "Matsa zuwa Ƙari",
     "moveOutOfMore": "Nuna a menu",
     "showSources": "Nuna sauran tushe",
     "hideSources": "Boye sauran tushe",
-    "aiTools": "Kayan aikin AI",
-    "aiToolsTooltip": "Irin damar da mataimaki zai iya amfani da su yayin amsawa: binciken yanar gizo kai tsaye, gudanar da lambar code, da haɗin kai da wasu ayyuka.",
     "codeInterpreterTooltip": "Gudanar da lambar Python a cikin sandbox mai tsaro a kowane saƙo.\n\nYana da kyau don nazarin bayanai, ƙididdiga, da ƙirƙirar jadawali daga fayilolin da aka makala.",
-    "categoryTools": "Kayan aiki & mahaɗa",
-    "translationConversationTitle": "Fassara: {filename}"
+    "translationConversationTitle": "Fassara: {filename}",
+    "categoryAdd": "Ƙara",
+    "categoryDo": "Yi",
+    "categoryChat": "A cikin wannan tattaunawa",
+    "categoryStart": "Fara daga"
   },
   "transcription": {
     "transcribesOnSend": "Zai fassara zuwa rubutu lokacin aikawa",
@@ -2554,7 +2557,9 @@
     "savedToOneDrive": "An ajiye {name} zuwa OneDrive.",
     "openInOneDrive": "Buɗe",
     "saveForbidden": "Ba ka da izini ka rubuta wannan fayil — zaɓi wani tare da “Ajiye zuwa OneDrive”.",
-    "saveToOneDriveFailed": "Ba a iya ajiye zuwa OneDrive ba — da fatan za a sake gwadawa."
+    "saveToOneDriveFailed": "Ba a iya ajiye zuwa OneDrive ba — da fatan za a sake gwadawa.",
+    "textVersion": "Sigar rubutu (DOCX)",
+    "textVersionHint": "Fayil din Word mai sauƙi da rubutun da aka fassara, shafi daya kowanne asali. Fayil din da aka fassara yana riƙe da tsarin asali."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -2726,7 +2731,6 @@
   },
   "usageImpact": {
     "empty": "Ba a samo bayanin amfani ba tukuna. Amfanin takardunku da kididdigar hayaƙi za su bayyana anan bayan kun yi hira.",
-    "co2Value": "{grams} g CO₂e",
     "equivalence": "≈ {count} cajin wayar hannu",
     "requests": "Buƙatu",
     "promptTokens": "Alamomin umarni",
@@ -2888,7 +2892,7 @@
       "addedByYou": "Ka ƙara",
       "glossary": "Jadawalin kalmomi",
       "noGlossary": "Babu jadawalin kalmomi",
-      "manageGlossaries": "Jadawalin kalmomi",
+      "manageGlossaries": "Sarrafa ƙamus",
       "glossaries": "Jadawalin kalmomi",
       "closeGlossaries": "Rufe jadawalin kalmomi",
       "glossariesEmpty": "Ƙirƙiri jadawalin kalmomi don tabbatar da fassarar wasu kalmomi. Jadawalai za su ajiye a wannan na'ura kuma za a iya sake amfani da su.",
@@ -3053,7 +3057,145 @@
       "importTooLarge": "Fayil ɗin yayi girma fiye da izini (max 5 MB).",
       "importNothing": "Ba a sami layin da ya dace ba ({skipped} an tsallake).",
       "importSummary": "{added} an ƙara, {replaced} an maye gurbinsu, {skipped} an tsallake.",
-      "entriesTooManyToShow": "{count} kalmomi — sun yi yawa a nan. Fitar da su don duba, ko shigo da fayil don maye gurbinsu."
+      "entriesTooManyToShow": "{count} kalmomi — sun yi yawa a nan. Fitar da su don duba, ko shigo da fayil don maye gurbinsu.",
+      "pagesLoaded": "Shafuka {selected} daga {total} an loda",
+      "pagesLabel": "Shafuka",
+      "pagesApply": "Loda shafuka",
+      "pagesPrevious": "Kundin baya",
+      "pagesNext": "Kundin gaba",
+      "pagesBudget": "{used} / {max} haruffa",
+      "pagesChange": "Canza shafuka",
+      "pagesLoading": "Ana loda shafuka…",
+      "pagesInvalid": "Shigar lambobin shafi ko iyaka, misali 1-40, 45.",
+      "pagesUnavailable": "Ba wani daga cikin shafukan ya kunshi rubutu.",
+      "pagesTooMany": "Zabin nan na {used} haruffa ne, bayanai daya yana ɗauke da {max}. Zaɓi ƙasa da haka.",
+      "stop": "Tsayar",
+      "stepAnalyzing": "Nazari",
+      "stepTranslating": "Fassarar",
+      "stepReviewing": "Duba",
+      "stepDone": "An gama",
+      "runProgressLabel": "Ci gaban fassara",
+      "runHintAnalyzing": "Karanta tushen don gano kalmomi masu wahala da rashin bayyananniya.",
+      "runHintTranslating": "Rubuta fassarar.",
+      "runHintReviewing": "Tantance rubutun da tushen.",
+      "runHintReviewingRound": "Tantance rubutun da tushen · zagaye na {round} daga cikin har zuwa {total}.",
+      "runRound": "Zagaye na {round} daga cikin har zuwa {total}",
+      "draftLabel": "Rubutun farko",
+      "sourceLocked": "An kulle yayin fassara",
+      "analysisNotes": "{count, plural, one {# bayanin} other {# bayanai}}",
+      "analysisPill": "{count, plural, one {Nazari · # bayanin} other {Nazari · # bayanai}}",
+      "reviewSummary": "{count, plural, one {Dubawa: # zagaye, {verdict}} other {Dubawa: # zagaye, {verdict}}}",
+      "analysisDismiss": "Boyewa ga duk fassara",
+      "analysisShow": "Nuna nazarin kafin fassara",
+      "analysisResize": "Canza girman kwandon nazari",
+      "assessingCriteria": "{count, plural, one {Gani # ka'ida} other {Gani # ka'idoji}}",
+      "editsPending": "Shawarwarin gyare-gyare za su bayyana anan idan an kammala bincike.",
+      "uploadProgressLabel": "Ci gaban loda",
+      "uploadStepUploading": "Ana lodawa",
+      "uploadStepReading": "Karanta rubutu",
+      "uploadStepReady": "A shirye",
+      "uploadCancel": "Soke",
+      "modeDocument": "Dukkan takarda",
+      "modeDocumentHint": "Yana fassara PDF da aka ɗora gaba ɗaya tare da kiyaye tsarin sa. Karanta kuma gyara sakamakon a shafi-shafi.",
+      "translateDocument": "Fassara takarda",
+      "documentSubmitting": "Ana tura...",
+      "documentIntroTitle": "Fassara dukkan takarda",
+      "documentIntro": "Za a fassara dukkan PDF da aka loda cikin cikakken tsarin sa, tare da kiyaye yadda shafuka suke. Lokacin da aka gama, za ka iya karanta shi shafi-shafi tare da na asali, duba shafuka, tantance ingancinsu, da saukar da sakamakon. Ba a amfani da kundin kalmomi ko zagaye na duba a wannan yanayin. Da zarar an fara, ba za a iya dakatar da fassarar takarda ba kuma shafukanta za su ƙidaya cikin iyakar yau.",
+      "documentNeedsFile": "Dora PDF don fassara dukkan takarda.",
+      "documentNeedsPdf": "Fassarar dukkan takarda mai duba shafi-shafi tana aiki da PDF kawai.",
+      "documentNeedsLanguage": "Zaɓi yaren da ake so don fassara takarda.",
+      "documentLanguageUnsupported": "Fassarar dukkan takarda ba ta samuwa ga wannan yaren. Yi amfani da Quick ko Reviewed.",
+      "documentNoGlossaries": "Ba a amfani da glosari a fassarar dukkan takarda",
+      "documentPagesLeft": "{count, plural, one {Shafi ɗaya ya rage yau} other {Shafuka # sun rage yau}}",
+      "documentLimitReached": "Takardar tana da shafuka fiye da abin da ya rage maka yau. Fassara shafuka da ka zaba ta hanyar Quick ko Reviewed, ko ka sake gwadawa gobe.",
+      "documentUnavailable": "Fassarar dukkan takarda ba ta daidaita a wannan server.",
+      "documentSubmitFailed": "Ba a iya tura takardar don fassara ba: {message}",
+      "documentProgressLabel": "Ci gaban fassarar takarda",
+      "documentStepUploaded": "An ɗora",
+      "documentStepPreparing": "Ana shirya shafuka",
+      "documentTypicalDuration": "yawanci minti kaɗan",
+      "documentCanLeave": "Za ka iya barin wannan shafi. Fassarar tana ci gaba, za ta kasance a nan idan ka dawo.",
+      "documentStalled": "Ba a iya duba ci gaban fassarar ba. Zai iya ci gaba da tafiya.",
+      "documentCheckAgain": "Sake duba",
+      "documentFailed": "Ba a iya fassara takarda ba: {message}",
+      "documentGone": "Wannan fassarar ba ta samuwa yanzu. Fassara takardar daga farko don karanta shi.",
+      "documentPageFailed": "Ba a iya loda wannan shafi ba: {message}",
+      "documentPagesNotAligned": "Takardar da aka fassara tana da shafuka daban, don haka wata shafi ba zai nuna abu iri ɗaya a bangarori biyu ba.",
+      "documentAvailableUntil": "Za a iya samunta har zuwa {date}",
+      "documentRetranslateTitle": "Fassara takardar daga farko?",
+      "documentRetranslateMessage": "Wannan zai fara sabon fassara kuma zai ƙara shafukan takarda cikin iyakar yau. Ba za a iya dakatar da shi ba idan an fara. Fassarar yanzu da gyaranta za su kasance a kan uwar garke har sai lokacin su ya kare, amma ba za a sake nuna su anan ba.",
+      "retry": "Sake gwadawa",
+      "pageLabel": "Shafi",
+      "pageOf": "na {total}",
+      "pageNumber": "· shafi {page}",
+      "pagePrevious": "Shafi da ya gabata",
+      "pageNext": "Shafi na gaba",
+      "correctedLabel": "An gyara",
+      "correctedPages": "Shafuka da aka gyara:",
+      "correctedPagesMore": "+{count} ƙari",
+      "correctionRestore": "Dawo",
+      "correctionRestoreHint": "Ajiye canje-canjinka ga wannan shafi, koma fassarar injin",
+      "correctionSaving": "Ana ajiye...",
+      "correctionSaved": "An adana",
+      "correctionSaveFailed": "Ba a adana ba. Canza rubutu don sake gwadawa.",
+      "download": "Sauke",
+      "downloading": "Ana sauke...",
+      "downloadFailed": "Sauke ya gaza: {message}",
+      "downloadTranslated": "An fassara {format}",
+      "downloadTranslatedHint": "Tsarin asali. Ba ya haɗa gyaranka.",
+      "downloadTextVersion": "Sigar rubutu (DOCX)",
+      "downloadTextVersionHint": "Rubutu kai tsaye, shafi guda a kowane shafi, tare da gyaranka.",
+      "documentNoCancel": "Ba za a iya dakatar da fassarar takarda bayan an fara ba.",
+      "documentGlossariesIgnored": "{count, plural, one {An zaɓar glossary ɗinka ba za a amfani da shi a wannan yanayin ba.} other {Glossary ɗinku da kuka zaɓa # ba za a amfani da su a wannan yanayin ba.}} Duba kalmomi shafi-shafi ta amfani da Assess quality, ko amfani da Quick ko Reviewed.",
+      "pendingLeavePage": "Shawarwarin suna wannan shafi, ba za su ci gaba idan ka bar shafin ba. Yanke shawarar shawarwarin da suka rage farko.",
+      "uploadStepOcr": "Karanta da OCR",
+      "ocrButton": "Karanta da OCR",
+      "ocrButtonHint": "Karanta wannan PDF din da sake gane rubutu, don shafukan da aka scana ko rubutun da bai fito daidai ba",
+      "ocrApplied": "OCR",
+      "ocrAppliedHint": "An karanta wannan rubutun daga shafuka ta hanyar gane rubutu. Duba da asalin takarda.",
+      "ocrReasonNoText": "Ba a sami rubutu a cikin {name}. Kamar yana daga cikin takardun da aka scana.",
+      "ocrReasonSparse": "An sami ƙananan rubutu a cikin {name}. Wataƙila an scana wasu daga cikinsu.",
+      "ocrReasonManual": "A sake karanta {name} ta hanyar gane rubutu?",
+      "ocrExplanation": "OCR yana karanta rubutu daga hoton shafuka. Yana ɗaukar lokaci fiye da hanya ta al'ada, yana ƙididdige kowanne shafi a cikin fayil ɗin da iyakar OCR na yau, kuma yana iya yin kuskure idan scan ɗin ba kyau ba, rubutun hannu ko tebur.",
+      "ocrPagesLeft": "{count, plural, one {# shafin OCR ya rage yau.} other {# shafukan OCR sun rage yau.}}",
+      "ocrRun": "Karanta da OCR",
+      "ocrDismiss": "Ba yanzu ba",
+      "ocrSparseHint": "An sami ƙananan rubutu a cikin wannan PDF din. Wasu shafuka ma sun kasance an scana.",
+      "ocrLimitReached": "Wannan takarda tana da shafuka fiye da iyakar OCR da ke sauran yau.",
+      "ocrTooManyPages": "Wannan takarda tana da shafuka masu yawa don OCR, wanda ke karanta har zuwa {max} shafuka kawai. Raba PDF din sannan ka ɗora wani ɓangare.",
+      "ocrUnavailable": "OCR bai kasance a wannan sabar ba.",
+      "ocrNoText": "OCR bai samu rubutu a wannan takarda ba.",
+      "ocrFailed": "Ba a iya karanta takardar da OCR ba. Ka sake gwadawa.",
+      "scannedWholeExplanation": "Hakanan za a iya fassara dukkan takaddar: tsarin yana karanta shafukan da aka duba da kansa, yana kiyaye yadda aka tsara su, kuma yana ƙirga shafuka a cikin ƙarfin fassarar ku na kullum.",
+      "scannedUseWholeDocument": "Fassara dukkan takaddar",
+      "scannedSourceNote": "Babu rubutu da za a nuna a nan daga {name}. Fassara dukkan takaddar tana karanta shafukanta kai tsaye. Idan ka rubuta naka a nan, zai maye gurbin takaddar.",
+      "scannedPageNote": "Ba a iya karanta rubutu daga wannan shafin asali ba. Kwatanta da fayil ɗin da kansa.",
+      "changeLabel": "Nemi a canza fassarar",
+      "changePlaceholder": "Nemi a canza, misali, a yi ta mafi karin girmamawa",
+      "changePlaceholderAnother": "Nemi a yi wani canji",
+      "changeSend": "Aika bukata",
+      "changeWorking": "Ana duba canje-canje",
+      "changeNothingApplied": "Ba za a samu canji ba sai ka amince",
+      "changeSelectionLabel": "Nemi a canza rubutun da aka zaba",
+      "changeSelectionPlaceholder": "Canza wannan, misali, ce tableta",
+      "changeSelectionScope": "Ana amfani da shi ga rubutun da aka zaba kadai",
+      "changeSelectionClose": "Rufe",
+      "changeTitle": "Canje-canje da aka nema",
+      "changeSelectedLabel": "Rubutun da aka zaba",
+      "changeNoEdits": "Ba a buƙatar canji a wannan bukata.",
+      "changeReplyPending": "{count, plural, one {# gyara da aka ba da shawara yana cikin aikin.} other {# gyare-gyare da aka ba da shawara suna cikin aikin.}} Ba za a samu canji ba sai ka amince.",
+      "changeStopped": "An dakatar. Ba a samu canji ba.",
+      "changeFailed": "Bukatar canji ta gaza. Gwada sake.",
+      "changeNoTranslation": "Babu fassara don a canza tukuna. Da fari ka fassara rubutun.",
+      "changeBusy": "Jira a gama aikin yanzu, sannan ka sake tambaya.",
+      "changeHeld": "Ba a aika ba: har yanzu ba a yanke hukunci kan gyare-gyaren da aka ba da shawara ba.",
+      "pendingRunActionRequest": "Ana neman a yi canji",
+      "railPlaceholder": "Nemi a yi canji ko tambaya…",
+      "documentPageCount": "{count, plural, one {shafi #} other {shafuka #}}",
+      "sourceShowPages": "Nuna shafuka",
+      "sourceEditText": "Gyara azaman rubutu",
+      "sourceRemoveDocument": "Cire takarda",
+      "sourceJumpToPage": "Je zuwa shafi"
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",
@@ -3681,7 +3823,7 @@
       "guideTargetTerm": "Fassarar da ake buƙata",
       "guideNote": "Lura",
       "pendingRun": {
-        "title": "Akwai shawarwari {count} da ke jiran dubawa",
+        "title": "{count, plural, one {# shawarar da ke jiran amsa} other {# shawarwari da ke jiran amsa}}",
         "body": "{action} na iya sauya kowanne bangare na rubutu, ciki har da sassan da ke da shawarwari da ba ka yanke hukunci ba tukuna, kuma sabon tantancewa zai maye gurbin jerin yanzu. Ka yanke shawarar saura da farko.",
         "acceptAll": "Amince da duk saura",
         "rejectAll": "Ki duk",
@@ -3743,7 +3885,7 @@
         "list<number>": "Jerin lambobi"
       },
       "layout": "Tsari",
-      "layoutHint": "Markdown tare da {{field:id}} guraben — ana amfani da shi don fitarwa na gani da samfoti.",
+      "layoutHint": "Markdown tare da '{{field:id}}' guraben — ana amfani da shi don fitarwa na gani da samfoti.",
       "saveTemplate": "Ajiye samfur",
       "deleteTemplate": "Goge samfur",
       "cancel": "Soke",
@@ -4571,6 +4713,10 @@
         "note": "Kudin a farashin jerin kamar na {asOf} (Farashin Matsayin Duniya, ba tare da rangwamen bayanan da aka adana ba): iyakar kima ne, ba takardar biyan kuɗi ba. Bincike a yanar gizo, aiwatar da lamba, fassara, magana, fassarar magana da kimanta takardu ba a haɗa su ba."
       }
     },
+    "mass": {
+      "grams": "{value} g CO₂e",
+      "kilograms": "{value} kg CO₂e"
+    },
     "workflow": {
       "title": "Wannan wurin aiki (kimantawa)",
       "workspace": "Wannan wurin aiki",
@@ -5385,7 +5531,9 @@
     "indexedDocumentSummary": "{indexed, plural, one {Takarda #} other {Takardu #}} an jera",
     "m365CapImmediateHelp": "Aikace-aikacen yana adana iyaka nan da nan. Sauran gyare-gyare suna buƙatar Ajiyewa.",
     "m365CapDraftHelp": "Za a adana iyakar lokacin kirkirar wakili.",
-    "m365CapSaved": "An adana iyakar takardu: {limit}."
+    "m365CapSaved": "An adana iyakar takardu: {limit}.",
+    "m365AgentAllowWebSearchHelp": "A kashe ta tsoho: wakilin yana amsa ne kawai daga takardun sa, baya yin binciken web, ko menene saitin bincike da mai amfani ya zaba. Idan an kunna, umarnin wakili ne ke yanke shawara lokacin da za a gudanar da binciken web da kuma irin shafukan da zai iya amfani da su, sannan tushen web za a nuna su daban-daban da na takardun wakili.",
+    "promptAgentAllowWebSearchHelp": "A kunna ta tsoho. Idan an kashe, wannan wakili baya yin binciken web, ko menene saitin bincike da mai amfani ya zaba."
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -5692,7 +5840,9 @@
       "m365MailReadsPerDay": "Karanta imel a rana",
       "m365MailDraftsPerDay": "Rubutun imel a rana",
       "m365MailDeepScansPerDay": "Cikakken duba imel a rana",
-      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na kullum a rana"
+      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na kullum a rana",
+      "translationPagesPerDay": "Shafukan fassarar takardu a rana",
+      "ocrPagesPerDay": "Shafukan OCR a kowace rana"
     },
     "valueModeLabel": "Irin iyaka",
     "valueAmountLabel": "Adadin iyaka",
@@ -5715,7 +5865,8 @@
       "jobs": "aiki",
       "rounds": "zagaye",
       "documents": "takardu",
-      "boolean": ""
+      "boolean": "",
+      "pages": "shafuka"
     },
     "window": {
       "day": "rana",
@@ -5773,7 +5924,9 @@
       "m365MailReadsPerDay": "Binciken imel da karanta saƙonni/lambobin zance a rana. Idan an wuce iyaka, kayan aikin imel za su nuna “gwada gobe”.",
       "m365MailDraftsPerDay": "Kirkiran rubutattun imel ɗin da mataimakin zai iya yi a rana — kowannensu ana tabbatarwa dabam. An yi da gangan don kar a wuce gona da iri.",
       "m365MailDeepScansPerDay": "Cikakkun nazarin imel (taƙaitawa, bincike mai zurfi, alƙawari) a rana. Kowanne bincike guda yana ɗauke da tamkar ɗaya daga cikin kasafin, ko da yawan karatunsu a ciki.",
-      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na Microsoft 365 a rana. Gudun guda yana kunshe da karanta Graph da dama tare da kira na analysis-model guda biyu; zaɓin lokacin yana sauƙaƙa maidowa, saboda haka an sa iyaka a bisa tsoho."
+      "m365DigestRunsPerDay": "Gudun takaitaccen rahoto na Microsoft 365 a rana. Gudun guda yana kunshe da karanta Graph da dama tare da kira na analysis-model guda biyu; zaɓin lokacin yana sauƙaƙa maidowa, saboda haka an sa iyaka a bisa tsoho.",
+      "translationPagesPerDay": "Shafukan PDF da aka tura don fassarar takardu a rana.",
+      "ocrPagesPerDay": "Shafukan PDF da aka karanta da OCR (gane rubutu don takardun da aka scana) a kowace rana."
     },
     "scopeFamily": "Dangi",
     "scopeModel": "Samfuri",
@@ -8081,7 +8234,13 @@
       "skills": "Zaɓin fasaha",
       "tools": "Sarrafa hanyoyin aiki",
       "trim": "Rarrabe takardu",
-      "assessment": "Kimanta bincike"
+      "assessment": "Kimanta bincike",
+      "query": "Sake rubuta binciken tambaya",
+      "mailScreen": "Allon sata ta imel",
+      "mailAnalysis": "Nazarin imel da takaitawa",
+      "schemaProposal": "Shirin tsari na fitar da bayanai",
+      "mcpPlan": "Shirin haɗa maɓalli",
+      "vision": "Karanta hoto da shafi"
     },
     "reason": {
       "endpoint_missing": "Babu adireshin ƙarshe ko haɗin asusu",
@@ -8102,6 +8261,164 @@
       "endpoint_account_mismatch": "Adireshin ƙarshe da ARM resource ID na nuni da asusu daban-daban. Gyara saitin tura aiki.",
       "inventory_refresh_failed": "Sabunta jerin ta gaza. Duba izinin Reader na app da haɗin asusu.",
       "credential_unavailable": "App ba zai iya samun takardar izinin jerin sa ba. Duba tsarawa tura aiki na asali."
+    },
+    "notSupported": "Wannan samfurin bai goyi bayan haka ba",
+    "unservedOperations": "Babu samfurin a wannan jerin da ke goyan bayan: {operations}. Ƙara samfurin da zai iya."
+  },
+  "filePreview": {
+    "preview": "Dubawa",
+    "download": "Zazzage",
+    "loading": "Ana shirin dubawa...",
+    "failed": "Ba a iya dubawa wannan fayil din. Still za ka iya zazzage shi.",
+    "pageOf": "Shafi {page} daga cikin {total}",
+    "truncated": "An nuna shafuka {shown} na {total}. Zazzage fayil din don ganin sauran.",
+    "enlarge": "Fadada {name}"
+  },
+  "addToChat": {
+    "title": "Ƙara zuwa tattaunawa",
+    "titleTranslate": "Fassara takarda",
+    "titleTranscribe": "Rubuta sauti ko bidiyo",
+    "sourcesLabel": "Ƙara daga",
+    "microsoft365": "Microsoft 365",
+    "sourceUnavailable": "Ba a samu don wannan aikin",
+    "sources": {
+      "device": "Wannan na'ura",
+      "link": "Hanya",
+      "camera": "Kamara",
+      "onedrive": "OneDrive / SharePoint",
+      "mail": "Imel",
+      "meetings": "Taron"
+    },
+    "device": {
+      "browse": "Duba wannan na'ura",
+      "dropHint": "ko jefa fayiloli a kowane wuri cikin wannan taga, ko manna",
+      "rejected": "Ba za a iya amfani da waɗannan fayilolin a nan ba.",
+      "hint": {
+        "attach": "Takardu, hotuna, sauti da bidiyo.",
+        "translate": "Takarda guda: Word, Excel, PowerPoint, PDF, HTML ko rubutu.",
+        "transcribe": "Sauti ko bidiyo. Ana rubutawa idan ka aika saƙon."
+      }
+    },
+    "selection": {
+      "then": "Sannan",
+      "intents": {
+        "attach": "Makala",
+        "translate": "Fassara",
+        "transcribe": "Rubuta"
+      },
+      "confirm": {
+        "attach": "Ƙara",
+        "translate": "Fassara",
+        "transcribe": "Rubuta"
+      },
+      "unfit": {
+        "attach": "Ba za a iya makala waɗannan fayilolin ba",
+        "translate": "Fassara tana ɗaukar takarda guda lokaci ɗaya",
+        "transcribe": "Sauti da bidiyo kawai za a iya rubutawa"
+      }
+    },
+    "menu": {
+      "addToChatNote": "Wannan na'ura, hanyoyi, Microsoft 365",
+      "filesOrPhotos": "Fayiloli ko hotuna",
+      "fromThisDevice": "Daga wannan na'ura",
+      "connect": "Haɗa Microsoft 365",
+      "connectNote": "Ƙara daga OneDrive, imel da taron"
     }
+  },
+  "usageBudgets": {
+    "title": "Kudaden kasafin ku",
+    "description": "Iyakar da kuka sa wa kanku a wannan na'ura. Zaɓi kasafi, sannan zaɓi abin da zai faru lokacin da kuka kusanci ko wuce iyakar. Kasafin yana ƙididdige yawan hira da aikin workflow tun farkon kowanne lokaci.",
+    "metric": {
+      "emissions": "Kasafin hayaki",
+      "cost": "Kasafin kuɗi"
+    },
+    "metricShort": {
+      "emissions": "Hayaki",
+      "cost": "Kuɗi"
+    },
+    "off": "Ba a saita kasafi ba.",
+    "measureAs": "Auna shi azaman",
+    "unit": {
+      "grams": "g CO₂e",
+      "smartphoneCharge": "Cajin waya",
+      "usd": "Dalar Amurka"
+    },
+    "amountLabel": "Kasafi",
+    "amountSuffix": {
+      "grams": "g CO₂e",
+      "hours": "awanni",
+      "smartphoneCharge": "caji",
+      "usd": "Dalar Amurka"
+    },
+    "periodLabel": "Ana sake saiti kowane",
+    "period": {
+      "day": "Rana",
+      "week": "Mako",
+      "month": "Wata"
+    },
+    "costNote": "Kimanta daga farashin da aka jera: iyaka mafi girma, ba lissafi ba.",
+    "chargesValue": "{count} caji na waya",
+    "percent": "{percent}%",
+    "usedOf": "An yi amfani da {used} daga cikin {limit} ({percent}%)",
+    "usedOfShort": "{used} daga cikin {limit}",
+    "resets": "Ana sake saiti {date}",
+    "budgetMarker": "Kasafi",
+    "stageMarker": "{stage} {percent}%",
+    "status": {
+      "ok": "A cikin kasafi",
+      "warn": "An nuna gargadi",
+      "ask": "Ana tambaya kafin kowane saƙo",
+      "stop": "An dakatar da aikawa"
+    },
+    "stage": {
+      "warn": {
+        "title": "Gargadi",
+        "tag": "Sanarwa",
+        "description": "Nuna sanarwa a hira daga wannan kaso na kasafin."
+      },
+      "ask": {
+        "title": "Tambaya da farko",
+        "tag": "Tsare mai laushi",
+        "description": "A tambaye ni in tabbatar da kowane saƙo daga wannan kaso na kasafin."
+      },
+      "stop": {
+        "title": "Tsaya",
+        "tag": "Tsare mai ƙarfi",
+        "description": "Dakatar da aikawa daga wannan kaso na kasafin har sai an sake saiti ko na ƙara kasafi a nan."
+      }
+    },
+    "thresholdLabel": "Matakan {stage}, kashi na kasafi",
+    "notice": {
+      "warn": {
+        "emissions": "Kun yi amfani da {percent}% na kasafin hayakin ku.",
+        "cost": "Kun yi amfani da {percent}% na kasafin kuɗin ku."
+      },
+      "ask": {
+        "emissions": "Kun yi amfani da {percent}% na kasafin hayakin ku. A tura wannan saƙon?",
+        "cost": "Kun yi amfani da {percent}% na kasafin kuɗin ku. A tura wannan saƙon?"
+      },
+      "askRun": {
+        "emissions": "Kun yi amfani da {percent}% na kasafin hayakin ku. A fara wannan aiki?",
+        "cost": "Kun yi amfani da {percent}% na kasafin kuɗin ku. A fara wannan aiki?"
+      },
+      "stop": {
+        "emissions": "An kai iyakar hayakin kasafi. An dakatar da aikawa har sai {date}.",
+        "cost": "An kai iyakar kasafin kuɗi. An dakatar da aika saƙonni har sai {date}."
+      }
+    },
+    "actions": {
+      "viewBudget": "Duba kasafin kuɗi",
+      "dismiss": "Rufe",
+      "sendAnyway": "Aika duk da haka",
+      "runAnyway": "Gudu duk da haka",
+      "dontSend": "Kada a aika",
+      "dontAskToday": "Kada a tambaya yau",
+      "openSettings": "Buɗe saitunan kasafin kuɗi",
+      "edit": "Gyara"
+    },
+    "composerPaused": "Aika ya tsaya saboda kasafin kuɗi",
+    "summaryTitle": "Kasafin kuɗinku",
+    "chipAria": "Kasafin {metric}: an yi amfani da {percent}%.",
+    "runProjection": "Kasafin hayaƙi {from}% → {to}%"
   }
 }
