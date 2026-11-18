@@ -32,7 +32,7 @@ export const SOURCE_TEXT_STORE_DELAY_MS = 2000;
 
 // One of each per text, however many workspaces show the conversation: the
 // workspace can be mounted more than once (see nativeRunSession.ts).
-const loads = new Map<string, Promise<string>>();
+const loads = new Map<string, Promise<{ text: string; expiresAt?: string }>>();
 const saves = new Map<string, Promise<void>>();
 const lastTouch = new Map<string, number>();
 
@@ -134,20 +134,28 @@ export function useStoredSourceText(input: UseStoredSourceTextInput) {
     setProblem(null);
     let load = loads.get(current.id);
     if (!load) {
-      load = loadSourceText(current).finally(() => loads.delete(current.id));
+      load = loadSourceText(current)
+        .then(async (text) => ({
+          text,
+          // Asked, not touched: looking at a text does not extend it. Only
+          // app storage has an expiry to ask about.
+          expiresAt:
+            current.backend === 'app'
+              ? await touchSourceText(current, false).catch(
+                  () => current.expiresAt,
+                )
+              : undefined,
+        }))
+        .finally(() => loads.delete(current.id));
       loads.set(current.id, load);
     }
     load
-      .then(async (text) => {
+      .then(({ text, expiresAt }) => {
         change(conversationId, false, (latest) =>
           latest.sourceTextRef?.detached &&
           latest.sourceTextRef.id === current.id
             ? attachSourceText(latest, text)
             : latest,
-        );
-        // Asked, not touched: looking at a text does not extend it.
-        const expiresAt = await touchSourceText(current, false).catch(
-          () => current.expiresAt,
         );
         noteExpiry(conversationId, current.id, expiresAt);
       })
@@ -163,12 +171,11 @@ export function useStoredSourceText(input: UseStoredSourceTextInput) {
   useEffect(() => {
     if (!state || detached) return;
     if (!isLargeSourceText(sourceText)) {
-      if (!ref) return;
-      change(conversationId, true, (latest) => {
-        if (latest.sourceTextRef?.id !== ref.id) return latest;
-        const { sourceTextRef: _dropped, ...rest } = latest;
-        return rest;
-      });
+      // Only the first workspace to notice drops and deletes it.
+      if (!ref || readState(conversationId)?.sourceTextRef?.id !== ref.id) {
+        return;
+      }
+      forgetRef(conversationId, ref);
       void deleteSourceText(ref);
       return;
     }
