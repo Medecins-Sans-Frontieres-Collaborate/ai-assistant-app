@@ -131,6 +131,8 @@ export interface Message extends MessageToolArtifacts {
   thinking?: string;
   transcript?: TranscriptMetadata;
   error?: boolean; // Indicates if the message generation failed
+  /** The user's feedback rating, persisted so it survives reloads. */
+  feedback?: MessageFeedback;
   toneId?: string | null; // Custom tone/voice profile to apply
   promptId?: string | null; // Saved prompt that was used
   /** Browser-only one-shot skill references, replayed for retry/regeneration. */
@@ -229,6 +231,9 @@ export interface ConsentRequest {
 
 export type Role = 'system' | 'assistant' | 'user';
 
+/** A user's feedback rating on an assistant message. */
+export type MessageFeedback = 'good' | 'bad';
+
 export type ChatInputSubmitTypes = 'TEXT' | 'IMAGE' | 'FILE' | 'MULTI_FILE';
 
 /**
@@ -250,6 +255,7 @@ export interface AssistantMessageVersion extends MessageToolArtifacts {
   thinking?: string;
   transcript?: TranscriptMetadata;
   error?: boolean;
+  feedback?: MessageFeedback;
   createdAt: string; // ISO timestamp for when this version was generated
 }
 
