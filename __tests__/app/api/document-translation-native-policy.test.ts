@@ -45,6 +45,11 @@ vi.mock(
         typeof import('@/lib/services/documentTranslation/native/nativePdfPipeline')
       >()
     ).NativePdfDocumentLimitError,
+    NativePdfNoPagesLeftError: (
+      await importOriginal<
+        typeof import('@/lib/services/documentTranslation/native/nativePdfPipeline')
+      >()
+    ).NativePdfNoPagesLeftError,
     runNativePdfTranslation: vi.fn(),
     rerenderNativePdf: rerender,
     reviseNativeUnit: vi.fn(),
@@ -300,5 +305,48 @@ describe('native PDF limits come from the admin policy', () => {
       expect((await RENDER(renderRequest(body))).status).toBe(400);
     }
     expect(rerender).not.toHaveBeenCalled();
+  });
+
+  it('render passes on the pages to leave out, and none by default', async () => {
+    const base = {
+      sourceId: 'doc.pdf',
+      unitsId: 'a.json',
+      translations: { p1u1: 'x' },
+    };
+    await RENDER(renderRequest({ ...base, omitPages: [3, 5, 3] }));
+    expect(rerender.mock.calls[0][0].omitPages).toEqual([3, 5]);
+    await RENDER(renderRequest(base));
+    expect(rerender.mock.calls[1][0].omitPages).toEqual([]);
+  });
+
+  it('render refuses pages to leave out that are not page numbers', async () => {
+    for (const omitPages of [[0], [1.5], 'all', [1, '2']]) {
+      const response = await RENDER(
+        renderRequest({
+          sourceId: 'doc.pdf',
+          unitsId: 'a.json',
+          translations: { p1u1: 'x' },
+          omitPages,
+        }),
+      );
+      expect(response.status).toBe(400);
+    }
+    expect(rerender).not.toHaveBeenCalled();
+  });
+
+  it('render refuses to leave every page out, with its own code', async () => {
+    const { NativePdfNoPagesLeftError } =
+      await import('@/lib/services/documentTranslation/native/nativePdfPipeline');
+    rerender.mockRejectedValue(new NativePdfNoPagesLeftError());
+    const response = await RENDER(
+      renderRequest({
+        sourceId: 'doc.pdf',
+        unitsId: 'a.json',
+        translations: { p1u1: 'x' },
+        omitPages: [1],
+      }),
+    );
+    expect(response.status).toBe(400);
+    expect((await parseJsonResponse(response)).code).toBe('NO_PAGES_LEFT');
   });
 });
