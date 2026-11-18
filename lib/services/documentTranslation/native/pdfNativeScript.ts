@@ -48,6 +48,20 @@ CONVENTIONS (stated once; everything below cites these)
   - PANELS: a filled or outlined shape that a unit sits inside (a card, a table cell, a
     coloured box) is the unit's 'panel'. A room never reaches outside its unit's panel
     (see assign_room): free space beyond a panel's edge belongs to something else.
+  - CLEAR SPACE: a room grows only across space that looks empty. The page is drawn without
+    its text and scanned outward from the unit, a whole line of pixels at a time; growth
+    stops at the first line that differs from the one before it (a rule, a box's edge, a
+    picture). See clear_extent. This holds for shapes that are pictures, which PANELS cannot see.
+  - PEERS: units of one page set in the same font size, weight, slant and colour (the items
+    of a list, the headings of a row of cards) are peers ('peer' names the group). When the
+    layout has to shrink some of them, all are set at the smallest of those sizes, so a list
+    never mixes sizes; a unit that would need to go below PEER_MIN_SCALE is left to itself
+    and reported, so the pipeline rewords it instead. A unit given its own size by a style
+    is no longer anyone's peer.
+  - ALIGNMENT: 'align' is 'left', 'center' or 'right', read from the source: stacked lines
+    that share a centre or a right edge instead of a left one, or a single line sitting in
+    the middle of its panel. A centred unit's room is centred on the same axis, so the
+    translation stays in the middle however long it is. See line_alignment and assign_room.
   - Nothing is ever painted over the page: source text is removed from the
     content stream, so there is no cover-up rectangle to show through.
 """
@@ -67,7 +81,13 @@ UNDERLINE_MAX_HEIGHT = 1.5
 MAX_GROWTH = 0.35         # share of its own height a unit's room may extend downward
 PANEL_MAX_SHARE = 0.9     # a filled shape covering more of the page than this is its background
 PANEL_MAX_INSET = 8.0     # most that a room is kept clear of its panel's edge, in points
-PANEL_TOLERANCE = 1.0     # a unit this far outside a shape's edge still counts as inside it
+PANEL_TOLERANCE = 1.0     # a unit this far outside a shape's side edge still counts as inside it
+PANEL_LINE_SLACK = 0.25   # share of its font size a unit's box may stick out above or below its panel
+EDGE_CONTRAST = 18        # channel difference (0-255) between neighbouring pixels that makes an edge
+EDGE_SHARE = 0.08         # share of a scanned line that must change for it to count as an edge
+CENTRED_SHARE = 0.06      # a line's two insets in its panel may differ by this share of the panel's width
+PEER_SIZE_TOLERANCE = 0.3 # font sizes this close, in points, are the same size
+PEER_MIN_SCALE = 0.85     # peers are set at one size only while that keeps each at this share of its own
 
 
 def load_job():
@@ -85,13 +105,16 @@ def span_style(span):
 
 
 def is_paragraph(lines):
-    """Stacked lines sharing a left edge; anything else (a table row) is split per line."""
+    """Stacked lines sharing a left edge, a centre or a right edge (see ALIGNMENT); anything
+    else (a table row) is split per line."""
     if len(lines) < 2:
         return False
     tops = [line['bbox'][1] for line in lines]
-    lefts = [line['bbox'][0] for line in lines]
     stacked = all(b > a + 1 for a, b in zip(tops, tops[1:]))
-    return stacked and max(lefts) - min(lefts) < SAME_LEFT_EDGE
+    spread = lambda values: max(values) - min(values)
+    boxes = [line['bbox'] for line in lines]
+    return stacked and min(spread([b[0] for b in boxes]), spread([(b[0] + b[2]) / 2 for b in boxes]),
+                           spread([b[2] for b in boxes])) < SAME_LEFT_EDGE
 
 
 def link_for(rect, links):
@@ -153,6 +176,7 @@ def build_unit(uid, page_no, lines, links):
     bbox = fitz.Rect()
     for s in spans:
         bbox |= fitz.Rect(s['bbox'])
+    align = line_alignment(lines)
     baselines = [line['spans'][0]['origin'][1] for line in lines if line['spans']]
     leading = 1.2
     if len(baselines) > 1 and baselines[-1] > baselines[0]:
@@ -160,11 +184,26 @@ def build_unit(uid, page_no, lines, links):
     return {
         'id': uid, 'page': page_no, 'bbox': [round(v, 2) for v in bbox],
         'spanRects': [[round(v, 2) for v in s['bbox']] for s in spans],
-        'lines': len(lines), 'size': dsize, 'bold': dbold, 'italic': ditalic, 'color': dcolor,
+        'lines': len(lines), 'align': align, 'size': dsize, 'bold': dbold, 'italic': ditalic, 'color': dcolor,
         'serif': bool(SERIF_FONT.search(dfont)), 'leading': round(min(max(leading, 0.8), 2.0), 3),
         'text': markup, 'tags': book.tags,
         'chars': len(re.sub(r'<[^>]+>', '', markup)),
     }
+
+
+def line_alignment(lines):
+    """How stacked lines are aligned (see ALIGNMENT); one line alone reads as 'left'."""
+    if len(lines) < 2:
+        return 'left'
+    boxes = [line['bbox'] for line in lines]
+    spread = lambda values: max(values) - min(values)
+    if spread([b[0] for b in boxes]) < SAME_LEFT_EDGE:
+        return 'left'
+    if spread([(b[0] + b[2]) / 2 for b in boxes]) < SAME_LEFT_EDGE:
+        return 'center'
+    if spread([b[2] for b in boxes]) < SAME_LEFT_EDGE:
+        return 'right'
+    return 'left'
 
 
 def page_obstacles(page, blocks):
@@ -196,20 +235,70 @@ def page_panels(page):
     return panels
 
 
-def panel_of(box, panels):
-    """The smallest panel holding a unit's source text, or None."""
+def panel_of(box, panels, size):
+    """The smallest panel holding a unit's source text, or None.
+
+    A text box is taller than its ink (it leaves room for accents and descenders), so it may
+    poke out above or below the shape its letters sit in by a share of the font size.
+    """
+    slack = PANEL_LINE_SLACK * size
     grown = [p for p in panels
-             if (p + (-PANEL_TOLERANCE, -PANEL_TOLERANCE, PANEL_TOLERANCE, PANEL_TOLERANCE)).contains(box)]
+             if (p + (-PANEL_TOLERANCE, -slack, PANEL_TOLERANCE, slack)).contains(box)]
     return min(grown, key=lambda p: p.get_area()) if grown else None
 
 
-def assign_room(units, obstacles, page_rect, panels=()):
+def textless_pixels(page):
+    """The page drawn without its text, one pixel per point: what a translation is laid over."""
+    scratch = fitz.open()
+    scratch.insert_pdf(page.parent, from_page=page.number, to_page=page.number)
+    bare = scratch[0]
+    bare.add_redact_annot(bare.rect, fill=False)
+    bare.apply_redactions(images=fitz.PDF_REDACT_IMAGE_NONE, graphics=fitz.PDF_REDACT_LINE_ART_NONE)
+    return bare.get_pixmap(colorspace=fitz.csRGB, alpha=False)
+
+
+def clear_extent(pixels, box, limit, downward):
+    """How far a unit's room may grow before it meets something drawn (see CLEAR SPACE).
+
+    Scans from the unit's far edge toward 'limit': rows below it across its width when
+    'downward', else columns to its right across its height. Each line of pixels is compared
+    with the one before, so a gradient passes and a rule does not.
+
+    Returns the coordinate, in points, of the last clear line (never less than the unit's edge).
+    """
+    width, height, data = pixels.width, pixels.height, pixels.samples
+    x0, x1 = max(int(box.x0), 0), min(int(box.x1 + 0.999), width)
+    y0, y1 = max(int(box.y0), 0), min(int(box.y1 + 0.999), height)
+
+    def line(index):
+        if downward:
+            start = (index * width + x0) * 3
+            return data[start:start + (x1 - x0) * 3]
+        return b''.join(data[(y * width + index) * 3:(y * width + index) * 3 + 3] for y in range(y0, y1))
+
+    edge = y1 if downward else x1
+    stop = min(int(limit), height if downward else width)
+    if (x1 <= x0) or (y1 <= y0) or edge < 1:
+        return float(box.y1 if downward else box.x1)
+    previous = line(edge - 1)
+    for index in range(edge, stop):
+        current = line(index)
+        changed = sum(1 for k in range(0, len(current), 3)
+                      if max(abs(current[k] - previous[k]), abs(current[k + 1] - previous[k + 1]),
+                             abs(current[k + 2] - previous[k + 2])) > EDGE_CONTRAST)
+        if changed > EDGE_SHARE * (len(current) / 3):
+            return float(max(index - GAP, box.y1 if downward else box.x1))
+        previous = current
+    return float(limit)
+
+
+def assign_room(units, obstacles, page_rect, panels=(), pixels=None):
     """Derives each unit's 'room' (where its translation may go) from the free space around it."""
     for unit in units:
         box = fitz.Rect(unit['bbox'])
         right_limit = page_rect.x1 - min(box.x0, page_rect.width * 0.08)
         bottom_limit = page_rect.y1 - 18
-        panel = panel_of(box, panels)
+        panel = panel_of(box, panels, unit['size'])
         if panel is not None:
             # Kept as clear of the panel's far edges as the source is of its near one.
             inset = min(max(box.x0 - panel.x0, 0.0), PANEL_MAX_INSET)
@@ -227,16 +316,46 @@ def assign_room(units, obstacles, page_rect, panels=()):
             # Adjacent lines' boxes overlap by their ascenders, so "below" means starting lower.
             if same_column and o.y0 > box.y0 + 1:
                 bottom_limit = min(bottom_limit, o.y0 - GAP)
+        if pixels is not None:
+            right_limit = min(right_limit, clear_extent(pixels, box, right_limit, downward=False))
         # Paragraphs keep their column width, unless a panel says how wide the column really
         # is; single lines may grow sideways into free space.
         x1 = box.x1 if unit['lines'] > 1 and panel is None else max(box.x1, right_limit)
+        if pixels is not None:
+            # Scanned across the width the room will have, not only the source's.
+            reach = fitz.Rect(box.x0, box.y0, max(x1, box.x1), box.y1)
+            bottom_limit = min(bottom_limit, clear_extent(pixels, reach, bottom_limit, downward=True))
         first_line_bottom = box.y0 + unit['size'] * 1.3
         # Growth downward is capped: free space below a block is often a different background.
         y1 = min(bottom_limit, box.y1 + MAX_GROWTH * box.height + unit['size'])
         y1 = max(y1, min(box.y1, first_line_bottom))
-        unit['room'] = [round(box.x0, 2), round(box.y0, 2), round(max(x1, box.x1), 2), round(y1, 2)]
+        x0, x1 = box.x0, max(x1, box.x1)
+        if panel is not None and unit['lines'] == 1:
+            left, right = box.x0 - panel.x0, panel.x1 - box.x1
+            if left > PANEL_MAX_INSET and abs(left - right) <= max(SAME_LEFT_EDGE, CENTRED_SHARE * panel.width):
+                unit['align'] = 'center'
+        if unit['align'] == 'center':
+            # The room keeps the unit's centre: as wide as the nearer limit allows on both sides.
+            centre = (box.x0 + box.x1) / 2
+            near = panel.x0 + min(max(box.x0 - panel.x0, 0.0), PANEL_MAX_INSET) if panel is not None else box.x0
+            half = max(min(centre - near, x1 - centre), box.width / 2)
+            x0, x1 = centre - half, centre + half
+        unit['room'] = [round(x0, 2), round(box.y0, 2), round(x1, 2), round(y1, 2)]
         source_area = max(box.get_area(), 1.0)
         unit['roomFactor'] = round(fitz.Rect(unit['room']).get_area() / source_area, 2)
+
+
+def assign_peers(units):
+    """Names each unit's peer group on its page (see PEERS).
+
+    Sizes are grouped with a tolerance: the same text style often measures a tenth of a
+    point apart from one line to the next.
+    """
+    anchor = None
+    for unit in sorted(units, key=lambda u: u['size']):
+        if anchor is None or unit['size'] - anchor > PEER_SIZE_TOLERANCE:
+            anchor = unit['size']
+        unit['peer'] = '%.1f|%d%d|%s' % (anchor, unit['bold'], unit['italic'], unit['color'])
 
 
 def extract_units(doc, pages):
@@ -257,7 +376,9 @@ def extract_units(doc, pages):
                 unit = build_unit('p%d-b%d-%d' % (page_no, bi, gi), page_no, group, links)
                 if unit:
                     page_units.append(unit)
-        assign_room(page_units, page_obstacles(page, blocks), page.rect, page_panels(page))
+        assign_room(page_units, page_obstacles(page, blocks), page.rect, page_panels(page),
+                    textless_pixels(page))
+        assign_peers(page_units)
         for number, unit in enumerate(page_units, start=1):
             unit['n'] = number
         units.extend(page_units)
@@ -474,20 +595,44 @@ def command_rebuild(job):
             for link in page.get_links():
                 if link.get('uri'):
                     page.delete_link(link)
-        for unit in page_units:
+        def lay_out(target, unit, factor=1.0):
+            """Sets a unit's translation on 'target' at 'factor' of its size; (spare, scale)."""
             markup = restore_tags(translations[unit['id']], unit['tags'])
             style = styles.get(unit['id']) or {}
-            rooms[unit['id']] = styled_room(unit, style, page.rect)
-            if 'size' in style and unit['size']:
-                markup = resize_inline(markup, style['size'] / unit['size'])
+            size = style.get('size', unit['size']) * factor
+            if unit['size'] and abs(size - unit['size']) > 0.01:
+                markup = resize_inline(markup, size / unit['size'])
             css = css_fonts + (
-                '* {font-family:%s;} p {margin:0;font-size:%spt;line-height:%s;color:%s;font-weight:%s;font-style:%s;}'
+                '* {font-family:%s;} p {margin:0;font-size:%.2fpt;text-align:%s;line-height:%s;color:%s;'
+                'font-weight:%s;font-style:%s;}'
                 ' a {color:inherit;text-decoration:underline;}' % (
-                    'serifbody' if unit['serif'] else 'sansbody', style.get('size', unit['size']),
+                    'serifbody' if unit['serif'] else 'sansbody', size, unit.get('align', 'left'),
                     unit['leading'], style.get('color', unit['color']),
                     'bold' if unit['bold'] else 'normal', 'italic' if unit['italic'] else 'normal'))
-            spare, scale = page.insert_htmlbox(rooms[unit['id']], '<p>%s</p>' % markup, css=css,
-                                               archive=archive, scale_low=MIN_SCALE)
+            return target.insert_htmlbox(rooms[unit['id']], '<p>%s</p>' % markup, css=css,
+                                         archive=archive, scale_low=MIN_SCALE)
+
+        for unit in page_units:
+            rooms[unit['id']] = styled_room(unit, styles.get(unit['id']) or {}, page.rect)
+        # PEERS: a trial on a blank page tells how far each unit would be shrunk on its own.
+        trial_page = fitz.open().new_page(width=page.rect.width, height=page.rect.height)
+        peer_scale, alone = {}, set()
+        for unit in page_units:
+            if 'size' in (styles.get(unit['id']) or {}) or not unit.get('peer'):
+                continue
+            scale = lay_out(trial_page, unit)[1]
+            if scale >= PEER_MIN_SCALE:
+                peer_scale[unit['peer']] = min(peer_scale.get(unit['peer'], 1.0), scale)
+            else:
+                alone.add(unit['id'])
+        for unit in page_units:
+            style = styles.get(unit['id']) or {}
+            shared = 1.0
+            if 'size' not in style and unit.get('peer') and unit['id'] not in alone:
+                shared = peer_scale.get(unit['peer'], 1.0)
+            spare, scale = lay_out(page, unit, shared)
+            # Reported against the unit's own size, whoever caused the shrink.
+            scale *= shared
             if spare > 0 and style.get('size', 0) > unit['size']:
                 # A room stretched for larger text is reported as the height the text used.
                 rooms[unit['id']].y1 = max(rooms[unit['id']].y1 - spare, rooms[unit['id']].y0)
