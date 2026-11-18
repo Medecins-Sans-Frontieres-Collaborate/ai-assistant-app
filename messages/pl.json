@@ -3260,7 +3260,7 @@
           },
           "refit": {
             "title": "Napraw niepasujące",
-            "description": "Skraca tylko bloki z przekroczeniem miejsca, po czym odbudowuje i sprawdza ponownie."
+            "description": "Skraca, zmniejsza lub przesuwa tylko te bloki, które zostały oznaczone podczas sprawdzania, a następnie ponownie przebudowuje i sprawdza stronę. Strony, które wypadły gorzej, zostaną przywrócone do poprzedniej wersji."
           }
         },
         "alwaysSame": "Zawsze taki sam",
@@ -3317,7 +3317,7 @@
         "done": "Gotowe",
         "working": "Pracuję…",
         "unitFailed": "Tego bloku nie można było zmienić: {message}",
-        "editsPending": "{count, plural, one {# zmiana nie została jeszcze umieszczona na stronie} other {# zmian nie zostało jeszcze umieszczonych na stronie}}",
+        "editsPending": "{count, plural, one {# zmiana nie została jeszcze wprowadzona na stronie} other {# zmian nie zostało jeszcze wprowadzonych na stronie}}",
         "rerenderNote": "Ponowne renderowanie trwa około minuty. Żadne tłumaczenie nie jest wykonywane ponownie.",
         "discard": "Odrzuć zmiany",
         "rerender": "Przerenderuj strony",
@@ -3399,7 +3399,29 @@
         "pagesPending": "Zmiany na stronach nie zostały jeszcze uwzględnione w pobieraniu",
         "undoPageChanges": "Cofnij zmiany na stronach",
         "updateDownload": "Zaktualizuj pobieranie",
-        "pdfBehindPages": "PDF jest nieaktualny względem zmian stron"
+        "pdfBehindPages": "PDF jest nieaktualny względem zmian stron",
+        "zoom": "Powiększenie",
+        "zoomIn": "Powiększ",
+        "zoomOut": "Pomniejsz",
+        "zoomReset": "Powrót do normalnego rozmiaru",
+        "zoomLevel": "{percent}%",
+        "styleTitle": "Wygląd",
+        "styleSize": "Rozmiar",
+        "styleSizeValue": "{size} pkt",
+        "styleSmaller": "Mniejszy tekst",
+        "styleLarger": "Większy tekst",
+        "styleMove": "Położenie",
+        "moveLeft": "Przesuń w lewo",
+        "moveRight": "Przesuń w prawo",
+        "moveUp": "Przesuń w górę",
+        "moveDown": "Przesuń w dół",
+        "styleOffset": "{x} w poziomie, {y} w pionie",
+        "styleColor": "Kolor",
+        "styleColorOf": "Kolor tekstu bloku {n}",
+        "styleNote": "Na stronie po ponownym przetworzeniu",
+        "styleReset": "Przywróć domyślny wygląd",
+        "adjusted": "Dostosowane",
+        "adjustedHint": "Jego rozmiar lub pozycja zostały zmienione, aby dopasować do strony. Otwórz blok, aby zobaczyć lub zresetować ustawienia."
       },
       "kind": "Co tłumaczyć",
       "kindText": "Tekst",

@@ -3260,7 +3260,7 @@
           },
           "refit": {
             "title": "Corriger ce qui ne rentre pas",
-            "description": "Raccourcit uniquement les blocs qui débordent, puis reconstruit et vérifie à nouveau."
+            "description": "Raccourcit, rétrécit ou déplace uniquement les blocs signalés par le contrôle, puis reconstruit et vérifie à nouveau. Une page dont le résultat est moins bon est restaurée."
           }
         },
         "alwaysSame": "Toujours identique",
@@ -3281,7 +3281,7 @@
         "summaryQuick": "Traduction rapide en {language}",
         "summaryReviewed": "Traduction relue en {language}",
         "changeOptions": "Modifier les options",
-        "pdfBehind": "Le PDF est en retard sur vos modifications",
+        "pdfBehind": "Le PDF est en retard par rapport à vos modifications",
         "download": "Télécharger le PDF",
         "viewLabel": "Version de la page",
         "viewOriginal": "Original",
@@ -3399,7 +3399,29 @@
         "pagesPending": "Vos modifications de pages ne figurent pas encore dans le téléchargement",
         "undoPageChanges": "Annuler les modifications de pages",
         "updateDownload": "Mettre à jour le téléchargement",
-        "pdfBehindPages": "Le PDF n'intègre pas encore vos modifications de pages"
+        "pdfBehindPages": "Le PDF n'intègre pas encore vos modifications de pages",
+        "zoom": "Zoom",
+        "zoomIn": "Agrandir",
+        "zoomOut": "Réduire",
+        "zoomReset": "Retour à la taille normale",
+        "zoomLevel": "{percent}%",
+        "styleTitle": "Apparence",
+        "styleSize": "Taille",
+        "styleSizeValue": "{size} pt",
+        "styleSmaller": "Texte plus petit",
+        "styleLarger": "Texte plus grand",
+        "styleMove": "Position",
+        "moveLeft": "Déplacer à gauche",
+        "moveRight": "Déplacer à droite",
+        "moveUp": "Déplacer vers le haut",
+        "moveDown": "Déplacer vers le bas",
+        "styleOffset": "{x} à travers, {y} vers le bas",
+        "styleColor": "Couleur",
+        "styleColorOf": "Couleur du texte du bloc {n}",
+        "styleNote": "Sur la page après le nouveau rendu",
+        "styleReset": "Réinitialiser l’apparence",
+        "adjusted": "Ajusté",
+        "adjustedHint": "Sa taille ou sa position a été modifiée pour s'adapter à la page. Ouvrez le bloc pour le voir ou le réinitialiser."
       },
       "kind": "Que traduire",
       "kindText": "Texte",

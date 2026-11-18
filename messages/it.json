@@ -3260,7 +3260,7 @@
           },
           "refit": {
             "title": "Correggi ciò che non si adatta",
-            "description": "Accorcia solo i blocchi che traboccano, poi ricostruisce e controlla di nuovo."
+            "description": "Accorcia, riduce o sposta solo i blocchi segnalati dal controllo, poi ricostruisce e controlla di nuovo. Una pagina che risulta peggiore viene ripristinata."
           }
         },
         "alwaysSame": "Sempre uguale",
@@ -3399,7 +3399,29 @@
         "pagesPending": "Le modifiche alle pagine non sono ancora nel download",
         "undoPageChanges": "Annulla le modifiche alle pagine",
         "updateDownload": "Aggiorna il download",
-        "pdfBehindPages": "Il PDF non è aggiornato con le modifiche alle pagine"
+        "pdfBehindPages": "Il PDF non è aggiornato con le modifiche alle pagine",
+        "zoom": "Zoom",
+        "zoomIn": "Ingrandisci",
+        "zoomOut": "Riduci",
+        "zoomReset": "Torna alla dimensione normale",
+        "zoomLevel": "{percent}%",
+        "styleTitle": "Aspetto",
+        "styleSize": "Dimensione",
+        "styleSizeValue": "{size} pt",
+        "styleSmaller": "Testo più piccolo",
+        "styleLarger": "Testo più grande",
+        "styleMove": "Posizione",
+        "moveLeft": "Sposta a sinistra",
+        "moveRight": "Sposta a destra",
+        "moveUp": "Sposta in alto",
+        "moveDown": "Sposta in basso",
+        "styleOffset": "{x} a lato, {y} in basso",
+        "styleColor": "Colore",
+        "styleColorOf": "Colore del testo del blocco {n}",
+        "styleNote": "Sulla pagina dopo il nuovo rendering",
+        "styleReset": "Ripristina aspetto",
+        "adjusted": "Regolato",
+        "adjustedHint": "La dimensione o la posizione è stata modificata per adattarsi alla pagina. Apri il blocco per visualizzarlo o ripristinarlo."
       },
       "kind": "Cosa tradurre",
       "kindText": "Testo",

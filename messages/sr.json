@@ -3244,7 +3244,7 @@
           },
           "refit": {
             "title": "Ispravi ono što ne odgovara",
-            "description": "Skraćuje samo blokove koji prelaze, potom ponovo pravi i proverava."
+            "description": "Skrati, smanji ili pomeri samo blokove koje je provera označila, zatim ponovo izgradi i proveri. Stranica koja je izašla lošije se vraća nazad."
           }
         },
         "alwaysSame": "Uvek isto",
@@ -3301,7 +3301,7 @@
         "done": "Završeno",
         "working": "Radim...",
         "unitFailed": "Ovaj blok nije moguće promeniti: {message}",
-        "editsPending": "{count, plural, one {# izmena još nije na stranici} other {# izmena još nisu na stranici}}",
+        "editsPending": "{count, plural, one {# izmena još nije prikazana na stranici} other {# izmena još nisu prikazane na stranici}}",
         "rerenderNote": "Ponovno renderovanje traje oko minut. Ništa se ne prevodi ponovo.",
         "discard": "Odbaci izmene",
         "rerender": "Ponovo renderuj stranice",
@@ -3383,7 +3383,29 @@
         "pagesPending": "Vaše promene stranica još nisu uključene u preuzimanje",
         "undoPageChanges": "Poništite promene stranica",
         "updateDownload": "Ažurirajte preuzimanje",
-        "pdfBehindPages": "PDF zaostaje za vašim promenama stranica"
+        "pdfBehindPages": "PDF zaostaje za vašim promenama stranica",
+        "zoom": "Zumiranje",
+        "zoomIn": "Povećaj",
+        "zoomOut": "Smanji",
+        "zoomReset": "Vrati na normalnu veličinu",
+        "zoomLevel": "{percent}%",
+        "styleTitle": "Izgled",
+        "styleSize": "Veličina",
+        "styleSizeValue": "{size} pt",
+        "styleSmaller": "Manji tekst",
+        "styleLarger": "Veći tekst",
+        "styleMove": "Pozicija",
+        "moveLeft": "Pomeri levo",
+        "moveRight": "Pomeri desno",
+        "moveUp": "Pomeri gore",
+        "moveDown": "Pomeri dole",
+        "styleOffset": "{x} u širinu, {y} u visinu",
+        "styleColor": "Boja",
+        "styleColorOf": "Boja teksta bloka {n}",
+        "styleNote": "Na stranici nakon ponovnog učitavanja",
+        "styleReset": "Vrati izgled na početne vrednosti",
+        "adjusted": "Prilagođeno",
+        "adjustedHint": "Njegova veličina ili položaj su promenjeni kako bi odgovarali stranici. Otvorite blok da biste ga videli ili vratili na početno stanje."
       },
       "kind": "Šta prevoditi",
       "kindText": "Tekst",

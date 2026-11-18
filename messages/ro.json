@@ -3260,7 +3260,7 @@
           },
           "refit": {
             "title": "Corectează ce nu se potrivește",
-            "description": "Scurtează doar blocurile care depășesc spațiul, apoi reconstruiește și verifică din nou."
+            "description": "Redu, micșorează sau mută doar blocurile semnalate de verificare, apoi reconstruiește și verifică din nou. O pagină care a ieșit mai rău este restaurată."
           }
         },
         "alwaysSame": "Întotdeauna la fel",
@@ -3281,7 +3281,7 @@
         "summaryQuick": "Traducere rapidă în {language}",
         "summaryReviewed": "Traducere revizuită în {language}",
         "changeOptions": "Modifică opțiunile",
-        "pdfBehind": "PDF-ul este în urmă față de modificările tale",
+        "pdfBehind": "PDF-ul nu reflectă încă modificările tale",
         "download": "Descarcă PDF",
         "viewLabel": "Versiune pagină",
         "viewOriginal": "Original",
@@ -3399,7 +3399,29 @@
         "pagesPending": "Modificările paginilor dvs. nu sunt încă în descărcare",
         "undoPageChanges": "Anulați modificările de pagină",
         "updateDownload": "Actualizați descărcarea",
-        "pdfBehindPages": "PDF-ul nu include ultimele modificări ale paginilor"
+        "pdfBehindPages": "PDF-ul nu include ultimele modificări ale paginilor",
+        "zoom": "Zoom",
+        "zoomIn": "Mărește",
+        "zoomOut": "Micșorează",
+        "zoomReset": "Revenire la dimensiunea normală",
+        "zoomLevel": "{percent}%",
+        "styleTitle": "Aspect",
+        "styleSize": "Dimensiune",
+        "styleSizeValue": "{size} pt",
+        "styleSmaller": "Text mai mic",
+        "styleLarger": "Text mai mare",
+        "styleMove": "Poziție",
+        "moveLeft": "Mută la stânga",
+        "moveRight": "Mută la dreapta",
+        "moveUp": "Mută în sus",
+        "moveDown": "Mută în jos",
+        "styleOffset": "{x} pe orizontală, {y} pe verticală",
+        "styleColor": "Culoare",
+        "styleColorOf": "Culoarea textului blocului {n}",
+        "styleNote": "Pe pagină după reafișare",
+        "styleReset": "Resetează aspectul",
+        "adjusted": "Ajustat",
+        "adjustedHint": "Dimensiunea sau poziția sa a fost modificată pentru a se potrivi paginii. Deschideți blocul pentru a-l vedea sau reseta."
       },
       "kind": "Ce se traduce",
       "kindText": "Text",

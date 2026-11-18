@@ -3260,7 +3260,7 @@
           },
           "refit": {
             "title": "Nicht passende Stellen korrigieren",
-            "description": "Kürzt nur überlaufende Blöcke, baut dann neu auf und prüft erneut."
+            "description": "Verkürzt, verkleinert oder verschiebt nur die von der Prüfung markierten Blöcke, baut dann neu auf und prüft erneut. Eine Seite, die sich dadurch verschlechtert hat, wird zurückgesetzt."
           }
         },
         "alwaysSame": "Immer gleich",
@@ -3399,7 +3399,29 @@
         "pagesPending": "Ihre Seitenänderungen sind noch nicht im Download enthalten",
         "undoPageChanges": "Seitenänderungen rückgängig machen",
         "updateDownload": "Download aktualisieren",
-        "pdfBehindPages": "Das PDF ist nicht auf dem Stand Ihrer Seitenänderungen"
+        "pdfBehindPages": "Das PDF ist nicht auf dem Stand Ihrer Seitenänderungen",
+        "zoom": "Zoom",
+        "zoomIn": "Vergrößern",
+        "zoomOut": "Verkleinern",
+        "zoomReset": "Zurück zur Normalgröße",
+        "zoomLevel": "{percent}%",
+        "styleTitle": "Erscheinungsbild",
+        "styleSize": "Größe",
+        "styleSizeValue": "{size} pt",
+        "styleSmaller": "Kleinere Schrift",
+        "styleLarger": "Größere Schrift",
+        "styleMove": "Position",
+        "moveLeft": "Nach links verschieben",
+        "moveRight": "Nach rechts verschieben",
+        "moveUp": "Nach oben verschieben",
+        "moveDown": "Nach unten verschieben",
+        "styleOffset": "{x} nach rechts, {y} nach unten",
+        "styleColor": "Farbe",
+        "styleColorOf": "Textfarbe von Block {n}",
+        "styleNote": "Nach dem Neuladen der Seite",
+        "styleReset": "Erscheinungsbild zurücksetzen",
+        "adjusted": "Angepasst",
+        "adjustedHint": "Größe oder Position wurde angepasst, um auf die Seite zu passen. Öffnen Sie den Block, um ihn anzusehen oder zurückzusetzen."
       },
       "kind": "Was soll übersetzt werden",
       "kindText": "Text",
