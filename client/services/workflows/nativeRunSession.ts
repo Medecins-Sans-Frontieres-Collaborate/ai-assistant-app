@@ -89,6 +89,8 @@ class RunSession {
   private timer: ReturnType<typeof setTimeout> | null = null;
   private failedSaves = 0;
   private loading: AbortController | null = null;
+  /** The save in flight; another waits for it instead of overlapping it. */
+  private saving: Promise<void> | null = null;
 
   constructor(readonly access: RunAccess) {}
 
@@ -171,6 +173,15 @@ class RunSession {
    * is due, forced, or its files changed.
    */
   async persist(force = false): Promise<void> {
+    // One at a time: two writes of one record must not race in storage.
+    while (this.saving) await this.saving;
+    this.saving = this.persistNow(force).finally(() => {
+      this.saving = null;
+    });
+    return this.saving;
+  }
+
+  private async persistNow(force: boolean): Promise<void> {
     const run = this.state.run;
     if (!run) return;
     try {
