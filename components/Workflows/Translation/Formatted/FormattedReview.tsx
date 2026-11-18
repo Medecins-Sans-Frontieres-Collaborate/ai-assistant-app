@@ -1,5 +1,6 @@
 'use client';
 
+import { IconZoomIn, IconZoomOut } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -10,23 +11,29 @@ import { PdfPages } from '@/client/hooks/workflows/usePdfPages';
 import { fetchNativePdfImage } from '@/client/services/workflows/nativePdfTranslation';
 
 import {
+  DEFAULT_PAGE_ZOOM,
   FormattedDocumentRun,
+  PAGE_ZOOM_LEVELS,
   batchPageState,
+  changedUnits,
   currentTranslation,
-  editedUnits,
   fitEstimate,
   issueKey,
+  nextPageZoom,
   openIssues,
   plainText,
   planBatch,
   planTickedBatch,
   removalPending,
   removedPages,
+  restyledUnits,
   retagEditedText,
   stalePages,
   translatedPages,
+  unitStyle,
   withPageRemoved,
   withUnitEdit,
+  withUnitStyle,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import {
   NativePdfIssue,
@@ -38,8 +45,9 @@ import {
 } from '@/lib/utils/shared/translation/nativePdf';
 
 import { FormattedBlockActions } from './FormattedBlockActions';
+import { FormattedBlockStyle } from './FormattedBlockStyle';
 import { FormattedPageRail } from './FormattedPageRail';
-import { FormattedPageView } from './FormattedPageView';
+import { FormattedPageView, PAGE_WIDTH } from './FormattedPageView';
 
 type Filter = 'all' | 'shrunk' | 'kept' | 'edited';
 type PageSide = 'translated' | 'original';
@@ -120,6 +128,7 @@ export function FormattedReview({
     page: number;
     image: string | null;
   } | null>(null);
+  const [zoom, setZoom] = useState<number>(DEFAULT_PAGE_ZOOM);
   // Untranslated pages ticked in the page list for the next batch.
   const [ticked, setTicked] = useState<number[]>([]);
 
@@ -144,6 +153,9 @@ export function FormattedReview({
     ? planBatch({ ...batchInput, spec: '' }).pages
     : [];
   const pagesPending = removalPending(run);
+  const pageWidth = `calc(${PAGE_WIDTH} * ${zoom})`;
+  // Zoomed in, the original is rendered with more pixels to stay sharp.
+  const originalWidth = Math.round(ORIGINAL_WIDTH * Math.max(zoom, 1));
 
   // Page images are stored files answered as data URLs; each is read once.
   useEffect(() => {
@@ -163,13 +175,13 @@ export function FormattedReview({
   useEffect(() => {
     if (!showOriginal || pdf.status !== 'ready') return;
     let cancelled = false;
-    void pdf.renderPage(run.page, ORIGINAL_WIDTH).then((image) => {
+    void pdf.renderPage(run.page, originalWidth).then((image) => {
       if (!cancelled) setOriginal({ page: run.page, image });
     });
     return () => {
       cancelled = true;
     };
-  }, [showOriginal, pdf, run.page]);
+  }, [showOriginal, pdf, run.page, originalWidth]);
 
   const pageUnits = useMemo(
     () => run.units.filter((unit) => unit.page === run.page),
@@ -187,23 +199,29 @@ export function FormattedReview({
 
   const stale = stalePages(run);
   const pdfBehind = stale.length > 0 || pagesPending;
-  const editCount = editedUnits(run).length;
+  // Blocks that differ from the page, in their text or their look.
+  const editCount = changedUnits(run).length;
+  const restyled = useMemo(
+    () => new Set(restyledUnits(run).map((unit) => unit.id)),
+    [run],
+  );
+  const isChanged = (unit: NativePdfUnitResult): boolean =>
+    unit.id in run.edits || restyled.has(unit.id);
   const issues = openIssues(run, run.page);
   const selected = pageUnits.find((unit) => unit.id === selectedId) ?? null;
   const counts = {
     all: pageUnits.length,
-    shrunk: pageUnits.filter(
-      (unit) => !(unit.id in run.edits) && isShrunk(unit),
-    ).length,
+    shrunk: pageUnits.filter((unit) => !isChanged(unit) && isShrunk(unit))
+      .length,
     kept: pageUnits.filter((unit) => currentTranslation(run, unit) === null)
       .length,
-    edited: pageUnits.filter((unit) => unit.id in run.edits).length,
+    edited: pageUnits.filter(isChanged).length,
   };
   const matches: Record<Filter, (unit: NativePdfUnitResult) => boolean> = {
     all: () => true,
-    shrunk: (unit) => !(unit.id in run.edits) && isShrunk(unit),
+    shrunk: (unit) => !isChanged(unit) && isShrunk(unit),
     kept: (unit) => currentTranslation(run, unit) === null,
-    edited: (unit) => unit.id in run.edits,
+    edited: isChanged,
   };
 
   /** Text of a block as shown in a field: its translation, or its source. */
@@ -251,7 +269,11 @@ export function FormattedReview({
     }));
   const discard = () => {
     setDraft(null);
-    onUpdateRun((latest) => ({ ...latest, edits: {} }));
+    onUpdateRun((latest) => ({
+      ...latest,
+      edits: {},
+      styles: latest.pdfStyles,
+    }));
   };
   /** Ticks a page for the next batch, or unticks it. */
   const tickPage = (page: number) =>
@@ -426,6 +448,45 @@ export function FormattedReview({
                 {t('translation.formatted.viewTranslated')}
               </button>
             </div>
+            <div
+              role="group"
+              aria-label={t('translation.formatted.zoom')}
+              className="flex items-center rounded-lg bg-gray-100 p-0.5 dark:bg-surface-dark-elevated"
+            >
+              <button
+                type="button"
+                aria-label={t('translation.formatted.zoomOut')}
+                title={t('translation.formatted.zoomOut')}
+                disabled={zoom <= PAGE_ZOOM_LEVELS[0]}
+                onClick={() => setZoom((level) => nextPageZoom(level, -1))}
+                className="rounded-md p-1 text-gray-600 hover:bg-white disabled:opacity-40 dark:text-gray-300 dark:hover:bg-surface-dark"
+              >
+                <IconZoomOut size={15} aria-hidden />
+              </button>
+              <button
+                type="button"
+                title={t('translation.formatted.zoomReset')}
+                aria-label={t('translation.formatted.zoomReset')}
+                onClick={() => setZoom(DEFAULT_PAGE_ZOOM)}
+                className="min-w-[3rem] rounded-md px-1 py-1 text-xs tabular-nums text-gray-700 hover:bg-white dark:text-gray-200 dark:hover:bg-surface-dark"
+              >
+                <span data-testid="zoom-level">
+                  {t('translation.formatted.zoomLevel', {
+                    percent: Math.round(zoom * 100),
+                  })}
+                </span>
+              </button>
+              <button
+                type="button"
+                aria-label={t('translation.formatted.zoomIn')}
+                title={t('translation.formatted.zoomIn')}
+                disabled={zoom >= PAGE_ZOOM_LEVELS[PAGE_ZOOM_LEVELS.length - 1]}
+                onClick={() => setZoom((level) => nextPageZoom(level, 1))}
+                className="rounded-md p-1 text-gray-600 hover:bg-white disabled:opacity-40 dark:text-gray-300 dark:hover:bg-surface-dark"
+              >
+                <IconZoomIn size={15} aria-hidden />
+              </button>
+            </div>
             <label className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
               <input
                 type="checkbox"
@@ -451,7 +512,8 @@ export function FormattedReview({
             </span>
           </div>
           <div
-            className={`flex justify-center bg-gray-100 px-4 pb-5 pt-2 dark:bg-black/20 ${
+            data-testid="page-scroller"
+            className={`flex bg-gray-100 px-4 pb-5 pt-2 dark:bg-black/20 ${
               stacked ? '' : 'min-h-0 flex-1 overflow-auto'
             }`}
           >
@@ -465,12 +527,16 @@ export function FormattedReview({
                     page: run.page,
                   })}
                   data-testid="untranslated-page"
-                  className={`h-fit w-full max-w-[576px] shadow ${
+                  style={{ width: pageWidth }}
+                  className={`mx-auto h-fit shrink-0 shadow ${
                     pageRemoved ? 'opacity-40 grayscale' : ''
                   }`}
                 />
               ) : (
-                <span className="block aspect-[210/297] w-full max-w-[576px] animate-pulse bg-gray-200 dark:bg-surface-dark-elevated" />
+                <span
+                  style={{ width: pageWidth }}
+                  className="mx-auto block aspect-[210/297] shrink-0 animate-pulse bg-gray-200 dark:bg-surface-dark-elevated"
+                />
               ))}
             {pageStats && (
               <FormattedPageView
@@ -478,6 +544,9 @@ export function FormattedReview({
                 page={pageStats}
                 units={pageUnits}
                 edits={run.edits}
+                styles={run.styles}
+                restyled={restyled}
+                width={pageWidth}
                 selectedId={selectedId}
                 outlines={outlines}
                 draft={
@@ -696,7 +765,7 @@ export function FormattedReview({
           <ul className={stacked ? '' : 'min-h-0 flex-1 overflow-y-auto'}>
             {pageUnits.filter(matches[filter]).map((unit) => {
               const current = currentTranslation(run, unit);
-              const edited = unit.id in run.edits;
+              const edited = isChanged(unit);
               const isSelected = unit.id === selectedId;
               const chips = (
                 <span className="flex shrink-0 flex-col items-end gap-1">
@@ -713,6 +782,15 @@ export function FormattedReview({
                       {t('translation.formatted.sizeChip', {
                         percent: Math.round((unit.scale ?? 1) * 100),
                       })}
+                    </span>
+                  )}
+                  {!edited && run.pdfStyles?.[unit.id] && (
+                    <span
+                      data-testid="adjusted-chip"
+                      title={t('translation.formatted.adjustedHint')}
+                      className="rounded bg-blue-50 px-1.5 py-px text-[11px] text-blue-800 dark:bg-blue-900/30 dark:text-blue-200"
+                    >
+                      {t('translation.formatted.adjusted')}
                     </span>
                   )}
                   {current === null && (
@@ -759,7 +837,7 @@ export function FormattedReview({
               const text = fieldText(unit);
               const fit = fitEstimate(text, unit.budgetChars);
               const dropped =
-                edited &&
+                unit.id in run.edits &&
                 retagEditedText(unit.translation ?? unit.source, text).dropped >
                   0;
               return (
@@ -817,6 +895,22 @@ export function FormattedReview({
                       {t('translation.formatted.formattingDropped')}
                     </p>
                   )}
+                  <FormattedBlockStyle
+                    unit={unit}
+                    style={unitStyle(run, unit.id)}
+                    pending={restyled.has(unit.id)}
+                    disabled={controller.rendering}
+                    onChange={(change) =>
+                      onUpdateRun((latest) =>
+                        withUnitStyle(latest, unit.id, change),
+                      )
+                    }
+                    onReset={() =>
+                      onUpdateRun((latest) =>
+                        withUnitStyle(latest, unit.id, null),
+                      )
+                    }
+                  />
                   {actionsFor(unit, false)}
                 </li>
               );
