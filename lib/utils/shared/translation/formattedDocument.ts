@@ -11,6 +11,11 @@
  *    rendered translation, so `edits` being empty means the PDF is current.
  *  - Text is edited as PLAIN text. The inline tags that carry bold, italics
  *    and links (see nativePdf.ts) are put back by {@link retagEditedText}.
+ *  - A document is translated in BATCHES. A run holds every batch so far:
+ *    `run.units` covers all translated pages, and a page is "translated"
+ *    when the run has a unit on it ({@link translatedPages}). One batch may
+ *    take several requests (splitIntoRequests in nativePdf.ts); the pieces
+ *    are joined by {@link combineRuns} and one render.
  *  - Positions are page points from the top-left corner; the screen places
  *    them as percentages of the page (see {@link unitBox}).
  */
@@ -20,6 +25,8 @@ import {
   NATIVE_PDF_MAX_PAGES,
   NativePdfDepth,
   NativePdfIssue,
+  NativePdfLimits,
+  NativePdfPageImages,
   NativePdfPageStats,
   NativePdfRenderReport,
   NativePdfRunReport,
@@ -40,8 +47,17 @@ export const DEFAULT_DOCUMENT_LAYOUT: TranslationDocumentLayout = 'text';
 
 /** What the person chose for the next formatted run. */
 export interface FormattedDocumentOptions {
-  /** Page selection as typed, e.g. `"1-3, 8"`; empty means the first pages. */
+  /**
+   * Page selection as typed, e.g. `"1-3, 8"`; empty means the first pages
+   * that are not translated yet.
+   */
   pages: string;
+  /**
+   * Pages per batch as the person raised or lowered it; absent means the
+   * admin's default. Always read through {@link planBatch}, which holds it
+   * inside the person's limits.
+   */
+  batchPages?: number;
   instructions: NativePdfStepInstructions;
   refitRounds: number;
 }
@@ -68,6 +84,8 @@ export interface FormattedDocumentRun extends NativePdfRunReport {
   page: number;
   /** Keys ({@link issueKey}) of findings the person dismissed. */
   dismissed: string[];
+  /** Batches put into this run so far; absent on runs of a single batch. */
+  batches?: number;
 }
 
 export { NATIVE_PDF_DEFAULT_DEPTH, NATIVE_PDF_MAX_PAGES };
@@ -248,8 +266,198 @@ export function applyRenderReport(
     ],
     fonts: report.fonts,
     pdfUrl: report.pdfUrl,
-    pageImages: report.pageImages,
+    // The render returns images of the pages that changed only.
+    pageImages: mergeByPage(run.pageImages, report.pageImages),
+    unitsId: report.unitsId ?? run.unitsId,
   };
+}
+
+/** Two per-page lists as one, in page order; `added` wins on a shared page. */
+function mergeByPage<Item extends { page: number }>(
+  kept: Item[],
+  added: Item[],
+): Item[] {
+  const replaced = new Set(added.map((item) => item.page));
+  return [...kept.filter((item) => !replaced.has(item.page)), ...added].sort(
+    (a, b) => a.page - b.page,
+  );
+}
+
+/** Pages the run holds a translation for, ascending. */
+export function translatedPages(
+  run: Pick<FormattedDocumentRun, 'units'> | undefined,
+): number[] {
+  return [...new Set((run?.units ?? []).map((unit) => unit.page))].sort(
+    (a, b) => a - b,
+  );
+}
+
+/**
+ * Joins the pieces of a document's translation into one run, BEFORE the
+ * render that makes one PDF of them: `pdfUrl` is still the last piece's and
+ * `unitsId` is not valid for the whole until {@link applyRenderReport} has
+ * folded that render in.
+ *
+ * A page present in two pieces is taken from the later one, with its
+ * findings; pending edits to it are dropped with the text they applied to.
+ *
+ * @param base - The run so far (earlier batches), if any.
+ * @param pieces - The new batch, one run per request, in order; at least
+ *   one when `base` is absent.
+ * @returns The joined run, showing the first page of the new batch.
+ * @throws Error when there is nothing to join.
+ */
+export function combineRuns(
+  base: FormattedDocumentRun | undefined,
+  pieces: FormattedDocumentRun[],
+): FormattedDocumentRun {
+  const all = base ? [base, ...pieces] : pieces;
+  const last = all[all.length - 1];
+  if (!last) throw new Error('No translated pages to put together');
+  if (all.length === 1) return last;
+  let joined = all[0];
+  for (const piece of all.slice(1)) {
+    const replaced = new Set(piece.pages.map((page) => page.page));
+    const keptUnits = joined.units.filter((unit) => !replaced.has(unit.page));
+    const keptIds = new Set(keptUnits.map((unit) => unit.id));
+    joined = {
+      ...joined,
+      pages: mergeByPage(joined.pages, piece.pages),
+      units: [...keptUnits, ...piece.units].sort(
+        (a, b) => a.page - b.page || a.n - b.n,
+      ),
+      issues: [
+        ...joined.issues.filter((issue) => !replaced.has(issue.page)),
+        ...piece.issues,
+      ],
+      uncheckedPages: [
+        ...(joined.uncheckedPages ?? []).filter((page) => !replaced.has(page)),
+        ...(piece.uncheckedPages ?? []),
+      ].sort((a, b) => a - b),
+      pageImages: mergeByPage(joined.pageImages, piece.pageImages),
+      edits: Object.fromEntries(
+        Object.entries(joined.edits).filter(([id]) => keptIds.has(id)),
+      ),
+      totalTokens: joined.totalTokens + piece.totalTokens,
+    };
+  }
+  return {
+    ...joined,
+    // What the person sees of "the run" is its latest batch.
+    steps: last.steps,
+    fonts: last.fonts,
+    refitRounds: last.refitRounds,
+    pdfUrl: last.pdfUrl,
+    targetLanguage: last.targetLanguage,
+    depth: last.depth,
+    finishedAt: last.finishedAt,
+    page: pieces[0]?.page ?? last.page,
+    batches: (base?.batches ?? (base ? 1 : 0)) + (pieces.length > 0 ? 1 : 0),
+  };
+}
+
+/**
+ * How a page shows in the setup. Exactly one applies to each page:
+ *  - `translated`: an earlier batch did it.
+ *  - `selected`: it is in the batch about to run.
+ *  - `available`: it can still be added to this batch.
+ *  - `later`: this batch is full, but the document limit leaves room for it
+ *    in another batch.
+ *  - `locked`: the document limit is used up; it cannot be translated.
+ */
+export type BatchPageState =
+  | 'translated'
+  | 'selected'
+  | 'available'
+  | 'later'
+  | 'locked';
+
+/** Why a selection cannot be run as it is. */
+export type BatchProblem = 'unreadable' | 'over-batch' | 'none-left';
+
+/** The batch about to run, and where every page of the document stands. */
+export interface BatchPlan {
+  /** Pages the batch will translate, ascending; empty when `problem`. */
+  pages: number[];
+  problem?: BatchProblem;
+  /** Pages the selection named, when that was more than `capacity`. */
+  asked?: number;
+  /** Pages per batch in force: the person's choice held inside the limits. */
+  batchPages: number;
+  /** Pages this batch can take: `batchPages`, or less near the limit. */
+  capacity: number;
+  /** Pages the document limit still allows, this batch included. */
+  allowance: number;
+  /** Pages earlier batches translated, ascending. */
+  translated: number[];
+  limits: NativePdfLimits;
+}
+
+/**
+ * Works out the next batch from what the person typed or ticked.
+ *
+ * An empty selection means the first pages not translated yet, as many as
+ * the batch takes. Pages already translated are never part of a batch;
+ * naming one is not an error, it is left out.
+ *
+ * @param input.spec - The selection as typed.
+ * @param input.pageCount - Pages in the document (0 while unknown).
+ * @param input.translated - Pages earlier batches translated.
+ * @param input.batchPages - Pages per batch the person asked for, if any.
+ * @param input.limits - The person's limits.
+ */
+export function planBatch(input: {
+  spec: string;
+  pageCount: number;
+  translated: number[];
+  batchPages?: number;
+  limits: NativePdfLimits;
+}): BatchPlan {
+  const { limits } = input;
+  const translated = [...new Set(input.translated)].sort((a, b) => a - b);
+  const done = new Set(translated);
+  const batchPages = Math.min(
+    Math.max(Math.floor(input.batchPages ?? limits.defaultBatchPages), 1),
+    limits.maxBatchPages,
+  );
+  const allowance = Math.max(limits.maxDocumentPages - translated.length, 0);
+  const capacity = Math.min(batchPages, allowance);
+  const plan = { batchPages, capacity, allowance, translated, limits };
+  const open = Array.from(
+    { length: input.pageCount },
+    (_, index) => index + 1,
+  ).filter((page) => !done.has(page));
+  if (!input.spec.trim()) {
+    const pages = open.slice(0, capacity);
+    return pages.length > 0
+      ? { ...plan, pages }
+      : { ...plan, pages, problem: 'none-left' };
+  }
+  // Parsed against a generous cap, not the batch's: the batch's capacity is
+  // applied after translated pages are left out.
+  const parsed = parsePageSelection(input.spec, MAX_NAMED_PAGES);
+  if (!parsed.ok) return { ...plan, pages: [], problem: 'unreadable' };
+  const pages = parsed.pages.filter(
+    (page) => page <= input.pageCount && !done.has(page),
+  );
+  if (pages.length === 0) return { ...plan, pages, problem: 'none-left' };
+  if (pages.length > capacity) {
+    return { ...plan, pages: [], problem: 'over-batch', asked: pages.length };
+  }
+  return { ...plan, pages };
+}
+
+/** Most pages a typed selection may name before it is refused as unreadable. */
+const MAX_NAMED_PAGES = 5_000;
+
+/** Where one page stands under a plan (see {@link BatchPageState}). */
+export function batchPageState(plan: BatchPlan, page: number): BatchPageState {
+  if (plan.translated.includes(page)) return 'translated';
+  if (plan.pages.includes(page)) return 'selected';
+  if (plan.pages.length < plan.capacity) return 'available';
+  // The batch is full. Whether another batch could take the page depends
+  // on what the document limit leaves after this one.
+  return plan.allowance > plan.pages.length ? 'later' : 'locked';
 }
 
 /** Stable name of a finding, used to remember that it was dismissed. */
