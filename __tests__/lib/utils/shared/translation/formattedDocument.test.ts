@@ -15,6 +15,9 @@ import {
   openIssues,
   plainText,
   planBatch,
+  planTickedBatch,
+  removalPending,
+  removedPages,
   retagEditedText,
   selectedPages,
   stalePages,
@@ -22,6 +25,7 @@ import {
   translatedPages,
   translationsForRender,
   unitBox,
+  withPageRemoved,
   withUnitEdit,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import {
@@ -652,5 +656,164 @@ describe('applyRenderReport with batches', () => {
       { page: 2, previewUrl: '/new2.png', checkUrl: '' },
     ]);
     expect(after.unitsId).toBe('units-joined');
+  });
+});
+
+describe('pages removed from the download', () => {
+  it('lists removed pages once each, ascending', () => {
+    expect(removedPages(run({ removedPages: [4, 2, 4] }))).toEqual([2, 4]);
+    expect(removedPages(run())).toEqual([]);
+    expect(removedPages(undefined)).toEqual([]);
+  });
+
+  it('removes a page and puts it back', () => {
+    const without = withPageRemoved(run(), 3, true, 5);
+    expect(without.removedPages).toEqual([3]);
+    expect(withPageRemoved(without, 3, false, 5).removedPages).toEqual([]);
+    // Removing what is removed, or restoring what is there, changes nothing.
+    expect(withPageRemoved(without, 3, true, 5)).toBe(without);
+    expect(withPageRemoved(run(), 3, false, 5)).toEqual(run());
+  });
+
+  it('keeps the last page: one may go from two, none from one', () => {
+    const two = withPageRemoved(run(), 1, true, 3);
+    const one = withPageRemoved(two, 2, true, 3);
+    expect(one.removedPages).toEqual([1, 2]);
+    // Page 3 is all that is left of a 3-page document.
+    expect(withPageRemoved(one, 3, true, 3)).toBe(one);
+  });
+
+  it('is pending exactly while the PDF leaves out other pages than asked', () => {
+    expect(removalPending(run())).toBe(false);
+    expect(removalPending(run({ removedPages: [2] }))).toBe(true);
+    expect(
+      removalPending(run({ removedPages: [2, 4], pdfRemovedPages: [4, 2] })),
+    ).toBe(false);
+    // Put back since the last render.
+    expect(
+      removalPending(run({ removedPages: [], pdfRemovedPages: [2] })),
+    ).toBe(true);
+    // Same count, other pages.
+    expect(
+      removalPending(run({ removedPages: [2], pdfRemovedPages: [3] })),
+    ).toBe(true);
+  });
+
+  it('a render makes the PDF leave out what the run asked for', () => {
+    const rendered = applyRenderReport(
+      run({ removedPages: [2], pdfRemovedPages: [] }),
+      renderReport(),
+    );
+    expect(rendered.pdfRemovedPages).toEqual([2]);
+    expect(removalPending(rendered)).toBe(false);
+  });
+
+  it('adding a batch keeps the removed pages of the run it adds to', () => {
+    const base = run({ removedPages: [2], pdfRemovedPages: [2] });
+    const piece = run({
+      pages: [{ page: 3, width: 1, height: 1, units: 1, scanned: false }],
+      units: [unit('p3u1', 3, 'Trois')],
+      issues: [],
+    });
+    expect(combineRuns(base, [piece])).toMatchObject({
+      removedPages: [2],
+      pdfRemovedPages: [2],
+    });
+  });
+});
+
+describe('batches and removed pages', () => {
+  // 2 a batch by default, 3 at most, 4 of a document in total.
+  const limits: NativePdfLimits = {
+    defaultBatchPages: 2,
+    maxBatchPages: 3,
+    maxDocumentPages: 4,
+  };
+
+  it('never puts a removed page in a batch, by default or by name', () => {
+    const base = { pageCount: 6, translated: [1], removed: [2, 3], limits };
+    expect(planBatch({ ...base, spec: '' }).pages).toEqual([4, 5]);
+    expect(planBatch({ ...base, spec: '2-4' }).pages).toEqual([4]);
+    expect(planBatch({ ...base, spec: '2-3' })).toMatchObject({
+      pages: [],
+      problem: 'none-left',
+    });
+  });
+
+  it('shows a removed page as removed, translated or not', () => {
+    const plan = planBatch({
+      spec: '',
+      pageCount: 6,
+      translated: [1, 2],
+      removed: [2, 5],
+      limits,
+    });
+    expect(
+      [1, 2, 3, 4, 5, 6].map((page) => batchPageState(plan, page)),
+    ).toEqual([
+      'translated',
+      'removed',
+      'selected',
+      'selected',
+      'removed',
+      'locked',
+    ]);
+  });
+
+  it('a removed translated page still counts toward the document limit', () => {
+    const plan = planBatch({
+      spec: '',
+      pageCount: 9,
+      translated: [1, 2, 3],
+      removed: [3],
+      limits,
+    });
+    expect(plan.allowance).toBe(1);
+    expect(plan.pages).toEqual([4]);
+  });
+});
+
+describe('planTickedBatch', () => {
+  const limits: NativePdfLimits = {
+    defaultBatchPages: 2,
+    maxBatchPages: 3,
+    maxDocumentPages: 4,
+  };
+  const ticked = (pages: number[], extra: { batchPages?: number } = {}) =>
+    planTickedBatch({
+      ticked: pages,
+      pageCount: 8,
+      translated: [1],
+      removed: [2],
+      limits,
+      ...extra,
+    });
+
+  it('ticking nothing is an empty batch with room in it', () => {
+    const plan = ticked([]);
+    expect(plan.pages).toEqual([]);
+    expect(plan.problem).toBeUndefined();
+    expect(plan.capacity).toBe(2);
+    expect(batchPageState(plan, 3)).toBe('available');
+  });
+
+  it('takes the ticked pages a batch can take, in page order', () => {
+    // 1 is translated, 2 removed, 9 outside the document.
+    expect(ticked([5, 1, 2, 9, 3]).pages).toEqual([3, 5]);
+  });
+
+  it('holds exactly the batch: a page more is left out, and the rest wait', () => {
+    const full = ticked([3, 4]);
+    expect(full.pages).toEqual([3, 4]);
+    expect(batchPageState(full, 5)).toBe('later');
+    expect(ticked([3, 4, 5]).pages).toEqual([3, 4]);
+    // The person's larger batch takes the third page.
+    expect(ticked([3, 4, 5], { batchPages: 3 }).pages).toEqual([3, 4, 5]);
+  });
+
+  it('locks the pages the document limit leaves no room for', () => {
+    // 1 done of 4: this batch of 3 uses the limit up.
+    const plan = ticked([3, 4, 5], { batchPages: 3 });
+    expect(batchPageState(plan, 6)).toBe('locked');
   });
 });
