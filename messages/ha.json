@@ -760,6 +760,8 @@
     "disableWebSearch": "Kashe binciken yanar gizo",
     "scrollToBottom": "Gungura zuwa ƙasa",
     "regenerateResponse": "Sake ƙirƙirar amsa",
+    "goodResponse": "Amsa mai kyau",
+    "badResponse": "Amsa mara kyau",
     "retryMessage": "Sake ƙoƙarin aika saƙo",
     "editMessage": "Gyara saƙo",
     "deleteMessage": "Goge saƙo",

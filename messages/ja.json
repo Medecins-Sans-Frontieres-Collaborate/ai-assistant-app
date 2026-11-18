@@ -692,6 +692,8 @@
     "disableWebSearch": "ウェブ検索を無効化",
     "scrollToBottom": "一番下にスクロール",
     "regenerateResponse": "応答を再生成",
+    "goodResponse": "良い返答",
+    "badResponse": "悪い返答",
     "retryMessage": "メッセージを再試行",
     "editMessage": "メッセージを編集",
     "deleteMessage": "メッセージを削除",

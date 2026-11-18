@@ -660,6 +660,8 @@
     "disableWebSearch": "Webzoeken uitschakelen",
     "scrollToBottom": "Naar beneden scrollen",
     "regenerateResponse": "Reactie opnieuw genereren",
+    "goodResponse": "Goede reactie",
+    "badResponse": "Slechte reactie",
     "retryMessage": "Bericht opnieuw proberen",
     "editMessage": "Bericht bewerken",
     "deleteMessage": "Bericht verwijderen",

@@ -760,6 +760,8 @@
     "disableWebSearch": "वेब खोज असक्षम गर्नुहोस्",
     "scrollToBottom": "तल स्क्रोल गर्नुहोस्",
     "regenerateResponse": "प्रतिक्रिया पुन: उत्पन्न गर्नुहोस्",
+    "goodResponse": "राम्रो उत्तर",
+    "badResponse": "खराब उत्तर",
     "retryMessage": "सन्देश पुन: प्रयास गर्नुहोस्",
     "editMessage": "सन्देश सम्पादन गर्नुहोस्",
     "deleteMessage": "सन्देश मेट्नुहोस्",

@@ -760,6 +760,8 @@
     "disableWebSearch": "இணையத் தேடலை முடக்கு",
     "scrollToBottom": "கீழே உருட்டு",
     "regenerateResponse": "பதிலை மீண்டும் உருவாக்கு",
+    "goodResponse": "சிறந்த பதில்",
+    "badResponse": "மோசமான பதில்",
     "retryMessage": "செய்தியை மீண்டும் முயற்சி",
     "editMessage": "செய்தியைத் திருத்து",
     "deleteMessage": "செய்தியை நீக்கு",

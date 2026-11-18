@@ -760,6 +760,8 @@
     "disableWebSearch": "Хомӯш кардани ҷустуҷӯи веб",
     "scrollToBottom": "Ба поён ҳаракат кардан",
     "regenerateResponse": "Боз тавлид кардани ҷавоб",
+    "goodResponse": "Ҷавоби хуб",
+    "badResponse": "Ҷавоби бад",
     "retryMessage": "Паёмро дубора фиристед",
     "editMessage": "Таҳрири паём",
     "deleteMessage": "Ҳазфи паём",

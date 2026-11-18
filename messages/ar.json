@@ -638,6 +638,8 @@
     "disableWebSearch": "تعطيل بحث الويب",
     "scrollToBottom": "الانتقال إلى الأسفل",
     "regenerateResponse": "إعادة إنشاء الرد",
+    "goodResponse": "استجابة جيدة",
+    "badResponse": "استجابة سيئة",
     "retryMessage": "إعادة محاولة الرسالة",
     "editMessage": "تحرير الرسالة",
     "deleteMessage": "حذف الرسالة",

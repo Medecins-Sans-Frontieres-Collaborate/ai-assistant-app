@@ -668,6 +668,8 @@
     "disableWebSearch": "Desactivar cerca web",
     "scrollToBottom": "Desplaçar-se cap avall",
     "regenerateResponse": "Regenerar resposta",
+    "goodResponse": "Bona resposta",
+    "badResponse": "Resposta dolenta",
     "retryMessage": "Tornar a intentar el missatge",
     "editMessage": "Editar missatge",
     "deleteMessage": "Eliminar missatge",

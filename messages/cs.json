@@ -692,6 +692,8 @@
     "disableWebSearch": "Zakázat webové vyhledávání",
     "scrollToBottom": "Posunout dolů",
     "regenerateResponse": "Regenerovat odpověď",
+    "goodResponse": "Dobrá odpověď",
+    "badResponse": "Špatná odpověď",
     "retryMessage": "Opakovat zprávu",
     "editMessage": "Upravit zprávu",
     "deleteMessage": "Smazat zprávu",

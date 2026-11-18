@@ -7,6 +7,10 @@ import {
   IconLoader2,
   IconRefresh,
   IconShare2,
+  IconThumbDown,
+  IconThumbDownFilled,
+  IconThumbUp,
+  IconThumbUpFilled,
   IconVolume,
   IconVolumeOff,
 } from '@tabler/icons-react';
@@ -44,6 +48,7 @@ import { generateAudioFilename } from '@/lib/utils/shared/string/slugify';
 import {
   Conversation,
   Message,
+  MessageFeedback,
   VersionInfo,
   isAssistantMessageGroup,
 } from '@/types/chat';
@@ -78,6 +83,7 @@ import { StreamdownWithCodeButtons } from '@/components/Markdown/StreamdownWithC
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatStore } from '@/client/stores/chatStore';
+import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import {
   extractConsentRequests,
@@ -192,6 +198,10 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     const [loadingMessage, setLoadingMessage] = useState<string | null>(null);
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
     const [messageCopied, setMessageCopied] = useState(false);
+    const feedback = message?.feedback ?? null;
+    const setMessageFeedback = useConversationStore(
+      (state) => state.setMessageFeedback,
+    );
 
     // §4 output tie-in: action items → Microsoft To Do (user-confirmed
     // batch). Flag + connect opt-in, and only when the text has list items.
@@ -492,6 +502,35 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
         }, 2000);
       });
     }, [displayedContent]);
+
+    const handleFeedback = useCallback(
+      (rating: MessageFeedback) => {
+        // Feedback is final since a second click skews stats.
+        if (feedback) return;
+        if (selectedConversation) {
+          setMessageFeedback(selectedConversation.id, messageIndex, rating);
+        }
+        void fetch('/api/chat/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            rating,
+            messageId: message?.id,
+            conversationId: selectedConversation?.id,
+            model: message?.usage?.modelId ?? selectedConversation?.model?.id,
+            botId: selectedConversation?.bot,
+          }),
+        }).catch(() => undefined);
+      },
+      [
+        feedback,
+        message?.id,
+        message?.usage?.modelId,
+        messageIndex,
+        selectedConversation,
+        setMessageFeedback,
+      ],
+    );
 
     const handleTTS = useCallback(
       async (overrides: Partial<TTSSettings> = {}) => {
@@ -975,6 +1014,36 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                       <IconRefresh size={18} />
                     </button>
                   )}
+
+                  <button
+                    className={`text-gray-500 dark:text-gray-400 transition-colors ${feedback ? 'cursor-default' : 'hover:text-gray-700 dark:hover:text-gray-300'}`}
+                    onClick={() => handleFeedback('good')}
+                    aria-disabled={feedback ? true : undefined}
+                    aria-label={t('chat.goodResponse')}
+                    aria-pressed={feedback === 'good'}
+                    title={t('chat.goodResponse')}
+                  >
+                    {feedback === 'good' ? (
+                      <IconThumbUpFilled size={18} />
+                    ) : (
+                      <IconThumbUp size={18} />
+                    )}
+                  </button>
+
+                  <button
+                    className={`text-gray-500 dark:text-gray-400 transition-colors ${feedback ? 'cursor-default' : 'hover:text-gray-700 dark:hover:text-gray-300'}`}
+                    onClick={() => handleFeedback('bad')}
+                    aria-disabled={feedback ? true : undefined}
+                    aria-label={t('chat.badResponse')}
+                    aria-pressed={feedback === 'bad'}
+                    title={t('chat.badResponse')}
+                  >
+                    {feedback === 'bad' ? (
+                      <IconThumbDownFilled size={18} />
+                    ) : (
+                      <IconThumbDown size={18} />
+                    )}
+                  </button>
 
                   {/* Listen button. Already-generated audio can still be
                       closed when the budget runs out mid-session — only NEW

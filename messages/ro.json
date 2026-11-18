@@ -690,6 +690,8 @@
     "disableWebSearch": "Dezactivează căutarea web",
     "scrollToBottom": "Derulează în jos",
     "regenerateResponse": "Regenerează răspunsul",
+    "goodResponse": "Răspuns bun",
+    "badResponse": "Răspuns slab",
     "retryMessage": "Reîncearcă mesajul",
     "editMessage": "Editează mesajul",
     "deleteMessage": "Șterge mesajul",

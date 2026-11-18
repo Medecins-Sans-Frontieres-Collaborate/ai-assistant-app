@@ -723,6 +723,8 @@
     "disableWebSearch": "禁用网页搜索",
     "scrollToBottom": "滚动到底部",
     "regenerateResponse": "重新生成响应",
+    "goodResponse": "回复良好",
+    "badResponse": "回复不佳",
     "retryMessage": "重试消息",
     "editMessage": "编辑消息",
     "deleteMessage": "删除消息",

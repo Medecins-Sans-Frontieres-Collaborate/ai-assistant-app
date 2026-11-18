@@ -760,6 +760,8 @@
     "disableWebSearch": "Khubaza ukusesha kwewebhu",
     "scrollToBottom": "Skrolela phansi",
     "regenerateResponse": "Phinda wenze impendulo",
+    "goodResponse": "Impendulo enhle",
+    "badResponse": "Impendulo embi",
     "retryMessage": "Zama umlayezo futhi",
     "editMessage": "Hlela umlayezo",
     "deleteMessage": "Susa umlayezo",

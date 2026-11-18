@@ -693,6 +693,8 @@
     "disableWebSearch": "ویب تلاش غیر فعال کریں",
     "scrollToBottom": "نیچے تک سکرول کریں",
     "regenerateResponse": "جواب دوبارہ بنائیں",
+    "goodResponse": "اچھا جواب",
+    "badResponse": "برا جواب",
     "retryMessage": "پیغام دوبارہ بھیجیں",
     "editMessage": "پیغام میں ترمیم کریں",
     "deleteMessage": "پیغام حذف کریں",

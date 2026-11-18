@@ -808,6 +808,8 @@
     "disableCodeInterpreter": "Disable code execution",
     "scrollToBottom": "Scroll to bottom",
     "regenerateResponse": "Regenerate response",
+    "goodResponse": "Good response",
+    "badResponse": "Bad response",
     "retryMessage": "Retry message",
     "editMessage": "Edit message",
     "deleteMessage": "Delete message",

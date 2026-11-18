@@ -760,6 +760,8 @@
     "disableWebSearch": "Dezaktive rechèch wèb",
     "scrollToBottom": "Desann nan fon",
     "regenerateResponse": "Rejenerasyon repons",
+    "goodResponse": "Bon repons",
+    "badResponse": "Mauvais repons",
     "retryMessage": "Eseye mesaj ankò",
     "editMessage": "Modifye mesaj",
     "deleteMessage": "Efase mesaj",

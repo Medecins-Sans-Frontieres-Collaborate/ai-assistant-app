@@ -660,6 +660,8 @@
     "disableWebSearch": "වෙබ් සෙවීම අබල කරන්න",
     "scrollToBottom": "පහළට අනුචලනය කරන්න",
     "regenerateResponse": "ප්‍රතිචාරය නැවත උත්පාදනය කරන්න",
+    "goodResponse": "හොඳ ප්‍රතිචාරයක්",
+    "badResponse": "නරක ප්‍රතිචාරයක්",
     "retryMessage": "පණිවිඩය නැවත උත්සාහ කරන්න",
     "editMessage": "පණිවිඩය සංස්කරණය කරන්න",
     "deleteMessage": "පණිවිඩය මකන්න",

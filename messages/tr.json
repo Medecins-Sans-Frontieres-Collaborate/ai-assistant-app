@@ -692,6 +692,8 @@
     "disableWebSearch": "Web aramasını devre dışı bırak",
     "scrollToBottom": "En alta kaydır",
     "regenerateResponse": "Yanıtı yeniden oluştur",
+    "goodResponse": "İyi yanıt",
+    "badResponse": "Kötü yanıt",
     "retryMessage": "Mesajı yeniden dene",
     "editMessage": "Mesajı düzenle",
     "deleteMessage": "Mesajı sil",

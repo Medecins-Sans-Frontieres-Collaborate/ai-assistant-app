@@ -760,6 +760,8 @@
     "disableWebSearch": "ናይ ወብ ድልያ ኣጥፍእ",
     "scrollToBottom": "ንታሕቲ ስክሮል",
     "regenerateResponse": "መልሲ ዳግም ፍጠር",
+    "goodResponse": "መልሲ ጽቡቕ",
+    "badResponse": "መልሲ ዘይጽቡቕ",
     "retryMessage": "መልእኽቲ ደግም",
     "editMessage": "መልእኽቲ ኣርም",
     "deleteMessage": "መልእኽቲ ደምስስ",

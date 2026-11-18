@@ -29,6 +29,7 @@ export function entryToDisplayMessage(entry: ConversationEntry): Message {
       transcript: activeVersion.transcript,
       digest: activeVersion.digest,
       error: activeVersion.error,
+      feedback: activeVersion.feedback,
       approvalOutcomes: activeVersion.approvalOutcomes,
       approvalSources: activeVersion.approvalSources,
       toolCalls: activeVersion.toolCalls,

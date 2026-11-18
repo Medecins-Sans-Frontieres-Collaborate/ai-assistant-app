@@ -539,6 +539,8 @@
     "disableWebSearch": "گەڕانی وێب ناچالاک بکە",
     "scrollToBottom": "بگەڕێ بۆ خوار",
     "regenerateResponse": "وەڵامەکە دووبارە دروست بکە",
+    "goodResponse": "وەڵامی باش",
+    "badResponse": "وەڵامی خراپ",
     "retryMessage": "پەیام دووبارە هەوڵ بده",
     "editMessage": "پەیام دەستکاری بکە",
     "deleteMessage": "پەیام بسڕەوە",

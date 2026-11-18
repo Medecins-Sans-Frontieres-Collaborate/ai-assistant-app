@@ -692,6 +692,8 @@
     "disableWebSearch": "वेब खोज अक्षम करें",
     "scrollToBottom": "नीचे स्क्रॉल करें",
     "regenerateResponse": "प्रतिक्रिया पुनः जनरेट करें",
+    "goodResponse": "अच्छा जवाब",
+    "badResponse": "खराब जवाब",
     "retryMessage": "संदेश पुनः प्रयास करें",
     "editMessage": "संदेश संपादित करें",
     "deleteMessage": "संदेश हटाएं",

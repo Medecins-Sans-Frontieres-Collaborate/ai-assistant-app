@@ -760,6 +760,8 @@
     "disableWebSearch": "Hagarika kurondera kuri interineti",
     "scrollToBottom": "Manuka hasi",
     "regenerateResponse": "Subira ukore ikisubizo",
+    "goodResponse": "Inyishu nziza",
+    "badResponse": "Inyishu mbi",
     "retryMessage": "Ongera ugerageze ubutumwa",
     "editMessage": "Hindura ubutumwa",
     "deleteMessage": "Siba ubutumwa",

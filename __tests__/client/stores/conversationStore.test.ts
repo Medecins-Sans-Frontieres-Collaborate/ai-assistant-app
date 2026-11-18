@@ -1,3 +1,5 @@
+import { entryToDisplayMessage } from '@/lib/utils/shared/chat/messageVersioning';
+
 import {
   ActiveFile,
   AssistantMessageGroup,
@@ -1342,6 +1344,89 @@ describe('conversationStore', () => {
       expect(state.selectedConversationId).toBeNull();
       expect(state.folders).toEqual([]);
       expect(state.searchTerm).toBe('');
+    });
+  });
+
+  describe('setMessageFeedback', () => {
+    const version = (content: string) => ({
+      content,
+      messageType: undefined,
+      createdAt: '2026-11-17T00:00:00.000Z',
+    });
+
+    const conversationWith = (
+      messages: Conversation['messages'],
+    ): Conversation => ({ id: 'c1', name: 'Test', messages }) as Conversation;
+
+    const messagesOf = () =>
+      useConversationStore.getState().conversations[0].messages;
+
+    it('rates the active version of a message group', () => {
+      useConversationStore.setState({
+        conversations: [
+          conversationWith([
+            { role: 'user', content: 'hi', messageType: undefined },
+            {
+              type: 'assistant_group',
+              activeIndex: 1,
+              versions: [version('first'), version('second')],
+            },
+          ]),
+        ],
+      });
+
+      useConversationStore.getState().setMessageFeedback('c1', 1, 'good');
+
+      const group = messagesOf()[1] as AssistantMessageGroup;
+      expect(group.versions[1].feedback).toBe('good');
+      expect(group.versions[0].feedback).toBeUndefined();
+      expect(entryToDisplayMessage(group).feedback).toBe('good');
+    });
+
+    it('replaces an earlier rating', () => {
+      useConversationStore.setState({
+        conversations: [
+          conversationWith([
+            {
+              type: 'assistant_group',
+              activeIndex: 0,
+              versions: [{ ...version('answer'), feedback: 'good' }],
+            },
+          ]),
+        ],
+      });
+
+      useConversationStore.getState().setMessageFeedback('c1', 0, 'bad');
+
+      const group = messagesOf()[0] as AssistantMessageGroup;
+      expect(group.versions[0].feedback).toBe('bad');
+    });
+
+    it('rates a legacy assistant message', () => {
+      useConversationStore.setState({
+        conversations: [
+          conversationWith([
+            { role: 'assistant', content: 'answer', messageType: undefined },
+          ]),
+        ],
+      });
+
+      useConversationStore.getState().setMessageFeedback('c1', 0, 'bad');
+
+      expect(messagesOf()[0]).toMatchObject({ feedback: 'bad' });
+    });
+
+    it('ignores user messages and leaves the conversation untouched', () => {
+      const conversation = conversationWith([
+        { role: 'user', content: 'hi', messageType: undefined },
+      ]);
+      useConversationStore.setState({ conversations: [conversation] });
+
+      useConversationStore.getState().setMessageFeedback('c1', 0, 'good');
+
+      expect(useConversationStore.getState().conversations[0]).toBe(
+        conversation,
+      );
     });
   });
 

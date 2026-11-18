@@ -760,6 +760,8 @@
     "disableWebSearch": "Esory ny fikarohana aterineto",
     "scrollToBottom": "Mikodiadia midina",
     "regenerateResponse": "Avereno ny valiny",
+    "goodResponse": "Valiny tsara",
+    "badResponse": "Valiny ratsy",
     "retryMessage": "Avereno ny hafatra",
     "editMessage": "Ovay ny hafatra",
     "deleteMessage": "Fafao ny hafatra",

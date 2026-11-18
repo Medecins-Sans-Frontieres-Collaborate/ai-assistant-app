@@ -692,6 +692,8 @@
     "disableWebSearch": "Inaktivera webbsökning",
     "scrollToBottom": "Rulla längst ner",
     "regenerateResponse": "Återskapa svar",
+    "goodResponse": "Bra svar",
+    "badResponse": "Dåligt svar",
     "retryMessage": "Försök igen med meddelande",
     "editMessage": "Redigera meddelande",
     "deleteMessage": "Ta bort meddelande",

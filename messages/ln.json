@@ -760,6 +760,8 @@
     "disableWebSearch": "Kofungola recherche na Internet te",
     "scrollToBottom": "Kobenda tii na se",
     "regenerateResponse": "Kopesa eyano lisusu",
+    "goodResponse": "Eyano malamu",
+    "badResponse": "Eyano mabe",
     "retryMessage": "Kozongela kotinda nsango",
     "editMessage": "Kokoma nsango lisusu",
     "deleteMessage": "Kolongola nsango",

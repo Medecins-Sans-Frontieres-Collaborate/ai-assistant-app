@@ -660,6 +660,8 @@
     "disableWebSearch": "Nonaktifkan pencarian web",
     "scrollToBottom": "Gulir ke bawah",
     "regenerateResponse": "Buat ulang respons",
+    "goodResponse": "Respon baik",
+    "badResponse": "Respon buruk",
     "retryMessage": "Coba pesan lagi",
     "editMessage": "Edit pesan",
     "deleteMessage": "Hapus pesan",

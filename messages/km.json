@@ -760,6 +760,8 @@
     "disableWebSearch": "បិទការស្វែងរកគេហទំព័រ",
     "scrollToBottom": "រមូរទៅខាងក្រោម",
     "regenerateResponse": "បង្កើតចម្លើយឡើងវិញ",
+    "goodResponse": "ចម្លើយល្អ",
+    "badResponse": "ចម្លើយអាក្រក់",
     "retryMessage": "សាកល្បងសារម្តងទៀត",
     "editMessage": "កែសម្រួលសារ",
     "deleteMessage": "លុបសារ",
