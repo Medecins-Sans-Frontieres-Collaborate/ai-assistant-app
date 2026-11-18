@@ -33,6 +33,10 @@ export const RUN_RETENTION_DAYS = 5;
 export const RUN_EXPIRY_WARNING_DAYS = 2;
 /** A file written more recently than this is not touched again. */
 export const RUN_TOUCH_INTERVAL_HOURS = 12;
+/** Quiet time after a change before the browser saves the record. */
+export const RUN_SAVE_DELAY_MS = 1500;
+/** While a run is worked on, the browser keeps it alive at most this often. */
+export const RUN_KEEP_ALIVE_INTERVAL_MS = 10 * 60 * 1000;
 
 export const RUN_BACKENDS = ['app', 'onedrive'] as const;
 export type NativeRunBackend = (typeof RUN_BACKENDS)[number];
@@ -60,14 +64,13 @@ export interface NativeRunRef {
   keyId?: string;
   /** The uploaded document the run was made from (see TranslationSourceDocument.url). */
   sourceUrl: string;
-  sourceName: string;
-  targetLanguage: string;
-  /** Source pages translated so far, ascending. */
-  translatedPages: number[];
+  /**
+   * The run's own copy of that document. The upload expires like any other
+   * file in app storage; this copy lives as long as the run does.
+   */
+  sourceId: string;
   /** ISO time `app` storage deletes the run unless touched; absent on OneDrive. */
   expiresAt?: string;
-  /** ISO time the record was last saved. */
-  savedAt: string;
 }
 
 /** Whether a value is a run id (a lowercase UUID). */
