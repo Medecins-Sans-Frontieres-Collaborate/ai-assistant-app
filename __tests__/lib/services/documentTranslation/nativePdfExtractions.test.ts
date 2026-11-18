@@ -213,3 +213,58 @@ describe('rerenderNativePdf: pages left out of the result', () => {
     expect(runSandboxScript).not.toHaveBeenCalled();
   });
 });
+
+describe('rerenderNativePdf: the looks of blocks', () => {
+  const params = (styles: unknown) => ({
+    document: Buffer.from('%PDF-1.4'),
+    unitsFiles: [extraction({ 1: 2 }, 3)],
+    translations: { 'p1-b0-1': 'traduit', 'p1-b0-2': 'aussi' },
+    checkPages: [],
+    imagePages: [],
+    styles,
+    maxDocumentPages: 5,
+    instructions: {},
+    modelId: 'model',
+    usage: {} as never,
+  });
+  const job = () =>
+    JSON.parse(
+      vi
+        .mocked(runSandboxScript)
+        .mock.calls[0][1].find((file) => file.filename === 'job.json')
+        ?.data.toString() ?? '{}',
+    );
+
+  beforeEach(() => {
+    vi.mocked(runSandboxScript).mockReset();
+    vi.mocked(runSandboxScript).mockResolvedValue({
+      files: new Map([
+        [
+          'report.json',
+          strToU8(
+            JSON.stringify({ fonts: { sans: 'A', serif: 'B' }, units: [] }),
+          ),
+        ],
+        ['translated.pdf', strToU8('%PDF-out')],
+      ]),
+    } as never);
+  });
+
+  it('sends no styles when none are given', async () => {
+    await rerenderNativePdf(params(undefined));
+    expect(job()).not.toHaveProperty('styles');
+  });
+
+  it("sends only valid styles of the document's own units", async () => {
+    await rerenderNativePdf(
+      params({
+        'p1-b0-1': { size: 14, color: '#AA0000', dx: 3, evil: '</style>' },
+        'p1-b0-2': { color: 'red; x' },
+        'p7-b0-1': { size: 20 },
+      }),
+    );
+    expect(job().styles).toEqual({
+      'p1-b0-1': { size: 14, color: '#aa0000', dx: 3 },
+    });
+  });
+});
