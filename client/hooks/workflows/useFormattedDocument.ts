@@ -223,6 +223,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
                 // edits this render puts on the page for the first time.
                 imagePages: stalePages(combined),
                 omitPages: removedPages(combined),
+                styles: combined.styles ?? {},
                 instructions: {},
                 modelId,
                 conversationId,
@@ -281,6 +282,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
             : [],
           imagePages: stalePages(run),
           omitPages: removedPages(run),
+          styles: run.styles ?? {},
           instructions,
           modelId,
           conversationId,
@@ -297,8 +299,10 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
             ...next,
             page: latest.page,
             dismissed: latest.dismissed,
-            // A page removed or put back while waiting is still pending.
+            // A page removed or put back while waiting is still pending,
+            // and so is a look changed meanwhile.
             removedPages: latest.removedPages,
+            styles: latest.styles,
           };
         });
       } catch (error) {
