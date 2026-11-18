@@ -336,10 +336,10 @@ was, a batch of pages at a time. The rules live in
   translated pages than the document limit (`DOCUMENT_PAGE_LIMIT`). The
   server keeps no count per document, so the limit holds per result, not
   across separate conversations.
-- **State**: the run is stored in workflow state as `formattedRun` and
-  holds every batch so far. It holds ids of the stored source and
-  extraction, so a re-render needs nothing else from the server. A run
-  belongs to the document it was made from.
+- **State**: workflow state holds only a reference to the run
+  (`formattedRunRef`: run id, where it is stored, the source it was made
+  from, when it expires). The run itself is kept in storage; see
+  "Where a formatted translation is kept" below.
 - **Editing convention** (stated once, in `formattedDocument.ts`):
   `units[].translation` is what the last render shows; `edits[id]` is a
   pending change (`null` = keep as written) and exists only while it differs.
@@ -377,6 +377,59 @@ was, a batch of pages at a time. The rules live in
   own; JPEG 2000 images are missing from the page previews (not from the
   PDF); stopping keeps the requests of a batch that already finished and
   discards the one in progress; text that is not horizontal is not handled.
+
+### Where a formatted translation is kept
+
+A run is expensive to hold: a source PDF, an extraction per batch, the
+translated PDF, two images per page and a record of every block. None of it
+is kept in the browser. The conventions are written once, in
+`lib/utils/shared/translation/nativeRunStorage.ts`.
+
+- **One folder per run, in one place.** Chosen when the run starts and never
+  changed:
+  - **OneDrive** (`Apps/AI Assistant/Translations/<deployment>/<run>/`) when
+    the person uses Microsoft 365 files (the same gate as the upload
+    picker). Files stay until the person deletes them.
+  - **App storage** (`<user>/translation-runs/<run>/` in the uploads
+    container) otherwise. Not using Microsoft 365 is a privacy choice and
+    this is what it costs: the container deletes a file
+    `RUN_RETENTION_DAYS` (5) days after it was last written.
+  - A new run that cannot reach OneDrive (no consent, not connected) goes to
+    app storage instead; the server opens storage before translating, so the
+    refused attempt costs nothing.
+- **Files** are named `<sha256>.<pdf|json|png>` and written only by the
+  server; `record.json` is the run's record (blocks, edits, findings, page
+  position), written only by the browser. All are read through
+  `GET /api/document-translation/native/file?run=&storage=&id=`, under the
+  signed-in person's own prefix or with their own Graph token.
+- **Saving** (`useFormattedRunStorage`): the record is saved at once when
+  the run's files changed (a run or a re-render finished) and otherwise
+  `RUN_SAVE_DELAY_MS` after the last change. A failed save shows "Changes
+  not saved yet" and is retried with the next change.
+- **Staying alive** (`POST .../native/run`): saving a change also touches
+  the run's files, at most every `RUN_KEEP_ALIVE_INTERVAL_MS`, and deletes
+  files an earlier render left behind. The server skips files written within
+  `RUN_TOUCH_INTERVAL_HOURS`. Opening a run only asks when it expires
+  (`touch: false`): looking is not working on it.
+- **Expiry**: `RUN_EXPIRY_WARNING_DAYS` (2) days or less before app storage
+  deletes a run, the review shows a warning with "Keep for 5 more days".
+  A run whose files are gone says so and offers to translate again. The
+  Original view and added batches read the run's own copy of the source, so
+  they outlive the upload, which expires on its own clock.
+- **Encryption**: a run started on a device holding the person's backup key
+  (Settings, the key that encrypts conversation backups) is encrypted at
+  rest, in either place. The run's key is derived from the backup key and
+  the run id (HKDF); each file is AES-256-GCM, bound to its run and name.
+  The browser encrypts the record itself and decrypts every file it reads.
+  The server has to read the source and extraction to lay pages out, so the
+  browser sends the run's key with those requests (`x-translation-run-key`);
+  the server uses it for that request and never stores it. This is
+  encryption at rest, not end-to-end: the backup key never leaves the
+  device, but page content passes through the server while it is being
+  translated, as it does without encryption. `keyId` on the reference names
+  the backup key, so a device without it, or with another, says which.
+- **Deleting**: a run replaced by a new one, or discarded after its files
+  expired, is deleted (`DELETE .../native/run`).
 
 ## OCR for scanned PDFs
 
