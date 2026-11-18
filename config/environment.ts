@@ -284,6 +284,12 @@ const serverEnvSchema = z.object({
   // the Responses-API code_interpreter tool in the project's region).
   CODE_INTERPRETER_MODEL: z.string().default('gpt-5.4'),
 
+  // Native PDF translation (experimental): the fixed extract → analyze →
+  // translate → rebuild → verify → refit pipeline behind
+  // POST /api/document-translation/native. ON unless set, so the route
+  // answers 404 on every deployment that has opts out.
+  NATIVE_PDF_TRANSLATION_ENABLED: booleanString(true),
+
   // Pins the deployment the Bing web search runs on (the Responses API
   // native web_search tool). UNSET = resolved per region from the served
   // model list — the policy default, skipping anything that is retiring
