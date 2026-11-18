@@ -441,10 +441,10 @@ export function FormattedReview({
                   : 'text-gray-500 dark:text-gray-400'
               }`}
             >
-              {pageRemoved
-                ? t('translation.formatted.pageRemovedNote')
-                : untranslated
-                  ? t('translation.formatted.pageUntranslatedNote')
+              {untranslated
+                ? ''
+                : pageRemoved
+                  ? t('translation.formatted.pageRemovedNote')
                   : stale.includes(run.page)
                     ? t('translation.formatted.lastRender')
                     : t('translation.formatted.clickToEdit')}
