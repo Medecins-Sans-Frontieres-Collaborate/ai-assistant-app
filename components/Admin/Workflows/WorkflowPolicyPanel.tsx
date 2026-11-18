@@ -13,8 +13,14 @@ import {
 } from '@/client/hooks/settings/useWorkflowPolicyAdmin';
 
 import {
+  WORKFLOW_FEATURES,
+  WORKFLOW_FEATURE_IDS,
   WORKFLOW_POLICY_DEFAULTS,
+  WorkflowFeatureId,
+  WorkflowPolicy,
   resolveAllWorkflowsEnabled,
+  resolveWorkflowFeatureSetting,
+  workflowFeaturesOf,
 } from '@/lib/services/workflows/policy/types';
 
 import {
@@ -37,10 +43,24 @@ import {
 import { WORKFLOW_META } from '@/components/Workflows/registryMeta';
 
 type Draft = Record<ConversationWorkflowType, boolean>;
+type FeatureDraft = Record<WorkflowFeatureId, boolean>;
+
+/** Each feature's own switch under a (possibly absent) saved policy. */
+function featureDraftFrom(policy: WorkflowPolicy | null): FeatureDraft {
+  const draft = {} as FeatureDraft;
+  for (const id of WORKFLOW_FEATURE_IDS) {
+    draft[id] = resolveWorkflowFeatureSetting(policy, id);
+  }
+  return draft;
+}
 
 /**
  * Admin panel for the workflow enable/disable policy
  * (docs/ADMIN_WORKFLOWS_AND_VIEW_AS.md).
+ *
+ * Each workflow row lists its optional features (WORKFLOW_FEATURES)
+ * underneath; a feature's switch is kept but has no effect while its
+ * workflow is off, so it is shown disabled then.
  *
  * One document, one CAS'd PUT with If-Match; on 409 the admin is told
  * another admin won the race and the policy is reloaded. The server
@@ -51,6 +71,9 @@ export const WorkflowPolicyPanel: FC = () => {
   const tWorkflows = useTranslations('workflows');
   const { query, save } = useWorkflowPolicyAdmin();
   const [draft, setDraft] = useState<Draft>({ ...WORKFLOW_POLICY_DEFAULTS });
+  const [featureDraft, setFeatureDraft] = useState<FeatureDraft>(() =>
+    featureDraftFrom(null),
+  );
   const [etag, setEtag] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   // Seed the draft from each NEW server response during render (the
@@ -68,13 +91,22 @@ export const WorkflowPolicyPanel: FC = () => {
     setSeededFrom(query.data);
     setEtag(query.data.etag);
     setDraft(resolveAllWorkflowsEnabled(query.data.policy));
+    setFeatureDraft(featureDraftFrom(query.data.policy));
     setDirty(false);
   }
 
   const setAll = (enabled: boolean) => {
     const next = {} as Draft;
     for (const type of CONVERSATION_WORKFLOW_TYPES) next[type] = enabled;
+    const nextFeatures = {} as FeatureDraft;
+    for (const id of WORKFLOW_FEATURE_IDS) nextFeatures[id] = enabled;
     setDraft(next);
+    setFeatureDraft(nextFeatures);
+    setDirty(true);
+  };
+
+  const toggleFeature = (id: WorkflowFeatureId) => {
+    setFeatureDraft((prev) => ({ ...prev, [id]: !prev[id] }));
     setDirty(true);
   };
 
@@ -91,8 +123,12 @@ export const WorkflowPolicyPanel: FC = () => {
     for (const type of CONVERSATION_WORKFLOW_TYPES) {
       workflows[type] = { enabled: draft[type] };
     }
+    const features = {} as Record<WorkflowFeatureId, { enabled: boolean }>;
+    for (const id of WORKFLOW_FEATURE_IDS) {
+      features[id] = { enabled: featureDraft[id] };
+    }
     try {
-      const result = await save.mutateAsync({ workflows, etag });
+      const result = await save.mutateAsync({ workflows, features, etag });
       setEtag(result.etag);
       setDirty(false);
       toast.success(t('saveSuccess'));
@@ -182,37 +218,81 @@ export const WorkflowPolicyPanel: FC = () => {
             const meta = WORKFLOW_META[type];
             const Icon = meta.icon;
             const inputId = `workflow-policy-${type}`;
+            const features = workflowFeaturesOf(type);
             return (
-              <li key={type} className={`${ADMIN_ROW} flex items-start gap-3`}>
-                <input
-                  id={inputId}
-                  type="checkbox"
-                  className={`${ADMIN_CHECKBOX} mt-1`}
-                  checked={draft[type]}
-                  onChange={() => toggle(type)}
-                />
-                <label htmlFor={inputId} className="min-w-0 flex-1">
-                  <span className="flex items-center gap-2 text-sm font-medium text-black dark:text-white">
-                    <Icon size={16} aria-hidden />
-                    {tWorkflows(`types.${meta.i18nKey}.label`)}
-                    <span className={ADMIN_MUTED}>
-                      {draft[type] ? t('enabledLabel') : t('disabledLabel')}
+              <li key={type} className={ADMIN_ROW}>
+                <div className="flex items-start gap-3">
+                  <input
+                    id={inputId}
+                    type="checkbox"
+                    className={`${ADMIN_CHECKBOX} mt-1`}
+                    checked={draft[type]}
+                    onChange={() => toggle(type)}
+                  />
+                  <label htmlFor={inputId} className="min-w-0 flex-1">
+                    <span className="flex items-center gap-2 text-sm font-medium text-black dark:text-white">
+                      <Icon size={16} aria-hidden />
+                      {tWorkflows(`types.${meta.i18nKey}.label`)}
+                      <span className={ADMIN_MUTED}>
+                        {draft[type] ? t('enabledLabel') : t('disabledLabel')}
+                      </span>
                     </span>
-                  </span>
-                  <span className={`block ${ADMIN_MUTED}`}>
-                    {tWorkflows(`types.${meta.i18nKey}.description`)}
-                  </span>
-                  <span className={`block ${ADMIN_HINT}`}>
-                    {WORKFLOW_POLICY_DEFAULTS[type]
-                      ? t('defaultOnHint')
-                      : t('defaultOffHint')}
-                  </span>
-                  {type === 'grants' && (
+                    <span className={`block ${ADMIN_MUTED}`}>
+                      {tWorkflows(`types.${meta.i18nKey}.description`)}
+                    </span>
                     <span className={`block ${ADMIN_HINT}`}>
-                      {t('grantsNote')}
+                      {WORKFLOW_POLICY_DEFAULTS[type]
+                        ? t('defaultOnHint')
+                        : t('defaultOffHint')}
                     </span>
-                  )}
-                </label>
+                    {type === 'grants' && (
+                      <span className={`block ${ADMIN_HINT}`}>
+                        {t('grantsNote')}
+                      </span>
+                    )}
+                  </label>
+                </div>
+                {features.length > 0 && (
+                  <ul className="ml-7 mt-3 space-y-2 border-l border-gray-200 pl-4 dark:border-gray-700">
+                    {features.map((id) => {
+                      const featureInputId = `workflow-feature-${id}`;
+                      const on = featureDraft[id];
+                      return (
+                        <li key={id} className="flex items-start gap-3">
+                          <input
+                            id={featureInputId}
+                            type="checkbox"
+                            className={`${ADMIN_CHECKBOX} mt-1`}
+                            checked={on}
+                            disabled={!draft[type]}
+                            onChange={() => toggleFeature(id)}
+                          />
+                          <label
+                            htmlFor={featureInputId}
+                            className={`min-w-0 flex-1 ${draft[type] ? '' : 'opacity-60'}`}
+                          >
+                            <span className="flex flex-wrap items-center gap-2 text-sm font-medium text-black dark:text-white">
+                              {t(`features.${id}.label`)}
+                              <span className={ADMIN_MUTED}>
+                                {on ? t('enabledLabel') : t('disabledLabel')}
+                              </span>
+                            </span>
+                            <span className={`block ${ADMIN_MUTED}`}>
+                              {t(`features.${id}.description`)}
+                            </span>
+                            <span className={`block ${ADMIN_HINT}`}>
+                              {draft[type]
+                                ? WORKFLOW_FEATURES[id].defaultEnabled
+                                  ? t('defaultOnHint')
+                                  : t('defaultOffHint')
+                                : t('featureNeedsWorkflow')}
+                            </span>
+                          </label>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </li>
             );
           })}
