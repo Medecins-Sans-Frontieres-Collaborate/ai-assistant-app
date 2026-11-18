@@ -48,8 +48,92 @@ export const MAX_STEP_INSTRUCTION_CHARS = 2_000;
  */
 export const NATIVE_PDF_FEATURE = 'translation-preserve-formatting';
 
-/** Pages one synchronous run may process: it bounds cost and request time. */
+/**
+ * Pages ONE REQUEST may process: it bounds the request's time. A batch
+ * larger than this is sent as several requests, one after the other (see
+ * splitIntoRequests); how large a batch or a document may be is an admin
+ * setting (see NativePdfLimits), not this constant.
+ */
 export const NATIVE_PDF_MAX_PAGES = 6;
+
+/** Pages one re-render may run the layout check on. */
+export const NATIVE_PDF_MAX_CHECK_PAGES = 24;
+
+/** Extractions (one per request of a document) one re-render may combine. */
+export const NATIVE_PDF_MAX_EXTRACTIONS = 40;
+
+/**
+ * How many pages a person may translate, as an admin set it for them
+ * (Admin > Workflows, under Translation). Invariant, kept by
+ * {@link nativePdfLimits}: defaultBatchPages ≤ maxBatchPages ≤
+ * maxDocumentPages.
+ */
+export interface NativePdfLimits {
+  /** Pages a batch takes unless the person raises it. */
+  defaultBatchPages: number;
+  /** The most a person may raise one batch to. */
+  maxBatchPages: number;
+  /** Pages of one document that may be translated in total. */
+  maxDocumentPages: number;
+}
+
+/** Limits used when the server's answer is missing a value. */
+export const FALLBACK_NATIVE_PDF_LIMITS: NativePdfLimits = {
+  defaultBatchPages: NATIVE_PDF_MAX_PAGES,
+  maxBatchPages: NATIVE_PDF_MAX_PAGES,
+  maxDocumentPages: NATIVE_PDF_MAX_PAGES,
+};
+
+/**
+ * Reads resolved feature limits into {@link NativePdfLimits} and puts them
+ * in order: a batch cannot exceed the document total, nor the default the
+ * largest batch. Values an admin saved out of order are lowered, never
+ * raised.
+ *
+ * @param values - Limits by key, as the workflow policy resolved them.
+ */
+export function nativePdfLimits(
+  values: Partial<Record<keyof NativePdfLimits, number>> | undefined,
+): NativePdfLimits {
+  const whole = (value: number | undefined, fallback: number): number =>
+    typeof value === 'number' && Number.isFinite(value) && value >= 1
+      ? Math.floor(value)
+      : fallback;
+  const maxDocumentPages = whole(
+    values?.maxDocumentPages,
+    FALLBACK_NATIVE_PDF_LIMITS.maxDocumentPages,
+  );
+  const maxBatchPages = Math.min(
+    whole(values?.maxBatchPages, FALLBACK_NATIVE_PDF_LIMITS.maxBatchPages),
+    maxDocumentPages,
+  );
+  const defaultBatchPages = Math.min(
+    whole(
+      values?.defaultBatchPages,
+      FALLBACK_NATIVE_PDF_LIMITS.defaultBatchPages,
+    ),
+    maxBatchPages,
+  );
+  return { defaultBatchPages, maxBatchPages, maxDocumentPages };
+}
+
+/**
+ * Splits a batch's pages into the requests that will translate them, each
+ * at most {@link NATIVE_PDF_MAX_PAGES} pages, in page order.
+ *
+ * @example splitIntoRequests([1, 2, 3, 4, 5, 6, 7]) // [[1..6], [7]]
+ */
+export function splitIntoRequests(
+  pages: number[],
+  perRequest: number = NATIVE_PDF_MAX_PAGES,
+): number[][] {
+  const size = Math.max(1, Math.floor(perRequest));
+  const requests: number[][] = [];
+  for (let index = 0; index < pages.length; index += size) {
+    requests.push(pages.slice(index, index + size));
+  }
+  return requests;
+}
 
 /** Units one run may carry; beyond this the document needs batching. */
 export const NATIVE_PDF_MAX_UNITS = 400;
@@ -249,7 +333,13 @@ export interface NativePdfRenderReport {
   repaired: string[];
   tooLong: string[];
   pdfUrl: string;
+  /** Images of the pages asked for only (`imagePages`), not of every page. */
   pageImages: NativePdfPageImages[];
+  /**
+   * The extraction this render used. When several were sent it is a new
+   * one holding all of them; later re-renders send it alone.
+   */
+  unitsId: string;
 }
 
 /**
