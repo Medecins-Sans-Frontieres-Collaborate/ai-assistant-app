@@ -260,6 +260,19 @@ was, a batch of pages at a time. The rules live in
   analyze, translate, rebuild, verify, refit). Three accept an added
   instruction (analyze, translate, verify), which is appended to the step's
   rules and never replaces them. None can be skipped or reordered.
+- **Panels**: the layout script keeps a block's room inside the filled or
+  outlined shape it sits in (a card, a table cell, a coloured box), and lets
+  a paragraph in such a shape use the shape's width. Free space beyond a
+  panel's edge is never used. See PANELS in `pdf_native.py`.
+- **Fix rounds** (the refit step, 0 to `NATIVE_PDF_MAX_REFIT_ROUNDS`): the
+  visual check gets each page's picture plus its size and every block's
+  font size, shrink and area, and prescribes one fix per finding: a shorter
+  wording, a smaller font, or a move. `planLayoutFixes` holds them inside
+  the automatic limits (`AUTO_MIN_SIZE_RATIO`, `AUTO_MAX_SHIFT`), the pages
+  are laid out and checked again, and a page whose `layoutScore` got worse
+  is put back and left alone. Sizes and moves are returned as the run's
+  `styles`, so they show in a block's Appearance box (marked "Adjusted")
+  and can be changed or reset like a person's own.
 - **Translation**: Quick (default) is one pass per page. Reviewed adds up to
   `NATIVE_PDF_MAX_REVIEW_ROUNDS` (3) rounds in which the draft is checked
   against the source. Glossaries apply in both; any target language works,
@@ -320,6 +333,22 @@ was, a batch of pages at a time. The rules live in
   pending change (`null` = keep as written) and exists only while it differs.
   Text is typed as plain text, on the page or in the block list; inline
   formatting is put back where its words survive (`retagEditedText`).
+- **Zoom**: the page view zooms in steps from 50% to 250%
+  (`PAGE_ZOOM_LEVELS`); 100% is the pane's width up to a normal page.
+  Translated page images are made at 144 dpi so they stay readable zoomed
+  in; the original is rendered again at the zoomed width.
+- **A block's look** (`Formatted/FormattedBlockStyle.tsx`): font size,
+  position and text colour of the selected block, in small steps.
+  `run.styles[id]` is the look wanted, `run.pdfStyles[id]` the one on the
+  page; a difference is a pending change like a text edit, counted once per
+  block. The outline on the page moves at once; the page changes on
+  re-render. `NativePdfUnitStyle` (in `nativePdf.ts`) states the move
+  convention: points, +x right, +y down. The render route takes `styles`
+  and drops anything invalid (`sanitizeUnitStyles`). In the rebuild script
+  a size applies to the whole block (parts in another size keep their
+  proportion, and a larger size lets the text use the space below it); a
+  colour applies to the block's main text, while links and parts in their
+  own colour keep it; a move stops at the page's edge.
 - **Re-render**: edits wait in a banner until "Re-render pages". Every
   render starts from the original PDF and returns images of the changed
   pages only. The layout check afterwards is optional and covers only the
