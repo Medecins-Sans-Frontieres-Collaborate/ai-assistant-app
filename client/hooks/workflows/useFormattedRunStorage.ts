@@ -93,6 +93,11 @@ export function useFormattedRunStorage(input: UseFormattedRunStorageInput) {
     access: RunAccess;
   } | null>(null);
 
+  // DEBUG-STORAGE
+  useEffect(() => {
+    console.warn('[run-storage] mount');
+    return () => console.warn('[run-storage] unmount');
+  }, []);
   const runId = runRef?.runId;
   const run = loaded && loaded.runId === runId ? loaded.run : undefined;
 
@@ -154,6 +159,7 @@ export function useFormattedRunStorage(input: UseFormattedRunStorageInput) {
   useEffect(() => {
     const ref = refNow.current;
     if (!ref || !runId || heldRunId.current === runId) return;
+    console.warn('[run-storage] load', runId, 'held', heldRunId.current); // DEBUG-STORAGE
     // Another run takes this one's place: what it still owes is saved first.
     flushPending();
     runNow.current = null;
@@ -207,6 +213,7 @@ export function useFormattedRunStorage(input: UseFormattedRunStorageInput) {
   const setRun = useCallback(
     (next: FormattedDocumentRun, access: RunAccess) => {
       const previous = refNow.current;
+      console.warn('[run-storage] setRun', access.runId); // DEBUG-STORAGE
       runNow.current = next;
       heldRunId.current = access.runId;
       if (previous?.runId !== access.runId) {
