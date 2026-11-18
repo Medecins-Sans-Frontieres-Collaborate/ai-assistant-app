@@ -165,11 +165,26 @@ above its trigger but flips below when the space above can't fit it (the
 workspace trigger sits at the top of the window), clamps horizontally,
 and repositions on scroll/resize while open.
 
-## Whole-document mode
+## Document mode
 
-A third mode beside Quick and Reviewed. It sends the uploaded PDF through
-document translation (`/api/document-translation/translate`), which keeps the
-layout, and then reads the result page by page.
+A third mode beside Quick and Reviewed, for translating the uploaded PDF
+itself. It has two layouts, chosen in a row under the toolbar. The row
+appears while the "Preserve formatting for PDFs" feature is on in
+Admin > Workflows (under Translation; on by default). With the feature off
+there is one layout and no row, and the server refuses the pipeline's
+routes:
+
+| Layout              | Default | What it does                                                                                                                      |
+| ------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Text only           | yes     | Azure document translation of the whole file; read and corrected as text, page by page. Described in this section.                |
+| Preserve formatting | no      | Each page is rebuilt with the translation in place. See [Document mode: preserve formatting](#document-mode-preserve-formatting). |
+
+In the workspace code `documentMode` means the text layout and
+`formattedMode` the other; exactly one is true in Document mode.
+
+The text layout sends the PDF through document translation
+(`/api/document-translation/translate`) and then reads the result page by
+page.
 
 - **Availability** (`wholeDocumentEligibility`): a PDF kept on the server and a
   target language that document translation supports. Custom languages and
@@ -201,6 +216,47 @@ layout, and then reads the result page by page.
 - **Stated limits**: a line says attached glossaries are not applied, and the
   introduction, the progress pane and the translate-again dialog say a
   started document translation cannot be stopped.
+
+## Document mode: preserve formatting
+
+Rebuilds up to `NATIVE_PDF_MAX_PAGES` (6) pages of a PDF with the translation
+laid out where the source text was. The rules live in
+`lib/utils/shared/translation/nativePdf.ts` (pipeline) and
+`formattedDocument.ts` (screen); the screens are in
+`components/Workflows/Translation/Formatted/`.
+
+- **Steps**: every run does the same six steps in the same order (extract,
+  analyze, translate, rebuild, verify, refit). Three accept an added
+  instruction (analyze, translate, verify), which is appended to the step's
+  rules and never replaces them. None can be skipped or reordered.
+- **Translation**: Quick (default) is one pass per page. Reviewed adds up to
+  `NATIVE_PDF_MAX_REVIEW_ROUNDS` (3) rounds in which the draft is checked
+  against the source. Glossaries apply in both; any target language works,
+  custom ones included.
+- **Routes** (all under `/api/document-translation/native`; 403
+  `WORKFLOW_FEATURE_DISABLED` while the feature or the translation workflow
+  is off in Admin > Workflows): `GET` reports availability and limits; `POST` runs the pipeline and
+  streams one JSON line per step, then the result; `POST /render` lays the
+  pages out again from edited text without translating anything;
+  `POST /unit` rewrites one block (shorten, change as instructed, translate).
+- **State**: the run is stored in workflow state as `formattedRun`. It holds
+  ids of the stored source and extraction, so a re-render needs nothing else
+  from the server. A run belongs to the document it was made from.
+- **Editing convention** (stated once, in `formattedDocument.ts`):
+  `units[].translation` is what the last render shows; `edits[id]` is a
+  pending change (`null` = keep as written) and exists only while it differs.
+  Text is typed as plain text, on the page or in the block list; inline
+  formatting is put back where its words survive (`retagEditedText`).
+- **Re-render**: edits wait in a banner until "Re-render pages". Every
+  render starts from the original PDF. The layout check afterwards is
+  optional and covers only the pages that changed.
+- **Layout check failures**: the check is advice about pages that are
+  already built. A page whose check fails (for example on a dropped
+  connection) is listed in `uncheckedPages` and the run still finishes.
+- **Limits**: scanned pages have no text to rebuild and are left out;
+  translated text is set in the closest installed font, not the document's
+  own; JPEG 2000 images are missing from the page previews (not from the
+  PDF); stopping a run keeps nothing.
 
 ## OCR for scanned PDFs
 
