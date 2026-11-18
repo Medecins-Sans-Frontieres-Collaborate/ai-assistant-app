@@ -84,7 +84,14 @@ const ERROR_KIND_KEYS: Partial<Record<M365ErrorKind, string>> = {
   rateLimited: 'errors.rateLimited',
 };
 
-function errorKey(error: unknown): string {
+/**
+ * The `m365` message key that explains a failed Microsoft 365 request.
+ *
+ * @param error - What the request threw.
+ * @returns A key under the `m365` namespace; a general one when the failure
+ *   is of no known kind.
+ */
+export function m365ErrorMessageKey(error: unknown): string {
   return ERROR_KIND_KEYS[m365ErrorKind(error)] ?? 'errors.generic';
 }
 
@@ -170,7 +177,7 @@ export function useM365Attachment() {
       } catch (error) {
         // Same invariant as the browser path: the failure becomes an
         // explanatory attachment, never a silent drop.
-        const sourceError = t(errorKey(error));
+        const sourceError = t(m365ErrorMessageKey(error));
         const file = makeTextFile(
           `${entry.name}-unavailable.md`,
           buildFailureDocument(sourceKey, {
@@ -218,7 +225,7 @@ export function useM365Attachment() {
         file = result.file;
         webUrl = result.webUrl;
       } catch (error) {
-        sourceError = t(errorKey(error));
+        sourceError = t(m365ErrorMessageKey(error));
         file = makeTextFile(
           failureName,
           buildFailureDocument(sourceKey, {
