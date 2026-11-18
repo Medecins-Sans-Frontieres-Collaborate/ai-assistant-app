@@ -14,6 +14,11 @@ import {
   selectRefitTargets,
   visibleLength,
 } from '@/lib/utils/shared/translation/nativePdf';
+import {
+  NATIVE_PDF_MAX_PAGES as REQUEST_PAGES,
+  nativePdfLimits,
+  splitIntoRequests,
+} from '@/lib/utils/shared/translation/nativePdf';
 
 import { describe, expect, it } from 'vitest';
 
@@ -263,5 +268,91 @@ describe('sanitizeTranslationEdits', () => {
     for (const value of [null, 'a', 3, ['a']]) {
       expect(sanitizeTranslationEdits(value, units).translations.size).toBe(0);
     }
+  });
+});
+
+describe('nativePdfLimits', () => {
+  it('reads limits that are in order as they are', () => {
+    expect(
+      nativePdfLimits({
+        defaultBatchPages: 6,
+        maxBatchPages: 12,
+        maxDocumentPages: 30,
+      }),
+    ).toEqual({
+      defaultBatchPages: 6,
+      maxBatchPages: 12,
+      maxDocumentPages: 30,
+    });
+  });
+
+  it('lowers a batch above the document total, and a default above the batch', () => {
+    // Equal values are in order; one over is lowered.
+    expect(
+      nativePdfLimits({
+        defaultBatchPages: 12,
+        maxBatchPages: 12,
+        maxDocumentPages: 12,
+      }),
+    ).toEqual({
+      defaultBatchPages: 12,
+      maxBatchPages: 12,
+      maxDocumentPages: 12,
+    });
+    expect(
+      nativePdfLimits({
+        defaultBatchPages: 14,
+        maxBatchPages: 13,
+        maxDocumentPages: 12,
+      }),
+    ).toEqual({
+      defaultBatchPages: 12,
+      maxBatchPages: 12,
+      maxDocumentPages: 12,
+    });
+  });
+
+  it('falls back to one request per document when values are missing or unusable', () => {
+    const fallback = {
+      defaultBatchPages: REQUEST_PAGES,
+      maxBatchPages: REQUEST_PAGES,
+      maxDocumentPages: REQUEST_PAGES,
+    };
+    expect(nativePdfLimits(undefined)).toEqual(fallback);
+    expect(
+      nativePdfLimits({
+        defaultBatchPages: 0,
+        maxBatchPages: Number.NaN,
+        maxDocumentPages: -3,
+      }),
+    ).toEqual(fallback);
+  });
+});
+
+describe('splitIntoRequests', () => {
+  const pages = (count: number) =>
+    Array.from({ length: count }, (_, index) => index + 1);
+
+  it('keeps a batch of exactly one request whole', () => {
+    expect(splitIntoRequests(pages(REQUEST_PAGES))).toHaveLength(1);
+  });
+
+  it('starts a second request at one page more', () => {
+    const requests = splitIntoRequests(pages(REQUEST_PAGES + 1));
+    expect(requests.map((request) => request.length)).toEqual([
+      REQUEST_PAGES,
+      1,
+    ]);
+    expect(requests.flat()).toEqual(pages(REQUEST_PAGES + 1));
+  });
+
+  it('uses the request size it is given, and never less than one', () => {
+    expect(splitIntoRequests([1, 2, 3, 8, 9], 2)).toEqual([
+      [1, 2],
+      [3, 8],
+      [9],
+    ]);
+    expect(splitIntoRequests([4, 5], 0)).toEqual([[4], [5]]);
+    expect(splitIntoRequests([])).toEqual([]);
   });
 });
