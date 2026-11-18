@@ -1,5 +1,6 @@
 'use client';
 
+import { IconCheck, IconLock } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -7,8 +8,10 @@ import { useTranslations } from 'next-intl';
 import { PdfPages } from '@/client/hooks/workflows/usePdfPages';
 
 import {
+  BatchPageState,
+  BatchPlan,
   FormattedDocumentOptions,
-  selectedPages,
+  batchPageState,
   togglePage,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import {
@@ -16,28 +19,38 @@ import {
   NATIVE_PDF_STEPS,
   NativePdfDepth,
   NativePdfInstructableStep,
+  splitIntoRequests,
 } from '@/lib/utils/shared/translation/nativePdf';
 
 /** Pages shown as previews; a longer document is selected by typing. */
 const PREVIEW_LIMIT = 24;
 const PREVIEW_WIDTH = 220;
 
+/**
+ * How each page state looks. The three states a page can be in without
+ * being part of this batch must not be mistaken for one another:
+ * `available` is a normal, clickable page; `later` is dimmed (it will be
+ * selectable again); `locked` is greyed out and struck by the limit.
+ */
+const PAGE_IMAGE: Record<BatchPageState, string> = {
+  selected: 'outline outline-2 outline-offset-2 outline-blue-500',
+  available: 'opacity-90 group-hover:opacity-100',
+  translated: 'opacity-60',
+  later: 'opacity-40',
+  locked: 'opacity-20 grayscale',
+};
+
 interface PagePreviewProps {
   page: number;
   pdf: PdfPages;
-  selected: boolean;
-  disabled?: boolean;
+  state: BatchPageState;
+  /** Why the page cannot be ticked, for `later` and `locked`. */
+  reason?: string;
   onToggle: () => void;
 }
 
-/** One page of the source as a selectable preview. */
-function PagePreview({
-  page,
-  pdf,
-  selected,
-  disabled,
-  onToggle,
-}: PagePreviewProps) {
+/** One page of the source as a preview, selectable when its state allows. */
+function PagePreview({ page, pdf, state, reason, onToggle }: PagePreviewProps) {
   const t = useTranslations('workflows');
   const [image, setImage] = useState<string | null>(null);
   useEffect(() => {
@@ -49,34 +62,79 @@ function PagePreview({
       cancelled = true;
     };
   }, [pdf, page]);
-  return (
-    <label className="flex cursor-pointer flex-col gap-2">
-      {image ? (
-        // A rendered page of the user's own file, as a data URL.
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={image}
-          alt=""
-          className={`w-full rounded ${
-            selected
-              ? 'outline outline-2 outline-offset-2 outline-blue-500'
-              : 'opacity-70'
-          }`}
-        />
-      ) : (
-        <span className="block aspect-[210/297] w-full animate-pulse rounded bg-gray-200 dark:bg-surface-dark-elevated" />
-      )}
-      <span className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
-        <input
-          type="checkbox"
-          checked={selected}
-          disabled={disabled}
-          onChange={onToggle}
-        />
-        {t('translation.formatted.pageLabel', { page })}
-      </span>
-    </label>
+  const selectable = state === 'selected' || state === 'available';
+  const picture = image ? (
+    // A rendered page of the user's own file, as a data URL.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={image} alt="" className={`w-full rounded ${PAGE_IMAGE[state]}`} />
+  ) : (
+    <span className="block aspect-[210/297] w-full animate-pulse rounded bg-gray-200 dark:bg-surface-dark-elevated" />
   );
+  const label = t('translation.formatted.pageLabel', { page });
+  if (selectable) {
+    return (
+      <label
+        data-page-state={state}
+        className="group flex cursor-pointer flex-col gap-2"
+      >
+        {picture}
+        <span className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+          <input
+            type="checkbox"
+            checked={state === 'selected'}
+            onChange={onToggle}
+          />
+          {label}
+        </span>
+      </label>
+    );
+  }
+  return (
+    <div
+      data-page-state={state}
+      title={reason}
+      className="flex cursor-not-allowed flex-col gap-2"
+    >
+      <span className="relative block">
+        {picture}
+        <span
+          className={`absolute start-1.5 top-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${
+            state === 'translated'
+              ? 'bg-green-600 text-white dark:bg-green-500 dark:text-gray-900'
+              : state === 'later'
+                ? 'bg-gray-700 text-white dark:bg-gray-200 dark:text-gray-900'
+                : 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+          }`}
+        >
+          {state === 'translated' && (
+            <IconCheck size={11} stroke={3} aria-hidden />
+          )}
+          {state === 'locked' && <IconLock size={11} aria-hidden />}
+          {t(`translation.formatted.pageState.${state}`)}
+        </span>
+      </span>
+      <span
+        className={`text-xs ${
+          state === 'locked'
+            ? 'text-gray-400 dark:text-gray-500'
+            : 'text-gray-600 dark:text-gray-400'
+        }`}
+      >
+        {label}
+        {reason && <span className="sr-only"> — {reason}</span>}
+      </span>
+    </div>
+  );
+}
+
+/** Earlier batches of the loaded document. */
+export interface EarlierTranslation {
+  /** Pages already translated. */
+  pages: number;
+  /** Display label of the language they were translated into. */
+  language: string;
+  /** False when the target language has changed since. */
+  sameLanguage: boolean;
 }
 
 interface FormattedSetupProps {
@@ -86,13 +144,26 @@ interface FormattedSetupProps {
   pdf: PdfPages;
   options: FormattedDocumentOptions;
   depth: NativePdfDepth;
-  maxPages: number;
+  /** The batch about to run and where every page stands (see planBatch). */
+  plan: BatchPlan;
+  /** Pages one request takes; a larger batch runs in several parts. */
+  requestPages?: number;
+  /** Display label of the target language, if one is chosen. */
+  targetLanguage?: string;
+  /** Earlier batches, when the document has any. */
+  earlier?: EarlierTranslation;
+  /**
+   * The new pages are added to the earlier batches. False starts over:
+   * the earlier result is replaced when the new one finishes.
+   */
+  adding: boolean;
   maxRefitRounds: number;
   /** Instructions are saved for the person's next documents. */
   remember: boolean;
   /** A finished translation exists to go back to. */
   canGoBack: boolean;
   onOptionsChange: (options: FormattedDocumentOptions) => void;
+  onAddingChange: (adding: boolean) => void;
   onRememberChange: (remember: boolean) => void;
   onBack: () => void;
   /** Lets go of the loaded document. */
@@ -100,10 +171,13 @@ interface FormattedSetupProps {
 }
 
 /**
- * Where a formatted translation is set up: which pages to translate, and
- * the fixed steps the run will take, three of which accept an added
- * instruction. No step can be removed or reordered here; the list shows
- * what will happen, not a menu.
+ * Where a formatted translation is set up: which pages the next batch
+ * takes, how large a batch is, and the fixed steps the run will take, three
+ * of which accept an added instruction. No step can be removed or reordered
+ * here; the list shows what will happen, not a menu.
+ *
+ * Every page shows where it stands: in this batch, free to add, done by an
+ * earlier batch, waiting for a later batch, or beyond the document limit.
  */
 export function FormattedSetup({
   documentName,
@@ -111,27 +185,44 @@ export function FormattedSetup({
   pdf,
   options,
   depth,
-  maxPages,
+  plan,
+  requestPages,
+  targetLanguage,
+  earlier,
+  adding,
   maxRefitRounds,
   remember,
   canGoBack,
   onOptionsChange,
+  onAddingChange,
   onRememberChange,
   onBack,
   onRemove,
 }: FormattedSetupProps) {
   const t = useTranslations('workflows');
-  const [limitHit, setLimitHit] = useState(false);
   const [opened, setOpened] = useState<Set<NativePdfInstructableStep>>(
     () => new Set(),
   );
-  const selection = selectedPages(options.pages, pageCount, maxPages);
-  const pages = selection.ok ? selection.pages : [];
+  const { pages, limits } = plan;
   const previewCount = Math.min(pageCount, PREVIEW_LIMIT);
+  const previewPages = Array.from(
+    { length: previewCount },
+    (_, index) => index + 1,
+  );
+  const states = previewPages.map((page) => batchPageState(plan, page));
+  const canRaise = plan.batchPages < limits.maxBatchPages;
+  const parts = splitIntoRequests(pages, requestPages || undefined).length;
+  const reasonFor: Partial<Record<BatchPageState, string>> = {
+    later: canRaise
+      ? t('translation.formatted.pageReason.laterRaise')
+      : t('translation.formatted.pageReason.later'),
+    locked: t('translation.formatted.pageReason.locked', {
+      max: limits.maxDocumentPages,
+    }),
+  };
 
   const toggle = (page: number) => {
-    const next = togglePage(pages, page, maxPages);
-    setLimitHit(next === null);
+    const next = togglePage(pages, page, plan.capacity);
     if (next !== null) onOptionsChange({ ...options, pages: next });
   };
   const setInstruction = (step: NativePdfInstructableStep, text: string) => {
@@ -144,15 +235,25 @@ export function FormattedSetup({
   return (
     <div className="flex min-h-0 flex-1 flex-wrap overflow-y-auto">
       <section className="min-w-0 flex-[1_1_26rem] border-gray-200 pb-4 dark:border-gray-700 md:border-e">
-        <div className="flex flex-wrap items-center gap-3 px-3 py-2.5">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 px-3 py-2.5">
           <h2 className="text-xs font-medium text-gray-700 dark:text-gray-300">
-            {t('translation.formatted.sourcePages')}
+            {earlier && adding
+              ? t('translation.formatted.addPagesTitle')
+              : t('translation.formatted.sourcePages')}
           </h2>
-          <span className="text-xs text-gray-500 dark:text-gray-400">
-            {t('translation.formatted.pagesSelected', {
+          <span
+            className="text-xs tabular-nums text-gray-700 dark:text-gray-300"
+            data-testid="batch-summary"
+          >
+            {t('translation.formatted.batchSummary', {
               selected: pages.length,
-              total: pageCount,
-              max: maxPages,
+              capacity: plan.capacity,
+            })}
+          </span>
+          <span className="text-xs tabular-nums text-gray-500 dark:text-gray-400">
+            {t('translation.formatted.documentSummary', {
+              used: plan.translated.length + pages.length,
+              max: limits.maxDocumentPages,
             })}
           </span>
           <label className="ms-auto flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
@@ -161,12 +262,20 @@ export function FormattedSetup({
               type="text"
               inputMode="numeric"
               value={options.pages}
-              placeholder={`1-${Math.min(pageCount || maxPages, maxPages)}`}
-              aria-invalid={!selection.ok}
-              onChange={(event) => {
-                setLimitHit(false);
-                onOptionsChange({ ...options, pages: event.target.value });
-              }}
+              placeholder={
+                pages.length > 0 && !options.pages.trim()
+                  ? t('translation.formatted.pagesPlaceholder', {
+                      from: pages[0],
+                      to: pages[pages.length - 1],
+                    })
+                  : undefined
+              }
+              aria-invalid={
+                plan.problem === 'unreadable' || plan.problem === 'over-batch'
+              }
+              onChange={(event) =>
+                onOptionsChange({ ...options, pages: event.target.value })
+              }
               className="min-h-[30px] w-28 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs text-gray-900 aria-[invalid=true]:border-red-500 dark:border-gray-600 dark:bg-surface-dark-base dark:text-gray-100"
             />
           </label>
@@ -183,32 +292,129 @@ export function FormattedSetup({
             {t('translation.formatted.removeDocument')}
           </button>
         </div>
-        {(!selection.ok || limitHit || pages.length === 0) && (
+
+        {earlier && (
+          <div className="mx-3 mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl bg-gray-50 px-3 py-2 text-xs text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300">
+            <span className="min-w-0 flex-1">
+              {!earlier.sameLanguage
+                ? t('translation.formatted.earlierOtherLanguage', {
+                    count: earlier.pages,
+                    language: earlier.language,
+                    target: targetLanguage ?? '',
+                  })
+                : adding
+                  ? t('translation.formatted.earlierAdding', {
+                      count: earlier.pages,
+                      language: earlier.language,
+                    })
+                  : t('translation.formatted.earlierReplacing', {
+                      count: earlier.pages,
+                    })}
+            </span>
+            {earlier.sameLanguage && (
+              <button
+                type="button"
+                onClick={() => onAddingChange(!adding)}
+                className="text-blue-700 hover:underline dark:text-blue-300"
+              >
+                {adding
+                  ? t('translation.formatted.startOver')
+                  : t('translation.formatted.keepAdding')}
+              </button>
+            )}
+          </div>
+        )}
+
+        <div className="mx-3 mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+          <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+            {t('translation.formatted.batchSize')}
+            <select
+              value={plan.batchPages}
+              onChange={(event) =>
+                onOptionsChange({
+                  ...options,
+                  batchPages: Number(event.target.value),
+                })
+              }
+              className="min-h-[28px] rounded-md border border-gray-300 bg-white text-xs text-gray-900 dark:border-gray-600 dark:bg-surface-dark-base dark:text-gray-100"
+            >
+              {Array.from(
+                { length: limits.maxBatchPages },
+                (_, index) => index + 1,
+              ).map((size) => (
+                <option key={size} value={size}>
+                  {size === limits.defaultBatchPages
+                    ? t('translation.formatted.batchSizeDefault', { size })
+                    : size}
+                </option>
+              ))}
+            </select>
+          </label>
+          <span>
+            {plan.batchPages > limits.defaultBatchPages
+              ? t('translation.formatted.batchSizeRaised', { parts })
+              : t('translation.formatted.batchSizeRange', {
+                  max: limits.maxBatchPages,
+                })}
+          </span>
+        </div>
+
+        {plan.problem && (
           <p
             role="alert"
-            className="mx-3 mt-1 text-xs text-amber-700 dark:text-amber-400"
+            className="mx-3 mt-2 text-xs text-amber-700 dark:text-amber-400"
           >
-            {limitHit
-              ? t('translation.formatted.pagesLimit', { max: maxPages })
-              : !selection.ok
-                ? t('translation.formatted.pagesInvalid', { max: maxPages })
-                : t('translation.formatted.pagesNone')}
+            {plan.problem === 'unreadable'
+              ? t('translation.formatted.pagesUnreadable')
+              : plan.problem === 'over-batch'
+                ? t('translation.formatted.pagesOverBatch', {
+                    asked: plan.asked ?? 0,
+                    capacity: plan.capacity,
+                  })
+                : plan.allowance === 0
+                  ? t('translation.formatted.pagesLimitReached', {
+                      max: limits.maxDocumentPages,
+                    })
+                  : t('translation.formatted.pagesNoneLeft')}
           </p>
         )}
         {pdf.status === 'ready' ? (
-          <div className="grid grid-cols-2 gap-4 px-3 pt-3 sm:grid-cols-3">
-            {Array.from({ length: previewCount }, (_, index) => index + 1).map(
-              (page) => (
+          <>
+            <div className="grid grid-cols-2 gap-4 px-3 pt-3 sm:grid-cols-3">
+              {previewPages.map((page, index) => (
                 <PagePreview
                   key={page}
                   page={page}
                   pdf={pdf}
-                  selected={pages.includes(page)}
+                  state={states[index]}
+                  reason={reasonFor[states[index]]}
                   onToggle={() => toggle(page)}
                 />
-              ),
+              ))}
+            </div>
+            {(states.includes('later') || states.includes('locked')) && (
+              <ul className="mx-3 mt-3 flex flex-col gap-1 text-xs text-gray-500 dark:text-gray-400">
+                {states.includes('later') && (
+                  <li>
+                    <strong className="font-medium text-gray-700 dark:text-gray-300">
+                      {t('translation.formatted.pageState.later')}
+                    </strong>
+                    {' — '}
+                    {reasonFor.later}
+                  </li>
+                )}
+                {states.includes('locked') && (
+                  <li>
+                    <strong className="font-medium text-gray-700 dark:text-gray-300">
+                      {t('translation.formatted.pageState.locked')}
+                    </strong>
+                    {' — '}
+                    {reasonFor.locked}
+                  </li>
+                )}
+              </ul>
             )}
-          </div>
+          </>
         ) : (
           <p className="mx-3 mt-3 text-xs text-gray-500 dark:text-gray-400">
             {pdf.status === 'failed'
