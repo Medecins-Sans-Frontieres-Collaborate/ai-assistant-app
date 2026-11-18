@@ -20,7 +20,12 @@ import {
 } from '@/lib/utils/shared/translation/nativeRunStorage';
 
 import { NativePdfPageOutput } from './nativePdfPipeline';
-import { BlobRunFolder, DriveRunFolder, RunFolder } from './nativeRunBackends';
+import {
+  BlobRunFolder,
+  DriveRunFolder,
+  RunFolder,
+  RunFolderKind,
+} from './nativeRunBackends';
 
 /**
  * A translation run's files, on the server (see the conventions in
@@ -284,16 +289,18 @@ export class NativeRunStore {
  * @param req - The request; OneDrive is reached with its delegated token.
  * @param session - The signed-in person; app storage uses their prefix.
  * @param location - The run, its backend and its key.
+ * @param kind - What the folder holds; a run unless said otherwise.
  * @throws M365Error when OneDrive is named and file access is not granted.
  */
 export async function openNativeRunStore(
   req: NextRequest,
   session: Session,
   location: NativeRunLocation,
+  kind: RunFolderKind = 'runs',
 ): Promise<NativeRunStore> {
   const folder =
     location.backend === 'onedrive'
-      ? await DriveRunFolder.open(req, location.runId)
-      : BlobRunFolder.open(session, location.runId);
+      ? await DriveRunFolder.open(req, location.runId, kind)
+      : BlobRunFolder.open(session, location.runId, kind);
   return new NativeRunStore(location, folder);
 }
