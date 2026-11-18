@@ -48,6 +48,7 @@ import { generateAudioFilename } from '@/lib/utils/shared/string/slugify';
 import {
   Conversation,
   Message,
+  MessageFeedback,
   VersionInfo,
   isAssistantMessageGroup,
 } from '@/types/chat';
@@ -82,6 +83,7 @@ import { StreamdownWithCodeButtons } from '@/components/Markdown/StreamdownWithC
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatStore } from '@/client/stores/chatStore';
+import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import {
   extractConsentRequests,
@@ -196,7 +198,10 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     const [loadingMessage, setLoadingMessage] = useState<string | null>(null);
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
     const [messageCopied, setMessageCopied] = useState(false);
-    const [feedback, setFeedback] = useState<'good' | 'bad' | null>(null);
+    const feedback = message?.feedback ?? null;
+    const setMessageFeedback = useConversationStore(
+      (state) => state.setMessageFeedback,
+    );
 
     // §4 output tie-in: action items → Microsoft To Do (user-confirmed
     // batch). Flag + connect opt-in, and only when the text has list items.
@@ -499,9 +504,12 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     }, [displayedContent]);
 
     const handleFeedback = useCallback(
-      (rating: 'good' | 'bad') => {
-        if (feedback === rating) return;
-        setFeedback(rating);
+      (rating: MessageFeedback) => {
+        // Feedback is final since a second click skews stats.
+        if (feedback) return;
+        if (selectedConversation) {
+          setMessageFeedback(selectedConversation.id, messageIndex, rating);
+        }
         void fetch('/api/chat/feedback', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -509,12 +517,19 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
             rating,
             messageId: message?.id,
             conversationId: selectedConversation?.id,
-            model: selectedConversation?.model?.id,
+            model: message?.usage?.modelId ?? selectedConversation?.model?.id,
             botId: selectedConversation?.bot,
           }),
         }).catch(() => undefined);
       },
-      [feedback, message?.id, selectedConversation],
+      [
+        feedback,
+        message?.id,
+        message?.usage?.modelId,
+        messageIndex,
+        selectedConversation,
+        setMessageFeedback,
+      ],
     );
 
     const handleTTS = useCallback(
@@ -1001,8 +1016,9 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                   )}
 
                   <button
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
+                    className={`text-gray-500 dark:text-gray-400 transition-colors ${feedback ? 'cursor-default' : 'hover:text-gray-700 dark:hover:text-gray-300'}`}
                     onClick={() => handleFeedback('good')}
+                    aria-disabled={feedback ? true : undefined}
                     aria-label={t('chat.goodResponse')}
                     aria-pressed={feedback === 'good'}
                     title={t('chat.goodResponse')}
@@ -1015,8 +1031,9 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                   </button>
 
                   <button
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
+                    className={`text-gray-500 dark:text-gray-400 transition-colors ${feedback ? 'cursor-default' : 'hover:text-gray-700 dark:hover:text-gray-300'}`}
                     onClick={() => handleFeedback('bad')}
+                    aria-disabled={feedback ? true : undefined}
                     aria-label={t('chat.badResponse')}
                     aria-pressed={feedback === 'bad'}
                     title={t('chat.badResponse')}
