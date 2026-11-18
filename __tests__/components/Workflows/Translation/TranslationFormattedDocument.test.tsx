@@ -627,3 +627,233 @@ describe('document mode: preserve formatting', () => {
     ).toBeNull();
   });
 });
+
+describe('finished translation: the page list', () => {
+  const pageLooks = () =>
+    [...document.querySelectorAll('[data-page-look]')].map((element) =>
+      element.getAttribute('data-page-look'),
+    );
+  const railStates = () =>
+    [...document.querySelectorAll('[data-page-look]')].map((element) =>
+      element.getAttribute('data-page-state'),
+    );
+  const button = (name: string) => screen.getByRole('button', { name });
+
+  /** Translates pages 1-2 of the 5-page document and waits for the result. */
+  async function finishFirstBatch() {
+    mountWorkspace({ documentLayout: 'formatted' });
+    fireEvent.click(
+      await screen.findByRole('button', {
+        name: 'translation.formatted.translatePages 2',
+      }),
+    );
+    await waitFor(() => expect(workflowState().formattedRun).toBeDefined());
+    await screen.findByRole('button', {
+      name: 'translation.formatted.removePage 5',
+    });
+  }
+
+  it('lists every page of the document, telling translated from not', async () => {
+    await finishFirstBatch();
+    expect(pageLooks()).toEqual([
+      'translated',
+      'translated',
+      'untranslated',
+      'untranslated',
+      'untranslated',
+    ]);
+    expect(
+      screen.getAllByText('translation.formatted.pageUntranslated'),
+    ).toHaveLength(3);
+  });
+
+  it('shows an untranslated page as its original, with a way to translate it', async () => {
+    await finishFirstBatch();
+    fireEvent.click(button('translation.formatted.pageLabel 3'));
+    expect(workflowState().formattedRun?.page).toBe(3);
+    const panel = screen.getByTestId('untranslated-panel');
+    expect(panel).toHaveTextContent(
+      'translation.formatted.pageUntranslatedNote',
+    );
+    fireEvent.click(
+      within(panel).getByRole('button', {
+        name: 'translation.formatted.translateThisPage',
+      }),
+    );
+    await waitFor(() => expect(runNativePdf).toHaveBeenCalledTimes(2));
+    expect(vi.mocked(runNativePdf).mock.calls[1][0].pages).toBe('3');
+  });
+
+  it('selects the next batch and adds it to the document', async () => {
+    vi.mocked(renderNativePdf).mockResolvedValue(
+      renderAnswer(['p1u1', 'p2u1', 'p3u1', 'p4u1']),
+    );
+    await finishFirstBatch();
+    fireEvent.click(button('translation.formatted.railSelectNext 2'));
+    // 2 done and 2 ticked use the limit of 4 up: page 5 is beyond it.
+    expect(railStates()).toEqual([
+      'translated',
+      'translated',
+      'selected',
+      'selected',
+      'locked',
+    ]);
+    expect(screen.getByTestId('rail-batch-summary')).toHaveTextContent(
+      'translation.formatted.batchSummary 2 2',
+    );
+    fireEvent.click(button('translation.formatted.translatePages 2'));
+    await waitFor(() => expect(renderNativePdf).toHaveBeenCalledTimes(1));
+    expect(vi.mocked(runNativePdf).mock.calls[1][0]).toMatchObject({
+      pages: '3-4',
+      depth: 'quick',
+    });
+    expect(vi.mocked(renderNativePdf).mock.calls[0][0]).toMatchObject({
+      unitsIds: ['units-1-2', 'units-3-4'],
+      omitPages: [],
+    });
+    await waitFor(() =>
+      expect(
+        workflowState().formattedRun?.units.map((unit) => unit.page),
+      ).toEqual([1, 2, 3, 4]),
+    );
+  });
+
+  it('ticks pages one by one up to the batch, and frees a place on untick', async () => {
+    await finishFirstBatch();
+    const tick = (page: number) =>
+      fireEvent.click(
+        screen.getByRole('checkbox', {
+          name: `translation.formatted.pageLabel ${page}`,
+        }),
+      );
+    tick(5);
+    expect(railStates().slice(2)).toEqual([
+      'available',
+      'available',
+      'selected',
+    ]);
+    tick(3);
+    // The batch of 2 is full: page 4 has no tick box any more.
+    expect(railStates().slice(2)).toEqual(['selected', 'locked', 'selected']);
+    expect(
+      screen.queryByRole('checkbox', {
+        name: 'translation.formatted.pageLabel 4',
+      }),
+    ).toBeNull();
+    tick(5);
+    expect(railStates().slice(2)).toEqual([
+      'selected',
+      'available',
+      'available',
+    ]);
+    fireEvent.click(button('translation.formatted.railClear'));
+    expect(railStates().slice(2)).toEqual([
+      'available',
+      'available',
+      'available',
+    ]);
+  });
+
+  it('removes a page from the download only once the download is updated', async () => {
+    vi.mocked(renderNativePdf).mockResolvedValue(
+      renderAnswer(['p1u1', 'p2u1'], { unitsId: 'units-1-2' }),
+    );
+    await finishFirstBatch();
+    expect(screen.queryByTestId('pending-changes')).toBeNull();
+    fireEvent.click(button('translation.formatted.removePage 5'));
+    expect(pageLooks()[4]).toBe('removed');
+    expect(workflowState().formattedRun?.removedPages).toEqual([5]);
+    // Still the old file until it is built again.
+    expect(workflowState().formattedRun?.pdfUrl).toBe('/api/file/out.pdf');
+    expect(screen.getByTestId('pending-changes')).toHaveTextContent(
+      'translation.formatted.pagesPending',
+    );
+    expect(
+      screen.getByText('translation.formatted.pdfBehindPages'),
+    ).toBeTruthy();
+
+    fireEvent.click(button('translation.formatted.updateDownload'));
+    await waitFor(() =>
+      expect(workflowState().formattedRun?.pdfUrl).toBe('/api/file/out2.pdf'),
+    );
+    expect(vi.mocked(renderNativePdf).mock.calls[0][0]).toMatchObject({
+      omitPages: [5],
+      // Nothing was edited: no page is drawn or checked again.
+      imagePages: [],
+      checkPages: [],
+    });
+    expect(workflowState().formattedRun?.pdfRemovedPages).toEqual([5]);
+    expect(screen.queryByTestId('pending-changes')).toBeNull();
+  });
+
+  it('puts a removed page back, and undoes page changes not yet in the download', async () => {
+    await finishFirstBatch();
+    fireEvent.click(button('translation.formatted.removePage 4'));
+    fireEvent.click(button('translation.formatted.removePage 1'));
+    expect(pageLooks()).toEqual([
+      'removed',
+      'translated',
+      'untranslated',
+      'removed',
+      'untranslated',
+    ]);
+    fireEvent.click(button('translation.formatted.restorePage 4'));
+    expect(workflowState().formattedRun?.removedPages).toEqual([1]);
+    fireEvent.click(button('translation.formatted.undoPageChanges'));
+    expect(workflowState().formattedRun?.removedPages ?? []).toEqual([]);
+    expect(screen.queryByTestId('pending-changes')).toBeNull();
+    expect(renderNativePdf).not.toHaveBeenCalled();
+  });
+
+  it('keeps a removed page out of the next batch', async () => {
+    await finishFirstBatch();
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: 'translation.formatted.pageLabel 3',
+      }),
+    );
+    fireEvent.click(button('translation.formatted.removePage 3'));
+    // Its tick went with it, and the next batch starts after it.
+    expect(railStates().slice(2)).toEqual([
+      'removed',
+      'available',
+      'available',
+    ]);
+    fireEvent.click(button('translation.formatted.railSelectNext 2'));
+    expect(railStates().slice(2)).toEqual(['removed', 'selected', 'selected']);
+  });
+
+  it('never lets the last page go', async () => {
+    await finishFirstBatch();
+    for (const page of [1, 2, 3, 4]) {
+      fireEvent.click(button(`translation.formatted.removePage ${page}`));
+    }
+    expect(workflowState().formattedRun?.removedPages).toEqual([1, 2, 3, 4]);
+    expect(
+      screen.queryByRole('button', {
+        name: 'translation.formatted.removePage 5',
+      }),
+    ).toBeNull();
+  });
+
+  it('says why pages cannot be added in another language', async () => {
+    await finishFirstBatch();
+    useConversationStore.setState((store) => ({
+      conversations: store.conversations.map((conversation) => ({
+        ...conversation,
+        workflowState: {
+          ...(conversation.workflowState as TranslationWorkflowState),
+          targetLanguage: { id: 'fr', label: 'French' },
+        },
+      })),
+    }));
+    expect(
+      await screen.findByText(
+        'translation.formatted.railOtherLanguage Spanish',
+      ),
+    ).toBeTruthy();
+    expect(screen.queryAllByRole('checkbox', { name: /pageLabel/ })).toEqual(
+      [],
+    );
+  });
+});
