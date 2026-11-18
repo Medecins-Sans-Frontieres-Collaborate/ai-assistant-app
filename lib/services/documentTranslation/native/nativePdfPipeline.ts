@@ -134,6 +134,11 @@ export interface NativePdfRerenderParams {
    * pages in `checkPages` are always included.
    */
   imagePages?: number[];
+  /**
+   * Source pages (1-based) to leave out of the PDF. Their translations are
+   * still laid out, so putting a page back needs nothing but another render.
+   */
+  omitPages?: number[];
   /** Most pages of the document that may carry a translation. */
   maxDocumentPages: number;
   /** Untrusted: unit id to translation; null or absent keeps the unit as written. */
@@ -173,6 +178,14 @@ export class NativePdfDocumentLimitError extends Error {
       `This document already has translations on ${pages} pages; at most ${limit} pages of one document can be translated`,
     );
     this.name = 'NativePdfDocumentLimitError';
+  }
+}
+
+/** Thrown when a re-render is asked to leave every page out of the result. */
+export class NativePdfNoPagesLeftError extends Error {
+  constructor() {
+    super('At least one page has to stay in the document');
+    this.name = 'NativePdfNoPagesLeftError';
   }
 }
 
@@ -414,14 +427,23 @@ async function verifyPage(options: {
   return result.issues.map((issue) => ({ ...issue, page: options.page }));
 }
 
+/** What a rebuild returns besides the translated pages themselves. */
+interface RebuildOutput {
+  /** Pages to return images of; absent means every translated page. */
+  imagePages?: number[];
+  /** Source pages to leave out of the PDF. */
+  omitPages?: number[];
+}
+
 /** Lays the current translations into the original document. */
 async function rebuild(
   document: Buffer,
   unitsFile: Uint8Array,
   translations: Map<string, string>,
   usage: WorkflowUsageCollector,
-  imagePages?: number[],
+  output: RebuildOutput = {},
 ): Promise<RebuildOutcome> {
+  const { imagePages, omitPages } = output;
   const run = await runSandboxScript(
     'rebuild',
     [
@@ -443,6 +465,7 @@ async function rebuild(
         // replaced, so batches add up to one file.
         onlyTranslatedPages: false,
         ...(imagePages ? { imagePages } : {}),
+        ...(omitPages?.length ? { omitPages } : {}),
       }),
     ],
     usage,
@@ -694,6 +717,7 @@ export function combineExtractions(files: Uint8Array[]): Uint8Array {
  *   for the checked pages.
  * @throws NativePdfDocumentLimitError when more pages would carry a
  *   translation than `maxDocumentPages`.
+ * @throws NativePdfNoPagesLeftError when `omitPages` names every page.
  * @throws Error when the extraction cannot be read, no unit is left with a
  *   translation, or the sandbox step fails.
  */
@@ -717,14 +741,23 @@ export async function rerenderNativePdf(
       params.maxDocumentPages,
     );
   }
+  const omitted = [...new Set(params.omitPages ?? [])].filter(
+    (page) => page <= extracted.pageCount,
+  );
+  if (extracted.pageCount > 0 && omitted.length >= extracted.pageCount) {
+    throw new NativePdfNoPagesLeftError();
+  }
   const built = await rebuild(
     params.document,
     unitsFile,
     edits.translations,
     params.usage,
-    params.imagePages && [
-      ...new Set([...params.imagePages, ...params.checkPages]),
-    ],
+    {
+      imagePages: params.imagePages && [
+        ...new Set([...params.imagePages, ...params.checkPages]),
+      ],
+      omitPages: omitted,
+    },
   );
   const wanted = new Set(params.checkPages);
   const toCheck = built.outputs.filter((output) => wanted.has(output.page));
