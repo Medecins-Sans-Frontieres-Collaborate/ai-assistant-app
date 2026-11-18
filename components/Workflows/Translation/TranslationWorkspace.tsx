@@ -41,6 +41,7 @@ import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 import { useDocumentTranslationReader } from '@/client/hooks/workflows/useDocumentTranslationReader';
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
 import { useFormattedDocument } from '@/client/hooks/workflows/useFormattedDocument';
+import { useFormattedRunStorage } from '@/client/hooks/workflows/useFormattedRunStorage';
 import { usePdfPages } from '@/client/hooks/workflows/usePdfPages';
 import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
@@ -61,6 +62,10 @@ import {
   NativePdfAvailability,
   fetchNativePdfAvailability,
 } from '@/client/services/workflows/nativePdfTranslation';
+import {
+  RunAccess,
+  fetchRunFile,
+} from '@/client/services/workflows/nativeRunStorage';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
 import { assessTranslation } from '@/client/services/workflows/translationAssessment';
 import { requestTranslationChange } from '@/client/services/workflows/translationChangeRequest';
@@ -136,6 +141,11 @@ import {
   NATIVE_PDF_DEFAULT_DEPTH,
 } from '@/lib/utils/shared/translation/nativePdf';
 import {
+  NativeRunBackend,
+  NativeRunRef,
+  runFileUrl,
+} from '@/lib/utils/shared/translation/nativeRunStorage';
+import {
   SourcePage,
   formatPageSelection,
   joinPages,
@@ -201,6 +211,7 @@ import { DocumentJobProgress } from './DocumentJobProgress';
 import { DocumentReaderBar } from './DocumentReaderBar';
 import { FormattedProgress } from './Formatted/FormattedProgress';
 import { FormattedReview } from './Formatted/FormattedReview';
+import { FormattedRunUnavailable } from './Formatted/FormattedRunStorageNotice';
 import { EarlierTranslation, FormattedSetup } from './Formatted/FormattedSetup';
 import { TranslationOptionsBar } from './Formatted/TranslationOptionsBar';
 import { GlossaryManager } from './GlossaryManager';
@@ -2027,12 +2038,34 @@ export function TranslationWorkspace({
     formattedSource,
     targetLanguage?.label,
   );
+  // A run belongs to the document it was made from; another document
+  // starts at the setup.
+  const formattedRunRef =
+    state?.formattedRunRef &&
+    state.formattedRunRef.sourceUrl === formattedSourceUrl
+      ? state.formattedRunRef
+      : undefined;
+  const formattedRunRefNow = useRef(formattedRunRef);
+  useEffect(() => {
+    formattedRunRefNow.current = formattedRunRef;
+  });
   const loadFormattedFile = useCallback(async (): Promise<File> => {
     if (!formattedSourceUrl) throw new Error('No document is loaded');
     const kept = uploadedFileRef.current;
-    return kept?.url === formattedSourceUrl
-      ? kept.file
-      : fetchStoredFile(formattedSourceUrl, formattedSourceName);
+    if (kept?.url === formattedSourceUrl) return kept.file;
+    // A run keeps its own copy of the document, which outlives the upload.
+    const stored = formattedRunRefNow.current;
+    if (stored) {
+      try {
+        const bytes = await fetchRunFile(runFileUrl(stored, stored.sourceId));
+        return new File([new Uint8Array(bytes)], formattedSourceName, {
+          type: 'application/pdf',
+        });
+      } catch {
+        // Fall through to the upload.
+      }
+    }
+    return fetchStoredFile(formattedSourceUrl, formattedSourceName);
   }, [formattedSourceUrl, formattedSourceName]);
   /** The setup and review screens need a PDF to show; a blocker hides them. */
   const formattedHasPdf =
@@ -2044,31 +2077,32 @@ export function TranslationWorkspace({
     loadFormattedFile,
     formattedHasPdf ? (formattedSourceUrl ?? null) : null,
   );
-  const setFormattedRun = useCallback(
-    (run: FormattedDocumentRun) => {
-      patchState({ formattedRun: run });
-      setFormattedSetupOpen(false);
-    },
+  // Workflow state holds where the run is stored; the run itself is read
+  // from there and saved back (see useFormattedRunStorage).
+  const setFormattedRunRef = useCallback(
+    (ref: NativeRunRef | undefined) => patchState({ formattedRunRef: ref }),
     [patchState],
   );
-  const updateFormattedRun = useCallback(
-    (update: (run: FormattedDocumentRun) => FormattedDocumentRun) => {
-      updateWorkflowState(conversationId, (prev) => {
-        const p = prev as TranslationWorkflowState;
-        return p.formattedRun
-          ? {
-              ...p,
-              formattedRun: update(p.formattedRun),
-              updatedAt: new Date().toISOString(),
-            }
-          : p;
-      });
+  const formattedStorage = useFormattedRunStorage({
+    runRef: formattedRunRef,
+    setRunRef: setFormattedRunRef,
+  });
+  const storeFormattedRun = formattedStorage.setRun;
+  const setFormattedRun = useCallback(
+    (run: FormattedDocumentRun, access: RunAccess) => {
+      storeFormattedRun(run, access);
+      setFormattedSetupOpen(false);
     },
-    [conversationId, updateWorkflowState],
+    [storeFormattedRun],
   );
+  const updateFormattedRun = formattedStorage.updateRun;
+  /** OneDrive when the person uses Microsoft 365 files, else app storage. */
+  const formattedBackend: NativeRunBackend =
+    m365FilesFlag && m365Connected ? 'onedrive' : 'app';
   const formatted = useFormattedDocument({
     conversationId,
-    run: state?.formattedRun,
+    run: formattedStorage.run,
+    access: formattedRunRef,
     setRun: setFormattedRun,
     updateRun: updateFormattedRun,
     glossaries: {
@@ -2086,12 +2120,9 @@ export function TranslationWorkspace({
   const formattedDepth = state?.documentDepth ?? NATIVE_PDF_DEFAULT_DEPTH;
   const formattedPageCount =
     pdfPages.pageCount || formattedSource?.lastPage || 0;
-  // A run belongs to the document it was made from; another document
-  // starts at the setup.
-  const formattedRun =
-    state?.formattedRun && state.formattedRun.sourceUrl === formattedSourceUrl
-      ? state.formattedRun
-      : undefined;
+  const formattedRun = formattedStorage.run;
+  /** A stored run that is still loading, or cannot be shown. */
+  const formattedRunPending = !!formattedRunRef && !formattedRun;
   // --- Batches (see formattedDocument.ts) ---
   // The next batch is added to the pages already translated, unless the
   // person starts over or the target language has changed since.
@@ -2146,6 +2177,7 @@ export function TranslationWorkspace({
         pages: formattedPlan.pages,
         requestPages: formattedService?.maxPages,
         base: formattedAdding ? formattedRun : undefined,
+        backend: formattedBackend,
       })
       .then(() => {
         // The typed selection named this batch's pages; the next batch
@@ -2178,6 +2210,7 @@ export function TranslationWorkspace({
       pages,
       requestPages: formattedService?.maxPages,
       base: formattedRun,
+      backend: formattedBackend,
     });
   };
   /** Opens the setup to add pages, or to start over when none can be added. */
@@ -2793,8 +2826,26 @@ export function TranslationWorkspace({
             instructions={formattedOptions.instructions}
             glossaryCount={selectedOrgIds.length + selectedPersonalIds.length}
             stacked={!layout.reviewBeside}
+            storage={
+              formattedRunRef && {
+                runRef: formattedRunRef,
+                saveFailed: formattedStorage.saveFailed,
+                keeping: formattedStorage.keeping,
+                onKeep: () => void formattedStorage.keep(),
+              }
+            }
             onUpdateRun={updateFormattedRun}
             onChangeOptions={openFormattedSetup}
+          />
+        ) : formattedRunPending && !formattedSetupOpen ? (
+          <FormattedRunUnavailable
+            problem={formattedStorage.problem}
+            onRetry={formattedStorage.retry}
+            onStartOver={() =>
+              // Expired files are gone already; anything left is deleted.
+              // A run this device cannot read is left for one that can.
+              formattedStorage.discard(formattedStorage.problem === 'missing')
+            }
           />
         ) : (
           <FormattedSetup
