@@ -143,17 +143,20 @@ interface FormattedRunExpiryWarningProps {
   keeping: boolean;
   /** Keeps the files for another retention period. */
   onKeep: () => void;
+  /** What is about to be deleted; a formatted translation unless said. */
+  subject?: 'run' | 'sourceText';
 }
 
 /**
- * Warns that a translation's files are about to be deleted from app
- * storage, with the one action that prevents it. Renders nothing while
+ * Warns that a translation's files, or its stored source text, are about
+ * to be deleted from app storage, with the one action that prevents it. Renders nothing while
  * more than the warning period is left, or where nothing expires.
  */
 export function FormattedRunExpiryWarning({
   expiresAt,
   keeping,
   onKeep,
+  subject = 'run',
 }: FormattedRunExpiryWarningProps) {
   const t = useTranslations('workflows');
   if (!expiresAt || runExpiryState(expiresAt) !== 'soon') return null;
@@ -164,9 +167,12 @@ export function FormattedRunExpiryWarning({
       className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100"
     >
       <span>
-        {t('translation.formatted.storage.expiresSoon', {
-          count: runDaysLeft(expiresAt),
-        })}
+        {t(
+          subject === 'run'
+            ? 'translation.formatted.storage.expiresSoon'
+            : 'translation.sourceStorage.expiresSoon',
+          { count: runDaysLeft(expiresAt) },
+        )}
       </span>
       <button
         type="button"
