@@ -2055,6 +2055,7 @@ export function TranslationWorkspace({
     if (kept?.url === formattedSourceUrl) return kept.file;
     // A run keeps its own copy of the document, which outlives the upload.
     const stored = formattedRunRefNow.current;
+    console.warn('[run-storage] loadFile; ref known:', !!stored); // DEBUG-STORAGE
     if (stored) {
       try {
         const bytes = await fetchRunFile(runFileUrl(stored, stored.sourceId));
