@@ -515,6 +515,10 @@ describe('planLayoutFixes', () => {
     );
     expect(moved.styles).toEqual({ a: { dx: 10, dy: -AUTO_MAX_SHIFT } });
     expect(moved.moved).toEqual(['a']);
+    // A minor remark is not worth moving a unit for.
+    expect(
+      hasLayoutFixes(plan([issue(1, { action: 'move', dy: 6 }, 'minor')])),
+    ).toBe(false);
     // A move of nothing is no fix.
     expect(hasLayoutFixes(plan([issue(1, { action: 'move' })]))).toBe(false);
   });
@@ -565,6 +569,36 @@ describe('planLayoutFixes', () => {
     expect(hasLayoutFixes(untranslated)).toBe(false);
     const remark = { ...issue(1, { action: 'smaller', percent: 80 }), n: null };
     expect(hasLayoutFixes(plan([remark]))).toBe(false);
+  });
+
+  it("gives a smaller font to the unit's peers on the page, and to no one else", () => {
+    const peers = planLayoutFixes({
+      fits: [
+        fit('a', 1),
+        fit('b', 2),
+        fit('c', 3),
+        { ...fit('d', 1), page: 2 },
+        fit('e', 4),
+      ],
+      issues: [issue(1, { action: 'smaller', percent: 90 })],
+      lengths: new Map(['a', 'b', 'c', 'd', 'e'].map((id) => [id, 100])),
+      units: [
+        { id: 'a', size: 20, peer: 'item' },
+        { id: 'b', size: 20.1, peer: 'item' },
+        { id: 'c', size: 20, peer: 'heading' },
+        // Same style on another page: not a peer.
+        { id: 'd', size: 20, peer: 'item' },
+        // Already set smaller by an earlier fix: keeps its size.
+        { id: 'e', size: 20, peer: 'item' },
+      ],
+      styles: { e: { size: 15 } },
+    });
+    expect(peers.styles).toEqual({
+      a: { size: 18 },
+      b: { size: 18 },
+      e: { size: 15 },
+    });
+    expect(peers.resized).toEqual(['a', 'b']);
   });
 
   it('does not modify the styles it is given', () => {
