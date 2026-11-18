@@ -3440,7 +3440,7 @@
       "uploadPickerConfirm": "Sebenzisa lo mbhalo",
       "sourceStorage": {
         "loading": "Kulayishwa umbhalo oyisisekelo…",
-        "expiresSoon": "{count, plural, one {Umbhalo oyisisekelo ogciniwe uzosuswa ngosuku olulodwa.} other {Umbhalo oyisisekelo ogciniwe uzosuswa emadeni amaningi.}}",
+        "expiresSoon": "{count, plural, one {Umbhalo oyisisekelo ogciniwe uzosuswa ngosuku olulodwa.} other {Umbhalo oyisisekelo ogciniwe uzosuswa ezinsukwini ezingu-#.}}",
         "missingTitle": "Umbhalo oyisisekelo awusagcinwanga",
         "missingBody": "Ususwe ngemva kwezinsuku ezingu-{days} ngaphandle kwezikuguquko. Ingxenye yokuhumusha isekhona.",
         "noKeyTitle": "Umbhalo oyisisekelo ufihliwe",
