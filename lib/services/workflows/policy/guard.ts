@@ -11,12 +11,14 @@
  * from an ordinary authorization failure.
  */
 import { WorkflowPolicyService } from '@/lib/services/workflows/policy/WorkflowPolicyService';
+import { WorkflowFeatureId } from '@/lib/services/workflows/policy/types';
 
 import { errorResponse } from '@/lib/utils/server/api/apiResponse';
 
 import { ConversationWorkflowType } from '@/types/workflow';
 
 export const WORKFLOW_DISABLED_CODE = 'WORKFLOW_DISABLED';
+export const WORKFLOW_FEATURE_DISABLED_CODE = 'WORKFLOW_FEATURE_DISABLED';
 
 export async function isWorkflowEnabled(
   type: ConversationWorkflowType,
@@ -32,5 +34,31 @@ export function workflowDisabledResponse(type: ConversationWorkflowType) {
     403,
     undefined,
     WORKFLOW_DISABLED_CODE,
+  );
+}
+
+/**
+ * Whether an optional part of a workflow (WORKFLOW_FEATURES) is available
+ * under the admin policy. False whenever its workflow is disabled, so a
+ * route that checks the feature does not need to check the workflow too.
+ *
+ * @param id The feature to check.
+ * @returns The effective state from the cached policy (defaults when none).
+ */
+export async function isWorkflowFeatureEnabled(
+  id: WorkflowFeatureId,
+): Promise<boolean> {
+  const service = WorkflowPolicyService.getInstance();
+  await service.ensureFresh();
+  return service.isFeatureEnabled(id);
+}
+
+/** 403 with a stable code for a feature an admin has switched off. */
+export function workflowFeatureDisabledResponse(id: WorkflowFeatureId) {
+  return errorResponse(
+    `The ${id} feature has been disabled by an administrator`,
+    403,
+    undefined,
+    WORKFLOW_FEATURE_DISABLED_CODE,
   );
 }
