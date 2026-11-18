@@ -8,6 +8,11 @@ import {
   reviseNativePdfUnit,
   runNativePdf,
 } from '@/client/services/workflows/nativePdfTranslation';
+import {
+  RunAccess,
+  isOneDriveUnavailable,
+  newRunAccess,
+} from '@/client/services/workflows/nativeRunStorage';
 
 import {
   FormattedDocumentOptions,
@@ -31,6 +36,7 @@ import {
   NativePdfUnitResult,
   splitIntoRequests,
 } from '@/lib/utils/shared/translation/nativePdf';
+import { NativeRunBackend } from '@/lib/utils/shared/translation/nativeRunStorage';
 
 /** One step of a run in progress. */
 export interface FormattedStepProgress {
@@ -71,14 +77,21 @@ export interface StartFormattedRun {
   requestPages?: number;
   /** Earlier batches of this document to add the new pages to. */
   base?: FormattedDocumentRun;
+  /**
+   * Where a new run's files go. Pages added to `base` go where it is.
+   * A new run that cannot use OneDrive is kept in app storage instead.
+   */
+  backend: NativeRunBackend;
 }
 
 interface UseFormattedDocumentInput {
   conversationId: string;
   /** The stored run, if one has finished. */
   run: FormattedDocumentRun | undefined;
+  /** Where the stored run's files are. */
+  access: RunAccess | undefined;
   /** Stores a run (a first batch, or all batches joined), replacing the previous one. */
-  setRun: (run: FormattedDocumentRun) => void;
+  setRun: (run: FormattedDocumentRun, access: RunAccess) => void;
   /** Applies a change to the stored run. */
   updateRun: (
     update: (run: FormattedDocumentRun) => FormattedDocumentRun,
@@ -104,13 +117,14 @@ const ASSEMBLE_ATTEMPTS = 2;
 /**
  * Runs and edits a formatting-preserving document translation.
  *
- * The finished run lives in workflow state (through `setRun` /
- * `updateRun`); this hook holds only what is transient: the run in
+ * The finished run lives in storage (through `setRun` / `updateRun`, see
+ * useFormattedRunStorage); this hook holds only what is transient: the run in
  * progress, the request being waited on, and the last error of each kind.
  * Requests are stopped when the workspace unmounts.
  */
 export function useFormattedDocument(input: UseFormattedDocumentInput) {
-  const { conversationId, run, setRun, updateRun, modelId, onSpent } = input;
+  const { conversationId, run, access, setRun, updateRun, modelId, onSpent } =
+    input;
   const [progress, setProgress] = useState<FormattedRunProgress | null>(null);
   const [runError, setRunError] = useState<string | null>(null);
   const [rendering, setRendering] = useState(false);
@@ -160,32 +174,53 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
       setProgress({ startedAt, ...progressAt(1) });
       const pieces: FormattedDocumentRun[] = [];
       let failure: unknown = null;
+      // Every request of the batch writes into one run: the earlier
+      // batches' when adding to them, otherwise a new one.
+      let target: RunAccess | null = null;
       try {
         const file = await request.loadFile();
+        target =
+          request.base && access ? access : await newRunAccess(request.backend);
         for (const [index, pages] of requests.entries()) {
           if (index > 0) setProgress({ startedAt, ...progressAt(index + 1) });
-          const { report, totalTokens } = await runNativePdf({
-            file,
-            targetLanguage: request.targetLanguage,
-            pages: formatPageSelection(pages),
-            instructions: request.options.instructions,
-            refitRounds: request.options.refitRounds,
-            depth: request.depth,
-            ...glossaries.current,
-            modelId,
-            conversationId,
-            signal: abort.signal,
-            onStep: (step) =>
-              setProgress(
-                (current) =>
-                  current && {
-                    ...current,
-                    steps: current.steps.map((existing) =>
-                      existing.id === step.id ? { ...step } : existing,
-                    ),
-                  },
-              ),
-          });
+          const translate = (run: RunAccess) =>
+            runNativePdf({
+              run,
+              file,
+              targetLanguage: request.targetLanguage,
+              pages: formatPageSelection(pages),
+              instructions: request.options.instructions,
+              refitRounds: request.options.refitRounds,
+              depth: request.depth,
+              ...glossaries.current,
+              modelId,
+              conversationId,
+              signal: abort.signal,
+              onStep: (step) =>
+                setProgress(
+                  (current) =>
+                    current && {
+                      ...current,
+                      steps: current.steps.map((existing) =>
+                        existing.id === step.id ? { ...step } : existing,
+                      ),
+                    },
+                ),
+            });
+          let answer: Awaited<ReturnType<typeof translate>>;
+          try {
+            answer = await translate(target);
+          } catch (error) {
+            // OneDrive refused before anything was written: a new run
+            // goes to app storage instead (the server opens storage
+            // before it translates, so nothing was spent).
+            const movable =
+              index === 0 && !request.base && target.backend === 'onedrive';
+            if (!movable || !isOneDriveUnavailable(error)) throw error;
+            target = { ...target, backend: 'app' };
+            answer = await translate(target);
+          }
+          const { report, totalTokens } = answer;
           pieces.push(
             runFromReport(report, {
               sourceUrl: request.sourceUrl,
@@ -200,10 +235,11 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
         failure = error;
       }
       try {
-        if (pieces.length > 0) {
+        if (pieces.length > 0 && target) {
+          const run = target;
           const combined = combineRuns(request.base, pieces);
           if (!request.base && pieces.length === 1) {
-            setRun(combined);
+            setRun(combined, run);
           } else {
             // Joining is its own request, so stopping the batch does not
             // stop it; a second Stop does.
@@ -212,6 +248,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
             setProgress({ startedAt, ...progressAt(requests.length, true) });
             const assemble = () =>
               renderNativePdf({
+                run,
                 sourceId: combined.sourceId,
                 unitsIds: [
                   ...(request.base ? [request.base.unitsId] : []),
@@ -237,7 +274,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
                 if (isAbort(error) || attempt >= ASSEMBLE_ATTEMPTS) throw error;
               }
             }
-            setRun(applyRenderReport(combined, report));
+            setRun(applyRenderReport(combined, report), run);
           }
         }
       } catch (error) {
@@ -249,7 +286,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
         onSpent?.();
       }
     },
-    [conversationId, modelId, onSpent, setRun],
+    [access, conversationId, modelId, onSpent, setRun],
   );
 
   /**
@@ -267,13 +304,14 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
    */
   const rerender = useCallback(
     async (check: boolean, instructions: NativePdfStepInstructions) => {
-      if (!run || rendering) return;
+      if (!run || !access || rendering) return;
       const abort = new AbortController();
       requestAbort.current = abort;
       setRendering(true);
       setRenderError(null);
       try {
         const report = await renderNativePdf({
+          run: access,
           sourceId: run.sourceId,
           unitsIds: [run.unitsId],
           translations: translationsForRender(run),
@@ -312,7 +350,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
         onSpent?.();
       }
     },
-    [conversationId, modelId, onSpent, rendering, run, updateRun],
+    [access, conversationId, modelId, onSpent, rendering, run, updateRun],
   );
 
   /**
