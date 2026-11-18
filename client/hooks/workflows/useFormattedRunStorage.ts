@@ -87,7 +87,11 @@ export function useFormattedRunStorage(input: UseFormattedRunStorageInput) {
     files: '',
   });
   const lastKeepAlive = useRef(0);
-  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** A save waiting for its quiet period, and the run it belongs to. */
+  const pendingSave = useRef<{
+    timer: ReturnType<typeof setTimeout>;
+    access: RunAccess;
+  } | null>(null);
 
   const runId = runRef?.runId;
   const run = loaded && loaded.runId === runId ? loaded.run : undefined;
@@ -109,7 +113,8 @@ export function useFormattedRunStorage(input: UseFormattedRunStorageInput) {
   const persist = useCallback(
     async (access: RunAccess, force = false) => {
       const current = runNow.current;
-      if (!current) return;
+      // Only the run this hook holds is saved under its own id.
+      if (!current || heldRunId.current !== access.runId) return;
       try {
         if (saved.current.run !== current) {
           await saveRunRecord(access, current);
@@ -136,10 +141,23 @@ export function useFormattedRunStorage(input: UseFormattedRunStorageInput) {
     [noteExpiry],
   );
 
+  /** Saves now what was waiting for its quiet period. */
+  const flushPending = useCallback(() => {
+    const pending = pendingSave.current;
+    if (!pending) return;
+    clearTimeout(pending.timer);
+    pendingSave.current = null;
+    void persist(pending.access);
+  }, [persist]);
+
   // Load the record of a run this hook does not hold yet.
   useEffect(() => {
     const ref = refNow.current;
     if (!ref || !runId || heldRunId.current === runId) return;
+    // Another run takes this one's place: what it still owes is saved first.
+    flushPending();
+    runNow.current = null;
+    heldRunId.current = null;
     const abort = new AbortController();
     setProblem(null);
     void (async () => {
@@ -159,29 +177,22 @@ export function useFormattedRunStorage(input: UseFormattedRunStorageInput) {
       }
     })();
     return () => abort.abort();
-  }, [runId, loadAttempt, noteExpiry]);
+  }, [runId, loadAttempt, noteExpiry, flushPending]);
 
   // Save what is pending when the workspace goes away.
-  useEffect(
-    () => () => {
-      if (!saveTimer.current) return;
-      clearTimeout(saveTimer.current);
-      const ref = refNow.current;
-      if (ref) void persist(ref);
-    },
-    [persist],
-  );
+  useEffect(() => flushPending, [flushPending]);
 
   const schedule = useCallback(
     (access: RunAccess, immediately: boolean) => {
-      if (saveTimer.current) clearTimeout(saveTimer.current);
-      saveTimer.current = setTimeout(
+      if (pendingSave.current) clearTimeout(pendingSave.current.timer);
+      const timer = setTimeout(
         () => {
-          saveTimer.current = null;
+          pendingSave.current = null;
           void persist(access);
         },
         immediately ? 0 : RUN_SAVE_DELAY_MS,
       );
+      pendingSave.current = { timer, access };
     },
     [persist],
   );
@@ -256,8 +267,8 @@ export function useFormattedRunStorage(input: UseFormattedRunStorageInput) {
    */
   const discard = useCallback((remove: boolean) => {
     const ref = refNow.current;
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = null;
+    if (pendingSave.current) clearTimeout(pendingSave.current.timer);
+    pendingSave.current = null;
     runNow.current = null;
     heldRunId.current = null;
     saved.current = { run: null, files: '' };
