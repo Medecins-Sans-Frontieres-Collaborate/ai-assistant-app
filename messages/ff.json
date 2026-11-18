@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Ñaawo} one {Ñaawo # cemma} other {Ñaawo # cemmaaji}}",
         "translateAgain": "Ñaawo ɗoo kadi",
         "sourcePages": "Cemmaaji soɓorgal",
-        "pagesSelected": "{selected} e {total} suɓi · tan e {max} cemma goɗɗum",
         "pagesField": "Cemmaaji",
-        "pagesInvalid": "Cemmol suɓgol ɗee alaa waawde janga, walla ina jogii {max} cemmaaji. Windu caɗee 1-3, 8.",
-        "pagesLimit": "Goɗɗum ngal jogii tan e {max} cemmaaji. Suɓ cemma nde keɓa.",
-        "pagesNone": "Suɓ cemma goɗɗum so tawii.",
         "pageLabel": "Cemma {page}",
         "pageEdits": "{count, plural, one {Cemma {page} · # furtonɗo} other {Cemma {page} · # furtonɗi}}",
         "pages": "Cemmaaji",
@@ -3260,7 +3256,7 @@
         "remember": "Nanaama cewndiraaɗi ɗee e dokimmaaji an ni ndiyam",
         "fontsNote": "Fonts: ko moƴƴindi gotti feewnoy, on alaa font dokimaani.",
         "progressTitle": "{count, plural, one {Nde njiɓii # hello to {language}} other {Nde njiɓii # helloji to {language}}}",
-        "progressNote": "So tawii a ndiytii, kala ko min nanndaa daga tawtugol.",
+        "progressNote": "Ñifɗinira tan teganni heɓannde nde.",
         "progressLabel": "Laawol njiɓgol",
         "stepWaiting": "Ndaɗon",
         "stepRunning": "Njiɗu…",
@@ -3341,8 +3337,49 @@
         "run": "Hurmit",
         "runSummary": "{seconds} s · {tokens} tokenji · {font}",
         "details": "Ceetɗe",
-        "unchecked": "Layawto anndito hulaa waawde hurmude e gese nde. Hurmit e anndito on, tee waawi faaleede."
-      }
+        "unchecked": "Layawto anndito hulaa waawde hurmude e gese nde. Hurmit e anndito on, tee waawi faaleede.",
+        "addPages": "Ɓoɗɗitol helloji",
+        "addPagesTitle": "Helloji waɗiɗɓe ɓoɗɗu",
+        "batchSummary": "{selected} e {capacity} e dimo ngol",
+        "documentSummary": "{used} e {max} helloji dokumɛntal",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Helloji e dimo",
+        "batchSizeDefault": "{size} (kaaɗo)",
+        "batchSizeRange": "Ina waawi winndude kadi e {max}.",
+        "batchSizeRaised": "{parts, plural, one {Dimo tawii balɗe ɗaarii e jammaan e naatan geltaan ma.} other {Dimo tawii balɗe ɗaarii e jammaan e naatan geltaan ma. Ngol dimo jogii e # makko.}}",
+        "pageState": {
+          "translated": "Hollitaama",
+          "later": "Dimo doole",
+          "locked": "Booyaani"
+        },
+        "pageReason": {
+          "later": "Dimo ngol paɗii. Helloji ɓe waɗaani e dimo doole.",
+          "laterRaise": "Dimo ngol paɗii. Helloji ɓe waɗaani e dimo doole, walla winndi helloji e dimo ɗe ɓe ɓuri e.",
+          "locked": "Helloji {max} ɗen leydi e dokumɛntal e waawi hollitaade, booyaani ngam mo paɗii."
+        },
+        "pagesUnreadable": "Winndu helloji mo nambaaji e limi, sey 1-3, 8.",
+        "pagesOverBatch": "Ngol ko helloji {asked}; dimo ngol jogii {capacity}. Winndi helloji fayde walla winndi helloji e dimo ɗe ɓe ɓuri e.",
+        "pagesLimitReached": "Paɗo helloji {max} e dokumɛntal go’o joɓii. Helloji ɓe ɗiɗi waawi hollitaade.",
+        "pagesNoneLeft": "Helloji kala winndude hollitaama.",
+        "earlierAdding": "{count, plural, one {# hello hollitaama e} other {# helloji hollitaama e}} {language}. Helloji yeeso ɓoɗɗitii e PDF goo.",
+        "earlierReplacing": "{count, plural, one {Fuɗnaade balloo # hello hollitaama} other {Fuɗnaade balloo # helloji hollitaama}} so hollitooɓe yeeso.",
+        "earlierOtherLanguage": "{count, plural, one {# hello hollitaama e} other {# helloji hollitaama e}} {language}. Hollitaaɗe e {target} fuɗna balloo ɓe.",
+        "startOver": "Fuɗnaade gollu",
+        "keepAdding": "Ɓoɗɗitol e helloji hollitaama",
+        "progressNoteParts": "Naatnude waɗii mo fen no waɗiri, jonnude mo jogii.",
+        "progressPart": "Makko {part} e {parts}",
+        "progressAssembling": "Nastude helloji e dokumɛntal goɗɗo"
+      },
+      "kind": "Ko woni hollitaade",
+      "kindText": "Kalmaaji",
+      "kindTextHint": "Hollitaa kalmaaji mo findinioo. Faal ngol njogiraa woni mo kalmaaji.",
+      "languageNeeded": "Suɓo colliinde walla ngel hollitaade",
+      "pdfAsTextOffer": "{name} lootii mo kalmaaji. Ngam hollitaade PDF mo fayde helloji, moynu e Dokumɛnt.",
+      "pdfAsTextSwitch": "Hollito mo dokumɛntal",
+      "pdfAsTextKeep": "Hakkil mo kalmaaji",
+      "uploadPickerTitle": "Naɗnu dogon fayde",
+      "uploadPickerHint": "PDF, Word, PowerPoint, binndi, Markdown walla XML. Dogon fayde goɗɗo tan.",
+      "uploadPickerConfirm": "Naatnu dogon fayde ɗee"
     },
     "document": {
       "emptyTitle": "Winndu lan binndi dannde maa",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Soodii tafsiriijo format e PDF",
-        "description": "Nanndiri \"Soodii format\" e Document mode, mo waɗi ɗam e PDF kala hoore e tafsiri. O fayda code interpreter e vision model, kadiin e jam foodi ne dammude to tafsiri juutndi."
+        "description": "Nanndiri \"Soodii format\" e Document mode, mo waɗi ɗam e PDF kala hoore e tafsiri. O fayda code interpreter e vision model, kadiin e jam foodi ne dammude to tafsiri juutndi.",
+        "limits": {
+          "defaultBatchPages": "Helloji e dimo, kaaɗo",
+          "maxBatchPages": "Dimo balɗo moɗɗo woni suɓan",
+          "maxDocumentPages": "Helloji e dokumɛntal, e jaɓɓorgo"
+        },
+        "limitsNote": "Golle hollitii dokumɛntal e dimo jokkondiri. Ina waawi winndude dimo, amma dokumɛntal paɗii, helloji makko waawi hollitaade."
+      }
+    },
+    "limitsTitle": "Paɗɗi",
+    "limitRange": "{min} to {max}",
+    "limitsInvalid": "Paɗo ngol mo waawi jooɗaani sehila. Suuliki laawol wannda e naatnu.",
+    "overridesTitle": "Paɗɗi goɗɗi moɓɓe",
+    "overridesNote": "Balloo mooftaa paɗɗi ɗi ɗe mo ɓuri. Feere fuɗnanɗo de midir, balloo mo waawi, a balloo mo Lowre mail.",
+    "overrideScope": "Doggoraa e",
+    "overrideTargets": "Hoore (so tawii e komaa)",
+    "overrideInherit": "{value} (wannaaka)",
+    "overrideAdd": "Ɓoɗɗu balloo",
+    "overrideRemove": "Momtu",
+    "overrideScopes": {
+      "user": {
+        "label": "Moɓɓe",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Domen ngel mail",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Koɗol ngel directory",
+        "placeholder": "department:health"
       }
     }
   },

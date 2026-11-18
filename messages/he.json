@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {תרגם} one {תרגם עמוד אחד} other {תרגם # עמודים}}",
         "translateAgain": "תרגם שוב",
         "sourcePages": "עמודי מקור",
-        "pagesSelected": "{selected} מתוך {total} נבחרו · עד {max} להרצה",
         "pagesField": "עמודים",
-        "pagesInvalid": "לא ניתן לקרוא את בחירת העמודים, או שכמות העמודים עולה על {max}. יש לכתוב לדוג' 1-3, 8.",
-        "pagesLimit": "הרצה אחת כוללת עד {max} עמודים. בטל תחילה בחירה של עמוד.",
-        "pagesNone": "בחר לפחות עמוד אחד.",
         "pageLabel": "עמוד {page}",
         "pageEdits": "{count, plural, one {עמוד {page} · עריכה אחת} other {עמוד {page} · # עריכות}}",
         "pages": "עמודים",
@@ -3276,7 +3272,7 @@
         "remember": "זכור את ההנחיות האלו למסמכים הבאים שלי",
         "fontsNote": "גופנים: משמשת ההתאמה הקרובה ביותר הזמינה, לא גופן המסמך המקורי.",
         "progressTitle": "{count, plural, one {מתרגם עמוד אחד ל-{language}} other {מתרגם {count} עמודים ל-{language}}}",
-        "progressNote": "הפסקה לא תשמור דבר מהריצה הזו.",
+        "progressNote": "עצירה תבטל את התרגום הזה.",
         "progressLabel": "שלבי תרגום",
         "stepWaiting": "ממתין",
         "stepRunning": "בתהליך…",
@@ -3357,8 +3353,49 @@
         "run": "הרץ",
         "runSummary": "{seconds} שניות · {tokens} טוקנים · {font}",
         "details": "פרטים",
-        "unchecked": "לא ניתן היה להריץ את בדיקת העימוד בעמוד זה. יש לעדכן מחדש עם הבדיקה מופעלת כדי לנסות שוב."
-      }
+        "unchecked": "לא ניתן היה להריץ את בדיקת העימוד בעמוד זה. יש לעדכן מחדש עם הבדיקה מופעלת כדי לנסות שוב.",
+        "addPages": "הוסף עמודים",
+        "addPagesTitle": "עמודים להוספה",
+        "batchSummary": "{selected} מתוך {capacity} באצווה זו",
+        "documentSummary": "{used} מתוך {max} עמודי מסמך",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "עמודים לאצווה",
+        "batchSizeDefault": "{size} (ברירת מחדל)",
+        "batchSizeRange": "ניתן להגדיל עד {max}.",
+        "batchSizeRaised": "{parts, plural, one {אצווה גדולה יותר לוקחת יותר זמן ומשתמשת ביותר מהתקציב שלך.} other {אצווה גדולה יותר לוקחת יותר זמן ומשתמשת ביותר מהתקציב שלך. אצווה זו מתבצעת ב-# חלקים.}}",
+        "pageState": {
+          "translated": "תורגם",
+          "later": "באצווה הבאה",
+          "locked": "מעבר למגבלה"
+        },
+        "pageReason": {
+          "later": "אצווה זו מלאה. העמודים האלה ייכנסו לאצווה הבאה.",
+          "laterRaise": "האצווה מלאה. ניתן להוסיף את העמודים לאצווה הבאה, או להגדיל את מספר העמודים לאצווה כדי להכליל אותם כעת.",
+          "locked": "ניתן לתרגם עד {max} עמודים למסמך, והמגבלה הזו נוצלה."
+        },
+        "pagesUnreadable": "יש לציין עמודים כמספרים וטווחים, למשל 1-3, 8.",
+        "pagesOverBatch": "ציינת {asked} עמודים; האצווה מכילה {capacity}. ציין פחות עמודים או הגדל את מספר העמודים לאצווה.",
+        "pagesLimitReached": "הגעת למגבלה של {max} עמודים למסמך. לא ניתן לתרגם עמודים נוספים.",
+        "pagesNoneLeft": "כל העמודים שצוינו כבר תורגמו.",
+        "earlierAdding": "{count, plural, one {# עמוד כבר תורגם ל-{language}.} other {# עמודים כבר תורגמו ל-{language}.}} עמודים חדשים יתווספו לאותו PDF.",
+        "earlierReplacing": "{count, plural, one {אם מתחילים מחדש, העמוד המתורגם האחד יוחלף כשהתרגום החדש יסתיים.} other {אם מתחילים מחדש, # העמודים המתורגמים יוחלפו כשהתרגום החדש יסתיים.}}",
+        "earlierOtherLanguage": "{count, plural, one {# עמוד כבר תורגם ל-{language}.} other {# עמודים כבר תורגמו ל-{language}.}} תרגום ל-{target} יתחיל מחדש ויחליף אותם.",
+        "startOver": "התחל מחדש במקום",
+        "keepAdding": "הוסף לעמודים המתורגמים במקום",
+        "progressNoteParts": "הפסקה תשאיר את החלקים שהסתיימו ותבטל את החלק בתהליך.",
+        "progressPart": "חלק {part} מתוך {parts}",
+        "progressAssembling": "מאחד את העמודים למסמך אחד"
+      },
+      "kind": "מה לתרגם",
+      "kindText": "טקסט",
+      "kindTextHint": "מתרגם את הטקסט בלשונית המקור. קובץ שתעלה ייקרא כטקסט.",
+      "languageNeeded": "בחר שפת יעד לתרגום",
+      "pdfAsTextOffer": "{name} נטען כטקסט. כדי לתרגם את ה-PDF עצמו, עמוד אחר עמוד, עבור למסמך.",
+      "pdfAsTextSwitch": "תרגם כמסמך",
+      "pdfAsTextKeep": "השאר כטקסט",
+      "uploadPickerTitle": "העלאת מסמך",
+      "uploadPickerHint": "PDF, Word, PowerPoint, טקסט, Markdown או XML. מסמך אחד בכל פעם.",
+      "uploadPickerConfirm": "השתמש במסמך זה"
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "שמירת עיצוב עבור PDF",
-        "description": "מוסיף את עיצוב \"שמירת עיצוב\" למצב מסמך, שבו כל עמוד PDF נבנה מחדש עם התרגום במקומו. הדבר עושה שימוש במפרש קוד ובמודל חזותי, ולכן עמוד עולה יותר מאשר תרגום טקסט בלבד."
+        "description": "מוסיף את עיצוב \"שמירת עיצוב\" למצב מסמך, שבו כל עמוד PDF נבנה מחדש עם התרגום במקומו. הדבר עושה שימוש במפרש קוד ובמודל חזותי, ולכן עמוד עולה יותר מאשר תרגום טקסט בלבד.",
+        "limits": {
+          "defaultBatchPages": "עמודים באצווה כברירת מחדל",
+          "maxBatchPages": "האצווה הגדולה ביותר שאדם יכול לבחור",
+          "maxDocumentPages": "סה\"כ עמודים למסמך"
+        },
+        "limitsNote": "אנשים מתרגמים מסמך אצווה אחר אצווה ויכולים להגדיל את האצווה עד הגדולה ביותר. כאשר מגיעים לסך העמודים, לא ניתן לתרגם עמודים נוספים שלו. ברירת מחדל מעל האצווה המרבית, או אצווה מרבית מעל סך המסמך, תותאם אוטומטית."
+      }
+    },
+    "limitsTitle": "מגבלות",
+    "limitRange": "{min} עד {max}",
+    "limitsInvalid": "אחת מהמגבלות אינה בטווח המותר. בדוק את הטווחים המסומנים ונסה שוב.",
+    "overridesTitle": "מגבלות שונות לחלק מהאנשים",
+    "overridesNote": "הגדרה שונה מחליפה מגבלות אלה לאנשים שמצוינים. שדה ריק ישאיר את הערך מלמעלה. כאשר יש כמה התאמות, אדם גובר על מאפיין ספרייה, שמגבר על דומיין מייל.",
+    "overrideScope": "חל על",
+    "overrideTargets": "למי (הפרד בין כמה על ידי פסיקים)",
+    "overrideInherit": "{value} (נרשמה בירושה)",
+    "overrideAdd": "הוסף הגדרה שונה",
+    "overrideRemove": "הסר",
+    "overrideScopes": {
+      "user": {
+        "label": "אנשים",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "דומיין דואר",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "מאפיין ספריה",
+        "placeholder": "department:health"
       }
     }
   },

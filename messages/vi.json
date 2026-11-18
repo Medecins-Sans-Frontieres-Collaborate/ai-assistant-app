@@ -3255,11 +3255,7 @@
         "translatePages": "{count, plural, =0 {Dịch} one {Dịch # trang} other {Dịch # trang}}",
         "translateAgain": "Dịch lại",
         "sourcePages": "Trang gốc",
-        "pagesSelected": "Đã chọn {selected} trong {total} · tối đa {max} mỗi lần",
         "pagesField": "Trang",
-        "pagesInvalid": "Lựa chọn trang này không hợp lệ, hoặc vượt quá {max} trang. Nhập như 1-3, 8.",
-        "pagesLimit": "Mỗi lần dịch tối đa {max} trang. Hãy bỏ chọn một trang trước.",
-        "pagesNone": "Chọn ít nhất một trang.",
         "pageLabel": "Trang {page}",
         "pageEdits": "{count, plural, one {Trang {page} · # chỉnh sửa} other {Trang {page} · # chỉnh sửa}}",
         "pages": "Trang",
@@ -3307,7 +3303,7 @@
         "remember": "Ghi nhớ các hướng dẫn này cho tài liệu tiếp theo của tôi",
         "fontsNote": "Phông chữ: sử dụng phông gần giống nhất có sẵn, không phải phông gốc của tài liệu.",
         "progressTitle": "{count, plural, one {Đang dịch # trang sang {language}} other {Đang dịch # trang sang {language}}}",
-        "progressNote": "Dừng lại sẽ không giữ lại gì từ lần chạy này.",
+        "progressNote": "Dừng lại sẽ hủy bỏ bản dịch này.",
         "progressLabel": "Các bước dịch",
         "stepWaiting": "Đang chờ",
         "stepRunning": "Đang thực hiện…",
@@ -3388,8 +3384,49 @@
         "run": "Chạy",
         "runSummary": "{seconds} giây · {tokens} tokens · {font}",
         "details": "Chi tiết",
-        "unchecked": "Không thể kiểm tra bố cục cho trang này. Vui lòng dựng lại với kiểm tra bố cục để thử lại."
-      }
+        "unchecked": "Không thể kiểm tra bố cục cho trang này. Vui lòng dựng lại với kiểm tra bố cục để thử lại.",
+        "addPages": "Thêm trang",
+        "addPagesTitle": "Trang cần thêm",
+        "batchSummary": "{selected} trong tổng số {capacity} của đợt này",
+        "documentSummary": "{used} trong tổng số {max} trang tài liệu",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Trang mỗi đợt",
+        "batchSizeDefault": "{size} (mặc định)",
+        "batchSizeRange": "Bạn có thể tăng lên tối đa {max}.",
+        "batchSizeRaised": "{parts, plural, one {Đợt lớn hơn sẽ mất nhiều thời gian và dùng nhiều ngân sách hơn.} other {Đợt lớn hơn sẽ mất nhiều thời gian và dùng nhiều ngân sách hơn. Đợt này chạy trong # phần.}}",
+        "pageState": {
+          "translated": "Đã dịch",
+          "later": "Đợt tiếp theo",
+          "locked": "Vượt giới hạn"
+        },
+        "pageReason": {
+          "later": "Đợt này đã đầy. Các trang này sẽ được đưa vào đợt tiếp theo.",
+          "laterRaise": "Đợt này đã đầy. Các trang này sẽ được đưa vào đợt tiếp theo, hoặc tăng số trang mỗi đợt để bao gồm ngay.",
+          "locked": "Mỗi tài liệu chỉ dịch tối đa {max} trang; giới hạn này đã đạt."
+        },
+        "pagesUnreadable": "Viết số trang bằng số và khoảng, ví dụ 1-3, 8.",
+        "pagesOverBatch": "Bạn đã chọn {asked} trang; đợt này chỉ nhận {capacity} trang. Vui lòng chọn ít trang hơn hoặc tăng số trang mỗi đợt.",
+        "pagesLimitReached": "Đã đạt giới hạn {max} trang cho một tài liệu. Không thể dịch thêm trang nào.",
+        "pagesNoneLeft": "Mọi trang đã được dịch.",
+        "earlierAdding": "{count, plural, one {# trang đã} other {# trang đã}} được dịch sang {language}. Các trang mới sẽ được thêm vào cùng PDF.",
+        "earlierReplacing": "{count, plural, one {Bắt đầu lại sẽ thay thế # trang đã dịch} other {Bắt đầu lại sẽ thay thế # trang đã dịch}} khi bản dịch mới hoàn thành.",
+        "earlierOtherLanguage": "{count, plural, one {# trang đã} other {# trang đã}} được dịch sang {language}. Dịch sang {target} sẽ bắt đầu lại và thay thế chúng.",
+        "startOver": "Bắt đầu lại",
+        "keepAdding": "Thêm vào các trang đã dịch",
+        "progressNoteParts": "Dừng sẽ giữ các phần đã hoàn thành và bỏ phần đang xử lý.",
+        "progressPart": "Phần {part} trong tổng số {parts}",
+        "progressAssembling": "Đang ghép các trang vào một tài liệu"
+      },
+      "kind": "Nội dung cần dịch",
+      "kindText": "Văn bản",
+      "kindTextHint": "Dịch văn bản trong bảng nguồn. Tập tin tải lên sẽ được đọc dưới dạng văn bản.",
+      "languageNeeded": "Chọn ngôn ngữ đích để dịch",
+      "pdfAsTextOffer": "{name} đã được tải dưới dạng văn bản. Để dịch trực tiếp PDF, từng trang một, hãy chuyển sang \"Tài liệu\".",
+      "pdfAsTextSwitch": "Dịch dưới dạng tài liệu",
+      "pdfAsTextKeep": "Giữ ở dạng văn bản",
+      "uploadPickerTitle": "Tải lên tài liệu",
+      "uploadPickerHint": "PDF, Word, PowerPoint, văn bản, Markdown hoặc XML. Chỉ chọn một tài liệu mỗi lần.",
+      "uploadPickerConfirm": "Dùng tài liệu này"
     },
     "document": {
       "emptyTitle": "Mô tả tài liệu bạn muốn",
@@ -7090,7 +7127,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Giữ nguyên định dạng cho PDF",
-        "description": "Thêm bố cục \"Giữ nguyên định dạng\" vào chế độ Tài liệu, giúp tái tạo từng trang PDF với bản dịch ngay tại chỗ. Chức năng này sử dụng trình thông dịch mã và mô hình thị giác, nên chi phí cho mỗi trang sẽ cao hơn so với bản dịch chỉ có văn bản."
+        "description": "Thêm bố cục \"Giữ nguyên định dạng\" vào chế độ Tài liệu, giúp tái tạo từng trang PDF với bản dịch ngay tại chỗ. Chức năng này sử dụng trình thông dịch mã và mô hình thị giác, nên chi phí cho mỗi trang sẽ cao hơn so với bản dịch chỉ có văn bản.",
+        "limits": {
+          "defaultBatchPages": "Trang mỗi đợt, mặc định",
+          "maxBatchPages": "Đợt lớn nhất người dùng có thể chọn",
+          "maxDocumentPages": "Tổng trang mỗi tài liệu"
+        },
+        "limitsNote": "Người dùng dịch tài liệu theo từng đợt và có thể tăng lên đợt lớn nhất. Khi đạt tổng trang cho tài liệu, không thể dịch thêm. Mặc định vượt đợt lớn nhất, hoặc đợt lớn nhất vượt tổng trang, sẽ bị giảm cho phù hợp."
+      }
+    },
+    "limitsTitle": "Giới hạn",
+    "limitRange": "{min} đến {max}",
+    "limitsInvalid": "Một giới hạn nằm ngoài phạm vi cho phép. Kiểm tra các phạm vi được đánh dấu và thử lại.",
+    "overridesTitle": "Giới hạn khác cho một số người",
+    "overridesNote": "Giới hạn tùy chỉnh sẽ thay thế giới hạn này cho những người được chỉ định. Trường không điền sẽ giữ giá trị bên trên. Nếu có nhiều trường hợp, người dùng vượt quyền thuộc tính thư mục, thuộc tính thư mục vượt quyền tên miền email.",
+    "overrideScope": "Áp dụng cho",
+    "overrideTargets": "Ai (phân tách bằng dấu phẩy)",
+    "overrideInherit": "{value} (kế thừa)",
+    "overrideAdd": "Thêm giới hạn tùy chỉnh",
+    "overrideRemove": "Xóa",
+    "overrideScopes": {
+      "user": {
+        "label": "Người dùng",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Tên miền email",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Thuộc tính thư mục",
+        "placeholder": "department:health"
       }
     }
   },

@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {Traduci} one {Traduci # pagina} other {Traduci # pagine}}",
         "translateAgain": "Traduci di nuovo",
         "sourcePages": "Pagine di origine",
-        "pagesSelected": "{selected} su {total} selezionate · fino a {max} per esecuzione",
         "pagesField": "Pagine",
-        "pagesInvalid": "Questa selezione di pagine non può essere letta, oppure indica più di {max} pagine. Scrivila come 1-3, 8.",
-        "pagesLimit": "Un’esecuzione include fino a {max} pagine. Deseleziona prima una pagina.",
-        "pagesNone": "Seleziona almeno una pagina.",
         "pageLabel": "Pagina {page}",
         "pageEdits": "{count, plural, one {Pagina {page} · # modifica} other {Pagina {page} · # modifiche}}",
         "pages": "Pagine",
@@ -3276,7 +3272,7 @@
         "remember": "Ricorda queste istruzioni per i miei prossimi documenti",
         "fontsNote": "Font: viene usato il più simile disponibile, non quello originale del documento.",
         "progressTitle": "{count, plural, one {Traduzione di # pagina in {language}} other {Traduzione di # pagine in {language}}}",
-        "progressNote": "Interrompendo non si salva nulla da questo processo.",
+        "progressNote": "L'interruzione annulla questa traduzione.",
         "progressLabel": "Passaggi di traduzione",
         "stepWaiting": "In attesa",
         "stepRunning": "In corso…",
@@ -3357,8 +3353,49 @@
         "run": "Esegui",
         "runSummary": "{seconds} s · {tokens} token · {font}",
         "details": "Dettagli",
-        "unchecked": "Il controllo del layout non può essere eseguito per questa pagina. Rigenera con il controllo attivato per riprovare."
-      }
+        "unchecked": "Il controllo del layout non può essere eseguito per questa pagina. Rigenera con il controllo attivato per riprovare.",
+        "addPages": "Aggiungi pagine",
+        "addPagesTitle": "Pagine da aggiungere",
+        "batchSummary": "{selected} di {capacity} in questo batch",
+        "documentSummary": "{used} di {max} pagine del documento",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Pagine per batch",
+        "batchSizeDefault": "{size} (predefinito)",
+        "batchSizeRange": "Puoi aumentarlo fino a {max}.",
+        "batchSizeRaised": "{parts, plural, one {Un batch più grande richiede più tempo e usa di più il tuo budget.} other {Un batch più grande richiede più tempo e usa di più il tuo budget. Questo viene eseguito in # parti.}}",
+        "pageState": {
+          "translated": "Tradotto",
+          "later": "Prossimo batch",
+          "locked": "Oltre il limite"
+        },
+        "pageReason": {
+          "later": "Questo batch è pieno. Queste pagine possono andare nel prossimo batch.",
+          "laterRaise": "Questo batch è pieno. Queste pagine possono andare nel prossimo batch, oppure aumenta le pagine per batch per includerle ora.",
+          "locked": "Si possono tradurre al massimo {max} pagine di un documento, e il limite è stato raggiunto."
+        },
+        "pagesUnreadable": "Scrivi le pagine come numeri e intervalli, ad esempio 1-3, 8.",
+        "pagesOverBatch": "Sono {asked} pagine; questo batch ne accetta {capacity}. Nomina meno pagine o aumenta le pagine per batch.",
+        "pagesLimitReached": "Raggiunto il limite di {max} pagine per documento. Non è possibile tradurre altre pagine.",
+        "pagesNoneLeft": "Tutte le pagine indicate sono già tradotte.",
+        "earlierAdding": "{count, plural, one {# pagina è} other {# pagine sono}} già tradotte in {language}. Le nuove pagine vengono aggiunte allo stesso PDF.",
+        "earlierReplacing": "{count, plural, one {Ricominciando si sostituisce la # pagina tradotta} other {Ricominciando si sostituiscono le # pagine tradotte}} quando la nuova traduzione è completata.",
+        "earlierOtherLanguage": "{count, plural, one {# pagina è} other {# pagine sono}} tradotte in {language}. Tradurre in {target} ricomincia e le sostituisce.",
+        "startOver": "Ricominci invece",
+        "keepAdding": "Aggiungi invece alle pagine tradotte",
+        "progressNoteParts": "Se interrompi, mantieni le parti completate e scarti quella in corso.",
+        "progressPart": "Parte {part} di {parts}",
+        "progressAssembling": "Unire le pagine in un unico documento"
+      },
+      "kind": "Cosa tradurre",
+      "kindText": "Testo",
+      "kindTextHint": "Traduce il testo nel pannello di origine. Un file caricato viene letto come testo.",
+      "languageNeeded": "Scegli una lingua di destinazione per la traduzione",
+      "pdfAsTextOffer": "{name} è stato caricato come testo. Per tradurre il PDF direttamente, pagina per pagina, passa a Documento.",
+      "pdfAsTextSwitch": "Traduci come documento",
+      "pdfAsTextKeep": "Mantieni come testo",
+      "uploadPickerTitle": "Carica un documento",
+      "uploadPickerHint": "PDF, Word, PowerPoint, testo, Markdown o XML. Un documento alla volta.",
+      "uploadPickerConfirm": "Usa questo documento"
     },
     "document": {
       "emptyTitle": "Descrivi il documento desiderato",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Mantieni la formattazione per i PDF",
-        "description": "Aggiunge la modalità di layout \"Mantieni la formattazione\" alla modalità Documento, che ricostruisce ogni pagina PDF con la traduzione al suo posto. Utilizza il code interpreter e un modello di visione, quindi il costo di una pagina è superiore rispetto a una traduzione solo testo."
+        "description": "Aggiunge la modalità di layout \"Mantieni la formattazione\" alla modalità Documento, che ricostruisce ogni pagina PDF con la traduzione al suo posto. Utilizza il code interpreter e un modello di visione, quindi il costo di una pagina è superiore rispetto a una traduzione solo testo.",
+        "limits": {
+          "defaultBatchPages": "Pagine per batch, predefinito",
+          "maxBatchPages": "Il batch più grande che si può scegliere",
+          "maxDocumentPages": "Pagine per documento, totali"
+        },
+        "limitsNote": "Le persone traducono un documento un batch alla volta e possono aumentare il batch fino al massimo. Quando si raggiunge il totale del documento, non si possono tradurre altre pagine. Un predefinito superiore al batch massimo, o un batch massimo superiore al totale del documento, viene abbassato per adattarsi."
+      }
+    },
+    "limitsTitle": "Limiti",
+    "limitRange": "{min} a {max}",
+    "limitsInvalid": "Un limite è fuori dalla sua gamma consentita. Verifica gli intervalli evidenziati e riprova.",
+    "overridesTitle": "Limiti diversi per alcune persone",
+    "overridesNote": "Un override sostituisce questi limiti per le persone indicate. Un campo lasciato vuoto mantiene il valore sopra. Quando corrispondono più valori, una persona ha priorità su un attributo della directory, che ha priorità su un dominio email.",
+    "overrideScope": "Si applica a",
+    "overrideTargets": "Chi (separa più nomi con la virgola)",
+    "overrideInherit": "{value} (ereditato)",
+    "overrideAdd": "Aggiungi un override",
+    "overrideRemove": "Rimuovi",
+    "overrideScopes": {
+      "user": {
+        "label": "Persone",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Dominio email",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Attributo directory",
+        "placeholder": "department:health"
       }
     }
   },

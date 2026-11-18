@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {Přeložit} one {Přeložit # stránku} other {Přeložit # stránek}}",
         "translateAgain": "Přeložit znovu",
         "sourcePages": "Zdrojové stránky",
-        "pagesSelected": "Vybráno {selected} z {total} · max. {max} na jedno spuštění",
         "pagesField": "Stránky",
-        "pagesInvalid": "Tento výběr stránek nelze načíst nebo je označeno více než {max} stránek. Napište například 1–3, 8.",
-        "pagesLimit": "Jeden běh zahrnuje maximálně {max} stránek. Nejprve odznačte stránku.",
-        "pagesNone": "Vyberte alespoň jednu stránku.",
         "pageLabel": "Stránka {page}",
         "pageEdits": "{count, plural, one {Stránka {page} · # úprava} other {Stránka {page} · # úprav}}",
         "pages": "Stránky",
@@ -3276,7 +3272,7 @@
         "remember": "Zapamatovat tyto pokyny pro mé další dokumenty",
         "fontsNote": "Písma: použije se nejbližší dostupná varianta, ne původní z dokumentu.",
         "progressTitle": "{count, plural, one {Překládá se # stránka do {language}} other {Překládá se # stránek do {language}}}",
-        "progressNote": "Zastavením se z tohoto běhu nic neuloží.",
+        "progressNote": "Zastavením se tato překlad zahodí.",
         "progressLabel": "Kroky překladu",
         "stepWaiting": "Čekání",
         "stepRunning": "Probíhá…",
@@ -3357,8 +3353,49 @@
         "run": "Spustit",
         "runSummary": "{seconds} s · {tokens} tokenů · {font}",
         "details": "Podrobnosti",
-        "unchecked": "Kontrola rozložení na této stránce nemohla proběhnout. Pro opakování zkuste stránku znovu vykreslit s kontrolou."
-      }
+        "unchecked": "Kontrola rozložení na této stránce nemohla proběhnout. Pro opakování zkuste stránku znovu vykreslit s kontrolou.",
+        "addPages": "Přidat stránky",
+        "addPagesTitle": "Stránky k přidání",
+        "batchSummary": "{selected} z {capacity} v této dávce",
+        "documentSummary": "{used} z {max} stránek dokumentu",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Stránek na dávku",
+        "batchSizeDefault": "{size} (výchozí)",
+        "batchSizeRange": "Lze zvýšit až na {max}.",
+        "batchSizeRaised": "{parts, plural, one {Větší dávka trvá déle a používá více rozpočtu.} other {Větší dávka trvá déle a používá více rozpočtu. Tato běží ve # částech.}}",
+        "pageState": {
+          "translated": "Přeloženo",
+          "later": "Příští dávka",
+          "locked": "Nad limitem"
+        },
+        "pageReason": {
+          "later": "Tato dávka je plná. Tyto stránky mohou být v příští dávce.",
+          "laterRaise": "Tato dávka je plná. Tyto stránky mohou být v příští dávce, nebo zvýšte stránky na dávku a zahrněte je nyní.",
+          "locked": "Lze přeložit maximálně {max} stránek jednoho dokumentu a tento limit je vyčerpán."
+        },
+        "pagesUnreadable": "Zadejte stránky jako čísla a rozsahy, např. 1-3, 8.",
+        "pagesOverBatch": "To je {asked} stránek; tato dávka bere {capacity}. Zadejte méně stránek nebo zvýšte stránky na dávku.",
+        "pagesLimitReached": "Byl dosažen limit {max} stránek pro jeden dokument. Nelze přeložit více stránek.",
+        "pagesNoneLeft": "Každá uvedená stránka je již přeložena.",
+        "earlierAdding": "{count, plural, one {# stránka je} other {# stránek je}} již přeloženo do {language}. Nové stránky budou přidány do stejného PDF.",
+        "earlierReplacing": "{count, plural, one {Nový překlad nahradí # přeloženou stránku} other {Nový překlad nahradí # přeložených stránek}} po dokončení překladu.",
+        "earlierOtherLanguage": "{count, plural, one {# stránka je} other {# stránek je}} přeloženo do {language}. Překlad do {target} začne znovu a nahradí je.",
+        "startOver": "Začít znovu",
+        "keepAdding": "Přidat ke přeloženým stránkám",
+        "progressNoteParts": "Zastavení zachová dokončené části a zahodí tu běžící.",
+        "progressPart": "Část {part} z {parts}",
+        "progressAssembling": "Spojují se stránky do jednoho dokumentu"
+      },
+      "kind": "Co překládat",
+      "kindText": "Text",
+      "kindTextHint": "Překládá text v panelu zdroje. Nahraný soubor se načte jako text.",
+      "languageNeeded": "Vyberte cílový jazyk překladu",
+      "pdfAsTextOffer": "{name} byl načten jako text. Chcete-li přeložit samotné PDF po stránkách, přepněte na Dokument.",
+      "pdfAsTextSwitch": "Přeložit jako dokument",
+      "pdfAsTextKeep": "Zachovat jako text",
+      "uploadPickerTitle": "Nahrát dokument",
+      "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown nebo XML. Jeden dokument najednou.",
+      "uploadPickerConfirm": "Použít tento dokument"
     },
     "document": {
       "emptyTitle": "Popište požadovaný dokument",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Zachovat formátování u PDF",
-        "description": "Přidává rozložení \"Zachovat formátování\" v režimu dokumentu, které obnoví každou stránku PDF s překladovou úpravou. Používá code interpreter a vision model, takže stránka je dražší než překlad pouze textu."
+        "description": "Přidává rozložení \"Zachovat formátování\" v režimu dokumentu, které obnoví každou stránku PDF s překladovou úpravou. Používá code interpreter a vision model, takže stránka je dražší než překlad pouze textu.",
+        "limits": {
+          "defaultBatchPages": "Stránek na dávku, výchozí",
+          "maxBatchPages": "Největší dávka, kterou lze vybrat",
+          "maxDocumentPages": "Stránek na dokument celkem"
+        },
+        "limitsNote": "Dokument se překládá po dávkách a lze zvýšit dávku až na největší. Jakmile je dosažen celkový počet stránek dokumentu, nelze přeložit více jeho stránek. Výchozí nad největší dávku, nebo největší dávka nad celkový počet, se sníží, aby seděl."
+      }
+    },
+    "limitsTitle": "Limity",
+    "limitRange": "{min} až {max}",
+    "limitsInvalid": "Limit je mimo povolený rozsah. Zkontrolujte zvýrazněné rozsahy a zkuste znovu.",
+    "overridesTitle": "Jiné limity pro některé osoby",
+    "overridesNote": "Přepsání nahradí tyto limity pro uvedené osoby. Prázdné pole ponechá hodnotu výše. Pokud je několik shod, osoba má přednost před atributem adresáře, ten má přednost před doménou e-mailu.",
+    "overrideScope": "Platí pro",
+    "overrideTargets": "Kdo (oddělte více čárkami)",
+    "overrideInherit": "{value} (zděděno)",
+    "overrideAdd": "Přidat přepsání",
+    "overrideRemove": "Odstranit",
+    "overrideScopes": {
+      "user": {
+        "label": "Osoby",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Poštovní doména",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Adresářový atribut",
+        "placeholder": "department:health"
       }
     }
   },

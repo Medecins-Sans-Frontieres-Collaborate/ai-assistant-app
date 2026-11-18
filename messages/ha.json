@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Fassara} one {Fassara shafi #} other {Fassara shafuka #}}",
         "translateAgain": "Fassara sake",
         "sourcePages": "Shafukan asali",
-        "pagesSelected": "An zaɓi {selected} daga cikin {total} · har zuwa {max} a ko wane lokaci",
         "pagesField": "Shafuka",
-        "pagesInvalid": "Zaɓin shafin nan ba za a iya karantawa ba, ko kuma yafi {max} shafuka. Rubuta kamar 1-3, 8.",
-        "pagesLimit": "Zango ɗaya yana ɗaukar har zuwa shafuka {max}. Da farko cire wani shafi.",
-        "pagesNone": "Zaɓi aƙalla shafi ɗaya.",
         "pageLabel": "Shafi {page}",
         "pageEdits": "{count, plural, one {Shafi {page} · gyara # ɗaya} other {Shafi {page} · gyare-gyae #}}",
         "pages": "Shafuka",
@@ -3260,7 +3256,7 @@
         "remember": "Ka tuna waɗannan umarni don takardun na gaba",
         "fontsNote": "Fonts: ana amfani da mafi kusa da ake da shi, ba na takardun da kanta ba.",
         "progressTitle": "{count, plural, one {Ana fassara shafi # zuwa {language}} other {Ana fassara shafuka # zuwa {language}}}",
-        "progressNote": "Tsayawa ba zai adana komai daga wannan zagaye ba.",
+        "progressNote": "Tsayawa yana share wannan fassarar.",
         "progressLabel": "Matakan fassara",
         "stepWaiting": "Ana jira",
         "stepRunning": "Ana aiki…",
@@ -3341,8 +3337,49 @@
         "run": "Gudanar",
         "runSummary": "{seconds} s · {tokens} kalmomi · {font}",
         "details": "Cikakkun bayanai",
-        "unchecked": "An kasa gudanar da binciken tsarin wannan shafi. Sake nuna tare da binciken don sake gwadawa."
-      }
+        "unchecked": "An kasa gudanar da binciken tsarin wannan shafi. Sake nuna tare da binciken don sake gwadawa.",
+        "addPages": "Ƙara shafuka",
+        "addPagesTitle": "Shafukan da za a ƙara",
+        "batchSummary": "{selected} daga cikin {capacity} a wannan rukuni",
+        "documentSummary": "{used} daga cikin {max} shafukan takarda",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Shafuka a kowanne rukuni",
+        "batchSizeDefault": "{size} (tsoho)",
+        "batchSizeRange": "Za ka iya ƙara har zuwa {max}.",
+        "batchSizeRaised": "{parts, plural, one {Babban rukuni yana ɗaukar lokaci kuma yana cinye kasafin kuɗinka.} other {Babban rukuni yana ɗaukar lokaci kuma yana cinye kasafin kuɗinka. Wannan yana gudana a sassa #.}}",
+        "pageState": {
+          "translated": "An fassara",
+          "later": "Rukuni na gaba",
+          "locked": "An fi iyaka"
+        },
+        "pageReason": {
+          "later": "Wannan rukuni ya cika. Wadannan shafuka za su iya shiga rukuni na gaba.",
+          "laterRaise": "Wannan rukuni ya cika. Wadannan shafuka za su iya shiga rukuni na gaba, ko kuma ka ƙara shafuka a kowanne rukuni don shigarsu yanzu.",
+          "locked": "Akwai iyaka na {max} shafuka daga takarda ɗaya da za a iya fassara, kuma an kai wannan iyaka."
+        },
+        "pagesUnreadable": "Rubuta shafuka da lambobi ko jeri, kamar 1-3, 8.",
+        "pagesOverBatch": "Wannan {asked} shafuka ne; wannan rukuni yana ɗaukar {capacity}. Zaɓi shafuka kaɗan ko ƙara shafuka a kowanne rukuni.",
+        "pagesLimitReached": "An kai iyakar {max} shafuka daga takarda ɗaya. Ba za a iya fassara ƙarin shafuka ba.",
+        "pagesNoneLeft": "Dukkan shafukan da aka ambata an fassara su tuni.",
+        "earlierAdding": "{count, plural, one {An fassara shafi #} other {An fassara shafuka #}} zuwa {language}. Ana ƙara sababbin shafuka a PDF ɗaya.",
+        "earlierReplacing": "{count, plural, one {Fara daga farko yana maye gurbin shafi # da aka fassara} other {Fara daga farko yana maye gurbin shafuka # da aka fassara}} bayan sabuwar fassara ta gama.",
+        "earlierOtherLanguage": "{count, plural, one {An fassara shafi #} other {An fassara shafuka #}} zuwa {language}. Fassara zuwa {target} zai fara daga farko kuma ya maye gurbinsu.",
+        "startOver": "Fara daga farko maimakon haka",
+        "keepAdding": "Ci gaba da ƙara ga shafukan da aka fassara maimakon haka",
+        "progressNoteParts": "Tsayawa yana ajiye sassan da suka gama sannan yana watsar da wanda ke ci gaba.",
+        "progressPart": "Sashi {part} daga {parts}",
+        "progressAssembling": "Ana haɗa shafukan zuwa takarda guda"
+      },
+      "kind": "Abin da za a fassara",
+      "kindText": "Rubutu",
+      "kindTextHint": "Yana fassara rubutun da ke cikin mashaya tushe. Ana karanta fayil ɗin da ka ɗora azaman rubutu.",
+      "languageNeeded": "Zaɓi harshen da za a fassara zuwa",
+      "pdfAsTextOffer": "An ɗora {name} azaman rubutu. Don fassara PDF ɗin da kansa, shafi-shafi, koma Document.",
+      "pdfAsTextSwitch": "Fassara azaman takarda",
+      "pdfAsTextKeep": "Bar shi azaman rubutu",
+      "uploadPickerTitle": "Loda takarda",
+      "uploadPickerHint": "PDF, Word, PowerPoint, rubutu, Markdown ko XML. Takarda ɗaya a lokaci.",
+      "uploadPickerConfirm": "Yi amfani da wannan takarda"
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Kare tsarin rubutu don PDFs",
-        "description": "Yana kara tsarin \"Kare tsarin rubutu\" a yanayin Takardu, wanda ke sake gina kowace shafi ta PDF da fassarar tana cikin sa. Yana amfani da code interpreter da vision model, don haka kowane shafi yana da tsada fiye da fassarar rubutu kawai."
+        "description": "Yana kara tsarin \"Kare tsarin rubutu\" a yanayin Takardu, wanda ke sake gina kowace shafi ta PDF da fassarar tana cikin sa. Yana amfani da code interpreter da vision model, don haka kowane shafi yana da tsada fiye da fassarar rubutu kawai.",
+        "limits": {
+          "defaultBatchPages": "Shafuka a kowanne rukuni, tsoho",
+          "maxBatchPages": "Mafi girman rukuni da mutum zai iya zaɓa",
+          "maxDocumentPages": "Jimillar shafuka a kowanne takarda"
+        },
+        "limitsNote": "Mutane suna fassara takarda rukuni-rukuni, kuma za su iya ƙara rukuni har zuwa mafi girma. Idan an kai jimilla, ba za a iya fassara ƙarin shafuka ba. Tsoho da ya fi rukuni mafi girma, ko rukuni mafi girma da ya fi jimilla, zai sauka don dacewa."
+      }
+    },
+    "limitsTitle": "Iyakoki",
+    "limitRange": "{min} zuwa {max}",
+    "limitsInvalid": "Lalata na waje da iyakar da aka yarda. Dubi range da aka haskaka, ka gwada sake.",
+    "overridesTitle": "Iyakoki daban ga wasu",
+    "overridesNote": "Override yana sauya wadannan iyakoki ga mutanen da aka ambata. Idan aka bar filin babu komai, zai ci gaba da amfani da ƙima da ke sama. Idan mutane da dama sun dace, mutum yana fi directory attribute, wanda yana fi mail domain.",
+    "overrideScope": "Ya shafi",
+    "overrideTargets": "Waye (separate da commas)",
+    "overrideInherit": "{value} (an gada)",
+    "overrideAdd": "Ƙara override",
+    "overrideRemove": "Cire",
+    "overrideScopes": {
+      "user": {
+        "label": "Mutane",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Makarantar imel",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Sifar direktori",
+        "placeholder": "department:health"
       }
     }
   },

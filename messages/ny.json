@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Tanthauzirani} one {Tanthauzirani tsamba #} other {Tanthauzirani ma tsamba #}}",
         "translateAgain": "Tanthuazirani kachiwiri",
         "sourcePages": "Masamba oyambirira",
-        "pagesSelected": "{selected} mwa {total} asankhidwa · mpaka {max} nthawi imodzi",
         "pagesField": "Masamba",
-        "pagesInvalid": "Kusankhidwa kwa tsamba simungathe kuwerengedwa, kapena kwatchula ma tsamba oposa {max}. Lembani ngati 1-3, 8.",
-        "pagesLimit": "Nthawi imodzi imatenga mpaka ma tsamba {max}. Chotsani tsamba kaye.",
-        "pagesNone": "Sankhani tsamba limodzi kapena zambiri.",
         "pageLabel": "Tsamba {page}",
         "pageEdits": "{count, plural, one {Tsamba {page} · kusintha #} other {Tsamba {page} · kusintha #}}",
         "pages": "Masamba",
@@ -3260,7 +3256,7 @@
         "remember": "Kumbukani malangizo awa pa zikalata zanga zikudzawa",
         "fontsNote": "Ma font: zomwe zili pafupi ndi zomwe zilipo ndizomwe zigwiritsidwa ntchito, osati za chikalata cheni cheni.",
         "progressTitle": "{count, plural, one {Kumasulira tsamba # m'Chichewa kukhala {language}} other {Kumasulira masamba # m'Chichewa kukhala {language}}}",
-        "progressNote": "Kuyimitsa sikusunga chilichonse kuchokera pamene pano.",
+        "progressNote": "Kuyimitsa kumachotsa matembenuzidwe awa.",
         "progressLabel": "Mapazi a kumasulira",
         "stepWaiting": "Kudikirira",
         "stepRunning": "Zikuchitika...",
@@ -3341,8 +3337,49 @@
         "run": "Thamangani",
         "runSummary": "{seconds} s · {tokens} ma token · {font}",
         "details": "Zambiri",
-        "unchecked": "Kutsimikiza kapangidwe kanalephereka kuthamangira tsamba ili. Onetsetsani mwachiwonekere ndi kutsimikiza kuti muyese kachiwiri."
-      }
+        "unchecked": "Kutsimikiza kapangidwe kanalephereka kuthamangira tsamba ili. Onetsetsani mwachiwonekere ndi kutsimikiza kuti muyese kachiwiri.",
+        "addPages": "Onjezani masamba",
+        "addPagesTitle": "Masamba owonjezera",
+        "batchSummary": "{selected} mwa {capacity} mu batch iyi",
+        "documentSummary": "{used} mwa {max} masamba a chikalata",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Masamba pa batch",
+        "batchSizeDefault": "{size} (mwachizolowezi)",
+        "batchSizeRange": "Mutha kukweza mpaka {max}.",
+        "batchSizeRaised": "{parts, plural, one {Batch yayikulu imatenga nthawi yayitali ndipo imafunikira ndalama zambiri.} other {Batch yayikulu imatenga nthawi yayitali ndipo imafunikira ndalama zambiri. Iyi imathamanga mu zigawo za #.}}",
+        "pageState": {
+          "translated": "Yamasuliridwa",
+          "later": "Batch yotsatira",
+          "locked": "Kupitirira malire"
+        },
+        "pageReason": {
+          "later": "Batch iyi yazadza. Masamba awa atha kuyikidwa mu batch yotsatira.",
+          "laterRaise": "Batch iyi yazadza. Masamba awa atha kuyikidwa mu batch yotsatira, kapena kukweza masamba pa batch kuti mugwiritse ntchito tsopano.",
+          "locked": "Masamba ambiri {max} a chikalata chimodzi akhoza kumasuliridwa, ndipo malirero agwiritsidwa ntchito."
+        },
+        "pagesUnreadable": "Lembani masamba ngati manambala ndi maderalo, monga 1-3, 8.",
+        "pagesOverBatch": "Awa ndi masamba {asked}; batch iyi imatenga {capacity}. Chepetsani masamba kapena kukweza masamba pa batch.",
+        "pagesLimitReached": "Malire a masamba {max} pa chikalata chimodzi afika. Palibe masamba ena akhoza kumasuliridwa.",
+        "pagesNoneLeft": "Masamba onse olembedwa akumakhala atamasuliridwa kale.",
+        "earlierAdding": "{count, plural, one {Tsamba limodzi lasuliridwa kale ku {language}.} other {Masamba # asuliridwa kale ku {language}.}} Masamba atsopano awonjezedwa ku PDF yomweyo.",
+        "earlierReplacing": "{count, plural, one {Kuyambanso kuchotsa tsamba limodzi lasuliridwa} other {Kuyambanso kuchotsa masamba # asuliridwa}} pamene kumasuliridwa kwatsopano kutha.",
+        "earlierOtherLanguage": "{count, plural, one {Tsamba limodzi lasuliridwa ku {language}.} other {Masamba # asuliridwa ku {language}.}} Kumasulira ku {target} kuyambiranso ndikuchotsa masamba amenewa.",
+        "startOver": "Yambiranso m'malo mwake",
+        "keepAdding": "Onjezani ku masamba amamasuliridwa m'malo mwake",
+        "progressNoteParts": "Kusiya kusunga zigawo zomalizidwa ndikuchotsa zomwe zikuchitika.",
+        "progressPart": "Gawo {part} mwa {parts}",
+        "progressAssembling": "Kuphatikiza masamba mu chikalata chimodzi"
+      },
+      "kind": "Choti masulire",
+      "kindText": "Malemba",
+      "kindTextHint": "Kumasulira malemba mu pane ya gwero. Fayilo yomwe mumakweze imawerengedwa ngati malemba.",
+      "languageNeeded": "Sankhani chinenero chomwe mukufuna kumasulira",
+      "pdfAsTextOffer": "{name} yatumizidwa ngati malemba. Kumasulira PDF yokha, tsamba ndi tsamba, sinthani ku Chikalata.",
+      "pdfAsTextSwitch": "Masulirani ngati chikalata",
+      "pdfAsTextKeep": "Sungani ngati malemba",
+      "uploadPickerTitle": "Kweza chikalata",
+      "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown kapena XML. Chikalata chimodzi pa nthawi.",
+      "uploadPickerConfirm": "Gwiritsa ntchito chikalata ichi"
     },
     "document": {
       "emptyTitle": "Fotokozani chikalata chomwe mukufuna",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Sungani kapangidwe ka PDF",
-        "description": "Imathandiza kusunga kapangidwe ka PDF mu Document mode, komwe imakonza tsamba lililonse la PDF ndi kumasulira kwake. Imagwiritsa ntchito code interpreter ndi vision model, motero tsamba limodzi limakhala ndi mtengo wochuluka kuposa kutanthauzira mawu okha."
+        "description": "Imathandiza kusunga kapangidwe ka PDF mu Document mode, komwe imakonza tsamba lililonse la PDF ndi kumasulira kwake. Imagwiritsa ntchito code interpreter ndi vision model, motero tsamba limodzi limakhala ndi mtengo wochuluka kuposa kutanthauzira mawu okha.",
+        "limits": {
+          "defaultBatchPages": "Masamba pa batch, mwachizolowezi",
+          "maxBatchPages": "Batch yayikulu kwambiri yomwe munthu akhoza kusankha",
+          "maxDocumentPages": "Masamba pa chikalata, zonse"
+        },
+        "limitsNote": "Anthu amasulira chikalata batch ndi batch ndipo atha kukweza batch mpaka yayikulu kwambiri. Akafika zonse za chikalata, masamba ena sadzamasuliridwa. Mwachizolowezi akuuluka kuposa batch yayikulu, kapena batch yayikulu kuposa zonse za chikalata, amachepetsedwa kuti zikwaniritse."
+      }
+    },
+    "limitsTitle": "Malire",
+    "limitRange": "{min} mpaka {max}",
+    "limitsInvalid": "Malire ali kunja kwa zomwe zilolezedwa. Onani maderalo owonetsedwa ndiyeseni kachiwiri.",
+    "overridesTitle": "Malire osiyanasiyana kwa ena",
+    "overridesNote": "Override imalowetsa malire awa kwa anthu omwe atchulidwa. Gawo lopanda kanthu limasunga mtengo wapamwamba. Akawerengedwa ambiri, munthu amakhala woyamba, kenaka attribute ya directory, kenaka domain wa email.",
+    "overrideScope": "Zikukhudza",
+    "overrideTargets": "Ndani (gawani ndi malama)",
+    "overrideInherit": "{value} (yachitika)",
+    "overrideAdd": "Onjezani override",
+    "overrideRemove": "Chotsani",
+    "overrideScopes": {
+      "user": {
+        "label": "Anthu",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Dera la imelo",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Chinthu cha directory",
+        "placeholder": "department:health"
       }
     }
   },

@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {Çevir} one {# sayfayı çevir} other {# sayfayı çevir}}",
         "translateAgain": "Tekrar çevir",
         "sourcePages": "Kaynak sayfalar",
-        "pagesSelected": "{total} sayfanın {selected} tanesi seçili · her seferde en fazla {max}",
         "pagesField": "Sayfalar",
-        "pagesInvalid": "Bu sayfa seçimi okunamıyor veya {max} sayfadan fazla belirtilmiş. Şu şekilde yazın: 1-3, 8.",
-        "pagesLimit": "Bir işlemde en fazla {max} sayfa çevrilebilir. Önce bir sayfanın seçimini kaldırın.",
-        "pagesNone": "En az bir sayfa seçin.",
         "pageLabel": "Sayfa {page}",
         "pageEdits": "{count, plural, one {Sayfa {page} · # düzenleme} other {Sayfa {page} · # düzenleme}}",
         "pages": "Sayfalar",
@@ -3276,7 +3272,7 @@
         "remember": "Bu talimatları sonraki belgelerim için hatırla",
         "fontsNote": "Yazı tipleri: Belgeye ait değil, en yakın uygun eşleşme kullanılır.",
         "progressTitle": "{count, plural, one {# sayfa {language} diline çevriliyor} other {# sayfa {language} diline çevriliyor}}",
-        "progressNote": "Durdurmak bu işlemin hiçbir sonucunu korumaz.",
+        "progressNote": "Durdurmak bu çeviriyi iptal eder.",
         "progressLabel": "Çeviri adımları",
         "stepWaiting": "Bekleniyor",
         "stepRunning": "Devam ediyor…",
@@ -3357,8 +3353,49 @@
         "run": "Çalıştır",
         "runSummary": "{seconds} sn · {tokens} token · {font}",
         "details": "Ayrıntılar",
-        "unchecked": "Bu sayfa için düzen kontrolü çalıştırılamadı. Tekrar denemek için kontrolü açarak yeniden oluşturun."
-      }
+        "unchecked": "Bu sayfa için düzen kontrolü çalıştırılamadı. Tekrar denemek için kontrolü açarak yeniden oluşturun.",
+        "addPages": "Sayfa ekle",
+        "addPagesTitle": "Eklenecek sayfalar",
+        "batchSummary": "Bu grupta {capacity} üzerinden {selected}",
+        "documentSummary": "{max} belge sayfası üzerinden {used}",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Her grup için sayfa",
+        "batchSizeDefault": "{size} (varsayılan)",
+        "batchSizeRange": "Bunu {max} değerine kadar yükseltebilirsiniz.",
+        "batchSizeRaised": "{parts, plural, one {Daha büyük bir grup işlem süresini uzatır ve bütçenizden daha fazla kullanır.} other {Daha büyük bir grup işlem süresini uzatır ve bütçenizden daha fazla kullanır. Bu grup # parçada çalışır.}}",
+        "pageState": {
+          "translated": "Çevrildi",
+          "later": "Sonraki grup",
+          "locked": "Limitin üzerinde"
+        },
+        "pageReason": {
+          "later": "Bu grup dolu. Bu sayfalar bir sonraki gruba eklenebilir.",
+          "laterRaise": "Bu grup dolu. Bu sayfalar bir sonraki gruba eklenebilir veya grup başına sayfa sayısını artırarak şimdi ekleyebilirsiniz.",
+          "locked": "Bir belgeden en fazla {max} sayfa çevrilebilir ve bu sınır kullanıldı."
+        },
+        "pagesUnreadable": "Sayfaları sayı ve aralık olarak yazın, örn. 1-3, 8.",
+        "pagesOverBatch": "Bu {asked} sayfa; bu grup {capacity} alır. Daha az sayfa seçin veya grup başına sayfa sayısını artırın.",
+        "pagesLimitReached": "Bir belge için {max} sayfa sınırına ulaşıldı. Daha fazla sayfa çevrilemez.",
+        "pagesNoneLeft": "Adı verilen tüm sayfalar zaten çevrilmiş.",
+        "earlierAdding": "{count, plural, one {# sayfa zaten} other {# sayfa zaten}} {language} diline çevrildi. Yeni sayfalar aynı PDF'ye eklenir.",
+        "earlierReplacing": "{count, plural, one {Baştan başlamak, yeni çeviri tamamlandığında # çevrilmiş sayfayı değiştirir} other {Baştan başlamak, yeni çeviri tamamlandığında # çevrilmiş sayfayı değiştirir}}.",
+        "earlierOtherLanguage": "{count, plural, one {# sayfa} other {# sayfa}} {language} diline çevrildi. {target} diline çeviri baştan başlar ve bunların yerine geçer.",
+        "startOver": "Bunun yerine baştan başla",
+        "keepAdding": "Bunun yerine çevrilmiş sayfalara ekle",
+        "progressNoteParts": "Durdurursanız, tamamlanan parçalar korunur ve işlenmekte olan parça atılır.",
+        "progressPart": "{parts} parçadan {part}. parça",
+        "progressAssembling": "Sayfalar tek belgede birleştiriliyor"
+      },
+      "kind": "Ne çevrilecek",
+      "kindText": "Metin",
+      "kindTextHint": "Kaynak penceredeki metni çevirir. Yüklediğiniz bir dosya metin olarak okunur.",
+      "languageNeeded": "Çevrilecek hedef dili seçin",
+      "pdfAsTextOffer": "{name} metin olarak yüklendi. PDF'nin kendisini, sayfa sayfa çevirmek için Belge'ye geçin.",
+      "pdfAsTextSwitch": "Belge olarak çevir",
+      "pdfAsTextKeep": "Metin olarak tut",
+      "uploadPickerTitle": "Bir belge yükle",
+      "uploadPickerHint": "PDF, Word, PowerPoint, metin, Markdown veya XML. Her seferinde bir belge.",
+      "uploadPickerConfirm": "Bu belgeyi kullan"
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "PDF'ler için biçimlendirmeyi koru",
-        "description": "Belge moduna \"Biçimlendirmeyi koru\" yerleşimini ekler; bu seçenek, her bir PDF sayfasını çeviriyle birlikte yeniden oluşturur. Kod yorumlayıcı ve görsel model kullandığı için, sayfa başına maliyeti sadece metin çevirisinden daha fazladır."
+        "description": "Belge moduna \"Biçimlendirmeyi koru\" yerleşimini ekler; bu seçenek, her bir PDF sayfasını çeviriyle birlikte yeniden oluşturur. Kod yorumlayıcı ve görsel model kullandığı için, sayfa başına maliyeti sadece metin çevirisinden daha fazladır.",
+        "limits": {
+          "defaultBatchPages": "Varsayılan olarak grup başına sayfa",
+          "maxBatchPages": "Bir kişinin seçebileceği en büyük grup",
+          "maxDocumentPages": "Belge başına toplam sayfa"
+        },
+        "limitsNote": "Kişiler bir belgeyi grup grup çevirir ve grubu en büyük grup değerine kadar çıkarabilir. Belge toplamına ulaşıldığında, başka sayfa çevrilemez. Varsayılan, en büyük gruptan yüksekse veya en büyük grup, belge toplamından büyükse, sınır aşağı çekilir."
+      }
+    },
+    "limitsTitle": "Sınırlar",
+    "limitRange": "{min} - {max}",
+    "limitsInvalid": "Bir sınır izin verilen aralığın dışında. Vurgulanan aralıkları kontrol edip tekrar deneyin.",
+    "overridesTitle": "Bazı kişiler için farklı sınırlar",
+    "overridesNote": "Geçersiz kılma, adlandırılan kişiler için bu sınırların yerini alır. Boş bırakılan alan yukarıdaki değeri korur. Birkaç eşleşme olduğunda, kişi dizin özniteliğinin ve o da mail domaininin önündedir.",
+    "overrideScope": "Uygulanan",
+    "overrideTargets": "Kimler (birkaçını virgül ile ayırın)",
+    "overrideInherit": "{value} (devralındı)",
+    "overrideAdd": "Geçersiz kılma ekle",
+    "overrideRemove": "Kaldır",
+    "overrideScopes": {
+      "user": {
+        "label": "Kişiler",
+        "placeholder": "ad@ornek.org"
+      },
+      "domain": {
+        "label": "E-posta alanı",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Dizin niteliği",
+        "placeholder": "department:health"
       }
     }
   },

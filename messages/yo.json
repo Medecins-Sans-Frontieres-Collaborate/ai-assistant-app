@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Túmọ̀} one {Túmọ̀ ojúewé #} other {Túmọ̀ ojúewé #}}",
         "translateAgain": "Túmọ̀ lẹ́ẹkansi",
         "sourcePages": "Ojúewé orísun",
-        "pagesSelected": "{selected} nínú {total} ti a yàn · tó {max} lêsẹ̀kan",
         "pagesField": "Ojúewé",
-        "pagesInvalid": "Àṣàyàn ojúewé yìí kì í ṣe é kà, tàbí pé ó ju ojúewé {max} lọ. Kọ́ o báyìí: 1-3, 8.",
-        "pagesLimit": "Ìfáìlì kan gba tó ojúewé {max}. Yọ ojúewé kan kúrò kọ́kọ́.",
-        "pagesNone": "Yàn ojúewé kan jù lọ jọwọ.",
         "pageLabel": "Ojúewé {page}",
         "pageEdits": "{count, plural, one {Ojúewé {page} · # àtúnṣe} other {Ojúewé {page} · # àtúnṣe}}",
         "pages": "Ojúewé",
@@ -3260,7 +3256,7 @@
         "remember": "Rántí àṣẹ wọ̀nyí fún àwọn fáìlì mi tó tẹ̀síwá",
         "fontsNote": "Fọ́ntì: ti a bá àwọn tó wà lójúwe jọ, kì í ṣe ti fáìlì náà.",
         "progressTitle": "{count, plural, one {Nṣiṣẹ itumọ # ojúewé sí {language}} other {Nṣiṣẹ itumọ # ojúewé sí {language}}}",
-        "progressNote": "Dídákẹ́kọ̀ọ́ yìí kò dá ohunkóhun sílẹ̀ látọwọ́ ìpẹ̀yà yìí.",
+        "progressNote": "Dídákẹ́kọ jẹ́ kí itumọ̀ yìí parí.",
         "progressLabel": "Ìpele itumọ̀",
         "stepWaiting": "Níbi pẹ̀lú",
         "stepRunning": "Níṣíṣe…",
@@ -3341,8 +3337,49 @@
         "run": "Ṣe",
         "runSummary": "{seconds} s · {tokens} awọn aami · {font}",
         "details": "Alaye",
-        "unchecked": "Ayẹwo akoto ko le ṣiṣẹ fun oju-iwe yii. Tún ṣe pẹlu ayẹwo lati gbiyanju lẹẹkansi."
-      }
+        "unchecked": "Ayẹwo akoto ko le ṣiṣẹ fun oju-iwe yii. Tún ṣe pẹlu ayẹwo lati gbiyanju lẹẹkansi.",
+        "addPages": "Ṣafikun àwọn ojúewé",
+        "addPagesTitle": "Àwọn ojúewé láti ṣàfikún",
+        "batchSummary": "{selected} nínú {capacity} nínú àgbékà yìí",
+        "documentSummary": "{used} nínú {max} ojúewé ìwé",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Ojúewé kọọkan nínú àgbékà",
+        "batchSizeDefault": "{size} (àṣàṣẹ)",
+        "batchSizeRange": "O le gbe e soke de {max}.",
+        "batchSizeRaised": "{parts, plural, one {Àgbékà tó tóbi ju gba akoko diẹ sii àti pé yóò lo owó rẹ síi.} other {Àgbékà tó tóbi ju gba akoko diẹ sii àti pé yóò lo owó rẹ síi. Èyí máa ṣiṣẹ nínú apá #.}}",
+        "pageState": {
+          "translated": "Ti túmọ̀",
+          "later": "Àgbékà tó kàn",
+          "locked": "Kúrò lórí àlà"
+        },
+        "pageReason": {
+          "later": "Àgbékà yìí ti kún. Àwọn ojúewé wọ̀nyí lè wà nínú àgbékà tó kàn.",
+          "laterRaise": "Àgbékà yìí ti kún. Àwọn ojúewé wọ̀nyí lè wà nínú àgbékà tó kàn, tàbí gbe iye ojúewé kọọkan soke kí wọ́n wa sí i.",
+          "locked": "Pípò jùlọ {max} ojúewé lórí ìwé kan ni a le túmọ̀, àtàwọn yìí ti kún."
+        },
+        "pagesUnreadable": "Kọ ojúewé gẹ́gẹ́ bí nónba àti àkójọpọ̀, bíi 1-3, 8.",
+        "pagesOverBatch": "Ìyẹn jẹ́ {asked} ojúewé; àgbékà yìí gbà {capacity}. Darúkọ díẹ̀ síi tàbí gbe iye ojúewé kọọkan soke.",
+        "pagesLimitReached": "Ìdíyelé {max} ojúewé fún ìwé kan ti pé. Kò sí ojúewé míì tí a le túmọ̀.",
+        "pagesNoneLeft": "Gbogbo ojúewé tí a darúkọ ti túmọ̀ tán.",
+        "earlierAdding": "{count, plural, one {# ojúewé ti} other {# ojúewé ti}} ti túmọ̀ sí {language}. Àwọn ojúewé tuntun ni a fikún si PDF kan naa.",
+        "earlierReplacing": "{count, plural, one {Bí àtúnbẹrẹ ṣe bẹ̀rẹ̀ yóò rọ́pò ojúewé {#} tí a ti túmọ̀} other {Bí àtúnbẹrẹ ṣe bẹ̀rẹ̀ yóò rọ́pò ojúewé {#} tí a ti túmọ̀}} nígbà tí ìtumọ̀ tuntun bá parí.",
+        "earlierOtherLanguage": "{count, plural, one {# ojúewé ti} other {# ojúewé ti}} túmọ̀ sí {language}. Ìtumọ̀ sí {target} túnbẹrẹ kí ó sì rọ́pò wọn.",
+        "startOver": "Tún bẹ̀rẹ̀ dípò",
+        "keepAdding": "Ṣàfikún sí àwọn ojúewé tí a ti túmọ̀ dípò",
+        "progressNoteParts": "Dídà dáwọ́ dúró yóò pa àwọn apá tí o ti parí tì, tí yóò sì da èyí tó wà lókè sílẹ̀.",
+        "progressPart": "Apá {part} nínú {parts}",
+        "progressAssembling": "N ṣe àpapọ̀ ojúewé sí ìwé kan"
+      },
+      "kind": "Kí ni láti túmọ̀",
+      "kindText": "Ìtẹ̀sí ọrọ̀",
+      "kindTextHint": "Túmọ̀ ọrọ̀ inú pẹ́ènì orísun. Fáìlì tí o gbé wọlé ni a ka gẹ́gẹ́ bí ọrọ̀.",
+      "languageNeeded": "Yan èdè ibi-afẹ́ si fún ìtumọ̀",
+      "pdfAsTextOffer": "{name} ni a kó wọlé gẹ́gẹ́ bí ọrọ̀. Láti túmọ̀ PDF fúnra rẹ̀, ojúewé kọọkan, yí padà sí Ìwé.",
+      "pdfAsTextSwitch": "Túmọ̀ gẹ́gẹ́ bí ìwé",
+      "pdfAsTextKeep": "Ṣètọju gẹ́gẹ́ bí ọrọ̀",
+      "uploadPickerTitle": "Gbe iwe kan wọle",
+      "uploadPickerHint": "PDF, Word, PowerPoint, ọrọ, Markdown tàbí XML. Iwe kan pere ni igba kọọkan.",
+      "uploadPickerConfirm": "Lo iwe yi"
     },
     "document": {
       "emptyTitle": "Ṣàpèjúwe iwe ti o fẹ",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Ṣètọju ìlàna ìfọkànsin fún PDF",
-        "description": "Àfikún àtọka \"Ṣètọju ìlàna ìfọkànsin\" sí ipo Ìwé, tó ń tún ojúewé kọọkan PDF ṣe pẹ̀lú ìtumọ̀ tó wà lórí. Ó ń lo code interpreter àti vision model, nítorí náà, ojúewé kọọkan yó kó owo ju ìtumọ̀ ọrọ̀ díẹ̀ lọ."
+        "description": "Àfikún àtọka \"Ṣètọju ìlàna ìfọkànsin\" sí ipo Ìwé, tó ń tún ojúewé kọọkan PDF ṣe pẹ̀lú ìtumọ̀ tó wà lórí. Ó ń lo code interpreter àti vision model, nítorí náà, ojúewé kọọkan yó kó owo ju ìtumọ̀ ọrọ̀ díẹ̀ lọ.",
+        "limits": {
+          "defaultBatchPages": "Ojúewé kọọkan nínú àgbékà, àtọkànwá",
+          "maxBatchPages": "Àgbékà tó tóbi jù tí ènìyàn le yan",
+          "maxDocumentPages": "Ojúewé kọọkan fún ìwé kan, lápapọ̀"
+        },
+        "limitsNote": "Àwọn ènìyàn máa túmọ̀ ìwé ní àgbékà kọọkan, wọ́n á sì le gbe àgbékà náà soke dé tóbi jùlọ. Nígbà tí ipinlapapọ̀ ìwé bá pé, a kò le túmọ̀ ojúewé mìíràn rẹ̀ mọ́. Àtọkànwá tó ga ju àgbékà tó tóbi jù lọ, tàbí àgbékà tó tóbi jù tó ju ipinlapapọ̀ ìwé lọ, ni a máa dín kù kí ó bà a mu."
+      }
+    },
+    "limitsTitle": "Ìdíyelé",
+    "limitRange": "{min} sí {max}",
+    "limitsInvalid": "Ìdíyelé kan wà níta àkòtun tó jẹwọ́. Ṣàyẹ̀wò àkòpọ̀ tí a tẹnumọ àti gbìyànjú lẹ́ẹ̀kansi.",
+    "overridesTitle": "Ìdíyelé yàtọ̀ fún àwọn kan",
+    "overridesNote": "Ìfarapa yìí yóò rọ́pò àwọn ìdìyelé wọ̀nyí fún àwọn ènìyàn tí o bá darukọ. Àwọn ààyè tí a fi sílẹ̀ ṣofo yóò mu iye lókè. Nígbà tí ọ̀pọ̀ bá wáyé, ènìyàn ni ipo tó ga ju àtọka adirẹ́sì, tí ó ga ju ọdẹ́ imeélì.",
+    "overrideScope": "Lo sí",
+    "overrideTargets": "Táláà (pín àwọn pupọ̀ pẹ̀lú kọ́má)",
+    "overrideInherit": "{value} (gbàgbọ́)",
+    "overrideAdd": "Ṣàfikún ìfarapa",
+    "overrideRemove": "Yọ",
+    "overrideScopes": {
+      "user": {
+        "label": "Àwọn ènìyàn",
+        "placeholder": "oruko@example.org"
+      },
+      "domain": {
+        "label": "Ibi-iṣowo imeeli",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Àmì ìtòsọ́nà",
+        "placeholder": "department:health"
       }
     }
   },

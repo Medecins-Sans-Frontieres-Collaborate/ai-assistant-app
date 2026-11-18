@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Prevedi} one {Prevedi # stranu} other {Prevedi # strana}}",
         "translateAgain": "Prevedi ponovo",
         "sourcePages": "Izvorne strane",
-        "pagesSelected": "Izabrano {selected} od {total} · najviše {max} po izvršavanju",
         "pagesField": "Strane",
-        "pagesInvalid": "Ovaj izbor strana nije čitljiv ili je označeno više od {max} strana. Napišite kao 1-3, 8.",
-        "pagesLimit": "Jedno izvršavanje obuhvata najviše {max} strana. Prvo uklonite neku stranu.",
-        "pagesNone": "Izaberite bar jednu stranu.",
         "pageLabel": "Strana {page}",
         "pageEdits": "{count, plural, one {Strana {page} · # izmena} other {Strana {page} · # izmena}}",
         "pages": "Strane",
@@ -3260,7 +3256,7 @@
         "remember": "Zapamti ove instrukcije za moje naredne dokumente",
         "fontsNote": "Fontovi: koristi se najbliži dostupan, ne originalni iz dokumenta.",
         "progressTitle": "{count, plural, one {Prevod # stranice na {language}} other {Prevod # stranica na {language}}}",
-        "progressNote": "Zaustavljanjem se ništa iz ove obrade ne sačuva.",
+        "progressNote": "Zaustavljanje odbacuje ovaj prevod.",
         "progressLabel": "Koraci prevođenja",
         "stepWaiting": "Čekanje",
         "stepRunning": "U toku...",
@@ -3341,8 +3337,49 @@
         "run": "Pokreni",
         "runSummary": "{seconds} s · {tokens} tokena · {font}",
         "details": "Detalji",
-        "unchecked": "Provera izgleda nije mogla da se izvrši za ovu stranicu. Ponovo renderujte sa uključenom proverom da pokušate ponovo."
-      }
+        "unchecked": "Provera izgleda nije mogla da se izvrši za ovu stranicu. Ponovo renderujte sa uključenom proverom da pokušate ponovo.",
+        "addPages": "Dodaj stranice",
+        "addPagesTitle": "Stranice za dodavanje",
+        "batchSummary": "{selected} od {capacity} u ovoj seriji",
+        "documentSummary": "{used} od {max} stranica dokumenta",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Stranica po seriji",
+        "batchSizeDefault": "{size} (podrazumevano)",
+        "batchSizeRange": "Možete povećati do {max}.",
+        "batchSizeRaised": "{parts, plural, one {Veća serija traje duže i troši više vašeg budžeta.} other {Veća serija traje duže i troši više vašeg budžeta. Ova se izvršava u # delova.}}",
+        "pageState": {
+          "translated": "Prevedeno",
+          "later": "Sledeća serija",
+          "locked": "Preko limita"
+        },
+        "pageReason": {
+          "later": "Ova serija je puna. Ove stranice se mogu prevesti u sledećoj seriji.",
+          "laterRaise": "Ova serija je puna. Ove stranice se mogu prevesti u sledećoj seriji, ili povećajte broj stranica po seriji da biste ih uključili odmah.",
+          "locked": "Najviše {max} stranica iz jednog dokumenta može biti prevedeno, a taj limit je iskorišćen."
+        },
+        "pagesUnreadable": "Unesite stranice kao brojeve i opsege, kao što su 1-3, 8.",
+        "pagesOverBatch": "To je {asked} stranica; ova serija prima {capacity}. Navedite manje stranica ili povećajte broj stranica po seriji.",
+        "pagesLimitReached": "Limit od {max} stranica za jedan dokument je dostignut. Nije moguće prevesti više stranica.",
+        "pagesNoneLeft": "Svaka navedena stranica je već prevedena.",
+        "earlierAdding": "{count, plural, one {# stranica je} other {# stranica su}} već prevedene na {language}. Nove stranice se dodaju u isti PDF.",
+        "earlierReplacing": "{count, plural, one {Započinjanjem iznova menja se # prevedena stranica} other {Započinjanjem iznova menjaju se # prevedene stranice}} kada se nova verzija prevoda završi.",
+        "earlierOtherLanguage": "{count, plural, one {# stranica je} other {# stranica su}} prevedene na {language}. Prevođenje na {target} započinje iznova i menja ih.",
+        "startOver": "Umesto toga započnite iznova",
+        "keepAdding": "Umesto toga dodajte novo prevedenim stranicama",
+        "progressNoteParts": "Zaustavljanjem se čuvaju završeni delovi, a odbacuje onaj u toku.",
+        "progressPart": "Deo {part} od {parts}",
+        "progressAssembling": "Spajanje stranica u jedan dokument"
+      },
+      "kind": "Šta prevoditi",
+      "kindText": "Tekst",
+      "kindTextHint": "Prevodi tekst u izvornom panelu. Datoteka koju otpremite tumači se kao tekst.",
+      "languageNeeded": "Izaberite ciljni jezik za prevod",
+      "pdfAsTextOffer": "{name} je učitan kao tekst. Za prevođenje samog PDF-a, stranu po stranu, prebacite se na Dokument.",
+      "pdfAsTextSwitch": "Prevedite kao dokument",
+      "pdfAsTextKeep": "Zadrži kao tekst",
+      "uploadPickerTitle": "Otpremite dokument",
+      "uploadPickerHint": "PDF, Word, PowerPoint, tekst, Markdown ili XML. Jedan dokument u isto vreme.",
+      "uploadPickerConfirm": "Upotrebite ovaj dokument"
     },
     "document": {
       "emptyTitle": "Opišite dokument koji želite",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Očuvaj formatiranje za PDF-ove",
-        "description": "Dodaje prikaz „Očuvaj formatiranje“ u režimu Dokumenta, koji rekonstruiše svaku PDF stranicu sa prevodom. Koristi code interpreter i vision model, pa je cena po stranici veća nego za prevod samo teksta."
+        "description": "Dodaje prikaz „Očuvaj formatiranje“ u režimu Dokumenta, koji rekonstruiše svaku PDF stranicu sa prevodom. Koristi code interpreter i vision model, pa je cena po stranici veća nego za prevod samo teksta.",
+        "limits": {
+          "defaultBatchPages": "Stranica po seriji, podrazumevano",
+          "maxBatchPages": "Najveća serija koju korisnik može izabrati",
+          "maxDocumentPages": "Stranica po dokumentu, ukupno"
+        },
+        "limitsNote": "Dokument se prevodi seriju po seriju, a serija se može povećati do najveće dozvoljene. Kada ukupni broj stranica dokumenta bude dostignut, nije moguće prevoditi više njegovih stranica. Podrazumevana vrednost iznad najveće serije, ili serija iznad ukupnog broja stranica dokumenta, biće smanjena da odgovara granici."
+      }
+    },
+    "limitsTitle": "Limiti",
+    "limitRange": "{min} do {max}",
+    "limitsInvalid": "Limit je izvan dozvoljenog opsega. Proverite označene opsege i pokušajte ponovo.",
+    "overridesTitle": "Različiti limiti za neke osobe",
+    "overridesNote": "Izmena menja ove limite za osobe koje su navedene. Polje koje ostane prazno zadržava vrednost iznad. Kada postoji više podudaranja, osoba ima prednost nad atributom direktorijuma, koji ima prednost nad domenom e-pošte.",
+    "overrideScope": "Primeni na",
+    "overrideTargets": "Ko (odvojite više sa zarezima)",
+    "overrideInherit": "{value} (nasleđeno)",
+    "overrideAdd": "Dodaj izmenu",
+    "overrideRemove": "Ukloni",
+    "overrideScopes": {
+      "user": {
+        "label": "Osobe",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Mail domen",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Atribut direktorijuma",
+        "placeholder": "department:health"
       }
     }
   },

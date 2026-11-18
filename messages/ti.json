@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {ትርጉም} one {ትርጉም ገጽ #} other {ትርጉም ገጻት #}}",
         "translateAgain": "ኣብ ትካል ድሕሪ ትርጉም",
         "sourcePages": "መለላዊ ገጻት",
-        "pagesSelected": "{selected} ካብ {total} ይተመርፅ· ኣብ ነፃዊ {max} ግዜ",
         "pagesField": "ገጻት",
-        "pagesInvalid": "ዝተመርፀ ገጻት ክትብቅ ኣይክኣልን፣ ወይ ብዝሓሰ ኣብ {max} ዝበሃል ገጻት ስም የኣምራን። ብ. ምስ 1-3, 8 እንተ ታህል።",
-        "pagesLimit": "ኣብ ነፃዊ ግዜ {max} ገጻት ይኸውኑ። ቃለ ገጽ ቀደም ትወጽእ።",
-        "pagesNone": "ነዚ ዝተመርፀ ገጽ ምርግጋዕ ይስፍኑ።",
         "pageLabel": "ገጽ {page}",
         "pageEdits": "{count, plural, one {ገጽ {page} · ሓደ ቅየም} other {ገጽ {page} · {count} ቅየማት}}",
         "pages": "ገጻት",
@@ -3260,7 +3256,7 @@
         "remember": "ነዚ መምሕዳር ኣብ ብቕድው ውጽኢታት ይክአል።",
         "fontsNote": "ፎንት: ዝተቃጽለ ቅርብ ተመሳሳል ይጭእ፡ ኣብ መጽሓፍ ዘሎ የብሉን።",
         "progressTitle": "{count, plural, one {ኣዚ ገጽ ን {language} እዚ ተትርጎም እዩ} other {ኣዚ ገጻት ን {language} ተትርጎም እዩ}}",
-        "progressNote": "ምቁራብ ንዚ እውን ኣምሓደው ነይዎ።",
+        "progressNote": "ኣብርሓ መልእኽቲ ትርጉም ይጥል።",
         "progressLabel": "ስራሕ ትርጉም",
         "stepWaiting": "እትጸንቕ",
         "stepRunning": "ብሕጂ ብስራሕ እዩ…",
@@ -3341,8 +3337,49 @@
         "run": "ኣሞላ",
         "runSummary": "{seconds} ሰከንዶታት · {tokens} token  · {font}",
         "details": "ዝርዝር",
-        "unchecked": "ቅድሚ ምምሕዳር ነዚ ገፅ ኣይተካየደን። ቅድሚ ምምሕዳር ማዕበል ተብሉ ክትኣይዝ ተኸተላ."
-      }
+        "unchecked": "ቅድሚ ምምሕዳር ነዚ ገፅ ኣይተካየደን። ቅድሚ ምምሕዳር ማዕበል ተብሉ ክትኣይዝ ተኸተላ.",
+        "addPages": "ገጽታት ደምስሱ",
+        "addPagesTitle": "ዝተወሰኑ ገጽታት",
+        "batchSummary": "{selected} ካብ {capacity} እዚ ባቶም ውሽጥ",
+        "documentSummary": "{used} ካብ {max} ዝዘሰነ ገጽታት ደብዳይ",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "ገጽታት ብባቶም",
+        "batchSizeDefault": "{size} (ንቁ) ",
+        "batchSizeRange": "ክጠውዓዉ ዝኸኣ ክልተ {max} ይኸውን ይኽእል.",
+        "batchSizeRaised": "{parts, plural, one {ባቶም ናይ ግዕኡ ክብየ እንተሃለወ፡ ቕርበትን በጀትን ይሕንው.} other {ባቶም ናይ ግዕኡ ክብየ እንተሃለወ፡ ቕርበትን በጀትን ይሕንው። እዚ ባቶም ብ # ክፋል ይሕገ፡}}",
+        "pageState": {
+          "translated": "ተተርጎሞ",
+          "later": "ባቶም ቀጺሉ",
+          "locked": "ቅድሚ ደረበ"
+        },
+        "pageReason": {
+          "later": "እዚ ባቶም ዝተልዓለ። እዚ ገጽታት ኣብ ባቶም ቀጺሉ ክኸውኑ ይኽእሉ.",
+          "laterRaise": "እዚ ባቶም ዝተልዓለ። እዚ ገጽታት ኣብ ባቶም ቀጺሉ ክኸውኑ ይኽእሉ፡ ወይ ገጽታት ብባቶም ክጠውዓዉ እንተሃለወ፡ ሕጂ ይኽእሉ.",
+          "locked": "ብዝተሓጋገዘ {max} ገጽታት ደብዳይ ክተተርጎሙ ይኽእሉ፡ ዝተሓጋገዘ ምስበጺ."
+        },
+        "pagesUnreadable": "ገጽታት ቁፅሪን ናይ ምሕደራ ናይ ገጽታት ከተን፡ እቲ ምሳናይ 1-3፡ 8 ።",
+        "pagesOverBatch": "እዚ {asked} ገጽታት እዩ፡ እዚ ባቶም {capacity} ይከኣል፡ ገጽታት ሓሳዊ ከማዘን ወይ ገጽታት ብባቶም ክጠውዓዉ.",
+        "pagesLimitReached": "ዝተሓጋገዘ {max} ገጽታት ንደብዳይ ተራአየ። ተጨማሪ ገጽታት ክተተርጎሙ ኣይኽእሉን.",
+        "pagesNoneLeft": "ኩሉ ዝተጠራቅቱ ገጽታት ኸኣ ተተርጎሙ.",
+        "earlierAdding": "{count, plural, one {# ገጽ ተተርጎሞ እዩ} other {# ገጽታት ተተርጎሙ እዮም}} ኣብ {language}። ገጽታት ናይ ሓዱሽ ቃወም ኣብ ናብይ PDF ይተወሰኑ.",
+        "earlierReplacing": "{count, plural, one {እዋናን ኣብ # ተተርጎመ ገጽ ይተስዕብ} other {እዋናን ኣብ # ተተርጎመ ገጽታት ይተስዕቡ}} እግዚ ተርጉም ከጨምረ.",
+        "earlierOtherLanguage": "{count, plural, one {# ገጽ ተተርጎሞ እዩ} other {# ገጽታት ተተርጎሙ እዮም}} ኣብ {language}። ብ {target} ክተተርጎም ይግዝና፡ ይተስዕቡ.",
+        "startOver": "ንቀደም ጀምር",
+        "keepAdding": "ኣብ ተተርጎመ ገጽታት ደምስሱ",
+        "progressNoteParts": "ምቁራብ እዋነት ዝተዋጽኡ ክፋል ይዕበዩ፡ እዚ ተርጉም ዝተግበሩ እውዒ.",
+        "progressPart": "ክፋል {part} ካብ {parts}",
+        "progressAssembling": "ገጽታት ኣብ ሓደ ደብዳይ ይኣእትዉ"
+      },
+      "kind": "ንመተርጎም ዝግበሩ",
+      "kindText": "ጽሑፋ",
+      "kindTextHint": "ጽሑፍ ኣብ ምስል ዝተቀመጠ፡ ዝጸበሓካ ፋይል እንተተጠቀመ ኣብ ጽሑፍ ይነበብ.",
+      "languageNeeded": "ብትሕቲ ቋንቋ ንተርጎም ዝምልከት ምረፅ",
+      "pdfAsTextOffer": "{name} ኣብ ጽሑፍ ተዓደበ። ምርጫ ናብ ደብዳይ ዘይፍጻኹ ዚ PDF ባቶም ባቶም ንተተርጎም.",
+      "pdfAsTextSwitch": "ናብ ደብዳይ ንተርጎም",
+      "pdfAsTextKeep": "ኣብ ጽሑፍ ምርካት",
+      "uploadPickerTitle": "ተሰናዳዕ መዘኻኽያ ሓሳው",
+      "uploadPickerHint": "PDF, Word, PowerPoint, ናይ ጽሑፍ ፋይል, Markdown ወይ XML፡ ንኽንደይ ሓዚ መዘኻኽያ ፡፡",
+      "uploadPickerConfirm": "ንእዚ መዘኻኽያ ተጠቀም"
     },
     "document": {
       "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "ዝተቐመጠ ሞያ፣ PDF ዝትሓገስ ቅንጡ ድገም፡",
-        "description": "\"Preserve formatting\" ብሓላፍነት ቅርጸምስና ኣተሓሳሰብ ዝያዳ ብምምዝጋን ብዚ Document mode ናይ PDF ገጽ ድሕሪ ትርጉም ተመሓዘ። ብ code interpreter ከምኡ'ውን ብ vision model ይጠቕም፣ ሓንቲ ገጽ ከም ትንታነ ታዲስ ትርጉም ፍዲ ዝበዝሕ ይኸውን።"
+        "description": "\"Preserve formatting\" ብሓላፍነት ቅርጸምስና ኣተሓሳሰብ ዝያዳ ብምምዝጋን ብዚ Document mode ናይ PDF ገጽ ድሕሪ ትርጉም ተመሓዘ። ብ code interpreter ከምኡ'ውን ብ vision model ይጠቕም፣ ሓንቲ ገጽ ከም ትንታነ ታዲስ ትርጉም ፍዲ ዝበዝሕ ይኸውን።",
+        "limits": {
+          "defaultBatchPages": "ገጽታት ብባቶም፡ ብንቁ",
+          "maxBatchPages": "ዝሓደስ ባቶም ሓጺር ብሰባት ይኸውን",
+          "maxDocumentPages": "ገጻት ብደብዳይ፡ በዓል ዓገደ"
+        },
+        "limitsNote": "ሰባት ደብዳይን ባቶም ባቶም ይተርጎም፡ ኣብ ዝሓደስ ባቶም ክጠውዓዉ ይኽእሉ። ትኽክለኡ ደብዳይ ዓገደ ንድሕሪት ንተርጎም ኣይኽእሉን፡ ንቁ ካብ ባቶም ዝሓደስ ወይ ዝሓደስ ባቶም ካብ ዓገደ ደብዳይ ዝበሃል ክታዕነኡ ይኽእል."
+      }
+    },
+    "limitsTitle": "ውሽጣት",
+    "limitRange": "{min} ናብ {max}",
+    "limitsInvalid": "ዝደገሞ ውሽጣት ካብ ወሰን ኮይኑ። ናይ ቀለጠ ወሰኖት ምርኣይን ተመልሰም።",
+    "overridesTitle": "ውሽጣት ዝተለወጡ ንሰባት",
+    "overridesNote": "ዝተለወጠ ውሽጣት ኣብ ሰባት ትንታነ ይተስነ። ኣብ ሕሳብ ዝተውሃበ ክፋል ካብ ደሓላዉ ይተቕጠር። ንሕዚ ዝደለወጠ ድሕሪት ሰባት ዋናይ ዘይኮነ ዛዚ ኣብ attribute ከተሓጋገዙ፡ እቲ attribute ብዛዚ ኣብ mail domain ይኣጽዕ.",
+    "overrideScope": "ይተሰምዕካ",
+    "overrideTargets": "ማን (ባሕቲት ብተራፉን ኣርፎ)",
+    "overrideInherit": "{value} (ዝተደሓረ)",
+    "overrideAdd": "ዝተለወጠ ውሽጣት ደምስሱ",
+    "overrideRemove": "ሕዱ",
+    "overrideScopes": {
+      "user": {
+        "label": "ሰባት",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "ናይ ኢመይል ዶሜይን",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "ናይ ዝርዝር ባህሪ",
+        "placeholder": "department:health"
       }
     }
   },

@@ -2066,6 +2066,9 @@
       "sourcePlaceholder": "Paste or type the text to translate, or upload a document.",
       "targetEmpty": "The translation will appear here.",
       "uploadDocument": "Upload document",
+      "uploadPickerTitle": "Upload a document",
+      "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown or XML. One document at a time.",
+      "uploadPickerConfirm": "Use this document",
       "copy": "Copy",
       "copied": "Copied",
       "tooLong": "Text is longer than {max} characters. Split it into parts, or use document translation for whole files.",
@@ -2348,11 +2351,7 @@
         "translatePages": "{count, plural, =0 {Translate} one {Translate # page} other {Translate # pages}}",
         "translateAgain": "Translate again",
         "sourcePages": "Source pages",
-        "pagesSelected": "{selected} of {total} selected · up to {max} per run",
         "pagesField": "Pages",
-        "pagesInvalid": "This page selection cannot be read, or it names more than {max} pages. Write it like 1-3, 8.",
-        "pagesLimit": "One run takes up to {max} pages. Unselect a page first.",
-        "pagesNone": "Select at least one page.",
         "pageLabel": "Page {page}",
         "pageEdits": "{count, plural, one {Page {page} · # edit} other {Page {page} · # edits}}",
         "pages": "Pages",
@@ -2400,7 +2399,7 @@
         "remember": "Remember these instructions for my next documents",
         "fontsNote": "Fonts: the closest available match is used, not the document's own.",
         "progressTitle": "{count, plural, one {Translating # page into {language}} other {Translating # pages into {language}}}",
-        "progressNote": "Stopping keeps nothing from this run.",
+        "progressNote": "Stopping discards this translation.",
         "progressLabel": "Translation steps",
         "stepWaiting": "Waiting",
         "stepRunning": "In progress…",
@@ -2481,8 +2480,46 @@
         "run": "Run",
         "runSummary": "{seconds} s · {tokens} tokens · {font}",
         "details": "Details",
-        "unchecked": "The layout check could not run for this page. Re-render with the check on to try again."
-      }
+        "unchecked": "The layout check could not run for this page. Re-render with the check on to try again.",
+        "addPages": "Add pages",
+        "addPagesTitle": "Pages to add",
+        "batchSummary": "{selected} of {capacity} in this batch",
+        "documentSummary": "{used} of {max} document pages",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Pages per batch",
+        "batchSizeDefault": "{size} (default)",
+        "batchSizeRange": "You can raise it up to {max}.",
+        "batchSizeRaised": "{parts, plural, one {A larger batch takes longer and uses more of your budget.} other {A larger batch takes longer and uses more of your budget. This one runs in # parts.}}",
+        "pageState": {
+          "translated": "Translated",
+          "later": "Next batch",
+          "locked": "Over the limit"
+        },
+        "pageReason": {
+          "later": "This batch is full. These pages can go in the next batch.",
+          "laterRaise": "This batch is full. These pages can go in the next batch, or raise the pages per batch to include them now.",
+          "locked": "At most {max} pages of one document can be translated, and that limit is used up."
+        },
+        "pagesUnreadable": "Write pages as numbers and ranges, such as 1-3, 8.",
+        "pagesOverBatch": "That is {asked} pages; this batch takes {capacity}. Name fewer pages or raise the pages per batch.",
+        "pagesLimitReached": "The limit of {max} pages for one document is reached. No more pages can be translated.",
+        "pagesNoneLeft": "Every page named is already translated.",
+        "earlierAdding": "{count, plural, one {# page is} other {# pages are}} already translated into {language}. New pages are added to the same PDF.",
+        "earlierReplacing": "{count, plural, one {Starting over replaces the # translated page} other {Starting over replaces the # translated pages}} when the new translation finishes.",
+        "earlierOtherLanguage": "{count, plural, one {# page is} other {# pages are}} translated into {language}. Translating into {target} starts over and replaces them.",
+        "startOver": "Start over instead",
+        "keepAdding": "Add to the translated pages instead",
+        "progressNoteParts": "Stopping keeps the parts that have finished and discards the one in progress.",
+        "progressPart": "Part {part} of {parts}",
+        "progressAssembling": "Putting the pages into one document"
+      },
+      "kind": "What to translate",
+      "kindText": "Text",
+      "kindTextHint": "Translates the text in the source pane. A file you upload is read as text.",
+      "languageNeeded": "Choose a target language to translate",
+      "pdfAsTextOffer": "{name} was loaded as text. To translate the PDF itself, page by page, switch to Document.",
+      "pdfAsTextSwitch": "Translate as a document",
+      "pdfAsTextKeep": "Keep as text"
     },
     "document": {
       "emptyTitle": "Describe the document you want",
@@ -7471,7 +7508,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Preserve formatting for PDFs",
-        "description": "Adds the \"Preserve formatting\" layout to Document mode, which rebuilds each PDF page with the translation in place. It uses the code interpreter and a vision model, so a page costs more than a text-only translation."
+        "description": "Adds the \"Preserve formatting\" layout to Document mode, which rebuilds each PDF page with the translation in place. It uses the code interpreter and a vision model, so a page costs more than a text-only translation.",
+        "limits": {
+          "defaultBatchPages": "Pages per batch, by default",
+          "maxBatchPages": "Largest batch a person can choose",
+          "maxDocumentPages": "Pages per document, in total"
+        },
+        "limitsNote": "People translate a document a batch at a time and can raise the batch up to the largest one. Once the document total is reached, no more of its pages can be translated. A default above the largest batch, or a largest batch above the document total, is lowered to fit."
+      }
+    },
+    "limitsTitle": "Limits",
+    "limitRange": "{min} to {max}",
+    "limitsInvalid": "A limit is outside its allowed range. Check the highlighted ranges and try again.",
+    "overridesTitle": "Different limits for some people",
+    "overridesNote": "An override replaces these limits for the people it names. A field left empty keeps the value above. When several match, a person outranks a directory attribute, which outranks a mail domain.",
+    "overrideScope": "Applies to",
+    "overrideTargets": "Who (separate several with commas)",
+    "overrideInherit": "{value} (inherited)",
+    "overrideAdd": "Add an override",
+    "overrideRemove": "Remove",
+    "overrideScopes": {
+      "user": {
+        "label": "People",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Mail domain",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Directory attribute",
+        "placeholder": "department:health"
       }
     }
   },

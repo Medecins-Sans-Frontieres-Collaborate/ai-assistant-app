@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Turjun} one {Turjun # bog} other {Turjun # bogag}}",
         "translateAgain": "Mar kale turjun",
         "sourcePages": "Bogagga asalka ah",
-        "pagesSelected": "{selected} oo {total} ah la doortay · ugu badnaan {max} mar kasta",
         "pagesField": "Bogag",
-        "pagesInvalid": "Xulashada boggaan lama akhrin karo, ama waxay kabadan tahay {max} bog. Qor sidan: 1-3, 8.",
-        "pagesLimit": "Hal mar waxay qaadataa ugu badnaan {max} bogag. Xulo bog ka yar marka hore.",
-        "pagesNone": "Ugu yaraan hal bog dooro.",
         "pageLabel": "Bogga {page}",
         "pageEdits": "{count, plural, one {Bogga {page} · # tafatir} other {Bogga {page} · # tafatirro}}",
         "pages": "Bogag",
@@ -3260,7 +3256,7 @@
         "remember": "Xasuuso tilmaamahan dukumentiyada xiga",
         "fontsNote": "Fonts: tan ugu dhow ee la heli karo ayaa la isticmaalaa, ee looma adeegsanayo tan dukumentiga laftiisa.",
         "progressTitle": "{count, plural, one {Waa la turjumayaa # bog luqadda {language}} other {Waa la turjumayaa # bogag luqadda {language}}}",
-        "progressNote": "Joojintu ma kaydinayso wax xog ah oo la sameeyay markan.",
+        "progressNote": "Joojintu waxay tirtiraysaa turjumadan.",
         "progressLabel": "Tallaabooyinka turjumaada",
         "stepWaiting": "Sugaya",
         "stepRunning": "Waa socda…",
@@ -3341,8 +3337,49 @@
         "run": "Orod",
         "runSummary": "{seconds} s · {tokens} calaamado · {font}",
         "details": "Faahfaahin",
-        "unchecked": "Hubinta qaabka boggan lama awoodo in la sameeyo. Dib u cusboonaysii adigoo hubinta daartay si aad markale u tijaabiso."
-      }
+        "unchecked": "Hubinta qaabka boggan lama awoodo in la sameeyo. Dib u cusboonaysii adigoo hubinta daartay si aad markale u tijaabiso.",
+        "addPages": "Kudar bogag",
+        "addPagesTitle": "Bogagga la kudarayo",
+        "batchSummary": "{selected} ka mid ah {capacity} ee baakadan",
+        "documentSummary": "{used} ka mid ah {max} bogagga dukumeentiga",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Bogag baakid kasta",
+        "batchSizeDefault": "{size} (asalka ah)",
+        "batchSizeRange": "Waad kordhin kartaa ilaa {max}.",
+        "batchSizeRaised": "{parts, plural, one {Baakad weyn waxay qaadanaysaa waqti dheeraad ah waxayna isticmaalaysaa miisaaniyad badan.} other {Baakad weyn waxay qaadanaysaa waqti dheeraad ah waxayna isticmaalaysaa miisaaniyad badan. Tani waxay u qaybsantaa # qaybood.}}",
+        "pageState": {
+          "translated": "La turjumay",
+          "later": "Baakada xigta",
+          "locked": "Waa ka badan yahay xadka"
+        },
+        "pageReason": {
+          "later": "Baakadan waa buuxdaa. Bogaggaani waxay gali karaan baakada xigta.",
+          "laterRaise": "Baakadan waa buuxdaa. Bogagan waxa la dhigi karaa baakada xigta, ama kordhi bogagga baakid kasta si hadda loogu daro.",
+          "locked": "Ugu badnaan {max} bog oo dukumeenti ah ayaa la turjumi karaa, xadkaana waa la gaaray."
+        },
+        "pagesUnreadable": "Ku qor bogagga tirooyin iyo xuduudo, sida 1-3, 8.",
+        "pagesOverBatch": "Taasi waa {asked} bog; baakadan waxay qaadaneysaa {capacity}. Soo xulo bogag ka yar ama kordhi bogagga baakid kasta.",
+        "pagesLimitReached": "Xadka {max} ee bogag dukumeenti ah ayaa la gaadhay. Bogag kale lama turjumi karo.",
+        "pagesNoneLeft": "Bog kasta oo la magacaabay hore ayaa loo turjumay.",
+        "earlierAdding": "{count, plural, one {# bog ayaa hore loogu turjumay luqadda {language}.} other {# bog ayaa hore loogu turjumay luqadda {language}.}} Bogag cusub waxa lagu darayaa isla PDF-ga.",
+        "earlierReplacing": "{count, plural, one {Dib u bilaabiddu waxay beddelaysaa # bog ee la turjumay} other {Dib u bilaabiddu waxay beddeshaa # bog ee la turjumay}} marka turjumaada cusub la dhameeyo.",
+        "earlierOtherLanguage": "{count, plural, one {# bog ayaa hore loogu turjumay luqadda {language}.} other {# bog ayaa hore loogu turjumay luqadda {language}.}} Turjumaad luqadda {target} waxay dib u bilaabeysaa oo bedelaysaa kuwii hore.",
+        "startOver": "Dib u bilow halkii",
+        "keepAdding": "Kudar bogagga la turjumay halkii",
+        "progressNoteParts": "Joojintu waxay haynaysaa qaybaha dhamaaday waxayna tuuraysaa qaybta socda.",
+        "progressPart": "Qaybta {part} ee {parts}",
+        "progressAssembling": "Bogagga ayaa la isu keenayaa hal dukumeenti"
+      },
+      "kind": "Waa maxay in la turjumo",
+      "kindText": "Qoraal",
+      "kindTextHint": "Waxay turjumaysaa qoraalka ku jira qaybta isha. Faylka aad galiso waxa lagu akhrin doonaa qoraal ahaan.",
+      "languageNeeded": "Dooro luqadda la turjumayo",
+      "pdfAsTextOffer": "{name} waxaa loo furay qoraal ahaan. Si aad PDF-ga laftiisa, bog bog, u turjunto, u beddel Dukumeenti.",
+      "pdfAsTextSwitch": "U turjun sida dukumeenti",
+      "pdfAsTextKeep": "Ku hay qoraal ahaan",
+      "uploadPickerTitle": "Soo geli dukumeenti",
+      "uploadPickerHint": "PDF, Word, PowerPoint, qoraal, Markdown ama XML. Hal dukumeenti mar kasta.",
+      "uploadPickerConfirm": "Isticmaal dukumeentigan"
     },
     "document": {
       "emptyTitle": "Sharax dukumintiga aad rabto",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Haye qaabka asalka ah ee PDFs",
-        "description": "Waxay ku darsataa qaab-dhismeedka \"Haye qaabka asalka ah\" ee habka Dukumeentiga, kaasoo bog kasta oo PDF ah dib u dhisaya iyada oo turjumaadda lagu dhex daray. Waxay isticmaashaa code interpreter iyo vision model, sidaas darteed boggu wuu ka qaalisan yahay turjumaad kaliya oo qoraal ah."
+        "description": "Waxay ku darsataa qaab-dhismeedka \"Haye qaabka asalka ah\" ee habka Dukumeentiga, kaasoo bog kasta oo PDF ah dib u dhisaya iyada oo turjumaadda lagu dhex daray. Waxay isticmaashaa code interpreter iyo vision model, sidaas darteed boggu wuu ka qaalisan yahay turjumaad kaliya oo qoraal ah.",
+        "limits": {
+          "defaultBatchPages": "Bogagga baakid kasta, sida caadiga ah",
+          "maxBatchPages": "Baakidka ugu badan ee qof dooran karo",
+          "maxDocumentPages": "Bogagga dukumeenti kasta, guud ahaan"
+        },
+        "limitsNote": "Dadku waxay dukumeenti u turjumaan baakid baakid ahaan waxayna karaan kordhiyaan baakidka ilaa midka ugu weyn. Marka tirada guud la gaaro, bogag dambe lama turjumi karo. Haddii asalka sareeyo midka ugu weyn, ama midka ugu weyn ka weyn yahay guud ahaan dukumeentiga, si toos ah ayaa loo dhigaa heerka saxda ah."
+      }
+    },
+    "limitsTitle": "Xaddidaadaha",
+    "limitRange": "{min} ilaa {max}",
+    "limitsInvalid": "Xad ayaa ka baxsan xadka la oggol yahay. Fiiri xuduudaha muuqda oo isku day mar kale.",
+    "overridesTitle": "Xuduudo gaar ah dadka qaar",
+    "overridesNote": "Beddelku waxa uu baddalayaa xuduudahan dadka la magacaabay. Garoon hadhsan waxa la haynayaa qiimaha kor ku xusan. Haddii dhowr ay is waafaqaan, qof ayaa ka mudnaan badan astaanta galka, taas oo ka mudnaan badan magaca domainka emailka.",
+    "overrideScope": "Waxa uu saameeyaa",
+    "overrideTargets": "Yaa (ku kala saar goobo, faag)",
+    "overrideInherit": "{value} (ka dhaxlay)",
+    "overrideAdd": "Kudar xad gaar ah",
+    "overrideRemove": "Ka saar",
+    "overrideScopes": {
+      "user": {
+        "label": "Dadka",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Mail domain",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Tilmaamaha galka (directory attribute)",
+        "placeholder": "department:health"
       }
     }
   },

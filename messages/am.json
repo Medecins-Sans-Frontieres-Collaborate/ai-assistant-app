@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {ትርጉም} one {# ገፅ ይተረጉሙ} other {# ገፆች ይተረጉሙ}}",
         "translateAgain": "እንደገና ይተረጉሙ",
         "sourcePages": "የመነሻ ገፆች",
-        "pagesSelected": "{selected} ከ {total} ተመርጧል · ከፍተኛው {max} በአንድ ግዜ",
         "pagesField": "ገፆች",
-        "pagesInvalid": "የተመረጠው ገፅ ማንበብ አይቻልም ወይም ከ {max} ገፆች በላይ ተጠቅመዋል። እንደ 1-3, 8 ይጻፉ።",
-        "pagesLimit": "አንድ ጊዜ እስከ {max} ገፆች ይደርሳል። የመጀመሪያውን ገፅ ያሁኑ ይሰርዙ።",
-        "pagesNone": "ቢያንስ አንድ ገፅ ይምረጡ።",
         "pageLabel": "ገፅ {page}",
         "pageEdits": "{count, plural, one {ገፅ {page} · # ማስተካከያ} other {ገፅ {page} · # ማስተካከያዎች}}",
         "pages": "ገፆች",
@@ -3276,7 +3272,7 @@
         "remember": "እነዚህን መመሪያዎች ለሚቀጥሉት ሰነዶቼ ይዘብቱ",
         "fontsNote": "ፎንቶች፡ በቅርብ ከተገኘው አገልግሎት ይጠቀማል፣ የሰነዱ የግል ፎንት አይሆንም።",
         "progressTitle": "{count, plural, one {አንድ ገፅን ወደ {language} ተረጐመ} other {# ገፆችን ወደ {language} ተረጐመ}}",
-        "progressNote": "ማቆም ይህን ግልጽ ስራ ፍጹም አያስቀምጥም።",
+        "progressNote": "መቆመጥ ይህን ትርጉም ይተውበታል።",
         "progressLabel": "የትርጉም እርምጃዎች",
         "stepWaiting": "በመጠበቅ",
         "stepRunning": "በሂደት ላይ…",
@@ -3357,8 +3353,49 @@
         "run": "አስተላልፈ",
         "runSummary": "{seconds} ሴኮንድ · {tokens} ቶክኖች · {font}",
         "details": "ዝርዝሮች",
-        "unchecked": "የአይነት ማረም በዚህ ገፅ ላይ አልተሰራም፡ በማረም እንደገና ይሞክሩ፡"
-      }
+        "unchecked": "የአይነት ማረም በዚህ ገፅ ላይ አልተሰራም፡ በማረም እንደገና ይሞክሩ፡",
+        "addPages": "ገፆች ያክሉ",
+        "addPagesTitle": "የሚጨመሩ ገፆች",
+        "batchSummary": "በዚህ ዕቅድ {selected} ከ{capacity} ውስጥ",
+        "documentSummary": "{used} ከ{max} የሰነዱ ገፆች",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "ገፆች በየዕቅድ ውስጥ",
+        "batchSizeDefault": "{size} (ነባር)",
+        "batchSizeRange": "እስከ {max} ድረስ ማሳደግ ይችላሉ።",
+        "batchSizeRaised": "{parts, plural, one {የበለጠ ዕቅድ ረጅም ጊዜ ይወስዳል እና የባጀትዎን ብዛት ይጠቀማል።} other {የበለጠ ዕቅድ ረጅም ጊዜ ይወስዳል እና የባጀትዎን ብዛት ይጠቀማል። ይህ በ# ክፍሎች ውስጥ ይሰራል።}}",
+        "pageState": {
+          "translated": "ተተርጎሟል",
+          "later": "በሚቀጥለው ዕቅድ",
+          "locked": "ከገደቡ በላይ"
+        },
+        "pageReason": {
+          "later": "ይህ ዕቅድ ተሞልቷል። እነዚህ ገፆች በሚቀጥለው ዕቅድ ሊጨመሩ ይችላሉ።",
+          "laterRaise": "ይህ ዕቅድ ተሞልቷል። እነዚህ ገፆች በሚቀጥለው ዕቅድ ይጨምራሉ፣ ወይም በዕቅድ ውስጥ ገፆችን ማሳደግ በአሁኑ ጊዜ ማካተቱ ይቻላል።",
+          "locked": "ከአንድ ሰነድ በጣም {max} ገፆች መተርጎም ይቻላል እና ያ ገደብ ተጠናቋል።"
+        },
+        "pagesUnreadable": "ገፆችን በቁጥር እና ክልል ብል፣ ለምሳሌ 1-3, 8 አሉት።",
+        "pagesOverBatch": "ይህ {asked} ገፆች ናቸው፤ ይህ ዕቅድ {capacity} የመቀበል አቅም አለው። የተቀደመ ገፆች ይቀንሱ ወይም ገፆች በዕቅድ ይደግፉ።",
+        "pagesLimitReached": "ለአንድ ሰነድ {max} የገፅ ገደብ ተደርሷል። ተጨማሪ ገፆች መተርጎም አይቻልም።",
+        "pagesNoneLeft": "የተጠቀመው የተጠበቀ የገፅ ሁሉ ተተርጎሟል።",
+        "earlierAdding": "{count, plural, one {# ገፅ} other {# ገፆች}} አስቀድሞ ወደ {language} ተተርጎሟል። አዲስ ገፆች ወደ ተመረጡ አንደኛ PDF ውስጥ ታከማቹ።",
+        "earlierReplacing": "{count, plural, one {እንደገና ጀመረ ሲሆን # የተተርጎመውን ገፅ ይተካል} other {እንደገና ጀመረ ሲሆን # የተተርጎመውን ገፆች ይተካሉ}} ሲያልቅ አዲሱ ትርጉም ይተካላቸዋል።",
+        "earlierOtherLanguage": "{count, plural, one {# ገፅ} other {# ገፆች}} ወደ {language} ተተርጎሟል። ወደ {target} መተርጎም እንደገና ይጀምራል እና ያነቀሳቸዋል።",
+        "startOver": "እንደገና ጀምሩ",
+        "keepAdding": "በተተርጎመው ገፆች ላይ ያክሉ",
+        "progressNoteParts": "መቆም ተጨማሪ የተጠናቀቁትን ክፍሎች ይጠብቃል እና በሂደት ላይ ያለውን ይጣል።",
+        "progressPart": "ክፍል {part} ከ{parts}",
+        "progressAssembling": "ገፆቹን በአንድ ሰነድ ውስጥ በመዋደቅ ላይ"
+      },
+      "kind": "ምን ማትረጉም ይፈልጋሉ",
+      "kindText": "ጽሁፍ",
+      "kindTextHint": "በምንጩ ገፅ ውስጥ ጽሁፉን ይተርጎማል። የሚጫኑት ፋይል እንደ ጽሁፍ ይነባል።",
+      "languageNeeded": "የሚተርጎም ቋንቋ ይምረጡ",
+      "pdfAsTextOffer": "{name} እንደ ጽሁፍ ተጭኗል። PDF እርሱን በገፅ በገፅ ለማትረጓም ወደ ሰነድ ውይዝ ቀይሩ።",
+      "pdfAsTextSwitch": "እንደ ሰነድ ይተርጎሙ",
+      "pdfAsTextKeep": "እንደ ጽሁፍ ይቆይ",
+      "uploadPickerTitle": "ሰነድ ያስገቡ",
+      "uploadPickerHint": "PDF፣ Word፣ PowerPoint፣ ጽሑፍ፣ Markdown ወይም XML። አንድ ሰነድ ብቻ ተቀባይነት አለው።",
+      "uploadPickerConfirm": "ይህን ሰነድ ይጠቀሙ"
     },
     "document": {
       "emptyTitle": "የሚፈልጉትን ሰነድ ይግለጹ",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "የ PDF ቅርጸትን ይጠብቁ",
-        "description": "\"ቅርጸትን ይጠብቁ\" layout ወደ Document mode ያክላል፣ የ PDF አንዳንድ ገጾችን ትርጉም ጋር ዳግም የሚገነባው። ይህ code interpreter እና vision model ያጠቃልላል፣ ስለዚህ አንድ ገጽ ከ ጽሁፍ ብቻ ትርጉም ይበዝል ያከፋፋል።"
+        "description": "\"ቅርጸትን ይጠብቁ\" layout ወደ Document mode ያክላል፣ የ PDF አንዳንድ ገጾችን ትርጉም ጋር ዳግም የሚገነባው። ይህ code interpreter እና vision model ያጠቃልላል፣ ስለዚህ አንድ ገጽ ከ ጽሁፍ ብቻ ትርጉም ይበዝል ያከፋፋል።",
+        "limits": {
+          "defaultBatchPages": "የነባር ገፆች በየዕቅድ ውስጥ",
+          "maxBatchPages": "አንዱ ሰው ማምረጥ የሚችለው ትልቁ ዕቅድ",
+          "maxDocumentPages": "ገፆች በየሰነዱ ጠቅላላ"
+        },
+        "limitsNote": "ሰዎች ሰነድን በዕቅድ ይተርጎማሉ እና ዕቅዱን እስከ ትልቁ ዕቅድ ድረስ ማሳደግ ይችላሉ። ከአንዱ ሰነድ ጠቅላላ ግዴታ በኋላ፣ ሌላ ገፅ አይተርጎምም። ከትልቁ ዕቅድ በላይ የሆነ የነባር ወይም ከጠቅላላው የሰነድ ገፅ በላይ የሆነ የትልቁ ዕቅድ ዝቅ ይደርሳል።"
+      }
+    },
+    "limitsTitle": "ግዴታዎች",
+    "limitRange": "{min} እስከ {max}",
+    "limitsInvalid": "ግዴታ ከተፈቀደው ክልል ውጪ ነው። የተጠባበቁትን ክልሎች ያረጋግጡ እና እንደገና ይሞክሩ።",
+    "overridesTitle": "ለአንዳንድ ሰዎች የተለየ ግዴታ",
+    "overridesNote": "Override ይህን ግዴታ ለውስጥ የተጠቀመውን ሰው ይተካል። ባዶ ትምህርት ያኖረ እንደላይ ይቆያል። በብዙ መዛግብት ላይ ሰው ከማውጣት በላይ ያለ ይቀደማል፣ መዳረሻ attribute ከmail domain በላይ ይቀደማል።",
+    "overrideScope": "ተፈጻሚ ለ",
+    "overrideTargets": "ማን (በኮማ ለመለየት)",
+    "overrideInherit": "{value} (የተወረሰ)",
+    "overrideAdd": "override ያክሉ",
+    "overrideRemove": "ያስወግዱ",
+    "overrideScopes": {
+      "user": {
+        "label": "ሰዎች",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "የኢሜል ደረሰኝ",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "የዳይሬክቶሪ ባህሪ",
+        "placeholder": "department:health"
       }
     }
   },

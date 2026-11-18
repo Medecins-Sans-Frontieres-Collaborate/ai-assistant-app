@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {Översätt} one {Översätt # sida} other {Översätt # sidor}}",
         "translateAgain": "Översätt igen",
         "sourcePages": "Originalsidor",
-        "pagesSelected": "{selected} av {total} valda · upp till {max} per omgång",
         "pagesField": "Sidor",
-        "pagesInvalid": "Detta sidval kan inte läsas eller innehåller fler än {max} sidor. Skriv som 1–3, 8.",
-        "pagesLimit": "En omgång tar upp till {max} sidor. Avmarkera först en sida.",
-        "pagesNone": "Välj minst en sida.",
         "pageLabel": "Sida {page}",
         "pageEdits": "{count, plural, one {Sida {page} · # ändring} other {Sida {page} · # ändringar}}",
         "pages": "Sidor",
@@ -3276,7 +3272,7 @@
         "remember": "Kom ihåg dessa instruktioner för mina nästa dokument",
         "fontsNote": "Typsnitt: den närmaste tillgängliga matchen används, inte dokumentets egna.",
         "progressTitle": "{count, plural, one {Översätter # sida till {language}} other {Översätter # sidor till {language}}}",
-        "progressNote": "Att stoppa sparar inget från denna körning.",
+        "progressNote": "Om du stoppar förkastas denna översättning.",
         "progressLabel": "Översättningssteg",
         "stepWaiting": "Väntar",
         "stepRunning": "Pågår…",
@@ -3357,8 +3353,49 @@
         "run": "Kör",
         "runSummary": "{seconds} s · {tokens} tokens · {font}",
         "details": "Detaljer",
-        "unchecked": "Layoutkontrollen kunde inte köras för den här sidan. Rendera om med kontrollen aktiverad för att försöka igen."
-      }
+        "unchecked": "Layoutkontrollen kunde inte köras för den här sidan. Rendera om med kontrollen aktiverad för att försöka igen.",
+        "addPages": "Lägg till sidor",
+        "addPagesTitle": "Sidor att lägga till",
+        "batchSummary": "{selected} av {capacity} i detta paket",
+        "documentSummary": "{used} av {max} dokumentsidor",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Sidor per paket",
+        "batchSizeDefault": "{size} (standard)",
+        "batchSizeRange": "Du kan höja upp till {max}.",
+        "batchSizeRaised": "{parts, plural, one {Ett större paket tar längre tid och använder mer av din budget.} other {Ett större paket tar längre tid och använder mer av din budget. Detta körs i # delar.}}",
+        "pageState": {
+          "translated": "Översatt",
+          "later": "Nästa paket",
+          "locked": "Över gränsen"
+        },
+        "pageReason": {
+          "later": "Detta paket är fullt. Dessa sidor kan tas med i nästa paket.",
+          "laterRaise": "Detta paket är fullt. Dessa sidor kan tas med i nästa paket, eller höj sidor per paket för att inkludera dem nu.",
+          "locked": "Högst {max} sidor av ett dokument kan översättas, och gränsen är nådd."
+        },
+        "pagesUnreadable": "Skriv sidor som nummer och intervall, till exempel 1-3, 8.",
+        "pagesOverBatch": "Det är {asked} sidor; detta paket tar {capacity}. Namnge färre sidor eller höj sidor per paket.",
+        "pagesLimitReached": "Gränsen på {max} sidor för ett dokument är nådd. Inga fler sidor kan översättas.",
+        "pagesNoneLeft": "Alla angivna sidor är redan översatta.",
+        "earlierAdding": "{count, plural, one {# sida är} other {# sidor är}} redan översatta till {language}. Nya sidor läggs till i samma PDF.",
+        "earlierReplacing": "{count, plural, one {Omstart ersätter den # översatta sidan} other {Omstart ersätter de # översatta sidorna}} när den nya översättningen är klar.",
+        "earlierOtherLanguage": "{count, plural, one {# sida är} other {# sidor är}} översatta till {language}. Översättning till {target} börjar om och ersätter dem.",
+        "startOver": "Börja om istället",
+        "keepAdding": "Lägg till de översatta sidorna istället",
+        "progressNoteParts": "Om du stoppar sparas de delar som är klara och den som pågår tas bort.",
+        "progressPart": "Del {part} av {parts}",
+        "progressAssembling": "Sammanfogar sidorna till ett dokument"
+      },
+      "kind": "Vad som ska översättas",
+      "kindText": "Text",
+      "kindTextHint": "Översätter texten i källpanelen. En fil du laddar upp läses som text.",
+      "languageNeeded": "Välj ett målspråk att översätta till",
+      "pdfAsTextOffer": "{name} lästes in som text. För att översätta själva PDF-filen, sida för sida, byt till Dokument.",
+      "pdfAsTextSwitch": "Översätt som dokument",
+      "pdfAsTextKeep": "Behåll som text",
+      "uploadPickerTitle": "Ladda upp ett dokument",
+      "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown eller XML. Endast ett dokument åt gången.",
+      "uploadPickerConfirm": "Använd detta dokument"
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Bevara formatering för PDF:er",
-        "description": "Lägger till layouten \"Bevara formatering\" i dokumentläget, vilket återskapar varje PDF-sida med översättningen på plats. Den använder code interpreter och en visionmodell, så en sida kostar mer än en ren textöversättning."
+        "description": "Lägger till layouten \"Bevara formatering\" i dokumentläget, vilket återskapar varje PDF-sida med översättningen på plats. Den använder code interpreter och en visionmodell, så en sida kostar mer än en ren textöversättning.",
+        "limits": {
+          "defaultBatchPages": "Sidor per paket, standard",
+          "maxBatchPages": "Största paket en person kan välja",
+          "maxDocumentPages": "Sidor per dokument, totalt"
+        },
+        "limitsNote": "Personer översätter ett dokument ett paket i taget och kan höja paketet upp till det största. När den totala gränsen för ett dokument är nådd kan inga fler sidor översättas. Ett standardvärde över det största paketet, eller ett största paket över den totala dokumentgränsen, sänks automatiskt."
+      }
+    },
+    "limitsTitle": "Gränser",
+    "limitRange": "{min} till {max}",
+    "limitsInvalid": "En gräns är utanför det tillåtna intervallet. Kontrollera de markerade intervallen och försök igen.",
+    "overridesTitle": "Olika gränser för vissa personer",
+    "overridesNote": "En överskrivning ersätter dessa gränser för de angivna personerna. Ett fält som lämnas tomt använder värdet ovan. Om flera matchar går en person före en katalogattribut, som går före en e-postdomän.",
+    "overrideScope": "Gäller för",
+    "overrideTargets": "Vem (separera flera med kommatecken)",
+    "overrideInherit": "{value} (ärvd)",
+    "overrideAdd": "Lägg till en överskrivning",
+    "overrideRemove": "Ta bort",
+    "overrideScopes": {
+      "user": {
+        "label": "Personer",
+        "placeholder": "namn@example.org"
+      },
+      "domain": {
+        "label": "E-postdomän",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Katalogattribut",
+        "placeholder": "department:health"
       }
     }
   },

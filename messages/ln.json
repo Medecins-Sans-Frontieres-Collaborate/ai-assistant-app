@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Bongisa} one {Bongisa page #} other {Bongisa pages #}}",
         "translateAgain": "Bongisa lisusu",
         "sourcePages": "Pages ya source",
-        "pagesSelected": "{selected} na {total} ezali na sélection · Tika max {max} na mbala moko",
         "pagesField": "Pages",
-        "pagesInvalid": "Sélection ya page lokoka te, to ezali koleka {max} pages. Sela yango ndenge 1-3, 8.",
-        "pagesLimit": "Mbala moko ekoki na {max} pages. Sambwa page moko liboso.",
-        "pagesNone": "Pona page moko na ndambu ya page.",
         "pageLabel": "Page {page}",
         "pageEdits": "{count, plural, one {Page {page} · edit moko} other {Page {page} · edits #}}",
         "pages": "Pages",
@@ -3260,7 +3256,7 @@
         "remember": "Tia motema ndakisa oyo mpo na ba documents na ngai oyo ekoya",
         "fontsNote": "Fonts: ekosala elɛngɛ oyo ekokani mingi, kasi te ya dokumentɛ moko.",
         "progressTitle": "{count, plural, one {Kosalisa lokota ya # page na {language}} other {Kosalisa lokota ya # ba pages na {language}}}",
-        "progressNote": "Kokangola ekosimba eloko moko te na biteni oyo.",
+        "progressNote": "Kokanga ekosilisa bobongoli oyo.",
         "progressLabel": "Bansuka ya traduction",
         "stepWaiting": "Kozela",
         "stepRunning": "Ezalaka na mosala…",
@@ -3341,8 +3337,49 @@
         "run": "Kokende",
         "runSummary": "{seconds} s · {tokens} biloko · {font}",
         "details": "Bisika",
-        "unchecked": "Kotalela ya layout ekoki te kosala ya page oyo. Talaa lisusu na kotalela esalemi mpo osala lisusu."
-      }
+        "unchecked": "Kotalela ya layout ekoki te kosala ya page oyo. Talaa lisusu na kotalela esalemi mpo osala lisusu.",
+        "addPages": "Bakɔtisa mapɛji",
+        "addPagesTitle": "Mapɛji ya kokɔtisa",
+        "batchSummary": "{selected} na {capacity} na lotome oyo",
+        "documentSummary": "{used} na {max} mapɛji ya mokanda",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Mapɛji na lotome",
+        "batchSizeDefault": "{size} (ya libosó)",
+        "batchSizeRange": "Okoki kotombola yango tii na {max}.",
+        "batchSizeRaised": "{parts, plural, one {Lotome monene ezosɛnga ntango mingi mpe ekolya motuya mingi.} other {Lotome monene ezosɛnga ntango mingi mpe ekolya motuya mingi. Oyo ekopasama na biteni #.}}",
+        "pageState": {
+          "translated": "Ekomami",
+          "later": "Lotome elandi",
+          "locked": "Likolo ya ndelo"
+        },
+        "pageReason": {
+          "later": "Lotome oyo efuli. Mapɛji oyo ekokende na lotome elandi.",
+          "laterRaise": "Lotome oyo efuli. Mapɛji oyo ekokende na lotome elandi, to tombola motango ya mapɛji na lotome mpo ekɔta sik’oyo.",
+          "locked": "Na mingi {max} mapɛji ya mokanda moko ekoki kokoma, mpe ndelo yango esilí."
+        },
+        "pagesUnreadable": "Komá mapɛji na ba nɔmɛrɛ mpe ba ranje, lokola 1-3, 8.",
+        "pagesOverBatch": "Yango ezali {asked} mapɛji; lotome oyo ezali {capacity}. Tángá mapɛji mike to tombola motango ya mapɛji na lotome.",
+        "pagesLimitReached": "Ndelo ya {max} mapɛji mpo na mokanda moko ekómi. Mapɛji mosusu ekoki te kokoma.",
+        "pagesNoneLeft": "Mapɛji nyonso okomi ekómami déjà.",
+        "earlierAdding": "{count, plural, one {# mapɛji ekómami déjà na} other {# mapɛji ekómami déjà na}} {language}. Mapɛji mususu bazali kokɔtisa na PDF wana.",
+        "earlierReplacing": "{count, plural, one {Kobanda lisusu ekokómisa # mapɛji ekómami lisusu} other {Kobanda lisusu ekokómisa # mapɛji ekómami lisusu}} ntango bakómisi sika esilí.",
+        "earlierOtherLanguage": "{count, plural, one {# mapɛji ekómami déjà na} other {# mapɛji ekómami déjà na}} {language}. Kokómisa na {target} ekobanda lisusu mpe ekosilikisa yango.",
+        "startOver": "Bandá lisusu na esika",
+        "keepAdding": "Kokɔtisa na mapɛji ekómami na esika",
+        "progressNoteParts": "Kotika ekotikala biteni esilaki, mpe ekolongola oyo ezali na mosala.",
+        "progressPart": "Biteni {part} na {parts}",
+        "progressAssembling": "Kokangisa mapɛji na mokanda moko"
+      },
+      "kind": "Nini okolinga kokómisa",
+      "kindText": "Maloba",
+      "kindTextHint": "Ekómisaka maloba oyo ezali na eteni ya sika. Fichie okɔtisá ekosomama lokola maloba.",
+      "languageNeeded": "Pona lokota ya bokómisi",
+      "pdfAsTextOffer": "{name} ekoti lokola maloba. Soki olingi kokómisa PDF moko na moko, salá Document.",
+      "pdfAsTextSwitch": "Kómisa lokola mokanda",
+      "pdfAsTextKeep": "Tika lokola maloba",
+      "uploadPickerTitle": "Yelekisa ndakisa ya mokanda",
+      "uploadPickerHint": "PDF, Word, PowerPoint, mokanda ya nkiti, Markdown to XML. Mokanda moko na moko.",
+      "uploadPickerConfirm": "Salisa mokanda oyo"
     },
     "document": {
       "emptyTitle": "Sosola mokanda olingi",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Batelaka format ya PDF",
-        "description": "Ekomi layout \"Batelaka format\" na Document mode, ezali kotongela lisusu mokolo ya PDF na lokoki ya kobongola makomi. Ezali kosalela code interpreter mpe model ya vision, yango emonaka kofuta mingi na mokolo moko koleka kotia kaka makomi."
+        "description": "Ekomi layout \"Batelaka format\" na Document mode, ezali kotongela lisusu mokolo ya PDF na lokoki ya kobongola makomi. Ezali kosalela code interpreter mpe model ya vision, yango emonaka kofuta mingi na mokolo moko koleka kotia kaka makomi.",
+        "limits": {
+          "defaultBatchPages": "Mapɛji na lotome, ya libosó",
+          "maxBatchPages": "Lotome monene oyo moto akoki kopona",
+          "maxDocumentPages": "Mapɛji nyonso na mokanda"
+        },
+        "limitsNote": "Bato bakómisaka mokanda lotome moko na moko mpe bakoki kotombola lotome tii na monene. Soki mokanda ekómi ndelo, mapɛji mosusu ekoki te kokómama. Motuya ya libosó koleka lotome monene, to lotome monene koleka ndelo ya mokanda, ekobimisama mpo ekoka."
+      }
+    },
+    "limitsTitle": "Badeló",
+    "limitRange": "{min} tii {max}",
+    "limitsInvalid": "Ndelo moko ezali libanda ya boyekoli. Tala ba ranje eponamaki mpe pesa lisusu mosala.",
+    "overridesTitle": "Badeló ndenge na ndenge mpo na bato mosusu",
+    "overridesNote": "Override ekosala ete badeló oyo ebongwana mpo na bato oyo ekomi. Soki champ esili, ekotya motuya ya likoló. Soki baponi mingi, moto azali likoló ya attribut ya directory, mpe attribut ya directory ezali likoló ya domaine mail.",
+    "overrideScope": "Elongobani na",
+    "overrideTargets": "Nani (tángá mingi na ba koma koma)",
+    "overrideInherit": "{value} (ezali ya kozwa)",
+    "overrideAdd": "Bakɔtisa override",
+    "overrideRemove": "Kolongola",
+    "overrideScopes": {
+      "user": {
+        "label": "Bato",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Domeyeni ya email",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Attribut ya directory",
+        "placeholder": "department:health"
       }
     }
   },

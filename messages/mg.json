@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Adikao} one {Adikao pejy #} other {Adikao pejy #} }",
         "translateAgain": "Adikao indray",
         "sourcePages": "Pejy loharano",
-        "pagesSelected": "{selected} amin'ny {total} voafantina · hatramin'ny {max} isaky ny mandeha",
         "pagesField": "Pejy",
-        "pagesInvalid": "Tsy azo vakiana ity safidy pejy ity, na mihoatra ny pejy {max} no voatonona. Soraty ohatra: 1-3, 8.",
-        "pagesLimit": "Hatramin’ny pejy {max} isaky ny mandeha. Esory aloha ny pejy iray.",
-        "pagesNone": "Safidio farafahakeliny pejy iray.",
         "pageLabel": "Pejy {page}",
         "pageEdits": "{count, plural, one {Pejy {page} · # fanitsiana} other {Pejy {page} · # fanitsiana} }",
         "pages": "Pejy",
@@ -3260,7 +3256,7 @@
         "remember": "Tsarovy ireto toromarika ireto amin'ny rakitra manaraka",
         "fontsNote": "Endri-tsoratra: ilay tena mitovitovy indrindra ihany no ampiasaina, tsy ny an’ny rakitra niaviany.",
         "progressTitle": "{count, plural, one {Mandika pejy # ho amin'ny {language}} other {Mandika pejy # ho amin'ny {language}}}",
-        "progressNote": "Raha atsahatra dia tsy misy voatahiry amin'ity fihodinana ity.",
+        "progressNote": "Ny fijanona dia manala tanteraka ity fandikan-teny ity.",
         "progressLabel": "Dingana fandikana",
         "stepWaiting": "Miandry",
         "stepRunning": "Eo am-panaovana...",
@@ -3341,8 +3337,49 @@
         "run": "Alefa",
         "runSummary": "{seconds} s · {tokens} teny · {font}",
         "details": "Antsipirihany",
-        "unchecked": "Tsy afaka nandeha ny fanaraha-maso ny famolavolana ho an'ity pejy ity. Avereno miaraka amin'ny fanamarinana mba hanandramana indray."
-      }
+        "unchecked": "Tsy afaka nandeha ny fanaraha-maso ny famolavolana ho an'ity pejy ity. Avereno miaraka amin'ny fanamarinana mba hanandramana indray.",
+        "addPages": "Ampio pejy",
+        "addPagesTitle": "Pejy ampiana",
+        "batchSummary": "{selected} amin'ny {capacity} ao amin'ity batch ity",
+        "documentSummary": "{used} amin'ny {max} pejin-dokumenta",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Pejy isaky ny batch",
+        "batchSizeDefault": "{size} (default)",
+        "batchSizeRange": "Afaka ampitomboina hatramin'ny {max}.",
+        "batchSizeRaised": "{parts, plural, one {Batch lehibe kokoa dia maharitra ela kokoa sy mandany tetibola bebe kokoa.} other {Batch lehibe kokoa dia maharitra ela kokoa sy mandany tetibola bebe kokoa. Ity dia mizara ho ampahany #.}}",
+        "pageState": {
+          "translated": "Voadika",
+          "later": "Batch manaraka",
+          "locked": "Mihoatra ny fetra"
+        },
+        "pageReason": {
+          "later": "Feno ity batch ity. Afaka asiana amin'ny batch manaraka ireo pejy ireo.",
+          "laterRaise": "Feno ity batch ity. Afaka asiana amin'ny batch manaraka ireo pejy ireo, na ampio ny pejy isaky ny batch mba hampidirana azy ireo izao.",
+          "locked": "Pejy {max} amin'ny taratasy iray ihany no azo adika, ary efa lany izany fetra izany."
+        },
+        "pagesUnreadable": "Soraty amin'ny tarehimarika na elanelana ny pejy, ohatra 1-3, 8.",
+        "pagesOverBatch": "Izany dia pejy {asked}; ity batch ity dia mandray {capacity}. Asio pejy kely kokoa na ampio ny pejy isaky ny batch.",
+        "pagesLimitReached": "Vita ny fetra {max} pejy amin'ny taratasy iray. Tsy misy intsony pejy azo adika.",
+        "pagesNoneLeft": "Efa voadika avokoa ny pejy rehetra voalaza.",
+        "earlierAdding": "{count, plural, one {Pejy # efa voadika amin'ny {language}.} other {Pejy # efa voadika amin'ny {language}.}} Ampiana amin'ilay PDF ihany ireo pejy vaovao.",
+        "earlierReplacing": "{count, plural, one {Raha manomboka indray dia soloina ilay pejy voadika #} other {Raha manomboka indray dia soloina ireo pejy voadika #}} rehefa vita ny fandikan-teny vaovao.",
+        "earlierOtherLanguage": "{count, plural, one {Pejy # efa voadika amin'ny {language}.} other {Pejy # efa voadika amin'ny {language}.}} Raha mandika amin'ny {target}, dia soloina sy tapahina izy ireo.",
+        "startOver": "Atombohy indray kosa",
+        "keepAdding": "Ampio amin'ny pejy efa voadika kosa",
+        "progressNoteParts": "Ajanona dia mitahiry ireo ampahany vita ary manary izay mbola eo ampandehanana.",
+        "progressPart": "Ampahany {part} amin'ny {parts}",
+        "progressAssembling": "Ampifangaroina ho taratasy iray ireo pejy"
+      },
+      "kind": "Inona no adika",
+      "kindText": "Lahatsoratra",
+      "kindTextHint": "Mandika ny lahatsoratra ao amin'ny varavarankely loharano. Raha mampakatra rakitra ianao dia vakiana ho lahatsoratra izany.",
+      "languageNeeded": "Safidio ny fiteny kendrena h adika",
+      "pdfAsTextOffer": "{name} dia nalefa ho lahatsoratra. Raha tiana adika taratasy isaky ny pejy amin'ny PDF, mifidiana Document.",
+      "pdfAsTextSwitch": "Adika ho taratasy",
+      "pdfAsTextKeep": "Tazomy ho lahatsoratra",
+      "uploadPickerTitle": "Ampidiro rakitra",
+      "uploadPickerHint": "PDF, Word, PowerPoint, lahatsoratra, Markdown na XML. Rakitra iray isaky ny mandeha.",
+      "uploadPickerConfirm": "Ampiasao ity rakitra ity"
     },
     "document": {
       "emptyTitle": "Lazao ny antontan-taratasy ilainao",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Tehirizo ny fisehon'ny endrika ho an'ny PDF",
-        "description": "Manampy layout \"Tehirizo ny endrika\" ao amin'ny Document mode, izay manamboatra indray ny pejy PDF tsirairay miaraka amin'ny fandikan-teny eo amin'ny toerana tokony hisy azy. Mampiasa code interpreter sy vision model izy io, ka lafo kokoa noho ny fandikan-teny lahatsoratra fotsiny ny pejy iray."
+        "description": "Manampy layout \"Tehirizo ny endrika\" ao amin'ny Document mode, izay manamboatra indray ny pejy PDF tsirairay miaraka amin'ny fandikan-teny eo amin'ny toerana tokony hisy azy. Mampiasa code interpreter sy vision model izy io, ka lafo kokoa noho ny fandikan-teny lahatsoratra fotsiny ny pejy iray.",
+        "limits": {
+          "defaultBatchPages": "Pejy isaky ny batch, default",
+          "maxBatchPages": "Batch lehibe indrindra azo isafidianana",
+          "maxDocumentPages": "Pejy isaky ny taratasy, fitambarany"
+        },
+        "limitsNote": "Adika batch tsirairay ny taratasy iray ary afaka ampitomboina hatramin'ny batch lehibe indrindra. Raha tonga amin'ny totalin'ny pejy rehetra, dia tsy azo adika intsony ny ambiny. Raha ny default dia ambony noho ny batch lehibe indrindra, na ny batch lehibe indrindra dia ambony noho ny totalin'ny taratasy, dia ahena mifanaraka."
+      }
+    },
+    "limitsTitle": "Fetrany",
+    "limitRange": "{min} ka hatramin'ny {max}",
+    "limitsInvalid": "Misy fetra ivelan'ny elanelana azo ekena. Tadiavo ny havoitra sy andramo indray.",
+    "overridesTitle": "Fetra manokana ho an'ny olona sasany",
+    "overridesNote": "Raha misy override, dia soloina ny fetran'ny olona amin'ny anarana ao anatiny. Raha banga ny saha iray dia mitazona ny sandany etsy ambony. Raha misy mifanindry dia olona no ambony indrindra, manaraka ny directory attribute, farany ny mail domain.",
+    "overrideScope": "Mikasika",
+    "overrideTargets": "Iza (asaraho amin'ny koma raha maro)",
+    "overrideInherit": "{value} (voararaikitra)",
+    "overrideAdd": "Ampio override",
+    "overrideRemove": "Esory",
+    "overrideScopes": {
+      "user": {
+        "label": "Olona",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "TLD mailaka",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Toetra ao amin'ny katalaogim-panjakana",
+        "placeholder": "departemanta:saina"
       }
     }
   },

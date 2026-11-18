@@ -3255,11 +3255,7 @@
         "translatePages": "{count, plural, =0 {翻译} one {翻译 # 页} other {翻译 # 页}}",
         "translateAgain": "重新翻译",
         "sourcePages": "原文页数",
-        "pagesSelected": "已选择 {selected} / {total} · 每次最多 {max} 页",
         "pagesField": "页码",
-        "pagesInvalid": "无法识别该页码选择，或超过 {max} 页。请按 1-3, 8 格式输入。",
-        "pagesLimit": "每次最多可翻译 {max} 页。请先取消选择部分页面。",
-        "pagesNone": "请至少选择一页。",
         "pageLabel": "第 {page} 页",
         "pageEdits": "{count, plural, one {第 {page} 页 · # 次编辑} other {第 {page} 页 · # 次编辑}}",
         "pages": "页面",
@@ -3307,7 +3303,7 @@
         "remember": "下次文档记住这些说明",
         "fontsNote": "字体：将使用最接近的可用字体，不保证为文档原字体。",
         "progressTitle": "{count, plural, one {正在将 # 页翻译为 {language}} other {正在将 # 页翻译为 {language}}}",
-        "progressNote": "停止将不会保留此次运行的任何内容。",
+        "progressNote": "停止将放弃此翻译。",
         "progressLabel": "翻译步骤",
         "stepWaiting": "等待中",
         "stepRunning": "进行中…",
@@ -3388,8 +3384,49 @@
         "run": "运行",
         "runSummary": "{seconds} 秒 · {tokens} 词元 · {font}",
         "details": "详情",
-        "unchecked": "该页面无法进行版式检查。请重新渲染并启用检查后再试。"
-      }
+        "unchecked": "该页面无法进行版式检查。请重新渲染并启用检查后再试。",
+        "addPages": "添加页面",
+        "addPagesTitle": "要添加的页面",
+        "batchSummary": "本批次已选 {selected} / {capacity}",
+        "documentSummary": "已用 {used} / {max} 页面",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "每批页面数",
+        "batchSizeDefault": "{size}（默认）",
+        "batchSizeRange": "最多可提高到 {max}。",
+        "batchSizeRaised": "{parts, plural, one {批次较大，所需时间更长并消耗更多预算。} other {批次较大，所需时间更长并消耗更多预算。本次共分为 # 个部分。}}",
+        "pageState": {
+          "translated": "已翻译",
+          "later": "下批处理",
+          "locked": "超出上限"
+        },
+        "pageReason": {
+          "later": "本批次已满。这些页面将进入下一个批次。",
+          "laterRaise": "本批次已满。这些页面可进入下一个批次，或提高每批页面数以立即包含。",
+          "locked": "同一文档最多可翻译 {max} 页，该上限已用完。"
+        },
+        "pagesUnreadable": "请以数字或范围填写页码，如 1-3, 8。",
+        "pagesOverBatch": "已选 {asked} 页；本批次最多为 {capacity}。请减少页数或提高每批页面数。",
+        "pagesLimitReached": "单个文档已达 {max} 页上限，无法再翻译更多页面。",
+        "pagesNoneLeft": "所选页面均已翻译。",
+        "earlierAdding": "{count, plural, one {# 页已翻译为 {language}。} other {# 页已翻译为 {language}。}} 新页面将添加至同一个 PDF。",
+        "earlierReplacing": "{count, plural, one {重新开始将替换 # 页已翻译页面} other {重新开始将替换 # 页已翻译页面}}，新翻译完成后生效。",
+        "earlierOtherLanguage": "{count, plural, one {# 页已翻译为 {language}。} other {# 页已翻译为 {language}。}} 如翻译为 {target}，将全部重新开始并替换原有翻译。",
+        "startOver": "改为重新开始",
+        "keepAdding": "改为添加到已翻译页面",
+        "progressNoteParts": "停止后将保留已完成部分，放弃正在进行中的部分。",
+        "progressPart": "第 {part} 部分，共 {parts} 部分",
+        "progressAssembling": "正在将页面组合成一个文档"
+      },
+      "kind": "翻译内容",
+      "kindText": "文本",
+      "kindTextHint": "翻译源面板中的文本。您上传的文件将作为文本读取。",
+      "languageNeeded": "请选择要翻译的目标语言",
+      "pdfAsTextOffer": "{name} 已作为文本加载。如需按页翻译 PDF，请切换至“文档”模式。",
+      "pdfAsTextSwitch": "作为文档翻译",
+      "pdfAsTextKeep": "继续作为文本处理",
+      "uploadPickerTitle": "上传文档",
+      "uploadPickerHint": "支持 PDF、Word、PowerPoint、文本、Markdown 或 XML。一次仅限一个文档。",
+      "uploadPickerConfirm": "使用此文档"
     },
     "document": {
       "emptyTitle": "描述您需要的文档",
@@ -7090,7 +7127,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "保留PDF格式",
-        "description": "在文档模式下新增“保留格式”布局，可将每页PDF内容用对应译文重建。此功能依赖代码解释器和视觉模型，因此每页翻译费用高于纯文本翻译。"
+        "description": "在文档模式下新增“保留格式”布局，可将每页PDF内容用对应译文重建。此功能依赖代码解释器和视觉模型，因此每页翻译费用高于纯文本翻译。",
+        "limits": {
+          "defaultBatchPages": "默认每批页面数",
+          "maxBatchPages": "用户可选最大批次量",
+          "maxDocumentPages": "单文档总页面数上限"
+        },
+        "limitsNote": "用户每次分批翻译文档，并可将单批页面数提高到最大上限。达到文档总页数上限后，将无法再翻译。若默认批次大于最大批次，或最大批次大于文档总数，上限会自动调整以适配。"
+      }
+    },
+    "limitsTitle": "限制",
+    "limitRange": "{min} 到 {max}",
+    "limitsInvalid": "某项限制超出允许范围。请检查高亮范围并重试。",
+    "overridesTitle": "为部分用户设置不同限制",
+    "overridesNote": "覆盖项会为指定用户替换上述限制。字段留空会沿用上面的值。如有多个匹配，用户优先于目录属性，目录属性优先于邮件域名。",
+    "overrideScope": "适用对象",
+    "overrideTargets": "目标用户（多个用逗号分隔）",
+    "overrideInherit": "{value}（继承）",
+    "overrideAdd": "添加覆盖项",
+    "overrideRemove": "移除",
+    "overrideScopes": {
+      "user": {
+        "label": "用户",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "邮件域名",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "目录属性",
+        "placeholder": "department:health"
       }
     }
   },

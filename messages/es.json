@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {Traducir} one {Traducir # página} other {Traducir # páginas}}",
         "translateAgain": "Volver a traducir",
         "sourcePages": "Páginas de origen",
-        "pagesSelected": "{selected} de {total} seleccionadas · hasta {max} por ejecución",
         "pagesField": "Páginas",
-        "pagesInvalid": "No se puede leer esta selección de páginas, o excede {max} páginas. Escriba, por ejemplo: 1-3, 8.",
-        "pagesLimit": "Una ejecución admite hasta {max} páginas. Quite una página antes.",
-        "pagesNone": "Seleccione al menos una página.",
         "pageLabel": "Página {page}",
         "pageEdits": "{count, plural, one {Página {page} · # edición} other {Página {page} · # ediciones}}",
         "pages": "Páginas",
@@ -3276,7 +3272,7 @@
         "remember": "Recordar estas instrucciones para mis próximos documentos",
         "fontsNote": "Fuentes: se utiliza la coincidencia disponible más cercana, no la fuente propia del documento.",
         "progressTitle": "{count, plural, one {Traduciendo # página al {language}} other {Traduciendo # páginas al {language}}}",
-        "progressNote": "Si se detiene, no se conservará nada de esta ejecución.",
+        "progressNote": "Si se detiene, se descarta esta traducción.",
         "progressLabel": "Pasos de traducción",
         "stepWaiting": "En espera",
         "stepRunning": "En progreso…",
@@ -3357,8 +3353,49 @@
         "run": "Ejecutar",
         "runSummary": "{seconds} s · {tokens} tokens · {font}",
         "details": "Detalles",
-        "unchecked": "No se pudo ejecutar la revisión de diseño para esta página. Vuelva a renderizar con la revisión activada para intentarlo de nuevo."
-      }
+        "unchecked": "No se pudo ejecutar la revisión de diseño para esta página. Vuelva a renderizar con la revisión activada para intentarlo de nuevo.",
+        "addPages": "Agregar páginas",
+        "addPagesTitle": "Páginas a agregar",
+        "batchSummary": "{selected} de {capacity} en este lote",
+        "documentSummary": "{used} de {max} páginas de documento",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Páginas por lote",
+        "batchSizeDefault": "{size} (predeterminado)",
+        "batchSizeRange": "Puede aumentarlo hasta {max}.",
+        "batchSizeRaised": "{parts, plural, one {Un lote mayor tarda más y usa más de su presupuesto.} other {Un lote mayor tarda más y usa más de su presupuesto. Este se divide en # partes.}}",
+        "pageState": {
+          "translated": "Traducida",
+          "later": "Próximo lote",
+          "locked": "Fuera del límite"
+        },
+        "pageReason": {
+          "later": "Este lote está lleno. Estas páginas pueden agregarse en el próximo lote.",
+          "laterRaise": "Este lote está lleno. Estas páginas pueden ir en el próximo lote, o aumente las páginas por lote para incluirlas ahora.",
+          "locked": "Se pueden traducir como máximo {max} páginas de un documento, y ya se alcanzó ese límite."
+        },
+        "pagesUnreadable": "Escriba las páginas como números y rangos, por ejemplo 1-3, 8.",
+        "pagesOverBatch": "Eso son {asked} páginas; este lote permite {capacity}. Cite menos páginas o aumente las páginas por lote.",
+        "pagesLimitReached": "Se alcanzó el límite de {max} páginas para un documento. No se pueden traducir más páginas.",
+        "pagesNoneLeft": "Todas las páginas indicadas ya están traducidas.",
+        "earlierAdding": "{count, plural, one {# página ya está} other {# páginas ya están}} traducidas al {language}. Las nuevas páginas se agregan al mismo PDF.",
+        "earlierReplacing": "{count, plural, one {Al comenzar de nuevo se reemplaza la # página traducida} other {Al comenzar de nuevo se reemplazan las # páginas traducidas}} una vez que finalice la nueva traducción.",
+        "earlierOtherLanguage": "{count, plural, one {# página está} other {# páginas están}} traducidas en {language}. Traducir en {target} comienza de nuevo y las reemplaza.",
+        "startOver": "Comenzar de nuevo",
+        "keepAdding": "Agregar a las páginas ya traducidas",
+        "progressNoteParts": "Si detiene, mantiene las partes finalizadas y descarta la que está en curso.",
+        "progressPart": "Parte {part} de {parts}",
+        "progressAssembling": "Uniendo las páginas en un documento"
+      },
+      "kind": "Qué traducir",
+      "kindText": "Texto",
+      "kindTextHint": "Traduce el texto en el panel de origen. Un archivo cargado se lee como texto.",
+      "languageNeeded": "Elija un idioma de destino para traducir",
+      "pdfAsTextOffer": "{name} se cargó como texto. Para traducir el PDF página por página, cambie a Documento.",
+      "pdfAsTextSwitch": "Traducir como documento",
+      "pdfAsTextKeep": "Mantener como texto",
+      "uploadPickerTitle": "Subir un documento",
+      "uploadPickerHint": "PDF, Word, PowerPoint, texto, Markdown o XML. Un documento a la vez.",
+      "uploadPickerConfirm": "Usar este documento"
     },
     "document": {
       "emptyTitle": "Describa el documento que desea",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Preservar formato para PDF",
-        "description": "Agrega la opción \"Preservar formato\" al modo Documento, que reconstruye cada página del PDF con la traducción integrada. Utiliza el intérprete de código y un modelo de visión, por lo que una página cuesta más que una traducción solo de texto."
+        "description": "Agrega la opción \"Preservar formato\" al modo Documento, que reconstruye cada página del PDF con la traducción integrada. Utiliza el intérprete de código y un modelo de visión, por lo que una página cuesta más que una traducción solo de texto.",
+        "limits": {
+          "defaultBatchPages": "Páginas por lote, por defecto",
+          "maxBatchPages": "El mayor lote que una persona puede elegir",
+          "maxDocumentPages": "Páginas por documento, en total"
+        },
+        "limitsNote": "Las personas traducen un documento por lotes y pueden aumentar el lote hasta el máximo. Una vez alcanzado el total de páginas del documento, no se pueden traducir más páginas. Un valor predeterminado mayor al máximo, o un máximo mayor al total, se ajusta automáticamente."
+      }
+    },
+    "limitsTitle": "Límites",
+    "limitRange": "{min} a {max}",
+    "limitsInvalid": "Un límite está fuera del rango permitido. Revise los rangos resaltados e intente de nuevo.",
+    "overridesTitle": "Límites diferentes para algunas personas",
+    "overridesNote": "Una excepción reemplaza estos límites para las personas indicadas. Un campo vacío mantiene el valor anterior. Cuando varios coinciden, la persona tiene prioridad sobre un atributo de directorio y este sobre un dominio de correo.",
+    "overrideScope": "Aplica a",
+    "overrideTargets": "Quién (separe varios con comas)",
+    "overrideInherit": "{value} (heredado)",
+    "overrideAdd": "Agregar excepción",
+    "overrideRemove": "Eliminar",
+    "overrideScopes": {
+      "user": {
+        "label": "Personas",
+        "placeholder": "nombre@ejemplo.org"
+      },
+      "domain": {
+        "label": "Dominio de correo",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Atributo de directorio",
+        "placeholder": "department:health"
       }
     }
   },

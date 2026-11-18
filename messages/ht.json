@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Tradui} one {Tradui # paj} other {Tradui # paj yo}}",
         "translateAgain": "Tradui ankò",
         "sourcePages": "Paj sous",
-        "pagesSelected": "{selected} sou {total} chwazi · jiska {max} pa fason",
         "pagesField": "Paj yo",
-        "pagesInvalid": "Seleksyon paj sa a pa kapab li, oswa li gen plis pase {max} paj. Ekri li tankou 1-3, 8.",
-        "pagesLimit": "Yon pasaj pran jiska {max} paj. Deklase yon paj anvan.",
-        "pagesNone": "Chwazi omwen yon paj.",
         "pageLabel": "Paj {page}",
         "pageEdits": "{count, plural, one {Paj {page} · # koreksyon} other {Paj {page} · # koreksyon}}",
         "pages": "Paj yo",
@@ -3260,7 +3256,7 @@
         "remember": "Sonje enstriksyon sa yo pou pwochen dokiman mwen yo",
         "fontsNote": "Fonts: yo itilize font ki pi pre ki disponib, pa font dokiman an.",
         "progressTitle": "{count, plural, one {Ap tradui # paj an {language}} other {Ap tradui # paj yo an {language}}}",
-        "progressNote": "Sispann p ap sove anyen nan kouri sa a.",
+        "progressNote": "Lè ou sispann, tradiksyon sa a ap anile.",
         "progressLabel": "Etap tradiksyon",
         "stepWaiting": "Ap tann",
         "stepRunning": "Ann pwogrè…",
@@ -3341,8 +3337,49 @@
         "run": "Kòmanse",
         "runSummary": "{seconds} s · {tokens} mo · {font}",
         "details": "Detay",
-        "unchecked": "Verifikasyon konpozisyon pa t ka fèt pou paj sa a. Re-randwi ak opsyon verifikasyon an pou eseye ankò."
-      }
+        "unchecked": "Verifikasyon konpozisyon pa t ka fèt pou paj sa a. Re-randwi ak opsyon verifikasyon an pou eseye ankò.",
+        "addPages": "Ajoute paj",
+        "addPagesTitle": "Paj pou ajoute",
+        "batchSummary": "{selected} sou {capacity} nan pakè sa a",
+        "documentSummary": "{used} sou {max} paj dokiman",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Paj pa pakè",
+        "batchSizeDefault": "{size} (pa default)",
+        "batchSizeRange": "Ou ka ogmante li jiska {max}.",
+        "batchSizeRaised": "{parts, plural, one {Yon pakè pi gwo pran plis tan epi itilize plis nan bidjè ou.} other {Yon pakè pi gwo pran plis tan epi itilize plis nan bidjè ou. Sa a divize an # pati.}}",
+        "pageState": {
+          "translated": "Tradui",
+          "later": "Nan pwochen pakè",
+          "locked": "Depase limit"
+        },
+        "pageReason": {
+          "later": "Pakè sa a chaje deja. Paj sa yo ap ka antre nan pwochen pakè a.",
+          "laterRaise": "Pakè sa a chaje deja. Paj sa yo ap ka antre nan pwochen pakè a, oswa ogmante kantite paj pa pakè pou enkli yo kounye a.",
+          "locked": "Okenn dokiman pa ka genyen plis pase {max} paj tradui, epi limit sa a deja itilize."
+        },
+        "pagesUnreadable": "Ekri paj yo kòm nimewo ak ranje, tankou 1-3, 8.",
+        "pagesOverBatch": "Sa fè {asked} paj; pakè sa a pran {capacity}. Chwazi mwens paj oswa ogmante kantite paj pa pakè.",
+        "pagesLimitReached": "Limit {max} paj pou yon dokiman atenn. Pa ka tradui lòt paj ankò.",
+        "pagesNoneLeft": "Chak paj ou chwazi deja tradui.",
+        "earlierAdding": "{count, plural, one {# paj deja tradui an {language}. Nou pral ajoute nouvo paj nan menm PDF la.} other {# paj deja tradui an {language}. Nou pral ajoute nouvo paj nan menm PDF la.}}",
+        "earlierOtherLanguage": "{count, plural, one {# paj deja tradui an {language}. Tradui an {target} ap kòmanse ankò epi ranplase yo.} other {# paj deja tradui an {language}. Tradui an {target} ap kòmanse ankò epi ranplase yo.}}",
+        "startOver": "Kòmanse ankò pito",
+        "keepAdding": "Ajoute ak paj yo ki deja tradui pito",
+        "progressNoteParts": "Sispann pwosesis la ap kenbe pati ki fini epi lage sa k ap fèt la.",
+        "progressPart": "Pati {part} sou {parts}",
+        "progressAssembling": "Ap mete tout paj yo ansanm nan yon sèl dokiman",
+        "earlierReplacing": "{count, plural, one {Rekòmanse ap ranplase # paj ki tradui} other {Rekòmanse ap ranplase # paj ki tradui yo}} lè nouvo tradiksyon an fini."
+      },
+      "kind": "Kisa pou tradui",
+      "kindText": "Tèks",
+      "kindTextHint": "Tradui tèks ki nan fenèt sous la. Nenpòt fichye ou telechaje ap trete kòm tèks.",
+      "languageNeeded": "Chwazi lang ou vle tradui a",
+      "pdfAsTextOffer": "{name} chaje kòm tèks. Pou tradui PDF a li menm, paj pa paj, chwazi 'Dokiman'.",
+      "pdfAsTextSwitch": "Tradui kòm dokiman",
+      "pdfAsTextKeep": "Kenbe kòm tèks",
+      "uploadPickerTitle": "Telechaje yon dokiman",
+      "uploadPickerHint": "PDF, Word, PowerPoint, tèks, Markdown oswa XML. Youn dokiman chak fwa.",
+      "uploadPickerConfirm": "Itilize dokiman sa a"
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Kenbe fòmatasyon pou PDF yo",
-        "description": "Ajoute layout \"Kenbe fòmatasyon\" nan mode Dokiman, ki rebati chak paj PDF ak tradiksyon an sou li. Li itilize code interpreter ak yon modèl vizyon, sa fè tradiksyon chak paj koute plis pase sèlman tèks."
+        "description": "Ajoute layout \"Kenbe fòmatasyon\" nan mode Dokiman, ki rebati chak paj PDF ak tradiksyon an sou li. Li itilize code interpreter ak yon modèl vizyon, sa fè tradiksyon chak paj koute plis pase sèlman tèks.",
+        "limits": {
+          "defaultBatchPages": "Paj pa pakè, pa default",
+          "maxBatchPages": "Pi gwo pakè yon moun ka chwazi",
+          "maxDocumentPages": "Paj pa dokiman, an total"
+        },
+        "limitsNote": "Moun tradui yon dokiman pakè pa pakè epi ka ogmante kantite paj jiska pi gwo pakè a. Lè total paj dokiman an atenn, pa gen lòt paj li ki kapab tradui. Yon default ki depase pi gwo pakè a oswa pi gwo pakè a ki depase total dokiman an ap ajiste pou adapte."
+      }
+    },
+    "limitsTitle": "Limit",
+    "limitRange": "{min} pou rive {max}",
+    "limitsInvalid": "Yon limit pa antre nan kantite ki pèmèt la. Tcheke ranje ki make yo epi eseye ankò.",
+    "overridesTitle": "Limit diferan pou kèk moun",
+    "overridesNote": "Yon eksepsyon ap ranplase limit sa yo pou moun yo nonmen. Yon chan vid ap kenbe valè anwo a. Si gen plizyè ki matche, moun nan vin anvan atribi anyè a, epi atribi anyè a devan domèn imel la.",
+    "overrideScope": "Aplike pou",
+    "overrideTargets": "Pou kiyès (separe plizyè ak vigil)",
+    "overrideInherit": "{value} (erit)",
+    "overrideAdd": "Ajoute yon eksepsyon",
+    "overrideRemove": "Retire",
+    "overrideScopes": {
+      "user": {
+        "label": "Moun",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Domen imèl",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Atribi anyè a",
+        "placeholder": "department:health"
       }
     }
   },

@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {翻訳する} one {#ページを翻訳} other {#ページを翻訳}}",
         "translateAgain": "再翻訳",
         "sourcePages": "元のページ",
-        "pagesSelected": "{selected} / {total} 選択済み · 1回最大{max}ページ",
         "pagesField": "ページ",
-        "pagesInvalid": "このページ指定は認識できないか、{max}ページを超えています。例：1-3, 8 のように記入してください。",
-        "pagesLimit": "1回の実行で最大{max}ページまでです。まずページの選択を外してください。",
-        "pagesNone": "1ページ以上選んでください。",
         "pageLabel": "{page}ページ",
         "pageEdits": "{count, plural, one {ページ{page} · # 件の編集} other {ページ{page} · # 件の編集}}",
         "pages": "ページ",
@@ -3276,7 +3272,7 @@
         "remember": "次回以降もこれらの指示を記憶する",
         "fontsNote": "フォント：ドキュメントのフォントではなく、最も近い互換フォントが使用されます。",
         "progressTitle": "{count, plural, one {#ページを{language}に翻訳中} other {#ページを{language}に翻訳中}}",
-        "progressNote": "停止すると、この実行の結果は保持されません。",
+        "progressNote": "中止するとこの翻訳は破棄されます。",
         "progressLabel": "翻訳ステップ",
         "stepWaiting": "待機中",
         "stepRunning": "進行中…",
@@ -3357,8 +3353,49 @@
         "run": "実行",
         "runSummary": "{seconds} 秒 · {tokens} トークン · {font}",
         "details": "詳細",
-        "unchecked": "このページではレイアウトチェックを実行できませんでした。チェックを有効にして再レンダリングしてください。"
-      }
+        "unchecked": "このページではレイアウトチェックを実行できませんでした。チェックを有効にして再レンダリングしてください。",
+        "addPages": "ページを追加",
+        "addPagesTitle": "追加するページ",
+        "batchSummary": "このバッチでは{capacity}中{selected}",
+        "documentSummary": "{max}ページ中{used}ページ",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "バッチごとのページ数",
+        "batchSizeDefault": "{size}（デフォルト）",
+        "batchSizeRange": "最大{max}まで上げられます。",
+        "batchSizeRaised": "{parts, plural, one {大きなバッチは時間がかかり、予算も多く消費します。} other {大きなバッチは時間がかかり、予算も多く消費します。この場合、# パートで実行されます。}}",
+        "pageState": {
+          "translated": "翻訳済み",
+          "later": "次のバッチ",
+          "locked": "上限超過"
+        },
+        "pageReason": {
+          "later": "このバッチは満杯です。これらのページは次のバッチにできます。",
+          "laterRaise": "このバッチは満杯です。これらのページを今すぐ含めるには、バッチごとのページ数を増やしてください。",
+          "locked": "1つのドキュメントで翻訳できるのは最大{max}ページで、その上限に達しています。"
+        },
+        "pagesUnreadable": "ページは数字や範囲（例：1-3、8）の形式で指定してください。",
+        "pagesOverBatch": "{asked}ページありますが、このバッチには{capacity}ページまでです。ページ数を減らすか、バッチごとのページ数を増やしてください。",
+        "pagesLimitReached": "1つのドキュメントにつき最大{max}ページの制限に達しました。これ以上翻訳できません。",
+        "pagesNoneLeft": "指定されたすべてのページはすでに翻訳済みです。",
+        "earlierAdding": "{count, plural, one {#ページはすでに{language}に翻訳されています。新しいページは同じPDFに追加されます。} other {#ページはすでに{language}に翻訳されています。新しいページは同じPDFに追加されます。}}",
+        "earlierReplacing": "{count, plural, one {やり直すと、#ページの翻訳が新しい翻訳完了時に置き換わります。} other {やり直すと、#ページの翻訳が新しい翻訳完了時に置き換わります。}}",
+        "earlierOtherLanguage": "{count, plural, one {#ページが{language}に翻訳されています。{target}で翻訳するとやり直しになり、上書きされます。} other {#ページが{language}に翻訳されています。{target}で翻訳するとやり直しになり、上書きされます。}}",
+        "startOver": "やり直す",
+        "keepAdding": "翻訳済みページに追加する",
+        "progressNoteParts": "停止すると、完了したパートは保持され、進行中のパートは破棄されます。",
+        "progressPart": "{parts}中{part}パート",
+        "progressAssembling": "ページを1つのドキュメントにまとめています"
+      },
+      "kind": "翻訳する対象",
+      "kindText": "テキスト",
+      "kindTextHint": "ソースペインのテキストを翻訳します。アップロードしたファイルはテキストとして読み込まれます。",
+      "languageNeeded": "翻訳する対象言語を選択してください",
+      "pdfAsTextOffer": "{name}はテキストとして読み込まれました。PDF全体をページごとに翻訳するには、「ドキュメント」に切り替えてください。",
+      "pdfAsTextSwitch": "ドキュメントとして翻訳",
+      "pdfAsTextKeep": "テキストのまま保持",
+      "uploadPickerTitle": "ドキュメントをアップロード",
+      "uploadPickerHint": "PDF、Word、PowerPoint、テキスト、Markdown、またはXML。1回につき1つのドキュメントのみ対応。",
+      "uploadPickerConfirm": "このドキュメントを使用する"
     },
     "document": {
       "emptyTitle": "作成したい文書の説明",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "PDFのフォーマットを保持",
-        "description": "Documentモードに「フォーマット保持」レイアウトを追加します。PDFの各ページを翻訳付きで再構築します。コードインタープリタとビジョンモデルを使用するため、1ページあたりの費用はテキストのみの翻訳より高くなります。"
+        "description": "Documentモードに「フォーマット保持」レイアウトを追加します。PDFの各ページを翻訳付きで再構築します。コードインタープリタとビジョンモデルを使用するため、1ページあたりの費用はテキストのみの翻訳より高くなります。",
+        "limits": {
+          "defaultBatchPages": "デフォルトのバッチごとのページ数",
+          "maxBatchPages": "選択可能な最大バッチサイズ",
+          "maxDocumentPages": "ドキュメントごとの合計ページ数"
+        },
+        "limitsNote": "ユーザーはドキュメントをバッチごとに翻訳でき、最大バッチサイズまで引き上げられます。ドキュメントの合計が上限に達するまで翻訳できます。デフォルト値が最大バッチより大きい場合や最大バッチがドキュメント合計を超える場合、自動的に調整されます。"
+      }
+    },
+    "limitsTitle": "上限",
+    "limitRange": "{min}～{max}",
+    "limitsInvalid": "上限が許容範囲外です。ハイライトされた範囲を確認し、再度お試しください。",
+    "overridesTitle": "一部のユーザー向けの異なる上限",
+    "overridesNote": "上書き設定は指定されたユーザーにだけ適用されます。空白の場合は上記の値が適用されます。複数一致する場合、個人がディレクトリ属性より優先され、ディレクトリ属性はメールドメインより優先されます。",
+    "overrideScope": "対象",
+    "overrideTargets": "誰に（複数はカンマ区切り）",
+    "overrideInherit": "{value}（継承）",
+    "overrideAdd": "上書きを追加",
+    "overrideRemove": "削除",
+    "overrideScopes": {
+      "user": {
+        "label": "ユーザー",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "メールドメイン",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "ディレクトリアトリビュート",
+        "placeholder": "department:health"
       }
     }
   },

@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {Übersetzen} one {# Seite übersetzen} other {# Seiten übersetzen}}",
         "translateAgain": "Erneut übersetzen",
         "sourcePages": "Originalseiten",
-        "pagesSelected": "{selected} von {total} ausgewählt · bis zu {max} pro Durchlauf",
         "pagesField": "Seiten",
-        "pagesInvalid": "Diese Seitenauswahl kann nicht gelesen werden oder sie umfasst mehr als {max} Seiten. Schreiben Sie z. B. 1-3, 8.",
-        "pagesLimit": "Ein Durchlauf umfasst bis zu {max} Seiten. Entfernen Sie zuerst eine Seite.",
-        "pagesNone": "Wählen Sie mindestens eine Seite aus.",
         "pageLabel": "Seite {page}",
         "pageEdits": "{count, plural, one {Seite {page} · # Änderung} other {Seite {page} · # Änderungen}}",
         "pages": "Seiten",
@@ -3276,7 +3272,7 @@
         "remember": "Diese Anweisungen für meine nächsten Dokumente merken",
         "fontsNote": "Schriftarten: Es wird die nächstähnliche verfügbare Schrift verwendet, nicht die im Dokument.",
         "progressTitle": "{count, plural, one {# Seite wird ins {language} übersetzt} other {# Seiten werden ins {language} übersetzt}}",
-        "progressNote": "Beim Anhalten wird nichts aus diesem Durchlauf übernommen.",
+        "progressNote": "Beim Anhalten wird diese Übersetzung verworfen.",
         "progressLabel": "Übersetzungsschritte",
         "stepWaiting": "Warten",
         "stepRunning": "In Bearbeitung…",
@@ -3357,8 +3353,49 @@
         "run": "Ausführen",
         "runSummary": "{seconds} s · {tokens} Token · {font}",
         "details": "Details",
-        "unchecked": "Für diese Seite konnte die Layout-Prüfung nicht durchgeführt werden. Rendern Sie die Seite erneut mit aktiviertem Check, um es erneut zu versuchen."
-      }
+        "unchecked": "Für diese Seite konnte die Layout-Prüfung nicht durchgeführt werden. Rendern Sie die Seite erneut mit aktiviertem Check, um es erneut zu versuchen.",
+        "addPages": "Seiten hinzufügen",
+        "addPagesTitle": "Hinzuzufügende Seiten",
+        "batchSummary": "{selected} von {capacity} in diesem Stapel",
+        "documentSummary": "{used} von {max} Dokumentseiten",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Seiten pro Stapel",
+        "batchSizeDefault": "{size} (Standard)",
+        "batchSizeRange": "Sie können bis zu {max} erhöhen.",
+        "batchSizeRaised": "{parts, plural, one {Ein größerer Stapel dauert länger und verbraucht mehr von Ihrem Kontingent.} other {Ein größerer Stapel dauert länger und verbraucht mehr von Ihrem Kontingent. Dieser läuft in # Teilen.}}",
+        "pageState": {
+          "translated": "Übersetzt",
+          "later": "Nächster Stapel",
+          "locked": "Über dem Limit"
+        },
+        "pageReason": {
+          "later": "Dieser Stapel ist voll. Diese Seiten können im nächsten Stapel bearbeitet werden.",
+          "laterRaise": "Dieser Stapel ist voll. Diese Seiten können im nächsten Stapel bearbeitet werden, oder erhöhen Sie die Seiten pro Stapel, um sie jetzt einzuschließen.",
+          "locked": "Maximal {max} Seiten eines Dokuments können übersetzt werden; dieses Limit ist erreicht."
+        },
+        "pagesUnreadable": "Geben Sie Seiten als Zahlen und Bereiche an, z. B. 1-3, 8.",
+        "pagesOverBatch": "Das sind {asked} Seiten; dieser Stapel nimmt {capacity}. Nennen Sie weniger Seiten oder erhöhen Sie die Seiten pro Stapel.",
+        "pagesLimitReached": "Das Limit von {max} Seiten pro Dokument ist erreicht. Es können keine weiteren Seiten übersetzt werden.",
+        "pagesNoneLeft": "Alle angegebenen Seiten sind bereits übersetzt.",
+        "earlierAdding": "{count, plural, one {# Seite ist} other {# Seiten sind}} bereits in {language} übersetzt. Neue Seiten werden zur gleichen PDF hinzugefügt.",
+        "earlierReplacing": "{count, plural, one {Neustart ersetzt die # übersetzte Seite} other {Neustart ersetzt die # übersetzten Seiten}}, wenn die neue Übersetzung abgeschlossen ist.",
+        "earlierOtherLanguage": "{count, plural, one {# Seite ist} other {# Seiten sind}} in {language} übersetzt. Übersetzen in {target} beginnt neu und ersetzt diese.",
+        "startOver": "Stattdessen neu beginnen",
+        "keepAdding": "Stattdessen zu den übersetzten Seiten hinzufügen",
+        "progressNoteParts": "Beim Anhalten bleiben die abgeschlossenen Teile erhalten, und der gerade laufende wird verworfen.",
+        "progressPart": "Teil {part} von {parts}",
+        "progressAssembling": "Seiten werden in ein Dokument zusammengefügt"
+      },
+      "kind": "Was soll übersetzt werden",
+      "kindText": "Text",
+      "kindTextHint": "Übersetzt den Text im Quellbereich. Eine hochgeladene Datei wird als Text gelesen.",
+      "languageNeeded": "Wählen Sie eine Zielsprache für die Übersetzung",
+      "pdfAsTextOffer": "{name} wurde als Text geladen. Um das PDF selbst, Seite für Seite, zu übersetzen, wechseln Sie zu Dokument.",
+      "pdfAsTextSwitch": "Als Dokument übersetzen",
+      "pdfAsTextKeep": "Als Text belassen",
+      "uploadPickerTitle": "Dokument hochladen",
+      "uploadPickerHint": "PDF, Word, PowerPoint, Text, Markdown oder XML. Ein Dokument gleichzeitig.",
+      "uploadPickerConfirm": "Dieses Dokument verwenden"
     },
     "document": {
       "emptyTitle": "Beschreiben Sie das gewünschte Dokument",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Formatierung für PDFs beibehalten",
-        "description": "Fügt den Layout \"Formatierung beibehalten\" zum Dokumentenmodus hinzu, der jede PDF-Seite mit der Übersetzung neu erstellt. Dazu werden der Code-Interpreter und ein Vision-Modell verwendet, daher kostet eine Seite mehr als eine reine Text-Übersetzung."
+        "description": "Fügt den Layout \"Formatierung beibehalten\" zum Dokumentenmodus hinzu, der jede PDF-Seite mit der Übersetzung neu erstellt. Dazu werden der Code-Interpreter und ein Vision-Modell verwendet, daher kostet eine Seite mehr als eine reine Text-Übersetzung.",
+        "limits": {
+          "defaultBatchPages": "Seiten pro Stapel (standardmäßig)",
+          "maxBatchPages": "Größter Stapel, den man wählen kann",
+          "maxDocumentPages": "Maximale Seiten pro Dokument"
+        },
+        "limitsNote": "Dokumente werden stapelweise übersetzt; die Stapelgröße kann bis zum Maximum erhöht werden. Ist das Dokument-Limit erreicht, können keine weiteren Seiten mehr übersetzt werden. Ein Standardwert über dem Maximum, oder ein Maximum über dem Dokument-Limit, wird entsprechend angepasst."
+      }
+    },
+    "limitsTitle": "Grenzwerte",
+    "limitRange": "{min} bis {max}",
+    "limitsInvalid": "Ein Grenzwert liegt außerhalb des zulässigen Bereichs. Überprüfen Sie die markierten Bereiche und versuchen Sie es erneut.",
+    "overridesTitle": "Andere Grenzwerte für bestimmte Personen",
+    "overridesNote": "Eine Ausnahme ersetzt diese Grenzwerte für die benannten Personen. Ein leeres Feld übernimmt den oberen Wert. Gibt es mehrere Übereinstimmungen, hat eine Person Vorrang vor einem Verzeichnis-Attribut, das wiederum vor einer Mail-Domain Vorrang hat.",
+    "overrideScope": "Gilt für",
+    "overrideTargets": "Wer (bei mehreren bitte durch Kommas trennen)",
+    "overrideInherit": "{value} (geerbt)",
+    "overrideAdd": "Ausnahme hinzufügen",
+    "overrideRemove": "Entfernen",
+    "overrideScopes": {
+      "user": {
+        "label": "Personen",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Mail-Domain",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Verzeichnisattribut",
+        "placeholder": "department:health"
       }
     }
   },

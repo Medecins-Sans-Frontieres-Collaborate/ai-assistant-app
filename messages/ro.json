@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {Tradu} one {Tradu # pagină} other {Tradu # pagini}}",
         "translateAgain": "Tradu din nou",
         "sourcePages": "Pagini sursă",
-        "pagesSelected": "{selected} din {total} selectate · până la {max} per execuție",
         "pagesField": "Pagini",
-        "pagesInvalid": "Această selecție de pagini nu poate fi citită sau numește mai mult de {max} pagini. Scrieți, de exemplu: 1-3, 8.",
-        "pagesLimit": "O execuție permite până la {max} pagini. Deselectați mai întâi o pagină.",
-        "pagesNone": "Selectați cel puțin o pagină.",
         "pageLabel": "Pagina {page}",
         "pageEdits": "{count, plural, one {Pagina {page} · # editare} other {Pagina {page} · # editări}}",
         "pages": "Pagini",
@@ -3276,7 +3272,7 @@
         "remember": "Ține minte aceste instrucțiuni pentru următoarele documente",
         "fontsNote": "Fonturi: se folosește cea mai apropiată variantă disponibilă, nu cea originală a documentului.",
         "progressTitle": "{count, plural, one {Se traduce # pagină în {language}} other {Se traduc # pagini în {language}}}",
-        "progressNote": "Oprirea nu păstrează nimic din această rulare.",
+        "progressNote": "Oprirea anulează această traducere.",
         "progressLabel": "Pași de traducere",
         "stepWaiting": "Se așteaptă",
         "stepRunning": "În curs…",
@@ -3357,8 +3353,49 @@
         "run": "Execută",
         "runSummary": "{seconds} s · {tokens} tokeni · {font}",
         "details": "Detalii",
-        "unchecked": "Verificarea aspectului nu a putut fi executată pentru această pagină. Re-randați cu verificarea activată pentru a încerca din nou."
-      }
+        "unchecked": "Verificarea aspectului nu a putut fi executată pentru această pagină. Re-randați cu verificarea activată pentru a încerca din nou.",
+        "addPages": "Adăugați pagini",
+        "addPagesTitle": "Pagini de adăugat",
+        "batchSummary": "{selected} din {capacity} în acest lot",
+        "documentSummary": "{used} din {max} pagini ale documentului",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Pagini pe lot",
+        "batchSizeDefault": "{size} (implicit)",
+        "batchSizeRange": "Puteți crește până la {max}.",
+        "batchSizeRaised": "{parts, plural, one {Un lot mai mare durează mai mult și consumă mai mult din buget.} other {Un lot mai mare durează mai mult și consumă mai mult din buget. Acesta rulează în # părți.}}",
+        "pageState": {
+          "translated": "Tradus",
+          "later": "Lotul următor",
+          "locked": "Peste limită"
+        },
+        "pageReason": {
+          "later": "Acest lot este plin. Aceste pagini pot fi adăugate în lotul următor.",
+          "laterRaise": "Acest lot este plin. Aceste pagini pot fi adăugate în lotul următor sau creșteți numărul de pagini per lot pentru a le include acum.",
+          "locked": "Maxim {max} pagini dintr-un document pot fi traduse, iar această limită este atinsă."
+        },
+        "pagesUnreadable": "Scrieți paginile ca numere și intervale, de exemplu 1-3, 8.",
+        "pagesOverBatch": "Sunt {asked} pagini; acest lot acceptă {capacity}. Specificați mai puține pagini sau creșteți numărul de pagini pe lot.",
+        "pagesLimitReached": "Limita de {max} pagini pentru un document a fost atinsă. Nu se pot traduce mai multe pagini.",
+        "pagesNoneLeft": "Toate paginile specificate sunt deja traduse.",
+        "earlierAdding": "{count, plural, one {# pagină este} other {# pagini sunt}} deja traduse în {language}. Noile pagini sunt adăugate la același PDF.",
+        "earlierReplacing": "{count, plural, one {Începerea de la zero înlocuiește # pagină tradusă} other {Începerea de la zero înlocuiește # pagini traduse}} când noua traducere se finalizează.",
+        "earlierOtherLanguage": "{count, plural, one {# pagină este} other {# pagini sunt}} traduse în {language}. Traducerea în {target} începe de la zero și le înlocuiește.",
+        "startOver": "Începeți de la zero",
+        "keepAdding": "Adăugați la paginile traduse",
+        "progressNoteParts": "Oprirea păstrează părțile finalizate și renunță la cea în curs.",
+        "progressPart": "Partea {part} din {parts}",
+        "progressAssembling": "Se adună paginile într-un singur document"
+      },
+      "kind": "Ce se traduce",
+      "kindText": "Text",
+      "kindTextHint": "Traduce textul din panoul sursă. Un fișier încărcat este citit ca text.",
+      "languageNeeded": "Alegeți limba țintă pentru traducere",
+      "pdfAsTextOffer": "{name} a fost încărcat ca text. Pentru a traduce PDF-ul pagină cu pagină, schimbați la Document.",
+      "pdfAsTextSwitch": "Traduceți ca document",
+      "pdfAsTextKeep": "Păstrați ca text",
+      "uploadPickerTitle": "Încărcați un document",
+      "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown sau XML. Un singur document la un moment dat.",
+      "uploadPickerConfirm": "Folosiți acest document"
     },
     "document": {
       "emptyTitle": "Descrieți documentul dorit",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Menține formatarea pentru PDF-uri",
-        "description": "Adaugă aspectul „Menține formatarea” în modul Document, care reconstruiește fiecare pagină PDF cu traducerea integrată. Folosește interpreterul de cod și un model de viziune, astfel încât o pagină costă mai mult decât o traducere doar de text."
+        "description": "Adaugă aspectul „Menține formatarea” în modul Document, care reconstruiește fiecare pagină PDF cu traducerea integrată. Folosește interpreterul de cod și un model de viziune, astfel încât o pagină costă mai mult decât o traducere doar de text.",
+        "limits": {
+          "defaultBatchPages": "Pagini per lot, implicit",
+          "maxBatchPages": "Cel mai mare lot pe care îl poate alege o persoană",
+          "maxDocumentPages": "Pagini per document, în total"
+        },
+        "limitsNote": "Documentele se traduc câte un lot și lotul poate fi crescut până la maxim. După ce se atinge totalul documentului, nu se mai pot traduce pagini. Un implicit peste maxim sau un maxim peste total este redus pentru a se potrivi."
+      }
+    },
+    "limitsTitle": "Limite",
+    "limitRange": "{min} până la {max}",
+    "limitsInvalid": "O limită este în afara intervalului permis. Verificați intervalele marcate și încercați din nou.",
+    "overridesTitle": "Limite diferite pentru anumite persoane",
+    "overridesNote": "O excepție înlocuiește aceste limite pentru persoanele menționate. Un câmp lăsat gol păstrează valoarea de mai sus. Când sunt mai multe potriviri, persoana are prioritate față de atributul directorului, care are prioritate față de domeniul de e-mail.",
+    "overrideScope": "Se aplică la",
+    "overrideTargets": "Cine (separați mai mulți cu virgule)",
+    "overrideInherit": "{value} (moștenit)",
+    "overrideAdd": "Adăugați o excepție",
+    "overrideRemove": "Eliminați",
+    "overrideScopes": {
+      "user": {
+        "label": "Persoane",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Domeniu de e-mail",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Atribut din director",
+        "placeholder": "department:health"
       }
     }
   },

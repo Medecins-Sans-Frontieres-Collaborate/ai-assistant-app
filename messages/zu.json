@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Humusha} one {Humusha ikhasi elingu-#} other {Humusha amakhasi angu-#}}",
         "translateAgain": "Humusha futhi",
         "sourcePages": "Amakhasi omthombo",
-        "pagesSelected": "{selected} ku-{total} kukhethiwe · kufika ku-{max} ngesikhathi okukodwa",
         "pagesField": "Amakhasi",
-        "pagesInvalid": "Ukukhethwa kwamakhasi akufundeki, noma kunamakhasi angaphezu kuka-{max} okukhulunywe ngawo. Bhala njenge-1-3, 8.",
-        "pagesLimit": "Ukuhunyushwa okukanye kuthatha amakhasi angaba ngu-{max}. Khetha ikhasi elilodwa ukuze ulungise.",
-        "pagesNone": "Khetha okungenani ikhasi elilodwa.",
         "pageLabel": "Ikhasi {page}",
         "pageEdits": "{count, plural, one {Ikhasi {page} · # ukuhlela} other {Ikhasi {page} · # ukuhlela}}",
         "pages": "Amakhasi",
@@ -3260,7 +3256,7 @@
         "remember": "Khumbula le miyalelo ngamadokhumenti ami alandelayo",
         "fontsNote": "Amafonti: kusetshenziswa okufanele okuseduze, kungeyona ifonti yedokhumenti uqobo.",
         "progressTitle": "{count, plural, one {Kuhumusha ikhasi elingu-# liye ku-{language}} other {Kuhumusha amakhasi angu-# aye ku-{language}}}",
-        "progressNote": "Ukuyeka akugcini lutho kulolu hlelo.",
+        "progressNote": "Ukumisa kuzolahla le nguqulo.",
         "progressLabel": "Izinyathelo zokuhumusha",
         "stepWaiting": "Kulindwe",
         "stepRunning": "Kuyaqhubeka…",
@@ -3341,8 +3337,49 @@
         "run": "Qalisa",
         "runSummary": "{seconds} s · {tokens} ama-tokens · {font}",
         "details": "Imininingwane",
-        "unchecked": "Ukuhlolwa kwendawo akwenzanga kuleli khasi. Phinda ubuyekeze nehlolo ukuze uzame futhi."
-      }
+        "unchecked": "Ukuhlolwa kwendawo akwenzanga kuleli khasi. Phinda ubuyekeze nehlolo ukuze uzame futhi.",
+        "addPages": "Engeza amakhasi",
+        "addPagesTitle": "Amakhasi ozowengeza",
+        "batchSummary": "{selected} kwe-{capacity} kule batch",
+        "documentSummary": "{used} kwe-{max} amakhasi edokhumenti",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Amakhasi nge-batch",
+        "batchSizeDefault": "{size} (okuzenzakalelayo)",
+        "batchSizeRange": "Ungayandisa kube kuze kufike ku-{max}.",
+        "batchSizeRaised": "{parts, plural, one {I-batch enkulu idinga isikhathi eside futhi isebenzisa ingxenye enkulu yesabelomali sakho.} other {I-batch enkulu idinga isikhathi eside futhi isebenzisa ingxenye enkulu yesabelomali sakho. Le batch ihlukaniswe izigaba eziyi-#.}}",
+        "pageState": {
+          "translated": "Iguquliwe",
+          "later": "I-batch elandelayo",
+          "locked": "Ngaphandle komkhawulo"
+        },
+        "pageReason": {
+          "later": "Le batch igcwele. Lawa makhasi angafakwa ku-batch elandelayo.",
+          "laterRaise": "Le batch igcwele. Lawa makhasi angafakwa ku-batch elandelayo, noma wandise amakhasi nge-batch ukuze uwafake manje.",
+          "locked": "Kungenziwa amakhasi angu-{max} kuphela edokhumenti eyodwa, futhi lowo mkhawulo sewusetshenzisiwe."
+        },
+        "pagesUnreadable": "Bhala amakhasi ngezibalo noma ububanzi, njengokuthi 1-3, 8.",
+        "pagesOverBatch": "Lawa amakhasi angu-{asked}; le batch ingathatha {capacity}. Bhala amakhasi ambalwa noma wandise amakhasi nge-batch.",
+        "pagesLimitReached": "Umkhawulo wamakhasi angu-{max} wedokhumenti eyodwa usuwafinyelelwe. Awukho omunye amakhasi angaguqulwa.",
+        "pagesNoneLeft": "Wonke ikhasi elibaliwe seleguquliwe.",
+        "earlierAdding": "{count, plural, one {# ikhasi seliguqulwe ku-{language}.} other {# amakhasi seaguqulwe ku-{language}.}} Amakhasi amasha azofakwa ku-PDF efanayo.",
+        "earlierReplacing": "{count, plural, one {Ukuqala kabusha kuzoshintsha ikhasi elingu-# eliguquliwe} other {Ukuqala kabusha kuzoshintsha amakhasi angu-# aguguziwe}} uma ukuhumusha okusha sekuqediwe.",
+        "earlierOtherLanguage": "{count, plural, one {# ikhasi seliguqulwe ku-{language}. Ukuhumusha ku-{target} kuzoqala kabusha kwashintsha.} other {# amakhasi seaguqulwe ku-{language}. Ukuhumusha ku-{target} kuzoqala kabusha kwashintsha.}}",
+        "startOver": "Qala kabusha",
+        "keepAdding": "Engeza kumakhasi aguqile",
+        "progressNoteParts": "Ukuma kugcina izigaba eziqediwe, bese kushiywa esesakhiwa.",
+        "progressPart": "Ingxenye {part} kwe-{parts}",
+        "progressAssembling": "Ukuhlanganisa amakhasi edokhumenti eyodwa"
+      },
+      "kind": "Okuzoguqulwa",
+      "kindText": "Umbhalo",
+      "kindTextHint": "Kuguqulwa umbhalo ebhokisini lomthombo. Ifayela olifaka lifundwa njengombhalo.",
+      "languageNeeded": "Khetha ulimi okuzoguqulwa kulo",
+      "pdfAsTextOffer": "{name} selilayishwe njengombhalo. Ukuze uguqule i-PDF uqobo, ikhasi ngalinye, shintsha uye kuDokhumenti.",
+      "pdfAsTextSwitch": "Guqula njenge-dokhumenti",
+      "pdfAsTextKeep": "Gcina njengombhalo",
+      "uploadPickerTitle": "Layisha umbhalo",
+      "uploadPickerHint": "PDF, Word, PowerPoint, umbhalo, Markdown noma XML. Umbhalo owodwa ngesikhathi.",
+      "uploadPickerConfirm": "Sebenzisa lo mbhalo"
     },
     "document": {
       "emptyTitle": "Chaza umbhalo ofunayo",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Gcina ukwakheka kuma-PDFs",
-        "description": "Engeza ukwakheka kwe-\"Gcina ukwakheka\" ku Document mode, okwakha kabusha ikhasi le-PDF ngalinye kuhunyushwe. Kusebenzisa i-code interpreter ne-vision model, ngakho ikhasi libiza kakhulu kunokuhumusha umbhalo kuphela."
+        "description": "Engeza ukwakheka kwe-\"Gcina ukwakheka\" ku Document mode, okwakha kabusha ikhasi le-PDF ngalinye kuhunyushwe. Kusebenzisa i-code interpreter ne-vision model, ngakho ikhasi libiza kakhulu kunokuhumusha umbhalo kuphela.",
+        "limits": {
+          "defaultBatchPages": "Amakhasi nge-batch, okuzenzakalelayo",
+          "maxBatchPages": "I-batch enkulu umuntu angayikhetha",
+          "maxDocumentPages": "Amakhasi wedokhumenti, ingqikithi"
+        },
+        "limitsNote": "Abantu baguqula idokhumenti nge-batch ngayinye futhi bangandisa i-batch kufike kweyikhulu. Uma ingqikithi yedokhumenti ifinyelelwa, awekho amakhasi alo angaguqulwa. Okuzenzakalelayo okungaphezulu kwe-batch enkulu, noma i-batch enkulu edlula ingqikithi yedokhumenti, kwehliwa kuzovumelana."
+      }
+    },
+    "limitsTitle": "Imikhawulo",
+    "limitRange": "{min} kuya ku-{max}",
+    "limitsInvalid": "Umkhawulo uphume ebangeni elivumelekile. Hlola ububanzi obugqamile bese uzama futhi.",
+    "overridesTitle": "Imikhawulo ehlukile kwabanye",
+    "overridesNote": "Ukuphambana kushintsha le mikhawulo kwabantu ebabala. Inkambu engashiwongo igcina inani elingenhla. Uma abaningana behambelana, umuntu uphakeme kunesici sedirectory, esiphezulu kune-domain ye-imeyili.",
+    "overrideScope": "Kusebenza ku",
+    "overrideTargets": "Obani (hlukanisa abaningi ngamakhoma)",
+    "overrideInherit": "{value} (ifakwe ngokuzenzakalelayo)",
+    "overrideAdd": "Engeza ukuphambana",
+    "overrideRemove": "Susa",
+    "overrideScopes": {
+      "user": {
+        "label": "Abantu",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Igesi le-imeyili",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Isici sekhasi",
+        "placeholder": "umsebenzi:ezempilo"
       }
     }
   },

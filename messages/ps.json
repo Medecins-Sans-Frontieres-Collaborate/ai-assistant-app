@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {ژباړه} one {د # صفحه ژباړه} other {د # صفحو ژباړه}}",
         "translateAgain": "بیا ژباړه",
         "sourcePages": "سرچینې صفحات",
-        "pagesSelected": "{selected} له {total} څخه انتخاب شوي · تر {max} پورې هر ځل",
         "pagesField": "صفحې",
-        "pagesInvalid": "دا د صفحو انتخاب لوستل نشي، یا له {max} صفحو زیات نومول شوي. لکه ۱-۳، ۸ ولیکئ.",
-        "pagesLimit": "یو ځل تر {max} پورې صفحې اخلي. لومړی یوه صفحه غیر انتخاب کړئ.",
-        "pagesNone": "لږ تر لږه یوه صفحه انتخاب کړئ.",
         "pageLabel": "صفحه {page}",
         "pageEdits": "{count, plural, one {صفحه {page} · # اصلاح} other {صفحه {page} · # اصلاحات}}",
         "pages": "صفحې",
@@ -3260,7 +3256,7 @@
         "remember": "دا لارښوونې زما د راتلونکو اسنادو لپاره یاد کړئ",
         "fontsNote": "فونټونه: تر ټولو نږدې مناسب فونټ کارول کېږي، د سند خپل نه.",
         "progressTitle": "{count, plural, one {# پاڼه {language} ته ژباړل کیږي} other {# پاڼې {language} ته ژباړل کیږي}}",
-        "progressNote": "درول سره د دې دورې معلومات نه خوندي کیږي.",
+        "progressNote": "درول دا ژباړه له منځه وړي.",
         "progressLabel": "د ژباړې مرحلې",
         "stepWaiting": "په انتظار",
         "stepRunning": "پر مخ روان…",
@@ -3341,8 +3337,49 @@
         "run": "پیل کړئ",
         "runSummary": "{seconds} ثانیې · {tokens} ټوکنونه · {font}",
         "details": "تفصیلات",
-        "unchecked": "د دې پاڼې لپاره د ترتیب کتنه نشي اجرا کېدلای. د کتنې سره بیا جوړ کړئ ترڅو بیا هڅه وکړئ."
-      }
+        "unchecked": "د دې پاڼې لپاره د ترتیب کتنه نشي اجرا کېدلای. د کتنې سره بیا جوړ کړئ ترڅو بیا هڅه وکړئ.",
+        "addPages": "پاڼې اضافه کړئ",
+        "addPagesTitle": "اضافه کېدونکې پاڼې",
+        "batchSummary": "په دې ډله کې {selected} له {capacity} څخه",
+        "documentSummary": "د سند {used} له {max} پاڼو څخه",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "پاڼې هرې ډلې ته",
+        "batchSizeDefault": "{size} (اصلي)",
+        "batchSizeRange": "تاسو کولای شئ دا تر {max} پورې لوړ کړئ.",
+        "batchSizeRaised": "{parts, plural, one {لویه ډله ډېر وخت او بودجه مصرفوي.} other {لویه ډله ډېر وخت او بودجه مصرفوي. دا به په # برخو کې چلیږي.}}",
+        "pageState": {
+          "translated": "ژباړل شوې",
+          "later": "بله ډله",
+          "locked": "د حد نه زیات"
+        },
+        "pageReason": {
+          "later": "دا ډله ډکه ده. دا پاڼې راتلونکې ډلې ته داخلېدای شي.",
+          "laterRaise": "دا ډله ډکه ده. دا پاڼې راتلونکې ډلې ته داخلېدای شي، یا د هرې ډلې پاڼې لوړ کړئ چې همدا اوس یې شامله کړئ.",
+          "locked": "اعظم {max} پاڼې د یو سند ژباړلی شي، او دا حد بشپړ شوی دی."
+        },
+        "pagesUnreadable": "پاڼې په شمېرو یا قطارونو ولیکئ، لکه 1-3, 8.",
+        "pagesOverBatch": "دا {asked} پاڼې دي؛ دا ډله {capacity} اخلي. لږ پاڼې وټاکئ یا د ډلې حد لوړ کړئ.",
+        "pagesLimitReached": "د {max} پاڼو حد د یو سند لپاره پوره شوی. نورې پاڼې نشي ژباړل کېدای.",
+        "pagesNoneLeft": "ټولې یادې شوې پاڼې مخکې ژباړل شوي دي.",
+        "earlierAdding": "{count, plural, one {# پاڼه} other {# پاڼې}} له مخکې {language} ته ژباړل شوې دي. نوې پاڼې به همدغه PDF ته ورزیات شي.",
+        "earlierReplacing": "{count, plural, one {کله چې نوې ژباړه بشپړه شي، یوه ژباړل شوې # پاڼه بیاځلې ځایناستې کیږي.} other {کله چې نوې ژباړه بشپړه شي، # ژباړلې پاڼې بیاځلې ځایناستې کیږي.}}",
+        "earlierOtherLanguage": "{count, plural, one {# پاڼه} other {# پاڼې}} {language} ته ژباړل شوې دي. {target} ته ژباړل بیا له سره پیلوي او بدلوي یې.",
+        "startOver": "پر ځای یې له سره پیل کړئ",
+        "keepAdding": "د ژباړل شوو پاڼو سره اضافه کړئ",
+        "progressNoteParts": "درول شوې پروسه پای ته رسیدلي برخې ساتي او روانه برخه حذف کوي.",
+        "progressPart": "برخه {part} له {parts} څخه",
+        "progressAssembling": "پاڼې یو سند ته سره تړل کېږي"
+      },
+      "kind": "څه ژباړل کیږي",
+      "kindText": "متن",
+      "kindTextHint": "د سرچینې پانه کې متن ژباړي. ستاسو پورته کړی فایل به د متن په توګه لوستل کېږي.",
+      "languageNeeded": "د ژباړې لپاره هدف ژبه وټاکئ",
+      "pdfAsTextOffer": "{name} د متن په توګه پورته شو. که غواړئ PDF خپله پاڼه پاڼه ژباړئ، اسنادو ته واوړئ.",
+      "pdfAsTextSwitch": "د سند په توګه یې ژباړئ",
+      "pdfAsTextKeep": "د متن په توګه وساتئ",
+      "uploadPickerTitle": "يو سند پورته کړئ",
+      "uploadPickerHint": "PDF، Word، PowerPoint، متن، Markdown يا XML. يو ځل يو سند پورته کړئ.",
+      "uploadPickerConfirm": "دا سند وکاروئ"
     },
     "document": {
       "emptyTitle": "هغه سند تشریح کړئ چې غواړئ",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "د PDF فایلونو لپاره فورمېټ ساتل",
-        "description": "د سند حالت ته د \"Preserve formatting\" لیوت اضافه کوي، چې هر PDF پاڼه له ژباړې سره بیا جوړوي. دا code interpreter او vision model کاروي، نو یوه پاڼه د یوازې متن ژباړې په پرتله زیاته بیه لري."
+        "description": "د سند حالت ته د \"Preserve formatting\" لیوت اضافه کوي، چې هر PDF پاڼه له ژباړې سره بیا جوړوي. دا code interpreter او vision model کاروي، نو یوه پاڼه د یوازې متن ژباړې په پرتله زیاته بیه لري.",
+        "limits": {
+          "defaultBatchPages": "په هرې ډلې کې پاڼې، اصلاً",
+          "maxBatchPages": "تر ټولو لویه ډله چې یو څوک ټاکلی شي",
+          "maxDocumentPages": "په یو سند کې ټولې پاڼې"
+        },
+        "limitsNote": "خلک یو سند په ډلو کې ژباړي او کولی شي ډله تر لوی حد پورې پراخه کړي. کله چې د سند ټولیز حد پوره شي، نورې پاڼې نشي ژباړل کېدای. که اصلي ډله یا لویه ډله د ټولي پاڼو له حده زیاته شي، نو راټیټه کېږي."
+      }
+    },
+    "limitsTitle": "حدونه",
+    "limitRange": "له {min} تر {max}",
+    "limitsInvalid": "یو حد د ټاکلي حد څخه بهر دی. روښانه شوي رینجونه وګورئ او بیا هڅه وکړئ.",
+    "overridesTitle": "د ځینو لپاره بېلابېل حدونه",
+    "overridesNote": "اوورراید غوره شوي حدونه د هغو کسانو لپاره بدلوي چې نومونه یې ورکول شوي وي. تشه برخه بره ارزښت ساتي. که څو حالتونه برابر شي، شخص د دفتر ځانګړتیا نه لوړ دی، او دفتر د ایمیل ډومېن نه لوړ دی.",
+    "overrideScope": "د چا لپاره پلي کېږي",
+    "overrideTargets": "چا ته (څو د کامه سره بېل کړئ)",
+    "overrideInherit": "{value} (وراثت شوی)",
+    "overrideAdd": "اوورراید اضافه کړئ",
+    "overrideRemove": "لورې کړئ",
+    "overrideScopes": {
+      "user": {
+        "label": "خلک",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "د برېښنالېک ډومېن",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "د ډایرېکټورۍ ځانګړتیا",
+        "placeholder": "department:health"
       }
     }
   },

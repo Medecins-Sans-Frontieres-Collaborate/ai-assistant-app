@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {Terjemahkan} one {Terjemahkan # halaman} other {Terjemahkan # halaman}}",
         "translateAgain": "Terjemahkan lagi",
         "sourcePages": "Halaman sumber",
-        "pagesSelected": "{selected} dari {total} dipilih · maksimal {max} tiap kali",
         "pagesField": "Halaman",
-        "pagesInvalid": "Pilihan halaman ini tidak bisa dibaca, atau jumlahnya melebihi {max} halaman. Tuliskan seperti 1-3, 8.",
-        "pagesLimit": "Satu kali maksimal {max} halaman. Hapus pilihan halaman dahulu.",
-        "pagesNone": "Pilih minimal satu halaman.",
         "pageLabel": "Halaman {page}",
         "pageEdits": "{count, plural, one {Halaman {page} · # suntingan} other {Halaman {page} · # suntingan}}",
         "pages": "Halaman",
@@ -3276,7 +3272,7 @@
         "remember": "Ingat instruksi ini untuk dokumen berikutnya",
         "fontsNote": "Font: digunakan padanan tersedia yang paling mirip, bukan milik dokumen.",
         "progressTitle": "{count, plural, one {Menerjemahkan # halaman ke dalam {language}} other {Menerjemahkan # halaman ke dalam {language}}}",
-        "progressNote": "Menghentikan akan membatalkan semua hasil dari proses ini.",
+        "progressNote": "Menghentikan akan membatalkan terjemahan ini.",
         "progressLabel": "Langkah penerjemahan",
         "stepWaiting": "Menunggu",
         "stepRunning": "Sedang berlangsung…",
@@ -3357,8 +3353,49 @@
         "run": "Jalankan",
         "runSummary": "{seconds} d · {tokens} token · {font}",
         "details": "Detail",
-        "unchecked": "Pemeriksaan tata letak tidak dapat dijalankan untuk halaman ini. Render ulang dengan pemeriksaan aktif untuk mencoba lagi."
-      }
+        "unchecked": "Pemeriksaan tata letak tidak dapat dijalankan untuk halaman ini. Render ulang dengan pemeriksaan aktif untuk mencoba lagi.",
+        "addPages": "Tambah halaman",
+        "addPagesTitle": "Halaman yang akan ditambahkan",
+        "batchSummary": "{selected} dari {capacity} dalam batch ini",
+        "documentSummary": "{used} dari {max} halaman dokumen",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Halaman per batch",
+        "batchSizeDefault": "{size} (default)",
+        "batchSizeRange": "Anda dapat menaikkannya hingga {max}.",
+        "batchSizeRaised": "{parts, plural, one {Batch lebih besar memerlukan waktu lebih lama dan menggunakan lebih banyak anggaran Anda.} other {Batch lebih besar memerlukan waktu lebih lama dan menggunakan lebih banyak anggaran Anda. Batch ini berjalan dalam # bagian.}}",
+        "pageState": {
+          "translated": "Sudah diterjemahkan",
+          "later": "Batch berikutnya",
+          "locked": "Melebihi batas"
+        },
+        "pageReason": {
+          "later": "Batch ini sudah penuh. Halaman-halaman ini bisa masuk batch berikutnya.",
+          "laterRaise": "Batch ini sudah penuh. Halaman-halaman ini bisa masuk batch berikutnya, atau naikkan halaman per batch untuk memasukkannya sekarang.",
+          "locked": "Maksimal {max} halaman dari satu dokumen dapat diterjemahkan, dan batas itu telah tercapai."
+        },
+        "pagesUnreadable": "Tuliskan halaman sebagai angka dan rentang, seperti 1-3, 8.",
+        "pagesOverBatch": "Itu {asked} halaman; batch ini mengambil {capacity}. Sebutkan lebih sedikit halaman atau naikkan halaman per batch.",
+        "pagesLimitReached": "Batas {max} halaman untuk satu dokumen telah tercapai. Tidak ada lagi halaman yang dapat diterjemahkan.",
+        "pagesNoneLeft": "Setiap halaman yang disebutkan sudah diterjemahkan.",
+        "earlierAdding": "{count, plural, one {# halaman sudah} other {# halaman sudah}} diterjemahkan ke {language}. Halaman baru ditambahkan ke PDF yang sama.",
+        "earlierReplacing": "{count, plural, one {Memulai ulang menggantikan # halaman yang sudah diterjemahkan} other {Memulai ulang menggantikan # halaman yang sudah diterjemahkan}} ketika terjemahan baru selesai.",
+        "earlierOtherLanguage": "{count, plural, one {# halaman sudah} other {# halaman sudah}} diterjemahkan ke {language}. Menerjemahkan ke {target} akan memulai ulang dan menggantikannya.",
+        "startOver": "Mulai ulang sebagai gantinya",
+        "keepAdding": "Tambahkan ke halaman yang diterjemahkan",
+        "progressNoteParts": "Penghentian akan menyimpan bagian yang telah selesai dan membuang yang sedang berjalan.",
+        "progressPart": "Bagian {part} dari {parts}",
+        "progressAssembling": "Menggabungkan halaman ke satu dokumen"
+      },
+      "kind": "Apa yang akan diterjemahkan",
+      "kindText": "Teks",
+      "kindTextHint": "Menerjemahkan teks di panel sumber. File yang diunggah dibaca sebagai teks.",
+      "languageNeeded": "Pilih bahasa tujuan untuk diterjemahkan",
+      "pdfAsTextOffer": "{name} dimuat sebagai teks. Untuk menerjemahkan PDF itu sendiri, per halaman, ubah ke Dokumen.",
+      "pdfAsTextSwitch": "Terjemahkan sebagai dokumen",
+      "pdfAsTextKeep": "Biarkan sebagai teks",
+      "uploadPickerTitle": "Unggah dokumen",
+      "uploadPickerHint": "PDF, Word, PowerPoint, teks, Markdown, atau XML. Satu dokumen setiap kali.",
+      "uploadPickerConfirm": "Gunakan dokumen ini"
     },
     "document": {
       "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Pertahankan pemformatan untuk PDF",
-        "description": "Menambahkan tata letak \"Pertahankan pemformatan\" ke mode Dokumen, di mana setiap halaman PDF dibangun ulang dengan terjemahan yang sudah diterapkan. Fitur ini menggunakan code interpreter dan vision model, sehingga biaya per halaman lebih tinggi dibandingkan terjemahan teks saja."
+        "description": "Menambahkan tata letak \"Pertahankan pemformatan\" ke mode Dokumen, di mana setiap halaman PDF dibangun ulang dengan terjemahan yang sudah diterapkan. Fitur ini menggunakan code interpreter dan vision model, sehingga biaya per halaman lebih tinggi dibandingkan terjemahan teks saja.",
+        "limits": {
+          "defaultBatchPages": "Halaman per batch, default",
+          "maxBatchPages": "Batch terbesar yang bisa dipilih",
+          "maxDocumentPages": "Halaman per dokumen, total"
+        },
+        "limitsNote": "Orang menerjemahkan dokumen per batch dan dapat menaikkan batch hingga yang terbesar. Setelah total dokumen tercapai, tidak ada lagi halaman dari dokumen itu yang dapat diterjemahkan. Default di atas batch terbesar, atau batch terbesar di atas total dokumen, akan diturunkan agar sesuai."
+      }
+    },
+    "limitsTitle": "Batas",
+    "limitRange": "{min} hingga {max}",
+    "limitsInvalid": "Sebuah batas berada di luar rentang yang diizinkan. Periksa rentang yang ditandai dan coba lagi.",
+    "overridesTitle": "Batas berbeda untuk sebagian orang",
+    "overridesNote": "Override menggantikan batas ini untuk orang yang disebutkan. Kolom yang dikosongkan mempertahankan nilai di atas. Jika beberapa cocok, individu lebih diutamakan daripada atribut direktori, dan atribut direktori lebih diutamakan daripada domain email.",
+    "overrideScope": "Berlaku untuk",
+    "overrideTargets": "Siapa (pisahkan dengan koma)",
+    "overrideInherit": "{value} (diwariskan)",
+    "overrideAdd": "Tambah override",
+    "overrideRemove": "Hapus",
+    "overrideScopes": {
+      "user": {
+        "label": "Orang",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Domain email",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Atribut direktori",
+        "placeholder": "department:health"
       }
     }
   },

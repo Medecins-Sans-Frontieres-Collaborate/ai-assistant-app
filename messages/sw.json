@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {Tafsiri} one {Tafsiri ukurasa #} other {Tafsiri kurasa #}}",
         "translateAgain": "Tafsiri tena",
         "sourcePages": "Kurasa chanzo",
-        "pagesSelected": "{selected} kati ya {total} zimechaguliwa · hadi {max} kwa kila mzunguko",
         "pagesField": "Kurasa",
-        "pagesInvalid": "Uteuzi huu wa kurasa hauwezi kusomwa, au umeandika zaidi ya kurasa {max}. Andika kama 1-3, 8.",
-        "pagesLimit": "Mzunguko mmoja unachukua hadi kurasa {max}. Ondoa ukurasa kwanza.",
-        "pagesNone": "Chagua angalau ukurasa mmoja.",
         "pageLabel": "Ukurasa {page}",
         "pageEdits": "{count, plural, one {Ukurasa {page} · # mabadiliko} other {Ukurasa {page} · # mabadiliko}}",
         "pages": "Kurasa",
@@ -3276,7 +3272,7 @@
         "remember": "Kumbuka maagizo haya kwa nyaraka zangu zijazo",
         "fontsNote": "Fonti: ile inayofanana zaidi ndiyo itatumika, si ya hati husika.",
         "progressTitle": "{count, plural, one {Inatafsiri ukurasa # kwa {language}} other {Inatafsiri kurasa # kwa {language}}}",
-        "progressNote": "Kusimamisha hakuhifadhi chochote kutoka kwa mchakato huu.",
+        "progressNote": "Kusitisha kunafuta tafsiri hii.",
         "progressLabel": "Hatua za tafsiri",
         "stepWaiting": "Inasubiri",
         "stepRunning": "Inaendelea…",
@@ -3357,8 +3353,49 @@
         "run": "Endesha",
         "runSummary": "{seconds} s · {tokens} tokeni · {font}",
         "details": "Maelezo",
-        "unchecked": "Ukaguzi wa mpangilio haukuweza kufanyika kwa ukurasa huu. Onyesha upya ukiwa na ukaguzi kuwasha ili ujaribu tena."
-      }
+        "unchecked": "Ukaguzi wa mpangilio haukuweza kufanyika kwa ukurasa huu. Onyesha upya ukiwa na ukaguzi kuwasha ili ujaribu tena.",
+        "addPages": "Ongeza kurasa",
+        "addPagesTitle": "Kurasa za kuongeza",
+        "batchSummary": "{selected} kati ya {capacity} kwenye kundi hili",
+        "documentSummary": "{used} kati ya {max} kurasa za hati",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Kurasa kwa kila kundi",
+        "batchSizeDefault": "{size} (chaguomsingi)",
+        "batchSizeRange": "Unaweza kuongeza hadi {max}.",
+        "batchSizeRaised": "{parts, plural, one {Kundi kubwa huchukua muda zaidi na hutumia zaidi ya bajeti yako.} other {Kundi kubwa huchukua muda zaidi na hutumia zaidi ya bajeti yako. Hili linatekelezwa kwa sehemu #.}}",
+        "pageState": {
+          "translated": "Imetafsiriwa",
+          "later": "Kundi linalofuata",
+          "locked": "Zaidi ya kikomo"
+        },
+        "pageReason": {
+          "later": "Kundi hili limejaa. Kurasa hizi zinaweza kwenda kwenye kundi linalofuata.",
+          "laterRaise": "Kundi hili limejaa. Kurasa hizi zinaweza kwenda kwenye kundi linalofuata, au ongeza kurasa kwa kila kundi ili kuzijumuisha sasa.",
+          "locked": "Upeo wa kurasa {max} kwa hati moja umeshafikiwa."
+        },
+        "pagesUnreadable": "Andika kurasa kama namba na safu, mfano 1-3, 8.",
+        "pagesOverBatch": "Hizo ni kurasa {asked}; kundi hili linachukua {capacity}. Taja kurasa chache au ongeza kurasa kwa kila kundi.",
+        "pagesLimitReached": "Kikomo cha kurasa {max} kwa hati moja kimefikiwa. Hakuna kurasa zaidi zinazoweza kutafsiriwa.",
+        "pagesNoneLeft": "Kila ukurasa uliotajwa tayari umetafsiriwa.",
+        "earlierAdding": "{count, plural, one {# ukurasa umetafsiriwa kwenye {language}.} other {Kurasa # zimetafsiriwa kwenye {language}.}} Kurasa mpya zinaongezwa kwenye PDF hiyo hiyo.",
+        "earlierReplacing": "{count, plural, one {Kuanza upya kutabadilisha ukurasa # uliotafsiriwa} other {Kuanza upya kutabadilisha kurasa # zilizotafsiriwa}} baada ya tafsiri mpya kukamilika.",
+        "earlierOtherLanguage": "{count, plural, one {# ukurasa umetafsiriwa kwenye {language}.} other {Kurasa # zimetafsiriwa kwenye {language}.}} Kutafsiri kwa {target} kutaanza upya na kubadilisha hizo.",
+        "startOver": "Anza upya badala yake",
+        "keepAdding": "Ongeza kwenye kurasa zilizotafsiriwa badala yake",
+        "progressNoteParts": "Kusitisha kunabaki na sehemu zilizokamilika na kutupilia mbali ile inayofanyika.",
+        "progressPart": "Sehemu ya {part} kati ya {parts}",
+        "progressAssembling": "Kuweka kurasa pamoja kwenye hati moja"
+      },
+      "kind": "Nini kitafsiriwe",
+      "kindText": "Maandishi",
+      "kindTextHint": "Inatafsiri maandishi yaliyo kwenye paneli chanzo. Faili unayopakia inasomwa kama maandishi.",
+      "languageNeeded": "Chagua lugha lengwa ya kutafsiri",
+      "pdfAsTextOffer": "{name} imesheheni kama maandishi. Ili kutafsiri PDF yenyewe, ukurasa kwa ukurasa, badilisha kwenda Hati.",
+      "pdfAsTextSwitch": "Tafsiri kama hati",
+      "pdfAsTextKeep": "Bakiza kama maandishi",
+      "uploadPickerTitle": "Pakia hati",
+      "uploadPickerHint": "PDF, Word, PowerPoint, maandishi, Markdown au XML. Hati moja kwa wakati.",
+      "uploadPickerConfirm": "Tumia hati hii"
     },
     "document": {
       "emptyTitle": "Eleza unachohitaji kwenye hati",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Hifadhi muundo kwa PDFs",
-        "description": "Inaongeza mpangilio wa \"Hifadhi muundo\" katika hali ya Hati, ambapo kila ukurasa wa PDF unajengwa upya na tafsiri ikiwa imewekwa. Inatumia tafsiri ya msimbo na mfano wa kuona, hivyo gharama ya ukurasa mmoja ni kubwa kuliko tafsiri ya maandishi pekee."
+        "description": "Inaongeza mpangilio wa \"Hifadhi muundo\" katika hali ya Hati, ambapo kila ukurasa wa PDF unajengwa upya na tafsiri ikiwa imewekwa. Inatumia tafsiri ya msimbo na mfano wa kuona, hivyo gharama ya ukurasa mmoja ni kubwa kuliko tafsiri ya maandishi pekee.",
+        "limits": {
+          "defaultBatchPages": "Kurasa kwa kila kundi, chaguomsingi",
+          "maxBatchPages": "Kundi kubwa zaidi ambalo mtu anaweza kuchagua",
+          "maxDocumentPages": "Kurasa kwa hati, jumla"
+        },
+        "limitsNote": "Watu wanatafsiri hati kwa kundi na wanaweza kuongeza kundi hadi kubwa zaidi. Jumla ya hati ikifikia, hakuna kurasa zaidi zake zinazoweza kutafsiriwa. Chaguomsingi iliyo juu ya kundi kubwa zaidi, au kundi kubwa zaidi lililo juu ya jumla ya hati, inashushwa ili kufaa."
+      }
+    },
+    "limitsTitle": "Vikomo",
+    "limitRange": "{min} hadi {max}",
+    "limitsInvalid": "Kikomo kiko nje ya wigo unaoruhusiwa. Angalia mawanda yaliyopauka kisha jaribu tena.",
+    "overridesTitle": "Vikomo tofauti kwa baadhi ya watu",
+    "overridesNote": "Ubadilishaji unachukua nafasi ya vikomo hivi kwa watu watakaotajwa. Sehemu iliyoachwa wazi hubakiza thamani iliyo juu. Kuna vigezo vingi, mtu hutangulia sifa ya direktori, ambayo hutangulia kikoa cha barua pepe.",
+    "overrideScope": "Inahusu",
+    "overrideTargets": "Nani (tenganisha kadhaa kwa koma)",
+    "overrideInherit": "{value} (imerithiwa)",
+    "overrideAdd": "Ongeza badilisho",
+    "overrideRemove": "Ondoa",
+    "overrideScopes": {
+      "user": {
+        "label": "Watu",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Kikoa cha barua pepe",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Sifa ya saraka",
+        "placeholder": "department:health"
       }
     }
   },

@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Gbâgbâ} one {Gbâgbâ page #} other {Gbâgbâ pages #}}",
         "translateAgain": "Gbâgbâ li",
         "sourcePages": "Pages ya bângâ",
-        "pagesSelected": "{selected} sô {total} yêkê · mbi {max} tî run yeke",
         "pagesField": "Pages",
-        "pagesInvalid": "Sêlêzi na page a hû na mbênî, wala i so mbi {max} pages. Yèkï nafuli lako 1-3, 8.",
-        "pagesLimit": "Run yeke mbi {max} pages. Sô pâ fîtî page mo.",
-        "pagesNone": "Yèkî page yeke apa na sele.",
         "pageLabel": "Page {page}",
         "pageEdits": "{count, plural, one {Page {page} · # ndalkö} other {Page {page} · # ndalkö}}",
         "pages": "Pages",
@@ -3260,7 +3256,7 @@
         "remember": "Yeke ndokbé mo ala na dosiê mo tî mûngû",
         "fontsNote": "Fonts: mo o ti kàngbi kufûlû yêkî, apê cava tî dosiê a.",
         "progressTitle": "{count, plural, one {Gbâ  # kôdörö ti {language}} other {Gbâ # kôdörö ti {language}}}",
-        "progressNote": "Sô na kängbi, lo yâko tî ködörö azo na lo.",
+        "progressNote": "Kpu ti yeke hûtu, oko na tene so ti sô apepe yango.",
         "progressLabel": "Gâ tî gbâ",
         "stepWaiting": "Nde nzönî",
         "stepRunning": "Ebê na gâ…",
@@ -3341,8 +3337,49 @@
         "run": "Kwè",
         "runSummary": "{seconds} s · {tokens} tokens · {font}",
         "details": "Dôkô",
-        "unchecked": "Bokô tî layout abî tî kûö na kâda ôko. Bé sôkôsô na layout dà yi zîngbï da."
-      }
+        "unchecked": "Bokô tî layout abî tî kûö na kâda ôko. Bé sôkôsô na layout dà yi zîngbï da.",
+        "addPages": "Gbâré pages",
+        "addPagesTitle": "Pages ti a sô",
+        "batchSummary": "{selected} na {capacity} na batch tî azo",
+        "documentSummary": "{used} na {max} pages tî document",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Pages na batch",
+        "batchSizeDefault": "{size} (défaut)",
+        "batchSizeRange": "Könü yo na {max}.",
+        "batchSizeRaised": "{parts, plural, one {Batch tî vundu yéké ti longa na so tî dörö na mo budget.} other {Batch tî vundu yéké ti longa na so tî dörö na mo budget. Ala batch ti kö na # parts.}}",
+        "pageState": {
+          "translated": "Page yï bango",
+          "later": "Batch tî yângâ",
+          "locked": "Bé ti mbênî"
+        },
+        "pageReason": {
+          "later": "Batch tî azo yéké. Pages tî kâdène kö na batch tî yângâ.",
+          "laterRaise": "Batch tî azo yéké. Pages tî kâdène kö na batch tî yângâ, mbi könü pages na batch tî azo ti kö ban ndo.",
+          "locked": "Pages tî document yéké na {max} mo. Ala limit yéké ti azo."
+        },
+        "pagesUnreadable": "Lê pages na nombro na ranges, mo so 1-3, 8.",
+        "pagesOverBatch": "Mo yéké {asked} pages; batch tî azo yéké {capacity}. Kpe pages na mbi kö nombro na batch.",
+        "pagesLimitReached": "Limit tî {max} pages tî document yéké ti azo. Pages tî kâdène ti yéké bango.",
+        "pagesNoneLeft": "Pages tî mbi yë na bango.",
+        "earlierAdding": "{count, plural, one {# page ti yë na bango na {language}.} other {# pages ti yë na bango na {language}.}} Pages tî kâdène ti kö na PDF tî mô tî azo.",
+        "earlierReplacing": "{count, plural, one {Mbï yângâ ti kpê # page tî mbi na bango.} other {Mbï yângâ ti kpê # pages tî mbi na bango.}} bé translation tî azo ti fini.",
+        "earlierOtherLanguage": "{count, plural, one {# page ti yë na bango na {language}.} other {# pages ti yë na bango na {language}.}} Translation na {target} ti yângâ na mbi kö kpê bango.",
+        "startOver": "Mbï yângâ na balan",
+        "keepAdding": "Gbâré ka pages tî yë na bango",
+        "progressNoteParts": "Mbï kugbä ti mo so ti fini na mo parts, mbi kpê ti mo na progress.",
+        "progressPart": "Part {part} na {parts}",
+        "progressAssembling": "Mbï kö pages na document yô"
+      },
+      "kind": "Mo so ti bango",
+      "kindText": "Text",
+      "kindTextHint": "Mbï bango text na pane tî source. File tî mbi sô ti yë na text.",
+      "languageNeeded": "Kpe language tî mo na bango",
+      "pdfAsTextOffer": "{name} ti yë na text. Mbï gbä ti bango PDF na page na page, mbi na kou na Document.",
+      "pdfAsTextSwitch": "Bango na document",
+      "pdfAsTextKeep": "Mbï yë na text",
+      "uploadPickerTitle": "Kangbi dokuma",
+      "uploadPickerHint": "PDF, Word, PowerPoint, dokuma na zo na na Markdown na XML. Dokuma mo so ti kangbi.",
+      "uploadPickerConfirm": "Sambisa dokuma ti asi"
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Gbenza doli ti PDF",
-        "description": "A gu na layout \"Gbenza doli\" na Document mode, a gawa kodaya PDF bako ti traductions. A ti code interpreter na vision model, kowa ndambi kwa na page ti PDF ti traductions ti texte-seule."
+        "description": "A gu na layout \"Gbenza doli\" na Document mode, a gawa kodaya PDF bako ti traductions. A ti code interpreter na vision model, kowa ndambi kwa na page ti PDF ti traductions ti texte-seule.",
+        "limits": {
+          "defaultBatchPages": "Pages na batch na défaut",
+          "maxBatchPages": "Batch tî vundu na mo ti sô",
+          "maxDocumentPages": "Pages na document, na mo tî ndö"
+        },
+        "limitsNote": "Mö ti bango document na batch na batch na mbi könü batch na batch tî vundu. Bé document ti longana, pages tî kâdène ti yéké bango. Défaut mbi na batch tî vundu, batch tî vundu mbi na document ti longana, mbi kpê ti mo na fit."
+      }
+    },
+    "limitsTitle": "Limits",
+    "limitRange": "{min} na {max}",
+    "limitsInvalid": "Limit mo so ti ndö na range ti mo. Gbâm na ranges ti highlight na mbi yângâ na balan.",
+    "overridesTitle": "Limit tî ti sô na moto",
+    "overridesNote": "Override ti kpê limits ti mo na moto ti mbi sô. Field tî mbi ndö ti yë na valeur ti ndö. Bé sô na match, moto ti kö attribute directory, attribute directory ti kö mail domain.",
+    "overrideScope": "Mbï kö na",
+    "overrideTargets": "Moto (kpe na commas)",
+    "overrideInherit": "{value} (hérité)",
+    "overrideAdd": "Gbâré override",
+    "overrideRemove": "Kpê",
+    "overrideScopes": {
+      "user": {
+        "label": "Moto",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Domain na mingi",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Atiribio ti Directory",
+        "placeholder": "department:health"
       }
     }
   },

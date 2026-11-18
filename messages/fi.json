@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {Käännä} one {Käännä # sivu} other {Käännä # sivua}}",
         "translateAgain": "Käännä uudelleen",
         "sourcePages": "Lähdesivut",
-        "pagesSelected": "{selected}/{total} valittu · enintään {max} kerralla",
         "pagesField": "Sivut",
-        "pagesInvalid": "Tätä sivuvalintaa ei voi lukea tai se ylittää {max} sivun rajan. Kirjoita muodossa 1-3, 8.",
-        "pagesLimit": "Yhdellä kertaa voidaan käsitellä enintään {max} sivua. Poista ensin valinta joltakin sivulta.",
-        "pagesNone": "Valitse vähintään yksi sivu.",
         "pageLabel": "Sivu {page}",
         "pageEdits": "{count, plural, one {Sivu {page} · # muokkaus} other {Sivu {page} · # muokkausta}}",
         "pages": "Sivut",
@@ -3276,7 +3272,7 @@
         "remember": "Muista nämä ohjeet seuraaviin asiakirjoihini",
         "fontsNote": "Fontit: käytetään lähintä saatavilla olevaa vaihtoehtoa, ei asiakirjan omaa.",
         "progressTitle": "{count, plural, one {Käännetään # sivu kielelle {language}} other {Käännetään # sivua kielelle {language}}}",
-        "progressNote": "Jos pysäytät, mitään tästä suorituksesta ei säilytetä.",
+        "progressNote": "Lopettaminen hylkää tämän käännöksen.",
         "progressLabel": "Käännösvaiheet",
         "stepWaiting": "Odottaa",
         "stepRunning": "Käynnissä…",
@@ -3357,8 +3353,49 @@
         "run": "Suorita",
         "runSummary": "{seconds} s · {tokens} tokenia · {font}",
         "details": "Tiedot",
-        "unchecked": "Asettelutarkistusta ei voitu suorittaa tälle sivulle. Piirrä uudelleen tarkistus päällä yrittääksesi uudelleen."
-      }
+        "unchecked": "Asettelutarkistusta ei voitu suorittaa tälle sivulle. Piirrä uudelleen tarkistus päällä yrittääksesi uudelleen.",
+        "addPages": "Lisää sivuja",
+        "addPagesTitle": "Lisättävät sivut",
+        "batchSummary": "{selected} / {capacity} tässä erässä",
+        "documentSummary": "{used} / {max} dokumentin sivua",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Sivuja per erä",
+        "batchSizeDefault": "{size} (oletus)",
+        "batchSizeRange": "Voit nostaa arvon maksimiin {max}.",
+        "batchSizeRaised": "{parts, plural, one {Suurempi erä kestää pidempään ja käyttää enemmän budjettia.} other {Suurempi erä kestää pidempään ja käyttää enemmän budjettia. Tämä jaetaan # osaan.}}",
+        "pageState": {
+          "translated": "Käännetty",
+          "later": "Seuraava erä",
+          "locked": "Ylittää rajan"
+        },
+        "pageReason": {
+          "later": "Tämä erä on täynnä. Nämä sivut voidaan lisätä seuraavaan erään.",
+          "laterRaise": "Tämä erä on täynnä. Nämä sivut voidaan lisätä seuraavaan erään tai kasvata sivujen määrää per erä sisällyttääksesi ne nyt.",
+          "locked": "Yhdestä dokumentista voidaan kääntää enintään {max} sivua, ja raja on käytetty."
+        },
+        "pagesUnreadable": "Kirjoita sivut numeroina ja väleinä, esim. 1-3, 8.",
+        "pagesOverBatch": "Sivuja on {asked}; tähän erään mahtuu {capacity}. Nimeä vähemmän sivuja tai kasvat sivujen määrää per erä.",
+        "pagesLimitReached": "Dokumentin {max} sivun raja on täyttynyt. Enempää sivuja ei voi kääntää.",
+        "pagesNoneLeft": "Kaikki nimetyt sivut on jo käännetty.",
+        "earlierAdding": "{count, plural, one {# sivu on jo käännetty kielelle {language}.} other {# sivua on jo käännetty kielelle {language}.}} Uudet sivut lisätään samaan PDF:ään.",
+        "earlierReplacing": "{count, plural, one {Aloittaminen alusta korvaa # käännetyn sivun} other {Aloittaminen alusta korvaa # käännettyä sivua}} kun uusi käännös valmistuu.",
+        "earlierOtherLanguage": "{count, plural, one {# sivu on käännetty kielelle {language}.} other {# sivua on käännetty kielelle {language}.}} Kääntäminen kielelle {target} aloittaa alusta ja korvaa ne.",
+        "startOver": "Aloita alusta sen sijaan",
+        "keepAdding": "Lisää käännettyihin sivuihin sen sijaan",
+        "progressNoteParts": "Pysäyttäminen säilyttää valmiit osat ja keskeyttää käynnissä olevan.",
+        "progressPart": "Osa {part} / {parts}",
+        "progressAssembling": "Sivuja yhdistetään yhdeksi dokumentiksi"
+      },
+      "kind": "Mitä käännetään",
+      "kindText": "Teksti",
+      "kindTextHint": "Kääntää lähdenäkymän tekstin. Ladattu tiedosto käsitellään tekstinä.",
+      "languageNeeded": "Valitse kohdekieli käännökselle",
+      "pdfAsTextOffer": "{name} ladattiin tekstinä. Jos haluat kääntää itse PDF:n sivu kerrallaan, vaihda Dokumenttiin.",
+      "pdfAsTextSwitch": "Käännä dokumenttina",
+      "pdfAsTextKeep": "Pidä tekstinä",
+      "uploadPickerTitle": "Lataa asiakirja",
+      "uploadPickerHint": "PDF, Word, PowerPoint, teksti, Markdown tai XML. Yksi asiakirja kerrallaan.",
+      "uploadPickerConfirm": "Käytä tätä asiakirjaa"
     },
     "document": {
       "emptyTitle": "Kuvaile haluamaasi asiakirjaa",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Säilytä PDF-muotoilu",
-        "description": "Lisää \"Säilytä muotoilu\" -asettelun Document-tilaan, jolloin jokainen PDF-sivu rakennetaan uudelleen käännöksen kanssa. Käyttää code interpreteria ja vision-mallia, joten sivun kääntäminen maksaa enemmän kuin pelkkä tekstikäännös."
+        "description": "Lisää \"Säilytä muotoilu\" -asettelun Document-tilaan, jolloin jokainen PDF-sivu rakennetaan uudelleen käännöksen kanssa. Käyttää code interpreteria ja vision-mallia, joten sivun kääntäminen maksaa enemmän kuin pelkkä tekstikäännös.",
+        "limits": {
+          "defaultBatchPages": "Peruserän sivumäärä",
+          "maxBatchPages": "Suurin mahdollinen erä",
+          "maxDocumentPages": "Sivuja yhteensä per dokumentti"
+        },
+        "limitsNote": "Dokumentti käännetään erissä ja eräkokoa voi nostaa suurimpaan sallittuun. Kun dokumentin kokonaissivumäärä täyttyy, lisää sivuja ei voi kääntää. Jos oletus ylittää suurimman erän, tai suurin erä ylittää dokumentin rajan, arvo lasketaan sopivaksi."
+      }
+    },
+    "limitsTitle": "Rajaukset",
+    "limitRange": "{min}–{max}",
+    "limitsInvalid": "Rajaus on sallitun alueen ulkopuolella. Tarkista korostetut rajat ja yritä uudelleen.",
+    "overridesTitle": "Poikkeavat rajat joillekin",
+    "overridesNote": "Poikkeukset korvaavat nämä rajat nimetyille henkilöille. Tyhjä kenttä säilyttää yllä olevan arvon. Jos useita osuu, henkilö menee etusijalle, sitten hakemisto-ominaisuus ja lopuksi sähköpostidomain.",
+    "overrideScope": "Koskee",
+    "overrideTargets": "Kenelle (erota pilkulla)",
+    "overrideInherit": "{value} (peritty)",
+    "overrideAdd": "Lisää poikkeus",
+    "overrideRemove": "Poista",
+    "overrideScopes": {
+      "user": {
+        "label": "Henkilöt",
+        "placeholder": "nimi@example.org"
+      },
+      "domain": {
+        "label": "Sähköpostiverkkotunnus",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Hakemiston attribuutti",
+        "placeholder": "department:health"
       }
     }
   },

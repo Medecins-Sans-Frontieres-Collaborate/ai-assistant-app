@@ -3224,11 +3224,7 @@
         "translatePages": "{count, plural, =0 {Traduir} one {Traduir # pàgina} other {Traduir # pàgines}}",
         "translateAgain": "Tornar a traduir",
         "sourcePages": "Pàgines d'origen",
-        "pagesSelected": "{selected} de {total} seleccionades · fins a {max} per sessió",
         "pagesField": "Pàgines",
-        "pagesInvalid": "No es pot llegir aquesta selecció de pàgines, o inclou més de {max} pàgines. Escriviu-ho així: 1-3, 8.",
-        "pagesLimit": "Una sessió admet fins a {max} pàgines. Desseleccioneu una pàgina primer.",
-        "pagesNone": "Seleccioneu almenys una pàgina.",
         "pageLabel": "Pàgina {page}",
         "pageEdits": "{count, plural, one {Pàgina {page} · # edició} other {Pàgina {page} · # edicions}}",
         "pages": "Pàgines",
@@ -3275,7 +3271,7 @@
         "rounds": "Rondes",
         "remember": "Recorda aquestes instruccions per als meus pròxims documents",
         "fontsNote": "Tipus de lletra: s’utilitza la coincidència més propera disponible, no la del document.",
-        "progressNote": "Si s’atura, no es conserva res d’aquesta execució.",
+        "progressNote": "Si s’atura, es descartarà aquesta traducció.",
         "progressLabel": "Passos de traducció",
         "stepWaiting": "En espera",
         "stepRunning": "En procés…",
@@ -3357,8 +3353,49 @@
         "runSummary": "{seconds} s · {tokens} tokens · {font}",
         "details": "Detalls",
         "unchecked": "No s'ha pogut executar la comprovació de maquetació per aquesta pàgina. Torneu a renderitzar amb la comprovació activada per intentar-ho de nou.",
-        "progressTitle": "{count, plural, one {Traducció d’# pàgina al {language}} other {Traducció de # pàgines al {language}}}"
-      }
+        "progressTitle": "{count, plural, one {Traducció d’# pàgina al {language}} other {Traducció de # pàgines al {language}}}",
+        "addPages": "Afegeix pàgines",
+        "addPagesTitle": "Pàgines a afegir",
+        "batchSummary": "{selected} de {capacity} en aquest lot",
+        "documentSummary": "{used} de {max} pàgines del document",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Pàgines per lot",
+        "batchSizeDefault": "{size} (per defecte)",
+        "batchSizeRange": "Pots augmentar-ho fins a {max}.",
+        "batchSizeRaised": "{parts, plural, one {Un lot més gran triga més i utilitza més pressupost.} other {Un lot més gran triga més i utilitza més pressupost. Aquest lot es divideix en # parts.}}",
+        "pageState": {
+          "translated": "Traduïda",
+          "later": "Propera tanda",
+          "locked": "Fora del límit"
+        },
+        "pageReason": {
+          "later": "Aquest lot és ple. Aquestes pàgines poden anar a la propera tanda.",
+          "laterRaise": "Aquest lot és ple. Aquestes pàgines poden passar al següent, o bé augmenta el nombre de pàgines per lot per incloure-les ara.",
+          "locked": "Com a màxim es poden traduir {max} pàgines d’un document, i ja s’ha assolit aquest límit."
+        },
+        "pagesUnreadable": "Escriu les pàgines amb números i intervals, com ara 1-3, 8.",
+        "pagesOverBatch": "Són {asked} pàgines; aquest lot admet {capacity}. Nomena menys pàgines o augmenta les pàgines per lot.",
+        "pagesLimitReached": "S’ha arribat al límit de {max} pàgines per document. No es poden traduir més pàgines.",
+        "pagesNoneLeft": "Totes les pàgines indicades ja estan traduïdes.",
+        "earlierAdding": "{count, plural, one {# pàgina ja està} other {# pàgines ja estan}} traduïdes al {language}. Les noves pàgines s’afegeixen al mateix PDF.",
+        "earlierReplacing": "{count, plural, one {En reiniciar, es reemplaçarà la # pàgina traduïda} other {En reiniciar, es reemplaçaran les # pàgines traduïdes}} quan finalitzi la nova traducció.",
+        "earlierOtherLanguage": "{count, plural, one {# pàgina està} other {# pàgines estan}} traduïdes al {language}. Traduir al {target} reiniciarà i les reemplaçarà.",
+        "startOver": "Reinicia en lloc d’això",
+        "keepAdding": "Afegeix a les pàgines traduïdes en lloc d’això",
+        "progressNoteParts": "Si atures, es mantenen les parts finalitzades i es descarta la que està en procés.",
+        "progressPart": "Part {part} de {parts}",
+        "progressAssembling": "Ajuntant les pàgines en un sol document"
+      },
+      "kind": "Què traduir",
+      "kindText": "Text",
+      "kindTextHint": "Tradueix el text del panell d’origen. Un fitxer carregat es llegeix com a text.",
+      "languageNeeded": "Tria un idioma de destinació per traduir",
+      "pdfAsTextOffer": "{name} s’ha carregat com a text. Per traduir el propi PDF, pàgina per pàgina, canvia a Document.",
+      "pdfAsTextSwitch": "Traduir com a document",
+      "pdfAsTextKeep": "Mantén com a text",
+      "uploadPickerTitle": "Puja un document",
+      "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown o XML. Només un document a la vegada.",
+      "uploadPickerConfirm": "Utilitza aquest document"
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",
@@ -7059,7 +7096,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Preserva el format per a PDFs",
-        "description": "Afegeix el disseny \"Preserva el format\" al mode Document, que reconstrueix cada pàgina del PDF amb la traducció corresponent. Utilitza l'intèrpret de codi i un model de visió, així que una pàgina té un cost superior a una traducció només de text."
+        "description": "Afegeix el disseny \"Preserva el format\" al mode Document, que reconstrueix cada pàgina del PDF amb la traducció corresponent. Utilitza l'intèrpret de codi i un model de visió, així que una pàgina té un cost superior a una traducció només de text.",
+        "limits": {
+          "defaultBatchPages": "Pàgines per lot, per defecte",
+          "maxBatchPages": "Lot més gran que pot triar una persona",
+          "maxDocumentPages": "Total de pàgines per document"
+        },
+        "limitsNote": "Les persones tradueixen un document per lots i poden augmentar el lot fins al màxim permès. Un cop s’assoleix el total de pàgines del document, ja no es poden traduir més pàgines. Un valor per defecte superior al màxim, o un màxim superior al total del document, s’ajusta automàticament."
+      }
+    },
+    "limitsTitle": "Límits",
+    "limitRange": "{min} a {max}",
+    "limitsInvalid": "Un límit està fora del rang permès. Comprova els intervals ressaltats i torna-ho a provar.",
+    "overridesTitle": "Límits diferents per a algunes persones",
+    "overridesNote": "Una excepció substitueix aquests límits per a les persones indicades. Un camp buit manté el valor anterior. Si coincideixen diverses, una persona té prioritat sobre un atribut de directori, que a la vegada té prioritat sobre un domini de correu.",
+    "overrideScope": "S’aplica a",
+    "overrideTargets": "Qui (separa diversos amb comes)",
+    "overrideInherit": "{value} (heretat)",
+    "overrideAdd": "Afegeix una excepció",
+    "overrideRemove": "Elimina",
+    "overrideScopes": {
+      "user": {
+        "label": "Persones",
+        "placeholder": "nom@exemple.org"
+      },
+      "domain": {
+        "label": "Domini de correu",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Atribut del directori",
+        "placeholder": "department:health"
       }
     }
   },

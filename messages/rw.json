@@ -3208,11 +3208,7 @@
         "translatePages": "{count, plural, =0 {Hindura} one {Hindura urupapuro #} other {Hindura amapapuro #}}",
         "translateAgain": "Garura ubusemuzi",
         "sourcePages": "Amapapuro y'inkomoko",
-        "pagesSelected": "{selected} muri {total} byatoranijwe · kugeza {max} icyarimwe",
         "pagesField": "Amapapuro",
-        "pagesInvalid": "Ihitamo ry'aya mapapuro ntirisomeka, cyangwa ryavuze amapapuro arenga {max}. Andika nka 1-3, 8.",
-        "pagesLimit": "Icyarimwe cyemera amapapuro {max} gusa. Banza usubiremo umupapuro umwe.",
-        "pagesNone": "Hitamo byibuze urupapuro rumwe.",
         "pageLabel": "Urupapuro {page}",
         "pageEdits": "{count, plural, one {Urupapuro {page} · # gukosora} other {Urupapuro {page} · # gukosora}}",
         "pages": "Amapapuro",
@@ -3260,7 +3256,7 @@
         "remember": "Ibuka aya mabwiriza ku madosiye yanjye azakurikiraho",
         "fontsNote": "Fonts: ikoreshwa iya hafi iboneka, si iy’idocument ubwayo.",
         "progressTitle": "{count, plural, one {Turimo guhindura urupapuro rumwe mu {language}} other {Turimo guhindura amapaji {count} mu {language}}}",
-        "progressNote": "Guhagarika ntibizigira icyo bikura muri iri koranabuhanga.",
+        "progressNote": "Guhagarika birasenya ubu buhinduro.",
         "progressLabel": "Intambwe zo guhindura",
         "stepWaiting": "Birindiriye",
         "stepRunning": "Birimo gukorwa…",
@@ -3341,8 +3337,49 @@
         "run": "Tangira",
         "runSummary": "{seconds} s · {tokens} inyuguti · {font}",
         "details": "Ibisobanuro",
-        "unchecked": "Isuzuma ryo gutondeka ntiryakozwe kuri uru rupapuro. Subiramo usuzume kugira ngo ugerageze nanone."
-      }
+        "unchecked": "Isuzuma ryo gutondeka ntiryakozwe kuri uru rupapuro. Subiramo usuzume kugira ngo ugerageze nanone.",
+        "addPages": "Ongeramo impapuro",
+        "addPagesTitle": "Impapuro zo kongeraho",
+        "batchSummary": "{selected} muri {capacity} muri uyu mubare",
+        "documentSummary": "{used} muri {max} z’impapuro z’igitekerezo",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Impapuro kuri buri mubare",
+        "batchSizeDefault": "{size} (bisanzwe)",
+        "batchSizeRange": "Wemerewe kongera kugeza kuri {max}.",
+        "batchSizeRaised": "{parts, plural, one {Imubare munini usaba igihe kirekire kandi ukoresha ingengo y'imari nyinshi.} other {Imubare munini usaba igihe kirekire kandi ukoresha ingengo y'imari nyinshi. Iyi izakorwa mu bice #.}}",
+        "pageState": {
+          "translated": "Byahinduwe",
+          "later": "Muri gahunda ikurikira",
+          "locked": "Harengeje urugero"
+        },
+        "pageReason": {
+          "later": "Uyu mubare wuzuye. Izi mpapuro zizajyamo ubutaha.",
+          "laterRaise": "Uyu mubare wuzuye. Izi mpapuro zagira mu mubare ukurikiyeho, cyangwa wanoza umubare w'impapuro kuri buri mubare kugira ngo zigeremo nonaha.",
+          "locked": "Impapuro ntarengwa zigera kuri {max} kuri buri gitekerezo zishobora guhindurwa, kandi icyo gipimo cyarangiye."
+        },
+        "pagesUnreadable": "Andika impapuro ukoresheje imibare n’intervalli, nko 1-3, 8.",
+        "pagesOverBatch": "Ni impapuro {asked}; uyu mubare wemera {capacity}. Andika impapuro nke cyangwa wongere umubare w’izo kuri buri mubare.",
+        "pagesLimitReached": "Icyo gipimo ntarengwa cya {max} z’impapuro kuri buri gitekerezo cyagezweho. Nta zindi mpapuro zishobora guhindurwa.",
+        "pagesNoneLeft": "Impapuro zose zanditse zamaze guhindurwa.",
+        "earlierAdding": "{count, plural, one {Impapuro # zaramaze} other {Impapuro # zaramaze}} guhindurwa mu {language}. Impapuro nshya zongerwa kuri PDF imwe.",
+        "earlierReplacing": "{count, plural, one {Gutangira bundi bushya bisimbuza impapuro # zahinduwe} other {Gutangira bundi bushya bisimbuza impapuro # zahinduwe}} iyo ukuvugurura gushya kurangije.",
+        "earlierOtherLanguage": "{count, plural, one {Impapuro # zaramaze} other {Impapuro # zaramaze}} guhindurwa mu {language}. Guhindura mu {target} bitangira bundi bushya kandi bisimbuza izindi papuro.",
+        "startOver": "Ahubwo tangira bushya",
+        "keepAdding": "Ongeraho ku mpapuro zahinduwe",
+        "progressNoteParts": "Guhagarika bisiga ibirangiye, bikajugunya biri mu bikorwa.",
+        "progressPart": "Igice {part} muri {parts}",
+        "progressAssembling": "Gushyira impapuro hamwe mu gitekerezo kimwe"
+      },
+      "kind": "Ihinduza ushaka gukora",
+      "kindText": "Ibuririro",
+      "kindTextHint": "Bihindura inyandiko iri mu cyanzu. Dosiye winjije isomwa nk'inyandiko.",
+      "languageNeeded": "Hitamo ururimi ushaka guhinduriramo",
+      "pdfAsTextOffer": "{name} yashyizwemo nk’inyandiko. Ushaka guhindura PDF iteguye ku rupapuro, hitamo Igitekerezo.",
+      "pdfAsTextSwitch": "Hindura nk'igitekerezo",
+      "pdfAsTextKeep": "Gumana nk’inyandiko",
+      "uploadPickerTitle": "Ohereza inyandiko",
+      "uploadPickerHint": "PDF, Word, PowerPoint, inyandiko, Markdown cyangwa XML. Inyandiko imwe icya rimwe.",
+      "uploadPickerConfirm": "Koresha iyi nyandiko"
     },
     "document": {
       "emptyTitle": "Sobanura inyandiko ushaka",
@@ -7043,7 +7080,37 @@
     "features": {
       "translation-preserve-formatting": {
         "label": "Kurinda imiterere ya PDFs",
-        "description": "Yongeramo imikorere ya \"Kurinda imiterere\" muri Document mode, aho buri rupapuro rwa PDF rugaragazwa n'ubusobanuro bushyizweho. Ibi bikoresha code interpreter na vision model, bityo urupapuro rumwe rukaba ruhenze kurusha ubusobanuro bw’amagambo gusa."
+        "description": "Yongeramo imikorere ya \"Kurinda imiterere\" muri Document mode, aho buri rupapuro rwa PDF rugaragazwa n'ubusobanuro bushyizweho. Ibi bikoresha code interpreter na vision model, bityo urupapuro rumwe rukaba ruhenze kurusha ubusobanuro bw’amagambo gusa.",
+        "limits": {
+          "defaultBatchPages": "Impapuro kuri buri mubare, bisanzwe",
+          "maxBatchPages": "Umubare munini umuntu yemerewe guhitamo",
+          "maxDocumentPages": "Impapuro kuri buri gitekerezo, zose hamwe"
+        },
+        "limitsNote": "Abantu bahindura igitekerezo uruhande ku rundi kandi bashobora kongera kugeza kugera ku munini. Niba igiteranyo cy’umubare ntarengwa kigezeho, nta yindi mpapuro zishobora guhindurwa. Iyo iomero ntarengwa riri hejuru y'umubare munini cyangwa umubare munini uri hejuru ya document yose, ryagabanywa ngo rihuze."
+      }
+    },
+    "limitsTitle": "Imipaka",
+    "limitRange": "{min} kugeza {max}",
+    "limitsInvalid": "Imipaka imwe iri hanze y'ubusanzwe. Sobanura ibice biri kuri orange wongere ugerageze.",
+    "overridesTitle": "Imipaka itandukanye kuri bamwe",
+    "overridesNote": "Override isimbura iyi mipaka ku bo bivuga. Idasizeho agaciro ikomeza guhabwa ivuye hejuru. Iyo hari byinshi bihuye, umuntu yihariye ku izina abanza kuri attribute ya directory, hanyuma kuri mail domain.",
+    "overrideScope": "Bireba",
+    "overrideTargets": "Abo bireba (tandukanya benshi na coma)",
+    "overrideInherit": "{value} (bisazweho)",
+    "overrideAdd": "Ongeraho override",
+    "overrideRemove": "Kuraho",
+    "overrideScopes": {
+      "user": {
+        "label": "Abantu",
+        "placeholder": "izina@example.org"
+      },
+      "domain": {
+        "label": "Domaine ya email",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Imiterere ya Directory",
+        "placeholder": "department:health"
       }
     }
   },
