@@ -9,8 +9,8 @@ import {
 import { auth } from '@/auth';
 
 /**
- * GET /api/workflows/policy/me — which workflows are currently enabled by
- * the admin policy, for every signed-in user. Drives menu/tab visibility and
+ * GET /api/workflows/policy/me — which workflows (and which of their
+ * optional features) are currently enabled by the admin policy, for every signed-in user. Drives menu/tab visibility and
  * the "disabled by an administrator" notice; every workflow API route
  * re-checks the policy server-side regardless.
  *
@@ -27,6 +27,7 @@ export async function GET() {
     const { policyUnavailable } = service.getSnapshot();
     return successResponse({
       enabled: service.allEnabled(),
+      features: service.allFeaturesEnabled(),
       policyUnavailable,
     });
   } catch (error) {
