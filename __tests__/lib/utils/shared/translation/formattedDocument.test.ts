@@ -3,8 +3,10 @@ import {
   DOCUMENT_LAYOUTS,
   FIT_TOLERANCE,
   FormattedDocumentRun,
+  PAGE_ZOOM_LEVELS,
   applyRenderReport,
   batchPageState,
+  changedUnits,
   combineRuns,
   currentTranslation,
   editedUnits,
@@ -12,26 +14,34 @@ import {
   formatPageSelection,
   formattedEligibility,
   issueKey,
+  movedBox,
+  nextPageZoom,
   openIssues,
   plainText,
   planBatch,
   planTickedBatch,
   removalPending,
   removedPages,
+  restyledUnits,
   retagEditedText,
+  runFromReport,
+  sameUnitStyle,
   selectedPages,
   stalePages,
   togglePage,
   translatedPages,
   translationsForRender,
   unitBox,
+  unitStyle,
   withPageRemoved,
   withUnitEdit,
+  withUnitStyle,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import {
   NATIVE_PDF_DEFAULT_DEPTH,
   NativePdfLimits,
   NativePdfRenderReport,
+  NativePdfRunReport,
   NativePdfUnitResult,
 } from '@/lib/utils/shared/translation/nativePdf';
 
@@ -570,6 +580,21 @@ describe('combineRuns', () => {
       ...extra,
     });
 
+  it("keeps each batch's looks, and a page translated again starts from its new ones", () => {
+    const base = piece([1, 2], {
+      styles: { p1u1: { size: 9 }, p2u1: { dx: 4 } },
+      pdfStyles: { p1u1: { size: 9 }, p2u1: { dx: 4 } },
+    });
+    // Page 2 again, this time with a different automatic fix, and page 3.
+    const again = piece([2, 3], {
+      styles: { p3u1: { dy: 6 } },
+      pdfStyles: { p3u1: { dy: 6 } },
+    });
+    const joined = combineRuns(base, [again]);
+    expect(joined.styles).toEqual({ p1u1: { size: 9 }, p3u1: { dy: 6 } });
+    expect(joined.pdfStyles).toEqual(joined.styles);
+  });
+
   it('returns a single piece as it is', () => {
     const only = piece([1, 2]);
     expect(combineRuns(undefined, [only])).toBe(only);
@@ -815,5 +840,168 @@ describe('planTickedBatch', () => {
     // 1 done of 4: this batch of 3 uses the limit up.
     const plan = ticked([3, 4, 5], { batchPages: 3 });
     expect(batchPageState(plan, 6)).toBe('locked');
+  });
+});
+
+describe("a block's look", () => {
+  // p1u1 is set in 10 pt dark blue in the source.
+  const styledRun = (extra: Partial<FormattedDocumentRun> = {}) =>
+    run({
+      units: [
+        unit('p1u1', 1, 'Un titre', { size: 10, color: '#02024F' }),
+        unit('p2u1', 2, 'Texte', { size: 9, color: '#000000' }),
+      ],
+      ...extra,
+    });
+
+  it('has no look of its own until one is set', () => {
+    expect(unitStyle(styledRun(), 'p1u1')).toEqual({});
+    expect(restyledUnits(styledRun())).toEqual([]);
+  });
+
+  it('sets fields one at a time and keeps the others', () => {
+    let next = withUnitStyle(styledRun(), 'p1u1', { size: 12 });
+    next = withUnitStyle(next, 'p1u1', { dx: 4 });
+    next = withUnitStyle(next, 'p1u1', { color: '#FF0000' });
+    expect(unitStyle(next, 'p1u1')).toEqual({
+      size: 12,
+      dx: 4,
+      color: '#ff0000',
+    });
+    expect(restyledUnits(next).map((u) => u.id)).toEqual(['p1u1']);
+  });
+
+  it("does not keep a size or colour equal to the source's as a change", () => {
+    const resized = withUnitStyle(styledRun(), 'p1u1', { size: 10.5 });
+    expect(unitStyle(resized, 'p1u1')).toEqual({ size: 10.5 });
+    // Back to the source's 10 pt, and its colour in another case.
+    const back = withUnitStyle(resized, 'p1u1', { size: 10, color: '#02024f' });
+    expect(back.styles).toEqual({});
+    expect(restyledUnits(back)).toEqual([]);
+  });
+
+  it('puts a field back with undefined, a move back with zero, and all back with null', () => {
+    const styled = withUnitStyle(styledRun(), 'p1u1', {
+      size: 12,
+      dx: 4,
+      dy: 2,
+    });
+    expect(
+      unitStyle(withUnitStyle(styled, 'p1u1', { size: undefined }), 'p1u1'),
+    ).toEqual({ dx: 4, dy: 2 });
+    expect(unitStyle(withUnitStyle(styled, 'p1u1', { dx: 0 }), 'p1u1')).toEqual(
+      {
+        size: 12,
+        dy: 2,
+      },
+    );
+    expect(withUnitStyle(styled, 'p1u1', null).styles).toEqual({});
+  });
+
+  it('holds a size inside its range and ignores a unit it does not have', () => {
+    expect(
+      unitStyle(withUnitStyle(styledRun(), 'p1u1', { size: 500 }), 'p1u1').size,
+    ).toBe(96);
+    const same = styledRun();
+    expect(withUnitStyle(same, 'nope', { size: 12 })).toBe(same);
+  });
+
+  it('compares looks field by field, absent equal to empty', () => {
+    expect(sameUnitStyle(undefined, {})).toBe(true);
+    expect(sameUnitStyle({ size: 12 }, { size: 12 })).toBe(true);
+    expect(sameUnitStyle({ size: 12 }, { size: 12, dx: 2 })).toBe(false);
+    expect(sameUnitStyle({ color: '#000000' }, undefined)).toBe(false);
+  });
+
+  it('is pending until a render uses it, and marks its page stale', () => {
+    const styled = withUnitStyle(styledRun(), 'p2u1', { dy: -6 });
+    expect(stalePages(styled)).toEqual([2]);
+    const rendered = applyRenderReport(styled, renderReport());
+    expect(rendered.pdfStyles).toEqual({ p2u1: { dy: -6 } });
+    expect(restyledUnits(rendered)).toEqual([]);
+    expect(stalePages(rendered)).toEqual([]);
+    // Taking the look away again is a change of its own.
+    const reset = withUnitStyle(rendered, 'p2u1', null);
+    expect(restyledUnits(reset).map((u) => u.id)).toEqual(['p2u1']);
+  });
+
+  it('counts a block changed in text and look once', () => {
+    const both = withUnitStyle(
+      withUnitEdit(styledRun(), 'p1u1', 'Autre titre'),
+      'p1u1',
+      { size: 12 },
+    );
+    const other = withUnitStyle(both, 'p2u1', { dx: 2 });
+    expect(changedUnits(other).map((u) => u.id)).toEqual(['p1u1', 'p2u1']);
+    expect(stalePages(other)).toEqual([1, 2]);
+  });
+
+  it('moves a box right and down for positive moves', () => {
+    expect(movedBox([10, 20, 30, 40], { dx: 5, dy: -3 })).toEqual([
+      15, 17, 35, 37,
+    ]);
+    expect(movedBox([10, 20, 30, 40], undefined)).toEqual([10, 20, 30, 40]);
+  });
+});
+
+describe('nextPageZoom', () => {
+  const first = PAGE_ZOOM_LEVELS[0];
+  const last = PAGE_ZOOM_LEVELS[PAGE_ZOOM_LEVELS.length - 1];
+
+  it('steps through the levels in both directions', () => {
+    expect(nextPageZoom(1, 1)).toBe(1.25);
+    expect(nextPageZoom(1, -1)).toBe(0.75);
+  });
+
+  it('stays at either end', () => {
+    expect(nextPageZoom(last, 1)).toBe(last);
+    expect(nextPageZoom(first, -1)).toBe(first);
+  });
+
+  it('goes to the nearest level from a value between two', () => {
+    expect(nextPageZoom(1.1, 1)).toBe(1.25);
+    expect(nextPageZoom(1.1, -1)).toBe(1);
+  });
+});
+
+describe('runFromReport: looks set by the automatic fixes', () => {
+  const report = (
+    styles?: NativePdfRunReport['styles'],
+  ): NativePdfRunReport => ({
+    steps: [],
+    pageCount: 1,
+    pages: [],
+    units: [unit('p1u1', 1, 'Un titre', { size: 10 })],
+    issues: [],
+    uncheckedPages: [],
+    fonts: { sans: 'A', serif: 'B' },
+    refitRounds: 1,
+    styles,
+    pdfUrl: '/out.pdf',
+    pageImages: [],
+    sourceId: 's',
+    unitsId: 'u',
+  });
+  const meta = {
+    sourceUrl: '/s.pdf',
+    sourceName: 's.pdf',
+    targetLanguage: 'fr',
+    depth: 'quick' as const,
+    totalTokens: 0,
+  };
+
+  it('are both wanted and on the page, so nothing is pending', () => {
+    const made = runFromReport(report({ p1u1: { size: 9, dy: 4 } }), meta);
+    expect(unitStyle(made, 'p1u1')).toEqual({ size: 9, dy: 4 });
+    expect(restyledUnits(made)).toEqual([]);
+    // Taking an automatic fix back is a change like any other.
+    const reset = withUnitStyle(made, 'p1u1', null);
+    expect(restyledUnits(reset).map((u) => u.id)).toEqual(['p1u1']);
+  });
+
+  it('are empty for a report without any', () => {
+    const made = runFromReport(report(undefined), meta);
+    expect(made.styles).toEqual({});
+    expect(made.pdfStyles).toEqual({});
   });
 });
