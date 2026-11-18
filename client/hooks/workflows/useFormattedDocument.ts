@@ -13,18 +13,22 @@ import {
   FormattedDocumentOptions,
   FormattedDocumentRun,
   applyRenderReport,
+  combineRuns,
+  formatPageSelection,
   runFromReport,
   stalePages,
   translationsForRender,
   withUnitEdit,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import {
+  NATIVE_PDF_MAX_CHECK_PAGES,
   NATIVE_PDF_STEPS,
   NativePdfDepth,
   NativePdfStepId,
   NativePdfStepInstructions,
   NativePdfUnitAction,
   NativePdfUnitResult,
+  splitIntoRequests,
 } from '@/lib/utils/shared/translation/nativePdf';
 
 /** One step of a run in progress. */
@@ -40,8 +44,15 @@ export interface FormattedStepProgress {
 export interface FormattedRunProgress {
   /** Epoch milliseconds the run started at. */
   startedAt: number;
+  /** Pages in the whole batch. */
   pageCount: number;
+  /** Steps of the request in progress. */
   steps: FormattedStepProgress[];
+  /** 1-based request in progress, and how many the batch takes. */
+  part: number;
+  parts: number;
+  /** The finished requests are being put into one document. */
+  assembling: boolean;
 }
 
 export interface StartFormattedRun {
@@ -53,15 +64,19 @@ export interface StartFormattedRun {
   targetLanguage: string;
   options: FormattedDocumentOptions;
   depth: NativePdfDepth;
-  /** Pages the run will cover, for the progress heading. */
-  pageCount: number;
+  /** The batch's pages (see planBatch), ascending. */
+  pages: number[];
+  /** Pages one request takes, as the server said; absent uses its default. */
+  requestPages?: number;
+  /** Earlier batches of this document to add the new pages to. */
+  base?: FormattedDocumentRun;
 }
 
 interface UseFormattedDocumentInput {
   conversationId: string;
   /** The stored run, if one has finished. */
   run: FormattedDocumentRun | undefined;
-  /** Stores a new run, replacing the previous one. */
+  /** Stores a run (a first batch, or all batches joined), replacing the previous one. */
   setRun: (run: FormattedDocumentRun) => void;
   /** Applies a change to the stored run. */
   updateRun: (
@@ -78,6 +93,12 @@ const isAbort = (error: unknown): boolean =>
 
 const message = (error: unknown): string =>
   error instanceof Error ? error.message : String(error);
+
+const upcomingSteps = (): FormattedStepProgress[] =>
+  NATIVE_PDF_STEPS.map((step) => ({ id: step.id, status: 'upcoming' }));
+
+/** Times the joining of finished pages into one document is attempted. */
+const ASSEMBLE_ATTEMPTS = 2;
 
 /**
  * Runs and edits a formatting-preserving document translation.
@@ -109,57 +130,117 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
     [],
   );
 
-  /** Starts a run; a run already in progress is left alone. */
+  /**
+   * Translates one batch. A batch larger than one request takes is sent as
+   * several, one after the other; whatever finished is then joined with
+   * the earlier batches into one document, also when a later request fails
+   * or the person stops, so finished pages are never thrown away.
+   *
+   * A batch already in progress is left alone.
+   */
   const start = useCallback(
     async (request: StartFormattedRun) => {
       if (runAbort.current) return;
-      const abort = new AbortController();
+      let abort = new AbortController();
       runAbort.current = abort;
       setRunError(null);
-      setProgress({
-        startedAt: Date.now(),
-        pageCount: request.pageCount,
-        steps: NATIVE_PDF_STEPS.map((step) => ({
-          id: step.id,
-          status: 'upcoming',
-        })),
+      const requests = splitIntoRequests(
+        request.pages,
+        request.requestPages || undefined,
+      );
+      const progressAt = (part: number, assembling = false) => ({
+        pageCount: request.pages.length,
+        steps: upcomingSteps(),
+        part,
+        parts: requests.length,
+        assembling,
       });
+      const startedAt = Date.now();
+      setProgress({ startedAt, ...progressAt(1) });
+      const pieces: FormattedDocumentRun[] = [];
+      let failure: unknown = null;
       try {
         const file = await request.loadFile();
-        const { report, totalTokens } = await runNativePdf({
-          file,
-          targetLanguage: request.targetLanguage,
-          pages: request.options.pages,
-          instructions: request.options.instructions,
-          refitRounds: request.options.refitRounds,
-          depth: request.depth,
-          ...glossaries.current,
-          modelId,
-          conversationId,
-          signal: abort.signal,
-          onStep: (step) =>
-            setProgress(
-              (current) =>
-                current && {
-                  ...current,
-                  steps: current.steps.map((existing) =>
-                    existing.id === step.id ? { ...step } : existing,
-                  ),
-                },
-            ),
-        });
-        setRun(
-          runFromReport(report, {
-            sourceUrl: request.sourceUrl,
-            sourceName: request.sourceName,
+        for (const [index, pages] of requests.entries()) {
+          if (index > 0) setProgress({ startedAt, ...progressAt(index + 1) });
+          const { report, totalTokens } = await runNativePdf({
+            file,
             targetLanguage: request.targetLanguage,
+            pages: formatPageSelection(pages),
+            instructions: request.options.instructions,
+            refitRounds: request.options.refitRounds,
             depth: request.depth,
-            totalTokens,
-          }),
-        );
+            ...glossaries.current,
+            modelId,
+            conversationId,
+            signal: abort.signal,
+            onStep: (step) =>
+              setProgress(
+                (current) =>
+                  current && {
+                    ...current,
+                    steps: current.steps.map((existing) =>
+                      existing.id === step.id ? { ...step } : existing,
+                    ),
+                  },
+              ),
+          });
+          pieces.push(
+            runFromReport(report, {
+              sourceUrl: request.sourceUrl,
+              sourceName: request.sourceName,
+              targetLanguage: request.targetLanguage,
+              depth: request.depth,
+              totalTokens,
+            }),
+          );
+        }
       } catch (error) {
-        if (!isAbort(error)) setRunError(message(error));
+        failure = error;
+      }
+      try {
+        if (pieces.length > 0) {
+          const combined = combineRuns(request.base, pieces);
+          if (!request.base && pieces.length === 1) {
+            setRun(combined);
+          } else {
+            // Joining is its own request, so stopping the batch does not
+            // stop it; a second Stop does.
+            abort = new AbortController();
+            runAbort.current = abort;
+            setProgress({ startedAt, ...progressAt(requests.length, true) });
+            const assemble = () =>
+              renderNativePdf({
+                sourceId: combined.sourceId,
+                unitsIds: [
+                  ...(request.base ? [request.base.unitsId] : []),
+                  ...pieces.map((piece) => piece.unitsId),
+                ],
+                translations: translationsForRender(combined),
+                checkPages: [],
+                // Every page's image is already here, except pages whose
+                // edits this render puts on the page for the first time.
+                imagePages: stalePages(combined),
+                instructions: {},
+                modelId,
+                conversationId,
+                signal: abort.signal,
+              });
+            let report: Awaited<ReturnType<typeof assemble>> | null = null;
+            for (let attempt = 1; !report; attempt += 1) {
+              try {
+                report = await assemble();
+              } catch (error) {
+                if (isAbort(error) || attempt >= ASSEMBLE_ATTEMPTS) throw error;
+              }
+            }
+            setRun(applyRenderReport(combined, report));
+          }
+        }
+      } catch (error) {
+        failure = failure && !isAbort(failure) ? failure : error;
       } finally {
+        if (failure && !isAbort(failure)) setRunError(message(failure));
         runAbort.current = null;
         setProgress(null);
         onSpent?.();
@@ -168,7 +249,10 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
     [conversationId, modelId, onSpent, setRun],
   );
 
-  /** Stops the run in progress; nothing of it is kept. */
+  /**
+   * Stops the batch in progress. Pages of requests that already finished
+   * are kept and joined; the request in progress is discarded.
+   */
   const stop = useCallback(() => runAbort.current?.abort(), []);
 
   /**
@@ -187,9 +271,12 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
       try {
         const report = await renderNativePdf({
           sourceId: run.sourceId,
-          unitsId: run.unitsId,
+          unitsIds: [run.unitsId],
           translations: translationsForRender(run),
-          checkPages: check ? stalePages(run) : [],
+          checkPages: check
+            ? stalePages(run).slice(0, NATIVE_PDF_MAX_CHECK_PAGES)
+            : [],
+          imagePages: stalePages(run),
           instructions,
           modelId,
           conversationId,
