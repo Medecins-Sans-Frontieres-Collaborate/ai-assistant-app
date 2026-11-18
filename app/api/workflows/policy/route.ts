@@ -5,8 +5,11 @@ import { STRONG_ETAG_REGEX } from '@/lib/services/agentAccess/adminRouteHelpers'
 import { WorkflowPolicyService } from '@/lib/services/workflows/policy/WorkflowPolicyService';
 import {
   WORKFLOW_FEATURE_IDS,
+  WorkflowFeatureId,
+  WorkflowFeatureSettingSchema,
   WorkflowPolicy,
   WorkflowSettingSchema,
+  featureSettingProblem,
 } from '@/lib/services/workflows/policy/types';
 import {
   WorkflowPolicyConflictError,
@@ -52,7 +55,10 @@ const putBodySchema = z.object({
   // Optional so a client that predates features still saves; the features
   // it leaves out fall back to their defaults.
   features: z
-    .partialRecord(z.enum(WORKFLOW_FEATURE_IDS), WorkflowSettingSchema)
+    .partialRecord(
+      z.enum(WORKFLOW_FEATURE_IDS),
+      WorkflowFeatureSettingSchema.strict(),
+    )
     .optional(),
 });
 
@@ -103,6 +109,11 @@ export async function PUT(request: NextRequest) {
         .map((i) => `${i.path.join('.')}: ${i.message}`)
         .join('; '),
     );
+  }
+
+  for (const [id, setting] of Object.entries(parsed.data.features ?? {})) {
+    const problem = featureSettingProblem(id as WorkflowFeatureId, setting);
+    if (problem) return badRequestResponse('Invalid workflow policy', problem);
   }
 
   const ifMatchEtag = request.headers.get('if-match');
