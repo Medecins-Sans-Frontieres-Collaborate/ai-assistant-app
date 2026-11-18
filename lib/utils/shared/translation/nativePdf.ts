@@ -68,6 +68,12 @@ export const NATIVE_PDF_MAX_EXTRACTIONS = 40;
  * {@link nativePdfLimits}: defaultBatchPages ≤ maxBatchPages ≤
  * maxDocumentPages.
  */
+/**
+ * Most pages a render may be asked to leave out of the result. A bound on
+ * the request's size, far above any document the pipeline is used for.
+ */
+export const NATIVE_PDF_MAX_OMITTED_PAGES = 5_000;
+
 export interface NativePdfLimits {
   /** Pages a batch takes unless the person raises it. */
   defaultBatchPages: number;
