@@ -24,6 +24,25 @@ import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
  * encryption and expiry are decided one level up, in nativePdfStorage.ts.
  */
 
+/**
+ * What a folder holds, which decides where it sits:
+ *  - `runs`: a formatted translation run (source, pages, record).
+ *  - `texts`: a source text too large to keep in the browser, as the one
+ *    file the browser writes (see storedSourceText.ts).
+ */
+export const RUN_FOLDER_KINDS = ['runs', 'texts'] as const;
+export type RunFolderKind = (typeof RUN_FOLDER_KINDS)[number];
+
+const BLOB_ROOTS: Record<RunFolderKind, string> = {
+  runs: 'translation-runs',
+  texts: 'translation-texts',
+};
+/** Folder under the deployment's OneDrive folder; runs sit directly in it. */
+const DRIVE_ROOTS: Record<RunFolderKind, string> = {
+  runs: '',
+  texts: 'Source texts/',
+};
+
 /** One stored file of a run. */
 export interface RunFolderEntry {
   name: string;
@@ -53,8 +72,9 @@ export interface RunFolder {
 
 /**
  * A run's folder in the app's blob storage, under the person's own prefix:
- * `<user>/translation-runs/<run>/<name>`. The container's lifecycle rule
- * deletes each blob some days after its last modification.
+ * `<user>/translation-runs/<run>/<name>` (`translation-texts` for source
+ * texts). The container's lifecycle rule deletes each blob some days after
+ * its last modification.
  */
 export class BlobRunFolder implements RunFolder {
   readonly expires = true;
@@ -64,16 +84,22 @@ export class BlobRunFolder implements RunFolder {
     private readonly storage: BlobStorage,
     userId: string,
     runId: string,
+    kind: RunFolderKind = 'runs',
   ) {
-    this.prefix = `${userId}/translation-runs/${runId}/`;
+    this.prefix = `${userId}/${BLOB_ROOTS[kind]}/${runId}/`;
   }
 
-  /** The folder of a signed-in person's run. */
-  static open(session: Session, runId: string): BlobRunFolder {
+  /** The folder of a signed-in person's run or stored text. */
+  static open(
+    session: Session,
+    runId: string,
+    kind: RunFolderKind = 'runs',
+  ): BlobRunFolder {
     return new BlobRunFolder(
       createBlobStorageClient(session),
       getUserIdFromSession(session),
       runId,
+      kind,
     );
   }
 
@@ -129,8 +155,8 @@ interface DriveChildren {
 
 /**
  * A run's folder in the person's own OneDrive:
- * `Apps/AI Assistant/Translations/<deployment>/<run>/<name>`. The
- * deployment segment keeps localhost, dev and production runs apart in the
+ * `Apps/AI Assistant/Translations/<deployment>/<run>/<name>` (source texts
+ * under `<deployment>/Source texts/`). The deployment segment keeps localhost, dev and production runs apart in the
  * one drive they share (see resolveDriveNamespace). Files stay until the
  * person deletes them.
  */
@@ -141,12 +167,14 @@ export class DriveRunFolder implements RunFolder {
   constructor(
     private readonly req: NextRequest,
     runId: string,
+    kind: RunFolderKind = 'runs',
   ) {
     const namespace = resolveDriveNamespace(req.nextUrl.hostname || null);
-    this.folder = `${DRIVE_RUNS_FOLDER}/${namespace}/${runId}`
-      .split('/')
-      .map(encodeURIComponent)
-      .join('/');
+    this.folder =
+      `${DRIVE_RUNS_FOLDER}/${namespace}/${DRIVE_ROOTS[kind]}${runId}`
+        .split('/')
+        .map(encodeURIComponent)
+        .join('/');
   }
 
   /**
@@ -154,10 +182,14 @@ export class DriveRunFolder implements RunFolder {
    *
    * @throws M365Error when the person has not granted file access.
    */
-  static async open(req: NextRequest, runId: string): Promise<DriveRunFolder> {
+  static async open(
+    req: NextRequest,
+    runId: string,
+    kind: RunFolderKind = 'runs',
+  ): Promise<DriveRunFolder> {
     // Minted up front so a missing grant fails before any work is done.
     await mintGraphToken(req, DRIVE_SCOPES);
-    return new DriveRunFolder(req, runId);
+    return new DriveRunFolder(req, runId, kind);
   }
 
   private url(name = '', suffix = ''): string {
