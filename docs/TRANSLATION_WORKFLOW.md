@@ -260,17 +260,29 @@ was, a batch of pages at a time. The rules live in
   analyze, translate, rebuild, verify, refit). Three accept an added
   instruction (analyze, translate, verify), which is appended to the step's
   rules and never replaces them. None can be skipped or reordered.
-- **Panels**: the layout script keeps a block's room inside the filled or
-  outlined shape it sits in (a card, a table cell, a coloured box), and lets
-  a paragraph in such a shape use the shape's width. Free space beyond a
-  panel's edge is never used. See PANELS in `pdf_native.py`.
+- **Where a translation may go** (rules stated once at the top of
+  `browser-harness/scripts/pdf_native.py`, tested in `test_pdf_native.py`
+  beside it):
+  - _Panels_: a block's room stays inside the filled or outlined shape it
+    sits in (a card, a table cell, a coloured box), and a paragraph in such
+    a shape may use the shape's width.
+  - _Clear space_: the page is drawn without its text and a room grows only
+    until it meets something drawn: a rule, a box's edge, a picture.
+  - _Alignment_: centred and right-aligned text is detected (stacked lines
+    sharing a centre or right edge, or one line in the middle of its panel)
+    and laid out the same way, in a room centred on the same axis.
+  - _Peers_: blocks of one page in the same style (list items, the headings
+    of a row of cards) are set at one size. When some must shrink, all take
+    the smallest size; a block that would need less than 85% is left out of
+    the group and reworded by the fix rounds instead.
 - **Fix rounds** (the refit step, 0 to `NATIVE_PDF_MAX_REFIT_ROUNDS`): the
   visual check gets each page's picture plus its size and every block's
   font size, shrink and area, and prescribes one fix per finding: a shorter
   wording, a smaller font, or a move. `planLayoutFixes` holds them inside
   the automatic limits (`AUTO_MIN_SIZE_RATIO`, `AUTO_MAX_SHIFT`), the pages
   are laid out and checked again, and a page whose `layoutScore` got worse
-  is put back and left alone. Sizes and moves are returned as the run's
+  is put back and left alone. A smaller font goes to the block's peers too.
+  Sizes and moves are returned as the run's
   `styles`, so they show in a block's Appearance box (marked "Adjusted")
   and can be changed or reset like a person's own.
 - **Translation**: Quick (default) is one pass per page. Reviewed adds up to
