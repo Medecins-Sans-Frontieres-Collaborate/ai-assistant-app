@@ -38,6 +38,7 @@ const PAGE_IMAGE: Record<BatchPageState, string> = {
   translated: 'opacity-60',
   later: 'opacity-40',
   locked: 'opacity-20 grayscale',
+  removed: 'opacity-20 grayscale',
 };
 
 interface PagePreviewProps {
