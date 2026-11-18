@@ -4,6 +4,8 @@ import {
   FIT_TOLERANCE,
   FormattedDocumentRun,
   applyRenderReport,
+  batchPageState,
+  combineRuns,
   currentTranslation,
   editedUnits,
   fitEstimate,
@@ -12,16 +14,19 @@ import {
   issueKey,
   openIssues,
   plainText,
+  planBatch,
   retagEditedText,
   selectedPages,
   stalePages,
   togglePage,
+  translatedPages,
   translationsForRender,
   unitBox,
   withUnitEdit,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import {
   NATIVE_PDF_DEFAULT_DEPTH,
+  NativePdfLimits,
   NativePdfRenderReport,
   NativePdfUnitResult,
 } from '@/lib/utils/shared/translation/nativePdf';
@@ -102,6 +107,7 @@ function renderReport(
     tooLong: [],
     pdfUrl: '/new.pdf',
     pageImages: [],
+    unitsId: 'u',
     ...extra,
   };
 }
@@ -369,5 +375,282 @@ describe('page selection', () => {
 
   it('keeps the last selected page, since an empty selection is not "none"', () => {
     expect(togglePage([4], 4, MAX_PAGES)).toBe('4');
+  });
+});
+
+describe('planBatch', () => {
+  // 5 a batch by default, 8 at most, 12 of a document in total.
+  const limits: NativePdfLimits = {
+    defaultBatchPages: 5,
+    maxBatchPages: 8,
+    maxDocumentPages: 12,
+  };
+  const plan = (input: Partial<Parameters<typeof planBatch>[0]> = {}) =>
+    planBatch({ spec: '', pageCount: 20, translated: [], limits, ...input });
+  const range = (from: number, to: number) =>
+    Array.from({ length: to - from + 1 }, (_, index) => from + index);
+
+  it('takes the first pages, as many as the default batch', () => {
+    expect(plan()).toMatchObject({
+      pages: [1, 2, 3, 4, 5],
+      batchPages: 5,
+      capacity: 5,
+      allowance: 12,
+    });
+    expect(plan().problem).toBeUndefined();
+  });
+
+  it('holds the batch size the person asked for inside the limits', () => {
+    // One under, at, and one over the largest batch; and below one.
+    expect(plan({ batchPages: 7 }).batchPages).toBe(7);
+    expect(plan({ batchPages: 8 }).batchPages).toBe(8);
+    expect(plan({ batchPages: 9 }).batchPages).toBe(8);
+    expect(plan({ batchPages: 0 }).batchPages).toBe(1);
+  });
+
+  it('continues after the pages already translated', () => {
+    const next = plan({ translated: [1, 2, 3, 4, 5] });
+    expect(next.pages).toEqual([6, 7, 8, 9, 10]);
+    expect(next.allowance).toBe(7);
+  });
+
+  it('shrinks the batch to what the document limit leaves', () => {
+    // 10 of 12 done: 2 left, less than a batch.
+    expect(plan({ translated: range(1, 10) })).toMatchObject({
+      pages: [11, 12],
+      capacity: 2,
+      allowance: 2,
+    });
+    // 11 done: exactly one left.
+    expect(plan({ translated: range(1, 11) }).pages).toEqual([12]);
+    // At the limit: nothing can be planned.
+    expect(plan({ translated: range(1, 12) })).toMatchObject({
+      pages: [],
+      capacity: 0,
+      allowance: 0,
+      problem: 'none-left',
+    });
+  });
+
+  it('accepts a typed selection up to the batch and refuses one page more', () => {
+    expect(plan({ spec: '3-7' }).pages).toEqual([3, 4, 5, 6, 7]);
+    expect(plan({ spec: '3-8' })).toMatchObject({
+      pages: [],
+      problem: 'over-batch',
+      asked: 6,
+    });
+  });
+
+  it('leaves translated pages and pages the document lacks out of a selection', () => {
+    expect(plan({ spec: '1-6', translated: [1, 2] }).pages).toEqual([
+      3, 4, 5, 6,
+    ]);
+    expect(plan({ spec: '19-25' }).pages).toEqual([19, 20]);
+    expect(plan({ spec: '1-2', translated: [1, 2] }).problem).toBe('none-left');
+  });
+
+  it('says so when the selection cannot be read', () => {
+    expect(plan({ spec: 'three' }).problem).toBe('unreadable');
+    // An absurd range is refused instead of being counted out.
+    expect(plan({ spec: '1-999999999' }).problem).toBe('unreadable');
+  });
+
+  it('plans nothing while the page count is unknown', () => {
+    expect(plan({ pageCount: 0 })).toMatchObject({
+      pages: [],
+      problem: 'none-left',
+    });
+  });
+});
+
+describe('batchPageState', () => {
+  const limits: NativePdfLimits = {
+    defaultBatchPages: 2,
+    maxBatchPages: 3,
+    maxDocumentPages: 4,
+  };
+  const states = (input: Partial<Parameters<typeof planBatch>[0]>) => {
+    const plan = planBatch({
+      spec: '',
+      pageCount: 6,
+      translated: [],
+      limits,
+      ...input,
+    });
+    return [1, 2, 3, 4, 5, 6].map((page) => batchPageState(plan, page));
+  };
+
+  it('offers every other page while the batch has room', () => {
+    expect(states({ spec: '2' })).toEqual([
+      'available',
+      'selected',
+      'available',
+      'available',
+      'available',
+      'available',
+    ]);
+  });
+
+  it('shows the rest as waiting once the batch is full and the limit has room', () => {
+    // 2 selected of a 4-page allowance.
+    expect(states({})).toEqual([
+      'selected',
+      'selected',
+      'later',
+      'later',
+      'later',
+      'later',
+    ]);
+  });
+
+  it('locks the rest once this batch uses up the document limit', () => {
+    // 2 done + 2 selected = 4, the limit: one page fewer done would still
+    // leave room (see the case above with a larger batch below).
+    expect(states({ translated: [1, 2] })).toEqual([
+      'translated',
+      'translated',
+      'selected',
+      'selected',
+      'locked',
+      'locked',
+    ]);
+    // 1 done, 2 selected: 3 of 4, so one more can follow in a later batch.
+    expect(states({ translated: [1] })).toEqual([
+      'translated',
+      'selected',
+      'selected',
+      'later',
+      'later',
+      'later',
+    ]);
+  });
+
+  it('locks everything untranslated when the limit is already reached', () => {
+    expect(states({ translated: [1, 2, 3, 4] })).toEqual([
+      'translated',
+      'translated',
+      'translated',
+      'translated',
+      'locked',
+      'locked',
+    ]);
+  });
+});
+
+describe('combineRuns', () => {
+  const piece = (
+    pages: number[],
+    extra: Partial<FormattedDocumentRun> = {},
+  ): FormattedDocumentRun =>
+    run({
+      pages: pages.map((page) => ({
+        page,
+        width: 500,
+        height: 700,
+        units: 1,
+        textChars: 10,
+        scanned: false,
+      })),
+      units: pages.map((page) => unit(`p${page}u1`, page, `text ${page}`)),
+      pageImages: pages.map((page) => ({
+        page,
+        previewUrl: `/p${page}.png`,
+        checkUrl: '',
+      })),
+      issues: [],
+      uncheckedPages: [],
+      edits: {},
+      totalTokens: 100,
+      unitsId: `units-${pages.join('-')}`,
+      page: pages[0],
+      ...extra,
+    });
+
+  it('returns a single piece as it is', () => {
+    const only = piece([1, 2]);
+    expect(combineRuns(undefined, [only])).toBe(only);
+  });
+
+  it('refuses to join nothing', () => {
+    expect(() => combineRuns(undefined, [])).toThrow();
+  });
+
+  it('joins a new batch onto the earlier ones in page order', () => {
+    const base = piece([3, 4], {
+      edits: { p3u1: 'edited' },
+      issues: [
+        { page: 4, n: 1, kind: 'overflow', severity: 'minor', note: 'kept' },
+      ],
+    });
+    const joined = combineRuns(base, [piece([1, 2]), piece([5])]);
+    expect(translatedPages(joined)).toEqual([1, 2, 3, 4, 5]);
+    expect(joined.units.map((u) => u.id)).toEqual([
+      'p1u1',
+      'p2u1',
+      'p3u1',
+      'p4u1',
+      'p5u1',
+    ]);
+    expect(joined.pageImages.map((image) => image.page)).toEqual([
+      1, 2, 3, 4, 5,
+    ]);
+    expect(joined.pages.map((page) => page.page)).toEqual([1, 2, 3, 4, 5]);
+    // Earlier pages keep their pending edits and findings.
+    expect(joined.edits).toEqual({ p3u1: 'edited' });
+    expect(joined.issues).toHaveLength(1);
+    expect(joined.totalTokens).toBe(300);
+    // The person lands on the new batch's first page.
+    expect(joined.page).toBe(1);
+    expect(joined.batches).toBe(2);
+  });
+
+  it('takes a page translated again from the later piece only', () => {
+    const base = piece([1, 2], {
+      edits: { p1u1: 'old edit', p2u1: 'kept edit' },
+      issues: [
+        { page: 1, n: 1, kind: 'overflow', severity: 'major', note: 'old' },
+        { page: 2, n: 1, kind: 'clipped', severity: 'minor', note: 'kept' },
+      ],
+      uncheckedPages: [1],
+    });
+    const again = piece([1], {
+      units: [unit('p1u1', 1, 'new text')],
+    });
+    const joined = combineRuns(base, [again]);
+    expect(joined.units.map((u) => u.translation)).toEqual([
+      'new text',
+      'text 2',
+    ]);
+    expect(joined.edits).toEqual({ p2u1: 'kept edit' });
+    expect(joined.issues.map((issue) => issue.note)).toEqual(['kept']);
+    expect(joined.uncheckedPages).toEqual([]);
+  });
+
+  it('counts batches across several additions', () => {
+    const two = combineRuns(piece([1]), [piece([2])]);
+    expect(combineRuns(two, [piece([3])]).batches).toBe(3);
+  });
+});
+
+describe('applyRenderReport with batches', () => {
+  it('keeps the images of pages the render did not draw and takes the new extraction', () => {
+    const before = run({
+      pageImages: [
+        { page: 1, previewUrl: '/old1.png', checkUrl: '' },
+        { page: 2, previewUrl: '/old2.png', checkUrl: '' },
+      ],
+    });
+    const after = applyRenderReport(
+      before,
+      renderReport({
+        pageImages: [{ page: 2, previewUrl: '/new2.png', checkUrl: '' }],
+        unitsId: 'units-joined',
+      }),
+    );
+    expect(after.pageImages).toEqual([
+      { page: 1, previewUrl: '/old1.png', checkUrl: '' },
+      { page: 2, previewUrl: '/new2.png', checkUrl: '' },
+    ]);
+    expect(after.unitsId).toBe('units-joined');
   });
 });
