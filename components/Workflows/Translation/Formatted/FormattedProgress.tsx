@@ -41,11 +41,26 @@ export function FormattedProgress({
           })}
         </h2>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          {t('translation.formatted.progressNote')}
+          {progress.parts > 1
+            ? t('translation.formatted.progressNoteParts')
+            : t('translation.formatted.progressNote')}
         </p>
+        {(progress.parts > 1 || progress.assembling) && (
+          <p
+            role="status"
+            className="mt-3 text-sm font-medium text-gray-900 dark:text-gray-100"
+          >
+            {progress.assembling
+              ? t('translation.formatted.progressAssembling')
+              : t('translation.formatted.progressPart', {
+                  part: progress.part,
+                  parts: progress.parts,
+                })}
+          </p>
+        )}
         <ol
           aria-label={t('translation.formatted.progressLabel')}
-          className="mt-6"
+          className={`mt-6 ${progress.assembling ? 'hidden' : ''}`}
         >
           {progress.steps.map((step) => (
             <li
