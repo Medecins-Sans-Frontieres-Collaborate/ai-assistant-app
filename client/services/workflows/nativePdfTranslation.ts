@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  RunAccess,
+  fetchRunFile,
+  runErrorFrom,
+  runKeyHeaders,
+} from '@/client/services/workflows/nativeRunStorage';
 import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRecorder';
 
 import {
@@ -16,6 +22,7 @@ import {
   NativePdfUnitStyle,
   nativePdfLimits,
 } from '@/lib/utils/shared/translation/nativePdf';
+import { bytesToBase64 } from '@/lib/utils/shared/translation/nativeRunStorage';
 
 import { GlossaryEntry } from '@/types/workflow';
 
@@ -72,6 +79,8 @@ export async function fetchNativePdfAvailability(
 }
 
 export interface NativePdfRunInput extends NativePdfGlossaries {
+  /** The run the pages belong to, and where its files are stored. */
+  run: RunAccess;
   file: File;
   /** Display label of the target language. */
   targetLanguage: string;
@@ -110,15 +119,17 @@ export async function runNativePdf(
   form.append('glossaryGuideIds', JSON.stringify(input.glossaryGuideIds ?? []));
   if (input.modelId) form.append('modelId', input.modelId);
   if (input.conversationId) form.append('conversationId', input.conversationId);
+  form.append('runId', input.run.runId);
+  form.append('storage', input.run.backend);
 
   const response = await fetch(BASE, {
     method: 'POST',
+    headers: await runKeyHeaders(input.run),
     body: form,
     signal: input.signal,
   });
   if (!response.ok || !response.body) {
-    const parsed = await response.json().catch(() => null);
-    throw new Error(parsed?.error || `Translation failed (${response.status})`);
+    throw await runErrorFrom(response, 'Translation failed');
   }
 
   // Newline-delimited JSON: a line may arrive split across chunks.
@@ -160,15 +171,17 @@ async function postJson<T>(
   body: Record<string, unknown>,
   fallback: string,
   signal?: AbortSignal,
+  headers: Record<string, string> = {},
 ): Promise<T> {
   const response = await fetch(`${BASE}/${path}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...headers },
     body: JSON.stringify(body),
     signal,
   });
+  if (!response.ok) throw await runErrorFrom(response, fallback);
   const parsed = await response.json().catch(() => null);
-  if (!response.ok || !parsed?.success) {
+  if (!parsed?.success) {
     throw new Error(parsed?.error || `${fallback} (${response.status})`);
   }
   if (typeof body.conversationId === 'string') {
@@ -178,6 +191,8 @@ async function postJson<T>(
 }
 
 export interface NativePdfRenderInput {
+  /** The run being laid out again, and where its files are stored. */
+  run: RunAccess;
   sourceId: string;
   /**
    * The extraction to lay out: one id, or the ids of several batches of
@@ -208,8 +223,16 @@ export interface NativePdfRenderInput {
 export function renderNativePdf(
   input: NativePdfRenderInput,
 ): Promise<NativePdfRenderReport> {
-  const { signal, ...body } = input;
-  return postJson('render', body, 'Re-rendering failed', signal);
+  const { signal, run, ...body } = input;
+  return runKeyHeaders(run).then((headers) =>
+    postJson(
+      'render',
+      { ...body, runId: run.runId, storage: run.backend },
+      'Re-rendering failed',
+      signal,
+      headers,
+    ),
+  );
 }
 
 export interface NativePdfUnitInput extends NativePdfGlossaries {
@@ -239,21 +262,17 @@ export function reviseNativePdfUnit(
 }
 
 /**
- * Loads a stored page image. The file route answers images as JSON holding
- * a data URL, not as image bytes, so an `<img src>` cannot point at it.
+ * Loads a stored page image, decrypted when the run is encrypted.
  *
  * @param url - A `previewUrl` or `checkUrl` of a run.
  * @returns A data URL to use as an image source.
- * @throws Error when the image cannot be read (for example it expired).
+ * @throws RunMissingError when the image is gone (the run expired), or
+ *   RunLockedError when this device cannot decrypt it.
  */
 export async function fetchNativePdfImage(
   url: string,
   signal?: AbortSignal,
 ): Promise<string> {
-  const response = await fetch(url, { signal });
-  const parsed = await response.json().catch(() => null);
-  if (!response.ok || typeof parsed?.base64Url !== 'string') {
-    throw new Error(`The page image could not be loaded (${response.status})`);
-  }
-  return parsed.base64Url as string;
+  const bytes = await fetchRunFile(url, signal);
+  return `data:image/png;base64,${bytesToBase64(bytes)}`;
 }
