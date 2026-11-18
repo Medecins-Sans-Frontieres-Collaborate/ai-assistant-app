@@ -9,10 +9,10 @@
  */
 import {
   FormattedDocumentOptions,
-  FormattedDocumentRun,
   TranslationDocumentLayout,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import { NativePdfDepth } from '@/lib/utils/shared/translation/nativePdf';
+import { NativeRunRef } from '@/lib/utils/shared/translation/nativeRunStorage';
 
 import { ChannelDrafterWorkflowState } from './drafter';
 import { FormFillWorkflowState } from './formFill';
@@ -366,8 +366,11 @@ export interface TranslationWorkflowState {
   documentDepth?: NativePdfDepth;
   /** The person's choices for the next `formatted` run. */
   formattedOptions?: FormattedDocumentOptions;
-  /** The last `formatted` run of `sourceDocument` and the edits made to it. */
-  formattedRun?: FormattedDocumentRun;
+  /**
+   * Where the last `formatted` run of `sourceDocument` is stored. The run
+   * itself (blocks, edits, files) is never kept in the browser.
+   */
+  formattedRunRef?: NativeRunRef;
   sourceLang?: string;
   /** Legacy locale-code field; superseded by targetLanguage. */
   targetLang?: string;
