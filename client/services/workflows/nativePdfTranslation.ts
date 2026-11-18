@@ -3,7 +3,9 @@
 import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRecorder';
 
 import {
+  FALLBACK_NATIVE_PDF_LIMITS,
   NativePdfDepth,
+  NativePdfLimits,
   NativePdfRenderReport,
   NativePdfRunReport,
   NativePdfStepId,
@@ -11,6 +13,7 @@ import {
   NativePdfStepRecord,
   NativePdfStreamEvent,
   NativePdfUnitAction,
+  nativePdfLimits,
 } from '@/lib/utils/shared/translation/nativePdf';
 
 import { GlossaryEntry } from '@/types/workflow';
@@ -29,8 +32,11 @@ export interface NativePdfGlossaries {
 
 export interface NativePdfAvailability {
   enabled: boolean;
+  /** Pages one request takes; a larger batch is sent in several. */
   maxPages: number;
   maxRefitRounds: number;
+  /** The signed-in person's batch and document limits. */
+  limits: NativePdfLimits;
 }
 
 /**
@@ -42,13 +48,23 @@ export interface NativePdfAvailability {
 export async function fetchNativePdfAvailability(
   signal?: AbortSignal,
 ): Promise<NativePdfAvailability> {
-  const off = { enabled: false, maxPages: 0, maxRefitRounds: 0 };
+  const off = {
+    enabled: false,
+    maxPages: 0,
+    maxRefitRounds: 0,
+    limits: FALLBACK_NATIVE_PDF_LIMITS,
+  };
   try {
     const response = await fetch(BASE, { signal });
     const parsed = await response.json().catch(() => null);
-    return response.ok && parsed?.success
-      ? (parsed.data as NativePdfAvailability)
-      : off;
+    if (!response.ok || !parsed?.success) return off;
+    const data = parsed.data as Partial<NativePdfAvailability>;
+    return {
+      enabled: data.enabled === true,
+      maxPages: data.maxPages ?? 0,
+      maxRefitRounds: data.maxRefitRounds ?? 0,
+      limits: nativePdfLimits(data.limits),
+    };
   } catch {
     return off;
   }
@@ -162,11 +178,17 @@ async function postJson<T>(
 
 export interface NativePdfRenderInput {
   sourceId: string;
-  unitsId: string;
+  /**
+   * The extraction to lay out: one id, or the ids of several batches of
+   * the same document (oldest first) to put together.
+   */
+  unitsIds: string[];
   /** Every unit that should be translated, by id. */
   translations: Record<string, string>;
   /** Pages to run the layout check on afterwards. */
   checkPages: number[];
+  /** Pages to get images of; the pages that changed. */
+  imagePages: number[];
   instructions: NativePdfStepInstructions;
   modelId?: string;
   conversationId?: string;
