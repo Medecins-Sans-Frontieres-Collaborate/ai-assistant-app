@@ -22,6 +22,12 @@
  *    ones the PDF at `run.pdfUrl` actually leaves out. The two differ only
  *    until the next render ({@link removalPending}). Page numbers always
  *    mean pages of the SOURCE, whatever the download leaves out.
+ *  - A unit's LOOK can be changed: font size, colour and position
+ *    (NativePdfUnitStyle in nativePdf.ts, which also states which way a
+ *    move goes). `run.styles[id]` is the look the person wants,
+ *    `run.pdfStyles[id]` the one the last render used; a unit is restyled
+ *    while the two differ ({@link restyledUnits}). An absent entry means
+ *    the source's own look.
  *  - Positions are page points from the top-left corner; the screen places
  *    them as percentages of the page (see {@link unitBox}).
  */
@@ -38,7 +44,9 @@ import {
   NativePdfRunReport,
   NativePdfStepInstructions,
   NativePdfUnitResult,
+  NativePdfUnitStyle,
   parsePageSelection,
+  sanitizeUnitStyle,
   visibleLength,
 } from '@/lib/utils/shared/translation/nativePdf';
 
@@ -92,6 +100,10 @@ export interface FormattedDocumentRun extends NativePdfRunReport {
   dismissed: string[];
   /** Batches put into this run so far; absent on runs of a single batch. */
   batches?: number;
+  /** Unit id to the look the person wants (see the conventions). */
+  styles?: Record<string, NativePdfUnitStyle>;
+  /** Unit id to the look the last render used. */
+  pdfStyles?: Record<string, NativePdfUnitStyle>;
   /** Source pages to leave out of the download (see the conventions). */
   removedPages?: number[];
   /** Source pages the PDF at `pdfUrl` leaves out. */
@@ -205,9 +217,112 @@ export function editedUnits(run: FormattedDocumentRun): NativePdfUnitResult[] {
   return run.units.filter((unit) => unit.id in run.edits);
 }
 
-/** Pages with at least one edit that is not on the page yet, ascending. */
+const STYLE_FIELDS = ['size', 'color', 'dx', 'dy'] as const;
+
+/** Whether two looks are the same; an absent look equals an empty one. */
+export function sameUnitStyle(
+  a: NativePdfUnitStyle | undefined,
+  b: NativePdfUnitStyle | undefined,
+): boolean {
+  return STYLE_FIELDS.every((field) => a?.[field] === b?.[field]);
+}
+
+/** The look the person wants for a unit; empty means the source's own. */
+export function unitStyle(
+  run: Pick<FormattedDocumentRun, 'styles'>,
+  id: string,
+): NativePdfUnitStyle {
+  return run.styles?.[id] ?? {};
+}
+
+/** Units whose look differs from what is on the page, in document order. */
+export function restyledUnits(
+  run: FormattedDocumentRun,
+): NativePdfUnitResult[] {
+  return run.units.filter(
+    (unit) => !sameUnitStyle(run.styles?.[unit.id], run.pdfStyles?.[unit.id]),
+  );
+}
+
+/**
+ * Units that differ from what is on the page in their text or their look,
+ * in document order. These are what a re-render puts on the page.
+ */
+export function changedUnits(run: FormattedDocumentRun): NativePdfUnitResult[] {
+  const restyled = new Set(restyledUnits(run).map((unit) => unit.id));
+  return run.units.filter(
+    (unit) => unit.id in run.edits || restyled.has(unit.id),
+  );
+}
+
+/**
+ * Changes a unit's look. Fields of `change` replace the unit's; a field
+ * set to `undefined` goes back to the source's own. Values are held inside
+ * their ranges (sanitizeUnitStyle), and a size or colour equal to the
+ * source's is not kept as a change.
+ *
+ * @param run - The run.
+ * @param id - The unit.
+ * @param change - Fields to set, or null to drop the unit's whole look.
+ */
+export function withUnitStyle(
+  run: FormattedDocumentRun,
+  id: string,
+  change: Partial<NativePdfUnitStyle> | null,
+): FormattedDocumentRun {
+  const unit = run.units.find((candidate) => candidate.id === id);
+  if (!unit) return run;
+  const merged = change ? { ...unitStyle(run, id), ...change } : {};
+  const style = sanitizeUnitStyle(merged) ?? {};
+  if (style.size === unit.size) delete style.size;
+  if (style.color === unit.color?.toLowerCase()) delete style.color;
+  const styles = { ...(run.styles ?? {}) };
+  if (Object.keys(style).length > 0) styles[id] = style;
+  else delete styles[id];
+  return { ...run, styles };
+}
+
+/**
+ * A box moved by a unit's look, for showing on the page where the unit's
+ * translation will be laid out.
+ *
+ * @param box - `[x0, y0, x1, y1]` in page points.
+ * @param style - The unit's look.
+ */
+export function movedBox(
+  box: [number, number, number, number],
+  style: NativePdfUnitStyle | undefined,
+): [number, number, number, number] {
+  const dx = style?.dx ?? 0;
+  const dy = style?.dy ?? 0;
+  return [box[0] + dx, box[1] + dy, box[2] + dx, box[3] + dy];
+}
+
+/** Zoom levels of the page view; 1 shows the page at its normal width. */
+export const PAGE_ZOOM_LEVELS = [0.5, 0.75, 1, 1.25, 1.5, 2, 2.5] as const;
+export const DEFAULT_PAGE_ZOOM = 1;
+
+/**
+ * The zoom level one step in or out from the current one.
+ *
+ * @param zoom - The current level.
+ * @param direction - `1` to zoom in, `-1` to zoom out.
+ * @returns The next level, or the current one at either end.
+ */
+export function nextPageZoom(zoom: number, direction: 1 | -1): number {
+  const levels: readonly number[] = PAGE_ZOOM_LEVELS;
+  if (direction > 0) {
+    return levels.find((level) => level > zoom) ?? levels[levels.length - 1];
+  }
+  return [...levels].reverse().find((level) => level < zoom) ?? levels[0];
+}
+
+/**
+ * Pages with a change, in text or look, that is not on the page yet,
+ * ascending.
+ */
 export function stalePages(run: FormattedDocumentRun): number[] {
-  return [...new Set(editedUnits(run).map((unit) => unit.page))].sort(
+  return [...new Set(changedUnits(run).map((unit) => unit.page))].sort(
     (a, b) => a - b,
   );
 }
@@ -324,6 +439,8 @@ export function applyRenderReport(
     ],
     fonts: report.fonts,
     pdfUrl: report.pdfUrl,
+    // The render used the looks of the run as it was sent.
+    pdfStyles: run.styles ?? {},
     // The render left out the pages removed in the run as it was sent.
     pdfRemovedPages: removedPages(run),
     // The render returns images of the pages that changed only.
@@ -349,6 +466,16 @@ export function translatedPages(
 ): number[] {
   return [...new Set((run?.units ?? []).map((unit) => unit.page))].sort(
     (a, b) => a - b,
+  );
+}
+
+/** The entries of a per-unit record whose unit is still in the run. */
+function keptOnly<T>(
+  record: Record<string, T> | undefined,
+  keptIds: ReadonlySet<string>,
+): Record<string, T> {
+  return Object.fromEntries(
+    Object.entries(record ?? {}).filter(([id]) => keptIds.has(id)),
   );
 }
 
@@ -398,6 +525,15 @@ export function combineRuns(
       edits: Object.fromEntries(
         Object.entries(joined.edits).filter(([id]) => keptIds.has(id)),
       ),
+      // A page translated again starts from its new batch's looks.
+      styles: {
+        ...keptOnly(joined.styles, keptIds),
+        ...(piece.styles ?? {}),
+      },
+      pdfStyles: {
+        ...keptOnly(joined.pdfStyles, keptIds),
+        ...(piece.pdfStyles ?? {}),
+      },
       totalTokens: joined.totalTokens + piece.totalTokens,
     };
   }
@@ -657,6 +793,9 @@ export function runFromReport(
     uncheckedPages: report.uncheckedPages,
     fonts: report.fonts,
     refitRounds: report.refitRounds,
+    // The automatic fixes' looks are on the page already.
+    styles: report.styles ?? {},
+    pdfStyles: report.styles ?? {},
     pdfUrl: report.pdfUrl,
     pageImages: report.pageImages,
     sourceId: report.sourceId,
