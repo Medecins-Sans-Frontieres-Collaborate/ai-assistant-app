@@ -7,6 +7,7 @@ import {
   storeNativeRebuild,
 } from '@/lib/services/documentTranslation/native/nativePdfStorage';
 import {
+  getWorkflowFeatureLimits,
   isWorkflowFeatureEnabled,
   workflowFeatureDisabledResponse,
 } from '@/lib/services/workflows/policy/guard';
@@ -29,6 +30,7 @@ import {
   NativePdfDepth,
   NativePdfRunReport,
   NativePdfStreamEvent,
+  nativePdfLimits,
   parsePageSelection,
   sanitizeStepInstructions,
 } from '@/lib/utils/shared/translation/nativePdf';
@@ -58,12 +60,20 @@ function jsonField(form: FormData, name: string): unknown {
  * GET /api/document-translation/native — whether formatting-preserving PDF
  * translation is available here, and its limits. The workspace offers the
  * option only when this says so.
+ *
+ * `limits` are the signed-in person's own (an admin may have set different
+ * ones for them): the default and largest batch, and the document total.
+ * `maxPages` is how many pages one request takes; a larger batch is sent
+ * as several requests.
  */
 export async function GET() {
   const session = await auth();
   if (!session) return unauthorizedResponse();
   return successResponse({
     enabled: await isWorkflowFeatureEnabled(NATIVE_PDF_FEATURE),
+    limits: nativePdfLimits(
+      await getWorkflowFeatureLimits(NATIVE_PDF_FEATURE, session),
+    ),
     maxPages: NATIVE_PDF_MAX_PAGES,
     maxRefitRounds: NATIVE_PDF_MAX_REFIT_ROUNDS,
   });
@@ -72,7 +82,10 @@ export async function GET() {
 /**
  * POST /api/document-translation/native — experimental native PDF
  * translation. Runs the fixed extract → analyze → translate → rebuild →
- * verify → refit pipeline on up to NATIVE_PDF_MAX_PAGES pages.
+ * verify → refit pipeline on up to NATIVE_PDF_MAX_PAGES pages
+ * (fewer when the person's largest batch is smaller). A batch of more pages
+ * is several of these requests, put together afterwards by
+ * POST .../native/render.
  *
  * Responds with a stream of newline-delimited JSON events
  * (NativePdfStreamEvent): one `step` line when a step starts and one when it
@@ -132,9 +145,14 @@ export async function POST(req: NextRequest) {
     return badRequestResponse('Target language name is too long');
   }
 
+  // One request takes NATIVE_PDF_MAX_PAGES at most, and never more than
+  // the person's largest batch when an admin has set that lower.
+  const limits = nativePdfLimits(
+    await getWorkflowFeatureLimits(NATIVE_PDF_FEATURE, session),
+  );
   const selection = parsePageSelection(
     form.get('pages') as string | null,
-    NATIVE_PDF_MAX_PAGES,
+    Math.min(NATIVE_PDF_MAX_PAGES, limits.maxBatchPages),
   );
   if (!selection.ok) return badRequestResponse(selection.error);
 
