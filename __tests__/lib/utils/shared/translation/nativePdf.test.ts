@@ -1,16 +1,26 @@
 import {
+  AUTO_MAX_SHIFT,
+  AUTO_MIN_SIZE_RATIO,
   MAX_STEP_INSTRUCTION_CHARS,
+  NATIVE_PDF_MAX_FONT_SIZE,
   NATIVE_PDF_MAX_PAGES,
+  NATIVE_PDF_MAX_SHIFT,
   NATIVE_PDF_MAX_TRANSLATION_CHARS,
+  NATIVE_PDF_MIN_FONT_SIZE,
   NATIVE_PDF_STEPS,
   NativePdfFitReport,
   NativePdfIssue,
   REFIT_SCALE_THRESHOLD,
   charBudget,
+  hasLayoutFixes,
+  layoutScore,
   parsePageSelection,
+  planLayoutFixes,
   repairTranslationTags,
   sanitizeStepInstructions,
   sanitizeTranslationEdits,
+  sanitizeUnitStyle,
+  sanitizeUnitStyles,
   selectRefitTargets,
   visibleLength,
 } from '@/lib/utils/shared/translation/nativePdf';
@@ -354,5 +364,247 @@ describe('splitIntoRequests', () => {
     ]);
     expect(splitIntoRequests([4, 5], 0)).toEqual([[4], [5]]);
     expect(splitIntoRequests([])).toEqual([]);
+  });
+});
+
+describe('sanitizeUnitStyle', () => {
+  it('keeps a valid look as it is, colour in lowercase', () => {
+    expect(
+      sanitizeUnitStyle({ size: 12.5, color: '#FFCC00', dx: 4, dy: -6 }),
+    ).toEqual({ size: 12.5, color: '#ffcc00', dx: 4, dy: -6 });
+  });
+
+  it('holds a size inside its range, at both ends', () => {
+    expect(sanitizeUnitStyle({ size: NATIVE_PDF_MIN_FONT_SIZE })?.size).toBe(
+      NATIVE_PDF_MIN_FONT_SIZE,
+    );
+    expect(
+      sanitizeUnitStyle({ size: NATIVE_PDF_MIN_FONT_SIZE - 0.5 })?.size,
+    ).toBe(NATIVE_PDF_MIN_FONT_SIZE);
+    expect(sanitizeUnitStyle({ size: NATIVE_PDF_MAX_FONT_SIZE })?.size).toBe(
+      NATIVE_PDF_MAX_FONT_SIZE,
+    );
+    expect(
+      sanitizeUnitStyle({ size: NATIVE_PDF_MAX_FONT_SIZE + 1 })?.size,
+    ).toBe(NATIVE_PDF_MAX_FONT_SIZE);
+  });
+
+  it('holds a move inside its range and drops a move of nothing', () => {
+    expect(sanitizeUnitStyle({ dx: -1e9, dy: 1e9 })).toEqual({
+      dx: -NATIVE_PDF_MAX_SHIFT,
+      dy: NATIVE_PDF_MAX_SHIFT,
+    });
+    expect(sanitizeUnitStyle({ dx: 0, dy: 0 })).toBeUndefined();
+  });
+
+  it('drops what is not a size, a move or a colour', () => {
+    expect(
+      sanitizeUnitStyle({
+        size: '12',
+        dx: NaN,
+        dy: Infinity,
+        color: 'red;} body{display:none',
+        font: 'Comic Sans',
+      }),
+    ).toBeUndefined();
+    // Three hex digits and a missing hash are not the form the layout takes.
+    expect(sanitizeUnitStyle({ color: '#fc0' })).toBeUndefined();
+    expect(sanitizeUnitStyle({ color: 'ffcc00' })).toBeUndefined();
+    for (const value of [null, 'x', 3, []]) {
+      expect(sanitizeUnitStyle(value)).toBeUndefined();
+    }
+  });
+});
+
+describe('sanitizeUnitStyles', () => {
+  const units = [{ id: 'p1-b0-0' }, { id: 'p1-b1-0' }];
+
+  it("keeps styles of this document's units only, each sanitized", () => {
+    expect(
+      sanitizeUnitStyles(
+        {
+          'p1-b0-0': { size: 14, bogus: true },
+          'p1-b1-0': { color: 'nope' },
+          'p9-b0-0': { size: 20 },
+          __proto__: { size: 30 },
+        },
+        units,
+      ),
+    ).toEqual({ 'p1-b0-0': { size: 14 } });
+  });
+
+  it('answers nothing for input that is not an object of styles', () => {
+    for (const value of [undefined, null, 'x', [{ size: 12 }]]) {
+      expect(sanitizeUnitStyles(value, units)).toEqual({});
+    }
+  });
+});
+
+describe('planLayoutFixes', () => {
+  const fit = (id: string, n: number, scale = 1): NativePdfFitReport => ({
+    id,
+    page: 1,
+    n,
+    scale,
+    fits: true,
+  });
+  const issue = (
+    n: number,
+    fix: Partial<NonNullable<NativePdfIssue['fix']>> | undefined,
+    severity: NativePdfIssue['severity'] = 'major',
+  ): NativePdfIssue => ({
+    page: 1,
+    n,
+    kind: 'overflow',
+    severity,
+    note: '',
+    fix: fix && { action: 'none', percent: 100, dx: 0, dy: 0, ...fix },
+  });
+  const units = [
+    { id: 'a', size: 20 },
+    { id: 'b', size: 20 },
+  ];
+  const lengths = new Map([
+    ['a', 100],
+    ['b', 100],
+  ]);
+  const plan = (
+    issues: NativePdfIssue[],
+    fits = [fit('a', 1), fit('b', 2)],
+    styles = {},
+  ) => planLayoutFixes({ fits, issues, lengths, units, styles });
+
+  it('changes nothing on a clean page', () => {
+    const clean = plan([]);
+    expect(hasLayoutFixes(clean)).toBe(false);
+    expect(clean.styles).toEqual({});
+  });
+
+  it('sets a smaller font, counted from the size shown', () => {
+    // 20 pt already shrunk to 90% is shown at 18 pt; 90% of that is 16.2,
+    // rounded down to a half point.
+    const smaller = plan(
+      [issue(1, { action: 'smaller', percent: 90 })],
+      [fit('a', 1, 0.9), fit('b', 2)],
+    );
+    expect(smaller.styles).toEqual({ a: { size: 16 } });
+    expect(smaller.resized).toEqual(['a']);
+    expect(smaller.targets).toEqual([]);
+  });
+
+  it('never sets a font below the automatic floor, and shortens instead once there', () => {
+    const floor = 20 * AUTO_MIN_SIZE_RATIO;
+    const first = plan([issue(1, { action: 'smaller', percent: 10 })]);
+    expect(first.styles.a.size).toBe(floor);
+    // At the floor already: nothing left to take off, so the text gets shorter.
+    const again = plan(
+      [issue(1, { action: 'smaller', percent: 80 })],
+      undefined,
+      first.styles,
+    );
+    expect(again.resized).toEqual([]);
+    expect(again.styles).toEqual(first.styles);
+    expect(again.targets.map((target) => target.id)).toEqual(['a']);
+  });
+
+  it('moves a unit, inside the automatic limit, on top of an earlier move', () => {
+    const moved = plan(
+      [issue(1, { action: 'move', dx: 6, dy: -500 })],
+      undefined,
+      { a: { dx: 4 } },
+    );
+    expect(moved.styles).toEqual({ a: { dx: 10, dy: -AUTO_MAX_SHIFT } });
+    expect(moved.moved).toEqual(['a']);
+    // A move of nothing is no fix.
+    expect(hasLayoutFixes(plan([issue(1, { action: 'move' })]))).toBe(false);
+  });
+
+  it('shortens by the prescribed share, held inside its limits', () => {
+    const targets = (percent: number) =>
+      plan([issue(1, { action: 'shorten', percent })]).targets[0].targetChars;
+    expect(targets(80)).toBe(80);
+    expect(targets(5)).toBe(50);
+    expect(targets(100)).toBe(95);
+  });
+
+  it('prefers the layout report over a prescription: text shrunk too far gets shorter', () => {
+    const shrunk = plan(
+      [issue(1, { action: 'move', dx: 10 })],
+      [fit('a', 1, REFIT_SCALE_THRESHOLD - 0.05), fit('b', 2)],
+    );
+    expect(shrunk.targets).toMatchObject([{ id: 'a', reason: 'scale' }]);
+    expect(shrunk.moved).toEqual([]);
+  });
+
+  it("applies a minor finding's prescription, a major one first", () => {
+    expect(
+      plan([issue(2, { action: 'smaller', percent: 90 }, 'minor')]).styles,
+    ).toEqual({ b: { size: 18 } });
+    const both = plan([
+      issue(1, { action: 'smaller', percent: 90 }, 'minor'),
+      issue(1, { action: 'move', dy: 4 }, 'major'),
+    ]);
+    expect(both.styles).toEqual({ a: { dy: 4 } });
+  });
+
+  it('leaves a finding prescribed "none" alone, and shortens a major one with no prescription', () => {
+    expect(hasLayoutFixes(plan([issue(1, { action: 'none' })]))).toBe(false);
+    expect(plan([issue(1, undefined)]).targets).toMatchObject([
+      { id: 'a', reason: 'visual' },
+    ]);
+    expect(hasLayoutFixes(plan([issue(1, undefined, 'minor')]))).toBe(false);
+  });
+
+  it('never touches a unit that was not translated or a page-level remark', () => {
+    const untranslated = planLayoutFixes({
+      fits: [fit('z', 1)],
+      issues: [issue(1, { action: 'smaller', percent: 80 })],
+      lengths,
+      units: [{ id: 'z', size: 20 }],
+    });
+    expect(hasLayoutFixes(untranslated)).toBe(false);
+    const remark = { ...issue(1, { action: 'smaller', percent: 80 }), n: null };
+    expect(hasLayoutFixes(plan([remark]))).toBe(false);
+  });
+
+  it('does not modify the styles it is given', () => {
+    const given = { a: { dx: 4 } };
+    plan([issue(1, { action: 'move', dx: 6 })], undefined, given);
+    expect(given).toEqual({ a: { dx: 4 } });
+  });
+});
+
+describe('layoutScore', () => {
+  const fits: NativePdfFitReport[] = [
+    { id: 'a', page: 1, n: 1, scale: 1, fits: true },
+  ];
+  const finding = (severity: NativePdfIssue['severity']): NativePdfIssue => ({
+    page: 1,
+    n: 1,
+    kind: 'overlap',
+    severity,
+    note: '',
+  });
+
+  it('is zero for a clean page and grows with findings', () => {
+    expect(layoutScore(fits, [])).toBe(0);
+    expect(layoutScore(fits, [finding('minor')])).toBeGreaterThan(0);
+  });
+
+  it('counts one major finding as worse than several minor ones', () => {
+    expect(layoutScore(fits, [finding('major')])).toBeGreaterThan(
+      layoutScore(
+        fits,
+        Array.from({ length: 5 }, () => finding('minor')),
+      ),
+    );
+  });
+
+  it('counts a unit the layout could not fit like a major finding', () => {
+    const unfit = [{ ...fits[0], fits: false }];
+    expect(layoutScore(unfit, [])).toBe(layoutScore(fits, [finding('major')]));
+    // Exactly at the shrink threshold is not unfit.
+    const atLimit = [{ ...fits[0], scale: REFIT_SCALE_THRESHOLD - 1e-7 }];
+    expect(layoutScore(atLimit, [])).toBe(0);
   });
 });
