@@ -1,9 +1,15 @@
 import { WorkflowPolicyService } from '@/lib/services/workflows/policy/WorkflowPolicyService';
 import {
+  WORKFLOW_FEATURES,
+  WORKFLOW_FEATURE_IDS,
   WORKFLOW_POLICY_DEFAULTS,
   WorkflowPolicy,
+  resolveAllWorkflowFeaturesEnabled,
   resolveAllWorkflowsEnabled,
   resolveWorkflowEnabled,
+  resolveWorkflowFeatureEnabled,
+  resolveWorkflowFeatureSetting,
+  workflowFeaturesOf,
 } from '@/lib/services/workflows/policy/types';
 import { readWorkflowPolicy } from '@/lib/services/workflows/policy/workflowPolicyStore';
 
@@ -62,6 +68,74 @@ describe('workflow policy resolution', () => {
       ].sort(),
     );
     expect(all.grants).toBe(true);
+  });
+});
+
+describe('workflow feature resolution', () => {
+  const FEATURE = 'translation-preserve-formatting' as const;
+  const withFeature = (
+    enabled: boolean,
+    workflows: WorkflowPolicy['workflows'] = {},
+  ): WorkflowPolicy => ({
+    ...policy(workflows),
+    features: { [FEATURE]: { enabled } },
+  });
+
+  it('every feature belongs to a known workflow and is listed under it', () => {
+    for (const id of WORKFLOW_FEATURE_IDS) {
+      expect(workflowFeaturesOf(WORKFLOW_FEATURES[id].workflow)).toContain(id);
+    }
+    expect(workflowFeaturesOf('translation')).toEqual([FEATURE]);
+    expect(workflowFeaturesOf('map')).toEqual([]);
+  });
+
+  it('uses the default with no policy and with a policy that predates features', () => {
+    const fallback = WORKFLOW_FEATURES[FEATURE].defaultEnabled;
+    expect(fallback).toBe(true);
+    expect(resolveWorkflowFeatureEnabled(null, FEATURE)).toBe(fallback);
+    expect(resolveWorkflowFeatureEnabled(policy({}), FEATURE)).toBe(fallback);
+  });
+
+  it('an explicit setting wins in both directions', () => {
+    expect(resolveWorkflowFeatureEnabled(withFeature(false), FEATURE)).toBe(
+      false,
+    );
+    expect(resolveWorkflowFeatureEnabled(withFeature(true), FEATURE)).toBe(
+      true,
+    );
+  });
+
+  it('is unavailable while its workflow is off, but keeps its own switch', () => {
+    const p = withFeature(true, { translation: { enabled: false } });
+    expect(resolveWorkflowFeatureEnabled(p, FEATURE)).toBe(false);
+    expect(resolveWorkflowFeatureSetting(p, FEATURE)).toBe(true);
+    // Another workflow being off does not affect it.
+    expect(
+      resolveWorkflowFeatureEnabled(
+        withFeature(true, { map: { enabled: false } }),
+        FEATURE,
+      ),
+    ).toBe(true);
+  });
+
+  it('resolveAllWorkflowFeaturesEnabled covers every known feature', () => {
+    const all = resolveAllWorkflowFeaturesEnabled(withFeature(false));
+    expect(Object.keys(all).sort()).toEqual([...WORKFLOW_FEATURE_IDS].sort());
+    expect(all[FEATURE]).toBe(false);
+  });
+
+  it('the service answers from the loaded policy', async () => {
+    WorkflowPolicyService.resetInstance();
+    vi.mocked(readWorkflowPolicy).mockReset();
+    vi.mocked(readWorkflowPolicy).mockResolvedValue({
+      policy: withFeature(false),
+      etag: '"e"',
+    });
+    const service = WorkflowPolicyService.getInstance();
+    expect(service.isFeatureEnabled(FEATURE)).toBe(true);
+    await service.ensureFresh();
+    expect(service.isFeatureEnabled(FEATURE)).toBe(false);
+    expect(service.allFeaturesEnabled()).toEqual({ [FEATURE]: false });
   });
 });
 
