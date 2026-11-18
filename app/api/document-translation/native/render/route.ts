@@ -6,11 +6,12 @@ import {
   rerenderNativePdf,
 } from '@/lib/services/documentTranslation/native/nativePdfPipeline';
 import {
+  NativeRunStore,
   isNativeFileId,
-  readNativeFile,
-  storeNativeFile,
-  storeNativeRebuild,
+  openNativeRunStore,
+  parseRunLocation,
 } from '@/lib/services/documentTranslation/native/nativePdfStorage';
+import { runStorageErrorResponse } from '@/lib/services/documentTranslation/native/nativeRunResponses';
 import {
   getWorkflowFeatureLimits,
   isWorkflowFeatureEnabled,
@@ -23,11 +24,9 @@ import {
   badRequestResponse,
   errorResponse,
   handleApiError,
-  notFoundResponse,
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
-import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 import {
   NATIVE_PDF_FEATURE,
   NATIVE_PDF_MAX_CHECK_PAGES,
@@ -44,6 +43,9 @@ import { auth } from '@/auth';
 export const maxDuration = 300;
 
 interface RenderRequest {
+  /** The run the files belong to, and where it is stored. */
+  runId?: unknown;
+  storage?: unknown;
   /** `sourceId` returned by the run being edited. */
   sourceId?: unknown;
   /** `unitsId` returned by the run being edited. */
@@ -101,7 +103,9 @@ function parseUnitsIds(body: RenderRequest): string[] | null {
  * `imagePages`, `styles` (unit id to `size`, `color`, `dx`, `dy`; anything
  * invalid is dropped), `omitPages` (source pages to leave out of the PDF; 400
  * `NO_PAGES_LEFT` when that is every page), `instructions` (only `verify` applies), `modelId`,
- * `conversationId`.
+ * `conversationId`, and the run's `runId` and `storage` (with its key in
+ * the RUN_KEY_HEADER header when it is encrypted). 404 `RUN_FILES_MISSING`
+ * when the run's files are gone: expired from app storage, or deleted.
  *
  * This is also how batches of one document become one file: send
  * `unitsIds` (each batch's `unitsId`, oldest first) instead of `unitsId`,
@@ -179,17 +183,23 @@ export async function POST(req: NextRequest) {
     return badRequestResponse('omitPages must be a list of page numbers');
   }
 
+  const where = parseRunLocation(
+    { runId: body.runId, storage: body.storage },
+    req,
+  );
+  if (!where.ok) return badRequestResponse(where.error);
+  let store: NativeRunStore;
   let document: Buffer;
   let unitsFiles: Buffer[];
   try {
+    store = await openNativeRunStore(req, session, where.location);
     [document, ...unitsFiles] = await Promise.all([
-      readNativeFile(session, sourceId, 'pdf'),
-      ...unitsIds.map((id) => readNativeFile(session, id, 'json')),
+      store.get(sourceId),
+      ...unitsIds.map((id) => store.get(id)),
     ]);
   } catch (error) {
-    if (isBlobNotFoundError(error)) {
-      return notFoundResponse('The files of this translation run');
-    }
+    const response = runStorageErrorResponse(error);
+    if (response) return response;
     console.error('[document-translation/native/render] Read failed:', error);
     return handleApiError(error, 'Could not read the translation run');
   }
@@ -220,11 +230,11 @@ export async function POST(req: NextRequest) {
     const unitsId =
       unitsIds.length === 1
         ? unitsIds[0]
-        : (await storeNativeFile(session, unitsFile, 'json')).id;
+        : (await store.put(unitsFile, 'json')).id;
     return successResponse({
       ...report,
       unitsId,
-      ...(await storeNativeRebuild(session, { pdf, outputs })),
+      ...(await store.putRebuild({ pdf, outputs })),
       ...usage.fields(),
     });
   } catch (error) {
@@ -239,6 +249,8 @@ export async function POST(req: NextRequest) {
     if (error instanceof NativePdfNoPagesLeftError) {
       return errorResponse(error.message, 400, undefined, 'NO_PAGES_LEFT');
     }
+    const response = runStorageErrorResponse(error);
+    if (response) return response;
     console.error('[document-translation/native/render] Failed:', error);
     return handleApiError(error, 'Re-rendering the pages failed');
   }
