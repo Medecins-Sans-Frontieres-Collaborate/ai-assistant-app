@@ -13,6 +13,7 @@ import {
   renderNativePdf,
   runNativePdf,
 } from '@/client/services/workflows/nativePdfTranslation';
+import { resetRunSessions } from '@/client/services/workflows/nativeRunSession';
 import type * as RunStorageModule from '@/client/services/workflows/nativeRunStorage';
 import {
   RunMissingError,
@@ -278,6 +279,7 @@ const checked = (group: HTMLElement) =>
 beforeEach(() => {
   vi.clearAllMocks();
   savedRecord = undefined;
+  resetRunSessions();
   vi.mocked(fetchNativePdfAvailability).mockResolvedValue({
     enabled: true,
     maxPages: MAX_PAGES,
@@ -1101,6 +1103,8 @@ describe('TranslationWorkspace — where a formatted translation is kept', () =>
     await translateOnce();
     const record = savedRun() as FormattedDocumentRun;
     vi.mocked(loadRunRecord).mockResolvedValue(record);
+    // Another visit: nothing of the run is in memory.
+    resetRunSessions();
     document.body.innerHTML = '';
     mountWorkspace({ documentLayout: 'formatted', formattedRunRef: ref });
   }
