@@ -1,4 +1,5 @@
 import {
+  NATIVE_PDF_FIX_ACTIONS,
   NATIVE_PDF_ISSUE_KINDS,
   NATIVE_PDF_ROLES,
   NativePdfInstructableStep,
@@ -46,6 +47,13 @@ const FIXED_PROMPTS: Record<NativePdfInstructableStep, string> = {
     '- too_small: text is noticeably smaller than its neighbours of the same kind.',
     'Use the number of the unit concerned, or null for a page-level remark. severity is "major" when a reader would notice it or lose information, otherwise "minor".',
     'A different font, or line breaks falling in different places, is expected and is not a defect. Do not judge translation quality. If the page is clean, return no issues.',
+    'Compare with the original: text that wraps onto a rule or divider the original cleared, leaves the card or box it belongs to, or closes the gap to the next element until they touch, is a defect even when it is inside its outline.',
+    'For every issue also prescribe, as fix, the one change most likely to cure it. The message lists the page size and, per unit, its font size, how far the layout already shrank it, and its area, all in points:',
+    '- action "smaller": set the unit in a smaller font. percent is the new size as a percentage of the size it is shown at now (70 to 95). Use it when the text is a little too long: it wraps one line too many, or just reaches a rule or a neighbour.',
+    '- action "shorten": have the translation reworded more briefly. percent is the new length as a percentage of the current one (50 to 90). Use it when the text is far too long, and for too_small: text already smaller than its neighbours must get shorter, not smaller.',
+    '- action "move": shift the unit. dx and dy are the move in points, +x to the right and +y down; one point is 1/72 inch and the page size tells you the scale of the image. Use it when the text has enough space but sits on a rule, an icon or a neighbour that a small shift would clear.',
+    '- action "none": nothing above would help (leftover_source, a page-level remark).',
+    'Set percent to 100 and dx, dy to 0 where the action does not use them.',
   ].join('\n'),
 };
 
@@ -162,12 +170,23 @@ export const VERIFY_SCHEMA = {
       items: {
         type: 'object',
         additionalProperties: false,
-        required: ['n', 'kind', 'severity', 'note'],
+        required: ['n', 'kind', 'severity', 'note', 'fix'],
         properties: {
           n: { type: ['integer', 'null'] },
           kind: { type: 'string', enum: [...NATIVE_PDF_ISSUE_KINDS] },
           severity: { type: 'string', enum: ['minor', 'major'] },
           note: { type: 'string' },
+          fix: {
+            type: 'object',
+            additionalProperties: false,
+            required: ['action', 'percent', 'dx', 'dy'],
+            properties: {
+              action: { type: 'string', enum: [...NATIVE_PDF_FIX_ACTIONS] },
+              percent: { type: 'number' },
+              dx: { type: 'number' },
+              dy: { type: 'number' },
+            },
+          },
         },
       },
     },
