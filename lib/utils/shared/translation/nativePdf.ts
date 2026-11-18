@@ -186,6 +186,45 @@ const VISUAL_ISSUE_SHORTEN_RATIO = 0.85;
 /** Never ask for less than this share of the current length. */
 const MIN_SHORTEN_RATIO = 0.5;
 
+/**
+ * Limits of the AUTOMATIC layout fixes (see planLayoutFixes). They are
+ * tighter than what a person may set by hand: a fix nobody asked for must
+ * stay small enough to be an obvious improvement or an obvious no-op.
+ */
+/** Smallest font an automatic fix sets, as a share of the source's size. */
+export const AUTO_MIN_SIZE_RATIO = 0.7;
+/** Farthest an automatic fix moves a unit along one axis, in points. */
+export const AUTO_MAX_SHIFT = 48;
+/** Range of a prescribed percentage (of the current size or length). */
+export const AUTO_MIN_PERCENT = 50;
+export const AUTO_MAX_PERCENT = 95;
+/** Weight of a major finding against a minor one (see layoutScore). */
+const MAJOR_ISSUE_WEIGHT = 10;
+
+/** Fixes the visual check can prescribe for a finding. */
+export const NATIVE_PDF_FIX_ACTIONS = [
+  'none',
+  'shorten',
+  'smaller',
+  'move',
+] as const;
+export type NativePdfFixAction = (typeof NATIVE_PDF_FIX_ACTIONS)[number];
+
+/**
+ * The fix the visual check prescribes for one finding.
+ *  - `smaller`: `percent` is the new font size as a share of the size shown.
+ *  - `shorten`: `percent` is the new length as a share of the current one.
+ *  - `move`: `dx`, `dy` in page points, as in NativePdfUnitStyle (+x right,
+ *    +y down).
+ * Fields an action does not use are ignored.
+ */
+export interface NativePdfLayoutFix {
+  action: NativePdfFixAction;
+  percent: number;
+  dx: number;
+  dy: number;
+}
+
 export const NATIVE_PDF_ROLES = [
   'title',
   'heading',
@@ -237,10 +276,14 @@ export interface NativePdfUnit {
   bbox: [number, number, number, number];
   /** Where the translation may be laid out. */
   room: [number, number, number, number];
+  /** The card, cell or box the unit sits inside, which its room stays in. */
+  panel?: [number, number, number, number];
   /** `room` area over `bbox` area: how much more space there is than was used. */
   roomFactor: number;
   lines: number;
   size: number;
+  /** The unit's dominant text colour, as `#rrggbb`. */
+  color?: string;
   text: string;
   tags: Record<string, NativePdfTag>;
   /** Visible characters of `text`, tags excluded. */
@@ -263,6 +306,8 @@ export interface NativePdfFitReport {
   n: number;
   scale: number;
   fits: boolean;
+  /** The part of its room the text took up, `[x0, y0, x1, y1]`. */
+  used?: [number, number, number, number];
 }
 
 /** A step as it finished. */
@@ -288,6 +333,10 @@ export interface NativePdfUnitResult {
   room: NativePdfUnit['room'];
   /** Visible characters that fit the room at full size (see charBudget). */
   budgetChars: number;
+  /** Font size of the source text in points; absent on runs made before it was kept. */
+  size?: number;
+  /** Colour of the source text as `#rrggbb`; absent as `size` is. */
+  color?: string;
   /** Null when the unit was deliberately left as written. */
   translation: string | null;
   /** Layout scale of the final rebuild (1 = unshrunk); null when untouched. */
@@ -320,6 +369,11 @@ export interface NativePdfRunReport {
   uncheckedPages: number[];
   fonts: { sans: string; serif: string };
   refitRounds: number;
+  /**
+   * Unit id to the look the automatic fixes gave it (a smaller font, a
+   * move). The PDF is laid out with these; a re-render must send them back.
+   */
+  styles?: Record<string, NativePdfUnitStyle>;
   pdfUrl: string;
   pageImages: NativePdfPageImages[];
   /** Ids of the stored source PDF and extraction; a re-render sends them back. */
@@ -366,6 +420,8 @@ export interface NativePdfIssue {
   kind: NativePdfIssueKind;
   severity: 'minor' | 'major';
   note: string;
+  /** What the check prescribes for it; absent on findings made without one. */
+  fix?: NativePdfLayoutFix;
 }
 
 /**
@@ -521,13 +577,169 @@ export interface RefitTarget {
   reason: 'scale' | 'visual';
 }
 
+/** What one round of automatic layout fixes will change. */
+export interface LayoutFixPlan {
+  /** Units going back for a shorter translation, and how short. */
+  targets: RefitTarget[];
+  /** Every unit's style after the round: the given ones plus the fixes. */
+  styles: Record<string, NativePdfUnitStyle>;
+  /** Ids of units set in a smaller font by this round. */
+  resized: string[];
+  /** Ids of units moved by this round. */
+  moved: string[];
+}
+
+/** Whether a plan changes anything. */
+export function hasLayoutFixes(plan: LayoutFixPlan): boolean {
+  return (
+    plan.targets.length > 0 || plan.resized.length > 0 || plan.moved.length > 0
+  );
+}
+
+/** A value held inside a range. */
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
 /**
- * Decides which units go back for a shorter translation, and how short.
+ * Decides one round of automatic layout fixes from the layout report and
+ * the visual check.
  *
- * A unit is refitted when the layout step could not fit it, shrank it past
- * {@link REFIT_SCALE_THRESHOLD}, or a visual check raised a major fit issue
- * on it. Minor remarks and issues that shortening cannot cure are reported
- * but do not trigger a refit.
+ * Per unit, in this order:
+ *  - The layout could not fit it, or shrank it past
+ *    {@link REFIT_SCALE_THRESHOLD}: a shorter translation, sized from how
+ *    far it was shrunk.
+ *  - The visual check prescribed a fix for it (NativePdfLayoutFix): that
+ *    fix, held inside the automatic limits. A major finding is preferred
+ *    over a minor one. `smaller` sets a font size counted from the size the
+ *    text is SHOWN at (its size times the layout's shrink), never below
+ *    {@link AUTO_MIN_SIZE_RATIO} of the source's; where that floor leaves
+ *    nothing to take off, the unit is shortened instead.
+ *  - The check raised a major fit issue without prescribing anything: a
+ *    shorter translation.
+ * Minor remarks without a prescription change nothing.
+ *
+ * @param input.fits - The layout report of the latest rebuild.
+ * @param input.issues - The latest visual check's findings.
+ * @param input.lengths - Visible length of each unit's current translation;
+ *   a unit absent here is not translated and is never touched.
+ * @param input.units - Source font size per unit; a unit absent here cannot
+ *   be resized and is shortened instead.
+ * @param input.styles - Styles already in force; never modified.
+ */
+export function planLayoutFixes(input: {
+  fits: readonly NativePdfFitReport[];
+  issues: readonly NativePdfIssue[];
+  lengths: ReadonlyMap<string, number>;
+  units?: readonly Pick<NativePdfUnit, 'id' | 'size'>[];
+  styles?: Readonly<Record<string, NativePdfUnitStyle>>;
+}): LayoutFixPlan {
+  const sizeById = new Map(
+    (input.units ?? []).map((unit) => [unit.id, unit.size]),
+  );
+  const plan: LayoutFixPlan = {
+    targets: [],
+    styles: { ...(input.styles ?? {}) },
+    resized: [],
+    moved: [],
+  };
+  const shorten = (
+    id: string,
+    length: number,
+    ratio: number,
+    reason: RefitTarget['reason'],
+  ): void => {
+    plan.targets.push({
+      id,
+      targetChars: Math.max(
+        4,
+        Math.floor(length * Math.max(ratio, MIN_SHORTEN_RATIO)),
+      ),
+      reason,
+    });
+  };
+  for (const fit of input.fits) {
+    const length = input.lengths.get(fit.id);
+    if (!length) continue;
+    if (!fit.fits || fit.scale < REFIT_SCALE_THRESHOLD - SCALE_EPSILON) {
+      shorten(fit.id, length, fit.scale * REFIT_SAFETY, 'scale');
+      continue;
+    }
+    const found = input.issues.filter(
+      (issue) => issue.page === fit.page && issue.n === fit.n,
+    );
+    const prescribed = [...found]
+      .sort(
+        (a, b) =>
+          Number(b.severity === 'major') - Number(a.severity === 'major'),
+      )
+      .find((issue) => issue.fix && issue.fix.action !== 'none');
+    const fix = prescribed?.fix;
+    if (!fix) {
+      const majorFit = found.some(
+        (issue) =>
+          !issue.fix &&
+          issue.severity === 'major' &&
+          FIT_ISSUE_KINDS.has(issue.kind),
+      );
+      if (majorFit) {
+        shorten(fit.id, length, VISUAL_ISSUE_SHORTEN_RATIO, 'visual');
+      }
+      continue;
+    }
+    const style = plan.styles[fit.id] ?? {};
+    if (fix.action === 'move') {
+      const dx = clamp(fix.dx, -AUTO_MAX_SHIFT, AUTO_MAX_SHIFT);
+      const dy = clamp(fix.dy, -AUTO_MAX_SHIFT, AUTO_MAX_SHIFT);
+      const moved = sanitizeUnitStyle({
+        ...style,
+        dx: (style.dx ?? 0) + dx,
+        dy: (style.dy ?? 0) + dy,
+      });
+      if (
+        (moved?.dx ?? 0) !== (style.dx ?? 0) ||
+        (moved?.dy ?? 0) !== (style.dy ?? 0)
+      ) {
+        if (moved) plan.styles[fit.id] = moved;
+        else delete plan.styles[fit.id];
+        plan.moved.push(fit.id);
+      }
+      continue;
+    }
+    const ratio = clamp(fix.percent, AUTO_MIN_PERCENT, AUTO_MAX_PERCENT) / 100;
+    const sourceSize = sizeById.get(fit.id);
+    if (fix.action === 'smaller' && sourceSize) {
+      const current = style.size ?? sourceSize;
+      const shown = current * Math.min(fit.scale, 1);
+      const floor = Math.max(
+        sourceSize * AUTO_MIN_SIZE_RATIO,
+        NATIVE_PDF_MIN_FONT_SIZE,
+      );
+      // Rounded down to a size a person could also have set by hand.
+      const next =
+        Math.floor(Math.max(shown * ratio, floor) / NATIVE_PDF_FONT_SIZE_STEP) *
+        NATIVE_PDF_FONT_SIZE_STEP;
+      if (next >= floor - SCALE_EPSILON && next < current - SCALE_EPSILON) {
+        plan.styles[fit.id] = { ...style, size: next };
+        plan.resized.push(fit.id);
+        continue;
+      }
+    }
+    // A shortening, or a resize the floor leaves no room for.
+    shorten(
+      fit.id,
+      length,
+      fix.action === 'shorten' ? ratio : VISUAL_ISSUE_SHORTEN_RATIO,
+      'visual',
+    );
+  }
+  return plan;
+}
+
+/**
+ * Decides which units go back for a shorter translation, and how short,
+ * when shortening is the only fix on offer (see {@link planLayoutFixes},
+ * whose rules these are with no prescriptions and no styles).
  *
  * @param fits - The layout report of the latest rebuild.
  * @param issues - The latest visual check's findings.
@@ -538,37 +750,133 @@ export function selectRefitTargets(
   issues: readonly NativePdfIssue[],
   currentLength: ReadonlyMap<string, number>,
 ): RefitTarget[] {
-  const flagged = new Set(
-    issues
-      .filter(
-        (issue) =>
-          issue.n !== null &&
-          issue.severity === 'major' &&
-          FIT_ISSUE_KINDS.has(issue.kind),
-      )
-      .map((issue) => `${issue.page}:${issue.n}`),
-  );
-  const targets: RefitTarget[] = [];
-  for (const fit of fits) {
-    const length = currentLength.get(fit.id);
-    if (!length) continue;
-    const tooSmall =
-      !fit.fits || fit.scale < REFIT_SCALE_THRESHOLD - SCALE_EPSILON;
-    const visual = flagged.has(`${fit.page}:${fit.n}`);
-    if (!tooSmall && !visual) continue;
-    const ratio = tooSmall
-      ? fit.scale * REFIT_SAFETY
-      : VISUAL_ISSUE_SHORTEN_RATIO;
-    targets.push({
-      id: fit.id,
-      targetChars: Math.max(
-        4,
-        Math.floor(length * Math.max(ratio, MIN_SHORTEN_RATIO)),
-      ),
-      reason: tooSmall ? 'scale' : 'visual',
-    });
+  return planLayoutFixes({
+    fits,
+    issues: issues.map((issue) => ({ ...issue, fix: undefined })),
+    lengths: currentLength,
+  }).targets;
+}
+
+/**
+ * How bad a page's layout is, for telling whether a round of fixes helped:
+ * higher is worse. A major finding outweighs any number of minor ones a
+ * page plausibly has, and a unit the layout could not fit counts as major.
+ *
+ * @param fits - The page's layout report.
+ * @param issues - The page's findings.
+ */
+export function layoutScore(
+  fits: readonly NativePdfFitReport[],
+  issues: readonly NativePdfIssue[],
+): number {
+  const unfit = fits.filter(
+    (fit) => !fit.fits || fit.scale < REFIT_SCALE_THRESHOLD - SCALE_EPSILON,
+  ).length;
+  const major = issues.filter((issue) => issue.severity === 'major').length;
+  return (unfit + major) * MAJOR_ISSUE_WEIGHT + (issues.length - major);
+}
+
+/**
+ * How a person changed the look of one unit's translation. Every field is
+ * optional; an absent one keeps what the source has.
+ *
+ * Convention, stated once: `dx` and `dy` move the area the translation is
+ * laid out in, in page points, in the same coordinates as `bbox` and
+ * `room`: +x is right, +y is DOWN.
+ */
+export interface NativePdfUnitStyle {
+  /** Font size in points. */
+  size?: number;
+  /** Text colour as lowercase `#rrggbb`. */
+  color?: string;
+  dx?: number;
+  dy?: number;
+}
+
+/** Font sizes a person may set, in points. */
+export const NATIVE_PDF_MIN_FONT_SIZE = 4;
+export const NATIVE_PDF_MAX_FONT_SIZE = 96;
+/** One press of a size button, in points. */
+export const NATIVE_PDF_FONT_SIZE_STEP = 0.5;
+/**
+ * Farthest a unit may be moved along one axis, in points. The layout also
+ * keeps the unit on its page; this bounds the number itself.
+ */
+export const NATIVE_PDF_MAX_SHIFT = 2000;
+/** One press of a move button, in points. */
+export const NATIVE_PDF_SHIFT_STEP = 2;
+
+const HEX_COLOR = /^#[0-9a-f]{6}$/;
+
+/** A number held inside a range, or undefined when it is not a number. */
+function boundedNumber(
+  value: unknown,
+  min: number,
+  max: number,
+): number | undefined {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return undefined;
+  // Two decimals: finer than anything a page shows, and stable to compare.
+  return Math.round(Math.min(Math.max(value, min), max) * 100) / 100;
+}
+
+/**
+ * One style with only its valid, meaningful fields: numbers inside their
+ * ranges, a colour in `#rrggbb`, and no zero move.
+ *
+ * @param value - Untrusted input.
+ * @returns The style, or undefined when nothing of it is left.
+ */
+export function sanitizeUnitStyle(
+  value: unknown,
+): NativePdfUnitStyle | undefined {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return undefined;
   }
-  return targets;
+  const raw = value as Record<string, unknown>;
+  const style: NativePdfUnitStyle = {};
+  const size = boundedNumber(
+    raw.size,
+    NATIVE_PDF_MIN_FONT_SIZE,
+    NATIVE_PDF_MAX_FONT_SIZE,
+  );
+  if (size !== undefined) style.size = size;
+  const color = typeof raw.color === 'string' ? raw.color.toLowerCase() : '';
+  if (HEX_COLOR.test(color)) style.color = color;
+  for (const axis of ['dx', 'dy'] as const) {
+    const shift = boundedNumber(
+      raw[axis],
+      -NATIVE_PDF_MAX_SHIFT,
+      NATIVE_PDF_MAX_SHIFT,
+    );
+    if (shift) style[axis] = shift;
+  }
+  return Object.keys(style).length > 0 ? style : undefined;
+}
+
+/**
+ * The styles a client sends for a re-render, as they are laid out. As with
+ * {@link sanitizeTranslationEdits} the client is not trusted: only units of
+ * this document keep a style, and each style is passed through
+ * {@link sanitizeUnitStyle} (the colour reaches a style sheet).
+ *
+ * @param value - Untrusted input: an object of unit id to style.
+ * @param units - The document's units, as extracted.
+ * @returns Unit id to style, for the units that have one.
+ */
+export function sanitizeUnitStyles(
+  value: unknown,
+  units: Pick<NativePdfUnit, 'id'>[],
+): Record<string, NativePdfUnitStyle> {
+  const styles: Record<string, NativePdfUnitStyle> = {};
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return styles;
+  }
+  const raw = value as Record<string, unknown>;
+  for (const unit of units) {
+    const style = sanitizeUnitStyle(raw[unit.id]);
+    if (style) styles[unit.id] = style;
+  }
+  return styles;
 }
 
 /** Translations ready to lay out, after {@link sanitizeTranslationEdits}. */
