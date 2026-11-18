@@ -197,15 +197,71 @@ afterEach(() => {
 });
 
 describe('whole-document mode: availability', () => {
-  it('offers the mode beside Quick and Reviewed', () => {
+  it('offers Text or Document, with Quick or Reviewed beneath Text', () => {
+    mountWorkspace({ mode: 'quick' });
+    const group = (name: string) =>
+      within(screen.getByRole('radiogroup', { name }))
+        .getAllByRole('radio')
+        .map((radio) => [
+          radio.textContent,
+          radio.getAttribute('aria-checked'),
+        ]);
+    expect(group('translation.kind')).toEqual([
+      ['translation.kindText', 'true'],
+      ['translation.modeDocument', 'false'],
+    ]);
+    expect(group('translation.formatted.optionsDepth')).toEqual([
+      ['translation.modeQuick', 'true'],
+      ['translation.modeAgentic', 'false'],
+    ]);
+  });
+
+  it('keeps the text depth while in Document and returns to it', () => {
+    mountWorkspace({ mode: 'quick' });
+    fireEvent.click(
+      screen.getByRole('radio', { name: 'translation.modeDocument' }),
+    );
+    expect(workflowState()).toMatchObject({
+      mode: 'document',
+      textMode: 'quick',
+    });
+    // A document read as text has no Quick / Reviewed choice.
+    expect(
+      screen.queryByRole('radiogroup', {
+        name: 'translation.formatted.optionsDepth',
+      }),
+    ).toBeNull();
+    fireEvent.click(
+      screen.getByRole('radio', { name: 'translation.kindText' }),
+    );
+    expect(workflowState().mode).toBe('quick');
+    fireEvent.click(
+      screen.getByRole('radio', { name: 'translation.modeAgentic' }),
+    );
+    expect(workflowState().mode).toBe('agentic');
+  });
+
+  it('offers to translate a PDF loaded as text as a document', () => {
     mountWorkspace({ mode: 'quick' });
     expect(
-      screen.getAllByRole('radio').map((radio) => radio.textContent),
-    ).toEqual([
-      'translation.modeQuick',
-      'translation.modeAgentic',
-      'translation.modeDocument',
-    ]);
+      screen.getByText(/^translation\.pdfAsTextOffer/),
+    ).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'translation.pdfAsTextKeep' }),
+    );
+    expect(screen.queryByText(/^translation\.pdfAsTextOffer/)).toBeNull();
+    expect(workflowState().mode).toBe('quick');
+  });
+
+  it('switches to Document from the offer', () => {
+    mountWorkspace({ mode: 'agentic' });
+    fireEvent.click(
+      screen.getByRole('button', { name: 'translation.pdfAsTextSwitch' }),
+    );
+    expect(workflowState()).toMatchObject({
+      mode: 'document',
+      textMode: 'agentic',
+    });
   });
 
   it.each([
@@ -379,11 +435,12 @@ describe('whole-document mode: reading', () => {
     await screen.findByText('machine page 3');
 
     fireEvent.click(
-      screen.getByRole('radio', { name: 'translation.modeQuick' }),
+      screen.getByRole('radio', { name: 'translation.kindText' }),
     );
     expect(await screen.findByText('text mode result')).toBeInTheDocument();
     expect(workflowState()).toMatchObject({
-      mode: 'quick',
+      // No text depth was remembered, so Text opens on its default.
+      mode: 'agentic',
       finalText: 'text mode result',
       documentJob: { page: 3 },
     });
@@ -549,12 +606,12 @@ describe('whole-document mode: leaving a page with suggestions pending', () => {
   it('gates leaving the mode the same way', async () => {
     await readerWithSuggestion();
     fireEvent.click(
-      screen.getByRole('radio', { name: 'translation.modeQuick' }),
+      screen.getByRole('radio', { name: 'translation.kindText' }),
     );
     expect(gate()).toBeInTheDocument();
     expect(workflowState().mode).toBe('document');
     fireEvent.click(screen.getByRole('button', { name: 'rejectAll' }));
-    await waitFor(() => expect(workflowState().mode).toBe('quick'));
+    await waitFor(() => expect(workflowState().mode).toBe('agentic'));
     expect(workflowState().finalText).toBe('text mode result');
   });
 });
