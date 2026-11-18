@@ -402,10 +402,16 @@ is kept in the browser. The conventions are written once, in
   position), written only by the browser. All are read through
   `GET /api/document-translation/native/file?run=&storage=&id=`, under the
   signed-in person's own prefix or with their own Graph token.
-- **Saving** (`useFormattedRunStorage`): the record is saved at once when
-  the run's files changed (a run or a re-render finished) and otherwise
-  `RUN_SAVE_DELAY_MS` after the last change. A failed save shows "Changes
-  not saved yet" and is retried with the next change.
+- **In memory once** (`client/services/workflows/nativeRunSession.ts`): the
+  workspace can be mounted more than once for a conversation, so the run
+  is held in one session per run that every mount subscribes to
+  (`useFormattedRunStorage`). A copy per mount had one reading the record
+  before the other had saved it.
+- **Saving**: the record is saved at once when the run's files changed (a
+  run or a re-render finished) and otherwise `RUN_SAVE_DELAY_MS` after the
+  last change, and when the page is left. A failed save shows "Changes not
+  saved yet" and is tried again up to `SAVE_ATTEMPTS` times, then with the
+  next change.
 - **Staying alive** (`POST .../native/run`): saving a change also touches
   the run's files, at most every `RUN_KEEP_ALIVE_INTERVAL_MS`, and deletes
   files an earlier render left behind. The server skips files written within
