@@ -78,6 +78,8 @@ const report: NativePdfRunReport = {
       bbox: [50, 50, 300, 80],
       room: [50, 50, 400, 90],
       budgetChars: 40,
+      size: 10,
+      color: '#02024f',
       translation: 'Informe anual',
       scale: 1,
       fits: true,
@@ -854,6 +856,170 @@ describe('finished translation: the page list', () => {
     ).toBeTruthy();
     expect(screen.queryAllByRole('checkbox', { name: /pageLabel/ })).toEqual(
       [],
+    );
+  });
+});
+
+describe('finished translation: zoom and the look of a block', () => {
+  const button = (name: string) => screen.getByRole('button', { name });
+
+  async function finishOnePage() {
+    mountWorkspace({
+      documentLayout: 'formatted',
+      formattedOptions: { pages: '1', instructions: {}, refitRounds: 0 },
+    });
+    fireEvent.click(
+      await screen.findByRole('button', {
+        name: 'translation.formatted.translatePages 1',
+      }),
+    );
+    await waitFor(() => expect(workflowState().formattedRun).toBeDefined());
+    await screen.findByTestId('formatted-page');
+  }
+  const pageWidth = () => screen.getByTestId('formatted-page').style.width;
+  const zoomLevel = () => screen.getByTestId('zoom-level').textContent;
+
+  it('zooms the page in and out by steps, and back to normal', async () => {
+    await finishOnePage();
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 100');
+    const normal = pageWidth();
+    fireEvent.click(button('translation.formatted.zoomIn'));
+    fireEvent.click(button('translation.formatted.zoomIn'));
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 150');
+    expect(pageWidth()).toContain('1.5');
+    expect(pageWidth()).not.toBe(normal);
+    fireEvent.click(button('translation.formatted.zoomReset'));
+    expect(pageWidth()).toBe(normal);
+    fireEvent.click(button('translation.formatted.zoomOut'));
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 75');
+  });
+
+  it('stops at the largest and the smallest zoom', async () => {
+    await finishOnePage();
+    const zoomIn = button('translation.formatted.zoomIn');
+    for (
+      let press = 0;
+      press < 12 && !zoomIn.hasAttribute('disabled');
+      press += 1
+    ) {
+      fireEvent.click(zoomIn);
+    }
+    expect(zoomIn).toBeDisabled();
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 250');
+    fireEvent.click(button('translation.formatted.zoomReset'));
+    const zoomOut = button('translation.formatted.zoomOut');
+    fireEvent.click(zoomOut);
+    fireEvent.click(zoomOut);
+    expect(zoomOut).toBeDisabled();
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 50');
+  });
+
+  it("changes a block's size, position and colour, pending until re-rendered", async () => {
+    vi.mocked(renderNativePdf).mockResolvedValue(
+      renderAnswer(['p1u1'], { unitsId: 'units-1' }),
+    );
+    await finishOnePage();
+    // While a block is selected its outline gives way to the edit field.
+    const boxBefore = (
+      await screen.findByRole('button', {
+        name: 'translation.formatted.blockLabel 1',
+      })
+    ).style.left;
+    fireEvent.click(await screen.findByText('Informe anual'));
+    const look = screen.getByTestId('block-style');
+    // The source's own look is what the controls start from.
+    expect(look).toHaveTextContent('translation.formatted.styleSizeValue 10');
+
+    fireEvent.click(button('translation.formatted.styleLarger'));
+    fireEvent.click(button('translation.formatted.styleLarger'));
+    fireEvent.click(button('translation.formatted.moveRight'));
+    fireEvent.click(button('translation.formatted.moveUp'));
+    fireEvent.change(
+      screen.getByLabelText('translation.formatted.styleColorOf 1'),
+      { target: { value: '#ff0000' } },
+    );
+    expect(workflowState().formattedRun?.styles).toEqual({
+      p1u1: { size: 11, dx: 2, dy: -2, color: '#ff0000' },
+    });
+    expect(look).toHaveTextContent('translation.formatted.styleSizeValue 11');
+    expect(look).toHaveTextContent('translation.formatted.styleOffset +2 −2');
+    expect(look).toHaveTextContent('translation.formatted.styleNote');
+    // One block changed, however many things about it.
+    expect(screen.getByTestId('pending-changes')).toHaveTextContent(
+      'translation.formatted.editsPending 1',
+    );
+    // The PDF is the old one still.
+    expect(workflowState().formattedRun?.pdfUrl).toBe('/api/file/out.pdf');
+    // The outline shows where the block will go before anything is rendered.
+    fireEvent.click(button('translation.formatted.done'));
+    expect(button('translation.formatted.blockLabel 1').style.left).not.toBe(
+      boxBefore,
+    );
+
+    fireEvent.click(button('translation.formatted.rerender'));
+    await waitFor(() =>
+      expect(workflowState().formattedRun?.pdfUrl).toBe('/api/file/out2.pdf'),
+    );
+    expect(vi.mocked(renderNativePdf).mock.calls[0][0]).toMatchObject({
+      styles: { p1u1: { size: 11, dx: 2, dy: -2, color: '#ff0000' } },
+      // The restyled block's page is drawn again.
+      imagePages: [1],
+    });
+    expect(workflowState().formattedRun?.pdfStyles).toEqual({
+      p1u1: { size: 11, dx: 2, dy: -2, color: '#ff0000' },
+    });
+    expect(screen.queryByTestId('pending-changes')).toBeNull();
+  });
+
+  it("resets one block's look, and discards pending looks with the edits", async () => {
+    await finishOnePage();
+    fireEvent.click(await screen.findByText('Informe anual'));
+    fireEvent.click(button('translation.formatted.styleSmaller'));
+    expect(workflowState().formattedRun?.styles).toEqual({
+      p1u1: { size: 9.5 },
+    });
+    fireEvent.click(button('translation.formatted.styleReset'));
+    expect(workflowState().formattedRun?.styles).toEqual({});
+    expect(screen.queryByTestId('pending-changes')).toBeNull();
+
+    fireEvent.click(button('translation.formatted.moveDown'));
+    expect(screen.getByTestId('pending-changes')).toBeTruthy();
+    fireEvent.click(button('translation.formatted.discard'));
+    expect(workflowState().formattedRun?.styles ?? {}).toEqual({});
+    expect(screen.queryByTestId('pending-changes')).toBeNull();
+    expect(renderNativePdf).not.toHaveBeenCalled();
+  });
+
+  it('shows a block the automatic fixes adjusted, and lets the person take the fix back', async () => {
+    vi.mocked(runNativePdf).mockImplementation(async (input) => ({
+      report: {
+        ...reportFor(input.pages),
+        styles: { p1u1: { size: 9, dy: 4 } },
+      },
+      totalTokens: 123,
+    }));
+    vi.mocked(renderNativePdf).mockResolvedValue(
+      renderAnswer(['p1u1'], { unitsId: 'units-1' }),
+    );
+    await finishOnePage();
+    // On the page already: marked, and nothing waits to be rendered.
+    expect(screen.getByTestId('adjusted-chip')).toBeTruthy();
+    expect(screen.queryByTestId('pending-changes')).toBeNull();
+
+    fireEvent.click(await screen.findByText('Informe anual'));
+    const look = screen.getByTestId('block-style');
+    expect(look).toHaveTextContent('translation.formatted.styleSizeValue 9');
+    expect(look).toHaveTextContent('translation.formatted.styleOffset 0 +4');
+    expect(look).not.toHaveTextContent('translation.formatted.styleNote');
+
+    fireEvent.click(button('translation.formatted.styleReset'));
+    expect(look).toHaveTextContent('translation.formatted.styleSizeValue 10');
+    expect(screen.getByTestId('pending-changes')).toBeTruthy();
+    fireEvent.click(button('translation.formatted.rerender'));
+    await waitFor(() =>
+      expect(vi.mocked(renderNativePdf).mock.calls[0]?.[0]).toMatchObject({
+        styles: {},
+      }),
     );
   });
 });
