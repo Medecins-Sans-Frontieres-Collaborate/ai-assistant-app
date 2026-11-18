@@ -13,6 +13,7 @@ import {
   NativePdfStepRecord,
   NativePdfStreamEvent,
   NativePdfUnitAction,
+  NativePdfUnitStyle,
   nativePdfLimits,
 } from '@/lib/utils/shared/translation/nativePdf';
 
@@ -191,6 +192,8 @@ export interface NativePdfRenderInput {
   imagePages: number[];
   /** Source pages the person removed from the result. */
   omitPages?: number[];
+  /** Unit id to the person's style for it. */
+  styles?: Record<string, NativePdfUnitStyle>;
   instructions: NativePdfStepInstructions;
   modelId?: string;
   conversationId?: string;
