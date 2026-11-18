@@ -160,6 +160,28 @@ describe('saving a run', () => {
     expect(syncRun).toHaveBeenCalledTimes(1);
   });
 
+  it('never has two saves of one run in flight', async () => {
+    const session = await opened();
+    let inFlight = 0;
+    let most = 0;
+    vi.mocked(saveRunRecord).mockImplementation(async () => {
+      inFlight += 1;
+      most = Math.max(most, inFlight);
+      await new Promise((resolve) => setTimeout(resolve, 8000));
+      inFlight -= 1;
+    });
+    session.update((current) => ({ ...current, page: 2 }));
+    await vi.advanceTimersByTimeAsync(RUN_SAVE_DELAY_MS);
+    // A second change is ready while the first save is still on its way.
+    session.update((current) => ({ ...current, page: 3 }));
+    await vi.advanceTimersByTimeAsync(RUN_SAVE_DELAY_MS);
+    expect(saveRunRecord).toHaveBeenCalledTimes(1);
+    await vi.advanceTimersByTimeAsync(20_000);
+    expect(most).toBe(1);
+    expect(saveRunRecord).toHaveBeenCalledTimes(2);
+    expect(saveRunRecord).toHaveBeenLastCalledWith(ACCESS, run({ page: 3 }));
+  });
+
   it('saves what is pending when asked to flush', async () => {
     const session = await opened();
     session.update((current) => ({ ...current, page: 2 }));
