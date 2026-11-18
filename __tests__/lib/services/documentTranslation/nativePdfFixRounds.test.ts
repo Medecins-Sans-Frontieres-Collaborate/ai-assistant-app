@@ -243,10 +243,10 @@ describe('runNativePdfTranslation: fix rounds', () => {
   });
 
   it('puts a page back when a round made it worse, and leaves it alone after', async () => {
-    const original = [finding(1, { action: 'move', dx: 10, dy: 0 }, 'minor')];
+    const original = [finding(1, { action: 'move', dx: 10, dy: 0 })];
     stubModels([
       original,
-      // After the move: two major findings where there was one minor.
+      // After the move: two major findings where there was one.
       [
         finding(1, { action: 'move', dx: 10, dy: 0 }),
         finding(2, { action: 'smaller', percent: 80 }),
@@ -261,7 +261,7 @@ describe('runNativePdfTranslation: fix rounds', () => {
     expect(result.styles).toEqual({});
     // The findings reported are those of the page as it stands.
     expect(result.issues).toHaveLength(1);
-    expect(result.issues[0]).toMatchObject({ n: 1, severity: 'minor' });
+    expect(result.issues[0]).toMatchObject({ n: 1, severity: 'major' });
     expect(result.issues[0]).not.toHaveProperty('fix');
     // A second round was allowed, but the page is not tried again.
     expect(result.refitRounds).toBe(1);
