@@ -189,6 +189,8 @@ export interface NativePdfRenderInput {
   checkPages: number[];
   /** Pages to get images of; the pages that changed. */
   imagePages: number[];
+  /** Source pages the person removed from the result. */
+  omitPages?: number[];
   instructions: NativePdfStepInstructions;
   modelId?: string;
   conversationId?: string;
