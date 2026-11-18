@@ -167,9 +167,11 @@ describe('a text that becomes large', () => {
   it('goes back to the browser when it is cut short', async () => {
     seed({ sourceText: LARGE, sourceTextRef: refFor(LARGE) });
     mount();
+    mount();
     edit({ sourceText: ALMOST });
     expect(stateNow().sourceTextRef).toBeUndefined();
     expect(deleteSourceText).toHaveBeenCalledWith(refFor(LARGE));
+    expect(deleteSourceText).toHaveBeenCalledTimes(1);
     const kept = JSON.parse(localStorage.getItem('conv-data-c1')!);
     expect(kept.workflowState.sourceText).toBe(ALMOST);
   });
@@ -192,7 +194,8 @@ describe('a text the browser did not keep', () => {
     expect(stateNow().sourceTextRef?.detached).toBeUndefined();
     expect(conversation().updatedAt).toBe('2026-11-18T10:00:00.000Z');
     expect(first.result.current.loading).toBe(false);
-    // Only asked when it expires; nothing is saved again.
+    // Only asked when it expires, once; nothing is saved again.
+    expect(touchSourceText).toHaveBeenCalledTimes(1);
     expect(touchSourceText).toHaveBeenCalledWith(expect.anything(), false);
     expect(first.result.current.expiresAt).toBe('2026-11-22T00:00:00.000Z');
     await advance(SOURCE_TEXT_STORE_DELAY_MS);
