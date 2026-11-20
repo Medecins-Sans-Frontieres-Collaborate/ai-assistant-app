@@ -15,12 +15,14 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
+import { mergeGlossaryEntries } from '@/lib/utils/shared/translation/glossaryMatch';
 import {
   MAX_STEP_INSTRUCTION_CHARS,
   NATIVE_PDF_FEATURE,
   NATIVE_PDF_MAX_TRANSLATION_CHARS,
   NATIVE_PDF_UNIT_ACTIONS,
   NativePdfUnitAction,
+  sanitizeBrief,
 } from '@/lib/utils/shared/translation/nativePdf';
 
 import { auth } from '@/auth';
@@ -32,6 +34,8 @@ const MAX_LANGUAGE_LABEL_CHARS = 80;
 interface UnitRequest {
   action?: unknown;
   targetLanguage?: unknown;
+  /** The run's document brief, so the block is worded as its pages are. */
+  brief?: unknown;
   source?: unknown;
   translation?: unknown;
   instruction?: unknown;
@@ -116,15 +120,24 @@ export async function POST(req: NextRequest) {
   );
   if (denied) return denied;
 
+  const brief = sanitizeBrief(body.brief);
   try {
     const revised = await reviseNativeUnit({
       action,
       targetLanguage,
+      language: brief.language,
       source,
       translation,
       instruction,
       targetChars: Math.floor(targetChars),
-      glossaryEntries: glossary.entries,
+      // A glossary entry outranks the brief on the same term.
+      glossaryEntries: mergeGlossaryEntries(
+        glossary.entries,
+        brief.terms.map((term) => ({
+          source: term.source,
+          target: term.target,
+        })),
+      ),
       modelId: resolveWorkflowModelId(body.modelId),
       usage,
     });
