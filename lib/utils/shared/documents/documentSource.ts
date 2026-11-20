@@ -39,6 +39,28 @@ export const PAGED_DOCUMENT_TYPES: readonly string[] = [
   'rtf',
 ];
 
+/** Types whose pages are slides (presentations). */
+const PRESENTATION_TYPES: ReadonlySet<string> = new Set([
+  'pptx',
+  'pptm',
+  'ppsx',
+  'potx',
+  'ppt',
+  'pps',
+  'pot',
+  'odp',
+]);
+
+/** Whether a type is a presentation (its pages are slides). */
+export function isPresentationType(type: string): boolean {
+  return PRESENTATION_TYPES.has(type.toLowerCase());
+}
+
+/** What a page of a document of `type` is called on screen. */
+export function documentUnitOf(type: string): 'page' | 'slide' {
+  return isPresentationType(type) ? 'slide' : 'page';
+}
+
 /** Largest document laid out as a PDF for viewing. */
 export const DOCUMENT_PDF_MAX_BYTES = 60 * 1024 * 1024;
 
