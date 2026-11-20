@@ -1,12 +1,12 @@
 import { NextRequest } from 'next/server';
 
-import { resolveRequestGlossary } from '@/lib/services/documentTranslation/native/nativePdfGlossary';
 import { runNativePdfTranslation } from '@/lib/services/documentTranslation/native/nativePdfPipeline';
 import {
   NativeRunStore,
   openNativeRunStore,
   parseRunLocation,
 } from '@/lib/services/documentTranslation/native/nativePdfStorage';
+import { readNativeRunOptions } from '@/lib/services/documentTranslation/native/nativeRunForm';
 import { runStorageErrorResponse } from '@/lib/services/documentTranslation/native/nativeRunResponses';
 import {
   getWorkflowFeatureLimits,
@@ -23,19 +23,12 @@ import {
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
 import {
-  NATIVE_PDF_DEFAULT_DEPTH,
-  NATIVE_PDF_DEFAULT_REFIT_ROUNDS,
-  NATIVE_PDF_DEPTHS,
   NATIVE_PDF_FEATURE,
   NATIVE_PDF_MAX_PAGES,
   NATIVE_PDF_MAX_REFIT_ROUNDS,
-  NativePdfDepth,
   NativePdfRunReport,
   NativePdfStreamEvent,
   nativePdfLimits,
-  parsePageSelection,
-  sanitizeBrief,
-  sanitizeStepInstructions,
 } from '@/lib/utils/shared/translation/nativePdf';
 
 import { auth } from '@/auth';
@@ -45,19 +38,7 @@ export const maxDuration = 300;
 
 /** Largest PDF accepted; the file is uploaded to the sandbox twice per run. */
 const MAX_PDF_BYTES = 20 * 1024 * 1024;
-const MAX_LANGUAGE_LABEL_CHARS = 80;
 const PDF_SIGNATURE = '%PDF-';
-
-/** A JSON form field parsed, or undefined when absent or not JSON. */
-function jsonField(form: FormData, name: string): unknown {
-  const raw = form.get(name);
-  if (typeof raw !== 'string' || !raw.trim()) return undefined;
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return undefined;
-  }
-}
 
 /**
  * GET /api/document-translation/native — whether formatting-preserving PDF
@@ -152,52 +133,19 @@ export async function POST(req: NextRequest) {
     return badRequestResponse('The file is not a PDF');
   }
 
-  const targetLanguage = String(form.get('targetLanguage') ?? '').trim();
-  if (!targetLanguage) return badRequestResponse('Target language is required');
-  if (targetLanguage.length > MAX_LANGUAGE_LABEL_CHARS) {
-    return badRequestResponse('Target language name is too long');
-  }
-
   // One request takes NATIVE_PDF_MAX_PAGES at most, and never more than
   // the person's largest batch when an admin has set that lower.
   const limits = nativePdfLimits(
     await getWorkflowFeatureLimits(NATIVE_PDF_FEATURE, session),
   );
-  const selection = parsePageSelection(
-    form.get('pages') as string | null,
+  const read = await readNativeRunOptions(
+    form,
+    req,
+    session,
     Math.min(NATIVE_PDF_MAX_PAGES, limits.maxBatchPages),
   );
-  if (!selection.ok) return badRequestResponse(selection.error);
-
-  const instructions = sanitizeStepInstructions(
-    jsonField(form, 'instructions'),
-  );
-
-  const depth = String(form.get('depth') ?? NATIVE_PDF_DEFAULT_DEPTH);
-  if (!(NATIVE_PDF_DEPTHS as readonly string[]).includes(depth)) {
-    return badRequestResponse(
-      `depth must be one of: ${NATIVE_PDF_DEPTHS.join(', ')}`,
-    );
-  }
-
-  const glossary = await resolveRequestGlossary(req, session, {
-    glossaryEntries: jsonField(form, 'glossaryEntries'),
-    glossaryGuideIds: jsonField(form, 'glossaryGuideIds'),
-  });
-  if ('error' in glossary) return badRequestResponse(glossary.error);
-
-  const requestedRounds = Number(
-    form.get('refitRounds') ?? NATIVE_PDF_DEFAULT_REFIT_ROUNDS,
-  );
-  if (
-    !Number.isInteger(requestedRounds) ||
-    requestedRounds < 0 ||
-    requestedRounds > NATIVE_PDF_MAX_REFIT_ROUNDS
-  ) {
-    return badRequestResponse(
-      `Refit rounds must be between 0 and ${NATIVE_PDF_MAX_REFIT_ROUNDS}`,
-    );
-  }
+  if (!read.ok) return badRequestResponse(read.error);
+  const { options } = read;
 
   const where = parseRunLocation(
     { runId: form.get('runId'), storage: form.get('storage') },
@@ -247,16 +195,16 @@ export async function POST(req: NextRequest) {
     try {
       const result = await runNativePdfTranslation({
         document,
-        targetLanguage,
-        pages: selection.pages,
-        instructions,
+        targetLanguage: options.targetLanguage,
+        pages: options.pages,
+        instructions: options.instructions,
         modelId: resolveWorkflowModelId(
           (form.get('modelId') as string | null) ?? undefined,
         ),
-        maxRefitRounds: requestedRounds,
-        depth: depth as NativePdfDepth,
-        glossaryEntries: glossary.entries,
-        brief: sanitizeBrief(jsonField(form, 'brief')),
+        maxRefitRounds: options.refitRounds,
+        depth: options.depth,
+        glossaryEntries: options.glossaryEntries,
+        brief: options.brief,
         onStep: (step) => send({ type: 'step', ...step }),
         signal: req.signal,
         usage,
