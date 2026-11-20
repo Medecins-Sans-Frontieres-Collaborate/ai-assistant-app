@@ -3,7 +3,7 @@
  */
 import { NextResponse } from 'next/server';
 
-import { renderErrorResponse } from '@/lib/services/presentationRender/renderErrorResponse';
+import { renderErrorResponse } from '@/lib/services/documents/render/renderErrorResponse';
 
 import { errorResponse } from '@/lib/utils/server/api/apiResponse';
 

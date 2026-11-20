@@ -10,7 +10,7 @@ import {
   readPackageDirectory,
   readPackagePart,
   writePackage,
-} from '@/lib/services/presentationRender/ooxmlPackage';
+} from '@/lib/services/documents/render/ooxmlPackage';
 
 import { DeckFormatError, MAX_DECK_XML_BYTES } from './deckText';
 

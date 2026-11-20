@@ -3,8 +3,8 @@
  * ready when it is submitted, finished when the service is done. See THE
  * MERGE CONVENTION in deckMerge.
  */
-import { checkLibreOfficeInput } from '@/lib/services/presentationRender/libreOfficeInputs';
-import { getRenderService } from '@/lib/services/presentationRender/renderService';
+import { checkLibreOfficeInput } from '@/lib/services/documents/render/libreOfficeInputs';
+import { getRenderService } from '@/lib/services/documents/render/renderService';
 
 import {
   DeckPackageType,
@@ -84,7 +84,7 @@ export async function prepareDeck(
         type: 'ppt',
         convertTo: PPT_TO_PPTX,
         outputDir: path.join(dir, 'converted'),
-        lane: 'translation',
+        lane: 'background',
         signal,
       });
       type = 'pptx';
@@ -140,7 +140,7 @@ export async function repairDeck(
       type: format,
       convertTo: PPT_TO_PPTX,
       outputDir: path.join(dir, 'repaired'),
-      lane: 'translation',
+      lane: 'background',
       signal,
     });
     if ((await readDeckSlides(repairedPath)).length === 0) {

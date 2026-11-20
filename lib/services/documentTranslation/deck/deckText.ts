@@ -16,7 +16,7 @@ import {
   PackageFormatError,
   readPackageDirectory,
   readPackagePart,
-} from '@/lib/services/presentationRender/ooxmlPackage';
+} from '@/lib/services/documents/render/ooxmlPackage';
 
 import path from 'path';
 

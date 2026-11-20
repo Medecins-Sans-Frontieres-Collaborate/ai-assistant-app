@@ -18,7 +18,7 @@ import {
   readPackageDirectory,
   readPackagePart,
   writePackage,
-} from '@/lib/services/presentationRender/ooxmlPackage';
+} from '@/lib/services/documents/render/ooxmlPackage';
 
 import { MAX_DECK_XML_BYTES, readDeckSlides, relsPartOf } from './deckText';
 

@@ -13,8 +13,8 @@
  * (makeServiceCopy): macros never leave the app's storage. Every rebuild
  * starts from the original deck.
  */
-import { RenderBusyError } from '@/lib/services/presentationRender/renderQueue';
-import { getRenderService } from '@/lib/services/presentationRender/renderService';
+import { RenderBusyError } from '@/lib/services/documents/render/renderQueue';
+import { getRenderService } from '@/lib/services/documents/render/renderService';
 
 import Hasher from '@/lib/utils/app/hash';
 import { NativeDeckFormat } from '@/lib/utils/shared/translation/nativeFormats';
@@ -176,7 +176,7 @@ async function renderSlides(
     type: 'pptx',
     convertTo: deckPdfExport(slides),
     outputDir: path.join(dir, `render-${path.basename(deckPath, '.pptx')}`),
-    lane: 'translation',
+    lane: 'background',
     signal: context.signal,
     onPosition: context.onQueue,
   });
@@ -194,7 +194,7 @@ async function renderSlides(
           dir,
           `pictures-${path.basename(deckPath, '.pptx')}`,
         ),
-        lane: 'translation',
+        lane: 'background',
         signal: context.signal,
         onPosition: context.onQueue,
       })
@@ -278,7 +278,7 @@ async function pictureResult(input: {
         pages: pdfPages,
         dpi: SLIDE_RENDER_DPI,
         outputDir: path.join(dir, 'translated-pictures'),
-        lane: 'translation',
+        lane: 'background',
         signal: context.signal,
         onPosition: context.onQueue,
       })
