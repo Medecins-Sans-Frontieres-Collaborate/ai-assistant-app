@@ -31,6 +31,11 @@ interface FormattedBlockStyleProps {
   /** The look differs from what is on the page. */
   pending: boolean;
   disabled: boolean;
+  /**
+   * A move shifts the whole shape the block is in (a presentation's text
+   * box, with every paragraph in it), not the block alone; the box says so.
+   */
+  movesShape?: boolean;
   /** Sets fields of the look; `undefined` puts a field back to the source's. */
   onChange: (change: Partial<NativePdfUnitStyle>) => void;
   /** Drops the whole look. */
@@ -49,6 +54,7 @@ export function FormattedBlockStyle({
   style,
   pending,
   disabled,
+  movesShape = false,
   onChange,
   onReset,
 }: FormattedBlockStyleProps) {
@@ -147,6 +153,11 @@ export function FormattedBlockStyle({
           </span>
         )}
       </div>
+      {movesShape && (
+        <p className="ps-[3.875rem] text-[11px] text-gray-500 dark:text-gray-400">
+          {t('translation.formatted.styleMoveShape')}
+        </p>
+      )}
       <div className="flex items-center gap-1.5">
         <span className={label}>{t('translation.formatted.styleColor')}</span>
         <input
