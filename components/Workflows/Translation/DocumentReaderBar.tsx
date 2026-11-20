@@ -10,6 +10,7 @@ import { FormEvent, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 
 import {
+  DocumentUnit,
   clampPage,
   parsePageInput,
 } from '@/lib/utils/shared/translation/documentMode';
@@ -24,7 +25,30 @@ interface DocumentReaderBarProps {
   /** Blocks navigation (an assessment is running on the page in view). */
   disabled: boolean;
   onGoToPage: (page: number) => void;
+  /** Pages, or a presentation's slides. */
+  unit?: DocumentUnit;
+  /** The slide in view is hidden in a slide show. */
+  hidden?: boolean;
 }
+
+/** The bar's words, by what the document's pages are called. */
+const UNIT_LABELS: Record<
+  DocumentUnit,
+  { label: string; previous: string; next: string; corrected: string }
+> = {
+  page: {
+    label: 'translation.pageLabel',
+    previous: 'translation.pagePrevious',
+    next: 'translation.pageNext',
+    corrected: 'translation.correctedPages',
+  },
+  slide: {
+    label: 'translation.slides.label',
+    previous: 'translation.slides.previous',
+    next: 'translation.slides.next',
+    corrected: 'translation.slides.corrected',
+  },
+};
 
 /** Corrected pages listed as buttons before the rest fold into a count. */
 const MAX_CORRECTION_LINKS = 6;
@@ -46,8 +70,11 @@ export function DocumentReaderBar({
   saveState,
   disabled,
   onGoToPage,
+  unit = 'page',
+  hidden = false,
 }: DocumentReaderBarProps) {
   const t = useTranslations('workflows');
+  const labels = UNIT_LABELS[unit];
   const locale = useLocale();
   const [draft, setDraft] = useState(String(job.page));
   const [invalid, setInvalid] = useState(false);
@@ -82,7 +109,7 @@ export function DocumentReaderBar({
           type="button"
           onClick={() => onGoToPage(clampPage(job.page - 1, lastPage))}
           disabled={disabled || job.page <= 1}
-          aria-label={t('translation.pagePrevious')}
+          aria-label={t(labels.previous)}
           className={BUTTON_CLASS}
         >
           <IconChevronLeft size={13} className="rtl:rotate-180" aria-hidden />
@@ -91,7 +118,7 @@ export function DocumentReaderBar({
           htmlFor="translation-reader-page"
           className="text-xs text-gray-500 dark:text-gray-400"
         >
-          {t('translation.pageLabel')}
+          {t(labels.label)}
         </label>
         <input
           id="translation-reader-page"
@@ -114,16 +141,22 @@ export function DocumentReaderBar({
           disabled={
             disabled || (lastPage !== undefined && job.page >= lastPage)
           }
-          aria-label={t('translation.pageNext')}
+          aria-label={t(labels.next)}
           className={BUTTON_CLASS}
         >
           <IconChevronRight size={13} className="rtl:rotate-180" aria-hidden />
         </button>
       </form>
 
+      {hidden && (
+        <span className="rounded-full border border-gray-300 px-2 py-0.5 text-xs text-gray-600 dark:border-gray-600 dark:text-gray-400">
+          {t('translation.slides.hidden')}
+        </span>
+      )}
+
       {correctedPages.length > 0 && (
         <span className="flex flex-wrap items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-          {t('translation.correctedPages')}
+          {t(labels.corrected)}
           {correctedPages.slice(0, MAX_CORRECTION_LINKS).map((page) => (
             <button
               key={page}
