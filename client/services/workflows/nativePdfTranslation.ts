@@ -10,7 +10,9 @@ import { recordWorkflowUsage } from '@/client/services/workflows/workflowUsageRe
 
 import {
   FALLBACK_NATIVE_PDF_LIMITS,
+  NativePdfBrief,
   NativePdfDepth,
+  NativePdfExportFormat,
   NativePdfLimits,
   NativePdfRenderReport,
   NativePdfRunReport,
@@ -84,6 +86,11 @@ export interface NativePdfRunInput extends NativePdfGlossaries {
   file: File;
   /** Display label of the target language. */
   targetLanguage: string;
+  /**
+   * The document brief so far (THE DOCUMENT BRIEF in nativePdf.ts): what
+   * earlier requests for this document settled. Absent on the first.
+   */
+  brief?: NativePdfBrief;
   pages: string;
   instructions: NativePdfStepInstructions;
   refitRounds: number;
@@ -117,6 +124,7 @@ export async function runNativePdf(
   form.append('depth', input.depth);
   form.append('glossaryEntries', JSON.stringify(input.glossaryEntries ?? []));
   form.append('glossaryGuideIds', JSON.stringify(input.glossaryGuideIds ?? []));
+  if (input.brief) form.append('brief', JSON.stringify(input.brief));
   if (input.modelId) form.append('modelId', input.modelId);
   if (input.conversationId) form.append('conversationId', input.conversationId);
   form.append('runId', input.run.runId);
@@ -209,6 +217,10 @@ export interface NativePdfRenderInput {
   omitPages?: number[];
   /** Unit id to the person's style for it. */
   styles?: Record<string, NativePdfUnitStyle>;
+  /** The run's language tag (`brief.language.code`), for hyphenation. */
+  language?: string;
+  /** Editable formats to build with the PDF (EDITABLE DOWNLOADS in nativePdf.ts). */
+  exports?: NativePdfExportFormat[];
   instructions: NativePdfStepInstructions;
   modelId?: string;
   conversationId?: string;
@@ -238,6 +250,8 @@ export function renderNativePdf(
 export interface NativePdfUnitInput extends NativePdfGlossaries {
   action: NativePdfUnitAction;
   targetLanguage: string;
+  /** The run's document brief, so the block is worded as its pages are. */
+  brief?: NativePdfBrief;
   source: string;
   translation: string;
   instruction?: string;
