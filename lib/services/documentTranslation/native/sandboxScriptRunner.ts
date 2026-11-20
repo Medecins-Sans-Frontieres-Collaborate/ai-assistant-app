@@ -12,6 +12,24 @@ import { env } from '@/config/environment';
 import { unzipSync } from 'fflate';
 import { toFile } from 'openai';
 
+/**
+ * A fixed program the sandbox runs: its file name, its source, and the
+ * archive each command leaves beside it. The model is told to start it and
+ * nothing else; no document logic is ever written by a model.
+ */
+export interface SandboxScript {
+  filename: string;
+  source: string;
+  archives: Readonly<Record<string, string>>;
+}
+
+/** The native PDF script (pdfNativeScript.ts). */
+export const PDF_SANDBOX_SCRIPT: SandboxScript = {
+  filename: PDF_NATIVE_SCRIPT_FILENAME,
+  source: PDF_NATIVE_SCRIPT,
+  archives: PDF_NATIVE_OUTPUT_ARCHIVE,
+};
+
 /** One file placed beside the script in the sandbox. */
 export interface SandboxInputFile {
   filename: string;
@@ -55,10 +73,11 @@ const SANDBOX_WORK_DIR = `${SANDBOX_DATA_DIR}/native_job`;
  * list reports it.
  */
 function launchInstruction(
-  command: PdfNativeCommand,
+  script: SandboxScript,
+  command: string,
   filenames: string[],
 ): string {
-  const archive = PDF_NATIVE_OUTPUT_ARCHIVE[command];
+  const archive = script.archives[command];
   return [
     'Run exactly this Python code once in the code interpreter, unchanged.',
     'Do not modify it, do not write any other code, and do not open or inspect the files.',
@@ -74,7 +93,7 @@ function launchInstruction(
     '    for name in names:',
     "        if os.path.isfile(path) and (base == name or base.endswith('-' + name)):",
     '            shutil.copy(path, os.path.join(work, name))',
-    `result = subprocess.run([sys.executable, os.path.join(work, '${PDF_NATIVE_SCRIPT_FILENAME}'), '${command}'], capture_output=True, text=True)`,
+    `result = subprocess.run([sys.executable, os.path.join(work, '${script.filename}'), '${command}'], capture_output=True, text=True)`,
     `print(result.stdout[-${LOG_TAIL_CHARS}:])`,
     `print(result.stderr[-${LOG_TAIL_CHARS}:])`,
     `if os.path.exists(os.path.join(work, '${archive}')):`,
@@ -84,7 +103,7 @@ function launchInstruction(
 }
 
 /**
- * Runs one command of the fixed PDF script in a fresh code-interpreter
+ * Runs one command of a fixed script (the PDF one unless another is given) in a fresh code-interpreter
  * sandbox and returns the files it produced.
  *
  * Each call uploads its inputs, starts a new container and reads the output
@@ -96,21 +115,28 @@ function launchInstruction(
  * @param command - Which script command to run.
  * @param inputs - Files the command reads (the script itself is added).
  * @param usage - Collector the sandbox model's token use is reported to.
+ * @param script - The program to run; the PDF script by default.
  * @returns The unpacked output archive and the script's log tail.
  * @throws SandboxScriptError when the archive is missing (the script failed).
+ * @throws Error when the script has no such command.
  * @throws Error when the Foundry client or an upload fails.
  */
 export async function runSandboxScript(
-  command: PdfNativeCommand,
+  command: PdfNativeCommand | string,
   inputs: SandboxInputFile[],
   usage?: WorkflowUsageCollector,
+  script: SandboxScript = PDF_SANDBOX_SCRIPT,
 ): Promise<SandboxScriptRun> {
+  const archiveName = script.archives[command];
+  if (!archiveName) {
+    throw new Error(`${script.filename} has no ${command} command`);
+  }
   const startedAt = Date.now();
   const client = await createFoundryOpenAIClient();
   const files: SandboxInputFile[] = [
     {
-      filename: PDF_NATIVE_SCRIPT_FILENAME,
-      data: Buffer.from(PDF_NATIVE_SCRIPT, 'utf-8'),
+      filename: script.filename,
+      data: Buffer.from(script.source, 'utf-8'),
       mimeType: 'text/x-python',
     },
     ...inputs,
@@ -132,6 +158,7 @@ export async function runSandboxScript(
     const response = await client.responses.create({
       model,
       input: launchInstruction(
+        script,
         command,
         files.map((file) => file.filename),
       ),
@@ -166,7 +193,6 @@ export async function runSandboxScript(
     }
     const logs = logParts.join('\n').trim();
 
-    const archiveName = PDF_NATIVE_OUTPUT_ARCHIVE[command];
     for (const containerId of containerIds) {
       const listing = await client.containers.files.list(containerId);
       for await (const file of listing) {
