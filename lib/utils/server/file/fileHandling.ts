@@ -1,3 +1,6 @@
+import { RenderLane } from '@/lib/services/presentationRender/renderQueue';
+import { getRenderService } from '@/lib/services/presentationRender/renderService';
+
 import {
   perfLog,
   sanitizeForLog,
@@ -656,61 +659,85 @@ async function xlsxToText(
   }
 }
 
+/** Options for one LibreOffice conversion. */
+export interface LibreOfficeConvertOptions extends ExtractionOptions {
+  /**
+   * What the input is (extension, no dot); the input file's own extension
+   * when absent. Checked against the file's first bytes.
+   */
+  type?: string;
+  /** Queue lane; chat and previews are `interactive` (the default). */
+  lane?: RenderLane;
+}
+
 /**
- * Converts one document with LibreOffice headless into `format` inside
- * `outputDir` and returns the produced file's path. A per-invocation
- * profile directory keeps concurrent conversions on the same OS user from
- * colliding on the shared default profile lock.
+ * Converts one document with LibreOffice into `format` inside `outputDir`
+ * and returns the produced file's path. Goes through the render service
+ * (lib/services/presentationRender), so it waits for a free slot and runs
+ * within the service's time and memory limits.
+ *
+ * @throws DocumentSignatureError when the file is not its declared type.
+ * @throws RenderBusyError when the converter's queue is full.
+ * @throws LibreOfficeTimeoutError, LibreOfficeFailedError on failure.
  */
 export async function libreOfficeConvert(
   inputPath: string,
   format: string,
   outputDir: string,
-  options?: ExtractionOptions,
+  options?: LibreOfficeConvertOptions,
 ): Promise<string> {
-  const profileDir = path.join(outputDir, 'lo-profile');
-  const baseName = path.basename(inputPath, path.extname(inputPath));
-  const expected = `${baseName}.${format}`;
-  const { stdout, stderr } = await execFileAsync(
-    'libreoffice',
-    [
-      `-env:UserInstallation=file://${profileDir}`,
-      '--headless',
-      '--convert-to',
-      format,
-      '--outdir',
-      outputDir,
-      inputPath,
-    ],
-    execOpts(options),
-  );
-  console.log('LibreOffice stdout:', stdout);
-  if (stderr) {
-    console.warn('LibreOffice stderr:', stderr);
+  return getRenderService().convert({
+    inputPath,
+    type: options?.type ?? path.extname(inputPath).slice(1),
+    convertTo: format,
+    outputDir,
+    lane: options?.lane ?? 'interactive',
+    signal: options?.signal,
+  });
+}
+
+/**
+ * Which PowerPoint type an upload is, for LibreOffice's import filter: the
+ * file name's extension when it names one, else the MIME type. Extraction
+ * temp files do not always keep the extension.
+ */
+export function powerPointTypeOf(mimeType: string, lowerName: string): string {
+  const extension = path.extname(lowerName).slice(1);
+  if (
+    ['pptx', 'pptm', 'ppsx', 'potx', 'ppt', 'pps', 'pot'].includes(extension)
+  ) {
+    return extension;
   }
-  const files = await fs.promises.readdir(outputDir);
-  if (!files.includes(expected)) {
-    throw new Error(
-      `LibreOffice did not produce ${expected} (found: ${files.join(', ') || 'nothing'})`,
-    );
+  if (
+    mimeType.startsWith(
+      'application/vnd.openxmlformats-officedocument.presentationml',
+    )
+  ) {
+    return 'pptx';
   }
-  return path.join(outputDir, expected);
+  if (
+    mimeType.startsWith(
+      'application/vnd.ms-powerpoint.presentation.macroenabled',
+    )
+  ) {
+    return 'pptm';
+  }
+  return 'ppt';
 }
 
 async function pptToText(
   inputPath: string,
+  type: string,
   options?: ExtractionOptions,
 ): Promise<string> {
   const perfStart = performance.now();
   // TODO: Possibly find a way to do this without converting to PDF first
   const outputDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'ppt-'));
   try {
-    const pdfPath = await libreOfficeConvert(
-      inputPath,
-      'pdf',
-      outputDir,
-      options,
-    );
+    const pdfPath = await libreOfficeConvert(inputPath, 'pdf', outputDir, {
+      ...options,
+      type,
+    });
     const text = await pdfToText(pdfPath, options);
     console.log(
       `[Perf] pptToText: ${(performance.now() - perfStart).toFixed(1)}ms`,
@@ -740,12 +767,10 @@ async function docToText(
   const perfStart = performance.now();
   const outputDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'doc-'));
   try {
-    const docxPath = await libreOfficeConvert(
-      inputPath,
-      'docx',
-      outputDir,
-      options,
-    );
+    const docxPath = await libreOfficeConvert(inputPath, 'docx', outputDir, {
+      ...options,
+      type: 'doc',
+    });
     const text = await convertWithPandoc(docxPath, 'markdown', options);
     console.log(
       `[Perf] docToText: ${(performance.now() - perfStart).toFixed(1)}ms`,
@@ -811,7 +836,11 @@ export async function loadDocumentFromPath(
     case mimeType.startsWith(
       'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     ) || mimeType.startsWith('application/vnd.ms-powerpoint'):
-      text = await pptToText(filePath, options);
+      text = await pptToText(
+        filePath,
+        powerPointTypeOf(mimeType.toLowerCase(), lowerName),
+        options,
+      );
       break;
     case mimeType.startsWith('application/epub+zip'):
       text = await convertWithPandoc(filePath, 'markdown', options);
