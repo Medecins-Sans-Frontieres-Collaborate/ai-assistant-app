@@ -49,6 +49,13 @@ export function runStorageErrorResponse(error: unknown): NextResponse | null {
       RUN_ERROR_CODES.keyMismatch,
     );
   }
-  if (error instanceof M365Error) return m365ErrorResponse(error);
+  if (error instanceof M365Error) {
+    // Unlike a missing or locked run, this is a failure to reach OneDrive:
+    // logged, since the answer alone (often a 502) does not say why.
+    console.warn(
+      `[document-translation/native] Microsoft 365 failed: ${error.kind} (${error.status}): ${error.message}`,
+    );
+    return m365ErrorResponse(error);
+  }
   return null;
 }
