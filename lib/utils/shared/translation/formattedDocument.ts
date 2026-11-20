@@ -36,6 +36,7 @@ import {
   NATIVE_PDF_DEFAULT_REFIT_ROUNDS,
   NATIVE_PDF_MAX_PAGES,
   NativePdfDepth,
+  NativePdfExportUrls,
   NativePdfIssue,
   NativePdfLimits,
   NativePdfPageImages,
@@ -108,6 +109,11 @@ export interface FormattedDocumentRun extends NativePdfRunReport {
   removedPages?: number[];
   /** Source pages the PDF at `pdfUrl` leaves out. */
   pdfRemovedPages?: number[];
+  /**
+   * The editable files built with the PDF at `pdfUrl` (EDITABLE DOWNLOADS
+   * in nativePdf.ts); absent when that render was not asked for any.
+   */
+  exportUrls?: NativePdfExportUrls;
 }
 
 export { NATIVE_PDF_DEFAULT_DEPTH, NATIVE_PDF_MAX_PAGES };
@@ -138,6 +144,30 @@ export function formattedEligibility(
 /** Removes inline tags, leaving the text a person reads and types. */
 export function plainText(text: string): string {
   return text.replace(/<\/?[a-zA-Z][^>]*>/g, '');
+}
+
+/**
+ * Rows a text field needs to show `text` whole: each line (a line break
+ * starts one, see BREAKS in the layout script) takes at least a row, and a
+ * long line the rows its characters fill.
+ *
+ * @param text - The field's text.
+ * @param charsPerRow - Characters that fit on one row of the field.
+ * @param limits - Fewest and most rows to answer.
+ * @example textRows('one\ntwo', 50, { min: 1, max: 10 }) // 2
+ */
+export function textRows(
+  text: string,
+  charsPerRow: number,
+  limits: { min: number; max: number },
+): number {
+  const rows = text
+    .split('\n')
+    .reduce(
+      (sum, line) => sum + Math.max(1, Math.ceil(line.length / charsPerRow)),
+      0,
+    );
+  return Math.min(Math.max(rows, limits.min), limits.max);
 }
 
 const TAGGED_SPAN = /<(g\d+|b|i)>([\s\S]*?)<\/\1>/g;
@@ -298,12 +328,27 @@ export function movedBox(
   return [box[0] + dx, box[1] + dy, box[2] + dx, box[3] + dy];
 }
 
-/** Zoom levels of the page view; 1 shows the page at its normal width. */
+/**
+ * ZOOM of the page view. 1 shows the page at its normal width (PAGE_WIDTH in
+ * FormattedPageView). The buttons and Ctrl/Cmd with +, - and 0 step through
+ * PAGE_ZOOM_LEVELS; a pinch or Ctrl+wheel goes anywhere between the first
+ * and the last.
+ */
 export const PAGE_ZOOM_LEVELS = [0.5, 0.75, 1, 1.25, 1.5, 2, 2.5] as const;
 export const DEFAULT_PAGE_ZOOM = 1;
+export const MIN_PAGE_ZOOM = PAGE_ZOOM_LEVELS[0];
+export const MAX_PAGE_ZOOM = PAGE_ZOOM_LEVELS[PAGE_ZOOM_LEVELS.length - 1];
+/** Zoom levels closer than this are the same level (a pinch lands between). */
+export const PAGE_ZOOM_EPSILON = 0.001;
+
+/** A zoom level kept between MIN_PAGE_ZOOM and MAX_PAGE_ZOOM. */
+export function clampPageZoom(zoom: number): number {
+  return Math.min(MAX_PAGE_ZOOM, Math.max(MIN_PAGE_ZOOM, zoom));
+}
 
 /**
- * The zoom level one step in or out from the current one.
+ * The zoom level one step in or out from the current one. A level between
+ * two (after a pinch) steps to the next one in that direction.
  *
  * @param zoom - The current level.
  * @param direction - `1` to zoom in, `-1` to zoom out.
@@ -312,9 +357,30 @@ export const DEFAULT_PAGE_ZOOM = 1;
 export function nextPageZoom(zoom: number, direction: 1 | -1): number {
   const levels: readonly number[] = PAGE_ZOOM_LEVELS;
   if (direction > 0) {
-    return levels.find((level) => level > zoom) ?? levels[levels.length - 1];
+    return (
+      levels.find((level) => level > zoom + PAGE_ZOOM_EPSILON) ??
+      levels[levels.length - 1]
+    );
   }
-  return [...levels].reverse().find((level) => level < zoom) ?? levels[0];
+  return (
+    [...levels].reverse().find((level) => level < zoom - PAGE_ZOOM_EPSILON) ??
+    levels[0]
+  );
+}
+
+/** How much one pixel of wheel delta zooms (0.2% a pixel). */
+const WHEEL_ZOOM_PER_PX = 0.002;
+
+/**
+ * The zoom level after a pinch or Ctrl+wheel: each unit of wheel delta
+ * scales the page a little, so a trackpad pinch and a mouse wheel's notch
+ * both feel proportionate. Negative delta (wheel up, fingers apart) zooms in.
+ *
+ * @param zoom - The current level.
+ * @param deltaPx - The wheel's vertical delta, in pixels.
+ */
+export function wheelPageZoom(zoom: number, deltaPx: number): number {
+  return clampPageZoom(zoom * Math.exp(-deltaPx * WHEEL_ZOOM_PER_PX));
 }
 
 /**
@@ -439,6 +505,8 @@ export function applyRenderReport(
     ],
     fonts: report.fonts,
     pdfUrl: report.pdfUrl,
+    // Only what this render built describes its PDF.
+    exportUrls: report.exportUrls,
     // The render used the looks of the run as it was sent.
     pdfStyles: run.styles ?? {},
     // The render left out the pages removed in the run as it was sent.
@@ -535,6 +603,11 @@ export function combineRuns(
         ...(piece.pdfStyles ?? {}),
       },
       totalTokens: joined.totalTokens + piece.totalTokens,
+      // Each request returns the brief it was given with its own decisions
+      // added, so the latest one holds them all.
+      ...((piece.brief ?? joined.brief)
+        ? { brief: piece.brief ?? joined.brief }
+        : {}),
     };
   }
   return {
@@ -544,6 +617,7 @@ export function combineRuns(
     fonts: last.fonts,
     refitRounds: last.refitRounds,
     pdfUrl: last.pdfUrl,
+    exportUrls: undefined,
     targetLanguage: last.targetLanguage,
     depth: last.depth,
     finishedAt: last.finishedAt,
@@ -796,6 +870,7 @@ export function runFromReport(
     // The automatic fixes' looks are on the page already.
     styles: report.styles ?? {},
     pdfStyles: report.styles ?? {},
+    ...(report.brief ? { brief: report.brief } : {}),
     pdfUrl: report.pdfUrl,
     pageImages: report.pageImages,
     sourceId: report.sourceId,
