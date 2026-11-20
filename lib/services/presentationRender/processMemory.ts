@@ -8,6 +8,13 @@
  * address-space limit, while a glibc build of 26.8 cannot convert one line
  * of text under 8 GB of it and then needs 300 MB resident. Resident memory
  * is what fills the machine, and it is measured the same way everywhere.
+ *
+ * PRIVATE resident memory only (anonymous plus shared-memory pages): pages
+ * mapped from files (fonts, libraries) are page cache the kernel can drop
+ * and other processes share. Measured on a desktop with many fonts, one
+ * conversion of a five-slide deck held 100 MB private and up to 3.9 GB
+ * file-backed, so counting VmRSS stopped a harmless job. Where the kernel
+ * does not split the figure, VmRSS is used.
  */
 import fs from 'fs';
 import path from 'path';
@@ -78,13 +85,29 @@ async function processGroup(
   return members;
 }
 
-/** A process's resident memory in bytes, from its `status`; 0 when gone. */
+/** A `kB` field of a `status` file in bytes, or null when absent. */
+function statusBytes(status: string, field: string): number | null {
+  const match = new RegExp(`^${field}:\\s+(\\d+)\\s+kB`, 'm').exec(status);
+  return match ? Number(match[1]) * 1024 : null;
+}
+
+/**
+ * A process's private resident memory in bytes (see the module comment),
+ * from its `status`; 0 when gone.
+ */
+export function privateResidentBytes(status: string): number {
+  const anonymous = statusBytes(status, 'RssAnon');
+  if (anonymous !== null) {
+    return anonymous + (statusBytes(status, 'RssShmem') ?? 0);
+  }
+  return statusBytes(status, 'VmRSS') ?? 0;
+}
+
 async function residentBytes(pid: number, procRoot: string): Promise<number> {
   const status = await fs.promises
     .readFile(path.join(procRoot, String(pid), 'status'), 'utf8')
     .catch(() => '');
-  const match = /^VmRSS:\s+(\d+)\s+kB/m.exec(status);
-  return match ? Number(match[1]) * 1024 : 0;
+  return privateResidentBytes(status);
 }
 
 /**
