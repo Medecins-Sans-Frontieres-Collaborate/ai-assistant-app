@@ -708,7 +708,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
   );
 
   return (
-    <div className="my-3 flex max-w-prose items-start gap-2 border-s-2 border-blue-400/70 py-1.5 ps-3 not-prose dark:border-blue-500/60">
+    <div className="my-3 flex max-w-prose items-start gap-2 rounded-lg bg-blue-50 px-3 py-1.5 not-prose dark:bg-blue-950/40">
       <IconShieldCheck
         size={14}
         className="mt-[3px] shrink-0 text-blue-600 dark:text-blue-400"
