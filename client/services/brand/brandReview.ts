@@ -68,7 +68,8 @@ export async function listUsableBrandBooks(): Promise<UsableBrandBook[]> {
 }
 
 /**
- * Starts a review.
+ * Starts a review. `locale` is the reader's: the model writes its notes in
+ * its language.
  *
  * @throws BrandReviewBusyError when the person's reviews are all running.
  */
@@ -77,6 +78,7 @@ export async function startBrandReview(input: {
   file: string;
   name: string;
   modelReview: boolean;
+  locale: string;
 }): Promise<BrandReviewReading> {
   return dataOf(
     await fetch('/api/brand-review', {
