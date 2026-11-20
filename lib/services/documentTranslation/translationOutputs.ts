@@ -52,6 +52,17 @@ export function translationOutputPath(
     : `${userId}/translations/${jobId}.${ext}`;
 }
 
+/**
+ * Formats an original may be kept in when its translation is of `type`:
+ * the service translates a legacy file (.ppt, .doc) as its modern format,
+ * while the original is kept as it was uploaded.
+ */
+const ORIGINAL_TYPES: Readonly<Record<string, readonly string[]>> = {
+  pptx: ['pptx', 'ppt'],
+  docx: ['docx', 'doc'],
+  xlsx: ['xlsx', 'xls'],
+};
+
 function outputReader(kind: string, original: boolean): DocumentSourceReader {
   return {
     kind,
@@ -59,14 +70,21 @@ function outputReader(kind: string, original: boolean): DocumentSourceReader {
       const userId = session.user?.id;
       if (!userId || !isSafeBlobPathId(source.id)) return null;
       const storage = translationOutputStorage(session.user);
-      const blobPath = translationOutputPath(
-        userId,
-        source.id,
-        source.type,
-        original,
-      );
-      if (!(await storage.blobExists(blobPath))) return null;
-      return (await storage.get(blobPath, BlobProperty.BLOB)) as Buffer;
+      const types = original
+        ? (ORIGINAL_TYPES[source.type] ?? [source.type])
+        : [source.type];
+      for (const type of types) {
+        const blobPath = translationOutputPath(
+          userId,
+          source.id,
+          type,
+          original,
+        );
+        if (!(await storage.blobExists(blobPath))) continue;
+        const data = (await storage.get(blobPath, BlobProperty.BLOB)) as Buffer;
+        return { data, type };
+      }
+      return null;
     },
   };
 }
