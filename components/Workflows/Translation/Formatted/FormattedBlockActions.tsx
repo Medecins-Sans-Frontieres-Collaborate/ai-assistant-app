@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -46,6 +46,7 @@ export function FormattedBlockActions({
   const t = useTranslations('workflows');
   const [asking, setAsking] = useState(false);
   const [instruction, setInstruction] = useState('');
+  const askButton = useRef<HTMLButtonElement>(null);
   const button = `rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated ${
     compact ? 'px-2 py-1 text-[11px]' : 'min-h-[32px] px-2.5 py-1 text-xs'
   }`;
@@ -82,6 +83,7 @@ export function FormattedBlockActions({
               type="button"
               className={button}
               disabled={disabled}
+              ref={askButton}
               aria-expanded={asking}
               onClick={() => setAsking((open) => !open)}
             >
@@ -141,6 +143,12 @@ export function FormattedBlockActions({
             onChange={(event) => setInstruction(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === 'Enter') submit();
+              // Escape closes this box first, not the block around it.
+              if (event.key === 'Escape') {
+                event.preventDefault();
+                setAsking(false);
+                askButton.current?.focus();
+              }
             }}
             className="min-h-[32px] min-w-0 flex-1 rounded-lg border border-gray-300 bg-white px-2.5 py-1 text-xs text-gray-900 dark:border-gray-600 dark:bg-surface-dark-base dark:text-gray-100"
           />
