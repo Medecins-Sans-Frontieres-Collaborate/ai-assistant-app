@@ -27,40 +27,17 @@ import {
   startBrandReview,
   stopBrandReview,
 } from '@/client/services/brand/brandReview';
-import { fetchDocumentPdf } from '@/client/services/documents/documentPdf';
 
-import {
-  BrandFinding,
-  BrandFindingSeverity,
-  countBySeverity,
-} from '@/lib/utils/shared/brand/brandFindings';
-import {
-  buildBrandReport,
-  describeFinding,
-} from '@/lib/utils/shared/brand/brandReport';
+import { countBySeverity } from '@/lib/utils/shared/brand/brandFindings';
+import { buildBrandReport } from '@/lib/utils/shared/brand/brandReport';
 
 import { BrandReviewWorkflowState } from '@/types/workflow';
 
-import {
-  PageOverlay,
-  PageOverlayTone,
-} from '@/components/Documents/DocumentPage';
-import {
-  DocumentViewer,
-  ViewerSource,
-} from '@/components/Documents/DocumentViewer';
-
 import { WorkflowWorkspaceProps } from '../registry';
-import { BrandFindingsPanel } from './BrandFindingsPanel';
+import { BrandFindingsViewer } from './BrandFindingsViewer';
 import { BrandReviewSetup, ReviewDocument } from './BrandReviewSetup';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
-
-const TONE: Record<BrandFindingSeverity, PageOverlayTone> = {
-  error: 'error',
-  warning: 'warning',
-  info: 'normal',
-};
 
 /**
  * Follows one review with useBackgroundJob. Built here from the imported
@@ -74,18 +51,6 @@ function reviewFollower(reviewId: string): JobFollower<BrandReviewReading> {
     isRunning: (reading) => reading.state.status === 'running',
   };
 }
-
-/** Presentation types, whose pages are called slides. */
-const SLIDE_TYPES = new Set([
-  'pptx',
-  'pptm',
-  'ppsx',
-  'potx',
-  'ppt',
-  'pps',
-  'pot',
-  'odp',
-]);
 
 const quietButton =
   'inline-flex min-h-[32px] items-center gap-1.5 rounded-md px-2.5 py-1 text-sm text-gray-700 hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600 disabled:opacity-40 dark:text-gray-300 dark:hover:bg-gray-800';
@@ -137,8 +102,6 @@ export function BrandReviewWorkspace({
     message: string | null;
     fallback: 'readFailed' | 'startFailed';
   } | null>(null);
-  const [selected, setSelected] = useState<BrandFinding | null>(null);
-  const [page, setPage] = useState(1);
 
   const reviewId = ws?.reviewId;
   // Follows a review until it ends. Errors are kept as data and worded at
@@ -185,8 +148,6 @@ export function BrandReviewWorkspace({
         locale,
       });
       setReading(started);
-      setSelected(null);
-      setPage(1);
       setWs({ reviewId: started.reviewId });
     } catch (err) {
       setError({
@@ -206,7 +167,6 @@ export function BrandReviewWorkspace({
   const newReview = async () => {
     const old = reviewId;
     setReading(null);
-    setSelected(null);
     setWs({ reviewId: undefined });
     // The finished review is not kept once a new one is set up.
     if (old && reading?.state.status !== 'running') {
@@ -234,47 +194,6 @@ export function BrandReviewWorkspace({
       t(key as never, values as never),
     [t],
   );
-
-  const sources = useMemo<[ViewerSource] | null>(() => {
-    const upload =
-      document &&
-      /^\/api\/file\/([a-f0-9]{64}\.[a-z0-9]+)$/.exec(document.file);
-    if (!document || !upload) return null;
-    return [
-      {
-        key: document.file,
-        label: document.name,
-        load: () =>
-          fetchDocumentPdf({
-            kind: 'upload',
-            id: upload[1],
-            type: document.type,
-          }),
-      },
-    ];
-  }, [document]);
-
-  const overlaysOf = useCallback(
-    (pageNumber: number): PageOverlay[] =>
-      findings
-        .filter((finding) => finding.page === pageNumber && finding.box)
-        .map((finding) => ({
-          id: finding.id,
-          box: finding.box!,
-          tone: TONE[finding.severity],
-          label: `${t(`rule.${finding.rule}`)}: ${describeFinding(finding, translate)}`,
-        })),
-    [findings, t, translate],
-  );
-
-  const errorsOn = useMemo(() => {
-    const counts = new Map<number, number>();
-    for (const finding of findings) {
-      if (finding.page !== null)
-        counts.set(finding.page, (counts.get(finding.page) ?? 0) + 1);
-    }
-    return counts;
-  }, [findings]);
 
   const downloadReport = () => {
     if (!state) return;
@@ -417,34 +336,11 @@ export function BrandReviewWorkspace({
         </p>
       )}
       <div className="min-h-0 flex-1">
-        {sources && (
-          <DocumentViewer
-            sources={sources}
-            unit={SLIDE_TYPES.has(state.request.type) ? 'slide' : 'page'}
-            overlaysOf={overlaysOf}
-            selectedOverlayId={selected?.id ?? null}
-            onSelectOverlay={(id) =>
-              setSelected(findings.find((finding) => finding.id === id) ?? null)
-            }
-            page={page}
-            onPageChange={setPage}
-            pageBadge={(pageNumber) =>
-              errorsOn.get(pageNumber) ? (
-                <span className="rounded-full bg-gray-900/80 px-1.5 text-[11px] font-medium text-white">
-                  {errorsOn.get(pageNumber)}
-                </span>
-              ) : null
-            }
-            aside={
-              <BrandFindingsPanel
-                findings={findings}
-                selectedId={selected?.id ?? null}
-                onSelect={(finding) => {
-                  setSelected(finding);
-                  if (finding.page !== null) setPage(finding.page);
-                }}
-              />
-            }
+        {document && (
+          <BrandFindingsViewer
+            key={reviewId}
+            document={document}
+            findings={findings}
           />
         )}
       </div>
