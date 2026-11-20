@@ -28,6 +28,10 @@ import {
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
 import {
+  isNativeDeckFormat,
+  nativeFormatOfFileId,
+} from '@/lib/utils/shared/translation/nativeFormats';
+import {
   NATIVE_PDF_FEATURE,
   NATIVE_PDF_MAX_CHECK_PAGES,
   NATIVE_PDF_MAX_EXTRACTIONS,
@@ -143,7 +147,9 @@ export async function POST(req: NextRequest) {
   }
   const { sourceId, translations } = body;
   const unitsIds = parseUnitsIds(body);
-  if (!isNativeFileId(sourceId, 'pdf') || !unitsIds) {
+  // The source's kind is the run's format (THE FORMAT ADAPTER).
+  const format = nativeFormatOfFileId(sourceId);
+  if (!format || !isNativeFileId(sourceId, format) || !unitsIds) {
     return badRequestResponse('sourceId and unitsId from a run are required');
   }
   if (
@@ -219,22 +225,30 @@ export async function POST(req: NextRequest) {
   if (denied) return denied;
 
   try {
-    const { pdf, outputs, exports, unitsFile, ...report } =
-      await rerenderNativePdf({
-        document,
-        unitsFiles,
-        translations,
-        checkPages,
-        imagePages,
-        omitPages,
-        styles: body.styles,
-        language: body.language,
-        exports: sanitizeExportFormats(body.exports),
-        maxDocumentPages: limits.maxDocumentPages,
-        instructions: sanitizeStepInstructions(body.instructions),
-        modelId: resolveWorkflowModelId(body.modelId),
-        usage,
-      });
+    const {
+      pdf,
+      outputs,
+      exports,
+      unitsFile,
+      document: translated,
+      ...report
+    } = await rerenderNativePdf({
+      document,
+      format,
+      signal: req.signal,
+      unitsFiles,
+      translations,
+      checkPages,
+      imagePages,
+      omitPages,
+      styles: body.styles,
+      language: body.language,
+      exports: sanitizeExportFormats(body.exports),
+      maxDocumentPages: limits.maxDocumentPages,
+      instructions: sanitizeStepInstructions(body.instructions),
+      modelId: resolveWorkflowModelId(body.modelId),
+      usage,
+    });
     // Several extractions were combined: the combination is stored so the
     // next re-render sends one id. A single one is already stored.
     const unitsId =
@@ -244,7 +258,14 @@ export async function POST(req: NextRequest) {
     return successResponse({
       ...report,
       unitsId,
-      ...(await store.putRebuild({ pdf, outputs, exports })),
+      ...(await store.putRebuild({
+        pdf,
+        outputs,
+        exports,
+        ...(translated && isNativeDeckFormat(format)
+          ? { document: { data: translated, format } }
+          : {}),
+      })),
       ...usage.fields(),
     });
   } catch (error) {
