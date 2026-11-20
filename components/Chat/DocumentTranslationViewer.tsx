@@ -4,6 +4,7 @@ import {
   IconAlertTriangle,
   IconBrandOnedrive,
   IconDownload,
+  IconEye,
   IconFileText,
   IconFileTypeDocx,
   IconLanguage,
@@ -21,6 +22,7 @@ import {
   saveToOneDrive,
 } from '@/client/services/m365/m365Client';
 
+import { isPagedDocumentType } from '@/lib/utils/shared/documents/documentSource';
 import { pendingPollInterval } from '@/lib/utils/shared/translation/documentMode';
 
 import { isAssistantMessageGroup } from '@/types/chat';
@@ -32,6 +34,7 @@ import {
 import type { M365SaveDestination } from '@/types/m365';
 
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
+import { DocumentPreviewDialog } from '@/components/Documents/DocumentPreviewDialog';
 import { Tooltip } from '@/components/UI/Tooltip';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
@@ -401,6 +404,10 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
     : null;
   const showExpirationWarning =
     daysUntilExpiry !== null && daysUntilExpiry > 0 && daysUntilExpiry <= 2;
+  // A document with pages (not plain text) can be looked at before it is
+  // downloaded, as long as it is kept.
+  const canPreview =
+    !!reference && !isExpired && isPagedDocumentType(reference.extension);
 
   // Get language info
   const languageInfo = reference
@@ -419,6 +426,7 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
   const canSaveToOneDrive = translationEnabled && m365Connected;
   const [isSaving, setIsSaving] = useState(false);
   const [savePickerOpen, setSavePickerOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const fetchTranslatedBlob = useCallback(async (): Promise<Blob> => {
     if (!reference) throw new Error('No reference');
@@ -638,6 +646,17 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
               </>
             )}
 
+            {/* Preview: the translation's pages, beside its original's */}
+            {canPreview && (
+              <button
+                onClick={() => setPreviewOpen(true)}
+                className="flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600"
+              >
+                <IconEye size={16} />
+                {t('documentTranslation.preview')}
+              </button>
+            )}
+
             {/* Text version: only for formats with a page-level text view */}
             {supportsPagedText(reference.extension) && !isExpired && (
               <button
@@ -679,6 +698,32 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
             </button>
           </div>
         </div>
+
+        {canPreview && (
+          <DocumentPreviewDialog
+            isOpen={previewOpen}
+            onClose={() => setPreviewOpen(false)}
+            title={reference.filename}
+            versions={[
+              {
+                source: {
+                  kind: 'translation',
+                  id: reference.jobId,
+                  type: reference.extension.toLowerCase(),
+                },
+                label: t('documentTranslation.previewTranslated'),
+              },
+              {
+                source: {
+                  kind: 'translation-original',
+                  id: reference.jobId,
+                  type: reference.extension.toLowerCase(),
+                },
+                label: t('documentTranslation.previewOriginal'),
+              },
+            ]}
+          />
+        )}
 
         {/* Folder picker for the OneDrive save-back */}
         <M365FilePickerModal
