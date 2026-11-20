@@ -147,6 +147,8 @@ export class BlobRunFolder implements RunFolder {
 
 const DRIVE_SCOPES = ['Files.ReadWrite.All'];
 export const DRIVE_RUNS_FOLDER = 'Apps/AI Assistant/Translations';
+/** How long a minted Graph token is used before another is minted. */
+const TOKEN_REUSE_MS = 30 * 60 * 1000;
 
 interface DriveChildren {
   value?: Array<{ name?: string }>;
@@ -164,11 +166,14 @@ export class DriveRunFolder implements RunFolder {
   readonly expires = false;
   private readonly folder: string;
   /**
-   * The Graph token this folder's calls use. A folder serves one request,
-   * so one token is minted for all its calls: each mint is a round trip to
-   * Microsoft, and a request reads or writes several files.
+   * The Graph token this folder's calls use. A folder usually serves one
+   * request, so one token is minted for all its calls: each mint is a round
+   * trip to Microsoft, and a request reads or writes several files. A folder
+   * a background job holds for longer mints a new one every
+   * TOKEN_REUSE_MS, well inside a token's lifetime.
    */
   private token: Promise<string> | null = null;
+  private mintedAt = 0;
 
   constructor(
     private readonly req: NextRequest,
@@ -201,9 +206,13 @@ export class DriveRunFolder implements RunFolder {
 
   /** The folder's Graph token, minted on first use (see `token`). */
   private graphToken(): Promise<string> {
+    if (this.token && Date.now() - this.mintedAt > TOKEN_REUSE_MS) {
+      this.token = null;
+    }
     if (!this.token) {
       const minting = mintGraphToken(this.req, DRIVE_SCOPES);
       this.token = minting;
+      this.mintedAt = Date.now();
       // A failed mint is not kept: the next call tries again.
       minting.catch(() => {
         if (this.token === minting) this.token = null;
