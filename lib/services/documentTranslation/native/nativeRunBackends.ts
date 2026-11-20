@@ -163,6 +163,12 @@ interface DriveChildren {
 export class DriveRunFolder implements RunFolder {
   readonly expires = false;
   private readonly folder: string;
+  /**
+   * The Graph token this folder's calls use. A folder serves one request,
+   * so one token is minted for all its calls: each mint is a round trip to
+   * Microsoft, and a request reads or writes several files.
+   */
+  private token: Promise<string> | null = null;
 
   constructor(
     private readonly req: NextRequest,
@@ -187,9 +193,23 @@ export class DriveRunFolder implements RunFolder {
     runId: string,
     kind: RunFolderKind = 'runs',
   ): Promise<DriveRunFolder> {
+    const folder = new DriveRunFolder(req, runId, kind);
     // Minted up front so a missing grant fails before any work is done.
-    await mintGraphToken(req, DRIVE_SCOPES);
-    return new DriveRunFolder(req, runId, kind);
+    await folder.graphToken();
+    return folder;
+  }
+
+  /** The folder's Graph token, minted on first use (see `token`). */
+  private graphToken(): Promise<string> {
+    if (!this.token) {
+      const minting = mintGraphToken(this.req, DRIVE_SCOPES);
+      this.token = minting;
+      // A failed mint is not kept: the next call tries again.
+      minting.catch(() => {
+        if (this.token === minting) this.token = null;
+      });
+    }
+    return this.token;
   }
 
   private url(name = '', suffix = ''): string {
@@ -199,12 +219,23 @@ export class DriveRunFolder implements RunFolder {
     return `${GRAPH_V1}/me/drive/root:/${path}:${suffix}`;
   }
 
+  /**
+   * A Graph call with the folder's token. A token Graph rejects (401) is
+   * minted again and the call made once more.
+   */
   private async fetch(url: string, init: RequestInit = {}): Promise<Response> {
-    const token = await mintGraphToken(this.req, DRIVE_SCOPES);
-    return fetch(url, {
-      ...init,
-      headers: { Authorization: `Bearer ${token}`, ...(init.headers || {}) },
-    });
+    const send = async (): Promise<Response> =>
+      fetch(url, {
+        ...init,
+        headers: {
+          Authorization: `Bearer ${await this.graphToken()}`,
+          ...(init.headers || {}),
+        },
+      });
+    const response = await send();
+    if (response.status !== 401) return response;
+    this.token = null;
+    return send();
   }
 
   async write(name: string, data: Buffer, contentType: string): Promise<void> {
