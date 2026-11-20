@@ -42,10 +42,13 @@ function Swatch({ hex }: { hex: string }) {
  */
 export function BrandFindingsPanel({
   findings,
+  complete = false,
   selectedId,
   onSelect,
 }: {
   findings: readonly BrandFinding[];
+  /** Whether the review has ended, so no more findings will come. */
+  complete?: boolean;
   selectedId: string | null;
   onSelect: (finding: BrandFinding) => void;
 }) {
@@ -98,7 +101,11 @@ export function BrandFindingsPanel({
       </div>
       {shown.length === 0 ? (
         <p className="p-4 text-sm text-gray-500 dark:text-gray-400">
-          {findings.length === 0 ? t('noFindings') : t('noneOfSeverity')}
+          {findings.length > 0
+            ? t('noneOfSeverity')
+            : complete
+              ? t('noneFound')
+              : t('noFindings')}
         </p>
       ) : (
         <ul className="min-h-0 flex-1 overflow-y-auto">
