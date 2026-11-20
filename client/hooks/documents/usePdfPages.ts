@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -218,5 +219,10 @@ export function usePdfPages(
     [ensureOpened],
   );
 
-  return { status, pageCount, renderPage, pageSize };
+  // One object while nothing in it changes: callers list it in effect
+  // dependencies, and a new object each render re-ran them forever.
+  return useMemo(
+    () => ({ status, pageCount, renderPage, pageSize }),
+    [status, pageCount, renderPage, pageSize],
+  );
 }
