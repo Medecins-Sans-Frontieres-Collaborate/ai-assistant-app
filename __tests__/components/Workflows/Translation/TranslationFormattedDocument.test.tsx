@@ -462,7 +462,7 @@ describe('document mode: preserve formatting', () => {
     expect(renderNativePdf).not.toHaveBeenCalled();
     expect(
       await screen.findByRole('button', {
-        name: 'translation.formatted.download',
+        name: 'translation.formatted.downloadMenu',
       }),
     ).toBeTruthy();
   });
@@ -1075,6 +1075,203 @@ describe('finished translation: zoom and the look of a block', () => {
   });
 });
 
+describe('finished translation: keyboard and mouse', () => {
+  const button = (name: string) => screen.getByRole('button', { name });
+  const zoomLevel = () => screen.getByTestId('zoom-level').textContent;
+  const scroller = () => screen.getByTestId('page-scroller');
+  const currentPage = () =>
+    document
+      .querySelector('nav [aria-current="page"]')
+      ?.getAttribute('aria-label');
+  const pageBlock = () =>
+    screen.getByRole('button', { name: 'translation.formatted.blockLabel 1' });
+  const listBlock = (id: string) =>
+    document.querySelector<HTMLElement>(
+      `[data-unit-place="list"][data-unit-id="${id}"]`,
+    )!;
+
+  beforeEach(() => {
+    // jsdom lays nothing out; the review only takes keys while it has boxes
+    // (ownsKeyboard), as it does on screen.
+    vi.spyOn(Element.prototype, 'getClientRects').mockReturnValue([
+      new DOMRect(0, 0, 100, 100),
+    ] as unknown as DOMRectList);
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+    document.getElementById('elsewhere')?.remove();
+  });
+
+  /** Translates pages 1-2 of the 5-page document and waits for page 1. */
+  async function finishTwoPages() {
+    mountWorkspace({
+      documentLayout: 'formatted',
+      formattedOptions: { pages: '1-2', instructions: {}, refitRounds: 0 },
+    });
+    fireEvent.click(
+      await screen.findByRole('button', {
+        name: 'translation.formatted.translatePages 2',
+      }),
+    );
+    await waitFor(() => expect(savedRun()).toBeDefined());
+    await screen.findByTestId('formatted-page');
+  }
+
+  it('zooms the page, not the browser, with Ctrl or Cmd and +, - and 0', async () => {
+    await finishTwoPages();
+    pageBlock().focus();
+    // fireEvent answers false when the event was prevented: the browser
+    // does not zoom the whole app as well.
+    expect(fireEvent.keyDown(pageBlock(), { key: '=', ctrlKey: true })).toBe(
+      false,
+    );
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 125');
+    fireEvent.keyDown(pageBlock(), { key: '+', metaKey: true });
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 150');
+    fireEvent.keyDown(pageBlock(), { key: '-', ctrlKey: true });
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 125');
+    expect(fireEvent.keyDown(pageBlock(), { key: '0', ctrlKey: true })).toBe(
+      false,
+    );
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 100');
+    // Without Ctrl, + is just a key.
+    fireEvent.keyDown(pageBlock(), { key: '=' });
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 100');
+  });
+
+  it('leaves Ctrl and + to the browser while the keyboard is elsewhere in the app', async () => {
+    await finishTwoPages();
+    const elsewhere = document.createElement('button');
+    elsewhere.id = 'elsewhere';
+    document.body.append(elsewhere);
+    elsewhere.focus();
+    expect(fireEvent.keyDown(elsewhere, { key: '=', ctrlKey: true })).toBe(
+      true,
+    );
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 100');
+  });
+
+  it('zooms with Ctrl+wheel (and a pinch) over the page, and scrolls without Ctrl', async () => {
+    await finishTwoPages();
+    expect(fireEvent.wheel(scroller(), { deltaY: -100, ctrlKey: true })).toBe(
+      false,
+    );
+    // 100 pixels up is a little over a fifth larger (wheelPageZoom).
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 122');
+    // The next step goes on from there to the next level.
+    fireEvent.click(button('translation.formatted.zoomIn'));
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 125');
+    expect(fireEvent.wheel(scroller(), { deltaY: -100 })).toBe(true);
+    expect(zoomLevel()).toBe('translation.formatted.zoomLevel 125');
+  });
+
+  it('closes the field on the page with Escape, back to the block', async () => {
+    await finishTwoPages();
+    fireEvent.click(pageBlock());
+    const field = screen.getByLabelText('translation.formatted.editOnPage 1');
+    expect(document.activeElement).toBe(field);
+    fireEvent.keyDown(field, { key: 'Escape' });
+    expect(
+      screen.queryByLabelText('translation.formatted.editOnPage 1'),
+    ).toBeNull();
+    expect(document.activeElement).toBe(pageBlock());
+  });
+
+  it('opens a block chosen in the list with the keyboard in the list, and Escape returns there', async () => {
+    await finishTwoPages();
+    fireEvent.click(listBlock('p1u1'));
+    const field = screen.getByLabelText('translation.formatted.translation');
+    // The keyboard stays on the side the block was chosen from.
+    expect(document.activeElement).toBe(field);
+    fireEvent.keyDown(field, { key: 'Escape' });
+    expect(document.activeElement).toBe(listBlock('p1u1'));
+  });
+
+  it('closes the ask box with Escape, leaving the block open', async () => {
+    await finishTwoPages();
+    fireEvent.click(pageBlock());
+    const [ask] = screen.getAllByRole('button', {
+      name: 'translation.formatted.ask',
+    });
+    fireEvent.click(ask);
+    const box = screen.getByLabelText('translation.formatted.askPlaceholder');
+    fireEvent.keyDown(box, { key: 'Escape' });
+    expect(
+      screen.queryByLabelText('translation.formatted.askPlaceholder'),
+    ).toBeNull();
+    expect(document.activeElement).toBe(ask);
+    expect(
+      screen.getByLabelText('translation.formatted.editOnPage 1'),
+    ).toBeTruthy();
+  });
+
+  it("marks a block's state on its number in the list, not with a stripe", async () => {
+    await finishTwoPages();
+    const numberLook = () =>
+      document
+        .querySelector('ul [data-number-look]')
+        ?.getAttribute('data-number-look');
+    expect(numberLook()).toBe('plain');
+    fireEvent.click(listBlock('p1u1'));
+    expect(numberLook()).toBe('selected');
+    const field = screen.getByLabelText('translation.formatted.translation');
+    fireEvent.change(field, { target: { value: 'Informe del año' } });
+    fireEvent.keyDown(field, { key: 'Escape' });
+    expect(numberLook()).toBe('edited');
+    expect(document.querySelector('ul [class*="border-s-"]')).toBeNull();
+  });
+
+  it('makes the page list one Tab stop that the arrows move through', async () => {
+    await finishTwoPages();
+    const page = (n: number) => button(`translation.formatted.pageLabel ${n}`);
+    const tabStops = () =>
+      [1, 2, 3, 4, 5].filter((n) => page(n).tabIndex === 0);
+    expect(tabStops()).toEqual([1]);
+    page(1).focus();
+    fireEvent.keyDown(page(1), { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(page(2));
+    expect(tabStops()).toEqual([2]);
+    // The page's own controls follow the Tab stop.
+    expect(button('translation.formatted.removePage 2').tabIndex).toBe(0);
+    expect(button('translation.formatted.removePage 1').tabIndex).toBe(-1);
+    fireEvent.keyDown(page(2), { key: 'End' });
+    expect(document.activeElement).toBe(page(5));
+    // Moving is not opening: Enter (a click) opens.
+    expect(currentPage()).toBe('translation.formatted.pageLabel 1');
+  });
+
+  it('switches between the original and the translation with the arrow keys', async () => {
+    await finishTwoPages();
+    const radio = (name: string) => screen.getByRole('radio', { name });
+    const translatedSide = radio('translation.formatted.viewTranslated');
+    expect(translatedSide.tabIndex).toBe(0);
+    fireEvent.keyDown(translatedSide, { key: 'ArrowLeft' });
+    const originalSide = radio('translation.formatted.viewOriginal');
+    expect(originalSide).toHaveAttribute('aria-checked', 'true');
+    expect(document.activeElement).toBe(originalSide);
+    expect(originalSide.tabIndex).toBe(0);
+    fireEvent.keyDown(originalSide, { key: 'ArrowRight' });
+    expect(translatedSide).toHaveAttribute('aria-checked', 'true');
+  });
+
+  it('goes to the next page with PageDown at the end of the page, not while typing', async () => {
+    await finishTwoPages();
+    fireEvent.click(pageBlock());
+    const field = screen.getByLabelText('translation.formatted.editOnPage 1');
+    fireEvent.keyDown(field, { key: 'PageDown' });
+    expect(currentPage()).toBe('translation.formatted.pageLabel 1');
+    fireEvent.keyDown(field, { key: 'Escape' });
+    // jsdom scrolls nothing, so the page is always at its end.
+    scroller().focus();
+    expect(fireEvent.keyDown(scroller(), { key: 'PageDown' })).toBe(false);
+    expect(currentPage()).toBe('translation.formatted.pageLabel 2');
+    fireEvent.keyDown(scroller(), { key: 'PageUp' });
+    expect(currentPage()).toBe('translation.formatted.pageLabel 1');
+    // Before the first page there is none to go to.
+    expect(fireEvent.keyDown(scroller(), { key: 'PageUp' })).toBe(true);
+  });
+});
+
 describe('TranslationWorkspace — where a formatted translation is kept', () => {
   const DAY_MS = 24 * 60 * 60 * 1000;
   const fromNow = (days: number) =>
@@ -1156,7 +1353,7 @@ describe('TranslationWorkspace — where a formatted translation is kept', () =>
     await reopen(runRef());
     expect(
       await screen.findByRole('button', {
-        name: 'translation.formatted.download',
+        name: 'translation.formatted.downloadMenu',
       }),
     ).toBeInTheDocument();
     // Looking at a run asks when it expires without extending it.
@@ -1219,14 +1416,70 @@ describe('TranslationWorkspace — where a formatted translation is kept', () =>
     await translateOnce();
     fireEvent.click(
       await screen.findByRole('button', {
-        name: 'translation.formatted.download',
+        name: 'translation.formatted.downloadMenu',
+      }),
+    );
+    fireEvent.click(
+      await screen.findByRole('menuitem', {
+        name: /translation\.formatted\.downloadPdf/,
       }),
     );
     await waitFor(() =>
       expect(downloadRunFile).toHaveBeenCalledWith(
         '/api/file/out.pdf',
-        'manual.translated.pdf',
+        'manual_es.pdf',
       ),
     );
+    // Nothing had to be built for the PDF.
+    expect(renderNativePdf).not.toHaveBeenCalled();
+  });
+
+  it('builds the PowerPoint file on request, marks it experimental and keeps it for the next download', async () => {
+    await translateOnce();
+    vi.mocked(renderNativePdf).mockResolvedValueOnce({
+      fits: [],
+      issues: [],
+      checkedPages: [],
+      uncheckedPages: [],
+      fonts: { sans: 'Sans', serif: 'Serif' },
+      repaired: [],
+      tooLong: [],
+      pdfUrl: '/api/file/out2.pdf',
+      exportUrls: { pptx: '/api/file/out2.pptx' },
+      pageImages: [],
+      unitsId: 'units',
+    });
+    const openMenu = async () =>
+      fireEvent.click(
+        await screen.findByRole('button', {
+          name: 'translation.formatted.downloadMenu',
+        }),
+      );
+    const powerPoint = () =>
+      screen.findByRole('menuitem', {
+        name: /translation\.formatted\.downloadPptx/,
+      });
+    await openMenu();
+    expect((await powerPoint()).textContent).toContain(
+      'translation.formatted.experimental',
+    );
+    fireEvent.click(await powerPoint());
+    await waitFor(() =>
+      expect(downloadRunFile).toHaveBeenCalledWith(
+        '/api/file/out2.pptx',
+        'manual_es.pptx',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      ),
+    );
+    expect(renderNativePdf).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(renderNativePdf).mock.calls[0][0]).toMatchObject({
+      exports: ['pptx'],
+      checkPages: [],
+    });
+    // The file describes the page as it stands, so it is not built again.
+    await openMenu();
+    fireEvent.click(await powerPoint());
+    await waitFor(() => expect(downloadRunFile).toHaveBeenCalledTimes(2));
+    expect(renderNativePdf).toHaveBeenCalledTimes(1);
   });
 });
