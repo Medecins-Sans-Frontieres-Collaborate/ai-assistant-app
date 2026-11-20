@@ -89,14 +89,20 @@ describe('/api/brand-review', () => {
       file: FILE,
       name: 'Annual.pdf',
       modelReview: false,
+      locale: 'pt-br',
     });
     expect(response.status).toBe(202);
     expect(beginWorkflowRun).not.toHaveBeenCalled();
     expect(vi.mocked(startBrandReview).mock.calls[0].slice(2)).toEqual([
       { file: FILE, name: 'Annual.pdf', type: 'pdf' },
-      false,
+      { modelReview: false, noteLocale: 'pt-BR' },
     ]);
-    await post({ bookId: BOOK, file: FILE });
+    // A locale that is not a BCP 47 tag falls back to English.
+    await post({ bookId: BOOK, file: FILE, locale: 'not a <tag>' });
+    expect(vi.mocked(startBrandReview).mock.calls[1][3]).toEqual({
+      modelReview: true,
+      noteLocale: 'en',
+    });
     expect(beginWorkflowRun).toHaveBeenCalledTimes(1);
   });
 
