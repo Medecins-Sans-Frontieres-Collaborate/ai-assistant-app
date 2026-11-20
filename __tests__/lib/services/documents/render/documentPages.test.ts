@@ -2,10 +2,11 @@ import {
   clearPagePictureCache,
   documentPagePictures,
   documentPdf,
-  isPresentationType,
   pdfExportFor,
 } from '@/lib/services/documents/render/documentPages';
 import { getRenderService } from '@/lib/services/documents/render/renderService';
+
+import { isPresentationType } from '@/lib/utils/shared/documents/documentSource';
 
 import fs from 'fs';
 import os from 'os';
