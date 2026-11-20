@@ -56,9 +56,9 @@ export interface HttpRenderSettings {
 
 const EMPTY_SNAPSHOT: RenderQueueSnapshot = {
   running: 0,
-  queued: { interactive: 0, translation: 0 },
+  queued: { interactive: 0, background: 0 },
   maxConcurrent: 1,
-  averageRunMs: { interactive: null, translation: null },
+  averageRunMs: { interactive: null, background: null },
 };
 
 /**

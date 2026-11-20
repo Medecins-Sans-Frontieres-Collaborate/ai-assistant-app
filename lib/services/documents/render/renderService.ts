@@ -2,9 +2,9 @@
  * THE RENDER SERVICE: the only way the server runs LibreOffice.
  *
  * Every conversion (chat attachments read as text, file previews, document
- * translation) waits in one queue (RenderQueue) so the number of
+ * translation, brand review) waits in one queue (RenderQueue) so the number of
  * LibreOffice processes on an instance never exceeds RENDER_MAX_CONCURRENT,
- * whatever arrives at once. Waiting is cheap and expected: translation work
+ * whatever arrives at once. Waiting is cheap and expected: background work
  * already tells the person it takes a while.
  *
  * Callers use the `PresentationRenderService` interface only. The
@@ -168,7 +168,7 @@ function renderMetrics(service: () => PresentationRenderService) {
   depth.addCallback((result) => {
     const { queued } = service().snapshot();
     result.observe(queued.interactive, { lane: 'interactive' });
-    result.observe(queued.translation, { lane: 'translation' });
+    result.observe(queued.background, { lane: 'background' });
   });
   const observer: RenderQueueObserver = {
     onRefused: (lane) => refused.add(1, { lane }),

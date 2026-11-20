@@ -2,10 +2,11 @@
  * The queue every LibreOffice job waits in (see the render service).
  *
  * LANES: `interactive` is work a person is waiting on in a chat (reading an
- * attachment, a file preview); `translation` is document translation work,
- * which already tells the person it takes a while. Interactive jobs go
- * first, but after `interactiveBurst` of them in a row a waiting
- * translation job takes the next slot, so translation never starves.
+ * attachment, a file preview); `background` is work that already tells the
+ * person it takes a while (document translation, brand review, building a
+ * deck). Interactive jobs go first, but after `interactiveBurst` of them in
+ * a row a waiting background job takes the next slot, so background work
+ * never starves.
  *
  * A queued job is a closure and a few numbers: it holds no file bytes, so
  * the queue can be long. Past `maxQueued` waiting jobs, new work is refused
@@ -13,11 +14,11 @@
  */
 
 /** Which line a job waits in; see LANES above. */
-export type RenderLane = 'interactive' | 'translation';
+export type RenderLane = 'interactive' | 'background';
 
 export const RENDER_LANES: readonly RenderLane[] = [
   'interactive',
-  'translation',
+  'background',
 ] as const;
 
 export interface RenderQueueOptions {
@@ -25,7 +26,7 @@ export interface RenderQueueOptions {
   maxConcurrent: number;
   /** Jobs waiting at once, both lanes together, before work is refused. */
   maxQueued: number;
-  /** Interactive jobs run in a row while translation work waits. At least 1. */
+  /** Interactive jobs run in a row while background work waits. At least 1. */
   interactiveBurst: number;
   /** Told when a job starts and ends, for metrics. */
   observer?: RenderQueueObserver;
@@ -85,7 +86,7 @@ interface Waiting {
 export class RenderQueue {
   private readonly waiting: Record<RenderLane, Waiting[]> = {
     interactive: [],
-    translation: [],
+    background: [],
   };
   private running = 0;
   private interactiveStreak = 0;
@@ -110,7 +111,7 @@ export class RenderQueue {
       running: this.running,
       queued: {
         interactive: this.waiting.interactive.length,
-        translation: this.waiting.translation.length,
+        background: this.waiting.background.length,
       },
     };
   }
@@ -197,7 +198,7 @@ export class RenderQueue {
   }
 
   private queuedCount(): number {
-    return this.waiting.interactive.length + this.waiting.translation.length;
+    return this.waiting.interactive.length + this.waiting.background.length;
   }
 
   /** Records which lane got a slot, for the burst limit. */
@@ -209,14 +210,14 @@ export class RenderQueue {
   /** The lane whose next job runs next; null when nothing waits. */
   private nextLane(): RenderLane | null {
     const interactive = this.waiting.interactive.length > 0;
-    const translation = this.waiting.translation.length > 0;
+    const background = this.waiting.background.length > 0;
     if (
       interactive &&
-      (!translation || this.interactiveStreak < this.options.interactiveBurst)
+      (!background || this.interactiveStreak < this.options.interactiveBurst)
     ) {
       return 'interactive';
     }
-    if (translation) return 'translation';
+    if (background) return 'background';
     return null;
   }
 
@@ -234,7 +235,7 @@ export class RenderQueue {
 
   /**
    * Tells each waiting job how many are ahead of it: those before it in
-   * its lane and, for translation work, every interactive job waiting.
+   * its lane and, for background work, every interactive job waiting.
    */
   private reportPositions(): void {
     for (const lane of RENDER_LANES) {
@@ -242,7 +243,7 @@ export class RenderQueue {
         const ahead =
           index +
           this.running +
-          (lane === 'translation' ? this.waiting.interactive.length : 0);
+          (lane === 'background' ? this.waiting.interactive.length : 0);
         if (entry.lastReported !== ahead) {
           entry.lastReported = ahead;
           entry.onPosition?.(ahead);
