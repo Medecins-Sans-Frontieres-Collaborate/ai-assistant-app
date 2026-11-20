@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Revisione del brand",
         "description": "Controlla un PDF, documento Word o presentazione rispetto al brand book: font, colori, testo, loghi e tono"
+      },
+      "deckBuilder": {
+        "label": "Creatore di presentazioni",
+        "description": "Pianifica una presentazione partendo da un brief e delle fonti, poi costruiscila usando un template del brand."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Nuova elaborazione grant",
       "newFormFill": "Nuova compilazione documento",
       "newChannelDrafter": "Nuova bozza canale",
-      "newBrandReview": "Nuova revisione del brand"
+      "newBrandReview": "Nuova revisione del brand",
+      "newDeckBuilder": "Nuova presentazione"
     },
     "translation": {
       "chooseLanguage": "Lingua di destinazione",
@@ -4948,6 +4953,122 @@
         "found": "Rilevato",
         "notes": "Note",
         "fileSuffix": "revisione brand"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Caricamento della presentazione…",
+      "busy": "Hai già un lavoro in corso ({name}). Attendi la fine oppure interrompilo.",
+      "booksFailed": "Impossibile caricare i brand book.",
+      "readFailed": "Impossibile leggere lo stato di avanzamento della presentazione.",
+      "startFailed": "Impossibile avviare la scaletta.",
+      "buildFailed": "La presentazione non può essere costruita.",
+      "outlineFailed": "Non è stato possibile creare la scaletta.",
+      "stop": "Interrompi",
+      "download": "Scarica .pptx",
+      "editOutline": "Modifica scaletta",
+      "newDeck": "Nuova presentazione",
+      "startOver": "Ricomincia",
+      "built": "Creata",
+      "forBook": "{template}, per {book}",
+      "fromTemplate": "Da {template}",
+      "outlineTitle": "Scaletta",
+      "outlineReady": "{count, plural, one {# slide, pronta per la modifica} other {# slide, pronte per la modifica}}",
+      "repaired": "{count, plural, one {Un elemento del piano è stato adattato al template.} other {# elementi del piano sono stati adattati al template.}}",
+      "unread": "Impossibile leggere {names}; la scaletta è stata creata senza di essi.",
+      "outlinePhase": {
+        "template": "Lettura del template",
+        "reading": "Lettura delle fonti",
+        "planning": "Pianificazione delle slide"
+      },
+      "buildPhase": {
+        "composing": "Creazione delle slide",
+        "rendering": "Verifica della visualizzazione delle slide",
+        "storing": "Salvataggio della presentazione",
+        "reviewing": "Controllo rispetto al brand book"
+      },
+      "status": {
+        "running": "In corso",
+        "done": "Completata",
+        "failed": "Fallita",
+        "stopped": "Interrotta"
+      },
+      "reviewed": "{errors, plural, =0 {Nessun errore di brand} one {# errore di brand} other {# errori di brand}}, {warnings, plural, =0 {nessun avviso} one {# avviso} other {# avvisi}}",
+      "reviewGap": {
+        "busy": "Creata; non controllata rispetto al brand book (i tuoi controlli erano occupati)",
+        "failed": "Creata; non è stato possibile eseguire il controllo del brand"
+      },
+      "overflows": "{count, plural, one {Il testo sulla slide {slides} supera ancora lo spazio dopo l'adattamento.} other {Il testo sulle slide {slides} supera ancora lo spazio dopo l'adattamento.}}",
+      "shrunk": "{count, plural, one {Il testo su una slide è stato ridotto per adattarsi.} other {Il testo su # slide è stato ridotto per adattarsi.}}",
+      "setup": {
+        "title": "Creatore di presentazioni",
+        "intro": "Scegli un template, indica il motivo della presentazione e aggiungi quali fonti dovrebbe includere. Un modello genera una scaletta che puoi modificare prima che la presentazione venga creata dalle strutture del template.",
+        "template": "Template",
+        "booksLoading": "Caricamento template di brand…",
+        "fromBook": "Da {book}",
+        "ownTemplate": "Usa un tuo template",
+        "replaceTemplate": "Scegli un altro file",
+        "templateTypes": "Una presentazione o template PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Verifica rispetto a un brand book",
+        "noBook": "Non verificare",
+        "brief": "A cosa serve la presentazione?",
+        "briefPlaceholder": "Ad esempio: aggiornamento di 10 minuti per il board sulle nostre cliniche quest'anno, con i tre numeri più importanti.",
+        "sources": "Fonti",
+        "addSources": "Aggiungi documenti da utilizzare",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel o testo; fino a {max}",
+        "pictures": "Immagini",
+        "addPictures": "Aggiungi immagini che il deck può utilizzare",
+        "pictureTypes": "PNG, JPEG o GIF; fino a {max}",
+        "remove": "Rimuovi {name}",
+        "language": "Lingua del deck",
+        "start": "Bozza schema",
+        "wrongType": "Questo tipo di file non può essere usato qui.",
+        "uploadFailed": "Il caricamento è fallito."
+      },
+      "outline": {
+        "role": {
+          "title": "Titolo",
+          "subtitle": "Sottotitolo",
+          "body": "Testo",
+          "content": "Contenuto",
+          "picture": "Immagine"
+        },
+        "holds": "Cosa contiene {place}",
+        "kindText": "Testo",
+        "kindPicture": "Immagine",
+        "bullets": "Punti elenco",
+        "noPicture": "Scegli un'immagine",
+        "alt": "Descrivi l'immagine",
+        "tooLong": "Troppo lungo: contiene circa {lines, plural, one {# riga} other {# righe}} di {chars} caratteri, anche riducendo la dimensione.",
+        "shrinks": "Un po' lungo: sarà rimpicciolito per adattarsi.",
+        "bulletsHint": "Un punto elenco per riga. Inizia una riga con due spazi per rientrare.",
+        "room": "Spazio per circa {lines, plural, one {# riga} other {# righe}} di {chars} caratteri.",
+        "slide": "Slide {number}",
+        "layoutOf": "Layout della slide {number}",
+        "moveUp": "Sposta la slide {number} in alto",
+        "moveDown": "Sposta la slide {number} in basso",
+        "remove": "Rimuovi la slide {number}",
+        "notesSome": "Note del relatore",
+        "notesNone": "Aggiungi note del relatore",
+        "notesOf": "Note del relatore per la slide {number}",
+        "slides": "Slide",
+        "addSlide": "Aggiungi slide",
+        "blocked": "{count, plural, one {Un elemento impedisce la creazione del deck:} other {# elementi impediscono la creazione del deck:}}",
+        "problem": {
+          "no-slides": "Lo schema non include slide.",
+          "too-many-slides": "Vengono mantenute solo le prime 40 slide.",
+          "unknown-layout": "La slide {slide} usa un layout che questo modello non ha.",
+          "vertical-layout": "La slide {slide} usa un layout con testo laterale; scegli un altro.",
+          "unknown-placeholder": "La slide {slide} aveva contenuto per un elemento che il layout non prevede.",
+          "repeated-placeholder": "La slide {slide} ha riempito lo stesso elemento due volte.",
+          "kind-not-accepted": "La slide {slide} aveva contenuto che il layout non può gestire lì.",
+          "empty-fill": "La slide {slide} ha un campo vuoto.",
+          "unknown-image": "La slide {slide} nomina un'immagine non aggiunta.",
+          "bullet-level": "La slide {slide} contiene punti elenco troppo rientrati.",
+          "too-long": "La slide {slide} ha più testo di quanto possa contenere, anche ridotto. Accorcia o dividi la slide.",
+          "empty-slide": "La slide {slide} non contiene nulla."
+        },
+        "build": "{count, plural, one {Crea deck (# slide)} other {Crea deck (# slide)}}",
+        "willShrink": "{count, plural, one {Il testo in una diapositiva verrà ridotto per adattarsi.} other {Il testo in # diapositive verrà ridotto per adattarsi.}}"
       }
     }
   },

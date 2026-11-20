@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Marka incelemesi",
         "description": "Bir PDF, Word belgesi veya sunumu marka kitabına göre kontrol edin: yazı tipleri, renkler, kelime seçimi, logolar ve üslup"
+      },
+      "deckBuilder": {
+        "label": "Sunum oluşturucu",
+        "description": "Bir özet ve kaynaklardan bir sunum planlayın, ardından markaya özel bir şablondan oluşturun."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Yeni hibe işlemleri",
       "newFormFill": "Yeni belge doldurma",
       "newChannelDrafter": "Yeni kanal taslağı",
-      "newBrandReview": "Yeni marka incelemesi"
+      "newBrandReview": "Yeni marka incelemesi",
+      "newDeckBuilder": "Yeni sunum"
     },
     "translation": {
       "chooseLanguage": "Hedef dil",
@@ -4948,6 +4953,122 @@
         "found": "Bulundu",
         "notes": "Notlar",
         "fileSuffix": "marka incelemesi"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Sunum yükleniyor…",
+      "busy": "Zaten çalışan bir işiniz var ({name}). Bitmesini bekleyin veya durdurun.",
+      "booksFailed": "Marka kitapları yüklenemedi.",
+      "readFailed": "Sunumun ilerleyişi okunamadı.",
+      "startFailed": "Taslak başlatılamadı.",
+      "buildFailed": "Sunum oluşturulamadı.",
+      "outlineFailed": "Taslak oluşturulamadı.",
+      "stop": "Durdur",
+      "download": ".pptx indir",
+      "editOutline": "Taslağı düzenle",
+      "newDeck": "Yeni sunum",
+      "startOver": "Baştan başla",
+      "built": "Oluşturuldu",
+      "forBook": "{book} için {template}",
+      "fromTemplate": "{template} üzerinden",
+      "outlineTitle": "Taslak",
+      "outlineReady": "{count, plural, one {# slayt, düzenlemeye hazır} other {# slayt, düzenlemeye hazır}}",
+      "repaired": "{count, plural, one {Plana ait bir şey şablona uyması için ayarlandı.} other {Plana ait # şey şablona uyması için ayarlandı.}}",
+      "unread": "{names} okunamadı; taslak onsuz oluşturuldu.",
+      "outlinePhase": {
+        "template": "Şablon okunuyor",
+        "reading": "Kaynaklar okunuyor",
+        "planning": "Slaytlar planlanıyor"
+      },
+      "buildPhase": {
+        "composing": "Slaytlar oluşturuluyor",
+        "rendering": "Slaytların görüntüsü kontrol ediliyor",
+        "storing": "Sunum kaydediliyor",
+        "reviewing": "Marka kitabına göre kontrol ediliyor"
+      },
+      "status": {
+        "running": "Çalışıyor",
+        "done": "Bitti",
+        "failed": "Başarısız",
+        "stopped": "Durduruldu"
+      },
+      "reviewed": "{errors, plural, =0 {Marka hatası yok} one {# marka hatası} other {# marka hatası}}, {warnings, plural, =0 {uyarı yok} one {# uyarı} other {# uyarı}}",
+      "reviewGap": {
+        "busy": "Oluşturuldu; marka kitabına göre kontrol edilmedi (incelemeleriniz yoğundu)",
+        "failed": "Oluşturuldu; marka kontrolü yapılamadı"
+      },
+      "overflows": "{count, plural, one {Slayt {slides} üzerindeki metin ayarlandıktan sonra hâlâ taşmakta.} other {{slides} slayt üzerindeki metin ayarlandıktan sonra hâlâ taşmakta.}}",
+      "shrunk": "{count, plural, one {Bir slayttaki metin sığması için küçültüldü.} other {# slaytta metin sığması için küçültüldü.}}",
+      "setup": {
+        "title": "Sunum oluşturucu",
+        "intro": "Bir şablon seçin, sunumun amacını belirtin ve nelerden yararlanılacağını ekleyin. Bir model, şablonun düzenlerinden sunum oluşturulmadan önce düzenleyebileceğiniz bir taslak hazırlar.",
+        "template": "Şablon",
+        "booksLoading": "Marka şablonları yükleniyor…",
+        "fromBook": "{book} üzerinden",
+        "ownTemplate": "Kendi şablonunu kullan",
+        "replaceTemplate": "Başka bir dosya seç",
+        "templateTypes": "Bir PowerPoint sunumu veya şablonu (.pptx, .potx)",
+        "checkAgainst": "Marka kitabına göre kontrol et",
+        "noBook": "Kontrol etme",
+        "brief": "Sunum ne için?",
+        "briefPlaceholder": "Örneğin: Yönetim kuruluna bu yılki kliniklerimiz hakkında 10 dakikalık kısa bir bilgilendirme ve önemli üç veri.",
+        "sources": "Kaynaklar",
+        "addSources": "Başvurulacak belgeleri ekleyin",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel veya metin; en fazla {max}",
+        "pictures": "Resimler",
+        "addPictures": "Sunumda kullanılabilecek resimleri ekleyin",
+        "pictureTypes": "PNG, JPEG veya GIF; en fazla {max}",
+        "remove": "{name} öğesini kaldır",
+        "language": "Sunum dili",
+        "start": "Tasamlak oluştur",
+        "wrongType": "Bu tür bir dosya burada kullanılamaz.",
+        "uploadFailed": "Yükleme başarısız oldu."
+      },
+      "outline": {
+        "role": {
+          "title": "Başlık",
+          "subtitle": "Alt başlık",
+          "body": "Metin",
+          "content": "İçerik",
+          "picture": "Resim"
+        },
+        "holds": "{place} içeriği",
+        "kindText": "Metin",
+        "kindPicture": "Resim",
+        "bullets": "Madde işaretleri",
+        "noPicture": "Bir resim seçin",
+        "alt": "Resmi açıklayın",
+        "tooLong": "Çok uzun: Bu alan, küçültülse bile {chars} karakterden oluşan {lines, plural, one {# satır} other {# satır}} içerir.",
+        "shrinks": "Biraz uzun: Sığması için küçültülecek.",
+        "bulletsHint": "Her satıra bir madde ekleyin. Girinti için satır başına iki boşluk ile başlayın.",
+        "room": "Yaklaşık {chars} karakterden oluşan {lines, plural, one {# satır} other {# satır}} için alan var.",
+        "slide": "Slayt {number}",
+        "layoutOf": "Slayt {number} düzeni",
+        "moveUp": "Slaydı {number} yukarı taşı",
+        "moveDown": "Slaydı {number} aşağı taşı",
+        "remove": "Slaydı {number} kaldır",
+        "notesSome": "Konuşmacı notları",
+        "notesNone": "Konuşmacı notları ekle",
+        "notesOf": "Slayt {number} için konuşmacı notları",
+        "slides": "Slaytlar",
+        "addSlide": "Slayt ekle",
+        "blocked": "{count, plural, one {Sunumun oluşturulmasını engelleyen bir unsur var:} other {Sunumun oluşturulmasını engelleyen # unsur var:}}",
+        "problem": {
+          "no-slides": "Taslakta hiç slayt yok.",
+          "too-many-slides": "Yalnızca ilk 40 slayt korunur.",
+          "unknown-layout": "Slayt {slide}, bu şablonda olmayan bir düzen kullanıyor.",
+          "vertical-layout": "Slayt {slide}, yanlamasına metin içeren bir düzen kullanıyor; başka bir tane seçin.",
+          "unknown-placeholder": "Slayt {slide}, düzeninde olmayan bir alan için içerik içeriyor.",
+          "repeated-placeholder": "Slayt {slide}, bir alanı iki kez doldurdu.",
+          "kind-not-accepted": "Slayt {slide}, düzeninin kabul edemediği bir içerik içeriyor.",
+          "empty-fill": "Slayt {slide}, boş bir alan içeriyor.",
+          "unknown-image": "Slayt {slide}, eklenmeyen bir resmin adını taşıyor.",
+          "bullet-level": "Slayt {slide}, çok derin girintili madde işaretleri içeriyor.",
+          "too-long": "Slayt {slide}, sığmayacak kadar çok metin içeriyor, küçültülse bile. Kısaltın veya slaytı bölün.",
+          "empty-slide": "Slayt {slide}, içinde hiçbir şey yok."
+        },
+        "build": "{count, plural, one {Sunumu oluştur (# slayt)} other {Sunumu oluştur (# slayt)}}",
+        "willShrink": "{count, plural, one {Bir slayttaki metin sığacak şekilde küçültülecek.} other {# slayttaki metinler sığacak şekilde küçültülecek.}}"
       }
     }
   },

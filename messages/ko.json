@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "브랜드 검토",
         "description": "PDF, Word 문서 또는 프레젠테이션이 브랜드 북에 맞는지 확인합니다: 글꼴, 색상, 문구, 로고, 톤"
+      },
+      "deckBuilder": {
+        "label": "덱 빌더",
+        "description": "브리프와 소스를 바탕으로 프레젠테이션을 계획하고, 브랜드 템플릿에서 제작합니다."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "신규 보조금 처리",
       "newFormFill": "새 문서 작성",
       "newChannelDrafter": "새 채널 초안",
-      "newBrandReview": "새 브랜드 검토"
+      "newBrandReview": "새 브랜드 검토",
+      "newDeckBuilder": "새 덱"
     },
     "translation": {
       "chooseLanguage": "목표 언어",
@@ -4948,6 +4953,122 @@
         "found": "발견",
         "notes": "노트",
         "fileSuffix": "브랜드 검토"
+      }
+    },
+    "deckBuilder": {
+      "loading": "덱을 불러오는 중…",
+      "busy": "이미 작업({name})이 진행 중입니다. 완료하거나 중지하세요.",
+      "booksFailed": "브랜드 북을 불러올 수 없습니다.",
+      "readFailed": "덱 진행 상황을 읽을 수 없습니다.",
+      "startFailed": "아웃라인을 시작할 수 없습니다.",
+      "buildFailed": "덱을 만들 수 없습니다.",
+      "outlineFailed": "아웃라인을 만들 수 없습니다.",
+      "stop": "중지",
+      "download": ".pptx 다운로드",
+      "editOutline": "아웃라인 편집",
+      "newDeck": "새 덱",
+      "startOver": "다시 시작",
+      "built": "제작 완료",
+      "forBook": "{book}에 맞춘 {template}",
+      "fromTemplate": "{template}에서",
+      "outlineTitle": "아웃라인",
+      "outlineReady": "{count, plural, one {슬라이드 #개, 편집 준비됨} other {슬라이드 #개, 편집 준비됨}}",
+      "repaired": "{count, plural, one {계획의 한 항목이 템플릿에 맞게 조정되었습니다.} other {계획의 #개 항목이 템플릿에 맞게 조정되었습니다.}}",
+      "unread": "{names}를 읽을 수 없어 아웃라인을 제외하고 작성되었습니다.",
+      "outlinePhase": {
+        "template": "템플릿 읽는 중",
+        "reading": "소스 읽는 중",
+        "planning": "슬라이드 계획 중"
+      },
+      "buildPhase": {
+        "composing": "슬라이드 제작 중",
+        "rendering": "슬라이드 렌더 확인 중",
+        "storing": "덱 저장 중",
+        "reviewing": "브랜드 북 비교 확인 중"
+      },
+      "status": {
+        "running": "작업 중",
+        "done": "완료",
+        "failed": "실패",
+        "stopped": "중지됨"
+      },
+      "reviewed": "{errors, plural, =0 {브랜드 오류 없음} one {브랜드 오류 #건} other {브랜드 오류 #건}}, {warnings, plural, =0 {경고 없음} one {경고 #건} other {경고 #건}}",
+      "reviewGap": {
+        "busy": "제작됨; 브랜드 북 검사 미실시(리뷰가 진행 중임)",
+        "failed": "제작됨; 브랜드 검사 실행 실패"
+      },
+      "overflows": "{count, plural, one {슬라이드 {slides}의 텍스트가 맞추었지만 여전히 넘칩니다.} other {슬라이드 {slides}들의 텍스트가 맞추었지만 여전히 넘칩니다.}}",
+      "shrunk": "{count, plural, one {한 슬라이드의 텍스트 크기를 줄여 맞췄습니다.} other {#개의 슬라이드 텍스트 크기를 줄여 맞췄습니다.}}",
+      "setup": {
+        "title": "덱 빌더",
+        "intro": "템플릿을 선택하고 덱의 용도를 입력한 후, 참조할 자료를 추가하세요. 모델이 템플릿 레이아웃을 바탕으로 편집 가능한 아웃라인 초안을 작성합니다.",
+        "template": "템플릿",
+        "booksLoading": "브랜드 템플릿 불러오는 중…",
+        "fromBook": "{book}에서",
+        "ownTemplate": "자신의 템플릿 사용",
+        "replaceTemplate": "다른 파일 선택",
+        "templateTypes": "PowerPoint 프레젠테이션 또는 템플릿(.pptx, .potx)",
+        "checkAgainst": "브랜드 북과 비교",
+        "noBook": "비교하지 않음",
+        "brief": "덱의 용도는 무엇인가요?",
+        "briefPlaceholder": "예: 이사회에 올해 우리 진료소 주요 3개 숫자를 포함한 10분 브리핑",
+        "sources": "자료",
+        "addSources": "참고할 문서를 추가하세요",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel 또는 텍스트; 최대 {max}개",
+        "pictures": "이미지",
+        "addPictures": "슬라이드에서 사용할 이미지를 추가하세요",
+        "pictureTypes": "PNG, JPEG 또는 GIF; 최대 {max}개",
+        "remove": "{name} 삭제",
+        "language": "슬라이드의 언어",
+        "start": "개요 초안 작성",
+        "wrongType": "이 파일 형식은 사용할 수 없습니다.",
+        "uploadFailed": "업로드에 실패했습니다."
+      },
+      "outline": {
+        "role": {
+          "title": "제목",
+          "subtitle": "부제목",
+          "body": "텍스트",
+          "content": "내용",
+          "picture": "이미지"
+        },
+        "holds": "{place}에 들어가는 항목",
+        "kindText": "텍스트",
+        "kindPicture": "이미지",
+        "bullets": "글머리표",
+        "noPicture": "이미지를 선택하세요",
+        "alt": "이미지를 설명하세요",
+        "tooLong": "길이가 너무 깁니다: 줄을 작게 설정해도 {chars}자 기준으로 약 {lines, plural, one {#줄} other {#줄}}까지 들어갑니다.",
+        "shrinks": "조금 길어서 더 작게 표시됩니다.",
+        "bulletsHint": "한 줄에 글머리표 하나씩 입력하세요. 두 칸 공백으로 시작하면 들여쓰기됩니다.",
+        "room": "약 {chars}자 기준으로 {lines, plural, one {#줄} other {#줄}} 정도 들어갈 수 있습니다.",
+        "slide": "슬라이드 {number}",
+        "layoutOf": "슬라이드 {number}의 레이아웃",
+        "moveUp": "슬라이드 {number}을(를) 위로 이동",
+        "moveDown": "슬라이드 {number}을(를) 아래로 이동",
+        "remove": "슬라이드 {number} 삭제",
+        "notesSome": "발표자 노트",
+        "notesNone": "발표자 노트 추가",
+        "notesOf": "슬라이드 {number}의 발표자 노트",
+        "slides": "슬라이드",
+        "addSlide": "슬라이드 추가",
+        "blocked": "{count, plural, one {슬라이드 제작을 막는 항목이 1개 있습니다:} other {슬라이드 제작을 막는 항목이 #개 있습니다:}}",
+        "problem": {
+          "no-slides": "개요에 슬라이드가 없습니다.",
+          "too-many-slides": "최대 40개 슬라이드까지만 유지됩니다.",
+          "unknown-layout": "슬라이드 {slide}가 이 템플릿에 없는 레이아웃을 사용합니다.",
+          "vertical-layout": "슬라이드 {slide}는 텍스트가 옆으로 배치된 레이아웃을 사용합니다. 다른 레이아웃을 선택하세요.",
+          "unknown-placeholder": "슬라이드 {slide}에 레이아웃에 없는 곳의 내용이 있습니다.",
+          "repeated-placeholder": "슬라이드 {slide}가 한 곳을 두 번 채웠습니다.",
+          "kind-not-accepted": "슬라이드 {slide}에 해당 레이아웃에서 허용되지 않는 내용이 있습니다.",
+          "empty-fill": "슬라이드 {slide}에 빈 칸이 있습니다.",
+          "unknown-image": "슬라이드 {slide}에서 추가되지 않은 이미지를 지정했습니다.",
+          "bullet-level": "슬라이드 {slide}의 글머리표 들여쓰기가 너무 깊습니다.",
+          "too-long": "슬라이드 {slide}가 너무 많은 텍스트를 포함하고 있어 축소해도 들어가지 않습니다. 내용을 줄이거나 슬라이드를 나누세요.",
+          "empty-slide": "슬라이드 {slide}에 아무 내용도 없습니다."
+        },
+        "build": "{count, plural, one {슬라이드 제작 (#개 슬라이드)} other {슬라이드 제작 (#개 슬라이드)}}",
+        "willShrink": "{count, plural, one {한 슬라이드의 텍스트가 공간에 맞게 작게 표시됩니다.} other {#개의 슬라이드의 텍스트가 공간에 맞게 작게 표시됩니다.}}"
       }
     }
   },

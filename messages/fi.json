@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Brändikatselmus",
         "description": "Tarkista PDF, Word-asiakirja tai esitys brändikirjan mukaan: fontit, värit, sanamuoto, logot ja tyyli"
+      },
+      "deckBuilder": {
+        "label": "Esitystyökalun rakentaja",
+        "description": "Suunnittele esitys tiivistelmän ja lähteiden pohjalta, ja rakenna se brändipohjasta."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Uusien avustusten käsittely",
       "newFormFill": "Uusi asiakirjan täyttö",
       "newChannelDrafter": "Uusi kanavaluonnos",
-      "newBrandReview": "Uusi brändikatselmus"
+      "newBrandReview": "Uusi brändikatselmus",
+      "newDeckBuilder": "Uusi esitys"
     },
     "translation": {
       "chooseLanguage": "Kohdekieli",
@@ -4948,6 +4953,122 @@
         "found": "Löydetty",
         "notes": "Huomiot",
         "fileSuffix": "brändikatselmus"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Ladataan esitystä…",
+      "busy": "Sinulla on jo työ käynnissä ({name}). Odota, että se valmistuu, tai keskeytä se.",
+      "booksFailed": "Brändikirjoja ei voitu ladata.",
+      "readFailed": "Esityksen etenemistä ei voitu lukea.",
+      "startFailed": "Runkoluonnosta ei voitu käynnistää.",
+      "buildFailed": "Esitystä ei voitu rakentaa.",
+      "outlineFailed": "Runkoluonnosta ei voitu tehdä.",
+      "stop": "Keskeytä",
+      "download": "Lataa .pptx",
+      "editOutline": "Muokkaa runkoa",
+      "newDeck": "Uusi esitys",
+      "startOver": "Aloita alusta",
+      "built": "Rakennettu",
+      "forBook": "{template}, kohteena {book}",
+      "fromTemplate": "Pohjana {template}",
+      "outlineTitle": "Runko",
+      "outlineReady": "{count, plural, one {# dia, valmis muokattavaksi} other {# diaa, valmiina muokattavaksi}}",
+      "repaired": "{count, plural, one {Yksi suunnitelman kohta mukautettiin pohjaan sopivaksi.} other {# suunnitelman kohtaa mukautettiin pohjaan sopivaksi.}}",
+      "unread": "Kohteita {names} ei voitu lukea; runko tehtiin ilman niitä.",
+      "outlinePhase": {
+        "template": "Luetaan pohjaa",
+        "reading": "Luetaan lähteitä",
+        "planning": "Suunnitellaan diat"
+      },
+      "buildPhase": {
+        "composing": "Rakennetaan diat",
+        "rendering": "Tarkistetaan diojen näyttöä",
+        "storing": "Tallennetaan esitys",
+        "reviewing": "Verrataan brändikirjaan"
+      },
+      "status": {
+        "running": "Työn alla",
+        "done": "Valmis",
+        "failed": "Epäonnistui",
+        "stopped": "Keskeytetty"
+      },
+      "reviewed": "{errors, plural, =0 {Ei brändivirheitä} one {# brändivirhe} other {# brändivirhettä}}, {warnings, plural, =0 {ei varoituksia} one {# varoitus} other {# varoitusta}}",
+      "reviewGap": {
+        "busy": "Rakennettu; brändikatsausta ei tehty (arvioinnit olivat varattuja)",
+        "failed": "Rakennettu; brändikatsausta ei voitu suorittaa"
+      },
+      "overflows": "{count, plural, one {Dian {slides} teksti ylittyy yhä sovituksen jälkeen.} other {Diojen {slides} teksti ylittyy yhä sovituksen jälkeen.}}",
+      "shrunk": "{count, plural, one {Yhden dian tekstiä pienennettiin sopivaksi.} other {# dian tekstiä pienennettiin sopivaksi.}}",
+      "setup": {
+        "title": "Esitystyökalun rakentaja",
+        "intro": "Valitse pohja, kerro mihin esitystä tarvitaan ja lisää taustatiedot. Malli laatii muokattavan rungon, jonka mukaan esitys rakennetaan pohjan asetteluilla.",
+        "template": "Pohja",
+        "booksLoading": "Ladataan brändipohjia…",
+        "fromBook": "Pohjana {book}",
+        "ownTemplate": "Käytä omaa pohjaasi",
+        "replaceTemplate": "Valitse toinen tiedosto",
+        "templateTypes": "PowerPoint-esitys tai -pohja (.pptx, .potx)",
+        "checkAgainst": "Tarkista brändikirjan mukaan",
+        "noBook": "Älä tarkista",
+        "brief": "Mihin esitys on tarkoitettu?",
+        "briefPlaceholder": "Esim: 10 minuutin tilannepäivitys hallitukselle vuoden klinikoistamme, mukana kolme tärkeintä lukua.",
+        "sources": "Lähteet",
+        "addSources": "Lisää käytettäviä asiakirjoja",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel tai teksti; enintään {max}",
+        "pictures": "Kuvat",
+        "addPictures": "Lisää kuvia, joita esitys voi käyttää",
+        "pictureTypes": "PNG, JPEG tai GIF; enintään {max}",
+        "remove": "Poista {name}",
+        "language": "Esityksen kieli",
+        "start": "Laadi luonnos",
+        "wrongType": "Tämän tyyppistä tiedostoa ei voi käyttää täällä.",
+        "uploadFailed": "Lataus epäonnistui."
+      },
+      "outline": {
+        "role": {
+          "title": "Otsikko",
+          "subtitle": "Alaotsikko",
+          "body": "Teksti",
+          "content": "Sisältö",
+          "picture": "Kuva"
+        },
+        "holds": "Mitä {place} sisältää",
+        "kindText": "Teksti",
+        "kindPicture": "Kuva",
+        "bullets": "Luettelomerkit",
+        "noPicture": "Valitse kuva",
+        "alt": "Kuvaile kuva",
+        "tooLong": "Liian pitkä: tämä sisältää noin {lines, plural, one {# rivi} other {# riviä}} ({chars} merkkiä), vaikka koko pienennetään.",
+        "shrinks": "Hieman pitkä: koko pienennetään sopivaksi.",
+        "bulletsHint": "Yksi luettelomerkki per rivi. Aloita rivi kahdella välilyönnillä sisennystä varten.",
+        "room": "Tilaa noin {lines, plural, one {# rivi} other {# riviä}} ({chars} merkkiä).",
+        "slide": "Kalvo {number}",
+        "layoutOf": "Kalvon {number} asettelu",
+        "moveUp": "Siirrä kalvoa {number} ylemmäs",
+        "moveDown": "Siirrä kalvoa {number} alemmas",
+        "remove": "Poista kalvo {number}",
+        "notesSome": "Esittäjän muistiinpanot",
+        "notesNone": "Lisää esittäjän muistiinpanot",
+        "notesOf": "Kalvon {number} esittäjän muistiinpanot",
+        "slides": "Kalvot",
+        "addSlide": "Lisää kalvo",
+        "blocked": "{count, plural, one {Yksi asia estää esityksen rakentamisen:} other {# asiaa estävät esityksen rakentamisen:}}",
+        "problem": {
+          "no-slides": "Luonnoksessa ei ole yhtään kalvoa.",
+          "too-many-slides": "Vain ensimmäiset 40 kalvoa säilytetään.",
+          "unknown-layout": "Kalvo {slide} käyttää asettelua, jota tämä mallipohja ei sisällä.",
+          "vertical-layout": "Kalvo {slide} käyttää asettelua, jossa teksti on sivuttain; valitse toinen.",
+          "unknown-placeholder": "Kalvolla {slide} on sisältöä kohtaan, jota sen asettelussa ei ole.",
+          "repeated-placeholder": "Kalvo {slide} täytti saman kohdan kahdesti.",
+          "kind-not-accepted": "Kalvolla {slide} on sisältöä, jota asettelu ei tue tähän.",
+          "empty-fill": "Kalvolla {slide} on tyhjä kenttä.",
+          "unknown-image": "Kalvo {slide} viittaa kuvaan, jota ei ole lisätty.",
+          "bullet-level": "Kalvolla {slide} luettelomerkit on sisennetty liian syvälle.",
+          "too-long": "Kalvolla {slide} on enemmän tekstiä kuin mahtuu, vaikka kokoa pienennetään. Lyhennä tai jaa sisältö useammalle kalvolle.",
+          "empty-slide": "Kalvo {slide} on tyhjä."
+        },
+        "build": "{count, plural, one {Luo esitys (# kalvo)} other {Luo esitys (# kalvoa)}}",
+        "willShrink": "{count, plural, one {Yhden dian teksti pienennetään, jotta se mahtuu.} other {# dian teksti pienennetään, jotta ne mahtuvat.}}"
       }
     }
   },

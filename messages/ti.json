@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "ምርምር ብራንድ",
         "description": "PDF፣ Word ወይ ፕሬዘንታችን ኣብ ብራንድ ቡክ ኣሕዋት: ፎንት፣ ቀለማት፣ ናይ ጽሑፍ ቁልፉት፣ ቃለ-ኣቀባት፣ ኣታሓዱስ ናይ ሎጎን ኣዘናን ድሕሪት ተፈጢሩ"
+      },
+      "deckBuilder": {
+        "label": "ዕርግጠኛ ደብተር ተምሳሌ",
+        "description": "ሓላፍነትን ምእንቲን ሓበሬታ ካብ ሓገዝ ንዝተረኽበ ቅድሚ ምውዳቕ ንትዕዛምካ ቕርጺ ዝተረኽበ ኣብ ቦርድ ተደርየት ኣምራኽኩ።"
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "ሓድሽ ምምዳብ ግንዛቤታት",
       "newFormFill": "መዘኻኸሪ ቦታ ማሕተም ሓድሽ",
       "newChannelDrafter": "ሓዲሽ ናይ ቻናል ጽሁፍ",
-      "newBrandReview": "ሓድሽ ምርምር ብራንድ"
+      "newBrandReview": "ሓድሽ ምርምር ብራንድ",
+      "newDeckBuilder": "ደብተር እያ"
     },
     "translation": {
       "chooseLanguage": "ትርጉም ቋንቋ",
@@ -4932,6 +4937,122 @@
         "found": "ዝገነቡ",
         "notes": "ማህበራዊ ህቡባት",
         "fileSuffix": "ብራንድ ምርመራ"
+      }
+    },
+    "deckBuilder": {
+      "loading": "ደብተር እዘካኦ…",
+      "busy": "ፍሉይ ቃለ ስርሕ ኣሎ ({name})። ክጸወትካ ወይ ክትሰንቕ እንተደልየ።",
+      "booksFailed": "ባህርያት መለምታት ምጽዳቕ ኣይተኻአሉ።",
+      "readFailed": "ዕታ ምርግጋት ደብተር ኣይተኻአሉ።",
+      "startFailed": "ምዕባው ምጅማር ኣይተኻአሉ።",
+      "buildFailed": "ደብተር ከም ኢየ ምምሓዛው ኣይተኻአሉ።",
+      "outlineFailed": "ምዕባው ከም ኢየ ምምዃን ኣይተኻአሉ።",
+      "stop": "ምስንቓ",
+      "download": ".pptx ምሓዝ",
+      "editOutline": "ምዕባው ምርኣይ",
+      "newDeck": "ደብተር እያ",
+      "startOver": "ከንደናት ጀምር",
+      "built": "ዝምሓዝ",
+      "forBook": "{template}, ን {book}",
+      "fromTemplate": "ካብ {template}",
+      "outlineTitle": "ምዕባው",
+      "outlineReady": "{count, plural, one {# ስላይድ ንምርኣይ ትዕዛም} other {# ስላይዶት ንምርኣይ ትዕዛም}}",
+      "repaired": "{count, plural, one {ሓደ ነገር ባህርያት ንኣገዳገድ ተስተኻል።} other {# ነገርታት ባህርያት ንኣገዳገድ ተስተኻሉ።}}",
+      "unread": "{names} ምቕባል ኣይተኻአሉ፤ ምዕባው ዘይ'ኣታት ተቃጽል።",
+      "outlinePhase": {
+        "template": "ቕርጺ ምቕባል",
+        "reading": "ምእንቲ ምቕባል",
+        "planning": "ስላይዶት ምምዃን"
+      },
+      "buildPhase": {
+        "composing": "ስላይዶት ምምሓዛው",
+        "rendering": "ስላይዶት መርኣያ ምምሃብ",
+        "storing": "ደብተር ምዕባይ",
+        "reviewing": "ባህርያት መለምታት ምርኣይ"
+      },
+      "status": {
+        "running": "ስራሕ እዩ ዝሓሰበ",
+        "done": "ተዛሪቡ",
+        "failed": "ኣይተሳነነ",
+        "stopped": "ተሰንቐ"
+      },
+      "reviewed": "{errors, plural, =0 {ክፍቲ ባህርያት ኣይኮነን} one {# ባህርያት ክፍቲ} other {# ባህርያት ክፍታት}}, {warnings, plural, =0 {ኣይኮነን ተኣካያይ} one {# ተኣካያይ} other {# ተኣካያዮት}}",
+      "reviewGap": {
+        "busy": "ተምሓዝ፤ ኣይተርአየን ባህርያት መለምታት (ናብ ምርኣይካ እትኸውን ይምላእ)",
+        "failed": "ተምሓዝ፤ ምርኣይ ባህርያት ኣይተኻአሉ"
+      },
+      "overflows": "{count, plural, one {ሓሳብ ሰናይ ኣብ ስላይድ {slides} ሽቶ ዘይተኻኣመ መጠን ዝነበረ።} other {ሓሳብ ሰናይ ኣብ ስላይዶት {slides} ሽቶ ዘይተኻኣመ መጠን ዝነበሩ።}}",
+      "shrunk": "{count, plural, one {ሓሳብ ሰናይ ኣብ ሓደ ስላይድ ንመጠን ብትዕቢ ተወከሰ።} other {ሓሳብ ሰናይ ኣብ # ስላይዶት ንመጠን ብትዕቢ ተወከሰ።}}",
+      "setup": {
+        "title": "ዕርግጠኛ ደብተር ተምሳሌ",
+        "intro": "ቅድሚ፥ ቕርጺ ምርጫ፣ ደብተር ንምእንቲ ሓበሬታ ኣካ ፣ ዝደረቐ ምእንቲ ምጨባጭ። ሞዴል ምዕባው ይሃብ፣ ካልኦት ተቀዶ ክትርኣይ የኽእል።",
+        "template": "ቕርጺ",
+        "booksLoading": "ቕርጺታት ባህርያት እዘካኦ…",
+        "fromBook": "ካብ {book}",
+        "ownTemplate": "ቕርጺካ ምጠቃም",
+        "replaceTemplate": "ፋይል ካልኦት ምርጫ",
+        "templateTypes": "ፓዎይርፖይንት ትዕዛም ወይ ቕርጺ (.pptx, .potx)",
+        "checkAgainst": "ባህርያት መለምታት ምርኣይ",
+        "noBook": "ኣይትርኣይ",
+        "brief": "ደብተር ንምንታይ?",
+        "briefPlaceholder": "ምሳሌ፡ 10 ደቓይ ሓበሬታ ሎሚ ማእከላይ መናፈርታት ናብ ጉልበታት ፣ ናይ ሓላፍነት ሶስቱ ቁፅሪ ተፈላልዩ።",
+        "sources": "ምንጪዎች",
+        "addSources": "ሰነዶታት ስዕተወ",
+        "sourceTypes": "PDF፣ Word፣ PowerPoint፣ Excel ወይ ጽሑፍ፡ ንካብ {max}",
+        "pictures": "ስእሎታት",
+        "addPictures": "ስእሎታት ኣብ ዲክ ይውሑት፡ ስዕተዉ",
+        "pictureTypes": "PNG፣ JPEG ወይ GIF፡ ንካብ {max}",
+        "remove": "{name} ሰዓተ",
+        "language": "ቋንቋ ዲክ",
+        "start": "ረዳት ውድብ ደኣፊ",
+        "wrongType": "ዝተመረተ ፋይል ኣብዚ ምጥቃም የለን።",
+        "uploadFailed": "መስግዕ ፋይል ደኣ ድኣን።"
+      },
+      "outline": {
+        "role": {
+          "title": "ርእሲ",
+          "subtitle": "ንይ ርእሲ",
+          "body": "ጽሑፍ",
+          "content": "ዝሓዘ ኣብዚ",
+          "picture": "ስእል"
+        },
+        "holds": "እቲ {place} ዝወሰደ",
+        "kindText": "ጽሑፍ",
+        "kindPicture": "ስእል",
+        "bullets": "ጥፊ",
+        "noPicture": "ስእል ምረፅ",
+        "alt": "ስእል ብግልጽ ውህስ",
+        "tooLong": "ዝጽሩ፡ ዚ {lines, plural, one {# መስመር} other {# መስመራት}} ከም {chars} ቁሳቁስ ይወስዳ፡ እንከተንከባኸበ።",
+        "shrinks": "ነገር ዝረዝሐ፡ ንግዝ ዝተንከባከበ ይሓለ።",
+        "bulletsHint": "ብመስመር የእዋኑ ጥፊ፡ ልዕሊ መስመር ብትንሽተይ ጥቓ ምድረት ይከኣል።",
+        "room": "ምቕርፍ ንካብ {lines, plural, one {# መስመር} other {# መስመራት}} ከም {chars} ቁሳቁስ።",
+        "slide": "ስላይድ {number}",
+        "layoutOf": "ቅድሚት ስላይድ {number}",
+        "moveUp": "ስላይድ {number} ናብ ላዕሊ ኣንበል",
+        "moveDown": "ስላይድ {number} ናብ ታሕቲ ኣንበል",
+        "remove": "ስላይድ {number} ሰዓተ",
+        "notesSome": "ዓማኹላት ንዝዛረቦ",
+        "notesNone": "ዓማኹላት ንዝዛረቦ ሰዕተዎ",
+        "notesOf": "ዓማኹላት ንዝዛረቦ ስላይድ {number}",
+        "slides": "ስላይድታት",
+        "addSlide": "ስላይድ ስዕተው",
+        "blocked": "{count, plural, one {ሓደ ወዳጅ ዲክ ንምቕባል ይአጉድ፡} other {# ወዳጃት ዲክ ንምቕባል ይአጉድ፡}}",
+        "problem": {
+          "no-slides": "ረዳት ውድብ ስላይድ የብሉን።",
+          "too-many-slides": "ብመደበ ዝመስል 40 ስላይድ እታዩ ይቕበሩ።",
+          "unknown-layout": "ስላይድ {slide} ቅድሚት ዘይተሰናኸየ ትምታት ይጠቐም።",
+          "vertical-layout": "ስላይድ {slide} ቅድሚት ብጽቡን ጽሑፍ ይጠቐም፡ ካልኣይ ምረፅ።",
+          "unknown-placeholder": "ስላይድ {slide} ናብ ቦታ ዘይተሰናኸየ ቅድሚት ዋህዎ ብዝሓዘ።",
+          "repeated-placeholder": "ስላይድ {slide} ቦታ ብዓቢ ዋህዎ።",
+          "kind-not-accepted": "ስላይድ {slide} ዝሓዘ ኣብቦታ ዘይትቕበሉ ቅድሚት ዋህዎ።",
+          "empty-fill": "ስላይድ {slide} ቦታ ባዕሉ ይኣብእ።",
+          "unknown-image": "ስላይድ {slide} ስእል ዘይስዕብ ስም ህርም።",
+          "bullet-level": "ስላይድ {slide} ጥፊ ደቂ ብዝረዝሐ ዱቃሽ።",
+          "too-long": "ስላይድ {slide} ጽሑፍ ጽሩዕ የገባን፡ እንከተንከባከበ። ንዝጽሩ ካኣል ወይ ስላይድ ዳግነ ኤካ።",
+          "empty-slide": "ስላይድ {slide} ዋጋ የብሉ።"
+        },
+        "build": "{count, plural, one {ዲክ ምቕባል (# ስላይድ)} other {ዲክ ምቕባል (# ስላይደታት)}}",
+        "willShrink": "{count, plural, one {መጽሓፍ ሓበሬታ ብሓደ መርበብ እንተረኣየ ንኽምጽእ ብተዋሕዶ ይትኣኸለ።} other {መጽሓፍ ሓበሬታ ብ{count} መርበባት እንተተመረምረ ንኽምጽእ ብተዋሕዶ ይትኣኸለ።}}"
       }
     }
   },

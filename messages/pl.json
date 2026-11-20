@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Przegląd marki",
         "description": "Sprawdź plik PDF, dokument Word lub prezentację pod kątem księgi znaku: czcionki, kolory, sformułowania, logotypy i ton komunikacji"
+      },
+      "deckBuilder": {
+        "label": "Kreator prezentacji",
+        "description": "Zaplanuj prezentację na podstawie briefu i źródeł, a następnie przygotuj ją z szablonu marki."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Nowe przetwarzanie grantów",
       "newFormFill": "Nowe wypełnienie dokumentu",
       "newChannelDrafter": "Nowy szkic kanału",
-      "newBrandReview": "Nowy przegląd marki"
+      "newBrandReview": "Nowy przegląd marki",
+      "newDeckBuilder": "Nowa prezentacja"
     },
     "translation": {
       "chooseLanguage": "Język docelowy",
@@ -4948,6 +4953,122 @@
         "found": "Znaleziono",
         "notes": "Notatki",
         "fileSuffix": "przegląd marki"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Ładowanie prezentacji…",
+      "busy": "Trwa już inne zadanie ({name}). Poczekaj na zakończenie lub zatrzymaj je.",
+      "booksFailed": "Nie udało się załadować brand booków.",
+      "readFailed": "Nie udało się odczytać postępu prezentacji.",
+      "startFailed": "Nie udało się rozpocząć tworzenia konspektu.",
+      "buildFailed": "Nie udało się zbudować prezentacji.",
+      "outlineFailed": "Nie udało się utworzyć konspektu.",
+      "stop": "Zatrzymaj",
+      "download": "Pobierz .pptx",
+      "editOutline": "Edytuj konspekt",
+      "newDeck": "Nowa prezentacja",
+      "startOver": "Rozpocznij od nowa",
+      "built": "Zbudowano",
+      "forBook": "{template}, dla {book}",
+      "fromTemplate": "Z szablonu {template}",
+      "outlineTitle": "Konspekt",
+      "outlineReady": "{count, plural, one {# slajd gotowy do edycji} other {# slajdów gotowych do edycji}}",
+      "repaired": "{count, plural, one {Jeden element planu został dopasowany do szablonu.} other {# elementów planu zostało dopasowanych do szablonu.}}",
+      "unread": "Nie udało się odczytać {names}; konspekt utworzono bez nich.",
+      "outlinePhase": {
+        "template": "Odczytywanie szablonu",
+        "reading": "Odczytywanie źródeł",
+        "planning": "Planowanie slajdów"
+      },
+      "buildPhase": {
+        "composing": "Tworzenie slajdów",
+        "rendering": "Sprawdzanie wyglądu slajdów",
+        "storing": "Zapisywanie prezentacji",
+        "reviewing": "Weryfikacja z brand bookiem"
+      },
+      "status": {
+        "running": "W trakcie",
+        "done": "Zakończono",
+        "failed": "Niepowodzenie",
+        "stopped": "Zatrzymano"
+      },
+      "reviewed": "{errors, plural, =0 {Brak błędów marki} one {# błąd marki} other {# błędów marki}}, {warnings, plural, =0 {brak ostrzeżeń} one {# ostrzeżenie} other {# ostrzeżeń}}",
+      "reviewGap": {
+        "busy": "Zbudowano; nie porównano z brand bookiem (Twoje recenzje były zajęte)",
+        "failed": "Zbudowano; nie udało się zweryfikować z brand bookiem"
+      },
+      "overflows": "{count, plural, one {Tekst na slajdzie {slides} nadal wykracza poza pole po dopasowaniu.} other {Tekst na slajdach {slides} nadal wykracza poza pole po dopasowaniu.}}",
+      "shrunk": "{count, plural, one {Tekst na jednym slajdzie został pomniejszony, aby się zmieścić.} other {Tekst na # slajdach został pomniejszony, aby się zmieścił.}}",
+      "setup": {
+        "title": "Kreator prezentacji",
+        "intro": "Wybierz szablon, określ cel prezentacji i dodaj źródła. Model przygotuje konspekt, który możesz edytować przed budową prezentacji na podstawie układów szablonu.",
+        "template": "Szablon",
+        "booksLoading": "Ładowanie szablonów marki…",
+        "fromBook": "Z brand booka {book}",
+        "ownTemplate": "Użyj własnego szablonu",
+        "replaceTemplate": "Wybierz inny plik",
+        "templateTypes": "Prezentacja PowerPoint lub szablon (.pptx, .potx)",
+        "checkAgainst": "Porównaj z brand bookiem",
+        "noBook": "Nie porównuj",
+        "brief": "Jaki jest cel prezentacji?",
+        "briefPlaceholder": "Na przykład: 10-minutowe podsumowanie dla zarządu na temat naszych klinik w tym roku, z trzema najważniejszymi liczbami.",
+        "sources": "Źródła",
+        "addSources": "Dodaj dokumenty do wykorzystania",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel lub tekst; do {max}",
+        "pictures": "Obrazy",
+        "addPictures": "Dodaj obrazy, które mogą być użyte w prezentacji",
+        "pictureTypes": "PNG, JPEG lub GIF; do {max}",
+        "remove": "Usuń {name}",
+        "language": "Język prezentacji",
+        "start": "Szkic konspektu",
+        "wrongType": "Tego typu pliku nie można tutaj użyć.",
+        "uploadFailed": "Przesyłanie nie powiodło się."
+      },
+      "outline": {
+        "role": {
+          "title": "Tytuł",
+          "subtitle": "Podtytuł",
+          "body": "Tekst",
+          "content": "Treść",
+          "picture": "Obraz"
+        },
+        "holds": "Zawartość: {place}",
+        "kindText": "Tekst",
+        "kindPicture": "Obraz",
+        "bullets": "Punkty",
+        "noPicture": "Wybierz obraz",
+        "alt": "Opisz obraz",
+        "tooLong": "Za długie: mieści około {lines, plural, one {# wiersza} few {# wierszy} many {# wierszy} other {# wierszy}} po {chars} znaków, nawet po zmniejszeniu czcionki.",
+        "shrinks": "Trochę za długie: czcionka zostanie zmniejszona, by się zmieściło.",
+        "bulletsHint": "Jeden punkt na linię. Rozpocznij linię dwoma spacjami, aby ją wciąć.",
+        "room": "Miejsce na około {lines, plural, one {# wiersz} few {# wiersze} many {# wierszy} other {# wierszy}} po {chars} znaków.",
+        "slide": "Slajd {number}",
+        "layoutOf": "Układ slajdu {number}",
+        "moveUp": "Przesuń slajd {number} wyżej",
+        "moveDown": "Przesuń slajd {number} niżej",
+        "remove": "Usuń slajd {number}",
+        "notesSome": "Notatki prelegenta",
+        "notesNone": "Dodaj notatki prelegenta",
+        "notesOf": "Notatki prelegenta do slajdu {number}",
+        "slides": "Slajdy",
+        "addSlide": "Dodaj slajd",
+        "blocked": "{count, plural, one {Prezentacji nie można zbudować z powodu 1 problemu:} other {Prezentacji nie można zbudować z powodu # problemów:}}",
+        "problem": {
+          "no-slides": "Konspekt nie zawiera żadnych slajdów.",
+          "too-many-slides": "Zachowano tylko pierwsze 40 slajdów.",
+          "unknown-layout": "Slajd {slide} używa układu, którego ten szablon nie obsługuje.",
+          "vertical-layout": "Slajd {slide} używa układu z tekstem w pionie; wybierz inny układ.",
+          "unknown-placeholder": "Slajd {slide} zawiera treść dla pola, którego nie ma w jego układzie.",
+          "repeated-placeholder": "Slajd {slide} dwa razy wypełnił to samo miejsce.",
+          "kind-not-accepted": "Slajd {slide} zawiera treść, której nie można w tym miejscu umieścić.",
+          "empty-fill": "Slajd {slide} zawiera puste pole.",
+          "unknown-image": "Slajd {slide} odwołuje się do obrazu, który nie został dodany.",
+          "bullet-level": "Slajd {slide} zawiera zbyt głębokie wcięcie punktów.",
+          "too-long": "Slajd {slide} zawiera zbyt dużo tekstu, nawet po zmniejszeniu czcionki. Skróć treść lub podziel slajd.",
+          "empty-slide": "Slajd {slide} jest pusty."
+        },
+        "build": "{count, plural, one {Zbuduj prezentację (# slajd)} other {Zbuduj prezentację (# slajdów)}}",
+        "willShrink": "{count, plural, one {Tekst na jednym slajdzie zostanie pomniejszony, aby się zmieścił.} other {Tekst na # slajdach zostanie pomniejszony, aby się zmieścił.}}"
       }
     }
   },

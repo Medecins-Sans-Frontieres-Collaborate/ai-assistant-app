@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Ukuhlolwa komkhiqizo",
         "description": "Hlola i-PDF, idokhumenti ye-Word noma isethulo uma kuhambisana nencwadi yomkhiqizo: amafonti, imibala, amagama asetshenziswayo, amalogo nendlela yokukhuluma"
+      },
+      "deckBuilder": {
+        "label": "Umakhi wekhadikhadi",
+        "description": "Hlela ukwethula kusuka esifinyezweni nakumithombo, bese wakhe usebenzisa itemplate yomkhiqizo."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Ukucubungula izibonelelo ezintsha",
       "newFormFill": "Gcwalisa umbhalo omusha",
       "newChannelDrafter": "Isikhala esisha sesiteshi",
-      "newBrandReview": "Ukuhlolwa komkhiqizo okusha"
+      "newBrandReview": "Ukuhlolwa komkhiqizo okusha",
+      "newDeckBuilder": "Ikhadikhadi elisha"
     },
     "translation": {
       "chooseLanguage": "Ulimi oluqondiwe",
@@ -4932,6 +4937,122 @@
         "found": "Okutholiwe",
         "notes": "Amanothi",
         "fileSuffix": "ukubuyekezwa komkhiqizo"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Kulayishwa ikhadi...",
+      "busy": "Usunomsebenzi oqhubekayo ({name}). Linda uphele noma uyime.",
+      "booksFailed": "Akwenzekanga ukulayisha amabhuku omkhiqizo.",
+      "readFailed": "Akwenzekanga ukufunda inqubekela phambili yekhadi.",
+      "startFailed": "Akwenzekanga ukuqala uhlaka.",
+      "buildFailed": "Ikhadi alikwazanga ukwakhiwa.",
+      "outlineFailed": "Uhlaka aluzange lwenziwe.",
+      "stop": "Yima",
+      "download": "Landa .pptx",
+      "editOutline": "Hlela uhlaka",
+      "newDeck": "Ikhadikhadi elisha",
+      "startOver": "Qala kabusha",
+      "built": "Kwakiwe",
+      "forBook": "{template}, ye-{book}",
+      "fromTemplate": "Okuvela ku-{template}",
+      "outlineTitle": "Uhlaka",
+      "outlineReady": "{count, plural, one {# isilayidi, sekulungele ukuhlela} other {# izilayidi, sekulungele ukuhlela}}",
+      "repaired": "{count, plural, one {Into eyodwa ohlelweni ilungiswe ukuze ilingane nitemplate.} other {# izinto ohlelweni zilungiswe ukuze zilingane nitemplate.}}",
+      "unread": "Akwenzekanga ukufunda {names}; uhlaka lwenziwe ngaphandle kwazo.",
+      "outlinePhase": {
+        "template": "Kufundwa itemplate",
+        "reading": "Kufundwa imithombo",
+        "planning": "Kuhlelwa izilayidi"
+      },
+      "buildPhase": {
+        "composing": "Kwakhiwa izilayidi",
+        "rendering": "Kuhlolwa ukubonakala kwezilayidi",
+        "storing": "Kugcinwa ikhadi",
+        "reviewing": "Kuhlolwa ngebhuku lomkhiqizo"
+      },
+      "status": {
+        "running": "Kuyasebenza",
+        "done": "Kuqediwe",
+        "failed": "Kwehlulekile",
+        "stopped": "Kumisiwe"
+      },
+      "reviewed": "{errors, plural, =0 {Awekho amaphutha omkhiqizo} one {# iphutha lomkhiqizo} other {# amaphutha omkhiqizo}}, {warnings, plural, =0 {azikho izixwayiso} one {# isixwayiso} other {# izixwayiso}}",
+      "reviewGap": {
+        "busy": "Kwakiwe; akuhlolwanga ngebhuku lomkhiqizo (izibuyekezo zakho bezimatasa)",
+        "failed": "Kwakiwe; ukuhlola komkhiqizo akuzange kuqale"
+      },
+      "overflows": "{count, plural, one {Umbhalo kusilayidi {slides} usaqhubeka ngaphandle, nangemuva kokufakwa.} other {Umbhalo kuzilayidi {slides} usaqhubeka ngaphandle, nangemuva kokufakwa.}}",
+      "shrunk": "{count, plural, one {Umbhalo kusilayidi esisodwa uncishisiwe ukuze ulunge.} other {Umbhalo ku-# izilayidi uncishisiwe ukuze ulunge.}}",
+      "setup": {
+        "title": "Umakhi wekhadikhadi",
+        "intro": "Khetha itemplate, chaza ukuthi ikhadi lenzelwe ini bese wengeza ongalisebenzisa. Imodeli izokwenza uhlaka ongahlela ngaphambi kokuthi ikhadi lakhiwe kusetshenziswa ama-layout etemplate.",
+        "template": "Itemplate",
+        "booksLoading": "Kulayishwa amathempulethi womkhiqizo...",
+        "fromBook": "Okuvela ku-{book}",
+        "ownTemplate": "Sebenzisa itemplate yakho",
+        "replaceTemplate": "Khetha elinye ifayela",
+        "templateTypes": "I-PowerPoint presentation noma itemplate (.pptx, .potx)",
+        "checkAgainst": "Hlola ngebhuku lomkhiqizo",
+        "noBook": "Ungahloli",
+        "brief": "Ikhadi lenzelwe ini?",
+        "briefPlaceholder": "Isibonelo: ukubuyekeza kwemizuzu eyi-10 ebhodini ngokuphathelene nezikhungo zethu nonyaka, kanye nezibalo ezintathu ezibalulekile.",
+        "sources": "Imithombo",
+        "addSources": "Engeza amadokhumenti ongawasebenzisa",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel noma umbhalo; kufika ku-{max}",
+        "pictures": "Izithombe",
+        "addPictures": "Engeza izithombe ezizosebenziswa yile deck",
+        "pictureTypes": "PNG, JPEG noma i-GIF; kufika ku-{max}",
+        "remove": "Susa u-{name}",
+        "language": "Ulimi lwaleli deck",
+        "start": "Okubhalweyo okokuqala",
+        "wrongType": "Lolu hlobo lwefayela aluvunyelwe lapha.",
+        "uploadFailed": "Ukulayisha kwehlulekile."
+      },
+      "outline": {
+        "role": {
+          "title": "Isihloko",
+          "subtitle": "Isihlokwana",
+          "body": "Umbhalo",
+          "content": "Okuqukethwe",
+          "picture": "Isithombe"
+        },
+        "holds": "Okugcinwa u-{place}",
+        "kindText": "Umbhalo",
+        "kindPicture": "Isithombe",
+        "bullets": "Amaphuzu",
+        "noPicture": "Khetha isithombe",
+        "alt": "Chaza isithombe",
+        "tooLong": "Kude kakhulu: lokhu kugcine cishe {lines, plural, one {umugqa oyodwa} other {imigqa engu-#}} yezinhlamvu ezingama-{chars}, noma kwisilinganiselo esincane.",
+        "shrinks": "Kude kancane: kuzonciphiswa ukuze kungene.",
+        "bulletsHint": "Umugqa owodwa wephuzu ngakunye. Qala umugqa ngezikhala ezimbili ukuze uwuhlele.",
+        "room": "Isikhala sicishe sanele {lines, plural, one {umugqa oyodwa} other {imigqa engu-#}} yezinhlamvu ezingama-{chars}.",
+        "slide": "I-slide {number}",
+        "layoutOf": "Umklamo we-slide {number}",
+        "moveUp": "Nyusa i-slide {number}",
+        "moveDown": "Yehlisa i-slide {number}",
+        "remove": "Susa i-slide {number}",
+        "notesSome": "Amanothi omkhulumi",
+        "notesNone": "Engeza amanothi omkhulumi",
+        "notesOf": "Amanothi omkhulumi we-slide {number}",
+        "slides": "Ama-slide",
+        "addSlide": "Engeza i-slide",
+        "blocked": "{count, plural, one {Into eyodwa ivimba ukwakhiwa kwedeck:} other {Izinto ezingama-# zivimba ukwakhiwa kwedeck:}}",
+        "problem": {
+          "no-slides": "Umbhalo awunawo ama-slide.",
+          "too-many-slides": "Kugcinwa ama-slide okuqala angu-40 kuphela.",
+          "unknown-layout": "I-slide {slide} isebenzisa umklamo ongatholakali kule template.",
+          "vertical-layout": "I-slide {slide} isebenzisa umklamo onombhalo obhaliwe mpo; khetha omunye.",
+          "unknown-placeholder": "I-slide {slide} ibe nokuqukethwe kwendawo umklamo wayo ongayinalo.",
+          "repeated-placeholder": "I-slide {slide} igcwalise indawo efanayo kabili.",
+          "kind-not-accepted": "I-slide {slide} ibe nokuqukethwe umklamo wayo ongakwazi ukukubamba lapho.",
+          "empty-fill": "I-slide {slide} inokugcwaliswa okungenalutho.",
+          "unknown-image": "I-slide {slide} ibiza isithombe esingekangezanywe.",
+          "bullet-level": "I-slide {slide} ibe namaphuzu anokuhlelwa okujulile kakhulu.",
+          "too-long": "I-slide {slide} inomlando omude kunokugoqeka, noma yenza incane. Mfushane noma yenza ama-slide amabili.",
+          "empty-slide": "I-slide {slide} ayinalutho."
+        },
+        "build": "{count, plural, one {Yakha i-deck (# i-slide)} other {Yakha i-deck (# ama-slide)}}",
+        "willShrink": "{count, plural, one {Umbhalo kuslayidi elilodwa uzokwenziwa mncane ukuze ulingane.} other {Umbhalo kuslayidi ezi-{count} uzokwenziwa mncane ukuze ulingane.}}"
       }
     }
   },

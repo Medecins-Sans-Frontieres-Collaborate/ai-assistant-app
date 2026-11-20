@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Gusuzuma ikirango",
         "description": "Genzura PDF, inyandiko ya Word cyangwa igitabo cya PowerPoint ugereranyije n'igitabo cy'ikirango: imiforomo, amabara, amagambo, logos n'ijwi ry’ibirimo"
+      },
+      "deckBuilder": {
+        "label": "Deck builder",
+        "description": "Tegura igitekerezo cya gahunda uhereye ku bisobanuro ngufi n'inkomoko, hanyuma uyubake ukoresheje ishusho igaragara ya brand."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Igenzura rishya rya grants",
       "newFormFill": "Kwuzuza inyandiko nshya",
       "newChannelDrafter": "Ubutumwa bushya bw'umuyoboro",
-      "newBrandReview": "Gusuzuma ikirango nshya"
+      "newBrandReview": "Gusuzuma ikirango nshya",
+      "newDeckBuilder": "Deck nshya"
     },
     "translation": {
       "chooseLanguage": "Ururimi nyamukuru",
@@ -4932,6 +4937,122 @@
         "found": "Icyabonetse",
         "notes": "Inyandiko",
         "fileSuffix": "isuzuma ry'ikimenyetso"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Turimo gupakira deck...",
+      "busy": "Hari indi mirimo iri gukorwa ({name}). Tegereza irangire cyangwa uyihagarike.",
+      "booksFailed": "Ntibishobotse gupakira brand books.",
+      "readFailed": "Ntibishobotse gusoma uko deck igeze.",
+      "startFailed": "Ntibishobotse gutangiza outline.",
+      "buildFailed": "Ntibishobotse kubaka deck.",
+      "outlineFailed": "Ntibishobotse gukora outline.",
+      "stop": "Hagarika",
+      "download": "Kuramo .pptx",
+      "editOutline": "Hindura outline",
+      "newDeck": "Deck nshya",
+      "startOver": "Tangira bushya",
+      "built": "Byuzuye",
+      "forBook": "{template}, kuri {book}",
+      "fromTemplate": "Bikomotse kuri {template}",
+      "outlineTitle": "Outline",
+      "outlineReady": "{count, plural, one {slide 1, biteguye guhindurwa} other {slides #, biteguye guhindurwa}}",
+      "repaired": "{count, plural, one {Ikintu kimwe kuri plani cyahinduwe ngo kijyane na template.} other {Ibintu # kuri plan byahinduwe ngo bijyane na template.}}",
+      "unread": "Ntibishobotse gusoma {names}; outline yakozwe utabibashije.",
+      "outlinePhase": {
+        "template": "Turimo gusoma template",
+        "reading": "Turimo gusoma inkomoko",
+        "planning": "Turimo gutegura slides"
+      },
+      "buildPhase": {
+        "composing": "Turimo kubaka slides",
+        "rendering": "Turimo kugenzura isura ya slides",
+        "storing": "Turimo kubika deck",
+        "reviewing": "Turimo kugenzura na brand book"
+      },
+      "status": {
+        "running": "Birakorwa",
+        "done": "Birarangiye",
+        "failed": "Byanze",
+        "stopped": "Byahagaze"
+      },
+      "reviewed": "{errors, plural, =0 {Nta makosa ya brand} one {ikosa # rya brand} other {amakosa # ya brand}}, {warnings, plural, =0 {nta biburira} one {# riburira} other {# biburira}}",
+      "reviewGap": {
+        "busy": "Byuzuye; ntibagenzuwe na brand book (ibisuzumwa byawe byari bifite akazi)",
+        "failed": "Byuzuye; kugenzura brand nta bwo byakunze"
+      },
+      "overflows": "{count, plural, one {Inyandiko iri kuri slide {slides} iracyarenze nubwo yashyizwe mu rugero.} other {Inyandiko iri kuri slides {slides} iracyarenze n'ubwo yashyizwe mu rugero.}}",
+      "shrunk": "{count, plural, one {Inyandiko kuri slide imwe yagizwe nto ngo ijyane n'ikibanza.} other {Inyandiko kuri slides # zagizwe nto ngo zijyane n'ibibanza.}}",
+      "setup": {
+        "title": "Deck builder",
+        "intro": "Hitamo template, usobanure icyo deck igamije kandi wongeremo ibyo igomba gushingiraho. Model itegura outline ushobora guhindura mbere yo kubaka deck iva muri layouts za template.",
+        "template": "Template",
+        "booksLoading": "Turimo gupakira brand templates...",
+        "fromBook": "Bikomotse kuri {book}",
+        "ownTemplate": "Koresha template yawe bwite",
+        "replaceTemplate": "Hitamo irindi fichier",
+        "templateTypes": "PowerPoint presentation cyangwa template (.pptx, .potx)",
+        "checkAgainst": "Suzuma na brand book",
+        "noBook": "Ntugenzure",
+        "brief": "Deck igamije iki?",
+        "briefPlaceholder": "Urugero: raporo y’iminota 10 ku buyobozi igaragaza ibitariho ubu muri kliniki zacu uyu mwaka, hamwe n’imibare itatu ifatika.",
+        "sources": "Inkomoko",
+        "addSources": "Ongeramo inyandiko zo gukoresha",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel cyangwa inyandiko; kugeza kuri {max}",
+        "pictures": "Amafoto",
+        "addPictures": "Ongeramo amafoto deck ishobora gukoresha",
+        "pictureTypes": "PNG, JPEG cyangwa GIF; kugeza kuri {max}",
+        "remove": "Kura {name}",
+        "language": "Ururimi rwa deck",
+        "start": "Ishusho y'icyo ugiye gukora",
+        "wrongType": "Ubwoko bw’iyo file ntibwemewe hano.",
+        "uploadFailed": "Kohereza byarananiranye."
+      },
+      "outline": {
+        "role": {
+          "title": "Umwanya w’inyandiko ya mbere",
+          "subtitle": "Umwanya w’inyandiko nto",
+          "body": "Inyandiko",
+          "content": "Ibirimo",
+          "picture": "Ifoto"
+        },
+        "holds": "Ibiri muri {place}",
+        "kindText": "Inyandiko",
+        "kindPicture": "Ifoto",
+        "bullets": "Amasonga",
+        "noPicture": "Hitamo ifoto",
+        "alt": "Sobanura ifoto",
+        "tooLong": "Birarenze: ibi bifata hafi {lines, plural, one {umurongo 1} other {imirongo #}} y'inyuguti {chars}, nubwo byagabanyijwe.",
+        "shrinks": "Birimo kuba birebire: bizagabanywa ngo bihure n’umwanya.",
+        "bulletsHint": "Isonga imwe kuri buri murongo. Tangira umurongo n’utundi tuziga tubiri kugira ngo uwumanuke.",
+        "room": "Umwanya wa {lines, plural, one {umurongo 1} other {imirongo #}} w’inyuguti {chars}.",
+        "slide": "Slide {number}",
+        "layoutOf": "Imiterere ya slide {number}",
+        "moveUp": "Igira slide {number} hejuru",
+        "moveDown": "Igira slide {number} hasi",
+        "remove": "Kura slide {number}",
+        "notesSome": "Inyandiko za uvuga",
+        "notesNone": "Ongeramo inyandiko za uvuga",
+        "notesOf": "Inyandiko za uvuga kuri slide {number}",
+        "slides": "Slides",
+        "addSlide": "Ongeramo slide",
+        "blocked": "{count, plural, one {Ikintu kimwe gituma deck itubakwa:} other {Ibintu # bituma deck itubakwa:}}",
+        "problem": {
+          "no-slides": "Imiterere nta slides irimo.",
+          "too-many-slides": "Ni slides 40 za mbere gusa nizigaragara.",
+          "unknown-layout": "Slide {slide} ikoresheje imiterere iyi template idafite.",
+          "vertical-layout": "Slide {slide} ikoresheje imiterere irimo inyandiko zijya ku ruhande; hitamo indi.",
+          "unknown-placeholder": "Slide {slide} ifite ibiri ahantu imiterere yayo idafite.",
+          "repeated-placeholder": "Slide {slide} yuzuyemo ahantu hakoreshejwe kabiri.",
+          "kind-not-accepted": "Slide {slide} ifite ibirimo imiterere yayo itashobora kwakira.",
+          "empty-fill": "Slide {slide} ifite umwanya utuzuye.",
+          "unknown-image": "Slide {slide} yitiriye ifoto itariyongerwaho.",
+          "bullet-level": "Slide {slide} ifite amasonga manitse cyane.",
+          "too-long": "Slide {slide} irimo inyandiko nyinshi kurenza umwanya, nubwo byagabanyijwe. Gabanya cyangwa shyira kuri slide ebyiri.",
+          "empty-slide": "Slide {slide} nta kirimo."
+        },
+        "build": "{count, plural, one {Baka deck (# slide)} other {Baka deck (# slides)}}",
+        "willShrink": "{count, plural, one {Inyandiko iri kuri slide imwe izagirwa nto kugira ngo ijyane n’ububiko.} other {Inyandiko iri kuri slide # izagirwa nto kugira ngo ijyane n’ububiko.}}"
       }
     }
   },

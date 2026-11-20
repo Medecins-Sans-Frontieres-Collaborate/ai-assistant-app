@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Revisão de marca",
         "description": "Verifique um PDF, documento Word ou apresentação com base em um manual de marca: fontes, cores, textos, logotipos e tom"
+      },
+      "deckBuilder": {
+        "label": "Construtor de apresentações",
+        "description": "Planeje uma apresentação a partir de um briefing e fontes, depois construa-a a partir de um template da marca."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Novo processamento de grants",
       "newFormFill": "Novo preenchimento de documento",
       "newChannelDrafter": "Novo rascunho de canal",
-      "newBrandReview": "Nova revisão de marca"
+      "newBrandReview": "Nova revisão de marca",
+      "newDeckBuilder": "Nova apresentação"
     },
     "translation": {
       "chooseLanguage": "Idioma de destino",
@@ -4948,6 +4953,122 @@
         "found": "Encontrado",
         "notes": "Notas",
         "fileSuffix": "revisão de marca"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Carregando a apresentação…",
+      "busy": "Você já possui um trabalho em andamento ({name}). Aguarde terminar ou interrompa-o.",
+      "booksFailed": "Não foi possível carregar os brand books.",
+      "readFailed": "Não foi possível ler o progresso da apresentação.",
+      "startFailed": "Não foi possível iniciar o roteiro.",
+      "buildFailed": "Não foi possível construir a apresentação.",
+      "outlineFailed": "Não foi possível criar o roteiro.",
+      "stop": "Parar",
+      "download": "Baixar .pptx",
+      "editOutline": "Editar roteiro",
+      "newDeck": "Nova apresentação",
+      "startOver": "Recomeçar",
+      "built": "Construído",
+      "forBook": "{template}, para {book}",
+      "fromTemplate": "De {template}",
+      "outlineTitle": "Roteiro",
+      "outlineReady": "{count, plural, one {# slide, pronto para editar} other {# slides, prontos para editar}}",
+      "repaired": "{count, plural, one {Um item do plano foi ajustado para se adequar ao template.} other {# itens do plano foram ajustados para se adequar ao template.}}",
+      "unread": "Não foi possível ler {names}; o roteiro foi criado sem eles.",
+      "outlinePhase": {
+        "template": "Lendo o template",
+        "reading": "Lendo as fontes",
+        "planning": "Planejando os slides"
+      },
+      "buildPhase": {
+        "composing": "Construindo os slides",
+        "rendering": "Verificando a renderização dos slides",
+        "storing": "Salvando a apresentação",
+        "reviewing": "Verificando com o brand book"
+      },
+      "status": {
+        "running": "Trabalhando",
+        "done": "Concluído",
+        "failed": "Falhou",
+        "stopped": "Interrompido"
+      },
+      "reviewed": "{errors, plural, =0 {Nenhum erro de marca} one {# erro de marca} other {# erros de marca}}, {warnings, plural, =0 {sem avisos} one {# aviso} other {# avisos}}",
+      "reviewGap": {
+        "busy": "Construído; não verificado com o brand book (suas revisões estavam em uso)",
+        "failed": "Construído; não foi possível realizar a verificação de marca"
+      },
+      "overflows": "{count, plural, one {Texto no slide {slides} ainda excede o espaço após o ajuste.} other {Texto nos slides {slides} ainda excede o espaço após o ajuste.}}",
+      "shrunk": "{count, plural, one {O texto de um slide foi reduzido para encaixar.} other {O texto de # slides foi reduzido para encaixar.}}",
+      "setup": {
+        "title": "Construtor de apresentações",
+        "intro": "Escolha um template, informe para que servirá a apresentação e adicione os materiais de apoio. Um modelo irá criar um roteiro que pode ser editado antes da apresentação ser montada com os layouts do template.",
+        "template": "Template",
+        "booksLoading": "Carregando templates de marca…",
+        "fromBook": "De {book}",
+        "ownTemplate": "Usar seu próprio template",
+        "replaceTemplate": "Escolher outro arquivo",
+        "templateTypes": "Uma apresentação ou template do PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Verificar com um brand book",
+        "noBook": "Não verificar",
+        "brief": "Para que servirá a apresentação?",
+        "briefPlaceholder": "Por exemplo: uma atualização de 10 minutos para a diretoria sobre nossas clínicas este ano, com os três números mais importantes.",
+        "sources": "Fontes",
+        "addSources": "Adicione documentos para utilizar",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel ou texto; até {max}",
+        "pictures": "Imagens",
+        "addPictures": "Adicione imagens que o deck pode usar",
+        "pictureTypes": "PNG, JPEG ou GIF; até {max}",
+        "remove": "Remover {name}",
+        "language": "Idioma do deck",
+        "start": "Rascunhar estrutura",
+        "wrongType": "Esse tipo de arquivo não pode ser usado aqui.",
+        "uploadFailed": "O envio falhou."
+      },
+      "outline": {
+        "role": {
+          "title": "Título",
+          "subtitle": "Subtítulo",
+          "body": "Texto",
+          "content": "Conteúdo",
+          "picture": "Imagem"
+        },
+        "holds": "O que {place} contém",
+        "kindText": "Texto",
+        "kindPicture": "Imagem",
+        "bullets": "Tópicos",
+        "noPicture": "Escolha uma imagem",
+        "alt": "Descreva a imagem",
+        "tooLong": "Muito longo: este campo comporta cerca de {lines, plural, one {# linha} other {# linhas}} de {chars} caracteres, mesmo em tamanho reduzido.",
+        "shrinks": "Um pouco longo: será reduzido para caber.",
+        "bulletsHint": "Um tópico por linha. Comece uma linha com dois espaços para indentar.",
+        "room": "Espaço para cerca de {lines, plural, one {# linha} other {# linhas}} de {chars} caracteres.",
+        "slide": "Slide {number}",
+        "layoutOf": "Layout do slide {number}",
+        "moveUp": "Mover slide {number} para cima",
+        "moveDown": "Mover slide {number} para baixo",
+        "remove": "Remover slide {number}",
+        "notesSome": "Notas do apresentador",
+        "notesNone": "Adicionar notas do apresentador",
+        "notesOf": "Notas do apresentador do slide {number}",
+        "slides": "Slides",
+        "addSlide": "Adicionar slide",
+        "blocked": "{count, plural, one {Um item impede a criação do deck:} other {# itens impedem a criação do deck:}}",
+        "problem": {
+          "no-slides": "A estrutura não possui slides.",
+          "too-many-slides": "Apenas os primeiros 40 slides serão mantidos.",
+          "unknown-layout": "O slide {slide} usa um layout que este modelo não possui.",
+          "vertical-layout": "O slide {slide} usa um layout com texto na horizontal; escolha outro.",
+          "unknown-placeholder": "O slide {slide} possui conteúdo para um local que seu layout não possui.",
+          "repeated-placeholder": "O slide {slide} preencheu um local duas vezes.",
+          "kind-not-accepted": "O slide {slide} possui conteúdo que o layout não suporta nesse local.",
+          "empty-fill": "O slide {slide} possui um campo vazio.",
+          "unknown-image": "O slide {slide} faz referência a uma imagem que não foi adicionada.",
+          "bullet-level": "O slide {slide} tem tópicos com indentação muito profunda.",
+          "too-long": "O slide {slide} tem mais texto do que cabe, mesmo reduzido. Reduza ou divida o conteúdo do slide.",
+          "empty-slide": "O slide {slide} está vazio."
+        },
+        "build": "{count, plural, one {Criar deck (# slide)} other {Criar deck (# slides)}}",
+        "willShrink": "{count, plural, one {O texto em um slide será reduzido para caber.} other {O texto em # slides será reduzido para caber.}}"
       }
     }
   },

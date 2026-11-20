@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "בדיקת מיתוג",
         "description": "בדיקת מסמך PDF, וורד או מצגת מול ספר מיתוג: פונטים, צבעים, נוסח, לוגואים וטון"
+      },
+      "deckBuilder": {
+        "label": "בונה מצגות",
+        "description": "תכנן מצגת מתמצית ומקורות, ובנה אותה מתבנית ממותגת."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "עיבוד מענקים חדש",
       "newFormFill": "מילוי מסמך חדש",
       "newChannelDrafter": "טיוטת ערוץ חדשה",
-      "newBrandReview": "בדיקת מיתוג חדשה"
+      "newBrandReview": "בדיקת מיתוג חדשה",
+      "newDeckBuilder": "מצגת חדשה"
     },
     "translation": {
       "chooseLanguage": "שפת יעד",
@@ -4948,6 +4953,122 @@
         "found": "נמצא",
         "notes": "הערות",
         "fileSuffix": "סקירת מותג"
+      }
+    },
+    "deckBuilder": {
+      "loading": "טוען את המצגת…",
+      "busy": "יש לך עבודה פעילה ({name}). המתן לסיום או הפסק אותה.",
+      "booksFailed": "לא ניתן לטעון ספרי מותג.",
+      "readFailed": "לא ניתן לקרוא את התקדמות המצגת.",
+      "startFailed": "לא ניתן להתחיל את המתווה.",
+      "buildFailed": "לא ניתן לבנות את המצגת.",
+      "outlineFailed": "לא ניתן ליצור את המתווה.",
+      "stop": "הפסק",
+      "download": "הורד .pptx",
+      "editOutline": "עריכת מתווה",
+      "newDeck": "מצגת חדשה",
+      "startOver": "התחל מחדש",
+      "built": "נבנה",
+      "forBook": "{template}, עבור {book}",
+      "fromTemplate": "מתוך {template}",
+      "outlineTitle": "מתווה",
+      "outlineReady": "{count, plural, one {שקופית אחת, מוכנה לעריכה} other {# שקופיות, מוכנות לעריכה}}",
+      "repaired": "{count, plural, one {דבר אחד בתכנון הותאם לתבנית.} other {# דברים בתכנון הותאמו לתבנית.}}",
+      "unread": "לא ניתן היה לקרוא את {names}; המתווה נבנה בלעדיהם.",
+      "outlinePhase": {
+        "template": "קורא את התבנית",
+        "reading": "קורא את המקורות",
+        "planning": "מתכנן את השקופיות"
+      },
+      "buildPhase": {
+        "composing": "בונה את השקופיות",
+        "rendering": "בודק הצגת השקופיות",
+        "storing": "שומר את המצגת",
+        "reviewing": "בודק מול ספר המותג"
+      },
+      "status": {
+        "running": "בתהליך",
+        "done": "הושלם",
+        "failed": "נכשל",
+        "stopped": "נעצר"
+      },
+      "reviewed": "{errors, plural, =0 {אין שגיאות מותג} one {שגיאת מותג אחת} other {# שגיאות מותג}}, {warnings, plural, =0 {ללא אזהרות} one {אזהרה אחת} other {# אזהרות}}",
+      "reviewGap": {
+        "busy": "נבנה; לא נבדק מול ספר המותג (הבדיקות שלך היו עסוקות)",
+        "failed": "נבנה; בדיקת המותג לא הצליחה לרוץ"
+      },
+      "overflows": "{count, plural, one {הטקסט בשקופית {slides} עדיין חורג מגבולות לאחר התאמה.} other {הטקסט בשקופיות {slides} עדיין חורג מגבולות לאחר התאמה.}}",
+      "shrunk": "{count, plural, one {הטקסט בשקופית אחת הוקטן להתאמה.} other {הטקסט ב-# שקופיות הוקטן להתאמה.}}",
+      "setup": {
+        "title": "בונה מצגות",
+        "intro": "בחר תבנית, הסבר למה המצגת מיועדת והוסף מקורות תוכן. מודל יטמיע מתווה לעריכה לפני בניית המצגת מפריסות התבנית.",
+        "template": "תבנית",
+        "booksLoading": "טוען תבניות מותג…",
+        "fromBook": "מתוך {book}",
+        "ownTemplate": "השתמש בתבנית שלך",
+        "replaceTemplate": "בחר קובץ אחר",
+        "templateTypes": "מצגת או תבנית PowerPoint‏ (.pptx, ‏.potx)",
+        "checkAgainst": "בדוק מול ספר מותג",
+        "noBook": "אל תבצע בדיקה",
+        "brief": "למה מיועדת המצגת?",
+        "briefPlaceholder": "לדוגמה: עדכון בן 10 דקות לדירקטוריון על המרפאות שלנו השנה, עם שלושת הנתונים החשובים.",
+        "sources": "מקורות",
+        "addSources": "הוסיפו מסמכים להסתמך עליהם",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel או טקסט; עד {max}",
+        "pictures": "תמונות",
+        "addPictures": "הוסיפו תמונות שהמצגת יכולה להשתמש בהן",
+        "pictureTypes": "PNG, JPEG או GIF; עד {max}",
+        "remove": "הסרה של {name}",
+        "language": "שפת המצגת",
+        "start": "טיוטת מתווה",
+        "wrongType": "לא ניתן להשתמש בסוג קובץ זה כאן.",
+        "uploadFailed": "ההעלאה נכשלה."
+      },
+      "outline": {
+        "role": {
+          "title": "כותרת",
+          "subtitle": "כותרת משנה",
+          "body": "טקסט",
+          "content": "תוכן",
+          "picture": "תמונה"
+        },
+        "holds": "מה שמכיל {place}",
+        "kindText": "טקסט",
+        "kindPicture": "תמונה",
+        "bullets": "תבליטים",
+        "noPicture": "בחרו תמונה",
+        "alt": "תארו את התמונה",
+        "tooLong": "ארוך מדי: זה מכיל בערך {lines, plural, one {שורה אחת} other {# שורות}} מתוך {chars} תווים, גם כשהקטן.",
+        "shrinks": "קצת ארוך: יוקטן מעט כדי להתאים.",
+        "bulletsHint": "תבליט אחד בכל שורה. התחילו שורה עם שתי רווחים כדי להזיח.",
+        "room": "מקום לכ־{lines, plural, one {שורה אחת} other {# שורות}} מתוך {chars} תווים.",
+        "slide": "שקופית {number}",
+        "layoutOf": "פריסת שקופית {number}",
+        "moveUp": "העבר שקופית {number} למעלה",
+        "moveDown": "העבר שקופית {number} למטה",
+        "remove": "הסר שקופית {number}",
+        "notesSome": "הערות למרצה",
+        "notesNone": "הוסיפו הערות למרצה",
+        "notesOf": "הערות למרצה עבור שקופית {number}",
+        "slides": "שקופיות",
+        "addSlide": "הוספת שקופית",
+        "blocked": "{count, plural, one {קיים גורם אחד שמונע בניית המצגת:} other {# גורמים מונעים את בניית המצגת:}}",
+        "problem": {
+          "no-slides": "המתווה ללא שקופיות.",
+          "too-many-slides": "נשמרות רק 40 השקופיות הראשונות.",
+          "unknown-layout": "שקופית {slide} משתמשת בפריסה שאינה קיימת בתבנית זו.",
+          "vertical-layout": "שקופית {slide} משתמשת בפריסה עם טקסט אופקי; בחרו אחרת.",
+          "unknown-placeholder": "בשקופית {slide} קיים תוכן עבור אזור שאינו קיים בפריסה.",
+          "repeated-placeholder": "שקופית {slide} מילאה אזור פעמיים.",
+          "kind-not-accepted": "בשקופית {slide} קיים תוכן שמיקומו אינו אפשרי בפריסה זו.",
+          "empty-fill": "בשקופית {slide} יש שדה ריק.",
+          "unknown-image": "בשקופית {slide} הוזכרה תמונה שלא הוספה.",
+          "bullet-level": "בשקופית {slide} תבליטים הוזחו עמוק מדי.",
+          "too-long": "בשקופית {slide} יש יותר טקסט מהמותר, גם כשהקטן. קצרו או פצלו את השקופית.",
+          "empty-slide": "בשקופית {slide} אין תוכן."
+        },
+        "build": "{count, plural, one {בנה מצגת (# שקופית)} other {בנה מצגת (# שקופיות)}}",
+        "willShrink": "{count, plural, one {הטקסט בשקופית אחת יוקטן כך שיתאים.} other {הטקסט ב-# שקופיות יוקטן כך שיתאים.}}"
       }
     }
   },

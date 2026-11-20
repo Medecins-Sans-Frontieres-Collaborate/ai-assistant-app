@@ -1640,6 +1640,10 @@
       "brandReview": {
         "label": "Brand review",
         "description": "Check a PDF, Word document or presentation against a brand book: fonts, colours, wording, logos and tone"
+      },
+      "deckBuilder": {
+        "label": "Deck builder",
+        "description": "Plan a presentation from a brief and sources, then build it from a brand template."
       }
     },
     "tabs": {
@@ -1660,7 +1664,8 @@
       "newGrants": "New grants processing",
       "newFormFill": "New document fill",
       "newChannelDrafter": "New channel draft",
-      "newBrandReview": "New brand review"
+      "newBrandReview": "New brand review",
+      "newDeckBuilder": "New deck"
     },
     "drafter": {
       "brief": "Brief",
@@ -3692,6 +3697,122 @@
         "found": "Found",
         "notes": "Notes",
         "fileSuffix": "brand review"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Loading the deck…",
+      "busy": "You already have work running ({name}). Wait for it to finish or stop it.",
+      "booksFailed": "Could not load brand books.",
+      "readFailed": "Could not read the deck’s progress.",
+      "startFailed": "Could not start the outline.",
+      "buildFailed": "The deck could not be built.",
+      "outlineFailed": "The outline could not be made.",
+      "stop": "Stop",
+      "download": "Download .pptx",
+      "editOutline": "Edit outline",
+      "newDeck": "New deck",
+      "startOver": "Start over",
+      "built": "Built",
+      "forBook": "{template}, for {book}",
+      "fromTemplate": "From {template}",
+      "outlineTitle": "Outline",
+      "outlineReady": "{count, plural, one {# slide, ready to edit} other {# slides, ready to edit}}",
+      "repaired": "{count, plural, one {One thing in the plan was adjusted to fit the template.} other {# things in the plan were adjusted to fit the template.}}",
+      "unread": "Could not read {names}; the outline was made without them.",
+      "outlinePhase": {
+        "template": "Reading the template",
+        "reading": "Reading the sources",
+        "planning": "Planning the slides"
+      },
+      "buildPhase": {
+        "composing": "Building the slides",
+        "rendering": "Checking the slides render",
+        "storing": "Saving the deck",
+        "reviewing": "Checking against the brand book"
+      },
+      "status": {
+        "running": "Working",
+        "done": "Done",
+        "failed": "Failed",
+        "stopped": "Stopped"
+      },
+      "reviewed": "{errors, plural, =0 {No brand errors} one {# brand error} other {# brand errors}}, {warnings, plural, =0 {no warnings} one {# warning} other {# warnings}}",
+      "reviewGap": {
+        "busy": "Built; not checked against the brand book (your reviews were busy)",
+        "failed": "Built; the brand check could not run"
+      },
+      "overflows": "{count, plural, one {Text on slide {slides} still overflows after fitting.} other {Text on slides {slides} still overflows after fitting.}}",
+      "shrunk": "{count, plural, one {Text on one slide was set smaller to fit.} other {Text on # slides was set smaller to fit.}}",
+      "setup": {
+        "title": "Deck builder",
+        "intro": "Choose a template, say what the deck is for and add what it should draw on. A model drafts an outline you can edit before the deck is built from the template’s layouts.",
+        "template": "Template",
+        "booksLoading": "Loading brand templates…",
+        "fromBook": "From {book}",
+        "ownTemplate": "Use your own template",
+        "replaceTemplate": "Choose another file",
+        "templateTypes": "A PowerPoint presentation or template (.pptx, .potx)",
+        "checkAgainst": "Check against a brand book",
+        "noBook": "Don’t check",
+        "brief": "What is the deck for?",
+        "briefPlaceholder": "For example: a 10-minute update for the board on our clinics this year, with the three numbers that matter.",
+        "sources": "Sources",
+        "addSources": "Add documents to draw on",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel or text; up to {max}",
+        "pictures": "Pictures",
+        "addPictures": "Add pictures the deck may use",
+        "pictureTypes": "PNG, JPEG or GIF; up to {max}",
+        "remove": "Remove {name}",
+        "language": "Language of the deck",
+        "start": "Draft outline",
+        "wrongType": "That kind of file cannot be used here.",
+        "uploadFailed": "The upload failed."
+      },
+      "outline": {
+        "role": {
+          "title": "Title",
+          "subtitle": "Subtitle",
+          "body": "Text",
+          "content": "Content",
+          "picture": "Picture"
+        },
+        "holds": "What {place} holds",
+        "kindText": "Text",
+        "kindPicture": "Picture",
+        "bullets": "Bullets",
+        "noPicture": "Choose a picture",
+        "alt": "Describe the picture",
+        "tooLong": "Too long: this holds about {lines, plural, one {# line} other {# lines}} of {chars} characters, even set smaller.",
+        "shrinks": "A little long: it will be set smaller to fit.",
+        "bulletsHint": "One bullet per line. Start a line with two spaces to indent it.",
+        "room": "Room for about {lines, plural, one {# line} other {# lines}} of {chars} characters.",
+        "slide": "Slide {number}",
+        "layoutOf": "Layout of slide {number}",
+        "moveUp": "Move slide {number} up",
+        "moveDown": "Move slide {number} down",
+        "remove": "Remove slide {number}",
+        "notesSome": "Speaker notes",
+        "notesNone": "Add speaker notes",
+        "notesOf": "Speaker notes for slide {number}",
+        "slides": "Slides",
+        "addSlide": "Add slide",
+        "blocked": "{count, plural, one {One thing stops the deck from being built:} other {# things stop the deck from being built:}}",
+        "problem": {
+          "no-slides": "The outline has no slides.",
+          "too-many-slides": "Only the first 40 slides are kept.",
+          "unknown-layout": "Slide {slide} uses a layout this template does not have.",
+          "vertical-layout": "Slide {slide} uses a layout with sideways text; choose another.",
+          "unknown-placeholder": "Slide {slide} had content for a place its layout does not have.",
+          "repeated-placeholder": "Slide {slide} filled one place twice.",
+          "kind-not-accepted": "Slide {slide} had content its layout cannot hold there.",
+          "empty-fill": "Slide {slide} has an empty field.",
+          "unknown-image": "Slide {slide} names a picture that was not added.",
+          "bullet-level": "Slide {slide} had bullets indented too deep.",
+          "too-long": "Slide {slide} has more text than fits, even set smaller. Shorten it or split the slide.",
+          "empty-slide": "Slide {slide} has nothing on it."
+        },
+        "build": "{count, plural, one {Build deck (# slide)} other {Build deck (# slides)}}",
+        "willShrink": "{count, plural, one {Text on one slide will be set smaller to fit.} other {Text on # slides will be set smaller to fit.}}"
       }
     }
   },

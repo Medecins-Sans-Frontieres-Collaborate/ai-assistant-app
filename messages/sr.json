@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Pregled brenda",
         "description": "Proverite PDF, Word dokument ili prezentaciju prema vodiču za brend: fontovi, boje, formulacije, logotipi i ton."
+      },
+      "deckBuilder": {
+        "label": "Kreator prezentacije",
+        "description": "Isplanirajte prezentaciju na osnovu kratkog opisa i izvora, pa je kreirajte prema brend šablonu."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Nova obrada grantova",
       "newFormFill": "Novo popunjavanje dokumenta",
       "newChannelDrafter": "Novi nacrt za kanal",
-      "newBrandReview": "Novi pregled brenda"
+      "newBrandReview": "Novi pregled brenda",
+      "newDeckBuilder": "Nova prezentacija"
     },
     "translation": {
       "chooseLanguage": "Ciljni jezik",
@@ -4932,6 +4937,122 @@
         "found": "Pronađeno",
         "notes": "Beleške",
         "fileSuffix": "brend pregled"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Učitavanje prezentacije…",
+      "busy": "Već imate rad u toku ({name}). Sačekajte da se završi ili ga zaustavite.",
+      "booksFailed": "Brend knjige nije moguće učitati.",
+      "readFailed": "Nije moguće pročitati napredak prezentacije.",
+      "startFailed": "Nije moguće započeti izradu sadržaja.",
+      "buildFailed": "Prezentaciju nije moguće kreirati.",
+      "outlineFailed": "Sadržaj nije moguće napraviti.",
+      "stop": "Zaustavi",
+      "download": "Preuzmi .pptx",
+      "editOutline": "Uredi sadržaj",
+      "newDeck": "Nova prezentacija",
+      "startOver": "Ponovo započni",
+      "built": "Kreirano",
+      "forBook": "{template}, za {book}",
+      "fromTemplate": "Iz {template}",
+      "outlineTitle": "Sadržaj",
+      "outlineReady": "{count, plural, one {# slajd, spreman za uređivanje} other {# slajdova, spremni za uređivanje}}",
+      "repaired": "{count, plural, one {Jedan element plana je prilagođen šablonu.} other {# elemenata plana su prilagođena šablonu.}}",
+      "unread": "Nije moguće pročitati {names}; sadržaj je napravljen bez njih.",
+      "outlinePhase": {
+        "template": "Čitanje šablona",
+        "reading": "Čitanje izvora",
+        "planning": "Planiranje slajdova"
+      },
+      "buildPhase": {
+        "composing": "Kreiranje slajdova",
+        "rendering": "Provera prikaza slajdova",
+        "storing": "Čuvanje prezentacije",
+        "reviewing": "Provera prema brend knjizi"
+      },
+      "status": {
+        "running": "Rad u toku",
+        "done": "Završeno",
+        "failed": "Neuspešno",
+        "stopped": "Zaustavljeno"
+      },
+      "reviewed": "{errors, plural, =0 {Bez brend grešaka} one {# brend greška} other {# brend grešaka}}, {warnings, plural, =0 {bez upozorenja} one {# upozorenje} other {# upozorenja}}",
+      "reviewGap": {
+        "busy": "Kreirano; nije provereno prema brend knjizi (vaša provera je bila zauzeta)",
+        "failed": "Kreirano; brend provera nije mogla da se izvrši"
+      },
+      "overflows": "{count, plural, one {Tekst na slajdu {slides} i dalje premašuje ograničenje nakon prilagođavanja.} other {Tekst na slajdovima {slides} i dalje premašuje ograničenje nakon prilagođavanja.}}",
+      "shrunk": "{count, plural, one {Tekst na jednom slajdu je smanjen da bi se uklopio.} other {Tekst na # slajdova je smanjen da bi se uklopio.}}",
+      "setup": {
+        "title": "Kreator prezentacije",
+        "intro": "Izaberite šablon, navedite čemu služi prezentacija i dodajte na šta treba da se zasniva. Model pravi nacrt koji možete urediti pre nego što prezentacija bude kreirana prema rasporedima iz šablona.",
+        "template": "Šablon",
+        "booksLoading": "Učitavanje brend šablona…",
+        "fromBook": "Iz {book}",
+        "ownTemplate": "Koristite svoj šablon",
+        "replaceTemplate": "Izaberite drugi fajl",
+        "templateTypes": "PowerPoint prezentacija ili šablon (.pptx, .potx)",
+        "checkAgainst": "Proveri prema brend knjizi",
+        "noBook": "Ne proveravaj",
+        "brief": "Za šta je prezentacija?",
+        "briefPlaceholder": "Na primer: desetominutna prezentacija za upravni odbor o našim klinikama ove godine, sa tri ključna podatka.",
+        "sources": "Izvori",
+        "addSources": "Dodajte dokumente na koje želite da se oslonite",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel ili tekst; do {max}",
+        "pictures": "Slike",
+        "addPictures": "Dodajte slike koje može koristiti prezentacija",
+        "pictureTypes": "PNG, JPEG ili GIF; do {max}",
+        "remove": "Ukloni {name}",
+        "language": "Jezik prezentacije",
+        "start": "Nacrt strukture",
+        "wrongType": "Takav tip fajla nije dozvoljen ovde.",
+        "uploadFailed": "Otpremanje nije uspelo."
+      },
+      "outline": {
+        "role": {
+          "title": "Naslov",
+          "subtitle": "Podnaslov",
+          "body": "Tekst",
+          "content": "Sadržaj",
+          "picture": "Slika"
+        },
+        "holds": "Šta {place} sadrži",
+        "kindText": "Tekst",
+        "kindPicture": "Slika",
+        "bullets": "Stavke",
+        "noPicture": "Izaberite sliku",
+        "alt": "Opišite sliku",
+        "tooLong": "Predugačko: ovo sadrži oko {lines, plural, one {# red} other {# redova}} sa {chars} karaktera, čak i kada je smanjeno.",
+        "shrinks": "Malo je predugo: biće smanjeno da stane.",
+        "bulletsHint": "Svaka stavka u posebnom redu. Počnite red sa dva razmaka za uvlačenje.",
+        "room": "Ima mesta za oko {lines, plural, one {# red} other {# redova}} sa {chars} karaktera.",
+        "slide": "Slajd {number}",
+        "layoutOf": "Izgled slajda {number}",
+        "moveUp": "Pomeri slajd {number} nagore",
+        "moveDown": "Pomeri slajd {number} nadole",
+        "remove": "Ukloni slajd {number}",
+        "notesSome": "Beleške govornika",
+        "notesNone": "Dodajte beleške govornika",
+        "notesOf": "Beleške govornika za slajd {number}",
+        "slides": "Slajdovi",
+        "addSlide": "Dodaj slajd",
+        "blocked": "{count, plural, one {Jedna stvar sprečava izradu prezentacije:} other {# stvari sprečavaju izradu prezentacije:}}",
+        "problem": {
+          "no-slides": "Struktura nema nijedan slajd.",
+          "too-many-slides": "Samo prvih 40 slajdova se čuva.",
+          "unknown-layout": "Slajd {slide} ima izgled koji ovaj šablon nema.",
+          "vertical-layout": "Slajd {slide} koristi izgled sa tekstom postavljenim bočno; izaberite drugi.",
+          "unknown-placeholder": "Slajd {slide} ima sadržaj za mesto koje njegov izgled nema.",
+          "repeated-placeholder": "Slajd {slide} je popunio jedno mesto dva puta.",
+          "kind-not-accepted": "Slajd {slide} ima sadržaj koji njegov izgled ne podržava.",
+          "empty-fill": "Slajd {slide} ima prazno polje.",
+          "unknown-image": "Slajd {slide} navodi sliku koja nije dodata.",
+          "bullet-level": "Slajd {slide} ima stavke uvucene previše duboko.",
+          "too-long": "Slajd {slide} ima više teksta nego što može da stane, čak i kada je smanjeno. Skratite ili podelite slajd.",
+          "empty-slide": "Slajd {slide} nema ništa na sebi."
+        },
+        "build": "{count, plural, one {Napravite prezentaciju (# slajd)} other {Napravite prezentaciju (# slajdova)}}",
+        "willShrink": "{count, plural, one {Tekst na jednom slajdu biće smanjen da stane.} other {Tekst na # slajdova biće smanjen da stane.}}"
       }
     }
   },

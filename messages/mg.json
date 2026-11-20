@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Fanamarinana marika",
         "description": "Diniho amin’ny boky marika ny PDF, taratasy Word na fampisehoana: endritsoratra, loko, lahatsoratra, marika ary tonony"
+      },
+      "deckBuilder": {
+        "label": "Mpamorona Deck",
+        "description": "Mikarakara fanolorana manomboka amin'ny famintinana sy loharano, ary manorina azy amin'ny modely avy amin'ny marika."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Fikarakarana grant vaovao",
       "newFormFill": "Fandrakofana taratasy vaovao",
       "newChannelDrafter": "Fanoratana dika amin'ny fantsona vaovao",
-      "newBrandReview": "Fanamarinana marika vaovao"
+      "newBrandReview": "Fanamarinana marika vaovao",
+      "newDeckBuilder": "Deck vaovao"
     },
     "translation": {
       "chooseLanguage": "Fiteny kendrena",
@@ -4932,6 +4937,122 @@
         "found": "Hita",
         "notes": "Fanamarihana",
         "fileSuffix": "fanamarinana marika"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Eo am-pitondrana ny deck…",
+      "busy": "Misy asa mandeha amin'izao ({name}). Miandrasa ho vita izany na ajanony.",
+      "booksFailed": "Tsy afaka nampiditra ny boky marika.",
+      "readFailed": "Tsy afaka namaky ny fandrosoan’ny deck.",
+      "startFailed": "Tsy afaka nanomboka ny drafitra.",
+      "buildFailed": "Tsy afaka nanangana ilay deck.",
+      "outlineFailed": "Tsy afaka namorona ny drafitra.",
+      "stop": "Ajanona",
+      "download": "Ampidina .pptx",
+      "editOutline": "Hanova drafitra",
+      "newDeck": "Deck vaovao",
+      "startOver": "Atombohy indray",
+      "built": "Vita",
+      "forBook": "{template}, ho an'ny {book}",
+      "fromTemplate": "Avy amin'ny {template}",
+      "outlineTitle": "Drafitra",
+      "outlineReady": "{count, plural, one {# slide, vonona hovaina} other {# slides, vonona hovaina}}",
+      "repaired": "{count, plural, one {Nisy zavatra iray tamin’ny drafitra izay nafangaro aminy ilay template.} other {# zavatra tamin’ny drafitra no nafangaro aminy ilay template.}}",
+      "unread": "Tsy afaka novakiana {names}; novokarina tsy anisan'izy ireo ny drafitra.",
+      "outlinePhase": {
+        "template": "Mamaky ilay template",
+        "reading": "Mamaky ny loharano",
+        "planning": "Mikasa ny slides"
+      },
+      "buildPhase": {
+        "composing": "Manangana ny slides",
+        "rendering": "Manamarina ny fisehon'ny slides",
+        "storing": "Mitahiry ny deck",
+        "reviewing": "Manamarina amin’ny boky marika"
+      },
+      "status": {
+        "running": "Miasa",
+        "done": "Vita",
+        "failed": "Diso",
+        "stopped": "Najanona"
+      },
+      "reviewed": "{errors, plural, =0 {Tsy misy hadisoana marika} one {# hadisoana marika} other {# hadisoana marika}}, {warnings, plural, =0 {tsy misy fampitandremana} one {# fampitandremana} other {# fampitandremana}}",
+      "reviewGap": {
+        "busy": "Vita; tsy voamarina tamin’ny boky marika (nihantsy ny famerenana nataonao)",
+        "failed": "Vita; tsy afaka nandeha ny fitsirihana tamin’ny boky marika"
+      },
+      "overflows": "{count, plural, one {Mbola mahatratra ivelan’ny slide {slides} ny lahatsoratra na efa nampifanarahana aza.} other {Mbola mahatratra ivelan’ny slides {slides} ny lahatsoratra na efa nampifanarahana aza.}}",
+      "shrunk": "{count, plural, one {Nampihena ny lahatsoratra tamin’ny slide iray mba hifanaraka.} other {Nampihena ny lahatsoratra tamin'ny slides # mba hifanaraka.}}",
+      "setup": {
+        "title": "Mpamorona Deck",
+        "intro": "Misafidiana modely, lazao izay antony ampiasana ilay deck sy izay andraisany aingam-panahy. Ny modely dia hanome drafitra azonao ovaina alohan’ny hananganana ilay deck avy amin’ny layout an’ilay template.",
+        "template": "Modely",
+        "booksLoading": "Eo ampitondrana ny modely marika…",
+        "fromBook": "Avy amin'ny {book}",
+        "ownTemplate": "Ampiasao ny modelynao manokana",
+        "replaceTemplate": "Misafidiana rakitra hafa",
+        "templateTypes": "Fanolorana na modely PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Mametraha mari-pamantarana amin'ny boky marika",
+        "noBook": "Aza asiana fanamarinana",
+        "brief": "Inona no ilàna ny deck?",
+        "briefPlaceholder": "Ohatra: fanavaozana 10 minitra ho an'ny filankevi-pitantanana momba ny toeram-pitsaboan-tsika amin'ity taona ity, misy isa telo manan-danja.",
+        "sources": "Loharano",
+        "addSources": "Ampio antontan-taratasy ampiasaina",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel na lahatsoratra; hatramin'ny {max}",
+        "pictures": "Sary",
+        "addPictures": "Ampio sary afaka ampiasain'ny deck",
+        "pictureTypes": "PNG, JPEG na GIF; hatramin'ny {max}",
+        "remove": "Esory {name}",
+        "language": "Fitenin’ny deck",
+        "start": "Drafitra ankapobeny",
+        "wrongType": "Tsy azo ampiasaina eto io karazana rakitra io.",
+        "uploadFailed": "Tsy tafakatra ny fisie."
+      },
+      "outline": {
+        "role": {
+          "title": "Lohateny",
+          "subtitle": "Lohateny kely",
+          "body": "Lahatsoratra",
+          "content": "Votoaty",
+          "picture": "Sary"
+        },
+        "holds": "Izay voatahaky ny {place}",
+        "kindText": "Lahatsoratra",
+        "kindPicture": "Sary",
+        "bullets": "Boulety",
+        "noPicture": "Misafidiana sary",
+        "alt": "Farito amin’ny teny ilay sary",
+        "tooLong": "Lava loatra: eo ho eo amin’ny {lines, plural, one {# andalana} other {# andalana}} amin’ny tarehintsoratra {chars}, na dia ahena aza.",
+        "shrinks": "Somary lava: ahena ho kely kokoa izy hametraka azy.",
+        "bulletsHint": "Andalana iray isaky ny boulet. Atomboy amin'ny elanelana roa ny andalana raha hanakenda.",
+        "room": "Eo ho eo amin’ny {lines, plural, one {# andalana} other {# andalana}} amin’ny tarehintsoratra {chars} no azo asiana.",
+        "slide": "Slaida {number}",
+        "layoutOf": "Fandaminana an’i slaida {number}",
+        "moveUp": "Afindra ambony ny slaida {number}",
+        "moveDown": "Afindra ambany ny slaida {number}",
+        "remove": "Esory ny slaida {number}",
+        "notesSome": "Fanamarihan’ny mpandahateny",
+        "notesNone": "Ampio fanamarihan’ny mpandahateny",
+        "notesOf": "Fanamarihan’ny mpandahateny ho an’ny slaida {number}",
+        "slides": "Slaida",
+        "addSlide": "Ampio slaida",
+        "blocked": "{count, plural, one {Zavatra iray tsy mahafahana manangana deck:} other {# zavatra tsy mahafahana manangana deck:}}",
+        "problem": {
+          "no-slides": "Tsy misy slaida ao amin’ny drafitra.",
+          "too-many-slides": "Ny slaida 40 voalohany ihany no tazonina.",
+          "unknown-layout": "Slaida {slide} mampiasa fandaminana tsy ananan’ity modely ity.",
+          "vertical-layout": "Slaida {slide} mampiasa fandaminana amin’ny lahatsoratra mitsivalana; mifidiana hafa.",
+          "unknown-placeholder": "Slaida {slide} misy votoaty ho an’ny toerana tsy ananan’ny fandaminana azy.",
+          "repeated-placeholder": "Slaida {slide} dia nahafeno toerana iray indroa.",
+          "kind-not-accepted": "Slaida {slide} dia misy votoaty tsy azo ametrahana amin’izany toerana izany.",
+          "empty-fill": "Slaida {slide} dia misy saha foana.",
+          "unknown-image": "Slaida {slide} nanome anarana sary tsy mbola nampiana.",
+          "bullet-level": "Slaida {slide} dia nanana boulety nafindra lalina loatra.",
+          "too-long": "Slaida {slide} dia manana lahatsoratra mihoatra noho izay azo ametrahana, na dia ahena aza. Ahenao na zarazarao ho slaida roa.",
+          "empty-slide": "Slaida {slide} tsy misy votoaty."
+        },
+        "build": "{count, plural, one {Manangana deck (# slaida)} other {Manangana deck (# slaida)}}",
+        "willShrink": "{count, plural, one {Ny lahatsoratra ao amin'ny sary iray dia hatsorina ho kely kokoa mba hahafahana mametraka azy.} other {Ny lahatsoratra amin'ny sary # dia hatsorina ho kely kokoa mba hahafahana mametraka azy.}}"
       }
     }
   },

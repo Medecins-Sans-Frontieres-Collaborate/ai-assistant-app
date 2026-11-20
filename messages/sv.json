@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Varumärkesgranskning",
         "description": "Kontrollera en PDF-, Word-fil eller presentation mot en varumärkesmanual: typsnitt, färger, formuleringar, logotyper och tonläge"
+      },
+      "deckBuilder": {
+        "label": "Presentationskapare",
+        "description": "Planera en presentation utifrån en brief och källor, bygg sedan med en varumall."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Ny bidragshantering",
       "newFormFill": "Ny dokumentifyllning",
       "newChannelDrafter": "Nytt kanalkoncept",
-      "newBrandReview": "Ny varumärkesgranskning"
+      "newBrandReview": "Ny varumärkesgranskning",
+      "newDeckBuilder": "Ny presentation"
     },
     "translation": {
       "chooseLanguage": "Målspråk",
@@ -4948,6 +4953,122 @@
         "found": "Hittat",
         "notes": "Noteringar",
         "fileSuffix": "varumärkesgranskning"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Laddar presentationen…",
+      "busy": "Du har redan arbete igång ({name}). Vänta tills det är klart eller stoppa det.",
+      "booksFailed": "Kunde inte ladda varumärkesböcker.",
+      "readFailed": "Kunde inte läsa presentationens status.",
+      "startFailed": "Kunde inte starta utkastet.",
+      "buildFailed": "Presentationen kunde inte byggas.",
+      "outlineFailed": "Utkastet kunde inte skapas.",
+      "stop": "Stoppa",
+      "download": "Ladda ner .pptx",
+      "editOutline": "Redigera utkast",
+      "newDeck": "Ny presentation",
+      "startOver": "Börja om",
+      "built": "Byggd",
+      "forBook": "{template}, för {book}",
+      "fromTemplate": "Från {template}",
+      "outlineTitle": "Utkast",
+      "outlineReady": "{count, plural, one {# bild, redo att redigera} other {# bilder, redo att redigera}}",
+      "repaired": "{count, plural, one {En sak i planen anpassades till mallen.} other {# saker i planen anpassades till mallen.}}",
+      "unread": "Kunde inte läsa {names}; utkastet skapades utan dem.",
+      "outlinePhase": {
+        "template": "Läser in mallen",
+        "reading": "Läser källorna",
+        "planning": "Planerar bilderna"
+      },
+      "buildPhase": {
+        "composing": "Bygger bilderna",
+        "rendering": "Kontrollerar att bilderna återges",
+        "storing": "Sparar presentationen",
+        "reviewing": "Kontrollerar mot varumärkesboken"
+      },
+      "status": {
+        "running": "Arbetar",
+        "done": "Klart",
+        "failed": "Misslyckades",
+        "stopped": "Stoppad"
+      },
+      "reviewed": "{errors, plural, =0 {Inga varumärkesfel} one {# varumärkesfel} other {# varumärkesfel}}, {warnings, plural, =0 {inga varningar} one {# varning} other {# varningar}}",
+      "reviewGap": {
+        "busy": "Byggd; inte kontrollerad mot varumärkesboken (dina granskningar var upptagna)",
+        "failed": "Byggd; varumärkesgranskningen kunde inte köras"
+      },
+      "overflows": "{count, plural, one {Text på bild {slides} flödar fortfarande över efter justering.} other {Text på bilderna {slides} flödar fortfarande över efter justering.}}",
+      "shrunk": "{count, plural, one {Texten på en bild förminskades för att passa.} other {Texten på # bilder förminskades för att passa.}}",
+      "setup": {
+        "title": "Presentationskapare",
+        "intro": "Välj en mall, ange syftet med presentationen och vilka källor som ska användas. En modell tar fram ett utkast som du kan redigera innan presentationen byggs från mallens layouter.",
+        "template": "Mall",
+        "booksLoading": "Laddar varumärkesmallar…",
+        "fromBook": "Från {book}",
+        "ownTemplate": "Använd egen mall",
+        "replaceTemplate": "Välj en annan fil",
+        "templateTypes": "En PowerPoint-presentation eller mall (.pptx, .potx)",
+        "checkAgainst": "Kontrollera mot en varumärkesbok",
+        "noBook": "Kontrollera inte",
+        "brief": "Vad är presentationen till för?",
+        "briefPlaceholder": "Till exempel: en 10-minuters uppdatering för styrelsen om våra kliniker i år, med de tre viktigaste siffrorna.",
+        "sources": "Källor",
+        "addSources": "Lägg till dokument att använda",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel eller text; upp till {max}",
+        "pictures": "Bilder",
+        "addPictures": "Lägg till bilder som kan användas i presentationen",
+        "pictureTypes": "PNG, JPEG eller GIF; upp till {max}",
+        "remove": "Ta bort {name}",
+        "language": "Presentationens språk",
+        "start": "Skapa utkast",
+        "wrongType": "Den filtypen kan inte användas här.",
+        "uploadFailed": "Uppladdningen misslyckades."
+      },
+      "outline": {
+        "role": {
+          "title": "Titel",
+          "subtitle": "Undertitel",
+          "body": "Text",
+          "content": "Innehåll",
+          "picture": "Bild"
+        },
+        "holds": "Vad {place} innehåller",
+        "kindText": "Text",
+        "kindPicture": "Bild",
+        "bullets": "Punkter",
+        "noPicture": "Välj en bild",
+        "alt": "Beskriv bilden",
+        "tooLong": "För långt: detta rymmer cirka {lines, plural, one {# rad} other {# rader}} om {chars} tecken, även i mindre storlek.",
+        "shrinks": "Lite för långt: texten görs mindre för att få plats.",
+        "bulletsHint": "En punkt per rad. Börja en rad med två mellanslag för att göra ett indrag.",
+        "room": "Plats för cirka {lines, plural, one {# rad} other {# rader}} om {chars} tecken.",
+        "slide": "Bild {number}",
+        "layoutOf": "Layout för bild {number}",
+        "moveUp": "Flytta bild {number} uppåt",
+        "moveDown": "Flytta bild {number} nedåt",
+        "remove": "Ta bort bild {number}",
+        "notesSome": "Presentatörsanteckningar",
+        "notesNone": "Lägg till presentatörsanteckningar",
+        "notesOf": "Presentatörsanteckningar till bild {number}",
+        "slides": "Bilder",
+        "addSlide": "Lägg till bild",
+        "blocked": "{count, plural, one {En sak hindrar presentationen från att skapas:} other {# saker hindrar presentationen från att skapas:}}",
+        "problem": {
+          "no-slides": "Utkastet har inga bilder.",
+          "too-many-slides": "Endast de 40 första bilderna sparas.",
+          "unknown-layout": "Bild {slide} använder en layout som inte finns i denna mall.",
+          "vertical-layout": "Bild {slide} använder en layout med text på sidan; välj en annan layout.",
+          "unknown-placeholder": "Bild {slide} hade innehåll för en plats som inte finns i layouten.",
+          "repeated-placeholder": "Bild {slide} fyllde en plats två gånger.",
+          "kind-not-accepted": "Bild {slide} hade innehåll som layouten inte kan visa där.",
+          "empty-fill": "Bild {slide} har ett tomt fält.",
+          "unknown-image": "Bild {slide} hänvisar till en bild som inte har lagts till.",
+          "bullet-level": "Bild {slide} hade punkter med för djupt indrag.",
+          "too-long": "Bild {slide} har mer text än vad som får plats, även i mindre storlek. Kort ned texten eller dela upp i flera bilder.",
+          "empty-slide": "Bild {slide} har inget innehåll."
+        },
+        "build": "{count, plural, one {Skapa presentation (# bild)} other {Skapa presentation (# bilder)}}",
+        "willShrink": "{count, plural, one {Texten på en bild kommer att förminskas för att passa.} other {Texten på # bilder kommer att förminskas för att passa.}}"
       }
     }
   },

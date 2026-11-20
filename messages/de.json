@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Brand-Prüfung",
         "description": "Überprüfen Sie ein PDF, Word-Dokument oder eine Präsentation anhand des Brandbooks: Schriftarten, Farben, Formulierungen, Logos und Tonfall."
+      },
+      "deckBuilder": {
+        "label": "Deck-Builder",
+        "description": "Planen Sie eine Präsentation aus einem Briefing und Quellen und erstellen Sie sie dann mit einer Marken-Vorlage."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Neue Grants-Verarbeitung",
       "newFormFill": "Neues Dokument ausfüllen",
       "newChannelDrafter": "Neuer Channel-Entwurf",
-      "newBrandReview": "Neue Brand-Prüfung"
+      "newBrandReview": "Neue Brand-Prüfung",
+      "newDeckBuilder": "Neues Deck"
     },
     "translation": {
       "chooseLanguage": "Zielsprache",
@@ -4948,6 +4953,122 @@
         "found": "Gefunden",
         "notes": "Notizen",
         "fileSuffix": "Markenprüfung"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Deck wird geladen…",
+      "busy": "Sie haben bereits einen laufenden Vorgang ({name}). Warten Sie, bis er abgeschlossen ist, oder stoppen Sie ihn.",
+      "booksFailed": "Markenbücher konnten nicht geladen werden.",
+      "readFailed": "Der Fortschritt des Decks konnte nicht gelesen werden.",
+      "startFailed": "Die Gliederung konnte nicht gestartet werden.",
+      "buildFailed": "Das Deck konnte nicht erstellt werden.",
+      "outlineFailed": "Die Gliederung konnte nicht erstellt werden.",
+      "stop": "Stopp",
+      "download": ".pptx herunterladen",
+      "editOutline": "Gliederung bearbeiten",
+      "newDeck": "Neues Deck",
+      "startOver": "Neu beginnen",
+      "built": "Erstellt",
+      "forBook": "{template}, für {book}",
+      "fromTemplate": "Aus {template}",
+      "outlineTitle": "Gliederung",
+      "outlineReady": "{count, plural, one {# Folie, bereit zum Bearbeiten} other {# Folien, bereit zum Bearbeiten}}",
+      "repaired": "{count, plural, one {Ein Punkt im Plan wurde angepasst, um zur Vorlage zu passen.} other {# Punkte im Plan wurden angepasst, um zur Vorlage zu passen.}}",
+      "unread": "{names} konnten nicht gelesen werden; die Gliederung wurde ohne sie erstellt.",
+      "outlinePhase": {
+        "template": "Vorlage wird gelesen",
+        "reading": "Quellen werden gelesen",
+        "planning": "Folie wird geplant"
+      },
+      "buildPhase": {
+        "composing": "Folien werden erstellt",
+        "rendering": "Überprüfung der Folien-Darstellung",
+        "storing": "Deck wird gespeichert",
+        "reviewing": "Abgleich mit Markenbuch"
+      },
+      "status": {
+        "running": "In Bearbeitung",
+        "done": "Fertig",
+        "failed": "Fehlgeschlagen",
+        "stopped": "Gestoppt"
+      },
+      "reviewed": "{errors, plural, =0 {Keine Markenfehler} one {# Markenfehler} other {# Markenfehler}}, {warnings, plural, =0 {keine Warnungen} one {# Warnung} other {# Warnungen}}",
+      "reviewGap": {
+        "busy": "Erstellt; nicht mit Markenbuch abgeglichen (Ihre Überprüfungen waren beschäftigt)",
+        "failed": "Erstellt; Markenprüfung konnte nicht durchgeführt werden"
+      },
+      "overflows": "{count, plural, one {Text auf der Folie {slides} läuft trotz Anpassung noch über.} other {Text auf den Folien {slides} läuft trotz Anpassung noch über.}}",
+      "shrunk": "{count, plural, one {Text auf einer Folie wurde verkleinert, um zu passen.} other {Text auf # Folien wurde verkleinert, um zu passen.}}",
+      "setup": {
+        "title": "Deck-Builder",
+        "intro": "Wählen Sie eine Vorlage aus, geben Sie an, wofür das Deck gedacht ist, und fügen Sie gewünschte Inhalte hinzu. Ein Modell erstellt daraus eine Gliederung, die Sie vor dem Aufbau anhand der Vorlagen-Layouts bearbeiten können.",
+        "template": "Vorlage",
+        "booksLoading": "Markenvorlagen werden geladen…",
+        "fromBook": "Aus {book}",
+        "ownTemplate": "Eigene Vorlage verwenden",
+        "replaceTemplate": "Andere Datei wählen",
+        "templateTypes": "Eine PowerPoint-Präsentation oder Vorlage (.pptx, .potx)",
+        "checkAgainst": "Mit Markenbuch abgleichen",
+        "noBook": "Kein Abgleich",
+        "brief": "Wofür ist das Deck?",
+        "briefPlaceholder": "Beispiel: Ein 10-minütiges Update für den Vorstand zu unseren Kliniken dieses Jahr – mit den drei wichtigsten Zahlen.",
+        "sources": "Quellen",
+        "addSources": "Dokumente hinzufügen",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel oder Text; bis zu {max}",
+        "pictures": "Bilder",
+        "addPictures": "Bilder hinzufügen, die im Deck verwendet werden können",
+        "pictureTypes": "PNG, JPEG oder GIF; bis zu {max}",
+        "remove": "{name} entfernen",
+        "language": "Sprache des Decks",
+        "start": "Entwurf erstellen",
+        "wrongType": "Dieser Dateityp kann hier nicht verwendet werden.",
+        "uploadFailed": "Der Upload ist fehlgeschlagen."
+      },
+      "outline": {
+        "role": {
+          "title": "Titel",
+          "subtitle": "Untertitel",
+          "body": "Text",
+          "content": "Inhalt",
+          "picture": "Bild"
+        },
+        "holds": "Was {place} enthält",
+        "kindText": "Text",
+        "kindPicture": "Bild",
+        "bullets": "Aufzählungen",
+        "noPicture": "Bild auswählen",
+        "alt": "Bild beschreiben",
+        "tooLong": "Zu lang: Hier passen etwa {lines, plural, one {# Zeile} other {# Zeilen}} mit {chars} Zeichen, auch wenn verkleinert.",
+        "shrinks": "Etwas zu lang: Die Schrift wird verkleinert, damit es passt.",
+        "bulletsHint": "Eine Aufzählung pro Zeile. Mit zwei Leerzeichen am Zeilenanfang einrücken.",
+        "room": "Platz für etwa {lines, plural, one {# Zeile} other {# Zeilen}} mit {chars} Zeichen.",
+        "slide": "Folie {number}",
+        "layoutOf": "Layout der Folie {number}",
+        "moveUp": "Folie {number} nach oben verschieben",
+        "moveDown": "Folie {number} nach unten verschieben",
+        "remove": "Folie {number} entfernen",
+        "notesSome": "Sprechernotizen",
+        "notesNone": "Sprechernotizen hinzufügen",
+        "notesOf": "Sprechernotizen für Folie {number}",
+        "slides": "Folien",
+        "addSlide": "Folie hinzufügen",
+        "blocked": "{count, plural, one {Ein Problem verhindert das Erstellen des Decks:} other {# Probleme verhindern das Erstellen des Decks:}}",
+        "problem": {
+          "no-slides": "Die Gliederung enthält keine Folien.",
+          "too-many-slides": "Nur die ersten 40 Folien werden übernommen.",
+          "unknown-layout": "Folie {slide} verwendet ein Layout, das diese Vorlage nicht hat.",
+          "vertical-layout": "Folie {slide} verwendet ein Layout mit vertikalem Text; bitte ein anderes auswählen.",
+          "unknown-placeholder": "Folie {slide} hat Inhalt für einen Bereich, den das Layout nicht enthält.",
+          "repeated-placeholder": "Folie {slide} hat einen Bereich doppelt befüllt.",
+          "kind-not-accepted": "Folie {slide} hat Inhalt in einem Feld, das das Layout dort nicht unterstützt.",
+          "empty-fill": "Folie {slide} enthält ein leeres Feld.",
+          "unknown-image": "Folie {slide} benennt ein Bild, das nicht hinzugefügt wurde.",
+          "bullet-level": "Folie {slide} hat zu tief eingerückte Aufzählungen.",
+          "too-long": "Folie {slide} enthält mehr Text, als passt, selbst wenn verkleinert. Bitte kürzen oder Folie aufteilen.",
+          "empty-slide": "Folie {slide} ist leer."
+        },
+        "build": "{count, plural, one {Deck erstellen (# Folie)} other {Deck erstellen (# Folien)}}",
+        "willShrink": "{count, plural, one {Text auf einer Folie wird verkleinert, um zu passen.} other {Text auf # Folien wird verkleinert, um zu passen.}}"
       }
     }
   },

@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Revizyon mak",
         "description": "Verifye yon PDF, dokiman Word oswa prezantasyon selon liv mak la: polis, koulè, tèks, logo ak ton"
+      },
+      "deckBuilder": {
+        "label": "Kreyatè prezantasyon",
+        "description": "Planifye yon prezantasyon soti nan yon rezime ak sous, epi bati li ak yon modèl mak."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Nouvo pwosesis sibvansyon",
       "newFormFill": "Nouvo ranpli dokiman",
       "newChannelDrafter": "Nouvo drafe chanèl",
-      "newBrandReview": "Nouvo revizyon mak"
+      "newBrandReview": "Nouvo revizyon mak",
+      "newDeckBuilder": "Nouvo prezantasyon"
     },
     "translation": {
       "chooseLanguage": "Lang sib",
@@ -4932,6 +4937,122 @@
         "found": "Sa ki jwenn",
         "notes": "Nòt",
         "fileSuffix": "revizyon mak"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Y ap chaje prezantasyon an…",
+      "busy": "Ou deja gen yon travay k ap mache ({name}). Tanpri tann li fini oswa sispann li.",
+      "booksFailed": "Pa t kapab chaje liv mak yo.",
+      "readFailed": "Pa t kapab li pwogrè prezantasyon an.",
+      "startFailed": "Pa t kapab kòmanse plan an.",
+      "buildFailed": "Pa t kapab bati prezantasyon an.",
+      "outlineFailed": "Pa t kapab fè plan an.",
+      "stop": "Sispann",
+      "download": "Telechaje .pptx",
+      "editOutline": "Modifye plan",
+      "newDeck": "Nouvo prezantasyon",
+      "startOver": "Rekòmanse",
+      "built": "Bati",
+      "forBook": "{template}, pou {book}",
+      "fromTemplate": "Soti nan {template}",
+      "outlineTitle": "Plan",
+      "outlineReady": "{count, plural, one {# dyapos, pare pou modifye} other {# dyapos, pare pou modifye}}",
+      "repaired": "{count, plural, one {Yon bagay nan plan an te ajiste pou adapte ak modèl la.} other {# bagay nan plan an te ajiste pou adapte ak modèl la.}}",
+      "unread": "Pa t kapab li {names}; plan an fèt san yo.",
+      "outlinePhase": {
+        "template": "Y ap li modèl la",
+        "reading": "Y ap li sous yo",
+        "planning": "Y ap planifye dyapos yo"
+      },
+      "buildPhase": {
+        "composing": "Y ap bati dyapos yo",
+        "rendering": "Y ap verifye dyapos yo afiche",
+        "storing": "Y ap sove prezantasyon an",
+        "reviewing": "Y ap verifye ak liv mak la"
+      },
+      "status": {
+        "running": "Ap travay",
+        "done": "Fini",
+        "failed": "Echwe",
+        "stopped": "Sispann"
+      },
+      "reviewed": "{errors, plural, =0 {Pa gen erè mak} one {# erè mak} other {# erè mak}}, {warnings, plural, =0 {pa gen avètisman} one {# avètisman} other {# avètisman}}",
+      "reviewGap": {
+        "busy": "Bati; pa t verifye ak liv mak la (revizyon ou yo te okipe)",
+        "failed": "Bati; pa t kapab verifye mak la"
+      },
+      "overflows": "{count, plural, one {Tèks sou dyapo {slides} toujou depase apre adapte.} other {Tèks sou dyapos {slides} toujou depase apre adapte.}}",
+      "shrunk": "{count, plural, one {Tèks sou yon dyapo te fè pi piti pou l antre.} other {Tèks sou # dyapos te fè pi piti pou yo antre.}}",
+      "setup": {
+        "title": "Kreyatè prezantasyon",
+        "intro": "Chwazi yon modèl, di kisa prezantasyon an ye epi ajoute sa li dwe itilize. Yon modèl ap ekri yon plan ou ka modifye anvan prezantasyon an bati ak dispozisyon modèl la.",
+        "template": "Modèl",
+        "booksLoading": "Y ap chaje modèl mak yo…",
+        "fromBook": "Soti nan {book}",
+        "ownTemplate": "Sèvi ak pwòp modèl pa ou",
+        "replaceTemplate": "Chwazi yon lòt fichye",
+        "templateTypes": "Yon prezantasyon oswa yon modèl PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Verifye ak yon liv mak",
+        "noBook": "Pa verifye",
+        "brief": "Pou kisa prezantasyon an ye?",
+        "briefPlaceholder": "Pa egzanp: yon mizajou 10 minit pou konsèy la sou klinik nou yo ane sa a, ak twa chif ki pi enpòtan yo.",
+        "sources": "Sous",
+        "addSources": "Ajoute dokiman pou sèvi ak yo",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel oswa tèks; jiska {max}",
+        "pictures": "Imaj",
+        "addPictures": "Ajoute imaj tak ka sèvi nan diapositive a",
+        "pictureTypes": "PNG, JPEG oswa GIF; jiska {max}",
+        "remove": "Retire {name}",
+        "language": "Lang diapositive a",
+        "start": "Bouyon plan",
+        "wrongType": "Kalite fichye sa a pa ka itilize isit la.",
+        "uploadFailed": "Telechajman an echwe."
+      },
+      "outline": {
+        "role": {
+          "title": "Tit",
+          "subtitle": "Soustit",
+          "body": "Tèks",
+          "content": "Kontni",
+          "picture": "Imaj"
+        },
+        "holds": "Sa {place} genyen",
+        "kindText": "Tèks",
+        "kindPicture": "Imaj",
+        "bullets": "Pwen",
+        "noPicture": "Chwazi yon imaj",
+        "alt": "Dekri imaj la",
+        "tooLong": "Twò long: sa kenbe apeprè {lines, plural, one {# liy} other {# liy}} sou {chars} karaktè, menm si li fè pi piti.",
+        "shrinks": "Liy yo yon ti jan long: yap mete pi piti pou yo ka antre.",
+        "bulletsHint": "Yon pwen pa liy. Kòmanse yon liy ak de espas pou mete retrè.",
+        "room": "Gen plas pou apeprè {lines, plural, one {# liy} other {# liy}} sou {chars} karaktè.",
+        "slide": "Diapositive {number}",
+        "layoutOf": "Plan diapositive {number}",
+        "moveUp": "Monte diapositive {number} anlè",
+        "moveDown": "Desann diapositive {number} anba",
+        "remove": "Retire diapositive {number}",
+        "notesSome": "Nòt pou oratè",
+        "notesNone": "Ajoute nòt pou oratè",
+        "notesOf": "Nòt pou oratè pou diapositive {number}",
+        "slides": "Diapositive",
+        "addSlide": "Ajoute diapositive",
+        "blocked": "{count, plural, one {Gen yon bagay ki anpeche diapositive a fèt :} other {Gen # bagay ki anpeche diapositive a fèt :}}",
+        "problem": {
+          "no-slides": "Pa gen okenn diapositive nan plan an.",
+          "too-many-slides": "Se sèlman 40 premye diapositive yo ki ap konsève.",
+          "unknown-layout": "Diapositive {slide} itilize yon plan pa gen nan modèl sa a.",
+          "vertical-layout": "Diapositive {slide} itilize yon plan ak tèks sou kote; chwazi yon lòt.",
+          "unknown-placeholder": "Diapositive {slide} te genyen kontni pou yon zòn li pa gen nan plan an.",
+          "repeated-placeholder": "Diapositive {slide} plen menm zòn nan de fwa.",
+          "kind-not-accepted": "Diapositive {slide} te mete kontni kote plan an pa sipòte.",
+          "empty-fill": "Diapositive {slide} gen yon chan vid.",
+          "unknown-image": "Diapositive {slide} mande yon imaj ki pa te ajoute.",
+          "bullet-level": "Diapositive {slide} gen pwen ki twò fon.",
+          "too-long": "Diapositive {slide} gen plis tèks pase sa li ka mete, menm si li pi piti. Redwi oswa divize diapositive a.",
+          "empty-slide": "Diapositive {slide} pa gen anyen sou li."
+        },
+        "build": "{count, plural, one {Kreye diapositive (# diapositive)} other {Kreye diapositive (# diapositive)}}",
+        "willShrink": "{count, plural, one {Tekst sou yon diapozitif ap mete pi piti pou li ka antre.} other {Tekst sou # diapozitif ap mete pi piti pou yo ka antre.}}"
       }
     }
   },

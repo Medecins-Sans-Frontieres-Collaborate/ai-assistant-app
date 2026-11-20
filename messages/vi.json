@@ -2922,6 +2922,10 @@
       "brandReview": {
         "label": "Đánh giá thương hiệu",
         "description": "Kiểm tra tệp PDF, Word hoặc bản trình bày theo sổ tay thương hiệu: phông chữ, màu sắc, câu chữ, logo và tông giọng"
+      },
+      "deckBuilder": {
+        "label": "Trình tạo deck",
+        "description": "Lên kế hoạch cho một bài thuyết trình từ bản tóm tắt và nguồn, sau đó xây dựng nó từ mẫu thương hiệu."
       }
     },
     "chooser": {
@@ -2935,7 +2939,8 @@
       "newGrants": "Xử lý trợ cấp mới",
       "newFormFill": "Tạo mới tài liệu điền",
       "newChannelDrafter": "Bản nháp kênh mới",
-      "newBrandReview": "Đánh giá thương hiệu mới"
+      "newBrandReview": "Đánh giá thương hiệu mới",
+      "newDeckBuilder": "Deck mới"
     },
     "translation": {
       "chooseLanguage": "Ngôn ngữ đích",
@@ -4979,6 +4984,122 @@
         "found": "Đã tìm thấy",
         "notes": "Ghi chú",
         "fileSuffix": "đánh giá thương hiệu"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Đang tải deck…",
+      "busy": "Bạn đã có công việc đang chạy ({name}). Vui lòng đợi hoàn thành hoặc dừng lại.",
+      "booksFailed": "Không thể tải brand book.",
+      "readFailed": "Không thể đọc tiến trình của deck.",
+      "startFailed": "Không thể bắt đầu dàn ý.",
+      "buildFailed": "Không thể xây dựng deck.",
+      "outlineFailed": "Không thể tạo dàn ý.",
+      "stop": "Dừng",
+      "download": "Tải về .pptx",
+      "editOutline": "Chỉnh sửa dàn ý",
+      "newDeck": "Deck mới",
+      "startOver": "Bắt đầu lại",
+      "built": "Đã xây dựng",
+      "forBook": "{template}, cho {book}",
+      "fromTemplate": "Từ {template}",
+      "outlineTitle": "Dàn ý",
+      "outlineReady": "{count, plural, one {# slide, sẵn sàng chỉnh sửa} other {# slides, sẵn sàng chỉnh sửa}}",
+      "repaired": "{count, plural, one {Một mục trong kế hoạch đã được điều chỉnh cho phù hợp với mẫu.} other {# mục trong kế hoạch đã được điều chỉnh cho phù hợp với mẫu.}}",
+      "unread": "Không thể đọc {names}; dàn ý đã tạo mà không có chúng.",
+      "outlinePhase": {
+        "template": "Đang đọc mẫu",
+        "reading": "Đang đọc nguồn",
+        "planning": "Đang lên kế hoạch cho các slide"
+      },
+      "buildPhase": {
+        "composing": "Đang xây dựng các slide",
+        "rendering": "Đang kiểm tra hiển thị các slide",
+        "storing": "Đang lưu deck",
+        "reviewing": "Đang kiểm tra với brand book"
+      },
+      "status": {
+        "running": "Đang làm việc",
+        "done": "Hoàn thành",
+        "failed": "Thất bại",
+        "stopped": "Đã dừng"
+      },
+      "reviewed": "{errors, plural, =0 {Không có lỗi thương hiệu} one {# lỗi thương hiệu} other {# lỗi thương hiệu}}, {warnings, plural, =0 {không có cảnh báo} one {# cảnh báo} other {# cảnh báo}}",
+      "reviewGap": {
+        "busy": "Đã xây dựng; chưa kiểm tra với brand book (việc kiểm tra của bạn đang bận)",
+        "failed": "Đã xây dựng; không thể kiểm tra thương hiệu"
+      },
+      "overflows": "{count, plural, one {Văn bản trên slide {slides} vẫn tràn sau khi điều chỉnh.} other {Văn bản trên các slide {slides} vẫn tràn sau khi điều chỉnh.}}",
+      "shrunk": "{count, plural, one {Văn bản trên một slide đã được thu nhỏ để vừa.} other {Văn bản trên # slide đã được thu nhỏ để vừa.}}",
+      "setup": {
+        "title": "Trình tạo deck",
+        "intro": "Chọn mẫu, nêu mục đích của deck và thêm các nội dung cần tham khảo. Hệ thống sẽ tạo một dàn ý để bạn chỉnh sửa trước khi deck được xây dựng từ các bố cục của mẫu.",
+        "template": "Mẫu",
+        "booksLoading": "Đang tải brand template…",
+        "fromBook": "Từ {book}",
+        "ownTemplate": "Sử dụng mẫu của riêng bạn",
+        "replaceTemplate": "Chọn tệp khác",
+        "templateTypes": "Một bài thuyết trình hoặc mẫu PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Kiểm tra với brand book",
+        "noBook": "Không kiểm tra",
+        "brief": "Deck này dùng để làm gì?",
+        "briefPlaceholder": "Ví dụ: cập nhật 10 phút cho ban lãnh đạo về các phòng khám của chúng ta năm nay, với ba con số quan trọng.",
+        "sources": "Nguồn tư liệu",
+        "addSources": "Thêm tài liệu để sử dụng",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel hoặc văn bản; tối đa {max}",
+        "pictures": "Hình ảnh",
+        "addPictures": "Thêm hình ảnh để sử dụng cho bộ trình chiếu",
+        "pictureTypes": "PNG, JPEG hoặc GIF; tối đa {max}",
+        "remove": "Xóa {name}",
+        "language": "Ngôn ngữ của bộ trình chiếu",
+        "start": "Phác thảo đề cương",
+        "wrongType": "Kiểu tệp này không thể sử dụng ở đây.",
+        "uploadFailed": "Tải lên thất bại."
+      },
+      "outline": {
+        "role": {
+          "title": "Tiêu đề",
+          "subtitle": "Phụ đề",
+          "body": "Văn bản",
+          "content": "Nội dung",
+          "picture": "Hình ảnh"
+        },
+        "holds": "Nội dung của {place}",
+        "kindText": "Văn bản",
+        "kindPicture": "Hình ảnh",
+        "bullets": "Gạch đầu dòng",
+        "noPicture": "Chọn hình ảnh",
+        "alt": "Mô tả hình ảnh",
+        "tooLong": "Quá dài: phần này chứa khoảng {lines, plural, one {# dòng} other {# dòng}} với {chars} ký tự, kể cả khi thu nhỏ.",
+        "shrinks": "Hơi dài: sẽ thu nhỏ lại để vừa khung.",
+        "bulletsHint": "Mỗi gạch đầu dòng trên một dòng. Bắt đầu dòng bằng hai khoảng trắng để thụt lề.",
+        "room": "Có chỗ cho khoảng {lines, plural, one {# dòng} other {# dòng}} với {chars} ký tự.",
+        "slide": "Trang chiếu {number}",
+        "layoutOf": "Bố cục của trang chiếu {number}",
+        "moveUp": "Di chuyển trang chiếu {number} lên trên",
+        "moveDown": "Di chuyển trang chiếu {number} xuống dưới",
+        "remove": "Xóa trang chiếu {number}",
+        "notesSome": "Ghi chú cho người trình bày",
+        "notesNone": "Thêm ghi chú cho người trình bày",
+        "notesOf": "Ghi chú cho người trình bày của trang chiếu {number}",
+        "slides": "Các trang chiếu",
+        "addSlide": "Thêm trang chiếu",
+        "blocked": "{count, plural, one {Có 1 vấn đề ngăn bộ trình chiếu được tạo:} other {Có # vấn đề ngăn bộ trình chiếu được tạo:}}",
+        "problem": {
+          "no-slides": "Đề cương chưa có trang chiếu nào.",
+          "too-many-slides": "Chỉ giữ lại 40 trang chiếu đầu tiên.",
+          "unknown-layout": "Trang chiếu {slide} sử dụng bố cục mà mẫu này không có.",
+          "vertical-layout": "Trang chiếu {slide} dùng bố cục có văn bản xoay ngang; vui lòng chọn bố cục khác.",
+          "unknown-placeholder": "Trang chiếu {slide} có nội dung cho vị trí mà bố cục không hỗ trợ.",
+          "repeated-placeholder": "Trang chiếu {slide} điền một vị trí hai lần.",
+          "kind-not-accepted": "Trang chiếu {slide} có nội dung mà bố cục không cho phép tại vị trí này.",
+          "empty-fill": "Trang chiếu {slide} có trường bị để trống.",
+          "unknown-image": "Trang chiếu {slide} đặt tên cho hình ảnh chưa được thêm.",
+          "bullet-level": "Trang chiếu {slide} có gạch đầu dòng thụt vào quá sâu.",
+          "too-long": "Trang chiếu {slide} có quá nhiều văn bản so với khung, kể cả khi thu nhỏ. Hãy rút ngắn hoặc chia nhỏ ra.",
+          "empty-slide": "Trang chiếu {slide} không có nội dung."
+        },
+        "build": "{count, plural, one {Tạo bộ trình chiếu (# trang)} other {Tạo bộ trình chiếu (# trang)}}",
+        "willShrink": "{count, plural, one {Chữ trên một trang trình chiếu sẽ được thu nhỏ để vừa.} other {Chữ trên # trang trình chiếu sẽ được thu nhỏ để vừa.}}"
       }
     }
   },

@@ -2922,6 +2922,10 @@
       "brandReview": {
         "label": "品牌审核",
         "description": "根据品牌手册检查 PDF、Word 文档或演示文稿：字体、颜色、用词、标志和语调"
+      },
+      "deckBuilder": {
+        "label": "幻灯片生成器",
+        "description": "根据简要说明和来源规划演示文稿，并使用品牌模板生成内容。"
       }
     },
     "chooser": {
@@ -2935,7 +2939,8 @@
       "newGrants": "新拨款处理",
       "newFormFill": "新建文档填写",
       "newChannelDrafter": "新建频道草稿",
-      "newBrandReview": "新建品牌审核"
+      "newBrandReview": "新建品牌审核",
+      "newDeckBuilder": "新建演示文稿"
     },
     "translation": {
       "chooseLanguage": "目标语言",
@@ -4979,6 +4984,122 @@
         "found": "发现内容",
         "notes": "备注",
         "fileSuffix": "品牌审核"
+      }
+    },
+    "deckBuilder": {
+      "loading": "正在加载演示文稿…",
+      "busy": "已有任务在运行（{name}）。请等待完成或停止当前任务。",
+      "booksFailed": "无法加载品牌手册。",
+      "readFailed": "无法读取演示文稿进度。",
+      "startFailed": "无法开始生成大纲。",
+      "buildFailed": "无法生成演示文稿。",
+      "outlineFailed": "无法生成大纲。",
+      "stop": "停止",
+      "download": "下载 .pptx",
+      "editOutline": "编辑大纲",
+      "newDeck": "新建演示文稿",
+      "startOver": "重新开始",
+      "built": "已生成",
+      "forBook": "{template}，用于 {book}",
+      "fromTemplate": "来自 {template}",
+      "outlineTitle": "大纲",
+      "outlineReady": "{count, plural, one {# 页幻灯片，可编辑} other {# 页幻灯片，可编辑}}",
+      "repaired": "{count, plural, one {计划中已有一项已调整以适配模板。} other {计划中有 # 项已调整以适配模板。}}",
+      "unread": "无法读取 {names}，大纲已不包含它们。",
+      "outlinePhase": {
+        "template": "读取模板",
+        "reading": "读取来源",
+        "planning": "规划幻灯片"
+      },
+      "buildPhase": {
+        "composing": "生成幻灯片",
+        "rendering": "检查幻灯片渲染",
+        "storing": "保存演示文稿",
+        "reviewing": "对比品牌手册检查"
+      },
+      "status": {
+        "running": "处理中",
+        "done": "完成",
+        "failed": "失败",
+        "stopped": "已停止"
+      },
+      "reviewed": "{errors, plural, =0 {无品牌错误} one {# 个品牌错误} other {# 个品牌错误}}，{warnings, plural, =0 {无警告} one {# 个警告} other {# 个警告}}",
+      "reviewGap": {
+        "busy": "已生成，尚未对比品牌手册（审查时处于忙碌状态）",
+        "failed": "已生成，无法进行品牌核查"
+      },
+      "overflows": "{count, plural, one {幻灯片 {slides} 上的文本调整后仍然超出。} other {幻灯片 {slides} 上的文本调整后仍然超出。}}",
+      "shrunk": "{count, plural, one {一页幻灯片上的文字已缩小以适应。} other {# 页幻灯片上的文字已缩小以适应。}}",
+      "setup": {
+        "title": "幻灯片生成器",
+        "intro": "选择模板，说明用途及所要引用的内容。模型会草拟可编辑大纲，最后根据模板布局生成演示文稿。",
+        "template": "模板",
+        "booksLoading": "正在加载品牌模板…",
+        "fromBook": "来自 {book}",
+        "ownTemplate": "使用您自己的模板",
+        "replaceTemplate": "选择其他文件",
+        "templateTypes": "PowerPoint 演示文稿或模板（.pptx, .potx）",
+        "checkAgainst": "对比品牌手册检查",
+        "noBook": "不检查",
+        "brief": "演示文稿用途？",
+        "briefPlaceholder": "例如：一份为董事会汇报本年度诊所情况的10分钟简报，包含三个关键数据。",
+        "sources": "资料来源",
+        "addSources": "添加可参考的文档",
+        "sourceTypes": "PDF、Word、PowerPoint、Excel 或文本；最多 {max} 个",
+        "pictures": "图片",
+        "addPictures": "添加可用于幻灯片的图片",
+        "pictureTypes": "PNG、JPEG 或 GIF；最多 {max} 个",
+        "remove": "移除 {name}",
+        "language": "幻灯片语言",
+        "start": "草拟大纲",
+        "wrongType": "此类文件不能用于此处。",
+        "uploadFailed": "上传失败。"
+      },
+      "outline": {
+        "role": {
+          "title": "标题",
+          "subtitle": "副标题",
+          "body": "文本",
+          "content": "内容",
+          "picture": "图片"
+        },
+        "holds": "{place} 包含的内容",
+        "kindText": "文本",
+        "kindPicture": "图片",
+        "bullets": "项目符号",
+        "noPicture": "选择一张图片",
+        "alt": "描述图片",
+        "tooLong": "过长：即使缩小，约可容纳 {lines, plural, one {# 行} other {# 行}}，共 {chars} 个字符。",
+        "shrinks": "内容稍长，将缩小以适应。",
+        "bulletsHint": "每行一个项目。行首加两个空格可缩进。",
+        "room": "可容纳约 {lines, plural, one {# 行} other {# 行}}，共 {chars} 个字符。",
+        "slide": "第 {number} 幻灯片",
+        "layoutOf": "第 {number} 幻灯片布局",
+        "moveUp": "将第 {number} 幻灯片上移",
+        "moveDown": "将第 {number} 幻灯片下移",
+        "remove": "移除第 {number} 幻灯片",
+        "notesSome": "演讲者备注",
+        "notesNone": "添加演讲者备注",
+        "notesOf": "第 {number} 幻灯片的演讲者备注",
+        "slides": "幻灯片",
+        "addSlide": "添加幻灯片",
+        "blocked": "{count, plural, one {有一项阻止幻灯片创建：} other {有 # 项阻止幻灯片创建：}}",
+        "problem": {
+          "no-slides": "大纲中没有幻灯片。",
+          "too-many-slides": "仅保留前 40 张幻灯片。",
+          "unknown-layout": "第 {slide} 幻灯片使用了模板中没有的布局。",
+          "vertical-layout": "第 {slide} 幻灯片使用了横向文本布局，请选择其他布局。",
+          "unknown-placeholder": "第 {slide} 幻灯片包含了布局中不存在的占位内容。",
+          "repeated-placeholder": "第 {slide} 幻灯片的某一内容被重复填写。",
+          "kind-not-accepted": "第 {slide} 幻灯片包含不适合该布局的内容。",
+          "empty-fill": "第 {slide} 幻灯片有空白区域。",
+          "unknown-image": "第 {slide} 幻灯片引用了未添加的图片。",
+          "bullet-level": "第 {slide} 幻灯片项目缩进过深。",
+          "too-long": "第 {slide} 幻灯片的文本过多（即使缩小也无法容纳）。请缩短或拆分幻灯片。",
+          "empty-slide": "第 {slide} 幻灯片内容为空。"
+        },
+        "build": "{count, plural, one {生成幻灯片组（# 张幻灯片）} other {生成幻灯片组（# 张幻灯片）}}",
+        "willShrink": "{count, plural, one {一张幻灯片上的文本将缩小以适应。} other {# 张幻灯片上的文本将缩小以适应。}}"
       }
     }
   },

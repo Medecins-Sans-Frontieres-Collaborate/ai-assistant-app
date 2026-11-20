@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Bita na alamar kasuwanci",
         "description": "Duba PDF, takardar Word ko gabatarwa daidai da littafin alamar kasuwanci: font, launuka, kalmomi, tambura da yadda ake bayani"
+      },
+      "deckBuilder": {
+        "label": "Mai gina gabatarwa",
+        "description": "Shirya gabatarwa daga taƙaitaccen bayani da tushe, sannan a gina ta daga samfuri na alama."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Sabon sarrafa tallafi",
       "newFormFill": "Sabon cikar daftari",
       "newChannelDrafter": "Sabon rubutun tashoshi",
-      "newBrandReview": "Sabon bita na alamar kasuwanci"
+      "newBrandReview": "Sabon bita na alamar kasuwanci",
+      "newDeckBuilder": "Sabuwar gabatarwa"
     },
     "translation": {
       "chooseLanguage": "Harshe na fassara",
@@ -4932,6 +4937,122 @@
         "found": "Abin da aka samu",
         "notes": "Bayanan kula",
         "fileSuffix": "bitar alama"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Ana loda gabatarwar…",
+      "busy": "Kana da aiki da ke gudana ({name}). Jira ya gama ko tsayar da shi.",
+      "booksFailed": "An kasa loda littafan alama.",
+      "readFailed": "An kasa karanta cigaban wannan gabatarwar.",
+      "startFailed": "An kasa fara tsarin.",
+      "buildFailed": "Ba a iya gina gabatarwar ba.",
+      "outlineFailed": "Ba a iya samar da tsarin ba.",
+      "stop": "Tsaya",
+      "download": "Zazzage .pptx",
+      "editOutline": "Gyara tsarin",
+      "newDeck": "Sabuwar gabatarwa",
+      "startOver": "Fara daga farko",
+      "built": "An gina",
+      "forBook": "{template}, don {book}",
+      "fromTemplate": "Daga {template}",
+      "outlineTitle": "Tsari",
+      "outlineReady": "{count, plural, one {# silayidi, shirye don gyarawa} other {# silayidodi, shirye don gyarawa}}",
+      "repaired": "{count, plural, one {Abu ɗaya a cikin shirin ya dace da samfurin.} other {Abubuwa # a cikin shirin an daidaita su da samfurin.}}",
+      "unread": "An kasa karanta {names}; an samar da tsarin ba tare da su ba.",
+      "outlinePhase": {
+        "template": "Ana karanta samfurin",
+        "reading": "Ana karanta tushe",
+        "planning": "Ana tsara silayidodi"
+      },
+      "buildPhase": {
+        "composing": "Ana gina silayidodi",
+        "rendering": "Ana duba yadda silayidodin ke nunawa",
+        "storing": "Ana ajiye gabatarwar",
+        "reviewing": "Ana duba daidaito da littafin alama"
+      },
+      "status": {
+        "running": "Ana aiki",
+        "done": "An gama",
+        "failed": "Ya fadi",
+        "stopped": "An tsayar"
+      },
+      "reviewed": "{errors, plural, =0 {Babu kurakurai na alama} one {# kuskuren alama} other {# kurakurai na alama}}, {warnings, plural, =0 {babu gargadi} one {# gargadi} other {# gargadi}}",
+      "reviewGap": {
+        "busy": "An gina; ba a duba da littafin alama ba (duba naka na aiki)",
+        "failed": "An gina; ba a iya duba da littafin alama ba"
+      },
+      "overflows": "{count, plural, one {Rubutu a cikin silayidi {slides} har yanzu ya wuce bayan gyarawa.} other {Rubutu a cikin silayidodi {slides} har yanzu yana wuce bayan gyarawa.}}",
+      "shrunk": "{count, plural, one {Rubutu a silayidi ɗaya an rage shi don ya shiga.} other {Rubutu a silayidodi # an rage su don su shiga.}}",
+      "setup": {
+        "title": "Mai gina gabatarwa",
+        "intro": "Zaɓi samfurin, bayyana abin da gabatarwar take nufi kuma ƙara abin da za ta dogara da shi. Samfuri zai bayyana tsarin da zaka iya gyara kafin a gina gabatarwar daga tsarin samfurin.",
+        "template": "Samfuri",
+        "booksLoading": "Ana loda samfura na alama…",
+        "fromBook": "Daga {book}",
+        "ownTemplate": "Yi amfani da naka samfurin",
+        "replaceTemplate": "Zaɓi wani fayil",
+        "templateTypes": "Gabatarwa ko samfurin PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Duba da littafin alama",
+        "noBook": "Kada a duba",
+        "brief": "Me gabatarwar take nufi?",
+        "briefPlaceholder": "Misali: sabunta dakika 10 ga hukumar akan asibitocinmu wannan shekara, tare da muhimman lambobi guda uku.",
+        "sources": "Tushen bayanai",
+        "addSources": "Ƙara takardun da za a dogara da su",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel ko rubutu; har zuwa {max}",
+        "pictures": "Hotuna",
+        "addPictures": "Ƙara hotunan da za a iya amfani da su a cikin deck",
+        "pictureTypes": "PNG, JPEG ko GIF; har zuwa {max}",
+        "remove": "Cire {name}",
+        "language": "Yaren deck",
+        "start": "Fara tsarawa",
+        "wrongType": "Wannan irin fayil ɗin ba za a iya amfani da shi a nan ba.",
+        "uploadFailed": "An kasa lodawa."
+      },
+      "outline": {
+        "role": {
+          "title": "Take",
+          "subtitle": "Sako",
+          "body": "Rubutu",
+          "content": "Abun ciki",
+          "picture": "Hoto"
+        },
+        "holds": "Abin da {place} ke dauke da shi",
+        "kindText": "Rubutu",
+        "kindPicture": "Hoto",
+        "bullets": "Makulli",
+        "noPicture": "Zaɓi hoto",
+        "alt": "Fassara hoton",
+        "tooLong": "Tsawo ya wuce: wannan na ɗauke da kusan {lines, plural, one {layi 1} other {layuka #}} na haruffa {chars}, har ma da ƙananan saiti.",
+        "shrinks": "Yana dan tsayi: za a rage girman sa don ya dace.",
+        "bulletsHint": "Layi ɗaya ga kowanne makulli. Fara layi da sarari biyu don ja shi gaba.",
+        "room": "Wuri don kusan {lines, plural, one {layi daya} other {layuka #}} na haruffa {chars}.",
+        "slide": "Silayid {number}",
+        "layoutOf": "Tsarin silayid {number}",
+        "moveUp": "Matsa silayid {number} sama",
+        "moveDown": "Matsa silayid {number} ƙasa",
+        "remove": "Cire silayid {number}",
+        "notesSome": "Bayanan mai magana",
+        "notesNone": "Ƙara bayanan mai magana",
+        "notesOf": "Bayanan mai magana na silayid {number}",
+        "slides": "Silayidu",
+        "addSlide": "Ƙara silayid",
+        "blocked": "{count, plural, one {Abu ɗaya ne ke hana gina deck:} other {Abubuwa # ne ke hana gina deck:}}",
+        "problem": {
+          "no-slides": "Babu silayid a cikin tsari.",
+          "too-many-slides": "Silayidu 40 na farko kaɗai za a ajiye.",
+          "unknown-layout": "Silayid {slide} na amfani da tsarin da wannan samfurin baya da shi.",
+          "vertical-layout": "Silayid {slide} na amfani da tsarin rubutu a gefe; zaɓi wani.",
+          "unknown-placeholder": "Silayid {slide} na da abun ciki don wuri da tsarin sa bai da shi.",
+          "repeated-placeholder": "Silayid {slide} ya cika wuri guda sau biyu.",
+          "kind-not-accepted": "Silayid {slide} na da abun ciki da tsarin sa ba zai iya riƙewa a nan ba.",
+          "empty-fill": "Silayid {slide} nada fili babu komai.",
+          "unknown-image": "Silayid {slide} na kiran hoton da ba a ƙara ba.",
+          "bullet-level": "Silayid {slide} na da makulli da aka ja gaba fiye da kima.",
+          "too-long": "Silayid {slide} na dauke da rubutu fiye da yadda zai iya dacewa, har da ƙananan saiti. Gajarta ko raba zuwa silayidu guda biyu.",
+          "empty-slide": "Silayid {slide} ba shi da komai."
+        },
+        "build": "{count, plural, one {Gina deck (# silayid)} other {Gina deck (# silayidu)}}",
+        "willShrink": "{count, plural, one {Za a rage girman rubutu a faifan daya don ya dace.} other {Za a rage girman rubutu a faifai # don su dace.}}"
       }
     }
   },

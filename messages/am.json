@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "የብራንድ እይታ አጠቃቀም",
         "description": "PDF፣ Word ዶክመንት ወይም ማቅረቢያን በብራንድ መፅሀፍት ላይ ያስረጉ፡ ፊደላት፣ ቀለሞች፣ ቃላት፣ ሎጎዎችና ድምቀት ይፈትናል"
+      },
+      "deckBuilder": {
+        "label": "ዲክ መንቀሳቀሻ",
+        "description": "ከአጭሩ እና ምንጮች ቅድሚያ ማቅረብ፣ ከዚያም በብራንድ አብነት ማንቀሳቀስ ይጀምሩ።"
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "አዲስ የግራንት ሂደት",
       "newFormFill": "አዲስ ሰነድ ማሙላት",
       "newChannelDrafter": "አዲስ የቻናል ስህተት",
-      "newBrandReview": "አዲስ የብራንድ እይታ"
+      "newBrandReview": "አዲስ የብራንድ እይታ",
+      "newDeckBuilder": "አዲስ ዲክ"
     },
     "translation": {
       "chooseLanguage": "የትርጉም ቋንቋ",
@@ -4948,6 +4953,122 @@
         "found": "ተገኘ",
         "notes": "ማስታወሻዎች",
         "fileSuffix": "የብራንድ አስተያየት"
+      }
+    },
+    "deckBuilder": {
+      "loading": "ዲኩን በመጫን ላይ…",
+      "busy": "ቀድሞውኑ ስራ በመሄድ ላይ አለ ({name})። ሊጨርሱ ወይም ለመቆም ይጠብቁ።",
+      "booksFailed": "የብራንድ መፅሀፍቶችን ማከተት አልተቻለም።",
+      "readFailed": "የዲኩን እድገት ማንበብ አልተቻለም።",
+      "startFailed": "የማቅረብ ዝርዝር ማጀመር አልተቻለም።",
+      "buildFailed": "ዲኩ መገንባት አልተቻለም።",
+      "outlineFailed": "የማቅረብ ዝርዝሩን ማቅረብ አልተቻለም።",
+      "stop": "አቁም",
+      "download": ".pptx አውርድ",
+      "editOutline": "ዝርዝሩን አርትዕ",
+      "newDeck": "አዲስ ዲክ",
+      "startOver": "እንደገና ጀምር",
+      "built": "ተገንቧል",
+      "forBook": "{template}፣ ለ{book}",
+      "fromTemplate": "ከ{template}",
+      "outlineTitle": "ዝርዝር",
+      "outlineReady": "{count, plural, one {# ስላይድ፣ ለማስተካከል ዝግጁ} other {# ስላይዶች፣ ለማስተካከል ዝግጁ}}",
+      "repaired": "{count, plural, one {አንድ ነገር በአብነቱ ለማስማማት ተቀይሯል።} other {# ነገሮች በአብነቱ ለማስማማት ተቀይረዋል።}}",
+      "unread": "{names} ማንበብ አልተቻለም፤ ዝርዝሩ ያልቆሰለው ተደርጓል።",
+      "outlinePhase": {
+        "template": "አብነቱን በማንበብ ላይ",
+        "reading": "ምንጮቹን በማንበብ ላይ",
+        "planning": "ስላይዶቹን በመያዝ ላይ"
+      },
+      "buildPhase": {
+        "composing": "ስላይዶቹን በመገንባት ላይ",
+        "rendering": "ስላይዶቹ እንዴት እንደሚታዩ በመመርመር ላይ",
+        "storing": "ዲኩን በማስቀመጥ ላይ",
+        "reviewing": "በብራንድ መፅሀፍ ላይ በመመርመር ላይ"
+      },
+      "status": {
+        "running": "በስራ ላይ",
+        "done": "ተጠናቋል",
+        "failed": "አልተሳካም",
+        "stopped": "ቆሟል"
+      },
+      "reviewed": "{errors, plural, =0 {የብራንድ ስህተቶች የሉም} one {# የብራንድ ስህተት} other {# የብራንድ ስህተቶች}}, {warnings, plural, =0 {ማንኛውም ማስጠንቀቂያ የለም} one {# ማስጠንቀቂያ} other {# ማስጠንቀቂያዎች}}",
+      "reviewGap": {
+        "busy": "ተገንቧል፤ ከብራንድ መፅሀፉ ጋር አልተመረመረም (እናንተ በስራ ላይ ነበራችሁ)",
+        "failed": "ተገንቧል፤ የብራንድ ምርመራው አልተሄደም"
+      },
+      "overflows": "{count, plural, one {በስላይድ {slides} ላይ ያለው ጽሁፍ ከሰፍሮ በኋላ አልተሟላም።} other {በስላይዶች {slides} ላይ ያለው ጽሁፍ ከሰፍሮ በኋላ አልተሟላም።}}",
+      "shrunk": "{count, plural, one {በአንድ ስላይድ ያለው ጽሁፍ ለማስማማት ታንሶ ተዘምቷል።} other {በ# ስላይዶች ያሉ ጽሁፎች ለማስማማት ታንሶ ተዘምቷል።}}",
+      "setup": {
+        "title": "ዲክ መንቀሳቀሻ",
+        "intro": "አብነት ይምረጡ፣ ዲኩ ለምንኛ እንደሆነ ይግለጹና ምን እንዲያገናኝ ያክሉ። ሞዴሉ የሚያስተካክሉትን ዝርዝር ማቅረብ ይጀምራል፣ በኋላም ዲኩ ከአብነቱ አዘጋጅቶ ይገነባል።",
+        "template": "አብነት",
+        "booksLoading": "የብራንድ አብነቶችን በማጫን ላይ…",
+        "fromBook": "ከ{book}",
+        "ownTemplate": "የራስዎን አብነት ይተገብሩ",
+        "replaceTemplate": "ሌላ ፋይል ይምረጡ",
+        "templateTypes": "የPowerPoint ማቅረቢያ ወይም አብነት (.pptx, .potx)",
+        "checkAgainst": "ከብራንድ መፅሀፍ ጋር ያረጋግጡ",
+        "noBook": "አትመርምሩ",
+        "brief": "ዲኩ ለምንድን ነው?",
+        "briefPlaceholder": "ለምሳሌ፡ በዚህ ዓመት ላይ እኛ በክሊኒኮቻችን ለጉባኤው 10-ደቂቃ ዝርዝር፣ አስፈላጊውን ሶስቱ ቁጥሮች ጨምር።",
+        "sources": "ምንጮች",
+        "addSources": "ለመጠቀም ሰነዶችን ያክሉ",
+        "sourceTypes": "PDF፣ Word፣ PowerPoint፣ Excel ወይም ጽሑፍ፤ እስከ {max} ድረስ",
+        "pictures": "ፎቶዎች",
+        "addPictures": "ደኩ ሊጠቀምበት የሚችል ፎቶ ያክሉ",
+        "pictureTypes": "PNG፣ JPEG ወይም GIF፤ እስከ {max} ድረስ",
+        "remove": "{name} ያስወግዱ",
+        "language": "የደኩ ቋንቋ",
+        "start": "ሪፖርት ረቂቅ",
+        "wrongType": "ይህ አይነት ፋይል እዚህ ሊጠቀም አይችልም።",
+        "uploadFailed": "አቅርቦቱ አልተሳካም።"
+      },
+      "outline": {
+        "role": {
+          "title": "ርዕስ",
+          "subtitle": "ንዑስ ርዕስ",
+          "body": "ጽሑፍ",
+          "content": "ይዘት",
+          "picture": "ፎቶ"
+        },
+        "holds": "{place} የያዘው",
+        "kindText": "ጽሑፍ",
+        "kindPicture": "ፎቶ",
+        "bullets": "ድንቅ ነጥቦች",
+        "noPicture": "ፎቶ ይምረጡ",
+        "alt": "ፎቶውን ይግለጹ",
+        "tooLong": "በጣም ረጅም ነው፡ ይህ {chars} ቁምፊ በደኩ ላይ {lines, plural, one {# ሐረግ} other {# ሐረጎች}} ያህል ይታያል፣ ቢቀንስም።",
+        "shrinks": "በትንሹ ረጅም ነው፤ ለመስመር ይቀንሳል።",
+        "bulletsHint": "አንድ ነጥብ በአንድ መስመር። ቀደም ሲል ሁለት ነጠላ ቦታ ይስጡ ለመግለፅ።",
+        "room": "{chars} ቁምፊ የያዙ {lines, plural, one {# ሐረግ} other {# ሐረጎች}} ቦታ አለ።",
+        "slide": "ስላይድ {number}",
+        "layoutOf": "የስላይድ {number} አዘጋጅት",
+        "moveUp": "ስላይድ {number} ወደ ላይ ያንቀሳቅሉ",
+        "moveDown": "ስላይድ {number} ወደ ታች ያንቀሳቅሉ",
+        "remove": "ስላይድ {number} ያስወግዱ",
+        "notesSome": "የተናጋሪ ማስታወሻዎች",
+        "notesNone": "የተናጋሪ ማስታወሻዎች ያክሉ",
+        "notesOf": "ለስላይድ {number} የተናጋሪ ማስታወሻዎች",
+        "slides": "ስላይዶች",
+        "addSlide": "ስላይድ ያክሉ",
+        "blocked": "{count, plural, one {አንዱ ነገር ደኩን ከማንቀሳቀስ ይከለካል፡} other {# ነገሮች ደኩን ከመፍጠር ይከልካሉ፡}}",
+        "problem": {
+          "no-slides": "አዘጋጅቱ ምንም ስላይድ የለውም።",
+          "too-many-slides": "የመጀመሪያው 40 ስላይዶች ብቻ ይቀመጣሉ።",
+          "unknown-layout": "ስላይድ {slide} በዚህ ቴምፕሌት የለም አይነት አዘጋጅት ጠቀመ።",
+          "vertical-layout": "ስላይድ {slide} አግዳጅ ጽሑፍ ያለው አዘጋጅት ጠቀመ፤ ሌላ ይምረጡ።",
+          "unknown-placeholder": "ስላይድ {slide} ውስጥ በአዘጋጅቱ የሌለው ቦታ ይዘት ነበረ።",
+          "repeated-placeholder": "ስላይድ {slide} አንድ ቦታ ሁለመጥረቀቀ።",
+          "kind-not-accepted": "ስላይድ {slide} ውስጥ ለቦታው የማስቀመጥ ይችለው ያልችለው ይዘት ነበረ።",
+          "empty-fill": "ስላይድ {slide} ባዶ መስክ አለው።",
+          "unknown-image": "ስላይድ {slide} ያልታከለ ፎቶ ስም ተጠቀመ።",
+          "bullet-level": "ስላይድ {slide} ነጥቦች በጣም ጥልቅ ተዳምረዋል።",
+          "too-long": "ስላይድ {slide} በመስመር ላይ በምትር ማድረግም ያነጻጸረው እንኳ ያልካ። አቀናጁ ወይም በሁለት ስላይድ ይካፈሉት።",
+          "empty-slide": "ስላይድ {slide} ባዶ ነው።"
+        },
+        "build": "{count, plural, one {ደኩ ይፍጠሩ (# ስላይድ)} other {ደኩ ይፍጠሩ (# ስላይዶች)}}",
+        "willShrink": "{count, plural, one {አንዲት ስልይድ ላይ ያለው ጽሁፍ ለማስማት ይቀንሳል።} other {በ# ስልይዶች ላይ ያለው ጽሁፍ ለማስማት ይቀንሳል።}}"
       }
     }
   },

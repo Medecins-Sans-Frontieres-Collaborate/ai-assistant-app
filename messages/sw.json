@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Ukaguzi wa chapa",
         "description": "Kagua PDF, hati ya Word au wasilisho dhidi ya kitabu cha chapa: fonti, rangi, maneno, nembo na mtindo"
+      },
+      "deckBuilder": {
+        "label": "Mtengenezaji wa bwawa",
+        "description": "Panga wasilisho kutoka kwa muhtasari na vyanzo, kisha uitengeneze kutoka kwa kiolezo cha chapa."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Uchakatiji mpya wa ruzuku",
       "newFormFill": "Jaza hati mpya",
       "newChannelDrafter": "Rasimu mpya ya kituo",
-      "newBrandReview": "Ukaguzi mpya wa chapa"
+      "newBrandReview": "Ukaguzi mpya wa chapa",
+      "newDeckBuilder": "Bwawa jipya"
     },
     "translation": {
       "chooseLanguage": "Lugha lengwa",
@@ -4948,6 +4953,122 @@
         "found": "Imepatikana",
         "notes": "Maelezo",
         "fileSuffix": "ukaguzi wa chapa"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Inapakia bwawa…",
+      "busy": "Una kazi inayoendelea tayari ({name}). Subiri imalize au isitishe.",
+      "booksFailed": "Haikuweza kupakia vitabu vya chapa.",
+      "readFailed": "Haikuweza kusoma maendeleo ya bwawa.",
+      "startFailed": "Haikuweza kuanzisha muhtasari.",
+      "buildFailed": "Bwawa halikuweza kujengwa.",
+      "outlineFailed": "Muhtasari haukuweza kutengenezwa.",
+      "stop": "Sitisha",
+      "download": "Pakua .pptx",
+      "editOutline": "Hariri muhtasari",
+      "newDeck": "Bwawa jipya",
+      "startOver": "Anza upya",
+      "built": "Imetengenezwa",
+      "forBook": "{template}, kwa ajili ya {book}",
+      "fromTemplate": "Kutoka {template}",
+      "outlineTitle": "Muhtasari",
+      "outlineReady": "{count, plural, one {Slayidi #, iko tayari kuhaririwa} other {Slayidi #, ziko tayari kuhaririwa}}",
+      "repaired": "{count, plural, one {Jambo moja katika mpango lilirekebishwa kufaa kiolezo.} other {Mambo # katika mpango yalirekebishwa kufaa kiolezo.}}",
+      "unread": "Haikuweza kusoma {names}; muhtasari umetengenezwa bila hivyo.",
+      "outlinePhase": {
+        "template": "Inasoma kiolezo",
+        "reading": "Inasoma vyanzo",
+        "planning": "Inapanga slayidi"
+      },
+      "buildPhase": {
+        "composing": "Inatengeneza slayidi",
+        "rendering": "Inakagua jinsi slayidi zinavyoonekana",
+        "storing": "Inaokoa bwawa",
+        "reviewing": "Inakagua na kulinganisha na kitabu cha chapa"
+      },
+      "status": {
+        "running": "Inafanya kazi",
+        "done": "Imekamilika",
+        "failed": "Imeshindikana",
+        "stopped": "Imesitishwa"
+      },
+      "reviewed": "{errors, plural, =0 {Hakuna makosa ya chapa} one {Kosa # la chapa} other {Makosa # ya chapa}}, {warnings, plural, =0 {hakuna onyo} one {Onyo #} other {Onyo #}}",
+      "reviewGap": {
+        "busy": "Imetengenezwa; haijakaguliwa dhidi ya kitabu cha chapa (ukaguzi wako ulikuwa na shughuli nyingi)",
+        "failed": "Imetengenezwa; ukaguzi wa chapa haukuweza kuendeshwa"
+      },
+      "overflows": "{count, plural, one {Maandishi kwenye slayidi {slides} bado yanazidi baada ya kufaa.} other {Maandishi kwenye slayidi {slides} bado yanazidi baada ya kufaa.}}",
+      "shrunk": "{count, plural, one {Maandishi kwenye slayidi moja yamefanywa madogo kufaa.} other {Maandishi kwenye slayidi # yamefanywa madogo kufaa.}}",
+      "setup": {
+        "title": "Mtengenezaji wa bwawa",
+        "intro": "Chagua kiolezo, eleza bwawa linahusu nini na ongeza vyanzo. Mfano unatengeneza muhtasari ambao unaweza kuhariri kabla bwawa halijatengenezwa kutoka njia za kiolezo.",
+        "template": "Kiolezo",
+        "booksLoading": "Inapakia violezo vya chapa…",
+        "fromBook": "Kutoka {book}",
+        "ownTemplate": "Tumia kiolezo chako mwenyewe",
+        "replaceTemplate": "Chagua faili nyingine",
+        "templateTypes": "Wasilisho au kiolezo cha PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Kagua na ulinganishe na kitabu cha chapa",
+        "noBook": "Usikague",
+        "brief": "Bwawa ni kwa ajili gani?",
+        "briefPlaceholder": "Kwa mfano: taarifa ya dakika 10 kwa bodi kuhusu kliniki zetu mwaka huu, ikiwa na takwimu tatu muhimu.",
+        "sources": "Vyanzo",
+        "addSources": "Ongeza nyaraka za kutumia",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel au maandishi; hadi {max}",
+        "pictures": "Picha",
+        "addPictures": "Ongeza picha ambazo deki inaweza kutumia",
+        "pictureTypes": "PNG, JPEG au GIF; hadi {max}",
+        "remove": "Ondoa {name}",
+        "language": "Lugha ya deki",
+        "start": "Drafthi ya muhtasari",
+        "wrongType": "Aina hiyo ya faili haiwezi kutumika hapa.",
+        "uploadFailed": "Kupakia kimeshindikana."
+      },
+      "outline": {
+        "role": {
+          "title": "Kichwa",
+          "subtitle": "Kichwa kidogo",
+          "body": "Maandishi",
+          "content": "Yaliyomo",
+          "picture": "Picha"
+        },
+        "holds": "Kilicho ndani ya {place}",
+        "kindText": "Maandishi",
+        "kindPicture": "Picha",
+        "bullets": "Pointi",
+        "noPicture": "Chagua picha",
+        "alt": "Elezea picha",
+        "tooLong": "Ndefu sana: hiki kina uwezo wa {lines, plural, one {mstari mmoja} other {mistari #}} wa herufi {chars}, hata ukiwa mdogo.",
+        "shrinks": "Ndefu kidogo: kitapungua ili kiweze kutosha.",
+        "bulletsHint": "Pointi moja kwa kila mstari. Anza mstari na nafasi mbili ili uandishi uwe wa ndani.",
+        "room": "Nafasi kwa takriban {lines, plural, one {mstari mmoja} other {mistari #}} wa herufi {chars}.",
+        "slide": "Slidi {number}",
+        "layoutOf": "Mpangilio wa slidi {number}",
+        "moveUp": "Sogeza slidi {number} juu",
+        "moveDown": "Sogeza slidi {number} chini",
+        "remove": "Ondoa slidi {number}",
+        "notesSome": "Maelezo ya mzungumzaji",
+        "notesNone": "Ongeza maelezo ya mzungumzaji",
+        "notesOf": "Maelezo ya mzungumzaji kwa slidi {number}",
+        "slides": "Slidi",
+        "addSlide": "Ongeza slidi",
+        "blocked": "{count, plural, one {Jambo moja linazuia deki ijengwe:} other {Mambo # yanazuia deki ijengwe:}}",
+        "problem": {
+          "no-slides": "Muhtasari hauna slidi.",
+          "too-many-slides": "Slidi 40 za kwanza pekee ndizo zitakazofanyika.",
+          "unknown-layout": "Slidi {slide} imetumia mpangilio ambao kigezo hiki hakina.",
+          "vertical-layout": "Slidi {slide} imetumia mpangilio wenye maandishi pembeni; chagua mwingine.",
+          "unknown-placeholder": "Slidi {slide} imekuwa na yaliyomo kwa mahali ambapo mpangilio haupo.",
+          "repeated-placeholder": "Slidi {slide} imejaza mahali mara mbili.",
+          "kind-not-accepted": "Slidi {slide} imekuwa na yaliyomo ambayo mpangilio hauwezi kushikilia pale.",
+          "empty-fill": "Slidi {slide} ina sehemu tupu.",
+          "unknown-image": "Slidi {slide} imetaja picha ambayo haijaongezwa.",
+          "bullet-level": "Slidi {slide} imekuwa na pointi zimepindishwa ndani sana.",
+          "too-long": "Slidi {slide} ina maandishi mengi kuliko yanavyoweza kutosha, hata yakiwa madogo. Fupisha au gawanya slidi.",
+          "empty-slide": "Slidi {slide} haina kitu juu yake."
+        },
+        "build": "{count, plural, one {Tengeneza deki (slidi #)} other {Tengeneza deki (slidi #)}}",
+        "willShrink": "{count, plural, one {Maandishi kwenye slaidi moja yatapunguzwa ukubwa ili yaingie.} other {Maandishi kwenye slaidi # yatapunguzwa ukubwa ili yaingie.}}"
       }
     }
   },

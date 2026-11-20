@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Dib-u-eegis sumad",
         "description": "Fiiri PDF, document Word ama soo-bandhigid si loo hubiyo inay la jaanqaadayso buugga sumadda: farta, midabada, erayada, astaanta iyo dhawaqa qoraalka"
+      },
+      "deckBuilder": {
+        "label": "Dhisaha bandhigga",
+        "description": "Qor qorshe bandhig ah adigoo ka bilaabaya qoraal gaaban iyo ilo, kadib dhis adigoo isticmaalaya muunad sumadeed."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Ka shaqaynta deeqo cusub",
       "newFormFill": "Buuxinta dukumeenti cusub",
       "newChannelDrafter": "Qoraal kanaal cusub",
-      "newBrandReview": "Dib-u-eegis sumad cusub"
+      "newBrandReview": "Dib-u-eegis sumad cusub",
+      "newDeckBuilder": "Deck cusub"
     },
     "translation": {
       "chooseLanguage": "Luqadda la beegsanayo",
@@ -4932,6 +4937,122 @@
         "found": "La helay",
         "notes": "Xusuus-qor",
         "fileSuffix": "dib-u-eegista summad"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Deck-ga waa la rarayaa…",
+      "busy": "Hawsha ({name}) horey ayay u socotaa. Sug iney dhamaato ama jooji.",
+      "booksFailed": "Waxaa suurtagal noqon waayay in la raro buugaagta sumadda.",
+      "readFailed": "Ma suurtagelin in la akhriyo horumarka deck-ga.",
+      "startFailed": "Ma suurtagelin in la bilaabo dulmar.",
+      "buildFailed": "Deck-ga lama dhisi karin.",
+      "outlineFailed": "Dulmarka lama sameyn karin.",
+      "stop": "Jooji",
+      "download": "Soo degso .pptx",
+      "editOutline": "Dulmarka beddel",
+      "newDeck": "Deck cusub",
+      "startOver": "Dib u bilaab",
+      "built": "La dhisay",
+      "forBook": "{template}, loogu talagalay {book}",
+      "fromTemplate": "Laga bilaabay {template}",
+      "outlineTitle": "Dulmar",
+      "outlineReady": "{count, plural, one {# sawir, diyaarsan in la beddelo} other {# sawirro, diyaarsan in la beddelo}}",
+      "repaired": "{count, plural, one {Hal wax ayaa qorshaha laga beddelay si uu ugu habboonaado muunadda.} other {# waxyaalood ayaa qorshaha laga beddelay si ay muunadda ugu habboonaadaan.}}",
+      "unread": "Ma la akhriyi karin {names}; dulmarka waa la sameeyay iyagoon la isticmaalin.",
+      "outlinePhase": {
+        "template": "Muunadda waa la akhrinayaa",
+        "reading": "Ilooyinka waa la akhrinayaa",
+        "planning": "Sawirrada waa la qorsheynayaa"
+      },
+      "buildPhase": {
+        "composing": "Sawirrada waa la dhisayaa",
+        "rendering": "Waxa la hubinayaa in sawirradu si sax ah u muuqdaan",
+        "storing": "Deck-ga waa la kaydinayaa",
+        "reviewing": "Waxaa la hubinayaa la jaanqaadka buuggaga sumadda"
+      },
+      "status": {
+        "running": "Wuu socdaa",
+        "done": "Wuu dhammaaday",
+        "failed": "Wuu fashilmay",
+        "stopped": "La joojiyay"
+      },
+      "reviewed": "{errors, plural, =0 {Khaladaad sumadeed ma jiraan} one {# khalad sumadeed} other {# khaladaad sumadeed}}, {warnings, plural, =0 {digniin ma jirto} one {# digniin} other {# digniino}}",
+      "reviewGap": {
+        "busy": "La dhisay; lama hubin buugga sumadda (dib-u-eegistii way mashquulsanayd)",
+        "failed": "La dhisay; hubinta sumadda ma shaqayn karin"
+      },
+      "overflows": "{count, plural, one {Qoraalka ku jira sawirka {slides} wali wuu ka badbaday xadka kadib hagaajin.} other {Qoraalka ku jira sawirrada {slides} wali wuu ka badbaday xadka kadib hagaajin.}}",
+      "shrunk": "{count, plural, one {Qoraalka hal sawir ayaa la yareeyay si uu ugu habboonaado.} other {Qoraalka # sawirro ayaa la yareeyay si ay ugu habboonaadaan.}}",
+      "setup": {
+        "title": "Dhisaha bandhigga",
+        "intro": "Dooro muunad, sheeg waxa deck-gu yahay iyo waxa la adeegsanayo. Habka wuxuu diyaarinayaa dulmar aad tafatiri karto kahor inta aan deck-ga laga samayn qaabka muunadda.",
+        "template": "Muunad",
+        "booksLoading": "Muunado sumadeed waa la rarayaa…",
+        "fromBook": "Laga bilaabay {book}",
+        "ownTemplate": "Isticmaal muunaddaada gaarka ah",
+        "replaceTemplate": "Dooro feyl kale",
+        "templateTypes": "Bandhig PowerPoint ama muunad (.pptx, .potx)",
+        "checkAgainst": "Ku hubi buugga sumadda",
+        "noBook": "Ha la hubin",
+        "brief": "Deck-ga maxaa loo adeegsanayaa?",
+        "briefPlaceholder": "Tusaale: warbixin 10-daqiiqo ah oo la siinayo guddoomiyaha ku saabsan rugahayaga sanadkan, iyo saddexda tiro ee ugu muhiimsan.",
+        "sources": "Ilo",
+        "addSources": "Ku dar dukumintiyada la adeegsanayo",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel ama qoraal; ugu badnaan {max}",
+        "pictures": "Sawirro",
+        "addPictures": "Ku dar sawirro buugga yaqaanaan isticmaali karo",
+        "pictureTypes": "PNG, JPEG ama GIF; ugu badnaan {max}",
+        "remove": "Ka saar {name}",
+        "language": "Luuqadda buugga",
+        "start": "Qoraal hordhac ah",
+        "wrongType": "Nooca faylkaasi lama isticmaali karo halkan.",
+        "uploadFailed": "Soo gelintii waa ay fashilantay."
+      },
+      "outline": {
+        "role": {
+          "title": "Cinwaan",
+          "subtitle": "Cinwaan-hoosaad",
+          "body": "Qoraal",
+          "content": "Mawduuc",
+          "picture": "Sawir"
+        },
+        "holds": "Waxa uu {place} hayaa",
+        "kindText": "Qoraal",
+        "kindPicture": "Sawir",
+        "bullets": "Qodobbo",
+        "noPicture": "Doora sawir",
+        "alt": "Sharax sawirka",
+        "tooLong": "Waa dheer yahay: waxa uu hayn karaa qiyaastii {lines, plural, one {# sadar} other {# sadar}} oo ah {chars} xaraf, xitaa haddii la yareeyo.",
+        "shrinks": "Waa wax yar oo dheer: waxa la yareyn doonaa si uu ugu habboonaado.",
+        "bulletsHint": "Hal qodob halkii sadar. Ku bilow sadar laba jibbaar meel bannaan si aad u fogaato.",
+        "room": "Meel loogu talagalay qiyaastii {lines, plural, one {# sadar} other {# sadar}} oo ah {chars} xaraf.",
+        "slide": "Sawir-wareed {number}",
+        "layoutOf": "Qaabka sawir-wareedka {number}",
+        "moveUp": "U dhaqaaji sawir-wareed {number} kor",
+        "moveDown": "U dhaqaaji sawir-wareed {number} hoos",
+        "remove": "Ka saar sawir-wareed {number}",
+        "notesSome": "Qoraallo loogu talagalay hadlaha",
+        "notesNone": "Ku dar qoraallo loogu talagalay hadlaha",
+        "notesOf": "Qoraallo loogu talagalay hadlaha sawir-wareedka {number}",
+        "slides": "Sawir-wareedyo",
+        "addSlide": "Ku dar sawir-wareed",
+        "blocked": "{count, plural, one {Hal arrin ayaa ka hor istaagaysa in buugga la sameeyo:} other {# arrimood ayaa ka hor istaagaya in buugga la sameeyo:}}",
+        "problem": {
+          "no-slides": "Qoraalka hordhaca ahi ma laha wax sawir-wareedyo ah.",
+          "too-many-slides": "Kaliya 40-ka sawir-wareed ee hore ayaa la keydinayaa.",
+          "unknown-layout": "Sawir-wareed {slide} waxa uu adeegsanayaa qaab aan template-kan lahayn.",
+          "vertical-layout": "Sawir-wareed {slide} waxa uu adeegsadaa qaab qoraalku dhinac u jeedo; dooro mid kale.",
+          "unknown-placeholder": "Sawir-wareed {slide} waxa uu lahaa mawduuc meel aan qaabkiisu lahayn.",
+          "repeated-placeholder": "Sawir-wareed {slide} waxa uu laba jeer buuxiyey meel keli ah.",
+          "kind-not-accepted": "Sawir-wareed {slide} waxa uu ku leeyahay mawduuc aan qaabkiisu u qummanayn.",
+          "empty-fill": "Sawir-wareed {slide} waxa ku jira meel madhan.",
+          "unknown-image": "Sawir-wareed {slide} waxa uu magacaabay sawir aan la soo darin.",
+          "bullet-level": "Sawir-wareed {slide} waxa uu qodobbo aad u sii fog indheer.",
+          "too-long": "Sawir-wareed {slide} waxa uu leeyahay qoraal ka badan inta meesha ku jirta, xitaa la yareeyo. Soo koob ama kala qaybi.",
+          "empty-slide": "Sawir-wareed {slide} waxba kuma yaallaan."
+        },
+        "build": "{count, plural, one {Samee buugga (# sawir-wareed)} other {Samee buugga (# sawir-wareedyo)}}",
+        "willShrink": "{count, plural, one {Qoraalka hal bogga waxaa loo yarayn doonaa si uu ugu habboonaado.} other {Qoraalka # bog ayaa loo yarayn doonaa si uu ugu habboonaado.}}"
       }
     }
   },

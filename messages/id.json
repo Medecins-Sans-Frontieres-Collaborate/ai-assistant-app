@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Tinjauan merek",
         "description": "Periksa PDF, dokumen Word, atau presentasi sesuai buku merek: font, warna, kata-kata, logo, dan nada"
+      },
+      "deckBuilder": {
+        "label": "Pembangun dek",
+        "description": "Rencanakan presentasi dari ringkasan dan sumber, lalu bangun dari template merek."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Pemrosesan hibah baru",
       "newFormFill": "Isi dokumen baru",
       "newChannelDrafter": "Draf kanal baru",
-      "newBrandReview": "Tinjauan merek baru"
+      "newBrandReview": "Tinjauan merek baru",
+      "newDeckBuilder": "Dek baru"
     },
     "translation": {
       "chooseLanguage": "Bahasa target",
@@ -4948,6 +4953,122 @@
         "found": "Ditemukan",
         "notes": "Catatan",
         "fileSuffix": "review merek"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Sedang memuat dek…",
+      "busy": "Anda sudah memiliki pekerjaan yang sedang berjalan ({name}). Tunggu sampai selesai atau hentikan.",
+      "booksFailed": "Tidak dapat memuat buku merek.",
+      "readFailed": "Tidak dapat membaca progres dek.",
+      "startFailed": "Tidak dapat memulai garis besar.",
+      "buildFailed": "Dek tidak dapat dibangun.",
+      "outlineFailed": "Garis besar tidak dapat dibuat.",
+      "stop": "Hentikan",
+      "download": "Unduh .pptx",
+      "editOutline": "Edit garis besar",
+      "newDeck": "Dek baru",
+      "startOver": "Mulai ulang",
+      "built": "Selesai dibangun",
+      "forBook": "{template}, untuk {book}",
+      "fromTemplate": "Dari {template}",
+      "outlineTitle": "Garis besar",
+      "outlineReady": "{count, plural, one {# slide, siap untuk diedit} other {# slide, siap untuk diedit}}",
+      "repaired": "{count, plural, one {Satu hal dalam rencana disesuaikan agar cocok dengan template.} other {# hal dalam rencana disesuaikan agar cocok dengan template.}}",
+      "unread": "Tidak dapat membaca {names}; garis besar dibuat tanpa mereka.",
+      "outlinePhase": {
+        "template": "Membaca template",
+        "reading": "Membaca sumber",
+        "planning": "Merencanakan slide"
+      },
+      "buildPhase": {
+        "composing": "Membangun slide",
+        "rendering": "Memeriksa render slide",
+        "storing": "Menyimpan dek",
+        "reviewing": "Memeriksa dengan buku merek"
+      },
+      "status": {
+        "running": "Sedang bekerja",
+        "done": "Selesai",
+        "failed": "Gagal",
+        "stopped": "Dihentikan"
+      },
+      "reviewed": "{errors, plural, =0 {Tidak ada kesalahan merek} one {# kesalahan merek} other {# kesalahan merek}}, {warnings, plural, =0 {tidak ada peringatan} one {# peringatan} other {# peringatan}}",
+      "reviewGap": {
+        "busy": "Sudah dibangun; belum diperiksa dengan buku merek (ulasan Anda sedang sibuk)",
+        "failed": "Sudah dibangun; pemeriksaan merek tidak dapat dijalankan"
+      },
+      "overflows": "{count, plural, one {Teks pada slide {slides} masih meluap setelah penyesuaian.} other {Teks pada slide {slides} masih meluap setelah penyesuaian.}}",
+      "shrunk": "{count, plural, one {Teks pada satu slide diperkecil agar muat.} other {Teks pada # slide diperkecil agar muat.}}",
+      "setup": {
+        "title": "Pembangun dek",
+        "intro": "Pilih template, jelaskan tujuan dek dan tambahkan hal yang ingin dijadikan referensi. Model akan membuat garis besar yang dapat Anda edit sebelum dek dibangun dari layout template.",
+        "template": "Template",
+        "booksLoading": "Memuat template merek…",
+        "fromBook": "Dari {book}",
+        "ownTemplate": "Gunakan template Anda sendiri",
+        "replaceTemplate": "Pilih file lain",
+        "templateTypes": "Presentasi atau template PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Periksa dengan buku merek",
+        "noBook": "Jangan periksa",
+        "brief": "Untuk apa dek ini?",
+        "briefPlaceholder": "Contoh: pembaruan 10 menit untuk dewan tentang klinik kami tahun ini, beserta tiga angka terpenting.",
+        "sources": "Sumber",
+        "addSources": "Tambahkan dokumen untuk digunakan",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel atau teks; hingga {max}",
+        "pictures": "Gambar",
+        "addPictures": "Tambahkan gambar yang dapat digunakan deck",
+        "pictureTypes": "PNG, JPEG atau GIF; hingga {max}",
+        "remove": "Hapus {name}",
+        "language": "Bahasa deck",
+        "start": "Buat kerangka draft",
+        "wrongType": "Jenis file tersebut tidak dapat digunakan di sini.",
+        "uploadFailed": "Unggah gagal."
+      },
+      "outline": {
+        "role": {
+          "title": "Judul",
+          "subtitle": "Subjudul",
+          "body": "Teks",
+          "content": "Konten",
+          "picture": "Gambar"
+        },
+        "holds": "Yang diisi oleh {place}",
+        "kindText": "Teks",
+        "kindPicture": "Gambar",
+        "bullets": "Poin",
+        "noPicture": "Pilih gambar",
+        "alt": "Deskripsikan gambar",
+        "tooLong": "Terlalu panjang: ini memuat sekitar {lines, plural, one {# baris} other {# baris}} dari {chars} karakter, meskipun ukuran diperkecil.",
+        "shrinks": "Sedikit panjang: akan diperkecil agar muat.",
+        "bulletsHint": "Satu poin per baris. Awali baris dengan dua spasi untuk mengindentasi.",
+        "room": "Ruang untuk sekitar {lines, plural, one {# baris} other {# baris}} dari {chars} karakter.",
+        "slide": "Slide {number}",
+        "layoutOf": "Tata letak slide {number}",
+        "moveUp": "Pindahkan slide {number} ke atas",
+        "moveDown": "Pindahkan slide {number} ke bawah",
+        "remove": "Hapus slide {number}",
+        "notesSome": "Catatan pembicara",
+        "notesNone": "Tambahkan catatan pembicara",
+        "notesOf": "Catatan pembicara untuk slide {number}",
+        "slides": "Slide",
+        "addSlide": "Tambahkan slide",
+        "blocked": "{count, plural, one {Satu hal menghentikan deck dari dibuat:} other {# hal menghentikan deck dari dibuat:}}",
+        "problem": {
+          "no-slides": "Kerangka tidak memiliki slide.",
+          "too-many-slides": "Hanya 40 slide pertama yang disimpan.",
+          "unknown-layout": "Slide {slide} menggunakan tata letak yang tidak ada di template ini.",
+          "vertical-layout": "Slide {slide} menggunakan tata letak dengan teks menyamping; pilih lainnya.",
+          "unknown-placeholder": "Slide {slide} memiliki konten untuk tempat yang tidak ada di tata letak.",
+          "repeated-placeholder": "Slide {slide} mengisi satu tempat dua kali.",
+          "kind-not-accepted": "Slide {slide} memiliki konten yang tidak dapat diisi di tempat tersebut.",
+          "empty-fill": "Slide {slide} memiliki bidang kosong.",
+          "unknown-image": "Slide {slide} menyebutkan gambar yang belum ditambahkan.",
+          "bullet-level": "Slide {slide} memiliki poin yang terlalu dalam indentasinya.",
+          "too-long": "Slide {slide} memiliki teks lebih banyak daripada yang dapat dimuat, bahkan jika diperkecil. Persingkat atau pisahkan slide.",
+          "empty-slide": "Slide {slide} tidak berisi apa pun."
+        },
+        "build": "{count, plural, one {Buat deck (# slide)} other {Buat deck (# slides)}}",
+        "willShrink": "{count, plural, one {Teks pada satu slide akan diperkecil agar muat.} other {Teks pada # slide akan diperkecil agar muat.}}"
       }
     }
   },

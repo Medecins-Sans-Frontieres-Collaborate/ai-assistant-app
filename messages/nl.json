@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Merkaanpassing",
         "description": "Controleer een PDF-, Word-document of presentatie aan de hand van een merkboek: lettertypes, kleuren, formuleringen, logo's en toon"
+      },
+      "deckBuilder": {
+        "label": "Presentatiebouwer",
+        "description": "Plan een presentatie op basis van een briefing en bronnen, en bouw deze met een merksjabloon."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Nieuwe grantsverwerking",
       "newFormFill": "Nieuw document invullen",
       "newChannelDrafter": "Nieuw kanaalconcept",
-      "newBrandReview": "Nieuwe merkaanpassing"
+      "newBrandReview": "Nieuwe merkaanpassing",
+      "newDeckBuilder": "Nieuwe presentatie"
     },
     "translation": {
       "chooseLanguage": "Doeltaal",
@@ -4948,6 +4953,122 @@
         "found": "Gevonden",
         "notes": "Notities",
         "fileSuffix": "merkevaluatie"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Presentatie wordt geladen…",
+      "busy": "Er loopt al een taak ({name}). Wacht tot deze klaar is of stop hem.",
+      "booksFailed": "Merksjablonen konden niet worden geladen.",
+      "readFailed": "Vooruitgang van de presentatie kon niet worden gelezen.",
+      "startFailed": "De outline kon niet worden gestart.",
+      "buildFailed": "De presentatie kon niet worden gebouwd.",
+      "outlineFailed": "De outline kon niet worden gemaakt.",
+      "stop": "Stoppen",
+      "download": "Download .pptx",
+      "editOutline": "Outline bewerken",
+      "newDeck": "Nieuwe presentatie",
+      "startOver": "Opnieuw beginnen",
+      "built": "Gebouwd",
+      "forBook": "{template}, voor {book}",
+      "fromTemplate": "Van {template}",
+      "outlineTitle": "Outline",
+      "outlineReady": "{count, plural, one {# dia, klaar om te bewerken} other {# dia's, klaar om te bewerken}}",
+      "repaired": "{count, plural, one {Eén onderdeel van het plan is aangepast aan het sjabloon.} other {# onderdelen van het plan zijn aangepast aan het sjabloon.}}",
+      "unread": "Kon {names} niet lezen; de outline is zonder deze gemaakt.",
+      "outlinePhase": {
+        "template": "Sjabloon wordt gelezen",
+        "reading": "Bronnen worden gelezen",
+        "planning": "Dia's worden gepland"
+      },
+      "buildPhase": {
+        "composing": "Dia's worden opgebouwd",
+        "rendering": "Controleren of de dia's correct weergeven",
+        "storing": "Presentatie wordt opgeslagen",
+        "reviewing": "Brandboekcontrole"
+      },
+      "status": {
+        "running": "Bezig",
+        "done": "Klaar",
+        "failed": "Mislukt",
+        "stopped": "Gestopt"
+      },
+      "reviewed": "{errors, plural, =0 {Geen merkfouten} one {# merkfout} other {# merkfouten}}, {warnings, plural, =0 {geen waarschuwingen} one {# waarschuwing} other {# waarschuwingen}}",
+      "reviewGap": {
+        "busy": "Gebouwd; niet gecontroleerd met het brandboek (uw controles waren bezet)",
+        "failed": "Gebouwd; de brandboekcontrole kon niet worden uitgevoerd"
+      },
+      "overflows": "{count, plural, one {Tekst op dia {slides} loopt nog steeds uit na aanpassen.} other {Tekst op dia's {slides} loopt nog steeds uit na aanpassen.}}",
+      "shrunk": "{count, plural, one {Tekst op één dia is verkleind om te passen.} other {Tekst op # dia's is verkleind om te passen.}}",
+      "setup": {
+        "title": "Presentatiebouwer",
+        "intro": "Kies een sjabloon, geef aan waar de presentatie voor dient en voeg eventuele bronnen toe. Een model maakt een concept-outline die u kunt bewerken voordat de presentatie uit het sjabloon wordt opgebouwd.",
+        "template": "Sjabloon",
+        "booksLoading": "Merksjablonen laden…",
+        "fromBook": "Van {book}",
+        "ownTemplate": "Gebruik uw eigen sjabloon",
+        "replaceTemplate": "Kies een ander bestand",
+        "templateTypes": "Een PowerPoint-presentatie of sjabloon (.pptx, .potx)",
+        "checkAgainst": "Controleer met een brandboek",
+        "noBook": "Niet controleren",
+        "brief": "Waar is de presentatie voor?",
+        "briefPlaceholder": "Bijvoorbeeld: een update van 10 minuten voor de raad van bestuur over onze klinieken dit jaar, met de drie belangrijkste cijfers.",
+        "sources": "Bronnen",
+        "addSources": "Documenten toevoegen als bron",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel of tekst; tot {max}",
+        "pictures": "Afbeeldingen",
+        "addPictures": "Afbeeldingen toevoegen die het deck kan gebruiken",
+        "pictureTypes": "PNG, JPEG of GIF; tot {max}",
+        "remove": "{name} verwijderen",
+        "language": "Taal van het deck",
+        "start": "Zet opzetm van concept",
+        "wrongType": "Dat type bestand kan hier niet worden gebruikt.",
+        "uploadFailed": "Het uploaden is mislukt."
+      },
+      "outline": {
+        "role": {
+          "title": "Titel",
+          "subtitle": "Subtitel",
+          "body": "Tekst",
+          "content": "Inhoud",
+          "picture": "Afbeelding"
+        },
+        "holds": "Wat {place} bevat",
+        "kindText": "Tekst",
+        "kindPicture": "Afbeelding",
+        "bullets": "Opsommingstekens",
+        "noPicture": "Kies een afbeelding",
+        "alt": "Beschrijf de afbeelding",
+        "tooLong": "Te lang: dit bevat ongeveer {lines, plural, one {# regel} other {# regels}} van {chars} tekens, zelfs als het kleiner wordt gezet.",
+        "shrinks": "Iets te lang: het wordt kleiner weergegeven om te passen.",
+        "bulletsHint": "Eén opsommingsteken per regel. Begin een regel met twee spaties om deze in te springen.",
+        "room": "Ruimte voor ongeveer {lines, plural, one {# regel} other {# regels}} van {chars} tekens.",
+        "slide": "Dia {number}",
+        "layoutOf": "Indeling van dia {number}",
+        "moveUp": "Verplaats dia {number} omhoog",
+        "moveDown": "Verplaats dia {number} omlaag",
+        "remove": "Verwijder dia {number}",
+        "notesSome": "Sprekersnotities",
+        "notesNone": "Sprekersnotities toevoegen",
+        "notesOf": "Sprekersnotities voor dia {number}",
+        "slides": "Dia's",
+        "addSlide": "Dia toevoegen",
+        "blocked": "{count, plural, one {Eén ding blokkeert het bouwen van het deck:} other {# dingen blokkeren het bouwen van het deck:}}",
+        "problem": {
+          "no-slides": "De opzet heeft geen dia's.",
+          "too-many-slides": "Alleen de eerste 40 dia's worden bewaard.",
+          "unknown-layout": "Dia {slide} gebruikt een indeling die deze sjabloon niet heeft.",
+          "vertical-layout": "Dia {slide} gebruikt een indeling met tekst opzij; kies een andere.",
+          "unknown-placeholder": "Dia {slide} bevatte inhoud voor een plaats die zijn indeling niet kent.",
+          "repeated-placeholder": "Dia {slide} heeft één plek dubbel gevuld.",
+          "kind-not-accepted": "Dia {slide} bevatte inhoud die daar niet in de indeling past.",
+          "empty-fill": "Dia {slide} heeft een leeg veld.",
+          "unknown-image": "Dia {slide} noemt een afbeelding die niet is toegevoegd.",
+          "bullet-level": "Dia {slide} heeft te diep ingesprongen opsommingstekens.",
+          "too-long": "Dia {slide} bevat meer tekst dan past, zelfs als het kleiner is. Maak het korter of splits de dia.",
+          "empty-slide": "Dia {slide} bevat niets."
+        },
+        "build": "{count, plural, one {Deck bouwen (# dia)} other {Deck bouwen (# dia's)}}",
+        "willShrink": "{count, plural, one {Tekst op één dia wordt verkleind om te passen.} other {Tekst op # dia's wordt verkleind om te passen.}}"
       }
     }
   },

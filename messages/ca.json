@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Revisió de marca",
         "description": "Comprova un PDF, document Word o presentació segons el llibre d’estil de marca: tipografies, colors, redacció, logotips i to"
+      },
+      "deckBuilder": {
+        "label": "Creador de presentacions",
+        "description": "Planifica una presentació a partir d’un resum i fonts, i construeix-la amb una plantilla de marca."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Processament de noves subvencions",
       "newFormFill": "Nou emplenament de document",
       "newChannelDrafter": "Nou esborrany de canal",
-      "newBrandReview": "Nova revisió de marca"
+      "newBrandReview": "Nova revisió de marca",
+      "newDeckBuilder": "Nova presentació"
     },
     "translation": {
       "chooseLanguage": "Idioma de destinació",
@@ -4948,6 +4953,122 @@
         "found": "Trobat",
         "notes": "Notes",
         "fileSuffix": "revisió de marca"
+      }
+    },
+    "deckBuilder": {
+      "loading": "S’està carregant la presentació…",
+      "busy": "Ja tens una tasca en execució ({name}). Espera que acabi o atura-la.",
+      "booksFailed": "No s’han pogut carregar els llibres de marca.",
+      "readFailed": "No s’ha pogut llegir el progrés de la presentació.",
+      "startFailed": "No s’ha pogut iniciar l’esborrany.",
+      "buildFailed": "No s’ha pogut construir la presentació.",
+      "outlineFailed": "No s’ha pogut crear l’esborrany.",
+      "stop": "Atura",
+      "download": "Descarrega .pptx",
+      "editOutline": "Edita l’esborrany",
+      "newDeck": "Nova presentació",
+      "startOver": "Torna a començar",
+      "built": "Construïda",
+      "forBook": "{template}, per a {book}",
+      "fromTemplate": "De {template}",
+      "outlineTitle": "Esborrany",
+      "outlineReady": "{count, plural, one {# diapositiva, llesta per editar} other {# diapositives, llestes per editar}}",
+      "repaired": "{count, plural, one {S’ha ajustat un element del pla per adaptar-lo a la plantilla.} other {S’han ajustat # elements del pla per adaptar-los a la plantilla.}}",
+      "unread": "No s’ha pogut llegir {names}; l’esborrany s’ha creat sense aquestes fonts.",
+      "outlinePhase": {
+        "template": "S’està llegint la plantilla",
+        "reading": "S’estan llegint les fonts",
+        "planning": "S’estan planificant les diapositives"
+      },
+      "buildPhase": {
+        "composing": "S’estan generant les diapositives",
+        "rendering": "S’està comprovant la visualització de les diapositives",
+        "storing": "S’està desant la presentació",
+        "reviewing": "S’està comprovant amb el llibre de marca"
+      },
+      "status": {
+        "running": "En procés",
+        "done": "Fet",
+        "failed": "Error",
+        "stopped": "Aturat"
+      },
+      "reviewed": "{errors, plural, =0 {Sense errors de marca} one {# error de marca} other {# errors de marca}}, {warnings, plural, =0 {sense avisos} one {# avís} other {# avisos}}",
+      "reviewGap": {
+        "busy": "Construïda; no s’ha comprovat amb el llibre de marca (les revisions estaven ocupades)",
+        "failed": "Construïda; no s’ha pogut fer la comprovació de marca"
+      },
+      "overflows": "{count, plural, one {El text de la diapositiva {slides} encara desborda tot i ajustar-se.} other {El text de les diapositives {slides} encara desborda tot i ajustar-se.}}",
+      "shrunk": "{count, plural, one {S’ha reduït la mida del text en una diapositiva per adaptar-lo.} other {S’ha reduït la mida del text en # diapositives per adaptar-lo.}}",
+      "setup": {
+        "title": "Creador de presentacions",
+        "intro": "Tria una plantilla, indica per a què serveix la presentació i afegeix-hi el que hi ha d’incloure. Un model redactarà un esborrany que podràs editar abans de crear la presentació amb els dissenys de la plantilla.",
+        "template": "Plantilla",
+        "booksLoading": "S’estan carregant les plantilles de marca…",
+        "fromBook": "De {book}",
+        "ownTemplate": "Utilitza la teva pròpia plantilla",
+        "replaceTemplate": "Tria un altre fitxer",
+        "templateTypes": "Una presentació o plantilla de PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Comprova amb un llibre de marca",
+        "noBook": "No comprovis",
+        "brief": "Per a què serveix la presentació?",
+        "briefPlaceholder": "Per exemple: una actualització de 10 minuts per al consell sobre les nostres clíniques aquest any, amb les tres xifres més importants.",
+        "sources": "Fonts",
+        "addSources": "Afegeix documents de referència",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel o text; fins a {max}",
+        "pictures": "Imatges",
+        "addPictures": "Afegeix imatges que la presentació pot utilitzar",
+        "pictureTypes": "PNG, JPEG o GIF; fins a {max}",
+        "remove": "Elimina {name}",
+        "language": "Idioma de la presentació",
+        "start": "Esborrany de l'esquema",
+        "wrongType": "Aquest tipus d'arxiu no es pot utilitzar aquí.",
+        "uploadFailed": "La pujada ha fallat."
+      },
+      "outline": {
+        "role": {
+          "title": "Títol",
+          "subtitle": "Subtítol",
+          "body": "Text",
+          "content": "Contingut",
+          "picture": "Imatge"
+        },
+        "holds": "El que conté {place}",
+        "kindText": "Text",
+        "kindPicture": "Imatge",
+        "bullets": "Vinyetes",
+        "noPicture": "Tria una imatge",
+        "alt": "Descriu la imatge",
+        "tooLong": "Massa llarg: això conté unes {lines, plural, one {# línia} other {# línies}} de {chars} caràcters, fins i tot reduït.",
+        "shrinks": "Una mica llarg: es mostrarà més petit per encaixar.",
+        "bulletsHint": "Una vinyeta per línia. Comença una línia amb dos espais per indentar-la.",
+        "room": "Espai per a unes {lines, plural, one {# línia} other {# línies}} de {chars} caràcters.",
+        "slide": "Diapositiva {number}",
+        "layoutOf": "Disposició de la diapositiva {number}",
+        "moveUp": "Mou la diapositiva {number} cap amunt",
+        "moveDown": "Mou la diapositiva {number} cap avall",
+        "remove": "Elimina la diapositiva {number}",
+        "notesSome": "Notes del presentador",
+        "notesNone": "Afegeix notes del presentador",
+        "notesOf": "Notes del presentador per la diapositiva {number}",
+        "slides": "Diapositives",
+        "addSlide": "Afegeix diapositiva",
+        "blocked": "{count, plural, one {Un element impedeix crear la presentació:} other {# elements impedeixen crear la presentació:}}",
+        "problem": {
+          "no-slides": "L'esquema no té diapositives.",
+          "too-many-slides": "Només es conserven les primeres 40 diapositives.",
+          "unknown-layout": "La diapositiva {slide} utilitza una disposició que aquesta plantilla no té.",
+          "vertical-layout": "La diapositiva {slide} utilitza una disposició amb text en vertical; escull-ne una altra.",
+          "unknown-placeholder": "La diapositiva {slide} conté informació per a un espai que la seva disposició no preveu.",
+          "repeated-placeholder": "La diapositiva {slide} ha omplert un espai dues vegades.",
+          "kind-not-accepted": "La diapositiva {slide} conté informació que la seva disposició no permet.",
+          "empty-fill": "La diapositiva {slide} té un camp buit.",
+          "unknown-image": "La diapositiva {slide} referencia una imatge que no s'ha afegit.",
+          "bullet-level": "La diapositiva {slide} té vinyetes massa indents.",
+          "too-long": "La diapositiva {slide} té més text del que cap, fins i tot reduït. Esmeni-ho o divideixi la diapositiva.",
+          "empty-slide": "La diapositiva {slide} no té contingut."
+        },
+        "build": "{count, plural, one {Crear presentació (# diapositiva)} other {Crear presentació (# diapositives)}}",
+        "willShrink": "{count, plural, one {El text d'una diapositiva es reduirà per encaixar-hi.} other {El text de # diapositives es reduirà per encaixar-hi.}}"
       }
     }
   },

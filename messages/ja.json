@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "ブランドレビュー",
         "description": "PDF、Word文書またはプレゼン資料がブランドブック（フォント、色、表現、ロゴ、トーン）に合致しているか確認します"
+      },
+      "deckBuilder": {
+        "label": "デッキ作成",
+        "description": "ブリーフと資料からプレゼンテーションを計画し、ブランドテンプレートで組み立てます。"
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "新規助成金処理",
       "newFormFill": "新規文書入力",
       "newChannelDrafter": "新しいチャンネル下書き",
-      "newBrandReview": "新しいブランドレビュー"
+      "newBrandReview": "新しいブランドレビュー",
+      "newDeckBuilder": "新規デッキ"
     },
     "translation": {
       "chooseLanguage": "対象言語",
@@ -4948,6 +4953,122 @@
         "found": "検出内容",
         "notes": "備考",
         "fileSuffix": "ブランドレビュー"
+      }
+    },
+    "deckBuilder": {
+      "loading": "デッキを読み込み中…",
+      "busy": "すでに作業中です（{name}）。完了を待つか、停止してください。",
+      "booksFailed": "ブランドブックを読み込めませんでした。",
+      "readFailed": "デッキの進捗を読み取れませんでした。",
+      "startFailed": "アウトラインを開始できませんでした。",
+      "buildFailed": "デッキを作成できませんでした。",
+      "outlineFailed": "アウトラインを作成できませんでした。",
+      "stop": "停止",
+      "download": ".pptx をダウンロード",
+      "editOutline": "アウトラインを編集",
+      "newDeck": "新規デッキ",
+      "startOver": "やり直す",
+      "built": "作成済み",
+      "forBook": "{book} 用の {template}",
+      "fromTemplate": "{template} から作成",
+      "outlineTitle": "アウトライン",
+      "outlineReady": "{count, plural, one {編集可能なスライド # 枚} other {編集可能なスライド # 枚}}",
+      "repaired": "{count, plural, one {計画中の 1 件がテンプレートに合わせて調整されました。} other {計画中の # 件がテンプレートに合わせて調整されました。}}",
+      "unread": "{names} を読み取れませんでした。アウトラインはこれらなしで作成されました。",
+      "outlinePhase": {
+        "template": "テンプレートの読み込み",
+        "reading": "資料の読み込み",
+        "planning": "スライドの計画"
+      },
+      "buildPhase": {
+        "composing": "スライド作成中",
+        "rendering": "スライドの表示確認中",
+        "storing": "デッキの保存中",
+        "reviewing": "ブランドブックとの照合中"
+      },
+      "status": {
+        "running": "作業中",
+        "done": "完了",
+        "failed": "失敗",
+        "stopped": "停止済み"
+      },
+      "reviewed": "{errors, plural, =0 {ブランドのエラーなし} one {ブランドエラー # 件} other {ブランドエラー # 件}}, {warnings, plural, =0 {警告なし} one {警告 # 件} other {警告 # 件}}",
+      "reviewGap": {
+        "busy": "作成済み：ブランドブックとの照合未実施（レビューが忙しい状態でした）",
+        "failed": "作成済み：ブランドチェックを実行できませんでした"
+      },
+      "overflows": "{count, plural, one {スライド {slides} のテキストは調整後も依然オーバーフローしています。} other {スライド {slides} のテキストは調整後も依然オーバーフローしています。}}",
+      "shrunk": "{count, plural, one {1 枚のスライドのテキストが調整のため縮小されました。} other {# 枚のスライドのテキストが調整のため縮小されました。}}",
+      "setup": {
+        "title": "デッキ作成",
+        "intro": "テンプレートを選択し、デッキの目的を記載し、資料を追加します。モデルがアウトラインを作成しますので、デッキがテンプレートのレイアウトから組み立てられる前に編集できます。",
+        "template": "テンプレート",
+        "booksLoading": "ブランドテンプレートを読み込み中…",
+        "fromBook": "{book} から作成",
+        "ownTemplate": "自分のテンプレートを使用",
+        "replaceTemplate": "別のファイルを選択",
+        "templateTypes": "PowerPointプレゼンテーションまたはテンプレート（.pptx、.potx）",
+        "checkAgainst": "ブランドブックと照合",
+        "noBook": "照合しない",
+        "brief": "デッキの目的は何ですか？",
+        "briefPlaceholder": "例：今年のクリニックについて取締役会向けに10分のアップデートを。重要な数字は3つ。",
+        "sources": "資料",
+        "addSources": "参考となる文書を追加",
+        "sourceTypes": "PDF、Word、PowerPoint、Excel、テキスト 最大{max}件",
+        "pictures": "画像",
+        "addPictures": "デッキで使う画像を追加",
+        "pictureTypes": "PNG、JPEG、GIF 最大{max}件",
+        "remove": "{name}を削除",
+        "language": "デッキの言語",
+        "start": "アウトラインを作成",
+        "wrongType": "この種類のファイルは使用できません。",
+        "uploadFailed": "アップロードに失敗しました。"
+      },
+      "outline": {
+        "role": {
+          "title": "タイトル",
+          "subtitle": "サブタイトル",
+          "body": "テキスト",
+          "content": "コンテンツ",
+          "picture": "画像"
+        },
+        "holds": "{place}の内容",
+        "kindText": "テキスト",
+        "kindPicture": "画像",
+        "bullets": "箇条書き",
+        "noPicture": "画像を選択",
+        "alt": "画像の説明を入力",
+        "tooLong": "長すぎます: 文字を小さくしても{chars}文字で{lines, plural, one {# 行} other {# 行}}ほど入ります。",
+        "shrinks": "少し長いので、サイズを縮小して表示します。",
+        "bulletsHint": "1行に1項目。2つのスペースでインデントできます。",
+        "room": "{chars}文字で約{lines, plural, one {# 行} other {# 行}}分の余裕があります。",
+        "slide": "スライド{number}",
+        "layoutOf": "スライド{number}のレイアウト",
+        "moveUp": "スライド{number}を上へ移動",
+        "moveDown": "スライド{number}を下へ移動",
+        "remove": "スライド{number}を削除",
+        "notesSome": "話者メモ",
+        "notesNone": "話者メモを追加",
+        "notesOf": "スライド{number}の話者メモ",
+        "slides": "スライイド",
+        "addSlide": "スライドを追加",
+        "blocked": "{count, plural, one {デッキの作成を妨げる項目が1つあります:} other {デッキの作成を妨げる項目が#つあります:}}",
+        "problem": {
+          "no-slides": "アウトラインにスライドがありません。",
+          "too-many-slides": "最初の40枚のみ保存されます。",
+          "unknown-layout": "スライド{slide}は、このテンプレートにないレイアウトを使用しています。",
+          "vertical-layout": "スライド{slide}は横書きテキストのレイアウトを使用しています。ほかを選択してください。",
+          "unknown-placeholder": "スライド{slide}は、レイアウトにない場所にコンテンツがあります。",
+          "repeated-placeholder": "スライド{slide}で同じ場所が2回使われています。",
+          "kind-not-accepted": "スライド{slide}の内容は、このレイアウトに記載できません。",
+          "empty-fill": "スライド{slide}に空欄があります。",
+          "unknown-image": "スライド{slide}に追加されていない画像が指定されています。",
+          "bullet-level": "スライド{slide}の箇条書きのインデントが深すぎます。",
+          "too-long": "スライド{slide}のテキストが多すぎて入りません。短くするか分割してください。",
+          "empty-slide": "スライド{slide}に内容がありません。"
+        },
+        "build": "{count, plural, one {デッキを作成（#枚のスライド）} other {デッキを作成（#枚のスライド）}}",
+        "willShrink": "{count, plural, one {1枚のスライドのテキストは、収まるように小さく設定されます。} other {#枚のスライドのテキストは、収まるように小さく設定されます。}}"
       }
     }
   },

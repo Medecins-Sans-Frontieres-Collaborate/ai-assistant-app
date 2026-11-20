@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Revue de la marque",
         "description": "Vérifiez un PDF, un document Word ou une présentation par rapport à une charte graphique : polices, couleurs, formulation, logos et ton"
+      },
+      "deckBuilder": {
+        "label": "Créateur de présentations",
+        "description": "Planifiez une présentation à partir d’un brief et de sources, puis créez-la à partir d’un modèle de marque."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Nouveau traitement des subventions",
       "newFormFill": "Nouveau remplissage de document",
       "newChannelDrafter": "Nouveau brouillon multicanal",
-      "newBrandReview": "Nouvelle revue de la marque"
+      "newBrandReview": "Nouvelle revue de la marque",
+      "newDeckBuilder": "Nouvelle présentation"
     },
     "translation": {
       "chooseLanguage": "Langue cible",
@@ -4948,6 +4953,122 @@
         "found": "Trouvé",
         "notes": "Notes",
         "fileSuffix": "revue de marque"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Chargement de la présentation…",
+      "busy": "Vous avez déjà un travail en cours ({name}). Veuillez attendre qu’il se termine ou l’arrêter.",
+      "booksFailed": "Impossible de charger les brand books.",
+      "readFailed": "Impossible de lire l’avancement de la présentation.",
+      "startFailed": "Impossible de démarrer le plan.",
+      "buildFailed": "La présentation n’a pas pu être créée.",
+      "outlineFailed": "Le plan n’a pas pu être établi.",
+      "stop": "Arrêter",
+      "download": "Télécharger .pptx",
+      "editOutline": "Modifier le plan",
+      "newDeck": "Nouvelle présentation",
+      "startOver": "Recommencer",
+      "built": "Créée",
+      "forBook": "{template}, pour {book}",
+      "fromTemplate": "Depuis {template}",
+      "outlineTitle": "Plan",
+      "outlineReady": "{count, plural, one {# diapositive, prête à être modifiée} other {# diapositives, prêtes à être modifiées}}",
+      "repaired": "{count, plural, one {Un élément du plan a été adapté au modèle.} other {# éléments du plan ont été adaptés au modèle.}}",
+      "unread": "Impossible de lire {names} ; le plan a été établi sans eux.",
+      "outlinePhase": {
+        "template": "Lecture du modèle",
+        "reading": "Lecture des sources",
+        "planning": "Planification des diapositives"
+      },
+      "buildPhase": {
+        "composing": "Création des diapositives",
+        "rendering": "Vérification du rendu des diapositives",
+        "storing": "Enregistrement de la présentation",
+        "reviewing": "Vérification selon le brand book"
+      },
+      "status": {
+        "running": "En cours",
+        "done": "Terminé",
+        "failed": "Échec",
+        "stopped": "Arrêté"
+      },
+      "reviewed": "{errors, plural, =0 {Aucune erreur de marque} one {# erreur de marque} other {# erreurs de marque}}, {warnings, plural, =0 {aucun avertissement} one {# avertissement} other {# avertissements}}",
+      "reviewGap": {
+        "busy": "Créée ; non vérifiée par rapport au brand book (vos vérifications étaient occupées)",
+        "failed": "Créée ; la vérification de marque n’a pas pu être effectuée"
+      },
+      "overflows": "{count, plural, one {Le texte sur la diapositive {slides} déborde toujours après l’ajustement.} other {Le texte sur les diapositives {slides} déborde toujours après l’ajustement.}}",
+      "shrunk": "{count, plural, one {Le texte sur une diapositive a été réduit pour tenir.} other {Le texte sur # diapositives a été réduit pour tenir.}}",
+      "setup": {
+        "title": "Créateur de présentations",
+        "intro": "Choisissez un modèle, indiquez l’objectif de la présentation et ajoutez les éléments à utiliser. Un modèle propose un plan que vous pouvez modifier avant la création de la présentation à partir des mises en page du modèle.",
+        "template": "Modèle",
+        "booksLoading": "Chargement des modèles de marque…",
+        "fromBook": "Depuis {book}",
+        "ownTemplate": "Utiliser votre propre modèle",
+        "replaceTemplate": "Choisir un autre fichier",
+        "templateTypes": "Une présentation ou un modèle PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Vérifier selon un brand book",
+        "noBook": "Ne pas vérifier",
+        "brief": "À quoi sert la présentation ?",
+        "briefPlaceholder": "Par exemple : une mise à jour de 10 minutes pour le conseil sur nos cliniques cette année, avec les trois chiffres importants.",
+        "sources": "Sources",
+        "addSources": "Ajouter des documents à utiliser",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel ou texte ; jusqu’à {max}",
+        "pictures": "Images",
+        "addPictures": "Ajouter des images pouvant être utilisées dans le deck",
+        "pictureTypes": "PNG, JPEG ou GIF ; jusqu’à {max}",
+        "remove": "Supprimer {name}",
+        "language": "Langue du deck",
+        "start": "Ébauche du plan",
+        "wrongType": "Ce type de fichier ne peut pas être utilisé ici.",
+        "uploadFailed": "L’envoi a échoué."
+      },
+      "outline": {
+        "role": {
+          "title": "Titre",
+          "subtitle": "Sous-titre",
+          "body": "Texte",
+          "content": "Contenu",
+          "picture": "Image"
+        },
+        "holds": "Ce que contient {place}",
+        "kindText": "Texte",
+        "kindPicture": "Image",
+        "bullets": "Points",
+        "noPicture": "Choisir une image",
+        "alt": "Décrire l’image",
+        "tooLong": "Trop long : cela contient environ {lines, plural, one {# ligne} other {# lignes}} de {chars} caractères, même en taille réduite.",
+        "shrinks": "Un peu long : il sera réduit pour tenir.",
+        "bulletsHint": "Un point par ligne. Commencez la ligne avec deux espaces pour l’indenter.",
+        "room": "Place pour environ {lines, plural, one {# ligne} other {# lignes}} de {chars} caractères.",
+        "slide": "Diapositive {number}",
+        "layoutOf": "Disposition de la diapositive {number}",
+        "moveUp": "Déplacer la diapositive {number} vers le haut",
+        "moveDown": "Déplacer la diapositive {number} vers le bas",
+        "remove": "Supprimer la diapositive {number}",
+        "notesSome": "Notes orateur",
+        "notesNone": "Ajouter des notes orateur",
+        "notesOf": "Notes orateur pour la diapositive {number}",
+        "slides": "Diapositives",
+        "addSlide": "Ajouter une diapositive",
+        "blocked": "{count, plural, one {Une chose empêche la création du deck :} other {# choses empêchent la création du deck :}}",
+        "problem": {
+          "no-slides": "Le plan ne contient aucune diapositive.",
+          "too-many-slides": "Seules les 40 premières diapositives sont conservées.",
+          "unknown-layout": "La diapositive {slide} utilise une disposition non présente dans ce modèle.",
+          "vertical-layout": "La diapositive {slide} utilise une disposition avec du texte incliné ; choisissez-en une autre.",
+          "unknown-placeholder": "La diapositive {slide} a du contenu pour une zone que sa disposition ne contient pas.",
+          "repeated-placeholder": "La diapositive {slide} a rempli une zone deux fois.",
+          "kind-not-accepted": "La diapositive {slide} a du contenu non accepté dans sa disposition à cet endroit.",
+          "empty-fill": "La diapositive {slide} contient un champ vide.",
+          "unknown-image": "La diapositive {slide} mentionne une image qui n’a pas été ajoutée.",
+          "bullet-level": "La diapositive {slide} a des points trop profondément indentés.",
+          "too-long": "La diapositive {slide} contient plus de texte qu’il n’en tient, même réduit. Raccourcissez-le ou divisez la diapositive.",
+          "empty-slide": "La diapositive {slide} ne contient rien."
+        },
+        "build": "{count, plural, one {Créer le deck (# diapositive)} other {Créer le deck (# diapositives)}}",
+        "willShrink": "{count, plural, one {Le texte sur une diapositive sera réduit pour tenir.} other {Le texte sur # diapositives sera réduit pour tenir.}}"
       }
     }
   },

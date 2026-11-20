@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Revizuire de brand",
         "description": "Verificați un PDF, un document Word sau o prezentare față de manualul de brand: fonturi, culori, formulări, logo-uri și ton"
+      },
+      "deckBuilder": {
+        "label": "Generator de prezentări",
+        "description": "Planificați o prezentare pornind de la un rezumat și surse, apoi construiți-o folosind un șablon de brand."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Procesare granturi noi",
       "newFormFill": "Completare document nou",
       "newChannelDrafter": "Ciornă canal nou",
-      "newBrandReview": "Revizuire de brand nouă"
+      "newBrandReview": "Revizuire de brand nouă",
+      "newDeckBuilder": "Prezentare nouă"
     },
     "translation": {
       "chooseLanguage": "Limba țintă",
@@ -4948,6 +4953,122 @@
         "found": "Găsit",
         "notes": "Note",
         "fileSuffix": "revizuire brand"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Se încarcă prezentarea…",
+      "busy": "Aveți deja o lucrare în desfășurare ({name}). Așteptați să se termine sau opriți-o.",
+      "booksFailed": "Nu s-au putut încărca șabloanele de brand.",
+      "readFailed": "Nu s-a putut citi progresul prezentării.",
+      "startFailed": "Rezumatul nu a putut fi început.",
+      "buildFailed": "Prezentarea nu a putut fi construită.",
+      "outlineFailed": "Rezumatul nu a putut fi creat.",
+      "stop": "Opriți",
+      "download": "Descărcați .pptx",
+      "editOutline": "Editați rezumatul",
+      "newDeck": "Prezentare nouă",
+      "startOver": "Reporniți",
+      "built": "Construit",
+      "forBook": "{template}, pentru {book}",
+      "fromTemplate": "Din {template}",
+      "outlineTitle": "Rezumat",
+      "outlineReady": "{count, plural, one {# diapozitiv, gata de editare} other {# diapozitive, gata de editare}}",
+      "repaired": "{count, plural, one {Un element din plan a fost ajustat pentru a se potrivi șablonului.} other {# elemente din plan au fost ajustate pentru a se potrivi șablonului.}}",
+      "unread": "Nu s-a putut citi {names}; rezumatul a fost creat fără acestea.",
+      "outlinePhase": {
+        "template": "Se citește șablonul",
+        "reading": "Se citesc sursele",
+        "planning": "Se planifică diapozitivele"
+      },
+      "buildPhase": {
+        "composing": "Se construiesc diapozitivele",
+        "rendering": "Se verifică afișarea diapozitivelor",
+        "storing": "Se salvează prezentarea",
+        "reviewing": "Se verifică conformitatea cu brand book-ul"
+      },
+      "status": {
+        "running": "Se lucrează",
+        "done": "Finalizat",
+        "failed": "Eșuat",
+        "stopped": "Oprit"
+      },
+      "reviewed": "{errors, plural, =0 {Nicio eroare de brand} one {# eroare de brand} other {# erori de brand}}, {warnings, plural, =0 {fără avertismente} one {# avertisment} other {# avertismente}}",
+      "reviewGap": {
+        "busy": "Construit; nu s-a verificat conformitatea cu brand book (verificările dvs. erau ocupate)",
+        "failed": "Construit; verificarea de brand nu a putut fi efectuată"
+      },
+      "overflows": "{count, plural, one {Textul de pe diapozitivul {slides} încă depășește după ajustare.} other {Textul de pe diapozitivele {slides} încă depășește după ajustare.}}",
+      "shrunk": "{count, plural, one {Textul de pe un diapozitiv a fost micșorat pentru a se potrivi.} other {Textul de pe # diapozitive a fost micșorat pentru a se potrivi.}}",
+      "setup": {
+        "title": "Generator de prezentări",
+        "intro": "Alegeți un șablon, precizați scopul prezentării și adăugați sursele relevante. Un model va redacta un rezumat pe care îl puteți edita înainte ca prezentarea să fie construită din șablon.",
+        "template": "Șablon",
+        "booksLoading": "Se încarcă șabloanele de brand…",
+        "fromBook": "Din {book}",
+        "ownTemplate": "Utilizați propriul șablon",
+        "replaceTemplate": "Alegeți alt fișier",
+        "templateTypes": "O prezentare sau un șablon PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Verificați conformitatea cu un brand book",
+        "noBook": "Nu verificați",
+        "brief": "Care este scopul prezentării?",
+        "briefPlaceholder": "De exemplu: un update de 10 minute pentru consiliu despre clinicile noastre din acest an, cu cele trei cifre relevante.",
+        "sources": "Surse",
+        "addSources": "Adăugați documente de bază",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel sau text; până la {max}",
+        "pictures": "Imagini",
+        "addPictures": "Adăugați imagini care pot fi folosite în prezentare",
+        "pictureTypes": "PNG, JPEG sau GIF; până la {max}",
+        "remove": "Eliminați {name}",
+        "language": "Limba prezentării",
+        "start": "Schita inițială",
+        "wrongType": "Acest tip de fișier nu poate fi utilizat aici.",
+        "uploadFailed": "Încărcarea a eșuat."
+      },
+      "outline": {
+        "role": {
+          "title": "Titlu",
+          "subtitle": "Subtitlu",
+          "body": "Text",
+          "content": "Conținut",
+          "picture": "Imagine"
+        },
+        "holds": "Ce conține {place}",
+        "kindText": "Text",
+        "kindPicture": "Imagine",
+        "bullets": "Puncte",
+        "noPicture": "Alegeți o imagine",
+        "alt": "Descrieți imaginea",
+        "tooLong": "Prea lung: conține aproximativ {lines, plural, one {# rând} other {# rânduri}} de {chars} caractere, chiar și la dimensiune mai mică.",
+        "shrinks": "Puțin prea lung: va fi micșorat pentru a se potrivi.",
+        "bulletsHint": "Un punct pe fiecare rând. Începeți un rând cu două spații pentru a-l indenta.",
+        "room": "Spațiu pentru aproximativ {lines, plural, one {# rând} other {# rânduri}} de {chars} caractere.",
+        "slide": "Slide {number}",
+        "layoutOf": "Structura slide-ului {number}",
+        "moveUp": "Mută slide-ul {number} mai sus",
+        "moveDown": "Mută slide-ul {number} mai jos",
+        "remove": "Eliminați slide-ul {number}",
+        "notesSome": "Note pentru prezentator",
+        "notesNone": "Adăugați note pentru prezentator",
+        "notesOf": "Note pentru prezentator la slide-ul {number}",
+        "slides": "Slide-uri",
+        "addSlide": "Adăugați slide",
+        "blocked": "{count, plural, one {Un lucru împiedică crearea prezentării:} other {# probleme împiedică crearea prezentării:}}",
+        "problem": {
+          "no-slides": "Schita nu conține niciun slide.",
+          "too-many-slides": "Sunt păstrate doar primele 40 de slide-uri.",
+          "unknown-layout": "Slide-ul {slide} folosește o structură pe care acest șablon nu o are.",
+          "vertical-layout": "Slide-ul {slide} folosește o structură cu text vertical; alegeți altă opțiune.",
+          "unknown-placeholder": "Slide-ul {slide} are conținut pentru un loc pe care structura sa nu îl prevede.",
+          "repeated-placeholder": "Slide-ul {slide} a completat același loc de două ori.",
+          "kind-not-accepted": "Slide-ul {slide} are conținut pe care structura nu îl acceptă acolo.",
+          "empty-fill": "Slide-ul {slide} are un câmp gol.",
+          "unknown-image": "Slide-ul {slide} menționează o imagine care nu a fost adăugată.",
+          "bullet-level": "Slide-ul {slide} are puncte indentate prea adânc.",
+          "too-long": "Slide-ul {slide} are mai mult text decât încape, chiar și la dimensiune redusă. Scurtați textul sau împărțiți slide-ul.",
+          "empty-slide": "Slide-ul {slide} nu conține nimic."
+        },
+        "build": "{count, plural, one {Creați prezentarea (# slide)} other {Creați prezentarea (# slide-uri)}}",
+        "willShrink": "{count, plural, one {Textul de pe un diapozitiv va fi micșorat pentru a se potrivi.} other {Textul de pe # diapozitive va fi micșorat pentru a se potrivi.}}"
       }
     }
   },

@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Kontrola značky",
         "description": "Zkontrolujte PDF, Word nebo prezentaci podle manuálu značky: písma, barvy, formulace, loga a tón komunikace"
+      },
+      "deckBuilder": {
+        "label": "Tvůrce prezentací",
+        "description": "Naplánujte prezentaci podle zadání a zdrojů, poté ji vytvořte podle firemní šablony."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Nové zpracování grantů",
       "newFormFill": "Nové vyplnění dokumentu",
       "newChannelDrafter": "Nový návrh kanálu",
-      "newBrandReview": "Nová kontrola značky"
+      "newBrandReview": "Nová kontrola značky",
+      "newDeckBuilder": "Nová prezentace"
     },
     "translation": {
       "chooseLanguage": "Cílový jazyk",
@@ -4948,6 +4953,122 @@
         "found": "Nalezeno",
         "notes": "Poznámky",
         "fileSuffix": "brand review"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Načítání prezentace…",
+      "busy": "Již probíhá práce ({name}). Počkejte na dokončení nebo ji zastavte.",
+      "booksFailed": "Nelze načíst firemní knihy.",
+      "readFailed": "Nelze načíst postup prezentace.",
+      "startFailed": "Nelze spustit osnovu.",
+      "buildFailed": "Prezentaci nelze vytvořit.",
+      "outlineFailed": "Nelze vytvořit osnovu.",
+      "stop": "Zastavit",
+      "download": "Stáhnout .pptx",
+      "editOutline": "Upravit osnovu",
+      "newDeck": "Nová prezentace",
+      "startOver": "Začít znovu",
+      "built": "Vytvořeno",
+      "forBook": "{template}, pro {book}",
+      "fromTemplate": "Ze šablony {template}",
+      "outlineTitle": "Osnova",
+      "outlineReady": "{count, plural, one {# snímek, připraven k úpravě} other {# snímků, připraveno k úpravě}}",
+      "repaired": "{count, plural, one {Jedna položka v plánu byla upravena, aby odpovídala šabloně.} other {# položek v plánu bylo upraveno, aby odpovídaly šabloně.}}",
+      "unread": "Nelze načíst {names}; osnova byla vytvořena bez nich.",
+      "outlinePhase": {
+        "template": "Načítání šablony",
+        "reading": "Načítání zdrojů",
+        "planning": "Plánování snímků"
+      },
+      "buildPhase": {
+        "composing": "Vytváření snímků",
+        "rendering": "Kontrola zobrazení snímků",
+        "storing": "Ukládání prezentace",
+        "reviewing": "Kontrola podle firemní knihy"
+      },
+      "status": {
+        "running": "Pracuje se",
+        "done": "Hotovo",
+        "failed": "Chyba",
+        "stopped": "Zastaveno"
+      },
+      "reviewed": "{errors, plural, =0 {Žádné chyby značky} one {# chyba značky} other {# chyb značky}}, {warnings, plural, =0 {bez varování} one {# varování} other {# varování}}",
+      "reviewGap": {
+        "busy": "Vytvořeno; nekontrolováno podle firemní knihy (vaše kontroly byly zaneprázdněny)",
+        "failed": "Vytvořeno; kontrolu značky se nepodařilo spustit"
+      },
+      "overflows": "{count, plural, one {Text na snímku {slides} stále přesahuje po úpravě.} other {Text na snímcích {slides} stále přesahuje po úpravě.}}",
+      "shrunk": "{count, plural, one {Text na jednom snímku byl zmenšen, aby se vešel.} other {Text na # snímcích byl zmenšen, aby se vešel.}}",
+      "setup": {
+        "title": "Tvůrce prezentací",
+        "intro": "Vyberte šablonu, určete účel prezentace a přidejte, z čeho má čerpat. Model navrhne osnovu, kterou lze před vytvořením prezentace upravit podle rozvržení šablony.",
+        "template": "Šablona",
+        "booksLoading": "Načítání firemních šablon…",
+        "fromBook": "Z {book}",
+        "ownTemplate": "Použít vlastní šablonu",
+        "replaceTemplate": "Vybrat jiný soubor",
+        "templateTypes": "PowerPoint prezentace nebo šablona (.pptx, .potx)",
+        "checkAgainst": "Zkontrolovat podle firemní knihy",
+        "noBook": "Nekontrolovat",
+        "brief": "K čemu je prezentace určena?",
+        "briefPlaceholder": "Např.: desetiminutová aktualizace pro představenstvo o našich klinikách letos, se třemi klíčovými čísly.",
+        "sources": "Zdroje",
+        "addSources": "Přidat dokumenty ke zpracování",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel nebo text; až {max}",
+        "pictures": "Obrázky",
+        "addPictures": "Přidat obrázky, které může prezentace použít",
+        "pictureTypes": "PNG, JPEG nebo GIF; až {max}",
+        "remove": "Odebrat {name}",
+        "language": "Jazyk prezentace",
+        "start": "Návrh osnovy",
+        "wrongType": "Tento typ souboru zde nelze použít.",
+        "uploadFailed": "Nahrávání se nezdařilo."
+      },
+      "outline": {
+        "role": {
+          "title": "Nadpis",
+          "subtitle": "Podnadpis",
+          "body": "Text",
+          "content": "Obsah",
+          "picture": "Obrázek"
+        },
+        "holds": "Co obsahuje {place}",
+        "kindText": "Text",
+        "kindPicture": "Obrázek",
+        "bullets": "Odrážky",
+        "noPicture": "Vyberte obrázek",
+        "alt": "Popište obrázek",
+        "tooLong": "Příliš dlouhé: toto pojme asi {lines, plural, one {# řádek} few {# řádky} other {# řádků}} z {chars} znaků, i při zmenšení.",
+        "shrinks": "Trochu dlouhé: text bude zmenšen, aby se vešel.",
+        "bulletsHint": "Jedna odrážka na řádek. Pro odsazení začněte řádek dvěma mezerami.",
+        "room": "Místo pro asi {lines, plural, one {# řádek} few {# řádky} other {# řádků}} z {chars} znaků.",
+        "slide": "Snímek {number}",
+        "layoutOf": "Rozložení snímku {number}",
+        "moveUp": "Posunout snímek {number} výš",
+        "moveDown": "Posunout snímek {number} níž",
+        "remove": "Odebrat snímek {number}",
+        "notesSome": "Poznámky řečníka",
+        "notesNone": "Přidat poznámky řečníka",
+        "notesOf": "Poznámky řečníka ke snímku {number}",
+        "slides": "Snímky",
+        "addSlide": "Přidat snímek",
+        "blocked": "{count, plural, one {Jedna věc brání vytvoření prezentace:} few {# věci brání vytvoření prezentace:} other {# věcí brání vytvoření prezentace:}}",
+        "problem": {
+          "no-slides": "Osnova neobsahuje žádné snímky.",
+          "too-many-slides": "Zachováno je jen prvních 40 snímků.",
+          "unknown-layout": "Snímek {slide} používá rozložení, které tato šablona nemá.",
+          "vertical-layout": "Snímek {slide} používá rozložení s textem bokem; zvolte jiné.",
+          "unknown-placeholder": "Snímek {slide} měl obsah pro místo, které v rozložení není.",
+          "repeated-placeholder": "Snímek {slide} vyplnil jedno místo dvakrát.",
+          "kind-not-accepted": "Snímek {slide} měl obsah, který dané rozložení neumožňuje.",
+          "empty-fill": "Snímek {slide} má prázdné pole.",
+          "unknown-image": "Snímek {slide} jmenuje obrázek, který nebyl přidán.",
+          "bullet-level": "Snímek {slide} měl odrážky s přílišným odsazením.",
+          "too-long": "Snímek {slide} má více textu, než se vejde, i při zmenšení. Zkraťte text nebo rozdělte snímek.",
+          "empty-slide": "Snímek {slide} je prázdný."
+        },
+        "build": "{count, plural, one {Vytvořit prezentaci (# snímek)} few {Vytvořit prezentaci (# snímky)} other {Vytvořit prezentaci (# snímků)}}",
+        "willShrink": "{count, plural, one {Text na jednom snímku bude zmenšen, aby se vešel.} other {Text na # snímcích bude zmenšen, aby se vešel.}}"
       }
     }
   },

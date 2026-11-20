@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Àyẹ̀wò àmì idánimọ́",
         "description": "Ṣàyẹ̀wò PDF, ìwé Word tàbí àfihàn pẹ̀lú ìwé àmì: fọ́ńtì, àwọ̀, ọ̀rọ̀, àmì àpamọ́ àti ohun orin"
+      },
+      "deckBuilder": {
+        "label": "Olùdá agbóyè",
+        "description": "Ṣètò àfihàn láti inú àkótán àti àwọn orísun, kí o sì dá a sílẹ̀ pẹ̀lú àwòrán àfìmọ́ àjà."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Ilana ilẹ̀ amáyédẹrù tuntun",
       "newFormFill": "Fọwọsi iwe tuntun",
       "newChannelDrafter": "Ikọwe ikanni tuntun",
-      "newBrandReview": "Àyẹ̀wò àmì tuntun"
+      "newBrandReview": "Àyẹ̀wò àmì tuntun",
+      "newDeckBuilder": "Agbóyè tuntun"
     },
     "translation": {
       "chooseLanguage": "Èdè ibi-afẹ́",
@@ -4932,6 +4937,122 @@
         "found": "Tí a rí",
         "notes": "Àkọsilẹ̀",
         "fileSuffix": "àyẹ̀wò àmì"
+      }
+    },
+    "deckBuilder": {
+      "loading": "N gbígbógun agbóyè…",
+      "busy": "Ìṣẹ́ míì ń lọ lọwọ́ ({name}). Dúró kí ó parí tàbí dá a dúró.",
+      "booksFailed": "A kò lè gbógun àwọn ìwé àmì àjà.",
+      "readFailed": "A kò lè kà ìlọsíwájú agbóyè.",
+      "startFailed": "A kò lè bẹ̀rẹ̀ àkótán.",
+      "buildFailed": "Agbóyè kò lè dá sílẹ̀.",
+      "outlineFailed": "Àkótán kò lè dá sílẹ̀.",
+      "stop": "Dá dúró",
+      "download": "Ṣàgbàgbọ .pptx",
+      "editOutline": "Ṣàtúnṣe àkótán",
+      "newDeck": "Agbóyè tuntun",
+      "startOver": "Bẹ̀rẹ̀ lẹ́ẹ̀kansi",
+      "built": "Ti dá sílẹ̀",
+      "forBook": "{template}, fún {book}",
+      "fromTemplate": "Láti {template}",
+      "outlineTitle": "Àkótán",
+      "outlineReady": "{count, plural, one {# fídíòmù, ṣetán láti ṣàtúnṣe} other {# fídíòmù, ṣetán láti ṣàtúnṣe}}",
+      "repaired": "{count, plural, one {Ìkan nínu ètò ni a ṣe àtúnṣe kí ó bàá mu àwòrán àfìmọ́.} other {# nínu ètò ni a ṣe àtúnṣe kí ó bàá mu àwòrán àfìmọ́.}}",
+      "unread": "A kò le ka {names}; àkótán ni a dá láì fi wọ́n kún.",
+      "outlinePhase": {
+        "template": "N ka àwòrán àfìmọ́",
+        "reading": "N ka àwọn orísun",
+        "planning": "N ṣètò àwọn fídíòmù"
+      },
+      "buildPhase": {
+        "composing": "N dá àwọn fídíòmù sílẹ̀",
+        "rendering": "N ṣàyẹ̀wò àfihàn fídíòmù",
+        "storing": "N fipamọ́ agbóyè",
+        "reviewing": "N ṣàyẹ̀wò pẹ̀lú ìwé àmì àjà"
+      },
+      "status": {
+        "running": "N ṣiṣẹ́",
+        "done": "Parí",
+        "failed": "Ṣìṣẹ̀ kùn",
+        "stopped": "Ti dá dúró"
+      },
+      "reviewed": "{errors, plural, =0 {Kò sí àṣìṣe àmì àjà} one {# àṣìṣe àmì àjà} other {# àwọn àṣìṣe àmì àjà}}, {warnings, plural, =0 {kò sí ìkìlọ̀} one {# ìkìlọ̀} other {# àwọn ìkìlọ̀}}",
+      "reviewGap": {
+        "busy": "Ti dá sílẹ̀; a kò ṣàyẹ̀wò pẹ̀lú ìwé àmì àjà (àwọn àyẹ̀wò rẹ ní ṣiṣẹ́)",
+        "failed": "Ti dá sílẹ̀; a kò lè ṣàbẹ̀wò àmì àjà"
+      },
+      "overflows": "{count, plural, one {Ọ̀rọ̀ lori fídíòmù {slides} ṣi ń fọjọ́ pẹ̀lú ìṣe kíkópọ̀.} other {Ọ̀rọ̀ lori àwọn fídíòmù {slides} ṣi ń fọjọ́ pẹ̀lú ìṣe kíkópọ̀.}}",
+      "shrunk": "{count, plural, one {A ṣàdínkù ọ̀rọ̀ lori fídíòmù kan kí ó le bá àyè mu.} other {A ṣàdínkù ọ̀rọ̀ lori # fídíòmù kí ó le bá àyè mu.}}",
+      "setup": {
+        "title": "Olùdá agbóyè",
+        "intro": "Yan àwòrán àfìmọ́, sọ ohun tí agbóyè náà fẹ́ jẹ́, kún ohun tí ó yẹ kó gbilẹ̀ lórí. Àmúlùmọ̀ ṣètò àkótán tí o lè ṣàtúnṣe kí agbóyè náà tó dá lórí àwòrán àfìmọ́.",
+        "template": "Àwòrán àfìmọ́",
+        "booksLoading": "N gbígbógun àwòrán àmì àjà…",
+        "fromBook": "Láti {book}",
+        "ownTemplate": "Lo àwòrán àfìmọ́ tìrẹ",
+        "replaceTemplate": "Yan fáìlì míì",
+        "templateTypes": "Àfihàn tàbí àwòrán àfìmọ́ PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Ṣàyẹ̀wò pẹ̀lú ìwé àmì àjà",
+        "noBook": "Má ṣàyẹ̀wò",
+        "brief": "Kí ni agbóyè náà yàn fún?",
+        "briefPlaceholder": "Fún àpẹẹrẹ: ìmúlòlùfẹ̀ iṣẹ́ ìmúlò iṣẹ́ 10 ìṣéjú fún igbimọ̀ wa lórí àwọn ilé ìtọ́jú wa odún yìí pẹ̀lú àwọn àkunya mẹ́ta pàtàkì.",
+        "sources": "Àwọn orísun",
+        "addSources": "Ṣàfikún àwọn àwòrán tàbí ìwé lásopọ",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel tàbí tékítì; tó púpọ̀ jù lọ {max}",
+        "pictures": "Àwòrán",
+        "addPictures": "Ṣàfikún àwòrán tí àkójọpọ̀ lè lo",
+        "pictureTypes": "PNG, JPEG tàbí GIF; tó púpọ̀ jù lọ {max}",
+        "remove": "Yọ {name} kúrò",
+        "language": "Èdè àkójọpọ̀",
+        "start": "Ìkànsí àgbékalẹ̀",
+        "wrongType": "Irú fáìlì yìí kì í ṣiṣẹ́ níbí.",
+        "uploadFailed": "Ìkọsílẹ̀ ṣìṣe kù."
+      },
+      "outline": {
+        "role": {
+          "title": "Àkọlé",
+          "subtitle": "Àkọlé kékeré",
+          "body": "Ìtàn",
+          "content": "Àkóónú",
+          "picture": "Àwòrán"
+        },
+        "holds": "Ohun tí {place} gbà",
+        "kindText": "Ìtàn",
+        "kindPicture": "Àwòrán",
+        "bullets": "Àwọn aami",
+        "noPicture": "Yan àwòrán",
+        "alt": "Ṣàpèjúwe àwòrán",
+        "tooLong": "Gígùn ju: eyi gbà díẹ̀ nínú {lines, plural, one {# ìlà} other {# ìlà}} ti àwọn àmì {chars}, bó tilẹ̀ jẹ́ pé kékèké ni.",
+        "shrinks": "Díẹ̀ gùn: a máa dínkù rẹ̀ kó lè wọ àti.",
+        "bulletsHint": "Ìlà kọọkan jẹ́ fun aami kan. Bẹrẹ ìlà pẹ̀lú àyè méjì láti kọ lóṣùkan.",
+        "room": "Àyè fún díẹ̀ nínú {lines, plural, one {# ìlà} other {# ìlà}} ti {chars} àpèjúwe.",
+        "slide": "Síláìdì {number}",
+        "layoutOf": "Ìtò sélú siláìdì {number}",
+        "moveUp": "Gbé siláìdì {number} soke",
+        "moveDown": "Gbé siláìdì {number} sọ́dọ̀",
+        "remove": "Yọ siláìdì {number}",
+        "notesSome": "Àkọsílẹ̀ onísọrọ",
+        "notesNone": "Ṣàfikún àkósílẹ̀ onísọrọ",
+        "notesOf": "Àkósílẹ̀ onísọrọ fún siláìdì {number}",
+        "slides": "Àwọn siláìdì",
+        "addSlide": "Ṣàfikún siláìdì",
+        "blocked": "{count, plural, one {Ohun kan dá àkójọpọ̀ dúró:} other {# nǹkan ni ó dá àkójọpọ̀ dúró:}}",
+        "problem": {
+          "no-slides": "Ìkànsí kò ní siláìdì kankan.",
+          "too-many-slides": "Àwọn siláìdì mẹ́rìnlélọ́gbọ̀n (40) nikan ni a fi sílẹ̀.",
+          "unknown-layout": "Siláìdì {slide} lo irú títò tí àwòrán àpẹẹrẹ yìí kò ní.",
+          "vertical-layout": "Siláìdì {slide} lo títò pẹ̀lú ọ̀rọ̀ tó yíbọ́; yan ẹlòmíì.",
+          "unknown-placeholder": "Siláìdì {slide} ni àkóónú fún ibi tí títò yìí kò ní.",
+          "repeated-placeholder": "Siláìdì {slide} fi ibi kan kún lẹ́ẹ̀méjì.",
+          "kind-not-accepted": "Siláìdì {slide} ní àkóónú tí títò yìí kò le gbà.",
+          "empty-fill": "Siláìdì {slide} ní ààyè tí kò ní nǹkan kankan.",
+          "unknown-image": "Siláìdì {slide} tọ́ka sí àwòrán tí a kò fi kún un.",
+          "bullet-level": "Siláìdì {slide} fi aami jiná ju.",
+          "too-long": "Siláìdì {slide} ní ọ̀rọ̀ tó pọ̀ ju bí ó ṣe yẹ lọ, kódà nigbati a bá dínkù rẹ̀. Dínkù rẹ̀ tàbí pín siláìdì náà.",
+          "empty-slide": "Siláìdì {slide} kò ní nǹkan kan tó wà lórí."
+        },
+        "build": "{count, plural, one {Ṣẹda àkójọpọ̀ (siláìdì #)} other {Ṣẹda àkójọpọ̀ (àwọn siláìdì #)}}",
+        "willShrink": "{count, plural, one {Ìtàn lẹ́ẹ̀kan nìkan yóò dín kéré kí ó lè bà á mu.} other {Ìtàn nínú # àwọn sulaidi yóò dín kéré kí ó lè bà á mu.}}"
       }
     }
   },

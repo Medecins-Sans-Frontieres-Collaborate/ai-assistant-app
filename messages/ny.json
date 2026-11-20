@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Kuwunikanso kwazinthu za mtundu",
         "description": "Onani PDF, chikalata cha Word kapena chiwonetsero molingana ndi buku la mtundu: zilembo, mitundu, mawu, ma logo komanso momwe amawerengera"
+      },
+      "deckBuilder": {
+        "label": "Wopanga ma deck",
+        "description": "Konzani chiwonetsero kuchokera pa mwachidule ndi magwero, kenako mupange pogwiritsa ntchito template ya brand."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Kukonza ma grant atsopano",
       "newFormFill": "Kulowetsa chikalata chatsopano",
       "newChannelDrafter": "Zolemba zatsopano za njira",
-      "newBrandReview": "Kuwunikanso kwatsopano kwazinthu za mtundu"
+      "newBrandReview": "Kuwunikanso kwatsopano kwazinthu za mtundu",
+      "newDeckBuilder": "Deck yatsopano"
     },
     "translation": {
       "chooseLanguage": "Chilankhulo chofuna kutanthauzira",
@@ -4932,6 +4937,122 @@
         "found": "Chatsimikizika",
         "notes": "Zolemba",
         "fileSuffix": "kuwunika kwa brand"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Ikutsegula deck...",
+      "busy": "Pali ntchito ina yomwe ikuyenda ({name}). Dikirani ithe kapena muyimitse.",
+      "booksFailed": "Zalephera kutsegula ma brand books.",
+      "readFailed": "Zalephera kuwerenga momwe deck ikupitira.",
+      "startFailed": "Zalephera kuyamba outline.",
+      "buildFailed": "Deck yalephera kupanga.",
+      "outlineFailed": "Outline yalephera kupanga.",
+      "stop": "Imitsa",
+      "download": "Tsitsani .pptx",
+      "editOutline": "Sinthani outline",
+      "newDeck": "Deck yatsopano",
+      "startOver": "Yambani kuyambiranso",
+      "built": "Yapangidwa",
+      "forBook": "{template}, ya {book}",
+      "fromTemplate": "Kuchokera pa {template}",
+      "outlineTitle": "Outline",
+      "outlineReady": "{count, plural, one {# slide, yokonzeka kusintha} other {# ma slide, okonzeka kusintha}}",
+      "repaired": "{count, plural, one {Chinthu chimodzi mu dongosolo chinakonzedwa kuti chigwirizane ndi template.} other {# zinthu mu dongosolo zinakonzedwa kuti zigwirizane ndi template.}}",
+      "unread": "Zalephera kuwerenga {names}; outline inapangidwa popanda zimenezi.",
+      "outlinePhase": {
+        "template": "Ikutenga template",
+        "reading": "Ikutenga magwero",
+        "planning": "Ikukonzekera ma slide"
+      },
+      "buildPhase": {
+        "composing": "Ikupanga ma slide",
+        "rendering": "Ikuyendera ngati ma slide akuwoneka bwino",
+        "storing": "Ikusunga deck",
+        "reviewing": "Ikufanana ndi buku la brand"
+      },
+      "status": {
+        "running": "Ikugwira ntchito",
+        "done": "Zatha",
+        "failed": "Zalephera",
+        "stopped": "Yayimitsidwa"
+      },
+      "reviewed": "{errors, plural, =0 {Palibe zolakwika za brand} one {# cholakwika cha brand} other {# zolakwika za brand}}, {warnings, plural, =0 {palibe chenjezo} one {# chenjezo} other {# ma chenjezo}}",
+      "reviewGap": {
+        "busy": "Yapangidwa; sinayerekezedwe ndi brand book (mavoti anu anali kugwiritsidwa ntchito)",
+        "failed": "Yapangidwa; kufananiza ndi buku la brand kwalephera"
+      },
+      "overflows": "{count, plural, one {Zolemba pa slide {slides} zikadalipo zambiri ngakhale atayesetsa kuchepetsa.} other {Zolemba pa slides {slides} zikadalipo zambiri ngakhale atayesetsa kuchepetsa.}}",
+      "shrunk": "{count, plural, one {Zolemba pa slide imodzi zachepetsedwa kuti zikwane.} other {Zolemba pa # ma slide zachepetsedwa kuti zikwane.}}",
+      "setup": {
+        "title": "Wopanga ma deck",
+        "intro": "Sankhani template, fotokozani zomwe deck ikufunira ndi zabwino zomwe itha kugwiritsa ntchito. Mdelu amatulutsa outline yomwe mutha kusintha kenako deck ikamangidwa pogwiritsa ntchito zojambula za template.",
+        "template": "Template",
+        "booksLoading": "Ikutsegula ma template a brand...",
+        "fromBook": "Kuchokera {book}",
+        "ownTemplate": "Gwiritsani ntchito template yanu",
+        "replaceTemplate": "Sankhani fayilo ina",
+        "templateTypes": "PowerPoint presentation kapena template (.pptx, .potx)",
+        "checkAgainst": "Fananizani ndi buku la brand",
+        "noBook": "Osafananiza",
+        "brief": "Deck iyi ndi ya chiyani?",
+        "briefPlaceholder": "Mwachitsanzo: chisamaliro cha mphindi 10 kwa board pa zipatala zathu chaka chino, ndi manambala atatu ofunika.",
+        "sources": "Mgwero",
+        "addSources": "Onetsani zikalata zomwe mungagwiritse ntchito",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel kapena mawu; mpaka {max}",
+        "pictures": "Zithunzi",
+        "addPictures": "Onetsani zithunzi zomwe deck ingagwiritse ntchito",
+        "pictureTypes": "PNG, JPEG kapena GIF; mpaka {max}",
+        "remove": "Chotsani {name}",
+        "language": "Chilankhulo cha deck",
+        "start": "Draft outline",
+        "wrongType": "Fayilo ya mtundu umenewo siyigwiritsidwa ntchito pano.",
+        "uploadFailed": "Kukweza kwalephera."
+      },
+      "outline": {
+        "role": {
+          "title": "Mutu",
+          "subtitle": "Mutu wocheperako",
+          "body": "Mawu",
+          "content": "Zomwe zilimo",
+          "picture": "Chithunzi"
+        },
+        "holds": "Zomwe {place} ili nazo",
+        "kindText": "Mawu",
+        "kindPicture": "Chithunzi",
+        "bullets": "Malo",
+        "noPicture": "Sankhani chithunzi",
+        "alt": "Fotokozani chithunzi",
+        "tooLong": "Utali kwambiri: iyi ikhoza kulemba {lines, plural, one {# mzere} other {# mizere}} ya zilembo za {chars}, ngakhale ikhale yaying'ono.",
+        "shrinks": "Yaitali pang'ono: idzakhazikitsidwa yaching'ono kuti ikwane.",
+        "bulletsHint": "Malo umodzi pa mzere uliwonse. Yambitsani mzere ndi malo awiri kuti muchepetse.",
+        "room": "Malo okwanira {lines, plural, one {# mzere} other {# mizere}} ya zilembo za {chars}.",
+        "slide": "Slide {number}",
+        "layoutOf": "Mapangidwe a slide {number}",
+        "moveUp": "Sankhani slide {number} kukwera",
+        "moveDown": "Sankhani slide {number} kutsika",
+        "remove": "Chotsani slide {number}",
+        "notesSome": "Zolemba za munthu woyankhula",
+        "notesNone": "Onetsani zolemba za munthu woyankhula",
+        "notesOf": "Zolemba za munthu woyankhula pa slide {number}",
+        "slides": "Ma slide",
+        "addSlide": "Onetsani slide",
+        "blocked": "{count, plural, one {Chinthu chimodzi chikuteteza deck kuti isapangidwe:} other {Zinthu # zikupweteketsa deck kuti isapangidwe:}}",
+        "problem": {
+          "no-slides": "Outline ilibe ma slide.",
+          "too-many-slides": "Mumasunga ma slide 40 oyambirira okha.",
+          "unknown-layout": "Slide {slide} imagwiritsa ntchito mapangidwe omwe template iyi ilibe.",
+          "vertical-layout": "Slide {slide} imagwiritsa ntchito mapangidwe okhala ndi mawu ali mbali; sankhani ina.",
+          "unknown-placeholder": "Slide {slide} ili ndi zomwe zilimo pa malo omwe mapangidwe ake alibe.",
+          "repeated-placeholder": "Slide {slide} yadzaza malo amodzi kawiri.",
+          "kind-not-accepted": "Slide {slide} ili ndi zomwe zilimo zomwe mapangidwe ake satha kulemba pamenepo.",
+          "empty-fill": "Slide {slide} ili ndi gawo lopanda kalikonse.",
+          "unknown-image": "Slide {slide} yalemba dzina la chithunzi chomwe sichinawonetsedwe.",
+          "bullet-level": "Slide {slide} ili ndi malo omwe nyumba zake ndizakuya kwambiri.",
+          "too-long": "Slide {slide} ili ndi mawu ambiri kuposa omwe angakwanenso, ngakhale akhale achidule. Chepetsani kapena gawani pa slide ina.",
+          "empty-slide": "Slide {slide} ilibe kalikonse."
+        },
+        "build": "{count, plural, one {Pangani deck (# slide)} other {Pangani deck (# ma slide)}}",
+        "willShrink": "{count, plural, one {Mawu pa slide imodzi aziyikidwa ang'ono kuti akwane.} other {Mawu pa ma slide # aziyikidwa ang'ono kuti akwane.}}"
       }
     }
   },

@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Kotalisa ya brand",
         "description": "Talisa PDF, dokiman Word to presentation na brand book: polosi, balongi ya mikolo, majoli, maloba, logos mpe style"
+      },
+      "deckBuilder": {
+        "label": "Denge ya deck",
+        "description": "Yebisa plan ya présentation na ndenge na ndelo mpe biloko, na sima sala yango na modèle ya marque."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Misala ya ba grants ya sika",
       "newFormFill": "Kotonda mokanda ya sika",
       "newChannelDrafter": "Motángi ya kanal ya sika",
-      "newBrandReview": "Kotalisa ya brand ya sika"
+      "newBrandReview": "Kotalisa ya brand ya sika",
+      "newDeckBuilder": "Deck ya sika"
     },
     "translation": {
       "chooseLanguage": "Lokota ya bokokani",
@@ -4932,6 +4937,122 @@
         "found": "Eyebanaki",
         "notes": "Noti",
         "fileSuffix": "boyekoli ya brand"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Ezo zwa deck…",
+      "busy": "Okozali na mosala oyo ezo salama ({name}). Zela esila to longwa yango.",
+      "booksFailed": "Ekokaki te ko zwa brand books.",
+      "readFailed": "Ekokaki te ko tanga progression ya deck.",
+      "startFailed": "Ekokaki te kotanga outline.",
+      "buildFailed": "Deck ekokaki te ko sala.",
+      "outlineFailed": "Outline ekokaki te ko sala.",
+      "stop": "Longwa",
+      "download": "Telemisa .pptx",
+      "editOutline": "Bongisa outline",
+      "newDeck": "Deck ya sika",
+      "startOver": "Bandela lisusu",
+      "built": "Esalemi",
+      "forBook": "{template}, mpo na {book}",
+      "fromTemplate": "Na {template}",
+      "outlineTitle": "Outline",
+      "outlineReady": "{count, plural, one {# slide, ek prepared mpo na kobongisa} other {# slides, ek prepared mpo na kobongisa}}",
+      "repaired": "{count, plural, one {Eloko moko na plan ebongisami mpo eza na modèle.} other {# biloko na plan ebongisami mpo eza na modèle.}}",
+      "unread": "Ekokaki te ko tanga {names}; outline esalemi ata na bango te.",
+      "outlinePhase": {
+        "template": "Ezo tanga template",
+        "reading": "Ezo tanga sources",
+        "planning": "Ezo sala plan ya slides"
+      },
+      "buildPhase": {
+        "composing": "Ezo sala slides",
+        "rendering": "Ezo vérifier rendu ya slides",
+        "storing": "Ezo sauvegarder deck",
+        "reviewing": "Ezo vérifier na brand book"
+      },
+      "status": {
+        "running": "Ezo sala",
+        "done": "Esili",
+        "failed": "Ekokaki te",
+        "stopped": "Esili"
+      },
+      "reviewed": "{errors, plural, =0 {Mabe ya marque ezalaka te} one {# erreur ya marque} other {# erreurs ya marque}}, {warnings, plural, =0 {près na avertissements} one {# avertissement} other {# avertissements}}",
+      "reviewGap": {
+        "busy": "Esalemi; esalemi te na brand book (ba review na yo ezalaki na mosala)",
+        "failed": "Esalemi; contrôle ya marque ekokaki te ko salama"
+      },
+      "overflows": "{count, plural, one {Ekitisi ya texte na slide {slides} ezalaka naino mingi ata ebongisami.} other {Ekitisi ya texte na slides {slides} ezalaka naino mingi ata ebongisami.}}",
+      "shrunk": "{count, plural, one {Texte na slide moko ebongisami mpo ete ekota.} other {Texte na # slides ebongisami mpo ete ekota.}}",
+      "setup": {
+        "title": "Denge ya deck",
+        "intro": "Pona modèle, yebisa raison ya deck na sengela bio na yango. Model eko sala outline okoki kobongisa na liboso deck ekosalema na modèles ya layout.",
+        "template": "Modèle",
+        "booksLoading": "Ezo zwa modèles ya marque…",
+        "fromBook": "Na {book}",
+        "ownTemplate": "Salela modèle na yo",
+        "replaceTemplate": "Pona fichier mosusu",
+        "templateTypes": "Présentation to modèle ya PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Vérifier na brand book",
+        "noBook": "Te ko vérifier",
+        "brief": "Deck ekozala mpo na nini?",
+        "briefPlaceholder": "Pamba na likolo: update ya minite 10 pona comité na ba cliniques na mbula oyo, na ba nombres misato ya plus important.",
+        "sources": "Bikolo",
+        "addSources": "Bakisa ba ndakisa ya mikanda oyo esengeli kosalama na yango",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel to mokanda; kino {max}",
+        "pictures": "Bifoto",
+        "addPictures": "Bakisa bifoto oyo deck ekoki kosalela",
+        "pictureTypes": "PNG, JPEG to GIF; kino {max}",
+        "remove": "Longola {name}",
+        "language": "Lokota ya deck",
+        "start": "Ndakisa ya ebandeli",
+        "wrongType": "Dossier wana ezali kozala na nse ya malamu awa te.",
+        "uploadFailed": "Kotia dosie yango esimbi te."
+      },
+      "outline": {
+        "role": {
+          "title": "Titre",
+          "subtitle": "Sous-titre",
+          "body": "Motindo",
+          "content": "Bobele",
+          "picture": "Foto"
+        },
+        "holds": "Oyo {place} ezali na yango",
+        "kindText": "Motindo",
+        "kindPicture": "Foto",
+        "bullets": "Matanda",
+        "noPicture": "Pona foto",
+        "alt": "Lakisa foto na maloba",
+        "tooLong": "Elekisi: ezali na {lines, plural, one {# molongo} other {# milongo}} ya bilembo {chars}, ata esili kokita.",
+        "shrinks": "Molai moke: ezali kokitisa mpo ekota.",
+        "bulletsHint": "Motanda moko na molongo moko. Banda na esika ya mibale mpo na kobwisa etando.",
+        "room": "Esika mpo na {lines, plural, one {# molongo} other {# milongo}} ya bilembo {chars}.",
+        "slide": "Slide {number}",
+        "layoutOf": "Esaleli ya slide {number}",
+        "moveUp": "Tombola slide {number} likolo",
+        "moveDown": "Kita slide {number} nse",
+        "remove": "Longola slide {number}",
+        "notesSome": "Maloba ya koloba",
+        "notesNone": "Bakisa maloba ya koloba",
+        "notesOf": "Maloba ya koloba ya slide {number}",
+        "slides": "Slides",
+        "addSlide": "Bakisa slide",
+        "blocked": "{count, plural, one {Eloko moko ezali kokanga mosala ya deck:} other {Biloko {count} ezali kokanga mosala ya deck:}}",
+        "problem": {
+          "no-slides": "Ndenge na ye ezali na slide te.",
+          "too-many-slides": "Slides 40 ya liboso nde ekotikala.",
+          "unknown-layout": "Slide {slide} ezali na esaleli oyo exemple eye ezali na yango te.",
+          "vertical-layout": "Slide {slide} ezali kosalela esaleli na bilembo ya pembeni; pona mosusu.",
+          "unknown-placeholder": "Slide {slide} ezalaki na eloko na esika oyo esaleli ezali na yango te.",
+          "repeated-placeholder": "Slide {slide} etondi esika moko mbala mibale.",
+          "kind-not-accepted": "Slide {slide} ezalaki na eloko oyo esaleli na yango ekoki te.",
+          "empty-fill": "Slide {slide} ezali na esika ya pamba.",
+          "unknown-image": "Slide {slide} ebengaki foto oyo ebakisami te.",
+          "bullet-level": "Slide {slide} ezali na matanda ebweyi penza nse mingi.",
+          "too-long": "Slide {slide} ezalaki na maloba ebele koleka oyo ekokani, ata soki ekitisami. Fongola yango to koba slide.",
+          "empty-slide": "Slide {slide} ezali na eloko te."
+        },
+        "build": "{count, plural, one {Tonga deck (# slide)} other {Tonga deck (# slides)}}",
+        "willShrink": "{count, plural, one {Maloba na slide moko ekozala moke mpo ekokanisa.} other {Maloba na ba slide # ekozala moke mpo ekokanisa.}}"
       }
     }
   },

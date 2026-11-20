@@ -2891,6 +2891,10 @@
       "brandReview": {
         "label": "Revisión de marca",
         "description": "Revise un PDF, documento Word o presentación comparándolo con un manual de marca: fuentes, colores, redacción, logotipos y tono"
+      },
+      "deckBuilder": {
+        "label": "Generador de presentaciones",
+        "description": "Planifique una presentación a partir de un resumen y fuentes, luego créela con una plantilla de marca."
       }
     },
     "chooser": {
@@ -2904,7 +2908,8 @@
       "newGrants": "Nuevo procesamiento de subvenciones",
       "newFormFill": "Nuevo llenado de documento",
       "newChannelDrafter": "Nuevo borrador de canal",
-      "newBrandReview": "Nueva revisión de marca"
+      "newBrandReview": "Nueva revisión de marca",
+      "newDeckBuilder": "Nueva presentación"
     },
     "translation": {
       "chooseLanguage": "Idioma de destino",
@@ -4948,6 +4953,122 @@
         "found": "Encontrado",
         "notes": "Notas",
         "fileSuffix": "revisión de marca"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Cargando la presentación…",
+      "busy": "Ya tiene un trabajo en ejecución ({name}). Espere a que termine o deténgalo.",
+      "booksFailed": "No se pudieron cargar los libros de marca.",
+      "readFailed": "No se pudo leer el progreso de la presentación.",
+      "startFailed": "No se pudo iniciar el esquema.",
+      "buildFailed": "No se pudo construir la presentación.",
+      "outlineFailed": "No se pudo generar el esquema.",
+      "stop": "Detener",
+      "download": "Descargar .pptx",
+      "editOutline": "Editar esquema",
+      "newDeck": "Nueva presentación",
+      "startOver": "Empezar de nuevo",
+      "built": "Construida",
+      "forBook": "{template}, para {book}",
+      "fromTemplate": "Desde {template}",
+      "outlineTitle": "Esquema",
+      "outlineReady": "{count, plural, one {# diapositiva, lista para editar} other {# diapositivas, listas para editar}}",
+      "repaired": "{count, plural, one {Se ajustó una cosa en el plan para que encajara en la plantilla.} other {Se ajustaron # cosas en el plan para que encajaran en la plantilla.}}",
+      "unread": "No se pudo leer {names}; el esquema se realizó sin ellas.",
+      "outlinePhase": {
+        "template": "Leyendo la plantilla",
+        "reading": "Leyendo las fuentes",
+        "planning": "Planificando las diapositivas"
+      },
+      "buildPhase": {
+        "composing": "Construyendo las diapositivas",
+        "rendering": "Verificando la visualización de las diapositivas",
+        "storing": "Guardando la presentación",
+        "reviewing": "Verificando según el libro de marca"
+      },
+      "status": {
+        "running": "Trabajando",
+        "done": "Listo",
+        "failed": "Falló",
+        "stopped": "Detenido"
+      },
+      "reviewed": "{errors, plural, =0 {Sin errores de marca} one {# error de marca} other {# errores de marca}}, {warnings, plural, =0 {sin advertencias} one {# advertencia} other {# advertencias}}",
+      "reviewGap": {
+        "busy": "Construida; no se verificó con el libro de marca (sus revisiones estaban ocupadas)",
+        "failed": "Construida; no se pudo realizar la verificación de marca"
+      },
+      "overflows": "{count, plural, one {El texto en la diapositiva {slides} todavía se desborda después de ajustar.} other {El texto en las diapositivas {slides} todavía se desborda después de ajustar.}}",
+      "shrunk": "{count, plural, one {El texto en una diapositiva se redujo para que encajara.} other {El texto en # diapositivas se redujo para que encajara.}}",
+      "setup": {
+        "title": "Generador de presentaciones",
+        "intro": "Elija una plantilla, indique el propósito de la presentación y agregue las fuentes que debe utilizar. Un modelo genera un esquema que puede editar antes de que la presentación se cree a partir de las maquetaciones de la plantilla.",
+        "template": "Plantilla",
+        "booksLoading": "Cargando plantillas de marca…",
+        "fromBook": "Desde {book}",
+        "ownTemplate": "Usar su propia plantilla",
+        "replaceTemplate": "Elegir otro archivo",
+        "templateTypes": "Una presentación o plantilla de PowerPoint (.pptx, .potx)",
+        "checkAgainst": "Verificar con un libro de marca",
+        "noBook": "No verificar",
+        "brief": "¿Para qué es la presentación?",
+        "briefPlaceholder": "Por ejemplo: una actualización de 10 minutos para la junta sobre nuestras clínicas este año, con los tres números más importantes.",
+        "sources": "Fuentes",
+        "addSources": "Agregue documentos para consultar",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel o texto; hasta {max}",
+        "pictures": "Imágenes",
+        "addPictures": "Agregue imágenes que pueda usar la presentación",
+        "pictureTypes": "PNG, JPEG o GIF; hasta {max}",
+        "remove": "Eliminar {name}",
+        "language": "Idioma de la presentación",
+        "start": "Borrador de esquema",
+        "wrongType": "Ese tipo de archivo no puede usarse aquí.",
+        "uploadFailed": "La carga falló."
+      },
+      "outline": {
+        "role": {
+          "title": "Título",
+          "subtitle": "Subtítulo",
+          "body": "Texto",
+          "content": "Contenido",
+          "picture": "Imagen"
+        },
+        "holds": "Lo que contiene {place}",
+        "kindText": "Texto",
+        "kindPicture": "Imagen",
+        "bullets": "Viñetas",
+        "noPicture": "Elija una imagen",
+        "alt": "Describa la imagen",
+        "tooLong": "Demasiado largo: esto contiene aproximadamente {lines, plural, one {# línea} other {# líneas}} de {chars} caracteres, incluso si se reduce el tamaño.",
+        "shrinks": "Un poco largo: se reducirá el tamaño para ajustar.",
+        "bulletsHint": "Una viñeta por línea. Comience una línea con dos espacios para indentar.",
+        "room": "Espacio para aproximadamente {lines, plural, one {# línea} other {# líneas}} de {chars} caracteres.",
+        "slide": "Diapositiva {number}",
+        "layoutOf": "Diseño de la diapositiva {number}",
+        "moveUp": "Mover la diapositiva {number} hacia arriba",
+        "moveDown": "Mover la diapositiva {number} hacia abajo",
+        "remove": "Eliminar la diapositiva {number}",
+        "notesSome": "Notas del expositor",
+        "notesNone": "Agregar notas del expositor",
+        "notesOf": "Notas del expositor para la diapositiva {number}",
+        "slides": "Diapositivas",
+        "addSlide": "Agregar diapositiva",
+        "blocked": "{count, plural, one {Un elemento impide construir la presentación:} other {# elementos impiden construir la presentación:}}",
+        "problem": {
+          "no-slides": "El esquema no tiene diapositivas.",
+          "too-many-slides": "Solo se mantienen las primeras 40 diapositivas.",
+          "unknown-layout": "La diapositiva {slide} utiliza un diseño que esta plantilla no tiene.",
+          "vertical-layout": "La diapositiva {slide} utiliza un diseño con texto orientado al costado; elija otro.",
+          "unknown-placeholder": "La diapositiva {slide} tenía contenido para un lugar que su diseño no tiene.",
+          "repeated-placeholder": "La diapositiva {slide} llenó un lugar dos veces.",
+          "kind-not-accepted": "La diapositiva {slide} tenía contenido que su diseño no puede contener allí.",
+          "empty-fill": "La diapositiva {slide} tiene un campo vacío.",
+          "unknown-image": "La diapositiva {slide} nombra una imagen que no fue agregada.",
+          "bullet-level": "La diapositiva {slide} tenía viñetas demasiado indentadas.",
+          "too-long": "La diapositiva {slide} tiene más texto del que cabe, incluso si se reduce el tamaño. Acorte el texto o divida la diapositiva.",
+          "empty-slide": "La diapositiva {slide} no tiene nada."
+        },
+        "build": "{count, plural, one {Construir presentación (# diapositiva)} other {Construir presentación (# diapositivas)}}",
+        "willShrink": "{count, plural, one {El texto en una diapositiva se reducirá para que quepa.} other {El texto en # diapositivas se reducirá para que quepa.}}"
       }
     }
   },

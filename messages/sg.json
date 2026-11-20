@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Brand review",
         "description": "Kûê ti PDF, Word, na présentation na brand book: fonts, couleurs, yângô, logos ti tongana."
+      },
+      "deckBuilder": {
+        "label": "Mbênî ti presentation",
+        "description": "Fânzî presentation na mo na ndapê ti brîéf na sô tî lo, apia na gbêtî na modèle tî logo."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Sêse ti grants mbï",
       "newFormFill": "Kûê dɔkima mupië",
       "newChannelDrafter": "Kêtê sêngbê ti kana",
-      "newBrandReview": "Brand review mbïngu"
+      "newBrandReview": "Brand review mbïngu",
+      "newDeckBuilder": "Mbênî presentation mpya"
     },
     "translation": {
       "chooseLanguage": "Sangö tî sû",
@@ -4932,6 +4937,122 @@
         "found": "Mo ti yeke",
         "notes": "Note",
         "fileSuffix": "gbangu ti brand"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Mo yeke na mbênî presentation...",
+      "busy": "Nga ti mo yeke na travaï na {name}. Bé ti mo lo munu gbâ ti mo tî fini na so bé ti mo lo vété.",
+      "booksFailed": "O ti bisa na gbênî brand books.",
+      "readFailed": "O ti bisa na yèkè gbênî progrès ti presentation.",
+      "startFailed": "O ti bisa na yèkè gbênî outline.",
+      "buildFailed": "Presentation o ti bisa na mbênî.",
+      "outlineFailed": "Outline o ti bisa na mbênî.",
+      "stop": "Vété",
+      "download": "Télécharger .pptx",
+      "editOutline": "Sâra outline",
+      "newDeck": "Mbênî presentation mpya",
+      "startOver": "Kêmba na gorê",
+      "built": "Mbênî",
+      "forBook": "{template}, kângo {book}",
+      "fromTemplate": "Na {template}",
+      "outlineTitle": "Outline",
+      "outlineReady": "{count, plural, one {# slide, lo yèkî sâra} other {# slides, lo yèkî sâra}}",
+      "repaired": "{count, plural, one {Mo tî plan yèkî sâra pour modèle.} other {# ti plan yèkî sâra pour modèle.}}",
+      "unread": "O ti bisa na gbênî {names}; outline yèkî mbênî sans lo.",
+      "outlinePhase": {
+        "template": "O yèkî gbênî modèle",
+        "reading": "O yèkî gbênî sô tî référence",
+        "planning": "O yèkî planifi slides"
+      },
+      "buildPhase": {
+        "composing": "O yèkî mbênî slides",
+        "rendering": "O yèkî vérifi affiche tî slides",
+        "storing": "O yèkî sâra presentation",
+        "reviewing": "O yèkî vérifi brand book"
+      },
+      "status": {
+        "running": "O yèkî runga",
+        "done": "Fini",
+        "failed": "Munnga",
+        "stopped": "Vété"
+      },
+      "reviewed": "{errors, plural, =0 {Munnga ti brand} one {# munnga ti brand} other {# munnga ti brand}}, {warnings, plural, =0 {munnga ti alèt} one {# alèt} other {# alèt}}",
+      "reviewGap": {
+        "busy": "Mbênî; o ti bisa na vérifi na brand book (reviews tî mo yèkî runga)",
+        "failed": "Mbênî; vérifi ti brand book o ti bisa gbênî"
+      },
+      "overflows": "{count, plural, one {La texte na slide {slides} yèkî vî vâpa après sâra.} other {La texte na slides {slides} yèkî vî vâpa après sâra.}}",
+      "shrunk": "{count, plural, one {La texte na slide mô yèkî mbëtî ti kö pour yèkî sâra.} other {La texte na # slides yèkî mbëtî ti kö pour yèkî sâra.}}",
+      "setup": {
+        "title": "Mbênî ti presentation",
+        "intro": "Sâra modèle, lâ ti so presentation yèkî tambula na sô tî lo, apia na sô ti presentation bé yèkî vî. Modèle yèkî mbênî outline tî mo, bé mo yèkî sâra avant présentation yèkî mbênî na modèles tî logo.",
+        "template": "Modèle",
+        "booksLoading": "O yèkî gbênî templates ti brand...",
+        "fromBook": "Na {book}",
+        "ownTemplate": "Gbé na modèle tî mo",
+        "replaceTemplate": "Sâra fichier ti yângâ",
+        "templateTypes": "Présentation PowerPoint ou modèle (.pptx, .potx)",
+        "checkAgainst": "Vérifi na brand book",
+        "noBook": "Bë ti vérifi",
+        "brief": "Présentation yèkî tambula na sô?",
+        "briefPlaceholder": "Par exemple: 10-minutes ti mo tî update ti conseil tî clinique tî yângâ na anê, na les trois chiffres ti linga.",
+        "sources": "Bara tî Löngö",
+        "addSources": "Köta na tî dokumenté gbâkö",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel na téks; kapê {max}",
+        "pictures": "Gbûnda",
+        "addPictures": "Köta gbûnda mo deck a yeke kø",
+        "pictureTypes": "PNG, JPEG na GIF; kapê {max}",
+        "remove": "Kwîlî {name}",
+        "language": "Lângê tî deck",
+        "start": "Kîri ya na bâa",
+        "wrongType": "Ködörö tî fichier a alî ndö abê sô.",
+        "uploadFailed": "Ködörö tî köda abê sô."
+      },
+      "outline": {
+        "role": {
+          "title": "Tîtili",
+          "subtitle": "Sûbîtîtili",
+          "body": "Téks",
+          "content": "Dênde",
+          "picture": "Gbûnda"
+        },
+        "holds": "Sô {place} a yeke kö",
+        "kindText": "Téks",
+        "kindPicture": "Gbûnda",
+        "bullets": "Bâta bâ-bullet",
+        "noPicture": "Sâra gbûnda",
+        "alt": "Kûê gbûnda",
+        "tooLong": "A ko mbi sô: a yeke bâ {lines, plural, one {# rê} other {# rê}} tî {chars} karakterê, mbï köli ndokö kânî.",
+        "shrinks": "A klêmbî sô: mo köli ndokö sô agɛnâ.",
+        "bulletsHint": "Rê yeke bullet oko. Yeke rê na kûi na kolle doso na mendè.",
+        "room": "Gbongo tî bâ {lines, plural, one {# rê} other {# rê}} tî {chars} karakterê.",
+        "slide": "Slide {number}",
+        "layoutOf": "Disposition tî slide {number}",
+        "moveUp": "Vötä slide {number} na sûka",
+        "moveDown": "Vötä slide {number} na gbüngö",
+        "remove": "Kwîlî slide {number}",
+        "notesSome": "Bara tî parole tî gbâmbôli",
+        "notesNone": "Köta bara tî parole tî gbâmbôli",
+        "notesOf": "Bara tî parole tî gbâmbôli tî slide {number}",
+        "slides": "Slides",
+        "addSlide": "Köta slide",
+        "blocked": "{count, plural, one {Ködörö mbo apê deck na yeke kö:} other {# kodörö ape deck na yeke kö:}}",
+        "problem": {
+          "no-slides": "Plan agbi fadɛ slide.",
+          "too-many-slides": "Ngâ tî slide 40 lo yeke kpî.",
+          "unknown-layout": "Slide {slide} a yeke disposition sô modèle a yeke asâla.",
+          "vertical-layout": "Slide {slide} ayeke disposition sô téks a yeke na sâkî; sâra kôda.",
+          "unknown-placeholder": "Slide {slide} ayeke dênde tî gbongo disposition asâla.",
+          "repeated-placeholder": "Slide {slide} ayeke gbongo mô kolî na kônî.",
+          "kind-not-accepted": "Slide {slide} ayeke dênde sô disposition asâla a yeke akêlî na gâkë.",
+          "empty-fill": "Slide {slide} ayeke gbongo tî wa mbeti.",
+          "unknown-image": "Slide {slide} ayeke gbûnda sô ninga abê köta.",
+          "bullet-level": "Slide {slide} a yeke bullet a boro na sümba gbênî.",
+          "too-long": "Slide {slide} a yeke téks a mbi sô na yeke kö, mbï köli ndokö kânî. Sûgûna lô ou gbêtë slide na kè.",
+          "empty-slide": "Slide {slide} ayeke wa mbeti na kè."
+        },
+        "build": "{count, plural, one {Kö deck (# slide)} other {Kö deck (# slides)}}",
+        "willShrink": "{count, plural, one {Küö na di sî slide tî oko, azo na gu bé ti seka gïrï tî yeke nzönî.} other {Küö na di sî {count} slides, azo na gu bé ti seka gïrï tî yeke nzönî.}}"
       }
     }
   },

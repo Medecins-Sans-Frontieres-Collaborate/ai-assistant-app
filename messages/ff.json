@@ -2875,6 +2875,10 @@
       "brandReview": {
         "label": "Jokkondiral e brand",
         "description": "Yeeso PDF, Word walla prezentasyon e brand book: fontaji, rangol, ngom, logoji e ton"
+      },
+      "deckBuilder": {
+        "label": "Deck builder",
+        "description": "Sondor ɗa presentation e goonga e nguuru, jooni tafii e template doo e brand."
       }
     },
     "chooser": {
@@ -2888,7 +2892,8 @@
       "newGrants": "Cuɓoraaɗe kurkure hesere",
       "newFormFill": "Holti dokumint mum",
       "newChannelDrafter": "Minndol lenyol kesɗit",
-      "newBrandReview": "Jokkondiral brand fof"
+      "newBrandReview": "Jokkondiral brand fof",
+      "newDeckBuilder": "Deck fayi"
     },
     "translation": {
       "chooseLanguage": "Ɓernde hubitere",
@@ -4932,6 +4937,122 @@
         "found": "Moƴƴi",
         "notes": "Dokkal",
         "fileSuffix": "lewna brand"
+      }
+    },
+    "deckBuilder": {
+      "loading": "Deck sedang ngarga…",
+      "busy": "Aɗa jogii hoore toɓɓere ({name}). Hakkil e nde o fayii walla jokkiso.",
+      "booksFailed": "Brand books waawaani ngarga.",
+      "readFailed": "Waawaani jango deck’s progress.",
+      "startFailed": "Waawaani fuɗɗo outline.",
+      "buildFailed": "Deck waawaani taƴto.",
+      "outlineFailed": "Outline waawaani soɗɗo.",
+      "stop": "Fuutu",
+      "download": "Naɗi .pptx",
+      "editOutline": "Mbiddi outline",
+      "newDeck": "Deck fayi",
+      "startOver": "Fuɗɗo e doo",
+      "built": "Taƴti",
+      "forBook": "{template}, e {book}",
+      "fromTemplate": "E {template}",
+      "outlineTitle": "Outline",
+      "outlineReady": "{count, plural, one {# slide, woni mbidka} other {# slides, woni mbidka}}",
+      "repaired": "{count, plural, one {Ko toɓɓere goɗɗo e plan jokkani e template.} other {# toɓɓere e plan jokkani e template.}}",
+      "unread": "Waawaani jango {names}; outline soɗɗani tawa ɗe.",
+      "outlinePhase": {
+        "template": "Jango template",
+        "reading": "Jango nguuru",
+        "planning": "Sonndor slides"
+      },
+      "buildPhase": {
+        "composing": "Taƴto slides",
+        "rendering": "Jango slides render",
+        "storing": "Danndu deck",
+        "reviewing": "Jango e brand book"
+      },
+      "status": {
+        "running": "Dogno",
+        "done": "Fayni",
+        "failed": "Waawaani",
+        "stopped": "Fuɗɗi"
+      },
+      "reviewed": "{errors, plural, =0 {Ko brand error wala} one {# brand error} other {# brand errors}}, {warnings, plural, =0 {wala warning} one {# warning} other {# warnings}}",
+      "reviewGap": {
+        "busy": "Taƴti; waawaani jango e brand book (reviews maa dogno)",
+        "failed": "Taƴti; jango brand waawaani dogni"
+      },
+      "overflows": "{count, plural, one {Ɗurorde e slide {slides} waawaani tawa fit.} other {Ɗurorde e slides {slides} waawaani tawa fit.}}",
+      "shrunk": "{count, plural, one {Ɗurorde e slide goɗɗo tampaani tawa fit.} other {Ɗurorde e # slides tampaani tawa fit.}}",
+      "setup": {
+        "title": "Deck builder",
+        "intro": "Suɓo template, jango ko deck min woni e addi ko mo jogi. Model soɗɗani outline, aɗa mbiddi so deck taƴti e layout template.",
+        "template": "Template",
+        "booksLoading": "Brand templates sedang ngarga…",
+        "fromBook": "E {book}",
+        "ownTemplate": "Ngu template maa",
+        "replaceTemplate": "Suɓo file goɗɗo",
+        "templateTypes": "Presentation PowerPoint walla template (.pptx, .potx)",
+        "checkAgainst": "Jango e brand book",
+        "noBook": "A jangaani",
+        "brief": "Ko deck min woni e?",
+        "briefPlaceholder": "Misal: update e minuti 10 e board e kliniks maa woni e ñalngu, e tati lambaɗi.",
+        "sources": "Daggol",
+        "addSources": "Jokku dokumgol to daɗa mo",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel walla njahun; ɗo yaha e {max}",
+        "pictures": "Ngaatukol",
+        "addPictures": "Jokku ngaatukol mo deck maa waɗi",
+        "pictureTypes": "PNG, JPEG walla GIF; ɗo yaha e {max}",
+        "remove": "Momtu {name}",
+        "language": "Ngul ɗe deck",
+        "start": "Lakkan draft",
+        "wrongType": "Ngal file ndiyam waawi jar goɗɗum.",
+        "uploadFailed": "Upload ndi iwti."
+      },
+      "outline": {
+        "role": {
+          "title": "Teewol",
+          "subtitle": "Teewol laawol",
+          "body": "Text",
+          "content": "Ginawol",
+          "picture": "Ngaatukol"
+        },
+        "holds": "Ko {place} jogii",
+        "kindText": "Text",
+        "kindPicture": "Ngaatukol",
+        "bullets": "Bullets",
+        "noPicture": "Suɓo ngaatukol",
+        "alt": "Taɲɲo ngaatukol",
+        "tooLong": "Ndi hirna: ko jogii {lines, plural, one {# laylaydi} other {# laylaydi}} e {chars} karakter, fii so daan goɗɗum.",
+        "shrinks": "Duma hirna: daan goɗɗum ko mo jogi.",
+        "bulletsHint": "Laylaydi goɗɗum bullet. Fuɗɗo laylaydi e ndiyam ɗiɗi ngol ko mo yowdi.",
+        "room": "Joguɗi e {lines, plural, one {# laylaydi} other {# laylaydi}} e {chars} karakter.",
+        "slide": "Slide {number}",
+        "layoutOf": "Layout slide {number}",
+        "moveUp": "Nattu slide {number} e leydi",
+        "moveDown": "Nattu slide {number} e ndiyam",
+        "remove": "Momtu slide {number}",
+        "notesSome": "Hokkere jawle",
+        "notesNone": "Jokku hokkere jawle",
+        "notesOf": "Hokkere jawle slide {number}",
+        "slides": "Slides",
+        "addSlide": "Jokku slide",
+        "blocked": "{count, plural, one {Galgol goɗɗum iwtii deck e ɗe jar:} other {# galgoy iwtii deck e ɗe jar:}}",
+        "problem": {
+          "no-slides": "Lakkan nde jogii slide.",
+          "too-many-slides": "Wona slides 40 ngal jogataa.",
+          "unknown-layout": "Slide {slide} jogii layout mo template ngal ndiyam jogii.",
+          "vertical-layout": "Slide {slide} jogii layout e tekst ngol seɗɗi; suɓo goɗɗum.",
+          "unknown-placeholder": "Slide {slide} jogii ginawol to mo layout ndiyam jogii.",
+          "repeated-placeholder": "Slide {slide} jogii leydi ɗiɗi e mo.",
+          "kind-not-accepted": "Slide {slide} jogii ginawol mo layout ndiyam waawi jogii.",
+          "empty-fill": "Slide {slide} jogii feɗde jeɗɗo.",
+          "unknown-image": "Slide {slide} jogii ngaatukol mo jokataa.",
+          "bullet-level": "Slide {slide} jogii bullet mo yowda seɗɗi.",
+          "too-long": "Slide {slide} jogii tekst mo hirna, fii so daan goɗɗum. Naatu mo walla wattin slide.",
+          "empty-slide": "Slide {slide} jogii baɗ mo e mo."
+        },
+        "build": "{count, plural, one {Waɗ deck (# slide)} other {Waɗ deck (# slides)}}",
+        "willShrink": "{count, plural, one {Naatan e jamɗo e slide gooto ngoni hurmin e so fitu.} other {Naatan e jamɗo e slides # ngoni hurmin e so fitu.}}"
       }
     }
   },
