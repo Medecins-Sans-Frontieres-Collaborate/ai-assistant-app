@@ -1,14 +1,11 @@
 'use client';
 
-import { KeyboardEvent, ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import { NO_PAN_ATTRIBUTE } from '@/client/hooks/documents/usePagePan';
-import { PAGE_SURFACE_ATTRIBUTE } from '@/client/hooks/documents/usePageZoom';
 
-import { groupKeyTarget } from '@/lib/utils/client/keyboardScope';
-import { pageBox } from '@/lib/utils/shared/documents/pageGeometry';
 import {
   FormattedDocumentRun,
   movedBox,
@@ -20,6 +17,15 @@ import {
   NativePdfUnitStyle,
   SCALE_EPSILON,
 } from '@/lib/utils/shared/translation/nativePdf';
+
+import {
+  DocumentPage,
+  OVERLAY_ATTRIBUTE,
+  OVERLAY_PLACE_ATTRIBUTE,
+  PAGE_WIDTH,
+  PageOverlay,
+  placeOnPage,
+} from '@/components/Documents/DocumentPage';
 
 import { useUnitWording } from './formattedWording';
 
@@ -51,25 +57,20 @@ interface FormattedPageViewProps {
   onDraftChange: (text: string) => void;
 }
 
-/** Width of a page that is not zoomed: the pane's, up to a normal page. */
-export const PAGE_WIDTH = 'min(100%, 36rem)';
-
 /** Marks a block's button, here and in the block list, by unit id. */
-export const UNIT_ATTRIBUTE = 'data-unit-id';
+export const UNIT_ATTRIBUTE = OVERLAY_ATTRIBUTE;
 /** Where a block's button is: 'page' (here) or 'list'. */
-export const UNIT_PLACE_ATTRIBUTE = 'data-unit-place';
+export const UNIT_PLACE_ATTRIBUTE = OVERLAY_PLACE_ATTRIBUTE;
 
 /** Smallest field shown over the page, so a one-word block stays typeable. */
 const MIN_FIELD_WIDTH_PX = 220;
 
 /**
- * One page with its text blocks marked. Every block is a button over the
- * place it occupies; the selected block of the translated page becomes a
- * text field in that same place, so the words are edited where they sit.
- * What is typed is not on the image until the page is re-rendered.
- *
- * The blocks are one Tab stop: arrow keys move between them in reading
- * order, Home and End go to the first and last, Enter or Space edits one.
+ * One translated page with its text blocks marked, on the documents layer's
+ * page (DocumentPage). Every block is a box over the place it occupies; the
+ * selected block of the translated page becomes a text field in that same
+ * place, so the words are edited where they sit. What is typed is not on
+ * the image until the page is re-rendered.
  */
 export function FormattedPageView({
   image,
@@ -89,101 +90,44 @@ export function FormattedPageView({
 }: FormattedPageViewProps) {
   const t = useTranslations('workflows');
   const unitT = useUnitWording();
-  // The block that takes the Tab stop: the last one the keyboard was on.
-  const [focusedId, setFocusedId] = useState<string | null>(null);
-  if (!image) {
-    return (
-      <div
-        role="status"
-        aria-label={unitT('loadingPage', { page: page.page })}
-        {...{ [PAGE_SURFACE_ATTRIBUTE]: '' }}
-        style={{ width }}
-        className="m-auto aspect-[210/297] shrink-0 animate-pulse rounded bg-gray-200 dark:bg-surface-dark-elevated"
-      />
-    );
-  }
-  const tabStop = [focusedId, selectedId, units[0]?.id].find(
-    (id) => id && units.some((unit) => unit.id === id),
-  );
-  /** Arrow keys, Home and End move between the blocks (see above). */
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const from = (event.target as HTMLElement).closest(
-      `[${UNIT_PLACE_ATTRIBUTE}="page"]`,
-    );
-    if (!from || event.altKey || event.ctrlKey || event.metaKey) return;
-    const buttons = Array.from(
-      event.currentTarget.querySelectorAll<HTMLElement>(
-        `[${UNIT_PLACE_ATTRIBUTE}="page"]`,
-      ),
-    );
-    const to = groupKeyTarget(
-      event.key,
-      buttons.indexOf(from as HTMLElement),
-      buttons.length,
-      'both',
-    );
-    if (to === null) return;
-    event.preventDefault();
-    buttons[to].focus();
-  };
-  const selected = units.find((unit) => unit.id === selectedId);
   /** Where a block is drawn: its measured place, moved as the person asked. */
-  const place = (unit: NativePdfUnitResult, box: NativePdfUnitResult['bbox']) =>
-    pageBox(movedBox(box, styles?.[unit.id]), page);
+  const placed = (
+    unit: NativePdfUnitResult,
+    box: NativePdfUnitResult['bbox'],
+  ) => movedBox(box, styles?.[unit.id]);
+  const overlays: PageOverlay[] = units.map((unit) => {
+    const edited = unit.id in edits || !!restyled?.has(unit.id);
+    const shrunk =
+      !edited && unit.scale !== null && unit.scale < 1 - SCALE_EPSILON;
+    return {
+      id: unit.id,
+      box: placed(unit, unit.bbox),
+      tone: edited ? 'edited' : shrunk ? 'warning' : 'normal',
+      label: t('translation.formatted.blockLabel', { n: unit.n }),
+      // The open field takes the selected block's place.
+      hidden: unit.id === selectedId && draft !== null,
+    };
+  });
+  const selected = units.find((unit) => unit.id === selectedId);
   return (
-    // Auto margins centre the page and, unlike centring the row, leave a
-    // zoomed page's left edge reachable by scrolling.
-    <div
-      data-testid="formatted-page"
-      {...{ [PAGE_SURFACE_ATTRIBUTE]: '' }}
-      style={{ width }}
-      onKeyDown={onKeyDown}
-      className="relative mx-auto shrink-0 self-start"
+    <DocumentPage
+      testId="formatted-page"
+      image={image}
+      imageLabel={unitT('pageLabel', { page: page.page })}
+      loadingLabel={unitT('loadingPage', { page: page.page })}
+      size={page}
+      overlays={overlays}
+      selectedId={selectedId}
+      outlines={outlines}
+      width={width}
+      onSelect={onSelect}
     >
-      {/* A rendered page served as a data URL. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={image}
-        alt={unitT('pageLabel', { page: page.page })}
-        draggable={false}
-        className="block w-full select-none rounded-sm"
-      />
-      {units.map((unit) => {
-        const isSelected = unit.id === selectedId;
-        if (isSelected && draft !== null) return null;
-        const edited = unit.id in edits || !!restyled?.has(unit.id);
-        const shrunk =
-          !edited && unit.scale !== null && unit.scale < 1 - SCALE_EPSILON;
-        const border = isSelected
-          ? 'border-2 border-blue-500 bg-blue-500/10'
-          : edited
-            ? 'border-2 border-dashed border-amber-400'
-            : !outlines
-              ? 'border border-transparent hover:border-blue-400/70'
-              : shrunk
-                ? 'border border-amber-400/80'
-                : 'border border-blue-400/40 hover:border-blue-400';
-        return (
-          <button
-            key={unit.id}
-            type="button"
-            aria-label={t('translation.formatted.blockLabel', { n: unit.n })}
-            aria-pressed={isSelected}
-            {...{ [UNIT_ATTRIBUTE]: unit.id, [UNIT_PLACE_ATTRIBUTE]: 'page' }}
-            tabIndex={unit.id === tabStop ? 0 : -1}
-            onFocus={() => setFocusedId(unit.id)}
-            onClick={() => onSelect(unit.id)}
-            style={place(unit, unit.bbox)}
-            className={`absolute rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${border}`}
-          />
-        );
-      })}
       {selected && (
         <span
           aria-hidden
           style={{
-            left: place(selected, selected.bbox).left,
-            top: place(selected, selected.bbox).top,
+            left: placeOnPage(placed(selected, selected.bbox), page).left,
+            top: placeOnPage(placed(selected, selected.bbox), page).top,
           }}
           className="absolute -ms-1 -translate-x-full rounded bg-blue-600 px-1.5 text-[11px] font-semibold text-white rtl:translate-x-full"
         >
@@ -194,9 +138,9 @@ export function FormattedPageView({
         <div
           {...{ [UNIT_ATTRIBUTE]: selected.id, [NO_PAN_ATTRIBUTE]: '' }}
           style={{
-            left: place(selected, selected.room).left,
-            top: place(selected, selected.room).top,
-            width: place(selected, selected.room).width,
+            left: placeOnPage(placed(selected, selected.room), page).left,
+            top: placeOnPage(placed(selected, selected.room), page).top,
+            width: placeOnPage(placed(selected, selected.room), page).width,
             minWidth: MIN_FIELD_WIDTH_PX,
           }}
           className="absolute z-10 flex max-w-full flex-col gap-1"
@@ -218,6 +162,6 @@ export function FormattedPageView({
           )}
         </div>
       )}
-    </div>
+    </DocumentPage>
   );
 }
