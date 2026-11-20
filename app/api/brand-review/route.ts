@@ -4,6 +4,7 @@ import { BRAND_BOOK_ID_PATTERN } from '@/lib/services/agentAccess/types';
 import { JobActiveError } from '@/lib/services/backgroundJobs/backgroundJobs';
 import { usableBrandBook } from '@/lib/services/brand/brandBooks';
 import {
+  parseNoteLocale,
   parseReviewUpload,
   startBrandReview,
 } from '@/lib/services/brand/brandReviews';
@@ -30,7 +31,8 @@ import { auth } from '@/auth';
  * phase F). Answers 202 at once with the review's first state; the work
  * goes on in the background (GET /api/brand-review/<id>).
  *
- * Body: `{ bookId, file: "/api/file/<sha256>.<ext>", name, modelReview }`.
+ * Body: `{ bookId, file: "/api/file/<sha256>.<ext>", name, modelReview,
+ * locale }`; the locale is the reader's, which the model's notes are in.
  */
 export async function POST(request: NextRequest) {
   const session = await auth();
@@ -73,7 +75,7 @@ export async function POST(request: NextRequest) {
       session,
       book,
       { file, name, type: upload.type },
-      modelReview,
+      { modelReview, noteLocale: parseNoteLocale(body.locale) },
     );
     return successResponse(started, undefined, 202);
   } catch (error) {
