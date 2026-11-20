@@ -30,6 +30,8 @@ import {
   NATIVE_PDF_MAX_CHECK_PAGES,
   NATIVE_PDF_STEPS,
   NativePdfDepth,
+  NativePdfExportFormat,
+  NativePdfRenderReport,
   NativePdfStepId,
   NativePdfStepInstructions,
   NativePdfUnitAction,
@@ -173,6 +175,13 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
       const startedAt = Date.now();
       setProgress({ startedAt, ...progressAt(1) });
       const pieces: FormattedDocumentRun[] = [];
+      // What the document's earlier pages settled (language, names); each
+      // request adds to it and the next one starts from the result.
+      // A brief settled for another language says nothing about this one.
+      let brief =
+        request.base?.targetLanguage === request.targetLanguage
+          ? request.base.brief
+          : undefined;
       let failure: unknown = null;
       // Every request of the batch writes into one run: the earlier
       // batches' when adding to them, otherwise a new one.
@@ -188,6 +197,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
               run,
               file,
               targetLanguage: request.targetLanguage,
+              brief,
               pages: formatPageSelection(pages),
               instructions: request.options.instructions,
               refitRounds: request.options.refitRounds,
@@ -221,6 +231,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
             answer = await translate(target);
           }
           const { report, totalTokens } = answer;
+          brief = report.brief ?? brief;
           pieces.push(
             runFromReport(report, {
               sourceUrl: request.sourceUrl,
@@ -261,6 +272,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
                 imagePages: stalePages(combined),
                 omitPages: removedPages(combined),
                 styles: combined.styles ?? {},
+                language: combined.brief?.language?.code,
                 instructions: {},
                 modelId,
                 conversationId,
@@ -301,10 +313,18 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
    *
    * @param check - Also run the layout check on the edited pages.
    * @param instructions - Step instructions; only the check's applies.
+   * @param exports - Editable formats to build with the PDF (EDITABLE
+   *   DOWNLOADS in nativePdf.ts).
+   * @returns The server's answer, or null when the render did not happen
+   *   or failed (the reason is then in `renderError`).
    */
   const rerender = useCallback(
-    async (check: boolean, instructions: NativePdfStepInstructions) => {
-      if (!run || !access || rendering) return;
+    async (
+      check: boolean,
+      instructions: NativePdfStepInstructions,
+      exports: NativePdfExportFormat[] = [],
+    ): Promise<NativePdfRenderReport | null> => {
+      if (!run || !access || rendering) return null;
       const abort = new AbortController();
       requestAbort.current = abort;
       setRendering(true);
@@ -321,6 +341,8 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
           imagePages: stalePages(run),
           omitPages: removedPages(run),
           styles: run.styles ?? {},
+          language: run.brief?.language?.code,
+          exports,
           instructions,
           modelId,
           conversationId,
@@ -343,8 +365,10 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
             styles: latest.styles,
           };
         });
+        return report;
       } catch (error) {
         if (!isAbort(error)) setRenderError(message(error));
+        return null;
       } finally {
         setRendering(false);
         onSpent?.();
@@ -377,6 +401,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
         const revised = await reviseNativePdfUnit({
           action,
           targetLanguage: run.targetLanguage,
+          brief: run.brief,
           source: unit.source,
           translation: current ?? '',
           instruction,
