@@ -35,6 +35,7 @@ import {
   NATIVE_PDF_MAX_PAGES,
   NATIVE_PDF_MAX_UNITS,
   nativePdfLimits,
+  sanitizeExportFormats,
   sanitizeStepInstructions,
 } from '@/lib/utils/shared/translation/nativePdf';
 
@@ -65,6 +66,10 @@ interface RenderRequest {
   imagePages?: unknown;
   /** Source pages to leave out of the PDF. */
   omitPages?: unknown;
+  /** The target language's tag (the run's `brief.language.code`), for hyphenation. */
+  language?: unknown;
+  /** Editable formats to build beside the PDF: any of NATIVE_PDF_EXPORT_FORMATS. */
+  exports?: unknown;
   instructions?: unknown;
   modelId?: string;
   conversationId?: unknown;
@@ -103,7 +108,9 @@ function parseUnitsIds(body: RenderRequest): string[] | null {
  * `imagePages`, `styles` (unit id to `size`, `color`, `dx`, `dy`; anything
  * invalid is dropped), `omitPages` (source pages to leave out of the PDF; 400
  * `NO_PAGES_LEFT` when that is every page), `instructions` (only `verify` applies), `modelId`,
- * `conversationId`, and the run's `runId` and `storage` (with its key in
+ * `conversationId`, `exports` (editable formats to build with the PDF, see
+ * EDITABLE DOWNLOADS in nativePdf.ts; the answer's `exportUrls` then says
+ * where each is served from), and the run's `runId` and `storage` (with its key in
  * the RUN_KEY_HEADER header when it is encrypted). 404 `RUN_FILES_MISSING`
  * when the run's files are gone: expired from app storage, or deleted.
  *
@@ -212,19 +219,22 @@ export async function POST(req: NextRequest) {
   if (denied) return denied;
 
   try {
-    const { pdf, outputs, unitsFile, ...report } = await rerenderNativePdf({
-      document,
-      unitsFiles,
-      translations,
-      checkPages,
-      imagePages,
-      omitPages,
-      styles: body.styles,
-      maxDocumentPages: limits.maxDocumentPages,
-      instructions: sanitizeStepInstructions(body.instructions),
-      modelId: resolveWorkflowModelId(body.modelId),
-      usage,
-    });
+    const { pdf, outputs, exports, unitsFile, ...report } =
+      await rerenderNativePdf({
+        document,
+        unitsFiles,
+        translations,
+        checkPages,
+        imagePages,
+        omitPages,
+        styles: body.styles,
+        language: body.language,
+        exports: sanitizeExportFormats(body.exports),
+        maxDocumentPages: limits.maxDocumentPages,
+        instructions: sanitizeStepInstructions(body.instructions),
+        modelId: resolveWorkflowModelId(body.modelId),
+        usage,
+      });
     // Several extractions were combined: the combination is stored so the
     // next re-render sends one id. A single one is already stored.
     const unitsId =
@@ -234,7 +244,7 @@ export async function POST(req: NextRequest) {
     return successResponse({
       ...report,
       unitsId,
-      ...(await store.putRebuild({ pdf, outputs })),
+      ...(await store.putRebuild({ pdf, outputs, exports })),
       ...usage.fields(),
     });
   } catch (error) {
