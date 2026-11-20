@@ -111,6 +111,7 @@ import {
   stampSelectionAnchors,
 } from '@/lib/utils/shared/translation/changeRequest';
 import {
+  documentUnitOf,
   fileExtensionOf,
   leaveDocumentReader,
   showDocumentPage,
@@ -125,6 +126,7 @@ import {
   DEFAULT_FORMATTED_OPTIONS,
   FormattedDocumentOptions,
   FormattedDocumentRun,
+  FormattedPendingJob,
   TranslationDocumentLayout,
   formattedEligibility,
   planBatch,
@@ -137,6 +139,13 @@ import {
   findTranslationLanguage,
   translationLanguageLabel,
 } from '@/lib/utils/shared/translation/languages';
+import {
+  NATIVE_SOURCE_CONTENT_TYPES,
+  isNativeDeckUpload,
+  nativeFormatOfFileId,
+  slidesPdfUrl,
+  storedFileName,
+} from '@/lib/utils/shared/translation/nativeFormats';
 import {
   FALLBACK_NATIVE_PDF_LIMITS,
   NATIVE_PDF_DEFAULT_DEPTH,
@@ -169,7 +178,8 @@ import {
 
 import {
   TRANSLATION_PAGES_LIMIT_KEY,
-  supportsPagedText,
+  isPresentationExtension,
+  supportsWholeDocument,
 } from '@/types/documentTranslation';
 import type { M365DriveEntry } from '@/types/m365';
 import {
@@ -218,10 +228,15 @@ import {
 } from './Formatted/FormattedRunStorageNotice';
 import { EarlierTranslation, FormattedSetup } from './Formatted/FormattedSetup';
 import { TranslationOptionsBar } from './Formatted/TranslationOptionsBar';
+import {
+  FormattedUnit,
+  FormattedUnitProvider,
+} from './Formatted/formattedWording';
 import { GlossaryManager } from './GlossaryManager';
 import { GlossaryPicker, languageFit } from './GlossaryPicker';
 import { OcrOffer, OcrOfferReason } from './OcrOffer';
 import { SelectionChangeRequest } from './SelectionChangeRequest';
+import { SlideNotes } from './SlideNotes';
 import { SourceDocumentCard } from './SourceDocumentCard';
 import { SourcePageSelector } from './SourcePageSelector';
 import { SourcePageSheets } from './SourcePageSheets';
@@ -293,6 +308,12 @@ export function TranslationWorkspace({
   const glossaries = useSettingsStore((s) => s.glossaries);
   const addGlossary = useSettingsStore((s) => s.addGlossary);
   const customLanguages = useSettingsStore((s) => s.customLanguages);
+  const translateSpeakerNotes = useSettingsStore(
+    (s) => s.translateSpeakerNotes,
+  );
+  const setTranslateSpeakerNotes = useSettingsStore(
+    (s) => s.setTranslateSpeakerNotes,
+  );
   const addCustomLanguage = useSettingsStore((s) => s.addCustomLanguage);
   const autoClearResolvedEdits = useSettingsStore(
     (s) => s.autoClearResolvedEdits,
@@ -627,6 +648,11 @@ export function TranslationWorkspace({
     documentJob?.status === 'preparing';
   // The reader has pages to show: the panes show a page, not the source text.
   const readingDocument = documentMode && documentJob?.status === 'ready';
+  // Pages, or a presentation's slides: the job's file once there is one.
+  const documentUnit = documentUnitOf(
+    documentJob?.sourceName ?? state?.sourceDocument?.name,
+  );
+  const onSlides = documentUnit === 'slide';
   /** The reader's page is loaded and is the text in the translation pane. */
   const pageInPane =
     readingDocument &&
@@ -896,7 +922,7 @@ export function TranslationWorkspace({
     if (
       !sourceDocument &&
       extracted.url &&
-      supportsPagedText(fileExtensionOf(extracted.name))
+      supportsWholeDocument(fileExtensionOf(extracted.name))
     ) {
       sourceDocument = {
         name: extracted.name,
@@ -988,7 +1014,7 @@ export function TranslationWorkspace({
      * (when the server has it) or translated whole.
      */
     const offerOcr = (url: string | undefined, available: boolean) => {
-      if (!url || !supportsPagedText(fileExtensionOf(file.name))) return false;
+      if (!url || fileExtensionOf(file.name) !== 'pdf') return false;
       uploadedFileRef.current = { url, file };
       setOcrOffer({
         name: file.name,
@@ -1939,7 +1965,12 @@ export function TranslationWorkspace({
         kept?.url === source.url
           ? kept.file
           : await fetchStoredFile(source.url, source.name);
-      const pending = await submitDocumentTranslation(file, languageCode);
+      const pending = await submitDocumentTranslation(
+        file,
+        languageCode,
+        undefined,
+        { translateNotes: translateSpeakerNotes },
+      );
       setEditingTarget(false);
       updateWorkflowState(conversationId, (prev) => {
         const p = prev as TranslationWorkflowState;
@@ -1966,7 +1997,11 @@ export function TranslationWorkspace({
       const known = error instanceof DocumentJobError ? error : undefined;
       setDocumentError(
         known?.status === 429
-          ? t('translation.documentLimitReached')
+          ? t(
+              onSlides
+                ? 'translation.slides.limitReached'
+                : 'translation.documentLimitReached',
+            )
           : known?.code === 'SERVICE_NOT_CONFIGURED'
             ? t('translation.documentUnavailable')
             : t('translation.documentSubmitFailed', {
@@ -2039,6 +2074,10 @@ export function TranslationWorkspace({
   const formattedSource = state?.sourceDocument;
   const formattedSourceUrl = formattedSource?.url;
   const formattedSourceName = formattedSource?.name ?? '';
+  /** The formatted screens speak of slides for a presentation. */
+  const formattedUnit: FormattedUnit = isNativeDeckUpload(formattedSourceName)
+    ? 'slide'
+    : 'page';
   const formattedCheck = formattedEligibility(
     formattedSource,
     targetLanguage?.label,
@@ -2063,15 +2102,30 @@ export function TranslationWorkspace({
     if (stored) {
       try {
         const bytes = await fetchRunFile(runFileUrl(stored, stored.sourceId));
-        return new File([new Uint8Array(bytes)], formattedSourceName, {
-          type: 'application/pdf',
-        });
+        // Named as stored: a .ppt's copy is the converted .pptx.
+        const format = nativeFormatOfFileId(stored.sourceId) ?? 'pdf';
+        return new File(
+          [new Uint8Array(bytes)],
+          storedFileName(formattedSourceName, format),
+          { type: NATIVE_SOURCE_CONTENT_TYPES[format] },
+        );
       } catch {
         // Fall through to the upload.
       }
     }
     return fetchStoredFile(formattedSourceUrl, formattedSourceName);
   }, [formattedSourceUrl, formattedSourceName]);
+  /**
+   * The pages the setup and review show: the document itself, or for a
+   * presentation its slides laid out as a PDF by the server (slidesPdfUrl).
+   */
+  const loadFormattedPages = useCallback(async (): Promise<File> => {
+    if (!formattedSourceUrl) throw new Error('No document is loaded');
+    if (!isNativeDeckUpload(formattedSourceName)) return loadFormattedFile();
+    const slides = slidesPdfUrl(formattedSourceUrl);
+    if (!slides) throw new Error('These slides cannot be shown');
+    return fetchStoredFile(slides, `${formattedSourceName}.pdf`);
+  }, [formattedSourceUrl, formattedSourceName, loadFormattedFile]);
   /** The setup and review screens need a PDF to show; a blocker hides them. */
   const formattedHasPdf =
     formattedMode &&
@@ -2079,7 +2133,7 @@ export function TranslationWorkspace({
     !uploading &&
     (formattedCheck.ok || formattedCheck.reason === 'no-language');
   const pdfPages = usePdfPages(
-    loadFormattedFile,
+    loadFormattedPages,
     formattedHasPdf ? (formattedSourceUrl ?? null) : null,
     // A stored run opens on its translated pages: the source is needed only
     // to look at the original or at untranslated pages, so it loads then.
@@ -2114,12 +2168,24 @@ export function TranslationWorkspace({
     state,
     backend: formattedBackend,
   });
+  // A presentation translating in the background belongs to its document.
+  const formattedPendingJob =
+    state?.formattedPendingJob?.sourceUrl === formattedSourceUrl
+      ? state?.formattedPendingJob
+      : undefined;
+  const setFormattedPendingJob = useCallback(
+    (job: FormattedPendingJob | undefined) =>
+      patchState({ formattedPendingJob: job }),
+    [patchState],
+  );
   const formatted = useFormattedDocument({
     conversationId,
     run: formattedStorage.run,
     access: formattedRunRef,
     setRun: setFormattedRun,
     updateRun: updateFormattedRun,
+    pendingJob: formattedPendingJob,
+    setPendingJob: setFormattedPendingJob,
     glossaries: {
       glossaryEntries: activeGlossaryEntries,
       glossaryGuideIds: selectedOrgIds,
@@ -2193,6 +2259,7 @@ export function TranslationWorkspace({
         requestPages: formattedService?.maxPages,
         base: formattedAdding ? formattedRun : undefined,
         backend: formattedBackend,
+        translateNotes: translateSpeakerNotes,
       })
       .then(() => {
         // The typed selection named this batch's pages; the next batch
@@ -2226,6 +2293,7 @@ export function TranslationWorkspace({
       requestPages: formattedService?.maxPages,
       base: formattedRun,
       backend: formattedBackend,
+      translateNotes: translateSpeakerNotes,
     });
   };
   /** Opens the setup to add pages, or to start over when none can be added. */
@@ -2301,6 +2369,12 @@ export function TranslationWorkspace({
       mode: next === 'document' ? 'document' : rememberedTextMode,
     });
   };
+  // A presentation's speaker notes are translated unless the person said
+  // otherwise; the choice is remembered (settingsStore).
+  const sourceIsPresentation =
+    !!state.sourceDocument?.name &&
+    isPresentationExtension(fileExtensionOf(state.sourceDocument.name));
+
   // A PDF loaded into Text is translated as extracted text; Document keeps
   // its pages. The offer is made once per document.
   const pdfLoadedAsText =
@@ -2330,7 +2404,7 @@ export function TranslationWorkspace({
     !anyDocumentMode && analysisHidden && hasPaperTrail(state);
   const formattedBlockerKey: Record<string, string> = {
     'no-document': 'translation.formatted.needsFile',
-    'not-pdf': 'translation.formatted.needsPdf',
+    'unsupported-format': 'translation.formatted.needsSupportedFile',
     'no-language': 'translation.documentNeedsLanguage',
   };
   // A missing language is said beside the language control itself (see
@@ -2346,609 +2420,701 @@ export function TranslationWorkspace({
   const reviewVerdict = lastReviewVerdict(state.rounds);
 
   return (
-    <div ref={setRoot} className="flex h-full min-h-0 flex-col">
-      {/* Controls bar */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-gray-200 px-3 py-2 dark:border-gray-700">
-        <button
-          ref={langButtonRef}
-          type="button"
-          onClick={() => setLangPickerOpen((open) => !open)}
-          disabled={isRunning}
-          data-needs-language={languageMissing || undefined}
-          aria-describedby={languageMissing ? languageHintId : undefined}
-          className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm disabled:opacity-50 ${
-            languageMissing
-              ? `border-amber-500 bg-amber-50 font-medium text-amber-900 hover:bg-amber-100 dark:border-amber-400 dark:bg-amber-900/20 dark:text-amber-200 dark:hover:bg-amber-900/30 ${
-                  languageAsked
-                    ? 'ring-2 ring-amber-500 ring-offset-1 dark:ring-amber-400 dark:ring-offset-surface-dark'
-                    : ''
-                }`
-              : 'border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-surface-dark-elevated'
-          }`}
-        >
-          <IconLanguage size={15} aria-hidden />
-          {targetLanguage?.label ?? t('translation.chooseLanguage')}
-        </button>
-        {languageMissing && (
-          <span
-            id={languageHintId}
-            role={languageAsked ? 'alert' : undefined}
-            className={`text-xs text-amber-700 dark:text-amber-400 ${
-              languageAsked ? 'font-medium' : ''
+    <FormattedUnitProvider unit={formattedUnit}>
+      <div ref={setRoot} className="flex h-full min-h-0 flex-col">
+        {/* Controls bar */}
+        <div className="flex flex-wrap items-center gap-2 border-b border-gray-200 px-3 py-2 dark:border-gray-700">
+          <button
+            ref={langButtonRef}
+            type="button"
+            onClick={() => setLangPickerOpen((open) => !open)}
+            disabled={isRunning}
+            data-needs-language={languageMissing || undefined}
+            aria-describedby={languageMissing ? languageHintId : undefined}
+            className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm disabled:opacity-50 ${
+              languageMissing
+                ? `border-amber-500 bg-amber-50 font-medium text-amber-900 hover:bg-amber-100 dark:border-amber-400 dark:bg-amber-900/20 dark:text-amber-200 dark:hover:bg-amber-900/30 ${
+                    languageAsked
+                      ? 'ring-2 ring-amber-500 ring-offset-1 dark:ring-amber-400 dark:ring-offset-surface-dark'
+                      : ''
+                  }`
+                : 'border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-surface-dark-elevated'
             }`}
           >
-            {t('translation.languageNeeded')}
-          </span>
-        )}
-        <LanguagePicker
-          triggerRef={langButtonRef}
-          isOpen={langPickerOpen}
-          onClose={() => setLangPickerOpen(false)}
-          options={languageOptions}
-          value={targetLanguage?.id ?? null}
-          onSelect={(code) => {
-            if (code) selectTargetById(code);
-            setLangPickerOpen(false);
-          }}
-          onCreateOption={handleCreateLanguage}
-          disabled={isRunning}
-        />
-
-        {/* One attachment control for organization + personal glossaries;
-            the popover sorts by fit with the current target language. */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => setGlossaryPickerOpen((open) => !open)}
-            aria-expanded={glossaryPickerOpen}
-            aria-haspopup="dialog"
-            // Whole-document translation does not take glossaries.
-            disabled={isRunning || documentMode}
-            title={
-              documentMode ? t('translation.documentNoGlossaries') : undefined
-            }
-            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm text-gray-700 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300"
-          >
-            <IconBook2 size={15} aria-hidden />
-            {t('translation.glossariesButton', {
-              count: String(selectedOrgIds.length + selectedPersonalIds.length),
-            })}
-            {glossaryLanguageMismatch && (
-              <span
-                className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
-                title={t('translation.glossaryLanguageMismatch')}
-              >
-                {t('translation.glossaryMismatchChip')}
-              </span>
-            )}
+            <IconLanguage size={15} aria-hidden />
+            {targetLanguage?.label ?? t('translation.chooseLanguage')}
           </button>
-          {glossaryPickerOpen && (
-            <GlossaryPicker
-              orgGlossaries={terminologyGuides}
-              personalGlossaries={glossaries}
-              selectedOrgIds={selectedOrgIds}
-              selectedPersonalIds={selectedPersonalIds}
-              staleOrgIds={staleOrgIds}
-              stalePersonalIds={stalePersonalIds}
-              targetLangId={targetLanguage?.id}
-              onToggleOrg={toggleOrgGlossary}
-              onTogglePersonal={togglePersonalGlossary}
-              onCopyToMine={copyOrgGlossaryToMine}
-              onManage={() => {
-                setGlossaryPickerOpen(false);
-                setGlossariesOpen(true);
-                setCriteriaOpen(false);
-              }}
-              onClose={() => setGlossaryPickerOpen(false)}
-              disabled={isRunning}
-            />
-          )}
-        </div>
-
-        <button
-          type="button"
-          onClick={() => {
-            setGlossariesOpen((open) => !open);
-            setCriteriaOpen(false);
-          }}
-          aria-pressed={glossariesOpen}
-          className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
-        >
-          <IconBook2 size={15} aria-hidden />
-          {t('translation.manageGlossaries')}
-        </button>
-
-        {/* Two managers share the bottom slot, so opening one closes the
-            other rather than stacking two 72-tall panes. */}
-        <button
-          type="button"
-          onClick={() => {
-            setCriteriaOpen((open) => !open);
-            setGlossariesOpen(false);
-          }}
-          aria-pressed={criteriaOpen}
-          className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
-        >
-          <IconAdjustments size={15} aria-hidden />
-          {translationCriteria.length > 0
-            ? t('translation.manageCriteria')
-            : t('translation.addCriteria')}
-        </button>
-
-        {/* Text or Document; Quick / Reviewed sit in the row beneath. */}
-        <div
-          role="radiogroup"
-          aria-label={t('translation.kind')}
-          className="ms-auto flex rounded-lg bg-gray-100 p-0.5 dark:bg-surface-dark-elevated"
-        >
-          {TRANSLATION_KINDS.map((option) => (
-            <button
-              key={option}
-              role="radio"
-              aria-checked={kind === option}
-              onClick={() => changeKind(option)}
-              disabled={isRunning || assessing || formatted.running}
-              title={
-                option === 'text'
-                  ? t('translation.kindTextHint')
-                  : t('translation.modeDocumentHint')
-              }
-              className={`rounded-md px-2.5 py-1 text-xs font-medium disabled:opacity-50 ${
-                kind === option
-                  ? 'bg-white text-gray-900 dark:bg-surface-dark dark:text-gray-100'
-                  : 'text-gray-600 dark:text-gray-400'
+          {languageMissing && (
+            <span
+              id={languageHintId}
+              role={languageAsked ? 'alert' : undefined}
+              className={`text-xs text-amber-700 dark:text-amber-400 ${
+                languageAsked ? 'font-medium' : ''
               }`}
             >
-              {option === 'text'
-                ? t('translation.kindText')
-                : t('translation.modeDocument')}
-            </button>
-          ))}
-        </div>
-
-        {/* What this run will cost, while quick/agentic is still a choice. */}
-        {documentMode && pagesBudget && (
-          <span className="text-xs tabular-nums text-gray-500 dark:text-gray-400">
-            {t('translation.documentPagesLeft', {
-              count: pagesBudget.remaining,
-            })}
-          </span>
-        )}
-        {!isRunning && !anyDocumentMode && (
-          <RunEstimateHint
-            model={conversation?.model}
-            sourceText={state.sourceText}
-            // Quick is one pass. Agentic adds the analysis pass and up to
-            // MAX_REVIEW_ROUNDS reviews, each re-reading source + draft —
-            // an upper bound, since the loop stops early on approval.
-            passes={
-              state.mode === 'agentic' ? AGENTIC_TRANSLATION_MAX_PASSES : 1
-            }
-            atMost={state.mode === 'agentic'}
+              {t('translation.languageNeeded')}
+            </span>
+          )}
+          <LanguagePicker
+            triggerRef={langButtonRef}
+            isOpen={langPickerOpen}
+            onClose={() => setLangPickerOpen(false)}
+            options={languageOptions}
+            value={targetLanguage?.id ?? null}
+            onSelect={(code) => {
+              if (code) selectTargetById(code);
+              setLangPickerOpen(false);
+            }}
+            onCreateOption={handleCreateLanguage}
+            disabled={isRunning}
           />
-        )}
 
-        {isRunning && (
-          <span className="text-xs text-gray-500 dark:text-gray-400">
-            {runStage === 'reviewing' &&
-              run?.activityParams?.round &&
-              run.activityParams.total && (
-                <>
-                  {t('translation.runRound', {
-                    round: run.activityParams.round,
-                    total: run.activityParams.total,
-                  })}
-                  {' · '}
-                </>
-              )}
-            <ElapsedTime />
-          </span>
-        )}
-
-        {formattedMode ? (
-          formatted.running ? (
+          {/* One attachment control for organization + personal glossaries;
+            the popover sorts by fit with the current target language. */}
+          <div className="relative">
             <button
               type="button"
-              onClick={formatted.stop}
+              onClick={() => setGlossaryPickerOpen((open) => !open)}
+              aria-expanded={glossaryPickerOpen}
+              aria-haspopup="dialog"
+              // Whole-document translation does not take glossaries.
+              disabled={isRunning || documentMode}
+              title={
+                documentMode ? t('translation.documentNoGlossaries') : undefined
+              }
+              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm text-gray-700 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300"
+            >
+              <IconBook2 size={15} aria-hidden />
+              {t('translation.glossariesButton', {
+                count: String(
+                  selectedOrgIds.length + selectedPersonalIds.length,
+                ),
+              })}
+              {glossaryLanguageMismatch && (
+                <span
+                  className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
+                  title={t('translation.glossaryLanguageMismatch')}
+                >
+                  {t('translation.glossaryMismatchChip')}
+                </span>
+              )}
+            </button>
+            {glossaryPickerOpen && (
+              <GlossaryPicker
+                orgGlossaries={terminologyGuides}
+                personalGlossaries={glossaries}
+                selectedOrgIds={selectedOrgIds}
+                selectedPersonalIds={selectedPersonalIds}
+                staleOrgIds={staleOrgIds}
+                stalePersonalIds={stalePersonalIds}
+                targetLangId={targetLanguage?.id}
+                onToggleOrg={toggleOrgGlossary}
+                onTogglePersonal={togglePersonalGlossary}
+                onCopyToMine={copyOrgGlossaryToMine}
+                onManage={() => {
+                  setGlossaryPickerOpen(false);
+                  setGlossariesOpen(true);
+                  setCriteriaOpen(false);
+                }}
+                onClose={() => setGlossaryPickerOpen(false)}
+                disabled={isRunning}
+              />
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              setGlossariesOpen((open) => !open);
+              setCriteriaOpen(false);
+            }}
+            aria-pressed={glossariesOpen}
+            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+          >
+            <IconBook2 size={15} aria-hidden />
+            {t('translation.manageGlossaries')}
+          </button>
+
+          {/* Two managers share the bottom slot, so opening one closes the
+            other rather than stacking two 72-tall panes. */}
+          <button
+            type="button"
+            onClick={() => {
+              setCriteriaOpen((open) => !open);
+              setGlossariesOpen(false);
+            }}
+            aria-pressed={criteriaOpen}
+            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+          >
+            <IconAdjustments size={15} aria-hidden />
+            {translationCriteria.length > 0
+              ? t('translation.manageCriteria')
+              : t('translation.addCriteria')}
+          </button>
+
+          {/* Text or Document; Quick / Reviewed sit in the row beneath. */}
+          <div
+            role="radiogroup"
+            aria-label={t('translation.kind')}
+            className="ms-auto flex rounded-lg bg-gray-100 p-0.5 dark:bg-surface-dark-elevated"
+          >
+            {TRANSLATION_KINDS.map((option) => (
+              <button
+                key={option}
+                role="radio"
+                aria-checked={kind === option}
+                onClick={() => changeKind(option)}
+                disabled={isRunning || assessing || formatted.running}
+                title={
+                  option === 'text'
+                    ? t('translation.kindTextHint')
+                    : t('translation.modeDocumentHint')
+                }
+                className={`rounded-md px-2.5 py-1 text-xs font-medium disabled:opacity-50 ${
+                  kind === option
+                    ? 'bg-white text-gray-900 dark:bg-surface-dark dark:text-gray-100'
+                    : 'text-gray-600 dark:text-gray-400'
+                }`}
+              >
+                {option === 'text'
+                  ? t('translation.kindText')
+                  : t('translation.modeDocument')}
+              </button>
+            ))}
+          </div>
+
+          {/* What this run will cost, while quick/agentic is still a choice. */}
+          {documentMode && pagesBudget && (
+            <span className="text-xs tabular-nums text-gray-500 dark:text-gray-400">
+              {t('translation.documentPagesLeft', {
+                count: pagesBudget.remaining,
+              })}
+            </span>
+          )}
+          {!isRunning && !anyDocumentMode && (
+            <RunEstimateHint
+              model={conversation?.model}
+              sourceText={state.sourceText}
+              // Quick is one pass. Agentic adds the analysis pass and up to
+              // MAX_REVIEW_ROUNDS reviews, each re-reading source + draft —
+              // an upper bound, since the loop stops early on approval.
+              passes={
+                state.mode === 'agentic' ? AGENTIC_TRANSLATION_MAX_PASSES : 1
+              }
+              atMost={state.mode === 'agentic'}
+            />
+          )}
+
+          {isRunning && (
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {runStage === 'reviewing' &&
+                run?.activityParams?.round &&
+                run.activityParams.total && (
+                  <>
+                    {t('translation.runRound', {
+                      round: run.activityParams.round,
+                      total: run.activityParams.total,
+                    })}
+                    {' · '}
+                  </>
+                )}
+              <ElapsedTime />
+            </span>
+          )}
+
+          {formattedMode ? (
+            formatted.running ? (
+              <button
+                type="button"
+                onClick={formatted.stop}
+                className="inline-flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg border border-gray-400 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-100 dark:border-gray-500 dark:text-white dark:hover:bg-surface-dark-elevated"
+              >
+                <IconPlayerStopFilled size={14} aria-hidden />
+                {t('translation.stop')}
+              </button>
+            ) : showFormattedReview ? (
+              <button
+                type="button"
+                onClick={openFormattedSetup}
+                className={
+                  formattedCanAdd
+                    ? 'min-h-[36px] rounded-lg bg-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-400 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated'
+                    : 'min-h-[36px] rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-surface-dark-elevated'
+                }
+              >
+                {formattedCanAdd
+                  ? t('translation.formatted.addPages')
+                  : t('translation.formatted.translateAgain')}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() =>
+                  targetLanguage
+                    ? guardBudget(startFormatted, 'run')
+                    : askForLanguage()
+                }
+                disabled={!formattedReady}
+                className="min-h-[36px] rounded-lg bg-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
+              >
+                {t(
+                  formattedUnit === 'slide'
+                    ? 'translation.formatted.slides.translatePages'
+                    : 'translation.formatted.translatePages',
+                  { count: formattedSelectedCount },
+                )}
+              </button>
+            )
+          ) : isRunning ? (
+            <button
+              type="button"
+              onClick={() => cancelRun(conversationId)}
+              aria-label={t('shell.stopGenerating')}
               className="inline-flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg border border-gray-400 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-100 dark:border-gray-500 dark:text-white dark:hover:bg-surface-dark-elevated"
             >
               <IconPlayerStopFilled size={14} aria-hidden />
               {t('translation.stop')}
             </button>
-          ) : showFormattedReview ? (
+          ) : documentMode ? (
             <button
               type="button"
-              onClick={openFormattedSetup}
-              className={
-                formattedCanAdd
-                  ? 'min-h-[36px] rounded-lg bg-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-400 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated'
-                  : 'min-h-[36px] rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-surface-dark-elevated'
+              onClick={() =>
+                targetLanguage
+                  ? guardBudget(handleTranslateDocument, 'run')
+                  : askForLanguage()
               }
+              disabled={!canTranslateDocument}
+              className="min-h-[36px] rounded-lg bg-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
             >
-              {formattedCanAdd
-                ? t('translation.formatted.addPages')
-                : t('translation.formatted.translateAgain')}
+              {submittingDocument
+                ? t('translation.documentSubmitting')
+                : t('translation.translateDocument')}
             </button>
           ) : (
             <button
               type="button"
               onClick={() =>
                 targetLanguage
-                  ? guardBudget(startFormatted, 'run')
+                  ? guardBudget(() => void handleTranslate(), 'run')
                   : askForLanguage()
               }
-              disabled={!formattedReady}
+              disabled={!textReady || tooLong}
               className="min-h-[36px] rounded-lg bg-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
             >
-              {t('translation.formatted.translatePages', {
-                count: formattedSelectedCount,
-              })}
+              {t('translation.translate')}
             </button>
-          )
-        ) : isRunning ? (
-          <button
-            type="button"
-            onClick={() => cancelRun(conversationId)}
-            aria-label={t('shell.stopGenerating')}
-            className="inline-flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg border border-gray-400 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-100 dark:border-gray-500 dark:text-white dark:hover:bg-surface-dark-elevated"
-          >
-            <IconPlayerStopFilled size={14} aria-hidden />
-            {t('translation.stop')}
-          </button>
-        ) : documentMode ? (
-          <button
-            type="button"
-            onClick={() =>
-              targetLanguage
-                ? guardBudget(handleTranslateDocument, 'run')
-                : askForLanguage()
-            }
-            disabled={!canTranslateDocument}
-            className="min-h-[36px] rounded-lg bg-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
-          >
-            {submittingDocument
-              ? t('translation.documentSubmitting')
-              : t('translation.translateDocument')}
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() =>
-              targetLanguage
-                ? guardBudget(() => void handleTranslate(), 'run')
-                : askForLanguage()
-            }
-            disabled={!textReady || tooLong}
-            className="min-h-[36px] rounded-lg bg-gray-300 px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
-          >
-            {t('translation.translate')}
-          </button>
+          )}
+        </div>
+
+        <TranslationOptionsBar
+          kind={kind}
+          layout={
+            formattedService?.enabled
+              ? (state.documentLayout ?? DEFAULT_DOCUMENT_LAYOUT)
+              : undefined
+          }
+          depth={
+            formattedMode
+              ? formattedDepth
+              : documentMode
+                ? undefined
+                : textMode === 'agentic'
+                  ? 'reviewed'
+                  : 'quick'
+          }
+          disabled={
+            isRunning ||
+            assessing ||
+            submittingDocument ||
+            formatted.running ||
+            formatted.rendering ||
+            (pageInPane && hasUnresolvedEdits)
+          }
+          onLayoutChange={changeDocumentLayout}
+          onDepthChange={(depth) =>
+            anyDocumentMode
+              ? patchState({ documentDepth: depth })
+              : changeMode(depth === 'reviewed' ? 'agentic' : 'quick')
+          }
+          speakerNotes={
+            // Both layouts translate a presentation's notes when asked.
+            anyDocumentMode && sourceIsPresentation
+              ? {
+                  checked: translateSpeakerNotes,
+                  onChange: setTranslateSpeakerNotes,
+                }
+              : undefined
+          }
+        />
+
+        {pdfLoadedAsText &&
+          state.sourceDocument?.url !== dismissedDocumentOffer &&
+          !isRunning && (
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-gray-200 px-3 py-2 text-xs dark:border-gray-700">
+              <span className="text-gray-700 dark:text-gray-300">
+                {t('translation.pdfAsTextOffer', {
+                  name: state.sourceDocument?.name ?? '',
+                })}
+              </span>
+              <button
+                type="button"
+                onClick={() => changeKind('document')}
+                className="rounded-lg border border-gray-300 px-2 py-0.5 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+              >
+                {t('translation.pdfAsTextSwitch')}
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setDismissedDocumentOffer(state.sourceDocument?.url ?? null)
+                }
+                className="text-gray-500 hover:underline dark:text-gray-400"
+              >
+                {t('translation.pdfAsTextKeep')}
+              </button>
+            </div>
+          )}
+
+        {formattedMode &&
+          (formattedBlocker || formatted.runError || formatted.busyWith) && (
+            <div className="border-b border-gray-200 px-3 py-2 dark:border-gray-700">
+              {formattedBlocker && (
+                <p className="text-sm text-amber-700 dark:text-amber-400">
+                  {formattedBlocker}
+                </p>
+              )}
+              {formatted.busyWith !== null && (
+                <p
+                  className="text-sm text-amber-700 dark:text-amber-400"
+                  role="alert"
+                >
+                  {t('translation.formatted.deckRunActive', {
+                    name: formatted.busyWith,
+                  })}
+                </p>
+              )}
+              {formatted.runError && (
+                <p
+                  className="text-sm text-red-700 dark:text-red-400"
+                  role="alert"
+                >
+                  {t('translation.formatted.runFailed', {
+                    message: formatted.runError,
+                  })}
+                </p>
+              )}
+              {formatted.runError && formattedUnit === 'slide' && (
+                // A presentation that cannot keep its formatting can still
+                // be translated whole by the document service.
+                <button
+                  type="button"
+                  onClick={() => {
+                    formatted.clearRunError();
+                    changeDocumentLayout('text');
+                  }}
+                  className="mt-1 text-sm font-medium text-blue-700 hover:underline dark:text-blue-300"
+                >
+                  {t('translation.formatted.slides.useTextOnly')}
+                </button>
+              )}
+            </div>
+          )}
+
+        {/* Status / errors */}
+        {(run?.error ||
+          tooLong ||
+          uploadError ||
+          targetLanguage?.custom ||
+          (documentMode &&
+            (documentError ||
+              ignoredGlossaryCount > 0 ||
+              (documentBlocker && !documentJob)))) && (
+          <div className="border-b border-gray-200 px-3 py-2 dark:border-gray-700">
+            {targetLanguage?.custom && (
+              <p className="text-xs text-amber-700 dark:text-amber-400">
+                {t('translation.customLanguageHint', {
+                  name: targetLanguage.label,
+                })}
+              </p>
+            )}
+            {run?.error && (
+              <p
+                className="text-sm text-red-700 dark:text-red-400"
+                role="alert"
+              >
+                {t('document.runFailed', { message: run.error })}
+              </p>
+            )}
+            {tooLong && (
+              <p className="text-sm text-amber-700 dark:text-amber-400">
+                {t('translation.tooLong', {
+                  max: String(MAX_SOURCE_CHARS),
+                })}
+              </p>
+            )}
+            {uploadError && (
+              <p
+                className="text-sm text-red-700 dark:text-red-400"
+                role="alert"
+              >
+                {uploadError}
+              </p>
+            )}
+            {documentMode && ignoredGlossaryCount > 0 && (
+              <p className="text-xs text-amber-700 dark:text-amber-400">
+                {t('translation.documentGlossariesIgnored', {
+                  count: ignoredGlossaryCount,
+                })}
+              </p>
+            )}
+            {documentMode && documentBlocker && !documentJob && (
+              <p className="text-sm text-amber-700 dark:text-amber-400">
+                {documentBlocker}
+              </p>
+            )}
+            {documentMode && documentError && (
+              <p
+                className="text-sm text-red-700 dark:text-red-400"
+                role="alert"
+              >
+                {documentError}
+              </p>
+            )}
+          </div>
         )}
-      </div>
 
-      <TranslationOptionsBar
-        kind={kind}
-        layout={
-          formattedService?.enabled
-            ? (state.documentLayout ?? DEFAULT_DOCUMENT_LAYOUT)
-            : undefined
-        }
-        depth={
-          formattedMode
-            ? formattedDepth
-            : documentMode
-              ? undefined
-              : textMode === 'agentic'
-                ? 'reviewed'
-                : 'quick'
-        }
-        disabled={
-          isRunning ||
-          assessing ||
-          submittingDocument ||
-          formatted.running ||
-          formatted.rendering ||
-          (pageInPane && hasUnresolvedEdits)
-        }
-        onLayoutChange={changeDocumentLayout}
-        onDepthChange={(depth) =>
-          anyDocumentMode
-            ? patchState({ documentDepth: depth })
-            : changeMode(depth === 'reviewed' ? 'agentic' : 'quick')
-        }
-      />
+        {readingDocument && documentJob && (
+          <DocumentReaderBar
+            key={`${documentJob.jobId}:${documentJob.page}`}
+            job={documentJob}
+            correctedPages={reader.correctedPages}
+            saveState={reader.saveState}
+            disabled={assessing}
+            onGoToPage={(page) => requestLeavePage({ page })}
+            unit={documentUnit}
+            hidden={reader.page?.hidden}
+          />
+        )}
+        {readingDocument && !reader.pagesAligned && (
+          <p className="border-b border-gray-200 px-3 py-1.5 text-xs text-amber-700 dark:border-gray-700 dark:text-amber-400">
+            {t(
+              onSlides
+                ? 'translation.slides.notAligned'
+                : 'translation.documentPagesNotAligned',
+            )}
+          </p>
+        )}
+        {readingDocument &&
+          fileExtensionOf(state.sourceDocument?.name ?? '') === 'ppt' && (
+            <p className="border-b border-gray-200 px-3 py-1.5 text-xs text-gray-600 dark:border-gray-700 dark:text-gray-400">
+              {t('translation.slides.converted')}
+            </p>
+          )}
+        {readingDocument && onSlides && reader.page && (
+          <SlideNotes
+            key={reader.page.page}
+            source={reader.page.sourceNotes}
+            translation={reader.page.translationNotes}
+          />
+        )}
 
-      {pdfLoadedAsText &&
-        state.sourceDocument?.url !== dismissedDocumentOffer &&
-        !isRunning && (
+        {sparseTextHint && canOfferOcr && !ocrOffer && !uploading && (
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-gray-200 px-3 py-2 text-xs dark:border-gray-700">
-            <span className="text-gray-700 dark:text-gray-300">
-              {t('translation.pdfAsTextOffer', {
-                name: state.sourceDocument?.name ?? '',
-              })}
+            <span className="text-amber-700 dark:text-amber-400">
+              {t('translation.ocrSparseHint')}
             </span>
             <button
               type="button"
-              onClick={() => changeKind('document')}
+              onClick={() => offerOcrForLoaded('sparse')}
               className="rounded-lg border border-gray-300 px-2 py-0.5 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
             >
-              {t('translation.pdfAsTextSwitch')}
+              {t('translation.ocrButton')}
             </button>
             <button
               type="button"
-              onClick={() =>
-                setDismissedDocumentOffer(state.sourceDocument?.url ?? null)
-              }
-              className="text-gray-500 hover:underline dark:text-gray-400"
+              onClick={() => setSparseTextHint(false)}
+              className="rounded-lg px-2 py-0.5 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
             >
-              {t('translation.pdfAsTextKeep')}
+              {t('translation.ocrDismiss')}
             </button>
           </div>
         )}
 
-      {formattedMode && (formattedBlocker || formatted.runError) && (
-        <div className="border-b border-gray-200 px-3 py-2 dark:border-gray-700">
-          {formattedBlocker && (
-            <p className="text-sm text-amber-700 dark:text-amber-400">
-              {formattedBlocker}
-            </p>
+        {state?.sourceDocument &&
+          !state.sourceDocument.fitsOneBatch &&
+          !anyDocumentMode && (
+            <SourcePageSelector
+              key={`${state.sourceDocument.url}:${state.sourceDocument.selectedPages}`}
+              document={state.sourceDocument}
+              pages={sourcePages}
+              maxChars={MAX_SOURCE_CHARS}
+              loading={loadingSourcePages}
+              disabled={isRunning || uploading || assessing}
+              onSelect={handleSelectSourcePages}
+              onLoadPages={() => void handleLoadSourcePages()}
+            />
           )}
-          {formatted.runError && (
-            <p className="text-sm text-red-700 dark:text-red-400" role="alert">
-              {t('translation.formatted.runFailed', {
-                message: formatted.runError,
-              })}
-            </p>
-          )}
-        </div>
-      )}
 
-      {/* Status / errors */}
-      {(run?.error ||
-        tooLong ||
-        uploadError ||
-        targetLanguage?.custom ||
-        (documentMode &&
-          (documentError ||
-            ignoredGlossaryCount > 0 ||
-            (documentBlocker && !documentJob)))) && (
-        <div className="border-b border-gray-200 px-3 py-2 dark:border-gray-700">
-          {targetLanguage?.custom && (
-            <p className="text-xs text-amber-700 dark:text-amber-400">
-              {t('translation.customLanguageHint', {
-                name: targetLanguage.label,
-              })}
-            </p>
-          )}
-          {run?.error && (
-            <p className="text-sm text-red-700 dark:text-red-400" role="alert">
-              {t('document.runFailed', { message: run.error })}
-            </p>
-          )}
-          {tooLong && (
-            <p className="text-sm text-amber-700 dark:text-amber-400">
-              {t('translation.tooLong', {
-                max: String(MAX_SOURCE_CHARS),
-              })}
-            </p>
-          )}
-          {uploadError && (
-            <p className="text-sm text-red-700 dark:text-red-400" role="alert">
-              {uploadError}
-            </p>
-          )}
-          {documentMode && ignoredGlossaryCount > 0 && (
-            <p className="text-xs text-amber-700 dark:text-amber-400">
-              {t('translation.documentGlossariesIgnored', {
-                count: ignoredGlossaryCount,
-              })}
-            </p>
-          )}
-          {documentMode && documentBlocker && !documentJob && (
-            <p className="text-sm text-amber-700 dark:text-amber-400">
-              {documentBlocker}
-            </p>
-          )}
-          {documentMode && documentError && (
-            <p className="text-sm text-red-700 dark:text-red-400" role="alert">
-              {documentError}
-            </p>
-          )}
-        </div>
-      )}
-
-      {readingDocument && documentJob && (
-        <DocumentReaderBar
-          key={`${documentJob.jobId}:${documentJob.page}`}
-          job={documentJob}
-          correctedPages={reader.correctedPages}
-          saveState={reader.saveState}
-          disabled={assessing}
-          onGoToPage={(page) => requestLeavePage({ page })}
-        />
-      )}
-      {readingDocument && !reader.pagesAligned && (
-        <p className="border-b border-gray-200 px-3 py-1.5 text-xs text-amber-700 dark:border-gray-700 dark:text-amber-400">
-          {t('translation.documentPagesNotAligned')}
-        </p>
-      )}
-
-      {sparseTextHint && canOfferOcr && !ocrOffer && !uploading && (
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-gray-200 px-3 py-2 text-xs dark:border-gray-700">
-          <span className="text-amber-700 dark:text-amber-400">
-            {t('translation.ocrSparseHint')}
-          </span>
-          <button
-            type="button"
-            onClick={() => offerOcrForLoaded('sparse')}
-            className="rounded-lg border border-gray-300 px-2 py-0.5 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
-          >
-            {t('translation.ocrButton')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setSparseTextHint(false)}
-            className="rounded-lg px-2 py-0.5 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
-          >
-            {t('translation.ocrDismiss')}
-          </button>
-        </div>
-      )}
-
-      {state?.sourceDocument &&
-        !state.sourceDocument.fitsOneBatch &&
-        !anyDocumentMode && (
-          <SourcePageSelector
-            key={`${state.sourceDocument.url}:${state.sourceDocument.selectedPages}`}
-            document={state.sourceDocument}
-            pages={sourcePages}
-            maxChars={MAX_SOURCE_CHARS}
-            loading={loadingSourcePages}
-            disabled={isRunning || uploading || assessing}
-            onSelect={handleSelectSourcePages}
-            onLoadPages={() => void handleLoadSourcePages()}
-          />
-        )}
-
-      {formattedHasPdf &&
-        (formatted.progress ? (
-          <FormattedProgress
-            progress={formatted.progress}
-            language={targetLanguage?.label ?? ''}
-          />
-        ) : showFormattedReview && formattedRun ? (
-          <FormattedReview
-            run={formattedRun}
-            pageCount={formattedPageCount}
-            batch={
-              formattedEarlier?.sameLanguage && targetLanguage
-                ? {
-                    limits: formattedLimits,
-                    batchPages: formattedOptions.batchPages,
-                    onTranslate: addFormattedPages,
-                  }
-                : undefined
-            }
-            batchBlocked={
-              formattedEarlier && !formattedEarlier.sameLanguage
-                ? t('translation.formatted.railOtherLanguage', {
-                    language: formattedRun.targetLanguage,
-                  })
-                : undefined
-            }
-            controller={formatted}
-            pdf={pdfPages}
-            instructions={formattedOptions.instructions}
-            glossaryCount={selectedOrgIds.length + selectedPersonalIds.length}
-            stacked={!layout.reviewBeside}
-            storage={
-              formattedRunRef && {
-                runRef: formattedRunRef,
-                saveFailed: formattedStorage.saveFailed,
-                keeping: formattedStorage.keeping,
-                onKeep: () => void formattedStorage.keep(),
+        {formattedHasPdf &&
+          (formatted.progress ? (
+            <FormattedProgress
+              progress={formatted.progress}
+              language={targetLanguage?.label ?? ''}
+            />
+          ) : showFormattedReview && formattedRun ? (
+            <FormattedReview
+              run={formattedRun}
+              pageCount={formattedPageCount}
+              batch={
+                formattedEarlier?.sameLanguage && targetLanguage
+                  ? {
+                      limits: formattedLimits,
+                      batchPages: formattedOptions.batchPages,
+                      onTranslate: addFormattedPages,
+                    }
+                  : undefined
               }
-            }
-            onUpdateRun={updateFormattedRun}
-            onChangeOptions={openFormattedSetup}
-          />
-        ) : formattedRunPending && !formattedSetupOpen ? (
-          <FormattedRunUnavailable
-            problem={formattedStorage.problem}
-            onRetry={formattedStorage.retry}
-            onStartOver={() =>
-              // Expired files are gone already; anything left is deleted.
-              // A run this device cannot read is left for one that can.
-              formattedStorage.discard(formattedStorage.problem === 'missing')
-            }
-          />
-        ) : (
-          <FormattedSetup
-            documentName={formattedSourceName}
-            pageCount={formattedPageCount}
-            pdf={pdfPages}
-            options={formattedOptions}
-            depth={formattedDepth}
-            plan={formattedPlan}
-            requestPages={formattedService?.maxPages}
-            targetLanguage={targetLanguage?.label}
-            earlier={formattedEarlier}
-            adding={formattedAdding}
-            onAddingChange={setFormattedAddingChoice}
-            maxRefitRounds={formattedService?.maxRefitRounds ?? 0}
-            remember={rememberInstructions}
-            canGoBack={!!formattedRun}
-            onOptionsChange={(options) =>
-              patchState({ formattedOptions: options })
-            }
-            onRememberChange={setRememberInstructions}
-            onBack={() => setFormattedSetupOpen(false)}
-            onRemove={handleRemoveDocument}
-          />
-        ))}
+              batchBlocked={
+                formattedEarlier && !formattedEarlier.sameLanguage
+                  ? t('translation.formatted.railOtherLanguage', {
+                      language: formattedRun.targetLanguage,
+                    })
+                  : undefined
+              }
+              controller={formatted}
+              pdf={pdfPages}
+              instructions={formattedOptions.instructions}
+              glossaryCount={selectedOrgIds.length + selectedPersonalIds.length}
+              stacked={!layout.reviewBeside}
+              storage={
+                formattedRunRef && {
+                  runRef: formattedRunRef,
+                  saveFailed: formattedStorage.saveFailed,
+                  keeping: formattedStorage.keeping,
+                  onKeep: () => void formattedStorage.keep(),
+                }
+              }
+              onUpdateRun={updateFormattedRun}
+              onChangeOptions={openFormattedSetup}
+            />
+          ) : formattedRunPending && !formattedSetupOpen ? (
+            <FormattedRunUnavailable
+              problem={formattedStorage.problem}
+              onRetry={formattedStorage.retry}
+              onStartOver={() =>
+                // Expired files are gone already; anything left is deleted.
+                // A run this device cannot read is left for one that can.
+                formattedStorage.discard(formattedStorage.problem === 'missing')
+              }
+            />
+          ) : (
+            <FormattedSetup
+              documentName={formattedSourceName}
+              pageCount={formattedPageCount}
+              pdf={pdfPages}
+              options={formattedOptions}
+              depth={formattedDepth}
+              plan={formattedPlan}
+              requestPages={formattedService?.maxPages}
+              targetLanguage={targetLanguage?.label}
+              earlier={formattedEarlier}
+              adding={formattedAdding}
+              onAddingChange={setFormattedAddingChoice}
+              maxRefitRounds={formattedService?.maxRefitRounds ?? 0}
+              remember={rememberInstructions}
+              canGoBack={!!formattedRun}
+              onOptionsChange={(options) =>
+                patchState({ formattedOptions: options })
+              }
+              onRememberChange={setRememberInstructions}
+              onBack={() => setFormattedSetupOpen(false)}
+              onRemove={handleRemoveDocument}
+            />
+          ))}
 
-      {/* Workbench: panes (+ assess controls) with the review column beside.
+        {/* Workbench: panes (+ assess controls) with the review column beside.
           Hidden, not unmounted, while the formatted layout shows its own
           screens: it holds the source pane, where a document is uploaded. */}
-      <div
-        className={`min-h-0 flex-1 ${formattedHasPdf ? 'hidden' : 'flex'} ${
-          // Without room for the review beside the panes, the parts stack
-          // and the workbench scrolls instead of squeezing each one flat.
-          layout.reviewBeside ? 'flex-row' : 'flex-col overflow-y-auto'
-        }`}
-      >
         <div
-          className={`flex min-w-0 flex-1 flex-col ${
-            layout.reviewBeside ? 'min-h-0' : 'shrink-0'
+          className={`min-h-0 flex-1 ${formattedHasPdf ? 'hidden' : 'flex'} ${
+            // Without room for the review beside the panes, the parts stack
+            // and the workbench scrolls instead of squeezing each one flat.
+            layout.reviewBeside ? 'flex-row' : 'flex-col overflow-y-auto'
           }`}
         >
-          {/* Panes */}
           <div
-            className={`flex flex-1 ${
-              layout.reviewBeside
-                ? 'min-h-0 flex-row'
-                : layout.panesSideBySide
-                  ? `${PANE_MIN_HEIGHT} flex-row`
-                  : 'flex-col'
+            className={`flex min-w-0 flex-1 flex-col ${
+              layout.reviewBeside ? 'min-h-0' : 'shrink-0'
             }`}
           >
+            {/* Panes */}
             <div
-              className={`flex min-w-0 flex-1 flex-col border-gray-200 dark:border-gray-700 ${
-                layout.panesSideBySide
-                  ? 'min-h-0 border-e'
-                  : `${PANE_MIN_HEIGHT} border-b`
+              className={`flex flex-1 ${
+                layout.reviewBeside
+                  ? 'min-h-0 flex-row'
+                  : layout.panesSideBySide
+                    ? `${PANE_MIN_HEIGHT} flex-row`
+                    : 'flex-col'
               }`}
             >
-              <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-3 pt-2">
-                <span className="flex items-center gap-2 whitespace-nowrap text-xs font-medium text-gray-500 dark:text-gray-400">
-                  {t('translation.sourceLabel')}
-                  {readingDocument && documentJob && (
-                    <span className="font-normal">
-                      {t('translation.pageNumber', {
-                        page: String(documentJob.page),
-                      })}
-                    </span>
-                  )}
-                  {isRunning && (
-                    <span className="inline-flex items-center gap-1 font-normal">
-                      <IconLock size={12} aria-hidden />
-                      {t('translation.sourceLocked')}
-                    </span>
-                  )}
-                </span>
-                <span className="flex items-center gap-1 whitespace-nowrap">
-                  {loadedDocument?.ocrApplied && !ocrOffer && (
-                    <span
-                      title={t('translation.ocrAppliedHint')}
-                      className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300"
-                    >
-                      {t('translation.ocrApplied')}
-                    </span>
-                  )}
-                  {canOfferOcr && !ocrOffer && !readingDocument && (
+              <div
+                className={`flex min-w-0 flex-1 flex-col border-gray-200 dark:border-gray-700 ${
+                  layout.panesSideBySide
+                    ? 'min-h-0 border-e'
+                    : `${PANE_MIN_HEIGHT} border-b`
+                }`}
+              >
+                <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-3 pt-2">
+                  <span className="flex items-center gap-2 whitespace-nowrap text-xs font-medium text-gray-500 dark:text-gray-400">
+                    {t('translation.sourceLabel')}
+                    {readingDocument && documentJob && (
+                      <span className="font-normal">
+                        {t('translation.pageNumber', {
+                          page: String(documentJob.page),
+                        })}
+                      </span>
+                    )}
+                    {isRunning && (
+                      <span className="inline-flex items-center gap-1 font-normal">
+                        <IconLock size={12} aria-hidden />
+                        {t('translation.sourceLocked')}
+                      </span>
+                    )}
+                  </span>
+                  <span className="flex items-center gap-1 whitespace-nowrap">
+                    {loadedDocument?.ocrApplied && !ocrOffer && (
+                      <span
+                        title={t('translation.ocrAppliedHint')}
+                        className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300"
+                      >
+                        {t('translation.ocrApplied')}
+                      </span>
+                    )}
+                    {canOfferOcr && !ocrOffer && !readingDocument && (
+                      <button
+                        type="button"
+                        onClick={() => offerOcrForLoaded('manual')}
+                        disabled={
+                          isRunning ||
+                          uploading ||
+                          assessing ||
+                          submittingDocument ||
+                          documentInProgress
+                        }
+                        title={t('translation.ocrButtonHint')}
+                        className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+                      >
+                        <IconScan size={13} aria-hidden />
+                        {t('translation.ocrButton')}
+                      </button>
+                    )}
                     <button
                       type="button"
-                      onClick={() => offerOcrForLoaded('manual')}
+                      onClick={() =>
+                        uploadUsesPicker
+                          ? setUploadPickerOpen(true)
+                          : fileInputRef.current?.click()
+                      }
                       disabled={
                         isRunning ||
                         uploading ||
@@ -2956,680 +3122,671 @@ export function TranslationWorkspace({
                         submittingDocument ||
                         documentInProgress
                       }
-                      title={t('translation.ocrButtonHint')}
                       className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
                     >
-                      <IconScan size={13} aria-hidden />
-                      {t('translation.ocrButton')}
+                      <IconUpload size={13} aria-hidden />
+                      {t('translation.uploadDocument')}
                     </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      uploadUsesPicker
-                        ? setUploadPickerOpen(true)
-                        : fileInputRef.current?.click()
+                  </span>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept={ACCEPTED_UPLOADS}
+                    hidden
+                    onChange={(e) => void handleUpload(e.target.files?.[0])}
+                  />
+                  <AddToChatDialog
+                    isOpen={uploadPickerOpen}
+                    onClose={() => setUploadPickerOpen(false)}
+                    initialIntent="attach"
+                    capabilities={uploadCapabilities}
+                    onBrowseDevice={() => fileInputRef.current?.click()}
+                    onDeviceFiles={(files) => void handleUpload(files[0])}
+                    host={uploadHost}
+                  />
+                </div>
+                {upload && (
+                  <UploadProgress
+                    fileName={upload.name}
+                    fileSize={upload.size}
+                    stage={upload.stage}
+                    onCancel={() => uploadAbortRef.current?.abort()}
+                  />
+                )}
+                {ocrOffer && !uploading && (
+                  <OcrOffer
+                    fileName={ocrOffer.name}
+                    reason={ocrOffer.reason}
+                    canOcr={ocrOffer.canOcr}
+                    onTranslateWhole={
+                      ocrOffer.reason === 'no-text'
+                        ? handleTranslateScannedWhole
+                        : undefined
                     }
+                    pagesLeft={ocrBudget?.remaining}
+                    error={ocrOffer.error}
+                    onRun={() => void handleRunOcr()}
+                    onDismiss={() => setOcrOffer(null)}
+                  />
+                )}
+                {readingDocument && !uploading && !ocrOffer && (
+                  <div
+                    data-testid="document-source-page"
+                    className="min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap p-3 text-sm text-gray-900 dark:text-gray-100"
+                  >
+                    {pageInPane ? (
+                      reader.page?.source || (
+                        <span className="text-gray-500 dark:text-gray-400">
+                          {t('translation.scannedPageNote')}
+                        </span>
+                      )
+                    ) : reader.pageError ? null : (
+                      <SkeletonLines widths={['88%', '94%', '61%']} />
+                    )}
+                  </div>
+                )}
+                {loadedDocument?.noText &&
+                  sourceText === '' &&
+                  !readingDocument &&
+                  !uploading &&
+                  !ocrOffer && (
+                    <p className="px-3 pt-2 text-xs text-gray-600 dark:text-gray-400">
+                      {t('translation.scannedSourceNote', {
+                        name: loadedDocument.name,
+                      })}
+                    </p>
+                  )}
+                {showDocumentCard && loadedDocument && (
+                  <SourceDocumentCard
+                    document={loadedDocument}
                     disabled={
                       isRunning ||
-                      uploading ||
                       assessing ||
                       submittingDocument ||
                       documentInProgress
                     }
-                    className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
-                  >
-                    <IconUpload size={13} aria-hidden />
-                    {t('translation.uploadDocument')}
-                  </button>
-                </span>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept={ACCEPTED_UPLOADS}
-                  hidden
-                  onChange={(e) => void handleUpload(e.target.files?.[0])}
-                />
-                <AddToChatDialog
-                  isOpen={uploadPickerOpen}
-                  onClose={() => setUploadPickerOpen(false)}
-                  initialIntent="attach"
-                  capabilities={uploadCapabilities}
-                  onBrowseDevice={() => fileInputRef.current?.click()}
-                  onDeviceFiles={(files) => void handleUpload(files[0])}
-                  host={uploadHost}
-                />
-              </div>
-              {upload && (
-                <UploadProgress
-                  fileName={upload.name}
-                  fileSize={upload.size}
-                  stage={upload.stage}
-                  onCancel={() => uploadAbortRef.current?.abort()}
-                />
-              )}
-              {ocrOffer && !uploading && (
-                <OcrOffer
-                  fileName={ocrOffer.name}
-                  reason={ocrOffer.reason}
-                  canOcr={ocrOffer.canOcr}
-                  onTranslateWhole={
-                    ocrOffer.reason === 'no-text'
-                      ? handleTranslateScannedWhole
-                      : undefined
-                  }
-                  pagesLeft={ocrBudget?.remaining}
-                  error={ocrOffer.error}
-                  onRun={() => void handleRunOcr()}
-                  onDismiss={() => setOcrOffer(null)}
-                />
-              )}
-              {readingDocument && !uploading && !ocrOffer && (
-                <div
-                  data-testid="document-source-page"
-                  className="min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap p-3 text-sm text-gray-900 dark:text-gray-100"
-                >
-                  {pageInPane ? (
-                    reader.page?.source || (
-                      <span className="text-gray-500 dark:text-gray-400">
-                        {t('translation.scannedPageNote')}
-                      </span>
-                    )
-                  ) : reader.pageError ? null : (
-                    <SkeletonLines widths={['88%', '94%', '61%']} />
-                  )}
-                </div>
-              )}
-              {loadedDocument?.noText &&
-                sourceText === '' &&
-                !readingDocument &&
-                !uploading &&
-                !ocrOffer && (
-                  <p className="px-3 pt-2 text-xs text-gray-600 dark:text-gray-400">
-                    {t('translation.scannedSourceNote', {
-                      name: loadedDocument.name,
-                    })}
-                  </p>
+                    onRemove={handleRemoveDocument}
+                    action={
+                      loadedDocument.noText
+                        ? undefined
+                        : sheetPages
+                          ? // Whole document reads the file, not this text:
+                            // there is nothing to edit there.
+                            !documentMode && (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setSourceAsText((asText) => !asText)
+                                }
+                                disabled={isRunning}
+                                className={CARD_ACTION_CLASS}
+                              >
+                                {sourceAsText
+                                  ? t('translation.sourceShowPages')
+                                  : t('translation.sourceEditText')}
+                              </button>
+                            )
+                          : !sourcePages && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSourceAsText(false);
+                                  void handleLoadSourcePages();
+                                }}
+                                disabled={loadingSourcePages}
+                                className={CARD_ACTION_CLASS}
+                              >
+                                {loadingSourcePages
+                                  ? t('translation.pagesLoading')
+                                  : t('translation.sourceShowPages')}
+                              </button>
+                            )
+                    }
+                  />
                 )}
-              {showDocumentCard && loadedDocument && (
-                <SourceDocumentCard
-                  document={loadedDocument}
+                {showSheets && sheetPages && loadedDocument && (
+                  <SourcePageSheets
+                    pages={sheetPages}
+                    lastPage={loadedDocument.lastPage}
+                  />
+                )}
+                <FormattedRunExpiryWarning
+                  subject="sourceText"
+                  expiresAt={sourceStorage.expiresAt}
+                  keeping={sourceStorage.keeping}
+                  onKeep={() => void sourceStorage.keep()}
+                />
+                <SourceTextStorageNotice storage={sourceStorage} />
+                <textarea
+                  ref={sourceRef}
+                  hidden={
+                    uploading ||
+                    readingDocument ||
+                    ocrOffer !== null ||
+                    showSheets
+                  }
+                  value={sourceText}
+                  onChange={(e) =>
+                    patchState({
+                      sourceText: e.target.value,
+                      // Emptying the pane lets go of the document it came from;
+                      // so does typing over a document that brought no text.
+                      ...((e.target.value === '' ||
+                        state.sourceDocument?.noText) && {
+                        sourceDocument: undefined,
+                      }),
+                    })
+                  }
+                  // A text still being fetched must not be typed over.
                   disabled={
                     isRunning ||
-                    assessing ||
-                    submittingDocument ||
-                    documentInProgress
+                    uploading ||
+                    sourceStorage.loading ||
+                    sourceStorage.problem !== null
                   }
-                  onRemove={handleRemoveDocument}
-                  action={
-                    loadedDocument.noText
-                      ? undefined
-                      : sheetPages
-                        ? // Whole document reads the file, not this text:
-                          // there is nothing to edit there.
-                          !documentMode && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setSourceAsText((asText) => !asText)
-                              }
-                              disabled={isRunning}
-                              className={CARD_ACTION_CLASS}
-                            >
-                              {sourceAsText
-                                ? t('translation.sourceShowPages')
-                                : t('translation.sourceEditText')}
-                            </button>
-                          )
-                        : !sourcePages && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setSourceAsText(false);
-                                void handleLoadSourcePages();
-                              }}
-                              disabled={loadingSourcePages}
-                              className={CARD_ACTION_CLASS}
-                            >
-                              {loadingSourcePages
-                                ? t('translation.pagesLoading')
-                                : t('translation.sourceShowPages')}
-                            </button>
-                          )
+                  placeholder={
+                    sourceStorage.loading || sourceStorage.problem
+                      ? ''
+                      : t('translation.sourcePlaceholder')
                   }
+                  className="min-h-0 flex-1 resize-none bg-transparent p-3 text-sm text-gray-900 placeholder-gray-500 focus:outline-none disabled:opacity-70 dark:text-gray-100 dark:placeholder-gray-400"
                 />
-              )}
-              {showSheets && sheetPages && loadedDocument && (
-                <SourcePageSheets
-                  pages={sheetPages}
-                  lastPage={loadedDocument.lastPage}
-                />
-              )}
-              <FormattedRunExpiryWarning
-                subject="sourceText"
-                expiresAt={sourceStorage.expiresAt}
-                keeping={sourceStorage.keeping}
-                onKeep={() => void sourceStorage.keep()}
-              />
-              <SourceTextStorageNotice storage={sourceStorage} />
-              <textarea
-                ref={sourceRef}
-                hidden={
-                  uploading ||
-                  readingDocument ||
-                  ocrOffer !== null ||
-                  showSheets
-                }
-                value={sourceText}
-                onChange={(e) =>
-                  patchState({
-                    sourceText: e.target.value,
-                    // Emptying the pane lets go of the document it came from;
-                    // so does typing over a document that brought no text.
-                    ...((e.target.value === '' ||
-                      state.sourceDocument?.noText) && {
-                      sourceDocument: undefined,
-                    }),
-                  })
-                }
-                // A text still being fetched must not be typed over.
-                disabled={
-                  isRunning ||
-                  uploading ||
-                  sourceStorage.loading ||
-                  sourceStorage.problem !== null
-                }
-                placeholder={
-                  sourceStorage.loading || sourceStorage.problem
-                    ? ''
-                    : t('translation.sourcePlaceholder')
-                }
-                className="min-h-0 flex-1 resize-none bg-transparent p-3 text-sm text-gray-900 placeholder-gray-500 focus:outline-none disabled:opacity-70 dark:text-gray-100 dark:placeholder-gray-400"
-              />
-            </div>
-
-            <div
-              className={`flex min-w-0 flex-1 flex-col ${
-                layout.panesSideBySide ? 'min-h-0' : PANE_MIN_HEIGHT
-              }`}
-            >
-              <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-3 pt-2">
-                <span className="flex min-w-0 flex-wrap items-center gap-1.5 whitespace-nowrap text-xs font-medium text-gray-500 dark:text-gray-400">
-                  {t('translation.targetLabel')}
-                  {isDraft && (
-                    <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300">
-                      {t('translation.draftLabel')}
-                    </span>
-                  )}
-                  {pageInPane && pageIsCorrected && (
-                    <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300">
-                      {t('translation.correctedLabel')}
-                    </span>
-                  )}
-                  {/* The dismissed analysis strip stays one click away. */}
-                  {paperTrailHidden && !isRunning && (
-                    <button
-                      type="button"
-                      onClick={showAnalysis}
-                      title={t('translation.analysisShow')}
-                      className="rounded-full border border-gray-300 px-2 py-0.5 text-[11px] font-normal text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
-                    >
-                      {state.analysis
-                        ? t('translation.analysisPill', {
-                            count: countAnalysisNotes(state.analysis),
-                          })
-                        : reviewVerdict
-                          ? t('translation.reviewTitle')
-                          : t('translation.glossaryCheckTitle')}
-                      {state.analysis && reviewVerdict && (
-                        <>
-                          {' · '}
-                          {reviewVerdict === 'approve'
-                            ? t('translation.verdictApprove')
-                            : t('translation.verdictRevise')}
-                        </>
-                      )}
-                    </button>
-                  )}
-                </span>
-                <span className="flex items-center gap-1 whitespace-nowrap">
-                  {pageInPane && reader.page && pageIsCorrected && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        patchState({
-                          finalText: reader.page?.translation ?? '',
-                          assessment: undefined,
-                        })
-                      }
-                      disabled={assessing}
-                      title={t('translation.correctionRestoreHint')}
-                      className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
-                    >
-                      <IconArrowBackUp size={13} aria-hidden />
-                      {t('translation.correctionRestore')}
-                    </button>
-                  )}
-                  {readingDocument && documentJob && (
-                    <DocumentDownloadMenu job={documentJob} />
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => setEditingTarget((editing) => !editing)}
-                    // Pending suggestions no longer lock the translation:
-                    // text they don't cover is free to change, and typing
-                    // over one goes through handleTargetChange's gate
-                    // (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §5).
-                    disabled={
-                      isRunning || assessing || (documentMode && !pageInPane)
-                    }
-                    aria-pressed={editingTarget}
-                    title={
-                      editingTarget
-                        ? t('translation.doneEditing')
-                        : t('translation.editTranslation')
-                    }
-                    className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
-                  >
-                    {editingTarget ? (
-                      <IconPencilOff size={13} aria-hidden />
-                    ) : (
-                      <IconPencil size={13} aria-hidden />
-                    )}
-                    {editingTarget
-                      ? t('translation.doneEditing')
-                      : t('translation.editTranslation')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => void handleCopy()}
-                    disabled={!targetText}
-                    className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
-                  >
-                    <IconCopy size={13} aria-hidden />
-                    {copied ? t('translation.copied') : t('translation.copy')}
-                  </button>
-                </span>
               </div>
-              {isRunning && (
-                <TranslationRunStatus
-                  mode={textMode}
-                  stage={runStage}
-                  round={run?.activityParams?.round}
-                  totalRounds={run?.activityParams?.total}
-                />
-              )}
-              {documentMode && !pageInPane ? (
-                documentJob &&
-                (documentJob.status === 'translating' ||
-                  documentJob.status === 'preparing') ? (
-                  <DocumentJobProgress
-                    job={{ ...documentJob, status: documentJob.status }}
-                    stalled={reader.stalled}
-                    onRetry={reader.retryStatus}
-                  />
-                ) : documentJob?.status === 'failed' || reader.pageError ? (
-                  <div
-                    role="alert"
-                    className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 p-6 text-center"
-                  >
-                    <p className="max-w-[48ch] text-sm text-red-700 dark:text-red-400">
-                      {documentJob?.status === 'failed'
-                        ? documentJob.error
-                          ? t('translation.documentFailed', {
-                              message: documentJob.error,
-                            })
-                          : t('translation.documentGone')
-                        : t('translation.documentPageFailed', {
-                            message: reader.pageError ?? '',
-                          })}
-                    </p>
-                    {documentJob?.status !== 'failed' && (
+
+              <div
+                className={`flex min-w-0 flex-1 flex-col ${
+                  layout.panesSideBySide ? 'min-h-0' : PANE_MIN_HEIGHT
+                }`}
+              >
+                <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-3 pt-2">
+                  <span className="flex min-w-0 flex-wrap items-center gap-1.5 whitespace-nowrap text-xs font-medium text-gray-500 dark:text-gray-400">
+                    {t('translation.targetLabel')}
+                    {isDraft && (
+                      <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300">
+                        {t('translation.draftLabel')}
+                      </span>
+                    )}
+                    {pageInPane && pageIsCorrected && (
+                      <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300">
+                        {t('translation.correctedLabel')}
+                      </span>
+                    )}
+                    {/* The dismissed analysis strip stays one click away. */}
+                    {paperTrailHidden && !isRunning && (
                       <button
                         type="button"
-                        onClick={reader.retryPage}
-                        className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+                        onClick={showAnalysis}
+                        title={t('translation.analysisShow')}
+                        className="rounded-full border border-gray-300 px-2 py-0.5 text-[11px] font-normal text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
                       >
-                        {t('translation.retry')}
+                        {state.analysis
+                          ? t('translation.analysisPill', {
+                              count: countAnalysisNotes(state.analysis),
+                            })
+                          : reviewVerdict
+                            ? t('translation.reviewTitle')
+                            : t('translation.glossaryCheckTitle')}
+                        {state.analysis && reviewVerdict && (
+                          <>
+                            {' · '}
+                            {reviewVerdict === 'approve'
+                              ? t('translation.verdictApprove')
+                              : t('translation.verdictRevise')}
+                          </>
+                        )}
                       </button>
                     )}
-                  </div>
-                ) : documentJob ? (
-                  <div className="min-h-0 flex-1 p-3">
-                    <SkeletonLines widths={['92%', '70%', '84%', '48%']} />
-                  </div>
-                ) : (
-                  <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-2 p-6 text-center">
-                    <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
-                      {t('translation.documentIntroTitle')}
-                    </p>
-                    <p className="max-w-[52ch] text-xs text-gray-500 dark:text-gray-400">
-                      {t('translation.documentIntro')}
-                    </p>
-                  </div>
-                )
-              ) : editingTarget ? (
-                <>
-                  {/* The textarea cannot mark suggestions, so while editing
-                      the user is told what is at stake instead (§5 v1). */}
-                  {hasUnresolvedEdits && (
-                    <p className="border-b border-amber-200 bg-amber-50 px-3 py-1.5 text-xs text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-200">
-                      {previewEdits.length > 1
-                        ? t('translation.editingPendingHint', {
-                            count: String(previewEdits.length),
+                  </span>
+                  <span className="flex items-center gap-1 whitespace-nowrap">
+                    {pageInPane && reader.page && pageIsCorrected && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          patchState({
+                            finalText: reader.page?.translation ?? '',
+                            assessment: undefined,
                           })
-                        : t('translation.editingPendingHintOne')}
-                    </p>
-                  )}
-                  <textarea
-                    value={state.finalText ?? ''}
-                    onChange={(e) => handleTargetChange(e.target.value)}
-                    placeholder={t('translation.pasteTranslationPlaceholder')}
-                    className="min-h-0 flex-1 resize-none bg-transparent p-3 text-sm text-gray-900 placeholder-gray-500 focus:outline-none dark:text-gray-100 dark:placeholder-gray-400"
-                  />
-                </>
-              ) : (
-                <div
-                  // A draft under review is readable but visibly not final.
-                  className={`min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap p-3 text-sm text-gray-900 dark:text-gray-100 ${
-                    isDraft && runStage === 'reviewing'
-                      ? 'opacity-70 motion-safe:animate-pulse'
-                      : ''
-                  }`}
-                >
-                  {isRunning && runStage !== 'reviewing' ? (
-                    <>
-                      {targetText}
-                      <SkeletonLines
-                        widths={['92%', '70%', '48%']}
-                        className={targetText ? 'mt-3' : ''}
-                      />
-                    </>
-                  ) : targetText ? (
-                    <SelectionChangeRequest
-                      text={targetText}
-                      disabled={
-                        isDraft ||
-                        assessing ||
-                        changeRun !== null ||
-                        (documentMode && !pageInPane)
-                      }
-                      onSubmit={(instruction, selection) =>
-                        void runChangeRequest({ instruction, selection })
-                      }
-                    >
-                      <AnnotatedText
-                        text={targetText}
-                        edits={previewEdits}
-                        activeId={preview.activeId}
-                        pinnedId={preview.pinnedId}
-                        onPin={preview.setPinned}
-                        onHover={preview.setHovered}
-                        i18nNamespace="workflows.translation"
-                        onAccept={(id) => resolveEdit(id, 'accepted')}
-                        onReject={(id) => resolveEdit(id, 'rejected')}
-                        disabled={assessing || isRunning}
-                      />
-                    </SelectionChangeRequest>
-                  ) : (
-                    <span className="text-gray-400 dark:text-gray-500">
-                      {t('translation.targetEmpty')}
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Ask for a change in words; the answer is suggested edits. */}
-          {(state.finalText ?? '').trim().length > 0 &&
-            (!documentMode || pageInPane) && (
-              <ChangeRequestBar
-                runningInstruction={changeRun?.instruction}
-                runningSince={changeRun?.startedAt}
-                hasResult={Boolean(assessment?.request)}
-                disabledReason={
-                  isRunning || assessing
-                    ? t('translation.changeBusy')
-                    : undefined
-                }
-                note={changeNote}
-                error={changeError}
-                onSubmit={(instruction) =>
-                  void runChangeRequest({ instruction })
-                }
-                onStop={() => changeAbortRef.current?.abort()}
-              />
-            )}
-
-          {/* Quality assessment controls */}
-          {(state.finalText ?? '').trim().length > 0 && (
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-gray-200 px-3 py-2 dark:border-gray-700">
-              <CriteriaPicker
-                criteria={criteriaItems}
-                selected={selectedCriteria}
-                onToggle={(id) =>
-                  setSelectedCriteria((prev) => {
-                    const next = new Set(prev);
-                    if (next.has(id)) next.delete(id);
-                    else next.add(id);
-                    return next;
-                  })
-                }
-                i18nNamespace="workflows.translation"
-                disabled={assessing || isRunning}
-              />
-              <GuidePicker
-                guides={translationGuides}
-                selected={selectedCriteria}
-                onToggle={(id) =>
-                  setSelectedCriteria((prev) => {
-                    const next = new Set(prev);
-                    if (next.has(id)) next.delete(id);
-                    else next.add(id);
-                    return next;
-                  })
-                }
-                i18nNamespace="workflows.translation"
-                disabled={assessing || isRunning}
-              />
-              <span className="ms-auto flex items-center gap-2">
-                {assessment && !reviewOpen && (
-                  <button
-                    type="button"
-                    onClick={() => setReviewOpen(true)}
-                    className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
-                  >
-                    {hasUnresolvedEdits
-                      ? t('translation.showReviewPending', {
-                          count: String(
-                            assessment.edits.filter(
-                              (e) => e.status === 'pending',
-                            ).length,
-                          ),
-                        })
-                      : t('translation.showReview')}
-                  </button>
-                )}
-                {assessing ? (
-                  <>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      {t('translation.assessing')}
-                    </span>
+                        }
+                        disabled={assessing}
+                        title={t('translation.correctionRestoreHint')}
+                        className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+                      >
+                        <IconArrowBackUp size={13} aria-hidden />
+                        {t('translation.correctionRestore')}
+                      </button>
+                    )}
+                    {readingDocument && documentJob && (
+                      <DocumentDownloadMenu job={documentJob} />
+                    )}
                     <button
                       type="button"
-                      onClick={() => assessAbortRef.current?.abort()}
-                      className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg border border-gray-400 px-2.5 py-1 text-xs font-medium text-gray-900 hover:bg-gray-100 dark:border-gray-500 dark:text-gray-100 dark:hover:bg-surface-dark-elevated"
+                      onClick={() => setEditingTarget((editing) => !editing)}
+                      // Pending suggestions no longer lock the translation:
+                      // text they don't cover is free to change, and typing
+                      // over one goes through handleTargetChange's gate
+                      // (docs/REVIEW_EDIT_UNFREEZE_DESIGN.md §5).
+                      disabled={
+                        isRunning || assessing || (documentMode && !pageInPane)
+                      }
+                      aria-pressed={editingTarget}
+                      title={
+                        editingTarget
+                          ? t('translation.doneEditing')
+                          : t('translation.editTranslation')
+                      }
+                      className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
                     >
-                      <IconPlayerStopFilled size={12} aria-hidden />
-                      {t('translation.stop')}
+                      {editingTarget ? (
+                        <IconPencilOff size={13} aria-hidden />
+                      ) : (
+                        <IconPencil size={13} aria-hidden />
+                      )}
+                      {editingTarget
+                        ? t('translation.doneEditing')
+                        : t('translation.editTranslation')}
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => void handleCopy()}
+                      disabled={!targetText}
+                      className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+                    >
+                      <IconCopy size={13} aria-hidden />
+                      {copied ? t('translation.copied') : t('translation.copy')}
+                    </button>
+                  </span>
+                </div>
+                {isRunning && (
+                  <TranslationRunStatus
+                    mode={textMode}
+                    stage={runStage}
+                    round={run?.activityParams?.round}
+                    totalRounds={run?.activityParams?.total}
+                  />
+                )}
+                {documentMode && !pageInPane ? (
+                  documentJob &&
+                  (documentJob.status === 'translating' ||
+                    documentJob.status === 'preparing') ? (
+                    <DocumentJobProgress
+                      job={{ ...documentJob, status: documentJob.status }}
+                      stalled={reader.stalled}
+                      onRetry={reader.retryStatus}
+                    />
+                  ) : documentJob?.status === 'failed' || reader.pageError ? (
+                    <div
+                      role="alert"
+                      className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 p-6 text-center"
+                    >
+                      <p className="max-w-[48ch] text-sm text-red-700 dark:text-red-400">
+                        {documentJob?.status === 'failed'
+                          ? documentJob.error
+                            ? t('translation.documentFailed', {
+                                message: documentJob.error,
+                              })
+                            : t('translation.documentGone')
+                          : t(
+                              onSlides
+                                ? 'translation.slides.failed'
+                                : 'translation.documentPageFailed',
+                              { message: reader.pageError ?? '' },
+                            )}
+                      </p>
+                      {documentJob?.status !== 'failed' && (
+                        <button
+                          type="button"
+                          onClick={reader.retryPage}
+                          className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+                        >
+                          {t('translation.retry')}
+                        </button>
+                      )}
+                    </div>
+                  ) : documentJob ? (
+                    <div className="min-h-0 flex-1 p-3">
+                      <SkeletonLines widths={['92%', '70%', '84%', '48%']} />
+                    </div>
+                  ) : (
+                    <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-2 p-6 text-center">
+                      <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                        {t('translation.documentIntroTitle')}
+                      </p>
+                      <p className="max-w-[52ch] text-xs text-gray-500 dark:text-gray-400">
+                        {t(
+                          onSlides
+                            ? 'translation.slides.intro'
+                            : 'translation.documentIntro',
+                        )}
+                      </p>
+                    </div>
+                  )
+                ) : editingTarget ? (
+                  <>
+                    {/* The textarea cannot mark suggestions, so while editing
+                      the user is told what is at stake instead (§5 v1). */}
+                    {hasUnresolvedEdits && (
+                      <p className="border-b border-amber-200 bg-amber-50 px-3 py-1.5 text-xs text-amber-800 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-200">
+                        {previewEdits.length > 1
+                          ? t('translation.editingPendingHint', {
+                              count: String(previewEdits.length),
+                            })
+                          : t('translation.editingPendingHintOne')}
+                      </p>
+                    )}
+                    <textarea
+                      value={state.finalText ?? ''}
+                      onChange={(e) => handleTargetChange(e.target.value)}
+                      placeholder={t('translation.pasteTranslationPlaceholder')}
+                      className="min-h-0 flex-1 resize-none bg-transparent p-3 text-sm text-gray-900 placeholder-gray-500 focus:outline-none dark:text-gray-100 dark:placeholder-gray-400"
+                    />
                   </>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => void handleAssess()}
-                    disabled={!canAssess}
-                    className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-900 hover:bg-gray-300 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-elevated dark:text-gray-100 dark:hover:bg-gray-700"
+                  <div
+                    // A draft under review is readable but visibly not final.
+                    className={`min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap p-3 text-sm text-gray-900 dark:text-gray-100 ${
+                      isDraft && runStage === 'reviewing'
+                        ? 'opacity-70 motion-safe:animate-pulse'
+                        : ''
+                    }`}
                   >
-                    <IconClipboardCheck size={14} aria-hidden />
-                    {t('translation.assess')}
-                  </button>
+                    {isRunning && runStage !== 'reviewing' ? (
+                      <>
+                        {targetText}
+                        <SkeletonLines
+                          widths={['92%', '70%', '48%']}
+                          className={targetText ? 'mt-3' : ''}
+                        />
+                      </>
+                    ) : targetText ? (
+                      <SelectionChangeRequest
+                        text={targetText}
+                        disabled={
+                          isDraft ||
+                          assessing ||
+                          changeRun !== null ||
+                          (documentMode && !pageInPane)
+                        }
+                        onSubmit={(instruction, selection) =>
+                          void runChangeRequest({ instruction, selection })
+                        }
+                      >
+                        <AnnotatedText
+                          text={targetText}
+                          edits={previewEdits}
+                          activeId={preview.activeId}
+                          pinnedId={preview.pinnedId}
+                          onPin={preview.setPinned}
+                          onHover={preview.setHovered}
+                          i18nNamespace="workflows.translation"
+                          onAccept={(id) => resolveEdit(id, 'accepted')}
+                          onReject={(id) => resolveEdit(id, 'rejected')}
+                          disabled={assessing || isRunning}
+                        />
+                      </SelectionChangeRequest>
+                    ) : (
+                      <span className="text-gray-400 dark:text-gray-500">
+                        {t('translation.targetEmpty')}
+                      </span>
+                    )}
+                  </div>
                 )}
-              </span>
-              {assessError && (
-                <p
-                  className="w-full text-xs text-red-700 dark:text-red-400"
-                  role="alert"
-                >
-                  {assessError}
-                </p>
+              </div>
+            </div>
+
+            {/* Ask for a change in words; the answer is suggested edits. */}
+            {(state.finalText ?? '').trim().length > 0 &&
+              (!documentMode || pageInPane) && (
+                <ChangeRequestBar
+                  runningInstruction={changeRun?.instruction}
+                  runningSince={changeRun?.startedAt}
+                  hasResult={Boolean(assessment?.request)}
+                  disabledReason={
+                    isRunning || assessing
+                      ? t('translation.changeBusy')
+                      : undefined
+                  }
+                  note={changeNote}
+                  error={changeError}
+                  onSubmit={(instruction) =>
+                    void runChangeRequest({ instruction })
+                  }
+                  onStop={() => changeAbortRef.current?.abort()}
+                />
               )}
+
+            {/* Quality assessment controls */}
+            {(state.finalText ?? '').trim().length > 0 && (
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-gray-200 px-3 py-2 dark:border-gray-700">
+                <CriteriaPicker
+                  criteria={criteriaItems}
+                  selected={selectedCriteria}
+                  onToggle={(id) =>
+                    setSelectedCriteria((prev) => {
+                      const next = new Set(prev);
+                      if (next.has(id)) next.delete(id);
+                      else next.add(id);
+                      return next;
+                    })
+                  }
+                  i18nNamespace="workflows.translation"
+                  disabled={assessing || isRunning}
+                />
+                <GuidePicker
+                  guides={translationGuides}
+                  selected={selectedCriteria}
+                  onToggle={(id) =>
+                    setSelectedCriteria((prev) => {
+                      const next = new Set(prev);
+                      if (next.has(id)) next.delete(id);
+                      else next.add(id);
+                      return next;
+                    })
+                  }
+                  i18nNamespace="workflows.translation"
+                  disabled={assessing || isRunning}
+                />
+                <span className="ms-auto flex items-center gap-2">
+                  {assessment && !reviewOpen && (
+                    <button
+                      type="button"
+                      onClick={() => setReviewOpen(true)}
+                      className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+                    >
+                      {hasUnresolvedEdits
+                        ? t('translation.showReviewPending', {
+                            count: String(
+                              assessment.edits.filter(
+                                (e) => e.status === 'pending',
+                              ).length,
+                            ),
+                          })
+                        : t('translation.showReview')}
+                    </button>
+                  )}
+                  {assessing ? (
+                    <>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {t('translation.assessing')}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => assessAbortRef.current?.abort()}
+                        className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg border border-gray-400 px-2.5 py-1 text-xs font-medium text-gray-900 hover:bg-gray-100 dark:border-gray-500 dark:text-gray-100 dark:hover:bg-surface-dark-elevated"
+                      >
+                        <IconPlayerStopFilled size={12} aria-hidden />
+                        {t('translation.stop')}
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => void handleAssess()}
+                      disabled={!canAssess}
+                      className="inline-flex min-h-[32px] items-center gap-1.5 rounded-lg bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-900 hover:bg-gray-300 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-elevated dark:text-gray-100 dark:hover:bg-gray-700"
+                    >
+                      <IconClipboardCheck size={14} aria-hidden />
+                      {t('translation.assess')}
+                    </button>
+                  )}
+                </span>
+                {assessError && (
+                  <p
+                    className="w-full text-xs text-red-700 dark:text-red-400"
+                    role="alert"
+                  >
+                    {assessError}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Quality review column — a dedicated pane beside the text it
+            modifies, so the pending-edit queue is never buried in the
+            paper-trail strip below. */}
+          {assessing && (
+            <div className={reviewColumnClasses}>
+              <AssessmentProgress
+                criteria={[...selectedCriteria].map(resolveCriterionLabel)}
+              />
+            </div>
+          )}
+          {assessment && reviewOpen && !assessing && (
+            <div className={reviewColumnClasses}>
+              <AssessmentPanel
+                assessment={assessment}
+                resolveCriterionLabel={resolveCriterionLabel}
+                i18nNamespace="workflows.translation"
+                request={
+                  assessment.request && {
+                    title: t('translation.changeTitle'),
+                    instruction: assessment.request.instruction,
+                    selectedText: assessment.request.selectedText,
+                    selectedLabel: t('translation.changeSelectedLabel'),
+                    emptyMessage: t('translation.changeNoEdits'),
+                  }
+                }
+                previewEditId={preview.activeId}
+                onPreviewEdit={preview.setHovered}
+                onAccept={(id) => resolveEdit(id, 'accepted')}
+                onReject={(id) => resolveEdit(id, 'rejected')}
+                onAcceptAll={() => resolveAll('accepted')}
+                onRejectAll={() => resolveAll('rejected')}
+                onRevert={revertEdit}
+                onClearResolved={clearResolved}
+                autoClearResolved={autoClearResolvedEdits}
+                onToggleAutoClear={setAutoClearResolvedEdits}
+                onClose={() => setReviewOpen(false)}
+                // Not shown at all while assessing (see the condition above).
+                disabled={isRunning || changeRun !== null}
+              />
             </div>
           )}
         </div>
 
-        {/* Quality review column — a dedicated pane beside the text it
-            modifies, so the pending-edit queue is never buried in the
-            paper-trail strip below. */}
-        {assessing && (
-          <div className={reviewColumnClasses}>
-            <AssessmentProgress
-              criteria={[...selectedCriteria].map(resolveCriterionLabel)}
-            />
-          </div>
+        {/* Pre-run paper trail (analysis + review rounds) — history only */}
+        {!analysisHidden && !anyDocumentMode && (
+          <AnalysisStrip
+            analysis={state.analysis}
+            rounds={state.rounds}
+            glossaryCheck={state.glossaryCheck}
+            expanded={analysisExpanded}
+            onToggleExpanded={() => setAnalysisExpanded((open) => !open)}
+            onDismiss={() => setAnalysisHidden(true)}
+            height={analysisHeight}
+            onResize={setAnalysisHeight}
+          />
         )}
-        {assessment && reviewOpen && !assessing && (
-          <div className={reviewColumnClasses}>
-            <AssessmentPanel
-              assessment={assessment}
-              resolveCriterionLabel={resolveCriterionLabel}
+
+        {/* Glossary manager */}
+        {criteriaOpen && (
+          <div className="h-72 shrink-0">
+            <CriteriaManager
+              criteria={translationCriteria}
               i18nNamespace="workflows.translation"
-              request={
-                assessment.request && {
-                  title: t('translation.changeTitle'),
-                  instruction: assessment.request.instruction,
-                  selectedText: assessment.request.selectedText,
-                  selectedLabel: t('translation.changeSelectedLabel'),
-                  emptyMessage: t('translation.changeNoEdits'),
-                }
-              }
-              previewEditId={preview.activeId}
-              onPreviewEdit={preview.setHovered}
-              onAccept={(id) => resolveEdit(id, 'accepted')}
-              onReject={(id) => resolveEdit(id, 'rejected')}
-              onAcceptAll={() => resolveAll('accepted')}
-              onRejectAll={() => resolveAll('rejected')}
-              onRevert={revertEdit}
-              onClearResolved={clearResolved}
-              autoClearResolved={autoClearResolvedEdits}
-              onToggleAutoClear={setAutoClearResolvedEdits}
-              onClose={() => setReviewOpen(false)}
-              // Not shown at all while assessing (see the condition above).
-              disabled={isRunning || changeRun !== null}
+              onCreate={addTranslationCriterion}
+              onUpdate={updateTranslationCriterion}
+              onDelete={deleteTranslationCriterion}
+              onClose={() => setCriteriaOpen(false)}
             />
           </div>
         )}
-      </div>
 
-      {/* Pre-run paper trail (analysis + review rounds) — history only */}
-      {!analysisHidden && !anyDocumentMode && (
-        <AnalysisStrip
-          analysis={state.analysis}
-          rounds={state.rounds}
-          glossaryCheck={state.glossaryCheck}
-          expanded={analysisExpanded}
-          onToggleExpanded={() => setAnalysisExpanded((open) => !open)}
-          onDismiss={() => setAnalysisHidden(true)}
-          height={analysisHeight}
-          onResize={setAnalysisHeight}
-        />
-      )}
+        {glossariesOpen && (
+          <div className="h-72 shrink-0">
+            <GlossaryManager
+              onClose={() => setGlossariesOpen(false)}
+              defaultTargetLang={targetLanguage?.id}
+            />
+          </div>
+        )}
 
-      {/* Glossary manager */}
-      {criteriaOpen && (
-        <div className="h-72 shrink-0">
-          <CriteriaManager
-            criteria={translationCriteria}
-            i18nNamespace="workflows.translation"
-            onCreate={addTranslationCriterion}
-            onUpdate={updateTranslationCriterion}
-            onDelete={deleteTranslationCriterion}
-            onClose={() => setCriteriaOpen(false)}
-          />
-        </div>
-      )}
-
-      {glossariesOpen && (
-        <div className="h-72 shrink-0">
-          <GlossaryManager
-            onClose={() => setGlossariesOpen(false)}
-            defaultTargetLang={targetLanguage?.id}
-          />
-        </div>
-      )}
-
-      {/* An AI run asked for with suggestions still pending: decide the queue
+        {/* An AI run asked for with suggestions still pending: decide the queue
           in bulk, then the run follows with the post-decision text (§6b). */}
-      <PendingEditsDialog
-        isOpen={reviewGate !== null}
-        pendingCount={previewEdits.length}
-        actionLabel={
-          reviewGate === 'assess'
-            ? t('translation.pendingRunActionAssess')
-            : reviewGate === 'request'
-              ? t('translation.pendingRunActionRequest')
-              : t('translation.pendingRunActionTranslate')
-        }
-        onAcceptAll={() => decidePendingAndRun('accepted')}
-        onRejectAll={() => decidePendingAndRun('rejected')}
-        onCancel={cancelReviewGate}
-      />
-      <PendingEditsDialog
-        isOpen={departureGate !== null}
-        pendingCount={previewEdits.length}
-        actionLabel=""
-        message={t('translation.pendingLeavePage')}
-        onAcceptAll={() => decidePendingAndLeave('accepted')}
-        onRejectAll={() => decidePendingAndLeave('rejected')}
-        onCancel={() => setDepartureGate(null)}
-      />
+        <PendingEditsDialog
+          isOpen={reviewGate !== null}
+          pendingCount={previewEdits.length}
+          actionLabel={
+            reviewGate === 'assess'
+              ? t('translation.pendingRunActionAssess')
+              : reviewGate === 'request'
+                ? t('translation.pendingRunActionRequest')
+                : t('translation.pendingRunActionTranslate')
+          }
+          onAcceptAll={() => decidePendingAndRun('accepted')}
+          onRejectAll={() => decidePendingAndRun('rejected')}
+          onCancel={cancelReviewGate}
+        />
+        <PendingEditsDialog
+          isOpen={departureGate !== null}
+          pendingCount={previewEdits.length}
+          actionLabel=""
+          message={t('translation.pendingLeavePage')}
+          onAcceptAll={() => decidePendingAndLeave('accepted')}
+          onRejectAll={() => decidePendingAndLeave('rejected')}
+          onCancel={() => setDepartureGate(null)}
+        />
 
-      <ConfirmDialog
-        isOpen={confirmRetranslate}
-        title={t('translation.documentRetranslateTitle')}
-        message={t('translation.documentRetranslateMessage')}
-        confirmLabel={t('translation.translateDocument')}
-        onConfirm={() => {
-          setConfirmRetranslate(false);
-          void submitDocument();
-        }}
-        onCancel={() => setConfirmRetranslate(false)}
-      />
+        <ConfirmDialog
+          isOpen={confirmRetranslate}
+          title={t('translation.documentRetranslateTitle')}
+          message={t(
+            onSlides
+              ? 'translation.slides.retranslate'
+              : 'translation.documentRetranslateMessage',
+          )}
+          confirmLabel={t('translation.translateDocument')}
+          onConfirm={() => {
+            setConfirmRetranslate(false);
+            void submitDocument();
+          }}
+          onCancel={() => setConfirmRetranslate(false)}
+        />
 
-      {/* First change over a suggested passage: explain once, then act.
+        {/* First change over a suggested passage: explain once, then act.
           Confirming applies the held change — nothing typed is lost. */}
-      <ConfirmDialog
-        isOpen={overwritePrompt !== null}
-        title={t('translation.overwriteEditTitle')}
-        message={t('translation.overwriteEditMessage')}
-        confirmLabel={
-          (overwritePrompt?.ids.length ?? 0) > 1
-            ? t('translation.overwriteEditConfirmMany', {
-                count: String(overwritePrompt?.ids.length ?? 0),
-              })
-            : t('translation.overwriteEditConfirmOne')
-        }
-        onConfirm={() => {
-          if (!overwritePrompt) return;
-          const { ids, next } = overwritePrompt;
-          setOverwritePrompt(null);
-          setReviewOverwriteAcknowledged(true);
-          dropEdits(ids);
-          patchState({ finalText: next });
-        }}
-        onCancel={() => setOverwritePrompt(null)}
-      />
-    </div>
+        <ConfirmDialog
+          isOpen={overwritePrompt !== null}
+          title={t('translation.overwriteEditTitle')}
+          message={t('translation.overwriteEditMessage')}
+          confirmLabel={
+            (overwritePrompt?.ids.length ?? 0) > 1
+              ? t('translation.overwriteEditConfirmMany', {
+                  count: String(overwritePrompt?.ids.length ?? 0),
+                })
+              : t('translation.overwriteEditConfirmOne')
+          }
+          onConfirm={() => {
+            if (!overwritePrompt) return;
+            const { ids, next } = overwritePrompt;
+            setOverwritePrompt(null);
+            setReviewOverwriteAcknowledged(true);
+            dropEdits(ids);
+            patchState({ finalText: next });
+          }}
+          onCancel={() => setOverwritePrompt(null)}
+        />
+      </div>
+    </FormattedUnitProvider>
   );
 }
