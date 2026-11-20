@@ -14,12 +14,13 @@ import path from 'path';
 
 /**
  * The process ids of `rootPid` and all its descendants, found by walking
- * each thread's `children` list.
+ * each thread's `children` list; null where the kernel does not provide
+ * those lists (built without CONFIG_PROC_CHILDREN).
  */
 async function processTree(
   rootPid: number,
   procRoot: string,
-): Promise<number[]> {
+): Promise<number[] | null> {
   const found: number[] = [];
   const pending = [rootPid];
   while (pending.length > 0) {
@@ -35,13 +36,46 @@ async function processTree(
           path.join(procRoot, String(pid), 'task', task, 'children'),
           'utf8',
         )
-        .catch(() => '');
+        .catch((error: NodeJS.ErrnoException) =>
+          error.code === 'ENOENT' ? null : '',
+        );
+      if (children === null) {
+        // The root's own list missing means the kernel has none at all; a
+        // child's can simply have exited.
+        if (pid === rootPid) return null;
+        continue;
+      }
       for (const child of children.split(/\s+/)) {
         if (/^\d+$/.test(child)) pending.push(Number(child));
       }
     }
   }
   return found;
+}
+
+/**
+ * Every process in process group `groupId`, by reading each process's
+ * `stat`. Slower than the tree walk; used where the kernel has no
+ * children lists. The render service starts LibreOffice as a group leader
+ * (its pid is the group id) and LibreOffice keeps its processes in it.
+ */
+async function processGroup(
+  groupId: number,
+  procRoot: string,
+): Promise<number[]> {
+  const entries = await fs.promises.readdir(procRoot).catch(() => []);
+  const members: number[] = [];
+  for (const name of entries) {
+    if (!/^\d+$/.test(name)) continue;
+    const stat = await fs.promises
+      .readFile(path.join(procRoot, name, 'stat'), 'utf8')
+      .catch(() => '');
+    // Fields after the command, which is in parentheses and may contain
+    // spaces: state, ppid, pgrp, ...
+    const rest = stat.slice(stat.lastIndexOf(')') + 2).split(' ');
+    if (Number(rest[2]) === groupId) members.push(Number(name));
+  }
+  return members;
 }
 
 /** A process's resident memory in bytes, from its `status`; 0 when gone. */
@@ -76,7 +110,9 @@ export async function treeResidentBytes(
       .catch(() => false);
     return procExists ? 0 : null;
   }
-  const pids = await processTree(rootPid, procRoot);
+  const pids =
+    (await processTree(rootPid, procRoot)) ??
+    (await processGroup(rootPid, procRoot));
   const sizes = await Promise.all(
     pids.map((pid) => residentBytes(pid, procRoot)),
   );
