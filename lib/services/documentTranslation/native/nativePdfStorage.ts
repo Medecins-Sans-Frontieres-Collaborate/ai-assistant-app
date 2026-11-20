@@ -3,6 +3,11 @@ import { NextRequest } from 'next/server';
 
 import Hasher from '@/lib/utils/app/hash';
 import {
+  NATIVE_PDF_EXPORT_FORMATS,
+  NativePdfExportFormat,
+  NativePdfExportUrls,
+} from '@/lib/utils/shared/translation/nativePdf';
+import {
   NativeRunBackend,
   RUN_KEY_BYTES,
   RUN_KEY_HEADER,
@@ -38,6 +43,7 @@ const CONTENT_TYPES = {
   pdf: 'application/pdf',
   json: 'application/json',
   png: 'image/png',
+  pptx: NATIVE_PDF_EXPORT_FORMATS.pptx.contentType,
 } as const;
 const OPAQUE = 'application/octet-stream';
 
@@ -254,16 +260,26 @@ export class NativeRunStore {
   }
 
   /**
-   * Stores a rebuild's PDF and page images.
+   * Stores a rebuild's PDF, page images and editable files.
    *
    * @param built - The rebuild's PDF and per-page images.
-   * @returns Where the PDF and each page's images are served from.
+   * @returns Where the PDF, each page's images and each editable file are
+   *   served from.
    */
   async putRebuild(built: {
     pdf: Uint8Array;
     outputs: NativePdfPageOutput[];
-  }): Promise<{ pdfUrl: string; pageImages: StoredNativePage[] }> {
-    const [pdf, pageImages] = await Promise.all([
+    /** Editable files built with the PDF (see EDITABLE DOWNLOADS). */
+    exports?: Partial<Record<NativePdfExportFormat, Uint8Array>>;
+  }): Promise<{
+    pdfUrl: string;
+    pageImages: StoredNativePage[];
+    exportUrls?: NativePdfExportUrls;
+  }> {
+    const formats = Object.entries(built.exports ?? {}) as Array<
+      [NativePdfExportFormat, Uint8Array]
+    >;
+    const [pdf, pageImages, exported] = await Promise.all([
       this.put(built.pdf, 'pdf'),
       Promise.all(
         built.outputs.map(async (output) => {
@@ -278,8 +294,18 @@ export class NativeRunStore {
           };
         }),
       ),
+      Promise.all(
+        formats.map(
+          async ([format, data]) =>
+            [format, (await this.put(data, format)).url] as const,
+        ),
+      ),
     ]);
-    return { pdfUrl: pdf.url, pageImages };
+    return {
+      pdfUrl: pdf.url,
+      pageImages,
+      ...(exported.length ? { exportUrls: Object.fromEntries(exported) } : {}),
+    };
   }
 }
 
