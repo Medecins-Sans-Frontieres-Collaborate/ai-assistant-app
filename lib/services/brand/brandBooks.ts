@@ -37,6 +37,7 @@ import {
   brandBookFileBlobPath,
 } from '@/lib/services/agentAccess/types';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import { storedUploadBytes } from '@/lib/services/documents/sources/documentSources';
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
@@ -138,26 +139,8 @@ export interface BrandFileStore {
   writeStored(bookId: string, name: string, data: Buffer): Promise<void>;
 }
 
-/** A data URL as the upload route stores an image: `data:<mime>;base64,`. */
-const STORED_DATA_URL = /^data:[a-zA-Z0-9!#$&^_.+/-]+;base64,/;
-
-/**
- * An upload's bytes as stored. The upload route keeps an image as its
- * data URL text (sanitised, for SVG), not as the image's bytes; every
- * other file is kept as it is.
- *
- * @param stored - The blob's content.
- * @returns The file's own bytes.
- */
-export function uploadBytes(stored: Buffer): Buffer {
-  const head = stored.subarray(0, 120).toString('latin1');
-  const prefix = STORED_DATA_URL.exec(head);
-  if (!prefix) return stored;
-  return Buffer.from(
-    stored.subarray(prefix[0].length).toString('latin1'),
-    'base64',
-  );
-}
+/** An upload's bytes as stored (the documents layer's storedUploadBytes). */
+export const uploadBytes = storedUploadBytes;
 
 /** Base64 holds 3 bytes in 4 characters, plus the data URL's prefix. */
 const STORED_SIZE_ALLOWANCE = 1.4;
