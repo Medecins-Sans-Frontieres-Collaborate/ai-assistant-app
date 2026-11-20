@@ -21,6 +21,12 @@
  */
 import { NextRequest } from 'next/server';
 
+import { deckErrorResponse } from '@/lib/services/documentTranslation/deck/deckErrorResponse';
+import {
+  DECK_SERVICE_EXTENSION,
+  PreparedDeck,
+  prepareDeck,
+} from '@/lib/services/documentTranslation/deck/deckJob';
 import { DocumentTranslationService } from '@/lib/services/documentTranslation/documentTranslationService';
 import { createTranslationJob } from '@/lib/services/documentTranslation/translationJobStore';
 import { GuardResult, guardLimit } from '@/lib/services/limits/routeGuard';
@@ -42,6 +48,7 @@ import { AzureBlobStorage } from '@/lib/utils/server/blob/blob';
 import { countPdfPages } from '@/lib/utils/server/file/fileHandling';
 import { createApiLoggingContext } from '@/lib/utils/server/observability';
 import { sanitizeBlobExtension } from '@/lib/utils/shared/blobPath';
+import { fileExtensionOf } from '@/lib/utils/shared/translation/documentMode';
 
 import {
   DocumentTranslationPendingReference,
@@ -55,6 +62,7 @@ import {
   getDocumentContentType,
   requiresAsyncTranslation,
 } from '@/types/documentTranslation';
+import { isPresentationExtension } from '@/types/documentTranslation';
 
 import { auth } from '@/auth';
 import { env } from '@/config/environment';
@@ -65,7 +73,10 @@ import {
 } from '@/lib/constants/fileTypes';
 import { v4 as uuidv4 } from 'uuid';
 
-export const maxDuration = 60; // Allow up to 60 seconds for translation
+// A .ppt is converted first, which can wait for a free slot in the render
+// queue (lib/services/presentationRender); the same bound as the formatted
+// pipeline's route.
+export const maxDuration = 300;
 
 /**
  * Reserves a PDF's pages against the caller's daily page allowance
@@ -125,6 +136,8 @@ export async function POST(request: NextRequest) {
   const customOutputFilename = formData.get('customOutputFilename') as
     | string
     | null;
+  // Presentations: speaker notes are translated unless this says 'false'.
+  const translateNotes = formData.get('translateNotes') !== 'false';
   const driveId = formData.get('driveId');
   const itemId = formData.get('itemId');
 
@@ -262,13 +275,31 @@ export async function POST(request: NextRequest) {
     // only ever touches the staging account — the firewalled user-data
     // accounts are never exposed to it.
     if (requiresAsyncTranslation(document.name)) {
-      // Usage limit: pages per day. Only the batch (PDF) path has a page
-      // count that is cheap to read before translating.
-      const pagesGuard = await reservePdfPages(
-        session,
-        request,
-        documentBuffer,
-      );
+      // A deck is made ready first: checked, converted from .ppt, its
+      // slides counted, and a plain .pptx copy made for the service.
+      let deck: PreparedDeck | undefined;
+      if (isPresentationExtension(fileExtensionOf(document.name))) {
+        try {
+          deck = await prepareDeck(
+            documentBuffer,
+            document.name,
+            request.signal,
+          );
+        } catch (error) {
+          const answer = deckErrorResponse(error);
+          if (!answer) throw error;
+          await Promise.allSettled(reservationRollbacks.map((undo) => undo()));
+          return answer;
+        }
+      }
+      // Usage limit: pages per day (a slide counts as a page). Only the
+      // batch path has a count that is cheap to read before translating.
+      const pagesGuard = deck
+        ? await guardLimit(session, TRANSLATION_PAGES_LIMIT_KEY, {
+            req: request,
+            amount: deck.slides,
+          })
+        : await reservePdfPages(session, request, documentBuffer);
       if (!pagesGuard.allowed && pagesGuard.response) {
         await Promise.allSettled(reservationRollbacks.map((undo) => undo()));
         return pagesGuard.response;
@@ -276,13 +307,18 @@ export async function POST(request: NextRequest) {
       if (pagesGuard.rollback) reservationRollbacks.push(pagesGuard.rollback);
 
       const jobId = uuidv4();
-      const fileExtension = sanitizeBlobExtension(
-        document.name.split('.').pop(),
-        'pdf',
-      );
+      const fileExtension = deck
+        ? deck.extension
+        : sanitizeBlobExtension(document.name.split('.').pop(), 'pdf');
+      // What the service reads and writes: the deck's .pptx copy, or the
+      // file itself.
+      const serviceExtension = deck ? DECK_SERVICE_EXTENSION : fileExtension;
+      const sourceName = deck ? deck.filename : document.name;
+      const keptOriginal = deck ? deck.base : documentBuffer;
+      const sentOriginal = deck ? deck.serviceCopy : documentBuffer;
       const translatedFilename =
         customOutputFilename ||
-        generateTranslatedFilename(document.name, targetLanguage);
+        generateTranslatedFilename(sourceName, targetLanguage);
 
       const blobStorage = new AzureBlobStorage(
         getEnvVariable({ name: 'AZURE_BLOB_STORAGE_NAME', user: session.user }),
@@ -308,18 +344,21 @@ export async function POST(request: NextRequest) {
       );
 
       const originalBlobPath = `${session.user.id}/translations/${jobId}_original.${fileExtension}`;
-      const blobPath = `${session.user.id}/translations/${jobId}.${fileExtension}`;
-      const contentType = getDocumentContentType(document.name);
+      const stagingOriginalPath = `${session.user.id}/translations/${jobId}_original.${serviceExtension}`;
+      const blobPath = `${session.user.id}/translations/${jobId}.${serviceExtension}`;
+      const contentType = getDocumentContentType(sourceName);
       // User storage copy — serves the original-file download immediately.
-      await blobStorage.upload(originalBlobPath, documentBuffer, {
+      await blobStorage.upload(originalBlobPath, keptOriginal, {
         blobHTTPHeaders: {
           blobContentType: contentType,
-          blobContentDisposition: `attachment; filename="${encodeURIComponent(document.name)}"`,
+          blobContentDisposition: `attachment; filename="${encodeURIComponent(sourceName)}"`,
         },
       });
       // Staging copy — what the Translator actually reads.
-      await stagingStorage.upload(originalBlobPath, documentBuffer, {
-        blobHTTPHeaders: { blobContentType: contentType },
+      await stagingStorage.upload(stagingOriginalPath, sentOriginal, {
+        blobHTTPHeaders: {
+          blobContentType: getDocumentContentType(`x.${serviceExtension}`),
+        },
       });
 
       // Optional glossary stages alongside the source (read SAS).
@@ -347,7 +386,7 @@ export async function POST(request: NextRequest) {
       // yet — Azure writes it on completion; the status route copies it into
       // user storage at the same path. Short expiry: jobs finish in minutes.
       const sourceUrl = await stagingStorage.generateContainerScopedSasUrl(
-        originalBlobPath,
+        stagingOriginalPath,
         4,
         'rl',
       );
@@ -370,12 +409,17 @@ export async function POST(request: NextRequest) {
         jobId,
         userId: session.user.id,
         operationId,
-        filename: document.name,
+        filename: sourceName,
         translatedFilename,
         ext: fileExtension,
         targetLanguage,
         createdAt: Date.now(),
         ...(m365Source && { m365Source }),
+        ...(deck && {
+          serviceExt: serviceExtension,
+          translateNotes,
+          ...(deck.convertedFrom && { convertedFrom: deck.convertedFrom }),
+        }),
       });
 
       console.log(
@@ -385,8 +429,8 @@ export async function POST(request: NextRequest) {
       const pending: DocumentTranslationPendingReference = {
         async: true,
         jobId,
-        originalFilename: document.name,
-        originalFileUrl: `/api/document-translation/content/${jobId}?filename=${encodeURIComponent(document.name)}&ext=${fileExtension}&original=true`,
+        originalFilename: sourceName,
+        originalFileUrl: `/api/document-translation/content/${jobId}?filename=${encodeURIComponent(sourceName)}&ext=${fileExtension}&original=true`,
         translatedFilename,
         targetLanguage,
         targetLanguageName: targetLangInfo.englishName,
