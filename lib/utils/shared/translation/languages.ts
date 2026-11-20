@@ -10,6 +10,7 @@
  *
  * ids are ISO 639-1 where available, else ISO 639-3.
  */
+import { slugify } from '@/lib/utils/shared/string/slugify';
 
 export interface TranslationLanguage {
   id: string;
@@ -147,4 +148,61 @@ export function findTranslationLanguage(
   id: string,
 ): TranslationLanguage | undefined {
   return TRANSLATION_LANGUAGES.find((l) => l.id === id);
+}
+
+/**
+ * The listed language a display label names: its label as shown in the
+ * picker ("German (Deutsch)"), its English name, its own name or its id,
+ * in any letter case. A language a person typed in by hand matches none.
+ *
+ * @param label - The target language as a request carries it.
+ */
+export function findTranslationLanguageByLabel(
+  label: string,
+): TranslationLanguage | undefined {
+  const wanted = label.trim().toLowerCase();
+  if (!wanted) return undefined;
+  return TRANSLATION_LANGUAGES.find((lang) =>
+    [translationLanguageLabel(lang), lang.name, lang.autonym, lang.id].some(
+      (name) => name.toLowerCase() === wanted,
+    ),
+  );
+}
+
+/** Used in a file name when a language's name has no letters a slug keeps. */
+const UNNAMED_LANGUAGE_SUFFIX = 'translated';
+
+/**
+ * What a translated file's name carries for its language, as in
+ * `report_fr.pdf`: a listed language's code, and for one typed in by hand
+ * a slug of the name as typed (`report_patwah.pdf`).
+ *
+ * @param label - The target language as a run carries it.
+ * @example translatedFileSuffix('German (Deutsch)') // 'de'
+ * @example translatedFileSuffix('Haitian Creole of the North') // 'haitian-creole-of-the-north'
+ */
+export function translatedFileSuffix(label: string): string {
+  return (
+    findTranslationLanguageByLabel(label)?.id ||
+    slugify(label) ||
+    UNNAMED_LANGUAGE_SUFFIX
+  );
+}
+
+/**
+ * The name a translation of a file is downloaded under: the source's name
+ * with the language after it and the extension of the format.
+ *
+ * @param sourceName - The source file's name, with or without an extension.
+ * @param label - The target language as a run carries it.
+ * @param extension - The download's extension, without the dot.
+ * @example translatedFileName('Report 2026.pdf', 'French', 'pptx') // 'Report 2026_fr.pptx'
+ */
+export function translatedFileName(
+  sourceName: string,
+  label: string,
+  extension: string,
+): string {
+  const base = sourceName.replace(/\.[A-Za-z0-9]{1,5}$/, '') || sourceName;
+  return `${base}_${translatedFileSuffix(label)}.${extension}`;
 }
