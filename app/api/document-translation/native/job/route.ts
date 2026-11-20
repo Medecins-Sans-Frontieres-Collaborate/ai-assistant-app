@@ -21,7 +21,7 @@ import {
 } from '@/lib/services/documentTranslation/native/nativePdfStorage';
 import { readNativeRunOptions } from '@/lib/services/documentTranslation/native/nativeRunForm';
 import { runStorageErrorResponse } from '@/lib/services/documentTranslation/native/nativeRunResponses';
-import { getRenderService } from '@/lib/services/presentationRender/renderService';
+import { getRenderService } from '@/lib/services/documents/render/renderService';
 import {
   getWorkflowFeatureLimits,
   isWorkflowFeatureEnabled,

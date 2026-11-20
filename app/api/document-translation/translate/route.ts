@@ -74,7 +74,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // A .ppt is converted first, which can wait for a free slot in the render
-// queue (lib/services/presentationRender); the same bound as the formatted
+// queue (lib/services/documents/render); the same bound as the formatted
 // pipeline's route.
 export const maxDuration = 300;
 
