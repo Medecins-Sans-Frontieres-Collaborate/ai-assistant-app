@@ -2,6 +2,7 @@ import {
   DOCUMENT_JOB_STEPS,
   clampPage,
   correctionToSave,
+  documentUnitOf,
   fileExtensionOf,
   leaveDocumentReader,
   parsePageInput,
@@ -85,6 +86,35 @@ describe('wholeDocumentEligibility', () => {
       ok: false,
       reason,
     });
+  });
+  it.each(['Deck.PPTX', 'a.pptm', 'a.ppsx', 'a.potx', 'old.ppt'])(
+    'accepts the presentation %s',
+    (name) => {
+      expect(wholeDocumentEligibility({ ...pdf, name }, 'es').ok).toBe(true);
+    },
+  );
+
+  it.each(['a.odp', 'a.key', 'a.pps'])(
+    'refuses the presentation format %s, which the service cannot read',
+    (name) => {
+      expect(wholeDocumentEligibility({ ...pdf, name }, 'es')).toEqual({
+        ok: false,
+        reason: 'unsupported-format',
+      });
+    },
+  );
+});
+
+describe('documentUnitOf', () => {
+  it.each([
+    ['Deck.PPTX', 'slide'],
+    ['old.ppt', 'slide'],
+    ['show.ppsx', 'slide'],
+    ['Manual.pdf', 'page'],
+    ['notes.docx', 'page'],
+    [undefined, 'page'],
+  ] as const)('%s is read in %ss', (name, unit) => {
+    expect(documentUnitOf(name)).toBe(unit);
   });
 });
 
