@@ -1,23 +1,36 @@
+'use client';
+
 import {
-  IconBraces,
-  IconCheck,
-  IconInfoCircle,
-  IconX,
-} from '@tabler/icons-react';
-import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
+  FC,
+  KeyboardEvent,
+  ReactNode,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import {
-  VariableDefinition,
+  PromptSegment,
   getVariableDefinitions,
+  humanizeVariableName,
+  promptSegments,
+  variableContext,
 } from '@/lib/utils/shared/chat/variables';
 
 import { Prompt } from '@/types/prompt';
 
+import Modal from '@/components/UI/Modal';
+
 interface Props {
   prompt: Prompt;
-  variables: string[];
+  /**
+   * Called with every variable's value, in the order the prompt first uses
+   * them, and the same values by name. An empty value means "use the
+   * default" (see replaceVariablesWithMap).
+   */
   onSubmit: (
     updatedVariables: string[],
     variableMap: { [key: string]: string },
@@ -25,206 +38,247 @@ interface Props {
   onClose: () => void;
 }
 
-export const VariableModal: FC<Props> = ({
-  prompt,
-  variables,
-  onSubmit,
-  onClose,
-}) => {
+/** Rows a value's field grows to before it scrolls. */
+const MAX_FIELD_ROWS = 6;
+
+/**
+ * Fills in a prompt's variables before it goes into the message box.
+ *
+ * Each field is named in words ("Example values" for {{example_values}})
+ * and shows the sentence of the prompt it sits in, so what to type is
+ * clear from the prompt itself. Below the fields, the message as it will
+ * read, updated while typing. A variable with a default can be left empty.
+ *
+ * Keys: Enter moves to the next field and, in the last one, inserts the
+ * prompt; Shift+Enter starts a new line; Ctrl/Cmd+Enter inserts from any
+ * field; Escape cancels. A missing value is pointed out at its field.
+ */
+export const VariableModal: FC<Props> = ({ prompt, onSubmit, onClose }) => {
   const t = useTranslations();
-
-  // Get variable definitions with defaults from the prompt content
-  const variableDefinitions = getVariableDefinitions(prompt.content);
-
-  const [updatedVariables, setUpdatedVariables] = useState<
-    { key: string; value: string; definition: VariableDefinition }[]
-  >(
-    variableDefinitions.map((varDef) => ({
-      key: varDef.name,
-      value: '',
-      definition: varDef,
-    })),
+  const formId = useId();
+  const definitions = useMemo(
+    () => getVariableDefinitions(prompt.content),
+    [prompt.content],
   );
+  const [values, setValues] = useState<Record<string, string>>({});
+  const [missing, setMissing] = useState<string[]>([]);
+  const [active, setActive] = useState<string | null>(
+    definitions[0]?.name ?? null,
+  );
+  const fields = useRef<Record<string, HTMLTextAreaElement | null>>({});
+  const firstField = useRef<HTMLTextAreaElement | null>(null);
+  const typedSomething = Object.values(values).some((value) => value.trim());
 
-  const modalRef = useRef<HTMLDivElement>(null);
-  const nameInputRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleChange = (index: number, value: string) => {
-    setUpdatedVariables((prev) => {
-      const updated = [...prev];
-      updated[index].value = value;
-      return updated;
-    });
+  const setValue = (name: string, value: string) => {
+    setValues((current) => ({ ...current, [name]: value }));
+    if (value.trim()) {
+      setMissing((current) => current.filter((other) => other !== name));
+    }
   };
 
-  const handleSubmit = () => {
-    // Only validate required variables (those without defaults)
-    const missingRequired = updatedVariables.filter(
-      (variable) => !variable.definition.isOptional && variable.value === '',
-    );
-
-    if (missingRequired.length > 0) {
-      alert(
-        `Please fill out all required variables: ${missingRequired.map((v) => v.key).join(', ')}`,
-      );
+  const submit = () => {
+    const empty = definitions
+      .filter((definition) => !definition.isOptional)
+      .map((definition) => definition.name)
+      .filter((name) => !values[name]?.trim());
+    if (empty.length > 0) {
+      setMissing(empty);
+      fields.current[empty[0]]?.focus();
       return;
     }
-
-    // Create a map of variable keys to values
-    const variableMap: { [key: string]: string } = {};
-    updatedVariables.forEach((variable) => {
-      variableMap[variable.key] = variable.value;
-    });
-
+    const variableMap = Object.fromEntries(
+      definitions.map((definition) => [
+        definition.name,
+        values[definition.name] ?? '',
+      ]),
+    );
     onSubmit(
-      updatedVariables.map((variable) => variable.value),
+      definitions.map((definition) => variableMap[definition.name]),
       variableMap,
     );
     onClose();
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit();
-    } else if (e.key === 'Escape') {
-      onClose();
-    }
+  const onFieldKeyDown = (
+    event: KeyboardEvent<HTMLTextAreaElement>,
+    index: number,
+  ) => {
+    if (event.key !== 'Enter' || event.shiftKey) return;
+    if (event.nativeEvent.isComposing) return;
+    event.preventDefault();
+    const next = definitions[index + 1];
+    if (event.ctrlKey || event.metaKey || !next) submit();
+    else fields.current[next.name]?.focus();
   };
 
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        onClose();
-      }
-    };
-
-    window.addEventListener('click', handleOutsideClick);
-
-    return () => {
-      window.removeEventListener('click', handleOutsideClick);
-    };
-  }, [onClose]);
-
-  useEffect(() => {
-    if (nameInputRef.current) {
-      nameInputRef.current.focus();
-    }
-  }, []);
+  const preview = promptSegments(prompt.content, values);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 animate-fade-in-fast"
-      onKeyDown={handleKeyDown}
-    >
-      <div
-        ref={modalRef}
-        className="relative inline-block max-h-[90vh] w-full max-w-lg transform overflow-hidden rounded-xl border border-gray-200 bg-white text-start align-bottom shadow-xl transition-all dark:border-gray-700 dark:bg-surface-dark sm:my-8 sm:align-middle animate-modal-in"
-        role="dialog"
-      >
-        {/* Header */}
-        <div className="relative border-b border-gray-200 bg-blue-50 px-6 py-5 dark:border-gray-700 dark:bg-blue-900/20">
+    <Modal
+      isOpen
+      onClose={onClose}
+      title={prompt.name}
+      size="lg"
+      initialFocusRef={firstField}
+      // Typed values are not thrown away by a stray click beside the dialog.
+      preventOutsideClick={typedSomething}
+      closeWithButton={false}
+      footer={
+        <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
+          <p className="me-auto text-xs text-gray-500 dark:text-gray-400">
+            {t('variableModal.keysHint')}
+          </p>
           <button
+            type="button"
             onClick={onClose}
-            className="absolute end-4 top-4 p-1 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors rounded-lg hover:bg-white/50 dark:hover:bg-black/30"
-            aria-label={t('common.close')}
+            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
           >
-            <IconX size={20} />
+            {t('variableModal.cancel')}
           </button>
-
-          <div className="flex items-start gap-3 pe-8">
-            <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
-                {prompt.name}
-              </h3>
-              {prompt.description && (
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                  {prompt.description}
-                </p>
-              )}
-            </div>
-          </div>
+          <button
+            type="submit"
+            form={formId}
+            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          >
+            {t('variableModal.insert')}
+          </button>
         </div>
-
-        {/* Content */}
-        <div className="max-h-[calc(90vh-220px)] overflow-y-auto px-6 py-5 space-y-5">
-          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/10 px-3 py-2 rounded-lg border border-blue-100 dark:border-blue-900/30">
-            <IconBraces size={16} className="shrink-0" />
-            <span>{t('variableModal.fillInstructions')}</span>
-          </div>
-
-          {updatedVariables.map((variable, index) => (
-            <div key={index} className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                <div className="flex h-6 w-6 items-center justify-center rounded bg-gray-100 dark:bg-gray-800 text-xs font-mono text-gray-600 dark:text-gray-400">
-                  {index + 1}
-                </div>
-                <span className="font-mono text-blue-600 dark:text-blue-400">
-                  {`{{${variable.key}}}`}
-                </span>
-                {variable.definition.isOptional ? (
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
-                    {t('variableModal.optional')}
-                  </span>
-                ) : (
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
-                    {t('variableModal.required')}
+      }
+    >
+      {prompt.description && (
+        <p className="-mt-2 mb-4 text-sm text-gray-600 dark:text-gray-400">
+          {prompt.description}
+        </p>
+      )}
+      <form
+        id={formId}
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          submit();
+        }}
+        className="flex flex-col gap-5"
+      >
+        {definitions.map((definition, index) => {
+          const { name } = definition;
+          const fieldId = `${formId}-${name}`;
+          const contextId = `${fieldId}-context`;
+          const errorId = `${fieldId}-error`;
+          const isMissing = missing.includes(name);
+          const value = values[name] ?? '';
+          return (
+            <div key={name} className="flex flex-col gap-1.5">
+              <label
+                htmlFor={fieldId}
+                className="text-sm font-medium text-gray-900 dark:text-gray-100"
+              >
+                {humanizeVariableName(name)}
+                {definition.isOptional && (
+                  // A real space, so the name reads "Audience (optional)".
+                  <span className="font-normal text-gray-500 dark:text-gray-400">
+                    {' '}
+                    {t('variableModal.optionalSuffix')}
                   </span>
                 )}
               </label>
-
-              {variable.definition.defaultValue && (
-                <div className="flex items-start gap-1.5 text-xs text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/10 px-2.5 py-1.5 rounded border border-blue-100 dark:border-blue-900/30">
-                  <IconInfoCircle size={14} className="shrink-0 mt-0.5" />
-                  <span>
-                    {t('variableModal.default')}{' '}
-                    <span className="font-mono font-medium">
-                      {variable.definition.defaultValue}
-                    </span>
-                  </span>
-                </div>
-              )}
-
+              <p
+                id={contextId}
+                className="text-xs leading-relaxed text-gray-500 dark:text-gray-400"
+              >
+                <PromptText
+                  segments={variableContext(prompt.content, name, values)}
+                  active={name}
+                />
+              </p>
               <textarea
-                ref={index === 0 ? nameInputRef : undefined}
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-blue-400 dark:focus:ring-blue-400/20"
-                style={{ resize: 'vertical', minHeight: '80px' }}
+                id={fieldId}
+                ref={(element) => {
+                  fields.current[name] = element;
+                  if (index === 0) firstField.current = element;
+                }}
+                value={value}
+                rows={Math.min(
+                  MAX_FIELD_ROWS,
+                  Math.max(1, value.split('\n').length),
+                )}
                 placeholder={
-                  variable.definition.defaultValue
+                  definition.defaultValue
                     ? t('variableModal.defaultPlaceholder', {
-                        defaultValue: variable.definition.defaultValue,
+                        defaultValue: definition.defaultValue,
                       })
-                    : t('variableModal.enterValue', { key: variable.key })
+                    : undefined
                 }
-                value={variable.value}
-                onChange={(e) => handleChange(index, e.target.value)}
-                rows={3}
+                aria-invalid={isMissing || undefined}
+                aria-describedby={
+                  isMissing ? `${contextId} ${errorId}` : contextId
+                }
+                onChange={(event) => setValue(name, event.target.value)}
+                onFocus={() => setActive(name)}
+                onKeyDown={(event) => onFieldKeyDown(event, index)}
+                className={`w-full resize-y rounded-lg border bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder:text-gray-500 ${
+                  isMissing
+                    ? 'border-red-500 focus:ring-red-500/30'
+                    : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 dark:border-gray-600'
+                }`}
               />
+              {isMissing && (
+                <p
+                  id={errorId}
+                  role="alert"
+                  className="text-xs text-red-600 dark:text-red-400"
+                >
+                  {t('variableModal.missing')}
+                </p>
+              )}
             </div>
-          ))}
-        </div>
+          );
+        })}
 
-        {/* Footer */}
-        <div className="border-t border-gray-200 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-surface-dark-recessed">
-          <div className="flex items-center justify-end gap-3">
-            <div className="flex gap-2">
-              <button
-                onClick={onClose}
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-              >
-                {t('variableModal.cancel')}
-              </button>
-              <button
-                onClick={handleSubmit}
-                className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-              >
-                <IconCheck size={16} />
-                <span>{t('variableModal.apply')}</span>
-              </button>
-            </div>
+        <section aria-labelledby={`${formId}-preview`}>
+          <h4
+            id={`${formId}-preview`}
+            className="mb-1.5 text-xs font-medium text-gray-700 dark:text-gray-300"
+          >
+            {t('variableModal.preview')}
+          </h4>
+          <div className="max-h-40 overflow-y-auto whitespace-pre-wrap rounded-lg bg-gray-50 px-3 py-2 text-sm leading-relaxed text-gray-800 dark:bg-gray-800/60 dark:text-gray-200">
+            <PromptText segments={preview} active={active} />
           </div>
-        </div>
-      </div>
-    </div>
+        </section>
+      </form>
+    </Modal>
   );
 };
+
+/**
+ * Prompt text with its variables marked: the one being filled (`active`)
+ * highlighted, a value or default as typed, and a variable still to fill
+ * as its name in brackets.
+ */
+function PromptText({
+  segments,
+  active,
+}: {
+  segments: PromptSegment[];
+  active: string | null;
+}): ReactNode {
+  return segments.map((segment, index) => {
+    if (segment.kind === 'text') return segment.text;
+    const isActive = segment.name === active;
+    const shown = segment.missing
+      ? `[${humanizeVariableName(segment.name)}]`
+      : segment.text;
+    const look = isActive
+      ? 'rounded bg-blue-100 px-0.5 text-blue-900 dark:bg-blue-900/50 dark:text-blue-100'
+      : segment.missing
+        ? 'text-gray-500 dark:text-gray-400'
+        : segment.usesDefault
+          ? 'italic'
+          : 'font-medium text-gray-900 dark:text-gray-100';
+    return (
+      <span key={index} data-variable={segment.name} className={look}>
+        {shown}
+      </span>
+    );
+  });
+}
