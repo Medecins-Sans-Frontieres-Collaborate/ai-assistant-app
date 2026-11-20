@@ -1,20 +1,32 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 
 /** Loading state of the document behind {@link usePdfPages}. */
 export type PdfPagesStatus = 'idle' | 'loading' | 'ready' | 'failed';
 
 export interface PdfPages {
+  /**
+   * `idle` before loading starts: with no file, or, on demand, until a page
+   * is first rendered.
+   */
   status: PdfPagesStatus;
   /** Pages in the document; 0 until it is ready. */
   pageCount: number;
   /**
-   * Renders one page to an image.
+   * Renders one page to an image, loading the document first when it is
+   * not loaded yet.
    *
    * @param page - 1-based page number.
    * @param width - Width of the image in CSS pixels.
-   * @returns A data URL, or null when the page cannot be rendered.
+   * @returns A data URL, or null when the page cannot be rendered (or the
+   *   document cannot be opened, or it was unloaded meanwhile).
    */
   renderPage: (page: number, width: number) => Promise<string | null>;
 }
@@ -37,29 +49,56 @@ interface LoadedDocument {
  * that cannot be opened reports `failed` instead of throwing, so previews
  * are always optional to the screen using them.
  *
+ * A screen that may never show the original (the review of a translated
+ * document) asks for it on demand: the file is fetched and opened on the
+ * first rendered page, not when the screen opens. A long document is
+ * several megabytes, and opening it competes with what the screen does
+ * need first.
+ *
  * @param loadFile - Returns the PDF; called once per `fileKey`.
  * @param fileKey - Identifies the file. A new key loads a new document;
  *   null unloads.
+ * @param options.onDemand - Load on the first rendered page instead of at
+ *   once. Turning it off loads a document not loaded yet.
  */
 export function usePdfPages(
   loadFile: () => Promise<Blob>,
   fileKey: string | null,
+  options: { onDemand?: boolean } = {},
 ): PdfPages {
+  const onDemand = options.onDemand ?? false;
   const [status, setStatus] = useState<PdfPagesStatus>('idle');
   const [pageCount, setPageCount] = useState(0);
   const documentRef = useRef<LoadedDocument | null>(null);
   const cacheRef = useRef(new Map<string, Promise<string | null>>());
   const loadFileRef = useRef(loadFile);
-  useEffect(() => {
+  // Kept in step in layout effects: those run before any passive effect, so
+  // a child that renders a page in its own effect already sees the new file.
+  useLayoutEffect(() => {
     loadFileRef.current = loadFile;
   });
+  /**
+   * The document of the current key, loading or loaded; null before the
+   * first request. Each key has its own `generation`, so a load that
+   * finishes after its key was replaced is discarded.
+   */
+  const openingRef = useRef<{
+    generation: number;
+    promise: Promise<LoadedDocument | null>;
+  } | null>(null);
+  const generationRef = useRef(0);
+  const fileKeyRef = useRef(fileKey);
 
-  useEffect(() => {
-    if (!fileKey) return;
-    let cancelled = false;
-    const cache = cacheRef.current;
+  /** Starts loading the current key's document, once; resolves null on failure. */
+  const ensureOpened = useCallback((): Promise<LoadedDocument | null> => {
+    if (!fileKeyRef.current) return Promise.resolve(null);
+    const generation = generationRef.current;
+    if (openingRef.current?.generation === generation) {
+      return openingRef.current.promise;
+    }
+    const isCurrent = () => generationRef.current === generation;
     setStatus('loading');
-    void (async () => {
+    const promise = (async (): Promise<LoadedDocument | null> => {
       try {
         // Both modules are the minified builds, imported rather than
         // referenced by URL. The readable builds declare their own
@@ -76,21 +115,32 @@ export function usePdfPages(
         const loaded = (await pdfjs.getDocument({
           data: new Uint8Array(await file.arrayBuffer()),
         }).promise) as unknown as LoadedDocument;
-        if (cancelled) {
+        if (!isCurrent()) {
           void loaded.destroy();
-          return;
+          return null;
         }
         documentRef.current = loaded;
         setPageCount(loaded.numPages);
         setStatus('ready');
+        return loaded;
       } catch (error) {
-        if (cancelled) return;
+        if (!isCurrent()) return null;
         console.warn('[usePdfPages] The PDF could not be opened:', error);
         setStatus('failed');
+        return null;
       }
     })();
+    openingRef.current = { generation, promise };
+    return promise;
+  }, []);
+
+  useLayoutEffect(() => {
+    fileKeyRef.current = fileKey;
+    if (!fileKey) return;
+    const cache = cacheRef.current;
     return () => {
-      cancelled = true;
+      generationRef.current += 1;
+      openingRef.current = null;
       cache.clear();
       void documentRef.current?.destroy();
       documentRef.current = null;
@@ -99,12 +149,14 @@ export function usePdfPages(
     };
   }, [fileKey]);
 
+  useEffect(() => {
+    if (fileKey && !onDemand) void ensureOpened();
+  }, [fileKey, onDemand, ensureOpened]);
+
   const renderPage = useCallback(
-    (page: number, width: number): Promise<string | null> => {
-      const loaded = documentRef.current;
-      if (!loaded || page < 1 || page > loaded.numPages) {
-        return Promise.resolve(null);
-      }
+    async (page: number, width: number): Promise<string | null> => {
+      const loaded = documentRef.current ?? (await ensureOpened());
+      if (!loaded || page < 1 || page > loaded.numPages) return null;
       const key = `${page}@${width}`;
       const cached = cacheRef.current.get(key);
       if (cached) return cached;
@@ -134,7 +186,7 @@ export function usePdfPages(
       cacheRef.current.set(key, rendering);
       return rendering;
     },
-    [],
+    [ensureOpened],
   );
 
   return { status, pageCount, renderPage };
