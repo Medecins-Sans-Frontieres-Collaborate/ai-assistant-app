@@ -725,6 +725,15 @@ export function powerPointTypeOf(mimeType: string, lowerName: string): string {
   return 'ppt';
 }
 
+/**
+ * PDF export of a presentation with its hidden slides: LibreOffice leaves
+ * them out by default, which shifts every later page number off its slide
+ * number (measured; docs/POWERPOINT_TRANSLATION.md). With them, page n of
+ * the text is slide n, as the translation workflow numbers slides.
+ */
+export const PPT_PDF_WITH_HIDDEN_SLIDES =
+  'pdf:impress_pdf_Export:{"ExportHiddenSlides":{"type":"boolean","value":"true"}}';
+
 async function pptToText(
   inputPath: string,
   type: string,
@@ -734,10 +743,12 @@ async function pptToText(
   // TODO: Possibly find a way to do this without converting to PDF first
   const outputDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'ppt-'));
   try {
-    const pdfPath = await libreOfficeConvert(inputPath, 'pdf', outputDir, {
-      ...options,
-      type,
-    });
+    const pdfPath = await libreOfficeConvert(
+      inputPath,
+      PPT_PDF_WITH_HIDDEN_SLIDES,
+      outputDir,
+      { ...options, type },
+    );
     const text = await pdfToText(pdfPath, options);
     console.log(
       `[Perf] pptToText: ${(performance.now() - perfStart).toFixed(1)}ms`,
