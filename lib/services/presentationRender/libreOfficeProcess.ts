@@ -4,14 +4,17 @@
  *
  * - Its own process group, so a timeout or an abort kills the launcher and
  *   `soffice.bin` together.
- * - An address-space cap (`ulimit -v`) and a lower CPU priority (`nice`):
- *   a deck too large for the cap fails as a job and the server goes on.
- *   Measured: 384 MB renders a 60-slide deck; 256 MB fails within a second.
+ * - A memory limit on what the process group actually uses (resident
+ *   memory, checked every MEMORY_CHECK_MS; see processMemory for why not
+ *   an address-space limit) and a lower CPU priority (`nice`): a deck too
+ *   large fails as a job and the server goes on.
  * - Its own profile directory, so conversions never share a profile lock.
  * - Success is the output file: LibreOffice exits 0 when it fails to load
  *   a file, so the exit code alone means nothing (probe results in
  *   docs/POWERPOINT_TRANSLATION.md).
  */
+import { treeResidentBytes } from './processMemory';
+
 import { spawn } from 'child_process';
 import fs from 'fs';
 import path from 'path';
@@ -21,6 +24,9 @@ const LOG_TAIL_CHARS = 4_000;
 
 /** CPU priority LibreOffice runs at; higher is lower priority. */
 const NICENESS = 10;
+
+/** How often the process group's memory is checked. */
+export const MEMORY_CHECK_MS = 250;
 
 export interface LibreOfficeConversion {
   /** The file to convert; already checked against its type. */
@@ -38,12 +44,25 @@ export interface LibreOfficeConversion {
   profileDir: string;
   /** Killed after this long. */
   timeoutMs: number;
-  /** Address-space cap for the process, in megabytes. */
+  /** Resident memory the process group may use, in megabytes. */
   memoryLimitMb: number;
   /** Stops the conversion (the process group is killed). */
   signal?: AbortSignal;
   /** The LibreOffice launcher to run; `libreoffice` by default. */
   binary?: string;
+  /** Measures the process tree's memory; replaced in tests. */
+  measureMemory?: (rootPid: number) => Promise<number | null>;
+}
+
+/** Raised when a conversion used more memory than allowed; it was killed. */
+export class LibreOfficeMemoryError extends Error {
+  readonly code = 'RENDER_MEMORY';
+  constructor(readonly limitMb: number) {
+    super(
+      `The document converter needed more than ${limitMb} MB of memory and was stopped. The file may be too large to convert.`,
+    );
+    this.name = 'LibreOfficeMemoryError';
+  }
 }
 
 /** Raised when a conversion runs past its time limit; it was killed. */
@@ -87,23 +106,17 @@ export function expectedOutputPath(
 }
 
 /**
- * The command line. A shell sets the address-space limit and then execs
- * `nice`, which execs LibreOffice: arguments are passed as positional
- * parameters, never spliced into the script, so no file name is ever
- * interpreted by the shell.
+ * The command line: LibreOffice under `nice`. Arguments go straight to the
+ * process (no shell), so no file name is ever interpreted.
  */
 export function libreOfficeCommand(job: LibreOfficeConversion): {
   command: string;
   args: string[];
 } {
-  // $0 is the limit in KiB, $1 the niceness; the rest is the command.
-  const script = 'ulimit -v "$0" && n="$1" && shift && exec nice -n "$n" "$@"';
   return {
-    command: 'sh',
+    command: 'nice',
     args: [
-      '-c',
-      script,
-      String(Math.max(1, Math.floor(job.memoryLimitMb * 1024))),
+      '-n',
       String(NICENESS),
       job.binary ?? 'libreoffice',
       `-env:UserInstallation=file://${job.profileDir}`,
@@ -135,6 +148,7 @@ function killGroup(pid: number | undefined): void {
  * @param job - What to convert, where, and within which limits.
  * @returns Path of the converted file.
  * @throws LibreOfficeTimeoutError past `timeoutMs`.
+ * @throws LibreOfficeMemoryError past `memoryLimitMb`.
  * @throws The signal's reason when aborted.
  * @throws LibreOfficeFailedError when no output was produced.
  */
@@ -150,50 +164,75 @@ export async function runLibreOffice(
     job.outputDir,
   );
 
-  const { code, signal, logs, timedOut, aborted } = await new Promise<{
-    code: number | null;
-    signal: NodeJS.Signals | null;
-    logs: string;
-    timedOut: boolean;
-    aborted: boolean;
-  }>((resolve, reject) => {
-    const child = spawn(command, args, {
-      detached: true, // its own process group; see killGroup
-      stdio: ['ignore', 'pipe', 'pipe'],
+  const measure =
+    job.measureMemory ?? ((pid: number) => treeResidentBytes(pid));
+  const limitBytes = job.memoryLimitMb * 1024 * 1024;
+  const { code, signal, logs, timedOut, aborted, overMemory } =
+    await new Promise<{
+      code: number | null;
+      signal: NodeJS.Signals | null;
+      logs: string;
+      timedOut: boolean;
+      aborted: boolean;
+      overMemory: boolean;
+    }>((resolve, reject) => {
+      const child = spawn(command, args, {
+        detached: true, // its own process group; see killGroup
+        stdio: ['ignore', 'pipe', 'pipe'],
+      });
+      let logs = '';
+      const keep = (chunk: Buffer) => {
+        logs = (logs + chunk.toString()).slice(-LOG_TAIL_CHARS);
+      };
+      child.stdout?.on('data', keep);
+      child.stderr?.on('data', keep);
+      let timedOut = false;
+      let aborted = false;
+      let overMemory = false;
+      let measuring = false;
+      const watchdog = setInterval(() => {
+        if (measuring || !child.pid) return;
+        measuring = true;
+        measure(child.pid)
+          .then((bytes) => {
+            if (bytes !== null && bytes > limitBytes && !overMemory) {
+              overMemory = true;
+              killGroup(child.pid);
+            }
+          })
+          .catch(() => undefined)
+          .finally(() => {
+            measuring = false;
+          });
+      }, MEMORY_CHECK_MS);
+      const timer = setTimeout(() => {
+        timedOut = true;
+        killGroup(child.pid);
+      }, job.timeoutMs);
+      const onAbort = () => {
+        aborted = true;
+        killGroup(child.pid);
+      };
+      job.signal?.addEventListener('abort', onAbort, { once: true });
+      child.on('error', (error) => {
+        clearTimeout(timer);
+        clearInterval(watchdog);
+        job.signal?.removeEventListener('abort', onAbort);
+        reject(error);
+      });
+      child.on('close', (code, signal) => {
+        clearTimeout(timer);
+        clearInterval(watchdog);
+        job.signal?.removeEventListener('abort', onAbort);
+        // The launcher can exit while soffice.bin lingers; never leave it.
+        killGroup(child.pid);
+        resolve({ code, signal, logs, timedOut, aborted, overMemory });
+      });
     });
-    let logs = '';
-    const keep = (chunk: Buffer) => {
-      logs = (logs + chunk.toString()).slice(-LOG_TAIL_CHARS);
-    };
-    child.stdout?.on('data', keep);
-    child.stderr?.on('data', keep);
-    let timedOut = false;
-    let aborted = false;
-    const timer = setTimeout(() => {
-      timedOut = true;
-      killGroup(child.pid);
-    }, job.timeoutMs);
-    const onAbort = () => {
-      aborted = true;
-      killGroup(child.pid);
-    };
-    job.signal?.addEventListener('abort', onAbort, { once: true });
-    child.on('error', (error) => {
-      clearTimeout(timer);
-      job.signal?.removeEventListener('abort', onAbort);
-      reject(error);
-    });
-    child.on('close', (code, signal) => {
-      clearTimeout(timer);
-      job.signal?.removeEventListener('abort', onAbort);
-      // The launcher can exit while soffice.bin lingers; never leave it.
-      killGroup(child.pid);
-      resolve({ code, signal, logs, timedOut, aborted });
-    });
-  });
 
   if (aborted) throw job.signal?.reason ?? new Error('Conversion aborted');
   if (timedOut) throw new LibreOfficeTimeoutError(job.timeoutMs);
+  if (overMemory) throw new LibreOfficeMemoryError(job.memoryLimitMb);
   const produced = await fs.promises
     .stat(output)
     .then((stats) => stats.size > 0)
