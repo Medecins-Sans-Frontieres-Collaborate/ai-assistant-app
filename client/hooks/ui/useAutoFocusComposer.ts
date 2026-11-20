@@ -13,6 +13,31 @@ export function composerCaptureBlocked(): boolean {
 }
 
 /**
+ * True when the composer cannot receive what is typed: it is not on screen,
+ * as when another view of the workspace (a document under review) is shown
+ * in its place. Text sent there would change a field nobody can see.
+ */
+export function composerHidden(composer: HTMLElement): boolean {
+  return !composer.isConnected || composer.getClientRects().length === 0;
+}
+
+/** Controls that Space activates: a Space pressed on one belongs to it. */
+const SPACE_ACTIVATED =
+  'button, summary, input[type="checkbox"], input[type="radio"], [role="button"], [role="checkbox"], [role="radio"], [role="switch"], [role="tab"], [role="menuitem"], [role="option"]';
+
+/**
+ * True when the key is Space on a control that Space activates (a button,
+ * a checkbox): pressing it there is a click, not typing.
+ */
+export function isControlActivation(event: KeyboardEvent): boolean {
+  return (
+    event.key === ' ' &&
+    event.target instanceof Element &&
+    event.target.closest(SPACE_ACTIVATED) !== null
+  );
+}
+
+/**
  * True when the event originated inside some *other* editable element, which
  * must keep its native behavior. Passing the composer itself returns false —
  * it is the intended destination, not a competing one.
@@ -69,8 +94,9 @@ export function useAutoFocusComposer({
       // Skip if already in an input/textarea/contenteditable
       if (isForeignEditable(event.target, textarea)) return;
       if (event.target === textarea) return;
+      if (isControlActivation(event)) return;
 
-      if (composerCaptureBlocked()) return;
+      if (composerCaptureBlocked() || composerHidden(textarea)) return;
 
       // Skip non-printable keys
       if (event.key.length !== 1) return;
