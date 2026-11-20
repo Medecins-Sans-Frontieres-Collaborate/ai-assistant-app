@@ -908,6 +908,12 @@ interface SettingsStore {
   setFormattedStepInstructions: (
     instructions: NativePdfStepInstructions,
   ) => void;
+  /**
+   * Whether a presentation's speaker notes are translated with its slides.
+   * On by default; the person's last choice is remembered.
+   */
+  translateSpeakerNotes: boolean;
+  setTranslateSpeakerNotes: (translate: boolean) => void;
   setMapImportDefaultConfidence: (value: 'high' | 'medium' | 'low') => void;
   setSuggestRevisions: (enabled: boolean) => void;
   setSuggestRevisionsException: (
@@ -1209,6 +1215,7 @@ export const useSettingsStore = create<SettingsStore>()(
       translationAnalysisHidden: false,
       translationAnalysisHeight: ANALYSIS_STRIP_HEIGHT.default,
       formattedStepInstructions: {},
+      translateSpeakerNotes: true,
       mapImportDefaultConfidence: 'high',
       m365Connected: true,
       m365ConnectedUserSet: false,
@@ -2091,6 +2098,8 @@ export const useSettingsStore = create<SettingsStore>()(
         set({
           formattedStepInstructions: sanitizeStepInstructions(instructions),
         }),
+      setTranslateSpeakerNotes: (translate) =>
+        set({ translateSpeakerNotes: translate }),
       setMapImportDefaultConfidence: (value) =>
         set({ mapImportDefaultConfidence: value }),
 
@@ -2240,6 +2249,7 @@ export const useSettingsStore = create<SettingsStore>()(
           translationAnalysisHidden: false,
           translationAnalysisHeight: ANALYSIS_STRIP_HEIGHT.default,
           formattedStepInstructions: {},
+          translateSpeakerNotes: true,
           mapImportDefaultConfidence: 'high',
           suggestRevisions: true,
           suggestRevisionsExceptions: {
@@ -2261,7 +2271,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 77, // v77: remembered formatted-translation step instructions
+      version: 78, // v78: remembered speaker-notes choice for presentations
       // A full browser storage must not throw out of a settings change
       // (saving a prompt left its dialog open): see guardedLocalStorage.
       storage: createJSONStorage(() => guardedLocalStorage),
@@ -2375,6 +2385,7 @@ export const useSettingsStore = create<SettingsStore>()(
         translationAnalysisHidden: state.translationAnalysisHidden,
         translationAnalysisHeight: state.translationAnalysisHeight,
         formattedStepInstructions: state.formattedStepInstructions,
+        translateSpeakerNotes: state.translateSpeakerNotes,
         mapImportDefaultConfidence: state.mapImportDefaultConfidence,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
@@ -3175,6 +3186,11 @@ export const useSettingsStore = create<SettingsStore>()(
           state.formattedStepInstructions = sanitizeStepInstructions(
             state.formattedStepInstructions,
           );
+        }
+
+        // v78: notes are translated unless the person said otherwise.
+        if (typeof state.translateSpeakerNotes !== 'boolean') {
+          state.translateSpeakerNotes = true;
         }
 
         // Whatever version it came from, the per-set rows are only kept as
