@@ -19,6 +19,8 @@ Every document holds, so each check has both sides:
     height (distorted)
 In brand.pptx the logo also sits on the master (every slide shows it).
 locked.pdf is brand.pdf with a password.
+guide.pdf is the brand's guide, stating the rules above in words (what a
+brand book draft is made from).
 """
 import copy
 import io
@@ -124,7 +126,35 @@ def pdf():
     doc.save(out / 'locked.pdf', encryption=fitz.PDF_ENCRYPT_AES_256, owner_pw='owner', user_pw='user')
 
 
+def guide():
+    lines = [
+        (22, INK, 'Northwind brand guide'),
+        (13, INK, 'Colours'),
+        (11, INK, 'Primary: Teal, #0F7C80. Use for headings and highlights.'),
+        (11, INK, 'Text: Ink, #1B2A41. Use for all body text.'),
+        (11, INK, 'Background: Sand, #F2E8D5.'),
+        (11, INK, 'White and black may be used anywhere.'),
+        (13, INK, 'Typography'),
+        (11, INK, 'Headings are set in Montserrat. Body text is set in Source Sans Pro.'),
+        (11, INK, 'Where these are not available, use Arial.'),
+        (11, INK, 'Never set text smaller than 9 pt.'),
+        (13, INK, 'Wording'),
+        (11, INK, 'Write in English. Say "families", not "clients".'),
+        (11, INK, 'Avoid "cheap"; write "affordable" instead.'),
+        (11, INK, 'Our voice is warm, plain and direct.'),
+    ]
+    doc = fitz.open()
+    page = doc.new_page(width=595, height=842)
+    y = 70
+    for size, color, text in lines:
+        y += size * 2.2
+        page.insert_text((50, y), text, fontname='helv', fontsize=size,
+                         color=tuple(c / 255 for c in color))
+    doc.save(out / 'guide.pdf')
+
+
 pptx()
 docx()
 pdf()
+guide()
 print('wrote', ', '.join(sorted(p.name for p in out.iterdir() if p.suffix != '.py')))
