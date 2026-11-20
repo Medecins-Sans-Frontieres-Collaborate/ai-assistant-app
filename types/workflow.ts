@@ -7,6 +7,7 @@
  * standard chat. The type is fixed at creation time: it is only ever set on
  * an empty conversation and never changed afterward.
  */
+import type { DeckPlan } from '@/lib/utils/shared/documents/deckPlan';
 import {
   FormattedDocumentOptions,
   FormattedPendingJob,
@@ -29,6 +30,7 @@ export const CONVERSATION_WORKFLOW_TYPES = [
   'form-fill',
   'channel-drafter',
   'brand-review',
+  'deck-builder',
 ] as const;
 
 export type ConversationWorkflowType =
@@ -1022,6 +1024,41 @@ export interface BrandReviewWorkflowState {
 }
 
 /* ------------------------------------------------------------------ */
+/* Deck builder (docs/DOCUMENT_PLATFORM.md, phase G)                   */
+/* ------------------------------------------------------------------ */
+
+/** One of the person's uploads, by reference and name. */
+export interface DeckBuilderUpload {
+  /** `/api/file/<sha256>.<ext>`. */
+  file: string;
+  name: string;
+}
+
+/**
+ * A deck builder conversation: what the deck is built from, the outline
+ * as the person is editing it, and the latest build. The outline's layouts
+ * and the build's deck live with their jobs on the server
+ * (GET /api/deck-builder/<id>).
+ */
+export interface DeckBuilderWorkflowState {
+  kind: 'deck-builder';
+  /** The brand book the deck is for, if any. */
+  bookId?: string;
+  /** A book's deck template (`admin:<book>/<name>`) or the person's upload. */
+  template?: { file: string; name: string; type: string };
+  brief: string;
+  sources: DeckBuilderUpload[];
+  pictures: DeckBuilderUpload[];
+  /** BCP 47 tag the deck is written in (default: the interface's). */
+  language?: string;
+  outlineId?: string;
+  /** The outline being edited: bounded text (at most 40 slides). */
+  plan?: DeckPlan;
+  buildId?: string;
+  updatedAt: string;
+}
+
+/* ------------------------------------------------------------------ */
 /* Union                                                               */
 /* ------------------------------------------------------------------ */
 
@@ -1039,4 +1076,5 @@ export type WorkflowState =
   | GrantsWorkflowState
   | FormFillWorkflowState
   | ChannelDrafterWorkflowState
-  | BrandReviewWorkflowState;
+  | BrandReviewWorkflowState
+  | DeckBuilderWorkflowState;
