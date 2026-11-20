@@ -12,6 +12,7 @@
  * Its conventions (coordinates, page numbering, what a unit is, measured box
  * versus layout room, inline tags) are stated once, in its own docstring.
  */
+import type { SandboxScript } from '@/lib/services/documents/sandbox/sandboxScriptRunner';
 
 /** Filename the script is uploaded under; the launch snippet looks for it. */
 export const PDF_NATIVE_SCRIPT_FILENAME = 'pdf_native.py';
@@ -2028,3 +2029,11 @@ if __name__ == '__main__':
     else:
         raise SystemExit('usage: pdf_native.py extract|rebuild')
 `;
+
+/** The PDF script as the sandbox runner takes it. */
+export const PDF_SANDBOX_SCRIPT: SandboxScript = {
+  filename: PDF_NATIVE_SCRIPT_FILENAME,
+  source: PDF_NATIVE_SCRIPT,
+  archives: PDF_NATIVE_OUTPUT_ARCHIVE,
+  usageLabel: 'native-pdf-sandbox',
+};
