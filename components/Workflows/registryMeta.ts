@@ -4,6 +4,7 @@ import {
   IconLanguage,
   IconMap,
   IconMessages,
+  IconPalette,
   IconReportMoney,
   IconTable,
 } from '@tabler/icons-react';
@@ -32,7 +33,8 @@ export interface WorkflowMeta {
     | 'map'
     | 'grants'
     | 'formFill'
-    | 'channelDrafter';
+    | 'channelDrafter'
+    | 'brandReview';
 }
 
 export const WORKFLOW_META: Record<ConversationWorkflowType, WorkflowMeta> = {
@@ -70,6 +72,11 @@ export const WORKFLOW_META: Record<ConversationWorkflowType, WorkflowMeta> = {
     type: 'channel-drafter',
     icon: IconMessages,
     i18nKey: 'channelDrafter',
+  },
+  'brand-review': {
+    type: 'brand-review',
+    icon: IconPalette,
+    i18nKey: 'brandReview',
   },
 };
 
