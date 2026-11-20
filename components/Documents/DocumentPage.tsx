@@ -80,6 +80,8 @@ export interface DocumentPageProps {
    * use {@link placeOnPage} to position something over a box.
    */
   children?: ReactNode;
+  /** Test id of the page element. */
+  testId?: string;
 }
 
 /**
@@ -112,6 +114,7 @@ export function DocumentPage({
   width = PAGE_WIDTH,
   onSelect,
   children,
+  testId = 'document-page',
 }: DocumentPageProps) {
   // The box that takes the Tab stop: the last one the keyboard was on.
   const [focusedId, setFocusedId] = useState<string | null>(null);
@@ -155,7 +158,7 @@ export function DocumentPage({
     // Auto margins centre the page and, unlike centring the row, leave a
     // zoomed page's left edge reachable by scrolling.
     <div
-      data-testid="document-page"
+      data-testid={testId}
       {...{ [PAGE_SURFACE_ATTRIBUTE]: '' }}
       style={{ width }}
       onKeyDown={onKeyDown}
