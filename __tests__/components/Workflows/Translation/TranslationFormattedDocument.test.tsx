@@ -1152,7 +1152,7 @@ describe('finished translation: keyboard and mouse', () => {
     screen.getByRole('button', { name: 'translation.formatted.blockLabel 1' });
   const listBlock = (id: string) =>
     document.querySelector<HTMLElement>(
-      `[data-unit-place="list"][data-unit-id="${id}"]`,
+      `[data-overlay-place="list"][data-overlay-id="${id}"]`,
     )!;
 
   beforeEach(() => {
