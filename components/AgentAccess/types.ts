@@ -12,6 +12,8 @@ import type {
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 
+import type { BrandBookBody } from '@/lib/utils/shared/brand/brandBook';
+
 import type { ChannelProfile, ChannelSetData } from '@/types/drafter';
 
 /**
@@ -582,6 +584,41 @@ export interface AdminFormTemplateResponse {
   canonicalKey: string;
 }
 
+/* ------------------------------------------------------------------ */
+/* Brand books (docs/DOCUMENT_PLATFORM.md, phase E)                    */
+/* ------------------------------------------------------------------ */
+
+/** Mirrors `BRAND_BOOK_SOURCE` (server types). */
+export const CLIENT_BRAND_BOOK_SOURCE = 'brand-book';
+
+/** A brand book record as GET /api/agent-access/brand-books serves it. */
+export interface AdminBrandBookRecord {
+  version: 1;
+  id: string;
+  book: BrandBookBody;
+  createdBy: string;
+  createdAt: string;
+  updatedBy: string;
+  updatedAt: string;
+}
+
+export interface AdminStoredBrandBook {
+  canonicalKey: string;
+  record: AdminBrandBookRecord;
+  etag: string;
+}
+
+export interface AdminBrandBooksResponse {
+  books: AdminStoredBrandBook[];
+  booksUnavailable?: boolean;
+}
+
+export interface AdminBrandBookResponse {
+  record: AdminBrandBookRecord;
+  etag: string;
+  canonicalKey: string;
+}
+
 // ---------------------------------------------------------------------------
 // Which rule sources the merged agents list shows
 // ---------------------------------------------------------------------------
@@ -612,6 +649,7 @@ export const CLIENT_NON_AGENT_RULE_SOURCES: ReadonlySet<string> = new Set([
   CLIENT_CATALOG_OAUTH_SOURCE,
   CLIENT_MAP_DATASET_SOURCE,
   CLIENT_FORM_TEMPLATE_SOURCE,
+  CLIENT_BRAND_BOOK_SOURCE,
   CLIENT_CHANNEL_PROFILE_SOURCE,
   CLIENT_CHANNEL_SET_SOURCE,
   CLIENT_PUBLISH_SOURCE,
