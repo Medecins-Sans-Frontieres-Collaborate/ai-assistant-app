@@ -21,15 +21,23 @@ In brand.pptx the logo also sits on the master (every slide shows it).
 locked.pdf is brand.pdf with a password.
 guide.pdf is the brand's guide, stating the rules above in words (what a
 brand book draft is made from).
+template.pptx is the brand's deck template: PowerPoint's own eleven layouts
+(python-pptx's default, made in PowerPoint) with the brand's typefaces and
+colours in its theme, and one sample slide a built deck must not keep. The
+sample has a picture only it uses, speaker notes and a section, so building
+from the template exercises removing all three. template.potx is the same
+template saved as a template (only its main part's content type differs).
 """
 import copy
 import io
 import sys
+import zipfile
 from pathlib import Path
 
 import fitz
 from docx import Document
 from docx.shared import Pt as DocxPt, RGBColor as DocxColor, Inches as DocxInches
+from lxml import etree
 from PIL import Image, ImageDraw
 from pptx import Presentation
 from pptx.dml.color import RGBColor
@@ -38,6 +46,7 @@ from pptx.util import Inches, Pt
 INK = (0x1b, 0x2a, 0x41)
 TEAL = (0x0f, 0x7c, 0x80)
 OFF = (0xff, 0x00, 0xff)
+SAND = (0xf2, 0xe8, 0xd5)
 
 TEXT = {
     'heading': 'Northwind annual review',
@@ -153,7 +162,67 @@ def guide():
     doc.save(out / 'guide.pdf')
 
 
+THEME_NS = '{http://schemas.openxmlformats.org/drawingml/2006/main}'
+
+
+def template():
+    prs = Presentation()
+    master = prs.slide_master
+    theme_part = next(rel.target_part for rel in master.part.rels.values()
+                      if rel.reltype.endswith('/theme'))
+    theme = etree.fromstring(theme_part.blob)
+    scheme = theme.find('.//' + THEME_NS + 'clrScheme')
+    for name, rgb in (('dk1', INK), ('dk2', INK), ('accent1', TEAL), ('lt2', SAND)):
+        slot = scheme.find(THEME_NS + name)
+        for child in list(slot):
+            slot.remove(child)
+        etree.SubElement(slot, THEME_NS + 'srgbClr', val='%02X%02X%02X' % rgb)
+    fonts = theme.find('.//' + THEME_NS + 'fontScheme')
+    fonts.find(THEME_NS + 'majorFont/' + THEME_NS + 'latin').set('typeface', 'Montserrat')
+    fonts.find(THEME_NS + 'minorFont/' + THEME_NS + 'latin').set('typeface', 'Source Sans Pro')
+    theme_part._blob = etree.tostring(theme, xml_declaration=True, encoding='UTF-8', standalone=True)
+
+    sample = prs.slides.add_slide(prs.slide_layouts[1])
+    sample.shapes.title.text = 'Sample slide: replace me'
+    sample.placeholders[1].text = 'Template guidance that a built deck must not keep'
+    sample.shapes.add_picture(io.BytesIO(SAMPLE_PICTURE), Inches(7), Inches(5), Inches(1), Inches(1))
+    sample.notes_slide.notes_text_frame.text = 'Notes on the sample slide'
+    # A section naming the sample slide, as PowerPoint writes one.
+    p14 = 'http://schemas.microsoft.com/office/powerpoint/2010/main'
+    pres = prs.part._element
+    slide_id = pres.find('.//{http://schemas.openxmlformats.org/presentationml/2006/main}sldId').get('id')
+    ext_list = pres.find('{http://schemas.openxmlformats.org/presentationml/2006/main}extLst')
+    if ext_list is None:
+        ext_list = etree.SubElement(pres, '{http://schemas.openxmlformats.org/presentationml/2006/main}extLst')
+    ext = etree.SubElement(ext_list, '{http://schemas.openxmlformats.org/presentationml/2006/main}ext',
+                           uri='{521415D9-36F7-43E2-AB2F-B90AF26B5E84}')
+    section = etree.SubElement(etree.SubElement(ext, '{%s}sectionLst' % p14, nsmap={'p14': p14}),
+                               '{%s}section' % p14, name='Samples', id='{9B1A0AF3-4A0C-4E5B-9E25-0D6C1E2B3A41}')
+    etree.SubElement(etree.SubElement(section, '{%s}sldIdLst' % p14), '{%s}sldId' % p14, id=slide_id)
+    prs.save(out / 'template.pptx')
+
+    # The same template saved as a template: only the main part's type differs.
+    source = zipfile.ZipFile(out / 'template.pptx')
+    with zipfile.ZipFile(out / 'template.potx', 'w', zipfile.ZIP_DEFLATED) as potx:
+        for info in source.infolist():
+            data = source.read(info.filename)
+            if info.filename == '[Content_Types].xml':
+                data = data.replace(b'presentationml.presentation.main+xml',
+                                    b'presentationml.template.main+xml')
+            potx.writestr(info, data)
+
+
+def sample_picture():
+    image = Image.new('RGB', (120, 120), (200, 30, 30))
+    buffer = io.BytesIO()
+    image.save(buffer, 'PNG')
+    return buffer.getvalue()
+
+
+SAMPLE_PICTURE = sample_picture()
+
 pptx()
+template()
 docx()
 pdf()
 guide()
