@@ -13,6 +13,7 @@
  * (makeServiceCopy): macros never leave the app's storage. Every rebuild
  * starts from the original deck.
  */
+import { DECK_ENGINE_SCRIPT } from '@/lib/services/documents/model/deckEngineScript';
 import {
   documentPagePictures,
   documentPdf,
@@ -26,7 +27,6 @@ import { NativePdfFitReport } from '@/lib/utils/shared/translation/nativePdf';
 
 import { makeServiceCopy, mergeTranslatedDeck } from '../../deck/deckMerge';
 import { omitDeckSlides } from '../../deck/deckSlides';
-import { DECK_SANDBOX_SCRIPT } from '../pptxNativeScript';
 import {
   DrawnUnit,
   SLIDE_RENDER_DPI,
@@ -249,7 +249,7 @@ export function deckFormat(format: NativeDeckFormat): NativeFormatAdapter {
             }),
           ],
           context.usage,
-          DECK_SANDBOX_SCRIPT,
+          DECK_ENGINE_SCRIPT,
         );
         throwIfRefused(run.files);
         const unitsFile = requireFile(run.files, UNITS_FILENAME);
@@ -334,7 +334,7 @@ export function deckFormat(format: NativeDeckFormat): NativeFormatAdapter {
             }),
           ],
           context.usage,
-          DECK_SANDBOX_SCRIPT,
+          DECK_ENGINE_SCRIPT,
         );
         throwIfRefused(run.files);
         const report = JSON.parse(
