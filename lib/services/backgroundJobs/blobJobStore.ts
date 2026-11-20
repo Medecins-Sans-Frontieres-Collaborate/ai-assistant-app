@@ -5,6 +5,7 @@
  * caller's, normally under the person's own folder.
  */
 import { BlobProperty, BlobStorage } from '@/lib/utils/server/blob/blob';
+import { overwriteBlob } from '@/lib/utils/server/blob/overwriteBlob';
 import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 
 import { JobStore } from './backgroundJobs';
@@ -41,10 +42,11 @@ export class BlobJobStore implements JobStore {
   }
 
   private async write(name: string, data: unknown): Promise<void> {
-    await this.storage.upload(
+    await overwriteBlob(
+      this.storage,
       this.prefix + name,
       Buffer.from(JSON.stringify(data), 'utf-8'),
-      { blobHTTPHeaders: { blobContentType: JSON_TYPE } },
+      JSON_TYPE,
     );
   }
 
