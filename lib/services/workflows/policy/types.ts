@@ -105,11 +105,13 @@ export const WORKFLOW_FEATURES: Record<
     // three in order: default batch ≤ largest batch ≤ document total.
     limits: {
       // Pages a batch takes unless the person raises it.
-      defaultBatchPages: { default: 6, min: 1, max: 24 },
-      // The most a person may raise one batch to.
-      maxBatchPages: { default: 12, min: 1, max: 24 },
+      defaultBatchPages: { default: 6, min: 1, max: 50 },
+      // The most a person may raise one batch to. A batch is sent as
+      // requests of NATIVE_PDF_MAX_PAGES, one after the other, which share
+      // the document brief; 50 pages is nine of them.
+      maxBatchPages: { default: 50, min: 1, max: 50 },
       // Pages of one document that may be translated in total.
-      maxDocumentPages: { default: 30, min: 1, max: 100 },
+      maxDocumentPages: { default: 50, min: 1, max: 100 },
     },
   },
 };
