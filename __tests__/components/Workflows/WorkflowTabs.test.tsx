@@ -115,7 +115,7 @@ describe('WorkflowTabs', () => {
     it('renders on localhost even without the flag', () => {
       setHostname('localhost');
       render(<WorkflowTabs />);
-      expect(screen.getAllByRole('tab')).toHaveLength(8);
+      expect(screen.getAllByRole('tab')).toHaveLength(9);
     });
 
     it('renders nothing once the conversation has messages', () => {
@@ -136,9 +136,9 @@ describe('WorkflowTabs', () => {
       mockFlags = { conversationWorkflows: true };
     });
 
-    it('renders Chat plus the seven general workflows', () => {
+    it('renders Chat plus the eight general workflows', () => {
       render(<WorkflowTabs />);
-      expect(screen.getAllByRole('tab')).toHaveLength(8);
+      expect(screen.getAllByRole('tab')).toHaveLength(9);
       expect(screen.getByRole('tab', { name: CHAT })).toBeInTheDocument();
       expect(
         screen.getByRole('tab', { name: TRANSLATION }),
@@ -148,7 +148,7 @@ describe('WorkflowTabs', () => {
     it('adds the Grants tab only for grants group members', () => {
       mockGrantsAccess = true;
       render(<WorkflowTabs />);
-      expect(screen.getAllByRole('tab')).toHaveLength(9);
+      expect(screen.getAllByRole('tab')).toHaveLength(10);
       mockGrantsAccess = false;
     });
 
