@@ -15,6 +15,7 @@ import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useTones } from '@/client/hooks/settings/useTones';
 import { useStructuresEnabled } from '@/client/hooks/useStructuresEnabled';
 
+import { NESTED_DIALOG_ATTRIBUTE } from '@/components/UI/DashboardModal';
 import { TabNavigation } from '@/components/UI/TabNavigation';
 
 import { PromptsTab } from './PromptsTab';
@@ -77,6 +78,20 @@ export function CustomizationsModal({
     isStructuresEnabled,
   ]);
 
+  // Escape closes Quick Actions, unless an editor is open over it: that
+  // editor may hold an unsaved prompt or tone, and a stray Escape there
+  // must not throw it away with everything underneath.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || event.defaultPrevented) return;
+      if (document.querySelector(`[${NESTED_DIALOG_ATTRIBUTE}]`)) return;
+      onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
@@ -85,6 +100,9 @@ export function CustomizationsModal({
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="quick-actions-title"
         className="relative w-full h-full max-h-[90vh] max-w-[1400px] md:h-[85vh] bg-white dark:bg-surface-dark rounded-xl shadow-xl overflow-hidden flex flex-col animate-modal-in"
         onClick={(e) => e.stopPropagation()}
       >
@@ -92,7 +110,10 @@ export function CustomizationsModal({
         <div className="flex-shrink-0 px-4 md:px-6 py-3 md:py-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-3 md:mb-4">
             <div className="flex-1 min-w-0 me-4">
-              <h3 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white truncate">
+              <h3
+                id="quick-actions-title"
+                className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white truncate"
+              >
                 {t('Quick Actions')}
               </h3>
               <p className="hidden sm:block text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -100,7 +121,10 @@ export function CustomizationsModal({
               </p>
             </div>
             <button
+              type="button"
               onClick={onClose}
+              aria-label={t('common.close')}
+              title={t('common.close')}
               className="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
             >
               <IconX size={20} />
