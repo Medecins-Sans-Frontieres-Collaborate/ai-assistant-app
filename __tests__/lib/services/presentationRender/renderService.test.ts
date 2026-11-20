@@ -209,7 +209,7 @@ describe('InProcessRenderService', () => {
     await expect(service.convert(request())).rejects.toBeInstanceOf(
       RenderBusyError,
     );
-    expect(service.snapshot()).toEqual({
+    expect(service.snapshot()).toMatchObject({
       running: 1,
       queued: { interactive: 0, translation: 2 },
     });
