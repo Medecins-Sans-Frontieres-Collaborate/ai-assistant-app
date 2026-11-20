@@ -46,6 +46,7 @@ import {
   withUnitStyle,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import { translatedFileName } from '@/lib/utils/shared/translation/languages';
+import { NATIVE_SOURCE_CONTENT_TYPES } from '@/lib/utils/shared/translation/nativeFormats';
 import {
   NATIVE_PDF_EXPORT_FORMATS,
   NativePdfIssue,
@@ -62,6 +63,7 @@ import { FormattedBlockStyle } from './FormattedBlockStyle';
 import {
   FormattedDownloadFormat,
   FormattedDownloadMenu,
+  downloadFormatsOf,
 } from './FormattedDownloadMenu';
 import { FormattedPageRail } from './FormattedPageRail';
 import {
@@ -74,6 +76,7 @@ import {
   FormattedRunExpiryWarning,
   FormattedRunStorageLine,
 } from './FormattedRunStorageNotice';
+import { useFormattedUnit, useUnitWording } from './formattedWording';
 
 import { formatKeys } from '@/lib/constants/keyboardShortcuts';
 
@@ -203,6 +206,8 @@ export function FormattedReview({
   onChangeOptions,
 }: FormattedReviewProps) {
   const t = useTranslations('workflows');
+  const unitT = useUnitWording();
+  const unitIsSlide = useFormattedUnit() === 'slide';
   const [side, setSide] = useState<PageSide>('translated');
   const [outlines, setOutlines] = useState(true);
   const [filter, setFilter] = useState<Filter>('all');
@@ -544,7 +549,29 @@ export function FormattedReview({
       translatedFileName(run.sourceName, run.targetLanguage, extension);
     try {
       if (format === 'pdf') {
+        if (!run.pdfUrl) {
+          setDownloadFailed(true);
+          return;
+        }
         await downloadRunFile(run.pdfUrl, named('pdf'));
+        return;
+      }
+      if (format === 'document') {
+        // A presentation's deck is rebuilt by every render, so changes not
+        // on the page yet are put in by one first.
+        const url = pdfBehind
+          ? (await controller.rerender(false, {}))?.documentUrl
+          : run.documentUrl;
+        const kind = run.format;
+        if (!url || !kind || kind === 'pdf') {
+          setDownloadFailed(true);
+          return;
+        }
+        await downloadRunFile(
+          url,
+          named(kind),
+          NATIVE_SOURCE_CONTENT_TYPES[kind],
+        );
         return;
       }
       const stored = pdfBehind ? undefined : run.exportUrls?.[format];
@@ -623,6 +650,8 @@ export function FormattedReview({
           </span>
         )}
         <FormattedDownloadMenu
+          formats={downloadFormatsOf(run)}
+          documentExtension={run.format}
           busy={download}
           disabled={controller.rendering && download === null}
           behind={pdfBehind}
@@ -678,7 +707,7 @@ export function FormattedReview({
                 disabled={pdf.status === 'failed'}
                 title={
                   pdf.status === 'failed'
-                    ? t('translation.formatted.previewsUnavailable')
+                    ? unitT('previewsUnavailable')
                     : undefined
                 }
                 onClick={() => setSide('original')}
@@ -766,7 +795,7 @@ export function FormattedReview({
               {untranslated
                 ? ''
                 : pageRemoved
-                  ? t('translation.formatted.pageRemovedNote')
+                  ? unitT('pageRemovedNote')
                   : stale.includes(run.page)
                     ? t('translation.formatted.lastRender')
                     : t('translation.formatted.clickToEdit')}
@@ -776,7 +805,7 @@ export function FormattedReview({
             ref={scrollerRef}
             data-testid="page-scroller"
             role="region"
-            aria-label={t('translation.formatted.pageLabel', {
+            aria-label={unitT('pageLabel', {
               page: run.page,
             })}
             tabIndex={0}
@@ -790,7 +819,7 @@ export function FormattedReview({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={image}
-                  alt={t('translation.formatted.pageLabel', {
+                  alt={unitT('pageLabel', {
                     page: run.page,
                   })}
                   data-testid="untranslated-page"
@@ -913,8 +942,8 @@ export function FormattedReview({
             >
               <p className="text-[13px] text-gray-700 dark:text-gray-300">
                 {pageRemoved
-                  ? t('translation.formatted.pageRemovedNote')
-                  : t('translation.formatted.pageUntranslatedNote')}
+                  ? unitT('pageRemovedNote')
+                  : unitT('pageUntranslatedNote')}
               </p>
               {pageRemoved ? (
                 <button
@@ -933,7 +962,7 @@ export function FormattedReview({
                     onClick={() => batch?.onTranslate([run.page])}
                     className="min-h-[36px] rounded-lg bg-blue-600 px-3 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
                   >
-                    {t('translation.formatted.translateThisPage')}
+                    {unitT('translateThisPage')}
                   </button>
                 )
               )}
@@ -956,7 +985,7 @@ export function FormattedReview({
 
           {run.uncheckedPages?.includes(run.page) && (
             <p className="border-b border-gray-200 px-3 py-2 text-xs text-amber-700 dark:border-gray-700 dark:text-amber-400">
-              {t('translation.formatted.unchecked')}
+              {unitT('unchecked')}
             </p>
           )}
           {issues.length > 0 && (
@@ -974,7 +1003,7 @@ export function FormattedReview({
                       <span className="shrink-0 self-start rounded bg-amber-100 px-1.5 py-px text-[11px] text-amber-900 dark:bg-amber-900/40 dark:text-amber-200">
                         {unit
                           ? t('translation.formatted.blockLabel', { n: unit.n })
-                          : t('translation.formatted.wholePage')}
+                          : unitT('wholePage')}
                       </span>
                       <div className="min-w-0 flex-1">
                         <p className="text-[13px] text-gray-900 dark:text-gray-100">
@@ -1193,6 +1222,7 @@ export function FormattedReview({
                     style={unitStyle(run, unit.id)}
                     pending={restyled.has(unit.id)}
                     disabled={controller.rendering}
+                    movesShape={unitIsSlide}
                     onChange={(change) =>
                       onUpdateRun((latest) =>
                         withUnitStyle(latest, unit.id, change),
