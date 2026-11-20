@@ -29,10 +29,10 @@ vi.mock('@/lib/services/blobStorageFactory', () => ({
       }
       return blob;
     },
-    upload: async (name: string, data: Buffer) => {
-      blobs.set(name, data);
-      return name;
-    },
+    // Files that change in place are written whole (overwriteBlob.ts).
+    getBlockBlobClient: (name: string) => ({
+      upload: async (data: Buffer) => blobs.set(name, Buffer.from(data)),
+    }),
     deleteIfExists: async (name: string) => blobs.delete(name),
   }),
 }));
