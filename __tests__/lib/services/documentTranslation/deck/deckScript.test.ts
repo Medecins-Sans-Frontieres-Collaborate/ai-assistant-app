@@ -1,4 +1,4 @@
-import { PPTX_NATIVE_SCRIPT } from '@/lib/services/documentTranslation/native/pptxNativeScript';
+import { DECK_ENGINE_SOURCE } from '@/lib/services/documents/model/deckEngineScript';
 
 import {
   deckScriptAvailable,
@@ -93,9 +93,11 @@ const texts = (doc: string) =>
   [...doc.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map((m) => m[1]);
 
 it('ships as a raw template without backticks or dollar-braces', () => {
-  expect(PPTX_NATIVE_SCRIPT).not.toContain('`');
-  expect(PPTX_NATIVE_SCRIPT).not.toContain('${');
-  expect(PPTX_NATIVE_SCRIPT.startsWith('"""Native presentation')).toBe(true);
+  expect(DECK_ENGINE_SOURCE).not.toContain('`');
+  expect(DECK_ENGINE_SOURCE).not.toContain('${');
+  expect(DECK_ENGINE_SOURCE.startsWith('"""The presentation engine')).toBe(
+    true,
+  );
 });
 
 describe.skipIf(!deckScriptAvailable)(

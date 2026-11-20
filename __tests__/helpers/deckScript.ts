@@ -1,15 +1,15 @@
 /**
- * Runs the presentation sandbox script (pptxNativeScript.ts) on this
+ * Runs the presentation sandbox script (deckEngineScript.ts) on this
  * machine, with the same contract as runSandboxScript: inputs placed beside
  * the script, the command's archive unpacked. Tests that need it skip where
  * Python or lxml is missing (`deckScriptAvailable`).
  */
 import {
-  PPTX_NATIVE_OUTPUT_ARCHIVE,
-  PPTX_NATIVE_SCRIPT,
-  PPTX_NATIVE_SCRIPT_FILENAME,
-  PptxNativeCommand,
-} from '@/lib/services/documentTranslation/native/pptxNativeScript';
+  DECK_ENGINE_ARCHIVES,
+  DECK_ENGINE_FILENAME,
+  DECK_ENGINE_SOURCE,
+  DeckEngineCommand,
+} from '@/lib/services/documents/model/deckEngineScript';
 import type { SandboxInputFile } from '@/lib/services/documents/sandbox/sandboxScriptRunner';
 
 import { execFileSync } from 'child_process';
@@ -33,10 +33,7 @@ export const deckScriptAvailable = (() => {
 /** A fresh folder holding the script, for one run. */
 export function scriptDir(): string {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'deck-script-'));
-  fs.writeFileSync(
-    path.join(dir, PPTX_NATIVE_SCRIPT_FILENAME),
-    PPTX_NATIVE_SCRIPT,
-  );
+  fs.writeFileSync(path.join(dir, DECK_ENGINE_FILENAME), DECK_ENGINE_SOURCE);
   return dir;
 }
 
@@ -47,7 +44,7 @@ export function scriptDir(): string {
  * @param inputs - Files placed beside the script (job.json among them).
  */
 export function runDeckScript(
-  command: PptxNativeCommand,
+  command: DeckEngineCommand,
   inputs: SandboxInputFile[],
 ): Map<string, Uint8Array> {
   const dir = scriptDir();
@@ -57,11 +54,11 @@ export function runDeckScript(
     }
     execFileSync(
       PYTHON,
-      ['-I', path.join(dir, PPTX_NATIVE_SCRIPT_FILENAME), command, dir],
+      ['-I', path.join(dir, DECK_ENGINE_FILENAME), command, dir],
       { stdio: 'pipe', timeout: 120_000 },
     );
     const archive = fs.readFileSync(
-      path.join(dir, PPTX_NATIVE_OUTPUT_ARCHIVE[command]),
+      path.join(dir, DECK_ENGINE_ARCHIVES[command]),
     );
     return new Map(Object.entries(unzipSync(new Uint8Array(archive))));
   } finally {
@@ -78,7 +75,7 @@ export function withDeckModule<T>(code: string): T {
   const dir = scriptDir();
   try {
     fs.renameSync(
-      path.join(dir, PPTX_NATIVE_SCRIPT_FILENAME),
+      path.join(dir, DECK_ENGINE_FILENAME),
       path.join(dir, 'deck.py'),
     );
     const program = `import sys, json\nsys.path.insert(0, ${JSON.stringify(dir)})\nimport deck\n${code}`;

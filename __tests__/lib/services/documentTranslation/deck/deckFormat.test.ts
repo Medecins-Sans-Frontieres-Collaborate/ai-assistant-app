@@ -33,7 +33,7 @@ vi.mock('@/lib/services/documents/sandbox/sandboxScriptRunner', () => ({
       _usage: unknown,
       script: { filename: string },
     ) => {
-      if (script?.filename !== 'pptx_native.py') {
+      if (script?.filename !== 'deck_engine.py') {
         throw new Error('only the deck script runs here');
       }
       return {
