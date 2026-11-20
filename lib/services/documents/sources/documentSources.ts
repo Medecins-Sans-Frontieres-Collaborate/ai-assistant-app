@@ -10,6 +10,7 @@ import { Session } from 'next-auth';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 
+import Hasher from '@/lib/utils/app/hash';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
@@ -80,10 +81,56 @@ export async function readDocumentSource(
   return reader.read(session, source);
 }
 
+/** A data URL as the upload route stores an image: `data:<mime>;base64,`. */
+const STORED_DATA_URL = /^data:[a-zA-Z0-9!#$&^_.+/-]+;base64,/;
+
+/**
+ * An upload's bytes as stored. The upload route keeps an image as its
+ * data URL text (sanitised, for SVG), not as the image's bytes; every
+ * other file is kept as it is.
+ *
+ * @param stored - The blob's content.
+ * @returns The file's own bytes.
+ */
+export function storedUploadBytes(stored: Buffer): Buffer {
+  const head = stored.subarray(0, 120).toString('latin1');
+  const prefix = STORED_DATA_URL.exec(head);
+  if (!prefix) return stored;
+  return Buffer.from(
+    stored.subarray(prefix[0].length).toString('latin1'),
+    'base64',
+  );
+}
+
+/**
+ * Keeps a file a feature made for the person as one of their uploads, so
+ * every reader of uploads (the viewer, downloads, reviews) takes it.
+ * Uploads are kept by their content's hash: the same file is kept once.
+ *
+ * @param type - Its extension, no dot (`pptx`).
+ * @returns Its reference, `/api/file/<sha256>.<type>`.
+ */
+export async function storeUploadedFile(
+  session: Session,
+  data: Uint8Array,
+  type: string,
+  contentType: string,
+): Promise<string> {
+  const bytes = Buffer.from(data);
+  const id = `${Hasher.sha256(bytes)}.${type}`;
+  await createBlobStorageClient(session).upload(
+    `${getUserIdFromSession(session)}/uploads/files/${id}`,
+    bytes,
+    { blobHTTPHeaders: { blobContentType: contentType } },
+  );
+  return `/api/file/${id}`;
+}
+
 /**
  * A person's uploaded files (`/api/file/<id>`). They are stored under the
  * owner's own prefix, so another person's id resolves to nothing; the id's
- * extension must be the source's type.
+ * extension must be the source's type. An image comes back as its bytes,
+ * not as the data URL text it is stored as.
  */
 export const uploadDocumentSource: DocumentSourceReader = {
   kind: 'upload',
@@ -96,7 +143,7 @@ export const uploadDocumentSource: DocumentSourceReader = {
         `${userId}/uploads/files/${source.id}`,
         BlobProperty.BLOB,
       )) as Buffer;
-      return { data, type: source.type };
+      return { data: storedUploadBytes(data), type: source.type };
     } catch (error) {
       if (isBlobNotFoundError(error)) return null;
       throw error;
