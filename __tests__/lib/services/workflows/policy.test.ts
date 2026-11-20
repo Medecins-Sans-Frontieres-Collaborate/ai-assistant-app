@@ -61,6 +61,7 @@ describe('workflow policy resolution', () => {
     );
     expect(Object.keys(all).sort()).toEqual(
       [
+        'brand-review',
         'channel-drafter',
         'data-analysis',
         'document',
