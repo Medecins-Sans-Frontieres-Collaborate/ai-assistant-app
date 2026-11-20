@@ -78,8 +78,8 @@ describe('WorkflowPolicyPanel features', () => {
         enabled: true,
         limits: {
           defaultBatchPages: 6,
-          maxBatchPages: 12,
-          maxDocumentPages: 30,
+          maxBatchPages: 50,
+          maxDocumentPages: 50,
         },
       },
     });
