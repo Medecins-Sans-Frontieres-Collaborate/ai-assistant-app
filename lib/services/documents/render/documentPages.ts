@@ -12,6 +12,7 @@
  * checking it) renders it once.
  */
 import Hasher from '@/lib/utils/app/hash';
+import { isPresentationType } from '@/lib/utils/shared/documents/documentSource';
 
 import { LibreOfficeInputType } from './libreOfficeInputs';
 import { RenderLane } from './renderQueue';
@@ -27,23 +28,6 @@ export type PagedDocumentType = LibreOfficeInputType | 'pdf';
 export const PAGE_PICTURES_KEPT = 120;
 
 const pictureCache = new Map<string, Uint8Array>();
-
-/** Types Impress lays out (presentations); the rest are text documents. */
-const PRESENTATION_TYPES: ReadonlySet<string> = new Set([
-  'pptx',
-  'pptm',
-  'ppsx',
-  'potx',
-  'ppt',
-  'pps',
-  'pot',
-  'odp',
-]);
-
-/** Whether a type is a presentation (its pages are slides). */
-export function isPresentationType(type: string): boolean {
-  return PRESENTATION_TYPES.has(type.toLowerCase());
-}
 
 /**
  * The LibreOffice `--convert-to` argument that exports `type` as a PDF.
