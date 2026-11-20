@@ -13,6 +13,7 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import {
   JobFollower,
+  isFollowAbort,
   useBackgroundJob,
 } from '@/client/hooks/backgroundJobs/useBackgroundJob';
 
@@ -132,36 +133,44 @@ export function BrandReviewWorkspace({
   const jobs = useBackgroundJob<BrandReviewReading>();
   const [reading, setReading] = useState<BrandReviewReading | null>(null);
   const [starting, setStarting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{
+    message: string | null;
+    fallback: 'readFailed' | 'startFailed';
+  } | null>(null);
   const [selected, setSelected] = useState<BrandFinding | null>(null);
   const [page, setPage] = useState(1);
 
   const reviewId = ws?.reviewId;
+  // Follows a review until it ends. Errors are kept as data and worded at
+  // render, so this never depends on `t` (whose identity may change).
   const follow = useCallback(
-    async (id: string) => {
+    async (id: string, signal: AbortSignal) => {
       const outcome = await jobs.follow(reviewFollower(id), {
         onReading: setReading,
+        signal,
       });
       if (outcome.error instanceof BrandReviewGoneError) {
         setReading(null);
         setWs({ reviewId: undefined });
-      } else if (outcome.error) {
-        setError(
-          outcome.error instanceof Error
-            ? outcome.error.message
-            : t('readFailed'),
-        );
+      } else if (outcome.error && !isFollowAbort(outcome.error)) {
+        setError({
+          message:
+            outcome.error instanceof Error ? outcome.error.message : null,
+          fallback: 'readFailed',
+        });
       }
     },
-    [jobs, setWs, t],
+    [jobs, setWs],
   );
 
-  // Follow the conversation's review again after a reload.
+  // Follow the conversation's review: a new one just started, or one
+  // remembered from before a reload. A new id ends the old follow.
   useEffect(() => {
-    if (reviewId && reading?.reviewId !== reviewId) void follow(reviewId);
-    // Only a new review id starts following; readings arrive meanwhile.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reviewId]);
+    if (!reviewId) return;
+    const controller = new AbortController();
+    void follow(reviewId, controller.signal);
+    return () => controller.abort();
+  }, [reviewId, follow]);
 
   const start = async () => {
     if (!ws?.bookId || !ws.document) return;
@@ -179,13 +188,15 @@ export function BrandReviewWorkspace({
       setPage(1);
       setWs({ reviewId: started.reviewId });
     } catch (err) {
-      setError(
-        err instanceof BrandReviewBusyError
-          ? t('busy', { name: err.activeName ?? '' })
-          : err instanceof Error
-            ? err.message
-            : t('startFailed'),
-      );
+      setError({
+        message:
+          err instanceof BrandReviewBusyError
+            ? t('busy', { name: err.activeName ?? '' })
+            : err instanceof Error
+              ? err.message
+              : null,
+        fallback: 'startFailed',
+      });
     } finally {
       setStarting(false);
     }
@@ -289,6 +300,8 @@ export function BrandReviewWorkspace({
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
+  const errorText = error ? (error.message ?? t(error.fallback)) : null;
+
   if (!ws) return null;
 
   if (!reviewId || !state) {
@@ -312,7 +325,7 @@ export function BrandReviewWorkspace({
           onModelReview={(modelReview) => setWs({ modelReview })}
           onStart={() => void start()}
           starting={starting}
-          error={error ?? (booksQuery.error ? t('booksFailed') : null)}
+          error={errorText ?? (booksQuery.error ? t('booksFailed') : null)}
         />
       </div>
     );
@@ -399,7 +412,7 @@ export function BrandReviewWorkspace({
           className="border-b border-red-200 bg-red-50 px-4 py-2 text-sm text-red-800 dark:border-red-900 dark:bg-red-900/20 dark:text-red-300"
           role="alert"
         >
-          {error}
+          {errorText}
         </p>
       )}
       <div className="min-h-0 flex-1">
