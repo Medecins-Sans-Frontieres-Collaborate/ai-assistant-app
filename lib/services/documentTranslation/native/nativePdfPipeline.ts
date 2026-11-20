@@ -6,46 +6,70 @@ import {
 import { resolveVisionWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
 import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflowUsage';
 
+import { mergeGlossaryEntries } from '@/lib/utils/shared/translation/glossaryMatch';
+import { findTranslationLanguageByLabel } from '@/lib/utils/shared/translation/languages';
 import {
+  MAX_BRIEF_TERMS,
   NATIVE_PDF_MAX_REVIEW_ROUNDS,
   NATIVE_PDF_MAX_UNITS,
   NATIVE_PDF_STEPS,
+  NativePdfBrief,
   NativePdfDepth,
+  NativePdfExportFormat,
   NativePdfFitReport,
   NativePdfIssue,
   NativePdfIssueKind,
+  NativePdfLanguage,
   NativePdfLayoutFix,
   NativePdfPageStats,
   NativePdfRole,
   NativePdfStepId,
   NativePdfStepInstructions,
   NativePdfStepRecord,
+  NativePdfTerm,
   NativePdfUnit,
   NativePdfUnitAction,
   NativePdfUnitResult,
   NativePdfUnitStyle,
+  addsAbbreviation,
+  breakLike,
   charBudget,
+  dropsTerm,
   hasLayoutFixes,
   layoutScore,
+  mergeBriefs,
+  missingTerms,
   planLayoutFixes,
   repairTranslationTags,
+  sanitizeBrief,
+  sanitizeLanguageCode,
   sanitizeTranslationEdits,
   sanitizeUnitStyles,
+  termCandidates,
+  termKey,
+  termsIn,
   visibleLength,
+  wordingInCaseOf,
 } from '@/lib/utils/shared/translation/nativePdf';
 
 import { GlossaryEntry } from '@/types/workflow';
 
 import {
   ANALYZE_SCHEMA,
+  LANGUAGE_PROMPT,
+  LANGUAGE_SCHEMA,
   REVIEW_PROMPT,
   REVIEW_SCHEMA,
   SHORTEN_PROMPT,
+  TERMS_REPAIR_PROMPT,
+  TERMS_SCHEMA,
   TRANSLATE_SCHEMA,
   UNIT_CHANGE_PROMPT,
   UNIT_TEXT_SCHEMA,
   VERIFY_SCHEMA,
   buildStepPrompt,
+  buildTermsPrompt,
+  targetLanguageLines,
 } from './nativePdfPrompts';
 import { SandboxInputFile, runSandboxScript } from './sandboxScriptRunner';
 
@@ -88,6 +112,11 @@ export interface NativePdfParams {
   depth: NativePdfDepth;
   /** Terminology the translation must follow; only terms on a page are sent. */
   glossaryEntries: GlossaryEntry[];
+  /**
+   * What earlier requests for this document settled (THE DOCUMENT BRIEF in
+   * nativePdf.ts), already sanitized. Absent on a document's first request.
+   */
+  brief?: NativePdfBrief;
   /** Called when a step starts (`active`) and when it ends (its record). */
   onStep?: (
     event: { id: NativePdfStepId; status: 'active' } | NativePdfStepRecord,
@@ -118,6 +147,8 @@ export interface NativePdfResult {
   refitRounds: number;
   /** Unit id to the look the automatic fixes gave it; the PDF uses these. */
   styles: Record<string, NativePdfUnitStyle>;
+  /** The brief this run was given, with what it decided added. */
+  brief: NativePdfBrief;
   /** The translated pages as a PDF. */
   pdf: Uint8Array;
   outputs: NativePdfPageOutput[];
@@ -149,6 +180,10 @@ export interface NativePdfRerenderParams {
   omitPages?: number[];
   /** Untrusted: unit id to the person's style for it (see NativePdfUnitStyle). */
   styles?: unknown;
+  /** Untrusted: the target language's tag, which selects hyphenation rules. */
+  language?: unknown;
+  /** Editable formats to build beside the PDF, already sanitized. */
+  exports?: NativePdfExportFormat[];
   /** Most pages of the document that may carry a translation. */
   maxDocumentPages: number;
   /** Untrusted: unit id to translation; null or absent keeps the unit as written. */
@@ -173,6 +208,8 @@ export interface NativePdfRerenderResult {
   /** Units refused as too long; they were laid out as written. */
   tooLong: string[];
   pdf: Uint8Array;
+  /** The editable files asked for, by format. */
+  exports: Partial<Record<NativePdfExportFormat, Uint8Array>>;
   outputs: NativePdfPageOutput[];
   /** The extraction that was laid out: the only one sent, or all combined. */
   unitsFile: Uint8Array;
@@ -215,6 +252,8 @@ interface RebuildOutcome {
   fits: NativePdfFitReport[];
   fonts: { sans: string; serif: string };
   pdf: Uint8Array;
+  /** The editable files asked for (see EDITABLE DOWNLOADS in nativePdf.ts). */
+  exports: Partial<Record<NativePdfExportFormat, Uint8Array>>;
   outputs: NativePdfPageOutput[];
 }
 
@@ -224,6 +263,11 @@ const UNITS_FILENAME = 'units.json';
 const ANALYZE_TEXT_PREVIEW_CHARS = 160;
 const TRANSLATE_MAX_TOKENS = 12_000;
 const VISION_MAX_TOKENS = 4_000;
+const LANGUAGE_MAX_TOKENS = 1_000;
+/** Earlier decisions shown when new terms are decided: the latest ones. */
+const DECIDED_TERMS_SHOWN = 80;
+/** Units one request may ask to have reworded to the brief's terms. */
+const TERM_REPAIRS_MAX = 80;
 
 const pngDataUrl = (bytes: Uint8Array): string =>
   `data:image/png;base64,${Buffer.from(bytes).toString('base64')}`;
@@ -258,7 +302,11 @@ async function analyzePage(options: {
   image: Uint8Array;
   units: NativePdfUnit[];
   usage: WorkflowUsageCollector;
-}): Promise<{ notes: string; byNumber: Map<number, UnitAnalysis> }> {
+}): Promise<{
+  notes: string;
+  names: string[];
+  byNumber: Map<number, UnitAnalysis>;
+}> {
   const listing = options.units.map((unit) => ({
     n: unit.n,
     size: unit.size,
@@ -268,6 +316,7 @@ async function analyzePage(options: {
   }));
   const result = await callStructured<{
     pageNotes: string;
+    names: string[];
     units: Array<UnitAnalysis & { n: number }>;
   }>({
     client: options.client,
@@ -288,8 +337,104 @@ async function analyzePage(options: {
   });
   return {
     notes: result.pageNotes,
+    names: result.names ?? [],
     byNumber: new Map(result.units.map((unit) => [unit.n, unit])),
   };
+}
+
+/**
+ * Pins the target language down for the whole document (THE DOCUMENT BRIEF
+ * in nativePdf.ts). A language from the list is known by its label and
+ * costs nothing; one a person typed in is identified by the model, which
+ * also settles the variety and spelling when the name leaves them open.
+ *
+ * @returns The language; with an empty code and note when the model could
+ *   not be asked, so a run never fails for want of this.
+ */
+async function resolveLanguage(options: {
+  client: AzureOpenAI;
+  model: string;
+  targetLanguage: string;
+  usage: WorkflowUsageCollector;
+}): Promise<NativePdfLanguage> {
+  const listed = findTranslationLanguageByLabel(options.targetLanguage);
+  if (listed) return { code: listed.id, name: listed.name, note: '' };
+  try {
+    const found = await callStructured<NativePdfLanguage>({
+      client: options.client,
+      model: options.model,
+      system: LANGUAGE_PROMPT,
+      user: `Target language as typed: ${options.targetLanguage}`,
+      schemaName: 'native_pdf_language',
+      schema: LANGUAGE_SCHEMA,
+      maxTokens: LANGUAGE_MAX_TOKENS,
+      usage: options.usage,
+      usageLabel: 'native-pdf-language',
+    });
+    const language = sanitizeBrief({ language: found }).language;
+    if (language) return language;
+  } catch (error) {
+    console.warn('[native-pdf] Could not identify the target language:', error);
+  }
+  return { code: '', name: options.targetLanguage, note: '' };
+}
+
+/**
+ * Decides, once for the document, how each new name or recurring term is
+ * handled: kept as written or translated, and then as what.
+ *
+ * @param options.candidates - Names not yet in the brief, as written.
+ * @param options.decided - The brief's terms, shown so new decisions follow
+ *   their pattern.
+ * @returns The decisions for candidates the model answered; a candidate it
+ *   skipped, or all of them when the call fails, stays undecided and is
+ *   handled page by page as before.
+ */
+async function decideTerms(options: {
+  client: AzureOpenAI;
+  model: string;
+  system: string;
+  language: string;
+  candidates: string[];
+  decided: NativePdfTerm[];
+  usage: WorkflowUsageCollector;
+}): Promise<NativePdfTerm[]> {
+  if (options.candidates.length === 0) return [];
+  try {
+    const result = await callStructured<{ terms: NativePdfTerm[] }>({
+      client: options.client,
+      model: options.model,
+      system: options.system,
+      user: [
+        options.language,
+        `Already decided:\n${JSON.stringify(options.decided.slice(-DECIDED_TERMS_SHOWN))}`,
+        `Candidates:\n${JSON.stringify(options.candidates)}`,
+      ].join('\n\n'),
+      schemaName: 'native_pdf_terms',
+      schema: TERMS_SCHEMA,
+      maxTokens: TRANSLATE_MAX_TOKENS,
+      usage: options.usage,
+      usageLabel: 'native-pdf-terms',
+    });
+    const asked = new Set(options.candidates.map(termKey));
+    return sanitizeBrief({ terms: result.terms }).terms.filter((term) =>
+      asked.has(termKey(term.source)),
+    );
+  } catch (error) {
+    console.warn('[native-pdf] Could not decide the document terms:', error);
+    return [];
+  }
+}
+
+/** A brief's terms as glossary rows: a kept term's translation is itself. */
+function termsAsGlossary(terms: NativePdfTerm[]): GlossaryEntry[] {
+  return terms.map((term) => ({
+    source: term.source,
+    target: term.target,
+    note: term.keep
+      ? 'name: keep exactly as written'
+      : 'fixed for this document: use on every page',
+  }));
 }
 
 /** One page's translatable units translated in a single structured call. */
@@ -297,7 +442,8 @@ async function translatePage(options: {
   client: AzureOpenAI;
   model: string;
   system: string;
-  targetLanguage: string;
+  /** How the step is told the target language (targetLanguageLines). */
+  language: string;
   notes: string;
   units: NativePdfUnit[];
   analysis: Map<string, UnitAnalysis>;
@@ -329,7 +475,7 @@ async function translatePage(options: {
     model: options.model,
     system: options.system + glossaryBlock,
     user: [
-      `Target language: ${options.targetLanguage}`,
+      options.language,
       `About this page: ${options.notes || 'no notes'}`,
       `Units:\n${JSON.stringify(payload)}`,
     ].join('\n\n'),
@@ -356,7 +502,7 @@ async function translatePage(options: {
       model: options.model,
       system: REVIEW_PROMPT + glossaryBlock,
       user: [
-        `Target language: ${options.targetLanguage}`,
+        options.language,
         `About this page: ${options.notes || 'no notes'}`,
         `Units:\n${JSON.stringify(
           payload.map((unit) => ({
@@ -488,6 +634,10 @@ interface RebuildOutput {
   omitPages?: number[];
   /** Unit id to the person's style for it, already sanitized. */
   styles?: Record<string, NativePdfUnitStyle>;
+  /** The target language's tag, already sanitized; '' or absent for none. */
+  language?: string;
+  /** Editable formats to build beside the PDF. */
+  exports?: NativePdfExportFormat[];
 }
 
 /** Lays the current translations into the original document. */
@@ -498,7 +648,7 @@ async function rebuild(
   usage: WorkflowUsageCollector,
   output: RebuildOutput = {},
 ): Promise<RebuildOutcome> {
-  const { imagePages, omitPages, styles } = output;
+  const { imagePages, omitPages, styles, language, exports = [] } = output;
   const run = await runSandboxScript(
     'rebuild',
     [
@@ -522,6 +672,10 @@ async function rebuild(
         ...(imagePages ? { imagePages } : {}),
         ...(omitPages?.length ? { omitPages } : {}),
         ...(styles && Object.keys(styles).length > 0 ? { styles } : {}),
+        // Words too long for their line are hyphenated by this language's rules.
+        ...(language ? { language } : {}),
+        // SLIDES in the script: the result as a presentation as well.
+        ...(exports.includes('pptx') ? { slides: true } : {}),
       }),
     ],
     usage,
@@ -536,6 +690,9 @@ async function rebuild(
     fits: report.units,
     fonts: report.fonts,
     pdf: requireFile(run.files, 'translated.pdf'),
+    exports: exports.includes('pptx')
+      ? { pptx: requireFile(run.files, 'translated.pptx') }
+      : {},
     outputs: pages.map((page) => ({
       page,
       preview: requireFile(run.files, `preview_${page}.png`),
@@ -547,6 +704,8 @@ async function rebuild(
 export interface NativePdfUnitRevision {
   action: NativePdfUnitAction;
   targetLanguage: string;
+  /** The document brief's language, so the block matches its pages. */
+  language?: NativePdfLanguage;
   /** The unit's source text, with its inline tags. */
   source: string;
   /** The current translation; ignored by `translate`. */
@@ -593,7 +752,7 @@ export async function reviseNativeUnit(
       ...shared,
       system: SHORTEN_PROMPT,
       user: [
-        `Language: ${params.targetLanguage}`,
+        targetLanguageLines(params.targetLanguage, params.language),
         `Units:\n${JSON.stringify([
           {
             id: 'unit',
@@ -613,7 +772,7 @@ export async function reviseNativeUnit(
       ...shared,
       system: buildStepPrompt('translate', {}) + glossaryBlock,
       user: [
-        `Target language: ${params.targetLanguage}`,
+        targetLanguageLines(params.targetLanguage, params.language),
         `Units:\n${JSON.stringify([
           {
             id: 'unit',
@@ -633,7 +792,7 @@ export async function reviseNativeUnit(
       ...shared,
       system: UNIT_CHANGE_PROMPT + glossaryBlock,
       user: [
-        `Target language: ${params.targetLanguage}`,
+        targetLanguageLines(params.targetLanguage, params.language),
         `Source: ${params.source}`,
         `Translation: ${params.translation}`,
         `Request: ${params.instruction}`,
@@ -820,6 +979,8 @@ export async function rerenderNativePdf(
       ],
       omitPages: omitted,
       styles,
+      language: sanitizeLanguageCode(params.language),
+      exports: params.exports,
     },
   );
   const wanted = new Set(params.checkPages);
@@ -849,6 +1010,7 @@ export async function rerenderNativePdf(
     repaired: edits.repaired,
     tooLong: edits.tooLong,
     pdf: built.pdf,
+    exports: built.exports,
     outputs: built.outputs,
     unitsFile,
   };
@@ -931,6 +1093,16 @@ export async function runNativePdfTranslation(
   startedAt = begin('analyze');
   const analysis = new Map<string, UnitAnalysis>();
   const pageNotes = new Map<number, string>();
+  const namesFound: string[] = [];
+  // The brief's language stands; only a document's first request settles it.
+  const languageSettled: Promise<NativePdfLanguage> = params.brief?.language
+    ? Promise.resolve(params.brief.language)
+    : resolveLanguage({
+        client,
+        model: params.modelId,
+        targetLanguage,
+        usage,
+      });
   await Promise.all(
     [...unitsByPage].map(async ([page, units]) => {
       const result = await analyzePage({
@@ -942,6 +1114,7 @@ export async function runNativePdfTranslation(
         usage,
       });
       pageNotes.set(page, result.notes);
+      namesFound.push(...result.names);
       for (const unit of units) {
         // A unit the model skipped is translated: leaving text untranslated
         // must be a decision, never an omission.
@@ -970,13 +1143,66 @@ export async function runNativePdfTranslation(
     const info = analysis.get(unit.id);
     if (info) info.translate = translateByText.get(unit.text) ?? true;
   }
+  // THE DOCUMENT BRIEF: one decision per name for every page and request.
+  // Whatever a page's reading listed as a name, or left as written, is
+  // decided here unless the brief or the glossary already says.
+  const language = await languageSettled;
+  const languageLines = targetLanguageLines(targetLanguage, language);
+  const candidates = termCandidates(
+    [
+      ...namesFound,
+      ...extracted.units
+        .filter((unit) => analysis.get(unit.id)?.translate === false)
+        .map((unit) => unit.text),
+    ],
+    [
+      ...(params.brief?.terms ?? []).map((term) => term.source),
+      ...params.glossaryEntries.map((entry) => entry.source),
+    ],
+    MAX_BRIEF_TERMS - (params.brief?.terms.length ?? 0),
+  );
+  const brief = mergeBriefs(params.brief, {
+    language,
+    terms: await decideTerms({
+      client,
+      model: params.modelId,
+      system: buildTermsPrompt(instructions.analyze),
+      language: languageLines,
+      candidates,
+      decided: params.brief?.terms ?? [],
+      usage,
+    }),
+  });
+  // A glossary entry outranks the brief on the same term.
+  const glossaryEntries = mergeGlossaryEntries(
+    params.glossaryEntries,
+    termsAsGlossary(brief.terms),
+  );
+  const glossarySources = new Set(
+    params.glossaryEntries.map((entry) => termKey(entry.source)),
+  );
+  const termByKey = new Map(
+    brief.terms
+      .filter((term) => !glossarySources.has(termKey(term.source)))
+      .map((term) => [termKey(term.source), term]),
+  );
+  /** The brief's term a unit consists of entirely, if it is one. */
+  const termOf = (unit: NativePdfUnit): NativePdfTerm | undefined =>
+    termByKey.get(termKey(unit.text));
+  for (const unit of extracted.units) {
+    const term = termOf(unit);
+    const info = analysis.get(unit.id);
+    if (term && info) info.translate = !term.keep;
+  }
   const kept = extracted.units.filter(
     (unit) => analysis.get(unit.id)?.translate === false,
   );
   record(
     'analyze',
     startedAt,
-    `${extracted.units.length - kept.length} units to translate, ${kept.length} kept as written`,
+    `${extracted.units.length - kept.length} units to translate, ${kept.length} kept as written` +
+      `; ${brief.terms.length} names and terms fixed for the document` +
+      (language.note ? `; writing in: ${language.note}` : ''),
   );
 
   // ── translate ──────────────────────────────────────────────────────────
@@ -999,13 +1225,13 @@ export async function runNativePdfTranslation(
         client,
         model: params.modelId,
         system: buildStepPrompt('translate', instructions),
-        targetLanguage,
+        language: languageLines,
         notes: pageNotes.get(page) ?? '',
         units: units.filter(
           (unit) => analysis.get(unit.id)?.translate !== false,
         ),
         analysis,
-        glossaryEntries: params.glossaryEntries,
+        glossaryEntries,
         reviewRounds:
           params.depth === 'reviewed' ? NATIVE_PDF_MAX_REVIEW_ROUNDS : 0,
         signal: params.signal,
@@ -1028,6 +1254,83 @@ export async function runNativePdfTranslation(
     if (first === undefined) wordingByText.set(unit.text, translation);
     else translations.set(unit.id, first);
   }
+  // A unit that is nothing but one of the brief's translated terms reads as
+  // the brief says on every page, whatever this page's translator wrote.
+  // One with inline tags is left to the translator, who keeps the tags.
+  const fixedWording = new Set<string>();
+  for (const unit of extracted.units) {
+    const term = termOf(unit);
+    if (!term || term.keep || !translations.has(unit.id)) continue;
+    fixedWording.add(unit.id);
+    if (Object.keys(unit.tags).length === 0) {
+      const worded = wordingInCaseOf(unit.text, term.target);
+      // A term is matched across line breaks, but the breaks are the
+      // unit's own (BREAKS in the layout script): the wording takes them
+      // where this page's translator put them, else where the source has
+      // them.
+      const translated = translations.get(unit.id) ?? '';
+      const breaks = (text: string) => text.split('\n').length - 1;
+      const lineModel =
+        breaks(translated) === breaks(unit.text) ? translated : unit.text;
+      translations.set(
+        unit.id,
+        breaks(unit.text) > 0 ? breakLike(lineModel, worded) : worded,
+      );
+    }
+  }
+  // A term inside a longer unit is the translator's to write, and it does
+  // not always follow the brief. Those units are asked for again, once,
+  // and the answer is taken only where it then follows every term.
+  const offTerm = extracted.units
+    .filter((unit) => !fixedWording.has(unit.id))
+    .map((unit) => ({
+      unit,
+      terms: missingTerms(
+        unit.text,
+        translations.get(unit.id) ?? unit.text,
+        brief.terms,
+      ),
+    }))
+    .filter((entry) => translations.has(entry.unit.id) && entry.terms.length)
+    .slice(0, TERM_REPAIRS_MAX);
+  let termsRepaired = 0;
+  if (offTerm.length > 0) {
+    params.signal?.throwIfAborted();
+    const reworded = await callStructured<{
+      units: Array<{ id: string; text: string }>;
+    }>({
+      client,
+      model: params.modelId,
+      system: TERMS_REPAIR_PROMPT,
+      user: [
+        languageLines,
+        `Units:\n${JSON.stringify(
+          offTerm.map(({ unit, terms }) => ({
+            id: unit.id,
+            source: unit.text,
+            text: translations.get(unit.id),
+            terms: terms.map(({ source, target }) => ({ source, target })),
+          })),
+        )}`,
+      ].join('\n\n'),
+      schemaName: 'native_pdf_terms_repair',
+      schema: TRANSLATE_SCHEMA,
+      maxTokens: TRANSLATE_MAX_TOKENS,
+      usage,
+      usageLabel: 'native-pdf-terms',
+    });
+    const sourceById = new Map(offTerm.map(({ unit }) => [unit.id, unit.text]));
+    for (const unit of reworded.units) {
+      const source = sourceById.get(unit.id);
+      if (
+        source !== undefined &&
+        missingTerms(source, unit.text, brief.terms).length === 0
+      ) {
+        accept(unit.id, unit.text);
+        termsRepaired += 1;
+      }
+    }
+  }
   const missing = extracted.units.length - kept.length - translations.size;
   record(
     'translate',
@@ -1037,12 +1340,17 @@ export async function runNativePdfTranslation(
         ? `; ${reviewRevised.size} revised in review`
         : '') +
       (repaired.size ? `; inline tags repaired in ${repaired.size}` : '') +
+      (offTerm.length
+        ? `; ${termsRepaired} of ${offTerm.length} reworded to the document's terms`
+        : '') +
       (missing > 0 ? `; ${missing} returned no translation` : ''),
   );
 
   // ── rebuild ────────────────────────────────────────────────────────────
   startedAt = begin('rebuild');
-  let built = await rebuild(document, unitsFile, translations, usage);
+  let built = await rebuild(document, unitsFile, translations, usage, {
+    language: language.code,
+  });
   const shrunk = (fits: NativePdfFitReport[]): number =>
     fits.filter((fit) => !fit.fits || fit.scale < 1).length;
   record(
@@ -1102,6 +1410,11 @@ export async function runNativePdfTranslation(
       units: extracted.units,
       styles,
     });
+    // A term the brief fixed is never reworded: it would then differ from
+    // the same term on another page. It is set smaller instead.
+    plan.targets = plan.targets.filter(
+      (target) => !fixedWording.has(target.id),
+    );
     if (!hasLayoutFixes(plan)) break;
     params.signal?.throwIfAborted();
     rounds += 1;
@@ -1119,13 +1432,25 @@ export async function runNativePdfTranslation(
         model: params.modelId,
         system: SHORTEN_PROMPT,
         user: [
-          `Language: ${targetLanguage}`,
+          languageLines,
           `Units:\n${JSON.stringify(
-            plan.targets.map((target) => ({
-              id: target.id,
-              targetChars: target.targetChars,
-              text: translations.get(target.id),
-            })),
+            plan.targets.map((target) => {
+              const text = translations.get(target.id) ?? '';
+              const source = unitById.get(target.id)?.text ?? '';
+              const unmet = new Set(missingTerms(source, text, brief.terms));
+              const due = termsIn(source, brief.terms).filter(
+                (term) => !unmet.has(term),
+              );
+              return {
+                id: target.id,
+                targetChars: target.targetChars,
+                text,
+                // The brief's wordings this text follows, to be kept.
+                ...(due.length
+                  ? { fixed: due.map((term) => term.target) }
+                  : {}),
+              };
+            }),
           )}`,
         ].join('\n\n'),
         schemaName: 'native_pdf_shorten',
@@ -1136,11 +1461,24 @@ export async function runNativePdfTranslation(
       });
       const wanted = new Set(plan.targets.map((target) => target.id));
       for (const unit of shortened.units) {
-        if (wanted.has(unit.id)) accept(unit.id, unit.text);
+        // A shortening that abbreviates, or that loses one of the brief's
+        // terms, is refused: the unit keeps its full wording, set smaller.
+        const current = translations.get(unit.id) ?? '';
+        const source = unitById.get(unit.id)?.text ?? '';
+        if (
+          wanted.has(unit.id) &&
+          !addsAbbreviation(current, unit.text) &&
+          !dropsTerm(source, current, unit.text, brief.terms)
+        ) {
+          accept(unit.id, unit.text);
+        }
       }
     }
     styles = plan.styles;
-    built = await rebuild(document, unitsFile, translations, usage, { styles });
+    built = await rebuild(document, unitsFile, translations, usage, {
+      styles,
+      language: language.code,
+    });
     // Only the pages that changed are looked at again; the rest keep their findings.
     const changedPages = new Set(
       [
@@ -1195,6 +1533,7 @@ export async function runNativePdfTranslation(
       // The pages on file still show the undone fixes.
       built = await rebuild(document, unitsFile, translations, usage, {
         styles,
+        language: language.code,
       });
     }
   }
@@ -1264,6 +1603,7 @@ export async function runNativePdfTranslation(
     fonts: built.fonts,
     refitRounds: rounds,
     styles,
+    brief,
     pdf: built.pdf,
     outputs: built.outputs,
     unitsFile,
