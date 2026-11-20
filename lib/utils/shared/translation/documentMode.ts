@@ -12,7 +12,10 @@
  * leaves the mode (`leaveDocumentReader`). `documentJob.viewPage` says
  * whether, and for which page, the reader holds the pane.
  */
-import { supportsPagedText } from '@/types/documentTranslation';
+import {
+  isPresentationExtension,
+  supportsWholeDocument,
+} from '@/types/documentTranslation';
 import {
   TranslationDocumentJob,
   TranslationSourceDocument,
@@ -35,6 +38,20 @@ export function fileExtensionOf(filename: string): string {
   return dot > 0 ? filename.slice(dot + 1).toLowerCase() : '';
 }
 
+/**
+ * What a document's pages are called: a presentation's are slides
+ * (numbered as the presentation lists them, hidden ones included), any
+ * other document's are pages.
+ */
+export type DocumentUnit = 'page' | 'slide';
+
+/** The unit a document is read in, from its file name. */
+export function documentUnitOf(filename: string | undefined): DocumentUnit {
+  return filename && isPresentationExtension(fileExtensionOf(filename))
+    ? 'slide'
+    : 'page';
+}
+
 /** Why whole-document translation cannot start. */
 export type WholeDocumentBlocker =
   | 'no-document'
@@ -51,7 +68,7 @@ export type WholeDocumentEligibility =
  * Decides whether the uploaded document can be translated whole.
  *
  * It needs a file kept on the server, in a format with a page-by-page text
- * view, and a target language that document translation supports (custom
+ * view (a PDF, or a presentation read slide by slide), and a target language that document translation supports (custom
  * languages and some catalog languages are language-model only).
  *
  * @param sourceDocument - The uploaded document's reference, if any.
@@ -62,7 +79,7 @@ export function wholeDocumentEligibility(
   targetLanguageId: string | undefined,
 ): WholeDocumentEligibility {
   if (!sourceDocument?.url) return { ok: false, reason: 'no-document' };
-  if (!supportsPagedText(fileExtensionOf(sourceDocument.name))) {
+  if (!supportsWholeDocument(fileExtensionOf(sourceDocument.name))) {
     return { ok: false, reason: 'unsupported-format' };
   }
   if (!targetLanguageId) return { ok: false, reason: 'no-language' };
