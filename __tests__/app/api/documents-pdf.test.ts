@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import { DocumentSignatureError } from '@/lib/services/documents/render/libreOfficeInputs';
 import { RenderBusyError } from '@/lib/services/documents/render/renderQueue';
 import { getRenderService } from '@/lib/services/documents/render/renderService';
 
@@ -194,5 +195,15 @@ describe('/api/documents/pdf', () => {
     const response = await call(upload('pptx'));
     expect(response.status).toBe(503);
     expect(response.headers.get('Retry-After')).toBeTruthy();
+  });
+
+  it('answers 422 DOCUMENT_PROTECTED for a password-protected Office file', async () => {
+    // A .pptx that is a compound file, not a zip: protected or encrypted.
+    convert.mockRejectedValue(new DocumentSignatureError('pptx', 'cfb'));
+    const response = await call(upload('pptx'));
+    expect(response.status).toBe(422);
+    expect(JSON.stringify(await response.json())).toContain(
+      'DOCUMENT_PROTECTED',
+    );
   });
 });
