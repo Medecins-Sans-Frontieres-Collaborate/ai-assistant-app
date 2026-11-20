@@ -28,6 +28,7 @@ export const CONVERSATION_WORKFLOW_TYPES = [
   'grants',
   'form-fill',
   'channel-drafter',
+  'brand-review',
 ] as const;
 
 export type ConversationWorkflowType =
@@ -1000,6 +1001,27 @@ export interface GrantsWorkflowState {
 }
 
 /* ------------------------------------------------------------------ */
+/* Brand review (docs/DOCUMENT_PLATFORM.md, phase F)                   */
+/* ------------------------------------------------------------------ */
+
+/**
+ * A brand review conversation: the book and document chosen, and the
+ * review run on them. The findings live with the review on the server
+ * (GET /api/brand-review/<id>), not here.
+ */
+export interface BrandReviewWorkflowState {
+  kind: 'brand-review';
+  bookId?: string;
+  /** The person's upload being reviewed. */
+  document?: { file: string; name: string; type: string };
+  /** Whether a model looks at each page (default true). */
+  modelReview: boolean;
+  /** The latest review of this document, while it is kept. */
+  reviewId?: string;
+  updatedAt: string;
+}
+
+/* ------------------------------------------------------------------ */
 /* Union                                                               */
 /* ------------------------------------------------------------------ */
 
@@ -1016,4 +1038,5 @@ export type WorkflowState =
   | MapWorkflowState
   | GrantsWorkflowState
   | FormFillWorkflowState
-  | ChannelDrafterWorkflowState;
+  | ChannelDrafterWorkflowState
+  | BrandReviewWorkflowState;
