@@ -491,6 +491,7 @@ export function DeckBuilderWorkspace({
                 type: 'pptx',
               }}
               findings={findings ?? []}
+              complete={findings !== null}
             />
           )}
         </div>
