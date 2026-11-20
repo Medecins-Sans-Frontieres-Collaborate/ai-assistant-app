@@ -90,14 +90,31 @@ function isIco(b: Buffer): boolean {
   );
 }
 
-const IMAGE_SIGNATURES: SignatureCheck[] = [
-  isPng,
-  isJpeg,
-  isGif,
-  isWebp,
-  isBmp,
-  isIco,
+/** The binary image formats this module recognises. */
+export type ImageType = 'png' | 'jpeg' | 'gif' | 'webp' | 'bmp' | 'ico';
+
+const SIGNATURES_BY_TYPE: ReadonlyArray<[ImageType, SignatureCheck]> = [
+  ['png', isPng],
+  ['jpeg', isJpeg],
+  ['gif', isGif],
+  ['webp', isWebp],
+  ['bmp', isBmp],
+  ['ico', isIco],
 ];
+
+const IMAGE_SIGNATURES: SignatureCheck[] = SIGNATURES_BY_TYPE.map(
+  ([, check]) => check,
+);
+
+/**
+ * The format of an image, from its leading bytes.
+ *
+ * @returns The format, or null when the bytes are none of them (SVG
+ *   included; see the module note).
+ */
+export function imageTypeOf(buffer: Buffer): ImageType | null {
+  return SIGNATURES_BY_TYPE.find(([, check]) => check(buffer))?.[0] ?? null;
+}
 
 /**
  * Returns `{ isValid: true }` when the buffer's leading bytes match a known
