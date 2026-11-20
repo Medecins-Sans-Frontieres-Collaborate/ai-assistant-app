@@ -1,12 +1,17 @@
 import {
-  DEFAULT_DOCUMENT_LAYOUT,
-  DOCUMENT_LAYOUTS,
-  FIT_TOLERANCE,
-  FormattedDocumentRun,
   MAX_PAGE_ZOOM,
   MIN_PAGE_ZOOM,
   PAGE_ZOOM_EPSILON,
   PAGE_ZOOM_LEVELS,
+  nextPageZoom,
+  pageBox,
+  wheelPageZoom,
+} from '@/lib/utils/shared/documents/pageGeometry';
+import {
+  DEFAULT_DOCUMENT_LAYOUT,
+  DOCUMENT_LAYOUTS,
+  FIT_TOLERANCE,
+  FormattedDocumentRun,
   applyRenderReport,
   batchPageState,
   changedUnits,
@@ -18,7 +23,6 @@ import {
   formattedEligibility,
   issueKey,
   movedBox,
-  nextPageZoom,
   openIssues,
   plainText,
   planBatch,
@@ -35,9 +39,7 @@ import {
   togglePage,
   translatedPages,
   translationsForRender,
-  unitBox,
   unitStyle,
-  wheelPageZoom,
   withPageRemoved,
   withUnitEdit,
   withUnitStyle,
@@ -339,9 +341,9 @@ describe('openIssues', () => {
   });
 });
 
-describe('unitBox', () => {
+describe('pageBox', () => {
   it('places a box as percentages of its page, with a little padding', () => {
-    expect(unitBox([50, 100, 250, 120], { width: 500, height: 1000 })).toEqual({
+    expect(pageBox([50, 100, 250, 120], { width: 500, height: 1000 })).toEqual({
       left: '9.600%',
       top: '9.800%',
       width: '40.800%',
@@ -350,7 +352,7 @@ describe('unitBox', () => {
   });
 
   it('never leaves the page', () => {
-    const box = unitBox([-10, -10, 600, 20], { width: 500, height: 1000 });
+    const box = pageBox([-10, -10, 600, 20], { width: 500, height: 1000 });
     expect(box.left).toBe('0.000%');
     expect(box.width).toBe('100.000%');
   });
