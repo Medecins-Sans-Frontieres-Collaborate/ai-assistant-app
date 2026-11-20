@@ -178,6 +178,11 @@ export const DOCUMENT_TRANSLATION_EXTENSIONS = [
   '.docx',
   '.xlsx',
   '.pptx',
+  // Other presentations go the batch path too; see PRESENTATION_EXTENSIONS.
+  '.pptm',
+  '.ppsx',
+  '.potx',
+  '.ppt',
   '.msg',
   '.xlf',
   '.xliff',
@@ -210,6 +215,10 @@ export const DOCUMENT_TRANSLATION_MIME_TYPES = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
   'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
+  'application/vnd.ms-powerpoint.presentation.macroEnabled.12', // .pptm
+  'application/vnd.openxmlformats-officedocument.presentationml.slideshow', // .ppsx
+  'application/vnd.openxmlformats-officedocument.presentationml.template', // .potx
+  'application/vnd.ms-powerpoint', // .ppt
   'application/vnd.ms-outlook', // .msg
   'application/xliff+xml', // .xlf/.xliff
   'application/x-xliff+xml', // .xlf/.xliff (legacy)
