@@ -9,6 +9,10 @@ import {
 } from '@testing-library/react';
 
 import {
+  readDeckJob,
+  startDeckJob,
+} from '@/client/services/workflows/nativeDeckJob';
+import {
   fetchNativePdfAvailability,
   renderNativePdf,
   runNativePdf,
@@ -75,6 +79,14 @@ vi.mock('@/client/services/workflows/nativePdfTranslation', () => ({
   renderNativePdf: vi.fn(),
   reviseNativePdfUnit: vi.fn(),
   fetchNativePdfImage: vi.fn(() => Promise.resolve('data:image/png;base64,')),
+}));
+// A presentation's background job (the server side is tested elsewhere).
+vi.mock('@/client/services/workflows/nativeDeckJob', async (original) => ({
+  ...(await original<object>()),
+  startDeckJob: vi.fn(),
+  readDeckJob: vi.fn(),
+  stopDeckJob: vi.fn(),
+  recordDeckJobUsage: vi.fn(),
 }));
 // The browser PDF renderer is not available in jsdom.
 vi.mock('@/client/hooks/workflows/usePdfPages', () => ({
@@ -655,7 +667,60 @@ describe('document mode: preserve formatting', () => {
     );
   });
 
-  it('names what is missing instead of the setup for a file that is not a PDF', async () => {
+  it('speaks of slides for a presentation, and offers Text only when its run fails', async () => {
+    vi.mocked(startDeckJob).mockResolvedValue({
+      job: { status: 'running' },
+      sourceId: 'a.pptx',
+      sourceUrl: '/x',
+    } as never);
+    vi.mocked(readDeckJob).mockResolvedValue({
+      job: {
+        status: 'failed',
+        error: 'The slides could not be read',
+        pieces: [],
+        parts: 1,
+        pageCount: 2,
+        translateNotes: true,
+      },
+    } as never);
+    mountWorkspace({
+      documentLayout: 'formatted',
+      sourceDocument: {
+        name: 'deck.pptx',
+        url: '/api/file/deck.pptx',
+        lastPage: PAGE_COUNT,
+        selectedPages: `1-${PAGE_COUNT}`,
+      },
+    });
+    const start = await screen.findByRole('button', {
+      name: `translation.formatted.slides.translatePages ${MAX_PAGES}`,
+    });
+    // The notes option shows in this layout too, ticked by default.
+    expect(
+      screen.getAllByRole('checkbox', {
+        name: 'translation.formatted.speakerNotes',
+      })[0],
+    ).toBeChecked();
+    fireEvent.click(start);
+    await waitFor(() => expect(startDeckJob).toHaveBeenCalledTimes(1));
+    expect(runNativePdf).not.toHaveBeenCalled();
+    expect(vi.mocked(startDeckJob).mock.calls[0][0]).toMatchObject({
+      translateNotes: true,
+      pages: '1-2',
+    });
+    const fallback = await screen.findByRole('button', {
+      name: 'translation.formatted.slides.useTextOnly',
+    });
+    expect(
+      screen.getByText(
+        /translation\.formatted\.runFailed The slides could not be read/,
+      ),
+    ).toBeTruthy();
+    fireEvent.click(fallback);
+    await waitFor(() => expect(workflowState().documentLayout).toBe('text'));
+  });
+
+  it('names what is missing instead of the setup for a file it cannot keep the formatting of', async () => {
     mountWorkspace({
       documentLayout: 'formatted',
       sourceDocument: {
@@ -666,7 +731,7 @@ describe('document mode: preserve formatting', () => {
       },
     });
     expect(
-      await screen.findByText('translation.formatted.needsPdf'),
+      await screen.findByText('translation.formatted.needsSupportedFile'),
     ).toBeTruthy();
     expect(
       screen.queryByText('translation.formatted.whatHappensTitle'),
