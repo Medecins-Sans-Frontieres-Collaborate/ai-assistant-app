@@ -15,6 +15,7 @@ import { createHash } from 'crypto';
 import { strFromU8 } from 'fflate';
 import fs from 'fs';
 import path from 'path';
+import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
 
 /**
@@ -160,6 +161,15 @@ describe.skipIf(!pythonHas(['fitz']))('the PDF reader', () => {
     ]);
     expect(new Set(model!.images.map((image) => image.file)).size).toBe(1);
     expect(files.get(model!.images[0].file)?.length).toBeGreaterThan(0);
+  });
+
+  it('keeps a picture’s transparency, which a PDF holds as a soft mask', async () => {
+    // Without the mask the logo's transparent ground reads as black.
+    const meta = await sharp(
+      Buffer.from(files.get(model!.images[0].file)!),
+    ).metadata();
+    expect(meta.hasAlpha).toBe(true);
+    expect(model!.images[0].contentType).toBe('image/png');
   });
 
   it('refuses a password-protected PDF', () => {
