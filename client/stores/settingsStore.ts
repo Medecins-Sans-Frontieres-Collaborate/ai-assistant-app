@@ -10,6 +10,7 @@ import { normalizeUserSkills } from '@/lib/services/skills/userSkills';
 import type { AddSourceId } from '@/lib/utils/app/addToChat';
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
+import { guardedLocalStorage } from '@/lib/utils/app/storage/guardedLocalStorage';
 import {
   DEFAULT_MODEL_TIMEOUT_SECONDS,
   clampModelTimeoutSeconds,
@@ -2261,7 +2262,9 @@ export const useSettingsStore = create<SettingsStore>()(
     {
       name: 'settings-storage',
       version: 77, // v77: remembered formatted-translation step instructions
-      storage: createJSONStorage(() => localStorage),
+      // A full browser storage must not throw out of a settings change
+      // (saving a prompt left its dialog open): see guardedLocalStorage.
+      storage: createJSONStorage(() => guardedLocalStorage),
       partialize: (state) => ({
         temperature: state.temperature,
         systemPrompt: state.systemPrompt,
