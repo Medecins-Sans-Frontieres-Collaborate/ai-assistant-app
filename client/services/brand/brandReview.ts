@@ -13,6 +13,8 @@ export interface UsableBrandBook {
   name: string;
   description: string;
   colors: string[];
+  /** The book's deck templates (.pptx, .potx). */
+  templates: Array<{ id: string; name: string; type: string; file: string }>;
   updatedAt: string;
 }
 
