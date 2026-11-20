@@ -60,9 +60,12 @@ export interface FindingsDocument {
 export function BrandFindingsViewer({
   document,
   findings,
+  complete = false,
 }: {
   document: FindingsDocument;
   findings: readonly BrandFinding[];
+  /** Whether the review has ended (BrandFindingsPanel). */
+  complete?: boolean;
 }) {
   const t = useTranslations('workflows.brandReview');
   const [selected, setSelected] = useState<BrandFinding | null>(null);
@@ -136,6 +139,7 @@ export function BrandFindingsViewer({
       aside={
         <BrandFindingsPanel
           findings={findings}
+          complete={complete}
           selectedId={selected?.id ?? null}
           onSelect={(finding) => {
             setSelected(finding);
