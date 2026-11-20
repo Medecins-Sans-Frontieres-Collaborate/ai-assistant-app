@@ -1,7 +1,9 @@
 import {
+  brandItemId,
   familiesFor,
   fontKey,
   parseBrandBookBody,
+  templateTypeForFile,
 } from '@/lib/utils/shared/brand/brandBook';
 
 import { describe, expect, it } from 'vitest';
@@ -102,5 +104,24 @@ describe('fontKey and familiesFor', () => {
     expect(families.has(fontKey('Arial'))).toBe(true);
     expect(families.has(fontKey('Montserrat-Bold'))).toBe(true);
     expect(families.has(fontKey('Helvetica'))).toBe(false);
+  });
+});
+
+describe('brandItemId and templateTypeForFile', () => {
+  it('makes a schema-valid id unique among those taken', () => {
+    expect(brandItemId('Main logo', [])).toBe('main-logo');
+    expect(brandItemId('Main logo', ['main-logo', 'main-logo-2'])).toBe(
+      'main-logo-3',
+    );
+    expect(brandItemId('  ***  ', [])).toBe('item');
+    expect(brandItemId('Logó Négatif', [])).toBe('logo-negatif');
+    expect(brandItemId('x'.repeat(80), [])).toHaveLength(34);
+  });
+
+  it('reads a template type from its file name only for template types', () => {
+    expect(templateTypeForFile('Deck.POTX')).toBe('potx');
+    expect(templateTypeForFile('letter.docx')).toBe('docx');
+    expect(templateTypeForFile('guide.pdf')).toBeNull();
+    expect(templateTypeForFile('noextension')).toBeNull();
   });
 });
