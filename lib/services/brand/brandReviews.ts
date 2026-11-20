@@ -10,22 +10,11 @@
 import { Session } from 'next-auth';
 
 import { AdminBrandBook } from '@/lib/services/agentAccess/types';
-import {
-  isStalled,
-  readJob,
-  resumeJob,
-  startJob,
-  stopJob,
-} from '@/lib/services/backgroundJobs/backgroundJobs';
-import { BlobJobSlots } from '@/lib/services/backgroundJobs/blobJobSlots';
-import { BlobJobStore } from '@/lib/services/backgroundJobs/blobJobStore';
-import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import { personJobs } from '@/lib/services/backgroundJobs/personJobs';
 import { inspectDocument } from '@/lib/services/documents/model/inspect';
 import { documentPagePictures } from '@/lib/services/documents/render/documentPages';
 import { readDocumentSource } from '@/lib/services/documents/sources/documentSources';
 import { resolveVisionWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
-
-import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 
 import { parseBrandFileRef, readStoredBrandFile } from './brandBooks';
 import { reviewPage } from './brandPageReview';
@@ -64,17 +53,6 @@ export const REVIEWABLE_TYPES: readonly string[] = [
 /** A review id that cannot be guessed. */
 export function newReviewId(): string {
   return `review-${randomBytes(6).toString('hex')}`;
-}
-
-/** Where a review's state and the person's review slots are kept. */
-function placeOf(session: Session, reviewId: string) {
-  const storage = createBlobStorageClient(session);
-  const userId = getUserIdFromSession(session);
-  return {
-    store: new BlobJobStore(storage, `${userId}/brand-reviews/${reviewId}/`),
-    slots: new BlobJobSlots(storage, userId, 'brand-reviews/active.json'),
-    key: reviewId,
-  };
 }
 
 /** The upload a request names, or null when it names none of the person's. */
@@ -139,6 +117,9 @@ export function parseNoteLocale(value: unknown): string {
   }
 }
 
+/** The person's reviews, under `brand-reviews/` in their storage. */
+const reviews = personJobs(BRAND_REVIEW_JOB_KIND, 'brand-reviews', contextFor);
+
 /**
  * Starts a review of one of the person's uploads against a book they may
  * use (the caller has checked that, and passes the book as read).
@@ -147,7 +128,7 @@ export function parseNoteLocale(value: unknown): string {
  */
 export async function startBrandReview(
   session: Session,
-  book: AdminBrandBook,
+  book: Pick<AdminBrandBook, 'id' | 'book' | 'updatedAt'>,
   upload: { file: string; name: string; type: string },
   options: { modelReview: boolean; noteLocale: string },
 ): Promise<{ reviewId: string; state: BrandReviewState }> {
@@ -165,11 +146,7 @@ export async function startBrandReview(
     modelReview: options.modelReview,
     noteLocale: options.noteLocale,
   };
-  const state = await startJob(
-    BRAND_REVIEW_JOB_KIND,
-    { ...placeOf(session, reviewId), context: contextFor(session, request) },
-    request,
-  );
+  const state = await reviews.start(session, reviewId, request);
   return { reviewId, state };
 }
 
@@ -179,53 +156,25 @@ export async function startBrandReview(
  *
  * @returns The state, or null when the person has no such review.
  */
-export async function readBrandReview(
+export function readBrandReview(
   session: Session,
   reviewId: string,
 ): Promise<BrandReviewState | null> {
-  const place = placeOf(session, reviewId);
-  const state = await readJob<BrandReviewState>(
-    BRAND_REVIEW_JOB_KIND,
-    place.store,
-  );
-  if (!state) return null;
-  if (isStalled(BRAND_REVIEW_JOB_KIND.kind, reviewId, state, Date.now())) {
-    return resumeJob(
-      BRAND_REVIEW_JOB_KIND,
-      { ...place, context: contextFor(session, state.request) },
-      state,
-    );
-  }
-  return state;
+  return reviews.read(session, reviewId);
 }
 
 /** Asks a running review to stop; it keeps what it found. */
-export async function stopBrandReview(
+export function stopBrandReview(
   session: Session,
   reviewId: string,
 ): Promise<BrandReviewState | null> {
-  const place = placeOf(session, reviewId);
-  const state = await readJob<BrandReviewState>(
-    BRAND_REVIEW_JOB_KIND,
-    place.store,
-  );
-  if (!state) return null;
-  return stopJob(BRAND_REVIEW_JOB_KIND, reviewId, place.store, state);
+  return reviews.stop(session, reviewId);
 }
 
 /** Stops a review if it runs, and deletes what is stored of it. */
-export async function removeBrandReview(
+export function removeBrandReview(
   session: Session,
   reviewId: string,
 ): Promise<boolean> {
-  const place = placeOf(session, reviewId);
-  const state = await readJob<BrandReviewState>(
-    BRAND_REVIEW_JOB_KIND,
-    place.store,
-  );
-  if (!state) return false;
-  await stopJob(BRAND_REVIEW_JOB_KIND, reviewId, place.store, state);
-  await place.slots.release(reviewId);
-  await place.store.remove();
-  return true;
+  return reviews.remove(session, reviewId);
 }
