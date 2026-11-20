@@ -241,6 +241,7 @@ describe('BrandReviewWorkspace', () => {
       file: FILE,
       name: 'Annual review.pdf',
       modelReview: true,
+      locale: 'en',
     });
     expect(
       useConversationStore.getState().conversations[0].workflowState,
