@@ -53,7 +53,7 @@ export const RUN_KEY_HEADER = 'x-translation-run-key';
 export const RUN_KEY_BYTES = 32;
 
 const RUN_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-const SERVER_FILE_ID = /^[0-9a-f]{64}\.(pdf|json|png)$/;
+const SERVER_FILE_ID = /^[0-9a-f]{64}\.(pdf|json|png|pptx)$/;
 const FILE_ROUTE = '/api/document-translation/native/file';
 
 /** What the browser keeps of a run: where it is, never what is in it. */
