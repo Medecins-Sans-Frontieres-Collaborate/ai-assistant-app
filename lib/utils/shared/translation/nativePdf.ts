@@ -17,6 +17,7 @@
  *    them on every run. Caller-supplied instructions can add to a step's
  *    prompt; they can never remove or reorder a step.
  */
+import { NativeSourceFormat } from './nativeFormats';
 
 /** The fixed step sequence. `instructable` steps accept added instructions. */
 export const NATIVE_PDF_STEPS = [
@@ -380,6 +381,11 @@ export interface NativePdfFitReport {
   fits: boolean;
   /** The part of its room the text took up, `[x0, y0, x1, y1]`. */
   used?: [number, number, number, number];
+  /**
+   * The unit's part could not be rewritten safely: it stays as in the
+   * source and is reported as not translated (presentations only).
+   */
+  kept?: boolean;
 }
 
 /** A step as it finished. */
@@ -446,7 +452,21 @@ export interface NativePdfRunReport {
    * move). The PDF is laid out with these; a re-render must send them back.
    */
   styles?: Record<string, NativePdfUnitStyle>;
-  pdfUrl: string;
+  /**
+   * The translated pages as a PDF. Absent only for a presentation whose
+   * render failed: the deck is delivered without pictures or the check.
+   */
+  pdfUrl?: string;
+  /**
+   * What the run's source is (THE FORMAT ADAPTER); a PDF when absent. Also
+   * the kind of `sourceId`.
+   */
+  format?: NativeSourceFormat;
+  /**
+   * Sources that are not PDF: the translated file in the source's own
+   * format (a presentation comes back as a presentation).
+   */
+  documentUrl?: string;
   pageImages: NativePdfPageImages[];
   /** Ids of the stored source PDF and extraction; a re-render sends them back. */
   sourceId: string;
@@ -469,7 +489,10 @@ export interface NativePdfRenderReport {
   fonts: { sans: string; serif: string };
   repaired: string[];
   tooLong: string[];
-  pdfUrl: string;
+  /** Absent only for a presentation whose render failed (see the run report). */
+  pdfUrl?: string;
+  /** Sources that are not PDF: the translated file in its own format. */
+  documentUrl?: string;
   /** The editable files this render was asked for (see EDITABLE DOWNLOADS). */
   exportUrls?: NativePdfExportUrls;
   /** Images of the pages asked for only (`imagePages`), not of every page. */
