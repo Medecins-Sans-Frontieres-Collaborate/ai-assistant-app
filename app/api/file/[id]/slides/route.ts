@@ -2,7 +2,7 @@ import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
-import { deckPdfExport } from '@/lib/services/documentTranslation/native/formats/deckFormat';
+import { pdfExportFor } from '@/lib/services/documents/render/documentPages';
 import { renderErrorResponse } from '@/lib/services/documents/render/renderErrorResponse';
 import { getRenderService } from '@/lib/services/documents/render/renderService';
 
@@ -90,7 +90,7 @@ export async function GET(
     const pdfPath = await getRenderService().convert({
       inputPath,
       type: extension,
-      convertTo: deckPdfExport(),
+      convertTo: pdfExportFor(extension),
       outputDir: path.join(workDir, 'out'),
       lane: 'interactive',
       signal: request.signal,
