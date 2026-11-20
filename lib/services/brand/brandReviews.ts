@@ -124,6 +124,22 @@ function contextFor(
 }
 
 /**
+ * Reads the locale a review's notes are written in: a well-formed BCP 47
+ * tag, canonicalised, or English for anything else.
+ *
+ * @param value - The request's `locale`, unchecked.
+ * @returns A canonical tag such as `pt-BR`.
+ */
+export function parseNoteLocale(value: unknown): string {
+  if (typeof value !== 'string' || !value || value.length > 35) return 'en';
+  try {
+    return Intl.getCanonicalLocales(value)[0] ?? 'en';
+  } catch {
+    return 'en';
+  }
+}
+
+/**
  * Starts a review of one of the person's uploads against a book they may
  * use (the caller has checked that, and passes the book as read).
  *
@@ -133,7 +149,7 @@ export async function startBrandReview(
   session: Session,
   book: AdminBrandBook,
   upload: { file: string; name: string; type: string },
-  modelReview: boolean,
+  options: { modelReview: boolean; noteLocale: string },
 ): Promise<{ reviewId: string; state: BrandReviewState }> {
   const reviewId = newReviewId();
   const request: BrandReviewRequest = {
@@ -146,7 +162,8 @@ export async function startBrandReview(
     file: upload.file,
     name: upload.name,
     type: upload.type,
-    modelReview,
+    modelReview: options.modelReview,
+    noteLocale: options.noteLocale,
   };
   const state = await startJob(
     BRAND_REVIEW_JOB_KIND,
