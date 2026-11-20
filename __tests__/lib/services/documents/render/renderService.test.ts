@@ -211,7 +211,7 @@ describe('InProcessRenderService', () => {
     );
     expect(service.snapshot()).toMatchObject({
       running: 1,
-      queued: { interactive: 0, translation: 2 },
+      queued: { interactive: 0, background: 2 },
     });
     while (releases.length > 0 || running > 0) {
       releases.shift()?.();

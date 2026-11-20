@@ -284,7 +284,7 @@ const serverEnvSchema = z.object({
   // the Responses-API code_interpreter tool in the project's region).
   CODE_INTERPRETER_MODEL: z.string().default('gpt-5.4'),
 
-  // Document render service (lib/services/presentationRender): every
+  // Document render service (lib/services/documents/render): every
   // LibreOffice job on the server waits in one queue. Measured for a 60-slide
   // deck: 6-8 s and about 260 MB each (docs/POWERPOINT_TRANSLATION.md).
   // 'inprocess' runs LibreOffice on this server; 'http' sends every job to a

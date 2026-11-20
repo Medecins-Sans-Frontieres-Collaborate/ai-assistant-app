@@ -3,8 +3,8 @@ import { NextRequest } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { deckPdfExport } from '@/lib/services/documentTranslation/native/formats/deckFormat';
-import { renderErrorResponse } from '@/lib/services/presentationRender/renderErrorResponse';
-import { getRenderService } from '@/lib/services/presentationRender/renderService';
+import { renderErrorResponse } from '@/lib/services/documents/render/renderErrorResponse';
+import { getRenderService } from '@/lib/services/documents/render/renderService';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import {

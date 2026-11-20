@@ -2,7 +2,7 @@ import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
-import { renderErrorResponse } from '@/lib/services/presentationRender/renderErrorResponse';
+import { renderErrorResponse } from '@/lib/services/documents/render/renderErrorResponse';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import {

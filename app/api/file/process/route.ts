@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { FileProcessingService } from '@/lib/services/chat/FileProcessingService';
 import { isDocumentIntelligenceConfigured } from '@/lib/services/documentIntelligence/client';
-import { renderErrorResponse } from '@/lib/services/presentationRender/renderErrorResponse';
+import { renderErrorResponse } from '@/lib/services/documents/render/renderErrorResponse';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { isBlobUrlOwnedByUser } from '@/lib/utils/server/file/blobOwnership';
