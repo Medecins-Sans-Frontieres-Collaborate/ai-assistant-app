@@ -161,7 +161,8 @@ describe('POST /api/deck-builder/build', () => {
   const body = {
     outlineId: OUTLINE_ID,
     plan: PLAN,
-    name: 'Annual/review',
+    // A character a file name cannot hold becomes one space, not two.
+    name: 'Annual: review',
     locale: 'en',
   };
 
