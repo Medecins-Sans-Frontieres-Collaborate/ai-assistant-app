@@ -67,7 +67,7 @@ const request = (overrides = {}) => ({
   type: 'pptx',
   convertTo: 'pdf',
   outputDir: path.join(dir, 'out'),
-  lane: 'translation' as const,
+  lane: 'background' as const,
   ...overrides,
 });
 

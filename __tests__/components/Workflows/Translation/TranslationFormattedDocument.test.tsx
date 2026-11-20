@@ -89,7 +89,7 @@ vi.mock('@/client/services/workflows/nativeDeckJob', async (original) => ({
   recordDeckJobUsage: vi.fn(),
 }));
 // The browser PDF renderer is not available in jsdom.
-vi.mock('@/client/hooks/workflows/usePdfPages', () => ({
+vi.mock('@/client/hooks/documents/usePdfPages', () => ({
   usePdfPages: (_load: unknown, fileKey: string | null) => ({
     status: fileKey ? 'ready' : 'idle',
     pageCount: fileKey ? PAGE_COUNT : 0,

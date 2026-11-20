@@ -5,6 +5,7 @@ import { KeyboardEvent, RefObject, useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useNearView } from '@/client/hooks/documents/useNearView';
 import { PdfPages } from '@/client/hooks/documents/usePdfPages';
 import { useRunImage } from '@/client/hooks/workflows/useRunImage';
 
@@ -24,9 +25,6 @@ import { useUnitWording } from './formattedWording';
 /** Width a source page is rendered at for its thumbnail, in CSS pixels. */
 const THUMBNAIL_WIDTH = 176;
 
-/** How far outside the list a thumbnail starts rendering. */
-const THUMBNAIL_MARGIN = '240px';
-
 /**
  * How a page's thumbnail looks, by what the download holds of it. The
  * three must not be mistaken for one another: a translated page is shown
@@ -43,29 +41,6 @@ interface SourceThumbnailProps {
   page: number;
   pdf: PdfPages;
   className: string;
-}
-
-/**
- * Whether the element behind `holder` has come near the visible part of
- * the list (within THUMBNAIL_MARGIN). Once near, it stays near. Without
- * the observer (an old browser) everything is near.
- */
-function useNearView(holder: RefObject<HTMLElement | null>): boolean {
-  const [near, setNear] = useState(
-    () => typeof IntersectionObserver === 'undefined',
-  );
-  useEffect(() => {
-    if (near || !holder.current) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) setNear(true);
-      },
-      { rootMargin: THUMBNAIL_MARGIN },
-    );
-    observer.observe(holder.current);
-    return () => observer.disconnect();
-  }, [near, holder]);
-  return near;
 }
 
 /** Placeholder of a thumbnail that is not there yet. */
