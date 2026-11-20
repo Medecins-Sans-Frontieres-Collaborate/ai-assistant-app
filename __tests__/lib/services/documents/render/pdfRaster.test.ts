@@ -1,8 +1,8 @@
-import { DocumentSignatureError } from '@/lib/services/presentationRender/libreOfficeInputs';
-import { LibreOfficeFailedError } from '@/lib/services/presentationRender/libreOfficeProcess';
-import { rasterizePdf } from '@/lib/services/presentationRender/pdfRaster';
-import { RenderBusyError } from '@/lib/services/presentationRender/renderQueue';
-import { InProcessRenderService } from '@/lib/services/presentationRender/renderService';
+import { DocumentSignatureError } from '@/lib/services/documents/render/libreOfficeInputs';
+import { LibreOfficeFailedError } from '@/lib/services/documents/render/libreOfficeProcess';
+import { rasterizePdf } from '@/lib/services/documents/render/pdfRaster';
+import { RenderBusyError } from '@/lib/services/documents/render/renderQueue';
+import { InProcessRenderService } from '@/lib/services/documents/render/renderService';
 
 import { execFileSync } from 'child_process';
 import fs from 'fs';

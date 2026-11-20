@@ -19,16 +19,16 @@ describe('getRenderService', () => {
       RENDER_SERVICE_URL: 'http://render.internal',
     });
     const { getRenderService } =
-      await import('@/lib/services/presentationRender/renderService');
+      await import('@/lib/services/documents/render/renderService');
     const { HttpRenderService } =
-      await import('@/lib/services/presentationRender/httpRenderService');
+      await import('@/lib/services/documents/render/httpRenderService');
     expect(getRenderService()).toBeInstanceOf(HttpRenderService);
   });
 
   it('refuses http without an address', async () => {
     Object.assign(env, { RENDER_SERVICE: 'http' });
     const { getRenderService } =
-      await import('@/lib/services/presentationRender/renderService');
+      await import('@/lib/services/documents/render/renderService');
     expect(() => getRenderService()).toThrow('RENDER_SERVICE_URL');
   });
 
@@ -39,7 +39,7 @@ describe('getRenderService', () => {
       RENDER_INTERACTIVE_BURST: 3,
     });
     const { getRenderService, InProcessRenderService } =
-      await import('@/lib/services/presentationRender/renderService');
+      await import('@/lib/services/documents/render/renderService');
     expect(getRenderService()).toBeInstanceOf(InProcessRenderService);
   });
 });

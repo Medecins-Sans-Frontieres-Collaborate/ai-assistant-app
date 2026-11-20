@@ -3,11 +3,11 @@ import {
   LibreOfficeMemoryError,
   LibreOfficeTimeoutError,
   runLibreOffice,
-} from '@/lib/services/presentationRender/libreOfficeProcess';
+} from '@/lib/services/documents/render/libreOfficeProcess';
 import {
   privateResidentBytes,
   treeResidentBytes,
-} from '@/lib/services/presentationRender/processMemory';
+} from '@/lib/services/documents/render/processMemory';
 
 import { execFileSync } from 'child_process';
 import fs from 'fs';

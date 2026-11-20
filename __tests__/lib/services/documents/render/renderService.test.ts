@@ -2,20 +2,20 @@ import {
   DocumentSignatureError,
   checkLibreOfficeInput,
   signatureOf,
-} from '@/lib/services/presentationRender/libreOfficeInputs';
+} from '@/lib/services/documents/render/libreOfficeInputs';
 import {
   LibreOfficeConversion,
   LibreOfficeFailedError,
   LibreOfficeTimeoutError,
-} from '@/lib/services/presentationRender/libreOfficeProcess';
-import { RenderBusyError } from '@/lib/services/presentationRender/renderQueue';
+} from '@/lib/services/documents/render/libreOfficeProcess';
+import { RenderBusyError } from '@/lib/services/documents/render/renderQueue';
 import {
   InProcessRenderService,
   InProcessRenderSettings,
   STALE_WORK_MS,
   getRenderService,
   timeLimitFor,
-} from '@/lib/services/presentationRender/renderService';
+} from '@/lib/services/documents/render/renderService';
 
 import fs from 'fs';
 import os from 'os';

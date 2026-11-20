@@ -1,14 +1,14 @@
-import { DocumentSignatureError } from '@/lib/services/presentationRender/libreOfficeInputs';
+import { DocumentSignatureError } from '@/lib/services/documents/render/libreOfficeInputs';
 import {
   LibreOfficeFailedError,
   LibreOfficeMemoryError,
   LibreOfficeTimeoutError,
-} from '@/lib/services/presentationRender/libreOfficeProcess';
+} from '@/lib/services/documents/render/libreOfficeProcess';
 import {
   RENDER_RETRY_AFTER_SECONDS,
   renderErrorResponse,
-} from '@/lib/services/presentationRender/renderErrorResponse';
-import { RenderBusyError } from '@/lib/services/presentationRender/renderQueue';
+} from '@/lib/services/documents/render/renderErrorResponse';
+import { RenderBusyError } from '@/lib/services/documents/render/renderQueue';
 
 import { describe, expect, it } from 'vitest';
 

@@ -1,7 +1,7 @@
-import { HttpRenderService } from '@/lib/services/presentationRender/httpRenderService';
-import { DocumentSignatureError } from '@/lib/services/presentationRender/libreOfficeInputs';
-import { LibreOfficeTimeoutError } from '@/lib/services/presentationRender/libreOfficeProcess';
-import { RenderBusyError } from '@/lib/services/presentationRender/renderQueue';
+import { HttpRenderService } from '@/lib/services/documents/render/httpRenderService';
+import { DocumentSignatureError } from '@/lib/services/documents/render/libreOfficeInputs';
+import { LibreOfficeTimeoutError } from '@/lib/services/documents/render/libreOfficeProcess';
+import { RenderBusyError } from '@/lib/services/documents/render/renderQueue';
 
 import fs from 'fs';
 import http from 'http';

@@ -2,7 +2,7 @@ import {
   RenderBusyError,
   RenderLane,
   RenderQueue,
-} from '@/lib/services/presentationRender/renderQueue';
+} from '@/lib/services/documents/render/renderQueue';
 
 import { describe, expect, it, vi } from 'vitest';
 

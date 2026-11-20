@@ -4,7 +4,7 @@ import {
   readPackageEntry,
   readPackagePart,
   writePackage,
-} from '@/lib/services/presentationRender/ooxmlPackage';
+} from '@/lib/services/documents/render/ooxmlPackage';
 
 import { Zip, ZipDeflate, strToU8, unzipSync, zipSync } from 'fflate';
 import fs from 'fs';
