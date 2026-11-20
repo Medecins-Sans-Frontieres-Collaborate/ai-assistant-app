@@ -1,9 +1,13 @@
 import { NextRequest } from 'next/server';
 
 import { ensureDocumentSources } from '@/lib/services/documentSources';
-import { documentPdf } from '@/lib/services/documents/render/documentPages';
+import {
+  PagedDocumentType,
+  documentPdf,
+} from '@/lib/services/documents/render/documentPages';
 import { renderErrorResponse } from '@/lib/services/documents/render/renderErrorResponse';
 import {
+  DocumentFile,
   UnknownDocumentSourceError,
   readDocumentSource,
 } from '@/lib/services/documents/sources/documentSources';
@@ -58,7 +62,7 @@ export async function GET(request: NextRequest) {
   if (!session?.user) return unauthorizedResponse();
 
   ensureDocumentSources();
-  let file: Buffer | null;
+  let file: DocumentFile | null;
   try {
     file = await readDocumentSource(session, source);
   } catch (error) {
@@ -69,7 +73,7 @@ export async function GET(request: NextRequest) {
     return errorResponse('Failed to retrieve the document', 500);
   }
   if (!file) return notFoundResponse('Document');
-  if (file.byteLength > DOCUMENT_PDF_MAX_BYTES) {
+  if (file.data.byteLength > DOCUMENT_PDF_MAX_BYTES) {
     return badRequestResponse(
       'This document is too large to show',
       'DOCUMENT_TOO_LARGE',
@@ -83,8 +87,13 @@ export async function GET(request: NextRequest) {
     // in the person's own browser cache only.
     'Cache-Control': 'private, max-age=3600',
   };
-  if (source.type === 'pdf') {
-    return new Response(new Uint8Array(file), { headers });
+  // The stored file's own type decides how it is opened.
+  const type = file.type;
+  if (!isPagedDocumentType(type)) {
+    return badRequestResponse('This file has no pages to show', 'NOT_PAGED');
+  }
+  if (type === 'pdf') {
+    return new Response(new Uint8Array(file.data), { headers });
   }
 
   const workDir = await fs.promises.mkdtemp(
@@ -93,9 +102,9 @@ export async function GET(request: NextRequest) {
   try {
     // A fixed name: nothing from the request reaches a path but the
     // validated type.
-    const inputPath = path.join(workDir, `document.${source.type}`);
-    await fs.promises.writeFile(inputPath, file);
-    const pdfPath = await documentPdf(inputPath, source.type, {
+    const inputPath = path.join(workDir, `document.${type}`);
+    await fs.promises.writeFile(inputPath, file.data);
+    const pdfPath = await documentPdf(inputPath, type as PagedDocumentType, {
       lane: 'interactive',
       workDir,
       signal: request.signal,
