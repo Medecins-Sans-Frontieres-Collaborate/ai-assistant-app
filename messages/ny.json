@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Tsegulani",
-    "showFullMessage": "Onetsani uthenga wonse",
-    "collapse": "Pangani Wachidule",
     "customTone": "Mawu Apadera",
     "showMore": "Onetsani zambiri",
-    "showLess": "Onetsani zochepa"
+    "showLess": "Onetsani zochepa",
+    "fromPrompt": "Lamulo: {name}"
   },
   "codeBlock": {
     "openInEditor": "Tsegulani mu wosintha"
@@ -2627,14 +2626,13 @@
     "contactUs": "Lumikizanani nafe nthawi yomweyo ngati muli ndi nkhawa za chinsinsi:"
   },
   "variableModal": {
-    "fillInstructions": "Dzazani zosinthika pansipa kuti musinthe lamulo lanu",
-    "optional": "Zosankha",
-    "required": "Zofunikira",
-    "default": "Choyamba:",
     "defaultPlaceholder": "{defaultValue} (choyamba)",
-    "enterValue": "Lowetsani mtengo wa {key}...",
     "cancel": "Letsani",
-    "apply": "Gwiritsani Ntchito"
+    "optionalSuffix": "(mwa kufuna)",
+    "missing": "Lembani apa kuti mugwiritse ntchito lamulo.",
+    "keysHint": "Enter: malo otsatira · Shift+Enter: mzere watsopano",
+    "preview": "Kuona uthenga pasadakhale",
+    "insert": "Ikani mu uthenga"
   },
   "recentSources": {
     "title": "Magwero Aposachedwa",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Masamba oyambirira",
         "pagesField": "Masamba",
         "pageLabel": "Tsamba {page}",
+        "loadingPage": "Tikutsegula tsamba {page}",
         "pageEdits": "{count, plural, one {Tsamba {page} · kusintha #} other {Tsamba {page} · kusintha #}}",
         "pages": "Masamba",
         "removeDocument": "Chotsani",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Zosintha sizinasungidwe",
           "expiresSoon": "{count, plural, one {Mafayilo a kumasulira kwa ichi adzachotsedwa m’tsiku limodzi.} other {Mafayilo a kumasulira kwa ichi adzachotsedwa m’masiku #.}}",
           "keep": "Sungani kwa masiku {days} owonjezera"
-        }
+        },
+        "downloadMenu": "Tsitsani",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Masamba omasuliridwa monga akuonekera pano.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Mawu osinthika pamwamba pa chithunzi cha tsamba lililonse. Onani musanagawane.",
+        "experimental": "Zoyesera",
+        "downloadBuilding": "Kukonza {format}…",
+        "downloadWithChanges": "Zikuphatikiza zosintha zanu zaposachedwa.",
+        "lineBreakHint": "Dinani Enter kuti muyambe mzere watsopano patsamba."
       },
       "kind": "Choti masulire",
       "kindText": "Malemba",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Mabajeti anu",
     "chipAria": "Bajeti ya {metric}: {percent}% yagwiritsidwa ntchito.",
     "runProjection": "Bajeti ya maemission {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Ikufuna {fields}",
+    "keysHint": "↑↓ kusankha · Enter kugwiritsa · Esc kutseka"
   }
 }

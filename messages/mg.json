@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Sokafy",
-    "showFullMessage": "Asehoy ny hafatra feno",
-    "collapse": "Ahitsio",
     "customTone": "Feo Manokana",
     "showMore": "Asehoy bebe kokoa",
-    "showLess": "Asehoy kely kokoa"
+    "showLess": "Asehoy kely kokoa",
+    "fromPrompt": "Baiko: {name}"
   },
   "codeBlock": {
     "openInEditor": "Sokafy ao amin'ny mpanova"
@@ -2627,14 +2626,13 @@
     "contactUs": "Mifandraisa aminay avy hatrany raha manana ahiahy momba ny fiainam-pirenena ianao:"
   },
   "variableModal": {
-    "fillInstructions": "Fenoy ny ova eto ambany mba hanokana ny toro-hevitrao",
-    "optional": "Tsy voatery",
-    "required": "Ilaina",
-    "default": "Tsy miovaova:",
     "defaultPlaceholder": "{defaultValue} (tsy miovaova)",
-    "enterValue": "Ampidiro ny sanda ho an'ny {key}...",
     "cancel": "Ajanony",
-    "apply": "Ampiharo"
+    "optionalSuffix": "(tsy voatery)",
+    "missing": "Fenoy ity hampiasana ny baiko.",
+    "keysHint": "Enter: saha manaraka · Shift+Enter: andalana vaovao",
+    "preview": "Topimaso ny hafatra",
+    "insert": "Ampidiro ao amin’ny hafatra"
   },
   "recentSources": {
     "title": "Angona Loharano Farany",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Pejy loharano",
         "pagesField": "Pejy",
         "pageLabel": "Pejy {page}",
+        "loadingPage": "Mampiditra ny pejy {page}",
         "pageEdits": "{count, plural, one {Pejy {page} · # fanitsiana} other {Pejy {page} · # fanitsiana} }",
         "pages": "Pejy",
         "removeDocument": "Esory",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Tsy voatahiry hatramin’izao ny fiovana",
           "expiresSoon": "{count, plural, one {Ho voafafa ao anatin’ny # andro ny rakitra amin’ity fandikan-teny ity.} other {Ho voafafa ao anatin’ny # andro ny rakitra amin’ity fandikan-teny ity.}}",
           "keep": "Tehirizo mandritra ny {days} andro fanampiny"
-        }
+        },
+        "downloadMenu": "Ampidino",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Ireo pejy voadika araka ny aseho eto.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Lahatsoratra azo ovaina eo ambonin’ny sarin’ny pejy tsirairay. Hamarino alohan’ny hizarana.",
+        "experimental": "Andrana",
+        "downloadBuilding": "Manomana ny {format}…",
+        "downloadWithChanges": "Ahitana ny fanovana farany nataonao.",
+        "lineBreakHint": "Tsindrio ny Enter mba hanombohana andalana vaovao eo amin’ny pejy."
       },
       "kind": "Inona no adika",
       "kindText": "Lahatsoratra",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Ny teti-bolanao",
     "chipAria": "Teti-bola {metric}: {percent}% voaampiasaina.",
     "runProjection": "Teti-bola emissions {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Mangataka {fields}",
+    "keysHint": "↑↓ hifidy · Enter hampiasa · Esc hanidy"
   }
 }

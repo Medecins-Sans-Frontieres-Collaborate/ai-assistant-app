@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "திற",
-    "showFullMessage": "முழு செய்தியைக் காட்டு",
-    "collapse": "சுருக்கு",
     "customTone": "தனிப்பயன் தொனி",
     "showMore": "மேலும் காண்பது",
-    "showLess": "குறைவாக காண்பது"
+    "showLess": "குறைவாக காண்பது",
+    "fromPrompt": "ப்ராம்ப்ட்: {name}"
   },
   "codeBlock": {
     "openInEditor": "திருத்தியில் திற"
@@ -2627,14 +2626,13 @@
     "contactUs": "தனியுரிமை கவலைகள் இருந்தால் உடனடியாக எங்களைத் தொடர்புகொள்ளுங்கள்:"
   },
   "variableModal": {
-    "fillInstructions": "உங்கள் ப்ராம்ப்ட்டைத் தனிப்பயனாக்க கீழே உள்ள மாறிகளை நிரப்புங்கள்",
-    "optional": "விருப்பத்தேர்வு",
-    "required": "தேவை",
-    "default": "இயல்புநிலை:",
     "defaultPlaceholder": "{defaultValue} (இயல்புநிலை)",
-    "enterValue": "{key}-க்கான மதிப்பை உள்ளிடுங்கள்...",
     "cancel": "ரத்துசெய்",
-    "apply": "பயன்படுத்து"
+    "optionalSuffix": "(விருப்பத்தேர்வு)",
+    "missing": "ப்ராம்ப்டைப் பயன்படுத்த இதை நிரப்பவும்.",
+    "keysHint": "Enter: அடுத்த புலம் · Shift+Enter: புதிய வரி",
+    "preview": "செய்தி முன்னோட்டம்",
+    "insert": "செய்தியில் சேர்"
   },
   "recentSources": {
     "title": "சமீபத்திய ஆதாரத் தரவு",
@@ -3210,6 +3208,7 @@
         "sourcePages": "மூலப் பக்கங்கள்",
         "pagesField": "பக்கங்கள்",
         "pageLabel": "பக்கம் {page}",
+        "loadingPage": "பக்கம் {page} ஏற்றப்படுகிறது",
         "pageEdits": "{count, plural, one {பக்கம் {page} · # திருத்தம்} other {பக்கம் {page} · # திருத்தங்கள்}}",
         "pages": "பக்கங்கள்",
         "removeDocument": "அகற்று",
@@ -3426,7 +3425,16 @@
           "saveFailed": "மாற்றங்கள் இன்னும் சேமிக்கப்படவில்லை",
           "expiresSoon": "{count, plural, one {இந்த மொழிபெயர்ப்பின் கோப்புகள் # நாளில் நீக்கப்படும்.} other {இந்த மொழிபெயர்ப்பின் கோப்புகள் # நாட்களில் நீக்கப்படும்.}}",
           "keep": "மேலும் {days} நாட்கள் வைத்திருக்கவும்"
-        }
+        },
+        "downloadMenu": "பதிவிறக்கு",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "மொழிபெயர்க்கப்பட்ட பக்கங்கள், இங்கே காட்டப்பட்டபடி.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "ஒவ்வொரு பக்கத்தின் படத்தின் மேல் திருத்தக்கூடிய உரை. பகிர்வதற்கு முன் சரிபார்க்கவும்.",
+        "experimental": "பரிசோதனை",
+        "downloadBuilding": "{format} தயாராகிறது…",
+        "downloadWithChanges": "உங்கள் சமீபத்திய மாற்றங்கள் சேர்க்கப்பட்டுள்ளன.",
+        "lineBreakHint": "பக்கத்தில் புதிய வரியைத் தொடங்க Enter ஐ அழுத்தவும்."
       },
       "kind": "எதை மொழிபெயர்க்க வேண்டும்",
       "kindText": "உரை",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "உங்கள் பட்ஜெட்டுகள்",
     "chipAria": "{metric} பட்ஜெட்: {percent}% பயன்படுத்தப்பட்டுள்ளது.",
     "runProjection": "வாயு வீச்சு பட்ஜெட் {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "{fields} கேட்கிறது",
+    "keysHint": "↑↓ தேர்வு · Enter பயன்படுத்து · Esc மூடு"
   }
 }

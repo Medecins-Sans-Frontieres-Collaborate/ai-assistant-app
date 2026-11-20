@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "ክፈት",
-    "showFullMessage": "ምሉእ መልእኽቲ ኣርኢ",
-    "collapse": "ጽብብ",
     "customTone": "ብሕታዊ ቃና",
     "showMore": "ተወሳኺ ሓውሳኽ ራኣ",
-    "showLess": "ድሓን ምስራዕ"
+    "showLess": "ድሓን ምስራዕ",
+    "fromPrompt": "መምርሒ፦ {name}"
   },
   "codeBlock": {
     "openInEditor": "ኣብ ኤዲተር ክፈት"
@@ -2627,14 +2626,13 @@
     "contactUs": "ናይ ብሕትና ስክፍታ እንተ ኣለካ ብቕልጡፍ ርኸቡና:"
   },
   "variableModal": {
-    "fillInstructions": "ፕሮምፕትካ ንምቕያር ታሕቲ ዘለዉ ተለዋዋጥታት ምልኣ",
-    "optional": "ኣማራጺ",
-    "required": "ኣድላዪ",
-    "default": "ውሁድ:",
     "defaultPlaceholder": "{defaultValue} (ውሁድ)",
-    "enterValue": "ን{key} ዋጋ ኣእቱ...",
     "cancel": "ሰርዝ",
-    "apply": "ተግብር"
+    "optionalSuffix": "(ኣማራጺ)",
+    "missing": "ነቲ መምርሒ ንምጥቃም እዚ ምልኡ።",
+    "keysHint": "Enter፦ ቀጻሊ ቦታ · Shift+Enter፦ ሓድሽ መስመር",
+    "preview": "ቅድመ ርእይ መልእኽቲ",
+    "insert": "ናብ መልእኽቲ ኣእቱ"
   },
   "recentSources": {
     "title": "ናይ ቀረባ ምንጪ ዳታ",
@@ -3210,6 +3208,7 @@
         "sourcePages": "መለላዊ ገጻት",
         "pagesField": "ገጻት",
         "pageLabel": "ገጽ {page}",
+        "loadingPage": "ገጽ {page} ይጽዕን ኣሎ",
         "pageEdits": "{count, plural, one {ገጽ {page} · ሓደ ቅየም} other {ገጽ {page} · {count} ቅየማት}}",
         "pages": "ገጻት",
         "removeDocument": "ወጽእ",
@@ -3426,7 +3425,16 @@
           "saveFailed": "ለውጢ ኣብ ዝኸኣለ ኣይተሓናጸን",
           "expiresSoon": "{count, plural, one {ሰነዶታትኡ ትርጉም በናይ # መዓልቲ ይጠፍኡ።} other {ሰነዶታትኡ ትርጉም በናይ # መዓልታት ይጠፍኡ።}}",
           "keep": "ኣብ {days} መዓልት ዝሓዘ ክውን"
-        }
+        },
+        "downloadMenu": "ኣውርድ",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "እተን ዝተተርጎማ ገጻት ከምቲ ኣብዚ ዝርአ።",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "ኣብ ልዕሊ ስእሊ ነፍሲ ወከፍ ገጽ ክእረም ዝኽእል ጽሑፍ። ቅድሚ ምክፋልካ ኣረጋግጽ።",
+        "experimental": "ፈተነ",
+        "downloadBuilding": "{format} ይዳሎ ኣሎ…",
+        "downloadWithChanges": "ናይ መወዳእታ ለውጥታትካ የጠቓልል።",
+        "lineBreakHint": "ኣብ ገጽ ሓድሽ መስመር ንምጅማር Enter ጠውቑ።"
       },
       "kind": "ንመተርጎም ዝግበሩ",
       "kindText": "ጽሑፋ",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "ባጀቶትካ",
     "chipAria": "{metric} ባጀት፡ {percent}% ተጠቓሚ ይሕሸ.",
     "runProjection": "ዝኸደ ባጀት ምፍላጥ {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "{fields} ይሓትት",
+    "keysHint": "↑↓ ንምምራጽ · Enter ንምጥቃም · Esc ንምዕጻው"
   }
 }

@@ -2339,11 +2339,10 @@
   },
   "userMessage": {
     "open": "ဖွင့်ရန်",
-    "showFullMessage": "မက်ဆေ့ချ်လုံးဝ ပြပါ",
-    "collapse": "ဖျက်ပုံချရန်",
     "customTone": "စိတ်ကြိုက်အသံအလုံးအရင်း",
     "showMore": "ပိုမိုပြသရန်",
-    "showLess": "အနည်းပြရန်"
+    "showLess": "အနည်းပြရန်",
+    "fromPrompt": "Prompt: {name}"
   },
   "codeBlock": {
     "openInEditor": "Editor တွင် ဖွင့်ရန်"
@@ -2643,14 +2642,13 @@
     "contactUs": "ကိုယ်ရေးအချက်အလက် စိုးရိမ်မှုများ ရှိပါက ချက်ချင်း ဆက်သွယ်ပါ:"
   },
   "variableModal": {
-    "fillInstructions": "သင့်အချက်ပြချက်ကို စိတ်ကြိုက်ပြင်ဆင်ရန် အောက်ပါ ကိန်းရှင်များကို ဖြည့်ပါ",
-    "optional": "ရွေးချယ်ခွင့်",
-    "required": "လိုအပ်သည်",
-    "default": "ပုံသေ:",
     "defaultPlaceholder": "{defaultValue} (ပုံသေ)",
-    "enterValue": "{key} အတွက် တန်ဖိုးထည့်ပါ...",
     "cancel": "ဖျက်သိမ်းပါ",
-    "apply": "အသုံးပြုပါ"
+    "optionalSuffix": "(ရွေးချယ်နိုင်)",
+    "missing": "Prompt ကိုသုံးရန် ဤနေရာကိုဖြည့်ပါ။",
+    "keysHint": "Enter: နောက်အကွက် · Shift+Enter: စာကြောင်းအသစ်",
+    "preview": "စာတိုကြိုတင်ကြည့်ရှုမှု",
+    "insert": "စာတိုထဲသို့ ထည့်ရန်"
   },
   "recentSources": {
     "title": "နောက်ဆုံးရ အရင်းအမြစ် ဒေတာ",
@@ -3226,6 +3224,7 @@
         "sourcePages": "မူရင်း စာမျက်နှာများ",
         "pagesField": "စာမျက်နှာများ",
         "pageLabel": "စာမျက်နှာ {page}",
+        "loadingPage": "စာမျက်နှာ {page} ကို ဖွင့်နေသည်",
         "pageEdits": "{count, plural, one {စာမျက်နှာ {page} · တစ်ကြိမ် ပြင်ဆင်မှု} other {စာမျက်နှာ {page} · # ကြိမ် ပြင်ဆင်မှု}}",
         "pages": "စာမျက်နှာများ",
         "removeDocument": "ဖယ်ရှားမည်",
@@ -3442,7 +3441,16 @@
           "saveFailed": "ပြင်ဆင်မှုများသိမ်းဆည်းထားပါသေး။",
           "expiresSoon": "{count, plural, one {ဒီဘာသာပြန်မှုရဲ့ ဖိုင်တင်များသည် နောက်တစ်ရက်အတွင်း ဖျက်သိမ်းလိမ့်မည်။} other {ဒီဘာသာပြန်မှုရဲ့ ဖိုင်တင်များသည် နောက် # ရက်အတွင်း ဖျက်သိမ်းလိမ့်မည်။}}",
           "keep": "{days} ရက်ထပ်မံထားရှိပါ"
-        }
+        },
+        "downloadMenu": "ဒေါင်းလုဒ်",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "ဤနေရာတွင် ပြထားသည့်အတိုင်း ဘာသာပြန်ထားသော စာမျက်နှာများ။",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "စာမျက်နှာတစ်ခုစီ၏ ပုံပေါ်တွင် တည်းဖြတ်နိုင်သော စာသား။ မမျှဝေမီ စစ်ဆေးပါ။",
+        "experimental": "စမ်းသပ်မှု",
+        "downloadBuilding": "{format} ကို ပြင်ဆင်နေသည်…",
+        "downloadWithChanges": "သင်၏ နောက်ဆုံးပြောင်းလဲမှုများ ပါဝင်သည်။",
+        "lineBreakHint": "စာမျက်နှာပေါ်တွင် စာကြောင်းအသစ် စရန် Enter ကို နှိပ်ပါ။"
       },
       "kind": "ဘာသာပြန်ရန် အမျိုးအစား",
       "kindText": "စာသား",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "သင့်ဘတ်ဂျက်များ",
     "chipAria": "{metric} ဘတ်ဂျက်- {percent}% အသုံးပြုထားသည်။",
     "runProjection": "ထုတ်လွှတ်မှုဘတ်ဂျက် {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "{fields} ကိုတောင်းသည်",
+    "keysHint": "↑↓ ရွေးရန် · Enter သုံးရန် · Esc ပိတ်ရန်"
   }
 }

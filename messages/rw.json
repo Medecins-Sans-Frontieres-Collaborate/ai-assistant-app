@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Fungura",
-    "showFullMessage": "Erekana ubutumwa bwuzuye",
-    "collapse": "Funga",
     "customTone": "Ijwi Ryihariye",
     "showMore": "Erekana byinshi",
-    "showLess": "Erekana bike"
+    "showLess": "Erekana bike",
+    "fromPrompt": "Ibwiriza: {name}"
   },
   "codeBlock": {
     "openInEditor": "Fungura mu guhindura"
@@ -2627,14 +2626,13 @@
     "contactUs": "Duhamagare ako kanya niba ufite ibibazo by'ibanga:"
   },
   "variableModal": {
-    "fillInstructions": "Uzuza impinduka zikurikira kugira ngo uhindure ibwiriza ryawe",
-    "optional": "Ntibisabwa",
-    "required": "Bisabwa",
-    "default": "Ibisanzwe:",
     "defaultPlaceholder": "{defaultValue} (ibisanzwe)",
-    "enterValue": "Injiza agaciro ka {key}...",
     "cancel": "Hagarika",
-    "apply": "Koresha"
+    "optionalSuffix": "(si ngombwa)",
+    "missing": "Uzuza aha kugira ngo ukoreshe iri bwiriza.",
+    "keysHint": "Enter: umwanya ukurikira · Shift+Enter: umurongo mushya",
+    "preview": "Kureba ubutumwa mbere",
+    "insert": "Shyira mu butumwa"
   },
   "recentSources": {
     "title": "Amakuru y'Inkomoko Mashya",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Amapapuro y'inkomoko",
         "pagesField": "Amapapuro",
         "pageLabel": "Urupapuro {page}",
+        "loadingPage": "Gufungura urupapuro {page}",
         "pageEdits": "{count, plural, one {Urupapuro {page} · # gukosora} other {Urupapuro {page} · # gukosora}}",
         "pages": "Amapapuro",
         "removeDocument": "Kuraho",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Impinduka ntizirabikwa",
           "expiresSoon": "{count, plural, one {Amadosiye y'ubu busobanuro azasibwa mu munsi 1.} other {Amadosiye y'ubu busobanuro azasibwa mu minsi #.}}",
           "keep": "Bikomeze igihe cy'iminsi {days} yiyongera"
-        }
+        },
+        "downloadMenu": "Manura",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Amapaji yahinduwe nk’uko agaragara hano.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Umwandiko ushobora guhindurwa uri hejuru y’ishusho ya buri paji. Banza ugenzure mbere yo gusangiza.",
+        "experimental": "Igeragezwa",
+        "downloadBuilding": "Harategurwa {format}…",
+        "downloadWithChanges": "Harimo impinduka zawe ziheruka.",
+        "lineBreakHint": "Kanda Enter kugira ngo utangire umurongo mushya ku ipaji."
       },
       "kind": "Ihinduza ushaka gukora",
       "kindText": "Ibuririro",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Ingengo y’imari zawe",
     "chipAria": "Ingengo y'imari ya {metric}: {percent}% byakoreshejwe.",
     "runProjection": "Ingingo y’imari y’ibyoherezwa {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Isaba {fields}",
+    "keysHint": "↑↓ guhitamo · Enter gukoresha · Esc gufunga"
   }
 }

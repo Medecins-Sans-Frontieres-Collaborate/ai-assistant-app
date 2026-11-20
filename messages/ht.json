@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Ouvri",
-    "showFullMessage": "Montre mesaj konplè",
-    "collapse": "Ratresi",
     "customTone": "Ton Pèsonalize",
     "showMore": "Montre plis",
-    "showLess": "Montre mwens"
+    "showLess": "Montre mwens",
+    "fromPrompt": "Envit: {name}"
   },
   "codeBlock": {
     "openInEditor": "Ouvri nan editè"
@@ -2627,14 +2626,13 @@
     "contactUs": "Kontakte nou imedyatman si ou gen enkyetid sou konfidansyalite:"
   },
   "variableModal": {
-    "fillInstructions": "Ranpli varyab anba yo pou pèsonalize envit ou",
-    "optional": "Opsyonèl",
-    "required": "Obligatwa",
-    "default": "Pa defo:",
     "defaultPlaceholder": "{defaultValue} (pa defo)",
-    "enterValue": "Antre valè pou {key}...",
     "cancel": "Anile",
-    "apply": "Aplike"
+    "optionalSuffix": "(si ou vle)",
+    "missing": "Ranpli sa a pou itilize envit la.",
+    "keysHint": "Enter: pwochen chan · Shift+Enter: nouvo liy",
+    "preview": "Apèsi mesaj la",
+    "insert": "Mete nan mesaj la"
   },
   "recentSources": {
     "title": "Dènye Done Sous",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Paj sous",
         "pagesField": "Paj yo",
         "pageLabel": "Paj {page}",
+        "loadingPage": "Paj {page} ap chaje",
         "pageEdits": "{count, plural, one {Paj {page} · # koreksyon} other {Paj {page} · # koreksyon}}",
         "pages": "Paj yo",
         "removeDocument": "Retire",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Chanjman yo pa sove ankò",
           "expiresSoon": "{count, plural, one {Dosye tradiksyon sa a ap efase nan # jou.} other {Dosye tradiksyon sa a ap efase nan # jou.}}",
           "keep": "Kenbe pou {days} jou anplis"
-        }
+        },
+        "downloadMenu": "Telechaje",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Paj tradui yo jan yo parèt la a.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Tèks ou ka modifye sou yon imaj chak paj. Verifye l anvan ou pataje l.",
+        "experimental": "Eksperimantal",
+        "downloadBuilding": "N ap prepare {format}…",
+        "downloadWithChanges": "Li gen dènye chanjman ou yo ladan l.",
+        "lineBreakHint": "Peze Enter pou kòmanse yon nouvo liy sou paj la."
       },
       "kind": "Kisa pou tradui",
       "kindText": "Tèks",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Bidjè ou yo",
     "chipAria": "Bidjè {metric}: {percent}% itilize.",
     "runProjection": "Projè bidjè emisyon {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Mande {fields}",
+    "keysHint": "↑↓ pou chwazi · Enter pou itilize · Esc pou fèmen"
   }
 }

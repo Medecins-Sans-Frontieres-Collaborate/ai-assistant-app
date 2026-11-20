@@ -1793,9 +1793,8 @@
     "showMore": "زیاتر پیشان بدە",
     "showLess": "کەمتر پیشان بدە",
     "open": "کەرەوە",
-    "showFullMessage": "نمایش پەیامی تەواو",
-    "collapse": "داخستن",
-    "customTone": "هەواڵی تایبەتی"
+    "customTone": "هەواڵی تایبەتی",
+    "fromPrompt": "Ferman: {name}"
   },
   "codeBlock": {
     "openInEditor": "بکەیتەوە لە ئیدیتۆر"
@@ -2157,14 +2156,13 @@
     "contactUs": "ئێمە پەیوەندیمان پێوە بکە فەرمانی تایبەتمەندی هەبیت:"
   },
   "variableModal": {
-    "fillInstructions": "گۆڕانکاری وەرگێڕان بۆ هەستیارەکان لە خوارەوە پڕبکە",
-    "optional": "دڵخواز",
-    "required": "پێویست",
-    "default": "بنەڕەت:",
     "defaultPlaceholder": "{defaultValue} (بنەڕەت)",
-    "enterValue": "نرخ بنووسە بۆ {key}...",
     "cancel": "پاشگەزبوونەوە",
-    "apply": "جێبەجێکردن"
+    "optionalSuffix": "(vebijarkî)",
+    "missing": "Ji bo bikaranîna fermanê vê dagire.",
+    "keysHint": "Enter: qada din · Shift+Enter: rêza nû",
+    "preview": "Pêşdîtina peyamê",
+    "insert": "Têxe nav peyamê"
   },
   "recentSources": {
     "title": "داتای سەرچاوەی نوێ",
@@ -2740,6 +2738,7 @@
         "sourcePages": "پەڕە سەرچاوە",
         "pagesField": "پەڕەکان",
         "pageLabel": "پەڕە {page}",
+        "loadingPage": "Rûpela {page} tê barkirin",
         "pageEdits": "{count, plural, one {پەڕە {page} · یەک گوڕانکاری} other {پەڕە {page} · # گوڕانکاری}}",
         "pages": "پەڕەکان",
         "removeDocument": "سڕینەوە",
@@ -2956,7 +2955,16 @@
           "saveFailed": "گۆڕانکاریەکان تاکو ئێستا نەخراوە",
           "expiresSoon": "{count, plural, one {پەڕگەکانی ئەم وەرگێڕانە لە ماوەی ١ ڕۆژ دڕاو دەبن.} other {پەڕگەکانی ئەم وەرگێڕانە لە ماوەی # ڕۆژ دڕاو دەبن.}}",
           "keep": "{days} ڕۆژی زیاتر هەڵبگرە"
-        }
+        },
+        "downloadMenu": "داگرتن",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Rûpelên wergerandî wekî ku li vir têne nîşandan.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Nivîsa guherbar li ser wêneyê her rûpelê. Berî parvekirinê kontrol bike.",
+        "experimental": "تاقیکراو",
+        "downloadBuilding": "{format} tê amadekirin…",
+        "downloadWithChanges": "Guhertinên te yên dawî tê de hene.",
+        "lineBreakHint": "Ji bo ku li ser rûpelê rêzeke nû dest pê bike, Enter bitikîne."
       },
       "kind": "چی وەرگێڕدرێت",
       "kindText": "دەق",
@@ -8720,5 +8728,9 @@
     "summaryTitle": "نەخشیەکانی تۆ",
     "chipAria": "نەخشی {metric}: {percent}% بەکارهاتوو.",
     "runProjection": "نەخشی خەرجکردن {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "{fields} dixwaze",
+    "keysHint": "↑↓ hilbijêre · Enter bikar bîne · Esc bigire"
   }
 }

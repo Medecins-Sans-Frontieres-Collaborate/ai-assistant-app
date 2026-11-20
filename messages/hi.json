@@ -2187,11 +2187,10 @@
   },
   "userMessage": {
     "open": "खोलें",
-    "showFullMessage": "पूरा संदेश दिखाएँ",
-    "collapse": "संक्षिप्त करें",
     "customTone": "कस्टम टोन",
     "showMore": "और दिखाएँ",
-    "showLess": "कम दिखाएँ"
+    "showLess": "कम दिखाएँ",
+    "fromPrompt": "प्रॉम्प्ट: {name}"
   },
   "codeBlock": {
     "openInEditor": "संपादक में खोलें"
@@ -2643,14 +2642,13 @@
     "contactUs": "गोपनीयता संबंधी चिंता होने पर तुरंत हमसे संपर्क करें:"
   },
   "variableModal": {
-    "fillInstructions": "अपना प्रॉम्प्ट कस्टमाइज़ करने के लिए नीचे दिए गए वेरिएबल भरें",
-    "optional": "वैकल्पिक",
-    "required": "आवश्यक",
-    "default": "डिफ़ॉल्ट:",
     "defaultPlaceholder": "{defaultValue} (डिफ़ॉल्ट)",
-    "enterValue": "{key} के लिए मान दर्ज करें...",
     "cancel": "रद्द करें",
-    "apply": "लागू करें"
+    "optionalSuffix": "(वैकल्पिक)",
+    "missing": "प्रॉम्प्ट का उपयोग करने के लिए इसे भरें।",
+    "keysHint": "Enter: अगला फ़ील्ड · Shift+Enter: नई पंक्ति",
+    "preview": "संदेश का पूर्वावलोकन",
+    "insert": "संदेश में डालें"
   },
   "recentSources": {
     "title": "नवीनतम स्रोत डेटा",
@@ -3226,6 +3224,7 @@
         "sourcePages": "स्रोत पृष्ठ",
         "pagesField": "पृष्ठ",
         "pageLabel": "पृष्ठ {page}",
+        "loadingPage": "पृष्ठ {page} लोड हो रहा है",
         "pageEdits": "{count, plural, one {पृष्ठ {page} · # संपादन} other {पृष्ठ {page} · # संपादन}}",
         "pages": "पृष्ठ",
         "removeDocument": "हटाएँ",
@@ -3442,7 +3441,16 @@
           "saveFailed": "परिवर्तन अभी सहेजे नहीं गए",
           "expiresSoon": "{count, plural, one {इस अनुवाद की फ़ाइलें # दिन में हटा दी जाएँगी।} other {इस अनुवाद की फ़ाइलें # दिनों में हटा दी जाएँगी।}}",
           "keep": "{days} दिन और रखें"
-        }
+        },
+        "downloadMenu": "डाउनलोड",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "अनुवादित पृष्ठ, जैसे यहाँ दिखाए गए हैं।",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "हर पृष्ठ के चित्र पर संपादन योग्य पाठ। साझा करने से पहले जाँच लें।",
+        "experimental": "प्रायोगिक",
+        "downloadBuilding": "{format} तैयार किया जा रहा है…",
+        "downloadWithChanges": "आपके नवीनतम बदलाव शामिल हैं।",
+        "lineBreakHint": "पृष्ठ पर नई पंक्ति शुरू करने के लिए Enter दबाएँ।"
       },
       "kind": "क्या अनुवादित करना है",
       "kindText": "पाठ",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "आपके बजट",
     "chipAria": "{metric} बजट: {percent}% उपयोग हो चुका है।",
     "runProjection": "उत्सर्जन बजट {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "{fields} मांगता है",
+    "keysHint": "↑↓ चुनें · Enter उपयोग करें · Esc बंद करें"
   }
 }

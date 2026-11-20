@@ -2339,11 +2339,10 @@
   },
   "userMessage": {
     "open": "פתח",
-    "showFullMessage": "הצג הודעה מלאה",
-    "collapse": "צמצם",
     "customTone": "טון מותאם אישית",
     "showMore": "הצג עוד",
-    "showLess": "הצג פחות"
+    "showLess": "הצג פחות",
+    "fromPrompt": "הנחיה: {name}"
   },
   "codeBlock": {
     "openInEditor": "פתח בעורך"
@@ -2643,14 +2642,13 @@
     "contactUs": "צור איתנו קשר מיד אם יש לך חששות בנוגע לפרטיות:"
   },
   "variableModal": {
-    "fillInstructions": "מלא את המשתנים למטה כדי להתאים אישית את ההנחיה שלך",
-    "optional": "אופציונלי",
-    "required": "נדרש",
-    "default": "ברירת מחדל:",
     "defaultPlaceholder": "{defaultValue} (ברירת מחדל)",
-    "enterValue": "הזן ערך עבור {key}...",
     "cancel": "ביטול",
-    "apply": "החל"
+    "optionalSuffix": "(אופציונלי)",
+    "missing": "יש למלא כדי להשתמש בהנחיה.",
+    "keysHint": "Enter: השדה הבא · Shift+Enter: שורה חדשה",
+    "preview": "תצוגה מקדימה של ההודעה",
+    "insert": "הוספה להודעה"
   },
   "recentSources": {
     "title": "נתוני מקור אחרונים",
@@ -3226,6 +3224,7 @@
         "sourcePages": "עמודי מקור",
         "pagesField": "עמודים",
         "pageLabel": "עמוד {page}",
+        "loadingPage": "טוען את עמוד {page}",
         "pageEdits": "{count, plural, one {עמוד {page} · עריכה אחת} other {עמוד {page} · # עריכות}}",
         "pages": "עמודים",
         "removeDocument": "הסר",
@@ -3442,7 +3441,16 @@
           "saveFailed": "השינויים עדיין לא נשמרו",
           "expiresSoon": "{count, plural, one {הקבצים של תרגום זה יימחקו בעוד יום אחד.} other {הקבצים של תרגום זה יימחקו בעוד # ימים.}}",
           "keep": "השאר לעוד {days} ימים"
-        }
+        },
+        "downloadMenu": "הורדה",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "הדפים המתורגמים כפי שהם מוצגים כאן.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "טקסט שניתן לערוך מעל תמונה של כל דף. יש לבדוק לפני שיתוף.",
+        "experimental": "ניסיוני",
+        "downloadBuilding": "מכין את {format}…",
+        "downloadWithChanges": "כולל את השינויים האחרונים שלך.",
+        "lineBreakHint": "יש ללחוץ Enter כדי להתחיל שורה חדשה בדף."
       },
       "kind": "מה לתרגם",
       "kindText": "טקסט",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "התקציבים שלך",
     "chipAria": "תקציב עבור {metric}: {percent}% נוצל.",
     "runProjection": "תקציב פליטות {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "מבקש {fields}",
+    "keysHint": "↑↓ לבחירה · Enter לשימוש · Esc לסגירה"
   }
 }

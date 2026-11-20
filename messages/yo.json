@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Ṣí",
-    "showFullMessage": "Fi ìfiránṣẹ́ kíkún hàn",
-    "collapse": "Dé parí",
     "customTone": "Ohùn Àdánidá",
     "showMore": "Fi diẹ sii han",
-    "showLess": "Fi diẹ kere han"
+    "showLess": "Fi diẹ kere han",
+    "fromPrompt": "Ìtọ́ni: {name}"
   },
   "codeBlock": {
     "openInEditor": "Ṣí nínú olóòtú"
@@ -2627,14 +2626,13 @@
     "contactUs": "Kàn sí wa lẹ́sẹ̀kẹsẹ̀ tí o bá ní àwọn àníyàn àṣírí:"
   },
   "variableModal": {
-    "fillInstructions": "Kún àwọn oníyípadà ní ìsàlẹ̀ láti ṣe àdánidá ìkìlọ̀ rẹ",
-    "optional": "Àṣàyàn",
-    "required": "Dandan",
-    "default": "Ìbẹ̀rẹ̀:",
     "defaultPlaceholder": "{defaultValue} (ìbẹ̀rẹ̀)",
-    "enterValue": "Tẹ iye fún {key}...",
     "cancel": "Fagilé",
-    "apply": "Lo"
+    "optionalSuffix": "(àṣàyàn)",
+    "missing": "Fọwọ́ sí èyí láti lo ìtọ́ni náà.",
+    "keysHint": "Enter: àyè tó kàn · Shift+Enter: ìlà tuntun",
+    "preview": "Àwòkọ́ṣe ìfiránṣẹ́",
+    "insert": "Fi sínú ìfiránṣẹ́"
   },
   "recentSources": {
     "title": "Dátà Orísun Tuntun",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Ojúewé orísun",
         "pagesField": "Ojúewé",
         "pageLabel": "Ojúewé {page}",
+        "loadingPage": "Ó ń gbé ojú ìwé {page} wọlé",
         "pageEdits": "{count, plural, one {Ojúewé {page} · # àtúnṣe} other {Ojúewé {page} · # àtúnṣe}}",
         "pages": "Ojúewé",
         "removeDocument": "Yọ kúrò",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Ayipada naa kò tí í fipamọ́",
           "expiresSoon": "{count, plural, one {A má pa àwọn fáìlì ìtúmọ̀ yìí nínú ọjọ́ kan.} other {A má pa àwọn fáìlì ìtúmọ̀ yìí nínú ọjọ́ #.}}",
           "keep": "Fi pamọ́ fun ọjọ́ {days} míì"
-        }
+        },
+        "downloadMenu": "Ṣe ìgbasílẹ̀",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Àwọn ojú-ìwé tí a túmọ̀ gẹ́gẹ́ bí a ṣe fi hàn níbí.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Ọ̀rọ̀ tí a lè ṣàtúnṣe lórí àwòrán ojú-ìwé kọ̀ọ̀kan. Ṣàyẹ̀wò rẹ̀ kí o tó pín in.",
+        "experimental": "Àdánwò",
+        "downloadBuilding": "A ń ṣètò {format}…",
+        "downloadWithChanges": "Ó ní àwọn àyípadà rẹ tuntun nínú.",
+        "lineBreakHint": "Tẹ Enter láti bẹ̀rẹ̀ ìlà tuntun lórí ojú-ìwé."
       },
       "kind": "Kí ni láti túmọ̀",
       "kindText": "Ìtẹ̀sí ọrọ̀",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Awọn isuna rẹ",
     "chipAria": "{metric} isuna: {percent}% lo.",
     "runProjection": "Eto isuna eefi {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Ó béèrè {fields}",
+    "keysHint": "↑↓ láti yan · Enter láti lò · Esc láti pa"
   }
 }

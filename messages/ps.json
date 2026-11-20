@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "خلاص کړئ",
-    "showFullMessage": "پوره پیغام وښایئ",
-    "collapse": "ټول کړئ",
     "customTone": "خپل ځانګړی انداز",
     "showMore": "نور ښکاره کړئ",
-    "showLess": "کم ښکاره کړئ"
+    "showLess": "کم ښکاره کړئ",
+    "fromPrompt": "پرامپټ: {name}"
   },
   "codeBlock": {
     "openInEditor": "په ایډیټر کې خلاص کړئ"
@@ -2627,14 +2626,13 @@
     "contactUs": "که چېرې د محرمیت اندېښنه لرئ، سمدلاسه له موږ سره تماس ونیسئ:"
   },
   "variableModal": {
-    "fillInstructions": "لاندې متغیرونه ډک کړئ څو خپل درخواست ځانګړی کړئ",
-    "optional": "اختیاري",
-    "required": "اړین",
-    "default": "اصلي:",
     "defaultPlaceholder": "{defaultValue} (اصلي)",
-    "enterValue": "د {key} لپاره ارزښت ولیکئ...",
     "cancel": "لغوه",
-    "apply": "اعمالول"
+    "optionalSuffix": "(اختیاري)",
+    "missing": "د پرامپټ کارولو لپاره دا ډک کړئ.",
+    "keysHint": "Enter: بله برخه · Shift+Enter: نوې کرښه",
+    "preview": "د پیغام مخکتنه",
+    "insert": "په پیغام کې ورننویستل"
   },
   "recentSources": {
     "title": "تازه سرچینې معلومات",
@@ -3210,6 +3208,7 @@
         "sourcePages": "سرچینې صفحات",
         "pagesField": "صفحې",
         "pageLabel": "صفحه {page}",
+        "loadingPage": "د {page} پاڼې پورته کېږي",
         "pageEdits": "{count, plural, one {صفحه {page} · # اصلاح} other {صفحه {page} · # اصلاحات}}",
         "pages": "صفحې",
         "removeDocument": "لیرې کړئ",
@@ -3426,7 +3425,16 @@
           "saveFailed": "بدلونونه تر اوسه ذخیره شوي نه دي",
           "expiresSoon": "{count, plural, one {د دې ژباړې فایلونه به په # ورځ کې ړنګ شي.} other {د دې ژباړې فایلونه به په # ورځو کې ړنګ شي.}}",
           "keep": "لا {days} نورې ورځې وساتئ"
-        }
+        },
+        "downloadMenu": "ډاونلوډ",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "ژباړل شوي مخونه لکه څنګه چې دلته ښودل شوي دي.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "د هر مخ پر انځور د سمون وړ متن. له شریکولو مخکې یې وګورئ.",
+        "experimental": "ازمایښتي",
+        "downloadBuilding": "{format} چمتو کېږي…",
+        "downloadWithChanges": "ستاسو وروستي بدلونونه پکې شامل دي.",
+        "lineBreakHint": "په مخ کې د نوې کرښې د پیلولو لپاره Enter کېکاږئ."
       },
       "kind": "څه ژباړل کیږي",
       "kindText": "متن",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "ستاسې بوديجې",
     "chipAria": "{metric} بوديجه: {percent}% کارول شوې.",
     "runProjection": "د اخراج بوديجه {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "{fields} غواړي",
+    "keysHint": "↑↓ د ټاکلو لپاره · Enter د کارولو لپاره · Esc د بندولو لپاره"
   }
 }

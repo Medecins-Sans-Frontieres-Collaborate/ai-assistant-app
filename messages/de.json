@@ -2339,11 +2339,10 @@
   },
   "userMessage": {
     "open": "Öffnen",
-    "showFullMessage": "Komplette Nachricht anzeigen",
-    "collapse": "Einklappen",
     "customTone": "Benutzerdefinierter Ton",
     "showMore": "Mehr anzeigen",
-    "showLess": "Weniger anzeigen"
+    "showLess": "Weniger anzeigen",
+    "fromPrompt": "Prompt: {name}"
   },
   "codeBlock": {
     "openInEditor": "Im Editor öffnen"
@@ -2643,14 +2642,13 @@
     "contactUs": "Kontaktieren Sie uns umgehend bei Datenschutzbedenken:"
   },
   "variableModal": {
-    "fillInstructions": "Füllen Sie die untenstehenden Variablen aus, um Ihre Eingabeaufforderung anzupassen",
-    "optional": "Optional",
-    "required": "Erforderlich",
-    "default": "Standard:",
     "defaultPlaceholder": "{defaultValue} (Standard)",
-    "enterValue": "Wert für {key} eingeben...",
     "cancel": "Abbrechen",
-    "apply": "Anwenden"
+    "optionalSuffix": "(optional)",
+    "missing": "Füllen Sie dies aus, um den Prompt zu verwenden.",
+    "keysHint": "Eingabe: nächstes Feld · Umschalt+Eingabe: neue Zeile",
+    "preview": "Vorschau der Nachricht",
+    "insert": "In Nachricht einfügen"
   },
   "recentSources": {
     "title": "Neueste Quelldaten",
@@ -3226,6 +3224,7 @@
         "sourcePages": "Originalseiten",
         "pagesField": "Seiten",
         "pageLabel": "Seite {page}",
+        "loadingPage": "Seite {page} wird geladen",
         "pageEdits": "{count, plural, one {Seite {page} · # Änderung} other {Seite {page} · # Änderungen}}",
         "pages": "Seiten",
         "removeDocument": "Entfernen",
@@ -3442,7 +3441,16 @@
           "saveFailed": "Änderungen noch nicht gespeichert",
           "expiresSoon": "{count, plural, one {Die Dateien dieser Übersetzung werden in # Tag gelöscht.} other {Die Dateien dieser Übersetzung werden in # Tagen gelöscht.}}",
           "keep": "Noch {days} Tage aufbewahren"
-        }
+        },
+        "downloadMenu": "Herunterladen",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Die übersetzten Seiten, wie hier angezeigt.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Bearbeitbarer Text über einem Bild jeder Seite. Vor dem Weitergeben prüfen.",
+        "experimental": "Experimentell",
+        "downloadBuilding": "{format} wird vorbereitet …",
+        "downloadWithChanges": "Enthält Ihre letzten Änderungen.",
+        "lineBreakHint": "Mit der Eingabetaste beginnt auf der Seite eine neue Zeile."
       },
       "kind": "Was soll übersetzt werden",
       "kindText": "Text",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "Ihre Budgets",
     "chipAria": "{metric}-Budget: {percent}% verwendet.",
     "runProjection": "Emissionsbudget {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Fragt nach: {fields}",
+    "keysHint": "↑↓ auswählen · Eingabe verwenden · Esc schließen"
   }
 }

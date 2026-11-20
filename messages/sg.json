@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Open",
-    "showFullMessage": "Show full message",
-    "collapse": "Collapse",
     "customTone": "Custom Tone",
     "showMore": "Wana mingi",
-    "showLess": "Wana peke"
+    "showLess": "Wana peke",
+    "fromPrompt": "Komandë: {name}"
   },
   "codeBlock": {
     "openInEditor": "Open in editor"
@@ -2627,14 +2626,13 @@
     "contactUs": "Contact us immediately if you have privacy concerns:"
   },
   "variableModal": {
-    "fillInstructions": "Fill in the variables below to customize your prompt",
-    "optional": "Optional",
-    "required": "Required",
-    "default": "Default:",
     "defaultPlaceholder": "{defaultValue} (default)",
-    "enterValue": "Enter value for {key}...",
     "cancel": "Cancel",
-    "apply": "Apply"
+    "optionalSuffix": "(na mbeni ngangu pëpe)",
+    "missing": "Sï ndo so ti sâra kua na komandë.",
+    "keysHint": "Enter: ndo ti peko · Shift+Enter: fini linye",
+    "preview": "Bâ mbëtï kozo",
+    "insert": "Zîa na yâ ti mbëtï"
   },
   "recentSources": {
     "title": "Latest Source Data",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Pages ya bângâ",
         "pagesField": "Pages",
         "pageLabel": "Page {page}",
+        "loadingPage": "A yeke zi lembeti {page}",
         "pageEdits": "{count, plural, one {Page {page} · # ndalkö} other {Page {page} · # ndalkö}}",
         "pages": "Pages",
         "removeDocument": "Yèkî",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Kûé na bâa sô ayeke ti yeke",
           "expiresSoon": "{count, plural, one {Ngangu ti lo translation ti yeke kɛ ɓeti na # mogo na lendu.} other {Ngangu ti lo translation ti yeke kɛ ɓeti na # mogo na lendu.}}",
           "keep": "Tî lamba ti {days} ni na ngâ"
-        }
+        },
+        "downloadMenu": "Mu",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Alêmbëtï so a kîri na yângâ nî töngana so a fa na ndo so.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Mbëtï so mo lîngbi tî leke na ndö tî limo tî lêmbëtï ôko ôko. Bâa nî kôzo sï mo kângbi.",
+        "experimental": "Expérimental",
+        "downloadBuilding": "A yeke leke {format}…",
+        "downloadWithChanges": "Âchangement tî mo tî ndângbâ nî ayeke daä.",
+        "lineBreakHint": "Pusu Enter tî komanse mbeni ndia tî fini na ndö tî lêmbëtï."
       },
       "kind": "Mo so ti bango",
       "kindText": "Text",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Budu ti mo",
     "chipAria": "Budu ti {metric}: {percent}% a gbugba.",
     "runProjection": "Budu ti emissions {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "A hûnda {fields}",
+    "keysHint": "↑↓ ti soro · Enter ti sâra kua · Esc ti kânga"
   }
 }

@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Άνοιγμα",
-    "showFullMessage": "Εμφάνιση πλήρους μηνύματος",
-    "collapse": "Σύμπτυξη",
     "customTone": "Προσαρμοσμένος Τόνος",
     "showMore": "Εμφάνιση περισσότερων",
-    "showLess": "Εμφάνιση λιγότερων"
+    "showLess": "Εμφάνιση λιγότερων",
+    "fromPrompt": "Προτροπή: {name}"
   },
   "codeBlock": {
     "openInEditor": "Άνοιγμα σε επεξεργαστή"
@@ -2627,14 +2626,13 @@
     "contactUs": "Επικοινωνήστε μαζί μας αμέσως αν έχετε ανησυχίες για το απόρρητο:"
   },
   "variableModal": {
-    "fillInstructions": "Συμπληρώστε τις μεταβλητές παρακάτω για να προσαρμόσετε την προτροπή σας",
-    "optional": "Προαιρετικό",
-    "required": "Υποχρεωτικό",
-    "default": "Προεπιλογή:",
     "defaultPlaceholder": "{defaultValue} (προεπιλογή)",
-    "enterValue": "Εισάγετε τιμή για {key}...",
     "cancel": "Ακύρωση",
-    "apply": "Εφαρμογή"
+    "optionalSuffix": "(προαιρετικό)",
+    "missing": "Συμπληρώστε το για να χρησιμοποιήσετε την προτροπή.",
+    "keysHint": "Enter: επόμενο πεδίο · Shift+Enter: νέα γραμμή",
+    "preview": "Προεπισκόπηση μηνύματος",
+    "insert": "Εισαγωγή στο μήνυμα"
   },
   "recentSources": {
     "title": "Τελευταία Δεδομένα Πηγής",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Σελίδες προέλευσης",
         "pagesField": "Σελίδες",
         "pageLabel": "Σελίδα {page}",
+        "loadingPage": "Φόρτωση σελίδας {page}",
         "pageEdits": "{count, plural, one {Σελίδα {page} · # διόρθωση} other {Σελίδα {page} · # διορθώσεις}}",
         "pages": "Σελίδες",
         "removeDocument": "Αφαίρεση",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Οι αλλαγές δεν έχουν αποθηκευτεί ακόμα",
           "expiresSoon": "{count, plural, one {Τα αρχεία αυτής της μετάφρασης θα διαγραφούν σε # ημέρα.} other {Τα αρχεία αυτής της μετάφρασης θα διαγραφούν σε # ημέρες.}}",
           "keep": "Διατήρηση για ακόμη {days} ημέρες"
-        }
+        },
+        "downloadMenu": "Λήψη",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Οι μεταφρασμένες σελίδες όπως εμφανίζονται εδώ.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Επεξεργάσιμο κείμενο πάνω σε εικόνα κάθε σελίδας. Ελέγξτε το πριν το μοιραστείτε.",
+        "experimental": "Πειραματικό",
+        "downloadBuilding": "Προετοιμασία {format}…",
+        "downloadWithChanges": "Περιλαμβάνει τις τελευταίες αλλαγές σας.",
+        "lineBreakHint": "Πατήστε Enter για να ξεκινήσει νέα γραμμή στη σελίδα."
       },
       "kind": "Τι θέλετε να μεταφράσετε",
       "kindText": "Κείμενο",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Οι προϋπολογισμοί σας",
     "chipAria": "Προϋπολογισμός {metric}: {percent}% χρησιμοποιήθηκε.",
     "runProjection": "Προϋπολογισμός εκπομπών {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Ζητά {fields}",
+    "keysHint": "↑↓ επιλογή · Enter χρήση · Esc κλείσιμο"
   }
 }

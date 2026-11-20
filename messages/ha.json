@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Buɗe",
-    "showFullMessage": "Nuna cikakken saƙo",
-    "collapse": "Rufe",
     "customTone": "Sauti na musamman",
     "showMore": "Nuna ƙari",
-    "showLess": "Nuna ƙasa"
+    "showLess": "Nuna ƙasa",
+    "fromPrompt": "Umarni: {name}"
   },
   "codeBlock": {
     "openInEditor": "Buɗe a edita"
@@ -2627,14 +2626,13 @@
     "contactUs": "Tuntube mu gaggawa idan akwai damuwa dangane da sirri:"
   },
   "variableModal": {
-    "fillInstructions": "Cika abubuwan canzawa da ke ƙasa don tsara tambayarka",
-    "optional": "Zaɓi",
-    "required": "Dole",
-    "default": "Tsoho:",
     "defaultPlaceholder": "{defaultValue} (tsoho)",
-    "enterValue": "Shigar da ƙima don {key}...",
     "cancel": "Soke",
-    "apply": "Aiwatar"
+    "optionalSuffix": "(na zaɓi)",
+    "missing": "Cike wannan don amfani da umarnin.",
+    "keysHint": "Enter: fili na gaba · Shift+Enter: sabon layi",
+    "preview": "Samfotin saƙo",
+    "insert": "Saka cikin saƙo"
   },
   "recentSources": {
     "title": "Sabbin Bayanai na Asali",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Shafukan asali",
         "pagesField": "Shafuka",
         "pageLabel": "Shafi {page}",
+        "loadingPage": "Ana loda shafi na {page}",
         "pageEdits": "{count, plural, one {Shafi {page} · gyara # ɗaya} other {Shafi {page} · gyare-gyae #}}",
         "pages": "Shafuka",
         "removeDocument": "Cire",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Ba a adana sauye-sauyen ba tukuna",
           "expiresSoon": "{count, plural, one {Za a gogewa fayilolin wannan fassarar a cikin kwana guda.} other {Za a gogewa fayilolin wannan fassarar a cikin kwanaki #.}}",
           "keep": "Ajiye na {days} kwanaki masu zuwa"
-        }
+        },
+        "downloadMenu": "Zazzage",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Shafukan da aka fassara kamar yadda aka nuna a nan.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Rubutu mai iya gyaruwa a kan hoton kowane shafi. Duba shi kafin ka raba.",
+        "experimental": "Gwaji",
+        "downloadBuilding": "Ana shirya {format}…",
+        "downloadWithChanges": "Ya ƙunshi sauye-sauyenka na baya-bayan nan.",
+        "lineBreakHint": "Danna Enter don fara sabon layi a shafin."
       },
       "kind": "Abin da za a fassara",
       "kindText": "Rubutu",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Kasafin kuɗinku",
     "chipAria": "Kasafin {metric}: an yi amfani da {percent}%.",
     "runProjection": "Kasafin hayaƙi {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Yana neman {fields}",
+    "keysHint": "↑↓ don zaɓa · Enter don amfani · Esc don rufewa"
   }
 }

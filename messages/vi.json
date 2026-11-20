@@ -2370,11 +2370,10 @@
   },
   "userMessage": {
     "open": "Mở",
-    "showFullMessage": "Hiển thị toàn bộ tin nhắn",
-    "collapse": "Thu gọn",
     "customTone": "Tông tùy chỉnh",
     "showMore": "Hiển thị thêm",
-    "showLess": "Ẩn bớt"
+    "showLess": "Ẩn bớt",
+    "fromPrompt": "Lời nhắc: {name}"
   },
   "codeBlock": {
     "openInEditor": "Mở trong trình chỉnh sửa"
@@ -2674,14 +2673,13 @@
     "contactUs": "Liên hệ ngay với chúng tôi nếu bạn có lo ngại về quyền riêng tư:"
   },
   "variableModal": {
-    "fillInstructions": "Điền các biến bên dưới để tùy chỉnh lời nhắc của bạn",
-    "optional": "Tùy chọn",
-    "required": "Bắt buộc",
-    "default": "Mặc định:",
     "defaultPlaceholder": "{defaultValue} (mặc định)",
-    "enterValue": "Nhập giá trị cho {key}...",
     "cancel": "Hủy",
-    "apply": "Áp dụng"
+    "optionalSuffix": "(không bắt buộc)",
+    "missing": "Điền vào đây để dùng lời nhắc.",
+    "keysHint": "Enter: trường tiếp theo · Shift+Enter: dòng mới",
+    "preview": "Xem trước tin nhắn",
+    "insert": "Chèn vào tin nhắn"
   },
   "recentSources": {
     "title": "Dữ liệu nguồn mới nhất",
@@ -3257,6 +3255,7 @@
         "sourcePages": "Trang gốc",
         "pagesField": "Trang",
         "pageLabel": "Trang {page}",
+        "loadingPage": "Đang tải trang {page}",
         "pageEdits": "{count, plural, one {Trang {page} · # chỉnh sửa} other {Trang {page} · # chỉnh sửa}}",
         "pages": "Trang",
         "removeDocument": "Gỡ bỏ",
@@ -3473,7 +3472,16 @@
           "saveFailed": "Những thay đổi chưa được lưu",
           "expiresSoon": "{count, plural, one {Các tệp của bản dịch này sẽ bị xóa trong # ngày.} other {Các tệp của bản dịch này sẽ bị xóa trong # ngày.}}",
           "keep": "Giữ thêm {days} ngày nữa"
-        }
+        },
+        "downloadMenu": "Tải xuống",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Các trang đã dịch như hiển thị ở đây.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Văn bản chỉnh sửa được đặt trên hình ảnh của từng trang. Hãy kiểm tra trước khi chia sẻ.",
+        "experimental": "Thử nghiệm",
+        "downloadBuilding": "Đang chuẩn bị {format}…",
+        "downloadWithChanges": "Bao gồm các thay đổi mới nhất của bạn.",
+        "lineBreakHint": "Nhấn Enter để xuống dòng trên trang."
       },
       "kind": "Nội dung cần dịch",
       "kindText": "Văn bản",
@@ -8771,5 +8779,9 @@
     "summaryTitle": "Ngân sách của bạn",
     "chipAria": "Ngân sách {metric}: đã dùng {percent}%.",
     "runProjection": "Ngân sách phát thải {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Cần {fields}",
+    "keysHint": "↑↓ chọn · Enter dùng · Esc đóng"
   }
 }

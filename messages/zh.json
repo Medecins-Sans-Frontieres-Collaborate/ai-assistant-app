@@ -2218,11 +2218,10 @@
   },
   "userMessage": {
     "open": "打开",
-    "showFullMessage": "显示完整消息",
-    "collapse": "收起",
     "customTone": "自定义语气",
     "showMore": "显示更多",
-    "showLess": "显示更少"
+    "showLess": "显示更少",
+    "fromPrompt": "提示词：{name}"
   },
   "codeBlock": {
     "openInEditor": "在编辑器中打开"
@@ -2674,14 +2673,13 @@
     "contactUs": "如果您有隐私问题，请立即联系我们："
   },
   "variableModal": {
-    "fillInstructions": "填写以下变量以自定义您的提示",
-    "optional": "可选",
-    "required": "必填",
-    "default": "默认值：",
     "defaultPlaceholder": "{defaultValue}（默认）",
-    "enterValue": "输入 {key} 的值...",
     "cancel": "取消",
-    "apply": "应用"
+    "optionalSuffix": "（可选）",
+    "missing": "请填写此项以使用提示词。",
+    "keysHint": "Enter：下一项 · Shift+Enter：换行",
+    "preview": "消息预览",
+    "insert": "插入到消息"
   },
   "recentSources": {
     "title": "最新来源数据",
@@ -3257,6 +3255,7 @@
         "sourcePages": "原文页数",
         "pagesField": "页码",
         "pageLabel": "第 {page} 页",
+        "loadingPage": "正在加载第 {page} 页",
         "pageEdits": "{count, plural, one {第 {page} 页 · # 次编辑} other {第 {page} 页 · # 次编辑}}",
         "pages": "页面",
         "removeDocument": "移除",
@@ -3473,7 +3472,16 @@
           "saveFailed": "更改尚未保存",
           "expiresSoon": "{count, plural, one {此翻译的文件将在 # 天后被删除。} other {此翻译的文件将在 # 天后被删除。}}",
           "keep": "再保留 {days} 天"
-        }
+        },
+        "downloadMenu": "下载",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "译文页面，与此处显示的一致。",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "每页图片上叠加可编辑的文字。分享前请先检查。",
+        "experimental": "实验性",
+        "downloadBuilding": "正在准备 {format}…",
+        "downloadWithChanges": "包含您的最新更改。",
+        "lineBreakHint": "按 Enter 键可在页面上另起一行。"
       },
       "kind": "翻译内容",
       "kindText": "文本",
@@ -8771,5 +8779,9 @@
     "summaryTitle": "您的预算",
     "chipAria": "{metric} 预算：已用 {percent}%。",
     "runProjection": "排放预算 {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "需要填写：{fields}",
+    "keysHint": "↑↓ 选择 · Enter 使用 · Esc 关闭"
   }
 }

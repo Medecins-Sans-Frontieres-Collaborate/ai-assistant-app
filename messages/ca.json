@@ -2339,11 +2339,10 @@
   },
   "userMessage": {
     "open": "Obre",
-    "showFullMessage": "Mostra el missatge complet",
-    "collapse": "Redueix",
     "customTone": "To personalitzat",
     "showMore": "Mostra'n més",
-    "showLess": "Mostra'n menys"
+    "showLess": "Mostra'n menys",
+    "fromPrompt": "Indicació: {name}"
   },
   "codeBlock": {
     "openInEditor": "Obre a l'editor"
@@ -2643,14 +2642,13 @@
     "contactUs": "Contacteu-nos immediatament si teniu preocupacions de privacitat:"
   },
   "variableModal": {
-    "fillInstructions": "Empleneu les variables a continuació per personalitzar el vostre avís",
-    "optional": "Opcional",
-    "required": "Obligatori",
-    "default": "Per defecte:",
     "defaultPlaceholder": "{defaultValue} (per defecte)",
-    "enterValue": "Introduïu un valor per a {key}...",
     "cancel": "Cancel·la",
-    "apply": "Aplica"
+    "optionalSuffix": "(opcional)",
+    "missing": "Ompliu-ho per fer servir la indicació.",
+    "keysHint": "Retorn: camp següent · Maj+Retorn: línia nova",
+    "preview": "Previsualització del missatge",
+    "insert": "Insereix al missatge"
   },
   "recentSources": {
     "title": "Últimes dades de fonts",
@@ -3226,6 +3224,7 @@
         "sourcePages": "Pàgines d'origen",
         "pagesField": "Pàgines",
         "pageLabel": "Pàgina {page}",
+        "loadingPage": "S’està carregant la pàgina {page}",
         "pageEdits": "{count, plural, one {Pàgina {page} · # edició} other {Pàgina {page} · # edicions}}",
         "pages": "Pàgines",
         "removeDocument": "Elimina",
@@ -3442,7 +3441,16 @@
           "saveFailed": "Els canvis encara no s'han desat",
           "expiresSoon": "{count, plural, one {Els fitxers d'aquesta traducció s'eliminaran d'aquí a # dia.} other {Els fitxers d'aquesta traducció s'eliminaran d'aquí a # dies.}}",
           "keep": "Conserva-ho {days} dies més"
-        }
+        },
+        "downloadMenu": "Descarrega",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Les pàgines traduïdes tal com es mostren aquí.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Text editable sobre una imatge de cada pàgina. Reviseu-lo abans de compartir-lo.",
+        "experimental": "Experimental",
+        "downloadBuilding": "S’està preparant {format}…",
+        "downloadWithChanges": "Inclou els vostres darrers canvis.",
+        "lineBreakHint": "Premeu Retorn per començar una línia nova a la pàgina."
       },
       "kind": "Què traduir",
       "kindText": "Text",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "Els teus pressupostos",
     "chipAria": "Pressupost de {metric}: {percent}% utilitzat.",
     "runProjection": "Pressupost d'emissions {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Demana {fields}",
+    "keysHint": "↑↓ per triar · Retorn per fer servir · Esc per tancar"
   }
 }

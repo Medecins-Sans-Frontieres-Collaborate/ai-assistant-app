@@ -2339,11 +2339,10 @@
   },
   "userMessage": {
     "open": "開く",
-    "showFullMessage": "全文を表示",
-    "collapse": "折りたたむ",
     "customTone": "カスタムトーン",
     "showMore": "さらに表示",
-    "showLess": "表示を減らす"
+    "showLess": "表示を減らす",
+    "fromPrompt": "プロンプト: {name}"
   },
   "codeBlock": {
     "openInEditor": "エディタで開く"
@@ -2643,14 +2642,13 @@
     "contactUs": "プライバシーに関する懸念がある場合は、すぐにご連絡ください："
   },
   "variableModal": {
-    "fillInstructions": "以下の変数を入力してプロンプトをカスタマイズしてください",
-    "optional": "オプション",
-    "required": "必須",
-    "default": "デフォルト：",
     "defaultPlaceholder": "{defaultValue}（デフォルト）",
-    "enterValue": "{key}の値を入力...",
     "cancel": "キャンセル",
-    "apply": "適用"
+    "optionalSuffix": "（任意）",
+    "missing": "プロンプトを使うには入力してください。",
+    "keysHint": "Enter: 次の項目 · Shift+Enter: 改行",
+    "preview": "メッセージのプレビュー",
+    "insert": "メッセージに挿入"
   },
   "recentSources": {
     "title": "最新ソースデータ",
@@ -3226,6 +3224,7 @@
         "sourcePages": "元のページ",
         "pagesField": "ページ",
         "pageLabel": "{page}ページ",
+        "loadingPage": "{page} ページを読み込み中",
         "pageEdits": "{count, plural, one {ページ{page} · # 件の編集} other {ページ{page} · # 件の編集}}",
         "pages": "ページ",
         "removeDocument": "削除",
@@ -3442,7 +3441,16 @@
           "saveFailed": "変更はまだ保存されていません",
           "expiresSoon": "{count, plural, one {この翻訳のファイルはあと#日で削除されます。} other {この翻訳のファイルはあと#日で削除されます。}}",
           "keep": "あと{days}日保存"
-        }
+        },
+        "downloadMenu": "ダウンロード",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "ここに表示されているとおりの翻訳済みページ。",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "各ページの画像の上に編集可能なテキストを配置します。共有前に確認してください。",
+        "experimental": "実験的",
+        "downloadBuilding": "{format} を準備しています…",
+        "downloadWithChanges": "最新の変更が含まれます。",
+        "lineBreakHint": "Enter キーでページ上の改行ができます。"
       },
       "kind": "翻訳する対象",
       "kindText": "テキスト",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "あなたの予算",
     "chipAria": "{metric}予算：{percent}%使用済み。",
     "runProjection": "排出量予算 {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "入力項目: {fields}",
+    "keysHint": "↑↓ で選択 · Enter で使用 · Esc で閉じる"
   }
 }

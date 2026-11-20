@@ -2339,11 +2339,10 @@
   },
   "userMessage": {
     "open": "Öppna",
-    "showFullMessage": "Visa hela meddelandet",
-    "collapse": "Fäll ihop",
     "customTone": "Anpassad ton",
     "showMore": "Visa mer",
-    "showLess": "Visa mindre"
+    "showLess": "Visa mindre",
+    "fromPrompt": "Prompt: {name}"
   },
   "codeBlock": {
     "openInEditor": "Öppna i redigerare"
@@ -2643,14 +2642,13 @@
     "contactUs": "Kontakta oss omedelbart om du har integritetsfrågor:"
   },
   "variableModal": {
-    "fillInstructions": "Fyll i variablerna nedan för att anpassa din prompt",
-    "optional": "Valfri",
-    "required": "Obligatorisk",
-    "default": "Standard:",
     "defaultPlaceholder": "{defaultValue} (standard)",
-    "enterValue": "Ange värde för {key}...",
     "cancel": "Avbryt",
-    "apply": "Tillämpa"
+    "optionalSuffix": "(valfritt)",
+    "missing": "Fyll i detta för att använda prompten.",
+    "keysHint": "Enter: nästa fält · Skift+Enter: ny rad",
+    "preview": "Förhandsgranskning av meddelandet",
+    "insert": "Infoga i meddelandet"
   },
   "recentSources": {
     "title": "Senaste källdata",
@@ -3226,6 +3224,7 @@
         "sourcePages": "Originalsidor",
         "pagesField": "Sidor",
         "pageLabel": "Sida {page}",
+        "loadingPage": "Läser in sidan {page}",
         "pageEdits": "{count, plural, one {Sida {page} · # ändring} other {Sida {page} · # ändringar}}",
         "pages": "Sidor",
         "removeDocument": "Ta bort",
@@ -3442,7 +3441,16 @@
           "saveFailed": "Ändringar har inte sparats än",
           "expiresSoon": "{count, plural, one {Filerna för denna översättning kommer att raderas om # dag.} other {Filerna för denna översättning kommer att raderas om # dagar.}}",
           "keep": "Behåll i {days} dagar till"
-        }
+        },
+        "downloadMenu": "Ladda ner",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "De översatta sidorna som de visas här.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Redigerbar text över en bild av varje sida. Kontrollera innan du delar.",
+        "experimental": "Experimentell",
+        "downloadBuilding": "Förbereder {format}…",
+        "downloadWithChanges": "Innehåller dina senaste ändringar.",
+        "lineBreakHint": "Tryck på Retur för att börja en ny rad på sidan."
       },
       "kind": "Vad som ska översättas",
       "kindText": "Text",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "Dina budgetar",
     "chipAria": "{metric}-budget: {percent}% använt.",
     "runProjection": "Utsläppsbudget {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Frågar efter {fields}",
+    "keysHint": "↑↓ välj · Enter använd · Esc stäng"
   }
 }

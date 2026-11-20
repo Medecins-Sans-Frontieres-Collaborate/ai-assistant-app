@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Fur",
-    "showFullMessage": "Tus fariinta oo dhan",
-    "collapse": "Laab",
     "customTone": "Dhawaaq Gaar ah",
     "showMore": "Muuji wax badan",
-    "showLess": "Muuji wax yar"
+    "showLess": "Muuji wax yar",
+    "fromPrompt": "Tilmaan: {name}"
   },
   "codeBlock": {
     "openInEditor": "Ku fur tifaftiraha"
@@ -2627,14 +2626,13 @@
     "contactUs": "Nala soo xidhiidh isla markiiba haddii aad leedahay walaacyo asturnaanta:"
   },
   "variableModal": {
-    "fillInstructions": "Buuxi doorsoomeeyaasha hoose si aad u habeeyso tilmaantaada",
-    "optional": "Ikhtiyaari",
-    "required": "Loo baahan yahay",
-    "default": "Caadiga ah:",
     "defaultPlaceholder": "{defaultValue} (caadiga ah)",
-    "enterValue": "Geli qiime {key}...",
     "cancel": "Ka noqo",
-    "apply": "Dabaq"
+    "optionalSuffix": "(ikhtiyaari)",
+    "missing": "Buuxi tan si aad u isticmaasho tilmaanta.",
+    "keysHint": "Enter: goobta xigta · Shift+Enter: sadar cusub",
+    "preview": "Hordhaca fariinta",
+    "insert": "Geli fariinta"
   },
   "recentSources": {
     "title": "Xogta Isha ee Ugu Dambeeyey",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Bogagga asalka ah",
         "pagesField": "Bogag",
         "pageLabel": "Bogga {page}",
+        "loadingPage": "Bogga {page} waa la soo raraya",
         "pageEdits": "{count, plural, one {Bogga {page} · # tafatir} other {Bogga {page} · # tafatirro}}",
         "pages": "Bogag",
         "removeDocument": "Ka saar",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Isbeddellada weli lama keydin",
           "expiresSoon": "{count, plural, one {Faylasha tarjumaaddan waa la tirtiri doonaa 1 maalin gudaheed.} other {Faylasha tarjumaaddan waa la tirtiri doonaa # maalmood gudahood.}}",
           "keep": "Ku hay {days} maalmood oo kale"
-        }
+        },
+        "downloadMenu": "Soo degso",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Bogagga la turjumay sida halkan lagu muujiyey.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Qoraal la tafatiri karo oo dul saaran sawirka bog kasta. Hubi ka hor inta aadan wadaagin.",
+        "experimental": "Tijaabo",
+        "downloadBuilding": "{format} waa la diyaarinayaa…",
+        "downloadWithChanges": "Waxaa ku jira isbeddelladaadii ugu dambeeyay.",
+        "lineBreakHint": "Riix Enter si aad bogga uga bilowdo sadar cusub."
       },
       "kind": "Waa maxay in la turjumo",
       "kindText": "Qoraal",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Miisaaniyadahaaga",
     "chipAria": "Miisaaniyadda {metric}: {percent}% la isticmaalay.",
     "runProjection": "Miisaaniyadda qiiqa {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Wuxuu weydiinayaa {fields}",
+    "keysHint": "↑↓ dooro · Enter isticmaal · Esc xir"
   }
 }

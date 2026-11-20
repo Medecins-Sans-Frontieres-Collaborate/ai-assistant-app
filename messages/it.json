@@ -2339,11 +2339,10 @@
   },
   "userMessage": {
     "open": "Apri",
-    "showFullMessage": "Mostra messaggio completo",
-    "collapse": "Comprimi",
     "customTone": "Tono personalizzato",
     "showMore": "Mostra altro",
-    "showLess": "Mostra meno"
+    "showLess": "Mostra meno",
+    "fromPrompt": "Prompt: {name}"
   },
   "codeBlock": {
     "openInEditor": "Apri nell’editor"
@@ -2643,14 +2642,13 @@
     "contactUs": "Contattaci immediatamente se hai preoccupazioni sulla privacy:"
   },
   "variableModal": {
-    "fillInstructions": "Compila le variabili qui sotto per personalizzare il tuo prompt",
-    "optional": "Facoltativo",
-    "required": "Obbligatorio",
-    "default": "Predefinito:",
     "defaultPlaceholder": "{defaultValue} (predefinito)",
-    "enterValue": "Inserisci un valore per {key}...",
     "cancel": "Annulla",
-    "apply": "Applica"
+    "optionalSuffix": "(facoltativo)",
+    "missing": "Compila questo campo per usare il prompt.",
+    "keysHint": "Invio: campo successivo · Maiusc+Invio: nuova riga",
+    "preview": "Anteprima del messaggio",
+    "insert": "Inserisci nel messaggio"
   },
   "recentSources": {
     "title": "Ultime fonti dati",
@@ -3226,6 +3224,7 @@
         "sourcePages": "Pagine di origine",
         "pagesField": "Pagine",
         "pageLabel": "Pagina {page}",
+        "loadingPage": "Caricamento della pagina {page}",
         "pageEdits": "{count, plural, one {Pagina {page} · # modifica} other {Pagina {page} · # modifiche}}",
         "pages": "Pagine",
         "removeDocument": "Rimuovi",
@@ -3442,7 +3441,16 @@
           "saveFailed": "Modifiche non ancora salvate",
           "expiresSoon": "{count, plural, one {I file di questa traduzione saranno eliminati tra # giorno.} other {I file di questa traduzione saranno eliminati tra # giorni.}}",
           "keep": "Conserva per altri {days} giorni"
-        }
+        },
+        "downloadMenu": "Scarica",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Le pagine tradotte come mostrate qui.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Testo modificabile sopra un’immagine di ogni pagina. Controllalo prima di condividerlo.",
+        "experimental": "Sperimentale",
+        "downloadBuilding": "Preparazione di {format}…",
+        "downloadWithChanges": "Include le ultime modifiche.",
+        "lineBreakHint": "Premi Invio per andare a capo nella pagina."
       },
       "kind": "Cosa tradurre",
       "kindText": "Testo",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "I tuoi budget",
     "chipAria": "Budget {metric}: utilizzato il {percent}%.",
     "runProjection": "Budget emissioni {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Chiede {fields}",
+    "keysHint": "↑↓ per scegliere · Invio per usare · Esc per chiudere"
   }
 }

@@ -2353,6 +2353,7 @@
         "sourcePages": "Source pages",
         "pagesField": "Pages",
         "pageLabel": "Page {page}",
+        "loadingPage": "Loading page {page}",
         "pageEdits": "{count, plural, one {Page {page} · # edit} other {Page {page} · # edits}}",
         "pages": "Pages",
         "removeDocument": "Remove",
@@ -2569,7 +2570,16 @@
           "saveFailed": "Changes not saved yet",
           "expiresSoon": "{count, plural, one {The files of this translation will be deleted in # day.} other {The files of this translation will be deleted in # days.}}",
           "keep": "Keep for {days} more days"
-        }
+        },
+        "downloadMenu": "Download",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "The translated pages as shown here.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Editable text over a picture of each page. Check it before sharing.",
+        "experimental": "Experimental",
+        "downloadBuilding": "Preparing {format}…",
+        "downloadWithChanges": "Includes your latest changes.",
+        "lineBreakHint": "Press Enter to start a new line on the page."
       },
       "kind": "What to translate",
       "kindText": "Text",
@@ -4226,11 +4236,10 @@
   },
   "userMessage": {
     "open": "Open",
-    "showFullMessage": "Show full message",
-    "collapse": "Collapse",
     "showMore": "Show more",
     "showLess": "Show less",
-    "customTone": "Custom Tone"
+    "customTone": "Custom Tone",
+    "fromPrompt": "Prompt: {name}"
   },
   "codeBlock": {
     "openInEditor": "Open in editor"
@@ -4652,14 +4661,13 @@
     "contactUs": "Contact us immediately if you have privacy concerns:"
   },
   "variableModal": {
-    "fillInstructions": "Fill in the variables below to customize your prompt",
-    "optional": "Optional",
-    "required": "Required",
-    "default": "Default:",
     "defaultPlaceholder": "{defaultValue} (default)",
-    "enterValue": "Enter value for {key}...",
     "cancel": "Cancel",
-    "apply": "Apply"
+    "optionalSuffix": "(optional)",
+    "missing": "Fill this in to use the prompt.",
+    "keysHint": "Enter: next field · Shift+Enter: new line",
+    "preview": "Message preview",
+    "insert": "Insert into message"
   },
   "recentSources": {
     "title": "Latest Source Data",
@@ -8683,5 +8691,9 @@
       "connect": "Connect Microsoft 365",
       "connectNote": "Add from OneDrive, email and meetings"
     }
+  },
+  "promptList": {
+    "asksFor": "Asks for {fields}",
+    "keysHint": "↑↓ to choose · Enter to use · Esc to close"
   }
 }

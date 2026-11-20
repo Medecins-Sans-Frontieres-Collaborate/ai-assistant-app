@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "បើក",
-    "showFullMessage": "បង្ហាញសារទាំងមូល",
-    "collapse": "បង្រួម",
     "customTone": "ប្តូរទ្រនិចសំឡេងផ្ទាល់",
     "showMore": "បង្ហាញបន្ថែម",
-    "showLess": "បង្ហាញតិច"
+    "showLess": "បង្ហាញតិច",
+    "fromPrompt": "ប្រអប់បញ្ចូល៖ {name}"
   },
   "codeBlock": {
     "openInEditor": "បើក​ក្នុង​កម្មវិធី​កូដ"
@@ -2627,14 +2626,13 @@
     "contactUs": "សូមទាក់ទងយើងភ្លាមៗ ប្រសិនបើអ្នកកំពុងមានបញ្ហាភាពឯកជន៖"
   },
   "variableModal": {
-    "fillInstructions": "បំពេញអថេរខាងក្រោមដើម្បីផ្លាស់ប្តូរព័ត៌មានដែលចង់បញ្ចូល",
-    "optional": "សិទ្ធិជ្រើស",
-    "required": "ត្រូវបញ្ចូល",
-    "default": "លំនាំដើម៖",
     "defaultPlaceholder": "{defaultValue} (លំនាំដើម)",
-    "enterValue": "បញ្ចូលតម្លៃសម្រាប់ {key}...",
     "cancel": "បោះបង់",
-    "apply": "អនុវត្ត"
+    "optionalSuffix": "(ស្រេចចិត្ត)",
+    "missing": "បំពេញវាដើម្បីប្រើប្រអប់បញ្ចូលនេះ។",
+    "keysHint": "Enter៖ ប្រអប់បន្ទាប់ · Shift+Enter៖ បន្ទាត់ថ្មី",
+    "preview": "មើលសារជាមុន",
+    "insert": "បញ្ចូលទៅក្នុងសារ"
   },
   "recentSources": {
     "title": "ទិន្នន័យប្រភពថ្មីបំផុត",
@@ -3210,6 +3208,7 @@
         "sourcePages": "ទំព័រប្រភព",
         "pagesField": "ទំព័រ",
         "pageLabel": "ទំព័រ {page}",
+        "loadingPage": "កំពុងផ្ទុកទំព័រ {page}",
         "pageEdits": "{count, plural, one {ទំព័រ {page} · ១ កែប្រែ} other {ទំព័រ {page} · # កែប្រែ}}",
         "pages": "ទំព័រ",
         "removeDocument": "ដកចេញ",
@@ -3426,7 +3425,16 @@
           "saveFailed": "ការផ្លាស់ប្តូរមិនទាន់ត្រូវបានរក្សាទុកឡើយ",
           "expiresSoon": "{count, plural, one {ឯកសារនៃការប្រែសម្រួលនេះនឹងត្រូវលុបនៅក្នុងមួយថ្ងៃ} other {ឯកសារនៃការប្រែសម្រួលនេះនឹងត្រូវលុបនៅក្នុង # ថ្ងៃ។}}",
           "keep": "រក្សាទុកបន្តទៀត {days} ថ្ងៃ"
-        }
+        },
+        "downloadMenu": "ទាញយក",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "ទំព័រដែលបានបកប្រែ ដូចដែលបង្ហាញនៅទីនេះ។",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "អត្ថបទដែលអាចកែបាន នៅលើរូបភាពនៃទំព័រនីមួយៗ។ សូមពិនិត្យមុនពេលចែករំលែក។",
+        "experimental": "ពិសោធន៍",
+        "downloadBuilding": "កំពុងរៀបចំ {format}…",
+        "downloadWithChanges": "រួមបញ្ចូលការផ្លាស់ប្ដូរចុងក្រោយរបស់អ្នក។",
+        "lineBreakHint": "ចុច Enter ដើម្បីចាប់ផ្ដើមបន្ទាត់ថ្មីនៅលើទំព័រ។"
       },
       "kind": "អ្វីដែលត្រូវបកប្រែ",
       "kindText": "អត្ថបទ",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "ថវិការបស់អ្នក",
     "chipAria": "ថវិកា {metric}: ប្រើប្រាស់ {percent}%។",
     "runProjection": "ថវិកាបញ្ចេញ {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "សុំ {fields}",
+    "keysHint": "↑↓ ជ្រើសរើស · Enter ប្រើ · Esc បិទ"
   }
 }

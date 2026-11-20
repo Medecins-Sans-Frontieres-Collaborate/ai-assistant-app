@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Отвори",
-    "showFullMessage": "Прикажи целу поруку",
-    "collapse": "Скупи",
     "customTone": "Прилагођени тон",
     "showMore": "Prikaži više",
-    "showLess": "Prikaži manje"
+    "showLess": "Prikaži manje",
+    "fromPrompt": "Упит: {name}"
   },
   "codeBlock": {
     "openInEditor": "Отвори у уређивачу"
@@ -2627,14 +2626,13 @@
     "contactUs": "Контактирајте нас одмах ако имате забринутости о приватности:"
   },
   "variableModal": {
-    "fillInstructions": "Попуните променљиве испод да прилагодите свој промпт",
-    "optional": "Опционално",
-    "required": "Обавезно",
-    "default": "Подразумевано:",
     "defaultPlaceholder": "{defaultValue} (подразумевано)",
-    "enterValue": "Унесите вредност за {key}...",
     "cancel": "Откажи",
-    "apply": "Примени"
+    "optionalSuffix": "(опционо)",
+    "missing": "Попуните ово да бисте користили упит.",
+    "keysHint": "Enter: следеће поље · Shift+Enter: нови ред",
+    "preview": "Преглед поруке",
+    "insert": "Убаци у поруку"
   },
   "recentSources": {
     "title": "Најновији извори података",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Izvorne strane",
         "pagesField": "Strane",
         "pageLabel": "Strana {page}",
+        "loadingPage": "Учитавање странице {page}",
         "pageEdits": "{count, plural, one {Strana {page} · # izmena} other {Strana {page} · # izmena}}",
         "pages": "Strane",
         "removeDocument": "Ukloni",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Izmene još nisu sačuvane",
           "expiresSoon": "{count, plural, one {Fajlovi ovog prevoda biće obrisani za # dan.} other {Fajlovi ovog prevoda biće obrisani za # dana.}}",
           "keep": "Sačuvaj još {days} dana"
-        }
+        },
+        "downloadMenu": "Преузми",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Преведене странице као што су овде приказане.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Текст који се може уређивати преко слике сваке странице. Проверите пре дељења.",
+        "experimental": "Експериментално",
+        "downloadBuilding": "Припрема се {format}…",
+        "downloadWithChanges": "Садржи ваше последње измене.",
+        "lineBreakHint": "Притисните Enter да бисте на страници почели нови ред."
       },
       "kind": "Šta prevoditi",
       "kindText": "Tekst",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Vaši budžeti",
     "chipAria": "{metric} budžet: iskorišćeno {percent}%.",
     "runProjection": "Budžet emisija {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Тражи: {fields}",
+    "keysHint": "↑↓ избор · Enter употреба · Esc затварање"
   }
 }

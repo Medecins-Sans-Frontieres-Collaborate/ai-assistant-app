@@ -2339,11 +2339,10 @@
   },
   "userMessage": {
     "open": "Fungua",
-    "showFullMessage": "Onyesha ujumbe wote",
-    "collapse": "Fupisha",
     "customTone": "Sauti Iliyobinafsishwa",
     "showMore": "Onyesha zaidi",
-    "showLess": "Onyesha kidogo"
+    "showLess": "Onyesha kidogo",
+    "fromPrompt": "Maelekezo: {name}"
   },
   "codeBlock": {
     "openInEditor": "Fungua kwenye mhariri"
@@ -2643,14 +2642,13 @@
     "contactUs": "Wasiliana nasi mara moja ikiwa una wasiwasi kuhusu faragha:"
   },
   "variableModal": {
-    "fillInstructions": "Jaza vigeuzi vilivyo hapa chini ili kubinafsisha amri yako",
-    "optional": "Si lazima",
-    "required": "Inahitajika",
-    "default": "Chaguomsingi:",
     "defaultPlaceholder": "{defaultValue} (chaguomsingi)",
-    "enterValue": "Ingiza thamani ya {key}...",
     "cancel": "Ghairi",
-    "apply": "Tumia"
+    "optionalSuffix": "(si lazima)",
+    "missing": "Jaza hapa ili kutumia maelekezo.",
+    "keysHint": "Enter: sehemu inayofuata · Shift+Enter: mstari mpya",
+    "preview": "Onyesho la ujumbe",
+    "insert": "Weka kwenye ujumbe"
   },
   "recentSources": {
     "title": "Data ya Hivi Karibuni ya Vyanzo",
@@ -3226,6 +3224,7 @@
         "sourcePages": "Kurasa chanzo",
         "pagesField": "Kurasa",
         "pageLabel": "Ukurasa {page}",
+        "loadingPage": "Inapakia ukurasa wa {page}",
         "pageEdits": "{count, plural, one {Ukurasa {page} · # mabadiliko} other {Ukurasa {page} · # mabadiliko}}",
         "pages": "Kurasa",
         "removeDocument": "Ondoa",
@@ -3442,7 +3441,16 @@
           "saveFailed": "Mabadiliko bado hayajahifadhiwa",
           "expiresSoon": "{count, plural, one {Faili za tafsiri hii zitafutwa baada ya siku #.} other {Faili za tafsiri hii zitafutwa baada ya siku #.}}",
           "keep": "Tunza kwa siku {days} zaidi"
-        }
+        },
+        "downloadMenu": "Pakua",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Kurasa zilizotafsiriwa kama zinavyoonyeshwa hapa.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Maandishi yanayoweza kuhaririwa juu ya picha ya kila ukurasa. Kagua kabla ya kushiriki.",
+        "experimental": "Majaribio",
+        "downloadBuilding": "Inaandaa {format}…",
+        "downloadWithChanges": "Inajumuisha mabadiliko yako ya hivi karibuni.",
+        "lineBreakHint": "Bonyeza Enter kuanza mstari mpya kwenye ukurasa."
       },
       "kind": "Nini kitafsiriwe",
       "kindText": "Maandishi",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "Bajeti zako",
     "chipAria": "Bajeti ya {metric}: {percent}% imetumika.",
     "runProjection": "Bajeti ya utoaji {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Inaomba {fields}",
+    "keysHint": "↑↓ kuchagua · Enter kutumia · Esc kufunga"
   }
 }

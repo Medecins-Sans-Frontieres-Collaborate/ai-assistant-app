@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Fungola",
-    "showFullMessage": "Lakisa nsango mobimba",
-    "collapse": "Kokanga",
     "customTone": "Ndenge ya mongongo moko",
     "showMore": "Lakisa mosusu",
-    "showLess": "Lakisa moke"
+    "showLess": "Lakisa moke",
+    "fromPrompt": "Motuna: {name}"
   },
   "codeBlock": {
     "openInEditor": "Fungola na editor"
@@ -2627,14 +2626,13 @@
     "contactUs": "Komibatela soki ozali na mituna ya ebombame:"
   },
   "variableModal": {
-    "fillInstructions": "Tondisá ba variables naino awa mpo obongisa prompt na yo",
-    "optional": "Poni",
-    "required": "Esengeli",
-    "default": "Ya suka:",
     "defaultPlaceholder": "{defaultValue} (ya suka)",
-    "enterValue": "Tḓáka motuya mpo na {key}...",
     "cancel": "Kolanda te",
-    "apply": "Appliquer"
+    "optionalSuffix": "(soki olingi)",
+    "missing": "Tondisa yango mpo na kosalela motuna.",
+    "keysHint": "Enter: esika oyo elandi · Shift+Enter: molongo ya sika",
+    "preview": "Kotala nsango liboso",
+    "insert": "Tya na nsango"
   },
   "recentSources": {
     "title": "Ba Donnée ya Suka",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Pages ya source",
         "pagesField": "Pages",
         "pageLabel": "Page {page}",
+        "loadingPage": "Ezali kofungola lokasa {page}",
         "pageEdits": "{count, plural, one {Page {page} · edit moko} other {Page {page} · edits #}}",
         "pages": "Pages",
         "removeDocument": "Longwa",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Mbongwana ezalaka nanu te ebombami",
           "expiresSoon": "{count, plural, one {Bifichie ya translation oyo ekosangisama na mokolo moko.} other {Bifichie ya translation oyo ekosangisama na mikolo #.}}",
           "keep": "Bomba lisusu mikolo {days}"
-        }
+        },
+        "downloadMenu": "Kozwa",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Bankasa oyo ebongolami ndenge emonani awa.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Makomi oyo okoki kobongisa likolo ya elilingi ya lokasa moko na moko. Talá yango liboso ya kokabola.",
+        "experimental": "Ya esayi",
+        "downloadBuilding": "Tozali kobongisa {format}…",
+        "downloadWithChanges": "Ezali na mbongwana na yo ya nsuka.",
+        "lineBreakHint": "Fina Enter mpo na kobanda molongo ya sika na lokasa."
       },
       "kind": "Nini okolinga kokómisa",
       "kindText": "Maloba",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Ba budget na yo",
     "chipAria": "Budget ya {metric}: {percent}% esalami.",
     "runProjection": "Budget ya émissions {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Esengi {fields}",
+    "keysHint": "↑↓ kopona · Enter kosalela · Esc kokanga"
   }
 }

@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Vula",
-    "showFullMessage": "Bonisa umlayezo ophelele",
-    "collapse": "Goqa",
     "customTone": "Ithoni Yakho",
     "showMore": "Khombisa okuningi",
-    "showLess": "Khombisa okuncane"
+    "showLess": "Khombisa okuncane",
+    "fromPrompt": "Isiqondiso: {name}"
   },
   "codeBlock": {
     "openInEditor": "Vula kumhleli"
@@ -2627,14 +2626,13 @@
     "contactUs": "Sithinte ngokushesha uma unokukhathazeka ngobumfihlo:"
   },
   "variableModal": {
-    "fillInstructions": "Gcwalisa izinguquko ezingezansi ukuze ulungise iphrompthi yakho",
-    "optional": "Okukhethwa",
-    "required": "Okudingekile",
-    "default": "Okuzenzakalelayo:",
     "defaultPlaceholder": "{defaultValue} (okuzenzakalelayo)",
-    "enterValue": "Faka inani lika-{key}...",
     "cancel": "Khansela",
-    "apply": "Sebenzisa"
+    "optionalSuffix": "(okuzikhethela)",
+    "missing": "Gcwalisa lokhu ukuze usebenzise isiqondiso.",
+    "keysHint": "Enter: inkambu elandelayo · Shift+Enter: umugqa omusha",
+    "preview": "Ukubuka umlayezo kuqala",
+    "insert": "Faka emlayezweni"
   },
   "recentSources": {
     "title": "Idatha Yemithombo Yakamuva",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Amakhasi omthombo",
         "pagesField": "Amakhasi",
         "pageLabel": "Ikhasi {page}",
+        "loadingPage": "Kulayishwa ikhasi {page}",
         "pageEdits": "{count, plural, one {Ikhasi {page} · # ukuhlela} other {Ikhasi {page} · # ukuhlela}}",
         "pages": "Amakhasi",
         "removeDocument": "Susa",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Izinguquko azikagcinwa",
           "expiresSoon": "{count, plural, one {Amafayela alolu hlelo lokuhumusha azosuswa ngosuku olulodwa.} other {Amafayela alolu hlelo lokuhumusha azosuswa ezinsukwini ezingu-#.}}",
           "keep": "Gcina izinsuku ezithe xaxa ezingu-{days}"
-        }
+        },
+        "downloadMenu": "Layisha",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Amakhasi ahunyushiwe njengoba eboniswa lapha.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Umbhalo ohlelekayo phezu kwesithombe sekhasi ngalinye. Wuhlole ngaphambi kokwabelana.",
+        "experimental": "Okuhlolwayo",
+        "downloadBuilding": "Kulungiswa i-{format}…",
+        "downloadWithChanges": "Kufaka izinguquko zakho zakamuva.",
+        "lineBreakHint": "Cindezela u-Enter ukuze uqale umugqa omusha ekhasini."
       },
       "kind": "Okuzoguqulwa",
       "kindText": "Umbhalo",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Izabelomali zakho",
     "chipAria": "Isabelomali se-{metric}: {percent}% isisetshenzisiwe.",
     "runProjection": "Isabelomali sokukhishwa kwegesi {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Icela {fields}",
+    "keysHint": "↑↓ ukukhetha · Enter ukusebenzisa · Esc ukuvala"
   }
 }

@@ -2187,11 +2187,10 @@
   },
   "userMessage": {
     "open": "খুলুন",
-    "showFullMessage": "সম্পূর্ণ বার্তা দেখান",
-    "collapse": "সঙ্কুচিত করুন",
     "customTone": "কাস্টম টোন",
     "showMore": "আরও দেখান",
-    "showLess": "কম দেখান"
+    "showLess": "কম দেখান",
+    "fromPrompt": "প্রম্পট: {name}"
   },
   "codeBlock": {
     "openInEditor": "এডিটরে খুলুন"
@@ -2643,14 +2642,13 @@
     "contactUs": "গোপনীয়তার উদ্বেগ থাকলে অবিলম্বে আমাদের সাথে যোগাযোগ করুন:"
   },
   "variableModal": {
-    "fillInstructions": "আপনার প্রম্পট কাস্টমাইজ করতে নিচের ভেরিয়েবলগুলি পূরণ করুন",
-    "optional": "ঐচ্ছিক",
-    "required": "আবশ্যক",
-    "default": "ডিফল্ট:",
     "defaultPlaceholder": "{defaultValue} (ডিফল্ট)",
-    "enterValue": "{key}-এর জন্য মান প্রবেশ করুন...",
     "cancel": "বাতিল",
-    "apply": "প্রয়োগ করুন"
+    "optionalSuffix": "(ঐচ্ছিক)",
+    "missing": "প্রম্পটটি ব্যবহার করতে এটি পূরণ করুন।",
+    "keysHint": "Enter: পরের ঘর · Shift+Enter: নতুন লাইন",
+    "preview": "বার্তার পূর্বরূপ",
+    "insert": "বার্তায় যোগ করুন"
   },
   "recentSources": {
     "title": "সর্বশেষ উৎস তথ্য",
@@ -3226,6 +3224,7 @@
         "sourcePages": "সোর্স পৃষ্ঠা",
         "pagesField": "পৃষ্ঠা",
         "pageLabel": "পৃষ্ঠা {page}",
+        "loadingPage": "পৃষ্ঠা {page} লোড হচ্ছে",
         "pageEdits": "{count, plural, one {পৃষ্ঠা {page} · #টি সম্পাদনা} other {পৃষ্ঠা {page} · #টি সম্পাদনা}}",
         "pages": "পৃষ্ঠা",
         "removeDocument": "অপসারণ করুন",
@@ -3442,7 +3441,16 @@
           "saveFailed": "পরিবর্তনগুলো এখনো সংরক্ষিত হয়নি",
           "expiresSoon": "{count, plural, one {এই অনুবাদের ফাইলগুলো # দিনে মুছে ফেলা হবে।} other {এই অনুবাদের ফাইলগুলো # দিনে মুছে ফেলা হবে।}}",
           "keep": "আরও {days} দিন রাখুন"
-        }
+        },
+        "downloadMenu": "ডাউনলোড",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "অনূদিত পৃষ্ঠাগুলো, এখানে যেমন দেখানো হয়েছে।",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "প্রতিটি পৃষ্ঠার ছবির উপর সম্পাদনাযোগ্য লেখা। শেয়ার করার আগে যাচাই করুন।",
+        "experimental": "পরীক্ষামূলক",
+        "downloadBuilding": "{format} প্রস্তুত করা হচ্ছে…",
+        "downloadWithChanges": "আপনার সর্বশেষ পরিবর্তনগুলো অন্তর্ভুক্ত।",
+        "lineBreakHint": "পৃষ্ঠায় নতুন লাইন শুরু করতে Enter চাপুন।"
       },
       "kind": "কী অনুবাদ করবেন",
       "kindText": "পাঠ্য",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "আপনার বাজেটসমূহ",
     "chipAria": "{metric} বাজেট: {percent}% ব্যবহৃত।",
     "runProjection": "নিঃসরণ বাজেট {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "{fields} চায়",
+    "keysHint": "↑↓ বাছাই · Enter ব্যবহার · Esc বন্ধ"
   }
 }

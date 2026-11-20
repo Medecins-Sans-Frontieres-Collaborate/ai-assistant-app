@@ -2261,11 +2261,10 @@
   },
   "userMessage": {
     "open": "Uddit",
-    "showFullMessage": "Hollu neldol timmuɗo",
-    "collapse": "Ñiƴƴu",
     "customTone": "Daande Keeriɗɗo",
     "showMore": "Holl eɓɓe",
-    "showLess": "Holl ɗiɗi"
+    "showLess": "Holl ɗiɗi",
+    "fromPrompt": "Jaŋde: {name}"
   },
   "codeBlock": {
     "openInEditor": "Uddit e taƴtoowo"
@@ -2627,14 +2626,13 @@
     "contactUs": "Jokkondiru e amen law so aɗa jogii ngañamaame suturo:"
   },
   "variableModal": {
-    "fillInstructions": "Heɓɓin wayluɓe les ɗee ngam feewnude tinndinol maa",
-    "optional": "Suɓte-ɗum",
-    "required": "Hatojini",
-    "default": "Goowɗo:",
     "defaultPlaceholder": "{defaultValue} (goowɗo)",
-    "enterValue": "Naatnu ɓure ngam {key}...",
     "cancel": "Haaytu",
-    "apply": "Huutoro"
+    "optionalSuffix": "(suɓaade)",
+    "missing": "Hebbin ɗum ngam huutoraade jaŋde ndee.",
+    "keysHint": "Enter: kaa ɓennoowo · Shift+Enter: diidol hesol",
+    "preview": "Yiyde ɓataake o",
+    "insert": "Naatnu e ɓataake o"
   },
   "recentSources": {
     "title": "Keɓe Iwdi Cakkitiiɗe",
@@ -3210,6 +3208,7 @@
         "sourcePages": "Cemmaaji soɓorgal",
         "pagesField": "Cemmaaji",
         "pageLabel": "Cemma {page}",
+        "loadingPage": "Nana loowa hello {page}",
         "pageEdits": "{count, plural, one {Cemma {page} · # furtonɗo} other {Cemma {page} · # furtonɗi}}",
         "pages": "Cemmaaji",
         "removeDocument": "Momtu",
@@ -3426,7 +3425,16 @@
           "saveFailed": "Waylaaɗe ngo annditanii kadi",
           "expiresSoon": "{count, plural, one {Fiilan danndanko e jamfaade ɓe ndeen kadi ha # ñalngu.} other {Fiilan danndanko e jamfaade ɓe ndeen kadi ha # ñalnguji.}}",
           "keep": "Tubiti {days} balɗe ɓurɗe"
-        }
+        },
+        "downloadMenu": "Aawto",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Kelle pirtaaɗe no ɗe kollirtee ɗoo nii.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Binndol ngol waawaa taƴtineede dow natal hello kala. Ƴeewto ɗum hade maa lollinde.",
+        "experimental": "Ƴeewndal",
+        "downloadBuilding": "Ina heblee {format}…",
+        "downloadWithChanges": "Ina waɗi bayle maa cakkitiiɗe.",
+        "lineBreakHint": "Ñoƴƴu Enter ngam fuɗɗoo diidol kesol e hello ngo."
       },
       "kind": "Ko woni hollitaade",
       "kindText": "Kalmaaji",
@@ -8724,5 +8732,9 @@
     "summaryTitle": "Maantore maa",
     "chipAria": "Maantore {metric}: {percent}% woni.",
     "runProjection": "Maantore emissions {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Ɗaɓɓiri {fields}",
+    "keysHint": "↑↓ suɓaade · Enter huutoraade · Esc uddude"
   }
 }

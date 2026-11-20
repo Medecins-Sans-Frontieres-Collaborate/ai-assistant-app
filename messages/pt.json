@@ -2187,11 +2187,10 @@
   },
   "userMessage": {
     "open": "Abrir",
-    "showFullMessage": "Mostrar mensagem completa",
-    "collapse": "Recolher",
     "customTone": "Tom personalizado",
     "showMore": "Mostrar mais",
-    "showLess": "Mostrar menos"
+    "showLess": "Mostrar menos",
+    "fromPrompt": "Prompt: {name}"
   },
   "codeBlock": {
     "openInEditor": "Abrir no editor"
@@ -2643,14 +2642,13 @@
     "contactUs": "Entre em contato conosco imediatamente se tiver preocupações com a privacidade:"
   },
   "variableModal": {
-    "fillInstructions": "Preencha as variáveis abaixo para personalizar seu prompt",
-    "optional": "Opcional",
-    "required": "Obrigatório",
-    "default": "Padrão:",
     "defaultPlaceholder": "{defaultValue} (padrão)",
-    "enterValue": "Insira o valor para {key}...",
     "cancel": "Cancelar",
-    "apply": "Aplicar"
+    "optionalSuffix": "(opcional)",
+    "missing": "Preencha para usar o prompt.",
+    "keysHint": "Enter: próximo campo · Shift+Enter: nova linha",
+    "preview": "Pré-visualização da mensagem",
+    "insert": "Inserir na mensagem"
   },
   "recentSources": {
     "title": "Dados de fontes mais recentes",
@@ -3226,6 +3224,7 @@
         "sourcePages": "Páginas de origem",
         "pagesField": "Páginas",
         "pageLabel": "Página {page}",
+        "loadingPage": "Carregando a página {page}",
         "pageEdits": "{count, plural, one {Página {page} · # edição} other {Página {page} · # edições}}",
         "pages": "Páginas",
         "removeDocument": "Remover",
@@ -3442,7 +3441,16 @@
           "saveFailed": "Alterações ainda não salvas",
           "expiresSoon": "{count, plural, one {Os arquivos desta tradução serão excluídos em # dia.} other {Os arquivos desta tradução serão excluídos em # dias.}}",
           "keep": "Manter por mais {days} dias"
-        }
+        },
+        "downloadMenu": "Baixar",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "As páginas traduzidas tal como aparecem aqui.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Texto editável sobre uma imagem de cada página. Verifique antes de partilhar.",
+        "experimental": "Experimental",
+        "downloadBuilding": "A preparar {format}…",
+        "downloadWithChanges": "Inclui as suas últimas alterações.",
+        "lineBreakHint": "Prima Enter para começar uma nova linha na página."
       },
       "kind": "O que traduzir",
       "kindText": "Texto",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "Seus orçamentos",
     "chipAria": "Orçamento de {metric}: {percent}% utilizado.",
     "runProjection": "Orçamento de emissões {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Pede {fields}",
+    "keysHint": "↑↓ para escolher · Enter para usar · Esc para fechar"
   }
 }

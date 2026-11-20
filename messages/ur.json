@@ -2341,11 +2341,10 @@
   },
   "userMessage": {
     "open": "کھولیں",
-    "showFullMessage": "مکمل پیغام دکھائیں",
-    "collapse": "سمیٹیں",
     "customTone": "حسب منشا انداز",
     "showMore": "مزید دکھائیں",
-    "showLess": "کم دکھائیں"
+    "showLess": "کم دکھائیں",
+    "fromPrompt": "پرامپٹ: {name}"
   },
   "codeBlock": {
     "openInEditor": "ایڈیٹر میں کھولیں"
@@ -2663,13 +2662,12 @@
     "placeholder": "{key} کی قیمت درج کریں",
     "submit": "ایجنٹ شروع کریں",
     "cancel": "منسوخ کریں",
-    "fillInstructions": "اپنے پرامپٹ کو حسب ضرورت بنانے کے لیے نیچے متغیرات پُر کریں",
-    "optional": "اختیاری",
-    "required": "لازمی",
-    "default": "ڈیفالٹ:",
     "defaultPlaceholder": "{defaultValue} (ڈیفالٹ)",
-    "enterValue": "{key} کے لیے ویلیو درج کریں...",
-    "apply": "لاگو کریں"
+    "optionalSuffix": "(اختیاری)",
+    "missing": "پرامپٹ استعمال کرنے کے لیے اسے بھریں۔",
+    "keysHint": "Enter: اگلا خانہ · Shift+Enter: نئی سطر",
+    "preview": "پیغام کا پیش منظر",
+    "insert": "پیغام میں شامل کریں"
   },
   "recentSources": {
     "title": "حالیہ ذرائع",
@@ -3256,6 +3254,7 @@
         "sourcePages": "اصل صفحات",
         "pagesField": "صفحات",
         "pageLabel": "صفحہ {page}",
+        "loadingPage": "صفحہ {page} لوڈ ہو رہا ہے",
         "pageEdits": "{count, plural, one {صفحہ {page} · # ترمیم} other {صفحہ {page} · # ترامیم}}",
         "pages": "صفحات",
         "removeDocument": "ہٹا دیں",
@@ -3472,7 +3471,16 @@
           "saveFailed": "تبدیلیاں ابھی محفوظ نہیں ہوئیں",
           "expiresSoon": "{count, plural, one {اس ترجمہ کی فائلیں # دن میں حذف کر دی جائیں گی۔} other {اس ترجمہ کی فائلیں # دنوں میں حذف کر دی جائیں گی۔}}",
           "keep": "مزید {days} دن رکھیں"
-        }
+        },
+        "downloadMenu": "ڈاؤن لوڈ",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "ترجمہ شدہ صفحات جیسے یہاں دکھائے گئے ہیں۔",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "ہر صفحے کی تصویر پر قابلِ ترمیم متن۔ شیئر کرنے سے پہلے جانچ لیں۔",
+        "experimental": "تجرباتی",
+        "downloadBuilding": "{format} تیار ہو رہا ہے…",
+        "downloadWithChanges": "آپ کی تازہ ترین تبدیلیاں شامل ہیں۔",
+        "lineBreakHint": "صفحے پر نئی سطر شروع کرنے کے لیے Enter دبائیں۔"
       },
       "kind": "کیا ترجمہ کرنا ہے",
       "kindText": "متن",
@@ -8770,5 +8778,9 @@
     "summaryTitle": "آپ کے بجٹس",
     "chipAria": "{metric} بجٹ: {percent}% استعمال ہو چکا ہے۔",
     "runProjection": "اخراجات کا بجٹ {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "{fields} مانگتا ہے",
+    "keysHint": "↑↓ منتخب کریں · Enter استعمال کریں · Esc بند کریں"
   }
 }

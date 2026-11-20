@@ -2339,11 +2339,10 @@
   },
   "userMessage": {
     "open": "Buka",
-    "showFullMessage": "Tampilkan pesan lengkap",
-    "collapse": "Tutup",
     "customTone": "Nada Khusus",
     "showMore": "Tampilkan lebih banyak",
-    "showLess": "Tampilkan lebih sedikit"
+    "showLess": "Tampilkan lebih sedikit",
+    "fromPrompt": "Prompt: {name}"
   },
   "codeBlock": {
     "openInEditor": "Buka di editor"
@@ -2643,14 +2642,13 @@
     "contactUs": "Hubungi kami segera jika Anda memiliki kekhawatiran privasi:"
   },
   "variableModal": {
-    "fillInstructions": "Isi variabel di bawah untuk menyesuaikan prompt Anda",
-    "optional": "Opsional",
-    "required": "Wajib",
-    "default": "Default:",
     "defaultPlaceholder": "{defaultValue} (default)",
-    "enterValue": "Masukkan nilai untuk {key}...",
     "cancel": "Batal",
-    "apply": "Terapkan"
+    "optionalSuffix": "(opsional)",
+    "missing": "Isi ini untuk menggunakan prompt.",
+    "keysHint": "Enter: kolom berikutnya · Shift+Enter: baris baru",
+    "preview": "Pratinjau pesan",
+    "insert": "Sisipkan ke pesan"
   },
   "recentSources": {
     "title": "Data Sumber Terbaru",
@@ -3226,6 +3224,7 @@
         "sourcePages": "Halaman sumber",
         "pagesField": "Halaman",
         "pageLabel": "Halaman {page}",
+        "loadingPage": "Memuat halaman {page}",
         "pageEdits": "{count, plural, one {Halaman {page} · # suntingan} other {Halaman {page} · # suntingan}}",
         "pages": "Halaman",
         "removeDocument": "Hapus",
@@ -3442,7 +3441,16 @@
           "saveFailed": "Perubahan belum tersimpan",
           "expiresSoon": "{count, plural, one {File terjemahan ini akan dihapus dalam # hari.} other {File terjemahan ini akan dihapus dalam # hari.}}",
           "keep": "Simpan selama {days} hari lagi"
-        }
+        },
+        "downloadMenu": "Unduh",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "Halaman terjemahan seperti yang ditampilkan di sini.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Teks yang dapat diedit di atas gambar setiap halaman. Periksa sebelum dibagikan.",
+        "experimental": "Eksperimental",
+        "downloadBuilding": "Menyiapkan {format}…",
+        "downloadWithChanges": "Mencakup perubahan terbaru Anda.",
+        "lineBreakHint": "Tekan Enter untuk memulai baris baru di halaman."
       },
       "kind": "Apa yang akan diterjemahkan",
       "kindText": "Teks",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "Anggaran Anda",
     "chipAria": "Anggaran {metric}: {percent}% digunakan.",
     "runProjection": "Anggaran emisi {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "Meminta {fields}",
+    "keysHint": "↑↓ pilih · Enter gunakan · Esc tutup"
   }
 }

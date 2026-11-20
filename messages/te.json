@@ -2339,11 +2339,10 @@
   },
   "userMessage": {
     "open": "తెరవండి",
-    "showFullMessage": "పూర్తి సందేశాన్ని చూపించండి",
-    "collapse": "కుదించండి",
     "customTone": "అనుకూల టోన్",
     "showMore": "మరింత చూపించు",
-    "showLess": "తక్కువ చూపించు"
+    "showLess": "తక్కువ చూపించు",
+    "fromPrompt": "ప్రాంప్ట్: {name}"
   },
   "codeBlock": {
     "openInEditor": "ఎడిటర్‌లో తెరవండి"
@@ -2643,14 +2642,13 @@
     "contactUs": "గోప్యతా ఆందోళనలు ఉంటే వెంటనే మమ్మల్ని సంప్రదించండి:"
   },
   "variableModal": {
-    "fillInstructions": "మీ ప్రాంప్ట్‌ను అనుకూలీకరించడానికి క్రింది వేరియబుల్స్ నింపండి",
-    "optional": "ఐచ్ఛికం",
-    "required": "అవసరం",
-    "default": "డిఫాల్ట్:",
     "defaultPlaceholder": "{defaultValue} (డిఫాల్ట్)",
-    "enterValue": "{key} కోసం విలువ నమోదు చేయండి...",
     "cancel": "రద్దు చేయండి",
-    "apply": "వర్తింపజేయండి"
+    "optionalSuffix": "(ఐచ్ఛికం)",
+    "missing": "ప్రాంప్ట్‌ను ఉపయోగించడానికి దీన్ని పూరించండి.",
+    "keysHint": "Enter: తదుపరి ఫీల్డ్ · Shift+Enter: కొత్త పంక్తి",
+    "preview": "సందేశ ప్రివ్యూ",
+    "insert": "సందేశంలో చేర్చు"
   },
   "recentSources": {
     "title": "తాజా మూలాధార డేటా",
@@ -3226,6 +3224,7 @@
         "sourcePages": "మూల పేజీలు",
         "pagesField": "పేజీలు",
         "pageLabel": "పేజీ {page}",
+        "loadingPage": "పేజీ {page} లోడ్ అవుతోంది",
         "pageEdits": "{count, plural, one {పేజీ {page} · # సవరణ} other {పేజీ {page} · # సవరణలు}}",
         "pages": "పేజీలు",
         "removeDocument": "తొలగించండి",
@@ -3442,7 +3441,16 @@
           "saveFailed": "మార్పులు ఇంకా సేవ్ చేయబడలేదు",
           "expiresSoon": "{count, plural, one {ఈ అనువాదానికి సంబంధించిన ఫైళ్ళు # రోజులో తొలగించబడతాయి.} other {ఈ అనువాదానికి సంబంధించిన ఫైళ్ళు # రోజుల్లో తొలగించబడతాయి.}}",
           "keep": "ఇంకా {days} రోజులు నిల్వ ఉంచండి"
-        }
+        },
+        "downloadMenu": "డౌన్‌లోడ్",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "అనువదించిన పేజీలు, ఇక్కడ చూపినట్లుగా.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "ప్రతి పేజీ చిత్రంపై సవరించగల వచనం. పంచుకునే ముందు తనిఖీ చేయండి.",
+        "experimental": "ప్రయోగాత్మక",
+        "downloadBuilding": "{format} సిద్ధమవుతోంది…",
+        "downloadWithChanges": "మీ తాజా మార్పులు ఇందులో ఉన్నాయి.",
+        "lineBreakHint": "పేజీలో కొత్త పంక్తి ప్రారంభించడానికి Enter నొక్కండి."
       },
       "kind": "ఏది అనువదించాలి",
       "kindText": "పాఠ్యం",
@@ -8740,5 +8748,9 @@
     "summaryTitle": "మీ బడ్జెట్లు",
     "chipAria": "{metric} బడ్జెట్: {percent}% వాడబడింది.",
     "runProjection": "ఉత్సర్గల బడ్జెట్ {from}% → {to}%"
+  },
+  "promptList": {
+    "asksFor": "{fields} అడుగుతుంది",
+    "keysHint": "↑↓ ఎంచుకోండి · Enter ఉపయోగించండి · Esc మూసివేయండి"
   }
 }
