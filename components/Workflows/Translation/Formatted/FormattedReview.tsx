@@ -58,6 +58,8 @@ import {
 } from '@/lib/utils/shared/translation/nativePdf';
 import { NativeRunRef } from '@/lib/utils/shared/translation/nativeRunStorage';
 
+import { PAGE_WIDTH } from '@/components/Documents/DocumentPage';
+
 import { FormattedBlockActions } from './FormattedBlockActions';
 import { FormattedBlockStyle } from './FormattedBlockStyle';
 import {
@@ -68,7 +70,6 @@ import {
 import { FormattedPageRail } from './FormattedPageRail';
 import {
   FormattedPageView,
-  PAGE_WIDTH,
   UNIT_ATTRIBUTE,
   UNIT_PLACE_ATTRIBUTE,
 } from './FormattedPageView';
