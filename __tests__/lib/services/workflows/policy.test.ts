@@ -64,6 +64,7 @@ describe('workflow policy resolution', () => {
         'brand-review',
         'channel-drafter',
         'data-analysis',
+        'deck-builder',
         'document',
         'form-fill',
         'grants',
