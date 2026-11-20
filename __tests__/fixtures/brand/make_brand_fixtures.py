@@ -18,6 +18,7 @@ Every document holds, so each check has both sides:
   - the logo at its own proportions, and the logo squashed to half its
     height (distorted)
 In brand.pptx the logo also sits on the master (every slide shows it).
+locked.pdf is brand.pdf with a password.
 """
 import copy
 import io
@@ -119,6 +120,8 @@ def pdf():
     page.insert_image(fitz.Rect(50, 300, 250, 400), stream=LOGO)
     page.insert_image(fitz.Rect(300, 300, 500, 350), stream=LOGO, keep_proportion=False)
     doc.save(out / 'brand.pdf')
+    # The same, password protected: the reader must refuse it.
+    doc.save(out / 'locked.pdf', encryption=fitz.PDF_ENCRYPT_AES_256, owner_pw='owner', user_pw='user')
 
 
 pptx()
