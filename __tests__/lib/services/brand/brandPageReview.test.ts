@@ -1,6 +1,7 @@
 import {
   describeBook,
   describePage,
+  noteLanguage,
   pageFindings,
 } from '@/lib/services/brand/brandPageReview';
 
@@ -100,6 +101,14 @@ describe('pageFindings', () => {
 });
 
 describe('what the model is told', () => {
+  it('names the language of the notes, which is the reader’s', () => {
+    expect(noteLanguage('en')).toBe('English');
+    expect(noteLanguage('it')).toBe('Italian');
+    expect(noteLanguage('pt-BR')).toBe('Brazilian Portuguese');
+    // Not a tag: passed through rather than failing the page.
+    expect(noteLanguage('not a tag')).toBe('not a tag');
+  });
+
   it('states the book plainly', () => {
     const parsed = parseBrandBookBody({
       name: 'Northwind',
