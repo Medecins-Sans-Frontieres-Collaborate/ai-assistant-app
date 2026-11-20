@@ -19,6 +19,8 @@ import {
   translatedPages,
 } from '@/lib/utils/shared/translation/formattedDocument';
 
+import { useUnitWording } from './formattedWording';
+
 /** Width a source page is rendered at for its thumbnail, in CSS pixels. */
 const THUMBNAIL_WIDTH = 176;
 
@@ -194,6 +196,7 @@ export function FormattedPageRail({
   onRemovePage,
 }: FormattedPageRailProps) {
   const t = useTranslations('workflows');
+  const unitT = useUnitWording();
   const list = useRef<HTMLElement>(null);
   // The page that holds the Tab stop: the last one the keyboard was on.
   const [focusedPage, setFocusedPage] = useState<number | null>(null);
@@ -250,7 +253,7 @@ export function FormattedPageRail({
           onClick={onTranslateTicked}
           className="min-h-[32px] rounded-lg bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
         >
-          {t('translation.formatted.translatePages', {
+          {unitT('translatePages', {
             count: ticked.length,
           })}
         </button>
@@ -339,7 +342,7 @@ export function FormattedPageRail({
         const label =
           edits > 0
             ? t('translation.formatted.pageEdits', { page, count: edits })
-            : t('translation.formatted.pageLabel', { page });
+            : unitT('pageLabel', { page });
         // Only the page with the Tab stop has its controls in the Tab order.
         const tabIndex = page === tabStop ? 0 : -1;
         const outline = current
@@ -361,7 +364,7 @@ export function FormattedPageRail({
               <button
                 type="button"
                 aria-current={current ? 'page' : undefined}
-                aria-label={t('translation.formatted.pageLabel', { page })}
+                aria-label={unitT('pageLabel', { page })}
                 data-page-open
                 tabIndex={tabIndex}
                 onFocus={() => setFocusedPage(page)}
@@ -398,8 +401,8 @@ export function FormattedPageRail({
                 <button
                   type="button"
                   disabled={busy}
-                  title={t('translation.formatted.restorePage', { page })}
-                  aria-label={t('translation.formatted.restorePage', { page })}
+                  title={unitT('restorePage', { page })}
+                  aria-label={unitT('restorePage', { page })}
                   tabIndex={tabIndex}
                   onClick={() => onRemovePage(page, false)}
                   className="absolute end-1 top-1 rounded-full bg-white p-1 text-gray-700 shadow ring-1 ring-gray-300 hover:bg-gray-100 disabled:opacity-50 dark:bg-surface-dark-elevated dark:text-gray-200 dark:ring-gray-600"
@@ -411,8 +414,8 @@ export function FormattedPageRail({
                   <button
                     type="button"
                     disabled={busy}
-                    title={t('translation.formatted.removePage', { page })}
-                    aria-label={t('translation.formatted.removePage', { page })}
+                    title={unitT('removePage', { page })}
+                    aria-label={unitT('removePage', { page })}
                     tabIndex={tabIndex}
                     onClick={() => onRemovePage(page, true)}
                     className="absolute end-1 top-1 rounded-full bg-gray-900/70 p-1 text-white opacity-0 hover:bg-gray-900 focus:opacity-100 disabled:opacity-0 group-hover:opacity-100 max-sm:opacity-100"
