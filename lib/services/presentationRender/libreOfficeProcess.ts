@@ -1,6 +1,6 @@
 /**
- * Runs one LibreOffice conversion as a contained process. Used only by the
- * render service, which decides when it may run.
+ * Runs one LibreOffice conversion (or a pdftoppm raster) as a contained
+ * process. Used only by the render service, which decides when it may run.
  *
  * - Its own process group, so a timeout or an abort kills the launcher and
  *   `soffice.bin` together.
@@ -142,31 +142,40 @@ function killGroup(pid: number | undefined): void {
   }
 }
 
+/** How a contained process ended (see runContainedProcess). */
+export interface ContainedProcessExit {
+  code: number | null;
+  signal: NodeJS.Signals | null;
+  /** The tail of what it printed. */
+  logs: string;
+}
+
 /**
- * Converts one file.
+ * Runs a command as a contained process: its own process group, killed
+ * with the whole group past `timeoutMs`, past `memoryLimitMb` of resident
+ * memory, or on abort. Used for LibreOffice and for pdftoppm.
  *
- * @param job - What to convert, where, and within which limits.
- * @returns Path of the converted file.
+ * @param command - The program; arguments go to it directly (no shell).
+ * @param args - Its arguments.
+ * @param limits - Time, memory, abort signal, and the memory probe.
+ * @returns How the process exited when it ran to the end.
  * @throws LibreOfficeTimeoutError past `timeoutMs`.
  * @throws LibreOfficeMemoryError past `memoryLimitMb`.
  * @throws The signal's reason when aborted.
- * @throws LibreOfficeFailedError when no output was produced.
+ * @throws The spawn error when the program cannot be started.
  */
-export async function runLibreOffice(
-  job: LibreOfficeConversion,
-): Promise<string> {
-  if (job.signal?.aborted) throw job.signal.reason;
-  await fs.promises.mkdir(job.outputDir, { recursive: true });
-  const { command, args } = libreOfficeCommand(job);
-  const output = expectedOutputPath(
-    job.inputPath,
-    job.convertTo,
-    job.outputDir,
-  );
-
+export async function runContainedProcess(
+  command: string,
+  args: string[],
+  limits: Pick<
+    LibreOfficeConversion,
+    'timeoutMs' | 'memoryLimitMb' | 'signal' | 'measureMemory'
+  >,
+): Promise<ContainedProcessExit> {
+  if (limits.signal?.aborted) throw limits.signal.reason;
   const measure =
-    job.measureMemory ?? ((pid: number) => treeResidentBytes(pid));
-  const limitBytes = job.memoryLimitMb * 1024 * 1024;
+    limits.measureMemory ?? ((pid: number) => treeResidentBytes(pid));
+  const limitBytes = limits.memoryLimitMb * 1024 * 1024;
   const { code, signal, logs, timedOut, aborted, overMemory } =
     await new Promise<{
       code: number | null;
@@ -208,31 +217,57 @@ export async function runLibreOffice(
       const timer = setTimeout(() => {
         timedOut = true;
         killGroup(child.pid);
-      }, job.timeoutMs);
+      }, limits.timeoutMs);
       const onAbort = () => {
         aborted = true;
         killGroup(child.pid);
       };
-      job.signal?.addEventListener('abort', onAbort, { once: true });
+      limits.signal?.addEventListener('abort', onAbort, { once: true });
       child.on('error', (error) => {
         clearTimeout(timer);
         clearInterval(watchdog);
-        job.signal?.removeEventListener('abort', onAbort);
+        limits.signal?.removeEventListener('abort', onAbort);
         reject(error);
       });
       child.on('close', (code, signal) => {
         clearTimeout(timer);
         clearInterval(watchdog);
-        job.signal?.removeEventListener('abort', onAbort);
-        // The launcher can exit while soffice.bin lingers; never leave it.
+        limits.signal?.removeEventListener('abort', onAbort);
+        // A launcher can exit while its child lingers; never leave it.
         killGroup(child.pid);
         resolve({ code, signal, logs, timedOut, aborted, overMemory });
       });
     });
 
-  if (aborted) throw job.signal?.reason ?? new Error('Conversion aborted');
-  if (timedOut) throw new LibreOfficeTimeoutError(job.timeoutMs);
-  if (overMemory) throw new LibreOfficeMemoryError(job.memoryLimitMb);
+  if (aborted) throw limits.signal?.reason ?? new Error('Conversion aborted');
+  if (timedOut) throw new LibreOfficeTimeoutError(limits.timeoutMs);
+  if (overMemory) throw new LibreOfficeMemoryError(limits.memoryLimitMb);
+  return { code, signal, logs };
+}
+
+/**
+ * Converts one file.
+ *
+ * @param job - What to convert, where, and within which limits.
+ * @returns Path of the converted file.
+ * @throws LibreOfficeTimeoutError past `timeoutMs`.
+ * @throws LibreOfficeMemoryError past `memoryLimitMb`.
+ * @throws The signal's reason when aborted.
+ * @throws LibreOfficeFailedError when no output was produced.
+ */
+export async function runLibreOffice(
+  job: LibreOfficeConversion,
+): Promise<string> {
+  if (job.signal?.aborted) throw job.signal.reason;
+  await fs.promises.mkdir(job.outputDir, { recursive: true });
+  const { command, args } = libreOfficeCommand(job);
+  const output = expectedOutputPath(
+    job.inputPath,
+    job.convertTo,
+    job.outputDir,
+  );
+  const { code, signal, logs } = await runContainedProcess(command, args, job);
+
   const produced = await fs.promises
     .stat(output)
     .then((stats) => stats.size > 0)
