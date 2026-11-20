@@ -55,6 +55,9 @@ export const WORKFLOW_POLICY_DEFAULTS: Record<
   // Reviews against brand books an admin curates; with none to use, the
   // workspace says so (docs/DOCUMENT_PLATFORM.md, phase F).
   'brand-review': true,
+  // Builds from templates an admin curates or the person's own; every
+  // model call is budgeted (docs/DOCUMENT_PLATFORM.md, phase G).
+  'deck-builder': true,
 };
 
 /**
