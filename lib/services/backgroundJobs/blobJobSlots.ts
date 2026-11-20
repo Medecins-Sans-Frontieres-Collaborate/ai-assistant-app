@@ -4,6 +4,7 @@
  * instance sees the same slots.
  */
 import { BlobProperty, BlobStorage } from '@/lib/utils/server/blob/blob';
+import { overwriteBlob } from '@/lib/utils/server/blob/overwriteBlob';
 import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 
 import { JobSlotRecord, JobSlots } from './backgroundJobs';
@@ -94,8 +95,11 @@ export class BlobJobSlots implements JobSlots {
   }
 
   private async save(records: JobSlotRecord[]): Promise<void> {
-    await this.storage.upload(this.name, Buffer.from(JSON.stringify(records)), {
-      blobHTTPHeaders: { blobContentType: 'application/json' },
-    });
+    await overwriteBlob(
+      this.storage,
+      this.name,
+      Buffer.from(JSON.stringify(records)),
+      'application/json',
+    );
   }
 }
