@@ -35,6 +35,63 @@ export interface SandboxInputFile {
   mimeType?: string;
 }
 
+/**
+ * The extensions the sandbox takes an input file under, as its file
+ * upload states them. Any other is refused with a 400 before the script
+ * runs, so inputs are named for what they are (a picture `.png`, never
+ * `.bin`). The local test runner applies the same list.
+ */
+export const SANDBOX_INPUT_EXTENSIONS: ReadonlySet<string> = new Set([
+  'c',
+  'cpp',
+  'css',
+  'csv',
+  'doc',
+  'docx',
+  'gif',
+  'go',
+  'html',
+  'java',
+  'jpeg',
+  'jpg',
+  'js',
+  'json',
+  'md',
+  'pdf',
+  'php',
+  'pkl',
+  'png',
+  'pptx',
+  'py',
+  'rb',
+  'tar',
+  'tex',
+  'ts',
+  'txt',
+  'webp',
+  'xlsx',
+  'xml',
+  'zip',
+]);
+
+/**
+ * Checks that the sandbox will take every input by its name.
+ *
+ * @throws Error naming the first file whose extension it would refuse.
+ */
+export function assertSandboxInputNames(
+  inputs: readonly Pick<SandboxInputFile, 'filename'>[],
+): void {
+  for (const { filename } of inputs) {
+    const extension = /\.([^.]+)$/.exec(filename)?.[1]?.toLowerCase() ?? '';
+    if (!SANDBOX_INPUT_EXTENSIONS.has(extension)) {
+      throw new Error(
+        `The sandbox does not take ${filename}: ".${extension}" is not an extension it accepts`,
+      );
+    }
+  }
+}
+
 export interface SandboxScriptRun {
   /** The command's output archive, unpacked: filename → bytes. */
   files: Map<string, Uint8Array>;
@@ -144,6 +201,7 @@ export async function runSandboxScript(
     })),
     ...inputs,
   ];
+  assertSandboxInputNames(files);
 
   const fileIds: string[] = [];
   try {
