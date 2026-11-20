@@ -56,6 +56,7 @@ export const ADMIN_AREA_IDS = [
   'skills',
   'map-datasets',
   'form-templates',
+  'brand-books',
   'channel-sets',
   'channel-profiles',
   'limits',
@@ -129,6 +130,9 @@ export async function resolveAdminAreas(
         'glossaries',
         'map-datasets',
         'form-templates',
+        // Like form templates: a local admin's new book is delegated to
+        // them, and the route decides per book.
+        'brand-books',
         // A team's rule set is theirs to edit (delegated on creation), so
         // every admin gets the area; the route decides per set.
         'channel-sets',
