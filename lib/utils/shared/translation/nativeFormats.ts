@@ -91,20 +91,6 @@ export function isNativeDeckUpload(filename: string): boolean {
   return extension !== null && extension !== 'pdf';
 }
 
-/** An uploaded file's address: `/api/file/<id>`. */
-const UPLOADED_FILE_URL = /^\/api\/file\/([^/?#]+)$/;
-
-/**
- * Where an uploaded presentation's slides are served as a PDF (GET
- * /api/file/[id]/slides), from the upload's address.
- *
- * @returns The address, or null when `fileUrl` is not an uploaded file.
- */
-export function slidesPdfUrl(fileUrl: string): string | null {
-  const id = UPLOADED_FILE_URL.exec(fileUrl)?.[1];
-  return id ? `/api/file/${id}/slides` : null;
-}
-
 /**
  * A file name with the extension of the format it is stored in, which
  * differs for a `.ppt` (stored converted, as `.pptx`).

@@ -83,6 +83,10 @@ import {
   sortLanguageOptionsByLabel,
 } from '@/lib/utils/app/languagePickerHelpers';
 import {
+  documentPdfUrl,
+  uploadSource,
+} from '@/lib/utils/shared/documents/documentSource';
+import {
   MAX_OCR_PAGES,
   OCR_ERROR,
   OCR_PAGES_LIMIT_KEY,
@@ -143,7 +147,6 @@ import {
   NATIVE_SOURCE_CONTENT_TYPES,
   isNativeDeckUpload,
   nativeFormatOfFileId,
-  slidesPdfUrl,
   storedFileName,
 } from '@/lib/utils/shared/translation/nativeFormats';
 import {
@@ -2117,14 +2120,17 @@ export function TranslationWorkspace({
   }, [formattedSourceUrl, formattedSourceName]);
   /**
    * The pages the setup and review show: the document itself, or for a
-   * presentation its slides laid out as a PDF by the server (slidesPdfUrl).
+   * presentation its slides laid out as a PDF by the server (documentPdfUrl).
    */
   const loadFormattedPages = useCallback(async (): Promise<File> => {
     if (!formattedSourceUrl) throw new Error('No document is loaded');
     if (!isNativeDeckUpload(formattedSourceName)) return loadFormattedFile();
-    const slides = slidesPdfUrl(formattedSourceUrl);
-    if (!slides) throw new Error('These slides cannot be shown');
-    return fetchStoredFile(slides, `${formattedSourceName}.pdf`);
+    const source = uploadSource(formattedSourceUrl);
+    if (!source) throw new Error('These slides cannot be shown');
+    return fetchStoredFile(
+      documentPdfUrl(source),
+      `${formattedSourceName}.pdf`,
+    );
   }, [formattedSourceUrl, formattedSourceName, loadFormattedFile]);
   /** The setup and review screens need a PDF to show; a blocker hides them. */
   const formattedHasPdf =

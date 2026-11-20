@@ -1,6 +1,6 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 
-import { usePdfPages } from '@/client/hooks/workflows/usePdfPages';
+import { usePdfPages } from '@/client/hooks/documents/usePdfPages';
 
 import {
   afterEach,
