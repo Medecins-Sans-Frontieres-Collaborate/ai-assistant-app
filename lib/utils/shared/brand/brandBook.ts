@@ -216,3 +216,39 @@ export function fontKey(name: string): string {
     .replace(/[\s_-]+/g, '')
     .toLowerCase();
 }
+
+/**
+ * An id for a new logo or template, made from its name and unique among
+ * the ids already taken (the schema's `^[a-z0-9-]{1,40}$`).
+ *
+ * @example brandItemId('Main logo', ['main-logo']) === 'main-logo-2'
+ */
+export function brandItemId(name: string, taken: Iterable<string>): string {
+  const used = new Set(taken);
+  const base =
+    name
+      .toLowerCase()
+      .normalize('NFKD')
+      .replace(/\p{M}+/gu, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 34) || 'item';
+  if (!used.has(base)) return base;
+  for (let suffix = 2; ; suffix += 1) {
+    const candidate = `${base}-${suffix}`;
+    if (!used.has(candidate)) return candidate;
+  }
+}
+
+/**
+ * The template type a file name stands for, or null for a file no
+ * template can be.
+ */
+export function templateTypeForFile(
+  fileName: string,
+): (typeof BRAND_TEMPLATE_TYPES)[number] | null {
+  const ext = /\.([a-z0-9]+)$/i.exec(fileName)?.[1]?.toLowerCase() ?? '';
+  return (BRAND_TEMPLATE_TYPES as readonly string[]).includes(ext)
+    ? (ext as (typeof BRAND_TEMPLATE_TYPES)[number])
+    : null;
+}
