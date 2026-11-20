@@ -28,25 +28,21 @@ import { describe, expect, it, vi } from 'vitest';
 // rules (runLocalScript refuses the input names the sandbox refuses).
 vi.mock(
   '@/lib/services/documents/sandbox/sandboxScriptRunner',
-  async (importOriginal) => {
-    const { runLocalScript: runHere } =
-      await import('../../../../helpers/sandboxScript');
-    return {
-      ...(await importOriginal<object>()),
-      runSandboxScript: vi.fn(
-        async (
-          command: string,
-          inputs: Parameters<typeof runHere>[2],
-          _usage: unknown,
-          script: Parameters<typeof runHere>[0],
-        ) => ({
-          files: runHere(script, command, inputs),
-          logs: '',
-          durationMs: 0,
-        }),
-      ),
-    };
-  },
+  async (importOriginal) => ({
+    ...(await importOriginal<object>()),
+    runSandboxScript: vi.fn(
+      async (
+        command: string,
+        inputs: Parameters<typeof runLocalScript>[2],
+        _usage: unknown,
+        script: Parameters<typeof runLocalScript>[0],
+      ) => ({
+        files: runLocalScript(script, command, inputs),
+        logs: '',
+        durationMs: 0,
+      }),
+    ),
+  }),
 );
 
 const FIXTURES = path.join(process.cwd(), '__tests__/fixtures/brand');
