@@ -160,7 +160,17 @@ describe('formattedEligibility', () => {
         { url: '/api/file/a.docx', name: 'a.docx' },
         'French',
       ),
-    ).toEqual({ ok: false, reason: 'not-pdf' });
+    ).toEqual({ ok: false, reason: 'unsupported-format' });
+    // Presentations are taken, .ppt included (converted by the server).
+    for (const name of ['a.pptx', 'a.PPTM', 'a.ppsx', 'a.potx', 'a.ppt']) {
+      expect(
+        formattedEligibility({ url: `/api/file/${name}`, name }, 'French'),
+      ).toEqual({ ok: true });
+    }
+    // An OpenDocument presentation is not.
+    expect(
+      formattedEligibility({ url: '/api/file/a.odp', name: 'a.odp' }, 'French'),
+    ).toEqual({ ok: false, reason: 'unsupported-format' });
     expect(formattedEligibility(pdf, '  ')).toEqual({
       ok: false,
       reason: 'no-language',
