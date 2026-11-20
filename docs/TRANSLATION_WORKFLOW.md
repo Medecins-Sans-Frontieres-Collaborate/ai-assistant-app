@@ -597,9 +597,10 @@ slides.
 - **Format adapter**: the pipeline's format-specific steps sit behind
   THE FORMAT ADAPTER (`native/formats/nativeFormat.ts`); a run's format is
   the kind of its stored source (`<sha256>.<format>`). The deck adapter
-  (`deckFormat.ts`) reads and rewrites the deck with `pptx_native.py` in the
-  sandbox (`pptxNativeScript.ts`, generated from the script; how it finds
-  units, sizes and fits text is documented in the script).
+  (`deckFormat.ts`) reads and rewrites the deck with the documents
+  layer's presentation engine (`deck_engine.py` in the sandbox, kept in
+  `documents/model/deckEngineScript.ts`; how it finds units, sizes and
+  fits text is documented in the script).
 - **Background job**: a presentation is a job on the server (THE JOB
   CONVENTION, `native/deckRunJob.ts`; route `POST|GET|DELETE
 /api/document-translation/native/job`). Starting answers at once; the
@@ -625,9 +626,9 @@ slides.
 | ------------------------------- | -------------------------------------------------------------- | ----------------------------- |
 | Encrypted deck (not a zip)      | Refused at upload, with the reason                             | `checkLibreOfficeInput`       |
 | Damaged package                 | Repaired by LibreOffice once and retried; else refused         | `deckRunJob.ts`, `repairDeck` |
-| A part that cannot be rewritten | Left as it was; its units listed as not translated             | `pptx_native.py`, pipeline    |
+| A part that cannot be rewritten | Left as it was; its units listed as not translated             | `deck_engine.py`, pipeline    |
 | The deck as a whole fails       | The error offers Text only                                     | `TranslationWorkspace`        |
-| Text still does not fit         | Shrink-on-overflow and a flag in the review                    | `pptx_native.py`              |
+| Text still does not fit         | Shrink-on-overflow and a flag in the review                    | `deck_engine.py`              |
 | Slides cannot be rendered       | Read from text alone; deck delivered without pictures or check | `deckFormat.ts`               |
 | Queue full                      | Refused ("busy, try again shortly") before anything is charged | `deckFormat.ts`, routes       |
 
