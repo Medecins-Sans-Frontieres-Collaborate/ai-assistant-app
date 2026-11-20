@@ -79,14 +79,12 @@ export const UserMessage: FC<UserMessageProps> = memo(
     const { tones } = useTones();
     const { prompts } = useSettings();
     const { openArtifact, openDocument } = useArtifactStore();
-    const { content, toneId, promptId, promptVariables, artifactContext } =
-      message;
+    const { content, toneId, promptId, artifactContext } = message;
     // The typed text only. A message with an upload stores a list of parts,
     // so `content` itself is not always a string.
     const [localMessageContent, setLocalMessageContent] = useState<string>(
       messageText(content),
     );
-    const [isPromptExpanded, setIsPromptExpanded] = useState(false);
 
     // Find the used prompt
     const usedPrompt = promptId ? prompts.find((p) => p.id === promptId) : null;
@@ -247,123 +245,57 @@ export const UserMessage: FC<UserMessageProps> = memo(
                 </div>
               )}
 
-              {promptId && usedPrompt ? (
-                <div className="py-1">
-                  {/* Collapsed view - show by default */}
-                  {!isPromptExpanded ? (
-                    <div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <IconBraces size={16} className="text-blue-400" />
-                        <span className="font-medium">{usedPrompt.name}</span>
-                      </div>
-
-                      {promptVariables &&
-                        Object.keys(promptVariables).length > 0 && (
-                          <div className="space-y-1.5 mb-3">
-                            {Object.entries(promptVariables).map(
-                              ([key, value]) => (
-                                <div key={key} className="text-sm">
-                                  <span className="text-blue-300/70 font-mono text-xs">
-                                    {key}:
-                                  </span>{' '}
-                                  <span className="text-white/90">{value}</span>
-                                </div>
-                              ),
-                            )}
-                          </div>
-                        )}
-
-                      <button
-                        onClick={() => setIsPromptExpanded(true)}
-                        className="text-xs text-white/60 hover:text-white/80 underline"
-                      >
-                        {t('userMessage.showFullMessage')}
-                      </button>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <IconBraces size={16} className="text-blue-400" />
-                        <span className="font-medium">{usedPrompt.name}</span>
-                      </div>
-
-                      <div className="user-message-text prose prose-invert text-white max-w-none mb-2">
-                        {/* Deliberately NOT math-normalized: this is the
-                            user's own text. Someone who typed `\(` may have
-                            meant to show LaTeX source, and there is no
-                            upstream prompt to correct instead. `mode` is
-                            static because a user message is never streaming. */}
-                        <MathStreamdown
-                          mode="static"
-                          controls={true}
-                          shikiTheme={['github-light', 'github-dark']}
-                        >
-                          {localMessageContent}
-                        </MathStreamdown>
-                      </div>
-
-                      <button
-                        onClick={() => setIsPromptExpanded(false)}
-                        className="text-xs text-white/60 hover:text-white/80 underline"
-                      >
-                        {t('userMessage.collapse')}
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Tone Badge */}
-                  {toneId && (
-                    <div className="flex items-center gap-1.5 mt-3 pt-2 pb-1 border-t border-white/20">
-                      <IconVolume
-                        size={14}
-                        className="text-purple-400 flex-shrink-0"
-                      />
-                      <span className="text-xs text-white/70">
-                        {tones.find((tone) => tone.id === toneId)?.name ||
-                          t('userMessage.customTone')}
-                      </span>
-                    </div>
-                  )}
+              {/* A message sent with a saved prompt reads like any other
+                  message (its full text, as sent), labelled with the prompt. */}
+              {usedPrompt && (
+                <div className="mb-1 flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-300">
+                  <IconBraces
+                    size={14}
+                    aria-hidden
+                    className="shrink-0 text-blue-600 dark:text-blue-400"
+                  />
+                  <span>
+                    {t('userMessage.fromPrompt', { name: usedPrompt.name })}
+                  </span>
                 </div>
-              ) : (
-                <>
-                  {/* Attachments (images/files) and the typed text are both
+              )}
+              {/* Attachments (images/files) and the typed text are both
                       rendered: a message can carry an upload AND a caption, so
                       `children || text` would silently drop the caption.
                       Callers pass only the attachments as children; the text
                       is rendered here, through the same markdown path whether
                       or not the message has an upload. */}
-                  {children}
-                  {localMessageContent && (
-                    <div
-                      className={`user-message-text prose dark:prose-invert text-gray-800 dark:text-white max-w-none ${
-                        children ? 'mt-2' : ''
-                      }`}
-                    >
-                      {/* Deliberately NOT math-normalized — the user wrote
-                          this. See the expanded-prompt view above. */}
-                      <MathStreamdown
-                        mode="static"
-                        controls={true}
-                        shikiTheme={['github-light', 'github-dark']}
-                      >
-                        {localMessageContent}
-                      </MathStreamdown>
-                    </div>
-                  )}
-                  {toneId && (
-                    <div className="flex items-center gap-1.5 mt-2 pt-2 border-t border-gray-800/20 dark:border-white/20">
-                      <IconVolume
-                        size={14}
-                        className="text-purple-400 flex-shrink-0"
-                      />
-                      <span className="text-xs text-gray-800/70 dark:text-white/70">
-                        {tones.find((tone) => tone.id === toneId)?.name ||
-                          t('userMessage.customTone')}
-                      </span>
-                    </div>
-                  )}
-                </>
+              {children}
+              {localMessageContent && (
+                <div
+                  className={`user-message-text prose dark:prose-invert text-gray-800 dark:text-white max-w-none ${
+                    children ? 'mt-2' : ''
+                  }`}
+                >
+                  {/* Deliberately NOT math-normalized: this is the
+                          user's own text. Someone who typed `\(` may have
+                          meant to show LaTeX source. `mode` is static because
+                          a user message is never streaming. */}
+                  <MathStreamdown
+                    mode="static"
+                    controls={true}
+                    shikiTheme={['github-light', 'github-dark']}
+                  >
+                    {localMessageContent}
+                  </MathStreamdown>
+                </div>
+              )}
+              {toneId && (
+                <div className="flex items-center gap-1.5 mt-2 pt-2 border-t border-gray-800/20 dark:border-white/20">
+                  <IconVolume
+                    size={14}
+                    className="text-purple-400 flex-shrink-0"
+                  />
+                  <span className="text-xs text-gray-800/70 dark:text-white/70">
+                    {tones.find((tone) => tone.id === toneId)?.name ||
+                      t('userMessage.customTone')}
+                  </span>
+                </div>
               )}
             </>
           )}
