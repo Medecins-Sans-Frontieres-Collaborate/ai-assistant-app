@@ -11,6 +11,8 @@
  */
 import { NextRequest } from 'next/server';
 
+import { finishDeck } from '@/lib/services/documentTranslation/deck/deckJob';
+import { isDeckReadError } from '@/lib/services/documentTranslation/deck/deckText';
 import { DocumentTranslationService } from '@/lib/services/documentTranslation/documentTranslationService';
 import {
   TRANSLATION_JOB_ID_REGEX,
@@ -88,6 +90,9 @@ export async function GET(
 
     if (batch.status === 'Succeeded') {
       const blobPath = `${session.user.id}/translations/${job.jobId}.${job.ext}`;
+      // Where the service wrote: a deck's .pptx copy, or the file itself.
+      const serviceExt = job.serviceExt ?? job.ext;
+      const stagingPath = `${session.user.id}/translations/${job.jobId}.${serviceExt}`;
 
       // The translated blob lands in the STAGING account; copy it into user
       // storage at the standard path the content route serves, then clean
@@ -103,16 +108,30 @@ export async function GET(
           session.user,
         );
 
-        if (!(await stagingStorage.blobExists(blobPath))) {
+        if (!(await stagingStorage.blobExists(stagingPath))) {
           // Azure can report success momentarily before the target blob is
           // visible; keep the client polling until the download would work.
           return successResponse({ status: 'Running' as const });
         }
 
-        const translated = (await stagingStorage.get(
-          blobPath,
+        let translated = (await stagingStorage.get(
+          stagingPath,
           BlobProperty.BLOB,
         )) as Buffer;
+        if (job.serviceExt) {
+          // A deck: the translation goes into the person's own package
+          // (THE MERGE CONVENTION, lib/services/documentTranslation/deck).
+          const base = (await blobStorage.get(
+            `${session.user.id}/translations/${job.jobId}_original.${job.ext}`,
+            BlobProperty.BLOB,
+          )) as Buffer;
+          translated = await finishDeck({
+            base,
+            translated,
+            extension: job.ext,
+            translateNotes: job.translateNotes ?? true,
+          });
+        }
         await blobStorage.upload(blobPath, translated, {
           blobHTTPHeaders: {
             blobContentType: getDocumentContentType(job.filename),
@@ -123,9 +142,9 @@ export async function GET(
         // Best-effort scratch cleanup — the staging account's 1-day
         // lifecycle rule catches anything this misses (e.g. glossaries).
         void Promise.allSettled([
-          stagingStorage.deleteIfExists(blobPath),
+          stagingStorage.deleteIfExists(stagingPath),
           stagingStorage.deleteIfExists(
-            `${session.user.id}/translations/${job.jobId}_original.${job.ext}`,
+            `${session.user.id}/translations/${job.jobId}_original.${serviceExt}`,
           ),
         ]);
       }
@@ -153,6 +172,15 @@ export async function GET(
 
     return successResponse({ status: 'Running' as const });
   } catch (error) {
+    // A deck that cannot be put back together will not succeed on the next
+    // poll either: say so instead of polling forever.
+    if (isDeckReadError(error)) {
+      console.error('[DocumentTranslation] Deck merge failed:', error);
+      return successResponse({
+        status: 'Failed' as const,
+        error: `The translated presentation could not be assembled: ${(error as Error).message}`,
+      });
+    }
     // Azure poll failure is transient from the client's perspective — keep
     // it polling rather than surfacing a terminal failure.
     console.error(
