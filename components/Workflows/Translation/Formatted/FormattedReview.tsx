@@ -1,26 +1,34 @@
 'use client';
 
 import { IconZoomIn, IconZoomOut } from '@tabler/icons-react';
-import { useEffect, useMemo, useState } from 'react';
+import { KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import { FormattedDocumentController } from '@/client/hooks/workflows/useFormattedDocument';
+import { usePagePan } from '@/client/hooks/workflows/usePagePan';
+import { usePageZoom } from '@/client/hooks/workflows/usePageZoom';
 import { PdfPages } from '@/client/hooks/workflows/usePdfPages';
+import {
+  usePrefetchRunImages,
+  useRunImage,
+} from '@/client/hooks/workflows/useRunImage';
 
-import { fetchNativePdfImage } from '@/client/services/workflows/nativePdfTranslation';
 import { downloadRunFile } from '@/client/services/workflows/nativeRunStorage';
+import { prefetchOrder } from '@/client/services/workflows/runImageLoader';
 
 import {
-  DEFAULT_PAGE_ZOOM,
+  isEditableTarget,
+  ownsKeyboard,
+} from '@/lib/utils/client/keyboardScope';
+import { isRtlElement } from '@/lib/utils/client/textDirection';
+import {
   FormattedDocumentRun,
-  PAGE_ZOOM_LEVELS,
   batchPageState,
   changedUnits,
   currentTranslation,
   fitEstimate,
   issueKey,
-  nextPageZoom,
   openIssues,
   plainText,
   planBatch,
@@ -30,13 +38,16 @@ import {
   restyledUnits,
   retagEditedText,
   stalePages,
+  textRows,
   translatedPages,
   unitStyle,
   withPageRemoved,
   withUnitEdit,
   withUnitStyle,
 } from '@/lib/utils/shared/translation/formattedDocument';
+import { translatedFileName } from '@/lib/utils/shared/translation/languages';
 import {
+  NATIVE_PDF_EXPORT_FORMATS,
   NativePdfIssue,
   NativePdfLimits,
   NativePdfStepInstructions,
@@ -48,15 +59,32 @@ import { NativeRunRef } from '@/lib/utils/shared/translation/nativeRunStorage';
 
 import { FormattedBlockActions } from './FormattedBlockActions';
 import { FormattedBlockStyle } from './FormattedBlockStyle';
+import {
+  FormattedDownloadFormat,
+  FormattedDownloadMenu,
+} from './FormattedDownloadMenu';
 import { FormattedPageRail } from './FormattedPageRail';
-import { FormattedPageView, PAGE_WIDTH } from './FormattedPageView';
+import {
+  FormattedPageView,
+  PAGE_WIDTH,
+  UNIT_ATTRIBUTE,
+  UNIT_PLACE_ATTRIBUTE,
+} from './FormattedPageView';
 import {
   FormattedRunExpiryWarning,
   FormattedRunStorageLine,
 } from './FormattedRunStorageNotice';
 
+import { formatKeys } from '@/lib/constants/keyboardShortcuts';
+
 type Filter = 'all' | 'shrunk' | 'kept' | 'edited';
 type PageSide = 'translated' | 'original';
+/**
+ * Where a block was chosen: on the page, in the block list, or from a
+ * finding. Its field opens with the keyboard on the side it was chosen
+ * from, and closing it puts the keyboard back there.
+ */
+type ChosenFrom = 'page' | 'list';
 
 /** Width the original page is rendered at, in CSS pixels. */
 const ORIGINAL_WIDTH = 576;
@@ -104,6 +132,38 @@ interface FormattedReviewProps {
   onChangeOptions: () => void;
 }
 
+/** Scroll left at the end of the page pane that still counts as the end. */
+const SCROLL_END_TOLERANCE_PX = 2;
+
+/**
+ * A block's element inside `container`, marked UNIT_ATTRIBUTE: its button
+ * on the page or in the list (`place`), or anything of it when no place.
+ */
+function unitElement(
+  container: HTMLElement | null,
+  id: string,
+  place?: ChosenFrom,
+): HTMLElement | null {
+  const marked = container?.querySelectorAll<HTMLElement>(
+    `[${UNIT_ATTRIBUTE}]`,
+  );
+  return (
+    Array.from(marked ?? []).find(
+      (element) =>
+        element.getAttribute(UNIT_ATTRIBUTE) === id &&
+        (!place || element.getAttribute(UNIT_PLACE_ATTRIBUTE) === place),
+    ) ?? null
+  );
+}
+
+/**
+ * A block's number in the block list. Its colour carries the block's state,
+ * as the page does: blue when selected (the badge beside it on the page),
+ * amber when changed (its amber outline there).
+ */
+const BLOCK_NUMBER =
+  'inline-flex min-w-[1.25rem] justify-center rounded px-1 py-px text-[11px] font-semibold tabular-nums';
+
 const isShrunk = (unit: NativePdfUnitResult): boolean =>
   unit.scale !== null && unit.scale < 1 - SCALE_EPSILON;
 
@@ -117,6 +177,16 @@ const isShrunk = (unit: NativePdfUnitResult): boolean =>
  * Pages can be removed from the download or put back (pending in the same
  * banner as edits), and untranslated pages can be ticked and translated as
  * the next batch.
+ *
+ * Keys, while the keyboard is in the review (see ownsKeyboard):
+ *  - Ctrl/Cmd with +, - and 0 zoom the page, not the browser; so do
+ *    Ctrl+wheel and a pinch over the page (usePageZoom);
+ *  - Escape closes a block's field, back to the block it was opened from;
+ *  - PageDown and PageUp scroll the page, and past its end go to the next
+ *    or previous page;
+ *  - arrow keys move within the page list, the blocks of a page, and the
+ *    Original/Translated switch, each of which is one Tab stop.
+ * A zoomed page can be dragged with the mouse (usePagePan).
  */
 export function FormattedReview({
   run,
@@ -137,16 +207,29 @@ export function FormattedReview({
   const [outlines, setOutlines] = useState(true);
   const [filter, setFilter] = useState<Filter>('all');
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [chosenFrom, setChosenFrom] = useState<ChosenFrom>('page');
   const [draft, setDraft] = useState<{ id: string; text: string } | null>(null);
   const [checkAfter, setCheckAfter] = useState(true);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [previews, setPreviews] = useState<Record<string, string>>({});
   const [original, setOriginal] = useState<{
     page: number;
     image: string | null;
   } | null>(null);
-  const [zoom, setZoom] = useState<number>(DEFAULT_PAGE_ZOOM);
-  const [download, setDownload] = useState<'idle' | 'busy' | 'failed'>('idle');
+  const rootRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const sideRefs = useRef<Record<PageSide, HTMLButtonElement | null>>({
+    original: null,
+    translated: null,
+  });
+  // The block whose button gets the keyboard back once its field closes.
+  const returnFocus = useRef<{ id: string; place: ChosenFrom } | null>(null);
+  const pageZoom = usePageZoom(scrollerRef, rootRef);
+  const zoom = pageZoom.zoom;
+  const [download, setDownload] = useState<FormattedDownloadFormat | null>(
+    null,
+  );
+  const [downloadFailed, setDownloadFailed] = useState(false);
   // Untranslated pages ticked in the page list for the next batch.
   const [ticked, setTicked] = useState<number[]>([]);
 
@@ -175,23 +258,9 @@ export function FormattedReview({
   // Zoomed in, the original is rendered with more pixels to stay sharp.
   const originalWidth = Math.round(ORIGINAL_WIDTH * Math.max(zoom, 1));
 
-  // Page images are stored files answered as data URLs; each is read once.
   useEffect(() => {
-    const abort = new AbortController();
-    for (const { previewUrl } of run.pageImages) {
-      void fetchNativePdfImage(previewUrl, abort.signal)
-        .then((image) =>
-          setPreviews((current) =>
-            current[previewUrl] ? current : { ...current, [previewUrl]: image },
-          ),
-        )
-        .catch(() => undefined);
-    }
-    return () => abort.abort();
-  }, [run.pageImages]);
-
-  useEffect(() => {
-    if (!showOriginal || pdf.status !== 'ready') return;
+    // The source document loads on this first use (see usePdfPages).
+    if (!showOriginal || pdf.status === 'failed') return;
     let cancelled = false;
     void pdf.renderPage(run.page, originalWidth).then((image) => {
       if (!cancelled) setOriginal({ page: run.page, image });
@@ -208,7 +277,23 @@ export function FormattedReview({
   const previewUrl = run.pageImages.find(
     (image) => image.page === run.page,
   )?.previewUrl;
-  const translatedImage = previewUrl ? (previews[previewUrl] ?? null) : null;
+  // PAGE IMAGES (runImageLoader.ts): the page on screen first; once it is
+  // there, the pages either side, then the rest of the document.
+  const translatedImage = useRunImage(previewUrl, 'now');
+  const pageImageShown = !previewUrl || translatedImage !== null;
+  const prefetch = useMemo(
+    () =>
+      prefetchOrder(
+        run.pageImages.map((image) => ({
+          page: image.page,
+          url: image.previewUrl,
+        })),
+        run.page,
+      ),
+    [run.pageImages, run.page],
+  );
+  usePrefetchRunImages(prefetch.near, 'soon', pageImageShown);
+  usePrefetchRunImages(prefetch.rest, 'later', pageImageShown);
   const image = showOriginal
     ? original?.page === run.page
       ? original.image
@@ -259,9 +344,15 @@ export function FormattedReview({
       ),
     );
   };
-  const select = (id: string | null) => {
+  const select = (id: string | null, from: ChosenFrom = 'page') => {
     setSelectedId(id);
+    setChosenFrom(from);
     setDraft(null);
+  };
+  /** Closes the selected block's field; the keyboard goes back to it. */
+  const deselect = (place: ChosenFrom) => {
+    if (selectedId) returnFocus.current = { id: selectedId, place };
+    select(null);
   };
   const ask = async (
     unit: NativePdfUnitResult,
@@ -319,6 +410,89 @@ export function FormattedReview({
     untranslated &&
     (pageBatchState === 'selected' || pageBatchState === 'available');
 
+  // A closed field hands the keyboard back to its block's button.
+  useEffect(() => {
+    const target = returnFocus.current;
+    if (!target || selectedId !== null) return;
+    returnFocus.current = null;
+    unitElement(rootRef.current, target.id, target.place)?.focus();
+  }, [selectedId]);
+
+  // A block chosen on one side is brought into sight on the other.
+  useEffect(() => {
+    if (!selectedId) return;
+    const other =
+      chosenFrom === 'list'
+        ? unitElement(scrollerRef.current, selectedId)
+        : stacked
+          ? null
+          : unitElement(listRef.current, selectedId);
+    other?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+  }, [selectedId, chosenFrom, stacked]);
+
+  const zoomInKeys = formatKeys(['ctrl'], '+');
+  const zoomOutKeys = formatKeys(['ctrl'], '-');
+  const zoomResetKeys = formatKeys(['ctrl'], '0');
+
+  /** Escape closes a field (see the keys above), once nothing nearer did. */
+  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.defaultPrevented) return;
+    if (event.key === 'Escape' && selectedId) {
+      event.preventDefault();
+      const inList = listRef.current?.contains(event.target as Node);
+      deselect(inList ? 'list' : 'page');
+      return;
+    }
+    if (event.key === 'PageDown' || event.key === 'PageUp') {
+      turnPage(event, event.key === 'PageDown' ? 1 : -1);
+    }
+  };
+  /**
+   * PageDown/PageUp in the page pane: the browser scrolls the page; at its
+   * end, the next (or previous) page opens at its top.
+   */
+  const turnPage = (event: KeyboardEvent, direction: 1 | -1) => {
+    const scroller = scrollerRef.current;
+    if (stacked || !scroller || event.altKey || event.ctrlKey) return;
+    if (event.metaKey || event.shiftKey || isEditableTarget(event.target)) {
+      return;
+    }
+    if (!scroller.contains(event.target as Node)) return;
+    if (!ownsKeyboard(rootRef.current)) return;
+    const atEnd =
+      direction > 0
+        ? scroller.scrollTop + scroller.clientHeight >=
+          scroller.scrollHeight - SCROLL_END_TOLERANCE_PX
+        : scroller.scrollTop <= SCROLL_END_TOLERANCE_PX;
+    const next = run.page + direction;
+    if (!atEnd || next < 1 || next > pageTotal) return;
+    event.preventDefault();
+    goToPage(next);
+    scroller.scrollTop = 0;
+    scroller.focus({ preventScroll: true });
+  };
+  /** Arrow keys move the Original/Translated switch, as a radio group does. */
+  const onSideKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const forward = ['ArrowRight', 'ArrowDown'].includes(event.key);
+    const back = ['ArrowLeft', 'ArrowUp'].includes(event.key);
+    if (!forward && !back) return;
+    event.preventDefault();
+    const rtl = isRtlElement(event.currentTarget);
+    const horizontal = event.key === 'ArrowLeft' || event.key === 'ArrowRight';
+    const toTranslated = horizontal && rtl ? back : forward;
+    const next: PageSide = toTranslated ? 'translated' : 'original';
+    if (sideRefs.current[next]?.disabled) return;
+    setSide(next);
+    sideRefs.current[next]?.focus();
+  };
+  const { pannable, panning } = usePagePan(
+    scrollerRef,
+    () => {
+      if (selectedId) select(null);
+    },
+    `${run.page}:${zoom}:${side}`,
+  );
+
   const actionsFor = (unit: NativePdfUnitResult, compact: boolean) => (
     <FormattedBlockActions
       compact={compact}
@@ -339,7 +513,7 @@ export function FormattedReview({
           withUnitEdit(latest, unit.id, unit.translation),
         );
       }}
-      onDone={compact ? () => select(null) : undefined}
+      onDone={compact ? () => deselect('page') : undefined}
     />
   );
 
@@ -357,22 +531,45 @@ export function FormattedReview({
         : 'text-gray-600 dark:text-gray-400'
     }`;
 
-  /** Saves the translated PDF; stored files are read through the app. */
-  const downloadPdf = async () => {
-    setDownload('busy');
+  /**
+   * Saves the run in a format. The PDF is the stored one. An editable
+   * format (EDITABLE DOWNLOADS in nativePdf.ts) is the stored one too while
+   * it describes the page as it stands; otherwise it is built first, by a
+   * render with the person's pending changes.
+   */
+  const downloadAs = async (format: FormattedDownloadFormat) => {
+    setDownload(format);
+    setDownloadFailed(false);
+    const named = (extension: string): string =>
+      translatedFileName(run.sourceName, run.targetLanguage, extension);
     try {
-      await downloadRunFile(
-        run.pdfUrl,
-        run.sourceName.replace(/\.pdf$/i, '') + '.translated.pdf',
-      );
-      setDownload('idle');
+      if (format === 'pdf') {
+        await downloadRunFile(run.pdfUrl, named('pdf'));
+        return;
+      }
+      const stored = pdfBehind ? undefined : run.exportUrls?.[format];
+      const url =
+        stored ??
+        (await controller.rerender(false, {}, [format]))?.exportUrls?.[format];
+      if (!url) {
+        setDownloadFailed(true);
+        return;
+      }
+      const { extension, contentType } = NATIVE_PDF_EXPORT_FORMATS[format];
+      await downloadRunFile(url, named(extension), contentType);
     } catch {
-      setDownload('failed');
+      setDownloadFailed(true);
+    } finally {
+      setDownload(null);
     }
   };
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div
+      ref={rootRef}
+      onKeyDown={onKeyDown}
+      className="flex min-h-0 flex-1 flex-col"
+    >
       {storage && (
         <FormattedRunExpiryWarning
           expiresAt={storage.runRef.expiresAt}
@@ -420,21 +617,18 @@ export function FormattedReview({
               : t('translation.formatted.pdfBehindPages')}
           </span>
         )}
-        {download === 'failed' && (
+        {downloadFailed && (
           <span role="alert" className="text-red-700 dark:text-red-400">
             {t('translation.formatted.downloadFailed')}
           </span>
         )}
-        <button
-          type="button"
-          disabled={download === 'busy'}
-          onClick={() => void downloadPdf()}
-          className={`rounded-lg border border-gray-300 px-2.5 py-1 font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-surface-dark-elevated ${
-            pdfBehind || download === 'failed' ? '' : 'ms-auto'
-          }`}
-        >
-          {t('translation.formatted.download')}
-        </button>
+        <FormattedDownloadMenu
+          busy={download}
+          disabled={controller.rendering && download === null}
+          behind={pdfBehind}
+          onSelect={(format) => void downloadAs(format)}
+          className={pdfBehind || downloadFailed ? '' : 'ms-auto'}
+        />
       </div>
 
       <div
@@ -446,7 +640,6 @@ export function FormattedReview({
           run={run}
           pageCount={pageTotal}
           pdf={pdf}
-          previews={previews}
           stacked={stacked}
           plan={tickedPlan}
           nextPages={nextPages}
@@ -471,13 +664,18 @@ export function FormattedReview({
             <div
               role="radiogroup"
               aria-label={t('translation.formatted.viewLabel')}
+              onKeyDown={onSideKeyDown}
               className="flex rounded-lg bg-gray-100 p-0.5 dark:bg-surface-dark-elevated"
             >
               <button
                 type="button"
                 role="radio"
+                ref={(element) => {
+                  sideRefs.current.original = element;
+                }}
                 aria-checked={showOriginal}
-                disabled={pdf.status !== 'ready'}
+                tabIndex={showOriginal ? 0 : -1}
+                disabled={pdf.status === 'failed'}
                 title={
                   pdf.status === 'failed'
                     ? t('translation.formatted.previewsUnavailable')
@@ -491,7 +689,11 @@ export function FormattedReview({
               <button
                 type="button"
                 role="radio"
+                ref={(element) => {
+                  sideRefs.current.translated = element;
+                }}
                 aria-checked={!showOriginal}
+                tabIndex={showOriginal ? -1 : 0}
                 disabled={untranslated}
                 onClick={() => setSide('translated')}
                 className={segment(!showOriginal)}
@@ -507,18 +709,20 @@ export function FormattedReview({
               <button
                 type="button"
                 aria-label={t('translation.formatted.zoomOut')}
-                title={t('translation.formatted.zoomOut')}
-                disabled={zoom <= PAGE_ZOOM_LEVELS[0]}
-                onClick={() => setZoom((level) => nextPageZoom(level, -1))}
+                aria-keyshortcuts="Control+Minus Meta+Minus"
+                title={`${t('translation.formatted.zoomOut')} (${zoomOutKeys})`}
+                disabled={!pageZoom.canZoomOut}
+                onClick={() => pageZoom.step(-1)}
                 className="rounded-md p-1 text-gray-600 hover:bg-white disabled:opacity-40 dark:text-gray-300 dark:hover:bg-surface-dark"
               >
                 <IconZoomOut size={15} aria-hidden />
               </button>
               <button
                 type="button"
-                title={t('translation.formatted.zoomReset')}
+                title={`${t('translation.formatted.zoomReset')} (${zoomResetKeys})`}
                 aria-label={t('translation.formatted.zoomReset')}
-                onClick={() => setZoom(DEFAULT_PAGE_ZOOM)}
+                aria-keyshortcuts="Control+0 Meta+0"
+                onClick={pageZoom.reset}
                 className="min-w-[3rem] rounded-md px-1 py-1 text-xs tabular-nums text-gray-700 hover:bg-white dark:text-gray-200 dark:hover:bg-surface-dark"
               >
                 <span data-testid="zoom-level">
@@ -530,13 +734,19 @@ export function FormattedReview({
               <button
                 type="button"
                 aria-label={t('translation.formatted.zoomIn')}
-                title={t('translation.formatted.zoomIn')}
-                disabled={zoom >= PAGE_ZOOM_LEVELS[PAGE_ZOOM_LEVELS.length - 1]}
-                onClick={() => setZoom((level) => nextPageZoom(level, 1))}
+                aria-keyshortcuts="Control+Plus Meta+Plus"
+                title={`${t('translation.formatted.zoomIn')} (${zoomInKeys})`}
+                disabled={!pageZoom.canZoomIn}
+                onClick={() => pageZoom.step(1)}
                 className="rounded-md p-1 text-gray-600 hover:bg-white disabled:opacity-40 dark:text-gray-300 dark:hover:bg-surface-dark"
               >
                 <IconZoomIn size={15} aria-hidden />
               </button>
+              <span aria-live="polite" className="sr-only">
+                {t('translation.formatted.zoomLevel', {
+                  percent: Math.round(zoom * 100),
+                })}
+              </span>
             </div>
             <label className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
               <input
@@ -563,10 +773,16 @@ export function FormattedReview({
             </span>
           </div>
           <div
+            ref={scrollerRef}
             data-testid="page-scroller"
-            className={`flex bg-gray-100 px-4 pb-5 pt-2 dark:bg-black/20 ${
+            role="region"
+            aria-label={t('translation.formatted.pageLabel', {
+              page: run.page,
+            })}
+            tabIndex={0}
+            className={`flex bg-gray-100 px-4 pb-5 pt-2 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600 dark:bg-black/20 ${
               stacked ? '' : 'min-h-0 flex-1 overflow-auto'
-            }`}
+            } ${panning ? 'cursor-grabbing select-none' : pannable ? 'cursor-grab' : ''}`}
           >
             {untranslated &&
               (image ? (
@@ -604,7 +820,8 @@ export function FormattedReview({
                   selected && side === 'translated' ? fieldText(selected) : null
                 }
                 toolbar={selected ? actionsFor(selected, true) : undefined}
-                onSelect={select}
+                focusField={chosenFrom === 'page'}
+                onSelect={(id) => select(id, 'page')}
                 onDraftChange={(text) => selected && type(selected, text)}
               />
             )}
@@ -770,7 +987,7 @@ export function FormattedReview({
                           {unit && (
                             <button
                               type="button"
-                              onClick={() => select(unit.id)}
+                              onClick={() => select(unit.id, 'list')}
                               className="text-blue-700 hover:underline dark:text-blue-300"
                             >
                               {t('translation.formatted.showBlock')}
@@ -813,7 +1030,10 @@ export function FormattedReview({
             ))}
           </div>
 
-          <ul className={stacked ? '' : 'min-h-0 flex-1 overflow-y-auto'}>
+          <ul
+            ref={listRef}
+            className={stacked ? '' : 'min-h-0 flex-1 overflow-y-auto'}
+          >
             {pageUnits.filter(matches[filter]).map((unit) => {
               const current = currentTranslation(run, unit);
               const edited = isChanged(unit);
@@ -856,22 +1076,33 @@ export function FormattedReview({
                   <li key={unit.id}>
                     <button
                       type="button"
-                      onClick={() => select(unit.id)}
-                      className={`flex w-full gap-2.5 border-b border-s-[3px] border-gray-200 px-3 py-2.5 text-start hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-surface-dark-elevated ${
-                        edited ? 'border-s-amber-400' : 'border-s-transparent'
-                      }`}
+                      {...{
+                        [UNIT_ATTRIBUTE]: unit.id,
+                        [UNIT_PLACE_ATTRIBUTE]: 'list',
+                      }}
+                      onClick={() => select(unit.id, 'list')}
+                      className="flex w-full gap-2.5 border-b border-gray-200 px-3 py-2.5 text-start hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-surface-dark-elevated"
                     >
-                      <span className="w-6 shrink-0 pt-0.5 text-[11px] font-semibold tabular-nums text-gray-500 dark:text-gray-400">
-                        {unit.n}
+                      <span className="w-6 shrink-0">
+                        <span
+                          data-number-look={edited ? 'edited' : 'plain'}
+                          className={`${BLOCK_NUMBER} ${
+                            edited
+                              ? 'bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-200'
+                              : 'text-gray-500 dark:text-gray-400'
+                          }`}
+                        >
+                          {unit.n}
+                        </span>
                       </span>
                       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                         {current !== null && (
-                          <span className="line-clamp-1 text-xs text-gray-500 dark:text-gray-400">
+                          <span className="line-clamp-1 whitespace-pre-line text-xs text-gray-500 dark:text-gray-400">
                             {plainText(unit.source)}
                           </span>
                         )}
                         <span
-                          className={`line-clamp-2 text-[13px] ${
+                          className={`line-clamp-2 whitespace-pre-line text-[13px] ${
                             current === null
                               ? 'text-gray-500 dark:text-gray-400'
                               : 'text-gray-900 dark:text-gray-100'
@@ -894,17 +1125,23 @@ export function FormattedReview({
               return (
                 <li
                   key={unit.id}
-                  className="flex flex-col gap-2.5 border-b border-s-[3px] border-gray-200 border-s-blue-500 bg-blue-50/60 p-3 dark:border-gray-700 dark:border-s-blue-500 dark:bg-blue-950/30"
+                  {...{ [UNIT_ATTRIBUTE]: unit.id }}
+                  className="flex flex-col gap-2.5 border border-blue-300 bg-blue-50/60 p-3 dark:border-blue-800 dark:bg-blue-950/30"
                 >
                   <div className="flex items-start gap-2.5">
-                    <span className="text-[11px] font-semibold tabular-nums text-blue-800 dark:text-blue-200">
-                      {unit.n}
+                    <span className="w-6 shrink-0">
+                      <span
+                        data-number-look="selected"
+                        className={`${BLOCK_NUMBER} bg-blue-600 text-white`}
+                      >
+                        {unit.n}
+                      </span>
                     </span>
                     <div className="min-w-0 flex-1">
                       <div className="text-[11px] text-gray-500 dark:text-gray-400">
                         {t('translation.formatted.original')}
                       </div>
-                      <div className="text-[13px] text-gray-700 dark:text-gray-300">
+                      <div className="whitespace-pre-line text-[13px] text-gray-700 dark:text-gray-300">
                         {plainText(unit.source)}
                       </div>
                     </div>
@@ -913,15 +1150,20 @@ export function FormattedReview({
                   <label className="text-[11px] text-gray-500 dark:text-gray-400">
                     {t('translation.formatted.translation')}
                     <textarea
-                      rows={Math.min(
-                        Math.max(Math.ceil(text.length / 55), 2),
-                        12,
-                      )}
+                      autoFocus={chosenFrom === 'list'}
+                      rows={textRows(text, 55, { min: 2, max: 12 })}
                       value={text}
                       onChange={(event) => type(unit, event.target.value)}
+                      aria-describedby={`${unit.id}-breaks`}
                       className="mt-1 block w-full resize-y rounded-lg border border-blue-500 bg-white px-2.5 py-2 text-[13px] text-gray-900 dark:bg-surface-dark-base dark:text-gray-100"
                     />
                   </label>
+                  <p
+                    id={`${unit.id}-breaks`}
+                    className="-mt-1.5 text-[11px] text-gray-500 dark:text-gray-400"
+                  >
+                    {t('translation.formatted.lineBreakHint')}
+                  </p>
                   {current !== null && (
                     <p
                       className={`text-xs ${
