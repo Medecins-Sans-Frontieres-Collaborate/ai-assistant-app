@@ -32,14 +32,12 @@ import { usePromptSelection } from '@/client/hooks/ui/usePromptSelection';
 import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import { isMobileDevice } from '@/lib/utils/client/device/detection';
 import { getExtractionMaterialState } from '@/lib/utils/shared/chat/extractionMaterial';
+import { replacePromptTrigger } from '@/lib/utils/shared/chat/promptMatching';
 import {
   shouldPreventSubmission,
   validateMessageSubmission,
 } from '@/lib/utils/shared/chat/validation';
-import {
-  parseVariables,
-  replaceVariablesWithMap,
-} from '@/lib/utils/shared/chat/variables';
+import { replaceVariablesWithMap } from '@/lib/utils/shared/chat/variables';
 
 import { AgentType } from '@/types/agent';
 import {
@@ -78,7 +76,7 @@ import { ToneBadge } from '@/components/Chat/ChatInput/ToneBadge';
 import { M365AgentAccessBanner } from '@/components/Chat/M365AgentAccessBanner';
 import { QueuedMessagesTray } from '@/components/Chat/QueuedMessagesTray';
 
-import { PromptList } from './ChatInput/PromptList';
+import { PromptList, promptOptionId } from './ChatInput/PromptList';
 import { VariableModal } from './ChatInput/VariableModal';
 import { EmissionsChip } from './EmissionsChip';
 import { TranscriptionProgressIndicator } from './TranscriptionProgressIndicator';
@@ -87,6 +85,9 @@ import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
 import { UI_CONSTANTS } from '@/lib/constants/ui';
+
+/** Id of the prompt list the message box drives (aria-controls). */
+const PROMPT_LIST_ID = 'chat-prompt-list';
 
 interface Props {
   onSend: (message: Message, searchMode?: SearchMode) => void;
@@ -118,6 +119,7 @@ export const ChatInput = ({
   const { selectedConversation, folders } = useConversations();
   const { isStreaming, requestStop } = useChat();
   const { prompts, defaultInterpreterMode } = useSettings();
+  const hasPrompts = prompts.length > 0;
   const { tones } = useTones();
   const { isArtifactOpen, fileName, language, closeArtifact } =
     useArtifactStore();
@@ -232,7 +234,6 @@ export const ChatInput = ({
 
   const budgetGate = useBudgetGate();
 
-  const [variables, setVariables] = useState<string[]>([]);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedPromptForModal, setSelectedPromptForModal] =
     useState<Prompt | null>(null);
@@ -256,30 +257,33 @@ export const ChatInput = ({
   ]);
 
   const {
-    showPromptList,
     setShowPromptList,
+    isPromptListVisible,
     activePromptIndex,
     setActivePromptIndex,
     filteredPrompts,
     promptListRef,
     handleKeyDownPromptList,
-    handleInitModal,
+    selectPromptAt,
     updatePromptListVisibilityCallback,
   } = usePromptSelection({
     prompts,
-    onPromptSelect: (prompt, parsedVariables, hasVariables) => {
-      setVariables(parsedVariables);
-
+    folders,
+    onPromptSelect: (prompt, _parsedVariables, hasVariables) => {
       if (hasVariables) {
         setSelectedPromptForModal(prompt);
         setIsModalVisible(true);
-      } else {
-        setTextFieldValue((prevContent) => {
-          const updatedContent = prevContent?.replace(/\/\w*$/, prompt.content);
-          return updatedContent;
-        });
-        updatePromptListVisibilityCallback(prompt.content);
+        return;
       }
+      // A prompt with nothing to fill goes straight into the message, and
+      // the message is marked as sent with it, like one with variables.
+      setTextFieldValue((typed) =>
+        replacePromptTrigger(typed ?? '', prompt.content),
+      );
+      setUsedPromptId(prompt.id);
+      setUsedPromptVariables(null);
+      setShowPromptList(false);
+      textareaRef?.current?.focus();
     },
     onResetInputState: () => {
       if (submitType !== 'TEXT') {
@@ -308,6 +312,11 @@ export const ChatInput = ({
 
     setTextFieldValue(value);
     updatePromptListVisibilityCallback(value);
+    // An emptied message box no longer holds the prompt that was put in it.
+    if (usedPromptId && !value.trim()) {
+      setUsedPromptId(null);
+      setUsedPromptVariables(null);
+    }
   };
 
   /**
@@ -362,7 +371,9 @@ export const ChatInput = ({
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (showPromptList) {
+    // Keys go to the prompt list only while it shows something; a "/" with
+    // no matching prompt leaves Enter to send the message.
+    if (isPromptListVisible) {
       handleKeyDownPromptList(e);
     } else {
       handleKeyDownInput(e.key, e);
@@ -382,8 +393,9 @@ export const ChatInput = ({
     );
 
     // Replace the /prompt text in the input with the filled-in content
-    const newContent = textFieldValue?.replace(/\/\w*$/, contentWithVariables);
-    setTextFieldValue(newContent);
+    setTextFieldValue(
+      replacePromptTrigger(textFieldValue ?? '', contentWithVariables),
+    );
 
     // Track which prompt was used and the variable values
     setUsedPromptId(selectedPromptForModal.id);
@@ -447,9 +459,14 @@ export const ChatInput = ({
 
   useEffect(() => {
     setTimeout(() => {
-      setPlaceholderText(t('Ask Anything'));
+      // Someone with saved prompts is told how to reach them.
+      setPlaceholderText(
+        hasPrompts
+          ? t('Type a message or type "/" to select a prompt_ellipsis')
+          : t('Ask Anything'),
+      );
     }, 0);
-  }, [t, setPlaceholderText]);
+  }, [t, setPlaceholderText, hasPrompts]);
 
   // Notify parent when transcription status changes
   useEffect(() => {
@@ -666,6 +683,17 @@ export const ChatInput = ({
                   onBlur={() => setIsFocused(false)}
                   onCompositionStart={() => setIsTyping(true)}
                   onCompositionEnd={() => setIsTyping(false)}
+                  promptList={
+                    isPromptListVisible
+                      ? {
+                          id: PROMPT_LIST_ID,
+                          activeOptionId: promptOptionId(
+                            PROMPT_LIST_ID,
+                            activePromptIndex,
+                          ),
+                        }
+                      : null
+                  }
                 />
 
                 {/* Bottom row with badges and controls */}
@@ -775,12 +803,15 @@ export const ChatInput = ({
                   <ConnectorActivityBadge />
                 </div>
 
-                {showPromptList && filteredPrompts.length > 0 && (
-                  <div className="absolute bottom-12 w-full">
+                {/* Above the message box and over the bubbles that sit on
+                    top of it (z-[9999]): the list is what the keys drive. */}
+                {isPromptListVisible && (
+                  <div className="absolute inset-x-0 bottom-full z-[10002] mb-2">
                     <PromptList
+                      id={PROMPT_LIST_ID}
                       activePromptIndex={activePromptIndex}
                       prompts={filteredPrompts}
-                      onSelect={handleInitModal}
+                      onSelect={selectPromptAt}
                       onMouseOver={setActivePromptIndex}
                       promptListRef={promptListRef}
                       folders={folders}
@@ -793,7 +824,6 @@ export const ChatInput = ({
             {isModalVisible && selectedPromptForModal && (
               <VariableModal
                 prompt={selectedPromptForModal}
-                variables={variables}
                 onSubmit={handleSubmit}
                 onClose={() => {
                   setIsModalVisible(false);
