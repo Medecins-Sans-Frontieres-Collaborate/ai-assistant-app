@@ -3,15 +3,21 @@ import { NextRequest } from 'next/server';
 
 import Hasher from '@/lib/utils/app/hash';
 import {
+  NATIVE_SOURCE_CONTENT_TYPES,
+  NativeDeckFormat,
+} from '@/lib/utils/shared/translation/nativeFormats';
+import {
   NATIVE_PDF_EXPORT_FORMATS,
   NativePdfExportFormat,
   NativePdfExportUrls,
 } from '@/lib/utils/shared/translation/nativePdf';
 import {
   NativeRunBackend,
+  RUN_JOB_ID,
   RUN_KEY_BYTES,
   RUN_KEY_HEADER,
   RUN_RECORD_ID,
+  RUN_STOP_ID,
   RUN_TOUCH_INTERVAL_HOURS,
   base64ToBytes,
   decryptRunFile,
@@ -40,10 +46,13 @@ import {
  */
 
 const CONTENT_TYPES = {
-  pdf: 'application/pdf',
+  pdf: NATIVE_SOURCE_CONTENT_TYPES.pdf,
   json: 'application/json',
   png: 'image/png',
   pptx: NATIVE_PDF_EXPORT_FORMATS.pptx.contentType,
+  pptm: NATIVE_SOURCE_CONTENT_TYPES.pptm,
+  ppsx: NATIVE_SOURCE_CONTENT_TYPES.ppsx,
+  potx: NATIVE_SOURCE_CONTENT_TYPES.potx,
 } as const;
 const OPAQUE = 'application/octet-stream';
 
@@ -210,19 +219,73 @@ export class NativeRunStore {
   }
 
   /**
+   * Writes the state of a background job (RUN_JOB_ID), encrypted when the
+   * run has a key. Rewritten in place as the job moves on.
+   *
+   * @param state - The state as JSON-serializable data.
+   */
+  async putJob(state: unknown): Promise<void> {
+    const data = Buffer.from(JSON.stringify(state), 'utf-8');
+    const { runId, key } = this.location;
+    const stored = key
+      ? await encryptRunFile(key, runId, RUN_JOB_ID, data)
+      : data;
+    await this.folder.write(
+      RUN_JOB_ID,
+      Buffer.from(stored),
+      key ? OPAQUE : CONTENT_TYPES.json,
+    );
+  }
+
+  /**
+   * Reads the state of a background job.
+   *
+   * @returns The parsed state, or null when the run has no job.
+   * @throws NativeRunLockedError when it is encrypted and no key was sent.
+   * @throws RunFileIntegrityError when the key is not the run's.
+   */
+  async getJob(): Promise<unknown | null> {
+    const stored = await this.folder.read(RUN_JOB_ID);
+    if (!stored) return null;
+    let plain: Uint8Array = stored;
+    if (isEncryptedRunFile(stored)) {
+      const { runId, key } = this.location;
+      if (!key) throw new NativeRunLockedError();
+      plain = await decryptRunFile(key, runId, RUN_JOB_ID, stored);
+    }
+    return JSON.parse(Buffer.from(plain).toString('utf-8')) as unknown;
+  }
+
+  /** Asks the run's background job to stop (RUN_STOP_ID). */
+  async requestStop(): Promise<void> {
+    await this.folder.write(RUN_STOP_ID, Buffer.from('{}'), CONTENT_TYPES.json);
+  }
+
+  /** Clears an earlier stop request, before a new job starts. */
+  async clearStop(): Promise<void> {
+    await this.folder.remove(RUN_STOP_ID);
+  }
+
+  /** Whether a stop was asked for. */
+  async stopRequested(): Promise<boolean> {
+    return (await this.folder.read(RUN_STOP_ID)) !== null;
+  }
+
+  /**
    * Brings the run's folder in step with what the browser still uses:
    * files it no longer names are deleted, and where files expire, those
    * not written for {@link RUN_TOUCH_INTERVAL_HOURS} are touched.
    *
    * @param keep - Ids of the files still in use; absent keeps everything.
-   *   The record is always kept.
+   *   The record and a background job's state are always kept.
    * @param touch - False only reports when the run expires, extending nothing.
    * @throws NativeRunFileMissingError when the run holds no files at all,
    *   or a file named in `keep` is gone.
    */
   async sync(keep?: readonly string[], touch = true): Promise<NativeRunSync> {
     const now = Date.now();
-    const kept = keep && new Set([...keep, RUN_RECORD_ID]);
+    const kept =
+      keep && new Set([...keep, RUN_RECORD_ID, RUN_JOB_ID, RUN_STOP_ID]);
     const entries = await this.folder.list();
     const live = entries.filter((entry) => !kept || kept.has(entry.name));
     await Promise.all(
@@ -267,20 +330,24 @@ export class NativeRunStore {
    *   served from.
    */
   async putRebuild(built: {
-    pdf: Uint8Array;
+    /** Null when a presentation could not be rendered: no PDF is stored. */
+    pdf: Uint8Array | null;
     outputs: NativePdfPageOutput[];
     /** Editable files built with the PDF (see EDITABLE DOWNLOADS). */
     exports?: Partial<Record<NativePdfExportFormat, Uint8Array>>;
+    /** Sources that are not PDF: the translated file, and its format. */
+    document?: { data: Uint8Array; format: NativeDeckFormat };
   }): Promise<{
-    pdfUrl: string;
+    pdfUrl?: string;
     pageImages: StoredNativePage[];
     exportUrls?: NativePdfExportUrls;
+    documentUrl?: string;
   }> {
     const formats = Object.entries(built.exports ?? {}) as Array<
       [NativePdfExportFormat, Uint8Array]
     >;
-    const [pdf, pageImages, exported] = await Promise.all([
-      this.put(built.pdf, 'pdf'),
+    const [pdf, pageImages, exported, document] = await Promise.all([
+      built.pdf ? this.put(built.pdf, 'pdf') : Promise.resolve(null),
       Promise.all(
         built.outputs.map(async (output) => {
           const [preview, check] = await Promise.all([
@@ -300,11 +367,15 @@ export class NativeRunStore {
             [format, (await this.put(data, format)).url] as const,
         ),
       ),
+      built.document
+        ? this.put(built.document.data, built.document.format)
+        : Promise.resolve(null),
     ]);
     return {
-      pdfUrl: pdf.url,
+      ...(pdf ? { pdfUrl: pdf.url } : {}),
       pageImages,
       ...(exported.length ? { exportUrls: Object.fromEntries(exported) } : {}),
+      ...(document ? { documentUrl: document.url } : {}),
     };
   }
 }
