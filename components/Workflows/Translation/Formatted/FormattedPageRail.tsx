@@ -20,10 +20,12 @@ import {
   translatedPages,
 } from '@/lib/utils/shared/translation/formattedDocument';
 
-import { useUnitWording } from './formattedWording';
+import {
+  PdfPageThumbnail,
+  ThumbnailPlaceholder,
+} from '@/components/Documents/PageThumbnail';
 
-/** Width a source page is rendered at for its thumbnail, in CSS pixels. */
-const THUMBNAIL_WIDTH = 176;
+import { useUnitWording } from './formattedWording';
 
 /**
  * How a page's thumbnail looks, by what the download holds of it. The
@@ -36,61 +38,6 @@ const THUMBNAIL_LOOK = {
   untranslated: 'opacity-55',
   removed: 'opacity-20 grayscale',
 } as const;
-
-interface SourceThumbnailProps {
-  page: number;
-  pdf: PdfPages;
-  className: string;
-}
-
-/** Placeholder of a thumbnail that is not there yet. */
-function ThumbnailPlaceholder({
-  holder,
-  pulse,
-}: {
-  holder?: RefObject<HTMLSpanElement | null>;
-  pulse: boolean;
-}) {
-  return (
-    <span
-      ref={holder}
-      className={`block aspect-[210/297] w-full rounded-sm bg-gray-200 dark:bg-surface-dark-elevated ${
-        pulse ? 'animate-pulse' : ''
-      }`}
-    />
-  );
-}
-
-/**
- * A page of the source document, rendered only once it is near the visible
- * part of the list: a long document has many pages that are never looked at.
- * The source document itself loads on the first such page (see usePdfPages).
- */
-function SourceThumbnail({ page, pdf, className }: SourceThumbnailProps) {
-  const holder = useRef<HTMLSpanElement>(null);
-  const near = useNearView(holder);
-  const [image, setImage] = useState<string | null>(null);
-  const { renderPage, status } = pdf;
-
-  useEffect(() => {
-    if (!near || status === 'failed') return;
-    let cancelled = false;
-    void renderPage(page, THUMBNAIL_WIDTH).then((url) => {
-      if (!cancelled) setImage(url);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [near, status, renderPage, page]);
-
-  return image ? (
-    // A rendered page of the user's own file, as a data URL.
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={image} alt="" className={`w-full rounded-sm ${className}`} />
-  ) : (
-    <ThumbnailPlaceholder holder={holder} pulse={status !== 'failed'} />
-  );
-}
 
 interface TranslatedThumbnailProps {
   /** The page's stored image (its `previewUrl`). */
@@ -352,7 +299,7 @@ export function FormattedPageRail({
                     className={THUMBNAIL_LOOK[look]}
                   />
                 ) : (
-                  <SourceThumbnail
+                  <PdfPageThumbnail
                     page={page}
                     pdf={pdf}
                     className={THUMBNAIL_LOOK[look]}
