@@ -1594,6 +1594,8 @@ class Rebuilder:
             style = self.styles.get(unit['id']) or {}
             if style.get('color'):
                 self.recolor(unit, style['color'])
+            if style.get('font'):
+                self.refont(unit, style['font'])
             if (style.get('dx') or style.get('dy')) and unit['deck'].get('shape'):
                 shape = unit['deck']['shape']
                 if shape['key'] not in moved and not shape.get('cell'):
@@ -1675,6 +1677,28 @@ class Rebuilder:
                 fill = etree.Element(A + 'solidFill')
                 etree.SubElement(fill, A + 'srgbClr', val=value)
                 insert_ordered(rpr, fill, RPR_ORDER)
+        self.mark(unit['deck']['part'])
+
+    def refont(self, unit, family):
+        """Sets the Latin typeface of every run of the unit (a style edit)."""
+        family = str(family).strip()[:64]
+        if not family or any(ch in family for ch in '<>&"'):
+            return
+        for p in self.paragraphs_of(unit):
+            for child in p:
+                if local(child) not in ('r', 'fld'):
+                    continue
+                rpr = child.find(A + 'rPr')
+                if rpr is None:
+                    rpr = etree.Element(A + 'rPr')
+                    child.insert(0, rpr)
+                latin = rpr.find(A + 'latin')
+                if latin is None:
+                    latin = etree.Element(A + 'latin')
+                    insert_ordered(rpr, latin, RPR_ORDER)
+                latin.set('typeface', family)
+                for attr in ('panose', 'pitchFamily', 'charset'):
+                    latin.attrib.pop(attr, None)
         self.mark(unit['deck']['part'])
 
     def move(self, shape, dx, dy):
