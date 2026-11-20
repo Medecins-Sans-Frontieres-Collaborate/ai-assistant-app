@@ -28,6 +28,7 @@ import toast from 'react-hot-toast';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { m365ErrorMessageKey } from '@/client/hooks/chat/useM365Attachment';
+import { usePdfPages } from '@/client/hooks/documents/usePdfPages';
 import { useAvailableGuides } from '@/client/hooks/settings/useAvailableGuides';
 import {
   useLimitGates,
@@ -42,7 +43,6 @@ import { useDocumentTranslationReader } from '@/client/hooks/workflows/useDocume
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
 import { useFormattedDocument } from '@/client/hooks/workflows/useFormattedDocument';
 import { useFormattedRunStorage } from '@/client/hooks/workflows/useFormattedRunStorage';
-import { usePdfPages } from '@/client/hooks/workflows/usePdfPages';
 import { useStoredSourceText } from '@/client/hooks/workflows/useStoredSourceText';
 import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 

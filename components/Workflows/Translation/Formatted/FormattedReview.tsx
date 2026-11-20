@@ -5,10 +5,10 @@ import { KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { usePagePan } from '@/client/hooks/documents/usePagePan';
+import { usePageZoom } from '@/client/hooks/documents/usePageZoom';
+import { PdfPages } from '@/client/hooks/documents/usePdfPages';
 import { FormattedDocumentController } from '@/client/hooks/workflows/useFormattedDocument';
-import { usePagePan } from '@/client/hooks/workflows/usePagePan';
-import { usePageZoom } from '@/client/hooks/workflows/usePageZoom';
-import { PdfPages } from '@/client/hooks/workflows/usePdfPages';
 import {
   usePrefetchRunImages,
   useRunImage,

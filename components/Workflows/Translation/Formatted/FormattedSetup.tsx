@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { PdfPages } from '@/client/hooks/workflows/usePdfPages';
+import { PdfPages } from '@/client/hooks/documents/usePdfPages';
 
 import {
   BatchPageState,

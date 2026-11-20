@@ -5,7 +5,7 @@ import { KeyboardEvent, RefObject, useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { PdfPages } from '@/client/hooks/workflows/usePdfPages';
+import { PdfPages } from '@/client/hooks/documents/usePdfPages';
 import { useRunImage } from '@/client/hooks/workflows/useRunImage';
 
 import { groupKeyTarget } from '@/lib/utils/client/keyboardScope';

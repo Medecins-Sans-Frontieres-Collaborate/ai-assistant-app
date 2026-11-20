@@ -4,15 +4,15 @@ import { KeyboardEvent, ReactNode, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { NO_PAN_ATTRIBUTE } from '@/client/hooks/workflows/usePagePan';
-import { PAGE_SURFACE_ATTRIBUTE } from '@/client/hooks/workflows/usePageZoom';
+import { NO_PAN_ATTRIBUTE } from '@/client/hooks/documents/usePagePan';
+import { PAGE_SURFACE_ATTRIBUTE } from '@/client/hooks/documents/usePageZoom';
 
 import { groupKeyTarget } from '@/lib/utils/client/keyboardScope';
+import { pageBox } from '@/lib/utils/shared/documents/pageGeometry';
 import {
   FormattedDocumentRun,
   movedBox,
   textRows,
-  unitBox,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import {
   NativePdfPageStats,
@@ -129,7 +129,7 @@ export function FormattedPageView({
   const selected = units.find((unit) => unit.id === selectedId);
   /** Where a block is drawn: its measured place, moved as the person asked. */
   const place = (unit: NativePdfUnitResult, box: NativePdfUnitResult['bbox']) =>
-    unitBox(movedBox(box, styles?.[unit.id]), page);
+    pageBox(movedBox(box, styles?.[unit.id]), page);
   return (
     // Auto margins centre the page and, unlike centring the row, leave a
     // zoomed page's left edge reachable by scrolling.
