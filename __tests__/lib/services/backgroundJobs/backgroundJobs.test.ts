@@ -357,10 +357,10 @@ describe('BlobJobSlots', () => {
           if (!blob) throw notFound;
           return blob;
         },
-        upload: async (name: string, data: Buffer) => {
-          blobs.set(name, data);
-          return name;
-        },
+        // Written whole, as files that change in place are (overwriteBlob.ts).
+        getBlockBlobClient: (name: string) => ({
+          upload: async (data: Buffer) => blobs.set(name, Buffer.from(data)),
+        }),
         deleteIfExists: async (name: string) => {
           blobs.delete(name);
         },
