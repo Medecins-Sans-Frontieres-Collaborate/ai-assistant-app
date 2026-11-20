@@ -201,6 +201,7 @@ describe('reading a file of a run', () => {
   it('passes on why OneDrive cannot be used', async () => {
     const { M365Error } = await import('@/lib/services/m365/graphApi');
     driveRefusal.error = new M365Error('Consent', 'consent_missing', 403);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const response = await getFile({
       run: RUN,
       storage: 'onedrive',
@@ -210,6 +211,11 @@ describe('reading a file of a run', () => {
     expect((await parseJsonResponse(response)).code).toBe(
       'M365_CONSENT_MISSING',
     );
+    // The answer alone does not say why OneDrive failed; the log does.
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('consent_missing (403): Consent'),
+    );
+    warn.mockRestore();
   });
 });
 
