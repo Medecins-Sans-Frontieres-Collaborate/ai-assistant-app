@@ -81,7 +81,7 @@ Report only:
 - logo-unknown: a listed picture that looks like the brand's logo, or an altered, recoloured or old version of it, or a different organisation's mark placed as if it were the brand's. Tie it to the picture (imageId); "found" says what it looks like.
 - language: text in a language other than the book's languages. Tie it to the unit; "found" is the language as a BCP 47 tag.
 
-Severity: error for a clear break of a stated rule, warning when likely wrong, info when worth a look. Report nothing that is fine; an empty list is a good answer. "note" is one sentence for the author, in the language of the document, saying what to change. Use only ids from the lists given.`;
+Severity: error for a clear break of a stated rule, warning when likely wrong, info when worth a look. Report nothing that is fine; an empty list is a good answer. "note" is one sentence for the author, in the language the request names, saying what to change. Use only ids from the lists given.`;
 
 /** The book as the model reads it: what it states, plainly. */
 export function describeBook(book: BrandBookBody): string {
@@ -194,14 +194,35 @@ export function pageFindings(
 }
 
 /**
+ * Names a locale's language in English, for the instruction saying which
+ * language the notes are written in: the reader's, since notes sit among
+ * findings worded in it.
+ *
+ * @param locale - A BCP 47 tag, such as `fr` or `pt-BR`.
+ * @returns The language's English name, or the tag when it has none.
+ */
+export function noteLanguage(locale: string): string {
+  try {
+    return (
+      new Intl.DisplayNames(['en'], { type: 'language' }).of(locale) ?? locale
+    );
+  } catch {
+    return locale;
+  }
+}
+
+/**
  * Reviews one page with a model.
  *
  * @param input.picture - The page as a PNG.
+ * @param input.noteLocale - The reader's locale, for the notes' language.
  * @param input.logos - The book's logos as PNG data URLs (a few).
  * @returns The page's model findings.
  */
 export async function reviewPage(input: {
   page: number;
+  /** The reader's locale (BCP 47); the notes are written in its language. */
+  noteLocale: string;
   picture: Uint8Array;
   units: readonly DocumentUnit[];
   pictures: readonly DocumentImage[];
@@ -217,7 +238,7 @@ export async function reviewPage(input: {
     user: [
       {
         type: 'text',
-        text: `${describeBook(input.book)}\n\nPage ${input.page}.\n${describePage(input.units, input.pictures)}`,
+        text: `${describeBook(input.book)}\n\nPage ${input.page}.\n${describePage(input.units, input.pictures)}\n\nWrite each note in ${noteLanguage(input.noteLocale)}.`,
       },
       {
         type: 'image_url',
