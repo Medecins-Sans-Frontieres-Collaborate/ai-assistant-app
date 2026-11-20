@@ -418,7 +418,10 @@ export function withPageRemoved(
 
 /**
  * Every unit's translation for a re-render: the edits over the rendered
- * text. A unit kept as written has no entry.
+ * text. A unit kept as written has no entry, unless the person changed how
+ * it looks: it is then sent with its own text (with its inline tags), since
+ * the page is rebuilt only where text is sent and its new size, colour or
+ * place would otherwise never reach the page.
  */
 export function translationsForRender(
   run: FormattedDocumentRun,
@@ -426,9 +429,23 @@ export function translationsForRender(
   const translations: Record<string, string> = {};
   for (const unit of run.units) {
     const text = currentTranslation(run, unit);
-    if (text !== null && text.trim()) translations[unit.id] = text;
+    if (text !== null && text.trim()) {
+      translations[unit.id] = text;
+    } else if (hasStyle(run.styles?.[unit.id]) && unit.source.trim()) {
+      translations[unit.id] = unit.source;
+    }
   }
   return translations;
+}
+
+/** Whether a style changes anything about a unit. */
+function hasStyle(style: NativePdfUnitStyle | undefined): boolean {
+  return (
+    !!style &&
+    Object.values(style).some(
+      (value) => value !== undefined && value !== null && value !== 0,
+    )
+  );
 }
 
 /**
