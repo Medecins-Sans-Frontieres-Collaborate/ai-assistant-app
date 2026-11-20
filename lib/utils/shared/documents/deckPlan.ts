@@ -13,6 +13,7 @@
  * that fits at full size is fine, text that fits only smaller will be
  * shrunk, and text that does not fit even at `FIT_MIN_SCALE` is too long.
  */
+import { z } from 'zod';
 
 /** A placeholder's role, which decides what a plan may put in it. */
 export type DeckPlaceholderRole =
@@ -418,3 +419,48 @@ export function checkDeckPlan(
   }
   return { plan: { slides: kept }, repaired, blocking, shrunk };
 }
+
+/** Generous bounds for a plan sent from the browser; the check does the rest. */
+const planText = (max: number) => z.string().max(max);
+
+/** A plan as the browser sends it (the person's edited outline). */
+export const DeckPlanSchema = z.object({
+  slides: z
+    .array(
+      z.object({
+        layout: z.string().min(1).max(80),
+        notes: planText(4_000).default(''),
+        fills: z
+          .array(
+            z.discriminatedUnion('kind', [
+              z.object({
+                placeholder: z.string().min(1).max(40),
+                kind: z.literal('text'),
+                text: planText(4_000),
+              }),
+              z.object({
+                placeholder: z.string().min(1).max(40),
+                kind: z.literal('bullets'),
+                bullets: z
+                  .array(
+                    z.object({
+                      text: planText(1_000),
+                      level: z.number().int().min(0).max(MAX_BULLET_LEVEL),
+                    }),
+                  )
+                  .max(30),
+              }),
+              z.object({
+                placeholder: z.string().min(1).max(40),
+                kind: z.literal('image'),
+                image: z.string().min(1).max(80),
+                alt: planText(300),
+                fit: z.enum(['contain', 'cover']).optional(),
+              }),
+            ]),
+          )
+          .max(12),
+      }),
+    )
+    .max(MAX_PLAN_SLIDES),
+});
