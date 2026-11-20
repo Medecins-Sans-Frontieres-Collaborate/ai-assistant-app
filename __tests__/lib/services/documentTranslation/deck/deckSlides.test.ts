@@ -4,7 +4,6 @@ import {
 } from '@/lib/services/documentTranslation/deck/deckSlides';
 import { DeckFormatError } from '@/lib/services/documentTranslation/deck/deckText';
 import { readDeckSlides } from '@/lib/services/documentTranslation/deck/deckText';
-import { deckPdfExport } from '@/lib/services/documentTranslation/native/formats/deckFormat';
 
 import fs from 'fs';
 import os from 'os';
@@ -54,21 +53,5 @@ describe('omitDeckSlides', () => {
     const titles = (await readDeckSlides(out)).map((slide) => slide.text);
     expect(titles).toEqual(['Slide 1', 'Slide 4', 'Slide 5']);
     fs.rmSync(dir, { recursive: true, force: true });
-  });
-});
-
-describe('deckPdfExport', () => {
-  it('always exports hidden slides, so PDF page n is slide n', () => {
-    const options = JSON.parse(deckPdfExport().split('impress_pdf_Export:')[1]);
-    expect(options).toEqual({
-      ExportHiddenSlides: { type: 'boolean', value: 'true' },
-    });
-  });
-
-  it('names a range of slides in ascending order, once each', () => {
-    const options = JSON.parse(
-      deckPdfExport([8, 2, 2, 5]).split('impress_pdf_Export:')[1],
-    );
-    expect(options.PageRange).toEqual({ type: 'string', value: '2,5,8' });
   });
 });

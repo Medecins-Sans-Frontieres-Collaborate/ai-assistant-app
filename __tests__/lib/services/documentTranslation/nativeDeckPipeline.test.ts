@@ -6,7 +6,7 @@ import {
   rerenderNativePdf,
   runNativePdfTranslation,
 } from '@/lib/services/documentTranslation/native/nativePdfPipeline';
-import { runSandboxScript } from '@/lib/services/documentTranslation/native/sandboxScriptRunner';
+import { runSandboxScript } from '@/lib/services/documents/sandbox/sandboxScriptRunner';
 import { callStructured } from '@/lib/services/workflows/shared/workflowLlm';
 
 import { NATIVE_PDF_FONT_SIZE_STEP } from '@/lib/utils/shared/translation/nativePdf';
@@ -22,10 +22,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
  */
 
 vi.mock('@/config/environment', () => ({ env: {} }));
-vi.mock(
-  '@/lib/services/documentTranslation/native/sandboxScriptRunner',
-  () => ({ runSandboxScript: vi.fn() }),
-);
+vi.mock('@/lib/services/documents/sandbox/sandboxScriptRunner', () => ({
+  runSandboxScript: vi.fn(),
+}));
 vi.mock('@/lib/services/workflows/shared/workflowLlm', () => ({
   callStructured: vi.fn(),
   createAzureClient: vi.fn(() => ({})),

@@ -228,7 +228,7 @@ describe('submitting a presentation', () => {
     expect(res.status).toBe(202);
     expect(mockConvert.mock.calls[0][0]).toMatchObject({
       type: 'ppt',
-      lane: 'translation',
+      lane: 'background',
     });
     expect(json.data.originalFilename).toBe('old deck.pptx');
     expect(json.data.fileExtension).toBe('pptx');

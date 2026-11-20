@@ -1,15 +1,14 @@
 import { runNativePdfTranslation } from '@/lib/services/documentTranslation/native/nativePdfPipeline';
-import { runSandboxScript } from '@/lib/services/documentTranslation/native/sandboxScriptRunner';
+import { runSandboxScript } from '@/lib/services/documents/sandbox/sandboxScriptRunner';
 import { callStructured } from '@/lib/services/workflows/shared/workflowLlm';
 
 import { strFromU8, strToU8 } from 'fflate';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/config/environment', () => ({ env: {} }));
-vi.mock(
-  '@/lib/services/documentTranslation/native/sandboxScriptRunner',
-  () => ({ runSandboxScript: vi.fn() }),
-);
+vi.mock('@/lib/services/documents/sandbox/sandboxScriptRunner', () => ({
+  runSandboxScript: vi.fn(),
+}));
 vi.mock('@/lib/services/workflows/shared/workflowLlm', () => ({
   callStructured: vi.fn(),
   createAzureClient: vi.fn(() => ({})),

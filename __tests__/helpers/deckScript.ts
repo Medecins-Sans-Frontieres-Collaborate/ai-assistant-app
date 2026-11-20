@@ -10,7 +10,7 @@ import {
   PPTX_NATIVE_SCRIPT_FILENAME,
   PptxNativeCommand,
 } from '@/lib/services/documentTranslation/native/pptxNativeScript';
-import type { SandboxInputFile } from '@/lib/services/documentTranslation/native/sandboxScriptRunner';
+import type { SandboxInputFile } from '@/lib/services/documents/sandbox/sandboxScriptRunner';
 
 import { execFileSync } from 'child_process';
 import { unzipSync } from 'fflate';

@@ -25,28 +25,25 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
  */
 
 vi.mock('@/config/environment', () => ({ env: {} }));
-vi.mock(
-  '@/lib/services/documentTranslation/native/sandboxScriptRunner',
-  () => ({
-    runSandboxScript: vi.fn(
-      async (
-        command: 'extract' | 'rebuild',
-        inputs: Array<{ filename: string; data: Buffer }>,
-        _usage: unknown,
-        script: { filename: string },
-      ) => {
-        if (script?.filename !== 'pptx_native.py') {
-          throw new Error('only the deck script runs here');
-        }
-        return {
-          files: runDeckScript(command, inputs),
-          logs: '',
-          durationMs: 0,
-        };
-      },
-    ),
-  }),
-);
+vi.mock('@/lib/services/documents/sandbox/sandboxScriptRunner', () => ({
+  runSandboxScript: vi.fn(
+    async (
+      command: 'extract' | 'rebuild',
+      inputs: Array<{ filename: string; data: Buffer }>,
+      _usage: unknown,
+      script: { filename: string },
+    ) => {
+      if (script?.filename !== 'pptx_native.py') {
+        throw new Error('only the deck script runs here');
+      }
+      return {
+        files: runDeckScript(command, inputs),
+        logs: '',
+        durationMs: 0,
+      };
+    },
+  ),
+}));
 const service = vi.hoisted(() => ({ current: null as unknown }));
 vi.mock('@/lib/services/documents/render/renderService', async (original) => {
   const actual = (await original()) as Record<string, unknown>;

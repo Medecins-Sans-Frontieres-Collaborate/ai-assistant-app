@@ -612,7 +612,7 @@ slides.
 - **One at a time**: one presentation per person runs at once; another is
   refused, naming the first.
 - **Setup and review**: slides are shown from a PDF of the uploaded deck
-  (`GET /api/file/[id]/slides`, hidden slides included so page n is slide
+  (`GET /api/documents/pdf`, hidden slides included so page n is slide
   n); Original in the review shows the same render.
 - **Moves**: a move shifts the whole shape the paragraph is in, and the
   Appearance box says so.
