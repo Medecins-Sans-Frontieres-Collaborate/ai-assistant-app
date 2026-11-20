@@ -75,6 +75,11 @@ export interface BrandReviewRequest {
   type: string;
   /** Whether a model looks at each page. */
   modelReview: boolean;
+  /**
+   * The reader's locale (BCP 47): the model writes its notes in its
+   * language. Requests stored before it was kept have none (English).
+   */
+  noteLocale?: string;
 }
 
 export type BrandReviewPhase = 'reading' | 'checking' | 'reviewing';
@@ -317,6 +322,7 @@ async function runReview(
               ...(await job.untilStopped(
                 deps.reviewPage({
                   page,
+                  noteLocale: request.noteLocale ?? 'en',
                   picture,
                   units: model.units.filter(
                     (unit) =>
