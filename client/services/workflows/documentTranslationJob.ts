@@ -45,6 +45,12 @@ export interface DocumentJobPage {
   translation: string;
   /** The user's replacement text for the page, when one was saved. */
   correction?: { text: string; updatedAt: string };
+  /** Presentations: the slide is hidden in a slide show. */
+  hidden?: boolean;
+  /** Presentations: the slide's speaker notes. */
+  sourceNotes?: string;
+  /** Presentations: the notes as delivered (translated, or kept). */
+  translationNotes?: string;
 }
 
 /** A window of a job's pages. */
@@ -112,8 +118,10 @@ export async function fetchStoredFile(
  * Submits a document for whole-document translation.
  *
  * @param file - The document. Only formats translated as a background job
- *   (PDF) are expected here.
+ *   (PDF, presentations) are expected here.
  * @param targetLanguage - Document translation language code.
+ * @param options - `translateNotes`: for a presentation, whether its speaker
+ *   notes are translated (default true).
  * @returns The pending job to follow with {@link fetchDocumentJobStatus}.
  * @throws DocumentJobError when the submission is refused; `code` is e.g.
  *   `SERVICE_NOT_CONFIGURED`, and `status` is 429 for an exhausted limit.
@@ -122,10 +130,12 @@ export async function submitDocumentTranslation(
   file: File,
   targetLanguage: string,
   signal?: AbortSignal,
+  options: { translateNotes?: boolean } = {},
 ): Promise<DocumentTranslationPendingReference> {
   const form = new FormData();
   form.append('document', file);
   form.append('targetLanguage', targetLanguage);
+  if (options.translateNotes === false) form.append('translateNotes', 'false');
   const response = await fetch('/api/document-translation/translate', {
     method: 'POST',
     body: form,
