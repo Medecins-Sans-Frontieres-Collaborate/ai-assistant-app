@@ -21,6 +21,8 @@ import {
   SCALE_EPSILON,
 } from '@/lib/utils/shared/translation/nativePdf';
 
+import { useUnitWording } from './formattedWording';
+
 interface FormattedPageViewProps {
   /** Image of the page to show, or null while it loads. */
   image: string | null;
@@ -86,13 +88,14 @@ export function FormattedPageView({
   onDraftChange,
 }: FormattedPageViewProps) {
   const t = useTranslations('workflows');
+  const unitT = useUnitWording();
   // The block that takes the Tab stop: the last one the keyboard was on.
   const [focusedId, setFocusedId] = useState<string | null>(null);
   if (!image) {
     return (
       <div
         role="status"
-        aria-label={t('translation.formatted.loadingPage', { page: page.page })}
+        aria-label={unitT('loadingPage', { page: page.page })}
         {...{ [PAGE_SURFACE_ATTRIBUTE]: '' }}
         style={{ width }}
         className="m-auto aspect-[210/297] shrink-0 animate-pulse rounded bg-gray-200 dark:bg-surface-dark-elevated"
@@ -141,7 +144,7 @@ export function FormattedPageView({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={image}
-        alt={t('translation.formatted.pageLabel', { page: page.page })}
+        alt={unitT('pageLabel', { page: page.page })}
         draggable={false}
         className="block w-full select-none rounded-sm"
       />
