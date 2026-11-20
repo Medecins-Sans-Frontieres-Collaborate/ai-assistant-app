@@ -4,7 +4,7 @@ import { readDeckSlides } from '@/lib/services/documentTranslation/deck/deckText
 import {
   readPackageDirectory,
   readPackagePart,
-} from '@/lib/services/presentationRender/ooxmlPackage';
+} from '@/lib/services/documents/render/ooxmlPackage';
 
 import { TRANSLATION_PAGES_LIMIT_KEY } from '@/types/documentTranslation';
 
@@ -70,7 +70,7 @@ vi.mock(
   }),
 );
 // The render service converts a .ppt; here it hands back a .pptx fixture.
-vi.mock('@/lib/services/presentationRender/renderService', () => ({
+vi.mock('@/lib/services/documents/render/renderService', () => ({
   getRenderService: () => ({ convert: mockConvert }),
 }));
 vi.mock('@/lib/utils/server/blob/blob', async (importOriginal) => {
@@ -260,7 +260,7 @@ describe('submitting a presentation', () => {
 
   it('answers busy, with a time to retry, when the render queue is full', async () => {
     const { RenderBusyError } =
-      await import('@/lib/services/presentationRender/renderQueue');
+      await import('@/lib/services/documents/render/renderQueue');
     mockConvert.mockRejectedValue(new RenderBusyError(200));
     const res = await submit('old.ppt', fixture('rich.ppt'));
     expect(res.status).toBe(503);

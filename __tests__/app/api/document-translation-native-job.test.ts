@@ -55,11 +55,11 @@ vi.mock('@/lib/services/documentTranslation/native/nativePdfPipeline', () => ({
   runNativePdfTranslation: translate,
   rerenderNativePdf: vi.fn(),
 }));
-vi.mock('@/lib/services/presentationRender/renderService', () => ({
+vi.mock('@/lib/services/documents/render/renderService', () => ({
   getRenderService: () => ({
     snapshot: () => ({
       running: 0,
-      queued: { interactive: 0, translation: 0 },
+      queued: { interactive: 0, background: 0 },
     }),
     convert: vi.fn(),
   }),

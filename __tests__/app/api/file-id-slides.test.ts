@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
-import { RenderBusyError } from '@/lib/services/presentationRender/renderQueue';
-import { getRenderService } from '@/lib/services/presentationRender/renderService';
+import { RenderBusyError } from '@/lib/services/documents/render/renderQueue';
+import { getRenderService } from '@/lib/services/documents/render/renderService';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { NATIVE_DECK_MAX_BYTES } from '@/lib/utils/shared/translation/nativeFormats';
@@ -31,7 +31,7 @@ vi.mock('@/lib/utils/app/user/session', () => ({
 vi.mock('@/lib/utils/server/blob/blob', () => ({
   BlobProperty: { BLOB: 'blob' },
 }));
-vi.mock('@/lib/services/presentationRender/renderService', () => ({
+vi.mock('@/lib/services/documents/render/renderService', () => ({
   getRenderService: vi.fn(),
 }));
 
