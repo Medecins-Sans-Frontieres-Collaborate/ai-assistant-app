@@ -245,6 +245,11 @@ describe('BrandReviewWorkspace', () => {
     expect(
       useConversationStore.getState().conversations[0].workflowState,
     ).toMatchObject({ reviewId: 'review-aaaaaaaaaaaa' });
+    // The new review is followed until it ends (it once was not: the
+    // first reading came from the start and nothing read it again).
+    expect(await screen.findByText('1 error, 1 warning')).toBeInTheDocument();
+    expect(readBrandReview).toHaveBeenCalled();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
   it('lists findings in words, filters them, and shows a chosen one on its page', async () => {
