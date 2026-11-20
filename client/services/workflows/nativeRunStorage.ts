@@ -295,17 +295,20 @@ export async function deleteRun(access: RunAccess): Promise<boolean> {
 /**
  * Saves one of a run's files to the person's device.
  *
- * @param url - The file's path (a run's `pdfUrl`).
+ * @param url - The file's path (a run's `pdfUrl`, or one of its `exportUrls`).
  * @param filename - The name to save it under.
+ * @param contentType - The file's media type; a PDF unless said otherwise.
+ * @throws RunMissingError or RunLockedError as {@link fetchRunFile} does.
  */
 export async function downloadRunFile(
   url: string,
   filename: string,
+  contentType: string = 'application/pdf',
 ): Promise<void> {
   const bytes = await fetchRunFile(url);
   const link = document.createElement('a');
   const href = URL.createObjectURL(
-    new Blob([new Uint8Array(bytes)], { type: 'application/pdf' }),
+    new Blob([new Uint8Array(bytes)], { type: contentType }),
   );
   link.href = href;
   link.download = filename;
