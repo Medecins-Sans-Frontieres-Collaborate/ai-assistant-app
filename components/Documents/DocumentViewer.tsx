@@ -139,7 +139,7 @@ export function DocumentViewer({
       if (shownPage === undefined) setOwnPage(target);
       onPageChange?.(target);
       onSelectOverlay?.(null);
-      scrollerRef.current?.scrollTo({ top: 0 });
+      scrollerRef.current?.scrollTo?.({ top: 0 });
     },
     [page, pageCount, shownPage, onPageChange, onSelectOverlay],
   );
@@ -149,9 +149,14 @@ export function DocumentViewer({
     const onKey = (event: globalThis.KeyboardEvent) => {
       if (event.defaultPrevented || !ownsKeyboard(rootRef.current)) return;
       if (event.key !== 'PageDown' && event.key !== 'PageUp') return;
-      const target = event.target as HTMLElement | null;
-      if (target?.closest('textarea, input, select, [contenteditable="true"]'))
+      // Typing in a field keeps its own PageUp and PageDown.
+      const target = event.target;
+      if (
+        target instanceof Element &&
+        target.closest('textarea, input, select, [contenteditable="true"]')
+      ) {
         return;
+      }
       event.preventDefault();
       goTo(page + (event.key === 'PageDown' ? 1 : -1));
     };
