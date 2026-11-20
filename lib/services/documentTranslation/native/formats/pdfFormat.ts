@@ -2,9 +2,14 @@
  * The PDF adapter (see THE FORMAT ADAPTER): both steps are commands of the
  * fixed PDF script in the sandbox (pdfNativeScript.ts).
  */
+import {
+  SandboxInputFile,
+  runSandboxScript,
+} from '@/lib/services/documents/sandbox/sandboxScriptRunner';
+
 import { NativePdfFitReport } from '@/lib/utils/shared/translation/nativePdf';
 
-import { SandboxInputFile, runSandboxScript } from '../sandboxScriptRunner';
+import { PDF_SANDBOX_SCRIPT } from '../pdfNativeScript';
 import {
   FormatExtraction,
   NativeFormatAdapter,
@@ -41,6 +46,7 @@ export const pdfFormat: NativeFormatAdapter = {
         jobFile({ source: SOURCE_FILENAME, pages }),
       ],
       usage,
+      PDF_SANDBOX_SCRIPT,
     );
     return {
       unitsFile: requireFile(run.files, UNITS_FILENAME),
@@ -86,6 +92,7 @@ export const pdfFormat: NativeFormatAdapter = {
         }),
       ],
       usage,
+      PDF_SANDBOX_SCRIPT,
     );
     const report = JSON.parse(
       strFromU8(requireFile(run.files, 'report.json')),
