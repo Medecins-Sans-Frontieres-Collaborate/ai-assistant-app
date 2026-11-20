@@ -335,3 +335,97 @@ describe('laying out a stored run again', () => {
     expect((await parseJsonResponse(response)).error).toMatch(/run key/);
   });
 });
+
+describe('presentation runs', () => {
+  const DECK = `${'c'.repeat(64)}.pptm`;
+
+  it.each([
+    [
+      'pptx',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    ],
+    ['pptm', 'application/vnd.ms-powerpoint.presentation.macroEnabled.12'],
+    [
+      'ppsx',
+      'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+    ],
+    [
+      'potx',
+      'application/vnd.openxmlformats-officedocument.presentationml.template',
+    ],
+  ])('serves a stored .%s with its type', async (kind, type) => {
+    const id = `${'d'.repeat(64)}.${kind}`;
+    seed('u1', { [id]: text('PK-deck') });
+    const response = await getFile({ run: RUN, storage: 'app', id });
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-type')).toBe(type);
+  });
+
+  it('never serves the job state or a stop request', async () => {
+    seed('u1', { 'job.json': text('{}'), 'stop.json': text('{}') });
+    for (const id of ['job.json', 'stop.json']) {
+      expect((await getFile({ run: RUN, storage: 'app', id })).status).toBe(
+        400,
+      );
+    }
+  });
+
+  it('keeps the job state and a stop request when the browser syncs', async () => {
+    seed('u1', {
+      [SOURCE]: text('%PDF-plain'),
+      'job.json': text('{}'),
+      'stop.json': text('{}'),
+      [`${'e'.repeat(64)}.png`]: text('old'),
+    });
+    const response = await sync({ runId: RUN, storage: 'app', keep: [SOURCE] });
+    expect(response.status).toBe(200);
+    expect([...drive.get(`u1/${RUN}`)!.keys()].sort()).toEqual(
+      [SOURCE, 'job.json', 'stop.json'].sort(),
+    );
+  });
+
+  it('re-renders a deck run as a deck: its format passed on, its deck stored', async () => {
+    seed('u1', { [DECK]: text('PK-deck'), [UNITS]: text('{}') });
+    rerender.mockResolvedValue({
+      pdf: text('%PDF-new'),
+      document: text('PK-translated'),
+      outputs: [],
+      unitsFile: text('{}'),
+      fits: [],
+    });
+    const response = await RENDER(
+      new NextRequest(`${BASE}/render`, {
+        method: 'POST',
+        body: JSON.stringify({
+          runId: RUN,
+          storage: 'app',
+          sourceId: DECK,
+          unitsId: UNITS,
+          translations: {},
+        }),
+      }),
+    );
+    expect(response.status).toBe(200);
+    expect(rerender).toHaveBeenCalledWith(
+      expect.objectContaining({ format: 'pptm' }),
+    );
+    const { data } = await parseJsonResponse(response);
+    expect(data.documentUrl).toMatch(/\.pptm/);
+  });
+
+  it('refuses a source id of a kind no adapter reads', async () => {
+    const response = await RENDER(
+      new NextRequest(`${BASE}/render`, {
+        method: 'POST',
+        body: JSON.stringify({
+          runId: RUN,
+          storage: 'app',
+          sourceId: `${'a'.repeat(64)}.png`,
+          unitsId: UNITS,
+          translations: {},
+        }),
+      }),
+    );
+    expect(response.status).toBe(400);
+  });
+});
