@@ -71,6 +71,19 @@ describe('usePdfPages', () => {
     expect(loadFile).toHaveBeenCalledTimes(1);
   });
 
+  it('gives the same object across renders while nothing in it changes', async () => {
+    // Callers list it in effect dependencies; a new object every render
+    // re-ran a page render forever and froze the brand review.
+    const loadFile = vi.fn(file('report'));
+    const { result, rerender } = renderHook(() =>
+      usePdfPages(loadFile, 'report'),
+    );
+    await waitFor(() => expect(result.current.status).toBe('ready'));
+    const ready = result.current;
+    rerender();
+    expect(result.current).toBe(ready);
+  });
+
   it('on demand, fetches nothing until a page is rendered, then opens it once', async () => {
     const loadFile = vi.fn(file('report'));
     const { result } = renderHook(() =>
