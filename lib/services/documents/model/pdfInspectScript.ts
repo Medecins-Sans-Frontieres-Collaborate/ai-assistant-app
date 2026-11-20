@@ -147,6 +147,20 @@ def inspect(job, work):
                 continue
             data = extracted.get('image') or b''
             ext = (extracted.get('ext') or '').lower()
+            # A picture's transparency is kept apart from it, as a soft mask
+            # (info[1]); without it the transparent parts read as black and
+            # the picture no longer looks like what is drawn. Joined here.
+            if info[1]:
+                try:
+                    base = fitz.Pixmap(doc, xref)
+                    if base.colorspace and base.colorspace.n > 3:
+                        base = fitz.Pixmap(fitz.csRGB, base)
+                    if base.alpha:
+                        base = fitz.Pixmap(base, 0)
+                    data = fitz.Pixmap(base, fitz.Pixmap(doc, info[1])).tobytes('png')
+                    ext = 'png'
+                except Exception:  # noqa: BLE001 - keep the picture without its mask
+                    pass
             if not data or len(data) > MAX_IMAGE_BYTES or ext not in IMAGE_TYPES:
                 continue
             digest = hashlib.sha256(data).hexdigest()
