@@ -22,6 +22,8 @@ import {
   splitIntoRequests,
 } from '@/lib/utils/shared/translation/nativePdf';
 
+import { useFormattedUnit, useUnitWording } from './formattedWording';
+
 /** Pages shown as previews; a longer document is selected by typing. */
 const PREVIEW_LIMIT = 24;
 const PREVIEW_WIDTH = 220;
@@ -53,6 +55,7 @@ interface PagePreviewProps {
 /** One page of the source as a preview, selectable when its state allows. */
 function PagePreview({ page, pdf, state, reason, onToggle }: PagePreviewProps) {
   const t = useTranslations('workflows');
+  const unitT = useUnitWording();
   const [image, setImage] = useState<string | null>(null);
   useEffect(() => {
     let cancelled = false;
@@ -71,7 +74,7 @@ function PagePreview({ page, pdf, state, reason, onToggle }: PagePreviewProps) {
   ) : (
     <span className="block aspect-[210/297] w-full animate-pulse rounded bg-gray-200 dark:bg-surface-dark-elevated" />
   );
-  const label = t('translation.formatted.pageLabel', { page });
+  const label = unitT('pageLabel', { page });
   if (selectable) {
     return (
       <label
@@ -201,6 +204,8 @@ export function FormattedSetup({
   onRemove,
 }: FormattedSetupProps) {
   const t = useTranslations('workflows');
+  const unitT = useUnitWording();
+  const unit = useFormattedUnit();
   const [opened, setOpened] = useState<Set<NativePdfInstructableStep>>(
     () => new Set(),
   );
@@ -214,12 +219,8 @@ export function FormattedSetup({
   const canRaise = plan.batchPages < limits.maxBatchPages;
   const parts = splitIntoRequests(pages, requestPages || undefined).length;
   const reasonFor: Partial<Record<BatchPageState, string>> = {
-    later: canRaise
-      ? t('translation.formatted.pageReason.laterRaise')
-      : t('translation.formatted.pageReason.later'),
-    locked: t('translation.formatted.pageReason.locked', {
-      max: limits.maxDocumentPages,
-    }),
+    later: unitT(canRaise ? 'pageReason.laterRaise' : 'pageReason.later'),
+    locked: unitT('pageReason.locked', { max: limits.maxDocumentPages }),
   };
 
   const toggle = (page: number) => {
@@ -240,7 +241,7 @@ export function FormattedSetup({
           <h2 className="text-xs font-medium text-gray-700 dark:text-gray-300">
             {earlier && adding
               ? t('translation.formatted.addPagesTitle')
-              : t('translation.formatted.sourcePages')}
+              : unitT('sourcePages')}
           </h2>
           <span
             className="text-xs tabular-nums text-gray-700 dark:text-gray-300"
@@ -252,13 +253,13 @@ export function FormattedSetup({
             })}
           </span>
           <span className="text-xs tabular-nums text-gray-500 dark:text-gray-400">
-            {t('translation.formatted.documentSummary', {
+            {unitT('documentSummary', {
               used: plan.translated.length + pages.length,
               max: limits.maxDocumentPages,
             })}
           </span>
           <label className="ms-auto flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-            {t('translation.formatted.pagesField')}
+            {unitT('pagesField')}
             <input
               type="text"
               inputMode="numeric"
@@ -328,7 +329,7 @@ export function FormattedSetup({
 
         <div className="mx-3 mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-            {t('translation.formatted.batchSize')}
+            {unitT('batchSize')}
             <select
               value={plan.batchPages}
               onChange={(event) =>
@@ -419,18 +420,21 @@ export function FormattedSetup({
         ) : (
           <p className="mx-3 mt-3 text-xs text-gray-500 dark:text-gray-400">
             {pdf.status === 'failed'
-              ? t('translation.formatted.previewsUnavailable')
-              : t('translation.formatted.previewsLoading')}
+              ? unitT('previewsUnavailable')
+              : unitT('previewsLoading')}
           </p>
         )}
         {pdf.status === 'ready' && pageCount > previewCount && (
           <p className="mx-3 mt-3 text-xs text-gray-500 dark:text-gray-400">
-            {t('translation.formatted.previewsFirst', { count: previewCount })}
+            {unitT('previewsFirst', { count: previewCount })}
           </p>
         )}
-        <p className="mx-3 mt-3 text-xs text-gray-500 dark:text-gray-400">
-          {t('translation.formatted.scannedNote')}
-        </p>
+        {/* A slide's text is always there to rebuild; only a PDF is scanned. */}
+        {unit === 'page' && (
+          <p className="mx-3 mt-3 text-xs text-gray-500 dark:text-gray-400">
+            {t('translation.formatted.scannedNote')}
+          </p>
+        )}
       </section>
 
       <section className="flex min-w-0 flex-[1_1_26rem] flex-col gap-3.5 px-5 pb-6 pt-2.5">
