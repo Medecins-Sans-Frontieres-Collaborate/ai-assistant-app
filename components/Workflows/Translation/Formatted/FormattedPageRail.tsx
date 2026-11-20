@@ -1,12 +1,15 @@
 'use client';
 
 import { IconArrowBackUp, IconX } from '@tabler/icons-react';
-import { useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, RefObject, useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import { PdfPages } from '@/client/hooks/workflows/usePdfPages';
+import { useRunImage } from '@/client/hooks/workflows/useRunImage';
 
+import { groupKeyTarget } from '@/lib/utils/client/keyboardScope';
+import { isRtlElement } from '@/lib/utils/client/textDirection';
 import {
   BatchPageState,
   BatchPlan,
@@ -41,18 +44,14 @@ interface SourceThumbnailProps {
 }
 
 /**
- * A page of the source document, rendered only once it is near the visible
- * part of the list: a long document has many pages that are never looked at.
+ * Whether the element behind `holder` has come near the visible part of
+ * the list (within THUMBNAIL_MARGIN). Once near, it stays near. Without
+ * the observer (an old browser) everything is near.
  */
-function SourceThumbnail({ page, pdf, className }: SourceThumbnailProps) {
-  const holder = useRef<HTMLSpanElement>(null);
-  // Without the observer (an old browser) every thumbnail simply renders.
+function useNearView(holder: RefObject<HTMLElement | null>): boolean {
   const [near, setNear] = useState(
     () => typeof IntersectionObserver === 'undefined',
   );
-  const [image, setImage] = useState<string | null>(null);
-  const { renderPage, status } = pdf;
-
   useEffect(() => {
     if (near || !holder.current) return;
     const observer = new IntersectionObserver(
@@ -63,10 +62,41 @@ function SourceThumbnail({ page, pdf, className }: SourceThumbnailProps) {
     );
     observer.observe(holder.current);
     return () => observer.disconnect();
-  }, [near]);
+  }, [near, holder]);
+  return near;
+}
+
+/** Placeholder of a thumbnail that is not there yet. */
+function ThumbnailPlaceholder({
+  holder,
+  pulse,
+}: {
+  holder?: RefObject<HTMLSpanElement | null>;
+  pulse: boolean;
+}) {
+  return (
+    <span
+      ref={holder}
+      className={`block aspect-[210/297] w-full rounded-sm bg-gray-200 dark:bg-surface-dark-elevated ${
+        pulse ? 'animate-pulse' : ''
+      }`}
+    />
+  );
+}
+
+/**
+ * A page of the source document, rendered only once it is near the visible
+ * part of the list: a long document has many pages that are never looked at.
+ * The source document itself loads on the first such page (see usePdfPages).
+ */
+function SourceThumbnail({ page, pdf, className }: SourceThumbnailProps) {
+  const holder = useRef<HTMLSpanElement>(null);
+  const near = useNearView(holder);
+  const [image, setImage] = useState<string | null>(null);
+  const { renderPage, status } = pdf;
 
   useEffect(() => {
-    if (!near || status !== 'ready') return;
+    if (!near || status === 'failed') return;
     let cancelled = false;
     void renderPage(page, THUMBNAIL_WIDTH).then((url) => {
       if (!cancelled) setImage(url);
@@ -81,12 +111,30 @@ function SourceThumbnail({ page, pdf, className }: SourceThumbnailProps) {
     // eslint-disable-next-line @next/next/no-img-element
     <img src={image} alt="" className={`w-full rounded-sm ${className}`} />
   ) : (
-    <span
-      ref={holder}
-      className={`block aspect-[210/297] w-full rounded-sm bg-gray-200 dark:bg-surface-dark-elevated ${
-        status === 'failed' ? '' : 'animate-pulse'
-      }`}
-    />
+    <ThumbnailPlaceholder holder={holder} pulse={status !== 'failed'} />
+  );
+}
+
+interface TranslatedThumbnailProps {
+  /** The page's stored image (its `previewUrl`). */
+  url: string;
+  className: string;
+}
+
+/**
+ * A translated page, loaded once it is near the visible part of the list,
+ * at `soon` priority (see PAGE IMAGES in runImageLoader.ts).
+ */
+function TranslatedThumbnail({ url, className }: TranslatedThumbnailProps) {
+  const holder = useRef<HTMLSpanElement>(null);
+  const near = useNearView(holder);
+  const image = useRunImage(url, 'soon', near);
+  return image ? (
+    // A stored page of the user's own run, as a data URL.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={image} alt="" className={`w-full rounded-sm ${className}`} />
+  ) : (
+    <ThumbnailPlaceholder holder={holder} pulse />
   );
 }
 
@@ -96,8 +144,6 @@ export interface FormattedPageRailProps {
   pageCount: number;
   /** The source document, for pages that are not translated. */
   pdf: PdfPages;
-  /** Loaded images of the translated pages, by preview URL. */
-  previews: Record<string, string>;
   /** Laid out as a row above the page instead of a column beside it. */
   stacked: boolean;
   /**
@@ -126,12 +172,15 @@ export interface FormattedPageRailProps {
  * pages, pages still in the source language, and pages removed from the
  * download. From here a person opens a page, removes it or puts it back,
  * and ticks untranslated pages to translate as the next batch.
+ *
+ * The pages are one Tab stop: arrow keys move between them (up and down,
+ * or left and right when the list is a row), Home and End go to the first
+ * and last, Enter opens one. Tab from a page reaches its own controls.
  */
 export function FormattedPageRail({
   run,
   pageCount,
   pdf,
-  previews,
   stacked,
   plan,
   nextPages,
@@ -145,6 +194,37 @@ export function FormattedPageRail({
   onRemovePage,
 }: FormattedPageRailProps) {
   const t = useTranslations('workflows');
+  const list = useRef<HTMLElement>(null);
+  // The page that holds the Tab stop: the last one the keyboard was on.
+  const [focusedPage, setFocusedPage] = useState<number | null>(null);
+  const tabStop =
+    focusedPage !== null && focusedPage <= pageCount ? focusedPage : run.page;
+
+  // The open page stays in sight when it changes from elsewhere (a key).
+  useEffect(() => {
+    list.current
+      ?.querySelector(`[data-page="${run.page}"]`)
+      ?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+  }, [run.page]);
+
+  /** Arrow keys, Home and End move between the pages (see above). */
+  const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    const from = (event.target as HTMLElement).closest('[data-page-open]');
+    if (!from || event.altKey || event.ctrlKey || event.metaKey) return;
+    const buttons = Array.from(
+      event.currentTarget.querySelectorAll<HTMLElement>('[data-page-open]'),
+    );
+    const to = groupKeyTarget(
+      event.key,
+      buttons.indexOf(from as HTMLElement),
+      buttons.length,
+      stacked ? 'horizontal' : 'vertical',
+      isRtlElement(event.currentTarget),
+    );
+    if (to === null) return;
+    event.preventDefault();
+    buttons[to].focus();
+  };
   const translated = new Set(translatedPages(run));
   const removed = new Set(removedPages(run));
   const pages = Array.from({ length: pageCount }, (_, index) => index + 1);
@@ -215,7 +295,9 @@ export function FormattedPageRail({
 
   return (
     <nav
+      ref={list}
       aria-label={t('translation.formatted.pages')}
+      onKeyDown={onKeyDown}
       className={`flex shrink-0 gap-3.5 border-gray-200 p-3 dark:border-gray-700 ${
         stacked
           ? 'flex-row overflow-x-auto border-b'
@@ -258,6 +340,8 @@ export function FormattedPageRail({
           edits > 0
             ? t('translation.formatted.pageEdits', { page, count: edits })
             : t('translation.formatted.pageLabel', { page });
+        // Only the page with the Tab stop has its controls in the Tab order.
+        const tabIndex = page === tabStop ? 0 : -1;
         const outline = current
           ? 'outline outline-2 outline-offset-2 outline-blue-500'
           : state === 'selected'
@@ -278,20 +362,17 @@ export function FormattedPageRail({
                 type="button"
                 aria-current={current ? 'page' : undefined}
                 aria-label={t('translation.formatted.pageLabel', { page })}
+                data-page-open
+                tabIndex={tabIndex}
+                onFocus={() => setFocusedPage(page)}
                 onClick={() => onOpenPage(page)}
-                className={`block w-full rounded-sm ${outline}`}
+                className={`block w-full rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${outline}`}
               >
                 {isTranslated && url ? (
-                  previews[url] ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={previews[url]}
-                      alt=""
-                      className={`w-full rounded-sm ${THUMBNAIL_LOOK[look]}`}
-                    />
-                  ) : (
-                    <span className="block aspect-[210/297] w-full animate-pulse rounded-sm bg-gray-200 dark:bg-surface-dark-elevated" />
-                  )
+                  <TranslatedThumbnail
+                    url={url}
+                    className={THUMBNAIL_LOOK[look]}
+                  />
                 ) : (
                   <SourceThumbnail
                     page={page}
@@ -319,6 +400,7 @@ export function FormattedPageRail({
                   disabled={busy}
                   title={t('translation.formatted.restorePage', { page })}
                   aria-label={t('translation.formatted.restorePage', { page })}
+                  tabIndex={tabIndex}
                   onClick={() => onRemovePage(page, false)}
                   className="absolute end-1 top-1 rounded-full bg-white p-1 text-gray-700 shadow ring-1 ring-gray-300 hover:bg-gray-100 disabled:opacity-50 dark:bg-surface-dark-elevated dark:text-gray-200 dark:ring-gray-600"
                 >
@@ -331,6 +413,7 @@ export function FormattedPageRail({
                     disabled={busy}
                     title={t('translation.formatted.removePage', { page })}
                     aria-label={t('translation.formatted.removePage', { page })}
+                    tabIndex={tabIndex}
                     onClick={() => onRemovePage(page, true)}
                     className="absolute end-1 top-1 rounded-full bg-gray-900/70 p-1 text-white opacity-0 hover:bg-gray-900 focus:opacity-100 disabled:opacity-0 group-hover:opacity-100 max-sm:opacity-100"
                   >
@@ -344,6 +427,7 @@ export function FormattedPageRail({
                 <input
                   type="checkbox"
                   checked={state === 'selected'}
+                  tabIndex={tabIndex}
                   onChange={() => onTickPage(page)}
                 />
                 {label}
