@@ -123,6 +123,21 @@ describe('/api/documents/pdf', () => {
     ]);
   });
 
+  it('opens an original kept in its legacy format as that format', async () => {
+    // The translation is a .pptx; the uploaded original was a .ppt.
+    translations.blobExists.mockImplementation(
+      async (blob: string) =>
+        blob === `user-1/translations/${JOB}_original.ppt`,
+    );
+    const response = await call({
+      kind: 'translation-original',
+      id: JOB,
+      type: 'pptx',
+    });
+    expect(response.status).toBe(200);
+    expect(convert.mock.calls[0][0].type).toBe('ppt');
+  });
+
   it('finds nothing for an output that is gone, or a job id that is not one', async () => {
     translations.blobExists.mockResolvedValue(false);
     expect(
