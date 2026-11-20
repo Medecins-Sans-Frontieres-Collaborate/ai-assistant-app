@@ -221,13 +221,21 @@ function paragraphsOf(
   return [];
 }
 
-/** Bullets moved into a text-only placeholder: one paragraph each. */
-function bulletsAsText(bullets: readonly DeckBullet[]): string {
+/**
+ * Bullets moved into a text-only placeholder: a title takes them as one
+ * line, a subtitle as one paragraph each.
+ */
+function bulletsAsText(
+  bullets: readonly DeckBullet[],
+  role: DeckPlaceholderRole,
+): string {
   return bullets
     .map((bullet) => bullet.text.trim())
     .filter(Boolean)
-    .join('\n');
+    .join(role === 'title' ? ' ' : '\n');
 }
+
+const lines = (count: number) => `${count} ${count === 1 ? 'line' : 'lines'}`;
 
 /**
  * Checks a plan against a template's layouts. What can be repaired
@@ -318,7 +326,7 @@ export function checkDeckPlan(
           fill = {
             placeholder: fill.placeholder,
             kind: 'text',
-            text: bulletsAsText(fill.bullets),
+            text: bulletsAsText(fill.bullets, place.role),
           };
           repaired.push({
             code: 'kind-not-accepted',
@@ -380,7 +388,7 @@ export function checkDeckPlan(
           blocking.push({
             code: 'too-long',
             ...where,
-            message: `Slide ${number}: the text for "${place.name}" needs ${linesNeeded(paragraphsOf(fill), place, 1)} lines; it holds ${place.lines} lines of about ${place.charsPerLine} characters, and the fit can make room for at most ${Math.floor(place.lines / FIT_MIN_SCALE)} shorter ones. Shorten it or split the slide.`,
+            message: `Slide ${number}: the text for "${place.name}" needs ${lines(linesNeeded(paragraphsOf(fill), place, 1))}; it holds ${lines(place.lines)} of about ${place.charsPerLine} characters, and the fit can make room for at most ${lines(Math.floor(place.lines / FIT_MIN_SCALE))}, shorter. Shorten it or split the slide.`,
           });
         } else if (fit === 'shrinks') {
           shrunk.push({ slide: number, placeholder: place.key });
