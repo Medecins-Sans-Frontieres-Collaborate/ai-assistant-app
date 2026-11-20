@@ -287,9 +287,14 @@ const serverEnvSchema = z.object({
   // Document render service (lib/services/presentationRender): every
   // LibreOffice job on the server waits in one queue. Measured for a 60-slide
   // deck: 6-8 s and about 260 MB each (docs/POWERPOINT_TRANSLATION.md).
-  // 'inprocess' runs LibreOffice on this server; a separate service will
-  // implement the same interface and be chosen here.
-  RENDER_SERVICE: z.enum(['inprocess']).default('inprocess'),
+  // 'inprocess' runs LibreOffice on this server; 'http' sends every job to a
+  // separate service at RENDER_SERVICE_URL (contract: docs/RENDER_SERVICE.md).
+  RENDER_SERVICE: z.enum(['inprocess', 'http']).default('inprocess'),
+  // The separate service's address; required when RENDER_SERVICE is 'http'.
+  // Reached over the environment's internal network only.
+  RENDER_SERVICE_URL: z.string().url().optional(),
+  // Optional bearer token the separate service checks.
+  RENDER_SERVICE_TOKEN: z.string().optional(),
   // Jobs running at once on this instance.
   RENDER_MAX_CONCURRENT: z.coerce.number().int().min(1).max(16).default(1),
   // Jobs waiting at once before new work is refused (503 RENDER_BUSY).
