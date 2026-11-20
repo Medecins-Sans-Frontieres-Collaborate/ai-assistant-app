@@ -85,6 +85,10 @@ export function artifactOf(state: WorkflowState | undefined): WorkflowArtifact {
         ? { id: `form:${active.id}`, label: active.template.name }
         : WORKSPACE;
     }
+    case 'brand-review':
+      // One review at a time; a new document is a new review in the same
+      // workspace, and the run's usage carries its own label.
+      return WORKSPACE;
     case 'channel-drafter':
       // Generation writes every channel in one run, so the run cannot be
       // attributed to a single channel; the per-channel split is carried by
