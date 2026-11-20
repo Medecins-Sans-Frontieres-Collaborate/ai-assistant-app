@@ -4953,7 +4953,8 @@
         "found": "Trobat",
         "notes": "Notes",
         "fileSuffix": "revisió de marca"
-      }
+      },
+      "noneFound": "No s’ha detectat cap problema."
     },
     "deckBuilder": {
       "loading": "S’està carregant la presentació…",

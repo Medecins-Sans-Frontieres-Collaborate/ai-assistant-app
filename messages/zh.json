@@ -4984,7 +4984,8 @@
         "found": "发现内容",
         "notes": "备注",
         "fileSuffix": "品牌审核"
-      }
+      },
+      "noneFound": "未发现问题。"
     },
     "deckBuilder": {
       "loading": "正在加载演示文稿…",

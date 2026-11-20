@@ -4983,7 +4983,8 @@
         "found": "ملا",
         "notes": "نوٹس",
         "fileSuffix": "برانڈ ریویو"
-      }
+      },
+      "noneFound": "کوئی مسئلہ نہیں ملا۔"
     },
     "deckBuilder": {
       "loading": "ڈیک لوڈ ہو رہا ہے...",

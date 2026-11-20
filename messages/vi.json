@@ -4984,7 +4984,8 @@
         "found": "Đã tìm thấy",
         "notes": "Ghi chú",
         "fileSuffix": "đánh giá thương hiệu"
-      }
+      },
+      "noneFound": "Không phát hiện vấn đề nào."
     },
     "deckBuilder": {
       "loading": "Đang tải deck…",

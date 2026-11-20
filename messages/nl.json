@@ -4953,7 +4953,8 @@
         "found": "Gevonden",
         "notes": "Notities",
         "fileSuffix": "merkevaluatie"
-      }
+      },
+      "noneFound": "Geen problemen gevonden."
     },
     "deckBuilder": {
       "loading": "Presentatie wordt geladen…",

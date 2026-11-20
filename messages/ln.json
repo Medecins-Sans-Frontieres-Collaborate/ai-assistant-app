@@ -4937,7 +4937,8 @@
         "found": "Eyebanaki",
         "notes": "Noti",
         "fileSuffix": "boyekoli ya brand"
-      }
+      },
+      "noneFound": "Mokwɛ́lɛ moko ezwámá te."
     },
     "deckBuilder": {
       "loading": "Ezo zwa deck…",

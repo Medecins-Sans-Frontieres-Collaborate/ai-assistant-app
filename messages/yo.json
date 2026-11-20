@@ -4937,7 +4937,8 @@
         "found": "Tí a rí",
         "notes": "Àkọsilẹ̀",
         "fileSuffix": "àyẹ̀wò àmì"
-      }
+      },
+      "noneFound": "Ko si wahala kankan ti a ri."
     },
     "deckBuilder": {
       "loading": "N gbígbógun agbóyè…",

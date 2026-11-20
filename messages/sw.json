@@ -4953,7 +4953,8 @@
         "found": "Imepatikana",
         "notes": "Maelezo",
         "fileSuffix": "ukaguzi wa chapa"
-      }
+      },
+      "noneFound": "Hakuna matatizo yaliyopatikana."
     },
     "deckBuilder": {
       "loading": "Inapakia bwawa…",

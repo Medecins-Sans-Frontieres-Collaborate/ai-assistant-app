@@ -4937,7 +4937,8 @@
         "found": "Okutholiwe",
         "notes": "Amanothi",
         "fileSuffix": "ukubuyekezwa komkhiqizo"
-      }
+      },
+      "noneFound": "Awekho amaphutha atholakele."
     },
     "deckBuilder": {
       "loading": "Kulayishwa ikhadi...",

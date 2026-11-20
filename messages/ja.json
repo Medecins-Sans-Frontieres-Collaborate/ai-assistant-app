@@ -4953,7 +4953,8 @@
         "found": "検出内容",
         "notes": "備考",
         "fileSuffix": "ブランドレビュー"
-      }
+      },
+      "noneFound": "問題は見つかりませんでした。"
     },
     "deckBuilder": {
       "loading": "デッキを読み込み中…",

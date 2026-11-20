@@ -4953,7 +4953,8 @@
         "found": "נמצא",
         "notes": "הערות",
         "fileSuffix": "סקירת מותג"
-      }
+      },
+      "noneFound": "לא נמצאו בעיות."
     },
     "deckBuilder": {
       "loading": "טוען את המצגת…",

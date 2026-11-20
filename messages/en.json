@@ -3635,6 +3635,7 @@
       "newReview": "New review",
       "findings": "Findings",
       "noFindings": "Nothing found yet.",
+      "noneFound": "No problems found.",
       "noneOfSeverity": "No findings of this kind.",
       "byModel": "Found by the model; check it.",
       "notes": "Notes",

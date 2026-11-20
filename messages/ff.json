@@ -4937,7 +4937,8 @@
         "found": "Moƴƴi",
         "notes": "Dokkal",
         "fileSuffix": "lewna brand"
-      }
+      },
+      "noneFound": "Wone jam so tayan."
     },
     "deckBuilder": {
       "loading": "Deck sedang ngarga…",

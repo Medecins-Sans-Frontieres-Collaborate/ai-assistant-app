@@ -4953,7 +4953,8 @@
         "found": "Trouvé",
         "notes": "Notes",
         "fileSuffix": "revue de marque"
-      }
+      },
+      "noneFound": "Aucun problème détecté."
     },
     "deckBuilder": {
       "loading": "Chargement de la présentation…",

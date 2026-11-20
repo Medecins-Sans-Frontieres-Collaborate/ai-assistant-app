@@ -4953,7 +4953,8 @@
         "found": "Nalezeno",
         "notes": "Poznámky",
         "fileSuffix": "brand review"
-      }
+      },
+      "noneFound": "Nebyly nalezeny žádné problémy."
     },
     "deckBuilder": {
       "loading": "Načítání prezentace…",

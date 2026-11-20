@@ -4937,7 +4937,8 @@
         "found": "Icyabonetse",
         "notes": "Inyandiko",
         "fileSuffix": "isuzuma ry'ikimenyetso"
-      }
+      },
+      "noneFound": "Nta kibazo cyabonetse."
     },
     "deckBuilder": {
       "loading": "Turimo gupakira deck...",

@@ -4953,7 +4953,8 @@
         "found": "ተገኘ",
         "notes": "ማስታወሻዎች",
         "fileSuffix": "የብራንድ አስተያየት"
-      }
+      },
+      "noneFound": "ምንም ችግር አልተገኘም።"
     },
     "deckBuilder": {
       "loading": "ዲኩን በመጫን ላይ…",

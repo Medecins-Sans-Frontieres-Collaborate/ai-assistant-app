@@ -4937,7 +4937,8 @@
         "found": "Mo ti yeke",
         "notes": "Note",
         "fileSuffix": "gbangu ti brand"
-      }
+      },
+      "noneFound": "Gbangu sô ôko agbenza."
     },
     "deckBuilder": {
       "loading": "Mo yeke na mbênî presentation...",

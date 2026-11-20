@@ -4953,7 +4953,8 @@
         "found": "Hittat",
         "notes": "Noteringar",
         "fileSuffix": "varumärkesgranskning"
-      }
+      },
+      "noneFound": "Inga problem hittades."
     },
     "deckBuilder": {
       "loading": "Laddar presentationen…",

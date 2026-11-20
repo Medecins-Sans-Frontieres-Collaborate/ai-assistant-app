@@ -4937,7 +4937,8 @@
         "found": "Chatsimikizika",
         "notes": "Zolemba",
         "fileSuffix": "kuwunika kwa brand"
-      }
+      },
+      "noneFound": "Palibe mavuto apezeka."
     },
     "deckBuilder": {
       "loading": "Ikutsegula deck...",

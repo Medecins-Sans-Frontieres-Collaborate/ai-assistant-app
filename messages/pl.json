@@ -4953,7 +4953,8 @@
         "found": "Znaleziono",
         "notes": "Notatki",
         "fileSuffix": "przegląd marki"
-      }
+      },
+      "noneFound": "Nie znaleziono problemów."
     },
     "deckBuilder": {
       "loading": "Ładowanie prezentacji…",

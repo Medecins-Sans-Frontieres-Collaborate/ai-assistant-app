@@ -4937,7 +4937,8 @@
         "found": "Pronađeno",
         "notes": "Beleške",
         "fileSuffix": "brend pregled"
-      }
+      },
+      "noneFound": "Nisu pronađeni problemi."
     },
     "deckBuilder": {
       "loading": "Učitavanje prezentacije…",

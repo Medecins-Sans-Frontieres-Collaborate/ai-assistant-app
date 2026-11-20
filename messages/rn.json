@@ -4937,7 +4937,8 @@
         "found": "Ivyabonetse",
         "notes": "Utumenyeshanyo",
         "fileSuffix": "isuzuma ry'ikimenyetso"
-      }
+      },
+      "noneFound": "Nta kibazo cabonetse."
     },
     "deckBuilder": {
       "loading": "Biriko birashira deck...",

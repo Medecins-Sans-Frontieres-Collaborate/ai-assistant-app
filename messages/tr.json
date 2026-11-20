@@ -4953,7 +4953,8 @@
         "found": "Bulundu",
         "notes": "Notlar",
         "fileSuffix": "marka incelemesi"
-      }
+      },
+      "noneFound": "Sorun bulunamadı."
     },
     "deckBuilder": {
       "loading": "Sunum yükleniyor…",

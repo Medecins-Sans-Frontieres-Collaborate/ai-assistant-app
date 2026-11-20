@@ -4937,7 +4937,8 @@
         "found": "Εντοπίστηκε",
         "notes": "Σημειώσεις",
         "fileSuffix": "έλεγχος brand"
-      }
+      },
+      "noneFound": "Δεν εντοπίστηκαν προβλήματα."
     },
     "deckBuilder": {
       "loading": "Φόρτωση του deck…",

@@ -4937,7 +4937,8 @@
         "found": "La helay",
         "notes": "Xusuus-qor",
         "fileSuffix": "dib-u-eegista summad"
-      }
+      },
+      "noneFound": "Dhibaato lama helin."
     },
     "deckBuilder": {
       "loading": "Deck-ga waa la rarayaa…",

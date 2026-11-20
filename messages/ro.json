@@ -4953,7 +4953,8 @@
         "found": "Găsit",
         "notes": "Note",
         "fileSuffix": "revizuire brand"
-      }
+      },
+      "noneFound": "Nu au fost identificate probleme."
     },
     "deckBuilder": {
       "loading": "Se încarcă prezentarea…",

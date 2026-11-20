@@ -4953,7 +4953,8 @@
         "found": "Löydetty",
         "notes": "Huomiot",
         "fileSuffix": "brändikatselmus"
-      }
+      },
+      "noneFound": "Ongelmia ei löytynyt."
     },
     "deckBuilder": {
       "loading": "Ladataan esitystä…",

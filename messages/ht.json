@@ -4937,7 +4937,8 @@
         "found": "Sa ki jwenn",
         "notes": "Nòt",
         "fileSuffix": "revizyon mak"
-      }
+      },
+      "noneFound": "Pa gen okenn pwoblèm jwenn."
     },
     "deckBuilder": {
       "loading": "Y ap chaje prezantasyon an…",

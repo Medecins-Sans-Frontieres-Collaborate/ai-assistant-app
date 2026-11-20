@@ -4937,7 +4937,8 @@
         "found": "ዝገነቡ",
         "notes": "ማህበራዊ ህቡባት",
         "fileSuffix": "ብራንድ ምርመራ"
-      }
+      },
+      "noneFound": "ችግሮ ኣይተረኽበን።"
     },
     "deckBuilder": {
       "loading": "ደብተር እዘካኦ…",

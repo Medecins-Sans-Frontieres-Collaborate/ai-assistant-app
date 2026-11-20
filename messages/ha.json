@@ -4937,7 +4937,8 @@
         "found": "Abin da aka samu",
         "notes": "Bayanan kula",
         "fileSuffix": "bitar alama"
-      }
+      },
+      "noneFound": "Ba a samu wata matsala ba."
     },
     "deckBuilder": {
       "loading": "Ana loda gabatarwar…",

@@ -4953,7 +4953,8 @@
         "found": "발견",
         "notes": "노트",
         "fileSuffix": "브랜드 검토"
-      }
+      },
+      "noneFound": "문제가 발견되지 않았습니다."
     },
     "deckBuilder": {
       "loading": "덱을 불러오는 중…",

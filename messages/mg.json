@@ -4937,7 +4937,8 @@
         "found": "Hita",
         "notes": "Fanamarihana",
         "fileSuffix": "fanamarinana marika"
-      }
+      },
+      "noneFound": "Tsy nisy olana hita."
     },
     "deckBuilder": {
       "loading": "Eo am-pitondrana ny deck…",

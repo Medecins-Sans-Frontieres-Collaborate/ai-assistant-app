@@ -4953,7 +4953,8 @@
         "found": "Ditemukan",
         "notes": "Catatan",
         "fileSuffix": "review merek"
-      }
+      },
+      "noneFound": "Tidak ada masalah yang ditemukan."
     },
     "deckBuilder": {
       "loading": "Sedang memuat dek…",
