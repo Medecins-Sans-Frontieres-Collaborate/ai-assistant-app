@@ -404,6 +404,27 @@ describe.skipIf(!deckScriptAvailable)(
         expect(after[0] - before[0]).toBe(10 * 12700);
         expect(after[1]).toBe(before[1]);
       });
+
+      it('sets the typeface of every run of a refonted paragraph, and only that one', () => {
+        const refonted = unit('JUST FITS');
+        const { deck } = rebuild(
+          unitsFile,
+          {},
+          { styles: { [refonted.id]: { font: 'Source Sans Pro' } } },
+        );
+        const after = xml(deck, 'ppt/slides/slide8.xml');
+        const latin = [
+          ...after.matchAll(/<a:latin typeface="Source Sans Pro"\/>/g),
+        ];
+        expect(latin.length).toBeGreaterThan(0);
+        // A name that could break the XML is refused, the deck unchanged.
+        const { deck: unsafe } = rebuild(
+          unitsFile,
+          {},
+          { styles: { [refonted.id]: { font: 'Bad"Font' } } },
+        );
+        expect(xml(unsafe, 'ppt/slides/slide8.xml')).not.toContain('Bad');
+      });
     });
 
     describe('fit', () => {
