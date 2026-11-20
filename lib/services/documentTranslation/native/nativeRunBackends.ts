@@ -16,6 +16,7 @@ import {
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty, BlobStorage } from '@/lib/utils/server/blob/blob';
+import { overwriteBlob } from '@/lib/utils/server/blob/overwriteBlob';
 import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 
 /**
@@ -104,9 +105,8 @@ export class BlobRunFolder implements RunFolder {
   }
 
   async write(name: string, data: Buffer, contentType: string): Promise<void> {
-    await this.storage.upload(this.prefix + name, data, {
-      blobHTTPHeaders: { blobContentType: contentType },
-    });
+    // The run's job and record change in place (overwriteBlob.ts).
+    await overwriteBlob(this.storage, this.prefix + name, data, contentType);
   }
 
   async read(name: string): Promise<Buffer | null> {
