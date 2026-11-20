@@ -28,23 +28,27 @@ import {
 
 vi.mock('@/config/environment', () => ({ env: {} }));
 const sandbox = vi.hoisted(() => ({ calls: [] as string[] }));
-vi.mock('@/lib/services/documents/sandbox/sandboxScriptRunner', () => ({
-  runSandboxScript: vi.fn(
-    async (
-      command: string,
-      inputs: Array<{ filename: string; data: Buffer }>,
-      _usage: unknown,
-      script: Parameters<typeof runLocalScript>[0],
-    ) => {
-      sandbox.calls.push(script.filename);
-      return {
-        files: runLocalScript(script, command, inputs),
-        logs: '',
-        durationMs: 0,
-      };
-    },
-  ),
-}));
+vi.mock(
+  '@/lib/services/documents/sandbox/sandboxScriptRunner',
+  async (importOriginal) => ({
+    ...(await importOriginal<object>()),
+    runSandboxScript: vi.fn(
+      async (
+        command: string,
+        inputs: Array<{ filename: string; data: Buffer }>,
+        _usage: unknown,
+        script: Parameters<typeof runLocalScript>[0],
+      ) => {
+        sandbox.calls.push(script.filename);
+        return {
+          files: runLocalScript(script, command, inputs),
+          logs: '',
+          durationMs: 0,
+        };
+      },
+    ),
+  }),
+);
 const service = vi.hoisted(() => ({ current: null as unknown }));
 vi.mock('@/lib/services/documents/render/renderService', async (original) => {
   const actual = (await original()) as Record<string, unknown>;
