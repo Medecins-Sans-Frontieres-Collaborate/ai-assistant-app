@@ -341,6 +341,7 @@ export function BrandReviewWorkspace({
             key={reviewId}
             document={document}
             findings={findings}
+            complete={state.status === 'done'}
           />
         )}
       </div>
