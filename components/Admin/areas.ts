@@ -6,6 +6,7 @@ import {
   IconMap2,
   IconMasksTheater,
   IconMessages,
+  IconPalette,
   IconPlugConnected,
   IconRobot,
   IconRoute,
@@ -135,6 +136,13 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     labelKey: 'agentAccess.formTemplatesTab',
     descriptionKey: 'admin.areaDescription.formTemplates',
   },
+  'brand-books': {
+    id: 'brand-books',
+    href: '/admin/brand-books',
+    icon: IconPalette,
+    labelKey: 'admin.area.brandBooks',
+    descriptionKey: 'admin.areaDescription.brandBooks',
+  },
   'channel-sets': {
     id: 'channel-sets',
     href: '/admin/channel-sets',
@@ -260,6 +268,7 @@ export const ADMIN_GROUPS: AdminAreaGroupDescriptor[] = [
       'glossaries',
       'map-datasets',
       'form-templates',
+      'brand-books',
       'channel-sets',
       // The organisation-wide platform facts every channel set builds on, so
       // it reads as a footnote to the sets rather than a peer of them.
