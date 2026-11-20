@@ -8,6 +8,8 @@ import {
   useState,
 } from 'react';
 
+import { PageSize } from '@/lib/utils/shared/documents/pageGeometry';
+
 /** Loading state of the document behind {@link usePdfPages}. */
 export type PdfPagesStatus = 'idle' | 'loading' | 'ready' | 'failed';
 
@@ -29,6 +31,13 @@ export interface PdfPages {
    *   document cannot be opened, or it was unloaded meanwhile).
    */
   renderPage: (page: number, width: number) => Promise<string | null>;
+  /**
+   * A page's size in points (PDF units, 72 to the inch), loading the
+   * document first when needed: what boxes over the page are given in.
+   *
+   * @returns The size, or null when the page or the document cannot be read.
+   */
+  pageSize: (page: number) => Promise<PageSize | null>;
 }
 
 interface LoadedDocument {
@@ -189,5 +198,25 @@ export function usePdfPages(
     [ensureOpened],
   );
 
-  return { status, pageCount, renderPage };
+  const pageSize = useCallback(
+    async (page: number): Promise<PageSize | null> => {
+      const loaded = documentRef.current ?? (await ensureOpened());
+      if (!loaded || page < 1 || page > loaded.numPages) return null;
+      try {
+        const { width, height } = (await loaded.getPage(page)).getViewport({
+          scale: 1,
+        });
+        return { width, height };
+      } catch (error) {
+        console.warn(
+          `[usePdfPages] Page ${page} could not be measured:`,
+          error,
+        );
+        return null;
+      }
+    },
+    [ensureOpened],
+  );
+
+  return { status, pageCount, renderPage, pageSize };
 }
