@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import { usableBrandBooks } from '@/lib/services/brand/brandBooks';
+import { DECK_TEMPLATE_TYPES } from '@/lib/services/deckBuilder/deckInputs';
 
 import {
   handleApiError,
@@ -28,6 +29,11 @@ export async function GET(request: NextRequest) {
           name: record.book.name,
           description: record.book.description,
           colors: record.book.palette.slice(0, 8).map((color) => color.hex),
+          // Deck templates, for the deck builder; their files are reached
+          // through the book (the server checks the book lists them).
+          templates: record.book.templates
+            .filter((template) => DECK_TEMPLATE_TYPES.includes(template.type))
+            .map(({ id, name, type, file }) => ({ id, name, type, file })),
           updatedAt: record.updatedAt,
         }))
         .sort((a, b) => a.name.localeCompare(b.name)),
