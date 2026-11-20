@@ -7,6 +7,7 @@
  * collide with user upload paths (`<userId-guid>/uploads/...`).
  */
 import Hasher from '@/lib/utils/app/hash';
+import { BrandBookBodySchema } from '@/lib/utils/shared/brand/brandBook';
 
 import { z } from 'zod';
 
@@ -32,6 +33,9 @@ export const AGENT_ACCESS_M365_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent
 export const AGENT_ACCESS_FORM_TEMPLATES_PREFIX = `${AGENT_ACCESS_PREFIX}form-templates/`;
 export const AGENT_ACCESS_CHANNEL_PROFILES_PREFIX = `${AGENT_ACCESS_PREFIX}channel-profiles/`;
 export const AGENT_ACCESS_CHANNEL_SETS_PREFIX = `${AGENT_ACCESS_PREFIX}channel-sets/`;
+export const AGENT_ACCESS_BRAND_BOOKS_PREFIX = `${AGENT_ACCESS_PREFIX}brand-books/`;
+/** Files of brand books (logos, templates, source guides): `<id>/<file>`. */
+export const AGENT_ACCESS_BRAND_BOOK_FILES_PREFIX = `${AGENT_ACCESS_PREFIX}brand-book-files/`;
 /** Original DOCX/PDF uploads behind admin form templates (binary, not JSON). */
 export const AGENT_ACCESS_FORM_TEMPLATE_ORIGINALS_PREFIX = `${AGENT_ACCESS_PREFIX}form-template-originals/`;
 /**
@@ -98,6 +102,13 @@ export const MAP_DATASET_SOURCE = 'map-dataset';
  * the other entity sources: rules, delegation and history for free.
  */
 export const FORM_TEMPLATE_SOURCE = 'form-template';
+
+/**
+ * Pseudo-source for admin-managed brand books in canonical keys
+ * (`brand-book::<id>`), docs/DOCUMENT_PLATFORM.md phase E. Rules under the
+ * key decide who may review against, or build from, the book.
+ */
+export const BRAND_BOOK_SOURCE = 'brand-book';
 
 /**
  * Pseudo-source for admin-edited channel profiles in canonical keys
@@ -1109,6 +1120,37 @@ export type AdminFormTemplateHistoryEntry = z.infer<
 export const FORM_TEMPLATE_ID_PATTERN = /^formtpl-[a-f0-9]{12}$/;
 
 /* ------------------------------------------------------------------ */
+/* Brand books (docs/DOCUMENT_PLATFORM.md, phase E)                     */
+/* ------------------------------------------------------------------ */
+
+export const AdminBrandBookSchema = z.object({
+  version: z.literal(1),
+  /** Server-generated `brand-<hex>`; immutable, canonical keys hang off it. */
+  id: z.string().min(1),
+  /** The book as its admin wrote it (brandBook.ts). */
+  book: BrandBookBodySchema,
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type AdminBrandBook = z.infer<typeof AdminBrandBookSchema>;
+
+export const AdminBrandBookHistoryEntrySchema = z.object({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  record: AdminBrandBookSchema.nullable(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type AdminBrandBookHistoryEntry = z.infer<
+  typeof AdminBrandBookHistoryEntrySchema
+>;
+
+export const BRAND_BOOK_ID_PATTERN = /^brand-[a-f0-9]{12}$/;
+
+/* ------------------------------------------------------------------ */
 /* Channel profiles (channel drafter, admin-edited)                    */
 /* ------------------------------------------------------------------ */
 
@@ -1550,6 +1592,15 @@ export function guidePayloadListPrefix(id: string): string {
 
 export function formTemplateBlobPath(id: string): string {
   return `${AGENT_ACCESS_FORM_TEMPLATES_PREFIX}${id}.json`;
+}
+
+export function brandBookBlobPath(id: string): string {
+  return `${AGENT_ACCESS_BRAND_BOOKS_PREFIX}${id}.json`;
+}
+
+/** A brand book's stored file (`<sha256 prefix>.<ext>`). */
+export function brandBookFileBlobPath(id: string, file: string): string {
+  return `${AGENT_ACCESS_BRAND_BOOK_FILES_PREFIX}${id}/${file}`;
 }
 
 export function channelProfileBlobPath(id: string): string {
