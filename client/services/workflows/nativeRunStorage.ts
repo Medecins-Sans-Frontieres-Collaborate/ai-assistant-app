@@ -184,7 +184,8 @@ export function runFilesInUse(run: FormattedDocumentRun): string[] {
   const ids = [
     run.sourceId,
     run.unitsId,
-    fileIdOf(run.pdfUrl),
+    ...(run.pdfUrl ? [fileIdOf(run.pdfUrl)] : []),
+    ...(run.documentUrl ? [fileIdOf(run.documentUrl)] : []),
     ...run.pageImages.flatMap((image) => [
       fileIdOf(image.previewUrl),
       fileIdOf(image.checkUrl),
