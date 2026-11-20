@@ -8,6 +8,7 @@ import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflow
 
 import { mergeGlossaryEntries } from '@/lib/utils/shared/translation/glossaryMatch';
 import { findTranslationLanguageByLabel } from '@/lib/utils/shared/translation/languages';
+import { NativeSourceFormat } from '@/lib/utils/shared/translation/nativeFormats';
 import {
   MAX_BRIEF_TERMS,
   NATIVE_PDF_MAX_REVIEW_ROUNDS,
@@ -54,6 +55,12 @@ import {
 
 import { GlossaryEntry } from '@/types/workflow';
 
+import { nativeFormatAdapter } from './formats';
+import {
+  FormatCallContext,
+  NativeFormatAdapter,
+  NativePdfPageOutput,
+} from './formats/nativeFormat';
 import {
   ANALYZE_SCHEMA,
   LANGUAGE_PROMPT,
@@ -71,7 +78,6 @@ import {
   buildTermsPrompt,
   targetLanguageLines,
 } from './nativePdfPrompts';
-import { SandboxInputFile, runSandboxScript } from './sandboxScriptRunner';
 
 import { strFromU8, strToU8 } from 'fflate';
 import type { AzureOpenAI } from 'openai';
@@ -97,9 +103,17 @@ import type { AzureOpenAI } from 'openai';
  * translate, fails with a reason instead of returning an unchanged file.
  */
 
+export type { NativePdfPageOutput } from './formats/nativeFormat';
+
 export interface NativePdfParams {
-  /** The original PDF bytes. */
+  /** The original file's bytes. */
   document: Buffer;
+  /** What the original is (THE FORMAT ADAPTER); a PDF when absent. */
+  format?: NativeSourceFormat;
+  /** Presentations: whether speaker notes are translated too. */
+  translateNotes?: boolean;
+  /** Told how many jobs are ahead while a step waits for a render slot. */
+  onQueue?: (ahead: number) => void;
   targetLanguage: string;
   /** 1-based pages to translate (see parsePageSelection). */
   pages: number[];
@@ -126,14 +140,6 @@ export interface NativePdfParams {
   usage: WorkflowUsageCollector;
 }
 
-export interface NativePdfPageOutput {
-  page: number;
-  /** PNG of the translated page. */
-  preview: Uint8Array;
-  /** PNG of the original beside the translated page, units numbered. */
-  check: Uint8Array;
-}
-
 export interface NativePdfResult {
   steps: NativePdfStepRecord[];
   pageCount: number;
@@ -149,8 +155,10 @@ export interface NativePdfResult {
   styles: Record<string, NativePdfUnitStyle>;
   /** The brief this run was given, with what it decided added. */
   brief: NativePdfBrief;
-  /** The translated pages as a PDF. */
-  pdf: Uint8Array;
+  /** The translated pages as a PDF; null when a presentation could not be rendered. */
+  pdf: Uint8Array | null;
+  /** Sources that are not PDF: the translated file in its own format. */
+  document?: Uint8Array;
   outputs: NativePdfPageOutput[];
   /**
    * The extraction as the sandbox wrote it. Kept so the pages can be laid
@@ -161,8 +169,13 @@ export interface NativePdfResult {
 }
 
 export interface NativePdfRerenderParams {
-  /** The original PDF bytes. */
+  /** The original file's bytes. */
   document: Buffer;
+  /** What the original is (THE FORMAT ADAPTER); a PDF when absent. */
+  format?: NativeSourceFormat;
+  /** Told how many jobs are ahead while the render waits for a slot. */
+  onQueue?: (ahead: number) => void;
+  signal?: AbortSignal;
   /**
    * The extractions of the document's batches, oldest first: one for a
    * single batch, several when batches are being put together.
@@ -207,7 +220,10 @@ export interface NativePdfRerenderResult {
   repaired: string[];
   /** Units refused as too long; they were laid out as written. */
   tooLong: string[];
-  pdf: Uint8Array;
+  /** Null when a presentation could not be rendered. */
+  pdf: Uint8Array | null;
+  /** Sources that are not PDF: the translated file in its own format. */
+  document?: Uint8Array;
   /** The editable files asked for, by format. */
   exports: Partial<Record<NativePdfExportFormat, Uint8Array>>;
   outputs: NativePdfPageOutput[];
@@ -248,17 +264,6 @@ interface UnitAnalysis {
   note: string;
 }
 
-interface RebuildOutcome {
-  fits: NativePdfFitReport[];
-  fonts: { sans: string; serif: string };
-  pdf: Uint8Array;
-  /** The editable files asked for (see EDITABLE DOWNLOADS in nativePdf.ts). */
-  exports: Partial<Record<NativePdfExportFormat, Uint8Array>>;
-  outputs: NativePdfPageOutput[];
-}
-
-const SOURCE_FILENAME = 'source.pdf';
-const UNITS_FILENAME = 'units.json';
 /** Characters of a unit's text shown to the vision model beside the image. */
 const ANALYZE_TEXT_PREVIEW_CHARS = 160;
 const TRANSLATE_MAX_TOKENS = 12_000;
@@ -271,20 +276,6 @@ const TERM_REPAIRS_MAX = 80;
 
 const pngDataUrl = (bytes: Uint8Array): string =>
   `data:image/png;base64,${Buffer.from(bytes).toString('base64')}`;
-
-function requireFile(files: Map<string, Uint8Array>, name: string): Uint8Array {
-  const bytes = files.get(name);
-  if (!bytes) throw new Error(`The sandbox output is missing ${name}`);
-  return bytes;
-}
-
-function jobFile(job: Record<string, unknown>): SandboxInputFile {
-  return {
-    filename: 'job.json',
-    data: Buffer.from(JSON.stringify(job), 'utf-8'),
-    mimeType: 'application/json',
-  };
-}
 
 function groupByPage<T extends { page: number }>(items: T[]): Map<number, T[]> {
   const pages = new Map<number, T[]>();
@@ -299,7 +290,12 @@ async function analyzePage(options: {
   client: AzureOpenAI;
   model: string;
   system: string;
-  image: Uint8Array;
+  /**
+   * The labelled picture of the page; null when it could not be made (a
+   * presentation whose slides could not be rendered): the units are then
+   * judged from their text alone.
+   */
+  image: Uint8Array | null;
   units: NativePdfUnit[];
   usage: WorkflowUsageCollector;
 }): Promise<{
@@ -324,10 +320,17 @@ async function analyzePage(options: {
     system: options.system,
     user: [
       { type: 'text', text: `Units on this page:\n${JSON.stringify(listing)}` },
-      {
-        type: 'image_url',
-        image_url: { url: pngDataUrl(options.image), detail: 'high' },
-      },
+      ...(options.image
+        ? [
+            {
+              type: 'image_url' as const,
+              image_url: {
+                url: pngDataUrl(options.image),
+                detail: 'high' as const,
+              },
+            },
+          ]
+        : []),
     ],
     schemaName: 'native_pdf_page_analysis',
     schema: ANALYZE_SCHEMA,
@@ -627,80 +630,6 @@ function checkFacts(options: {
 }
 
 /** What a rebuild returns besides the translated pages themselves. */
-interface RebuildOutput {
-  /** Pages to return images of; absent means every translated page. */
-  imagePages?: number[];
-  /** Source pages to leave out of the PDF. */
-  omitPages?: number[];
-  /** Unit id to the person's style for it, already sanitized. */
-  styles?: Record<string, NativePdfUnitStyle>;
-  /** The target language's tag, already sanitized; '' or absent for none. */
-  language?: string;
-  /** Editable formats to build beside the PDF. */
-  exports?: NativePdfExportFormat[];
-}
-
-/** Lays the current translations into the original document. */
-async function rebuild(
-  document: Buffer,
-  unitsFile: Uint8Array,
-  translations: Map<string, string>,
-  usage: WorkflowUsageCollector,
-  output: RebuildOutput = {},
-): Promise<RebuildOutcome> {
-  const { imagePages, omitPages, styles, language, exports = [] } = output;
-  const run = await runSandboxScript(
-    'rebuild',
-    [
-      {
-        filename: SOURCE_FILENAME,
-        data: document,
-        mimeType: 'application/pdf',
-      },
-      {
-        filename: UNITS_FILENAME,
-        data: Buffer.from(unitsFile),
-        mimeType: 'application/json',
-      },
-      jobFile({
-        source: SOURCE_FILENAME,
-        units: UNITS_FILENAME,
-        translations: Object.fromEntries(translations),
-        // The result is the whole document with the translated pages
-        // replaced, so batches add up to one file.
-        onlyTranslatedPages: false,
-        ...(imagePages ? { imagePages } : {}),
-        ...(omitPages?.length ? { omitPages } : {}),
-        ...(styles && Object.keys(styles).length > 0 ? { styles } : {}),
-        // Words too long for their line are hyphenated by this language's rules.
-        ...(language ? { language } : {}),
-        // SLIDES in the script: the result as a presentation as well.
-        ...(exports.includes('pptx') ? { slides: true } : {}),
-      }),
-    ],
-    usage,
-  );
-  const report = JSON.parse(
-    strFromU8(requireFile(run.files, 'report.json')),
-  ) as { fonts: { sans: string; serif: string }; units: NativePdfFitReport[] };
-  const pages = [...new Set(report.units.map((unit) => unit.page))]
-    .filter((page) => !imagePages || imagePages.includes(page))
-    .sort((a, b) => a - b);
-  return {
-    fits: report.units,
-    fonts: report.fonts,
-    pdf: requireFile(run.files, 'translated.pdf'),
-    exports: exports.includes('pptx')
-      ? { pptx: requireFile(run.files, 'translated.pptx') }
-      : {},
-    outputs: pages.map((page) => ({
-      page,
-      preview: requireFile(run.files, `preview_${page}.png`),
-      check: requireFile(run.files, `check_${page}.png`),
-    })),
-  };
-}
-
 export interface NativePdfUnitRevision {
   action: NativePdfUnitAction;
   targetLanguage: string;
@@ -968,11 +897,11 @@ export async function rerenderNativePdf(
     throw new NativePdfNoPagesLeftError();
   }
   const styles = sanitizeUnitStyles(params.styles, extracted.units);
-  const built = await rebuild(
+  const adapter = nativeFormatAdapter(params.format ?? 'pdf');
+  const built = await adapter.rebuild(
     params.document,
     unitsFile,
     edits.translations,
-    params.usage,
     {
       imagePages: params.imagePages && [
         ...new Set([...params.imagePages, ...params.checkPages]),
@@ -982,6 +911,7 @@ export async function rerenderNativePdf(
       language: sanitizeLanguageCode(params.language),
       exports: params.exports,
     },
+    { usage: params.usage, signal: params.signal, onQueue: params.onQueue },
   );
   const wanted = new Set(params.checkPages);
   const toCheck = built.outputs.filter((output) => wanted.has(output.page));
@@ -1005,11 +935,17 @@ export async function rerenderNativePdf(
     // The prescriptions are for the automatic rounds of a first run.
     issues: check.issues.map(({ fix: _fix, ...issue }) => issue),
     checkedPages: check.checkedPages,
-    uncheckedPages: check.uncheckedPages,
+    uncheckedPages: [
+      ...new Set([
+        ...check.uncheckedPages,
+        ...(built.unpictured ?? []).filter((page) => wanted.has(page)),
+      ]),
+    ],
     fonts: built.fonts,
     repaired: edits.repaired,
     tooLong: edits.tooLong,
     pdf: built.pdf,
+    ...(built.document ? { document: built.document } : {}),
     exports: built.exports,
     outputs: built.outputs,
     unitsFile,
@@ -1029,6 +965,14 @@ export async function runNativePdfTranslation(
   params: NativePdfParams,
 ): Promise<NativePdfResult> {
   const { document, targetLanguage, instructions, usage } = params;
+  const adapter: NativeFormatAdapter = nativeFormatAdapter(
+    params.format ?? 'pdf',
+  );
+  const context: FormatCallContext = {
+    usage,
+    signal: params.signal,
+    onQueue: params.onQueue,
+  };
   const client = createAzureClient();
   const visionModel = resolveVisionWorkflowModelId(params.modelId);
   const steps: NativePdfStepRecord[] = [];
@@ -1051,19 +995,11 @@ export async function runNativePdfTranslation(
 
   // ── extract ────────────────────────────────────────────────────────────
   let startedAt = begin('extract');
-  const extraction = await runSandboxScript(
-    'extract',
-    [
-      {
-        filename: SOURCE_FILENAME,
-        data: document,
-        mimeType: 'application/pdf',
-      },
-      jobFile({ source: SOURCE_FILENAME, pages: params.pages }),
-    ],
-    usage,
-  );
-  const unitsFile = requireFile(extraction.files, UNITS_FILENAME);
+  const extraction = await adapter.extract(document, params.pages, {
+    ...context,
+    translateNotes: params.translateNotes,
+  });
+  const unitsFile = extraction.unitsFile;
   const extracted = JSON.parse(strFromU8(unitsFile)) as ExtractPayload;
   const scannedPages = extracted.pages.filter((page) => page.scanned);
   record(
@@ -1109,7 +1045,7 @@ export async function runNativePdfTranslation(
         client,
         model: visionModel,
         system: buildStepPrompt('analyze', instructions),
-        image: requireFile(extraction.files, `page_${page}.png`),
+        image: extraction.pageImage(page),
         units,
         usage,
       });
@@ -1348,15 +1284,26 @@ export async function runNativePdfTranslation(
 
   // ── rebuild ────────────────────────────────────────────────────────────
   startedAt = begin('rebuild');
-  let built = await rebuild(document, unitsFile, translations, usage, {
-    language: language.code,
-  });
+  let built = await adapter.rebuild(
+    document,
+    unitsFile,
+    translations,
+    { language: language.code },
+    context,
+  );
+  // A unit whose part could not be rewritten stays as in the source: it is
+  // reported as not translated rather than as a translation nobody sees.
+  const keptAsWritten = built.fits.filter((fit) => fit.kept);
+  for (const fit of keptAsWritten) translations.delete(fit.id);
   const shrunk = (fits: NativePdfFitReport[]): number =>
     fits.filter((fit) => !fit.fits || fit.scale < 1).length;
   record(
     'rebuild',
     startedAt,
-    `${built.fits.length} units laid out in ${built.fonts.sans}; ${shrunk(built.fits)} needed shrinking`,
+    `${built.fits.length} units laid out in ${built.fonts.sans}; ${shrunk(built.fits)} needed shrinking` +
+      (keptAsWritten.length
+        ? `; ${keptAsWritten.length} could not be written and stay as in the source`
+        : ''),
   );
 
   // ── verify ─────────────────────────────────────────────────────────────
@@ -1380,7 +1327,12 @@ export async function runNativePdfTranslation(
     });
   const firstCheck = await verify(built.outputs);
   let issues = firstCheck.issues;
-  const unchecked = new Set(firstCheck.uncheckedPages);
+  // Pages the rebuild could not picture (a presentation whose render
+  // failed) could not be looked at either.
+  const unchecked = new Set([
+    ...firstCheck.uncheckedPages,
+    ...(built.unpictured ?? []),
+  ]);
   record(
     'verify',
     startedAt,
@@ -1475,10 +1427,13 @@ export async function runNativePdfTranslation(
       }
     }
     styles = plan.styles;
-    built = await rebuild(document, unitsFile, translations, usage, {
-      styles,
-      language: language.code,
-    });
+    built = await adapter.rebuild(
+      document,
+      unitsFile,
+      translations,
+      { styles, language: language.code },
+      context,
+    );
     // Only the pages that changed are looked at again; the rest keep their findings.
     const changedPages = new Set(
       [
@@ -1499,6 +1454,7 @@ export async function runNativePdfTranslation(
     ];
     rechecked.checkedPages.forEach((page) => unchecked.delete(page));
     rechecked.uncheckedPages.forEach((page) => unchecked.add(page));
+    built.unpictured?.forEach((page) => unchecked.add(page));
     // Do no harm: a page that reads worse than before the round goes back.
     const scoreOf = (
       page: number,
@@ -1531,10 +1487,13 @@ export async function runNativePdfTranslation(
       ];
       worse.forEach((page) => undonePages.add(page));
       // The pages on file still show the undone fixes.
-      built = await rebuild(document, unitsFile, translations, usage, {
-        styles,
-        language: language.code,
-      });
+      built = await adapter.rebuild(
+        document,
+        unitsFile,
+        translations,
+        { styles, language: language.code },
+        context,
+      );
     }
   }
   const refitted = new Set(
@@ -1605,6 +1564,7 @@ export async function runNativePdfTranslation(
     styles,
     brief,
     pdf: built.pdf,
+    ...(built.document ? { document: built.document } : {}),
     outputs: built.outputs,
     unitsFile,
   };
