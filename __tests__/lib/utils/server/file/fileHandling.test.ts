@@ -21,7 +21,7 @@ const spawnMock = vi.fn();
 // LibreOffice is reached only through the render service (its own tests
 // cover the process); here it stands in, to check what is asked of it.
 const renderConvertMock = vi.fn();
-vi.mock('@/lib/services/presentationRender/renderService', () => ({
+vi.mock('@/lib/services/documents/render/renderService', () => ({
   getRenderService: () => ({ convert: renderConvertMock }),
 }));
 

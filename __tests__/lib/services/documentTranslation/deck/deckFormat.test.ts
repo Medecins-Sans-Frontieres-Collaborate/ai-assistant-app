@@ -1,8 +1,8 @@
 import { repairDeck } from '@/lib/services/documentTranslation/deck/deckJob';
 import { deckFormat } from '@/lib/services/documentTranslation/native/formats/deckFormat';
-import { LibreOfficeFailedError } from '@/lib/services/presentationRender/libreOfficeProcess';
-import { RenderBusyError } from '@/lib/services/presentationRender/renderQueue';
-import { InProcessRenderService } from '@/lib/services/presentationRender/renderService';
+import { LibreOfficeFailedError } from '@/lib/services/documents/render/libreOfficeProcess';
+import { RenderBusyError } from '@/lib/services/documents/render/renderQueue';
+import { InProcessRenderService } from '@/lib/services/documents/render/renderService';
 import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
@@ -48,7 +48,7 @@ vi.mock(
   }),
 );
 const service = vi.hoisted(() => ({ current: null as unknown }));
-vi.mock('@/lib/services/presentationRender/renderService', async (original) => {
+vi.mock('@/lib/services/documents/render/renderService', async (original) => {
   const actual = (await original()) as Record<string, unknown>;
   return { ...actual, getRenderService: () => service.current };
 });

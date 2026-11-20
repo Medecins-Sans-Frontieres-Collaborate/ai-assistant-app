@@ -8,12 +8,12 @@ import {
   drawingText,
   readDeckSlides,
 } from '@/lib/services/documentTranslation/deck/deckText';
-import { runLibreOffice } from '@/lib/services/presentationRender/libreOfficeProcess';
+import { runLibreOffice } from '@/lib/services/documents/render/libreOfficeProcess';
 import {
   readPackageDirectory,
   readPackagePart,
   writePackage,
-} from '@/lib/services/presentationRender/ooxmlPackage';
+} from '@/lib/services/documents/render/ooxmlPackage';
 
 import { execFileSync } from 'child_process';
 import fs from 'fs';
