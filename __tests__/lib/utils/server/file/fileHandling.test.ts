@@ -1,5 +1,6 @@
 import {
   NoExtractableTextError,
+  PPT_PDF_WITH_HIDDEN_SLIDES,
   PdfExtractionError,
   countPdfPages,
   loadDocumentFromPath,
@@ -183,9 +184,10 @@ describe('legacy Office / HTML routing via loadDocumentFromPath', () => {
       await loadDocumentFromPath('/input/file', mime, name).catch(
         () => undefined,
       );
+      // Hidden slides included, so page n of the text is slide n.
       expect(renderConvertMock.mock.calls[0][0]).toMatchObject({
         type,
-        convertTo: 'pdf',
+        convertTo: PPT_PDF_WITH_HIDDEN_SLIDES,
       });
     }
   });
