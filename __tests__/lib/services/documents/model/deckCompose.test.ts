@@ -1,4 +1,7 @@
-import type { DeckComposeReport } from '@/lib/services/documents/model/deckEngine';
+import {
+  DeckComposeReport,
+  composeDeck,
+} from '@/lib/services/documents/model/deckEngine';
 import { DECK_ENGINE_SCRIPT } from '@/lib/services/documents/model/deckEngineScript';
 
 import type {
@@ -12,13 +15,39 @@ import { pythonHas, runLocalScript } from '../../../../helpers/sandboxScript';
 import { strFromU8, unzipSync } from 'fflate';
 import fs from 'fs';
 import path from 'path';
-import { describe, expect, it } from 'vitest';
+import sharp from 'sharp';
+import { describe, expect, it, vi } from 'vitest';
 
 /**
  * The presentation engine's `layouts` and `compose`, run here as the
  * sandbox runs them, on the brand template fixture (PowerPoint's own
  * layouts, one sample slide with a picture, notes and a section).
  */
+
+// composeDeck itself runs here on this machine, under the sandbox's
+// rules (runLocalScript refuses the input names the sandbox refuses).
+vi.mock(
+  '@/lib/services/documents/sandbox/sandboxScriptRunner',
+  async (importOriginal) => {
+    const { runLocalScript: runHere } =
+      await import('../../../../helpers/sandboxScript');
+    return {
+      ...(await importOriginal<object>()),
+      runSandboxScript: vi.fn(
+        async (
+          command: string,
+          inputs: Parameters<typeof runHere>[2],
+          _usage: unknown,
+          script: Parameters<typeof runHere>[0],
+        ) => ({
+          files: runHere(script, command, inputs),
+          logs: '',
+          durationMs: 0,
+        }),
+      ),
+    };
+  },
+);
 
 const FIXTURES = path.join(process.cwd(), '__tests__/fixtures/brand');
 const fixture = (name: string) => fs.readFileSync(path.join(FIXTURES, name));
@@ -43,7 +72,7 @@ function compose(
 } {
   const names: Record<string, string> = {};
   const inputs = Object.entries(images).map(([key, data], at) => {
-    names[key] = `picture${at + 1}.bin`;
+    names[key] = `picture${at + 1}.png`;
     return { filename: names[key], data };
   });
   const files = runLocalScript(DECK_ENGINE_SCRIPT, 'compose', [
@@ -376,3 +405,53 @@ describe.skipIf(!pythonHas(['lxml']))(
     });
   },
 );
+
+describe.skipIf(!pythonHas(['lxml']))('composeDeck', () => {
+  const picturePlan = (image: string): DeckPlan => ({
+    slides: [
+      {
+        layout: 'slideLayout2',
+        fills: [
+          { placeholder: 'title', kind: 'text', text: 'Pictures' },
+          { placeholder: '1', kind: 'image', image, alt: 'A picture' },
+        ],
+        notes: '',
+      },
+    ],
+  });
+  const pictureParts = (deck: Uint8Array) =>
+    Object.keys(unzipSync(deck)).filter((name) =>
+      name.startsWith('ppt/media/'),
+    );
+
+  it('sends each picture under a name the sandbox takes, by what it is', async () => {
+    const jpeg = await sharp({
+      create: { width: 40, height: 20, channels: 3, background: '#0f7c80' },
+    })
+      .jpeg()
+      .toBuffer();
+    for (const [picture, extension] of [
+      [LOGO, 'png'],
+      [jpeg, 'jpg'],
+    ] as const) {
+      const { deck } = await composeDeck(
+        fixture('template.potx'),
+        picturePlan('logo:main'),
+        new Map([['logo:main', new Uint8Array(picture)]]),
+      );
+      expect(
+        pictureParts(deck).some((name) => name.endsWith(`.${extension}`)),
+      ).toBe(true);
+    }
+  });
+
+  it('refuses a picture that is not a PNG, JPEG or GIF', async () => {
+    await expect(
+      composeDeck(
+        fixture('template.potx'),
+        picturePlan('picture:1'),
+        new Map([['picture:1', new Uint8Array(Buffer.from('<svg/>'))]]),
+      ),
+    ).rejects.toMatchObject({ code: 'BAD_IMAGE' });
+  });
+});
