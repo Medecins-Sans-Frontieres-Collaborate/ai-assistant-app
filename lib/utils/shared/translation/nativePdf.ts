@@ -56,6 +56,47 @@ export const NATIVE_PDF_FEATURE = 'translation-preserve-formatting';
  */
 export const NATIVE_PDF_MAX_PAGES = 6;
 
+/**
+ * EDITABLE DOWNLOADS (stated once; the route, the hook and the menu cite
+ * this). Besides the PDF, a run can be downloaded in the formats listed
+ * here, for refining by hand outside the app. Each is built by a render
+ * that is asked for it, from the same text and looks as that render's PDF,
+ * so `run.exportUrls` always describes the PDF at `run.pdfUrl`: a render
+ * that was not asked for a format leaves the run without it.
+ *
+ * `experimental` marks a format rebuilt from a document of another kind
+ * (a presentation from a PDF): close to the page, not a faithful copy. A
+ * format a source file is translated in directly would not carry it.
+ */
+export const NATIVE_PDF_EXPORT_FORMATS = {
+  pptx: {
+    extension: 'pptx',
+    contentType:
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    experimental: true,
+  },
+} as const;
+
+export type NativePdfExportFormat = keyof typeof NATIVE_PDF_EXPORT_FORMATS;
+
+/** Format to the address its file is served from. */
+export type NativePdfExportUrls = Partial<
+  Record<NativePdfExportFormat, string>
+>;
+
+/**
+ * The export formats in a request, each once; anything else is dropped.
+ *
+ * @param value - Untrusted: what a client sent as `exports`.
+ */
+export function sanitizeExportFormats(value: unknown): NativePdfExportFormat[] {
+  if (!Array.isArray(value)) return [];
+  const known = Object.keys(
+    NATIVE_PDF_EXPORT_FORMATS,
+  ) as NativePdfExportFormat[];
+  return known.filter((format) => value.includes(format));
+}
+
 /** Pages one re-render may run the layout check on. */
 export const NATIVE_PDF_MAX_CHECK_PAGES = 24;
 
@@ -285,12 +326,36 @@ export interface NativePdfUnit {
   peer?: string;
   /** How the source text is aligned; the translation is laid out the same. */
   align?: 'left' | 'center' | 'right';
+  /**
+   * Pictures that draw the unit's text in place of real text (a PowerPoint
+   * export without its font), each by where it is placed. They are removed
+   * with the unit's text. See GLYPH PICTURES in the script.
+   */
+  pictures?: Array<[number, number, number, number]>;
+  /** The unit is a list item: it began with a bullet, which stays on the page. */
+  listed?: boolean;
+  /**
+   * The unit sits in the middle of a cell (a table row, a box): its room is
+   * the cell's height and its translation is centred in it. See CELLS in
+   * the script.
+   */
+  valign?: 'middle';
+  /**
+   * How far the unit's text is turned, counter-clockwise, in degrees; absent
+   * for text running left to right. See DIRECTION in the script.
+   */
+  rotate?: 90 | 180 | 270;
   /** `room` area over `bbox` area: how much more space there is than was used. */
   roomFactor: number;
   lines: number;
   size: number;
   /** The unit's dominant text colour, as `#rrggbb`. */
   color?: string;
+  /**
+   * The unit's text with its inline tags. A line break in it is one the
+   * author made (stacked facts, not a line that only wrapped); a translation
+   * keeps it and is set with it.
+   */
   text: string;
   tags: Record<string, NativePdfTag>;
   /** Visible characters of `text`, tags excluded. */
@@ -386,6 +451,11 @@ export interface NativePdfRunReport {
   /** Ids of the stored source PDF and extraction; a re-render sends them back. */
   sourceId: string;
   unitsId: string;
+  /**
+   * The document brief after this run (see THE DOCUMENT BRIEF): the next
+   * request for the same document sends it back.
+   */
+  brief?: NativePdfBrief;
 }
 
 /** What a re-render sends the client. */
@@ -400,6 +470,8 @@ export interface NativePdfRenderReport {
   repaired: string[];
   tooLong: string[];
   pdfUrl: string;
+  /** The editable files this render was asked for (see EDITABLE DOWNLOADS). */
+  exportUrls?: NativePdfExportUrls;
   /** Images of the pages asked for only (`imagePages`), not of every page. */
   pageImages: NativePdfPageImages[];
   /**
@@ -505,6 +577,349 @@ const ANY_TAG_PATTERN = /<\/?[a-zA-Z][^>]*>/g;
 /** Visible length of a unit's text: tags do not take up room on the page. */
 export function visibleLength(text: string): number {
   return text.replace(ANY_TAG_PATTERN, '').length;
+}
+
+/**
+ * THE DOCUMENT BRIEF. Pages are translated independently, and a document
+ * larger than one request is translated in several. The brief is what all
+ * of them share, so that every page reads as one translation:
+ *
+ *  - `language` pins the target language down once: its code, and for a
+ *    name that leaves room for doubt (a language typed in by hand, one
+ *    with competing spellings) the variety and orthography to write in.
+ *  - `terms` holds one decision per name or recurring term: kept as
+ *    written (`keep`, and then `target` equals `source`) or translated,
+ *    always as `target`.
+ *
+ * A run starts from the brief it is given, decides only what that brief
+ * leaves open, and returns the brief with its own decisions added. Earlier
+ * decisions are never changed by a later request (see mergeBriefs).
+ */
+export interface NativePdfLanguage {
+  /** IETF language tag ("de", "ht", "jam"); empty when not identified. */
+  code: string;
+  /** The language's unambiguous English name. */
+  name: string;
+  /** Which variety and spelling to write in; empty when there is no doubt. */
+  note: string;
+}
+
+export interface NativePdfTerm {
+  source: string;
+  /** How the term is written in the translation; `source` when kept. */
+  target: string;
+  /** Whether the term is left as written. */
+  keep: boolean;
+}
+
+export interface NativePdfBrief {
+  language?: NativePdfLanguage;
+  terms: NativePdfTerm[];
+}
+
+/** Terms one brief may hold; a request stops deciding new ones at this. */
+export const MAX_BRIEF_TERMS = 300;
+/** Longest text that is treated as a name or term rather than a sentence. */
+export const MAX_BRIEF_TERM_CHARS = 80;
+export const MAX_BRIEF_NOTE_CHARS = 300;
+const MAX_LANGUAGE_NAME_CHARS = 80;
+const LANGUAGE_CODE_PATTERN = /^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8}){0,3}$/;
+
+/**
+ * What two spellings of one term have in common: tags, case and spacing
+ * (a line break included) do not make a different term.
+ *
+ * @param text - A term, or a unit's text with its inline tags.
+ */
+export function termKey(text: string): string {
+  return text
+    .replace(ANY_TAG_PATTERN, '')
+    .normalize('NFKC')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+/** A term's text as terms are compared: {@link termKey}, either apostrophe. */
+const plainTerm = (value: string): string =>
+  termKey(value).replace(/[‘’]/g, "'");
+
+/** Matches a term as whole words: "WHO" is not in "whole". */
+function termPattern(term: string, flags: string): RegExp | null {
+  const wanted = plainTerm(term);
+  if (!wanted) return null;
+  const escaped = wanted.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, flags);
+}
+
+/**
+ * `text` with line breaks where `model` has them, in proportion: a break
+ * after the first third of the model's characters goes after the first
+ * third of the text's (BREAKS in the layout script: a line break inside a
+ * unit is one its author made). Each break goes at the nearest place a line
+ * can end: a space, which it replaces, or after a slash or hyphen. A break
+ * with no such place left is not made, and a line is never left empty.
+ *
+ * @param model - Text whose breaks are wanted, such as a translator's own
+ *   wording of the unit, or the unit's source.
+ * @param text - Text without breaks of its own (any it has are kept as
+ *   spaces).
+ * @returns `text` with up to as many breaks as `model` has.
+ * @example breakLike('TEMPS/\nAPPROUVÉ', 'DURÉE/APPROUVÉE') // 'DURÉE/\nAPPROUVÉE'
+ */
+export function breakLike(model: string, text: string): string {
+  const flat = text.replace(/\s*\n\s*/g, ' ');
+  const lines = model.split('\n');
+  if (lines.length < 2) return flat;
+  const total = lines.reduce((sum, line) => sum + line.length, 0) || 1;
+  // Where a line may end: [index the next line starts at, characters taken].
+  const places: Array<{ at: number; replaces: number }> = [];
+  for (let i = 1; i < flat.length; i++) {
+    if (flat[i] === ' ') places.push({ at: i, replaces: 1 });
+    else if (/[/-]/.test(flat[i - 1]) && flat[i] !== ' ') {
+      places.push({ at: i, replaces: 0 });
+    }
+  }
+  const chosen: Array<{ at: number; replaces: number }> = [];
+  let seen = 0;
+  for (const line of lines.slice(0, -1)) {
+    seen += line.length;
+    const wanted = (seen / total) * flat.length;
+    const previous = chosen.at(-1);
+    // Where the line this break ends starts; it keeps one character at least.
+    const lineStart = previous ? previous.at + previous.replaces : 0;
+    let best: { at: number; replaces: number } | undefined;
+    for (const place of places) {
+      if (place.at <= lineStart) continue;
+      if (!best || Math.abs(place.at - wanted) < Math.abs(best.at - wanted)) {
+        best = place;
+      }
+    }
+    if (best) chosen.push(best);
+  }
+  let result = '';
+  let from = 0;
+  for (const place of chosen) {
+    result += flat.slice(from, place.at) + '\n';
+    from = place.at + place.replaces;
+  }
+  return result + flat.slice(from);
+}
+
+/**
+ * A term's decided wording as a unit written in capitals takes it: terms
+ * are matched whatever their case, so "TIME" and "Time" share one decision,
+ * and a heading set in capitals stays in capitals.
+ *
+ * @param written - The unit's source text.
+ * @param target - The term's decided wording.
+ * @example wordingInCaseOf('TIME', 'Temps') // 'TEMPS'
+ */
+export function wordingInCaseOf(written: string, target: string): string {
+  const plain = written.replace(ANY_TAG_PATTERN, '');
+  const capitals =
+    plain === plain.toUpperCase() && plain !== plain.toLowerCase();
+  return capitals ? target.toUpperCase() : target;
+}
+
+/**
+ * The brief's terms that a unit's source text is written with. Where one
+ * term lies inside a longer one ("Status" in "Status Review"), only the
+ * longer is meant: the shorter counts only where it also stands alone.
+ *
+ * @param source - The unit's source text.
+ * @param terms - The document brief's terms.
+ */
+export function termsIn(
+  source: string,
+  terms: readonly NativePdfTerm[],
+): NativePdfTerm[] {
+  let rest = plainTerm(source);
+  const found = new Set<NativePdfTerm>();
+  const longestFirst = [...terms].sort(
+    (a, b) => plainTerm(b.source).length - plainTerm(a.source).length,
+  );
+  for (const term of longestFirst) {
+    const pattern = termPattern(term.source, 'gu');
+    if (!pattern || !pattern.test(rest)) continue;
+    found.add(term);
+    // Taken out, so that a shorter term inside it is not found there.
+    rest = rest.replace(pattern, '\u0000');
+  }
+  return terms.filter((term) => found.has(term));
+}
+
+/**
+ * The brief's terms a translation fails to follow: those the unit's source
+ * is written with (see {@link termsIn}) whose decided wording the
+ * translation does not have.
+ *
+ * @param source - The unit's source text.
+ * @param translation - Its translation.
+ * @param terms - The document brief's terms.
+ * @example
+ * missingTerms('Ask WHO', 'Demandez à la WHO', [{source: 'WHO', target: 'OMS', keep: false}])
+ * // [{source: 'WHO', target: 'OMS', keep: false}]
+ */
+export function missingTerms(
+  source: string,
+  translation: string,
+  terms: readonly NativePdfTerm[],
+): NativePdfTerm[] {
+  const written = plainTerm(translation);
+  return termsIn(source, terms).filter(
+    (term) => !termPattern(term.target, 'u')?.test(written),
+  );
+}
+
+/**
+ * Whether a rewording loses a term its earlier wording followed, so that
+ * the unit would read differently from the same term on another page.
+ *
+ * @param source - The unit's source text.
+ * @param before - The wording being replaced.
+ * @param after - The proposed wording.
+ * @param terms - The document brief's terms.
+ */
+export function dropsTerm(
+  source: string,
+  before: string,
+  after: string,
+  terms: readonly NativePdfTerm[],
+): boolean {
+  return (
+    missingTerms(source, after, terms).length >
+    missingTerms(source, before, terms).length
+  );
+}
+
+/**
+ * A language tag as the layout step may be given it, or '' when the value
+ * is not one. The tag only selects hyphenation rules.
+ */
+export function sanitizeLanguageCode(value: unknown): string {
+  return typeof value === 'string' && LANGUAGE_CODE_PATTERN.test(value.trim())
+    ? value.trim()
+    : '';
+}
+
+/**
+ * A brief as received from a client, made safe to use: its texts become
+ * prompt text, so they are single-line and capped, and a malformed part is
+ * dropped rather than trusted.
+ *
+ * @param value - The parsed `brief` field of a request.
+ * @returns The usable brief; one with no language and no terms when
+ *   `value` holds nothing usable.
+ */
+export function sanitizeBrief(value: unknown): NativePdfBrief {
+  const line = (text: unknown, max: number): string =>
+    typeof text === 'string'
+      ? text.replace(/\s+/g, ' ').trim().slice(0, max)
+      : '';
+  const raw = (value && typeof value === 'object' ? value : {}) as {
+    language?: Record<string, unknown>;
+    terms?: unknown;
+  };
+  const brief: NativePdfBrief = { terms: [] };
+  const name = line(raw.language?.name, MAX_LANGUAGE_NAME_CHARS);
+  if (raw.language && typeof raw.language === 'object' && name) {
+    brief.language = {
+      code: sanitizeLanguageCode(raw.language.code),
+      name,
+      note: line(raw.language.note, MAX_BRIEF_NOTE_CHARS),
+    };
+  }
+  const seen = new Set<string>();
+  for (const entry of Array.isArray(raw.terms) ? raw.terms : []) {
+    if (brief.terms.length >= MAX_BRIEF_TERMS) break;
+    const term = (entry ?? {}) as Record<string, unknown>;
+    const source = line(term.source, MAX_BRIEF_TERM_CHARS);
+    const keep = term.keep === true;
+    const target = keep ? source : line(term.target, MAX_BRIEF_TERM_CHARS * 2);
+    const key = termKey(source);
+    if (!key || !target || seen.has(key)) continue;
+    seen.add(key);
+    brief.terms.push({ source, target, keep });
+  }
+  return brief;
+}
+
+/**
+ * The names a request still has to decide: those found on its pages that
+ * neither the brief nor the glossary settles, each once, as first written.
+ * Text longer than {@link MAX_BRIEF_TERM_CHARS} is a sentence, not a name.
+ *
+ * @param found - Names and kept texts from the pages, in page order.
+ * @param settled - Terms already decided (the brief's and the glossary's
+ *   source terms).
+ * @param room - Most candidates to return: what the brief can still hold.
+ */
+export function termCandidates(
+  found: readonly string[],
+  settled: readonly string[],
+  room: number,
+): string[] {
+  const taken = new Set(settled.map(termKey));
+  const candidates: string[] = [];
+  for (const name of found) {
+    if (candidates.length >= room) break;
+    const written = name
+      .replace(ANY_TAG_PATTERN, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const key = termKey(written);
+    if (!key || written.length > MAX_BRIEF_TERM_CHARS || taken.has(key)) {
+      continue;
+    }
+    taken.add(key);
+    candidates.push(written);
+  }
+  return candidates;
+}
+
+/**
+ * Adds a request's decisions to the brief it started from. What the
+ * earlier brief decided stands: its language is kept, and a term it holds
+ * is not replaced.
+ *
+ * @param base - The brief the request was given.
+ * @param added - The language and terms the request decided.
+ */
+export function mergeBriefs(
+  base: NativePdfBrief | undefined,
+  added: NativePdfBrief,
+): NativePdfBrief {
+  const terms = [...(base?.terms ?? [])];
+  const seen = new Set(terms.map((term) => termKey(term.source)));
+  for (const term of added.terms) {
+    const key = termKey(term.source);
+    if (seen.has(key) || terms.length >= MAX_BRIEF_TERMS) continue;
+    seen.add(key);
+    terms.push(term);
+  }
+  const language = base?.language ?? added.language;
+  return { ...(language ? { language } : {}), terms };
+}
+
+/** A word ending in a full stop with more text after it: "Eval. of", "p. 4". */
+const INNER_STOP_PATTERN = /\p{L}\.(?=\s+\S)/gu;
+
+/**
+ * Whether a reworded text abbreviates words its earlier wording wrote out:
+ * it has more words that end in a full stop with text following than the
+ * earlier wording had. Abbreviations already there ("p. ex.") and the stop
+ * that ends the text are not counted against it. Scripts that do not end
+ * an abbreviation with "." are never flagged.
+ *
+ * @param before - The wording being replaced.
+ * @param after - The proposed shorter wording.
+ * @returns true when `after` should be refused as an abbreviation of `before`.
+ */
+export function addsAbbreviation(before: string, after: string): boolean {
+  const stops = (text: string): number =>
+    text.replace(ANY_TAG_PATTERN, '').match(INNER_STOP_PATTERN)?.length ?? 0;
+  return stops(after) > stops(before);
 }
 
 export interface TagRepair {
