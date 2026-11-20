@@ -9,6 +9,7 @@
  */
 import {
   FormattedDocumentOptions,
+  FormattedPendingJob,
   TranslationDocumentLayout,
 } from '@/lib/utils/shared/translation/formattedDocument';
 import { NativePdfDepth } from '@/lib/utils/shared/translation/nativePdf';
@@ -379,6 +380,11 @@ export interface TranslationWorkflowState {
    * itself (blocks, edits, files) is never kept in the browser.
    */
   formattedRunRef?: NativeRunRef;
+  /**
+   * A presentation of `sourceDocument` being translated in the background:
+   * followed again after a reload, cleared once its batches are in the run.
+   */
+  formattedPendingJob?: FormattedPendingJob;
   sourceLang?: string;
   /** Legacy locale-code field; superseded by targetLanguage. */
   targetLang?: string;
