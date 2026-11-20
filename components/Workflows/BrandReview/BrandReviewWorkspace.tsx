@@ -182,6 +182,7 @@ export function BrandReviewWorkspace({
         file: ws.document.file,
         name: ws.document.name,
         modelReview: ws.modelReview,
+        locale,
       });
       setReading(started);
       setSelected(null);
