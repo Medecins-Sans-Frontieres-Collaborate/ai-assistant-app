@@ -104,9 +104,9 @@ function view(overrides: Partial<NativeDeckJobView> = {}): NativeDeckJobView {
 }
 const QUEUE = {
   running: 2,
-  queued: { interactive: 0, translation: 3 },
+  queued: { interactive: 0, background: 3 },
   maxConcurrent: 2,
-  averageRunMs: { interactive: null, translation: 90_000 },
+  averageRunMs: { interactive: null, background: 90_000 },
 };
 
 function mount(pendingJob?: FormattedPendingJob) {

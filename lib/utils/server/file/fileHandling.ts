@@ -1,5 +1,5 @@
-import { RenderLane } from '@/lib/services/presentationRender/renderQueue';
-import { getRenderService } from '@/lib/services/presentationRender/renderService';
+import { RenderLane } from '@/lib/services/documents/render/renderQueue';
+import { getRenderService } from '@/lib/services/documents/render/renderService';
 
 import {
   perfLog,
@@ -673,7 +673,7 @@ export interface LibreOfficeConvertOptions extends ExtractionOptions {
 /**
  * Converts one document with LibreOffice into `format` inside `outputDir`
  * and returns the produced file's path. Goes through the render service
- * (lib/services/presentationRender), so it waits for a free slot and runs
+ * (lib/services/documents/render), so it waits for a free slot and runs
  * within the service's time and memory limits.
  *
  * @throws DocumentSignatureError when the file is not its declared type.

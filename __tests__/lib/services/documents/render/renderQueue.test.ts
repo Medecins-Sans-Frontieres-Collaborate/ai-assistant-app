@@ -1,10 +1,11 @@
 import {
+  RUN_TIME_WEIGHT,
   RenderBusyError,
   RenderLane,
   RenderQueue,
 } from '@/lib/services/documents/render/renderQueue';
 
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 /** A task that runs until released, recording when it started. */
 function gate(log: string[], name: string) {
@@ -39,13 +40,13 @@ describe('RenderQueue', () => {
     const queue = queueOf({ maxConcurrent: 2 });
     const log: string[] = [];
     const jobs = ['a', 'b', 'c'].map((name) => gate(log, name));
-    const results = jobs.map((job) => queue.run('translation', job.task));
+    const results = jobs.map((job) => queue.run('background', job.task));
 
     await flush();
     expect(log).toEqual(['a', 'b']); // at the cap: two run, the third waits
-    expect(queue.snapshot()).toEqual({
+    expect(queue.snapshot()).toMatchObject({
       running: 2,
-      queued: { interactive: 0, translation: 1 },
+      queued: { interactive: 0, background: 1 },
     });
 
     jobs[0].release();
@@ -61,9 +62,9 @@ describe('RenderQueue', () => {
     const queue = queueOf({ interactiveBurst: 2 });
     const log: string[] = [];
     const first = gate(log, 'first');
-    queue.run('translation', first.task);
+    queue.run('background', first.task);
     const waiting: Array<[RenderLane, string]> = [
-      ['translation', 't1'],
+      ['background', 't1'],
       ['interactive', 'i1'],
       ['interactive', 'i2'],
       ['interactive', 'i3'],
@@ -86,8 +87,8 @@ describe('RenderQueue', () => {
     const queue = queueOf({ maxQueued: 2 });
     const log: string[] = [];
     const running = gate(log, 'running');
-    queue.run('translation', running.task);
-    queue.run('translation', gate(log, 'w1').task);
+    queue.run('background', running.task);
+    queue.run('background', gate(log, 'w1').task);
     queue.run('interactive', gate(log, 'w2').task);
 
     const refused = vi.fn();
@@ -97,10 +98,10 @@ describe('RenderQueue', () => {
       interactiveBurst: 1,
       observer: { onRefused: refused },
     });
-    busy.run('translation', gate(log, 'only').task);
+    busy.run('background', gate(log, 'only').task);
 
     await expect(
-      queue.run('translation', gate(log, 'w3').task),
+      queue.run('background', gate(log, 'w3').task),
     ).rejects.toBeInstanceOf(RenderBusyError);
     await expect(
       busy.run('interactive', gate(log, 'x').task),
@@ -113,15 +114,15 @@ describe('RenderQueue', () => {
     const queue = queueOf();
     const log: string[] = [];
     const running = gate(log, 'running');
-    queue.run('translation', running.task);
+    queue.run('background', running.task);
     const controller = new AbortController();
-    const aborted = queue.run('translation', gate(log, 'aborted').task, {
+    const aborted = queue.run('background', gate(log, 'aborted').task, {
       signal: controller.signal,
     });
 
     controller.abort(new Error('stopped'));
     await expect(aborted).rejects.toThrow('stopped');
-    expect(queue.snapshot().queued.translation).toBe(0);
+    expect(queue.snapshot().queued.background).toBe(0);
     running.release();
     await flush();
     expect(log).toEqual(['running']);
@@ -131,9 +132,9 @@ describe('RenderQueue', () => {
     const queue = queueOf();
     const log: string[] = [];
     const failing = gate(log, 'failing');
-    const failed = queue.run('translation', failing.task);
+    const failed = queue.run('background', failing.task);
     const next = gate(log, 'next');
-    const after = queue.run('translation', next.task);
+    const after = queue.run('background', next.task);
 
     failing.fail(new Error('crashed'));
     await expect(failed).rejects.toThrow('crashed');
@@ -146,11 +147,11 @@ describe('RenderQueue', () => {
     const queue = queueOf();
     const log: string[] = [];
     const running = gate(log, 'running');
-    queue.run('translation', running.task);
+    queue.run('background', running.task);
     const first = gate(log, 'first');
-    queue.run('translation', first.task);
+    queue.run('background', first.task);
     const positions: number[] = [];
-    queue.run('translation', gate(log, 'mine').task, {
+    queue.run('background', gate(log, 'mine').task, {
       onPosition: (ahead) => positions.push(ahead),
     });
     // Interactive work arriving later counts as ahead of translation work.
@@ -173,7 +174,7 @@ describe('RenderQueue', () => {
     const queue = queueOf({ observer: { onStart, onFinish } });
     await queue.run('interactive', async () => 'done');
     await expect(
-      queue.run('translation', async () => {
+      queue.run('background', async () => {
         throw new Error('bad');
       }),
     ).rejects.toThrow('bad');
@@ -184,5 +185,53 @@ describe('RenderQueue', () => {
   it('refuses settings that would never run anything', () => {
     expect(() => queueOf({ maxConcurrent: 0 })).toThrow('maxConcurrent');
     expect(() => queueOf({ interactiveBurst: 0 })).toThrow('interactiveBurst');
+  });
+});
+
+describe('RenderQueue run times', () => {
+  afterEach(() => vi.useRealTimers());
+
+  /** Runs one job in `lane` that takes `ms`, ending as `outcome`. */
+  async function timed(
+    queue: RenderQueue,
+    lane: RenderLane,
+    ms: number,
+    outcome: 'ok' | 'error' = 'ok',
+  ) {
+    const job = queue.run(lane, async () => {
+      vi.advanceTimersByTime(ms);
+      if (outcome === 'error') throw new Error('failed');
+      return 'done';
+    });
+    await job.catch(() => undefined);
+  }
+
+  it('reports no average before a job has finished', () => {
+    expect(queueOf({ maxConcurrent: 2 }).snapshot()).toMatchObject({
+      maxConcurrent: 2,
+      averageRunMs: { interactive: null, background: null },
+    });
+  });
+
+  it('weights each finished job by RUN_TIME_WEIGHT, per lane', async () => {
+    vi.useFakeTimers();
+    const queue = queueOf();
+    await timed(queue, 'background', 10_000);
+    expect(queue.snapshot().averageRunMs.background).toBe(10_000);
+    await timed(queue, 'background', 20_000);
+    expect(queue.snapshot().averageRunMs.background).toBeCloseTo(
+      10_000 + RUN_TIME_WEIGHT * 10_000,
+      6,
+    );
+    // The other lane is its own.
+    expect(queue.snapshot().averageRunMs.interactive).toBeNull();
+  });
+
+  it('leaves failed jobs out of the average', async () => {
+    vi.useFakeTimers();
+    const queue = queueOf();
+    await timed(queue, 'background', 10_000);
+    await timed(queue, 'background', 500, 'error');
+    expect(queue.snapshot().averageRunMs.background).toBe(10_000);
   });
 });

@@ -73,9 +73,9 @@ beforeAll(async () => {
       if (req.url === '/queue') {
         return send(200, {
           running: 1,
-          queued: { interactive: 0, translation: 4 },
+          queued: { interactive: 0, background: 4 },
           maxConcurrent: 2,
-          averageRunMs: { interactive: null, translation: 9000 },
+          averageRunMs: { interactive: null, background: 9000 },
         });
       }
       send(404, {});
@@ -115,14 +115,14 @@ describe('HttpRenderService', () => {
       type: 'pptx',
       convertTo: 'pdf',
       outputDir: path.join(dir, 'out'),
-      lane: 'translation',
+      lane: 'background',
       onPosition: (ahead) => positions.push(ahead),
     });
     expect(fs.readFileSync(out, 'utf8')).toBe('%PDF-converted');
     expect(positions).toEqual([2, 1, 0]);
     const created = seen.find((r) => r.method === 'POST')!;
     expect(created.auth).toBe('Bearer secret-t');
-    for (const field of ['convert', 'pptx', 'translation', 'PK deck']) {
+    for (const field of ['convert', 'pptx', 'background', 'PK deck']) {
       expect(created.fields).toContain(field);
     }
   });
@@ -147,7 +147,7 @@ describe('HttpRenderService', () => {
       pages: [1, 3],
       dpi: 144,
       outputDir: path.join(dir, 'pictures'),
-      lane: 'translation',
+      lane: 'background',
     });
     expect(fs.readFileSync(pages.get(3)!, 'utf8')).toBe('p3');
     expect(fs.readFileSync(pages.get(1)!, 'utf8')).toBe('p1');
@@ -227,7 +227,7 @@ describe('HttpRenderService', () => {
         type: 'pptx',
         convertTo: 'pdf',
         outputDir: dir,
-        lane: 'translation',
+        lane: 'background',
       }),
     ).rejects.toBeInstanceOf(LibreOfficeTimeoutError);
   });
@@ -247,7 +247,7 @@ describe('HttpRenderService', () => {
       type: 'pptx',
       convertTo: 'pdf',
       outputDir: dir,
-      lane: 'translation',
+      lane: 'background',
       signal: stop.signal,
       onPosition: () => setTimeout(() => stop.abort(new Error('stopped')), 10),
     });
@@ -264,7 +264,7 @@ describe('HttpRenderService', () => {
     await new Promise((resolve) => setTimeout(resolve, 50));
     expect(service.snapshot()).toMatchObject({
       maxConcurrent: 2,
-      queued: { translation: 4 },
+      queued: { background: 4 },
     });
   });
 });

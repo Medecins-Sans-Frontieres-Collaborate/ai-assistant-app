@@ -75,7 +75,7 @@ describe('rasterize through the render service', () => {
       pages: [1],
       dpi: 72,
       outputDir: dir,
-      lane: 'translation',
+      lane: 'background',
     });
     await vi.waitFor(() => expect(raster).toHaveBeenCalled());
     await expect(
@@ -84,7 +84,7 @@ describe('rasterize through the render service', () => {
         pages: [2],
         dpi: 72,
         outputDir: dir,
-        lane: 'translation',
+        lane: 'background',
       }),
     ).rejects.toBeInstanceOf(RenderBusyError);
     release();
@@ -106,7 +106,7 @@ describe('rasterize through the render service', () => {
         pages: [1],
         dpi: 72,
         outputDir: dir,
-        lane: 'translation',
+        lane: 'background',
       }),
     ).rejects.toBeInstanceOf(DocumentSignatureError);
     expect(raster).not.toHaveBeenCalled();
