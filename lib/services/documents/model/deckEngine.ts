@@ -9,6 +9,7 @@
  */
 import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflowUsage';
 
+import { imageTypeOf } from '@/lib/utils/server/file/imageSignature';
 import type {
   DeckLayouts,
   DeckPlan,
@@ -16,7 +17,7 @@ import type {
 
 import { runSandboxScript } from '../sandbox/sandboxScriptRunner';
 import { DECK_ENGINE_SCRIPT } from './deckEngineScript';
-import { jobInput, throwIfRefused } from './inspect';
+import { DocumentRefusedError, jobInput, throwIfRefused } from './inspect';
 
 import { strFromU8 } from 'fflate';
 
@@ -188,6 +189,15 @@ export async function readDeckLayouts(
   return JSON.parse(strFromU8(layouts)) as DeckLayouts;
 }
 
+/** The picture formats a composed deck takes, by their signature. */
+const COMPOSE_PICTURE_FORMATS: Partial<
+  Record<string, { extension: string; mimeType: string }>
+> = {
+  png: { extension: 'png', mimeType: 'image/png' },
+  jpeg: { extension: 'jpg', mimeType: 'image/jpeg' },
+  gif: { extension: 'gif', mimeType: 'image/gif' },
+};
+
 /**
  * Builds a deck from a template and a plan checked against its layouts
  * (checkDeckPlan): the template's own slides removed, its masters and
@@ -209,13 +219,19 @@ export async function composeDeck(
 ): Promise<{ deck: Uint8Array; report: DeckComposeReport }> {
   const images: Record<string, string> = {};
   const pictureFiles = [...pictures.entries()].map(([key, data], index) => {
-    const filename = `picture${index + 1}.bin`;
+    const bytes = Buffer.from(data);
+    const type = imageTypeOf(bytes);
+    const picture = type ? COMPOSE_PICTURE_FORMATS[type] : undefined;
+    if (!picture) {
+      throw new DocumentRefusedError(
+        'BAD_IMAGE',
+        `The picture ${key} is not a PNG, JPEG or GIF.`,
+      );
+    }
+    // Named for what it is: the sandbox takes inputs by extension.
+    const filename = `picture${index + 1}.${picture.extension}`;
     images[key] = filename;
-    return {
-      filename,
-      data: Buffer.from(data),
-      mimeType: 'application/octet-stream',
-    };
+    return { filename, data: bytes, mimeType: picture.mimeType };
   });
   const run = await runSandboxScript(
     'compose',
