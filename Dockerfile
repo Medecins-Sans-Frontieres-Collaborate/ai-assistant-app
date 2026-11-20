@@ -39,6 +39,15 @@ ENV NODE_OPTIONS="--max-http-header-size=65536"
 RUN apk add --no-cache poppler poppler-dev poppler-utils libxml2 libxslt zlib fontconfig ttf-dejavu \
     shared-mime-info libc6-compat glib zip unzip ghostscript curl gnumeric libreoffice
 
+# Fonts LibreOffice lays translated slides out with: Carlito and Liberation
+# have Calibri's and Arial's metrics, so text fits as it will in PowerPoint;
+# Noto covers the scripts of the app's target languages (fontconfig picks
+# them for a deck's Windows font names, e.g. Nirmala UI for Tamil). Package
+# names checked against Alpine 3.24; together about 290 MB.
+RUN apk add --no-cache font-carlito font-liberation font-noto font-noto-arabic font-noto-hebrew \
+    font-noto-ethiopic font-noto-devanagari font-noto-bengali font-noto-tamil font-noto-telugu \
+    font-noto-sinhala font-noto-thai font-noto-khmer font-noto-myanmar font-noto-cjk
+
 RUN curl -L "https://github.com/jgm/pandoc/releases/download/3.9.0.2/pandoc-3.9.0.2-linux-amd64.tar.gz" | tar xz --strip-components 1 -C /usr/local
 
 RUN chmod 1777 /tmp
