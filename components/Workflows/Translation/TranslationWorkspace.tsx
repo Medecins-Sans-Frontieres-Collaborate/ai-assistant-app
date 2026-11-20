@@ -2081,6 +2081,10 @@ export function TranslationWorkspace({
   const pdfPages = usePdfPages(
     loadFormattedFile,
     formattedHasPdf ? (formattedSourceUrl ?? null) : null,
+    // A stored run opens on its translated pages: the source is needed only
+    // to look at the original or at untranslated pages, so it loads then.
+    // The setup shows the source's pages at once.
+    { onDemand: !!formattedRunRef && !formattedSetupOpen },
   );
   // Workflow state holds where the run is stored; the run itself is read
   // from there and saved back (see useFormattedRunStorage).
