@@ -3,6 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
+  JobFollower,
+  useBackgroundJob,
+} from '@/client/hooks/backgroundJobs/useBackgroundJob';
+
+import {
   DeckRunBusyError,
   readDeckJob,
   recordDeckJobUsage,
@@ -177,6 +182,19 @@ async function loaded<T>(
 }
 
 /**
+ * A presentation job as useBackgroundJob follows it.
+ *
+ * @param run - The run the job belongs to.
+ */
+function deckJobFollower(run: RunAccess): JobFollower<DeckJobReading> {
+  return {
+    read: (signal) => readDeckJob(run, signal),
+    stop: () => stopDeckJob(run),
+    isRunning: (reading) => reading.job.status === 'running',
+  };
+}
+
+/**
  * A presentation job's progress as the run screen shows it.
  *
  * @param reading - The job and its queue, as last read.
@@ -240,7 +258,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
   const [unitError, setUnitError] = useState<string | null>(null);
   const runAbort = useRef<AbortController | null>(null);
   /** The presentation job being followed; Stop asks the server to end it. */
-  const followedJob = useRef<RunAccess | null>(null);
+  const jobs = useBackgroundJob<DeckJobReading>({ pollMs: DECK_POLL_MS });
   /** The stored run as it is now, for work that outlives a render. */
   const runNow = useRef(run);
   useEffect(() => {
@@ -330,21 +348,14 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
   const followDeckJob = useCallback(
     async (job: FormattedPendingJob, abort: AbortController) => {
       runAbort.current = abort;
-      followedJob.current = job.access;
-      let failure: unknown = null;
-      let reading: DeckJobReading | null = null;
-      try {
-        for (;;) {
-          reading = await readDeckJob(job.access, abort.signal);
-          setProgress(progressOfDeckJob(reading, job.startedAt));
-          if (reading.job.status !== 'running') break;
-          await pause(DECK_POLL_MS, abort.signal);
-        }
-      } catch (error) {
-        failure = error;
-      }
-      followedJob.current = null;
-      if (isAbort(failure) || !reading || reading.job.status === 'running') {
+      const outcome = await jobs.follow(deckJobFollower(job.access), {
+        signal: abort.signal,
+        onReading: (reading) =>
+          setProgress(progressOfDeckJob(reading, job.startedAt)),
+      });
+      let failure: unknown = outcome.error;
+      const reading = outcome.last;
+      if (!outcome.ended || !reading) {
         // Left, or the job could not be read: it stays remembered.
         if (failure && !isAbort(failure)) setRunError(message(failure));
         runAbort.current = null;
@@ -403,7 +414,7 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
         onSpent?.();
       }
     },
-    [conversationId, keepPieces, onSpent, setPendingJob],
+    [conversationId, jobs, keepPieces, onSpent, setPendingJob],
   );
 
   // A job remembered from before a reload is followed again.
@@ -623,15 +634,9 @@ export function useFormattedDocument(input: UseFormattedDocumentInput) {
    * it has.
    */
   const stop = useCallback(() => {
-    const job = followedJob.current;
-    if (job) {
-      void stopDeckJob(job).catch((error: unknown) =>
-        setRunError(message(error)),
-      );
-      return;
-    }
+    if (jobs.stop((error) => setRunError(message(error)))) return;
     runAbort.current?.abort();
-  }, []);
+  }, [jobs]);
 
   /**
    * Lays the pages out again with the person's edits, leaving out the
