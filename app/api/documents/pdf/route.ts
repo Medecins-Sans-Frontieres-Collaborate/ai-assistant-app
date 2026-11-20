@@ -40,10 +40,10 @@ export const maxDuration = 300;
  * queue answers 503 `RENDER_BUSY` with Retry-After, an unreadable or
  * protected file 422.
  *
- * Responses: 200 `application/pdf`; 400 a malformed source
- * (`INVALID_SOURCE`), a type without pages (`NOT_PAGED`), an unknown kind
- * (`UNKNOWN_SOURCE`) or a file too large (`DOCUMENT_TOO_LARGE`); 401; 404
- * no such document for this person.
+ * Responses: 200 `application/pdf`; 400 with `details` saying why: a
+ * malformed source (`INVALID_SOURCE`), a type without pages (`NOT_PAGED`),
+ * an unknown kind (`UNKNOWN_SOURCE`) or a file too large
+ * (`DOCUMENT_TOO_LARGE`); 401; 404 no such document for this person.
  */
 export async function GET(request: NextRequest) {
   const source = documentSourceFromParams(request.nextUrl.searchParams);
