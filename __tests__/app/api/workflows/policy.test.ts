@@ -83,6 +83,7 @@ const validBody = {
     grants: { enabled: true },
     'form-fill': { enabled: true },
     'channel-drafter': { enabled: true },
+    'brand-review': { enabled: true },
   },
 };
 
