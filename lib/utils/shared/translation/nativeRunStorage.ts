@@ -43,6 +43,17 @@ export type NativeRunBackend = (typeof RUN_BACKENDS)[number];
 
 /** The record of a run: its blocks, findings and pending changes. */
 export const RUN_RECORD_ID = 'record.json';
+/**
+ * The state of a run translated in the background (a presentation): its
+ * progress and finished batches. Written by the server only, rewritten as
+ * the job moves on; never served by the file route.
+ */
+export const RUN_JOB_ID = 'job.json';
+/**
+ * A request to stop a background job. Written only by a stop request and
+ * only read by the job, so no progress write can overwrite it.
+ */
+export const RUN_STOP_ID = 'stop.json';
 /** Largest record the server accepts, in bytes. */
 export const RUN_RECORD_MAX_BYTES = 8 * 1024 * 1024;
 /** Most files a run may list as still in use. */
@@ -53,7 +64,7 @@ export const RUN_KEY_HEADER = 'x-translation-run-key';
 export const RUN_KEY_BYTES = 32;
 
 const RUN_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-const SERVER_FILE_ID = /^[0-9a-f]{64}\.(pdf|json|png|pptx)$/;
+const SERVER_FILE_ID = /^[0-9a-f]{64}\.(pdf|json|png|pptx|pptm|ppsx|potx)$/;
 const FILE_ROUTE = '/api/document-translation/native/file';
 
 /** What the browser keeps of a run: where it is, never what is in it. */
