@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Onkowe ikanni",
         "description": "Yi awọn orisun pada si awọn ifiweranṣẹ fun ọpọlọpọ awọn ikanni, kọọkan pẹlu ohun to tọ, pẹlu gbogbo asọye ti a tọka si orisun rẹ"
+      },
+      "brandReview": {
+        "label": "Àyẹ̀wò àmì idánimọ́",
+        "description": "Ṣàyẹ̀wò PDF, ìwé Word tàbí àfihàn pẹ̀lú ìwé àmì: fọ́ńtì, àwọ̀, ọ̀rọ̀, àmì àpamọ́ àti ohun orin"
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Maapu tuntun",
       "newGrants": "Ilana ilẹ̀ amáyédẹrù tuntun",
       "newFormFill": "Fọwọsi iwe tuntun",
-      "newChannelDrafter": "Ikọwe ikanni tuntun"
+      "newChannelDrafter": "Ikọwe ikanni tuntun",
+      "newBrandReview": "Àyẹ̀wò àmì tuntun"
     },
     "translation": {
       "chooseLanguage": "Èdè ibi-afẹ́",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Ìtúmọ̀ àwòrán {name} jẹ́ {count} ju aala ikanni yìí lọ {max}.",
         "unicodeSms": "{characters} kò le fi ránṣé́ nínú SMS àtọwọdá, nítorí náà ìránṣẹ́ yìí le fi lẹ́tà 70 ránṣé́, kì í ṣe 160. Rọpo wọn kí o le gba àyà pada."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Àyẹ̀wò àmì idánimọ́",
+        "intro": "Yan ìwé àmì idánimọ́ àti ìwé kan. Àyẹ̀wò yìí máa ṣàyẹ̀wò fọ́ńtì, àwọ̀, ìwọn ọ̀rọ̀, ọrọ̀ àti àmì àpamọ́; àpamọ́ le jẹ́ kí àwòrán ọlọ́jùṣe wo ojú ewé kọọkan fún ohun orin àti ofin àwòrán.",
+        "book": "Ìwé àmì idánimọ́",
+        "booksLoading": "N gbé ìwé àmì wọlé...",
+        "noBooks": "Kò sí ìwé àmì idánimọ́ tó wà fún ọ títí di báyìí. Alábòójútó ni yóò fi kún un ní Admin > Brand books.",
+        "document": "Ìwé",
+        "chooseDocument": "Yan ìwé",
+        "replaceDocument": "Yan ìwé míràn",
+        "documentTypes": "PDF, Word tàbí PowerPoint",
+        "uploading": "N gbékalẹ̀...",
+        "uploadFailed": "A kò le gbe ìwé kalẹ̀.",
+        "wrongType": "Jọ̀wọ́, yan PDF, Word tàbí àfihàn.",
+        "modelReview": "Jẹ́ kí àwòrán ọlọ́jùṣe wo ojú ewé kọọkan",
+        "modelReviewHint": "Ìtẹ̀wọgbà ohun orin, àwòrán àti ìṣòro àmì tí ìtẹ̀nà kò lè rí. Lo àmi tókan fún ojú ewé kọọkan, tó pọ̀ tó 40 ojú ewé.",
+        "start": "Bẹrẹ àyẹ̀wò"
+      },
+      "loading": "N gbé àyẹ̀wò wọlé...",
+      "booksFailed": "Kò le gbe ìwé àmì wọlé.",
+      "startFailed": "A kò le bẹ̀rẹ̀ àyẹ̀wò náà.",
+      "readFailed": "A kò le kà àyẹ̀wò náà.",
+      "busy": "\"{name}\" ṣi n ṣe àyẹ̀wò. Dúró kí ó parí tàbí dá a dúró kí o tó bẹ̀rẹ̀ míràn.",
+      "failed": "Àyẹ̀wò náà kọ.",
+      "against": "Lòdì sí {book}",
+      "progress": {
+        "reading": "N ka ìwé náà...",
+        "checking": "N ṣàyẹ̀wò ọ̀rọ̀ àti àmì àpamọ́...",
+        "reviewing": "N ṣàyẹ̀wò ojú ewé...",
+        "pages": "A ti ṣe àyẹ̀wò ojú ewé {done} nínú {total}"
+      },
+      "status": {
+        "done": "{errors, plural, one {# àṣìṣe} other {# àṣìṣe}}, {warnings, plural, one {# ìkìlọ̀} other {# ìkìlọ̀}}",
+        "stopped": "Dáwọ́ dúró: {errors, plural, one {# àṣìṣe} other {# àṣìṣe}} títí di báyìí",
+        "failed": "Kọ",
+        "running": "N ṣiṣẹ́"
+      },
+      "stop": "Dáwọ́ dúró",
+      "download": "Gba ìròyìn xuống",
+      "newReview": "Àyẹ̀wò tuntun",
+      "findings": "Ìwádìí",
+      "noFindings": "Kò sí ohun tí a ti rí títí di báyìí.",
+      "noneOfSeverity": "Kò sí ìwádìí irú èyí.",
+      "byModel": "Àwòrán ọlọ́jùṣe ló rí; ṣàyẹ̀wò rè.",
+      "notes": "Ìkìlọ̀",
+      "pageShort": "oj. {page}",
+      "filter": {
+        "label": "Fi hàn",
+        "all": "Gbogbo {count}",
+        "error": "Àṣìṣe {count}",
+        "warning": "Ìkìlọ̀ {count}",
+        "info": "Ìkíni {count}"
+      },
+      "severity": {
+        "error": "Àṣìṣe",
+        "warning": "Ìkìlọ̀",
+        "info": "Ìkíni"
+      },
+      "rule": {
+        "font": "Ìrú àkọsílẹ̀",
+        "color": "Àwọ̀",
+        "size": "Ìwọn àkótán ọrọ̀",
+        "banned-term": "Ọ̀rọ̀ láti yàgò fún",
+        "preferred-term": "Ọ̀rọ̀ tí a fẹ́rán jùlọ",
+        "language": "Èdè",
+        "logo-distorted": "Ìgbẹ̀yàpọ̀ àpamọ̀ ààmì",
+        "logo-small": "Ìwọn ààmì",
+        "logo-background": "Àyíká ààmì",
+        "logo-unknown": "Ààmì tó ṣeé ṣe kó jẹ́ ààmì ilé-iṣẹ́",
+        "visual": "Àwòrán",
+        "tone": "Ìfarapa ọrọ̀"
+      },
+      "message": {
+        "font": "A fi sí {found}; àwọn àkọsílẹ̀ àmì ni {expected}.",
+        "font-alone": "A fi sí {found}, kì í ṣe àkọsílẹ̀ àmì.",
+        "color": "{found} kì í ṣe àwọ̀ àmì; tó sunmọ́ jùlọ ni {first}.",
+        "size": "Ọ̀rọ̀ lórí {found} pt; kékèké tó jẹ́wọ́ ni {first} pt.",
+        "banned-term": "\"{found}\" jẹ́ ọ̀rọ̀ láti yàgò fún; kọ {expected} dípò rẹ̀.",
+        "banned-term-alone": "\"{found}\" jẹ́ ọ̀rọ̀ láti yàgò fún.",
+        "preferred-term": "Lo \"{first}\" dípò \"{found}\".",
+        "language": "A fọwọ́sowọ́n sí {found}; àwọn èdè àmì ni {expected}.",
+        "logo-distorted": "{name} ti fa sí {found}; ìgbẹ̀yàpọ̀ rẹ̀ fúnra rẹ̀ ni {first}.",
+        "logo-small": "{name} jẹ́ {found} pt ní ìwọ̀n; ó yẹ kó jẹ́ bóṣeyíjú {first} pt.",
+        "logo-background": "{name} wà lórí {found}; ó le hàn lórí {expected}.",
+        "logo-unknown": "Àwòrán tó ṣeé ṣe kó jẹ́ ààmì: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Àyẹ̀wò àmì: {name}",
+        "meta": "Díẹ̀ lórí {book}, {date}, {pages, plural, one {# ojúewé} other {# ojúewé}}",
+        "errors": "{count, plural, one {# aṣiṣe} other {# aṣiṣe}}",
+        "warnings": "{count, plural, one {# ìkìlọ̀} other {# ìkìlọ̀}}",
+        "infos": "{count, plural, one {# akọsilẹ̀} other {# akọsilẹ̀}}",
+        "partial": "Àyẹ̀wò náà kò parí; ìròyìn yìí wà pẹ̀lú ohun tí a rí kí tó parí.",
+        "skipped": "Awoṣe náà kò wo ojúewé {pages}; wọ́n ṣàyẹ̀wò láìlo rẹ.",
+        "none": "Kò sí ohun tí a rí tí ó yà sílẹ̀ láti ìwé àmì.",
+        "page": "Ojúewé",
+        "severity": "Ìwọn líle",
+        "rule": "Ayẹwo",
+        "finding": "Ìdánilẹ́kọ",
+        "found": "Tí a rí",
+        "notes": "Àkọsilẹ̀",
+        "fileSuffix": "àyẹ̀wò àmì"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Ìwọn ìtàn àjíròrò tí a rán si gbogbo àlẹ́mọ̀ ní gbogbo yíyí.",
       "analytics": "Ìjábọ́ tí a fi ránṣẹ́: ohun tó dé, ẹni tí ó lè ṣí apamọ́ kọọkan, àti àwọn pápá wo ni a lè fi hàn.",
       "skills": "Àwọn àkọsílẹ̀ ìtọnisọna tí a lè tun lo tí iranwọ́ nlo bí a bá nílò wọn ninu ibaraẹnisọrọ.",
-      "models": "Yan awọn awoṣe abẹlẹ ki o ṣayẹwo imurasilẹ fun ifilọlẹ agbegbe."
+      "models": "Yan awọn awoṣe abẹlẹ ki o ṣayẹwo imurasilẹ fun ifilọlẹ agbegbe.",
+      "brandBooks": "Awọ, iru-fọọmu, aami, ọrọ ati àwòrán amúlò tí a fi ńṣe ayẹwo àti kó iwe jọ."
     },
     "openSettings": "Ṣí eto",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Ìpòwó àkọsílẹ̀",
       "analytics": "Ìtúpalẹ̀",
       "skills": "Ọgbon",
-      "models": "Awoṣe ati imurasilẹ"
+      "models": "Awoṣe ati imurasilẹ",
+      "brandBooks": "Iwe ami orukọ"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Tún ìsún-mọ́ ṣe (báyìí {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "A kò lè fi ìwé yìí hàn. Ó lè tóbi jù, ó lè jẹ́ ààbò, tàbí kí olùyípadà náà ní iṣẹ́ lọ́wọ́; gbìyànjú lẹ́ẹ̀kan sí i láìpẹ́."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Iwe ami orukọ tí kò lorukọ",
+    "intro": "Iwe ami orukọ ni o pa awọ, iru-fọọmu, aami, ọrọ ati àwòrán amúlò ajọ pamọ̀, kí a lè fi ṣàyẹwo ati kó iwe jọ láti inú rẹ. Ẹni tí ó le lo kọọkan ni a ṣètò pẹlu ofin iraye rẹ.",
+    "unavailable": "A kò le kó iwe ami orukọ wá láti ibi ipamọ. Gbìyànjú lẹẹkansi lẹ́yìn ọ̀sẹ̀ díẹ.",
+    "add": "Fi iwe ami orukọ kun",
+    "none": "Kò sí iwe ami orukọ sibẹ.",
+    "paletteSummary": "{count, plural, one {# awọ ami orukọ} other {# àwọn awọ ami orukọ}}",
+    "summary": "{fonts, plural, one {# iru-fọọmu} other {# àwọn iru-fọọmu}}, {logos, plural, one {# aami} other {# àwọn aami}}",
+    "open": "Ṣí",
+    "delete": "Pa",
+    "deleteConfirm": "Ṣe o fẹ́ pa \"{name}\" àti gbogbo faili rẹ? Àwọn iwe tí a ti ṣayẹwo tele yóò tọju iroyin wọn.",
+    "deleteConfirmButton": "Pa iwe ami orukọ",
+    "loading": "N ń ko iwe ami orukọ wá...",
+    "loadFailed": "A kò le kó iwe ami orukọ wá.",
+    "missing": "Iwe ami orukọ yìí kò sí, tàbí o kò le ṣe àtúnṣe rẹ.",
+    "back": "Àwọn iwe ami orukọ",
+    "unsaved": "Àtúnṣe tí a kò tíi fipamọ",
+    "saved": "Ti fipamọ",
+    "save": "Fipamọ",
+    "conflict": "Adari mi-in ti fipamọ iwe ami orukọ yìí lẹ́yìn tí o ṣí i. Tun kó wá kí o ri ẹ̀tọ́ wọn; àwọn àtúnṣe rẹ yìí máa parẹ.",
+    "reload": "Tun kó wá",
+    "invalid": "A kò le fipamọ iwe ami orukọ yìí sibẹ: {reason}",
+    "saveFailed": "A kò le fipamọ iwe ami orukọ yìí.",
+    "uploadFailed": "A kò le po faili soke.",
+    "remove": "Yọ kuro",
+    "removeNamed": "Yọ {name} kuro",
+    "basics": {
+      "title": "Iwe ami orukọ",
+      "name": "Orukọ",
+      "description": "Apejuwe"
+    },
+    "guide": {
+      "action": "Ṣẹdá àtẹ̀jáde láti ìtòsọ́nà ami orukọ",
+      "reading": "N ń ka ìtòsọ́nà...",
+      "hint": "Po ìtòsọ́nà ami orukọ bí PDF láti kún awọ, iru-fọọmu àti ọrọ tí o sọ. Awọn aami àti àwòrán amúlò kò ní wa lati inu rẹ; po wọ́n silẹ lókè.",
+      "source": "Ṣẹdá láti",
+      "notPdf": "Ìtòsọ́nà ami orukọ gbọ́dọ̀ jẹ́ PDF.",
+      "failed": "A kò le dá àtẹ̀jáde yìí sílẹ̀ láti ìtòsọ́nà yìí.",
+      "applied": "{pages, plural, one {A ti kọ́ láti ìtòsọ́nà tó ní ojúewé #.} other {A ti kọ́ láti ìtòsọ́nà tó ní ojúewé #.}}",
+      "measuredFonts": "Àwọn iru-fọọmu tí a fi kọ ọrọ rẹ:",
+      "measuredColors": "Àwọn awọ tí a lò ninu ọrọ rẹ:",
+      "check": "Ṣàyẹwo gbogbo iye pẹ̀lú ìtòsọ́nà ṣáájú fipamọ.",
+      "undo": "Fagìlì àtẹ̀jáde"
+    },
+    "palette": {
+      "title": "Àwọ",
+      "description": "Àwọn awọ ami orukọ. Àwọ tí o wà ninu iwe ni a ka sí ọkan ninu wọ̀n yìí tí o bá wà lórí àṣe àwọ náà.",
+      "add": "Fi awọ kun",
+      "newName": "Àwọ {number}",
+      "none": "Kò sí awọ ami orukọ sibẹ.",
+      "hex": "Hex",
+      "pick": "Yan awọ fún {name}",
+      "name": "Orukọ",
+      "tolerance": "Ìfarapa",
+      "toleranceHint": "Iyato awọ (Delta E). 2 si 3 ko han kedere.",
+      "roles": "Lo fun",
+      "neutrals": "Awọ aarin",
+      "neutralsHint": "Awọ ti iwe eyikeyi le lo laisi ki o jẹ awọ ami, pelu ami pipin kika."
+    },
+    "colorRole": {
+      "primary": "Pataki",
+      "secondary": "Ikeji",
+      "accent": "Ifasilẹ",
+      "text": "Ìtẹ̀sí",
+      "background": "Abẹlẹ",
+      "neutral": "Aarin"
+    },
+    "typography": {
+      "title": "Iru",
+      "description": "Àwọn oriṣi fonti gẹ́gẹ́ bí ipa wọn, ati awọn fonti ti a le gba laaye lati lo dipo wọn, bíi fonti eto fun awọn iwe a pin síta.",
+      "add": "Fikun fonti",
+      "none": "Ko sí fonti títí.",
+      "role": "Ipa",
+      "family": "Fonti",
+      "substitutes": "Àwọn amúlò mìíràn",
+      "minSize": "Kekere jùlọ ìtẹ̀sí (pt)",
+      "minSizeHint": "0 túmọ̀ sí pé kò sí tobi kékèké."
+    },
+    "fontRole": {
+      "heading": "Ìtókasi",
+      "body": "Ìtẹ̀sí ara",
+      "accent": "Ifasilẹ"
+    },
+    "logos": {
+      "title": "Àwòrán àmì",
+      "description": "Àwọn faili àmì tí iwe yẹ kí o lo, gẹ́gẹ́ bí PNG, SVG tàbí JPEG.",
+      "add": "Gbe àmì sórí",
+      "untitled": "Àmì",
+      "none": "Ko sí àmì titi.",
+      "noPreview": "Ko si àwòrán àpẹẹrẹ",
+      "name": "Orukọ",
+      "minWidth": "Iwọn fife kékèké jùlọ (pt)",
+      "aspect": "Èyí tí a le fa di gigun (%)",
+      "aspectHint": "Ipò tí a le yà tàbí ṣàtúnṣe irisi rẹ.",
+      "colors": "Fi han lóri",
+      "colorsHint": "Fi gbogbo silẹ lai yàn kankan lati gba ẹ̀yà abẹlẹ kankan."
+    },
+    "language": {
+      "title": "Ìtumọ̀ ọrọ̀",
+      "description": "Àwọn èdè ti iwe kọwé kọ, àwọn ọrọ tí a yẹ kí a lo àti ti a yẹ kí a yago fún, àti irisi agbọrọsọ.",
+      "locales": "Àwọn èdè",
+      "localesHint": "Àmi èdè bíi en tàbí fr-CA, pelu ami pipin kika.",
+      "preferred": "Àwọn ọrọ tí a yẹ kí a lo",
+      "banned": "Àwọn ọrọ tí a yẹ kí a yàgò fún",
+      "term": "Ọ̀rọ̀ tàbí gbolohun",
+      "alternatives": "Dipo / kọ dipo",
+      "note": "Akiyesi",
+      "addPreferred": "Fi ọrọ kan tí a yẹ kí a lo",
+      "addBanned": "Fi ọrọ kan tí a yẹ kí a yàgò fún",
+      "nonePreferred": "Kò sí ọrọ ti a fẹ́ lo títí.",
+      "noneBanned": "Kò sí ọrọ lati yàgò fún títí.",
+      "tone": "Agbọrọsọ"
+    },
+    "templates": {
+      "title": "Àwọn àpẹẹrẹ",
+      "description": "Àwọn àpẹẹrẹ PowerPoint ati Word tí a fi dá iwe tuntun.",
+      "add": "Gbe àwòrán àpẹẹrẹ sórí",
+      "untitled": "Àpẹẹrẹ",
+      "none": "Ko sí àpẹẹrẹ kankan síbẹ̀.",
+      "name": "Orúkọ",
+      "wrongType": "Àpẹẹrẹ gbọ́dọ̀ jẹ́ ọ̀kan nínú {types}."
     }
   }
 }

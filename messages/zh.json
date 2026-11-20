@@ -2918,6 +2918,10 @@
       "channelDrafter": {
         "label": "频道内容撰写器",
         "description": "将来源内容转化为适用于各频道的帖子，语气合适，所有引用都可追溯来源"
+      },
+      "brandReview": {
+        "label": "品牌审核",
+        "description": "根据品牌手册检查 PDF、Word 文档或演示文稿：字体、颜色、用词、标志和语调"
       }
     },
     "chooser": {
@@ -2930,7 +2934,8 @@
       "newMap": "新建地图",
       "newGrants": "新拨款处理",
       "newFormFill": "新建文档填写",
-      "newChannelDrafter": "新建频道草稿"
+      "newChannelDrafter": "新建频道草稿",
+      "newBrandReview": "新建品牌审核"
     },
     "translation": {
       "chooseLanguage": "目标语言",
@@ -4869,6 +4874,112 @@
         "altTooLong": "{name}的替代文本超出该频道限{max}，已超出{count}。",
         "unicodeSms": "{characters}无法通过标准短信发送，因此此消息最多可包含70个字符，而非160。替换这些字符以获得更多空间。"
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "品牌审核",
+        "intro": "请选择品牌手册和文档。审核会检查字体、颜色、文字大小、用词和标志，并可让模型逐页检查语调和视觉规范。",
+        "book": "品牌手册",
+        "booksLoading": "正在加载品牌手册…",
+        "noBooks": "您还没有可用的品牌手册。管理员可在管理 > 品牌手册中添加。",
+        "document": "文档",
+        "chooseDocument": "选择文档",
+        "replaceDocument": "选择其他文档",
+        "documentTypes": "PDF、Word 或 PowerPoint",
+        "uploading": "正在上传…",
+        "uploadFailed": "无法上传文档。",
+        "wrongType": "请选择 PDF、Word 文档或演示文稿。",
+        "modelReview": "由模型逐页检查",
+        "modelReviewHint": "发现检查无法检测的语调、视觉和标志问题。每页消耗一次 token，最多 40 页。",
+        "start": "开始审核"
+      },
+      "loading": "正在加载审核…",
+      "booksFailed": "无法加载品牌手册。",
+      "startFailed": "无法开始审核。",
+      "readFailed": "无法读取审核内容。",
+      "busy": "“{name}”仍在审核中。请等待完成或先停止当前审核后再开始新的审核。",
+      "failed": "审核失败。",
+      "against": "依据 {book}",
+      "progress": {
+        "reading": "正在读取文档…",
+        "checking": "正在检查文本和标志…",
+        "reviewing": "正在审核页面…",
+        "pages": "已审核 {done} / {total} 页"
+      },
+      "status": {
+        "done": "{errors, plural, one {# 个错误} other {# 个错误}}，{warnings, plural, one {# 个警告} other {# 个警告}}",
+        "stopped": "已停止：目前共 {errors, plural, one {# 个错误} other {# 个错误}}",
+        "failed": "失败",
+        "running": "运行中"
+      },
+      "stop": "停止",
+      "download": "下载报告",
+      "newReview": "新建审核",
+      "findings": "发现",
+      "noFindings": "尚未发现任何问题。",
+      "noneOfSeverity": "无此类发现。",
+      "byModel": "由模型发现，请检查。",
+      "notes": "备注",
+      "pageShort": "第 {page} 页",
+      "filter": {
+        "label": "显示",
+        "all": "全部 {count}",
+        "error": "错误 {count}",
+        "warning": "警告 {count}",
+        "info": "备注 {count}"
+      },
+      "severity": {
+        "error": "错误",
+        "warning": "警告",
+        "info": "备注"
+      },
+      "rule": {
+        "font": "字体",
+        "color": "颜色",
+        "size": "文字大小",
+        "banned-term": "需避免的词语",
+        "preferred-term": "优选词语",
+        "language": "语言",
+        "logo-distorted": "标志比例",
+        "logo-small": "标志尺寸",
+        "logo-background": "标志背景",
+        "logo-unknown": "可能的标志",
+        "visual": "视觉",
+        "tone": "语气"
+      },
+      "message": {
+        "font": "当前字体为{found}；品牌字体为{expected}。",
+        "font-alone": "当前字体为{found}，不是品牌字体。",
+        "color": "{found}不是品牌色；最接近的是{first}。",
+        "size": "字体大小为{found} pt；最小允许为{first} pt。",
+        "banned-term": "“{found}”为需避免的用词，请用{expected}。",
+        "banned-term-alone": "“{found}”为需避免的用词。",
+        "preferred-term": "请用“{first}”替换“{found}”。",
+        "language": "当前标记为{found}；品牌语言为{expected}。",
+        "logo-distorted": "{name}显示比例为{found}；原始比例为{first}。",
+        "logo-small": "{name}宽为{found} pt；应不小于{first} pt。",
+        "logo-background": "{name}出现在{found}背景上；可在{expected}背景上显示。",
+        "logo-unknown": "一张可能为标志的图片：{found}。",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "品牌审核：{name}",
+        "meta": "依据{book}，{date}，{pages, plural, one {#页} other {#页}}",
+        "errors": "{count, plural, one {#个错误} other {#个错误}}",
+        "warnings": "{count, plural, one {#个警告} other {#个警告}}",
+        "infos": "{count, plural, one {#条说明} other {#条说明}}",
+        "partial": "审核未完成；本报告仅包含已检查内容。",
+        "skipped": "模型未查看第{pages}页；这些页面由人工检查。",
+        "none": "未发现违背品牌手册的内容。",
+        "page": "页面",
+        "severity": "严重程度",
+        "rule": "检查项",
+        "finding": "发现",
+        "found": "发现内容",
+        "notes": "备注",
+        "fileSuffix": "品牌审核"
+      }
     }
   },
   "connectors": {
@@ -6141,7 +6252,8 @@
       "contextBudget": "每轮发送给模型的对话内容量。",
       "analytics": "已生成报告：包括内容、可查看每个文件夹的用户及可显示的字段。",
       "skills": "当对话需要时，助手会应用的可复用指令块。",
-      "models": "分配后台模型并检查区域部署准备情况。"
+      "models": "分配后台模型并检查区域部署准备情况。",
+      "brandBooks": "用于检查和制定文件的品牌颜色、字体、标志、用词和模板。"
     },
     "openSettings": "打开设置",
     "area": {
@@ -6154,7 +6266,8 @@
       "contextBudget": "上下文预算",
       "analytics": "分析",
       "skills": "技能",
-      "models": "模型和准备情况"
+      "models": "模型和准备情况",
+      "brandBooks": "品牌手册"
     }
   },
   "limits": {
@@ -8855,6 +8968,129 @@
       "zoomReset": "重置缩放（当前 {percent}%）",
       "zoomLevel": "{percent}%",
       "failed": "无法显示此文档。文档可能过大或受保护，也可能转换器正忙；请稍后再试。"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "未命名品牌手册",
+    "intro": "品牌手册包含组织的颜色、字体、标志、用词和模板，文件可据此进行检查和制定。每本手册的使用权限通过访问规则设置。",
+    "unavailable": "无法从存储加载品牌手册，请稍后重试。",
+    "add": "添加品牌手册",
+    "none": "尚无品牌手册。",
+    "paletteSummary": "{count, plural, one {# 个品牌颜色} other {# 个品牌颜色}}",
+    "summary": "{fonts, plural, one {# 种字体} other {# 种字体}}，{logos, plural, one {# 个标志} other {# 个标志}}",
+    "open": "打开",
+    "delete": "删除",
+    "deleteConfirm": "要删除“{name}”及其文件吗？已检查过的文件会保留其报告。",
+    "deleteConfirmButton": "删除品牌手册",
+    "loading": "正在加载品牌手册...",
+    "loadFailed": "无法加载品牌手册。",
+    "missing": "该品牌手册不存在，或您无权编辑。",
+    "back": "品牌手册",
+    "unsaved": "更改未保存",
+    "saved": "已保存",
+    "save": "保存",
+    "conflict": "在您打开后，其他管理员已保存了此品牌手册。请重新加载以查看他们的版本；您在此的更改将会丢失。",
+    "reload": "重新加载",
+    "invalid": "该品牌手册尚无法保存：{reason}",
+    "saveFailed": "无法保存品牌手册。",
+    "uploadFailed": "无法上传该文件。",
+    "remove": "移除",
+    "removeNamed": "移除{name}",
+    "basics": {
+      "title": "品牌手册",
+      "name": "名称",
+      "description": "描述"
+    },
+    "guide": {
+      "action": "根据品牌指南草拟",
+      "reading": "正在读取指南...",
+      "hint": "上传品牌指南PDF文件，将自动填写所定义的颜色、字体和用词。标志和模板不会从中提取，请在下方单独上传。",
+      "source": "草拟自",
+      "notPdf": "品牌指南必须为PDF格式。",
+      "failed": "无法根据该指南生成草稿。",
+      "applied": "{pages, plural, one {根据 # 页的指南起草。} other {根据 # 页的指南起草。}}",
+      "measuredFonts": "文本所用字体：",
+      "measuredColors": "文本所用颜色：",
+      "check": "请在保存前根据指南核对每项数值。",
+      "undo": "撤销草稿"
+    },
+    "palette": {
+      "title": "颜色",
+      "description": "品牌颜色。当文件中的某一颜色在该颜色容差范围内时，即视为品牌颜色之一。",
+      "add": "添加颜色",
+      "newName": "颜色{number}",
+      "none": "尚无品牌颜色。",
+      "hex": "Hex",
+      "pick": "为{name}选择颜色",
+      "name": "名称",
+      "tolerance": "容差",
+      "toleranceHint": "颜色差异（Delta E）。2 到 3 几乎不可见。",
+      "roles": "用途",
+      "neutrals": "中性色",
+      "neutralsHint": "任何文件可使用的非品牌色，使用逗号分隔。"
+    },
+    "colorRole": {
+      "primary": "主色",
+      "secondary": "次色",
+      "accent": "强调色",
+      "text": "文本",
+      "background": "背景",
+      "neutral": "中性"
+    },
+    "typography": {
+      "title": "类别",
+      "description": "按角色分类的字体及其允许的替代字体，如外部共享文档时可用的系统字体。",
+      "add": "添加字体",
+      "none": "暂无字体。",
+      "role": "角色",
+      "family": "字体",
+      "substitutes": "允许的替代字体",
+      "minSize": "最小字号（pt）",
+      "minSizeHint": "0 表示不设下限。"
+    },
+    "fontRole": {
+      "heading": "标题",
+      "body": "正文",
+      "accent": "强调"
+    },
+    "logos": {
+      "title": "标志",
+      "description": "文档应使用的标志文件，格式为 PNG、SVG 或 JPEG。",
+      "add": "上传标志",
+      "untitled": "标志",
+      "none": "暂无标志。",
+      "noPreview": "无预览",
+      "name": "名称",
+      "minWidth": "最小宽度（pt）",
+      "aspect": "允许拉伸（%）",
+      "aspectHint": "允许比例变化的范围。",
+      "colors": "显示在",
+      "colorsHint": "如全不勾选，则允许任意背景。"
+    },
+    "language": {
+      "title": "用词",
+      "description": "文档所用语言、建议使用和避免的词语，以及语气。",
+      "locales": "语言",
+      "localesHint": "语言标记，如 en 或 fr-CA，用逗号分隔。",
+      "preferred": "建议用词",
+      "banned": "避免用词",
+      "term": "词语或短语",
+      "alternatives": "代替 / 推荐用法",
+      "note": "备注",
+      "addPreferred": "添加建议用词",
+      "addBanned": "添加避免用词",
+      "nonePreferred": "暂无建议用词。",
+      "noneBanned": "暂无避免用词。",
+      "tone": "语气"
+    },
+    "templates": {
+      "title": "模板",
+      "description": "新文档所用的 PowerPoint 和 Word 模板。",
+      "add": "上传模板",
+      "untitled": "模板",
+      "none": "尚无模板。",
+      "name": "名称",
+      "wrongType": "模板必须是 {types} 之一。"
     }
   }
 }

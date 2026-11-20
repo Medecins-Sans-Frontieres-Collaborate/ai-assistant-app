@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Redactor de canale",
         "description": "Transformă sursele în postări pentru mai multe canale, fiecare cu tonul potrivit, iar fiecare citat cu sursa sa identificată"
+      },
+      "brandReview": {
+        "label": "Revizuire de brand",
+        "description": "Verificați un PDF, un document Word sau o prezentare față de manualul de brand: fonturi, culori, formulări, logo-uri și ton"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Hartă nouă",
       "newGrants": "Procesare granturi noi",
       "newFormFill": "Completare document nou",
-      "newChannelDrafter": "Ciornă canal nou"
+      "newChannelDrafter": "Ciornă canal nou",
+      "newBrandReview": "Revizuire de brand nouă"
     },
     "translation": {
       "chooseLanguage": "Limba țintă",
@@ -4838,6 +4843,112 @@
         "altTooLong": "Textul alternativ pentru {name} depășește cu {count} limita acestui canal, care este {max}.",
         "unicodeSms": "{characters} nu pot fi trimise într-un SMS standard, astfel încât acest mesaj are loc doar pentru 70 de caractere, nu 160. Elimină-le pentru a elibera spațiu."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Revizuire de brand",
+        "intro": "Alegeți un manual de brand și un document. Revizuirea verifică fonturi, culori, mărimi ale textului, formulări și logo-uri și poate folosi un model pentru a analiza fiecare pagină privind tonul și regulile vizuale.",
+        "book": "Manual de brand",
+        "booksLoading": "Se încarcă manualele de brand...",
+        "noBooks": "Nu aveți încă manuale de brand disponibile. Un administrator le adaugă în Admin > Manuale de brand.",
+        "document": "Document",
+        "chooseDocument": "Alegeți un document",
+        "replaceDocument": "Alegeți alt document",
+        "documentTypes": "PDF, Word sau PowerPoint",
+        "uploading": "Se încarcă...",
+        "uploadFailed": "Documentul nu a putut fi încărcat.",
+        "wrongType": "Alegeți un PDF, document Word sau prezentare.",
+        "modelReview": "Modelul analizează fiecare pagină",
+        "modelReviewHint": "Identifică probleme de ton, vizuale și de logo pe care verificările nu le pot detecta. Folosește tokeni pentru fiecare pagină, maxim 40 pagini.",
+        "start": "Porniți revizuirea"
+      },
+      "loading": "Se încarcă revizuirea...",
+      "booksFailed": "Manualele de brand nu au putut fi încărcate.",
+      "startFailed": "Revizuirea nu a putut fi pornită.",
+      "readFailed": "Revizuirea nu a putut fi citită.",
+      "busy": "„{name}” este încă în proces de revizuire. Așteptați finalizarea sau opriți procesul înainte de a începe altul.",
+      "failed": "Revizuirea a eșuat.",
+      "against": "Față de {book}",
+      "progress": {
+        "reading": "Se citește documentul...",
+        "checking": "Se verifică textul și logo-urile...",
+        "reviewing": "Se revizuiesc paginile...",
+        "pages": "Au fost revizuite {done} din {total} pagini"
+      },
+      "status": {
+        "done": "{errors, plural, one {# eroare} other {# erori}}, {warnings, plural, one {# avertisment} other {# avertismente}}",
+        "stopped": "Oprit: {errors, plural, one {# eroare} other {# erori}} până acum",
+        "failed": "Eșuat",
+        "running": "Se execută"
+      },
+      "stop": "Opriți",
+      "download": "Descărcați raportul",
+      "newReview": "Revizuire nouă",
+      "findings": "Constatări",
+      "noFindings": "Nu s-a găsit nimic încă.",
+      "noneOfSeverity": "Nu există constatări de acest tip.",
+      "byModel": "Identificat de model; verificați.",
+      "notes": "Note",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "Afișați",
+        "all": "Toate {count}",
+        "error": "Erori {count}",
+        "warning": "Avertismente {count}",
+        "info": "Note {count}"
+      },
+      "severity": {
+        "error": "Eroare",
+        "warning": "Avertisment",
+        "info": "Notă"
+      },
+      "rule": {
+        "font": "Tip de caracter",
+        "color": "Culoare",
+        "size": "Dimensiunea textului",
+        "banned-term": "Cuvânt de evitat",
+        "preferred-term": "Cuvânt preferat",
+        "language": "Limbă",
+        "logo-distorted": "Proporțiile logo-ului",
+        "logo-small": "Dimensiunea logo-ului",
+        "logo-background": "Fundalul logo-ului",
+        "logo-unknown": "Posibil logo",
+        "visual": "Vizual",
+        "tone": "Ton"
+      },
+      "message": {
+        "font": "Setat în {found}; tipurile de caractere ale brandului sunt {expected}.",
+        "font-alone": "Setat în {found}, care nu este un tip de caracter al brandului.",
+        "color": "{found} nu este o culoare a brandului; cea mai apropiată este {first}.",
+        "size": "Text la {found} pt; cel mai mic permis este {first} pt.",
+        "banned-term": "„{found}” este un cuvânt de evitat; scrieţi {expected} în schimb.",
+        "banned-term-alone": "„{found}” este un cuvânt de evitat.",
+        "preferred-term": "Scrieţi „{first}” în loc de „{found}”.",
+        "language": "Marcat ca {found}; limbile brandului sunt {expected}.",
+        "logo-distorted": "{name} este redat la {found}; proporțiile lui sunt {first}.",
+        "logo-small": "{name} are lățimea de {found} pt; ar trebui să aibă cel puțin {first} pt.",
+        "logo-background": "{name} este pe {found}; poate fi afișat pe {expected}.",
+        "logo-unknown": "O imagine care poate fi un logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Revizuire brand: {name}",
+        "meta": "Comparativ cu {book}, {date}, {pages, plural, one {# pagină} other {# pagini}}",
+        "errors": "{count, plural, one {# eroare} other {# erori}}",
+        "warnings": "{count, plural, one {# avertisment} other {# avertismente}}",
+        "infos": "{count, plural, one {# notă} other {# note}}",
+        "partial": "Revizuirea nu s-a finalizat; acest raport prezintă ce s-a găsit înainte de terminare.",
+        "skipped": "Modelul nu a analizat paginile {pages}; acestea au fost verificate fără el.",
+        "none": "Nu s-a găsit nimic care să se abată de la cartea de brand.",
+        "page": "Pagină",
+        "severity": "Gravitate",
+        "rule": "Verificare",
+        "finding": "Constatare",
+        "found": "Găsit",
+        "notes": "Note",
+        "fileSuffix": "revizuire brand"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Câtă parte din conversație primește fiecare model la fiecare răspuns.",
       "analytics": "Rapoarte livrate: ce a sosit, cine poate accesa fiecare dosar și ce câmpuri pot fi afişate.",
       "skills": "Blocuri de instrucțiuni reutilizabile pe care asistentul le aplică atunci când conversația necesită acest lucru.",
-      "models": "Atribuiți modele de fundal și verificați pregătirea pentru implementare regională."
+      "models": "Atribuiți modele de fundal și verificați pregătirea pentru implementare regională.",
+      "brandBooks": "Culori, fonturi, sigle, formulare și șabloane după care se verifică și se construiesc documentele."
     },
     "openSettings": "Deschide setările",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Buget context",
       "analytics": "Analitice",
       "skills": "Abilități",
-      "models": "Modele și pregătire"
+      "models": "Modele și pregătire",
+      "brandBooks": "Manuale de brand"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Resetează zoomul (acum {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Acest document nu a putut fi afișat. Poate fi prea mare, protejat sau convertorul poate fi ocupat; încercați din nou în scurt timp."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Manual de brand fără titlu",
+    "intro": "Un manual de brand conține culorile, fonturile, siglele, formulările și șabloanele organizației, pentru ca documentele să fie verificate și construite pe baza lui. Accesul la fiecare manual este stabilit prin regula de acces.",
+    "unavailable": "Manualele de brand nu au putut fi încărcate din stocare. Încercați din nou în câteva momente.",
+    "add": "Adaugă manual de brand",
+    "none": "Nu există încă manuale de brand.",
+    "paletteSummary": "{count, plural, one {# culoare de brand} other {# culori de brand}}",
+    "summary": "{fonts, plural, one {# font} other {# fonturi}}, {logos, plural, one {# siglă} other {# sigle}}",
+    "open": "Deschide",
+    "delete": "Șterge",
+    "deleteConfirm": "Șterge „{name}” și fișierele aferente? Documentele deja verificate păstrează rapoartele.",
+    "deleteConfirmButton": "Șterge manualul de brand",
+    "loading": "Se încarcă manualul de brand...",
+    "loadFailed": "Manualul de brand nu a putut fi încărcat.",
+    "missing": "Acest manual de brand nu există sau nu puteți să-l editați.",
+    "back": "Manuale de brand",
+    "unsaved": "Modificări nesalvate",
+    "saved": "Salvat",
+    "save": "Salvează",
+    "conflict": "Alt administrator a salvat acest manual de brand după ce l-ați deschis. Reîncărcați pentru a vedea versiunea lor; modificările dumneavoastră vor fi pierdute.",
+    "reload": "Reîncărcați",
+    "invalid": "Acest manual de brand nu poate fi salvat încă: {reason}",
+    "saveFailed": "Manualul de brand nu a putut fi salvat.",
+    "uploadFailed": "Fișierul nu a putut fi încărcat.",
+    "remove": "Elimină",
+    "removeNamed": "Elimină {name}",
+    "basics": {
+      "title": "Manual de brand",
+      "name": "Nume",
+      "description": "Descriere"
+    },
+    "guide": {
+      "action": "Elaborează din ghidul de brand",
+      "reading": "Se citește ghidul...",
+      "hint": "Încărcați ghidul de brand ca PDF pentru a completa culorile, fonturile și formulările definite în acesta. Siglele și șabloanele nu sunt extrase din el; încărcați-le mai jos.",
+      "source": "Elaborat din",
+      "notPdf": "Un ghid de brand trebuie să fie în format PDF.",
+      "failed": "Nu s-a putut elabora un manual din acest ghid.",
+      "applied": "{pages, plural, one {Creat de la un ghid de # pagină.} other {Creat de la un ghid de # pagini.}}",
+      "measuredFonts": "Fonturi folosite în text:",
+      "measuredColors": "Culori folosite în text:",
+      "check": "Verificați fiecare valoare cu ghidul înainte de salvare.",
+      "undo": "Anulează elaborarea"
+    },
+    "palette": {
+      "title": "Culori",
+      "description": "Culorile de brand. O culoare într-un document este considerată una dintre acestea atunci când se află în toleranța de culoare.",
+      "add": "Adaugă culoare",
+      "newName": "Culoarea {number}",
+      "none": "Nu există încă culori de brand.",
+      "hex": "Hex",
+      "pick": "Alegeți o culoare pentru {name}",
+      "name": "Nume",
+      "tolerance": "Toleranță",
+      "toleranceHint": "Diferență de culoare (Delta E). 2 până la 3 este aproape invizibilă.",
+      "roles": "Folosit pentru",
+      "neutrals": "Culori neutre",
+      "neutralsHint": "Culori pe care orice document le poate folosi fără a fi culori de brand, separate prin virgulă."
+    },
+    "colorRole": {
+      "primary": "Principală",
+      "secondary": "Secundară",
+      "accent": "Accent",
+      "text": "Text",
+      "background": "Fundal",
+      "neutral": "Neutru"
+    },
+    "typography": {
+      "title": "Tip",
+      "description": "Familiile de fonturi pe roluri și fonturile permise în locul lor, cum ar fi un font de sistem pentru documentele distribuite extern.",
+      "add": "Adaugă familie de font",
+      "none": "Nicio familie de font momentan.",
+      "role": "Rol",
+      "family": "Familie de font",
+      "substitutes": "Substitute permise",
+      "minSize": "Cel mai mic text (pt)",
+      "minSizeHint": "0 nu setează nicio limită minimă."
+    },
+    "fontRole": {
+      "heading": "Titluri",
+      "body": "Text principal",
+      "accent": "Accent"
+    },
+    "logos": {
+      "title": "Logouri",
+      "description": "Fișierele logo pe care documentele trebuie să le folosească, în format PNG, SVG sau JPEG.",
+      "add": "Încarcă logo",
+      "untitled": "Logo",
+      "none": "Niciun logo momentan.",
+      "noPreview": "Fără previzualizare",
+      "name": "Nume",
+      "minWidth": "Cea mai mică lățime (pt)",
+      "aspect": "Stretch permis (%)",
+      "aspectHint": "Cât de mult se pot modifica proporțiile.",
+      "colors": "Afișat pe",
+      "colorsHint": "Lăsați toate neselectate pentru a permite orice fundal."
+    },
+    "language": {
+      "title": "Formulări",
+      "description": "Limbi în care sunt redactate documentele, cuvintele de folosit și de evitat, și tonul.",
+      "locales": "Limbi",
+      "localesHint": "Taguri de limbă precum en sau fr-CA, separate prin virgulă.",
+      "preferred": "Cuvinte de folosit",
+      "banned": "Cuvinte de evitat",
+      "term": "Cuvânt sau expresie",
+      "alternatives": "În loc de / scrieți în schimb",
+      "note": "Notă",
+      "addPreferred": "Adaugă cuvânt de folosit",
+      "addBanned": "Adaugă cuvânt de evitat",
+      "nonePreferred": "Nu există cuvinte de folosit momentan.",
+      "noneBanned": "Nu există cuvinte de evitat momentan.",
+      "tone": "Ton"
+    },
+    "templates": {
+      "title": "Șabloane",
+      "description": "Șabloane PowerPoint și Word din care se creează documente noi.",
+      "add": "Încarcă șablonul",
+      "untitled": "Șablon",
+      "none": "Nu există șabloane încă.",
+      "name": "Nume",
+      "wrongType": "Un șablon trebuie să fie unul dintre {types}."
     }
   }
 }

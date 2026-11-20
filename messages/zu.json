@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Umhleli weziteshi",
         "description": "Guqula imithombo ibe izikhala ezahlukene ezimeni ezahlukene zeziteshi, ngayinye ibe nendlela efanele yokukhuluma, zonke izikhombo ziqondiswe emithonjeni yazo"
+      },
+      "brandReview": {
+        "label": "Ukuhlolwa komkhiqizo",
+        "description": "Hlola i-PDF, idokhumenti ye-Word noma isethulo uma kuhambisana nencwadi yomkhiqizo: amafonti, imibala, amagama asetshenziswayo, amalogo nendlela yokukhuluma"
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Imephu entsha",
       "newGrants": "Ukucubungula izibonelelo ezintsha",
       "newFormFill": "Gcwalisa umbhalo omusha",
-      "newChannelDrafter": "Isikhala esisha sesiteshi"
+      "newChannelDrafter": "Isikhala esisha sesiteshi",
+      "newBrandReview": "Ukuhlolwa komkhiqizo okusha"
     },
     "translation": {
       "chooseLanguage": "Ulimi oluqondiwe",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Umbhalo we-alt ka-{name} udlule ngo-{count} kwelinganiselwa kule siteshi eli-{max}.",
         "unicodeSms": "{characters} angeke athunyelwe ku-SMS evamile, ngakho le mlayezo inokubhalwa okungu-70 kuphela, hhayi okungu-160. Susa lezi zimpawu ukuze ubuyise isikhala."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Ukuhlolwa komkhiqizo",
+        "intro": "Khetha incwadi yomkhiqizo nedokhumenti. Ukuhlolwa kubheka amafonti, imibala, osayizi bombhalo, amagama asetshenziswayo namalogo, bese kungaba nemodeli ebheka ikhasi ngalinye ukuze ihlole indlela yokukhuluma nemithetho ebonakalayo.",
+        "book": "Incwadi yomkhiqizo",
+        "booksLoading": "Kulayishwa izincwadi zomkhiqizo...",
+        "noBooks": "Azikatholakali izincwadi zomkhiqizo kuwe. Umphathi uzifaka ku-Admin > Brand books.",
+        "document": "Idokhumenti",
+        "chooseDocument": "Khetha idokhumenti",
+        "replaceDocument": "Khetha enye idokhumenti",
+        "documentTypes": "PDF, Word noma PowerPoint",
+        "uploading": "Kulayishwa...",
+        "uploadFailed": "Idokhumenti ayikwazanga ukulayishwa.",
+        "wrongType": "Khetha i-PDF, idokhumenti ye-Word noma isethulo.",
+        "modelReview": "Vumela imodeli ibheke ikhasi ngalinye",
+        "modelReviewHint": "Ithola izinkinga zendlela yokukhuluma, ukubonakala namalogo angabonwa ukuhlola okujwayelekile. Isebenzisa amathokheni ekhasini ngalinye, kufika kumakhasi angu-40.",
+        "start": "Qala ukuhlola"
+      },
+      "loading": "Kulayishwa ukuhlola...",
+      "booksFailed": "Izincwadi zomkhiqizo azikwazanga ukulayishwa.",
+      "startFailed": "Ukuhlolwa akukwazanga ukuqala.",
+      "readFailed": "Ukuhlolwa akukwazanga ukufundwa.",
+      "busy": "\"{name}\" kusazohlolwa. Linda kuqede noma uyeke, ngaphambi kokuqala okunye.",
+      "failed": "Ukuhlolwa kwehlulekile.",
+      "against": "Kuqhathaniswa no-{book}",
+      "progress": {
+        "reading": "Kufundwa idokhumenti...",
+        "checking": "Kuhlolwa umbhalo namalogo...",
+        "reviewing": "Kuhlolwa amakhasi...",
+        "pages": "Kuhloliwe {done} kwa-{total} amakhasi"
+      },
+      "status": {
+        "done": "{errors, plural, one {# iphutha} other {# amaphutha}}, {warnings, plural, one {# isexwayiso} other {# izexwayiso}}",
+        "stopped": "Kumisiwe: {errors, plural, one {# iphutha} other {# amaphutha}} okwamanje",
+        "failed": "Kwehlulekile",
+        "running": "Kuyasebenza"
+      },
+      "stop": "Misa",
+      "download": "Landa umbiko",
+      "newReview": "Ukuhlola okusha",
+      "findings": "Okutholakele",
+      "noFindings": "Awekho okutholiwe okwamanje.",
+      "noneOfSeverity": "Awekho okutholakele kwalolu hlobo.",
+      "byModel": "Kutholwe yimodeli; sicela uhlole.",
+      "notes": "Amanothi",
+      "pageShort": "ikh. {page}",
+      "filter": {
+        "label": "Bonisa",
+        "all": "Konke {count}",
+        "error": "Amaphutha {count}",
+        "warning": "Izexwayiso {count}",
+        "info": "Amanothi {count}"
+      },
+      "severity": {
+        "error": "Iphutha",
+        "warning": "Isixwayiso",
+        "info": "Inothi"
+      },
+      "rule": {
+        "font": "Uhlobo lwebhodi",
+        "color": "Umbala",
+        "size": "Usayizi wombhalo",
+        "banned-term": "Igama okufanele ligwenywe",
+        "preferred-term": "Igama elikhethwayo",
+        "language": "Ulimi",
+        "logo-distorted": "Ulinganisa kwelogo",
+        "logo-small": "Usayizi welogo",
+        "logo-background": "Isizinda selogo",
+        "logo-unknown": "Ilogo engaba khona",
+        "visual": "Ukubukeka",
+        "tone": "Ithoni"
+      },
+      "message": {
+        "font": "Setshenziswe ku-{found}; ohlotshweni lwebhodi lomkhiqizo ngu-{expected}.",
+        "font-alone": "Setshenziswe ku-{found}, okungeyona uhlobo lwebhodi lomkhiqizo.",
+        "color": "{found} akuwona umbala womkhiqizo; eduze kakhulu ngu-{first}.",
+        "size": "Umbhalo ku-{found} pt; omncane ovumelekile ngu-{first} pt.",
+        "banned-term": "\"{found}\" liyigama okufanele ligwenywe; bhala u-{expected} esikhundleni salo.",
+        "banned-term-alone": "\"{found}\" liyigama okufanele ligwenywe.",
+        "preferred-term": "Sebenzisa \"{first}\" esikhundleni sika \"{found}\".",
+        "language": "Kumakwe ku-{found}; izilimi zomkhiqizo ngu-{expected}.",
+        "logo-distorted": "{name} idonswe ku-{found}; ingxenye yayo ilingana no-{first}.",
+        "logo-small": "{name} ibanzi ngo-{found} pt; kufanele ibe okungenani ngo-{first} pt.",
+        "logo-background": "{name} ibekwe ku-{found}; ingaboniswa ku-{expected}.",
+        "logo-unknown": "Isithombe esingaba ilogo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Ukubuyekezwa komkhiqizo: {name}",
+        "meta": "Ngokumelene no-{book}, {date}, {pages, plural, one {# ikhasi} other {# amakhasi}}",
+        "errors": "{count, plural, one {# iphutha} other {# amaphutha}}",
+        "warnings": "{count, plural, one {# isexwayiso} other {# izexwayiso}}",
+        "infos": "{count, plural, one {# inothi} other {# amanothi}}",
+        "partial": "Ukuhlola akuphelile; lo mbiko uqukethe okutholwe ngaphambi kokuphela.",
+        "skipped": "Imodeli ayibukanga amakhasi {pages}; ahloliwe ngaphandle kwawo.",
+        "none": "Akutholakanga okwephula incwadi yomkhiqizo.",
+        "page": "Ikhasi",
+        "severity": "Ubukhulu",
+        "rule": "Hlola",
+        "finding": "Okutholwe",
+        "found": "Okutholiwe",
+        "notes": "Amanothi",
+        "fileSuffix": "ukubuyekezwa komkhiqizo"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Inani lengxoxo elithunyelwa kwimodeli ngayinye ngomjikelezo ngamunye.",
       "analytics": "Imibiko elayishiwe: okuthunyelwe, ukuthi ubani ongavula ifolda ngayinye, nezinkambu ezingaboniswa.",
       "skills": "Amabhulokhi wemiyalelo angasetshenziswa kabusha uwusizo uma ingxoxo idinga wona.",
-      "models": "Nika amamodeli ngemuva bese uhlole ukulungela ukwabiwa kwesifunda."
+      "models": "Nika amamodeli ngemuva bese uhlole ukulungela ukwabiwa kwesifunda.",
+      "brandBooks": "Imibala, izinhlobo zonobumba, ama-logo, umbhalo namathempulethi okuthi imibhalo iqinisekiswe futhi kwakhiwe kusuka kuwo."
     },
     "openSettings": "Vula izilungiselelo",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Isabelomali somongo",
       "analytics": "Izibalo",
       "skills": "Amakhono",
-      "models": "Amamodeli nokulungela"
+      "models": "Amamodeli nokulungela",
+      "brandBooks": "Izincwadi zomkhiqizo"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Setha kabusha usayizi (manje {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Le dokhumenti ayikwazanga ukuboniswa. Ingase inkulu kakhulu, ivikelwe, noma isiguquli simatasa; zama futhi ngemuva kwesikhashana."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Incwadi yomkhiqizo engenasihloko",
+    "intro": "Incwadi yomkhiqizo igcina imibala yenhlangano, izinhlobo zonobumba, ama-logo, umbhalo namathempulethi, ukuze imibhalo iqinisekiswe futhi kwakhiwe kusuka kuyo. Abangakwazi ukuyisebenzisa balawulwa yimithetho yokufinyelela.",
+    "unavailable": "Izincwadi zomkhiqizo azikwazanga ukulayishwa kusuka kokugcinayo. Zama futhi ngesikhathi esizayo.",
+    "add": "Engeza incwadi yomkhiqizo",
+    "none": "Azikekho izincwadi zomkhiqizo okwamanje.",
+    "paletteSummary": "{count, plural, one {# umbala womkhiqizo} other {# imibala yomkhiqizo}}",
+    "summary": "{fonts, plural, one {# uhlobo lonobumba} other {# izinhlobo zonobumba}}, {logos, plural, one {# i-logo} other {# ama-logo}}",
+    "open": "Vula",
+    "delete": "Susa",
+    "deleteConfirm": "Susa \"{name}\" namafayela ayo? Imibhalo esivele iqinisekisiwe igcina imibiko yayo.",
+    "deleteConfirmButton": "Susa incwadi yomkhiqizo",
+    "loading": "Kulayishwa incwadi yomkhiqizo...",
+    "loadFailed": "Ayikwazanga ukulayishwa incwadi yomkhiqizo.",
+    "missing": "Le ncwadi yomkhiqizo ayikho, noma awuvunyelwe ukuyihlela.",
+    "back": "Izincwadi zomkhiqizo",
+    "unsaved": "Izinguquko ezingagcinwanga",
+    "saved": "Kugcinwe",
+    "save": "Gcina",
+    "conflict": "Omunye umlawuli ugcine le ncwadi yomkhiqizo ngemuva kokuthi uyivulile. Layisha kabusha ukuze ubone inguqulo yabo; izinguquko zakho lapha zizolahleka.",
+    "reload": "Layisha kabusha",
+    "invalid": "Le ncwadi yomkhiqizo ayikwazi ukugcinwa okwamanje: {reason}",
+    "saveFailed": "Ayikwazanga ukugcinwa incwadi yomkhiqizo.",
+    "uploadFailed": "Ifayela alikwazanga ukulayishwa.",
+    "remove": "Susa",
+    "removeNamed": "Susa {name}",
+    "basics": {
+      "title": "Incwadi yomkhiqizo",
+      "name": "Igama",
+      "description": "Incazelo"
+    },
+    "guide": {
+      "action": "Dweba kusuka kumhlahlandlela womkhiqizo",
+      "reading": "Kufundwa umhlahlandlela...",
+      "hint": "Layisha umhlahlandlela womkhiqizo njenge-PDF ukuze ugcwalise imibala, izinhlobo zonobumba nombhalo oqukethwe kuwo. Ama-logo namathempulethi awenziwa kusuka kuwo; lawa layisha ngezansi.",
+      "source": "Kudwetshwe kusuka ku",
+      "notPdf": "Umhlahlandlela womkhiqizo kufanele ube yi-PDF.",
+      "failed": "Ihlu draft alikwazanga ukwenziwa kulo mhlahlandlela.",
+      "applied": "{pages, plural, one {Kubhalwe kusetshenziswe incwadi yomhlahlandlela ye-# ikhasi.} other {Kubhalwe kusetshenziswe incwadi yomhlahlandlela yamakhasi angu-#.}}",
+      "measuredFonts": "Izinhlobo zonobumba ezisetshenziswe embhalweni:",
+      "measuredColors": "Imibala esetshenziswa embhalweni:",
+      "check": "Qinisekisa inani lilinye nomhlahlandlela ngaphambi kokugcina.",
+      "undo": "Hlehlisa idrafti"
+    },
+    "palette": {
+      "title": "Imibala",
+      "description": "Imibala yomkhiqizo. Umbala okwi-document ubhekwa njengowalena uma ungaphakathi kwemingcele yomabala.",
+      "add": "Engeza umbala",
+      "newName": "Umbala {number}",
+      "none": "Ayikho imibala yomkhiqizo okwamanje.",
+      "hex": "Hex",
+      "pick": "Khetha umbala ka-{name}",
+      "name": "Igama",
+      "tolerance": "Ukubekezelelana",
+      "toleranceHint": "Umehluko wombala (Delta E). U-2 kuya ku-3 akubonakali kalula.",
+      "roles": "Kusetshenziswa ku",
+      "neutrals": "Imibala ephakathi",
+      "neutralsHint": "Imibala noma yimaphi amadokhumenti angayisebenzisa ngaphandle kokuba imibala yomkhiqizo, ukuhlukaniswe ngamaphayiphi."
+    },
+    "colorRole": {
+      "primary": "Eyokuqala",
+      "secondary": "Yesibili",
+      "accent": "Ukugcizelela",
+      "text": "Umbhalo",
+      "background": "Isizinda",
+      "neutral": "Okuphakathi"
+    },
+    "typography": {
+      "title": "Uhlobo",
+      "description": "Izifakiwombhalo ngokwendima, kanye namafonti avumelekile endaweni yazo, njengefonti yesistimu yemibhalo ehanjiswa ngaphandle.",
+      "add": "Engeza isifakiwombhalo",
+      "none": "Azikabi bikho izifakiwombhalo.",
+      "role": "Indima",
+      "family": "Isifakiwombhalo",
+      "substitutes": "Izindlela ezivumelekile",
+      "minSize": "Umbhalo omncane kakhulu (pt)",
+      "minSizeHint": "U-0 awubekeli phansi umkhawulo."
+    },
+    "fontRole": {
+      "heading": "Izihloko",
+      "body": "Umbhalo oyinhloko",
+      "accent": "Ukugcizelela"
+    },
+    "logos": {
+      "title": "Ama-logo",
+      "description": "Amafayela we-logo okufanele asetshenziswe amadokhumenti, njenge-PNG, SVG noma i-JPEG.",
+      "add": "Layisha i-logo",
+      "untitled": "I-logo",
+      "none": "Azikabi bikho ama-logo.",
+      "noPreview": "Akunakho ukubuka kuqala",
+      "name": "Igama",
+      "minWidth": "Ububanzi obuncane (pt)",
+      "aspect": "Ukuvunyelwa ukwelulwa (%)",
+      "aspectHint": "Ubude nobubanzi bungahluka kangakanani.",
+      "colors": "Ikhonjiswa phezu kwa",
+      "colorsHint": "Shiya konke kungakhethiwe ukuze uvumele noma yiliphi isizinda."
+    },
+    "language": {
+      "title": "Izisho",
+      "description": "Izilimi okuthiwa kubhalwe ngazo amadokhumenti, amagama okufanele asetshenziswe nawagwemayo, kanye nendlela yokukhuluma.",
+      "locales": "Izilimi",
+      "localesHint": "Omaka bolimi njengokuthi en noma fr-CA, uhlukaniswe ngamaphayiphi.",
+      "preferred": "Amagama okufanele asetshenziswe",
+      "banned": "Amagama okufanele agwemwe",
+      "term": "Igama noma ibinzana",
+      "alternatives": "Esikhundleni / bhala esikhundleni salokho",
+      "note": "Inothi",
+      "addPreferred": "Engeza igama elizosetshenziswa",
+      "addBanned": "Engeza igama elizogwemeka",
+      "nonePreferred": "Azikabi bikho amagama okufanele asetshenziswe.",
+      "noneBanned": "Azikabi bikho amagama okufanele agwemwe.",
+      "tone": "Indlela yokukhuluma"
+    },
+    "templates": {
+      "title": "Amathemplethi",
+      "description": "Amathemplethi e-PowerPoint naWord okwakhiwa kuwo imibhalo emisha.",
+      "add": "Layisha itempulethi",
+      "untitled": "Itempulethi",
+      "none": "Azikabikho itempulethi.",
+      "name": "Igama",
+      "wrongType": "Itempulethi kumele ibe enye kwalezi: {types}."
     }
   }
 }

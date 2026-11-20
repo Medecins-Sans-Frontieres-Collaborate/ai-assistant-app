@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Kanal drafter",
         "description": "Pretvara izvore u objave za više kanala, za svaki odgovarajući stil, sa svakim citatom praćenim do izvora"
+      },
+      "brandReview": {
+        "label": "Pregled brenda",
+        "description": "Proverite PDF, Word dokument ili prezentaciju prema vodiču za brend: fontovi, boje, formulacije, logotipi i ton."
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Nova mapa",
       "newGrants": "Nova obrada grantova",
       "newFormFill": "Novo popunjavanje dokumenta",
-      "newChannelDrafter": "Novi nacrt za kanal"
+      "newChannelDrafter": "Novi nacrt za kanal",
+      "newBrandReview": "Novi pregled brenda"
     },
     "translation": {
       "chooseLanguage": "Ciljni jezik",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Alt tekst za {name} je {count} iznad ograničenja za ovaj kanal od {max}.",
         "unicodeSms": "{characters} ne mogu biti poslati standardnim SMS-om, pa ova poruka može imati 70 umesto 160 znakova. Zamenite ih da biste povratili prostor."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Pregled brenda",
+        "intro": "Izaberite vodič za brend i dokument. Pregled proverava fontove, boje, veličine teksta, formulacije i logotipe, i može koristiti model za analizu tona i vizuelnih pravila na svakoj stranici.",
+        "book": "Vodič za brend",
+        "booksLoading": "Učitavanje vodiča za brend...",
+        "noBooks": "Vodiči za brend trenutno nisu dostupni. Administrator ih dodaje u Admin > Vodiči za brend.",
+        "document": "Dokument",
+        "chooseDocument": "Izaberite dokument",
+        "replaceDocument": "Izaberite drugi dokument",
+        "documentTypes": "PDF, Word ili PowerPoint",
+        "uploading": "Otpremanje...",
+        "uploadFailed": "Dokument nije mogao biti otpremljen.",
+        "wrongType": "Izaberite PDF, Word dokument ili prezentaciju.",
+        "modelReview": "Model neka pregleda svaku stranicu",
+        "modelReviewHint": "Otkriva probleme ton, vizuala i logotipa koje provera ne može da vidi. Troši tokene po stranici, do 40 stranica.",
+        "start": "Pokreni pregled"
+      },
+      "loading": "Učitavanje pregleda...",
+      "booksFailed": "Vodiči za brend nisu mogli biti učitani.",
+      "startFailed": "Pregled nije mogao biti pokrenut.",
+      "readFailed": "Pregled nije mogao biti pročitan.",
+      "busy": "\"{name}\" se još uvek pregledava. Sačekajte da završi ili ga zaustavite pre pokretanja novog.",
+      "failed": "Pregled nije uspeo.",
+      "against": "Prema {book}",
+      "progress": {
+        "reading": "Čitanje dokumenta...",
+        "checking": "Provera teksta i logotipa...",
+        "reviewing": "Pregled stranica...",
+        "pages": "Pregledano {done} od {total} stranica"
+      },
+      "status": {
+        "done": "{errors, plural, one {# greška} other {# grešaka}}, {warnings, plural, one {# upozorenje} other {# upozorenja}}",
+        "stopped": "Zaustavljeno: {errors, plural, one {# greška} other {# grešaka}} do sada",
+        "failed": "Neuspešno",
+        "running": "U toku"
+      },
+      "stop": "Zaustavi",
+      "download": "Preuzmi izveštaj",
+      "newReview": "Novi pregled",
+      "findings": "Nalazi",
+      "noFindings": "Ništa nije pronađeno.",
+      "noneOfSeverity": "Nema nalaza ovog tipa.",
+      "byModel": "Otkrio model; proverite.",
+      "notes": "Napomene",
+      "pageShort": "str. {page}",
+      "filter": {
+        "label": "Prikaži",
+        "all": "Sve {count}",
+        "error": "Greške {count}",
+        "warning": "Upozorenja {count}",
+        "info": "Napomene {count}"
+      },
+      "severity": {
+        "error": "Greška",
+        "warning": "Upozorenje",
+        "info": "Napomena"
+      },
+      "rule": {
+        "font": "Tip slova",
+        "color": "Boja",
+        "size": "Veličina teksta",
+        "banned-term": "Reč za izbegavanje",
+        "preferred-term": "Preporučena reč",
+        "language": "Jezik",
+        "logo-distorted": "Proporcije logotipa",
+        "logo-small": "Veličina logotipa",
+        "logo-background": "Pozadina logotipa",
+        "logo-unknown": "Mogući logotip",
+        "visual": "Vizuelno",
+        "tone": "Ton"
+      },
+      "message": {
+        "font": "Korišćen je font {found}; zvanični fontovi su {expected}.",
+        "font-alone": "Korišćen je font {found}, koji nije zvanični brend font.",
+        "color": "{found} nije brend boja; najbliža je {first}.",
+        "size": "Tekst je {found} pt; najmanje dozvoljeno je {first} pt.",
+        "banned-term": "\"{found}\" je reč koju treba izbegavati; napišite {expected} umesto toga.",
+        "banned-term-alone": "\"{found}\" je reč koju treba izbegavati.",
+        "preferred-term": "Napišite \"{first}\" umesto \"{found}\".",
+        "language": "Označeno kao {found}; zvanični jezici su {expected}.",
+        "logo-distorted": "{name} je prikazan u {found}; originalne proporcije su {first}.",
+        "logo-small": "{name} je širok {found} pt; treba biti najmanje {first} pt.",
+        "logo-background": "{name} se nalazi na {found}; može biti prikazan na {expected}.",
+        "logo-unknown": "Slika koja može biti logotip: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Brend pregled: {name}",
+        "meta": "Prema {book}, {date}, {pages, plural, one {# strana} other {# strana}}",
+        "errors": "{count, plural, one {# greška} other {# grešaka}}",
+        "warnings": "{count, plural, one {# upozorenje} other {# upozorenja}}",
+        "infos": "{count, plural, one {# napomena} other {# napomena}}",
+        "partial": "Pregled nije završen; ovaj izveštaj sadrži ono što je pronađeno pre prekida.",
+        "skipped": "Model nije pregledao stranice {pages}; one su proverene bez njega.",
+        "none": "Nije pronađeno ništa što odstupa od brend priručnika.",
+        "page": "Strana",
+        "severity": "Ozbiljnost",
+        "rule": "Provera",
+        "finding": "Nalaz",
+        "found": "Pronađeno",
+        "notes": "Beleške",
+        "fileSuffix": "brend pregled"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Koliko se istorije razgovora šalje svakom modelu u svakom krugu.",
       "analytics": "Dostavljeni izveštaji: šta je stiglo, ko može da otvori svaki folder i koja polja mogu biti prikazana.",
       "skills": "Ponovo upotrebljivi blokovi instrukcija koje asistent primenjuje kada su potrebni u razgovoru.",
-      "models": "Dodelite pozadinske modele i proverite spremnost regionalnog raspoređivanja."
+      "models": "Dodelite pozadinske modele i proverite spremnost regionalnog raspoređivanja.",
+      "brandBooks": "Boje, tipografija, logotipi, tekst i predlošci prema kojima se proveravaju i izrađuju dokumenti."
     },
     "openSettings": "Otvori podešavanja",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Budžet konteksta",
       "analytics": "Analitika",
       "skills": "Veštine",
-      "models": "Modeli i spremnost"
+      "models": "Modeli i spremnost",
+      "brandBooks": "Brend knjige"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Poništi zumiranje (sada {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Ovaj dokument nije mogao da se prikaže. Možda je prevelik ili zaštićen, ili je konvertor zauzet; pokušajte ponovo uskoro."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Neimenovana brend knjiga",
+    "intro": "Brend knjiga sadrži boje, tipografiju, logotipe, tekst i predloške organizacije, kako bi dokumenti mogli da se proveravaju i izrađuju prema njoj. Ko može da koristi svaku knjigu određuje se pravilom pristupa.",
+    "unavailable": "Brend knjige nije moguće učitati iz skladišta. Pokušajte ponovo za trenutak.",
+    "add": "Dodaj brend knjigu",
+    "none": "Još nema brend knjiga.",
+    "paletteSummary": "{count, plural, one {# brend boja} other {# brend boje}}",
+    "summary": "{fonts, plural, one {# tip fonta} other {# tipovi fonta}}, {logos, plural, one {# logotip} other {# logotipi}}",
+    "open": "Otvori",
+    "delete": "Obriši",
+    "deleteConfirm": "Obrisati \"{name}\" i njene fajlove? Dokumenti koji su već provereni zadržavaju svoje izveštaje.",
+    "deleteConfirmButton": "Obriši brend knjigu",
+    "loading": "Učitavanje brend knjige...",
+    "loadFailed": "Brend knjiga nije mogla biti učitana.",
+    "missing": "Ova brend knjiga ne postoji ili nemate pravo da je uređujete.",
+    "back": "Brend knjige",
+    "unsaved": "Nesačuvane izmene",
+    "saved": "Sačuvano",
+    "save": "Sačuvaj",
+    "conflict": "Drugi administrator je sačuvao ovu brend knjigu nakon što ste je otvorili. Ponovo učitajte da biste videli njihovu verziju; vaše izmene će biti izgubljene.",
+    "reload": "Ponovo učitaj",
+    "invalid": "Brend knjiga još ne može biti sačuvana: {reason}",
+    "saveFailed": "Brend knjiga nije mogla biti sačuvana.",
+    "uploadFailed": "Fajl nije mogao biti otpremljen.",
+    "remove": "Ukloni",
+    "removeNamed": "Ukloni {name}",
+    "basics": {
+      "title": "Brend knjiga",
+      "name": "Naziv",
+      "description": "Opis"
+    },
+    "guide": {
+      "action": "Nacrt iz brend vodiča",
+      "reading": "Čitanje vodiča...",
+      "hint": "Otpremite brend vodič kao PDF kako biste popunili boje, tipografiju i tekst koje definiše. Logotipi i predlošci se ne preuzimaju iz njega; otpremite ih ispod.",
+      "source": "Nacrt iz",
+      "notPdf": "Brend vodič mora biti PDF.",
+      "failed": "Nacrt nije mogao biti napravljen iz ovog vodiča.",
+      "applied": "{pages, plural, one {Sastavljeno prema vodiču od # strane.} other {Sastavljeno prema vodiču od # strana.}}",
+      "measuredFonts": "Fontovi korišćeni u tekstu:",
+      "measuredColors": "Boje korišćene u tekstu:",
+      "check": "Proverite svaku vrednost prema vodiču pre čuvanja.",
+      "undo": "Poništi nacrt"
+    },
+    "palette": {
+      "title": "Boje",
+      "description": "Brend boje. Boja u dokumentu se računa kao jedna od ovih ako je unutar tolerancije.",
+      "add": "Dodaj boju",
+      "newName": "Boja {number}",
+      "none": "Još nema brend boja.",
+      "hex": "Hex",
+      "pick": "Odaberite boju za {name}",
+      "name": "Naziv",
+      "tolerance": "Tolerancija",
+      "toleranceHint": "Razlika u boji (Delta E). 2 do 3 je jedva primetno.",
+      "roles": "Koristi se za",
+      "neutrals": "Neutralne boje",
+      "neutralsHint": "Boje koje svaki dokument može koristiti bez obzira na brend, odvojene zarezima."
+    },
+    "colorRole": {
+      "primary": "Primarna",
+      "secondary": "Sekundarna",
+      "accent": "Naglašena",
+      "text": "Tekst",
+      "background": "Pozadina",
+      "neutral": "Neutralna"
+    },
+    "typography": {
+      "title": "Tip",
+      "description": "Pisani fontovi po ulozi i dozvoljeni zamenski fontovi, kao što je sistemski font za dokumente deljene van organizacije.",
+      "add": "Dodaj font",
+      "none": "Još nema fontova.",
+      "role": "Uloga",
+      "family": "Font",
+      "substitutes": "Dozvoljene zamene",
+      "minSize": "Najmanji tekst (pt)",
+      "minSizeHint": "0 postavlja bez minimalne veličine."
+    },
+    "fontRole": {
+      "heading": "Naslovi",
+      "body": "Tekst tela",
+      "accent": "Naglašena"
+    },
+    "logos": {
+      "title": "Logotipi",
+      "description": "Logo fajlovi koje dokumenti treba da koriste, kao PNG, SVG ili JPEG.",
+      "add": "Otpremi logotip",
+      "untitled": "Logotip",
+      "none": "Još nema logotipa.",
+      "noPreview": "Nema pregleda",
+      "name": "Naziv",
+      "minWidth": "Najmanja širina (pt)",
+      "aspect": "Dozvoljeno razvlačenje (%)",
+      "aspectHint": "Koliko proporcije mogu odstupati.",
+      "colors": "Prikazan na",
+      "colorsHint": "Ostavite sve neoznačeno da biste dozvolili bilo koju pozadinu."
+    },
+    "language": {
+      "title": "Formulacija",
+      "description": "Jezici u kojima su dokumenti napisani, reči koje treba koristiti i izbegavati, i ton.",
+      "locales": "Jezici",
+      "localesHint": "Oznake jezika kao en ili fr-CA, razdvojene zarezima.",
+      "preferred": "Reči koje treba koristiti",
+      "banned": "Reči koje treba izbegavati",
+      "term": "Reč ili fraza",
+      "alternatives": "Umesto / napiši umesto",
+      "note": "Napomena",
+      "addPreferred": "Dodaj reč za korišćenje",
+      "addBanned": "Dodaj reč za izbegavanje",
+      "nonePreferred": "Još nema preporučenih reči.",
+      "noneBanned": "Još nema reči za izbegavanje.",
+      "tone": "Ton"
+    },
+    "templates": {
+      "title": "Šabloni",
+      "description": "PowerPoint i Word šabloni od kojih se prave novi dokumenti.",
+      "add": "Otpremi šablon",
+      "untitled": "Šablon",
+      "none": "Još uvek nema šablona.",
+      "name": "Naziv",
+      "wrongType": "Šablon mora biti jedan od sledećih: {types}."
     }
   }
 }

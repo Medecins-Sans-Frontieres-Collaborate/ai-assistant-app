@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Qoraha kanaalka",
         "description": "U beddel ilo qoraallo loogu talagalay kanaallo kala duwan, mid walbana codkiisa saxda ah, dhammaan oraahyadana si sax ah ugu xiran ilaha ay ka yimaadeen"
+      },
+      "brandReview": {
+        "label": "Dib-u-eegis sumad",
+        "description": "Fiiri PDF, document Word ama soo-bandhigid si loo hubiyo inay la jaanqaadayso buugga sumadda: farta, midabada, erayada, astaanta iyo dhawaqa qoraalka"
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Khariidad cusub",
       "newGrants": "Ka shaqaynta deeqo cusub",
       "newFormFill": "Buuxinta dukumeenti cusub",
-      "newChannelDrafter": "Qoraal kanaal cusub"
+      "newChannelDrafter": "Qoraal kanaal cusub",
+      "newBrandReview": "Dib-u-eegis sumad cusub"
     },
     "translation": {
       "chooseLanguage": "Luqadda la beegsanayo",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Qoraalka alt ee {name} waxa uu {count} dhaafay xadka {max} ee kanaalkan.",
         "unicodeSms": "{characters} lama diri karo farriin qoraal caadi ah, sidaa darteed farriintani waxay leedahay 70 xaraf kaliya, halkii ay ka ahaan lahayd 160. Ka beddel si aad boos u hesho."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Dib-u-eegis sumad",
+        "intro": "Xulo buug sumadeed iyo document. Dib-u-eegistu waxay hubisaa farta, midabada, cabbirrada qoraalka, erayada iyo astaamaha, waxaana suurto gal ah in moodel uu mar walba bog walba u hubiyo dhawaqa qoraalka iyo xeerarka muuqaalka.",
+        "book": "Buug sumadeed",
+        "booksLoading": "Buugaagta sumadda oo soo dhacaya...",
+        "noBooks": "Weli ma heli kartid buugaag sumadeed. Maamulaha ayaa ku daray Admin > Buugaag sumadeed.",
+        "document": "Document",
+        "chooseDocument": "Dooro document",
+        "replaceDocument": "Dooro document kale",
+        "documentTypes": "PDF, Word ama PowerPoint",
+        "uploading": "Wuxuu soo dhacayaa...",
+        "uploadFailed": "Document-ka lama soo dhigi karin.",
+        "wrongType": "Doorto PDF, document Word ama presentation.",
+        "modelReview": "U ogolow moodel inuu fiiriyo bog walba",
+        "modelReviewHint": "Waxay ogaataa dhibaatooyin dhawaqa qoraalka, muuqaalka iyo astaanta ee aan qoraalka lagu ogaan karin. Waxay isticmaashaa tokens bog walba, ilaa 40 bog.",
+        "start": "Bilow dib-u-eegista"
+      },
+      "loading": "Dib-u-eegista oo la rarayo...",
+      "booksFailed": "Buugaagta sumadda lama rari karin.",
+      "startFailed": "Dib-u-eegista lama bilaabi karin.",
+      "readFailed": "Dib-u-eegista lama akhrin karin.",
+      "busy": "\"{name}\" wali waa la eegayaa. Sug inta la dhammeeyo, ama jooji, ka hor inta aanad mid kale bilaabin.",
+      "failed": "Dib-u-eegistu wey guuldareysatay.",
+      "against": "Marka loo eego {book}",
+      "progress": {
+        "reading": "Document-ka oo la akhrinayo...",
+        "checking": "Qoraalka iyo astaamaha oo la hubinayo...",
+        "reviewing": "Bogagga oo la eegayo...",
+        "pages": "{done} ka mid ah {total} bog ayaa la eegay"
+      },
+      "status": {
+        "done": "{errors, plural, one {hal khalad} other {# khalad}}, {warnings, plural, one {hal digniin} other {# digniin}}",
+        "stopped": "La joojiyay: {errors, plural, one {hal khalad} other {# khalad}} illaa hadda",
+        "failed": "Guuldarreysatay",
+        "running": "Waqtiyaysan"
+      },
+      "stop": "Jooji",
+      "download": "Soo degso warbixinta",
+      "newReview": "Dib-u-eegis cusub",
+      "findings": "Waxyaabaha la helay",
+      "noFindings": "Weli wax lama helin.",
+      "noneOfSeverity": "Noocan lama helin.",
+      "byModel": "Moodelka ayaa helay; fadlan hubi.",
+      "notes": "Xusuusin",
+      "pageShort": "b. {page}",
+      "filter": {
+        "label": "Muuji",
+        "all": "Dhamaantood {count}",
+        "error": "Khaladaad {count}",
+        "warning": "Digniino {count}",
+        "info": "Xusuusin {count}"
+      },
+      "severity": {
+        "error": "Khalad",
+        "warning": "Digniin",
+        "info": "Xusuusin"
+      },
+      "rule": {
+        "font": "Nooca farta",
+        "color": "Midabka",
+        "size": "Cabbirka qoraalka",
+        "banned-term": "Erey la iska ilaaliyo",
+        "preferred-term": "Ereyga la doorbidayo",
+        "language": "Luuqadda",
+        "logo-distorted": "Qiyaasta astaanta",
+        "logo-small": "Cabbirka astaanta",
+        "logo-background": "Asalka astaanta",
+        "logo-unknown": "Astaanta suuragalka ah",
+        "visual": "Mid muuqaal ah",
+        "tone": "Codka"
+      },
+      "message": {
+        "font": "Waxaa lagu qoray {found}; noocyada faraha ee summaddu waa {expected}.",
+        "font-alone": "Waxaa lagu qoray {found}, kaas oo aan ahayn nooca astaanta.",
+        "color": "{found} ma ahan midabka summadda; kan ugu dhow waa {first}.",
+        "size": "Qoraalka waa {found} pt; kan ugu yar ee la ogolyahay waa {first} pt.",
+        "banned-term": "\"{found}\" waa erey la iska ilaaliyo; halkii aad ka isticmaali lahayd qor {expected}.",
+        "banned-term-alone": "\"{found}\" waa erey la iska ilaaliyo.",
+        "preferred-term": "Qor \"{first}\" halkii aad ka isticmaali lahayd \"{found}\".",
+        "language": "Waxaa loo calaamadeeyay {found}; luuqadaha sumaddu waa {expected}.",
+        "logo-distorted": "{name} waxaa lagu sawiray {found}; qiyaasta saxda ah waa {first}.",
+        "logo-small": "{name} waa {found} pt ballac; waa in ugu yaraan ahaataa {first} pt.",
+        "logo-background": "{name} waxa uu saaran yahay {found}; waxaa laga yaabaa in lagu tuso {expected}.",
+        "logo-unknown": "Sawir suuragal ah in uu astaanta yahay: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Dib-u-eegista summadda: {name}",
+        "meta": "Marka la barbar dhigo {book}, {date}, {pages, plural, one {# bog} other {# bogag}}",
+        "errors": "{count, plural, one {# khalad} other {# khaladaad}}",
+        "warnings": "{count, plural, one {# digniin} other {# digniino}}",
+        "infos": "{count, plural, one {# qoraal} other {# qoraallo}}",
+        "partial": "Dib-u-eegistu ma dhammaan; warbixintani waxa ay xambaarsan tahay wixii la helay intaan la dhammaan.",
+        "skipped": "Moodelku ma uusan fiirin bogagga {pages}; iyaga ayaa si gooni ah loo hubiyay.",
+        "none": "Lama helin wax ka leexday buuggii sumadda.",
+        "page": "Bog",
+        "severity": "Darajo",
+        "rule": "Hubin",
+        "finding": "Wax la helay",
+        "found": "La helay",
+        "notes": "Xusuus-qor",
+        "fileSuffix": "dib-u-eegista summad"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Inta taariikh-wada sheekaysi ah ee model kastaa loo diro marka la isticmaalo.",
       "analytics": "Warbixino la keenay: waxa yimid, cidda furin karta gal kasta, iyo qaybahaa la tusin karo.",
       "skills": "Xirmooyin tilmaamo dib loo isticmaali karo oo kaaliyuhu adeegsado marka looga baahdo wadahadalka.",
-      "models": "U qoondee moodallada asalka ah oo hubi diyaar garowga qeybaha."
+      "models": "U qoondee moodallada asalka ah oo hubi diyaar garowga qeybaha.",
+      "brandBooks": "Midabada, noocyada faraha, astaamaha, erayada iyo shaxmaha dukumentiyada lagu hubiyo laguna sameeyo."
     },
     "openSettings": "Fur dejinta",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Miisaaniyada macnaha guud",
       "analytics": "Falcelin xogeed",
       "skills": "Xirfadaha",
-      "models": "Moodallo iyo diyaar garow"
+      "models": "Moodallo iyo diyaar garow",
+      "brandBooks": "Buugaagta astaan shirkadeed"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Dib u deji ballaadhinta (hadda {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Dukumeentigan lama muujin karin. Waxaa laga yaabaa inuu aad u weyn yahay, la ilaaliyay, ama beddelaha uu mashquul yahay; mar kale isku day wax yar kadib."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Buug astaameed aan cinwaan lahayn",
+    "intro": "Buug astaameedku waxa uu kaydiyaa midabada, noocyada faraha, astaamaha, erayada iyo shaxmaha ururka, si dukumentiyada loogu hubiyo laguna diyaariyo. Cida isticmaali karta buug kasta waxa lagu xadidaa xeerka galitaanka.",
+    "unavailable": "Buugaagta astaameed lama soo rogi karin. Fadlan isku day mar kale.",
+    "add": "Ku dar buug astaameed",
+    "none": "Wali ma jiraan buugaag astaameed.",
+    "paletteSummary": "{count, plural, one {# midabka astaanta} other {# midabada astaanta}}",
+    "summary": "{fonts, plural, one {# farta} other {# faraha}}, {logos, plural, one {# astaan} other {# astaamo}}",
+    "open": "Fur",
+    "delete": "Tirtir",
+    "deleteConfirm": "Tirtir \"{name}\" iyo faylashiisa? Dukumentiyadii horey loo hubiyay warbixintoodu way sii jiraysaa.",
+    "deleteConfirmButton": "Tirtir buug astaameed",
+    "loading": "Buugga astaameed waa la rarayaa...",
+    "loadFailed": "Buugga astaameed lama soo rogi karin.",
+    "missing": "Buuggan astaameed ma jiro, ama ma awoodid inaad wax ka beddesho.",
+    "back": "Buugaagta astaan shirkadeed",
+    "unsaved": "Isbedelo aan la keydin",
+    "saved": "Waa la keydiyay",
+    "save": "Keydi",
+    "conflict": "Maamule kale ayaa kaydiyay buuggan astaameed kadib markaa aad furtay. Dib u soo rogo si aad u aragto nuqulkooda; isbeddeladaada halkan waa lumi doonaan.",
+    "reload": "Dib u rogo",
+    "invalid": "Buuggan astaameed lama kaydin karo weli: {reason}",
+    "saveFailed": "Buugga astaameed lama kaydin karin.",
+    "uploadFailed": "Faylka lama soo rogi karin.",
+    "remove": "Ka saar",
+    "removeNamed": "Ka saar {name}",
+    "basics": {
+      "title": "Buug astaameed",
+      "name": "Magaca",
+      "description": "Sharaxaad"
+    },
+    "guide": {
+      "action": "Ka samee qoraal hagaha astaanta",
+      "reading": "Hagaha waa la akhrinayaa...",
+      "hint": "Soo geli hagaha astaanta oo ah PDF si midabada, faraha iyo erayada uu qeexayo loo buuxiyo. Astaamaha iyo shaxmaha lagama heli doono; fadlan soo geli hoos.",
+      "source": "Qoraal laga sameeyay",
+      "notPdf": "Hagaha astaanta waa in uu noqdaa PDF.",
+      "failed": "Qoraal lagama samayn karin hagahan.",
+      "applied": "{pages, plural, one {Laga qoray hagaha oo ah # bog.} other {Laga qoray hagaha oo ah # bogag.}}",
+      "measuredFonts": "Faraha uu qoraalka haguhu isticmaalo:",
+      "measuredColors": "Midabada qoraalka haguhu isticmaalo:",
+      "check": "Hubi qiime kasta oo hagaha ah ka hor intaadan kaydin.",
+      "undo": "Ka noqo qoraalka"
+    },
+    "palette": {
+      "title": "Midabada",
+      "description": "Midabada astaanta. Midab ku jira dukumenti waxa uu u dhigmaa midkan marka uu u dhow yahay baaxadda loo ogolyahay.",
+      "add": "Ku dar midab",
+      "newName": "Midabka {number}",
+      "none": "Weli ma jiraan midabo astaan ah.",
+      "hex": "Hex",
+      "pick": "Xulo midab loogu talagalay {name}",
+      "name": "Magaca",
+      "tolerance": "Baaxadda la ogolyahay",
+      "toleranceHint": "Farqiga midabka (Delta E). 2 ilaa 3 aad bay u yar tahay in la arko.",
+      "roles": "Loogu talagalay",
+      "neutrals": "Midabyo dhexdhexaad ah",
+      "neutralsHint": "Midab kasta oo dukumeenti isticmaali karo iyadoo aan loo eegin midabka astaan, kala saarista waa faasiin."
+    },
+    "colorRole": {
+      "primary": "Midabka koowaad",
+      "secondary": "Midabka labaad",
+      "accent": "Midabka muuqda",
+      "text": "Qoraal",
+      "background": "Asal",
+      "neutral": "Neutraal"
+    },
+    "typography": {
+      "title": "Nooca",
+      "description": "Noocyada farta ee loo adeegsado doorkooda, iyo xarfaha oggol ee lagu beddeli karo, sida xaraf nidaamka ee dukumentiyada la wadaago ee bannaanka.",
+      "add": "Ku dar nooca far",
+      "none": "Nooc far looma darin wali.",
+      "role": "Doorka",
+      "family": "Nooca far",
+      "substitutes": "Bedel oggol",
+      "minSize": "Qoraalka ugu yar (pt)",
+      "minSizeHint": "0 micnaheedu waa in aan la xadidin ugu yaraan."
+    },
+    "fontRole": {
+      "heading": "Cinwaanno",
+      "body": "Qoraalka jirka",
+      "accent": "Midab muuqda"
+    },
+    "logos": {
+      "title": "Astaamo",
+      "description": "Faylasha astaanta ee ay tahay in dukumintiyadu isticmaalaan, sida PNG, SVG ama JPEG.",
+      "add": "Soo geli astaan",
+      "untitled": "Astaan",
+      "none": "Ma jiraan astaan wali.",
+      "noPreview": "Muujin ma jiro",
+      "name": "Magac",
+      "minWidth": "Ballaca ugu yar (pt)",
+      "aspect": "Kala bixin la oggol yahay (%)",
+      "aspectHint": "Sida boqolleyda isbeddelka qaab-dhismeedku u oggol yahay.",
+      "colors": "Waxaa lagu muujiyay",
+      "colorsHint": "Haddii dhammaan la dhaafo, midab kasta waa loo oggol yahay asalka."
+    },
+    "language": {
+      "title": "Eraybixin",
+      "description": "Luuqadaha lagu qoro dukumeentiyada, ereyada la isticmaalo iyo kuwa la iska ilaaliyo, iyo codka.",
+      "locales": "Luuqado",
+      "localesHint": "Calaamadaha luuqadda sida en ama fr-CA, kala saarista waa faasiin.",
+      "preferred": "Ereyada la isticmaalo",
+      "banned": "Ereyada laga fogaado",
+      "term": "Erey ama oraah",
+      "alternatives": "Bedel / ku qor halkii laga isticmaali lahaa",
+      "note": "Faallo",
+      "addPreferred": "Ku dar erey la isticmaalo",
+      "addBanned": "Ku dar erey laga fogaado",
+      "nonePreferred": "Wali lama darin ereyo la doorbidayo.",
+      "noneBanned": "Wali lama darin ereyo laga fogaado.",
+      "tone": "Cod"
+    },
+    "templates": {
+      "title": "Tusaalooyin",
+      "description": "Tusaalooyinka PowerPoint iyo Word ee dukumeenti cusub laga dhiso.",
+      "add": "Soo geliso template",
+      "untitled": "Template",
+      "none": "Weli templates ma jiraan.",
+      "name": "Magaca",
+      "wrongType": "Template waa in ay ka mid noqotaa kuwa {types}."
     }
   }
 }

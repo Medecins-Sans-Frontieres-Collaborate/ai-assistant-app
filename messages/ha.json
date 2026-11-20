@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Mai ƙirƙira sakonni na tashoshi",
         "description": "Juya tushe zuwa sakonni don tashoshi da dama, kowanne da murya ta dace, tare da tunatar da kowanne ambato daga inda aka samo shi"
+      },
+      "brandReview": {
+        "label": "Bita na alamar kasuwanci",
+        "description": "Duba PDF, takardar Word ko gabatarwa daidai da littafin alamar kasuwanci: font, launuka, kalmomi, tambura da yadda ake bayani"
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Sabuwar taswira",
       "newGrants": "Sabon sarrafa tallafi",
       "newFormFill": "Sabon cikar daftari",
-      "newChannelDrafter": "Sabon rubutun tashoshi"
+      "newChannelDrafter": "Sabon rubutun tashoshi",
+      "newBrandReview": "Sabon bita na alamar kasuwanci"
     },
     "translation": {
       "chooseLanguage": "Harshe na fassara",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Rubutun alt na {name} ya wuce {count} daga iyakar wannan tashar na {max}.",
         "unicodeSms": "{characters} ba za a iya aika da su cikin saƙon rubutu na al'ada ba, sabili da haka wannan saƙon yana da sarari don haruffa 70 kacal, ba 160 ba. Canza su don samun ƙarin sarari."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Bita na alamar kasuwanci",
+        "intro": "Zaɓi littafin alamar kasuwanci da takarda. Bita zai duba font, launuka, girman rubutu, kalmomi da tambura, har ma ana iya amfani da samfurin na'ura don duba kowace shafi domin yadda ake bayani da ƙa'idodin gani.",
+        "book": "Littafin alamar kasuwanci",
+        "booksLoading": "Ana loda littafan alamar kasuwanci...",
+        "noBooks": "Har yanzu babu littafan alamar kasuwanci da ake dasu gare ku. Mai gudanarwa ne yake ƙara su a Admin > Littafan alamar kasuwanci.",
+        "document": "Takarda",
+        "chooseDocument": "Zaɓi takarda",
+        "replaceDocument": "Zaɓi wata takarda",
+        "documentTypes": "PDF, Word ko PowerPoint",
+        "uploading": "Ana lodawa...",
+        "uploadFailed": "Ba a iya loda takardar ba.",
+        "wrongType": "Zaɓi PDF, takardar Word ko gabatarwa.",
+        "modelReview": "A bar samfurin na'ura ya duba kowace shafi",
+        "modelReviewHint": "Yana gano matsalolin yadda ake bayani, gani da tambura da ba za a iya gani ba. Yana amfani da tokens a kowace shafi, har zuwa shafuka 40.",
+        "start": "Fara bita"
+      },
+      "loading": "Ana loda bitar...",
+      "booksFailed": "Ba a iya loda littafan alamar kasuwanci ba.",
+      "startFailed": "Ba a iya fara bita ba.",
+      "readFailed": "Ba a iya karanta bita ba.",
+      "busy": "\"{name}\" har yanzu ana duba shi. Jira a gama, ko dakatar da shi kafin ka fara wani.",
+      "failed": "Bitar tayi kuskure.",
+      "against": "A kan {book}",
+      "progress": {
+        "reading": "Ana karanta takardar...",
+        "checking": "Ana dubawa rubutu da tambura...",
+        "reviewing": "Ana bita shafuka...",
+        "pages": "An duba shafuka {done} daga cikin {total}"
+      },
+      "status": {
+        "done": "{errors, plural, one {# kuskure} other {# kurakurai}}, {warnings, plural, one {# gargadi} other {# gargadi}}",
+        "stopped": "An dakatar: {errors, plural, one {# kuskure} other {# kurakurai}} zuwa yanzu",
+        "failed": "An gaza",
+        "running": "Ana gudana"
+      },
+      "stop": "Dakatar",
+      "download": "Sauke rahoto",
+      "newReview": "Sabon bita",
+      "findings": "Abubuwan da aka samu",
+      "noFindings": "Babu abin da aka samu tukuna.",
+      "noneOfSeverity": "Babu abinda aka samu irin wannan.",
+      "byModel": "Samfurin na'ura ne ya gano; duba shi.",
+      "notes": "Bayanan aiki",
+      "pageShort": "sh. {page}",
+      "filter": {
+        "label": "Nuna",
+        "all": "Duka {count}",
+        "error": "Kurakurai {count}",
+        "warning": "Gargadi {count}",
+        "info": "Bayanan aiki {count}"
+      },
+      "severity": {
+        "error": "Kuskure",
+        "warning": "Gargadi",
+        "info": "Bayanin aiki"
+      },
+      "rule": {
+        "font": "Salon rubutu",
+        "color": "Launi",
+        "size": "Girman rubutu",
+        "banned-term": "Kalmar da ya kamata a guje wa ta",
+        "preferred-term": "Kalmar da ake so",
+        "language": "Harshe",
+        "logo-distorted": "Gwargwadon tambari",
+        "logo-small": "Girman tambari",
+        "logo-background": "Bayanan tambari",
+        "logo-unknown": "Wata tambari mai yiyuwa",
+        "visual": "Abu mai hoto",
+        "tone": "Sauti/Salonta"
+      },
+      "message": {
+        "font": "An sa a cikin {found}; salon rubutun kamfani su ne {expected}.",
+        "font-alone": "An sa a cikin {found}, wanda ba salon kamfani ba ne.",
+        "color": "{found} ba launin kamfani ba ne; mafi kusa shine {first}.",
+        "size": "Rubutu a {found} pt; mafi ƙanƙanta da aka yarda dashi shine {first} pt.",
+        "banned-term": "\"{found}\" kalma ce da ya kamata a guje; a rubuta {expected} maimakon haka.",
+        "banned-term-alone": "\"{found}\" kalma ce da ya kamata a guje.",
+        "preferred-term": "A rubuta \"{first}\" maimakon \"{found}\".",
+        "language": "An sa a matsayin {found}; harsunan kamfani su ne {expected}.",
+        "logo-distorted": "An zana {name} a {found}; gwargwado nasa na asali shine {first}.",
+        "logo-small": "{name} yana da fadin {found} pt; ya kamata aƙalla {first} pt.",
+        "logo-background": "{name} yana kan {found}; yana iya bayyana a kan {expected}.",
+        "logo-unknown": "Hoto wanda zai iya zama tambari: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Bita na alama: {name}",
+        "meta": "Daga {book}, {date}, {pages, plural, one {shafi #} other {shafuka #}}",
+        "errors": "{count, plural, one {# kuskure} other {# kurakurai}}",
+        "warnings": "{count, plural, one {# gargadi} other {# gargadi}}",
+        "infos": "{count, plural, one {# bayani} other {# bayanai}}",
+        "partial": "Bita bai kammala ba; wannan rahoto yana kunshe da abin da aka samu kafin a dakata.",
+        "skipped": "Samfuri bai dubi shafuka {pages} ba; an duba su ba tare da shi ba.",
+        "none": "Ba a samu wani abu da ya saba da littafin alama ba.",
+        "page": "Shafi",
+        "severity": "Matsayi",
+        "rule": "Bincike",
+        "finding": "Abin da aka gano",
+        "found": "Abin da aka samu",
+        "notes": "Bayanan kula",
+        "fileSuffix": "bitar alama"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Yawan tarihin hira da kowanne tsarin za a tura a kowane zagaye.",
       "analytics": "Rahotannin da aka isar: abin da ya iso, wanda zai iya bude kowane fayil, da wadanne filaye za a iya nuna su.",
       "skills": "Block na umarni da ake iya amfani da su wanda mai taimako ke amfani da su idan tattaunawa ta bukata.",
-      "models": "Sanya samfura na baya da duba shirin yanki don aikin kaddamarwa."
+      "models": "Sanya samfura na baya da duba shirin yanki don aikin kaddamarwa.",
+      "brandBooks": "Launuka, nau'in rubutu, tambura, maganganu da samfuri wadanda ake duba da kuma gina takardu dasu."
     },
     "openSettings": "Buɗe saituna",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Kasafin mahallin hirar",
       "analytics": "Nazari",
       "skills": "Kwarewa",
-      "models": "Samfura da shiri"
+      "models": "Samfura da shiri",
+      "brandBooks": "Littattafan alama"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Sake saita zuƙowa (yanzu {percent}%)",
       "failed": "Ba a iya nuna wannan takarda ba. Wataƙila ta yi girma sosai, ko tana da kariya, ko mai sauyawa yana aiki; sake gwadawa nan ba da jimawa ba.",
       "zoomLevel": "{percent}%"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Littafin alama mara suna",
+    "intro": "Littafin alama yana dauke da launuka, nau'in rubutu, tambura, maganganu da samfuri na kungiya, don a duba takardu da su da kuma gina su. Ana saita wanda zai iya amfani da kowanne littafi ta hanyar dokar samun dama.",
+    "unavailable": "Ba a samu damar loda littattafan alama daga ajiya ba. Yi kokari sake gwadawa.",
+    "add": "Kara littafin alama",
+    "none": "Babu littafin alama a yanzu.",
+    "paletteSummary": "{count, plural, one {# launin alama} other {# launukan alama}}",
+    "summary": "{fonts, plural, one {# nau'in rubutu} other {# nau'o'in rubutu}}, {logos, plural, one {# tambura} other {# tambura}}",
+    "open": "Bude",
+    "delete": "Goge",
+    "deleteConfirm": "A goge \"{name}\" da fayilolinsa? Takardun da aka riga aka duba za su ci gaba da ajiyar rahotonsu.",
+    "deleteConfirmButton": "Goge littafin alama",
+    "loading": "Ana lodin littafin alama...",
+    "loadFailed": "An kasa loda littafin alama.",
+    "missing": "Wannan littafin alama ba ya akwai, ko kuma ba za ka iya gyara shi ba.",
+    "back": "Littattafan alama",
+    "unsaved": "Sauye-sauyen da ba a ajiye ba",
+    "saved": "An ajiye",
+    "save": "Ajiye",
+    "conflict": "Wani admin ya ajiye wannan littafin alama bayan ka bude shi. Sake loda don ganin sabuwar sigarsu; canje-canjenka za su bace.",
+    "reload": "Sake loda",
+    "invalid": "Ba za a iya ajiye wannan littafin alama ba tukuna: {reason}",
+    "saveFailed": "An kasa ajiye littafin alama.",
+    "uploadFailed": "An kasa loda fayil din.",
+    "remove": "Cire",
+    "removeNamed": "Cire {name}",
+    "basics": {
+      "title": "Littafin alama",
+      "name": "Suna",
+      "description": "Bayani"
+    },
+    "guide": {
+      "action": "Fara da jagorar alama",
+      "reading": "Ana karanta jagora...",
+      "hint": "Loda jagorar alama a matsayin PDF don cike launuka, nau'in rubutu da maganganu da ta bayyana. Ba a dauki tambura da samfuri daga ciki ba; loda wadannan a kasa.",
+      "source": "An fara daga",
+      "notPdf": "Jagorar alama dole ta zama PDF.",
+      "failed": "Ba a iya samar da daftarin daga jagorar nan ba.",
+      "applied": "{pages, plural, one {An zana daga jagora mai shafi #.} other {An zana daga jagora mai shafuka #.}}",
+      "measuredFonts": "Nau'ikan rubutun da aka yi amfani da su:",
+      "measuredColors": "Launukan da aka yi amfani da su a rubutu:",
+      "check": "Duba kowane abu da jagora kafin a ajiye.",
+      "undo": "A soke daftarin"
+    },
+    "palette": {
+      "title": "Launuka",
+      "description": "Launukan alama. Launi a cikin takarda yana bayyana a matsayin daya daga cikin wadannan idan yana cikin iyakar launin.",
+      "add": "Kara launi",
+      "newName": "Launi {number}",
+      "none": "Babu launin alama a yanzu.",
+      "hex": "Hex",
+      "pick": "Zabi launi don {name}",
+      "name": "Suna",
+      "tolerance": "Iyaka",
+      "toleranceHint": "Bambancin launi (Delta E). 2 zuwa 3 ba a iya ganinsa sosai.",
+      "roles": "Ana amfani da shi don",
+      "neutrals": "Launuka marasa bambanci",
+      "neutralsHint": "Launukan da kowanne takarda zai iya amfani da su ba tare da suna launin alama ba, an raba su da alama koma."
+    },
+    "colorRole": {
+      "primary": "Na farko",
+      "secondary": "Na biyu",
+      "accent": "Bayani na ƙari",
+      "text": "Rubutu",
+      "background": "Fage",
+      "neutral": "Bai bayyana ba"
+    },
+    "typography": {
+      "title": "Iri",
+      "description": "Irin nau’in falsar da aka warewa kowane matsayi, da haruffan da aka amince a musanya su da su, kamar font ɗin tsarin kwamfuta don takardun da za a raba waje.",
+      "add": "Sanya nau’in haruffa",
+      "none": "Ba a saka wani nau’in haruffa ba tukuna.",
+      "role": "Matsayi",
+      "family": "Nau'in haruffa",
+      "substitutes": "Zaɓin da aka amince a musanya",
+      "minSize": "Karamin rubutu (pt)",
+      "minSizeHint": "0 yana nufin babu mafi ƙanƙanta."
+    },
+    "fontRole": {
+      "heading": "Kanun rubutu",
+      "body": "Rubutun jiki",
+      "accent": "Bayani na ƙari"
+    },
+    "logos": {
+      "title": "Raman tambari",
+      "description": "Fayilolin tambarin da ya kamata a saka cikin takardu, kamar PNG, SVG ko JPEG.",
+      "add": "Loda tambari",
+      "untitled": "Tambari",
+      "none": "Ba a saka tambari ba tukuna.",
+      "noPreview": "Babu dubawa",
+      "name": "Suna",
+      "minWidth": "Karamin faɗi (pt)",
+      "aspect": "An amince a shimfiɗa (%)",
+      "aspectHint": "Yadda aka yarda girman ya bambanta.",
+      "colors": "Ana nuna a kan",
+      "colorsHint": "Bar duka a buɗe don a amince da kowanne fage."
+    },
+    "language": {
+      "title": "Rubutu",
+      "description": "Harsunan da ake rubuta takardu da su, kalmomin da ya dace a yi amfani da su ko a guje su, da irin sautinta.",
+      "locales": "Harsuna",
+      "localesHint": "Tag ɗin harshe kamar en ko fr-CA, an raba su da alama koma.",
+      "preferred": "Kalmomin da za a yi amfani da su",
+      "banned": "Kalmomin da za a guje su",
+      "term": "Kalmomi ko jumla",
+      "alternatives": "Maimakon / rubuta maimakon haka",
+      "note": "Bayanan",
+      "addPreferred": "Ƙara kalmar da za a yi amfani da ita",
+      "addBanned": "Ƙara kalmar da za a guje wa",
+      "nonePreferred": "Ba a saka tsarin kalmomi ba tukuna.",
+      "noneBanned": "Ba a saka kalmomin da za a guje su ba tukuna.",
+      "tone": "Murya"
+    },
+    "templates": {
+      "title": "Samfura",
+      "description": "Samfuran PowerPoint da Word da ake gina sababbin takardu da su.",
+      "add": "Loda samfuri",
+      "untitled": "Samfuri",
+      "none": "Babu samfura tukuna.",
+      "name": "Suna",
+      "wrongType": "Samfuri dole ya kasance ɗaya daga cikin: {types}."
     }
   }
 }

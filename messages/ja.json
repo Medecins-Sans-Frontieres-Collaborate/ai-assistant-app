@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "チャンネルドラフター",
         "description": "情報源を複数のチャンネル向けの投稿に変換し、それぞれ適切な文体で、すべての引用に出典を明記します"
+      },
+      "brandReview": {
+        "label": "ブランドレビュー",
+        "description": "PDF、Word文書またはプレゼン資料がブランドブック（フォント、色、表現、ロゴ、トーン）に合致しているか確認します"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "新しいマップ",
       "newGrants": "新規助成金処理",
       "newFormFill": "新規文書入力",
-      "newChannelDrafter": "新しいチャンネル下書き"
+      "newChannelDrafter": "新しいチャンネル下書き",
+      "newBrandReview": "新しいブランドレビュー"
     },
     "translation": {
       "chooseLanguage": "対象言語",
@@ -4838,6 +4843,112 @@
         "altTooLong": "{name}の代替テキストが、このチャンネルの上限{max}より{count}多いです。",
         "unicodeSms": "{characters}はSMSで送信できません。そのため、このメッセージは70文字までとなります。削除または修正で160文字まで戻せます。"
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "ブランドレビュー",
+        "intro": "ブランドブックと文書を選択してください。レビューはフォント、色、文字サイズ、表現、ロゴを確認し、モデルが各ページのトーンやビジュアル規則もチェックできます。",
+        "book": "ブランドブック",
+        "booksLoading": "ブランドブックを読み込み中...",
+        "noBooks": "利用可能なブランドブックはまだありません。管理者が Admin > ブランドブック で追加する必要があります。",
+        "document": "文書",
+        "chooseDocument": "文書を選択",
+        "replaceDocument": "別の文書を選択",
+        "documentTypes": "PDF、WordまたはPowerPoint",
+        "uploading": "アップロード中...",
+        "uploadFailed": "文書をアップロードできませんでした。",
+        "wrongType": "PDF、Word文書またはプレゼン資料を選択してください。",
+        "modelReview": "モデルによる各ページのチェック",
+        "modelReviewHint": "トーンやビジュアル、ロゴの問題を検出します。各ページにトークンを使用し、最大40ページまで対応。",
+        "start": "レビュー開始"
+      },
+      "loading": "レビューを読み込み中...",
+      "booksFailed": "ブランドブックを読み込めませんでした。",
+      "startFailed": "レビューを開始できませんでした。",
+      "readFailed": "レビューを読み取れませんでした。",
+      "busy": "「{name}」はまだレビュー中です。完了まで待つか停止してから、別のレビューを開始してください。",
+      "failed": "レビューに失敗しました。",
+      "against": "{book} に基づいて",
+      "progress": {
+        "reading": "文書を読み取り中...",
+        "checking": "テキストとロゴをチェック中...",
+        "reviewing": "ページをレビュー中...",
+        "pages": "{done}／{total}ページをレビュー済み"
+      },
+      "status": {
+        "done": "{errors, plural, one {# 件のエラー} other {# 件のエラー}}, {warnings, plural, one {# 件の警告} other {# 件の警告}}",
+        "stopped": "停止済み：ここまでに {errors, plural, one {# 件のエラー} other {# 件のエラー}}",
+        "failed": "失敗",
+        "running": "実行中"
+      },
+      "stop": "停止",
+      "download": "レポートをダウンロード",
+      "newReview": "新しいレビュー",
+      "findings": "検出結果",
+      "noFindings": "まだ検出されていません。",
+      "noneOfSeverity": "この種類の検出結果はありません。",
+      "byModel": "モデルによる検出結果：ご確認ください。",
+      "notes": "メモ",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "表示",
+        "all": "すべて {count}",
+        "error": "エラー {count}",
+        "warning": "警告 {count}",
+        "info": "メモ {count}"
+      },
+      "severity": {
+        "error": "エラー",
+        "warning": "警告",
+        "info": "メモ"
+      },
+      "rule": {
+        "font": "書体",
+        "color": "色",
+        "size": "文字サイズ",
+        "banned-term": "避けるべき言葉",
+        "preferred-term": "推奨される言葉",
+        "language": "言語",
+        "logo-distorted": "ロゴの比率",
+        "logo-small": "ロゴのサイズ",
+        "logo-background": "ロゴの背景",
+        "logo-unknown": "ロゴの可能性あり",
+        "visual": "ビジュアル",
+        "tone": "トーン"
+      },
+      "message": {
+        "font": "{found}が設定されています。ブランドの書体は{expected}です。",
+        "font-alone": "{found}が設定されていますが、ブランドの書体ではありません。",
+        "color": "{found}はブランドカラーではありません。最も近い色は{first}です。",
+        "size": "{found}ptの文字です。最小許容サイズは{first}ptです。",
+        "banned-term": "「{found}」は避けるべき言葉です。代わりに{expected}と記載してください。",
+        "banned-term-alone": "「{found}」は避けるべき言葉です。",
+        "preferred-term": "「{found}」ではなく「{first}」と記載してください。",
+        "language": "{found}と記載されています。ブランドの言語は{expected}です。",
+        "logo-distorted": "{name}は{found}で描画されています。元々の比率は{first}です。",
+        "logo-small": "{name}の幅は{found}ptです。最低でも{first}pt必要です。",
+        "logo-background": "{name}は{found}上に配置されています。{expected}上での表示が認められています。",
+        "logo-unknown": "ロゴの可能性がある画像：{found}",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "ブランドレビュー：{name}",
+        "meta": "{book}、{date}、{pages, plural, one {#ページ} other {#ページ}} の基準で検証",
+        "errors": "{count, plural, one {#件のエラー} other {#件のエラー}}",
+        "warnings": "{count, plural, one {#件の警告} other {#件の警告}}",
+        "infos": "{count, plural, one {#件の注意} other {#件の注意}}",
+        "partial": "レビューは完了しませんでした。終了前に検出された内容のみ表示しています。",
+        "skipped": "モデルはページ{pages}を確認しませんでした。これらは別途チェック済みです。",
+        "none": "ブランドブックから逸脱した項目は見つかりませんでした。",
+        "page": "ページ",
+        "severity": "重大度",
+        "rule": "チェック項目",
+        "finding": "指摘内容",
+        "found": "検出内容",
+        "notes": "備考",
+        "fileSuffix": "ブランドレビュー"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "各モデルが毎回送信する会話の量。",
       "analytics": "配布されたレポート：到着した内容、各フォルダーを開く可能性のある人物、表示可能な項目。",
       "skills": "会話で必要な際にアシスタントが適用する再利用可能な指示ブロックです。",
-      "models": "バックグラウンドモデルの割り当てと、地域展開の準備状況を確認します。"
+      "models": "バックグラウンドモデルの割り当てと、地域展開の準備状況を確認します。",
+      "brandBooks": "ドキュメントが照合・作成される色、書体、ロゴ、表記やテンプレートです。"
     },
     "openSettings": "設定を開く",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "コンテキスト予算",
       "analytics": "アナリティクス",
       "skills": "スキル",
-      "models": "モデルと準備状況"
+      "models": "モデルと準備状況",
+      "brandBooks": "ブランドブック"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "ズームをリセット（現在 {percent}%）",
       "zoomLevel": "{percent}%",
       "failed": "このドキュメントを表示できませんでした。サイズが大きすぎるか、保護されているか、変換処理が混み合っている可能性があります。しばらくしてからもう一度お試しください。"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "無題のブランドブック",
+    "intro": "ブランドブックは、組織の色、書体、ロゴ、表記、テンプレートをまとめたものです。各ブックの利用者はアクセスルールで設定します。",
+    "unavailable": "ストレージからブランドブックを読み込めませんでした。しばらくしてから再試行してください。",
+    "add": "ブランドブックを追加",
+    "none": "ブランドブックはまだありません。",
+    "paletteSummary": "{count, plural, one {# ブランドカラー} other {# ブランドカラー}}",
+    "summary": "{fonts, plural, one {# 書体} other {# 書体}}, {logos, plural, one {# ロゴ} other {# ロゴ}}",
+    "open": "開く",
+    "delete": "削除",
+    "deleteConfirm": "「{name}」とそのファイルを削除しますか？すでに照合済みのドキュメントはレポートが保持されます。",
+    "deleteConfirmButton": "ブランドブックを削除",
+    "loading": "ブランドブックを読み込み中...",
+    "loadFailed": "ブランドブックを読み込めませんでした。",
+    "missing": "このブランドブックは存在しないか、編集権限がありません。",
+    "back": "ブランドブック",
+    "unsaved": "未保存の変更",
+    "saved": "保存済み",
+    "save": "保存",
+    "conflict": "他の管理者が開いた後にこのブランドブックを保存しました。リロードして相手のバージョンを確認してください。ここでの変更は失われます。",
+    "reload": "リロード",
+    "invalid": "このブランドブックはまだ保存できません: {reason}",
+    "saveFailed": "ブランドブックを保存できませんでした。",
+    "uploadFailed": "ファイルをアップロードできませんでした。",
+    "remove": "削除",
+    "removeNamed": "{name} を削除",
+    "basics": {
+      "title": "ブランドブック",
+      "name": "名前",
+      "description": "説明"
+    },
+    "guide": {
+      "action": "ブランドガイドから下書き作成",
+      "reading": "ガイドを読込中...",
+      "hint": "ブランドガイドをPDFでアップロードすると、定義された色、書体、表記が入力されます。ロゴとテンプレートは取得されませんので、下部からアップロードしてください。",
+      "source": "作成元",
+      "notPdf": "ブランドガイドはPDF形式である必要があります。",
+      "failed": "このガイドから下書きを作成できませんでした。",
+      "applied": "{pages, plural, one {# ページのガイドから作成しました。} other {# ページのガイドから作成しました。}}",
+      "measuredFonts": "本文に使用されたフォント:",
+      "measuredColors": "本文に使用されたカラー:",
+      "check": "保存前に各値をガイドと照合してください。",
+      "undo": "下書きを元に戻す"
+    },
+    "palette": {
+      "title": "カラー",
+      "description": "ブランドカラーです。ドキュメントの色が設定した許容範囲内であればブランドカラーとして判定されます。",
+      "add": "カラーを追加",
+      "newName": "カラー {number}",
+      "none": "ブランドカラーはまだありません。",
+      "hex": "Hex",
+      "pick": "{name} のカラーを選択",
+      "name": "名前",
+      "tolerance": "許容範囲",
+      "toleranceHint": "色差（Delta E）。2～3はほとんど識別できません。",
+      "roles": "用途",
+      "neutrals": "ニュートラルカラー",
+      "neutralsHint": "ブランドカラーではない任意のドキュメントで使用できる色。カンマ区切り。"
+    },
+    "colorRole": {
+      "primary": "プライマリー",
+      "secondary": "セカンダリー",
+      "accent": "アクセント",
+      "text": "テキスト",
+      "background": "背景",
+      "neutral": "ニュートラル"
+    },
+    "typography": {
+      "title": "種類",
+      "description": "役割ごとの書体と、その代替許可フォント（外部共有用のシステムフォントなど）。",
+      "add": "書体を追加",
+      "none": "書体はまだありません。",
+      "role": "役割",
+      "family": "書体名",
+      "substitutes": "許可された代替",
+      "minSize": "最小テキストサイズ（pt）",
+      "minSizeHint": "0で最小値なし。"
+    },
+    "fontRole": {
+      "heading": "見出し",
+      "body": "本文",
+      "accent": "アクセント"
+    },
+    "logos": {
+      "title": "ロゴ",
+      "description": "ドキュメントで使用するロゴファイル（PNG、SVG、JPEG）。",
+      "add": "ロゴをアップロード",
+      "untitled": "ロゴ",
+      "none": "ロゴはまだありません。",
+      "noPreview": "プレビューなし",
+      "name": "名称",
+      "minWidth": "最小幅（pt）",
+      "aspect": "伸縮許容率（％）",
+      "aspectHint": "比率の許容範囲。",
+      "colors": "表示背景",
+      "colorsHint": "すべて未選択の場合、任意の背景を許可します。"
+    },
+    "language": {
+      "title": "言葉遣い",
+      "description": "ドキュメントの記載言語、使用・回避する語句、語調。",
+      "locales": "言語",
+      "localesHint": "enやfr-CAなどの言語タグ。カンマ区切り。",
+      "preferred": "使用する語句",
+      "banned": "回避する語句",
+      "term": "語句・フレーズ",
+      "alternatives": "代わりに／置き換え",
+      "note": "注記",
+      "addPreferred": "使用する語句を追加",
+      "addBanned": "回避する語句を追加",
+      "nonePreferred": "使用語句はまだありません。",
+      "noneBanned": "回避語句はまだありません。",
+      "tone": "語調"
+    },
+    "templates": {
+      "title": "テンプレート",
+      "description": "新しいドキュメント作成用のPowerPointとWordのテンプレート。",
+      "add": "テンプレートをアップロード",
+      "untitled": "テンプレート",
+      "none": "テンプレートがまだありません。",
+      "name": "名前",
+      "wrongType": "テンプレートは{types}のいずれかでなければなりません。"
     }
   }
 }

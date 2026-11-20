@@ -1636,6 +1636,10 @@
       "channelDrafter": {
         "label": "Channel drafter",
         "description": "Turn sources into posts for several channels, each in the right voice, with every quote traced to its source"
+      },
+      "brandReview": {
+        "label": "Brand review",
+        "description": "Check a PDF, Word document or presentation against a brand book: fonts, colours, wording, logos and tone"
       }
     },
     "tabs": {
@@ -1655,7 +1659,8 @@
       "newMap": "New map",
       "newGrants": "New grants processing",
       "newFormFill": "New document fill",
-      "newChannelDrafter": "New channel draft"
+      "newChannelDrafter": "New channel draft",
+      "newBrandReview": "New brand review"
     },
     "drafter": {
       "brief": "Brief",
@@ -3582,6 +3587,112 @@
       "saveFailed": "Could not save to OneDrive",
       "editTemplate": "Edit template",
       "loadingTemplate": "Loading template…"
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Brand review",
+        "intro": "Choose a brand book and a document. The review checks fonts, colours, text sizes, wording and logos, and can have a model look at each page for tone and visual rules.",
+        "book": "Brand book",
+        "booksLoading": "Loading brand books...",
+        "noBooks": "No brand books are available to you yet. An administrator adds them in Admin > Brand books.",
+        "document": "Document",
+        "chooseDocument": "Choose a document",
+        "replaceDocument": "Choose another document",
+        "documentTypes": "PDF, Word or PowerPoint",
+        "uploading": "Uploading...",
+        "uploadFailed": "The document could not be uploaded.",
+        "wrongType": "Choose a PDF, Word document or presentation.",
+        "modelReview": "Have a model look at each page",
+        "modelReviewHint": "Finds tone, visual and logo problems the checks cannot see. Uses tokens for every page, up to 40 pages.",
+        "start": "Start review"
+      },
+      "loading": "Loading the review...",
+      "booksFailed": "Brand books could not be loaded.",
+      "startFailed": "The review could not be started.",
+      "readFailed": "The review could not be read.",
+      "busy": "\"{name}\" is still being reviewed. Wait for it to finish, or stop it, before starting another.",
+      "failed": "The review failed.",
+      "against": "Against {book}",
+      "progress": {
+        "reading": "Reading the document...",
+        "checking": "Checking text and logos...",
+        "reviewing": "Reviewing pages...",
+        "pages": "Reviewed {done} of {total} pages"
+      },
+      "status": {
+        "done": "{errors, plural, one {# error} other {# errors}}, {warnings, plural, one {# warning} other {# warnings}}",
+        "stopped": "Stopped: {errors, plural, one {# error} other {# errors}} so far",
+        "failed": "Failed",
+        "running": "Running"
+      },
+      "stop": "Stop",
+      "download": "Download report",
+      "newReview": "New review",
+      "findings": "Findings",
+      "noFindings": "Nothing found yet.",
+      "noneOfSeverity": "No findings of this kind.",
+      "byModel": "Found by the model; check it.",
+      "notes": "Notes",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "Show",
+        "all": "All {count}",
+        "error": "Errors {count}",
+        "warning": "Warnings {count}",
+        "info": "Notes {count}"
+      },
+      "severity": {
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Note"
+      },
+      "rule": {
+        "font": "Typeface",
+        "color": "Colour",
+        "size": "Text size",
+        "banned-term": "Word to avoid",
+        "preferred-term": "Preferred word",
+        "language": "Language",
+        "logo-distorted": "Logo proportions",
+        "logo-small": "Logo size",
+        "logo-background": "Logo background",
+        "logo-unknown": "Possible logo",
+        "visual": "Visual",
+        "tone": "Tone"
+      },
+      "message": {
+        "font": "Set in {found}; the brand's typefaces are {expected}.",
+        "font-alone": "Set in {found}, which is not a brand typeface.",
+        "color": "{found} is not a brand colour; the nearest is {first}.",
+        "size": "Text at {found} pt; the smallest allowed is {first} pt.",
+        "banned-term": "\"{found}\" is a word to avoid; write {expected} instead.",
+        "banned-term-alone": "\"{found}\" is a word to avoid.",
+        "preferred-term": "Write \"{first}\" instead of \"{found}\".",
+        "language": "Marked as {found}; the brand's languages are {expected}.",
+        "logo-distorted": "{name} is drawn at {found}; its own proportions are {first}.",
+        "logo-small": "{name} is {found} pt wide; it should be at least {first} pt.",
+        "logo-background": "{name} sits on {found}; it may be shown on {expected}.",
+        "logo-unknown": "A picture that may be a logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Brand review: {name}",
+        "meta": "Against {book}, {date}, {pages, plural, one {# page} other {# pages}}",
+        "errors": "{count, plural, one {# error} other {# errors}}",
+        "warnings": "{count, plural, one {# warning} other {# warnings}}",
+        "infos": "{count, plural, one {# note} other {# notes}}",
+        "partial": "The review did not finish; this report holds what it found before it ended.",
+        "skipped": "The model did not look at pages {pages}; they were checked without it.",
+        "none": "Nothing was found that departs from the brand book.",
+        "page": "Page",
+        "severity": "Severity",
+        "rule": "Check",
+        "finding": "Finding",
+        "found": "Found",
+        "notes": "Notes",
+        "fileSuffix": "brand review"
+      }
     }
   },
   "emptyState": {
@@ -5927,7 +6038,8 @@
       "delegations": "Who administers which users, and what each of them is allowed to do.",
       "analytics": "Delivered reports: what arrived, who may open each folder, and which fields may be shown.",
       "channelSets": "Each team's rules for writing on the platforms: guidance, voices, defaults, who may use the set and who may send.",
-      "skills": "Reusable instruction blocks the assistant applies when a conversation needs them."
+      "skills": "Reusable instruction blocks the assistant applies when a conversation needs them.",
+      "brandBooks": "Colours, type, logos, wording and templates that documents are checked against and built from."
     },
     "area": {
       "workflows": "Workflows",
@@ -5939,7 +6051,8 @@
       "announcements": "Announcements",
       "delegations": "Delegations",
       "analytics": "Analytics",
-      "skills": "Skills"
+      "skills": "Skills",
+      "brandBooks": "Brand books"
     }
   },
   "auxiliaryModels": {
@@ -7987,6 +8100,129 @@
       "none": "Rendered only"
     },
     "leaveUnsaved": "You have unsaved changes. Leave without saving?"
+  },
+  "adminBrandBooks": {
+    "untitled": "Untitled brand book",
+    "intro": "A brand book holds an organisation's colours, type, logos, wording and templates, so documents can be checked against it and built from it. Who can use each book is set with its access rule.",
+    "unavailable": "Brand books could not be loaded from storage. Try again in a moment.",
+    "add": "Add brand book",
+    "none": "No brand books yet.",
+    "paletteSummary": "{count, plural, one {# brand colour} other {# brand colours}}",
+    "summary": "{fonts, plural, one {# typeface} other {# typefaces}}, {logos, plural, one {# logo} other {# logos}}",
+    "open": "Open",
+    "delete": "Delete",
+    "deleteConfirm": "Delete \"{name}\" and its files? Documents already checked keep their reports.",
+    "deleteConfirmButton": "Delete brand book",
+    "loading": "Loading brand book...",
+    "loadFailed": "The brand book could not be loaded.",
+    "missing": "This brand book does not exist, or you cannot edit it.",
+    "back": "Brand books",
+    "unsaved": "Unsaved changes",
+    "saved": "Saved",
+    "save": "Save",
+    "conflict": "Another admin saved this brand book after you opened it. Reload to see their version; your changes here will be lost.",
+    "reload": "Reload",
+    "invalid": "This brand book cannot be saved yet: {reason}",
+    "saveFailed": "The brand book could not be saved.",
+    "uploadFailed": "The file could not be uploaded.",
+    "remove": "Remove",
+    "removeNamed": "Remove {name}",
+    "basics": {
+      "title": "Brand book",
+      "name": "Name",
+      "description": "Description"
+    },
+    "guide": {
+      "action": "Draft from a brand guide",
+      "reading": "Reading the guide...",
+      "hint": "Upload the brand guide as a PDF to fill in the colours, type and wording it defines. Logos and templates are not taken from it; upload those below.",
+      "source": "Drafted from",
+      "notPdf": "A brand guide must be a PDF.",
+      "failed": "A draft could not be made from this guide.",
+      "applied": "{pages, plural, one {Drafted from a guide of # page.} other {Drafted from a guide of # pages.}}",
+      "measuredFonts": "Fonts its text is set in:",
+      "measuredColors": "Colours its text uses:",
+      "check": "Check each value against the guide before saving.",
+      "undo": "Undo the draft"
+    },
+    "palette": {
+      "title": "Colours",
+      "description": "The brand colours. A colour in a document counts as one of these when it is within the colour's tolerance.",
+      "add": "Add colour",
+      "newName": "Colour {number}",
+      "none": "No brand colours yet.",
+      "hex": "Hex",
+      "pick": "Pick a colour for {name}",
+      "name": "Name",
+      "tolerance": "Tolerance",
+      "toleranceHint": "Colour difference (Delta E). 2 to 3 is barely visible.",
+      "roles": "Used for",
+      "neutrals": "Neutral colours",
+      "neutralsHint": "Colours any document may use without being brand colours, comma separated."
+    },
+    "colorRole": {
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "accent": "Accent",
+      "text": "Text",
+      "background": "Background",
+      "neutral": "Neutral"
+    },
+    "typography": {
+      "title": "Type",
+      "description": "The typefaces by role, and the fonts allowed in their place, such as a system font for documents shared outside.",
+      "add": "Add typeface",
+      "none": "No typefaces yet.",
+      "role": "Role",
+      "family": "Typeface",
+      "substitutes": "Allowed substitutes",
+      "minSize": "Smallest text (pt)",
+      "minSizeHint": "0 sets no minimum."
+    },
+    "fontRole": {
+      "heading": "Headings",
+      "body": "Body text",
+      "accent": "Accent"
+    },
+    "logos": {
+      "title": "Logos",
+      "description": "The logo files documents should use, as PNG, SVG or JPEG.",
+      "add": "Upload logo",
+      "untitled": "Logo",
+      "none": "No logos yet.",
+      "noPreview": "No preview",
+      "name": "Name",
+      "minWidth": "Smallest width (pt)",
+      "aspect": "Stretch allowed (%)",
+      "aspectHint": "How far its proportions may differ.",
+      "colors": "Shown on",
+      "colorsHint": "Leave all unticked to allow any background."
+    },
+    "language": {
+      "title": "Wording",
+      "description": "The languages documents are written in, the words to use and avoid, and the voice.",
+      "locales": "Languages",
+      "localesHint": "Language tags such as en or fr-CA, comma separated.",
+      "preferred": "Words to use",
+      "banned": "Words to avoid",
+      "term": "Word or phrase",
+      "alternatives": "Instead of / write instead",
+      "note": "Note",
+      "addPreferred": "Add a word to use",
+      "addBanned": "Add a word to avoid",
+      "nonePreferred": "No preferred words yet.",
+      "noneBanned": "No words to avoid yet.",
+      "tone": "Voice"
+    },
+    "templates": {
+      "title": "Templates",
+      "description": "PowerPoint and Word templates new documents are built from.",
+      "add": "Upload template",
+      "untitled": "Template",
+      "none": "No templates yet.",
+      "name": "Name",
+      "wrongType": "A template must be one of {types}."
+    }
   },
   "announcements": {
     "localTime": "{time} your time",

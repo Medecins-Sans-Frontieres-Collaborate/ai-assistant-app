@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Kanal taslağı oluşturucu",
         "description": "Kaynakları, her biri doğru üslupta, alıntıları kaynağına izlenebilir şekilde olmak üzere çeşitli kanallara yönelik gönderilere dönüştürün"
+      },
+      "brandReview": {
+        "label": "Marka incelemesi",
+        "description": "Bir PDF, Word belgesi veya sunumu marka kitabına göre kontrol edin: yazı tipleri, renkler, kelime seçimi, logolar ve üslup"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Yeni harita",
       "newGrants": "Yeni hibe işlemleri",
       "newFormFill": "Yeni belge doldurma",
-      "newChannelDrafter": "Yeni kanal taslağı"
+      "newChannelDrafter": "Yeni kanal taslağı",
+      "newBrandReview": "Yeni marka incelemesi"
     },
     "translation": {
       "chooseLanguage": "Hedef dil",
@@ -4838,6 +4843,112 @@
         "altTooLong": "{name} görselinin alt metni, bu kanalın {max} sınırından {count} fazla.",
         "unicodeSms": "{characters} standart bir SMS'te gönderilemez, bu nedenle bu mesajda 160 yerine 70 karakter kullanılabilir. Alanı geri almak için bunların yerine başka karakterler kullanın."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Marka incelemesi",
+        "intro": "Bir marka kitabı ve bir belge seçin. İnceleme, yazı tipleri, renkler, metin boyutları, kelime seçimi ve logoları kontrol eder; ayrıca her sayfada üslup ve görsel kurallar için modeli devreye alabilirsiniz.",
+        "book": "Marka kitabı",
+        "booksLoading": "Marka kitapları yükleniyor...",
+        "noBooks": "Henüz size uygun marka kitabı yok. Bir yönetici, onları Yönetim > Marka kitapları altında ekleyebilir.",
+        "document": "Belge",
+        "chooseDocument": "Belge seçin",
+        "replaceDocument": "Başka bir belge seçin",
+        "documentTypes": "PDF, Word veya PowerPoint",
+        "uploading": "Yükleniyor...",
+        "uploadFailed": "Belge yüklenemedi.",
+        "wrongType": "PDF, Word belgesi veya sunum seçin.",
+        "modelReview": "Her sayfayı modelden kontrol ettir",
+        "modelReviewHint": "Denetimlerin göremediği üslup, görsel ve logo sorunlarını bulur. Her sayfa için token kullanır, en fazla 40 sayfa.",
+        "start": "İncelemeyi başlat"
+      },
+      "loading": "İnceleme yükleniyor...",
+      "booksFailed": "Marka kitapları yüklenemedi.",
+      "startFailed": "İnceleme başlatılamadı.",
+      "readFailed": "İnceleme okunamadı.",
+      "busy": "\"{name}\" hâlâ inceleniyor. Yenisine başlamadan önce bitmesini bekleyin veya mevcut işlemi durdurun.",
+      "failed": "İnceleme başarısız oldu.",
+      "against": "{book} ile karşılaştırıldı",
+      "progress": {
+        "reading": "Belge okunuyor...",
+        "checking": "Metin ve logolar kontrol ediliyor...",
+        "reviewing": "Sayfalar inceleniyor...",
+        "pages": "{total} sayfanın {done} tanesi incelendi"
+      },
+      "status": {
+        "done": "{errors, plural, one {# hata} other {# hata}}, {warnings, plural, one {# uyarı} other {# uyarı}}",
+        "stopped": "Durduruldu: Şu ana kadar {errors, plural, one {# hata} other {# hata}}",
+        "failed": "Başarısız",
+        "running": "Devam ediyor"
+      },
+      "stop": "Durdur",
+      "download": "Raporu indir",
+      "newReview": "Yeni inceleme",
+      "findings": "Bulgular",
+      "noFindings": "Henüz bir şey bulunamadı.",
+      "noneOfSeverity": "Bu türde bulgu yok.",
+      "byModel": "Model tarafından bulundu; kontrol edin.",
+      "notes": "Notlar",
+      "pageShort": "s. {page}",
+      "filter": {
+        "label": "Göster",
+        "all": "Tümü {count}",
+        "error": "Hatalar {count}",
+        "warning": "Uyarılar {count}",
+        "info": "Notlar {count}"
+      },
+      "severity": {
+        "error": "Hata",
+        "warning": "Uyarı",
+        "info": "Not"
+      },
+      "rule": {
+        "font": "Yazı tipi",
+        "color": "Renk",
+        "size": "Metin boyutu",
+        "banned-term": "Kaçınılacak kelime",
+        "preferred-term": "Tercih edilen kelime",
+        "language": "Dil",
+        "logo-distorted": "Logo oranları",
+        "logo-small": "Logo boyutu",
+        "logo-background": "Logo arka planı",
+        "logo-unknown": "Olası logo",
+        "visual": "Görsel",
+        "tone": "Üslup"
+      },
+      "message": {
+        "font": "{found} ile ayarlanmış; markanın yazı tipleri {expected}.",
+        "font-alone": "{found} ile ayarlanmış, bu marka yazı tipi değildir.",
+        "color": "{found} marka rengi değil; en yakın olan {first}.",
+        "size": "Metin {found} pt; izin verilen en küçük {first} pt.",
+        "banned-term": "\"{found}\" kaçınılması gereken bir kelime; bunun yerine {expected} yazın.",
+        "banned-term-alone": "\"{found}\" kaçınılması gereken bir kelimedir.",
+        "preferred-term": "\"{found}\" yerine \"{first}\" yazın.",
+        "language": "{found} olarak işaretlenmiş; markanın dilleri {expected}.",
+        "logo-distorted": "{name}, {found} oranında çizilmiş; kendi oranı {first}.",
+        "logo-small": "{name} {found} pt genişliğinde; en az {first} pt olmalı.",
+        "logo-background": "{name} {found} üzerinde; {expected} üzerinde gösterilebilir.",
+        "logo-unknown": "Logo olabilecek bir görsel: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Marka incelemesi: {name}",
+        "meta": "{book}, {date}, {pages, plural, one {# sayfa} other {# sayfa}}",
+        "errors": "{count, plural, one {# hata} other {# hata}}",
+        "warnings": "{count, plural, one {# uyarı} other {# uyarı}}",
+        "infos": "{count, plural, one {# not} other {# not}}",
+        "partial": "İnceleme tamamlanmadı; bu rapor, bitmeden önce bulunanları içeriyor.",
+        "skipped": "Model, {pages} sayfalara bakmadı; onlar modelsiz kontrol edildi.",
+        "none": "Marka kitabından sapma tespit edilmedi.",
+        "page": "Sayfa",
+        "severity": "Ciddiyet",
+        "rule": "Kontrol",
+        "finding": "Bulgular",
+        "found": "Bulundu",
+        "notes": "Notlar",
+        "fileSuffix": "marka incelemesi"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Her modelin her turda aldığı konuşma miktarı.",
       "analytics": "Teslim edilen raporlar: neler geldi, her klasörü kim açabilir, hangi alanlar gösterilebilir.",
       "skills": "Asistanın, gerektiğinde bir konuşmaya uyguladığı tekrar kullanılabilir talimat blokları.",
-      "models": "Arka plan modellerini atayın ve bölgesel dağıtım hazırlığını kontrol edin."
+      "models": "Arka plan modellerini atayın ve bölgesel dağıtım hazırlığını kontrol edin.",
+      "brandBooks": "Belgelerin kontrol edildiği ve oluşturulduğu renkler, yazı tipleri, logolar, ifadeler ve şablonlar."
     },
     "openSettings": "Ayarları aç",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Kontekst bütçesi",
       "analytics": "Analitik",
       "skills": "Yetenekler",
-      "models": "Modeller ve hazırlık"
+      "models": "Modeller ve hazırlık",
+      "brandBooks": "Marka kitapları"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Yakınlaştırmayı sıfırla (şu an %{percent})",
       "zoomLevel": "%{percent}",
       "failed": "Bu belge gösterilemedi. Çok büyük veya korumalı olabilir ya da dönüştürücü meşgul olabilir; biraz sonra yeniden deneyin."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Başlıksız marka kitabı",
+    "intro": "Bir marka kitabı, bir kuruluşun renklerini, yazı tiplerini, logolarını, ifadelerini ve şablonlarını içerir; böylece belgeler buna göre kontrol edilir ve hazırlanır. Her kitabı kimlerin kullanabileceği erişim kuralı ile belirlenir.",
+    "unavailable": "Marka kitapları depodan yüklenemedi. Lütfen biraz sonra tekrar deneyin.",
+    "add": "Marka kitabı ekle",
+    "none": "Henüz marka kitabı yok.",
+    "paletteSummary": "{count, plural, one {# marka rengi} other {# marka rengi}}",
+    "summary": "{fonts, plural, one {# yazı tipi} other {# yazı tipi}}, {logos, plural, one {# logo} other {# logo}}",
+    "open": "Aç",
+    "delete": "Sil",
+    "deleteConfirm": "\"{name}\" ve dosyalarını silinsin mi? Daha önce kontrol edilen belgeler raporlarını koruyacaktır.",
+    "deleteConfirmButton": "Marka kitabını sil",
+    "loading": "Marka kitabı yükleniyor...",
+    "loadFailed": "Marka kitabı yüklenemedi.",
+    "missing": "Bu marka kitabı mevcut değil ya da düzenleme izniniz yok.",
+    "back": "Marka kitapları",
+    "unsaved": "Kaydedilmemiş değişiklikler",
+    "saved": "Kaydedildi",
+    "save": "Kaydet",
+    "conflict": "Bu marka kitabı siz açtıktan sonra başka bir yönetici tarafından kaydedildi. Kendi sürümlerini görmek için yeniden yükleyin; buradaki değişiklikleriniz kaybolacak.",
+    "reload": "Yeniden yükle",
+    "invalid": "Bu marka kitabı henüz kaydedilemiyor: {reason}",
+    "saveFailed": "Marka kitabı kaydedilemedi.",
+    "uploadFailed": "Dosya yüklenemedi.",
+    "remove": "Kaldır",
+    "removeNamed": "{name} öğesini kaldır",
+    "basics": {
+      "title": "Marka kitabı",
+      "name": "Adı",
+      "description": "Açıklama"
+    },
+    "guide": {
+      "action": "Marka rehberinden taslak oluştur",
+      "reading": "Rehber okunuyor...",
+      "hint": "Tanımlanan renkler, yazı tipleri ve ifadelerle otomatik doldurmak için marka rehberini PDF olarak yükleyin. Logolar ve şablonlar alınmaz; bunları aşağıdan ekleyin.",
+      "source": "Taslak oluşturulduğu kaynak",
+      "notPdf": "Bir marka rehberi PDF olmalıdır.",
+      "failed": "Bu rehberden taslak oluşturulamadı.",
+      "applied": "{pages, plural, one {# sayfalık bir rehberden taslak hazırlandı.} other {# sayfalık bir rehberden taslak hazırlandı.}}",
+      "measuredFonts": "Metinlerde kullanılan yazı tipleri:",
+      "measuredColors": "Metinlerdeki renkler:",
+      "check": "Kaydetmeden önce her değeri rehberden kontrol edin.",
+      "undo": "Taslağı geri al"
+    },
+    "palette": {
+      "title": "Renkler",
+      "description": "Markanın renkleri. Bir belgede bir renk, belirlenen tolerans aralığında ise bu renklerden biri olarak sayılır.",
+      "add": "Renk ekle",
+      "newName": "Renk {number}",
+      "none": "Henüz marka rengi yok.",
+      "hex": "Hex",
+      "pick": "{name} için bir renk seçin",
+      "name": "Adı",
+      "tolerance": "Tolerans",
+      "toleranceHint": "Renk farkı (Delta E). 2 ila 3 neredeyse fark edilmez.",
+      "roles": "Kullanım amacı",
+      "neutrals": "Nötr renkler",
+      "neutralsHint": "Herhangi bir belgenin marka rengi olmadan kullanabileceği renkler, virgül ile ayrılmıştır."
+    },
+    "colorRole": {
+      "primary": "Birincil",
+      "secondary": "İkincil",
+      "accent": "Vurgu",
+      "text": "Metin",
+      "background": "Arka plan",
+      "neutral": "Nötr"
+    },
+    "typography": {
+      "title": "Tür",
+      "description": "Rol bazında yazı tipleri ve onların yerine kullanılabilecek fontlar, örneğin dışarıyla paylaşılan belgeler için sistem fontu.",
+      "add": "Yazı tipi ekle",
+      "none": "Henüz yazı tipi yok.",
+      "role": "Rol",
+      "family": "Yazı tipi",
+      "substitutes": "İzin verilen alternatifler",
+      "minSize": "En küçük metin (pt)",
+      "minSizeHint": "0, minimum değer atamaz."
+    },
+    "fontRole": {
+      "heading": "Başlıklar",
+      "body": "Gövde metni",
+      "accent": "Vurgu"
+    },
+    "logos": {
+      "title": "Logolar",
+      "description": "Belgelerde kullanılması gereken logo dosyaları, PNG, SVG veya JPEG olarak.",
+      "add": "Logo yükle",
+      "untitled": "Logo",
+      "none": "Henüz logo yok.",
+      "noPreview": "Önizleme yok",
+      "name": "Ad",
+      "minWidth": "En küçük genişlik (pt)",
+      "aspect": "İzin verilen esnetme (%)",
+      "aspectHint": "Oranlarının ne kadar farklı olabileceği.",
+      "colors": "Gösterildiği zemin",
+      "colorsHint": "Herhangi bir arka planı kabul etmek için tümünü işaretsiz bırakın."
+    },
+    "language": {
+      "title": "İfade biçimi",
+      "description": "Belgelerin yazıldığı diller, kullanılacak ve kaçınılacak kelimeler ile üslup.",
+      "locales": "Diller",
+      "localesHint": "en veya fr-CA gibi dil etiketleri, virgülle ayrılmıştir.",
+      "preferred": "Kullanılacak kelimeler",
+      "banned": "Kaçınılacak kelimeler",
+      "term": "Kelime veya ifade",
+      "alternatives": "Bunun yerine / yerine bunu yazın",
+      "note": "Not",
+      "addPreferred": "Kullanılacak kelime ekle",
+      "addBanned": "Kaçınılacak kelime ekle",
+      "nonePreferred": "Henüz kullanılacak kelime yok.",
+      "noneBanned": "Henüz kaçınılacak kelime yok.",
+      "tone": "Üslup"
+    },
+    "templates": {
+      "title": "Şablonlar",
+      "description": "Yeni belgelerin oluşturulacağı PowerPoint ve Word şablonları.",
+      "add": "Şablon yükle",
+      "untitled": "Şablon",
+      "none": "Henüz şablon yok.",
+      "name": "Ad",
+      "wrongType": "Bir şablon şu türlerden biri olmalıdır: {types}."
     }
   }
 }

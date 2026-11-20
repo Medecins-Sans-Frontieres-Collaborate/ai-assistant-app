@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Channel drafter",
         "description": "Avadika ho lahatsoratra amin’ny fantsona maromaro ny loharano tsirairay, amin’ny feo sahaza sy ny filaharam-pitenenan’ny fantsona tsirairay, miaraka amin’ny fanononana rehetra arahana loharano."
+      },
+      "brandReview": {
+        "label": "Fanamarinana marika",
+        "description": "Diniho amin’ny boky marika ny PDF, taratasy Word na fampisehoana: endritsoratra, loko, lahatsoratra, marika ary tonony"
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Saritany vaovao",
       "newGrants": "Fikarakarana grant vaovao",
       "newFormFill": "Fandrakofana taratasy vaovao",
-      "newChannelDrafter": "Fanoratana dika amin'ny fantsona vaovao"
+      "newChannelDrafter": "Fanoratana dika amin'ny fantsona vaovao",
+      "newBrandReview": "Fanamarinana marika vaovao"
     },
     "translation": {
       "chooseLanguage": "Fiteny kendrena",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Mihoatra {count} amin'ny fetra {max} ato amin'ny fantsona ity ny lahatsoratra alt an'i {name}.",
         "unicodeSms": "Tsy afaka alefa amin'ny hafatra mahazatra ireo tarehintsoratra {characters}, ka 70 monja no azo soratana fa tsy 160. Esory izy ireo raha mila habaka bebe kokoa."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Fanamarinana marika",
+        "intro": "Misafidiana boky marika sy antontan-taratasy. Hijery endritsoratra, loko, haben’ny lahatsoratra, lahatsoratra ary marika ny fanamarinana, ary afaka manampy modely hijery pejy tsirairay amin’ny tonony sy fitsipika hita maso.",
+        "book": "Boky marika",
+        "booksLoading": "Eo am-pitondrana boky marika...",
+        "noBooks": "Tsy mbola misy boky marika azonao. Ny mpitantana no manampy izany ao amin’ny Admin > Boky marika.",
+        "document": "Antontan-taratasy",
+        "chooseDocument": "Misafidiana antontan-taratasy",
+        "replaceDocument": "Misafidiana antontan-taratasy hafa",
+        "documentTypes": "PDF, Word na PowerPoint",
+        "uploading": "Eo am-piakatra...",
+        "uploadFailed": "Tsy tafiakatra ilay antontan-taratasy.",
+        "wrongType": "Misafidiana PDF, taratasy Word na fampisehoana.",
+        "modelReview": "Ampidiro modely hijery pejy tsirairay",
+        "modelReviewHint": "Mahita olana amin’ny tonony, hita maso sy marika izay tsy tratran’ny fitsirihana. Mampiasa token isaky ny pejy, hatramin’ny pejy 40.",
+        "start": "Atombohy ny fanamarinana"
+      },
+      "loading": "Eo am-pitondrana ny fanamarinana...",
+      "booksFailed": "Tsy tafiditra ny boky marika.",
+      "startFailed": "Tsy afaka natomboka ny fanamarinana.",
+      "readFailed": "Tsy afaka novakiana ny fanamarinana.",
+      "busy": "\"{name}\" mbola eo am-panaovana fanamarinana. Andraso hifarana, na ajanony, alohan’ny hanombohana iray hafa.",
+      "failed": "Tsy nahomby ny fanamarinana.",
+      "against": "Araka ny {book}",
+      "progress": {
+        "reading": "Mamaky ny antontan-taratasy...",
+        "checking": "Manamarina lahatsoratra sy marika...",
+        "reviewing": "Mandinika pejy...",
+        "pages": "Vita ny pejy {done} amin’ny {total}"
+      },
+      "status": {
+        "done": "{errors, plural, one {# hadisoana} other {# hadisoana}}, {warnings, plural, one {# fampitandremana} other {# fampitandremana}}",
+        "stopped": "Nijanona: {errors, plural, one {# hadisoana} other {# hadisoana}} hatreto",
+        "failed": "Tsy nahomby",
+        "running": "Mihazakazaka"
+      },
+      "stop": "Ajanona",
+      "download": "Alaivo tatitra",
+      "newReview": "Fanamarinana vaovao",
+      "findings": "Zavatra hita",
+      "noFindings": "Tsy mbola nisy hitan-davitra.",
+      "noneOfSeverity": "Tsy mbola misy karazana hitan-davitra toy izao.",
+      "byModel": "Nohitan’ny modely; jereo.",
+      "notes": "Fanamarihana",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "Asehoy",
+        "all": "Rehetra {count}",
+        "error": "Hadisoana {count}",
+        "warning": "Fampitandremana {count}",
+        "info": "Fanamarihana {count}"
+      },
+      "severity": {
+        "error": "Hadisoana",
+        "warning": "Fampitandremana",
+        "info": "Fanamarihana"
+      },
+      "rule": {
+        "font": "Karazan-tsoratra",
+        "color": "Loko",
+        "size": "Haben'ny soratra",
+        "banned-term": "Teny tsy azo ampiasaina",
+        "preferred-term": "Teny tsara kokoa",
+        "language": "Fiteny",
+        "logo-distorted": "Zotra sy endriky ny logo",
+        "logo-small": "Haben'ny logo",
+        "logo-background": "Toton'ny logo",
+        "logo-unknown": "Logo mety ho izy",
+        "visual": "Visuel",
+        "tone": "Feo"
+      },
+      "message": {
+        "font": "Natao tamin'ny {found}; ny karazan-tsoratra an'ny marika dia {expected}.",
+        "font-alone": "Natao tamin'ny {found}, izay tsy karazan-tsoratra an'ny marika.",
+        "color": "Tsy loko an'ny marika ny {found}; ny akaiky indrindra dia {first}.",
+        "size": "Soratra amin'ny {found} pt; ny kely indrindra azo ekena dia {first} pt.",
+        "banned-term": "\"{found}\" dia teny tsy tokony ampiasaina; soraty {expected} fa tsy io.",
+        "banned-term-alone": "\"{found}\" dia teny tsy tokony ampiasaina.",
+        "preferred-term": "Soraty \"{first}\" fa tsy \"{found}\".",
+        "language": "Voamarika hoe {found}; ny fitenin'ny marika dia {expected}.",
+        "logo-distorted": "{name} dia aseho amin'ny {found}; ny lanjan'ny endriny dia {first}.",
+        "logo-small": "{name} dia {found} pt ny sakany; tokony ho farafahakeliny {first} pt izany.",
+        "logo-background": "{name} dia amin'ny {found}; azo aseho amin'ny {expected} izany.",
+        "logo-unknown": "Sary mety ho logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Fanamarinana marika: {name}",
+        "meta": "Araka ny {book}, {date}, {pages, plural, one {# pejy} other {# pejy}}",
+        "errors": "{count, plural, one {# hadisoana} other {# hadisoana}}",
+        "warnings": "{count, plural, one {# fampitandremana} other {# fampitandremana}}",
+        "infos": "{count, plural, one {# fanamarihana} other {# fanamarihana}}",
+        "partial": "Tsy vita tanteraka ny famerenana; ny hita alohan'ny nifaranany ihany no ao amin'ity tatitra ity.",
+        "skipped": "Tsy nojerena tamin'ny modely ny pejy {pages}; noraisina fanamarinana izany tsy niaraka aminy.",
+        "none": "Tsy nisy latsaka tamin'ny fitsipiky ny bokin'ny marika hita.",
+        "page": "Pejy",
+        "severity": "Hakitroky",
+        "rule": "Fanamarinana",
+        "finding": "Hitana",
+        "found": "Hita",
+        "notes": "Fanamarihana",
+        "fileSuffix": "fanamarinana marika"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Firy ny tantaran’ny resaka alefa isaky ny mandeha amin’ny modely tsirairay.",
       "analytics": "Tatitra nalefa: inona no tonga, iza afaka manokatra folder tsirairay, ary iza avy amin’ny saha no hita.",
       "skills": "Boky toromarika azo averina ampiasaina rehefa ilain'ny resaka iray izany.",
-      "models": "Manendry modely amin'ny fitantanana sy manamarina ny fahavononan'ny fizarana."
+      "models": "Manendry modely amin'ny fitantanana sy manamarina ny fahavononan'ny fizarana.",
+      "brandBooks": "Loko, karazana soratra, logo, fehezanteny ary modely izay anamarinana sy anamboarana tahirin-kevitra."
     },
     "openSettings": "Sokafy ny fikirakirana",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Teti-bola amin'ny sehatra",
       "analytics": "Analytics",
       "skills": "Fahaiza-manao",
-      "models": "Modely sy fahavononana"
+      "models": "Modely sy fahavononana",
+      "brandBooks": "Boky famantarana"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Averina ny habeny (ankehitriny {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Tsy azo naseho ity antontan-taratasy ity. Mety ho lehibe loatra, voaaro, na be atao ilay mpanova; andramo indray afaka kelikely."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Boky famantarana tsy misy lohateny",
+    "intro": "Mitahiry ireo loko, soratra, logo, fehezanteny, ary modelin'ny fikambanana iray ny boky famantarana, ka azon'ny tahirin-kevitra andraisana amantarina sy anamboarana azy. Ny olona afaka mampiasa izany dia araka ny fitsipika fidirana napetraka.",
+    "unavailable": "Tsy afaka nalaina avy amin'ny fitahirizana ny boky famantarana. Andramo indray afaka kelikely.",
+    "add": "Manampy boky famantarana",
+    "none": "Tsy misy boky famantarana hatreto.",
+    "paletteSummary": "{count, plural, one {# loko famantarana} other {# loko famantarana}}",
+    "summary": "{fonts, plural, one {# karazana soratra} other {# karazana soratra}}, {logos, plural, one {# logo} other {# logo}}",
+    "open": "Sokafy",
+    "delete": "Fafao",
+    "deleteConfirm": "Fafana \"{name}\" sy ireo rakitra ao aminy? Mitazona ny tatitra any amin'ireo tahirin-kevitra efa voamarina.",
+    "deleteConfirmButton": "Fafana ny boky famantarana",
+    "loading": "Manokatra boky famantarana...",
+    "loadFailed": "Tsy afaka nisokatra ny boky famantarana.",
+    "missing": "Tsy misy ity boky famantarana ity, na tsy azonao ovaina.",
+    "back": "Boky famantarana",
+    "unsaved": "Fiovana tsy voatahiry",
+    "saved": "Voatahiry",
+    "save": "Tehirizo",
+    "conflict": "Admin hafa no nitahiry ity boky famantarana ity rehefa avy nosokafanao. Avereno mba hijerena ny kinoviny; ho very ny fiovanao eto.",
+    "reload": "Avereno",
+    "invalid": "Tsy mbola azo tehirizina ity boky famantarana ity: {reason}",
+    "saveFailed": "Tsy voatahiry ny boky famantarana.",
+    "uploadFailed": "Tsy voaakatra ilay rakitra.",
+    "remove": "Esory",
+    "removeNamed": "Esory {name}",
+    "basics": {
+      "title": "Boky famantarana",
+      "name": "Anarana",
+      "description": "Famaritana"
+    },
+    "guide": {
+      "action": "Dika avy amin'ny torolalana famantarana",
+      "reading": "Mamaky ny torolalana...",
+      "hint": "Akatrao amin'ny PDF ny torolalana famantarana hanamenoana ireo loko, soratra ary fehezanteny voafaritra ao aminy. Tsy raisina ao ny logo sy modely; akatry ny misy misaraka ambany.",
+      "source": "Nodika avy amin'ny",
+      "notPdf": "Tokony ho PDF ny torolalana famantarana.",
+      "failed": "Tsy vita dika avy amin'ity torolalana ity.",
+      "applied": "{pages, plural, one {Natao avy amin'ny torolàlana misy pejy #.} other {Natao avy amin'ny torolàlana misy pejy #.}}",
+      "measuredFonts": "Karazana soratra ampiasain'ny lahatsoratra:",
+      "measuredColors": "Loko ampiasain'ny lahatsoratra:",
+      "check": "Hamarino amin'ny torolalana ireo sanda tsirairay alohan'ny hitahirizana.",
+      "undo": "Avereno ny dika"
+    },
+    "palette": {
+      "title": "Loko",
+      "description": "Ireo loko famantarana. Lasa iray amin'ireny loko ireny ny loko hita amin'ny antontan-taratasy raha toa anatin'ny fandeferan'ilay loko izy.",
+      "add": "Manampia loko",
+      "newName": "Loko {number}",
+      "none": "Tsy mbola misy loko famantarana.",
+      "hex": "Hex",
+      "pick": "Safidio ny loko ho an'i {name}",
+      "name": "Anarana",
+      "tolerance": "Fandeferana",
+      "toleranceHint": "Hafa-kolontsaina (Delta E). 2 ka hatramin'ny 3 dia saika tsy hita maso.",
+      "roles": "Ampiasaina ho an'ny",
+      "neutrals": "Loko tsy miangatra",
+      "neutralsHint": "Loko azon'ny antontan-taratasy ampiasaina raha tsy loko marika, misaraka amin'ny koma."
+    },
+    "colorRole": {
+      "primary": "Laharana voalohany",
+      "secondary": "Laharana faharoa",
+      "accent": "Misongadina",
+      "text": "Soratra",
+      "background": "Ambadika",
+      "neutral": "Tsy miangatra"
+    },
+    "typography": {
+      "title": "Karazana",
+      "description": "Ny karazana endri-tsoratra arakaraka ny andraikitra, sy ireo endri-tsoratra azo ampiasaina amin'ny toerany, toy ny endri-tsoratra rafitra ho an'ny antontan-taratasy zaraina ivelany.",
+      "add": "Ampio endri-tsoratra",
+      "none": "Tsy mbola misy endri-tsoratra.",
+      "role": "Andraikitra",
+      "family": "Endri-tsoratra",
+      "substitutes": "Fanolo azo ekena",
+      "minSize": "Soratra kely indrindra (pt)",
+      "minSizeHint": "0 tsy mametra fetra ambany."
+    },
+    "fontRole": {
+      "heading": "Lohateny",
+      "body": "Soratra fototra",
+      "accent": "Misongadina"
+    },
+    "logos": {
+      "title": "Sariohatra",
+      "description": "Ny rakitra sariohatra tokony ampiasain'ny antontan-taratasy, toy ny PNG, SVG na JPEG.",
+      "add": "Ampakaro sariohatra",
+      "untitled": "Sariohatra",
+      "none": "Tsy mbola misy sariohatra.",
+      "noPreview": "Tsy misy topy maso",
+      "name": "Anarana",
+      "minWidth": "Sakan'ny kely indrindra (pt)",
+      "aspect": "Fiova endrika azo atao (%)",
+      "aspectHint": "Hatramin'ny faran'izay mety hiova amin'ny endrika azy.",
+      "colors": "Aseho amin'ny",
+      "colorsHint": "Avela tsy voamarika rehetra raha mila mamela amin'ny ambadika rehetra."
+    },
+    "language": {
+      "title": "Fomba fitsipi-pitenenana",
+      "description": "Ny fiteny ampiasaina amin'ny antontan-taratasy, ireo teny tokony ampiasaina sy ialana, ary ny feo.",
+      "locales": "Fiteny",
+      "localesHint": "Tag fiteny toy ny en na fr-CA, misaraka amin'ny koma.",
+      "preferred": "Teny tokony ampiasaina",
+      "banned": "Teny tokony ialana",
+      "term": "Teny na andian-teny",
+      "alternatives": "Fa tsy / soraty avy hatrany",
+      "note": "Fanamarihana",
+      "addPreferred": "Ampio teny tokony ampiasaina",
+      "addBanned": "Ampio teny tokony ialana",
+      "nonePreferred": "Tsy mbola misy teny tiana ampiasaina.",
+      "noneBanned": "Tsy mbola misy teny tokony ialana.",
+      "tone": "Feo"
+    },
+    "templates": {
+      "title": "Santionany",
+      "description": "Santionan'ny PowerPoint sy Word ho an'ny antontan-taratasy vaovao.",
+      "add": "Ampidiro ny template",
+      "untitled": "Template",
+      "none": "Tsy misy template hatreto.",
+      "name": "Anarana",
+      "wrongType": "Tokony ho isan'ny {types} ny template."
     }
   }
 }

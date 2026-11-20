@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Redaktor kanałów",
         "description": "Przekształcaj źródła w posty dla różnych kanałów, w odpowiednim stylu, z każdą cytowaną wypowiedzią powiązaną ze źródłem"
+      },
+      "brandReview": {
+        "label": "Przegląd marki",
+        "description": "Sprawdź plik PDF, dokument Word lub prezentację pod kątem księgi znaku: czcionki, kolory, sformułowania, logotypy i ton komunikacji"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Nowa mapa",
       "newGrants": "Nowe przetwarzanie grantów",
       "newFormFill": "Nowe wypełnienie dokumentu",
-      "newChannelDrafter": "Nowy szkic kanału"
+      "newChannelDrafter": "Nowy szkic kanału",
+      "newBrandReview": "Nowy przegląd marki"
     },
     "translation": {
       "chooseLanguage": "Język docelowy",
@@ -4838,6 +4843,112 @@
         "altTooLong": "Tekst alternatywny {name} przekracza o {count} limit tego kanału wynoszący {max}.",
         "unicodeSms": "Znaki {characters} nie mogą być wysłane w standardowym SMS-ie, więc ta wiadomość ma miejsce na 70 znaków, a nie 160. Usuń je, aby odzyskać miejsce."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Przegląd marki",
+        "intro": "Wybierz księgę znaku i dokument. Przegląd sprawdzi czcionki, kolory, rozmiary tekstu, sformułowania i logotypy. Model może dodatkowo ocenić ton oraz zgodność wizualną każdej strony.",
+        "book": "Księga znaku",
+        "booksLoading": "Ładowanie ksiąg znaku...",
+        "noBooks": "Nie masz jeszcze dostępnych ksiąg znaku. Administrator dodaje je w Admin > Księgi znaku.",
+        "document": "Dokument",
+        "chooseDocument": "Wybierz dokument",
+        "replaceDocument": "Wybierz inny dokument",
+        "documentTypes": "PDF, Word lub PowerPoint",
+        "uploading": "Przesyłanie...",
+        "uploadFailed": "Nie udało się przesłać dokumentu.",
+        "wrongType": "Wybierz plik PDF, dokument Word lub prezentację.",
+        "modelReview": "Niech model sprawdzi każdą stronę",
+        "modelReviewHint": "Wykrywa problemy z tonem, wizualne i z logotypami, których nie wyłapują automatyczne testy. Zużywa tokeny za każdą stronę, do 40 stron.",
+        "start": "Rozpocznij przegląd"
+      },
+      "loading": "Ładowanie przeglądu...",
+      "booksFailed": "Nie udało się załadować ksiąg znaku.",
+      "startFailed": "Nie udało się rozpocząć przeglądu.",
+      "readFailed": "Nie udało się odczytać przeglądu.",
+      "busy": "\"{name}\" jest w trakcie przeglądu. Poczekaj na zakończenie lub przerwij, zanim rozpoczniesz kolejny.",
+      "failed": "Przegląd nie powiódł się.",
+      "against": "Na podstawie {book}",
+      "progress": {
+        "reading": "Odczytywanie dokumentu...",
+        "checking": "Sprawdzanie tekstu i logotypów...",
+        "reviewing": "Przeglądanie stron...",
+        "pages": "Przejrzano {done} z {total} stron"
+      },
+      "status": {
+        "done": "{errors, plural, one {# błąd} other {# błędów}}, {warnings, plural, one {# ostrzeżenie} other {# ostrzeżeń}}",
+        "stopped": "Zatrzymano: {errors, plural, one {# błąd} other {# błędów}} do tej pory",
+        "failed": "Niepowodzenie",
+        "running": "W trakcie"
+      },
+      "stop": "Zatrzymaj",
+      "download": "Pobierz raport",
+      "newReview": "Nowy przegląd",
+      "findings": "Wyniki",
+      "noFindings": "Na razie nic nie znaleziono.",
+      "noneOfSeverity": "Brak wyników tego typu.",
+      "byModel": "Wykryte przez model; sprawdź to.",
+      "notes": "Notatki",
+      "pageShort": "s. {page}",
+      "filter": {
+        "label": "Pokaż",
+        "all": "Wszystkie {count}",
+        "error": "Błędy {count}",
+        "warning": "Ostrzeżenia {count}",
+        "info": "Notatki {count}"
+      },
+      "severity": {
+        "error": "Błąd",
+        "warning": "Ostrzeżenie",
+        "info": "Notatka"
+      },
+      "rule": {
+        "font": "Krój pisma",
+        "color": "Kolor",
+        "size": "Wielkość tekstu",
+        "banned-term": "Słowo do unikania",
+        "preferred-term": "Preferowane słowo",
+        "language": "Język",
+        "logo-distorted": "Proporcje logo",
+        "logo-small": "Wielkość logo",
+        "logo-background": "Tło logo",
+        "logo-unknown": "Możliwe logo",
+        "visual": "Wizualne",
+        "tone": "Ton"
+      },
+      "message": {
+        "font": "Ustawiono {found}; firmowe kroje pisma to {expected}.",
+        "font-alone": "Ustawiono {found}, który nie jest krojem firmowym.",
+        "color": "{found} nie jest firmowym kolorem; najbliżej jest {first}.",
+        "size": "Tekst: {found} pkt; najmniejsza dopuszczalna wielkość to {first} pkt.",
+        "banned-term": "„{found}” to słowo do unikania; zamiast tego napisz {expected}.",
+        "banned-term-alone": "„{found}” to słowo do unikania.",
+        "preferred-term": "Napisz „{first}” zamiast „{found}”.",
+        "language": "Oznaczono jako {found}; firmowe języki to {expected}.",
+        "logo-distorted": "{name} przedstawiono w proporcjach {found}; poprawne to {first}.",
+        "logo-small": "{name} ma szerokość {found} pkt; powinno mieć co najmniej {first} pkt.",
+        "logo-background": "{name} umieszczone na {found}; można prezentować na {expected}.",
+        "logo-unknown": "Obrazek, który może być logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Przegląd marki: {name}",
+        "meta": "Do {book}, {date}, {pages, plural, one {# strona} few {# strony} many {# stron} other {# stron}}",
+        "errors": "{count, plural, one {# błąd} few {# błędy} many {# błędów} other {# błędów}}",
+        "warnings": "{count, plural, one {# ostrzeżenie} few {# ostrzeżenia} many {# ostrzeżeń} other {# ostrzeżeń}}",
+        "infos": "{count, plural, one {# uwaga} few {# uwagi} many {# uwag} other {# uwag}}",
+        "partial": "Przegląd nie został zakończony; ten raport zawiera wyniki z dotychczasowego przebiegu.",
+        "skipped": "Model nie przeanalizował stron {pages}; zostały sprawdzone bez niego.",
+        "none": "Nie znaleziono niczego niezgodnego z księgą marki.",
+        "page": "Strona",
+        "severity": "Waga",
+        "rule": "Sprawdzenie",
+        "finding": "Wynik",
+        "found": "Znaleziono",
+        "notes": "Notatki",
+        "fileSuffix": "przegląd marki"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Ile rozmowy każdy model otrzymuje przy każdym użyciu.",
       "analytics": "Dostarczone raporty: co dotarło, kto może otworzyć każdy folder i które pola mogą być wyświetlane.",
       "skills": "Wielokrotnego użytku bloki instrukcji stosowane przez asystenta w razie potrzeby podczas rozmowy.",
-      "models": "Przypisz modele bazowe i sprawdź gotowość wdrożenia regionalnego."
+      "models": "Przypisz modele bazowe i sprawdź gotowość wdrożenia regionalnego.",
+      "brandBooks": "Kolory, kroje pisma, logotypy, sformułowania i szablony, względem których sprawdzane i na których bazowane są dokumenty."
     },
     "openSettings": "Otwórz ustawienia",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Budżet kontekstu",
       "analytics": "Analityka",
       "skills": "Umiejętności",
-      "models": "Modele i gotowość"
+      "models": "Modele i gotowość",
+      "brandBooks": "Księgi znaku"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Resetuj powiększenie (teraz {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Nie można wyświetlić tego dokumentu. Może być za duży lub chroniony albo konwerter jest zajęty; spróbuj ponownie za chwilę."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Księga znaku bez tytułu",
+    "intro": "Księga znaku zawiera kolory, kroje pisma, logotypy, sformułowania i szablony organizacji, dzięki czemu dokumenty mogą być z nią zgodne. Dostęp do księgi regulują jej uprawnienia.",
+    "unavailable": "Nie udało się wczytać ksiąg znaku z magazynu. Spróbuj ponownie za chwilę.",
+    "add": "Dodaj księgę znaku",
+    "none": "Brak ksiąg znaku.",
+    "paletteSummary": "{count, plural, one {# kolor marki} other {# kolory marki}}",
+    "summary": "{fonts, plural, one {# krój pisma} other {# kroje pisma}}, {logos, plural, one {# logotyp} other {# logotypy}}",
+    "open": "Otwórz",
+    "delete": "Usuń",
+    "deleteConfirm": "Usunąć \"{name}\" i jej pliki? Dokumenty już sprawdzone zachowają swoje raporty.",
+    "deleteConfirmButton": "Usuń księgę znaku",
+    "loading": "Wczytywanie księgi znaku...",
+    "loadFailed": "Nie udało się wczytać księgi znaku.",
+    "missing": "Ta księga znaku nie istnieje lub nie masz uprawnień do jej edycji.",
+    "back": "Księgi znaku",
+    "unsaved": "Niezapisane zmiany",
+    "saved": "Zapisano",
+    "save": "Zapisz",
+    "conflict": "Inny administrator zapisał tę księgę znaku po Twoim otwarciu. Odśwież, aby zobaczyć jego wersję; Twoje zmiany zostaną utracone.",
+    "reload": "Odśwież",
+    "invalid": "Nie można jeszcze zapisać tej księgi znaku: {reason}",
+    "saveFailed": "Nie udało się zapisać księgi znaku.",
+    "uploadFailed": "Nie udało się przesłać pliku.",
+    "remove": "Usuń",
+    "removeNamed": "Usuń {name}",
+    "basics": {
+      "title": "Księga znaku",
+      "name": "Nazwa",
+      "description": "Opis"
+    },
+    "guide": {
+      "action": "Szkic z przewodnika marki",
+      "reading": "Odczytywanie przewodnika...",
+      "hint": "Prześlij przewodnik marki w formacie PDF, aby automatycznie uzupełnić kolory, kroje pisma i sformułowania. Logotypy i szablony należy dodać osobno poniżej.",
+      "source": "Sporządzono ze źródła",
+      "notPdf": "Przewodnik marki musi być w formacie PDF.",
+      "failed": "Nie udało się sporządzić szkicu z tego przewodnika.",
+      "applied": "{pages, plural, one {Opracowano na podstawie przewodnika liczącego # stronę.} few {Opracowano na podstawie przewodnika liczącego # strony.} many {Opracowano na podstawie przewodnika liczącego # stron.} other {Opracowano na podstawie przewodnika liczącego # stron.}}",
+      "measuredFonts": "Czcionki użyte w tekście:",
+      "measuredColors": "Kolory użyte w tekście:",
+      "check": "Sprawdź każdą wartość względem przewodnika przed zapisaniem.",
+      "undo": "Cofnij szkic"
+    },
+    "palette": {
+      "title": "Kolory",
+      "description": "Kolory marki. Kolor w dokumencie uznaje się za markowy, jeśli mieści się w tolerancji tego koloru.",
+      "add": "Dodaj kolor",
+      "newName": "Kolor {number}",
+      "none": "Brak kolorów marki.",
+      "hex": "Hex",
+      "pick": "Wybierz kolor dla {name}",
+      "name": "Nazwa",
+      "tolerance": "Tolerancja",
+      "toleranceHint": "Różnica kolorów (Delta E). Wartość 2–3 jest ledwo zauważalna.",
+      "roles": "Używane do",
+      "neutrals": "Kolory neutralne",
+      "neutralsHint": "Kolory, których może użyć każdy dokument, niezależnie od marki, oddzielone przecinkami."
+    },
+    "colorRole": {
+      "primary": "Podstawowy",
+      "secondary": "Pomocniczy",
+      "accent": "Akcent",
+      "text": "Tekst",
+      "background": "Tło",
+      "neutral": "Neutralny"
+    },
+    "typography": {
+      "title": "Rodzaj pisma",
+      "description": "Króje pisma według roli oraz dozwolone zamienniki, np. czcionka systemowa do dokumentów udostępnianych na zewnątrz.",
+      "add": "Dodaj krój pisma",
+      "none": "Brak krojów pisma.",
+      "role": "Rola",
+      "family": "Krój pisma",
+      "substitutes": "Dozwolone zamienniki",
+      "minSize": "Najmniejszy tekst (pt)",
+      "minSizeHint": "0 oznacza brak minimum."
+    },
+    "fontRole": {
+      "heading": "Nagłówki",
+      "body": "Tekst główny",
+      "accent": "Akcent"
+    },
+    "logos": {
+      "title": "Logotypy",
+      "description": "Pliki logotypów do użycia w dokumentach — PNG, SVG lub JPEG.",
+      "add": "Wgraj logotyp",
+      "untitled": "Logotyp",
+      "none": "Brak logotypów.",
+      "noPreview": "Brak podglądu",
+      "name": "Nazwa",
+      "minWidth": "Minimalna szerokość (pt)",
+      "aspect": "Dopuszczalne rozciągnięcie (%)",
+      "aspectHint": "Jak bardzo może zmienić się proporcja.",
+      "colors": "Pokazane na",
+      "colorsHint": "Pozostaw bez zaznaczenia, by umożliwić dowolne tło."
+    },
+    "language": {
+      "title": "Wersja językowa",
+      "description": "Języki stosowane w dokumentach, zalecane i niezalecane słowa oraz styl wypowiedzi.",
+      "locales": "Języki",
+      "localesHint": "Tagi językowe, np. en lub fr-CA, oddzielone przecinkami.",
+      "preferred": "Zalecane słowa",
+      "banned": "Unikać słów",
+      "term": "Słowo lub fraza",
+      "alternatives": "Zamiast / użyj",
+      "note": "Notatka",
+      "addPreferred": "Dodaj zalecane słowo",
+      "addBanned": "Dodaj słowo do unikania",
+      "nonePreferred": "Brak zalecanych słów.",
+      "noneBanned": "Brak słów do unikania.",
+      "tone": "Styl wypowiedzi"
+    },
+    "templates": {
+      "title": "Szablony",
+      "description": "Szablony PowerPoint i Word, na bazie których powstają nowe dokumenty.",
+      "add": "Prześlij szablon",
+      "untitled": "Szablon",
+      "none": "Brak szablonów.",
+      "name": "Nazwa",
+      "wrongType": "Szablon musi być jednym z następujących typów: {types}."
     }
   }
 }

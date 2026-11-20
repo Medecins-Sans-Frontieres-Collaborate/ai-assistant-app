@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Návrh kanálu",
         "description": "Převádějte zdroje na příspěvky pro různé kanály, každý ve správném stylu, s jasným uvedením zdrojů u každého citátu"
+      },
+      "brandReview": {
+        "label": "Kontrola značky",
+        "description": "Zkontrolujte PDF, Word nebo prezentaci podle manuálu značky: písma, barvy, formulace, loga a tón komunikace"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Nová mapa",
       "newGrants": "Nové zpracování grantů",
       "newFormFill": "Nové vyplnění dokumentu",
-      "newChannelDrafter": "Nový návrh kanálu"
+      "newChannelDrafter": "Nový návrh kanálu",
+      "newBrandReview": "Nová kontrola značky"
     },
     "translation": {
       "chooseLanguage": "Cílový jazyk",
@@ -4838,6 +4843,112 @@
         "altTooLong": "Alternativní text {name} je o {count} delší, než je limit tohoto kanálu ({max}).",
         "unicodeSms": "Znak(y) {characters} nejde v běžné SMS odeslat, proto tato zpráva umožňuje jen 70 znaků místo 160. Vymažte je, abyste získali více místa."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Kontrola značky",
+        "intro": "Vyberte manuál značky a dokument. Kontrola ověří písma, barvy, velikosti textu, formulace i loga a může použít model pro kontrolu tónu a vizuálních pravidel na každé stránce.",
+        "book": "Manuál značky",
+        "booksLoading": "Načítání manuálů značky...",
+        "noBooks": "Zatím nemáte k dispozici žádné manuály značky. Správce je přidá v Admin > Manuály značky.",
+        "document": "Dokument",
+        "chooseDocument": "Zvolte dokument",
+        "replaceDocument": "Zvolte jiný dokument",
+        "documentTypes": "PDF, Word nebo PowerPoint",
+        "uploading": "Nahrávání...",
+        "uploadFailed": "Dokument se nepodařilo nahrát.",
+        "wrongType": "Vyberte PDF, dokument Word nebo prezentaci.",
+        "modelReview": "Nechte model zkontrolovat každou stránku",
+        "modelReviewHint": "Hledá problémy s tónem, vizuálem a logem, které běžná kontrola neodhalí. Používá tokeny pro každou stránku, maximálně 40 stránek.",
+        "start": "Spustit kontrolu"
+      },
+      "loading": "Načítání kontroly...",
+      "booksFailed": "Manuály značky se nepodařilo načíst.",
+      "startFailed": "Kontrolu se nepodařilo spustit.",
+      "readFailed": "Kontrola se nepodařila načíst.",
+      "busy": "„{name}“ se ještě kontroluje. Počkejte na dokončení, nebo ji zastavte před spuštěním další.",
+      "failed": "Kontrola selhala.",
+      "against": "Podle {book}",
+      "progress": {
+        "reading": "Čtení dokumentu...",
+        "checking": "Kontrola textu a log...",
+        "reviewing": "Kontrola stránek...",
+        "pages": "Zkontrolováno {done} z {total} stránek"
+      },
+      "status": {
+        "done": "{errors, plural, one {# chyba} few {# chyby} other {# chyb}}, {warnings, plural, one {# varování} few {# varování} other {# varování}}",
+        "stopped": "Zastaveno: {errors, plural, one {# chyba} few {# chyby} other {# chyb}} zatím",
+        "failed": "Selhalo",
+        "running": "Probíhá"
+      },
+      "stop": "Zastavit",
+      "download": "Stáhnout zprávu",
+      "newReview": "Nová kontrola",
+      "findings": "Nálezy",
+      "noFindings": "Zatím nebylo nic nalezeno.",
+      "noneOfSeverity": "Žádné nálezy tohoto typu.",
+      "byModel": "Nalezeno modelem; ověřte.",
+      "notes": "Poznámky",
+      "pageShort": "s. {page}",
+      "filter": {
+        "label": "Zobrazit",
+        "all": "Vše {count}",
+        "error": "Chyby {count}",
+        "warning": "Varování {count}",
+        "info": "Poznámky {count}"
+      },
+      "severity": {
+        "error": "Chyba",
+        "warning": "Varování",
+        "info": "Poznámka"
+      },
+      "rule": {
+        "font": "Písmo",
+        "color": "Barva",
+        "size": "Velikost textu",
+        "banned-term": "Slovo, kterému se vyhnout",
+        "preferred-term": "Preferované slovo",
+        "language": "Jazyk",
+        "logo-distorted": "Proporce loga",
+        "logo-small": "Velikost loga",
+        "logo-background": "Pozadí loga",
+        "logo-unknown": "Možné logo",
+        "visual": "Vizuál",
+        "tone": "Tón"
+      },
+      "message": {
+        "font": "Použito písmo {found}; písma značky jsou {expected}.",
+        "font-alone": "Použito písmo {found}, které není písmem značky.",
+        "color": "{found} není barva značky; nejbližší je {first}.",
+        "size": "Text o velikosti {found} pt; nejmenší povolená je {first} pt.",
+        "banned-term": "„{found}“ je slovo, kterému se vyhnout; napište místo toho {expected}.",
+        "banned-term-alone": "„{found}“ je slovo, kterému je třeba se vyhnout.",
+        "preferred-term": "Napište „{first}“ místo „{found}“.",
+        "language": "Označeno jako {found}; jazyky značky jsou {expected}.",
+        "logo-distorted": "{name} je vykresleno na {found}; správné proporce jsou {first}.",
+        "logo-small": "{name} má šířku {found} pt; mělo by mít alespoň {first} pt.",
+        "logo-background": "{name} je na {found}; může být zobrazeno na {expected}.",
+        "logo-unknown": "Obrázek, který může být logem: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Brand review: {name}",
+        "meta": "Podle {book}, {date}, {pages, plural, one {# strana} few {# strany} other {# stran}}",
+        "errors": "{count, plural, one {# chyba} few {# chyby} other {# chyb}}",
+        "warnings": "{count, plural, one {# varování} few {# varování} other {# varování}}",
+        "infos": "{count, plural, one {# poznámka} few {# poznámky} other {# poznámek}}",
+        "partial": "Revize nebyla dokončena; tato zpráva obsahuje vše, co bylo nalezeno před jejím ukončením.",
+        "skipped": "Model neprohlédl stránky {pages}; byly zkontrolovány bez něj.",
+        "none": "Nebyly nalezeny žádné odchylky od manuálu značky.",
+        "page": "Strana",
+        "severity": "Závažnost",
+        "rule": "Kontrola",
+        "finding": "Nález",
+        "found": "Nalezeno",
+        "notes": "Poznámky",
+        "fileSuffix": "brand review"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Kolik konverzace je každý modelu posíláno při každém kroku.",
       "analytics": "Doručené reporty: co dorazilo, kdo může otevřít kterou složku a která pole lze zobrazit.",
       "skills": "Znovupoužitelné bloky instrukcí, které asistent použije, když je to v konverzaci potřeba.",
-      "models": "Přiřaďte podpůrné modely a zkontrolujte připravenost pro regionální nasazení."
+      "models": "Přiřaďte podpůrné modely a zkontrolujte připravenost pro regionální nasazení.",
+      "brandBooks": "Barvy, písma, loga, formulace a šablony, podle kterých se dokumenty kontrolují a vytvářejí."
     },
     "openSettings": "Otevřít nastavení",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Rozpočet kontextu",
       "analytics": "Analytika",
       "skills": "Dovednosti",
-      "models": "Modely a připravenost"
+      "models": "Modely a připravenost",
+      "brandBooks": "Brand booky"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Obnovit přiblížení (nyní {percent} %)",
       "failed": "Tento dokument nelze zobrazit. Může být příliš velký nebo chráněný, nebo je převodník zaneprázdněn; zkuste to za chvíli znovu.",
       "zoomLevel": "{percent}%"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Nepojmenovaný brand book",
+    "intro": "Brand book obsahuje barvy, písma, loga, texty a šablony organizace, aby bylo možné dokumenty podle něj kontrolovat a vytvářet. Přístup pro jednotlivé uživatele je stanoven pravidly.",
+    "unavailable": "Brand booky nelze načíst ze úložiště. Zkuste to prosím za chvíli znovu.",
+    "add": "Přidat brand book",
+    "none": "Zatím žádné brand booky.",
+    "paletteSummary": "{count, plural, one {# barva značky} few {# barvy značky} other {# barev značky}}",
+    "summary": "{fonts, plural, one {# písmo} few {# písma} other {# písem}}, {logos, plural, one {# logo} few {# loga} other {# log}}",
+    "open": "Otevřít",
+    "delete": "Smazat",
+    "deleteConfirm": "Smazat \"{name}\" a její soubory? Již zkontrolované dokumenty si ponechají své zprávy.",
+    "deleteConfirmButton": "Smazat brand book",
+    "loading": "Načítání brand booku...",
+    "loadFailed": "Brand book se nepodařilo načíst.",
+    "missing": "Tento brand book neexistuje, nebo jej nemáte oprávnění upravovat.",
+    "back": "Brand booky",
+    "unsaved": "Neuložené změny",
+    "saved": "Uloženo",
+    "save": "Uložit",
+    "conflict": "Jiný administrátor mezitím tento brand book uložil. Načtěte jej znovu pro zobrazení novější verze; vaše změny budou ztraceny.",
+    "reload": "Znovu načíst",
+    "invalid": "Tento brand book zatím nelze uložit: {reason}",
+    "saveFailed": "Brand book nelze uložit.",
+    "uploadFailed": "Soubor se nepodařilo nahrát.",
+    "remove": "Odstranit",
+    "removeNamed": "Odstranit {name}",
+    "basics": {
+      "title": "Brand book",
+      "name": "Název",
+      "description": "Popis"
+    },
+    "guide": {
+      "action": "Vytvořit návrh z brand guide",
+      "reading": "Čtení průvodce...",
+      "hint": "Nasaďte brand guide jako PDF pro doplnění barev, písem a textů, které definuje. Loga a šablony nejsou převzaty; nahrajte je níže.",
+      "source": "Vytvořeno z",
+      "notPdf": "Brand guide musí být ve formátu PDF.",
+      "failed": "Z tohoto průvodce nelze vytvořit návrh.",
+      "applied": "{pages, plural, one {Vytvořeno podle návodu o # stránce.} other {Vytvořeno podle návodu o # stránkách.}}",
+      "measuredFonts": "Použitá písma:",
+      "measuredColors": "Použité barvy:",
+      "check": "Před uložením zkontrolujte každou hodnotu dle průvodce.",
+      "undo": "Vrátit návrh zpět"
+    },
+    "palette": {
+      "title": "Barvy",
+      "description": "Barvy značky. Barva v dokumentu se počítá jako jedna z nich, pokud spadá do tolerance dané barvy.",
+      "add": "Přidat barvu",
+      "newName": "Barva {number}",
+      "none": "Zatím žádné barvy značky.",
+      "hex": "Hex",
+      "pick": "Vyberte barvu pro {name}",
+      "name": "Název",
+      "tolerance": "Tolerance",
+      "toleranceHint": "Barevný rozdíl (Delta E). 2 až 3 je sotva viditelný.",
+      "roles": "Použito pro",
+      "neutrals": "Neutrální barvy",
+      "neutralsHint": "Barvy, které může použít jakýkoli dokument, aniž by šlo o značkové barvy, oddělené čárkami."
+    },
+    "colorRole": {
+      "primary": "Primární",
+      "secondary": "Sekundární",
+      "accent": "Akcent",
+      "text": "Text",
+      "background": "Pozadí",
+      "neutral": "Neutrální"
+    },
+    "typography": {
+      "title": "Písmo",
+      "description": "Písma podle role a povolené alternativy, například systémové písmo pro sdílené dokumenty.",
+      "add": "Přidat písmo",
+      "none": "Zatím žádná písma.",
+      "role": "Role",
+      "family": "Písmo",
+      "substitutes": "Povolené alternativy",
+      "minSize": "Nejmenší text (pt)",
+      "minSizeHint": "0 nenastavuje žádné minimum."
+    },
+    "fontRole": {
+      "heading": "Nadpisy",
+      "body": "Text odstavce",
+      "accent": "Akcent"
+    },
+    "logos": {
+      "title": "Loga",
+      "description": "Soubory log, které mají dokumenty používat, jako PNG, SVG nebo JPEG.",
+      "add": "Nahrát logo",
+      "untitled": "Logo",
+      "none": "Zatím žádná loga.",
+      "noPreview": "Žádný náhled",
+      "name": "Název",
+      "minWidth": "Nejmenší šířka (pt)",
+      "aspect": "Povolené roztažení (%)",
+      "aspectHint": "Jak moc se mohou proporce lišit.",
+      "colors": "Zobrazeno na",
+      "colorsHint": "Nevyberte nic pro povolení jakéhokoli pozadí."
+    },
+    "language": {
+      "title": "Formulace",
+      "description": "Jazyky, ve kterých jsou dokumenty psány, slova k použití a vyvarování, a styl vyjadřování.",
+      "locales": "Jazyky",
+      "localesHint": "Jazykové značky jako en nebo fr-CA, oddělené čárkami.",
+      "preferred": "Doporučená slova",
+      "banned": "Zakázaná slova",
+      "term": "Slovo nebo fráze",
+      "alternatives": "Místo toho / pište místo",
+      "note": "Poznámka",
+      "addPreferred": "Přidat doporučené slovo",
+      "addBanned": "Přidat zakázané slovo",
+      "nonePreferred": "Zatím žádná doporučená slova.",
+      "noneBanned": "Zatím žádná slova k vyvarování.",
+      "tone": "Styl vyjadřování"
+    },
+    "templates": {
+      "title": "Šablony",
+      "description": "Šablony PowerPoint a Word, ze kterých se tvoří nové dokumenty.",
+      "add": "Nahrát šablonu",
+      "untitled": "Šablona",
+      "none": "Zatím žádné šablony.",
+      "name": "Název",
+      "wrongType": "Šablona musí být jeden z těchto typů: {types}."
     }
   }
 }

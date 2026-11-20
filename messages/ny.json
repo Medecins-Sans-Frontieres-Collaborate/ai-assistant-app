@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Wolemba zolemba za njira",
         "description": "Sinthani magwero kukhala zolemba za njira zosiyanasiyana, iliyonse ndi mawu ake oyenera, ndi mawu aliwonse okonzedwa kuchokera kumene anachokera"
+      },
+      "brandReview": {
+        "label": "Kuwunikanso kwazinthu za mtundu",
+        "description": "Onani PDF, chikalata cha Word kapena chiwonetsero molingana ndi buku la mtundu: zilembo, mitundu, mawu, ma logo komanso momwe amawerengera"
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Mapu atsopano",
       "newGrants": "Kukonza ma grant atsopano",
       "newFormFill": "Kulowetsa chikalata chatsopano",
-      "newChannelDrafter": "Zolemba zatsopano za njira"
+      "newChannelDrafter": "Zolemba zatsopano za njira",
+      "newBrandReview": "Kuwunikanso kwatsopano kwazinthu za mtundu"
     },
     "translation": {
       "chooseLanguage": "Chilankhulo chofuna kutanthauzira",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Alt text ya {name} ili {count} kupitilira malire a {max} a njira iyi.",
         "unicodeSms": "{characters} sangatumizidwe mu mauthenga wamba, choncho uthengawu uli ndi malo a zilembo 70, osati 160. Chotsani izi kuti mukwanitse zilembo zambiri."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Kuwunikanso kwazinthu za mtundu",
+        "intro": "Sankhani buku la mtundu ndi chikalata. Kuwunikiraku kumayang'ana zilembo, mitundu, kukula kwa manambala, mawu ndi ma logo, ndipo modeli imatha kuyang'ana tsamba lililonse kuti muwone mmene zalembedwera komanso malamulo owoneka.",
+        "book": "Buku la mtundu",
+        "booksLoading": "Kukutola mabuku a mtundu...",
+        "noBooks": "Palibe mabuku a mtundu omwe akupezeka kwa inu panobe. Woyang'anira amawonjezera mu Admin > Brand books.",
+        "document": "Chikalata",
+        "chooseDocument": "Sankhani chikalata",
+        "replaceDocument": "Sankhani chikalata china",
+        "documentTypes": "PDF, Word kapena PowerPoint",
+        "uploading": "Kukweza...",
+        "uploadFailed": "Chikalata sichinathe kukwezedwa.",
+        "wrongType": "Sankhani PDF, chikalata cha Word kapena chiwonetsero.",
+        "modelReview": "Lolani modeli iwonere tsamba lililonse",
+        "modelReviewHint": "Imapeza mavuto amomwe zalembedwera, mawonekedwe ndi ma logo omwe njira zina sizingazindikire. Imagwiritsa ntchito matokens pa tsamba lililonse, mpaka masamba 40.",
+        "start": "Yambani kuwunika"
+      },
+      "loading": "Kukutola kuwunika...",
+      "booksFailed": "Mabuku a mtundu alephera kutoleredwa.",
+      "startFailed": "Kuwunika sikunathe kuyambika.",
+      "readFailed": "Kuwunika sikunathe kuwerengedwa.",
+      "busy": "\"{name}\" ikadali mukuwunikidwa. Dikirani zithe, kapena siyani, musanayambe ina.",
+      "failed": "Kuwunika kwalephera.",
+      "against": "Motsutsana ndi {book}",
+      "progress": {
+        "reading": "Kuwaŵerenga chikalata...",
+        "checking": "Kuyang'ana mawu ndi ma logo...",
+        "reviewing": "Kuwunika masamba...",
+        "pages": "Masamba {done} mwa {total} awonetsedwa"
+      },
+      "status": {
+        "done": "{errors, plural, one {# cholakwika} other {# zolakwika}}, {warnings, plural, one {# chenjezo} other {# machenjezo}}",
+        "stopped": "Yayimitsidwa: {errors, plural, one {# cholakwika} other {# zolakwika}} mpaka pano",
+        "failed": "Zalephera",
+        "running": "Ilikupitirira"
+      },
+      "stop": "Imitsa",
+      "download": "Tsitsani lipoti",
+      "newReview": "Kuwunika kwatsopano",
+      "findings": "Zomwe zapezeka",
+      "noFindings": "Palibe chomwe chapezeka pano.",
+      "noneOfSeverity": "Palibe zomwe zapezeka za mtundu uwu.",
+      "byModel": "Zapezedwa ndi modeli; chonde yang'anani.",
+      "notes": "Zolemba",
+      "pageShort": "ts. {page}",
+      "filter": {
+        "label": "Onetsani",
+        "all": "Zonse {count}",
+        "error": "Zolakwika {count}",
+        "warning": "Machenjezo {count}",
+        "info": "Zolemba {count}"
+      },
+      "severity": {
+        "error": "Cholakwika",
+        "warning": "Chenjerani",
+        "info": "Zolemba"
+      },
+      "rule": {
+        "font": "Kalembedwe ka zilembo",
+        "color": "Mtundu",
+        "size": "Kukula kwa malemba",
+        "banned-term": "Mawu oti apewe",
+        "preferred-term": "Mawu okondedwa",
+        "language": "Chiyankhulo",
+        "logo-distorted": "Makhalidwe a logo",
+        "logo-small": "Kukula kwa logo",
+        "logo-background": "Chimene chiri kumbuyo kwa logo",
+        "logo-unknown": "Logo yomwe ikhoza kukhala ilipo",
+        "visual": "Zowoneka",
+        "tone": "Kamvekedwe"
+      },
+      "message": {
+        "font": "Yakhazikitsidwa mu {found}; zilembo za brand ndi {expected}.",
+        "font-alone": "Yakhazikitsidwa mu {found}, yomwe si zilembo za brand.",
+        "color": "{found} si mtundu wa brand; pafupi ndi {first}.",
+        "size": "Malemba ali pa {found} pt; ochepa kwambiri oyenera ndi {first} pt.",
+        "banned-term": "\"{found}\" ndi mawu oti apewe; lembani {expected} m'malo mwake.",
+        "banned-term-alone": "\"{found}\" ndi mawu oti apewe.",
+        "preferred-term": "Lembani \"{first}\" m'malo mwa \"{found}\".",
+        "language": "Yadzindikiritsidwa monga {found}; zilankhulo za brand ndi {expected}.",
+        "logo-distorted": "{name} yakhazikitsidwa pa {found}; makhalidwe ake ndi {first}.",
+        "logo-small": "{name} ili ndi m'lifupi mwa {found} pt; iyenera kukhala osachepera {first} pt.",
+        "logo-background": "{name} ili pa {found}; ikhoza kuwonetsedwa pa {expected}.",
+        "logo-unknown": "Chithunzi chomwe chingakhale logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Kuwunikanso kwa brand: {name}",
+        "meta": "Motsutsana ndi {book}, {date}, {pages, plural, one {tsamba #} other {masamba #}}",
+        "errors": "{count, plural, one {cholakwika #} other {zolakwika #}}",
+        "warnings": "{count, plural, one {chenjezo #} other {zichenjezo #}}",
+        "infos": "{count, plural, one {nkhani #} other {zolemba #}}",
+        "partial": "Kuwunikiraku sikunamalize; lipotili lili ndi zomwe zapangidwa musanafike pa mapeto.",
+        "skipped": "Model sinayang'ane masamba {pages}; anawunikiridwa popanda model.",
+        "none": "Palibe chomwe chinapezeka chosiyana ndi buku la brand.",
+        "page": "Tsamba",
+        "severity": "Kulemera kwa vuto",
+        "rule": "Yang'anani",
+        "finding": "Chomwe chapezeka",
+        "found": "Chatsimikizika",
+        "notes": "Zolemba",
+        "fileSuffix": "kuwunika kwa brand"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Kuchuluka kwa mbiri ya zokambirana yomwe imatumidwa ku mtundu uliwonse pa nthawi iliyonse.",
       "analytics": "Malingaliro a ma report: zomwe zabwera, amene angatsegule galimoto iliyonse, ndi magawo omwe angasonyezedwe.",
       "skills": "Ma blokosi a malangizo omwe wothandiza amagwiritsa ntchito pamene akuyankhula ndi munthu akafunikira.",
-      "models": "Perekani zitsanzo zakumbuyo ndi kuyang'ana kukonzeka kwa dera."
+      "models": "Perekani zitsanzo zakumbuyo ndi kuyang'ana kukonzeka kwa dera.",
+      "brandBooks": "Mitundu, zitsanzo za zilembo, ma logo, mawu ndi matemplate omwe amafananizidwa ndi kupanga zikalata."
     },
     "openSettings": "Tsegulani makonda",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Bajeti ya mbiri",
       "analytics": "Kuwunika deta",
       "skills": "Ziluso",
-      "models": "Zitsanzo ndi kukonzeka"
+      "models": "Zitsanzo ndi kukonzeka",
+      "brandBooks": "Mabuku a mtundu wa bungwe"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Bwezeretsani kukula (tsopano {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Chikalatachi sichinathe kuwonetsedwa. Chingakhale chachikulu kwambiri, chotetezedwa, kapena chosinthira chili chotanganidwa; yesaninso posachedwa."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Bukhu la mtundu lopanda dzina",
+    "intro": "Bukhu la mtundu wa bungwe limasunga mitundu, zitsanzo za zilembo, ma logo, mawu ndi matemplate a bungwe kuti zikalata ziziyesedwa ndikupangidwa potsatira bukhu ili. Anthu owalola kugwiritsa ntchito bukhu lililonse amakhazikitsidwa ndi malamulo a mwayi wawo.",
+    "unavailable": "Mabuku a mtundu wa bungwe alephera kutsegulidwa kuchokera posungira. Yesaninso pambuyo pake.",
+    "add": "Onjezani bukhu la mtundu wa bungwe",
+    "none": "Palibe mabuku a mtundu wa bungwe pano.",
+    "paletteSummary": "{count, plural, one {# mtundu wa bungwe} other {# mitundu ya bungwe}}",
+    "summary": "{fonts, plural, one {# fonti} other {# fonti}}, {logos, plural, one {# logo} other {# ma logo}}",
+    "open": "Tsegulani",
+    "delete": "Chotsani",
+    "deleteConfirm": "Chotsani \"{name}\" ndi mafayilo ake? Zikalata zomwe zayendetsedwa kale zimasunga malipoti awo.",
+    "deleteConfirmButton": "Chotsani bukhu la mtundu wa bungwe",
+    "loading": "Kutsegula bukhu la mtundu wa bungwe...",
+    "loadFailed": "Bukhu la mtundu wa bungwe silinatsegulidwe.",
+    "missing": "Bukhu la mtundu uwu kulibe, kapena simungakonzere.",
+    "back": "Mabuku a mtundu wa bungwe",
+    "unsaved": "Zosintha zosasungidwa",
+    "saved": "Zasungidwa",
+    "save": "Sungani",
+    "conflict": "Wina wa oyang'anira wasunga bukhu ili mutatsegula. Tsegulaninso kuti muone zomwe asintha; zosintha zanu zidzachotsedwa.",
+    "reload": "Tsegulaninso",
+    "invalid": "Bukhu la mtundu wa bungwe silingasungidwe pano: {reason}",
+    "saveFailed": "Bukhu la mtundu wa bungwe silinasungidwe.",
+    "uploadFailed": "Fayilo yalephera kukweza.",
+    "remove": "Chotsani",
+    "removeNamed": "Chotsani {name}",
+    "basics": {
+      "title": "Bukhu la mtundu wa bungwe",
+      "name": "Dzina",
+      "description": "Mafotokozedwe"
+    },
+    "guide": {
+      "action": "Pangani kuchokera pa bukhu la malangizo a mtundu",
+      "reading": "Kuwerenga malangizo...",
+      "hint": "Kwezani bukhu la malangizo a mtundu ngati PDF kuti mukwaniritse mitundu, zilembo ndi mawu omwe akufotokozedwa. Ma logo ndi matemplate sizimachotsedwa mmenemo; kwezani apa pansipa.",
+      "source": "Zinatengedwa kuchokera",
+      "notPdf": "Bukhu la malangizo liyenera kukhala PDF.",
+      "failed": "Sikutha kupanga kuchokera pa bukhu ili la malangizo.",
+      "applied": "{pages, plural, one {Yalembedwa kuchokera mu kalozera wa tsamba limodzi.} other {Yalembedwa kuchokera mu kalozera wa matsamba #.}}",
+      "measuredFonts": "Fonti zomwe zili m'bukhu:",
+      "measuredColors": "Mitundu yomwe imagwiritsidwa ntchito m'bukhu:",
+      "check": "Onetsetsani chilichonse motsatana ndi bukhu la malangizo musanasunge.",
+      "undo": "Bwezeretsani zomwe zapangidwa"
+    },
+    "palette": {
+      "title": "Mitundu",
+      "description": "Mitundu ya mtundu wa bungwe. Mtundu uliwonse m'chikalata amawerengedwa ngati mmodzi wa mitundu iyi ngati uli mkati mwa kusiyana kwa mtunduwo.",
+      "add": "Onjezani mtundu",
+      "newName": "Mtundu {number}",
+      "none": "Palibe mitundu ya mtundu wa bungwe pano.",
+      "hex": "Hex",
+      "pick": "Sankhani mtundu wa {name}",
+      "name": "Dzina",
+      "tolerance": "Kulekerera",
+      "toleranceHint": "Kusiyana kwa mtundu (Delta E). 2 mpaka 3 sikuwoneka bwino.",
+      "roles": "Zogwiritsidwa ntchito",
+      "neutrals": "Mitundu yopanda kukondera",
+      "neutralsHint": "Mitundu yomwe chikalata chilichonse chingagwiritse ntchito popanda kukhala mtundu wa chizindikiro, kulekanitsidwa ndi mawu okoma."
+    },
+    "colorRole": {
+      "primary": "Chachikulu",
+      "secondary": "Chachiwiri",
+      "accent": "Kuwonetsa",
+      "text": "Mawu",
+      "background": "Pambuyo",
+      "neutral": "Opanda kukondera"
+    },
+    "typography": {
+      "title": "Mtundu",
+      "description": "Zilembo zomwe zimagwiritsidwa ntchito molingana ndi ntchito, ndi zilembo zomwe zimaloledwa m'malo mwake, monga zilembo za makina a chikalata chimenechi chaperekedwa kunja.",
+      "add": "Onjezani zilembo",
+      "none": "Palibe zilembo pano.",
+      "role": "Ntchito",
+      "family": "Lemba",
+      "substitutes": "Zolowa m'malo zololeka",
+      "minSize": "Mawu ang'ono kwambiri (pt)",
+      "minSizeHint": "0 sichikuyika osachepera."
+    },
+    "fontRole": {
+      "heading": "Mitu",
+      "body": "Mawu akumutu",
+      "accent": "Kuwonetsa"
+    },
+    "logos": {
+      "title": "Zizindikiro",
+      "description": "Zikalata zoyenera kugwiritsa ntchito zizindikiro, monga PNG, SVG kapena JPEG.",
+      "add": "Kwezani chizindikiro",
+      "untitled": "Chizindikiro",
+      "none": "Palibe zizindikiro pano.",
+      "noPreview": "Palibe chithunzithunzi",
+      "name": "Dzina",
+      "minWidth": "M'lifupi mwachichepere (pt)",
+      "aspect": "Kupanikizika kovomerezeka (%)",
+      "aspectHint": "Mmene makhadi ake angapezekere osiyana.",
+      "colors": "Zikuonetsedwa pa",
+      "colorsHint": "Siyani zonse zisanasankhidwe kuti chilole chikope chilichonse."
+    },
+    "language": {
+      "title": "Mawu",
+      "description": "Zilankhulo zomwe chikalata chimalembedwa, mawu ogwiritsa ntchito ndi opewa, ndi mmene cholankhula chimakhalira.",
+      "locales": "Zilankhulo",
+      "localesHint": "Ma tag a chinenero monga en kapena fr-CA, kulekanitsidwa ndi mawu okoma.",
+      "preferred": "Mawu ogwiritsidwa ntchito",
+      "banned": "Mawu opewa",
+      "term": "Mawu kapena mawu apadera",
+      "alternatives": "M'malo mwa / lembani m'malo mwake",
+      "note": "Zindikirani",
+      "addPreferred": "Onjezani mawu ogwiritsidwa ntchito",
+      "addBanned": "Onjezani mawu opewa",
+      "nonePreferred": "Palibe mawu ogwiritsidwa ntchito pano.",
+      "noneBanned": "Palibe mawu opewa pano.",
+      "tone": "Mawu"
+    },
+    "templates": {
+      "title": "Zitsanzo",
+      "description": "Zitsanzo za PowerPoint ndi Word zomwe zikalata zatsopano zimamangidwa kuchokera.",
+      "add": "Kweza chitsanzo",
+      "untitled": "Chitsanzo",
+      "none": "Palibe zitsanzo pano.",
+      "name": "Dzina",
+      "wrongType": "Chitsanzo chiyenera kukhala chimodzi mwa {types}."
     }
   }
 }

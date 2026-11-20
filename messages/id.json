@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Drafter kanal",
         "description": "Ubah sumber menjadi postingan untuk beberapa kanal, masing-masing dengan gaya bahasa yang tepat, dan setiap kutipan ditelusuri ke sumbernya"
+      },
+      "brandReview": {
+        "label": "Tinjauan merek",
+        "description": "Periksa PDF, dokumen Word, atau presentasi sesuai buku merek: font, warna, kata-kata, logo, dan nada"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Peta baru",
       "newGrants": "Pemrosesan hibah baru",
       "newFormFill": "Isi dokumen baru",
-      "newChannelDrafter": "Draf kanal baru"
+      "newChannelDrafter": "Draf kanal baru",
+      "newBrandReview": "Tinjauan merek baru"
     },
     "translation": {
       "chooseLanguage": "Bahasa target",
@@ -4838,6 +4843,112 @@
         "altTooLong": "Teks alt untuk {name} melebihi {count} dari batas saluran ini yaitu {max}.",
         "unicodeSms": "{characters} tidak dapat dikirim dalam SMS standar, sehingga pesan ini hanya memuat 70 karakter, bukan 160. Ganti karakter tersebut untuk mendapatkan ruang kembali."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Tinjauan merek",
+        "intro": "Pilih buku merek dan dokumen. Tinjauan akan memeriksa font, warna, ukuran teks, kata-kata, serta logo, dan model dapat menilai halaman untuk nada dan aturan visual.",
+        "book": "Buku merek",
+        "booksLoading": "Memuat buku merek...",
+        "noBooks": "Buku merek belum tersedia untuk Anda. Administrator menambahkannya di Admin > Buku merek.",
+        "document": "Dokumen",
+        "chooseDocument": "Pilih dokumen",
+        "replaceDocument": "Pilih dokumen lain",
+        "documentTypes": "PDF, Word, atau PowerPoint",
+        "uploading": "Mengunggah...",
+        "uploadFailed": "Dokumen tidak dapat diunggah.",
+        "wrongType": "Pilih PDF, dokumen Word, atau presentasi.",
+        "modelReview": "Minta model menilai setiap halaman",
+        "modelReviewHint": "Mendeteksi masalah nada, visual, dan logo yang tidak terdeteksi oleh pemeriksaan biasa. Menggunakan token untuk setiap halaman, hingga 40 halaman.",
+        "start": "Mulai tinjauan"
+      },
+      "loading": "Memuat tinjauan...",
+      "booksFailed": "Buku merek tidak dapat dimuat.",
+      "startFailed": "Tinjauan tidak dapat dimulai.",
+      "readFailed": "Tinjauan tidak dapat dibaca.",
+      "busy": "\"{name}\" masih sedang ditinjau. Tunggu hingga selesai, atau hentikan terlebih dahulu, sebelum memulai yang lain.",
+      "failed": "Tinjauan gagal.",
+      "against": "Terhadap {book}",
+      "progress": {
+        "reading": "Membaca dokumen...",
+        "checking": "Memeriksa teks dan logo...",
+        "reviewing": "Meninjau halaman...",
+        "pages": "Telah ditinjau {done} dari {total} halaman"
+      },
+      "status": {
+        "done": "{errors, plural, one {# kesalahan} other {# kesalahan}}, {warnings, plural, one {# peringatan} other {# peringatan}}",
+        "stopped": "Dihentikan: {errors, plural, one {# kesalahan} other {# kesalahan}} sejauh ini",
+        "failed": "Gagal",
+        "running": "Sedang berjalan"
+      },
+      "stop": "Hentikan",
+      "download": "Unduh laporan",
+      "newReview": "Tinjauan baru",
+      "findings": "Temuan",
+      "noFindings": "Belum ditemukan apa pun.",
+      "noneOfSeverity": "Tidak ada temuan jenis ini.",
+      "byModel": "Ditemukan oleh model; harap periksa.",
+      "notes": "Catatan",
+      "pageShort": "hlm. {page}",
+      "filter": {
+        "label": "Tampilkan",
+        "all": "Semua {count}",
+        "error": "Kesalahan {count}",
+        "warning": "Peringatan {count}",
+        "info": "Catatan {count}"
+      },
+      "severity": {
+        "error": "Kesalahan",
+        "warning": "Peringatan",
+        "info": "Catatan"
+      },
+      "rule": {
+        "font": "Jenis huruf",
+        "color": "Warna",
+        "size": "Ukuran teks",
+        "banned-term": "Kata yang harus dihindari",
+        "preferred-term": "Kata yang disarankan",
+        "language": "Bahasa",
+        "logo-distorted": "Proporsi logo",
+        "logo-small": "Ukuran logo",
+        "logo-background": "Latar belakang logo",
+        "logo-unknown": "Kemungkinan logo",
+        "visual": "Visual",
+        "tone": "Nada"
+      },
+      "message": {
+        "font": "Menggunakan {found}; jenis huruf merek adalah {expected}.",
+        "font-alone": "Menggunakan {found}, yang bukan jenis huruf merek.",
+        "color": "{found} bukan warna merek; yang terdekat adalah {first}.",
+        "size": "Teks pada {found} pt; yang terkecil yang diperbolehkan adalah {first} pt.",
+        "banned-term": "\"{found}\" adalah kata yang harus dihindari; gunakan {expected} sebagai gantinya.",
+        "banned-term-alone": "\"{found}\" adalah kata yang harus dihindari.",
+        "preferred-term": "Gunakan \"{first}\" daripada \"{found}\".",
+        "language": "Ditandai sebagai {found}; bahasa merek adalah {expected}.",
+        "logo-distorted": "{name} digambar pada {found}; proporsi aslinya adalah {first}.",
+        "logo-small": "{name} berukuran {found} pt; seharusnya setidaknya {first} pt.",
+        "logo-background": "{name} berada di atas {found}; boleh ditampilkan di {expected}.",
+        "logo-unknown": "Gambar yang mungkin merupakan logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Review merek: {name}",
+        "meta": "Berdasarkan {book}, {date}, {pages, plural, one {# halaman} other {# halaman}}",
+        "errors": "{count, plural, one {# kesalahan} other {# kesalahan}}",
+        "warnings": "{count, plural, one {# peringatan} other {# peringatan}}",
+        "infos": "{count, plural, one {# catatan} other {# catatan}}",
+        "partial": "Review tidak selesai; laporan ini berisi temuan sebelum proses berakhir.",
+        "skipped": "Model tidak meninjau halaman {pages}; halaman tersebut diperiksa tanpa model.",
+        "none": "Tidak ditemukan pelanggaran terhadap buku merek.",
+        "page": "Halaman",
+        "severity": "Tingkat keparahan",
+        "rule": "Pemeriksaan",
+        "finding": "Temuan",
+        "found": "Ditemukan",
+        "notes": "Catatan",
+        "fileSuffix": "review merek"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Jumlah percakapan yang dikirim ke setiap model di setiap giliran.",
       "analytics": "Laporan yang dikirim: apa saja yang diterima, siapa yang dapat membuka setiap folder, dan bidang mana yang dapat ditampilkan.",
       "skills": "Blok instruksi yang dapat digunakan kembali, diterapkan oleh asisten saat percakapan membutuhkannya.",
-      "models": "Tetapkan model latar belakang dan periksa kesiapan penyebaran regional."
+      "models": "Tetapkan model latar belakang dan periksa kesiapan penyebaran regional.",
+      "brandBooks": "Warna, jenis huruf, logo, kata-kata, dan template yang menjadi standar pemeriksaan dan pengembangan dokumen."
     },
     "openSettings": "Buka pengaturan",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Anggaran konteks",
       "analytics": "Analitik",
       "skills": "Keterampilan",
-      "models": "Model dan kesiapan"
+      "models": "Model dan kesiapan",
+      "brandBooks": "Buku merek"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Atur ulang zoom (saat ini {percent}%)",
       "failed": "Dokumen ini tidak dapat ditampilkan. Dokumen mungkin terlalu besar atau dilindungi, atau konverter sedang sibuk; coba lagi sebentar lagi.",
       "zoomLevel": "{percent}%"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Buku merek tanpa judul",
+    "intro": "Buku merek memuat warna, jenis huruf, logo, kata-kata, dan template organisasi agar dokumen dapat diperiksa dan dikembangkan dari sana. Pengguna masing-masing buku diatur dengan aturan aksesnya.",
+    "unavailable": "Buku merek tidak dapat dimuat dari penyimpanan. Coba lagi sebentar.",
+    "add": "Tambah buku merek",
+    "none": "Belum ada buku merek.",
+    "paletteSummary": "{count, plural, one {# warna merek} other {# warna merek}}",
+    "summary": "{fonts, plural, one {# jenis huruf} other {# jenis huruf}}, {logos, plural, one {# logo} other {# logo}}",
+    "open": "Buka",
+    "delete": "Hapus",
+    "deleteConfirm": "Hapus \"{name}\" beserta berkasnya? Dokumen yang sudah diperiksa tetap menyimpan laporan mereka.",
+    "deleteConfirmButton": "Hapus buku merek",
+    "loading": "Memuat buku merek...",
+    "loadFailed": "Buku merek tidak dapat dimuat.",
+    "missing": "Buku merek ini tidak ada, atau Anda tidak dapat mengeditnya.",
+    "back": "Buku merek",
+    "unsaved": "Perubahan belum disimpan",
+    "saved": "Tersimpan",
+    "save": "Simpan",
+    "conflict": "Admin lain telah menyimpan buku merek ini setelah Anda membukanya. Muat ulang untuk melihat versi mereka; perubahan Anda akan hilang.",
+    "reload": "Muat ulang",
+    "invalid": "Buku merek ini belum dapat disimpan: {reason}",
+    "saveFailed": "Buku merek tidak dapat disimpan.",
+    "uploadFailed": "Berkas tidak dapat diunggah.",
+    "remove": "Hapus",
+    "removeNamed": "Hapus {name}",
+    "basics": {
+      "title": "Buku merek",
+      "name": "Nama",
+      "description": "Deskripsi"
+    },
+    "guide": {
+      "action": "Draft dari panduan merek",
+      "reading": "Membaca panduan...",
+      "hint": "Unggah panduan merek dalam bentuk PDF untuk mengisi warna, jenis huruf, dan kata-kata yang didefinisikan. Logo dan template tidak diambil dari panduan; unggah bagian tersebut di bawah.",
+      "source": "Draft dari",
+      "notPdf": "Panduan merek harus berupa PDF.",
+      "failed": "Draft tidak dapat dibuat dari panduan ini.",
+      "applied": "{pages, plural, one {Dibuat dari panduan dengan # halaman.} other {Dibuat dari panduan dengan # halaman.}}",
+      "measuredFonts": "Jenis huruf yang digunakan dalam teks:",
+      "measuredColors": "Warna yang digunakan teks:",
+      "check": "Periksa setiap nilai dengan panduan sebelum menyimpan.",
+      "undo": "Batalkan draft"
+    },
+    "palette": {
+      "title": "Warna",
+      "description": "Warna merek. Suatu warna dalam dokumen dianggap sebagai salah satu warna ini jika masih dalam toleransinya.",
+      "add": "Tambah warna",
+      "newName": "Warna {number}",
+      "none": "Belum ada warna merek.",
+      "hex": "Hex",
+      "pick": "Pilih warna untuk {name}",
+      "name": "Nama",
+      "tolerance": "Toleransi",
+      "toleranceHint": "Perbedaan warna (Delta E). 2 hingga 3 hampir tidak terlihat.",
+      "roles": "Digunakan untuk",
+      "neutrals": "Warna netral",
+      "neutralsHint": "Warna yang dapat digunakan dokumen tanpa menjadi warna merek, dipisahkan dengan koma."
+    },
+    "colorRole": {
+      "primary": "Utama",
+      "secondary": "Sekunder",
+      "accent": "Aksen",
+      "text": "Teks",
+      "background": "Latar belakang",
+      "neutral": "Netral"
+    },
+    "typography": {
+      "title": "Jenis",
+      "description": "Jenis huruf berdasarkan peran, serta font yang diperbolehkan sebagai penggantinya, seperti font sistem untuk dokumen yang dibagikan ke luar.",
+      "add": "Tambah jenis huruf",
+      "none": "Belum ada jenis huruf.",
+      "role": "Peran",
+      "family": "Jenis huruf",
+      "substitutes": "Pengganti yang diperbolehkan",
+      "minSize": "Teks terkecil (pt)",
+      "minSizeHint": "0 tidak menetapkan batas minimum."
+    },
+    "fontRole": {
+      "heading": "Judul",
+      "body": "Teks isi",
+      "accent": "Aksen"
+    },
+    "logos": {
+      "title": "Logo",
+      "description": "File logo yang harus digunakan dokumen, dalam format PNG, SVG, atau JPEG.",
+      "add": "Unggah logo",
+      "untitled": "Logo",
+      "none": "Belum ada logo.",
+      "noPreview": "Tidak ada pratinjau",
+      "name": "Nama",
+      "minWidth": "Lebar terkecil (pt)",
+      "aspect": "Peregangan yang diperbolehkan (%)",
+      "aspectHint": "Seberapa jauh proporsinya dapat berbeda.",
+      "colors": "Ditampilkan pada",
+      "colorsHint": "Biarkan semua tidak dicentang untuk membolehkan latar belakang apa saja."
+    },
+    "language": {
+      "title": "Penulisan",
+      "description": "Bahasa yang digunakan dokumen, kata-kata yang digunakan dan dihindari, serta suara.",
+      "locales": "Bahasa",
+      "localesHint": "Tag bahasa seperti en atau fr-CA, dipisahkan dengan koma.",
+      "preferred": "Kata yang digunakan",
+      "banned": "Kata yang dihindari",
+      "term": "Kata atau frasa",
+      "alternatives": "Gantikan / tulis sebagai",
+      "note": "Catatan",
+      "addPreferred": "Tambah kata yang digunakan",
+      "addBanned": "Tambah kata yang dihindari",
+      "nonePreferred": "Belum ada kata yang digunakan.",
+      "noneBanned": "Belum ada kata yang dihindari.",
+      "tone": "Suara"
+    },
+    "templates": {
+      "title": "Template",
+      "description": "Template PowerPoint dan Word yang digunakan untuk membuat dokumen baru.",
+      "add": "Unggah template",
+      "untitled": "Template",
+      "none": "Belum ada template.",
+      "name": "Nama",
+      "wrongType": "Template harus salah satu dari {types}."
     }
   }
 }

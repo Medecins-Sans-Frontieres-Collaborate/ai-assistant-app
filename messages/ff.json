@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Minndol lenyol",
         "description": "Yiy e dowgal e lenyol tatee, ko feewi fitina, e laawol so wodori to mo."
+      },
+      "brandReview": {
+        "label": "Jokkondiral e brand",
+        "description": "Yeeso PDF, Word walla prezentasyon e brand book: fontaji, rangol, ngom, logoji e ton"
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Karte hesere",
       "newGrants": "Cuɓoraaɗe kurkure hesere",
       "newFormFill": "Holti dokumint mum",
-      "newChannelDrafter": "Minndol lenyol kesɗit"
+      "newChannelDrafter": "Minndol lenyol kesɗit",
+      "newBrandReview": "Jokkondiral brand fof"
     },
     "translation": {
       "chooseLanguage": "Ɓernde hubitere",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Alt ngol {name} gollii {count} gollin e doggol kanaal ngal ({max}).",
         "unicodeSms": "{characters} waawataa anndude e SMS normal, tee jooni njanngo ngal waawi 70 herere tan, hane 160. Ginnu ɓe ngam terde doggol ngal."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Jokkondiral e brand",
+        "intro": "Suɓo brand book e dokument. Jokkondiral fotti fontaji, rangol, ngol, ngom, logoji e model mo waɗi yeeso konngol e rerol e ton e fotaani.",
+        "book": "Brand book",
+        "booksLoading": "Brand bookji ina fottude...",
+        "noBooks": "Brand bookji goongol e maɓɓe wano. Admin mo addi e Admin > Brand books.",
+        "document": "Dokument",
+        "chooseDocument": "Suɓo dokument",
+        "replaceDocument": "Suɓo dokument fof",
+        "documentTypes": "PDF, Word walla PowerPoint",
+        "uploading": "Ina fottude...",
+        "uploadFailed": "Dokument waawa fottude.",
+        "wrongType": "Suɓo PDF, Word dokument walla prezentasyon.",
+        "modelReview": "Model mo yeesi dow konngol",
+        "modelReviewHint": "Fotti konngol, rerol e logo doo doctor waawa yeesi. Ina jibbi tokenji konngol, 40 konngol feewi.",
+        "start": "Fuɗɗi jokkondiral"
+      },
+      "loading": "Ina fottude jokkondiral...",
+      "booksFailed": "Brand bookji waawi fottude.",
+      "startFailed": "Jokkondiral waawi fuɗɗude.",
+      "readFailed": "Jokkondiral waawi leesde.",
+      "busy": "\"{name}\" ina jokkondir. Hakkil eɗɗa, walla rufi, so fuɗɗi jokkondiral fof.",
+      "failed": "Jokkondiral doo wonaa.",
+      "against": "E {book}",
+      "progress": {
+        "reading": "Ina leesde dokument...",
+        "checking": "Ina fotti ngom e logoji...",
+        "reviewing": "Ina jokkondiri konngol...",
+        "pages": "{done} e {total} konngol jokkondirde"
+      },
+      "status": {
+        "done": "{errors, plural, one {# moƴƴere} other {# moƴƴere}}, {warnings, plural, one {# heɓtino} other {# heɓtino}}",
+        "stopped": "Ruɗɗi: {errors, plural, one {# moƴƴere} other {# moƴƴere}} sadugo",
+        "failed": "Wonaa",
+        "running": "Ina ɗo jokkondiri"
+      },
+      "stop": "Rufi",
+      "download": "Aaway raport",
+      "newReview": "Jokkondiral fof",
+      "findings": "Yeesoji",
+      "noFindings": "Hesre waawaani yeesi.",
+      "noneOfSeverity": "Hesre woni yeeso doo.",
+      "byModel": "Model mo yeesi; fotti.",
+      "notes": "Hesre",
+      "pageShort": "k. {page}",
+      "filter": {
+        "label": "Yeeso",
+        "all": "Fof {count}",
+        "error": "Moƴƴere {count}",
+        "warning": "Heɓtino {count}",
+        "info": "Hesre {count}"
+      },
+      "severity": {
+        "error": "Moƴƴere",
+        "warning": "Heɓtino",
+        "info": "Hesre"
+      },
+      "rule": {
+        "font": "Ñaɓri ɓurndi",
+        "color": "Roore",
+        "size": "Golle ɓurndi",
+        "banned-term": "Ɗo ƴaɗi gollirde",
+        "preferred-term": "Ɗo moƴƴi gollirde",
+        "language": "Hassaniya",
+        "logo-distorted": "Ɓeenemaɗo logo",
+        "logo-small": "Golle logo",
+        "logo-background": "Jom logo",
+        "logo-unknown": "Logo weendu",
+        "visual": "Visual",
+        "tone": "Ɗam"
+      },
+      "message": {
+        "font": "Gollirde e {found}; ñaɓri ɓurndi brand ɗen on {expected}.",
+        "font-alone": "Gollirde e {found}, ɗum ɓuri ñaɓri brand.",
+        "color": "{found} ɓuri roore brand; moƴƴi e {first}.",
+        "size": "Golle e {found} pt; fuddi moƴƴi on {first} pt.",
+        "banned-term": "\"{found}\" ɗum on Ɗo ƴaɗi gollirde; gollu {expected} e jawdi.",
+        "banned-term-alone": "\"{found}\" ɗum on Ɗo ƴaɗi gollirde.",
+        "preferred-term": "Gollu \"{first}\" e jawdi \"{found}\".",
+        "language": "Cuɓɓinirde e {found}; hassaniya brand ɗen on {expected}.",
+        "logo-distorted": "{name} ɓeenii e {found}; ɓeenema ɗum on {first}.",
+        "logo-small": "{name} ɓuri {found} pt; moƴƴi ɗuum e sa¥nde {first} pt.",
+        "logo-background": "{name} woni e {found}; moƴƴi hollude e {expected}.",
+        "logo-unknown": "Ɓiɓɓude weendi logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Lewna brand: {name}",
+        "meta": "E {book}, {date}, {pages, plural, one {# cuɓɓi} other {# cuɓɓi}}",
+        "errors": "{count, plural, one {# ndutti} other {# ndutti}}",
+        "warnings": "{count, plural, one {# leydi} other {# leydi}}",
+        "infos": "{count, plural, one {# dokkal} other {# dokkal}}",
+        "partial": "Lewna ndokkanii; jawdi e ɗuum moƴƴi ko ɓurti e Ɗum woɗii.",
+        "skipped": "Model ndokkanii e cuɓɓi {pages}; moƴƴi waɗde e udditan ɗum.",
+        "none": "Golle ndokkanii ɗaɓɓi brand book.",
+        "page": "Cuɓɓi",
+        "severity": "Lakkal",
+        "rule": "Ɗeƴɗo",
+        "finding": "Moƴƴi",
+        "found": "Moƴƴi",
+        "notes": "Dokkal",
+        "fileSuffix": "lewna brand"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Hooɗe konngol mon model njangu e baŋngal.",
       "analytics": "Rapporte ligge: wondude, kanko waawanaa uɓɓit fodere, e caɗeeji waawi hollita.",
       "skills": "Bakkaaji tawa ngal jaggi e naatude jooni, jooni ummora mo waawaani.",
-      "models": "Seydu moodel e noolirde sey to kesi laawol ndiyam."
+      "models": "Seydu moodel e noolirde sey to kesi laawol ndiyam.",
+      "brandBooks": "Rangii, leydi, logoji, inyam be templates ɗi, ɗum on fow woni ko feccita e labdi."
     },
     "openSettings": "Hollu teeltorde",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Konngol njangu",
       "analytics": "Analytics",
       "skills": "Ndikkaaji",
-      "models": "Moodel e noolirde"
+      "models": "Moodel e noolirde",
+      "brandBooks": "Brand books"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Artir mawnugol (jooni {percent}%)",
       "failed": "Ɗerewol ngol hollaaki. Ina waawi mawnude no feewi, walla ina reenaa, walla waylowo oo ina heewi golle; fuɗɗito ɗoon e seeɗa.",
       "zoomLevel": "{percent}%"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Brand book ngal e hono tinnda",
+    "intro": "Brand book ngal jogi rangii, leydi, logoji, inyam e templates organisation, kadi ko fow feccita e labdi. Ko mo jogi hakkunde book ngal ɗo, tan on feccita e access rule makko.",
+    "unavailable": "Brand books ndii waawi labde e storage. Naamnu e wadi ɗoo a yidi.",
+    "add": "Naat Brand book",
+    "none": "Brand book fow tan labii.",
+    "paletteSummary": "{count, plural, one {# rangol brand} other {# rangii brand}}",
+    "summary": "{fonts, plural, one {# leydi} other {# leydi}}, {logos, plural, one {# logo} other {# logoji}}",
+    "open": "Uddit",
+    "delete": "Momtu",
+    "deleteConfirm": "Momtu \"{name}\" e file makko? Labdi feccita e limtu, report makko waawi hokka.",
+    "deleteConfirmButton": "Momtu Brand book",
+    "loading": "Brand book feccita e yuppa...",
+    "loadFailed": "Brand book ngal waawi yuppa.",
+    "missing": "Brand book ngal alaa, walla a waawi fiɗna.",
+    "back": "Brand books",
+    "unsaved": "Limtooji fow feccita e kakkila",
+    "saved": "Limtooji feccita e limtu",
+    "save": "Limtu",
+    "conflict": "Admin gooto limtu brand book ngal jokkondirta e wa. Yuppa e jokka makko; limtooji maa ɗi wadi.",
+    "reload": "Yuppu ɗoo",
+    "invalid": "Brand book ngal waawi limtu tan: {reason}",
+    "saveFailed": "Brand book ngal waawi limtu.",
+    "uploadFailed": "File waawi sendude.",
+    "remove": "Momtu",
+    "removeNamed": "Momtu {name}",
+    "basics": {
+      "title": "Brand book",
+      "name": "Innde",
+      "description": "Nanaata"
+    },
+    "guide": {
+      "action": "Daɗɗa e brand guide",
+      "reading": "Brand guide feccita e jangu...",
+      "hint": "Senda brand guide e PDF so njoɓdi rangii, leydi e inyam. Logoji e templates waawii yantu e guide ngal; sendi ɗum hande.",
+      "source": "Daɗɗi e",
+      "notPdf": "Brand guide waawi PDF tan.",
+      "failed": "Draft waawi daɗɗude e guide ngal.",
+      "applied": "{pages, plural, one {Naatani e jaŋngol e # cuɓo.} other {Naatani e jaŋngol e # cuɓe.}}",
+      "measuredFonts": "Leydi noon e text makko:",
+      "measuredColors": "Rangii noon e text makko:",
+      "check": "Fuɗnoy e guide so a limtu.",
+      "undo": "Foyda draft"
+    },
+    "palette": {
+      "title": "Rangii",
+      "description": "Rangii brand ngal. Rangol e dokument, e njoɓdi rangii ngal, feccita e brand rangii nde e tolere makko.",
+      "add": "Naat rangol",
+      "newName": "Rangol {number}",
+      "none": "Brand rangii fow tan labii.",
+      "hex": "Hex",
+      "pick": "Suɓi rangol {name}",
+      "name": "Innde",
+      "tolerance": "Tolere",
+      "toleranceHint": "Ñaawan baali (Delta E). 2 ɗo 3 woni wonata.",
+      "roles": "Nde ena naatani ko",
+      "neutrals": "Ñaawan ne'utral",
+      "neutralsHint": "Ñaawan kala dokumment ena waawda hokkude, haa ne duuɓi brand, separi ɗum ji comma."
+    },
+    "colorRole": {
+      "primary": "Naatal moƴƴol",
+      "secondary": "Naatal ɗiɗɗol",
+      "accent": "Accent",
+      "text": "Text",
+      "background": "Baantare",
+      "neutral": "Ne'utral"
+    },
+    "typography": {
+      "title": "Type",
+      "description": "Nden typefaces ko ɗuɓɓe, e fontji waɗi waawde, fota ɗum ko system font dokummentji so ina sendi ɓe caaɗi.",
+      "add": "Ɗaɗɗi typeface",
+      "none": "Typefaces wala yet.",
+      "role": "Role",
+      "family": "Typeface",
+      "substitutes": "Substitutes waawɗi",
+      "minSize": "Text juulɗe ko ƴaawtu (pt)",
+      "minSizeHint": "0 moƴƴi minimum."
+    },
+    "fontRole": {
+      "heading": "Headings",
+      "body": "Text body",
+      "accent": "Accent"
+    },
+    "logos": {
+      "title": "Logos",
+      "description": "Files logo dokummentji fota naatana, ko PNG, SVG walla JPEG.",
+      "add": "Upload logo",
+      "untitled": "Logo",
+      "none": "Logos wala yet.",
+      "noPreview": "Preview wala",
+      "name": "Innde",
+      "minWidth": "Laawol juulɗe ko ƴaawtu (pt)",
+      "aspect": "Stretch waawɗi (%)",
+      "aspectHint": "Ko ƴiɗi e proportion fota nafata.",
+      "colors": "Ñaawan e ndarge",
+      "colorsHint": "Suɓi kala wala tick, waawaani baantare kala."
+    },
+    "language": {
+      "title": "Hokkugo kala",
+      "description": "Hokka dokummentji, kala e ndiyam, e hokkugo e kaaɗo, e voice.",
+      "locales": "Hokkugo",
+      "localesHint": "Tags hokkugo fota en walla fr-CA, separi ɗum ji comma.",
+      "preferred": "Kala ena hokkani",
+      "banned": "Kala fota kaɗaani",
+      "term": "Kala walla phrase",
+      "alternatives": "Fota / hokki fota",
+      "note": "Note",
+      "addPreferred": "Ɗaɗɗi kala ena hokkani",
+      "addBanned": "Ɗaɗɗi kala fota kaɗaani",
+      "nonePreferred": "Kala waawani hokkude wala yet.",
+      "noneBanned": "Kala waawani kaɗude wala yet.",
+      "tone": "Voice"
+    },
+    "templates": {
+      "title": "Templates",
+      "description": "Templates PowerPoint e Word dokummentji fota waɗi e maa.",
+      "add": "Giɗɗi template",
+      "untitled": "Template",
+      "none": "A template wala yet.",
+      "name": "Innde",
+      "wrongType": "Template ɗaɗi ko e kala {types}."
     }
   }
 }

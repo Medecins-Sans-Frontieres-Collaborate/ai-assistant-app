@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Sêngbê ti kana",
         "description": "Bêngî mbeti na piô ti yângâ kana mingi, na pu na kûê yângâ kana, na ndumu ti séndo so kûê-yângâ azô."
+      },
+      "brandReview": {
+        "label": "Brand review",
+        "description": "Kûê ti PDF, Word, na présentation na brand book: fonts, couleurs, yângô, logos ti tongana."
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Karte mûtu",
       "newGrants": "Sêse ti grants mbï",
       "newFormFill": "Kûê dɔkima mupië",
-      "newChannelDrafter": "Kêtê sêngbê ti kana"
+      "newChannelDrafter": "Kêtê sêngbê ti kana",
+      "newBrandReview": "Brand review mbïngu"
     },
     "translation": {
       "chooseLanguage": "Sangö tî sû",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Text alt tî {name} abï {count} tî gbênzi limit channel ôko tî {max}.",
         "unicodeSms": "{characters} ala yeke na SMS standard, yeke wa message ôko abï 70 caractères, ala 160. Kèni yeke wa mo tî gba wene."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Brand review",
+        "intro": "Bâta brand book na document. Review a yeke akamba fonts, couleurs, size ti yângô, yângô na logos. Model ape kûê na page wüngö ti tongana na règle visuel.",
+        "book": "Brand book",
+        "booksLoading": "Brand books azo ape...",
+        "noBooks": "Brand book ala ti mo. Administrator ape na Admin > Brand books.",
+        "document": "Document",
+        "chooseDocument": "Bâta document",
+        "replaceDocument": "Bâta document mbïngu",
+        "documentTypes": "PDF, Word na PowerPoint",
+        "uploading": "Na upload...",
+        "uploadFailed": "Document ape ti upload.",
+        "wrongType": "Bâta PDF, Word document na présentation.",
+        "modelReview": "Model a kûê page sô",
+        "modelReviewHint": "Model a si tongana, visuel na logo sï yê ape ti check. Yeke ti tokens na page kûê, na 40 pages.",
+        "start": "Kûê review"
+      },
+      "loading": "Review azo ape...",
+      "booksFailed": "Brand books ape azo.",
+      "startFailed": "Review ape ti kûê.",
+      "readFailed": "Review ape ti lâsi.",
+      "busy": "\"{name}\" azo na kûê. Bê ti yângâra sô a fini, ou bien yângâra sô a sô, fûnga bâta ndï na mbïngu.",
+      "failed": "Review a sô ape.",
+      "against": "Na {book}",
+      "progress": {
+        "reading": "Na lâsi document...",
+        "checking": "Na kamba yângô na logos...",
+        "reviewing": "Na kûê pages...",
+        "pages": "Pages {done} na {total} ako kûê"
+      },
+      "status": {
+        "done": "{errors, plural, one {# erreur} other {# bîri erreur}}, {warnings, plural, one {# alerte} other {# bîri alerte}}",
+        "stopped": "A sô: {errors, plural, one {# erreur} other {# bîri erreur}} so far",
+        "failed": "A sô ape",
+        "running": "A kûê"
+      },
+      "stop": "Sô",
+      "download": "Télécharger rapport",
+      "newReview": "Review mbïngu",
+      "findings": "Résultats",
+      "noFindings": "Bê ape ti dû.",
+      "noneOfSeverity": "Ala ti résultats na ndongö so nga.",
+      "byModel": "Model a gbonî: Yângâra sô bokilo.",
+      "notes": "Notes",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "Sôhô",
+        "all": "Bê {count}",
+        "error": "Erreurs {count}",
+        "warning": "Alerte {count}",
+        "info": "Notes {count}"
+      },
+      "severity": {
+        "error": "Erreur",
+        "warning": "Alerte",
+        "info": "Note"
+      },
+      "rule": {
+        "font": "Herve ti yeke",
+        "color": "Kondzi",
+        "size": "Gbundu ti lo yeke",
+        "banned-term": "Mo ti alinga na kota",
+        "preferred-term": "Mo ti yeke na soro",
+        "language": "Yângâ",
+        "logo-distorted": "Gbundu ti logo",
+        "logo-small": "Gbundu ti logo",
+        "logo-background": "Kondo ti logo",
+        "logo-unknown": "Logo ti kerekere",
+        "visual": "Image",
+        "tone": "Ndoye"
+      },
+      "message": {
+        "font": "Ti lo yeke na {found}; herve ti brand ti yeke {expected}.",
+        "font-alone": "Ti lo yeke na {found}, kodê aye ti brand.",
+        "color": "{found} kodê kondzi ti brand; kondzi ti yeke na soro ti yeke {first}.",
+        "size": "Gbundu ti lo yeke {found} pt; gbundu ti ende ti yeke {first} pt.",
+        "banned-term": "\"{found}\" ti mo ti alinga na kota; kota na {expected}.",
+        "banned-term-alone": "\"{found}\" ti mo ti alinga na kota.",
+        "preferred-term": "Kota \"{first}\" na \"{found}\".",
+        "language": "Ti lo yeke na {found}; yângâ ti brand ti yeke {expected}.",
+        "logo-distorted": "{name} ti naweke na {found}; gbundu ti ake ti yeke {first}.",
+        "logo-small": "{name} ti yeke na {found} pt; ende ti yeke na {first} pt.",
+        "logo-background": "{name} ti na kondo ti {found}; ti yeke na soro na kondo {expected}.",
+        "logo-unknown": "Image ti logo ti kerekere: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Gbangu ti brand: {name}",
+        "meta": "Na {book}, {date}, {pages, plural, one {# page} other {# page}}",
+        "errors": "{count, plural, one {# mbongo} other {# mbongo}}",
+        "warnings": "{count, plural, one {# ndoye} other {# ndoye}}",
+        "infos": "{count, plural, one {# note} other {# note}}",
+        "partial": "Gbangu ti lo aye na mbongo; repot ti so na mo ti lo yeke na soro ba lo yeke na mbongo.",
+        "skipped": "Model aye kodua na page {pages}; na model mo na soro.",
+        "none": "Aye mo ti yeke na biani na buku ti brand.",
+        "page": "Page",
+        "severity": "Mbongo",
+        "rule": "Gbangu",
+        "finding": "Mo ti yeke",
+        "found": "Mo ti yeke",
+        "notes": "Note",
+        "fileSuffix": "gbangu ti brand"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Limê tî karê gbanî tî kônvu ti model da dö tî turn kölü.",
       "analytics": "Rapô so asara: mbîrî asarê, azo anza tî kufa na foldere, na châ tî gbâ chô so ayeke hîla.",
       "skills": "Ti barara na yeke soro, assistant a yeke gu na mo na di ala na soro.",
-      "models": "Pala mo su mbeti na mo tengbi model na mo kangu sa ti to mbeti."
+      "models": "Pala mo su mbeti na mo tengbi model na mo kangu sa ti to mbeti.",
+      "brandBooks": "Balê ti mbi kodoro, ndörö, logo, ngbangbo ti nginza na makanda, ala mbi azo a pekä na soko sô ndö ti yeke nende."
     },
     "openSettings": "Fungbi tî settings",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Budget tî kônvu",
       "analytics": "Ánalîtiki",
       "skills": "Bakara",
-      "models": "Model na kangu"
+      "models": "Model na kangu",
+      "brandBooks": "Kasa ti sädö logo"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Kiri na zoom (fadë {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "A lingbi tî fa document so pëpe. Peut-être lo kono mingi, a bata lo, wala convertisseur ayeke na kua; tara nî ngbene kêtê."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Kasa ti sädö logo tî gbâ mbû",
+    "intro": "Kasa ti sädö logo ti holdo balê ti mbi kodoro, ndörö, logo, ngbangbo na makanda ti organisasyon, so ndö ti yeke nende na azo a soko sô. Azo na yeke mbï a zo köda yâ, azo a kontre na règle ti mbi yeke na a.",
+    "unavailable": "Kasa ti sädö logo ti pe sô a hû ködörö na storage. Kûé mbî nzönî na yâ.",
+    "add": "Ajo kasa ti sädö logo",
+    "none": "Kasa ti sädö logo ti yèkè gbâ sô.",
+    "paletteSummary": "{count, plural, one {# kodoro ti sädö} other {# kodoro ti sädö}}",
+    "summary": "{fonts, plural, one {# ndörö} other {# ndörö}}, {logos, plural, one {# logo} other {# logo}}",
+    "open": "Fâtâ",
+    "delete": "Küa",
+    "deleteConfirm": "Küa \"{name}\" na ndö ti a? Ndö ti zo a pekä ti vönî, rapor ti mbi yeke kwè na a.",
+    "deleteConfirmButton": "Küa kasa ti sädö logo",
+    "loading": "Ködörö kasa ti sädö logo...",
+    "loadFailed": "Kasa ti sädö logo ti pe so a ködörö.",
+    "missing": "Kasa ti sädö logo â zo tî yèkè or mbi pe so a ti sô sâ.",
+    "back": "Kasa ti sädö logo",
+    "unsaved": "Bongü na pe so a ti sô.",
+    "saved": "Ngbëlä ti bâa.",
+    "save": "Ngbëlä",
+    "conflict": "Azo ndâ na admin ti gbëlä kasa ti sädö logo ape na wâso mbi a fâtâ. Yeke na kököta so a hû version ti a; bongü mbi sô a gbë ti kode.",
+    "reload": "Kököta",
+    "invalid": "Kasa ti sädö logo â pe so a gbëlä ape: {reason}",
+    "saveFailed": "Kasa ti sädö logo ti pe so a gbëlä.",
+    "uploadFailed": "Fichier ti pe so a dîkö.",
+    "remove": "Kô",
+    "removeNamed": "Kô {name}",
+    "basics": {
+      "title": "Kasa ti sädö logo",
+      "name": "Zökô",
+      "description": "Gbêtïngö"
+    },
+    "guide": {
+      "action": "Zia na kasa ti sädö logo sorti na guide",
+      "reading": "Köta guide...",
+      "hint": "Dîkö guide ti sädö logo sô na PDF so a sangö kodoro, ndörö na ngbangbo ti mbi yeke a. Logo na makanda ti pe so a hû na mbi; dîkö deren na kôdörö.",
+      "source": "Nzönî na ti yeke a",
+      "notPdf": "Guide ti sädö logo a yeke na PDF sô.",
+      "failed": "Zia so na guide ti pe so a sâ.",
+      "applied": "{pages, plural, one {Sîngö ti yeke azo ti gujere na # kété.} other {Sîngö ti yeke azo ti gujere na # pages.}}",
+      "measuredFonts": "Ndörö sô a gï na text ti mbi:",
+      "measuredColors": "Kodoro sô a gï na text ti mbi:",
+      "check": "Gäna ndö bâ na guide ködörö mbi yâ gbëlä.",
+      "undo": "Wälä zia ti guide"
+    },
+    "palette": {
+      "title": "Kodoro",
+      "description": "Kodoro ti sädö logo. Kodoro ti ndö a yâ so a ködörö kodoro so a yeke na ni ti kodoro.",
+      "add": "Ajo kodoro",
+      "newName": "Kodoro {number}",
+      "none": "Kodoro ti sädö logo ti yéké gbâ sô.",
+      "hex": "Hex",
+      "pick": "Sâô kodoro bî {name}",
+      "name": "Zökô",
+      "tolerance": "Tolérânsä",
+      "toleranceHint": "Lingbi ti couleurs (Delta E). 2 ti 3 azo na gbâmâ.",
+      "roles": "Yeke hünde na",
+      "neutrals": "Couleur bé yeke ti sâni",
+      "neutralsHint": "Couleurs ti doküma kâ azo yeke na, bé kûngubâ ti couleur ti brand, séka na coma."
+    },
+    "colorRole": {
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "accent": "Accent",
+      "text": "Text",
+      "background": "Background",
+      "neutral": "Neutral"
+    },
+    "typography": {
+      "title": "Type",
+      "description": "Typeface na hünde, na font ti yeke na la, mû font ti système na doküma ti yeke pânda sô.",
+      "add": "Gbé typeface",
+      "none": "Typeface ti yeke kodê.",
+      "role": "Hünde",
+      "family": "Typeface",
+      "substitutes": "Font ti yeke na vûngö",
+      "minSize": "Text ti kêtî gbâ (pt)",
+      "minSizeHint": "0 ti benga minimum."
+    },
+    "fontRole": {
+      "heading": "Hedeng",
+      "body": "Text ti doküma",
+      "accent": "Accent"
+    },
+    "logos": {
+      "title": "Logo",
+      "description": "Fichier ti logo ti doküma kâ yeke na, lô PNG, SVG, ou JPEG.",
+      "add": "Gbâmbeni logo",
+      "untitled": "Logo",
+      "none": "Logo ti yeke kodê.",
+      "noPreview": "Prévu ti yeke kodê",
+      "name": "Ngbiani",
+      "minWidth": "Gbâ ti logo ti kêtî gbâ (pt)",
+      "aspect": "Pourcentage ti déformation (%)",
+      "aspectHint": "Bara ti proportions azo yeke vûngö.",
+      "colors": "Kê yeke na",
+      "colorsHint": "Deke tout na sô ti yeke ou logo na tout background."
+    },
+    "language": {
+      "title": "Kölë",
+      "description": "Langue ti doküma kâ yeke na, kölë ti yeke na, ti yeke kodê, na voix.",
+      "locales": "Langue",
+      "localesHint": "Tag ti langue lô en ou fr-CA, séka na coma.",
+      "preferred": "Kölë ti yeke na",
+      "banned": "Kölë ti yeke kodê",
+      "term": "Kölë ou phrase",
+      "alternatives": "Tî na / yeke na tî",
+      "note": "Note",
+      "addPreferred": "Gbämbeni kölë ti yeke na",
+      "addBanned": "Gbämbeni kölë ti yeke kodê",
+      "nonePreferred": "Kölë ti yeke na ti yeke kodê.",
+      "noneBanned": "Kölë ti yeke kodê ti yeke kodê.",
+      "tone": "Voix"
+    },
+    "templates": {
+      "title": "Templates",
+      "description": "Template ti PowerPoint na Word ti doküma kâ yeke gbâ tî.",
+      "add": "Aza fa nâti template",
+      "untitled": "Template",
+      "none": "Template ayeke ti yeke.",
+      "name": "Gbângû",
+      "wrongType": "Template afa na yeke mo tî {types}."
     }
   }
 }

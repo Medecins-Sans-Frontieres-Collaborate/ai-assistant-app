@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Channel-Entwurf",
         "description": "Verwandeln Sie Quellen in Beiträge für mehrere Kanäle, jeweils im passenden Stil, mit jedem Zitat zurückverfolgt zur Quelle."
+      },
+      "brandReview": {
+        "label": "Brand-Prüfung",
+        "description": "Überprüfen Sie ein PDF, Word-Dokument oder eine Präsentation anhand des Brandbooks: Schriftarten, Farben, Formulierungen, Logos und Tonfall."
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Neue Karte",
       "newGrants": "Neue Grants-Verarbeitung",
       "newFormFill": "Neues Dokument ausfüllen",
-      "newChannelDrafter": "Neuer Channel-Entwurf"
+      "newChannelDrafter": "Neuer Channel-Entwurf",
+      "newBrandReview": "Neue Brand-Prüfung"
     },
     "translation": {
       "chooseLanguage": "Zielsprache",
@@ -4838,6 +4843,112 @@
         "altTooLong": "Der Alt-Text von {name} überschreitet das Kanal-Limit von {max} um {count}.",
         "unicodeSms": "{characters} können nicht in einer Standard-SMS gesendet werden. Diese Nachricht ist daher auf 70 Zeichen statt 160 begrenzt. Ersetzen Sie sie, um mehr Platz zu erhalten."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Brand-Prüfung",
+        "intro": "Wählen Sie ein Brandbook und ein Dokument. Die Prüfung überprüft Schriftarten, Farben, Textgrößen, Formulierungen und Logos. Optional kann ein Modell jede Seite hinsichtlich Ton und visueller Regeln bewerten.",
+        "book": "Brandbook",
+        "booksLoading": "Brandbooks werden geladen...",
+        "noBooks": "Für Sie sind noch keine Brandbooks verfügbar. Ein Administrator fügt sie unter Admin > Brandbooks hinzu.",
+        "document": "Dokument",
+        "chooseDocument": "Dokument auswählen",
+        "replaceDocument": "Anderes Dokument auswählen",
+        "documentTypes": "PDF, Word oder PowerPoint",
+        "uploading": "Wird hochgeladen...",
+        "uploadFailed": "Das Dokument konnte nicht hochgeladen werden.",
+        "wrongType": "Bitte wählen Sie ein PDF, Word-Dokument oder eine Präsentation aus.",
+        "modelReview": "Modell prüft jede Seite",
+        "modelReviewHint": "Erkennt Ton-, visuelle und Logoprobleme, die die Prüfungen nicht erkennen können. Verbraucht Tokens pro Seite, bis zu 40 Seiten.",
+        "start": "Prüfung starten"
+      },
+      "loading": "Prüfung wird geladen...",
+      "booksFailed": "Brandbooks konnten nicht geladen werden.",
+      "startFailed": "Die Prüfung konnte nicht gestartet werden.",
+      "readFailed": "Die Prüfung konnte nicht gelesen werden.",
+      "busy": "„{name}“ wird noch geprüft. Warten Sie, bis die Prüfung abgeschlossen ist, oder stoppen Sie sie, bevor Sie eine neue starten.",
+      "failed": "Die Prüfung ist fehlgeschlagen.",
+      "against": "Mit {book} vergleichen",
+      "progress": {
+        "reading": "Dokument wird gelesen...",
+        "checking": "Text und Logos werden geprüft...",
+        "reviewing": "Seiten werden geprüft...",
+        "pages": "{done} von {total} Seiten geprüft"
+      },
+      "status": {
+        "done": "{errors, plural, one {# Fehler} other {# Fehler}}, {warnings, plural, one {# Warnung} other {# Warnungen}}",
+        "stopped": "Gestoppt: {errors, plural, one {# Fehler} other {# Fehler}} bisher",
+        "failed": "Fehlgeschlagen",
+        "running": "Läuft"
+      },
+      "stop": "Stopp",
+      "download": "Bericht herunterladen",
+      "newReview": "Neue Prüfung",
+      "findings": "Ergebnisse",
+      "noFindings": "Noch nichts gefunden.",
+      "noneOfSeverity": "Keine Ergebnisse dieser Art.",
+      "byModel": "Vom Modell gefunden; bitte überprüfen.",
+      "notes": "Notizen",
+      "pageShort": "S. {page}",
+      "filter": {
+        "label": "Anzeigen",
+        "all": "Alle {count}",
+        "error": "Fehler {count}",
+        "warning": "Warnungen {count}",
+        "info": "Notizen {count}"
+      },
+      "severity": {
+        "error": "Fehler",
+        "warning": "Warnung",
+        "info": "Notiz"
+      },
+      "rule": {
+        "font": "Schriftart",
+        "color": "Farbe",
+        "size": "Textgröße",
+        "banned-term": "Zu vermeidendes Wort",
+        "preferred-term": "Bevorzugtes Wort",
+        "language": "Sprache",
+        "logo-distorted": "Logo-Proportionen",
+        "logo-small": "Logogröße",
+        "logo-background": "Logo-Hintergrund",
+        "logo-unknown": "Mögliches Logo",
+        "visual": "Visuell",
+        "tone": "Ton"
+      },
+      "message": {
+        "font": "Verwendet: {found}; die Markenschriftarten sind {expected}.",
+        "font-alone": "Verwendet: {found}, das ist keine Markenschriftart.",
+        "color": "{found} ist keine Markenfarbe; am nächsten ist {first}.",
+        "size": "Text mit {found} pt; das Mindestmaß ist {first} pt.",
+        "banned-term": "„{found}“ ist zu vermeiden; schreiben Sie stattdessen {expected}.",
+        "banned-term-alone": "„{found}“ ist zu vermeiden.",
+        "preferred-term": "Schreiben Sie „{first}“ statt „{found}“.",
+        "language": "Markiert als {found}; die Markensprachen sind {expected}.",
+        "logo-distorted": "{name} ist in {found} dargestellt; die eigentlichen Proportionen sind {first}.",
+        "logo-small": "{name} ist {found} pt breit; es sollte mindestens {first} pt sein.",
+        "logo-background": "{name} steht auf {found}; es darf auf {expected} erscheinen.",
+        "logo-unknown": "Ein Bild, das ein Logo sein könnte: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Markenprüfung: {name}",
+        "meta": "Prüfung von {book}, {date}, {pages, plural, one {# Seite} other {# Seiten}}",
+        "errors": "{count, plural, one {# Fehler} other {# Fehler}}",
+        "warnings": "{count, plural, one {# Warnung} other {# Warnungen}}",
+        "infos": "{count, plural, one {# Hinweis} other {# Hinweise}}",
+        "partial": "Die Prüfung wurde nicht abgeschlossen; dieser Bericht enthält die bisherigen Ergebnisse.",
+        "skipped": "Das Modell hat die Seiten {pages} nicht überprüft; sie wurden ohne das Modell geprüft.",
+        "none": "Es wurden keine Abweichungen vom Markenbuch gefunden.",
+        "page": "Seite",
+        "severity": "Schweregrad",
+        "rule": "Prüfung",
+        "finding": "Ergebnis",
+        "found": "Gefunden",
+        "notes": "Notizen",
+        "fileSuffix": "Markenprüfung"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Wie viel einer Konversation pro Zug an jedes Modell gesendet wird.",
       "analytics": "Gelieferte Berichte: Was eingetroffen ist, wer auf welchen Ordner zugreifen darf und welche Felder angezeigt werden können.",
       "skills": "Wiederverwendbare Anweisungsblöcke, die der Assistent bei Bedarf in einer Unterhaltung anwendet.",
-      "models": "Hintergrundmodelle zuweisen und regionale Einsatzbereitschaft prüfen."
+      "models": "Hintergrundmodelle zuweisen und regionale Einsatzbereitschaft prüfen.",
+      "brandBooks": "Farben, Schriften, Logos, Formulierungen und Vorlagen, anhand derer Dokumente geprüft und erstellt werden."
     },
     "openSettings": "Einstellungen öffnen",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Kontextbudget",
       "analytics": "Analytics",
       "skills": "Fähigkeiten",
-      "models": "Modelle und Bereitschaft"
+      "models": "Modelle und Bereitschaft",
+      "brandBooks": "Brand Books"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Zoom zurücksetzen (aktuell {percent} %)",
       "failed": "Dieses Dokument konnte nicht angezeigt werden. Es ist eventuell zu groß oder geschützt, oder der Konverter ist ausgelastet; versuchen Sie es gleich noch einmal.",
       "zoomLevel": "{percent}%"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Unbenanntes Brand Book",
+    "intro": "Ein Brand Book enthält die Farben, Schriften, Logos, Formulierungen und Vorlagen einer Organisation, damit Dokumente damit geprüft und erstellt werden können. Die Zugriffsregeln bestimmen, wer das jeweilige Book nutzen darf.",
+    "unavailable": "Brand Books konnten nicht aus dem Speicher geladen werden. Bitte versuchen Sie es später erneut.",
+    "add": "Brand Book hinzufügen",
+    "none": "Noch keine Brand Books.",
+    "paletteSummary": "{count, plural, one {# Markenfarbe} other {# Markenfarben}}",
+    "summary": "{fonts, plural, one {# Schriftart} other {# Schriftarten}}, {logos, plural, one {# Logo} other {# Logos}}",
+    "open": "Öffnen",
+    "delete": "Löschen",
+    "deleteConfirm": "„{name}“ und die zugehörigen Dateien löschen? Bereits geprüfte Dokumente behalten ihre Berichte.",
+    "deleteConfirmButton": "Brand Book löschen",
+    "loading": "Brand Book wird geladen...",
+    "loadFailed": "Das Brand Book konnte nicht geladen werden.",
+    "missing": "Dieses Brand Book existiert nicht oder Sie können es nicht bearbeiten.",
+    "back": "Brand Books",
+    "unsaved": "Ungespeicherte Änderungen",
+    "saved": "Gespeichert",
+    "save": "Speichern",
+    "conflict": "Ein anderer Administrator hat dieses Brand Book gespeichert, nachdem Sie es geöffnet haben. Laden Sie die aktuelle Version, Ihre Änderungen gehen dabei verloren.",
+    "reload": "Neu laden",
+    "invalid": "Dieses Brand Book kann noch nicht gespeichert werden: {reason}",
+    "saveFailed": "Das Brand Book konnte nicht gespeichert werden.",
+    "uploadFailed": "Die Datei konnte nicht hochgeladen werden.",
+    "remove": "Entfernen",
+    "removeNamed": "{name} entfernen",
+    "basics": {
+      "title": "Brand Book",
+      "name": "Name",
+      "description": "Beschreibung"
+    },
+    "guide": {
+      "action": "Aus Brand Guide entwerfen",
+      "reading": "Leitfaden wird gelesen...",
+      "hint": "Laden Sie den Brand Guide als PDF hoch, um darin definierte Farben, Schriften und Formulierungen automatisch zu übernehmen. Logos und Vorlagen werden nicht übernommen; laden Sie diese unten separat hoch.",
+      "source": "Entworfen aus",
+      "notPdf": "Ein Brand Guide muss als PDF vorliegen.",
+      "failed": "Aus diesem Leitfaden konnte kein Entwurf erstellt werden.",
+      "applied": "{pages, plural, one {Entwurf basierend auf einem Leitfaden mit # Seite.} other {Entwurf basierend auf einem Leitfaden mit # Seiten.}}",
+      "measuredFonts": "Schriften, die im Text verwendet werden:",
+      "measuredColors": "Verwendete Farben im Text:",
+      "check": "Überprüfen Sie alle Werte vor dem Speichern mit dem Leitfaden.",
+      "undo": "Entwurf zurücksetzen"
+    },
+    "palette": {
+      "title": "Farben",
+      "description": "Die Markenfarben. Eine Farbe in einem Dokument gilt als eine dieser, wenn sie innerhalb der Toleranz liegt.",
+      "add": "Farbe hinzufügen",
+      "newName": "Farbe {number}",
+      "none": "Noch keine Markenfarben.",
+      "hex": "Hex",
+      "pick": "Farbe für {name} auswählen",
+      "name": "Name",
+      "tolerance": "Toleranz",
+      "toleranceHint": "Farbunterschied (Delta E). 2 bis 3 ist kaum sichtbar.",
+      "roles": "Verwendet für",
+      "neutrals": "Neutrale Farben",
+      "neutralsHint": "Farben, die in jedem Dokument ohne Markenbindung verwendet werden können, durch Kommas getrennt."
+    },
+    "colorRole": {
+      "primary": "Primär",
+      "secondary": "Sekundär",
+      "accent": "Akzent",
+      "text": "Text",
+      "background": "Hintergrund",
+      "neutral": "Neutral"
+    },
+    "typography": {
+      "title": "Typ",
+      "description": "Die Schriftarten nach Rolle sowie die erlaubten Ersatzschriften, etwa Systemschriften für extern geteilte Dokumente.",
+      "add": "Schriftart hinzufügen",
+      "none": "Noch keine Schriftarten.",
+      "role": "Rolle",
+      "family": "Schriftart",
+      "substitutes": "Erlaubte Ersatzschriften",
+      "minSize": "Kleinster Text (pt)",
+      "minSizeHint": "0 setzt kein Minimum."
+    },
+    "fontRole": {
+      "heading": "Überschriften",
+      "body": "Fließtext",
+      "accent": "Akzent"
+    },
+    "logos": {
+      "title": "Logos",
+      "description": "Die Logo-Dateien, die in Dokumenten verwendet werden sollen, als PNG, SVG oder JPEG.",
+      "add": "Logo hochladen",
+      "untitled": "Logo",
+      "none": "Noch keine Logos.",
+      "noPreview": "Keine Vorschau",
+      "name": "Name",
+      "minWidth": "Kleinste Breite (pt)",
+      "aspect": "Erlaubte Streckung (%)",
+      "aspectHint": "Inwieweit die Proportionen abweichen dürfen.",
+      "colors": "Angezeigt auf",
+      "colorsHint": "Lassen Sie alle Felder leer, um jeden Hintergrund zuzulassen."
+    },
+    "language": {
+      "title": "Wortlaut",
+      "description": "Die Sprachen, in denen Dokumente verfasst sind, die zu verwendenden und zu vermeidenden Wörter sowie die Sprachweise.",
+      "locales": "Sprachen",
+      "localesHint": "Sprach-Tags wie en oder fr-CA, durch Kommas getrennt.",
+      "preferred": "Zu verwendende Wörter",
+      "banned": "Zu vermeidende Wörter",
+      "term": "Wort oder Ausdruck",
+      "alternatives": "Stattdessen / stattdessen schreiben",
+      "note": "Hinweis",
+      "addPreferred": "Wort zum Verwenden hinzufügen",
+      "addBanned": "Wort zum Vermeiden hinzufügen",
+      "nonePreferred": "Noch keine bevorzugten Wörter.",
+      "noneBanned": "Noch keine zu vermeidenden Wörter.",
+      "tone": "Sprachstil"
+    },
+    "templates": {
+      "title": "Vorlagen",
+      "description": "PowerPoint- und Word-Vorlagen, aus denen neue Dokumente erstellt werden.",
+      "add": "Vorlage hochladen",
+      "untitled": "Vorlage",
+      "none": "Noch keine Vorlagen.",
+      "name": "Name",
+      "wrongType": "Eine Vorlage muss eine der folgenden Typen sein: {types}."
     }
   }
 }

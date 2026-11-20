@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Gutunganya ubutumwa bw'umuyoboro",
         "description": "Hindura inkomoko z'amakuru zigire ubutumwa kuri buri muyoboro, buri kimwe gifite imvugo iboneye, quotes zose zigaragaza aho zavuye."
+      },
+      "brandReview": {
+        "label": "Gusuzuma ikirango",
+        "description": "Genzura PDF, inyandiko ya Word cyangwa igitabo cya PowerPoint ugereranyije n'igitabo cy'ikirango: imiforomo, amabara, amagambo, logos n'ijwi ry’ibirimo"
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Ikarita nshya",
       "newGrants": "Igenzura rishya rya grants",
       "newFormFill": "Kwuzuza inyandiko nshya",
-      "newChannelDrafter": "Ubutumwa bushya bw'umuyoboro"
+      "newChannelDrafter": "Ubutumwa bushya bw'umuyoboro",
+      "newBrandReview": "Gusuzuma ikirango nshya"
     },
     "translation": {
       "chooseLanguage": "Ururimi nyamukuru",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Ibisobanuro bya {name} birengeje {count} kuri ntarengwa ya {max} kuri iyi channel.",
         "unicodeSms": "{characters} ntizishobora koherezwa mu butumwa busanzwe, bityo ubu butumwa bufite umwanya wa 70 gusa aho kuba 160. Hindura ngo wongere umwanya."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Gusuzuma ikirango",
+        "intro": "Hitamo igitabo cy'ikirango n'inyandiko. Gusuzuma birareba imiforomo, amabara, ubunini bw'inyandiko, amagambo na logos, kandi ushobora gusaba model ko ireba buri paji ku jwi n’amategeko y’ibishushanyo.",
+        "book": "Igitabo cy'ikirango",
+        "booksLoading": "Birimo gufata ibitabo by'ikirango...",
+        "noBooks": "Nta bitabo by’ikirango biraboneka kuri wowe. Umuyobozi abishyiraho muri Admin > Brand books.",
+        "document": "Inyandiko",
+        "chooseDocument": "Hitamo inyandiko",
+        "replaceDocument": "Hitamo indi nyandiko",
+        "documentTypes": "PDF, Word cyangwa PowerPoint",
+        "uploading": "Birimo kohereza...",
+        "uploadFailed": "Inyandiko ntishoboye koherezwa.",
+        "wrongType": "Hitamo PDF, Word cyangwa PowerPoint.",
+        "modelReview": "Saba model irebe buri paji",
+        "modelReviewHint": "Ibona ibibazo by’ijwi, ishusho na logo model itabona. Bikoreshwa tokens kuri buri paji, kugeza kuri paji 40.",
+        "start": "Tangiza isuzuma"
+      },
+      "loading": "Birimo gufata isuzuma...",
+      "booksFailed": "Ibitabo by’ikirango ntibishoboye gufatwa.",
+      "startFailed": "Isuzuma ntishoboye gutangira.",
+      "readFailed": "Isuzuma ntishoboye gusomwa.",
+      "busy": "\"{name}\" iracyasuzumwa. Tegereza kurangira, cyangwa ihagarike, mbere yo gutangira indi.",
+      "failed": "Isuzuma ntirangiye neza.",
+      "against": "Ugereranije na {book}",
+      "progress": {
+        "reading": "Birimo gusoma inyandiko...",
+        "checking": "Birimo gusuzuma amagambo na logos...",
+        "reviewing": "Birimo gusuzuma amapaji...",
+        "pages": "Amapaji {done} kuri {total} arasuzumwe"
+      },
+      "status": {
+        "done": "{errors, plural, one {# ikosa} other {# amakosa}}, {warnings, plural, one {# igisozi} other {# ibisozwa}}",
+        "stopped": "Byahagaritswe: {errors, plural, one {# ikosa} other {# amakosa}} kugeza ubu",
+        "failed": "Ntibyakunze",
+        "running": "Birimo gukorwa"
+      },
+      "stop": "Hagarika",
+      "download": "Jyana raporo",
+      "newReview": "Isuzuma rishya",
+      "findings": "Ibyabonetse",
+      "noFindings": "Nta byabonetse kugeza ubu.",
+      "noneOfSeverity": "Nta byabonetse bifite ubu bwoko.",
+      "byModel": "Byabonetse na model; reba neza.",
+      "notes": "Inyandiko",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "Erekana",
+        "all": "Byose {count}",
+        "error": "Amakosa {count}",
+        "warning": "Ibisozwa {count}",
+        "info": "Inyandiko {count}"
+      },
+      "severity": {
+        "error": "Ikosa",
+        "warning": "Ibisozwa",
+        "info": "Inyandiko"
+      },
+      "rule": {
+        "font": "Ubwoko bw'inyuguti",
+        "color": "Ibara",
+        "size": "Ingano y'inyandiko",
+        "banned-term": "Ijambo rikwiye kwirindwa",
+        "preferred-term": "Ijambo ryifuzwa",
+        "language": "Ururimi",
+        "logo-distorted": "Ingano ya logo",
+        "logo-small": "Ingano ya logo",
+        "logo-background": "Imiterere ya achtergrond ya logo",
+        "logo-unknown": "Logo ishoboka",
+        "visual": "Igishushanyo",
+        "tone": "Imvo y'amagambo"
+      },
+      "message": {
+        "font": "Byanditse mu {found}; ubwoko bw'inyuguti z'ikimenyetso ni {expected}.",
+        "font-alone": "Byanditse mu {found}, ntabwo ari ubwoko bw'inyuguti bw'ikimenyetso.",
+        "color": "{found} ntabwo ari ibara ry'ikimenyetso; irihariye ryegereye ni {first}.",
+        "size": "Inyandiko iri kuri {found} pt; ingano nto yashyizweho ni {first} pt.",
+        "banned-term": "\"{found}\" ni ijambo rikwiye kwirindwa; ryandike {expected}.",
+        "banned-term-alone": "\"{found}\" ni ijambo rikwiye kwirindwa.",
+        "preferred-term": "Ryandike \"{first}\" aho gukoresha \"{found}\".",
+        "language": "Ryashyizweho nka {found}; indimi z'ikimenyetso ni {expected}.",
+        "logo-distorted": "{name} yashushanyijwe kuri {found}; ingano yacyo ni {first}.",
+        "logo-small": "{name} ifite ubugari bwa {found} pt; ikwiye kuba nibura {first} pt.",
+        "logo-background": "{name} iri kuri {found}; ishobora kwerekanwa kuri {expected}.",
+        "logo-unknown": "Ifoto ishobora kuba logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Isuzuma ry'ikimenyetso: {name}",
+        "meta": "Kuri {book}, {date}, {pages, plural, one {# ipaji} other {# mapaji}}",
+        "errors": "{count, plural, one {# ikosa} other {# amakosa}}",
+        "warnings": "{count, plural, one {# igusubizamo} other {# ibisubizamo}}",
+        "infos": "{count, plural, one {# inyandiko} other {# inyandiko}}",
+        "partial": "Isuzuma ntirarangira; iyi raporo igaragaza ibyarabonetse mbere y’uko irangira.",
+        "skipped": "Model ntiyasuzumye ku mapaji {pages}; yasuzumwe idafashijwe na yo.",
+        "none": "Nta cyagaragaye gitandukanye n'igitabo cy'ikimenyetso.",
+        "page": "Ipaji",
+        "severity": "Ubukana",
+        "rule": "Isuzuma",
+        "finding": "Icyabonetse",
+        "found": "Icyabonetse",
+        "notes": "Inyandiko",
+        "fileSuffix": "isuzuma ry'ikimenyetso"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Isi y'ikiganiro buri model ishyikirizwa buri gihe.",
       "analytics": "Raporo zageze: ibyageze, abemerewe gufungura buri dossier, ndetse n'imyanya ishobora kwerekanwa.",
       "skills": "Ibice by’amabwiriza akoreshwa inshuro nyinshi bishyirwa n’umufasha igihe bigaragaye ko bikenewe mu kiganiro.",
-      "models": "Shyiraho imodoka z’inyuma kandi usuzume ko akarere gateguye neza gushyirwamo."
+      "models": "Shyiraho imodoka z’inyuma kandi usuzume ko akarere gateguye neza gushyirwamo.",
+      "brandBooks": "Amabara, ubwoko bw'inyuguti, logos, amagambo n'inyandiko-shusho bigenzurwa ndetse bikaganirirwaho mu nyandiko."
     },
     "openSettings": "Fungura imyanya",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Ingengo y'ikiganiro",
       "analytics": "Isesengura",
       "skills": "Ubushobozi",
-      "models": "Imodoka n’ubiteguye"
+      "models": "Imodoka n’ubiteguye",
+      "brandBooks": "Igitabo cy'ibirango"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Subiza ingano uko yari (ubu {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Iyi nyandiko ntiyashoboye kugaragazwa. Ishobora kuba nini cyane, irinzwe, cyangwa igihindura gihuze; ongera ugerageze mu kanya."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Igitabo cy'ibirango kidafite izina",
+    "intro": "Igitabo cy'ibirango kirimo amabara, ubwoko bw'inyuguti, logos, amagambo n'inyandiko-shusho by'ikigo, kugira ngo inyandiko zigenzurwe cyangwa zubakwe hakurikije ibyo. Uko buri gitabo gikoreshwa bigenwa n'amabwiriza yo kucyinjiramo.",
+    "unavailable": "Ibitabo by'ibirango ntibyabashije kuboneka aho bibikwa. Gerageza kongera usubiremo nyuma.",
+    "add": "Ongeramo igitabo cy'ibirango",
+    "none": "Nta gitabo cy'ibirango kiraboneka.",
+    "paletteSummary": "{count, plural, one {# warna y'ikirango} other {# amabara y'ikirango}}",
+    "summary": "{fonts, plural, one {# ubwoko bw'inyuguti} other {# ubwoko bw'inyuguti}}, {logos, plural, one {# logo} other {# logos}}",
+    "open": "Fungura",
+    "delete": "Siba",
+    "deleteConfirm": "Siba \"{name}\" n'amafayile yayo? Inyandiko zamaze kugenzurwa zizakomeza kubika raporo zabyo.",
+    "deleteConfirmButton": "Siba igitabo cy'ibirango",
+    "loading": "Birimo gufungura igitabo cy'ibirango...",
+    "loadFailed": "Gufungura igitabo cy'ibirango byaranze.",
+    "missing": "Igitabo cy'ibirango ntibihari cyangwa mwemerewe kugihindura.",
+    "back": "Ibitabo by'ibirango",
+    "unsaved": "Impinduka ntizabitswe",
+    "saved": "Byabitswe",
+    "save": "Bika",
+    "conflict": "Undi muyobozi yabikiye igitabo cy'ibirango nyuma yo kukifungura. Ongera ufungure kugira ngo urebe version nshya; impinduka wakoze hano zizatakara.",
+    "reload": "Ongera ufungure",
+    "invalid": "Igitabo cy'ibirango nticyashobora kubikwa: {reason}",
+    "saveFailed": "Igitabo cy'ibirango nticyashoboye kubikwa.",
+    "uploadFailed": "Dosiye ntiyashoboye koherezwa.",
+    "remove": "Kura",
+    "removeNamed": "Kura {name}",
+    "basics": {
+      "title": "Igitabo cy'ibirango",
+      "name": "Izina",
+      "description": "Ibisobanuro"
+    },
+    "guide": {
+      "action": "Gutangirira ku gitabo cy'amabwiriza y'ibirango",
+      "reading": "Birimo gusoma amabwiriza...",
+      "hint": "Ohereza amabwiriza y'ibirango nk'ifatizo ya PDF kugira ngo huzuzwe amabara, ubwoko bw'inyuguti n'amagambo yasobanuwe. Logos n'inyandiko-shusho ntabwo bifatwa kuri ayo mabwiriza; byoherereza hasi.",
+      "source": "Byatangiriye kuri",
+      "notPdf": "Amabwiriza y'ibirango agomba kuba ari PDF.",
+      "failed": "Gutangirira kuri aya mabwiriza ntibyashobotse.",
+      "applied": "{pages, plural, one {Byakozwe hifashishijwe igitabo gifite urupapuro 1.} other {Byakozwe hifashishijwe igitabo gifite impapuro #.}}",
+      "measuredFonts": "Ubwoko bw'inyuguti zakoreshwejwe muri ayo magambo:",
+      "measuredColors": "Amabara yakoreshejwe muri ayo magambo:",
+      "check": "Genzyura buri gaciro n'amabwiriza mbere yo kubika.",
+      "undo": "Subira inyuma umushinga watangijwe"
+    },
+    "palette": {
+      "title": "Amabara",
+      "description": "Amabara y'ikigo. Ibara riri mu nyandiko rifatwa nk'umwe muri aya mabarwa iyo riri mu mbibi zemerera iryo bara.",
+      "add": "Ongeramo ibara",
+      "newName": "Ibara {number}",
+      "none": "Nta mabarwa y'ikigo araboneka.",
+      "hex": "Hex",
+      "pick": "Hitamo ibara rya {name}",
+      "name": "Izina",
+      "tolerance": "Imbibi",
+      "toleranceHint": "Itandukaniro ry'amabara (Delta E). 2 kugeza kuri 3 ntibigira itandukaniro risa.",
+      "roles": "Bikoreshwa kuri",
+      "neutrals": "Amabara adafite uruhande",
+      "neutralsHint": "Amabara inyandiko iyo ari yo yose ishobora gukoresha idakoresheje amabara y'ikimenyetso, yasizweho akadomo."
+    },
+    "colorRole": {
+      "primary": "Iby'ingenzi",
+      "secondary": "Ibyunganira",
+      "accent": "Kugaragaza",
+      "text": "Inyandiko",
+      "background": "Inyuma",
+      "neutral": "Atarimo uruhande"
+    },
+    "typography": {
+      "title": "Ubwoko",
+      "description": "Imyandikire hashingiwe ku ruhare, n'imyandikire yemerewe kuyisimbura, nk'urugero inyandiko zohererezwa hanze hifashishijwe fonts za system.",
+      "add": "Ongeramo inyuguti",
+      "none": "Nta nyuguti irashyirwaho.",
+      "role": "Uruhare",
+      "family": "Imyandikire",
+      "substitutes": "Ibisimbura byemewe",
+      "minSize": "Inyandiko ntoya cyane (pt)",
+      "minSizeHint": "0 bisobanura nta ntarengwa."
+    },
+    "fontRole": {
+      "heading": "Umutwe w'inyandiko",
+      "body": "Inyandiko nyamukuru",
+      "accent": "Kugaragaza"
+    },
+    "logos": {
+      "title": "Amabendera (Logos)",
+      "description": "Amadosiye y'ikimenyetso inyandiko zigomba gukoresha, nka PNG, SVG cyangwa JPEG.",
+      "add": "Ohereza ikimenyetso",
+      "untitled": "Ikimenyetso",
+      "none": "Nta kimenyetso kirashyirwaho.",
+      "noPreview": "Nta ishusho igaragaza",
+      "name": "Izina",
+      "minWidth": "Ubugari buto cyane (pt)",
+      "aspect": "Kwemererwa gukururwa (%)",
+      "aspectHint": "Uburyo igice cy'ikimenyetso gishobora gutandukana.",
+      "colors": "Byerekanwa kuri",
+      "colorsHint": "Reka byose bidatoranyijwe kugira ngo byemererwe ku mfuruka iyo ari yo yose."
+    },
+    "language": {
+      "title": "Imikoreshereze y'amagambo",
+      "description": "Indimi inyandiko zandikwamo, amagambo akwiriye gukoreshwa n'atemewe, n'ijwi rizakoreshwa.",
+      "locales": "Indimi",
+      "localesHint": "Ibiranga indimi nko kuri en cyangwa fr-CA, byatandukanijwe n'akadomo.",
+      "preferred": "Amagambo akwiriye gukoreshwa",
+      "banned": "Amagambo akwiriye kwirindwa",
+      "term": "Ijambo cyangwa interuro",
+      "alternatives": "Aho / andika ahubwo",
+      "note": "Icyitonderwa",
+      "addPreferred": "Ongeraho ijambo rikoreshwa",
+      "addBanned": "Ongeraho ijambo ryo kwirinda",
+      "nonePreferred": "Nta magambo akwiriye gukoreshwa arashyirwaho.",
+      "noneBanned": "Nta magambo yo kwirinda arashyirwaho.",
+      "tone": "Ijwi"
+    },
+    "templates": {
+      "title": "Ibisekuru (Templates)",
+      "description": "Ibisekuru bya PowerPoint na Word inyandiko nshya zishingirwaho.",
+      "add": "Ohereza icyitegererezo",
+      "untitled": "Icyitegererezo",
+      "none": "Nta byitegererezo biraboneka.",
+      "name": "Izina",
+      "wrongType": "Icyitegererezo kigomba kuba kimwe muri {types}."
     }
   }
 }

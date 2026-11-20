@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "የቻናል ሰሪ",
         "description": "ምንጮችን ወደ ልዩ ልዩ ቻናሎች መልእክቶች ያድርጉ፣ እያንዳንዱ በትክክለኛው ድምፅ፣ የተጠቀሱትን ትክክለኛ ምንጭ አብሮ ያሳያሉ"
+      },
+      "brandReview": {
+        "label": "የብራንድ እይታ አጠቃቀም",
+        "description": "PDF፣ Word ዶክመንት ወይም ማቅረቢያን በብራንድ መፅሀፍት ላይ ያስረጉ፡ ፊደላት፣ ቀለሞች፣ ቃላት፣ ሎጎዎችና ድምቀት ይፈትናል"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "አዲስ ካርታ",
       "newGrants": "አዲስ የግራንት ሂደት",
       "newFormFill": "አዲስ ሰነድ ማሙላት",
-      "newChannelDrafter": "አዲስ የቻናል ስህተት"
+      "newChannelDrafter": "አዲስ የቻናል ስህተት",
+      "newBrandReview": "አዲስ የብራንድ እይታ"
     },
     "translation": {
       "chooseLanguage": "የትርጉም ቋንቋ",
@@ -4838,6 +4843,112 @@
         "altTooLong": "የ{name} አልት ጽሑፍ {count} በዚህ ቻነል {max} ገደብ በላይ ነው።",
         "unicodeSms": "{characters} በመደበኛ እና ተግባራዊ ጽሑፍ ላይ ላከን አይችሉም፣ ስለዚህ ይህ መልእክት ለ70 ባህሪዎች ቦታ አለው እንጂ ለ160 አይደለም። ቦታ እንዲመለስ በተቆይተው ይቀይሩአቸው።"
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "የብራንድ እይታ",
+        "intro": "ብራንድ መፅሀፍ እና ዶክመንት ይምረጡ። ፊደሎች፣ ቀለሞች፣ የጽሑፍ መጠኖች፣ ቃላትና ሎጎዎችን ይፈትናል፤ እና ሞዴሉ እያንዳንዱን ገፅ ለድምቀትና ለምሳሌ ቅድመ ደንቦች ማየት ይችላል።",
+        "book": "የብራንድ መፅሀፍ",
+        "booksLoading": "ብራንድ መፅሀፍቶችን በመጫን ላይ...",
+        "noBooks": "የብራንድ መፅሀፍቶች አልተገኙም። አስተዳዳሪው እነሱን በAdmin > Brand books ይጨምራል።",
+        "document": "ዶክመንት",
+        "chooseDocument": "ዶክመንት ይምረጡ",
+        "replaceDocument": "ሌላ ዶክመንት ይምረጡ",
+        "documentTypes": "PDF፣ Word ወይም PowerPoint",
+        "uploading": "በመጫን ላይ...",
+        "uploadFailed": "ዶክመንቱን መስቀመጥ አልተቻለም።",
+        "wrongType": "PDF፣ Word ዶክመንት ወይም ማቅረቢያ ይምረጡ።",
+        "modelReview": "ሞዴሉ እያንዳንዱን ገፅ ይመልከት",
+        "modelReviewHint": "ስድቀት፣ ታየ እና የሎጎ ችግሮችን ይያያዣል። በእያንዳንዱ ገፅ ላይ tokens ይጠቀማል፣ ከ40 ገፅ እስከ.",
+        "start": "እይታ ጀምር"
+      },
+      "loading": "እይታውን በመጫን ላይ...",
+      "booksFailed": "የብራንድ መፅሀፍቶች መጫን አልተቻለም።",
+      "startFailed": "እይታውን ማስጀመር አልተቻለም።",
+      "readFailed": "እይታውን ማንበብ አልተቻለም።",
+      "busy": "\"{name}\" እየተመረምረ ነው። ከመጀመርዎ በፊት ያጠናቁ ወይም አቁሙ።",
+      "failed": "እይታው አልተሳካም።",
+      "against": "በ{book} ላይ",
+      "progress": {
+        "reading": "ዶክመንቱን በመንባት ላይ...",
+        "checking": "ጽሑፍና ሎጎዎችን በመመረመር ላይ...",
+        "reviewing": "ገፆችን በመገምገም ላይ...",
+        "pages": "ከ{total} ውስጥ {done} ገፆች ተጠቅመዋል"
+      },
+      "status": {
+        "done": "{errors, plural, one {# ስህተት} other {# ስህተቶች}}, {warnings, plural, one {# ማንታዎች} other {# ማንታዎች}}",
+        "stopped": "ቆመ፡ {errors, plural, one {# ስህተት} other {# ስህተቶች}} እስካሁን",
+        "failed": "አልተሳካም",
+        "running": "በሂደት ላይ"
+      },
+      "stop": "አቁም",
+      "download": "ሪፖርቱን አውርድ",
+      "newReview": "አዲስ እይታ",
+      "findings": "ውጤቶች",
+      "noFindings": "ምንም አልተገኘም።",
+      "noneOfSeverity": "የዚህ አይነት ውጤት የለም።",
+      "byModel": "በሞዴሉ የተገኘ፤ ያረጋግጡ።",
+      "notes": "ማስታወሻዎች",
+      "pageShort": "ገ. {page}",
+      "filter": {
+        "label": "አሳይ",
+        "all": "ሁሉም {count}",
+        "error": "ስህተቶች {count}",
+        "warning": "ማንታዎች {count}",
+        "info": "ማስታወሻዎች {count}"
+      },
+      "severity": {
+        "error": "ስህተት",
+        "warning": "ማንታ",
+        "info": "ማስታወሻ"
+      },
+      "rule": {
+        "font": "ፎንት አይነት",
+        "color": "ቀለም",
+        "size": "የጽሑፍ መጠን",
+        "banned-term": "ሊታሰበው የማይገባ ቃል",
+        "preferred-term": "ተመከረ ቃል",
+        "language": "ቋንቋ",
+        "logo-distorted": "የአርማ ልኬት",
+        "logo-small": "የአርማ መጠን",
+        "logo-background": "የአርማ መደብ",
+        "logo-unknown": "አርማ ሊሆን ይችላል",
+        "visual": "አይነታዊ",
+        "tone": "ድምጽ"
+      },
+      "message": {
+        "font": "በ{found} ተቀመጠ፤ የብራንድ ፎንቶች {expected} ናቸው።",
+        "font-alone": "በ{found} ተቀመጠ፣ ይህ የብራንድ ፎንት አይደለም።",
+        "color": "{found} የብራንድ ቀለም አይደለም፣ ቅርብ ከሆነው {first} ነው።",
+        "size": "ጽሑፍ {found} pt ላይ ነው፤ በታች የሚፈቀደው {first} pt ነው።",
+        "banned-term": "\"{found}\" ሊታሰበው የማይገባ ቃል ነው፤ ይህን ይበይኑ {expected} ይፃፉ።",
+        "banned-term-alone": "\"{found}\" ሊታሰበው የማይገባ ቃል ነው።",
+        "preferred-term": "\"{found}\" ፣ የተሻለው \"{first}\" ነው።",
+        "language": "በ{found} ታይቷል፤ የብራንዱ ቋንቋዎች {expected} ናቸው።",
+        "logo-distorted": "{name} በ{found} ተዳርጎ ታይቷል፤ የትክክለኛው ልኬት {first} ነው።",
+        "logo-small": "{name} በ{found} pt ወሰን ተመዝግቷል፤ ቢያንስ {first} pt መሆን ይገባዋል።",
+        "logo-background": "{name} በ{found} ላይ ተደርጓል፤ በ{expected} ላይም ማሳየት ይችላል።",
+        "logo-unknown": "የአርማ ሊሆን ይችላል የሚባለ መልክት፡ {found}።",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "የብራንድ አስተያየት፡ {name}",
+        "meta": "ከ{book} ጋር፣ {date}፣ {pages, plural, one {# ገፅ} other {# ገፆች}}",
+        "errors": "{count, plural, one {# ስህተት} other {# ስህተቶች}}",
+        "warnings": "{count, plural, one {# ማስጠንቀቂያ} other {# ማስጠንቀቂያዎች}}",
+        "infos": "{count, plural, one {# ማስታወሻ} other {# ማስታወሻዎች}}",
+        "partial": "እባክዎን አጠናቀቀ አልውለውም፡ ቪው ሪፖርት እስከ አቋሙ ድረስ ያገኘውን ይዟል።",
+        "skipped": "ሞዴሉ {pages} ገፆችን አላየም፤ ያ ያሉት በሞዴል ሳይጠቀሙ ተቆጣጠሩ።",
+        "none": "ከብራንድ መመሪያ የተለየ ምንም አልተገኘም።",
+        "page": "ገፅ",
+        "severity": "አስከባሪነት",
+        "rule": "ቁጥር አስተካከያ",
+        "finding": "የተገኘ",
+        "found": "ተገኘ",
+        "notes": "ማስታወሻዎች",
+        "fileSuffix": "የብራንድ አስተያየት"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "በእያንዳንዱ ዙር ለየትኛውም ሞዴል ምን ያህል የውይይት ታሪክ ይላካል።",
       "analytics": "የተደረሱ ሪፖርቶች፡ የደረሱትን፣ ማን ጎራውን ማክፈት የሚችል እና የሚታዩትን መስኮች።",
       "skills": "የሚደጋገመ የመመሪያ ቅርፄዎች የሚያስፈልግ ጊዜ የሚተገበሩ በአስሸጋገሩ የሚደረጉ።",
-      "models": "የጀርባ ሞዴሎችን ይመድቡ እና የአከባቢዎች ስፋት በጥቂት ዝግጁነት ይፈትሹ።"
+      "models": "የጀርባ ሞዴሎችን ይመድቡ እና የአከባቢዎች ስፋት በጥቂት ዝግጁነት ይፈትሹ።",
+      "brandBooks": "የማብራሪያ ቀለሞች፣ ፊደሎች፣ አርማዎች፣ ቃላት እና ቴምፕሌቶች፣ መደበኛ ሰነዶችን ማረጋገጥ እና መገንባት የሚደረግበት።"
     },
     "openSettings": "ማቀናበሪያዎችን ክፈት",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "ኮንቴክስት በጀት",
       "analytics": "ትንተና",
       "skills": "ክህሎቶች",
-      "models": "ሞዴሎች እና ዝግጁነት"
+      "models": "ሞዴሎች እና ዝግጁነት",
+      "brandBooks": "የማብራሪያ መመዝገቦች"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "ማጉላቱን ዳግም አስጀምር (አሁን {percent}%)",
       "failed": "ይህ ሰነድ ሊታይ አልቻለም። በጣም ትልቅ፣ የተጠበቀ ሊሆን ይችላል፣ ወይም መቀየሪያው ስራ በዝቶበት ሊሆን ይችላል፤ ትንሽ ቆይተው እንደገና ይሞክሩ።",
       "zoomLevel": "{percent}%"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "ስልም የሌለው የማብራሪያ መመዝገብ",
+    "intro": "የማብራሪያ መመዝገብ የድርጅቱን ቀለሞች፣ ፊደሎች፣ አርማዎች፣ ቃላት እና ቴምፕሌቶች ይዞ ይያዛል። ሰነዶች እንዲሆኑ ይገመገማሉ እና ከዚህ መመዝገብ ይገናኝባቸዋል። የትኛው ማብራሪያ መመዝገብ በማን እንደሚያገለግል ከዳሰሳ ደንብ ጋር ይቀመጣል።",
+    "unavailable": "የማብራሪያ መመዝገቦችን ከቤት መዝገብ ማስመጣት አልተቻለም። እባክዎን በአንድ ጊዜ ደግመው ይሞክሩ።",
+    "add": "የማብራሪያ መመዝገብ ያክሉ",
+    "none": "እስካሁን የማብራሪያ መመዝገቦች የሉም።",
+    "paletteSummary": "{count, plural, one {# የማብራሪያ ቀለም} other {# የማብራሪያ ቀለሞች}}",
+    "summary": "{fonts, plural, one {# ፊደል አይነት} other {# ፊደል አይነቶች}}, {logos, plural, one {# አርማ} other {# አርማዎች}}",
+    "open": "ክፈት",
+    "delete": "ሰርዝ",
+    "deleteConfirm": "\"{name}\" እና አካል ፋይሎች ይሰረዛሉ? የተገመገመባቸው ሰነዶች የግምገማ ሪፖርታቸውን ይጠብቃሉ።",
+    "deleteConfirmButton": "የማብራሪያ መመዝገብ ሰርዝ",
+    "loading": "የማብራሪያ መመዝገብ በመጫን ላይ...",
+    "loadFailed": "የማብራሪያ መመዝገቡን ማስመጣት አልተቻለም።",
+    "missing": "ይህ የማብራሪያ መመዝገብ የለም ወይም ማስተካከል አትችሉም።",
+    "back": "የማብራሪያ መመዝገቦች",
+    "unsaved": "ያልተቀመጡ ለውጦች",
+    "saved": "ተቀመጠ",
+    "save": "አስቀምጥ",
+    "conflict": "በተጨማሪ አድሚን ይህን የማብራሪያ መመዝገብ እርስዎ ከመክፈታቸው በኋላ አስቀመጡት። እባክዎ ዳግመው ይጫኑ እና እርስዎ ያደረጉት ለውጥ ይጠፋል።",
+    "reload": "ተመልሷል",
+    "invalid": "ይህ የማብራሪያ መመዝገብ አሁን ማስቀመጥ አይችልም፡ {reason}",
+    "saveFailed": "የማብራሪያ መመዝገቡን ማስቀመጥ አልተቻለም።",
+    "uploadFailed": "ፋይሉን ማስገባት አልተቻለም።",
+    "remove": "ያስወግዱ",
+    "removeNamed": "{name} ያስወግዱ",
+    "basics": {
+      "title": "የማብራሪያ መመዝገብ",
+      "name": "ስም",
+      "description": "መግለጫ"
+    },
+    "guide": {
+      "action": "ከየማብራሪያ መመሪያ ቅድመ ሰነድ ፍጠር",
+      "reading": "መመሪያውን በቅድሚያ በመንበብ ላይ...",
+      "hint": "ቀለሞች፣ ፊደሎች እና ቃላት ለመሙያው የዋናውን መመሪያ PDF በመጫን ይሙሉ። አርማዎችና ቴምፕሌቶች ከዚህ አይቀደዱም፤ ከታች ይጫኑ።",
+      "source": "ቅድመ ሰነድ የተፈጠረው",
+      "notPdf": "የማብራሪያ መመሪያ PDF መሆን አለበት።",
+      "failed": "ከዚህ መመሪያ ቅድመ ሰነድ ማዘጋጀት አልተቻለም።",
+      "applied": "{pages, plural, one {ከአንድ ገፅ መመሪያ ተዘምኗል።} other {ከ # ገፆች መመሪያ ተዘምኗል።}}",
+      "measuredFonts": "የመጽሐፉ ፊደሎች፦",
+      "measuredColors": "የመጽሐፉ ቀለሞች፦",
+      "check": "ማስቀመጥ ከጀመሩ በፊት እያንዳንዱን እሴት ከመመሪያው ጋር ያረጋግጡ።",
+      "undo": "ቅድመ ሰነድ ይተዉ"
+    },
+    "palette": {
+      "title": "ቀለሞች",
+      "description": "የማብራሪያ ቀለሞች። በሰነድ ውስጥ ያለ ቀለም በህጉ መድረሻ ውስጥ ከሆነ ከዚህ መካከል አንዱ ነው ተብሎ ይቈጠራል።",
+      "add": "ቀለም ያክሉ",
+      "newName": "ቀለም {number}",
+      "none": "እስካሁን የማብራሪያ ቀለሞች የሉም።",
+      "hex": "Hex",
+      "pick": "ለ{name} ቀለም ይምረጡ",
+      "name": "ስም",
+      "tolerance": "መቻል ደረጃ",
+      "toleranceHint": "ለማህበራዊ ቀለም ልዩነት (Delta E)። 2 እስከ 3 በጣም አይታወቅም።",
+      "roles": "ሚያገለግሉበት",
+      "neutrals": "መነሻ ቀለሞች",
+      "neutralsHint": "ማንኛውም ሰነድ ያጠቀመው በኩባንያ ቀለሙ ሳይሆን የሚያስገቡ ቀለሞች፣ በኮማ የተሰየመ።"
+    },
+    "colorRole": {
+      "primary": "ዋና",
+      "secondary": "ሁለተኛ",
+      "accent": "ልዩ ማስያዣ",
+      "text": "ጽሑፍ",
+      "background": "ጀርባ",
+      "neutral": "መነሻ"
+    },
+    "typography": {
+      "title": "አይነት",
+      "description": "በተለያዩ ጥራቶች የሚጠቀሙት ቅፅ፣ እና በአካባቢው ሰነዶች ውስጥ ከተጠቀሙ ፊደሎች በተጨማሪ የሚፈቀዱ ፊደሎች፣ እንደ ስርዓተ-ፊደል ያሉ ናቸው።",
+      "add": "ፊደል ቅፅ ያክሉ",
+      "none": "እስካሁን ፊደል ቅፅ የለም።",
+      "role": "ሚና",
+      "family": "ፊደል ቅፅ",
+      "substitutes": "የተፈቀዱ መተካቸዎች",
+      "minSize": "ትንሹ ጽሑፍ (pt)",
+      "minSizeHint": "0 የአነስተኛውን ግዴታ አይቀይርም።"
+    },
+    "fontRole": {
+      "heading": "አርዕሶች",
+      "body": "የመደበኛ ጽሑፍ",
+      "accent": "ልዩ ማስያዣ"
+    },
+    "logos": {
+      "title": "ሎጎዎች",
+      "description": "ሰነዶች የመጠቀም የሚገባቸው የሎጎ ፋይሎች፣ PNG፣ SVG ወይም JPEG በመሆኑ።",
+      "add": "ሎጎ ያስገቡ",
+      "untitled": "ሎጎ",
+      "none": "እስካሁን ሎጎ የለም።",
+      "noPreview": "አሳየት የለም",
+      "name": "አይዲ",
+      "minWidth": "ትንሹ ስፋት (pt)",
+      "aspect": "የመዘንጋጃ ልዩነት (%)",
+      "aspectHint": "በርካታ መጠን ፍላጎቱ ሊለያይ ይችላል።",
+      "colors": "የሚታየው",
+      "colorsHint": "ሁሉንም ካልመረጡ ማንኛውም ጀርባ ይፈቀዳል።"
+    },
+    "language": {
+      "title": "ሙያ ጽሑፍ",
+      "description": "ሰነዶቹ የተጻፉበት ቋንቋ፣ የሚጠቀሙትና የማይጠቀሙት ቃላት፣ እና ድምፃቸው።",
+      "locales": "ቋንቋዎች",
+      "localesHint": "እንደ en ወይም fr-CA ያሉ ቋንቋ መለያዎች፣ በኮማ የተሰየመ።",
+      "preferred": "የሚጠቀሙት ቃላት",
+      "banned": "የማይጠቀሙት ቃላት",
+      "term": "ቃል ወይም አንድ አንደበት",
+      "alternatives": "በመፈጸሙ የተለየ/ በፊት የተጻፉን ይጻፉ",
+      "note": "ማብራሪያ",
+      "addPreferred": "ሊጠቀመው የሚሆነውን ቃል ያክሉ",
+      "addBanned": "ለመቆጣጠር የማይጠቀመውን ቃል ያክሉ",
+      "nonePreferred": "ተመራጩ ቃላት አልተጨመሩም።",
+      "noneBanned": "የማይጠቀመው ቃላት አልተጨመሩም።",
+      "tone": "ድምፅ"
+    },
+    "templates": {
+      "title": "አብካቻዎች",
+      "description": "አዲሱ ሰነድ የሚከፈተው የPowerPoint እና Word ቅርጸ አብካቻዎች።",
+      "add": "ቴምፕሌት ያስገቡ",
+      "untitled": "ቴምፕሌት",
+      "none": "አሁን የሚገኙ መስፈሪያዎች የሉም።",
+      "name": "ስም",
+      "wrongType": "ቴምፕሌት ከ {types} መካከል አንዱ ሊሆን ይገባል።"
     }
   }
 }

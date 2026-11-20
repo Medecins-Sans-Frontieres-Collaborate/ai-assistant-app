@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Redactor de canales",
         "description": "Convierte fuentes en publicaciones para varios canales, cada uno con el tono adecuado y cada cita rastreada a su origen"
+      },
+      "brandReview": {
+        "label": "Revisión de marca",
+        "description": "Revise un PDF, documento Word o presentación comparándolo con un manual de marca: fuentes, colores, redacción, logotipos y tono"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Nuevo mapa",
       "newGrants": "Nuevo procesamiento de subvenciones",
       "newFormFill": "Nuevo llenado de documento",
-      "newChannelDrafter": "Nuevo borrador de canal"
+      "newChannelDrafter": "Nuevo borrador de canal",
+      "newBrandReview": "Nueva revisión de marca"
     },
     "translation": {
       "chooseLanguage": "Idioma de destino",
@@ -4838,6 +4843,112 @@
         "altTooLong": "El texto alternativo de {name} supera en {count} el límite de {max} de este canal.",
         "unicodeSms": "{characters} no se pueden enviar en un SMS estándar, por lo que este mensaje tiene espacio para 70 caracteres en lugar de 160. Reemplácelos para recuperar espacio."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Revisión de marca",
+        "intro": "Elija un manual de marca y un documento. La revisión verificará fuentes, colores, tamaños de texto, redacción y logotipos, y un modelo puede analizar cada página para revisar el tono y reglas visuales.",
+        "book": "Manual de marca",
+        "booksLoading": "Cargando manuales de marca...",
+        "noBooks": "Aún no dispone de manuales de marca. Un administrador debe agregarlos en Admin > Manuales de marca.",
+        "document": "Documento",
+        "chooseDocument": "Elija un documento",
+        "replaceDocument": "Elija otro documento",
+        "documentTypes": "PDF, Word o PowerPoint",
+        "uploading": "Subiendo...",
+        "uploadFailed": "No se pudo subir el documento.",
+        "wrongType": "Elija un PDF, documento Word o presentación.",
+        "modelReview": "Hacer que un modelo revise cada página",
+        "modelReviewHint": "Detecta problemas de tono, visuales y logotipos que las comprobaciones no pueden ver. Utiliza tokens por cada página, hasta 40 páginas.",
+        "start": "Iniciar revisión"
+      },
+      "loading": "Cargando la revisión...",
+      "booksFailed": "No se pudieron cargar los manuales de marca.",
+      "startFailed": "No se pudo iniciar la revisión.",
+      "readFailed": "No se pudo leer la revisión.",
+      "busy": "\"{name}\" todavía se está revisando. Espere a que termine o deténgalo antes de iniciar otro.",
+      "failed": "La revisión falló.",
+      "against": "Contra {book}",
+      "progress": {
+        "reading": "Leyendo el documento...",
+        "checking": "Comprobando texto y logotipos...",
+        "reviewing": "Revisando páginas...",
+        "pages": "Revisadas {done} de {total} páginas"
+      },
+      "status": {
+        "done": "{errors, plural, one {# error} other {# errores}}, {warnings, plural, one {# advertencia} other {# advertencias}}",
+        "stopped": "Detenido: {errors, plural, one {# error} other {# errores}} hasta ahora",
+        "failed": "Fallido",
+        "running": "En ejecución"
+      },
+      "stop": "Detener",
+      "download": "Descargar informe",
+      "newReview": "Nueva revisión",
+      "findings": "Hallazgos",
+      "noFindings": "Aún no se ha encontrado nada.",
+      "noneOfSeverity": "No hay hallazgos de este tipo.",
+      "byModel": "Detectado por el modelo; revíselo.",
+      "notes": "Notas",
+      "pageShort": "pág. {page}",
+      "filter": {
+        "label": "Mostrar",
+        "all": "Todos {count}",
+        "error": "Errores {count}",
+        "warning": "Advertencias {count}",
+        "info": "Notas {count}"
+      },
+      "severity": {
+        "error": "Error",
+        "warning": "Advertencia",
+        "info": "Nota"
+      },
+      "rule": {
+        "font": "Tipografía",
+        "color": "Color",
+        "size": "Tamaño de texto",
+        "banned-term": "Palabra a evitar",
+        "preferred-term": "Palabra preferida",
+        "language": "Idioma",
+        "logo-distorted": "Proporciones del logo",
+        "logo-small": "Tamaño del logo",
+        "logo-background": "Fondo del logo",
+        "logo-unknown": "Logo posible",
+        "visual": "Visual",
+        "tone": "Tono"
+      },
+      "message": {
+        "font": "Establecido en {found}; las tipografías de la marca son {expected}.",
+        "font-alone": "Establecido en {found}, que no es una tipografía de la marca.",
+        "color": "{found} no es un color de la marca; el más cercano es {first}.",
+        "size": "Texto en {found} pt; el mínimo permitido es {first} pt.",
+        "banned-term": "\"{found}\" es una palabra a evitar; escriba {expected} en su lugar.",
+        "banned-term-alone": "\"{found}\" es una palabra a evitar.",
+        "preferred-term": "Escriba \"{first}\" en lugar de \"{found}\".",
+        "language": "Marcado como {found}; los idiomas de la marca son {expected}.",
+        "logo-distorted": "{name} se muestra en {found}; sus propias proporciones son {first}.",
+        "logo-small": "{name} tiene {found} pt de ancho; debe tener al menos {first} pt.",
+        "logo-background": "{name} está sobre {found}; puede mostrarse sobre {expected}.",
+        "logo-unknown": "Una imagen que puede ser un logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Revisión de marca: {name}",
+        "meta": "Contra {book}, {date}, {pages, plural, one {# página} other {# páginas}}",
+        "errors": "{count, plural, one {# error} other {# errores}}",
+        "warnings": "{count, plural, one {# advertencia} other {# advertencias}}",
+        "infos": "{count, plural, one {# nota} other {# notas}}",
+        "partial": "La revisión no se completó; este informe contiene lo encontrado antes de finalizar.",
+        "skipped": "El modelo no revisó las páginas {pages}; fueron evaluadas sin él.",
+        "none": "No se encontró nada que se desvíe del manual de marca.",
+        "page": "Página",
+        "severity": "Severidad",
+        "rule": "Verificación",
+        "finding": "Hallazgo",
+        "found": "Encontrado",
+        "notes": "Notas",
+        "fileSuffix": "revisión de marca"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Cuánta conversación se envía a cada modelo en cada turno.",
       "analytics": "Informes entregados: lo que llegó, quién puede abrir cada carpeta y qué campos se pueden mostrar.",
       "skills": "Bloques de instrucciones reutilizables que el asistente aplica cuando una conversación los necesita.",
-      "models": "Asigne modelos de fondo y verifique la preparación para el despliegue regional."
+      "models": "Asigne modelos de fondo y verifique la preparación para el despliegue regional.",
+      "brandBooks": "Colores, tipografía, logotipos, redacción y plantillas que sirven de referencia y base para revisar y crear documentos."
     },
     "openSettings": "Abrir ajustes",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Presupuesto de contexto",
       "analytics": "Analítica",
       "skills": "Habilidades",
-      "models": "Modelos y preparación"
+      "models": "Modelos y preparación",
+      "brandBooks": "Manual de marca"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Restablecer el zoom (ahora {percent} %)",
       "failed": "No se pudo mostrar este documento. Puede que sea demasiado grande o esté protegido, o que el conversor esté ocupado; inténtelo de nuevo en breve.",
       "zoomLevel": "{percent}%"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Manual de marca sin título",
+    "intro": "Un manual de marca contiene los colores, tipografía, logotipos, redacción y plantillas de una organización, para revisar y crear documentos conforme a él. Quién puede usar cada manual se determina con su regla de acceso.",
+    "unavailable": "No se pudieron cargar los manuales de marca desde el almacenamiento. Inténtelo nuevamente en un momento.",
+    "add": "Agregar manual de marca",
+    "none": "Aún no hay manuales de marca.",
+    "paletteSummary": "{count, plural, one {# color de marca} other {# colores de marca}}",
+    "summary": "{fonts, plural, one {# tipografía} other {# tipografías}}, {logos, plural, one {# logotipo} other {# logotipos}}",
+    "open": "Abrir",
+    "delete": "Eliminar",
+    "deleteConfirm": "¿Eliminar \"{name}\" y sus archivos? Los documentos ya revisados mantienen sus reportes.",
+    "deleteConfirmButton": "Eliminar manual de marca",
+    "loading": "Cargando manual de marca...",
+    "loadFailed": "No se pudo cargar el manual de marca.",
+    "missing": "Este manual de marca no existe o no puede editarlo.",
+    "back": "Manuales de marca",
+    "unsaved": "Cambios no guardados",
+    "saved": "Guardado",
+    "save": "Guardar",
+    "conflict": "Otro administrador guardó este manual de marca después de que lo abrió. Recargue para ver su versión; sus cambios aquí se perderán.",
+    "reload": "Recargar",
+    "invalid": "Este manual de marca aún no puede guardarse: {reason}",
+    "saveFailed": "No se pudo guardar el manual de marca.",
+    "uploadFailed": "No se pudo subir el archivo.",
+    "remove": "Eliminar",
+    "removeNamed": "Eliminar {name}",
+    "basics": {
+      "title": "Manual de marca",
+      "name": "Nombre",
+      "description": "Descripción"
+    },
+    "guide": {
+      "action": "Crear borrador desde una guía de marca",
+      "reading": "Leyendo la guía...",
+      "hint": "Suba la guía de marca en PDF para llenar los colores, tipografía y redacción que define. Los logotipos y plantillas no se extraen de ella; súbalos abajo.",
+      "source": "Borrador basado en",
+      "notPdf": "La guía de marca debe ser un PDF.",
+      "failed": "No se pudo crear un borrador desde esta guía.",
+      "applied": "{pages, plural, one {Redactado a partir de una guía de # página.} other {Redactado a partir de una guía de # páginas.}}",
+      "measuredFonts": "Tipografías usadas en el texto:",
+      "measuredColors": "Colores usados en el texto:",
+      "check": "Verifique cada valor comparándolo con la guía antes de guardar.",
+      "undo": "Deshacer borrador"
+    },
+    "palette": {
+      "title": "Colores",
+      "description": "Los colores de la marca. Un color en un documento se considera uno de estos si está dentro de la tolerancia del color.",
+      "add": "Agregar color",
+      "newName": "Color {number}",
+      "none": "Aún no hay colores de marca.",
+      "hex": "Hex",
+      "pick": "Elija un color para {name}",
+      "name": "Nombre",
+      "tolerance": "Tolerancia",
+      "toleranceHint": "Diferencia de color (Delta E). 2 a 3 es apenas perceptible.",
+      "roles": "Usado para",
+      "neutrals": "Colores neutros",
+      "neutralsHint": "Colores que cualquier documento puede usar sin ser colores de marca, separados por comas."
+    },
+    "colorRole": {
+      "primary": "Principal",
+      "secondary": "Secundario",
+      "accent": "Acento",
+      "text": "Texto",
+      "background": "Fondo",
+      "neutral": "Neutro"
+    },
+    "typography": {
+      "title": "Tipo",
+      "description": "Las tipografías por rol y las fuentes permitidas en su lugar, como una fuente de sistema para documentos compartidos externamente.",
+      "add": "Agregar tipografía",
+      "none": "Aún no hay tipografías.",
+      "role": "Rol",
+      "family": "Tipografía",
+      "substitutes": "Sustitutos permitidos",
+      "minSize": "Texto más pequeño (pt)",
+      "minSizeHint": "0 no establece mínimo."
+    },
+    "fontRole": {
+      "heading": "Títulos",
+      "body": "Texto principal",
+      "accent": "Acento"
+    },
+    "logos": {
+      "title": "Logos",
+      "description": "Los archivos de logos que deben usar los documentos, en PNG, SVG o JPEG.",
+      "add": "Subir logo",
+      "untitled": "Logo",
+      "none": "Aún no hay logos.",
+      "noPreview": "Sin vista previa",
+      "name": "Nombre",
+      "minWidth": "Ancho mínimo (pt)",
+      "aspect": "Estiramiento permitido (%)",
+      "aspectHint": "Cuánto pueden variar sus proporciones.",
+      "colors": "Mostrado en",
+      "colorsHint": "Deje todas sin marcar para permitir cualquier fondo."
+    },
+    "language": {
+      "title": "Redacción",
+      "description": "Los idiomas en que se redactan los documentos, las palabras a usar y evitar, y el tono de voz.",
+      "locales": "Idiomas",
+      "localesHint": "Etiquetas de idioma como en o fr-CA, separadas por comas.",
+      "preferred": "Palabras a usar",
+      "banned": "Palabras a evitar",
+      "term": "Palabra o frase",
+      "alternatives": "En lugar de / escribir en su lugar",
+      "note": "Nota",
+      "addPreferred": "Agregar una palabra a usar",
+      "addBanned": "Agregar una palabra a evitar",
+      "nonePreferred": "Aún no hay palabras preferidas.",
+      "noneBanned": "Aún no hay palabras a evitar.",
+      "tone": "Tono de voz"
+    },
+    "templates": {
+      "title": "Plantillas",
+      "description": "Plantillas de PowerPoint y Word de las que se crean nuevos documentos.",
+      "add": "Subir plantilla",
+      "untitled": "Plantilla",
+      "none": "Aún no hay plantillas.",
+      "name": "Nombre",
+      "wrongType": "Una plantilla debe ser uno de los siguientes tipos: {types}."
     }
   }
 }

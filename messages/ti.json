@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "የባህሪ ኣዘጋጅ",
         "description": "ምንጪታት ናብ ብዝተፈላለየ ቻናላት ናይ ሚዛን ድምጺ ፖሶት ክዕወጡ፣ ብዝኾነ ኩሉ ጥቓቕ ናብ ምንጪ ዝተመልከት።"
+      },
+      "brandReview": {
+        "label": "ምርምር ብራንድ",
+        "description": "PDF፣ Word ወይ ፕሬዘንታችን ኣብ ብራንድ ቡክ ኣሕዋት: ፎንት፣ ቀለማት፣ ናይ ጽሑፍ ቁልፉት፣ ቃለ-ኣቀባት፣ ኣታሓዱስ ናይ ሎጎን ኣዘናን ድሕሪት ተፈጢሩ"
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "ሓድሽ ካርታ",
       "newGrants": "ሓድሽ ምምዳብ ግንዛቤታት",
       "newFormFill": "መዘኻኸሪ ቦታ ማሕተም ሓድሽ",
-      "newChannelDrafter": "ሓዲሽ ናይ ቻናል ጽሁፍ"
+      "newChannelDrafter": "ሓዲሽ ናይ ቻናል ጽሁፍ",
+      "newBrandReview": "ሓድሽ ምርምር ብራንድ"
     },
     "translation": {
       "chooseLanguage": "ትርጉም ቋንቋ",
@@ -4822,6 +4827,112 @@
         "altTooLong": "ኣልተሰ መልእኽቲ {name} {count} ኣካብአ እዚ ቻናል ብቃል {max} ይምረት።",
         "unicodeSms": "{characters} ብምሳብ ኣብ ስእን ቴክስት ልክዕ ኣይከእልን። እዚ መልእኽቲ 70 ቃላት እንተሃልዎ ይግበሩ። ቃላት ይቅይሩ ንዕድሎም ክህቱ።"
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "ምርምር ብራንድ",
+        "intro": "ብራንድ ቡክን ሰነዲቕን ምምር፡ ምርግጋር ፎንት፣ ቀለማት፣ ቁልፉት፣ ቃለ-ኣቀባትን ሎጎን ይመርምር፡ ኣማሓደስ ሞዴል ናይ ቀርኒ የክርን ኣዘናን ናይ ራእይ ሕጋት ይምርምር ይኽእል።",
+        "book": "ብራንድ ቡክ",
+        "booksLoading": "ብራንድ ቡኳት እዩ እንተካፍሉ...",
+        "noBooks": "ብራንድ ቡኳት እቲ ኮይኖም ንእምበር። ኣመሓዳሪ Admin > Brand books እዩ ዝወሓደ።",
+        "document": "ሰነዲቕ",
+        "chooseDocument": "ሰነዲቕ ምረኽ",
+        "replaceDocument": "ኣንዳንዴ ሰነዲቕ ምረኽ",
+        "documentTypes": "PDF፣ Word ወይ PowerPoint",
+        "uploading": "እዚ ተስዕብ ኣሎ...",
+        "uploadFailed": "ሰነዲቕ ከኣተስዕበን ኣሎ።",
+        "wrongType": "PDF፣ Word ሰነዲቕ ወይ ፕሬዘንታችን ምረኽ።",
+        "modelReview": "ሞዴል ናይ ቀርኒ ምርምር ይፅኑ",
+        "modelReviewHint": "ናይ ኣዘናን ቅንጽውን ራእይን ሎጎን መሕጋስታት ዘይተርእዩ ይረክብ። ክርን ምርምር፡ ነዚ ናይ ቀርኒ ብኣብ 40 እትውህለዉ ገጽ ይጠቕም።",
+        "start": "ምርምር መጀመር"
+      },
+      "loading": "ምርምር እዩ እንተካፍሉ...",
+      "booksFailed": "ብራንድ ቡኳት የተካፍሉን ኣሎ።",
+      "startFailed": "ምርምር ከተጀመረን ኣሎ።",
+      "readFailed": "ምርምር ከተተኣራሓን ኣሎ።",
+      "busy": "\"{name}\" እዚ እምብሩ ኣሎ። ሓሊፍ ወይ ምትው ኣይእትው፡ ቅድሚ ምጀመር ካልእ ምርምር።",
+      "failed": "ምርምር የፍለጠ።",
+      "against": "ኣብ {book}",
+      "progress": {
+        "reading": "ሰነዲቕ እዩ እንተኣነበ።",
+        "checking": "ጽሑፍን ሎጎን እዩ እንተርገጽ።",
+        "reviewing": "ገጻት እዩ እንተምርምር።",
+        "pages": "{done} ካብ {total} ገጻት ተመርምሮም"
+      },
+      "status": {
+        "done": "{errors, plural, one {# ሓገዝ} other {# ሓገዛት}}, {warnings, plural, one {# ማሕጋስ} other {# ማሕጋሳት}}",
+        "stopped": "ትርፉ: {errors, plural, one {# ሓገዝ} other {# ሓገዛት}} ክሱዕ ዝርፉ",
+        "failed": "ፍለጣ",
+        "running": "ኣብ ስራሕ ኣሎ"
+      },
+      "stop": "ዝብሉ",
+      "download": "ሪፖርት ምግባእ",
+      "newReview": "ሓድሽ ምርምር",
+      "findings": "ረኺባታት",
+      "noFindings": "እቲ ረኺባት የትረኽብን።",
+      "noneOfSeverity": "ረኺባት ናይ ዚኖሩ ደረጃ ኣይተረኽቡን።",
+      "byModel": "ብሞዴል ተረኽብ፣ ምርግጋር ግበር።",
+      "notes": "ማህበራት",
+      "pageShort": "ገጽ {page}",
+      "filter": {
+        "label": "ምርኣይ",
+        "all": "ኩሉ {count}",
+        "error": "ሓገዛት {count}",
+        "warning": "ማሕጋሳት {count}",
+        "info": "ማህበራት {count}"
+      },
+      "severity": {
+        "error": "ሓገዝ",
+        "warning": "ማሕጋስ",
+        "info": "ማህበር"
+      },
+      "rule": {
+        "font": "ዓይነት ፊደል",
+        "color": "ቀለም",
+        "size": "ብስ፡ፊደላት",
+        "banned-term": "ቃል ኣይትጠቀም",
+        "preferred-term": "ቃል ዝምልከት",
+        "language": "ቋንቋ",
+        "logo-distorted": "ምስናይ ሎጎ፡ ፍሓስ ኣብ ምዃኑ",
+        "logo-small": "መጠን ሎጎ",
+        "logo-background": "በጃ ሎጎ",
+        "logo-unknown": "ዕቢ ሎጎ ዝኾነ ተሓታተዩ",
+        "visual": "ትርኢት",
+        "tone": "ድንበት"
+      },
+      "message": {
+        "font": "በዓይነት ፊደል {found} ተተኻኽሎ፡ ዝትረኽቡ ናይ ብራንድ ዓይነት ፊደላት {expected} እዮም።",
+        "font-alone": "በዓይነት ፊደል {found} ተተኻኽሎ፡ እዚ ብራንድ ዓይነት ፊደል ኣይኮነን።",
+        "color": "{found} ዝብራንድ ቀለም ኣይኮነን፡ ዝተቐረበ {first} እዩ።",
+        "size": "ፊደል ኣብ {found} pt; ዝፍቀደ ንዝትኣበሓ ዝንአዉዋድ {first} pt እዩ።",
+        "banned-term": "\"{found}\" ቃል ኣይትጠቀም፡ ምስ{expected} ትጽልዉ።",
+        "banned-term-alone": "\"{found}\" ቃል ኣይትጠቀም።",
+        "preferred-term": "ምስ \"{first}\" ኣብርሓኩ \"{found}\" ትጽልዉ።",
+        "language": "ኣብ {found} ተሰናዲዎ፡ ዝትረኽቡ ናይ ብራንድ ቋንቋታት {expected} እዮም።",
+        "logo-distorted": "{name} ኣብ {found} ተጽዓይዎ፡ ዝነአዉዋድ ፍሓሱ {first} እዩ።",
+        "logo-small": "{name} ኣብ ምዃኑ {found} pt ድኳን፡ ብኣየና {first} pt ኢድ ይረኽብ ክንድኣን።",
+        "logo-background": "{name} ኣብ {found} ይበል፡ ኣብ {expected} ክትተሰናድይ ትኽአል።",
+        "logo-unknown": "ስእሊ ዝኾነ ሎጎ ነገር: {found}።",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "ብራንድ ምርመራ፡ {name}",
+        "meta": "ብምኻንያት {book}, {date}, {pages, plural, one {# ገጽ} other {# ገጻት}}",
+        "errors": "{count, plural, one {# ሽግር} other {# ሽግራት}}",
+        "warnings": "{count, plural, one {# ምኽር} other {# ምኽራት}}",
+        "infos": "{count, plural, one {# ማህበራዊ ህቡባት} other {# ማህበራዊ ህቡባት}}",
+        "partial": "ምርመራው ኣይተዓገበን፡ ዚሕደሉ ሪፖርት ምንባር ብዛዕባ ኣብ ምዃኑ ዘለዎ ይሕይዋት።",
+        "skipped": "ቦታስ ንገጻት {pages} ኣይርእዩን፡ ኣይተምርመሯን ናይ ሞዴል ዘይተሰናዲዉ።",
+        "none": "ኣንዳንድ ዝፈለጠ ብራንድ ቦክ ንበይና ኣይተረኽቦን።",
+        "page": "ገጽ",
+        "severity": "ብድንበት",
+        "rule": "ምርመራ",
+        "finding": "ዝተረኽበ",
+        "found": "ዝገነቡ",
+        "notes": "ማህበራዊ ህቡባት",
+        "fileSuffix": "ብራንድ ምርመራ"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "ብቦና ክንታይ conversations ቀረቡዮም model ብእዋኑ ይቅረቡ።",
       "analytics": "ተሰጥዎ ሪፖርታት፡ ምንባብ መግቢ ፋይል፣ ክንደይ ዝተጠቀሙ ፦ ኣብ ፋይል ዝመዓዙ ኣካል፣ ዝተረኸበ ቦታ",
       "skills": "ገንዘብ ትእዛዝ ናይ መሰልታት ብዝያዳ ናይ ንድሕረ መደበኛ መጠን ዝምልከት ዘሎ፣ ሓገዝ ሓዳስ ብደረት ክሳዕ ምምሕዳር የተገበረው።",
-      "models": "ዋና ናይ መደብ ሞዴሎታት ይመደብን ናብ ኩባንያ ውስጢ ምትእትናን ይዓትቱ።"
+      "models": "ዋና ናይ መደብ ሞዴሎታት ይመደብን ናብ ኩባንያ ውስጢ ምትእትናን ይዓትቱ።",
+      "brandBooks": "ሓደ ዝዕመምዎ ፣ ቅድሚ ፍቓድ ዝውይ፣ ሎጎ ፣ ኣቀሓላዊ ንጥፈትን ማዕበልን ተሳትፋ የተፈጠረ ፀቃዉ ደረሲ እዩ።"
     },
     "openSettings": "ቅንጥታት ክፈት",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Context budget",
       "analytics": "Analytics",
       "skills": "መሰልታት",
-      "models": "ሞዴሎታትን ቅድሚ ምግባርን"
+      "models": "ሞዴሎታትን ቅድሚ ምግባርን",
+      "brandBooks": "ብራንድ ቦክስ"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "ምጉላሕ ዳግም ኣቐምጥ (ሕጂ {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "እዚ ሰነድ ክርአ ኣይከኣለን። ኣዝዩ ዓቢ ወይ ዝተሓለወ ክኸውን ይኽእል፣ ወይ እቲ መቐየሪ ተታሒዙ ክኸውን ይኽእል፤ ድሕሪ ቁሩብ እንደገና ፈትን።"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "ምስል ዘይብሉዎ ብራንድ ቦክ",
+    "intro": "ብራንድ ቦክ ሓደ ውሽጢ ማዕከላዊ ቀለም፣ ፎንት ፣ ሎጎ ፣ ቃላትን ኩነታት ዘንበሩ እትውሕሉ። ኣውዳእ ዝሕደና ድማ ንምትሓዘ ፀቃዉ ደረሳት ከይፅሓ ፣ ንምንባብ ኣካላት ኣቕፅላ ዳነ ይፅቀ።",
+    "unavailable": "ብራንድ ቦክስ ካብ ዝጸናጸኑ ሰነዳት ኣይኣቱን። ንጸበ ግዜ እንተኻኸው ፈልጥ።",
+    "add": "ብራንድ ቦክ ወስደ",
+    "none": "ኣይፈጠረን ብራንድ ቦክስ።",
+    "paletteSummary": "{count, plural, one {# ብራንድ ቀለም} other {# ብራንድ ቀለማት}}",
+    "summary": "{fonts, plural, one {# ስነ ጽሑፍ} other {# ስነ ጽሑፋት}}, {logos, plural, one {# ሎጎ} other {# ሎጎታት}}",
+    "open": "ክፈት",
+    "delete": "ሰርዝ",
+    "deleteConfirm": "\"{name}\" ንተንሳፋዊ ፋይላትኡ ይሰርዝ? ዝተረጋገጡ ደረሳት ረፖርታታት ይቀይሩ።",
+    "deleteConfirmButton": "ብራንድ ቦክ ሰርዝ",
+    "loading": "ብራንድ ቦክ ንጸብጻብ...",
+    "loadFailed": "ብራንድ ቦክ ኣይተጸበጸበን።",
+    "missing": "ብራንድ ቦክ ኣይኮነን፣ ወይ እንተትደቐም ኣይትኽእልን።",
+    "back": "ብራንድ ቦክስ",
+    "unsaved": "ዘይተቐሚጡ ለውጦታት",
+    "saved": "ተቐሚጡ",
+    "save": "ቐሚጥ",
+    "conflict": "ዝኾነ ኣስተዳደር ብራንድ ቦክ ብትኽክል ምቐሚጥ ገይሩ። ምስታሓሰብ ፅሓፈኩም ይጠፍኡ።",
+    "reload": "ዳግማይ ጸብጸብ",
+    "invalid": "እዚ ብራንድ ቦክ መሓዱ ክቐምጥ ኣይከኣለን፡ {reason}",
+    "saveFailed": "ብራንድ ቦክ ኣይተቐሚጠን።",
+    "uploadFailed": "ፋይል ኣይተጻወተን።",
+    "remove": "ውጽኣ",
+    "removeNamed": "{name} ውጽኣ",
+    "basics": {
+      "title": "ብራንድ ቦክ",
+      "name": "ስም",
+      "description": "መግለጺ"
+    },
+    "guide": {
+      "action": "ብምቅናብ ብራንድ መርሓት ፅሓፍ",
+      "reading": "መርሓት ንጽሓፍ...",
+      "hint": "ብራንድ መርሓት PDF ኣትምጽእ፡ ቀለማት፣ ፎንትን ቃላትን ንምምላስ። ሎጎን ኩነታት ብዚ ኣይቐለምን፡ ታሕቲ ኣትጽበይ።",
+      "source": "ብምቅናብ ዝተፀሓፈ",
+      "notPdf": "ብራንድ መርሓት PDF ክኸውን ይግባእ።",
+      "failed": "ካብ መርሓት ዝሓደረ ጽሕፈት ኣይተፍጠረን።",
+      "applied": "{pages, plural, one {ካብ መመሪያ ናይ ገፅ ኣንድ፡ ብላኽት ተጻፊ።} other {ካብ መመሪያ ናይ # ገፅታት፡ ብላኽት ተጻፊ።}}",
+      "measuredFonts": "ፎንት ዝተሰደፈት ኣንቀጽ፡",
+      "measuredColors": "ቀለማት ዝተሰደፈት ጽሑፍ፡",
+      "check": "ንቅርጸታት ብመርሓት ንምትሓዘ በፅም ቃል ቅድሚ ቐሚጥ።",
+      "undo": "ዝተፀሓፈ ድሕረት"
+    },
+    "palette": {
+      "title": "ቀለማት",
+      "description": "ብራንድ ቀለማት፡ ቀለም ኣብ ደረሳት ኣብ ክሳብ ዝዕሩዳን ብራንድ ቀለም ይቆጸፍ።",
+      "add": "ቀለም ወስደ",
+      "newName": "ቀለም {number}",
+      "none": "ኣይፈጠርን ብራንድ ቀለማት።",
+      "hex": "Hex",
+      "pick": "ቀለም ምረፅ ን{name}",
+      "name": "ስም",
+      "tolerance": "መጠን",
+      "toleranceHint": "ፍርጫ ልዋጥ ቀለም (Delta E). 2 ናይ 3 መሰረት ኣይተይደአን.",
+      "roles": "ኣብ ምጥቃም ዝውዕል",
+      "neutrals": "ቀለምታት ናይ መእተ",
+      "neutralsHint": "ቀለምታት ዝኸፍሉ ኣድሓን ፣ ዘይዝሓለፉ ቀለምታት፣ ብኮማ ዝተሰፋፋ."
+    },
+    "colorRole": {
+      "primary": "ዓወት",
+      "secondary": "ሓሳብ",
+      "accent": "ደንዘን",
+      "text": "ጽሑፍ",
+      "background": "ትሕቲ ቀይሕ",
+      "neutral": "ናይ መእተ"
+    },
+    "typography": {
+      "title": "ብሓደ ዓይነት",
+      "description": "ፎንት ብሓደ ዓይነት ናይ ሓርነት፣ ኣንፈሳሰሳት ፎንት ናይዳር፣ ኣብ መደበኛ ፎንት ዝሰርሕ ኣድሓን ዝተኣጠቁ ሰነዳት መልእኽቲ.",
+      "add": "ፎንት ደምሲ",
+      "none": "ዓይነት ፎንት ኣለን ዝምስካ.",
+      "role": "ሓርነት",
+      "family": "ፎንት",
+      "substitutes": "ዝተፈቀደ ምስቶታት",
+      "minSize": "ንኡስ ጽሑፍ (pt)",
+      "minSizeHint": "0 ዝተደለኹ ውድብ ኣይተሓደሱን።"
+    },
+    "fontRole": {
+      "heading": "ኣሰርቲ ሓዳስ",
+      "body": "ጽሑፍ ኣገዳሲ",
+      "accent": "ደንዘን"
+    },
+    "logos": {
+      "title": "ሎጎታት",
+      "description": "ፋይል ሎጎ ዝኣጸዉ ሰነዳት፣ እንታይ ፋይል PNG፣ SVG ወይ JPEG.",
+      "add": "ሎጎ ኣኣታ",
+      "untitled": "ሎጎ",
+      "none": "ሎጎ ኣለን ዝምስካ.",
+      "noPreview": "ቅድሚ ርእይቲ ኣለን",
+      "name": "ሽም",
+      "minWidth": "ንኡስ ፍፅሓ (pt)",
+      "aspect": "ምሕስ ዝተፈቀደ (%)",
+      "aspectHint": "ኣብ ግምባር ብዝከውን ልዋጥ ዝኸፍሉ መሰረት እንታይ.",
+      "colors": "ኣብዚ ዝተሃበ",
+      "colorsHint": "ንትሕቲ ቀይሕ ኣይትመሰረኩን ዝደሊኹም ትዕዝብቲ ተረሲዑ."
+    },
+    "language": {
+      "title": "ቃለ-መጠይቅ",
+      "description": "ቋንቋ ሰነዳት ዝርከብን፣ ዝጠቀመን ዝምናኢን ቃላት፣ ድምበ.",
+      "locales": "ቋንቋታት",
+      "localesHint": "ቋንቋ tags እንተ en ወይ fr-CA፣ ብኮማ ዝተሰፋፋ.",
+      "preferred": "ዝጠቀመን ቃላት",
+      "banned": "ዝጠለየን ቃላት",
+      "term": "ቃል ወይ ሓንቲ ሓሳብ",
+      "alternatives": "ምስ ዘለዎ / ዘለዎ ብዝኣምረ",
+      "note": "ኣብዝተናገራ",
+      "addPreferred": "ዝጠቀመን ቃል ኣኣታ",
+      "addBanned": "ዝጠለየን ቃል ኣኣታ",
+      "nonePreferred": "ዝተፈቀደ ቃላት ኣለን ዝምስካ.",
+      "noneBanned": "ዝጠለየን ቃላት ኣለን ዝምስካ.",
+      "tone": "ድምበ"
+    },
+    "templates": {
+      "title": "ብርኪ",
+      "description": "Template ብ PowerPoint እና Word ናይ ሓዱሽ ሰነዳት ዝተሰርሕ.",
+      "add": "ቅርጸ ብዙሓን ኣክትዎ",
+      "untitled": "ቅርጸ ብዙሓን",
+      "none": "ቅርጸ ብዙሓን የብሉን እምበት።",
+      "name": "ሽም",
+      "wrongType": "ቅርጸ ብዙሓን ካብ {types} አይኮነን ክምሃስ ኣለዎ።"
     }
   }
 }

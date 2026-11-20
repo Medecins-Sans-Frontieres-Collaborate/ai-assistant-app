@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Drafe chanèl",
         "description": "Transfòme sous yo an pòs pou plizyè chanèl, chak ak vwa ki kòrèk, ak tout sitasyon ki gen sous klè"
+      },
+      "brandReview": {
+        "label": "Revizyon mak",
+        "description": "Verifye yon PDF, dokiman Word oswa prezantasyon selon liv mak la: polis, koulè, tèks, logo ak ton"
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Nouvo kat",
       "newGrants": "Nouvo pwosesis sibvansyon",
       "newFormFill": "Nouvo ranpli dokiman",
-      "newChannelDrafter": "Nouvo drafe chanèl"
+      "newChannelDrafter": "Nouvo drafe chanèl",
+      "newBrandReview": "Nouvo revizyon mak"
     },
     "translation": {
       "chooseLanguage": "Lang sib",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Tèks alt {name} depase {count} sou limit {max} pou chanèl sa a.",
         "unicodeSms": "{characters} pa ka voye nan yon mesaj teks estanda, sa vle di mesaj sa a gen espas pou 70 karaktè, pa 160. Ranplase yo pou gen plis espas."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Revizyon mak",
+        "intro": "Chwazi yon liv mak ak yon dokiman. Revizyon an ap verifye polis, koulè, gwosè tèks, pawòl ak logo, epi li ka fè yon modèl gade chak paj pou ton ak règleman vizyèl.",
+        "book": "Liv mak",
+        "booksLoading": "Y ap chaje liv mak yo...",
+        "noBooks": "Pa gen liv mak ki disponib pou ou ankò. Yon administratè mete yo nan Admin > Liv mak.",
+        "document": "Dokiman",
+        "chooseDocument": "Chwazi yon dokiman",
+        "replaceDocument": "Chwazi yon lòt dokiman",
+        "documentTypes": "PDF, Word oswa PowerPoint",
+        "uploading": "Y ap telechaje...",
+        "uploadFailed": "Dokiman an pa t ka telechaje.",
+        "wrongType": "Chwazi yon PDF, dokiman Word oswa prezantasyon.",
+        "modelReview": "Fè yon modèl gade chak paj",
+        "modelReviewHint": "Detekte pwoblèm sou ton, vizyèl ak logo ke verifikasyon pa ka wè. Itilize tokèn pou chak paj, jiska 40 paj.",
+        "start": "Kòmanse revizyon"
+      },
+      "loading": "Y ap chaje revizyon an...",
+      "booksFailed": "Yo pa t ka chaje liv mak yo.",
+      "startFailed": "Yo pa t ka kòmanse revizyon an.",
+      "readFailed": "Yo pa t ka li revizyon an.",
+      "busy": "\"{name}\" ap toujou sibi revizyon. Tanpri tann li fini, oswa sispann li, avan ou kòmanse yon lòt.",
+      "failed": "Revizyon an echwe.",
+      "against": "Daprè {book}",
+      "progress": {
+        "reading": "Y ap li dokiman an...",
+        "checking": "Y ap verifye tèks ak logo...",
+        "reviewing": "Y ap revize paj yo...",
+        "pages": "{done} sou {total} paj revize"
+      },
+      "status": {
+        "done": "{errors, plural, one {# erè} other {# erè}}, {warnings, plural, one {# avètisman} other {# avètisman}}",
+        "stopped": "Sispann: {errors, plural, one {# erè} other {# erè}} jiskaprezan",
+        "failed": "Echwe",
+        "running": "Ap mache"
+      },
+      "stop": "Sispann",
+      "download": "Telechaje rapò",
+      "newReview": "Nouvo revizyon",
+      "findings": "Dekouvèt",
+      "noFindings": "Pa gen anyen jwenn ankò.",
+      "noneOfSeverity": "Pa gen dekouvèt konsa.",
+      "byModel": "Modèl la jwenn sa; verifye li.",
+      "notes": "Nòt",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "Montre",
+        "all": "Tout {count}",
+        "error": "Erè {count}",
+        "warning": "Avètisman {count}",
+        "info": "Nòt {count}"
+      },
+      "severity": {
+        "error": "Erè",
+        "warning": "Avètisman",
+        "info": "Nòt"
+      },
+      "rule": {
+        "font": "Tipografi",
+        "color": "Koulè",
+        "size": "Gwosè tèks",
+        "banned-term": "Mo pou evite",
+        "preferred-term": "Mo preferab",
+        "language": "Lang",
+        "logo-distorted": "Pwopòsyon logo",
+        "logo-small": "Gwosè logo",
+        "logo-background": "Dèyè logo",
+        "logo-unknown": "Logo posib",
+        "visual": "Vizèl",
+        "tone": "Ton"
+      },
+      "message": {
+        "font": "Fè ak {found}; tipografi mak la se {expected}.",
+        "font-alone": "Fè ak {found}, ki pa yon tipografi mak.",
+        "color": "{found} pa yon koulè mak; ki pi pre a se {first}.",
+        "size": "Tèks a {found} pt; ki pi piti otorize se {first} pt.",
+        "banned-term": "\"{found}\" se yon mo pou evite; ekri {expected} olye.",
+        "banned-term-alone": "\"{found}\" se yon mo pou evite.",
+        "preferred-term": "Ekri \"{first}\" olye de \"{found}\".",
+        "language": "Make kòm {found}; lang mak la se {expected}.",
+        "logo-distorted": "{name} trase a {found}; pwopòsyon li yo se {first}.",
+        "logo-small": "{name} gen {found} pt lajè; li ta dwe omwen {first} pt.",
+        "logo-background": "{name} chita sou {found}; li ka montre sou {expected}.",
+        "logo-unknown": "Yon imaj ki ka yon logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Revizyon mak: {name}",
+        "meta": "Konpare ak {book}, {date}, {pages, plural, one {# paj} other {# paj}}",
+        "errors": "{count, plural, one {# erè} other {# erè}}",
+        "warnings": "{count, plural, one {# avètisman} other {# avètisman}}",
+        "infos": "{count, plural, one {# nòt} other {# nòt}}",
+        "partial": "Revizyon an pa fin fèt; rapò sa a kontni sa li te jwenn anvan li te fini.",
+        "skipped": "Modèl la pa t konsilte paj {pages}; yo te tcheke san li.",
+        "none": "Pa gen okenn bagay ki sòt de gid mak la ki te jwenn.",
+        "page": "Paj",
+        "severity": "Gravite",
+        "rule": "Tcheke",
+        "finding": "Konsatat",
+        "found": "Sa ki jwenn",
+        "notes": "Nòt",
+        "fileSuffix": "revizyon mak"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Konbyen nan chak konvèsasyon ki voye bay chak modèl sou chak etap.",
       "analytics": "Rapò yo delivre: sa ki rive, kiyès ki ka ouvri chak dosye, ak ki jaden ki ka montre.",
       "skills": "Blòk enstriksyon reutilizab asistan an aplike lè yon konvèsasyon bezwen yo.",
-      "models": "Asiyen modèl background yo epi verifye preparasyon pou deplwaye nan rejyon an."
+      "models": "Asiyen modèl background yo epi verifye preparasyon pou deplwaye nan rejyon an.",
+      "brandBooks": "Koulè yo, polis, logo, tèks ak modèl ke dokiman yo verifye epi bati sou yo."
     },
     "openSettings": "Louvri anviwònman yo",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Bidjè kontèks",
       "analytics": "Analiz",
       "skills": "Konpetans",
-      "models": "Modèl ak preparasyon"
+      "models": "Modèl ak preparasyon",
+      "brandBooks": "Liv mak"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Remete zoum nan jan l te ye (kounye a {percent}%)",
       "failed": "Nou pa t ka montre dokiman sa a. Li ka twò gwo, li ka pwoteje, oswa konvètisè a ka okipe; eseye ankò talè.",
       "zoomLevel": "{percent}%"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Liv mak san tit",
+    "intro": "Yon liv mak genyen koulè, polis, logo, tèks ak modèl òganizasyon an, pou dokiman yo ka verifye ak li epi bati dapre li. Ki moun ki ka sèvi ak chak liv depann de règ aksè li.",
+    "unavailable": "Liv mak yo pa ka chaje soti nan depo a. Eseye ankò apre kèk moman.",
+    "add": "Ajoute liv mak",
+    "none": "Pa gen okenn liv mak pou kounye a.",
+    "paletteSummary": "{count, plural, one {# koulè mak} other {# koulè mak yo}}",
+    "summary": "{fonts, plural, one {# polis} other {# polis}}, {logos, plural, one {# logo} other {# logo yo}}",
+    "open": "Louvri",
+    "delete": "Efase",
+    "deleteConfirm": "Efase \"{name}\" ak fichye li yo? Dokiman ki tcheke deja ap kenbe rapò yo.",
+    "deleteConfirmButton": "Efase liv mak",
+    "loading": "Y ap chaje liv mak la...",
+    "loadFailed": "Liv mak la pa ka chaje.",
+    "missing": "Liv mak sa a pa egziste, oswa ou pa gen dwa modifye li.",
+    "back": "Liv mak",
+    "unsaved": "Chanjman ki pa anrejistre",
+    "saved": "Anrejistre",
+    "save": "Anrejistre",
+    "conflict": "Yon lòt administratè anrejistre liv mak sa a apre ou louvri li. Rekòmanse pou wè vèsyon pa yo; chanjman ou fè la ap pèdi.",
+    "reload": "Rekòmanse",
+    "invalid": "Liv mak sa a pa ka anrejistre ankò: {reason}",
+    "saveFailed": "Liv mak la pa ka anrejistre.",
+    "uploadFailed": "Fichye a pa ka téléchaje.",
+    "remove": "Retire",
+    "removeNamed": "Retire {name}",
+    "basics": {
+      "title": "Liv mak",
+      "name": "Non",
+      "description": "Deskripsyon"
+    },
+    "guide": {
+      "action": "Bati yon bouyon soti nan gid mak",
+      "reading": "Y ap li gid la...",
+      "hint": "Voye gid mak la kòm PDF pou konplete koulè, polis ak tèks li defini yo. Logo ak modèl yo pa pran nan li; telechaje yo anba a.",
+      "source": "Bati depi",
+      "notPdf": "Yon gid mak dwe yon PDF.",
+      "failed": "Pa posib fè yon bouyon soti nan gid sa a.",
+      "applied": "{pages, plural, one {Ekri soti nan yon gid ki gen # paj.} other {Ekri soti nan yon gid ki gen # paj.}}",
+      "measuredFonts": "Polis ki itilize nan tèks la:",
+      "measuredColors": "Koulè tèks la itilize:",
+      "check": "Verifye chak valè ak gid la anvan ou anrejistre.",
+      "undo": "Anile bouyon an"
+    },
+    "palette": {
+      "title": "Koulè",
+      "description": "Koulè mak yo. Yon koulè nan yon dokiman konte kòm youn nan sa yo si li tonbe nan tolerans koulè a.",
+      "add": "Ajoute koulè",
+      "newName": "Koulè {number}",
+      "none": "Pa gen okenn koulè mak pou kounye a.",
+      "hex": "Hex",
+      "pick": "Chwazi yon koulè pou {name}",
+      "name": "Non",
+      "tolerance": "Tolerans",
+      "toleranceHint": "Diferans koulè (Delta E). 2 a 3 prèske pa vizib.",
+      "roles": "Sèvi pou",
+      "neutrals": "Koulè neut",
+      "neutralsHint": "Koulè nenpòt dokiman ka sèvi ak yo san yo pa koulè mak, separe ak vigil."
+    },
+    "colorRole": {
+      "primary": "Prensipal",
+      "secondary": "Segondè",
+      "accent": "Aksan",
+      "text": "Tèks",
+      "background": "Fond",
+      "neutral": "Neut"
+    },
+    "typography": {
+      "title": "Tip",
+      "description": "Tipgraf pa wòl, ak font ki gen dwa ranplase yo, tankou font sistèm pou dokiman pataje deyò.",
+      "add": "Ajoute tipgraf",
+      "none": "Pa gen tipgraf ankò.",
+      "role": "Wòl",
+      "family": "Tipgraf",
+      "substitutes": "Ranplasman otorize",
+      "minSize": "Tèks pi piti (pt)",
+      "minSizeHint": "0 pa mete minimòm."
+    },
+    "fontRole": {
+      "heading": "Tit",
+      "body": "Tèks prensipal",
+      "accent": "Aksan"
+    },
+    "logos": {
+      "title": "Logo",
+      "description": "Fichye logo pou dokiman dwe itilize, tankou PNG, SVG oswa JPEG.",
+      "add": "Telechaje logo",
+      "untitled": "Logo",
+      "none": "Pa gen logo ankò.",
+      "noPreview": "Pa gen aperçu",
+      "name": "Non",
+      "minWidth": "Lajè pi piti (pt)",
+      "aspect": "Deformasyon otorize (%)",
+      "aspectHint": "Jiska ki kote pwopòsyon li ka diferan.",
+      "colors": "Montre sou",
+      "colorsHint": "Pa tcheke okenn pou aksepte nenpòt fond."
+    },
+    "language": {
+      "title": "Mo",
+      "description": "Lang dokiman yo ekri, mo pou itilize ak evite, ak ton.",
+      "locales": "Lang",
+      "localesHint": "Tag lang tankou en oswa fr-CA, separe ak vigil.",
+      "preferred": "Mo pou itilize",
+      "banned": "Mo pou evite",
+      "term": "Mo oswa fraz",
+      "alternatives": "Olye de / ekri olye",
+      "note": "Nòt",
+      "addPreferred": "Ajoute yon mo pou itilize",
+      "addBanned": "Ajoute yon mo pou evite",
+      "nonePreferred": "Pa gen mo preferans ankò.",
+      "noneBanned": "Pa gen mo pou evite ankò.",
+      "tone": "Ton"
+    },
+    "templates": {
+      "title": "Modèl",
+      "description": "Modèl PowerPoint ak Word pou dokiman nouvo ap bati sou yo.",
+      "add": "Telechaje modèl",
+      "untitled": "Modèl",
+      "none": "Pa gen okenn modèl pou kounye a.",
+      "name": "Non",
+      "wrongType": "Yon modèl dwe youn nan {types}."
     }
   }
 }

@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Kanalkonceptskapare",
         "description": "Gör om källor till inlägg för flera kanaler, med rätt tonalitet och varje citat spårbart till dess källa"
+      },
+      "brandReview": {
+        "label": "Varumärkesgranskning",
+        "description": "Kontrollera en PDF-, Word-fil eller presentation mot en varumärkesmanual: typsnitt, färger, formuleringar, logotyper och tonläge"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Ny karta",
       "newGrants": "Ny bidragshantering",
       "newFormFill": "Ny dokumentifyllning",
-      "newChannelDrafter": "Nytt kanalkoncept"
+      "newChannelDrafter": "Nytt kanalkoncept",
+      "newBrandReview": "Ny varumärkesgranskning"
     },
     "translation": {
       "chooseLanguage": "Målspråk",
@@ -4838,6 +4843,112 @@
         "altTooLong": "Alt-texten för {name} är {count} över kanalens gräns på {max}.",
         "unicodeSms": "{characters} kan inte skickas i ett standard-sms, så detta meddelande har plats för 70 tecken, inte 160. Byt ut dem för att få tillbaka utrymmet."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Varumärkesgranskning",
+        "intro": "Välj en varumärkesmanual och ett dokument. Granskningen kontrollerar typsnitt, färger, textstorlekar, formuleringar och logotyper. En modell kan även granska varje sida för ton och visuella regler.",
+        "book": "Varumärkesmanual",
+        "booksLoading": "Laddar varumärkesmanualer...",
+        "noBooks": "Inga varumärkesmanualer är tillgängliga för dig än. En administratör lägger till dessa under Admin > Varumärkesmanualer.",
+        "document": "Dokument",
+        "chooseDocument": "Välj ett dokument",
+        "replaceDocument": "Välj ett annat dokument",
+        "documentTypes": "PDF, Word eller PowerPoint",
+        "uploading": "Laddar upp...",
+        "uploadFailed": "Dokumentet kunde inte laddas upp.",
+        "wrongType": "Välj en PDF-, Word-fil eller presentation.",
+        "modelReview": "Låt en modell granska varje sida",
+        "modelReviewHint": "Hittar problem med ton, visuellt och logotyp som inte kan hittas av kontrollerna. Använder tokens för varje sida, upp till 40 sidor.",
+        "start": "Starta granskning"
+      },
+      "loading": "Laddar granskningen...",
+      "booksFailed": "Varumärkesmanualerna kunde inte laddas.",
+      "startFailed": "Granskningen kunde inte startas.",
+      "readFailed": "Granskningen kunde inte läsas.",
+      "busy": "\"{name}\" granskas fortfarande. Vänta tills den är klar, eller stoppa den, innan du påbörjar en ny.",
+      "failed": "Granskningen misslyckades.",
+      "against": "Mot {book}",
+      "progress": {
+        "reading": "Läser dokumentet...",
+        "checking": "Kontrollerar text och logotyper...",
+        "reviewing": "Granskar sidor...",
+        "pages": "Granskade {done} av {total} sidor"
+      },
+      "status": {
+        "done": "{errors, plural, one {# fel} other {# fel}}, {warnings, plural, one {# varning} other {# varningar}}",
+        "stopped": "Stoppad: {errors, plural, one {# fel} other {# fel}} hittills",
+        "failed": "Misslyckades",
+        "running": "Pågår"
+      },
+      "stop": "Stoppa",
+      "download": "Ladda ner rapport",
+      "newReview": "Ny granskning",
+      "findings": "Fynd",
+      "noFindings": "Inget hittat än.",
+      "noneOfSeverity": "Inga fynd av denna typ.",
+      "byModel": "Upptäckt av modellen, kontrollera det.",
+      "notes": "Anteckningar",
+      "pageShort": "s. {page}",
+      "filter": {
+        "label": "Visa",
+        "all": "Alla {count}",
+        "error": "Fel {count}",
+        "warning": "Varningar {count}",
+        "info": "Anteckningar {count}"
+      },
+      "severity": {
+        "error": "Fel",
+        "warning": "Varning",
+        "info": "Anteckning"
+      },
+      "rule": {
+        "font": "Typsnitt",
+        "color": "Färg",
+        "size": "Textstorlek",
+        "banned-term": "Ord att undvika",
+        "preferred-term": "Föredraget ord",
+        "language": "Språk",
+        "logo-distorted": "Logotypens proportioner",
+        "logo-small": "Logotypens storlek",
+        "logo-background": "Logotypens bakgrund",
+        "logo-unknown": "Möjlig logotyp",
+        "visual": "Visuellt",
+        "tone": "Ton"
+      },
+      "message": {
+        "font": "Satt i {found}; varumärkets typsnitt är {expected}.",
+        "font-alone": "Satt i {found}, vilket inte är ett varumärkestypsnitt.",
+        "color": "{found} är inte en varumärkesfärg; den närmaste är {first}.",
+        "size": "Texten är {found} pt; minsta tillåtna är {first} pt.",
+        "banned-term": "\"{found}\" är ett ord att undvika; skriv {expected} istället.",
+        "banned-term-alone": "\"{found}\" är ett ord att undvika.",
+        "preferred-term": "Skriv \"{first}\" istället för \"{found}\".",
+        "language": "Markerat som {found}; varumärkets språk är {expected}.",
+        "logo-distorted": "{name} är ritad i {found}; dess egna proportioner är {first}.",
+        "logo-small": "{name} är {found} pt bred; den bör vara minst {first} pt.",
+        "logo-background": "{name} ligger på {found}; den kan visas på {expected}.",
+        "logo-unknown": "En bild som kan vara en logotyp: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Varumärkesgranskning: {name}",
+        "meta": "Mot {book}, {date}, {pages, plural, one {# sida} other {# sidor}}",
+        "errors": "{count, plural, one {# fel} other {# fel}}",
+        "warnings": "{count, plural, one {# varning} other {# varningar}}",
+        "infos": "{count, plural, one {# notering} other {# noteringar}}",
+        "partial": "Granskningen slutfördes inte; denna rapport innehåller det som hittades innan den avbröts.",
+        "skipped": "Modellen granskade inte sidorna {pages}; de kontrollerades utan den.",
+        "none": "Inget avvikande från varumärkesboken hittades.",
+        "page": "Sida",
+        "severity": "Allvarlighetsgrad",
+        "rule": "Kontroll",
+        "finding": "Iakttagelse",
+        "found": "Hittat",
+        "notes": "Noteringar",
+        "fileSuffix": "varumärkesgranskning"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Hur mycket av en konversation som skickas till varje modell vid varje tur.",
       "analytics": "Levererade rapporter: vad anlände, vem kan öppna varje mapp och vilka fält som kan visas.",
       "skills": "Återanvändbara instruktioner som assistenten tillämpar vid behov i en konversation.",
-      "models": "Tilldela bakgrundsmodeller och kontrollera regional redo-status."
+      "models": "Tilldela bakgrundsmodeller och kontrollera regional redo-status.",
+      "brandBooks": "Färger, typsnitt, logotyper, formuleringar och mallar som dokument granskas mot och byggs från."
     },
     "openSettings": "Öppna inställningar",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Context budget",
       "analytics": "Analys",
       "skills": "Färdigheter",
-      "models": "Modeller och redo-status"
+      "models": "Modeller och redo-status",
+      "brandBooks": "Varumärkesböcker"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Återställ zoom (nu {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Dokumentet kunde inte visas. Det kan vara för stort eller skyddat, eller så är konverteraren upptagen; försök igen om en stund."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Namnlös varumärkesbok",
+    "intro": "En varumärkesbok innehåller organisationens färger, typsnitt, logotyper, formuleringar och mallar, så att dokument kan granskas mot och byggas från den. Vem som kan använda varje bok styrs av dess åtkomstregel.",
+    "unavailable": "Det gick inte att läsa in varumärkesböcker från lagringen. Försök igen om en stund.",
+    "add": "Lägg till varumärkesbok",
+    "none": "Inga varumärkesböcker än.",
+    "paletteSummary": "{count, plural, one {# varumärkesfärg} other {# varumärkesfärger}}",
+    "summary": "{fonts, plural, one {# typsnitt} other {# typsnitt}}, {logos, plural, one {# logotyp} other {# logotyper}}",
+    "open": "Öppna",
+    "delete": "Ta bort",
+    "deleteConfirm": "Ta bort \"{name}\" och dess filer? Dokument som redan har granskats behåller sina rapporter.",
+    "deleteConfirmButton": "Ta bort varumärkesbok",
+    "loading": "Laddar varumärkesbok...",
+    "loadFailed": "Varumärkesboken kunde inte läsas in.",
+    "missing": "Denna varumärkesbok finns inte, eller så kan du inte redigera den.",
+    "back": "Varumärkesböcker",
+    "unsaved": "Osparade ändringar",
+    "saved": "Sparat",
+    "save": "Spara",
+    "conflict": "En annan administratör sparade denna varumärkesbok efter att du öppnat den. Läs om för att se deras version; dina ändringar här kommer att gå förlorade.",
+    "reload": "Läs om",
+    "invalid": "Denna varumärkesbok kan ännu inte sparas: {reason}",
+    "saveFailed": "Varumärkesboken kunde inte sparas.",
+    "uploadFailed": "Filen kunde inte laddas upp.",
+    "remove": "Ta bort",
+    "removeNamed": "Ta bort {name}",
+    "basics": {
+      "title": "Varumärkesbok",
+      "name": "Namn",
+      "description": "Beskrivning"
+    },
+    "guide": {
+      "action": "Skapa utkast från varumärkesguide",
+      "reading": "Läser guiden...",
+      "hint": "Ladda upp varumärkesguiden som PDF för att fylla i färger, typsnitt och formuleringar enligt guiden. Logotyper och mallar tas inte från guiden; ladda upp dem nedan.",
+      "source": "Utkast från",
+      "notPdf": "En varumärkesguide måste vara en PDF.",
+      "failed": "Det gick inte att skapa utkast från denna guide.",
+      "applied": "{pages, plural, one {Utformad från en guide på # sida.} other {Utformad från en guide på # sidor.}}",
+      "measuredFonts": "Typsnitten som dess text är satt i:",
+      "measuredColors": "Färger som används i dess text:",
+      "check": "Kontrollera varje värde mot guiden innan du sparar.",
+      "undo": "Ångra utkastet"
+    },
+    "palette": {
+      "title": "Färger",
+      "description": "Varumärkesfärgerna. En färg i ett dokument räknas som en av dessa om den ligger inom toleransen för färgen.",
+      "add": "Lägg till färg",
+      "newName": "Färg {number}",
+      "none": "Inga varumärkesfärger än.",
+      "hex": "Hex",
+      "pick": "Välj en färg för {name}",
+      "name": "Namn",
+      "tolerance": "Tolerans",
+      "toleranceHint": "Färgskillnad (Delta E). 2 till 3 är knappt synlig.",
+      "roles": "Används för",
+      "neutrals": "Neutrala färger",
+      "neutralsHint": "Färger som alla dokument kan använda utan att vara varumärkesfärger, separerade med kommatecken."
+    },
+    "colorRole": {
+      "primary": "Primär",
+      "secondary": "Sekundär",
+      "accent": "Accent",
+      "text": "Text",
+      "background": "Bakgrund",
+      "neutral": "Neutral"
+    },
+    "typography": {
+      "title": "Typ",
+      "description": "Typsnitt efter roll och de typsnitt som är tillåtna som ersättning, till exempel ett systemtypsnitt för dokument som delas externt.",
+      "add": "Lägg till typsnitt",
+      "none": "Inga typsnitt ännu.",
+      "role": "Roll",
+      "family": "Typsnitt",
+      "substitutes": "Tillåtna ersättningar",
+      "minSize": "Minsta textstorlek (pt)",
+      "minSizeHint": "0 sätter ingen minsta storlek."
+    },
+    "fontRole": {
+      "heading": "Rubriker",
+      "body": "Brödtext",
+      "accent": "Accent"
+    },
+    "logos": {
+      "title": "Logotyper",
+      "description": "De logofiler som dokument ska använda, som PNG, SVG eller JPEG.",
+      "add": "Ladda upp logotyp",
+      "untitled": "Logotyp",
+      "none": "Inga logotyper ännu.",
+      "noPreview": "Ingen förhandsvisning",
+      "name": "Namn",
+      "minWidth": "Minsta bredd (pt)",
+      "aspect": "Tillåten streckning (%)",
+      "aspectHint": "Hur mycket proportionerna får skilja sig.",
+      "colors": "Visas på",
+      "colorsHint": "Lämna alla otickade för att tillåta alla bakgrunder."
+    },
+    "language": {
+      "title": "Formulering",
+      "description": "Språken dokumenten är skrivna på, ord att använda och undvika samt tonfall.",
+      "locales": "Språk",
+      "localesHint": "Språkkoder som en eller fr-CA, separerade med kommatecken.",
+      "preferred": "Rekommenderade ord",
+      "banned": "Ord att undvika",
+      "term": "Ord eller fras",
+      "alternatives": "Istället för / Skriv istället",
+      "note": "Notering",
+      "addPreferred": "Lägg till rekommenderat ord",
+      "addBanned": "Lägg till ord att undvika",
+      "nonePreferred": "Inga rekommenderade ord ännu.",
+      "noneBanned": "Inga ord att undvika ännu.",
+      "tone": "Ton"
+    },
+    "templates": {
+      "title": "Mallar",
+      "description": "PowerPoint- och Word-mallar som nya dokument baseras på.",
+      "add": "Ladda upp mall",
+      "untitled": "Mall",
+      "none": "Inga mallar ännu.",
+      "name": "Namn",
+      "wrongType": "En mall måste vara en av {types}."
     }
   }
 }

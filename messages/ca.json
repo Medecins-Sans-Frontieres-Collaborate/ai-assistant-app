@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Redactor de canals",
         "description": "Converteix fonts en publicacions per a diversos canals, cadascun amb el to adequat i amb cada cita vinculada a la seva font"
+      },
+      "brandReview": {
+        "label": "Revisió de marca",
+        "description": "Comprova un PDF, document Word o presentació segons el llibre d’estil de marca: tipografies, colors, redacció, logotips i to"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Nou mapa",
       "newGrants": "Processament de noves subvencions",
       "newFormFill": "Nou emplenament de document",
-      "newChannelDrafter": "Nou esborrany de canal"
+      "newChannelDrafter": "Nou esborrany de canal",
+      "newBrandReview": "Nova revisió de marca"
     },
     "translation": {
       "chooseLanguage": "Idioma de destinació",
@@ -4838,6 +4843,112 @@
         "altTooLong": "El text alternatiu de {name} supera en {count} el límit de {max} d'aquest canal.",
         "unicodeSms": "{characters} no es poden enviar en un SMS estàndard, així que aquest missatge admet 70 caràcters, no 160. Substitueix-los per recuperar espai."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Revisió de marca",
+        "intro": "Trieu un llibre d’estil i un document. La revisió comprova tipografies, colors, mides de text, redacció i logotips, i es pot fer servir un model per revisar cada pàgina pel to i les regles visuals.",
+        "book": "Llibre d’estil",
+        "booksLoading": "S’estan carregant els llibres d’estil...",
+        "noBooks": "Encara no teniu cap llibre d’estil disponible. Un administrador els afegeix a Admin > Llibres d’estil.",
+        "document": "Document",
+        "chooseDocument": "Trieu un document",
+        "replaceDocument": "Trieu un altre document",
+        "documentTypes": "PDF, Word o PowerPoint",
+        "uploading": "S’està pujant...",
+        "uploadFailed": "No s’ha pogut pujar el document.",
+        "wrongType": "Trieu un PDF, document Word o presentació.",
+        "modelReview": "Fer que un model revisi cada pàgina",
+        "modelReviewHint": "Troba problemes de to, visuals i de logotip que els controls no poden detectar. Consumeix tokens per cada pàgina, fins a 40 pàgines.",
+        "start": "Iniciar revisió"
+      },
+      "loading": "S’està carregant la revisió...",
+      "booksFailed": "No s’han pogut carregar els llibres d’estil.",
+      "startFailed": "No s’ha pogut iniciar la revisió.",
+      "readFailed": "No s’ha pogut llegir la revisió.",
+      "busy": "\"{name}\" encara s’està revisant. Espereu que acabi o atureu-la abans de començar-ne una altra.",
+      "failed": "La revisió ha fallat.",
+      "against": "Segons {book}",
+      "progress": {
+        "reading": "S’està llegint el document...",
+        "checking": "S’estan comprovant textos i logotips...",
+        "reviewing": "S’estan revisant les pàgines...",
+        "pages": "S’han revisat {done} de {total} pàgines"
+      },
+      "status": {
+        "done": "{errors, plural, one {# error} other {# errors}}, {warnings, plural, one {# avís} other {# avisos}}",
+        "stopped": "Aturat: {errors, plural, one {# error} other {# errors}} fins ara",
+        "failed": "Ha fallat",
+        "running": "En execució"
+      },
+      "stop": "Atura",
+      "download": "Descarrega l’informe",
+      "newReview": "Nova revisió",
+      "findings": "Resultats",
+      "noFindings": "Encara no s’ha trobat res.",
+      "noneOfSeverity": "No hi ha resultats d’aquest tipus.",
+      "byModel": "Trobat pel model; reviseu-ho.",
+      "notes": "Notes",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "Mostra",
+        "all": "Tot {count}",
+        "error": "Errors {count}",
+        "warning": "Avisos {count}",
+        "info": "Notes {count}"
+      },
+      "severity": {
+        "error": "Error",
+        "warning": "Avís",
+        "info": "Nota"
+      },
+      "rule": {
+        "font": "Tipografia",
+        "color": "Color",
+        "size": "Mida del text",
+        "banned-term": "Paraula a evitar",
+        "preferred-term": "Paraula preferida",
+        "language": "Llengua",
+        "logo-distorted": "Proporcions del logotip",
+        "logo-small": "Mida del logotip",
+        "logo-background": "Fons del logotip",
+        "logo-unknown": "Possible logotip",
+        "visual": "Visual",
+        "tone": "To"
+      },
+      "message": {
+        "font": "En {found}; les tipografies de la marca són {expected}.",
+        "font-alone": "En {found}, que no és una tipografia de la marca.",
+        "color": "{found} no és un color de la marca; el més proper és {first}.",
+        "size": "Text a {found} pt; el mínim permès és {first} pt.",
+        "banned-term": "«{found}» és una paraula a evitar; escriu {expected} en el seu lloc.",
+        "banned-term-alone": "«{found}» és una paraula a evitar.",
+        "preferred-term": "Escriu «{first}» en lloc de «{found}».",
+        "language": "Marcat com a {found}; les llengües de la marca són {expected}.",
+        "logo-distorted": "{name} està dibuixat a {found}; les seves proporcions són {first}.",
+        "logo-small": "{name} fa {found} pt d'amplada; hauria de ser almenys {first} pt.",
+        "logo-background": "{name} es troba sobre {found}; es pot mostrar sobre {expected}.",
+        "logo-unknown": "Una imatge que podria ser un logotip: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Revisió de marca: {name}",
+        "meta": "Segons {book}, {date}, {pages, plural, one {# pàgina} other {# pàgines}}",
+        "errors": "{count, plural, one {# error} other {# errors}}",
+        "warnings": "{count, plural, one {# avís} other {# avisos}}",
+        "infos": "{count, plural, one {# nota} other {# notes}}",
+        "partial": "La revisió no s'ha completat; aquest informe recull el que es va trobar abans d'acabar.",
+        "skipped": "El model no ha revisat les pàgines {pages}; s'han comprovat sense ell.",
+        "none": "No s'ha trobat cap element que s'allunyi del llibre de marca.",
+        "page": "Pàgina",
+        "severity": "Gravetat",
+        "rule": "Comprovació",
+        "finding": "Resultat",
+        "found": "Trobat",
+        "notes": "Notes",
+        "fileSuffix": "revisió de marca"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Quant de la conversa s'envia a cada model en cada torn.",
       "analytics": "Informes lliurats: què ha arribat, qui pot obrir cada carpeta i quins camps es poden mostrar.",
       "skills": "Blocs d'instruccions reutilitzables que l'assistent aplica quan una conversa els necessita.",
-      "models": "Assigna models de fons i verifica la preparació per al desplegament regional."
+      "models": "Assigna models de fons i verifica la preparació per al desplegament regional.",
+      "brandBooks": "Colors, tipografies, logotips, redacció i plantilles amb què es revisen i creen els documents."
     },
     "openSettings": "Obre la configuració",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Pressupost de context",
       "analytics": "Analítica",
       "skills": "Habilitats",
-      "models": "Models i preparació"
+      "models": "Models i preparació",
+      "brandBooks": "Manuals de marca"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Restableix el zoom (ara {percent}%)",
       "failed": "No s’ha pogut mostrar aquest document. Pot ser massa gran o estar protegit, o el convertidor pot estar ocupat; torneu-ho a provar d’aquí a una estona.",
       "zoomLevel": "{percent}%"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Manual de marca sense títol",
+    "intro": "Un manual de marca recull els colors, tipografies, logotips, redaccions i plantilles d'una organització, per tal que els documents es puguin revisar i crear segons aquest. Qui pot utilitzar cada manual es determina amb les regles d'accés.",
+    "unavailable": "No s'han pogut carregar els manuals de marca des de l'emmagatzematge. Torna-ho a provar més tard.",
+    "add": "Afegeix manual de marca",
+    "none": "Encara no hi ha manuals de marca.",
+    "paletteSummary": "{count, plural, one {# color de marca} other {# colors de marca}}",
+    "summary": "{fonts, plural, one {# tipografia} other {# tipografies}}, {logos, plural, one {# logotip} other {# logotips}}",
+    "open": "Obre",
+    "delete": "Elimina",
+    "deleteConfirm": "Voleu eliminar \"{name}\" i els seus fitxers? Els documents ja revisats mantindran els seus informes.",
+    "deleteConfirmButton": "Elimina manual de marca",
+    "loading": "S'està carregant el manual de marca...",
+    "loadFailed": "No s'ha pogut carregar el manual de marca.",
+    "missing": "Aquest manual de marca no existeix o no el podeu editar.",
+    "back": "Manuals de marca",
+    "unsaved": "Canvis no desats",
+    "saved": "Desat",
+    "save": "Desa",
+    "conflict": "Una altra persona administradora ha desat aquest manual de marca després que l'obrissis. Torna a carregar per veure la seva versió; els teus canvis es perdran.",
+    "reload": "Torna a carregar",
+    "invalid": "Aquest manual de marca encara no es pot desar: {reason}",
+    "saveFailed": "No s'ha pogut desar el manual de marca.",
+    "uploadFailed": "No s'ha pogut pujar el fitxer.",
+    "remove": "Elimina",
+    "removeNamed": "Elimina {name}",
+    "basics": {
+      "title": "Manual de marca",
+      "name": "Nom",
+      "description": "Descripció"
+    },
+    "guide": {
+      "action": "Esborrany a partir d'una guia de marca",
+      "reading": "S'està llegint la guia...",
+      "hint": "Puja la guia de marca en PDF per omplir els colors, tipografies i redacció que defineix. Els logotips i les plantilles no s'importen automàticament; puja'ls a continuació.",
+      "source": "Esborrany generat de",
+      "notPdf": "La guia de marca ha de ser un PDF.",
+      "failed": "No s'ha pogut generar un esborrany a partir d'aquesta guia.",
+      "applied": "{pages, plural, one {Redactat a partir d’una guia d’# pàgina.} other {Redactat a partir d’una guia de # pàgines.}}",
+      "measuredFonts": "Tipografies del text:",
+      "measuredColors": "Colors utilitzats al text:",
+      "check": "Comprova cada valor amb la guia abans de desar.",
+      "undo": "Desfés l'esborrany"
+    },
+    "palette": {
+      "title": "Colors",
+      "description": "Els colors de marca. Un color d'un document es considera un d'aquests si està dins la seva tolerància.",
+      "add": "Afegeix color",
+      "newName": "Color {number}",
+      "none": "Encara no hi ha colors de marca.",
+      "hex": "Hex",
+      "pick": "Tria un color per a {name}",
+      "name": "Nom",
+      "tolerance": "Tolerància",
+      "toleranceHint": "Diferència de color (Delta E). Entre 2 i 3 és gairebé imperceptible.",
+      "roles": "Utilitzat per a",
+      "neutrals": "Colors neutres",
+      "neutralsHint": "Colors que qualsevol document pot utilitzar sense que siguin colors de marca, separats per comes."
+    },
+    "colorRole": {
+      "primary": "Principal",
+      "secondary": "Secundari",
+      "accent": "Accent",
+      "text": "Text",
+      "background": "Fons",
+      "neutral": "Neutre"
+    },
+    "typography": {
+      "title": "Tipus",
+      "description": "Les tipografies per rol i les fonts permeses com a substitució, com ara una font de sistema per als documents compartits externament.",
+      "add": "Afegeix tipografia",
+      "none": "Encara no hi ha tipografies.",
+      "role": "Rol",
+      "family": "Tipografia",
+      "substitutes": "Substituts permesos",
+      "minSize": "Text més petit (pt)",
+      "minSizeHint": "0 indica cap mínim."
+    },
+    "fontRole": {
+      "heading": "Encapçalaments",
+      "body": "Cos de text",
+      "accent": "Accent"
+    },
+    "logos": {
+      "title": "Logotips",
+      "description": "Els fitxers de logotip que han d'utilitzar els documents, en PNG, SVG o JPEG.",
+      "add": "Puja logotip",
+      "untitled": "Logotip",
+      "none": "Encara no hi ha logotips.",
+      "noPreview": "Sense previsualització",
+      "name": "Nom",
+      "minWidth": "Amplada mínima (pt)",
+      "aspect": "Deformació permesa (%)",
+      "aspectHint": "Fins a quin punt poden variar les seves proporcions.",
+      "colors": "Mostrat sobre",
+      "colorsHint": "Deixa tot desmarcat per permetre qualsevol fons."
+    },
+    "language": {
+      "title": "Redacció",
+      "description": "Els idiomes en què s’escriuen els documents, les paraules que s’han d’utilitzar i evitar, i el to de veu.",
+      "locales": "Idiomes",
+      "localesHint": "Etiquetes d’idioma com en o fr-CA, separades per comes.",
+      "preferred": "Paraules per utilitzar",
+      "banned": "Paraules a evitar",
+      "term": "Paraula o expressió",
+      "alternatives": "En comptes de / escriu",
+      "note": "Nota",
+      "addPreferred": "Afegeix una paraula per utilitzar",
+      "addBanned": "Afegeix una paraula a evitar",
+      "nonePreferred": "Encara no hi ha paraules preferides.",
+      "noneBanned": "Encara no hi ha paraules a evitar.",
+      "tone": "To de veu"
+    },
+    "templates": {
+      "title": "Plantilles",
+      "description": "Plantilles de PowerPoint i Word des de les quals es creen nous documents.",
+      "add": "Puja plantilla",
+      "untitled": "Plantilla",
+      "none": "Encara no hi ha cap plantilla.",
+      "name": "Nom",
+      "wrongType": "Una plantilla ha de ser un dels següents tipus: {types}."
     }
   }
 }

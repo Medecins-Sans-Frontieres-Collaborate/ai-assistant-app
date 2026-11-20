@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Kanavaluonnostelija",
         "description": "Muuta lähteet usean kanavan julkaisuiksi, jokainen oikealla äänensävyllä ja jokainen lainaus jäljitettävissä sen lähteeseen"
+      },
+      "brandReview": {
+        "label": "Brändikatselmus",
+        "description": "Tarkista PDF, Word-asiakirja tai esitys brändikirjan mukaan: fontit, värit, sanamuoto, logot ja tyyli"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Uusi kartta",
       "newGrants": "Uusien avustusten käsittely",
       "newFormFill": "Uusi asiakirjan täyttö",
-      "newChannelDrafter": "Uusi kanavaluonnos"
+      "newChannelDrafter": "Uusi kanavaluonnos",
+      "newBrandReview": "Uusi brändikatselmus"
     },
     "translation": {
       "chooseLanguage": "Kohdekieli",
@@ -4838,6 +4843,112 @@
         "altTooLong": "Kuvan {name} alt-teksti ylittää tämän kanavan rajan {max} {count} merkillä.",
         "unicodeSms": "Merkkejä {characters} ei voi lähettää tavallisessa tekstiviestissä, joten viestin pituus on 70 merkkiä 160 sijaan. Korvaa nämä merkit saadaksesi enemmän tilaa."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Brändikatselmus",
+        "intro": "Valitse brändikirja ja asiakirja. Katselmus tarkistaa fontit, värit, tekstikoot, sanamuodot ja logot, ja halutessasi malli voi arvioida jokaisen sivun tyylin ja visuaaliset säännöt.",
+        "book": "Brändikirja",
+        "booksLoading": "Brändikirjoja ladataan...",
+        "noBooks": "Brändikirjoja ei ole vielä käytettävissäsi. Ylläpitäjä lisää ne kohdassa Admin > Brändikirjat.",
+        "document": "Asiakirja",
+        "chooseDocument": "Valitse asiakirja",
+        "replaceDocument": "Valitse toinen asiakirja",
+        "documentTypes": "PDF, Word tai PowerPoint",
+        "uploading": "Ladataan...",
+        "uploadFailed": "Asiakirjaa ei voitu ladata.",
+        "wrongType": "Valitse PDF, Word-asiakirja tai esitys.",
+        "modelReview": "Anna mallin tarkistaa jokainen sivu",
+        "modelReviewHint": "Löytää tyyli-, visuaalisia ja logoon liittyviä ongelmia, joita tarkistukset eivät havaitse. Käyttää tunnuksia jokaisella sivulla, enintään 40 sivua.",
+        "start": "Aloita katselmus"
+      },
+      "loading": "Ladataan katselmusta...",
+      "booksFailed": "Brändikirjojen lataus epäonnistui.",
+      "startFailed": "Katselmusta ei voitu aloittaa.",
+      "readFailed": "Katselmusta ei voitu lukea.",
+      "busy": "\"{name}\" on yhä katselmuksessa. Odota, että se valmistuu, tai keskeytä ennen uuden aloittamista.",
+      "failed": "Katselmus epäonnistui.",
+      "against": "Vastaa: {book}",
+      "progress": {
+        "reading": "Luetaan asiakirjaa...",
+        "checking": "Tarkistetaan tekstiä ja logoja...",
+        "reviewing": "Katselmoidaan sivuja...",
+        "pages": "Katselmoitu {done} / {total} sivua"
+      },
+      "status": {
+        "done": "{errors, plural, one {# virhe} other {# virhettä}}, {warnings, plural, one {# varoitus} other {# varoitusta}}",
+        "stopped": "Keskeytetty: {errors, plural, one {# virhe} other {# virhettä}} tähän mennessä",
+        "failed": "Epäonnistui",
+        "running": "Käynnissä"
+      },
+      "stop": "Keskeytä",
+      "download": "Lataa raportti",
+      "newReview": "Uusi katselmus",
+      "findings": "Löydökset",
+      "noFindings": "Mitään ei löytynyt vielä.",
+      "noneOfSeverity": "Tämän tyyppisiä löydöksiä ei ole.",
+      "byModel": "Malli löysi; tarkista se.",
+      "notes": "Huomiot",
+      "pageShort": "s. {page}",
+      "filter": {
+        "label": "Näytä",
+        "all": "Kaikki {count}",
+        "error": "Virheet {count}",
+        "warning": "Varoitukset {count}",
+        "info": "Huomiot {count}"
+      },
+      "severity": {
+        "error": "Virhe",
+        "warning": "Varoitus",
+        "info": "Huomio"
+      },
+      "rule": {
+        "font": "Kirjasintyyppi",
+        "color": "Väri",
+        "size": "Tekstin koko",
+        "banned-term": "Vältettävä sana",
+        "preferred-term": "Suositeltu sana",
+        "language": "Kieli",
+        "logo-distorted": "Logon mittasuhteet",
+        "logo-small": "Logon koko",
+        "logo-background": "Logon tausta",
+        "logo-unknown": "Mahdollinen logo",
+        "visual": "Visuaalinen",
+        "tone": "Sävy"
+      },
+      "message": {
+        "font": "Käytetty {found}; brändin kirjasintyypit ovat {expected}.",
+        "font-alone": "Käytetty {found}, joka ei ole brändin kirjasintyyppi.",
+        "color": "{found} ei ole brändin väri; lähin on {first}.",
+        "size": "Teksti on {found} pt; pienin sallittu on {first} pt.",
+        "banned-term": "\"{found}\" on vältettävä sana; käytä sen sijaan {expected}.",
+        "banned-term-alone": "\"{found}\" on vältettävä sana.",
+        "preferred-term": "Kirjoita \"{first}\" \"{found}\" sijaan.",
+        "language": "Merkitty kielelle {found}; brändin kielet ovat {expected}.",
+        "logo-distorted": "{name} on piirretty muodossa {found}; oikeat mittasuhteet ovat {first}.",
+        "logo-small": "{name} on {found} pt leveä; sen tulee olla vähintään {first} pt.",
+        "logo-background": "{name} on {found}-taustalla; sitä voi näyttää taustoilla {expected}.",
+        "logo-unknown": "Kuva, joka saattaa olla logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Brändikatselmus: {name}",
+        "meta": "Verrattu: {book}, {date}, {pages, plural, one {# sivu} other {# sivua}}",
+        "errors": "{count, plural, one {# virhe} other {# virhettä}}",
+        "warnings": "{count, plural, one {# varoitus} other {# varoitusta}}",
+        "infos": "{count, plural, one {# huomio} other {# huomiota}}",
+        "partial": "Katselmus ei valmistunut; tämä raportti sisältää löydökset ennen päättymistä.",
+        "skipped": "Malli ei tarkastellut sivuja {pages}; ne tarkistettiin ilman mallia.",
+        "none": "Brändikirjasta poikkeavia kohtia ei löytynyt.",
+        "page": "Sivu",
+        "severity": "Vakavuus",
+        "rule": "Tarkistus",
+        "finding": "Löytö",
+        "found": "Löydetty",
+        "notes": "Huomiot",
+        "fileSuffix": "brändikatselmus"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Kuinka paljon keskustelua kukin malli saa kerralla.",
       "analytics": "Toimitetut raportit: mitä saapui, kuka saa avata kansion ja mitkä kentät voidaan näyttää.",
       "skills": "Toistettavat ohjeet, joita avustaja käyttää tarvittaessa keskusteluissa.",
-      "models": "Määritä taustamallit ja tarkista alueellinen käyttöönoton valmius."
+      "models": "Määritä taustamallit ja tarkista alueellinen käyttöönoton valmius.",
+      "brandBooks": "Värit, fontit, logot, sanamuodot ja pohjat, joita asiakirjat tarkistetaan ja joiden pohjalta ne laaditaan."
     },
     "openSettings": "Avaa asetukset",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Kontekstibudjetti",
       "analytics": "Analytiikka",
       "skills": "Osaamiset",
-      "models": "Mallit ja valmius"
+      "models": "Mallit ja valmius",
+      "brandBooks": "Brändikirjat"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Palauta zoomaus (nyt {percent} %)",
       "failed": "Tätä asiakirjaa ei voitu näyttää. Se voi olla liian suuri tai suojattu, tai muunnin voi olla varattu; yritä hetken päästä uudelleen.",
       "zoomLevel": "{percent}%"
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Nimeämätön brändikirja",
+    "intro": "Brändikirjassa on organisaation värit, fontit, logot, sanamuodot ja pohjat, jotta asiakirjat voidaan tarkistaa ja laatia niiden mukaisesti. Kuka voi käyttää kutakin kirjaa, määritetään käyttöoikeuksilla.",
+    "unavailable": "Brändikirjoja ei voitu ladata tallennustilasta. Yritä hetken kuluttua uudelleen.",
+    "add": "Lisää brändikirja",
+    "none": "Brändikirjoja ei ole vielä.",
+    "paletteSummary": "{count, plural, one {# brändiväri} other {# brändiväriä}}",
+    "summary": "{fonts, plural, one {# fontti} other {# fonttia}}, {logos, plural, one {# logo} other {# logoa}}",
+    "open": "Avaa",
+    "delete": "Poista",
+    "deleteConfirm": "Poistetaanko \"{name}\" ja sen tiedostot? Jo tarkastettujen asiakirjojen raportit säilyvät.",
+    "deleteConfirmButton": "Poista brändikirja",
+    "loading": "Ladataan brändikirjaa...",
+    "loadFailed": "Brändikirjaa ei voitu ladata.",
+    "missing": "Tätä brändikirjaa ei ole olemassa tai sinulla ei ole muokkausoikeutta.",
+    "back": "Brändikirjat",
+    "unsaved": "Tallentamattomat muutokset",
+    "saved": "Tallennettu",
+    "save": "Tallenna",
+    "conflict": "Toinen ylläpitäjä tallensi tämän brändikirjan avaamisesi jälkeen. Lataa uudelleen nähdäksesi heidän version; tekemäsi muutokset häviävät.",
+    "reload": "Lataa uudelleen",
+    "invalid": "Brändikirjaa ei voi vielä tallentaa: {reason}",
+    "saveFailed": "Brändikirjaa ei voitu tallentaa.",
+    "uploadFailed": "Tiedostoa ei voitu ladata.",
+    "remove": "Poista",
+    "removeNamed": "Poista {name}",
+    "basics": {
+      "title": "Brändikirja",
+      "name": "Nimi",
+      "description": "Kuvaus"
+    },
+    "guide": {
+      "action": "Laadi luonnos brändioppaasta",
+      "reading": "Luetaan opasta...",
+      "hint": "Lataa brändiopas PDF-muodossa, jotta sen määrittelemät värit, fontit ja sanamuodot täytetään automaattisesti. Logoja ja pohjia ei tuoda; lisää ne alle.",
+      "source": "Luonnosteltu lähteestä",
+      "notPdf": "Brändioppaan on oltava PDF.",
+      "failed": "Tästä oppaasta ei voitu tehdä luonnosta.",
+      "applied": "{pages, plural, one {Luotu oppaasta, jossa on # sivu.} other {Luotu oppaasta, jossa on # sivua.}}",
+      "measuredFonts": "Oppaan teksti käyttää fontteja:",
+      "measuredColors": "Oppaan tekstin värit:",
+      "check": "Tarkista jokainen arvo oppaasta ennen tallennusta.",
+      "undo": "Kumoa luonnos"
+    },
+    "palette": {
+      "title": "Värit",
+      "description": "Brändivärit. Väri lasketaan kuuluvaksi näihin, kun se on määritellyssä toleranssissa.",
+      "add": "Lisää väri",
+      "newName": "Väri {number}",
+      "none": "Brändivärejä ei ole vielä.",
+      "hex": "Hex",
+      "pick": "Valitse väri kohteelle {name}",
+      "name": "Nimi",
+      "tolerance": "Toleranssi",
+      "toleranceHint": "Värin ero (Delta E). 2–3 on tuskin havaittavissa.",
+      "roles": "Käyttötarkoitus",
+      "neutrals": "Neutraalit värit",
+      "neutralsHint": "Värit, joita mikä tahansa asiakirja voi käyttää ilman, että ne ovat brändivärejä, pilkulla eroteltuna."
+    },
+    "colorRole": {
+      "primary": "Ensisijainen",
+      "secondary": "Toissijainen",
+      "accent": "Korostus",
+      "text": "Teksti",
+      "background": "Tausta",
+      "neutral": "Neutraali"
+    },
+    "typography": {
+      "title": "Tyyppi",
+      "description": "Kirjasintyypit rooleittain sekä sallitut vaihtoehtoiset fontit, kuten järjestelmäfontti ulkopuolisiin jaettaviin asiakirjoihin.",
+      "add": "Lisää kirjasintyyppi",
+      "none": "Ei kirjasintyyppejä vielä.",
+      "role": "Rooli",
+      "family": "Kirjasintyyppi",
+      "substitutes": "Sallitut vaihtoehdot",
+      "minSize": "Pienin tekstikoko (pt)",
+      "minSizeHint": "0 tarkoittaa, ettei minimiä ole."
+    },
+    "fontRole": {
+      "heading": "Otsikot",
+      "body": "Leipäteksti",
+      "accent": "Korostus"
+    },
+    "logos": {
+      "title": "Logot",
+      "description": "Logo-tiedostot, joita asiakirjoissa tulisi käyttää (PNG, SVG tai JPEG).",
+      "add": "Lataa logo",
+      "untitled": "Logo",
+      "none": "Ei logoja vielä.",
+      "noPreview": "Ei esikatselua",
+      "name": "Nimi",
+      "minWidth": "Pienin leveys (pt)",
+      "aspect": "Sallittu venytys (%)",
+      "aspectHint": "Kuinka paljon mittasuhteet saavat poiketa.",
+      "colors": "Näkyy taustalla",
+      "colorsHint": "Jätä kaikki valitsematta salliaksesi minkä tahansa taustan."
+    },
+    "language": {
+      "title": "Sanamuoto",
+      "description": "Kielet, joilla asiakirjat laaditaan, käytettävät ja vältettävät sanat sekä tyyli.",
+      "locales": "Kielet",
+      "localesHint": "Kielitunnisteet, kuten en tai fr-CA, pilkulla eroteltuna.",
+      "preferred": "Käytettävät sanat",
+      "banned": "Vältettävät sanat",
+      "term": "Sana tai ilmaus",
+      "alternatives": "Sen sijaan / kirjoita tilalle",
+      "note": "Huomio",
+      "addPreferred": "Lisää käytettävä sana",
+      "addBanned": "Lisää vältettävä sana",
+      "nonePreferred": "Ei suositeltuja sanoja vielä.",
+      "noneBanned": "Ei vältettäviä sanoja vielä.",
+      "tone": "Tyyli"
+    },
+    "templates": {
+      "title": "Pohjat",
+      "description": "PowerPoint- ja Word-pohjat, joista uudet asiakirjat luodaan.",
+      "add": "Lataa malli",
+      "untitled": "Malli",
+      "none": "Ei malleja vielä.",
+      "name": "Nimi",
+      "wrongType": "Mallin tulee olla yksi seuraavista: {types}."
     }
   }
 }

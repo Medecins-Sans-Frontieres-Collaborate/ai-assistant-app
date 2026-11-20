@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Kanaal opsteller",
         "description": "Zet bronnen om in berichten voor meerdere kanalen, elk in de juiste toon, met elke quote herleid naar de bron"
+      },
+      "brandReview": {
+        "label": "Merkaanpassing",
+        "description": "Controleer een PDF-, Word-document of presentatie aan de hand van een merkboek: lettertypes, kleuren, formuleringen, logo's en toon"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Nieuwe kaart",
       "newGrants": "Nieuwe grantsverwerking",
       "newFormFill": "Nieuw document invullen",
-      "newChannelDrafter": "Nieuw kanaalconcept"
+      "newChannelDrafter": "Nieuw kanaalconcept",
+      "newBrandReview": "Nieuwe merkaanpassing"
     },
     "translation": {
       "chooseLanguage": "Doeltaal",
@@ -4838,6 +4843,112 @@
         "altTooLong": "De alt-tekst van {name} is {count} boven de kanaallimiet van {max}.",
         "unicodeSms": "{characters} kunnen niet worden verzonden in een standaard sms, waardoor dit bericht plaats biedt aan 70 tekens in plaats van 160. Vervang deze om ruimte terug te krijgen."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Merkaanpassing",
+        "intro": "Kies een merkboek en een document. De controle kijkt naar lettertypes, kleuren, lettergroottes, teksten en logo's, en kan per pagina door een model laten beoordelen op toon en visuele regels.",
+        "book": "Merkboek",
+        "booksLoading": "Bezig met laden van merkboeken...",
+        "noBooks": "Er zijn nog geen merkboeken voor u beschikbaar. Een beheerder voegt deze toe via Beheer > Merkboeken.",
+        "document": "Document",
+        "chooseDocument": "Kies een document",
+        "replaceDocument": "Kies een ander document",
+        "documentTypes": "PDF, Word of PowerPoint",
+        "uploading": "Bezig met uploaden...",
+        "uploadFailed": "Het document kon niet worden geüpload.",
+        "wrongType": "Kies een PDF-, Word-document of presentatie.",
+        "modelReview": "Laat een model elke pagina beoordelen",
+        "modelReviewHint": "Zoekt toon-, visuele- en logoproblemen die automatische checks niet zien. Gebruikt tokens per pagina, tot 40 pagina's.",
+        "start": "Start controle"
+      },
+      "loading": "Beoordeling wordt geladen...",
+      "booksFailed": "Merkboeken konden niet worden geladen.",
+      "startFailed": "De beoordeling kon niet worden gestart.",
+      "readFailed": "De beoordeling kon niet worden gelezen.",
+      "busy": "\"{name}\" wordt nog beoordeeld. Wacht tot deze klaar is, of stop deze, voordat u een nieuwe start.",
+      "failed": "De beoordeling is mislukt.",
+      "against": "Tegen {book}",
+      "progress": {
+        "reading": "Bezig met lezen van het document...",
+        "checking": "Teksten en logo's worden gecontroleerd...",
+        "reviewing": "Pagina's worden beoordeeld...",
+        "pages": "{done} van {total} pagina’s beoordeeld"
+      },
+      "status": {
+        "done": "{errors, plural, one {# fout} other {# fouten}}, {warnings, plural, one {# waarschuwing} other {# waarschuwingen}}",
+        "stopped": "Gestopt: tot nu toe {errors, plural, one {# fout} other {# fouten}}",
+        "failed": "Mislukt",
+        "running": "Bezig"
+      },
+      "stop": "Stoppen",
+      "download": "Rapport downloaden",
+      "newReview": "Nieuwe beoordeling",
+      "findings": "Bevindingen",
+      "noFindings": "Nog niets gevonden.",
+      "noneOfSeverity": "Geen bevindingen van dit soort.",
+      "byModel": "Gevonden door het model; controleer dit.",
+      "notes": "Notities",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "Tonen",
+        "all": "Alle {count}",
+        "error": "Fouten {count}",
+        "warning": "Waarschuwingen {count}",
+        "info": "Notities {count}"
+      },
+      "severity": {
+        "error": "Fout",
+        "warning": "Waarschuwing",
+        "info": "Notitie"
+      },
+      "rule": {
+        "font": "Lettertype",
+        "color": "Kleur",
+        "size": "Tekstgrootte",
+        "banned-term": "Vermijd dit woord",
+        "preferred-term": "Voorkeurswoord",
+        "language": "Taal",
+        "logo-distorted": "Logo-verhoudingen",
+        "logo-small": "Logo-grootte",
+        "logo-background": "Logo-achtergrond",
+        "logo-unknown": "Mogelijk logo",
+        "visual": "Visueel",
+        "tone": "Toon"
+      },
+      "message": {
+        "font": "Ingesteld op {found}; de merklettertypes zijn {expected}.",
+        "font-alone": "Ingesteld op {found}, wat geen merklettertype is.",
+        "color": "{found} is geen merkleur; de dichtstbijzijnde is {first}.",
+        "size": "Tekst op {found} pt; het minimum is {first} pt.",
+        "banned-term": "\"{found}\" is een te vermijden woord; gebruik in plaats daarvan {expected}.",
+        "banned-term-alone": "\"{found}\" is een te vermijden woord.",
+        "preferred-term": "Gebruik \"{first}\" in plaats van \"{found}\".",
+        "language": "Gemarkeerd als {found}; de merktalen zijn {expected}.",
+        "logo-distorted": "{name} is getekend op {found}; de eigen verhoudingen zijn {first}.",
+        "logo-small": "{name} is {found} pt breed; dit moet minimaal {first} pt zijn.",
+        "logo-background": "{name} staat op {found}; deze mag op {expected} worden getoond.",
+        "logo-unknown": "Een afbeelding die mogelijk een logo is: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Merkevaluatie: {name}",
+        "meta": "Tegen {book}, {date}, {pages, plural, one {# pagina} other {# pagina's}}",
+        "errors": "{count, plural, one {# fout} other {# fouten}}",
+        "warnings": "{count, plural, one {# waarschuwing} other {# waarschuwingen}}",
+        "infos": "{count, plural, one {# opmerking} other {# opmerkingen}}",
+        "partial": "De evaluatie is niet voltooid; dit rapport bevat wat er tot dan toe is gevonden.",
+        "skipped": "Het model heeft niet gekeken naar pagina’s {pages}; deze zijn zonder het model gecontroleerd.",
+        "none": "Er is niets gevonden dat afwijkt van het merkboek.",
+        "page": "Pagina",
+        "severity": "Ernst",
+        "rule": "Controlepunt",
+        "finding": "Bevinding",
+        "found": "Gevonden",
+        "notes": "Notities",
+        "fileSuffix": "merkevaluatie"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Hoeveel van een gesprek elk model per beurt ontvangt.",
       "analytics": "Afgeleverde rapporten: wat is ontvangen, wie mag welke map openen, en welke velden mogen getoond worden.",
       "skills": "Herbruikbare instructieblokken die de assistent toepast wanneer een gesprek daarom vraagt.",
-      "models": "Wijs achtergrondmodellen toe en controleer de gereedheid voor regionale uitrol."
+      "models": "Wijs achtergrondmodellen toe en controleer de gereedheid voor regionale uitrol.",
+      "brandBooks": "Kleuren, typografie, logo's, taalgebruik en sjablonen waarmee documenten worden gecontroleerd en opgebouwd."
     },
     "openSettings": "Instellingen openen",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Contextbudget",
       "analytics": "Analytics",
       "skills": "Vaardigheden",
-      "models": "Modellen en gereedheid"
+      "models": "Modellen en gereedheid",
+      "brandBooks": "Huisstijlboeken"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Zoom herstellen (nu {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Dit document kan niet worden weergegeven. Het is mogelijk te groot of beveiligd, of de converter is bezet; probeer het zo opnieuw."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Naamloos huisstijlboek",
+    "intro": "Een huisstijlboek bevat de kleuren, typografie, logo’s, taalgebruik en sjablonen van een organisatie, zodat documenten hiermee gecontroleerd en opgebouwd kunnen worden. Wie elk boek kan gebruiken, wordt bepaald door de toegangsregels.",
+    "unavailable": "Huisstijlboeken konden niet uit de opslag worden geladen. Probeer het zo meteen opnieuw.",
+    "add": "Huisstijlboek toevoegen",
+    "none": "Nog geen huisstijlboeken.",
+    "paletteSummary": "{count, plural, one {# huisstijlkleur} other {# huisstijlkleuren}}",
+    "summary": "{fonts, plural, one {# lettertype} other {# lettertypen}}, {logos, plural, one {# logo} other {# logo's}}",
+    "open": "Openen",
+    "delete": "Verwijderen",
+    "deleteConfirm": "\"{name}\" en de bijbehorende bestanden verwijderen? Rapporten van reeds gecontroleerde documenten blijven bewaard.",
+    "deleteConfirmButton": "Huisstijlboek verwijderen",
+    "loading": "Huisstijlboek wordt geladen...",
+    "loadFailed": "Het huisstijlboek kon niet worden geladen.",
+    "missing": "Dit huisstijlboek bestaat niet of u kunt het niet bewerken.",
+    "back": "Huisstijlboeken",
+    "unsaved": "Niet-opgeslagen wijzigingen",
+    "saved": "Opgeslagen",
+    "save": "Opslaan",
+    "conflict": "Een andere beheerder heeft het huisstijlboek opgeslagen nadat u het had geopend. Herlaad om hun versie te zien; uw wijzigingen gaan dan verloren.",
+    "reload": "Herladen",
+    "invalid": "Dit huisstijlboek kan nog niet worden opgeslagen: {reason}",
+    "saveFailed": "Het huisstijlboek kon niet worden opgeslagen.",
+    "uploadFailed": "Het bestand kon niet worden geüpload.",
+    "remove": "Verwijderen",
+    "removeNamed": "{name} verwijderen",
+    "basics": {
+      "title": "Huisstijlboek",
+      "name": "Naam",
+      "description": "Beschrijving"
+    },
+    "guide": {
+      "action": "Ontwerp vanuit een huisstijlgids",
+      "reading": "Huisstijlgids wordt gelezen...",
+      "hint": "Upload de huisstijlgids als PDF om de daarin vastgelegde kleuren, lettertypen en taalgebruik in te vullen. Logo's en sjablonen worden niet overgenomen; upload die hieronder.",
+      "source": "Ontworpen op basis van",
+      "notPdf": "Een huisstijlgids moet een PDF zijn.",
+      "failed": "Van deze gids kon geen ontwerp worden gemaakt.",
+      "applied": "{pages, plural, one {Opgesteld uit een gids van # pagina.} other {Opgesteld uit een gids van # pagina's.}}",
+      "measuredFonts": "Lettertypen in de tekst:",
+      "measuredColors": "Gebruikte kleuren in de tekst:",
+      "check": "Controleer iedere waarde met de gids voordat u opslaat.",
+      "undo": "Ontwerp ongedaan maken"
+    },
+    "palette": {
+      "title": "Kleuren",
+      "description": "De huisstijlkleuren. Een kleur in een document wordt gelijkgesteld aan een van deze wanneer deze binnen de tolerantiewaarde valt.",
+      "add": "Kleur toevoegen",
+      "newName": "Kleur {number}",
+      "none": "Nog geen huisstijlkleuren.",
+      "hex": "Hex",
+      "pick": "Kies een kleur voor {name}",
+      "name": "Naam",
+      "tolerance": "Tolerantie",
+      "toleranceHint": "Kleurverschil (Delta E). 2 tot 3 is nauwelijks zichtbaar.",
+      "roles": "Gebruikt voor",
+      "neutrals": "Neutrale kleuren",
+      "neutralsHint": "Kleuren die elk document mag gebruiken zonder merkkleur te zijn, komma-gescheiden."
+    },
+    "colorRole": {
+      "primary": "Primair",
+      "secondary": "Secundair",
+      "accent": "Accent",
+      "text": "Tekst",
+      "background": "Achtergrond",
+      "neutral": "Neutraal"
+    },
+    "typography": {
+      "title": "Type",
+      "description": "De lettertypen per rol en de toegestane alternatieven, zoals een systeemlettertype voor extern gedeelde documenten.",
+      "add": "Lettertype toevoegen",
+      "none": "Nog geen lettertypen.",
+      "role": "Rol",
+      "family": "Lettertype",
+      "substitutes": "Toegestane alternatieven",
+      "minSize": "Kleinste tekst (pt)",
+      "minSizeHint": "0 betekent geen minimum."
+    },
+    "fontRole": {
+      "heading": "Koppen",
+      "body": "Lopende tekst",
+      "accent": "Accent"
+    },
+    "logos": {
+      "title": "Logo's",
+      "description": "De logobestanden die documenten moeten gebruiken, als PNG, SVG of JPEG.",
+      "add": "Logo uploaden",
+      "untitled": "Logo",
+      "none": "Nog geen logo's.",
+      "noPreview": "Geen voorbeeld",
+      "name": "Naam",
+      "minWidth": "Kleinste breedte (pt)",
+      "aspect": "Toegestane rek (%)",
+      "aspectHint": "Hoeveel de verhoudingen mogen afwijken.",
+      "colors": "Getoond op",
+      "colorsHint": "Laat alles uitgevinkt om elke achtergrond toe te staan."
+    },
+    "language": {
+      "title": "Wording",
+      "description": "De talen waarin documenten zijn geschreven, de te gebruiken en te vermijden woorden, en de toon.",
+      "locales": "Talen",
+      "localesHint": "Taalcodes zoals nl of fr-CA, komma-gescheiden.",
+      "preferred": "Te gebruiken woorden",
+      "banned": "Te vermijden woorden",
+      "term": "Woord of uitdrukking",
+      "alternatives": "In plaats van / schrijf",
+      "note": "Opmerking",
+      "addPreferred": "Voeg een te gebruiken woord toe",
+      "addBanned": "Voeg een te vermijden woord toe",
+      "nonePreferred": "Nog geen voorkeurwoorden.",
+      "noneBanned": "Nog geen te vermijden woorden.",
+      "tone": "Toon"
+    },
+    "templates": {
+      "title": "Sjablonen",
+      "description": "PowerPoint- en Word-sjablonen waarop nieuwe documenten worden gebaseerd.",
+      "add": "Sjabloon uploaden",
+      "untitled": "Sjabloon",
+      "none": "Nog geen sjablonen.",
+      "name": "Naam",
+      "wrongType": "Een sjabloon moet een van de volgende zijn: {types}."
     }
   }
 }

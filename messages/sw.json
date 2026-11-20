@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "Muandishi wa kituo",
         "description": "Geuza vyanzo kuwa machapisho kwa vituo mbalimbali, kila kimoja kikiwa na sauti sahihi, na kila nukuu ikiwa na chanzo chake"
+      },
+      "brandReview": {
+        "label": "Ukaguzi wa chapa",
+        "description": "Kagua PDF, hati ya Word au wasilisho dhidi ya kitabu cha chapa: fonti, rangi, maneno, nembo na mtindo"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "Ramani mpya",
       "newGrants": "Uchakatiji mpya wa ruzuku",
       "newFormFill": "Jaza hati mpya",
-      "newChannelDrafter": "Rasimu mpya ya kituo"
+      "newChannelDrafter": "Rasimu mpya ya kituo",
+      "newBrandReview": "Ukaguzi mpya wa chapa"
     },
     "translation": {
       "chooseLanguage": "Lugha lengwa",
@@ -4838,6 +4843,112 @@
         "altTooLong": "Maandishi mbadala ya {name} yamezidi {count} kwenye kikomo cha chaneli hii cha {max}.",
         "unicodeSms": "{characters} haziwezi kutumwa kwenye ujumbe wa kawaida, hivyo ujumbe huu una nafasi ya herufi 70 badala ya 160. Zibadilishe ili kupata nafasi tena."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Ukaguzi wa chapa",
+        "intro": "Chagua kitabu cha chapa na hati. Ukaguzi utachunguza fonti, rangi, ukubwa wa maandishi, maneno na nembo, na pia unaweza kutumia modeli kukagua kila ukurasa kwa mtindo na sheria za muonekano.",
+        "book": "Kitabu cha chapa",
+        "booksLoading": "Inapakia vitabu vya chapa...",
+        "noBooks": "Hakuna vitabu vya chapa vilivyopatikana kwako bado. Msimamizi ataongeza kupitia Admin > Brand books.",
+        "document": "Hati",
+        "chooseDocument": "Chagua hati",
+        "replaceDocument": "Chagua hati nyingine",
+        "documentTypes": "PDF, Word au PowerPoint",
+        "uploading": "Inapakia...",
+        "uploadFailed": "Hati haikuweza kupakiwa.",
+        "wrongType": "Chagua PDF, hati ya Word au wasilisho.",
+        "modelReview": "Tumia modeli kukagua kila ukurasa",
+        "modelReviewHint": "Inatambua matatizo ya mtindo, muonekano na nembo ambayo ukaguzi hauwezi kuona. Inatumia tokeni kwa kila ukurasa, hadi kurasa 40.",
+        "start": "Anzisha ukaguzi"
+      },
+      "loading": "Inapakia ukaguzi...",
+      "booksFailed": "Vitabu vya chapa havikuweza kupakiwa.",
+      "startFailed": "Ukaguzi haukuweza kuanzishwa.",
+      "readFailed": "Ukaguzi haukuweza kusomwa.",
+      "busy": "\"{name}\" bado inakaguliwa. Subiri mpaka imalizike, au isitishe, kabla ya kuanza nyingine.",
+      "failed": "Ukaguzi umeshindikana.",
+      "against": "Dhidi ya {book}",
+      "progress": {
+        "reading": "Inasoma hati...",
+        "checking": "Inakagua maandishi na nembo...",
+        "reviewing": "Inakagua kurasa...",
+        "pages": "Imekagua {done} kati ya {total} kurasa"
+      },
+      "status": {
+        "done": "{errors, plural, one {# kosa} other {# makosa}}, {warnings, plural, one {# onyo} other {# maonyo}}",
+        "stopped": "Imesitishwa: {errors, plural, one {# kosa} other {# makosa}} mpaka sasa",
+        "failed": "Imeshindikana",
+        "running": "Inaendelea"
+      },
+      "stop": "Sitisha",
+      "download": "Pakua ripoti",
+      "newReview": "Ukaguzi mpya",
+      "findings": "Matokeo",
+      "noFindings": "Bado hakuna kilichopatikana.",
+      "noneOfSeverity": "Hakuna matokeo ya aina hii.",
+      "byModel": "Imegunduliwa na modeli; angalia.",
+      "notes": "Maelezo",
+      "pageShort": "uk. {page}",
+      "filter": {
+        "label": "Onyesha",
+        "all": "Zote {count}",
+        "error": "Makosa {count}",
+        "warning": "Maonyo {count}",
+        "info": "Maelezo {count}"
+      },
+      "severity": {
+        "error": "Kosa",
+        "warning": "Onyo",
+        "info": "Maelezo"
+      },
+      "rule": {
+        "font": "Aina ya mwandiko",
+        "color": "Rangi",
+        "size": "Ukubwa wa maandishi",
+        "banned-term": "Neno la kuepuka",
+        "preferred-term": "Neno linalopendekezwa",
+        "language": "Lugha",
+        "logo-distorted": "Uwiano wa nembo",
+        "logo-small": "Ukubwa wa nembo",
+        "logo-background": "Mandharinyuma ya nembo",
+        "logo-unknown": "Nembo inayoweza kuwepo",
+        "visual": "Muonekano",
+        "tone": "Mtindo wa lugha"
+      },
+      "message": {
+        "font": "Imetumika {found}; aina za maandishi za chapa ni {expected}.",
+        "font-alone": "Imetumika {found}, ambayo si aina ya maandishi ya chapa.",
+        "color": "{found} si rangi ya chapa; iliyo karibu ni {first}.",
+        "size": "Maandishi kwenye {found} pt; ndogo zaidi inayoruhusiwa ni {first} pt.",
+        "banned-term": "\"{found}\" ni neno la kuepuka; tumia {expected} badala yake.",
+        "banned-term-alone": "\"{found}\" ni neno la kuepuka.",
+        "preferred-term": "Tumia \"{first}\" badala ya \"{found}\".",
+        "language": "Imetajwa kama {found}; lugha za chapa ni {expected}.",
+        "logo-distorted": "{name} imechorwa kwenye {found}; uwiano wake ni {first}.",
+        "logo-small": "{name} ni upana wa {found} pt; inapaswa kuwa angalau {first} pt.",
+        "logo-background": "{name} iko juu ya {found}; inaweza kuonyeshwa juu ya {expected}.",
+        "logo-unknown": "Picha inayoweza kuwa nembo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Ukaguzi wa chapa: {name}",
+        "meta": "Dhidi ya {book}, {date}, {pages, plural, one {ukurasa #} other {kurasa #}}",
+        "errors": "{count, plural, one {hitilafu #} other {hitilafu #}}",
+        "warnings": "{count, plural, one {onya #} other {onya #}}",
+        "infos": "{count, plural, one {kumbukumbu #} other {kumbukumbu #}}",
+        "partial": "Ukaguzi haujakamilika; ripoti hii ina kile kilichopatikana kabla ya kuisha.",
+        "skipped": "Mfano haukuangalia kurasa {pages}; zilihakikiwa bila kutumia mfano.",
+        "none": "Hakuna kilichopatikana kinachokinzana na kitabu cha chapa.",
+        "page": "Ukurasa",
+        "severity": "Ukali",
+        "rule": "Ukaguzi",
+        "finding": "Ugunduzi",
+        "found": "Imepatikana",
+        "notes": "Maelezo",
+        "fileSuffix": "ukaguzi wa chapa"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "Sehemu ya mazungumzo inayotumwa kwa kila modeli kila mara.",
       "analytics": "Ripoti zilizowasilishwa: kilichofika, nani anaweza kufungua kila folda, na ni vipimo gani vinaweza kuonyeshwa.",
       "skills": "Vifurushi vya maagizo vinavyoweza kutumiwa tena ambavyo msaidizi anatumia pale inapohitajika kwenye mazungumzo.",
-      "models": "Weka miundo ya usuli na angalia utayari wa usanidi wa kieneo."
+      "models": "Weka miundo ya usuli na angalia utayari wa usanidi wa kieneo.",
+      "brandBooks": "Rangi, aina ya maandishi, nembo, maneno na violezo ambavyo nyaraka hukaguliwa na kuundwa kulingana navyo."
     },
     "openSettings": "Fungua mipangilio",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "Bajeti ya muktadha",
       "analytics": "Takwimu",
       "skills": "Ujuzi",
-      "models": "Miundo na utayari"
+      "models": "Miundo na utayari",
+      "brandBooks": "Vitabu vya chapa"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "Weka upya ukuzaji (sasa {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Hati hii haikuweza kuonyeshwa. Huenda ni kubwa mno, imelindwa, au kigeuzi kina shughuli nyingi; jaribu tena baada ya muda mfupi."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Kitabu cha chapa bila jina",
+    "intro": "Kitabu cha chapa kina rangi, aina ya maandishi, nembo, maneno na violezo vya shirika, ili nyaraka ziweze kukaguliwa na kuundwa kulingana navyo. Upatikanaji wa kitabu kila kimoja umewekwa kwa kanuni ya ufikiaji.",
+    "unavailable": "Vitabu vya chapa vimeshindwa kupakuliwa kutoka kwenye hifadhi. Jaribu tena baada ya muda.",
+    "add": "Ongeza kitabu cha chapa",
+    "none": "Hakuna vitabu vya chapa bado.",
+    "paletteSummary": "{count, plural, one {# rangi ya chapa} other {# rangi za chapa}}",
+    "summary": "{fonts, plural, one {# aina ya maandishi} other {# aina za maandishi}}, {logos, plural, one {# nembo} other {# nembo}}",
+    "open": "Fungua",
+    "delete": "Futa",
+    "deleteConfirm": "Ufuta \"{name}\" na faili zake? Nyaraka zilizokaguliwa tayari zitaendelea kuwa na ripoti zao.",
+    "deleteConfirmButton": "Futa kitabu cha chapa",
+    "loading": "Inapakia kitabu cha chapa...",
+    "loadFailed": "Kitabu cha chapa kimeshindwa kupakuliwa.",
+    "missing": "Kitabu hiki cha chapa hakipo, au huwezi kukihariri.",
+    "back": "Vitabu vya chapa",
+    "unsaved": "Mabadiliko hayajahifadhiwa",
+    "saved": "Imekifadhiwa",
+    "save": "Hifadhi",
+    "conflict": "Msimamizi mwingine amehifadhi kitabu hiki cha chapa baada ya wewe kukifungua. Pakua upya kuona toleo lao; mabadiliko yako hapa yatapotea.",
+    "reload": "Pakua upya",
+    "invalid": "Kitabu hiki cha chapa hakiwezi kuhifadhiwa bado: {reason}",
+    "saveFailed": "Kitabu cha chapa kimeshindwa kuhifadhiwa.",
+    "uploadFailed": "Faili imeshindwa kupakuliwa.",
+    "remove": "Ondoa",
+    "removeNamed": "Ondoa {name}",
+    "basics": {
+      "title": "Kitabu cha chapa",
+      "name": "Jina",
+      "description": "Maelezo"
+    },
+    "guide": {
+      "action": "Andika rasimu kutoka mwongozo wa chapa",
+      "reading": "Inasoma mwongozo...",
+      "hint": "Pakia mwongozo wa chapa kama PDF ili kujaza rangi, aina ya maandishi na maneno yaliyofafanuliwa. Nembo na violezo havichukuliwi kutoka kwenye mwongozo; pakia hivyo chini.",
+      "source": "Rasimu kutoka",
+      "notPdf": "Mwongozo wa chapa lazima uwe PDF.",
+      "failed": "Rasimu imeshindwa kuandikwa kutoka mwongozo huu.",
+      "applied": "{pages, plural, one {Imeandaliwa kutoka kwa mwongozo wa ukurasa #.} other {Imeandaliwa kutoka kwa mwongozo wa kurasa #.}}",
+      "measuredFonts": "Aina za maandishi kwenye maandishi yake:",
+      "measuredColors": "Rangi zilizotumika kwenye maandishi yake:",
+      "check": "Angalia kila thamani dhidi ya mwongozo kabla ya kuhifadhi.",
+      "undo": "Futa rasimu"
+    },
+    "palette": {
+      "title": "Rangi",
+      "description": "Rangi za chapa. Rangi katika nyaraka huhesabiwa kuwa mojawapo ya hizi ikiwa iko ndani ya kiwango cha toleransi ya rangi hiyo.",
+      "add": "Ongeza rangi",
+      "newName": "Rangi {number}",
+      "none": "Hakuna rangi za chapa bado.",
+      "hex": "Hex",
+      "pick": "Chagua rangi kwa {name}",
+      "name": "Jina",
+      "tolerance": "Toleransi",
+      "toleranceHint": "Tofauti ya rangi (Delta E). 2 hadi 3 ni vigumu kuonekana.",
+      "roles": "Inatumika kwa",
+      "neutrals": "Rangi zisizo na upande",
+      "neutralsHint": "Rangi ambazo hati yoyote inaweza kutumia bila kuwa rangi ya chapa, zikitenganishwa kwa koma."
+    },
+    "colorRole": {
+      "primary": "Kuu",
+      "secondary": "Mhimu wa pili",
+      "accent": "Msisitizo",
+      "text": "Maandishi",
+      "background": "Mandharinyuma",
+      "neutral": "Isiyo na upande"
+    },
+    "typography": {
+      "title": "Aina",
+      "description": "Aina za maandishi kulingana na jukumu, na fonti zinazokubalika badala yake, kama vile fonti ya mfumo kwa hati zinazoshirikiwa nje.",
+      "add": "Ongeza aina ya maandishi",
+      "none": "Hakuna aina za maandishi bado.",
+      "role": "Jukumu",
+      "family": "Aina ya maandishi",
+      "substitutes": "Mbadala zinazoruhusiwa",
+      "minSize": "Maandishi madogo kabisa (pt)",
+      "minSizeHint": "0 haiweki kiwango cha chini."
+    },
+    "fontRole": {
+      "heading": "Vichwa vya habari",
+      "body": "Maandishi ya mwili",
+      "accent": "Msisitizo"
+    },
+    "logos": {
+      "title": "Nembo",
+      "description": "Faili za nembo ambazo hati zinapaswa kutumia, kama PNG, SVG au JPEG.",
+      "add": "Pakia nembo",
+      "untitled": "Nembo",
+      "none": "Hakuna nembo bado.",
+      "noPreview": "Hakuna hakikisho",
+      "name": "Jina",
+      "minWidth": "Upana mdogo kabisa (pt)",
+      "aspect": "Kunyoosha kunakokubalika (%)",
+      "aspectHint": "Ni kiasi gani vipimo vinaweza kutofautiana.",
+      "colors": "Inaonekana kwenye",
+      "colorsHint": "Acha zote bila kuchaguliwa ili kuruhusu mandharinyuma yoyote."
+    },
+    "language": {
+      "title": "Maneno",
+      "description": "Lugha ambazo hati zimeandikwa, maneno ya kutumia na kuepuka, na sauti ya matumizi.",
+      "locales": "Lugha",
+      "localesHint": "Vitambulisho vya lugha kama en au fr-CA, zikitenganishwa kwa koma.",
+      "preferred": "Maneno ya kutumia",
+      "banned": "Maneno ya kuepuka",
+      "term": "Neno au kifungu",
+      "alternatives": "Badala ya / andika badala yake",
+      "note": "Maelezo",
+      "addPreferred": "Ongeza neno la kutumia",
+      "addBanned": "Ongeza neno la kuepuka",
+      "nonePreferred": "Hakuna maneno ya kupendekezwa bado.",
+      "noneBanned": "Hakuna maneno ya kuepuka bado.",
+      "tone": "Sauti"
+    },
+    "templates": {
+      "title": "Violezo",
+      "description": "Violezo vya PowerPoint na Word ambavyo hati mpya zinatengenezwa.",
+      "add": "Pakia kiolezo",
+      "untitled": "Kiolezo",
+      "none": "Bado hakuna violezo.",
+      "name": "Jina",
+      "wrongType": "Kiolezo lazima kiwe mojawapo ya {types}."
     }
   }
 }

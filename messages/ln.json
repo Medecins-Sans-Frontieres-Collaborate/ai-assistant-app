@@ -2871,6 +2871,10 @@
       "channelDrafter": {
         "label": "Motángoli ya kanal",
         "description": "Bongola biloko ya nséko na biposa ya bango ya mikanda ya ba kanal ndenge nionso, mokolo na mongongo na yango, mpe kiekie nyonso ezalaka na motindo na yango."
+      },
+      "brandReview": {
+        "label": "Kotalisa ya brand",
+        "description": "Talisa PDF, dokiman Word to presentation na brand book: polosi, balongi ya mikolo, majoli, maloba, logos mpe style"
       }
     },
     "chooser": {
@@ -2883,7 +2887,8 @@
       "newMap": "Carte sika",
       "newGrants": "Misala ya ba grants ya sika",
       "newFormFill": "Kotonda mokanda ya sika",
-      "newChannelDrafter": "Motángi ya kanal ya sika"
+      "newChannelDrafter": "Motángi ya kanal ya sika",
+      "newBrandReview": "Kotalisa ya brand ya sika"
     },
     "translation": {
       "chooseLanguage": "Lokota ya bokokani",
@@ -4822,6 +4827,112 @@
         "altTooLong": "Maloba ya alt ya {name} ekiti {count} koleka ndelo ya shaneli oyo ya {max}.",
         "unicodeSms": "{characters} ekoki te kotindama na sms ya normal, yango wana nsango oyo ezali na esika ya ba karaktere 70, te 160. Boma yango mpo ozwa esika lisusu."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Kotalisa ya brand",
+        "intro": "Pona brand book mpe dokiman. Kotalisa ezali kotala polosi, balongi, bamokuse ya maloba, majoli, logos, na modele ekoki kotala page nyonso pona style mpe ndenge ya elilingi.",
+        "book": "Brand book",
+        "booksLoading": "Brand book ezali kotinda...",
+        "noBooks": "Brand book ezali te pona yo sikoyo. Admin azali koyela yango na Admin > Brand books.",
+        "document": "Dokiman",
+        "chooseDocument": "Pona dokiman",
+        "replaceDocument": "Pona dokiman mosusu",
+        "documentTypes": "PDF, Word to PowerPoint",
+        "uploading": "Ezali kotinda...",
+        "uploadFailed": "Dokiman ekokaki te kotinda.",
+        "wrongType": "Pona PDF, dokiman Word to presentation.",
+        "modelReview": "Pesa modele esika ya kotala page nyonso",
+        "modelReviewHint": "Ezo lima style, elilingi mpe likambo ya logos oyo controle ekoki te komona. Ezali kosalela tokens pona page nyonso, mingi na 40 pages.",
+        "start": "Koma kotalisa"
+      },
+      "loading": "Kozwa kotalisa...",
+      "booksFailed": "Brand books ekokaki te kozwa.",
+      "startFailed": "Kotalisa ekokaki te kobanda.",
+      "readFailed": "Kotalisa ekokaki te kozwa.",
+      "busy": "\"{name}\" ezali kaka na kotala. Zela esuka, to longola yango, liboso ya kobanda mosusu.",
+      "failed": "Kotalisa efandi.",
+      "against": "Na {book}",
+      "progress": {
+        "reading": "Ezali kotala dokiman...",
+        "checking": "Ezali kotala maloba mpe logos...",
+        "reviewing": "Ezali kotala ba page...",
+        "pages": "Ba pages {done} ya {total} ebongi kotala"
+      },
+      "status": {
+        "stopped": "Eboya: {errors, plural, one {# likambo} other {# makambo}} kino sikoyo",
+        "failed": "Efandi",
+        "running": "Ezali kotala",
+        "done": "{errors, plural, one {# likambo ya libunga} other {# ba likambo ya libunga}}, {warnings, plural, one {# likambo ya limbalimba} other {# ba likambo ya limbalimba}}"
+      },
+      "stop": "Kanga",
+      "download": "Zwa rapo",
+      "newReview": "Kotalisa ya sika",
+      "findings": "Makambo",
+      "noFindings": "Eloko ezati te.",
+      "noneOfSeverity": "Makambo oyo ya ndenge oyo ezati te.",
+      "byModel": "Modele ebimisi yango; talisa.",
+      "notes": "Tola",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "Pakola",
+        "all": "Nionso {count}",
+        "error": "Makambo {count}",
+        "warning": "Miloba {count}",
+        "info": "Tola {count}"
+      },
+      "severity": {
+        "error": "Likambo",
+        "warning": "Liloba",
+        "info": "Tola"
+      },
+      "rule": {
+        "font": "Letra",
+        "color": "Mbalanza ya elóko",
+        "size": "Kubwa ya nkoma",
+        "banned-term": "Motindo ya koluka kike",
+        "preferred-term": "Motindo ya malamu",
+        "language": "Lokota",
+        "logo-distorted": "Proportion ya logo",
+        "logo-small": "Kubwa ya logo",
+        "logo-background": "Esika logo ezali",
+        "logo-unknown": "Logo ekoki kozala",
+        "visual": "Visual",
+        "tone": "Toni"
+      },
+      "message": {
+        "font": "Epesami na {found}; letra ya brand ezali {expected}.",
+        "font-alone": "Epesami na {found}, ezali letra ya brand te.",
+        "color": "{found} ezali mbalaza ya brand te; ya pene ezali {first}.",
+        "size": "Nkoma na {found} pt; ya moke oyo ekoki ezali {first} pt.",
+        "banned-term": "\"{found}\" ezali motindo ya koluka kike; kokoma {expected} esika na yango.",
+        "banned-term-alone": "\"{found}\" ezali motindo ya koluka kike.",
+        "preferred-term": "Kokoma \"{first}\" esika na \"{found}\".",
+        "language": "Epesami na {found}; lokota ya brand ezali {expected}.",
+        "logo-distorted": "{name} esalemi na {found}; proportion na yango ezali {first}.",
+        "logo-small": "{name} ezali {found} pt na kuele; esengeli ezala na {first} pt.",
+        "logo-background": "{name} ezali na {found}; ekoki komonama na {expected}.",
+        "logo-unknown": "Elili ekoki kozala logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Boyekoli ya brand: {name}",
+        "meta": "Na {book}, {date}, {pages, plural, one {# lokasa} other {# makasa}}",
+        "errors": "{count, plural, one {# erreur} other {# erreurs}}",
+        "warnings": "{count, plural, one {# avertissement} other {# avertissements}}",
+        "infos": "{count, plural, one {# noti} other {# noti}}",
+        "partial": "Boyekoli esili te; rapport oyo ezali na makambo eselaki liboso esila.",
+        "skipped": "Model esaleli te makasa {pages}; esengeli kotala yango na model te.",
+        "none": "Ezali na eloko moko te ekotiki na brand book.",
+        "page": "Lokasa",
+        "severity": "Zala likolo",
+        "rule": "Talisa",
+        "finding": "Oyebi",
+        "found": "Eyebanaki",
+        "notes": "Noti",
+        "fileSuffix": "boyekoli ya brand"
+      }
     }
   },
   "connectors": {
@@ -6094,7 +6205,8 @@
       "contextBudget": "Bokangiseli ya lisolo oyo model nyonso ezwi na tour nyonso.",
       "analytics": "Rapport epesami: nini ebimi, nani akoki kofungola dosiye, mpe bilanga nini ekoki komonana.",
       "skills": "Biteni ya mateya oyo asistani akoki kosalela tango esengeli na lisolo.",
-      "models": "Pona ba modèles ya nsé mpe kotalela soki eteni ekokani na kotombola bakoki ya bisika."
+      "models": "Pona ba modèles ya nsé mpe kotalela soki eteni ekokani na kotombola bakoki ya bisika.",
+      "brandBooks": "Bokoki ya kala, ndenge ya nkoma, logo, maloba mpe modèle oyo bakangaka mpo na kotala mpe kosala mindoki."
     },
     "openSettings": "Fungola malamu misala ya malamu",
     "area": {
@@ -6107,7 +6219,8 @@
       "contextBudget": "Bokangiseli ya kontekste",
       "analytics": "Analytics",
       "skills": "Ba compétence",
-      "models": "Ba modèles mpe bokokani"
+      "models": "Ba modèles mpe bokokani",
+      "brandBooks": "Bitabola ya brand"
     }
   },
   "limits": {
@@ -8808,6 +8921,129 @@
       "zoomReset": "Zongisa zoom (sikoyo {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Mokanda oyo ekoki komonana te. Ekoki kozala monene mingi, ebatelami, to convertisseur ezali na mosala; meka lisusu mwa sima."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Bitabola ya brand ezali na kombo te",
+    "intro": "Bitabola ya brand ezali na bokoki ya kala, ndenge ya nkoma, logo, maloba mpe modèle ya organisation, mpo mindoki ekoka kotala yango mpe kosala yango. Muntu akoki kosalela bitabola moko, ekosalisama na règle ya entrée.",
+    "unavailable": "Bitabola ya brand ekokaki te kokotama na stockage. Yoka lisusu na mwa moke.",
+    "add": "Tia bitabola ya brand",
+    "none": "Bitabola ya brand ezali te.",
+    "paletteSummary": "{count, plural, one {# kala ya brand} other {# bakala ya brand}}",
+    "summary": "{fonts, plural, one {# ndenge ya nkoma} other {# ndenge ya nkoma}}, {logos, plural, one {# logo} other {# ba logo}}",
+    "open": "Fungola",
+    "delete": "Longwa",
+    "deleteConfirm": "Bolongwa \"{name}\" mpe bafile na yango? Mindoki oyo esalemi kozoka ekotika ba rapor na bango.",
+    "deleteConfirmButton": "Longwa bitabola ya brand",
+    "loading": "Ekokisaka bitabola ya brand...",
+    "loadFailed": "Bitabola ya brand ekokaki te kokotama.",
+    "missing": "Bitabola ya brand oyo ezali te, to okoki te kosala mpe kosala yango.",
+    "back": "Bitabola ya brand",
+    "unsaved": "Bakalaka ebongisami te",
+    "saved": "Ebongisami",
+    "save": "Bongisa",
+    "conflict": "Administrateur mosusu abongisaki bitabola ya brand oyo sima ete yo kofungolaki yango. Bongisa lisusu mpo na komona version na bango; bakalaka na yo ekolongwa.",
+    "reload": "Bongisa lisusu",
+    "invalid": "Bitabola ya brand oyo ekoki te ebongisama sikoyo: {reason}",
+    "saveFailed": "Bitabola ya brand ekokaki te ebongisama.",
+    "uploadFailed": "Fichier ekokaki te ekotama.",
+    "remove": "Longwa",
+    "removeNamed": "Longwa {name}",
+    "basics": {
+      "title": "Bitabola ya brand",
+      "name": "Kombo",
+      "description": "Ntembe"
+    },
+    "guide": {
+      "action": "Ebongisa na guide ya brand",
+      "reading": "Ebandi kotanga guide...",
+      "hint": "Kotisa guide ya brand lokola PDF mpo na kotia baakala, ndenge ya nkoma mpe maloba oyo guide esalaka. Logo mpe modèles ekosalama te awa; kotisa yango na suka.",
+      "source": "Ebongisama na",
+      "notPdf": "Guide ya brand esengeli kozala PDF.",
+      "failed": "Ebongisama ekokaki te kosalema na guide oyo.",
+      "applied": "{pages, plural, one {Ebandeli na elakiseli ya lokasa #.} other {Ebandeli na elakiseli ya bilakisa #.}}",
+      "measuredFonts": "Ndenge ya nkoma guide esalelaka:",
+      "measuredColors": "Ba kala guide esalelaka:",
+      "check": "Talela motuya na guide liboso bongisa.",
+      "undo": "Longwa ebongisama"
+    },
+    "palette": {
+      "title": "Ba kala",
+      "description": "Ba kala ya brand. Kala moko na mindoki ekondimama kala moko na kaka ya brand soki esalemi na limite ya kala na yango.",
+      "add": "Tia kala",
+      "newName": "Kala {number}",
+      "none": "Ba kala ya brand ezali te.",
+      "hex": "Hex",
+      "pick": "Pona kala ya {name}",
+      "name": "Kombo",
+      "tolerance": "Limite",
+      "toleranceHint": "Différence ya couleur (Delta E). 2 kino 3 ekoki komonana te.",
+      "roles": "Ezali kosalelama mpo na",
+      "neutrals": "Ba couleur neutral",
+      "neutralsHint": "Ba couleur nyonso oyo dokument ekoki kosalela soki ezali te couleur ya brand, kotanga na koma."
+    },
+    "colorRole": {
+      "primary": "Ya liboso",
+      "secondary": "Ya mibale",
+      "accent": "Accent",
+      "text": "Mbalama",
+      "background": "Esika ya sima",
+      "neutral": "Neutral"
+    },
+    "typography": {
+      "title": "Tipo",
+      "description": "Ba typeface na mikumba, pe ba font oyo ekoki kosalema na esika na yango, lokola font ya system mpo na ba dokument oyo esolama na libanda.",
+      "add": "Kobakisa typeface",
+      "none": "Typeface ezali te naino.",
+      "role": "Mikumba",
+      "family": "Typeface",
+      "substitutes": "Ba remplacement ya ndingisa",
+      "minSize": "Mbalama ya moke mingi (pt)",
+      "minSizeHint": "0 eloko te epesi minimum."
+    },
+    "fontRole": {
+      "heading": "Ba titre",
+      "body": "Mbalama ya kati",
+      "accent": "Accent"
+    },
+    "logos": {
+      "title": "Ba logo",
+      "description": "Ba fichier ya logo oyo dokument esengeli kosalela, lokola PNG, SVG to JPEG.",
+      "add": "Kotelema logo",
+      "untitled": "Logo",
+      "none": "Logo ezali naino te.",
+      "noPreview": "Preview ezali te",
+      "name": "Nkombo",
+      "minWidth": "Largeur ya moke mingi (pt)",
+      "aspect": "Stretch ya ndingisa (%)",
+      "aspectHint": "Koleka ndenge ya forme ekoki ndenge nini.",
+      "colors": "Elakisami na",
+      "colorsHint": "Tika nyonso na te mpo na kolanda background nyonso."
+    },
+    "language": {
+      "title": "Maloba",
+      "description": "Ba lokota oyo dokument ekomama, ba maloba ya kosalela pe ya kokima, pe ndenge ya maloba.",
+      "locales": "Ba lokota",
+      "localesHint": "Ba tag ya lokota lokola en to fr-CA, kotanga na koma.",
+      "preferred": "Maloba ya kosalela",
+      "banned": "Maloba ya kokima",
+      "term": "Liloba to phrase",
+      "alternatives": "Na esika ya / koya na esika",
+      "note": "Noti",
+      "addPreferred": "Kobakisa liloba ya kosalela",
+      "addBanned": "Kobakisa liloba ya kokima",
+      "nonePreferred": "Maloba ya kosalela ezali naino te.",
+      "noneBanned": "Maloba ya kokima ezali naino te.",
+      "tone": "Ndenge ya maloba"
+    },
+    "templates": {
+      "title": "Ba template",
+      "description": "Template ya PowerPoint pe Word oyo dokument ya sika ezosalama na yango.",
+      "add": "Télecharger modèle",
+      "untitled": "Modèle",
+      "none": "Nanu modèles te.",
+      "name": "Nkombo",
+      "wrongType": "Modèle esengeli kozala moko na kati ya {types}."
     }
   }
 }

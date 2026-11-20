@@ -2887,6 +2887,10 @@
       "channelDrafter": {
         "label": "채널 작성기",
         "description": "자료를 여러 채널용 게시글로 변환하며, 각 채널에 맞는 톤을 적용하고 모든 인용을 원문으로 추적합니다."
+      },
+      "brandReview": {
+        "label": "브랜드 검토",
+        "description": "PDF, Word 문서 또는 프레젠테이션이 브랜드 북에 맞는지 확인합니다: 글꼴, 색상, 문구, 로고, 톤"
       }
     },
     "chooser": {
@@ -2899,7 +2903,8 @@
       "newMap": "새 지도",
       "newGrants": "신규 보조금 처리",
       "newFormFill": "새 문서 작성",
-      "newChannelDrafter": "새 채널 초안"
+      "newChannelDrafter": "새 채널 초안",
+      "newBrandReview": "새 브랜드 검토"
     },
     "translation": {
       "chooseLanguage": "목표 언어",
@@ -4838,6 +4843,112 @@
         "altTooLong": "{name}의 대체 텍스트가 이 채널 한도인 {max}자를 {count}자 초과했습니다.",
         "unicodeSms": "{characters} 문자는 일반 문자 메시지로 전송할 수 없습니다. 이 메시지는 160자 대신 70자까지 입력할 수 있습니다. 해당 문자를 바꾸면 더 입력할 수 있습니다."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "브랜드 검토",
+        "intro": "브랜드 북과 문서를 선택하세요. 글꼴, 색상, 텍스트 크기, 문구, 로고를 체크하며, 모델이 각 페이지의 톤과 시각적 규칙을 검토할 수 있습니다.",
+        "book": "브랜드 북",
+        "booksLoading": "브랜드 북을 불러오는 중...",
+        "noBooks": "아직 사용 가능한 브랜드 북이 없습니다. 관리자가 Admin > 브랜드 북에서 추가합니다.",
+        "document": "문서",
+        "chooseDocument": "문서를 선택하세요",
+        "replaceDocument": "다른 문서를 선택하세요",
+        "documentTypes": "PDF, Word 또는 PowerPoint",
+        "uploading": "업로드 중...",
+        "uploadFailed": "문서를 업로드할 수 없습니다.",
+        "wrongType": "PDF, Word 문서 또는 프레젠테이션을 선택하세요.",
+        "modelReview": "모델이 각 페이지를 검토하도록 하기",
+        "modelReviewHint": "검사로 확인할 수 없는 톤, 시각적, 로고 문제를 발견합니다. 페이지마다 토큰이 사용되며 최대 40페이지까지 가능합니다.",
+        "start": "검토 시작"
+      },
+      "loading": "검토를 불러오는 중...",
+      "booksFailed": "브랜드 북을 불러올 수 없습니다.",
+      "startFailed": "검토를 시작할 수 없습니다.",
+      "readFailed": "검토를 읽을 수 없습니다.",
+      "busy": "\"{name}\"이(가) 아직 검토 중입니다. 완료를 기다리거나 중지한 후에 다른 검토를 시작하세요.",
+      "failed": "검토에 실패했습니다.",
+      "against": "{book} 기준",
+      "progress": {
+        "reading": "문서 읽는 중...",
+        "checking": "텍스트와 로고 확인 중...",
+        "reviewing": "페이지 검토 중...",
+        "pages": "총 {total}페이지 중 {done}페이지 검토 완료"
+      },
+      "status": {
+        "done": "{errors, plural, one {#건 오류} other {#건 오류}}, {warnings, plural, one {#건 경고} other {#건 경고}}",
+        "stopped": "중지됨: 현재까지 {errors, plural, one {#건 오류} other {#건 오류}}",
+        "failed": "실패",
+        "running": "진행 중"
+      },
+      "stop": "중지",
+      "download": "보고서 다운로드",
+      "newReview": "새 검토",
+      "findings": "발견사항",
+      "noFindings": "아직 발견된 것이 없습니다.",
+      "noneOfSeverity": "해당 유형의 발견사항이 없습니다.",
+      "byModel": "모델이 발견함; 확인하세요.",
+      "notes": "노트",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "보기",
+        "all": "전체 {count}",
+        "error": "오류 {count}",
+        "warning": "경고 {count}",
+        "info": "노트 {count}"
+      },
+      "severity": {
+        "error": "오류",
+        "warning": "경고",
+        "info": "노트"
+      },
+      "rule": {
+        "font": "서체",
+        "color": "색상",
+        "size": "텍스트 크기",
+        "banned-term": "피해야 할 단어",
+        "preferred-term": "권장 단어",
+        "language": "언어",
+        "logo-distorted": "로고 비율",
+        "logo-small": "로고 크기",
+        "logo-background": "로고 배경",
+        "logo-unknown": "가능성 있는 로고",
+        "visual": "비주얼",
+        "tone": "톤"
+      },
+      "message": {
+        "font": "{found} 서체로 설정됨; 브랜드의 서체는 {expected}입니다.",
+        "font-alone": "{found} 서체로 설정되었으나 브랜드 서체가 아닙니다.",
+        "color": "{found}은 브랜드 색상이 아닙니다; 가장 가까운 색상은 {first}입니다.",
+        "size": "텍스트가 {found} pt로 설정됨; 허용되는 최소 크기는 {first} pt입니다.",
+        "banned-term": "\"{found}\"은 피해야 할 단어입니다; 대신 {expected}을(를) 사용하세요.",
+        "banned-term-alone": "\"{found}\"은 피해야 할 단어입니다.",
+        "preferred-term": "\"{found}\" 대신 \"{first}\"을(를) 사용하세요.",
+        "language": "{found}로 표시됨; 브랜드의 언어는 {expected}입니다.",
+        "logo-distorted": "{name}이(가) {found}로 그려졌습니다; 원래 비율은 {first}입니다.",
+        "logo-small": "{name}은(는) 폭이 {found} pt입니다; 최소 {first} pt이어야 합니다.",
+        "logo-background": "{name}이(가) {found} 위에 놓여 있습니다; {expected}에 표시될 수 있습니다.",
+        "logo-unknown": "로고일 수 있는 그림: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "브랜드 검토: {name}",
+        "meta": "{book}, {date}, {pages, plural, one {페이지 #} other {페이지 #}} 기준",
+        "errors": "{count, plural, one {오류 #건} other {오류 #건}}",
+        "warnings": "{count, plural, one {경고 #건} other {경고 #건}}",
+        "infos": "{count, plural, one {노트 #건} other {노트 #건}}",
+        "partial": "검토가 완료되지 않았습니다; 이 보고서는 종료 이전의 결과를 포함합니다.",
+        "skipped": "모델이 페이지 {pages}를 확인하지 않았습니다; 해당 페이지는 모델 없이 검토되었습니다.",
+        "none": "브랜드 북에서 벗어난 사항이 발견되지 않았습니다.",
+        "page": "페이지",
+        "severity": "심각도",
+        "rule": "검사",
+        "finding": "결과",
+        "found": "발견",
+        "notes": "노트",
+        "fileSuffix": "브랜드 검토"
+      }
     }
   },
   "connectors": {
@@ -6110,7 +6221,8 @@
       "contextBudget": "각 모델이 매 회차에 받는 대화량",
       "analytics": "전달된 보고서: 도착한 항목, 각 폴더의 열람 권한, 표시할 수 있는 필드.",
       "skills": "대화에 필요할 때 어시스턴트가 적용하는 재사용 가능한 지시문 블록입니다.",
-      "models": "백그라운드 모델을 할당하고 지역 배포 준비 상태를 확인하세요."
+      "models": "백그라운드 모델을 할당하고 지역 배포 준비 상태를 확인하세요.",
+      "brandBooks": "문서의 색상, 서체, 로고, 워딩, 템플릿을 확인하고 작성할 때 기준이 되는 항목입니다."
     },
     "openSettings": "설정 열기",
     "area": {
@@ -6123,7 +6235,8 @@
       "contextBudget": "컨텍스트 예산",
       "analytics": "분석",
       "skills": "스킬",
-      "models": "모델 및 준비 상태"
+      "models": "모델 및 준비 상태",
+      "brandBooks": "브랜드북"
     }
   },
   "limits": {
@@ -8824,6 +8937,129 @@
       "zoomReset": "확대/축소 초기화 (현재 {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "이 문서를 표시할 수 없습니다. 파일이 너무 크거나 보호되어 있거나 변환기가 사용 중일 수 있습니다. 잠시 후 다시 시도하세요."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "제목 없는 브랜드북",
+    "intro": "브랜드북에는 조직의 색상, 서체, 로고, 워딩, 템플릿이 포함되어 있어 문서를 검토하고 작성할 수 있습니다. 각 브랜드북의 사용자는 접근 규칙으로 설정됩니다.",
+    "unavailable": "저장소에서 브랜드북을 불러올 수 없습니다. 잠시 후 다시 시도하세요.",
+    "add": "브랜드북 추가",
+    "none": "아직 브랜드북이 없습니다.",
+    "paletteSummary": "{count, plural, one {# 브랜드 색상} other {# 브랜드 색상}}",
+    "summary": "{fonts, plural, one {# 서체} other {# 서체}}, {logos, plural, one {# 로고} other {# 로고}}",
+    "open": "열기",
+    "delete": "삭제",
+    "deleteConfirm": "\"{name}\" 및 그 파일을 삭제하시겠습니까? 이미 검토된 문서는 보고서를 유지합니다.",
+    "deleteConfirmButton": "브랜드북 삭제",
+    "loading": "브랜드북 불러오는 중...",
+    "loadFailed": "브랜드북을 불러올 수 없습니다.",
+    "missing": "이 브랜드북이 존재하지 않거나 수정 권한이 없습니다.",
+    "back": "브랜드북",
+    "unsaved": "저장되지 않은 변경사항",
+    "saved": "저장됨",
+    "save": "저장",
+    "conflict": "다른 관리자가 브랜드북을 저장했습니다. 새 버전을 보려면 새로고침하세요. 현재 변경사항은 사라집니다.",
+    "reload": "새로고침",
+    "invalid": "이 브랜드북은 아직 저장할 수 없습니다: {reason}",
+    "saveFailed": "브랜드북을 저장할 수 없습니다.",
+    "uploadFailed": "파일을 업로드할 수 없습니다.",
+    "remove": "제거",
+    "removeNamed": "{name} 제거",
+    "basics": {
+      "title": "브랜드북",
+      "name": "이름",
+      "description": "설명"
+    },
+    "guide": {
+      "action": "브랜드 가이드로 초안 작성",
+      "reading": "가이드 읽는 중...",
+      "hint": "브랜드 가이드를 PDF로 업로드하면 정의된 색상, 서체, 워딩이 자동으로 입력됩니다. 로고와 템플릿은 포함되지 않으니 아래에서 별도로 업로드하세요.",
+      "source": "초안 출처",
+      "notPdf": "브랜드 가이드는 PDF이어야 합니다.",
+      "failed": "이 가이드에서 초안을 만들 수 없습니다.",
+      "applied": "{pages, plural, one {#페이지의 가이드에서 초안이 작성되었습니다.} other {#페이지의 가이드에서 초안이 작성되었습니다.}}",
+      "measuredFonts": "본문에 사용된 서체:",
+      "measuredColors": "본문에 사용된 색상:",
+      "check": "저장하기 전에 각 값을 가이드와 비교하세요.",
+      "undo": "초안 되돌리기"
+    },
+    "palette": {
+      "title": "색상",
+      "description": "브랜드 색상입니다. 문서의 색상이 해당 색상 허용 범위 내에 있을 때 브랜드 색상으로 간주됩니다.",
+      "add": "색상 추가",
+      "newName": "색상 {number}",
+      "none": "아직 브랜드 색상이 없습니다.",
+      "hex": "Hex",
+      "pick": "{name}의 색상을 선택하세요",
+      "name": "이름",
+      "tolerance": "허용 범위",
+      "toleranceHint": "색상 차이(델타 E). 2~3은 거의 구분되지 않습니다.",
+      "roles": "용도",
+      "neutrals": "중립 색상",
+      "neutralsHint": "브랜드 색상이 아닌, 모든 문서에서 사용할 수 있는 색상(쉼표로 구분)."
+    },
+    "colorRole": {
+      "primary": "주요",
+      "secondary": "보조",
+      "accent": "강조",
+      "text": "텍스트",
+      "background": "배경",
+      "neutral": "중립"
+    },
+    "typography": {
+      "title": "유형",
+      "description": "역할별 서체와 사용 가능한 대체 폰트(외부 공유 문서용 시스템 폰트 등).",
+      "add": "서체 추가",
+      "none": "아직 서체가 없습니다.",
+      "role": "역할",
+      "family": "서체",
+      "substitutes": "허용 대체 폰트",
+      "minSize": "최소 텍스트 크기(pt)",
+      "minSizeHint": "0은 최소값을 설정하지 않습니다."
+    },
+    "fontRole": {
+      "heading": "제목",
+      "body": "본문",
+      "accent": "강조"
+    },
+    "logos": {
+      "title": "로고",
+      "description": "문서에서 사용할 로고 파일(PNG, SVG, JPEG).",
+      "add": "로고 업로드",
+      "untitled": "로고",
+      "none": "아직 로고가 없습니다.",
+      "noPreview": "미리보기 없음",
+      "name": "이름",
+      "minWidth": "최소 너비(pt)",
+      "aspect": "늘릴 수 있는 비율(%)",
+      "aspectHint": "비율이 얼마나 달라질 수 있는지.",
+      "colors": "표시되는 배경",
+      "colorsHint": "모두 선택하지 않으면 모든 배경에서 사용 가능합니다."
+    },
+    "language": {
+      "title": "표현",
+      "description": "문서의 사용 언어, 사용할/피할 단어, 그리고 톤.",
+      "locales": "언어",
+      "localesHint": "언어 태그(예: en 또는 fr-CA, 쉼표로 구분).",
+      "preferred": "사용할 단어",
+      "banned": "피할 단어",
+      "term": "단어 또는 구",
+      "alternatives": "대신 / 이렇게 작성",
+      "note": "참고",
+      "addPreferred": "사용할 단어 추가",
+      "addBanned": "피할 단어 추가",
+      "nonePreferred": "아직 사용할 단어가 없습니다.",
+      "noneBanned": "아직 피할 단어가 없습니다.",
+      "tone": "톤"
+    },
+    "templates": {
+      "title": "템플릿",
+      "description": "새 문서 작성에 사용하는 PowerPoint 및 Word 템플릿.",
+      "add": "템플릿 업로드",
+      "untitled": "템플릿",
+      "none": "아직 템플릿이 없습니다.",
+      "name": "이름",
+      "wrongType": "템플릿은 {types} 중 하나여야 합니다."
     }
   }
 }

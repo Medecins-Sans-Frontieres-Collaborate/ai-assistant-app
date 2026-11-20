@@ -2918,6 +2918,10 @@
       "channelDrafter": {
         "label": "Trình soạn thảo kênh",
         "description": "Chuyển nguồn thành bài đăng cho nhiều kênh, đúng phong cách, với mọi trích dẫn đều truy nguồn."
+      },
+      "brandReview": {
+        "label": "Đánh giá thương hiệu",
+        "description": "Kiểm tra tệp PDF, Word hoặc bản trình bày theo sổ tay thương hiệu: phông chữ, màu sắc, câu chữ, logo và tông giọng"
       }
     },
     "chooser": {
@@ -2930,7 +2934,8 @@
       "newMap": "Bản đồ mới",
       "newGrants": "Xử lý trợ cấp mới",
       "newFormFill": "Tạo mới tài liệu điền",
-      "newChannelDrafter": "Bản nháp kênh mới"
+      "newChannelDrafter": "Bản nháp kênh mới",
+      "newBrandReview": "Đánh giá thương hiệu mới"
     },
     "translation": {
       "chooseLanguage": "Ngôn ngữ đích",
@@ -4869,6 +4874,112 @@
         "altTooLong": "Văn bản thay thế của {name} vượt {count} ký tự so với giới hạn {max} của kênh này.",
         "unicodeSms": "{characters} không thể gửi qua tin nhắn văn bản tiêu chuẩn, nên tin nhắn này chỉ có thể chứa 70 ký tự thay vì 160. Hãy thay thế chúng để tăng số ký tự."
       }
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Đánh giá thương hiệu",
+        "intro": "Chọn sổ tay thương hiệu và một tài liệu. Việc đánh giá sẽ kiểm tra phông chữ, màu sắc, kích cỡ chữ, câu chữ và logo, đồng thời có thể sử dụng mô hình để xem từng trang về tông giọng và quy tắc thị giác.",
+        "book": "Sổ tay thương hiệu",
+        "booksLoading": "Đang tải sổ tay thương hiệu...",
+        "noBooks": "Bạn chưa có sổ tay thương hiệu nào. Quản trị viên sẽ thêm tại Quản trị > Sổ tay thương hiệu.",
+        "document": "Tài liệu",
+        "chooseDocument": "Chọn tài liệu",
+        "replaceDocument": "Chọn tài liệu khác",
+        "documentTypes": "PDF, Word hoặc PowerPoint",
+        "uploading": "Đang tải lên...",
+        "uploadFailed": "Không thể tải lên tài liệu.",
+        "wrongType": "Chọn tài liệu PDF, Word hoặc bản trình bày.",
+        "modelReview": "Sử dụng mô hình để xem từng trang",
+        "modelReviewHint": "Phát hiện các vấn đề về tông giọng, thị giác và logo mà kiểm tra thông thường không thể nhận biết. Dùng token cho mỗi trang, tối đa 40 trang.",
+        "start": "Bắt đầu đánh giá"
+      },
+      "loading": "Đang tải đánh giá...",
+      "booksFailed": "Không thể tải sổ tay thương hiệu.",
+      "startFailed": "Không thể bắt đầu đánh giá.",
+      "readFailed": "Không thể đọc đánh giá.",
+      "busy": "\"{name}\" vẫn đang được đánh giá. Vui lòng chờ hoàn tất hoặc dừng lại trước khi bắt đầu đánh giá khác.",
+      "failed": "Đánh giá thất bại.",
+      "against": "So với {book}",
+      "progress": {
+        "reading": "Đang đọc tài liệu...",
+        "checking": "Đang kiểm tra văn bản và logo...",
+        "reviewing": "Đang đánh giá các trang...",
+        "pages": "Đã đánh giá {done}/{total} trang"
+      },
+      "status": {
+        "done": "{errors, plural, one {# lỗi} other {# lỗi}}, {warnings, plural, one {# cảnh báo} other {# cảnh báo}}",
+        "stopped": "Đã dừng: {errors, plural, one {# lỗi} other {# lỗi}} đến thời điểm này",
+        "failed": "Thất bại",
+        "running": "Đang chạy"
+      },
+      "stop": "Dừng",
+      "download": "Tải báo cáo",
+      "newReview": "Đánh giá mới",
+      "findings": "Phát hiện",
+      "noFindings": "Chưa tìm thấy gì.",
+      "noneOfSeverity": "Không có phát hiện thuộc loại này.",
+      "byModel": "Do mô hình phát hiện; hãy kiểm tra.",
+      "notes": "Ghi chú",
+      "pageShort": "tr. {page}",
+      "filter": {
+        "label": "Hiển thị",
+        "all": "Tất cả {count}",
+        "error": "Lỗi {count}",
+        "warning": "Cảnh báo {count}",
+        "info": "Ghi chú {count}"
+      },
+      "severity": {
+        "error": "Lỗi",
+        "warning": "Cảnh báo",
+        "info": "Ghi chú"
+      },
+      "rule": {
+        "font": "Phông chữ",
+        "color": "Màu sắc",
+        "size": "Cỡ chữ",
+        "banned-term": "Từ cần tránh",
+        "preferred-term": "Từ ưu tiên",
+        "language": "Ngôn ngữ",
+        "logo-distorted": "Tỷ lệ logo",
+        "logo-small": "Kích thước logo",
+        "logo-background": "Nền logo",
+        "logo-unknown": "Logo khả nghi",
+        "visual": "Hình ảnh trực quan",
+        "tone": "Tông giọng"
+      },
+      "message": {
+        "font": "Đang sử dụng {found}; phông chữ thương hiệu là {expected}.",
+        "font-alone": "Đang sử dụng {found}, không phải phông chữ thương hiệu.",
+        "color": "{found} không phải màu của thương hiệu; màu gần nhất là {first}.",
+        "size": "Chữ ở {found} pt; nhỏ nhất cho phép là {first} pt.",
+        "banned-term": "\"{found}\" là từ cần tránh; hãy thay bằng {expected}.",
+        "banned-term-alone": "\"{found}\" là từ cần tránh.",
+        "preferred-term": "Hãy dùng \"{first}\" thay cho \"{found}\".",
+        "language": "Đánh dấu là {found}; ngôn ngữ thương hiệu là {expected}.",
+        "logo-distorted": "{name} được vẽ với tỷ lệ {found}; tỷ lệ chuẩn là {first}.",
+        "logo-small": "{name} rộng {found} pt; tối thiểu phải là {first} pt.",
+        "logo-background": "{name} nằm trên {found}; có thể hiển thị trên {expected}.",
+        "logo-unknown": "Hình ảnh có thể là logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Đánh giá thương hiệu: {name}",
+        "meta": "Dựa trên {book}, {date}, {pages, plural, one {# trang} other {# trang}}",
+        "errors": "{count, plural, one {# lỗi} other {# lỗi}}",
+        "warnings": "{count, plural, one {# cảnh báo} other {# cảnh báo}}",
+        "infos": "{count, plural, one {# ghi chú} other {# ghi chú}}",
+        "partial": "Đánh giá chưa hoàn tất; báo cáo này chứa các phát hiện trước khi kết thúc.",
+        "skipped": "Mô hình không kiểm tra các trang {pages}; chúng được kiểm tra thủ công.",
+        "none": "Không phát hiện nội dung nào sai với sổ tay thương hiệu.",
+        "page": "Trang",
+        "severity": "Mức độ",
+        "rule": "Kiểm tra",
+        "finding": "Phát hiện",
+        "found": "Đã tìm thấy",
+        "notes": "Ghi chú",
+        "fileSuffix": "đánh giá thương hiệu"
+      }
     }
   },
   "connectors": {
@@ -6141,7 +6252,8 @@
       "contextBudget": "Lượng thông tin cuộc trò chuyện mỗi mô hình nhận được trong mỗi lượt.",
       "analytics": "Báo cáo đã chuyển: nội dung đã nhận, ai có thể mở từng thư mục và các trường có thể hiển thị.",
       "skills": "Các khối hướng dẫn có thể tái sử dụng mà trợ lý áp dụng khi cuộc trò chuyện cần.",
-      "models": "Gán mô hình nền và kiểm tra mức độ sẵn sàng triển khai tại khu vực."
+      "models": "Gán mô hình nền và kiểm tra mức độ sẵn sàng triển khai tại khu vực.",
+      "brandBooks": "Màu sắc, phông chữ, logo, từ ngữ và mẫu tài liệu mà các tài liệu được kiểm tra và xây dựng dựa trên đó."
     },
     "openSettings": "Mở cài đặt",
     "area": {
@@ -6154,7 +6266,8 @@
       "contextBudget": "Ngân sách ngữ cảnh",
       "analytics": "Phân tích",
       "skills": "Kỹ năng",
-      "models": "Mô hình và mức sẵn sàng"
+      "models": "Mô hình và mức sẵn sàng",
+      "brandBooks": "Sổ tay thương hiệu"
     }
   },
   "limits": {
@@ -8855,6 +8968,129 @@
       "zoomReset": "Đặt lại thu phóng (hiện tại {percent}%)",
       "zoomLevel": "{percent}%",
       "failed": "Không thể hiển thị tài liệu này. Có thể tài liệu quá lớn, được bảo vệ, hoặc trình chuyển đổi đang bận; hãy thử lại sau ít phút."
+    }
+  },
+  "adminBrandBooks": {
+    "untitled": "Sổ tay thương hiệu chưa có tên",
+    "intro": "Sổ tay thương hiệu lưu trữ màu sắc, phông chữ, logo, từ ngữ và mẫu tài liệu của tổ chức, để các tài liệu có thể được kiểm tra và xây dựng dựa trên đó. Quyền truy cập vào từng sổ do quy tắc truy cập quyết định.",
+    "unavailable": "Không thể tải sổ tay thương hiệu từ bộ nhớ. Vui lòng thử lại sau.",
+    "add": "Thêm sổ tay thương hiệu",
+    "none": "Chưa có sổ tay thương hiệu nào.",
+    "paletteSummary": "{count, plural, one {# màu thương hiệu} other {# màu thương hiệu}}",
+    "summary": "{fonts, plural, one {# phông chữ} other {# phông chữ}}, {logos, plural, one {# logo} other {# logo}}",
+    "open": "Mở",
+    "delete": "Xóa",
+    "deleteConfirm": "Xóa \"{name}\" và các tệp của nó? Các báo cáo đã kiểm tra vẫn được giữ lại.",
+    "deleteConfirmButton": "Xóa sổ tay thương hiệu",
+    "loading": "Đang tải sổ tay thương hiệu...",
+    "loadFailed": "Không thể tải sổ tay thương hiệu.",
+    "missing": "Sổ tay thương hiệu này không tồn tại hoặc bạn không thể chỉnh sửa.",
+    "back": "Sổ tay thương hiệu",
+    "unsaved": "Thay đổi chưa lưu",
+    "saved": "Đã lưu",
+    "save": "Lưu",
+    "conflict": "Một quản trị viên khác đã lưu sổ tay thương hiệu này sau khi bạn mở. Tải lại để xem phiên bản mới, thay đổi của bạn tại đây sẽ bị mất.",
+    "reload": "Tải lại",
+    "invalid": "Chưa thể lưu sổ tay thương hiệu này: {reason}",
+    "saveFailed": "Không thể lưu sổ tay thương hiệu.",
+    "uploadFailed": "Không thể tải lên tệp.",
+    "remove": "Gỡ bỏ",
+    "removeNamed": "Gỡ bỏ {name}",
+    "basics": {
+      "title": "Sổ tay thương hiệu",
+      "name": "Tên",
+      "description": "Mô tả"
+    },
+    "guide": {
+      "action": "Soạn thảo từ hướng dẫn thương hiệu",
+      "reading": "Đang đọc hướng dẫn...",
+      "hint": "Tải lên file hướng dẫn thương hiệu dưới dạng PDF để tự động điền màu sắc, phông chữ và từ ngữ được định nghĩa. Logo và mẫu không được lấy từ đây; vui lòng tải lên bên dưới.",
+      "source": "Soạn thảo từ",
+      "notPdf": "Hướng dẫn thương hiệu phải là tệp PDF.",
+      "failed": "Không thể soạn thảo từ hướng dẫn này.",
+      "applied": "{pages, plural, one {Được soạn thảo từ một hướng dẫn gồm # trang.} other {Được soạn thảo từ một hướng dẫn gồm # trang.}}",
+      "measuredFonts": "Phông chữ trong văn bản:",
+      "measuredColors": "Màu sắc trong văn bản:",
+      "check": "Kiểm tra từng giá trị với hướng dẫn trước khi lưu.",
+      "undo": "Hoàn tác soạn thảo"
+    },
+    "palette": {
+      "title": "Màu sắc",
+      "description": "Màu thương hiệu. Một màu trong tài liệu sẽ được tính là màu thương hiệu khi nằm trong khoảng cho phép của màu đó.",
+      "add": "Thêm màu",
+      "newName": "Màu {number}",
+      "none": "Chưa có màu thương hiệu nào.",
+      "hex": "Hex",
+      "pick": "Chọn màu cho {name}",
+      "name": "Tên",
+      "tolerance": "Khoảng sai số",
+      "toleranceHint": "Sự khác biệt màu sắc (Delta E). Mức 2 đến 3 hầu như không thấy được.",
+      "roles": "Dùng cho",
+      "neutrals": "Màu trung tính",
+      "neutralsHint": "Các màu mà bất kỳ tài liệu nào cũng có thể sử dụng mà không phải là màu thương hiệu, cách nhau bằng dấu phẩy."
+    },
+    "colorRole": {
+      "primary": "Chính",
+      "secondary": "Phụ",
+      "accent": "Nhấn mạnh",
+      "text": "Văn bản",
+      "background": "Nền",
+      "neutral": "Trung tính"
+    },
+    "typography": {
+      "title": "Loại",
+      "description": "Kiểu chữ theo vai trò và các font khác được phép thay thế, ví dụ như font hệ thống cho tài liệu chia sẻ bên ngoài.",
+      "add": "Thêm kiểu chữ",
+      "none": "Chưa có kiểu chữ nào.",
+      "role": "Vai trò",
+      "family": "Kiểu chữ",
+      "substitutes": "Các font thay thế được phép",
+      "minSize": "Kích thước chữ nhỏ nhất (pt)",
+      "minSizeHint": "0 là không có giới hạn tối thiểu."
+    },
+    "fontRole": {
+      "heading": "Tiêu đề",
+      "body": "Nội dung văn bản",
+      "accent": "Nhấn mạnh"
+    },
+    "logos": {
+      "title": "Logo",
+      "description": "Các tệp logo mà tài liệu nên sử dụng, dạng PNG, SVG hoặc JPEG.",
+      "add": "Tải lên logo",
+      "untitled": "Logo",
+      "none": "Chưa có logo nào.",
+      "noPreview": "Không có xem trước",
+      "name": "Tên",
+      "minWidth": "Chiều rộng nhỏ nhất (pt)",
+      "aspect": "Độ co kéo cho phép (%)",
+      "aspectHint": "Tỉ lệ có thể khác biệt tối đa.",
+      "colors": "Hiển thị trên",
+      "colorsHint": "Bỏ chọn tất cả để cho phép bất kỳ nền nào."
+    },
+    "language": {
+      "title": "Ngôn từ",
+      "description": "Ngôn ngữ sử dụng trong tài liệu, các từ nên và không nên dùng, và phong cách diễn đạt.",
+      "locales": "Ngôn ngữ",
+      "localesHint": "Mã ngôn ngữ như en hoặc fr-CA, ngăn cách bằng dấu phẩy.",
+      "preferred": "Từ nên dùng",
+      "banned": "Từ cần tránh",
+      "term": "Từ hoặc cụm từ",
+      "alternatives": "Thay vì / hãy viết",
+      "note": "Ghi chú",
+      "addPreferred": "Thêm từ nên dùng",
+      "addBanned": "Thêm từ cần tránh",
+      "nonePreferred": "Chưa có từ nên dùng.",
+      "noneBanned": "Chưa có từ cần tránh.",
+      "tone": "Giọng điệu"
+    },
+    "templates": {
+      "title": "Mẫu",
+      "description": "Mẫu PowerPoint và Word dùng để tạo tài liệu mới.",
+      "add": "Tải lên mẫu",
+      "untitled": "Mẫu",
+      "none": "Chưa có mẫu nào.",
+      "name": "Tên",
+      "wrongType": "Mẫu phải thuộc một trong các loại sau: {types}."
     }
   }
 }
