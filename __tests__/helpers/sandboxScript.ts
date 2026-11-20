@@ -61,8 +61,8 @@ export function runLocalScript(
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'sandbox-script-'));
   try {
     fs.writeFileSync(path.join(dir, script.filename), script.source);
-    for (const module of script.modules ?? []) {
-      fs.writeFileSync(path.join(dir, module.filename), module.source);
+    for (const extra of script.modules ?? []) {
+      fs.writeFileSync(path.join(dir, extra.filename), extra.source);
     }
     for (const input of inputs) {
       fs.writeFileSync(path.join(dir, input.filename), input.data);
