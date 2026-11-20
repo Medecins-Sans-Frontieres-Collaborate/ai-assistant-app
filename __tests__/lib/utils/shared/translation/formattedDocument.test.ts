@@ -252,6 +252,23 @@ describe('translationsForRender', () => {
       p2u1: 'Texte',
     });
   });
+
+  it('sends a kept unit with its own text only when its look was changed', () => {
+    const kept = withUnitEdit(run(), 'p1u1', null);
+    const source = kept.units.find((unit) => unit.id === 'p1u1')!.source;
+    // Kept and unstyled (or styled with nothing that changes it): left out.
+    expect(translationsForRender(kept)).not.toHaveProperty('p1u1');
+    expect(
+      translationsForRender({ ...kept, styles: { p1u1: { dx: 0, dy: 0 } } }),
+    ).not.toHaveProperty('p1u1');
+    // Kept and recoloured: sent as written, so the page is rebuilt there.
+    expect(
+      translationsForRender({
+        ...kept,
+        styles: { p1u1: { color: '#ffcc00' } },
+      }),
+    ).toMatchObject({ p1u1: source });
+  });
 });
 
 describe('applyRenderReport', () => {
