@@ -151,4 +151,16 @@ export const WORKFLOW_REGISTRY: Record<
     ),
     createInitialState: () => createInitialWorkflowState('brand-review'),
   },
+  'deck-builder': {
+    meta: WORKFLOW_META['deck-builder'],
+    // A brief, sources and a template become an editable outline, then a
+    // deck (docs/DOCUMENT_PLATFORM.md, phase G). No rail chat: the outline
+    // is edited in place.
+    Workspace: lazy(() =>
+      import('./DeckBuilder/DeckBuilderWorkspace').then((m) => ({
+        default: m.DeckBuilderWorkspace,
+      })),
+    ),
+    createInitialState: () => createInitialWorkflowState('deck-builder'),
+  },
 };
