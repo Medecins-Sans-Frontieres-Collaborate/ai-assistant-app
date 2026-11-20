@@ -13,14 +13,16 @@
  * (makeServiceCopy): macros never leave the app's storage. Every rebuild
  * starts from the original deck.
  */
-import { DECK_ENGINE_SCRIPT } from '@/lib/services/documents/model/deckEngineScript';
+import {
+  applyDeckEdits,
+  extractDeckUnits,
+} from '@/lib/services/documents/model/deckEngine';
 import {
   documentPagePictures,
   documentPdf,
 } from '@/lib/services/documents/render/documentPages';
 import { RenderBusyError } from '@/lib/services/documents/render/renderQueue';
 import { getRenderService } from '@/lib/services/documents/render/renderService';
-import { runSandboxScript } from '@/lib/services/documents/sandbox/sandboxScriptRunner';
 
 import { NativeDeckFormat } from '@/lib/utils/shared/translation/nativeFormats';
 import { NativePdfFitReport } from '@/lib/utils/shared/translation/nativePdf';
@@ -47,22 +49,8 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
-const SOURCE_FILENAME = 'source.pptx';
-const UNITS_FILENAME = 'units.json';
 const DECK_CONTENT_TYPE =
   'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-
-/** A deck the script refused to open, with its typed reason. */
-export class DeckRefusedError extends Error {
-  constructor(
-    /** ENCRYPTED, DAMAGED, DOCTYPE, ZIP_BOMB or TOO_LARGE. */
-    readonly code: string,
-    message: string,
-  ) {
-    super(message);
-    this.name = 'DeckRefusedError';
-  }
-}
 
 /** What a deck unit carries besides the shared unit fields. */
 interface DeckUnitRecord {
@@ -88,20 +76,6 @@ async function inWorkDir<T>(work: (dir: string) => Promise<T>): Promise<T> {
   } finally {
     await fs.promises.rm(dir, { recursive: true, force: true });
   }
-}
-
-/** Throws the script's refusal, when it refused. */
-function throwIfRefused(files: Map<string, Uint8Array>): void {
-  const refused = files.get('refused.json');
-  if (!refused) return;
-  const reason = JSON.parse(strFromU8(refused)) as {
-    code?: string;
-    message?: string;
-  };
-  throw new DeckRefusedError(
-    reason.code ?? 'DAMAGED',
-    reason.message ?? 'The presentation could not be read.',
-  );
 }
 
 /** Units drawn on a slide picture: not notes, not chart strings, with a box. */
@@ -234,25 +208,11 @@ export function deckFormat(format: NativeDeckFormat): NativeFormatAdapter {
     async extract(document, pages, context): Promise<FormatExtraction> {
       return inWorkDir(async (dir) => {
         const { servicePath } = await prepare(dir, document);
-        const run = await runSandboxScript(
-          'extract',
-          [
-            {
-              filename: SOURCE_FILENAME,
-              data: await fs.promises.readFile(servicePath),
-              mimeType: DECK_CONTENT_TYPE,
-            },
-            jobFile({
-              source: SOURCE_FILENAME,
-              pages,
-              notes: context.translateNotes !== false,
-            }),
-          ],
+        const unitsFile = await extractDeckUnits(
+          await fs.promises.readFile(servicePath),
+          { pages, notes: context.translateNotes !== false },
           context.usage,
-          DECK_ENGINE_SCRIPT,
         );
-        throwIfRefused(run.files);
-        const unitsFile = requireFile(run.files, UNITS_FILENAME);
         const extracted = JSON.parse(strFromU8(unitsFile)) as DeckExtraction;
         const slides = extracted.pages.map((page) => page.page);
         // Pictures help the reading of each slide but are not needed for
@@ -310,44 +270,22 @@ export function deckFormat(format: NativeDeckFormat): NativeFormatAdapter {
       return inWorkDir(async (dir) => {
         const { basePath, servicePath } = await prepare(dir, document);
         const extracted = JSON.parse(strFromU8(unitsFile)) as DeckExtraction;
-        const run = await runSandboxScript(
-          'rebuild',
-          [
-            {
-              filename: SOURCE_FILENAME,
-              data: await fs.promises.readFile(servicePath),
-              mimeType: DECK_CONTENT_TYPE,
-            },
-            {
-              filename: UNITS_FILENAME,
-              data: Buffer.from(unitsFile),
-              mimeType: 'application/json',
-            },
-            jobFile({
-              source: SOURCE_FILENAME,
-              units: UNITS_FILENAME,
-              translations: Object.fromEntries(translations),
-              ...(output.styles && Object.keys(output.styles).length > 0
-                ? { styles: output.styles }
-                : {}),
-              ...(output.language ? { language: output.language } : {}),
-            }),
-          ],
+        const applied = await applyDeckEdits(
+          await fs.promises.readFile(servicePath),
+          unitsFile,
+          {
+            text: Object.fromEntries(translations),
+            styles: output.styles,
+            language: output.language,
+          },
           context.usage,
-          DECK_ENGINE_SCRIPT,
         );
-        throwIfRefused(run.files);
-        const report = JSON.parse(
-          strFromU8(requireFile(run.files, 'report.json')),
-        ) as {
+        const report = applied.report as unknown as {
           fonts: { sans: string; serif: string };
           units: NativePdfFitReport[];
         };
         const translatedPath = path.join(dir, 'translated.pptx');
-        await fs.promises.writeFile(
-          translatedPath,
-          requireFile(run.files, 'translated.pptx'),
-        );
+        await fs.promises.writeFile(translatedPath, applied.deck);
 
         // THE MERGE CONVENTION: the person's package with the written parts in.
         const mergedPath = path.join(dir, `merged.${format}`);
