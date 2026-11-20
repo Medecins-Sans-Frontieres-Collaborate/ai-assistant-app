@@ -1,17 +1,14 @@
 import { IconX } from '@tabler/icons-react';
-import {
-  FC,
-  KeyboardEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import { Session } from 'next-auth';
 import { useTranslations } from 'next-intl';
 
+import { usePromptSelection } from '@/client/hooks/ui/usePromptSelection';
+
 import { DEFAULT_SYSTEM_PROMPT } from '@/lib/utils/app/const';
+import { replacePromptTrigger } from '@/lib/utils/shared/chat/promptMatching';
+import { replaceVariablesWithMap } from '@/lib/utils/shared/chat/variables';
 
 import { Conversation } from '@/types/chat';
 import { Prompt } from '@/types/prompt';
@@ -35,19 +32,37 @@ export const SystemPrompt: FC<Props> = ({
   const t = useTranslations();
 
   const [value, setValue] = useState<string>(systemPrompt);
-  const [activePromptIndex, setActivePromptIndex] = useState(0);
-  const [showPromptList, setShowPromptList] = useState(false);
-  const [promptInputValue, setPromptInputValue] = useState('');
-  const [variables, setVariables] = useState<string[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  // The prompt whose variables are being filled in, if any.
+  const [modalPrompt, setModalPrompt] = useState<Prompt | null>(null);
   const [textareaScrollHeight, setTextareaScrollHeight] = useState(0);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const promptListRef = useRef<HTMLUListElement | null>(null);
+  /** Puts `text` where "/" and its search were, and saves the result. */
+  const insertPrompt = (text: string) => {
+    const updated = replacePromptTrigger(value, text);
+    setValue(updated);
+    onChangePrompt(updated);
+    textareaRef.current?.focus();
+  };
 
-  const filteredPrompts = prompts.filter((prompt) =>
-    prompt.name.toLowerCase().includes(promptInputValue.toLowerCase()),
-  );
+  // The same "/" list as the message box (usePromptSelection).
+  const {
+    setShowPromptList,
+    isPromptListVisible,
+    activePromptIndex,
+    setActivePromptIndex,
+    filteredPrompts,
+    promptListRef,
+    handleKeyDownPromptList,
+    selectPromptAt,
+    updatePromptListVisibilityCallback,
+  } = usePromptSelection({
+    prompts,
+    onPromptSelect: (prompt, _variables, hasVariables) => {
+      if (hasVariables) setModalPrompt(prompt);
+      else insertPrompt(prompt.content);
+    },
+  });
 
   const maxLength = Number(process.env.systemPromptmaxLength) || 500;
 
@@ -57,7 +72,7 @@ export const SystemPrompt: FC<Props> = ({
     // tells the user how close they are to the limit.
     const value = e.target.value;
     setValue(value);
-    updatePromptListVisibility(value);
+    updatePromptListVisibilityCallback(value);
     // Always propagate, including the empty string. Skipping value.length === 0
     // here would mean the reducer never sees the cleared field, and the change
     // would silently revert on the next mount.
@@ -67,101 +82,12 @@ export const SystemPrompt: FC<Props> = ({
   const handleClear = () => {
     setValue('');
     onChangePrompt('');
-    updatePromptListVisibility('');
+    updatePromptListVisibilityCallback('');
     textareaRef.current?.focus();
   };
 
-  const handleInitModal = () => {
-    const selectedPrompt = filteredPrompts[activePromptIndex];
-    setValue((prevVal) => {
-      const newContent = prevVal?.replace(/\/\w*$/, selectedPrompt.content);
-      return newContent;
-    });
-    handlePromptSelect(selectedPrompt);
-    setShowPromptList(false);
-  };
-
-  const parseVariables = (content: string) => {
-    const regex = /{{(.*?)}}/g;
-    const foundVariables = [];
-    let match;
-
-    while ((match = regex.exec(content)) !== null) {
-      foundVariables.push(match[1]);
-    }
-
-    return foundVariables;
-  };
-
-  const updatePromptListVisibility = useCallback((text: string) => {
-    const match = text.match(/\/\w*$/);
-
-    if (match) {
-      setShowPromptList(true);
-      setPromptInputValue(match[0].slice(1));
-    } else {
-      setShowPromptList(false);
-      setPromptInputValue('');
-    }
-  }, []);
-
-  const handlePromptSelect = (prompt: Prompt) => {
-    const parsedVariables = parseVariables(prompt.content);
-    setVariables(parsedVariables);
-
-    if (parsedVariables.length > 0) {
-      setIsModalVisible(true);
-    } else {
-      const updatedContent = value?.replace(/\/\w*$/, prompt.content);
-
-      setValue(updatedContent);
-      onChangePrompt(updatedContent);
-
-      updatePromptListVisibility(prompt.content);
-    }
-  };
-
-  const handleSubmit = (updatedVariables: string[]) => {
-    const newContent = value?.replace(/{{(.*?)}}/g, (match, variable) => {
-      const index = variables.indexOf(variable);
-      return updatedVariables[index];
-    });
-
-    setValue(newContent);
-    onChangePrompt(newContent);
-
-    if (textareaRef && textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  };
-
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (showPromptList) {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        setActivePromptIndex((prevIndex) =>
-          prevIndex < prompts.length - 1 ? prevIndex + 1 : prevIndex,
-        );
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        setActivePromptIndex((prevIndex) =>
-          prevIndex > 0 ? prevIndex - 1 : prevIndex,
-        );
-      } else if (e.key === 'Tab') {
-        e.preventDefault();
-        setActivePromptIndex((prevIndex) =>
-          prevIndex < prompts.length - 1 ? prevIndex + 1 : 0,
-        );
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        handleInitModal();
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        setShowPromptList(false);
-      } else {
-        setActivePromptIndex(0);
-      }
-    }
+    if (isPromptListVisible) handleKeyDownPromptList(e);
   };
 
   useEffect(() => {
@@ -187,7 +113,7 @@ export const SystemPrompt: FC<Props> = ({
     return () => {
       window.removeEventListener('click', handleOutsideClick);
     };
-  }, []);
+  }, [promptListRef, setShowPromptList]);
 
   const valueLength = value?.length ?? 0;
 
@@ -238,24 +164,28 @@ export const SystemPrompt: FC<Props> = ({
         })}
       </div>
 
-      {showPromptList && filteredPrompts.length > 0 && (
+      {isPromptListVisible && (
         <div>
           <PromptList
+            id="system-prompt-list"
             activePromptIndex={activePromptIndex}
             prompts={filteredPrompts}
-            onSelect={handleInitModal}
+            onSelect={selectPromptAt}
             onMouseOver={setActivePromptIndex}
             promptListRef={promptListRef}
           />
         </div>
       )}
 
-      {isModalVisible && (
+      {modalPrompt && (
         <VariableModal
-          prompt={prompts[activePromptIndex]}
-          variables={variables}
-          onSubmit={handleSubmit}
-          onClose={() => setIsModalVisible(false)}
+          prompt={modalPrompt}
+          onSubmit={(_values, variableMap) =>
+            insertPrompt(
+              replaceVariablesWithMap(modalPrompt.content, variableMap),
+            )
+          }
+          onClose={() => setModalPrompt(null)}
         />
       )}
     </div>
