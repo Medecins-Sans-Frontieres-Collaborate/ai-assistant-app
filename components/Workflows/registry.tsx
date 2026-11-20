@@ -140,4 +140,15 @@ export const WORKFLOW_REGISTRY: Record<
       })),
     ),
   },
+  'brand-review': {
+    meta: WORKFLOW_META['brand-review'],
+    // Pick a brand book, add a document, review it (docs/DOCUMENT_PLATFORM.md,
+    // phase F). No rail chat: the findings are the conversation.
+    Workspace: lazy(() =>
+      import('./BrandReview/BrandReviewWorkspace').then((m) => ({
+        default: m.BrandReviewWorkspace,
+      })),
+    ),
+    createInitialState: () => createInitialWorkflowState('brand-review'),
+  },
 };
