@@ -9,19 +9,29 @@
  *
  * Callers use the `PresentationRenderService` interface only. The
  * in-process implementation runs LibreOffice on this server; a separate
- * service is meant to replace it (RENDER_SERVICE) without callers changing.
- * The contract is written down in docs/POWERPOINT_TRANSLATION.md.
+ * service replaces it by configuration (RENDER_SERVICE=http, see
+ * httpRenderService.ts) without callers changing. The contract is written
+ * down in docs/RENDER_SERVICE.md.
  */
+import { HttpRenderService } from './httpRenderService';
 import {
+  DocumentSignatureError,
   LibreOfficeInputType,
   checkLibreOfficeInput,
+  readSignature,
 } from './libreOfficeInputs';
 import {
   LibreOfficeConversion,
   LibreOfficeFailedError,
   runLibreOffice,
 } from './libreOfficeProcess';
-import { RenderLane, RenderQueue, RenderQueueObserver } from './renderQueue';
+import { PdfRasterJob, rasterizePdf } from './pdfRaster';
+import {
+  RenderLane,
+  RenderQueue,
+  RenderQueueObserver,
+  RenderQueueSnapshot,
+} from './renderQueue';
 
 import { env } from '@/config/environment';
 import { metrics } from '@opentelemetry/api';
@@ -53,6 +63,21 @@ export interface RenderConversionRequest {
   timeoutMs?: number;
 }
 
+/** Pictures of a PDF's pages. */
+export interface RenderRasterRequest {
+  /** The PDF. */
+  pdfPath: string;
+  /** 1-based pages to picture. */
+  pages: number[];
+  /** Resolution in dots per inch (at most MAX_RASTER_DPI). */
+  dpi: number;
+  /** Where the PNGs are written. */
+  outputDir: string;
+  lane: RenderLane;
+  signal?: AbortSignal;
+  onPosition?: (ahead: number) => void;
+}
+
 /** What callers may rely on, in process or as a separate service. */
 export interface PresentationRenderService {
   /**
@@ -65,8 +90,18 @@ export interface PresentationRenderService {
    * @throws LibreOfficeTimeoutError, LibreOfficeFailedError on failure.
    */
   convert(request: RenderConversionRequest): Promise<string>;
+  /**
+   * Pictures pages of a PDF once a slot is free; waits in the same queue
+   * as conversions.
+   *
+   * @returns Page number to the PNG's path in `outputDir`.
+   * @throws DocumentSignatureError when the file is not a PDF.
+   * @throws RenderBusyError when the queue is full.
+   * @throws LibreOfficeTimeoutError, LibreOfficeFailedError on failure.
+   */
+  rasterize(request: RenderRasterRequest): Promise<Map<number, string>>;
   /** Jobs running and waiting, by lane. */
-  snapshot(): ReturnType<RenderQueue['snapshot']>;
+  snapshot(): RenderQueueSnapshot;
 }
 
 /** Settings of the in-process service; see RENDER_* in config. */
@@ -166,6 +201,9 @@ export class InProcessRenderService implements PresentationRenderService {
     private readonly run: (
       job: LibreOfficeConversion,
     ) => Promise<string> = runLibreOffice,
+    private readonly raster: (
+      job: PdfRasterJob,
+    ) => Promise<Map<number, string>> = rasterizePdf,
   ) {
     const { observer, failure } = renderMetrics(() => this);
     this.recordFailure = failure;
@@ -237,6 +275,31 @@ export class InProcessRenderService implements PresentationRenderService {
     );
   }
 
+  async rasterize(request: RenderRasterRequest): Promise<Map<number, string>> {
+    const found = await readSignature(request.pdfPath);
+    if (found !== 'pdf') throw new DocumentSignatureError('pdf', found);
+    const { size } = await fs.promises.stat(request.pdfPath);
+    // A picture per page; the time limit grows with the pages asked for.
+    const timeoutMs = Math.min(
+      this.settings.timeoutMaxMs,
+      timeLimitFor(size, this.settings) * Math.max(1, request.pages.length),
+    );
+    return this.queue.run(
+      request.lane,
+      (signal) =>
+        this.raster({
+          pdfPath: request.pdfPath,
+          pages: request.pages,
+          dpi: request.dpi,
+          outputDir: request.outputDir,
+          timeoutMs,
+          memoryLimitMb: this.settings.memoryLimitMb,
+          signal,
+        }),
+      { signal: request.signal, onPosition: request.onPosition },
+    );
+  }
+
   /**
    * Removes work directories a crash or restart left behind. Only those
    * older than STALE_WORK_MS: a running job's directory is younger.
@@ -285,6 +348,19 @@ export function getRenderService(): PresentationRenderService {
   const holder = globalThis as Holder;
   const existing = holder[SERVICE_KEY];
   if (existing) return existing;
+  if (env.RENDER_SERVICE === 'http') {
+    if (!env.RENDER_SERVICE_URL) {
+      throw new Error(
+        'RENDER_SERVICE is http but RENDER_SERVICE_URL is not set',
+      );
+    }
+    const remote = new HttpRenderService({
+      url: env.RENDER_SERVICE_URL,
+      token: env.RENDER_SERVICE_TOKEN,
+    });
+    holder[SERVICE_KEY] = remote;
+    return remote;
+  }
   const settings = renderSettingsFromEnv();
   const service = new InProcessRenderService(settings);
   void service
