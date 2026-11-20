@@ -84,6 +84,7 @@ const validBody = {
     'form-fill': { enabled: true },
     'channel-drafter': { enabled: true },
     'brand-review': { enabled: true },
+    'deck-builder': { enabled: true },
   },
 };
 
