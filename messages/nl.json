@@ -2533,6 +2533,9 @@
     "translatedTo": "Vertaald naar {language}",
     "download": "Downloaden",
     "downloading": "Bezig met downloaden...",
+    "preview": "Voorbeeld",
+    "previewTranslated": "Vertaald",
+    "previewOriginal": "Origineel",
     "expired": "Deze vertaling is verlopen en niet langer beschikbaar",
     "expiresSoon": "Verloopt over {days} dag(en) - download snel",
     "expires": "Beschikbaar gedurende {days} dagen",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Vraagt om {fields}",
     "keysHint": "↑↓ kiezen · Enter gebruiken · Esc sluiten"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Dia {page}} other {Pagina {page}}}",
+      "loadingPage": "{unit, select, slide {Dia {page} laden} other {Pagina {page} laden}}",
+      "pageList": "{unit, select, slide {Dia's} other {Pagina's}}",
+      "position": "{unit, select, slide {Dia {page} van {count}} other {Pagina {page} van {count}}}",
+      "previous": "{unit, select, slide {Vorige dia} other {Vorige pagina}}",
+      "next": "{unit, select, slide {Volgende dia} other {Volgende pagina}}",
+      "showing": "Getoonde versie",
+      "zoomIn": "Inzoomen",
+      "zoomOut": "Uitzoomen",
+      "zoomReset": "Zoom herstellen (nu {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Dit document kan niet worden weergegeven. Het is mogelijk te groot of beveiligd, of de converter is bezet; probeer het zo opnieuw."
+    }
   }
 }

@@ -2533,6 +2533,9 @@
     "translatedTo": "A ti túmọ̀ sí {language}",
     "download": "Ṣe Ìgbasílẹ̀",
     "downloading": "Ń ṣe ìgbasílẹ̀...",
+    "preview": "Àwòtẹ́lẹ̀",
+    "previewTranslated": "Tí a túmọ̀",
+    "previewOriginal": "Téèyàn kọ́kọ́",
     "expired": "Ìtúmọ̀ yìí ti parí àti pé kò sí mọ́",
     "expiresSoon": "Ó parí ní ọjọ́ {days} - ṣe ìgbasílẹ̀ láìpẹ́",
     "expires": "Ó wà fún ọjọ́ {days}",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Ó béèrè {fields}",
     "keysHint": "↑↓ láti yan · Enter láti lò · Esc láti pa"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Sílàìdì {page}} other {Ojúewé {page}}}",
+      "loadingPage": "{unit, select, slide {Ó ń gbé sílàìdì {page} wọlé} other {Ó ń gbé ojú ìwé {page} wọlé}}",
+      "pageList": "{unit, select, slide {Sílàìdì} other {Ojúewé}}",
+      "position": "{unit, select, slide {Sílàìdì {page} nínú {count}} other {Ojúewé {page} nínú {count}}}",
+      "previous": "{unit, select, slide {Sílàìdì ṣáájú} other {Ojúewé ṣáájú}}",
+      "next": "{unit, select, slide {Sílàìdì tó kàn} other {Ojúewé tó kàn}}",
+      "showing": "Ẹ̀dà tí a ń fi hàn",
+      "zoomIn": "Ṣe fàgógó síwájú",
+      "zoomOut": "Ṣe fàgógó sẹ́yìn",
+      "zoomReset": "Tún ìsún-mọ́ ṣe (báyìí {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "A kò lè fi ìwé yìí hàn. Ó lè tóbi jù, ó lè jẹ́ ààbò, tàbí kí olùyípadà náà ní iṣẹ́ lọ́wọ́; gbìyànjú lẹ́ẹ̀kan sí i láìpẹ́."
+    }
   }
 }

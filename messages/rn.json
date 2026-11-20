@@ -2533,6 +2533,9 @@
     "translatedTo": "Byahindutse mu {language}",
     "download": "Kurura",
     "downloading": "Biriko birakururwa...",
+    "preview": "Kurabira imbere",
+    "previewTranslated": "Yahinduwe",
+    "previewOriginal": "Iy'umwimerere",
     "expired": "Iyi nyandiko yahindutse yararangiye kandi ntikiri guhari",
     "expiresSoon": "Birarangira mu minsi {days} - kurura vuba",
     "expires": "Bihari ku minsi {days}",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Isaba {fields}",
     "keysHint": "↑↓ guhitamwo · Enter gukoresha · Esc kwugara"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Isilayidi {page}} other {Urupapuro {page}}}",
+      "loadingPage": "{unit, select, slide {Turiko turafungura isilayidi {page}} other {Turiko turafungura urupapuro {page}}}",
+      "pageList": "{unit, select, slide {Amasilayidi} other {Impapuro}}",
+      "position": "{unit, select, slide {Isilayidi {page} kuri {count}} other {Urupapuro {page} kuri {count}}}",
+      "previous": "{unit, select, slide {Isilayidi iheruka} other {Urupapuro ruheruka}}",
+      "next": "{unit, select, slide {Isilayidi ikurikira} other {Urupapuro rukurikira}}",
+      "showing": "Version yerekanwa",
+      "zoomIn": "Kwagura",
+      "zoomOut": "Kugabanya",
+      "zoomReset": "Subiza ingano (ubu {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Iyi nyandiko ntiyashoboye kwerekanwa. Ishobora kuba nini cane, ikingiwe, canke igihindura kiraririmwe; subira ugerageze mu kanya."
+    }
   }
 }

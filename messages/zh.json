@@ -2564,6 +2564,9 @@
     "translatedTo": "已翻译为{language}",
     "download": "下载",
     "downloading": "正在下载…",
+    "preview": "预览",
+    "previewTranslated": "译文",
+    "previewOriginal": "原文",
     "expired": "此翻译已过期，无法访问",
     "expiresSoon": "将在{days}天后过期，请尽快下载",
     "expires": "可用{days}天",
@@ -8837,5 +8840,21 @@
   "promptList": {
     "asksFor": "需要填写：{fields}",
     "keysHint": "↑↓ 选择 · Enter 使用 · Esc 关闭"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {第 {page} 张幻灯片} other {第 {page} 页}}",
+      "loadingPage": "{unit, select, slide {正在加载第 {page} 张幻灯片} other {正在加载第 {page} 页}}",
+      "pageList": "{unit, select, slide {幻灯片} other {页面}}",
+      "position": "{unit, select, slide {第 {page} 张，共 {count} 张} other {第 {page} 页，共 {count} 页}}",
+      "previous": "{unit, select, slide {上一张幻灯片} other {上一页}}",
+      "next": "{unit, select, slide {下一张幻灯片} other {下一页}}",
+      "showing": "显示的版本",
+      "zoomIn": "放大",
+      "zoomOut": "缩小",
+      "zoomReset": "重置缩放（当前 {percent}%）",
+      "zoomLevel": "{percent}%",
+      "failed": "无法显示此文档。文档可能过大或受保护，也可能转换器正忙；请稍后再试。"
+    }
   }
 }

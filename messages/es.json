@@ -2533,6 +2533,9 @@
     "translatedTo": "Traducido a {language}",
     "download": "Descargar",
     "downloading": "Descargando...",
+    "preview": "Vista previa",
+    "previewTranslated": "Traducido",
+    "previewOriginal": "Original",
     "expired": "Esta traducción ha expirado y ya no está disponible",
     "expiresSoon": "Expira en {days} día(s); descargue pronto",
     "expires": "Disponible por {days} día(s)",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Pide {fields}",
     "keysHint": "↑↓ para elegir · Intro para usar · Esc para cerrar"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Diapositiva {page}} other {Página {page}}}",
+      "loadingPage": "{unit, select, slide {Cargando la diapositiva {page}} other {Cargando la página {page}}}",
+      "pageList": "{unit, select, slide {Diapositivas} other {Páginas}}",
+      "position": "{unit, select, slide {Diapositiva {page} de {count}} other {Página {page} de {count}}}",
+      "previous": "{unit, select, slide {Diapositiva anterior} other {Página anterior}}",
+      "next": "{unit, select, slide {Diapositiva siguiente} other {Página siguiente}}",
+      "showing": "Versión mostrada",
+      "zoomIn": "Acercar",
+      "zoomOut": "Alejar",
+      "zoomReset": "Restablecer el zoom (ahora {percent} %)",
+      "failed": "No se pudo mostrar este documento. Puede que sea demasiado grande o esté protegido, o que el conversor esté ocupado; inténtelo de nuevo en breve.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

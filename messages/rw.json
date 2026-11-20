@@ -2533,6 +2533,9 @@
     "translatedTo": "Byahinduwe mu {language}",
     "download": "Manura",
     "downloading": "Gumanura...",
+    "preview": "Kureba mbere",
+    "previewTranslated": "Yahinduwe",
+    "previewOriginal": "Iy'umwimerere",
     "expired": "Ubu buhinduzi bwarangiye kandi ntibukiboneka",
     "expiresSoon": "Birangira mu minsi {days} - manura vuba",
     "expires": "Biboneka mu minsi {days}",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Isaba {fields}",
     "keysHint": "↑↓ guhitamo · Enter gukoresha · Esc gufunga"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Isilayidi {page}} other {Urupapuro {page}}}",
+      "loadingPage": "{unit, select, slide {Gufungura isilayidi {page}} other {Gufungura urupapuro {page}}}",
+      "pageList": "{unit, select, slide {Amasilayidi} other {Amapapuro}}",
+      "position": "{unit, select, slide {Isilayidi {page} muri {count}} other {Urupapuro {page} muri {count}}}",
+      "previous": "{unit, select, slide {Isilayidi ibanza} other {Urupapuro rubanza}}",
+      "next": "{unit, select, slide {Isilayidi ikurikira} other {Urupapuro rukurikira}}",
+      "showing": "Verisiyo igaragazwa",
+      "zoomIn": "Kongera ingano",
+      "zoomOut": "Kugabanya ingano",
+      "zoomReset": "Subiza ingano uko yari (ubu {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Iyi nyandiko ntiyashoboye kugaragazwa. Ishobora kuba nini cyane, irinzwe, cyangwa igihindura gihuze; ongera ugerageze mu kanya."
+    }
   }
 }

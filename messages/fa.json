@@ -2533,6 +2533,9 @@
     "translatedTo": "ترجمه شده به {language}",
     "download": "دانلود",
     "downloading": "در حال دانلود...",
+    "preview": "پیش‌نمایش",
+    "previewTranslated": "ترجمه‌شده",
+    "previewOriginal": "اصلی",
     "expired": "این ترجمه منقضی شده و دیگر در دسترس نیست.",
     "expiresSoon": "تا {days} روز دیگر منقضی می‌شود - هرچه زودتر دانلود کنید",
     "expires": "به مدت {days} روز در دسترس است",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "{fields} را می‌خواهد",
     "keysHint": "↑↓ برای انتخاب · Enter برای استفاده · Esc برای بستن"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {اسلاید {page}} other {صفحه {page}}}",
+      "loadingPage": "{unit, select, slide {در حال بارگیری اسلاید {page}} other {در حال بارگیری صفحه {page}}}",
+      "pageList": "{unit, select, slide {اسلایدها} other {صفحات}}",
+      "position": "{unit, select, slide {اسلاید {page} از {count}} other {صفحه {page} از {count}}}",
+      "previous": "{unit, select, slide {اسلاید قبلی} other {صفحه قبلی}}",
+      "next": "{unit, select, slide {اسلاید بعدی} other {صفحه بعدی}}",
+      "showing": "نسخهٔ نمایش‌داده‌شده",
+      "zoomIn": "بزرگنمایی بیشتر",
+      "zoomOut": "بزرگنمایی کمتر",
+      "zoomReset": "بازنشانی بزرگنمایی (اکنون {percent}%)",
+      "failed": "این سند قابل نمایش نیست. ممکن است خیلی بزرگ یا محافظت‌شده باشد، یا مبدل مشغول باشد؛ کمی بعد دوباره امتحان کنید.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

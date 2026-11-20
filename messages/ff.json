@@ -2533,6 +2533,9 @@
     "translatedTo": "Firaama e {language}",
     "download": "Aawto",
     "downloading": "Ina aawtoo...",
+    "preview": "Yiyude adan",
+    "previewTranslated": "Firaaɗo",
+    "previewOriginal": "Iwdi",
     "expired": "Ngol firgol gasii tee alaa kadi",
     "expiresSoon": "Ena gasoo e balɗe {days} - aawto law",
     "expires": "Ena woodi ngam balɗe {days}",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Ɗaɓɓiri {fields}",
     "keysHint": "↑↓ suɓaade · Enter huutoraade · Esc uddude"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Diapo {page}} other {Cemma {page}}}",
+      "loadingPage": "{unit, select, slide {Nana loowa diapo {page}} other {Nana loowa hello {page}}}",
+      "pageList": "{unit, select, slide {Diapooji} other {Cemmaaji}}",
+      "position": "{unit, select, slide {Diapo {page} e {count}} other {Cemma {page} e {count}}}",
+      "previous": "{unit, select, slide {Diapo adiindo} other {Hello adiingo}}",
+      "next": "{unit, select, slide {Diapo garowo} other {Hello garoowo}}",
+      "showing": "Yamre hollaande",
+      "zoomIn": "Soowita to gila",
+      "zoomOut": "Soowita heɓta",
+      "zoomReset": "Artir mawnugol (jooni {percent}%)",
+      "failed": "Ɗerewol ngol hollaaki. Ina waawi mawnude no feewi, walla ina reenaa, walla waylowo oo ina heewi golle; fuɗɗito ɗoon e seeɗa.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

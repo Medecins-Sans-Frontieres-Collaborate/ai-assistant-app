@@ -2533,6 +2533,9 @@
     "translatedTo": "Voadika ho {language}",
     "download": "Ampidino",
     "downloading": "Mampidina...",
+    "preview": "Topy maso",
+    "previewTranslated": "Voadika",
+    "previewOriginal": "Tany am-boalohany",
     "expired": "Ity fandikana ity dia lany daty ary tsy azo ampiasaina intsony",
     "expiresSoon": "Lany daty ao anatin'ny {days} andro - ampidino haingana",
     "expires": "Azo ampiasaina mandritra ny {days} andro",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Mangataka {fields}",
     "keysHint": "↑↓ hifidy · Enter hampiasa · Esc hanidy"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Silaida {page}} other {Pejy {page}}}",
+      "loadingPage": "{unit, select, slide {Mampiditra ny silaida {page}} other {Mampiditra ny pejy {page}}}",
+      "pageList": "{unit, select, slide {Silaida} other {Pejy}}",
+      "position": "{unit, select, slide {Silaida {page} amin'ny {count}} other {Pejy {page} amin'ny {count}}}",
+      "previous": "{unit, select, slide {Silaida teo aloha} other {Pejy teo aloha}}",
+      "next": "{unit, select, slide {Silaida manaraka} other {Pejy manaraka}}",
+      "showing": "Dikan-teny aseho",
+      "zoomIn": "Hanalehibe",
+      "zoomOut": "Hanakely",
+      "zoomReset": "Averina ny habeny (ankehitriny {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Tsy azo naseho ity antontan-taratasy ity. Mety ho lehibe loatra, voaaro, na be atao ilay mpanova; andramo indray afaka kelikely."
+    }
   }
 }

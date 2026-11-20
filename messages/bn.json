@@ -2533,6 +2533,9 @@
     "translatedTo": "{language} ভাষায় অনুবাদিত",
     "download": "ডাউনলোড",
     "downloading": "ডাউনলোড হচ্ছে...",
+    "preview": "প্রিভিউ",
+    "previewTranslated": "অনূদিত",
+    "previewOriginal": "মূল",
     "expired": "এই অনুবাদের মেয়াদ শেষ হয়েছে এবং আর উপলব্ধ নেই",
     "expiresSoon": "{days} দিন পর মেয়াদ শেষ হবে - দ্রুত ডাউনলোড করুন",
     "expires": "{days} দিন পর্যন্ত উপলব্ধ",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "{fields} চায়",
     "keysHint": "↑↓ বাছাই · Enter ব্যবহার · Esc বন্ধ"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {স্লাইড {page}} other {পৃষ্ঠা {page}}}",
+      "loadingPage": "{unit, select, slide {স্লাইড {page} লোড হচ্ছে} other {পৃষ্ঠা {page} লোড হচ্ছে}}",
+      "pageList": "{unit, select, slide {স্লাইড} other {পৃষ্ঠা}}",
+      "position": "{unit, select, slide {{count}টির মধ্যে স্লাইড {page}} other {{count}টির মধ্যে পৃষ্ঠা {page}}}",
+      "previous": "{unit, select, slide {আগের স্লাইড} other {আগের পৃষ্ঠা}}",
+      "next": "{unit, select, slide {পরের স্লাইড} other {পরের পৃষ্ঠা}}",
+      "showing": "দেখানো সংস্করণ",
+      "zoomIn": "বড় করে দেখুন",
+      "zoomOut": "ছোট করে দেখুন",
+      "zoomReset": "জুম রিসেট করুন (এখন {percent}%)",
+      "failed": "এই ডকুমেন্টটি দেখানো যায়নি। এটি খুব বড় বা সুরক্ষিত হতে পারে, অথবা কনভার্টার ব্যস্ত থাকতে পারে; একটু পরে আবার চেষ্টা করুন।",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

@@ -2533,6 +2533,9 @@
     "translatedTo": "{language} diline çevrildi",
     "download": "İndir",
     "downloading": "İndiriliyor...",
+    "preview": "Önizleme",
+    "previewTranslated": "Çevrilmiş",
+    "previewOriginal": "Orijinal",
     "expired": "Bu çevirinin süresi doldu ve artık erişilemez",
     "expiresSoon": "{days} gün içinde süresi dolacak - lütfen yakında indirin",
     "expires": "{days} gün boyunca kullanılabilir",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "İstenenler: {fields}",
     "keysHint": "↑↓ seç · Enter kullan · Esc kapat"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Slayt {page}} other {Sayfa {page}}}",
+      "loadingPage": "{unit, select, slide {{page}. slayt yükleniyor} other {{page}. sayfa yükleniyor}}",
+      "pageList": "{unit, select, slide {Slaytlar} other {Sayfalar}}",
+      "position": "{unit, select, slide {Slayt {page} / {count}} other {Sayfa {page} / {count}}}",
+      "previous": "{unit, select, slide {Önceki slayt} other {Önceki sayfa}}",
+      "next": "{unit, select, slide {Sonraki slayt} other {Sonraki sayfa}}",
+      "showing": "Gösterilen sürüm",
+      "zoomIn": "Yakınlaştır",
+      "zoomOut": "Uzaklaştır",
+      "zoomReset": "Yakınlaştırmayı sıfırla (şu an %{percent})",
+      "zoomLevel": "%{percent}",
+      "failed": "Bu belge gösterilemedi. Çok büyük veya korumalı olabilir ya da dönüştürücü meşgul olabilir; biraz sonra yeniden deneyin."
+    }
   }
 }

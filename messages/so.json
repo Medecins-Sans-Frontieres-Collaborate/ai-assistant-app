@@ -2533,6 +2533,9 @@
     "translatedTo": "Loo turjumay {language}",
     "download": "Soo degso",
     "downloading": "Waa la soo degsanayaa...",
+    "preview": "Horudhac",
+    "previewTranslated": "La turjumay",
+    "previewOriginal": "Asal",
     "expired": "Turjumaaddani way dhacday oo mar dambe lama heli karo",
     "expiresSoon": "Waxay dhacaysaa {days} maalmood gudahood - dhakhso u soo degso",
     "expires": "Waa la heli karaa {days} maalmood",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Wuxuu weydiinayaa {fields}",
     "keysHint": "↑↓ dooro · Enter isticmaal · Esc xir"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Slaydh {page}} other {Bogga {page}}}",
+      "loadingPage": "{unit, select, slide {Slaydhka {page} waa la soo raraya} other {Bogga {page} waa la soo raraya}}",
+      "pageList": "{unit, select, slide {Slaydhyo} other {Bogag}}",
+      "position": "{unit, select, slide {Slaydh {page} ee {count}} other {Bogga {page} ee {count}}}",
+      "previous": "{unit, select, slide {Slaydhka hore} other {Boggii hore}}",
+      "next": "{unit, select, slide {Slaydhka xiga} other {Bogga xiga}}",
+      "showing": "Nooca la muujiyay",
+      "zoomIn": "Ballaadhi",
+      "zoomOut": "Yaree ballaca",
+      "zoomReset": "Dib u deji ballaadhinta (hadda {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Dukumeentigan lama muujin karin. Waxaa laga yaabaa inuu aad u weyn yahay, la ilaaliyay, ama beddelaha uu mashquul yahay; mar kale isku day wax yar kadib."
+    }
   }
 }

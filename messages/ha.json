@@ -2533,6 +2533,9 @@
     "translatedTo": "An fassara zuwa {language}",
     "download": "Sauke",
     "downloading": "Ana saukewa...",
+    "preview": "Samfoti",
+    "previewTranslated": "Wanda aka fassara",
+    "previewOriginal": "Na asali",
     "expired": "Fassarar nan ta ƙare kuma ba a sake samun ta ba",
     "expiresSoon": "Zai ƙare cikin {days} rana(ni) - sauke da wuri",
     "expires": "Za a samu na tsawon {days} rana",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Yana neman {fields}",
     "keysHint": "↑↓ don zaɓa · Enter don amfani · Esc don rufewa"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Silaid {page}} other {Shafi {page}}}",
+      "loadingPage": "{unit, select, slide {Ana loda silaid na {page}} other {Ana loda shafi na {page}}}",
+      "pageList": "{unit, select, slide {Silaidodi} other {Shafuka}}",
+      "position": "{unit, select, slide {Silaid {page} cikin {count}} other {Shafi {page} cikin {count}}}",
+      "previous": "{unit, select, slide {Silaid na baya} other {Shafi na baya}}",
+      "next": "{unit, select, slide {Silaid na gaba} other {Shafi na gaba}}",
+      "showing": "Sigar da ake nunawa",
+      "zoomIn": "Ƙara zuƙowa",
+      "zoomOut": "Rage zuƙowa",
+      "zoomReset": "Sake saita zuƙowa (yanzu {percent}%)",
+      "failed": "Ba a iya nuna wannan takarda ba. Wataƙila ta yi girma sosai, ko tana da kariya, ko mai sauyawa yana aiki; sake gwadawa nan ba da jimawa ba.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

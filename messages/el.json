@@ -2533,6 +2533,9 @@
     "translatedTo": "Μεταφράστηκε σε {language}",
     "download": "Λήψη",
     "downloading": "Λήψη...",
+    "preview": "Προεπισκόπηση",
+    "previewTranslated": "Μεταφρασμένο",
+    "previewOriginal": "Πρωτότυπο",
     "expired": "Αυτή η μετάφραση έχει λήξει και δεν είναι πλέον διαθέσιμη",
     "expiresSoon": "Λήγει σε {days} ημέρα(-ες) - κατεβάστε σύντομα",
     "expires": "Διαθέσιμο για {days} ημέρες",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Ζητά {fields}",
     "keysHint": "↑↓ επιλογή · Enter χρήση · Esc κλείσιμο"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Διαφάνεια {page}} other {Σελίδα {page}}}",
+      "loadingPage": "{unit, select, slide {Φόρτωση διαφάνειας {page}} other {Φόρτωση σελίδας {page}}}",
+      "pageList": "{unit, select, slide {Διαφάνειες} other {Σελίδες}}",
+      "position": "{unit, select, slide {Διαφάνεια {page} από {count}} other {Σελίδα {page} από {count}}}",
+      "previous": "{unit, select, slide {Προηγούμενη διαφάνεια} other {Προηγούμενη σελίδα}}",
+      "next": "{unit, select, slide {Επόμενη διαφάνεια} other {Επόμενη σελίδα}}",
+      "showing": "Εμφανιζόμενη έκδοση",
+      "zoomIn": "Μεγέθυνση",
+      "zoomOut": "Σμίκρυνση",
+      "zoomReset": "Επαναφορά ζουμ (τώρα {percent}%)",
+      "failed": "Δεν ήταν δυνατή η εμφάνιση αυτού του εγγράφου. Μπορεί να είναι πολύ μεγάλο ή προστατευμένο, ή ο μετατροπέας να είναι απασχολημένος· δοκιμάστε ξανά σε λίγο.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

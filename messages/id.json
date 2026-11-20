@@ -2533,6 +2533,9 @@
     "translatedTo": "Diterjemahkan ke {language}",
     "download": "Unduh",
     "downloading": "Mengunduh...",
+    "preview": "Pratinjau",
+    "previewTranslated": "Terjemahan",
+    "previewOriginal": "Asli",
     "expired": "Penerjemahan ini telah kedaluwarsa dan tidak lagi tersedia",
     "expiresSoon": "Akan kedaluwarsa dalam {days} hari - segera unduh",
     "expires": "Tersedia selama {days} hari",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Meminta {fields}",
     "keysHint": "↑↓ pilih · Enter gunakan · Esc tutup"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Slide {page}} other {Halaman {page}}}",
+      "loadingPage": "{unit, select, slide {Memuat slide {page}} other {Memuat halaman {page}}}",
+      "pageList": "{unit, select, slide {Slide} other {Halaman}}",
+      "position": "{unit, select, slide {Slide {page} dari {count}} other {Halaman {page} dari {count}}}",
+      "previous": "{unit, select, slide {Slide sebelumnya} other {Halaman sebelumnya}}",
+      "next": "{unit, select, slide {Slide berikutnya} other {Halaman berikutnya}}",
+      "showing": "Versi yang ditampilkan",
+      "zoomIn": "Perbesar",
+      "zoomOut": "Perkecil",
+      "zoomReset": "Atur ulang zoom (saat ini {percent}%)",
+      "failed": "Dokumen ini tidak dapat ditampilkan. Dokumen mungkin terlalu besar atau dilindungi, atau konverter sedang sibuk; coba lagi sebentar lagi.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

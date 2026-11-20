@@ -2533,6 +2533,9 @@
     "translatedTo": "Ба {language} тарҷума шуд",
     "download": "Зеркашӣ кардан",
     "downloading": "Дар ҳоли зеркашӣ...",
+    "preview": "Пешнамоиш",
+    "previewTranslated": "Тарҷумашуда",
+    "previewOriginal": "Аслӣ",
     "expired": "Ин тарҷума куҳна шудаст ва дигар дастрас нест",
     "expiresSoon": "Муҳлат дар {days} рӯз мебарояд — зудтар зеркашӣ кунед",
     "expires": "Дар давоми {days} рӯз дастрас",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "{fields}-ро мепурсад",
     "keysHint": "↑↓ интихоб · Enter истифода · Esc пӯшидан"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Слайди {page}} other {Саҳифаи {page}}}",
+      "loadingPage": "{unit, select, slide {Боркунии слайди {page}} other {Боркунии саҳифаи {page}}}",
+      "pageList": "{unit, select, slide {Слайдҳо} other {Саҳифаҳо}}",
+      "position": "{unit, select, slide {Слайди {page} аз {count}} other {Саҳифаи {page} аз {count}}}",
+      "previous": "{unit, select, slide {Слайди қаблӣ} other {Саҳифаи қаблӣ}}",
+      "next": "{unit, select, slide {Слайди навбатӣ} other {Саҳифаи навбатӣ}}",
+      "showing": "Версияи нишондодашуда",
+      "zoomIn": "Бузург кардан",
+      "zoomOut": "Кам кардан",
+      "zoomReset": "Бозгардонии миқёс (ҳоло {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Ин ҳуҷҷат нишон дода нашуд. Шояд он хеле калон ё ҳифзшуда бошад, ё табдилдиҳанда банд бошад; пас аз чанде дубора кӯшиш кунед."
+    }
   }
 }

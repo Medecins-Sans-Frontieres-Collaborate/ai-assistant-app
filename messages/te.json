@@ -2533,6 +2533,9 @@
     "translatedTo": "{language} కి అనువదించబడింది",
     "download": "డౌన్‌లోడ్ చేసుకోండి",
     "downloading": "డౌన్‌లోడ్ అవుతోంది...",
+    "preview": "ప్రీవ్యూ",
+    "previewTranslated": "అనువదించింది",
+    "previewOriginal": "అసలు",
     "expired": "ఈ అనువాదానికి గడువు పూర్తయింది, ఇక అందుబాటులో లేదు",
     "expiresSoon": "{days} రోజు(లు)లో గడువు ముగుస్తుంది - త్వరలో డౌన్‌లోడ్ చేయండి",
     "expires": "{days} రోజులపాటు అందుబాటులో ఉంటుంది",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "{fields} అడుగుతుంది",
     "keysHint": "↑↓ ఎంచుకోండి · Enter ఉపయోగించండి · Esc మూసివేయండి"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {స్లైడ్ {page}} other {పేజీ {page}}}",
+      "loadingPage": "{unit, select, slide {స్లైడ్ {page} లోడ్ అవుతోంది} other {పేజీ {page} లోడ్ అవుతోంది}}",
+      "pageList": "{unit, select, slide {స్లైడ్‌లు} other {పేజీలు}}",
+      "position": "{unit, select, slide {{count}లో స్లైడ్ {page}} other {{count}లో పేజీ {page}}}",
+      "previous": "{unit, select, slide {మునుపటి స్లైడ్} other {మునుపటి పేజీ}}",
+      "next": "{unit, select, slide {తదుపరి స్లైడ్} other {తదుపరి పేజీ}}",
+      "showing": "చూపుతున్న వెర్షన్",
+      "zoomIn": "జూమ్ ఇన్",
+      "zoomOut": "జూమ్ అవుట్",
+      "zoomReset": "జూమ్ రీసెట్ చేయండి (ప్రస్తుతం {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "ఈ డాక్యుమెంట్‌ను చూపించలేకపోయాం. ఇది చాలా పెద్దదిగా లేదా రక్షించబడినదిగా ఉండవచ్చు, లేదా కన్వర్టర్ బిజీగా ఉండవచ్చు; కొద్దిసేపట్లో మళ్లీ ప్రయత్నించండి."
+    }
   }
 }

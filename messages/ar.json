@@ -2533,6 +2533,9 @@
     "translatedTo": "تمت الترجمة إلى {language}",
     "download": "تنزيل",
     "downloading": "جارٍ التنزيل...",
+    "preview": "معاينة",
+    "previewTranslated": "المترجَم",
+    "previewOriginal": "الأصلي",
     "expired": "انتهت صلاحية هذه الترجمة ولم تعد متاحة",
     "expiresSoon": "تنتهي في غضون {days} يوم(أيام) - يرجى التنزيل قريباً",
     "expires": "متوفر لمدة {days} يوم",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "يطلب {fields}",
     "keysHint": "↑↓ للاختيار · Enter للاستخدام · Esc للإغلاق"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {الشريحة {page}} other {الصفحة {page}}}",
+      "loadingPage": "{unit, select, slide {جارٍ تحميل الشريحة {page}} other {جارٍ تحميل الصفحة {page}}}",
+      "pageList": "{unit, select, slide {الشرائح} other {الصفحات}}",
+      "position": "{unit, select, slide {الشريحة {page} من {count}} other {الصفحة {page} من {count}}}",
+      "previous": "{unit, select, slide {الشريحة السابقة} other {الصفحة السابقة}}",
+      "next": "{unit, select, slide {الشريحة التالية} other {الصفحة التالية}}",
+      "showing": "النسخة المعروضة",
+      "zoomIn": "تكبير",
+      "zoomOut": "تصغير",
+      "zoomReset": "إعادة ضبط التكبير (حاليًا {percent}%)",
+      "failed": "تعذّر عرض هذا المستند. قد يكون كبيرًا جدًا أو محميًا، أو قد يكون المحوّل مشغولًا؛ حاول مرة أخرى بعد قليل.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

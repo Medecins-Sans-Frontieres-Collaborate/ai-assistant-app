@@ -2533,6 +2533,9 @@
     "translatedTo": "Přeloženo do {language}",
     "download": "Stáhnout",
     "downloading": "Stahuje se...",
+    "preview": "Náhled",
+    "previewTranslated": "Přeložený",
+    "previewOriginal": "Původní",
     "expired": "Tento překlad vypršel a již není k dispozici",
     "expiresSoon": "Vyprší za {days} den/dnů – stáhněte brzy",
     "expires": "K dispozici {days} dní",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Žádá: {fields}",
     "keysHint": "↑↓ výběr · Enter použít · Esc zavřít"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Snímek {page}} other {Stránka {page}}}",
+      "loadingPage": "{unit, select, slide {Načítání snímku {page}} other {Načítání stránky {page}}}",
+      "pageList": "{unit, select, slide {Snímky} other {Stránky}}",
+      "position": "{unit, select, slide {Snímek {page} z {count}} other {Stránka {page} z {count}}}",
+      "previous": "{unit, select, slide {Předchozí snímek} other {Předchozí stránka}}",
+      "next": "{unit, select, slide {Další snímek} other {Další stránka}}",
+      "showing": "Zobrazená verze",
+      "zoomIn": "Přiblížit",
+      "zoomOut": "Oddálit",
+      "zoomReset": "Obnovit přiblížení (nyní {percent} %)",
+      "failed": "Tento dokument nelze zobrazit. Může být příliš velký nebo chráněný, nebo je převodník zaneprázdněn; zkuste to za chvíli znovu.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

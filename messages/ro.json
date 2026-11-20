@@ -2533,6 +2533,9 @@
     "translatedTo": "Tradus în {language}",
     "download": "Descarcă",
     "downloading": "Se descarcă...",
+    "preview": "Previzualizare",
+    "previewTranslated": "Tradus",
+    "previewOriginal": "Original",
     "expired": "Această traducere a expirat și nu mai este disponibilă",
     "expiresSoon": "Expiră în {days} zi(le) - descărcați cât mai curând",
     "expires": "Disponibil pentru {days} zile",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Cere {fields}",
     "keysHint": "↑↓ alegere · Enter folosire · Esc închidere"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Diapozitivul {page}} other {Pagina {page}}}",
+      "loadingPage": "{unit, select, slide {Se încarcă diapozitivul {page}} other {Se încarcă pagina {page}}}",
+      "pageList": "{unit, select, slide {Diapozitive} other {Pagini}}",
+      "position": "{unit, select, slide {Diapozitivul {page} din {count}} other {Pagina {page} din {count}}}",
+      "previous": "{unit, select, slide {Diapozitivul anterior} other {Pagina anterioară}}",
+      "next": "{unit, select, slide {Diapozitivul următor} other {Pagina următoare}}",
+      "showing": "Versiunea afișată",
+      "zoomIn": "Mărește",
+      "zoomOut": "Micșorează",
+      "zoomReset": "Resetează zoomul (acum {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Acest document nu a putut fi afișat. Poate fi prea mare, protejat sau convertorul poate fi ocupat; încercați din nou în scurt timp."
+    }
   }
 }

@@ -2533,6 +2533,9 @@
     "translatedTo": "แปลเป็น {language}",
     "download": "ดาวน์โหลด",
     "downloading": "กำลังดาวน์โหลด...",
+    "preview": "ดูตัวอย่าง",
+    "previewTranslated": "แปลแล้ว",
+    "previewOriginal": "ต้นฉบับ",
     "expired": "การแปลนี้หมดอายุและไม่สามารถใช้งานได้อีก",
     "expiresSoon": "จะหมดอายุในอีก {days} วัน - กรุณาดาวน์โหลดโดยเร็ว",
     "expires": "สามารถใช้งานได้ {days} วัน",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "ขอ {fields}",
     "keysHint": "↑↓ เลือก · Enter ใช้ · Esc ปิด"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {สไลด์ {page}} other {หน้า {page}}}",
+      "loadingPage": "{unit, select, slide {กำลังโหลดสไลด์ {page}} other {กำลังโหลดหน้า {page}}}",
+      "pageList": "{unit, select, slide {สไลด์} other {หน้า}}",
+      "position": "{unit, select, slide {สไลด์ {page} จาก {count}} other {หน้า {page} จาก {count}}}",
+      "previous": "{unit, select, slide {สไลด์ก่อนหน้า} other {หน้าก่อนหน้า}}",
+      "next": "{unit, select, slide {สไลด์ถัดไป} other {หน้าถัดไป}}",
+      "showing": "เวอร์ชันที่แสดง",
+      "zoomIn": "ซูมเข้า",
+      "zoomOut": "ซูมออก",
+      "zoomReset": "รีเซ็ตการซูม (ขณะนี้ {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "ไม่สามารถแสดงเอกสารนี้ได้ เอกสารอาจใหญ่เกินไป ได้รับการป้องกัน หรือตัวแปลงไฟล์อาจไม่ว่าง โปรดลองอีกครั้งในอีกสักครู่"
+    }
   }
 }

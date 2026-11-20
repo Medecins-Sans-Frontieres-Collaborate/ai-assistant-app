@@ -2533,6 +2533,9 @@
     "translatedTo": "Przetłumaczono na {language}",
     "download": "Pobierz",
     "downloading": "Pobieranie...",
+    "preview": "Podgląd",
+    "previewTranslated": "Przetłumaczony",
+    "previewOriginal": "Oryginał",
     "expired": "To tłumaczenie wygasło i nie jest już dostępne",
     "expiresSoon": "Wygasa za {days} dni – pobierz wkrótce",
     "expires": "Dostępne przez {days} dni",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Pyta o: {fields}",
     "keysHint": "↑↓ wybór · Enter użyj · Esc zamknij"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Slajd {page}} other {Strona {page}}}",
+      "loadingPage": "{unit, select, slide {Wczytywanie slajdu {page}} other {Wczytywanie strony {page}}}",
+      "pageList": "{unit, select, slide {Slajdy} other {Strony}}",
+      "position": "{unit, select, slide {Slajd {page} z {count}} other {Strona {page} z {count}}}",
+      "previous": "{unit, select, slide {Poprzedni slajd} other {Poprzednia strona}}",
+      "next": "{unit, select, slide {Następny slajd} other {Następna strona}}",
+      "showing": "Wyświetlana wersja",
+      "zoomIn": "Powiększ",
+      "zoomOut": "Pomniejsz",
+      "zoomReset": "Resetuj powiększenie (teraz {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Nie można wyświetlić tego dokumentu. Może być za duży lub chroniony albo konwerter jest zajęty; spróbuj ponownie za chwilę."
+    }
   }
 }

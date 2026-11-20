@@ -2533,6 +2533,9 @@
     "translatedTo": "Översatt till {language}",
     "download": "Ladda ner",
     "downloading": "Laddar ner...",
+    "preview": "Förhandsvisning",
+    "previewTranslated": "Översatt",
+    "previewOriginal": "Original",
     "expired": "Denna översättning har gått ut och är inte längre tillgänglig",
     "expiresSoon": "Utgår om {days} dag(ar) – ladda ner snart",
     "expires": "Tillgänglig i {days} dagar",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Frågar efter {fields}",
     "keysHint": "↑↓ välj · Enter använd · Esc stäng"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Bild {page}} other {Sida {page}}}",
+      "loadingPage": "{unit, select, slide {Läser in bild {page}} other {Läser in sidan {page}}}",
+      "pageList": "{unit, select, slide {Bilder} other {Sidor}}",
+      "position": "{unit, select, slide {Bild {page} av {count}} other {Sida {page} av {count}}}",
+      "previous": "{unit, select, slide {Föregående bild} other {Föregående sida}}",
+      "next": "{unit, select, slide {Nästa bild} other {Nästa sida}}",
+      "showing": "Visad version",
+      "zoomIn": "Zooma in",
+      "zoomOut": "Zooma ut",
+      "zoomReset": "Återställ zoom (nu {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Dokumentet kunde inte visas. Det kan vara för stort eller skyddat, eller så är konverteraren upptagen; försök igen om en stund."
+    }
   }
 }

@@ -2533,6 +2533,9 @@
     "translatedTo": "وژباړل شو: {language}",
     "download": "ښکته کړئ",
     "downloading": "د ښکته کولو په حال کې...",
+    "preview": "مخکتنه",
+    "previewTranslated": "ژباړل شوی",
+    "previewOriginal": "اصلي",
     "expired": "دا ژباړه پای ته رسېدلې او نور نشته",
     "expiresSoon": "په {days} ورځو کې به پای ته ورسېږي - ژر ښکته کړئ",
     "expires": "{days} ورځو لپاره موجود",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "{fields} غواړي",
     "keysHint": "↑↓ د ټاکلو لپاره · Enter د کارولو لپاره · Esc د بندولو لپاره"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {سلاید {page}} other {صفحه {page}}}",
+      "loadingPage": "{unit, select, slide {د {page} سلاید پورته کېږي} other {د {page} پاڼې پورته کېږي}}",
+      "pageList": "{unit, select, slide {سلایدونه} other {صفحې}}",
+      "position": "{unit, select, slide {سلاید {page} له {count} څخه} other {صفحه {page} له {count} څخه}}",
+      "previous": "{unit, select, slide {مخکینی سلاید} other {مخکینۍ پاڼه}}",
+      "next": "{unit, select, slide {راتلونکی سلاید} other {راتلونکې پاڼه}}",
+      "showing": "ښودل شوې بڼه",
+      "zoomIn": "لوی کول",
+      "zoomOut": "کوچنی کول",
+      "zoomReset": "زوم بیا تنظیمول (اوس {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "دا سند ونه ښودل شو. کېدای شي ډېر لوی وي، خوندي وي، یا بدلوونکی بوخت وي؛ لږ وروسته بیا هڅه وکړئ."
+    }
   }
 }

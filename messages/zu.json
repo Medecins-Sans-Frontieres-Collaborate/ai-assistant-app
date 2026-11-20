@@ -2533,6 +2533,9 @@
     "translatedTo": "Ihunyushwe ku-{language}",
     "download": "Landa",
     "downloading": "Kuyalandwa...",
+    "preview": "Ukubuka kuqala",
+    "previewTranslated": "Kuhumushiwe",
+    "previewOriginal": "Yokuqala",
     "expired": "Lokhu kuhumusha kuphelelwe yisikhathi futhi akusatholakali",
     "expiresSoon": "Kuphelelwa yisikhathi ngezinsuku ezingu-{days} - landa masinyane",
     "expires": "Kutholakala izinsuku ezingu-{days}",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Icela {fields}",
     "keysHint": "↑↓ ukukhetha · Enter ukusebenzisa · Esc ukuvala"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Isilayidi {page}} other {Ikhasi {page}}}",
+      "loadingPage": "{unit, select, slide {Kulayishwa isilayidi {page}} other {Kulayishwa ikhasi {page}}}",
+      "pageList": "{unit, select, slide {Amaslayidi} other {Amakhasi}}",
+      "position": "{unit, select, slide {Isilayidi {page} kwangu-{count}} other {Ikhasi {page} kwangu-{count}}}",
+      "previous": "{unit, select, slide {Isilayidi esandulele} other {Ikhasi elandulele}}",
+      "next": "{unit, select, slide {Isilayidi esilandelayo} other {Ikhasi elilandelayo}}",
+      "showing": "Inguqulo eboniswayo",
+      "zoomIn": "Engeza usayizi",
+      "zoomOut": "Nciphisa usayizi",
+      "zoomReset": "Setha kabusha usayizi (manje {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Le dokhumenti ayikwazanga ukuboniswa. Ingase inkulu kakhulu, ivikelwe, noma isiguquli simatasa; zama futhi ngemuva kwesikhashana."
+    }
   }
 }

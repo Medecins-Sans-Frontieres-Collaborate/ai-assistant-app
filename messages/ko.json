@@ -2533,6 +2533,9 @@
     "translatedTo": "{language}(으)로 번역됨",
     "download": "다운로드",
     "downloading": "다운로드 중...",
+    "preview": "미리보기",
+    "previewTranslated": "번역본",
+    "previewOriginal": "원본",
     "expired": "이 번역은 만료되어 더 이상 이용할 수 없습니다",
     "expiresSoon": "{days}일 후 만료 예정 - 빠른 다운로드 권장",
     "expires": "{days}일간 이용 가능",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "입력 항목: {fields}",
     "keysHint": "↑↓ 선택 · Enter 사용 · Esc 닫기"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {슬라이드 {page}} other {페이지 {page}}}",
+      "loadingPage": "{unit, select, slide {슬라이드 {page} 불러오는 중} other {{page}페이지 불러오는 중}}",
+      "pageList": "{unit, select, slide {슬라이드} other {페이지}}",
+      "position": "{unit, select, slide {슬라이드 {page} / {count}} other {페이지 {page} / {count}}}",
+      "previous": "{unit, select, slide {이전 슬라이드} other {이전 페이지}}",
+      "next": "{unit, select, slide {다음 슬라이드} other {다음 페이지}}",
+      "showing": "표시 중인 버전",
+      "zoomIn": "확대",
+      "zoomOut": "축소",
+      "zoomReset": "확대/축소 초기화 (현재 {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "이 문서를 표시할 수 없습니다. 파일이 너무 크거나 보호되어 있거나 변환기가 사용 중일 수 있습니다. 잠시 후 다시 시도하세요."
+    }
   }
 }

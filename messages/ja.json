@@ -2533,6 +2533,9 @@
     "translatedTo": "{language}に翻訳済み",
     "download": "ダウンロード",
     "downloading": "ダウンロード中...",
+    "preview": "プレビュー",
+    "previewTranslated": "翻訳版",
+    "previewOriginal": "原文",
     "expired": "この翻訳の有効期限が切れており、利用できません",
     "expiresSoon": "残り{days}日で失効します。お早めにダウンロードしてください",
     "expires": "{days}日間利用可能",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "入力項目: {fields}",
     "keysHint": "↑↓ で選択 · Enter で使用 · Esc で閉じる"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {スライド{page}} other {{page}ページ}}",
+      "loadingPage": "{unit, select, slide {スライド {page} を読み込み中} other {{page} ページを読み込み中}}",
+      "pageList": "{unit, select, slide {スライド} other {ページ}}",
+      "position": "{unit, select, slide {スライド {page} / {count}} other {{page} / {count} ページ}}",
+      "previous": "{unit, select, slide {前のスライド} other {前のページ}}",
+      "next": "{unit, select, slide {次のスライド} other {次のページ}}",
+      "showing": "表示中の版",
+      "zoomIn": "拡大",
+      "zoomOut": "縮小",
+      "zoomReset": "ズームをリセット（現在 {percent}%）",
+      "zoomLevel": "{percent}%",
+      "failed": "このドキュメントを表示できませんでした。サイズが大きすぎるか、保護されているか、変換処理が混み合っている可能性があります。しばらくしてからもう一度お試しください。"
+    }
   }
 }

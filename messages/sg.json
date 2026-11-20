@@ -2533,6 +2533,9 @@
     "translatedTo": "Translated to {language}",
     "download": "Download",
     "downloading": "Downloading...",
+    "preview": "Bâa kôzo",
+    "previewTranslated": "A gbâ",
+    "previewOriginal": "Original",
     "expired": "This translation has expired and is no longer available",
     "expiresSoon": "Expires in {days} day(s) - download soon",
     "expires": "Available for {days} days",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "A hûnda {fields}",
     "keysHint": "↑↓ ti soro · Enter ti sâra kua · Esc ti kânga"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Diapo {page}} other {Page {page}}}",
+      "loadingPage": "{unit, select, slide {A yeke zi diapo {page}} other {A yeke zi lembeti {page}}}",
+      "pageList": "{unit, select, slide {Adiapo} other {Pages}}",
+      "position": "{unit, select, slide {Diapo {page} na {count}} other {Page {page} na {count}}}",
+      "previous": "{unit, select, slide {Diapo so kôzo} other {Page so kôzo}}",
+      "next": "{unit, select, slide {Diapo so na pekô} other {Page so na pekô}}",
+      "showing": "Version so a fa",
+      "zoomIn": "Kono nî",
+      "zoomOut": "Kete nî",
+      "zoomReset": "Kiri na zoom (fadë {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "A lingbi tî fa document so pëpe. Peut-être lo kono mingi, a bata lo, wala convertisseur ayeke na kua; tara nî ngbene kêtê."
+    }
   }
 }

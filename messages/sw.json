@@ -2533,6 +2533,9 @@
     "translatedTo": "Imetafsiriwa kwa {language}",
     "download": "Pakua",
     "downloading": "Inapakua...",
+    "preview": "Hakikisho",
+    "previewTranslated": "Imetafsiriwa",
+    "previewOriginal": "Asili",
     "expired": "Tafsiri hii imeisha muda na haipatikani tena",
     "expiresSoon": "Inaisha baada ya siku {days} - pakua mapema",
     "expires": "Inapatikana kwa siku {days}",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Inaomba {fields}",
     "keysHint": "↑↓ kuchagua · Enter kutumia · Esc kufunga"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Slaidi {page}} other {Ukurasa {page}}}",
+      "loadingPage": "{unit, select, slide {Inapakia slaidi ya {page}} other {Inapakia ukurasa wa {page}}}",
+      "pageList": "{unit, select, slide {Slaidi} other {Kurasa}}",
+      "position": "{unit, select, slide {Slaidi {page} kati ya {count}} other {Ukurasa {page} kati ya {count}}}",
+      "previous": "{unit, select, slide {Slaidi iliyotangulia} other {Ukurasa uliotangulia}}",
+      "next": "{unit, select, slide {Slaidi inayofuata} other {Ukurasa unaofuata}}",
+      "showing": "Toleo linaloonyeshwa",
+      "zoomIn": "Kuza zaidi",
+      "zoomOut": "Punguza",
+      "zoomReset": "Weka upya ukuzaji (sasa {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Hati hii haikuweza kuonyeshwa. Huenda ni kubwa mno, imelindwa, au kigeuzi kina shughuli nyingi; jaribu tena baada ya muda mfupi."
+    }
   }
 }

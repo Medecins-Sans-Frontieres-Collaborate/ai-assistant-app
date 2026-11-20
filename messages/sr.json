@@ -2533,6 +2533,9 @@
     "translatedTo": "Преведено на {language}",
     "download": "Преузми",
     "downloading": "Преузимање...",
+    "preview": "Преглед",
+    "previewTranslated": "Преведено",
+    "previewOriginal": "Оригинал",
     "expired": "Овај превод је истекао и више није доступан",
     "expiresSoon": "Истиче за {days} дан(а) - преузмите ускоро",
     "expires": "Доступно за {days} дана",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Тражи: {fields}",
     "keysHint": "↑↓ избор · Enter употреба · Esc затварање"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Slajd {page}} other {Strana {page}}}",
+      "loadingPage": "{unit, select, slide {Učitavanje slajda {page}} other {Učitavanje stranice {page}}}",
+      "pageList": "{unit, select, slide {Slajdovi} other {Strane}}",
+      "position": "{unit, select, slide {Slajd {page} od {count}} other {Strana {page} od {count}}}",
+      "previous": "{unit, select, slide {Prethodni slajd} other {Prethodna strana}}",
+      "next": "{unit, select, slide {Sledeći slajd} other {Sledeća strana}}",
+      "showing": "Prikazana verzija",
+      "zoomIn": "Povećaj",
+      "zoomOut": "Smanji",
+      "zoomReset": "Poništi zumiranje (sada {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Ovaj dokument nije mogao da se prikaže. Možda je prevelik ili zaštićen, ili je konvertor zauzet; pokušajte ponovo uskoro."
+    }
   }
 }

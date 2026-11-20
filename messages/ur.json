@@ -2535,6 +2535,9 @@
     "translatedTo": "{language} میں ترجمہ شدہ",
     "download": "ڈاؤن لوڈ کریں",
     "downloading": "ڈاؤن لوڈ ہو رہا ہے...",
+    "preview": "پیش نظارہ",
+    "previewTranslated": "ترجمہ شدہ",
+    "previewOriginal": "اصل",
     "expired": "اس ترجمے کی مدت ختم ہوچکی ہے اور یہ دستیاب نہیں رہا",
     "expiresSoon": "{days} دن میں مدت ختم ہو جائے گی - جلدی ڈاؤن لوڈ کریں",
     "expires": "{days} دن تک دستیاب",
@@ -8836,5 +8839,21 @@
   "promptList": {
     "asksFor": "{fields} مانگتا ہے",
     "keysHint": "↑↓ منتخب کریں · Enter استعمال کریں · Esc بند کریں"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {سلائیڈ {page}} other {صفحہ {page}}}",
+      "loadingPage": "{unit, select, slide {سلائیڈ {page} لوڈ ہو رہی ہے} other {صفحہ {page} لوڈ ہو رہا ہے}}",
+      "pageList": "{unit, select, slide {سلائیڈیں} other {صفحات}}",
+      "position": "{unit, select, slide {سلائیڈ {page} از {count}} other {صفحہ {page} از {count}}}",
+      "previous": "{unit, select, slide {پچھلی سلائیڈ} other {پچھلا صفحہ}}",
+      "next": "{unit, select, slide {اگلی سلائیڈ} other {اگلا صفحہ}}",
+      "showing": "دکھایا گیا ورژن",
+      "zoomIn": "زوم اندر",
+      "zoomOut": "زوم باہر",
+      "zoomReset": "زوم ری سیٹ کریں (ابھی {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "یہ دستاویز نہیں دکھائی جا سکی۔ ہو سکتا ہے یہ بہت بڑی یا محفوظ ہو، یا کنورٹر مصروف ہو؛ تھوڑی دیر بعد دوبارہ کوشش کریں۔"
+    }
   }
 }

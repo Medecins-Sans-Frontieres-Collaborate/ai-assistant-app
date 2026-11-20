@@ -2533,6 +2533,9 @@
     "translatedTo": "Chamasuliridwa ku {language}",
     "download": "Tsitsani",
     "downloading": "Kutsitsa...",
+    "preview": "Onani kaye",
+    "previewTranslated": "Chomasuliridwa",
+    "previewOriginal": "Choyambirira",
     "expired": "Kumasulira kumeneku kwatha nthawi ndipo sikukupezekanso",
     "expiresSoon": "Kumatha mu masiku {days} - tsitsani msanga",
     "expires": "Kupezeka kwa masiku {days}",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Ikufuna {fields}",
     "keysHint": "↑↓ kusankha · Enter kugwiritsa · Esc kutseka"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Silaidi {page}} other {Tsamba {page}}}",
+      "loadingPage": "{unit, select, slide {Tikutsegula silaidi {page}} other {Tikutsegula tsamba {page}}}",
+      "pageList": "{unit, select, slide {Masilaidi} other {Masamba}}",
+      "position": "{unit, select, slide {Silaidi {page} mwa {count}} other {Tsamba {page} mwa {count}}}",
+      "previous": "{unit, select, slide {Silaidi yapitayi} other {Tsamba lapitalo}}",
+      "next": "{unit, select, slide {Silaidi yotsatira} other {Tsamba lotsatira}}",
+      "showing": "Mtundu womwe ukuwonetsedwa",
+      "zoomIn": "Kulitsa",
+      "zoomOut": "Kuchepetsa",
+      "zoomReset": "Bwezeretsani kukula (tsopano {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Chikalatachi sichinathe kuwonetsedwa. Chingakhale chachikulu kwambiri, chotetezedwa, kapena chosinthira chili chotanganidwa; yesaninso posachedwa."
+    }
   }
 }

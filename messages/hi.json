@@ -2533,6 +2533,9 @@
     "translatedTo": "{language} में अनुवादित",
     "download": "डाउनलोड करें",
     "downloading": "डाउनलोड हो रहा है...",
+    "preview": "पूर्वावलोकन",
+    "previewTranslated": "अनुवादित",
+    "previewOriginal": "मूल",
     "expired": "इस अनुवाद की वैधता समाप्त हो चुकी है और अब उपलब्ध नहीं है",
     "expiresSoon": "{days} दिन में समाप्त होगा - शीघ्र डाउनलोड करें",
     "expires": "{days} दिन तक उपलब्ध",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "{fields} मांगता है",
     "keysHint": "↑↓ चुनें · Enter उपयोग करें · Esc बंद करें"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {स्लाइड {page}} other {पृष्ठ {page}}}",
+      "loadingPage": "{unit, select, slide {स्लाइड {page} लोड हो रही है} other {पृष्ठ {page} लोड हो रहा है}}",
+      "pageList": "{unit, select, slide {स्लाइड} other {पृष्ठ}}",
+      "position": "{unit, select, slide {{count} में से स्लाइड {page}} other {{count} में से पृष्ठ {page}}}",
+      "previous": "{unit, select, slide {पिछली स्लाइड} other {पिछला पृष्ठ}}",
+      "next": "{unit, select, slide {अगली स्लाइड} other {अगला पृष्ठ}}",
+      "showing": "दिखाया गया संस्करण",
+      "zoomIn": "ज़ूम इन करें",
+      "zoomOut": "ज़ूम आउट करें",
+      "zoomReset": "ज़ूम रीसेट करें (अभी {percent}%)",
+      "failed": "यह दस्तावेज़ नहीं दिखाया जा सका। यह बहुत बड़ा या सुरक्षित हो सकता है, या कनवर्टर व्यस्त हो सकता है; थोड़ी देर में फिर से प्रयास करें।",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

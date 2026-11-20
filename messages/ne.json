@@ -2533,6 +2533,9 @@
     "translatedTo": "{language} मा अनुवाद गरियो",
     "download": "डाउनलोड",
     "downloading": "डाउनलोड गर्दै...",
+    "preview": "पूर्वावलोकन",
+    "previewTranslated": "अनुवादित",
+    "previewOriginal": "मूल",
     "expired": "यो अनुवादको म्याद सकिएको छ र अब उपलब्ध छैन",
     "expiresSoon": "{days} दिनमा म्याद सकिन्छ - चाँडै डाउनलोड गर्नुहोस्",
     "expires": "{days} दिनसम्म उपलब्ध",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "{fields} माग्छ",
     "keysHint": "↑↓ छान्न · Enter प्रयोग गर्न · Esc बन्द गर्न"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {स्लाइड {page}} other {पृष्ठ {page}}}",
+      "loadingPage": "{unit, select, slide {स्लाइड {page} लोड हुँदैछ} other {पृष्ठ {page} लोड हुँदैछ}}",
+      "pageList": "{unit, select, slide {स्लाइडहरू} other {पृष्ठहरू}}",
+      "position": "{unit, select, slide {स्लाइड {page} / {count}} other {पृष्ठ {page} / {count}}}",
+      "previous": "{unit, select, slide {अघिल्लो स्लाइड} other {अघिल्लो पृष्ठ}}",
+      "next": "{unit, select, slide {अर्को स्लाइड} other {अर्को पृष्ठ}}",
+      "showing": "देखाइएको संस्करण",
+      "zoomIn": "ठूलो पार्नुहोस्",
+      "zoomOut": "सानो पार्नुहोस्",
+      "zoomReset": "जुम रिसेट गर्नुहोस् (अहिले {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "यो दस्तावेज देखाउन सकिएन। यो धेरै ठूलो, सुरक्षित, वा कन्भर्टर व्यस्त हुन सक्छ; केही बेरमा फेरि प्रयास गर्नुहोस्।"
+    }
   }
 }

@@ -2533,6 +2533,9 @@
     "translatedTo": "Tradui an {language}",
     "download": "Telechaje",
     "downloading": "Ap telechaje...",
+    "preview": "Aperçu",
+    "previewTranslated": "Tradui",
+    "previewOriginal": "Orijinal",
     "expired": "Tradiksyon sa a te ekspire epi li pa disponib ankò",
     "expiresSoon": "Ekspire nan {days} jou - telechaje byento",
     "expires": "Disponib pou {days} jou",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Mande {fields}",
     "keysHint": "↑↓ pou chwazi · Enter pou itilize · Esc pou fèmen"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Diapo {page}} other {Paj {page}}}",
+      "loadingPage": "{unit, select, slide {Diapo {page} ap chaje} other {Paj {page} ap chaje}}",
+      "pageList": "{unit, select, slide {Diapo yo} other {Paj yo}}",
+      "position": "{unit, select, slide {Diapo {page} sou {count}} other {Paj {page} sou {count}}}",
+      "previous": "{unit, select, slide {Diapo anvan an} other {Paj anvan an}}",
+      "next": "{unit, select, slide {Pwochen diapo} other {Pwochen paj}}",
+      "showing": "Vèsyon ki parèt la",
+      "zoomIn": "Agrandi",
+      "zoomOut": "Retresi",
+      "zoomReset": "Remete zoum nan jan l te ye (kounye a {percent}%)",
+      "failed": "Nou pa t ka montre dokiman sa a. Li ka twò gwo, li ka pwoteje, oswa konvètisè a ka okipe; eseye ankò talè.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

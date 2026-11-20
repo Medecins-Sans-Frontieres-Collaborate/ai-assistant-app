@@ -2081,6 +2081,9 @@
     "translatedTo": "وەرگێڕرا بۆ {language}",
     "download": "داونلود",
     "downloading": "لە داونلودکردنە...",
+    "preview": "پێشبینین",
+    "previewTranslated": "وەرگێڕدراو",
+    "previewOriginal": "ئەسڵی",
     "expired": "ئەم وەرگێڕانە بەسەرچووە و بەردەست نیە",
     "expiresSoon": "لە {days} ڕۆژدا بەسەر دەچێت - زوو داونلود بکە",
     "expires": "بەردەستە بۆ {days} ڕۆژ",
@@ -8786,5 +8789,21 @@
   "promptList": {
     "asksFor": "{fields} dixwaze",
     "keysHint": "↑↓ hilbijêre · Enter bikar bîne · Esc bigire"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {سلاید {page}} other {پەڕە {page}}}",
+      "loadingPage": "{unit, select, slide {سلایدی {page} بار دەکرێت} other {پەڕەی {page} بار دەکرێت}}",
+      "pageList": "{unit, select, slide {سلایدەکان} other {پەڕەکان}}",
+      "position": "{unit, select, slide {سلاید {page} لە {count}} other {پەڕە {page} لە {count}}}",
+      "previous": "{unit, select, slide {سلایدی پێشوو} other {پەڕەی پێشوو}}",
+      "next": "{unit, select, slide {سلایدی دواتر} other {پەڕەی دواتر}}",
+      "showing": "وەشانی پیشاندراو",
+      "zoomIn": "گەورەکردن",
+      "zoomOut": "بچووککردن",
+      "zoomReset": "ڕێکخستنەوەی گەورەکردن (ئێستا {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "ئەم بەڵگەنامەیە پیشان نەدرا. لەوانەیە زۆر گەورە بێت، پارێزراو بێت، یان گۆڕەرەکە سەرقاڵ بێت؛ کەمێکی تر دووبارە هەوڵ بدەرەوە."
+    }
   }
 }

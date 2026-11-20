@@ -2533,6 +2533,9 @@
     "translatedTo": "ወደ {language} ተተርጎሟል",
     "download": "አውርድ",
     "downloading": "በማውረድ ላይ...",
+    "preview": "ቅድመ እይታ",
+    "previewTranslated": "የተተረጎመ",
+    "previewOriginal": "የመጀመሪያው",
     "expired": "ይህ ትርጉም ጊዜው አልፎበታል እና ማግኘት አይቻልም",
     "expiresSoon": "በ{days} ቀን(ች) ውስጥ ይያዛል - አሁን በፍጥነት ያውርዱ",
     "expires": "ለ{days} ቀናት ይገኛል",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "{fields} ይጠይቃል",
     "keysHint": "↑↓ ለመምረጥ · Enter ለመጠቀም · Esc ለመዝጋት"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {ስላይድ {page}} other {ገፅ {page}}}",
+      "loadingPage": "{unit, select, slide {ስላይድ {page} በመጫን ላይ} other {ገጽ {page} በመጫን ላይ}}",
+      "pageList": "{unit, select, slide {ስላይዶች} other {ገፆች}}",
+      "position": "{unit, select, slide {ስላይድ {page} ከ{count}} other {ገፅ {page} ከ{count}}}",
+      "previous": "{unit, select, slide {ቀዳሚ ስላይድ} other {ቀዳሚ ገፅ}}",
+      "next": "{unit, select, slide {ቀጣይ ስላይድ} other {ቀጣይ ገፅ}}",
+      "showing": "የሚታየው ስሪት",
+      "zoomIn": "አጉላ",
+      "zoomOut": "አሳንስ",
+      "zoomReset": "ማጉላቱን ዳግም አስጀምር (አሁን {percent}%)",
+      "failed": "ይህ ሰነድ ሊታይ አልቻለም። በጣም ትልቅ፣ የተጠበቀ ሊሆን ይችላል፣ ወይም መቀየሪያው ስራ በዝቶበት ሊሆን ይችላል፤ ትንሽ ቆይተው እንደገና ይሞክሩ።",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

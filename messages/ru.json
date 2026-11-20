@@ -2533,6 +2533,9 @@
     "translatedTo": "Переведено на {language}",
     "download": "Скачать",
     "downloading": "Скачивание...",
+    "preview": "Предпросмотр",
+    "previewTranslated": "Перевод",
+    "previewOriginal": "Оригинал",
     "expired": "Срок действия этого перевода истёк, файл недоступен",
     "expiresSoon": "Истекает через {days} дн. — скачайте заранее",
     "expires": "Доступно {days} дн.",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Запрашивает: {fields}",
     "keysHint": "↑↓ выбрать · Enter использовать · Esc закрыть"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Слайд {page}} other {Страница {page}}}",
+      "loadingPage": "{unit, select, slide {Загрузка слайда {page}} other {Загрузка страницы {page}}}",
+      "pageList": "{unit, select, slide {Слайды} other {Страницы}}",
+      "position": "{unit, select, slide {Слайд {page} из {count}} other {Страница {page} из {count}}}",
+      "previous": "{unit, select, slide {Предыдущий слайд} other {Предыдущая страница}}",
+      "next": "{unit, select, slide {Следующий слайд} other {Следующая страница}}",
+      "showing": "Показанная версия",
+      "zoomIn": "Увеличить",
+      "zoomOut": "Уменьшить",
+      "zoomReset": "Сбросить масштаб (сейчас {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Не удалось показать этот документ. Возможно, он слишком большой или защищён, либо конвертер занят; повторите попытку чуть позже."
+    }
   }
 }

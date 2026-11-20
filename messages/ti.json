@@ -2533,6 +2533,9 @@
     "translatedTo": "ናብ {language} ተተርጒሙ",
     "download": "ኣውርድ",
     "downloading": "ይወርድ ኣሎ...",
+    "preview": "ቅድመ-ርእይቶ",
+    "previewTranslated": "ተተርጎም",
+    "previewOriginal": "መደበይ",
     "expired": "እዚ ትርጉም ግዜኡ ወዲኡ ድሮ ኣይርከብን",
     "expiresSoon": "ድሕሪ {days} መዓልቲ(ታት) ግዜኡ ይውዳእ - ቀልጢፍካ ኣውርድ",
     "expires": "ን{days} መዓልትታት ይርከብ",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "{fields} ይሓትት",
     "keysHint": "↑↓ ንምምራጽ · Enter ንምጥቃም · Esc ንምዕጻው"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {ስላይድ {page}} other {ገጽ {page}}}",
+      "loadingPage": "{unit, select, slide {ስላይድ {page} ይጽዕን ኣሎ} other {ገጽ {page} ይጽዕን ኣሎ}}",
+      "pageList": "{unit, select, slide {ስላይዳት} other {ገጻት}}",
+      "position": "{unit, select, slide {ስላይድ {page} ካብ {count}} other {ገጽ {page} ካብ {count}}}",
+      "previous": "{unit, select, slide {ዝሓለፈ ስላይድ} other {ዝሓለፈ ገጽ}}",
+      "next": "{unit, select, slide {ዝቕጽል ስላይድ} other {ዝቕጽል ገጽ}}",
+      "showing": "ዝርአ ዘሎ ቅዳሕ",
+      "zoomIn": "ኣጉልሕ",
+      "zoomOut": "ኣንእስ",
+      "zoomReset": "ምጉላሕ ዳግም ኣቐምጥ (ሕጂ {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "እዚ ሰነድ ክርአ ኣይከኣለን። ኣዝዩ ዓቢ ወይ ዝተሓለወ ክኸውን ይኽእል፣ ወይ እቲ መቐየሪ ተታሒዙ ክኸውን ይኽእል፤ ድሕሪ ቁሩብ እንደገና ፈትን።"
+    }
   }
 }

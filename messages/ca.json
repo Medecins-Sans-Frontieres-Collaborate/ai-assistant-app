@@ -2533,6 +2533,9 @@
     "translatedTo": "Traduït a {language}",
     "download": "Descarrega",
     "downloading": "S'està descarregant...",
+    "preview": "Previsualització",
+    "previewTranslated": "Traduït",
+    "previewOriginal": "Original",
     "expired": "Aquesta traducció ha caducat i ja no està disponible",
     "expiresSoon": "Caduca en {days} dia(es) - descarregueu aviat",
     "expires": "Disponible durant {days} dies",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Demana {fields}",
     "keysHint": "↑↓ per triar · Retorn per fer servir · Esc per tancar"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Diapositiva {page}} other {Pàgina {page}}}",
+      "loadingPage": "{unit, select, slide {S’està carregant la diapositiva {page}} other {S’està carregant la pàgina {page}}}",
+      "pageList": "{unit, select, slide {Diapositives} other {Pàgines}}",
+      "position": "{unit, select, slide {Diapositiva {page} de {count}} other {Pàgina {page} de {count}}}",
+      "previous": "{unit, select, slide {Diapositiva anterior} other {Pàgina anterior}}",
+      "next": "{unit, select, slide {Diapositiva següent} other {Pàgina següent}}",
+      "showing": "Versió mostrada",
+      "zoomIn": "Ampliar",
+      "zoomOut": "Reduir",
+      "zoomReset": "Restableix el zoom (ara {percent}%)",
+      "failed": "No s’ha pogut mostrar aquest document. Pot ser massa gran o estar protegit, o el convertidor pot estar ocupat; torneu-ho a provar d’aquí a una estona.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

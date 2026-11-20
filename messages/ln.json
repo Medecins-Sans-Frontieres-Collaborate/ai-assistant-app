@@ -2533,6 +2533,9 @@
     "translatedTo": "Ebongolami na {language}",
     "download": "Pikola",
     "downloading": "Ezali kopikola...",
+    "preview": "Kotala liboso",
+    "previewTranslated": "Ebongolami",
+    "previewOriginal": "Original",
     "expired": "Kobongola oyo ekosili kosala mpe ezalaka lisusu te",
     "expiresSoon": "Ekokosila na mikolo {days} - pikola nokinoki",
     "expires": "Ekosangama mikolo {days}",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "Esengi {fields}",
     "keysHint": "↑↓ kopona · Enter kosalela · Esc kokanga"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Diapositive {page}} other {Page {page}}}",
+      "loadingPage": "{unit, select, slide {Ezali kofungola diapositive {page}} other {Ezali kofungola lokasa {page}}}",
+      "pageList": "{unit, select, slide {Ba diapositives} other {Pages}}",
+      "position": "{unit, select, slide {Diapositive {page} na {count}} other {Page {page} na {count}}}",
+      "previous": "{unit, select, slide {Diapositive ya liboso} other {Lokasa ya liboso}}",
+      "next": "{unit, select, slide {Diapositive oyo elandi} other {Lokasa oyo elandi}}",
+      "showing": "Version oyo ezali komonana",
+      "zoomIn": "Kokomisa monene",
+      "zoomOut": "Kokomisa moke",
+      "zoomReset": "Zongisa zoom (sikoyo {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Mokanda oyo ekoki komonana te. Ekoki kozala monene mingi, ebatelami, to convertisseur ezali na mosala; meka lisusu mwa sima."
+    }
   }
 }

@@ -2564,6 +2564,9 @@
     "translatedTo": "Đã dịch sang {language}",
     "download": "Tải xuống",
     "downloading": "Đang tải xuống...",
+    "preview": "Xem trước",
+    "previewTranslated": "Bản dịch",
+    "previewOriginal": "Bản gốc",
     "expired": "Bản dịch này đã hết hạn và không còn khả dụng",
     "expiresSoon": "Sẽ hết hạn trong {days} ngày - hãy tải xuống sớm",
     "expires": "Có thể tải trong {days} ngày",
@@ -8837,5 +8840,21 @@
   "promptList": {
     "asksFor": "Cần {fields}",
     "keysHint": "↑↓ chọn · Enter dùng · Esc đóng"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Trang chiếu {page}} other {Trang {page}}}",
+      "loadingPage": "{unit, select, slide {Đang tải trang chiếu {page}} other {Đang tải trang {page}}}",
+      "pageList": "{unit, select, slide {Trang chiếu} other {Trang}}",
+      "position": "{unit, select, slide {Trang chiếu {page}/{count}} other {Trang {page}/{count}}}",
+      "previous": "{unit, select, slide {Trang chiếu trước} other {Trang trước}}",
+      "next": "{unit, select, slide {Trang chiếu sau} other {Trang sau}}",
+      "showing": "Phiên bản đang hiển thị",
+      "zoomIn": "Phóng to",
+      "zoomOut": "Thu nhỏ",
+      "zoomReset": "Đặt lại thu phóng (hiện tại {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Không thể hiển thị tài liệu này. Có thể tài liệu quá lớn, được bảo vệ, hoặc trình chuyển đổi đang bận; hãy thử lại sau ít phút."
+    }
   }
 }

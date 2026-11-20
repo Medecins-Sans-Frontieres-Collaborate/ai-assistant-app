@@ -2533,6 +2533,9 @@
     "translatedTo": "{language} သို့ဘာသာပြန်ပြီး",
     "download": "ဒေါင်းလုဒ်လုပ်ပါ",
     "downloading": "ဒေါင်းလုဒ်လုပျနေသည်...",
+    "preview": "ကြိုတင်ကြည့်ရှုရန်",
+    "previewTranslated": "ဘာသာပြန်ထားသည်",
+    "previewOriginal": "မူရင်း",
     "expired": "ဤဘာသာပြန်မှု သက်တမ်းကုန်သွားပြီး မသုံးနိုင်တော့ပါ",
     "expiresSoon": "သက်တမ်း {days} ရက်အတွင်း ပြီးဆုံးပါမည် - မကြာမီ ဒေါင်းလုဒ်လုပ်ပါ",
     "expires": "{days} ရက်အတွက် သုံးနိုင်ပါသည်",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "{fields} ကိုတောင်းသည်",
     "keysHint": "↑↓ ရွေးရန် · Enter သုံးရန် · Esc ပိတ်ရန်"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {ဆလိုက် {page}} other {စာမျက်နှာ {page}}}",
+      "loadingPage": "{unit, select, slide {ဆလိုက် {page} ကို ဖွင့်နေသည်} other {စာမျက်နှာ {page} ကို ဖွင့်နေသည်}}",
+      "pageList": "{unit, select, slide {ဆလိုက်များ} other {စာမျက်နှာများ}}",
+      "position": "{unit, select, slide {ဆလိုက် {count} ခုအနက် {page}} other {စာမျက်နှာ {count} ခုအနက် {page}}}",
+      "previous": "{unit, select, slide {ယခင် ဆလိုက်} other {ယခင် စာမျက်နှာ}}",
+      "next": "{unit, select, slide {နောက် ဆလိုက်} other {နောက် စာမျက်နှာ}}",
+      "showing": "ပြသထားသော ဗားရှင်း",
+      "zoomIn": "ချဲ့ရန်",
+      "zoomOut": "ချုံ့ရန်",
+      "zoomReset": "ချဲ့ချုံ့မှု ပြန်သတ်မှတ်ရန် (ယခု {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "ဤစာရွက်စာတမ်းကို ပြသ၍မရပါ။ အရွယ်အစား ကြီးလွန်းခြင်း၊ ကာကွယ်ထားခြင်း သို့မဟုတ် ပြောင်းလဲပေးသူ အလုပ်များနေခြင်း ဖြစ်နိုင်သည်။ ခဏအကြာတွင် ထပ်မံကြိုးစားပါ။"
+    }
   }
 }

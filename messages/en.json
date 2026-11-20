@@ -4571,6 +4571,9 @@
     "translatedTo": "Translated to {language}",
     "download": "Download",
     "downloading": "Downloading...",
+    "preview": "Preview",
+    "previewTranslated": "Translated",
+    "previewOriginal": "Original",
     "textVersion": "Text version (DOCX)",
     "textVersionHint": "An editable Word file with the translated text, one page per source page. The translated file itself keeps the original layout.",
     "expired": "This translation has expired and is no longer available",
@@ -8749,5 +8752,21 @@
   "promptList": {
     "asksFor": "Asks for {fields}",
     "keysHint": "↑↓ to choose · Enter to use · Esc to close"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Slide {page}} other {Page {page}}}",
+      "loadingPage": "{unit, select, slide {Loading slide {page}} other {Loading page {page}}}",
+      "pageList": "{unit, select, slide {Slides} other {Pages}}",
+      "position": "{unit, select, slide {Slide {page} of {count}} other {Page {page} of {count}}}",
+      "previous": "{unit, select, slide {Previous slide} other {Previous page}}",
+      "next": "{unit, select, slide {Next slide} other {Next page}}",
+      "showing": "Version shown",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "zoomReset": "Reset zoom (now {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "This document could not be shown. It may be too large, protected, or the converter may be busy; try again shortly."
+    }
   }
 }

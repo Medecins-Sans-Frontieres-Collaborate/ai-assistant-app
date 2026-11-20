@@ -2533,6 +2533,9 @@
     "translatedTo": "Перекладено на {language}",
     "download": "Завантажити",
     "downloading": "Завантаження...",
+    "preview": "Попередній перегляд",
+    "previewTranslated": "Перекладено",
+    "previewOriginal": "Оригінал",
     "expired": "Термін дії цього перекладу закінчився",
     "expiresSoon": "Термін дії закінчується через {days} днi(в) — завантажте найближчим часом",
     "expires": "Доступно протягом {days} днiв",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Запитує: {fields}",
     "keysHint": "↑↓ вибрати · Enter використати · Esc закрити"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Слайд {page}} other {Сторінка {page}}}",
+      "loadingPage": "{unit, select, slide {Завантаження слайда {page}} other {Завантаження сторінки {page}}}",
+      "pageList": "{unit, select, slide {Слайди} other {Сторінки}}",
+      "position": "{unit, select, slide {Слайд {page} з {count}} other {Сторінка {page} з {count}}}",
+      "previous": "{unit, select, slide {Попередній слайд} other {Попередня сторінка}}",
+      "next": "{unit, select, slide {Наступний слайд} other {Наступна сторінка}}",
+      "showing": "Показана версія",
+      "zoomIn": "Збільшити",
+      "zoomOut": "Зменшити",
+      "zoomReset": "Скинути масштаб (зараз {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "Не вдалося показати цей документ. Можливо, він завеликий чи захищений, або конвертер зайнятий; спробуйте ще раз трохи згодом."
+    }
   }
 }

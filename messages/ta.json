@@ -2533,6 +2533,9 @@
     "translatedTo": "{language}-க்கு மொழிபெயர்க்கப்பட்டது",
     "download": "பதிவிறக்கு",
     "downloading": "பதிவிறக்குகிறது...",
+    "preview": "முன்னோட்டம்",
+    "previewTranslated": "மொழிபெயர்ப்பு",
+    "previewOriginal": "மூலம்",
     "expired": "இந்த மொழிபெயர்ப்பு காலாவதியாகிவிட்டது மற்றும் இனி கிடைக்காது",
     "expiresSoon": "{days} நாள்(களில்) காலாவதியாகும் - விரைவில் பதிவிறக்குங்கள்",
     "expires": "{days} நாட்களுக்கு கிடைக்கும்",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "{fields} கேட்கிறது",
     "keysHint": "↑↓ தேர்வு · Enter பயன்படுத்து · Esc மூடு"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {ஸ்லைடு {page}} other {பக்கம் {page}}}",
+      "loadingPage": "{unit, select, slide {ஸ்லைடு {page} ஏற்றப்படுகிறது} other {பக்கம் {page} ஏற்றப்படுகிறது}}",
+      "pageList": "{unit, select, slide {ஸ்லைடுகள்} other {பக்கங்கள்}}",
+      "position": "{unit, select, slide {ஸ்லைடு {page} / {count}} other {பக்கம் {page} / {count}}}",
+      "previous": "{unit, select, slide {முந்தைய ஸ்லைடு} other {முந்தைய பக்கம்}}",
+      "next": "{unit, select, slide {அடுத்த ஸ்லைடு} other {அடுத்த பக்கம்}}",
+      "showing": "காட்டப்படும் பதிப்பு",
+      "zoomIn": "பெரிதாக்கு",
+      "zoomOut": "சிறிதாக்கு",
+      "zoomReset": "பெரிதாக்கத்தை மீட்டமை (தற்போது {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "இந்த ஆவணத்தைக் காட்ட முடியவில்லை. இது மிகப் பெரியதாகவோ பாதுகாக்கப்பட்டதாகவோ இருக்கலாம், அல்லது மாற்றி பணியில் இருக்கலாம்; சிறிது நேரத்தில் மீண்டும் முயலவும்."
+    }
   }
 }

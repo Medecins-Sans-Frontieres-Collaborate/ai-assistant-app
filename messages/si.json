@@ -2533,6 +2533,9 @@
     "translatedTo": "{language} වෙත පරිවර්තනය කරන ලදි",
     "download": "බාගත කරන්න",
     "downloading": "බාගත වෙමින්...",
+    "preview": "පෙරදසුන",
+    "previewTranslated": "පරිවර්තිත",
+    "previewOriginal": "මුල්",
     "expired": "මෙම පරිවර්තනය කල් ඉකුත් වී ඇති බැවින් තවදුරටත් ලබා ගත නොහැක",
     "expiresSoon": "දින {days}ක් ඇතුළත කල් ඉකුත් වේ - ඉක්මනින් බාගත කරන්න",
     "expires": "දින {days}ක් සඳහා ලැබෙනු ඇත",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "{fields} ඉල්ලයි",
     "keysHint": "↑↓ තෝරන්න · Enter භාවිත කරන්න · Esc වසන්න"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {ස්ලයිඩය {page}} other {පිටුව {page}}}",
+      "loadingPage": "{unit, select, slide {ස්ලයිඩය {page} පූරණය වෙමින්} other {පිටුව {page} පූරණය වෙමින්}}",
+      "pageList": "{unit, select, slide {ස්ලයිඩ} other {පිටු}}",
+      "position": "{unit, select, slide {ස්ලයිඩය {page} / {count}} other {පිටුව {page} / {count}}}",
+      "previous": "{unit, select, slide {පෙර ස්ලයිඩය} other {පෙර පිටුව}}",
+      "next": "{unit, select, slide {ඊළඟ ස්ලයිඩය} other {ඊළඟ පිටුව}}",
+      "showing": "පෙන්වන අනුවාදය",
+      "zoomIn": "විශාල කරන්න",
+      "zoomOut": "කුඩා කරන්න",
+      "zoomReset": "විශාලනය යළි සකසන්න (දැන් {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "මෙම ලේඛනය පෙන්විය නොහැකි විය. එය ඉතා විශාල, ආරක්ෂිත විය හැකිය, නැතහොත් පරිවර්තකය කාර්යබහුල විය හැකිය; ටික වේලාවකින් නැවත උත්සාහ කරන්න."
+    }
   }
 }

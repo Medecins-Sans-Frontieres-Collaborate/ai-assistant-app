@@ -2533,6 +2533,9 @@
     "translatedTo": "תורגם ל-{language}",
     "download": "הורדה",
     "downloading": "מוריד...",
+    "preview": "תצוגה מקדימה",
+    "previewTranslated": "מתורגם",
+    "previewOriginal": "מקור",
     "expired": "התרגום פג תוקף ואינו זמין עוד",
     "expiresSoon": "פג בעוד {days} יום/ימים - מומלץ להוריד בהקדם",
     "expires": "זמין למשך {days} ימים",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "מבקש {fields}",
     "keysHint": "↑↓ לבחירה · Enter לשימוש · Esc לסגירה"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {שקופית {page}} other {עמוד {page}}}",
+      "loadingPage": "{unit, select, slide {טוען את שקופית {page}} other {טוען את עמוד {page}}}",
+      "pageList": "{unit, select, slide {שקופיות} other {עמודים}}",
+      "position": "{unit, select, slide {שקופית {page} מתוך {count}} other {עמוד {page} מתוך {count}}}",
+      "previous": "{unit, select, slide {השקופית הקודמת} other {העמוד הקודם}}",
+      "next": "{unit, select, slide {השקופית הבאה} other {העמוד הבא}}",
+      "showing": "הגרסה המוצגת",
+      "zoomIn": "הגדל תצוגה",
+      "zoomOut": "הקטן תצוגה",
+      "zoomReset": "איפוס זום (כעת {percent}%)",
+      "failed": "לא ניתן להציג מסמך זה. ייתכן שהוא גדול מדי או מוגן, או שהממיר עמוס; נסה שוב בעוד רגע.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }

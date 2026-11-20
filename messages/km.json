@@ -2533,6 +2533,9 @@
     "translatedTo": "បានបកប្រែទៅ {language}",
     "download": "ទាញយក",
     "downloading": "កំពុងទាញយក...",
+    "preview": "មើលជាមុន",
+    "previewTranslated": "បានបកប្រែ",
+    "previewOriginal": "ដើម",
     "expired": "ការបកប្រែនេះបានផុតកំណត់ និងមិនអាចប្រើបានទៀតទេ",
     "expiresSoon": "នឹងផុតកំណត់ក្នុងរយៈពេល {days} ថ្ងៃ - សូមទាញយកឯកសារឬ",
     "expires": "អាចប្រើបានក្នុងរយៈ {days} ថ្ងៃ",
@@ -8790,5 +8793,21 @@
   "promptList": {
     "asksFor": "សុំ {fields}",
     "keysHint": "↑↓ ជ្រើសរើស · Enter ប្រើ · Esc បិទ"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {ស្លាយ {page}} other {ទំព័រ {page}}}",
+      "loadingPage": "{unit, select, slide {កំពុងផ្ទុកស្លាយ {page}} other {កំពុងផ្ទុកទំព័រ {page}}}",
+      "pageList": "{unit, select, slide {ស្លាយ} other {ទំព័រ}}",
+      "position": "{unit, select, slide {ស្លាយ {page} នៃ {count}} other {ទំព័រ {page} នៃ {count}}}",
+      "previous": "{unit, select, slide {ស្លាយមុន} other {ទំព័រមុន}}",
+      "next": "{unit, select, slide {ស្លាយបន្ទាប់} other {ទំព័របន្ទាប់}}",
+      "showing": "កំណែដែលកំពុងបង្ហាញ",
+      "zoomIn": "ពង្រីក",
+      "zoomOut": "បង្រួម",
+      "zoomReset": "កំណត់ការពង្រីកឡើងវិញ (ឥឡូវ {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "មិនអាចបង្ហាញឯកសារនេះបានទេ។ វាអាចធំពេក ត្រូវបានការពារ ឬកម្មវិធីបម្លែងអាចរវល់។ សូមព្យាយាមម្ដងទៀតបន្តិចទៀត។"
+    }
   }
 }

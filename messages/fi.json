@@ -2533,6 +2533,9 @@
     "translatedTo": "Käännetty kielelle {language}",
     "download": "Lataa",
     "downloading": "Ladataan...",
+    "preview": "Esikatselu",
+    "previewTranslated": "Käännetty",
+    "previewOriginal": "Alkuperäinen",
     "expired": "Tämä käännös on vanhentunut eikä ole enää saatavilla",
     "expiresSoon": "Vanhenee {days} päivän kuluttua – lataa pian",
     "expires": "Saatavilla {days} päivän ajan",
@@ -8806,5 +8809,21 @@
   "promptList": {
     "asksFor": "Kysyy: {fields}",
     "keysHint": "↑↓ valitse · Enter käytä · Esc sulje"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Dia {page}} other {Sivu {page}}}",
+      "loadingPage": "{unit, select, slide {Ladataan diaa {page}} other {Ladataan sivua {page}}}",
+      "pageList": "{unit, select, slide {Diat} other {Sivut}}",
+      "position": "{unit, select, slide {Dia {page}/{count}} other {Sivu {page}/{count}}}",
+      "previous": "{unit, select, slide {Edellinen dia} other {Edellinen sivu}}",
+      "next": "{unit, select, slide {Seuraava dia} other {Seuraava sivu}}",
+      "showing": "Näytettävä versio",
+      "zoomIn": "Lähennä",
+      "zoomOut": "Loitonna",
+      "zoomReset": "Palauta zoomaus (nyt {percent} %)",
+      "failed": "Tätä asiakirjaa ei voitu näyttää. Se voi olla liian suuri tai suojattu, tai muunnin voi olla varattu; yritä hetken päästä uudelleen.",
+      "zoomLevel": "{percent}%"
+    }
   }
 }
