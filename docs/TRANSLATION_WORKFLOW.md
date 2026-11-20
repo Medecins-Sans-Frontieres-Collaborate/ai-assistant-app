@@ -263,6 +263,61 @@ was, a batch of pages at a time. The rules live in
 - **Where a translation may go** (rules stated once at the top of
   `browser-harness/scripts/pdf_native.py`, tested in `test_pdf_native.py`
   beside it):
+  - _Text drawn as pictures_: PowerPoint, when it may not embed a font,
+    draws each run of text as a flat-coloured picture masked to the shape of
+    the letters, with the real text on top fully transparent in a stand-in
+    font. For such a run the picture is the source: colour and width come
+    from it, it is removed with the text, and lines, spaces and paragraphs
+    are put together from where the ink is, since the transparent text
+    follows the stand-in font's widths. The real font is not in the file, so
+    the translation is set in the usual fonts.
+  - _Left in place_: text that is not translated is never touched and no
+    room runs over it: amounts and page numbers, text at an angle that is
+    not a quarter turn, and the bullet a list item starts with. Each list
+    item is one block.
+  - _Cells_: a block with something drawn the same distance above and below
+    it (the rules of a table row, the edges of a box) is in the middle of a
+    cell. Its room is the cell's whole height and the width free beside it,
+    and its translation is centred in it, so shorter text does not rise to
+    the top and longer text is not shrunk while the cell has space. One-line
+    cells that share a centre with each other or with their column's heading
+    are centred, and neighbouring centred cells share the gap between them.
+  - _Direction_: text turned a quarter turn or upside down (a label running
+    up the side of a box) is translated and set turned the same way, along
+    the box it sits in.
+  - _One translation for the whole document_: pages are translated
+    separately, and a large document in several requests, so what must not
+    vary between them is settled once and passed along (the _document
+    brief_). The target language is pinned down first: a language from the
+    list by its code, one typed in by hand (Patwah, a regional variety) by
+    asking the model which language, variety and spelling it means, and
+    every page is then told to write in exactly that. Names and recurring
+    terms found on the pages (projects, programmes, organisations,
+    acronyms) each get one decision, kept as written or translated and
+    then always the same way, which every page and every later batch of
+    the document follows. A glossary entry outranks the brief, and an
+    earlier decision is never changed by a later batch. A unit that is
+    nothing but a decided term is given its decided wording outright; a
+    longer unit that contains one and does not use it is asked for again
+    once, and a shortening that would lose one is refused (the text is
+    set smaller instead). To steer the
+    decisions ("keep all project names in English"), add it to the
+    instructions for the analyze step.
+  - _Reading direction and scripts_: Arabic, Hebrew and other
+    right-to-left translations are set right to left, each block keeping
+    the left edge it had on the page (the page is not mirrored). Scripts
+    the document font lacks (Chinese, Japanese, Korean, Devanagari, Thai
+    and others) are drawn in the layout engine's own fonts, which have a
+    regular weight only, so bold text in those scripts comes out regular.
+  - _Hyphenation_: a word is divided only as a last resort: where a
+    translation would otherwise be set below 85% of its size and dividing
+    its words lets it be larger, by the hyphenation rules of the target
+    language.
+  - _Line breaks_: lines the author stacked on purpose (an amount, a
+    sponsor and a duration under one another) stay on lines of their own
+    in the translation. They are told from lines that only wrapped by how
+    the file was written, so this applies to files that record where a
+    line wrapped; in other files the lines of a block flow together.
   - _Panels_: a block's room stays inside the filled or outlined shape it
     sits in (a card, a table cell, a coloured box), and a paragraph in such
     a shape may use the shape's width.
@@ -323,6 +378,35 @@ was, a batch of pages at a time. The rules live in
   "Select next N" ticks the next batch, and "Translate N pages" runs the
   ticked pages with the run's own depth and adds them
   (`planTickedBatch`; the same limits as the setup).
+- **Editable download (experimental)**: the review's "Download" button
+  opens a menu: the PDF, and PowerPoint, tagged _Experimental_. The
+  presentation is for refining by hand outside the app: one slide per page
+  of the PDF, the page without its translated text as the slide's
+  background, and every translated block as a text box of its own in the
+  place, size, colour, alignment and direction the layout gave it. Text can
+  be edited; shapes, pictures and table lines cannot, because they are the
+  background. Each slide's notes hold the page's source text. Fonts are
+  named (Arial, Times New Roman), not embedded, and line breaks can differ
+  slightly from the PDF, since the two programs measure text differently;
+  boxes are set to shrink their text when more is typed. Changes made in
+  the file do not come back into the app.
+  - _How it is built_: a render asked for it (`exports: ['pptx']` on
+    `POST /render`) writes it beside the PDF from the same text and looks
+    (`SLIDES` in the layout script), and the answer's `exportUrls` says
+    where it is. So `run.exportUrls` always describes the PDF at
+    `run.pdfUrl`: a later render that was not asked for the format leaves
+    the run without it, and it is built again on the next download. With
+    changes pending, choosing PowerPoint renders first, so the file is never
+    older than what is on screen.
+  - _File names_: every download is named after the source with the
+    language after it, `Report_fr.pdf` / `Report_fr.pptx`
+    (`translatedFileName` in `languages.ts`): a listed language gives its
+    code, a language typed in by hand a slug of its name
+    (`Report_patwah.pdf`).
+  - _Formats are a list_ (`NATIVE_PDF_EXPORT_FORMATS` in `nativePdf.ts`),
+    each with its extension, media type and whether it is experimental; the
+    route, the storage and the menu read it. A format that a source file is
+    translated in directly would join it without the tag.
 - **Removing pages from the download**: `run.removedPages` is what the
   person wants left out, `run.pdfRemovedPages` what the stored PDF leaves
   out (convention in `formattedDocument.ts`). A difference is a pending
@@ -345,10 +429,36 @@ was, a batch of pages at a time. The rules live in
   pending change (`null` = keep as written) and exists only while it differs.
   Text is typed as plain text, on the page or in the block list; inline
   formatting is put back where its words survive (`retagEditedText`).
-- **Zoom**: the page view zooms in steps from 50% to 250%
-  (`PAGE_ZOOM_LEVELS`); 100% is the pane's width up to a normal page.
-  Translated page images are made at 144 dpi so they stay readable zoomed
-  in; the original is rendered again at the zoomed width.
+- **Line breaks**: a line break inside a block is one its author made
+  (BREAKS in the layout script) and is set as one. Enter in either editor
+  types one, and the field says so; the block list shows the original with
+  its breaks, so a person can see where the author broke the lines. A block
+  that is one of the brief's terms takes the brief's wording, which is
+  matched across breaks and so has none: it gets the block's breaks back
+  (`breakLike`), placed where that page's translator put them, else in
+  proportion to the source's lines, at a space or after a slash or hyphen.
+- **Zoom** (`usePageZoom`): the page view zooms from 50% to 250%; 100%
+  is the pane's width up to a normal page. The buttons and Ctrl/Cmd with
+  +, - and 0 step through `PAGE_ZOOM_LEVELS`; Ctrl+wheel and a trackpad
+  pinch over the page zoom smoothly between them. While the keyboard is in
+  the review (or on nothing), those keys zoom the page instead of the
+  browser; elsewhere in the app they are the browser's. Zooming keeps the
+  point under the pointer (or the middle of the view) where it is, as far
+  as the page can scroll. A page larger than its pane can be dragged with
+  the mouse (`usePagePan`); a click on the page outside a block closes the
+  open block. Translated page images are made at 144 dpi so they stay
+  readable zoomed in; the original is rendered again at the zoomed width.
+- **Keyboard**: the page list, the blocks of a page and the
+  Original/Translated switch are one Tab stop each, moved through with the
+  arrow keys, Home and End (`groupKeyTarget`); Enter or Space opens a page
+  or a block. A block opened on the page puts the caret in the field on the
+  page; one opened in the block list puts it in the list. Escape closes the
+  ask box first, then the block, and returns the keyboard to the block it
+  was opened from. With the page pane focused, PageDown and PageUp scroll
+  the page and, past its end, open the next or previous page at its top.
+  Letters typed and text pasted outside a field are never sent to the
+  hidden source-text field (`composerHidden`), and Space on a button stays
+  with the button (`isControlActivation`).
 - **A block's look** (`Formatted/FormattedBlockStyle.tsx`): font size,
   position and text colour of the selected block, in small steps.
   `run.styles[id]` is the look wanted, `run.pdfStyles[id]` the one on the
@@ -402,6 +512,18 @@ is kept in the browser. The conventions are written once, in
   position), written only by the browser. All are read through
   `GET /api/document-translation/native/file?run=&storage=&id=`, under the
   signed-in person's own prefix or with their own Graph token.
+- **Opening a stored run** reads only what the first screen needs: the
+  record, then the image of the page on screen. Page images are named by
+  their content, so each is fetched once per session and kept
+  (`client/services/workflows/runImageLoader.ts`, PAGE IMAGES): the page on
+  screen first, then the pages either side and thumbnails near view, then
+  the rest in the background, at most `MAX_CONCURRENT_IMAGE_LOADS` at a
+  time and never all of them for background loads, so a page that is opened
+  is never queued behind them. The source PDF, several megabytes, loads only
+  when it is first needed (the Original view, an untranslated page or its
+  thumbnail; `usePdfPages` with `onDemand`); the setup still loads it at
+  once to show its pages. A OneDrive folder mints one Graph token for all
+  of a request's calls (`DriveRunFolder`).
 - **In memory once** (`client/services/workflows/nativeRunSession.ts`): the
   workspace can be mounted more than once for a conversation, so the run
   is held in one session per run that every mount subscribes to
