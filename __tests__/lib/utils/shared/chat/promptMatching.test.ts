@@ -1,7 +1,13 @@
 import {
+  MAX_PROMPT_QUERY_CHARS,
   findPromptMatch,
+  groupPromptsForList,
+  promptMatchesQuery,
+  replacePromptTrigger,
   updatePromptListVisibility,
 } from '@/lib/utils/shared/chat/promptMatching';
+
+import type { Prompt } from '@/types/prompt';
 
 import { describe, expect, it } from 'vitest';
 
@@ -35,11 +41,14 @@ describe('promptMatching', () => {
       expect(result.searchTerm).toBe('');
     });
 
-    it('should not match slash in middle of text', () => {
-      const result = findPromptMatch('/email is great');
+    // Prompt names have spaces, so the search does too: the list shows
+    // only while a name holds it (usePromptSelection), so ordinary text
+    // after a "/" simply finds nothing.
+    it('keeps spaces in the search, for names of several words', () => {
+      const result = findPromptMatch('/Weekly status');
 
-      expect(result.matched).toBe(false);
-      expect(result.searchTerm).toBe('');
+      expect(result.matched).toBe(true);
+      expect(result.searchTerm).toBe('Weekly status');
     });
 
     it('should not match slash with space after', () => {
@@ -84,12 +93,9 @@ describe('promptMatching', () => {
       expect(result.searchTerm).toBe('camelCasePrompt');
     });
 
-    it('should match only word characters after slash', () => {
-      // Hyphen is not a word character, so pattern doesn't match at end
-      const result = findPromptMatch('/email-test');
-
-      expect(result.matched).toBe(false); // Pattern requires word chars at END of string
-      expect(result.searchTerm).toBe('');
+    it('keeps hyphens and accented letters in the search', () => {
+      expect(findPromptMatch('/email-test').searchTerm).toBe('email-test');
+      expect(findPromptMatch('/Résumé').searchTerm).toBe('Résumé');
     });
 
     it('should not match slash followed by space', () => {
@@ -128,11 +134,17 @@ describe('promptMatching', () => {
       expect(result.searchTerm).toBe('EmAiL');
     });
 
-    it('should match after double slash', () => {
-      const result = findPromptMatch('//email');
+    it('does not match a slash right after another character', () => {
+      // "and/", "//" and the end of a URL or path are not the trigger.
+      expect(findPromptMatch('//email').matched).toBe(false);
+      expect(findPromptMatch('this and/').matched).toBe(false);
+      expect(findPromptMatch('see example.com/docs').matched).toBe(false);
+    });
 
-      expect(result.matched).toBe(true);
-      expect(result.searchTerm).toBe('email'); // Removes the leading slash
+    it('stops matching past the longest search', () => {
+      const atLimit = 'a'.repeat(MAX_PROMPT_QUERY_CHARS);
+      expect(findPromptMatch(`/${atLimit}`).matched).toBe(true);
+      expect(findPromptMatch(`/${atLimit}a`).matched).toBe(false);
     });
 
     it('should handle text with multiple potential patterns', () => {
@@ -221,8 +233,8 @@ describe('promptMatching', () => {
       expect(result.inputValue).toBe('');
     });
 
-    it('should hide list when slash is not at end', () => {
-      const result = updatePromptListVisibility('/email is great');
+    it('should hide list when a line follows the slash', () => {
+      const result = updatePromptListVisibility('/email\nis great');
 
       expect(result.showList).toBe(false);
       expect(result.inputValue).toBe('');
@@ -373,6 +385,61 @@ describe('promptMatching', () => {
       result = updatePromptListVisibility('/format');
       expect(result.showList).toBe(true);
       expect(result.inputValue).toBe('format');
+    });
+  });
+
+  describe('replacePromptTrigger', () => {
+    it('replaces "/" and its search, keeping what came before', () => {
+      expect(replacePromptTrigger('Notes: /exec', 'Summarise:')).toBe(
+        'Notes: Summarise:',
+      );
+      expect(replacePromptTrigger('/Weekly sta', 'Body')).toBe('Body');
+      expect(replacePromptTrigger('Line one\n/x', 'Body')).toBe(
+        'Line one\nBody',
+      );
+    });
+
+    it('leaves text without the trigger alone', () => {
+      expect(replacePromptTrigger('this and/', 'Body')).toBe('this and/');
+    });
+  });
+
+  describe('promptMatchesQuery and groupPromptsForList', () => {
+    const prompt = (id: string, name: string, folderId: string | null) =>
+      ({ id, name, content: '', folderId }) as unknown as Prompt;
+
+    it('matches names ignoring case and accents', () => {
+      expect(
+        promptMatchesQuery(prompt('1', 'Résumé check', null), 'resume'),
+      ).toBe(true);
+      expect(promptMatchesQuery(prompt('1', 'Email', null), 'mail')).toBe(true);
+      expect(promptMatchesQuery(prompt('1', 'Email', null), 'memo')).toBe(
+        false,
+      );
+    });
+
+    it('orders by folder, then loose prompts; an unknown folder counts as none', () => {
+      const folders = [
+        { id: 'f2', name: 'Two', type: 'prompt' as const },
+        { id: 'chat', name: 'Chats', type: 'chat' as const },
+        { id: 'f1', name: 'One', type: 'prompt' as const },
+      ];
+      const { groups, ordered } = groupPromptsForList(
+        [
+          prompt('a', 'A', null),
+          prompt('b', 'B', 'f1'),
+          prompt('c', 'C', 'f2'),
+          prompt('d', 'D', 'deleted'),
+          prompt('e', 'E', 'chat'),
+        ],
+        folders,
+      );
+      expect(groups.map((group) => group.folder?.name ?? null)).toEqual([
+        'Two',
+        'One',
+        null,
+      ]);
+      expect(ordered.map((p) => p.name)).toEqual(['C', 'B', 'A', 'D', 'E']);
     });
   });
 });
