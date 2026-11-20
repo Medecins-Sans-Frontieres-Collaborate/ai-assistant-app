@@ -31,6 +31,7 @@
  *  - Positions are page points from the top-left corner; the screen places
  *    them as percentages of the page (see {@link unitBox}).
  */
+import { nativeUploadExtension } from '@/lib/utils/shared/translation/nativeFormats';
 import {
   NATIVE_PDF_DEFAULT_DEPTH,
   NATIVE_PDF_DEFAULT_REFIT_ROUNDS,
@@ -50,6 +51,7 @@ import {
   sanitizeUnitStyle,
   visibleLength,
 } from '@/lib/utils/shared/translation/nativePdf';
+import type { NativeRunRef } from '@/lib/utils/shared/translation/nativeRunStorage';
 
 /**
  * How Document mode produces its result. `text` sends the file through
@@ -101,6 +103,11 @@ export interface FormattedDocumentRun extends NativePdfRunReport {
   dismissed: string[];
   /** Batches put into this run so far; absent on runs of a single batch. */
   batches?: number;
+  /**
+   * A presentation: whether its speaker notes were translated (as the
+   * person chose when it started). Absent for a PDF.
+   */
+  translateNotes?: boolean;
   /** Unit id to the look the person wants (see the conventions). */
   styles?: Record<string, NativePdfUnitStyle>;
   /** Unit id to the look the last render used. */
@@ -118,13 +125,36 @@ export interface FormattedDocumentRun extends NativePdfRunReport {
 
 export { NATIVE_PDF_DEFAULT_DEPTH, NATIVE_PDF_MAX_PAGES };
 
+/**
+ * A presentation being translated in the background (THE JOB CONVENTION in
+ * deckRunJob.ts), as workflow state remembers it: enough to follow the job
+ * again after a reload, and to turn its batches into the run.
+ */
+export interface FormattedPendingJob {
+  /** Where the job's run is stored. */
+  access: Pick<NativeRunRef, 'runId' | 'backend' | 'keyId'>;
+  sourceUrl: string;
+  sourceName: string;
+  /** Display label of the target language. */
+  targetLanguage: string;
+  depth: NativePdfDepth;
+  /** The job adds slides to the run stored when it started. */
+  addsToBase: boolean;
+  /** Epoch milliseconds it started at. */
+  startedAt: number;
+}
+
 /** Why a formatted run cannot start. */
-export type FormattedBlocker = 'no-document' | 'not-pdf' | 'no-language';
+export type FormattedBlocker =
+  | 'no-document'
+  | 'unsupported-format'
+  | 'no-language';
 
 /**
  * Whether the loaded document can be translated with its formatting kept.
- * It needs a PDF kept on the server and any target language: the language
- * model translates, so custom languages work too.
+ * It needs a PDF or a presentation (NATIVE_UPLOAD_EXTENSIONS) kept on the
+ * server and any target language: the language model translates, so custom
+ * languages work too.
  *
  * @param document - The uploaded document's reference, if any.
  * @param targetLanguage - Display label of the target language, if set.
@@ -134,8 +164,8 @@ export function formattedEligibility(
   targetLanguage: string | undefined,
 ): { ok: true } | { ok: false; reason: FormattedBlocker } {
   if (!document?.url) return { ok: false, reason: 'no-document' };
-  if (!document.name.toLowerCase().endsWith('.pdf')) {
-    return { ok: false, reason: 'not-pdf' };
+  if (!nativeUploadExtension(document.name)) {
+    return { ok: false, reason: 'unsupported-format' };
   }
   if (!targetLanguage?.trim()) return { ok: false, reason: 'no-language' };
   return { ok: true };
@@ -505,6 +535,9 @@ export function applyRenderReport(
     ],
     fonts: report.fonts,
     pdfUrl: report.pdfUrl,
+    // A presentation's translated deck, built by the same render; an
+    // earlier one would no longer match the PDF.
+    documentUrl: report.documentUrl,
     // Only what this render built describes its PDF.
     exportUrls: report.exportUrls,
     // The render used the looks of the run as it was sent.
@@ -617,6 +650,7 @@ export function combineRuns(
     fonts: last.fonts,
     refitRounds: last.refitRounds,
     pdfUrl: last.pdfUrl,
+    documentUrl: last.documentUrl,
     exportUrls: undefined,
     targetLanguage: last.targetLanguage,
     depth: last.depth,
@@ -872,6 +906,8 @@ export function runFromReport(
     pdfStyles: report.styles ?? {},
     ...(report.brief ? { brief: report.brief } : {}),
     pdfUrl: report.pdfUrl,
+    ...(report.format ? { format: report.format } : {}),
+    ...(report.documentUrl ? { documentUrl: report.documentUrl } : {}),
     pageImages: report.pageImages,
     sourceId: report.sourceId,
     unitsId: report.unitsId,
