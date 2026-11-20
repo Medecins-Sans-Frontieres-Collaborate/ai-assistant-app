@@ -70,27 +70,27 @@ export interface NativeDeckJobView {
 /** The render queue as the job route reports it. */
 export interface NativeDeckQueue {
   running: number;
-  queued: { interactive: number; translation: number };
+  queued: { interactive: number; background: number };
   maxConcurrent: number;
-  averageRunMs: { interactive: number | null; translation: number | null };
+  averageRunMs: { interactive: number | null; background: number | null };
 }
 
 /**
  * How long a job with `ahead` jobs before it may wait for a slot: the
- * rounds of `maxConcurrent` jobs ahead of it, each taking the translation
+ * rounds of `maxConcurrent` jobs ahead of it, each taking the background
  * lane's average.
  *
  * @param ahead - Jobs ahead (`current.queueAhead`).
  * @param queue - The queue the job waits in.
  * @returns Milliseconds; null when nothing is ahead or no job has finished
  *   yet to go by.
- * @example queueWaitEstimateMs(4, { maxConcurrent: 2, averageRunMs: { translation: 30_000 } }) // 60_000
+ * @example queueWaitEstimateMs(4, { maxConcurrent: 2, averageRunMs: { background: 30_000 } }) // 60_000
  */
 export function queueWaitEstimateMs(
   ahead: number,
   queue: Pick<NativeDeckQueue, 'maxConcurrent' | 'averageRunMs'>,
 ): number | null {
-  const average = queue.averageRunMs.translation;
+  const average = queue.averageRunMs.background;
   if (!(ahead > 0) || average === null || !(average > 0)) return null;
   const rounds = Math.ceil(ahead / Math.max(1, queue.maxConcurrent));
   return rounds * average;
