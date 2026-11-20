@@ -13,17 +13,20 @@
  * (makeServiceCopy): macros never leave the app's storage. Every rebuild
  * starts from the original deck.
  */
+import {
+  documentPagePictures,
+  documentPdf,
+} from '@/lib/services/documents/render/documentPages';
 import { RenderBusyError } from '@/lib/services/documents/render/renderQueue';
 import { getRenderService } from '@/lib/services/documents/render/renderService';
+import { runSandboxScript } from '@/lib/services/documents/sandbox/sandboxScriptRunner';
 
-import Hasher from '@/lib/utils/app/hash';
 import { NativeDeckFormat } from '@/lib/utils/shared/translation/nativeFormats';
 import { NativePdfFitReport } from '@/lib/utils/shared/translation/nativePdf';
 
 import { makeServiceCopy, mergeTranslatedDeck } from '../../deck/deckMerge';
 import { omitDeckSlides } from '../../deck/deckSlides';
 import { DECK_SANDBOX_SCRIPT } from '../pptxNativeScript';
-import { runSandboxScript } from '../sandboxScriptRunner';
 import {
   DrawnUnit,
   SLIDE_RENDER_DPI,
@@ -48,9 +51,6 @@ const SOURCE_FILENAME = 'source.pptx';
 const UNITS_FILENAME = 'units.json';
 const DECK_CONTENT_TYPE =
   'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-
-/** Source slide pictures kept between an extraction and its rebuilds. */
-const SOURCE_PICTURES_KEPT = 120;
 
 /** A deck the script refused to open, with its typed reason. */
 export class DeckRefusedError extends Error {
@@ -78,24 +78,6 @@ interface DeckExtraction {
   pageCount: number;
   pages: Array<{ page: number }>;
   units: DeckUnitRecord[];
-}
-
-/**
- * The export filter for a deck: hidden slides included, so PDF page n is
- * slide n (THE SLIDE NUMBER CONVENTION), and optionally only some slides,
- * in ascending order.
- */
-export function deckPdfExport(slides?: readonly number[]): string {
-  const options: Record<string, { type: string; value: string }> = {
-    ExportHiddenSlides: { type: 'boolean', value: 'true' },
-  };
-  if (slides?.length) {
-    options.PageRange = {
-      type: 'string',
-      value: [...new Set(slides)].sort((a, b) => a - b).join(','),
-    };
-  }
-  return `pdf:impress_pdf_Export:${JSON.stringify(options)}`;
 }
 
 /** A private work folder, removed whatever happens. */
@@ -141,106 +123,29 @@ function drawnUnits(
     .map((unit) => ({ n: unit.n, box: unit[box] }));
 }
 
-// Pictures of source slides, by the copy's hash and slide: an extraction
-// makes them and the rebuilds of its rounds use them for the check.
-const sourcePictures = new Map<string, Uint8Array>();
-
-function keepPicture(key: string, png: Uint8Array): void {
-  sourcePictures.delete(key);
-  sourcePictures.set(key, png);
-  while (sourcePictures.size > SOURCE_PICTURES_KEPT) {
-    const oldest = sourcePictures.keys().next().value;
-    if (oldest === undefined) break;
-    sourcePictures.delete(oldest);
-  }
-}
-
 /**
- * Renders some slides of a deck and pictures them.
- *
- * @param deckPath - A plain `.pptx` copy.
- * @param slides - 1-based slides; absent renders and pictures every slide.
- * @param dir - Work folder.
- * @returns The PDF's path and each slide's PNG by slide number.
- */
-async function renderSlides(
-  deckPath: string,
-  slides: number[] | undefined,
-  dir: string,
-  context: FormatCallContext,
-  pictured: number[],
-): Promise<{ pdfPath: string; pictures: Map<number, Uint8Array> }> {
-  const render = getRenderService();
-  const pdfPath = await render.convert({
-    inputPath: deckPath,
-    type: 'pptx',
-    convertTo: deckPdfExport(slides),
-    outputDir: path.join(dir, `render-${path.basename(deckPath, '.pptx')}`),
-    lane: 'background',
-    signal: context.signal,
-    onPosition: context.onQueue,
-  });
-  const order = slides ? [...new Set(slides)].sort((a, b) => a - b) : undefined;
-  // PDF page of each slide: with a range, the slides in ascending order.
-  const pdfPageOf = (slide: number) =>
-    order ? order.indexOf(slide) + 1 : slide;
-  const wanted = pictured.filter((slide) => pdfPageOf(slide) > 0);
-  const pngs = wanted.length
-    ? await render.rasterize({
-        pdfPath,
-        pages: wanted.map(pdfPageOf),
-        dpi: SLIDE_RENDER_DPI,
-        outputDir: path.join(
-          dir,
-          `pictures-${path.basename(deckPath, '.pptx')}`,
-        ),
-        lane: 'background',
-        signal: context.signal,
-        onPosition: context.onQueue,
-      })
-    : new Map<number, string>();
-  const pictures = new Map<number, Uint8Array>();
-  for (const slide of wanted) {
-    const file = pngs.get(pdfPageOf(slide));
-    if (file) pictures.set(slide, await fs.promises.readFile(file));
-  }
-  return { pdfPath, pictures };
-}
-
-/**
- * Pictures of source slides, made once per copy and slide.
+ * Pictures of source slides, made once per copy and slide (the page
+ * pictures are kept by the documents layer).
  *
  * @param servicePath - The plain copy of the source deck.
  * @param slides - 1-based slides.
  */
-async function sourceSlidePictures(
+function sourceSlidePictures(
   servicePath: string,
   slides: number[],
   dir: string,
   context: FormatCallContext,
 ): Promise<Map<number, Uint8Array>> {
-  const hash = Hasher.sha256(await fs.promises.readFile(servicePath));
-  const found = new Map<number, Uint8Array>();
-  const missing: number[] = [];
-  for (const slide of slides) {
-    const cached = sourcePictures.get(`${hash}:${slide}`);
-    if (cached) found.set(slide, cached);
-    else missing.push(slide);
-  }
-  if (missing.length > 0) {
-    const { pictures } = await renderSlides(
-      servicePath,
-      missing,
-      dir,
-      context,
-      missing,
-    );
-    for (const [slide, png] of pictures) {
-      keepPicture(`${hash}:${slide}`, png);
-      found.set(slide, png);
-    }
-  }
-  return found;
+  return documentPagePictures({
+    inputPath: servicePath,
+    type: 'pptx',
+    pages: slides,
+    dpi: SLIDE_RENDER_DPI,
+    lane: 'background',
+    workDir: dir,
+    signal: context.signal,
+    onPosition: context.onQueue,
+  });
 }
 
 /**
@@ -264,17 +169,16 @@ async function pictureResult(input: {
   const { dir, context, kept, pictured } = input;
   // The rendered PDF holds the kept slides in order; they are pictured by
   // their place in it and each picture named by its source slide.
-  const rendered = await renderSlides(
-    input.renderPath,
-    undefined,
-    dir,
-    context,
-    [],
-  );
+  const renderedPdf = await documentPdf(input.renderPath, 'pptx', {
+    lane: 'background',
+    workDir: dir,
+    signal: context.signal,
+    onPosition: context.onQueue,
+  });
   const pdfPages = pictured.map((slide) => kept.indexOf(slide) + 1);
   const translatedPictures = pdfPages.length
     ? await getRenderService().rasterize({
-        pdfPath: rendered.pdfPath,
+        pdfPath: renderedPdf,
         pages: pdfPages,
         dpi: SLIDE_RENDER_DPI,
         outputDir: path.join(dir, 'translated-pictures'),
@@ -306,7 +210,7 @@ async function pictureResult(input: {
       };
     }),
   );
-  return { pdf: await fs.promises.readFile(rendered.pdfPath), outputs };
+  return { pdf: await fs.promises.readFile(renderedPdf), outputs };
 }
 
 /**
