@@ -1,11 +1,18 @@
 /**
- * The presentation engine's text operations (deck_engine.py, its
- * CONVENTIONS): `extract` lists the units text work reads and `apply`
- * writes text and style edits to them, starting from the original deck
- * every time. Translation is one user; any feature that rewrites a deck's
- * text (a brand fix, a generated deck) is another.
+ * The presentation engine's operations (deck_engine.py, its CONVENTIONS):
+ * `extract` lists the units text work reads and `apply` writes text and
+ * style edits to them, starting from the original deck every time.
+ * Translation is one user; any feature that rewrites a deck's text (a
+ * brand fix, a generated deck) is another. `readDeckLayouts` lists what a
+ * template offers to build with and `composeDeck` builds a deck from a
+ * plan over it (deckPlan.ts).
  */
 import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflowUsage';
+
+import type {
+  DeckLayouts,
+  DeckPlan,
+} from '@/lib/utils/shared/documents/deckPlan';
 
 import { runSandboxScript } from '../sandbox/sandboxScriptRunner';
 import { DECK_ENGINE_SCRIPT } from './deckEngineScript';
@@ -135,5 +142,106 @@ export async function applyDeckEdits(
   return {
     deck: edited,
     report: JSON.parse(strFromU8(report)) as DeckEditReport,
+  };
+}
+
+/** What composing reports: each slide built, and each unit's fit. */
+export interface DeckComposeReport {
+  slides: Array<{
+    page: number;
+    layout: string;
+    /** Placeholder keys filled. */
+    filled: string[];
+    /** Whether its speaker notes were kept (a template without a notes
+     * master keeps none). */
+    notes: boolean;
+  }>;
+  units: DeckEditReport['units'];
+}
+
+/**
+ * The layouts of a template (.pptx or .potx) and the placeholders a plan
+ * may fill.
+ *
+ * @throws DocumentRefusedError when the template cannot be opened.
+ */
+export async function readDeckLayouts(
+  template: Buffer,
+  usage?: WorkflowUsageCollector,
+): Promise<DeckLayouts> {
+  const run = await runSandboxScript(
+    'layouts',
+    [
+      {
+        filename: SOURCE_FILENAME,
+        data: template,
+        mimeType: DECK_CONTENT_TYPE,
+      },
+      jobInput({ source: SOURCE_FILENAME }),
+    ],
+    usage,
+    DECK_ENGINE_SCRIPT,
+  );
+  throwIfRefused(run.files);
+  const layouts = run.files.get('layouts.json');
+  if (!layouts) throw new Error('The deck engine returned no layouts');
+  return JSON.parse(strFromU8(layouts)) as DeckLayouts;
+}
+
+/**
+ * Builds a deck from a template and a plan checked against its layouts
+ * (checkDeckPlan): the template's own slides removed, its masters and
+ * layouts kept, the text fitted.
+ *
+ * @param pictures - The pictures the plan places, by the keys it uses
+ *   (PNG, JPEG or GIF).
+ * @param options.language - BCP 47 tag the text is marked with.
+ * @returns The deck (a .pptx, also from a .potx) and the engine's report.
+ * @throws DocumentRefusedError when the template cannot be opened or the
+ *   plan does not match it (code BAD_PLAN).
+ */
+export async function composeDeck(
+  template: Buffer,
+  plan: DeckPlan,
+  pictures: ReadonlyMap<string, Uint8Array>,
+  options: { language?: string } = {},
+  usage?: WorkflowUsageCollector,
+): Promise<{ deck: Uint8Array; report: DeckComposeReport }> {
+  const images: Record<string, string> = {};
+  const pictureFiles = [...pictures.entries()].map(([key, data], index) => {
+    const filename = `picture${index + 1}.bin`;
+    images[key] = filename;
+    return {
+      filename,
+      data: Buffer.from(data),
+      mimeType: 'application/octet-stream',
+    };
+  });
+  const run = await runSandboxScript(
+    'compose',
+    [
+      {
+        filename: SOURCE_FILENAME,
+        data: template,
+        mimeType: DECK_CONTENT_TYPE,
+      },
+      ...pictureFiles,
+      jobInput({
+        source: SOURCE_FILENAME,
+        plan,
+        images,
+        ...(options.language ? { language: options.language } : {}),
+      }),
+    ],
+    usage,
+    DECK_ENGINE_SCRIPT,
+  );
+  throwIfRefused(run.files);
+  const deck = run.files.get('deck.pptx');
+  const report = run.files.get('report.json');
+  if (!deck || !report) throw new Error('The deck engine returned no deck');
+  return {
+    deck,
+    report: JSON.parse(strFromU8(report)) as DeckComposeReport,
   };
 }
