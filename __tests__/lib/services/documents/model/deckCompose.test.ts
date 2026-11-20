@@ -420,7 +420,7 @@ describe.skipIf(!pythonHas(['lxml']))('composeDeck', () => {
       name.startsWith('ppt/media/'),
     );
 
-  it('sends each picture under a name the sandbox takes, by what it is', async () => {
+  it('sends each picture under a name the sandbox takes, and places it as what it is', async () => {
     const jpeg = await sharp({
       create: { width: 40, height: 20, channels: 3, background: '#0f7c80' },
     })
@@ -428,7 +428,7 @@ describe.skipIf(!pythonHas(['lxml']))('composeDeck', () => {
       .toBuffer();
     for (const [picture, extension] of [
       [LOGO, 'png'],
-      [jpeg, 'jpg'],
+      [jpeg, 'jpeg'],
     ] as const) {
       const { deck } = await composeDeck(
         fixture('template.potx'),
