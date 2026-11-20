@@ -1,15 +1,18 @@
 /**
  * A person's one active presentation run (THE JOB CONVENTION in
- * deckRunJob.ts), kept in app storage under their own prefix whatever
- * backend the run's files use, so every instance sees the same slot.
+ * lib/services/backgroundJobs/backgroundJobs.ts), kept in app storage
+ * under their own prefix whatever backend the run's files use, so every
+ * instance sees the same slot. Stored as the runner's slots
+ * (BlobJobSlots), which also read the single record kept here before.
  */
 import { Session } from 'next-auth';
 
+import { BlobJobSlots } from '@/lib/services/backgroundJobs/blobJobSlots';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
-import { BlobProperty, BlobStorage } from '@/lib/utils/server/blob/blob';
-import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
+import { BlobStorage } from '@/lib/utils/server/blob/blob';
+import { NativeRunBackend } from '@/lib/utils/shared/translation/nativeRunStorage';
 
 import { DeckRunSlot, DeckRunSlotRecord } from './deckRunJob';
 
@@ -18,13 +21,10 @@ const SLOT_NAME = 'translation-runs/active-deck-run.json';
 
 /** The slot in a person's app storage. */
 export class BlobDeckRunSlot implements DeckRunSlot {
-  private readonly name: string;
+  private readonly slots: BlobJobSlots;
 
-  constructor(
-    private readonly storage: BlobStorage,
-    userId: string,
-  ) {
-    this.name = `${userId}/${SLOT_NAME}`;
+  constructor(storage: BlobStorage, userId: string) {
+    this.slots = new BlobJobSlots(storage, userId, SLOT_NAME);
   }
 
   /** The signed-in person's slot. */
@@ -36,32 +36,31 @@ export class BlobDeckRunSlot implements DeckRunSlot {
   }
 
   async read(): Promise<DeckRunSlotRecord | null> {
-    try {
-      const data = (await this.storage.get(
-        this.name,
-        BlobProperty.BLOB,
-      )) as Buffer;
-      const record = JSON.parse(data.toString('utf-8')) as DeckRunSlotRecord;
-      return typeof record?.runId === 'string' &&
-        typeof record.heartbeatAt === 'number'
-        ? record
-        : null;
-    } catch (error) {
-      if (isBlobNotFoundError(error) || error instanceof SyntaxError) {
-        return null;
-      }
-      throw error;
-    }
+    const [held] = await this.slots.read();
+    if (!held) return null;
+    return {
+      runId: held.key,
+      backend: (held.data?.backend as NativeRunBackend | undefined) ?? 'app',
+      sourceName: held.label,
+      heartbeatAt: held.heartbeatAt,
+    };
   }
 
   async write(record: DeckRunSlotRecord): Promise<void> {
-    await this.storage.upload(this.name, Buffer.from(JSON.stringify(record)), {
-      blobHTTPHeaders: { blobContentType: 'application/json' },
+    // One deck run per person: the record replaces any other.
+    const others = await this.slots.read();
+    for (const other of others) {
+      if (other.key !== record.runId) await this.slots.release(other.key);
+    }
+    await this.slots.write({
+      key: record.runId,
+      label: record.sourceName,
+      heartbeatAt: record.heartbeatAt,
+      data: { backend: record.backend },
     });
   }
 
   async release(runId: string): Promise<void> {
-    const held = await this.read();
-    if (held?.runId === runId) await this.storage.deleteIfExists(this.name);
+    await this.slots.release(runId);
   }
 }
