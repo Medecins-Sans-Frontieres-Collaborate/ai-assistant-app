@@ -5,6 +5,7 @@ import {
   IconMap,
   IconMessages,
   IconPalette,
+  IconPresentation,
   IconReportMoney,
   IconTable,
 } from '@tabler/icons-react';
@@ -34,7 +35,8 @@ export interface WorkflowMeta {
     | 'grants'
     | 'formFill'
     | 'channelDrafter'
-    | 'brandReview';
+    | 'brandReview'
+    | 'deckBuilder';
 }
 
 export const WORKFLOW_META: Record<ConversationWorkflowType, WorkflowMeta> = {
@@ -77,6 +79,11 @@ export const WORKFLOW_META: Record<ConversationWorkflowType, WorkflowMeta> = {
     type: 'brand-review',
     icon: IconPalette,
     i18nKey: 'brandReview',
+  },
+  'deck-builder': {
+    type: 'deck-builder',
+    icon: IconPresentation,
+    i18nKey: 'deckBuilder',
   },
 };
 
