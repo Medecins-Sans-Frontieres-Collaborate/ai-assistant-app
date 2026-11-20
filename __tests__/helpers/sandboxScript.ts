@@ -8,9 +8,10 @@
  * The Python used is DOCUMENT_SCRIPT_PYTHON when set (a virtual
  * environment with PyMuPDF, say), else python3.
  */
-import type {
+import {
   SandboxInputFile,
   SandboxScript,
+  assertSandboxInputNames,
 } from '@/lib/services/documents/sandbox/sandboxScriptRunner';
 
 import { execFileSync } from 'child_process';
@@ -58,6 +59,9 @@ export function runLocalScript(
 ): Map<string, Uint8Array> {
   const archive = script.archives[command];
   if (!archive) throw new Error(`${script.filename} has no ${command}`);
+  // Refuse what the sandbox refuses, so a test cannot pass on a name it
+  // would turn away.
+  assertSandboxInputNames(inputs);
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'sandbox-script-'));
   try {
     fs.writeFileSync(path.join(dir, script.filename), script.source);
