@@ -10,6 +10,7 @@ import {
 import { defineBlobEntity } from '@/lib/services/agentAccess/blobEntityStore';
 import { getPayloadCache } from '@/lib/services/agentAccess/payloadCache';
 import {
+  AGENT_ACCESS_BRAND_BOOKS_PREFIX,
   AGENT_ACCESS_CATALOG_OAUTH_PREFIX,
   AGENT_ACCESS_CHANNEL_PROFILES_PREFIX,
   AGENT_ACCESS_CHANNEL_SETS_PREFIX,
@@ -24,6 +25,10 @@ import {
   AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
   AGENT_ACCESS_SKILLS_PREFIX,
+  AdminBrandBook,
+  AdminBrandBookHistoryEntry,
+  AdminBrandBookHistoryEntrySchema,
+  AdminBrandBookSchema,
   AdminChannelProfile,
   AdminChannelProfileHistoryEntry,
   AdminChannelProfileHistoryEntrySchema,
@@ -38,6 +43,7 @@ import {
   AgentAccessHistoryEntrySchema,
   AgentAccessRule,
   AgentAccessRuleSchema,
+  BRAND_BOOK_SOURCE,
   CATALOG_OAUTH_SOURCE,
   CHANNEL_PROFILE_SOURCE,
   CHANNEL_SET_SOURCE,
@@ -87,6 +93,7 @@ import {
   PromptAgentHistoryEntrySchema,
   PromptAgentSchema,
   SKILL_SOURCE,
+  brandBookBlobPath,
   canonicalAgentKey,
   catalogOauthBlobPath,
   channelProfileBlobPath,
@@ -254,6 +261,19 @@ export interface StoredFormTemplate {
   canonicalKey: string;
   blobPath: string;
   record: AdminFormTemplate;
+  etag: string;
+}
+
+export interface StoredBrandBook {
+  /** `brand-book::<id>`, through delegation and rules unchanged. */
+  canonicalKey: string;
+  blobPath: string;
+  record: AdminBrandBook;
+  etag: string;
+}
+
+export interface BrandBookReadResult {
+  record: AdminBrandBook;
   etag: string;
 }
 
@@ -654,6 +674,20 @@ const formTemplateEntity = defineBlobEntity<
   schema: AdminFormTemplateSchema,
   historySchema: AdminFormTemplateHistoryEntrySchema,
   labelBase: 'FormTemplate',
+});
+
+const brandBookEntity = defineBlobEntity<
+  AdminBrandBook,
+  AdminBrandBookHistoryEntry
+>({
+  logNoun: 'brand-book',
+  errorNoun: 'brand book',
+  source: BRAND_BOOK_SOURCE,
+  listPrefix: AGENT_ACCESS_BRAND_BOOKS_PREFIX,
+  blobPath: brandBookBlobPath,
+  schema: AdminBrandBookSchema,
+  historySchema: AdminBrandBookHistoryEntrySchema,
+  labelBase: 'BrandBook',
 });
 
 const channelProfileEntity = defineBlobEntity<
@@ -1252,6 +1286,52 @@ export function writeFormTemplateHistoryEntry(
   entry: AdminFormTemplateHistoryEntry,
 ): Promise<void> {
   return formTemplateEntity.writeHistory(storage, entry);
+}
+
+/** Every stored brand book; an unreadable one is skipped and logged. */
+export function listAllBrandBooks(
+  storage: BlobStorage,
+): Promise<StoredBrandBook[]> {
+  return brandBookEntity.listAll(storage);
+}
+
+/** One brand book, or null when there is none with the id. */
+export function readBrandBook(
+  storage: BlobStorage,
+  id: string,
+): Promise<BrandBookReadResult | null> {
+  return brandBookEntity.read(storage, id);
+}
+
+/**
+ * Writes a brand book: a create with `ifMatchEtag` null, an update with
+ * the ETag it was read with.
+ *
+ * @returns The new ETag.
+ * @throws AgentAccessConflictError when another admin changed it first.
+ */
+export function writeBrandBook(
+  storage: BlobStorage,
+  record: AdminBrandBook,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  return brandBookEntity.write(storage, record, ifMatchEtag);
+}
+
+/** Deletes a brand book; false when there was none. */
+export function deleteBrandBook(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  return brandBookEntity.remove(storage, id, ifMatchEtag);
+}
+
+export function writeBrandBookHistoryEntry(
+  storage: BlobStorage,
+  entry: AdminBrandBookHistoryEntry,
+): Promise<void> {
+  return brandBookEntity.writeHistory(storage, entry);
 }
 
 /* ------------------------------------------------------------------ */
