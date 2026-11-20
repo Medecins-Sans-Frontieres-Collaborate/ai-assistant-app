@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { FileProcessingService } from '@/lib/services/chat/FileProcessingService';
 import { isDocumentIntelligenceConfigured } from '@/lib/services/documentIntelligence/client';
+import { renderErrorResponse } from '@/lib/services/presentationRender/renderErrorResponse';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { isBlobUrlOwnedByUser } from '@/lib/utils/server/file/blobOwnership';
@@ -127,6 +128,8 @@ export async function POST(req: NextRequest): Promise<Response> {
         { status: 422, headers: { 'Content-Type': 'application/json' } },
       );
     }
+    const renderAnswer = renderErrorResponse(e);
+    if (renderAnswer) return renderAnswer;
     // Error message can surface user-provided URLs / filenames from blob
     // download failures — sanitize before logging to prevent log forging.
     console.error('[api/file/process] Processing failed:', sanitizeForLog(e));
