@@ -34,6 +34,7 @@ import {
   NativePdfStreamEvent,
   nativePdfLimits,
   parsePageSelection,
+  sanitizeBrief,
   sanitizeStepInstructions,
 } from '@/lib/utils/shared/translation/nativePdf';
 
@@ -105,6 +106,10 @@ export async function GET() {
  *   depth           optional "quick" (default) or "reviewed"
  *   glossaryEntries optional JSON array of personal glossary entries
  *   glossaryGuideIds optional JSON array of organization glossary ids
+ *   brief           optional JSON: the document brief an earlier request for
+ *                   this document returned (its language and the names and
+ *                   terms already decided), so every request translates
+ *                   the same way; the result returns it with additions
  *   modelId         optional workflow model
  *   refitRounds     optional 0..NATIVE_PDF_MAX_REFIT_ROUNDS
  *   runId           the run the files belong to (a UUID the client made
@@ -251,6 +256,7 @@ export async function POST(req: NextRequest) {
         maxRefitRounds: requestedRounds,
         depth: depth as NativePdfDepth,
         glossaryEntries: glossary.entries,
+        brief: sanitizeBrief(jsonField(form, 'brief')),
         onStep: (step) => send({ type: 'step', ...step }),
         signal: req.signal,
         usage,
