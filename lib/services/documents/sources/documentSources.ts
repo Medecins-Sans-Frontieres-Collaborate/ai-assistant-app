@@ -19,14 +19,24 @@ import {
   isValidDocumentSource,
 } from '@/lib/utils/shared/documents/documentSource';
 
+/** A source's file as read. */
+export interface DocumentFile {
+  data: Buffer;
+  /**
+   * Its real type (extension, no dot): the source's, unless the store holds
+   * it as another (an original kept in a legacy format).
+   */
+  type: string;
+}
+
 /** Reads one kind of source. */
 export interface DocumentSourceReader {
   kind: string;
   /**
-   * The file's bytes, or null when this person has no such file. Never
-   * throws for a missing file; throws when the store fails.
+   * The file, or null when this person has no such file. Never throws for
+   * a missing file; throws when the store fails.
    */
-  read(session: Session, source: DocumentSource): Promise<Buffer | null>;
+  read(session: Session, source: DocumentSource): Promise<DocumentFile | null>;
 }
 
 /** Raised for a source whose kind no reader handles. */
@@ -53,7 +63,7 @@ export function hasDocumentSource(kind: string): boolean {
 }
 
 /**
- * The bytes of a source, for this person.
+ * The file of a source, for this person.
  *
  * @returns The file, or null when it is malformed or this person has no
  *   such file.
@@ -63,7 +73,7 @@ export function hasDocumentSource(kind: string): boolean {
 export async function readDocumentSource(
   session: Session,
   source: DocumentSource,
-): Promise<Buffer | null> {
+): Promise<DocumentFile | null> {
   if (!isValidDocumentSource(source)) return null;
   const reader = readers.get(source.kind);
   if (!reader) throw new UnknownDocumentSourceError(source.kind);
@@ -82,10 +92,11 @@ export const uploadDocumentSource: DocumentSourceReader = {
     if (source.id.split('.').pop()?.toLowerCase() !== source.type) return null;
     const userId = getUserIdFromSession(session);
     try {
-      return (await createBlobStorageClient(session).get(
+      const data = (await createBlobStorageClient(session).get(
         `${userId}/uploads/files/${source.id}`,
         BlobProperty.BLOB,
       )) as Buffer;
+      return { data, type: source.type };
     } catch (error) {
       if (isBlobNotFoundError(error)) return null;
       throw error;
