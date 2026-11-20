@@ -74,6 +74,11 @@ interface TranslationOptionsBarProps {
   disabled?: boolean;
   onLayoutChange: (layout: TranslationDocumentLayout) => void;
   onDepthChange: (depth: NativePdfDepth) => void;
+  /**
+   * For a presentation: whether its speaker notes are translated too.
+   * Absent for any other document.
+   */
+  speakerNotes?: { checked: boolean; onChange: (checked: boolean) => void };
 }
 
 /**
@@ -89,10 +94,12 @@ export function TranslationOptionsBar({
   disabled,
   onLayoutChange,
   onDepthChange,
+  speakerNotes,
 }: TranslationOptionsBarProps) {
   const t = useTranslations('workflows');
   const showLayout = kind === 'document' && layout !== undefined;
-  if (!showLayout && depth === undefined) return null;
+  const showNotes = kind === 'document' && speakerNotes !== undefined;
+  if (!showLayout && depth === undefined && !showNotes) return null;
   const formatted = layout === 'formatted';
   const depthHint = (value: NativePdfDepth): string =>
     kind === 'text'
@@ -138,6 +145,21 @@ export function TranslationOptionsBar({
             hint: depthHint(value),
           }))}
         />
+      )}
+      {showNotes && (
+        <label
+          title={t('translation.formatted.speakerNotesHint')}
+          className="flex cursor-pointer items-center gap-1.5 text-gray-700 dark:text-gray-300"
+        >
+          <input
+            type="checkbox"
+            checked={speakerNotes.checked}
+            disabled={disabled}
+            onChange={(event) => speakerNotes.onChange(event.target.checked)}
+            className="h-3.5 w-3.5 rounded border-gray-300 accent-blue-600 dark:border-gray-600"
+          />
+          {t('translation.formatted.speakerNotes')}
+        </label>
       )}
       <span className="min-w-[16rem] flex-1 text-gray-500 dark:text-gray-400">
         {kind === 'text' && depth !== undefined
