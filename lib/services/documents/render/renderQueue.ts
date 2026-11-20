@@ -66,6 +66,25 @@ export class RenderBusyError extends Error {
   }
 }
 
+/**
+ * Weight of the latest finished job in a lane's average run time: recent
+ * jobs count most, so the estimate follows the documents being sent now.
+ */
+export const RUN_TIME_WEIGHT = 0.2;
+
+/** What the queue holds now, and how long its jobs have been taking. */
+export interface RenderQueueSnapshot {
+  running: number;
+  queued: Record<RenderLane, number>;
+  /** Jobs that run at once. */
+  maxConcurrent: number;
+  /**
+   * Average run time of a lane's finished jobs (milliseconds), weighted to
+   * the recent ones (RUN_TIME_WEIGHT); null before one has finished.
+   */
+  averageRunMs: Record<RenderLane, number | null>;
+}
+
 interface Waiting {
   lane: RenderLane;
   enqueuedAt: number;
@@ -90,6 +109,10 @@ export class RenderQueue {
   };
   private running = 0;
   private interactiveStreak = 0;
+  private readonly averageRunMs: Record<RenderLane, number | null> = {
+    interactive: null,
+    background: null,
+  };
   private readonly options: RenderQueueOptions;
 
   constructor(options: RenderQueueOptions) {
@@ -105,15 +128,26 @@ export class RenderQueue {
     this.options = options;
   }
 
-  /** Jobs running and waiting, by lane. */
-  snapshot(): { running: number; queued: Record<RenderLane, number> } {
+  /** Jobs running and waiting, by lane, and how long jobs take. */
+  snapshot(): RenderQueueSnapshot {
     return {
       running: this.running,
       queued: {
         interactive: this.waiting.interactive.length,
         background: this.waiting.background.length,
       },
+      maxConcurrent: this.options.maxConcurrent,
+      averageRunMs: { ...this.averageRunMs },
     };
+  }
+
+  /** Adds a finished job's run time to its lane's average. */
+  private noteRunTime(lane: RenderLane, ranMs: number): void {
+    const previous = this.averageRunMs[lane];
+    this.averageRunMs[lane] =
+      previous === null
+        ? ranMs
+        : previous + RUN_TIME_WEIGHT * (ranMs - previous);
   }
 
   /**
@@ -148,11 +182,10 @@ export class RenderQueue {
           })
           .finally(() => {
             this.running -= 1;
-            this.options.observer?.onFinish?.(
-              lane,
-              Date.now() - startedAt,
-              outcome,
-            );
+            const ranMs = Date.now() - startedAt;
+            // A failed or stopped job says little about how long one takes.
+            if (outcome === 'ok') this.noteRunTime(lane, ranMs);
+            this.options.observer?.onFinish?.(lane, ranMs, outcome);
             this.pump();
           });
       };
