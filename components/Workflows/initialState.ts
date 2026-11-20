@@ -76,5 +76,7 @@ export function createInitialWorkflowState(
         nextId: 1,
         updatedAt,
       };
+    case 'brand-review':
+      return { kind: 'brand-review', modelReview: true, updatedAt };
   }
 }
