@@ -118,7 +118,12 @@ export const BrandBookBodySchema = z
     /** Smallest text size allowed, in points. */
     minTextSizePt: z.number().min(0).max(72).default(0),
     logos: z.array(BrandLogoSchema).max(20).default([]),
-    language: BrandLanguageSchema.default({}),
+    language: BrandLanguageSchema.default({
+      locales: [],
+      preferred: [],
+      banned: [],
+      tone: '',
+    }),
     templates: z.array(BrandTemplateSchema).max(20).default([]),
     /** The brand guide this book was written from, if uploaded. */
     source: z
