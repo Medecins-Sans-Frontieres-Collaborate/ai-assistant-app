@@ -4,7 +4,10 @@ import {
   LibreOfficeTimeoutError,
   runLibreOffice,
 } from '@/lib/services/presentationRender/libreOfficeProcess';
-import { treeResidentBytes } from '@/lib/services/presentationRender/processMemory';
+import {
+  privateResidentBytes,
+  treeResidentBytes,
+} from '@/lib/services/presentationRender/processMemory';
 
 import { execFileSync } from 'child_process';
 import fs from 'fs';
@@ -196,6 +199,36 @@ describe('treeResidentBytes', () => {
   it('is 0 for a process that has gone', async () => {
     const root = fakeProc('proc-gone', PROCESSES, true);
     expect(await treeResidentBytes(4242, root)).toBe(0);
+  });
+});
+
+describe('privateResidentBytes', () => {
+  // Measured on a desktop with many fonts: 100 MB private, 3.9 GB of
+  // mapped font files. Only the private part counts against the limit.
+  const status = (rss: number, anon: number, file: number, shmem: number) =>
+    `Name:\tsoffice.bin\nVmRSS:\t${rss} kB\nRssAnon:\t${anon} kB\nRssFile:\t${file} kB\nRssShmem:\t${shmem} kB\n`;
+
+  it('counts anonymous and shared-memory pages, not mapped files', () => {
+    expect(
+      privateResidentBytes(status(4_062_600, 76_948, 3_923_108, 62_544)),
+    ).toBe((76_948 + 62_544) * 1024);
+  });
+
+  it('keeps a deck that maps 3.9 GB of fonts under a 2 GB limit, and stops one that allocates past it', () => {
+    const limit = 2048 * 1024 * 1024;
+    expect(
+      privateResidentBytes(status(4_062_600, 76_948, 3_923_108, 62_544)),
+    ).toBeLessThan(limit);
+    expect(
+      privateResidentBytes(status(2_200_000, 2_150_000, 50_000, 0)),
+    ).toBeGreaterThan(limit);
+  });
+
+  it('falls back to VmRSS where the kernel does not split it', () => {
+    expect(privateResidentBytes('Name:\tx\nVmRSS:\t1000 kB\n')).toBe(
+      1000 * 1024,
+    );
+    expect(privateResidentBytes('')).toBe(0);
   });
 });
 
