@@ -52,6 +52,9 @@ export const WORKFLOW_POLICY_DEFAULTS: Record<
   'form-fill': true,
   // Drafting only; publishing has its own default-off gate (design §11.1).
   'channel-drafter': true,
+  // Reviews against brand books an admin curates; with none to use, the
+  // workspace says so (docs/DOCUMENT_PLATFORM.md, phase F).
+  'brand-review': true,
 };
 
 /**
