@@ -18,6 +18,8 @@ const LAYER = [
   'components/Documents',
   'lib/utils/shared/documents',
   'client/hooks/documents',
+  'client/hooks/backgroundJobs',
+  'client/services/documents',
 ];
 
 /** Import specifiers the layer must never use. */
