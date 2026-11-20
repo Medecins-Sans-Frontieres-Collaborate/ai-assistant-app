@@ -284,6 +284,30 @@ const serverEnvSchema = z.object({
   // the Responses-API code_interpreter tool in the project's region).
   CODE_INTERPRETER_MODEL: z.string().default('gpt-5.4'),
 
+  // Document render service (lib/services/presentationRender): every
+  // LibreOffice job on the server waits in one queue. Measured for a 60-slide
+  // deck: 6-8 s and about 260 MB each (docs/POWERPOINT_TRANSLATION.md).
+  // 'inprocess' runs LibreOffice on this server; a separate service will
+  // implement the same interface and be chosen here.
+  RENDER_SERVICE: z.enum(['inprocess']).default('inprocess'),
+  // Jobs running at once on this instance.
+  RENDER_MAX_CONCURRENT: z.coerce.number().int().min(1).max(16).default(1),
+  // Jobs waiting at once before new work is refused (503 RENDER_BUSY).
+  RENDER_MAX_QUEUED: z.coerce.number().int().min(0).max(10_000).default(200),
+  // Chat jobs run in a row while translation work waits.
+  RENDER_INTERACTIVE_BURST: z.coerce.number().int().min(1).max(100).default(3),
+  // Address-space cap per LibreOffice process (384 MB rendered the probe deck).
+  RENDER_MEMORY_LIMIT_MB: z.coerce
+    .number()
+    .int()
+    .min(256)
+    .max(16_384)
+    .default(2048),
+  // Time limit: a base, plus this much per megabyte of input, capped.
+  RENDER_TIMEOUT_BASE_MS: z.coerce.number().int().min(5_000).default(60_000),
+  RENDER_TIMEOUT_PER_MB_MS: z.coerce.number().int().min(0).default(2_000),
+  RENDER_TIMEOUT_MAX_MS: z.coerce.number().int().min(5_000).default(600_000),
+
   // Pins the deployment the Bing web search runs on (the Responses API
   // native web_search tool). UNSET = resolved per region from the served
   // model list — the policy default, skipping anything that is retiring
