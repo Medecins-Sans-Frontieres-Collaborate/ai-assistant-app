@@ -5,6 +5,11 @@ import {
   matchLogo,
   pictureSignature,
 } from '@/lib/services/brand/logoMatch';
+import { PDF_INSPECT_SCRIPT } from '@/lib/services/documents/model/pdfInspectScript';
+
+import { DocumentModel } from '@/lib/utils/shared/documents/documentModel';
+
+import { pythonHas, runLocalScript } from '../../../helpers/sandboxScript';
 
 import fs from 'fs';
 import path from 'path';
@@ -167,5 +172,28 @@ describe('backgroundAround', () => {
         box,
       ),
     ).toBe('#f2e8d5');
+  });
+});
+
+describe.skipIf(!pythonHas(['fitz']))('logos read from a PDF', () => {
+  it('matches the fixture PDF’s logo, both where drawn true and squashed', async () => {
+    const files = runLocalScript(PDF_INSPECT_SCRIPT, 'inspect', [
+      {
+        filename: 'source.pdf',
+        data: fs.readFileSync(
+          path.join(process.cwd(), '__tests__/fixtures/brand/brand.pdf'),
+        ),
+      },
+      { filename: 'job.json', data: Buffer.from('{"source":"source.pdf"}') },
+    ]);
+    const model = JSON.parse(
+      Buffer.from(files.get('model.json')!).toString('utf-8'),
+    ) as DocumentModel;
+    const logos = [{ key: 'main', signature: await signatureOf(LOGO) }];
+    expect(model.images).toHaveLength(2);
+    for (const image of model.images) {
+      const picture = await signatureOf(files.get(image.file)!);
+      expect(matchLogo(picture, logos)?.key).toBe('main');
+    }
   });
 });
