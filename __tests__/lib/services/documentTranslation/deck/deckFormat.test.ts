@@ -277,7 +277,10 @@ describe.skipIf(!ready)(
       const damaged = Buffer.from(zipSync(parts));
       await expect(
         deckFormat('pptx').extract(damaged, [1, 2], { usage: usage() }),
-      ).rejects.toMatchObject({ name: 'DeckRefusedError', code: 'DAMAGED' });
+      ).rejects.toMatchObject({
+        name: 'DocumentRefusedError',
+        code: 'DAMAGED',
+      });
       const repaired = await repairDeck(damaged, 'pptx');
       const extraction = await deckFormat('pptx').extract(repaired, [1, 2], {
         usage: usage(),

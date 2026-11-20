@@ -40,17 +40,12 @@ import {
   FormatExtraction,
   NativeFormatAdapter,
   RebuildOutcome,
-  requireFile,
 } from './nativeFormat';
-import { jobFile } from './pdfFormat';
 
 import { strFromU8 } from 'fflate';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-
-const DECK_CONTENT_TYPE =
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation';
 
 /** What a deck unit carries besides the shared unit fields. */
 interface DeckUnitRecord {
@@ -196,7 +191,7 @@ export function deckFormat(format: NativeDeckFormat): NativeFormatAdapter {
   /** Writes the person's deck and its plain copy into a work folder. */
   const prepare = async (dir: string, document: Buffer) => {
     const basePath = path.join(dir, `base.${format}`);
-    const servicePath = path.join(dir, SOURCE_FILENAME);
+    const servicePath = path.join(dir, 'source.pptx');
     await fs.promises.writeFile(basePath, document);
     await makeServiceCopy(basePath, format, servicePath);
     return { basePath, servicePath };

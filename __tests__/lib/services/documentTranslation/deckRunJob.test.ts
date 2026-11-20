@@ -14,10 +14,10 @@ import {
   startDeckJob,
   stopDeckJob,
 } from '@/lib/services/documentTranslation/native/deckRunJob';
-import { DeckRefusedError } from '@/lib/services/documentTranslation/native/formats/deckFormat';
 import type { NativePdfResult } from '@/lib/services/documentTranslation/native/nativePdfPipeline';
 import { NativeRunStore } from '@/lib/services/documentTranslation/native/nativePdfStorage';
 import type { RunFolder } from '@/lib/services/documentTranslation/native/nativeRunBackends';
+import { DocumentRefusedError } from '@/lib/services/documents/model/inspect';
 
 import { describe, expect, it, vi } from 'vitest';
 
@@ -479,7 +479,7 @@ describe('a damaged deck', () => {
       async (params: { document: Buffer; pages: number[] }) => {
         seen.push(params.document.toString());
         if (seen.length === 1)
-          throw new DeckRefusedError(
+          throw new DocumentRefusedError(
             'DAMAGED',
             'Part ppt/slides/slide2.xml is not well formed',
           );
@@ -510,7 +510,7 @@ describe('a damaged deck', () => {
     const { store } = storeWith();
     const repair = vi.fn(async () => Buffer.from('PK still bad'));
     const translate = vi.fn(async () => {
-      throw new DeckRefusedError('DAMAGED', 'not well formed');
+      throw new DocumentRefusedError('DAMAGED', 'not well formed');
     });
     await startDeckJob({
       store,
@@ -535,7 +535,7 @@ describe('a damaged deck', () => {
       request: { ...request([[1]]), sourceId: await sourceIn(store) },
       deps: {
         translate: (async () => {
-          throw new DeckRefusedError('ENCRYPTED', 'protected');
+          throw new DocumentRefusedError('ENCRYPTED', 'protected');
         }) as never,
         repair,
       },

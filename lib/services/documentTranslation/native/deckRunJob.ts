@@ -27,6 +27,7 @@
 import { Session } from 'next-auth';
 
 import { repairDeck } from '@/lib/services/documentTranslation/deck/deckJob';
+import { DocumentRefusedError } from '@/lib/services/documents/model/inspect';
 import { WorkflowUsageCollector } from '@/lib/services/workflows/shared/workflowUsage';
 
 import {
@@ -49,7 +50,6 @@ import { NativeRunBackend } from '@/lib/utils/shared/translation/nativeRunStorag
 
 import { GlossaryEntry } from '@/types/workflow';
 
-import { DeckRefusedError } from './formats/deckFormat';
 import {
   rerenderNativePdf,
   runNativePdfTranslation,
@@ -427,7 +427,7 @@ async function drive(
         // A damaged deck is repaired once (LibreOffice), then the batch is
         // tried again; the sandbox refuses it before anything is charged.
         const damaged =
-          error instanceof DeckRefusedError && error.code === 'DAMAGED';
+          error instanceof DocumentRefusedError && error.code === 'DAMAGED';
         if (!damaged || request.repaired) throw error;
         document = await deps.repair(document, request.format, abort.signal);
         const repairedSource = await store.put(document, 'pptx');
