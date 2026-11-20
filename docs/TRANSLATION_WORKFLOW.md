@@ -199,7 +199,8 @@ choices that belong to each:
 
 ## Document mode
 
-For translating the uploaded PDF itself. It has two layouts, chosen in a row under the toolbar. The row
+For translating the uploaded PDF or presentation itself (presentations: see
+[PowerPoint presentations](#powerpoint-presentations)). It has two layouts, chosen in a row under the toolbar. The row
 appears while the "Preserve formatting for PDFs" feature is on in
 Admin > Workflows (under Translation; on by default). With the feature off
 there is one layout and no row, and the server refuses the pipeline's
@@ -558,6 +559,77 @@ is kept in the browser. The conventions are written once, in
   the backup key, so a device without it, or with another, says which.
 - **Deleting**: a run replaced by a new one, or discarded after its files
   expired, is deleted (`DELETE .../native/run`).
+
+## PowerPoint presentations
+
+`.pptx`, `.pptm`, `.ppsx`, `.potx` and `.ppt` go through both Document
+layouts. The plan, acceptance criteria and probe results are in
+[POWERPOINT_TRANSLATION.md](POWERPOINT_TRANSLATION.md); the conventions
+below are stated where the code keeps them, and only pointed to here.
+
+- **Words**: every screen says "slide" for a presentation and "page" for a
+  PDF. Text only reads `documentUnitOf` (`documentMode.ts`); Preserve
+  formatting reads the unit set by `FormattedUnitProvider`
+  (`Formatted/formattedWording.tsx`), whose `SLIDE_WORDED_KEYS` each have a
+  twin under `translation.formatted.slides` in every locale
+  (`messageSyntax.test.ts` checks it).
+- **Speaker notes**: "Translate speaker notes" shows in both layouts for a
+  presentation, ticked by default and remembered (`translateSpeakerNotes` in
+  the settings store). A formatted run records the choice
+  (`FormattedDocumentRun.translateNotes`).
+- **`.ppt`**: converted to `.pptx` by the render service before anything is
+  stored or charged; the translation is a `.pptx`.
+- **Render service**: every LibreOffice and `pdftoppm` job waits in one
+  queue with a strict concurrency limit. Contract and settings:
+  [RENDER_SERVICE.md](RENDER_SERVICE.md).
+
+### Text only
+
+The document translation service is sent a plain `.pptx` copy and its
+result is merged back into the person's own package (THE MERGE CONVENTION,
+`lib/services/documentTranslation/deck/deckMerge.ts`), so macros, a show's
+or template's type and untranslated parts survive. Text is read slide by
+slide from the deck's XML (`deckText.ts`), and the daily allowance counts
+slides.
+
+### Preserve formatting
+
+- **Format adapter**: the pipeline's format-specific steps sit behind
+  THE FORMAT ADAPTER (`native/formats/nativeFormat.ts`); a run's format is
+  the kind of its stored source (`<sha256>.<format>`). The deck adapter
+  (`deckFormat.ts`) reads and rewrites the deck with `pptx_native.py` in the
+  sandbox (`pptxNativeScript.ts`, generated from the script; how it finds
+  units, sizes and fits text is documented in the script).
+- **Background job**: a presentation is a job on the server (THE JOB
+  CONVENTION, `native/deckRunJob.ts`; route `POST|GET|DELETE
+/api/document-translation/native/job`). Starting answers at once; the
+  browser reads progress every 2 s (`useFormattedDocument`), including the
+  place in the render queue and an estimate ("Waiting for a slot: N ahead.
+  About M minutes.", from the queue's average run time). The job's location
+  is kept in workflow state (`formattedPendingJob`), so a reload follows it
+  again; a server restart resumes it from the last finished batch without
+  charging again. Stop asks the server; finished batches are kept.
+- **One at a time**: one presentation per person runs at once; another is
+  refused, naming the first.
+- **Setup and review**: slides are shown from a PDF of the uploaded deck
+  (`GET /api/file/[id]/slides`, hidden slides included so page n is slide
+  n); Original in the review shows the same render.
+- **Moves**: a move shifts the whole shape the paragraph is in, and the
+  Appearance box says so.
+- **Downloads**: the deck in its own format first, then the PDF. The
+  picture-backed PowerPoint export offered for PDFs is not offered.
+
+### Fallbacks
+
+| Problem                         | What happens                                                   | Where                         |
+| ------------------------------- | -------------------------------------------------------------- | ----------------------------- |
+| Encrypted deck (not a zip)      | Refused at upload, with the reason                             | `checkLibreOfficeInput`       |
+| Damaged package                 | Repaired by LibreOffice once and retried; else refused         | `deckRunJob.ts`, `repairDeck` |
+| A part that cannot be rewritten | Left as it was; its units listed as not translated             | `pptx_native.py`, pipeline    |
+| The deck as a whole fails       | The error offers Text only                                     | `TranslationWorkspace`        |
+| Text still does not fit         | Shrink-on-overflow and a flag in the review                    | `pptx_native.py`              |
+| Slides cannot be rendered       | Read from text alone; deck delivered without pictures or check | `deckFormat.ts`               |
+| Queue full                      | Refused ("busy, try again shortly") before anything is charged | `deckFormat.ts`, routes       |
 
 ## Large source texts are kept in storage
 
