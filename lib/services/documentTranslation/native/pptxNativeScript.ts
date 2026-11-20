@@ -11,7 +11,7 @@
  * Its conventions (pages, coordinates, what a unit is, locations, inline
  * tags, fit, which parts are written) are stated once, in its docstring.
  */
-import { SandboxScript } from './sandboxScriptRunner';
+import type { SandboxScript } from '@/lib/services/documents/sandbox/sandboxScriptRunner';
 
 /** Filename the script is uploaded under; the launch snippet looks for it. */
 export const PPTX_NATIVE_SCRIPT_FILENAME = 'pptx_native.py';
@@ -1636,4 +1636,5 @@ export const DECK_SANDBOX_SCRIPT: SandboxScript = {
   filename: PPTX_NATIVE_SCRIPT_FILENAME,
   source: PPTX_NATIVE_SCRIPT,
   archives: PPTX_NATIVE_OUTPUT_ARCHIVE,
+  usageLabel: 'native-pdf-sandbox',
 };
