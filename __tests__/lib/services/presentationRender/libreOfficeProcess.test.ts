@@ -141,6 +141,62 @@ describe('treeResidentBytes', () => {
       await treeResidentBytes(process.pid, path.join(dir, 'no-proc')),
     ).toBeNull();
   });
+
+  /** A fake /proc: each process with its group, memory and children. */
+  function fakeProc(
+    name: string,
+    processes: Array<{
+      pid: number;
+      group: number;
+      kb: number;
+      children?: number[];
+    }>,
+    withChildrenLists: boolean,
+  ): string {
+    const root = path.join(dir, name);
+    for (const proc of processes) {
+      const folder = path.join(root, String(proc.pid));
+      fs.mkdirSync(path.join(folder, 'task', String(proc.pid)), {
+        recursive: true,
+      });
+      // The command has a space and a parenthesis, as real ones can.
+      fs.writeFileSync(
+        path.join(folder, 'stat'),
+        `${proc.pid} (soffice (bin)) S 1 ${proc.group} ${proc.group} 0`,
+      );
+      fs.writeFileSync(
+        path.join(folder, 'status'),
+        `Name:\tsoffice\nVmRSS:\t  ${proc.kb} kB\n`,
+      );
+      if (withChildrenLists) {
+        fs.writeFileSync(
+          path.join(folder, 'task', String(proc.pid), 'children'),
+          (proc.children ?? []).join(' '),
+        );
+      }
+    }
+    return root;
+  }
+  const PROCESSES = [
+    { pid: 100, group: 100, kb: 1_000, children: [200] }, // the launcher
+    { pid: 200, group: 100, kb: 300_000 }, // soffice.bin
+    { pid: 300, group: 999, kb: 5_000_000 }, // something else on the machine
+  ];
+
+  it('walks the children lists where the kernel has them', async () => {
+    const root = fakeProc('proc-tree', PROCESSES, true);
+    expect(await treeResidentBytes(100, root)).toBe(301_000 * 1024);
+  });
+
+  it('falls back to the process group where it does not', async () => {
+    const root = fakeProc('proc-group', PROCESSES, false);
+    expect(await treeResidentBytes(100, root)).toBe(301_000 * 1024);
+  });
+
+  it('is 0 for a process that has gone', async () => {
+    const root = fakeProc('proc-gone', PROCESSES, true);
+    expect(await treeResidentBytes(4242, root)).toBe(0);
+  });
 });
 
 const hasLibreOffice = (() => {
