@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { FormattedRunProgress } from '@/client/hooks/workflows/useFormattedDocument';
 
 import { ElapsedTime } from '../../Shared/Progress/ElapsedTime';
+import { useUnitWording } from './formattedWording';
 
 interface FormattedProgressProps {
   progress: FormattedRunProgress;
@@ -31,11 +32,12 @@ export function FormattedProgress({
   language,
 }: FormattedProgressProps) {
   const t = useTranslations('workflows');
+  const unitT = useUnitWording();
   return (
     <div className="flex min-h-0 flex-1 justify-center overflow-y-auto px-5 py-10">
       <div className="w-full max-w-xl">
         <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
-          {t('translation.formatted.progressTitle', {
+          {unitT('progressTitle', {
             count: progress.pageCount,
             language,
           })}
@@ -51,11 +53,32 @@ export function FormattedProgress({
             className="mt-3 text-sm font-medium text-gray-900 dark:text-gray-100"
           >
             {progress.assembling
-              ? t('translation.formatted.progressAssembling')
+              ? unitT('progressAssembling')
               : t('translation.formatted.progressPart', {
                   part: progress.part,
                   parts: progress.parts,
                 })}
+          </p>
+        )}
+        {progress.queue && (
+          <p
+            role="status"
+            className="mt-3 rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-200"
+          >
+            {t('translation.formatted.progressQueue', {
+              ahead: progress.queue.ahead,
+            })}
+            {progress.queue.waitMs !== null && (
+              <>
+                {' '}
+                {t('translation.formatted.progressQueueEstimate', {
+                  minutes: Math.max(
+                    1,
+                    Math.round(progress.queue.waitMs / 60_000),
+                  ),
+                })}
+              </>
+            )}
           </p>
         )}
         <ol
