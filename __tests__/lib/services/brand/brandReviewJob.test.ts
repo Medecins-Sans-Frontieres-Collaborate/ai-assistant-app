@@ -278,6 +278,8 @@ describe('brand review job', () => {
       'img-other',
     ]);
     expect(page2.units.map((u: { id: string }) => u.id)).toEqual(['u2']);
+    // A request stored before the reader's locale was kept: English notes.
+    expect(page2.noteLocale).toBe('en');
   });
 
   it('runs without the model when not asked, still checking logo backgrounds', async () => {
