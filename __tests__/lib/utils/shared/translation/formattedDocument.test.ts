@@ -3,6 +3,9 @@ import {
   DOCUMENT_LAYOUTS,
   FIT_TOLERANCE,
   FormattedDocumentRun,
+  MAX_PAGE_ZOOM,
+  MIN_PAGE_ZOOM,
+  PAGE_ZOOM_EPSILON,
   PAGE_ZOOM_LEVELS,
   applyRenderReport,
   batchPageState,
@@ -28,11 +31,13 @@ import {
   sameUnitStyle,
   selectedPages,
   stalePages,
+  textRows,
   togglePage,
   translatedPages,
   translationsForRender,
   unitBox,
   unitStyle,
+  wheelPageZoom,
   withPageRemoved,
   withUnitEdit,
   withUnitStyle,
@@ -238,6 +243,17 @@ describe('translationsForRender', () => {
 });
 
 describe('applyRenderReport', () => {
+  it('keeps only the editable files the render built', () => {
+    const built = applyRenderReport(
+      run(),
+      renderReport({ exportUrls: { pptx: '/files/deck.pptx' } }),
+    );
+    expect(built.exportUrls).toEqual({ pptx: '/files/deck.pptx' });
+    // A later render that was not asked for one leaves none: the stored
+    // file would describe an older page.
+    expect(applyRenderReport(built, renderReport()).exportUrls).toBeUndefined();
+  });
+
   it('makes the edits the rendered text and takes the new fit', () => {
     const edited = withUnitEdit(run(), 'p2u1', 'Nouveau');
     const applied = applyRenderReport(
@@ -962,6 +978,35 @@ describe('nextPageZoom', () => {
     expect(nextPageZoom(1.1, 1)).toBe(1.25);
     expect(nextPageZoom(1.1, -1)).toBe(1);
   });
+
+  // A pinch can stop a hair either side of a level; that is the level, so
+  // the next step must leave it rather than land on it again.
+  it('treats a value within the tolerance of a level as that level', () => {
+    const near = PAGE_ZOOM_EPSILON / 2;
+    expect(nextPageZoom(1.25 - near, 1)).toBe(1.5);
+    expect(nextPageZoom(1.25 + near, -1)).toBe(1);
+    // Just outside the tolerance it is between two levels again.
+    const outside = PAGE_ZOOM_EPSILON * 2;
+    expect(nextPageZoom(1.25 - outside, 1)).toBe(1.25);
+    expect(nextPageZoom(1.25 + outside, -1)).toBe(1.25);
+  });
+});
+
+describe('wheelPageZoom', () => {
+  it('zooms in for wheel up (negative delta) and out for wheel down', () => {
+    expect(wheelPageZoom(1, -100)).toBeGreaterThan(1);
+    expect(wheelPageZoom(1, 100)).toBeLessThan(1);
+    expect(wheelPageZoom(1, 0)).toBe(1);
+  });
+
+  it('undoes itself: up then down by the same amount comes back', () => {
+    expect(wheelPageZoom(wheelPageZoom(1, -60), 60)).toBeCloseTo(1, 10);
+  });
+
+  it('stays within the smallest and largest zoom', () => {
+    expect(wheelPageZoom(MAX_PAGE_ZOOM, -10_000)).toBe(MAX_PAGE_ZOOM);
+    expect(wheelPageZoom(MIN_PAGE_ZOOM, 10_000)).toBe(MIN_PAGE_ZOOM);
+  });
 });
 
 describe('runFromReport: looks set by the automatic fixes', () => {
@@ -1003,5 +1048,25 @@ describe('runFromReport: looks set by the automatic fixes', () => {
     const made = runFromReport(report(undefined), meta);
     expect(made.styles).toEqual({});
     expect(made.pdfStyles).toEqual({});
+  });
+});
+
+describe('textRows', () => {
+  const limits = { min: 1, max: 10 };
+
+  it('gives each line of a text at least a row', () => {
+    expect(textRows('TIME/\nAPPROVED', 50, limits)).toBe(2);
+    // An empty line, as two breaks in a row make, is a row too.
+    expect(textRows('a\n\nb', 50, limits)).toBe(3);
+  });
+
+  it('gives a long line the rows its characters fill', () => {
+    expect(textRows('x'.repeat(101), 50, limits)).toBe(3);
+    expect(textRows(`${'x'.repeat(60)}\nshort`, 50, limits)).toBe(3);
+  });
+
+  it('keeps within its limits', () => {
+    expect(textRows('', 50, { min: 2, max: 12 })).toBe(2);
+    expect(textRows('a\n'.repeat(30), 50, limits)).toBe(10);
   });
 });

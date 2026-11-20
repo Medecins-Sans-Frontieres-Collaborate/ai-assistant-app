@@ -1,7 +1,10 @@
 import {
   AUTO_MAX_SHIFT,
   AUTO_MIN_SIZE_RATIO,
+  MAX_BRIEF_TERMS,
+  MAX_BRIEF_TERM_CHARS,
   MAX_STEP_INSTRUCTION_CHARS,
+  NATIVE_PDF_EXPORT_FORMATS,
   NATIVE_PDF_MAX_FONT_SIZE,
   NATIVE_PDF_MAX_PAGES,
   NATIVE_PDF_MAX_SHIFT,
@@ -11,18 +14,30 @@ import {
   NativePdfFitReport,
   NativePdfIssue,
   REFIT_SCALE_THRESHOLD,
+  addsAbbreviation,
+  breakLike,
   charBudget,
+  dropsTerm,
   hasLayoutFixes,
   layoutScore,
+  mergeBriefs,
+  missingTerms,
   parsePageSelection,
   planLayoutFixes,
   repairTranslationTags,
+  sanitizeBrief,
+  sanitizeExportFormats,
+  sanitizeLanguageCode,
   sanitizeStepInstructions,
   sanitizeTranslationEdits,
   sanitizeUnitStyle,
   sanitizeUnitStyles,
   selectRefitTargets,
+  termCandidates,
+  termKey,
+  termsIn,
   visibleLength,
+  wordingInCaseOf,
 } from '@/lib/utils/shared/translation/nativePdf';
 import {
   NATIVE_PDF_MAX_PAGES as REQUEST_PAGES,
@@ -640,5 +655,279 @@ describe('layoutScore', () => {
     // Exactly at the shrink threshold is not unfit.
     const atLimit = [{ ...fits[0], scale: REFIT_SCALE_THRESHOLD - 1e-7 }];
     expect(layoutScore(atLimit, [])).toBe(0);
+  });
+});
+
+describe('addsAbbreviation', () => {
+  const full =
+    'Examen de la proposition : infrastructures de santé résilientes';
+
+  it('refuses a wording that abbreviates a word written out before', () => {
+    expect(
+      addsAbbreviation(full, 'Éval. du projet : infrastructures santé'),
+    ).toBe(true);
+    expect(
+      addsAbbreviation('<b>Statut</b> du projet', '<b>Stat.</b> du projet'),
+    ).toBe(true);
+  });
+
+  it('accepts a shorter wording without one', () => {
+    expect(
+      addsAbbreviation(full, 'Examen : infrastructures de santé résilientes'),
+    ).toBe(false);
+  });
+
+  it('does not count the stop that ends the text, or one already there', () => {
+    expect(
+      addsAbbreviation('Vise à réduire les coûts.', 'Réduit les coûts.'),
+    ).toBe(false);
+    expect(
+      addsAbbreviation(
+        'Voir p. ex. le rapport annuel',
+        'Voir p. ex. le rapport',
+      ),
+    ).toBe(false);
+    expect(addsAbbreviation('Coût : 3.5 M€ par an', 'Coût : 3.5 M€/an')).toBe(
+      false,
+    );
+  });
+});
+
+describe('the document brief', () => {
+  it('treats tags, case and spacing as the same term', () => {
+    expect(termKey('<b>3D Printing</b>\nfor  All')).toBe('3d printing for all');
+    expect(termKey('PRIM-Vax')).not.toBe(termKey('PRIM Vax'));
+  });
+
+  it('accepts language tags and nothing else as a language code', () => {
+    expect(sanitizeLanguageCode('de')).toBe('de');
+    expect(sanitizeLanguageCode(' zh-Hant ')).toBe('zh-Hant');
+    expect(sanitizeLanguageCode('jam')).toBe('jam');
+    expect(sanitizeLanguageCode('de" onload="x')).toBe('');
+    expect(sanitizeLanguageCode('german language')).toBe('');
+    expect(sanitizeLanguageCode(7)).toBe('');
+  });
+
+  it('keeps what is usable of a brief from a client and drops the rest', () => {
+    const brief = sanitizeBrief({
+      language: {
+        code: 'jam; drop table',
+        name: ' Jamaican\nPatois ',
+        note: 'x'.repeat(1000),
+      },
+      terms: [
+        { source: 'PRIM-Vax', target: 'anything', keep: true },
+        { source: 'prim-vax', target: 'duplicate', keep: false },
+        { source: 'Cold Chain', target: 'Chaîne du froid', keep: false },
+        { source: 'No target', keep: false },
+        { source: 'y'.repeat(MAX_BRIEF_TERM_CHARS + 20), target: 't' },
+        'not an entry',
+      ],
+    });
+    expect(brief.language).toEqual({
+      code: '',
+      name: 'Jamaican Patois',
+      note: 'x'.repeat(300),
+    });
+    expect(brief.terms.slice(0, 2)).toEqual([
+      // A kept term is written as its source, whatever target was sent.
+      { source: 'PRIM-Vax', target: 'PRIM-Vax', keep: true },
+      { source: 'Cold Chain', target: 'Chaîne du froid', keep: false },
+    ]);
+    expect(brief.terms[2].source).toHaveLength(MAX_BRIEF_TERM_CHARS);
+    expect(brief.terms).toHaveLength(3);
+    expect(sanitizeBrief('nonsense')).toEqual({ terms: [] });
+    expect(sanitizeBrief({ language: { code: 'de' } })).toEqual({ terms: [] });
+  });
+
+  it('holds at most the allowed number of terms', () => {
+    const many = Array.from({ length: MAX_BRIEF_TERMS + 5 }, (_, i) => ({
+      source: `Term ${i}`,
+      target: `Terme ${i}`,
+      keep: false,
+    }));
+    expect(sanitizeBrief({ terms: many }).terms).toHaveLength(MAX_BRIEF_TERMS);
+    expect(
+      mergeBriefs(
+        { terms: many.slice(0, MAX_BRIEF_TERMS - 1) },
+        { terms: many.slice(MAX_BRIEF_TERMS - 1) },
+      ).terms,
+    ).toHaveLength(MAX_BRIEF_TERMS);
+  });
+
+  it('never lets a later request change an earlier decision', () => {
+    const first = {
+      language: { code: 'ht', name: 'Haitian Creole', note: 'Standard Kreyòl' },
+      terms: [{ source: 'Cold Chain', target: 'Cold Chain', keep: true }],
+    };
+    const merged = mergeBriefs(first, {
+      language: { code: 'fr', name: 'French', note: '' },
+      terms: [
+        { source: 'cold  chain', target: 'Chèn frèt', keep: false },
+        { source: 'Fleet', target: 'Flòt', keep: false },
+      ],
+    });
+    expect(merged.language).toEqual(first.language);
+    expect(merged.terms).toEqual([
+      { source: 'Cold Chain', target: 'Cold Chain', keep: true },
+      { source: 'Fleet', target: 'Flòt', keep: false },
+    ]);
+    expect(
+      mergeBriefs(undefined, { language: first.language, terms: [] }),
+    ).toEqual({ language: first.language, terms: [] });
+  });
+
+  it('asks only about names nothing has settled, each once', () => {
+    const sentence = 'A sentence far too long to be a name '.repeat(4);
+    expect(
+      termCandidates(
+        ['PRIM-Vax', 'prim-vax', '<b>Cold Chain</b>', 'MSF', sentence, '  '],
+        ['Cold  chain'],
+        10,
+      ),
+    ).toEqual(['PRIM-Vax', 'MSF']);
+    // One character over the limit is a sentence; at the limit it is a name.
+    const atLimit = 'n'.repeat(MAX_BRIEF_TERM_CHARS);
+    expect(termCandidates([atLimit, `${atLimit}n`], [], 10)).toEqual([atLimit]);
+    // No more than the brief can still hold.
+    expect(termCandidates(['A1', 'B2', 'C3'], [], 2)).toEqual(['A1', 'B2']);
+    expect(termCandidates(['A1'], [], 0)).toEqual([]);
+  });
+});
+
+describe('following the brief inside a longer unit', () => {
+  const who = { source: 'WHO', target: 'OMS', keep: false };
+  const tic = { source: 'TIC', target: 'TIC', keep: true };
+  const eco = {
+    source: 'Eco and Defensive Driving',
+    target: 'Conduite économique et défensive',
+    keep: false,
+  };
+
+  it('finds the terms a translation does not follow', () => {
+    expect(missingTerms('Ask WHO now', 'Demandez à la WHO', [who])).toEqual([
+      who,
+    ]);
+    expect(missingTerms('Ask WHO now', 'Demandez à l’OMS', [who])).toEqual([]);
+    expect(missingTerms('The TIC team', "L'équipe CTI", [tic, who])).toEqual([
+      tic,
+    ]);
+  });
+
+  it('matches whole words only, whatever the case or the tags', () => {
+    // "WHO" is not in "whole", and "OMS" is not in "atomes".
+    expect(missingTerms('The whole team', 'Toute l’équipe', [who])).toEqual([]);
+    expect(missingTerms('Ask WHO', 'Des atomes', [who])).toEqual([who]);
+    expect(
+      missingTerms(
+        'The <b>Eco and\nDefensive Driving</b> programme',
+        'Le programme de <b>conduite économique et défensive</b>',
+        [eco],
+      ),
+    ).toEqual([]);
+    expect(
+      missingTerms(
+        'The Eco and Defensive Driving programme',
+        'Le programme d’éco-conduite et de conduite défensive',
+        [eco],
+      ),
+    ).toEqual([eco]);
+  });
+
+  it('means only the longer of two terms where one lies inside the other', () => {
+    const status = { source: 'STATUS', target: 'STATUT', keep: false };
+    const review = {
+      source: 'Status Review',
+      target: 'Revue de situation',
+      keep: false,
+    };
+    const terms = [status, review];
+    expect(termsIn('Status Review: Project X', terms)).toEqual([review]);
+    expect(
+      missingTerms('Status Review: X', 'Revue de situation : X', terms),
+    ).toEqual([]);
+    // Standing alone as well, the shorter term is meant too.
+    expect(termsIn('Status Review: status is green', terms)).toEqual(terms);
+    expect(termsIn('Status', terms)).toEqual([status]);
+  });
+
+  it('refuses a rewording only when it loses a term the wording had', () => {
+    const source = 'Review: Eco and Defensive Driving';
+    const full = 'Examen : Conduite économique et défensive';
+    expect(dropsTerm(source, full, 'Examen : éco-conduite', [eco])).toBe(true);
+    expect(
+      dropsTerm(source, full, 'Bilan : conduite économique et défensive', [
+        eco,
+      ]),
+    ).toBe(false);
+    // A wording that never followed the term is not made worse by another.
+    expect(
+      dropsTerm(source, 'Examen : éco-conduite', 'Bilan : éco-conduite', [eco]),
+    ).toBe(false);
+  });
+});
+
+describe('editable download formats', () => {
+  it('reads the known formats of a request, each once', () => {
+    expect(sanitizeExportFormats(['pptx', 'pptx', 'docx', 7])).toEqual([
+      'pptx',
+    ]);
+    expect(sanitizeExportFormats('pptx')).toEqual([]);
+    expect(sanitizeExportFormats(undefined)).toEqual([]);
+  });
+
+  it('marks a presentation rebuilt from a PDF as experimental', () => {
+    expect(NATIVE_PDF_EXPORT_FORMATS.pptx.experimental).toBe(true);
+    expect(NATIVE_PDF_EXPORT_FORMATS.pptx.extension).toBe('pptx');
+  });
+});
+
+describe('wordingInCaseOf', () => {
+  it('keeps a heading in capitals in capitals', () => {
+    expect(wordingInCaseOf('TIME', 'Temps')).toBe('TEMPS');
+    expect(wordingInCaseOf('<b>6-MONTH REVIEW</b>', 'Revue à 6 mois')).toBe(
+      'REVUE À 6 MOIS',
+    );
+  });
+
+  it('leaves the wording alone for anything else', () => {
+    expect(wordingInCaseOf('Time', 'Temps')).toBe('Temps');
+    expect(wordingInCaseOf('time', 'Temps')).toBe('Temps');
+    // No letters to tell the case by.
+    expect(wordingInCaseOf('2026', 'Temps')).toBe('Temps');
+  });
+});
+
+describe('breakLike', () => {
+  it('puts a break where the model has one, in proportion', () => {
+    expect(breakLike('DURÉE/\nAPPROUVÉE', 'DURÉE/APPROUVÉE')).toBe(
+      'DURÉE/\nAPPROUVÉE',
+    );
+    expect(breakLike('TIME/\nAPPROVED', 'ZEIT / GENEHMIGT')).toBe(
+      'ZEIT /\nGENEHMIGT',
+    );
+    expect(
+      breakLike(
+        '€ 250,000\nOCP sponsor\n2 years',
+        '250 000 € Parrain OCP 2 ans',
+      ),
+    ).toBe('250 000 €\nParrain OCP\n2 ans');
+  });
+
+  it('leaves text alone when the model has no break', () => {
+    expect(breakLike('TIME APPROVED', 'DURÉE APPROUVÉE')).toBe(
+      'DURÉE APPROUVÉE',
+    );
+  });
+
+  it('makes fewer breaks rather than an empty line or a split word', () => {
+    // One word: nowhere a line can end.
+    expect(breakLike('A\nB', 'Genehmigt')).toBe('Genehmigt');
+    // Three lines wanted, one place to end a line.
+    expect(breakLike('a\nb\nc', 'Zeit Genehmigt')).toBe('Zeit\nGenehmigt');
+  });
+
+  it('treats breaks already in the text as spaces', () => {
+    expect(breakLike('x\ny', 'one\ntwo three')).toBe('one two\nthree');
   });
 });

@@ -41,6 +41,9 @@ describe('run and file names', () => {
     expect(isRunFileId(RUN_RECORD_ID)).toBe(true);
     expect(isRunFileId(`../${FILE}`)).toBe(false);
     expect(isRunFileId(`${'a'.repeat(64)}.exe`)).toBe(false);
+    // An editable download is one of the run's files too.
+    expect(isRunFileId(`${'a'.repeat(64)}.pptx`)).toBe(true);
+    expect(isRunFileId(`${'a'.repeat(64)}.docx`)).toBe(false);
     expect(isRunFileId('notes.json')).toBe(false);
   });
 
