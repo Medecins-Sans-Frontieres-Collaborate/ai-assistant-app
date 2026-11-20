@@ -13,6 +13,7 @@ import { AdminBrandBook } from '@/lib/services/agentAccess/types';
 import { personJobs } from '@/lib/services/backgroundJobs/personJobs';
 import {
   readBrandReview,
+  removeBrandReview,
   startBrandReview,
 } from '@/lib/services/brand/brandReviews';
 import {
@@ -309,9 +310,19 @@ export function stopDeckJob(
   return Promise.resolve(null);
 }
 
-/** Removes an outline or build (a built deck stays the person's upload). */
-export function removeDeckJob(session: Session, id: string): Promise<boolean> {
+/**
+ * Removes an outline, or a build with the brand review it started (a
+ * built deck stays the person's upload).
+ *
+ * @returns Whether there was anything under the id.
+ */
+export async function removeDeckJob(
+  session: Session,
+  id: string,
+): Promise<boolean> {
   if (OUTLINE_ID_PATTERN.test(id)) return outlines.remove(session, id);
-  if (BUILD_ID_PATTERN.test(id)) return builds.remove(session, id);
-  return Promise.resolve(false);
+  if (!BUILD_ID_PATTERN.test(id)) return false;
+  const build = await builds.read(session, id);
+  if (build?.reviewId) await removeBrandReview(session, build.reviewId);
+  return builds.remove(session, id);
 }
