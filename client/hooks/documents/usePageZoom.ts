@@ -18,7 +18,7 @@ import {
   clampPageZoom,
   nextPageZoom,
   wheelPageZoom,
-} from '@/lib/utils/shared/translation/formattedDocument';
+} from '@/lib/utils/shared/documents/pageGeometry';
 
 /** Marks the element that is the page, inside the scroller (see anchors). */
 export const PAGE_SURFACE_ATTRIBUTE = 'data-page-surface';
