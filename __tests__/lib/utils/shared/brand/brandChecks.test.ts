@@ -333,3 +333,34 @@ describe('wording that overlaps', () => {
     ]);
   });
 });
+
+describe('wording that overlaps across the two lists', () => {
+  const book = bookWith({
+    fonts: [
+      { role: 'heading', family: 'Montserrat' },
+      { role: 'body', family: 'Montserrat' },
+    ],
+    language: {
+      banned: [{ term: 'the field', alternatives: ['medical project'] }],
+      preferred: [{ term: 'working in Haiti', alternatives: ['in the field'] }],
+    },
+  });
+  const findings = (text: string) =>
+    checkDocumentText(model([unit([run({ text, font: 'Arial' })])]), book);
+
+  it('reports the longer phrase only, whichever list holds it', () => {
+    const wording = (text: string) =>
+      findings(text)
+        .filter((f) => f.rule.endsWith('-term'))
+        .map((f) => `${f.rule}:${f.found}`);
+    expect(wording('Our teams in the field.')).toEqual([
+      'preferred-term:in the field',
+    ]);
+    expect(wording('We left the field.')).toEqual(['banned-term:the field']);
+  });
+
+  it('names a typeface set for two roles once', () => {
+    const font = findings('Text').find((f) => f.rule === 'font');
+    expect(font?.expected).toEqual(['Montserrat']);
+  });
+});
