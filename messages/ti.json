@@ -6929,6 +6929,223 @@
         "none": "መዝገብ የብን",
         "becomes": "ይሕይው",
         "removed": "ተውዕሉ"
+      },
+      "view": {
+        "label": "ርእይቲ",
+        "grid": "ብዝዕይነትን ፍትወታትን",
+        "runway": "መዓት ዝትውዓዝ",
+        "map": "ተሽዉዕቲን ዝተዋደደነትን"
+      },
+      "facts": {
+        "estimateNote": "ወጪ እና CO2e ናይ መስክ, ዘይምውን፡ ዘለዎት ጥዕናታት ብደቀንን ሞያ ምውካኣት ({promptTokens} ተኣጥቃ ትንበያ, {completionTokens} ኣውጡ ትንበያ) ብምሕጋዝ ዝሓለፈ. ምጥቃእ ኣብ ዝተሓለፈ {days, plural, one {# መዓልቲ} other {# መዓልታት}} ይኸውን።",
+        "estimateNoteNoCost": "CO2e ናይ መስክ እዩ፡ ዘይምውን፡ ዘለዎት ጥዕናታት ብደቀንን ሞያ ምውካኣት ({promptTokens} ተኣጥቃ ትንበያ, {completionTokens} ኣውጡ ትንበያ). ምጥቃእ ኣብ ዝተሓለፈ {days, plural, one {# መዓልቲ} other {# መዓልታት}} ይኸውን።",
+        "captureNote": "ምድላው ንኩሉ ሰባት ብዓይነት እንከ መጀመሪ መዓልቲ ምህባ ትሕድቦም እዩ ዝበሃል። ንገና እቲ ቁሳሊ ኣብ ሕዝቢ ክብህል ዝኽእል ይኸውን።",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} ውሽጢ፣ {output} ወጻኢ",
+        "summary": {
+          "label": "ሞዴልታት ጻወታ",
+          "used": "ሞዳላት ዝተጠቀሙ, ኣብ ዝተሓለፈ {days, plural, one {# መዓልቲ} other {# መዓልታት}}",
+          "usedValue": "{used} ካብ {total}",
+          "requests": "ሐበመታት",
+          "spend": "ዝግምት ወጻኢ",
+          "footprint": "ዝግምት CO2e",
+          "retiring": "ኣብ {days} መዓልታት ዝትውዓዝ",
+          "noCeiling": "ኣይነበርን ፀጋ ንኩሉ ሰባት",
+          "notYet": "ገና ዘይታወቀ።"
+        },
+        "columns": {
+          "label": "ኣንቀጽታት",
+          "cost": "ወጻኢ",
+          "footprint": "ዳህዋላ",
+          "usage": "ምድላው",
+          "lifecycle": "ዝትውዓዝ"
+        },
+        "col": {
+          "price": "ዝታወቀ ዋጋ ን 1M tokens",
+          "ceiling": "ዝተቀመጠ ወጻኢ ንሓደ ሰብ፣ ብወርሒ",
+          "footprint": "CO2e ን ዝሓሸ ሓበመታት",
+          "people": "ሰባት ዝድለዉ",
+          "spread": "ብዙሕ መዓልቲ ተበግቲ ሓበመታት",
+          "retires": "ይትውዓዝ"
+        },
+        "ceiling": {
+          "heavy": "ክሳብ {amount} ን ብሓበመታት ዝንከል",
+          "off": "ምንታይን፡ ዝተሰነዘ",
+          "unbounded": "ወሰን ኣይነበርን",
+          "unpriced": "ዝታወቀ ዋጋ ኣይነበረን"
+        },
+        "footprint": {
+          "notSet": "ዓበይቲ ኣይተዋገን"
+        },
+        "size": {
+          "nano": "ናኖ",
+          "mini": "ሚኒ",
+          "standard": "ስታንደርድ",
+          "large": "ትሑል",
+          "xl": "ቆሚ ትሑል"
+        },
+        "usage": {
+          "none": "ምድላው ኣይነበረን",
+          "spend": "ሰላ {amount}",
+          "cappedOnly": "ንዝተጠየቁ ሰባት ብፍጻሜ"
+        },
+        "spread": {
+          "caption": "መሊስ {median}, 75ኛ {p75}, ብዙሕ {max}",
+          "label": "ብዙሕ መዓልቲ መጥቀም ሓበመታት፡ መሊስ {median}, 75ኛ ፐርሰንታይል {p75}, 95ኛ ፐርሰንታይል {p95}, ብዙሕ {max}.",
+          "labelCap": "ውዕለት {cap} ብ መዓልቲ እዩ።",
+          "legend": {
+            "p95": "ክሳብ 95ኛ ፐርሰንታይል",
+            "box": "መሊስ ክሳብ 75ኛ ፐርሰንታይል",
+            "max": "ብዙሕ ዝተጠቀመ ሰብ",
+            "cap": "ውዕለት ንኩሉ ሰባት"
+          }
+        },
+        "retires": {
+          "none": "ቀን ኣይተለበጸን",
+          "forced": "እሕሱ ሰርቐ እዩ",
+          "past": "ቀን ዞምኹሩ እዩ",
+          "to": "ናብ {model}"
+        },
+        "lifecycle": {
+          "preview": "ቅድሚ ርእይ",
+          "ga": "ብሓደ ዝተማህደረ",
+          "legacy": "ዝተረፈ",
+          "deprecated": "ዝተወገደ",
+          "retired": "ዝተስተፈ"
+        },
+        "detail": {
+          "region": "እዚ ሞዴል ከመይ ይጠቀም እዩ ንፍሉይ ከመይ ይኸፍል እዩ",
+          "usageTitle": "ንእዚ ሰባት ኣብ ዝበለ ወርኪ መዓልቲ ዝተደሓነ ጥያቄ",
+          "usageHint": "{people, plural, one {# ሰብ} other {# ሰባት}} ኣብ ዝተሓለፈ {days, plural, one {# መዓልቲ} other {# መዓልታት}} ዘተጠቀመዮም። ካልእ ሰብ ሓንቲ ጊዜ ኣብ ዝኸደ መዓልቲ የተቐረቒ።",
+          "noUsage": "ኣንስተይ ኣብዚ ሞዳል ኣብ ዝተሓለፈ {days, plural, one {# መዓልቲ} other {# መዓልታት}} ዘተጠቀመዮም።",
+          "bucketHeading": "ጥያቄ ኣብ መዓልቲ",
+          "peopleHeading": "ሰባት",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "ውሑደ መሰል ኣብ ዘይቀረበ መዓልቲ",
+          "median": "መካነ ዝውሑድ",
+          "p75": "75ኛይ ፐርሰንቲል",
+          "p95": "95ኛይ ፐርሰንቲል",
+          "max": "በዝሒ ዝጠቀመ ሰብ",
+          "reachedCap": "ደሓን መደብ ድማ",
+          "cappedOnly": "ኣብ ሓደን መደብ ዚሉ ሰባት ብምስል ኣሞኑ እዩ፣ ዝወደበ ዚኣይተምሕደሩ ጌርኩም.",
+          "truncated": "ብዝበዝሖም ዝጠቕሞም ሰባት ብምግባር ፣ መካነ ዝውሑድን ፐርሰንቲልን ዘለዎም ዝበለ ይነበር እዩ።",
+          "replayTitle": "ኣብ ካሕሳ መደብ ክኸውን ነበር ዝኸውን",
+          "replayHint": "ኣብ መዓልቲ ዝበለ መደብ ዝተሰገሩ ሰባት እንታይ ይኸውን እዩ። ኣብ መዓልቲ ዘሎም ይድርቡ ከኣ.",
+          "replayCap": "መደብ ንቀሪት ሰባት",
+          "replayStopped": "ዝተወጡ ሰባት",
+          "replayPerDay": "{cap} ኣብ መዓልቲ",
+          "replayNow": "{cap} መዓልቲ (ሕጂ)",
+          "replayUnlimitedNow": "ዘይተቆላ ሕጂ",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "ቀዳሚ ዋጋ",
+          "costHint": "ፈልጠ ዋጋ ንተቐምጣጠ ጥያቄ። ፀፊ፣ ርእይ ፍቓድ ብዝሒ ይስርዕ።",
+          "typicalRequest": "ንዓይ ጥያቄ ናይ መሰል",
+          "longRequest": "ናይ ዝነዛ ጥያቄ",
+          "everyoneWindow": "ኩሉ ሰባት, ዝተሓለፈ {days, plural, one {# መዓልቲ} other {# መዓልታት}}",
+          "atThisPace": "ሰምናይ ኣብዚ ውዕሊ",
+          "footprintTitle": "ቀዳሚ ኪሎምት",
+          "footprintHint": "ካብ ውሑደ ክፋላት ሞዴልን ቀዳሚ ጥያቄን። ትንሳኤ ድምበት እዩ፣ መዘዝ ኣይኮነን።",
+          "sizeClass": "ውሑድ ክፋላት",
+          "noSizeClass": "እዚ ሞዴል ውሑድ ክፋላት የለዎ፣ ኪሎምት ኣይከወነን። ኣብ ሞዴል ዝርዝር ውሑድ ንውጽኡ.",
+          "aboutTitle": "ብዛዕባ እዚ ሞዴል",
+          "status": "ዓበይቲ",
+          "retiresOn": "{date}። መሕደራ ካብ {notice} ይተዓበዩ ከኣ ካብ {move} ይስምሓዩ።",
+          "retiresForced": "ሰባት ሕጂ ካብ እዚ ሞዴል ይስምሓዋ።",
+          "retiresUnknown": "ቀን ኣይተለበጸን",
+          "replacement": "ሰባት ይገብሱ",
+          "replacementNotSet": "ኣይተአሰረን",
+          "knowledge": "እዋን ድሕሪ ዝበለ",
+          "context": "ትክክል እዋን",
+          "contextTokens": "{tokens} token",
+          "canDo": "ይክእል",
+          "can": {
+            "images": "መልእኽቲ ምንባብ",
+            "tools": "መሳርሕታት ምጠቃም",
+            "codeInterpreter": "ኮድ ምሕሳብ",
+            "reasoningEffort": "ጥዕና ሓሳብ መስተካከል"
+          },
+          "hosted": "ዝተዳለወ",
+          "hosting": {
+            "azure": "ኣብ Azure ናይ ተቓውሞ ሸጋራ",
+            "external": "ብኣዳና ተሓጋጋዚ",
+            "local": "ኣብ ናይቲ ዓይነት"
+          }
+        }
+      },
+      "runway": {
+        "lead": "እዚ ናይ እዋን ዘሎ ኣብ ሞዴል ዝኾኑ ምስ ዝተሓሓልዎ፣ ንበዚ ዝጠቐመዎ ሰባት ብፅዕና እንታይ ዋሕሳነ ዝኾኑ ተመሳሳሊ መበገሲ ኣብ ኣዲስ ሞዴል ኣንስናዮም ዘሎዎ ይፅንዕ.",
+        "caption": "ሞዴልታት ብ ቀጥዒ ዝሓለፉ ዓይነት ፍቓድ፣ ንሁሉ ቆልዑ",
+        "empty": "ኣይተሓለፈ ዓይነት ፍቓድ ዘለዎ ሞዴል የብሉን።",
+        "today": "ሎሚ",
+        "col": {
+          "people": "ሰባት",
+          "landsOn": "ሰባት ይጠቕሙ",
+          "access": "ኣብ ተኪ ሞዴል መተግበሲ"
+        },
+        "alert": "{model} ኣብ {days, plural, one {# መዓልቲ} other {# መዓልታት}} ይተሓለፍ። {people, plural, one {# ሰብ} other {# ሰባት}} ብቅድሚ ዓብየ ወጻንዎ።",
+        "alertForced": "{model} ሎሚ ይተሓለፍ። {people, plural, one {# ሰብ} other {# ሰባት}} ቅድሚ ዓብየ ወጻንዎ።",
+        "alertTo": "ን {model} ይቐየሩ።",
+        "alertNoReplacement": "ተንሲኣ ዘይተዋሃበ።",
+        "access": {
+          "same": "ተመሳሳሊ ሕጋት",
+          "unknown": "ንሕሳብ ኣይክእን እንታይ ኣብ ተኪ ሞዴል ዘለዎ",
+          "everyone": "ሰባት ካልኦት በዝናብ ሓሳብ ይቕረቡ",
+          "audiences": "{count, plural, one {# ቡድድ, domain ወይ person ሓደ} other {# ቡድዳት, domain ወይ ሰባት ብትሕለት}} ዝተሓለፈ ስነ መሰረት ኣለዎ።",
+          "both": "ሰባት ካልኦት ኣብሰቶን እንተኾኑ {count, plural, one {# ቡድን፣ ዶሚን ወይ ሰብ} other {# ቡድናት፣ ዶሚናት ወይ ሰባት}} በዝናብ ሓሳብ ይቕረቡ"
+        },
+        "carryOver": "እዚ ሕጋት ወደ {model} ውክልን",
+        "carried": "ሕጋት ካብ {from} ናብ {to} ተውክሉ። ይዛዕብን ይቐልቱን ንምትግባል።",
+        "legend": {
+          "service": "ኣብ ሰራሕ",
+          "notice": "ዝተራከበ ናብ ሰባት፣ {days} መዓልታት",
+          "move": "ሰባት ተቐይሩ፣ ቅድሚ {days} መዓልታት"
+        },
+        "pastTitle": "ቅድሚ ውጽኢት ኣብ ሓደፋይ ዝተረኸበ።",
+        "pastItem": "{model} ({date}, {people, plural, one {# ሰብ} other {# ሰባት}})",
+        "undatedTitle": "ቀዳዲ ቀን ዘይተዋሃበ።",
+        "rulesNote": "ኣብ ዝበለ ሕጋት ንዓይነት ይህንድ። ኣብ ሞዴል ዝተጠቀመ ሰባት ቁልፊ ስም ዘይሰዓር፣ ንዚ ዝተጠቐመ ሰባት ንብሕታም ኣይይንዝን."
+      },
+      "map": {
+        "lead": "ካልእ ዞባ ሞዳል ኣብ ዝተሓለፈ {days, plural, one {# መዓልቲ} other {# መዓልታት}} ዝተጠቀመዩ። ዘሎ ሕሳብ ዝሓለፈ ይኸውን, ካብ ጸወነ መደበ ሓርርን ብምታምማጽን ብምሕጋዝ ምውካኣት ዘሕሉ። Spend እና CO2e ናይ መስክ እዮም፡ ካብ ሞያ ምውካኣት ዝርከብ ይሕሉ።",
+        "empty": "ተረኽበ ዝሕልዎ ሞዳል ኣብ ዝተሓለፈ {days, plural, one {# መዓልቲ} other {# መዓልታት}} ዘተጠቀመዮም።",
+        "caption": "ኣብ ሰናይ ደቂቕ ምሕሳብ ትክክል፣ ዋጋ ዝቐረበ ቀደም ኣብ ዓርት",
+        "sizeLabel": "ንዑይ ዓንቀጽ",
+        "size": {
+          "spend": "ሕሳብ ውፍሪ",
+          "footprint": "ሕሳብ CO2e",
+          "requests": "ተጠያቂታት"
+        },
+        "axisPeople": "ሰባት, ዝተሓለፈ {days, plural, one {# መዓልቲ} other {# መዓልታት}} (ላዕለ)",
+        "axisCost": "ሕሳብ ዋጋ ናይ ደቂቕ ምንባብ ብ ዋጋ ቁጽሪ (ደገ)",
+        "dotLabel": "{model}: {people, plural, one {# ሰብ} other {# ሰባት}}, {cost} ናይ ደቂቕ ምንባብ፣ {value}። መተግበሲ ሕጋት ኽፈቱ።",
+        "legendTitle": "መደበታ ንዑይ፡",
+        "legend": {
+          "mini": "ናኖ ወይት ምኒ",
+          "standard": "ስርዓት",
+          "large": "ትሕተት",
+          "xl": "ተጨማሪ ትሕተት",
+          "unset": "አይተወከለን"
+        },
+        "col": {
+          "requests": "ጥወታት",
+          "perRequest": "ብ ትሕዝተ ጥወታ"
+        },
+        "unknown": "ዘይታወቀ",
+        "noFindings": "ኣንዳንድ ይትረከብ ኣለዎ እዚ ግና.",
+        "findingTitle": {
+          "concentrated": "ተሰብኢ ምክፋል ናጽነት",
+          "reached": "ደርሆ ዝገበረ ግደታ",
+          "unreached": "ግደታ ዘይተበጸሖ",
+          "noCeiling": "ዘይ ደርሆ"
+        },
+        "finding": {
+          "concentrated": "{model} ክፋል {share} ተመሓላለፈ ዘሎ ወጪ እዩ።",
+          "reached": "{model}: {people} ካብ {of} ሰባት ደርሆ {cap} ብዝዓይ መዓልቲ ተረኽቡ።",
+          "unreached": "{model} ምስ {cap} ብዝዓይ መዓልቲ ዝሓዝ እዩ፤ ንዝበጽሖ ሰብ {max} ሰርሕ በለ።",
+          "noCeiling": "{models}: ሳዕ ሰባት ዘይ ግደታ። ንዝበጽሖ ሰብ {max, plural, one {# ጥወታ} other {# ጥወታት}} ብዝዓይ መዓልቲ ሰርሕ በለ።"
+        }
       }
     },
     "previewSourceModelAccess": "ምሉእ ምዝርግታ ሞዴል — {list}",

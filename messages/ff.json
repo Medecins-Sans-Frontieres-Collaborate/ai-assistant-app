@@ -6929,6 +6929,223 @@
         "none": "entry walaa",
         "becomes": "ɗum jogi",
         "removed": "momti"
+      },
+      "view": {
+        "label": "Hottan",
+        "grid": "Access e hakkunde",
+        "runway": "Jokkere feccere",
+        "map": "Naat e ngutti"
+      },
+      "facts": {
+        "estimateNote": "Kaare e CO2e ɗe kaareji, ndon hokki ɗum: tooŋgul woni e moƴƴi kaare ngal (tokken {promptTokens} warti, {completionTokens} wattude) e gese price. Nattude woni e {days, plural, one {# ñalngu} other {# ñalnguuji}} ɓannde.",
+        "estimateNoteNoCost": "CO2e kaareji, ndon hokki ɗum: tooŋgul woni e moƴƴi kaare ngal (tokken {promptTokens} warti, {completionTokens} wattude). Nattude woni e {days, plural, one {# ñalngu} other {# ñalnguuji}} ɓannde.",
+        "captureNote": "Huutorde on moƴƴi jamma mo waawi janno e ñande fuɗɗo feccere. Ko kadi, lottude giɗi woni moɗɗo mo ina sotto cap.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} weydi, {output} waɗi",
+        "summary": {
+          "label": "Model jiɗɗum janno",
+          "used": "Modelji ndon ko waawi, {days, plural, one {# ñalngu} other {# ñalnguuji}} ɓannde",
+          "usedValue": "{used} e {total}",
+          "requests": "Gesooji",
+          "spend": "Naat mabbutal",
+          "footprint": "Naat CO2e",
+          "retiring": "Feccude e {days} jiɓ",
+          "noCeiling": "Ko jamma wi'i",
+          "notYet": "Tananiɗa janno"
+        },
+        "columns": {
+          "label": "Pondirɗe",
+          "cost": "Naat",
+          "footprint": "Ngurtal",
+          "usage": "Huutorde",
+          "lifecycle": "Feccere"
+        },
+        "col": {
+          "price": "Darnade list e token 1M",
+          "ceiling": "Alam mo waawi naat, e lewru",
+          "footprint": "CO2e e woni kala gese",
+          "people": "Jamma mo huutii",
+          "spread": "Gesooji e ñande mo welti",
+          "retires": "Fecci"
+        },
+        "ceiling": {
+          "heavy": "kono e {amount} e gesooji longndi",
+          "off": "Laata: jokkani",
+          "unbounded": "Laata jamma",
+          "unpriced": "Laata darnade list"
+        },
+        "footprint": {
+          "notSet": "Ngurtal kala seɗa"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Large",
+          "xl": "Large jumbo"
+        },
+        "usage": {
+          "none": "Teeɗam huutorde",
+          "spend": "tawii {amount}",
+          "cappedOnly": "jamma mo sotto cap tan"
+        },
+        "spread": {
+          "caption": "median {median}, 75th {p75}, takkinde {max}",
+          "label": "Gesooji e ñande mo welti: median {median}, 75th percentile {p75}, 95th percentile {p95}, takkinde {max}.",
+          "labelCap": " Cap mo {cap} e ñande.",
+          "legend": {
+            "p95": "ton e 95th percentile",
+            "box": "median e 75th percentile",
+            "max": "mo hakkunde geese winndi",
+            "cap": "cap mo jamma wi'i"
+          }
+        },
+        "retires": {
+          "none": "Ñande jamma waɗtii",
+          "forced": "Teeɗi huuɗii",
+          "past": "Ñande waɗanii",
+          "to": "Ɓe {model}"
+        },
+        "lifecycle": {
+          "preview": "Ngu mbaɗi dokkal",
+          "ga": "Ngu mbaɗi doggol",
+          "legacy": "Ngu tampere",
+          "deprecated": "Ngu waawi fofta",
+          "retired": "Ngu haa ngam"
+        },
+        "detail": {
+          "region": "Kadi ko ɓe njoga model ngol, e ko ndiyam baali",
+          "usageTitle": "Jokkondiral jamaa e ñande sappooy",
+          "usageHint": "{people, plural, one {# neɗɗo} other {# neɗɗii}} waawi ɗum e {days, plural, one {# ñalngu} other {# ñalnguuji}} ɓannde. Neɗɗo kammu e ñalgu moƴƴi.",
+          "noUsage": "Neɗɗo so waawi model ngol e {days, plural, one {# ñalngu} other {# ñalnguuji}} ɓannde.",
+          "bucketHeading": "Jokkondiral e ñande",
+          "peopleHeading": "Jamaa",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Mboɗdi keewal e ñande fedde",
+          "median": "Mboɗdi njiddoy",
+          "p75": "75% junngo",
+          "p95": "95% junngo",
+          "max": "Jamaa jokkondiri feewi",
+          "reachedCap": "Teeɗi taggi laaɓta",
+          "cappedOnly": "So jamma kala ngennu laaɓta eɲa taggo e nder, so jamma laaɓta ngennu walaa.",
+          "truncated": "Jamaa jokkondiri feewi tan ɓe naani, ko adogi mboɗdi njiddoy e junngol gese.",
+          "replayTitle": "So laaɓta wonii weltii",
+          "replayHint": "Ko ɗum jamaa nde ɓe ngoodi ñande e laaɓta. ɓe ngennu taggi ñande ndu.",
+          "replayCap": "Laaɓta jamaa e makko",
+          "replayStopped": "Jamaa taggii",
+          "replayPerDay": "{cap} e ñande",
+          "replayNow": "{cap} e ñande (ngal) ",
+          "replayUnlimitedNow": "Walaa laaɓta (ngal)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Mboɗdi ndiyam baali",
+          "costHint": "Doggol ndiyam laawol jokkondiral. Walaa ndiyam: jokkondiral kamɓe gese e toɲal.",
+          "typicalRequest": "Jokkondiral keewal",
+          "longRequest": "Jokkondiral gese",
+          "everyoneWindow": "Neɗɗo gese, {days, plural, one {# ñalngu} other {# ñalnguuji}} ɓannde",
+          "atThisPace": "Lewru e nderen dokkal",
+          "footprintTitle": "Mboɗdi ceege",
+          "footprintHint": "E to mboɗdi siiz e model e laawol jokkondiral. Ko doggol junngo, walaa ɗam.",
+          "sizeClass": "Gollal siiz",
+          "noSizeClass": "Model ngol wonaa gollal siiz, tee ceege mum waawaa jogii. Taggi e katalog model.",
+          "aboutTitle": "Ko model ngol",
+          "status": "Mbaɗo",
+          "retiresOn": "{date}. Jamma danndani {notice} e ɓe huuɗi {move}.",
+          "retiresForced": "Jamaa huuɗi model ngol ngalaa.",
+          "retiresUnknown": "Ñande jamma waɗtii",
+          "replacement": "Jamaa woni e",
+          "replacementNotSet": "Wataa janngii",
+          "knowledge": "Jammaa hirna to",
+          "context": "Context window",
+          "contextTokens": "{tokens} tokenji",
+          "canDo": "Naatndi",
+          "can": {
+            "images": "luggude gambarji",
+            "tools": "huutorde tools",
+            "codeInterpreter": "ranndude code",
+            "reasoningEffort": "heɓude borɗo reasoning"
+          },
+          "hosted": "Hosted",
+          "hosting": {
+            "azure": "Azure tenant ngol organisation",
+            "external": "Golleede e maayo jogoo",
+            "local": "Leñoo"
+          }
+        }
+      },
+      "runway": {
+        "lead": "So model kala waɗi yaa, holi hay huunde e to, e so baho dokkal ngol access rewɓe e model ngol rewɓe waawii landude.",
+        "caption": "Modelji waɗi date retirement, jiɗɗi firnde",
+        "empty": "Model maa tigi jooɗi date retirement.",
+        "today": "Jooni",
+        "col": {
+          "people": "Rewɓe",
+          "landsOn": "Rewɓe landani",
+          "access": "Access e replacement"
+        },
+        "alert": "{model} ɗo waawi retired e {days, plural, one {# ñalngu} other {# ñalnuwi}}. {people, plural, one {# rewɗo} other {# rewɓe}} loowi bana.",
+        "alertForced": "{model} ɗo waawi retired jooni. {people, plural, one {# rewɗo} other {# rewɓe}} loowi bana.",
+        "alertTo": "Rewɓe ɗo waawi yamiri e {model}.",
+        "alertNoReplacement": "Model replacement mooɗani.",
+        "access": {
+          "same": "Rules kala",
+          "unknown": "Waawa looti e model replacement mooɗani",
+          "everyone": "Rewɓe jeɗɗi jogi terms banngal",
+          "audiences": "{count, plural, one {# group, domain wala neɗɗo jogii} other {# groupji, domainji wala neɗɗii jogiii}} njoɓdi terms ndon",
+          "both": "Rewɓe jeɗɗi e {count, plural, one {# group, domain walla rewɗo} other {# groupji, domainji walla rewɓe}} jogi terms banngal"
+        },
+        "carryOver": "Nat rulesji ɗi e {model}",
+        "carried": "Rulesji {from} natndi e {to}. Looto e dannde e andi.",
+        "legend": {
+          "service": "golle",
+          "notice": "notice mbaɗi rewɓe, {days} ñalnuwi",
+          "move": "rewɓe yamndi, {days} ñalnuwi jokkondirde"
+        },
+        "pastTitle": "Past date ngol e jooɗi e list ngol:",
+        "pastItem": "{model} ({date}, {people, plural, one {# rewɗo} other {# rewɓe}})",
+        "undatedTitle": "Date mooɗani publishi:",
+        "rulesNote": "Access looti rule e rule. Huutorde innude, innde rewɓe waawi nganndi, kono waawa jiyde hay rewɓe model ngol waawi waawude access."
+      },
+      "map": {
+        "lead": "Circliji kala waawa model ndon e {days, plural, one {# ñalngu} other {# ñalnguuji}} ɓannde. Ko tuma heyo hakkunde maan kaare per tooŋgul, moƴƴi e ley neɗɗo wattude. Kaare e CO2e ɗe kaareji e moƴƴi tooŋgul.",
+        "empty": "Model woni e gese price so waawi e {days, plural, one {# ñalngu} other {# ñalnguuji}} ɓannde.",
+        "caption": "Figura kala e tabal, spend jumtude njahar firnde",
+        "sizeLabel": "Circle ndiyam",
+        "size": {
+          "spend": "Spend jumtude",
+          "footprint": "CO2e jumtude",
+          "requests": "Requests"
+        },
+        "axisPeople": "Neɗɗo, {days, plural, one {# ñalngu} other {# ñalnguuji}} ɓannde (yehi)",
+        "axisCost": "Njahar cost request kala e price ngol (jeñi)",
+        "dotLabel": "{model}: {people, plural, one {# rewɗo} other {# rewɓe}}, {cost} e request kala, {value}. Uddi rules access ngol.",
+        "legendTitle": "Njahar class:",
+        "legend": {
+          "mini": "nano walla mini",
+          "standard": "standard",
+          "large": "ɗiɗal",
+          "xl": "ɗiɗal ɓuri",
+          "unset": "waɗi añ"
+        },
+        "col": {
+          "requests": "Danngaaji",
+          "perRequest": "Nde danngaaji baawol"
+        },
+        "unknown": "Waɗi añ",
+        "noFindings": "Jumɗe kala waña waɗi bayda.",
+        "findingTitle": {
+          "concentrated": "Ñaare mum yidi",
+          "reached": "Kafal mo waɗi tagna",
+          "unreached": "Kafal mo no feewi",
+          "noCeiling": "Kafal ngal waɗi añ"
+        },
+        "finding": {
+          "concentrated": "{model} ko {share} e ñaare mum yidi.",
+          "reached": "{model}: {people} e {of} mo waɗi tagna {cap} e ñalngu.",
+          "unreached": "{model} kaɗi tagna e {cap} e ñalngu; mo goɗɗo ɓuri neɗɗo waɗi {max}.",
+          "noCeiling": "{models}: ɓuri ɗum e moolo. Mo goɗɗo ɓuri neɗɗo waɗi {max, plural, one {# danngaaji} other {# danngaji}} e ñalngu."
+        }
       }
     },
     "previewSourceModelAccess": "Cuɓoraa model — {list}",

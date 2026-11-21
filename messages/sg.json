@@ -6929,6 +6929,223 @@
         "none": "Entry oko",
         "becomes": "sô tî",
         "removed": "gbé"
+      },
+      "view": {
+        "label": "Kéta",
+        "grid": "Dö kombéni na makandé",
+        "runway": "Sô a kodro a gbâ na pombi",
+        "map": "Gbêtê na fama"
+      },
+      "facts": {
+        "estimateNote": "Mbongo na CO2e ti lo mo na nyara, ala mbongo ti mo na makara: la ga u ngbangba na mbangui na keti ti use ({promptTokens} tokens mo na, {completionTokens} mo na ye) na keti ti mbongo. Gbaa ti mbangui mo na na yeke {days, plural, one {# ngbi} other {# ngbi}}.",
+        "estimateNoteNoCost": "CO2e ti lo mo na nyara, ala mo na makara: la ga u ngbangba na mbangui na keti ti use ({promptTokens} tokens mo na, {completionTokens} mo na ye). Gbaa ti mbangui mo na na yeke {days, plural, one {# ngbi} other {# ngbi}}.",
+        "captureNote": "Kôta tî yângâ tî ombi na yângâ so ape na nginza na lôndo na yângâ tî bédé tene. Tî tî yeke a, mô na yângâ kodro mbi, yângâ mo na fêtê na cap sô.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} tî vönî, {output} tî bîrî",
+        "summary": {
+          "label": "Modê na vönä ngû",
+          "used": "Model ti mo na na yeke, {days, plural, one {# ngbi} other {# ngbi}} ka na ngbi.",
+          "usedValue": "{used} na {total}",
+          "requests": "Yângâ",
+          "spend": "Gbêtê mbi na kombéni",
+          "footprint": "CO2e mbi na kombéni",
+          "retiring": "Ködro na kangô ti {days} tî kéké",
+          "noCeiling": "Mbênî yângâ sô sô ava",
+          "notYet": "Ape na sô"
+        },
+        "columns": {
+          "label": "Mbütü",
+          "cost": "Gbêtê",
+          "footprint": "Footprint",
+          "usage": "Kôta na yângâ",
+          "lifecycle": "Sô tî kodro"
+        },
+        "col": {
+          "price": "List price tî 1M tokens",
+          "ceiling": "Sô na mô môko tî gbêtê, na sôka",
+          "footprint": "CO2e na kôta tî yângâ tî sangbä",
+          "people": "Mö tî yângâ a",
+          "spread": "Yângâ na lôndo kâra tî mô",
+          "retires": "Yê kangô"
+        },
+        "ceiling": {
+          "heavy": "tu na {amount} na yângâ kâra",
+          "off": "Ala: a yeke so sô",
+          "unbounded": "Sô tî mbênî",
+          "unpriced": "A la list price"
+        },
+        "footprint": {
+          "notSet": "Kötörö tî kâlo ape"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Large",
+          "xl": "Extra large"
+        },
+        "usage": {
+          "none": "Kôta a tî yângâ ape",
+          "spend": "sôso {amount}",
+          "cappedOnly": "Mö na cap sô vönî"
+        },
+        "spread": {
+          "caption": "median {median}, 75e {p75}, ködörö {max}",
+          "label": "Yângâ na lôndo kâra tî mô: median {median}, 75e percentile {p75}, 95e percentile {p95}, ködörö {max}.",
+          "labelCap": "Cap sô {cap} na lôndo.",
+          "legend": {
+            "p95": "tu na 95e percentile",
+            "box": "median na 75e percentile",
+            "max": "mô na kâra ködörö",
+            "cap": "cap tî mbênî"
+          }
+        },
+        "retires": {
+          "none": "Datë so azô na nzoni",
+          "forced": "A yékë na modelï ti yê",
+          "past": "Datë ti ngbi",
+          "to": "na {model}"
+        },
+        "lifecycle": {
+          "preview": "Könö",
+          "ga": "A kodë ti zingo",
+          "legacy": "Gbâkö",
+          "deprecated": "A mabë",
+          "retired": "A yékë"
+        },
+        "detail": {
+          "region": "Könö na modelï ti yê na sé, na kékë so a ti mbongo",
+          "usageTitle": "Nzala ti süka na ndapë ti perso",
+          "usageHint": "{people, plural, one {# gbanguese} other {# gbanguese}} mo na na yeke {days, plural, one {# ngbi} other {# ngbi}} ka na ngbi. Gbanguese kunga mo na na yeke na ngbi mo na makara ti mo.",
+          "noUsage": "Kete gbanguese mo ti model tene na yeke {days, plural, one {# ngbi} other {# ngbi}} ka na ngbi.",
+          "bucketHeading": "Nzala ti ndapë",
+          "peopleHeading": "Perso",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Mbongo ti ndapë na perso",
+          "median": "Mbongo ti gbäkö",
+          "p75": "Gbäkö ti 75%",
+          "p95": "Gbäkö ti 95%",
+          "max": "Perso a ti nzala mbi",
+          "reachedCap": "A yékë na gbäkö",
+          "cappedOnly": "Perso ti yékë na gbäkö so ti nzoni, perso ti gbäkö te a kola.",
+          "truncated": "Perso a ti nzala mbi na gbë, na gbäkö na percentile a ti sila kpe na mbi.",
+          "replayTitle": "Sô gbäkö legbe",
+          "replayHint": "Mbongo na perso a ti ndapë na gbäkö ôko na ndapë. A ti lengë na ndapë na gbäkö.",
+          "replayCap": "Gbäkö ti mbi a sè",
+          "replayStopped": "Perso a ti lengë",
+          "replayPerDay": "{cap} ti ndapë",
+          "replayNow": "{cap} ti ndapë (na mbi)",
+          "replayUnlimitedNow": "Gbäkö te a mbi (na mbi)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Mbongo a ti lengë",
+          "costHint": "Mbongo ti nzoni ti süka na ndapë. A te ti fatura: ndapë ti ngbi a ti kodë.",
+          "typicalRequest": "Ndapë ti sô tî gbäkö",
+          "longRequest": "Ndapë ti sô mbi",
+          "everyoneWindow": "Bangbali, {days, plural, one {# ngbi} other {# ngbi}} ka na ngbi.",
+          "atThisPace": "Oko ti ngbi na mô-kelen",
+          "footprintTitle": "Gbäkö ti mbongo",
+          "footprintHint": "Na model ti gbäkö na mbongo ti ndapë. Gbäkö ti mbi, na te ti measurë.",
+          "sizeClass": "Gbäkö ti model",
+          "noSizeClass": "Modelï a ti size te, gbäkö te ti mbongo a ti ngbi. Setë na catalog ti model.",
+          "aboutTitle": "Gbäkö ti modelï",
+          "status": "Status",
+          "retiresOn": "{date}. Perso a ti yê na {notice}, na a yékë na {move}.",
+          "retiresForced": "Perso a ti yékë na modelï a ti yê na mbi.",
+          "retiresUnknown": "Datë so azô na nzoni",
+          "replacement": "Perso a ti mê ti",
+          "replacementNotSet": "A te ti setë",
+          "knowledge": "Deni ti na",
+          "context": "Gefe ti Context",
+          "contextTokens": "{tokens} token",
+          "canDo": "Ke",
+          "can": {
+            "images": "Ke fa na picture",
+            "tools": "Ke fa na tool",
+            "codeInterpreter": "Ke fa na code",
+            "reasoningEffort": "Ke sòngò reasoning"
+          },
+          "hosted": "Gbènî na",
+          "hosting": {
+            "azure": "Na Azure ti organisation",
+            "external": "Na société ti bââ",
+            "local": "Na mboka"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Tî sô model yeke ti tongbi, tî sô na wã yeke na model, tî sô règle ti accès yeke na model ti yeke ko.",
+        "caption": "Model ti tî retire date, yângö sô tî tongbi.",
+        "empty": "Model tî retire date yeke oko.",
+        "today": "Nzoni",
+        "col": {
+          "people": "Bâzo",
+          "landsOn": "Bâzo ti gbin na",
+          "access": "Accès na modèle ti gbin"
+        },
+        "alert": "{model} ké tî retire na {days, plural, one {# ngbi} other {# ngbi}}. {people, plural, one {# mbo} other {# bâzo}} fa na li oko na tî to.",
+        "alertForced": "{model} ké tî retire na nzoni. {people, plural, one {# mbo} other {# bâzo}} fa na li oko na tî to.",
+        "alertTo": "Bâzo ké ti gbin na {model}.",
+        "alertNoReplacement": "Model ti gbin oko yeke.",
+        "access": {
+          "same": "Règle ti na",
+          "unknown": "Mbiti ti gbin yeke oko, accès ti model tî ti gbin yeke oko",
+          "everyone": "Bâzo ti yângö ké ti reçoi règle ti dö",
+          "audiences": "{count, plural, one {# group, domain na gbanguese ti mo na} other {# groups, domains na gbanguese ti mo na}} na moti ti keti ti use",
+          "both": "Bâzo ti yângö na {count, plural, one {# groupe, domaine na mbo} other {# groupe, domain na bâzo}} ké ti reçoi règle ti dö"
+        },
+        "carryOver": "Kopi règle ti na na {model}",
+        "carried": "Kopi règle ti {from} na {to}. Rôle na save na tî dégë.",
+        "legend": {
+          "service": "na service",
+          "notice": "Bâzo ti mû tî avis, {days} ngbi",
+          "move": "Bâzo ti gbin, na {days} ngbi ti to"
+        },
+        "pastTitle": "Model ti passe date na, sô yeke ti yângö:",
+        "pastItem": "{model} ({date}, {people, plural, one {# mbo} other {# bâzo}})",
+        "undatedTitle": "Date yeke oko:",
+        "rulesNote": "Accès ké ti le compare règle pa règle. Usage ké ti bina na tî sin oko, so sô yeke oko ti ga na bâzo ti model ti perdre accès."
+      },
+      "map": {
+        "lead": "Kete na circle ti model ti mo na na yeke {days, plural, one {# ngbi} other {# ngbi}} ka na ngbi. Ala ti mo na na mbongo na lo mo, mboko ti mo na gbanguese. Mbongo na CO2e ti lo mo na nyara na keti ti use.",
+        "empty": "Kete model ti mbongo ti mo na na yeke {days, plural, one {# ngbi} other {# ngbi}} ka na ngbi.",
+        "caption": "Statistique kété tabe, estimate ti dépense haut ti to.",
+        "sizeLabel": "Taille ti circle",
+        "size": {
+          "spend": "Estimate ti dépense",
+          "footprint": "Estimate ti CO2e",
+          "requests": "Demande"
+        },
+        "axisPeople": "Gbanguese, {days, plural, one {# ngbi} other {# ngbi}} ka na ngbi (na use).",
+        "axisCost": "Estimate ti coûter ti demande ti lô na prix (droite)",
+        "dotLabel": "{model}: {people, plural, one {# mbo} other {# bâzo}}, {cost} ti demande ti lô, {value}. Ouvre règle ti accès.",
+        "legendTitle": "Classe ti taille:",
+        "legend": {
+          "mini": "nano na mini",
+          "standard": "standard",
+          "large": "mara",
+          "xl": "mara mingi",
+          "unset": "ale kö"
+        },
+        "col": {
+          "requests": "Mbarara",
+          "perRequest": "Na mbarara mo"
+        },
+        "unknown": "Mboke ti lo",
+        "noFindings": "Ba na ko yé mo.",
+        "findingTitle": {
+          "concentrated": "Mbêrê ti pesa",
+          "reached": "Mbongo mo biani",
+          "unreached": "Mbongo mo yângâ ko",
+          "noCeiling": "Mbongo kö"
+        },
+        "finding": {
+          "concentrated": "{model} ti {share} ti pesa ti so na kosê.",
+          "reached": "{model}: {people} ti {of} mo biani {cap} na lôkô.",
+          "unreached": "{model} ni mbongo na {cap} na lôkô; mo so na mbêrê biani {max}.",
+          "noCeiling": "{models}: kö na biani o. Mo so na mbêrê biani {max, plural, one {# mbarara} other {# mbarara}} na lôkô."
+        }
       }
     },
     "previewSourceModelAccess": "Model ti yame — {list}",

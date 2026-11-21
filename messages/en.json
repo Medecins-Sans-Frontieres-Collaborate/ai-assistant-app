@@ -6588,6 +6588,223 @@
         "none": "no entry",
         "becomes": "becomes",
         "removed": "removed"
+      },
+      "view": {
+        "label": "View",
+        "grid": "Access and facts",
+        "runway": "Retirement runway",
+        "map": "Spend and popularity"
+      },
+      "facts": {
+        "estimateNote": "Cost and CO2e are estimates, not measured spend: counted requests multiplied by a typical request ({promptTokens} tokens in, {completionTokens} out) at list price. Usage covers the last {days, plural, one {# day} other {# days}}.",
+        "estimateNoteNoCost": "CO2e is an estimate, not a measurement: counted requests multiplied by a typical request ({promptTokens} tokens in, {completionTokens} out). Usage covers the last {days, plural, one {# day} other {# days}}.",
+        "captureNote": "Usage by everyone appears after the first full day of collection. Until then the figures cover only people who are under a cap.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} in, {output} out",
+        "summary": {
+          "label": "Models at a glance",
+          "used": "Models used, last {days, plural, one {# day} other {# days}}",
+          "usedValue": "{used} of {total}",
+          "requests": "Requests",
+          "spend": "Estimated spend",
+          "footprint": "Estimated CO2e",
+          "retiring": "Retiring within {days} days",
+          "noCeiling": "Unlimited for everyone else",
+          "notYet": "Not yet known"
+        },
+        "columns": {
+          "label": "Columns",
+          "cost": "Cost",
+          "footprint": "Footprint",
+          "usage": "Usage",
+          "lifecycle": "Retirement"
+        },
+        "col": {
+          "price": "List price per 1M tokens",
+          "ceiling": "Most one person can cost, per month",
+          "footprint": "CO2e per typical request",
+          "people": "People using it",
+          "spread": "Requests on a person's busiest day",
+          "retires": "Retires"
+        },
+        "ceiling": {
+          "heavy": "up to {amount} with long requests",
+          "off": "Nothing: switched off",
+          "unbounded": "No ceiling",
+          "unpriced": "No list price"
+        },
+        "footprint": {
+          "notSet": "Size not set"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Large",
+          "xl": "Extra large"
+        },
+        "usage": {
+          "none": "No usage",
+          "spend": "about {amount}",
+          "cappedOnly": "capped people only"
+        },
+        "spread": {
+          "caption": "median {median}, 75th {p75}, most {max}",
+          "label": "Requests on a person's busiest day: median {median}, 75th percentile {p75}, 95th percentile {p95}, most {max}.",
+          "labelCap": " The cap is {cap} a day.",
+          "legend": {
+            "p95": "up to the 95th percentile",
+            "box": "median to 75th percentile",
+            "max": "heaviest person",
+            "cap": "cap for everyone else"
+          }
+        },
+        "retires": {
+          "none": "No date published",
+          "forced": "Being moved off now",
+          "past": "date has passed",
+          "to": "to {model}"
+        },
+        "lifecycle": {
+          "preview": "Preview",
+          "ga": "Generally available",
+          "legacy": "Legacy",
+          "deprecated": "Deprecated",
+          "retired": "Retired"
+        },
+        "detail": {
+          "region": "How this model is used, and what it costs",
+          "usageTitle": "Requests on each person's busiest day",
+          "usageHint": "{people, plural, one {# person} other {# people}} used it in the last {days, plural, one {# day} other {# days}}. Each person is counted once, at their busiest day.",
+          "noUsage": "Nobody used this model in the last {days, plural, one {# day} other {# days}}.",
+          "bucketHeading": "Requests in a day",
+          "peopleHeading": "People",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Average per active day",
+          "median": "Median",
+          "p75": "75th percentile",
+          "p95": "95th percentile",
+          "max": "Heaviest person",
+          "reachedCap": "Reached a cap",
+          "cappedOnly": "Only people under a cap are counted here so far, so people with no cap are missing.",
+          "truncated": "Only the heaviest people are listed, so the median and percentiles read higher than they are.",
+          "replayTitle": "If the cap were different",
+          "replayHint": "How many of these people had a day at or above each cap. They would have been stopped that day.",
+          "replayCap": "Cap for everyone else",
+          "replayStopped": "People stopped",
+          "replayPerDay": "{cap} a day",
+          "replayNow": "{cap} a day (now)",
+          "replayUnlimitedNow": "Unlimited (now)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Estimated cost",
+          "costHint": "List price for an assumed request. Not a bill: real requests vary in length.",
+          "typicalRequest": "One typical request",
+          "longRequest": "One long request",
+          "everyoneWindow": "Everyone, last {days, plural, one {# day} other {# days}}",
+          "atThisPace": "A month at this pace",
+          "footprintTitle": "Estimated footprint",
+          "footprintHint": "From the model's size class and an assumed request. An order of magnitude, not a measurement.",
+          "sizeClass": "Size class",
+          "noSizeClass": "This model has no size class, so its footprint cannot be estimated. Set one in the model catalog.",
+          "aboutTitle": "About this model",
+          "status": "Status",
+          "retiresOn": "{date}. Users see a notice from {notice} and are moved from {move}.",
+          "retiresForced": "People are being moved off this model now.",
+          "retiresUnknown": "No date published",
+          "replacement": "People land on",
+          "replacementNotSet": "Not set",
+          "knowledge": "Knowledge up to",
+          "context": "Context window",
+          "contextTokens": "{tokens} tokens",
+          "canDo": "Can",
+          "can": {
+            "images": "read images",
+            "tools": "use tools",
+            "codeInterpreter": "run code",
+            "reasoningEffort": "adjust reasoning effort"
+          },
+          "hosted": "Hosted",
+          "hosting": {
+            "azure": "In the organization's Azure tenant",
+            "external": "By an outside provider",
+            "local": "Locally"
+          }
+        }
+      },
+      "runway": {
+        "lead": "When each model goes away, how many people are on it, and whether its access rules match the model people will land on.",
+        "caption": "Models with a retirement date, soonest first",
+        "empty": "No model has a retirement date.",
+        "today": "Today",
+        "col": {
+          "people": "People",
+          "landsOn": "People land on",
+          "access": "Access on the replacement"
+        },
+        "alert": "{model} retires in {days, plural, one {# day} other {# days}}. {people, plural, one {# person} other {# people}} used it recently.",
+        "alertForced": "{model} is being retired now. {people, plural, one {# person} other {# people}} used it recently.",
+        "alertTo": "They will be moved to {model}.",
+        "alertNoReplacement": "No replacement is set.",
+        "access": {
+          "same": "Same rules",
+          "unknown": "Cannot be checked until a replacement is set",
+          "everyone": "Everyone else gets different terms",
+          "audiences": "{count, plural, one {# group, domain or person has} other {# groups, domains or people have}} different terms",
+          "both": "Everyone else and {count, plural, one {# group, domain or person} other {# groups, domains or people}} get different terms"
+        },
+        "carryOver": "Copy these rules to {model}",
+        "carried": "Copied the rules of {from} to {to}. Review and save to apply.",
+        "legend": {
+          "service": "in service",
+          "notice": "notice shown to users, {days} days",
+          "move": "people moved, last {days} days"
+        },
+        "pastTitle": "Past its date and still listed:",
+        "pastItem": "{model} ({date}, {people, plural, one {# person} other {# people}})",
+        "undatedTitle": "No date published:",
+        "rulesNote": "Access is compared rule by rule. Usage is stored without names, so this cannot say how many of the people on a model would lose access."
+      },
+      "map": {
+        "lead": "Each circle is a model used in the last {days, plural, one {# day} other {# days}}. Further right costs more per request, higher has more people. Spend and CO2e are estimates from a typical request.",
+        "empty": "No priced model was used in the last {days, plural, one {# day} other {# days}}.",
+        "caption": "The same figures as a table, highest estimated spend first",
+        "sizeLabel": "Circle size",
+        "size": {
+          "spend": "Estimated spend",
+          "footprint": "Estimated CO2e",
+          "requests": "Requests"
+        },
+        "axisPeople": "People, last {days, plural, one {# day} other {# days}} (up)",
+        "axisCost": "Estimated cost of one typical request at list price (right)",
+        "dotLabel": "{model}: {people, plural, one {# person} other {# people}}, {cost} per typical request, {value}. Open its access rules.",
+        "legendTitle": "Size class:",
+        "legend": {
+          "mini": "nano or mini",
+          "standard": "standard",
+          "large": "large",
+          "xl": "extra large",
+          "unset": "not set"
+        },
+        "col": {
+          "requests": "Requests",
+          "perRequest": "Per typical request"
+        },
+        "unknown": "Not known",
+        "noFindings": "Nothing stands out yet.",
+        "findingTitle": {
+          "concentrated": "Concentrated spend",
+          "reached": "A cap people reach",
+          "unreached": "A cap nobody comes near",
+          "noCeiling": "No ceiling"
+        },
+        "finding": {
+          "concentrated": "{model} is {share} of estimated spend.",
+          "reached": "{model}: {people} of {of} people reached {cap} a day.",
+          "unreached": "{model} is capped at {cap} a day; the heaviest person made {max}.",
+          "noCeiling": "{models}: unlimited for everyone else. The heaviest person made {max, plural, one {# request} other {# requests}} in a day."
+        }
       }
     },
     "tabsLabel": "Limits sections",

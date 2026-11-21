@@ -6945,6 +6945,223 @@
         "none": "aucune entrée",
         "becomes": "devient",
         "removed": "supprimé"
+      },
+      "view": {
+        "label": "Afficher",
+        "grid": "Accès et informations",
+        "runway": "Période de retrait",
+        "map": "Dépenses et popularité"
+      },
+      "facts": {
+        "estimateNote": "Le coût et le CO2e sont des estimations, non des dépenses mesurées : les requêtes comptées sont multipliées par une requête type ({promptTokens} tokens en entrée, {completionTokens} en sortie) au tarif standard. L'utilisation couvre les {days, plural, one {# dernier jour} other {# derniers jours}}.",
+        "estimateNoteNoCost": "Le CO2e est une estimation, non une mesure : les requêtes comptées sont multipliées par une requête type ({promptTokens} tokens en entrée, {completionTokens} en sortie). L'utilisation couvre les {days, plural, one {# dernier jour} other {# derniers jours}}.",
+        "captureNote": "L'utilisation par tous apparaît après un premier jour complet de collecte. Jusqu'à ce moment-là, les chiffres ne concernent que les personnes limitées.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} en entrée, {output} en sortie",
+        "summary": {
+          "label": "Aperçu des modèles",
+          "used": "Modèles utilisés, {days, plural, one {# dernier jour} other {# derniers jours}}",
+          "usedValue": "{used} sur {total}",
+          "requests": "Requêtes",
+          "spend": "Dépense estimée",
+          "footprint": "CO2e estimé",
+          "retiring": "Retraite dans {days} jours",
+          "noCeiling": "Illimité pour les autres",
+          "notYet": "Pas encore connu"
+        },
+        "columns": {
+          "label": "Colonnes",
+          "cost": "Coût",
+          "footprint": "Empreinte",
+          "usage": "Utilisation",
+          "lifecycle": "Retraite"
+        },
+        "col": {
+          "price": "Prix catalogue pour 1M jetons",
+          "ceiling": "Montant maximal par personne, par mois",
+          "footprint": "CO2e par demande typique",
+          "people": "Personnes l'utilisant",
+          "spread": "Requêtes lors du jour le plus actif d'une personne",
+          "retires": "Retraite"
+        },
+        "ceiling": {
+          "heavy": "jusqu’à {amount} avec des demandes longues",
+          "off": "Aucun : désactivé",
+          "unbounded": "Aucun plafond",
+          "unpriced": "Pas de prix catalogue"
+        },
+        "footprint": {
+          "notSet": "Taille non définie"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Large",
+          "xl": "Très grand"
+        },
+        "usage": {
+          "none": "Aucune utilisation",
+          "spend": "environ {amount}",
+          "cappedOnly": "uniquement personnes limitées"
+        },
+        "spread": {
+          "caption": "médiane {median}, 75e {p75}, maximum {max}",
+          "label": "Requêtes lors du jour le plus actif : médiane {median}, 75e percentile {p75}, 95e percentile {p95}, maximum {max}.",
+          "labelCap": " Le plafond est de {cap} par jour.",
+          "legend": {
+            "p95": "jusqu’au 95e percentile",
+            "box": "médiane au 75e percentile",
+            "max": "personne la plus active",
+            "cap": "plafond pour les autres"
+          }
+        },
+        "retires": {
+          "none": "Aucune date publiée",
+          "forced": "Déplacement en cours",
+          "past": "la date est dépassée",
+          "to": "vers {model}"
+        },
+        "lifecycle": {
+          "preview": "Aperçu",
+          "ga": "Généralement disponible",
+          "legacy": "Ancien",
+          "deprecated": "Obsolète",
+          "retired": "Retiré"
+        },
+        "detail": {
+          "region": "Comment ce modèle est utilisé et quel est son coût",
+          "usageTitle": "Requêtes lors du jour le plus actif de chaque personne",
+          "usageHint": "{people, plural, one {# personne l’a} other {# personnes l’ont}} utilisé lors des {days, plural, one {# dernier jour} other {# derniers jours}}. Chaque personne est comptée une fois, selon sa journée la plus active.",
+          "noUsage": "Personne n’a utilisé ce modèle lors des {days, plural, one {# dernier jour} other {# derniers jours}}.",
+          "bucketHeading": "Requêtes par jour",
+          "peopleHeading": "Personnes",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Moyenne par jour actif",
+          "median": "Médiane",
+          "p75": "75e percentile",
+          "p95": "95e percentile",
+          "max": "Personne la plus active",
+          "reachedCap": "Limite atteinte",
+          "cappedOnly": "Seules les personnes sous une limite sont comptées ici pour l'instant, donc celles sans limite sont absentes.",
+          "truncated": "Seules les personnes les plus actives sont listées, c'est pourquoi la médiane et les percentiles apparaissent plus élevés.",
+          "replayTitle": "Si la limite était différente",
+          "replayHint": "Combien de ces personnes ont eu un jour au moins égal à chaque limite. Elles auraient été stoppées ce jour-là.",
+          "replayCap": "Limite pour tous les autres",
+          "replayStopped": "Personnes stoppées",
+          "replayPerDay": "{cap} par jour",
+          "replayNow": "{cap} par jour (actuellement)",
+          "replayUnlimitedNow": "Illimité (actuellement)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Coût estimé",
+          "costHint": "Prix catalogue pour une requête supposée. Ceci n'est pas une facture : les requêtes réelles varient en longueur.",
+          "typicalRequest": "Une requête typique",
+          "longRequest": "Une requête longue",
+          "everyoneWindow": "Tout le monde, {days, plural, one {# dernier jour} other {# derniers jours}}",
+          "atThisPace": "Un mois à ce rythme",
+          "footprintTitle": "Empreinte estimée",
+          "footprintHint": "D'après la classe de taille du modèle et une requête supposée. Un ordre de grandeur, pas une mesure.",
+          "sizeClass": "Classe de taille",
+          "noSizeClass": "Ce modèle n'a pas de classe de taille, donc son empreinte ne peut pas être estimée. Définissez-en une dans le catalogue des modèles.",
+          "aboutTitle": "À propos de ce modèle",
+          "status": "Statut",
+          "retiresOn": "{date}. Les utilisateurs voient une notification depuis {notice} et sont déplacés depuis {move}.",
+          "retiresForced": "Les personnes sont en cours de déplacement de ce modèle.",
+          "retiresUnknown": "Aucune date publiée",
+          "replacement": "Les personnes arrivent sur",
+          "replacementNotSet": "Non défini",
+          "knowledge": "Connaissances jusqu'à",
+          "context": "Fenêtre de contexte",
+          "contextTokens": "{tokens} jetons",
+          "canDo": "Peut",
+          "can": {
+            "images": "lire des images",
+            "tools": "utiliser des outils",
+            "codeInterpreter": "exécuter du code",
+            "reasoningEffort": "ajuster l'effort de raisonnement"
+          },
+          "hosted": "Hébergé",
+          "hosting": {
+            "azure": "Sur le tenant Azure de l'organisation",
+            "external": "Par un prestataire extérieur",
+            "local": "Localement"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Quand chaque modèle disparaît, combien de personnes sont dessus, et si ses règles d'accès correspondent à celles du modèle sur lequel les gens atterriront.",
+        "caption": "Modèles avec une date de retrait, du plus proche au plus éloigné",
+        "empty": "Aucun modèle n'a de date de retrait.",
+        "today": "Aujourd'hui",
+        "col": {
+          "people": "Personnes",
+          "landsOn": "Personnes transférées vers",
+          "access": "Accès sur le remplaçant"
+        },
+        "alert": "{model} sera retiré dans {days, plural, one {# jour} other {# jours}}. {people, plural, one {# personne} other {# personnes}} l'ont utilisé récemment.",
+        "alertForced": "{model} est retiré maintenant. {people, plural, one {# personne} other {# personnes}} l'ont utilisé récemment.",
+        "alertTo": "Ils seront transférés vers {model}.",
+        "alertNoReplacement": "Aucun remplaçant défini.",
+        "access": {
+          "same": "Même règles",
+          "unknown": "Impossible à vérifier tant qu'un remplaçant n'est pas défini",
+          "everyone": "Les autres ont des conditions différentes",
+          "audiences": "{count, plural, one {# groupe, domaine ou personne a} other {# groupes, domaines ou personnes ont}} des conditions différentes",
+          "both": "Les autres et {count, plural, one {# groupe, domaine ou personne} other {# groupes, domaines ou personnes}} ont des conditions différentes"
+        },
+        "carryOver": "Copier ces règles vers {model}",
+        "carried": "Règles de {from} copiées vers {to}. Vérifiez et sauvegardez pour appliquer.",
+        "legend": {
+          "service": "en service",
+          "notice": "avertissement affiché aux utilisateurs, {days} jours",
+          "move": "personnes transférées, {days} derniers jours"
+        },
+        "pastTitle": "Date dépassée mais encore listé :",
+        "pastItem": "{model} ({date}, {people, plural, one {# personne} other {# personnes}})",
+        "undatedTitle": "Aucune date publiée :",
+        "rulesNote": "L'accès est comparé règle par règle. L'utilisation est stockée sans noms, donc il n'est pas possible de dire combien de personnes perdraient l'accès."
+      },
+      "map": {
+        "lead": "Chaque cercle représente un modèle utilisé lors des {days, plural, one {# dernier jour} other {# derniers jours}}. Plus à droite, le coût par requête est plus élevé ; plus haut, il y a plus de personnes. Les dépenses et le CO2e sont des estimations issues d'une requête type.",
+        "empty": "Aucun modèle tarifé n'a été utilisé lors des {days, plural, one {# dernier jour} other {# derniers jours}}.",
+        "caption": "Les mêmes chiffres sous forme de tableau, la dépense estimée la plus élevée en premier",
+        "sizeLabel": "Taille du cercle",
+        "size": {
+          "spend": "Dépense estimée",
+          "footprint": "CO2e estimé",
+          "requests": "Requêtes"
+        },
+        "axisPeople": "Personnes, {days, plural, one {# dernier jour} other {# derniers jours}} (haut)",
+        "axisCost": "Coût estimé d'une requête typique au prix catalogue (vers la droite)",
+        "dotLabel": "{model} : {people, plural, one {# personne} other {# personnes}}, {cost} par requête typique, {value}. Ouvrir ses règles d'accès.",
+        "legendTitle": "Classe de taille :",
+        "legend": {
+          "mini": "nano ou mini",
+          "standard": "standard",
+          "large": "grand",
+          "xl": "très grand",
+          "unset": "non défini"
+        },
+        "col": {
+          "requests": "Requêtes",
+          "perRequest": "Par requête typique"
+        },
+        "unknown": "Inconnu",
+        "noFindings": "Rien à signaler pour l'instant.",
+        "findingTitle": {
+          "concentrated": "Dépenses concentrées",
+          "reached": "Un plafond atteint",
+          "unreached": "Un plafond jamais approché",
+          "noCeiling": "Aucun plafond"
+        },
+        "finding": {
+          "concentrated": "{model} représente {share} des dépenses estimées.",
+          "reached": "{model} : {people} sur {of} personnes ont atteint {cap} par jour.",
+          "unreached": "{model} est limité à {cap} par jour ; la personne ayant le plus utilisé a fait {max}.",
+          "noCeiling": "{models} : illimité pour tous les autres. La personne ayant le plus utilisé a fait {max, plural, one {# requête} other {# requêtes}} en une journée."
+        }
       }
     },
     "previewSourceModelAccess": "Approbation du modèle — {list}",

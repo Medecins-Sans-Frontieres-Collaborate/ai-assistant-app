@@ -6945,6 +6945,223 @@
         "none": "tidak ada entri",
         "becomes": "menjadi",
         "removed": "dihapus"
+      },
+      "view": {
+        "label": "Lihat",
+        "grid": "Akses dan fakta",
+        "runway": "Masa pensiun",
+        "map": "Pengeluaran dan popularitas"
+      },
+      "facts": {
+        "estimateNote": "Biaya dan CO2e adalah estimasi, bukan pengeluaran yang diukur: permintaan yang dihitung dikalikan dengan permintaan tipikal ({promptTokens} token masuk, {completionTokens} token keluar) pada harga daftar. Penggunaan mencakup {days, plural, one {# hari} other {# hari}} terakhir.",
+        "estimateNoteNoCost": "CO2e adalah estimasi, bukan pengukuran: permintaan yang dihitung dikalikan dengan permintaan tipikal ({promptTokens} token masuk, {completionTokens} token keluar). Penggunaan mencakup {days, plural, one {# hari} other {# hari}} terakhir.",
+        "captureNote": "Penggunaan oleh semua orang akan muncul setelah hari pengumpulan penuh pertama. Sebelum itu, data hanya untuk orang yang berada di bawah batas.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} masuk, {output} keluar",
+        "summary": {
+          "label": "Model sekilas",
+          "used": "Model yang digunakan, {days, plural, one {# hari} other {# hari}} terakhir",
+          "usedValue": "{used} dari {total}",
+          "requests": "Permintaan",
+          "spend": "Perkiraan pengeluaran",
+          "footprint": "Perkiraan CO2e",
+          "retiring": "Pensiun dalam {days} hari",
+          "noCeiling": "Tak terbatas untuk yang lain",
+          "notYet": "Belum diketahui"
+        },
+        "columns": {
+          "label": "Kolom",
+          "cost": "Biaya",
+          "footprint": "Jejak",
+          "usage": "Penggunaan",
+          "lifecycle": "Pensiun"
+        },
+        "col": {
+          "price": "Harga daftar per 1M token",
+          "ceiling": "Biaya maksimum satu orang per bulan",
+          "footprint": "CO2e per permintaan tipikal",
+          "people": "Orang yang menggunakan",
+          "spread": "Permintaan pada hari tersibuk seseorang",
+          "retires": "Pensiun"
+        },
+        "ceiling": {
+          "heavy": "hingga {amount} dengan permintaan panjang",
+          "off": "Tidak ada: dinonaktifkan",
+          "unbounded": "Tanpa batas maksimum",
+          "unpriced": "Tanpa harga daftar"
+        },
+        "footprint": {
+          "notSet": "Ukuran belum ditetapkan"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standar",
+          "large": "Besar",
+          "xl": "Sangat besar"
+        },
+        "usage": {
+          "none": "Tidak ada penggunaan",
+          "spend": "sekitar {amount}",
+          "cappedOnly": "hanya orang yang dibatasi"
+        },
+        "spread": {
+          "caption": "median {median}, 75% {p75}, tertinggi {max}",
+          "label": "Permintaan pada hari tersibuk seseorang: median {median}, persentil ke-75 {p75}, persentil ke-95 {p95}, tertinggi {max}.",
+          "labelCap": " Batasnya adalah {cap} per hari.",
+          "legend": {
+            "p95": "hingga persentil ke-95",
+            "box": "median sampai persentil ke-75",
+            "max": "orang tersibuk",
+            "cap": "batas untuk yang lain"
+          }
+        },
+        "retires": {
+          "none": "Tidak ada tanggal diterbitkan",
+          "forced": "Sedang dipindahkan sekarang",
+          "past": "tanggal telah berlalu",
+          "to": "ke {model}"
+        },
+        "lifecycle": {
+          "preview": "Pratinjau",
+          "ga": "Tersedia secara umum",
+          "legacy": "Lama",
+          "deprecated": "Tidak direkomendasikan",
+          "retired": "Tidak digunakan"
+        },
+        "detail": {
+          "region": "Cara penggunaan model ini dan biayanya",
+          "usageTitle": "Permintaan pada hari tersibuk setiap orang",
+          "usageHint": "{people, plural, one {# orang} other {# orang}} menggunakannya dalam {days, plural, one {# hari} other {# hari}} terakhir. Setiap orang dihitung sekali, pada hari tersibuk mereka.",
+          "noUsage": "Tidak ada yang menggunakan model ini dalam {days, plural, one {# hari} other {# hari}} terakhir.",
+          "bucketHeading": "Permintaan dalam satu hari",
+          "peopleHeading": "Orang",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Rata-rata per hari aktif",
+          "median": "Median",
+          "p75": "Persentil ke-75",
+          "p95": "Persentil ke-95",
+          "max": "Orang terbanyak",
+          "reachedCap": "Mencapai batas",
+          "cappedOnly": "Hanya orang di bawah batas yang dihitung di sini sejauh ini, jadi orang tanpa batas tidak tercantum.",
+          "truncated": "Hanya orang terbanyak yang ditampilkan, sehingga nilai median dan persentil lebih tinggi dari sebenarnya.",
+          "replayTitle": "Jika batasnya berbeda",
+          "replayHint": "Berapa banyak dari orang ini memiliki hari dengan permintaan di atau di atas setiap batas. Mereka akan dihentikan pada hari itu.",
+          "replayCap": "Batas untuk yang lain",
+          "replayStopped": "Orang yang dihentikan",
+          "replayPerDay": "{cap} per hari",
+          "replayNow": "{cap} per hari (sekarang)",
+          "replayUnlimitedNow": "Tanpa batas (sekarang)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Perkiraan biaya",
+          "costHint": "Harga daftar untuk permintaan yang diasumsikan. Bukan tagihan: permintaan asli bervariasi panjangnya.",
+          "typicalRequest": "Satu permintaan biasa",
+          "longRequest": "Satu permintaan panjang",
+          "everyoneWindow": "Semua orang, {days, plural, one {# hari} other {# hari}} terakhir",
+          "atThisPace": "Sebulan dengan kecepatan ini",
+          "footprintTitle": "Perkiraan jejak",
+          "footprintHint": "Berdasarkan kelas ukuran model dan permintaan yang diasumsikan. Perkiraan skala, bukan pengukuran.",
+          "sizeClass": "Kelas ukuran",
+          "noSizeClass": "Model ini belum memiliki kelas ukuran, sehingga jejaknya tidak dapat diperkirakan. Atur di katalog model.",
+          "aboutTitle": "Tentang model ini",
+          "status": "Status",
+          "retiresOn": "{date}. Pengguna akan melihat pemberitahuan dari {notice} dan dipindahkan dari {move}.",
+          "retiresForced": "Orang sedang dipindahkan dari model ini sekarang.",
+          "retiresUnknown": "Tidak ada tanggal diterbitkan",
+          "replacement": "Orang berpindah ke",
+          "replacementNotSet": "Belum diatur",
+          "knowledge": "Pengetahuan hingga",
+          "context": "Jendela konteks",
+          "contextTokens": "{tokens} token",
+          "canDo": "Bisa",
+          "can": {
+            "images": "membaca gambar",
+            "tools": "menggunakan alat",
+            "codeInterpreter": "menjalankan kode",
+            "reasoningEffort": "menyesuaikan upaya penalaran"
+          },
+          "hosted": "Di-host",
+          "hosting": {
+            "azure": "Di tenant Azure organisasi",
+            "external": "Oleh penyedia eksternal",
+            "local": "Secara lokal"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Saat setiap model berhenti digunakan, berapa banyak orang yang menggunakan, dan apakah aturan aksesnya sesuai dengan model yang akan digunakan berikutnya.",
+        "caption": "Model dengan tanggal pensiun, paling cepat di daftar awal",
+        "empty": "Tidak ada model yang memiliki tanggal pensiun.",
+        "today": "Hari ini",
+        "col": {
+          "people": "Orang",
+          "landsOn": "Orang menggunakan",
+          "access": "Akses pada pengganti"
+        },
+        "alert": "{model} akan berhenti dalam {days, plural, one {# hari} other {# hari}}. {people, plural, one {# orang} other {# orang}} baru saja menggunakannya.",
+        "alertForced": "{model} sedang dihentikan sekarang. {people, plural, one {# orang} other {# orang}} baru saja menggunakannya.",
+        "alertTo": "Mereka akan dipindahkan ke {model}.",
+        "alertNoReplacement": "Pengganti belum ditetapkan.",
+        "access": {
+          "same": "Aturan yang sama",
+          "unknown": "Tidak dapat diperiksa sampai pengganti ditetapkan",
+          "everyone": "Semua orang lainnya mendapat syarat berbeda",
+          "audiences": "{count, plural, one {# grup, domain atau orang memiliki} other {# grup, domain atau orang memiliki}} ketentuan berbeda",
+          "both": "Semua orang lainnya dan {count, plural, one {# grup, domain, atau orang} other {# grup, domain, atau orang}} mendapat syarat berbeda"
+        },
+        "carryOver": "Salin aturan ini ke {model}",
+        "carried": "Aturan dari {from} disalin ke {to}. Tinjau dan simpan untuk menerapkan.",
+        "legend": {
+          "service": "dalam layanan",
+          "notice": "notifikasi pada pengguna, {days} hari",
+          "move": "orang dipindahkan, {days} hari terakhir"
+        },
+        "pastTitle": "Sudah melewati tanggal dan tetap terdaftar:",
+        "pastItem": "{model} ({date}, {people, plural, one {# orang} other {# orang}})",
+        "undatedTitle": "Tanggal belum dipublikasikan:",
+        "rulesNote": "Akses dibandingkan per aturan. Penggunaan disimpan tanpa nama, sehingga tidak dapat diketahui berapa banyak orang pada model yang akan kehilangan akses."
+      },
+      "map": {
+        "lead": "Setiap lingkaran adalah model yang digunakan dalam {days, plural, one {# hari} other {# hari}} terakhir. Semakin ke kanan, biaya per permintaan semakin tinggi; semakin ke atas, lebih banyak orang. Pengeluaran dan CO2e adalah estimasi dari permintaan tipikal.",
+        "empty": "Tidak ada model berharga yang digunakan dalam {days, plural, one {# hari} other {# hari}} terakhir.",
+        "caption": "Angka yang sama seperti tabel, pengeluaran tertinggi di urutan pertama",
+        "sizeLabel": "Ukuran lingkaran",
+        "size": {
+          "spend": "Perkiraan pengeluaran",
+          "footprint": "Perkiraan CO2e",
+          "requests": "Permintaan"
+        },
+        "axisPeople": "Orang, {days, plural, one {# hari} other {# hari}} terakhir (atas)",
+        "axisCost": "Perkiraan biaya satu permintaan tipikal pada harga daftar (kanan)",
+        "dotLabel": "{model}: {people, plural, one {# orang} other {# orang}}, {cost} per permintaan tipikal, {value}. Buka aturan aksesnya.",
+        "legendTitle": "Kelas ukuran:",
+        "legend": {
+          "mini": "nano atau mini",
+          "standard": "standar",
+          "large": "besar",
+          "xl": "sangat besar",
+          "unset": "belum ditetapkan"
+        },
+        "col": {
+          "requests": "Permintaan",
+          "perRequest": "Per permintaan biasa"
+        },
+        "unknown": "Tidak diketahui",
+        "noFindings": "Belum ada yang menonjol.",
+        "findingTitle": {
+          "concentrated": "Pengeluaran terkonsentrasi",
+          "reached": "Batas yang dicapai pengguna",
+          "unreached": "Batas yang tidak ada yang mendekati",
+          "noCeiling": "Tanpa batas maksimal"
+        },
+        "finding": {
+          "concentrated": "{model} merupakan {share} dari perkiraan pengeluaran.",
+          "reached": "{model}: {people} dari {of} orang mencapai {cap} per hari.",
+          "unreached": "{model} dibatasi pada {cap} per hari; pengguna terbanyak mencapai {max}.",
+          "noCeiling": "{models}: tidak terbatas untuk yang lain. Pengguna terbanyak membuat {max, plural, one {# permintaan} other {# permintaan}} dalam sehari."
+        }
       }
     },
     "previewSourceModelAccess": "Persetujuan model — {list}",

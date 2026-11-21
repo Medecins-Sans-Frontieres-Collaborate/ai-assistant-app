@@ -6945,6 +6945,223 @@
         "none": "ingen post",
         "becomes": "blir",
         "removed": "borttagen"
+      },
+      "view": {
+        "label": "Visa",
+        "grid": "Tillgång och fakta",
+        "runway": "Livslängd före avveckling",
+        "map": "Kostnad och popularitet"
+      },
+      "facts": {
+        "estimateNote": "Kostnad och CO2e är uppskattningar, inte uppmätta utgifter: antal förfrågningar multiplicerat med en typisk förfrågan ({promptTokens} in, {completionTokens} ut) till listpris. Användning avser de senaste {days, plural, one {# dag} other {# dagar}}.",
+        "estimateNoteNoCost": "CO2e är en uppskattning, inte en mätning: antal förfrågningar multiplicerat med en typisk förfrågan ({promptTokens} in, {completionTokens} ut). Användning avser de senaste {days, plural, one {# dag} other {# dagar}}.",
+        "captureNote": "Användning för alla visas efter den första hela insamlingsdagen. Tills dess visas endast användning för personer med begränsning.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} in, {output} ut",
+        "summary": {
+          "label": "Modeller i överblick",
+          "used": "Använda modeller, senaste {days, plural, one {# dag} other {# dagar}}",
+          "usedValue": "{used} av {total}",
+          "requests": "Förfrågningar",
+          "spend": "Uppskattad kostnad",
+          "footprint": "Uppskattad CO2e",
+          "retiring": "Avvecklas inom {days} dagar",
+          "noCeiling": "Obegränsat för övriga",
+          "notYet": "Ännu okänt"
+        },
+        "columns": {
+          "label": "Kolumner",
+          "cost": "Kostnad",
+          "footprint": "Koldioxidavtryck",
+          "usage": "Användning",
+          "lifecycle": "Avveckling"
+        },
+        "col": {
+          "price": "Listpris per 1M token",
+          "ceiling": "Högsta kostnad per person och månad",
+          "footprint": "CO2e per typisk förfrågan",
+          "people": "Personer som använder",
+          "spread": "Förfrågningar under en persons mest aktiva dag",
+          "retires": "Avvecklas"
+        },
+        "ceiling": {
+          "heavy": "upp till {amount} vid långa förfrågningar",
+          "off": "Inget: avstängd",
+          "unbounded": "Ingen gräns",
+          "unpriced": "Inget listpris"
+        },
+        "footprint": {
+          "notSet": "Storlek ej satt"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Stor",
+          "xl": "Extra stor"
+        },
+        "usage": {
+          "none": "Ingen användning",
+          "spend": "cirka {amount}",
+          "cappedOnly": "endast personer med begränsning"
+        },
+        "spread": {
+          "caption": "median {median}, 75:e {p75}, mest {max}",
+          "label": "Förfrågningar under en persons mest aktiva dag: median {median}, 75:e percentil {p75}, 95:e percentil {p95}, mest {max}.",
+          "labelCap": " Gränsen är {cap} per dag.",
+          "legend": {
+            "p95": "upp till 95:e percentilen",
+            "box": "median till 75:e percentilen",
+            "max": "mest aktiv person",
+            "cap": "gräns för övriga"
+          }
+        },
+        "retires": {
+          "none": "Inget datum publicerat",
+          "forced": "Flyttas bort nu",
+          "past": "datumet har passerat",
+          "to": "till {model}"
+        },
+        "lifecycle": {
+          "preview": "Förhandsvisning",
+          "ga": "Allmänt tillgänglig",
+          "legacy": "Legacy",
+          "deprecated": "Föråldrad",
+          "retired": "Utfasad"
+        },
+        "detail": {
+          "region": "Hur denna modell används och vad den kostar",
+          "usageTitle": "Förfrågningar på varje persons mest aktiva dag",
+          "usageHint": "{people, plural, one {# person} other {# personer}} använde den de senaste {days, plural, one {# dag} other {# dagar}}. Varje person räknas en gång, under sin mest aktiva dag.",
+          "noUsage": "Ingen har använt denna modell de senaste {days, plural, one {# dag} other {# dagar}}.",
+          "bucketHeading": "Förfrågningar per dag",
+          "peopleHeading": "Personer",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Genomsnitt per aktiv dag",
+          "median": "Median",
+          "p75": "75:e percentilen",
+          "p95": "95:e percentilen",
+          "max": "Mest aktiv person",
+          "reachedCap": "Taket har nåtts",
+          "cappedOnly": "Endast personer med ett tak räknas här hittills, så de utan tak saknas.",
+          "truncated": "Endast de mest aktiva personerna visas, så medianen och percentilerna ser högre ut än de är.",
+          "replayTitle": "Om taket var annorlunda",
+          "replayHint": "Hur många av dessa personer hade en dag vid eller över respektive tak. De skulle ha stoppats den dagen.",
+          "replayCap": "Tak för alla andra",
+          "replayStopped": "Personer stoppade",
+          "replayPerDay": "{cap} per dag",
+          "replayNow": "{cap} per dag (nu)",
+          "replayUnlimitedNow": "Obegränsat (nu)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Uppskattad kostnad",
+          "costHint": "Listpris för en antagen förfrågan. Ingen faktura: verkliga förfrågningar varierar i längd.",
+          "typicalRequest": "En typisk förfrågan",
+          "longRequest": "En lång förfrågan",
+          "everyoneWindow": "Alla, senaste {days, plural, one {# dag} other {# dagar}}",
+          "atThisPace": "En månad i denna takt",
+          "footprintTitle": "Uppskattat fotavtryck",
+          "footprintHint": "Baserat på modellens storleksklass och en antagen förfrågan. En ungefärlig uppskattning, ingen exakt mätning.",
+          "sizeClass": "Storleksklass",
+          "noSizeClass": "Denna modell har ingen storleksklass, så fotavtrycket kan inte uppskattas. Ange en i modellkatalogen.",
+          "aboutTitle": "Om denna modell",
+          "status": "Status",
+          "retiresOn": "{date}. Användare ser ett meddelande från {notice} och flyttas från {move}.",
+          "retiresForced": "Personer flyttas bort från denna modell nu.",
+          "retiresUnknown": "Inget datum publicerat",
+          "replacement": "Personer hamnar på",
+          "replacementNotSet": "Ej angivet",
+          "knowledge": "Kunskap upp till",
+          "context": "Contextfönster",
+          "contextTokens": "{tokens} tokens",
+          "canDo": "Kan",
+          "can": {
+            "images": "läsa bilder",
+            "tools": "använda verktyg",
+            "codeInterpreter": "köra kod",
+            "reasoningEffort": "justera resonemangsinsats"
+          },
+          "hosted": "Drift",
+          "hosting": {
+            "azure": "I organisationens Azure-tenant",
+            "external": "Av extern leverantör",
+            "local": "Lokalt"
+          }
+        }
+      },
+      "runway": {
+        "lead": "När varje modell tas bort, hur många personer är på den och om åtkomstreglerna matchar modellen de hamnar på.",
+        "caption": "Modeller med pensionsdatum, tidigast först",
+        "empty": "Ingen modell har ett pensionsdatum.",
+        "today": "Idag",
+        "col": {
+          "people": "Personer",
+          "landsOn": "Personer hamnar på",
+          "access": "Åtkomst till ersättaren"
+        },
+        "alert": "{model} pensioneras om {days, plural, one {# dag} other {# dagar}}. {people, plural, one {# person} other {# personer}} använde den nyligen.",
+        "alertForced": "{model} pensioneras nu. {people, plural, one {# person} other {# personer}} använde den nyligen.",
+        "alertTo": "De flyttas till {model}.",
+        "alertNoReplacement": "Ingen ersättare är satt.",
+        "access": {
+          "same": "Samma regler",
+          "unknown": "Kan inte kontrolleras förrän ersättare är satt",
+          "everyone": "Alla andra får andra villkor",
+          "audiences": "{count, plural, one {# grupp, domän eller person har} other {# grupper, domäner eller personer har}} olika villkor",
+          "both": "Alla andra och {count, plural, one {# grupp, domän eller person} other {# grupper, domäner eller personer}} får andra villkor"
+        },
+        "carryOver": "Kopiera dessa regler till {model}",
+        "carried": "Kopierade regler från {from} till {to}. Granska och spara för att tillämpa.",
+        "legend": {
+          "service": "i drift",
+          "notice": "meddelande till användare, {days} dagar",
+          "move": "personer flyttade, senaste {days} dagar"
+        },
+        "pastTitle": "Efter sitt datum och fortfarande listad:",
+        "pastItem": "{model} ({date}, {people, plural, one {# person} other {# personer}})",
+        "undatedTitle": "Inget publicerat datum:",
+        "rulesNote": "Åtkomst jämförs regel för regel. Användning lagras utan namn, så detta kan inte visa hur många av personerna på en modell som skulle förlora åtkomst."
+      },
+      "map": {
+        "lead": "Varje cirkel representerar en modell som använts de senaste {days, plural, one {# dag} other {# dagar}}. Längre till höger har högre kostnad per förfrågan, högre upp har fler användare. Uträkning av kostnad och CO2e är uppskattad från en typisk förfrågan.",
+        "empty": "Ingen prissatt modell har använts de senaste {days, plural, one {# dag} other {# dagar}}.",
+        "caption": "Samma siffror som en tabell, högst uppskattad kostnad först",
+        "sizeLabel": "Cirkelstorlek",
+        "size": {
+          "spend": "Uppskattad kostnad",
+          "footprint": "Uppskattad CO2e",
+          "requests": "Förfrågningar"
+        },
+        "axisPeople": "Personer, senaste {days, plural, one {# dag} other {# dagar}} (uppåt)",
+        "axisCost": "Uppskattad kostnad för en typisk förfrågan till listpris (höger)",
+        "dotLabel": "{model}: {people, plural, one {# person} other {# personer}}, {cost} per typisk förfrågan, {value}. Öppna dess åtkomstregler.",
+        "legendTitle": "Storleksklass:",
+        "legend": {
+          "mini": "nano eller mini",
+          "standard": "standard",
+          "large": "stor",
+          "xl": "extra stor",
+          "unset": "ej inställt"
+        },
+        "col": {
+          "requests": "Förfrågningar",
+          "perRequest": "Per typisk förfrågan"
+        },
+        "unknown": "Okänt",
+        "noFindings": "Inget sticker ut än.",
+        "findingTitle": {
+          "concentrated": "Koncentrerad förbrukning",
+          "reached": "En gräns som folk når",
+          "unreached": "En gräns ingen kommer nära",
+          "noCeiling": "Ingen övre gräns"
+        },
+        "finding": {
+          "concentrated": "{model} är {share} av uppskattad förbrukning.",
+          "reached": "{model}: {people} av {of} personer nådde {cap} per dag.",
+          "unreached": "{model} har en gräns på {cap} per dag; den som använde mest gjorde {max}.",
+          "noCeiling": "{models}: obegränsat för alla andra. Den som använde mest gjorde {max, plural, one {# förfrågan} other {# förfrågningar}} på en dag."
+        }
       }
     },
     "previewSourceModelAccess": "Modelgodkännande — {list}",

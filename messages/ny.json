@@ -6929,6 +6929,223 @@
         "none": "palibe cholemba",
         "becomes": "zasanduka",
         "removed": "zachotsedwa"
+      },
+      "view": {
+        "label": "Onerani",
+        "grid": "Kulowa ndi mfundo",
+        "runway": "Nthawi yomaliza penshoni",
+        "map": "Kugwiritsa ntchito ndi kutchuka"
+      },
+      "facts": {
+        "estimateNote": "Mtengo ndi CO2e ndi zowerengera, osati zomwe zakhala zikugwiritsidwa ntchito: zomwe zafunsidwa zimawerengedwa molingana ndi pempho wamba ({promptTokens} tokens olowa, {completionTokens} otuluka) pa mtengo wa mndandanda. Kugwiritsa ntchito kumaphimba masiku {days, plural, one {# tsiku} other {# masiku}} apitawa.",
+        "estimateNoteNoCost": "CO2e ndi chiwerengero, osati muyeso wolondola: pempho lililonse limawerengedwa molingana ndi pempho wamba ({promptTokens} tokens olowa, {completionTokens} otuluka). Kugwiritsa ntchito kumaphimba masiku {days, plural, one {# tsiku} other {# masiku}} apitawa.",
+        "captureNote": "Kugwiritsa ntchito kwa onse kuwonekera ikatha tsiku loyamba lathunthu losonkhanitsa. Mpaka pamenepo, ziwerengerozi zikuphatikiza anthu okha omwe ali ndi malire.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} kolowa, {output} kotuluka",
+        "summary": {
+          "label": "Mitundu mwachidule",
+          "used": "Mamodemu ogwiritsidwa ntchito, masiku {days, plural, one {# tsiku} other {# masiku}} apitawa",
+          "usedValue": "{used} mwa {total}",
+          "requests": "Mapempho",
+          "spend": "Mtengo wowerengeka",
+          "footprint": "CO2e wowerengeka",
+          "retiring": "Zikutha mkati mwa masiku {days}",
+          "noCeiling": "Palibe malire kwa ena onse",
+          "notYet": "Sinadziwikebe"
+        },
+        "columns": {
+          "label": "Mizere",
+          "cost": "Mtengo",
+          "footprint": "Chikoka",
+          "usage": "Kugwiritsa ntchito",
+          "lifecycle": "Nthawi yomaliza"
+        },
+        "col": {
+          "price": "Mtengo wotsatsa pa 1M ma token",
+          "ceiling": "Zochuluka zimene munthu angawononge, pa mwezi",
+          "footprint": "CO2e pa pempho labwino",
+          "people": "Anthu ogwiritsa ntchito",
+          "spread": "Mapempho pa tsiku lochita zambiri la munthu",
+          "retires": "Zimaliza"
+        },
+        "ceiling": {
+          "heavy": "mpaka {amount} ndi ma pempho atali",
+          "off": "Palibe: yotseka",
+          "unbounded": "Palibe malire",
+          "unpriced": "Palibe mtengo wotsatsa"
+        },
+        "footprint": {
+          "notSet": "Kukula sikunakhazikitsidwe"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Large",
+          "xl": "Extra large"
+        },
+        "usage": {
+          "none": "Palibe ogwiritsa ntchito",
+          "spend": "pafupifupi {amount}",
+          "cappedOnly": "anthu okha omwe ali ndi malire"
+        },
+        "spread": {
+          "caption": "pakatikati {median}, 75th {p75}, ochuluka {max}",
+          "label": "Mapempho pa tsiku la munthu lochita zambiri: pakati {median}, 75th percentile {p75}, 95th percentile {p95}, ochuluka {max}.",
+          "labelCap": "  Malire ndi {cap} patsiku.",
+          "legend": {
+            "p95": "mpaka 95th percentile",
+            "box": "pakatikati mpaka 75th percentile",
+            "max": "munthu wochita kwambiri",
+            "cap": "malire kwa onse ena"
+          }
+        },
+        "retires": {
+          "none": "Palibe tsiku lofalitsidwa",
+          "forced": "Ikuchotsedwa panopa",
+          "past": "tsiku latha",
+          "to": "kuchokera ku {model}"
+        },
+        "lifecycle": {
+          "preview": "Onetsani",
+          "ga": "Akupezeka",
+          "legacy": "Yakale",
+          "deprecated": "Yachotsedwa",
+          "retired": "Yapuma ntchito"
+        },
+        "detail": {
+          "region": "Momwe chitsanzochi chimagwiritsidwira ntchito komanso mtengo wake",
+          "usageTitle": "Ma pempho pa tsiku lotanganidwa la munthu aliyense",
+          "usageHint": "{people, plural, one {# munthu} other {# anthu}} adagwiritsa ntchito mu {days, plural, one {# tsiku} other {# masiku}} apitawa. Munthu aliyense amangawerengedwa kamodzi pa tsiku lake lochuluka ntchito.",
+          "noUsage": "Palibe amene adagwiritsa ntchito model iyi mu {days, plural, one {# tsiku} other {# masiku}} apitawa.",
+          "bucketHeading": "Ma pempho mu tsiku",
+          "peopleHeading": "Anthuwe",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Avareji pa tsiku lotanganidwa",
+          "median": "Pakati",
+          "p75": "Pa 75%",
+          "p95": "Pa 95%",
+          "max": "Munthu wotanganidwa kwambiri",
+          "reachedCap": "Afika malire",
+          "cappedOnly": "Pano, amangawerengedwa anthu okhawo omwe ali ndi malire. Anthu omwe alibe malire alibe kuwerengedwa.",
+          "truncated": "Amangolistedwa anthu otanganidwa kwambiri, kotero pakati ndi ma percentiles zikuwoneka kuti ndizokwera kuposa zenizeni.",
+          "replayTitle": "Ngati malire akana kukhala osiyana",
+          "replayHint": "Kodi anthu angati mwa awa anali ndi tsiku limodzi kapena pamwamba pa malire aliwonse. Akanayimitsidwa tsikulo.",
+          "replayCap": "Malire kwa ena",
+          "replayStopped": "Anthu oyimitsidwa",
+          "replayPerDay": "{cap} pa tsiku",
+          "replayNow": "{cap} pa tsiku (panopa)",
+          "replayUnlimitedNow": "Opanda malire (panopa)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Mtengo woyerekeza",
+          "costHint": "Mtengo wolembedwa pa pempho woyerekeza. Si bilu; pempho lenilenilo likhoza kusiyana.",
+          "typicalRequest": "Pempho limodzi la m’mavuto",
+          "longRequest": "Pempho limodzi lalitali",
+          "everyoneWindow": "Aliyense, masiku {days, plural, one {# tsiku} other {# masiku}} apitawa",
+          "atThisPace": "Mwezi pa liwiro ili",
+          "footprintTitle": "Yerekeza yoyikidwa",
+          "footprintHint": "Kutengera kukula kwa chitsanzo komanso pempho woyerekeza. Yerekeza, siye chinthu chenicheni.",
+          "sizeClass": "Kalasi ya kukula",
+          "noSizeClass": "Chitsanzochi chilibe kalasi ya kukula, choncho yoyikidwa yake sichitha kuyerekezedwa. Ikonzereni mu katalogu wa chitsanzo.",
+          "aboutTitle": "Za chitsanzo ichi",
+          "status": "Udindo",
+          "retiresOn": "{date}. Ogwiritsa ntchito amawona chidziwitso kuchokera kwa {notice} ndipo amachotsedwa kuchokera ku {move}.",
+          "retiresForced": "Anthuwe akuchotsedwa pa chitsanzochi panopa.",
+          "retiresUnknown": "Palibe tsiku lofalitsidwa",
+          "replacement": "Anthuwe amalowa",
+          "replacementNotSet": "Sanakhazikidwe",
+          "knowledge": "Chidziwitso mpaka",
+          "context": "Malo a kontekt",
+          "contextTokens": "{tokens} ma token",
+          "canDo": "Zitha",
+          "can": {
+            "images": "kuwerenga zithunzi",
+            "tools": "gwiritsa ntchito zida",
+            "codeInterpreter": "kuyendetsa code",
+            "reasoningEffort": "kusintha mphamvu yoganiza"
+          },
+          "hosted": "Zasungidwa",
+          "hosting": {
+            "azure": "Mu tenant ya Azure ya bungwe",
+            "external": "Wothandizira kunja",
+            "local": "Pafupi"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Pamene model iliyonse ikutha ntchito, ndi anthu angati akugwiritsa ntchito, komanso ngati malamulo ogwira ntchito akugwirizana ndi model yomwe anthu adzasinthira.",
+        "caption": "Ma modeli amene ali ndi tsiku lomaliza ntchito, oyamba ndi amene adza retire posachedwa",
+        "empty": "Palibe model ili ndi tsiku lomaliza ntchito.",
+        "today": "Lero",
+        "col": {
+          "people": "Anthu",
+          "landsOn": "Anthu adzasinthira",
+          "access": "Kulumikizana pa model yosintha"
+        },
+        "alert": "{model} ikutha ntchito mkati mwa {days, plural, one {# tsiku} other {# masiku}}. {people, plural, one {# munthu} other {# anthu}} adagwiritsa ntchito posachedwapa.",
+        "alertForced": "{model} ikutha ntchito panopa. {people, plural, one {# munthu} other {# anthu}} adagwiritsa ntchito posachedwapa.",
+        "alertTo": "Adzasamutsidwa ku {model}.",
+        "alertNoReplacement": "Palibe model yosintha yomwe yasankhidwa.",
+        "access": {
+          "same": "Malamulo omwewo",
+          "unknown": "Si zotheka kuwona mpaka model yosintha yasankhidwa",
+          "everyone": "Anthu ena onse adalandira malamulo osiyanasiyana",
+          "audiences": "{count, plural, one {# gulu, domain kapena munthu ali ndi} other {# magulu, ma domain kapena anthu ali ndi}} malamulo osiyanasiyana",
+          "both": "Anthu ena onse ndi {count, plural, one {# gulu, domain kapena munthu} other {# magulu, ma domain kapena anthu}} alandira malamulo osiyanasiyana"
+        },
+        "carryOver": "Koperani malamulo awa ku {model}",
+        "carried": "Makopi a malamulo a {from} kupita ku {to}. Unikani ndikupulumutsa kuti zigwiritse ntchito.",
+        "legend": {
+          "service": "ikugwiritsidwa ntchito",
+          "notice": "chidziwitso chikutumizidwa kwa ogwiritsa ntchito, {days} masiku",
+          "move": "anthu asamutsidwa, {days} masiku apitawa"
+        },
+        "pastTitle": "Wadutsa tsiku lomaliza ntchito koma alibe winawake:",
+        "pastItem": "{model} ({date}, {people, plural, one {# munthu} other {# anthu}})",
+        "undatedTitle": "Palibe tsiku lofotokozedwa:",
+        "rulesNote": "Kulumikizana kumafanana malamulo ndi malamulo. Kugwiritsa ntchito kusungidwa popanda dzina, choncho izi sizingasonyeze kuti anthu angati pa modeli adzataya kulumikizana."
+      },
+      "map": {
+        "lead": "Chozungulira chilichonse ndi modeli yomwe idagwiritsidwa ntchito mu {days, plural, one {# tsiku} other {# masiku}} apitawa. Kumanja mtengo umakwera pa pempho, kumtunda ndi anthu ambiri. Mtengo ndi CO2e ndi zowerengera kuchokera pa pempho wamba.",
+        "empty": "Palibe modeli yokhala ndi mtengo yomwe idagwiritsidwa ntchito mu {days, plural, one {# tsiku} other {# masiku}} apitawa.",
+        "caption": "Zambiri zomwezo mu tabu, kuyamba ndi zomwe zoyerekeza zochuluka kwambiri",
+        "sizeLabel": "Ukulu wa muzungulira",
+        "size": {
+          "spend": "Zoyerekeza zochitika",
+          "footprint": "Zoyerekeza za CO2e",
+          "requests": "Mapempho"
+        },
+        "axisPeople": "Anthu, masiku {days, plural, one {# tsiku} other {# masiku}} apitawa (pamwamba)",
+        "axisCost": "Zoyerekeza zamtengo wa pempho la wamba mu mtengo wanthawi zonse (kumanzere)",
+        "dotLabel": "{model}: {people, plural, one {# munthu} other {# anthu}}, {cost} pa pempho la wamba, {value}. Tsegulani malamulo ake.",
+        "legendTitle": "Ukulu wa gulu:",
+        "legend": {
+          "mini": "nano kapena mini",
+          "standard": "standard",
+          "large": "yayikulu",
+          "xl": "yayikulu kwambiri",
+          "unset": "sinakhazikitsidwe"
+        },
+        "col": {
+          "requests": "Zopempha",
+          "perRequest": "Pa pempho lililonse"
+        },
+        "unknown": "Sizikudziwika",
+        "noFindings": "Palibe chotsiyanitsidwa pano.",
+        "findingTitle": {
+          "concentrated": "Kugwiritsa ntchito kochuluka kumphepo imodzi",
+          "reached": "Malire amene anthu amafikako",
+          "unreached": "Malire amene palibe amafika",
+          "noCeiling": "Palibe malire"
+        },
+        "finding": {
+          "concentrated": "{model} ndi {share} wa ndalama zomwe zikuyerekezedwa kugwiritsidwa.",
+          "reached": "{model}: {people} mwa {of} anthuwa afika pa {cap} patsiku.",
+          "unreached": "{model} imaletsedwa pa {cap} patsiku; amene wagwiritsa ntchito kwambiri anapanga {max}.",
+          "noCeiling": "{models}: palibe malire kwa ena onse. Wogwiritsa ntchito kwambiri anapanga {max, plural, one {# pempho} other {# mapempho}} patsiku."
+        }
       }
     },
     "previewSourceModelAccess": "Kuvomereza chitsanzo — {list}",

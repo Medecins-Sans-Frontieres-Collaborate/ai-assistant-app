@@ -6929,6 +6929,223 @@
         "none": "ko si ohun fifi",
         "becomes": "di",
         "removed": "ti yọ kuro"
+      },
+      "view": {
+        "label": "Wo",
+        "grid": "Ibi wiwọle ati awọn otitọ",
+        "runway": "Akoko ifẹyinti",
+        "map": "Iṣuna ati olokiki"
+      },
+      "facts": {
+        "estimateNote": "Iye owo ati CO2e jẹ iṣiro, kii ṣe iye gangan: awọn ìbéèrè tí a kà pọ si ìbéèrè apẹẹrẹ ({promptTokens} àwọn tokini silẹ, {completionTokens} jade) ní owo àtatẹ. Lilo bo ọjọ {days, plural, one {# kan} other {# ọjọ}} to kọja.",
+        "estimateNoteNoCost": "CO2e jẹ iṣiro, kii ṣe ìwọn gangan: awọn ìbéèrè tí a kà pọ si ìbéèrè apẹẹrẹ ({promptTokens} àwọn tokini silẹ, {completionTokens} jade). Lilo bo ọjọ {days, plural, one {# kan} other {# ọjọ}} to kọja.",
+        "captureNote": "Lilo gbogbo eniyan han lẹ́yìn ọjọ́ àkọ́kọ́ tí ìkójọpọ̀ bá pé. Títí di bẹ́ẹ̀, àwárí naa bo àwọn tí kó wa lábẹ́ ààlà nikan.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} wọlé, {output} jáde",
+        "summary": {
+          "label": "Àwòrán àpẹẹrẹ",
+          "used": "Àwọn àwòrán tí a lo, ọjọ {days, plural, one {# kan} other {# ọjọ}} to kọja",
+          "usedValue": "{used} nínú {total}",
+          "requests": "Ìbéèrè",
+          "spend": "Iṣuna àfihàn",
+          "footprint": "CO2e àfihàn",
+          "retiring": "Yóò kúrò lórí {days} ọjọ́",
+          "noCeiling": "Ko ni ààlà fún àwọn mìíràn",
+          "notYet": "Kò tíì mọ̀"
+        },
+        "columns": {
+          "label": "Àwọn kòlómù",
+          "cost": "Iye owo",
+          "footprint": "Ìfọwọ́núlẹ̀",
+          "usage": "Ìlò",
+          "lifecycle": "Ifẹyinti"
+        },
+        "col": {
+          "price": "Iye adarí fún tóọki 1M kọọkan",
+          "ceiling": "Tó pọ jù tí ènìyàn lè na, nínú oṣù kan",
+          "footprint": "CO2e fun ìbéèrè àpẹẹrẹ",
+          "people": "Àwọn tó n lò ó",
+          "spread": "Ìbéèrè ọjọ́ tí ènìyàn pọ̀jù",
+          "retires": "Yóò kúrò"
+        },
+        "ceiling": {
+          "heavy": "títí de {amount} pẹ̀lú ìbéèrè pípẹ́",
+          "off": "Kò sí ohun kankan: ti dá a rẹ́",
+          "unbounded": "Kò sí ààlà",
+          "unpriced": "Kò sí iye adarí"
+        },
+        "footprint": {
+          "notSet": "Iwọn kò tíì ṣètò"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Didákọ́",
+          "large": "Tóbi",
+          "xl": "Tóbi pátápátá"
+        },
+        "usage": {
+          "none": "Kò sí ìlò",
+          "spend": "nípa {amount}",
+          "cappedOnly": "àwọn tó wà lábẹ́ ààlà nikan"
+        },
+        "spread": {
+          "caption": "apapọ {median}, 75th {p75}, tó pọ̀jù {max}",
+          "label": "Ìbéèrè ọjọ́ tí ènìyàn pọ̀jù: apapọ {median}, ipò 75th {p75}, ipò 95th {p95}, tó pọ̀jù {max}.",
+          "labelCap": "Ààlà jẹ́ {cap} l'ọjọ́ kan.",
+          "legend": {
+            "p95": "títí di ipo 95th",
+            "box": "láti apapọ sí ipò 75th",
+            "max": "ènìyàn tó pọ̀jù",
+            "cap": "ààlà fún gbogbo ènìyàn mìíràn"
+          }
+        },
+        "retires": {
+          "none": "Ko si ọjọ tí a ṣe ìtẹ̀jáde",
+          "forced": "Nṣiṣẹ́ ìyípadà nísinsin yìí",
+          "past": "ọjọ́ ti kọja",
+          "to": "sí {model}"
+        },
+        "lifecycle": {
+          "preview": "Àfihàn",
+          "ga": "Wà fún gbogbo ènìyàn",
+          "legacy": "Atijọ́",
+          "deprecated": "Parípẹ̀",
+          "retired": "Tí fagilé"
+        },
+        "detail": {
+          "region": "Bá a ṣe ń lo àwoṣe yìí, àti iye owó rẹ̀",
+          "usageTitle": "Ìbéèrè lọ́jọ́ tó pọ̀ jù lọ kọọkan",
+          "usageHint": "{people, plural, one {# ènìyàn} other {# àwọn ènìyàn}} lo o ní ọjọ {days, plural, one {# kan} other {# ọjọ}} to kọja. Ẹni kọọkan ni a kà lẹẹkan, ní ọjọ tí wọn kọọkan ṣiṣẹ julọ.",
+          "noUsage": "Kò sí ẹni tí lo àwòrán yìí ní ọjọ {days, plural, one {# kan} other {# ọjọ}} to kọja.",
+          "bucketHeading": "Ìbéèrè lọ́jọ́ kan",
+          "peopleHeading": "Àwọn ènìyàn",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Apapọ̀ ní gbogbo ọjọ́ tí wọ́n ṣiṣẹ́",
+          "median": "Ààrín",
+          "p75": "75th percentile",
+          "p95": "95th percentile",
+          "max": "Eni tó lo jùlọ",
+          "reachedCap": "Ìwọ̀n dé",
+          "cappedOnly": "Àwọn ènìyàn tí a fi ìyèkópọ̀ sí lásìkò yìí ni a kà síbí, àwọn tí kò ní ìyèkópọ̀ kò wà.",
+          "truncated": "Àwọn ènìyàn tó lo jùlọ ni a tọ́ka sí, aárín àti àwon porcentaile npọ ju gidi lọ.",
+          "replayTitle": "Tí wọ́n ba yí ìyèkópọ̀ padà",
+          "replayHint": "Mélòó ni àwọn ènìyàn wọ̀nyí ní ọjọ́ kan tí wọn fi wọ́ ìyèkópọ̀ kọọkan tàbí ju bẹẹ lọ. Wọn á ti dákẹ́ ní ọjọ́ yẹn.",
+          "replayCap": "Ìyèkópọ̀ fún gbogbo ènìyàn mìíràn",
+          "replayStopped": "Àwọn tí a dá dúró",
+          "replayPerDay": "{cap} ní ọjọ́ kan",
+          "replayNow": "{cap} ní ọjọ́ kan (nísinsin yìí)",
+          "replayUnlimitedNow": "Kò ní ìyàtọ̀ (nísinsin yìí)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Ìṣírí iye owó",
+          "costHint": "Ìyẹn ni ọ̀nà owó tí a pinnu fún ìbéèrè kan. Kì í ṣe ìnàwó gidi: gígùn ìbéèrè yàtọ̀.",
+          "typicalRequest": "Ìbéèrè àpọ̀jọ kan",
+          "longRequest": "Ìbéèrè gígùn kan",
+          "everyoneWindow": "Gbogbo ènìyàn, ọjọ {days, plural, one {# kan} other {# ọjọ}} to kọja",
+          "atThisPace": "Osù kan ní ìpele yìí",
+          "footprintTitle": "Ìṣírí ẹsẹ",
+          "footprintHint": "Gẹ́gẹ́ bí onínọmbà ìwọn àwoṣe àti ìbéèrè títẹ̀síwájú. Ẹ̀ka ìwọn, kì í ṣe gíga ìdánwò.",
+          "sizeClass": "Ìpele ìwọn",
+          "noSizeClass": "Àwoṣe yìí kò ní ìpele ìwọn, nítorí náà à lè ṣírí ẹsẹ rẹ. Ṣètò rẹ ní katalọ̀ọ̀gù àwoṣe.",
+          "aboutTitle": "Nípa àwoṣe yìí",
+          "status": "Ìpò",
+          "retiresOn": "{date}. Àwọn olùlò máa rí ìkéde láti {notice} wọ́n á sì yí wọn padà láti {move}.",
+          "retiresForced": "Àwọn ènìyàn ni a ń yí padà kúrò nínú àwoṣe yìí nísinsin yìí.",
+          "retiresUnknown": "Ko si ọjọ tí a ṣe ìtẹ̀jáde",
+          "replacement": "Àwọn ènìyàn máa dé sí",
+          "replacementNotSet": "Kò tí ì ṣètò",
+          "knowledge": "Ìmọ̀ pẹ̀lú títọ̀ sí",
+          "context": "Àpapọ̀ àlàyé",
+          "contextTokens": "{tokens} àwọn tókẹ́nì",
+          "canDo": "Lè ṣe",
+          "can": {
+            "images": "ka àwòrán",
+            "tools": "lo irinṣẹ́",
+            "codeInterpreter": "ṣiṣẹ́ kóòdù",
+            "reasoningEffort": "ṣàtúnṣe ìṣàlàyé"
+          },
+          "hosted": "Ti gbé lórí",
+          "hosting": {
+            "azure": "Lórí Azure ilé-iṣẹ́",
+            "external": "Nílẹ̀ ìpèsè tó wà lójú òde",
+            "local": "Ní agbègbè"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Nígbà tí àpẹẹrẹ kọọkan bá parí, iye àwọn ènìyàn tó wà lórí, àti bóyá ọ̀rọ̀ ìforúkọsílẹ̀ rẹ̀ bá àpẹẹrẹ tuntun mu.",
+        "caption": "Àwọn àpẹẹrẹ tó ní ọjọ́ ìyókúrò, tó sunmọ̀ jùlọ kọ́kọ́.",
+        "empty": "Kò sí àpẹẹrẹ tó ní ọjọ́ ìyókúrò.",
+        "today": "Lónìí",
+        "col": {
+          "people": "Àwọn ènìyàn",
+          "landsOn": "Àwọn ènìyàn tó di",
+          "access": "Ìwọlé lórí àpẹẹrẹ tuntun"
+        },
+        "alert": "{model} yóó parí ní {days, plural, one {ọjọ́ kan} other {ọjọ́ #}}. {people, plural, one {Ènìyàn kan} other {Ènìyàn #}} lo ó laipẹ́ yi.",
+        "alertForced": "A ti yọ {model} nísinsin yìí. {people, plural, one {Ènìyàn kan} other {Ènìyàn #}} lo ó laipẹ́ yi.",
+        "alertTo": "Wọn yóó fi ránṣẹ́ sí {model}.",
+        "alertNoReplacement": "Kò sí àyípadà tí a ṣètò.",
+        "access": {
+          "same": "Ìlànà kánnáà",
+          "unknown": "Kò le ṣàyẹ̀wò títí a fi ṣètò àyípadà",
+          "everyone": "Ẹlòmíì yókù ní àwọn àṣẹ tó yàtọ̀",
+          "audiences": "{count, plural, one {# ẹgbẹ́, domain tàbí ènìyàn ní} other {# àwọn ẹgbẹ́, domain tàbí awọn ènìyàn ní}} àwọn ofin tó yàtọ̀",
+          "both": "Ẹlòmíì yókù àti {count, plural, one {ẹgbẹ́, agbègbè tàbí ènìyàn #} other {ẹgbẹ́, agbègbè tàbí àwọn ènìyàn #}} ní àwọn àṣẹ tó yàtọ̀"
+        },
+        "carryOver": "Da àwọn ìlànà wọ̀nyí kọ sórí {model}",
+        "carried": "Da àwọn ìlànà {from} kọ sórí {to}. Ṣàyẹ̀wò ki o fipamọ́ láti fi mú níṣẹ́.",
+        "legend": {
+          "service": "ní ìṣẹ́",
+          "notice": "ìkìlọ̀ fihan fún àwọn olùlò, ọjọ́ {days}",
+          "move": "àwọn ènìyàn ti yípo, ọjọ́ {days} to kọja"
+        },
+        "pastTitle": "Ti kọja ọjọ́ rẹ̀ ṣùgbọ́n ṣi wà lórí àtòkọ:",
+        "pastItem": "{model} ({date}, {people, plural, one {Ènìyàn kan} other {Ènìyàn #}})",
+        "undatedTitle": "Ko tí í sí ọjọ́ tí a ṣèkéde:",
+        "rulesNote": "Ìwọlé yìí nwá àfíkun pẹ̀lú ìlànà kọọkan. Lílò ni a t’ọ́ọ̀ọ́tọ̀ lai darukọ, torí náà kò le sọ iye àwọn ènìyàn tó wà lórí àpẹẹrẹ tó lè padà mọ́wọ́lẹ̀."
+      },
+      "map": {
+        "lead": "Kẹ̀kẹ́ kọọkan jẹ́ àwòrán tí a lo ní ọjọ {days, plural, one {# kan} other {# ọjọ}} to kọja. Ní apa ọtun ṣe é gbowolori ju fun ìbéèrè kọọkan, tí ó ga jinlẹ́ si ni àwọn ènìyàn pọ si. Iye inawo ati CO2e jẹ iṣiro láti ìbéèrè apẹẹrẹ.",
+        "empty": "Kò sí àwòrán tí ó lówó tí a lo ní ọjọ {days, plural, one {# kan} other {# ọjọ}} to kọja.",
+        "caption": "Àwọn àfihàn kánnáà gẹ́gẹ́ bí tábìlì, pẹ̀lú àfikún ìṣiro inawo tó ga jùlọ",
+        "sizeLabel": "Ìwọn kẹ̀kẹ́",
+        "size": {
+          "spend": "Ìṣirò inawo",
+          "footprint": "Ìṣirò CO2e",
+          "requests": "Ìbéèrè"
+        },
+        "axisPeople": "Àwọn ènìyàn, ọjọ {days, plural, one {# kan} other {# ọjọ}} to kọja (sókè)",
+        "axisCost": "Ìṣirò owó ìbéèrè aṣàájú kan (sì ọ̀tún)",
+        "dotLabel": "{model}: {people, plural, one {Ènìyàn kan} other {Ènìyàn #}}, {cost} fún ìbéèrè àṣàájú kan, {value}. Ṣí ìlànà ìwọlé rẹ̀.",
+        "legendTitle": "Ẹ̀ka ìwọn:",
+        "legend": {
+          "mini": "nano tàbí mini",
+          "standard": "àwọn tẹ̀mí-tẹ̀mí",
+          "large": "tobi",
+          "xl": "tobi ju",
+          "unset": "ko tii ṣeto"
+        },
+        "col": {
+          "requests": "Ìbéèrè",
+          "perRequest": "Fún ìbéèrè kọọkan"
+        },
+        "unknown": "Kò mọ",
+        "noFindings": "Kò sí ohun tó yàtọ̀ sílẹ̀ sibẹ.",
+        "findingTitle": {
+          "concentrated": "Ináwó pọ sí ibi kan",
+          "reached": "Ìlà ààlà tí àwọn ènìyàn dé",
+          "unreached": "Ìlà ààlà tí kò sí ẹni tó sun mọ́",
+          "noCeiling": "Kò sí òpin"
+        },
+        "finding": {
+          "concentrated": "{model} jẹ́ {share} nínú ináwó tí a fi rò.",
+          "reached": "{model}: {people} nínú {of} ènìyàn dé {cap} ní ọjọ́ kan.",
+          "unreached": "{model} ni ààlà {cap} ni ọjọ́ kan; ẹni tó ṣèjùlọ ṣe {max}.",
+          "noCeiling": "{models}: kò sí ààlà fún gbogbo àwọn mìíràn. Ẹni tó ṣèjùlọ ṣe {max, plural, one {ìbéèrè kan} other {ìbéèrè #}} ní ọjọ́ kan."
+        }
       }
     },
     "previewSourceModelAccess": "Ìfọwọ́si àyíkọ́ — {list}",

@@ -6945,6 +6945,223 @@
         "none": "なし",
         "becomes": "に変更",
         "removed": "削除済み"
+      },
+      "view": {
+        "label": "表示",
+        "grid": "アクセスと事実",
+        "runway": "リタイアまでの期間",
+        "map": "費用と人気度"
+      },
+      "facts": {
+        "estimateNote": "コストとCO2eは推定値であり、実際の支出ではありません。リクエスト件数を、標準的なリクエスト（入力{promptTokens}トークン、出力{completionTokens}トークン）にリスト価格で掛けて計算しています。利用状況は直近{days, plural, one {#日} other {#日間}}のデータです。",
+        "estimateNoteNoCost": "CO2eは推定値であり、測定値ではありません。リクエスト件数を、標準的なリクエスト（入力{promptTokens}トークン、出力{completionTokens}トークン）に掛けて計算しています。利用状況は直近{days, plural, one {#日} other {#日間}}のデータです。",
+        "captureNote": "全員の利用状況は、集計開始後最初の全日以降に表示されます。それまでは、上限が設定された方のみの数値となります。",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "入力{input}、出力{output}",
+        "summary": {
+          "label": "モデルの概要",
+          "used": "利用されたモデル、直近{days, plural, one {#日} other {#日間}}",
+          "usedValue": "{used}／{total}",
+          "requests": "リクエスト数",
+          "spend": "推定支出額",
+          "footprint": "推定CO2e",
+          "retiring": "{days}日以内にリタイア予定",
+          "noCeiling": "他の方は無制限",
+          "notYet": "未確定"
+        },
+        "columns": {
+          "label": "列",
+          "cost": "費用",
+          "footprint": "排出量",
+          "usage": "利用",
+          "lifecycle": "リタイア"
+        },
+        "col": {
+          "price": "1Mトークンごとのリスト価格",
+          "ceiling": "1人が月に支払える最大額",
+          "footprint": "1回の典型的なリクエストごとのCO2e",
+          "people": "利用者数",
+          "spread": "最も多い日のリクエスト数",
+          "retires": "リタイア時期"
+        },
+        "ceiling": {
+          "heavy": "長文リクエストで最大{amount}まで",
+          "off": "なし：停止中",
+          "unbounded": "上限なし",
+          "unpriced": "リスト価格なし"
+        },
+        "footprint": {
+          "notSet": "未設定"
+        },
+        "size": {
+          "nano": "ナノ",
+          "mini": "ミニ",
+          "standard": "スタンダード",
+          "large": "ラージ",
+          "xl": "エクストララージ"
+        },
+        "usage": {
+          "none": "利用なし",
+          "spend": "約{amount}",
+          "cappedOnly": "上限設定の方のみ"
+        },
+        "spread": {
+          "caption": "中央値{median}、75パーセンタイル{p75}、最多{max}",
+          "label": "最も多い日のリクエスト数：中央値{median}、75パーセンタイル{p75}、95パーセンタイル{p95}、最多{max}。",
+          "labelCap": "上限は1日{cap}です。",
+          "legend": {
+            "p95": "95パーセンタイルまで",
+            "box": "中央値〜75パーセンタイル",
+            "max": "最多利用者",
+            "cap": "他の方の上限"
+          }
+        },
+        "retires": {
+          "none": "公開日なし",
+          "forced": "現在移行中",
+          "past": "日付が経過",
+          "to": "{model} へ"
+        },
+        "lifecycle": {
+          "preview": "プレビュー",
+          "ga": "一般提供中",
+          "legacy": "レガシー",
+          "deprecated": "非推奨",
+          "retired": "リタイア"
+        },
+        "detail": {
+          "region": "このモデルの利用方法とコスト",
+          "usageTitle": "各ユーザーの最も多いリクエスト日",
+          "usageHint": "直近{days, plural, one {#日} other {#日間}}で{people, plural, one {#人} other {#人}}が利用しました。各ユーザーは一番多く利用した日だけカウントされています。",
+          "noUsage": "直近{days, plural, one {#日} other {#日間}}でこのモデルを利用した人はいませんでした。",
+          "bucketHeading": "1日のリクエスト数",
+          "peopleHeading": "ユーザー数",
+          "bucketRange": "{from}～{to}",
+          "bucketOpen": "{from}以上",
+          "average": "活動日の平均",
+          "median": "中央値",
+          "p75": "75パーセンタイル",
+          "p95": "95パーセンタイル",
+          "max": "最大利用者",
+          "reachedCap": "上限に到達",
+          "cappedOnly": "ここには上限があるユーザーのみ集計されています。上限のないユーザーは含まれていません。",
+          "truncated": "主に利用数の多いユーザーのみ表示しているため、中央値とパーセンタイルは実際より高く表示されています。",
+          "replayTitle": "上限が異なる場合",
+          "replayHint": "各上限に達したまたは超えた日がある人数。該当日は利用が制限されます。",
+          "replayCap": "他の全員の上限",
+          "replayStopped": "制限されたユーザー数",
+          "replayPerDay": "1日{cap}まで",
+          "replayNow": "1日{cap}まで（現在）",
+          "replayUnlimitedNow": "無制限（現在）",
+          "replayPeople": "{people}（{share}）",
+          "costTitle": "推定コスト",
+          "costHint": "想定リクエストに対する定価です。請求額ではありません。実際のリクエストは長さが異なります。",
+          "typicalRequest": "一般的な1リクエスト",
+          "longRequest": "長いリクエスト1件",
+          "everyoneWindow": "全員、直近{days, plural, one {#日} other {#日間}}",
+          "atThisPace": "今のペースで1か月",
+          "footprintTitle": "推定フットプリント",
+          "footprintHint": "モデルのサイズクラスと想定リクエストから算出。大まかな目安であり正確な値ではありません。",
+          "sizeClass": "サイズクラス",
+          "noSizeClass": "このモデルにはサイズクラスが設定されていないため、フットプリントを推定できません。モデルカタログで設定してください。",
+          "aboutTitle": "このモデルについて",
+          "status": "ステータス",
+          "retiresOn": "{date}。{notice}から通知が表示され、{move}から移行されます。",
+          "retiresForced": "現在このモデルからユーザーが移行されています。",
+          "retiresUnknown": "公開日なし",
+          "replacement": "移行先",
+          "replacementNotSet": "未設定",
+          "knowledge": "知識範囲",
+          "context": "コンテキストウィンドウ",
+          "contextTokens": "{tokens} トークン",
+          "canDo": "できること",
+          "can": {
+            "images": "画像の読み取り",
+            "tools": "ツールの利用",
+            "codeInterpreter": "コードの実行",
+            "reasoningEffort": "推論の調整"
+          },
+          "hosted": "ホスティング先",
+          "hosting": {
+            "azure": "組織のAzureテナント内",
+            "external": "外部プロバイダーによる",
+            "local": "ローカル"
+          }
+        }
+      },
+      "runway": {
+        "lead": "各モデルが利用終了となる日時、利用者数、そのアクセスルールが次のモデルと一致しているかを確認します。",
+        "caption": "リタイア予定日があるモデル（早い順）",
+        "empty": "リタイア予定日が設定されたモデルはありません。",
+        "today": "本日",
+        "col": {
+          "people": "利用者数",
+          "landsOn": "着地する利用者数",
+          "access": "後継モデルのアクセス"
+        },
+        "alert": "{model} はあと {days, plural, one {# 日} other {# 日}}でリタイアします。最近 {people, plural, one {# 人} other {# 人}}が利用しました。",
+        "alertForced": "{model} は今リタイアしています。最近 {people, plural, one {# 人} other {# 人}}が利用しました。",
+        "alertTo": "{model} へ移行されます。",
+        "alertNoReplacement": "後継モデルは設定されていません。",
+        "access": {
+          "same": "同じルール",
+          "unknown": "後継モデルが設定されるまで確認できません",
+          "everyone": "他の利用者は異なる条件になります",
+          "audiences": "{count, plural, one {#グループ、ドメイン、または人物が} other {#グループ、ドメイン、または人物が}}異なる条件を持っています",
+          "both": "他の利用者および{count, plural, one {# グループ、ドメインまたは利用者} other {# グループ、ドメインまたは利用者}}が異なる条件"
+        },
+        "carryOver": "このルールを{model}にコピー",
+        "carried": "{from} のルールを {to} にコピーしました。確認して適用してください。",
+        "legend": {
+          "service": "運用中",
+          "notice": "利用者に通知済み、{days} 日間",
+          "move": "移行済み利用者、直近{days}日間"
+        },
+        "pastTitle": "リタイア日を過ぎても掲載中:",
+        "pastItem": "{model}（{date}、{people, plural, one {# 人} other {# 人}}）",
+        "undatedTitle": "公開日未設定:",
+        "rulesNote": "アクセスはルールごとに比較されます。利用記録には名前が含まれていないため、どれだけの利用者がアクセスを失うかはわかりません。"
+      },
+      "map": {
+        "lead": "各円は直近{days, plural, one {#日} other {#日間}}で利用されたモデルを表します。右側ほどリクエストごとのコストが高くなり、上側ほど利用者数が多くなります。支出とCO2eは標準的なリクエストの推定値です。",
+        "empty": "直近{days, plural, one {#日} other {#日間}}で価格付きモデルは利用されませんでした。",
+        "caption": "同じ情報を表で表示、推定支出が多い順",
+        "sizeLabel": "円の大きさ",
+        "size": {
+          "spend": "推定支出",
+          "footprint": "推定CO2e",
+          "requests": "リクエスト数"
+        },
+        "axisPeople": "利用者数、直近{days, plural, one {#日} other {#日間}}（上方向）",
+        "axisCost": "標準リクエストの推定コスト（右方向）",
+        "dotLabel": "{model}: {people, plural, one {# 人} other {# 人}}, 標準リクエストあたり{cost}、{value}。アクセスルールを開く。",
+        "legendTitle": "大きさ分類:",
+        "legend": {
+          "mini": "nano・mini",
+          "standard": "standard",
+          "large": "大",
+          "xl": "特大",
+          "unset": "未設定"
+        },
+        "col": {
+          "requests": "リクエスト",
+          "perRequest": "通常のリクエストごと"
+        },
+        "unknown": "不明",
+        "noFindings": "まだ特筆すべき点はありません。",
+        "findingTitle": {
+          "concentrated": "集中的な利用",
+          "reached": "到達した上限",
+          "unreached": "誰も近づかない上限",
+          "noCeiling": "上限なし"
+        },
+        "finding": {
+          "concentrated": "{model}は、推定利用額の{share}を占めています。",
+          "reached": "{model}: {of}人のうち{people}人が1日で{cap}に到達しました。",
+          "unreached": "{model}は1日{cap}で制限されていますが、最も多く利用した人は{max}でした。",
+          "noCeiling": "{models}：他の全員は無制限です。最も多く利用した人は1日で{max, plural, one {#リクエスト} other {#リクエスト}}でした。"
+        }
       }
     },
     "previewSourceModelAccess": "モデル承認 — {list}",

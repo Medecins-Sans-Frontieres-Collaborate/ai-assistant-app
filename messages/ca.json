@@ -6945,6 +6945,223 @@
         "none": "cap entrada",
         "becomes": "es converteix en",
         "removed": "eliminat"
+      },
+      "view": {
+        "label": "Visualitza",
+        "grid": "Accés i dades",
+        "runway": "Camí cap a la jubilació",
+        "map": "Despesa i popularitat"
+      },
+      "facts": {
+        "estimateNote": "El cost i el CO2e són estimacions, no despeses mesurades: s'obtenen multiplicant les sol·licituds comptades per una sol·licitud típica ({promptTokens} tokens d'entrada, {completionTokens} de sortida) al preu de llista. L'ús cobreix els darrers {days, plural, one {# dia} other {# dies}}.",
+        "estimateNoteNoCost": "El CO2e és una estimació, no una mesura: s'obté multiplicant les sol·licituds comptades per una sol·licitud típica ({promptTokens} tokens d'entrada, {completionTokens} de sortida). L'ús cobreix els darrers {days, plural, one {# dia} other {# dies}}.",
+        "captureNote": "L'ús per part de tothom apareix després del primer dia complet de recollida. Fins aleshores, les xifres cobreixen només les persones amb límit.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} d'entrada, {output} de sortida",
+        "summary": {
+          "label": "Models d'un cop d'ull",
+          "used": "Models usats, darrers {days, plural, one {# dia} other {# dies}}",
+          "usedValue": "{used} de {total}",
+          "requests": "Sol·licituds",
+          "spend": "Despesa estimada",
+          "footprint": "CO2e estimat",
+          "retiring": "Jubilació en {days} dies",
+          "noCeiling": "Sense límit per a la resta",
+          "notYet": "Encara no es coneix"
+        },
+        "columns": {
+          "label": "Columnes",
+          "cost": "Cost",
+          "footprint": "Empremta",
+          "usage": "Ús",
+          "lifecycle": "Jubilació"
+        },
+        "col": {
+          "price": "Preu de llista per 1M tokens",
+          "ceiling": "Màxim que pot costar una persona al mes",
+          "footprint": "CO2e per a una sol·licitud típica",
+          "people": "Persones que l'utilitzen",
+          "spread": "Sol·licituds en el dia més actiu d'una persona",
+          "retires": "Jubila"
+        },
+        "ceiling": {
+          "heavy": "fins a {amount} amb sol·licituds llargues",
+          "off": "Res: desactivat",
+          "unbounded": "Sense límit",
+          "unpriced": "Sense preu de llista"
+        },
+        "footprint": {
+          "notSet": "Mida no establerta"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Estàndard",
+          "large": "Gran",
+          "xl": "Extra gran"
+        },
+        "usage": {
+          "none": "Sense ús",
+          "spend": "uns {amount}",
+          "cappedOnly": "només persones limitades"
+        },
+        "spread": {
+          "caption": "mediana {median}, 75è {p75}, màxim {max}",
+          "label": "Sol·licituds en el dia més actiu d'una persona: mediana {median}, 75è percentil {p75}, 95è percentil {p95}, màxim {max}.",
+          "labelCap": " El límit és {cap} al dia.",
+          "legend": {
+            "p95": "fins al 95è percentil",
+            "box": "de la mediana al 75è percentil",
+            "max": "persona amb més sol·licituds",
+            "cap": "límit per a la resta"
+          }
+        },
+        "retires": {
+          "none": "Data no publicada",
+          "forced": "Trasllat immediat",
+          "past": "la data ja ha passat",
+          "to": "cap a {model}"
+        },
+        "lifecycle": {
+          "preview": "Previsualització",
+          "ga": "Disponibilitat general",
+          "legacy": "Heretat",
+          "deprecated": "Obsolet",
+          "retired": "Retirat"
+        },
+        "detail": {
+          "region": "Com s’utilitza aquest model i quin cost té",
+          "usageTitle": "Sol·licituds en el dia més actiu de cada persona",
+          "usageHint": "{people, plural, one {# persona} other {# persones}} l'ha utilitzat durant els darrers {days, plural, one {# dia} other {# dies}}. Cada persona es compta una sola vegada, el dia de més activitat.",
+          "noUsage": "Ningú ha utilitzat aquest model durant els darrers {days, plural, one {# dia} other {# dies}}.",
+          "bucketHeading": "Sol·licituds en un dia",
+          "peopleHeading": "Persones",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Mitjana per dia actiu",
+          "median": "Mediana",
+          "p75": "Percentil 75",
+          "p95": "Percentil 95",
+          "max": "Persona amb més ús",
+          "reachedCap": "S’ha arribat al límit",
+          "cappedOnly": "Només es compten aquí les persones sotmeses a límit; les sense límit no hi consten.",
+          "truncated": "Només es mostren les persones amb més ús, per això la mediana i els percentils poden resultar més alts.",
+          "replayTitle": "Si el límit fos diferent",
+          "replayHint": "Quantes d’aquestes persones van tenir un dia amb el límit igual o superior. Haurien estat aturades aquell dia.",
+          "replayCap": "Límit per a la resta",
+          "replayStopped": "Persones aturades",
+          "replayPerDay": "{cap} al dia",
+          "replayNow": "{cap} al dia (ara)",
+          "replayUnlimitedNow": "Il·limitat (ara)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Cost estimat",
+          "costHint": "Preu de llista d’una sol·licitud suposada. No és una factura: les sol·licituds reals poden variar de durada.",
+          "typicalRequest": "Una sol·licitud típica",
+          "longRequest": "Una sol·licitud llarga",
+          "everyoneWindow": "Tothom, darrers {days, plural, one {# dia} other {# dies}}",
+          "atThisPace": "Un mes a aquest ritme",
+          "footprintTitle": "Petjada estimada",
+          "footprintHint": "Segons la classe de mida del model i una sol·licitud suposada. Un ordre de magnitud, no una mesura exacta.",
+          "sizeClass": "Classe de mida",
+          "noSizeClass": "Aquest model no té classe de mida, així que no se’n pot estimar la petjada. Es pot establir al catàleg de models.",
+          "aboutTitle": "Sobre aquest model",
+          "status": "Estat",
+          "retiresOn": "{date}. Els usuaris rebran un avís des de {notice} i es traslladaran des de {move}.",
+          "retiresForced": "S’està traslladant la gent d’aquest model ara mateix.",
+          "retiresUnknown": "Data no publicada",
+          "replacement": "La gent va a parar a",
+          "replacementNotSet": "No establert",
+          "knowledge": "Coneixement fins a",
+          "context": "Finestra de context",
+          "contextTokens": "{tokens} tokens",
+          "canDo": "Pot",
+          "can": {
+            "images": "llegir imatges",
+            "tools": "utilitzar eines",
+            "codeInterpreter": "executar codi",
+            "reasoningEffort": "ajustar l'esforç de raonament"
+          },
+          "hosted": "Allotjat",
+          "hosting": {
+            "azure": "A l'entorn Azure de l'organització",
+            "external": "Per un proveïdor extern",
+            "local": "Localment"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Quan desapareix cada model, quantes persones l'utilitzen i si les seves normes d'accés coincideixen amb les del model al qual aniran.",
+        "caption": "Models amb data de retirada, primer els més pròxims",
+        "empty": "Cap model té data de retirada.",
+        "today": "Avui",
+        "col": {
+          "people": "Persones",
+          "landsOn": "Persones passen a",
+          "access": "Accés al reemplaçament"
+        },
+        "alert": "{model} es retira d'aquí a {days, plural, one {# dia} other {# dies}}. {people, plural, one {# persona} other {# persones}} l'han utilitzat recentment.",
+        "alertForced": "{model} s'està retirant ara. {people, plural, one {# persona} other {# persones}} l'han utilitzat recentment.",
+        "alertTo": "Es traslladaran a {model}.",
+        "alertNoReplacement": "No s'ha establert cap reemplaçament.",
+        "access": {
+          "same": "Mateixes normes",
+          "unknown": "No es pot comprovar fins que no s'estableixi un reemplaçament",
+          "everyone": "La resta té condicions diferents",
+          "audiences": "{count, plural, one {# grup, domini o persona té} other {# grups, dominis o persones tenen}} termes diferents",
+          "both": "La resta i {count, plural, one {# grup, domini o persona} other {# grups, dominis o persones}} tenen condicions diferents"
+        },
+        "carryOver": "Copia aquestes normes a {model}",
+        "carried": "Normes de {from} copiades a {to}. Reviseu-les i deseu per aplicar-les.",
+        "legend": {
+          "service": "en servei",
+          "notice": "avís mostrat als usuaris, {days} dies",
+          "move": "persones traslladades, últims {days} dies"
+        },
+        "pastTitle": "Ja passada la data i encara llistat:",
+        "pastItem": "{model} ({date}, {people, plural, one {# persona} other {# persones}})",
+        "undatedTitle": "Sense data publicada:",
+        "rulesNote": "L'accés es compara norma per norma. L'ús es desa sense noms, així que no es pot indicar quantes persones perdrien l'accés a un model."
+      },
+      "map": {
+        "lead": "Cada cercle és un model utilitzat els darrers {days, plural, one {# dia} other {# dies}}. Com més a la dreta, més cost per sol·licitud; com més amunt, més persones. La despesa i el CO2e són estimats a partir d'una sol·licitud típica.",
+        "empty": "Cap model amb preu ha estat utilitzat durant els darrers {days, plural, one {# dia} other {# dies}}.",
+        "caption": "Les mateixes dades en format taula, primer la despesa estimada més alta",
+        "sizeLabel": "Mida del cercle",
+        "size": {
+          "spend": "Despesa estimada",
+          "footprint": "CO2e estimat",
+          "requests": "Sol·licituds"
+        },
+        "axisPeople": "Persones, darrers {days, plural, one {# dia} other {# dies}} (amunt)",
+        "axisCost": "Cost estimat d'una sol·licitud típica al preu de llista (dreta)",
+        "dotLabel": "{model}: {people, plural, one {# persona} other {# persones}}, {cost} per sol·licitud típica, {value}. Obre les seves normes d'accés.",
+        "legendTitle": "Classe de mida:",
+        "legend": {
+          "mini": "nano o mini",
+          "standard": "estàndard",
+          "large": "gran",
+          "xl": "extra gran",
+          "unset": "no establert"
+        },
+        "col": {
+          "requests": "Sol·licituds",
+          "perRequest": "Per sol·licitud típica"
+        },
+        "unknown": "Desconegut",
+        "noFindings": "Encara no destaca res.",
+        "findingTitle": {
+          "concentrated": "Despesa concentrada",
+          "reached": "Un límit assolit per persones",
+          "unreached": "Un límit que ningú assoleix",
+          "noCeiling": "Sense límit superior"
+        },
+        "finding": {
+          "concentrated": "{model} representa el {share} de la despesa estimada.",
+          "reached": "{model}: {people} de {of} persones han assolit {cap} al dia.",
+          "unreached": "{model} té el límit de {cap} al dia; la persona amb més ús n'ha fet {max}.",
+          "noCeiling": "{models}: il·limitat per a la resta. La persona amb més ús n'ha fet {max, plural, one {# sol·licitud} other {# sol·licituds}} en un dia."
+        }
       }
     },
     "previewSourceModelAccess": "Aprovació del model — {list}",

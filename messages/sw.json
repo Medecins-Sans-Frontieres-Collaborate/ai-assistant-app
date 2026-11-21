@@ -6945,6 +6945,223 @@
         "none": "hakuna ingizo",
         "becomes": "inakuwa",
         "removed": "imeondolewa"
+      },
+      "view": {
+        "label": "Angalia",
+        "grid": "Upatikanaji na taarifa",
+        "runway": "Njia ya kustaafu",
+        "map": "Matumizi na umaarufu"
+      },
+      "facts": {
+        "estimateNote": "Gharama na CO2e ni makadirio, sio matumizi yaliyopimwa: maombi yaliyohesabiwa yamezidishwa na ombi la kawaida ({promptTokens} tokeni ndani, {completionTokens} nje) kwa bei iliyoorodheshwa. Matumizi yanahusu siku {days, plural, one {# moja} other {# siku}} zilizopita.",
+        "estimateNoteNoCost": "CO2e ni makadirio, sio kipimo: maombi yaliyohesabiwa yamezidishwa na ombi la kawaida ({promptTokens} tokeni ndani, {completionTokens} nje). Matumizi yanahusu siku {days, plural, one {# moja} other {# siku}} zilizopita.",
+        "captureNote": "Matumizi ya kila mtu yanaonekana baada ya siku moja kamili ya ukusanyaji. Kabla ya hapo, taarifa zinaonyesha tu watu walio chini ya kikomo.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} ndani, {output} nje",
+        "summary": {
+          "label": "Miundo kwa muhtasari",
+          "used": "Mifano iliyotumika, siku {days, plural, one {# moja} other {# siku}} zilizopita",
+          "usedValue": "{used} kati ya {total}",
+          "requests": "Maombi",
+          "spend": "Makadirio ya matumizi",
+          "footprint": "Makadirio ya CO2e",
+          "retiring": "Kustaafu ndani ya {days} siku",
+          "noCeiling": "Haki isiyo na kikomo kwa wengine wote",
+          "notYet": "Bado haijulikani"
+        },
+        "columns": {
+          "label": "Nguzo",
+          "cost": "Gharama",
+          "footprint": "Mkubwa wa athari",
+          "usage": "Matumizi",
+          "lifecycle": "Kustaafu"
+        },
+        "col": {
+          "price": "Bei ya orodha kwa tokeni milioni 1",
+          "ceiling": "Gharama ya juu zaidi mtu mmoja anaweza kutumia kwa mwezi",
+          "footprint": "CO2e kwa ombi la kawaida",
+          "people": "Watu wanaotumia",
+          "spread": "Maombi kwenye siku yenye shughuli nyingi kwa mtu",
+          "retires": "Inastaafu"
+        },
+        "ceiling": {
+          "heavy": "hadi {amount} kwa maombi marefu",
+          "off": "Hakuna: zimezimwa",
+          "unbounded": "Hakuna kikomo",
+          "unpriced": "Hakuna bei ya orodha"
+        },
+        "footprint": {
+          "notSet": "Ukubwa haujawekwa"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Kubwa",
+          "xl": "Kubwa zaidi"
+        },
+        "usage": {
+          "none": "Hakuna matumizi",
+          "spend": "karibu {amount}",
+          "cappedOnly": "watu waliowekwa kikomo pekee"
+        },
+        "spread": {
+          "caption": "median {median}, 75th {p75}, nyingi {max}",
+          "label": "Maombi kwenye siku yenye shughuli nyingi kwa mtu: median {median}, 75th percentile {p75}, 95th percentile {p95}, nyingi {max}.",
+          "labelCap": " Kikomo ni {cap} kwa siku.",
+          "legend": {
+            "p95": "hadi asilimia 95",
+            "box": "median hadi asilimia 75",
+            "max": "mtu mwenye matumizi mengi",
+            "cap": "kikomo kwa wengine wote"
+          }
+        },
+        "retires": {
+          "none": "Hakuna tarehe iliyochapishwa",
+          "forced": "Inahamishwa sasa",
+          "past": "tarehe imepita",
+          "to": "kwa {model}"
+        },
+        "lifecycle": {
+          "preview": "Hakikisho",
+          "ga": "Inapatikana kwa wote",
+          "legacy": "Legacy",
+          "deprecated": "Imepitwa na wakati",
+          "retired": "Imestaafishwa"
+        },
+        "detail": {
+          "region": "Jinsi mfano huu unavyotumika, na gharama yake",
+          "usageTitle": "Maombi katika siku yenye shughuli nyingi zaidi kwa kila mtu",
+          "usageHint": "{people, plural, one {# mtu} other {# watu}} alitumia katika siku {days, plural, one {# moja} other {# siku}} zilizopita. Kila mtu anahesabiwa mara moja, siku yake yenye shughuli nyingi.",
+          "noUsage": "Hakuna aliyekitumia kifaa hiki katika siku {days, plural, one {# moja} other {# siku}} zilizopita.",
+          "bucketHeading": "Maombi kwa siku",
+          "peopleHeading": "Watu",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Wastani kwa siku iliyo na shughuli",
+          "median": "Median",
+          "p75": "Asilimia 75",
+          "p95": "Asilimia 95",
+          "max": "Mtu aliyetumia zaidi",
+          "reachedCap": "Imeshafikia kikomo",
+          "cappedOnly": "Hapa wanahesabiwa watu walio chini ya kikomo pekee, hivyo walio bila kikomo hawajumuishwi.",
+          "truncated": "Watu waliotumia zaidi tu ndio wameorodheshwa, hivyo median na asilimia zinaonekana juu kuliko zilivyo.",
+          "replayTitle": "Iwapo kikomo kingekuwa tofauti",
+          "replayHint": "Watu wangapi kati ya hawa walikuwa na siku iliyofikia au kuzidi kikomo. Wangezuiwa siku hiyo.",
+          "replayCap": "Kikomo kwa wengine wote",
+          "replayStopped": "Watu waliozuiwa",
+          "replayPerDay": "{cap} kwa siku",
+          "replayNow": "{cap} kwa siku (sasa)",
+          "replayUnlimitedNow": "Bila kikomo (sasa)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Makadirio ya gharama",
+          "costHint": "Bei ya orodha kwa ombi linalokadiriwa. Sio bili: maombi halisi hutofautiana kwa urefu.",
+          "typicalRequest": "Ombi moja la kawaida",
+          "longRequest": "Ombi moja refu",
+          "everyoneWindow": "Kila mtu, siku {days, plural, one {# moja} other {# siku}} zilizopita",
+          "atThisPace": "Mwezi mmoja kwa mwendo huu",
+          "footprintTitle": "Makadirio ya footprint",
+          "footprintHint": "Kutokana na ukubwa wa darasa la mfano na ombi linalokadiriwa. Ni makadirio kwa karibu, si kipimo halisi.",
+          "sizeClass": "Darasa la ukubwa",
+          "noSizeClass": "Mfano huu hauna darasa la ukubwa, hivyo footprint haiwezi kukadiriwa. Weka darasa kwenye katalogi ya mfano.",
+          "aboutTitle": "Kuhusu mfano huu",
+          "status": "Hali",
+          "retiresOn": "{date}. Watumiaji wataona taarifa kutoka {notice} na kuhamishwa kutoka {move}.",
+          "retiresForced": "Watu wanahamishwa kutoka kwenye mfano huu sasa.",
+          "retiresUnknown": "Hakuna tarehe iliyochapishwa",
+          "replacement": "Watu watahamia",
+          "replacementNotSet": "Haijawekwa",
+          "knowledge": "Maarifa hadi",
+          "context": "Dirisha la muktadha",
+          "contextTokens": "{tokens} tokeni",
+          "canDo": "Inaweza",
+          "can": {
+            "images": "kusoma picha",
+            "tools": "kutumia zana",
+            "codeInterpreter": "kuendesha msimbo",
+            "reasoningEffort": "kurekebisha kiwango cha mantiki"
+          },
+          "hosted": "Imepangishwa",
+          "hosting": {
+            "azure": "Katika Azure ya shirika",
+            "external": "Kwa mtoa huduma wa nje",
+            "local": "Kimahali"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Kila modeli ikiondolewa, idadi ya watu waliyoitumia, na ikiwa sheria za upatikanaji zinafanana na modeli mpya ambayo watu watahamia.",
+        "caption": "Modeli zilizo na tarehe ya kustafu, mapema kwanza",
+        "empty": "Hakuna modeli yenye tarehe ya kustafu.",
+        "today": "Leo",
+        "col": {
+          "people": "Watu",
+          "landsOn": "Watu watahamia",
+          "access": "Upatikanaji kwenye mbadala"
+        },
+        "alert": "{model} itastaafu baada ya {days, plural, one {siku moja} other {siku #}}. {people, plural, one {mtu mmoja} other {watu #}} waliitumia hivi karibuni.",
+        "alertForced": "{model} inastaafishwa sasa. {people, plural, one {mtu mmoja} other {watu #}} waliitumia hivi karibuni.",
+        "alertTo": "Watahamishwa kwenda {model}.",
+        "alertNoReplacement": "Hakuna mbadala umewekwa.",
+        "access": {
+          "same": "Sheria sawa",
+          "unknown": "Haiwezi kukaguliwa hadi mbadala kuwekwa",
+          "everyone": "Wengine wote watapata masharti tofauti",
+          "audiences": "{count, plural, one {# kundi, domeini au mtu ana} other {# vikundi, domeini au watu wana}} masharti tofauti",
+          "both": "Wengine wote na {count, plural, one {kundi, domain au mtu mmoja} other {makundi, domain au watu #}} watapata masharti tofauti"
+        },
+        "carryOver": "Nakili sheria hizi kwenda {model}",
+        "carried": "Sheria za {from} zimekopiwa kwenda {to}. Kagua na hifadhi ili utekeleze.",
+        "legend": {
+          "service": "katika huduma",
+          "notice": "taarifa imeonyeshwa kwa watumiaji, siku {days}",
+          "move": "watu wamehamishwa, siku {days} zilizopita"
+        },
+        "pastTitle": "Imevuka tarehe na bado imetajwa:",
+        "pastItem": "{model} ({date}, {people, plural, one {mtu mmoja} other {watu #}})",
+        "undatedTitle": "Hakuna tarehe iliyotangazwa:",
+        "rulesNote": "Upatikanaji unalinganishwa kwa kila sheria. Matumizi yamehifadhiwa bila majina, hivyo haiwezi kusema ni watu wangapi kwenye modeli watapoteza upatikanaji."
+      },
+      "map": {
+        "lead": "Kila duara ni mfano uliotumika katika siku {days, plural, one {# moja} other {# siku}} zilizopita. Kadri mduara unavyoenda kulia, gharama kwa ombi huongezeka; kadri juu, watumiaji ni wengi zaidi. Matumizi na CO2e ni makadirio kulingana na ombi la kawaida.",
+        "empty": "Hakuna mfano wa bei uliotumika katika siku {days, plural, one {# moja} other {# siku}} zilizopita.",
+        "caption": "Nambari hizo hizo kama jedwali, matumizi yanayokadiriwa mengi kwanza",
+        "sizeLabel": "Ukubwa wa duara",
+        "size": {
+          "spend": "Matumizi yaliyokadiriwa",
+          "footprint": "CO2e iliyokadiriwa",
+          "requests": "Maombi"
+        },
+        "axisPeople": "Watu, siku {days, plural, one {# moja} other {# siku}} zilizopita (juu)",
+        "axisCost": "Gharama ya ombi la kawaida kwa bei ya orodha (kulia)",
+        "dotLabel": "{model}: {people, plural, one {mtu mmoja} other {watu #}}, {cost} kwa ombi la kawaida, {value}. Fungua sheria za upatikanaji.",
+        "legendTitle": "Darasa la ukubwa:",
+        "legend": {
+          "mini": "nano au mini",
+          "standard": "standard",
+          "large": "kubwa",
+          "xl": "kubwa zaidi",
+          "unset": "haijawekwa"
+        },
+        "col": {
+          "requests": "Maombi",
+          "perRequest": "Kwa ombi la kawaida"
+        },
+        "unknown": "Haijulikani",
+        "noFindings": "Hakuna kinachojitokeza bado.",
+        "findingTitle": {
+          "concentrated": "Matumizi yaliyokusanywa",
+          "reached": "Kikomo ambacho watu wanafikia",
+          "unreached": "Kikomo ambacho hakuna anayekaribia",
+          "noCeiling": "Hakuna kikomo"
+        },
+        "finding": {
+          "concentrated": "{model} ni {share} ya matumizi yanayotazamiwa.",
+          "reached": "{model}: {people} kati ya {of} watu walifikia {cap} kwa siku.",
+          "unreached": "{model} imewekewa kiwango cha juu cha {cap} kwa siku; mtu aliyetumia zaidi alifanya {max}.",
+          "noCeiling": "{models}: hakuna kikomo kwa wengine wote. Mtu aliyetumia zaidi alifanya {max, plural, one {ombi #} other {maombi #}} kwa siku."
+        }
       }
     },
     "previewSourceModelAccess": "Idhini ya muundo — {list}",

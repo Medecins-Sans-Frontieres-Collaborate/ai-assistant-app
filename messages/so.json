@@ -6929,6 +6929,223 @@
         "none": "gelin ma jiro",
         "becomes": "wuxuu isu beddelayaa",
         "removed": "waa la saaray"
+      },
+      "view": {
+        "label": "Eeg",
+        "grid": "Gelitaanka iyo xaqiiqooyinka",
+        "runway": "Waqtiga hawlgabnimada",
+        "map": "Kharashka iyo caansanaanta"
+      },
+      "facts": {
+        "estimateNote": "Kharashka iyo CO2e waa qiyaas, laguma cabbiro kharashka dhabta ah: codsiyada la tiriyay ayaa lagu dhuftay codsi caadi ah ({promptTokens} tokens gudaha, {completionTokens} bannaanka) qiimaha liiska. Isticmaalka waxa uu daboolayaa {days, plural, one {# maalin} other {# maalmood}} ee ugu dambeeyay.",
+        "estimateNoteNoCost": "CO2e waa qiyaas, la ma cabbirin: codsiyada la tiriyay ayaa lagu dhuftay codsi caadi ah ({promptTokens} tokens gudaha, {completionTokens} bannaanka). Isticmaalka waxa uu daboolayaa {days, plural, one {# maalin} other {# maalmood}} ee ugu dambeeyay.",
+        "captureNote": "Isticmaalka qof walba wuxuu muuqdaa kadib maalintii ugu horeysay ee xog uruurinta. Ilaa markaas tiradu waxa ay gacanta ku hayaan kaliya dadka xaddidan.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} gallay, {output} soobaxay",
+        "summary": {
+          "label": "Moodooyinka si kooban",
+          "used": "Moodooyinka la isticmaalay, {days, plural, one {# maalin} other {# maalmood}} ee ugu dambeeyay",
+          "usedValue": "{used} ka mid ah {total}",
+          "requests": "Codsiyada",
+          "spend": "Kharash la qiyaasay",
+          "footprint": "CO2e la qiyaasay",
+          "retiring": "Wuxuu hawlgab noqonayaa {days} maalmood gudahood",
+          "noCeiling": "Xad la’aan qof kasta oo kale",
+          "notYet": "Weli lama oga"
+        },
+        "columns": {
+          "label": "Tiirarka",
+          "cost": "Kharash",
+          "footprint": "Saamayn deegaanka",
+          "usage": "Isticmaalka",
+          "lifecycle": "Hawlgabnimo"
+        },
+        "col": {
+          "price": "Qiimaha liiska ee 1M tokens",
+          "ceiling": "Kharashka ugu badan ee qofkiiba, bishii",
+          "footprint": "CO2e codsi caadi ah",
+          "people": "Dadka isticmaalaya",
+          "spread": "Codsiyada maalinta qofku ugu mashquulsan yahay",
+          "retires": "Dhamaanaaya"
+        },
+        "ceiling": {
+          "heavy": "ilaa {amount} codsiyada dhaadheer",
+          "off": "Waxba: la damiyey",
+          "unbounded": "Xad ma leh",
+          "unpriced": "Qiimaha liiska ma jiro"
+        },
+        "footprint": {
+          "notSet": "Cabbir lama dejin"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Caadi",
+          "large": "Weyn",
+          "xl": "Aad u weyn"
+        },
+        "usage": {
+          "none": "Isticmaal ma jiro",
+          "spend": "qiyaastii {amount}",
+          "cappedOnly": "kaliya dadka xaddidan"
+        },
+        "spread": {
+          "caption": "celcelis {median}, 75aad {p75}, ugu badan {max}",
+          "label": "Codsiyada maalinta qofku ugu mashquulsan yahay: celcelis {median}, boqolkiiba 75aad {p75}, boqolkiiba 95aad {p95}, ugu badan {max}.",
+          "labelCap": " Xadka waa {cap} maalintii.",
+          "legend": {
+            "p95": "ilaa boqolkiiba 95aad",
+            "box": "celcelis ilaa boqolkiiba 75aad",
+            "max": "qofka ugu isticmaal badan",
+            "cap": "xadka qof kasta oo kale"
+          }
+        },
+        "retires": {
+          "none": "Taariikh lama shaacin",
+          "forced": "Waxaa hadda laga wareejinayaa",
+          "past": "taariikhdu way dhaaftay",
+          "to": "loogu wareejiyey {model}"
+        },
+        "lifecycle": {
+          "preview": "Muuqaal hordhac ah",
+          "ga": "Si guud loo heli karo",
+          "legacy": "Dhaxal dhaaw ah",
+          "deprecated": "Laga baxay adeegsigii",
+          "retired": "La seegay (la hawl gabay)"
+        },
+        "detail": {
+          "region": "Sida moodalkan loo isticmaalo, iyo waxa uu ku kaco",
+          "usageTitle": "Codsiyada maalinta ugu mashquulka badan ee qof walba",
+          "usageHint": "{people, plural, one {# qof} other {# qof}} ayaa isticmaalay {days, plural, one {# maalin} other {# maalmood}} ee ugu dambeeyay. Qof kasta hal mar ayaa la tirinayaa, maalintiisa ugu mashquulsan.",
+          "noUsage": "Qofna ma isticmaalin moodelkan {days, plural, one {# maalin} other {# maalmood}} ee ugu dambeeyay.",
+          "bucketHeading": "Codsiyada maalintii",
+          "peopleHeading": "Dadka",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Celcelis maalintii shaqaynaysay",
+          "median": "Dhexdhexaad",
+          "p75": "75% silsilad",
+          "p95": "95% silsilad",
+          "max": "Qofka ugu isticmaalka badan",
+          "reachedCap": "Heerkii la gaaray",
+          "cappedOnly": "Kaliya dadka xadka lagu xaddiday ayaa halkan lagu tirinayaa, markaa dadka aan xad lahayn way ka maqan yihiin.",
+          "truncated": "Keliya dadka ugu isticmaalka badan baa la taxay, sidaas darteed, dhexdhexaadka iyo boqolleyada (percentiles) way ka badan yihiin sidii dhab ahaantood.",
+          "replayTitle": "Haddii xadka la beddelo",
+          "replayHint": "Tirada dadkaas ee hal maalin gaaray xadka ama ka sare maray. Maalinkaas waa la joojin lahaa.",
+          "replayCap": "Xadka dadka kale oo dhan",
+          "replayStopped": "Dadka la joojiyey",
+          "replayPerDay": "{cap} maalintii",
+          "replayNow": "{cap} maalintii (hadda)",
+          "replayUnlimitedNow": "Aan xad lahayn (hadda)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Kharashka la qiyaasay",
+          "costHint": "Qiimaha liiska ee codsi la saadaaliyey. Tani ma aha biil rasmi ah: codsiyada dhabta ah way kala dheer yihiin.",
+          "typicalRequest": "Codsi caadi ah",
+          "longRequest": "Codsi dheer",
+          "everyoneWindow": "Dhamaan, {days, plural, one {# maalin} other {# maalmood}} ee ugu dambeeyay",
+          "atThisPace": "Bil dhan xawaarekan",
+          "footprintTitle": "Raadka la qiyaasay",
+          "footprintHint": "Laga soo qaatay baaxadda moodelka iyo codsi la saadaaliyey. Waa qiyaas ballaaran, ma aha cabbir toos ah.",
+          "sizeClass": "Fasalka baaxadda",
+          "noSizeClass": "Moodalkan ma laha fasal baaxad, sidaas darteed raadka lama qiyaasi karo. Fasal u qor buugga moodeelka.",
+          "aboutTitle": "Ku saabsan moodalkan",
+          "status": "Xaalad",
+          "retiresOn": "{date}. Isticmaalayaashu waxay arkaan ogeysiis laga bilaabo {notice} waxaana laga wareejiyaa {move}.",
+          "retiresForced": "Dadku hadda waxaa laga wareejinayaa moodalkan.",
+          "retiresUnknown": "Taariikh lama shaacin",
+          "replacement": "Dadku waxay tagaan",
+          "replacementNotSet": "Lama deyn",
+          "knowledge": "Xog ilaa",
+          "context": "Daaqadda xaaladda",
+          "contextTokens": "{tokens} token",
+          "canDo": "Wuxuu awooday",
+          "can": {
+            "images": "akhrin sawirro",
+            "tools": "isticmaal qalab",
+            "codeInterpreter": "socodsii koodh",
+            "reasoningEffort": "habee dadaalka falanqaynta"
+          },
+          "hosted": "Martigelin",
+          "hosting": {
+            "azure": "Gudaha Azure tenant-ka ururka",
+            "external": "Tilmaame dibadda ah",
+            "local": "Lokal ahaan"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Marka mid walba la joojiyo, tirada dadka isticmaalayey, iyo in xeerarka helista ay la mid yihiin kuwa moodelka la baddalay.",
+        "caption": "Moodellada leh taariikhda hawlgabnimada, kuwa ugu dhaw ugu horrayn",
+        "empty": "Moodel kasta ma leh taariikh hawlgabnimo.",
+        "today": "Maanta",
+        "col": {
+          "people": "Dadka",
+          "landsOn": "Dadku waxay galaan",
+          "access": "Helitaanka moodelka baddalka ah"
+        },
+        "alert": "{model} wuxuu hawlgab noqonayaa {days, plural, one {# maalin} other {# maalmood}}. {people, plural, one {# qof} other {# qof}} ayaa dhowaan isticmaalay.",
+        "alertForced": "{model} hadda waa la hawlgabiyey. {people, plural, one {# qof} other {# qof}} ayaa dhowaan isticmaalay.",
+        "alertTo": "Waxa lagu wareejin doonaa {model}.",
+        "alertNoReplacement": "Baddal lama dhigin.",
+        "access": {
+          "same": "Xeerar isku mid ah",
+          "unknown": "Lama hubin karo ilaa la dhigo baddal",
+          "everyone": "Dad kale waxay helaan shuruudo kala duwan",
+          "audiences": "{count, plural, one {# koox, domain ama qof ayaa leh} other {# kooxo, domains ama dad ayaa leh}} shuruudo kala duwan",
+          "both": "Dad kale iyo {count, plural, one {# koox, domain ama qof} other {# koox, domains ama dad}} waxay helaan shuruudo kala duwan"
+        },
+        "carryOver": "Nuqul xeerarkan {model}",
+        "carried": "Xeerar {from} ayaa loo nuqulay {to}. Dib u eeg oo keydi si loo ansixiyo.",
+        "legend": {
+          "service": "adeeg socda",
+          "notice": "ogeysiis la tusay isticmaalaha, {days} maalmood",
+          "move": "dad la wareejiyey, {days} maalmood ee u dambeysay"
+        },
+        "pastTitle": "Waa dhaaftay taariikhda la xusay haddana weli waa la qoray:",
+        "pastItem": "{model} ({date}, {people, plural, one {# qof} other {# qof}})",
+        "undatedTitle": "Taariikh lama daabicin:",
+        "rulesNote": "Helitaanka waxaa lagu fiiriyaa mid mid xeer kaste. Isticmaalka magacyada lama huri karo, sidaas darteed lama sheegi karo inta qof ee moodelka isticmaalaya ay lumin doonaan helitaanka."
+      },
+      "map": {
+        "lead": "Wareeg walba waa moodel la isticmaalay {days, plural, one {# maalin} other {# maalmood}} ee ugu dambeeyay. Xagga midig waxa uu kordhinayaa kharashka codsi kasta, sareyna waxa uu muujinayaa dadka badan. Kharashka iyo CO2e waa qiyaas codsi caadi ah.",
+        "empty": "Maalin {days, plural, one {# maalin} other {# maalmood}} ee ugu dambeeyay lagama isticmaalin moodel qiimo leh.",
+        "caption": "Tirooyinkan sidii jadwal, kuwa kharashka ugu badan hore",
+        "sizeLabel": "Cabirka goobada",
+        "size": {
+          "spend": "Qiyaasta kharashka",
+          "footprint": "Qiyaasta CO2e",
+          "requests": "Dalabaad"
+        },
+        "axisPeople": "Dadka, {days, plural, one {# maalin} other {# maalmood}} ee ugu dambeeyay (kor)",
+        "axisCost": "Qiyaasta kharashka hal dalab caadi ah oo liiska ku jira (midig)",
+        "dotLabel": "{model}: {people, plural, one {# qof} other {# qof}}, {cost} dalab caadi ah, {value}. Furo xeerarka helisteeda.",
+        "legendTitle": "Nooca cabbirka:",
+        "legend": {
+          "mini": "nano ama mini",
+          "standard": "heer caadi ah",
+          "large": "weyn",
+          "xl": "aad u weyn",
+          "unset": "lama dejin"
+        },
+        "col": {
+          "requests": "Codsiyo",
+          "perRequest": "Codsi kasta oo caadi ah"
+        },
+        "unknown": "Lama yaqaan",
+        "noFindings": "Weli wax gaar ah lama helin.",
+        "findingTitle": {
+          "concentrated": "Kharash urursan",
+          "reached": "Xad dadku gaareen",
+          "unreached": "Xad aan la gaadhin",
+          "noCeiling": "Xad sare malaha"
+        },
+        "finding": {
+          "concentrated": "{model} waa {share} kharashka la qiyaasay.",
+          "reached": "{model}: {people} ka mid ah {of} qof waxay gaareen {cap} maalintii.",
+          "unreached": "{model} waxaa la xaddiday {cap} maalintii; qofka ugu badan wuxuu sameeyay {max}.",
+          "noCeiling": "{models}: xad la’aan dadka kale oo dhan. Qofka ugu badan wuxuu sameeyay {max, plural, one {# codsi} other {# codsiyaal}} maalintii."
+        }
       }
     },
     "previewSourceModelAccess": "Oggolaanshaha model-ka — {list}",

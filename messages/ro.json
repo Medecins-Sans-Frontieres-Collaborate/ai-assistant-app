@@ -6945,6 +6945,223 @@
         "none": "nici o intrare",
         "becomes": "devine",
         "removed": "eliminat"
+      },
+      "view": {
+        "label": "Vizualizare",
+        "grid": "Acces și informații",
+        "runway": "Durata până la retragere",
+        "map": "Cheltuieli și popularitate"
+      },
+      "facts": {
+        "estimateNote": "Costul și CO2e sunt estimări, nu cheltuieli măsurate: cererile numărate înmulțite cu o cerere tipică ({promptTokens} token-uri la intrare, {completionTokens} la ieșire) la prețul de listă. Utilizarea acoperă ultimele {days, plural, one {# zi} other {# zile}}.",
+        "estimateNoteNoCost": "CO2e este o estimare, nu o măsurare: cererile numărate înmulțite cu o cerere tipică ({promptTokens} token-uri la intrare, {completionTokens} la ieșire). Utilizarea acoperă ultimele {days, plural, one {# zi} other {# zile}}.",
+        "captureNote": "Utilizarea tuturor apare după prima zi completă de colectare. Până atunci, cifrele acoperă doar persoanele aflate sub limită.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} intrare, {output} ieșire",
+        "summary": {
+          "label": "Modele pe scurt",
+          "used": "Modele folosite, ultimele {days, plural, one {# zi} other {# zile}}",
+          "usedValue": "{used} din {total}",
+          "requests": "Cererile",
+          "spend": "Cheltuieli estimate",
+          "footprint": "CO2e estimat",
+          "retiring": "Retragere în {days} zile",
+          "noCeiling": "Nelimitat pentru ceilalți",
+          "notYet": "Încă necunoscut"
+        },
+        "columns": {
+          "label": "Coloane",
+          "cost": "Cost",
+          "footprint": "Amprentă",
+          "usage": "Utilizare",
+          "lifecycle": "Retragere"
+        },
+        "col": {
+          "price": "Preț de listă per 1M token-uri",
+          "ceiling": "Cât poate costa cel mult o persoană pe lună",
+          "footprint": "CO2e per cerere tipică",
+          "people": "Persoane care îl folosesc",
+          "spread": "Cererile din cea mai ocupată zi a unei persoane",
+          "retires": "Se retrage"
+        },
+        "ceiling": {
+          "heavy": "până la {amount} cu cereri lungi",
+          "off": "Nimic: dezactivat",
+          "unbounded": "Fără limită",
+          "unpriced": "Fără preț de listă"
+        },
+        "footprint": {
+          "notSet": "Dimensiune nespecificată"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Mare",
+          "xl": "Foarte mare"
+        },
+        "usage": {
+          "none": "Nu există utilizare",
+          "spend": "aproximativ {amount}",
+          "cappedOnly": "doar persoane cu limită"
+        },
+        "spread": {
+          "caption": "mediana {median}, 75% {p75}, cel mai mult {max}",
+          "label": "Cererile din cea mai ocupată zi a unei persoane: mediana {median}, percentila 75 {p75}, percentila 95 {p95}, cel mai mult {max}.",
+          "labelCap": " Limita este {cap} pe zi.",
+          "legend": {
+            "p95": "până la percentila 95",
+            "box": "mediana până la percentila 75",
+            "max": "persoana cea mai activă",
+            "cap": "limita pentru ceilalți"
+          }
+        },
+        "retires": {
+          "none": "Nu a fost publicată nicio dată",
+          "forced": "Se transferă acum",
+          "past": "data a trecut",
+          "to": "la {model}"
+        },
+        "lifecycle": {
+          "preview": "Previzualizare",
+          "ga": "Disponibil general",
+          "legacy": "Legacy",
+          "deprecated": "Depreciat",
+          "retired": "Retras"
+        },
+        "detail": {
+          "region": "Cum este utilizat acest model și care sunt costurile",
+          "usageTitle": "Cereri în cea mai aglomerată zi a fiecărei persoane",
+          "usageHint": "{people, plural, one {# persoană} other {# persoane}} au folosit modelul în ultimele {days, plural, one {# zi} other {# zile}}. Fiecare persoană este contorizată o singură dată, în ziua cu cea mai mare activitate.",
+          "noUsage": "Nimeni nu a folosit acest model în ultimele {days, plural, one {# zi} other {# zile}}.",
+          "bucketHeading": "Cereri într-o zi",
+          "peopleHeading": "Persoane",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Media pe zi activă",
+          "median": "Mediana",
+          "p75": "Percentila 75",
+          "p95": "Percentila 95",
+          "max": "Persoana cu cele mai multe cereri",
+          "reachedCap": "S-a atins un plafon",
+          "cappedOnly": "Aici sunt contorizate doar persoanele cu plafon, deci cei fără plafon lipsesc.",
+          "truncated": "Sunt afișate doar persoanele cu cele mai multe cereri, astfel mediana și percentilele sunt mai mari decât în realitate.",
+          "replayTitle": "Dacă plafonul ar fi diferit",
+          "replayHint": "Câți dintre acești utilizatori au avut o zi la sau peste fiecare plafon. Ar fi fost opriți în acea zi.",
+          "replayCap": "Plafon pentru ceilalți",
+          "replayStopped": "Persoane oprite",
+          "replayPerDay": "{cap} pe zi",
+          "replayNow": "{cap} pe zi (acum)",
+          "replayUnlimitedNow": "Nelimitat (acum)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Cost estimat",
+          "costHint": "Preț de listă pentru o cerere presupusă. Nu este o factură: cererile reale pot varia ca lungime.",
+          "typicalRequest": "O cerere tipică",
+          "longRequest": "O cerere lungă",
+          "everyoneWindow": "Toată lumea, ultimele {days, plural, one {# zi} other {# zile}}",
+          "atThisPace": "O lună în acest ritm",
+          "footprintTitle": "Amprentă estimată",
+          "footprintHint": "Bazat pe clasa de dimensiune a modelului și o cerere presupusă. O estimare, nu o măsurare.",
+          "sizeClass": "Clasă de dimensiune",
+          "noSizeClass": "Acest model nu are clasă de dimensiune, deci amprenta nu poate fi estimată. Atribuiți una în catalogul de modele.",
+          "aboutTitle": "Despre acest model",
+          "status": "Stare",
+          "retiresOn": "{date}. Utilizatorii văd o notificare de la {notice} și sunt mutați de la {move}.",
+          "retiresForced": "Persoanele sunt transferate de pe acest model acum.",
+          "retiresUnknown": "Nu a fost publicată nicio dată",
+          "replacement": "Persoanele ajung la",
+          "replacementNotSet": "Neprecizat",
+          "knowledge": "Cunoștințe până la",
+          "context": "Fereastră de context",
+          "contextTokens": "{tokens} tokeni",
+          "canDo": "Poate",
+          "can": {
+            "images": "citi imagini",
+            "tools": "utiliza instrumente",
+            "codeInterpreter": "rula cod",
+            "reasoningEffort": "ajusta efortul de raționare"
+          },
+          "hosted": "Găzduit",
+          "hosting": {
+            "azure": "În tenant-ul Azure al organizației",
+            "external": "De un furnizor extern",
+            "local": "Local"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Când fiecare model dispare, câți oameni îl folosesc și dacă regulile de acces se potrivesc cu modelul pe care vor ajunge aceștia.",
+        "caption": "Modele cu dată de retragere, cele mai apropiate primele",
+        "empty": "Niciun model nu are o dată de retragere.",
+        "today": "Astăzi",
+        "col": {
+          "people": "Persoane",
+          "landsOn": "Persoanele ajung pe",
+          "access": "Acces pe modelul de înlocuire"
+        },
+        "alert": "{model} se retrage în {days, plural, one {# zi} other {# zile}}. {people, plural, one {# persoană} other {# persoane}} l-au folosit recent.",
+        "alertForced": "{model} este retras acum. {people, plural, one {# persoană} other {# persoane}} l-au folosit recent.",
+        "alertTo": "Vor fi mutați pe {model}.",
+        "alertNoReplacement": "Nu este setată nicio înlocuire.",
+        "access": {
+          "same": "Aceleași reguli",
+          "unknown": "Nu poate fi verificat până nu este setată o înlocuire",
+          "everyone": "Restul primesc termeni diferiți",
+          "audiences": "{count, plural, one {# grup, domeniu sau persoană are} other {# grupuri, domenii sau persoane au}} termeni diferiți",
+          "both": "Restul și {count, plural, one {# grup, domeniu sau persoană} other {# grupuri, domenii sau persoane}} primesc termeni diferiți"
+        },
+        "carryOver": "Copiați aceste reguli în {model}",
+        "carried": "Regulile de la {from} au fost copiate în {to}. Revizuiți și salvați pentru a aplica.",
+        "legend": {
+          "service": "în serviciu",
+          "notice": "aviz afișat utilizatorilor, {days} zile",
+          "move": "persoane mutate, ultimele {days} zile"
+        },
+        "pastTitle": "După data sa și încă listat:",
+        "pastItem": "{model} ({date}, {people, plural, one {# persoană} other {# persoane}})",
+        "undatedTitle": "Nu există dată publicată:",
+        "rulesNote": "Accesul este comparat regulă cu regulă. Utilizarea este stocată fără nume, deci nu poate indica câte dintre persoanele de pe un model ar pierde accesul."
+      },
+      "map": {
+        "lead": "Fiecare cerc reprezintă un model folosit în ultimele {days, plural, one {# zi} other {# zile}}. Cu cât este mai la dreapta, cu atât costul per cerere crește, iar mai sus indică mai mulți oameni. Cheltuiala și CO2e sunt estimări pe baza unei cereri tipice.",
+        "empty": "Niciun model cu preț nu a fost folosit în ultimele {days, plural, one {# zi} other {# zile}}.",
+        "caption": "Aceleași cifre ca tabel, cheltuiala estimată cea mai mare prima",
+        "sizeLabel": "Dimensiunea cercului",
+        "size": {
+          "spend": "Cheltuială estimată",
+          "footprint": "CO2e estimat",
+          "requests": "Solicitări"
+        },
+        "axisPeople": "Persoane, ultimele {days, plural, one {# zi} other {# zile}} (sus)",
+        "axisCost": "Costul estimat al unei solicitări tipice la prețul de listă (dreapta)",
+        "dotLabel": "{model}: {people, plural, one {# persoană} other {# persoane}}, {cost} per solicitare tipică, {value}. Deschide regulile de acces.",
+        "legendTitle": "Clasă de mărime:",
+        "legend": {
+          "mini": "nano sau mini",
+          "standard": "standard",
+          "large": "mare",
+          "xl": "foarte mare",
+          "unset": "nedefinit"
+        },
+        "col": {
+          "requests": "Solicitări",
+          "perRequest": "Per solicitare tipică"
+        },
+        "unknown": "Necunoscut",
+        "noFindings": "Nimic nu se remarcă încă.",
+        "findingTitle": {
+          "concentrated": "Cheltuieli concentrate",
+          "reached": "Un plafon la care ajung utilizatorii",
+          "unreached": "Un plafon la care nu ajunge nimeni",
+          "noCeiling": "Fără plafon"
+        },
+        "finding": {
+          "concentrated": "{model} reprezintă {share} din cheltuiala estimată.",
+          "reached": "{model}: {people} din {of} persoane au atins {cap} pe zi.",
+          "unreached": "{model} are plafon de {cap} pe zi; cea mai solicitantă persoană a făcut {max}.",
+          "noCeiling": "{models}: nelimitat pentru toți ceilalți. Cea mai solicitantă persoană a făcut {max, plural, one {# solicitare} other {# solicitări}} într-o zi."
+        }
       }
     },
     "previewSourceModelAccess": "Aprobare model — {list}",

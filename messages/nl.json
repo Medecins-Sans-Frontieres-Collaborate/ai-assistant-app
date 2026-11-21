@@ -6945,6 +6945,223 @@
         "none": "geen item",
         "becomes": "wordt",
         "removed": "verwijderd"
+      },
+      "view": {
+        "label": "Weergeven",
+        "grid": "Toegang en feiten",
+        "runway": "Pensioenvooruitzicht",
+        "map": "Uitgaven en populariteit"
+      },
+      "facts": {
+        "estimateNote": "Kosten en CO2e zijn schattingen, geen gemeten uitgaven: getelde verzoeken vermenigvuldigd met een typisch verzoek ({promptTokens} tokens in, {completionTokens} uit) tegen de catalogusprijs. Gebruik betreft de laatste {days, plural, one {# dag} other {# dagen}}.",
+        "estimateNoteNoCost": "CO2e is een schatting, geen meting: getelde verzoeken vermenigvuldigd met een typisch verzoek ({promptTokens} tokens in, {completionTokens} uit). Gebruik betreft de laatste {days, plural, one {# dag} other {# dagen}}.",
+        "captureNote": "Gebruik door iedereen verschijnt na de eerste volledige verzamelingsdag. Tot die tijd tonen de cijfers alleen mensen met een limiet.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} in, {output} uit",
+        "summary": {
+          "label": "Modellen in één oogopslag",
+          "used": "Gebruikte modellen, laatste {days, plural, one {# dag} other {# dagen}}",
+          "usedValue": "{used} van {total}",
+          "requests": "Aanvragen",
+          "spend": "Geschatte uitgaven",
+          "footprint": "Geschatte CO2e",
+          "retiring": "Wordt uitgefaseerd binnen {days} dagen",
+          "noCeiling": "Onbeperkt voor alle anderen",
+          "notYet": "Nog niet bekend"
+        },
+        "columns": {
+          "label": "Kolommen",
+          "cost": "Kosten",
+          "footprint": "Voetafdruk",
+          "usage": "Gebruik",
+          "lifecycle": "Uitfasering"
+        },
+        "col": {
+          "price": "Standaardprijs per 1M tokens",
+          "ceiling": "Maximale kosten per persoon per maand",
+          "footprint": "CO2e per typische aanvraag",
+          "people": "Gebruikers",
+          "spread": "Aanvragen op drukste dag gebruiker",
+          "retires": "Uitfasering"
+        },
+        "ceiling": {
+          "heavy": "tot {amount} bij lange aanvragen",
+          "off": "Niets: uitgeschakeld",
+          "unbounded": "Geen limiet",
+          "unpriced": "Geen standaardprijs"
+        },
+        "footprint": {
+          "notSet": "Grootte niet ingesteld"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standaard",
+          "large": "Groot",
+          "xl": "Extra groot"
+        },
+        "usage": {
+          "none": "Geen gebruik",
+          "spend": "circa {amount}",
+          "cappedOnly": "alleen bij gelimiteerde personen"
+        },
+        "spread": {
+          "caption": "mediaan {median}, 75e {p75}, meest {max}",
+          "label": "Aanvragen op de drukste dag: mediaan {median}, 75e percentiel {p75}, 95e percentiel {p95}, meest {max}.",
+          "labelCap": " De limiet is {cap} per dag.",
+          "legend": {
+            "p95": "tot het 95e percentiel",
+            "box": "mediaan tot 75e percentiel",
+            "max": "meest actieve gebruiker",
+            "cap": "limiet voor alle anderen"
+          }
+        },
+        "retires": {
+          "none": "Geen datum gepubliceerd",
+          "forced": "Wordt nu overgezet",
+          "past": "datum is verstreken",
+          "to": "naar {model}"
+        },
+        "lifecycle": {
+          "preview": "Preview",
+          "ga": "Algemeen beschikbaar",
+          "legacy": "Legacy",
+          "deprecated": "Verouderd",
+          "retired": "Uitgefaseerd"
+        },
+        "detail": {
+          "region": "Hoe dit model wordt gebruikt en wat het kost",
+          "usageTitle": "Verzoeken op de drukste dag van elke persoon",
+          "usageHint": "{people, plural, one {# persoon} other {# personen}} heeft het gebruikt in de laatste {days, plural, one {# dag} other {# dagen}}. Elke persoon wordt één keer geteld, op hun drukste dag.",
+          "noUsage": "Niemand heeft dit model gebruikt in de laatste {days, plural, one {# dag} other {# dagen}}.",
+          "bucketHeading": "Verzoeken per dag",
+          "peopleHeading": "Personen",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Gemiddeld per actieve dag",
+          "median": "Mediaan",
+          "p75": "75e percentiel",
+          "p95": "95e percentiel",
+          "max": "Meest actieve persoon",
+          "reachedCap": "Limiet bereikt",
+          "cappedOnly": "Hier worden tot nu toe alleen personen met een limiet weergegeven, dus personen zonder limiet ontbreken.",
+          "truncated": "Alleen de meest actieve personen worden getoond, waardoor de mediaan en percentielen hoger lijken.",
+          "replayTitle": "Als de limiet anders was",
+          "replayHint": "Hoeveel van deze personen hadden een dag op of boven elke limiet. Zij zouden die dag gestopt zijn.",
+          "replayCap": "Limiet voor alle anderen",
+          "replayStopped": "Gestopte personen",
+          "replayPerDay": "{cap} per dag",
+          "replayNow": "{cap} per dag (nu)",
+          "replayUnlimitedNow": "Onbeperkt (nu)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Geschatte kosten",
+          "costHint": "Catalogusprijs voor een verondersteld verzoek. Geen factuur: werkelijke verzoeken variëren in lengte.",
+          "typicalRequest": "Eén typisch verzoek",
+          "longRequest": "Eén lang verzoek",
+          "everyoneWindow": "Iedereen, laatste {days, plural, one {# dag} other {# dagen}}",
+          "atThisPace": "Een maand op dit tempo",
+          "footprintTitle": "Geschatte voetafdruk",
+          "footprintHint": "Gebaseerd op de grootteklasse van het model en een verondersteld verzoek. Een orde van grootte, geen meting.",
+          "sizeClass": "Grootteklasse",
+          "noSizeClass": "Dit model heeft geen grootteklasse, dus de voetafdruk kan niet worden geschat. Stel er één in de modelcatalogus in.",
+          "aboutTitle": "Over dit model",
+          "status": "Status",
+          "retiresOn": "{date}. Gebruikers zien een melding vanaf {notice} en worden overgezet vanaf {move}.",
+          "retiresForced": "Personen worden nu overgezet van dit model.",
+          "retiresUnknown": "Geen datum gepubliceerd",
+          "replacement": "Personen komen uit op",
+          "replacementNotSet": "Niet ingesteld",
+          "knowledge": "Kennis tot",
+          "context": "Contextvenster",
+          "contextTokens": "{tokens} tokens",
+          "canDo": "Kan",
+          "can": {
+            "images": "afbeeldingen lezen",
+            "tools": "tools gebruiken",
+            "codeInterpreter": "code uitvoeren",
+            "reasoningEffort": "redeneerinspanning aanpassen"
+          },
+          "hosted": "Gehost",
+          "hosting": {
+            "azure": "In de Azure-tenant van de organisatie",
+            "external": "Door een externe aanbieder",
+            "local": "Lokaal"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Wanneer elk model verdwijnt, hoeveel mensen het gebruiken en of de toegangsregels overeenkomen met het model waarop mensen terechtkomen.",
+        "caption": "Modellen met een pensioen­datum, eerst de snelste",
+        "empty": "Geen enkel model heeft een pensioen­datum.",
+        "today": "Vandaag",
+        "col": {
+          "people": "Mensen",
+          "landsOn": "Mensen komen op",
+          "access": "Toegang op de vervanger"
+        },
+        "alert": "{model} wordt gepensioneerd over {days, plural, one {# dag} other {# dagen}}. {people, plural, one {# persoon} other {# personen}} gebruikte het recent.",
+        "alertForced": "{model} wordt nu gepensioneerd. {people, plural, one {# persoon} other {# personen}} gebruikte het recent.",
+        "alertTo": "Ze worden overgezet naar {model}.",
+        "alertNoReplacement": "Geen vervanger ingesteld.",
+        "access": {
+          "same": "Zelfde regels",
+          "unknown": "Kan pas worden gecontroleerd als een vervanger is ingesteld",
+          "everyone": "Iedereen anders krijgt andere voorwaarden",
+          "audiences": "{count, plural, one {# groep, domein of persoon heeft} other {# groepen, domeinen of personen hebben}} verschillende voorwaarden",
+          "both": "Iedereen anders en {count, plural, one {# groep, domein of persoon} other {# groepen, domeinen of personen}} krijgen andere voorwaarden"
+        },
+        "carryOver": "Kopieer deze regels naar {model}",
+        "carried": "Regels van {from} naar {to} gekopieerd. Controleer en sla op om toe te passen.",
+        "legend": {
+          "service": "in dienst",
+          "notice": "melding getoond aan gebruikers, {days} dagen",
+          "move": "mensen overgezet, laatste {days} dagen"
+        },
+        "pastTitle": "Voorbij de datum en nog steeds vermeld:",
+        "pastItem": "{model} ({date}, {people, plural, one {# persoon} other {# personen}})",
+        "undatedTitle": "Geen datum gepubliceerd:",
+        "rulesNote": "Toegang wordt regel voor regel vergeleken. Gebruik wordt zonder namen opgeslagen, dus er kan niet worden aangegeven hoeveel mensen hun toegang zouden verliezen."
+      },
+      "map": {
+        "lead": "Elke cirkel is een model gebruikt in de laatste {days, plural, one {# dag} other {# dagen}}. Verder naar rechts is duurder per verzoek, hoger betekent meer mensen. Uitgaven en CO2e zijn schattingen op basis van een typisch verzoek.",
+        "empty": "Er is geen betaald model gebruikt in de laatste {days, plural, one {# dag} other {# dagen}}.",
+        "caption": "Dezelfde cijfers als tabel, hoogste geschatte uitgaven eerst",
+        "sizeLabel": "Cirkelgrootte",
+        "size": {
+          "spend": "Geschatte uitgaven",
+          "footprint": "Geschatte CO2e",
+          "requests": "Aanvragen"
+        },
+        "axisPeople": "Personen, laatste {days, plural, one {# dag} other {# dagen}} (omhoog)",
+        "axisCost": "Geschatte kosten van één typische aanvraag tegen lijstprijs (rechts)",
+        "dotLabel": "{model}: {people, plural, one {# persoon} other {# personen}}, {cost} per typische aanvraag, {value}. Open de toegangsregels.",
+        "legendTitle": "Grootteklasse:",
+        "legend": {
+          "mini": "nano of mini",
+          "standard": "standaard",
+          "large": "groot",
+          "xl": "extra groot",
+          "unset": "niet ingesteld"
+        },
+        "col": {
+          "requests": "Verzoeken",
+          "perRequest": "Per typisch verzoek"
+        },
+        "unknown": "Niet bekend",
+        "noFindings": "Er valt nog niets op.",
+        "findingTitle": {
+          "concentrated": "Geconcentreerde uitgaven",
+          "reached": "Een limiet die mensen bereiken",
+          "unreached": "Een limiet die niemand benadert",
+          "noCeiling": "Geen limiet"
+        },
+        "finding": {
+          "concentrated": "{model} is {share} van de geschatte uitgaven.",
+          "reached": "{model}: {people} van {of} personen bereikten {cap} per dag.",
+          "unreached": "{model} heeft een limiet van {cap} per dag; de zwaarste gebruiker kwam tot {max}.",
+          "noCeiling": "{models}: onbeperkt voor alle anderen. De zwaarste gebruiker deed {max, plural, one {# verzoek} other {# verzoeken}} op een dag."
+        }
       }
     },
     "previewSourceModelAccess": "Modelgoedkeuring — {list}",

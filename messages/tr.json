@@ -6945,6 +6945,223 @@
         "none": "giriş yok",
         "becomes": "olur",
         "removed": "kaldırıldı"
+      },
+      "view": {
+        "label": "Görüntüle",
+        "grid": "Erişim ve bilgiler",
+        "runway": "Emeklilik süresi",
+        "map": "Harcanan miktar ve popülerlik"
+      },
+      "facts": {
+        "estimateNote": "Maliyet ve CO2e tahmini olup, ölçülen harcama değildir: sayılan istekler, tipik bir istekle ({promptTokens} token giriş, {completionTokens} token çıkış) ve liste fiyatı ile çarpılır. Kullanım son {days, plural, one {# gün} other {# gün}}ü kapsar.",
+        "estimateNoteNoCost": "CO2e bir tahmindir, ölçüm değildir: sayılan istekler, tipik bir istekle ({promptTokens} token giriş, {completionTokens} token çıkış) çarpılır. Kullanım son {days, plural, one {# gün} other {# gün}}ü kapsar.",
+        "captureNote": "Herkesin kullanımı ilk tam gün veri toplandıktan sonra görüntülenir. O zamana kadar rakamlar sadece sınır altında olan kişileri kapsar.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} giriş, {output} çıkış",
+        "summary": {
+          "label": "Modellere genel bakış",
+          "used": "Kullanılan modeller, son {days, plural, one {# gün} other {# gün}}",
+          "usedValue": "{total} üzerinden {used}",
+          "requests": "İstekler",
+          "spend": "Tahmini harcama",
+          "footprint": "Tahmini CO2e",
+          "retiring": "{days} gün içinde emekli oluyor",
+          "noCeiling": "Diğer herkes için sınırsız",
+          "notYet": "Henüz bilinmiyor"
+        },
+        "columns": {
+          "label": "Sütunlar",
+          "cost": "Maliyet",
+          "footprint": "Ayak izi",
+          "usage": "Kullanım",
+          "lifecycle": "Emeklilik"
+        },
+        "col": {
+          "price": "1M token başına liste fiyatı",
+          "ceiling": "Bir kişinin aylık en fazla harcayabileceği tutar",
+          "footprint": "Tipik bir istek başına CO2e",
+          "people": "Kullanan kişi sayısı",
+          "spread": "Bir kişinin en yoğun günündeki istekler",
+          "retires": "Emeklilik tarihi"
+        },
+        "ceiling": {
+          "heavy": "Uzun isteklerle {amount}'a kadar",
+          "off": "Hiçbir şey: kapalı",
+          "unbounded": "Sınır yok",
+          "unpriced": "Liste fiyatı yok"
+        },
+        "footprint": {
+          "notSet": "Büyüklük ayarlanmadı"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standart",
+          "large": "Büyük",
+          "xl": "Çok büyük"
+        },
+        "usage": {
+          "none": "Kullanım yok",
+          "spend": "yaklaşık {amount}",
+          "cappedOnly": "yalnızca sınırda olan kişiler"
+        },
+        "spread": {
+          "caption": "medyan {median}, %75 {p75}, en yüksek {max}",
+          "label": "Bir kişinin en yoğun günündeki istekler: medyan {median}, %75 dilim {p75}, %95 dilim {p95}, en yüksek {max}.",
+          "labelCap": " Sınır günlük {cap}.",
+          "legend": {
+            "p95": "%95'lik dilime kadar",
+            "box": "medyan ile %75'lik dilim arası",
+            "max": "en yoğun kişi",
+            "cap": "diğer herkes için sınır"
+          }
+        },
+        "retires": {
+          "none": "Tarih yayımlanmadı",
+          "forced": "Şu anda kullanım dışı bırakılıyor",
+          "past": "tarih geçti",
+          "to": "{model}'a"
+        },
+        "lifecycle": {
+          "preview": "Önizleme",
+          "ga": "Genel kullanıma açık",
+          "legacy": "Eski",
+          "deprecated": "Kullanımdan kaldırıldı",
+          "retired": "Emekli edildi"
+        },
+        "detail": {
+          "region": "Bu modelin nasıl kullanıldığı ve maliyeti",
+          "usageTitle": "Her kişinin en yoğun günündeki istekler",
+          "usageHint": "{people, plural, one {# kişi} other {# kişi}} son {days, plural, one {# gün} other {# gün}} içinde kullandı. Her kişi yalnızca, en yoğun kullandığı gün ile sayılır.",
+          "noUsage": "Son {days, plural, one {# gün} other {# gün}} içinde bu modeli kimse kullanmadı.",
+          "bucketHeading": "Bir günde yapılan istekler",
+          "peopleHeading": "Kişiler",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Aktif günde ortalama",
+          "median": "Medyan",
+          "p75": "%75 yüzdelik dilimi",
+          "p95": "%95 yüzdelik dilimi",
+          "max": "En çok kullanan kişi",
+          "reachedCap": "Limite ulaşıldı",
+          "cappedOnly": "Şu ana kadar sadece sınırlandırılmış kişiler sayıldı, bu nedenle limiti olmayan kişiler eksik.",
+          "truncated": "Sadece en çok kullanan kişiler listeleniyor, bu yüzden medyan ve yüzdelikler gerçekte olduğundan yüksek görünüyor.",
+          "replayTitle": "Limit farklı olsaydı",
+          "replayHint": "Bu kişilerden kaçı her limitte bir gün veya daha fazlasını geçirdi. O gün durdurulmuş olurlardı.",
+          "replayCap": "Diğer herkes için limit",
+          "replayStopped": "Durdurulan kişiler",
+          "replayPerDay": "Günde {cap}",
+          "replayNow": "Günde {cap} (şimdi)",
+          "replayUnlimitedNow": "Sınırsız (şimdi)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Tahmini maliyet",
+          "costHint": "Varsayılan bir istek için liste fiyatı. Fatura değildir: gerçek istekler uzunluk bakımından değişir.",
+          "typicalRequest": "Tipik bir istek",
+          "longRequest": "Uzun bir istek",
+          "everyoneWindow": "Herkes, son {days, plural, one {# gün} other {# gün}}",
+          "atThisPace": "Bu hızda bir ay",
+          "footprintTitle": "Tahmini ayak izi",
+          "footprintHint": "Modelin boyut sınıfı ve varsayılan bir isteğe göre. Yaklaşık, kesin ölçüm değil.",
+          "sizeClass": "Boyut sınıfı",
+          "noSizeClass": "Bu modelin boyut sınıfı yok, bu yüzden ayak izi tahmin edilemiyor. Model kataloğunda bir boyut sınıfı ayarlayın.",
+          "aboutTitle": "Bu model hakkında",
+          "status": "Durum",
+          "retiresOn": "{date}. Kullanıcılar {notice} tarihinden itibaren bir bildirim görür ve {move} modelinden taşınır.",
+          "retiresForced": "Kullanıcılar şu anda bu modelden taşınıyor.",
+          "retiresUnknown": "Tarih yayımlanmadı",
+          "replacement": "Kişiler geçiş yaptı",
+          "replacementNotSet": "Ayarlanmadı",
+          "knowledge": "Şu tarihe kadar bilgi",
+          "context": "Bağlam penceresi",
+          "contextTokens": "{tokens} token",
+          "canDo": "Yapabilir",
+          "can": {
+            "images": "görselleri okuyabilir",
+            "tools": "araçları kullanabilir",
+            "codeInterpreter": "kod çalıştırabilir",
+            "reasoningEffort": "akıl yürütme düzeyini ayarlayabilir"
+          },
+          "hosted": "Barındırma",
+          "hosting": {
+            "azure": "Kuruluşun Azure tenant’ında",
+            "external": "Harici bir sağlayıcı tarafından",
+            "local": "Yerel olarak"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Her model kaldırıldığında, kimlerin kullandığı ve erişim kurallarının insanların geçeceği modelle eşleşip eşleşmediği.",
+        "caption": "Emeklilik tarihi belirlenen modeller, en yakından itibaren",
+        "empty": "Hiçbir modelin emeklilik tarihi yok.",
+        "today": "Bugün",
+        "col": {
+          "people": "Kişiler",
+          "landsOn": "Geçeceği model",
+          "access": "Yedekte erişim"
+        },
+        "alert": "{model} {days, plural, one {# gün} other {# gün}} sonra emekli oluyor. Son dönemde {people, plural, one {# kişi} other {# kişi}} kullandı.",
+        "alertForced": "{model} şimdi emekli ediliyor. Son dönemde {people, plural, one {# kişi} other {# kişi}} kullandı.",
+        "alertTo": "{model} modeline taşınacaklar.",
+        "alertNoReplacement": "Yedek bir model belirlenmedi.",
+        "access": {
+          "same": "Aynı kurallar",
+          "unknown": "Yedek belirlenmeden kontrol edilemez",
+          "everyone": "Diğer herkes farklı koşullar alır",
+          "audiences": "{count, plural, one {# grup, alan veya kişi farklı koşula sahip} other {# grup, alan veya kişi farklı koşula sahip}}",
+          "both": "Diğer herkes ve {count, plural, one {# grup, alan veya kişi} other {# grup, alan veya kişi}} farklı koşullar alır"
+        },
+        "carryOver": "Bu kuralları {model} modeline kopyala",
+        "carried": "{from} modelinin kuralları {to} modeline kopyalandı. Uygulamak için gözden geçirip kaydedin.",
+        "legend": {
+          "service": "kullanımda",
+          "notice": "kullanıcılara gösterilen bildirim, {days} gün",
+          "move": "taşınan kişiler, son {days} gün"
+        },
+        "pastTitle": "Tarihi geçmiş ve halen listede olanlar:",
+        "pastItem": "{model} ({date}, {people, plural, one {# kişi} other {# kişi}})",
+        "undatedTitle": "Yayınlanmış tarihi olmayanlar:",
+        "rulesNote": "Erişim kurallara göre karşılaştırılır. Kullanımlar isim olmadan saklanır, bu yüzden bir modelde erişimini kaybedecek kişi sayısı belirtilemez."
+      },
+      "map": {
+        "lead": "Her daire, son {days, plural, one {# gün} other {# gün}} içinde kullanılan bir modeli temsil eder. Sağa doğru gittikçe istek başına maliyet artar, yukarıya gittikçe kullanan kişi sayısı fazladır. Harcama ve CO2e tipik bir isteğe göre tahmin edilmiştir.",
+        "empty": "Son {days, plural, one {# gün} other {# gün}} içinde fiyatlandırılan bir model kullanılmadı.",
+        "caption": "Aynı veriler tablo halinde, en yüksek tahmini harcamadan başlayarak",
+        "sizeLabel": "Daire boyutu",
+        "size": {
+          "spend": "Tahmini harcama",
+          "footprint": "Tahmini CO2e",
+          "requests": "İstekler"
+        },
+        "axisPeople": "Kişi, son {days, plural, one {# gün} other {# gün}} (yukarı)",
+        "axisCost": "Fiyat listesine göre tipik bir isteğin tahmini maliyeti (sağda)",
+        "dotLabel": "{model}: {people, plural, one {# kişi} other {# kişi}}, tipik bir istek için {cost}, {value}. Erişim kurallarını açın.",
+        "legendTitle": "Boyut sınıfı:",
+        "legend": {
+          "mini": "nano veya mini",
+          "standard": "standart",
+          "large": "büyük",
+          "xl": "çok büyük",
+          "unset": "ayarlanmadı"
+        },
+        "col": {
+          "requests": "İstekler",
+          "perRequest": "Tipik istek başına"
+        },
+        "unknown": "Bilinmiyor",
+        "noFindings": "Henüz göze çarpan bir şey yok.",
+        "findingTitle": {
+          "concentrated": "Yoğun harcama",
+          "reached": "Erişilen bir sınır",
+          "unreached": "Yaklaşılmayan bir sınır",
+          "noCeiling": "Sınır yok"
+        },
+        "finding": {
+          "concentrated": "{model}, tahmini harcamanın %{share}’sini oluşturuyor.",
+          "reached": "{model}: {of} kişiden {people} kişi günde {cap} sınırına ulaştı.",
+          "unreached": "{model} için günlük limit {cap}; en yoğun kullanan kişi {max} yaptı.",
+          "noCeiling": "{models}: diğer tüm kullanıcılar için sınırsız. En yoğun kullanan kişi bir günde {max, plural, one {# istek} other {# istek}} yaptı."
+        }
       }
     },
     "previewSourceModelAccess": "Model onayı — {list}",

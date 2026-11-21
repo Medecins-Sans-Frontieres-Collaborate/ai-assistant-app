@@ -6945,6 +6945,223 @@
         "none": "ምንም ግብዓት የለም",
         "becomes": "ይሆናል",
         "removed": "ተወግዷል"
+      },
+      "view": {
+        "label": "ይመልከቱ",
+        "grid": "መዳረሻና እውነታዎች",
+        "runway": "እድሜ መያዣ",
+        "map": "አፈፃፀምና ታዋቂነት"
+      },
+      "facts": {
+        "estimateNote": "የወጪ እና CO2e ግምት ናቸው፣ አይደሉም የተሳሰቡ ከፍያዎች፡ ተቆጣጣሪ መጠያያዎች በየመደበኛው መጠያያ ({promptTokens} tokens ውስጥ፣ {completionTokens} ውጭ) እና የርዕሰ ዝርዝር ዋጋ በመባደር ተሰውሰዋል። አጠቃቀም ያካትታል ለመጨረሻው {days, plural, one {# ቀን} other {# ቀናት}}።",
+        "estimateNoteNoCost": "CO2e ግምት ነው፣ መለኪያ አይደለም፡ ተቆጣጣሪ መጠያያዎች በየመደበኛው መጠያያ ({promptTokens} tokens ውስጥ፣ {completionTokens} ውጭ) በመባደር ተሰውሰዋል። አጠቃቀም ያካትታል ለመጨረሻው {days, plural, one {# ቀን} other {# ቀናት}}።",
+        "captureNote": "የሁሉም ሰው መጠቀም ከመመዝገብ መጀመሪያ ቀን በኋላ ይታያል። እስከዚያ ድረስ ግምጃዎቹ መጠን የተገደቡ ሰዎችን ብቻ አያካትቱም።",
+        "co2Grams": "{value} ግራም CO2e",
+        "co2Kilograms": "{value} ኪ.ግ. CO2e",
+        "priceValue": "{input} ውስጥ፣ {output} ውጭ",
+        "summary": {
+          "label": "ሞዴሎች በአጭሩ",
+          "used": "በቅርቡ ተጠቃሚ የሆኑ ሞዴሎች፣ ለመጨረሻው {days, plural, one {# ቀን} other {# ቀናት}}",
+          "usedValue": "{used} ከ {total}",
+          "requests": "ጥያቄዎች",
+          "spend": "ግምት የወጪ መጠን",
+          "footprint": "ግምት የCO2e መጠን",
+          "retiring": "በ{days} ቀናት ውስጥ የሚያቆሙ",
+          "noCeiling": "ለሌሎቹ ሁሉ ውስብስብ ነው",
+          "notYet": "አሁን አልታወቀም"
+        },
+        "columns": {
+          "label": "አምዶች",
+          "cost": "ወጪ",
+          "footprint": "አሻራ",
+          "usage": "አጠቃቀም",
+          "lifecycle": "የእድሜ መጨረሻ"
+        },
+        "col": {
+          "price": "የ1M ቶከን ዝርዝር ዋጋ",
+          "ceiling": "አንድ ሰው በወር ሊያስከፍለው የሚችለው ከፍተኛ ወጪ",
+          "footprint": "በመደበኛ ጥያቄ የሚሆን  CO2e ",
+          "people": "የሚጠቀሙበት ሰዎች",
+          "spread": "በሰው በየቀኑ በጭነት የሚቀርበው ጥያቄ",
+          "retires": "የሚያቆም"
+        },
+        "ceiling": {
+          "heavy": "እስከ {amount} በረጅም ጥያቄዎች",
+          "off": "ምንም አይቀርም፦ ጠፍቷል",
+          "unbounded": "ገደብ የለም",
+          "unpriced": "ዝርዝር ዋጋ የለም"
+        },
+        "footprint": {
+          "notSet": "መጠኑ አልቀመጠም"
+        },
+        "size": {
+          "nano": "ናኖ",
+          "mini": "ሚኒ",
+          "standard": "መደበኛ",
+          "large": "ትልቅ",
+          "xl": "በጣም ትልቅ"
+        },
+        "usage": {
+          "none": "ምንም አጠቃቀም የለም",
+          "spend": "ወደ {amount} ያህል",
+          "cappedOnly": "የተቆጣጠሩ ሰዎች ብቻ"
+        },
+        "spread": {
+          "caption": "መካከለኛ {median}, 75ኛ {p75}, ከፍተኛ {max}",
+          "label": "በሰው በጭነት ቀኑ ላይ የተጠየቁ ጥያቄዎች: መካከለኛ {median}, 75ኛ ፐርሰንታይል {p75}, 95ኛ ፐርሰንታይል {p95}, ከፍተኛ {max}.",
+          "labelCap": "የቆጣጠራ ደረጃ {cap} በቀን ነው።",
+          "legend": {
+            "p95": "እስከ 95ኛ ፐርሰንታይል",
+            "box": "መካከለኛ እስከ 75ኛ ፐርሰንታይል",
+            "max": "በጣም ተጠቃሚ ሰው",
+            "cap": "ለሌሎቹ ሁሉ የቆጣጠራ ገደብ"
+          }
+        },
+        "retires": {
+          "none": "ቀን አልተለቀቀም",
+          "forced": "አሁን በመተዋወቅ ላይ ነው",
+          "past": "ቀኑ አልፏል",
+          "to": "ወደ {model}"
+        },
+        "lifecycle": {
+          "preview": "ቅድመ እይታ",
+          "ga": "በአጠቃላይ የሚገኝ",
+          "legacy": "ቅርስ",
+          "deprecated": "አልተመከረ",
+          "retired": "የተወገደ"
+        },
+        "detail": {
+          "region": "ይህ ሞዴል እንዴት እንደሚጠቀመው እና ምን ያህል ወጪ እንዳለው",
+          "usageTitle": "በእያንዳንዱ ሰው በጎደሎ ቀን የተደረጉ ጥያቄዎች",
+          "usageHint": "{people, plural, one {# ሰው} other {# ሰዎች}} በመጨረሻው {days, plural, one {# ቀን} other {# ቀናት}} አጠቃቀሙት። እያንዳንዱ ሰው አንድ ጊዜ በተጠቃሚነታቸው በጣም የታየበት ቀን ብቻ ይቆጠራል።",
+          "noUsage": "በመጨረሻው {days, plural, one {# ቀን} other {# ቀናት}} ውስጥ ይህ ሞዴል ማንም አልተጠቀመበትም።",
+          "bucketHeading": "በአንድ ቀን ውስጥ የተደረጉ ጥያቄዎች",
+          "peopleHeading": "ሰዎች",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "በአንድ አገልግሎት ቀን ውስጥ አማካይ",
+          "median": "መካከለኛው",
+          "p75": "75ኛ ፐርሰንታይል",
+          "p95": "95ኛ ፐርሰንታይል",
+          "max": "በጣም ብዙ ጥያቄ ያደረገ ሰው",
+          "reachedCap": "ገደቡ ተደርሷል",
+          "cappedOnly": "እስካሁን እዚህ በመቆጣጠሪያ ውስጥ ያሉ ሰዎች ብቻ ተቆጠሩ፣ እንዲሁም ውስጥ በሌላ ገደብ ያልተገቡ ሰዎች ጎድለዋል።",
+          "truncated": "በጣም ብዙ ጥያቄ ያደረጉ ሰዎች ብቻ ተዘርዝረዋል፣ ስለዚህ መካከለኛው እና ፐርሰንታይሎች ከአስተዋፅኦ አንፃፃፉ ይበልጣሉ።",
+          "replayTitle": "ገደቡ በተለየ ሁኔታ ቢሆን",
+          "replayHint": "እነዚያ ሰዎች ከእያንዳንዱ ገደብ በላይ ወይም በአካባቢ ቀን ያለባቸው ጥያቄ ምን ያህል ነበር። በዚያ ቀን ቲከኗቸው ነበር።",
+          "replayCap": "ለሌሎች ሁሉ ገደብ",
+          "replayStopped": "የቆሙ ሰዎች",
+          "replayPerDay": "በቀን {cap}",
+          "replayNow": "{cap} በቀን (አሁን)",
+          "replayUnlimitedNow": "ያልተገደበ (አሁን)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "የተገመተ ወጪ",
+          "costHint": "ለተጠቃሚ ጥያቄ የተመዘኘ ዋጋ። ይህ ክፍያ አይደለም፣ ትክክለኛ ጥያቄዎች በተለያዩ ቁጥሮች ይለያያሉ።",
+          "typicalRequest": "አንድ መደበኛ ጥያቄ",
+          "longRequest": "አንድ ረጅም ጥያቄ",
+          "everyoneWindow": "ሁሉም፣ ለመጨረሻው {days, plural, one {# ቀን} other {# ቀናት}}",
+          "atThisPace": "በዚህ ፍጥነት ለወር",
+          "footprintTitle": "የተገመተ የሞዴሉ ተጽዕኖ",
+          "footprintHint": "ከሞዴሉ መጠን ክፍልና ተጠቃሚ ጥያቄ በመጠን መነሳት። ጥልቅ ግምት ነው ፣ መለኪያ አይደለም።",
+          "sizeClass": "መጠን ክፍል",
+          "noSizeClass": "ይህ ሞዴል መጠን ክፍል የለውም፣ ስለዚህ ተጽዕኖውን መገመት አይቻልም። የሞዴሉን ካታሎግ ውስጥ መዝግብ።",
+          "aboutTitle": "ስለዚህ ሞዴል",
+          "status": "ሁኔታ",
+          "retiresOn": "{date}። ተጠቃሚዎች ከ{notice} ማሳወቂያ ይያያዯሉ እና ከ{move} ይተዋወቃሉ።",
+          "retiresForced": "ሰዎች አሁን ከዚህ ሞዴል ተወግደዋል።",
+          "retiresUnknown": "ቀን አልተለቀቀም",
+          "replacement": "ሰዎች የሚደርሱበት",
+          "replacementNotSet": "አልተዘጋጀም",
+          "knowledge": "እውቀት እስከ",
+          "context": "አያያዝ መስክ",
+          "contextTokens": "{tokens} ቶክኖች",
+          "canDo": "ማድረግ ይችላል",
+          "can": {
+            "images": "ምስሎችን ማንበብ",
+            "tools": "መሳሪያዎችን መጠቀም",
+            "codeInterpreter": "ኮድ ማስኬድ",
+            "reasoningEffort": "የአመንዝራ ሃይል ማስተካከል"
+          },
+          "hosted": "ተከታታይ",
+          "hosting": {
+            "azure": "በድርጅቱ ውስጥ ባለው Azure tenant",
+            "external": "በውጫዊ አቅራቢ",
+            "local": "በአካባቢ"
+          }
+        }
+      },
+      "runway": {
+        "lead": "እያንዳንዱ ሞዴል ሲያጠፋ የሚኖሩት ሰዎች ብዛት እና የመድረሻ ሞዴሉ የመዳረሻ መመሪያዎቹ ተመሳሳይ መሆኑን ያሳያል።",
+        "caption": "የአበቃበት ቀን ያለው ሞዴል፣ ቀደም ብሎ የሚያበቃው በመጀመሪያ",
+        "empty": "ማንኛውም ሞዴል የአበቃበት ቀን የለውም።",
+        "today": "ዛሬ",
+        "col": {
+          "people": "ሰዎች",
+          "landsOn": "ሰዎች የሚደርሱበት",
+          "access": "በተኪ ላይ መዳረሻ"
+        },
+        "alert": "{model} በ{days, plural, one {1 ቀን} other {# ቀናት}} ውስጥ ይያበቃል። በቅርቡ {people, plural, one {1 ሰው} other {# ሰዎች}} አጠቃቀሙት።",
+        "alertForced": "{model} አሁን ተያብቃል። በቅርቡ {people, plural, one {1 ሰው} other {# ሰዎች}} አጠቃቀሙት።",
+        "alertTo": "ወደ {model} ይተካሉ።",
+        "alertNoReplacement": "የተኪ አልተቀመጠም።",
+        "access": {
+          "same": "ተመሳሳይ መመሪያዎች",
+          "unknown": "ተኪ እስኪቀመጥ ድረስ ማረጋገጥ አይቻልም",
+          "everyone": "ቀሪ ሁሉ የተለየ መመሪያ ይቀበላሉ",
+          "audiences": "{count, plural, one {# ቡድን፣ ዶሜይን ወይም ሰው አለው} other {# ቡድኖች፣ ዶሜይኖች ወይም ሰዎች አሏቸው}} በተለያዩ ውልናዎች",
+          "both": "ቀሪ ሁሉ እና {count, plural, one {# ድርጅት፣ ዶሜይን ወይም ሰው} other {# ድርጅቶች፣ ዶሜዮች ወይም ሰዎች}} የተለየ መመሪያ ይቀበላሉ"
+        },
+        "carryOver": "እነዚህን መመሪያዎች ወደ {model} ይቅዱ",
+        "carried": "የ {from} መመሪያዎች ወደ {to} ተቅዳለች። ለመተግበር ይግለጹ እና ያስቀምጡ።",
+        "legend": {
+          "service": "በአገልግሎት ውስጥ",
+          "notice": "ለተጠቃሚዎች የታየ አስታውቂያ፣ {days} ቀናት",
+          "move": "ሰዎች ተከፍተዋል፣ የመጨረሻ {days} ቀናት"
+        },
+        "pastTitle": "ቀኑን አሻግሮ አለ እና ገና ተዘግቷል፦",
+        "pastItem": "{model} ({date}, {people, plural, one {1 ሰው} other {# ሰዎች}})",
+        "undatedTitle": "ቀን የሌለው፦",
+        "rulesNote": "መዳረሻ ቅደም ተከተይ ተወዳድራል። አጠቃቀም ስሞች በማጣት ይቀመጣል፣ ስለዚህ በሞዴሉ ላይ ያሉት ሰዎች የመዳረሻ እንዴት ይጡን ማወቅ አይቻልም።"
+      },
+      "map": {
+        "lead": "እያንዳንዱ ክብ በመጨረሻው {days, plural, one {# ቀን} other {# ቀናት}} የተጠቀሰ ሞዴል ነው። በቀኝ በተጨማሪ ወጪ ያለው ተጠያቂ ሲሆን፣ በከፍተኛ ልዩ ሰዎች አሉ። የወጪ እና CO2e ግምት ናቸው ከመደበኛ ተጠያያይ ፣ ይህም ግምት ብቻ ነው።",
+        "empty": "በመጨረሻው {days, plural, one {# ቀን} other {# ቀናት}} ውስጥ የተጠቀሰ የዋጋ ሞዴል የለም።",
+        "caption": "ቁጥሮቹ እንደ ሰንጠረዥ፣ በገንዘብ ግምት የበለጠ በመጀመሪያ",
+        "sizeLabel": "የዙር መጠን",
+        "size": {
+          "spend": "የተጠቀመ ገንዘብ ግምት",
+          "footprint": "የCO2e ግምት",
+          "requests": "ጥያቄዎች"
+        },
+        "axisPeople": "ሰዎች፣ ለመጨረሻው {days, plural, one {# ቀን} other {# ቀናት}} (ወደ ላይ)",
+        "axisCost": "በዝርዝር ዋጋ አንድ መደበኛ ጥያቄ የሚገፋው ገንዘብ (ቀኝ)",
+        "dotLabel": "{model}: {people, plural, one {1 ሰው} other {# ሰዎች}}, {cost} በመደበኛ ጥያቄ ላይ፣ {value}። የመዳረሻ መመሪያውን ይከፈቱ።",
+        "legendTitle": "የመጠን ክፍል፦",
+        "legend": {
+          "mini": "ናኖ ወይም አነስተኛ",
+          "standard": "መደበኛ",
+          "large": "ትልቅ",
+          "xl": "ከፍተኛ ትልቅ",
+          "unset": "አልተመደበም"
+        },
+        "col": {
+          "requests": "ጥያቄዎች",
+          "perRequest": "በመደበኛ ጥያቄ"
+        },
+        "unknown": "ያውቅ የለም",
+        "noFindings": "አንዳችም አልተገኘም።",
+        "findingTitle": {
+          "concentrated": "ገንዘብ በአንድ ቦታ አበቃ",
+          "reached": "አንዳንድ ሰዎች የሚደርሱበት ገደብ",
+          "unreached": "ማንም ቅርጾ የማይቀርበው ገደብ",
+          "noCeiling": "ገቢ ገደብ የለም"
+        },
+        "finding": {
+          "concentrated": "{model} ዕድሜ ገምጋሚው ውስጥ {share} ነው።",
+          "reached": "{model}፡ {of} ሰዎች ውስጥ {people} ሰው {cap} በቀን አገኘ።",
+          "unreached": "{model} በቀን {cap} የተጠየቀ ነው፤ በጣም ተጠቃሚው {max} አሰራሳል።",
+          "noCeiling": "{models}፡ ለሁሉም ዋስትና የለም። በጣም ተጠቃሚው በቀን {max, plural, one {# ጥያቄ} other {# ጥያቄዎች}} አሰራሳል።"
+        }
       }
     },
     "previewSourceModelAccess": "ሞዴል ማጽደቅ — {list}",

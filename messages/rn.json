@@ -6929,6 +6929,223 @@
         "none": "nta kinjira",
         "becomes": "bihinduka",
         "removed": "vyakuweko"
+      },
+      "view": {
+        "label": "Raba",
+        "grid": "Uburyo bwinjira n'ivyerekeye ukuri",
+        "runway": "Igihe gisigaye kugira ngo havanwe",
+        "map": "Uko amafaranga akoreshwa n'ukwamamara"
+      },
+      "facts": {
+        "estimateNote": "Igiciro na CO2e ni ibipimo, si amafaranga yakoreshejwe: ibisabwe birabazwa bikagurwa n'ikintu gisanzwe kinwa ({promptTokens} tokens vyinjiye, {completionTokens} vyasohotse) ku giciro kiri kuri liste. Ivyo ukoresheje vyerekana iminsi {days, plural, one {# umunsi} other {# iminsi}} ishize.",
+        "estimateNoteNoCost": "CO2e ni igipimo, si ingero zafashwe: ibisabwe birabazwa bikagurwa n'ikintu gisanzwe kinwa ({promptTokens} tokens vyinjiye, {completionTokens} vyasohotse). Ivyo ukoresheje vyerekana iminsi {days, plural, one {# umunsi} other {# iminsi}} ishize.",
+        "captureNote": "Uko abantu bose bakoresha biza kuboneka inyuma y'umunsi umwe wose wo gukoranya amakuru. Mbere y'aho, ibisubizo birerekana gusa abari munsi y'urugero.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} yinjiye, {output} hasohotse",
+        "summary": {
+          "label": "Ivyerekeye imashini muri make",
+          "used": "Iyi model yarakoreshejwe, iminsi {days, plural, one {# umunsi} other {# iminsi}} ishize",
+          "usedValue": "{used} kuri {total}",
+          "requests": "Ibisabe",
+          "spend": "Amafaranga bikekwa ko akoreshwa",
+          "footprint": "CO2e y'ukwiyumvirirwa",
+          "retiring": "Bizavanwa inyuma y'iminsi {days}",
+          "noCeiling": "Nta rugero ku bandi bose",
+          "notYet": "Ntibiramenyekana"
+        },
+        "columns": {
+          "label": "Inkingi",
+          "cost": "Amafaranga",
+          "footprint": "Ibipimo vya CO2e",
+          "usage": "Uko bikoreshejwe",
+          "lifecycle": "Kubivanaho"
+        },
+        "col": {
+          "price": "Igiciro ku majambo 1M",
+          "ceiling": "Amafaranga menshi umuntu umwe ashobora gukoresha, mu kwezi",
+          "footprint": "CO2e kuri buri busabe busanzwe",
+          "people": "Ababikoresha",
+          "spread": "Ibisabe ku munsi umuntu akoresha cane",
+          "retires": "Bizavanwa"
+        },
+        "ceiling": {
+          "heavy": "gushika kuri {amount} ku bisabe birebire",
+          "off": "Nta na kimwe: vyarahagaritswe",
+          "unbounded": "Nta rugero",
+          "unpriced": "Nta giciro kigaragara"
+        },
+        "footprint": {
+          "notSet": "Ingano ntirashirwaho"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Bisanzwe",
+          "large": "Kinini",
+          "xl": "Kinini cane"
+        },
+        "usage": {
+          "none": "Nta wakoresheje",
+          "spend": "hafi {amount}",
+          "cappedOnly": "abari munsi y'urugero gusa"
+        },
+        "spread": {
+          "caption": "hagati {median}, 75% {p75}, menshi {max}",
+          "label": "Ibisabe ku munsi umuntu akoresha cane: hagati {median}, 75% {p75}, 95% {p95}, menshi {max}.",
+          "labelCap": " Urugero ni {cap} ku munsi.",
+          "legend": {
+            "p95": "gushika kuri 95%",
+            "box": "hagati na 75%",
+            "max": "uwakoresheje cane kurusha abandi",
+            "cap": "urugero ku bandi bose"
+          }
+        },
+        "retires": {
+          "none": "Nta tariki yashizwe ahabona",
+          "forced": "Biriko birimurwa ubu",
+          "past": "itariki yararangiye",
+          "to": "kuri {model}"
+        },
+        "lifecycle": {
+          "preview": "Gusuzuma",
+          "ga": "Iri ahabona kuri bose",
+          "legacy": "Karya kazi",
+          "deprecated": "Ntivyemewe ukundi",
+          "retired": "Vyahagaritswe"
+        },
+        "detail": {
+          "region": "Uko uyu model ukoreshwa n'ibiciro vyawo",
+          "usageTitle": "Ibiprequest biba ku munsi w'umuntu wuzuye cane",
+          "usageHint": "{people, plural, one {# umuntu} other {# abantu}} barayikoresheje mu minsi {days, plural, one {# umunsi} other {# iminsi}} ishize. Umuntu umwe wese abarwa umunsi yatwaye menshi.",
+          "noUsage": "Nta muntu yakoresheje iyi model mu minsi {days, plural, one {# umunsi} other {# iminsi}} ishize.",
+          "bucketHeading": "Ibiprequest ku munsi",
+          "peopleHeading": "Abantu",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Rimwe ku munsi wakoreshejwe",
+          "median": "Mediya",
+          "p75": "Igipimo ca 75%",
+          "p95": "Igipimo ca 95%",
+          "max": "Umuntu yakoresheje cane",
+          "reachedCap": "Ageze kw'ishirirwaho ntarengwa",
+          "cappedOnly": "Abantu bari munsi y'ishirirwaho ntarengwa ni bo babarwa hano, abadafise ntarengwa ntibarimwo.",
+          "truncated": "Haragaragazwa gusa abantu bakoresheje cane, ivyo bituma mediya n'ibipimo vyisumbuye biboneka ko biri hejuru.",
+          "replayTitle": "Iyo ntarengwa yoba itandukanye",
+          "replayHint": "Abantu bangana iki bari bafise umunsi umwe w'ikoreshwa ry'iki gipimo canke barengeye ntarengwa. Bokubuzwa iryo munsi.",
+          "replayCap": "Ntarengwa kuri bose basigaye",
+          "replayStopped": "Abantu bahagaritswe",
+          "replayPerDay": "{cap} ku munsi",
+          "replayNow": "{cap} ku munsi (ubu)",
+          "replayUnlimitedNow": "Ntihari ntarengwa (ubu)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Ikigeranyo c'igiciro",
+          "costHint": "Igiciro gisanzwe ku biprequest vyiyumvirwa. Si facture: biprequest vy'ukuri biratandukaniro mu burebure.",
+          "typicalRequest": "Request imwe isanzwe",
+          "longRequest": "Request imwe ndende",
+          "everyoneWindow": "Abantu bose, iminsi {days, plural, one {# umunsi} other {# iminsi}} ishize",
+          "atThisPace": "Ukwezi uko ibintu vyifashe ubu",
+          "footprintTitle": "Ikigeranyo c'igipimo",
+          "footprintHint": "Kurikira uburinganire bwa model n'ugukekwa request. Ikigeranyo c'ingene vyari, si ingero.",
+          "sizeClass": "Uburinganire",
+          "noSizeClass": "Uwu model ntiwafise uburinganire, ntivyoroshe kugera igipimo. Shiramwo uburinganire mu catalog ya model.",
+          "aboutTitle": "Ku vyerekeye uyu model",
+          "status": "Ihohoterwa",
+          "retiresOn": "{date}. Abakoresha babona kirimikoro kivuye kuri {notice} hanyuma bimurwa kuva kuri {move}.",
+          "retiresForced": "Abantu bariko barimurwa kuri uyu model ubu.",
+          "retiresUnknown": "Nta tariki yashizwe ahabona",
+          "replacement": "Abantu bashikira",
+          "replacementNotSet": "Ntivyashizwe",
+          "knowledge": "Ubumenyi gushika ku",
+          "context": "Idirishya ry’ivyiyumviro",
+          "contextTokens": "{tokens} tokens",
+          "canDo": "Birashoboka",
+          "can": {
+            "images": "gusoma amashusho",
+            "tools": "gukoresha ibikoresho",
+            "codeInterpreter": "gushira mu bikorwa code",
+            "reasoningEffort": "guhindura uruhara mu kwiyumvira"
+          },
+          "hosted": "Ifashwe",
+          "hosting": {
+            "azure": "Muri Azure y’ishirahamwe",
+            "external": "N’uwundi atari ishirahamwe",
+            "local": "Aha mu kibanza"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Igihe buri model ishira, abantu bayikoresha bangahe, n’ukuntu amategeko yo kuyikoresha bihuye n’ayo bazosanga.",
+        "caption": "Models zifise itariki yo guhagarara, itigira imbere",
+        "empty": "Nta model ifise itariki yo guhagarara.",
+        "today": "Uyu musi",
+        "col": {
+          "people": "Abantu",
+          "landsOn": "Abantu baza kuri",
+          "access": "Ingingo zo gushikira iyiyisubiriyemwo"
+        },
+        "alert": "{model} izohagarara mu {days, plural, one {umusi} other {imisi #}}. {people, plural, one {umuntu 1} other {abantu #}} bayikoresheje vuba.",
+        "alertForced": "{model} iriko irahagarikwa ubu. {people, plural, one {umuntu 1} other {abantu #}} bayikoresheje vuba.",
+        "alertTo": "Bazoja kuri {model}.",
+        "alertNoReplacement": "Nta vyasubirijweho vyatanzwe.",
+        "access": {
+          "same": "Amategeko amwe",
+          "unknown": "Ntivyoroshe kwemeza gushika hashirwaho ivyisubirizo",
+          "everyone": "Abandi bose bararonka amategeko atandukanye",
+          "audiences": "{count, plural, one {# itsinda, domaine canke umuntu afise} other {# amatsinda, domaines canke abantu bafise}} amasezerano atandukanye",
+          "both": "Abandi bose hamwe na {count, plural, one {itsinda 1, domain 1 canke umuntu 1} other {amatsinda #, domaines canke abantu #}} bararonka amategeko atandukanye"
+        },
+        "carryOver": "Koporora aya mategeko kuri {model}",
+        "carried": "Imategeko ya {from} zakorewe kopi kuri {to}. Saba no kuzigama kugira bikore.",
+        "legend": {
+          "service": "mu bikorwa",
+          "notice": "inyandiko yerekaniwe abakoresha, imisi {days}",
+          "move": "abantu bimuwe, imisi {days} iheze"
+        },
+        "pastTitle": "Igihe cayo cerekanwe kirashitse kandi iracari kuri urutonde:",
+        "pastItem": "{model} ({date}, {people, plural, one {umuntu 1} other {abantu #}})",
+        "undatedTitle": "Nta tariki ryatangajwe:",
+        "rulesNote": "Uruhusha ruvugwa ku mategeko yose. Uko ikoreshwa kwandikwa ntibisigura amazina, rero ntibishobora kwerekana neza abokoresha vyotuma batakaza uruhusha."
+      },
+      "map": {
+        "lead": "Igicapo kimwe kimwe ni model yakoreshejwe mu minsi {days, plural, one {# umunsi} other {# iminsi}} ishize. Iza iburyo zihenze kuri buri gisabwe, iza hejuru zakoreshejwe n'abantu benshi. Igiciro na CO2e ni ibipimo vyavuye ku gisabwe gisanzwe.",
+        "empty": "Nta model yacirirwa igiciro yakoreshejwe mu minsi {days, plural, one {# umunsi} other {# iminsi}} ishize.",
+        "caption": "Ibiharuro bimwe vyerekanywe ku rutonde, umwanya uri hejuru ni iyatanzwe amafaranga menshi ingana",
+        "sizeLabel": "Ingano y’uruzingi",
+        "size": {
+          "spend": "Amafaranga yakoreshejwe igitararugo",
+          "footprint": "CO2e yavuzweko igitararugo",
+          "requests": "Ibisabwa"
+        },
+        "axisPeople": "Abantu, iminsi {days, plural, one {# umunsi} other {# iminsi}} ishize (hejuru)",
+        "axisCost": "Ikiguzi kivugwa c’igisabwa kimwe ku giciro gisanzwe (iburyo)",
+        "dotLabel": "{model}: {people, plural, one {umuntu 1} other {abantu #}}, {cost} kuri buri gisabwa bisanzwe, {value}. Fungura amategeko yo kuyikoresha.",
+        "legendTitle": "Ubwoko bw’ingano:",
+        "legend": {
+          "mini": "nano canke mini",
+          "standard": "isanzwe",
+          "large": "binini",
+          "xl": "binini cane",
+          "unset": "ntivyashizwe"
+        },
+        "col": {
+          "requests": "Ivyo wasavye",
+          "perRequest": "Ku gisabwa gisanzwe"
+        },
+        "unknown": "Ntivyamenyekanye",
+        "noFindings": "Nta co turabonye kiratandukanye.",
+        "findingTitle": {
+          "concentrated": "Igikoresha cashizwe hamwe",
+          "reached": "Ingingo abantu bagezeho",
+          "unreached": "Ingingo ata n'umwe yegereye",
+          "noCeiling": "Nta kigega"
+        },
+        "finding": {
+          "concentrated": "{model} ni {share} y'ikigero c'amafaranga bategerezwa gukoresha.",
+          "reached": "{model}: {people} kuri {of} abantu bageze ku {cap} ku munsi.",
+          "unreached": "{model} ishizwe ku {cap} ku munsi; uwarenze abandi yakoze {max}.",
+          "noCeiling": "{models}: ntihariho iherezo ku bandi bose. Uwakoze ivyo vyinshi yakoze {max, plural, one {# igisabwa} other {# ibisabwa}} ku munsi."
+        }
       }
     },
     "previewSourceModelAccess": "Kwemeza modele — {list}",

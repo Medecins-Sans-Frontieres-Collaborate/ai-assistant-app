@@ -6929,6 +6929,223 @@
         "none": "ndakisa te",
         "becomes": "ekoma",
         "removed": "elongwe"
+      },
+      "view": {
+        "label": "Talá",
+        "grid": "Kokota mpe ba fait",
+        "runway": "Bokiti ya retraite",
+        "map": "Mbongo esalemi mpe kokoka ya bato"
+      },
+      "facts": {
+        "estimateNote": "Motuya mpe CO2e ezali mateya, ezali na likoki te ya motuya esalemi: bamposa ya mikolo esangami ekoba na motuya moko ya mikolo ({promptTokens} tokens ekokisi, {completionTokens} ekobima) ndenge ezali na list price. Bisaleli ekosilisa mikolo {days, plural, one {# mokolo} other {# mikolo}} ya suka.",
+        "estimateNoteNoCost": "CO2e ezali mateya, ezali na likoki te ya motuya esalemi: bamposa ya mikolo esangami ekoba na motuya moko ya mikolo ({promptTokens} tokens ekokisi, {completionTokens} ekobima). Bisaleli ekosilisa mikolo {days, plural, one {# mokolo} other {# mikolo}} ya suka.",
+        "captureNote": "Koyeba ndenge nyonso esalemi epesámí sima ya mokolo ya libosó mobimba ya kokanga ba donnee. Liboso wana, ba nombre ezali kaka ya bato oyo bazali nse ya limite.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} kokota, {output} kobima",
+        "summary": {
+          "label": "Ba modèle na ndakisa",
+          "used": "Bamodeles oyo basalelaki, mikolo {days, plural, one {# moko} other {# ya suka}}",
+          "usedValue": "{used} kati na {total}",
+          "requests": "Mituni",
+          "spend": "Mbongo ekosalamá",
+          "footprint": "Esaleli ya CO2e epesámí",
+          "retiring": "Ekofanda te sima ya mikolo {days}",
+          "noCeiling": "Ezangi limite mpo na bato nyonso",
+          "notYet": "Eyebi nanu te"
+        },
+        "columns": {
+          "label": "Ba colonnes",
+          "cost": "Mbongo",
+          "footprint": "Esaleli ya CO2e",
+          "usage": "Kosalela",
+          "lifecycle": "Retraite"
+        },
+        "col": {
+          "price": "Motuya na liste ya 1M tokens",
+          "ceiling": "Mingi koleka te moto moko na sanza",
+          "footprint": "CO2e na mituni moko ya bisika",
+          "people": "Bato basalelaka yango",
+          "spread": "Mituni na mokolo ya mosala mingi ya moto",
+          "retires": "Ekofanda"
+        },
+        "ceiling": {
+          "heavy": "tí {amount} na mituni milai",
+          "off": "Te: efungwamí",
+          "unbounded": "Ezangi limite",
+          "unpriced": "Ezangi motuya na liste"
+        },
+        "footprint": {
+          "notSet": "Ndenge ezali te"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Monene",
+          "xl": "Ekusé monene"
+        },
+        "usage": {
+          "none": "Mosaleli te",
+          "spend": "péná {amount}",
+          "cappedOnly": "bato nse ya limite kaka"
+        },
+        "spread": {
+          "caption": "katikati {median}, 75e {p75}, mingi {max}",
+          "label": "Mituni na mokolo ya mosala mingi ya moto: katikati {median}, 75e percentile {p75}, 95e percentile {p95}, mingi {max}.",
+          "labelCap": " Limite ezali {cap} mokolo.",
+          "legend": {
+            "p95": "tí na 95e percentile",
+            "box": "katikati na 75e percentile",
+            "max": "moto ya mosala mingi",
+            "cap": "limite mpo na bato nyonso"
+          }
+        },
+        "retires": {
+          "none": "Date ya publikasion ezali te",
+          "forced": "Ezalaki komema bato mosusu",
+          "past": "date esili",
+          "to": "na {model}"
+        },
+        "lifecycle": {
+          "preview": "Monyo",
+          "ga": "Elekaka na bato nyonso",
+          "legacy": "Legacy",
+          "deprecated": "Ebimaki",
+          "retired": "Efandaki"
+        },
+        "detail": {
+          "region": "Ndakisa ndenge model ezali kosalelama mpe mpako na yango",
+          "usageTitle": "Demandes na mokolo ya moto ya activité mingi",
+          "usageHint": "{people, plural, one {# moto} other {# bato}} basalelaki yango na mikolo {days, plural, one {# moko} other {# ya suka}}. Moto moko moko akokangama mbala moko, na mokolo na ye ya mingi.",
+          "noUsage": "Moto moko te asalelaki model oyo na mikolo {days, plural, one {# moko} other {# ya suka}}.",
+          "bucketHeading": "Demandes na mokolo",
+          "peopleHeading": "Bato",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Moyenne na mokolo oyo activité",
+          "median": "Median",
+          "p75": "75e percentile",
+          "p95": "95e percentile",
+          "max": "Moto ya activité mingi",
+          "reachedCap": "Atindi na limit",
+          "cappedOnly": "Kaka bato na limit nde bazali komonama awa, batindaki ata moto moko te na limit te.",
+          "truncated": "Kaka bato baye activité mingi nde bazali, yango median na percentiles ekotomboka koleka.",
+          "replayTitle": "Soki limit ebongwana",
+          "replayHint": "Motoba boni na bato mwa baye bazalaki na mokolo moko na limit bakokaki seko. Ebongwanaki na mokolo wana.",
+          "replayCap": "Limit ya bato nyonso",
+          "replayStopped": "Bato basilaki",
+          "replayPerDay": "{cap} mokolo moko",
+          "replayNow": "{cap} mokolo moko (leki)",
+          "replayUnlimitedNow": "Limit ezali te (leki)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Motya mpako",
+          "costHint": "Motya moko na demande oyo ezosakana. Ezali lisungi, ekoki kokoma mingi ata mokuse.",
+          "typicalRequest": "Demande moko ya nkolo",
+          "longRequest": "Demande moko ya molai",
+          "everyoneWindow": "Bato nyonso, mikolo {days, plural, one {# moko} other {# ya suka}}",
+          "atThisPace": "Sanze moko na rythme oyo",
+          "footprintTitle": "Motya footprint",
+          "footprintHint": "Na size class ya model na demande oyo ezosakana. Ezali motya likolo, ekeleyaka te.",
+          "sizeClass": "Size class",
+          "noSizeClass": "Model oyo ezali na size class te, yango footprint na yango ekoki kubongwana te. Pesa size na model catalog.",
+          "aboutTitle": "Likolo model oyo",
+          "status": "Statut",
+          "retiresOn": "{date}. Base ya ba utilisateurs bakomona notice uta {notice} mpe bakosala mouvement uta {move}.",
+          "retiresForced": "Bato bazali kokende na model oyo leki.",
+          "retiresUnknown": "Date ya publikasion ezali te",
+          "replacement": "Bato bakendaka",
+          "replacementNotSet": "Epesami te",
+          "knowledge": "Boyebi kino",
+          "context": "Mwanya ya kontekst",
+          "contextTokens": "{tokens} tokens",
+          "canDo": "Akoki",
+          "can": {
+            "images": "kotala bafoto",
+            "tools": "kokosa basombo",
+            "codeInterpreter": "kokisa code",
+            "reasoningEffort": "kokatisa makasi ya kokanisa"
+          },
+          "hosted": "Ekokisamaka",
+          "hosting": {
+            "azure": "Na Azure ya organisation",
+            "external": "Na fournisseur ya libanda",
+            "local": "Na ekolo"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Tango model moko ekendaka, boni bato bazalaki na yango, mpe soki mitindo ya kokotela ekokani na model oyo bato bakozwa.",
+        "caption": "Bamodel oyo bakosila, ya mbala ya sima liboso",
+        "empty": "Model moko te ezali na daté ya kokosila.",
+        "today": "Lelo",
+        "col": {
+          "people": "Bato",
+          "landsOn": "Bato bakozwa",
+          "access": "Kokotela na modèle ya remplacement"
+        },
+        "alert": "{model} ekosila na mikolo {days, plural, one {#} other {#}}. {people, plural, one {# moto} other {# bato}} basalelaki yango na boumeli.",
+        "alertForced": "{model} esilaka sikoyo. {people, plural, one {# moto} other {# bato}} basalelaki yango na boumeli.",
+        "alertTo": "Bakoponama na {model}.",
+        "alertNoReplacement": "Remplacement ezali te.",
+        "access": {
+          "same": "Mitindo ekokani",
+          "unknown": "Ekozalaka te tii replacement epesami",
+          "everyone": "Bato nyonso bakozwa mitindo misusu",
+          "audiences": "{count, plural, one {# groupe, domaine to moto azali na} other {# groupes, domaines to bato bazali na}} mayoki ndenge na ndenge",
+          "both": "Bato nyonso mpe {count, plural, one {# groupe, domaine to moto} other {# ba groupes, domaines to bato}} bakozwa mitindo misusu"
+        },
+        "carryOver": "Kokopier mitindo na {model}",
+        "carried": "Mitindo ya {from} ekopiama na {to}. Salela revisa mpe sauvegarder.",
+        "legend": {
+          "service": "Ezali na service",
+          "notice": "Notice ebonisamaka na bayekoli, {days} mikolo",
+          "move": "Bato bapongwama, na {days} mikolo ya suka"
+        },
+        "pastTitle": "Elekaki daté na yango mpe esalemi kaka:",
+        "pastItem": "{model} ({date}, {people, plural, one {# moto} other {# bato}})",
+        "undatedTitle": "Daté moko te ebimi:",
+        "rulesNote": "Kokotela ezalaka na kolanda mitindo moko na moko. Mikoseli ekotombolami na komonisa kombo te, boye ekoki koloba te soki boni na bato bazali na model bakobungisa kokotela."
+      },
+      "map": {
+        "lead": "Circles nyonso ezali model oyo basalelaki na mikolo {days, plural, one {# moko} other {# ya suka}}. Na droite ezali na motuya mingi koleka mpo na posa, likolo ezali bato ebele koleka. Motuya mpe CO2e ezali mateya na motuya moko ya mikolo.",
+        "empty": "Model na motuya ezali te oyo basalelaki na mikolo {days, plural, one {# moko} other {# ya suka}}.",
+        "caption": "Ba chiffres moko na tableau, ya mbongo ya estimation mingi ekobaluka liboso",
+        "sizeLabel": "Taille ya circle",
+        "size": {
+          "spend": "Mbongo ya estimation",
+          "footprint": "CO2e ya estimation",
+          "requests": "Ba demandes"
+        },
+        "axisPeople": "Bato, mikolo {days, plural, one {# moko} other {# ya suka}} (likolo)",
+        "axisCost": "Mbongo ya demande moko ya biasa na prix ya liste (katambe)",
+        "dotLabel": "{model}: {people, plural, one {# moto} other {# bato}}, {cost} na demande ya biasa, {value}. Fungola mitindo ya kokotela.",
+        "legendTitle": "Classe ya taille:",
+        "legend": {
+          "mini": "nano to mini",
+          "standard": "standard",
+          "large": "monene",
+          "xl": "monene mingi",
+          "unset": "esalemi te"
+        },
+        "col": {
+          "requests": "Mikosala",
+          "perRequest": "Na likosala moko"
+        },
+        "unknown": "Eyebani te",
+        "noFindings": "Ezali ata eloko moko te oyo emonana.",
+        "findingTitle": {
+          "concentrated": "Kosalela mingi",
+          "reached": "Limite oyo bato bakoki kokoma",
+          "unreached": "Limite oyo moto ata moko akomi te",
+          "noCeiling": "Limite ezwami te"
+        },
+        "finding": {
+          "concentrated": "{model} ezali {share} ya kosalela oyo babandaki.",
+          "reached": "{model}: {people} ya {of} bato bakomi na {cap} na mokolo moko.",
+          "unreached": "{model} eza na limit ya {cap} na mokolo; bato oyo asalaka mingi akomaki na {max}.",
+          "noCeiling": "{models}: bakoki nyonso bazali na liberté. Moto oyo asalaka mingi akomaki na {max, plural, one {# likosala} other {# mikosala}} na mokolo moko."
+        }
       }
     },
     "previewSourceModelAccess": "Ndongolá modelɛ — {list}",

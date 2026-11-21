@@ -6929,6 +6929,223 @@
         "none": "tsy misy fidirana",
         "becomes": "lasa",
         "removed": "nesorina"
+      },
+      "view": {
+        "label": "Hijery",
+        "grid": "Fidirana sy antontan'isa",
+        "runway": "Lalan'ny fisotroan-dronono",
+        "map": "Fandaniana sy laza"
+      },
+      "facts": {
+        "estimateNote": "Ny vidiny sy CO2e dia tombana fotsiny, tsy fandrefesana marina: isaina ny fangatahana ary atao fanamaroana amin'ny fangatahana mahazatra ({promptTokens} tokens miditra, {completionTokens} tokens mivoaka) amin'ny vidiny eo amin'ny lisitra. Ny fampiasana dia mandrakotra ny {days, plural, one {# andro} other {# andro}} farany.",
+        "estimateNoteNoCost": "Ny CO2e dia tombana fotsiny, tsy fandrefesana: isaina ny fangatahana ary atao fanamaroana amin'ny fangatahana mahazatra ({promptTokens} tokens miditra, {completionTokens} tokens mivoaka). Ny fampiasana dia mandrakotra ny {days, plural, one {# andro} other {# andro}} farany.",
+        "captureNote": "Ho hita ho an'ny rehetra ny fampiasana rehefa vita iray andro feno ny fanangonana. Alohan'izay dia ho an'ireo olona voasakantsakana fotsiny ny tarehimarika.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} miditra, {output} mivoaka",
+        "summary": {
+          "label": "Topi-maso haingana ireo modely",
+          "used": "Modely nampiasaina, {days, plural, one {# andro} other {# andro}} farany",
+          "usedValue": "{used} amin'ny {total}",
+          "requests": "Fangatahana",
+          "spend": "Tombana fandaniana",
+          "footprint": "Tombana CO2e",
+          "retiring": "Hiala ao anatin'ny {days} andro",
+          "noCeiling": "Tsy voafetra ho an'ny hafa rehetra",
+          "notYet": "Tsy mbola fantatra"
+        },
+        "columns": {
+          "label": "Tsanganana",
+          "cost": "Vidiny",
+          "footprint": "Fiantraikany",
+          "usage": "Fampiasana",
+          "lifecycle": "Fisotroan-dronono"
+        },
+        "col": {
+          "price": "Vidin'ny lisitra isaky ny 1M toko",
+          "ceiling": "Vidiny farany ambony azon'ny olona iray, isam-bolana",
+          "footprint": "CO2e isaky ny fangatahana mahazatra",
+          "people": "Olona mampiasa azy",
+          "spread": "Fangatahana amin'ny andro be indrindra an'ny olona iray",
+          "retires": "Fahavitan'asa"
+        },
+        "ceiling": {
+          "heavy": "hatramin'ny {amount} amin'ny fangatahana lava",
+          "off": "Tsy misy: nakatona",
+          "unbounded": "Tsy voafetra",
+          "unpriced": "Tsy misy vidin'ny lisitra"
+        },
+        "footprint": {
+          "notSet": "Tsy napetraka ny habeny"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Fenitra",
+          "large": "Lehibe",
+          "xl": "Lehibe fanampiny"
+        },
+        "usage": {
+          "none": "Tsy mbola nisy fampiasana",
+          "spend": "eo ho eo amin'ny {amount}",
+          "cappedOnly": "olona voafetra ihany"
+        },
+        "spread": {
+          "caption": "salantsalany {median}, 75% {p75}, ankamaroany {max}",
+          "label": "Fangatahana amin'ny andro be indrindra an'ny olona iray: salantsalany {median}, 75% {p75}, 95% {p95}, ankamaroany {max}.",
+          "labelCap": " Ny fetra dia {cap} isan'andro.",
+          "legend": {
+            "p95": "hatramin'ny 95%",
+            "box": "salantsalany hatramin'ny 75%",
+            "max": "olona manana be indrindra",
+            "cap": "fetra ho an'ny hafa rehetra"
+          }
+        },
+        "retires": {
+          "none": "Tsy misy daty navoaka",
+          "forced": "Afindra ankehitriny",
+          "past": "efa lasa ny daty",
+          "to": "mankany amin'ny {model}"
+        },
+        "lifecycle": {
+          "preview": "Hijery mialoha",
+          "ga": "Azo ampiasaina amin'ny ankapobeny",
+          "legacy": "Legacy",
+          "deprecated": "Tsy ampirisihina",
+          "retired": "Retraite"
+        },
+        "detail": {
+          "region": "Fomba ampiasana ity modely ity sy ny vidiny",
+          "usageTitle": "Fangatahana amin'ny andro mavitrika indrindra isaky ny olona",
+          "usageHint": "{people, plural, one {# olona} other {# olona}} no nampiasa azy tamin'ny {days, plural, one {# andro} other {# andro}} farany. Isaina indray mandeha isaky ny olona, amin'ny andro feno indrindra nampiasany.",
+          "noUsage": "Tsy nisy olona nampiasa ity modely ity tamin'ny {days, plural, one {# andro} other {# andro}} farany.",
+          "bucketHeading": "Fangatahana amin'ny iray andro",
+          "peopleHeading": "Olona",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Salan'isa isaky ny andro mavitrika",
+          "median": "Median",
+          "p75": "Perycentile faha-75",
+          "p95": "Perycentile faha-95",
+          "max": "Olona be indrindra",
+          "reachedCap": "Nahatratra fetra",
+          "cappedOnly": "Olona voaara-maso amin'ny fetra ihany no voaisa eto, ka tsy voaisa ireo tsy manana fetra.",
+          "truncated": "Olona be indrindra ihany no aseho, ka ny median sy perycentile dia avo kokoa noho ny tena izy.",
+          "replayTitle": "Raha hafa ny fetra",
+          "replayHint": "Olona firy amin'ireo no nahazo andro nahatratra na nihoatra ny fetra tsirairay. Tokony ho sampanana tamin'io andro io.",
+          "replayCap": "Fetra ho an'ny ambiny rehetra",
+          "replayStopped": "Olona no sampanana",
+          "replayPerDay": "{cap} isan'andro",
+          "replayNow": "{cap} isan'andro (ankehitriny)",
+          "replayUnlimitedNow": "Tsy voafetra (ankehitriny)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Vidiny tombanana",
+          "costHint": "Vidiny amin'ny fangatahana iray tombanana. Tsy faktiora: tsy mitovy halava ny fangatahana tena izy.",
+          "typicalRequest": "Fangatahana mahazatra iray",
+          "longRequest": "Fangatahana lava iray",
+          "everyoneWindow": "Olona rehetra, {days, plural, one {# andro} other {# andro}} farany",
+          "atThisPace": "Volana amin'ity hafainganana ity",
+          "footprintTitle": "Footprint tombanana",
+          "footprintHint": "Avy amin'ny sokajin-danja sy fangatahana tombanana amin'ilay modely. Tombana fotsiny, fa tsy fandrefesana marina.",
+          "sizeClass": "Sokajin-danja",
+          "noSizeClass": "Tsy manana sokajin-danja ity modely ity, ka tsy azo tombanana ny footprint-ny. Apetraho ao amin'ny catalog modely.",
+          "aboutTitle": "Momban'ity modely ity",
+          "status": "Toetoetra",
+          "retiresOn": "{date}. Mahita fampandrenesana avy amin'ny {notice} ny mpampiasa ary afindra avy amin'ny {move}.",
+          "retiresForced": "Afindra amin'ity modely ity ny olona ankehitriny.",
+          "retiresUnknown": "Tsy misy daty navoaka",
+          "replacement": "Olona mifindran-toerana",
+          "replacementNotSet": "Tsy napetraka",
+          "knowledge": "Fahatakarana hatramin'ny",
+          "context": "Varavarankelin'ny context",
+          "contextTokens": "{tokens} token",
+          "canDo": "Afaka",
+          "can": {
+            "images": "mamaky sary",
+            "tools": "mampiasa fitaovana",
+            "codeInterpreter": "manatanteraka kaody",
+            "reasoningEffort": "manitsy ny ezaka famakafakana"
+          },
+          "hosted": "Voatokana",
+          "hosting": {
+            "azure": "Ao amin'ny Azure an'ny fikambanana",
+            "external": "Amin'ny mpanome tolotra ivelany",
+            "local": "Ao an-toerana"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Rehefa esorina ny modely tsirairay, ohatrinona ny olona mampiasa azy, ary mitovy amin'ny fitsipika ny modely hifindrany.",
+        "caption": "Modely misy datin'ny fisotroan-dronono, manomboka amin'ny akaiky indrindra",
+        "empty": "Tsy mbola misy modely manana daty fisotroan-dronono.",
+        "today": "Anio",
+        "col": {
+          "people": "Olona",
+          "landsOn": "Olona hifindra amin'",
+          "access": "Fidirana amin'ny modely manolo"
+        },
+        "alert": "{model} dia hikatona ao anatin'ny {days, plural, one {# andro} other {# andro}}. {people, plural, one {# olona} other {# olona}} no nampiasa azy tato ho ato.",
+        "alertForced": "Efa nakatona izao i {model}. {people, plural, one {# olona} other {# olona}} no nampiasa azy tato ho ato.",
+        "alertTo": "Hafindra amin'i {model} izy ireo.",
+        "alertNoReplacement": "Tsy misy modely manolo voatendry.",
+        "access": {
+          "same": "Mitovy ny fitsipika",
+          "unknown": "Tsy azo hamarinina raha tsy mbola voatendry ny modely manolo",
+          "everyone": "Samy hafa ny fepetra ho an'ny hafa rehetra",
+          "audiences": "{count, plural, one {# vondrona, domain na olona manana} other {# vondrona, domain na olona manana}} fepetra samihafa",
+          "both": "Ny hafa rehetra sy {count, plural, one {# vondrona, sehatra na olona} other {# vondrona, sehatra na olona}} dia manana fepetra samihafa"
+        },
+        "carryOver": "Afindrao amin'i {model} ireo fitsipika ireo",
+        "carried": "Nafindra tamin'i {from} ho amin'i {to} ny fitsipika. Jerena sy tehirizo raha hampiharina.",
+        "legend": {
+          "service": "ampiasaina",
+          "notice": "fampahafantarana ho an'ny mpampiasa, {days} andro",
+          "move": "olona nafindra, {days} andro farany"
+        },
+        "pastTitle": "Efa latsaka daty fa mbola ao amin'ny lisitra:",
+        "pastItem": "{model} ({date}, {people, plural, one {# olona} other {# olona}})",
+        "undatedTitle": "Tsy misy daty navoaka:",
+        "rulesNote": "Atsimbazina araka ny fitsipika isanisany ny fidirana. Tsy mirakitra anarana ny fahazoana miditra, ka tsy ahafahana milaza hoe firy amin'ireo olona mampiasa modely no ho very fahafahana."
+      },
+      "map": {
+        "lead": "Ny boribory tsirairay dia modely nampiasaina tamin'ny {days, plural, one {# andro} other {# andro}} farany. Raha mivoaka havanana dia lafo kokoa isaky ny fangatahana, ambony no mahatonga olona maro kokoa. Ny vidiny sy CO2e dia tombana avy amin'ny fangatahana mahazatra.",
+        "empty": "Tsy nisy modely misy vidiny nampiasaina tamin'ny {days, plural, one {# andro} other {# andro}} farany.",
+        "caption": "Ireo tarehimarika ireo ihany amin'ny tabilao, filaharana amin'ny fandaniana ambony indrindra",
+        "sizeLabel": "Haben'ny boribory",
+        "size": {
+          "spend": "Fanombanana fandaniana",
+          "footprint": "Fanombanana CO2e",
+          "requests": "Fangatahana"
+        },
+        "axisPeople": "Olona, {days, plural, one {# andro} other {# andro}} farany (miakatra)",
+        "axisCost": "Fanombanana ny sarany amin'ny fangatahana iray amin'ny vidiny fototra (miankavanana)",
+        "dotLabel": "{model}: {people, plural, one {# olona} other {# olona}}, {cost} isaky ny fangatahana mahazatra, {value}. Sokafy ny fitsipika fidirana aminy.",
+        "legendTitle": "Sokajy habe:",
+        "legend": {
+          "mini": "nano na mini",
+          "standard": "tsotra",
+          "large": "lehibe",
+          "xl": "lehibe indrindra",
+          "unset": "tsy napetraka"
+        },
+        "col": {
+          "requests": "Fangatahana",
+          "perRequest": "Isaky ny fangatahana mahazatra"
+        },
+        "unknown": "Tsy fantatra",
+        "noFindings": "Tsy mbola misy mahaliana.",
+        "findingTitle": {
+          "concentrated": "Fandaniana mifantoka",
+          "reached": "Fetra tonga amin'ny olona",
+          "unreached": "Fetra tsy misy tonga",
+          "noCeiling": "Tsy misy fetra"
+        },
+        "finding": {
+          "concentrated": "{model} dia {share} amin'ny fandaniana tombanana.",
+          "reached": "{model}\u0000a0: {people} amin’ireo {of} olona no nahatratra {cap} isan’andro.",
+          "unreached": "{model} dia voafetra amin’ny {cap} isan’andro; ny olona niasa mafy indrindra dia nahatratra {max}.",
+          "noCeiling": "{models}\u0000a0: tsy misy fetra ho an’ny hafa rehetra. Ny olona niasa mafy indrindra dia nahatratra {max, plural, one {# fangatahana} other {# fangatahana}} tamin’ny iray andro."
+        }
       }
     },
     "previewSourceModelAccess": "Fanekena modely — {list}",

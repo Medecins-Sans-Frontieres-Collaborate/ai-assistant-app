@@ -6945,6 +6945,223 @@
         "none": "ei merkintää",
         "becomes": "muuttuu",
         "removed": "poistettu"
+      },
+      "view": {
+        "label": "Näytä",
+        "grid": "Pääsy ja tiedot",
+        "runway": "Eläkkeelle siirtymisen aika",
+        "map": "Kulutus ja suosio"
+      },
+      "facts": {
+        "estimateNote": "Kustannus ja CO2e ovat arvioita, eivät mitattuja: laskettu pyyntöjen määrä kerrottuna tyypillisellä pyynnöllä ({promptTokens} merkkiä sisään, {completionTokens} ulos) listahintaan. Käyttö kattaa viimeiset {days, plural, one {# päivän} other {# päivää}}.",
+        "estimateNoteNoCost": "CO2e on arvio, ei mittaus: laskettu pyyntöjen määrä kerrottuna tyypillisellä pyynnöllä ({promptTokens} merkkiä sisään, {completionTokens} ulos). Käyttö kattaa viimeiset {days, plural, one {# päivän} other {# päivää}}.",
+        "captureNote": "Kaikkien käyttö näkyy vasta ensimmäisen täyden keruupäivän jälkeen. Siihen asti luvut kattavat vain henkilöt, joilla on käyttöraja.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} sisään, {output} ulos",
+        "summary": {
+          "label": "Mallit yhdellä silmäyksellä",
+          "used": "Käytetyt mallit, viimeiset {days, plural, one {# päivä} other {# päivää}}",
+          "usedValue": "{used} / {total}",
+          "requests": "Pyynnöt",
+          "spend": "Arvioitu kulutus",
+          "footprint": "Arvioitu CO2e",
+          "retiring": "Poistuu käytöstä {days} päivän sisällä",
+          "noCeiling": "Rajoittamaton muille",
+          "notYet": "Ei vielä tiedossa"
+        },
+        "columns": {
+          "label": "Sarakkeet",
+          "cost": "Kustannus",
+          "footprint": "Jalanjälki",
+          "usage": "Käyttö",
+          "lifecycle": "Poistuminen käytöstä"
+        },
+        "col": {
+          "price": "Ohjehinta / 1M merkkiä",
+          "ceiling": "Kuukausittain suurin mahdollinen henkilökohtainen kustannus",
+          "footprint": "CO2e/tyypillinen pyyntö",
+          "people": "Käyttäjät",
+          "spread": "Henkilön vilkkaimman päivän pyynnöt",
+          "retires": "Poistuu käytöstä"
+        },
+        "ceiling": {
+          "heavy": "enintään {amount} pitkissä pyynnöissä",
+          "off": "Ei mitään: pois käytöstä",
+          "unbounded": "Ei rajaa",
+          "unpriced": "Ei ohjehintaa"
+        },
+        "footprint": {
+          "notSet": "Kokoa ei asetettu"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standardi",
+          "large": "Suuri",
+          "xl": "Erittäin suuri"
+        },
+        "usage": {
+          "none": "Ei käyttöä",
+          "spend": "noin {amount}",
+          "cappedOnly": "vain rajatut käyttäjät"
+        },
+        "spread": {
+          "caption": "mediaani {median}, 75. persentiili {p75}, eniten {max}",
+          "label": "Henkilön vilkkaimman päivän pyynnöt: mediaani {median}, 75. persentiili {p75}, 95. persentiili {p95}, eniten {max}.",
+          "labelCap": " Rajoitus on {cap} päivässä.",
+          "legend": {
+            "p95": "enintään 95. persentiili",
+            "box": "mediaanista 75. persentiiliin",
+            "max": "suurin käyttäjä",
+            "cap": "raja muille"
+          }
+        },
+        "retires": {
+          "none": "Päivämäärää ei julkaistu",
+          "forced": "Siirretään pois nyt",
+          "past": "päivä on mennyt",
+          "to": "malliin {model}"
+        },
+        "lifecycle": {
+          "preview": "Esikatselu",
+          "ga": "Yleisesti saatavilla",
+          "legacy": "Vanhentunut",
+          "deprecated": "Poistettu käytöstä",
+          "retired": "Lopetettu"
+        },
+        "detail": {
+          "region": "Miten tätä mallia käytetään ja paljonko se maksaa",
+          "usageTitle": "Pyyntöjä henkilön kiireisimpänä päivänä",
+          "usageHint": "{people, plural, one {# henkilö} other {# henkilöä}} käytti sitä viimeisten {days, plural, one {# päivän} other {# päivän}} aikana. Jokainen henkilö lasketaan vain kerran, vilkkaimpana päivänään.",
+          "noUsage": "Tätä mallia ei ole käytetty viimeisten {days, plural, one {# päivän} other {# päivän}} aikana.",
+          "bucketHeading": "Pyyntöjä päivässä",
+          "peopleHeading": "Henkilöt",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Keskimäärin aktiivista päivää kohti",
+          "median": "Mediaani",
+          "p75": "75. prosenttipiste",
+          "p95": "95. prosenttipiste",
+          "max": "Eniten käyttänyt henkilö",
+          "reachedCap": "Yläraja saavutettu",
+          "cappedOnly": "Tässä lasketaan toistaiseksi vain henkilöt, joilla on yläraja; henkilöitä ilman rajaa ei ole mukana.",
+          "truncated": "Vain eniten käyttävät henkilöt on listattu, joten mediaani ja prosenttipisteet voivat näyttää todellista korkeammilta.",
+          "replayTitle": "Jos yläraja olisi eri",
+          "replayHint": "Kuinka monella näistä henkilöistä oli päivä, jolloin saavutettiin tai ylitettiin kyseinen yläraja. Heidät olisi estetty sinä päivänä.",
+          "replayCap": "Yläraja muille",
+          "replayStopped": "Estetyt henkilöt",
+          "replayPerDay": "{cap} päivässä",
+          "replayNow": "{cap} päivässä (nyt)",
+          "replayUnlimitedNow": "Rajoittamaton (nyt)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Arvioitu kustannus",
+          "costHint": "Listahinta oletetulle pyynnölle. Ei lasku: todellisten pyyntöjen pituus vaihtelee.",
+          "typicalRequest": "Yksi tyypillinen pyyntö",
+          "longRequest": "Yksi pitkä pyyntö",
+          "everyoneWindow": "Kaikki käyttäjät, viimeiset {days, plural, one {# päivä} other {# päivää}}",
+          "atThisPace": "Kuukausi tällä tahdilla",
+          "footprintTitle": "Arvioitu ympäristöjalanjälki",
+          "footprintHint": "Mallin kokoluokasta ja oletetusta pyynnöstä. Suuntaa-antava arvio, ei mittaus.",
+          "sizeClass": "Kokoluokka",
+          "noSizeClass": "Tällä mallilla ei ole kokoluokkaa, joten sen ympäristöjalanjälkeä ei voida arvioida. Aseta se malliluettelossa.",
+          "aboutTitle": "Tietoja tästä mallista",
+          "status": "Tila",
+          "retiresOn": "{date}. Käyttäjät näkevät ilmoituksen {notice} alkaen ja heidät siirretään mallista {move}.",
+          "retiresForced": "Käyttäjiä siirretään pois tästä mallista nyt.",
+          "retiresUnknown": "Päivämäärää ei julkaistu",
+          "replacement": "Käyttäjät siirtyvät malliin",
+          "replacementNotSet": "Ei asetettu",
+          "knowledge": "Tieto kattaa ajanjakson asti",
+          "context": "Konteksti-ikkuna",
+          "contextTokens": "{tokens} tokenia",
+          "canDo": "Voi",
+          "can": {
+            "images": "lukea kuvia",
+            "tools": "käyttää työkaluja",
+            "codeInterpreter": "suorittaa koodia",
+            "reasoningEffort": "säätää päättelyn tasoa"
+          },
+          "hosted": "Isännöity",
+          "hosting": {
+            "azure": "Organisaation Azure-ympäristössä",
+            "external": "Ulkoisen palveluntarjoajan toimesta",
+            "local": "Paikallisesti"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Kun kukin malli poistuu käytöstä, montako henkilöä sitä käyttää ja vastaavatko käyttöoikeudet mallia, jolle käyttäjät siirretään.",
+        "caption": "Mallit, joilla on eläkkeellejäämis­päivä, aikajärjestyksessä",
+        "empty": "Yhdelläkään mallilla ei ole eläkkeellejäämis­päivää.",
+        "today": "Tänään",
+        "col": {
+          "people": "Henkilöt",
+          "landsOn": "Siirretään malliin",
+          "access": "Käyttöoikeus korvaavassa mallissa"
+        },
+        "alert": "{model} poistuu käytöstä {days, plural, one {# päivän} other {# päivän}} kuluttua. {people, plural, one {# henkilö} other {# henkilöä}} on käyttänyt sitä hiljattain.",
+        "alertForced": "{model} poistetaan nyt käytöstä. {people, plural, one {# henkilö} other {# henkilöä}} on käyttänyt sitä hiljattain.",
+        "alertTo": "Heidät siirretään malliin {model}.",
+        "alertNoReplacement": "Korvaavaa mallia ei ole asetettu.",
+        "access": {
+          "same": "Samoin säännöin",
+          "unknown": "Ei voida tarkistaa ennen kuin korvaava malli on asetettu",
+          "everyone": "Kaikki muut saavat eri ehdot",
+          "audiences": "{count, plural, one {# ryhmällä, domainilla tai henkilöllä on} other {# ryhmällä, domainilla tai henkilöllä on}} eri ehdot",
+          "both": "Kaikki muut ja {count, plural, one {# ryhmä, domain tai henkilö} other {# ryhmää, domainia tai henkilöä}} saavat eri ehdot"
+        },
+        "carryOver": "Kopioi nämä säännöt malliin {model}",
+        "carried": "Kopioitiin {from}:n säännöt malliin {to}. Tarkista ja tallenna, jotta muutokset tulevat voimaan.",
+        "legend": {
+          "service": "käytössä",
+          "notice": "käyttäjille näytetty ilmoitus, {days} päivää",
+          "move": "käyttäjiä siirretty, viimeiset {days} päivää"
+        },
+        "pastTitle": "Ohittanut eläkkeellejäämis­päivänsä ja silti listattu:",
+        "pastItem": "{model} ({date}, {people, plural, one {# henkilö} other {# henkilöä}})",
+        "undatedTitle": "Ei julkaistua päivämäärää:",
+        "rulesNote": "Käyttöoikeudet vertaillaan sääntö kerrallaan. Käyttö tallennetaan ilman nimiä, joten ei voida sanoa, kuinka moni käyttäjä menettäisi pääsyn malliin."
+      },
+      "map": {
+        "lead": "Jokainen ympyrä on malli, jota on käytetty viimeisten {days, plural, one {# päivän} other {# päivän}} aikana. Oikealle siirryttäessä kustannus per pyyntö kasvaa, korkeampi tarkoittaa useampaa käyttäjää. Kulutus ja CO2e perustuvat tyypilliseen pyyntöön.",
+        "empty": "Yhtään hinnoiteltua mallia ei ole käytetty viimeisten {days, plural, one {# päivän} other {# päivän}} aikana.",
+        "caption": "Samat tiedot taulukkona, suurin arvioitu kulutus ensin",
+        "sizeLabel": "Ympyrän koko",
+        "size": {
+          "spend": "Arvioitu kulutus",
+          "footprint": "Arvioitu CO2e",
+          "requests": "Pyynnöt"
+        },
+        "axisPeople": "Ihmiset, viimeiset {days, plural, one {# päivä} other {# päivää}} (yläakseli)",
+        "axisCost": "Arvioitu yhden tyypillisen pyynnön kustannus hinnaston mukaan (oikealle)",
+        "dotLabel": "{model}: {people, plural, one {# henkilö} other {# henkilöä}}, {cost} per tyypillinen pyyntö, {value}. Avaa mallin käyttöoikeussäännöt.",
+        "legendTitle": "Kokoluokka:",
+        "legend": {
+          "mini": "nano tai mini",
+          "standard": "standardi",
+          "large": "suuri",
+          "xl": "erittäin suuri",
+          "unset": "ei asetettu"
+        },
+        "col": {
+          "requests": "Pyynnöt",
+          "perRequest": "Tyypillistä pyyntöä kohden"
+        },
+        "unknown": "Ei tiedossa",
+        "noFindings": "Ei erityistä huomioitavaa vielä.",
+        "findingTitle": {
+          "concentrated": "Keskittynyt kulutus",
+          "reached": "Raja, johon päädytään",
+          "unreached": "Raja, jota kukaan ei saavuta",
+          "noCeiling": "Ei ylärajaa"
+        },
+        "finding": {
+          "concentrated": "{model} on {share} arvioidusta kulutuksesta.",
+          "reached": "{model}: {people} / {of} henkilöstä saavutti rajan {cap} päivässä.",
+          "unreached": "{model} on rajoitettu {cap} päivässä; raskain käyttäjä teki {max}.",
+          "noCeiling": "{models}: rajoittamaton muille. Raskain käyttäjä teki {max, plural, one {# pyynnön} other {# pyyntöä}} päivässä."
+        }
       }
     },
     "previewSourceModelAccess": "Mallin hyväksyntä — {list}",

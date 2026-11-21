@@ -6929,6 +6929,223 @@
         "none": "akukho okufakiwe",
         "becomes": "kuba",
         "removed": "kususiwe"
+      },
+      "view": {
+        "label": "Buka",
+        "grid": "Ukufinyelela namaqiniso",
+        "runway": "Isikhathi sokuthatha umhlalaphansi",
+        "map": "Ukusetshenziswa nokuduma"
+      },
+      "facts": {
+        "estimateNote": "Izindleko ne-CO2e ziyilinganiselo, azilinganiselwanga: izicelo ezibalwe ziphindaphindwa ngesicelo esijwayelekile ({promptTokens} amathokheni angenayo, {completionTokens} aphumayo) ngenani loluhlu. Ukusetshenziswa kubalwa izinsuku ezingu-{days, plural, one {# usuku} other {# izinsuku}} ezedlule.",
+        "estimateNoteNoCost": "I-CO2e iyilinganiselo, ayilinganiswanga: izicelo ezibalwe ziphindaphindwa ngesicelo esijwayelekile ({promptTokens} amathokheni angenayo, {completionTokens} aphumayo). Ukusetshenziswa kubalwa izinsuku ezingu-{days, plural, one {# usuku} other {# izinsuku}} ezedlule.",
+        "captureNote": "Ukusetshenziswa kwayo wonke umuntu kuvela emva kosuku lokuqala oluphelele lokuqoqwa. Kuze kube yileso sikhathi izinombolo zibheka kuphela abantu abavikelekile ngesilinganiselo.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} okokufaka, {output} okukhiphayo",
+        "summary": {
+          "label": "Amodeli ngamafuphi",
+          "used": "Amashejuli asetshenzisiwe, izinsuku ezingu-{days, plural, one {# usuku} other {# izinsuku}} ezedlule",
+          "usedValue": "{used} kwa-{total}",
+          "requests": "Izicelo",
+          "spend": "Izindleko ezilinganisiwe",
+          "footprint": "I-CO2e elinganisiwe",
+          "retiring": "Kuzothatha umhlalaphansi phakathi kwezinsuku ezingu-{days}",
+          "noCeiling": "Akukhawulelwe kwabanye bonke",
+          "notYet": "Akwaziwa okwamanje"
+        },
+        "columns": {
+          "label": "Amakholomu",
+          "cost": "Izindleko",
+          "footprint": "Umthelela we-CO2e",
+          "usage": "Ukusetshenziswa",
+          "lifecycle": "Ukuthatha umhlalaphansi"
+        },
+        "col": {
+          "price": "Inani ohlwini ku-1M tokens ngayinye",
+          "ceiling": "Okukhulu umuntu angakuchitha, ngenyanga",
+          "footprint": "I-CO2e ngesicelo esijwayelekile",
+          "people": "Abantu abayisebenzisayo",
+          "spread": "Izicelo ngosuku oluxakeke kakhulu lomuntu",
+          "retires": "Iyathatha umhlalaphansi"
+        },
+        "ceiling": {
+          "heavy": "kufika ku-{amount} ngezicelo ezide",
+          "off": "Lutho: icishiwe",
+          "unbounded": "Ayikhawulelwanga",
+          "unpriced": "Ayikho inani ohlwini"
+        },
+        "footprint": {
+          "notSet": "Usayizi awusethwanga"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Ejwayelekile",
+          "large": "Enkulu",
+          "xl": "Ekhudlwana"
+        },
+        "usage": {
+          "none": "Ayisetshenziswa",
+          "spend": "cishe {amount}",
+          "cappedOnly": "abantu abavikelekile kuphela"
+        },
+        "spread": {
+          "caption": "imaphakathi {median}, 75% {p75}, okukhulu {max}",
+          "label": "Izicelo ngosuku oluxakeke kakhulu lomuntu: imaphakathi {median}, i-75% {p75}, i-95% {p95}, okukhulu {max}.",
+          "labelCap": " Umkhawulo ngu-{cap} ngosuku.",
+          "legend": {
+            "p95": "kuze kufike ku-95% wesamba",
+            "box": "imaphakathi kuye ku-75%",
+            "max": "umuntu osebenzisa kakhulu",
+            "cap": "umkhawulo kwabanye bonke"
+          }
+        },
+        "retires": {
+          "none": "Ayikho idethi eshicilelwe",
+          "forced": "Kuyasuswa manje",
+          "past": "idethi idlulile",
+          "to": "ku {model}"
+        },
+        "lifecycle": {
+          "preview": "Buka kuqala",
+          "ga": "Iyatholakala",
+          "legacy": "Legacy",
+          "deprecated": "Ayisekho",
+          "retired": "Isekhonile"
+        },
+        "detail": {
+          "region": "Indlela le modeli esetshenziswa ngayo, nezindleko zayo",
+          "usageTitle": "Izicelo ngosuku olukhulu lomuntu ngamunye",
+          "usageHint": "{people, plural, one {# umuntu} other {# abantu}} bayisebenzisile ezinsukwini ezingu-{days, plural, one {# usuku} other {# izinsuku}} ezedlule. Umuntu ngamunye ubalelwa kanye kuphela ngosuku lwakhe olumatasa kakhulu.",
+          "noUsage": "Akekho osebenzise le modeli ezinsukwini ezingu-{days, plural, one {# usuku} other {# izinsuku}} ezedlule.",
+          "bucketHeading": "Izicelo ngosuku",
+          "peopleHeading": "Abantu",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Isilinganiso ngosuku olusebenzayo",
+          "median": "Iphakathi",
+          "p75": "Iphesenti le-75",
+          "p95": "Iphesenti le-95",
+          "max": "Umuntu osebenzise kakhulu",
+          "reachedCap": "Ifinyelelwe inani eliphezulu",
+          "cappedOnly": "Kubalwe abantu abaphakathi kwenani eliphezulu kuphela, abangenakho babalulekile lapha.",
+          "truncated": "Kubalwe kuphela abantu abasebenzise kakhulu, ngakho iphakathi nephesenti kubonakala kuphezulu kunalokho okuyele.",
+          "replayTitle": "Uma inani eliphezulu lenhlukaniso lihluke",
+          "replayHint": "Bangaki kulezi abantu abake baba nosuku olufinyelela noma lwedlula inani eliphezulu. Babengamiswe ngalolo suku.",
+          "replayCap": "Inani eliphezulu kwabanye",
+          "replayStopped": "Abantu abamisiwe",
+          "replayPerDay": "{cap} ngosuku",
+          "replayNow": "{cap} ngosuku (manje)",
+          "replayUnlimitedNow": "Akuphelele (manje)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Izindleko ezilinganisiwe",
+          "costHint": "Intengo yoluhlu yesicelo esithathwa ngokuqagela. Akuyona i-invoyisi: izicelo zangempela zihluka ngobude.",
+          "typicalRequest": "Isicelo esijwayelekile esisodwa",
+          "longRequest": "Isicelo eside esisodwa",
+          "everyoneWindow": "Bonke, izinsuku ezingu-{days, plural, one {# usuku} other {# izinsuku}} ezedlule",
+          "atThisPace": "Inyanga ngesivinini esinjena",
+          "footprintTitle": "Ukulinganiselwa kwethonya",
+          "footprintHint": "Kusukela ekilasini lobukhulu bemodeli nakwisicelo esithathwa ngokuqagela. Kuyilinganiselwa elikhulu, akuyona imiphumela eqondile.",
+          "sizeClass": "Ikilasi lobukhulu",
+          "noSizeClass": "Le modeli ayinayo ikilasi lobukhulu, ngakho ithonya layo alikwazi ukulinganiselwa. Setha kwenye umkhakha wemodeli.",
+          "aboutTitle": "Mayelana nale modeli",
+          "status": "Isimo",
+          "retiresOn": "{date}. Abasebenzisi babona isaziso ku {notice} futhi bayasuswa ku {move}.",
+          "retiresForced": "Abantu bayasuswa kule modeli manje.",
+          "retiresUnknown": "Ayikho idethi eshicilelwe",
+          "replacement": "Abantu bazofika ku",
+          "replacementNotSet": "Akubekiwe",
+          "knowledge": "Ulwazi lufinyelela ku",
+          "context": "Iwindi lomongo",
+          "contextTokens": "{tokens} ama-token",
+          "canDo": "Kuyakwazi",
+          "can": {
+            "images": "funda izithombe",
+            "tools": "sebenzisa amathuluzi",
+            "codeInterpreter": "qhuba ikhodi",
+            "reasoningEffort": "lungisa umzamo wokuqonda"
+          },
+          "hosted": "Kukhoselwe",
+          "hosting": {
+            "azure": "Ku-Azure tenant yenhlangano",
+            "external": "Umhlinzeki wangaphandle",
+            "local": "Endaweni"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Uma imodeli ngayinye isanyamalala, bangaki abasebenzisi kuyo, nokuthi imithetho yokungena iyalingana yini nemodeli ezothathwa",
+        "caption": "Amaphrojekthi anezinsuku zokuthatha umhlalaphansi, eziseduze kuqala",
+        "empty": "Ayikho imodeli enosuku lokuthatha umhlalaphansi.",
+        "today": "Namuhla",
+        "col": {
+          "people": "Abantu",
+          "landsOn": "Abantu bathela ku",
+          "access": "Ukufinyelela emodelini entsha"
+        },
+        "alertForced": "{model} isithathe umhlalaphansi manje. {people, plural, one {# muntu} other {# abantu}} bayisebenzisile muva nje.",
+        "alertTo": "Bazodluliselwa ku-{model}.",
+        "alertNoReplacement": "Asikho esesikhundleni esimisiwe.",
+        "access": {
+          "same": "Imithetho efanayo",
+          "unknown": "Akuqinisekeki kuze kufakwe esikhundleni",
+          "everyone": "Abanye bonke bathola imigomo ehlukile",
+          "audiences": "{count, plural, one {# iqembu, indawo noma umuntu unenqubomgomo} other {# amaqembu, izindawo noma abantu banenqubomgomo}} ehlukene",
+          "both": "Abanye bonke kanye no-{count, plural, one {# iqembu, i-domain noma umuntu} other {# amaqembu, ama-domain noma abantu}} bathola imigomo ehlukile"
+        },
+        "carryOver": "Kopisha le mithetho ku-{model}",
+        "carried": "Kopishwe imithetho evela ku-{from} kuya ku-{to}. Hlola bese ulondoloza ukusisebenzisa.",
+        "legend": {
+          "service": "esevisi",
+          "notice": "isayishiwe kubasebenzisi, izinsuku ezingu-{days}",
+          "move": "abantu abashintshile, izinsuku ezingu-{days} ezedlule"
+        },
+        "pastTitle": "Sekudlule usuku lwayo kodwa isaluhluvenji:",
+        "pastItem": "{model} ({date}, {people, plural, one {# muntu} other {# abantu}})",
+        "undatedTitle": "Alukashicilelwa usuku:",
+        "rulesNote": "Ukufinyelela kuqhathaniswa umthetho nomthetho. Ukusetshenziswa kugcinwa ngaphandle kwamagama, ngakho lokhu akwazi ukukhombisa ukuthi bangaki abantu ababezemodeli abangalahlekelwa ukufinyelela.",
+        "alert": "I-{model} izophela ezinsukwini ezingu-{days, plural, one {#} other {#}}. I-{people, plural, one {# umuntu} other {# abantu}} isanda kuyisebenzisa."
+      },
+      "map": {
+        "lead": "Isiyingi ngasinye imodeli esebenzisiwe ezinsukwini ezingu-{days, plural, one {# usuku} other {# izinsuku}} ezedlule. Ngakwesokudla izindleko ziphakeme ngesicelo, phezulu kubonisa abantu abaningi. Izindleko ne-CO2e kuyilinganiselo esekelwe kusicelo esijwayelekile.",
+        "empty": "Awekho amamodeli anentengo asetshenzisiwe ezinsukwini ezingu-{days, plural, one {# usuku} other {# izinsuku}} ezedlule.",
+        "caption": "Amanani afanayo njenga etafuleni, ezinezindleko eziphezulu phambili",
+        "sizeLabel": "Usayizi wesiyingi",
+        "size": {
+          "spend": "Izindleko ezibalwayo",
+          "footprint": "CO2e elinganisiwe",
+          "requests": "Izicelo"
+        },
+        "axisPeople": "Abantu, izinsuku ezingu-{days, plural, one {# usuku} other {# izinsuku}} ezedlule (phezulu)",
+        "axisCost": "Izindleko ezilinganisiwe zesicelo esisodwa esijwayelekile ngentengo yohlwini (kwesokudla)",
+        "dotLabel": "{model}: {people, plural, one {# muntu} other {# abantu}}, {cost} ngesicelo esijwayelekile, {value}. Vula imithetho yokufinyelela yayo.",
+        "legendTitle": "Ikilasi losayizi:",
+        "legend": {
+          "mini": "nano noma mini",
+          "standard": "jwayelekile",
+          "large": "nkulu",
+          "xl": "nkulu kakhulu",
+          "unset": "akubekiwe"
+        },
+        "col": {
+          "requests": "Izicelo",
+          "perRequest": "Ngazinye izicelo"
+        },
+        "unknown": "Akwaziwa",
+        "noFindings": "Awekho okuphawulekayo okwamanje.",
+        "findingTitle": {
+          "concentrated": "Ukusetshenziswa okugxile",
+          "reached": "Umkhawulo abantu abafinyelela kuwo",
+          "unreached": "Umkhawulo ongafinyelelwa muntu",
+          "noCeiling": "Awekho umkhawulo"
+        },
+        "finding": {
+          "concentrated": "{model} iyingxenye ka-{share} yokusetshenziswa okulindelekile.",
+          "reached": "{model}: {people} kwabangu-{of} bafinyelele ku-{cap} ngosuku.",
+          "unreached": "{model} inemkhawulo ka-{cap} ngosuku; umuntu osebenzisa kakhulu wenze u-{max}.",
+          "noCeiling": "{models}: akukho mkhawulo kwabanye bonke. Umuntu osebenzisa kakhulu wenze u-{max, plural, one {# isicelo} other {# izicelo}} ngosuku."
+        }
       }
     },
     "previewSourceModelAccess": "Ukuvunywa kwemodeli — {list}",

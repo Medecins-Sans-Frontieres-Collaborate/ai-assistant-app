@@ -6976,6 +6976,223 @@
         "none": "không có mục",
         "becomes": "trở thành",
         "removed": "đã xóa"
+      },
+      "view": {
+        "label": "Xem",
+        "grid": "Truy cập và thông tin",
+        "runway": "Thời gian ngừng hoạt động",
+        "map": "Chi tiêu và mức độ phổ biến"
+      },
+      "facts": {
+        "estimateNote": "Chi phí và CO₂e là ước tính, không phải giá trị đo lường: số yêu cầu được tính nhân với một yêu cầu điển hình ({promptTokens} tokens vào, {completionTokens} tokens ra) theo giá niêm yết. Số liệu sử dụng bao gồm {days, plural, one {# ngày} other {# ngày}} gần đây nhất.",
+        "estimateNoteNoCost": "CO₂e là ước tính, không phải giá trị đo lường: số yêu cầu được tính nhân với một yêu cầu điển hình ({promptTokens} tokens vào, {completionTokens} tokens ra). Số liệu sử dụng bao gồm {days, plural, one {# ngày} other {# ngày}} gần đây nhất.",
+        "captureNote": "Số liệu sử dụng của tất cả mọi người sẽ xuất hiện sau ngày thu thập đầy đủ đầu tiên. Trước đó, số liệu chỉ bao gồm những người có giới hạn.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} vào, {output} ra",
+        "summary": {
+          "label": "Tổng quan các mô hình",
+          "used": "Mô hình đã sử dụng, {days, plural, one {# ngày} other {# ngày}} gần đây",
+          "usedValue": "{used} trên {total}",
+          "requests": "Yêu cầu",
+          "spend": "Ước tính chi tiêu",
+          "footprint": "Ước tính CO2e",
+          "retiring": "Sẽ ngừng hoạt động trong {days} ngày",
+          "noCeiling": "Không giới hạn cho người khác",
+          "notYet": "Chưa xác định"
+        },
+        "columns": {
+          "label": "Cột",
+          "cost": "Chi phí",
+          "footprint": "Dấu chân carbon",
+          "usage": "Sử dụng",
+          "lifecycle": "Ngừng hoạt động"
+        },
+        "col": {
+          "price": "Giá niêm yết cho mỗi 1 triệu token",
+          "ceiling": "Người dùng tối đa phải trả, mỗi tháng",
+          "footprint": "CO2e cho mỗi yêu cầu điển hình",
+          "people": "Số người dùng",
+          "spread": "Yêu cầu vào ngày bận rộn nhất của một người",
+          "retires": "Ngừng hoạt động"
+        },
+        "ceiling": {
+          "heavy": "lên đến {amount} với yêu cầu dài",
+          "off": "Không có: đã tắt",
+          "unbounded": "Không giới hạn",
+          "unpriced": "Không có giá niêm yết"
+        },
+        "footprint": {
+          "notSet": "Chưa thiết lập kích thước"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Tiêu chuẩn",
+          "large": "Lớn",
+          "xl": "Cực lớn"
+        },
+        "usage": {
+          "none": "Không sử dụng",
+          "spend": "khoảng {amount}",
+          "cappedOnly": "chỉ những người bị giới hạn"
+        },
+        "spread": {
+          "caption": "trung vị {median}, 75% {p75}, nhiều nhất {max}",
+          "label": "Yêu cầu vào ngày bận nhất của một người: trung vị {median}, phân vị 75% {p75}, phân vị 95% {p95}, nhiều nhất {max}.",
+          "labelCap": " Giới hạn là {cap} mỗi ngày.",
+          "legend": {
+            "p95": "đến phân vị 95%",
+            "box": "từ trung vị đến phân vị 75%",
+            "max": "người nhiều nhất",
+            "cap": "giới hạn cho người khác"
+          }
+        },
+        "retires": {
+          "none": "Chưa công bố ngày",
+          "forced": "Đang được di chuyển ngay bây giờ",
+          "past": "đã quá hạn",
+          "to": "đến {model}"
+        },
+        "lifecycle": {
+          "preview": "Xem trước",
+          "ga": "Công khai rộng rãi",
+          "legacy": "Cũ",
+          "deprecated": "Không còn được khuyến nghị",
+          "retired": "Đã ngừng sử dụng"
+        },
+        "detail": {
+          "region": "Cách sử dụng mô hình này và chi phí",
+          "usageTitle": "Số yêu cầu vào ngày bận nhất của mỗi người",
+          "usageHint": "{people, plural, one {# người} other {# người}} đã sử dụng trong {days, plural, one {# ngày} other {# ngày}} vừa qua. Mỗi người chỉ được tính một lần, vào ngày họ sử dụng nhiều nhất.",
+          "noUsage": "Không ai sử dụng mô hình này trong {days, plural, one {# ngày} other {# ngày}} gần đây.",
+          "bucketHeading": "Số yêu cầu trong một ngày",
+          "peopleHeading": "Người dùng",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Trung bình mỗi ngày hoạt động",
+          "median": "Trung vị",
+          "p75": "Phân vị thứ 75",
+          "p95": "Phân vị thứ 95",
+          "max": "Người dùng nhiều nhất",
+          "reachedCap": "Đã đạt giới hạn",
+          "cappedOnly": "Chỉ tính những người đang bị giới hạn, người không có giới hạn sẽ không xuất hiện ở đây.",
+          "truncated": "Chỉ hiển thị người dùng nhiều nhất, nên trung vị và các phân vị có thể cao hơn thực tế.",
+          "replayTitle": "Nếu thay đổi giới hạn",
+          "replayHint": "Bao nhiêu người trong số này đã có ngày chạm hoặc vượt giới hạn. Họ sẽ bị dừng vào ngày đó.",
+          "replayCap": "Giới hạn cho những người còn lại",
+          "replayStopped": "Người bị dừng",
+          "replayPerDay": "{cap} mỗi ngày",
+          "replayNow": "{cap} mỗi ngày (hiện tại)",
+          "replayUnlimitedNow": "Không giới hạn (hiện tại)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Ước tính chi phí",
+          "costHint": "Giá niêm yết cho một yêu cầu giả định. Không phải hóa đơn: các yêu cầu thật có thể dài ngắn khác nhau.",
+          "typicalRequest": "Một yêu cầu điển hình",
+          "longRequest": "Một yêu cầu dài",
+          "everyoneWindow": "Tất cả mọi người, {days, plural, one {# ngày} other {# ngày}} gần đây",
+          "atThisPace": "Một tháng theo tốc độ này",
+          "footprintTitle": "Ước tính tác động",
+          "footprintHint": "Dựa trên loại kích thước mô hình và một yêu cầu giả định. Đây chỉ là mức ước lượng, không phải con số đo lường.",
+          "sizeClass": "Loại kích thước",
+          "noSizeClass": "Mô hình này chưa có loại kích thước, nên chưa thể ước tính tác động. Vui lòng thiết lập trong danh mục mô hình.",
+          "aboutTitle": "Giới thiệu về mô hình này",
+          "status": "Trạng thái",
+          "retiresOn": "{date}. Người dùng nhìn thấy thông báo từ {notice} và được chuyển từ {move}.",
+          "retiresForced": "Người dùng đang được di chuyển khỏi mô hình này ngay bây giờ.",
+          "retiresUnknown": "Chưa công bố ngày",
+          "replacement": "Chuyển sang",
+          "replacementNotSet": "Chưa thiết lập",
+          "knowledge": "Kiến thức đến",
+          "context": "Cửa sổ ngữ cảnh",
+          "contextTokens": "{tokens} token",
+          "canDo": "Có thể",
+          "can": {
+            "images": "đọc hình ảnh",
+            "tools": "sử dụng công cụ",
+            "codeInterpreter": "chạy mã",
+            "reasoningEffort": "điều chỉnh mức độ suy luận"
+          },
+          "hosted": "Được lưu trữ",
+          "hosting": {
+            "azure": "Trong Azure của tổ chức",
+            "external": "Bởi nhà cung cấp bên ngoài",
+            "local": "Tại chỗ"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Khi mỗi mô hình hết hạn, có bao nhiêu người đang sử dụng và các quy tắc truy cập của nó có trùng khớp với mô hình kế tiếp không.",
+        "caption": "Các mô hình có ngày ngừng, sắp tới trước",
+        "empty": "Không có mô hình nào có ngày ngừng.",
+        "today": "Hôm nay",
+        "col": {
+          "people": "Số người",
+          "landsOn": "Sẽ chuyển sang",
+          "access": "Quyền truy cập trên mô hình thay thế"
+        },
+        "alert": "{model} sẽ ngừng trong {days, plural, one {# ngày} other {# ngày}}. {people, plural, one {# người} other {# người}} đã sử dụng gần đây.",
+        "alertForced": "{model} đang được ngừng ngay bây giờ. {people, plural, one {# người} other {# người}} đã sử dụng gần đây.",
+        "alertTo": "Họ sẽ được chuyển sang {model}.",
+        "alertNoReplacement": "Chưa có mô hình thay thế.",
+        "access": {
+          "same": "Quy tắc giống nhau",
+          "unknown": "Chưa kiểm tra được cho đến khi có mô hình thay thế",
+          "everyone": "Tất cả người dùng còn lại có điều khoản khác",
+          "audiences": "{count, plural, one {# nhóm, miền hoặc cá nhân có} other {# nhóm, miền hoặc cá nhân có}} thuật ngữ khác nhau",
+          "both": "Tất cả người dùng còn lại và {count, plural, one {# nhóm, miền hoặc người} other {# nhóm, miền hoặc người}} có điều khoản khác nhau"
+        },
+        "carryOver": "Sao chép các quy tắc này sang {model}",
+        "carried": "Đã sao chép quy tắc từ {from} sang {to}. Vui lòng kiểm tra và lưu để áp dụng.",
+        "legend": {
+          "service": "đang hoạt động",
+          "notice": "thông báo hiển thị cho người dùng, {days} ngày",
+          "move": "người dùng đã chuyển, {days} ngày gần đây"
+        },
+        "pastTitle": "Đã quá hạn và vẫn còn trong danh sách:",
+        "pastItem": "{model} ({date}, {people, plural, one {# người} other {# người}})",
+        "undatedTitle": "Chưa có ngày công bố:",
+        "rulesNote": "Quyền truy cập được so sánh từng quy tắc. Việc sử dụng được lưu không có tên, nên không thể xác định bao nhiêu người trong mô hình sẽ mất quyền truy cập."
+      },
+      "map": {
+        "lead": "Mỗi vòng tròn là một mô hình đã được sử dụng trong {days, plural, one {# ngày} other {# ngày}} gần nhất. Vòng bên phải hơn thì chi phí cho mỗi yêu cầu cao hơn, vị trí càng cao thì số người dùng càng nhiều. Chi phí và CO₂e là ước tính dựa trên một yêu cầu điển hình.",
+        "empty": "Không có mô hình tính phí nào được sử dụng trong {days, plural, one {# ngày} other {# ngày}} gần đây.",
+        "caption": "Các số liệu này thể hiện dạng bảng, sắp xếp theo chi phí ước tính cao nhất trước",
+        "sizeLabel": "Kích thước vòng tròn",
+        "size": {
+          "spend": "Chi phí ước tính",
+          "footprint": "CO2e ước tính",
+          "requests": "Lượt yêu cầu"
+        },
+        "axisPeople": "Số người, {days, plural, one {# ngày} other {# ngày}} gần đây (trục dọc)",
+        "axisCost": "Chi phí ước tính một lần truy cập điển hình theo giá niêm yết (trục ngang)",
+        "dotLabel": "{model}: {people, plural, one {# người} other {# người}}, {cost} cho mỗi lần truy cập điển hình, {value}. Mở quy tắc truy cập của mô hình này.",
+        "legendTitle": "Phân loại kích thước:",
+        "legend": {
+          "mini": "nano hoặc mini",
+          "standard": "chuẩn",
+          "large": "lớn",
+          "xl": "rất lớn",
+          "unset": "chưa đặt"
+        },
+        "col": {
+          "requests": "Yêu cầu",
+          "perRequest": "Mỗi yêu cầu điển hình"
+        },
+        "unknown": "Không rõ",
+        "noFindings": "Chưa có điều gì nổi bật.",
+        "findingTitle": {
+          "concentrated": "Chi tiêu tập trung",
+          "reached": "Giới hạn thường được chạm đến",
+          "unreached": "Giới hạn chưa ai đến gần",
+          "noCeiling": "Không giới hạn"
+        },
+        "finding": {
+          "concentrated": "{model} chiếm {share} tổng chi phí ước tính.",
+          "reached": "{model}: {people} trong số {of} người đã đạt {cap} mỗi ngày.",
+          "unreached": "{model} bị giới hạn ở {cap} mỗi ngày; người sử dụng nhiều nhất là {max}.",
+          "noCeiling": "{models}: không giới hạn với những người còn lại. Người sử dụng nhiều nhất đã gửi {max, plural, one {# yêu cầu} other {# yêu cầu}} trong một ngày."
+        }
       }
     },
     "previewSourceModelAccess": "Phê duyệt mô hình — {list}",

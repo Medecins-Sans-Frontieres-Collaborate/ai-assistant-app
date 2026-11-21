@@ -6929,6 +6929,223 @@
         "none": "pa gen antite",
         "becomes": "vin",
         "removed": "retire"
+      },
+      "view": {
+        "label": "Gade",
+        "grid": "Aksè ak enfòmasyon",
+        "runway": "Periyòd retrèt",
+        "map": "Depans ak popilarite"
+      },
+      "facts": {
+        "estimateNote": "Pri ak CO2e se estimasyon, yo pa mezire depans lan: repons konte yo miltipliye pa yon demann tipik ({promptTokens} token anndan, {completionTokens} deyò) ak pri an lis. Itilizasyon an kouvri {days, plural, one {# jou} other {# jou}} ki sot pase yo.",
+        "estimateNoteNoCost": "CO2e se yon estimasyon, yo pa mezire li: repons konte yo miltipliye pa yon demann tipik ({promptTokens} token anndan, {completionTokens} deyò). Itilizasyon an kouvri {days, plural, one {# jou} other {# jou}} ki sot pase yo.",
+        "captureNote": "Itilizasyon pa tout moun parèt apre premye jounen koleksyon an fini nèt. Anvan sa, done yo konsène sèlman moun ki anba yon plafon.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} antre, {output} sòti",
+        "summary": {
+          "label": "Modèl an detay",
+          "used": "Modèl yo itilize, {days, plural, one {# jou} other {# jou}} ki sot pase yo",
+          "usedValue": "{used} sou {total}",
+          "requests": "Demann",
+          "spend": "Depans estime",
+          "footprint": "CO2e estime",
+          "retiring": "Retrete nan {days} jou",
+          "noCeiling": "San limit pou tout lòt moun",
+          "notYet": "Pa ankò konnen"
+        },
+        "columns": {
+          "label": "Kolòn",
+          "cost": "Kout",
+          "footprint": "Empwént kabòn",
+          "usage": "Itilizasyon",
+          "lifecycle": "Retrete"
+        },
+        "col": {
+          "price": "Pri lis pa 1M jeton",
+          "ceiling": "Pi plis yon moun kapab depanse pa mwa",
+          "footprint": "CO2e pa demann tipik",
+          "people": "Moun k ap itilize",
+          "spread": "Demann nan jou ki pi chaje yon moun",
+          "retires": "Retrete"
+        },
+        "ceiling": {
+          "heavy": "jiska {amount} ak demann long",
+          "off": "Pa gen anyen : fèmen",
+          "unbounded": "San plafon",
+          "unpriced": "Pa gen pri lis"
+        },
+        "footprint": {
+          "notSet": "Gwosè pa defini"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Estanda",
+          "large": "Gwo",
+          "xl": "Ekstra gwo"
+        },
+        "usage": {
+          "none": "Pa gen itilizasyon",
+          "spend": "apeprè {amount}",
+          "cappedOnly": "sèlman moun ki limite"
+        },
+        "spread": {
+          "caption": "medyàn {median}, 75yèm {p75}, pi plis {max}",
+          "label": "Demann nan jou ki pi chaje yon moun : medyàn {median}, 75yèm pousantaj {p75}, 95yèm pousantaj {p95}, pi plis {max}.",
+          "labelCap": " Plafon an se {cap} pa jou.",
+          "legend": {
+            "p95": "jiska 95yèm pousantaj",
+            "box": "medyàn jiska 75yèm pousantaj",
+            "max": "moun ki gen plis",
+            "cap": "plafon pou tout lòt moun"
+          }
+        },
+        "retires": {
+          "none": "Pa gen dat pibliye",
+          "forced": "Y ap retire li kounye a",
+          "past": "dat la pase",
+          "to": "a {model}"
+        },
+        "lifecycle": {
+          "preview": "Avan-gou",
+          "ga": "Disponib jeneralman",
+          "legacy": "Eritaj",
+          "deprecated": "Depase",
+          "retired": "Retire"
+        },
+        "detail": {
+          "region": "Kijan modèl sa a itilize ak pri li",
+          "usageTitle": "Demann nan pi gwo jou chak moun",
+          "usageHint": "{people, plural, one {# moun} other {# moun}} te itilize li nan {days, plural, one {# jou} other {# jou}} ki sot pase yo. Chak moun konte yon sèl fwa, nan pi gwo jou yo.",
+          "noUsage": "Pèsonn pa te itilize modèl sa a nan {days, plural, one {# jou} other {# jou}} ki sot pase yo.",
+          "bucketHeading": "Demann chak jou",
+          "peopleHeading": "Moun",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Mwayèn pa jou aktif",
+          "median": "Medyàn",
+          "p75": "75yèm pousantaj",
+          "p95": "95yèm pousantaj",
+          "max": "Moun ki pi itilize a",
+          "reachedCap": "Limit atenn",
+          "cappedOnly": "Jiskaprezan, sèlman moun ki gen limit konte isit la, sa ki fè moun ki pa gen limit pa afiche.",
+          "truncated": "Sèlman moun ki pi itilize yo afiche, kidonk medyàn ak pousantaj yo parèt pi wo pase vrè valè yo.",
+          "replayTitle": "Si limit lan te diferan",
+          "replayHint": "Konbyen moun sa yo ki te rive oswa depase chak limit nan yon jou. Yo t ap sispann jou sa.",
+          "replayCap": "Limit pou lòt moun yo",
+          "replayStopped": "Moun ki sispann",
+          "replayPerDay": "{cap} pa jou",
+          "replayNow": "{cap} pa jou (kounye a)",
+          "replayUnlimitedNow": "San limit (kounye a)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Kout pri estime",
+          "costHint": "Pri lis pou yon demann sa a konsidere. Sa pa bòdwo: demann reyèl yo ka varye.",
+          "typicalRequest": "Yonn demann tipik",
+          "longRequest": "Yonn demann long",
+          "everyoneWindow": "Tout moun, {days, plural, one {# jou} other {# jou}} ki sot pase yo",
+          "atThisPace": "Yon mwa ak menm vitès sa",
+          "footprintTitle": "Anprint estime",
+          "footprintHint": "Dapre kategori gwosè modèl la ak yon demann sa a konsidere. Se yon approximasyon, pa yon mezi egzak.",
+          "sizeClass": "Kategori gwosè",
+          "noSizeClass": "Modèl sa pa gen kategori gwosè, kidonk anprint li pa ka estime. Ajoute youn nan katalòg modèl la.",
+          "aboutTitle": "Konsènan modèl sa a",
+          "status": "Estati",
+          "retiresOn": "{date}. Itilizatè yo ap wè yon avi depi {notice} e yo ap transfere soti {move}.",
+          "retiresForced": "Y ap retire moun sou modèl sa kounye a.",
+          "retiresUnknown": "Pa gen dat pibliye",
+          "replacement": "Moun yo ap ale sou",
+          "replacementNotSet": "Pa defini",
+          "knowledge": "Konesans jiska",
+          "context": "Fenèt kontèks",
+          "contextTokens": "{tokens} tokèn",
+          "canDo": "Ka",
+          "can": {
+            "images": "li imaj",
+            "tools": "sèvi ak zouti",
+            "codeInterpreter": "kouri kòd",
+            "reasoningEffort": "ajiste efò rezònman"
+          },
+          "hosted": "Hoste",
+          "hosting": {
+            "azure": "Nan Azure òganizasyon an",
+            "external": "Pa yon founisè ekstèn",
+            "local": "Lokalman"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Lè chak modèl fini, konbyen moun sou li, avèk si règ aksè li yo koresponn ak modèl moun yo ap jwenn.",
+        "caption": "Modèl ki gen dat retrèt, pi pre an premye",
+        "empty": "Pa gen modèl ki gen dat retrèt.",
+        "today": "Jodi a",
+        "col": {
+          "people": "Moun",
+          "landsOn": "Moun ap jwenn",
+          "access": "Aksè sou ranplasman"
+        },
+        "alert": "{model} ap pran retrèt nan {days, plural, one {# jou} other {# jou}}. {people, plural, one {# moun} other {# moun}} te itilize li dènyèman.",
+        "alertForced": "{model} ap pran retrèt kounye a. {people, plural, one {# moun} other {# moun}} te itilize li dènyèman.",
+        "alertTo": "Yo pral transfere sou {model}.",
+        "alertNoReplacement": "Pa gen ranplasman defini.",
+        "access": {
+          "same": "Menm règ",
+          "unknown": "Pa ka verifye jiskaske gen ranplasman defini",
+          "everyone": "Tout moun lòt yo gen lòt kondisyon",
+          "audiences": "{count, plural, one {# gwoup, domèn oswa moun gen} other {# gwoup, domèn oswa moun gen}} diferan tèm",
+          "both": "Tout moun lòt yo ak {count, plural, one {# gwoup, domèn oswa moun} other {# gwoup, domèn oswa moun}} gen lòt kondisyon"
+        },
+        "carryOver": "Kopye règ sa yo pou {model}",
+        "carried": "Règ {from} kopye pou {to}. Revize epi sove pou aplike.",
+        "legend": {
+          "service": "an sèvis",
+          "notice": "avi montré itilizatè yo, {days} jou",
+          "move": "moun transfere, dènye {days} jou"
+        },
+        "pastTitle": "Depase dat li epi toujou lis:",
+        "pastItem": "{model} ({date}, {people, plural, one {# moun} other {# moun}})",
+        "undatedTitle": "Pa gen dat pibliye:",
+        "rulesNote": "Aksè konpare règ pa règ. Itilizasyon an sere san non, konsa li pa ka di konbyen moun sou yon modèl ki ta pèdi aksè."
+      },
+      "map": {
+        "lead": "Chak sèk se yon modèl ki te itilize nan {days, plural, one {# jou} other {# jou}} ki sot pase yo. Pi adwat koute plis pou chak demann, pi wo gen plis moun. Pri ak CO2e se estimasyon soti nan yon demann tipik.",
+        "empty": "Pa gen okenn modèl ak pri ki te itilize nan {days, plural, one {# jou} other {# jou}} ki sot pase yo.",
+        "caption": "Menm done yo kòm tablo, estimasyon depans pi wo an premye",
+        "sizeLabel": "Gwosè sèk",
+        "size": {
+          "spend": "Depans estime",
+          "footprint": "CO2e estime",
+          "requests": "Demann"
+        },
+        "axisPeople": "Moun, {days, plural, one {# jou} other {# jou}} ki sot pase yo (anwo)",
+        "axisCost": "Kout estimasyon pou yon demann tipik sou pri lis (adwat)",
+        "dotLabel": "{model}: {people, plural, one {# moun} other {# moun}}, {cost} pou chak demann tipik, {value}. Louvri règ aksè li yo.",
+        "legendTitle": "Klas gwosè:",
+        "legend": {
+          "mini": "nano oswa mini",
+          "standard": "estanda",
+          "large": "gwo",
+          "xl": "ekstra gwo",
+          "unset": "pa defini"
+        },
+        "col": {
+          "requests": "Demann",
+          "perRequest": "Pou chak demann tipik"
+        },
+        "unknown": "Pa konnen",
+        "noFindings": "Pa gen anyen ki remakab ankò.",
+        "findingTitle": {
+          "concentrated": "Depans konsantre",
+          "reached": "Yon limit moun rive",
+          "unreached": "Yon limit pèsonn pa rive toupre",
+          "noCeiling": "Pa gen limit"
+        },
+        "finding": {
+          "concentrated": "{model} se {share} nan depans estime.",
+          "reached": "{model} : {people} sou {of} moun rive {cap} pa jou.",
+          "unreached": "{model} gen yon limit {cap} pa jou; moun ki pi itilize a te fè {max}.",
+          "noCeiling": "{models} : san limit pou tout rès moun yo. Moun ki te pi itilize a te fè {max, plural, one {# demann} other {# demann}} nan yon jou."
+        }
       }
     },
     "previewSourceModelAccess": "Apwobasyon modèl — {list}",

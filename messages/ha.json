@@ -6929,6 +6929,223 @@
         "none": "ba shiga",
         "becomes": "ya zama",
         "removed": "an cire"
+      },
+      "view": {
+        "label": "Duba",
+        "grid": "Samun dama da bayanai",
+        "runway": "Lokacin ritaya",
+        "map": "Kudin amfani da shahara"
+      },
+      "facts": {
+        "estimateNote": "Farashi da CO2e kiyasi ne, ba a auna su ba: an ƙididdige buƙatu an ninka su da buƙata na yau da kullum ({promptTokens} tokens ciki, {completionTokens} fita) a farashin lissafi. Amfani ya haɗa kwanaki {days, plural, one {# daya} other {# kwanaki}} da suka gabata.",
+        "estimateNoteNoCost": "CO2e kiyasi ne, ba a auna shi ba: an ƙididdige buƙatu an ninka su da buƙata na yau da kullum ({promptTokens} tokens ciki, {completionTokens} fita). Amfani ya haɗa kwanaki {days, plural, one {# daya} other {# kwanaki}} da suka gabata.",
+        "captureNote": "Amfanin kowa zai fito bayan cikar kwana guda na tattarawa. Kafin nan, bayanai suna shafar mutanen da ke ƙarƙashin iyaka kawai.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} an saka, {output} an fitar",
+        "summary": {
+          "label": "Tsakure na samfura",
+          "used": "An yi amfani da samfuran, cikin kwanaki {days, plural, one {# daya} other {# kwanaki}} da suka gabata",
+          "usedValue": "{used} daga {total}",
+          "requests": "Buƙatu",
+          "spend": "Kimanta kudin amfani",
+          "footprint": "Kimanta CO2e",
+          "retiring": "Zai ƙare a cikin kwanaki {days}",
+          "noCeiling": "Babu iyaka ga sauran mutane",
+          "notYet": "Ba a sani ba tukuna"
+        },
+        "columns": {
+          "label": "Ginshiƙai",
+          "cost": "Kudin kashewa",
+          "footprint": "Sawun muhalli",
+          "usage": "Amfani",
+          "lifecycle": "Ritaya"
+        },
+        "col": {
+          "price": "Farashin jerin kowane tokens miliyan 1",
+          "ceiling": "Mafi yawa da mutum zai iya kashewa, a wata guda",
+          "footprint": "CO2e a buƙatar yau da kullum",
+          "people": "Mutanen da ke amfani da shi",
+          "spread": "Buƙatu a ranar aikin mutum mafi yawa",
+          "retires": "Zai ƙare"
+        },
+        "ceiling": {
+          "heavy": "har zuwa {amount} da dogon buƙatu",
+          "off": "Babu kome: an kashe",
+          "unbounded": "Babu iyaka",
+          "unpriced": "Babu farashin jerin"
+        },
+        "footprint": {
+          "notSet": "Girman bai sa ba"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Babba",
+          "xl": "Mafi girma"
+        },
+        "usage": {
+          "none": "Babu amfani",
+          "spend": "kimanin {amount}",
+          "cappedOnly": "mutanen da aka kayyade kawai"
+        },
+        "spread": {
+          "caption": "matsakaici {median}, 75% {p75}, mafi yawa {max}",
+          "label": "Buƙatu a ranar mutum mafi aiki: matsakaici {median}, 75% {p75}, 95% {p95}, mafi yawa {max}.",
+          "labelCap": " Iyaka ita ce {cap} a rana.",
+          "legend": {
+            "p95": "har zuwa kashi 95%",
+            "box": "matsakaici zuwa kashi 75%",
+            "max": "mutum mafi amfani",
+            "cap": "iyaka ga sauran mutane"
+          }
+        },
+        "retires": {
+          "none": "Ba a buga ranar ba",
+          "forced": "Ana canza wannan yanzu",
+          "past": "Ranar ta wuce",
+          "to": "zuwa {model}"
+        },
+        "lifecycle": {
+          "preview": "Gabatarwa",
+          "ga": "A bude ga kowa",
+          "legacy": "Tsoho",
+          "deprecated": "An daina amfani",
+          "retired": "An janye"
+        },
+        "detail": {
+          "region": "Yadda ake amfani da wannan samfurin, da kudin da ake biya",
+          "usageTitle": "Bukatu a ranar da kowanne mutum ya fi amfani",
+          "usageHint": "{people, plural, one {# mutum} other {# mutane}} sun yi amfani da shi cikin kwanaki {days, plural, one {# daya} other {# kwanaki}} da suka gabata. Ana ƙididdige mutum sau ɗaya, a rana mafi yawan amfani.",
+          "noUsage": "Babu wanda ya yi amfani da wannan samfurin cikin kwanaki {days, plural, one {# daya} other {# kwanaki}} da suka gabata.",
+          "bucketHeading": "Bukatu a rana guda",
+          "peopleHeading": "Mutane",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Matsakaicin a kowace rana da aka yi amfani",
+          "median": "Matsakaici",
+          "p75": "Kashi 75 cikin 100",
+          "p95": "Kashi 95 cikin 100",
+          "max": "Mutum mafi yawan bukatu",
+          "reachedCap": "An kai iyaka",
+          "cappedOnly": "A nan ana kirga wadanda ke da iyaka ne kawai kawo yanzu, don haka wadanda ba su da iyaka ba su jira ba.",
+          "truncated": "An jera wadanda suka fi yawan bukatu kawai, don haka matsakaici da kashi suna da yawa sama da yadda ake da su a gaskiya.",
+          "replayTitle": "Da an sauya iyaka",
+          "replayHint": "Yawan mutanen da suka kai ko wuce kowanne iyaka a rana guda. Da an dakatar da su a wancan ranar.",
+          "replayCap": "Iyaka ga kowa",
+          "replayStopped": "Mutane da aka dakatar",
+          "replayPerDay": "{cap} a rana",
+          "replayNow": "{cap} a rana (yanzu)",
+          "replayUnlimitedNow": "Babu iyaka (yanzu)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Kimar kudin",
+          "costHint": "Farashin jerin gashi na bukata guda daya. Ba lissafi bane: bukatun gaske suna iya bambanta da tsawo.",
+          "typicalRequest": "Bukata guda ta al'ada",
+          "longRequest": "Bukata guda mai tsawo",
+          "everyoneWindow": "Kowa, cikin kwanaki {days, plural, one {# daya} other {# kwanaki}} da suka gabata",
+          "atThisPace": "Wata guda da irin wannan sauri",
+          "footprintTitle": "Kimar sawun amfani",
+          "footprintHint": "Dangane da aji (size class) na samfurin da kuma bukata mafi sauki. Kiyasin kisasi ne, ba cikakken auna ba.",
+          "sizeClass": "Aji (size class)",
+          "noSizeClass": "Wannan samfurin baya da aji, don haka ba za a iya kimanta sawunsa ba. Saita shin a kasidar samfurin.",
+          "aboutTitle": "Game da wannan samfurin",
+          "status": "Matsayi",
+          "retiresOn": "{date}. Masu amfani za su ga sanarwa daga {notice} kuma za a sauya su daga {move}.",
+          "retiresForced": "Ana canza mutane daga wannan samfurin yanzu.",
+          "retiresUnknown": "Ba a buga ranar ba",
+          "replacement": "Mutane za su sauka a",
+          "replacementNotSet": "Ba a saita ba",
+          "knowledge": "Sanin har zuwa",
+          "context": "Tagar mahallin",
+          "contextTokens": "{tokens} takardun shaida",
+          "canDo": "Zai iya",
+          "can": {
+            "images": "karanta hotuna",
+            "tools": "amfani da kayan aiki",
+            "codeInterpreter": "gudanar da lambar",
+            "reasoningEffort": "daidaita ƙoƙarin tunani"
+          },
+          "hosted": "An shigar",
+          "hosting": {
+            "azure": "A cikin gidan Azure na ƙungiyar",
+            "external": "Daga waje mai bada sabis",
+            "local": "A gida"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Lokacin da kowanne samfurin ya daina aiki, adadin mutanen da suke amfani da shi, da ko dokokin samun dama sun dace da samfurin da mutane za su koma.",
+        "caption": "Samfuran da aka sa ranar ritaya, mafi kusa farko",
+        "empty": "Babu samfurin da aka sa ranar ritaya.",
+        "today": "Yau",
+        "col": {
+          "people": "Mutane",
+          "landsOn": "Mutane sun koma",
+          "access": "Samun dama a sabuwar maye gurbin"
+        },
+        "alert": "{model} zai daina aiki cikin {days, plural, one {kwana ɗaya} other {kwanaki #}}. {people, plural, one {mutum ɗaya} other {mutane #}} sun yi amfani da shi kwanan nan.",
+        "alertForced": "Ana cire {model} yanzu. {people, plural, one {mutum ɗaya} other {mutane #}} sun yi amfani da shi kwanan nan.",
+        "alertTo": "Za a matsa su zuwa {model}.",
+        "alertNoReplacement": "Ba a saka maye gurbin ba.",
+        "access": {
+          "same": "Dokoki iri ɗaya",
+          "unknown": "Ba za a iya duba ba har sai an saka maye gurbin",
+          "everyone": "Sauran mutane sun sami sharudda daban",
+          "audiences": "{count, plural, one {# ƙungiya, domain ko mutum yana da} other {# ƙungiyoyi, domains ko mutane suna da}} sharudda daban-daban",
+          "both": "Sauran mutane da {count, plural, one {rukunin, yankin ko mutum ɗaya} other {rukunoni, yankuna ko mutane #}} sun samu sharudda daban"
+        },
+        "carryOver": "Kwafi wadannan dokoki zuwa {model}",
+        "carried": "An kwafi dokokin {from} zuwa {to}. Duba kuma adana don aiwatarwa.",
+        "legend": {
+          "service": "yana cikin sabis",
+          "notice": "sanarwa ga masu amfani, {days} kwanaki",
+          "move": "mutane sun canza, cikin kwanaki {days}"
+        },
+        "pastTitle": "Ya wuce ranar aiki amma har yanzu yana cikin jerin:",
+        "pastItem": "{model} ({date}, {people, plural, one {mutum ɗaya} other {mutane #}})",
+        "undatedTitle": "Ba a fitar da rana ba:",
+        "rulesNote": "Ana kwatanta samun dama da kowace doka. Amfani ana adana shi ba tare da suna ba, don haka ba zai bayyana adadin mutanen da za su rasa damar amfani da samfurin ba."
+      },
+      "map": {
+        "lead": "Kowanne zobe samfurin da aka yi amfani da shi ne cikin kwanaki {days, plural, one {# daya} other {# kwanaki}} da suka gabata. Dama yana da tsada kowace buƙata, sama na nuni da yawan mutane. Kuɗin kashewa da CO2e duka kiyasi ne daga buƙata na yau da kullum.",
+        "empty": "Ba a yi amfani da samfurin da ake cajin farashi ba cikin kwanaki {days, plural, one {# daya} other {# kwanaki}} da suka gabata.",
+        "caption": "Irin waɗannan lissafi a cikin tebur, mafi yawan kimar asusu farko",
+        "sizeLabel": "Girman zagaye",
+        "size": {
+          "spend": "Kimar asusu",
+          "footprint": "Kimar CO2e",
+          "requests": "Buƙatu"
+        },
+        "axisPeople": "Mutane, cikin kwanaki {days, plural, one {# daya} other {# kwanaki}} da suka gabata (sama)",
+        "axisCost": "Kimar farashi guda ɗaya buƙata a farashin jeri (hagu)",
+        "dotLabel": "{model}: {people, plural, one {mutum ɗaya} other {mutane #}}, {cost} kowane yawanci buƙata, {value}. Buɗe dokokin samun damarsa.",
+        "legendTitle": "Ajin girma:",
+        "legend": {
+          "mini": "nano ko mini",
+          "standard": "mai ƙa'ida",
+          "large": "babba",
+          "xl": "babba ƙwarai",
+          "unset": "ba a saita ba"
+        },
+        "col": {
+          "requests": "Buƙatu",
+          "perRequest": "A kowane buƙata"
+        },
+        "unknown": "Ba a sani ba",
+        "noFindings": "Babu abin da ya fito fili tukuna.",
+        "findingTitle": {
+          "concentrated": "Kashe kudi ya fi mayar da hankali",
+          "reached": "Iyakar da mutane ke kaiwa",
+          "unreached": "Iyakar da babu wanda ya kusance shi",
+          "noCeiling": "Babu iyaka"
+        },
+        "finding": {
+          "concentrated": "{model} yana da {share} na kididdigar kudin da aka kashe.",
+          "reached": "{model}: {people} daga cikin {of} mutane sun kai {cap} a rana.",
+          "unreached": "An iyakance {model} zuwa {cap} a rana; mafi girman wanda ya yi ya kai {max}.",
+          "noCeiling": "{models}: babu iyaka ga kowa. Mafi yawa da mutum ya yi shi ne {max, plural, one {buƙata 1} other {buƙatu #}} a rana."
+        }
       }
     },
     "previewSourceModelAccess": "Amincewa da samfur — {list}",

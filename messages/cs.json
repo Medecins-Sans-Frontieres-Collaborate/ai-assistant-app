@@ -6945,6 +6945,223 @@
         "none": "žádná položka",
         "becomes": "se mění na",
         "removed": "odebráno"
+      },
+      "view": {
+        "label": "Zobrazit",
+        "grid": "Přístup a fakta",
+        "runway": "Doba do vyřazení",
+        "map": "Útrata a popularita"
+      },
+      "facts": {
+        "estimateNote": "Náklady a CO2e jsou odhady, ne měřené výdaje: započítané požadavky vynásobené typickým požadavkem ({promptTokens} tokenů vstup, {completionTokens} výstup) za katalogovou cenu. Využití zahrnuje posledních {days, plural, one {# den} other {# dní}}.",
+        "estimateNoteNoCost": "CO2e je odhad, nikoliv měřená hodnota: započítané požadavky vynásobené typickým požadavkem ({promptTokens} tokenů vstup, {completionTokens} výstup). Využití zahrnuje posledních {days, plural, one {# den} other {# dní}}.",
+        "captureNote": "Využití všemi uživateli se zobrazí po prvním úplném dni sběru dat. Do té doby údaje zahrnují jen osoby s nastaveným limitem.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} vstup, {output} výstup",
+        "summary": {
+          "label": "Přehled modelů",
+          "used": "Použité modely, posledních {days, plural, one {# den} other {# dní}}",
+          "usedValue": "{used} z {total}",
+          "requests": "Požadavky",
+          "spend": "Odhadovaná útrata",
+          "footprint": "Odhadované CO2e",
+          "retiring": "Bude vyřazeno za {days} dní",
+          "noCeiling": "Neomezeno pro ostatní",
+          "notYet": "Zatím není známo"
+        },
+        "columns": {
+          "label": "Sloupce",
+          "cost": "Náklady",
+          "footprint": "Stopa",
+          "usage": "Využití",
+          "lifecycle": "Vyřazení"
+        },
+        "col": {
+          "price": "Katalogová cena za 1M tokenů",
+          "ceiling": "Maximální měsíční útrata na osobu",
+          "footprint": "CO2e na typický požadavek",
+          "people": "Uživatelé",
+          "spread": "Požadavky v nejvytíženějším dni uživatele",
+          "retires": "Vyřazuje se"
+        },
+        "ceiling": {
+          "heavy": "až {amount} při dlouhých požadavcích",
+          "off": "Nic: vypnuto",
+          "unbounded": "Bez limitu",
+          "unpriced": "Bez katalogové ceny"
+        },
+        "footprint": {
+          "notSet": "Velikost nenastavena"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standardní",
+          "large": "Velký",
+          "xl": "Extra velký"
+        },
+        "usage": {
+          "none": "Žádné využití",
+          "spend": "asi {amount}",
+          "cappedOnly": "pouze s limitem"
+        },
+        "spread": {
+          "caption": "medián {median}, 75. percentil {p75}, nejvíc {max}",
+          "label": "Požadavky v nejvytíženějším dni uživatele: medián {median}, 75. percentil {p75}, 95. percentil {p95}, nejvíc {max}.",
+          "labelCap": " Limit je {cap} za den.",
+          "legend": {
+            "p95": "až po 95. percentil",
+            "box": "medián až 75. percentil",
+            "max": "nejvytíženější uživatel",
+            "cap": "limit pro ostatní"
+          }
+        },
+        "retires": {
+          "none": "Žádné datum není zveřejněno",
+          "forced": "Právě se přesouvá",
+          "past": "datum již uplynulo",
+          "to": "na {model}"
+        },
+        "lifecycle": {
+          "preview": "Náhled",
+          "ga": "Obecně dostupné",
+          "legacy": "Starší verze",
+          "deprecated": "Zastaralé",
+          "retired": "Ukončeno"
+        },
+        "detail": {
+          "region": "Jak je tento model využíván a kolik stojí",
+          "usageTitle": "Počet požadavků v nejrušnější den každé osoby",
+          "usageHint": "{people, plural, one {# osoba} other {# osob}} jej použila za posledních {days, plural, one {# den} other {# dní}}. Každá osoba se počítá jen jednou, podle dne s nejvyšší aktivitou.",
+          "noUsage": "Tento model nikdo nepoužil za posledních {days, plural, one {# den} other {# dní}}.",
+          "bucketHeading": "Požadavky za den",
+          "peopleHeading": "Osoby",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Průměr za aktivní den",
+          "median": "Medián",
+          "p75": "75. percentil",
+          "p95": "95. percentil",
+          "max": "Nejvytíženější osoba",
+          "reachedCap": "Dosažen limit",
+          "cappedOnly": "Zatím jsou zde započítány pouze osoby s nastaveným limitem, osoby bez limitu chybí.",
+          "truncated": "Zobrazeny jsou jen nejaktivnější osoby, proto jsou medián a percentily vyšší než ve skutečnosti.",
+          "replayTitle": "Pokud by byl limit jiný",
+          "replayHint": "Kolik z těchto osob mělo den, kdy dosáhly nebo překročily zadaný limit. V ten den by byly zastaveny.",
+          "replayCap": "Limit pro ostatní",
+          "replayStopped": "Zastavené osoby",
+          "replayPerDay": "{cap} za den",
+          "replayNow": "{cap} za den (aktuálně)",
+          "replayUnlimitedNow": "Neomezeně (aktuálně)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Odhadovaná cena",
+          "costHint": "Ceníková cena za předpokládaný požadavek. Nejde o fakturaci: skutečné požadavky se liší délkou.",
+          "typicalRequest": "Jeden typický požadavek",
+          "longRequest": "Jeden dlouhý požadavek",
+          "everyoneWindow": "Všichni, posledních {days, plural, one {# den} other {# dní}}",
+          "atThisPace": "Měsíc v tomto tempu",
+          "footprintTitle": "Odhadovaná stopa",
+          "footprintHint": "Podle velikostní kategorie modelu a předpokládaného požadavku. Řádová velikost, ne přesné měření.",
+          "sizeClass": "Velikostní třída",
+          "noSizeClass": "Tento model nemá velikostní třídu, proto nelze odhadnout jeho stopu. Nastavte ji v katalogu modelů.",
+          "aboutTitle": "O tomto modelu",
+          "status": "Stav",
+          "retiresOn": "{date}. Uživatelé uvidí upozornění od {notice} a budou převedeni z {move}.",
+          "retiresForced": "Uživatelé jsou nyní z tohoto modelu přesouváni.",
+          "retiresUnknown": "Žádné datum není zveřejněno",
+          "replacement": "Uživatelé budou převedeni na",
+          "replacementNotSet": "Nenastaveno",
+          "knowledge": "Znalosti do",
+          "context": "Kontextové okno",
+          "contextTokens": "{tokens} tokenů",
+          "canDo": "Může",
+          "can": {
+            "images": "číst obrázky",
+            "tools": "používat nástroje",
+            "codeInterpreter": "spouštět kód",
+            "reasoningEffort": "nastavit úroveň úsudku"
+          },
+          "hosted": "Hostováno",
+          "hosting": {
+            "azure": "V Azure nájemci organizace",
+            "external": "Externím poskytovatelem",
+            "local": "Lokálně"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Kdy který model skončí, kolik lidí jej používá a zda jsou přístupová pravidla stejná s modelem, na který budou převedeni.",
+        "caption": "Modely s datem vyřazení, od nejbližšího",
+        "empty": "Žádný model nemá určené datum vyřazení.",
+        "today": "Dnes",
+        "col": {
+          "people": "Lidé",
+          "landsOn": "Převod na",
+          "access": "Přístup u náhrady"
+        },
+        "alert": "{model} bude vyřazen za {days, plural, one {# den} few {# dny} other {# dní}}. Nedávno jej použil {people, plural, one {# člověk} few {# lidé} other {# lidí}}.",
+        "alertForced": "{model} je právě nyní vyřazován. Nedávno jej použil {people, plural, one {# člověk} few {# lidé} other {# lidí}}.",
+        "alertTo": "Budou převedeni na {model}.",
+        "alertNoReplacement": "Není nastavena žádná náhrada.",
+        "access": {
+          "same": "Stejná pravidla",
+          "unknown": "Nelze ověřit, dokud není nastavena náhrada",
+          "everyone": "Ostatní mají odlišné podmínky",
+          "audiences": "{count, plural, one {# skupina, doména nebo osoba má} other {# skupin, domén nebo osob má}} různé podmínky",
+          "both": "Ostatní a {count, plural, one {# skupina, doména nebo osoba} few {# skupiny, domény nebo osoby} other {# skupin, domén nebo osob}} mají jiné podmínky"
+        },
+        "carryOver": "Zkopírovat tato pravidla do {model}",
+        "carried": "Pravidla z {from} byla zkopírována do {to}. Zkontrolujte a uložte pro použití.",
+        "legend": {
+          "service": "v provozu",
+          "notice": "upozornění zobrazeno uživatelům, {days} dní",
+          "move": "převedení uživatelé, posledních {days} dní"
+        },
+        "pastTitle": "Po datu, stále uvedené:",
+        "pastItem": "{model} ({date}, {people, plural, one {# člověk} few {# lidé} other {# lidí}})",
+        "undatedTitle": "Bez určeného data:",
+        "rulesNote": "Porovnání přístupu probíhá podle jednotlivých pravidel. Využití se eviduje anonymně, tedy zde nelze uvést, kolik lidí by přístup ztratilo."
+      },
+      "map": {
+        "lead": "Každý kruh představuje model použitý za posledních {days, plural, one {# den} other {# dní}}. Čím více vpravo, tím vyšší cena za požadavek, čím výš, tím více uživatelů. Výdaje a CO2e jsou odhady podle typického požadavku.",
+        "empty": "Žádný zpoplatněný model nebyl v posledních {days, plural, one {# den} other {# dní}} použit.",
+        "caption": "Stejné údaje v tabulce, podle nejvyšší očekávané útraty",
+        "sizeLabel": "Velikost kruhu",
+        "size": {
+          "spend": "Odhadovaná útrata",
+          "footprint": "Odhadované CO2e",
+          "requests": "Požadavky"
+        },
+        "axisPeople": "Uživatelé, posledních {days, plural, one {# den} other {# dní}} (nahoru)",
+        "axisCost": "Odhadovaná cena jednoho typického požadavku dle ceníku (vpravo)",
+        "dotLabel": "{model}: {people, plural, one {# člověk} few {# lidé} other {# lidí}}, {cost} za typický požadavek, {value}. Otevřete přístupová pravidla.",
+        "legendTitle": "Třída velikosti:",
+        "legend": {
+          "mini": "nano nebo mini",
+          "standard": "standardní",
+          "large": "velké",
+          "xl": "velmi velké",
+          "unset": "nenastaveno"
+        },
+        "col": {
+          "requests": "Požadavky",
+          "perRequest": "Na typický požadavek"
+        },
+        "unknown": "Neznámé",
+        "noFindings": "Zatím nic nevyčnívá.",
+        "findingTitle": {
+          "concentrated": "Koncentrované výdaje",
+          "reached": "Limit, kterého lidé dosahují",
+          "unreached": "Limit, ke kterému se nikdo nepřibližuje",
+          "noCeiling": "Bez limitu"
+        },
+        "finding": {
+          "concentrated": "{model} tvoří {share} odhadovaných výdajů.",
+          "reached": "{model}: {people} z {of} lidí dosáhlo limitu {cap} za den.",
+          "unreached": "{model} má limit {cap} za den; nejvyšší zaznamenaný uživatel měl {max}.",
+          "noCeiling": "{models}: neomezeno pro ostatní. Nejvyšší zaznamenaný uživatel měl za den {max, plural, one {# požadavek} few {# požadavky} many {# požadavků} other {# požadavků}}."
+        }
       }
     },
     "previewSourceModelAccess": "Schválení modelu — {list}",

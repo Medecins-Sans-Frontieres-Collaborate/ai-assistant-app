@@ -6945,6 +6945,223 @@
         "none": "kein Eintrag",
         "becomes": "wird zu",
         "removed": "entfernt"
+      },
+      "view": {
+        "label": "Anzeigen",
+        "grid": "Zugriff und Fakten",
+        "runway": "Ablaufzeitraum",
+        "map": "Ausgaben und Beliebtheit"
+      },
+      "facts": {
+        "estimateNote": "Kosten und CO2e sind Schätzungen, keine gemessenen Ausgaben: gezählte Anfragen multipliziert mit einer typischen Anfrage ({promptTokens} Tokens eingehend, {completionTokens} ausgehend) zum Listenpreis. Die Nutzung bezieht sich auf die letzten {days, plural, one {# Tag} other {# Tage}}.",
+        "estimateNoteNoCost": "CO2e ist eine Schätzung, keine Messung: gezählte Anfragen multipliziert mit einer typischen Anfrage ({promptTokens} Tokens eingehend, {completionTokens} ausgehend). Die Nutzung bezieht sich auf die letzten {days, plural, one {# Tag} other {# Tage}}.",
+        "captureNote": "Die Nutzung aller wird nach dem ersten vollständigen Sammlungstag angezeigt. Bis dahin werden nur Personen mit Begrenzung erfasst.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} rein, {output} raus",
+        "summary": {
+          "label": "Modelle auf einen Blick",
+          "used": "Verwendete Modelle, letzten {days, plural, one {# Tag} other {# Tage}}",
+          "usedValue": "{used} von {total}",
+          "requests": "Anfragen",
+          "spend": "Geschätzte Ausgaben",
+          "footprint": "Geschätztes CO2e",
+          "retiring": "Außer Betrieb in {days} Tagen",
+          "noCeiling": "Unbegrenzt für alle anderen",
+          "notYet": "Noch nicht bekannt"
+        },
+        "columns": {
+          "label": "Spalten",
+          "cost": "Kosten",
+          "footprint": "CO2-Bilanz",
+          "usage": "Nutzung",
+          "lifecycle": "Außerbetriebnahme"
+        },
+        "col": {
+          "price": "Listenpreis pro 1M Token",
+          "ceiling": "Maximaler Monatsbetrag pro Person",
+          "footprint": "CO2e pro typische Anfrage",
+          "people": "Nutzende Personen",
+          "spread": "Anfragen am geschäftigsten Tag einer Person",
+          "retires": "Außer Betrieb"
+        },
+        "ceiling": {
+          "heavy": "bis zu {amount} bei langen Anfragen",
+          "off": "Nichts: deaktiviert",
+          "unbounded": "Kein Limit",
+          "unpriced": "Kein Listenpreis"
+        },
+        "footprint": {
+          "notSet": "Größe nicht festgelegt"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Groß",
+          "xl": "Extra groß"
+        },
+        "usage": {
+          "none": "Keine Nutzung",
+          "spend": "ungefähr {amount}",
+          "cappedOnly": "nur begrenzte Personen"
+        },
+        "spread": {
+          "caption": "Median {median}, 75. Perzentil {p75}, Maximum {max}",
+          "label": "Anfragen am geschäftigsten Tag einer Person: Median {median}, 75. Perzentil {p75}, 95. Perzentil {p95}, Maximum {max}.",
+          "labelCap": " Das Limit beträgt {cap} pro Tag.",
+          "legend": {
+            "p95": "bis zum 95. Perzentil",
+            "box": "Median bis 75. Perzentil",
+            "max": "Person mit Höchstwert",
+            "cap": "Limit für alle anderen"
+          }
+        },
+        "retires": {
+          "none": "Kein Datum veröffentlicht",
+          "forced": "Wird jetzt umgestellt",
+          "past": "Datum abgelaufen",
+          "to": "zu {model}"
+        },
+        "lifecycle": {
+          "preview": "Vorschau",
+          "ga": "Allgemein verfügbar",
+          "legacy": "Legacy",
+          "deprecated": "Veraltet",
+          "retired": "Ausgemustert"
+        },
+        "detail": {
+          "region": "Nutzung und Kosten dieses Modells",
+          "usageTitle": "Anfragen am geschäftigsten Tag jeder Person",
+          "usageHint": "{people, plural, one {# Person} other {# Personen}} haben es in den letzten {days, plural, one {# Tag} other {# Tage}} verwendet. Jede Person wird einmal gezählt, an ihrem aktivsten Tag.",
+          "noUsage": "Niemand hat dieses Modell in den letzten {days, plural, one {# Tag} other {# Tage}} verwendet.",
+          "bucketHeading": "Anfragen pro Tag",
+          "peopleHeading": "Personen",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Durchschnitt pro aktivem Tag",
+          "median": "Median",
+          "p75": "75. Perzentil",
+          "p95": "95. Perzentil",
+          "max": "Person mit höchster Nutzung",
+          "reachedCap": "Limit erreicht",
+          "cappedOnly": "Hier werden bisher nur Personen mit Limit gezählt, daher fehlen die ohne Limit.",
+          "truncated": "Nur die am meisten nutzenden Personen sind gelistet, daher erscheinen Median und Perzentile höher als sie tatsächlich sind.",
+          "replayTitle": "Wenn das Limit anders wäre",
+          "replayHint": "Wie viele dieser Personen an einem Tag jeweils das Limit erreicht oder überschritten hätten. Sie wären an diesem Tag gestoppt worden.",
+          "replayCap": "Limit für alle übrigen",
+          "replayStopped": "Gestoppte Personen",
+          "replayPerDay": "{cap} pro Tag",
+          "replayNow": "{cap} pro Tag (jetzt)",
+          "replayUnlimitedNow": "Unbegrenzt (jetzt)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Geschätzte Kosten",
+          "costHint": "Listenpreis für eine angenommene Anfrage. Keine Rechnung: Tatsächliche Anfragen können variieren.",
+          "typicalRequest": "Eine typische Anfrage",
+          "longRequest": "Eine lange Anfrage",
+          "everyoneWindow": "Alle, letzten {days, plural, one {# Tag} other {# Tage}}",
+          "atThisPace": "Ein Monat bei diesem Tempo",
+          "footprintTitle": "Geschätzter Footprint",
+          "footprintHint": "Basierend auf der Modellgrößenklasse und einer angenommenen Anfrage. Nur eine Größenordnung, keine Messung.",
+          "sizeClass": "Größenklasse",
+          "noSizeClass": "Dieses Modell hat keine Größenklasse, daher kann der Footprint nicht geschätzt werden. Legen Sie eine im Modellkatalog fest.",
+          "aboutTitle": "Über dieses Modell",
+          "status": "Status",
+          "retiresOn": "{date}. Nutzer sehen ab {notice} einen Hinweis und werden von {move} weg migriert.",
+          "retiresForced": "Personen werden derzeit von diesem Modell umgestellt.",
+          "retiresUnknown": "Kein Datum veröffentlicht",
+          "replacement": "Personen landen auf",
+          "replacementNotSet": "Nicht festgelegt",
+          "knowledge": "Wissen bis",
+          "context": "Kontextfenster",
+          "contextTokens": "{tokens} Tokens",
+          "canDo": "Kann",
+          "can": {
+            "images": "Bilder lesen",
+            "tools": "Tools verwenden",
+            "codeInterpreter": "Code ausführen",
+            "reasoningEffort": "Denkaufwand anpassen"
+          },
+          "hosted": "Gehostet",
+          "hosting": {
+            "azure": "Im Azure-Tenant der Organisation",
+            "external": "Bei einem externen Anbieter",
+            "local": "Lokal"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Wann jedes Modell abgeschaltet wird, wie viele Personen es nutzen und ob die Zugriffsregeln mit dem Nachfolgemodell übereinstimmen.",
+        "caption": "Modelle mit Ablaufdatum, das nächste zuerst",
+        "empty": "Kein Modell hat ein Ablaufdatum.",
+        "today": "Heute",
+        "col": {
+          "people": "Personen",
+          "landsOn": "Wechseln zu",
+          "access": "Zugang beim Ersatzmodell"
+        },
+        "alert": "{model} wird in {days, plural, one {# Tag} other {# Tagen}} eingestellt. {people, plural, one {# Person} other {# Personen}} hat es kürzlich genutzt.",
+        "alertForced": "{model} wird jetzt eingestellt. {people, plural, one {# Person} other {# Personen}} hat es kürzlich genutzt.",
+        "alertTo": "Sie werden auf {model} umgestellt.",
+        "alertNoReplacement": "Kein Ersatz festgelegt.",
+        "access": {
+          "same": "Gleiche Regeln",
+          "unknown": "Kann erst geprüft werden, wenn ein Ersatz festgelegt ist",
+          "everyone": "Alle anderen erhalten andere Bedingungen",
+          "audiences": "{count, plural, one {# Gruppe, Domain oder Person hat} other {# Gruppen, Domains oder Personen haben}} unterschiedliche Bedingungen",
+          "both": "Alle anderen und {count, plural, one {# Gruppe, Domain oder Person} other {# Gruppen, Domains oder Personen}} erhalten andere Bedingungen"
+        },
+        "carryOver": "Diese Regeln zu {model} kopieren",
+        "carried": "Regeln von {from} nach {to} kopiert. Prüfen und speichern, um zu übernehmen.",
+        "legend": {
+          "service": "im Dienst",
+          "notice": "Hinweis an Nutzer angezeigt, {days} Tage",
+          "move": "Personen umgestellt, letzte {days} Tage"
+        },
+        "pastTitle": "Überfällig und noch gelistet:",
+        "pastItem": "{model} ({date}, {people, plural, one {# Person} other {# Personen}})",
+        "undatedTitle": "Kein Datum veröffentlicht:",
+        "rulesNote": "Der Zugriff wird Regel für Regel verglichen. Die Nutzung wird ohne Namen gespeichert, daher kann nicht gesagt werden, wie viele Personen den Zugang verlieren würden."
+      },
+      "map": {
+        "lead": "Jeder Kreis steht für ein Modell, das in den letzten {days, plural, one {# Tag} other {# Tage}} genutzt wurde. Weiter rechts bedeutet höhere Kosten pro Anfrage, weiter oben mehr Personen. Ausgaben und CO2e sind Schätzungen einer typischen Anfrage.",
+        "empty": "Kein bepreistes Modell wurde in den letzten {days, plural, one {# Tag} other {# Tage}} verwendet.",
+        "caption": "Die gleichen Zahlen als Tabelle, nach höchstem geschätzten Aufwand sortiert",
+        "sizeLabel": "Kreisgröße",
+        "size": {
+          "spend": "Geschätzte Ausgaben",
+          "footprint": "Geschätztes CO2e",
+          "requests": "Anfragen"
+        },
+        "axisPeople": "Personen, letzten {days, plural, one {# Tag} other {# Tage}} (oben)",
+        "axisCost": "Geschätzte Kosten einer typischen Anfrage zum Listenpreis (rechts)",
+        "dotLabel": "{model}: {people, plural, one {# Person} other {# Personen}}, {cost} pro typischer Anfrage, {value}. Öffnen Sie die Zugriffsregeln.",
+        "legendTitle": "Größenklasse:",
+        "legend": {
+          "mini": "nano oder mini",
+          "standard": "standard",
+          "large": "groß",
+          "xl": "sehr groß",
+          "unset": "nicht festgelegt"
+        },
+        "col": {
+          "requests": "Anfragen",
+          "perRequest": "Pro typische Anfrage"
+        },
+        "unknown": "Nicht bekannt",
+        "noFindings": "Bislang gibt es keine Auffälligkeiten.",
+        "findingTitle": {
+          "concentrated": "Konzentrierter Verbrauch",
+          "reached": "Eine Grenze, die erreicht wurde",
+          "unreached": "Eine Grenze, die niemand erreicht",
+          "noCeiling": "Keine Obergrenze"
+        },
+        "finding": {
+          "concentrated": "{model} entspricht {share} der geschätzten Ausgaben.",
+          "reached": "{model}: {people} von {of} Personen haben das Limit von {cap} pro Tag erreicht.",
+          "unreached": "{model} ist auf {cap} pro Tag begrenzt; die Person mit dem höchsten Wert hatte {max}.",
+          "noCeiling": "{models}: unbegrenzt für alle anderen. Die Person mit den meisten Anfragen hatte {max, plural, one {# Anfrage} other {# Anfragen}} an einem Tag."
+        }
       }
     },
     "previewSourceModelAccess": "Modellfreigabe — {list}",

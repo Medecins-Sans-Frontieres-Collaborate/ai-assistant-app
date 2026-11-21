@@ -6945,6 +6945,223 @@
         "none": "항목 없음",
         "becomes": "변경됨",
         "removed": "제거됨"
+      },
+      "view": {
+        "label": "보기",
+        "grid": "액세스 및 정보",
+        "runway": "사용 종료 예정 기간",
+        "map": "소비 및 인기"
+      },
+      "facts": {
+        "estimateNote": "비용 및 CO2e는 실제 지출이 아닌 추정치입니다: 요청 횟수에 일반적인 요청({promptTokens} 토큰 입력, {completionTokens} 토큰 출력)를 곱하고, 리스티드 가격을 기준으로 계산했습니다. 사용량은 최근 {days, plural, one {#일} other {#일}}을 포함합니다.",
+        "estimateNoteNoCost": "CO2e는 측정값이 아닌 추정치입니다: 요청 횟수에 일반적인 요청({promptTokens} 토큰 입력, {completionTokens} 토큰 출력)를 곱했습니다. 사용량은 최근 {days, plural, one {#일} other {#일}}을 포함합니다.",
+        "captureNote": "모두의 사용량은 수집 첫날 이후에 표시됩니다. 그 전에는 기준 제한이 있는 사용자만 포함됩니다.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} 입력, {output} 출력",
+        "summary": {
+          "label": "모델 한눈에 보기",
+          "used": "최근 {days, plural, one {#일} other {#일}} 동안 사용된 모델",
+          "usedValue": "{used} / {total}",
+          "requests": "요청",
+          "spend": "추정 소비",
+          "footprint": "추정 CO2e",
+          "retiring": "{days}일 내 사용 종료 예정",
+          "noCeiling": "다른 모든 사용자는 무제한",
+          "notYet": "아직 알 수 없음"
+        },
+        "columns": {
+          "label": "열",
+          "cost": "비용",
+          "footprint": "CO2e",
+          "usage": "사용량",
+          "lifecycle": "사용 종료"
+        },
+        "col": {
+          "price": "1M 토큰당 리스트 가격",
+          "ceiling": "한 사람이 한 달에 최대 사용할 수 있는 비용",
+          "footprint": "일반 요청당 CO2e",
+          "people": "사용자 수",
+          "spread": "한 사람의 가장 바쁜 날 요청 수",
+          "retires": "사용 종료 예정"
+        },
+        "ceiling": {
+          "heavy": "장시간 요청 시 최대 {amount}",
+          "off": "없음: 비활성화됨",
+          "unbounded": "제한 없음",
+          "unpriced": "리스트 가격 없음"
+        },
+        "footprint": {
+          "notSet": "규모 미설정"
+        },
+        "size": {
+          "nano": "나노",
+          "mini": "미니",
+          "standard": "스탠다드",
+          "large": "라지",
+          "xl": "엑스트라 라지"
+        },
+        "usage": {
+          "none": "사용 없음",
+          "spend": "약 {amount}",
+          "cappedOnly": "제한 사용자만"
+        },
+        "spread": {
+          "caption": "중앙값 {median}, 75퍼센트 {p75}, 최대 {max}",
+          "label": "한 사람의 가장 바쁜 날 요청: 중앙값 {median}, 75퍼센트 {p75}, 95퍼센트 {p95}, 최대 {max}.",
+          "labelCap": " 제한은 하루 {cap}입니다.",
+          "legend": {
+            "p95": "95퍼센트까지",
+            "box": "중앙값부터 75퍼센트",
+            "max": "가장 많이 사용한 사람",
+            "cap": "다른 모두의 제한"
+          }
+        },
+        "retires": {
+          "none": "게시된 날짜 없음",
+          "forced": "현재 이동 중",
+          "past": "날짜가 지남",
+          "to": "{model}로"
+        },
+        "lifecycle": {
+          "preview": "미리보기",
+          "ga": "일반 제공",
+          "legacy": "레거시",
+          "deprecated": "지원 중단됨",
+          "retired": "사용 종료됨"
+        },
+        "detail": {
+          "region": "이 모델의 사용 방식 및 비용",
+          "usageTitle": "각 사용자의 가장 바빴던 날의 요청",
+          "usageHint": "최근 {days, plural, one {#일} other {#일}} 동안 {people, plural, one {#명} other {#명}}이 이 모델을 사용했습니다. 각 사용자는 가장 많이 사용한 하루만 집계됩니다.",
+          "noUsage": "최근 {days, plural, one {#일} other {#일}} 동안 이 모델을 사용한 사람이 없습니다.",
+          "bucketHeading": "하루 동안의 요청",
+          "peopleHeading": "사용자",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "활동일당 평균",
+          "median": "중앙값",
+          "p75": "75번째 백분위수",
+          "p95": "95번째 백분위수",
+          "max": "최다 요청 사용자",
+          "reachedCap": "상한선 도달",
+          "cappedOnly": "현재 상한선이 적용된 사용자만 집계되어 있으므로 제한 없는 사용자는 누락되었습니다.",
+          "truncated": "최다 요청 사용자만 나열되어 있어 중앙값과 백분위수가 실제보다 높게 표시됩니다.",
+          "replayTitle": "상한선이 달랐다면",
+          "replayHint": "이 사용자 중 각 상한선에 도달한 사람이 얼마나 되는지. 해당일에 요청이 제한됩니다.",
+          "replayCap": "타 사용자 상한선",
+          "replayStopped": "제한된 사용자",
+          "replayPerDay": "하루 {cap}",
+          "replayNow": "하루 {cap} (현재)",
+          "replayUnlimitedNow": "무제한 (현재)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "예상 비용",
+          "costHint": "예상 요청에 대한 리스트 가격입니다. 청구서가 아니며 실제 요청은 길이가 다릅니다.",
+          "typicalRequest": "일반적인 요청 한 건",
+          "longRequest": "긴 요청 한 건",
+          "everyoneWindow": "전체 사용자, 최근 {days, plural, one {#일} other {#일}}",
+          "atThisPace": "이 속도로 한 달",
+          "footprintTitle": "예상 환경 발자국",
+          "footprintHint": "모델의 크기 분류와 예상 요청을 기반으로 산출합니다. 대략적인 규모이며 정확한 측정값은 아닙니다.",
+          "sizeClass": "크기 분류",
+          "noSizeClass": "이 모델은 크기 분류가 없어 발자국을 추정할 수 없습니다. 모델 카탈로그에서 분류를 설정하세요.",
+          "aboutTitle": "모델 정보",
+          "status": "상태",
+          "retiresOn": "{date}에 퇴출됩니다. {notice}에서 공지를 보고 {move}로 이동됩니다.",
+          "retiresForced": "사용자가 지금 이 모델에서 이동되고 있습니다.",
+          "retiresUnknown": "게시된 날짜 없음",
+          "replacement": "이동한 사용자",
+          "replacementNotSet": "설정되지 않음",
+          "knowledge": "최신 정보 기준",
+          "context": "컨텍스트 윈도우",
+          "contextTokens": "{tokens} 토큰",
+          "canDo": "가능한 작업",
+          "can": {
+            "images": "이미지 읽기",
+            "tools": "도구 사용",
+            "codeInterpreter": "코드 실행",
+            "reasoningEffort": "추론 강도 조정"
+          },
+          "hosted": "호스팅됨",
+          "hosting": {
+            "azure": "조직의 Azure 테넌트 내",
+            "external": "외부 제공자",
+            "local": "로컬"
+          }
+        }
+      },
+      "runway": {
+        "lead": "각 모델이 종료될 때, 몇 명이 사용 중인지, 그 접근 규칙이 다음 모델과 일치하는지 확인합니다.",
+        "caption": "퇴역 예정 모델, 빠른 순으로 정렬",
+        "empty": "퇴역일이 지정된 모델이 없습니다.",
+        "today": "오늘",
+        "col": {
+          "people": "사용자",
+          "landsOn": "이동 대상",
+          "access": "대체 모델 접근"
+        },
+        "alert": "{model}은 {days, plural, one {#일 뒤} other {#일 뒤}} 퇴역합니다. 최근 {people, plural, one {#명} other {#명}}이 사용했습니다.",
+        "alertForced": "{model}이 지금 퇴역 중입니다. 최근 {people, plural, one {#명} other {#명}}이 사용했습니다.",
+        "alertTo": "{model}으로 이동됩니다.",
+        "alertNoReplacement": "대체 모델이 설정되지 않았습니다.",
+        "access": {
+          "same": "동일 규칙",
+          "unknown": "대체 모델이 설정될 때까지 확인 불가",
+          "everyone": "기타 모든 사용자에게 다른 조건 적용",
+          "audiences": "{count, plural, one {#개의 그룹, 도메인 또는 개인이} other {#개의 그룹, 도메인 또는 개인이}} 각기 다른 조건을 가지고 있습니다.",
+          "both": "기타 모든 사용자 및 {count, plural, one {#개 그룹, 도메인 또는 사용자} other {#개 그룹, 도메인 또는 사용자}}에게 다른 조건 적용"
+        },
+        "carryOver": "이 규칙을 {model}에 복사",
+        "carried": "{from}의 규칙을 {to}로 복사했습니다. 검토 후 저장하여 적용하세요.",
+        "legend": {
+          "service": "서비스 중",
+          "notice": "사용자에게 공지, {days}일",
+          "move": "이동된 사용자, 최근 {days}일"
+        },
+        "pastTitle": "일자를 지난 모델:",
+        "pastItem": "{model} ({date}, {people, plural, one {#명} other {#명}})",
+        "undatedTitle": "공개 일자 없음:",
+        "rulesNote": "접근 규칙별로 비교합니다. 사용 정보는 이름 없이 저장되므로 해당 모델 사용자가 실제로 몇 명 접근을 잃는지 알 수 없습니다."
+      },
+      "map": {
+        "lead": "각 원은 최근 {days, plural, one {#일} other {#일}} 동안 사용된 모델입니다. 오른쪽으로 갈수록 요청당 비용이 높고, 위쪽은 사용자가 많음을 의미합니다. 비용 및 CO2e는 일반적인 요청을 기준으로 추정한 값입니다.",
+        "empty": "최근 {days, plural, one {#일} other {#일}} 동안 유료 모델이 사용되지 않았습니다.",
+        "caption": "동일 수치를 표 형태로, 추정 지출 순",
+        "sizeLabel": "원 크기",
+        "size": {
+          "spend": "추정 지출",
+          "footprint": "추정 CO2e",
+          "requests": "요청 수"
+        },
+        "axisPeople": "사람 수, 최근 {days, plural, one {#일} other {#일}} (위 방향)",
+        "axisCost": "대표 요청의 추정 비용 (오른쪽)",
+        "dotLabel": "{model}: {people, plural, one {#명} other {#명}}, 일반 요청당 {cost}, {value}. 접근 규칙을 확인하세요.",
+        "legendTitle": "크기 분류:",
+        "legend": {
+          "mini": "나노 또는 미니",
+          "standard": "스탠다드",
+          "large": "대형",
+          "xl": "초대형",
+          "unset": "미설정"
+        },
+        "col": {
+          "requests": "요청",
+          "perRequest": "일반 요청당"
+        },
+        "unknown": "알려지지 않음",
+        "noFindings": "아직 특별한 점이 없습니다.",
+        "findingTitle": {
+          "concentrated": "집중 지출",
+          "reached": "도달한 상한선",
+          "unreached": "접근하지 않은 상한선",
+          "noCeiling": "상한선 없음"
+        },
+        "finding": {
+          "concentrated": "{model}가 예산 지출의 {share}입니다.",
+          "reached": "{model}: {of}명 중 {people}명이 하루에 {cap}에 도달했습니다.",
+          "unreached": "{model}은 하루 {cap}으로 제한되지만, 가장 많이 사용한 사람은 {max}까지 사용했습니다.",
+          "noCeiling": "{models}: 다른 모든 사람에게 무제한입니다. 가장 많이 사용한 사람은 하루에 {max, plural, one {#회 요청} other {#회 요청}}했습니다."
+        }
       }
     },
     "previewSourceModelAccess": "모델 승인 — {list}",

@@ -6929,6 +6929,223 @@
         "none": "nema unosa",
         "becomes": "postaje",
         "removed": "uklonjeno"
+      },
+      "view": {
+        "label": "Prikaz",
+        "grid": "Pristup i činjenice",
+        "runway": "Period do povlačenja",
+        "map": "Potrošnja i popularnost"
+      },
+      "facts": {
+        "estimateNote": "Procena troškova i CO2e vrednosti, a ne izmereni utrošak: broj zahteva pomnožen sa tipičnim zahtevom ({promptTokens} tokena ulaz, {completionTokens} izlaz) po cenovniku. Korišćenje obuhvata poslednjih {days, plural, one {# dan} other {# dana}}.",
+        "estimateNoteNoCost": "CO2e je procena, a ne izmerena vrednost: broj zahteva pomnožen sa tipičnim zahtevom ({promptTokens} tokena ulaz, {completionTokens} izlaz). Korišćenje obuhvata poslednjih {days, plural, one {# dan} other {# dana}}.",
+        "captureNote": "Upotreba svih prikazuje se nakon prvog celog dana prikupljanja. Do tada, brojke pokrivaju samo osobe sa ograničenjem.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} uneto, {output} izdato",
+        "summary": {
+          "label": "Modeli na prvi pogled",
+          "used": "Korišćeni modeli, poslednjih {days, plural, one {# dan} other {# dana}}",
+          "usedValue": "{used} od {total}",
+          "requests": "Zahtevi",
+          "spend": "Procenjena potrošnja",
+          "footprint": "Procenjeni CO2e",
+          "retiring": "Povlači se za {days} dana",
+          "noCeiling": "Neograničeno za ostale",
+          "notYet": "Još nije poznato"
+        },
+        "columns": {
+          "label": "Kolone",
+          "cost": "Trošak",
+          "footprint": "Ekološki otisak",
+          "usage": "Upotreba",
+          "lifecycle": "Povlačenje"
+        },
+        "col": {
+          "price": "Cena po cenovniku za 1M tokena",
+          "ceiling": "Najviše što jedna osoba može potrošiti mesečno",
+          "footprint": "CO2e po tipičnom zahtevu",
+          "people": "Osobe koje ga koriste",
+          "spread": "Zahtevi u najaktivnijem danu osobe",
+          "retires": "Povlači se"
+        },
+        "ceiling": {
+          "heavy": "do {amount} za duge zahteve",
+          "off": "Ništa: isključeno",
+          "unbounded": "Bez ograničenja",
+          "unpriced": "Nema cenovnika"
+        },
+        "footprint": {
+          "notSet": "Veličina nije određena"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standardno",
+          "large": "Veliko",
+          "xl": "Ekstra veliko"
+        },
+        "usage": {
+          "none": "Nema upotrebe",
+          "spend": "oko {amount}",
+          "cappedOnly": "samo ograničene osobe"
+        },
+        "spread": {
+          "caption": "medijana {median}, 75. percentil {p75}, najviše {max}",
+          "label": "Zahtevi u najaktivnijem danu osobe: medijana {median}, 75. percentil {p75}, 95. percentil {p95}, najviše {max}.",
+          "labelCap": " Ograničenje je {cap} dnevno.",
+          "legend": {
+            "p95": "do 95. percentila",
+            "box": "medijana do 75. percentila",
+            "max": "najaktivnija osoba",
+            "cap": "ograničenje za ostale"
+          }
+        },
+        "retires": {
+          "none": "Datum nije objavljen",
+          "forced": "Trenutno se premešta",
+          "past": "datum je prošao",
+          "to": "prema {model}"
+        },
+        "lifecycle": {
+          "preview": "Pregled",
+          "ga": "Opšte dostupno",
+          "legacy": "Legacy",
+          "deprecated": "Zastarelo",
+          "retired": "Povučen"
+        },
+        "detail": {
+          "region": "Kako se ovaj model koristi i koja je cena",
+          "usageTitle": "Broj zahteva na najprometniji dan za svakog korisnika",
+          "usageHint": "{people, plural, one {# osoba} other {# osoba}} je koristilo u poslednjih {days, plural, one {# dan} other {# dana}}. Svaka osoba se broji jednom, prema najaktivnijem danu.",
+          "noUsage": "Niko nije koristio ovaj model u poslednjih {days, plural, one {# dan} other {# dana}}.",
+          "bucketHeading": "Zahtevi u danu",
+          "peopleHeading": "Korisnici",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Prosek po aktivnom danu",
+          "median": "Medijana",
+          "p75": "75. percentil",
+          "p95": "95. percentil",
+          "max": "Najaktivnija osoba",
+          "reachedCap": "Dostignut limit",
+          "cappedOnly": "Ovde se trenutno računaju samo osobe sa postavljenim limitom, tako da nedostaju oni bez limita.",
+          "truncated": "Prikazane su samo najaktivnije osobe, pa medijana i percentili ispadaju viši nego što jesu.",
+          "replayTitle": "Ako bi limit bio drugačiji",
+          "replayHint": "Koliko osoba je imalo dan na ili iznad svakog limita. Bili bi zaustavljeni tog dana.",
+          "replayCap": "Limit za sve ostale",
+          "replayStopped": "Zaustavljeni korisnici",
+          "replayPerDay": "{cap} dnevno",
+          "replayNow": "{cap} dnevno (trenutno)",
+          "replayUnlimitedNow": "Neograničeno (trenutno)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Procenjeni trošak",
+          "costHint": "Cena po cenovniku za pretpostavljeni zahtev. Ovo nije račun: stvarni zahtevi variraju po dužini.",
+          "typicalRequest": "Jedan tipičan zahtev",
+          "longRequest": "Jedan dugačak zahtev",
+          "everyoneWindow": "Svi, poslednjih {days, plural, one {# dan} other {# dana}}",
+          "atThisPace": "Mesec dana ovim tempom",
+          "footprintTitle": "Procenjeni uticaj",
+          "footprintHint": "Na osnovu veličine modela i pretpostavljenog zahteva. Samo okvirna vrednost, ne precizno merenje.",
+          "sizeClass": "Klasa veličine",
+          "noSizeClass": "Ovaj model nema klasu veličine pa njegov uticaj ne može biti procenjen. Postavite klasu u katalogu modela.",
+          "aboutTitle": "O ovom modelu",
+          "status": "Status",
+          "retiresOn": "{date}. Korisnici vide obaveštenje od {notice} i biće premešteni sa {move}.",
+          "retiresForced": "Korisnici se sada premeštaju sa ovog modela.",
+          "retiresUnknown": "Datum nije objavljen",
+          "replacement": "Korisnici prelaze na",
+          "replacementNotSet": "Nije postavljeno",
+          "knowledge": "Znanje do",
+          "context": "Kontekst prozor",
+          "contextTokens": "{tokens} tokena",
+          "canDo": "Može",
+          "can": {
+            "images": "čitati slike",
+            "tools": "koristiti alate",
+            "codeInterpreter": "izvršiti kod",
+            "reasoningEffort": "podesiti nivo rasuđivanja"
+          },
+          "hosted": "Hostovano",
+          "hosting": {
+            "azure": "U Azure tenantu organizacije",
+            "external": "Kod eksternog provajdera",
+            "local": "Lokalno"
+          }
+        }
+      },
+      "runway": {
+        "lead": "Kada svaki model prestaje sa radom, koliko ljudi ga koristi i da li pravila pristupa odgovaraju modelu na koji će se preći.",
+        "caption": "Modeli sa datumom povlačenja, najbliži prvi",
+        "empty": "Nijedan model nema datum povlačenja.",
+        "today": "Danas",
+        "col": {
+          "people": "Osobe",
+          "landsOn": "Osobe prelaze na",
+          "access": "Pristup na zameni"
+        },
+        "alert": "{model} se povlači za {days, plural, one {# dan} other {# dana}}. {people, plural, one {# osoba} other {# osoba}} ga je nedavno koristilo.",
+        "alertForced": "{model} se upravo povlači. {people, plural, one {# osoba} other {# osoba}} ga je nedavno koristilo.",
+        "alertTo": "Biće prebačeni na {model}.",
+        "alertNoReplacement": "Zamena nije postavljena.",
+        "access": {
+          "same": "Ista pravila",
+          "unknown": "Ne može se proveriti dok zamena ne bude postavljena",
+          "everyone": "Svi ostali imaju drugačije uslove",
+          "audiences": "{count, plural, one {# grupa, domen ili osoba ima} other {# grupa, domena ili osoba imaju}} različite uslove",
+          "both": "Svi ostali i {count, plural, one {# grupa, domen ili osoba} other {# grupa, domena ili osoba}} imaju različite uslove"
+        },
+        "carryOver": "Prekopiraj ova pravila na {model}",
+        "carried": "Pravila modela {from} su prekopirana na {to}. Pregledajte i sačuvajte da bi se primenila.",
+        "legend": {
+          "service": "u upotrebi",
+          "notice": "obaveštenje korisnicima, {days} dana",
+          "move": "osobe prebačene, poslednjih {days} dana"
+        },
+        "pastTitle": "Prošao svoj datum i još je naveden:",
+        "pastItem": "{model} ({date}, {people, plural, one {# osoba} other {# osoba}})",
+        "undatedTitle": "Bez objavljenog datuma:",
+        "rulesNote": "Pristup se poredi po pravilima. Upotreba se skladišti bez imena, tako da nije moguće prikazati koliko ljudi bi izgubilo pristup."
+      },
+      "map": {
+        "lead": "Svaki krug predstavlja model koji je korišćen u poslednjih {days, plural, one {# dan} other {# dana}}. Desno su modeli sa višom cenom po zahtevu, gore ih je koristilo više ljudi. Trošak i CO2e su procene na osnovu tipičnog zahteva.",
+        "empty": "Nijedan model sa cenom nije korišćen u poslednjih {days, plural, one {# dan} other {# dana}}.",
+        "caption": "Iste vrednosti kao tabela, najveća procenjena potrošnja prva",
+        "sizeLabel": "Veličina kruga",
+        "size": {
+          "spend": "Procenjena potrošnja",
+          "footprint": "Procenjeni CO2e",
+          "requests": "Zahtevi"
+        },
+        "axisPeople": "Osobe, poslednjih {days, plural, one {# dan} other {# dana}} (gore)",
+        "axisCost": "Procenjena cena za jedan tipičan zahtev po cenovniku (desno)",
+        "dotLabel": "{model}: {people, plural, one {# osoba} other {# osoba}}, {cost} po tipičnom zahtevu, {value}. Otvorite pravila pristupa.",
+        "legendTitle": "Klasa veličine:",
+        "legend": {
+          "mini": "nano ili mini",
+          "standard": "standarna",
+          "large": "veliko",
+          "xl": "veoma veliko",
+          "unset": "nije postavljeno"
+        },
+        "col": {
+          "requests": "Zahtevi",
+          "perRequest": "Po tipičnom zahtevu"
+        },
+        "unknown": "Nije poznato",
+        "noFindings": "Još ništa ne odskače.",
+        "findingTitle": {
+          "concentrated": "Koncentrisani troškovi",
+          "reached": "Dostignut limit",
+          "unreached": "Limit kojem se niko ne približava",
+          "noCeiling": "Bez ograničenja"
+        },
+        "finding": {
+          "concentrated": "{model} je {share} od procenjenih troškova.",
+          "reached": "{model}: {people} od {of} ljudi je dostiglo {cap} dnevno.",
+          "unreached": "{model} je ograničen na {cap} dnevno; najviše što je neko postigao je {max}.",
+          "noCeiling": "{models}: neograničeno za sve ostale. Najviše što je neko postigao je {max, plural, one {# zahtev} other {# zahteva}} dnevno."
+        }
       }
     },
     "previewSourceModelAccess": "Odobrenje modela — {list}",

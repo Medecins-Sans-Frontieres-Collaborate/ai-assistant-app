@@ -6976,6 +6976,223 @@
         "none": "无条目",
         "becomes": "变为",
         "removed": "已移除"
+      },
+      "view": {
+        "label": "查看",
+        "grid": "访问与数据",
+        "runway": "退役周期",
+        "map": "花费与受欢迎程度"
+      },
+      "facts": {
+        "estimateNote": "成本和CO2e为估算值，非实际支出：以请求次数乘以典型请求（输入{promptTokens}个tokens，输出{completionTokens}个tokens）的标价计算。用量涵盖过去{days, plural, one {#天} other {#天}}。",
+        "estimateNoteNoCost": "CO2e为估算值，非实际测量：以请求次数乘以典型请求（输入{promptTokens}个tokens，输出{completionTokens}个tokens）计算。用量涵盖过去{days, plural, one {#天} other {#天}}。",
+        "captureNote": "所有用户的使用情况将在收集的第一个完整日之后显示。在此之前，数据仅覆盖受限用户。",
+        "co2Grams": "{value} 克CO2e",
+        "co2Kilograms": "{value} 千克CO2e",
+        "priceValue": "输入{input}，输出{output}",
+        "summary": {
+          "label": "模型总览",
+          "used": "过去{days, plural, one {#天} other {#天}}使用的模型",
+          "usedValue": "{used}/{total}",
+          "requests": "请求量",
+          "spend": "预计花费",
+          "footprint": "预计CO2e",
+          "retiring": "将在{days}天内退役",
+          "noCeiling": "其他人不限额",
+          "notYet": "暂未知"
+        },
+        "columns": {
+          "label": "列",
+          "cost": "成本",
+          "footprint": "碳足迹",
+          "usage": "用量",
+          "lifecycle": "退役"
+        },
+        "col": {
+          "price": "每百万tokens的列表价格",
+          "ceiling": "单人每月最高成本",
+          "footprint": "典型请求CO2e",
+          "people": "使用人数",
+          "spread": "用户最繁忙一天的请求量",
+          "retires": "退役时间"
+        },
+        "ceiling": {
+          "heavy": "长请求可达{amount}",
+          "off": "无：已关闭",
+          "unbounded": "无上限",
+          "unpriced": "无列表价格"
+        },
+        "footprint": {
+          "notSet": "未设置大小"
+        },
+        "size": {
+          "nano": "纳米",
+          "mini": "迷你",
+          "standard": "标准",
+          "large": "大型",
+          "xl": "超大"
+        },
+        "usage": {
+          "none": "无使用",
+          "spend": "约{amount}",
+          "cappedOnly": "仅限受额用户"
+        },
+        "spread": {
+          "caption": "中位数{median}，75百分位{p75}，最多{max}",
+          "label": "用户最繁忙一天的请求：中位数{median}，75百分位{p75}，95百分位{p95}，最多{max}。",
+          "labelCap": " 限额为每天{cap}。",
+          "legend": {
+            "p95": "至95百分位",
+            "box": "中位数到75百分位",
+            "max": "最高用户",
+            "cap": "其他人限额"
+          }
+        },
+        "retires": {
+          "none": "未公布日期",
+          "forced": "正在迁移中",
+          "past": "日期已过",
+          "to": "转至 {model}"
+        },
+        "lifecycle": {
+          "preview": "预览",
+          "ga": "全面可用",
+          "legacy": "传统",
+          "deprecated": "已弃用",
+          "retired": "已退役"
+        },
+        "detail": {
+          "region": "该模型的使用方式及费用",
+          "usageTitle": "每人最繁忙日的请求数量",
+          "noUsage": "过去{days, plural, one {#天} other {#天}}无人使用此模型。",
+          "bucketHeading": "单日请求数",
+          "peopleHeading": "人数",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "活跃日均值",
+          "median": "中位数",
+          "p75": "第 75 百分位",
+          "p95": "第 95 百分位",
+          "max": "最高用户",
+          "reachedCap": "已达到上限",
+          "cappedOnly": "目前仅统计有限额的用户，无上限用户未统计。",
+          "truncated": "仅列出最高用户，因此中位数和百分位数高于实际。",
+          "replayTitle": "如果上限不同",
+          "replayHint": "这些人在某天达到或超过每个上限的人数。他们当天会被限制。",
+          "replayCap": "其他所有人的上限",
+          "replayStopped": "被限制人数",
+          "replayPerDay": "每日 {cap}",
+          "replayNow": "每日 {cap}（当前）",
+          "replayUnlimitedNow": "无限制（当前）",
+          "replayPeople": "{people}（{share}）",
+          "costTitle": "成本估算",
+          "costHint": "按假定请求的挂牌价，仅供参考：实际请求长度不同。",
+          "typicalRequest": "一个典型请求",
+          "longRequest": "一个长请求",
+          "everyoneWindow": "所有人，过去{days, plural, one {#天} other {#天}}",
+          "atThisPace": "以当前速度计算一个月",
+          "footprintTitle": "足迹估算",
+          "footprintHint": "基于模型体积类别及假定请求，仅为数量级估算。",
+          "sizeClass": "体积类别",
+          "noSizeClass": "该模型未设置体积类别，无法估算其足迹。请在模型目录中设置。",
+          "aboutTitle": "关于该模型",
+          "status": "状态",
+          "retiresOn": "{date}。用户自 {notice} 起收到通知，并将从 {move} 被迁移。",
+          "retiresForced": "目前正在将用户迁移出该模型。",
+          "retiresUnknown": "未公布日期",
+          "replacement": "迁移到",
+          "replacementNotSet": "未设置",
+          "knowledge": "知识截止到",
+          "context": "上下文窗口",
+          "contextTokens": "{tokens} 个 token",
+          "canDo": "可",
+          "can": {
+            "images": "读取图片",
+            "tools": "使用工具",
+            "codeInterpreter": "运行代码",
+            "reasoningEffort": "调整推理力度"
+          },
+          "hosted": "托管位置",
+          "hosting": {
+            "azure": "在本组织的 Azure 租户中",
+            "external": "由外部提供方托管",
+            "local": "本地运行"
+          },
+          "usageHint": "在过去{days, plural, one {#天} other {#天}}里，有{people, plural, one {#人} other {#人}}使用过。每人按其最活跃的一天计数一次。"
+        }
+      },
+      "runway": {
+        "lead": "展示每个模型的关闭时间、当前使用人数，以及其访问规则是否与新模型一致。",
+        "caption": "按即将退休时间排序的模型",
+        "empty": "暂无模型设定退休日期。",
+        "today": "今天",
+        "col": {
+          "people": "人数",
+          "landsOn": "人员切换到",
+          "access": "替代模型的访问规则"
+        },
+        "alert": "{model} 将在 {days, plural, one {# 天} other {# 天}}后退休。近期有 {people, plural, one {# 人} other {# 人}}使用过。",
+        "alertForced": "{model} 正在被退休。近期有 {people, plural, one {# 人} other {# 人}}使用过。",
+        "alertTo": "他们将转移到 {model}。",
+        "alertNoReplacement": "未指定替代模型。",
+        "access": {
+          "same": "规则一致",
+          "unknown": "需指定替代模型后才能核查",
+          "everyone": "其他人获得不同条款",
+          "audiences": "{count, plural, one {#个群组、域或个人有} other {#个群组、域或个人有}}不同条款",
+          "both": "其他人以及 {count, plural, one {# 个群组、域或人员} other {# 个群组、域或人员}}获得不同条款"
+        },
+        "carryOver": "复制这些规则到 {model}",
+        "carried": "已将 {from} 的规则复制到 {to}。请审核后保存应用。",
+        "legend": {
+          "service": "服务中",
+          "notice": "已通知用户，{days} 天",
+          "move": "已迁移人员，最近 {days} 天内"
+        },
+        "pastTitle": "已超出日期但仍在列表中：",
+        "pastItem": "{model}（{date}，{people, plural, one {# 人} other {# 人}}）",
+        "undatedTitle": "尚未发布日期：",
+        "rulesNote": "访问权限逐项比对。使用情况未记名，因此无法统计有多少使用者会失去访问权限。"
+      },
+      "map": {
+        "lead": "每个圆圈代表过去{days, plural, one {#天} other {#天}}使用的一个模型。向右表示每次请求成本更高，向上表示使用人数更多。支出和CO2e为典型请求的估算值。",
+        "empty": "过去{days, plural, one {#天} other {#天}}内未使用任何有价格的模型。",
+        "caption": "同样数据以表格显示，按估算支出从高到低排序",
+        "sizeLabel": "圆点大小",
+        "size": {
+          "spend": "预计支出",
+          "footprint": "预计 CO2e",
+          "requests": "请求数"
+        },
+        "axisPeople": "人数，过去{days, plural, one {#天} other {#天}}（向上）",
+        "axisCost": "按挂牌价的典型请求预计成本（横坐标）",
+        "dotLabel": "{model}：{people, plural, one {# 人} other {# 人}}，每次典型请求 {cost}，{value}。点击可查看访问规则。",
+        "legendTitle": "容量等级：",
+        "legend": {
+          "mini": "nano 或 mini",
+          "standard": "标准",
+          "large": "大",
+          "xl": "特大",
+          "unset": "未设置"
+        },
+        "col": {
+          "requests": "请求数",
+          "perRequest": "每次典型请求"
+        },
+        "unknown": "未知",
+        "noFindings": "暂未发现异常。",
+        "findingTitle": {
+          "concentrated": "集中开销",
+          "reached": "已有人达到上限",
+          "unreached": "未有人接近上限",
+          "noCeiling": "无上限"
+        },
+        "finding": {
+          "concentrated": "{model} 占预计开销的 {share}。",
+          "reached": "{model}：{of} 人中有 {people} 人每天达到 {cap}。",
+          "unreached": "{model} 限定为每天 {cap}；使用最多的人达到 {max}。",
+          "noCeiling": "{models}：其他人无限制。使用最多的人一天完成了 {max, plural, one {# 次请求} other {# 次请求}}。"
+        }
       }
     },
     "previewSourceModelAccess": "模型审批 — {list}",
