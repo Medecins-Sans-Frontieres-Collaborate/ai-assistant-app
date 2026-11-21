@@ -672,7 +672,7 @@ describe('LimitsPanel — global mode', () => {
     stored = policyResponse();
   });
 
-  it('opens on the Overview, with the mode, Check access, Review and Delegations tabs', async () => {
+  it('opens on the Overview, with the mode and the Check access, Models and Delegations tabs; Review is not a tab', async () => {
     globalRouting();
     renderPanel();
 
@@ -680,18 +680,159 @@ describe('LimitsPanel — global mode', () => {
     expect(
       screen.getByRole('tab', { name: 'console.tab.overview' }),
     ).toHaveAttribute('aria-selected', 'true');
-    for (const name of [
-      'console.tab.check',
-      'console.tab.review',
-      'tab.models',
-      'tab.delegations',
-    ]) {
+    for (const name of ['console.tab.check', 'tab.models', 'tab.delegations']) {
       expect(screen.getByRole('tab', { name })).toBeInTheDocument();
     }
     expect(
       screen.getByRole('radiogroup', { name: 'modeLabel' }),
     ).toBeInTheDocument();
     expect(screen.getByText('description')).toBeInTheDocument();
+    // Nothing changed: nothing to review, so no way into Review is offered.
+    expect(screen.queryByRole('tab', { name: /review/i })).toBeNull();
+    expect(
+      screen.queryByRole('button', { name: 'console.reviewChanges' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('offers Review only once something changed, as its own screen in place of the tabs, and leads back', async () => {
+    globalRouting();
+    renderPanel();
+    await openModelsWithPendingEntry();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'modelAccess.audience.add' }),
+    );
+
+    const open = screen.getByRole('button', { name: 'console.reviewChanges' });
+    fireEvent.click(open);
+    const review = screen.getByRole('region', { name: 'console.reviewRegion' });
+    // A different screen: the editing tabs and settings are gone.
+    expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('radiogroup', { name: 'modeLabel' }),
+    ).not.toBeInTheDocument();
+    expect(review).toHaveFocus();
+    expect(
+      within(review).getByText('console.otherChange.model-access'),
+    ).toBeInTheDocument();
+    // Save stays within reach.
+    expect(screen.getByRole('button', { name: 'save' })).toBeEnabled();
+
+    fireEvent.click(
+      within(review).getByRole('button', { name: 'console.backToEditing' }),
+    );
+    expect(selectedTab()).toBe('tab.models');
+    expect(
+      screen.getByRole('button', { name: 'console.reviewChanges' }),
+    ).toHaveFocus();
+  });
+
+  it('leaves Review by itself when the last change is undone, and does not come back on the next edit', async () => {
+    globalRouting();
+    renderPanel();
+    await openModelsWithPendingEntry();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'modelAccess.audience.add' }),
+    );
+    fireEvent.click(
+      screen.getByRole('button', { name: 'console.reviewChanges' }),
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'console.undo' }));
+    // Nothing left to review: back on the tabs, with no Review offered.
+    expect(await screen.findByRole('tablist')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('region', { name: 'console.reviewRegion' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'console.reviewChanges' }),
+    ).not.toBeInTheDocument();
+
+    await openModelsWithPendingEntry();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'modelAccess.audience.add' }),
+    );
+    expect(screen.getByRole('tablist')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'console.reviewChanges' }),
+    ).toBeInTheDocument();
+  });
+
+  /**
+   * Entries typed into the Models add field are not in the draft until
+   * added. Leaving the tab, or saving, must not lose them without a word.
+   * (Messages are mocked to their keys here, so every grid cell shares one
+   * accessible name; the first is the first family's Everyone else cell.)
+   */
+  async function openModelsWithPendingEntry() {
+    fireEvent.click(await screen.findByRole('tab', { name: 'tab.models' }));
+    fireEvent.click(
+      screen.getAllByRole('button', { name: 'modelAccess.grid.cellLabel' })[0],
+    );
+    const field = screen.getByRole('combobox', {
+      name: 'modelAccess.audience.pickerLabel',
+    });
+    fireEvent.change(field, { target: { value: 'oca.msf.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+    return field;
+  }
+  const selectedTab = () =>
+    screen
+      .getAllByRole('tab')
+      .find((tab) => tab.getAttribute('aria-selected') === 'true')?.textContent;
+
+  it('asks before leaving the Models tab with entries waiting in the add field, then goes where it was sent', async () => {
+    globalRouting();
+    renderPanel();
+    await openModelsWithPendingEntry();
+
+    fireEvent.click(screen.getByRole('tab', { name: 'console.tab.check' }));
+    // Still on Models, and the editor says why.
+    expect(selectedTab()).toBe('tab.models');
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'modelAccess.audience.notAdded',
+    );
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'modelAccess.audience.addAndClose' }),
+    );
+    // The entry went into the draft and the tab that was asked for opened.
+    expect(selectedTab()).toBe('console.tab.check');
+    expect(screen.getByText('console.unsavedCount')).toBeInTheDocument();
+  });
+
+  it('leaves the Models tab at once when nothing is waiting, and when told to drop what is', async () => {
+    globalRouting();
+    renderPanel();
+    fireEvent.click(await screen.findByRole('tab', { name: 'tab.models' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'console.tab.check' }));
+    expect(selectedTab()).toBe('console.tab.check');
+
+    await openModelsWithPendingEntry();
+    fireEvent.click(screen.getByRole('tab', { name: 'tab.delegations' }));
+    expect(selectedTab()).toBe('tab.models');
+    fireEvent.click(
+      screen.getByRole('button', { name: 'modelAccess.audience.closeAnyway' }),
+    );
+    expect(selectedTab()).toBe('tab.delegations');
+    // Dropped as asked: the draft is unchanged.
+    expect(screen.queryByText('console.unsavedCount')).not.toBeInTheDocument();
+  });
+
+  it('does not save past entries waiting in the Models add field', async () => {
+    globalRouting();
+    renderPanel();
+    const field = await openModelsWithPendingEntry();
+    // One entry added (the draft is dirty), a second one left waiting.
+    fireEvent.click(
+      screen.getByRole('button', { name: 'modelAccess.audience.add' }),
+    );
+    fireEvent.change(field, { target: { value: 'ocp.msf.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+
+    fireEvent.click(screen.getByRole('button', { name: 'save' }));
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'modelAccess.audience.notAdded',
+    );
+    expect(putCalls()).toHaveLength(0);
   });
 
   it('has no Cost calculator tab while the cost flags are off', async () => {
@@ -699,7 +840,7 @@ describe('LimitsPanel — global mode', () => {
     renderPanel();
 
     expect(await screen.findByRole('tablist')).toBeInTheDocument();
-    expect(screen.getAllByRole('tab')).toHaveLength(5);
+    expect(screen.getAllByRole('tab')).toHaveLength(4);
     expect(
       screen.queryByRole('tab', { name: 'cost.calculator.tab' }),
     ).not.toBeInTheDocument();
@@ -727,7 +868,7 @@ describe('LimitsPanel — global mode', () => {
     renderPanel();
 
     const tab = await screen.findByRole('tab', { name: 'cost.calculator.tab' });
-    expect(screen.getAllByRole('tab')).toHaveLength(6);
+    expect(screen.getAllByRole('tab')).toHaveLength(5);
     fireEvent.click(tab);
 
     const panel = screen.getByRole('tabpanel');
