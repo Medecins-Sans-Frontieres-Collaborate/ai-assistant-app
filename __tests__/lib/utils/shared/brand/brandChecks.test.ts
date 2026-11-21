@@ -298,3 +298,38 @@ describe('termOccurrences', () => {
     expect(termOccurrences('We are MSF.', 'MSF', [preferred])).toBe(1);
   });
 });
+
+describe('wording that overlaps', () => {
+  const book = bookWith({
+    language: {
+      banned: [
+        { term: 'in the field', alternatives: ['working in Haiti'] },
+        { term: 'the field', alternatives: ['medical project'] },
+      ],
+      preferred: [
+        { term: 'people', alternatives: ['populations'] },
+        { term: 'communities', alternatives: ['populations'] },
+      ],
+    },
+  });
+  const wording = (text: string) =>
+    checkDocumentText(model([unit([run({ text })])]), book)
+      .filter((f) => f.rule.endsWith('-term'))
+      .map((f) => `${f.rule}:${f.found}:${f.expected.join('|')}`);
+
+  it('reports a phrase inside a longer banned phrase once, as the longer', () => {
+    expect(wording('Our teams in the field.')).toEqual([
+      'banned-term:in the field:working in Haiti',
+    ]);
+    // On its own, the shorter phrase is still found.
+    expect(wording('We left the field.')).toEqual([
+      'banned-term:the field:medical project',
+    ]);
+  });
+
+  it('offers every preferred word for a word two of them replace, once', () => {
+    expect(wording('Care for populations.')).toEqual([
+      'preferred-term:populations:people|communities',
+    ]);
+  });
+});

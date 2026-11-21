@@ -219,8 +219,19 @@ function wordingFindings(
   book: BrandBookBody,
 ): BrandFinding[] {
   const findings: BrandFinding[] = [];
+  const bannedTerms = book.language.banned.map((entry) => entry.term);
   for (const banned of book.language.banned) {
-    const count = termOccurrences(unit.text, banned.term, banned.alternatives);
+    // Words inside a longer banned phrase are that phrase's finding, not
+    // a second one ("the field" inside "in the field").
+    const longer = bannedTerms.filter(
+      (other) =>
+        other.length > banned.term.length &&
+        termOccurrences(other, banned.term) > 0,
+    );
+    const count = termOccurrences(unit.text, banned.term, [
+      ...banned.alternatives,
+      ...longer,
+    ]);
     if (count > 0) {
       findings.push(
         unitFinding(unit, {
@@ -233,22 +244,35 @@ function wordingFindings(
       );
     }
   }
-  // A preferred term lists the words it should be used instead of.
+  // A preferred term lists the words it should be used instead of. A word
+  // several preferred terms replace is one finding offering all of them.
+  const replacements = new Map<
+    string,
+    { instead: string; count: number; expected: string[] }
+  >();
   for (const preferred of book.language.preferred) {
     for (const instead of preferred.alternatives) {
       const count = termOccurrences(unit.text, instead, [preferred.term]);
-      if (count > 0) {
-        findings.push(
-          unitFinding(unit, {
-            rule: 'preferred-term',
-            severity: 'warning',
-            found: instead,
-            expected: [preferred.term],
-            ...(count > 1 ? { count } : {}),
-          }),
-        );
-      }
+      if (count === 0) continue;
+      const key = instead.trim().toLowerCase();
+      const held = replacements.get(key);
+      replacements.set(key, {
+        instead: held?.instead ?? instead,
+        count: Math.max(held?.count ?? 0, count),
+        expected: [...(held?.expected ?? []), preferred.term],
+      });
     }
+  }
+  for (const { instead, count, expected } of replacements.values()) {
+    findings.push(
+      unitFinding(unit, {
+        rule: 'preferred-term',
+        severity: 'warning',
+        found: instead,
+        expected,
+        ...(count > 1 ? { count } : {}),
+      }),
+    );
   }
   if (book.language.locales.length > 0) {
     const declared = new Set(
