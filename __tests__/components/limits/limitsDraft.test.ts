@@ -8,10 +8,12 @@ import { LimitsPolicy } from '@/lib/services/limits/types';
 
 import {
   LimitsDraft,
+  audienceRule,
   draftPolicy,
   exceptionCounts,
   revertChange,
   rulesForKey,
+  withAudienceEntry,
   withEntry,
 } from '@/components/Limits/limitsDraft';
 
@@ -161,5 +163,72 @@ describe('revertChange', () => {
         expect(after).toContain(identity(other));
       }
     }
+  });
+});
+
+describe('audienceRule and withAudienceEntry', () => {
+  const cell = { limitKey: 'chat.messagesPerDay' };
+  const del = delegation('del-0000000000cc', []);
+  const shared = override('user', ['a@x.org', 'b@x.org'], [{ value: 10 }]);
+  const scoped = override('user', ['a@x.org'], [{ value: 20 }], {
+    delegationId: del.id,
+  });
+  const create = () => override('user', [], []);
+
+  it('ignores rules shared with others or owned by a delegated admin', () => {
+    expect(audienceRule([shared, scoped], 'user', 'a@x.org')).toBeUndefined();
+    const own = override('user', ['A@x.org'], [{ value: 30 }]);
+    expect(audienceRule([shared, scoped, own], 'user', 'a@X.org')).toBe(own);
+  });
+
+  it('creates the audience rule on the first value and drops it when emptied', () => {
+    const options = { savedIds: new Set<string>(), create };
+    const audience = { scope: 'user' as const, target: ' A@x.org ' };
+    const added = withAudienceEntry([shared], audience, cell, 500, options);
+    expect(added).toHaveLength(2);
+    expect(added[1]).toMatchObject({
+      scope: 'user',
+      targets: ['a@x.org'],
+      entries: [{ ...cell, value: 500, ceiling: false }],
+    });
+    // The shared rule is untouched.
+    expect(added[0]).toBe(shared);
+    expect(
+      withAudienceEntry(added, audience, cell, undefined, options),
+    ).toEqual([shared]);
+    // Inherit with no rule is a no-op, and an empty target changes nothing.
+    expect(
+      withAudienceEntry([shared], audience, cell, undefined, options),
+    ).toEqual([shared]);
+    expect(
+      withAudienceEntry(
+        [shared],
+        { scope: 'user', target: ' ' },
+        cell,
+        5,
+        options,
+      ),
+    ).toEqual([shared]);
+  });
+
+  it('keeps an emptied STORED rule, and switches a disabled one on when set', () => {
+    const own = override('group', ['g-1'], [{ value: 30 }], { enabled: false });
+    const options = { savedIds: new Set([own.id]), create };
+    const audience = { scope: 'group' as const, target: 'g-1' };
+    const emptied = withAudienceEntry(
+      [own],
+      audience,
+      cell,
+      undefined,
+      options,
+    );
+    expect(emptied).toHaveLength(1);
+    expect(emptied[0]).toMatchObject({
+      id: own.id,
+      entries: [],
+      enabled: false,
+    });
+    const set = withAudienceEntry([own], audience, cell, null, options);
+    expect(set[0]).toMatchObject({ enabled: true, entries: [{ value: null }] });
   });
 });
