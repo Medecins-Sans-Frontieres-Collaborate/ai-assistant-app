@@ -1,8 +1,11 @@
 /**
  * The model access GRID (docs/LIMITS.md "Model approval"): the same rules
  * the tree edits, read as one table. Rows are families and their models;
- * columns are "everyone else", one per group or domain that holds a grant
- * anywhere, the allow list and the block list.
+ * columns are "everyone else", one per group or domain named anywhere, and
+ * the named people. Groups, domains and people are ONE kind of thing here
+ * (an {@link Audience}) with one kind of answer ({@link AudienceTerms}); the
+ * stored rule keeps a grant list and a block list per kind, and nothing
+ * outside this module needs to know which list an entry lives on.
  *
  * Pure and client-importable. Inheritance convention, stated once here: a
  * MODEL row with nothing of its own in a column shows what its FAMILY sets
@@ -24,31 +27,106 @@ import {
   upsertRule,
 } from '@/lib/utils/app/modelAccessTree';
 
-/** A group or a domain that some row grants access to. */
-export interface AudienceColumn {
-  scope: 'group' | 'domain';
-  /** Entra group object id or email domain, as stored. */
+/** Who an entry is about: a person (mail), an Entra group or a domain. */
+export interface Audience {
+  scope: 'user' | 'group' | 'domain';
+  /** Mail, Entra group object id or bare email domain, as stored. */
   target: string;
 }
 
-const LIST_OF: Record<AudienceColumn['scope'], 'groups' | 'domains'> = {
+/**
+ * The terms one audience gets on one row. Convention, stated once: a number
+ * is a daily request cap, `null` is unlimited, `false` is BLOCKED.
+ * `undefined` (only as an argument) means "no entry": remove it.
+ */
+export type AudienceTerms = number | null | false;
+
+/** A group or a domain: the audiences the grid gives a column each. */
+export interface AudienceColumn extends Audience {
+  scope: 'group' | 'domain';
+}
+
+type GrantList = 'groups' | 'domains' | 'allow';
+type BlockList = 'denyGroups' | 'denyDomains' | 'deny';
+
+const GRANT_LIST: Record<Audience['scope'], GrantList> = {
   group: 'groups',
   domain: 'domains',
+  user: 'allow',
 };
+const BLOCK_LIST: Record<Audience['scope'], BlockList> = {
+  group: 'denyGroups',
+  domain: 'denyDomains',
+  user: 'deny',
+};
+/** Display order: the broadest lever an admin reaches for first. */
+const SCOPES: readonly Audience['scope'][] = ['group', 'domain', 'user'];
+
+const canonical = (target: string): string => target.trim().toLowerCase();
 
 const sameTarget = (a: string, b: string): boolean =>
-  a.trim().toLowerCase() === b.trim().toLowerCase();
+  canonical(a) === canonical(b);
+
+/** Identity of an audience, for keys and de-duplication. */
+export function audienceId(audience: Audience): string {
+  return `${audience.scope}:${canonical(audience.target)}`;
+}
 
 /** Identity of a column, for keys and de-duplication. */
-export function columnId(column: AudienceColumn): string {
-  return `${column.scope}:${column.target.trim().toLowerCase()}`;
+export const columnId: (column: AudienceColumn) => string = audienceId;
+
+const GUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const DOMAIN = /^[a-z0-9-]+(\.[a-z0-9-]+)+$/i;
+
+/**
+ * Reads one typed or pasted entry as an audience: `name@example.org` is a
+ * person, `example.org` or `@example.org` a domain, a GUID an Entra group.
+ *
+ * @returns The audience with a canonical (trimmed, lowercased) target, or
+ *   `null` when the text is none of the three.
+ */
+export function parseAudience(text: string): Audience | null {
+  const value = canonical(text);
+  if (GUID.test(value)) return { scope: 'group', target: value };
+  const at = value.lastIndexOf('@');
+  const domain = value.slice(at + 1);
+  if (!DOMAIN.test(domain)) return null;
+  if (at <= 0) return { scope: 'domain', target: domain };
+  const local = value.slice(0, at);
+  return /^[^\s@]+$/.test(local) ? { scope: 'user', target: value } : null;
+}
+
+/** The terms a rule itself gives an audience, or `undefined` for none. */
+function ownTerms(
+  rule: ModelAccessRule | undefined,
+  audience: Audience,
+): AudienceTerms | undefined {
+  if (!rule) return undefined;
+  const blocked = rule[BLOCK_LIST[audience.scope]] ?? [];
+  if (blocked.some((target) => sameTarget(target, audience.target))) {
+    return false;
+  }
+  return rule[GRANT_LIST[audience.scope]].find((grant: ModelAccessGrant) =>
+    sameTarget(grant.target, audience.target),
+  )?.requests;
+}
+
+/** Every audience a rule names, grants then blocks, in stored order. */
+function audiencesOf(
+  rule: ModelAccessRule,
+  scope: Audience['scope'],
+): string[] {
+  return [
+    ...rule[GRANT_LIST[scope]].map((grant) => grant.target),
+    ...(rule[BLOCK_LIST[scope]] ?? []),
+  ];
 }
 
 /**
- * Every audience column the grid shows: each group and domain granted by
- * any rule, then columns added this session that hold no grant yet. Groups
- * come before domains (more specific first); order within a kind is first
- * appearance, so adding a grant never reshuffles the table.
+ * Every audience column the grid shows: each group and domain granted or
+ * blocked by any rule, then columns added this session that hold nothing
+ * yet. Groups come before domains (more specific first); order within a
+ * kind is first appearance, so adding an entry never reshuffles the table.
  */
 export function audienceColumns(
   rules: readonly ModelAccessRule[],
@@ -64,35 +142,27 @@ export function audienceColumns(
   };
   for (const scope of ['group', 'domain'] as const) {
     for (const rule of rules) {
-      for (const grant of rule[LIST_OF[scope]]) {
-        add({ scope, target: grant.target });
-      }
+      for (const target of audiencesOf(rule, scope)) add({ scope, target });
     }
     for (const column of extra) if (column.scope === scope) add(column);
   }
   return out;
 }
 
-function grantOf(
-  rule: ModelAccessRule | undefined,
-  column: AudienceColumn,
-): ModelAccessGrant | undefined {
-  return rule?.[LIST_OF[column.scope]].find((grant) =>
-    sameTarget(grant.target, column.target),
-  );
-}
-
 /** What one cell of the grid holds. */
 export type GridCell =
   /** Nothing here and nothing inherited. */
   | { kind: 'empty' }
-  /** Set on this row. `requests: null` is unlimited. */
-  | { kind: 'set'; requests: number | null }
-  /** A model row showing its family's grant. */
-  | { kind: 'inherited'; requests: number | null };
+  /** Set on this row. */
+  | { kind: 'set'; terms: AudienceTerms }
+  /** A model row showing what its family sets. */
+  | { kind: 'inherited'; terms: AudienceTerms };
 
 /**
- * The cell for one row and one audience column.
+ * The cell for one row and one audience: what that audience really gets.
+ * A block wins wherever it sits (the resolver ranks it above a grant at the
+ * same layer), so a model row whose FAMILY blocks the audience shows the
+ * family's block even when the model grants it.
  *
  * @param dim - The row (a model id or a family series).
  * @param series - The model's family, for a model row.
@@ -101,45 +171,139 @@ export function audienceCell(
   rules: readonly ModelAccessRule[],
   dim: ModelAccessDimension,
   series: string | undefined,
-  column: AudienceColumn,
+  audience: Audience,
 ): GridCell {
-  const own = grantOf(ruleFor(rules, dim), column);
-  if (own) return { kind: 'set', requests: own.requests };
-  if (dim.modelId && series) {
-    const family = grantOf(ruleFor(rules, { series }), column);
-    if (family) return { kind: 'inherited', requests: family.requests };
-  }
+  const own = ownTerms(ruleFor(rules, dim), audience);
+  const family =
+    dim.modelId && series
+      ? ownTerms(ruleFor(rules, { series }), audience)
+      : undefined;
+  if (own === false) return { kind: 'set', terms: false };
+  if (family === false) return { kind: 'inherited', terms: false };
+  if (own !== undefined) return { kind: 'set', terms: own };
+  if (family !== undefined) return { kind: 'inherited', terms: family };
   return { kind: 'empty' };
 }
 
+/** One line of a row's audience list. */
+export interface AudienceEntry {
+  audience: Audience;
+  terms: AudienceTerms;
+  /** `own`: set on this row. `family`: a model row showing its family's. */
+  origin: 'own' | 'family';
+  /** An own grant that does nothing because the family blocks the audience. */
+  overruled: boolean;
+}
+
 /**
- * Sets, changes or removes one audience's grant on one row.
- *
- * @param requests - A daily cap, `null` for unlimited, or `undefined` to
- *   remove the grant (the row then inherits or has none).
- * @returns The new rule list; a rule left saying nothing is removed.
+ * Everyone a row names, in one list: its own groups, domains and people,
+ * then (for a model) the family's entries it has none of its own for.
  */
-export function withAudienceGrant(
+export function audienceEntries(
   rules: readonly ModelAccessRule[],
   dim: ModelAccessDimension,
-  column: AudienceColumn,
-  requests: number | null | undefined,
+  series: string | undefined,
+): AudienceEntry[] {
+  const own = ruleFor(rules, dim);
+  const family = dim.modelId && series ? ruleFor(rules, { series }) : undefined;
+  const entries: AudienceEntry[] = [];
+  const seen = new Set<string>();
+  for (const [rule, origin] of [
+    [own, 'own'],
+    [family, 'family'],
+  ] as const) {
+    if (!rule) continue;
+    for (const scope of SCOPES) {
+      for (const target of audiencesOf(rule, scope)) {
+        const audience: Audience = { scope, target };
+        const id = audienceId(audience);
+        if (seen.has(id)) continue;
+        seen.add(id);
+        const terms = ownTerms(rule, audience);
+        if (terms === undefined) continue;
+        entries.push({
+          audience,
+          terms,
+          origin,
+          overruled:
+            origin === 'own' &&
+            terms !== false &&
+            ownTerms(family, audience) === false,
+        });
+      }
+    }
+  }
+  return entries;
+}
+
+/**
+ * Sets, changes or removes what one audience gets on one row. An audience
+ * holds one entry per row: granting removes its block and blocking removes
+ * its grant (the save refuses a target on both lists).
+ *
+ * @param terms - A daily cap, `null` for unlimited, `false` to block, or
+ *   `undefined` to remove the entry (the row then inherits or has none).
+ * @returns The new rule list; a rule left saying nothing is removed.
+ */
+export function withAudienceTerms(
+  rules: readonly ModelAccessRule[],
+  dim: ModelAccessDimension,
+  audience: Audience,
+  terms: AudienceTerms | undefined,
 ): ModelAccessRule[] {
-  const list = LIST_OF[column.scope];
+  const target = canonical(audience.target);
+  if (!target) return [...rules];
+  const grantList = GRANT_LIST[audience.scope];
+  const blockList = BLOCK_LIST[audience.scope];
   const current = ruleFor(rules, dim) ?? emptyRule(dim);
-  const rest = current[list].filter(
-    (grant) => !sameTarget(grant.target, column.target),
+  const grants = current[grantList];
+  const existing = grants.find((grant) => sameTarget(grant.target, target));
+  const otherGrants = grants.filter((grant) => grant !== existing);
+  const otherBlocks = (current[blockList] ?? []).filter(
+    (blocked) => !sameTarget(blocked, target),
   );
-  const existing = grantOf(current, column);
-  const grants =
-    requests === undefined
-      ? rest
-      : existing
-        ? current[list].map((grant) =>
-            grant === existing ? { ...grant, requests } : grant,
-          )
-        : [...rest, { target: column.target.trim(), requests }];
-  return upsertRule(rules, dim, { ...current, [list]: grants });
+  const granted = terms !== undefined && terms !== false;
+  const nextGrants = !granted
+    ? otherGrants
+    : existing
+      ? grants.map((grant) =>
+          grant === existing ? { ...grant, requests: terms } : grant,
+        )
+      : [...grants, { target, requests: terms }];
+  const nextBlocks = terms === false ? [...otherBlocks, target] : otherBlocks;
+  const { [blockList]: _blocks, ...rest } = current;
+  return upsertRule(rules, dim, {
+    ...rest,
+    [grantList]: nextGrants,
+    // The people block list is always stored; the group and domain ones
+    // only when they hold something (older rules never carried them).
+    ...(blockList === 'deny' || nextBlocks.length > 0
+      ? { [blockList]: nextBlocks }
+      : {}),
+  } as ModelAccessRule);
+}
+
+/**
+ * Gives several audiences the same terms on several rows in one step.
+ *
+ * @example
+ * // Open two families to a group and a domain, 50 requests a day each.
+ * withAudiencesTerms(rules, [{ series: 'claude' }, { series: 'gpt' }],
+ *   [{ scope: 'group', target: id }, { scope: 'domain', target: 'msf.org' }], 50);
+ */
+export function withAudiencesTerms(
+  rules: readonly ModelAccessRule[],
+  dims: readonly ModelAccessDimension[],
+  audiences: readonly Audience[],
+  terms: AudienceTerms | undefined,
+): ModelAccessRule[] {
+  let next = [...rules];
+  for (const dim of dims) {
+    for (const audience of audiences) {
+      next = withAudienceTerms(next, dim, audience, terms);
+    }
+  }
+  return next;
 }
 
 /**
@@ -162,44 +326,58 @@ export function withDefaultAccess(
   );
 }
 
-/** The people lists of a row, with what a model row inherits from its family. */
-export interface PeopleLists {
-  allow: number;
-  deny: number;
-  /** Family entries a model row inherits on top of its own. */
-  inheritedAllow: number;
-  inheritedDeny: number;
+/** The named people of a row, with what a model row inherits. */
+export interface PeopleCounts {
+  allowed: number;
+  blocked: number;
+  /** Family entries a model row has none of its own for. */
+  inheritedAllowed: number;
+  inheritedBlocked: number;
 }
 
-export function peopleLists(
+/** Counts the people a row names, own and inherited, granted and blocked. */
+export function peopleCounts(
   rules: readonly ModelAccessRule[],
   dim: ModelAccessDimension,
   series: string | undefined,
-): PeopleLists {
-  const own = ruleFor(rules, dim);
-  const family = dim.modelId && series ? ruleFor(rules, { series }) : undefined;
-  return {
-    allow: own?.allow.length ?? 0,
-    deny: own?.deny.length ?? 0,
-    inheritedAllow: family?.allow.length ?? 0,
-    inheritedDeny: family?.deny.length ?? 0,
+): PeopleCounts {
+  const counts: PeopleCounts = {
+    allowed: 0,
+    blocked: 0,
+    inheritedAllowed: 0,
+    inheritedBlocked: 0,
   };
+  for (const entry of audienceEntries(rules, dim, series)) {
+    if (entry.audience.scope !== 'user') continue;
+    const blocked = entry.terms === false;
+    if (entry.origin === 'own') counts[blocked ? 'blocked' : 'allowed'] += 1;
+    else counts[blocked ? 'inheritedBlocked' : 'inheritedAllowed'] += 1;
+  }
+  return counts;
+}
+
+/** How many audiences of each kind a summary names. */
+export interface AudienceCounts {
+  groups: number;
+  domains: number;
+  people: number;
 }
 
 /** Who can use a row, in summary. */
 export type Reach =
   /** Open to everyone. */
   | { kind: 'everyone' }
-  /** Open to everyone except the people on a block list. */
-  | { kind: 'everyoneBut'; blocked: number }
-  /** Closed by default; only the listed audiences. */
-  | { kind: 'listed'; groups: number; domains: number; people: number }
-  /** Closed by default with nobody listed. */
+  /** Open to everyone except the blocked audiences. */
+  | ({ kind: 'everyoneBut' } & AudienceCounts)
+  /** Closed by default; only the granted audiences. */
+  | ({ kind: 'listed' } & AudienceCounts)
+  /** Closed by default with nobody granted. */
   | { kind: 'nobody' };
 
 /**
- * Who can use a row: the effective default for everyone else, then the
- * grants and blocks on the row and (for a model) on its family.
+ * Who can use a row: the effective default for everyone else, then what the
+ * row's audiences really get ({@link audienceCell}, so a family block counts
+ * on its models and an overruled grant does not).
  */
 export function reachOf(
   rules: readonly ModelAccessRule[],
@@ -213,23 +391,17 @@ export function reachOf(
     defaults,
     rules,
   ).state;
-  const sources = [
-    ruleFor(rules, dim),
-    dim.modelId && series ? ruleFor(rules, { series }) : undefined,
-  ].filter((rule): rule is ModelAccessRule => rule !== undefined);
-  const distinct = (pick: (rule: ModelAccessRule) => string[]): number =>
-    new Set(sources.flatMap(pick).map((value) => value.trim().toLowerCase()))
-      .size;
-  const blocked = distinct((rule) => rule.deny);
-  if (state.kind !== 'unavailable') {
-    return blocked > 0
-      ? { kind: 'everyoneBut', blocked }
-      : { kind: 'everyone' };
+  const open = state.kind !== 'unavailable';
+  const counts: AudienceCounts = { groups: 0, domains: 0, people: 0 };
+  const key = { group: 'groups', domain: 'domains', user: 'people' } as const;
+  for (const { audience } of audienceEntries(rules, dim, series)) {
+    const cell = audienceCell(rules, dim, series, audience);
+    if (cell.kind === 'empty') continue;
+    // Open rows are summed up by who is shut out, closed rows by who is in.
+    if ((cell.terms === false) === open) counts[key[audience.scope]] += 1;
   }
-  const groups = distinct((rule) => rule.groups.map((g) => g.target));
-  const domains = distinct((rule) => rule.domains.map((g) => g.target));
-  const people = distinct((rule) => rule.allow.map((g) => g.target));
-  return groups + domains + people === 0
-    ? { kind: 'nobody' }
-    : { kind: 'listed', groups, domains, people };
+  const none = counts.groups + counts.domains + counts.people === 0;
+  if (open)
+    return none ? { kind: 'everyone' } : { kind: 'everyoneBut', ...counts };
+  return none ? { kind: 'nobody' } : { kind: 'listed', ...counts };
 }
