@@ -69,6 +69,7 @@ import { RETIREMENT_NOTICE_DAYS } from '@/lib/utils/shared/modelRetirement';
 
 import {
   ADMIN_BANNER_WARN,
+  ADMIN_BREAKOUT,
   ADMIN_BTN_ICON_DANGER,
   ADMIN_BTN_PRIMARY,
   ADMIN_BTN_SECONDARY,
@@ -606,23 +607,27 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
         {insights && capturedDays === 0 && t('modelAccess.facts.captureNote')}
       </p>
       {view === 'runway' && (
-        <ModelRunway
-          models={runwayModels}
-          onOpen={openModel}
-          onCarryOver={carryOver}
-          disabled={disabled}
-        />
+        <div className={ADMIN_BREAKOUT}>
+          <ModelRunway
+            models={runwayModels}
+            onOpen={openModel}
+            onCarryOver={carryOver}
+            disabled={disabled}
+          />
+        </div>
       )}
       {view === 'map' && (
-        <ModelSpendMap
-          models={known.map(({ row, facts }) => ({
-            facts,
-            label: row.label,
-            terms: termsOf(row),
-          }))}
-          windowDays={windowDays}
-          onOpen={openModel}
-        />
+        <div className={ADMIN_BREAKOUT}>
+          <ModelSpendMap
+            models={known.map(({ row, facts }) => ({
+              facts,
+              label: row.label,
+              terms: termsOf(row),
+            }))}
+            windowDays={windowDays}
+            onOpen={openModel}
+          />
+        </div>
       )}
       {view !== 'grid' && (
         <p
@@ -701,7 +706,9 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
             // not as wide as the table, so it never scrolls sideways with it.
             // `isolate` keeps the pinned column's stacking inside this box, under
             // the page's sticky unsaved-changes bar.
-            <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white isolate [container-type:inline-size] dark:border-gray-700 dark:bg-surface-dark">
+            <div
+              className={`overflow-x-auto rounded-lg border border-gray-200 bg-white isolate [container-type:inline-size] dark:border-gray-700 dark:bg-surface-dark ${ADMIN_BREAKOUT}`}
+            >
               <table className="w-full border-collapse text-sm">
                 <caption className="sr-only">
                   {t('modelAccess.grid.caption')}
@@ -829,7 +836,7 @@ const SummaryFact: FC<{
   <div>
     <dt className="text-xs text-gray-600 dark:text-gray-400">{label}</dt>
     <dd
-      className={`text-lg font-semibold tabular-nums ${warn ? 'text-orange-800 dark:text-orange-300' : 'text-gray-900 dark:text-white'}`}
+      className={`text-base font-semibold tabular-nums ${warn ? 'text-orange-800 dark:text-orange-300' : 'text-gray-900 dark:text-white'}`}
     >
       {children}
     </dd>

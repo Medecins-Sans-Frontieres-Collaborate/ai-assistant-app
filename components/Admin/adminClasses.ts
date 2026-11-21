@@ -104,3 +104,11 @@ export const ADMIN_HEADING =
 
 /** Muted body copy — descriptions, secondary detail. */
 export const ADMIN_MUTED = 'text-xs text-gray-500 dark:text-gray-400';
+
+/**
+ * Lets a wide surface (a many-column grid, a chart) grow past the page's
+ * centred column into the free space of AdminShell's `main`, up to 96rem.
+ * `100cqw - 3rem` is that container less the column's own padding, so on a
+ * window narrower than the column the margin is 0 and nothing moves.
+ */
+export const ADMIN_BREAKOUT = 'mx-[calc((100%_-_min(100cqw_-_3rem,96rem))/2)]';
