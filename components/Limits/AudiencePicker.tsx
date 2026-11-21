@@ -1,19 +1,33 @@
 'use client';
 
 import { IconX } from '@tabler/icons-react';
-import { FC, KeyboardEvent, useId, useMemo, useState } from 'react';
+import {
+  FC,
+  KeyboardEvent,
+  Ref,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import { useAgentAccessGroupsEnabled } from '@/client/hooks/useAgentAccessGroupsEnabled';
 import { rememberGroupName, useGroupNames } from '@/client/hooks/useGroupNames';
 import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
-import {
+import type {
   TypeaheadFetch,
-  useTypeaheadSuggestions,
+  TypeaheadStatus,
+  TypeaheadSuggestion,
 } from '@/client/hooks/useTypeaheadSuggestions';
 
-import { searchEntraGroups } from '@/client/services/m365/m365Client';
+import {
+  M365_SEARCH_DEBOUNCE_MS,
+  M365_SEARCH_MIN_CHARS,
+  searchEntraGroups,
+} from '@/client/services/m365/m365Client';
 
 import {
   Audience,
@@ -31,6 +45,118 @@ interface AudiencePickerProps {
   /** Accessible name of the field. */
   label: string;
   disabled?: boolean;
+  /** The text field, so a parent can move focus to it. */
+  inputRef?: Ref<HTMLInputElement>;
+}
+
+/**
+ * Directory suggestions for the mixed field: groups and people are searched
+ * side by side and each list is SHOWN AS SOON AS IT ARRIVES, groups first.
+ * (One combined request made the faster group answer wait for the slower
+ * people search; groups are what an admin reaches for most.) A source that
+ * fails counts as answering with nothing; typing always keeps working.
+ */
+function useAudienceSuggestions(
+  searchPeople: TypeaheadFetch | undefined,
+  groupsEnabled: boolean,
+): {
+  suggestions: TypeaheadSuggestion[];
+  status: TypeaheadStatus;
+  activeIndex: number;
+  setActiveIndex: (index: number) => void;
+  query: (token: string, exclude: readonly string[]) => void;
+  clear: () => void;
+} {
+  const [groups, setGroups] = useState<TypeaheadSuggestion[]>([]);
+  const [people, setPeople] = useState<TypeaheadSuggestion[]>([]);
+  const [pending, setPending] = useState(0);
+  const [asked, setAsked] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  /** Identifies the newest query; answers to older ones are dropped. */
+  const run = useRef(0);
+  const timer = useRef<number | null>(null);
+  const abort = useRef<AbortController | null>(null);
+
+  const cancel = useCallback(() => {
+    run.current += 1;
+    abort.current?.abort();
+    if (timer.current !== null) window.clearTimeout(timer.current);
+    timer.current = null;
+  }, []);
+  const clear = useCallback(() => {
+    cancel();
+    setGroups([]);
+    setPeople([]);
+    setPending(0);
+    setAsked(false);
+    setActiveIndex(0);
+  }, [cancel]);
+  useEffect(() => cancel, [cancel]);
+
+  const query = useCallback(
+    (token: string, exclude: readonly string[]) => {
+      const text = token.trim();
+      const sources = (groupsEnabled ? 1 : 0) + (searchPeople ? 1 : 0);
+      if (sources === 0 || text.length < M365_SEARCH_MIN_CHARS) {
+        clear();
+        return;
+      }
+      cancel();
+      const id = run.current;
+      const skip = new Set(exclude);
+      const keep = (list: TypeaheadSuggestion[]) =>
+        list.filter((suggestion) => !skip.has(suggestion.value));
+      setPending(sources);
+      setAsked(true);
+      timer.current = window.setTimeout(() => {
+        const controller = new AbortController();
+        abort.current = controller;
+        const settle = (
+          set: (list: TypeaheadSuggestion[]) => void,
+          list: TypeaheadSuggestion[],
+        ) => {
+          if (run.current !== id) return;
+          set(keep(list));
+          setPending((count) => count - 1);
+          setActiveIndex(0);
+        };
+        if (groupsEnabled) {
+          searchEntraGroups(text)
+            .then((found) => {
+              for (const group of found)
+                rememberGroupName(group.id, group.name);
+              return found.map((group) => ({
+                label: group.name,
+                value: audienceId({ scope: 'group', target: group.id }),
+              }));
+            })
+            .catch(() => [])
+            .then((list) => settle(setGroups, list));
+        }
+        if (searchPeople) {
+          searchPeople(text, controller.signal)
+            .then((found) =>
+              found.map((person) => ({
+                label: person.label,
+                value: audienceId({ scope: 'user', target: person.value }),
+              })),
+            )
+            .catch(() => [])
+            .then((list) => settle(setPeople, list));
+        }
+      }, M365_SEARCH_DEBOUNCE_MS);
+    },
+    [searchPeople, groupsEnabled, cancel, clear],
+  );
+
+  return {
+    suggestions: [...groups, ...people],
+    status: pending > 0 ? 'searching' : asked ? 'done' : 'idle',
+    activeIndex,
+    setActiveIndex,
+    query,
+    clear,
+  };
 }
 
 /** Splits `scope:target` (a suggestion value) back into an audience. */
@@ -58,6 +184,7 @@ export const AudiencePicker: FC<AudiencePickerProps> = ({
   onChange,
   label,
   disabled = false,
+  inputRef,
 }) => {
   const t = useTranslations('limits');
   const tPeople = useTranslations('peopleSuggest');
@@ -71,29 +198,8 @@ export const AudiencePicker: FC<AudiencePickerProps> = ({
     value.filter((a) => a.scope === 'group').map((a) => a.target),
   );
 
-  const fetchSuggestions = useMemo<TypeaheadFetch | undefined>(() => {
-    if (!searchPeople && !groupsEnabled) return undefined;
-    return async (query, signal) => {
-      // Each source fails on its own: no groups must not cost the people.
-      const [groups, people] = await Promise.all([
-        groupsEnabled ? searchEntraGroups(query).catch(() => []) : [],
-        searchPeople ? searchPeople(query, signal).catch(() => []) : [],
-      ]);
-      for (const group of groups) rememberGroupName(group.id, group.name);
-      return [
-        ...groups.map((group) => ({
-          label: group.name,
-          value: audienceId({ scope: 'group', target: group.id }),
-        })),
-        ...people.map((person) => ({
-          label: person.label,
-          value: audienceId({ scope: 'user', target: person.value }),
-        })),
-      ];
-    };
-  }, [searchPeople, groupsEnabled]);
   const { suggestions, status, activeIndex, setActiveIndex, query, clear } =
-    useTypeaheadSuggestions(fetchSuggestions);
+    useAudienceSuggestions(searchPeople, groupsEnabled);
 
   const add = (audiences: Audience[]) => {
     const seen = new Set(value.map(audienceId));
@@ -152,6 +258,8 @@ export const AudiencePicker: FC<AudiencePickerProps> = ({
         return;
       }
       if (event.key === 'Escape') {
+        // Consumed: Escape closes the list, not the editor around it.
+        event.preventDefault();
         clear();
         return;
       }
@@ -211,8 +319,9 @@ export const AudiencePicker: FC<AudiencePickerProps> = ({
           </span>
         ))}
         <input
+          ref={inputRef}
           type="text"
-          className="min-w-[14rem] flex-1 border-none bg-transparent p-0.5 text-sm text-gray-900 outline-none placeholder:text-gray-500 dark:text-white dark:placeholder:text-gray-400"
+          className="min-w-[10rem] flex-1 border-none bg-transparent p-0.5 text-sm text-gray-900 outline-none placeholder:text-gray-500 dark:text-white dark:placeholder:text-gray-400"
           value={draft}
           onChange={(event) => {
             setDraft(event.target.value);
@@ -249,6 +358,14 @@ export const AudiencePicker: FC<AudiencePickerProps> = ({
             aria-busy={status === 'searching'}
             className="absolute start-0 top-full z-20 mt-1 max-h-60 w-full min-w-[16rem] overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
           >
+            {suggestions.length > 0 && status === 'searching' && (
+              <li
+                role="presentation"
+                className="px-3 py-1 text-xs text-gray-600 dark:text-gray-400"
+              >
+                {tPeople('searching')}
+              </li>
+            )}
             {suggestions.length === 0 && (
               <li
                 role="presentation"
