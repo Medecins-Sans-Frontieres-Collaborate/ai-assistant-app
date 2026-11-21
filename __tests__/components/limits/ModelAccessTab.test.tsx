@@ -465,6 +465,90 @@ describe('ModelAccessTab grid', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('keeps entries waiting in the field when another row is selected, then moves on once answered', () => {
+    const onChange = renderTab();
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    const editor = screen.getByRole('region', { name: 'Who can use Claude' });
+    const field = within(editor).getByRole('combobox');
+    fireEvent.change(field, { target: { value: 'oca.msf.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+
+    // Selecting a cell on ANOTHER row does not replace the editor.
+    fireEvent.click(cell(/^Claude Sonnet 5, Everyone else/));
+    expect(
+      screen.queryByRole('region', { name: 'Who can use Claude Sonnet 5' }),
+    ).not.toBeInTheDocument();
+    expect(within(editor).getByRole('alert')).toHaveTextContent(
+      '1 entry in the field is not added yet.',
+    );
+    const answer = within(editor).getByRole('button', {
+      name: 'Add and close',
+    });
+    expect(answer).toHaveFocus();
+    expect(onChange).not.toHaveBeenCalled();
+
+    // Answered: the entry is added and the row that was asked for opens.
+    fireEvent.click(answer);
+    expect(onChange).toHaveBeenLastCalledWith([
+      rule({
+        series: 'claude',
+        domains: [{ target: 'oca.msf.org', requests: null }],
+      }),
+    ]);
+    expect(
+      screen.getByRole('region', { name: 'Who can use Claude Sonnet 5' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('region', { name: 'Who can use Claude' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('moves to the other row without adding when told to, and switches freely with nothing waiting', () => {
+    const onChange = renderTab();
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    // Nothing waiting: another row opens at once.
+    fireEvent.click(cell(/^Claude Sonnet 5, Everyone else/));
+    const editor = screen.getByRole('region', {
+      name: 'Who can use Claude Sonnet 5',
+    });
+    const field = within(editor).getByRole('combobox');
+    fireEvent.change(field, { target: { value: 'oca.msf.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+    // A different column of the SAME row keeps the editor and its entries.
+    fireEvent.click(cell(/^Claude Sonnet 5, Named people/));
+    expect(within(editor).queryByRole('alert')).not.toBeInTheDocument();
+    expect(
+      within(editor).getByRole('button', { name: 'Add 1 entry' }),
+    ).toBeEnabled();
+
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    fireEvent.click(
+      within(editor).getByRole('button', { name: 'Close without adding' }),
+    );
+    expect(onChange).not.toHaveBeenCalled();
+    expect(
+      screen.getByRole('region', { name: 'Who can use Claude' }),
+    ).toBeInTheDocument();
+  });
+
+  it('adding the waiting entries the normal way cancels the queued move', () => {
+    renderTab();
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    const editor = screen.getByRole('region', { name: 'Who can use Claude' });
+    const field = within(editor).getByRole('combobox');
+    fireEvent.change(field, { target: { value: 'oca.msf.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+    fireEvent.click(cell(/^Claude Sonnet 5, Everyone else/));
+    fireEvent.click(
+      within(editor).getByRole('button', { name: 'Add 1 entry' }),
+    );
+    // Stayed here; a later Done simply closes instead of jumping rows.
+    fireEvent.click(within(editor).getByRole('button', { name: 'Done' }));
+    expect(
+      screen.queryByRole('region', { name: /^Who can use/ }),
+    ).not.toBeInTheDocument();
+  });
+
   it('filters a long list of entries, and not a short one', () => {
     const people = Array.from({ length: 9 }, (_, n) => ({
       target: `p${n}@msf.org`,
