@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
+  act,
   fireEvent,
   render,
   screen,
@@ -12,7 +13,10 @@ import { NextIntlClientProvider } from 'next-intl';
 
 import type { ModelAccessRule } from '@/lib/services/limits/types';
 
-import { ModelAccessTab } from '@/components/Limits/ModelAccessTab';
+import {
+  ModelAccessLeaveGuard,
+  ModelAccessTab,
+} from '@/components/Limits/ModelAccessTab';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import messages from '@/messages/en.json';
@@ -547,6 +551,46 @@ describe('ModelAccessTab grid', () => {
     expect(
       screen.queryByRole('region', { name: /^Who can use/ }),
     ).not.toBeInTheDocument();
+  });
+
+  it('tells its host whether it can be left, and runs what the host wanted once answered', () => {
+    const leaveGuard: { current: ModelAccessLeaveGuard | null } = {
+      current: null,
+    };
+    const onChange = vi.fn();
+    render(
+      <ModelAccessTab
+        rules={[]}
+        defaults={[]}
+        onChange={onChange}
+        mode="enforce"
+        onLeaveGuard={(guard) => {
+          leaveGuard.current = guard;
+        }}
+      />,
+      { wrapper },
+    );
+    const proceed = vi.fn();
+    // No editor open, then an editor with nothing waiting: free to leave.
+    expect(leaveGuard.current?.(proceed)).toBe(false);
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    expect(leaveGuard.current?.(proceed)).toBe(false);
+
+    const editor = screen.getByRole('region', { name: 'Who can use Claude' });
+    const field = within(editor).getByRole('combobox');
+    fireEvent.change(field, { target: { value: 'oca.msf.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+    let blocked: boolean | undefined;
+    act(() => {
+      blocked = leaveGuard.current?.(proceed);
+    });
+    expect(blocked).toBe(true);
+    expect(proceed).not.toHaveBeenCalled();
+    fireEvent.click(
+      within(editor).getByRole('button', { name: 'Close without adding' }),
+    );
+    expect(proceed).toHaveBeenCalledTimes(1);
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it('filters a long list of entries, and not a short one', () => {

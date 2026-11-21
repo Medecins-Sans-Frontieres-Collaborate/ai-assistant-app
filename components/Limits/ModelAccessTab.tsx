@@ -4,9 +4,9 @@ import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import {
   FC,
   Fragment,
-  MutableRefObject,
   ReactNode,
   Ref,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -80,7 +80,23 @@ interface ModelAccessTabProps {
   onChange: (rules: ModelAccessRule[]) => void;
   mode: LimitsMode;
   disabled?: boolean;
+  /**
+   * Called with this tab's guard while it is shown (and `null` when it
+   * goes), so its host can ask before taking the admin somewhere else
+   * (another tab, a save). See {@link ModelAccessLeaveGuard}.
+   */
+  onLeaveGuard?: (guard: ModelAccessLeaveGuard | null) => void;
 }
+
+/**
+ * Asks the Models tab whether it can be left right now.
+ *
+ * @param proceed - What the host wants to do next (switch tab, ...).
+ * @returns `false` when nothing is waiting: the host goes ahead itself.
+ *   `true` when entries wait in an open editor's add field: the editor now
+ *   shows "not added yet", and `proceed` runs once the admin has answered.
+ */
+export type ModelAccessLeaveGuard = (proceed: () => void) => boolean;
 
 /** One row of the grid: a family, or a model (with its family's series). */
 interface GridRow {
@@ -181,6 +197,7 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
   onChange,
   mode,
   disabled = false,
+  onLeaveGuard,
 }) => {
   const t = useTranslations('limits');
   const liveModels = useSettingsStore((s) => s.models);
@@ -240,20 +257,37 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
    * entries still waiting in its add field (and, if so, makes it say so).
    */
   const leaveGuard = useRef<LeaveGuard | null>(null);
-  /** The cell asked for while the open editor was holding entries. */
-  const [queued, setQueued] = useState<{
-    row: string;
-    column: ColumnKey;
-  } | null>(null);
+  /**
+   * What was asked for while the open editor was holding entries (another
+   * row's cell, or the host leaving the tab); runs once the editor closes.
+   */
+  const queued = useRef<(() => void) | null>(null);
+  // The host asks through the same guard the rows use: one question,
+  // whichever way the admin tries to leave the open editor.
+  useEffect(() => {
+    if (!onLeaveGuard) return;
+    onLeaveGuard((proceed) => {
+      if (!leaveGuard.current?.()) return false;
+      queued.current = () => {
+        setSelected(null);
+        proceed();
+      };
+      return true;
+    });
+    return () => onLeaveGuard(null);
+  }, [onLeaveGuard]);
+  const registerEditorGuard = useCallback((guard: LeaveGuard | null) => {
+    leaveGuard.current = guard;
+  }, []);
 
   const select = (row: string, column: ColumnKey) => {
     // Another row would replace the open editor: not while it holds
     // entries nobody has added. It asks first, then moves on to this cell.
     if (selected && selected.row !== row && leaveGuard.current?.()) {
-      setQueued({ row, column });
+      queued.current = () => setSelected({ row, column });
       return;
     }
-    setQueued(null);
+    queued.current = null;
     setSelected((current) =>
       current?.row === row && current.column === column
         ? null
@@ -386,13 +420,17 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
                     }
                     onSelect={(column) => select(row.key, column)}
                     onClose={() => {
-                      // Closing after "entries not added" continues to the
-                      // cell that was asked for.
-                      setSelected(queued);
-                      setQueued(null);
+                      // Closing after "entries not added" continues with
+                      // whatever was asked for.
+                      const next = queued.current;
+                      queued.current = null;
+                      if (next) next();
+                      else setSelected(null);
                     }}
-                    onStay={() => setQueued(null)}
-                    leaveGuard={leaveGuard}
+                    onStay={() => {
+                      queued.current = null;
+                    }}
+                    onLeaveGuard={registerEditorGuard}
                     onChange={onChange}
                     disabled={disabled}
                   />
@@ -697,7 +735,7 @@ interface RowProps {
   onClose: () => void;
   /** The editor's waiting entries were added: forget any queued move. */
   onStay: () => void;
-  leaveGuard: MutableRefObject<LeaveGuard | null>;
+  onLeaveGuard: (guard: LeaveGuard | null) => void;
   onChange: (rules: ModelAccessRule[]) => void;
   disabled: boolean;
 }
@@ -714,7 +752,7 @@ const Row: FC<RowProps> = ({
   onSelect,
   onClose,
   onStay,
-  leaveGuard,
+  onLeaveGuard,
   onChange,
   disabled,
 }) => {
@@ -895,7 +933,7 @@ const Row: FC<RowProps> = ({
                 focusDefault={selected === 'everyone'}
                 onClose={close}
                 onStay={onStay}
-                leaveGuard={leaveGuard}
+                onLeaveGuard={onLeaveGuard}
                 onChange={onChange}
                 disabled={disabled}
               />
@@ -923,7 +961,7 @@ const RowEditor: FC<{
   focusDefault: boolean;
   onClose: () => void;
   onStay: () => void;
-  leaveGuard: MutableRefObject<LeaveGuard | null>;
+  onLeaveGuard: (guard: LeaveGuard | null) => void;
   onChange: (rules: ModelAccessRule[]) => void;
   disabled: boolean;
 }> = ({
@@ -935,7 +973,7 @@ const RowEditor: FC<{
   focusDefault,
   onClose,
   onStay,
-  leaveGuard,
+  onLeaveGuard,
   onChange,
   disabled,
 }) => {
@@ -979,15 +1017,13 @@ const RowEditor: FC<{
   // While this editor is open it answers for the whole tab whether it can
   // be left: not with entries waiting, and it then shows the question.
   useEffect(() => {
-    leaveGuard.current = () => {
+    onLeaveGuard(() => {
       if (waiting === 0) return false;
       setConfirmClose(true);
       return true;
-    };
-    return () => {
-      leaveGuard.current = null;
-    };
-  }, [leaveGuard, waiting]);
+    });
+    return () => onLeaveGuard(null);
+  }, [onLeaveGuard, waiting]);
   // The question may be asked from a row far down the table: bring it into
   // view and put the keyboard on its first answer.
   useEffect(() => {
