@@ -59,6 +59,8 @@ export interface LimitsBlobPaths {
   policyPath: string;
   historyPrefix: string;
   usagePrefix: string;
+  /** Would-block tallies and daily usage summaries (usageInsights.ts). */
+  statsPrefix: string;
 }
 
 /** Pure builder so tests can assert both variants without touching env. */
@@ -68,6 +70,7 @@ export function limitsBlobPaths(variant: 'beta' | null): LimitsBlobPaths {
     policyPath: `${LIMITS_PREFIX}policy${suffix}.json`,
     historyPrefix: `${LIMITS_PREFIX}history${suffix}/`,
     usagePrefix: `${LIMITS_PREFIX}usage${suffix}/`,
+    statsPrefix: `${LIMITS_PREFIX}stats${suffix}/`,
   };
 }
 
@@ -76,6 +79,7 @@ const ACTIVE_LIMITS_PATHS = limitsBlobPaths(limitsBlobVariant());
 export const LIMITS_POLICY_PATH = ACTIVE_LIMITS_PATHS.policyPath;
 export const LIMITS_HISTORY_PREFIX = ACTIVE_LIMITS_PATHS.historyPrefix;
 export const LIMITS_USAGE_PREFIX = ACTIVE_LIMITS_PATHS.usagePrefix;
+export const LIMITS_STATS_PREFIX = ACTIVE_LIMITS_PATHS.statsPrefix;
 
 /**
  * ⚠ `null` means UNLIMITED — an explicit statement. A key being ABSENT from
@@ -381,6 +385,22 @@ export const UsageDocSchema = z.object({
   /** '2026-07-24' | '2026-07' | 'all' */
   period: z.string().min(1),
   counters: z.record(z.string(), z.number().nonnegative()).default({}),
+  /**
+   * The cap each metered cell had at its latest debit, and the rule that set
+   * it (an override id, or the layer name for defaults and the catalog).
+   * Lets the daily usage summary say how close people came to THEIR cap and
+   * which rule they were under, without resolving anyone's policy again.
+   * Absent on documents written before it existed.
+   */
+  caps: z
+    .record(
+      z.string(),
+      z.object({
+        limit: z.number().nonnegative(),
+        rule: z.string().max(128),
+      }),
+    )
+    .optional(),
   updatedAt: z.string(),
   /**
    * Id of the reserve/release call that produced this version. A conditional
