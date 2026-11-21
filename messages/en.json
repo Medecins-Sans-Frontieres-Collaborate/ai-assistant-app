@@ -8982,6 +8982,8 @@
     "health": {
       "deliveryUnavailableTitle": "The report storage can't be reached",
       "deliveryUnavailableBody": "The app could not list the container \"{container}\". Check that it exists and that the app's identity has a data role on it. Until then no reports are shown to anyone.",
+      "deliveryContainerCreatedTitle": "No reports have arrived in the new report storage",
+      "deliveryContainerCreatedBody": "The container \"{container}\" was missing, so the app created it when it started. It is still empty. Check that the reporting ETL writes to \"{container}\" and has write access to it. This message goes away when the first report arrives.",
       "foldersUnavailable": "The folder settings couldn't be read, so users currently see no folders. Files are not being checked or expired until this recovers.",
       "policyUnavailable": "The field settings couldn't be read, so users can't download files right now.",
       "total": {
