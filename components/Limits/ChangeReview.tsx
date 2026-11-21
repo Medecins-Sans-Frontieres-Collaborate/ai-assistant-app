@@ -4,6 +4,9 @@ import { FC, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useGroupNames } from '@/client/hooks/useGroupNames';
+
+import { modelAccessDimension } from '@/lib/services/limits/modelAccess';
 import {
   OtherChange,
   PolicyChange,
@@ -14,6 +17,12 @@ import {
 } from '@/lib/services/limits/policyChanges';
 import { LimitValue, LimitsPolicy } from '@/lib/services/limits/types';
 import type { CellInsight, UsageInsights } from '@/lib/services/limits/wire';
+
+import {
+  AudienceTerms,
+  audienceId,
+  ruleDifferences,
+} from '@/lib/utils/app/modelAccessGrid';
 
 import {
   ADMIN_BTN_SECONDARY,
@@ -123,6 +132,9 @@ export const ChangeReview: FC<ChangeReviewProps> = ({
               ) : (
                 <OtherChangeCard
                   change={change}
+                  saved={saved}
+                  draft={draft}
+                  groupNames={groupNames}
                   onUndo={() => onUndo(change)}
                 />
               )}
@@ -499,10 +511,13 @@ const RuleChangeCard: FC<{
   );
 };
 
-const OtherChangeCard: FC<{ change: OtherChange; onUndo: () => void }> = ({
-  change,
-  onUndo,
-}) => {
+const OtherChangeCard: FC<{
+  change: OtherChange;
+  saved: LimitsPolicy | null;
+  draft: LimitsPolicy;
+  groupNames: Record<string, string>;
+  onUndo: () => void;
+}> = ({ change, saved, draft, groupNames, onUndo }) => {
   const t = useTranslations('limits');
   const enforce =
     change.type === 'setting' &&
@@ -512,7 +527,7 @@ const OtherChangeCard: FC<{ change: OtherChange; onUndo: () => void }> = ({
     <article
       className={`${CARD} flex items-start gap-3 ${enforce ? 'border-orange-400 dark:border-orange-500' : 'border-gray-200 dark:border-gray-700'}`}
     >
-      <p className="min-w-0 flex-1 text-sm text-gray-800 dark:text-gray-200">
+      <div className="min-w-0 flex-1 text-sm text-gray-800 dark:text-gray-200">
         <strong>
           {change.type === 'setting'
             ? t('console.otherChange.setting', { subject: change.subject })
@@ -533,10 +548,102 @@ const OtherChangeCard: FC<{ change: OtherChange; onUndo: () => void }> = ({
             {t('console.flag.enforce')}
           </span>
         )}
-      </p>
+        {change.type === 'model-access' && (
+          <ModelAccessDifferences
+            dimension={change.subject}
+            saved={saved}
+            draft={draft}
+            groupNames={groupNames}
+          />
+        )}
+      </div>
       <button type="button" className={ADMIN_BTN_SECONDARY} onClick={onUndo}>
         {t('console.undo')}
       </button>
     </article>
+  );
+};
+
+/**
+ * What a model access change does, line by line: the everyone-else default
+ * and each group, domain or person whose terms were added, changed or
+ * removed, as before → after chips.
+ */
+const ModelAccessDifferences: FC<{
+  /** `model:<id>` or `family:<series>`, as the change names its subject. */
+  dimension: string;
+  saved: LimitsPolicy | null;
+  draft: LimitsPolicy;
+  groupNames: Record<string, string>;
+}> = ({ dimension, saved, draft, groupNames }) => {
+  const t = useTranslations('limits');
+  const requestsDef = getLimitDefinition('model.requests');
+  const find = (policy: LimitsPolicy | null) =>
+    policy?.modelAccess.find(
+      (rule) => modelAccessDimension(rule) === dimension.toLowerCase(),
+    );
+  const differences = ruleDifferences(find(saved), find(draft));
+  const lookedUp = useGroupNames(
+    differences.flatMap((difference) =>
+      difference.audience !== 'everyone' &&
+      difference.audience.scope === 'group'
+        ? [difference.audience.target]
+        : [],
+    ),
+  );
+  const chip = (terms: AudienceTerms | undefined, inherited: boolean) =>
+    terms === undefined ? (
+      <span className="text-xs text-gray-600 dark:text-gray-400">
+        {t('modelAccess.review.none')}
+      </span>
+    ) : (
+      <ValueChip
+        value={terms === false ? 0 : terms}
+        def={requestsDef}
+        inherited={inherited}
+      />
+    );
+  return (
+    <ul className="mt-2 space-y-1">
+      {differences.map((difference) => {
+        const everyone = difference.audience === 'everyone';
+        const name =
+          difference.audience === 'everyone'
+            ? t('modelAccess.defaultLabel')
+            : difference.audience.scope === 'group'
+              ? (lookedUp[difference.audience.target] ??
+                groupNames[difference.audience.target] ??
+                difference.audience.target)
+              : difference.audience.target;
+        return (
+          <li
+            key={
+              difference.audience === 'everyone'
+                ? 'everyone'
+                : audienceId(difference.audience)
+            }
+            className="flex flex-wrap items-center gap-x-2 gap-y-1"
+          >
+            <AudienceShape
+              kind={
+                difference.audience === 'everyone'
+                  ? 'everyone'
+                  : difference.audience.scope
+              }
+            />
+            <span className="[overflow-wrap:anywhere]">{name}</span>
+            {chip(difference.before, true)}
+            <span aria-hidden="true">→</span>
+            <span className="sr-only">{t('modelAccess.review.becomes')}</span>
+            {chip(difference.after, false)}
+            {!everyone && difference.after === undefined && (
+              <span className="text-xs text-gray-600 dark:text-gray-400">
+                {t('modelAccess.review.removed')}
+              </span>
+            )}
+          </li>
+        );
+      })}
+    </ul>
   );
 };

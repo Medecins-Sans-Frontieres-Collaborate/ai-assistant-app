@@ -306,6 +306,52 @@ export function withAudiencesTerms(
   return next;
 }
 
+/** One difference between two versions of a row's rule. */
+export interface RuleDifference {
+  /** The audience whose terms differ, or `everyone` for the row default. */
+  audience: Audience | 'everyone';
+  /** Terms before and after; `undefined` = no entry (inherits). */
+  before: AudienceTerms | undefined;
+  after: AudienceTerms | undefined;
+}
+
+/**
+ * What changed between two versions of one row's rule, as the review screen
+ * lists it: the everyone-else default first, then each audience added,
+ * changed or removed (groups, domains, people).
+ *
+ * @param was - The saved rule, or `undefined` when the row had none.
+ * @param now - The draft rule, or `undefined` when it was removed.
+ */
+export function ruleDifferences(
+  was: ModelAccessRule | undefined,
+  now: ModelAccessRule | undefined,
+): RuleDifference[] {
+  const differences: RuleDifference[] = [];
+  if (was?.defaultAccess !== now?.defaultAccess) {
+    differences.push({
+      audience: 'everyone',
+      before: was?.defaultAccess,
+      after: now?.defaultAccess,
+    });
+  }
+  const seen = new Set<string>();
+  for (const scope of SCOPES) {
+    for (const rule of [was, now]) {
+      for (const target of rule ? audiencesOf(rule, scope) : []) {
+        const audience: Audience = { scope, target: canonical(target) };
+        const id = audienceId(audience);
+        if (seen.has(id)) continue;
+        seen.add(id);
+        const before = ownTerms(was, audience);
+        const after = ownTerms(now, audience);
+        if (before !== after) differences.push({ audience, before, after });
+      }
+    }
+  }
+  return differences;
+}
+
 /**
  * Sets the "everyone else" default of one row.
  *
