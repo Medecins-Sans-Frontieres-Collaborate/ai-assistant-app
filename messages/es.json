@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "El costo y el CO2e son estimaciones, no gastos medidos: solicitudes contabilizadas multiplicadas por una solicitud típica ({promptTokens} tokens de entrada, {completionTokens} de salida) al precio de lista. El uso cubre los últimos {days, plural, one {# día} other {# días}}.",
-        "estimateNoteNoCost": "El CO2e es una estimación, no una medición: solicitudes contabilizadas multiplicadas por una solicitud típica ({promptTokens} tokens de entrada, {completionTokens} de salida). El uso cubre los últimos {days, plural, one {# día} other {# días}}.",
         "captureNote": "El uso por todos aparece después del primer día completo de recopilación. Hasta entonces, las cifras reflejan solo personas bajo un límite.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "Por un proveedor externo",
             "local": "Localmente"
           }
-        }
+        },
+        "showRetired": "Modelos retirados ({count})"
       },
       "runway": {
         "lead": "Cuando cada modelo se retira, cuántas personas lo usan y si las reglas de acceso coinciden con el modelo al que migrarán.",

@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Mbongo na CO2e ti lo mo na nyara, ala mbongo ti mo na makara: la ga u ngbangba na mbangui na keti ti use ({promptTokens} tokens mo na, {completionTokens} mo na ye) na keti ti mbongo. Gbaa ti mbangui mo na na yeke {days, plural, one {# ngbi} other {# ngbi}}.",
-        "estimateNoteNoCost": "CO2e ti lo mo na nyara, ala mo na makara: la ga u ngbangba na mbangui na keti ti use ({promptTokens} tokens mo na, {completionTokens} mo na ye). Gbaa ti mbangui mo na na yeke {days, plural, one {# ngbi} other {# ngbi}}.",
         "captureNote": "Kôta tî yângâ tî ombi na yângâ so ape na nginza na lôndo na yângâ tî bédé tene. Tî tî yeke a, mô na yângâ kodro mbi, yângâ mo na fêtê na cap sô.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "Na société ti bââ",
             "local": "Na mboka"
           }
-        }
+        },
+        "showRetired": "Modèle ti koué ({count})"
       },
       "runway": {
         "lead": "Tî sô model yeke ti tongbi, tî sô na wã yeke na model, tî sô règle ti accès yeke na model ti yeke ko.",

@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "Náklady a CO2e jsou odhady, ne měřené výdaje: započítané požadavky vynásobené typickým požadavkem ({promptTokens} tokenů vstup, {completionTokens} výstup) za katalogovou cenu. Využití zahrnuje posledních {days, plural, one {# den} other {# dní}}.",
-        "estimateNoteNoCost": "CO2e je odhad, nikoliv měřená hodnota: započítané požadavky vynásobené typickým požadavkem ({promptTokens} tokenů vstup, {completionTokens} výstup). Využití zahrnuje posledních {days, plural, one {# den} other {# dní}}.",
         "captureNote": "Využití všemi uživateli se zobrazí po prvním úplném dni sběru dat. Do té doby údaje zahrnují jen osoby s nastaveným limitem.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "Externím poskytovatelem",
             "local": "Lokálně"
           }
-        }
+        },
+        "showRetired": "Ukončené modely ({count})"
       },
       "runway": {
         "lead": "Kdy který model skončí, kolik lidí jej používá a zda jsou přístupová pravidla stejná s modelem, na který budou převedeni.",

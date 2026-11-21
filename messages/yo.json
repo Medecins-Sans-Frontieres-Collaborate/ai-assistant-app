@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Iye owo ati CO2e jẹ iṣiro, kii ṣe iye gangan: awọn ìbéèrè tí a kà pọ si ìbéèrè apẹẹrẹ ({promptTokens} àwọn tokini silẹ, {completionTokens} jade) ní owo àtatẹ. Lilo bo ọjọ {days, plural, one {# kan} other {# ọjọ}} to kọja.",
-        "estimateNoteNoCost": "CO2e jẹ iṣiro, kii ṣe ìwọn gangan: awọn ìbéèrè tí a kà pọ si ìbéèrè apẹẹrẹ ({promptTokens} àwọn tokini silẹ, {completionTokens} jade). Lilo bo ọjọ {days, plural, one {# kan} other {# ọjọ}} to kọja.",
         "captureNote": "Lilo gbogbo eniyan han lẹ́yìn ọjọ́ àkọ́kọ́ tí ìkójọpọ̀ bá pé. Títí di bẹ́ẹ̀, àwárí naa bo àwọn tí kó wa lábẹ́ ààlà nikan.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "Nílẹ̀ ìpèsè tó wà lójú òde",
             "local": "Ní agbègbè"
           }
-        }
+        },
+        "showRetired": "Àwòrán tí wọ́n ti fọ́kàn tán ({count})"
       },
       "runway": {
         "lead": "Nígbà tí àpẹẹrẹ kọọkan bá parí, iye àwọn ènìyàn tó wà lórí, àti bóyá ọ̀rọ̀ ìforúkọsílẹ̀ rẹ̀ bá àpẹẹrẹ tuntun mu.",

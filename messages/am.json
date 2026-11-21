@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "የወጪ እና CO2e ግምት ናቸው፣ አይደሉም የተሳሰቡ ከፍያዎች፡ ተቆጣጣሪ መጠያያዎች በየመደበኛው መጠያያ ({promptTokens} tokens ውስጥ፣ {completionTokens} ውጭ) እና የርዕሰ ዝርዝር ዋጋ በመባደር ተሰውሰዋል። አጠቃቀም ያካትታል ለመጨረሻው {days, plural, one {# ቀን} other {# ቀናት}}።",
-        "estimateNoteNoCost": "CO2e ግምት ነው፣ መለኪያ አይደለም፡ ተቆጣጣሪ መጠያያዎች በየመደበኛው መጠያያ ({promptTokens} tokens ውስጥ፣ {completionTokens} ውጭ) በመባደር ተሰውሰዋል። አጠቃቀም ያካትታል ለመጨረሻው {days, plural, one {# ቀን} other {# ቀናት}}።",
         "captureNote": "የሁሉም ሰው መጠቀም ከመመዝገብ መጀመሪያ ቀን በኋላ ይታያል። እስከዚያ ድረስ ግምጃዎቹ መጠን የተገደቡ ሰዎችን ብቻ አያካትቱም።",
         "co2Grams": "{value} ግራም CO2e",
         "co2Kilograms": "{value} ኪ.ግ. CO2e",
@@ -7088,7 +7087,8 @@
             "external": "በውጫዊ አቅራቢ",
             "local": "በአካባቢ"
           }
-        }
+        },
+        "showRetired": "የተወጁ ሞዴሎች ({count})"
       },
       "runway": {
         "lead": "እያንዳንዱ ሞዴል ሲያጠፋ የሚኖሩት ሰዎች ብዛት እና የመድረሻ ሞዴሉ የመዳረሻ መመሪያዎቹ ተመሳሳይ መሆኑን ያሳያል።",

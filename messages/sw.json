@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "Gharama na CO2e ni makadirio, sio matumizi yaliyopimwa: maombi yaliyohesabiwa yamezidishwa na ombi la kawaida ({promptTokens} tokeni ndani, {completionTokens} nje) kwa bei iliyoorodheshwa. Matumizi yanahusu siku {days, plural, one {# moja} other {# siku}} zilizopita.",
-        "estimateNoteNoCost": "CO2e ni makadirio, sio kipimo: maombi yaliyohesabiwa yamezidishwa na ombi la kawaida ({promptTokens} tokeni ndani, {completionTokens} nje). Matumizi yanahusu siku {days, plural, one {# moja} other {# siku}} zilizopita.",
         "captureNote": "Matumizi ya kila mtu yanaonekana baada ya siku moja kamili ya ukusanyaji. Kabla ya hapo, taarifa zinaonyesha tu watu walio chini ya kikomo.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "Kwa mtoa huduma wa nje",
             "local": "Kimahali"
           }
-        }
+        },
+        "showRetired": "Miundo iliyohamasishwa ({count})"
       },
       "runway": {
         "lead": "Kila modeli ikiondolewa, idadi ya watu waliyoitumia, na ikiwa sheria za upatikanaji zinafanana na modeli mpya ambayo watu watahamia.",

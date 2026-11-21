@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Kharashka iyo CO2e waa qiyaas, laguma cabbiro kharashka dhabta ah: codsiyada la tiriyay ayaa lagu dhuftay codsi caadi ah ({promptTokens} tokens gudaha, {completionTokens} bannaanka) qiimaha liiska. Isticmaalka waxa uu daboolayaa {days, plural, one {# maalin} other {# maalmood}} ee ugu dambeeyay.",
-        "estimateNoteNoCost": "CO2e waa qiyaas, la ma cabbirin: codsiyada la tiriyay ayaa lagu dhuftay codsi caadi ah ({promptTokens} tokens gudaha, {completionTokens} bannaanka). Isticmaalka waxa uu daboolayaa {days, plural, one {# maalin} other {# maalmood}} ee ugu dambeeyay.",
         "captureNote": "Isticmaalka qof walba wuxuu muuqdaa kadib maalintii ugu horeysay ee xog uruurinta. Ilaa markaas tiradu waxa ay gacanta ku hayaan kaliya dadka xaddidan.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "Tilmaame dibadda ah",
             "local": "Lokal ahaan"
           }
-        }
+        },
+        "showRetired": "Moodallo hawlgab noqday ({count})"
       },
       "runway": {
         "lead": "Marka mid walba la joojiyo, tirada dadka isticmaalayey, iyo in xeerarka helista ay la mid yihiin kuwa moodelka la baddalay.",

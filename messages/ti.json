@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "ወጪ እና CO2e ናይ መስክ, ዘይምውን፡ ዘለዎት ጥዕናታት ብደቀንን ሞያ ምውካኣት ({promptTokens} ተኣጥቃ ትንበያ, {completionTokens} ኣውጡ ትንበያ) ብምሕጋዝ ዝሓለፈ. ምጥቃእ ኣብ ዝተሓለፈ {days, plural, one {# መዓልቲ} other {# መዓልታት}} ይኸውን።",
-        "estimateNoteNoCost": "CO2e ናይ መስክ እዩ፡ ዘይምውን፡ ዘለዎት ጥዕናታት ብደቀንን ሞያ ምውካኣት ({promptTokens} ተኣጥቃ ትንበያ, {completionTokens} ኣውጡ ትንበያ). ምጥቃእ ኣብ ዝተሓለፈ {days, plural, one {# መዓልቲ} other {# መዓልታት}} ይኸውን።",
         "captureNote": "ምድላው ንኩሉ ሰባት ብዓይነት እንከ መጀመሪ መዓልቲ ምህባ ትሕድቦም እዩ ዝበሃል። ንገና እቲ ቁሳሊ ኣብ ሕዝቢ ክብህል ዝኽእል ይኸውን።",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "ብኣዳና ተሓጋጋዚ",
             "local": "ኣብ ናይቲ ዓይነት"
           }
-        }
+        },
+        "showRetired": "ዝተወጸኑ ሞዴሎታት ({count})"
       },
       "runway": {
         "lead": "እዚ ናይ እዋን ዘሎ ኣብ ሞዴል ዝኾኑ ምስ ዝተሓሓልዎ፣ ንበዚ ዝጠቐመዎ ሰባት ብፅዕና እንታይ ዋሕሳነ ዝኾኑ ተመሳሳሊ መበገሲ ኣብ ኣዲስ ሞዴል ኣንስናዮም ዘሎዎ ይፅንዕ.",

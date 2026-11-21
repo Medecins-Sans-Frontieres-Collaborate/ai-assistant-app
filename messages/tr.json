@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "Maliyet ve CO2e tahmini olup, ölçülen harcama değildir: sayılan istekler, tipik bir istekle ({promptTokens} token giriş, {completionTokens} token çıkış) ve liste fiyatı ile çarpılır. Kullanım son {days, plural, one {# gün} other {# gün}}ü kapsar.",
-        "estimateNoteNoCost": "CO2e bir tahmindir, ölçüm değildir: sayılan istekler, tipik bir istekle ({promptTokens} token giriş, {completionTokens} token çıkış) çarpılır. Kullanım son {days, plural, one {# gün} other {# gün}}ü kapsar.",
         "captureNote": "Herkesin kullanımı ilk tam gün veri toplandıktan sonra görüntülenir. O zamana kadar rakamlar sadece sınır altında olan kişileri kapsar.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "Harici bir sağlayıcı tarafından",
             "local": "Yerel olarak"
           }
-        }
+        },
+        "showRetired": "Emekli modeller ({count})"
       },
       "runway": {
         "lead": "Her model kaldırıldığında, kimlerin kullandığı ve erişim kurallarının insanların geçeceği modelle eşleşip eşleşmediği.",

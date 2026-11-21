@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "Costul și CO2e sunt estimări, nu cheltuieli măsurate: cererile numărate înmulțite cu o cerere tipică ({promptTokens} token-uri la intrare, {completionTokens} la ieșire) la prețul de listă. Utilizarea acoperă ultimele {days, plural, one {# zi} other {# zile}}.",
-        "estimateNoteNoCost": "CO2e este o estimare, nu o măsurare: cererile numărate înmulțite cu o cerere tipică ({promptTokens} token-uri la intrare, {completionTokens} la ieșire). Utilizarea acoperă ultimele {days, plural, one {# zi} other {# zile}}.",
         "captureNote": "Utilizarea tuturor apare după prima zi completă de colectare. Până atunci, cifrele acoperă doar persoanele aflate sub limită.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "De un furnizor extern",
             "local": "Local"
           }
-        }
+        },
+        "showRetired": "Modele retrase ({count})"
       },
       "runway": {
         "lead": "Când fiecare model dispare, câți oameni îl folosesc și dacă regulile de acces se potrivesc cu modelul pe care vor ajunge aceștia.",

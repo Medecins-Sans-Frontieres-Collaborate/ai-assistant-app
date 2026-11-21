@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "비용 및 CO2e는 실제 지출이 아닌 추정치입니다: 요청 횟수에 일반적인 요청({promptTokens} 토큰 입력, {completionTokens} 토큰 출력)를 곱하고, 리스티드 가격을 기준으로 계산했습니다. 사용량은 최근 {days, plural, one {#일} other {#일}}을 포함합니다.",
-        "estimateNoteNoCost": "CO2e는 측정값이 아닌 추정치입니다: 요청 횟수에 일반적인 요청({promptTokens} 토큰 입력, {completionTokens} 토큰 출력)를 곱했습니다. 사용량은 최근 {days, plural, one {#일} other {#일}}을 포함합니다.",
         "captureNote": "모두의 사용량은 수집 첫날 이후에 표시됩니다. 그 전에는 기준 제한이 있는 사용자만 포함됩니다.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "외부 제공자",
             "local": "로컬"
           }
-        }
+        },
+        "showRetired": "퇴역 모델 ({count})"
       },
       "runway": {
         "lead": "각 모델이 종료될 때, 몇 명이 사용 중인지, 그 접근 규칙이 다음 모델과 일치하는지 확인합니다.",

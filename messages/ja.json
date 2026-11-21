@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "コストとCO2eは推定値であり、実際の支出ではありません。リクエスト件数を、標準的なリクエスト（入力{promptTokens}トークン、出力{completionTokens}トークン）にリスト価格で掛けて計算しています。利用状況は直近{days, plural, one {#日} other {#日間}}のデータです。",
-        "estimateNoteNoCost": "CO2eは推定値であり、測定値ではありません。リクエスト件数を、標準的なリクエスト（入力{promptTokens}トークン、出力{completionTokens}トークン）に掛けて計算しています。利用状況は直近{days, plural, one {#日} other {#日間}}のデータです。",
         "captureNote": "全員の利用状況は、集計開始後最初の全日以降に表示されます。それまでは、上限が設定された方のみの数値となります。",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "外部プロバイダーによる",
             "local": "ローカル"
           }
-        }
+        },
+        "showRetired": "廃止モデル（{count}件）"
       },
       "runway": {
         "lead": "各モデルが利用終了となる日時、利用者数、そのアクセスルールが次のモデルと一致しているかを確認します。",

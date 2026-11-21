@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "Biaya dan CO2e adalah estimasi, bukan pengeluaran yang diukur: permintaan yang dihitung dikalikan dengan permintaan tipikal ({promptTokens} token masuk, {completionTokens} token keluar) pada harga daftar. Penggunaan mencakup {days, plural, one {# hari} other {# hari}} terakhir.",
-        "estimateNoteNoCost": "CO2e adalah estimasi, bukan pengukuran: permintaan yang dihitung dikalikan dengan permintaan tipikal ({promptTokens} token masuk, {completionTokens} token keluar). Penggunaan mencakup {days, plural, one {# hari} other {# hari}} terakhir.",
         "captureNote": "Penggunaan oleh semua orang akan muncul setelah hari pengumpulan penuh pertama. Sebelum itu, data hanya untuk orang yang berada di bawah batas.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "Oleh penyedia eksternal",
             "local": "Secara lokal"
           }
-        }
+        },
+        "showRetired": "Model yang sudah tidak aktif ({count})"
       },
       "runway": {
         "lead": "Saat setiap model berhenti digunakan, berapa banyak orang yang menggunakan, dan apakah aturan aksesnya sesuai dengan model yang akan digunakan berikutnya.",

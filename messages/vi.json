@@ -6985,7 +6985,6 @@
       },
       "facts": {
         "estimateNote": "Chi phí và CO₂e là ước tính, không phải giá trị đo lường: số yêu cầu được tính nhân với một yêu cầu điển hình ({promptTokens} tokens vào, {completionTokens} tokens ra) theo giá niêm yết. Số liệu sử dụng bao gồm {days, plural, one {# ngày} other {# ngày}} gần đây nhất.",
-        "estimateNoteNoCost": "CO₂e là ước tính, không phải giá trị đo lường: số yêu cầu được tính nhân với một yêu cầu điển hình ({promptTokens} tokens vào, {completionTokens} tokens ra). Số liệu sử dụng bao gồm {days, plural, one {# ngày} other {# ngày}} gần đây nhất.",
         "captureNote": "Số liệu sử dụng của tất cả mọi người sẽ xuất hiện sau ngày thu thập đầy đủ đầu tiên. Trước đó, số liệu chỉ bao gồm những người có giới hạn.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7119,7 +7118,8 @@
             "external": "Bởi nhà cung cấp bên ngoài",
             "local": "Tại chỗ"
           }
-        }
+        },
+        "showRetired": "Mô hình đã ngưng sử dụng ({count})"
       },
       "runway": {
         "lead": "Khi mỗi mô hình hết hạn, có bao nhiêu người đang sử dụng và các quy tắc truy cập của nó có trùng khớp với mô hình kế tiếp không.",

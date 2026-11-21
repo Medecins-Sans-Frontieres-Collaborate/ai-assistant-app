@@ -6597,7 +6597,6 @@
       },
       "facts": {
         "estimateNote": "Cost and CO2e are estimates, not measured spend: counted requests multiplied by a typical request ({promptTokens} tokens in, {completionTokens} out) at list price. Usage covers the last {days, plural, one {# day} other {# days}}.",
-        "estimateNoteNoCost": "CO2e is an estimate, not a measurement: counted requests multiplied by a typical request ({promptTokens} tokens in, {completionTokens} out). Usage covers the last {days, plural, one {# day} other {# days}}.",
         "captureNote": "Usage by everyone appears after the first full day of collection. Until then the figures cover only people who are under a cap.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -6731,7 +6730,8 @@
             "external": "By an outside provider",
             "local": "Locally"
           }
-        }
+        },
+        "showRetired": "Retired models ({count})"
       },
       "runway": {
         "lead": "When each model goes away, how many people are on it, and whether its access rules match the model people will land on.",

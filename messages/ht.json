@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Pri ak CO2e se estimasyon, yo pa mezire depans lan: repons konte yo miltipliye pa yon demann tipik ({promptTokens} token anndan, {completionTokens} deyò) ak pri an lis. Itilizasyon an kouvri {days, plural, one {# jou} other {# jou}} ki sot pase yo.",
-        "estimateNoteNoCost": "CO2e se yon estimasyon, yo pa mezire li: repons konte yo miltipliye pa yon demann tipik ({promptTokens} token anndan, {completionTokens} deyò). Itilizasyon an kouvri {days, plural, one {# jou} other {# jou}} ki sot pase yo.",
         "captureNote": "Itilizasyon pa tout moun parèt apre premye jounen koleksyon an fini nèt. Anvan sa, done yo konsène sèlman moun ki anba yon plafon.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "Pa yon founisè ekstèn",
             "local": "Lokalman"
           }
-        }
+        },
+        "showRetired": "Modèl ki pa an sèvis ankò ({count})"
       },
       "runway": {
         "lead": "Lè chak modèl fini, konbyen moun sou li, avèk si règ aksè li yo koresponn ak modèl moun yo ap jwenn.",

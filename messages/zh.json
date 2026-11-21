@@ -6985,7 +6985,6 @@
       },
       "facts": {
         "estimateNote": "成本和CO2e为估算值，非实际支出：以请求次数乘以典型请求（输入{promptTokens}个tokens，输出{completionTokens}个tokens）的标价计算。用量涵盖过去{days, plural, one {#天} other {#天}}。",
-        "estimateNoteNoCost": "CO2e为估算值，非实际测量：以请求次数乘以典型请求（输入{promptTokens}个tokens，输出{completionTokens}个tokens）计算。用量涵盖过去{days, plural, one {#天} other {#天}}。",
         "captureNote": "所有用户的使用情况将在收集的第一个完整日之后显示。在此之前，数据仅覆盖受限用户。",
         "co2Grams": "{value} 克CO2e",
         "co2Kilograms": "{value} 千克CO2e",
@@ -7119,7 +7118,8 @@
             "local": "本地运行"
           },
           "usageHint": "在过去{days, plural, one {#天} other {#天}}里，有{people, plural, one {#人} other {#人}}使用过。每人按其最活跃的一天计数一次。"
-        }
+        },
+        "showRetired": "已停用模型（{count}）"
       },
       "runway": {
         "lead": "展示每个模型的关闭时间、当前使用人数，以及其访问规则是否与新模型一致。",

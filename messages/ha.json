@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Farashi da CO2e kiyasi ne, ba a auna su ba: an ƙididdige buƙatu an ninka su da buƙata na yau da kullum ({promptTokens} tokens ciki, {completionTokens} fita) a farashin lissafi. Amfani ya haɗa kwanaki {days, plural, one {# daya} other {# kwanaki}} da suka gabata.",
-        "estimateNoteNoCost": "CO2e kiyasi ne, ba a auna shi ba: an ƙididdige buƙatu an ninka su da buƙata na yau da kullum ({promptTokens} tokens ciki, {completionTokens} fita). Amfani ya haɗa kwanaki {days, plural, one {# daya} other {# kwanaki}} da suka gabata.",
         "captureNote": "Amfanin kowa zai fito bayan cikar kwana guda na tattarawa. Kafin nan, bayanai suna shafar mutanen da ke ƙarƙashin iyaka kawai.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "Daga waje mai bada sabis",
             "local": "A gida"
           }
-        }
+        },
+        "showRetired": "Samfuran da aka cire ({count})"
       },
       "runway": {
         "lead": "Lokacin da kowanne samfurin ya daina aiki, adadin mutanen da suke amfani da shi, da ko dokokin samun dama sun dace da samfurin da mutane za su koma.",

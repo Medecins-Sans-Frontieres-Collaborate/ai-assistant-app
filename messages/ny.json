@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Mtengo ndi CO2e ndi zowerengera, osati zomwe zakhala zikugwiritsidwa ntchito: zomwe zafunsidwa zimawerengedwa molingana ndi pempho wamba ({promptTokens} tokens olowa, {completionTokens} otuluka) pa mtengo wa mndandanda. Kugwiritsa ntchito kumaphimba masiku {days, plural, one {# tsiku} other {# masiku}} apitawa.",
-        "estimateNoteNoCost": "CO2e ndi chiwerengero, osati muyeso wolondola: pempho lililonse limawerengedwa molingana ndi pempho wamba ({promptTokens} tokens olowa, {completionTokens} otuluka). Kugwiritsa ntchito kumaphimba masiku {days, plural, one {# tsiku} other {# masiku}} apitawa.",
         "captureNote": "Kugwiritsa ntchito kwa onse kuwonekera ikatha tsiku loyamba lathunthu losonkhanitsa. Mpaka pamenepo, ziwerengerozi zikuphatikiza anthu okha omwe ali ndi malire.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "Wothandizira kunja",
             "local": "Pafupi"
           }
-        }
+        },
+        "showRetired": "Mitundu yosiyitsidwa ntchito ({count})"
       },
       "runway": {
         "lead": "Pamene model iliyonse ikutha ntchito, ndi anthu angati akugwiritsa ntchito, komanso ngati malamulo ogwira ntchito akugwirizana ndi model yomwe anthu adzasinthira.",

@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "Kustannus ja CO2e ovat arvioita, eivät mitattuja: laskettu pyyntöjen määrä kerrottuna tyypillisellä pyynnöllä ({promptTokens} merkkiä sisään, {completionTokens} ulos) listahintaan. Käyttö kattaa viimeiset {days, plural, one {# päivän} other {# päivää}}.",
-        "estimateNoteNoCost": "CO2e on arvio, ei mittaus: laskettu pyyntöjen määrä kerrottuna tyypillisellä pyynnöllä ({promptTokens} merkkiä sisään, {completionTokens} ulos). Käyttö kattaa viimeiset {days, plural, one {# päivän} other {# päivää}}.",
         "captureNote": "Kaikkien käyttö näkyy vasta ensimmäisen täyden keruupäivän jälkeen. Siihen asti luvut kattavat vain henkilöt, joilla on käyttöraja.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "Ulkoisen palveluntarjoajan toimesta",
             "local": "Paikallisesti"
           }
-        }
+        },
+        "showRetired": "Poistetut mallit ({count})"
       },
       "runway": {
         "lead": "Kun kukin malli poistuu käytöstä, montako henkilöä sitä käyttää ja vastaavatko käyttöoikeudet mallia, jolle käyttäjät siirretään.",

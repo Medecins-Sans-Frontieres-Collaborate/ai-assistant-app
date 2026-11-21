@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Motuya mpe CO2e ezali mateya, ezali na likoki te ya motuya esalemi: bamposa ya mikolo esangami ekoba na motuya moko ya mikolo ({promptTokens} tokens ekokisi, {completionTokens} ekobima) ndenge ezali na list price. Bisaleli ekosilisa mikolo {days, plural, one {# mokolo} other {# mikolo}} ya suka.",
-        "estimateNoteNoCost": "CO2e ezali mateya, ezali na likoki te ya motuya esalemi: bamposa ya mikolo esangami ekoba na motuya moko ya mikolo ({promptTokens} tokens ekokisi, {completionTokens} ekobima). Bisaleli ekosilisa mikolo {days, plural, one {# mokolo} other {# mikolo}} ya suka.",
         "captureNote": "Koyeba ndenge nyonso esalemi epesámí sima ya mokolo ya libosó mobimba ya kokanga ba donnee. Liboso wana, ba nombre ezali kaka ya bato oyo bazali nse ya limite.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "Na fournisseur ya libanda",
             "local": "Na ekolo"
           }
-        }
+        },
+        "showRetired": "Ba modèles babongwani ({count})"
       },
       "runway": {
         "lead": "Tango model moko ekendaka, boni bato bazalaki na yango, mpe soki mitindo ya kokotela ekokani na model oyo bato bakozwa.",

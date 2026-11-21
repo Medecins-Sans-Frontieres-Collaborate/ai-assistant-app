@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "Kostnad och CO2e är uppskattningar, inte uppmätta utgifter: antal förfrågningar multiplicerat med en typisk förfrågan ({promptTokens} in, {completionTokens} ut) till listpris. Användning avser de senaste {days, plural, one {# dag} other {# dagar}}.",
-        "estimateNoteNoCost": "CO2e är en uppskattning, inte en mätning: antal förfrågningar multiplicerat med en typisk förfrågan ({promptTokens} in, {completionTokens} ut). Användning avser de senaste {days, plural, one {# dag} other {# dagar}}.",
         "captureNote": "Användning för alla visas efter den första hela insamlingsdagen. Tills dess visas endast användning för personer med begränsning.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "Av extern leverantör",
             "local": "Lokalt"
           }
-        }
+        },
+        "showRetired": "Pensionerade modeller ({count})"
       },
       "runway": {
         "lead": "När varje modell tas bort, hur många personer är på den och om åtkomstreglerna matchar modellen de hamnar på.",

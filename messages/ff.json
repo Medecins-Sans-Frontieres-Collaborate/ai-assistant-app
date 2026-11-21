@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Kaare e CO2e ɗe kaareji, ndon hokki ɗum: tooŋgul woni e moƴƴi kaare ngal (tokken {promptTokens} warti, {completionTokens} wattude) e gese price. Nattude woni e {days, plural, one {# ñalngu} other {# ñalnguuji}} ɓannde.",
-        "estimateNoteNoCost": "CO2e kaareji, ndon hokki ɗum: tooŋgul woni e moƴƴi kaare ngal (tokken {promptTokens} warti, {completionTokens} wattude). Nattude woni e {days, plural, one {# ñalngu} other {# ñalnguuji}} ɓannde.",
         "captureNote": "Huutorde on moƴƴi jamma mo waawi janno e ñande fuɗɗo feccere. Ko kadi, lottude giɗi woni moɗɗo mo ina sotto cap.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "Golleede e maayo jogoo",
             "local": "Leñoo"
           }
-        }
+        },
+        "showRetired": "Miwondiri moodelen ({count})"
       },
       "runway": {
         "lead": "So model kala waɗi yaa, holi hay huunde e to, e so baho dokkal ngol access rewɓe e model ngol rewɓe waawii landude.",

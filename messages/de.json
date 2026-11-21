@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "Kosten und CO2e sind Schätzungen, keine gemessenen Ausgaben: gezählte Anfragen multipliziert mit einer typischen Anfrage ({promptTokens} Tokens eingehend, {completionTokens} ausgehend) zum Listenpreis. Die Nutzung bezieht sich auf die letzten {days, plural, one {# Tag} other {# Tage}}.",
-        "estimateNoteNoCost": "CO2e ist eine Schätzung, keine Messung: gezählte Anfragen multipliziert mit einer typischen Anfrage ({promptTokens} Tokens eingehend, {completionTokens} ausgehend). Die Nutzung bezieht sich auf die letzten {days, plural, one {# Tag} other {# Tage}}.",
         "captureNote": "Die Nutzung aller wird nach dem ersten vollständigen Sammlungstag angezeigt. Bis dahin werden nur Personen mit Begrenzung erfasst.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "Bei einem externen Anbieter",
             "local": "Lokal"
           }
-        }
+        },
+        "showRetired": "Ausgegliederte Modelle ({count})"
       },
       "runway": {
         "lead": "Wann jedes Modell abgeschaltet wird, wie viele Personen es nutzen und ob die Zugriffsregeln mit dem Nachfolgemodell übereinstimmen.",

@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Izindleko ne-CO2e ziyilinganiselo, azilinganiselwanga: izicelo ezibalwe ziphindaphindwa ngesicelo esijwayelekile ({promptTokens} amathokheni angenayo, {completionTokens} aphumayo) ngenani loluhlu. Ukusetshenziswa kubalwa izinsuku ezingu-{days, plural, one {# usuku} other {# izinsuku}} ezedlule.",
-        "estimateNoteNoCost": "I-CO2e iyilinganiselo, ayilinganiswanga: izicelo ezibalwe ziphindaphindwa ngesicelo esijwayelekile ({promptTokens} amathokheni angenayo, {completionTokens} aphumayo). Ukusetshenziswa kubalwa izinsuku ezingu-{days, plural, one {# usuku} other {# izinsuku}} ezedlule.",
         "captureNote": "Ukusetshenziswa kwayo wonke umuntu kuvela emva kosuku lokuqala oluphelele lokuqoqwa. Kuze kube yileso sikhathi izinombolo zibheka kuphela abantu abavikelekile ngesilinganiselo.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "Umhlinzeki wangaphandle",
             "local": "Endaweni"
           }
-        }
+        },
+        "showRetired": "Amasistimu asewathatha umhlalaphansi ({count})"
       },
       "runway": {
         "lead": "Uma imodeli ngayinye isanyamalala, bangaki abasebenzisi kuyo, nokuthi imithetho yokungena iyalingana yini nemodeli ezothathwa",

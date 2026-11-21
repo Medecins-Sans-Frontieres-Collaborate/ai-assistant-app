@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "El cost i el CO2e són estimacions, no despeses mesurades: s'obtenen multiplicant les sol·licituds comptades per una sol·licitud típica ({promptTokens} tokens d'entrada, {completionTokens} de sortida) al preu de llista. L'ús cobreix els darrers {days, plural, one {# dia} other {# dies}}.",
-        "estimateNoteNoCost": "El CO2e és una estimació, no una mesura: s'obté multiplicant les sol·licituds comptades per una sol·licitud típica ({promptTokens} tokens d'entrada, {completionTokens} de sortida). L'ús cobreix els darrers {days, plural, one {# dia} other {# dies}}.",
         "captureNote": "L'ús per part de tothom apareix després del primer dia complet de recollida. Fins aleshores, les xifres cobreixen només les persones amb límit.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "Per un proveïdor extern",
             "local": "Localment"
           }
-        }
+        },
+        "showRetired": "Models retirats ({count})"
       },
       "runway": {
         "lead": "Quan desapareix cada model, quantes persones l'utilitzen i si les seves normes d'accés coincideixen amb les del model al qual aniran.",

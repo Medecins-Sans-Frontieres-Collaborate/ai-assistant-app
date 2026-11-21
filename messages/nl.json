@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "Kosten en CO2e zijn schattingen, geen gemeten uitgaven: getelde verzoeken vermenigvuldigd met een typisch verzoek ({promptTokens} tokens in, {completionTokens} uit) tegen de catalogusprijs. Gebruik betreft de laatste {days, plural, one {# dag} other {# dagen}}.",
-        "estimateNoteNoCost": "CO2e is een schatting, geen meting: getelde verzoeken vermenigvuldigd met een typisch verzoek ({promptTokens} tokens in, {completionTokens} uit). Gebruik betreft de laatste {days, plural, one {# dag} other {# dagen}}.",
         "captureNote": "Gebruik door iedereen verschijnt na de eerste volledige verzamelingsdag. Tot die tijd tonen de cijfers alleen mensen met een limiet.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "Door een externe aanbieder",
             "local": "Lokaal"
           }
-        }
+        },
+        "showRetired": "Uitgefaseerde modellen ({count})"
       },
       "runway": {
         "lead": "Wanneer elk model verdwijnt, hoeveel mensen het gebruiken en of de toegangsregels overeenkomen met het model waarop mensen terechtkomen.",

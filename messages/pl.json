@@ -6954,7 +6954,6 @@
       },
       "facts": {
         "estimateNote": "Koszt i CO2e to szacunki, a nie rzeczywiste zużycie: liczba żądań pomnożona przez typowe żądanie ({promptTokens} tokenów wejściowych, {completionTokens} wyjściowych) według cen katalogowych. Zużycie obejmuje ostatnie {days, plural, one {# dzień} other {# dni}}.",
-        "estimateNoteNoCost": "CO2e to szacunek, nie pomiar: liczba żądań pomnożona przez typowe żądanie ({promptTokens} tokenów wejściowych, {completionTokens} wyjściowych). Zużycie obejmuje ostatnie {days, plural, one {# dzień} other {# dni}}.",
         "captureNote": "Wykorzystanie przez wszystkich pojawia się po pierwszym pełnym dniu zbierania danych. Do tego czasu przedstawione dane dotyczą tylko osób z limitem.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7088,7 +7087,8 @@
             "external": "Przez zewnętrznego dostawcę",
             "local": "Lokalnie"
           }
-        }
+        },
+        "showRetired": "Wycofane modele ({count})"
       },
       "runway": {
         "lead": "Kiedy każdy model zostanie wycofany, ile osób z niego korzysta i czy zasady dostępu do nowego modelu będą zgodne z obecnymi.",

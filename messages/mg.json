@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Ny vidiny sy CO2e dia tombana fotsiny, tsy fandrefesana marina: isaina ny fangatahana ary atao fanamaroana amin'ny fangatahana mahazatra ({promptTokens} tokens miditra, {completionTokens} tokens mivoaka) amin'ny vidiny eo amin'ny lisitra. Ny fampiasana dia mandrakotra ny {days, plural, one {# andro} other {# andro}} farany.",
-        "estimateNoteNoCost": "Ny CO2e dia tombana fotsiny, tsy fandrefesana: isaina ny fangatahana ary atao fanamaroana amin'ny fangatahana mahazatra ({promptTokens} tokens miditra, {completionTokens} tokens mivoaka). Ny fampiasana dia mandrakotra ny {days, plural, one {# andro} other {# andro}} farany.",
         "captureNote": "Ho hita ho an'ny rehetra ny fampiasana rehefa vita iray andro feno ny fanangonana. Alohan'izay dia ho an'ireo olona voasakantsakana fotsiny ny tarehimarika.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "Amin'ny mpanome tolotra ivelany",
             "local": "Ao an-toerana"
           }
-        }
+        },
+        "showRetired": "Modely nesorina ({count})"
       },
       "runway": {
         "lead": "Rehefa esorina ny modely tsirairay, ohatrinona ny olona mampiasa azy, ary mitovy amin'ny fitsipika ny modely hifindrany.",

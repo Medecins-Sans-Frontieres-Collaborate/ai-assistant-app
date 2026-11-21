@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Igiciro na CO2e ni ibipimo, si amafaranga yakoreshejwe: ibisabwe birabazwa bikagurwa n'ikintu gisanzwe kinwa ({promptTokens} tokens vyinjiye, {completionTokens} vyasohotse) ku giciro kiri kuri liste. Ivyo ukoresheje vyerekana iminsi {days, plural, one {# umunsi} other {# iminsi}} ishize.",
-        "estimateNoteNoCost": "CO2e ni igipimo, si ingero zafashwe: ibisabwe birabazwa bikagurwa n'ikintu gisanzwe kinwa ({promptTokens} tokens vyinjiye, {completionTokens} vyasohotse). Ivyo ukoresheje vyerekana iminsi {days, plural, one {# umunsi} other {# iminsi}} ishize.",
         "captureNote": "Uko abantu bose bakoresha biza kuboneka inyuma y'umunsi umwe wose wo gukoranya amakuru. Mbere y'aho, ibisubizo birerekana gusa abari munsi y'urugero.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "N’uwundi atari ishirahamwe",
             "local": "Aha mu kibanza"
           }
-        }
+        },
+        "showRetired": "Uburyo bwasazishijwe ({count})"
       },
       "runway": {
         "lead": "Igihe buri model ishira, abantu bayikoresha bangahe, n’ukuntu amategeko yo kuyikoresha bihuye n’ayo bazosanga.",

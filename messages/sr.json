@@ -6938,7 +6938,6 @@
       },
       "facts": {
         "estimateNote": "Procena troškova i CO2e vrednosti, a ne izmereni utrošak: broj zahteva pomnožen sa tipičnim zahtevom ({promptTokens} tokena ulaz, {completionTokens} izlaz) po cenovniku. Korišćenje obuhvata poslednjih {days, plural, one {# dan} other {# dana}}.",
-        "estimateNoteNoCost": "CO2e je procena, a ne izmerena vrednost: broj zahteva pomnožen sa tipičnim zahtevom ({promptTokens} tokena ulaz, {completionTokens} izlaz). Korišćenje obuhvata poslednjih {days, plural, one {# dan} other {# dana}}.",
         "captureNote": "Upotreba svih prikazuje se nakon prvog celog dana prikupljanja. Do tada, brojke pokrivaju samo osobe sa ograničenjem.",
         "co2Grams": "{value} g CO2e",
         "co2Kilograms": "{value} kg CO2e",
@@ -7072,7 +7071,8 @@
             "external": "Kod eksternog provajdera",
             "local": "Lokalno"
           }
-        }
+        },
+        "showRetired": "Povućeni modeli ({count})"
       },
       "runway": {
         "lead": "Kada svaki model prestaje sa radom, koliko ljudi ga koristi i da li pravila pristupa odgovaraju modelu na koji će se preći.",
