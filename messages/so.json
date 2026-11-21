@@ -6820,7 +6820,6 @@
       "noModels": "Weli moodallo kuma jiro buugga.",
       "doneEditing": "Dhamey",
       "defaultLabel": "Qof kasta oo kale",
-      "requestsPerDay": "codsiyo / maalinti",
       "inheritedFrom": "Waxa uu ka dhaxlay {state} laga bilaabo {origin}.",
       "effectiveLabel": "Qof kastaa oo aan liis ku jirin waxa uu helayaa: {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Dadka la oggolyahay",
         "deny": "Dadka la xayiray"
       },
-      "listHint": {
-        "groups": "Xubnaha kooxahan Entra waxay isticmaali karaan, shuruudaha koox kasta ee loo dejiyay.",
-        "domains": "Dadka wata email ku yaal domains-kan, iyagoo ku saleynaya shuruudaha la dejiyay domain kasta.",
-        "allow": "Dadka magacaaban waxay isticmaali karaan inkastoo default ama domain-koodu uu kale yahay.",
-        "deny": "Dadka magacaaban waligood ma isticmaali karaan. Tani waa ka sarreysaa rukhsad kasta oo kor ku xusan."
-      },
-      "grantUnlimited": "Aan xad lahayn",
-      "grantLimited": "Xadidan ilaa",
       "termsLabel": "Shuruudaha {target}",
-      "requestsLabel": "Codsiyo maalintii ah ee {target}",
       "removeGrant": "Ka saar {target}",
       "groupsCount": "{count, plural, one {# koox} other {# kooxood}}",
       "domainsCount": "{count, plural, one {# domain} other {# domains}}",
       "collisionChip": "Sidoo kale waxa ku jira Dejinta Guud",
       "collisionWarning": "Qaabkan ama qoyska waxa kale oo lagu habeeyey Dejinta Guud. Kaydin lama ogola illaa mid ka mid ah labadaasi la tirtiray.",
       "grid": {
-        "intro": "Yaa isticmaali kara moodel walba, iyo inta codsi ee maalintii la samayn karo. Saf walba waa qoys ama moodel; tiirar walbana waa dhagaystayaal. Dooro unug si aad u beddesho.",
         "caption": "Helitaanka moodelka ee dhagaystayaasha",
         "col": {
           "model": "Moodel",
           "reach": "Waa la isticmaali karaa"
         },
         "familyNote": "qoys: miisaaniyad maalinle ah oo la wadaago",
-        "addColumn": "Kudar tiir dhagaystayaal",
-        "addColumnConfirm": "Kudar tiir",
-        "columnKind": "Dhagaystayaal",
-        "addColumnHint": "Tiirka wuu sii joogi doonaa mar haddii unugkiisa la dejiyo.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "ma laha shuruudo u gaar ah",
-        "grantHint": "Inherit waxay la micno tahay inaysan jirin shuruudo dhagaystahan safkan ku qoran: xubnahoodu waxay heli doonaan jawaabta Qofkasta oo kale haddii aysan jirin tiir kale oo daboola.",
-        "grantHintFamily": "Inherit waxay adeegsanaysaa shuruudaha qoyska u dejiyey dhagaystahan.",
-        "inheritedPeople": "{count, plural, one {# qof oo kale ayaa ka yimaada} other {# qof oo kale ayaa ka yimaada}} liiska qoyska.",
         "reach": {
           "everyone": "Qof walba",
-          "everyoneBut": "{count, plural, one {Qof walba marka laga reebo # qof} other {Qof walba marka laga reebo # qof}}",
           "nobody": "Qofna maaha",
           "people": "{count, plural, one {# qof} other {# qof}}"
         },
         "howTitle": "Sida go'aan looga gaaro codsi",
         "how": {
-          "block": "Liiska la xannibay? Lama heli karo, xaalad kasta oo jirta.",
-          "specific": "Haddii kale, ogolaanshaha ugu gaar ah ee qofka daboola ayaa dejiya shuruudihiisa: qof magaciisa la cayimay, kadib koox, kadib domain, kadib qofkasta oo kale.",
           "inherit": "Moodel aan lahayn shuruudo u gaar ah tiirka wuxuu adeegsanayaa kuwa qoyska (xariiqan).",
           "envelope": "Codsigu waa inuu la jaanqaadaa xadka moodelka, miisaaniyadda qoyska iyo wadarta sheekada, dhammaantood."
         }

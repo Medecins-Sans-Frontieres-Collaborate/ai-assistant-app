@@ -6836,7 +6836,6 @@
       "noModels": "Noch keine Modelle im Katalog.",
       "doneEditing": "Fertig",
       "defaultLabel": "Alle anderen",
-      "requestsPerDay": "Anfragen / Tag",
       "inheritedFrom": "Erbt {state} von {origin}.",
       "effectiveLabel": "Alle, die nicht auf einer Liste stehen, erhalten: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Erlaubte Personen",
         "deny": "Blockierte Personen"
       },
-      "listHint": {
-        "groups": "Mitglieder dieser Entra-Gruppen können es gemäß den jeweiligen Bedingungen nutzen.",
-        "domains": "Alle mit einer E-Mail-Adresse in diesen Domains, gemäß den jeweiligen Bedingungen pro Domain.",
-        "allow": "Genannte Personen können es nutzen, unabhängig vom Standard oder ihrer Domain.",
-        "deny": "Genannte Personen dürfen es nie nutzen. Dies schlägt jede Berechtigung oben."
-      },
-      "grantUnlimited": "Unbegrenzt",
-      "grantLimited": "Begrenzt auf",
       "termsLabel": "Bedingungen für {target}",
-      "requestsLabel": "Anfragen pro Tag für {target}",
       "removeGrant": "{target} entfernen",
       "groupsCount": "{count, plural, one {# Gruppe} other {# Gruppen}}",
       "domainsCount": "{count, plural, one {# Domain} other {# Domains}}",
       "collisionChip": "Auch in den globalen Standardwerten",
       "collisionWarning": "Dieses Modell oder diese Familie ist auch unter den globalen Standardwerten konfiguriert. Das Speichern wird verweigert, bis eine der beiden Konfigurationen entfernt wurde.",
       "grid": {
-        "intro": "Wer jedes Modell nutzen kann und wie viele Anfragen pro Tag erlaubt sind. Jede Zeile steht für eine Modellfamilie oder ein Modell, jede Spalte für ein Publikum. Wählen Sie eine Zelle, um sie zu ändern.",
         "caption": "Modellzugriff nach Publikum",
         "col": {
           "model": "Modell",
           "reach": "Kann nutzen"
         },
         "familyNote": "Familie: gemeinsames Tagesbudget",
-        "addColumn": "Publikumsspalte hinzufügen",
-        "addColumnConfirm": "Spalte hinzufügen",
-        "columnKind": "Publikum",
-        "addColumnHint": "Die Spalte bleibt, sobald eine Zelle darin gesetzt ist.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "keine eigenen Bedingungen",
-        "grantHint": "Vererben bedeutet keine eigenen Bedingungen für dieses Publikum in dieser Zeile: Seine Mitglieder erhalten die Antwort für Alle anderen, sofern keine andere Spalte sie abdeckt.",
-        "grantHintFamily": "Vererben verwendet die Bedingungen, die die Familie für dieses Publikum setzt.",
-        "inheritedPeople": "{count, plural, one {# weitere Person kommt} other {# weitere Personen kommen}} aus der Liste der Familie.",
         "reach": {
           "everyone": "Alle",
-          "everyoneBut": "{count, plural, one {Alle außer # Person} other {Alle außer # Personen}}",
           "nobody": "Niemand",
           "people": "{count, plural, one {# Person} other {# Personen}}"
         },
         "howTitle": "Wie eine Anfrage entschieden wird",
         "how": {
-          "block": "Auf der Blockliste? Nicht verfügbar, egal was sonst gilt.",
-          "specific": "Ansonsten gilt die spezifischste Ausnahme, die die Person einschließt: eine benannte Person, dann eine Gruppe, dann eine Domain, dann alle anderen.",
           "inherit": "Ein Modell ohne eigene Bedingungen in einer Spalte übernimmt die der Familie (gestrichelt).",
           "envelope": "Die Anfrage muss innerhalb des Modelllimits, des Familienbudgets und des Chat-Gesamts liegen – alle drei."
         }

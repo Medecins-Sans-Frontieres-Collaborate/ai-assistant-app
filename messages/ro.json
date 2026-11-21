@@ -6836,7 +6836,6 @@
       "noModels": "Nu există încă modele în catalog.",
       "doneEditing": "Finalizat",
       "defaultLabel": "Restul utilizatorilor",
-      "requestsPerDay": "cereri / zi",
       "inheritedFrom": "Moștenește {state} de la {origin}.",
       "effectiveLabel": "Oricine nu se află pe o listă primește: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Persoane permise",
         "deny": "Persoane blocate"
       },
-      "listHint": {
-        "groups": "Membrii acestor grupuri Entra pot utiliza modelul, conform condițiilor stabilite pentru fiecare grup.",
-        "domains": "Oricine cu adresă de email din aceste domenii, conform condițiilor stabilite pentru domeniu.",
-        "allow": "Persoanele nominalizate pot utiliza modelul indiferent de implicit sau domeniul lor.",
-        "deny": "Persoanele nominalizate nu pot folosi niciodată modelul. Aceasta are prioritate față de orice permisiune de mai sus."
-      },
-      "grantUnlimited": "Nelimitat",
-      "grantLimited": "Limitat la",
       "termsLabel": "Condiții pentru {target}",
-      "requestsLabel": "Cereri pe zi pentru {target}",
       "removeGrant": "Eliminați {target}",
       "groupsCount": "{count, plural, one {# grup} other {# grupuri}}",
       "domainsCount": "{count, plural, one {# domeniu} other {# domenii}}",
       "collisionChip": "De asemenea, în valorile implicite globale",
       "collisionWarning": "Acest model sau familie este configurat(ă) și în valorile implicite globale. Salvarea va fi refuzată până când una dintre cele două va fi eliminată.",
       "grid": {
-        "intro": "Cine poate folosi fiecare model și câte solicitări pot face pe zi. Fiecare rând reprezintă o familie sau un model; fiecare coloană reprezintă un public. Selectați o celulă pentru a o modifica.",
         "caption": "Accesul la model după public",
         "col": {
           "model": "Model",
           "reach": "Poate folosi"
         },
         "familyNote": "familie: buget zilnic partajat",
-        "addColumn": "Adaugă o coloană de public",
-        "addColumnConfirm": "Adaugă coloană",
-        "columnKind": "Public",
-        "addColumnHint": "Coloana rămâne după ce se setează o celulă în ea.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "fără termeni proprii",
-        "grantHint": "Moștenirea înseamnă că nu există termeni pentru acest public pe acest rând: membrii primesc răspunsul „Toți ceilalți”, exceptând cazul în care altă coloană îi acoperă.",
-        "grantHintFamily": "Moștenirea folosește termenii setați de familie pentru acest public.",
-        "inheritedPeople": "{count, plural, one {Încă o persoană vine} other {Încă # persoane vin}} din lista familiei.",
         "reach": {
           "everyone": "Toți",
-          "everyoneBut": "{count, plural, one {Toți cu excepția unei persoane} other {Toți cu excepția a # persoane}}",
           "nobody": "Nimeni",
           "people": "{count, plural, one {# persoană} other {# persoane}}"
         },
         "howTitle": "Cum se decide o solicitare",
         "how": {
-          "block": "Pe lista de blocare? Indisponibil, indiferent de alte condiții.",
-          "specific": "Altfel, cel mai specific acord care include persoana stabilește termenii: mai întâi persoana nominalizată, apoi grupul, apoi domeniul, apoi restul.",
           "inherit": "Un model fără termeni proprii într-o coloană folosește termenii familiei (linie punctată).",
           "envelope": "Solicitarea trebuie să se încadreze în limita modelului, bugetul partajat al familiei și totalul chatului, toate trei."
         }

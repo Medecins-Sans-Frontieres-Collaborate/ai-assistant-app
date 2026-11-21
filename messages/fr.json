@@ -6836,7 +6836,6 @@
       "noModels": "Aucun modèle dans le catalogue pour le moment.",
       "doneEditing": "Terminé",
       "defaultLabel": "Tous les autres",
-      "requestsPerDay": "requêtes / jour",
       "inheritedFrom": "Hérite {state} de {origin}.",
       "effectiveLabel": "Tous ceux qui ne sont pas sur une liste obtiennent : {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Personnes autorisées",
         "deny": "Personnes bloquées"
       },
-      "listHint": {
-        "groups": "Les membres de ces groupes Entra peuvent l’utiliser, selon les conditions définies par groupe.",
-        "domains": "Tous ceux ayant une adresse e-mail dans ces domaines, selon les conditions définies par domaine.",
-        "allow": "Les personnes nommées peuvent l’utiliser, quel que soit le paramètre par défaut ou leur domaine.",
-        "deny": "Les personnes nommées ne peuvent jamais l'utiliser. Cela prévaut sur toute autorisation ci-dessus."
-      },
-      "grantUnlimited": "Illimité",
-      "grantLimited": "Limité à",
       "termsLabel": "Conditions pour {target}",
-      "requestsLabel": "Requêtes par jour pour {target}",
       "removeGrant": "Retirer {target}",
       "groupsCount": "{count, plural, one {# groupe} other {# groupes}}",
       "domainsCount": "{count, plural, one {# domaine} other {# domaines}}",
       "collisionChip": "Aussi dans les paramètres globaux par défaut",
       "collisionWarning": "Ce modèle ou cette famille est également configuré(e) dans les paramètres globaux par défaut. L’enregistrement sera refusé jusqu’à ce que l’un des deux soit supprimé.",
       "grid": {
-        "intro": "Qui peut utiliser chaque modèle, et combien de requêtes par jour. Chaque ligne représente une famille ou un modèle ; chaque colonne représente un public. Sélectionnez une cellule pour la modifier.",
         "caption": "Accès au modèle par public",
         "col": {
           "model": "Modèle",
           "reach": "Peut l'utiliser"
         },
         "familyNote": "famille : budget quotidien partagé",
-        "addColumn": "Ajouter une colonne de public",
-        "addColumnConfirm": "Ajouter la colonne",
-        "columnKind": "Public",
-        "addColumnHint": "La colonne reste dès qu'une cellule y est définie.",
         "cellLabel": "{model}, {audience} : {value}",
         "noGrant": "pas de conditions propres",
-        "grantHint": "Hériter signifie qu’il n’y a pas de conditions pour ce public sur cette ligne : ses membres reçoivent la réponse Autres sauf si une autre colonne les couvre.",
-        "grantHintFamily": "Hériter applique les conditions définies par la famille pour ce public.",
-        "inheritedPeople": "{count, plural, one {# personne supplémentaire vient} other {# personnes supplémentaires viennent}} depuis la liste de la famille.",
         "reach": {
           "everyone": "Tout le monde",
-          "everyoneBut": "{count, plural, one {Tout le monde sauf # personne} other {Tout le monde sauf # personnes}}",
           "nobody": "Personne",
           "people": "{count, plural, one {# personne} other {# personnes}}"
         },
         "howTitle": "Comment une requête est décidée",
         "how": {
-          "block": "Sur la liste de blocage ? Indisponible, quel que soit le reste.",
-          "specific": "Sinon, l’autorisation la plus spécifique couvrant la personne détermine ses conditions : une personne nommée, puis un groupe, puis un domaine, puis le reste.",
           "inherit": "Un modèle sans conditions propres dans une colonne utilise celles de sa famille (en pointillé).",
           "envelope": "La requête doit respecter le plafond du modèle, le budget partagé de la famille et le total du chat, les trois."
         }

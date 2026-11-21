@@ -6836,7 +6836,6 @@
       "noModels": "Brak modeli w katalogu.",
       "doneEditing": "Gotowe",
       "defaultLabel": "Wszyscy inni",
-      "requestsPerDay": "żądania / dzień",
       "inheritedFrom": "Dziedziczy {state} od {origin}.",
       "effectiveLabel": "Każdy spoza listy otrzymuje: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Osoby dozwolone",
         "deny": "Osoby zablokowane"
       },
-      "listHint": {
-        "groups": "Członkowie tych grup Entra mogą korzystać, według zasad określonych dla grupy.",
-        "domains": "Każda osoba z adresem e-mail w tych domenach, według zasad określonych dla domeny.",
-        "allow": "Wskazane osoby mogą korzystać niezależnie od ustawień domyślnych lub domeny.",
-        "deny": "Wskazane osoby nigdy nie mogą korzystać. Ma to pierwszeństwo przed każdą powyższą zgodą."
-      },
-      "grantUnlimited": "Bez limitu",
-      "grantLimited": "Ograniczone do",
       "termsLabel": "Warunki dla {target}",
-      "requestsLabel": "Żądania dziennie dla {target}",
       "removeGrant": "Usuń {target}",
       "groupsCount": "{count, plural, one {# grupa} other {# grupy}}",
       "domainsCount": "{count, plural, one {# domena} other {# domeny}}",
       "collisionChip": "Także w ustawieniach globalnych",
       "collisionWarning": "Ten model lub rodzina jest również skonfigurowana w ustawieniach globalnych. Zapisanie będzie niemożliwe, dopóki jedno z tych ustawień nie zostanie usunięte.",
       "grid": {
-        "intro": "Kto może korzystać z każdego modelu i ile żądań dziennie. Każdy wiersz to rodzina lub model; każda kolumna to grupa odbiorców. Wybierz komórkę, aby ją zmienić.",
         "caption": "Dostęp do modelu według grupy odbiorców",
         "col": {
           "model": "Model",
           "reach": "Może używać"
         },
         "familyNote": "rodzina: wspólny dzienny limit",
-        "addColumn": "Dodaj kolumnę grupy odbiorców",
-        "addColumnConfirm": "Dodaj kolumnę",
-        "columnKind": "Grupa odbiorców",
-        "addColumnHint": "Kolumna zostaje, gdy ustawiono w niej komórkę.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "brak własnych warunków",
-        "grantHint": "Dziedziczenie oznacza brak własnych warunków dla tej grupy odbiorców w tym wierszu: jej członkowie otrzymują to samo, co wszyscy inni, chyba że inna kolumna ich obejmuje.",
-        "grantHintFamily": "Dziedziczenie korzysta z warunków ustawionych przez rodzinę dla tej grupy odbiorców.",
-        "inheritedPeople": "{count, plural, one {# dodatkowa osoba} other {# dodatkowych osób}} z listy rodziny.",
         "reach": {
           "everyone": "Wszyscy",
-          "everyoneBut": "{count, plural, one {Wszyscy oprócz # osoby} other {Wszyscy oprócz # osób}}",
           "nobody": "Nikt",
           "people": "{count, plural, one {# osoba} other {# osób}}"
         },
         "howTitle": "Jak podejmowana jest decyzja o jednym żądaniu",
         "how": {
-          "block": "Na liście blokowanych? Niedostępny niezależnie od innych ustawień.",
-          "specific": "W przeciwnym razie najbardziej szczegółowe uprawnienie, które dotyczy danej osoby, określa jej warunki: najpierw imienna osoba, potem grupa, następnie domena, a na końcu wszyscy inni.",
           "inherit": "Model bez własnych warunków w kolumnie korzysta z warunków rodziny (przerywana linia).",
           "envelope": "Żądanie musi mieścić się w limicie modelu, wspólnym limicie rodziny i całkowitym limicie czatu – we wszystkich trzech jednocześnie."
         }

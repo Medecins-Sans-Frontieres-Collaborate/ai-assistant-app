@@ -6820,7 +6820,6 @@
       "noModels": "Nanu bamodelo ezali te na catalogue.",
       "doneEditing": "Sukisi",
       "defaultLabel": "Bato mosusu nyonso",
-      "requestsPerDay": "ba requête / mokolo",
       "inheritedFrom": "Azwi {state} kowuta epai ya {origin}.",
       "effectiveLabel": "Bato nyonso oyo balingi te na liste bazwi: {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Bato oyo baponami",
         "deny": "Bato oyo baboyami"
       },
-      "listHint": {
-        "groups": "Bamembere ya ba groupe Entra oyo bakoki kosalela yango, kaka kolanda makambo na groupe.",
-        "domains": "Bato nyonso na adresse email ya domaine oyo, kolanda mibeko ya domaine.",
-        "allow": "Bato oyo babengami bakoki kosalela yango ata soki default to domaine na bango elobi nini.",
-        "deny": "Bato oyo babengami bakoki soki moke te kosalela yango. Ekoki koleka ba grant nyonso."
-      },
-      "grantUnlimited": "Ezangi limite",
-      "grantLimited": "Ezali kaka tina",
       "termsLabel": "Mibeko ya {target}",
-      "requestsLabel": "Ba requête mokolo ya {target}",
       "removeGrant": "Longola {target}",
       "groupsCount": "{count, plural, one {# groupe} other {# ba groupe}}",
       "domainsCount": "{count, plural, one {# domaine} other {# ba domaine}}",
       "collisionChip": "Pe ezali na Basaleli ya Global",
       "collisionWarning": "Modɛle oyo to libota na yango ezali mpe kosalelama na Basaleli ya Global. Kobomba ekokóma mbeba soki moko na moko elongoli te.",
       "grid": {
-        "intro": "Nani akoki kosalela model nyonso, mpe motango ya ba demandes na mokolo moko. Ligne moko ezali na libota to model; colonne moko ezali na batu oyo bazali audience. Pona cellule moko mpo na kobongola yango.",
         "caption": "Model ekoki kosalelama na audience",
         "col": {
           "model": "Model",
           "reach": "Akoki kosalela"
         },
         "familyNote": "libota: budget ya mokolo eyokanisi",
-        "addColumn": "Ajouter colonne ya audience",
-        "addColumnConfirm": "Ajouter colonne",
-        "columnKind": "Audience",
-        "addColumnHint": "Colonne ekotikala soki cellule na yango ebongwama.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "ezali na termes na yango te",
-        "grantHint": "Inherit elingi koloba terme ya audience oyo na ligne oyo ezali te: membes bakomema reponse ya 'Batu nyonso', soki colonne mosusu etaleli bango te.",
-        "grantHintFamily": "Inherit esaleli termes oyo libota epesi mpo na audience oyo.",
-        "inheritedPeople": "{count, plural, one {Moto moko akoma} other {Batu mingi akoma}} na liste ya libota.",
         "reach": {
           "everyone": "Batu nyonso",
-          "everyoneBut": "{count, plural, one {Batu nyonso kasi moto moko} other {Batu nyonso kasi bato #}}",
           "nobody": "Moto moko te",
           "people": "{count, plural, one {Moto moko} other {Bato #}}"
         },
         "howTitle": "Ndenge demande moko ekokisama",
         "how": {
-          "block": "Na liste ya bloqué? Ekozala te, ata soki mibeko misusu ezali.",
-          "specific": "Soki te, grant spesifique oyo ekoki moto ezali: kombo ya moto, groupe, domaine, puis batu nyonso.",
           "inherit": "Model oyo ezali na termes na yango te na colonne, esaleli termes ya libota (traitillés).",
           "envelope": "Demande esengeli ekokanisa cap ya model, budget ya libota mpe total ya chat, nyonso misato."
         }

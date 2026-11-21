@@ -6836,7 +6836,6 @@
       "noModels": "Katalogda henüz model yok.",
       "doneEditing": "Bitti",
       "defaultLabel": "Diğer herkes",
-      "requestsPerDay": "istek / gün",
       "inheritedFrom": "{origin} kaynağından {state} devralıyor.",
       "effectiveLabel": "Listede olmayan herkes: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "İzin verilen kişiler",
         "deny": "Engellenen kişiler"
       },
-      "listHint": {
-        "groups": "Bu Entra gruplarının üyeleri, grup için belirlenen koşullarda kullanabilir.",
-        "domains": "Bu alan adlarında e-posta adresi olan herkes, alan için belirlenen şartlarda kullanabilir.",
-        "allow": "İsmi belirtilen kişiler, varsayılandan veya alan ayarlarından bağımsız olarak kullanabilir.",
-        "deny": "İsmi belirtilen kişiler asla kullanamaz. Bu, yukarıdaki tüm izinleri geçersiz kılar."
-      },
-      "grantUnlimited": "Sınırsız",
-      "grantLimited": "Şu kadar ile sınırla",
       "termsLabel": "{target} için koşullar",
-      "requestsLabel": "{target} için günlük istek",
       "removeGrant": "{target}'ı kaldır",
       "groupsCount": "{count, plural, one {# grup} other {# grup}}",
       "domainsCount": "{count, plural, one {# alan adı} other {# alan adı}}",
       "collisionChip": "Global varsayılanlarda da mevcut",
       "collisionWarning": "Bu model veya ailesi ayrıca Global varsayılanlarda yapılandırılmıştır. Kaydetme işlemi, ikisinden biri temizlenene kadar reddedilecektir.",
       "grid": {
-        "intro": "Her modelin kimler tarafından kullanılabileceği ve günlük kaç istek yapılabileceği. Her satır bir aile ya da modeldir; her sütun bir hedef kitleyi gösterir. Değiştirmek için bir hücre seçin.",
         "caption": "Hedef kitleye göre model erişimi",
         "col": {
           "model": "Model",
           "reach": "Kullanabilir"
         },
         "familyNote": "aile: paylaşılan günlük bütçe",
-        "addColumn": "Hedef kitle sütunu ekle",
-        "addColumnConfirm": "Sütun ekle",
-        "columnKind": "Hedef kitle",
-        "addColumnHint": "Bir hücresinde değer ayarlanırsa sütun kalır.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "kendi koşulları yok",
-        "grantHint": "Devralma, bu satırdaki bu hedef kitle için özel koşul olmadığı anlamına gelir: Üyeleri için başka bir sütun tarafından kapsanmadığı sürece 'Diğerleri' cevabı geçerli olur.",
-        "grantHintFamily": "Devralma, bu hedef kitle için ailenin belirlediği koşulları kullanır.",
-        "inheritedPeople": "{count, plural, one {Ailenin listesinden # kişi daha gelir} other {Ailenin listesinden # kişi daha gelir}}.",
         "reach": {
           "everyone": "Herkes",
-          "everyoneBut": "{count, plural, one {# kişi hariç herkes} other {# kişi hariç herkes}}",
           "nobody": "Hiç kimse",
           "people": "{count, plural, one {# kişi} other {# kişi}}"
         },
         "howTitle": "Bir isteğe nasıl karar verilir",
         "how": {
-          "block": "Engelli listesinde mi? O zaman başka koşullar ne olursa olsun kullanılamaz.",
-          "specific": "Aksi takdirde, kişiyi kapsayan en özel yetki onların koşullarını belirler: önce ismiyle atanmış kişi, ardından grup, ardından domain ve son olarak diğer herkes.",
           "inherit": "Bir sütunda kendi koşulları olmayan model, ailesinin (kesikli çizgili) koşullarını kullanır.",
           "envelope": "İstek, modelin kotasına, ailenin paylaşılan bütçesine ve sohbet toplamına uymalı, üçü de geçerli olur."
         }

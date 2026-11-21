@@ -6820,7 +6820,6 @@
       "noModels": "Još nema modela u katalogu.",
       "doneEditing": "Završeno",
       "defaultLabel": "Svi ostali",
-      "requestsPerDay": "zahteva / dan",
       "inheritedFrom": "Nasleđuje {state} od {origin}.",
       "effectiveLabel": "Svi koji nisu na listi dobijaju: {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Odobrene osobe",
         "deny": "Blokirane osobe"
       },
-      "listHint": {
-        "groups": "Članovi ovih Entra grupa mogu ga koristiti, prema pravilima za svaku grupu.",
-        "domains": "Svi sa email adresom na ovim domenima, prema pravilima za svaki domen.",
-        "allow": "Imenovane osobe mogu ga koristiti bez obzira na podrazumevano ili njihov domen.",
-        "deny": "Imenovane osobe ga nikada ne mogu koristiti. Ovo ima prednost nad svim odobrenjima iznad."
-      },
-      "grantUnlimited": "Neograničeno",
-      "grantLimited": "Ograničeno na",
       "termsLabel": "Uslovi za {target}",
-      "requestsLabel": "Zahteva po danu za {target}",
       "removeGrant": "Ukloni {target}",
       "groupsCount": "{count, plural, one {# grupa} other {# grupa}}",
       "domainsCount": "{count, plural, one {# domen} other {# domena}}",
       "collisionChip": "Takođe u globalnim podrazumevanim vrednostima",
       "collisionWarning": "Ovaj model ili porodica je takođe podešena pod globalnim podrazumevanim vrednostima. Čuvanje neće biti dozvoljeno dok se jedno od dva ne ukloni.",
       "grid": {
-        "intro": "Ko može da koristi svaki model i koliko zahteva dnevno. Svaki red predstavlja porodicu ili model; svaka kolona je publika. Izaberite ćeliju da je izmenite.",
         "caption": "Pristup modelu po publici",
         "col": {
           "model": "Model",
           "reach": "Može da koristi"
         },
         "familyNote": "porodica: zajednički dnevni budžet",
-        "addColumn": "Dodaj kolonu za publiku",
-        "addColumnConfirm": "Dodaj kolonu",
-        "columnKind": "Publika",
-        "addColumnHint": "Kolona ostaje nakon što se jedna ćelija u njoj postavi.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "nema sopstvenih termina",
-        "grantHint": "Nasleđivanje znači da nema termina za ovu publiku u ovom redu: njeni članovi dobijaju odgovor 'Svi ostali', osim ako ih druga kolona pokrije.",
-        "grantHintFamily": "Nasleđivanje koristi termine koje porodica postavi za ovu publiku.",
-        "inheritedPeople": "{count, plural, one {Još # osoba dolazi} other {Još # osoba dolazi}} sa liste porodice.",
         "reach": {
           "everyone": "Svi",
-          "everyoneBut": "{count, plural, one {Svi osim # osobe} other {Svi osim # osoba}}",
           "nobody": "Niko",
           "people": "{count, plural, one {# osoba} other {# osoba}}"
         },
         "howTitle": "Kako se odlučuje jedan zahtev",
         "how": {
-          "block": "Na listi blokiranih? Nedostupno, bez obzira na ostalo.",
-          "specific": "U suprotnom, najkonkretnije dozvoljenje koje uključuje osobu određuje njihove termine: prvo imenovana osoba, zatim grupa, zatim domen, pa svi ostali.",
           "inherit": "Model bez sopstvenih termina u koloni koristi termine porodice (isprekidano).",
           "envelope": "Zahtev mora odgovarati ograničenju modela, zajedničkom budžetu porodice i ukupnom broju čatova, sva tri."
         }

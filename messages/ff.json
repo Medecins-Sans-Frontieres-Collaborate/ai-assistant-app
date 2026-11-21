@@ -6820,7 +6820,6 @@
       "noModels": "Modeli alaa e katalog ngam jooni.",
       "doneEditing": "Songa",
       "defaultLabel": "So tawii ndun",
-      "requestsPerDay": "requests / ñalngu",
       "inheritedFrom": "Winnditi {state} e {origin}.",
       "effectiveLabel": "Mbaylaa nde fow e lenyol renndani: {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Rewɓe juɗɗo",
         "deny": "Rewɓe juɗɗiayi"
       },
-      "listHint": {
-        "groups": "Janngirɗi e laaɓirɗe Entra ɗee waawani jogii, ngal keftingol peewi laaɓirɗe kala.",
-        "domains": "Koyɗe fow e email address ngal domain ɓeen, peewi keftingol e domain kala.",
-        "allow": "Rewɓe juɗɗo waawani jogii ko fiɗɗo default walla domain mum.",
-        "deny": "Rewɓe juɗɗiayi waawani jogii so wonaa. Ngol waawi dow kala grant ngal paykun."
-      },
-      "grantUnlimited": "Haynaani limit",
-      "grantLimited": "Limiti e",
       "termsLabel": "Keftingol e {target}",
-      "requestsLabel": "Requests e ñalngu e {target}",
       "removeGrant": "Momta {target}",
       "groupsCount": "{count, plural, one {# laaɓirɗo} other {# laaɓirɗe}}",
       "domainsCount": "{count, plural, one {# domain} other {# domains}}",
       "collisionChip": "E jamɗe Global defaults fow",
       "collisionWarning": "Model gila walla leydi-ɗe ɗee woni ko e jamɗe Global defaults. Ndaade mbaydi, waawani goɗɗum maa ɗiɗo epa juutde.",
       "grid": {
-        "intro": "Ko honɗun heɓii njiɗɗo model e goɗɗude raɓɓe e jaŋnga. Kele moƴƴi njiɗɗo family walla model; kele kolumn moƴƴi njiɗɗo audience. Suɓo cell moƴƴi adugol ɓe.",
         "caption": "Model moƴƴi audience",
         "col": {
           "model": "Model",
           "reach": "Moƴƴi heɓde"
         },
         "familyNote": "family: budget lajjo e ɓendu",
-        "addColumn": "Tee kolumn audience",
-        "addColumnConfirm": "Tee kolumn",
-        "columnKind": "Audience",
-        "addColumnHint": "Kolumn moƴƴi jannga saa cell e moƴƴi laawni.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "tartol makko wala",
-        "grantHint": "Inherit min woni tartol makko wala e audience moƴƴi: moƴƴi soɗɗi 'Everyone else' ngo heɓii cell makko, tuma kolumn laaɓii moɓɓe.",
-        "grantHintFamily": "Inherit moƴƴi so tartol family laawni audience moƴƴi.",
-        "inheritedPeople": "{count, plural, one {# janngunde jokkii} other {# janngunde jokkii}} e list family makko.",
         "reach": {
           "everyone": "Jokkere ɓe",
-          "everyoneBut": "{count, plural, one {Jokkere ɓe ɗum mo wala # janngunde} other {Jokkere ɓe ɗum mo wala # janngunde}}",
           "nobody": "Wala",
           "people": "{count, plural, one {# janngunde} other {# janngunde}}"
         },
         "howTitle": "Ko honɗun raɓɓe moƴƴi sosaani",
         "how": {
-          "block": "E list block? Wala moƴƴi, baali min duuɓi.",
-          "specific": "Tuma baali, grant moƴƴi soɗɗi e moƴƴi laawni tartol: ngoɗɗo soɗɗi, tuma group, tuma domain, jaŋnga 'everyone else'.",
           "inherit": "Model moƴƴi wala tartol makko e kolumn moƴƴi so tartol family makko.",
           "envelope": "Raɓɓe moƴƴi waawani e cap model, budget lajjo family e suma chat, tati."
         }

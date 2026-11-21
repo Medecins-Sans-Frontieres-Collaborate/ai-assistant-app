@@ -6836,7 +6836,6 @@
       "noModels": "Inga modeller i katalogen ännu.",
       "doneEditing": "Klar",
       "defaultLabel": "Alla andra",
-      "requestsPerDay": "förfrågningar / dag",
       "inheritedFrom": "Ärver {state} från {origin}.",
       "effectiveLabel": "Alla som inte är på en lista får: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Personer med tillåtelse",
         "deny": "Blockerade personer"
       },
-      "listHint": {
-        "groups": "Medlemmar i dessa Entra-grupper får använda den, enligt villkoren som är satta per grupp.",
-        "domains": "Alla med en e-postadress i dessa domäner, enligt villkoren per domän.",
-        "allow": "Namngivna personer får använda den oavsett standard eller deras domäninställning.",
-        "deny": "Namngivna personer får aldrig använda den. Detta prioriteras över alla tilldelningar ovan."
-      },
-      "grantUnlimited": "Obegränsad",
-      "grantLimited": "Begränsad till",
       "termsLabel": "Villkor för {target}",
-      "requestsLabel": "Förfrågningar per dag för {target}",
       "removeGrant": "Ta bort {target}",
       "groupsCount": "{count, plural, one {# grupp} other {# grupper}}",
       "domainsCount": "{count, plural, one {# domän} other {# domäner}}",
       "collisionChip": "Finns även i globala standardinställningar",
       "collisionWarning": "Den här modellen eller familjen är också konfigurerad under globala standardinställningar. Spara kommer att nekas tills en av de två tas bort.",
       "grid": {
-        "intro": "Vem som kan använda varje modell och hur många förfrågningar per dag. Varje rad är en familj eller modell; varje kolumn är en målgrupp. Välj en cell för att ändra den.",
         "caption": "Modellåtkomst per målgrupp",
         "col": {
           "model": "Modell",
           "reach": "Kan använda"
         },
         "familyNote": "familj: delad daglig budget",
-        "addColumn": "Lägg till målgruppskolumn",
-        "addColumnConfirm": "Lägg till kolumn",
-        "columnKind": "Målgrupp",
-        "addColumnHint": "Kolumnen stannar kvar när en cell i den har angetts.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "inga egna villkor",
-        "grantHint": "Ärva innebär inga särskilda villkor för denna målgrupp på denna rad: dess medlemmar får svaret för Alla andra, om ingen annan kolumn täcker dem.",
-        "grantHintFamily": "Ärv använder de villkor som familjen anger för denna målgrupp.",
-        "inheritedPeople": "{count, plural, one {# person till kommer} other {# personer till kommer}} från familjens lista.",
         "reach": {
           "everyone": "Alla",
-          "everyoneBut": "{count, plural, one {Alla utom # person} other {Alla utom # personer}}",
           "nobody": "Ingen",
           "people": "{count, plural, one {# person} other {# personer}}"
         },
         "howTitle": "Hur en förfrågan avgörs",
         "how": {
-          "block": "På blocklistan? Ej tillgänglig, oavsett övriga villkor.",
-          "specific": "Annars avgör det mest specifika tillståndet som omfattar personen villkoren: en namngiven person, sedan en grupp, sedan en domän och sist alla andra.",
           "inherit": "En modell utan egna villkor i en kolumn använder sin familjs (streckad).",
           "envelope": "Förfrågan måste rymmas inom modellens gräns, familjens delade budget och chatgränsen — alla tre."
         }

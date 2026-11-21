@@ -6820,7 +6820,6 @@
       "noModels": "Palibe mitundu m'catalog pakadali pano.",
       "doneEditing": "Maliza",
       "defaultLabel": "Ena onse",
-      "requestsPerDay": "mapempho / tsiku",
       "inheritedFrom": "Akulandira {state} kuchokera ku {origin}.",
       "effectiveLabel": "Aliyense amene ali m'ndandanda safika: {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Anthu ovololeka",
         "deny": "Anthu olephera"
       },
-      "listHint": {
-        "groups": "Mamembala a magulu a Entra awa angagwiritse ntchito, malinga ndi malamulo a gulu.",
-        "domains": "Aliyense amene ali ndi imelo m'domain awa, malinga ndi malamulo a domain.",
-        "allow": "Anthu omwe atchulidwa angagwiritse ntchito ngakhale kusakhazikika kapena domain yawo yatheka.",
-        "deny": "Anthu omwe atchulidwa sangathe kugwiritsa ntchito. Ichi chimaposa ufulu uliwonse pamwamba."
-      },
-      "grantUnlimited": "Opanda malire",
-      "grantLimited": "Zochepa pa",
       "termsLabel": "Malamulo a {target}",
-      "requestsLabel": "Mapempho patsiku a {target}",
       "removeGrant": "Chotsani {target}",
       "groupsCount": "{count, plural, one {# gulu} other {# magulu}}",
       "domainsCount": "{count, plural, one {# domain} other {# ma domain}}",
       "collisionChip": "Ili komanso mu Global defaults",
       "collisionWarning": "Chitsanzo ichi kapena banja lili ndi makonzedwe mu Global defaults. Kusunga sikuzaloledwa mpaka chimodzi mwaziwiri zichotsedwa.",
       "grid": {
-        "intro": "Ndani angagwiritse ntchito chitsanzo chilichonse, ndi kuchuluka kwa pempho patsiku. Mzere uliwonse ukuimira banja kapena chitsanzo; kolamu iliyonse ukuimira omvera. Sankhani maselo kusintha.",
         "caption": "Kuloledwa kugwiritsa ntchito chitsanzo malinga ndi omvera",
         "col": {
           "model": "Chitsanzo",
           "reach": "Angagwiritse ntchito"
         },
         "familyNote": "banja: bajeti yagawidwa tsiku ndi tsiku",
-        "addColumn": "Onjezerani kolamu ya omvera",
-        "addColumnConfirm": "Onjezerani kolamu",
-        "columnKind": "Omvera",
-        "addColumnHint": "Kolamu siyichotsedwa akangoyika selo imodzi.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "palibe malamulo ake payekha",
-        "grantHint": "Kutengera (Inherit) kumatanthauza palibe malamulo apadera pa omvera otere: mamembala ake alandira yankho la Zina zonse pokhapokha ngati kolamu ina yawaphatikiza.",
-        "grantHintFamily": "Kutengera kukugwiritsa ntchito malamulo a banja kwa omverawa.",
-        "inheritedPeople": "{count, plural, one {# munthu wina akupezeka} other {# anthu ena akupezeka}} kuchokera pa mndandanda wa banja.",
         "reach": {
           "everyone": "Aliyense",
-          "everyoneBut": "{count, plural, one {Aliyense kupatula munthu #} other {Aliyense kupatula anthu #}}",
           "nobody": "Palibe",
           "people": "{count, plural, one {munthu #} other {anthu #}}"
         },
         "howTitle": "Momwe pempho limasankhidwira",
         "how": {
-          "block": "Ali pa mndandanda wa oletsedwa? Sakuloledwa, ngakhale zinthu zina zili choncho.",
-          "specific": "Ngati si choncho, malamulo apadera omwe akuphimba munthu ameneyo adzakhazikitsidwa: wotchedwa payekha, gulu, domain, kenako aliyense.",
           "inherit": "Chitsanzo chopanda malamulo ake payekha m'kolamu chimatengera a banja (chowoneka ngati mzere wodulidwa).",
           "envelope": "Pempho liyenera kukhala mkati mwa malire a chitsanzo, bajeti yagawidwa ya banja ndi chiyambi cha chat, zonse zitatu."
         }

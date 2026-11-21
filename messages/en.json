@@ -6479,7 +6479,6 @@
       "noModels": "No models in the catalog yet.",
       "doneEditing": "Done",
       "defaultLabel": "Everyone else",
-      "requestsPerDay": "requests / day",
       "inheritedFrom": "Inherits {state} from {origin}.",
       "effectiveLabel": "Everyone not on a list gets: {state}.",
       "origin": {
@@ -6498,53 +6497,73 @@
         "groups": "Groups with access",
         "domains": "Domains with access",
         "allow": "Allowed people",
-        "deny": "Blocked people"
+        "deny": "Blocked people",
+        "denyGroups": "Blocked groups",
+        "denyDomains": "Blocked domains"
       },
-      "listHint": {
-        "groups": "Members of these Entra groups may use it, on the terms set per group.",
-        "domains": "Everyone with an email address at these domains, on the terms set per domain.",
-        "allow": "Named people may use it whatever the default or their domain says.",
-        "deny": "Named people may never use it. This beats every grant above."
-      },
-      "grantUnlimited": "Unlimited",
-      "grantLimited": "Limited to",
       "termsLabel": "Terms for {target}",
-      "requestsLabel": "Requests per day for {target}",
       "removeGrant": "Remove {target}",
       "groupsCount": "{count, plural, one {# group} other {# groups}}",
       "domainsCount": "{count, plural, one {# domain} other {# domains}}",
       "collisionChip": "Also in Global defaults",
       "collisionWarning": "This model or family is also configured under Global defaults. Saving will be refused until one of the two is cleared.",
       "grid": {
-        "intro": "Who can use each model, and how many requests a day. Each row is a family or a model; each column is an audience. Select a cell to change it.",
         "caption": "Model access by audience",
         "col": {
           "model": "Model",
-          "reach": "Can use it"
+          "reach": "Can use it",
+          "people": "Named people"
         },
         "familyNote": "family: shared daily budget",
-        "addColumn": "Add an audience column",
-        "addColumnConfirm": "Add column",
-        "columnKind": "Audience",
-        "addColumnHint": "The column stays once a cell in it is set.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "no terms of its own",
-        "grantHint": "Inherit means no terms for this audience on this row: its members get the Everyone else answer unless another column covers them.",
-        "grantHintFamily": "Inherit uses the terms the family sets for this audience.",
-        "inheritedPeople": "{count, plural, one {# more person comes} other {# more people come}} from the family's list.",
         "reach": {
           "everyone": "Everyone",
-          "everyoneBut": "{count, plural, one {Everyone but # person} other {Everyone but # people}}",
           "nobody": "Nobody",
-          "people": "{count, plural, one {# person} other {# people}}"
+          "people": "{count, plural, one {# person} other {# people}}",
+          "everyoneExcept": "Everyone except {list}"
         },
         "howTitle": "How one request is decided",
         "how": {
-          "block": "On the block list? Unavailable, whatever else applies.",
-          "specific": "Otherwise the most specific grant that includes the person sets their terms: a named person, then a group, then a domain, then everyone else.",
           "inherit": "A model with no terms of its own in a column uses its family's (dashed).",
-          "envelope": "The request must fit the model's cap, the family's shared budget and the chat total, all three."
+          "envelope": "The request must fit the model's cap, the family's shared budget and the chat total, all three.",
+          "blocked": "A named person set to Off cannot use it, whatever their group or domain gets.",
+          "mostSpecific": "Otherwise the most specific entry that includes the person decides: a named person, then a group, then a domain, then everyone else. Between two groups, or two domains, Off wins."
+        },
+        "lead": "Who can use each model, and how many requests a day. Each row is a family or a model; each column is an audience. Select a row to change who can use it.",
+        "peopleValue": "{allowed} allowed, {blocked} off",
+        "bulk": {
+          "open": "Add access on several models",
+          "title": "Give the same access on several models",
+          "models": "On these models",
+          "wholeFamily": "whole family",
+          "apply": "{count, plural, =0 {Choose models} one {Apply to # row} other {Apply to # rows}}",
+          "note": "Replaces what these people, groups and domains already have on the chosen rows. Nothing is saved until you save the policy."
         }
+      },
+      "audience": {
+        "editorTitle": "Who can use {model}",
+        "heading": "Groups, domains and people",
+        "hint": "Each gets its own answer on this row, whatever Everyone else says.",
+        "empty": "Nobody is named on this row yet.",
+        "who": "Who",
+        "terms": "They get",
+        "newTerms": "What the people, groups and domains being added get",
+        "add": "{count, plural, =0 {Add} one {Add # entry} other {Add # entries}}",
+        "placeholder": "Search people and groups, or type a domain such as example.org",
+        "pickerLabel": "People, groups or domains to add",
+        "pickerHint": "Mix people, groups and domains. Paste a list separated by commas.",
+        "pickerHintNoGroups": "Mix people and domains. Paste a list separated by commas. Group search is turned off here.",
+        "invalid": "Not recognised: {text}. Type an email address or a domain, or pick a group from the search.",
+        "kind": {
+          "user": "person",
+          "group": "group",
+          "domain": "domain"
+        },
+        "fromFamily": "from the family",
+        "setHere": "Change for this model",
+        "setHereFor": "Change {target} for this model",
+        "overruled": "Off on the family, which wins"
       }
     },
     "tabsLabel": "Limits sections",

@@ -6867,7 +6867,6 @@
       "noModels": "目录中暂无模型。",
       "doneEditing": "完成",
       "defaultLabel": "其他所有人",
-      "requestsPerDay": "请求/天",
       "inheritedFrom": "继承自 {origin} 的 {state}。",
       "effectiveLabel": "未列入名单的所有人将获得：{state}。",
       "origin": {
@@ -6888,48 +6887,28 @@
         "allow": "允许的个人",
         "deny": "封锁的个人"
       },
-      "listHint": {
-        "groups": "这些 Entra 群组的成员可根据群组设定使用该模型。",
-        "domains": "拥有这些域名邮箱的所有人可按该域名设置使用。",
-        "allow": "被指定的个人可使用该模型，无论其默认或域名设置如何。",
-        "deny": "被指定的个人永远无法使用。此规则优先于上方所有授权。"
-      },
-      "grantUnlimited": "无限制",
-      "grantLimited": "限制为",
       "termsLabel": "{target} 的使用条件",
-      "requestsLabel": "{target} 的每日请求数",
       "removeGrant": "移除 {target}",
       "groupsCount": "{count, plural, one {# 个群组} other {# 个群组}}",
       "domainsCount": "{count, plural, one {# 个域名} other {# 个域名}}",
       "collisionChip": "也在全局默认设置中",
       "collisionWarning": "该模型或系列也已在全局默认设置中配置。请在两个设置中清除其一后再保存。",
       "grid": {
-        "intro": "谁可以使用每个模型及其每日请求次数。每行代表一个家族或模型；每列代表一个受众。点击单元格进行更改。",
         "caption": "按受众分配模型访问权限",
         "col": {
           "model": "模型",
           "reach": "可用人员"
         },
         "familyNote": "家族：共享每日配额",
-        "addColumn": "添加受众列",
-        "addColumnConfirm": "添加列",
-        "columnKind": "受众",
-        "addColumnHint": "只要该列中某个单元格已设置，该列就会保留。",
         "cellLabel": "{model}，{audience}：{value}",
         "noGrant": "无专属条款",
-        "grantHint": "继承表示本行中该受众无专属条款：成员将采用“其他所有人”规则，除非有其他列覆盖。",
-        "grantHintFamily": "继承采用家族为该受众设置的条款。",
-        "inheritedPeople": "{count, plural, one {来自家族列表的 # 人} other {来自家族列表的 # 人}}。",
         "reach": {
           "everyone": "所有人",
-          "everyoneBut": "{count, plural, one {除 # 人外的所有人} other {除 # 人外的所有人}}",
           "nobody": "无任何人",
           "people": "{count, plural, one {# 人} other {# 人}}"
         },
         "howTitle": "如何决定一次请求",
         "how": {
-          "block": "在封禁名单中？则不可用，无论其他条件如何。",
-          "specific": "否则，以最具体的包含该人的授权为准：指定个人、再是群组、再是域，最后是所有其他人。",
           "inherit": "如本列中未单独设置条款，则该模型继承家族（虚线）的条款。",
           "envelope": "请求必须同时满足模型上限、家族共享配额与对话总量三者。"
         }

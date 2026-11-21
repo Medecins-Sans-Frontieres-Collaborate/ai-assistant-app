@@ -6820,7 +6820,6 @@
       "noModels": "Nta moderi ziraboneka muri catalogue.",
       "doneEditing": "Birarangiye",
       "defaultLabel": "Abasigaye bose",
-      "requestsPerDay": "requests / munsi",
       "inheritedFrom": "Vyamukuye kuri {state} ya {origin}.",
       "effectiveLabel": "Abatari ku rutonde baza: {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Abantu bemerewe",
         "deny": "Abantu babujijwe"
       },
-      "listHint": {
-        "groups": "Abari muri aya matsinda ya Entra barashobora kuyikoresha, uko vyashizwe kuri buri tsinda.",
-        "domains": "Buri wese afise email kuri izi nzego, uko vyashizwe kuri urwo rwego.",
-        "allow": "Abantu barashobora kuyikoresha naho default canke urwego rwabo rubivuga ukundi.",
-        "deny": "Abantu bagiye ku rutonde ntibemerewe kuyikoresha. Ibi biraruta ibindi vyemezo vyose."
-      },
-      "grantUnlimited": "Ntaho igarukira",
-      "grantLimited": "Rigeze kuri",
       "termsLabel": "Amategeko ya {target}",
-      "requestsLabel": "Requests ku munsi kuri {target}",
       "removeGrant": "Kuraho {target}",
       "groupsCount": "{count, plural, one {# itsinda} other {# amatsinda}}",
       "domainsCount": "{count, plural, one {# urwego} other {# inzego}}",
       "collisionChip": "Biri kandi mu mugenzi wa Global defaults",
       "collisionWarning": "Uyu modele canke umuryango nawo washizwe muri Global defaults. Kubika ntibizoshoboka gushika umwe muri vyo ukurwa.",
       "grid": {
-        "intro": "Ni bande bashobora gukoresha ikiganiro kimwe, n'ingene basaba ku musi. Umurongo umwe ni umuryango canke imodèle; inkingi imwe ni abakozi. Hitamwo akadirisha kugira ugahindure.",
         "caption": "Uko abakozi bakoresha imodèle",
         "col": {
           "model": "Imodèle",
           "reach": "Barashobora kuyikoresha"
         },
         "familyNote": "umuryango: ubushobozi bwo gusangira ku musi",
-        "addColumn": "Ongerako inkingi y'abakozi",
-        "addColumnConfirm": "Ongerako inkingi",
-        "columnKind": "Abakozi",
-        "addColumnHint": "Inkingi iraguma igihe umwidondoro wayo ushizwe.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "nta mategeko yayo yihariye",
-        "grantHint": "Kuronka bivuga ko ata mategeko yihariye y'iyo nkingi: abayigize baronka ico abatarimwo bose bahabwa keretse hari iyindi nkingi ibarimwo.",
-        "grantHintFamily": "Kuronka bikoresha amategeko umuryango ushira kuri abo bakozi.",
-        "inheritedPeople": "{count, plural, one {Umuntu # yiyongera} other {Abantu # biyongera}} kuri liste y'umuryango.",
         "reach": {
           "everyone": "Bose",
-          "everyoneBut": "{count, plural, one {Bose usibye umuntu #} other {Bose usibye abantu #}}",
           "nobody": "Nta muntu",
           "people": "{count, plural, one {Umuntu #} other {Abantu #}}"
         },
         "howTitle": "Ingene urusabwa rumwe rutoreshwa",
         "how": {
-          "block": "Hari ku rutonde rw'abirukanywe? Ntibishoboka, vyose vyaba vyakurikijwe.",
-          "specific": "Ubundi, ico uzotanga gishingiye ku mategeko arimwo wa muntu: ubanza uwavuzwe, hanyuma ishirahamwe, hanyuma domaine, hanyuma abandi bose.",
           "inherit": "Imodèle itagira amategeko yayo yihariye mu yokingi ikoresha ay'umuryango (ivugwa idaswitswe).",
           "envelope": "Irusabwa rigomba kuba mu mubumbe w'imodèle, ubushobozi bw'umuryango n'ikiganiro rusangi, vyose ku gihe."
         }

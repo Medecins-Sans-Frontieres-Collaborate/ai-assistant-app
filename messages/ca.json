@@ -6836,7 +6836,6 @@
       "noModels": "Encara no hi ha models al catàleg.",
       "doneEditing": "Fet",
       "defaultLabel": "La resta",
-      "requestsPerDay": "peticions / dia",
       "inheritedFrom": "Hereta {state} de {origin}.",
       "effectiveLabel": "Qui no és a cap llista rep: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Persones autoritzades",
         "deny": "Persones bloquejades"
       },
-      "listHint": {
-        "groups": "Els membres d’aquests grups Entra poden utilitzar-lo, segons les condicions fixades per grup.",
-        "domains": "Tothom amb una adreça de correu d’aquests dominis, segons les condicions fixades per domini.",
-        "allow": "Les persones designades podran utilitzar-lo, independentment del valor per defecte o del seu domini.",
-        "deny": "Les persones designades no el podran utilitzar mai. Això preval sobre qualsevol permís anterior."
-      },
-      "grantUnlimited": "Il·limitat",
-      "grantLimited": "Limitat a",
       "termsLabel": "Condicions per a {target}",
-      "requestsLabel": "Peticions al dia per a {target}",
       "removeGrant": "Elimina {target}",
       "groupsCount": "{count, plural, one {# grup} other {# grups}}",
       "domainsCount": "{count, plural, one {# domini} other {# dominis}}",
       "collisionChip": "També als valors predeterminats globals",
       "collisionWarning": "Aquest model o família també està configurat als valors predeterminats globals. No es podrà desar fins que s'esborri una de les dues opcions.",
       "grid": {
-        "intro": "Qui pot utilitzar cada model i quantes sol·licituds al dia. Cada fila és una família o un model; cada columna és un públic. Seleccioneu una cel·la per canviar-la.",
         "caption": "Accés al model per públic",
         "col": {
           "model": "Model",
           "reach": "Pot utilitzar-lo"
         },
         "familyNote": "família: pressupost diari compartit",
-        "addColumn": "Afegeix una columna de públic",
-        "addColumnConfirm": "Afegeix columna",
-        "columnKind": "Públic",
-        "addColumnHint": "La columna es manté un cop s'estableix una cel·la en ella.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "sense condicions pròpies",
-        "grantHint": "Heredar vol dir que no hi ha condicions per a aquest públic en aquesta fila: els membres reben la resposta de La resta de persones tret que una altra columna els cobreixi.",
-        "grantHintFamily": "Heredar usa les condicions establertes per la família per aquest públic.",
-        "inheritedPeople": "{count, plural, one {# persona més ve} other {# persones més venen}} de la llista de la família.",
         "reach": {
           "everyone": "Tothom",
-          "everyoneBut": "{count, plural, one {Tothom excepte # persona} other {Tothom excepte # persones}}",
           "nobody": "Ningú",
           "people": "{count, plural, one {# persona} other {# persones}}"
         },
         "howTitle": "Com es decideix una sol·licitud",
         "how": {
-          "block": "Està a la llista de bloqueig? No disponible, passi el que passi.",
-          "specific": "Si no, el permís més específic que inclogui la persona estableix les seves condicions: una persona amb nom, després un grup, després un domini i finalment la resta.",
           "inherit": "Un model sense condicions pròpies en una columna utilitza les de la seva família (ratllades).",
           "envelope": "La sol·licitud ha d'ajustar-se al límit del model, al pressupost compartit de la família i al total del xat, tots tres."
         }

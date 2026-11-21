@@ -6820,7 +6820,6 @@
       "noModels": "Pa gen okenn modèl nan katalòg la pou kounye a.",
       "doneEditing": "Fini",
       "defaultLabel": "Tout rès moun yo",
-      "requestsPerDay": "demann / jou",
       "inheritedFrom": "Eritaj {state} soti nan {origin}.",
       "effectiveLabel": "Tout moun ki pa sou lis la jwenn : {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Moun otorize",
         "deny": "Moun bloke"
       },
-      "listHint": {
-        "groups": "Manm gwoup Entra sa yo ka itilize li, dapre tèm ki tabli pou chak gwoup.",
-        "domains": "Tout moun ki gen yon adrès imèl nan domèn sa yo, dapre tèm ki tabli pou chak domèn.",
-        "allow": "Moun yo nonmen ka itilize li kèlkeswa sa default oswa domèn yo di.",
-        "deny": "Moun yo nonmen p ap janm ka itilize li. Sa pase tout otorizasyon anlè a."
-      },
-      "grantUnlimited": "San limit",
-      "grantLimited": "Limite a",
       "termsLabel": "Tèm pou {target}",
-      "requestsLabel": "Demann pa jou pou {target}",
       "removeGrant": "Retire {target}",
       "groupsCount": "{count, plural, one {# gwoup} other {# gwoup}}",
       "domainsCount": "{count, plural, one {# domèn} other {# domèn}}",
       "collisionChip": "Tou prezan nan Definisyon Global yo",
       "collisionWarning": "Modèl oswa fanmi sa a anrejistre tou anba Definisyon Global yo. Pa ka sove chanjman jiskaske youn nan de yo efase.",
       "grid": {
-        "intro": "Kiyès ki ka itilize chak modèl, epi konbyen demann pa jou. Chak liy reprezante yon fanmi oswa yon modèl; chak kolòn se yon odyans. Chwazi yon selil pou chanje li.",
         "caption": "Aksè modèl pa odyans",
         "col": {
           "model": "Modèl",
           "reach": "Ka itilize li"
         },
         "familyNote": "fanmi : bidjè chak jou pataje",
-        "addColumn": "Ajoute yon kolòn odyans",
-        "addColumnConfirm": "Ajoute kolòn",
-        "columnKind": "Odyans",
-        "addColumnHint": "Kolòn nan rete la yon fwa ou mete yon selil ladan li.",
         "cellLabel": "{model}, {audience} : {value}",
         "noGrant": "pa gen pwòp tèm pa li",
-        "grantHint": "Eritaj vle di pa gen tèm pou odyans sa a sou liy sa a: manm yo jwenn repons Pou tout rès la sòf si yon lòt kolòn kouvri yo.",
-        "grantHintFamily": "Eritaj itilize tèm fanmi an mete pou odyans sa.",
-        "inheritedPeople": "{count, plural, one {# moun an plis soti} other {# moun an plis soti}} nan lis fanmi an.",
         "reach": {
           "everyone": "Tout moun",
-          "everyoneBut": "{count, plural, one {Tout moun eksepte # moun} other {Tout moun eksepte # moun}}",
           "nobody": "Pèsonn",
           "people": "{count, plural, one {# moun} other {# moun}}"
         },
         "howTitle": "Ki jan yon demann deside",
         "how": {
-          "block": "Sou lis bloke a? Pa disponib, kèlkeswa lòt bagay ki aplike.",
-          "specific": "Sinon, tèm ki pi espesifik ki enkli moun nan defini sa li resevwa : yon moun nonmen, apre sa yon gwoup, apre sa yon domèn, epi tout rès la.",
           "inherit": "Yon modèl ki pa gen tèm pa li nan kolòn nan itilize sa fanmi an (li make ak trasye).",
           "envelope": "Demann nan dwe respekte plafon modèl la, bidjè fanmi an ak kantite total pou chat la, tout twa ansanm."
         }

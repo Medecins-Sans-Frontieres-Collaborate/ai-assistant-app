@@ -6820,7 +6820,6 @@
       "noModels": "Kò sí àwòrán nínú àkójọ wíwà yìí.",
       "doneEditing": "Parí",
       "defaultLabel": "Gbogbo ènìyàn mìíràn",
-      "requestsPerDay": "ìbéèrè / ọjọ́",
       "inheritedFrom": "Gba {state} láti {origin}.",
       "effectiveLabel": "Gbogbo ẹni tí kò wà lórí àkójọ máa rí: {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Àwọn ènìyàn tí wọ́n fọwọ́sowọ́pò",
         "deny": "Àwọn ènìyàn tí a dè wọlé"
       },
-      "listHint": {
-        "groups": "Àwọn ọmọ ẹgbẹ́ Entra wọ̀nyí lè lò, lórí àlàyé tó yàn fún ẹgbẹ́.",
-        "domains": "Gbogbo ẹni tó ní àdírẹ́sì imeeli nínú agbègbè wọ̀nyí, lórí àlàyé tó yàn fún agbègbè.",
-        "allow": "Àwọn ènìyàn tó mẹ́ sí orúkọ lè lò, láìka àwòkọṣe tàbí agbègbè wọn.",
-        "deny": "Àwọn ènìyàn tó mẹ́ sí orúkọ kò gbọ́dọ̀ lò rárá. Èyí kọja gbogbo ìmúlọ lókè."
-      },
-      "grantUnlimited": "Láìsí ààlà",
-      "grantLimited": "Di sí",
       "termsLabel": "Àlàyé fún {target}",
-      "requestsLabel": "Ìbéèrè l’ọjọ́ kọọkan fún {target}",
       "removeGrant": "Yọ {target} kúrò",
       "groupsCount": "{count, plural, one {# ẹgbẹ́} other {# ẹgbẹ́}}",
       "domainsCount": "{count, plural, one {# agbègbè} other {# agbègbè}}",
       "collisionChip": "Tun wà nínú Àwọn àyípasẹ Gbólóhùn",
       "collisionWarning": "Àwọ̀n àyíkọ́ tàbí ẹbí yìí tún jẹ́ pàtó nínú Àwọn àyípasẹ Gbólóhùn. Títípamọ̀ yóò kọ́ láì gba kókan kúrò nínú wọn.",
       "grid": {
-        "intro": "Tani le lo ọkọọkan awoṣe, ati iye awọn ìbéèrè lojọ kan. Kọọkan ila jẹ́ idile tàbí awoṣe; kọọkan kaarọ jẹ́ awujọ. Yan apoti kan láti yí i padà.",
         "caption": "Ìwọlé awoṣe nipasẹ awujọ",
         "col": {
           "model": "Awoṣe",
           "reach": "Le lò ó"
         },
         "familyNote": "idile: isuna ojoojumọ ti o pin",
-        "addColumn": "Fi kaarọ awujọ kun",
-        "addColumnConfirm": "Fi kaarọ kun",
-        "columnKind": "Awujọ",
-        "addColumnHint": "Kaarọ yoo wa ni titi apoti kan ninu rẹ̀ bá ti ṣeto.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "ko ni ofurufu tirẹ̀",
-        "grantHint": "Gbigba g inherits túmọ̀ sí pé kò sí ofurufu fún awujọ yìí lori ila yi: àwọn ọmọ ẹgbẹ̀ rẹ máa gba ìdáhùn Gbogbo ẹni míì ayafi pé kaarọ mìíràn bo wọn.",
-        "grantHintFamily": "Gbigba g inherits máa lo ofurufu tí idile ṣètò fún awujọ yi.",
-        "inheritedPeople": "{count, plural, one {Ọ̀kan síi wa} other {# àwọn ènìyàn míì wa}} láti àkójọpọ̀ idile.",
         "reach": {
           "everyone": "Gbogbo ènìyàn",
-          "everyoneBut": "{count, plural, one {Gbogbo ènìyàn ayafi ènìyàn #} other {Gbogbo ènìyàn ayafi àwọn ènìyàn #}}",
           "nobody": "Kò sí ènìyàn",
           "people": "{count, plural, one {ènìyàn #} other {ènìyàn #}}"
         },
         "howTitle": "Bá ìbéèrè kọọkan ṣe n jẹ́ àyẹ̀wò",
         "how": {
-          "block": "Ṣe o wà lórí atokọ tí a ti dá duro? Ko le fara han, ohunkóhun tó bá yẹ kẹ̀.",
-          "specific": "Bibẹẹkọ, ofurufu tó péye jùlọ tó kún fún ẹni náà ni yóó pinnu e: orúkọ ẹni, lẹhinna ẹgbẹ́, lẹ́hìn náà domain, lẹ́yìn náà gbogbo èlòmíì.",
           "inherit": "Awoṣe tí ko ni ofurufu tirẹ̀ ninu kaarọ kan máa lo ti idile rẹ (ààmì gígún-gún).",
           "envelope": "Ìbéèrè gbọ́dọ̀ fìt in in cap awoṣe, isuna ọjọ idile ati apapọ ìjíròrò, gbogbo mẹta."
         }

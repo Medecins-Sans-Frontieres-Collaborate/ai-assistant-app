@@ -6820,7 +6820,6 @@
       "noModels": "Nta miterere irimo kuri kataloge.",
       "doneEditing": "Byarangiye",
       "defaultLabel": "Abandi bose",
-      "requestsPerDay": "ibisabwa / umunsi",
       "inheritedFrom": "Bikomora kuri {origin} nk'uko {state} imeze.",
       "effectiveLabel": "Utari ku rutonde bose bahabwa: {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Abantu bemerewe",
         "deny": "Abantu babujijwe"
       },
-      "listHint": {
-        "groups": "Abanyamuryango b’aya matsinda ya Entra bemerewe kuyikoresha, uko amasezerano y’itsinda abiteganya.",
-        "domains": "Buri wese ufite aderesi ya email kuri izi domains, uko amasezerano ya domain abiteganya.",
-        "allow": "Abantu bavuzwe amazina bemerewe kuyikoresha nubwo default cyangwa domain yabo byaba bitabibemerera.",
-        "deny": "Abantu bavuzwe amazina ntibemerewe kuyikoresha. Ibi birusha buri bwememerwa bwose."
-      },
-      "grantUnlimited": "Ntaho bigarukira",
-      "grantLimited": "Bigarukira kuri",
       "termsLabel": "Amabwiriza ya {target}",
-      "requestsLabel": "Ibisabwa ku munsi bya {target}",
       "removeGrant": "Kuraho {target}",
       "groupsCount": "{count, plural, one {# tsinda} other {# matsinda}}",
       "domainsCount": "{count, plural, one {# domain} other {# domains}}",
       "collisionChip": "Biri no mu Migenzo ya Global",
       "collisionWarning": "Iyi model cyangwa umuryango wayo nabyo byateguwe muri Global defaults. Kubika ntibizashoboka kugeza kimwe muri byo gikuwemo.",
       "grid": {
-        "intro": "Ni bande bashobora gukoresha buri model n'uburyo bw'iminsi bushobora gusaba. Umurongo umwe ni umuryango cyangwa model; inkingi imwe ni abantu runaka. Hitamo agace kugirango uhindure.",
         "caption": "Gukoresha model bitewe n'abantu",
         "col": {
           "model": "Model",
           "reach": "Ashobora kuyikoresha"
         },
         "familyNote": "umuryango: ingengo y'iminsi ikoreshwa hamwe",
-        "addColumn": "Ongeraho inkingi y'abantu",
-        "addColumnConfirm": "Ongeraho inkingi",
-        "columnKind": "Abantu",
-        "addColumnHint": "Inkingi igumaho igihe agace kiyirimo gashyizweho.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "nta mategeko yayo bwite",
-        "grantHint": "Kwigira bivuze ko nta mategeko arengera aba bantu kuri uyu murongo: abanyamuryango bahabwa igisubizo cya Buri wundi keretse niba indi nkingi ibafashe.",
-        "grantHintFamily": "Kwigira bifata amategeko umuryango washyizeho kuri aba bantu.",
-        "inheritedPeople": "{count, plural, one {# umuntu wo ku rutonde rw'umuryango aza} other {# bantu bo ku rutonde rw'umuryango baza}}.",
         "reach": {
           "everyone": "Buri wese",
-          "everyoneBut": "{count, plural, one {Buri wese usibye umuntu #} other {Buri wese usibye abantu #}}",
           "nobody": "Nta muntu",
           "people": "{count, plural, one {umuntu #} other {abantu #}}"
         },
         "howTitle": "Uko ubusabe bumwe bufatwa",
         "how": {
-          "block": "Ku rutonde rw'abafunzwe? Ntiboneka, ibyo bindi bitavuze.",
-          "specific": "Byongeye, igisubizo gifatika kinyuranye kigaragara: umuntu wanditswe, itsinda, domain, hanyuma Buri wundi.",
           "inherit": "Model itagira amategeko yayo bwite muri iyi nkingi ikoresha ay'umuryango (ikaba ifunze).",
           "envelope": "Ubusabe bugomba kugendana n'ikigereranyo cya model, ingengo y'umuryango n'ikigereranyo cy'ibiganiro, byose uko ari bitatu."
         }

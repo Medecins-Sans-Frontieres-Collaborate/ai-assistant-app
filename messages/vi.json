@@ -6867,7 +6867,6 @@
       "noModels": "Chưa có mô hình nào trong danh mục.",
       "doneEditing": "Hoàn thành",
       "defaultLabel": "Những người khác",
-      "requestsPerDay": "yêu cầu / ngày",
       "inheritedFrom": "Kế thừa {state} từ {origin}.",
       "effectiveLabel": "Ai không có trên danh sách sẽ nhận: {state}.",
       "origin": {
@@ -6888,48 +6887,28 @@
         "allow": "Người được phép",
         "deny": "Người bị chặn"
       },
-      "listHint": {
-        "groups": "Thành viên của các nhóm Entra này có thể sử dụng, theo điều kiện của từng nhóm.",
-        "domains": "Tất cả người có địa chỉ email tại các tên miền này, theo điều kiện ứng với từng tên miền.",
-        "allow": "Những người được chỉ định này có thể sử dụng dù mặc định hoặc tên miền của họ quy định thế nào.",
-        "deny": "Những người được chỉ định này sẽ không bao giờ được sử dụng. Luôn ưu tiên quyền chặn này."
-      },
-      "grantUnlimited": "Không giới hạn",
-      "grantLimited": "Giới hạn đến",
       "termsLabel": "Điều kiện cho {target}",
-      "requestsLabel": "Số yêu cầu mỗi ngày cho {target}",
       "removeGrant": "Xóa {target}",
       "groupsCount": "{count, plural, one {# nhóm} other {# nhóm}}",
       "domainsCount": "{count, plural, one {# tên miền} other {# tên miền}}",
       "collisionChip": "Cũng có trong Thiết lập mặc định toàn cầu",
       "collisionWarning": "Mô hình hoặc nhóm này cũng được cấu hình trong Thiết lập mặc định toàn cầu. Việc lưu sẽ bị từ chối cho đến khi một trong hai được xóa.",
       "grid": {
-        "intro": "Ai có thể sử dụng từng mô hình và bao nhiêu yêu cầu mỗi ngày. Mỗi dòng là một nhóm hoặc một mô hình; mỗi cột là một nhóm người dùng. Chọn một ô để thay đổi.",
         "caption": "Quyền truy cập mô hình theo nhóm người dùng",
         "col": {
           "model": "Mô hình",
           "reach": "Có thể sử dụng"
         },
         "familyNote": "nhóm: dùng chung ngân sách hàng ngày",
-        "addColumn": "Thêm cột người dùng",
-        "addColumnConfirm": "Thêm cột",
-        "columnKind": "Nhóm người dùng",
-        "addColumnHint": "Cột sẽ được giữ lại khi có ô nào đó được cài đặt.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "không có điều kiện riêng",
-        "grantHint": "Kế thừa nghĩa là không có điều kiện áp dụng cho nhóm này ở dòng này: thành viên sẽ lấy theo câu trả lời của Mọi người khác trừ khi có cột khác dành riêng cho họ.",
-        "grantHintFamily": "Kế thừa sẽ dùng điều kiện mà nhóm thiết lập cho nhóm người dùng này.",
-        "inheritedPeople": "{count, plural, one {# người thêm được lấy} other {# người thêm được lấy}} từ danh sách của nhóm.",
         "reach": {
           "everyone": "Mọi người",
-          "everyoneBut": "{count, plural, one {Mọi người trừ # người} other {Mọi người trừ # người}}",
           "nobody": "Không ai",
           "people": "{count, plural, one {# người} other {# người}}"
         },
         "howTitle": "Cách quyết định một yêu cầu",
         "how": {
-          "block": "Có trong danh sách chặn? Không khả dụng dù có điều kiện gì khác.",
-          "specific": "Ngược lại, điều kiện cụ thể nhất bao gồm người đó sẽ áp dụng: tên cá nhân, sau đó là nhóm, sau đó là tên miền, cuối cùng là mọi người khác.",
           "inherit": "Một mô hình không có điều kiện riêng ở cột sẽ dùng điều kiện của nhóm (nét đứt).",
           "envelope": "Yêu cầu phải nằm trong giới hạn của mô hình, ngân sách chung của nhóm và tổng số trò chuyện, cả ba."
         }

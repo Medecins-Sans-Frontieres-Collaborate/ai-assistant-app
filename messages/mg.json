@@ -6820,7 +6820,6 @@
       "noModels": "Tsy mbola misy modely ao amin'ny katalaogy.",
       "doneEditing": "Vita",
       "defaultLabel": "Sisa rehetra",
-      "requestsPerDay": "fangatahana / andro",
       "inheritedFrom": "Mandova ny {state} avy amin'ny {origin}.",
       "effectiveLabel": "Izay tsy ao anaty lisitra dia mahazo: {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Olona mahazo alalana",
         "deny": "Olona voasakana"
       },
-      "listHint": {
-        "groups": "Ny mpikambana amin'ireo vondrona Entra ireo dia afaka mampiasa izany, araka ny fepetra isaky ny vondrona.",
-        "domains": "Ny olona manana adiresy mailaka amin'ireo domaina ireo rehetra, araka ny fepetra isaky ny domaina.",
-        "allow": "Olona voatondro anarana dia afaka mampiasa izany na inona na inona voalaza amin'ny default na ny domainany.",
-        "deny": "Olona voatondro anarana tsy mahazo mampiasa izany mihitsy. Mandresy fetra am-baravarana rehetra io."
-      },
-      "grantUnlimited": "Tsy voafetra",
-      "grantLimited": "Voafetra ho",
       "termsLabel": "Fepetra ho an'i {target}",
-      "requestsLabel": "Fangatahana isan'andro ho an'i {target}",
       "removeGrant": "Esory i {target}",
       "groupsCount": "{count, plural, one {# vondrona} other {# vondrona}}",
       "domainsCount": "{count, plural, one {# domaina} other {# domaina}}",
       "collisionChip": "Ao amin'ny safidy Global defaults koa",
       "collisionWarning": "Ity modely ity na ny sokajiny dia efa voahevitra ao amin'ny Global defaults. Tsy ho voavonjy raha tsy nesorina amin'ny iray amin'ireo.",
       "grid": {
-        "intro": "Iza no afaka mampiasa ny modely tsirairay, sy firy ny fangatahana isan'andro. Isaky ny andalana dia fianakaviana na modely; isaky ny andalana dia mpihaino. Safidio ilay sela hanovana azy.",
         "caption": "Fidirana amin’ny modely isaky ny mpihaino",
         "col": {
           "model": "Modely",
           "reach": "Afaka mampiasa"
         },
         "familyNote": "fianakaviana: teti-bola iombonana isan’andro",
-        "addColumn": "Ampio andalana mpihaino",
-        "addColumnConfirm": "Ampio andalana",
-        "columnKind": "Mpihaino",
-        "addColumnHint": "Hijanonana ny andalana raha vao misy sela amboarina ao.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "tsy manana fepetra manokana",
-        "grantHint": "Midika ny mandova fa tsy misy fepetra manokana amin'ity mpihaino amin’ity andalana ity: mahazo ny valiny 'Olona rehetra' izy raha tsy misy andalana hafa manazava azy.",
-        "grantHintFamily": "Ny mandova dia manaraka izay fepetra apetraky ny fianakaviana ho an'ity mpihaino ity.",
-        "inheritedPeople": "{count, plural, one {Olona # hafa avy amin'ny lisitry ny fianakaviana} other {Olona # hafa avy amin'ny lisitry ny fianakaviana}}.",
         "reach": {
           "everyone": "Olona rehetra",
-          "everyoneBut": "{count, plural, one {Olona rehetra afa-tsy #} other {Olona rehetra afa-tsy #}}",
           "nobody": "Tsy misy",
           "people": "{count, plural, one {Olona #} other {Olona #}}"
         },
         "howTitle": "Ahoana no andraisana fanapahan-kevitra amin’ny fangatahana iray",
         "how": {
-          "block": "Ao amin’ny lisitra voasakana? Tsy azo ampiasaina na misy fepetra hafa aza.",
-          "specific": "Raha tsy izany, ny fahazoana manokana indrindra manarona ilay olona no mametraka ny fepetra: olona voatonona, avy eo vondrona, avy eo domain, farany olona rehetra.",
           "inherit": "Ny modely tsy manana fepetra manokana amin’ny andalana iray dia mampiasa an’ny fianakaviana (mari-pamantaran-davitra).",
           "envelope": "Tsy maintsy mifanaraka amin’ireo fetra napetraky ny modely, ny teti-bola iombonan’ny fianakaviana sy ny totalin’ny resaka ihany koa ny fangatahana."
         }

@@ -6836,7 +6836,6 @@
       "noModels": "V katalogu zatím nejsou žádné modely.",
       "doneEditing": "Hotovo",
       "defaultLabel": "Všichni ostatní",
-      "requestsPerDay": "požadavků / den",
       "inheritedFrom": "Zdědí {state} od {origin}.",
       "effectiveLabel": "Všichni, kdo nejsou na seznamu, mají: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Povolené osoby",
         "deny": "Blokované osoby"
       },
-      "listHint": {
-        "groups": "Členové těchto Entra skupin jej mohou používat za podmínek nastavených pro skupinu.",
-        "domains": "Každý s e-mailovou adresou na těchto doménách jej může používat za podmínek nastavených pro doménu.",
-        "allow": "Pojmenované osoby jej mohou používat bez ohledu na výchozí nebo jejich doménu.",
-        "deny": "Pojmenované osoby jej nesmí nikdy používat. Toto přebíjí každé povolení výše."
-      },
-      "grantUnlimited": "Neomezeně",
-      "grantLimited": "Omezeno na",
       "termsLabel": "Podmínky pro {target}",
-      "requestsLabel": "Požadavky za den pro {target}",
       "removeGrant": "Odebrat {target}",
       "groupsCount": "{count, plural, one {# skupina} other {# skupin}}",
       "domainsCount": "{count, plural, one {# doména} other {# domén}}",
       "collisionChip": "Také v globálních výchozích hodnotách",
       "collisionWarning": "Tento model nebo rodina je také nastavena v globálních výchozích hodnotách. Uložení bude odmítnuto, dokud nebude jeden z těchto dvou vymazán.",
       "grid": {
-        "intro": "Kdo může používat jednotlivé modely a kolik žádostí za den. Každý řádek představuje rodinu nebo model; každý sloupec publikum. Vyberte buňku pro změnu.",
         "caption": "Přístup k modelu podle publika",
         "col": {
           "model": "Model",
           "reach": "Může použít"
         },
         "familyNote": "rodina: sdílený denní rozpočet",
-        "addColumn": "Přidat sloupec publika",
-        "addColumnConfirm": "Přidat sloupec",
-        "columnKind": "Publikum",
-        "addColumnHint": "Sloupec zůstane, jakmile je v něm nastavena buňka.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "žádné vlastní podmínky",
-        "grantHint": "Dědit znamená, že pro toto publikum v tomto řádku nejsou žádné vlastní podmínky: členové získají odpověď pro všechny ostatní, pokud je nepokrývá jiný sloupec.",
-        "grantHintFamily": "Dědění používá podmínky nastavené rodinou pro toto publikum.",
-        "inheritedPeople": "{count, plural, one {Přichází ještě # osoba} few {Přichází ještě # osoby} other {Přichází ještě # osob}} ze seznamu rodiny.",
         "reach": {
           "everyone": "Všichni",
-          "everyoneBut": "{count, plural, one {Všichni kromě # osoby} few {Všichni kromě # osob} other {Všichni kromě # osob}}",
           "nobody": "Nikdo",
           "people": "{count, plural, one {# osoba} few {# osoby} other {# osob}}"
         },
         "howTitle": "Jak se rozhoduje o jedné žádosti",
         "how": {
-          "block": "Na blokovacím seznamu? Nedostupné, ať platí cokoli dalšího.",
-          "specific": "Jinak rozhoduje nejkonkrétnější povolení, které člověka zahrnuje: nejprve jmenovaná osoba, pak skupina, doména a nakonec všichni ostatní.",
           "inherit": "Model bez vlastních podmínek ve sloupci použije podmínky své rodiny (přerušovaně).",
           "envelope": "Žádost musí zapadat do limitu modelu, sdíleného rozpočtu rodiny i celkového limitu chatu, všechny tři."
         }

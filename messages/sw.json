@@ -6836,7 +6836,6 @@
       "noModels": "Hakuna mifano kwenye orodha bado.",
       "doneEditing": "Imekamilika",
       "defaultLabel": "Wengine wote",
-      "requestsPerDay": "maombi / siku",
       "inheritedFrom": "Imeturithi {state} kutoka {origin}.",
       "effectiveLabel": "Wote ambao hawako kwenye orodha wanapata: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Watu walioruhusiwa",
         "deny": "Watu waliozuiwa"
       },
-      "listHint": {
-        "groups": "Wanachama wa makundi haya ya Entra wanaweza kutumia, kwa masharti yaliyowekwa kwa kila kundi.",
-        "domains": "Kila mtu mwenye anwani ya barua pepe kwenye domains hizi, kwa masharti yaliyowekwa kwa domain.",
-        "allow": "Watu waliotajwa wanaweza kutumia bila kujali chaguo-msingi au domain yao.",
-        "deny": "Watu waliotajwa hawawezi kutumia kabisa. Hii hushinda ruhusa zote juu."
-      },
-      "grantUnlimited": "Bila kikomo",
-      "grantLimited": "Imewekewa kikomo",
       "termsLabel": "Masharti kwa {target}",
-      "requestsLabel": "Maombi kwa siku kwa {target}",
       "removeGrant": "Ondoa {target}",
       "groupsCount": "{count, plural, one {# kundi} other {# makundi}}",
       "domainsCount": "{count, plural, one {# domaini} other {# domaini}}",
       "collisionChip": "Pia katika mipangilio ya kimataifa",
       "collisionWarning": "Muundo huu au familia yake imepangwa pia chini ya mipangilio ya kimataifa. Kuhifadhi hakutaruhusiwa hadi moja kati ya mbili iondolewe.",
       "grid": {
-        "intro": "Nani anaweza kutumia kila modeli, na idadi ya maombi kwa siku. Kila mstari ni familia au modeli; kila safu ni hadhira. Chagua kiini ili kubadilisha.",
         "caption": "Upatikanaji wa modeli kwa hadhira",
         "col": {
           "model": "Modeli",
           "reach": "Anaweza kutumia"
         },
         "familyNote": "familia: bajeti ya kila siku inayoshirikiwa",
-        "addColumn": "Ongeza safu ya hadhira",
-        "addColumnConfirm": "Ongeza safu",
-        "columnKind": "Hadhira",
-        "addColumnHint": "Safu inabaki baada ya kiini ndani yake kuwekwa.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "hakuna masharti yake yenyewe",
-        "grantHint": "Kurithi maana yake hakuna masharti kwa hadhira hii kwenye mstari huu: wanachama wake watapata majibu ya Wengine wote isipokuwa safu nyingine inawafunika.",
-        "grantHintFamily": "Kurithi kunatumia masharti ambayo familia imeweka kwa hadhira hii.",
-        "inheritedPeople": "{count, plural, one {mtu 1 zaidi anaongezeka} other {watu # zaidi wanaongezeka}} kutoka kwenye orodha ya familia.",
         "reach": {
           "everyone": "Wote",
-          "everyoneBut": "{count, plural, one {Wote isipokuwa mtu 1} other {Wote isipokuwa watu #}}",
           "nobody": "Hakuna",
           "people": "{count, plural, one {mtu 1} other {watu #}}"
         },
         "howTitle": "Jinsi ombi moja linaamuliwa",
         "how": {
-          "block": "Alipo kwenye orodha ya vizuizi? Haipatikani, chochote kingine kinachotumika.",
-          "specific": "Vinginevyo, ruzuku maalum zaidi inayomjumuisha mtu inaweka masharti yao: mtu aliyeitwa, kisha kikundi, kisha domain, kisha wengine wote.",
           "inherit": "Modeli bila masharti yake kwenye safu inatumia masharti ya familia yake (iliyo na mistari ya dashed).",
           "envelope": "Ombi ni lazima liendane na kikomo cha modeli, bajeti ya familia na jumla ya chat, vyote vitatu."
         }

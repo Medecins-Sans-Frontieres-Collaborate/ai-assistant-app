@@ -6820,7 +6820,6 @@
       "noModels": "ኣይኮነን ሞዴልታት ኣብ ካታሎግ እቲ።",
       "doneEditing": "ተዓሪፉ",
       "defaultLabel": "ቀርና፡ ኹሉ ሰብ",
-      "requestsPerDay": "ምውናት / ዕለት",
       "inheritedFrom": "{state} ካብ {origin} ይተሃረሱ።",
       "effectiveLabel": "ዝኾነ ርኣይ ዘይተወሰነ ሰባት: {state}።",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "ተፀዓዮ ሰባት",
         "deny": "ተኣግዩ ሰባት"
       },
-      "listHint": {
-        "groups": "ኣብዚ ናይ Entra ማዕረፍታት ዘለዎም ኣብ እቲ ምፍታት ዝተወሰኑ ምርጫታት ይሕጋዩ።",
-        "domains": "ኹሉ ዘለዎም ኢማይ ኣብዚ ዶሜይን እቲ ምፍታው ዝተወሰኑ መስርዕታት ይሕጋዩ።",
-        "allow": "ተፃዓዮ ሰባት ኣብ ውቂቡ ይፈትኑ፤ ንዶሜይን ወይ ውቑቡ ኣይኮናን የቀርና።",
-        "deny": "ተኣግዩ ሰባት ኣይፈትኑን። እዚ ናይ ምፍታው ኩሉ ውዕል ይዕደን።"
-      },
-      "grantUnlimited": "ምድላው",
-      "grantLimited": "ዝተወሰነ ናይ",
       "termsLabel": "መስርዕ ናይ {target}",
-      "requestsLabel": "ምውናት / ዕለት ናይ {target}",
       "removeGrant": "{target} ምሕዳስ",
       "groupsCount": "{count, plural, one {# ማዕረፍ} other {# ማዕረፍታት}}",
       "domainsCount": "{count, plural, one {# ዶሜይን} other {# ዶሜይንታት}}",
       "collisionChip": "ኣብ ናይ ዓለም ዋሕዋሐ ምስክር እዶም ምስተተፅናና",
       "collisionWarning": "እዚ ሞዴል ወይ ቤተሰብ ኣብ ናይ ዓለም ዋሕዋሐ ምስክር ተተፅናና እዩ። ምውህላው ክተሰርፅ ኣይከኣልን እምበር ናይ ሞዴል ወይ ናይ ቤተሰብ ንከንነው ብዙሕዋይ ክወጽእ ይግበሩ።",
       "grid": {
-        "intro": "ዝኽእል ሞዴል ንታሕዋት፣ ብዕለት ክነበስ ዝኽእል ብቁጽሪ ጥዕና፡ እዚ ሓበሬታ ምስጢር ንስደት ወይ ሞዴል እዩ፣ ኮሎም ንዳበል ይሕሸ፡ ዝዕቡ እዋን ዘይንተገናከየ ዝርዝሩ ታሕዋት፡ ንፍሉይ ሰርከት ምምሕዳር ይቕርብ።",
         "caption": "ሞዴል መድረኽ ብዳበል",
         "col": {
           "model": "ሞዴል",
           "reach": "ክስደት ይኽእል"
         },
         "familyNote": "ቤተሰብ፡ ተኣፍላይ ዘምልከት ንቀስተ ዕለት",
-        "addColumn": "ኮሎም ንዳበል ተደርስ",
-        "addColumnConfirm": "ኮሎም ጨምር",
-        "columnKind": "ዳበል",
-        "addColumnHint": "ኮሎም ነቲ ተወሰነ ስንቱ ሕሳብ ከተቐየም ይቆርጣ።",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "ዘሎ መስፈርት ኣይኮነን",
-        "grantHint": "ኣክሊዎ ማለት ምስ እዚ ዳበል ዘይኣለ መስፈርት፡ ኣባላት ናይ 'ንኹሉ ደገ' ምስተሰንደት እንተ ደቂ ኮሎም ኣይክዳልን።",
-        "grantHintFamily": "ኣክሊዎ ምስ መስፈርት ቤተሰብ ንዳበል ይጠቐም።",
-        "inheritedPeople": "{count, plural, one {ሓደ ሰብ ተጨውነ} other {# ሰባት ተጨውነ}} ካብ ዝርዝሩ ቤተሰቡ።",
         "reach": {
           "everyone": "ንኹሉ",
-          "everyoneBut": "{count, plural, one {ንኹሉ ካብ ሓደ ሰብ ወገን} other {ንኹሉ ካብ # ሰባት ወገን}}",
           "nobody": "ድንን",
           "people": "{count, plural, one {ሓደ ሰብ} other {# ሰባት}}"
         },
         "howTitle": "ብኸኣ ናይ ትእዛዝ መምሰር",
         "how": {
-          "block": "ኣብ ዝተዘጋፉ ዝርዝር እዩ? ዘይትሓገዝ፣ እሱን ካልእ ነገር እንታይ ይኸውን።",
-          "specific": "ካልእ ኣብ ዝንበሮ ነቲ ዘሎ ዘርከበ መስፈርት እታ ሰብ ይምሓዝ፡ ኣብ ስም ዝተሰነደት ሰብ፣ ካድ ገርና፣ ካድ ዶሚና፣ ካድ ንኹሉ ደገ።",
           "inherit": "ሞዴል ዘይኣለ መስፈርት ኣብ ኮሎም መስፈርት ቤተሰቡ (ተሰላሰላ መስመር) ይጠቐም።",
           "envelope": "ኣብ ዝኸኣ መስፈርት ይጽሓ፡ ሞዴል ዳነ ኣብ ቤተሰብ የተኣፍላይ ቀስተ ዕለትን ምናልባት ጫት ጉባኤን።"
         }

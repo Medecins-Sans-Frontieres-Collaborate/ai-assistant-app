@@ -6836,7 +6836,6 @@
       "noModels": "Ainda não há modelos no catálogo.",
       "doneEditing": "Concluído",
       "defaultLabel": "Demais pessoas",
-      "requestsPerDay": "solicitações / dia",
       "inheritedFrom": "Herdado {state} de {origin}.",
       "effectiveLabel": "Todos que não estão em uma lista recebem: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Pessoas permitidas",
         "deny": "Pessoas bloqueadas"
       },
-      "listHint": {
-        "groups": "Membros destes grupos Entra podem usar, conforme os termos definidos por grupo.",
-        "domains": "Todos com endereço de e-mail nestes domínios, conforme os termos definidos por domínio.",
-        "allow": "Pessoas nomeadas podem usar independentemente do padrão ou do domínio.",
-        "deny": "Pessoas nomeadas nunca podem usar. Isto supera qualquer permissão acima."
-      },
-      "grantUnlimited": "Ilimitado",
-      "grantLimited": "Limitado a",
       "termsLabel": "Termos para {target}",
-      "requestsLabel": "Solicitações por dia para {target}",
       "removeGrant": "Remover {target}",
       "groupsCount": "{count, plural, one {# grupo} other {# grupos}}",
       "domainsCount": "{count, plural, one {# domínio} other {# domínios}}",
       "collisionChip": "Também nas configurações globais",
       "collisionWarning": "Este modelo ou família também está configurado nas configurações globais. O salvamento será recusado até que uma das duas opções seja removida.",
       "grid": {
-        "intro": "Quem pode usar cada modelo e quantas solicitações por dia. Cada linha é uma família ou um modelo; cada coluna é um público. Selecione uma célula para alterá-la.",
         "caption": "Acesso ao modelo por público",
         "col": {
           "model": "Modelo",
           "reach": "Pode usar"
         },
         "familyNote": "família: orçamento diário compartilhado",
-        "addColumn": "Adicionar coluna de público",
-        "addColumnConfirm": "Adicionar coluna",
-        "columnKind": "Público",
-        "addColumnHint": "A coluna permanece depois que uma célula nela for definida.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "sem condições próprias",
-        "grantHint": "Herdar significa sem condições para este público nesta linha: seus membros recebem a resposta de Todos os demais, a menos que outra coluna os inclua.",
-        "grantHintFamily": "Herdar usa as condições definidas pela família para este público.",
-        "inheritedPeople": "{count, plural, one {# pessoa a mais vem} other {# pessoas a mais vêm}} da lista da família.",
         "reach": {
           "everyone": "Todos",
-          "everyoneBut": "{count, plural, one {Todos exceto # pessoa} other {Todos exceto # pessoas}}",
           "nobody": "Ninguém",
           "people": "{count, plural, one {# pessoa} other {# pessoas}}"
         },
         "howTitle": "Como uma solicitação é decidida",
         "how": {
-          "block": "Está na lista de bloqueio? Indisponível, independentemente do restante.",
-          "specific": "Caso contrário, a concessão mais específica que inclui a pessoa define as condições: uma pessoa nomeada, depois um grupo, depois um domínio e, por fim, todos os demais.",
           "inherit": "Um modelo sem condições próprias em uma coluna usa as da família (tracejado).",
           "envelope": "A solicitação deve se encaixar no limite do modelo, no orçamento compartilhado da família e no total do chat, sempre nos três."
         }

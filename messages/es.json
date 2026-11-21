@@ -6836,7 +6836,6 @@
       "noModels": "No hay modelos en el catálogo todavía.",
       "doneEditing": "Listo",
       "defaultLabel": "Todos los demás",
-      "requestsPerDay": "solicitudes / día",
       "inheritedFrom": "Hereda {state} de {origin}.",
       "effectiveLabel": "Quienes no estén en una lista reciben: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Personas permitidas",
         "deny": "Personas bloqueadas"
       },
-      "listHint": {
-        "groups": "Los miembros de estos grupos Entra pueden usarlo, según los términos definidos para cada grupo.",
-        "domains": "Todos con una dirección de correo electrónico en estos dominios, según los términos definidos para cada dominio.",
-        "allow": "Personas nombradas pueden usarlo independientemente del valor predeterminado o de su dominio.",
-        "deny": "Las personas nombradas no pueden usarlo nunca. Esto prevalece sobre cualquier concesión anterior."
-      },
-      "grantUnlimited": "Ilimitado",
-      "grantLimited": "Limitado a",
       "termsLabel": "Términos para {target}",
-      "requestsLabel": "Solicitudes por día para {target}",
       "removeGrant": "Eliminar {target}",
       "groupsCount": "{count, plural, one {# grupo} other {# grupos}}",
       "domainsCount": "{count, plural, one {# dominio} other {# dominios}}",
       "collisionChip": "También en los valores predeterminados globales",
       "collisionWarning": "Este modelo o familia también está configurado en los valores predeterminados globales. No se podrá guardar hasta que se elimine una de las dos configuraciones.",
       "grid": {
-        "intro": "Quién puede usar cada modelo y cuántas solicitudes diarias. Cada fila es una familia o un modelo; cada columna es una audiencia. Seleccione una celda para cambiarla.",
         "caption": "Acceso al modelo por audiencia",
         "col": {
           "model": "Modelo",
           "reach": "Puede usarlo"
         },
         "familyNote": "familia: presupuesto diario compartido",
-        "addColumn": "Agregar columna de audiencia",
-        "addColumnConfirm": "Agregar columna",
-        "columnKind": "Audiencia",
-        "addColumnHint": "La columna permanece una vez que se establece una celda en ella.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "sin condiciones propias",
-        "grantHint": "Heredar significa que no hay condiciones para esta audiencia en esta fila: sus miembros obtienen la respuesta para Todos los demás a menos que otra columna los cubra.",
-        "grantHintFamily": "Heredar usa las condiciones que la familia establece para esta audiencia.",
-        "inheritedPeople": "{count, plural, one {# persona más viene} other {# personas más vienen}} de la lista de la familia.",
         "reach": {
           "everyone": "Todos",
-          "everyoneBut": "{count, plural, one {Todos menos # persona} other {Todos menos # personas}}",
           "nobody": "Nadie",
           "people": "{count, plural, one {# persona} other {# personas}}"
         },
         "howTitle": "Cómo se decide una solicitud",
         "how": {
-          "block": "¿En la lista de bloqueados? No disponible, sin importar otras condiciones.",
-          "specific": "Si no, el permiso más específico que incluye a la persona establece sus condiciones: una persona nombrada, luego un grupo, luego un dominio, después todos los demás.",
           "inherit": "Un modelo sin condiciones propias en una columna usa las de su familia (en línea discontinua).",
           "envelope": "La solicitud debe ajustarse al límite del modelo, el presupuesto compartido de la familia y el total del chat, los tres."
         }

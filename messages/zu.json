@@ -6820,7 +6820,6 @@
       "noModels": "Awekho amamodeli ekhasini okwamanje.",
       "doneEditing": "Kuqediwe",
       "defaultLabel": "Abanye bonke",
-      "requestsPerDay": "izicelo / usuku",
       "inheritedFrom": "Kuthatha {state} ku-{origin}.",
       "effectiveLabel": "Abangekho ohlwini bathola: {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Abantu abavunyelwe",
         "deny": "Abantu abavinjiwe"
       },
-      "listHint": {
-        "groups": "Amalungu ala maqembu e-Entra angayisebenzisa, ngemigomo elungiselelwe iqembu ngalinye.",
-        "domains": "Wonke umuntu onekheli le-imeyili kulezi zindao, ngemigomo elungiselelwe isizinda.",
-        "allow": "Abantu abaqokiwe bangayisebenzisa noma ngabe yini okuzenzakalelayo noma isizinda sabo sisho ini.",
-        "deny": "Abantu abaqokiwe abakaze bayisebenzise. Lokhu kudlula yonke imvume."
-      },
-      "grantUnlimited": "Akekho umkhawulo",
-      "grantLimited": "Kunqunyelwe ku",
       "termsLabel": "Imigomo ye-{target}",
-      "requestsLabel": "Izicelo ngosuku zika-{target}",
       "removeGrant": "Susa u-{target}",
       "groupsCount": "{count, plural, one {# iqembu} other {# amaqembu}}",
       "domainsCount": "{count, plural, one {# isizinda} other {# izizinda}}",
       "collisionChip": "Iphinde itholakale ku-Global defaults",
       "collisionWarning": "Le modeli noma umndeni wayo iphinde yamiswa ngaphansi kwe-Global defaults. Ukulondoloza kuzonqatshwa kuze kube omunye wabo ususiwe.",
       "grid": {
-        "intro": "Ubani ongasebenzisa imodeli ngayinye, kanye nenani lezikhalo ngosuku. Umugqa ngamunye uyilungu lomndeni noma imodeli; ikholomu ngamunye izibukeli. Khetha iseli ukuze uliguqule.",
         "caption": "Ukufinyelela kwemodeli ngokuya ngababukeli",
         "col": {
           "model": "Imodeli",
           "reach": "Angakwazi ukuyisebenzisa"
         },
         "familyNote": "umndeni: isabelomali esihlanganyelwe nsuku zonke",
-        "addColumn": "Engeza ikholomu yababukeli",
-        "addColumnConfirm": "Engeza ikholomu",
-        "columnKind": "Izibukeli",
-        "addColumnHint": "Ikholomu ihlala uma iseli layo selimisiwe.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "ayikho imithetho yayo",
-        "grantHint": "Ukulanda kusho ukuthi ayikho imithetho yalababukeli kule mgqa: amalungu awo athola impendulo ye-'Bonke abanye' ngaphandle kokuthi enye ikholomu ibawubeka.",
-        "grantHintFamily": "Ukulanda kusebenzisa imithetho emiselwa umndeni kulababukeli.",
-        "inheritedPeople": "{count, plural, one {# umuntu owengeziwe uzofika} other {# abantu abengeziwe bazofika}} kuluhlu lomndeni.",
         "reach": {
           "everyone": "Bonke",
-          "everyoneBut": "{count, plural, one {Bonke ngaphandle kweyodwa} other {Bonke ngaphandle kwabantu abayi-#}}",
           "nobody": "Akekho",
           "people": "{count, plural, one {umuntu oyedwa} other {abantu abayi-#}}"
         },
         "howTitle": "Indlela okukhethwa ngayo isicelo esisodwa",
         "how": {
-          "block": "Usoluhlu lokuvimba? Awutholakali, noma yini okunye okusebenzayo.",
-          "specific": "Ngokwesinye, umthetho okhethekile ohlanganayo umuntu ubeka imithetho: umuntu oqanjwe igama, bese kulandela iqembu, igama lendawo, bese bonke abanye.",
           "inherit": "Imodeli engenayo imithetho yayo kule kholomu isebenzisa eyomndeni (evanayo).",
           "envelope": "Isicelo kumele sibe ngaphakathi komkhawulo wemodeli, isabelomali somndeni esihlanganyelwe, kanye nesamba sokuxoxa, konke kuyadingeka."
         }

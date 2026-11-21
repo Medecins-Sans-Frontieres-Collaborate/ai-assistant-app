@@ -6836,7 +6836,6 @@
       "noModels": "Nog geen modellen in de catalogus.",
       "doneEditing": "Gereed",
       "defaultLabel": "Iedereen anders",
-      "requestsPerDay": "aanvragen / dag",
       "inheritedFrom": "Neemt {state} over van {origin}.",
       "effectiveLabel": "Iedereen niet op een lijst krijgt: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Toegestane personen",
         "deny": "Geblokkeerde personen"
       },
-      "listHint": {
-        "groups": "Leden van deze Entra-groepen mogen dit gebruiken, onder de voorwaarden per groep.",
-        "domains": "Iedereen met een e-mailadres op deze domeinen, onder de voorwaarden per domein.",
-        "allow": "Genoemde personen mogen dit gebruiken, ongeacht de standaard of wat hun domein toestaat.",
-        "deny": "Genoemde personen mogen dit nooit gebruiken. Dit gaat boven elke andere toewijzing."
-      },
-      "grantUnlimited": "Onbeperkt",
-      "grantLimited": "Beperkt tot",
       "termsLabel": "Voorwaarden voor {target}",
-      "requestsLabel": "Aanvragen per dag voor {target}",
       "removeGrant": "{target} verwijderen",
       "groupsCount": "{count, plural, one {# groep} other {# groepen}}",
       "domainsCount": "{count, plural, one {# domein} other {# domeinen}}",
       "collisionChip": "Ook in wereldwijde standaardinstellingen",
       "collisionWarning": "Dit model of deze familie is ook geconfigureerd onder wereldwijde standaardinstellingen. Opslaan wordt geweigerd totdat een van de twee is verwijderd.",
       "grid": {
-        "intro": "Wie elk model kan gebruiken en hoeveel verzoeken per dag. Elke rij is een familie of model; elke kolom is een doelgroep. Selecteer een cel om deze te wijzigen.",
         "caption": "Modeltoegang per doelgroep",
         "col": {
           "model": "Model",
           "reach": "Kan gebruiken"
         },
         "familyNote": "familie: gedeeld dagbudget",
-        "addColumn": "Doelgroepkolom toevoegen",
-        "addColumnConfirm": "Kolom toevoegen",
-        "columnKind": "Doelgroep",
-        "addColumnHint": "De kolom blijft bestaan zodra een cel daarin is ingesteld.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "geen eigen voorwaarden",
-        "grantHint": "Overerven betekent geen voorwaarden voor deze doelgroep in deze rij: de leden krijgen het antwoord voor Overige tenzij een andere kolom hen dekt.",
-        "grantHintFamily": "Overerven gebruikt de voorwaarden die de familie instelt voor deze doelgroep.",
-        "inheritedPeople": "{count, plural, one {# extra persoon komt} other {# extra personen komen}} uit de lijst van de familie.",
         "reach": {
           "everyone": "Iedereen",
-          "everyoneBut": "{count, plural, one {Iedereen behalve # persoon} other {Iedereen behalve # personen}}",
           "nobody": "Niemand",
           "people": "{count, plural, one {# persoon} other {# personen}}"
         },
         "howTitle": "Hoe een verzoek wordt beslist",
         "how": {
-          "block": "Op de blokkeerlijst? Niet beschikbaar, ongeacht verdere voorwaarden.",
-          "specific": "Anders geldt de meest specifieke toekenning die de persoon omvat: een benoemd persoon, dan een groep, dan een domein, dan de rest.",
           "inherit": "Een model zonder eigen voorwaarden in een kolom gebruikt die van de familie (stippellijn).",
           "envelope": "Het verzoek moet voldoen aan het limiet van het model, het gedeelde familie-budget en het totaal voor het chatgesprek, alle drie."
         }

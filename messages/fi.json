@@ -6836,7 +6836,6 @@
       "noModels": "Luettelossa ei ole vielä malleja.",
       "doneEditing": "Valmis",
       "defaultLabel": "Kaikki muut",
-      "requestsPerDay": "pyyntöä / päivä",
       "inheritedFrom": "Perii tilan {state} kohteesta {origin}.",
       "effectiveLabel": "Kaikille, jotka eivät ole listalla: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Sallitut henkilöt",
         "deny": "Estetyt henkilöt"
       },
-      "listHint": {
-        "groups": "Nämä Entra-ryhmien jäsenet saavat käyttää sitä ryhmäkohtaisin ehdoin.",
-        "domains": "Kaikki, joilla on sähköpostiosoite näissä domaineissa, domainikohtaisin ehdoin.",
-        "allow": "Nimetyt henkilöt voivat käyttää sitä riippumatta oletuksesta tai domainista.",
-        "deny": "Nimetyt henkilöt eivät saa käyttää. Tämä ohittaa kaikki yllä olevat oikeudet."
-      },
-      "grantUnlimited": "Rajaton",
-      "grantLimited": "Rajattu",
       "termsLabel": "Ehdot kohteelle {target}",
-      "requestsLabel": "Pyyntöjä päivässä kohteelle {target}",
       "removeGrant": "Poista kohde {target}",
       "groupsCount": "{count, plural, one {# ryhmä} other {# ryhmää}}",
       "domainsCount": "{count, plural, one {# domain} other {# domainia}}",
       "collisionChip": "Myös globaaliasetuksissa",
       "collisionWarning": "Tämä malli tai perhe on myös määritetty globaaliasetuksissa. Tallennusta ei sallita, ennen kuin toinen näistä poistetaan.",
       "grid": {
-        "intro": "Kuka voi käyttää mitäkin mallia ja montako pyyntöä päivässä. Jokainen rivi on perhe tai malli; jokainen sarake on yleisö. Valitse solu muuttaaksesi sitä.",
         "caption": "Mallin käyttöoikeus yleisöittäin",
         "col": {
           "model": "Malli",
           "reach": "Voi käyttää"
         },
         "familyNote": "perhe: yhteinen päiväbudjetti",
-        "addColumn": "Lisää yleisösarake",
-        "addColumnConfirm": "Lisää sarake",
-        "columnKind": "Yleisö",
-        "addColumnHint": "Sarake pysyy, kun siihen asetetaan jokin solu.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "ei omia ehtoja",
-        "grantHint": "Periytä tarkoittaa, ettei tällä rivillä ole ehtoja tälle yleisölle: he saavat \"Kaikki muut\" -vastauksen, ellei toinen sarake kata heitä.",
-        "grantHintFamily": "Periytä käyttää ne ehdot, jotka perhe on määrittänyt tälle yleisölle.",
-        "inheritedPeople": "{count, plural, one {# henkilö tulee} other {# henkilöä tulee}} perheen listalta.",
         "reach": {
           "everyone": "Kaikki",
-          "everyoneBut": "{count, plural, one {Kaikki paitsi # henkilö} other {Kaikki paitsi # henkilöä}}",
           "nobody": "Ei kukaan",
           "people": "{count, plural, one {# henkilö} other {# henkilöä}}"
         },
         "howTitle": "Miten yhdestä pyynnöstä päätetään",
         "how": {
-          "block": "Onko estolistalla? Ei saatavilla riippumatta muista säännöistä.",
-          "specific": "Muuten tarkin henkilöä koskeva sääntö määrittää ehdot: nimetty henkilö, sitten ryhmä, sitten domain, sitten kaikki muut.",
           "inherit": "Mallissa, jolla ei ole omia ehtoja sarakkeessa, käytetään perheen ehtoja (katkiviivalla).",
           "envelope": "Pyynnön on mahduttava mallin rajaan, perheen yhteiseen budjettiin ja keskustelun kokonaismäärään – kaikki kolme huomioidaan."
         }

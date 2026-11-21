@@ -6836,7 +6836,6 @@
       "noModels": "አሁን በካታሎግ ውስጥ ናይሎች የሉም።",
       "doneEditing": "ወደ ተጠናቀቀ",
       "defaultLabel": "ደግሞ ሁሉም",
-      "requestsPerDay": "ጥያቄዎች / ቀን",
       "inheritedFrom": "ፈላጊው {origin} ከ{state} ይወርሳል።",
       "effectiveLabel": "በሰንዴ ያልተገኙ ሁሉ፡ {state} ይሰማዋል።",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "የተፈቀዱ ሰዎች",
         "deny": "የተገዱ ሰዎች"
       },
-      "listHint": {
-        "groups": "ይህንን የEntra ቡድን አባላት በዚያ ቡድን የተገለፀው ይተጠቀማሉ።",
-        "domains": "በመመዝገብ የተወሰኑ ደብዳቤዎች ውስጥ ኢሜይል አድራሻ ያላቸው ሁሉ በዚያ ደብዳቤ የተገለፀው ይሰማቸዋል።",
-        "allow": "በስም ተጠቃሚዎች በነባሪው ምንም ብቻ፣ ወይም በደብዳቤው እንዳትገደቡ ልዩ መዳረሻ ይያዛሉ።",
-        "deny": "በስም ተጠቃሚዎች ፈውስ የማያገኙ። ይህ ሁለቱንም ህጎች ይበልጣል።"
-      },
-      "grantUnlimited": "አልቋም",
-      "grantLimited": "ወደ",
       "termsLabel": "የ{target} ውሎች",
-      "requestsLabel": "በ{target} ቀን ጥያቄዎች",
       "removeGrant": "{target} አስወግድ",
       "groupsCount": "{count, plural, one {የተፈቀደ የቡድን ቁጥር #} other {የተፈቀዱ ቡድኖች #}}",
       "domainsCount": "{count, plural, one {የተፈቀደ የደብዳቤ ቁጥር #} other {የተፈቀዱ ደብዳቤዎች #}}",
       "collisionChip": "በGlobal defaults ውስጥም አለ",
       "collisionWarning": "ይህ ሞዴል ወይም ቤተሰብ በGlobal defaults ውስጥም ተሸጠ ነው። አንዱን ከሁለቱ ያጽዱ እስከዚያ ድረስ ማስቀመጥ አይቻልም።",
       "grid": {
-        "intro": "ማን ከተያያዙት ሞዴሎች ማንኛውን መጠቀም ይችላል፣ እና በቀን ስንት ጥያቄ ማድረግ ይችላል በሚሉ መግለጫዎች ይገለጻል። እያንዳንዱ ረድፍ ቤተሰብ ወይም ሞዴል ነው፣ እያንዳንዱ አምድም ተዋዋዩ ነው። ለመቀየር ሴል ይምረጡ።",
         "caption": "የሞዴል መድረሻ በተዋዋይ",
         "col": {
           "model": "ሞዴል",
           "reach": "ማግኘት ይችላሉ"
         },
         "familyNote": "ቤተሰብ፡ የተጋራ ዕለታዊ በጀት",
-        "addColumn": "የተዋዋይ አምድ ያክሉ",
-        "addColumnConfirm": "አምድ ያክሉ",
-        "columnKind": "ተዋዋይ",
-        "addColumnHint": "አንድ ሴል የተመደበበት ከሆነ አምድ ይቀያል።",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "የራሱ መመዘኛ የለውም",
-        "grantHint": "ርስት ማለት፡ በዚህ ረድፍ ላይ ለዚህ ተዋዋይ የተለየ መመዘኛ የለም፤ አባላት ከተለያዩ አምዶች በተካፋዩ ሌላ ከሆነ የሁሉም የተመረጠውን መልስ ይደርሳቸዋል።",
-        "grantHintFamily": "ርስት ማለት ቤተሰቡ ለዚህ ተዋዋይ ያቆሙትን መመዘኛ እንደሚጠቀም ማለት ነው።",
-        "inheritedPeople": "{count, plural, one {ከቤተሰቡ ዝርዝር ተጨማሪ 1 ሰው ይመጣል} other {ከቤተሰቡ ዝርዝር ተጨማሪ # ሰዎች ይመጣሉ}}",
         "reach": {
           "everyone": "ሁሉም",
-          "everyoneBut": "{count, plural, one {ሁሉም ነገር 1 ሰው በቀር} other {ሁሉም ነገር # ሰዎች በቀር}}",
           "nobody": "ማንም አይደርስበትም",
           "people": "{count, plural, one {# ሰው} other {# ሰዎች}}"
         },
         "howTitle": "አንድ ጥያቄ እንዴት እንደሚወሰን",
         "how": {
-          "block": "በተከለከው ዝርዝር ላይ አለ? በሌሎች ሁኔታዎች ምንም እንኳ አይገኝም።",
-          "specific": "ያልተለወጠ ከሆነ በጣም የተመረጠው መመዘኛ ለተባለው ሰው፣ ቡድን፣ ዶሜይን ወይም ሁሉም ሰዎች ያመራል።",
           "inherit": "አንድ ሞዴል በአንድ አምድ ራሱ መመዘኛ ሲያጣ የቤተሰቡን (የታመሰ ምልክት ያለው) ይጠቀማል።",
           "envelope": "ጥያቄው በሞዴሉ ገደብ፣ ቤተሰቡ የተጋራ በጀት፣ እና የውይይቱ አጠቃላይ ውስጥ መያዝ አለበት።"
         }

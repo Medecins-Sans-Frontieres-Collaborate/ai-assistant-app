@@ -6820,7 +6820,6 @@
       "noModels": "Ba a saka misalai cikin kundin ba tukuna.",
       "doneEditing": "An gama",
       "defaultLabel": "Sauran kowa",
-      "requestsPerDay": "buƙatu / rana",
       "inheritedFrom": "Ya gada {state} daga {origin}.",
       "effectiveLabel": "Duk wanda ba a jeri ba zai samu: {state}.",
       "origin": {
@@ -6841,48 +6840,28 @@
         "allow": "Mutanen da aka yarda",
         "deny": "Mutanen da aka toshe"
       },
-      "listHint": {
-        "groups": "Mambobi cikin waɗannan rukunin Entra na iya amfani da shi, bisa sharuddan kowane rukunin.",
-        "domains": "Duk mai adireshin imel a waɗannan yankuna, bisa sharuddan kowanne yanki.",
-        "allow": "Mutanen da aka ambata za su iya amfani da shi duk yadda tsoho ko yanki ya ce.",
-        "deny": "Mutanen da aka ambata ba za su taɓa amfani da shi ba. Wannan yana da fifiko akan duk wani izini da ke sama."
-      },
-      "grantUnlimited": "Ba iyaka",
-      "grantLimited": "An takaita zuwa",
       "termsLabel": "Sharudda ga {target}",
-      "requestsLabel": "Buƙatu a rana ga {target}",
       "removeGrant": "Cire {target}",
       "groupsCount": "{count, plural, one {# rukuni} other {# rukunoni}}",
       "domainsCount": "{count, plural, one {# yanki} other {# yankuna}}",
       "collisionChip": "Hakanan yana cikin Tsarin Duniya",
       "collisionWarning": "Wannan samfur ko iyali an saita shi a cikin Tsarin Duniya. Za a hana adanawa sai daya daga cikin biyun aka cire.",
       "grid": {
-        "intro": "Wanene zai iya amfani da kowanne samfurin, da yawan buƙatun da za a iya yi a rana. Kowanne layi iyali ne ko samfur, kowacce ginshiƙi masu sauraro ne. Zaɓi wani kwaya don canzawa.",
         "caption": "Samun damar samfur bisa ga masu sauraro",
         "col": {
           "model": "Samfuri",
           "reach": "Zai iya amfani"
         },
         "familyNote": "iyali: kasafin kuɗi na yau da kullum da ake raba",
-        "addColumn": "Ƙara ginshiƙin masu sauraro",
-        "addColumnConfirm": "Ƙara ginshiƙi",
-        "columnKind": "Masu sauraro",
-        "addColumnHint": "Ginshiƙin zai tsaya idan aka saita wata kwaya a cikinsa.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "babu sharuddan kansa",
-        "grantHint": "Inherit yana nufin babu sharudda ga wannan masu sauraro a wannan layi: membobinta za su samu amsar Kowa da Kowa sai dai idan wani ginshiƙi ya rufe su.",
-        "grantHintFamily": "Inherit yana amfani da sharuddan da iyali ya saita ga waɗannan masu sauraro.",
-        "inheritedPeople": "{count, plural, one {Mutum # ya ƙaru} other {Mutane # sun ƙaru}} daga jerin iyali.",
         "reach": {
           "everyone": "Kowa",
-          "everyoneBut": "{count, plural, one {Kowa sai mutum #} other {Kowa sai mutane #}}",
           "nobody": "Babu kowa",
           "people": "{count, plural, one {Mutum #} other {Mutane #}}"
         },
         "howTitle": "Yadda ake yanke shawara akan buƙata guda",
         "how": {
-          "block": "A cikin jerin masu hana amfani? Ba zai samu ba, komai sauran sharuddan.",
-          "specific": "In ba haka ba, mafi takamaiman izini da ya shafi mutum ne ke saita sharuddan: sunan mutum, sai ƙungiya, sai yankin imel, sai kowa da kowa.",
           "inherit": "Samfurin da ba shi da sharudda na kansa a wani ginshiƙi yana amfani da na iyalinsa (layi mai dashi).",
           "envelope": "Buƙatar dole ta dace da iyakar samfurin, kasafin iyali da jimillar hira, duka uku."
         }

@@ -6836,7 +6836,6 @@
       "noModels": "Belum ada model di katalog.",
       "doneEditing": "Selesai",
       "defaultLabel": "Semua yang lain",
-      "requestsPerDay": "permintaan / hari",
       "inheritedFrom": "Mewarisi {state} dari {origin}.",
       "effectiveLabel": "Semua yang tidak masuk daftar mendapatkan: {state}.",
       "origin": {
@@ -6857,48 +6856,28 @@
         "allow": "Orang yang diizinkan",
         "deny": "Orang yang diblokir"
       },
-      "listHint": {
-        "groups": "Anggota grup Entra ini dapat menggunakan, sesuai dengan ketentuan tiap grup.",
-        "domains": "Setiap orang dengan email di domain ini, sesuai ketentuan tiap domain.",
-        "allow": "Orang yang disebutkan dapat menggunakan tanpa memperhatikan default atau aturan domain mereka.",
-        "deny": "Orang yang disebutkan tidak dapat menggunakan kapan pun. Ini mengesampingkan semua pemberian akses di atasnya."
-      },
-      "grantUnlimited": "Tanpa batas",
-      "grantLimited": "Dibatasi hingga",
       "termsLabel": "Ketentuan untuk {target}",
-      "requestsLabel": "Permintaan per hari untuk {target}",
       "removeGrant": "Hapus {target}",
       "groupsCount": "{count, plural, one {# grup} other {# grup}}",
       "domainsCount": "{count, plural, one {# domain} other {# domain}}",
       "collisionChip": "Juga terdapat pada pengaturan Global",
       "collisionWarning": "Model atau keluarga ini juga dikonfigurasi dalam pengaturan Global. Penyimpanan akan ditolak sampai salah satu dari dua pengaturan dihapus.",
       "grid": {
-        "intro": "Siapa yang dapat menggunakan setiap model, dan berapa banyak permintaan per hari. Setiap baris adalah keluarga atau model; setiap kolom adalah audiens. Pilih sel untuk mengubahnya.",
         "caption": "Akses model berdasarkan audiens",
         "col": {
           "model": "Model",
           "reach": "Dapat digunakan"
         },
         "familyNote": "keluarga: anggaran harian bersama",
-        "addColumn": "Tambahkan kolom audiens",
-        "addColumnConfirm": "Tambah kolom",
-        "columnKind": "Audiens",
-        "addColumnHint": "Kolom akan tetap ada setelah salah satu sel di dalamnya diatur.",
         "cellLabel": "{model}, {audience}: {value}",
         "noGrant": "tidak ada ketentuan sendiri",
-        "grantHint": "Mewarisi berarti tidak ada ketentuan untuk audiens ini di baris ini: anggotanya akan mendapatkan jawaban Untuk semua orang kecuali jika kolom lain mencakup mereka.",
-        "grantHintFamily": "Mewarisi menggunakan ketentuan yang ditetapkan keluarga untuk audiens ini.",
-        "inheritedPeople": "{count, plural, one {# orang tambahan datang} other {# orang tambahan datang}} dari daftar keluarga.",
         "reach": {
           "everyone": "Semua orang",
-          "everyoneBut": "{count, plural, one {Semua orang kecuali # orang} other {Semua orang kecuali # orang}}",
           "nobody": "Tidak ada",
           "people": "{count, plural, one {# orang} other {# orang}}"
         },
         "howTitle": "Cara satu permintaan diputuskan",
         "how": {
-          "block": "Ada di daftar blokir? Tidak tersedia, apapun aturan lainnya.",
-          "specific": "Jika tidak, ketentuan paling spesifik yang mencakup orang tersebut akan menetapkan ketentuannya: orang yang disebut, lalu grup, lalu domain, lalu semua orang lainnya.",
           "inherit": "Model tanpa ketentuan sendiri di kolom menggunakan ketentuan keluarga (bergaris putus-putus).",
           "envelope": "Permintaan harus sesuai dengan batas model, anggaran bersama keluarga, dan total chat, ketiganya."
         }
