@@ -29,6 +29,7 @@ const mockEnv = vi.hoisted(() => ({
 const world = vi.hoisted(() => ({
   delegations: [] as unknown[],
   blobs: [] as { path: string; size: number; lastModified: string }[],
+  deliveryOrigin: 'infrastructure' as 'infrastructure' | 'app' | 'missing',
 }));
 const serviceSpies = vi.hoisted(() => ({
   invalidateConfig: vi.fn(),
@@ -425,6 +426,7 @@ describe('/api/admin/analytics/health', () => {
     vi.clearAllMocks();
     fake = installBlobFake();
     world.delegations = [analyticsDelegation];
+    world.deliveryOrigin = 'infrastructure';
     world.blobs = [
       { path: 'usage/ocba/a_2026-07.xlsx', size: 1, lastModified: STAMP },
       {
@@ -457,5 +459,20 @@ describe('/api/admin/analytics/health', () => {
     const asDelegate = await parseJsonResponse(await healthGET(request()));
     expect(asDelegate.data.totals.files).toBe(1);
     expect(asDelegate.data.unconfiguredFolders).toEqual(['usage/ocba']);
+  });
+
+  it('warns about an app-made delivery container until something is delivered', async () => {
+    mockAuth.mockResolvedValue(globalAdmin);
+    world.deliveryOrigin = 'app';
+    const withFiles = await parseJsonResponse(await healthGET(request()));
+    expect(withFiles.data.deliveryContainerCreatedByApp).toBe(false);
+
+    world.blobs = [];
+    const empty = await parseJsonResponse(await healthGET(request()));
+    expect(empty.data.deliveryContainerCreatedByApp).toBe(true);
+
+    world.deliveryOrigin = 'infrastructure';
+    const fromTerraform = await parseJsonResponse(await healthGET(request()));
+    expect(fromTerraform.data.deliveryContainerCreatedByApp).toBe(false);
   });
 });
