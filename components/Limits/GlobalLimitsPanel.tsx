@@ -1,6 +1,6 @@
 'use client';
 
-import { IconAlertTriangle, IconPlus } from '@tabler/icons-react';
+import { IconAlertTriangle } from '@tabler/icons-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FC, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -12,6 +12,7 @@ import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 import {
   PolicyPutBody,
   toPolicyPutDelegation,
+  useLimitsInsights,
 } from '@/client/hooks/settings/useLimitsAdmin';
 import {
   collectClientGroupIds,
@@ -20,13 +21,11 @@ import {
 } from '@/client/hooks/useGroupNames';
 
 import {
-  LimitDelegation,
-  LimitEntry,
-  LimitOverride,
-  LimitsFailMode,
-  LimitsMode,
-  ModelAccessRule,
-} from '@/lib/services/limits/types';
+  PolicyChange,
+  diffPolicies,
+  summarizeChanges,
+} from '@/lib/services/limits/policyChanges';
+import { LimitsFailMode, LimitsMode } from '@/lib/services/limits/types';
 
 import { AdminTabs } from '@/components/Admin/AdminTabs';
 import {
@@ -35,81 +34,42 @@ import {
   ADMIN_BTN_PRIMARY,
   ADMIN_BTN_RETRY,
   ADMIN_BTN_SECONDARY,
-  ADMIN_CARD,
-  ADMIN_CHECKBOX,
-  ADMIN_CHIP_NEUTRAL,
-  ADMIN_FIELD,
 } from '@/components/Admin/adminClasses';
+import { ChangeReview } from '@/components/Limits/ChangeReview';
 import { CostCalculatorLazy } from '@/components/Limits/CostCalculatorLazy';
 import { DelegationsTab } from '@/components/Limits/DelegationsTab';
-import { EffectiveLimitsPreview } from '@/components/Limits/EffectiveLimitsPreview';
-import { GlobalDefaultsSection } from '@/components/Limits/GlobalDefaultsSection';
 import { useLimitsCost } from '@/components/Limits/LimitsCostContext';
+import { LimitsOverview } from '@/components/Limits/LimitsOverview';
+import { LimitsSettingsStrip } from '@/components/Limits/LimitsSettingsStrip';
 import { ModelAccessTab } from '@/components/Limits/ModelAccessTab';
-import { OverrideEditor } from '@/components/Limits/OverrideEditor';
-import { RelevantRulesPopover } from '@/components/Limits/RelevantRulesPopover';
+import { PersonLens } from '@/components/Limits/PersonLens';
+import { RuleEditor } from '@/components/Limits/RuleEditor';
 import {
-  relevantRulesFor,
-  verdictsForTargets,
-} from '@/components/Limits/jurisdiction';
-import { LIMITS_CHIP_WARN } from '@/components/Limits/limitsClasses';
-import { appliesToLine } from '@/components/Limits/summaries';
+  EMPTY_DRAFT,
+  LimitsDraft,
+  draftFrom,
+  draftPolicy,
+  revertChange,
+  withOverride,
+} from '@/components/Limits/limitsDraft';
 import {
   PolicyResponse,
   emptyDelegation,
   emptyOverride,
   groupMembershipWarning,
 } from '@/components/Limits/types';
+import { DirectionMark, SymbolLegend } from '@/components/Limits/visualSyntax';
+
+import { getLimitDefinition } from '@/config/limits';
 
 /** `cost` exists only while `useLimitsCost().calculator` is on. */
-type PanelTab = 'defaults' | 'models' | 'overrides' | 'delegations' | 'cost';
-
-interface Draft {
-  defaults: LimitEntry[];
-  /** Model approval rules (docs/LIMITS.md "Model approval"); always sent. */
-  modelAccess: ModelAccessRule[];
-  overrides: LimitOverride[];
-  /**
-   * ⚠ Must be present on every PUT. The server refuses a body lacking the
-   * key once any delegation is stored (design §9 stale-client guard), and
-   * before that guard existed a body without it would erase every
-   * delegation and orphan every scoped override.
-   */
-  delegations: LimitDelegation[];
-  mode: LimitsMode;
-  failMode: LimitsFailMode;
-  timezone: string;
-  countByomUsage: boolean;
-  countAuxiliaryUsage: boolean;
-}
-
-const EMPTY_DRAFT: Draft = {
-  defaults: [],
-  modelAccess: [],
-  overrides: [],
-  delegations: [],
-  mode: 'observe',
-  failMode: 'open',
-  timezone: 'UTC',
-  countByomUsage: false,
-  countAuxiliaryUsage: false,
-};
-
-function draftFrom(data: PolicyResponse): Draft {
-  return data.policy
-    ? {
-        defaults: data.policy.defaults,
-        modelAccess: data.policy.modelAccess ?? [],
-        overrides: data.policy.overrides,
-        delegations: data.policy.delegations ?? [],
-        mode: data.policy.mode,
-        failMode: data.policy.failMode,
-        timezone: data.policy.timezone,
-        countByomUsage: data.policy.countByomUsage,
-        countAuxiliaryUsage: data.policy.countAuxiliaryUsage,
-      }
-    : EMPTY_DRAFT;
-}
+type PanelTab =
+  | 'overview'
+  | 'person'
+  | 'review'
+  | 'models'
+  | 'delegations'
+  | 'cost';
 
 /**
  * GLOBAL admin panel for org-wide usage limits.
@@ -135,25 +95,27 @@ export const GlobalLimitsPanel: FC = () => {
   const t = useTranslations('limits');
   const queryClient = useQueryClient();
   const { calculator } = useLimitsCost();
-  const [selectedTab, setSelectedTab] = useState<PanelTab>('defaults');
+  const [selectedTab, setSelectedTab] = useState<PanelTab>('overview');
   // The cost tab is flag-gated (design §4c). If the flag flips off while it
-  // is selected, fall back to Defaults during render — no effect, no
+  // is selected, fall back to the Overview during render — no effect, no
   // setState — so the strip and the panel never disagree.
   const tab: PanelTab =
-    selectedTab === 'cost' && !calculator ? 'defaults' : selectedTab;
-  const [draft, setDraft] = useState<Draft>(EMPTY_DRAFT);
+    selectedTab === 'cost' && !calculator ? 'overview' : selectedTab;
+  const [draft, setDraft] = useState<LimitsDraft>(EMPTY_DRAFT);
+  /** The rule open in the editor, under the Overview tab. */
+  const [editingRule, setEditingRule] = useState<string | null>(null);
+  /** The person the Person tab should open on (set from Review). */
+  const [lensMail, setLensMail] = useState<string | undefined>(undefined);
+  const [confirmDiscard, setConfirmDiscard] = useState(false);
+  const insightsQuery = useLimitsInsights();
   const [etag, setEtag] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [conflict, setConflict] = useState(false);
   /** Keep editing is adopting the fresh etag — Save waits for it. */
   const [adoptingEtag, setAdoptingEtag] = useState(false);
-  // Records created this session render expanded (a new card must never be
-  // a mystery); new delegations are also PUT WITHOUT an id so the server
-  // generates one (design §2).
-  const [newOverrideIds, setNewOverrideIds] = useState<Set<string>>(
-    () => new Set(),
-  );
+  // New delegations are PUT WITHOUT an id so the server generates one
+  // (design §2).
   const [newDelegationIds, setNewDelegationIds] = useState<Set<string>>(
     () => new Set(),
   );
@@ -192,7 +154,7 @@ export const GlobalLimitsPanel: FC = () => {
     if (!dirty) applyServer(policyQuery.data);
   }
 
-  const patch = (next: Partial<Draft>) => {
+  const patch = (next: Partial<LimitsDraft>) => {
     setDraft((current) => ({ ...current, ...next }));
     setDirty(true);
   };
@@ -313,8 +275,6 @@ export const GlobalLimitsPanel: FC = () => {
         .map((d) => ({ id: d.id, label: d.label || t('untitledDelegation') })),
     [draft.delegations, newDelegationIds, t],
   );
-  const delegationById = (id: string) =>
-    draft.delegations.find((d) => d.id === id);
   // Period keys embed the zone, so a zone change starts every day/month
   // counter from zero org-wide and, for the cache TTL, lets replicas debit
   // different documents. Worth saying before Save, not after.
@@ -332,6 +292,51 @@ export const GlobalLimitsPanel: FC = () => {
     policyQuery.data?.policy !== undefined &&
     policyQuery.data?.policy !== null &&
     draft.timezone.trim() !== savedTimezone;
+
+  const savedPolicy = policyQuery.data?.policy ?? null;
+  const policy = useMemo(
+    () => draftPolicy(draft, savedPolicy),
+    [draft, savedPolicy],
+  );
+  const changes: PolicyChange[] = useMemo(
+    () => (dirty ? diffPolicies(savedPolicy, policy) : []),
+    [dirty, savedPolicy, policy],
+  );
+  const summary = summarizeChanges(changes);
+  const editing = editingRule
+    ? draft.overrides.find((override) => override.id === editingRule)
+    : undefined;
+
+  const openRule = (overrideId: string) => {
+    setEditingRule(overrideId);
+    setSelectedTab('overview');
+  };
+
+  const addRule = (limitKey: string) => {
+    const def = getLimitDefinition(limitKey);
+    const created = emptyOverride('group');
+    created.entries = def
+      ? [
+          {
+            limitKey,
+            // Start from a real cap, never `null` (unlimited) or Off.
+            value:
+              def.unit === 'boolean'
+                ? true
+                : Math.min(100, def.hardCeiling ?? 100),
+            ceiling: false,
+          },
+        ]
+      : [];
+    patch({ overrides: [...draft.overrides, created] });
+    openRule(created.id);
+  };
+
+  const discard = () => {
+    setConfirmDiscard(false);
+    setEditingRule(null);
+    if (policyQuery.data) applyServer(policyQuery.data);
+  };
 
   if (unavailable) {
     return (
@@ -359,113 +364,67 @@ export const GlobalLimitsPanel: FC = () => {
     );
   }
 
+  const tabs = [
+    { id: 'overview', label: t('console.tab.overview') },
+    { id: 'person', label: t('console.tab.person') },
+    {
+      id: 'review',
+      label:
+        summary.total > 0
+          ? t('console.tab.reviewCount', { count: summary.total })
+          : t('console.tab.review'),
+    },
+    { id: 'models', label: t('tab.models') },
+    { id: 'delegations', label: t('tab.delegations') },
+    ...(calculator ? [{ id: 'cost', label: t('cost.calculator.tab') }] : []),
+  ];
+
   return (
     <>
-      <section className={`mb-6 ${ADMIN_CARD}`}>
-        <div className="flex flex-wrap items-center gap-4">
-          <label className="flex items-center gap-2 text-sm text-black dark:text-white">
-            {t('modeLabel')}
-            <select
-              className={ADMIN_FIELD}
-              value={draft.mode}
-              onChange={(e) => patch({ mode: e.target.value as LimitsMode })}
-            >
-              <option value="observe">{t('modeObserve')}</option>
-              <option value="enforce">{t('modeEnforce')}</option>
-            </select>
-          </label>
-          <label className="flex items-center gap-2 text-sm text-black dark:text-white">
-            {t('failModeLabel')}
-            <select
-              className={ADMIN_FIELD}
-              value={draft.failMode}
-              onChange={(e) =>
-                patch({ failMode: e.target.value as LimitsFailMode })
-              }
-            >
-              <option value="open">{t('failOpen')}</option>
-              <option value="closed">{t('failClosed')}</option>
-            </select>
-          </label>
-          <label className="flex items-center gap-2 text-sm text-black dark:text-white">
-            {t('timezoneLabel')}
-            <input
-              type="text"
-              className={`w-44 ${ADMIN_FIELD}`}
-              value={draft.timezone}
-              onChange={(e) => patch({ timezone: e.target.value })}
-            />
-          </label>
-        </div>
-        <div className="mt-3 flex flex-wrap gap-4">
-          <label className="flex items-center gap-1.5 text-sm text-black dark:text-white">
-            <input
-              type="checkbox"
-              className={ADMIN_CHECKBOX}
-              checked={draft.countByomUsage}
-              onChange={(e) => patch({ countByomUsage: e.target.checked })}
-            />
-            {t('countByom')}
-          </label>
-          <label className="flex items-center gap-1.5 text-sm text-black dark:text-white">
-            <input
-              type="checkbox"
-              className={ADMIN_CHECKBOX}
-              checked={draft.countAuxiliaryUsage}
-              onChange={(e) => patch({ countAuxiliaryUsage: e.target.checked })}
-            />
-            {t('countAuxiliary')}
-          </label>
-        </div>
-        {draft.mode === 'observe' && (
-          <p className={`mt-3 ${ADMIN_BANNER_WARN}`}>{t('observeNotice')}</p>
-        )}
-        {membershipWarning && policyQuery.data?.groupMembership && (
-          <p className={`mt-3 ${ADMIN_BANNER_WARN}`} role="alert">
-            {t(
-              membershipWarning === 'structural'
-                ? 'groupMembershipDegradedStructural'
-                : 'groupMembershipDegradedRetryable',
-              {
-                reason:
-                  policyQuery.data.groupMembership.lastFailure?.reason ?? '',
-              },
-            )}
-            {policyQuery.data.groupMembership.degradedUsers > 0 && (
-              <>
-                {' '}
-                {t('groupMembershipDegradedUsers', {
-                  count: policyQuery.data.groupMembership.degradedUsers,
-                })}
-              </>
-            )}
-          </p>
-        )}
-        {timezoneChanged && (
-          <p className={`mt-3 ${ADMIN_BANNER_WARN}`} role="note">
-            {t('timezoneChangeWarning', {
-              from: savedTimezone,
-              to: draft.timezone,
-            })}
-          </p>
-        )}
-        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-          {t('propagationNotice')}
+      <LimitsSettingsStrip
+        draft={draft}
+        onChange={patch}
+        insights={insightsQuery.data}
+        disabled={saving}
+        onOpenDelegations={() => setSelectedTab('delegations')}
+      />
+      {membershipWarning && policyQuery.data?.groupMembership && (
+        <p className={`mb-4 ${ADMIN_BANNER_WARN}`} role="alert">
+          {t(
+            membershipWarning === 'structural'
+              ? 'groupMembershipDegradedStructural'
+              : 'groupMembershipDegradedRetryable',
+            {
+              reason:
+                policyQuery.data.groupMembership.lastFailure?.reason ?? '',
+            },
+          )}
+          {policyQuery.data.groupMembership.degradedUsers > 0 && (
+            <>
+              {' '}
+              {t('groupMembershipDegradedUsers', {
+                count: policyQuery.data.groupMembership.degradedUsers,
+              })}
+            </>
+          )}
         </p>
-      </section>
+      )}
+      {timezoneChanged && (
+        <p className={`mb-4 ${ADMIN_BANNER_WARN}`} role="note">
+          {t('timezoneChangeWarning', {
+            from: savedTimezone,
+            to: draft.timezone,
+          })}
+        </p>
+      )}
 
       <AdminTabs
-        tabs={[
-          { id: 'defaults', label: t('tab.defaults') },
-          { id: 'models', label: t('tab.models') },
-          { id: 'overrides', label: t('tab.overrides') },
-          { id: 'delegations', label: t('tab.delegations') },
-          ...(calculator
-            ? [{ id: 'cost', label: t('cost.calculator.tab') }]
-            : []),
-        ]}
+        tabs={tabs}
         activeTab={tab}
-        onChange={(id) => setSelectedTab(id as PanelTab)}
+        onChange={(id) => {
+          setSelectedTab(id as PanelTab);
+          if (id !== 'overview') setEditingRule(null);
+        }}
         idPrefix="limits"
         ariaLabel={t('tabsLabel')}
       />
@@ -474,12 +433,74 @@ export const GlobalLimitsPanel: FC = () => {
         role="tabpanel"
         id={`limits-panel-${tab}`}
         aria-labelledby={`limits-tab-${tab}`}
+        className="space-y-4"
       >
-        {tab === 'defaults' && (
-          <GlobalDefaultsSection
-            entries={draft.defaults}
-            onChange={(defaults) => patch({ defaults })}
+        {tab === 'overview' && editing && (
+          <RuleEditor
+            override={editing}
+            policy={policy}
+            onChange={(next) =>
+              patch({ overrides: withOverride(draft.overrides, next) })
+            }
+            onRemove={() => {
+              patch({
+                overrides: draft.overrides.filter((o) => o.id !== editing.id),
+              });
+              setEditingRule(null);
+            }}
+            onBack={() => setEditingRule(null)}
+            delegationOptions={delegationOptions}
+            groupNames={groupNames}
+            insights={insightsQuery.data}
             disabled={saving}
+          />
+        )}
+        {tab === 'overview' && !editing && (
+          <>
+            <SymbolLegend />
+            <LimitsOverview
+              draft={draft}
+              policy={policy}
+              insights={insightsQuery.data}
+              groupNames={groupNames}
+              onDefaultsChange={(defaults) => patch({ defaults })}
+              onEditRule={openRule}
+              onAddRule={addRule}
+              disabled={saving}
+            />
+          </>
+        )}
+        {tab === 'person' && (
+          <PersonLens
+            key={lensMail ?? ''}
+            saved={savedPolicy}
+            draft={policy}
+            dirty={dirty}
+            groupNames={groupNames}
+            onEditRule={openRule}
+            initialMail={lensMail}
+          />
+        )}
+        {tab === 'review' && (
+          <ChangeReview
+            changes={changes}
+            saved={savedPolicy}
+            draft={policy}
+            insights={insightsQuery.data}
+            groupNames={groupNames}
+            onUndo={(change) => {
+              const next = revertChange(draft, savedPolicy, change);
+              setDraft(next);
+              setDirty(
+                diffPolicies(savedPolicy, draftPolicy(next, savedPolicy))
+                  .length > 0,
+              );
+            }}
+            onEditRule={openRule}
+            onCheckPerson={(mail) => {
+              setLensMail(mail);
+              setSelectedTab('person');
+            }}
           />
         )}
         {tab === 'models' && (
@@ -490,113 +511,6 @@ export const GlobalLimitsPanel: FC = () => {
             mode={draft.mode}
             disabled={saving}
           />
-        )}
-        {tab === 'overrides' && (
-          <div className="space-y-4">
-            <EffectiveLimitsPreview overrides={draft.overrides} dirty={dirty} />
-            {draft.overrides.length === 0 && (
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {t('noOverrides')}
-              </p>
-            )}
-            {draft.overrides.map((override, index) => {
-              const delegation = override.delegationId
-                ? delegationById(override.delegationId)
-                : undefined;
-              const orphaned = !!override.delegationId && !delegation;
-              return (
-                <OverrideEditor
-                  key={override.id}
-                  override={override}
-                  onChange={(next) =>
-                    patch({
-                      overrides: draft.overrides.map((o, i) =>
-                        i === index ? next : o,
-                      ),
-                    })
-                  }
-                  onRemove={() =>
-                    patch({
-                      overrides: draft.overrides.filter((_, i) => i !== index),
-                    })
-                  }
-                  disabled={saving}
-                  globalDefaults={draft.defaults}
-                  defaultExpanded={newOverrideIds.has(override.id)}
-                  variant={override.delegationId ? 'scoped' : 'global'}
-                  appliesTo={appliesToLine(
-                    t,
-                    override.scope,
-                    override.targets,
-                    groupNames,
-                  )}
-                  delegationOptions={delegationOptions}
-                  verdicts={
-                    delegation
-                      ? verdictsForTargets(
-                          override.scope,
-                          override.targets,
-                          delegation.jurisdiction,
-                        )
-                      : undefined
-                  }
-                  chips={
-                    <>
-                      {delegation && (
-                        <span className={ADMIN_CHIP_NEUTRAL}>
-                          {t('tierScoped')} ·{' '}
-                          {delegation.label || t('untitledDelegation')}
-                        </span>
-                      )}
-                      {delegation && !delegation.enabled && (
-                        <span
-                          className={ADMIN_CHIP_NEUTRAL}
-                          title={t('disabledDelegationNote')}
-                        >
-                          {t('delegationDisabledChip')}
-                        </span>
-                      )}
-                      {orphaned && (
-                        <span
-                          className={LIMITS_CHIP_WARN}
-                          title={t('orphanedDelegationNote')}
-                        >
-                          {t('orphanedDelegationChip')}
-                        </span>
-                      )}
-                    </>
-                  }
-                  headerActions={
-                    <RelevantRulesPopover
-                      rules={relevantRulesFor(
-                        override.scope,
-                        override.targets,
-                        {
-                          overrides: draft.overrides,
-                          delegations: draft.delegations,
-                        },
-                        override.id,
-                      )}
-                      delegationLabel={(id) => delegationById(id)?.label}
-                    />
-                  }
-                />
-              );
-            })}
-            <button
-              type="button"
-              className={ADMIN_BTN_SECONDARY}
-              onClick={() => {
-                const created = emptyOverride('user');
-                setNewOverrideIds((ids) => new Set([...ids, created.id]));
-                patch({ overrides: [...draft.overrides, created] });
-              }}
-              disabled={saving}
-            >
-              <IconPlus size={16} />
-              {t('addOverride')}
-            </button>
-          </div>
         )}
         {tab === 'delegations' && (
           <DelegationsTab
@@ -650,11 +564,83 @@ export const GlobalLimitsPanel: FC = () => {
         </div>
       )}
 
-      {/* Sticky: 17 catalog rows put Save well below the fold, and an
-          unsaved policy is the one thing an admin must never lose track
-          of. surface-dark-base matches the page plane so the bar does
-          not read as a second surface floating over the content. */}
-      <div className="sticky bottom-0 -mx-6 mt-6 flex items-center gap-3 border-t border-gray-200 bg-white px-6 py-4 dark:border-gray-700 dark:bg-surface-dark-base">
+      {/* Sticky: an unsaved policy is the one thing an admin must never lose
+          track of. It says what the draft does (looser / stricter / removes
+          a cap) and leads to Review before Save. */}
+      <div className="sticky bottom-0 -mx-6 mt-6 flex flex-wrap items-center gap-3 border-t border-gray-200 bg-white px-6 py-4 dark:border-gray-700 dark:bg-surface-dark-base">
+        {dirty ? (
+          <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-900 dark:text-white">
+            <strong>
+              {t('console.unsavedCount', { count: summary.total })}
+            </strong>
+            {summary.looser > 0 && (
+              <span>
+                <DirectionMark direction="looser" />{' '}
+                {t('console.countLooser', { count: summary.looser })}
+              </span>
+            )}
+            {summary.stricter > 0 && (
+              <span>
+                <DirectionMark direction="stricter" />{' '}
+                {t('console.countStricter', { count: summary.stricter })}
+              </span>
+            )}
+            {summary.removesCap > 0 && (
+              <span>
+                <DirectionMark direction="removes-cap" />{' '}
+                {t('console.countRemovesCap', { count: summary.removesCap })}
+              </span>
+            )}
+          </span>
+        ) : (
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {t('propagationNotice')}
+          </span>
+        )}
+        <span className="flex-1" />
+        {dirty &&
+          (confirmDiscard ? (
+            <>
+              <span className="text-sm text-gray-900 dark:text-white">
+                {t('console.discardConfirm')}
+              </span>
+              <button
+                type="button"
+                className={ADMIN_BTN_SECONDARY}
+                onClick={discard}
+              >
+                {t('console.discardYes')}
+              </button>
+              <button
+                type="button"
+                className={ADMIN_BTN_SECONDARY}
+                onClick={() => setConfirmDiscard(false)}
+              >
+                {t('cancel')}
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              className={ADMIN_BTN_SECONDARY}
+              onClick={() => setConfirmDiscard(true)}
+              disabled={saving}
+            >
+              {t('discard')}
+            </button>
+          ))}
+        {dirty && tab !== 'review' && (
+          <button
+            type="button"
+            className={ADMIN_BTN_SECONDARY}
+            onClick={() => {
+              setEditingRule(null);
+              setSelectedTab('review');
+            }}
+          >
+            {t('console.reviewChanges')}
+          </button>
+        )}
         <button
           type="button"
           className={ADMIN_BTN_PRIMARY}
@@ -663,11 +649,6 @@ export const GlobalLimitsPanel: FC = () => {
         >
           {saving ? t('saving') : t('save')}
         </button>
-        {dirty && (
-          <span className="text-xs text-gray-500 dark:text-gray-400">
-            {t('unsavedChanges')}
-          </span>
-        )}
       </div>
     </>
   );
