@@ -185,7 +185,16 @@ export function ruleEffect(
   };
 }
 
-function effectStatus(
+/**
+ * Why a rule's value is, or is not, what a principal ends up with.
+ *
+ * @param override - The rule in question.
+ * @param withRule - The explanation resolved for that principal under the
+ *   policy that contains the rule.
+ * @returns 'inert' when the rule was never a candidate, 'outranked' when
+ *   another record decides, 'held-by-ceiling' when a ceiling clamps it.
+ */
+export function effectStatus(
   override: LimitOverride,
   withRule: LimitExplanation,
 ): RuleEffectStatus {
