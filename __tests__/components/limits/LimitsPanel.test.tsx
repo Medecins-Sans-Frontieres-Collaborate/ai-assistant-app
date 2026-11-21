@@ -672,7 +672,7 @@ describe('LimitsPanel — global mode', () => {
     stored = policyResponse();
   });
 
-  it('opens on the Overview, with the mode, Person, Review and Delegations tabs', async () => {
+  it('opens on the Overview, with the mode, Check access, Review and Delegations tabs', async () => {
     globalRouting();
     renderPanel();
 
@@ -681,7 +681,7 @@ describe('LimitsPanel — global mode', () => {
       screen.getByRole('tab', { name: 'console.tab.overview' }),
     ).toHaveAttribute('aria-selected', 'true');
     for (const name of [
-      'console.tab.person',
+      'console.tab.check',
       'console.tab.review',
       'tab.models',
       'tab.delegations',
