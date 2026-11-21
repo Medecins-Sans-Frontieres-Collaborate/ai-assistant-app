@@ -16,7 +16,7 @@ import { strFromU8 } from 'fflate';
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 /**
  * The format readers on the brand fixtures (make_brand_fixtures.py), run
@@ -59,7 +59,13 @@ const unitStarting = (model: DocumentModel, text: string): DocumentUnit => {
 describe.skipIf(!pythonHas(['lxml']))(
   'the presentation engine’s inspect',
   () => {
-    const { model, files } = inspect(DECK_ENGINE_SCRIPT, 'source.pptx');
+    // In beforeAll, not the describe body: vitest runs a skipped suite's
+    // body to collect it, so a call here would run where Python is missing.
+    let model: DocumentModel | undefined;
+    let files: Map<string, Uint8Array>;
+    beforeAll(() => {
+      ({ model, files } = inspect(DECK_ENGINE_SCRIPT, 'source.pptx'));
+    });
 
     it('reports each run as declared, on brand and off', () => {
       expect(model!.scheme).toBe(DOCUMENT_MODEL_SCHEME);
@@ -110,7 +116,12 @@ describe.skipIf(!pythonHas(['lxml']))(
 );
 
 describe.skipIf(!pythonHas(['lxml']))('the Word reader', () => {
-  const { model } = inspect(DOCX_INSPECT_SCRIPT, 'source.docx');
+  // In beforeAll, not the describe body: vitest runs a skipped suite's
+  // body to collect it, so a call here would run where Python is missing.
+  let model: DocumentModel | undefined;
+  beforeAll(() => {
+    ({ model } = inspect(DOCX_INSPECT_SCRIPT, 'source.docx'));
+  });
 
   it('reports each run as declared, with no page until placed', () => {
     const heading = unitStarting(model!, 'Northwind annual');
@@ -136,7 +147,13 @@ describe.skipIf(!pythonHas(['lxml']))('the Word reader', () => {
 });
 
 describe.skipIf(!pythonHas(['fitz']))('the PDF reader', () => {
-  const { model, files } = inspect(PDF_INSPECT_SCRIPT, 'source.pdf');
+  // In beforeAll, not the describe body: vitest runs a skipped suite's
+  // body to collect it, so a call here would run where Python is missing.
+  let model: DocumentModel | undefined;
+  let files: Map<string, Uint8Array>;
+  beforeAll(() => {
+    ({ model, files } = inspect(PDF_INSPECT_SCRIPT, 'source.pdf'));
+  });
 
   it('reports each block’s spans as drawn', () => {
     expect(model!.pages).toEqual([{ page: 1, width: 595, height: 842 }]);
