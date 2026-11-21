@@ -16,7 +16,7 @@ import { strFromU8, unzipSync } from 'fflate';
 import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 
 /**
  * The presentation engine's `layouts` and `compose`, run here as the
@@ -140,10 +140,14 @@ const BASE: DeckPlan = {
 describe.skipIf(!pythonHas(['lxml']))(
   'the presentation engine’s layouts',
   () => {
-    const report = layoutsOf('template.potx');
-    const byName = new Map(
-      report.layouts.map((layout) => [layout.name, layout]),
-    );
+    // In beforeAll, not the describe body: vitest runs a skipped suite's
+    // body to collect it, so a call here would run where Python is missing.
+    let report: DeckLayouts;
+    let byName: Map<string, DeckLayouts['layouts'][number]>;
+    beforeAll(() => {
+      report = layoutsOf('template.potx');
+      byName = new Map(report.layouts.map((layout) => [layout.name, layout]));
+    });
 
     it('lists every layout of the masters, with only what a plan may fill', () => {
       expect(report.layouts).toHaveLength(11);
@@ -181,8 +185,14 @@ describe.skipIf(!pythonHas(['lxml']))(
 describe.skipIf(!pythonHas(['lxml']))(
   'the presentation engine’s compose',
   () => {
-    const built = compose(BASE);
-    const deck = built.deck!;
+    // In beforeAll, not the describe body: vitest runs a skipped suite's
+    // body to collect it, so a call here would run where Python is missing.
+    let built: ReturnType<typeof compose>;
+    let deck: Uint8Array;
+    beforeAll(() => {
+      built = compose(BASE);
+      deck = built.deck!;
+    });
 
     it('builds the planned slides from their layouts, as a presentation', () => {
       expect(built.refused).toBeUndefined();
