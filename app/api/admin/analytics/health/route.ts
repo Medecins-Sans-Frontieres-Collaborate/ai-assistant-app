@@ -1,6 +1,10 @@
 import { NextRequest } from 'next/server';
 
-import { resolveDeliveryLocation } from '@/lib/services/analytics/deliveryStore';
+import {
+  DeliveryContainerOrigin,
+  readDeliveryContainerOrigin,
+  resolveDeliveryLocation,
+} from '@/lib/services/analytics/deliveryStore';
 import { buildHealth } from '@/lib/services/analytics/health';
 import { loadAnalyticsContext } from '@/lib/services/analytics/requestContext';
 
@@ -13,6 +17,18 @@ import {
 
 import { auth } from '@/auth';
 import { env } from '@/config/environment';
+
+/**
+ * Who made the delivery container, or null when that cannot be read. A read
+ * failure is already reported as `deliveryUnavailable` by the listing.
+ */
+async function readOriginOrNull(): Promise<DeliveryContainerOrigin | null> {
+  try {
+    return await readDeliveryContainerOrigin();
+  } catch {
+    return null;
+  }
+}
 
 /**
  * GET /api/admin/analytics/health — what is wrong with the deliveries.
@@ -36,6 +52,7 @@ export async function GET(request: NextRequest) {
         actor: context.actor,
         deliveryUnavailable: context.deliveryUnavailable,
         foldersUnavailable: context.foldersUnavailable,
+        deliveryOrigin: await readOriginOrNull(),
         container: resolveDeliveryLocation().containerName,
         deleteEnabled: env.ANALYTICS_RETENTION_DELETE_ENABLED,
         now: context.now,
