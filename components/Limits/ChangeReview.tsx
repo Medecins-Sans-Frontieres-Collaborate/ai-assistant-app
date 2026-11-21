@@ -234,7 +234,9 @@ const ValueChangeCard: FC<{
               : t(
                   change.audience.kind === 'everyone'
                     ? 'console.change.everyoneGets'
-                    : 'console.change.membersGet',
+                    : change.audience.scope === 'user'
+                      ? 'console.change.peopleGet'
+                      : 'console.change.membersGet',
                   {
                     before: formatPlain(change.resolvedBefore),
                     after: formatPlain(change.resolvedAfter),
@@ -517,7 +519,10 @@ const OtherChangeCard: FC<{ change: OtherChange; onUndo: () => void }> = ({
             : change.type === 'delegation'
               ? t('console.otherChange.delegation', { subject: change.subject })
               : t('console.otherChange.model-access', {
-                  subject: change.subject,
+                  // Subjects are `model:<id>` or `family:<series>`.
+                  subject: change.subject.startsWith('family:')
+                    ? `${t('scopeFamily')} ${change.subject.slice(7)}`
+                    : change.subject.replace(/^model:/, ''),
                 })}
         </strong>
         {change.before !== undefined &&
