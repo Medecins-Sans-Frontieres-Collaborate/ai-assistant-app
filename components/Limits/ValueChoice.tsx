@@ -132,7 +132,7 @@ export const ValueChoice: FC<ValueChoiceProps> = ({
           return (
             <label
               key={option}
-              className={`relative flex h-9 min-w-[5.5rem] cursor-pointer items-center justify-center whitespace-nowrap border-r border-gray-200 px-3 text-sm last:border-r-0 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500 dark:border-gray-700 ${
+              className={`relative flex h-9 min-w-[4.5rem] cursor-pointer items-center justify-center whitespace-nowrap border-r border-gray-200 px-2 text-sm sm:min-w-[5.5rem] sm:px-3 last:border-r-0 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500 dark:border-gray-700 ${
                 checked
                   ? 'bg-gray-900 font-semibold text-white dark:bg-gray-100 dark:text-gray-900'
                   : 'bg-white text-gray-900 hover:bg-gray-50 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800'
@@ -154,7 +154,7 @@ export const ValueChoice: FC<ValueChoiceProps> = ({
         })}
       </div>
 
-      <div className="flex h-9 min-w-[13rem] items-center gap-2">
+      <div className="flex h-9 items-center gap-2 sm:min-w-[13rem]">
         {kind === 'limit' ? (
           <label className="flex h-9 items-center gap-2">
             <span className="sr-only">
