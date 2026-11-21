@@ -23,6 +23,7 @@ import type {
   LimitsMode,
   ModelAccessRule,
 } from '@/lib/services/limits/types';
+import type { UsageInsights } from '@/lib/services/limits/wire';
 
 import {
   Audience,
@@ -54,6 +55,17 @@ import {
   externalFamilyLabels,
   ruleFor,
 } from '@/lib/utils/app/modelAccessTree';
+import {
+  ModelFacts,
+  capCeiling,
+  compareReplacementAccess,
+  isRetiringSoon,
+  modelFacts,
+  termsOfState,
+  withRuleCarriedOver,
+} from '@/lib/utils/app/modelFacts';
+import { EMISSIONS_ASSUMPTIONS } from '@/lib/utils/shared/emissions';
+import { RETIREMENT_NOTICE_DAYS } from '@/lib/utils/shared/modelRetirement';
 
 import {
   ADMIN_BANNER_WARN,
@@ -67,7 +79,23 @@ import {
   ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
 import { AudiencePicker } from '@/components/Limits/AudiencePicker';
+import { useLimitsCost } from '@/components/Limits/LimitsCostContext';
+import {
+  FACT_GROUPS,
+  FactCells,
+  FactGroup,
+  FactHeadings,
+  SpreadLegend,
+  factColumnCount,
+} from '@/components/Limits/ModelFactCells';
+import { ModelRowContext } from '@/components/Limits/ModelRowContext';
+import {
+  ModelRunway,
+  ModelSpendMap,
+  RunwayModel,
+} from '@/components/Limits/ModelViews';
 import { ValueChoice, ValueKind } from '@/components/Limits/ValueChoice';
+import { useModelFactFormat } from '@/components/Limits/modelFactFormat';
 import { AudienceShape, ValueChip } from '@/components/Limits/visualSyntax';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -86,6 +114,21 @@ interface ModelAccessTabProps {
    * (another tab, a save). See {@link ModelAccessLeaveGuard}.
    */
   onLeaveGuard?: (guard: ModelAccessLeaveGuard | null) => void;
+  /**
+   * Usage evidence for the fact columns and the secondary views. Absent
+   * (still loading, or not permitted): the usage figures read "no usage".
+   */
+  insights?: UsageInsights;
+}
+
+/** The ways to look at the models: the access grid, or a secondary view. */
+const MODEL_VIEWS = ['grid', 'runway', 'map'] as const;
+type ModelView = (typeof MODEL_VIEWS)[number];
+
+/** What the grid needs to draw one row's facts. */
+interface RowFacts {
+  facts: ModelFacts;
+  replacementLabel: string | undefined;
 }
 
 /**
@@ -198,13 +241,68 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
   mode,
   disabled = false,
   onLeaveGuard,
+  insights,
 }) => {
   const t = useTranslations('limits');
+  const format = useModelFactFormat();
   const liveModels = useSettingsStore((s) => s.models);
-  const tree = useMemo(
-    () => buildModelAccessTree(catalogModelsForAdmin(liveModels), rules),
-    [liveModels, rules],
+  const catalog = useMemo(
+    () => catalogModelsForAdmin(liveModels),
+    [liveModels],
   );
+  const tree = useMemo(
+    () => buildModelAccessTree(catalog, rules),
+    [catalog, rules],
+  );
+  const cost = useLimitsCost();
+  // Cost figures follow the cost-insights flag: off means none are computed.
+  const pricing = cost.insights ? cost.pricing : null;
+  /** The moment retirement is judged at: fixed for the life of the tab. */
+  const [now] = useState(() => Date.now());
+  const [view, setView] = useState<ModelView>('grid');
+  const [hiddenGroups, setHiddenGroups] = useState<readonly FactGroup[]>([]);
+  const availableGroups = FACT_GROUPS.filter(
+    (group) => group !== 'cost' || pricing !== null,
+  );
+  const groups = availableGroups.filter(
+    (group) => !hiddenGroups.includes(group),
+  );
+  const catalogById = useMemo(
+    () => new Map(catalog.map((model) => [model.id.toLowerCase(), model])),
+    [catalog],
+  );
+  /** Every model row's facts, by model id as the tree spells it. */
+  const factsByModel = useMemo(() => {
+    const byModel = new Map<string, RowFacts>();
+    const nodes = [
+      ...tree.families.flatMap((family) => family.models),
+      ...tree.orphans,
+    ];
+    for (const node of nodes) {
+      const facts = modelFacts(
+        node.modelId,
+        catalogById.get(node.modelId.toLowerCase()),
+        { insights, pricing, now },
+      );
+      const replacementId = facts.lifecycle.replacementId;
+      byModel.set(node.modelId, {
+        facts,
+        replacementLabel: replacementId
+          ? (catalogById.get(replacementId.toLowerCase())?.name ??
+            replacementId)
+          : undefined,
+      });
+    }
+    return byModel;
+  }, [tree, catalogById, insights, pricing, now]);
+  const mostPeople = Math.max(
+    0,
+    ...[...factsByModel.values()].map((entry) => entry.facts.usage.people),
+  );
+  /** Days the per-model capture covers; 0 until its first day is summarised. */
+  const capturedDays = insights?.modelDays?.length ?? 0;
+  const windowDays =
+    capturedDays > 0 ? capturedDays : (insights?.days?.length ?? 0);
   const external = externalFamilyLabels(tree);
   const [bulkOpen, setBulkOpen] = useState(false);
   /** What the several-models form just did, said once it has closed. */
@@ -250,7 +348,7 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
         ]
       : []),
   ];
-  const columnCount = columns.length + 4;
+  const columnCount = columns.length + 4 + factColumnCount(groups);
 
   /**
    * Set by the open row editor: answers whether leaving it now would drop
@@ -295,175 +393,448 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
     );
   };
 
+  /** Changes the view, unless the open editor still holds unadded entries. */
+  const changeView = (next: ModelView) => {
+    const go = () => {
+      setSelected(null);
+      setBulkOpen(false);
+      setView(next);
+    };
+    if (view === 'grid' && leaveGuard.current?.()) {
+      queued.current = go;
+      return;
+    }
+    queued.current = null;
+    go();
+  };
+  /** Shows one model's row in the grid with its editor open. */
+  const openModel = (modelId: string) => {
+    setView('grid');
+    setSelected({ row: `model:${modelId}`, column: 'row' });
+  };
+
+  const modelRows = sections.flatMap((section) =>
+    section.rows.filter((row) => !row.isFamily),
+  );
+  const subjectOf = (row: GridRow) => ({
+    modelId: row.dimension.modelId as string,
+    series: row.series,
+  });
+  const rowByModel = new Map(
+    modelRows.map((row) => [subjectOf(row).modelId.toLowerCase(), row]),
+  );
+  const termsOf = (row: GridRow) =>
+    termsOfState(
+      effectiveAccessFor(row.dimension, row.series, defaults, rules).state,
+    );
+  const known = modelRows.flatMap((row) => {
+    const entry = factsByModel.get(subjectOf(row).modelId);
+    return entry ? [{ row, ...entry }] : [];
+  });
+  const runwayModels: RunwayModel[] = known.map(
+    ({ row, facts, replacementLabel }) => {
+      const replacement = facts.lifecycle.replacementId
+        ? rowByModel.get(facts.lifecycle.replacementId.toLowerCase())
+        : undefined;
+      const access = replacement
+        ? compareReplacementAccess(
+            rules,
+            defaults,
+            subjectOf(row),
+            subjectOf(replacement),
+          )
+        : null;
+      return {
+        facts,
+        label: row.label,
+        replacementLabel,
+        access,
+        canCarryOver: access?.kind === 'differs',
+      };
+    },
+  );
+  const carryOver = (modelId: string) => {
+    const from = rowByModel.get(modelId.toLowerCase());
+    const replacementId = from
+      ? factsByModel.get(modelId)?.facts.lifecycle.replacementId
+      : undefined;
+    const to = replacementId
+      ? rowByModel.get(replacementId.toLowerCase())
+      : undefined;
+    if (!from || !to) return;
+    onChange(
+      withRuleCarriedOver(rules, defaults, subjectOf(from), subjectOf(to)),
+    );
+    setNotice(
+      t('modelAccess.runway.carried', { from: from.label, to: to.label }),
+    );
+  };
+
+  const used = known.filter(({ facts }) => facts.usage.people > 0);
+  const totalRequests = used.reduce(
+    (sum, { facts }) => sum + (facts.usage.requests ?? 0),
+    0,
+  );
+  const spendKnown = used.filter(({ facts }) => facts.spendUsd !== null);
+  const footprintKnown = used.filter(
+    ({ facts }) => facts.footprintGrams !== null,
+  );
+  const retiringSoon = known.filter(({ facts }) =>
+    isRetiringSoon(facts.lifecycle.phase),
+  ).length;
+  const noCeiling = known.filter(({ row }) => termsOf(row) === null).length;
+  const { promptTokens, completionTokens } =
+    EMISSIONS_ASSUMPTIONS.typicalRequest;
+  const toggle =
+    'min-h-9 rounded-md border px-3 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500';
+  const toggleOn =
+    'border-gray-900 bg-gray-900 font-semibold text-white dark:border-white dark:bg-white dark:text-gray-900';
+  const toggleOff =
+    'border-gray-300 bg-white text-gray-900 hover:bg-gray-50 dark:border-gray-600 dark:bg-surface-dark dark:text-white dark:hover:bg-gray-800';
+
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-start gap-3">
-        <div className="min-w-0 flex-[1_1_28rem] space-y-1">
-          <p className={ADMIN_MUTED}>{t('modelAccess.grid.lead')}</p>
-          {external.length > 0 && (
-            <p className={ADMIN_MUTED}>
-              {t('modelAccess.externalNote', { families: external.join(', ') })}
-            </p>
-          )}
-        </div>
-        <button
-          type="button"
-          className={ADMIN_BTN_SECONDARY}
-          onClick={() => {
-            setNotice(null);
-            setBulkOpen((value) => !value);
-          }}
-          aria-expanded={bulkOpen}
-          disabled={disabled || sections.length === 0}
+      {known.length > 0 && (
+        <dl
+          aria-label={t('modelAccess.facts.summary.label')}
+          className="grid grid-cols-2 gap-x-6 gap-y-3 rounded-lg border border-gray-200 bg-white px-4 py-3 sm:grid-cols-3 xl:grid-cols-6 dark:border-gray-700 dark:bg-surface-dark"
         >
-          <IconPlus size={16} aria-hidden="true" />
-          {t('modelAccess.grid.bulk.open')}
-        </button>
+          <SummaryFact
+            label={t('modelAccess.facts.summary.used', { days: windowDays })}
+          >
+            {t('modelAccess.facts.summary.usedValue', {
+              used: used.length,
+              total: known.length,
+            })}
+          </SummaryFact>
+          <SummaryFact label={t('modelAccess.facts.summary.requests')}>
+            {capturedDays > 0
+              ? format.count(totalRequests)
+              : t('modelAccess.facts.summary.notYet')}
+          </SummaryFact>
+          {pricing !== null && (
+            <SummaryFact label={t('modelAccess.facts.summary.spend')}>
+              {spendKnown.length > 0
+                ? format.usd(
+                    spendKnown.reduce(
+                      (sum, { facts }) => sum + (facts.spendUsd ?? 0),
+                      0,
+                    ),
+                  )
+                : t('modelAccess.facts.summary.notYet')}
+            </SummaryFact>
+          )}
+          <SummaryFact label={t('modelAccess.facts.summary.footprint')}>
+            {footprintKnown.length > 0
+              ? format.co2(
+                  footprintKnown.reduce(
+                    (sum, { facts }) => sum + (facts.footprintGrams ?? 0),
+                    0,
+                  ),
+                )
+              : t('modelAccess.facts.summary.notYet')}
+          </SummaryFact>
+          <SummaryFact
+            label={t('modelAccess.facts.summary.retiring', {
+              days: RETIREMENT_NOTICE_DAYS,
+            })}
+            warn={retiringSoon > 0}
+          >
+            {format.count(retiringSoon)}
+          </SummaryFact>
+          <SummaryFact label={t('modelAccess.facts.summary.noCeiling')}>
+            {format.count(noCeiling)}
+          </SummaryFact>
+        </dl>
+      )}
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+        <div
+          role="group"
+          aria-label={t('modelAccess.view.label')}
+          className="flex flex-wrap gap-2"
+        >
+          {MODEL_VIEWS.filter(
+            (option) => option !== 'map' || pricing !== null,
+          ).map((option) => (
+            <button
+              key={option}
+              type="button"
+              aria-pressed={view === option}
+              onClick={() => changeView(option)}
+              className={`${toggle} ${view === option ? toggleOn : toggleOff}`}
+            >
+              {t(`modelAccess.view.${option}` as never)}
+            </button>
+          ))}
+        </div>
+        {view === 'grid' && (
+          <div
+            role="group"
+            aria-label={t('modelAccess.facts.columns.label')}
+            className="flex flex-wrap items-center gap-2"
+          >
+            <span className={ADMIN_MUTED}>
+              {t('modelAccess.facts.columns.label')}
+            </span>
+            {availableGroups.map((group) => (
+              <button
+                key={group}
+                type="button"
+                aria-pressed={groups.includes(group)}
+                onClick={() =>
+                  setHiddenGroups((hidden) =>
+                    hidden.includes(group)
+                      ? hidden.filter((other) => other !== group)
+                      : [...hidden, group],
+                  )
+                }
+                className={`${toggle} ${groups.includes(group) ? toggleOn : toggleOff}`}
+              >
+                {t(`modelAccess.facts.columns.${group}` as never)}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-      {bulkOpen && (
-        <BulkAccessForm
-          sections={sections}
+      <p className={ADMIN_MUTED} role="note">
+        {t(
+          pricing !== null
+            ? 'modelAccess.facts.estimateNote'
+            : 'modelAccess.facts.estimateNoteNoCost',
+          { promptTokens, completionTokens, days: windowDays },
+        )}{' '}
+        {insights && capturedDays === 0 && t('modelAccess.facts.captureNote')}
+      </p>
+      {view === 'runway' && (
+        <ModelRunway
+          models={runwayModels}
+          onOpen={openModel}
+          onCarryOver={carryOver}
           disabled={disabled}
-          onApply={(dims, audiences, terms) => {
-            onChange(withAudiencesTerms(rules, dims, audiences, terms));
-            setNotice(
-              t(
-                terms === undefined
-                  ? 'modelAccess.grid.bulk.removed'
-                  : 'modelAccess.grid.bulk.applied',
-                { entries: audiences.length, rows: dims.length },
-              ),
-            );
-            setBulkOpen(false);
-          }}
-          onCancel={() => setBulkOpen(false)}
         />
       )}
-      <p
-        role="status"
-        className={notice ? 'text-sm text-gray-900 dark:text-white' : 'sr-only'}
-      >
-        {notice}
-      </p>
-      {mode === 'observe' && (
-        <p className={ADMIN_BANNER_WARN} role="note">
-          {t('modelAccess.observeNote')}
+      {view === 'map' && (
+        <ModelSpendMap
+          models={known.map(({ row, facts }) => ({
+            facts,
+            label: row.label,
+            terms: termsOf(row),
+          }))}
+          windowDays={windowDays}
+          onOpen={openModel}
+        />
+      )}
+      {view !== 'grid' && (
+        <p
+          role="status"
+          className={
+            notice ? 'text-sm text-gray-900 dark:text-white' : 'sr-only'
+          }
+        >
+          {notice}
         </p>
       )}
-
-      {sections.length === 0 ? (
-        <p className={ADMIN_MUTED}>{t('modelAccess.noModels')}</p>
-      ) : (
-        // A size container: the row editor is as wide as this box (100cqw),
-        // not as wide as the table, so it never scrolls sideways with it.
-        // `isolate` keeps the pinned column's stacking inside this box, under
-        // the page's sticky unsaved-changes bar.
-        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white isolate [container-type:inline-size] dark:border-gray-700 dark:bg-surface-dark">
-          <table className="w-full border-collapse text-sm">
-            <caption className="sr-only">
-              {t('modelAccess.grid.caption')}
-            </caption>
-            <thead>
-              <tr className="text-left text-xs text-gray-600 dark:text-gray-400">
-                <th
-                  scope="col"
-                  className={`min-w-[11rem] px-4 py-2 font-semibold sm:min-w-[13rem] ${PINNED}`}
-                >
-                  {t('modelAccess.grid.col.model')}
-                </th>
-                <ColumnHeading kind="everyone">
-                  {t('modelAccess.defaultLabel')}
-                </ColumnHeading>
-                {columns.map((column) => (
-                  <ColumnHeading key={columnId(column)} kind={column.scope}>
-                    {audienceName(column)}
-                  </ColumnHeading>
-                ))}
-                <ColumnHeading kind="user">
-                  {t('modelAccess.grid.col.people')}
-                </ColumnHeading>
-                <th
-                  scope="col"
-                  className="min-w-[9rem] px-2 py-2 font-semibold"
-                >
-                  {t('modelAccess.grid.col.reach')}
-                </th>
-              </tr>
-            </thead>
-            {sections.map((section) => (
-              <tbody
-                key={section.key}
-                className="border-t border-gray-200 dark:border-gray-700"
-              >
-                {section.heading && (
-                  <tr>
-                    <th
-                      scope="rowgroup"
-                      colSpan={columnCount}
-                      className="px-4 pt-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400"
-                    >
-                      {section.heading}
-                    </th>
-                  </tr>
-                )}
-                {section.rows.map((row) => (
-                  <Row
-                    key={row.key}
-                    row={row}
-                    rules={rules}
-                    defaults={defaults}
-                    columns={columns}
-                    audienceName={audienceName}
-                    columnCount={columnCount}
-                    selected={
-                      selected?.row === row.key ? selected.column : null
-                    }
-                    onSelect={(column) => select(row.key, column)}
-                    onClose={() => {
-                      // Closing after "entries not added" continues with
-                      // whatever was asked for.
-                      const next = queued.current;
-                      queued.current = null;
-                      if (next) next();
-                      else setSelected(null);
-                    }}
-                    onStay={() => {
-                      queued.current = null;
-                    }}
-                    onLeaveGuard={registerEditorGuard}
-                    onChange={onChange}
-                    disabled={disabled}
-                  />
-                ))}
-              </tbody>
-            ))}
-          </table>
-          <p className="border-t border-gray-200 px-4 py-2 text-xs text-gray-600 dark:border-gray-700 dark:text-gray-400">
-            {t('modelAccess.envelopeNote')}
+      {view === 'grid' && (
+        <>
+          <div className="flex flex-wrap items-start gap-3">
+            <div className="min-w-0 flex-[1_1_28rem] space-y-1">
+              <p className={ADMIN_MUTED}>{t('modelAccess.grid.lead')}</p>
+              {external.length > 0 && (
+                <p className={ADMIN_MUTED}>
+                  {t('modelAccess.externalNote', {
+                    families: external.join(', '),
+                  })}
+                </p>
+              )}
+            </div>
+            <button
+              type="button"
+              className={ADMIN_BTN_SECONDARY}
+              onClick={() => {
+                setNotice(null);
+                setBulkOpen((value) => !value);
+              }}
+              aria-expanded={bulkOpen}
+              disabled={disabled || sections.length === 0}
+            >
+              <IconPlus size={16} aria-hidden="true" />
+              {t('modelAccess.grid.bulk.open')}
+            </button>
+          </div>
+          {bulkOpen && (
+            <BulkAccessForm
+              sections={sections}
+              disabled={disabled}
+              onApply={(dims, audiences, terms) => {
+                onChange(withAudiencesTerms(rules, dims, audiences, terms));
+                setNotice(
+                  t(
+                    terms === undefined
+                      ? 'modelAccess.grid.bulk.removed'
+                      : 'modelAccess.grid.bulk.applied',
+                    { entries: audiences.length, rows: dims.length },
+                  ),
+                );
+                setBulkOpen(false);
+              }}
+              onCancel={() => setBulkOpen(false)}
+            />
+          )}
+          <p
+            role="status"
+            className={
+              notice ? 'text-sm text-gray-900 dark:text-white' : 'sr-only'
+            }
+          >
+            {notice}
           </p>
-        </div>
-      )}
+          {mode === 'observe' && (
+            <p className={ADMIN_BANNER_WARN} role="note">
+              {t('modelAccess.observeNote')}
+            </p>
+          )}
 
-      <section
-        aria-labelledby="model-access-how"
-        className="rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-800 dark:border-gray-700 dark:bg-surface-dark dark:text-gray-200"
-      >
-        <h3
-          id="model-access-how"
-          className="mb-2 text-sm font-semibold text-gray-900 dark:text-white"
-        >
-          {t('modelAccess.grid.howTitle')}
-        </h3>
-        <ol className="list-decimal space-y-1 ps-5">
-          <li>{t('modelAccess.grid.how.blocked')}</li>
-          <li>{t('modelAccess.grid.how.mostSpecific')}</li>
-          <li>{t('modelAccess.grid.how.inherit')}</li>
-          <li>{t('modelAccess.grid.how.envelope')}</li>
-        </ol>
-      </section>
+          {sections.length === 0 ? (
+            <p className={ADMIN_MUTED}>{t('modelAccess.noModels')}</p>
+          ) : (
+            // A size container: the row editor is as wide as this box (100cqw),
+            // not as wide as the table, so it never scrolls sideways with it.
+            // `isolate` keeps the pinned column's stacking inside this box, under
+            // the page's sticky unsaved-changes bar.
+            <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white isolate [container-type:inline-size] dark:border-gray-700 dark:bg-surface-dark">
+              <table className="w-full border-collapse text-sm">
+                <caption className="sr-only">
+                  {t('modelAccess.grid.caption')}
+                </caption>
+                <thead>
+                  <tr className="text-left text-xs text-gray-600 dark:text-gray-400">
+                    <th
+                      scope="col"
+                      className={`min-w-[11rem] px-4 py-2 font-semibold sm:min-w-[13rem] ${PINNED}`}
+                    >
+                      {t('modelAccess.grid.col.model')}
+                    </th>
+                    <ColumnHeading kind="everyone">
+                      {t('modelAccess.defaultLabel')}
+                    </ColumnHeading>
+                    {columns.map((column) => (
+                      <ColumnHeading key={columnId(column)} kind={column.scope}>
+                        {audienceName(column)}
+                      </ColumnHeading>
+                    ))}
+                    <ColumnHeading kind="user">
+                      {t('modelAccess.grid.col.people')}
+                    </ColumnHeading>
+                    <th
+                      scope="col"
+                      className="min-w-[9rem] px-2 py-2 font-semibold"
+                    >
+                      {t('modelAccess.grid.col.reach')}
+                    </th>
+                    <FactHeadings groups={groups} />
+                  </tr>
+                </thead>
+                {sections.map((section) => (
+                  <tbody
+                    key={section.key}
+                    className="border-t border-gray-200 dark:border-gray-700"
+                  >
+                    {section.heading && (
+                      <tr>
+                        <th
+                          scope="rowgroup"
+                          colSpan={columnCount}
+                          className="px-4 pt-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400"
+                        >
+                          {section.heading}
+                        </th>
+                      </tr>
+                    )}
+                    {section.rows.map((row) => (
+                      <Row
+                        key={row.key}
+                        row={row}
+                        rules={rules}
+                        defaults={defaults}
+                        columns={columns}
+                        audienceName={audienceName}
+                        columnCount={columnCount}
+                        groups={groups}
+                        rowFacts={
+                          row.isFamily
+                            ? undefined
+                            : factsByModel.get(row.dimension.modelId as string)
+                        }
+                        mostPeople={mostPeople}
+                        windowDays={windowDays}
+                        selected={
+                          selected?.row === row.key ? selected.column : null
+                        }
+                        onSelect={(column) => select(row.key, column)}
+                        onClose={() => {
+                          // Closing after "entries not added" continues with
+                          // whatever was asked for.
+                          const next = queued.current;
+                          queued.current = null;
+                          if (next) next();
+                          else setSelected(null);
+                        }}
+                        onStay={() => {
+                          queued.current = null;
+                        }}
+                        onLeaveGuard={registerEditorGuard}
+                        onChange={onChange}
+                        disabled={disabled}
+                      />
+                    ))}
+                  </tbody>
+                ))}
+              </table>
+              <div className="space-y-1 border-t border-gray-200 px-4 py-2 text-xs text-gray-600 dark:border-gray-700 dark:text-gray-400">
+                <p>{t('modelAccess.envelopeNote')}</p>
+                {groups.includes('usage') && <SpreadLegend />}
+              </div>
+            </div>
+          )}
+
+          <section
+            aria-labelledby="model-access-how"
+            className="rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-800 dark:border-gray-700 dark:bg-surface-dark dark:text-gray-200"
+          >
+            <h3
+              id="model-access-how"
+              className="mb-2 text-sm font-semibold text-gray-900 dark:text-white"
+            >
+              {t('modelAccess.grid.howTitle')}
+            </h3>
+            <ol className="list-decimal space-y-1 ps-5">
+              <li>{t('modelAccess.grid.how.blocked')}</li>
+              <li>{t('modelAccess.grid.how.mostSpecific')}</li>
+              <li>{t('modelAccess.grid.how.inherit')}</li>
+              <li>{t('modelAccess.grid.how.envelope')}</li>
+            </ol>
+          </section>
+        </>
+      )}
     </div>
   );
 };
+
+/** One figure in the strip above the grid. */
+const SummaryFact: FC<{
+  label: string;
+  warn?: boolean;
+  children: ReactNode;
+}> = ({ label, warn = false, children }) => (
+  <div>
+    <dt className="text-xs text-gray-600 dark:text-gray-400">{label}</dt>
+    <dd
+      className={`text-lg font-semibold tabular-nums ${warn ? 'text-orange-800 dark:text-orange-300' : 'text-gray-900 dark:text-white'}`}
+    >
+      {children}
+    </dd>
+  </div>
+);
 
 const ColumnHeading: FC<{
   kind: 'everyone' | 'group' | 'domain' | 'user';
@@ -730,6 +1101,12 @@ interface RowProps {
   columns: AudienceColumn[];
   audienceName: (audience: Audience) => string;
   columnCount: number;
+  /** The fact column groups shown. */
+  groups: readonly FactGroup[];
+  /** The model's facts; `undefined` for a family row. */
+  rowFacts: RowFacts | undefined;
+  mostPeople: number;
+  windowDays: number;
   selected: ColumnKey | null;
   onSelect: (column: ColumnKey) => void;
   onClose: () => void;
@@ -748,6 +1125,10 @@ const Row: FC<RowProps> = ({
   columns,
   audienceName,
   columnCount,
+  groups,
+  rowFacts,
+  mostPeople,
+  windowDays,
   selected,
   onSelect,
   onClose,
@@ -761,6 +1142,11 @@ const Row: FC<RowProps> = ({
   const { dimension, series } = row;
   const rule = ruleFor(rules, dimension);
   const effective = effectiveAccessFor(dimension, series, defaults, rules);
+  const ceiling = rowFacts
+    ? capCeiling(termsOfState(effective.state), rowFacts.facts.cost)
+    : null;
+  const cap =
+    effective.state.kind === 'limited' ? effective.state.requests : null;
   const collision = collidesWithDefaults(dimension, rule, defaults);
   const people = peopleCounts(rules, dimension, series);
   const ownDefault = rule?.defaultAccess !== undefined;
@@ -914,6 +1300,14 @@ const Row: FC<RowProps> = ({
         <td className="px-2 py-2 text-xs text-gray-800 dark:text-gray-200">
           <ReachText reach={reachOf(rules, defaults, dimension, series)} />
         </td>
+        <FactCells
+          groups={groups}
+          facts={rowFacts?.facts ?? null}
+          ceiling={ceiling}
+          cap={cap}
+          mostPeople={mostPeople}
+          replacementLabel={rowFacts?.replacementLabel}
+        />
       </tr>
       {selected !== null && (
         <tr>
@@ -937,6 +1331,17 @@ const Row: FC<RowProps> = ({
                 onChange={onChange}
                 disabled={disabled}
               />
+              {rowFacts && (
+                <div className="mt-4">
+                  <ModelRowContext
+                    facts={rowFacts.facts}
+                    cap={cap}
+                    ceiling={ceiling}
+                    windowDays={windowDays}
+                    replacementLabel={rowFacts.replacementLabel}
+                  />
+                </div>
+              )}
             </div>
           </td>
         </tr>
