@@ -16,6 +16,7 @@ import {
   listAdminBrandBooks,
   updateBrandBook,
   uploadBrandFile,
+  uploadBrandGuide,
 } from '@/client/services/brand/brandBookAdmin';
 
 import {
@@ -46,6 +47,7 @@ vi.mock('@/client/services/brand/brandBookAdmin', async (importOriginal) => ({
   listAdminBrandBooks: vi.fn(),
   updateBrandBook: vi.fn(),
   uploadBrandFile: vi.fn(),
+  uploadBrandGuide: vi.fn(),
   draftBrandBookFromGuide: vi.fn(),
   createBrandBook: vi.fn(),
   deleteBrandBook: vi.fn(),
@@ -203,13 +205,21 @@ describe('BrandBookAdminEditor', () => {
   });
 
   it('applies a guide draft but keeps the logos, and can undo it', async () => {
-    vi.mocked(uploadBrandFile).mockResolvedValue(
+    URL.createObjectURL = vi.fn(() => 'blob:guide');
+    URL.revokeObjectURL = vi.fn();
+    vi.mocked(uploadBrandGuide).mockResolvedValue(
       `/api/file/${'a'.repeat(64)}.pdf`,
     );
     vi.mocked(draftBrandBookFromGuide).mockResolvedValue({
       book: body({
         name: 'Northwind',
-        palette: [{ name: 'Ink', hex: '#1b2a41' }],
+        palette: [
+          { name: 'Ink', hex: '#1b2a41' },
+          { name: 'Sand', hex: '#f2e8d5' },
+        ],
+        language: {
+          preferred: [{ term: 'families', alternatives: ['clients'] }],
+        },
         logos: [],
         source: { file: `/api/file/${'a'.repeat(64)}.pdf`, name: 'Guide.pdf' },
       }),
@@ -219,6 +229,15 @@ describe('BrandBookAdminEditor', () => {
         smallestTextPt: 9,
         pageCount: 12,
       },
+      // One colour the guide states and one it does not; a word it states
+      // whose replaced word it does not.
+      grounding: {
+        colors: { '#1b2a41': 7, '#f2e8d5': null },
+        fonts: {},
+        terms: { families: 3, clients: null },
+      },
+      logoMinWidthPt: 90,
+      dropped: 2,
     });
     const { container } = await openEditor();
     const input = container.querySelector<HTMLInputElement>(
@@ -238,6 +257,23 @@ describe('BrandBookAdminEditor', () => {
     expect(screen.getByDisplayValue('Ink')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Main logo')).toBeInTheDocument();
     expect(screen.getByText('Unsaved changes')).toBeInTheDocument();
+    // What the guide's text backs, in total and value by value.
+    expect(
+      screen.getByText(/1 of 2 colours, 0 of 0 typefaces, 1 of 2 words/),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Guide, page 7' })).toHaveAttribute(
+      'href',
+      'blob:guide#page=7',
+    );
+    expect(
+      screen.getByText("Not found in the guide's text."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Not found in the guide's text: clients"),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/2 entries could not be used/)).toBeInTheDocument();
+    // The guide's smallest logo width fills in the logo that had none.
+    expect(screen.getByLabelText('Smallest width (pt)')).toHaveValue(90);
 
     fireEvent.click(screen.getByRole('button', { name: 'Undo the draft' }));
     expect(screen.getByDisplayValue('Teal')).toBeInTheDocument();
