@@ -289,6 +289,12 @@ describe('GET /api/limits/me?as=', () => {
       );
       expect(body.data.directoryStatus).toBe('resolved');
       expect(body.data.notEvaluated).toEqual([]);
+      // The matching facts, so the admin view can resolve a draft for them.
+      expect(body.data.principal).toMatchObject({
+        mail: 'bob@ocp.msf.org',
+        domain: 'ocp.msf.org',
+      });
+      expect(body.data.principal.groupIds).toHaveLength(1);
       // Group (layer 4) outranks attribute (layer 3) — the real resolution order.
       expect(limitFor(body, 'chat.tokensPerDay')).toMatchObject({
         value: 5000,
@@ -378,6 +384,8 @@ describe('GET /api/limits/me?as=', () => {
       const body = await parseJsonResponse(response);
       expect(response.status).toBe(200);
       expect(body.data.scopedPreview).toBe(true);
+      // A scoped admin never receives the person's directory facts.
+      expect(body.data.principal).toBeUndefined();
       expect(limitFor(body, 'chat.messagesPerDay')).toMatchObject({
         value: 60,
         ceilingOverrideId: 'lim-0000000000c1',
