@@ -4,6 +4,7 @@ import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import {
   FC,
   Fragment,
+  MutableRefObject,
   ReactNode,
   Ref,
   useEffect,
@@ -90,6 +91,9 @@ interface GridRow {
   known: boolean;
   isFamily: boolean;
 }
+
+/** Returns true when leaving the open editor must wait for an answer. */
+type LeaveGuard = () => boolean;
 
 /** The column a row was opened from: a fixed one, or an audience column id. */
 type ColumnKey = 'everyone' | 'people' | 'row' | string;
@@ -231,12 +235,31 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
   ];
   const columnCount = columns.length + 4;
 
-  const select = (row: string, column: ColumnKey) =>
+  /**
+   * Set by the open row editor: answers whether leaving it now would drop
+   * entries still waiting in its add field (and, if so, makes it say so).
+   */
+  const leaveGuard = useRef<LeaveGuard | null>(null);
+  /** The cell asked for while the open editor was holding entries. */
+  const [queued, setQueued] = useState<{
+    row: string;
+    column: ColumnKey;
+  } | null>(null);
+
+  const select = (row: string, column: ColumnKey) => {
+    // Another row would replace the open editor: not while it holds
+    // entries nobody has added. It asks first, then moves on to this cell.
+    if (selected && selected.row !== row && leaveGuard.current?.()) {
+      setQueued({ row, column });
+      return;
+    }
+    setQueued(null);
     setSelected((current) =>
       current?.row === row && current.column === column
         ? null
         : { row, column },
     );
+  };
 
   return (
     <div className="space-y-4">
@@ -362,7 +385,14 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
                       selected?.row === row.key ? selected.column : null
                     }
                     onSelect={(column) => select(row.key, column)}
-                    onClose={() => setSelected(null)}
+                    onClose={() => {
+                      // Closing after "entries not added" continues to the
+                      // cell that was asked for.
+                      setSelected(queued);
+                      setQueued(null);
+                    }}
+                    onStay={() => setQueued(null)}
+                    leaveGuard={leaveGuard}
                     onChange={onChange}
                     disabled={disabled}
                   />
@@ -665,6 +695,9 @@ interface RowProps {
   selected: ColumnKey | null;
   onSelect: (column: ColumnKey) => void;
   onClose: () => void;
+  /** The editor's waiting entries were added: forget any queued move. */
+  onStay: () => void;
+  leaveGuard: MutableRefObject<LeaveGuard | null>;
   onChange: (rules: ModelAccessRule[]) => void;
   disabled: boolean;
 }
@@ -680,6 +713,8 @@ const Row: FC<RowProps> = ({
   selected,
   onSelect,
   onClose,
+  onStay,
+  leaveGuard,
   onChange,
   disabled,
 }) => {
@@ -859,6 +894,8 @@ const Row: FC<RowProps> = ({
                 opening={selectedColumn}
                 focusDefault={selected === 'everyone'}
                 onClose={close}
+                onStay={onStay}
+                leaveGuard={leaveGuard}
                 onChange={onChange}
                 disabled={disabled}
               />
@@ -885,6 +922,8 @@ const RowEditor: FC<{
   /** Opened from the Everyone else cell: focus starts on that control. */
   focusDefault: boolean;
   onClose: () => void;
+  onStay: () => void;
+  leaveGuard: MutableRefObject<LeaveGuard | null>;
   onChange: (rules: ModelAccessRule[]) => void;
   disabled: boolean;
 }> = ({
@@ -895,6 +934,8 @@ const RowEditor: FC<{
   opening,
   focusDefault,
   onClose,
+  onStay,
+  leaveGuard,
   onChange,
   disabled,
 }) => {
@@ -933,6 +974,27 @@ const RowEditor: FC<{
     // Only on mount: later renders must not steal focus.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const confirmRef = useRef<HTMLDivElement>(null);
+  const waiting = pending.length;
+  // While this editor is open it answers for the whole tab whether it can
+  // be left: not with entries waiting, and it then shows the question.
+  useEffect(() => {
+    leaveGuard.current = () => {
+      if (waiting === 0) return false;
+      setConfirmClose(true);
+      return true;
+    };
+    return () => {
+      leaveGuard.current = null;
+    };
+  }, [leaveGuard, waiting]);
+  // The question may be asked from a row far down the table: bring it into
+  // view and put the keyboard on its first answer.
+  useEffect(() => {
+    if (!confirmClose) return;
+    confirmRef.current?.scrollIntoView?.({ block: 'nearest' });
+    confirmRef.current?.querySelector('button')?.focus();
+  }, [confirmClose]);
   if (!requestsDef) return null;
 
   const addPending = () => {
@@ -1003,6 +1065,7 @@ const RowEditor: FC<{
       </div>
       {confirmClose && pending.length > 0 && (
         <div
+          ref={confirmRef}
           role="alert"
           className={`flex flex-wrap items-center gap-2 ${ADMIN_BANNER_WARN}`}
         >
@@ -1157,6 +1220,7 @@ const RowEditor: FC<{
             disabled={disabled || pending.length === 0}
             onClick={() => {
               addPending();
+              onStay();
               // Back to the field: the next entry is one keystroke away.
               pickerRef.current?.focus();
             }}
