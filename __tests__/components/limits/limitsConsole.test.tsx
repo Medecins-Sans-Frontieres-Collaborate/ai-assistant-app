@@ -573,4 +573,98 @@ describe('AccessLens', () => {
     expect(within(row).getByTitle('50, decides')).toBeInTheDocument();
     expect(within(row).getByTitle('200, outranked')).toBeInTheDocument();
   });
+
+  it('shows what a domain gets on a model the Models tab opened to it', () => {
+    const access = {
+      series: 'claude',
+      groups: [],
+      domains: [{ target: 'ocp.org', requests: 30 }],
+      allow: [],
+      deny: [],
+    };
+    const saved = policy([{ value: 200 }]);
+    const draft = policy([{ value: 200 }], [], { modelAccess: [access] });
+    preview.result = null;
+    renderWithMessages(
+      <AccessLens
+        saved={saved}
+        draft={draft}
+        dirty
+        groupNames={{}}
+        onEditRule={vi.fn()}
+        onOverridesChange={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getByRole('radio', { name: /Domain/ }));
+    fireEvent.change(screen.getByLabelText('Email domain to check'), {
+      target: { value: 'ocp.org' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Check' }));
+    // The family rows exist although no default or override names Claude.
+    const requests = screen
+      .getByRole('button', { name: /Messages per model · Family claude/ })
+      .closest('tr') as HTMLElement;
+    expect(within(requests).getByTitle('30, decides')).toBeInTheDocument();
+    const available = screen
+      .getByRole('button', { name: /Model available · Family claude/ })
+      .closest('tr') as HTMLElement;
+    expect(
+      within(available).getByTitle('Allowed, decides'),
+    ).toBeInTheDocument();
+  });
+});
+
+describe('ChangeReview, model access', () => {
+  it('lists who was added, changed and removed on the row, before and after', () => {
+    const rule = (partial: object) => ({
+      series: 'claude',
+      groups: [],
+      domains: [],
+      allow: [],
+      deny: [],
+      ...partial,
+    });
+    const saved = policy([{ value: 100 }], [], {
+      modelAccess: [
+        rule({
+          defaultAccess: false,
+          groups: [{ target: 'g-1', requests: 50 }],
+          allow: [{ target: 'ana@msf.org', requests: null }],
+        }),
+      ],
+    });
+    const draft = policy([{ value: 100 }], [], {
+      modelAccess: [
+        rule({
+          defaultAccess: false,
+          denyGroups: ['g-1'],
+          domains: [{ target: 'ocp.org', requests: 20 }],
+        }),
+      ],
+    });
+    renderWithMessages(
+      <ChangeReview
+        changes={diffPolicies(saved, draft)}
+        saved={saved}
+        draft={draft}
+        insights={undefined}
+        groupNames={{}}
+        onUndo={vi.fn()}
+        onEditRule={vi.fn()}
+        onCheckPerson={vi.fn()}
+      />,
+    );
+    const card = screen
+      .getByText('Model access for Family claude')
+      .closest('article') as HTMLElement;
+    const lines = within(card)
+      .getAllByRole('listitem')
+      .map((line) => line.textContent?.replace(/\s+/g, ' ').trim());
+    expect(lines).toEqual([
+      // The group, by its directory name: 50 a day, now off.
+      expect.stringMatching(/^□Pharmacy.*50.*→becomes.*Off$/),
+      expect.stringMatching(/^◇ocp\.org.*no entry→becomes.*20$/),
+      expect.stringMatching(/^●ana@msf\.org.*∞.*→becomesno entryremoved$/),
+    ]);
+  });
 });

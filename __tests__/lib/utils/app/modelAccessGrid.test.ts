@@ -8,6 +8,7 @@ import {
   parseAudience,
   peopleCounts,
   reachOf,
+  ruleDifferences,
   withAudienceTerms,
   withAudiencesTerms,
   withDefaultAccess,
@@ -346,5 +347,42 @@ describe('reachOf', () => {
       domains: 0,
       people: 0,
     });
+  });
+});
+
+describe('ruleDifferences', () => {
+  it('lists the default and each audience added, changed or removed, and nothing unchanged', () => {
+    const was = rule({
+      series: 'claude',
+      defaultAccess: false,
+      groups: [{ target: 'g-pilot', requests: 50 }],
+      domains: [{ target: 'oca.msf.org', requests: null }],
+      allow: [{ target: 'ana@msf.org', requests: 5 }],
+    });
+    const now = rule({
+      series: 'claude',
+      defaultAccess: 10,
+      denyGroups: ['G-Pilot'],
+      domains: [{ target: 'oca.msf.org', requests: null }],
+      deny: ['new@msf.org'],
+    });
+    expect(ruleDifferences(was, now)).toEqual([
+      { audience: 'everyone', before: false, after: 10 },
+      { audience: GROUP, before: 50, after: false },
+      { audience: PERSON, before: 5, after: undefined },
+      {
+        audience: { scope: 'user', target: 'new@msf.org' },
+        before: undefined,
+        after: false,
+      },
+    ]);
+    expect(ruleDifferences(was, was)).toEqual([]);
+    // A row with no rule before: everything it now says is new.
+    expect(ruleDifferences(undefined, was).map((d) => d.before)).toEqual([
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+    ]);
   });
 });
