@@ -898,8 +898,10 @@ export async function loadDocument(
 
   // Write the file to a temporary location with secure permissions (0o600 = read/write for owner only)
   const buffer = Buffer.from(await file.arrayBuffer());
+  // 'wx': create only; never write through a path something else made first.
   await fs.promises.writeFile(tempFilePath, new Uint8Array(buffer), {
     mode: 0o600,
+    flag: 'wx',
   });
 
   const text = await loadDocumentFromPath(
@@ -942,8 +944,10 @@ export async function loadDocumentWithValidation(
 
   // Write the file to a temporary location with secure permissions
   const buffer = Buffer.from(await file.arrayBuffer());
+  // 'wx': create only; never write through a path something else made first.
   await fs.promises.writeFile(tempFilePath, new Uint8Array(buffer), {
     mode: 0o600,
+    flag: 'wx',
   });
 
   let text: string;
