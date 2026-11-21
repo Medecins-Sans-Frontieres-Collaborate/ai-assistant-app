@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "위임 관리는 읽기 전용으로 표시됩니다. 위임의 구성원, 포함 사용자, 각 관리자의 권한은 위임 영역에서 관리됩니다.",
     "delegationsManagedElsewhereLink": "위임 열기",
     "modelAccess": {
-      "intro": "각 모델의 사용 권한을 결정하세요. 패밀리 설정은 그 패밀리의 모델들에 적용되며, 모델별 설정이 있으면 우선합니다. 목록에 있는 사람은 기본 설정을 뛰어넘고, 차단 목록은 모든 권한을 무효화합니다.",
       "externalNote": "Azure 환경 외부에 호스팅된 모델({families})은 여기에서 권한을 부여하기 전까지 모든 사용자에게 사용할 수 없습니다. 기본값 또는 그룹, 도메인, 개별 사용자에게 권한을 부여할 수 있습니다.",
       "envelopeNote": "패밀리에 대한 요청 제한은 해당 패밀리의 모델들이 공유하는 일일 예산입니다. 모델에 대한 제한은 그 모델 내에서만 적용됩니다. 모델의 무제한 설정은 패밀리 예산 제한을 해제하지 않습니다.",
       "observeNote": "관찰 모드가 켜져 있습니다. 현재 설정으로는 모델 숨김이나 요청 차단이 적용되지 않습니다. 규칙이 맞을 때 상단에서 Enforcement로 전환하세요.",
-      "familyChip": "패밀리",
-      "modelChip": "모델",
       "otherModels": "패밀리가 없는 모델",
-      "modelsInFamily": "{count, plural, one {이 패밀리에 모델 #개} other {이 패밀리에 모델 #개}}",
       "noModels": "카탈로그에 아직 모델이 없습니다.",
-      "expand": "모델 보기",
-      "collapse": "모델 숨기기",
-      "edit": "편집",
       "doneEditing": "완료",
-      "editNode": "{label}에 대한 접근 권한 편집",
       "defaultLabel": "기타 모든 사용자",
-      "defaultInherit": "상속",
-      "defaultUnlimited": "무제한",
-      "defaultLimited": "최대",
-      "defaultUnavailable": "사용 불가",
-      "defaultRequestsLabel": "기타 모든 사용자의 일일 요청 수",
       "requestsPerDay": "요청 / 일",
       "inheritedFrom": "{origin}에서 {state}를 상속받습니다.",
       "effectiveLabel": "목록에 없으면 {state}가 적용됩니다.",
-      "inheritedChip": "상속됨",
       "origin": {
         "model": "현재 설정",
         "family": "해당 패밀리",
@@ -6884,10 +6870,39 @@
       "removeGrant": "{target} 제거",
       "groupsCount": "{count, plural, one {그룹 #개} other {그룹 #개}}",
       "domainsCount": "{count, plural, one {도메인 #개} other {도메인 #개}}",
-      "allowCount": "{count, plural, one {사용자 #명 허용됨} other {사용자 #명 허용됨}}",
-      "denyCount": "{count, plural, one {사용자 #명 차단됨} other {사용자 #명 차단됨}}",
       "collisionChip": "글로벌 기본값에도 포함되어 있습니다.",
-      "collisionWarning": "이 모델 또는 계열이 글로벌 기본값에도 설정되어 있습니다. 둘 중 하나를 해제해야 저장이 가능합니다."
+      "collisionWarning": "이 모델 또는 계열이 글로벌 기본값에도 설정되어 있습니다. 둘 중 하나를 해제해야 저장이 가능합니다.",
+      "grid": {
+        "intro": "각 모델을 누가 사용할 수 있고 하루에 몇 번 요청할 수 있는지 확인합니다. 각 행은 패밀리 또는 모델, 각 열은 대상 사용자입니다. 셀을 선택하여 변경하세요.",
+        "caption": "대상별 모델 접근 권한",
+        "col": {
+          "model": "모델",
+          "reach": "사용 가능"
+        },
+        "familyNote": "패밀리: 일일 예산 공유",
+        "addColumn": "대상 열 추가",
+        "addColumnConfirm": "열 추가",
+        "columnKind": "대상",
+        "addColumnHint": "셀에 설정된 경우 열이 유지됩니다.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "별도의 조건 없음",
+        "grantHint": "상속은 이 행에서 해당 대상에 대한 조건이 없음을 의미합니다. 해당 사용자는 다른 열에 포함되지 않는 한 '기타 모두'에 해당하는 답변을 받습니다.",
+        "grantHintFamily": "상속은 패밀리가 해당 대상에 대해 설정한 조건을 사용합니다.",
+        "inheritedPeople": "{count, plural, one {패밀리 목록에서 #명 추가} other {패밀리 목록에서 #명 추가}}",
+        "reach": {
+          "everyone": "모두",
+          "everyoneBut": "{count, plural, one {#명 제외 모두} other {#명 제외 모두}}",
+          "nobody": "아무도 없음",
+          "people": "{count, plural, one {#명} other {#명}}"
+        },
+        "howTitle": "요청 결정 방식",
+        "how": {
+          "block": "블록 목록에 있으면 어떤 조건이든 사용 불가합니다.",
+          "specific": "그 밖에는, 해당 사용자를 포함하는 가장 구체적인 조건이 적용됩니다. 지정된 사용자, 그룹, 도메인, 그리고 기타 모두 순입니다.",
+          "inherit": "열에 자체 조건이 없는 모델은 해당 패밀리의 조건(점선)을 사용합니다.",
+          "envelope": "요청은 모델 한도, 패밀리의 공유 예산, 챗 전체 예산 모두를 충족해야 합니다."
+        }
+      }
     },
     "previewSourceModelAccess": "모델 승인 — {list}",
     "groupMembershipDegradedStructural": "이 서버에서 그룹 멤버십 조회가 실패하고 있습니다({reason}). 영향을 받은 사람들에게 그룹 기반 규칙과 권한이 적용되지 않습니다. 테넌트의 Group.Read.All 동의와 앱 등록을 확인하세요.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "개요",
-        "person": "한 사람",
         "review": "검토",
-        "reviewCount": "검토 ({count})"
+        "reviewCount": "검토 ({count})",
+        "check": "접근 확인"
       },
       "everyone": "모두",
       "off": "비활성화",
@@ -7015,7 +7030,6 @@
       "policyShown": "정책 표시됨",
       "savedPolicy": "저장됨",
       "withDraft": "변경사항 포함",
-      "lensIntro": "해당 인원의 이메일을 입력하면 부여된 제한, 오늘 사용한 내용, 결정한 규칙을 확인할 수 있습니다.",
       "lensCaption": "{mail}에 대한 제한",
       "layer": {
         "catalog": "내장",
@@ -7052,7 +7066,8 @@
         "ruleReach": "지난주 {people, plural, one {#명} other {#명}}이 여기서 상한을 받았으며, {atCap}명이 도달했습니다.",
         "overNewCap": "지난주 {people, plural, one {#명} other {#명}}이 {cap}를 하루 이상 초과했습니다.",
         "events": "지난주 {people, plural, one {#명} other {#명}}이 {events, plural, one {#회} other {#회}} 상한에 도달했습니다.",
-        "noTargets": "아직 대상이 없으므로, 사람이 추가될 때까지 아무것도 변경되지 않습니다."
+        "noTargets": "아직 대상이 없으므로, 사람이 추가될 때까지 아무것도 변경되지 않습니다.",
+        "peopleGet": "지정된 사람들은 이제 {before} 대신 {after}를 받습니다."
       },
       "flag": {
         "removes-cap": "상한선 제거: 이 사람들에게 제한이 적용되지 않습니다.",
@@ -7076,7 +7091,6 @@
         "model-access": "{subject}의 모델 접근"
       },
       "checkPerson": "이 초안에 대해 누구나 확인",
-      "checkPersonHint": "변경 사항이 적용된 단일 사용자 보기로 이동합니다.",
       "historyNote": "저장하면 변경 이력에 한 버전이 기록됩니다.",
       "histogramLabel": "지난주 가장 바빴던 하루 기준 {people}명; 이전 상한 {before}, 새 상한 {after}",
       "histogramCaption": "지난주에 가장 바빴던 날 기준 사람들. 주황색: 새 제한을 초과한 경우.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {#개 변경사항 저장되지 않음} other {#개 변경사항 저장되지 않음}}",
       "discardConfirm": "저장되지 않은 모든 변경사항을 폐기하시겠습니까?",
       "discardYes": "폐기",
-      "reviewChanges": "변경사항 검토"
+      "reviewChanges": "변경사항 검토",
+      "checkPersonHint": "변경 사항이 적용된 상태에서 접근 확인을 엽니다.",
+      "lens": {
+        "subjectKind": "확인 대상",
+        "kind": {
+          "user": "사용자",
+          "group": "보안 그룹",
+          "domain": "도메인"
+        },
+        "domainLabel": "확인할 이메일 도메인",
+        "groupHint": "이름으로 보안 그룹을 검색하거나, 객체 ID를 붙여넣으세요.",
+        "intro": "사용자, 보안 그룹 또는 도메인을 선택하면 해당 조건과 결정된 규칙을 볼 수 있습니다. 제한을 열어서 예외를 바로 설정할 수 있습니다.",
+        "typicalMember": {
+          "group": "전형적인 구성원: 이 그룹에 속하고 다른 규칙에 해당하지 않는 사용자. 개인 규칙이나 다른 그룹에도 포함된 경우 내용이 달라질 수 있습니다.",
+          "domain": "전형적인 구성원: 이 도메인에 속하고 다른 규칙에 해당하지 않는 사용자. 그룹 또는 개인 규칙에도 해당되는 경우 내용이 달라질 수 있습니다."
+        },
+        "ownRule": "{count, plural, one {#개 예외가} other {#개 예외가}} {subject}에만 설정됨.",
+        "exceptionFor": "{subject}에 대한 예외",
+        "exceptionLabel": "{subject}에 대한 {limit}",
+        "noException": {
+          "user": "예외 없음: 이 사용자는 위 규칙이 적용됩니다.",
+          "group": "예외 없음: 구성원들은 위 규칙이 적용됩니다.",
+          "domain": "예외 없음: 이 도메인 사용자는 위 규칙이 적용됩니다."
+        },
+        "effect": {
+          "applies": "{otherwise} 대신 {value}를 제공합니다.",
+          "same": "예외 없이 {value}와 동일하게 제공합니다.",
+          "held-by-ceiling": "설정해도 영향 없음: 하드 한도가 {value}로 제한합니다.",
+          "outranked": "설정해도 영향 없음: 더 구체적이거나 우선순위가 높은 규칙이 대신 결정합니다 ({value}).",
+          "inert": "적용되지 않음."
+        }
+      }
     }
   },
   "m365": {

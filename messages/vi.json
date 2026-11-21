@@ -6860,30 +6860,16 @@
     "delegationsManagedElsewhere": "Phân quyền được hiển thị ở đây chỉ để xem. Ai thuộc phân quyền nào, người dùng nào được bao phủ và mỗi quản trị viên được phép làm gì sẽ được quản lý trong mục Phân quyền.",
     "delegationsManagedElsewhereLink": "Mở Phân quyền",
     "modelAccess": {
-      "intro": "Quyết định ai có thể sử dụng từng mô hình. Thiết lập của một nhóm áp dụng cho các mô hình của nó trừ khi mô hình có thiết lập riêng; những người có trong danh sách sẽ được ưu tiên hơn mặc định cho những người khác; danh sách chặn có quyền ưu tiên cao nhất.",
       "externalNote": "Các mô hình được lưu trữ bên ngoài môi trường Azure ({families}) sẽ không khả dụng cho bất kỳ ai cho đến khi bạn cấp quyền tại đây — cho tất cả mọi người thông qua mặc định, hoặc cho nhóm, tên miền và cá nhân.",
       "envelopeNote": "Giới hạn yêu cầu trên một nhóm là ngân sách chia sẻ hàng ngày cho các mô hình của nó; giới hạn trên một mô hình là giới hạn trong chính mô hình đó. Không giới hạn trên một mô hình không nâng ngân sách chung của nhóm.",
       "observeNote": "Chế độ quan sát đang bật: các thiết lập ở đây chưa ẩn mô hình hoặc từ chối yêu cầu nào. Hãy chuyển sang Chế độ áp dụng ở trên khi đã cấu hình đúng quy tắc.",
-      "familyChip": "Nhóm",
-      "modelChip": "Mô hình",
       "otherModels": "Mô hình không thuộc nhóm nào",
-      "modelsInFamily": "{count, plural, one {# mô hình trong nhóm này} other {# mô hình trong nhóm này}}",
       "noModels": "Chưa có mô hình nào trong danh mục.",
-      "expand": "Hiển thị mô hình",
-      "collapse": "Ẩn mô hình",
-      "edit": "Chỉnh sửa",
       "doneEditing": "Hoàn thành",
-      "editNode": "Chỉnh sửa quyền truy cập cho {label}",
       "defaultLabel": "Những người khác",
-      "defaultInherit": "Kế thừa",
-      "defaultUnlimited": "Không giới hạn",
-      "defaultLimited": "Giới hạn đến",
-      "defaultUnavailable": "Không khả dụng",
-      "defaultRequestsLabel": "Số yêu cầu mỗi ngày cho những người khác",
       "requestsPerDay": "yêu cầu / ngày",
       "inheritedFrom": "Kế thừa {state} từ {origin}.",
       "effectiveLabel": "Ai không có trên danh sách sẽ nhận: {state}.",
-      "inheritedChip": "kế thừa",
       "origin": {
         "model": "thiết lập này",
         "family": "nhóm của nó",
@@ -6915,10 +6901,39 @@
       "removeGrant": "Xóa {target}",
       "groupsCount": "{count, plural, one {# nhóm} other {# nhóm}}",
       "domainsCount": "{count, plural, one {# tên miền} other {# tên miền}}",
-      "allowCount": "{count, plural, one {# người được phép} other {# người được phép}}",
-      "denyCount": "{count, plural, one {# người bị chặn} other {# người bị chặn}}",
       "collisionChip": "Cũng có trong Thiết lập mặc định toàn cầu",
-      "collisionWarning": "Mô hình hoặc nhóm này cũng được cấu hình trong Thiết lập mặc định toàn cầu. Việc lưu sẽ bị từ chối cho đến khi một trong hai được xóa."
+      "collisionWarning": "Mô hình hoặc nhóm này cũng được cấu hình trong Thiết lập mặc định toàn cầu. Việc lưu sẽ bị từ chối cho đến khi một trong hai được xóa.",
+      "grid": {
+        "intro": "Ai có thể sử dụng từng mô hình và bao nhiêu yêu cầu mỗi ngày. Mỗi dòng là một nhóm hoặc một mô hình; mỗi cột là một nhóm người dùng. Chọn một ô để thay đổi.",
+        "caption": "Quyền truy cập mô hình theo nhóm người dùng",
+        "col": {
+          "model": "Mô hình",
+          "reach": "Có thể sử dụng"
+        },
+        "familyNote": "nhóm: dùng chung ngân sách hàng ngày",
+        "addColumn": "Thêm cột người dùng",
+        "addColumnConfirm": "Thêm cột",
+        "columnKind": "Nhóm người dùng",
+        "addColumnHint": "Cột sẽ được giữ lại khi có ô nào đó được cài đặt.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "không có điều kiện riêng",
+        "grantHint": "Kế thừa nghĩa là không có điều kiện áp dụng cho nhóm này ở dòng này: thành viên sẽ lấy theo câu trả lời của Mọi người khác trừ khi có cột khác dành riêng cho họ.",
+        "grantHintFamily": "Kế thừa sẽ dùng điều kiện mà nhóm thiết lập cho nhóm người dùng này.",
+        "inheritedPeople": "{count, plural, one {# người thêm được lấy} other {# người thêm được lấy}} từ danh sách của nhóm.",
+        "reach": {
+          "everyone": "Mọi người",
+          "everyoneBut": "{count, plural, one {Mọi người trừ # người} other {Mọi người trừ # người}}",
+          "nobody": "Không ai",
+          "people": "{count, plural, one {# người} other {# người}}"
+        },
+        "howTitle": "Cách quyết định một yêu cầu",
+        "how": {
+          "block": "Có trong danh sách chặn? Không khả dụng dù có điều kiện gì khác.",
+          "specific": "Ngược lại, điều kiện cụ thể nhất bao gồm người đó sẽ áp dụng: tên cá nhân, sau đó là nhóm, sau đó là tên miền, cuối cùng là mọi người khác.",
+          "inherit": "Một mô hình không có điều kiện riêng ở cột sẽ dùng điều kiện của nhóm (nét đứt).",
+          "envelope": "Yêu cầu phải nằm trong giới hạn của mô hình, ngân sách chung của nhóm và tổng số trò chuyện, cả ba."
+        }
+      }
     },
     "previewSourceModelAccess": "Phê duyệt mô hình — {list}",
     "groupMembershipDegradedStructural": "Tìm kiếm thành viên nhóm đang gặp lỗi trên máy chủ này ({reason}). Các quy tắc và phân quyền dựa trên nhóm không được áp dụng cho những người bị ảnh hưởng — hãy kiểm tra quyền đồng ý Group.Read.All của tenant và đăng ký ứng dụng.",
@@ -6928,9 +6943,9 @@
     "console": {
       "tab": {
         "overview": "Tổng quan",
-        "person": "Một người",
         "review": "Xem lại",
-        "reviewCount": "Xem lại ({count})"
+        "reviewCount": "Xem lại ({count})",
+        "check": "Kiểm tra quyền truy cập"
       },
       "everyone": "Mọi người",
       "off": "Tắt",
@@ -7046,7 +7061,6 @@
       "policyShown": "Chính sách đang hiển thị",
       "savedPolicy": "Đã lưu",
       "withDraft": "Cùng với thay đổi của bạn",
-      "lensIntro": "Nhập email của ai đó để xem họ nhận được gì, đã sử dụng hôm nay ra sao và quy tắc nào quyết định.",
       "lensCaption": "Giới hạn cho {mail}",
       "layer": {
         "catalog": "Tích hợp sẵn",
@@ -7083,7 +7097,8 @@
         "ruleReach": "Tuần trước có {people, plural, one {# người} other {# người}} chịu giới hạn từ đây; {atCap} chạm giới hạn.",
         "overNewCap": "{people, plural, one {# người} other {# người}} có một ngày vượt {cap} vào tuần trước.",
         "events": "Giới hạn này bị chạm {events, plural, one {# lần} other {# lần}} bởi {people, plural, one {# người} other {# người}} vào tuần trước.",
-        "noTargets": "Hiện chưa áp dụng cho ai nên chưa có thay đổi, cho đến khi có người được thêm."
+        "noTargets": "Hiện chưa áp dụng cho ai nên chưa có thay đổi, cho đến khi có người được thêm.",
+        "peopleGet": "Những người này sẽ nhận {after} thay cho {before}."
       },
       "flag": {
         "removes-cap": "Loại bỏ giới hạn: không áp dụng giới hạn nào cho những người này.",
@@ -7107,7 +7122,6 @@
         "model-access": "Quyền truy cập mô hình cho {subject}"
       },
       "checkPerson": "Kiểm tra bất kỳ ai với bản nháp này",
-      "checkPersonHint": "Mở giao diện xem một người với thay đổi của bạn.",
       "historyNote": "Lưu sẽ ghi một phiên bản vào lịch sử thay đổi.",
       "histogramLabel": "{people} người theo ngày bận nhất tuần trước; giới hạn cũ {before}, giới hạn mới {after}",
       "histogramCaption": "Số người theo ngày bận rộn nhất tuần trước. Màu cam: vượt quá giới hạn mới.",
@@ -7127,7 +7141,38 @@
       "unsavedCount": "{count, plural, one {# thay đổi chưa lưu} other {# thay đổi chưa lưu}}",
       "discardConfirm": "Hủy mọi thay đổi chưa lưu?",
       "discardYes": "Hủy bỏ",
-      "reviewChanges": "Xem lại thay đổi"
+      "reviewChanges": "Xem lại thay đổi",
+      "checkPersonHint": "Mở Kiểm tra quyền truy cập với thay đổi của bạn đã áp dụng.",
+      "lens": {
+        "subjectKind": "Đối tượng cần kiểm tra",
+        "kind": {
+          "user": "Cá nhân",
+          "group": "Nhóm bảo mật",
+          "domain": "Tên miền"
+        },
+        "domainLabel": "Tên miền email cần kiểm tra",
+        "groupHint": "Tìm kiếm nhóm bảo mật theo tên, hoặc dán ID đối tượng của nhóm.",
+        "intro": "Chọn một cá nhân, nhóm bảo mật hoặc tên miền để xem họ nhận được gì và quy tắc nào quyết định. Mở bất kỳ giới hạn nào để đặt ngoại lệ cho họ ngay tại đó.",
+        "typicalMember": {
+          "group": "với tư cách là thành viên điển hình: người thuộc nhóm và không nằm trong bất kỳ quy tắc nào khác. Thành viên cũng nằm trong quy tắc cá nhân hoặc nhóm khác có thể nhận khác.",
+          "domain": "với tư cách là thành viên điển hình: người thuộc tên miền này và không nằm trong quy tắc nào khác. Người cũng thuộc nhóm hoặc có quy tắc cá nhân có thể nhận khác."
+        },
+        "ownRule": "{count, plural, one {# ngoại lệ được} other {# ngoại lệ được}} áp dụng riêng cho {subject}.",
+        "exceptionFor": "Ngoại lệ cho {subject}",
+        "exceptionLabel": "{limit} cho {subject}",
+        "noException": {
+          "user": "Không có ngoại lệ: người này sẽ nhận theo các quy tắc trên.",
+          "group": "Không có ngoại lệ: thành viên sẽ nhận theo các quy tắc trên.",
+          "domain": "Không có ngoại lệ: người thuộc tên miền này sẽ nhận theo các quy tắc trên."
+        },
+        "effect": {
+          "applies": "Áp dụng {value} thay cho {otherwise}.",
+          "same": "Áp dụng {value}, giống như không có ngoại lệ.",
+          "held-by-ceiling": "Không có hiệu lực như đã đặt: giới hạn cứng đang giữ ở {value}.",
+          "outranked": "Không có hiệu lực như đã đặt: một quy tắc cụ thể hoặc ưu tiên cao hơn đang quyết định ({value}).",
+          "inert": "Không có hiệu lực."
+        }
+      }
     }
   },
   "m365": {

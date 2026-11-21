@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "ዲሌጌሽኖች እዚህ መብት ሳይኖራቸው ለማየት ብቻ ናቸው። የዲሌጌሽኑ አባላት፣ የሚሸፍኑ ተጠቃሚዎች፣ እና አድሚን ምን ማድረግ እንደሚችሉ በዲሌጌሽኖች ቦታ ይቆጠባል።",
     "delegationsManagedElsewhereLink": "ዲሌጌሽኖችን ክፈት",
     "modelAccess": {
-      "intro": "እያንዳንዱ ናይል ለመጠቀም የሚችለው ማን እንደሆነ ይወስኑ። የቤተሰቡ ቅንብር ወደ ናይሎቹ ይተገበራል በሚገኙ፣ ሆኖም ናይሉ የራሱን ቅንብር ከቀየረ፣ የሰንዴ ሰዎች በሁሉም ላይ የተወሰኑትን ይመልከታሉ፣ የተገደበ ሰንዴ ግን ሁሉንም ይሻላል።",
       "externalNote": "ከAzure አካባቢ ውጭ የተያዘው ናይል ({families}) ለሁሉም ሰዎች እስከታደረው እዚህ ድረስ አይገኝም — ለሁሉም በነባሪው፣ ወይም ለቡድኖች፣ የኢሜል አድራሻዎች እና ሰዎች።",
       "envelopeNote": "ቤተሰብ ላይ የተወሰነ ሰነድ የበዓሉን በዓል ብዛት በናይሎቹ የሚጋራው ነው፤ በናይል ላይ ያለው ደግሞ የውስጥ ገደብ ነው። በናይል ውስጥ ያለው አልቋም ቤተሰብ ሰነድ አይወጣም።",
       "observeNote": "እየታየ ሁኔታ ይተገበራል፤ እዚህ ላይ ያለው ምንም ናይልን አይያዝም ወይም ጥያቄን አያቋርጥም። የህዝብ ህጎች ትክክለኛ ሲሆኑ ወደ Enforce ቀይር።",
-      "familyChip": "ቤተሰብ",
-      "modelChip": "ናይል",
       "otherModels": "የቤተሰብ ካልተካተቱ ናይሎች",
-      "modelsInFamily": "{count, plural, one {ይህበተሰብ ውስጥ ናይል አንዱ} other {ይህበተሰብ ውስጥ ናይሎች #}}",
       "noModels": "አሁን በካታሎግ ውስጥ ናይሎች የሉም።",
-      "expand": "ናይሎችን አሳይ",
-      "collapse": "ናይሎችን ደብቅ",
-      "edit": "አርትዕ",
       "doneEditing": "ወደ ተጠናቀቀ",
-      "editNode": "የ{label} መዳረሻ አርትዕ",
       "defaultLabel": "ደግሞ ሁሉም",
-      "defaultInherit": "ይወርሳል",
-      "defaultUnlimited": "አልቋም",
-      "defaultLimited": "ወደ",
-      "defaultUnavailable": "የማይገኝ",
-      "defaultRequestsLabel": "ለሁሉም ጥያቄዎች በቀን",
       "requestsPerDay": "ጥያቄዎች / ቀን",
       "inheritedFrom": "ፈላጊው {origin} ከ{state} ይወርሳል።",
       "effectiveLabel": "በሰንዴ ያልተገኙ ሁሉ፡ {state} ይሰማዋል።",
-      "inheritedChip": "የተወሰነ",
       "origin": {
         "model": "ይህ ቅንብር",
         "family": "ቤተሰቡ",
@@ -6884,10 +6870,39 @@
       "removeGrant": "{target} አስወግድ",
       "groupsCount": "{count, plural, one {የተፈቀደ የቡድን ቁጥር #} other {የተፈቀዱ ቡድኖች #}}",
       "domainsCount": "{count, plural, one {የተፈቀደ የደብዳቤ ቁጥር #} other {የተፈቀዱ ደብዳቤዎች #}}",
-      "allowCount": "{count, plural, one {የተፈቀደ ሰው #} other {የተፈቀዱ ሰዎች #}}",
-      "denyCount": "{count, plural, one {የተገደበ ሰው #} other {የተገዱ ሰዎች #}}",
       "collisionChip": "በGlobal defaults ውስጥም አለ",
-      "collisionWarning": "ይህ ሞዴል ወይም ቤተሰብ በGlobal defaults ውስጥም ተሸጠ ነው። አንዱን ከሁለቱ ያጽዱ እስከዚያ ድረስ ማስቀመጥ አይቻልም።"
+      "collisionWarning": "ይህ ሞዴል ወይም ቤተሰብ በGlobal defaults ውስጥም ተሸጠ ነው። አንዱን ከሁለቱ ያጽዱ እስከዚያ ድረስ ማስቀመጥ አይቻልም።",
+      "grid": {
+        "intro": "ማን ከተያያዙት ሞዴሎች ማንኛውን መጠቀም ይችላል፣ እና በቀን ስንት ጥያቄ ማድረግ ይችላል በሚሉ መግለጫዎች ይገለጻል። እያንዳንዱ ረድፍ ቤተሰብ ወይም ሞዴል ነው፣ እያንዳንዱ አምድም ተዋዋዩ ነው። ለመቀየር ሴል ይምረጡ።",
+        "caption": "የሞዴል መድረሻ በተዋዋይ",
+        "col": {
+          "model": "ሞዴል",
+          "reach": "ማግኘት ይችላሉ"
+        },
+        "familyNote": "ቤተሰብ፡ የተጋራ ዕለታዊ በጀት",
+        "addColumn": "የተዋዋይ አምድ ያክሉ",
+        "addColumnConfirm": "አምድ ያክሉ",
+        "columnKind": "ተዋዋይ",
+        "addColumnHint": "አንድ ሴል የተመደበበት ከሆነ አምድ ይቀያል።",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "የራሱ መመዘኛ የለውም",
+        "grantHint": "ርስት ማለት፡ በዚህ ረድፍ ላይ ለዚህ ተዋዋይ የተለየ መመዘኛ የለም፤ አባላት ከተለያዩ አምዶች በተካፋዩ ሌላ ከሆነ የሁሉም የተመረጠውን መልስ ይደርሳቸዋል።",
+        "grantHintFamily": "ርስት ማለት ቤተሰቡ ለዚህ ተዋዋይ ያቆሙትን መመዘኛ እንደሚጠቀም ማለት ነው።",
+        "inheritedPeople": "{count, plural, one {ከቤተሰቡ ዝርዝር ተጨማሪ 1 ሰው ይመጣል} other {ከቤተሰቡ ዝርዝር ተጨማሪ # ሰዎች ይመጣሉ}}",
+        "reach": {
+          "everyone": "ሁሉም",
+          "everyoneBut": "{count, plural, one {ሁሉም ነገር 1 ሰው በቀር} other {ሁሉም ነገር # ሰዎች በቀር}}",
+          "nobody": "ማንም አይደርስበትም",
+          "people": "{count, plural, one {# ሰው} other {# ሰዎች}}"
+        },
+        "howTitle": "አንድ ጥያቄ እንዴት እንደሚወሰን",
+        "how": {
+          "block": "በተከለከው ዝርዝር ላይ አለ? በሌሎች ሁኔታዎች ምንም እንኳ አይገኝም።",
+          "specific": "ያልተለወጠ ከሆነ በጣም የተመረጠው መመዘኛ ለተባለው ሰው፣ ቡድን፣ ዶሜይን ወይም ሁሉም ሰዎች ያመራል።",
+          "inherit": "አንድ ሞዴል በአንድ አምድ ራሱ መመዘኛ ሲያጣ የቤተሰቡን (የታመሰ ምልክት ያለው) ይጠቀማል።",
+          "envelope": "ጥያቄው በሞዴሉ ገደብ፣ ቤተሰቡ የተጋራ በጀት፣ እና የውይይቱ አጠቃላይ ውስጥ መያዝ አለበት።"
+        }
+      }
     },
     "previewSourceModelAccess": "ሞዴል ማጽደቅ — {list}",
     "groupMembershipDegradedStructural": "የቡድን አባልነት በዚህ ሰርቨር ላይ አልተሳካም ({reason})። በቡድን ላይ የተያዘው የመመሪያዎችና የፈቃድ ህጎች ለተጎዳው ሰው አይተገቡም—እባክዎ የተነንቱ የGroup.Read.All ስምምነትንና የአፕ ምዝገባን ያረጋግጡ።",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "አጠቃላይ ጥናት",
-        "person": "አንድ ሰው",
         "review": "ክርክር",
-        "reviewCount": "ክርክር ({count})"
+        "reviewCount": "ክርክር ({count})",
+        "check": "መዳረሻ ይፈትሹ"
       },
       "everyone": "ሁሉም",
       "off": "የተጠፋ",
@@ -7015,7 +7030,6 @@
       "policyShown": "የተባለው ፖሊሲ",
       "savedPolicy": "ተቀመጠ",
       "withDraft": "ከለውጦትዎ ጋር",
-      "lensIntro": "ማንኛውንም ኢሜይል አስገብተ ምን እንደሚሰጥ፣ ዛሬ ምን እንዳገለገለና የተወሰነውን ደንብ ይመልከቱ።",
       "lensCaption": "የ{mail} ገደቦች",
       "layer": {
         "catalog": "የተገባ",
@@ -7052,7 +7066,8 @@
         "ruleReach": "ባለፈው ሳምንት {people, plural, one {# ሰው} other {# ሰዎች}} ከዚህ ጣቢያ ወሰኑ፤ {atCap} ደርሶታል።",
         "overNewCap": "{people, plural, one {# ሰው} other {# ሰዎች}} ባለፈው ሳምንት የ {cap} ውስጥ ቀናት አሉ።",
         "events": "የዚህ ጣቢያ ጥቅም {events, plural, one {# ጊዜ} other {# ጊዜ}} በ {people, plural, one {# ሰው} other {# ሰዎች}} ባለፈው ሳምንት ተደርሷል።",
-        "noTargets": "ማንንም አያስተፋፋም፤ ህጎች ይጨምሩ ድረስ ምንም አይቀይም።"
+        "noTargets": "ማንንም አያስተፋፋም፤ ህጎች ይጨምሩ ድረስ ምንም አይቀይም።",
+        "peopleGet": "የተጠቀመው ሰዎች {before} ፈጽሞ {after} ይያዛሉ።"
       },
       "flag": {
         "removes-cap": "ጣቢያን ያስወጋል፤ ለእነዚህ ሰዎች ግዴታ የለም።",
@@ -7076,7 +7091,6 @@
         "model-access": "ሞዴል ተዳምታ ለ {subject}"
       },
       "checkPerson": "አንዱን ሰው በዚህ ዲስ ውስጥ ይፈትሙ",
-      "checkPersonHint": "የአንዱ ሰው እይታ ከለውጦትዎ ጋር ይከፈታል።",
       "historyNote": "ማስቀመጥ አንድ እትም ወደ የለውጦት ታሪክ ያገባዋል።",
       "histogramLabel": "{people} ሰዎች በባለፈው ሳምንት በጉጉት ቀናቸው፤ የቀድሞ ጣቢያ {before}, አዲስ ጣቢያ {after}",
       "histogramCaption": "ሰዎች በከፍተኛው ቀናቸው ባለፈው ሳምንት። ብጫ፡ ከአዲሱ ገደብ በላይ።",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# ለማስቀመጥ አልተቻለም} other {# ለማስቀመጥ አልተቻሉም}}",
       "discardConfirm": "ሁሉንም ያልተቀመጡ ለውጦች እንደት ይጣሉ?",
       "discardYes": "አስወግድ",
-      "reviewChanges": "ለውጦችን ይመርመሩ"
+      "reviewChanges": "ለውጦችን ይመርመሩ",
+      "checkPersonHint": "ከተደረጉት ለውጦች ጋር መዳረሻ መፈተሻ ይከፈታል።",
+      "lens": {
+        "subjectKind": "ምን እንደሚፈትሽ",
+        "kind": {
+          "user": "ሰው",
+          "group": "የደህንነት ቡድን",
+          "domain": "ዶሜይን"
+        },
+        "domainLabel": "የኢሜይል ዶሜይን ለመፈተሽ",
+        "groupHint": "የደህንነት ቡድን በስም ይፈልጉ፣ ወይም የኦብጀክት መታወቂያ ያስገቡ።",
+        "intro": "ምን እንደሚያገኙ እና የትኛው ደንብ እንዳወሰነው ለማየት ሰው፣ የደህንነት ቡድን ወይም ዶሜይን ይምረጡ። ለእነሱ እስከትእያዩ ማድረግ ትችላላችሁ።",
+        "typicalMember": {
+          "group": "እንደ በፍጥነት አባል፦ እሱ በዚህ ቡድን የሚገኝ እና በሌላ ደንብ የማይሸፈን ሰው። የፍቀድ ወይም በሌሎች ቡድኖች የሚከፈል አባል የተለየ ውጤት ሊሰጠው ይችላል።",
+          "domain": "እንደ በፍጥነት አባል፦ በዚህ ዶሜይን ውስጥ ያለ ወይም በሌላ ደንብ የማይሸፈን ሰው። በቡድን ወይም በግለሰብ ደንብ የሚከፈል ሰው የተለየ ሊያገኝ ይችላል።"
+        },
+        "ownRule": "{count, plural, one {# ልዩ ደንብ ተቀናጅቷል} other {# ልዩ ደንቦች ተቀናጅተዋል}} ለ {subject} ብቻ።",
+        "exceptionFor": "ልዩ ደንብ ለ {subject}",
+        "exceptionLabel": "{limit} ለ {subject}",
+        "noException": {
+          "user": "ልዩ ደንብ የለም፡ ይህ ሰው ላይ ከላይ ባሉት ደንቦች እንደሚሰጠው ይደርሳል።",
+          "group": "ልዩ ደንብ የለም፡ አባላት ከላይ ባሉት ደንቦች እንደሚሰጠው ይያዛሉ።",
+          "domain": "ልዩ ደንብ የለም፡ በዚህ ዶሜይን ያሉ ሰዎች ከላይ ባሉት ደንቦች እንደሚሰጠው ይመችባቸዋል።"
+        },
+        "effect": {
+          "same": "{value} ተሰጥቷል፣ ከልዩ ደንብ ያልተወየየ ነው።",
+          "held-by-ceiling": "የተደናገጠው ምንም ውጤት የለውም፥ ጠንካራ ገደብ በ {value} ያቆያል።",
+          "outranked": "ምንም ውጤት የለውም፥ የበለፀገ ወይም የሚቀይረው ደንብ ({value}) ይመደከታል።",
+          "inert": "አይገጥምም።",
+          "applies": "{otherwise} የተፈጸመ ላይ {value} ይሰጣል።"
+        }
+      }
     }
   },
   "m365": {

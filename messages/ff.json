@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Kondeeji ɗee fii rewteede e jogol. Hol ko wayiitii e konde, hol koondeeji jeytii, e hol ko admin foti gollu, ko e karallaaji Kondeeji.",
     "delegationsManagedElsewhereLink": "Uddit Kondeeji",
     "modelAccess": {
-      "intro": "Teeŋtin men ɓe waɗa model kala. Tiɗɗol rewɓe ɓeen ngal jogi ɗum e modelji ɗe, so wonaa model jiɗi ɗum; ɓeen e lenyol ɗe waɗi ko tiiɗe fii mo kala; ɓeen e lenyol walli ɗiɗɗo dow kala grant.",
       "externalNote": "Modeli ɓe waɗi e ɗe Azure environment ({families}) leɓiima e hoore mum on kadi so a jooɗi grant ɗe ngon – e hoore mum on tawa fow via default, walla ngal ɓernde, domains e rewɓe.",
       "envelopeNote": "Limita request ngam tiɗɗol rewɓe ko hoore budget e jammaji e model mum; limit e model ko hoore mum. Unlimited e model ngal waawani limiti budget tiɗɗol rewɓe.",
       "observeNote": "Observe mode ena on: Hay gooto e nder ɗoo ngarde model walla ndiyam request. Baylo e Enforce e paykun sabu kaɗi ko naatani laawol.",
-      "familyChip": "Tiɗɗol rewɓe",
-      "modelChip": "Model",
       "otherModels": "Modeli wonaani e tiɗɗol rewɓe",
-      "modelsInFamily": "{count, plural, one {# model e tiɗɗol rewɓe ɗen} other {# modeli e tiɗɗol rewɓe ɗen}}",
       "noModels": "Modeli alaa e katalog ngam jooni.",
-      "expand": "Hollu modeli",
-      "collapse": "Sokliti modeli",
-      "edit": "Taƴ",
       "doneEditing": "Songa",
-      "editNode": "Taƴ keftingol e {label}",
       "defaultLabel": "So tawii ndun",
-      "defaultInherit": "Winndito",
-      "defaultUnlimited": "Haynaani limit",
-      "defaultLimited": "Limiti e",
-      "defaultUnavailable": "Leɓaani",
-      "defaultRequestsLabel": "Requests e ñalngu tawa so tawii ndun",
       "requestsPerDay": "requests / ñalngu",
       "inheritedFrom": "Winnditi {state} e {origin}.",
       "effectiveLabel": "Mbaylaa nde fow e lenyol renndani: {state}.",
-      "inheritedChip": "winnditi",
       "origin": {
         "model": "ngal setting",
         "family": "tiɗɗol rewɓe mum",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Momta {target}",
       "groupsCount": "{count, plural, one {# laaɓirɗo} other {# laaɓirɗe}}",
       "domainsCount": "{count, plural, one {# domain} other {# domains}}",
-      "allowCount": "{count, plural, one {# juɗɗo} other {# juɗɗe}}",
-      "denyCount": "{count, plural, one {# juɗɗiayi} other {# juɗɗiayiɓe}}",
       "collisionChip": "E jamɗe Global defaults fow",
-      "collisionWarning": "Model gila walla leydi-ɗe ɗee woni ko e jamɗe Global defaults. Ndaade mbaydi, waawani goɗɗum maa ɗiɗo epa juutde."
+      "collisionWarning": "Model gila walla leydi-ɗe ɗee woni ko e jamɗe Global defaults. Ndaade mbaydi, waawani goɗɗum maa ɗiɗo epa juutde.",
+      "grid": {
+        "intro": "Ko honɗun heɓii njiɗɗo model e goɗɗude raɓɓe e jaŋnga. Kele moƴƴi njiɗɗo family walla model; kele kolumn moƴƴi njiɗɗo audience. Suɓo cell moƴƴi adugol ɓe.",
+        "caption": "Model moƴƴi audience",
+        "col": {
+          "model": "Model",
+          "reach": "Moƴƴi heɓde"
+        },
+        "familyNote": "family: budget lajjo e ɓendu",
+        "addColumn": "Tee kolumn audience",
+        "addColumnConfirm": "Tee kolumn",
+        "columnKind": "Audience",
+        "addColumnHint": "Kolumn moƴƴi jannga saa cell e moƴƴi laawni.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "tartol makko wala",
+        "grantHint": "Inherit min woni tartol makko wala e audience moƴƴi: moƴƴi soɗɗi 'Everyone else' ngo heɓii cell makko, tuma kolumn laaɓii moɓɓe.",
+        "grantHintFamily": "Inherit moƴƴi so tartol family laawni audience moƴƴi.",
+        "inheritedPeople": "{count, plural, one {# janngunde jokkii} other {# janngunde jokkii}} e list family makko.",
+        "reach": {
+          "everyone": "Jokkere ɓe",
+          "everyoneBut": "{count, plural, one {Jokkere ɓe ɗum mo wala # janngunde} other {Jokkere ɓe ɗum mo wala # janngunde}}",
+          "nobody": "Wala",
+          "people": "{count, plural, one {# janngunde} other {# janngunde}}"
+        },
+        "howTitle": "Ko honɗun raɓɓe moƴƴi sosaani",
+        "how": {
+          "block": "E list block? Wala moƴƴi, baali min duuɓi.",
+          "specific": "Tuma baali, grant moƴƴi soɗɗi e moƴƴi laawni tartol: ngoɗɗo soɗɗi, tuma group, tuma domain, jaŋnga 'everyone else'.",
+          "inherit": "Model moƴƴi wala tartol makko e kolumn moƴƴi so tartol family makko.",
+          "envelope": "Raɓɓe moƴƴi waawani e cap model, budget lajjo family e suma chat, tati."
+        }
+      }
     },
     "previewSourceModelAccess": "Cuɓoraa model — {list}",
     "groupMembershipDegradedStructural": "Ñaamugol cine weltaali baɗɗi e server maa ({reason}). Kaawtol e reftaaji gese e hoore mum-enen so wonaa neldaade — yuðu Group.Read.All consent e tenant e app registration.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Njaari",
-        "person": "Jeyɗo",
         "review": "Njaare",
-        "reviewCount": "Njaare ({count})"
+        "reviewCount": "Njaare ({count})",
+        "check": "Ceŋal moƴƴi"
       },
       "everyone": "Fof",
       "off": "Dakka",
@@ -6999,7 +7014,6 @@
       "policyShown": "Policy mo faytii",
       "savedPolicy": "Mo nannditi",
       "withDraft": "E jam mo wayi",
-      "lensIntro": "Suɓ email ñiɓɓe mo faytii e nde, mo jogi e jam, e ko kaɗaare mo yowiti.",
       "lensCaption": "Kaɗaare {mail}",
       "layer": {
         "catalog": "Moƴƴi kala",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Yontere jumaaji {people, plural, one {# ndeftere} other {# ndeftere bene}} ndiyata cap e ɗun; {atCap} ndiyata.",
         "overNewCap": "{people, plural, one {# ndeftere} other {# ndeftere bene}} jooo ko {cap} e yontere jumaaji.",
         "events": "Caps moƴƴi-ɗe tawii e {events, plural, one {# jumaaji} other {# jumaaji}} e {people, plural, one {# ndeftere} other {# ndeftere bene}} e yontere jumaaji.",
-        "noTargets": "Fi neɗɗo bene yet, noondi noon laɓɓani ko neɗɗo warti."
+        "noTargets": "Fi neɗɗo bene yet, noondi noon laɓɓani ko neɗɗo warti.",
+        "peopleGet": "Janngunde soɗɗi heɓii {after} tuma {before}."
       },
       "flag": {
         "removes-cap": "Jooɗi cap: moƴƴi-ɗe ndaara e neɗɗo ɓe.",
@@ -7060,7 +7075,6 @@
         "model-access": "Model access e {subject}"
       },
       "checkPerson": "Njaaji neɗɗo ko banngal moƴƴi-ɗe ɗun",
-      "checkPersonHint": "Wondi e woyde ndeftere e banngal moƴƴi-ɗe.",
       "historyNote": "Junnti jooɗi e jokkondiral junndiral.",
       "histogramLabel": "{people} neɗɗo e jumaaji ɓuri ndiyan; cap cuɓii {before}, cap moƴƴi-ɗe {after}",
       "histogramCaption": "Ndewon e ñande tuumaare moƴƴere lewru jooni. Njaare: leydi mum heɓi cap makko.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {# seerte muuɗaani} other {# seerɗe muuɗaani}}",
       "discardConfirm": "Miɗoo waarii hay seerɗe muuɗaani?",
       "discardYes": "Waari",
-      "reviewChanges": "Windli seerɗe"
+      "reviewChanges": "Windli seerɗe",
+      "checkPersonHint": "Yeɗi 'Ceŋal moƴƴi' e cuɗii noon.",
+      "lens": {
+        "subjectKind": "Ko ko moƴƴi ceŋal",
+        "kind": {
+          "user": "Janngunde",
+          "group": "Group security",
+          "domain": "Domain"
+        },
+        "domainLabel": "Email domain moƴƴi ceŋal",
+        "groupHint": "Njiɗɗo group security e innde, walla paste object ID makko.",
+        "intro": "Suɓo janngunde, group security walla domain moƴƴi wondu moƴƴi heɓi e tartol moƴƴi sosaani. Yeɗi limit moƴƴi tee exception moƴƴi ngo.",
+        "typicalMember": {
+          "group": "e member ngol: janngunde e group, cuɗii tartol laaɓi. Member moƴƴi soɗɗi exception ngoɗɗo walla group feƴɗi heɓii laawol.",
+          "domain": "e member ngol: janngunde e domain, cuɗii tartol laaɓi. Janngunde moƴƴi tuma group walla exception ngoɗɗo heɓii laawol."
+        },
+        "ownRule": "{count, plural, one {# exception e} other {# exceptions e}} tee e {subject} tan.",
+        "exceptionFor": "Exception moƴƴi {subject}",
+        "exceptionLabel": "{limit} moƴƴi {subject}",
+        "noException": {
+          "user": "Wala exception: janngunde ngol heɓii ko tartol moƴƴi laaɓi laawni.",
+          "group": "Wala exception: member heɓii ko tartol moƴƴi laaɓi laawni.",
+          "domain": "Wala exception: janngunde e domain ngol heɓii ko tartol moƴƴi laaɓi laawni."
+        },
+        "effect": {
+          "applies": "Yeɗii {value} tuma {otherwise}.",
+          "same": "Yeɗii {value}, fota ko boɗɗo e wala exception.",
+          "held-by-ceiling": "Ko boɗɗo ngol: ceiling hard ngol hokkii e {value}.",
+          "outranked": "Ko boɗɗo ngol: tartol moƴƴi soɗɗii walla priority dow moƴƴi sosaani ({value}).",
+          "inert": "Wala yeroya."
+        }
+      }
     }
   },
   "m365": {

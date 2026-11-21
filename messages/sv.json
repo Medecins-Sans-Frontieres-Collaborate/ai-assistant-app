@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "Delegationer visas här som endast läsbara. Vilka som ingår i en delegation, vilka användare som omfattas och vad varje administratör får göra hanteras i Delegations-området.",
     "delegationsManagedElsewhereLink": "Öppna Delegationer",
     "modelAccess": {
-      "intro": "Bestäm vem som får använda varje modell. En familjs inställning gäller för dess modeller om inte en modell har en egen; personer på en lista gäller över standardinställningen för andra; blocklistan prioriteras över alla tilldelningar.",
       "externalNote": "Modeller som ligger utanför Azure-miljön ({families}) är inte tillgängliga för någon förrän du beviljar åtkomst här — för alla via standardinställningen, eller för grupper, domäner och personer.",
       "envelopeNote": "En begäransgräns på en familj är en gemensam dagsbudget för dess modeller; en gräns på en modell är ett tak inom den. Obegränsat på en modell höjer inte familjens budget.",
       "observeNote": "Observera-läge är på: ingenting här döljer en modell eller stoppar en begäran ännu. Byt till Verkställ ovan när reglerna är korrekta.",
-      "familyChip": "Familj",
-      "modelChip": "Modell",
       "otherModels": "Modeller utan familj",
-      "modelsInFamily": "{count, plural, one {# modell i denna familj} other {# modeller i denna familj}}",
       "noModels": "Inga modeller i katalogen ännu.",
-      "expand": "Visa modeller",
-      "collapse": "Dölj modeller",
-      "edit": "Redigera",
       "doneEditing": "Klar",
-      "editNode": "Redigera åtkomst för {label}",
       "defaultLabel": "Alla andra",
-      "defaultInherit": "Ärv",
-      "defaultUnlimited": "Obegränsad",
-      "defaultLimited": "Begränsad till",
-      "defaultUnavailable": "Otillgänglig",
-      "defaultRequestsLabel": "Förfrågningar per dag för alla andra",
       "requestsPerDay": "förfrågningar / dag",
       "inheritedFrom": "Ärver {state} från {origin}.",
       "effectiveLabel": "Alla som inte är på en lista får: {state}.",
-      "inheritedChip": "ärvd",
       "origin": {
         "model": "denna inställning",
         "family": "dess familj",
@@ -6884,10 +6870,39 @@
       "removeGrant": "Ta bort {target}",
       "groupsCount": "{count, plural, one {# grupp} other {# grupper}}",
       "domainsCount": "{count, plural, one {# domän} other {# domäner}}",
-      "allowCount": "{count, plural, one {# person tillåten} other {# personer tillåtna}}",
-      "denyCount": "{count, plural, one {# person blockerad} other {# personer blockerade}}",
       "collisionChip": "Finns även i globala standardinställningar",
-      "collisionWarning": "Den här modellen eller familjen är också konfigurerad under globala standardinställningar. Spara kommer att nekas tills en av de två tas bort."
+      "collisionWarning": "Den här modellen eller familjen är också konfigurerad under globala standardinställningar. Spara kommer att nekas tills en av de två tas bort.",
+      "grid": {
+        "intro": "Vem som kan använda varje modell och hur många förfrågningar per dag. Varje rad är en familj eller modell; varje kolumn är en målgrupp. Välj en cell för att ändra den.",
+        "caption": "Modellåtkomst per målgrupp",
+        "col": {
+          "model": "Modell",
+          "reach": "Kan använda"
+        },
+        "familyNote": "familj: delad daglig budget",
+        "addColumn": "Lägg till målgruppskolumn",
+        "addColumnConfirm": "Lägg till kolumn",
+        "columnKind": "Målgrupp",
+        "addColumnHint": "Kolumnen stannar kvar när en cell i den har angetts.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "inga egna villkor",
+        "grantHint": "Ärva innebär inga särskilda villkor för denna målgrupp på denna rad: dess medlemmar får svaret för Alla andra, om ingen annan kolumn täcker dem.",
+        "grantHintFamily": "Ärv använder de villkor som familjen anger för denna målgrupp.",
+        "inheritedPeople": "{count, plural, one {# person till kommer} other {# personer till kommer}} från familjens lista.",
+        "reach": {
+          "everyone": "Alla",
+          "everyoneBut": "{count, plural, one {Alla utom # person} other {Alla utom # personer}}",
+          "nobody": "Ingen",
+          "people": "{count, plural, one {# person} other {# personer}}"
+        },
+        "howTitle": "Hur en förfrågan avgörs",
+        "how": {
+          "block": "På blocklistan? Ej tillgänglig, oavsett övriga villkor.",
+          "specific": "Annars avgör det mest specifika tillståndet som omfattar personen villkoren: en namngiven person, sedan en grupp, sedan en domän och sist alla andra.",
+          "inherit": "En modell utan egna villkor i en kolumn använder sin familjs (streckad).",
+          "envelope": "Förfrågan måste rymmas inom modellens gräns, familjens delade budget och chatgränsen — alla tre."
+        }
+      }
     },
     "previewSourceModelAccess": "Modelgodkännande — {list}",
     "groupMembershipDegradedStructural": "Gruppmedlemskap kan inte slås upp på den här servern ({reason}). Gruppbaserade regler och behörigheter tillämpas inte för de berörda personerna – kontrollera tenantens Group.Read.All-samtycke och appregistreringen.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "Översikt",
-        "person": "En person",
         "review": "Granska",
-        "reviewCount": "Granska ({count})"
+        "reviewCount": "Granska ({count})",
+        "check": "Kontrollera åtkomst"
       },
       "everyone": "Alla",
       "off": "Av",
@@ -7015,7 +7030,6 @@
       "policyShown": "Visad policy",
       "savedPolicy": "Sparad",
       "withDraft": "Med dina ändringar",
-      "lensIntro": "Ange en e-postadress för att se vad personen får, vad den använt idag och vilken regel som bestämde det.",
       "lensCaption": "Gränser för {mail}",
       "layer": {
         "catalog": "Inbyggd",
@@ -7052,7 +7066,8 @@
         "ruleReach": "Förra veckan hade {people, plural, one {# person} other {# personer}} sitt tak härifrån; {atCap} nådde det.",
         "overNewCap": "{people, plural, one {# person} other {# personer}} hade en dag över {cap} förra veckan.",
         "events": "Gränser nåddes {events, plural, one {# gång} other {# gånger}} av {people, plural, one {# person} other {# personer}} förra veckan.",
-        "noTargets": "Omfattar ingen ännu, så inget ändras tills personer läggs till."
+        "noTargets": "Omfattar ingen ännu, så inget ändras tills personer läggs till.",
+        "peopleGet": "De namngivna får {after} istället för {before}."
       },
       "flag": {
         "removes-cap": "Tar bort taket: ingen gräns gäller för dessa personer.",
@@ -7076,7 +7091,6 @@
         "model-access": "Modellåtkomst för {subject}"
       },
       "checkPerson": "Kontrollera vem som helst mot detta utkast",
-      "checkPersonHint": "Öppnar vy för en person med dina ändringar tillämpade.",
       "historyNote": "Vid sparande skrivs en version till ändringshistoriken.",
       "histogramLabel": "{people} personer efter sin mest aktiva dag förra veckan; gammalt tak {before}, nytt tak {after}",
       "histogramCaption": "Personer efter sin mest aktiva dag förra veckan. Orange: över det nya taket.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# ändring ej sparad} other {# ändringar ej sparade}}",
       "discardConfirm": "Kassera alla osparade ändringar?",
       "discardYes": "Kassera",
-      "reviewChanges": "Granska ändringar"
+      "reviewChanges": "Granska ändringar",
+      "checkPersonHint": "Öppnar Kontrollera åtkomst med dina ändringar tillämpade.",
+      "lens": {
+        "subjectKind": "Vad ska kontrolleras",
+        "kind": {
+          "user": "Person",
+          "group": "Säkerhetsgrupp",
+          "domain": "Domän"
+        },
+        "domainLabel": "E-postdomän att kontrollera",
+        "groupHint": "Sök upp en säkerhetsgrupp med namn eller klistra in dess objekt-ID.",
+        "intro": "Välj en person, säkerhetsgrupp eller domän för att se vad de får och vilken regel som avgjorde det. Öppna en gräns för att ställa in ett undantag direkt.",
+        "typicalMember": {
+          "group": "som en typisk medlem: någon i denna grupp som inte matchas av någon annan regel. En medlem som också omfattas av en personlig regel eller annan grupp kan få något annat.",
+          "domain": "som en typisk medlem: någon i denna domän som inte matchas av någon annan regel. Någon som också omfattas av en grupp- eller personlig regel kan få något annat."
+        },
+        "ownRule": "{count, plural, one {# undantag är} other {# undantag är}} inställda för endast {subject}.",
+        "exceptionFor": "Undantag för {subject}",
+        "exceptionLabel": "{limit} för {subject}",
+        "noException": {
+          "user": "Inget undantag: denna person får vad reglerna ovan ger.",
+          "group": "Inget undantag: medlemmar får vad reglerna ovan ger.",
+          "domain": "Inget undantag: personer på denna domän får vad reglerna ovan ger."
+        },
+        "effect": {
+          "applies": "Ger {value} istället för {otherwise}.",
+          "same": "Ger {value}, samma som utan undantaget.",
+          "held-by-ceiling": "Ingen effekt: ett tak håller den på {value}.",
+          "outranked": "Ingen effekt: en mer specifik eller prioriterad regel gäller istället ({value}).",
+          "inert": "Gäller inte."
+        }
+      }
     }
   },
   "m365": {

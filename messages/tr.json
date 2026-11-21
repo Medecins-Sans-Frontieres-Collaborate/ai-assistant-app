@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "Delegasyonlar burada yalnızca okunabilir olarak görüntülenir. Bir delegasyondaki kişiler, kapsadığı kullanıcılar ve her yöneticinin yetkileri Delegasyonlar alanında yönetilir.",
     "delegationsManagedElsewhereLink": "Delegasyonları Aç",
     "modelAccess": {
-      "intro": "Her bir modeli kimin kullanabileceğine karar verin. Bir ailenin ayarı, model kendi ayarını belirlemediği sürece o ailenin modelleri için geçerlidir; bir listedeki kişiler, diğer herkes için varsayılanı geçersiz kılar; engelleme listesi ise tüm izinlerin üzerindedir.",
       "externalNote": "Azure ortamı dışında barındırılan modeller ({families}), burada izin vermediğiniz sürece herkes için kullanılamaz — isteğe bağlı olarak tüm kullanıcılar (varsayılan), ya da gruplar, alan adları ve kişiler için.",
       "envelopeNote": "Bir ailedeki istek limiti, o ailenin modelleri arasında paylaşılan günlük bir bütçedir; bir modeldeki limit ise model için bir üst sınırdır. Bir modelde 'Sınırsız' seçmek, aile bütçesini aşmaz.",
       "observeNote": "Gözlem modu açık: Buradaki hiçbir ayar şu anda bir modeli gizlemez veya isteği engellemez. Kurallar doğru olduğunda yukarıdan Zorla seçeneğine geçin.",
-      "familyChip": "Aile",
-      "modelChip": "Model",
       "otherModels": "Ailesi olmayan modeller",
-      "modelsInFamily": "{count, plural, one {Bu ailede # model var} other {Bu ailede # model var}}",
       "noModels": "Katalogda henüz model yok.",
-      "expand": "Modelleri göster",
-      "collapse": "Modelleri gizle",
-      "edit": "Düzenle",
       "doneEditing": "Bitti",
-      "editNode": "{label} için erişimi düzenle",
       "defaultLabel": "Diğer herkes",
-      "defaultInherit": "Devral",
-      "defaultUnlimited": "Sınırsız",
-      "defaultLimited": "Şu kadar ile sınırla",
-      "defaultUnavailable": "Kullanılamaz",
-      "defaultRequestsLabel": "Diğer herkes için günlük istek",
       "requestsPerDay": "istek / gün",
       "inheritedFrom": "{origin} kaynağından {state} devralıyor.",
       "effectiveLabel": "Listede olmayan herkes: {state}.",
-      "inheritedChip": "devralınan",
       "origin": {
         "model": "bu ayar",
         "family": "aile ayarı",
@@ -6884,10 +6870,39 @@
       "removeGrant": "{target}'ı kaldır",
       "groupsCount": "{count, plural, one {# grup} other {# grup}}",
       "domainsCount": "{count, plural, one {# alan adı} other {# alan adı}}",
-      "allowCount": "{count, plural, one {# kişi izinli} other {# kişi izinli}}",
-      "denyCount": "{count, plural, one {# kişi engellendi} other {# kişi engellendi}}",
       "collisionChip": "Global varsayılanlarda da mevcut",
-      "collisionWarning": "Bu model veya ailesi ayrıca Global varsayılanlarda yapılandırılmıştır. Kaydetme işlemi, ikisinden biri temizlenene kadar reddedilecektir."
+      "collisionWarning": "Bu model veya ailesi ayrıca Global varsayılanlarda yapılandırılmıştır. Kaydetme işlemi, ikisinden biri temizlenene kadar reddedilecektir.",
+      "grid": {
+        "intro": "Her modelin kimler tarafından kullanılabileceği ve günlük kaç istek yapılabileceği. Her satır bir aile ya da modeldir; her sütun bir hedef kitleyi gösterir. Değiştirmek için bir hücre seçin.",
+        "caption": "Hedef kitleye göre model erişimi",
+        "col": {
+          "model": "Model",
+          "reach": "Kullanabilir"
+        },
+        "familyNote": "aile: paylaşılan günlük bütçe",
+        "addColumn": "Hedef kitle sütunu ekle",
+        "addColumnConfirm": "Sütun ekle",
+        "columnKind": "Hedef kitle",
+        "addColumnHint": "Bir hücresinde değer ayarlanırsa sütun kalır.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "kendi koşulları yok",
+        "grantHint": "Devralma, bu satırdaki bu hedef kitle için özel koşul olmadığı anlamına gelir: Üyeleri için başka bir sütun tarafından kapsanmadığı sürece 'Diğerleri' cevabı geçerli olur.",
+        "grantHintFamily": "Devralma, bu hedef kitle için ailenin belirlediği koşulları kullanır.",
+        "inheritedPeople": "{count, plural, one {Ailenin listesinden # kişi daha gelir} other {Ailenin listesinden # kişi daha gelir}}.",
+        "reach": {
+          "everyone": "Herkes",
+          "everyoneBut": "{count, plural, one {# kişi hariç herkes} other {# kişi hariç herkes}}",
+          "nobody": "Hiç kimse",
+          "people": "{count, plural, one {# kişi} other {# kişi}}"
+        },
+        "howTitle": "Bir isteğe nasıl karar verilir",
+        "how": {
+          "block": "Engelli listesinde mi? O zaman başka koşullar ne olursa olsun kullanılamaz.",
+          "specific": "Aksi takdirde, kişiyi kapsayan en özel yetki onların koşullarını belirler: önce ismiyle atanmış kişi, ardından grup, ardından domain ve son olarak diğer herkes.",
+          "inherit": "Bir sütunda kendi koşulları olmayan model, ailesinin (kesikli çizgili) koşullarını kullanır.",
+          "envelope": "İstek, modelin kotasına, ailenin paylaşılan bütçesine ve sohbet toplamına uymalı, üçü de geçerli olur."
+        }
+      }
     },
     "previewSourceModelAccess": "Model onayı — {list}",
     "groupMembershipDegradedStructural": "Grup üyeliği sorgulamaları bu sunucuda başarısız oluyor ({reason}). Grup tabanlı kurallar ve yetkiler, etkilenen kişiler için uygulanamıyor — tenant'ın Group.Read.All onayını ve uygulama kaydını kontrol edin.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "Genel Bakış",
-        "person": "Bir kişi",
         "review": "İnceleme",
-        "reviewCount": "İnceleme ({count})"
+        "reviewCount": "İnceleme ({count})",
+        "check": "Erişimi kontrol et"
       },
       "everyone": "Herkes",
       "off": "Kapalı",
@@ -7015,7 +7030,6 @@
       "policyShown": "Görüntülenen politika",
       "savedPolicy": "Kaydedildi",
       "withDraft": "Değişikliklerinizle",
-      "lensIntro": "Birinin e-posta adresini girerek neye sahip olduğunu, bugün ne kullandığını ve hangi kuralın belirlediğini görebilirsiniz.",
       "lensCaption": "{mail} için sınırlar",
       "layer": {
         "catalog": "Yerleşik",
@@ -7052,7 +7066,8 @@
         "ruleReach": "Geçen hafta {people, plural, one {# kişi} other {# kişi}} üst sınırını buradan aldı; {atCap} buna ulaştı.",
         "overNewCap": "Geçen hafta {people, plural, one {# kişi} other {# kişi}} bir gün {cap} üzerinde harcadı.",
         "events": "Geçen hafta {people, plural, one {# kişi} other {# kişi}} tarafından bu sınırdaki üst sınır {events, plural, one {# kez} other {# kez}} aşıldı.",
-        "noTargets": "Henüz kimseyi kapsamıyor, bu nedenle kişiler eklenene kadar bir değişiklik olmaz."
+        "noTargets": "Henüz kimseyi kapsamıyor, bu nedenle kişiler eklenene kadar bir değişiklik olmaz.",
+        "peopleGet": "Adı geçen kişiler {before} yerine {after} alır."
       },
       "flag": {
         "removes-cap": "Sınırı kaldırır: bu kişiler için bir üst sınır uygulanmaz.",
@@ -7076,7 +7091,6 @@
         "model-access": "{subject} için model erişimi"
       },
       "checkPerson": "Herhangi bir kişiyi bu taslağa göre kontrol et",
-      "checkPersonHint": "Yaptığınız değişikliklerle tek kişi görünümünü açar.",
       "historyNote": "Kaydetmek, değişiklik geçmişine bir sürüm yazar.",
       "histogramLabel": "Geçen hafta en yoğun günü itibarıyla {people} kişi; eski sınır {before}, yeni sınır {after}",
       "histogramCaption": "Geçen hafta en yoğun günlerine göre kişiler. Turuncu: yeni sınırın üzerinde.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# değişiklik kaydedilmedi} other {# değişiklik kaydedilmedi}}",
       "discardConfirm": "Kaydedilmemiş tüm değişiklikler silinsin mi?",
       "discardYes": "Sil",
-      "reviewChanges": "Değişiklikleri gözden geçir"
+      "reviewChanges": "Değişiklikleri gözden geçir",
+      "checkPersonHint": "Yaptığınız değişikliklerle Erişimi kontrol et ekranını açar.",
+      "lens": {
+        "subjectKind": "Neyi kontrol edeceksiniz",
+        "kind": {
+          "user": "Kişi",
+          "group": "Güvenlik grubu",
+          "domain": "Domain"
+        },
+        "domainLabel": "Kontrol edilecek e-posta domaini",
+        "groupHint": "Grup ismiyle arayın ya da nesne kimliğini yapıştırın.",
+        "intro": "Bir kişi, güvenlik grubu veya domain seçerek onlara ne verildiğini ve hangi kuralın bunu belirlediğini görebilirsiniz. Her sınırlama üzerinde hemen istisna ayarlayabilirsiniz.",
+        "typicalMember": {
+          "group": "tipik üye olarak: Yalnızca bu gruba dahil olup başka bir kuralla eşleşmeyen kişi. Kişisel veya başka bir grup kuralı ile de kapsanırsa farklı bir sonuç alabilir.",
+          "domain": "tipik üye olarak: Yalnızca bu domaine ait olup başka bir kuralla eşleşmeyen kişi. Bir grup veya kişisel kural ile de kapsanırsa farklı bir sonuç alabilir."
+        },
+        "ownRule": "{count, plural, one {Sadece {subject} için # istisna ayarlandı.} other {Sadece {subject} için # istisna ayarlandı.}}",
+        "exceptionFor": "{subject} için istisna",
+        "exceptionLabel": "{subject} için {limit}",
+        "noException": {
+          "user": "İstisna yok: Bu kişi yukarıdaki kurallar ne verirse onu alır.",
+          "group": "İstisna yok: Üyeler yukarıdaki kurallar ne verirse onu alır.",
+          "domain": "İstisna yok: Bu domaindeki kişiler yukarıdaki kurallar ne verirse onu alır."
+        },
+        "effect": {
+          "applies": "{otherwise} yerine {value} verir.",
+          "same": "{value} verir; istisna olmadan da aynı olurdu.",
+          "held-by-ceiling": "Belirlenen etkisi yok: üst sınır {value} ile sınırlıyor.",
+          "outranked": "Belirlenen etkisi yok: daha özel veya öncelikli bir kural ({value}) karar verir.",
+          "inert": "Etkin değil."
+        }
+      }
     }
   },
   "m365": {

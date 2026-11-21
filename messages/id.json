@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "Delegasi hanya dapat dilihat di sini (read-only). Siapa saja anggota delegasi, cakupan penggunanya, dan hak setiap admin dikelola di area Delegasi.",
     "delegationsManagedElsewhereLink": "Buka Delegasi",
     "modelAccess": {
-      "intro": "Tentukan siapa saja yang dapat menggunakan setiap model. Pengaturan untuk sebuah keluarga berlaku pada model-model di dalamnya, kecuali jika model memiliki pengaturan sendiri; orang pada daftar tertentu mengesampingkan pengaturan default untuk yang lain; daftar blokir mengesampingkan semua pemberian akses.",
       "externalNote": "Model yang di-host di luar lingkungan Azure ({families}) tidak tersedia untuk siapa pun sampai Anda memberikan akses di sini — untuk semua melalui default, atau untuk grup, domain, dan individu.",
       "envelopeNote": "Batas permintaan pada sebuah keluarga adalah anggaran harian bersama untuk seluruh modelnya; batas pada model adalah batas khusus pada model itu. Jika model tidak memiliki batas, itu tidak menghapus batas anggaran keluarga.",
       "observeNote": "Mode Observasi aktif: tidak ada yang tersembunyi atau menghentikan permintaan untuk model. Aktifkan Penegakan di atas setelah aturan sudah benar.",
-      "familyChip": "Keluarga",
-      "modelChip": "Model",
       "otherModels": "Model tanpa keluarga",
-      "modelsInFamily": "{count, plural, one {# model dalam keluarga ini} other {# model dalam keluarga ini}}",
       "noModels": "Belum ada model di katalog.",
-      "expand": "Tampilkan model",
-      "collapse": "Sembunyikan model",
-      "edit": "Edit",
       "doneEditing": "Selesai",
-      "editNode": "Edit akses untuk {label}",
       "defaultLabel": "Semua yang lain",
-      "defaultInherit": "Turun-temurun",
-      "defaultUnlimited": "Tanpa batas",
-      "defaultLimited": "Dibatasi hingga",
-      "defaultUnavailable": "Tidak tersedia",
-      "defaultRequestsLabel": "Permintaan per hari untuk semua yang lain",
       "requestsPerDay": "permintaan / hari",
       "inheritedFrom": "Mewarisi {state} dari {origin}.",
       "effectiveLabel": "Semua yang tidak masuk daftar mendapatkan: {state}.",
-      "inheritedChip": "turunan",
       "origin": {
         "model": "pengaturan ini",
         "family": "keluarganya",
@@ -6884,10 +6870,39 @@
       "removeGrant": "Hapus {target}",
       "groupsCount": "{count, plural, one {# grup} other {# grup}}",
       "domainsCount": "{count, plural, one {# domain} other {# domain}}",
-      "allowCount": "{count, plural, one {# orang diizinkan} other {# orang diizinkan}}",
-      "denyCount": "{count, plural, one {# orang diblokir} other {# orang diblokir}}",
       "collisionChip": "Juga terdapat pada pengaturan Global",
-      "collisionWarning": "Model atau keluarga ini juga dikonfigurasi dalam pengaturan Global. Penyimpanan akan ditolak sampai salah satu dari dua pengaturan dihapus."
+      "collisionWarning": "Model atau keluarga ini juga dikonfigurasi dalam pengaturan Global. Penyimpanan akan ditolak sampai salah satu dari dua pengaturan dihapus.",
+      "grid": {
+        "intro": "Siapa yang dapat menggunakan setiap model, dan berapa banyak permintaan per hari. Setiap baris adalah keluarga atau model; setiap kolom adalah audiens. Pilih sel untuk mengubahnya.",
+        "caption": "Akses model berdasarkan audiens",
+        "col": {
+          "model": "Model",
+          "reach": "Dapat digunakan"
+        },
+        "familyNote": "keluarga: anggaran harian bersama",
+        "addColumn": "Tambahkan kolom audiens",
+        "addColumnConfirm": "Tambah kolom",
+        "columnKind": "Audiens",
+        "addColumnHint": "Kolom akan tetap ada setelah salah satu sel di dalamnya diatur.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "tidak ada ketentuan sendiri",
+        "grantHint": "Mewarisi berarti tidak ada ketentuan untuk audiens ini di baris ini: anggotanya akan mendapatkan jawaban Untuk semua orang kecuali jika kolom lain mencakup mereka.",
+        "grantHintFamily": "Mewarisi menggunakan ketentuan yang ditetapkan keluarga untuk audiens ini.",
+        "inheritedPeople": "{count, plural, one {# orang tambahan datang} other {# orang tambahan datang}} dari daftar keluarga.",
+        "reach": {
+          "everyone": "Semua orang",
+          "everyoneBut": "{count, plural, one {Semua orang kecuali # orang} other {Semua orang kecuali # orang}}",
+          "nobody": "Tidak ada",
+          "people": "{count, plural, one {# orang} other {# orang}}"
+        },
+        "howTitle": "Cara satu permintaan diputuskan",
+        "how": {
+          "block": "Ada di daftar blokir? Tidak tersedia, apapun aturan lainnya.",
+          "specific": "Jika tidak, ketentuan paling spesifik yang mencakup orang tersebut akan menetapkan ketentuannya: orang yang disebut, lalu grup, lalu domain, lalu semua orang lainnya.",
+          "inherit": "Model tanpa ketentuan sendiri di kolom menggunakan ketentuan keluarga (bergaris putus-putus).",
+          "envelope": "Permintaan harus sesuai dengan batas model, anggaran bersama keluarga, dan total chat, ketiganya."
+        }
+      }
     },
     "previewSourceModelAccess": "Persetujuan model — {list}",
     "groupMembershipDegradedStructural": "Pencarian keanggotaan grup gagal di server ini ({reason}). Aturan dan izin berbasis grup tidak diterapkan untuk orang yang terdampak — periksa persetujuan Group.Read.All tenant dan registrasi aplikasi.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "Ringkasan",
-        "person": "Satu orang",
         "review": "Tinjau",
-        "reviewCount": "Tinjau ({count})"
+        "reviewCount": "Tinjau ({count})",
+        "check": "Cek akses"
       },
       "everyone": "Semua orang",
       "off": "Mati",
@@ -7015,7 +7030,6 @@
       "policyShown": "Kebijakan yang ditampilkan",
       "savedPolicy": "Disimpan",
       "withDraft": "Dengan perubahan Anda",
-      "lensIntro": "Masukkan email seseorang untuk melihat apa yang mereka dapatkan, apa yang telah digunakan hari ini, dan aturan mana yang menentukan.",
       "lensCaption": "Batas untuk {mail}",
       "layer": {
         "catalog": "Bawaan",
@@ -7052,7 +7066,8 @@
         "ruleReach": "Minggu lalu {people, plural, one {# orang} other {# orang}} mendapat batas dari sini; {atCap} mencapai itu.",
         "overNewCap": "{people, plural, one {# orang} other {# orang}} memiliki hari di atas {cap} minggu lalu.",
         "events": "Batas pada limit ini tercapai {events, plural, one {# kali} other {# kali}} oleh {people, plural, one {# orang} other {# orang}} minggu lalu.",
-        "noTargets": "Belum mencakup siapa pun, sehingga tidak berubah apa pun hingga orang ditambahkan."
+        "noTargets": "Belum mencakup siapa pun, sehingga tidak berubah apa pun hingga orang ditambahkan.",
+        "peopleGet": "Orang yang disebut akan mendapatkan {after} daripada {before}."
       },
       "flag": {
         "removes-cap": "Menghapus batas: tidak ada limit yang berlaku untuk orang-orang ini.",
@@ -7076,7 +7091,6 @@
         "model-access": "Akses model untuk {subject}"
       },
       "checkPerson": "Periksa siapa saja terhadap draft ini",
-      "checkPersonHint": "Membuka tampilan satu orang dengan perubahan Anda diterapkan.",
       "historyNote": "Menyimpan akan menulis satu versi ke riwayat perubahan.",
       "histogramLabel": "{people} orang berdasarkan hari tersibuk mereka minggu lalu; batas lama {before}, batas baru {after}",
       "histogramCaption": "Orang berdasarkan hari tersibuk mereka minggu lalu. Orange: melebihi batas baru.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# perubahan belum disimpan} other {# perubahan belum disimpan}}",
       "discardConfirm": "Buang semua perubahan yang belum disimpan?",
       "discardYes": "Buang",
-      "reviewChanges": "Tinjau perubahan"
+      "reviewChanges": "Tinjau perubahan",
+      "checkPersonHint": "Membuka Cek akses dengan perubahan Anda diterapkan.",
+      "lens": {
+        "subjectKind": "Apa yang ingin dicek",
+        "kind": {
+          "user": "Orang",
+          "group": "Grup keamanan",
+          "domain": "Domain"
+        },
+        "domainLabel": "Domain email untuk dicek",
+        "groupHint": "Cari grup keamanan berdasarkan nama, atau tempelkan ID objeknya.",
+        "intro": "Pilih orang, grup keamanan, atau domain untuk melihat apa yang mereka dapatkan dan aturan mana yang menentukan. Buka batas apa pun untuk menetapkan pengecualian langsung untuk mereka di sini.",
+        "typicalMember": {
+          "group": "sebagai anggota biasa: seseorang di grup ini dan tidak dicakup oleh aturan lain. Anggota yang juga dicakup oleh aturan pribadi atau grup lain mungkin mendapatkan sesuatu yang berbeda.",
+          "domain": "sebagai anggota biasa: seseorang di domain ini dan tidak dicakup oleh aturan lain. Seseorang yang juga dicakup oleh grup atau aturan pribadi mungkin mendapatkan sesuatu yang berbeda."
+        },
+        "ownRule": "{count, plural, one {# pengecualian ditetapkan} other {# pengecualian ditetapkan}} hanya untuk {subject}.",
+        "exceptionFor": "Pengecualian untuk {subject}",
+        "exceptionLabel": "{limit} untuk {subject}",
+        "noException": {
+          "user": "Tidak ada pengecualian: orang ini menerima apa pun yang diberikan oleh aturan di atas.",
+          "group": "Tidak ada pengecualian: anggota menerima apa pun yang diberikan oleh aturan di atas.",
+          "domain": "Tidak ada pengecualian: orang di domain ini menerima apa pun yang diberikan oleh aturan di atas."
+        },
+        "effect": {
+          "applies": "Memberikan {value} daripada {otherwise}.",
+          "same": "Memberikan {value}, sama seperti tanpa pengecualian.",
+          "held-by-ceiling": "Tidak berpengaruh sesuai pengaturan: batas maksimum menahan pada {value}.",
+          "outranked": "Tidak berpengaruh sesuai pengaturan: aturan yang lebih spesifik atau prioritas lebih tinggi menentukan ({value}).",
+          "inert": "Tidak berlaku."
+        }
+      }
     }
   },
   "m365": {

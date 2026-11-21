@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Wakilai an nuna su a nan don karantawa kawai. Wanene ke cikin wakilai, wa suke wakilta, da abin da kowanne admin zai iya yi ana sarrafa su a sashen Wakilai.",
     "delegationsManagedElsewhereLink": "Buɗe Wakilai",
     "modelAccess": {
-      "intro": "Kayyade wa zai iya amfani da kowanne misali. Saitin dangin zai shafi misalansa sai dai idan an kafa na musamman; mutanen da ke jerin suna kan gaba akan sauran; jerin toshewa ya fi kowanne izini.",
       "externalNote": "Misalan da ke waje da Azure ({families}) ba su samuwa ga kowa har sai an ba da izini a nan — ga kowa ta hanyar tsohuwar hanya, ko ga rukuni, yanki da mutane.",
       "envelopeNote": "Iyakar buƙata a kan dangi, kasafin kudi ne na kullum da ya shafi dukkan misalansa; iyaka a kan misali na nashi ne kadai. Ba iyaka a kan misali ba yana cire iyakar dangi ba.",
       "observeNote": "Yanayin lura yana kunne: babu wani abu a nan da zai ɓoye misali ko dakatar da buƙata a yanzu. Sauya zuwa Aiwatar sama idan an daidaita dokokin.",
-      "familyChip": "Dangi",
-      "modelChip": "Misali",
       "otherModels": "Misalan da ba su da dangi",
-      "modelsInFamily": "{count, plural, one {# misali a wannan dangi} other {# misalai a wannan dangi}}",
       "noModels": "Ba a saka misalai cikin kundin ba tukuna.",
-      "expand": "Nuna misalai",
-      "collapse": "Ɓoye misalai",
-      "edit": "Gyara",
       "doneEditing": "An gama",
-      "editNode": "Gyara damar shiga na {label}",
       "defaultLabel": "Sauran kowa",
-      "defaultInherit": "Gada",
-      "defaultUnlimited": "Ba iyaka",
-      "defaultLimited": "An takaita zuwa",
-      "defaultUnavailable": "Ba samuwa",
-      "defaultRequestsLabel": "Buƙatu a rana ga sauran kowa",
       "requestsPerDay": "buƙatu / rana",
       "inheritedFrom": "Ya gada {state} daga {origin}.",
       "effectiveLabel": "Duk wanda ba a jeri ba zai samu: {state}.",
-      "inheritedChip": "gada",
       "origin": {
         "model": "wannan saitin",
         "family": "danginsa",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Cire {target}",
       "groupsCount": "{count, plural, one {# rukuni} other {# rukunoni}}",
       "domainsCount": "{count, plural, one {# yanki} other {# yankuna}}",
-      "allowCount": "{count, plural, one {# mutum an yarda} other {# mutane an yarda}}",
-      "denyCount": "{count, plural, one {# mutum an toshe} other {# mutane an toshe}}",
       "collisionChip": "Hakanan yana cikin Tsarin Duniya",
-      "collisionWarning": "Wannan samfur ko iyali an saita shi a cikin Tsarin Duniya. Za a hana adanawa sai daya daga cikin biyun aka cire."
+      "collisionWarning": "Wannan samfur ko iyali an saita shi a cikin Tsarin Duniya. Za a hana adanawa sai daya daga cikin biyun aka cire.",
+      "grid": {
+        "intro": "Wanene zai iya amfani da kowanne samfurin, da yawan buƙatun da za a iya yi a rana. Kowanne layi iyali ne ko samfur, kowacce ginshiƙi masu sauraro ne. Zaɓi wani kwaya don canzawa.",
+        "caption": "Samun damar samfur bisa ga masu sauraro",
+        "col": {
+          "model": "Samfuri",
+          "reach": "Zai iya amfani"
+        },
+        "familyNote": "iyali: kasafin kuɗi na yau da kullum da ake raba",
+        "addColumn": "Ƙara ginshiƙin masu sauraro",
+        "addColumnConfirm": "Ƙara ginshiƙi",
+        "columnKind": "Masu sauraro",
+        "addColumnHint": "Ginshiƙin zai tsaya idan aka saita wata kwaya a cikinsa.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "babu sharuddan kansa",
+        "grantHint": "Inherit yana nufin babu sharudda ga wannan masu sauraro a wannan layi: membobinta za su samu amsar Kowa da Kowa sai dai idan wani ginshiƙi ya rufe su.",
+        "grantHintFamily": "Inherit yana amfani da sharuddan da iyali ya saita ga waɗannan masu sauraro.",
+        "inheritedPeople": "{count, plural, one {Mutum # ya ƙaru} other {Mutane # sun ƙaru}} daga jerin iyali.",
+        "reach": {
+          "everyone": "Kowa",
+          "everyoneBut": "{count, plural, one {Kowa sai mutum #} other {Kowa sai mutane #}}",
+          "nobody": "Babu kowa",
+          "people": "{count, plural, one {Mutum #} other {Mutane #}}"
+        },
+        "howTitle": "Yadda ake yanke shawara akan buƙata guda",
+        "how": {
+          "block": "A cikin jerin masu hana amfani? Ba zai samu ba, komai sauran sharuddan.",
+          "specific": "In ba haka ba, mafi takamaiman izini da ya shafi mutum ne ke saita sharuddan: sunan mutum, sai ƙungiya, sai yankin imel, sai kowa da kowa.",
+          "inherit": "Samfurin da ba shi da sharudda na kansa a wani ginshiƙi yana amfani da na iyalinsa (layi mai dashi).",
+          "envelope": "Buƙatar dole ta dace da iyakar samfurin, kasafin iyali da jimillar hira, duka uku."
+        }
+      }
     },
     "previewSourceModelAccess": "Amincewa da samfur — {list}",
     "groupMembershipDegradedStructural": "Neman mambobin ƙungiyoyi yana kasa a wannan server ({reason}). Dokoki da damar da suka danganci ƙungiyoyi ba za su yi aiki ba ga mutanen da abin ya shafa — duba Group.Read.All consent na tenant da rajistar app.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Dubawa",
-        "person": "Mutum guda",
         "review": "Bita",
-        "reviewCount": "Bita ({count})"
+        "reviewCount": "Bita ({count})",
+        "check": "Duba izini"
       },
       "everyone": "Kowa",
       "off": "A kashe",
@@ -6999,7 +7014,6 @@
       "policyShown": "An nuna manufofi",
       "savedPolicy": "An adana",
       "withDraft": "Tare da canje-canjenka",
-      "lensIntro": "Shigar da imel na wani don ganin abin da suka samu, abin da suka yi amfani da shi yau, da dokar da ta yanke masa.",
       "lensCaption": "Iyakoki ga {mail}",
       "layer": {
         "catalog": "Na cikin tsarin",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Makon da ya gabata {people, plural, one {mutum #} other {mutane #}} sun sami iyakarsu daga nan; {atCap} sun kai iyaka.",
         "overNewCap": "{people, plural, one {mutum #} other {mutane #}} sun wuce {cap} a rana guda makon da ya gabata.",
         "events": "An buga wannan iyaka {events, plural, one {sau #} other {sau #}} daga {people, plural, one {mutum #} other {mutane #}} a makon da ya gabata.",
-        "noTargets": "Ba ya shafi kowa tukuna, don haka ba zai canza komai ba har sai an ƙara mutane."
+        "noTargets": "Ba ya shafi kowa tukuna, don haka ba zai canza komai ba har sai an ƙara mutane.",
+        "peopleGet": "Mutanen da aka ambata za su samu {after} maimakon {before}."
       },
       "flag": {
         "removes-cap": "An cire iyakar: babu iyaka ga waɗannan mutanen.",
@@ -7060,7 +7075,6 @@
         "model-access": "Samun amfani da samfurin ga {subject}"
       },
       "checkPerson": "Duba kowane mutum da wannan daftarin",
-      "checkPersonHint": "Zai buɗe duban mutum guda tare da canje-canjenku.",
       "historyNote": "Ajiye yana rubuta juyi guda a tarihin canje-canje.",
       "histogramLabel": "{people} mutane ta ranarsu mafi aiki a makon da ya gabata; tsohuwar iyaka {before}, sabuwar iyaka {after}",
       "histogramCaption": "Mutane bisa mafi cunkoson ransu a makon da ya gabata. Orange: fiye da sabon iyaka.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {canji # bai ajiye ba} other {canje-canje # ba a ajiye ba}}",
       "discardConfirm": "A zubar da duk wani canji da ba a ajiye ba?",
       "discardYes": "Zubar",
-      "reviewChanges": "Duba canje-canje"
+      "reviewChanges": "Duba canje-canje",
+      "checkPersonHint": "Yana buɗe Duba izini tare da sauye-sauyanka.",
+      "lens": {
+        "subjectKind": "Abinda za a duba",
+        "kind": {
+          "user": "Mutum",
+          "group": "Ƙungiyar tsaro",
+          "domain": "Yanki"
+        },
+        "domainLabel": "Yankin imel da za a duba",
+        "groupHint": "Nema ƙungiyar tsaro ta suna, ko liƙa ID ɗinta.",
+        "intro": "Zaɓi mutum, ƙungiyar tsaro ko yanki don ganin abin da za su samu da wacce doka ta yanke. Buɗe kowane iyaka don saita ɗaya na musamman a kansu kai tsaye.",
+        "typicalMember": {
+          "group": "a matsayin mamba na yau da kullum: wanda ke cikin wannan ƙungiya kuma babu wata doka da ta dace da shi. Mamba da ke da sharuddan na kansa ko na wata ƙungiya zai iya samu daban.",
+          "domain": "a matsayin mamba na yau da kullum: wanda ke wannan yanki kuma babu wata doka da ta dace da shi. Wanda kuma wata doka ko ƙungiya ta shafa zai iya samu daban."
+        },
+        "ownRule": "{count, plural, one {Izini na musamman # aka saita} other {Izini na musamman # aka saita}} ga {subject} kawai.",
+        "exceptionFor": "Izini na musamman ga {subject}",
+        "exceptionLabel": "{limit} ga {subject}",
+        "noException": {
+          "user": "Babu izini na musamman: wannan mutum zai samu duk abin da dokokin sama suka bayar.",
+          "group": "Babu izini na musamman: membobi za su samu duk abin da dokokin sama suka bayar.",
+          "domain": "Babu izini na musamman: mutanen wannan yanki za su samu duk abin da dokokin sama suka bayar."
+        },
+        "effect": {
+          "applies": "Yana bayar da {value} maimakon {otherwise}.",
+          "same": "Yana bayar da {value}, kamar yadda ba tare da izini na musamman ba.",
+          "held-by-ceiling": "Babu tasiri kamar yadda aka saita: iyaka mai tsauri ta tsaida shi a {value}.",
+          "outranked": "Babu tasiri kamar yadda aka saita: doka mafi ƙayyadaddiya ko mafi fifiko ta yanke a maimako ({value}).",
+          "inert": "Ba a amfani da shi."
+        }
+      }
     }
   },
   "m365": {

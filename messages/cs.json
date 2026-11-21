@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "Delegace jsou zde zobrazeny pouze pro čtení. Kdo je v delegaci, na které uživatele se vztahuje a co může každý správce, se spravuje v sekci Delegace.",
     "delegationsManagedElsewhereLink": "Otevřít delegace",
     "modelAccess": {
-      "intro": "Rozhodněte, kdo může používat každý model. Nastavení rodiny platí pro její modely, pokud si model nenastaví vlastní; osoby na seznamu mají přednost před výchozím nastavením pro ostatní; blokovací seznam přebije každé povolení.",
       "externalNote": "Modely hostované mimo prostředí Azure ({families}) nejsou dostupné nikomu, dokud je zde nepovolíte – buď pro všechny prostřednictvím výchozího nastavení, nebo pro skupiny, domény a osoby.",
       "envelopeNote": "Limit požadavků na rodinu je sdílený denní rozpočet mezi jejími modely; limit na modelu je omezení v rámci něj. Neomezený model nezvyšuje rodinný rozpočet.",
       "observeNote": "Režim sledování je aktivní: nic zde zatím model neskrývá ani neblokuje požadavky. Přepněte výše na Vynutit, až budou pravidla správná.",
-      "familyChip": "Rodina",
-      "modelChip": "Model",
       "otherModels": "Modely bez rodiny",
-      "modelsInFamily": "{count, plural, one {# model v této rodině} other {# modelů v této rodině}}",
       "noModels": "V katalogu zatím nejsou žádné modely.",
-      "expand": "Zobrazit modely",
-      "collapse": "Skrýt modely",
-      "edit": "Upravit",
       "doneEditing": "Hotovo",
-      "editNode": "Upravit přístup pro {label}",
       "defaultLabel": "Všichni ostatní",
-      "defaultInherit": "Zdědit",
-      "defaultUnlimited": "Neomezeně",
-      "defaultLimited": "Omezeno na",
-      "defaultUnavailable": "Nedostupné",
-      "defaultRequestsLabel": "Požadavky za den pro všechny ostatní",
       "requestsPerDay": "požadavků / den",
       "inheritedFrom": "Zdědí {state} od {origin}.",
       "effectiveLabel": "Všichni, kdo nejsou na seznamu, mají: {state}.",
-      "inheritedChip": "zděděno",
       "origin": {
         "model": "toto nastavení",
         "family": "její rodina",
@@ -6884,10 +6870,39 @@
       "removeGrant": "Odebrat {target}",
       "groupsCount": "{count, plural, one {# skupina} other {# skupin}}",
       "domainsCount": "{count, plural, one {# doména} other {# domén}}",
-      "allowCount": "{count, plural, one {# povolená osoba} other {# povolených osob}}",
-      "denyCount": "{count, plural, one {# blokovaná osoba} other {# blokovaných osob}}",
       "collisionChip": "Také v globálních výchozích hodnotách",
-      "collisionWarning": "Tento model nebo rodina je také nastavena v globálních výchozích hodnotách. Uložení bude odmítnuto, dokud nebude jeden z těchto dvou vymazán."
+      "collisionWarning": "Tento model nebo rodina je také nastavena v globálních výchozích hodnotách. Uložení bude odmítnuto, dokud nebude jeden z těchto dvou vymazán.",
+      "grid": {
+        "intro": "Kdo může používat jednotlivé modely a kolik žádostí za den. Každý řádek představuje rodinu nebo model; každý sloupec publikum. Vyberte buňku pro změnu.",
+        "caption": "Přístup k modelu podle publika",
+        "col": {
+          "model": "Model",
+          "reach": "Může použít"
+        },
+        "familyNote": "rodina: sdílený denní rozpočet",
+        "addColumn": "Přidat sloupec publika",
+        "addColumnConfirm": "Přidat sloupec",
+        "columnKind": "Publikum",
+        "addColumnHint": "Sloupec zůstane, jakmile je v něm nastavena buňka.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "žádné vlastní podmínky",
+        "grantHint": "Dědit znamená, že pro toto publikum v tomto řádku nejsou žádné vlastní podmínky: členové získají odpověď pro všechny ostatní, pokud je nepokrývá jiný sloupec.",
+        "grantHintFamily": "Dědění používá podmínky nastavené rodinou pro toto publikum.",
+        "inheritedPeople": "{count, plural, one {Přichází ještě # osoba} few {Přichází ještě # osoby} other {Přichází ještě # osob}} ze seznamu rodiny.",
+        "reach": {
+          "everyone": "Všichni",
+          "everyoneBut": "{count, plural, one {Všichni kromě # osoby} few {Všichni kromě # osob} other {Všichni kromě # osob}}",
+          "nobody": "Nikdo",
+          "people": "{count, plural, one {# osoba} few {# osoby} other {# osob}}"
+        },
+        "howTitle": "Jak se rozhoduje o jedné žádosti",
+        "how": {
+          "block": "Na blokovacím seznamu? Nedostupné, ať platí cokoli dalšího.",
+          "specific": "Jinak rozhoduje nejkonkrétnější povolení, které člověka zahrnuje: nejprve jmenovaná osoba, pak skupina, doména a nakonec všichni ostatní.",
+          "inherit": "Model bez vlastních podmínek ve sloupci použije podmínky své rodiny (přerušovaně).",
+          "envelope": "Žádost musí zapadat do limitu modelu, sdíleného rozpočtu rodiny i celkového limitu chatu, všechny tři."
+        }
+      }
     },
     "previewSourceModelAccess": "Schválení modelu — {list}",
     "groupMembershipDegradedStructural": "Vyhledávání členů skupiny na tomto serveru selhává ({reason}). Pravidla a oprávnění založená na skupinách nejsou u dotčených osob uplatňována — zkontrolujte souhlas Group.Read.All tenanta a registraci aplikace.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "Přehled",
-        "person": "Jedna osoba",
         "review": "Revize",
-        "reviewCount": "Revize ({count})"
+        "reviewCount": "Revize ({count})",
+        "check": "Ověřit přístup"
       },
       "everyone": "Všichni",
       "off": "Vypnuto",
@@ -7015,7 +7030,6 @@
       "policyShown": "Zobrazovaná politika",
       "savedPolicy": "Uloženo",
       "withDraft": "S vašimi změnami",
-      "lensIntro": "Zadejte e-mail osoby a zobrazí se, co má nastaveno, co dnes použila a které pravidlo to určilo.",
       "lensCaption": "Limity pro {mail}",
       "layer": {
         "catalog": "Vestavěné",
@@ -7052,7 +7066,8 @@
         "ruleReach": "Minulý týden mělo {people, plural, one {# osoba} other {# osob}} limit zde; {atCap} ho dosáhlo.",
         "overNewCap": "{people, plural, one {# osoba} other {# osob}} mělo minulý týden jeden den nad {cap}.",
         "events": "Limity byly dosaženy {events, plural, one {# krát} other {# krát}} od {people, plural, one {# osoby} other {# osob}} minulý týden.",
-        "noTargets": "Zatím se na nikoho nevztahuje, změna nastane až po přidání osob."
+        "noTargets": "Zatím se na nikoho nevztahuje, změna nastane až po přidání osob.",
+        "peopleGet": "Uvedené osoby získají {after} místo {before}."
       },
       "flag": {
         "removes-cap": "Limit je odstraněn: pro tyto osoby neplatí žádné omezení.",
@@ -7076,7 +7091,6 @@
         "model-access": "Přístup k modelu pro {subject}"
       },
       "checkPerson": "Zkontrolujte kohokoliv podle tohoto návrhu",
-      "checkPersonHint": "Otevře zobrazení jedné osoby s vašimi změnami.",
       "historyNote": "Uložením se zapíše jedna verze do historie změn.",
       "histogramLabel": "{people} osob podle jejich nejvyšší aktivity za minulý týden; původní limit {before}, nový limit {after}",
       "histogramCaption": "Lidé podle svého nejrušnějšího dne v minulém týdnu. Oranžová: nad novým limitem.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# neuložená změna} few {# neuložené změny} other {# neuložených změn}}",
       "discardConfirm": "Zahodit všechny neuložené změny?",
       "discardYes": "Zahodit",
-      "reviewChanges": "Zkontrolovat změny"
+      "reviewChanges": "Zkontrolovat změny",
+      "checkPersonHint": "Otevře Ověření přístupu s vašimi změnami.",
+      "lens": {
+        "subjectKind": "Co ověřit",
+        "kind": {
+          "user": "Osoba",
+          "group": "Bezpečnostní skupina",
+          "domain": "Doména"
+        },
+        "domainLabel": "Emailová doména k ověření",
+        "groupHint": "Najděte bezpečnostní skupinu podle názvu nebo vložte její ID objektu.",
+        "intro": "Vyberte osobu, bezpečnostní skupinu nebo doménu a zjistěte, co získají a jaké pravidlo to určilo. Otevřete jakýkoli limit a nastavte pro ně výjimku přímo zde.",
+        "typicalMember": {
+          "group": "jako typický člen: někdo v této skupině, na koho neplatí jiné pravidlo. Člen pokrytý osobním nebo jiným skupinovým pravidlem může získat něco jiného.",
+          "domain": "jako typický člen: někdo v této doméně, na koho neplatí jiné pravidlo. Osoba pokrytá také skupinovým nebo osobním pravidlem může získat něco jiného."
+        },
+        "ownRule": "{count, plural, one {Je nastavena # výjimka} few {Jsou nastaveny # výjimky} other {Je nastaveno # výjimek}} pouze pro {subject}.",
+        "exceptionFor": "Výjimka pro {subject}",
+        "exceptionLabel": "{limit} pro {subject}",
+        "noException": {
+          "user": "Žádná výjimka: tato osoba získá, co jí určují výše uvedená pravidla.",
+          "group": "Žádná výjimka: členové získají, co určují výše uvedená pravidla.",
+          "domain": "Žádná výjimka: lidé v této doméně získají, co určují výše uvedená pravidla."
+        },
+        "effect": {
+          "applies": "Dává {value} místo {otherwise}.",
+          "same": "Dává {value}, stejně jako bez výjimky.",
+          "held-by-ceiling": "Bez efektu: je omezeno pevnou hranicí na {value}.",
+          "outranked": "Bez efektu: rozhoduje konkrétnější nebo prioritnější pravidlo ({value}).",
+          "inert": "Není v platnosti."
+        }
+      }
     }
   },
   "m365": {

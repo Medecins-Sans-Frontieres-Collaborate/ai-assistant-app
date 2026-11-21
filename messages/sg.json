@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Béni tî yângâ yumbu ape na ngû tî lê kodro. Ani nani yângâ, nani kodro sô a zarama na nti yângâ, na wa admin ngû ngû a ke lê tî zarama, mbi yé sô na Béni tî yângâ.",
     "delegationsManagedElsewhereLink": "Ouvri Béni tî yângâ",
     "modelAccess": {
-      "intro": "Bini na sô na mbi na sâ model mo azoyé. Afamilia na model bako na mo azoyé mo, koto model mo kpe na na zo azoyé. Ba mo na list mo ti azoyé ti mbi, mbi mpo so; ba mo na block list mo ti mbi kangbi na azoyé ti mbi.",
       "externalNote": "Model ti mbi mo na ko na Azure ({families}) mo mbi kangbi na mbi, ti mbi azoyé mo fa — na mbi lô mo ti mbi, ayeke na group, domain na mo ti mbi.",
       "envelopeNote": "Limiti na request na familia na model bako na mbi mo ti mbi, limite na model mo ti mbi fa. Unlimited na model mbi mbi kangbi fa limite na familia.",
       "observeNote": "Mode ti observe ti mbi: ni mbi azoyé model na mbi dampi request. Kwe na Enforce ti mbi so na règle mo zo azoyé.",
-      "familyChip": "Familia",
-      "modelChip": "Model",
       "otherModels": "Model ti mbi na mbi familia",
-      "modelsInFamily": "{count, plural, one {# model na familia ti mbi} other {# model ti mbi na familia ti mbi}}",
       "noModels": "Bé model ti mbi na catalog na mbi.",
-      "expand": "Mo model ti mbi",
-      "collapse": "Ka model ti mbi",
-      "edit": "Labo",
       "doneEditing": "Labo esese",
-      "editNode": "Labo accès ti {label}",
       "defaultLabel": "Mo ti mbi lô",
-      "defaultInherit": "Kwere",
-      "defaultUnlimited": "Bé limite",
-      "defaultLimited": "Limiti na",
-      "defaultUnavailable": "Mbi kangbi",
-      "defaultRequestsLabel": "Request ti mbi lô na denge",
       "requestsPerDay": "request / denge",
       "inheritedFrom": "Akwere {state} fa {origin}.",
       "effectiveLabel": "Mo ti mbi na list mo ti mbi lô na: {state}.",
-      "inheritedChip": "akwere",
       "origin": {
         "model": "setting ti mbi so",
         "family": "familia ti mbi",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Lé {target}",
       "groupsCount": "{count, plural, one {# group} other {# group ti mbi}}",
       "domainsCount": "{count, plural, one {# domain} other {# domain ti mbi}}",
-      "allowCount": "{count, plural, one {# mo ti mbi na azoyé} other {# mo ti mbi na azoyé}}",
-      "denyCount": "{count, plural, one {# mo ti mbi na kangbi} other {# mo ti mbi na kangbi}}",
       "collisionChip": "Duti na Global defaults",
-      "collisionWarning": "Model ti so familia ti yeke na Global defaults. Oko na klé ti model ou familia ti so oko ti la futi mo kui kidô."
+      "collisionWarning": "Model ti so familia ti yeke na Global defaults. Oko na klé ti model ou familia ti so oko ti la futi mo kui kidô.",
+      "grid": {
+        "intro": "Ndiani azo lingbi model bako, na ndenge azo tambula kilo na linga ködörö. Kökö bako na lintrö a hiko kodoro group bi model; kökö bako na lintrö a hiko ndanga. Fä cell ködörö mbi a füngö ye.",
+        "caption": "Model lingbi na ndanga",
+        "col": {
+          "model": "Model",
+          "reach": "Azo lingbi"
+        },
+        "familyNote": "group: budjo na singa na lo yeke",
+        "addColumn": "Kombärè kökö na ndanga",
+        "addColumnConfirm": "Kombärè kökö",
+        "columnKind": "Ndanga",
+        "addColumnHint": "Kökö a yeke, se cell mbi na simbi ye.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "tena term mbi na bango mbï",
+        "grantHint": "Inherit yeke n'gö term mbi na ndanga a kökö ayeke: membere yeke a tambula 'Everyone else' s'il n'yeke kökö mingi ara n'deke.",
+        "grantHintFamily": "Inherit lingbi term group a fixé ndanga ayeke.",
+        "inheritedPeople": "{count, plural, one {# ngangu a wuli} other {# ngangu ya wuli}} so na group ye.",
+        "reach": {
+          "everyone": "Bïan ava",
+          "everyoneBut": "{count, plural, one {Bïan ava dambe # ngangu} other {Bïan ava dambe # ngangu}}",
+          "nobody": "Tena n'dö",
+          "people": "{count, plural, one {# ngangu} other {# ngangu}}"
+        },
+        "howTitle": "Ndenge yi lo request azo téréngö",
+        "how": {
+          "block": "So na block list? Tena na lingbi, sala so mbi ena na minza.",
+          "specific": "Tî mingï, term na grant mbi na zo azo lingbi lo: ngangu na nzönî, group, domain, sü tö bïan ava.",
+          "inherit": "Model ayeke na tena term mbï so kökö, lingbi term mbi na group (dashed).",
+          "envelope": "Request ayeke na yeke na cap mbi model, budjo group na budjo chat, tî lo tötö."
+        }
+      }
     },
     "previewSourceModelAccess": "Model ti yame — {list}",
     "groupMembershipDegradedStructural": "Bingbi ti group membership ti na fa na ndawa na serveur ti mbi ({reason}). Lingbi ti group-based rules na grants ti na fa na kwe ti na yeke da, na bale ti tenant's Group.Read.All consent na app registration.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Nzoni",
-        "person": "Muntu moko",
         "review": "Kuyeke",
-        "reviewCount": "Kuyeke ({count})"
+        "reviewCount": "Kuyeke ({count})",
+        "check": "Kema lingbi"
       },
       "everyone": "Bângi bâso gbânzi",
       "off": "Sôkô",
@@ -6999,7 +7014,6 @@
       "policyShown": "Politiki yeke",
       "savedPolicy": "Politiki ti mbi lo wa na zoo",
       "withDraft": "Na gwiraka ti mbi",
-      "lensIntro": "Dape email ti mboka na yeke ti mbi na mbi yeke, na mbi lo wa na piani na ti mbi ku lo wa na mbi.",
       "lensCaption": "Ndongani ti {mail}",
       "layer": {
         "catalog": "Gbɛ tî",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Sema ti yi {people, plural, one {# mû} other {# mû}} ti yê cap na gbâ; {atCap} a yê mo.",
         "overNewCap": "{people, plural, one {# mû} other {# mû}} ti yêmê ti bâ ti {cap} na sema ti yi.",
         "events": "Caps na tî limit ti yê {events, plural, one {# mbî} other {# mbî}} tî {people, plural, one {# mû} other {# mû}} na sema ti yi.",
-        "noTargets": "A ko yêmê tî mû na, lô tî bâ ti bâ ti yôngô na yêmê na mû ti yêmê."
+        "noTargets": "A ko yêmê tî mû na, lô tî bâ ti bâ ti yôngô na yêmê na mû ti yêmê.",
+        "peopleGet": "Ngangu mbi azo tambula {after} na pi {before}."
       },
       "flag": {
         "removes-cap": "Bâ ceiling: ko limit na yêmê tî mû na.",
@@ -7060,7 +7075,6 @@
         "model-access": "Model access tî {subject}"
       },
       "checkPerson": "Gbê mû na gbâ tî draft na",
-      "checkPersonHint": "A ouver view tî mû na tî bâ na bâ tî yôngo na.",
       "historyNote": "Bâ na yêmê ti version tî mi na change history.",
       "histogramLabel": "{people} mû na gbângan na sema ti yi; old cap {before}, new cap {after}",
       "histogramCaption": "Bâa na mbi ti bara mo na lo na ti yeke bara mingi na sembe ti sembe di. Lo ti orange: na wa na lo ti kapé gûtî.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {# changement ti yeke fa na gbâ} other {# changement ti yeke fa na gbâ}}",
       "discardConfirm": "Kunduru changement ti gbâ na gbâ?",
       "discardYes": "Kunduru",
-      "reviewChanges": "Gbâ na changement"
+      "reviewChanges": "Gbâ na changement",
+      "checkPersonHint": "Otö Kema lingbi tî changement mbi.",
+      "lens": {
+        "subjectKind": "Lô to yeke kema",
+        "kind": {
+          "user": "Ngangu",
+          "group": "Group na seguridad",
+          "domain": "Domain"
+        },
+        "domainLabel": "Domain ngangu email to yeke kema",
+        "groupHint": "Fängö group seguridad sô na dzö na yeke, to sara ID mbi we na.",
+        "intro": "Fängö ngangu, group na seguridad to domain to yeke na yeke, na to mbï modö lo a tambula na rule to yeke na fïnga. Fuko limit keke to füngö exception na lo awali.",
+        "typicalMember": {
+          "group": "ngangu na group ayeke da so na match na rule mingi tö. Ngangu mbi na rule personal to group mingi azo tambula lo mingi.",
+          "domain": "ngangu na domain ayeke da so na match na rule mingi tö. Ngangu mbi na rule group to personal azo tambula lo mingi."
+        },
+        "ownRule": "{count, plural, one {# exception yeke} other {# exception yeke}} kombärè na {subject} we na ye.",
+        "exceptionFor": "Exception tî {subject}",
+        "exceptionLabel": "{limit} tî {subject}",
+        "noException": {
+          "user": "Tena exception: ngangu ayeke a tambula sala rule mbi a yeke.",
+          "group": "Tena exception: membere azo tambula sala rule mbi a yeke.",
+          "domain": "Tena exception: ngangu na domain ayeke azo tambula sala rule mbi a yeke."
+        },
+        "effect": {
+          "applies": "Ape {value} na pi {otherwise}.",
+          "same": "Ape {value}, dama péké se na exception tö.",
+          "held-by-ceiling": "Tena effet: hard ceiling azo téréngö na {value}.",
+          "outranked": "Tena effet: rule mingi to priority to yeke azo téréngö ({value}).",
+          "inert": "Tena en action."
+        }
+      }
     }
   },
   "m365": {

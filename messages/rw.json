@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Delegasiyo zigaragarira hano gusa mu buryo bwo gusoma. Abo delegasiyo igizweho, abo ikorera, n'ibyo buri muyobozi yemerewe gukora, byose bigenzurwa mu gice cya Delegasiyo.",
     "delegationsManagedElsewhereLink": "Fungura Delegasiyo",
     "modelAccess": {
-      "intro": "Hitamo abemerewe gukoresha buri miterere. Ibyemezo bya family birafasha imiterere yayo keretse igihe hari ibikorwa bidasanzwe; abashyizwe kuri lisiti birusha abandi bose; lisiti yo kubuza irakomeye kurusha izindi.",
       "externalNote": "Imiterere ibitse hanze ya Azure ({families}) ntiboneka kuri bose kugeza uyemereye hano — kuri bose ukoresheje imiterere isanzwe, cyangwa ku matsinda, domaines n’abantu.",
       "envelopeNote": "Umupaka w’ibisabwa kuri family ni ingengo y’imikoreshereze y’umunsi isangiye n’imitere yayo; umupaka ku miterere ni iherezo muri yo. Kudashyiraho umupaka ku miterere ntikurenga ingengo ya family.",
       "observeNote": "Observe mode irakora: nta na kimwe hano gihisha imodoka cyangwa gihagarika igisabwa. Hindura kuri Enforce haruguru nibimaze kuba neza.",
-      "familyChip": "Family",
-      "modelChip": "Model",
       "otherModels": "Imiterere idafite family",
-      "modelsInFamily": "{count, plural, one {# modeli muri iyi family} other {# modeli muri iyi family}}",
       "noModels": "Nta miterere irimo kuri kataloge.",
-      "expand": "Erekana imiterere",
-      "collapse": "Hisha imiterere",
-      "edit": "Hindura",
       "doneEditing": "Byarangiye",
-      "editNode": "Hindura uburenganzira bwa {label}",
       "defaultLabel": "Abandi bose",
-      "defaultInherit": "Kuragwa",
-      "defaultUnlimited": "Ntaho bigarukira",
-      "defaultLimited": "Bigarukira kuri",
-      "defaultUnavailable": "Ntibiboneka",
-      "defaultRequestsLabel": "Ibisabwa ku munsi kubandi bose",
       "requestsPerDay": "ibisabwa / umunsi",
       "inheritedFrom": "Bikomora kuri {origin} nk'uko {state} imeze.",
       "effectiveLabel": "Utari ku rutonde bose bahabwa: {state}.",
-      "inheritedChip": "bikomoka",
       "origin": {
         "model": "iri tegeko",
         "family": "family yayo",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Kuraho {target}",
       "groupsCount": "{count, plural, one {# tsinda} other {# matsinda}}",
       "domainsCount": "{count, plural, one {# domain} other {# domains}}",
-      "allowCount": "{count, plural, one {# muntu wemerewe} other {# bantu bemerewe}}",
-      "denyCount": "{count, plural, one {# muntu wabujijwe} other {# bantu babujijwe}}",
       "collisionChip": "Biri no mu Migenzo ya Global",
-      "collisionWarning": "Iyi model cyangwa umuryango wayo nabyo byateguwe muri Global defaults. Kubika ntibizashoboka kugeza kimwe muri byo gikuwemo."
+      "collisionWarning": "Iyi model cyangwa umuryango wayo nabyo byateguwe muri Global defaults. Kubika ntibizashoboka kugeza kimwe muri byo gikuwemo.",
+      "grid": {
+        "intro": "Ni bande bashobora gukoresha buri model n'uburyo bw'iminsi bushobora gusaba. Umurongo umwe ni umuryango cyangwa model; inkingi imwe ni abantu runaka. Hitamo agace kugirango uhindure.",
+        "caption": "Gukoresha model bitewe n'abantu",
+        "col": {
+          "model": "Model",
+          "reach": "Ashobora kuyikoresha"
+        },
+        "familyNote": "umuryango: ingengo y'iminsi ikoreshwa hamwe",
+        "addColumn": "Ongeraho inkingi y'abantu",
+        "addColumnConfirm": "Ongeraho inkingi",
+        "columnKind": "Abantu",
+        "addColumnHint": "Inkingi igumaho igihe agace kiyirimo gashyizweho.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "nta mategeko yayo bwite",
+        "grantHint": "Kwigira bivuze ko nta mategeko arengera aba bantu kuri uyu murongo: abanyamuryango bahabwa igisubizo cya Buri wundi keretse niba indi nkingi ibafashe.",
+        "grantHintFamily": "Kwigira bifata amategeko umuryango washyizeho kuri aba bantu.",
+        "inheritedPeople": "{count, plural, one {# umuntu wo ku rutonde rw'umuryango aza} other {# bantu bo ku rutonde rw'umuryango baza}}.",
+        "reach": {
+          "everyone": "Buri wese",
+          "everyoneBut": "{count, plural, one {Buri wese usibye umuntu #} other {Buri wese usibye abantu #}}",
+          "nobody": "Nta muntu",
+          "people": "{count, plural, one {umuntu #} other {abantu #}}"
+        },
+        "howTitle": "Uko ubusabe bumwe bufatwa",
+        "how": {
+          "block": "Ku rutonde rw'abafunzwe? Ntiboneka, ibyo bindi bitavuze.",
+          "specific": "Byongeye, igisubizo gifatika kinyuranye kigaragara: umuntu wanditswe, itsinda, domain, hanyuma Buri wundi.",
+          "inherit": "Model itagira amategeko yayo bwite muri iyi nkingi ikoresha ay'umuryango (ikaba ifunze).",
+          "envelope": "Ubusabe bugomba kugendana n'ikigereranyo cya model, ingengo y'umuryango n'ikigereranyo cy'ibiganiro, byose uko ari bitatu."
+        }
+      }
     },
     "previewSourceModelAccess": "Kwemeza model — {list}",
     "groupMembershipDegradedStructural": "Kugenzura abanyamuryango b’amatsinda biri kunanirana kuri uyu muyoboro ({reason}). Amabwiriza n’uburenganzira bishingiye ku matsinda ntibiri gushyirwa mu bikorwa ku bantu babangamiwe—suzuma Group.Read.All consent ya tenant hamwe na app registration.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Incamake",
-        "person": "Umuntu umwe",
         "review": "Gusuzuma",
-        "reviewCount": "Gusuzuma ({count})"
+        "reviewCount": "Gusuzuma ({count})",
+        "check": "Kugenzura ukoresha"
       },
       "everyone": "Bose",
       "off": "Hafunzwe",
@@ -6999,7 +7014,6 @@
       "policyShown": "Politiki igaragajwe",
       "savedPolicy": "Byabitswe",
       "withDraft": "Hamwe n'impinduka zawe",
-      "lensIntro": "Andika email y'umuntu kugira ngo urebe ibyo ahawe, ibyo yakoresheje uyu munsi, n'itegeko ryabigennye.",
       "lensCaption": "Imipaka kuri {mail}",
       "layer": {
         "catalog": "Byubatsemo",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Icyumweru gishize {people, plural, one {umuntu 1} other {abantu #}} bahawe umugabane bakavugwa aha; {atCap} barawugezeho.",
         "overNewCap": "{people, plural, one {umuntu 1} other {abantu #}} bafite umunsi umwe hejuru ya {cap} icyumweru gishize.",
         "events": "Limits kuri uyu mupaka zagezeho {events, plural, one {inshuro 1} other {inshuro #}} na {people, plural, one {umuntu 1} other {abantu #}} icyumweru gishize.",
-        "noTargets": "Nta muntu bihuriraho ubu, ntacyo bihatangaho kugeza hiyongere abantu."
+        "noTargets": "Nta muntu bihuriraho ubu, ntacyo bihatangaho kugeza hiyongere abantu.",
+        "peopleGet": "Abantu banditswe bahabwa {after} aho guhabwa {before}."
       },
       "flag": {
         "removes-cap": "Ikuraho mupaka: nta mupaka uhuye n’aba bantu.",
@@ -7060,7 +7075,6 @@
         "model-access": "Kwinjira kuri model ya {subject}"
       },
       "checkPerson": "Gereranya umuntu uwo ari we wese kuri draft",
-      "checkPersonHint": "Fungura igitekerezo cya umuntu umwe uko impinduka zawe zimaze guterwa.",
       "historyNote": "Kubika byandika version imwe mu mateka y’impinduka.",
       "histogramLabel": "{people} abantu hakurikijwe umunsi wabo w’akazi cyane icyumweru gishize; cap ya mbere {before}, cap nshya {after}",
       "histogramCaption": "Abantu ku munsi bahebwe cyane mu cyumweru gishize. Orange: barengeje umupaka mushya.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {impinduka 1 ntiyabitswe} other {impinduka # nti zabitswe}}",
       "discardConfirm": "Ukura buri mpinduka itabitswe?",
       "discardYes": "Kuraho",
-      "reviewChanges": "Suzuma impinduka"
+      "reviewChanges": "Suzuma impinduka",
+      "checkPersonHint": "Ifungura Kugenzura ukoresha uko wahinduye.",
+      "lens": {
+        "subjectKind": "Icyo ugenzura",
+        "kind": {
+          "user": "Umuntu",
+          "group": "Itsinda ry'umutekano",
+          "domain": "Domain"
+        },
+        "domainLabel": "Domain ya email ugenzura",
+        "groupHint": "Shakisha itsinda ry'umutekano ukoresheje izina, cyangwa shyiramo object ID yaryo.",
+        "intro": "Hitamo umuntu, itsinda ry'umutekano cyangwa domain kugira ngo ubone ibyo bahabwa n'itegeko ribibagenewe. Fungura umupaka uwo ariwo wose kugira ngo ushyireho uburenganzira bwihariye bahabwe aho.",
+        "typicalMember": {
+          "group": "nk'umunyamuryango usanzwe: umuntu uri muri iri tsinda kandi nta rindi tegeko rimumurengera. Umunyamuryango ufashwe na tegeko bwite cyangwa irindi tsinda ashobora guhabwa ikindi.",
+          "domain": "nk'umunyamuryango usanzwe: umuntu uri kuri iyi domain kandi nta rindi tegeko rimumurengera. Umunyamuryango ufashwe na itsinda cyangwa tegeko bwite ashobora guhabwa ikindi."
+        },
+        "ownRule": "{count, plural, one {# uburenganzira bwihariye bwashyizweho} other {# uburenganzira bwihariye bwashyizweho}} kuri {subject} gusa.",
+        "exceptionFor": "Uburenganzira bwihariye kuri {subject}",
+        "exceptionLabel": "{limit} kuri {subject}",
+        "noException": {
+          "user": "Nta burenganzira bwihariye: uyu muntu ahabwa icyo amategeko ari hejuru yamuhaye.",
+          "group": "Nta burenganzira bwihariye: abanyamuryango bahabwa icyo amategeko ari hejuru yabahaye.",
+          "domain": "Nta burenganzira bwihariye: abantu kuri iyi domain bahabwa icyo amategeko ari hejuru yabahaye."
+        },
+        "effect": {
+          "applies": "Bahabwa {value} aho guhabwa {otherwise}.",
+          "same": "Bahabwa {value}, nk'uko biba batabonye uburenganzira bwihariye.",
+          "held-by-ceiling": "Nta mpinduka nk'uko byashyizweho: umupaka muremure ubihagarika kuri {value}.",
+          "outranked": "Nta mpinduka nk'uko byashyizweho: itegeko rifatika cyangwa rifite agaciro kurusha abandi naryo niyo rifata umwanzuro ({value}).",
+          "inert": "Ntibikoreshwa."
+        }
+      }
     }
   },
   "m365": {

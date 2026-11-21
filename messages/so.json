@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Wakiillada waxaa halkan lagu tusaa oo keliya aqriso ahaan. Cidda wakiil ka ah, isticmaalayaasha ay daboolayaan, iyo waxa uu madaxda wakiil walba sameyn karo waxaa lagu maamulaa aagga Wakiillo.",
     "delegationsManagedElsewhereLink": "Fur Wakiillo",
     "modelAccess": {
-      "intro": "Go'aami qofka isticmaali kara moodal kasta. Dejinta qoysku waxay saameynaysaa moodallada la xiriira ilaa moodal gaar ah uu isagu gooni isu dejiyo; dadka liiska ku jira ayaa ka mudnaan badan kuwa kale; liiska xayiraaddu waxa uu ka sarreeyaa dhammaan rukhsiyada.",
       "externalNote": "Moodallada ka baxsan deegaanka Azure ({families}) cidna lama heli karo ilaa aad halkan rukhsad siiso — dhammaan adoo adeegsanaya default ama kooxo, domains, iyo dadka.",
       "envelopeNote": "Xaddiga codsiga ee qoys waxa uu la wadaaganyahay miisaaniyadda maalinlaha ee moodallada ku jira; xaddidaadda moodal keliya waxa ay xad u tahay gudaheeda. Haddii moodal aan xad lahayn laga dhigo, miisaaniyadda qoyska lagama saaro.",
       "observeNote": "Habka Diiwaangelinta (Observe) waa shaqeeyaa: wax kasta oo halkan ah weli ma qariyo moodal mana joojiyo codsi. U beddel Enforce marka xeerarku sax noqdaan.",
-      "familyChip": "Qoys",
-      "modelChip": "Model",
       "otherModels": "Moodallo aan qoys lahayn",
-      "modelsInFamily": "{count, plural, one {# moodal ku jira qoyska} other {# moodal ku jira qoyska}}",
       "noModels": "Weli moodallo kuma jiro buugga.",
-      "expand": "Muuji moodallo",
-      "collapse": "Qari moodallo",
-      "edit": "Wax ka beddel",
       "doneEditing": "Dhamey",
-      "editNode": "Wax ka beddel helitaanka {label}",
       "defaultLabel": "Qof kasta oo kale",
-      "defaultInherit": "Raac",
-      "defaultUnlimited": "Aan xad lahayn",
-      "defaultLimited": "Xadidan ilaa",
-      "defaultUnavailable": "Aan la heli karin",
-      "defaultRequestsLabel": "Codsiyo maalintii qof walba oo kale ah",
       "requestsPerDay": "codsiyo / maalinti",
       "inheritedFrom": "Waxa uu ka dhaxlay {state} laga bilaabo {origin}.",
       "effectiveLabel": "Qof kastaa oo aan liis ku jirin waxa uu helayaa: {state}.",
-      "inheritedChip": "la dhaxlay",
       "origin": {
         "model": "deejintan",
         "family": "qoyskiisa",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Ka saar {target}",
       "groupsCount": "{count, plural, one {# koox} other {# kooxood}}",
       "domainsCount": "{count, plural, one {# domain} other {# domains}}",
-      "allowCount": "{count, plural, one {# qof la oggolyahay} other {# qof la oggolyahay}}",
-      "denyCount": "{count, plural, one {# qof la xayiray} other {# qof la xayiray}}",
       "collisionChip": "Sidoo kale waxa ku jira Dejinta Guud",
-      "collisionWarning": "Qaabkan ama qoyska waxa kale oo lagu habeeyey Dejinta Guud. Kaydin lama ogola illaa mid ka mid ah labadaasi la tirtiray."
+      "collisionWarning": "Qaabkan ama qoyska waxa kale oo lagu habeeyey Dejinta Guud. Kaydin lama ogola illaa mid ka mid ah labadaasi la tirtiray.",
+      "grid": {
+        "intro": "Yaa isticmaali kara moodel walba, iyo inta codsi ee maalintii la samayn karo. Saf walba waa qoys ama moodel; tiirar walbana waa dhagaystayaal. Dooro unug si aad u beddesho.",
+        "caption": "Helitaanka moodelka ee dhagaystayaasha",
+        "col": {
+          "model": "Moodel",
+          "reach": "Waa la isticmaali karaa"
+        },
+        "familyNote": "qoys: miisaaniyad maalinle ah oo la wadaago",
+        "addColumn": "Kudar tiir dhagaystayaal",
+        "addColumnConfirm": "Kudar tiir",
+        "columnKind": "Dhagaystayaal",
+        "addColumnHint": "Tiirka wuu sii joogi doonaa mar haddii unugkiisa la dejiyo.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "ma laha shuruudo u gaar ah",
+        "grantHint": "Inherit waxay la micno tahay inaysan jirin shuruudo dhagaystahan safkan ku qoran: xubnahoodu waxay heli doonaan jawaabta Qofkasta oo kale haddii aysan jirin tiir kale oo daboola.",
+        "grantHintFamily": "Inherit waxay adeegsanaysaa shuruudaha qoyska u dejiyey dhagaystahan.",
+        "inheritedPeople": "{count, plural, one {# qof oo kale ayaa ka yimaada} other {# qof oo kale ayaa ka yimaada}} liiska qoyska.",
+        "reach": {
+          "everyone": "Qof walba",
+          "everyoneBut": "{count, plural, one {Qof walba marka laga reebo # qof} other {Qof walba marka laga reebo # qof}}",
+          "nobody": "Qofna maaha",
+          "people": "{count, plural, one {# qof} other {# qof}}"
+        },
+        "howTitle": "Sida go'aan looga gaaro codsi",
+        "how": {
+          "block": "Liiska la xannibay? Lama heli karo, xaalad kasta oo jirta.",
+          "specific": "Haddii kale, ogolaanshaha ugu gaar ah ee qofka daboola ayaa dejiya shuruudihiisa: qof magaciisa la cayimay, kadib koox, kadib domain, kadib qofkasta oo kale.",
+          "inherit": "Moodel aan lahayn shuruudo u gaar ah tiirka wuxuu adeegsanayaa kuwa qoyska (xariiqan).",
+          "envelope": "Codsigu waa inuu la jaanqaadaa xadka moodelka, miisaaniyadda qoyska iyo wadarta sheekada, dhammaantood."
+        }
+      }
     },
     "previewSourceModelAccess": "Oggolaanshaha model-ka — {list}",
     "groupMembershipDegradedStructural": "Helitaanka xubinnimada kooxda ayaa ka fashilmay server-kan ({reason}). Xeerarka iyo oggolaanshaha la xiriira kooxaha laguma dabaqayo dadka ay tani saameysey — fadlan hubi oggolaanshaha tenant-ka ee Group.Read.All iyo diiwaangelinta app-ka.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Guudmar",
-        "person": "Hal qof",
         "review": "Dib-u-eegis",
-        "reviewCount": "Dib-u-eegis ({count})"
+        "reviewCount": "Dib-u-eegis ({count})",
+        "check": "Hubi helitaanka"
       },
       "everyone": "Dhammaan",
       "off": "Dami",
@@ -6999,7 +7014,6 @@
       "policyShown": "Xeerka la tusay",
       "savedPolicy": "Waa la keydiyay",
       "withDraft": "Iyadoo la tixgelinayo isbeddelkaaga",
-      "lensIntro": "Gali email-ka qof si aad u aragto waxa uu helo, wixii uu isticmaalay maanta, iyo xeerka go'aamiyay.",
       "lensCaption": "Xadadka {mail}",
       "layer": {
         "catalog": "Kuwa ku dhex jira",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Toddobaadkii hore {people, plural, one {# qof} other {# qof}} ayaa saqafkooda laga helay halkan; {atCap} ayaa gaaray.",
         "overNewCap": "{people, plural, one {# qof} other {# qof}} ayaa maalin ka sareeyay {cap} toddobaadkii hore.",
         "events": "Saqafka xadkaas waxaa la gaaray {events, plural, one {# jeer} other {# jeer}} gaaray {people, plural, one {# qof} other {# qof}} toddobaadkii hore.",
-        "noTargets": "Wali ma daboolayso qof, sidaas darteed waxba ma badaleyso ilaa dad la daro."
+        "noTargets": "Wali ma daboolayso qof, sidaas darteed waxba ma badaleyso ilaa dad la daro.",
+        "peopleGet": "Dadkan magacyadooda leh waxay heli doonaan {after} halkii ay ka heli lahaayeen {before}."
       },
       "flag": {
         "removes-cap": "Waxay meesha ka saartaa xadka: xad kuma khusayso dadkaas.",
@@ -7060,7 +7075,6 @@
         "model-access": "Helitaanka moodelka ee {subject}"
       },
       "checkPerson": "Ka fiiri qof kasta qoraalkan",
-      "checkPersonHint": "Waxay furaysaa aragtida hal qof oo isbeddelladaada lagu dabaqay.",
       "historyNote": "Kaydinta waxa ay qoraysaa hal nooc taariikhda isbeddellada.",
       "histogramLabel": "{people} qof maalintoodii ugu shaqada badnaa ee toddobaadkii hore; saqafka hore {before}, saqafka cusub {after}",
       "histogramCaption": "Dadku maalintooda ugu mashquulka badan toddobaadkii hore. Orange: ka sarreeysa xadka cusub.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {# isbeddel lama kaydin} other {# isbeddello lama kaydin}}",
       "discardConfirm": "Ma rabtaa in la tirtiro isbeddellada aan la keydin oo dhan?",
       "discardYes": "Tirtir",
-      "reviewChanges": "Dib u eeg isbeddellada"
+      "reviewChanges": "Dib u eeg isbeddellada",
+      "checkPersonHint": "Waxay furaysaa Hubi helitaanka oo isbeddelkaagu wuxuu si toos ah ugu shaqeeyaa.",
+      "lens": {
+        "subjectKind": "Maxaad rabtaa inaad hubiso",
+        "kind": {
+          "user": "Qof",
+          "group": "Koox amni",
+          "domain": "Domain"
+        },
+        "domainLabel": "Domain-ka iimaylka si loo hubiyo",
+        "groupHint": "Raadi koox amni magaca, ama dheji Aqoonsigeeda.",
+        "intro": "Dooro qof, koox amni ama domain si aad u aragto waxa ay helayaan iyo xeerka u go'aamiyay. Fur xad walba si aad uga sameyso ka-reebitaan isla markiiba.",
+        "typicalMember": {
+          "group": "sida xubin caadi ah: qof kooxda ku jira oo aan xeer kale daboolin. Xubin sidoo kale daboolan xeer shaqsi ah ama koox kale wuxuu heli karaa wax kala duwan.",
+          "domain": "sida xubin caadi ah: qof domain-kan jooga oo aan xeer kale daboolin. Qof sidoo kale daboolan koox ama xeer shaqsi ah wuxuu heli karaa wax kala duwan."
+        },
+        "ownRule": "{count, plural, one {# ka-reebitaan ayaa} other {# ka-reebitaanno ayaa}} loo dejiyay {subject} kaliya.",
+        "exceptionFor": "Ka-reebitaan {subject}",
+        "exceptionLabel": "{limit} ee {subject}",
+        "noException": {
+          "user": "Ma jiro ka-reebitaan: qofkani wuxuu helayaa wixii xeerarka kor ku qoran siinayaan.",
+          "group": "Ma jiro ka-reebitaan: xubnuhu waxay helayaan wixii xeerarka kor ku qoran siinayaan.",
+          "domain": "Ma jiro ka-reebitaan: dadka domain-kan ku jira waxay helayaan wixii xeerarka kor ku qoran siinayaan."
+        },
+        "effect": {
+          "applies": "Waxay bixinaysaa {value} halkii ay ka bixin lahayd {otherwise}.",
+          "same": "Waxay bixinaysaa {value}, la mid ah sida aan la helin ka-reebitaan.",
+          "held-by-ceiling": "Saameyn kuma leh sida la dejiyay: xad adag ayaa ku haya {value}.",
+          "outranked": "Saameyn kuma leh sida la dejiyay: xeer gaar ah ama mid mudnaantiisu sarreyso ayaa go'aaminaya ({value}).",
+          "inert": "Saameyn kuma jiro."
+        }
+      }
     }
   },
   "m365": {

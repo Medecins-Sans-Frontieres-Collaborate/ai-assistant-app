@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "Delegoinnit ovat täällä vain luku -tilassa. Delegoinnin jäsenet, ketkä käyttäjät siihen kuuluvat ja mitä kukin ylläpitäjä voi tehdä, hallitaan Delegoinnit-osiossa.",
     "delegationsManagedElsewhereLink": "Avaa delegoinnit",
     "modelAccess": {
-      "intro": "Määritä, kuka saa käyttää mitäkin mallia. Perheen asetus koskee sen malleja, ellei mallin kohdalla ole poikkeusta; lista ohittaa oletuksen muille; estolista ohittaa kaikki myönnytykset.",
       "externalNote": "Azure-ympäristön ulkopuolella isännöidyt mallit ({families}) eivät ole kenenkään käytettävissä, ennen kuin myönnät oikeuden täällä – kaikille oletuksen kautta tai ryhmille, domaineille ja henkilöille erikseen.",
       "envelopeNote": "Perhetason pyyntöraja on yhteinen päivittäinen budjetti sen malleille; mallikohtainen raja on katto kyseisessä mallissa. Rajaton mallissa ei poista perheen budjettia.",
       "observeNote": "Seurantatila on käytössä: mikään täällä ei vielä piilota mallia tai estä pyyntöjä. Vaihda ylhäältä valvontaan, kun säännöt ovat kunnossa.",
-      "familyChip": "Perhe",
-      "modelChip": "Malli",
       "otherModels": "Mallit ilman perhettä",
-      "modelsInFamily": "{count, plural, one {# malli tässä perheessä} other {# mallia tässä perheessä}}",
       "noModels": "Luettelossa ei ole vielä malleja.",
-      "expand": "Näytä mallit",
-      "collapse": "Piilota mallit",
-      "edit": "Muokkaa",
       "doneEditing": "Valmis",
-      "editNode": "Muokkaa käyttöoikeuksia kohteelle {label}",
       "defaultLabel": "Kaikki muut",
-      "defaultInherit": "Peritty",
-      "defaultUnlimited": "Rajaton",
-      "defaultLimited": "Rajattu",
-      "defaultUnavailable": "Ei saatavilla",
-      "defaultRequestsLabel": "Pyyntöjä päivässä muille",
       "requestsPerDay": "pyyntöä / päivä",
       "inheritedFrom": "Perii tilan {state} kohteesta {origin}.",
       "effectiveLabel": "Kaikille, jotka eivät ole listalla: {state}.",
-      "inheritedChip": "peritty",
       "origin": {
         "model": "tämä asetus",
         "family": "sen perhe",
@@ -6884,10 +6870,39 @@
       "removeGrant": "Poista kohde {target}",
       "groupsCount": "{count, plural, one {# ryhmä} other {# ryhmää}}",
       "domainsCount": "{count, plural, one {# domain} other {# domainia}}",
-      "allowCount": "{count, plural, one {# sallittu henkilö} other {# sallittua henkilöä}}",
-      "denyCount": "{count, plural, one {# estetty henkilö} other {# estettyä henkilöä}}",
       "collisionChip": "Myös globaaliasetuksissa",
-      "collisionWarning": "Tämä malli tai perhe on myös määritetty globaaliasetuksissa. Tallennusta ei sallita, ennen kuin toinen näistä poistetaan."
+      "collisionWarning": "Tämä malli tai perhe on myös määritetty globaaliasetuksissa. Tallennusta ei sallita, ennen kuin toinen näistä poistetaan.",
+      "grid": {
+        "intro": "Kuka voi käyttää mitäkin mallia ja montako pyyntöä päivässä. Jokainen rivi on perhe tai malli; jokainen sarake on yleisö. Valitse solu muuttaaksesi sitä.",
+        "caption": "Mallin käyttöoikeus yleisöittäin",
+        "col": {
+          "model": "Malli",
+          "reach": "Voi käyttää"
+        },
+        "familyNote": "perhe: yhteinen päiväbudjetti",
+        "addColumn": "Lisää yleisösarake",
+        "addColumnConfirm": "Lisää sarake",
+        "columnKind": "Yleisö",
+        "addColumnHint": "Sarake pysyy, kun siihen asetetaan jokin solu.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "ei omia ehtoja",
+        "grantHint": "Periytä tarkoittaa, ettei tällä rivillä ole ehtoja tälle yleisölle: he saavat \"Kaikki muut\" -vastauksen, ellei toinen sarake kata heitä.",
+        "grantHintFamily": "Periytä käyttää ne ehdot, jotka perhe on määrittänyt tälle yleisölle.",
+        "inheritedPeople": "{count, plural, one {# henkilö tulee} other {# henkilöä tulee}} perheen listalta.",
+        "reach": {
+          "everyone": "Kaikki",
+          "everyoneBut": "{count, plural, one {Kaikki paitsi # henkilö} other {Kaikki paitsi # henkilöä}}",
+          "nobody": "Ei kukaan",
+          "people": "{count, plural, one {# henkilö} other {# henkilöä}}"
+        },
+        "howTitle": "Miten yhdestä pyynnöstä päätetään",
+        "how": {
+          "block": "Onko estolistalla? Ei saatavilla riippumatta muista säännöistä.",
+          "specific": "Muuten tarkin henkilöä koskeva sääntö määrittää ehdot: nimetty henkilö, sitten ryhmä, sitten domain, sitten kaikki muut.",
+          "inherit": "Mallissa, jolla ei ole omia ehtoja sarakkeessa, käytetään perheen ehtoja (katkiviivalla).",
+          "envelope": "Pyynnön on mahduttava mallin rajaan, perheen yhteiseen budjettiin ja keskustelun kokonaismäärään – kaikki kolme huomioidaan."
+        }
+      }
     },
     "previewSourceModelAccess": "Mallin hyväksyntä — {list}",
     "groupMembershipDegradedStructural": "Ryhmän jäsenyyksien tarkistukset epäonnistuvat tällä palvelimella ({reason}). Ryhmäperusteisia sääntöjä ja oikeuksia ei sovelleta asianomaisiin henkilöihin — tarkista vuokralaisen Group.Read.All-suostumus ja sovelluksen rekisteröinti.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "Yleiskatsaus",
-        "person": "Yksi henkilö",
         "review": "Tarkista",
-        "reviewCount": "Tarkista ({count})"
+        "reviewCount": "Tarkista ({count})",
+        "check": "Tarkista käyttöoikeus"
       },
       "everyone": "Kaikki",
       "off": "Pois päältä",
@@ -7015,7 +7030,6 @@
       "policyShown": "Politiikka näytetty",
       "savedPolicy": "Tallennettu",
       "withDraft": "Muutoksesi mukana",
-      "lensIntro": "Syötä henkilön sähköposti nähdäksesi, mitä hän saa, mitä on käyttänyt tänään ja mikä sääntö sen määritti.",
       "lensCaption": "Rajaukset: {mail}",
       "layer": {
         "catalog": "Sisäänrakennettu",
@@ -7052,7 +7066,8 @@
         "ruleReach": "Viime viikolla {people, plural, one {# henkilö} other {# henkilöä}} sai rajansa tästä; {atCap} saavutti sen.",
         "overNewCap": "{people, plural, one {# henkilö} other {# henkilöä}} ylitti uuden rajan {cap} yhtenä päivänä viime viikolla.",
         "events": "Tämä raja saavutettiin {events, plural, one {# kerran} other {# kertaa}} {people, plural, one {# henkilö} other {# henkilöä}} toimesta viime viikolla.",
-        "noTargets": "Ei koske vielä ketään, joten se ei muuta mitään ennen kuin henkilöitä lisätään."
+        "noTargets": "Ei koske vielä ketään, joten se ei muuta mitään ennen kuin henkilöitä lisätään.",
+        "peopleGet": "Nimetyt henkilöt saavat {after} sijaan {before}."
       },
       "flag": {
         "removes-cap": "Poistaa rajan: näihin henkilöihin ei kohdistu mitään rajaa.",
@@ -7076,7 +7091,6 @@
         "model-access": "Mallin käyttöoikeus: {subject}"
       },
       "checkPerson": "Tarkista luonnoksen vaikutus kenelle tahansa",
-      "checkPersonHint": "Avaa yhden henkilön näkymän muutoksillasi.",
       "historyNote": "Tallennus luo yhden version muutoshistoriaan.",
       "histogramLabel": "{people} henkilöä kiireisimmän päivänsä mukaan viime viikolla; vanha raja {before}, uusi raja {after}",
       "histogramCaption": "Ihmiset viime viikon kiireisimmän päivän mukaan. Oranssi: yli uuden rajan.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# muutosta tallentamatta} other {# muutosta tallentamatta}}",
       "discardConfirm": "Hylätäänkö kaikki tallentamattomat muutokset?",
       "discardYes": "Hylkää",
-      "reviewChanges": "Tarkista muutokset"
+      "reviewChanges": "Tarkista muutokset",
+      "checkPersonHint": "Avaa 'Tarkista käyttöoikeus' muutoksillasi.",
+      "lens": {
+        "subjectKind": "Mitä tarkistaa",
+        "kind": {
+          "user": "Henkilö",
+          "group": "Turvaryhmä",
+          "domain": "Domain"
+        },
+        "domainLabel": "Tarkistettava sähköpostidomain",
+        "groupHint": "Hae turvaryhmän nimellä tai liitä sen objektitunniste.",
+        "intro": "Valitse henkilö, turvaryhmä tai domain nähdäksesi mitä he saavat ja minkä säännön perusteella. Avaa mikä tahansa rajoitus määrittääksesi poikkeuksen sille suoraan.",
+        "typicalMember": {
+          "group": "tyyppillisenä jäsenenä: joku joka kuuluu tähän ryhmään, eikä mikään muu sääntö kata häntä. Jos jäsenelle on myös henkilökohtainen sääntö tai toinen ryhmä, hän voi saada jotain muuta.",
+          "domain": "tyyppillisenä jäsenenä: joku tässä domainissa, eikä mikään muu sääntö kata häntä. Jos domainin henkilöä koskee myös ryhmä- tai henkilökohtainen sääntö, hän voi saada jotain muuta."
+        },
+        "ownRule": "{count, plural, one {# poikkeus on} other {# poikkeusta on}} asetettu vain kohteelle {subject}.",
+        "exceptionFor": "Poikkeus: {subject}",
+        "exceptionLabel": "{limit} kohteelle {subject}",
+        "noException": {
+          "user": "Ei poikkeusta: tämä henkilö saa mitä yllä olevat säännöt antavat.",
+          "group": "Ei poikkeusta: jäsenet saavat mitä yllä olevat säännöt antavat.",
+          "domain": "Ei poikkeusta: tämän domainin henkilöt saavat mitä yllä olevat säännöt antavat."
+        },
+        "effect": {
+          "applies": "Antaa {value} sijaan {otherwise}.",
+          "same": "Antaa {value}, sama kuin ilman poikkeusta.",
+          "held-by-ceiling": "Ei vaikutusta: tiukka katto rajoittaa arvoon {value}.",
+          "outranked": "Ei vaikutusta: tarkempi tai priorisoidumpi sääntö ratkaisee ({value}).",
+          "inert": "Ei voimassa."
+        }
+      }
     }
   },
   "m365": {

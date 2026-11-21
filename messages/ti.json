@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "ደሌጌሽንታት ኣብዚ ንምንባዕ ብቑልጡፍ ይተረኽቡ። መን ኣብዚ ደሌጌሽን እዩ፣ ንማን ተጠቃሚታት ይሕበሩን እና ነቲ ኣድሚን ምንታይ ዝኽእሎ ኣብ ደሌጌሽን ፈንታ ይተኣክል።",
     "delegationsManagedElsewhereLink": "ደሌጌሽንታት ክኽፈቱ",
     "modelAccess": {
-      "intro": "ንሞዴልን ሓደ ትጠቐም ዝኽእል ማን ይፍለጥ። ሓላፍነት ዝተወሰነ ሞዴል ካዚ ሰብኣይ ንዝዘረበ ሞዴል ይሕሉ፣ በይነ ሰናይ ዝተወሰኑ ሰባት ቀዳም ይምለከት፣ ሓበው ሰናይ ዝተወሰኑ ሰባት ካብ ሓላፍነት ምስ ምእዙ።",
       "externalNote": "ናይ ኣዚር ይኣእቱ ብዝናብኦ ሞዴልታት ({families}) ናይ ሓበሽበል ኣይሰረዩም ክንወሓን ከምኡ ኣይግበሩን — ንሓላፍነት ንኹሉ ወይ ንማዕረፍታት ንናይ ድሕሪ ነጋሪትን ንሰባት ምስ ተፃወት።",
       "envelopeNote": "ዝተወሰነ ጥዕና ንምትሕዳስ ናይ ሞዴል መዋዕላዊ ዝወደድ ተስፋ የቀስ ይፃኑ። ዝተወሰነ ጥዕና ናይ ሞዴል ባይ ጥዕና ይፃኑ። ሞዴል ዝበለ ሕጋዊ ኣብ ሓላፍነት ሞዴል ክቕርሕ ኣይኮነን።",
       "observeNote": "Observe ሞዴ ተኣሪፉ፡ ኣብዚ ዚከኣል ሞዴል ዝተኸሰገ ወይ ምውናት ኣይተቀረበን። ኣብ ደሓሎ ደበላ ብEnforce በለ፡ ህጋዊ ውድብ እንተሓገዘ።",
-      "familyChip": "ወላዲ",
-      "modelChip": "ሞዴል",
       "otherModels": "ሞዴልታት ዘይኣቦ ወላዲ",
-      "modelsInFamily": "{count, plural, one {# ሞዴል ኣብዚ ወላዲ} other {# ሞዴልታት ኣብዚ ወላዲ}}",
       "noModels": "ኣይኮነን ሞዴልታት ኣብ ካታሎግ እቲ።",
-      "expand": "ሞዴልታት ርኣይ",
-      "collapse": "ሞዴልታት ምልባሉ",
-      "edit": "ምርማላ",
       "doneEditing": "ተዓሪፉ",
-      "editNode": "ኣብ {label} ምፍታው ተሰናይ",
       "defaultLabel": "ቀርና፡ ኹሉ ሰብ",
-      "defaultInherit": "ይተሃረሱ",
-      "defaultUnlimited": "ምድላው",
-      "defaultLimited": "ዝተወሰነ ናይ",
-      "defaultUnavailable": "ኣይሰረየን",
-      "defaultRequestsLabel": "ምውናትታት / ዕለት ንኹሉ ሰብ",
       "requestsPerDay": "ምውናት / ዕለት",
       "inheritedFrom": "{state} ካብ {origin} ይተሃረሱ።",
       "effectiveLabel": "ዝኾነ ርኣይ ዘይተወሰነ ሰባት: {state}።",
-      "inheritedChip": "ተሃረሱ",
       "origin": {
         "model": "እዚ ምርጫ",
         "family": "ወላዲ ናይ",
@@ -6868,10 +6854,39 @@
       "removeGrant": "{target} ምሕዳስ",
       "groupsCount": "{count, plural, one {# ማዕረፍ} other {# ማዕረፍታት}}",
       "domainsCount": "{count, plural, one {# ዶሜይን} other {# ዶሜይንታት}}",
-      "allowCount": "{count, plural, one {# ሰብ ተፃዓዮ} other {# ሰባት ተፃዓዮም}}",
-      "denyCount": "{count, plural, one {# ሰብ ተኣግዩ} other {# ሰባት ተኣግዩም}}",
       "collisionChip": "ኣብ ናይ ዓለም ዋሕዋሐ ምስክር እዶም ምስተተፅናና",
-      "collisionWarning": "እዚ ሞዴል ወይ ቤተሰብ ኣብ ናይ ዓለም ዋሕዋሐ ምስክር ተተፅናና እዩ። ምውህላው ክተሰርፅ ኣይከኣልን እምበር ናይ ሞዴል ወይ ናይ ቤተሰብ ንከንነው ብዙሕዋይ ክወጽእ ይግበሩ።"
+      "collisionWarning": "እዚ ሞዴል ወይ ቤተሰብ ኣብ ናይ ዓለም ዋሕዋሐ ምስክር ተተፅናና እዩ። ምውህላው ክተሰርፅ ኣይከኣልን እምበር ናይ ሞዴል ወይ ናይ ቤተሰብ ንከንነው ብዙሕዋይ ክወጽእ ይግበሩ።",
+      "grid": {
+        "intro": "ዝኽእል ሞዴል ንታሕዋት፣ ብዕለት ክነበስ ዝኽእል ብቁጽሪ ጥዕና፡ እዚ ሓበሬታ ምስጢር ንስደት ወይ ሞዴል እዩ፣ ኮሎም ንዳበል ይሕሸ፡ ዝዕቡ እዋን ዘይንተገናከየ ዝርዝሩ ታሕዋት፡ ንፍሉይ ሰርከት ምምሕዳር ይቕርብ።",
+        "caption": "ሞዴል መድረኽ ብዳበል",
+        "col": {
+          "model": "ሞዴል",
+          "reach": "ክስደት ይኽእል"
+        },
+        "familyNote": "ቤተሰብ፡ ተኣፍላይ ዘምልከት ንቀስተ ዕለት",
+        "addColumn": "ኮሎም ንዳበል ተደርስ",
+        "addColumnConfirm": "ኮሎም ጨምር",
+        "columnKind": "ዳበል",
+        "addColumnHint": "ኮሎም ነቲ ተወሰነ ስንቱ ሕሳብ ከተቐየም ይቆርጣ።",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "ዘሎ መስፈርት ኣይኮነን",
+        "grantHint": "ኣክሊዎ ማለት ምስ እዚ ዳበል ዘይኣለ መስፈርት፡ ኣባላት ናይ 'ንኹሉ ደገ' ምስተሰንደት እንተ ደቂ ኮሎም ኣይክዳልን።",
+        "grantHintFamily": "ኣክሊዎ ምስ መስፈርት ቤተሰብ ንዳበል ይጠቐም።",
+        "inheritedPeople": "{count, plural, one {ሓደ ሰብ ተጨውነ} other {# ሰባት ተጨውነ}} ካብ ዝርዝሩ ቤተሰቡ።",
+        "reach": {
+          "everyone": "ንኹሉ",
+          "everyoneBut": "{count, plural, one {ንኹሉ ካብ ሓደ ሰብ ወገን} other {ንኹሉ ካብ # ሰባት ወገን}}",
+          "nobody": "ድንን",
+          "people": "{count, plural, one {ሓደ ሰብ} other {# ሰባት}}"
+        },
+        "howTitle": "ብኸኣ ናይ ትእዛዝ መምሰር",
+        "how": {
+          "block": "ኣብ ዝተዘጋፉ ዝርዝር እዩ? ዘይትሓገዝ፣ እሱን ካልእ ነገር እንታይ ይኸውን።",
+          "specific": "ካልእ ኣብ ዝንበሮ ነቲ ዘሎ ዘርከበ መስፈርት እታ ሰብ ይምሓዝ፡ ኣብ ስም ዝተሰነደት ሰብ፣ ካድ ገርና፣ ካድ ዶሚና፣ ካድ ንኹሉ ደገ።",
+          "inherit": "ሞዴል ዘይኣለ መስፈርት ኣብ ኮሎም መስፈርት ቤተሰቡ (ተሰላሰላ መስመር) ይጠቐም።",
+          "envelope": "ኣብ ዝኸኣ መስፈርት ይጽሓ፡ ሞዴል ዳነ ኣብ ቤተሰብ የተኣፍላይ ቀስተ ዕለትን ምናልባት ጫት ጉባኤን።"
+        }
+      }
     },
     "previewSourceModelAccess": "ምሉእ ምዝርግታ ሞዴል — {list}",
     "groupMembershipDegradedStructural": "ብዝሒ ሓደጋ ኣብዚ ሰርቨር ናይ ምኦፃህ ባህሪ ናይ ቡድን ኣባልነት ምትሕትዋት ካይደለን ({reason})። ነቲ ተጋደልቲ ሰባት ናይ ቡድን መስፈርታትን ኣገዳሲን ኣይተተቐበሉን — ናይ tenant Group.Read.All ምምሕዳስን app registration ፈትን።",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "ትንሳኤ",
-        "person": "ናይ ሓደ ሰብ",
         "review": "ተደምሃሚ",
-        "reviewCount": "ተደምሃሚ ({count})"
+        "reviewCount": "ተደምሃሚ ({count})",
+        "check": "ተምርአን መድረኽ"
       },
       "everyone": "ኩሉ",
       "off": "ትንክል",
@@ -6999,7 +7014,6 @@
       "policyShown": "ፖሊሲ ይቕርብ።",
       "savedPolicy": "ተቐይሩ",
       "withDraft": "ብቅድሚ እንተሓውነትኡ",
-      "lensIntro": "ናይ ሰብ ኢሜይል ኣእትዎ፡ ይነብሩ ዝደለወ ወስን ፣ ዝተጠቀመ ዛሕማት እና እቲ ሕጊ ዝወሰነ ትረኽበ።",
       "lensCaption": "ውስን ናይ {mail}",
       "layer": {
         "catalog": "ምስተኻኸይ",
@@ -7036,7 +7050,8 @@
         "ruleReach": "ኣብ ዓለም ስምዒት መግበሪ {people, plural, one {# ሰብ} other {# ሰባት}} ኣብዚ ዝሓሰብ ኣንበት ይኸውን፡ {atCap} ተመላላሽ።",
         "overNewCap": "{people, plural, one {# ሰብ} other {# ሰባት}} ኣብ ዓለም ስምዒት ቀዳማይቲ {cap} ዝሓሸት ትዝፅቱ።",
         "events": "ኣብዚ መግበሪ ቀዳማይቲ {events, plural, one {# ግዜ} other {# ግዛያት}} ብ{people, plural, one {# ሰብ} other {# ሰባት}} ተሳእነ።",
-        "noTargets": "ንሰብ ምውዳእ የኣበሃን፡ ናይ ምስ ሰባት ኣተወ ምትንቓል ኢሉ ኢዩ።"
+        "noTargets": "ንሰብ ምውዳእ የኣበሃን፡ ናይ ምስ ሰባት ኣተወ ምትንቓል ኢሉ ኢዩ።",
+        "peopleGet": "ኣብ መስመር ሰባት ን{after} እንታይ {before} ይቅበሩ።"
       },
       "flag": {
         "removes-cap": "መግበሪ ይወረድ፡ ምግባር ኣይተሕበን ንነዚ ሰባት።",
@@ -7060,7 +7075,6 @@
         "model-access": "ናይ ሞዴል ምድላው ን{subject}"
       },
       "checkPerson": "ኣንዳንድ ሰብ ብዚ እትንበር",
-      "checkPersonHint": "ናይ ሓደ ሰብ ምሕዝ ትዕዛዝ ተተገብረው ይኸውን።",
       "historyNote": "ምትንቓል ብዛዕባ ደረጃ ናይ ቕያር ዓለም ይተህናጽ።",
       "histogramLabel": "{people} ሰባት ብኣብ በሃል፡ ዓለም ወዲ {before} መግበሪ፡ ሓድሽ {after}",
       "histogramCaption": "ኣይነት ሰብ ብዝበፅሑ መዓልቲ ባህሪ ዝፅአዎ ዝዕለ ሰማንታ። ብቀለይ ጻዕዳ: ኣብ ሓደሽ መግደቢ ኣይተሓለዉ።",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {# ሓወጋ ዘይተፃወተ} other {# ሓወጋታት ዘይተፃወቱ}}",
       "discardConfirm": "ሓውጋታት ዘይተፃወቱ ንኡዳ?",
       "discardYes": "እኡዳ",
-      "reviewChanges": "ሓወጋታት ኣተሓሓዝ"
+      "reviewChanges": "ሓወጋታት ኣተሓሓዝ",
+      "checkPersonHint": "ተመርአን መድረኽ ዝወጸአ ስዕብ ይኻል።",
+      "lens": {
+        "subjectKind": "ኣንዳንድ ንተመርአን",
+        "kind": {
+          "user": "ሰብ",
+          "group": "ኣረናዊ ተቐናበሉ",
+          "domain": "ዶሚና"
+        },
+        "domainLabel": "ኢሜይል ዶሚና ንተመርአን",
+        "groupHint": "ኣረናዊ ተቐናበሉ ብስም ዝርዝሩ ይኣምር ወይ ኣብ መለለይ ኢዲ ኣንኹን ብፅሕፈት ይገብር።",
+        "intro": "ሰብ፣ ኣረናዊ ተቐናበሉ ወይ ዶሚና ክትመርአን ምርጸይ፡ እቲ ዘይኸኣ እንታይ ይምሓዝብኩምን እንታይ ወይ መስፈርት ወሲደየ፡ ኣብ መናፅእ ድሕሪ ምስ ተወሰነ ግዜ ስፍር ንዝፈቀደ ርእየ።",
+        "typicalMember": {
+          "group": "እንተ ናይ ተወሰነ ኣባላት፡ ሰብ ኣብ ነዚ ተቐናበሉ ዘሎ እንተ ዝኾነን ዝቀረበን መስፈርት። ኣባላት ኣብ ስም ዝተሰነደት ወይ ካልእ ተቐናበሊ ንዛ ምንባር ድሕሪ ምስ የቃል።",
+          "domain": "እንተ ናይ ተወሰነ ኣባላት፡ ሰብ ኣብ ነዚ ዶሚና ዘሎ እንተ ዝኾነን ዝቀረበን መስፈርት። ኣባላት ካብ ተቐናበሊ ወይ ስም ዝተሰነደት ዝኾነ ሰብ ሓሳብ ትሓዙ።"
+        },
+        "ownRule": "{count, plural, one {# ምስፈር ሓደ ስፍሪ} other {# ምስፈር ስፍራት}} ን{subject} ብብሓላ፡",
+        "exceptionFor": "ምስፈር ስፍሪ ን{subject}",
+        "exceptionLabel": "{limit} ን{subject}",
+        "noException": {
+          "user": "ምስፈር ኣይኮነን: ነዛ ሰብ ምስፈርት ስፍራት ዝተሰነደተ ይምሓዝ።",
+          "group": "ምስፈር ኣይኮነን: ኣባላት ምስፈርት ስፍራት ዝተሰነደተ ይምሓዝ።",
+          "domain": "ምስፈር ኣይኮነን: ሰባት ኣብ ነዚ ዶሚና ምስፈርት ስፍራት ዝተሰነደተ ይምሓዝ።"
+        },
+        "effect": {
+          "applies": "{value} ይምሓዝ ብገዚ እንታይ {otherwise}።",
+          "same": "{value} ይምሓዝ፡ እንታይ ዘይትሕልወ ምስፈር።",
+          "held-by-ceiling": "ኣብ ዘይውሕድ ድሕሪ መደብ፡ ሓደ ክርኒት በዓል ብ{value} ይቆረጥ።",
+          "outranked": "ኣብ ዘይውሕድ ድሕሪ፡ ዝቐይሩ መስፈርት ዘይበረየ ይመው፡ ({value})",
+          "inert": "ኣብ መስርሒ ኣይኮነን።"
+        }
+      }
     }
   },
   "m365": {

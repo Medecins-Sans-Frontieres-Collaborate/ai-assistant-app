@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "Delegações exibidas aqui apenas para leitura. Quem está na delegação, quais usuários são abrangidos e o que cada administrador pode fazer são gerenciados na área de Delegações.",
     "delegationsManagedElsewhereLink": "Abrir Delegações",
     "modelAccess": {
-      "intro": "Decida quem pode usar cada modelo. A configuração de uma família vale para seus modelos, exceto se um modelo tiver sua própria; pessoas em uma lista prevalecem sobre o padrão para os demais; a lista de bloqueio supera qualquer permissão.",
       "externalNote": "Modelos hospedados fora do ambiente Azure ({families}) ficam indisponíveis para todos até que sejam concedidos aqui — para todos via padrão, ou para grupos, domínios e pessoas.",
       "envelopeNote": "Um limite de solicitações em uma família é um orçamento diário compartilhado entre seus modelos; um limite em um modelo é uma restrição dentro dele. Ilimitado em um modelo não remove o orçamento da família.",
       "observeNote": "Modo de observação está ativado: nada aqui esconde um modelo nem bloqueia solicitações ainda. Troque para Aplicar acima quando as regras estiverem certas.",
-      "familyChip": "Família",
-      "modelChip": "Modelo",
       "otherModels": "Modelos sem família",
-      "modelsInFamily": "{count, plural, one {# modelo nesta família} other {# modelos nesta família}}",
       "noModels": "Ainda não há modelos no catálogo.",
-      "expand": "Mostrar modelos",
-      "collapse": "Ocultar modelos",
-      "edit": "Editar",
       "doneEditing": "Concluído",
-      "editNode": "Editar acesso para {label}",
       "defaultLabel": "Demais pessoas",
-      "defaultInherit": "Herdar",
-      "defaultUnlimited": "Ilimitado",
-      "defaultLimited": "Limitado a",
-      "defaultUnavailable": "Indisponível",
-      "defaultRequestsLabel": "Solicitações por dia para demais pessoas",
       "requestsPerDay": "solicitações / dia",
       "inheritedFrom": "Herdado {state} de {origin}.",
       "effectiveLabel": "Todos que não estão em uma lista recebem: {state}.",
-      "inheritedChip": "herdado",
       "origin": {
         "model": "esta configuração",
         "family": "sua família",
@@ -6884,10 +6870,39 @@
       "removeGrant": "Remover {target}",
       "groupsCount": "{count, plural, one {# grupo} other {# grupos}}",
       "domainsCount": "{count, plural, one {# domínio} other {# domínios}}",
-      "allowCount": "{count, plural, one {# pessoa permitida} other {# pessoas permitidas}}",
-      "denyCount": "{count, plural, one {# pessoa bloqueada} other {# pessoas bloqueadas}}",
       "collisionChip": "Também nas configurações globais",
-      "collisionWarning": "Este modelo ou família também está configurado nas configurações globais. O salvamento será recusado até que uma das duas opções seja removida."
+      "collisionWarning": "Este modelo ou família também está configurado nas configurações globais. O salvamento será recusado até que uma das duas opções seja removida.",
+      "grid": {
+        "intro": "Quem pode usar cada modelo e quantas solicitações por dia. Cada linha é uma família ou um modelo; cada coluna é um público. Selecione uma célula para alterá-la.",
+        "caption": "Acesso ao modelo por público",
+        "col": {
+          "model": "Modelo",
+          "reach": "Pode usar"
+        },
+        "familyNote": "família: orçamento diário compartilhado",
+        "addColumn": "Adicionar coluna de público",
+        "addColumnConfirm": "Adicionar coluna",
+        "columnKind": "Público",
+        "addColumnHint": "A coluna permanece depois que uma célula nela for definida.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "sem condições próprias",
+        "grantHint": "Herdar significa sem condições para este público nesta linha: seus membros recebem a resposta de Todos os demais, a menos que outra coluna os inclua.",
+        "grantHintFamily": "Herdar usa as condições definidas pela família para este público.",
+        "inheritedPeople": "{count, plural, one {# pessoa a mais vem} other {# pessoas a mais vêm}} da lista da família.",
+        "reach": {
+          "everyone": "Todos",
+          "everyoneBut": "{count, plural, one {Todos exceto # pessoa} other {Todos exceto # pessoas}}",
+          "nobody": "Ninguém",
+          "people": "{count, plural, one {# pessoa} other {# pessoas}}"
+        },
+        "howTitle": "Como uma solicitação é decidida",
+        "how": {
+          "block": "Está na lista de bloqueio? Indisponível, independentemente do restante.",
+          "specific": "Caso contrário, a concessão mais específica que inclui a pessoa define as condições: uma pessoa nomeada, depois um grupo, depois um domínio e, por fim, todos os demais.",
+          "inherit": "Um modelo sem condições próprias em uma coluna usa as da família (tracejado).",
+          "envelope": "A solicitação deve se encaixar no limite do modelo, no orçamento compartilhado da família e no total do chat, sempre nos três."
+        }
+      }
     },
     "previewSourceModelAccess": "Aprovação do modelo — {list}",
     "groupMembershipDegradedStructural": "Consultas de associação a grupos estão falhando neste servidor ({reason}). Regras e permissões baseadas em grupos não estão sendo aplicadas para as pessoas afetadas — verifique o consentimento Group.Read.All do tenant e o registro do aplicativo.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "Visão geral",
-        "person": "Uma pessoa",
         "review": "Revisar",
-        "reviewCount": "Revisar ({count})"
+        "reviewCount": "Revisar ({count})",
+        "check": "Verificar acesso"
       },
       "everyone": "Todos",
       "off": "Desligado",
@@ -7015,7 +7030,6 @@
       "policyShown": "Política exibida",
       "savedPolicy": "Salvo",
       "withDraft": "Com suas alterações",
-      "lensIntro": "Insira o e-mail de alguém para ver o que ela recebe, o que usou hoje e qual regra decidiu isso.",
       "lensCaption": "Limites para {mail}",
       "layer": {
         "catalog": "Embutido",
@@ -7052,7 +7066,8 @@
         "ruleReach": "Na semana passada, {people, plural, one {# pessoa} other {# pessoas}} teve o limite definido aqui; {atCap} atingiu esse limite.",
         "overNewCap": "{people, plural, one {# pessoa} other {# pessoas}} teve um dia acima de {cap} na semana passada.",
         "events": "Os limites deste item foram atingidos {events, plural, one {# vez} other {# vezes}} por {people, plural, one {# pessoa} other {# pessoas}} na semana passada.",
-        "noTargets": "Ainda não cobre ninguém, então não altera nada até que pessoas sejam adicionadas."
+        "noTargets": "Ainda não cobre ninguém, então não altera nada até que pessoas sejam adicionadas.",
+        "peopleGet": "As pessoas nomeadas recebem {after} em vez de {before}."
       },
       "flag": {
         "removes-cap": "Remove o limite: não há restrição para essas pessoas.",
@@ -7076,7 +7091,6 @@
         "model-access": "Acesso ao modelo para {subject}"
       },
       "checkPerson": "Verifique qualquer pessoa neste rascunho",
-      "checkPersonHint": "Abre a visualização individual com suas alterações aplicadas.",
       "historyNote": "Ao salvar, uma versão é registrada no histórico de alterações.",
       "histogramLabel": "{people} pessoas pelo dia mais movimentado na semana passada; limite antigo {before}, novo limite {after}",
       "histogramCaption": "Pessoas pelo dia mais movimentado na semana passada. Laranja: acima do novo limite.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# alteração não salva} other {# alterações não salvas}}",
       "discardConfirm": "Descartar todas as alterações não salvas?",
       "discardYes": "Descartar",
-      "reviewChanges": "Revisar alterações"
+      "reviewChanges": "Revisar alterações",
+      "checkPersonHint": "Abre Verificar acesso com suas alterações aplicadas.",
+      "lens": {
+        "subjectKind": "O que verificar",
+        "kind": {
+          "user": "Pessoa",
+          "group": "Grupo de segurança",
+          "domain": "Domínio"
+        },
+        "domainLabel": "Domínio de e-mail para verificar",
+        "groupHint": "Procure um grupo de segurança pelo nome ou cole seu ID de objeto.",
+        "intro": "Escolha uma pessoa, um grupo de segurança ou um domínio para ver o que recebem e qual regra definiu isso. Abra qualquer limite para definir uma exceção para eles naquele ponto.",
+        "typicalMember": {
+          "group": "como membro típico: alguém deste grupo e não contemplado por outra regra. Um membro também coberto por uma regra pessoal ou outro grupo pode receber algo diferente.",
+          "domain": "como membro típico: alguém deste domínio e não contemplado por outra regra. Alguém também coberto por um grupo ou regra pessoal pode receber algo diferente."
+        },
+        "ownRule": "{count, plural, one {# exceção está} other {# exceções estão}} definidas somente para {subject}.",
+        "exceptionFor": "Exceção para {subject}",
+        "exceptionLabel": "{limit} para {subject}",
+        "noException": {
+          "user": "Sem exceção: esta pessoa recebe o que as regras acima determinarem.",
+          "group": "Sem exceção: os membros recebem o que as regras acima determinarem.",
+          "domain": "Sem exceção: pessoas deste domínio recebem o que as regras acima determinarem."
+        },
+        "effect": {
+          "applies": "Concede {value} em vez de {otherwise}.",
+          "same": "Concede {value}, igual ao que receberia sem a exceção.",
+          "held-by-ceiling": "Sem efeito como definido: um limite máximo mantém em {value}.",
+          "outranked": "Sem efeito como definido: uma regra mais específica ou prioritária decide no lugar ({value}).",
+          "inert": "Sem efeito."
+        }
+      }
     }
   },
   "m365": {

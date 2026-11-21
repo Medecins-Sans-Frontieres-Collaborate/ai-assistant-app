@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "デリゲーションは読み取り専用で表示されています。メンバーやその範囲、各管理者の権限は「デリゲーション」エリアで管理します。",
     "delegationsManagedElsewhereLink": "デリゲーションを開く",
     "modelAccess": {
-      "intro": "各モデルの利用者を決定します。ファミリの設定は、モデルが独自に設定しない限り、ファミリ内のモデルに適用されます。リストに載っている人は全員向けのデフォルトより優先され、ブロックリストはすべての許可より優先されます。",
       "externalNote": "Azure環境外にホストされたモデル（{families}）は、ここで全員またはグループ・ドメイン・個人へ許可を付与するまで、利用できません。",
       "envelopeNote": "ファミリへのリクエスト制限は、該当するモデル間で共有される1日あたりの予算です。モデルへの制限はそのモデル内での上限です。モデル単位で無制限にしても、ファミリ全体の予算は超えられません。",
       "observeNote": "観察モードが有効です：ここでの設定はモデルを非表示にしたり、リクエストを拒否したりしません。ルールが正しければ上部の「適用」に切り替えてください。",
-      "familyChip": "ファミリ",
-      "modelChip": "モデル",
       "otherModels": "ファミリがないモデル",
-      "modelsInFamily": "{count, plural, one {このファミリのモデル # 件} other {このファミリのモデル # 件}}",
       "noModels": "カタログにモデルがまだありません。",
-      "expand": "モデルを表示",
-      "collapse": "モデルを非表示",
-      "edit": "編集",
       "doneEditing": "完了",
-      "editNode": "{label} のアクセスを編集",
       "defaultLabel": "その他全員",
-      "defaultInherit": "継承",
-      "defaultUnlimited": "無制限",
-      "defaultLimited": "上限",
-      "defaultUnavailable": "利用不可",
-      "defaultRequestsLabel": "その他全員の1日あたりリクエスト数",
       "requestsPerDay": "リクエスト / 日",
       "inheritedFrom": "{origin} から {state} を継承しています。",
       "effectiveLabel": "リストに載っていないすべての方: {state}",
-      "inheritedChip": "継承",
       "origin": {
         "model": "この設定",
         "family": "ファミリ",
@@ -6884,10 +6870,39 @@
       "removeGrant": "{target} を削除",
       "groupsCount": "{count, plural, one {グループ # 件} other {グループ # 件}}",
       "domainsCount": "{count, plural, one {ドメイン # 件} other {ドメイン # 件}}",
-      "allowCount": "{count, plural, one {許可された人物 # 名} other {許可された人物 # 名}}",
-      "denyCount": "{count, plural, one {ブロックされた人物 # 名} other {ブロックされた人物 # 名}}",
       "collisionChip": "グローバルデフォルトにも設定されています",
-      "collisionWarning": "このモデルまたはファミリーはグローバルデフォルトにも設定されています。どちらか一方を解除しない限り、保存できません。"
+      "collisionWarning": "このモデルまたはファミリーはグローバルデフォルトにも設定されています。どちらか一方を解除しない限り、保存できません。",
+      "grid": {
+        "intro": "各モデルの利用者と1日あたりのリクエスト数を管理します。行ごとにファミリーまたはモデルを、列ごとに対象者を示します。セルを選択して変更できます。",
+        "caption": "対象者別のモデルアクセス",
+        "col": {
+          "model": "モデル",
+          "reach": "利用可"
+        },
+        "familyNote": "ファミリー：日ごとの予算を共有",
+        "addColumn": "対象者列の追加",
+        "addColumnConfirm": "列の追加",
+        "columnKind": "対象者",
+        "addColumnHint": "一度セルを設定すると、その列は残ります。",
+        "cellLabel": "{model}, {audience}：{value}",
+        "noGrant": "個別条件なし",
+        "grantHint": "継承はこの行のこの対象者に個別条件がないことを意味します。そのメンバーは、他の列で対象になっていなければ「Everyone else」の条件を受けます。",
+        "grantHintFamily": "継承は、ファミリーが設定したこの対象者への条件を使用します。",
+        "inheritedPeople": "{count, plural, one {ファミリーの一覧からさらに#名追加されます} other {ファミリーの一覧からさらに#名追加されます}}",
+        "reach": {
+          "everyone": "全員",
+          "everyoneBut": "{count, plural, one {#名以外全員} other {#名以外全員}}",
+          "nobody": "誰も不可",
+          "people": "{count, plural, one {#名} other {#名}}"
+        },
+        "howTitle": "1リクエストの決定方法",
+        "how": {
+          "block": "ブロックリストにある場合は利用不可。他の条件に関係なく制限されます。",
+          "specific": "それ以外の場合は、対象者を含む最も具体的な条件が適用されます。優先順位は名前指定→グループ→ドメイン→その他全員です。",
+          "inherit": "列内でモデルに個別条件がない場合は、ファミリーの条件（破線）を適用します。",
+          "envelope": "リクエストは、モデルの上限、ファミリーの共有予算、チャット全体の上限のすべてを満たす必要があります。"
+        }
+      }
     },
     "previewSourceModelAccess": "モデル承認 — {list}",
     "groupMembershipDegradedStructural": "このサーバーでグループメンバーシップの検索が失敗しています（{reason}）。影響を受ける人々には、グループベースのルールや権限が適用されていません。テナントの Group.Read.All 同意設定やアプリ登録を確認してください。",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "概要",
-        "person": "1人",
         "review": "レビュー",
-        "reviewCount": "レビュー（{count}）"
+        "reviewCount": "レビュー（{count}）",
+        "check": "アクセス確認"
       },
       "everyone": "全員",
       "off": "オフ",
@@ -7015,7 +7030,6 @@
       "policyShown": "表示中のポリシー",
       "savedPolicy": "保存済み",
       "withDraft": "変更を含む",
-      "lensIntro": "誰かのメールアドレスを入力すると、その人に適用される内容、今日の利用状況、どのルールが決まったかが分かります。",
       "lensCaption": "{mail} の制限",
       "layer": {
         "catalog": "標準搭載",
@@ -7052,7 +7066,8 @@
         "ruleReach": "先週、{people, plural, one {# 人} other {# 人}}がこの制限に到達し、{atCap}が達成しました。",
         "overNewCap": "先週、{people, plural, one {# 人} other {# 人}}が{cap}を超えた日がありました。",
         "events": "先週、この制限の上限に{events, plural, one {# 回} other {# 回}}、{people, plural, one {# 人} other {# 人}}が到達しました。",
-        "noTargets": "まだ誰も対象となっていないため、対象者が追加されるまで変更はありません。"
+        "noTargets": "まだ誰も対象となっていないため、対象者が追加されるまで変更はありません。",
+        "peopleGet": "指定された人々は{before}の代わりに{after}を取得します。"
       },
       "flag": {
         "removes-cap": "上限を解除: この人には制限が適用されません。",
@@ -7076,7 +7091,6 @@
         "model-access": "{subject}のモデルアクセス"
       },
       "checkPerson": "この下書きで任意の人物を確認",
-      "checkPersonHint": "変更を適用した一人ビューを開きます。",
       "historyNote": "保存すると変更履歴として1バージョンが記録されます。",
       "histogramLabel": "先週の忙しい日ごとの{people}人; 旧上限 {before}, 新上限 {after}",
       "histogramCaption": "先週の最も忙しかった日ごとの人数。オレンジ：新しい上限を超えています。",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {#件の変更が保存されていません} other {#件の変更が保存されていません}}",
       "discardConfirm": "保存されていないすべての変更を破棄しますか？",
       "discardYes": "破棄する",
-      "reviewChanges": "変更内容を確認する"
+      "reviewChanges": "変更内容を確認する",
+      "checkPersonHint": "変更内容を反映したアクセス確認が開きます。",
+      "lens": {
+        "subjectKind": "対象の確認",
+        "kind": {
+          "user": "個人",
+          "group": "セキュリティグループ",
+          "domain": "ドメイン"
+        },
+        "domainLabel": "確認するメールドメイン",
+        "groupHint": "グループ名で検索するか、オブジェクトIDを貼り付けてください。",
+        "intro": "個人、セキュリティグループ、またはドメインを選択して、それぞれが取得する内容と決定したルールを表示します。それぞれの制限で例外を設定できます。",
+        "typicalMember": {
+          "group": "標準メンバーとして：このグループに属し、他のルールでは対象となっていない人。個人ルールや別グループにも該当する場合は、異なる条件となることがあります。",
+          "domain": "標準メンバーとして：このドメインの利用者で、他のルールでは対象となっていない場合。グループや個人ルールにも該当すると、異なる条件となることがあります。"
+        },
+        "ownRule": "{count, plural, one {#件の例外が} other {#件の例外が}}{subject}専用に設定されています。",
+        "exceptionFor": "{subject}の例外",
+        "exceptionLabel": "{limit}（{subject}用）",
+        "noException": {
+          "user": "例外なし：この個人は上記のルールに従って条件を得ます。",
+          "group": "例外なし：メンバーは上記のルールに従って条件を得ます。",
+          "domain": "例外なし：このドメインの利用者は上記のルールに従って条件を得ます。"
+        },
+        "effect": {
+          "applies": "{otherwise}ではなく{value}を付与します。",
+          "same": "{value}を付与します。例外がなくても同じです。",
+          "held-by-ceiling": "設定内容は反映されません：厳しい上限により{value}となっています。",
+          "outranked": "設定内容は反映されません：より具体的または優先度の高いルールが決定しています（{value}）。",
+          "inert": "無効です。"
+        }
+      }
     }
   },
   "m365": {

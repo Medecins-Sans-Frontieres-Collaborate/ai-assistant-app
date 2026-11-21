@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Delegasyon yo ap parèt isit la sèlman pou lekti. Kiyès ki ladan yo, ki itilizatè yo kouvri ak sa chak admin ka fè, sa jere nan espas Delegasyon an.",
     "delegationsManagedElsewhereLink": "Ouvri Delegasyon yo",
     "modelAccess": {
-      "intro": "Deside kilès ki ka itilize chak modèl. Paramèt yon fanmi aplike pou modèl li yo sof si yon modèl gen pwòp paramèt li; moun sou yon lis pase default pou tout lòt moun; lis blokaj la pase tout lòt otorizasyon.",
       "externalNote": "Modèl ki anime deyò anviwònman Azure la ({families}) pap disponib pou pèsonn jiskaske ou bay aksè isit la – swa pou tout moun atravè default la, oswa pou gwoup, domèn ak moun.",
       "envelopeNote": "Yon limit demann sou yon fanmi se yon bidjè pataje pa jou atravè modèl fanmi sa yo; yon limit sou yon modèl se yon plafon andedan li. San limit sou yon modèl pa leve bidjè fanmi an.",
       "observeNote": "Mòd obsèvasyon limen : anyen isit la pa kache yon modèl ni bloke yon demann pou kounye a. Pase sou Mode Egzekite anlè a lè règ yo kòrèk.",
-      "familyChip": "Fanmi",
-      "modelChip": "Modèl",
       "otherModels": "Modèl san fanmi",
-      "modelsInFamily": "{count, plural, one {# modèl nan fanmi sa} other {# modèl nan fanmi sa}}",
       "noModels": "Pa gen okenn modèl nan katalòg la pou kounye a.",
-      "expand": "Montre modèl yo",
-      "collapse": "Kache modèl yo",
-      "edit": "Modifye",
       "doneEditing": "Fini",
-      "editNode": "Modifye aksè pou {label}",
       "defaultLabel": "Tout rès moun yo",
-      "defaultInherit": "Eritaj",
-      "defaultUnlimited": "San limit",
-      "defaultLimited": "Limite a",
-      "defaultUnavailable": "Endisponib",
-      "defaultRequestsLabel": "Demann pa jou pou tout rès moun yo",
       "requestsPerDay": "demann / jou",
       "inheritedFrom": "Eritaj {state} soti nan {origin}.",
       "effectiveLabel": "Tout moun ki pa sou lis la jwenn : {state}.",
-      "inheritedChip": "erite",
       "origin": {
         "model": "paramèt sa",
         "family": "fanmi li",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Retire {target}",
       "groupsCount": "{count, plural, one {# gwoup} other {# gwoup}}",
       "domainsCount": "{count, plural, one {# domèn} other {# domèn}}",
-      "allowCount": "{count, plural, one {# moun otorize} other {# moun otorize}}",
-      "denyCount": "{count, plural, one {# moun bloke} other {# moun bloke}}",
       "collisionChip": "Tou prezan nan Definisyon Global yo",
-      "collisionWarning": "Modèl oswa fanmi sa a anrejistre tou anba Definisyon Global yo. Pa ka sove chanjman jiskaske youn nan de yo efase."
+      "collisionWarning": "Modèl oswa fanmi sa a anrejistre tou anba Definisyon Global yo. Pa ka sove chanjman jiskaske youn nan de yo efase.",
+      "grid": {
+        "intro": "Kiyès ki ka itilize chak modèl, epi konbyen demann pa jou. Chak liy reprezante yon fanmi oswa yon modèl; chak kolòn se yon odyans. Chwazi yon selil pou chanje li.",
+        "caption": "Aksè modèl pa odyans",
+        "col": {
+          "model": "Modèl",
+          "reach": "Ka itilize li"
+        },
+        "familyNote": "fanmi : bidjè chak jou pataje",
+        "addColumn": "Ajoute yon kolòn odyans",
+        "addColumnConfirm": "Ajoute kolòn",
+        "columnKind": "Odyans",
+        "addColumnHint": "Kolòn nan rete la yon fwa ou mete yon selil ladan li.",
+        "cellLabel": "{model}, {audience} : {value}",
+        "noGrant": "pa gen pwòp tèm pa li",
+        "grantHint": "Eritaj vle di pa gen tèm pou odyans sa a sou liy sa a: manm yo jwenn repons Pou tout rès la sòf si yon lòt kolòn kouvri yo.",
+        "grantHintFamily": "Eritaj itilize tèm fanmi an mete pou odyans sa.",
+        "inheritedPeople": "{count, plural, one {# moun an plis soti} other {# moun an plis soti}} nan lis fanmi an.",
+        "reach": {
+          "everyone": "Tout moun",
+          "everyoneBut": "{count, plural, one {Tout moun eksepte # moun} other {Tout moun eksepte # moun}}",
+          "nobody": "Pèsonn",
+          "people": "{count, plural, one {# moun} other {# moun}}"
+        },
+        "howTitle": "Ki jan yon demann deside",
+        "how": {
+          "block": "Sou lis bloke a? Pa disponib, kèlkeswa lòt bagay ki aplike.",
+          "specific": "Sinon, tèm ki pi espesifik ki enkli moun nan defini sa li resevwa : yon moun nonmen, apre sa yon gwoup, apre sa yon domèn, epi tout rès la.",
+          "inherit": "Yon modèl ki pa gen tèm pa li nan kolòn nan itilize sa fanmi an (li make ak trasye).",
+          "envelope": "Demann nan dwe respekte plafon modèl la, bidjè fanmi an ak kantite total pou chat la, tout twa ansanm."
+        }
+      }
     },
     "previewSourceModelAccess": "Apwobasyon modèl — {list}",
     "groupMembershipDegradedStructural": "Rechèch manm gwoup yo pa mache sou sèvè sa a ({reason}). Règ ak aksè ki baze sou gwoup yo pa aplike pou moun sa yo — tanpri verifye konsantman Group.Read.All tenant lan ak enskripsyon aplikasyon an.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Apèsi",
-        "person": "Yon sèl moun",
         "review": "Revizyon",
-        "reviewCount": "Revizyon ({count})"
+        "reviewCount": "Revizyon ({count})",
+        "check": "Tcheke aksè"
       },
       "everyone": "Tout moun",
       "off": "Etèn",
@@ -6999,7 +7014,6 @@
       "policyShown": "Politik ki montre",
       "savedPolicy": "Sove",
       "withDraft": "Ak chanjman ou yo",
-      "lensIntro": "Antre imel yon moun pou wè sa yo genyen, sa yo itilize jodi a, epi ki règ ki deside li.",
       "lensCaption": "Limit pou {mail}",
       "layer": {
         "catalog": "Bati ladan li",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Semèn pase {people, plural, one {# moun} other {# moun}} te resevwa limit yo soti isit la; {atCap} rive li.",
         "overNewCap": "{people, plural, one {# moun} other {# moun}} te gen yon jou pi wo pase {cap} semèn pase.",
         "events": "Yo te frape limit sou limit sa {events, plural, one {# fwa} other {# fwa}} pa {people, plural, one {# moun} other {# moun}} semèn pase.",
-        "noTargets": "Pa kouvri pèsonn pou kounye a, li pa chanje anyen jiskaske moun ajoute."
+        "noTargets": "Pa kouvri pèsonn pou kounye a, li pa chanje anyen jiskaske moun ajoute.",
+        "peopleGet": "Moun ki mansyone yo ap resevwa {after} olye de {before}."
       },
       "flag": {
         "removes-cap": "Retire limit la: pa gen limit ki aplike pou moun sa yo.",
@@ -7060,7 +7075,6 @@
         "model-access": "Aksè sou modèl pou {subject}"
       },
       "checkPerson": "Tcheke nenpòt moun sou bouyon sa a",
-      "checkPersonHint": "Louvri vi yon sèl moun ak chanjman ou yo aplike.",
       "historyNote": "Sove ekri yon vèsyon nan istwa chanjman an.",
       "histogramLabel": "{people} moun pa jou yo ki te pi okipe semèn pase; ansyen limit {before}, nouvo limit {after}",
       "histogramCaption": "Moun selon jou ki te pi chaje yo semèn pase a. Nwaj: pi wo pase nouvo limit la.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {# chanjman pa anrejistre} other {# chanjman pa anrejistre}}",
       "discardConfirm": "Anile tout chanjman ki pa anrejistre yo?",
       "discardYes": "Anile",
-      "reviewChanges": "Revize chanjman yo"
+      "reviewChanges": "Revize chanjman yo",
+      "checkPersonHint": "Louvri Tcheke aksè ak chanjman ou yo aplike.",
+      "lens": {
+        "subjectKind": "Sa pou verifye",
+        "kind": {
+          "user": "Moun",
+          "group": "Gwoup sekirite",
+          "domain": "Domèn"
+        },
+        "domainLabel": "Domèn imel pou verifye",
+        "groupHint": "Chèche yon gwoup sekirite pa non, oswa kole ID objè li.",
+        "intro": "Chwazi yon moun, yon gwoup sekirite oswa yon domèn pou wè sa yo resevwa ak ki règ ki detèmine li. Louvri nenpòt limit pou mete yon eksepsyon pou yo la menm.",
+        "typicalMember": {
+          "group": "kòm yon manm tipik : yon moun nan gwoup sa a epi ki pa kouvri pa okenn lòt règ. Yon manm ki kouvri tou pa yon règ pèsonèl oswa yon lòt gwoup ka resevwa yon bagay diferan.",
+          "domain": "kòm yon manm tipik : yon moun nan domèn sa a epi ki pa kouvri pa okenn lòt règ. Yon moun ki kouvri tou pa yon règ gwoup oswa pèsonèl ka resevwa yon bagay diferan."
+        },
+        "ownRule": "{count, plural, one {# eksepsyon mete} other {# eksepsyon mete}} sèlman pou {subject}.",
+        "exceptionFor": "Eksepsyon pou {subject}",
+        "exceptionLabel": "{limit} pou {subject}",
+        "noException": {
+          "user": "Pa gen eksepsyon : moun sa a resevwa sa règ yo anlè a bay.",
+          "group": "Pa gen eksepsyon : manm yo resevwa sa règ yo anlè a bay.",
+          "domain": "Pa gen eksepsyon : moun nan domèn sa a resevwa sa règ yo anlè a bay."
+        },
+        "effect": {
+          "applies": "Bay {value} olye de {otherwise}.",
+          "same": "Bay {value}, menm jan ak san eksepsyon an.",
+          "held-by-ceiling": "Pa gen efè jan sa mete : plafon an kenbe li nan {value}.",
+          "outranked": "Pa gen efè jan sa mete : yon règ ki pi espesifik oswa ki gen plis priyorite deside ({value}).",
+          "inert": "Pa an aplikasyon."
+        }
+      }
     }
   },
   "m365": {

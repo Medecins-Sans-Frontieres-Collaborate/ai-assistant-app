@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "Les delegacions es mostren aquí només per a consulta. Qui forma part d’una delegació, quins usuaris cobreix i què pot fer cada administrador es gestiona a l’àrea de Delegacions.",
     "delegationsManagedElsewhereLink": "Obrir Delegacions",
     "modelAccess": {
-      "intro": "Decidiu qui pot utilitzar cada model. La configuració d’una família s’aplica als seus models, tret que un model tingui la seva pròpia; les persones d’una llista tenen prioritat sobre el valor per defecte dels altres; la llista de bloqueig preval sobre qualsevol permís.",
       "externalNote": "Els models allotjats fora de l'entorn Azure ({families}) estan indisponibles per a tothom fins que els concedeixis accés aquí — tant a tothom amb el valor per defecte com a grups, dominis i persones.",
       "envelopeNote": "Un límit de peticions a una família és un pressupost diari compartit entre els seus models; un límit a un model és un màxim dins d’ell. Il·limitat en un model no elimina el pressupost de la família.",
       "observeNote": "El mode d'observació està activat: res d'aquí amaga un model ni atura una petició ara mateix. Canvia a Aplica a dalt quan les normes siguin correctes.",
-      "familyChip": "Família",
-      "modelChip": "Model",
       "otherModels": "Models sense família",
-      "modelsInFamily": "{count, plural, one {# model en aquesta família} other {# models en aquesta família}}",
       "noModels": "Encara no hi ha models al catàleg.",
-      "expand": "Mostra models",
-      "collapse": "Oculta models",
-      "edit": "Edita",
       "doneEditing": "Fet",
-      "editNode": "Edita l'accés per a {label}",
       "defaultLabel": "La resta",
-      "defaultInherit": "Hereta",
-      "defaultUnlimited": "Il·limitat",
-      "defaultLimited": "Limitat a",
-      "defaultUnavailable": "Indisponible",
-      "defaultRequestsLabel": "Peticions al dia per a la resta",
       "requestsPerDay": "peticions / dia",
       "inheritedFrom": "Hereta {state} de {origin}.",
       "effectiveLabel": "Qui no és a cap llista rep: {state}.",
-      "inheritedChip": "heretat",
       "origin": {
         "model": "aquesta configuració",
         "family": "la seva família",
@@ -6884,10 +6870,39 @@
       "removeGrant": "Elimina {target}",
       "groupsCount": "{count, plural, one {# grup} other {# grups}}",
       "domainsCount": "{count, plural, one {# domini} other {# dominis}}",
-      "allowCount": "{count, plural, one {# persona autoritzada} other {# persones autoritzades}}",
-      "denyCount": "{count, plural, one {# persona bloquejada} other {# persones bloquejades}}",
       "collisionChip": "També als valors predeterminats globals",
-      "collisionWarning": "Aquest model o família també està configurat als valors predeterminats globals. No es podrà desar fins que s'esborri una de les dues opcions."
+      "collisionWarning": "Aquest model o família també està configurat als valors predeterminats globals. No es podrà desar fins que s'esborri una de les dues opcions.",
+      "grid": {
+        "intro": "Qui pot utilitzar cada model i quantes sol·licituds al dia. Cada fila és una família o un model; cada columna és un públic. Seleccioneu una cel·la per canviar-la.",
+        "caption": "Accés al model per públic",
+        "col": {
+          "model": "Model",
+          "reach": "Pot utilitzar-lo"
+        },
+        "familyNote": "família: pressupost diari compartit",
+        "addColumn": "Afegeix una columna de públic",
+        "addColumnConfirm": "Afegeix columna",
+        "columnKind": "Públic",
+        "addColumnHint": "La columna es manté un cop s'estableix una cel·la en ella.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "sense condicions pròpies",
+        "grantHint": "Heredar vol dir que no hi ha condicions per a aquest públic en aquesta fila: els membres reben la resposta de La resta de persones tret que una altra columna els cobreixi.",
+        "grantHintFamily": "Heredar usa les condicions establertes per la família per aquest públic.",
+        "inheritedPeople": "{count, plural, one {# persona més ve} other {# persones més venen}} de la llista de la família.",
+        "reach": {
+          "everyone": "Tothom",
+          "everyoneBut": "{count, plural, one {Tothom excepte # persona} other {Tothom excepte # persones}}",
+          "nobody": "Ningú",
+          "people": "{count, plural, one {# persona} other {# persones}}"
+        },
+        "howTitle": "Com es decideix una sol·licitud",
+        "how": {
+          "block": "Està a la llista de bloqueig? No disponible, passi el que passi.",
+          "specific": "Si no, el permís més específic que inclogui la persona estableix les seves condicions: una persona amb nom, després un grup, després un domini i finalment la resta.",
+          "inherit": "Un model sense condicions pròpies en una columna utilitza les de la seva família (ratllades).",
+          "envelope": "La sol·licitud ha d'ajustar-se al límit del model, al pressupost compartit de la família i al total del xat, tots tres."
+        }
+      }
     },
     "previewSourceModelAccess": "Aprovació del model — {list}",
     "groupMembershipDegradedStructural": "Les consultes de membres de grup estan fallant en aquest servidor ({reason}). No s’estan aplicant les regles i concessions basades en grup per a les persones afectades; comproveu el consentiment de Group.Read.All del tenant i el registre de l’aplicació.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "Resum",
-        "person": "Una persona",
         "review": "Revisió",
-        "reviewCount": "Revisió ({count})"
+        "reviewCount": "Revisió ({count})",
+        "check": "Comprova l'accés"
       },
       "everyone": "Tothom",
       "off": "Desactivat",
@@ -7015,7 +7030,6 @@
       "policyShown": "Política mostrada",
       "savedPolicy": "Desat",
       "withDraft": "Amb els teus canvis",
-      "lensIntro": "Introdueix el correu electrònic d'algú per veure què rep, què ha utilitzat avui i quina regla ho ha decidit.",
       "lensCaption": "Límits per a {mail}",
       "layer": {
         "catalog": "Integrat",
@@ -7052,7 +7066,8 @@
         "ruleReach": "La setmana passada {people, plural, one {# persona} other {# persones}} van obtenir el límit d’aquí; {atCap} el va assolir.",
         "overNewCap": "{people, plural, one {# persona} other {# persones}} van tenir un dia per sobre de {cap} la setmana passada.",
         "events": "Els límits d’aquest paràmetre es van assolir {events, plural, one {# vegada} other {# vegades}} per {people, plural, one {# persona} other {# persones}} la setmana passada.",
-        "noTargets": "Encara no cobreix ningú, així que no canvia res fins que s’hi afegeixin persones."
+        "noTargets": "Encara no cobreix ningú, així que no canvia res fins que s’hi afegeixin persones.",
+        "peopleGet": "Les persones esmentades reben {after} en lloc de {before}."
       },
       "flag": {
         "removes-cap": "Elimina el límit: no s’aplica cap restricció a aquestes persones.",
@@ -7076,7 +7091,6 @@
         "model-access": "Accés al model per a {subject}"
       },
       "checkPerson": "Comprova qualsevol persona amb aquest esborrany",
-      "checkPersonHint": "Obre la vista d’una sola persona aplicant-hi els teus canvis.",
       "historyNote": "Desar escriu una versió a l’historial de canvis.",
       "histogramLabel": "{people} persones pel seu dia més ocupat la setmana passada; límit antic {before}, límit nou {after}",
       "histogramCaption": "Persones segons el seu dia més actiu de la setmana passada. Taronja: per sobre del nou límit.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# canvi no desat} other {# canvis no desats}}",
       "discardConfirm": "Vols descartar tots els canvis no desats?",
       "discardYes": "Descarta",
-      "reviewChanges": "Revisa els canvis"
+      "reviewChanges": "Revisa els canvis",
+      "checkPersonHint": "Obre Comprova l'accés amb els teus canvis aplicats.",
+      "lens": {
+        "subjectKind": "Què comprovar",
+        "kind": {
+          "user": "Persona",
+          "group": "Grup de seguretat",
+          "domain": "Domini"
+        },
+        "domainLabel": "Domini de correu electrònic a comprovar",
+        "groupHint": "Cerca un grup de seguretat pel nom o enganxa'n l'identificador d'objecte.",
+        "intro": "Trieu una persona, un grup de seguretat o un domini per veure què obtenen i quina regla ho ha decidit. Obriu qualsevol límit per establir una excepció per a ells.",
+        "typicalMember": {
+          "group": "com a membre típic: algú d'aquest grup que no queda cobert per cap altra regla. Un membre també cobert per una regla personal o un altre grup podria rebre quelcom diferent.",
+          "domain": "com a membre típic: algú d'aquest domini que no queda cobert per cap altra regla. Algú també cobert per una regla de grup o personal podria rebre quelcom diferent."
+        },
+        "ownRule": "{count, plural, one {S'ha establert # excepció} other {S'han establert # excepcions}} només per a {subject}.",
+        "exceptionFor": "Excepció per a {subject}",
+        "exceptionLabel": "{limit} per a {subject}",
+        "noException": {
+          "user": "Sense excepció: aquesta persona rep el que li assignen les regles anteriors.",
+          "group": "Sense excepció: els membres reben el que assignen les regles anteriors.",
+          "domain": "Sense excepció: les persones d'aquest domini reben el que assignen les regles anteriors."
+        },
+        "effect": {
+          "applies": "Assigna {value} en lloc de {otherwise}.",
+          "same": "Assigna {value}, igual que sense l'excepció.",
+          "held-by-ceiling": "Sense efecte tal com està: hi ha un límit superior que ho fixa a {value}.",
+          "outranked": "Sense efecte tal com està: una regla més específica o de prioritat més alta ho decideix ({value}).",
+          "inert": "Sense efecte."
+        }
+      }
     }
   },
   "m365": {

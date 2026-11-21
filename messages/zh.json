@@ -6860,30 +6860,16 @@
     "delegationsManagedElsewhere": "工作分配仅可在此查看，无法编辑。分配成员、覆盖用户和管理员权限等内容请在“工作分配”区域管理。",
     "delegationsManagedElsewhereLink": "打开工作分配",
     "modelAccess": {
-      "intro": "决定谁可以使用每个模型。家族的设置适用于其下的模型，除非模型另有指定；名单上的人覆盖所有默认设置；封锁名单优先于所有授权。",
       "externalNote": "托管在 Azure 环境之外的模型（{families}）只有在您在此授予权限后，才对所有人可用 —— 可以通过默认对所有人开放，或指定给群组、域名和个人。",
       "envelopeNote": "为家族设置的请求限制是其下所有模型每日共享配额；为单个模型设置的限制仅适用于该模型内。某模型设置为无限不会影响家族总预算。",
       "observeNote": "当前为观察模式：此处的设置不会隐藏模型或阻止请求。待规则设置正确后，在上方切换为强制执行。",
-      "familyChip": "家族",
-      "modelChip": "模型",
       "otherModels": "未归类家族的模型",
-      "modelsInFamily": "{count, plural, one {该家族有 # 个模型} other {该家族有 # 个模型}}",
       "noModels": "目录中暂无模型。",
-      "expand": "显示模型",
-      "collapse": "隐藏模型",
-      "edit": "编辑",
       "doneEditing": "完成",
-      "editNode": "编辑 {label} 的访问权限",
       "defaultLabel": "其他所有人",
-      "defaultInherit": "继承",
-      "defaultUnlimited": "无限制",
-      "defaultLimited": "限制为",
-      "defaultUnavailable": "不可用",
-      "defaultRequestsLabel": "其他所有人的每日请求数",
       "requestsPerDay": "请求/天",
       "inheritedFrom": "继承自 {origin} 的 {state}。",
       "effectiveLabel": "未列入名单的所有人将获得：{state}。",
-      "inheritedChip": "已继承",
       "origin": {
         "model": "本设置",
         "family": "其家族",
@@ -6915,10 +6901,39 @@
       "removeGrant": "移除 {target}",
       "groupsCount": "{count, plural, one {# 个群组} other {# 个群组}}",
       "domainsCount": "{count, plural, one {# 个域名} other {# 个域名}}",
-      "allowCount": "{count, plural, one {允许 # 人} other {允许 # 人}}",
-      "denyCount": "{count, plural, one {封锁 # 人} other {封锁 # 人}}",
       "collisionChip": "也在全局默认设置中",
-      "collisionWarning": "该模型或系列也已在全局默认设置中配置。请在两个设置中清除其一后再保存。"
+      "collisionWarning": "该模型或系列也已在全局默认设置中配置。请在两个设置中清除其一后再保存。",
+      "grid": {
+        "intro": "谁可以使用每个模型及其每日请求次数。每行代表一个家族或模型；每列代表一个受众。点击单元格进行更改。",
+        "caption": "按受众分配模型访问权限",
+        "col": {
+          "model": "模型",
+          "reach": "可用人员"
+        },
+        "familyNote": "家族：共享每日配额",
+        "addColumn": "添加受众列",
+        "addColumnConfirm": "添加列",
+        "columnKind": "受众",
+        "addColumnHint": "只要该列中某个单元格已设置，该列就会保留。",
+        "cellLabel": "{model}，{audience}：{value}",
+        "noGrant": "无专属条款",
+        "grantHint": "继承表示本行中该受众无专属条款：成员将采用“其他所有人”规则，除非有其他列覆盖。",
+        "grantHintFamily": "继承采用家族为该受众设置的条款。",
+        "inheritedPeople": "{count, plural, one {来自家族列表的 # 人} other {来自家族列表的 # 人}}。",
+        "reach": {
+          "everyone": "所有人",
+          "everyoneBut": "{count, plural, one {除 # 人外的所有人} other {除 # 人外的所有人}}",
+          "nobody": "无任何人",
+          "people": "{count, plural, one {# 人} other {# 人}}"
+        },
+        "howTitle": "如何决定一次请求",
+        "how": {
+          "block": "在封禁名单中？则不可用，无论其他条件如何。",
+          "specific": "否则，以最具体的包含该人的授权为准：指定个人、再是群组、再是域，最后是所有其他人。",
+          "inherit": "如本列中未单独设置条款，则该模型继承家族（虚线）的条款。",
+          "envelope": "请求必须同时满足模型上限、家族共享配额与对话总量三者。"
+        }
+      }
     },
     "previewSourceModelAccess": "模型审批 — {list}",
     "groupMembershipDegradedStructural": "此服务器上的群组成员查找失败（{reason}）。受影响人员的基于群组的规则和授权未被应用——请检查租户的 Group.Read.All 授权和应用注册。",
@@ -6928,9 +6943,9 @@
     "console": {
       "tab": {
         "overview": "概览",
-        "person": "单人",
         "review": "复查",
-        "reviewCount": "复查（{count}）"
+        "reviewCount": "复查（{count}）",
+        "check": "检查访问"
       },
       "everyone": "所有人",
       "off": "关闭",
@@ -7046,7 +7061,6 @@
       "policyShown": "已显示策略",
       "savedPolicy": "已保存",
       "withDraft": "包含您的更改",
-      "lensIntro": "输入某人的邮箱地址，可查看其获得内容、今日使用量及由哪个规则决定。",
       "lensCaption": "{mail}的限制",
       "layer": {
         "catalog": "内置",
@@ -7083,7 +7097,8 @@
         "ruleReach": "上周有{people, plural, one {# 人} other {# 人}}通过此处获得上限；{atCap} 达到上限。",
         "overNewCap": "上周有{people, plural, one {# 人} other {# 人}}有一天超过了{cap}。",
         "events": "上周此限额被{people, plural, one {# 人} other {# 人}}共触发{events, plural, one {# 次} other {# 次}}。",
-        "noTargets": "目前未覆盖任何人，需添加成员后才会生效。"
+        "noTargets": "目前未覆盖任何人，需添加成员后才会生效。",
+        "peopleGet": "被指定人员获得 {after} 替代 {before}。"
       },
       "flag": {
         "removes-cap": "移除限额：这些人不再受限制。",
@@ -7107,7 +7122,6 @@
         "model-access": "{subject} 的模型访问"
       },
       "checkPerson": "将任意人员与本草稿对比",
-      "checkPersonHint": "以您的更改内容打开单人视图。",
       "historyNote": "保存即写入一条历史记录。",
       "histogramLabel": "上周最忙一天的{people}人；旧上限{before}，新上限{after}",
       "histogramCaption": "上周每个人最忙碌一天的分布。橙色：超出新上限。",
@@ -7127,7 +7141,38 @@
       "unsavedCount": "{count, plural, one {#项更改未保存} other {#项更改未保存}}",
       "discardConfirm": "确定放弃所有未保存的更改？",
       "discardYes": "放弃更改",
-      "reviewChanges": "查看更改"
+      "reviewChanges": "查看更改",
+      "checkPersonHint": "应用更改后打开“检查访问”。",
+      "lens": {
+        "subjectKind": "检查对象",
+        "kind": {
+          "user": "个人",
+          "group": "安全组",
+          "domain": "域名"
+        },
+        "domainLabel": "要检查的邮箱域名",
+        "groupHint": "可按名称搜索安全组，或粘贴对象 ID。",
+        "intro": "选择个人、安全组或域名，查看其权限及决定该权限的规则。点开任何限额即可为其单独设置例外。",
+        "typicalMember": {
+          "group": "作为典型成员：仅由此组匹配、无其他规则覆盖的人。如被个人规则或其他组覆盖，结果可能不同。",
+          "domain": "作为典型成员：仅由此域匹配、无其他规则覆盖的人。如被组或个人规则覆盖，结果可能不同。"
+        },
+        "ownRule": "{count, plural, one {已为 {subject} 单独设置 # 个例外} other {已为 {subject} 单独设置 # 个例外}}。",
+        "exceptionFor": "{subject} 的例外设置",
+        "exceptionLabel": "{subject} 的 {limit}",
+        "noException": {
+          "user": "无例外：该人员将按以上规则获得对应权限。",
+          "group": "无例外：组成员将按以上规则获得对应权限。",
+          "domain": "无例外：该域内人员将按以上规则获得对应权限。"
+        },
+        "effect": {
+          "applies": "给予 {value}，替代 {otherwise}。",
+          "same": "给予 {value}，与无例外时一致。",
+          "held-by-ceiling": "按当前设置无效：被硬上限限制为 {value}。",
+          "outranked": "按当前设置无效：被更具体或更高优先级规则决定（{value}）。",
+          "inert": "未生效。"
+        }
+      }
     }
   },
   "m365": {

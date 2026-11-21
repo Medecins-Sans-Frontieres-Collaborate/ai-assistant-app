@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "Delegațiile sunt afișate aici doar pentru citire. Ce utilizatori fac parte dintr-o delegație, pe cine acoperă aceasta și ce poate face fiecare administrator se gestionează în secțiunea Delegații.",
     "delegationsManagedElsewhereLink": "Deschide Delegații",
     "modelAccess": {
-      "intro": "Decideți cine poate folosi fiecare model. Setarea unei familii se aplică modelelor din cadrul acesteia, cu excepția cazului în care un model are propria setare; persoanele din listă au prioritate față de implicitul pentru ceilalți; lista de blocare are prioritate față de orice permisiune.",
       "externalNote": "Modelele găzduite în afara mediului Azure ({families}) nu sunt disponibile pentru nimeni până când le acordați acces aici — tuturor prin setarea implicită sau grupurilor, domeniilor și persoanelor.",
       "envelopeNote": "Limita de cereri pe o familie este un buget zilnic partajat între modelele ei; o limită pe un model este o restricție în cadrul acestuia. Fără limită pe un model nu ridică bugetul familiei.",
       "observeNote": "Modul de observare este activat: nimic de aici nu ascunde un model sau nu oprește încă o cerere. Treceți la Enforce mai sus când regulile sunt corecte.",
-      "familyChip": "Familie",
-      "modelChip": "Model",
       "otherModels": "Modele fără familie",
-      "modelsInFamily": "{count, plural, one {# model din această familie} other {# modele din această familie}}",
       "noModels": "Nu există încă modele în catalog.",
-      "expand": "Afișați modelele",
-      "collapse": "Ascundeți modelele",
-      "edit": "Editați",
       "doneEditing": "Finalizat",
-      "editNode": "Editați accesul pentru {label}",
       "defaultLabel": "Restul utilizatorilor",
-      "defaultInherit": "Moștenește",
-      "defaultUnlimited": "Nelimitat",
-      "defaultLimited": "Limitat la",
-      "defaultUnavailable": "Indisponibil",
-      "defaultRequestsLabel": "Cereri pe zi pentru restul utilizatorilor",
       "requestsPerDay": "cereri / zi",
       "inheritedFrom": "Moștenește {state} de la {origin}.",
       "effectiveLabel": "Oricine nu se află pe o listă primește: {state}.",
-      "inheritedChip": "moștenit",
       "origin": {
         "model": "această setare",
         "family": "familia sa",
@@ -6884,10 +6870,39 @@
       "removeGrant": "Eliminați {target}",
       "groupsCount": "{count, plural, one {# grup} other {# grupuri}}",
       "domainsCount": "{count, plural, one {# domeniu} other {# domenii}}",
-      "allowCount": "{count, plural, one {# persoană permisă} other {# persoane permise}}",
-      "denyCount": "{count, plural, one {# persoană blocată} other {# persoane blocate}}",
       "collisionChip": "De asemenea, în valorile implicite globale",
-      "collisionWarning": "Acest model sau familie este configurat(ă) și în valorile implicite globale. Salvarea va fi refuzată până când una dintre cele două va fi eliminată."
+      "collisionWarning": "Acest model sau familie este configurat(ă) și în valorile implicite globale. Salvarea va fi refuzată până când una dintre cele două va fi eliminată.",
+      "grid": {
+        "intro": "Cine poate folosi fiecare model și câte solicitări pot face pe zi. Fiecare rând reprezintă o familie sau un model; fiecare coloană reprezintă un public. Selectați o celulă pentru a o modifica.",
+        "caption": "Accesul la model după public",
+        "col": {
+          "model": "Model",
+          "reach": "Poate folosi"
+        },
+        "familyNote": "familie: buget zilnic partajat",
+        "addColumn": "Adaugă o coloană de public",
+        "addColumnConfirm": "Adaugă coloană",
+        "columnKind": "Public",
+        "addColumnHint": "Coloana rămâne după ce se setează o celulă în ea.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "fără termeni proprii",
+        "grantHint": "Moștenirea înseamnă că nu există termeni pentru acest public pe acest rând: membrii primesc răspunsul „Toți ceilalți”, exceptând cazul în care altă coloană îi acoperă.",
+        "grantHintFamily": "Moștenirea folosește termenii setați de familie pentru acest public.",
+        "inheritedPeople": "{count, plural, one {Încă o persoană vine} other {Încă # persoane vin}} din lista familiei.",
+        "reach": {
+          "everyone": "Toți",
+          "everyoneBut": "{count, plural, one {Toți cu excepția unei persoane} other {Toți cu excepția a # persoane}}",
+          "nobody": "Nimeni",
+          "people": "{count, plural, one {# persoană} other {# persoane}}"
+        },
+        "howTitle": "Cum se decide o solicitare",
+        "how": {
+          "block": "Pe lista de blocare? Indisponibil, indiferent de alte condiții.",
+          "specific": "Altfel, cel mai specific acord care include persoana stabilește termenii: mai întâi persoana nominalizată, apoi grupul, apoi domeniul, apoi restul.",
+          "inherit": "Un model fără termeni proprii într-o coloană folosește termenii familiei (linie punctată).",
+          "envelope": "Solicitarea trebuie să se încadreze în limita modelului, bugetul partajat al familiei și totalul chatului, toate trei."
+        }
+      }
     },
     "previewSourceModelAccess": "Aprobare model — {list}",
     "groupMembershipDegradedStructural": "Căutările privind apartenența la grupuri eșuează pe acest server ({reason}). Regulile și drepturile bazate pe grup nu sunt aplicate persoanelor afectate — verificați consimțământul Group.Read.All al tenantului și înregistrarea aplicației.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "Prezentare generală",
-        "person": "O persoană",
         "review": "Revizuire",
-        "reviewCount": "Revizuire ({count})"
+        "reviewCount": "Revizuire ({count})",
+        "check": "Verifică accesul"
       },
       "everyone": "Toată lumea",
       "off": "Dezactivat",
@@ -7015,7 +7030,6 @@
       "policyShown": "Politica afișată",
       "savedPolicy": "Salvat",
       "withDraft": "Cu modificările tale",
-      "lensIntro": "Introdu adresa de email a cuiva pentru a vedea ce primește, ce a utilizat azi și care regulă a decis.",
       "lensCaption": "Limite pentru {mail}",
       "layer": {
         "catalog": "Integrat",
@@ -7052,7 +7066,8 @@
         "ruleReach": "Săptămâna trecută {people, plural, one {# persoană} other {# persoane}} au avut plafon de aici; {atCap} l-au atins.",
         "overNewCap": "{people, plural, one {# persoană} other {# persoane}} au avut o zi peste {cap} săptămâna trecută.",
         "events": "Plafonul acestei limite a fost atins {events, plural, one {# dată} other {# dăți}} de către {people, plural, one {# persoană} other {# persoane}} săptămâna trecută.",
-        "noTargets": "Nu acoperă încă pe nimeni, deci nu modifică nimic până când se adaugă persoane."
+        "noTargets": "Nu acoperă încă pe nimeni, deci nu modifică nimic până când se adaugă persoane.",
+        "peopleGet": "Persoanele nominalizate primesc {after} în loc de {before}."
       },
       "flag": {
         "removes-cap": "Elimină plafonul: acești utilizatori nu mai au limită.",
@@ -7076,7 +7091,6 @@
         "model-access": "Acces model pentru {subject}"
       },
       "checkPerson": "Verificați oricine cu această variantă",
-      "checkPersonHint": "Deschide vizualizarea pentru o singură persoană cu modificările aplicate.",
       "historyNote": "Salvarea adaugă o versiune în istoricul modificărilor.",
       "histogramLabel": "{people} persoane după cea mai ocupată zi a lor din săptămâna trecută; plafon vechi {before}, plafon nou {after}",
       "histogramCaption": "Persoane după cea mai aglomerată zi a lor din săptămâna trecută. Portocaliu: peste noul plafon.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# modificare nesalvată} other {# modificări nesalvate}}",
       "discardConfirm": "Renunțați la toate modificările nesalvate?",
       "discardYes": "Renunță",
-      "reviewChanges": "Revizuire modificări"
+      "reviewChanges": "Revizuire modificări",
+      "checkPersonHint": "Deschide Verifică accesul cu modificările tale aplicate.",
+      "lens": {
+        "subjectKind": "Ce să verifici",
+        "kind": {
+          "user": "Persoană",
+          "group": "Grup de securitate",
+          "domain": "Domeniu"
+        },
+        "domainLabel": "Domeniu e-mail de verificat",
+        "groupHint": "Caută un grup de securitate după nume sau lipește ID-ul obiectului său.",
+        "intro": "Alegeți o persoană, un grup de securitate sau un domeniu pentru a vedea ce primesc și ce regulă a decis asta. Deschide orice limită pentru a seta o excepție direct pentru ei.",
+        "typicalMember": {
+          "group": "ca membru tipic: cineva din acest grup și neacoperit de altă regulă. Un membru acoperit și de o regulă personală sau de alt grup poate primi altceva.",
+          "domain": "ca membru tipic: cineva din acest domeniu și neacoperit de altă regulă. Cineva acoperit și de un grup sau regulă personală poate primi altceva."
+        },
+        "ownRule": "{count, plural, one {# excepție este} other {# excepții sunt}} setate doar pentru {subject}.",
+        "exceptionFor": "Excepție pentru {subject}",
+        "exceptionLabel": "{limit} pentru {subject}",
+        "noException": {
+          "user": "Fără excepție: această persoană primește ceea ce oferă regulile de mai sus.",
+          "group": "Fără excepție: membrii primesc ceea ce oferă regulile de mai sus.",
+          "domain": "Fără excepție: persoanele din acest domeniu primesc ceea ce oferă regulile de mai sus."
+        },
+        "effect": {
+          "applies": "Se acordă {value} în loc de {otherwise}.",
+          "same": "Se acordă {value}, la fel ca fără excepție.",
+          "held-by-ceiling": "Fără efect după setare: o limită maximă o blochează la {value}.",
+          "outranked": "Fără efect după setare: o regulă mai specifică sau cu prioritate mai mare decide în schimb ({value}).",
+          "inert": "Nu are efect."
+        }
+      }
     }
   },
   "m365": {

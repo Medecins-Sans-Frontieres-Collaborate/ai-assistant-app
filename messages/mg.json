@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Fanolorana andraikitra aseho eto amin'ny fomba famakiana fotsiny. Ny hoe iza no ao anaty delegasiona, iza no rakofiny ary inona no azony ataon'ny mpitantana tsirairay dia fehezina ao amin'ny faritra Delegations.",
     "delegationsManagedElsewhereLink": "Sokafy ny Fanolorana andraikitra",
     "modelAccess": {
-      "intro": "Fidio hoe iza no mahazo mampiasa ny modely tsirairay. Raha tsy manokana fanamboarana manokana ny modely iray, dia manara-dalàna amin'ny an'ny fianakaviana. Ireo olona ao anaty lisitra dia mahazo safidy mihoatra noho ny an'ny rehetra; ary ny ao anaty block list dia mandresy an'izay fanomezan-dalana rehetra.",
       "externalNote": "Ireo modely mitahiry ivelan'ny tontolo Azure ({families}) dia tsy azo idiran'ny olona rehetra raha tsy omena alalana eto — amin'ny alalan'ny default ho an'ny rehetra, na ho an'ny vondrona, domains, ary olona.",
       "envelopeNote": "Ny fetran'ny fangatahana amin'ny fianakaviana dia teti-bola iombonana isan'andro ho an'ny modely ao aminy; ny fetra amin'ny modely iray dia fitsipika manokana amin'izany modely izany. Raha tsy voafetra ny modely iray dia tsy midika hoe tsy misy fetra ny fianakaviana.",
       "observeNote": "Mihetsika ny fomba fanaraha-maso: tsy misy zavatra voafina na tsy avela mandefa fangatahana eto aloha. Ampiasao ny Enforce etsy ambony rehefa efa marina ny fitsipika.",
-      "familyChip": "Fianakaviana",
-      "modelChip": "Modely",
       "otherModels": "Modely tsy an'ny fianakaviana",
-      "modelsInFamily": "{count, plural, one {# modely ao amin'ity fianakaviana ity} other {# modely ao amin'ity fianakaviana ity}}",
       "noModels": "Tsy mbola misy modely ao amin'ny katalaogy.",
-      "expand": "Asehoy ny modely",
-      "collapse": "Afeno ny modely",
-      "edit": "Hanova",
       "doneEditing": "Vita",
-      "editNode": "Ovao ny fidirana ho an'i {label}",
       "defaultLabel": "Sisa rehetra",
-      "defaultInherit": "Manaram-penitra",
-      "defaultUnlimited": "Tsy voafetra",
-      "defaultLimited": "Voafetra ho",
-      "defaultUnavailable": "Tsy azo idirana",
-      "defaultRequestsLabel": "Fangatahana isan'andro ho an'ny sisa rehetra",
       "requestsPerDay": "fangatahana / andro",
       "inheritedFrom": "Mandova ny {state} avy amin'ny {origin}.",
       "effectiveLabel": "Izay tsy ao anaty lisitra dia mahazo: {state}.",
-      "inheritedChip": "navoaka",
       "origin": {
         "model": "io fanamboarana io",
         "family": "ny fianakaviany",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Esory i {target}",
       "groupsCount": "{count, plural, one {# vondrona} other {# vondrona}}",
       "domainsCount": "{count, plural, one {# domaina} other {# domaina}}",
-      "allowCount": "{count, plural, one {# olona nahazo alalana} other {# olona nahazo alalana}}",
-      "denyCount": "{count, plural, one {# olona voasakana} other {# olona voasakana}}",
       "collisionChip": "Ao amin'ny safidy Global defaults koa",
-      "collisionWarning": "Ity modely ity na ny sokajiny dia efa voahevitra ao amin'ny Global defaults. Tsy ho voavonjy raha tsy nesorina amin'ny iray amin'ireo."
+      "collisionWarning": "Ity modely ity na ny sokajiny dia efa voahevitra ao amin'ny Global defaults. Tsy ho voavonjy raha tsy nesorina amin'ny iray amin'ireo.",
+      "grid": {
+        "intro": "Iza no afaka mampiasa ny modely tsirairay, sy firy ny fangatahana isan'andro. Isaky ny andalana dia fianakaviana na modely; isaky ny andalana dia mpihaino. Safidio ilay sela hanovana azy.",
+        "caption": "Fidirana amin’ny modely isaky ny mpihaino",
+        "col": {
+          "model": "Modely",
+          "reach": "Afaka mampiasa"
+        },
+        "familyNote": "fianakaviana: teti-bola iombonana isan’andro",
+        "addColumn": "Ampio andalana mpihaino",
+        "addColumnConfirm": "Ampio andalana",
+        "columnKind": "Mpihaino",
+        "addColumnHint": "Hijanonana ny andalana raha vao misy sela amboarina ao.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "tsy manana fepetra manokana",
+        "grantHint": "Midika ny mandova fa tsy misy fepetra manokana amin'ity mpihaino amin’ity andalana ity: mahazo ny valiny 'Olona rehetra' izy raha tsy misy andalana hafa manazava azy.",
+        "grantHintFamily": "Ny mandova dia manaraka izay fepetra apetraky ny fianakaviana ho an'ity mpihaino ity.",
+        "inheritedPeople": "{count, plural, one {Olona # hafa avy amin'ny lisitry ny fianakaviana} other {Olona # hafa avy amin'ny lisitry ny fianakaviana}}.",
+        "reach": {
+          "everyone": "Olona rehetra",
+          "everyoneBut": "{count, plural, one {Olona rehetra afa-tsy #} other {Olona rehetra afa-tsy #}}",
+          "nobody": "Tsy misy",
+          "people": "{count, plural, one {Olona #} other {Olona #}}"
+        },
+        "howTitle": "Ahoana no andraisana fanapahan-kevitra amin’ny fangatahana iray",
+        "how": {
+          "block": "Ao amin’ny lisitra voasakana? Tsy azo ampiasaina na misy fepetra hafa aza.",
+          "specific": "Raha tsy izany, ny fahazoana manokana indrindra manarona ilay olona no mametraka ny fepetra: olona voatonona, avy eo vondrona, avy eo domain, farany olona rehetra.",
+          "inherit": "Ny modely tsy manana fepetra manokana amin’ny andalana iray dia mampiasa an’ny fianakaviana (mari-pamantaran-davitra).",
+          "envelope": "Tsy maintsy mifanaraka amin’ireo fetra napetraky ny modely, ny teti-bola iombonan’ny fianakaviana sy ny totalin’ny resaka ihany koa ny fangatahana."
+        }
+      }
     },
     "previewSourceModelAccess": "Fanekena modely — {list}",
     "groupMembershipDegradedStructural": "Tsy mandeha tsara ny fikarohana mpikambana ao amin'ny vondrona amin'ity mpizara ity ({reason}). Tsy mihatra amin'ireo olona voakasik'izany ny fitsipika sy fankatoavana mifototra amin'ny vondrona — jereo ny Group.Read.All consent an'ny tenant sy ny fisoratana anarana amin'ny app.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Topimaso",
-        "person": "Olona iray",
         "review": "Famerenana",
-        "reviewCount": "Famerenana ({count})"
+        "reviewCount": "Famerenana ({count})",
+        "check": "Hamarinina ny fidirana"
       },
       "everyone": "Rehetra",
       "off": "Maty",
@@ -6999,7 +7014,6 @@
       "policyShown": "Politika aseho",
       "savedPolicy": "Voatahiry",
       "withDraft": "Miaraka amin’ny fanovanao",
-      "lensIntro": "Ampidiro ny mailaka an'olona iray mba hijerena izay azony, izay nampiasainy androany, ary iza amin'ireo fitsipika no nanapa-kevitra.",
       "lensCaption": "Fetra ho an'i {mail}",
       "layer": {
         "catalog": "Voarakitra anatiny",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Tamin'ny herinandro lasa {people, plural, one {# olona} other {# olona}} no nahazo ny fetrany avy eto; {atCap} no tonga tamin'izany fetra izany.",
         "overNewCap": "{people, plural, one {# olona} other {# olona}} no nahazo andro mihoatra ny {cap} tamin'ny herinandro lasa.",
         "events": "Nidona tamin'ny fetra {events, plural, one {# indray mandeha} other {# im-betsaka}} tamin'ny olona {people, plural, one {# olona} other {# olona}} tamin'ny herinandro lasa.",
-        "noTargets": "Tsy manan-kery amin'iza, ka tsy misy zavatra miova mandra-pampidirana olona."
+        "noTargets": "Tsy manan-kery amin'iza, ka tsy misy zavatra miova mandra-pampidirana olona.",
+        "peopleGet": "Mahazo {after} fa tsy {before} ireo olona voatonona."
       },
       "flag": {
         "removes-cap": "Manafoana ny fetra: tsy misy fetra mihatra amin'ireo olona ireo.",
@@ -7060,7 +7075,6 @@
         "model-access": "Fidirana modely ho an'i {subject}"
       },
       "checkPerson": "Hamarino olona batiova amin'ity drafitra ity",
-      "checkPersonHint": "Manokatra fijery olona tokana sy mitaky ny fanovananao.",
       "historyNote": "Ny famonjena dia manoratra kinova iray ao amin'ny tantaran'ny fanovana.",
       "histogramLabel": "{people} olona amin'ny andro mafana indrindra tamin'ny herinandro lasa; fetra taloha {before}, fetra vaovao {after}",
       "histogramCaption": "Olona araka ny andro mafana indrindra tamin'ny herinandro lasa. Mena-orina: nihoatra ny fetra vaovao.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {# fiovana tsy voavonjy} other {# fiovana tsy voavonjy}}",
       "discardConfirm": "Hanaisotra ireo fiovana tsy voavonjy rehetra?",
       "discardYes": "Hanaisotra",
-      "reviewChanges": "Topazo maso ny fiovana"
+      "reviewChanges": "Topazo maso ny fiovana",
+      "checkPersonHint": "Manokatra 'Hamarinina ny fidirana' miaraka amin'ny fanovana nataonao.",
+      "lens": {
+        "subjectKind": "Ahoana no hojerena",
+        "kind": {
+          "user": "Olona",
+          "group": "Vondrona fiarovana",
+          "domain": "Domain"
+        },
+        "domainLabel": "Domain email hojerena",
+        "groupHint": "Karohy amin’ny anarana ny vondrona fiarovana, na apetaho ny ID-ny.",
+        "intro": "Misafidiana olona, vondrona fiarovana, na domain hijerena izay azony sy ny fitsipika nampiharina. Sokafy ny fetra rehetra hanapahana fanavahana ho an’izy ireo avy hatrany.",
+        "typicalMember": {
+          "group": "amin'ny maha-mpikambana mahazatra: olona ao amin’ity vondrona ity sady tsy mifanandrify amin'ny fitsipika hafa. Raha misy fitsipika manokana na vondrona hafa, mety hahazo zavatra hafa izy.",
+          "domain": "amin'ny maha-mpikambana mahazatra: olona amin’ity domain ity sady tsy mifanandrify amin'ny fitsipika hafa. Raha misy vondrona na fitsipika manokana, mety hahazo zavatra hafa izy."
+        },
+        "ownRule": "{count, plural, one {Fanavahana # napetraka ho an’i {subject} irery} other {Fanavahana # napetraka ho an’i {subject} irery}}.",
+        "exceptionFor": "Fanavahana ho an’i {subject}",
+        "exceptionLabel": "{limit} ho an’i {subject}",
+        "noException": {
+          "user": "Tsy misy fanavahana: mahazo izay omban’ireo fitsipika etsy ambony ity olona ity.",
+          "group": "Tsy misy fanavahana: mahazo izay omban’ireo fitsipika etsy ambony ireo mpikambana.",
+          "domain": "Tsy misy fanavahana: mahazo izay omban’ireo fitsipika etsy ambony ireo olona amin’ity domain ity."
+        },
+        "effect": {
+          "applies": "Manome {value} fa tsy {otherwise}.",
+          "same": "Manome {value}, mitovy amin’ny tsy misy fanavahana.",
+          "held-by-ceiling": "Tsy misy fiantraikany aloha: misy fetra ambony manakana amin’ny {value}.",
+          "outranked": "Tsy misy fiantraikany aloha: fitsipika mazava kokoa na laharam-pahamehana ambony kokoa no mametraka ({value}).",
+          "inert": "Tsy ampiharina."
+        }
+      }
     }
   },
   "m365": {

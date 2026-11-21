@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Aṣelọpọ ni a fi han nibi fun kika nikan. Tani wa ninu aṣelọpọ kan, awọn olumulo ti o wa rẹ, ati ohun ti oludari kọọkan le ṣe, ni a n ṣakoso ni agbegbe aṣelọpọ.",
     "delegationsManagedElsewhereLink": "Ṣii aṣelọpọ",
     "modelAccess": {
-      "intro": "Yàn ẹni tí ó lè lò àwòrán kọọkan. Eto idile kan máa kan gbogbo àwòrán rẹ bí kò bá ṣe pé àwòrán kan yàtọ̀ síra; àwọn ènìyàn tó wà lórí àkójọ àtakò àwòkọṣe yókù; àkójọ ìdènà ló kọja gbogbo ìfọwọ́sowọ́pò.",
       "externalNote": "Àwòrán tí a gbalejo lójú òde Azure ({families}) kò sí fún ẹnikẹ́ni ṣáájú kí o fi ìmúlọ sí wọn níbí — fún gbogbo ènìyàn nípasẹ̀ àwòkọṣe, tàbí fún àwọn ẹgbẹ́, agbègbè, àti àwọn ènìyàn.",
       "envelopeNote": "Ìyè ìbéèrè tó pẹ̀lú idile jẹ́ adápọ̀ àwọ́n tí wọ́n pẹ̀lú àwòrán rẹ; ìdìyekọ̀ ní àwòrán jẹ́ ààlà ṣe ẹ̀dá rẹ. Tí kò bá sí ààlà lórí àwòrán, kò túnbọ̀ nípa ààlà idile.",
       "observeNote": "Ipo abẹ̀wọ̀ ń ṣiṣẹ́: kò sí ohun tí o ṣe níbí tó máa fi dùnà tàbí dáwọ̀ ìbéèrè dúró. Ṣàǹfàní sí 'Enforce' lókè lẹ́yìn tí àtúnṣe bá pé.",
-      "familyChip": "Ìdílé",
-      "modelChip": "Àwòrán",
       "otherModels": "Àwòrán tí kò ní idile",
-      "modelsInFamily": "{count, plural, one {# àwòrán nínú idile yìí} other {# àwòrán nínú idile yìí}}",
       "noModels": "Kò sí àwòrán nínú àkójọ wíwà yìí.",
-      "expand": "Fi àwòrán hàn",
-      "collapse": "Tí àwòrán bo",
-      "edit": "Ṣàtúnṣe",
       "doneEditing": "Parí",
-      "editNode": "Ṣàtúnṣe ààyè fún {label}",
       "defaultLabel": "Gbogbo ènìyàn mìíràn",
-      "defaultInherit": "Tè sílẹ̀",
-      "defaultUnlimited": "Láìsí ààlà",
-      "defaultLimited": "Di sí",
-      "defaultUnavailable": "Kò sí níwọ̀n",
-      "defaultRequestsLabel": "Ìbéèrè l’ọjọ́ kọọkan fún gbogbo ènìyàn mìíràn",
       "requestsPerDay": "ìbéèrè / ọjọ́",
       "inheritedFrom": "Gba {state} láti {origin}.",
       "effectiveLabel": "Gbogbo ẹni tí kò wà lórí àkójọ máa rí: {state}.",
-      "inheritedChip": "tè sílẹ̀",
       "origin": {
         "model": "ètò yìí",
         "family": "idile rẹ",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Yọ {target} kúrò",
       "groupsCount": "{count, plural, one {# ẹgbẹ́} other {# ẹgbẹ́}}",
       "domainsCount": "{count, plural, one {# agbègbè} other {# agbègbè}}",
-      "allowCount": "{count, plural, one {# ènìyàn tí wọ́n fọwọ́sowọ́pò} other {# ènìyàn tí wọ́n fọwọ́sowọ́pò}}",
-      "denyCount": "{count, plural, one {# ènìyàn tí a dè wọlé} other {# ènìyàn tí a dè wọlé}}",
       "collisionChip": "Tun wà nínú Àwọn àyípasẹ Gbólóhùn",
-      "collisionWarning": "Àwọ̀n àyíkọ́ tàbí ẹbí yìí tún jẹ́ pàtó nínú Àwọn àyípasẹ Gbólóhùn. Títípamọ̀ yóò kọ́ láì gba kókan kúrò nínú wọn."
+      "collisionWarning": "Àwọ̀n àyíkọ́ tàbí ẹbí yìí tún jẹ́ pàtó nínú Àwọn àyípasẹ Gbólóhùn. Títípamọ̀ yóò kọ́ láì gba kókan kúrò nínú wọn.",
+      "grid": {
+        "intro": "Tani le lo ọkọọkan awoṣe, ati iye awọn ìbéèrè lojọ kan. Kọọkan ila jẹ́ idile tàbí awoṣe; kọọkan kaarọ jẹ́ awujọ. Yan apoti kan láti yí i padà.",
+        "caption": "Ìwọlé awoṣe nipasẹ awujọ",
+        "col": {
+          "model": "Awoṣe",
+          "reach": "Le lò ó"
+        },
+        "familyNote": "idile: isuna ojoojumọ ti o pin",
+        "addColumn": "Fi kaarọ awujọ kun",
+        "addColumnConfirm": "Fi kaarọ kun",
+        "columnKind": "Awujọ",
+        "addColumnHint": "Kaarọ yoo wa ni titi apoti kan ninu rẹ̀ bá ti ṣeto.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "ko ni ofurufu tirẹ̀",
+        "grantHint": "Gbigba g inherits túmọ̀ sí pé kò sí ofurufu fún awujọ yìí lori ila yi: àwọn ọmọ ẹgbẹ̀ rẹ máa gba ìdáhùn Gbogbo ẹni míì ayafi pé kaarọ mìíràn bo wọn.",
+        "grantHintFamily": "Gbigba g inherits máa lo ofurufu tí idile ṣètò fún awujọ yi.",
+        "inheritedPeople": "{count, plural, one {Ọ̀kan síi wa} other {# àwọn ènìyàn míì wa}} láti àkójọpọ̀ idile.",
+        "reach": {
+          "everyone": "Gbogbo ènìyàn",
+          "everyoneBut": "{count, plural, one {Gbogbo ènìyàn ayafi ènìyàn #} other {Gbogbo ènìyàn ayafi àwọn ènìyàn #}}",
+          "nobody": "Kò sí ènìyàn",
+          "people": "{count, plural, one {ènìyàn #} other {ènìyàn #}}"
+        },
+        "howTitle": "Bá ìbéèrè kọọkan ṣe n jẹ́ àyẹ̀wò",
+        "how": {
+          "block": "Ṣe o wà lórí atokọ tí a ti dá duro? Ko le fara han, ohunkóhun tó bá yẹ kẹ̀.",
+          "specific": "Bibẹẹkọ, ofurufu tó péye jùlọ tó kún fún ẹni náà ni yóó pinnu e: orúkọ ẹni, lẹhinna ẹgbẹ́, lẹ́hìn náà domain, lẹ́yìn náà gbogbo èlòmíì.",
+          "inherit": "Awoṣe tí ko ni ofurufu tirẹ̀ ninu kaarọ kan máa lo ti idile rẹ (ààmì gígún-gún).",
+          "envelope": "Ìbéèrè gbọ́dọ̀ fìt in in cap awoṣe, isuna ọjọ idile ati apapọ ìjíròrò, gbogbo mẹta."
+        }
+      }
     },
     "previewSourceModelAccess": "Ìfọwọ́si àyíkọ́ — {list}",
     "groupMembershipDegradedStructural": "Ṣàwárí ìsúnmọ́ ẹgbẹ́ ń kuna lórí olùṣàkóso yìí ({reason}). Àwọn ìlànà àti àṣẹ tó dá lórí ẹgbẹ́ kì í ní ṣiṣẹ́ fún àwọn ènìyàn tí ìpalára ti kan — ṣàyẹ̀wò ìfọwọ́sí Group.Read.All ti tenant àti ìforúkọsílẹ̀ app.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Àkótán",
-        "person": "Eni kan",
         "review": "Atunyẹwo",
-        "reviewCount": "Atunyẹwo ({count})"
+        "reviewCount": "Atunyẹwo ({count})",
+        "check": "Ṣàyẹ̀wò àwọlé"
       },
       "everyone": "Gbogbo ènìyàn",
       "off": "Pa",
@@ -6999,7 +7014,6 @@
       "policyShown": "Ẹ̀tò tí a fi hàn",
       "savedPolicy": "Ti fipamọ́",
       "withDraft": "Pẹ̀lú àwọn ayípadà rẹ",
-      "lensIntro": "Tẹ email ẹnikan sílẹ̀ láti rí ohun tí wọ́n gba, ohun tí wọ́n lò lónìí, àti ofin tí ó pinnu rẹ̀.",
       "lensCaption": "Ààlà fún {mail}",
       "layer": {
         "catalog": "Ti a fi mọ́ra",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Ọjọ́ àtijọ́ {people, plural, one {# eniyan} other {# eniyan}} ni okè wọn láti ibí; {atCap} dè e.",
         "overNewCap": "{people, plural, one {# eniyan} other {# eniyan}} ló ní ọjọ́ kan tó ju {cap} lọ lọ́sẹ̀ tó kọja.",
         "events": "Okè límiti yìí ni wọ́n dé {events, plural, one {# ìgbà} other {# ìgbà}} nipasẹ {people, plural, one {# eniyan} other {# eniyan}} lọ́sẹ̀ tó kọja.",
-        "noTargets": "Kò bò wọ́n kínní, nitorí náà kò yí ohunkóhun padà títí tí a fi fi ènìyàn kun un."
+        "noTargets": "Kò bò wọ́n kínní, nitorí náà kò yí ohunkóhun padà títí tí a fi fi ènìyàn kun un.",
+        "peopleGet": "Àwọn ènìyàn tó wa lorúkọ gba {after} dípò {before}."
       },
       "flag": {
         "removes-cap": "Yọ okè kúrò: kò sí límiti tó kan àwọn ènìyàn wọ̀nyí.",
@@ -7060,7 +7075,6 @@
         "model-access": "Ìwọle si awoṣe fún {subject}"
       },
       "checkPerson": "Ṣàyẹ̀wò ẹnikẹni sí àtúnṣe yìí",
-      "checkPersonHint": "Yíò ṣii àyíká ènìyàn kan pẹ̀lú àtúnṣe rẹ.",
       "historyNote": "Fipamọ́ yóò kọ́ ẹ̀dà kan sí itan ayipada.",
       "histogramLabel": "{people} ènìyàn gẹ́gẹ́ bi ọjọ́ tí ń ṣáájú wọn jù lọ lọ́sẹ̀ tó kọja; okè atijọ́ {before}, okè tuntun {after}",
       "histogramCaption": "Àwọn ènìyàn ní ọjọ́ tí ó kún jùlọ wọn lọsẹ tó kọjá. Osàn: ju ìdíyelé tuntun lọ.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {Ìyípadà # tí a kò fipamọ́} other {Ìyípadà # tí a kò fipamọ́}}",
       "discardConfirm": "Ṣé a fọ gbogbo ìyípadà tí a kò fipamọ́ sílẹ̀?",
       "discardYes": "Fọ sílẹ̀",
-      "reviewChanges": "Ṣàyẹ̀wò àwọn ìyípadà"
+      "reviewChanges": "Ṣàyẹ̀wò àwọn ìyípadà",
+      "checkPersonHint": "Ṣí Ṣàyẹ̀wò àwọlé pẹ̀lú àwọn àtúnṣe rẹ lára.",
+      "lens": {
+        "subjectKind": "Kí ni láti ṣàyẹ̀wò",
+        "kind": {
+          "user": "Eni",
+          "group": "Ẹgbẹ́ aabo",
+          "domain": "Domain"
+        },
+        "domainLabel": "Domain ìmẹ́lì láti ṣàyẹ̀wò",
+        "groupHint": "Wa ẹgbẹ́ aabo pẹ̀lú orúkọ, tàbí lẹẹmọ ID rẹ̀.",
+        "intro": "Yan ẹni, ẹgbẹ́ aabo tabi domain kan láti ri ohun tí wọn gba àti ofin wo ló pinnu rẹ. Ṣí àfikún eyikeyi láti ṣètò àtọka fún wọn níbẹ̀ lẹ́sẹ̀kẹsẹ̀.",
+        "typicalMember": {
+          "group": "gẹ́gẹ́ bí ọmọ ẹgbẹ́ àwọ̀n: ẹni tó wà nínú ẹgbẹ́ yi àtàwọn to kù àti tí kò sí ofin mìíràn tó bá wọn mu. Ẹsẹ ẹgbẹ́ tó wà lórí ofin ẹni tàbí ẹgbẹ́ mìíràn lè gba ohun to yàtọ̀.",
+          "domain": "gẹ́gẹ́ bí ọmọ ẹgbẹ́ àwọ̀n: ẹni tó wà lórí domain yìí àti tí kò sí ofin mìíràn tó bá a mu. Ẹni tó tún wà lórí ofin ẹgbẹ́ tàbí ẹni le gba ohun tó yàtọ̀."
+        },
+        "ownRule": "{count, plural, one {Atilẹyin # ni a ṣe} other {Atilẹyin # ni a ṣe}} fún {subject} nìkan.",
+        "exceptionFor": "Àtilẹyin fún {subject}",
+        "exceptionLabel": "{limit} fún {subject}",
+        "noException": {
+          "user": "Ko si àtilẹyin: ẹni yìí gba ohun tí ofin lókè fi fún un.",
+          "group": "Ko si àtilẹyin: àwọn ọmọ ẹgbẹ náà gba ohun tí ofin lókè fi fún wọn.",
+          "domain": "Ko si àtilẹyin: àwọn ènìyàn nínú domain yi gba ohun tí ofin lókè fi fún wọn."
+        },
+        "effect": {
+          "applies": "Fi {value} fún un dípò {otherwise}.",
+          "same": "Fi {value} fún un, tìkára rẹ bó ti jẹ́ kò sí àtilẹyin.",
+          "held-by-ceiling": "Ko ni ipa gege bi a ti ṣeto: ìdìpọ̀ tó pọ̀ ju mu wa sí {value}.",
+          "outranked": "Ko ni ipa gege bi a ti ṣeto: ofin tó péye ju tàbí tó ní àkànṣe ju lo pinnu dipo rẹ ({value}).",
+          "inert": "Ko ni ipa."
+        }
+      }
     }
   },
   "m365": {

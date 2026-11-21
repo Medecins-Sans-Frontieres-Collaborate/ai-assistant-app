@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "Delegationen werden hier nur gelesen angezeigt. Wer zu einer Delegation gehört, welche Nutzer sie umfasst und was jeder Admin darf, wird im Bereich \"Delegationen\" verwaltet.",
     "delegationsManagedElsewhereLink": "Delegationen öffnen",
     "modelAccess": {
-      "intro": "Legen Sie fest, wer welches Modell nutzen darf. Die Einstellung einer Familie gilt für deren Modelle, es sei denn, ein Modell hat eine eigene Einstellung; Personen auf einer Liste haben Vorrang vor dem Standard für alle anderen; die Blockliste schlägt jede Berechtigung.",
       "externalNote": "Modelle, die außerhalb der Azure-Umgebung ({families}) gehostet werden, sind für alle gesperrt, bis Sie hier Zugriff gewähren – entweder für alle über den Standard oder für Gruppen, Domains und einzelne Personen.",
       "envelopeNote": "Ein Anforderungs-Limit für eine Familie ist ein gemeinsames Tagesbudget für alle ihre Modelle; ein Limit für ein Modell ist eine Begrenzung darin. Unbegrenzt für ein Modell hebt das Familienbudget nicht auf.",
       "observeNote": "Beobachtungsmodus ist aktiv: Hier verbirgt nichts ein Modell oder verhindert eine Anfrage. Wechseln Sie oben auf Durchsetzen, wenn die Regeln korrekt sind.",
-      "familyChip": "Familie",
-      "modelChip": "Modell",
       "otherModels": "Modelle ohne Familie",
-      "modelsInFamily": "{count, plural, one {# Modell in dieser Familie} other {# Modelle in dieser Familie}}",
       "noModels": "Noch keine Modelle im Katalog.",
-      "expand": "Modelle anzeigen",
-      "collapse": "Modelle ausblenden",
-      "edit": "Bearbeiten",
       "doneEditing": "Fertig",
-      "editNode": "Zugriff für {label} bearbeiten",
       "defaultLabel": "Alle anderen",
-      "defaultInherit": "Vererben",
-      "defaultUnlimited": "Unbegrenzt",
-      "defaultLimited": "Begrenzt auf",
-      "defaultUnavailable": "Nicht verfügbar",
-      "defaultRequestsLabel": "Anfragen pro Tag für alle anderen",
       "requestsPerDay": "Anfragen / Tag",
       "inheritedFrom": "Erbt {state} von {origin}.",
       "effectiveLabel": "Alle, die nicht auf einer Liste stehen, erhalten: {state}.",
-      "inheritedChip": "vererbt",
       "origin": {
         "model": "diese Einstellung",
         "family": "seine Familie",
@@ -6884,10 +6870,39 @@
       "removeGrant": "{target} entfernen",
       "groupsCount": "{count, plural, one {# Gruppe} other {# Gruppen}}",
       "domainsCount": "{count, plural, one {# Domain} other {# Domains}}",
-      "allowCount": "{count, plural, one {# Person erlaubt} other {# Personen erlaubt}}",
-      "denyCount": "{count, plural, one {# Person blockiert} other {# Personen blockiert}}",
       "collisionChip": "Auch in den globalen Standardwerten",
-      "collisionWarning": "Dieses Modell oder diese Familie ist auch unter den globalen Standardwerten konfiguriert. Das Speichern wird verweigert, bis eine der beiden Konfigurationen entfernt wurde."
+      "collisionWarning": "Dieses Modell oder diese Familie ist auch unter den globalen Standardwerten konfiguriert. Das Speichern wird verweigert, bis eine der beiden Konfigurationen entfernt wurde.",
+      "grid": {
+        "intro": "Wer jedes Modell nutzen kann und wie viele Anfragen pro Tag erlaubt sind. Jede Zeile steht für eine Modellfamilie oder ein Modell, jede Spalte für ein Publikum. Wählen Sie eine Zelle, um sie zu ändern.",
+        "caption": "Modellzugriff nach Publikum",
+        "col": {
+          "model": "Modell",
+          "reach": "Kann nutzen"
+        },
+        "familyNote": "Familie: gemeinsames Tagesbudget",
+        "addColumn": "Publikumsspalte hinzufügen",
+        "addColumnConfirm": "Spalte hinzufügen",
+        "columnKind": "Publikum",
+        "addColumnHint": "Die Spalte bleibt, sobald eine Zelle darin gesetzt ist.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "keine eigenen Bedingungen",
+        "grantHint": "Vererben bedeutet keine eigenen Bedingungen für dieses Publikum in dieser Zeile: Seine Mitglieder erhalten die Antwort für Alle anderen, sofern keine andere Spalte sie abdeckt.",
+        "grantHintFamily": "Vererben verwendet die Bedingungen, die die Familie für dieses Publikum setzt.",
+        "inheritedPeople": "{count, plural, one {# weitere Person kommt} other {# weitere Personen kommen}} aus der Liste der Familie.",
+        "reach": {
+          "everyone": "Alle",
+          "everyoneBut": "{count, plural, one {Alle außer # Person} other {Alle außer # Personen}}",
+          "nobody": "Niemand",
+          "people": "{count, plural, one {# Person} other {# Personen}}"
+        },
+        "howTitle": "Wie eine Anfrage entschieden wird",
+        "how": {
+          "block": "Auf der Blockliste? Nicht verfügbar, egal was sonst gilt.",
+          "specific": "Ansonsten gilt die spezifischste Ausnahme, die die Person einschließt: eine benannte Person, dann eine Gruppe, dann eine Domain, dann alle anderen.",
+          "inherit": "Ein Modell ohne eigene Bedingungen in einer Spalte übernimmt die der Familie (gestrichelt).",
+          "envelope": "Die Anfrage muss innerhalb des Modelllimits, des Familienbudgets und des Chat-Gesamts liegen – alle drei."
+        }
+      }
     },
     "previewSourceModelAccess": "Modellfreigabe — {list}",
     "groupMembershipDegradedStructural": "Gruppenzugehörigkeitsabfragen schlagen auf diesem Server fehl ({reason}). Gruppenbasierte Regeln und Berechtigungen werden für die betroffenen Personen nicht angewendet — prüfen Sie die Berechtigung Group.Read.All des Mandanten und die App-Registrierung.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "Übersicht",
-        "person": "Eine Person",
         "review": "Überprüfen",
-        "reviewCount": "Überprüfen ({count})"
+        "reviewCount": "Überprüfen ({count})",
+        "check": "Zugriff prüfen"
       },
       "everyone": "Alle",
       "off": "Aus",
@@ -7015,7 +7030,6 @@
       "policyShown": "Angezeigte Richtlinie",
       "savedPolicy": "Gespeichert",
       "withDraft": "Mit Ihren Änderungen",
-      "lensIntro": "Geben Sie die E-Mail-Adresse einer Person ein, um zu sehen, was sie erhält, was heute genutzt wurde und welche Regel entschieden hat.",
       "lensCaption": "Limits für {mail}",
       "layer": {
         "catalog": "Eingebaut",
@@ -7052,7 +7066,8 @@
         "ruleReach": "Letzte Woche hatten {people, plural, one {# Person} other {# Personen}} ihr Limit von hier; {atCap} haben es erreicht.",
         "overNewCap": "{people, plural, one {# Person} other {# Personen}} lag letzte Woche an einem Tag über {cap}.",
         "events": "Limits dieses Wertes wurden letzte Woche {events, plural, one {# Mal} other {# Mal}} von {people, plural, one {# Person} other {# Personen}} erreicht.",
-        "noTargets": "Bisher betrifft es niemanden, daher ändert sich nichts, bis Personen hinzugefügt werden."
+        "noTargets": "Bisher betrifft es niemanden, daher ändert sich nichts, bis Personen hinzugefügt werden.",
+        "peopleGet": "Die genannten Personen erhalten {after} statt {before}."
       },
       "flag": {
         "removes-cap": "Entfernt die Obergrenze: Kein Limit gilt für diese Personen.",
@@ -7076,7 +7091,6 @@
         "model-access": "Modellzugriff für {subject}"
       },
       "checkPerson": "Prüfen Sie eine beliebige Person gegen diesen Entwurf",
-      "checkPersonHint": "Öffnet die Einzelpersonen-Ansicht mit Ihren Änderungen.",
       "historyNote": "Beim Speichern wird eine Version im Änderungsverlauf gesichert.",
       "histogramLabel": "{people} Personen nach ihrem arbeitsreichsten Tag in der vergangenen Woche; alte Obergrenze {before}, neue Obergrenze {after}",
       "histogramCaption": "Personen nach ihrem geschäftigsten Tag in der letzten Woche. Orange: über dem neuen Limit.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# Änderung nicht gespeichert} other {# Änderungen nicht gespeichert}}",
       "discardConfirm": "Alle nicht gespeicherten Änderungen verwerfen?",
       "discardYes": "Verwerfen",
-      "reviewChanges": "Änderungen überprüfen"
+      "reviewChanges": "Änderungen überprüfen",
+      "checkPersonHint": "Öffnet Zugriff prüfen mit Ihren Änderungen.",
+      "lens": {
+        "subjectKind": "Was prüfen",
+        "kind": {
+          "user": "Person",
+          "group": "Sicherheitsgruppe",
+          "domain": "Domain"
+        },
+        "domainLabel": "E-Mail-Domain zum Prüfen",
+        "groupHint": "Suchen Sie eine Sicherheitsgruppe nach Namen oder fügen Sie die Objekt-ID ein.",
+        "intro": "Wählen Sie eine Person, eine Sicherheitsgruppe oder eine Domain, um zu sehen, was sie erhalten und welche Regel dies entschieden hat. Öffnen Sie jede Begrenzung, um direkt eine Ausnahme für sie zu setzen.",
+        "typicalMember": {
+          "group": "als typisches Mitglied: jemand in dieser Gruppe, auf den keine andere Regel zutrifft. Ein Mitglied, das auch von einer persönlichen Regel oder einer anderen Gruppe abgedeckt ist, erhält möglicherweise etwas anderes.",
+          "domain": "als typisches Mitglied: jemand in dieser Domain, auf den keine andere Regel zutrifft. Jemand, der auch von einer Gruppen- oder persönlichen Regel abgedeckt ist, erhält möglicherweise etwas anderes."
+        },
+        "ownRule": "{count, plural, one {# Ausnahme ist} other {# Ausnahmen sind}} nur für {subject} festgelegt.",
+        "exceptionFor": "Ausnahme für {subject}",
+        "exceptionLabel": "{limit} für {subject}",
+        "noException": {
+          "user": "Keine Ausnahme: Diese Person erhält, was die obigen Regeln vorgeben.",
+          "group": "Keine Ausnahme: Mitglieder erhalten, was die obigen Regeln vorgeben.",
+          "domain": "Keine Ausnahme: Personen dieser Domain erhalten, was die obigen Regeln vorgeben."
+        },
+        "effect": {
+          "applies": "Gibt {value} statt {otherwise}.",
+          "same": "Gibt {value}, wie auch ohne Ausnahme.",
+          "held-by-ceiling": "Keine Wirkung wie festgelegt: Ein festes Maximum begrenzt es auf {value}.",
+          "outranked": "Keine Wirkung wie festgelegt: Eine spezifischere oder höher priorisierte Regel entscheidet stattdessen ({value}).",
+          "inert": "Nicht wirksam."
+        }
+      }
     }
   },
   "m365": {

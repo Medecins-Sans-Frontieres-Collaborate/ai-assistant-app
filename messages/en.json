@@ -6472,30 +6472,16 @@
       "delegations": "Delegations"
     },
     "modelAccess": {
-      "intro": "Decide who may use each model. A family's setting applies to its models unless a model sets its own; people on a list beat the default for everyone else; the block list beats every grant.",
       "externalNote": "Models hosted outside the Azure environment ({families}) are unavailable to everyone until you grant them here — to everyone via the default, or to groups, domains and people.",
       "envelopeNote": "A request limit on a family is a shared daily budget across its models; a limit on a model is a cap within it. Unlimited on a model does not lift a family budget.",
       "observeNote": "Observe mode is on: nothing here hides a model or stops a request yet. Switch to Enforce above once the rules are right.",
-      "familyChip": "Family",
-      "modelChip": "Model",
       "otherModels": "Models without a family",
-      "modelsInFamily": "{count, plural, one {# model in this family} other {# models in this family}}",
       "noModels": "No models in the catalog yet.",
-      "expand": "Show models",
-      "collapse": "Hide models",
-      "edit": "Edit",
       "doneEditing": "Done",
-      "editNode": "Edit access for {label}",
       "defaultLabel": "Everyone else",
-      "defaultInherit": "Inherit",
-      "defaultUnlimited": "Unlimited",
-      "defaultLimited": "Limited to",
-      "defaultUnavailable": "Unavailable",
-      "defaultRequestsLabel": "Requests per day for everyone else",
       "requestsPerDay": "requests / day",
       "inheritedFrom": "Inherits {state} from {origin}.",
       "effectiveLabel": "Everyone not on a list gets: {state}.",
-      "inheritedChip": "inherited",
       "origin": {
         "model": "this setting",
         "family": "its family",
@@ -6527,10 +6513,39 @@
       "removeGrant": "Remove {target}",
       "groupsCount": "{count, plural, one {# group} other {# groups}}",
       "domainsCount": "{count, plural, one {# domain} other {# domains}}",
-      "allowCount": "{count, plural, one {# person allowed} other {# people allowed}}",
-      "denyCount": "{count, plural, one {# person blocked} other {# people blocked}}",
       "collisionChip": "Also in Global defaults",
-      "collisionWarning": "This model or family is also configured under Global defaults. Saving will be refused until one of the two is cleared."
+      "collisionWarning": "This model or family is also configured under Global defaults. Saving will be refused until one of the two is cleared.",
+      "grid": {
+        "intro": "Who can use each model, and how many requests a day. Each row is a family or a model; each column is an audience. Select a cell to change it.",
+        "caption": "Model access by audience",
+        "col": {
+          "model": "Model",
+          "reach": "Can use it"
+        },
+        "familyNote": "family: shared daily budget",
+        "addColumn": "Add an audience column",
+        "addColumnConfirm": "Add column",
+        "columnKind": "Audience",
+        "addColumnHint": "The column stays once a cell in it is set.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "no terms of its own",
+        "grantHint": "Inherit means no terms for this audience on this row: its members get the Everyone else answer unless another column covers them.",
+        "grantHintFamily": "Inherit uses the terms the family sets for this audience.",
+        "inheritedPeople": "{count, plural, one {# more person comes} other {# more people come}} from the family's list.",
+        "reach": {
+          "everyone": "Everyone",
+          "everyoneBut": "{count, plural, one {Everyone but # person} other {Everyone but # people}}",
+          "nobody": "Nobody",
+          "people": "{count, plural, one {# person} other {# people}}"
+        },
+        "howTitle": "How one request is decided",
+        "how": {
+          "block": "On the block list? Unavailable, whatever else applies.",
+          "specific": "Otherwise the most specific grant that includes the person sets their terms: a named person, then a group, then a domain, then everyone else.",
+          "inherit": "A model with no terms of its own in a column uses its family's (dashed).",
+          "envelope": "The request must fit the model's cap, the family's shared budget and the chat total, all three."
+        }
+      }
     },
     "tabsLabel": "Limits sections",
     "group": {
@@ -6961,9 +6976,9 @@
     "console": {
       "tab": {
         "overview": "Overview",
-        "person": "One person",
         "review": "Review",
-        "reviewCount": "Review ({count})"
+        "reviewCount": "Review ({count})",
+        "check": "Check access"
       },
       "everyone": "Everyone",
       "off": "Off",
@@ -7079,7 +7094,6 @@
       "policyShown": "Policy shown",
       "savedPolicy": "Saved",
       "withDraft": "With your changes",
-      "lensIntro": "Enter someone's email to see what they get, what they used today, and which rule decided it.",
       "lensCaption": "Limits for {mail}",
       "layer": {
         "catalog": "Built in",
@@ -7116,7 +7130,8 @@
         "ruleReach": "Last week {people, plural, one {# person} other {# people}} had their cap from here; {atCap} hit it.",
         "overNewCap": "{people, plural, one {# person} other {# people}} had a day above {cap} last week.",
         "events": "Caps on this limit were hit {events, plural, one {# time} other {# times}} by {people, plural, one {# person} other {# people}} last week.",
-        "noTargets": "Covers nobody yet, so it changes nothing until people are added."
+        "noTargets": "Covers nobody yet, so it changes nothing until people are added.",
+        "peopleGet": "The people named get {after} instead of {before}."
       },
       "flag": {
         "removes-cap": "Removes the cap: no limit applies to these people.",
@@ -7140,7 +7155,7 @@
         "model-access": "Model access for {subject}"
       },
       "checkPerson": "Check anyone against this draft",
-      "checkPersonHint": "Opens the one-person view with your changes applied.",
+      "checkPersonHint": "Opens Check access with your changes applied.",
       "historyNote": "Saving writes one version to the change history.",
       "histogramLabel": "{people} people by their busiest day last week; old cap {before}, new cap {after}",
       "histogramCaption": "People by their busiest day last week. Orange: above the new cap.",
@@ -7160,7 +7175,37 @@
       "unsavedCount": "{count, plural, one {# change not saved} other {# changes not saved}}",
       "discardConfirm": "Discard every unsaved change?",
       "discardYes": "Discard",
-      "reviewChanges": "Review changes"
+      "reviewChanges": "Review changes",
+      "lens": {
+        "subjectKind": "What to check",
+        "kind": {
+          "user": "Person",
+          "group": "Security group",
+          "domain": "Domain"
+        },
+        "domainLabel": "Email domain to check",
+        "groupHint": "Search for a security group by name, or paste its object ID.",
+        "intro": "Pick a person, a security group or a domain to see what they get and which rule decided it. Open any limit to set an exception for them right there.",
+        "typicalMember": {
+          "group": "as a typical member: someone in this group and matched by no other rule. A member also covered by a personal rule or another group may get something different.",
+          "domain": "as a typical member: someone at this domain and matched by no other rule. Someone also covered by a group or personal rule may get something different."
+        },
+        "ownRule": "{count, plural, one {# exception is} other {# exceptions are}} set for {subject} alone.",
+        "exceptionFor": "Exception for {subject}",
+        "exceptionLabel": "{limit} for {subject}",
+        "noException": {
+          "user": "No exception: this person gets whatever the rules above give them.",
+          "group": "No exception: members get whatever the rules above give them.",
+          "domain": "No exception: people at this domain get whatever the rules above give them."
+        },
+        "effect": {
+          "applies": "Gives {value} instead of {otherwise}.",
+          "same": "Gives {value}, the same as without the exception.",
+          "held-by-ceiling": "No effect as set: a hard ceiling holds it at {value}.",
+          "outranked": "No effect as set: a more specific or higher-priority rule decides instead ({value}).",
+          "inert": "Not in effect."
+        }
+      }
     }
   },
   "adminMapDatasets": {

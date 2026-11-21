@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "Delegaties worden hier alleen als alleen-lezen weergegeven. Wie in een delegatie zit, welke gebruikers het betreft en wat elke beheerder mag doen, wordt beheerd in het gedeelte Delegaties.",
     "delegationsManagedElsewhereLink": "Open Delegaties",
     "modelAccess": {
-      "intro": "Bepaal wie elk model mag gebruiken. Een instelling op gezinsniveau geldt voor alle modellen in dat gezin, tenzij een model een eigen instelling heeft; mensen op een lijst gaan boven de standaardinstelling; de blokkadelijst gaat boven elke andere toewijzing.",
       "externalNote": "Modellen die buiten de Azure-omgeving worden gehost ({families}), zijn voor iedereen niet beschikbaar totdat u ze hier toegang geeft — via de standaardinstelling voor iedereen of voor groepen, domeinen en personen.",
       "envelopeNote": "Een aanvraaglimiet op een gezin is een gedeeld dagbudget voor al zijn modellen; een limiet op een model is een grens daarbinnen. Onbeperkt op modelniveau heft het gezinsbudget niet op.",
       "observeNote": "Observe-modus is ingeschakeld: niets verbergt een model of stopt een aanvraag. Zet hierboven op Handhaven zodra de regels kloppen.",
-      "familyChip": "Gezin",
-      "modelChip": "Model",
       "otherModels": "Modellen zonder gezin",
-      "modelsInFamily": "{count, plural, one {# model in dit gezin} other {# modellen in dit gezin}}",
       "noModels": "Nog geen modellen in de catalogus.",
-      "expand": "Modellen tonen",
-      "collapse": "Modellen verbergen",
-      "edit": "Bewerken",
       "doneEditing": "Gereed",
-      "editNode": "Toegang bewerken voor {label}",
       "defaultLabel": "Iedereen anders",
-      "defaultInherit": "Overnemen",
-      "defaultUnlimited": "Onbeperkt",
-      "defaultLimited": "Beperkt tot",
-      "defaultUnavailable": "Niet beschikbaar",
-      "defaultRequestsLabel": "Aanvragen per dag voor iedereen anders",
       "requestsPerDay": "aanvragen / dag",
       "inheritedFrom": "Neemt {state} over van {origin}.",
       "effectiveLabel": "Iedereen niet op een lijst krijgt: {state}.",
-      "inheritedChip": "overgenomen",
       "origin": {
         "model": "deze instelling",
         "family": "zijn gezin",
@@ -6884,10 +6870,39 @@
       "removeGrant": "{target} verwijderen",
       "groupsCount": "{count, plural, one {# groep} other {# groepen}}",
       "domainsCount": "{count, plural, one {# domein} other {# domeinen}}",
-      "allowCount": "{count, plural, one {# persoon toegestaan} other {# personen toegestaan}}",
-      "denyCount": "{count, plural, one {# persoon geblokkeerd} other {# personen geblokkeerd}}",
       "collisionChip": "Ook in wereldwijde standaardinstellingen",
-      "collisionWarning": "Dit model of deze familie is ook geconfigureerd onder wereldwijde standaardinstellingen. Opslaan wordt geweigerd totdat een van de twee is verwijderd."
+      "collisionWarning": "Dit model of deze familie is ook geconfigureerd onder wereldwijde standaardinstellingen. Opslaan wordt geweigerd totdat een van de twee is verwijderd.",
+      "grid": {
+        "intro": "Wie elk model kan gebruiken en hoeveel verzoeken per dag. Elke rij is een familie of model; elke kolom is een doelgroep. Selecteer een cel om deze te wijzigen.",
+        "caption": "Modeltoegang per doelgroep",
+        "col": {
+          "model": "Model",
+          "reach": "Kan gebruiken"
+        },
+        "familyNote": "familie: gedeeld dagbudget",
+        "addColumn": "Doelgroepkolom toevoegen",
+        "addColumnConfirm": "Kolom toevoegen",
+        "columnKind": "Doelgroep",
+        "addColumnHint": "De kolom blijft bestaan zodra een cel daarin is ingesteld.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "geen eigen voorwaarden",
+        "grantHint": "Overerven betekent geen voorwaarden voor deze doelgroep in deze rij: de leden krijgen het antwoord voor Overige tenzij een andere kolom hen dekt.",
+        "grantHintFamily": "Overerven gebruikt de voorwaarden die de familie instelt voor deze doelgroep.",
+        "inheritedPeople": "{count, plural, one {# extra persoon komt} other {# extra personen komen}} uit de lijst van de familie.",
+        "reach": {
+          "everyone": "Iedereen",
+          "everyoneBut": "{count, plural, one {Iedereen behalve # persoon} other {Iedereen behalve # personen}}",
+          "nobody": "Niemand",
+          "people": "{count, plural, one {# persoon} other {# personen}}"
+        },
+        "howTitle": "Hoe een verzoek wordt beslist",
+        "how": {
+          "block": "Op de blokkeerlijst? Niet beschikbaar, ongeacht verdere voorwaarden.",
+          "specific": "Anders geldt de meest specifieke toekenning die de persoon omvat: een benoemd persoon, dan een groep, dan een domein, dan de rest.",
+          "inherit": "Een model zonder eigen voorwaarden in een kolom gebruikt die van de familie (stippellijn).",
+          "envelope": "Het verzoek moet voldoen aan het limiet van het model, het gedeelde familie-budget en het totaal voor het chatgesprek, alle drie."
+        }
+      }
     },
     "previewSourceModelAccess": "Modelgoedkeuring — {list}",
     "groupMembershipDegradedStructural": "Groepslidmaatschap-zoekopdrachten werken niet op deze server ({reason}). Regels en machtigingen op basis van groepen worden niet toegepast voor de getroffen personen — controleer de Group.Read.All-toestemming van de tenant en de app-registratie.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "Overzicht",
-        "person": "Eén persoon",
         "review": "Beoordelen",
-        "reviewCount": "Beoordelen ({count})"
+        "reviewCount": "Beoordelen ({count})",
+        "check": "Toegang controleren"
       },
       "everyone": "Iedereen",
       "off": "Uit",
@@ -7015,7 +7030,6 @@
       "policyShown": "Beleid weergegeven",
       "savedPolicy": "Opgeslagen",
       "withDraft": "Met uw wijzigingen",
-      "lensIntro": "Voer het e-mailadres van iemand in om te zien wat hij krijgt, wat hij vandaag heeft gebruikt en welke regel dat bepaalde.",
       "lensCaption": "Limieten voor {mail}",
       "layer": {
         "catalog": "Ingebouwd",
@@ -7052,7 +7066,8 @@
         "ruleReach": "Afgelopen week kregen {people, plural, one {# persoon} other {# personen}} hun limiet hiervandaan; {atCap} bereikte het.",
         "overNewCap": "{people, plural, one {# persoon} other {# personen}} hadden een dag boven {cap} vorige week.",
         "events": "Limieten werden op deze grens {events, plural, one {# keer} other {# keer}} bereikt door {people, plural, one {# persoon} other {# personen}} afgelopen week.",
-        "noTargets": "Dekt nog niemand, dus er verandert niets totdat mensen worden toegevoegd."
+        "noTargets": "Dekt nog niemand, dus er verandert niets totdat mensen worden toegevoegd.",
+        "peopleGet": "De genoemde personen krijgen {after} in plaats van {before}."
       },
       "flag": {
         "removes-cap": "Verwijdert de limiet: op deze mensen is geen beperking van toepassing.",
@@ -7076,7 +7091,6 @@
         "model-access": "Modeltoegang voor {subject}"
       },
       "checkPerson": "Controleer iemand met dit concept",
-      "checkPersonHint": "Opent de weergave voor één persoon met uw wijzigingen toegepast.",
       "historyNote": "Opslaan schrijft één versie naar de wijzigingsgeschiedenis.",
       "histogramLabel": "{people} mensen op hun drukste dag vorige week; oude limiet {before}, nieuwe limiet {after}",
       "histogramCaption": "Mensen op hun drukste dag vorige week. Oranje: boven de nieuwe limiet.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# wijziging niet opgeslagen} other {# wijzigingen niet opgeslagen}}",
       "discardConfirm": "Alle niet-opgeslagen wijzigingen weggooien?",
       "discardYes": "Weggooien",
-      "reviewChanges": "Wijzigingen bekijken"
+      "reviewChanges": "Wijzigingen bekijken",
+      "checkPersonHint": "Opent Toegang controleren met uw wijzigingen toegepast.",
+      "lens": {
+        "subjectKind": "Wat wilt u controleren",
+        "kind": {
+          "user": "Persoon",
+          "group": "Beveiligingsgroep",
+          "domain": "Domein"
+        },
+        "domainLabel": "E-maildomein om te controleren",
+        "groupHint": "Zoek een beveiligingsgroep op naam of plak het object-ID.",
+        "intro": "Kies een persoon, beveiligingsgroep of domein om te zien wat zij krijgen en welke regel dat bepaalt. Open een limiet om daar direct een uitzondering voor hen in te stellen.",
+        "typicalMember": {
+          "group": "als een standaardlid: iemand in deze groep die door geen andere regel wordt geraakt. Een lid dat ook wordt gedekt door een persoonlijke regel of andere groep kan iets anders krijgen.",
+          "domain": "als een standaardlid: iemand binnen dit domein die door geen andere regel wordt geraakt. Iemand die ook door een groep of persoonlijke regel wordt gedekt, kan iets anders krijgen."
+        },
+        "ownRule": "{count, plural, one {# uitzondering is} other {# uitzonderingen zijn}} alleen voor {subject} ingesteld.",
+        "exceptionFor": "Uitzondering voor {subject}",
+        "exceptionLabel": "{limit} voor {subject}",
+        "noException": {
+          "user": "Geen uitzondering: deze persoon krijgt wat de bovenstaande regels bepalen.",
+          "group": "Geen uitzondering: leden krijgen wat de bovenstaande regels bepalen.",
+          "domain": "Geen uitzondering: mensen in dit domein krijgen wat de bovenstaande regels bepalen."
+        },
+        "effect": {
+          "applies": "Geeft {value} in plaats van {otherwise}.",
+          "same": "Geeft {value}, hetzelfde als zonder de uitzondering.",
+          "held-by-ceiling": "Geen effect zoals ingesteld: een harde limiet houdt het op {value}.",
+          "outranked": "Geen effect zoals ingesteld: een specifiekere of hogere regel beslist ({value}).",
+          "inert": "Niet van kracht."
+        }
+      }
     }
   },
   "m365": {

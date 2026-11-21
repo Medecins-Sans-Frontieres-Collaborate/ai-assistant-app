@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Ma delegation akusonyezedwa pano monga owerengeka okha. Amene ali m'gulu la delegation, amene likuphimba, ndi zomwe admin aliyense angachite zimawongoleredwa m'dera la Delegations.",
     "delegationsManagedElsewhereLink": "Tsegulani Delegations",
     "modelAccess": {
-      "intro": "Sankhani amene angagwiritse ntchito mtundu uliwonse. Zokhazikitsa za banja zimagwira mitundu yake mpaka mtundu waikha zake; anthu omwe ali m'ndandanda amapeza ufulu kuposa ena; ndandanda yoletsa imaposa ufulu uliwonse.",
       "externalNote": "Mitundu yomwe ili kunja kwa malo a Azure ({families}) siikupezeka kwa aliyense mpaka mutapereka chilolezo apa — kwa aliyense mwa kusakhazikika, kapena kwa magulu, domains ndi anthu.",
       "envelopeNote": "Malire a pempho pa banja ndi bajeti yogawana tsiku ndi tsiku pa mitundu yake; malire pa mtundu ndi chophimba mkati mwake. Kuchotsa malire pa mtundu sikutsegula bajeti ya banja.",
       "observeNote": "Njira ya Observe ili pa: palibe chobisala mtundu kapena choletsa pempho pano. Sinthani ku Enforce pamwamba mukakhazikitsa malamulo molondola.",
-      "familyChip": "Banja",
-      "modelChip": "Mtundu",
       "otherModels": "Mitundu yopanda banja",
-      "modelsInFamily": "{count, plural, one {# mtundu m'banja lino} other {# mitundu m'banja lino}}",
       "noModels": "Palibe mitundu m'catalog pakadali pano.",
-      "expand": "Onetsani mitundu",
-      "collapse": "Bisani mitundu",
-      "edit": "Sinthani",
       "doneEditing": "Maliza",
-      "editNode": "Sinthani ufulu wa {label}",
       "defaultLabel": "Ena onse",
-      "defaultInherit": "Landira",
-      "defaultUnlimited": "Opanda malire",
-      "defaultLimited": "Zochepa pa",
-      "defaultUnavailable": "Sikupezeka",
-      "defaultRequestsLabel": "Mapempho patsiku kwa ena onse",
       "requestsPerDay": "mapempho / tsiku",
       "inheritedFrom": "Akulandira {state} kuchokera ku {origin}.",
       "effectiveLabel": "Aliyense amene ali m'ndandanda safika: {state}.",
-      "inheritedChip": "zolandira",
       "origin": {
         "model": "kukhazikitsa uku",
         "family": "banja lake",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Chotsani {target}",
       "groupsCount": "{count, plural, one {# gulu} other {# magulu}}",
       "domainsCount": "{count, plural, one {# domain} other {# ma domain}}",
-      "allowCount": "{count, plural, one {# munthu wololeka} other {# anthu ololeka}}",
-      "denyCount": "{count, plural, one {# munthu olephera} other {# anthu olephera}}",
       "collisionChip": "Ili komanso mu Global defaults",
-      "collisionWarning": "Chitsanzo ichi kapena banja lili ndi makonzedwe mu Global defaults. Kusunga sikuzaloledwa mpaka chimodzi mwaziwiri zichotsedwa."
+      "collisionWarning": "Chitsanzo ichi kapena banja lili ndi makonzedwe mu Global defaults. Kusunga sikuzaloledwa mpaka chimodzi mwaziwiri zichotsedwa.",
+      "grid": {
+        "intro": "Ndani angagwiritse ntchito chitsanzo chilichonse, ndi kuchuluka kwa pempho patsiku. Mzere uliwonse ukuimira banja kapena chitsanzo; kolamu iliyonse ukuimira omvera. Sankhani maselo kusintha.",
+        "caption": "Kuloledwa kugwiritsa ntchito chitsanzo malinga ndi omvera",
+        "col": {
+          "model": "Chitsanzo",
+          "reach": "Angagwiritse ntchito"
+        },
+        "familyNote": "banja: bajeti yagawidwa tsiku ndi tsiku",
+        "addColumn": "Onjezerani kolamu ya omvera",
+        "addColumnConfirm": "Onjezerani kolamu",
+        "columnKind": "Omvera",
+        "addColumnHint": "Kolamu siyichotsedwa akangoyika selo imodzi.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "palibe malamulo ake payekha",
+        "grantHint": "Kutengera (Inherit) kumatanthauza palibe malamulo apadera pa omvera otere: mamembala ake alandira yankho la Zina zonse pokhapokha ngati kolamu ina yawaphatikiza.",
+        "grantHintFamily": "Kutengera kukugwiritsa ntchito malamulo a banja kwa omverawa.",
+        "inheritedPeople": "{count, plural, one {# munthu wina akupezeka} other {# anthu ena akupezeka}} kuchokera pa mndandanda wa banja.",
+        "reach": {
+          "everyone": "Aliyense",
+          "everyoneBut": "{count, plural, one {Aliyense kupatula munthu #} other {Aliyense kupatula anthu #}}",
+          "nobody": "Palibe",
+          "people": "{count, plural, one {munthu #} other {anthu #}}"
+        },
+        "howTitle": "Momwe pempho limasankhidwira",
+        "how": {
+          "block": "Ali pa mndandanda wa oletsedwa? Sakuloledwa, ngakhale zinthu zina zili choncho.",
+          "specific": "Ngati si choncho, malamulo apadera omwe akuphimba munthu ameneyo adzakhazikitsidwa: wotchedwa payekha, gulu, domain, kenako aliyense.",
+          "inherit": "Chitsanzo chopanda malamulo ake payekha m'kolamu chimatengera a banja (chowoneka ngati mzere wodulidwa).",
+          "envelope": "Pempho liyenera kukhala mkati mwa malire a chitsanzo, bajeti yagawidwa ya banja ndi chiyambi cha chat, zonse zitatu."
+        }
+      }
     },
     "previewSourceModelAccess": "Kuvomereza chitsanzo — {list}",
     "groupMembershipDegradedStructural": "Kufufuza za membala wa magulu zikuolephera pa server ino ({reason}). Malamulo ndi zilolezo za magulu sizikugwira ntchito kwa anthu okhudzidwa — onani Group.Read.All consent ya tenant ndi kulembetsa kwa app.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Chidule",
-        "person": "Munthu mmodzi",
         "review": "Onanso",
-        "reviewCount": "Onanso ({count})"
+        "reviewCount": "Onanso ({count})",
+        "check": "Yang'anani kuloledwa"
       },
       "everyone": "Aliyense",
       "off": "Zatsekedwa",
@@ -6999,7 +7014,6 @@
       "policyShown": "Mfundo ikuwonetsedwa",
       "savedPolicy": "Zasungidwa",
       "withDraft": "Ndi zosintha zanu",
-      "lensIntro": "Lembani email ya munthu kuti muwone zomwe amapatsidwa, zomwe agwiritsa ntchito lero, ndi lamulo lomwe lasankha.",
       "lensCaption": "Malire a {mail}",
       "layer": {
         "catalog": "Yomangidwa",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Sabata yatha {people, plural, one {# munthu} other {# anthu}} analandira ceiling kuchokera pano; {atCap} adafika pa ceiling.",
         "overNewCap": "{people, plural, one {# munthu} other {# anthu}} adatulukira pa {cap} tsiku lina sabata yatha.",
         "events": "Ceiling ya malire awa idafika {events, plural, one {# nthawi} other {# nthawi}} ndi {people, plural, one {# munthu} other {# anthu}} sabata yatha.",
-        "noTargets": "Silinagwirepo aliyense, kotero palibe chosintha mpaka anthu apindulidwe."
+        "noTargets": "Silinagwirepo aliyense, kotero palibe chosintha mpaka anthu apindulidwe.",
+        "peopleGet": "Anthu otchedwa apeza {after} m'malo mwa {before}."
       },
       "flag": {
         "removes-cap": "Kuchotsa ceiling: palibe malire omwe akugwira kwa anthu awa.",
@@ -7060,7 +7075,6 @@
         "model-access": "Model kolowera kwa {subject}"
       },
       "checkPerson": "Onani aliyense motsutsana ndi draft iyi",
-      "checkPersonHint": "Imatsegula mawonekedwe a munthu mmodzi ndi kusintha kwanu kuyikidwa.",
       "historyNote": "Kusunga kumalemba mtundu umodzi mu mbiri ya kusintha.",
       "histogramLabel": "{people} anthu malinga ndi tsiku lawo lochita kwambiri sabata yatha; ceiling yakale {before}, ceiling yatsopano {after}",
       "histogramCaption": "Anthu malinga ndi tsiku lawo logwira ntchito kwambiri sabata yatha. Lalanje: apitirira malire atsopano.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {# kusintha kosadasungidwa} other {# kusintha kosadasungidwa}}",
       "discardConfirm": "Kusiya kusintha konse kosasungidwa?",
       "discardYes": "Siyani",
-      "reviewChanges": "Onani kusintha"
+      "reviewChanges": "Onani kusintha",
+      "checkPersonHint": "Imatsegula Yang'anani kuloledwa ndi zosintha zanu.",
+      "lens": {
+        "subjectKind": "Choyenera kuyang'ana",
+        "kind": {
+          "user": "Munthu",
+          "group": "Gulu la chitetezo",
+          "domain": "Domain"
+        },
+        "domainLabel": "Domain ya email yoyang'anira",
+        "groupHint": "Fufuzani gulu la chitetezo mwadzina, kapena ikani object ID yake.",
+        "intro": "Sankhani munthu, gulu la chitetezo kapena domain kuti muwone zomwe apeza komanso lamulo lomwe lasankha. Tsegulani malire aliwonse kuti mukhazikitse zapadera pomwepo.",
+        "typicalMember": {
+          "group": "monga membala wamba: wina ali m'gulu limeneli ndipo sakhudzidwa ndi lamulo lina. M'membala wokhudzidwanso ndi lamulo laumwini kapena gulu lina angalandire china.",
+          "domain": "monga membala wamba: wina ali pa domain iyi ndipo sakhudzidwa ndi lamulo lina. Wina wokhudzidwanso ndi lamulo la gulu kapena laumwini angalandire china."
+        },
+        "ownRule": "{count, plural, one {# lamulo lapadera lakhazikitsidwa} other {# malamulo apadera akhazikitsidwa}} pa {subject} yokha.",
+        "exceptionFor": "Zopadera za {subject}",
+        "exceptionLabel": "{limit} kwa {subject}",
+        "noException": {
+          "user": "Palibe zapadera: munthuyu apeza zomwe malamulo apamwamba amupatsa.",
+          "group": "Palibe zapadera: mamembala apeza zomwe malamulo apamwamba amupatsa.",
+          "domain": "Palibe zapadera: anthu pa domain iyi apeza zomwe malamulo apamwamba amupatsa."
+        },
+        "effect": {
+          "applies": "Amapeza {value} m'malo mwa {otherwise}.",
+          "same": "Amapeza {value}, zomwe zilili zofanana ndi popanda zapadera.",
+          "held-by-ceiling": "Palibe kusiyana monga zakhazikitsidwa: malire akulu akumasula pa {value}.",
+          "outranked": "Palibe kusiyana monga zakhazikitsidwa: lamulo laikulu kapena lapadera limasankha ({value}).",
+          "inert": "Sikugwira ntchito."
+        }
+      }
     }
   },
   "m365": {

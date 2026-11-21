@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Delegacije su ovde prikazane samo za čitanje. Ko je u delegaciji, koje korisnike obuhvata i šta svaki administrator može, uređuje se u oblasti Delegacije.",
     "delegationsManagedElsewhereLink": "Otvori Delegacije",
     "modelAccess": {
-      "intro": "Odlučite ko može koristiti svaki model. Podešavanje porodice važi za njene modele, osim ako model nema svoje podešavanje; ljudi na listi imaju prednost nad podrazumevanim za sve ostale; blok lista ima prednost nad svim odobrenjima.",
       "externalNote": "Modeli koji su hostovani izvan Azure okruženja ({families}) nisu dostupni nikome dok ih ovde ne odobrite — svima preko podrazumevanog ili određenim grupama, domenima i osobama.",
       "envelopeNote": "Ograničenje zahteva na porodicu predstavlja zajednički dnevni budžet za njene modele; ograničenje na model predstavlja limit unutar njega. Neograničeno na modelu ne ukida budžet porodice.",
       "observeNote": "Režim posmatranja je uključen: ništa ovde još ne skriva model ili ne zaustavlja zahtev. Prebacite na režim sprovođenja iznad kad pravila budu ispravna.",
-      "familyChip": "Porodica",
-      "modelChip": "Model",
       "otherModels": "Modeli bez porodice",
-      "modelsInFamily": "{count, plural, one {# model u ovoj porodici} other {# modela u ovoj porodici}}",
       "noModels": "Još nema modela u katalogu.",
-      "expand": "Prikaži modele",
-      "collapse": "Sakrij modele",
-      "edit": "Izmeni",
       "doneEditing": "Završeno",
-      "editNode": "Izmeni pristup za {label}",
       "defaultLabel": "Svi ostali",
-      "defaultInherit": "Nasleđuje",
-      "defaultUnlimited": "Neograničeno",
-      "defaultLimited": "Ograničeno na",
-      "defaultUnavailable": "Nedostupno",
-      "defaultRequestsLabel": "Zahtevi po danu za sve ostale",
       "requestsPerDay": "zahteva / dan",
       "inheritedFrom": "Nasleđuje {state} od {origin}.",
       "effectiveLabel": "Svi koji nisu na listi dobijaju: {state}.",
-      "inheritedChip": "nasleđeno",
       "origin": {
         "model": "ovo podešavanje",
         "family": "njena porodica",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Ukloni {target}",
       "groupsCount": "{count, plural, one {# grupa} other {# grupa}}",
       "domainsCount": "{count, plural, one {# domen} other {# domena}}",
-      "allowCount": "{count, plural, one {# odobrena osoba} other {# odobrenih osoba}}",
-      "denyCount": "{count, plural, one {# blokirana osoba} other {# blokiranih osoba}}",
       "collisionChip": "Takođe u globalnim podrazumevanim vrednostima",
-      "collisionWarning": "Ovaj model ili porodica je takođe podešena pod globalnim podrazumevanim vrednostima. Čuvanje neće biti dozvoljeno dok se jedno od dva ne ukloni."
+      "collisionWarning": "Ovaj model ili porodica je takođe podešena pod globalnim podrazumevanim vrednostima. Čuvanje neće biti dozvoljeno dok se jedno od dva ne ukloni.",
+      "grid": {
+        "intro": "Ko može da koristi svaki model i koliko zahteva dnevno. Svaki red predstavlja porodicu ili model; svaka kolona je publika. Izaberite ćeliju da je izmenite.",
+        "caption": "Pristup modelu po publici",
+        "col": {
+          "model": "Model",
+          "reach": "Može da koristi"
+        },
+        "familyNote": "porodica: zajednički dnevni budžet",
+        "addColumn": "Dodaj kolonu za publiku",
+        "addColumnConfirm": "Dodaj kolonu",
+        "columnKind": "Publika",
+        "addColumnHint": "Kolona ostaje nakon što se jedna ćelija u njoj postavi.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "nema sopstvenih termina",
+        "grantHint": "Nasleđivanje znači da nema termina za ovu publiku u ovom redu: njeni članovi dobijaju odgovor 'Svi ostali', osim ako ih druga kolona pokrije.",
+        "grantHintFamily": "Nasleđivanje koristi termine koje porodica postavi za ovu publiku.",
+        "inheritedPeople": "{count, plural, one {Još # osoba dolazi} other {Još # osoba dolazi}} sa liste porodice.",
+        "reach": {
+          "everyone": "Svi",
+          "everyoneBut": "{count, plural, one {Svi osim # osobe} other {Svi osim # osoba}}",
+          "nobody": "Niko",
+          "people": "{count, plural, one {# osoba} other {# osoba}}"
+        },
+        "howTitle": "Kako se odlučuje jedan zahtev",
+        "how": {
+          "block": "Na listi blokiranih? Nedostupno, bez obzira na ostalo.",
+          "specific": "U suprotnom, najkonkretnije dozvoljenje koje uključuje osobu određuje njihove termine: prvo imenovana osoba, zatim grupa, zatim domen, pa svi ostali.",
+          "inherit": "Model bez sopstvenih termina u koloni koristi termine porodice (isprekidano).",
+          "envelope": "Zahtev mora odgovarati ograničenju modela, zajedničkom budžetu porodice i ukupnom broju čatova, sva tri."
+        }
+      }
     },
     "previewSourceModelAccess": "Odobrenje modela — {list}",
     "groupMembershipDegradedStructural": "Pretrage članstva u grupi ne uspevaju na ovom serveru ({reason}). Pravila i dozvole zasnovane na grupama nisu primenjena za pogođene osobe — proverite tenantovu Group.Read.All saglasnost i registraciju aplikacije.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Pregled",
-        "person": "Jedna osoba",
         "review": "Pregledaj",
-        "reviewCount": "Pregledaj ({count})"
+        "reviewCount": "Pregledaj ({count})",
+        "check": "Proveri pristup"
       },
       "everyone": "Svi",
       "off": "Isključeno",
@@ -6999,7 +7014,6 @@
       "policyShown": "Prikazana politika",
       "savedPolicy": "Sačuvano",
       "withDraft": "Sa vašim promenama",
-      "lensIntro": "Unesite email osobe da biste videli šta dobija, šta je iskoristila danas i koje pravilo je odlučilo.",
       "lensCaption": "Granice za {mail}",
       "layer": {
         "catalog": "Ugrađeno",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Prošle nedelje je {people, plural, one {# osoba} other {# osoba}} imalo plafon odavde; {atCap} ga je dostiglo.",
         "overNewCap": "{people, plural, one {# osoba} other {# osoba}} je imalo dan iznad {cap} prošle nedelje.",
         "events": "Plafoni ovog ograničenja su probijeni {events, plural, one {# put} other {# puta}} od strane {people, plural, one {# osobe} other {# osoba}} prošle nedelje.",
-        "noTargets": "Još ne pokriva nikoga, tako da ništa ne menja dok se ljudi ne dodaju."
+        "noTargets": "Još ne pokriva nikoga, tako da ništa ne menja dok se ljudi ne dodaju.",
+        "peopleGet": "Imenovane osobe dobijaju {after} umesto {before}."
       },
       "flag": {
         "removes-cap": "Uklanja plafon: ovo ograničenje se ne primenjuje na ove osobe.",
@@ -7060,7 +7075,6 @@
         "model-access": "Pristup modelu za {subject}"
       },
       "checkPerson": "Proverite bilo koga prema ovom nacrtu",
-      "checkPersonHint": "Otvara prikaz za jednu osobu sa vašim izmenama.",
       "historyNote": "Čuvanjem se beleži jedna verzija u istoriju izmena.",
       "histogramLabel": "{people} osoba prema svom najaktivnijem danu prošle nedelje; stari plafon {before}, novi plafon {after}",
       "histogramCaption": "Prikaz ljudi po njihovom najprometnijem danu prošle nedelje. Narandžasto: iznad novog ograničenja.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {# izmena nije sačuvana} other {# izmena nije sačuvano}}",
       "discardConfirm": "Odbaciti sve nesačuvane izmene?",
       "discardYes": "Odbaci",
-      "reviewChanges": "Pregledaj izmene"
+      "reviewChanges": "Pregledaj izmene",
+      "checkPersonHint": "Otvara 'Proveri pristup' sa primenjenim izmenama.",
+      "lens": {
+        "subjectKind": "Šta proveriti",
+        "kind": {
+          "user": "Osoba",
+          "group": "Bezbednosna grupa",
+          "domain": "Domen"
+        },
+        "domainLabel": "Email domen za proveru",
+        "groupHint": "Pretražite bezbednosnu grupu po imenu ili nalepite njen ID objekta.",
+        "intro": "Izaberite osobu, bezbednosnu grupu ili domen da vidite šta dobijaju i koja pravila su to odlučila. Otvorite bilo koje ograničenje da odmah postavite izuzetak za njih.",
+        "typicalMember": {
+          "group": "kao tipičan član: neko iz ove grupe koga ne pokriva nijedno drugo pravilo. Član pokriven ličnim pravilom ili drugom grupom može dobiti nešto drugačije.",
+          "domain": "kao tipičan član: neko iz ovog domena koga ne pokriva nijedno drugo pravilo. Osoba pokrivena grupom ili ličnim pravilom može dobiti nešto drugačije."
+        },
+        "ownRule": "{count, plural, one {# izuzetak je} other {# izuzetaka su}} postavljeni samo za {subject}.",
+        "exceptionFor": "Izuzetak za {subject}",
+        "exceptionLabel": "{limit} za {subject}",
+        "noException": {
+          "user": "Bez izuzetka: ova osoba dobija šta daju gorenavedena pravila.",
+          "group": "Bez izuzetka: članovi dobijaju šta daju gorenavedena pravila.",
+          "domain": "Bez izuzetka: osobe na ovom domenu dobijaju šta daju gorenavedena pravila."
+        },
+        "effect": {
+          "applies": "Daje {value} umesto {otherwise}.",
+          "same": "Daje {value}, isto kao bez izuzetka.",
+          "held-by-ceiling": "Nema efekta kako je postavljeno: čvrsto ograničenje zadržava vrednost na {value}.",
+          "outranked": "Nema efekta kako je postavljeno: odlučuje konkretnije ili prioritetnije pravilo ({value}).",
+          "inert": "Nije u efektu."
+        }
+      }
     }
   },
   "m365": {

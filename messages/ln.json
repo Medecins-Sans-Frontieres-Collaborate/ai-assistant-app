@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Bato ya ekateli emonisami awa kaka mpo na kotala. Nani azali na ekateli, bato nini bazali kokumbama mpe nini mokambi akoki kosala ezalaka kosalelama na eteni ya Bato ya ekateli.",
     "delegationsManagedElsewhereLink": "Fungola Bato ya ekateli",
     "modelAccess": {
-      "intro": "Kata baye bakoki kosalela modelo mokomoko. Paramɛtɛ ya libota esalelaka bamodelo na yango soki moko moko na bango ezwi paramɛtɛ na ye moko; bato na sololaka batondi koleka paramɛtɛ ya bato nyonso; liste ya koboya eboya nyonso ba granted.",
       "externalNote": "Bamodelo oyo bazali libanda ya Azure ({families}) bazali te mpo na bato nyonso kino opesi nzela awa — na bato nyonso na nzela ya paramɛtɛ par défaut, to na groupe, domaine, to bato oyo.",
       "envelopeNote": "Limite ya ba requêtes na libota ezali budget ya mokolo ezali kosakana na bamodelo na yango; limite na modelo ezali mbeto na kati na yango. Soki ezangi limite na modelo ekobongisa te budget ya libota.",
       "observeNote": "Mode Observe ezali: eloko moko awa ekobomba te modelo to kopekisa requête. Tia Enforce na likolo soki mibeko ezali malamu.",
-      "familyChip": "Libota",
-      "modelChip": "Modelo",
       "otherModels": "Bamodelo oyo bazangi libota",
-      "modelsInFamily": "{count, plural, one {# modelo na libota oyo} other {# bamodelo na libota oyo}}",
       "noModels": "Nanu bamodelo ezali te na catalogue.",
-      "expand": "Lakisa bamodelo",
-      "collapse": "Bomba bamodelo",
-      "edit": "Kobongola",
       "doneEditing": "Sukisi",
-      "editNode": "Bongola accès ya {label}",
       "defaultLabel": "Bato mosusu nyonso",
-      "defaultInherit": "Zwa na libota",
-      "defaultUnlimited": "Ezangi limite",
-      "defaultLimited": "Ezali kaka tina",
-      "defaultUnavailable": "Ezali te",
-      "defaultRequestsLabel": "Ba requête mokolo na bato mosusu nyonso",
       "requestsPerDay": "ba requête / mokolo",
       "inheritedFrom": "Azwi {state} kowuta epai ya {origin}.",
       "effectiveLabel": "Bato nyonso oyo balingi te na liste bazwi: {state}.",
-      "inheritedChip": "eyaki na libota",
       "origin": {
         "model": "paramɛtɛ oyo",
         "family": "libota na yango",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Longola {target}",
       "groupsCount": "{count, plural, one {# groupe} other {# ba groupe}}",
       "domainsCount": "{count, plural, one {# domaine} other {# ba domaine}}",
-      "allowCount": "{count, plural, one {# moto abongi} other {# bato babongi}}",
-      "denyCount": "{count, plural, one {# moto aboyami} other {# bato baboyami}}",
       "collisionChip": "Pe ezali na Basaleli ya Global",
-      "collisionWarning": "Modɛle oyo to libota na yango ezali mpe kosalelama na Basaleli ya Global. Kobomba ekokóma mbeba soki moko na moko elongoli te."
+      "collisionWarning": "Modɛle oyo to libota na yango ezali mpe kosalelama na Basaleli ya Global. Kobomba ekokóma mbeba soki moko na moko elongoli te.",
+      "grid": {
+        "intro": "Nani akoki kosalela model nyonso, mpe motango ya ba demandes na mokolo moko. Ligne moko ezali na libota to model; colonne moko ezali na batu oyo bazali audience. Pona cellule moko mpo na kobongola yango.",
+        "caption": "Model ekoki kosalelama na audience",
+        "col": {
+          "model": "Model",
+          "reach": "Akoki kosalela"
+        },
+        "familyNote": "libota: budget ya mokolo eyokanisi",
+        "addColumn": "Ajouter colonne ya audience",
+        "addColumnConfirm": "Ajouter colonne",
+        "columnKind": "Audience",
+        "addColumnHint": "Colonne ekotikala soki cellule na yango ebongwama.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "ezali na termes na yango te",
+        "grantHint": "Inherit elingi koloba terme ya audience oyo na ligne oyo ezali te: membes bakomema reponse ya 'Batu nyonso', soki colonne mosusu etaleli bango te.",
+        "grantHintFamily": "Inherit esaleli termes oyo libota epesi mpo na audience oyo.",
+        "inheritedPeople": "{count, plural, one {Moto moko akoma} other {Batu mingi akoma}} na liste ya libota.",
+        "reach": {
+          "everyone": "Batu nyonso",
+          "everyoneBut": "{count, plural, one {Batu nyonso kasi moto moko} other {Batu nyonso kasi bato #}}",
+          "nobody": "Moto moko te",
+          "people": "{count, plural, one {Moto moko} other {Bato #}}"
+        },
+        "howTitle": "Ndenge demande moko ekokisama",
+        "how": {
+          "block": "Na liste ya bloqué? Ekozala te, ata soki mibeko misusu ezali.",
+          "specific": "Soki te, grant spesifique oyo ekoki moto ezali: kombo ya moto, groupe, domaine, puis batu nyonso.",
+          "inherit": "Model oyo ezali na termes na yango te na colonne, esaleli termes ya libota (traitillés).",
+          "envelope": "Demande esengeli ekokanisa cap ya model, budget ya libota mpe total ya chat, nyonso misato."
+        }
+      }
     },
     "previewSourceModelAccess": "Ndongolá modelɛ — {list}",
     "groupMembershipDegradedStructural": "Koluka ba membre ya groupe ezali koleka te na serveur oyo ({reason}). Mitindo mpe makabo misalemaka na base ya groupe epesami te mpo na bato oyo ekwei — tala ndingisa ya Group.Read.All ya tenant mpe bakisa appli.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Lisolo mokuse",
-        "person": "Moto moko",
         "review": "Talela",
-        "reviewCount": "Talela ({count})"
+        "reviewCount": "Talela ({count})",
+        "check": "Kokanga accès"
       },
       "everyone": "Bato nyonso",
       "off": "Kasi",
@@ -6999,7 +7014,6 @@
       "policyShown": "Politike emonisami",
       "savedPolicy": "Ebombami",
       "withDraft": "Na bambongwana na yo",
-      "lensIntro": "Tyá email ya moto mpo omona oyo azwi, oyo asalisi lelo, mpe mobeko nini esali mokano.",
       "lensCaption": "Baimite mpo na {mail}",
       "layer": {
         "catalog": "Esaleli",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Na pɔsɔ eleki {people, plural, one {# moto} other {# bato}} bazwaki cap ndenge awa ; {atCap} bakotaki.",
         "overNewCap": "{people, plural, one {# moto} other {# bato}} bazalaki na mokolo moko koleka {cap} na pɔsɔ eleki.",
         "events": "Limite oyo bakotaki {events, plural, one {# mbala} other {# mbala}} na {people, plural, one {# moto} other {# bato}} na pɔsɔ eleki.",
-        "noTargets": "Ekomi naino na moto moko te, yango wana eloko moko te ebongwani kino bato bakotakwa."
+        "noTargets": "Ekomi naino na moto moko te, yango wana eloko moko te ebongwani kino bato bakotakwa.",
+        "peopleGet": "Batu oyo bazali na kombo bazwi {after} esika na {before}."
       },
       "flag": {
         "removes-cap": "Elongoli limite : limite moko te esalemi pona bato oyo.",
@@ -7060,7 +7075,6 @@
         "model-access": "Accès ya modèle pona {subject}"
       },
       "checkPerson": "Talela moto moko na draft oyo",
-      "checkPersonHint": "Ekofungola vue ya moto moko na ba changements na yo.",
       "historyNote": "Kobombama ekomisa version moko na liste ya ba changements.",
       "histogramLabel": "{people} bato selon mokolo ya misala ebele ya pɔsɔ eleki ; limiter ya kala {before}, limiter ya sika {after}",
       "histogramCaption": "Bato na mokolo ya bango ya mombongo ya semeni eleki. Orange: likolo na cap ya sika.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {# mbongwana ezalemi te} other {# mbongwana ezalemi te}}",
       "discardConfirm": "Lobaki mbongwana nyonso esalemi te?",
       "discardYes": "Lobaki",
-      "reviewChanges": "Tala mbongwana"
+      "reviewChanges": "Tala mbongwana",
+      "checkPersonHint": "Ekofungola 'Check access' na ba changements na yo.",
+      "lens": {
+        "subjectKind": "Nini kasi kokanga",
+        "kind": {
+          "user": "Moto",
+          "group": "Groupe ya sécurité",
+          "domain": "Domaine"
+        },
+        "domainLabel": "Domaine ya email oyo kasi kokanga",
+        "groupHint": "Kosala recherche ya groupe ya sécurité na kombo, to kopesa ID ya object na yango.",
+        "intro": "Pona moto moko, groupe ya sécurité to domaine, mpo na komona nini bazwi mpe règle nini ebongwisa yango. Fungola limite nyonso mpe set exception na bango awa.",
+        "typicalMember": {
+          "group": "lokola membre ya gruppe: moto oyo azali na groupe oyo mpe règle mosusu ekokanisa ye te. Membre oyo azali couvert na règle ya vie to groupe mosusu akoki kozwa kitoko mosusu.",
+          "domain": "lokola membre ya domaine: moto oyo azali na domaine oyo mpe règle mosusu ekokanisa ye te. Moto oyo azali couvert na groupe to règle ya vie akoki kozwa kitoko mosusu."
+        },
+        "ownRule": "{count, plural, one {Exception moko ezali} other {Exceptions mingi ezali}} esalemi mpo na {subject} kaka.",
+        "exceptionFor": "Exception mpo na {subject}",
+        "exceptionLabel": "{limit} mpo na {subject}",
+        "noException": {
+          "user": "Exception te: moto oyo azwi nini mibeko ya likolo epesi.",
+          "group": "Exception te: membres bazwi nini mibeko ya likolo epesi.",
+          "domain": "Exception te: batu na domaine oyo bazwi nini mibeko ya likolo epesi."
+        },
+        "effect": {
+          "applies": "Epesi {value} esika na {otherwise}.",
+          "same": "Epesi {value}, ndenge moko na soki exception ezalaka te.",
+          "held-by-ceiling": "Ezalaka te ndenge esalemi: plafond moko ekangaka na {value}.",
+          "outranked": "Ezalaka te ndenge esalemi: règle ya spécificité to priorité ya likolo ekangaka ({value}).",
+          "inert": "Ezalaka te."
+        }
+      }
     }
   },
   "m365": {

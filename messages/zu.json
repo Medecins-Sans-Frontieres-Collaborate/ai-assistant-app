@@ -6813,30 +6813,16 @@
     "delegationsManagedElsewhere": "Ukuqokwa kuboniswa lapha kuphela ukufunda. Ubani okuqokwe yena, abasebenzisi abayihlanganisayo nokuthi yibaphi amalungelo onompetha bekuphathwa endaweni yokuqokwa.",
     "delegationsManagedElsewhereLink": "Vula Ukuqokwa",
     "modelAccess": {
-      "intro": "Nquma ukuthi ubani ongasebenzisa imodeli ngayinye. Isilungiselelo somndeni sisebenza kumamodeli awo ngaphandle kokuba imodeli isete esayo; abantu abakuhlu bangathelela okuzenzakalelayo kwabanye bonke; uhlu lokuvimba lunqoba noma yikuphi ukugunyazwa.",
       "externalNote": "Amaphutha agcinwe ngaphandle kwendawo ye-Azure ({families}) awatholakali kubo bonke kuze kube uwanikeza imvume lapha — kubo bonke ngokuthi kube yinto okuzenzakalelayo, noma kumaqembu, izizinda, nabantu.",
       "envelopeNote": "Umkhawulo wesicelo kumndeni uyibhajethi yansuku zonke eyabelwana phakathi kwamamodeli awo; umkhawulo kwimodeli usho umkhawulo ngaphakathi kuyo. Okungapheli kwimodeli akusho ukukhulula umkhawulo womndeni.",
       "observeNote": "Imodi yokubuka ivuliwe: akukho okucashiwa noma okuvimba isicelo okwamanje. Shintshela ku-Enforce ngenhla uma imithetho isilungile.",
-      "familyChip": "Umndeni",
-      "modelChip": "Imodeli",
       "otherModels": "Amaphutha angenawo umndeni",
-      "modelsInFamily": "{count, plural, one {# imodeli kulomndeni} other {# amamodeli kulomndeni}}",
       "noModels": "Awekho amamodeli ekhasini okwamanje.",
-      "expand": "Bonisa amamodeli",
-      "collapse": "Fihla amamodeli",
-      "edit": "Hlela",
       "doneEditing": "Kuqediwe",
-      "editNode": "Hlela ukufinyelela kuka-{label}",
       "defaultLabel": "Abanye bonke",
-      "defaultInherit": "Landela",
-      "defaultUnlimited": "Akekho umkhawulo",
-      "defaultLimited": "Kunqunyelwe ku",
-      "defaultUnavailable": "Akutholakali",
-      "defaultRequestsLabel": "Izicelo ngosuku kwabanye bonke",
       "requestsPerDay": "izicelo / usuku",
       "inheritedFrom": "Kuthatha {state} ku-{origin}.",
       "effectiveLabel": "Abangekho ohlwini bathola: {state}.",
-      "inheritedChip": "kuthathiwe",
       "origin": {
         "model": "lesi silungiselelo",
         "family": "umndeni wakhe",
@@ -6868,10 +6854,39 @@
       "removeGrant": "Susa u-{target}",
       "groupsCount": "{count, plural, one {# iqembu} other {# amaqembu}}",
       "domainsCount": "{count, plural, one {# isizinda} other {# izizinda}}",
-      "allowCount": "{count, plural, one {# umuntu ovunyelwe} other {# abantu abavunyelwe}}",
-      "denyCount": "{count, plural, one {# umuntu ovinjiwe} other {# abantu abavinjiwe}}",
       "collisionChip": "Iphinde itholakale ku-Global defaults",
-      "collisionWarning": "Le modeli noma umndeni wayo iphinde yamiswa ngaphansi kwe-Global defaults. Ukulondoloza kuzonqatshwa kuze kube omunye wabo ususiwe."
+      "collisionWarning": "Le modeli noma umndeni wayo iphinde yamiswa ngaphansi kwe-Global defaults. Ukulondoloza kuzonqatshwa kuze kube omunye wabo ususiwe.",
+      "grid": {
+        "intro": "Ubani ongasebenzisa imodeli ngayinye, kanye nenani lezikhalo ngosuku. Umugqa ngamunye uyilungu lomndeni noma imodeli; ikholomu ngamunye izibukeli. Khetha iseli ukuze uliguqule.",
+        "caption": "Ukufinyelela kwemodeli ngokuya ngababukeli",
+        "col": {
+          "model": "Imodeli",
+          "reach": "Angakwazi ukuyisebenzisa"
+        },
+        "familyNote": "umndeni: isabelomali esihlanganyelwe nsuku zonke",
+        "addColumn": "Engeza ikholomu yababukeli",
+        "addColumnConfirm": "Engeza ikholomu",
+        "columnKind": "Izibukeli",
+        "addColumnHint": "Ikholomu ihlala uma iseli layo selimisiwe.",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "ayikho imithetho yayo",
+        "grantHint": "Ukulanda kusho ukuthi ayikho imithetho yalababukeli kule mgqa: amalungu awo athola impendulo ye-'Bonke abanye' ngaphandle kokuthi enye ikholomu ibawubeka.",
+        "grantHintFamily": "Ukulanda kusebenzisa imithetho emiselwa umndeni kulababukeli.",
+        "inheritedPeople": "{count, plural, one {# umuntu owengeziwe uzofika} other {# abantu abengeziwe bazofika}} kuluhlu lomndeni.",
+        "reach": {
+          "everyone": "Bonke",
+          "everyoneBut": "{count, plural, one {Bonke ngaphandle kweyodwa} other {Bonke ngaphandle kwabantu abayi-#}}",
+          "nobody": "Akekho",
+          "people": "{count, plural, one {umuntu oyedwa} other {abantu abayi-#}}"
+        },
+        "howTitle": "Indlela okukhethwa ngayo isicelo esisodwa",
+        "how": {
+          "block": "Usoluhlu lokuvimba? Awutholakali, noma yini okunye okusebenzayo.",
+          "specific": "Ngokwesinye, umthetho okhethekile ohlanganayo umuntu ubeka imithetho: umuntu oqanjwe igama, bese kulandela iqembu, igama lendawo, bese bonke abanye.",
+          "inherit": "Imodeli engenayo imithetho yayo kule kholomu isebenzisa eyomndeni (evanayo).",
+          "envelope": "Isicelo kumele sibe ngaphakathi komkhawulo wemodeli, isabelomali somndeni esihlanganyelwe, kanye nesamba sokuxoxa, konke kuyadingeka."
+        }
+      }
     },
     "previewSourceModelAccess": "Ukuvunywa kwemodeli — {list}",
     "groupMembershipDegradedStructural": "Ukuseshwa kobulungu beqembu kuyahluleka kule seva ({reason}). Imithetho nemvume esekelwe emaqenjini ayisebenzi kulabo abathintekayo — hlola imvume ye-tenant ethi Group.Read.All nokubhaliswa kohlelo.",
@@ -6881,9 +6896,9 @@
     "console": {
       "tab": {
         "overview": "Uhlolojikelele",
-        "person": "Umuntu oyedwa",
         "review": "Buyekeza",
-        "reviewCount": "Buyekeza ({count})"
+        "reviewCount": "Buyekeza ({count})",
+        "check": "Hlola ukufinyelela"
       },
       "everyone": "Wonke umuntu",
       "off": "Kucishiwe",
@@ -6999,7 +7014,6 @@
       "policyShown": "Inqubomgomo iveziwe",
       "savedPolicy": "Ilondoloziwe",
       "withDraft": "Ngoshintsho lwakho",
-      "lensIntro": "Faka i-email yomuntu ukuze ubone abakutholayo, abangasebenzisa namuhla, nomthetho owenza kunqunywe.",
       "lensCaption": "Imikhawulo ka-{mail}",
       "layer": {
         "catalog": "Eyake",
@@ -7036,7 +7050,8 @@
         "ruleReach": "Ngesonto elidlule {people, plural, one {# umuntu} other {# abantu}} bathole umkhawulo wabo lapha; {atCap} bashayile umkhawulo.",
         "overNewCap": "{people, plural, one {# umuntu} other {# abantu}} babe nosuku oluphezulu {cap} ngesonto elidlule.",
         "events": "Imikhawulo kulomkhawulo ishayiwe {events, plural, one {# isikhathi} other {# izikhathi}} ngu-{people, plural, one {# umuntu} other {# abantu}} ngesonto elidlule.",
-        "noTargets": "Ayekuvuli muntu okwamanje, ngakho akushintshi lutho kuze kwengezwe abantu."
+        "noTargets": "Ayekuvuli muntu okwamanje, ngakho akushintshi lutho kuze kwengezwe abantu.",
+        "peopleGet": "Abantu abaqanjiwe bathola {after} esikhundleni sika-{before}."
       },
       "flag": {
         "removes-cap": "Ikhipha umkhawulo: awukho umkhawulo ozosetshenziswa kubantu laba.",
@@ -7060,7 +7075,6 @@
         "model-access": "Ukufinyelela kwimodeli ku-{subject}"
       },
       "checkPerson": "Hlola noma ubani ngalolu hlu lwesikhashana",
-      "checkPersonHint": "Kuvala umbono womuntu oyedwa ngoshintsho lwakho lusetshenzisiwe.",
       "historyNote": "Ukulondoloza kubhala inguqulo eyodwa kumlando wokushintsha.",
       "histogramLabel": "{people} abantu ngosuku lwabo olumatasa kakhulu ngesonto elidlule; umkhawulo wakudala {before}, umkhawulo omusha {after}",
       "histogramCaption": "Abantu ngosuku lwabo olumatasa kakhulu ngesonto eledlule. Okunsomi: ukudlula umkhawulo omusha.",
@@ -7080,7 +7094,38 @@
       "unsavedCount": "{count, plural, one {# ushintsho alulondoloziwe} other {# izinguquko azilondoloziwe}}",
       "discardConfirm": "Lahla zonke izinguquko ezingagcinwanga?",
       "discardYes": "Lahla",
-      "reviewChanges": "Bheka izinguquko"
+      "reviewChanges": "Bheka izinguquko",
+      "checkPersonHint": "Kuvula Hlola ukufinyelela nezinguquko zakho zisebenzile.",
+      "lens": {
+        "subjectKind": "Okuzohlolwa",
+        "kind": {
+          "user": "Umuntu",
+          "group": "Iqembu eliphephile",
+          "domain": "Igama lendawo"
+        },
+        "domainLabel": "Igama lendawo le-imeyili ozolihlola",
+        "groupHint": "Sesha iqembu eliphephile ngegama, noma unamathisele i-ID yalo.",
+        "intro": "Khetha umuntu, iqembu eliphephile noma igama lendawo ukuze ubone abakutholayo nomthetho owawubeka. Vula umkhawulo ukuze usethe okukhethekile kubo kulapho.",
+        "typicalMember": {
+          "group": "njengelungu elijwayelekile: umuntu kuleli qembu ongahlanganwa noma yimuphi omunye umthetho. Ilungu elihlanganwa ngumthetho womuntu siqu noma elinye iqembu lingathola okwehlukile.",
+          "domain": "njengelungu elijwayelekile: umuntu kuleli gama lendawo ongahlanganwa noma yimuphi omunye umthetho. Umuntu owahlanganwa yiqembu noma umthetho womuntu siqu angathola okwehlukile."
+        },
+        "ownRule": "{count, plural, one {kunokwehlukile oku-#} other {kunokwehlukile okungu-#}} okusethelwe {subject} yedwa.",
+        "exceptionFor": "Okukhethekile ku-{subject}",
+        "exceptionLabel": "{limit} ku-{subject}",
+        "noException": {
+          "user": "Ayikho okuhlukile: lo muntu uthola noma yini eyenziwa imithetho engenhla.",
+          "group": "Ayikho okuhlukile: amalungu athola noma yini eyenziwa imithetho engenhla.",
+          "domain": "Ayikho okuhlukile: abantu kuleli gama lendawo bathola noma yini eyenziwa imithetho engenhla."
+        },
+        "effect": {
+          "applies": "Kunikeza {value} esikhundleni sika-{otherwise}.",
+          "same": "Kunikeza {value}, okufana nokuthi bekungekho okukhethekile.",
+          "held-by-ceiling": "Akukho umthelela njengoba kusethwe: umkhawulo omkhulu usibamba ku-{value}.",
+          "outranked": "Akukho umthelela njengoba kusethwe: umthetho okhethekile noma onobala uphetha esikhundleni ({value}).",
+          "inert": "Akusebenzi."
+        }
+      }
     }
   },
   "m365": {

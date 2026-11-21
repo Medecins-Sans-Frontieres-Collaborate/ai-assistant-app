@@ -6829,30 +6829,16 @@
     "delegationsManagedElsewhere": "Les délégations sont affichées ici en lecture seule. La composition des délégations, les utilisateurs couverts et les droits de chaque administrateur sont gérés dans la section Délégations.",
     "delegationsManagedElsewhereLink": "Ouvrir Délégations",
     "modelAccess": {
-      "intro": "Décidez qui peut utiliser chaque modèle. Un paramètre de famille s'applique à ses modèles, sauf si un modèle définit le sien ; les personnes sur une liste prévalent sur le paramètre par défaut ; la liste de blocage prévaut sur toute autorisation.",
       "externalNote": "Les modèles hébergés en dehors de l'environnement Azure ({families}) sont indisponibles pour tous tant que vous ne les accordez pas ici — soit à tous via le paramètre par défaut, soit à des groupes, domaines et personnes.",
       "envelopeNote": "Une limite de requêtes sur une famille correspond à un budget quotidien partagé entre ses modèles ; une limite sur un modèle fixe un plafond en son sein. 'Illimité' sur un modèle n'annule pas le budget familial.",
       "observeNote": "Le mode Observation est activé : rien ici ne masque un modèle ni n'arrête une requête pour l'instant. Passez en mode Application une fois que les règles sont prêtes.",
-      "familyChip": "Famille",
-      "modelChip": "Modèle",
       "otherModels": "Modèles sans famille",
-      "modelsInFamily": "{count, plural, one {# modèle dans cette famille} other {# modèles dans cette famille}}",
       "noModels": "Aucun modèle dans le catalogue pour le moment.",
-      "expand": "Afficher les modèles",
-      "collapse": "Masquer les modèles",
-      "edit": "Modifier",
       "doneEditing": "Terminé",
-      "editNode": "Modifier l’accès pour {label}",
       "defaultLabel": "Tous les autres",
-      "defaultInherit": "Héritage",
-      "defaultUnlimited": "Illimité",
-      "defaultLimited": "Limité à",
-      "defaultUnavailable": "Indisponible",
-      "defaultRequestsLabel": "Requêtes par jour pour tous les autres",
       "requestsPerDay": "requêtes / jour",
       "inheritedFrom": "Hérite {state} de {origin}.",
       "effectiveLabel": "Tous ceux qui ne sont pas sur une liste obtiennent : {state}.",
-      "inheritedChip": "hérité",
       "origin": {
         "model": "ce paramètre",
         "family": "sa famille",
@@ -6884,10 +6870,39 @@
       "removeGrant": "Retirer {target}",
       "groupsCount": "{count, plural, one {# groupe} other {# groupes}}",
       "domainsCount": "{count, plural, one {# domaine} other {# domaines}}",
-      "allowCount": "{count, plural, one {# personne autorisée} other {# personnes autorisées}}",
-      "denyCount": "{count, plural, one {# personne bloquée} other {# personnes bloquées}}",
       "collisionChip": "Aussi dans les paramètres globaux par défaut",
-      "collisionWarning": "Ce modèle ou cette famille est également configuré(e) dans les paramètres globaux par défaut. L’enregistrement sera refusé jusqu’à ce que l’un des deux soit supprimé."
+      "collisionWarning": "Ce modèle ou cette famille est également configuré(e) dans les paramètres globaux par défaut. L’enregistrement sera refusé jusqu’à ce que l’un des deux soit supprimé.",
+      "grid": {
+        "intro": "Qui peut utiliser chaque modèle, et combien de requêtes par jour. Chaque ligne représente une famille ou un modèle ; chaque colonne représente un public. Sélectionnez une cellule pour la modifier.",
+        "caption": "Accès au modèle par public",
+        "col": {
+          "model": "Modèle",
+          "reach": "Peut l'utiliser"
+        },
+        "familyNote": "famille : budget quotidien partagé",
+        "addColumn": "Ajouter une colonne de public",
+        "addColumnConfirm": "Ajouter la colonne",
+        "columnKind": "Public",
+        "addColumnHint": "La colonne reste dès qu'une cellule y est définie.",
+        "cellLabel": "{model}, {audience} : {value}",
+        "noGrant": "pas de conditions propres",
+        "grantHint": "Hériter signifie qu’il n’y a pas de conditions pour ce public sur cette ligne : ses membres reçoivent la réponse Autres sauf si une autre colonne les couvre.",
+        "grantHintFamily": "Hériter applique les conditions définies par la famille pour ce public.",
+        "inheritedPeople": "{count, plural, one {# personne supplémentaire vient} other {# personnes supplémentaires viennent}} depuis la liste de la famille.",
+        "reach": {
+          "everyone": "Tout le monde",
+          "everyoneBut": "{count, plural, one {Tout le monde sauf # personne} other {Tout le monde sauf # personnes}}",
+          "nobody": "Personne",
+          "people": "{count, plural, one {# personne} other {# personnes}}"
+        },
+        "howTitle": "Comment une requête est décidée",
+        "how": {
+          "block": "Sur la liste de blocage ? Indisponible, quel que soit le reste.",
+          "specific": "Sinon, l’autorisation la plus spécifique couvrant la personne détermine ses conditions : une personne nommée, puis un groupe, puis un domaine, puis le reste.",
+          "inherit": "Un modèle sans conditions propres dans une colonne utilise celles de sa famille (en pointillé).",
+          "envelope": "La requête doit respecter le plafond du modèle, le budget partagé de la famille et le total du chat, les trois."
+        }
+      }
     },
     "previewSourceModelAccess": "Approbation du modèle — {list}",
     "groupMembershipDegradedStructural": "Les recherches d'appartenance aux groupes échouent sur ce serveur ({reason}). Les règles et autorisations basées sur les groupes ne sont pas appliquées aux personnes concernées — vérifiez le consentement Group.Read.All du locataire et l'enregistrement de l'application.",
@@ -6897,9 +6912,9 @@
     "console": {
       "tab": {
         "overview": "Aperçu",
-        "person": "Une personne",
         "review": "Revue",
-        "reviewCount": "Revue ({count})"
+        "reviewCount": "Revue ({count})",
+        "check": "Vérifier l'accès"
       },
       "everyone": "Tout le monde",
       "off": "Désactivé",
@@ -7015,7 +7030,6 @@
       "policyShown": "Politique affichée",
       "savedPolicy": "Enregistré",
       "withDraft": "Avec vos modifications",
-      "lensIntro": "Saisissez l'email de quelqu'un pour voir ce qu'il reçoit, son utilisation aujourd'hui, et quelle règle l’a décidé.",
       "lensCaption": "Limites pour {mail}",
       "layer": {
         "catalog": "Intégré",
@@ -7052,7 +7066,8 @@
         "ruleReach": "La semaine dernière, {people, plural, one {# personne} other {# personnes}} avaient leur plafond à partir d'ici ; {atCap} l'ont atteint.",
         "overNewCap": "{people, plural, one {# personne} other {# personnes}} ont eu une journée au-dessus de {cap} la semaine dernière.",
         "events": "Les plafonds de cette limite ont été atteints {events, plural, one {# fois} other {# fois}} par {people, plural, one {# personne} other {# personnes}} la semaine dernière.",
-        "noTargets": "Ne concerne encore personne, donc cela ne change rien tant que des personnes ne sont pas ajoutées."
+        "noTargets": "Ne concerne encore personne, donc cela ne change rien tant que des personnes ne sont pas ajoutées.",
+        "peopleGet": "Les personnes nommées reçoivent {after} au lieu de {before}."
       },
       "flag": {
         "removes-cap": "Supprime le plafond : aucune limite ne s'applique à ces personnes.",
@@ -7076,7 +7091,6 @@
         "model-access": "Accès au modèle pour {subject}"
       },
       "checkPerson": "Vérifier toute personne selon ce brouillon",
-      "checkPersonHint": "Ouvre la vue d'une personne avec vos modifications appliquées.",
       "historyNote": "Enregistrer ajoute une version dans l'historique des modifications.",
       "histogramLabel": "{people} personnes selon leur journée la plus chargée la semaine dernière ; ancien plafond {before}, nouveau plafond {after}",
       "histogramCaption": "Personnes selon leur jour le plus chargé la semaine dernière. Orange : au-dessus du nouveau plafond.",
@@ -7096,7 +7110,38 @@
       "unsavedCount": "{count, plural, one {# modification non enregistrée} other {# modifications non enregistrées}}",
       "discardConfirm": "Abandonner toutes les modifications non enregistrées ?",
       "discardYes": "Abandonner",
-      "reviewChanges": "Vérifier les modifications"
+      "reviewChanges": "Vérifier les modifications",
+      "checkPersonHint": "Ouvre Vérifier l'accès avec vos modifications appliquées.",
+      "lens": {
+        "subjectKind": "À vérifier",
+        "kind": {
+          "user": "Personne",
+          "group": "Groupe de sécurité",
+          "domain": "Domaine"
+        },
+        "domainLabel": "Domaine email à vérifier",
+        "groupHint": "Rechercher un groupe de sécurité par nom ou coller son ID d'objet.",
+        "intro": "Choisissez une personne, un groupe de sécurité ou un domaine pour voir ce qu’ils reçoivent et quelle règle le décide. Ouvrez une limite pour définir une exception directement.",
+        "typicalMember": {
+          "group": "en tant que membre typique : quelqu’un dans ce groupe et sans autre règle associée. Un membre couvert par une règle personnelle ou un autre groupe peut recevoir autre chose.",
+          "domain": "en tant que membre typique : quelqu’un dans ce domaine et sans autre règle associée. Une personne couverte aussi par une règle de groupe ou personnelle pourrait recevoir autre chose."
+        },
+        "ownRule": "{count, plural, one {# exception est} other {# exceptions sont}} définie(s) pour {subject} uniquement.",
+        "exceptionFor": "Exception pour {subject}",
+        "exceptionLabel": "{limit} pour {subject}",
+        "noException": {
+          "user": "Aucune exception : cette personne reçoit ce que les règles ci-dessus lui donnent.",
+          "group": "Aucune exception : les membres reçoivent ce que les règles ci-dessus leur donnent.",
+          "domain": "Aucune exception : les personnes de ce domaine reçoivent ce que les règles ci-dessus leur donnent."
+        },
+        "effect": {
+          "applies": "Donne {value} au lieu de {otherwise}.",
+          "same": "Donne {value}, identique à sans exception.",
+          "held-by-ceiling": "Aucun effet dans l’état défini : un plafond dur le limite à {value}.",
+          "outranked": "Aucun effet dans l’état défini : une règle plus spécifique ou prioritaire le décide à la place ({value}).",
+          "inert": "Non en vigueur."
+        }
+      }
     }
   },
   "m365": {
