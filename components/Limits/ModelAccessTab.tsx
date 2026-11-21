@@ -299,7 +299,9 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
       ) : (
         // A size container: the row editor is as wide as this box (100cqw),
         // not as wide as the table, so it never scrolls sideways with it.
-        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white [container-type:inline-size] dark:border-gray-700 dark:bg-surface-dark">
+        // `isolate` keeps the pinned column's stacking inside this box, under
+        // the page's sticky unsaved-changes bar.
+        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white isolate [container-type:inline-size] dark:border-gray-700 dark:bg-surface-dark">
           <table className="w-full border-collapse text-sm">
             <caption className="sr-only">
               {t('modelAccess.grid.caption')}
