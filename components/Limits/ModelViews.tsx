@@ -103,25 +103,32 @@ export const ModelRunway: FC<ModelRunwayProps> = ({
   return (
     <div className="space-y-4">
       <p className={ADMIN_MUTED}>{t('modelAccess.runway.lead')}</p>
-      {[...forced, ...soon].map((model) => (
-        <p key={model.facts.modelId} className={ADMIN_BANNER_WARN} role="note">
-          {model.facts.lifecycle.phase === 'forced'
-            ? t('modelAccess.runway.alertForced', {
-                model: model.label,
-                people: model.facts.usage.people,
-              })
-            : t('modelAccess.runway.alert', {
-                model: model.label,
-                days: model.facts.lifecycle.daysLeft as number,
-                people: model.facts.usage.people,
-              })}{' '}
-          {model.replacementLabel
-            ? t('modelAccess.runway.alertTo', {
-                model: model.replacementLabel,
-              })
-            : t('modelAccess.runway.alertNoReplacement')}
-        </p>
-      ))}
+      {/* Only where somebody is affected: an unused model needs no alarm. */}
+      {[...forced, ...soon]
+        .filter((model) => model.facts.usage.people > 0)
+        .map((model) => (
+          <p
+            key={model.facts.modelId}
+            className={ADMIN_BANNER_WARN}
+            role="note"
+          >
+            {model.facts.lifecycle.phase === 'forced'
+              ? t('modelAccess.runway.alertForced', {
+                  model: model.label,
+                  people: model.facts.usage.people,
+                })
+              : t('modelAccess.runway.alert', {
+                  model: model.label,
+                  days: model.facts.lifecycle.daysLeft as number,
+                  people: model.facts.usage.people,
+                })}{' '}
+            {model.replacementLabel
+              ? t('modelAccess.runway.alertTo', {
+                  model: model.replacementLabel,
+                })
+              : t('modelAccess.runway.alertNoReplacement')}
+          </p>
+        ))}
       {dated.length + forced.length === 0 ? (
         <p className={ADMIN_MUTED}>{t('modelAccess.runway.empty')}</p>
       ) : (
@@ -340,14 +347,20 @@ type SizeMeasure = (typeof SIZE_MEASURES)[number];
 
 const MIN_DOT_PX = 10;
 const MAX_DOT_PX = 72;
+/** Horizontal position (percent) from which a circle's label sits before it. */
+const LABEL_FLIP_PERCENT = 65;
 
-/** Circle fill by size class; the outline alone marks "size not set". */
+/**
+ * Circle fill by size class, light to heavy; in dark mode the ramp runs the
+ * other way so a heavier model still stands out more from the surface. The
+ * dashed outline alone marks "size not set".
+ */
 const SIZE_FILL: Record<string, string> = {
-  nano: 'bg-blue-100 border-blue-900 dark:bg-blue-200 dark:border-blue-100',
-  mini: 'bg-blue-100 border-blue-900 dark:bg-blue-200 dark:border-blue-100',
-  standard: 'bg-blue-400 border-blue-900 dark:border-blue-100',
-  large: 'bg-blue-700 border-blue-900 dark:border-blue-100',
-  xl: 'bg-blue-950 border-blue-950 dark:bg-blue-900 dark:border-blue-100',
+  nano: 'bg-blue-100 border-blue-900 dark:bg-blue-950 dark:border-blue-100',
+  mini: 'bg-blue-100 border-blue-900 dark:bg-blue-950 dark:border-blue-100',
+  standard: 'bg-blue-400 border-blue-900 dark:bg-blue-700 dark:border-blue-100',
+  large: 'bg-blue-700 border-blue-900 dark:bg-blue-400 dark:border-blue-100',
+  xl: 'bg-blue-950 border-blue-950 dark:bg-blue-100 dark:border-blue-100',
 };
 const SIZE_UNSET =
   'bg-white border-dashed border-gray-500 dark:bg-gray-900 dark:border-gray-300';
@@ -454,6 +467,9 @@ export const ModelSpendMap: FC<ModelSpendMapProps> = ({
             {plotted.map((model) => {
               const px = size(measureOf(model.facts, measure));
               const sizeClass = model.facts.footprint?.sizeClass;
+              const left = x(model.facts.cost?.typical ?? 0);
+              // Past this point a label after the circle would leave the chart.
+              const labelBefore = left > LABEL_FLIP_PERCENT;
               const label = t('modelAccess.map.dotLabel', {
                 model: model.label,
                 people: model.facts.usage.people,
@@ -469,7 +485,7 @@ export const ModelSpendMap: FC<ModelSpendMapProps> = ({
                   onClick={() => onOpen(model.facts.modelId)}
                   className="group absolute flex -translate-x-1/2 -translate-y-1/2 items-center focus:outline-none"
                   style={{
-                    insetInlineStart: `${x(model.facts.cost?.typical ?? 0)}%`,
+                    insetInlineStart: `${left}%`,
                     top: `${y(model.facts.usage.people)}%`,
                   }}
                 >
@@ -477,7 +493,11 @@ export const ModelSpendMap: FC<ModelSpendMapProps> = ({
                     className={`block shrink-0 rounded-full border-2 opacity-90 group-hover:opacity-100 group-focus-visible:ring-2 group-focus-visible:ring-blue-500 group-focus-visible:ring-offset-2 ${sizeClass ? SIZE_FILL[sizeClass] : SIZE_UNSET}`}
                     style={{ width: px, height: px }}
                   />
-                  <span className="absolute start-full ms-1.5 whitespace-nowrap text-xs">
+                  <span
+                    className={`absolute whitespace-nowrap text-xs ${
+                      labelBefore ? 'end-full me-1.5' : 'start-full ms-1.5'
+                    }`}
+                  >
                     <strong className="text-gray-900 dark:text-white">
                       {model.label}
                     </strong>{' '}
