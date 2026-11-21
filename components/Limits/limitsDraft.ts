@@ -24,7 +24,7 @@ import {
   OverrideScope,
 } from '@/lib/services/limits/types';
 
-import { PolicyResponse } from '@/components/Limits/types';
+import { PolicyResponse, emptyOverride } from '@/components/Limits/types';
 
 /** Everything the PUT sends. */
 export interface LimitsDraft {
@@ -140,6 +140,75 @@ export function withOverride(
   return overrides.map((override) =>
     override.id === next.id ? next : override,
   );
+}
+
+/**
+ * The rule that belongs to ONE audience alone: a global-tier override of
+ * `scope` whose only target is `target`. This is the rule the check view
+ * edits when an admin sets an exception for the person, group or domain
+ * they are looking at. An enabled rule is preferred over a disabled one.
+ */
+export function audienceRule(
+  overrides: readonly LimitOverride[],
+  scope: OverrideScope,
+  target: string,
+): LimitOverride | undefined {
+  const wanted = target.trim().toLowerCase();
+  const own = overrides.filter(
+    (override) =>
+      !override.delegationId &&
+      override.scope === scope &&
+      override.targets.length === 1 &&
+      override.targets[0].trim().toLowerCase() === wanted,
+  );
+  return own.find((override) => override.enabled) ?? own[0];
+}
+
+/** What `withAudienceEntry` needs to know about the surrounding draft. */
+export interface AudienceEntryOptions {
+  /** Ids of stored overrides: an emptied stored rule is kept, a new one dropped. */
+  savedIds: ReadonlySet<string>;
+  /** Builds the rule when the audience has none yet (injectable for tests). */
+  create?: (scope: OverrideScope) => LimitOverride;
+}
+
+/**
+ * Sets, changes or removes one limit for exactly one audience, creating
+ * that audience's own rule when it has none.
+ *
+ * @param value - `undefined` removes the entry (inherit). A rule left with
+ *   no entries is dropped unless it is already stored, so its id stays
+ *   stable for the review's diff.
+ * @returns The new override list.
+ */
+export function withAudienceEntry(
+  overrides: readonly LimitOverride[],
+  audience: { scope: OverrideScope; target: string },
+  cell: LimitCell,
+  value: LimitValue | undefined,
+  options: AudienceEntryOptions,
+): LimitOverride[] {
+  const target = audience.target.trim().toLowerCase();
+  if (!target) return [...overrides];
+  const existing = audienceRule(overrides, audience.scope, target);
+  if (!existing) {
+    if (value === undefined) return [...overrides];
+    const created = (options.create ?? emptyOverride)(audience.scope);
+    return [
+      ...overrides,
+      { ...created, targets: [target], entries: withEntry([], cell, value) },
+    ];
+  }
+  const entries = withEntry(existing.entries, cell, value);
+  if (entries.length === 0 && !options.savedIds.has(existing.id)) {
+    return overrides.filter((override) => override.id !== existing.id);
+  }
+  return withOverride(overrides, {
+    ...existing,
+    entries,
+    // Setting a value on a switched-off rule means the admin wants it.
+    enabled: value === undefined ? existing.enabled : true,
+  });
 }
 
 /** One rule that sets a cell, for the Overview's exceptions and rule list. */
