@@ -206,19 +206,63 @@ const DRAFT_SCHEMA = {
   },
 } as const;
 
-const SYSTEM_PROMPT = `You turn an organisation's brand guide into a brand book: structured data that documents will be checked against.
+/** The fields each of the two drafting calls answers. */
+const VISUAL_FIELDS = [
+  'name',
+  'description',
+  'palette',
+  'neutrals',
+  'fonts',
+  'minTextSizePt',
+  'logoMinWidthPt',
+] as const satisfies ReadonlyArray<keyof RawDraft>;
+const WORDING_FIELDS = [
+  'locales',
+  'preferred',
+  'banned',
+  'tone',
+] as const satisfies ReadonlyArray<keyof RawDraft>;
 
-Use only what the guide states or plainly shows. Do not invent colours, fonts or rules.
+/** The draft's schema, narrowed to some of its fields. */
+function schemaOf(fields: ReadonlyArray<keyof RawDraft>) {
+  return {
+    type: 'object',
+    additionalProperties: false,
+    required: [...fields],
+    properties: Object.fromEntries(
+      fields.map((field) => [field, DRAFT_SCHEMA.properties[field]]),
+    ),
+  };
+}
+
+const PROMPT_INTRO = `You turn an organisation's brand guide into a brand book: structured data that documents will be checked against.
+
+Use only what the guide states or plainly shows. Do not invent colours, fonts or rules.`;
+
+/**
+ * How the guide looks. Asked apart from its wording: one call answering
+ * both reads the wording pages less closely, and which instructions it
+ * then leaves out changes from one draft to the next.
+ */
+const VISUAL_PROMPT = `${PROMPT_INTRO}
+- name: the brand the guide is for, as a short name for the book.
+- description: one sentence saying what the guide covers.
 - palette: every brand colour the guide defines, with the name the guide gives it and its hex value. When the guide gives only RGB or CMYK, convert to hex. Give roles only where the guide says what a colour is for (primary, secondary, accent, text, background, neutral).
 - neutrals: colours any document may use without being brand colours (usually white and black), as hex.
 - fonts: every typeface the guide lets documents use, as the guide names the family (without a weight such as Bold), each with the role it is used for: heading, body, or accent for display, numerals, callouts and handwriting. A role may have several typefaces: give each its own entry. Substitutes are the families the guide allows in a typeface's place (for example the version of it that ships with office software, or a system font for documents shared outside).
 - minTextSizePt: the smallest text size the guide says documents may use, in points; 0 unless the guide states one in words. The sizes the guide's own pages happen to be set in are not a rule.
 - logoMinWidthPt: the smallest width the guide allows the logo at, in points (1 inch is 72 points); 0 when it sets none.
-- preferred: words, names or spellings the guide asks for, each with the words it says NOT to write in its place. A short form or acronym the guide itself uses or allows is not one of those; when the guide fixes a spelling (always two words, always one word, no hyphen), the spellings that rule excludes are what it replaces; when the guide names nothing to replace, give no alternatives.
-- banned: words or phrases the guide asks to avoid, each with what to write instead and a short reason when it gives one. Give the phrase as it would appear in a document, not a description of it. Do not also list a banned phrase under preferred.
-- tone: the guide's voice in at most five sentences, in its own terms.
 
 The measured fonts and colours of the guide's text are evidence of what the guide uses; prefer the guide's stated values, and use the measurements to confirm a value or read one the text does not spell out.`;
+
+/** How the guide asks documents to be worded. */
+const WORDING_PROMPT = `${PROMPT_INTRO}
+
+Read the whole guide for what it says about words: how the organisation is named, lists of copy or style tips, tables of words to reconsider, do and do not examples. Give one entry for EVERY word, name, spelling or phrase it gives an instruction about; a tip that names several words is several entries. Leaving out an instruction the guide gives is the worse mistake: the person checking the book can remove an entry but will not notice a missing one.
+- locales: the languages the guide says documents are written in, as BCP 47 tags; empty when it does not say.
+- preferred: words, names or spellings the guide asks for, each with the words it says NOT to write in its place ("refer to X instead of Y" is X with the alternative Y). A short form or acronym the guide itself uses or allows is not one of those; when the guide fixes a spelling (always two words, always one word, no hyphen), the spellings that rule excludes are what it replaces; when the guide names nothing to replace, give no alternatives.
+- banned: words or phrases the guide asks to avoid, each with what to write instead and a short reason when it gives one. Give the phrase as it would appear in a document, not a description of it. Do not also list a banned phrase under preferred.
+- tone: the guide's voice in at most five sentences, in its own terms.`;
 
 /** A term compared without case or surrounding space. */
 function termKey(term: string): string {
@@ -421,23 +465,35 @@ export async function draftBrandBook(input: {
     const evidence = guideEvidence(model);
     const text = model.units.map((unit) => unit.text).join('\n');
     const budgeted = await truncateToTokenBudget(text, GUIDE_TEXT_TOKENS);
-    const raw = await callStructured<RawDraft>({
-      client: createAzureClient(),
-      model: input.model,
-      system: SYSTEM_PROMPT,
-      user: [
-        `Measured from the guide's ${evidence.pageCount} pages:`,
-        `Fonts (share of text): ${evidence.fonts.map((f) => `${f.family} ${Math.round(f.share * 100)}%`).join(', ') || 'none'}`,
-        `Text colours (share of text): ${evidence.colors.map((c) => `${c.hex} ${Math.round(c.share * 100)}%`).join(', ') || 'none'}`,
-        '',
-        'The guide:',
-        budgeted.text,
-      ].join('\n'),
-      schemaName: 'brand_book_draft',
-      schema: DRAFT_SCHEMA as unknown as Record<string, unknown>,
-      usage: input.usage,
-      usageLabel: 'brand-book-draft',
-    });
+    const client = createAzureClient();
+    const measured = [
+      `Measured from the guide's ${evidence.pageCount} pages:`,
+      `Fonts (share of text): ${evidence.fonts.map((f) => `${f.family} ${Math.round(f.share * 100)}%`).join(', ') || 'none'}`,
+      `Text colours (share of text): ${evidence.colors.map((c) => `${c.hex} ${Math.round(c.share * 100)}%`).join(', ') || 'none'}`,
+      '',
+    ];
+    const guideText = ['The guide:', budgeted.text];
+    const ask = <Fields extends keyof RawDraft>(
+      part: string,
+      system: string,
+      fields: ReadonlyArray<Fields>,
+      user: string[],
+    ) =>
+      callStructured<Pick<RawDraft, Fields>>({
+        client,
+        model: input.model,
+        system,
+        user: user.join('\n'),
+        schemaName: `brand_book_draft_${part}`,
+        schema: schemaOf(fields),
+        usage: input.usage,
+        usageLabel: `brand-book-draft-${part}`,
+      });
+    const [visual, wording] = await Promise.all([
+      ask('visual', VISUAL_PROMPT, VISUAL_FIELDS, [...measured, ...guideText]),
+      ask('wording', WORDING_PROMPT, WORDING_FIELDS, guideText),
+    ]);
+    const raw: RawDraft = { ...visual, ...wording };
     const modelDone = Date.now();
     const settled = settleDraft({
       ...(cleanDraft(raw) as object),
