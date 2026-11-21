@@ -15,8 +15,12 @@ import {
   brandItemId,
   templateTypeForFile,
 } from '@/lib/utils/shared/brand/brandBook';
-import { DEFAULT_COLOR_TOLERANCE } from '@/lib/utils/shared/brand/brandColor';
+import {
+  DEFAULT_COLOR_TOLERANCE,
+  normalizeHex,
+} from '@/lib/utils/shared/brand/brandColor';
 
+import { DraftGroundingLine, DraftGroundingView } from './DraftGroundingLine';
 import {
   EditorSection,
   Field,
@@ -32,6 +36,8 @@ import {
 interface SectionProps {
   book: BrandBookBody;
   onChange: (book: BrandBookBody) => void;
+  /** Where a draft's values are stated in its guide, while one is shown. */
+  grounding?: DraftGroundingView;
 }
 
 /** How the editor uploads a file and shows one (upload or stored). */
@@ -61,6 +67,9 @@ function previewFontStack(family: string): string | undefined {
   const name = family.replace(/["\\]/g, '').trim();
   return name ? `"${name}", system-ui, sans-serif` : undefined;
 }
+
+/** Most typefaces a book holds (the schema's bound). */
+const MAX_TYPEFACES = 12;
 
 /** A row of the editor's lists: a full border, no side stripe. */
 const rowClass =
@@ -121,7 +130,7 @@ export function UploadButton({
 }
 
 /** The brand colours, each with its roles and how close a match must be. */
-export function PaletteSection({ book, onChange }: SectionProps) {
+export function PaletteSection({ book, onChange, grounding }: SectionProps) {
   const t = useTranslations('adminBrandBooks');
   const setPalette = (palette: BrandBookBody['palette']) =>
     onChange({ ...book, palette });
@@ -251,6 +260,12 @@ export function PaletteSection({ book, onChange }: SectionProps) {
                   ))}
                 </div>
               </fieldset>
+              <DraftGroundingLine
+                view={grounding}
+                list="colors"
+                value={color.hex}
+                normalize={normalizeHex}
+              />
             </li>
           ))}
         </ul>
@@ -279,26 +294,30 @@ export function PaletteSection({ book, onChange }: SectionProps) {
 }
 
 /** The typefaces by role, their allowed substitutes, and the smallest size. */
-export function TypographySection({ book, onChange }: SectionProps) {
+export function TypographySection({ book, onChange, grounding }: SectionProps) {
   const t = useTranslations('adminBrandBooks');
   const setFonts = (fonts: BrandBookBody['fonts']) =>
     onChange({ ...book, fonts });
-  const freeRole = BRAND_FONT_ROLES.find(
-    (role) => !book.fonts.some((font) => font.role === role),
-  );
+  // A new typeface takes the first role without one; with every role
+  // taken it joins the last, where a guide's extra typefaces usually go.
+  const nextRole =
+    BRAND_FONT_ROLES.find(
+      (role) => !book.fonts.some((font) => font.role === role),
+    ) ?? BRAND_FONT_ROLES[BRAND_FONT_ROLES.length - 1];
+  const full = book.fonts.length >= MAX_TYPEFACES;
   return (
     <EditorSection
       title={t('typography.title')}
       description={t('typography.description')}
       action={
-        freeRole && (
+        !full && (
           <button
             type="button"
             className={quietButtonClass}
             onClick={() =>
               setFonts([
                 ...book.fonts,
-                { role: freeRole, family: '', substitutes: [] },
+                { role: nextRole, family: '', substitutes: [] },
               ])
             }
           >
@@ -315,87 +334,88 @@ export function TypographySection({ book, onChange }: SectionProps) {
       ) : (
         <ul className="space-y-2">
           {book.fonts.map((font, index) => (
-            <li
-              key={index}
-              className={`${rowClass} flex flex-wrap items-end gap-3`}
-            >
-              <Field label={t('typography.role')} className="w-36">
-                {(id) => (
-                  <select
-                    id={id}
-                    className={inputClass}
-                    value={font.role}
-                    onChange={(event) =>
-                      setFonts(
-                        replaced(book.fonts, index, {
-                          ...font,
-                          role: event.target
-                            .value as (typeof BRAND_FONT_ROLES)[number],
-                        }),
-                      )
-                    }
-                  >
-                    {BRAND_FONT_ROLES.filter(
-                      (role) =>
-                        role === font.role ||
-                        !book.fonts.some((other) => other.role === role),
-                    ).map((role) => (
-                      <option key={role} value={role}>
-                        {t(`fontRole.${role}`)}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </Field>
-              <Field
-                label={t('typography.family')}
-                className="min-w-[10rem] flex-1"
-              >
-                {(id) => (
-                  <input
-                    id={id}
-                    className={inputClass}
-                    value={font.family}
-                    maxLength={80}
-                    style={{ fontFamily: previewFontStack(font.family) }}
-                    onChange={(event) =>
-                      setFonts(
-                        replaced(book.fonts, index, {
-                          ...font,
-                          family: event.target.value,
-                        }),
-                      )
-                    }
-                  />
-                )}
-              </Field>
-              <Field
-                label={t('typography.substitutes')}
-                className="min-w-[12rem] flex-1"
-              >
-                {(id) => (
-                  <ListInput
-                    id={id}
-                    values={font.substitutes}
-                    placeholder="Arial, Helvetica"
-                    onChange={(substitutes) =>
-                      setFonts(
-                        replaced(book.fonts, index, { ...font, substitutes }),
-                      )
-                    }
-                  />
-                )}
-              </Field>
-              <button
-                type="button"
-                className={removeButtonClass}
-                aria-label={t('removeNamed', {
-                  name: font.family || t(`fontRole.${font.role}`),
-                })}
-                onClick={() => setFonts(without(book.fonts, index))}
-              >
-                {t('remove')}
-              </button>
+            <li key={index} className={rowClass}>
+              <div className="flex flex-wrap items-end gap-3">
+                <Field label={t('typography.role')} className="w-36">
+                  {(id) => (
+                    <select
+                      id={id}
+                      className={inputClass}
+                      value={font.role}
+                      onChange={(event) =>
+                        setFonts(
+                          replaced(book.fonts, index, {
+                            ...font,
+                            role: event.target
+                              .value as (typeof BRAND_FONT_ROLES)[number],
+                          }),
+                        )
+                      }
+                    >
+                      {BRAND_FONT_ROLES.map((role) => (
+                        <option key={role} value={role}>
+                          {t(`fontRole.${role}`)}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </Field>
+                <Field
+                  label={t('typography.family')}
+                  className="min-w-[10rem] flex-1"
+                >
+                  {(id) => (
+                    <input
+                      id={id}
+                      className={inputClass}
+                      value={font.family}
+                      maxLength={80}
+                      style={{ fontFamily: previewFontStack(font.family) }}
+                      onChange={(event) =>
+                        setFonts(
+                          replaced(book.fonts, index, {
+                            ...font,
+                            family: event.target.value,
+                          }),
+                        )
+                      }
+                    />
+                  )}
+                </Field>
+                <Field
+                  label={t('typography.substitutes')}
+                  className="min-w-[12rem] flex-1"
+                >
+                  {(id) => (
+                    <ListInput
+                      id={id}
+                      values={font.substitutes}
+                      placeholder="Arial, Helvetica"
+                      onChange={(substitutes) =>
+                        setFonts(
+                          replaced(book.fonts, index, { ...font, substitutes }),
+                        )
+                      }
+                    />
+                  )}
+                </Field>
+                <button
+                  type="button"
+                  className={removeButtonClass}
+                  aria-label={t('removeNamed', {
+                    name: font.family || t(`fontRole.${font.role}`),
+                  })}
+                  onClick={() => setFonts(without(book.fonts, index))}
+                >
+                  {t('remove')}
+                </button>
+              </div>
+              <DraftGroundingLine
+                view={grounding}
+                list="fonts"
+                value={font.family}
+                others={font.substitutes}
+              />
             </li>
           ))}
         </ul>
@@ -428,9 +448,12 @@ export function LogosSection({
   onChange,
   files,
   onError,
+  defaultMinWidthPt,
 }: SectionProps & {
   files: BrandFileAccess;
   onError: (message: string) => void;
+  /** The smallest width a new logo starts with (a drafted guide's rule). */
+  defaultMinWidthPt?: number;
 }) {
   const t = useTranslations('adminBrandBooks');
   const setLogos = (logos: BrandBookBody['logos']) =>
@@ -456,6 +479,7 @@ export function LogosSection({
           ),
           name: name.slice(0, 80),
           file: ref,
+          ...(defaultMinWidthPt ? { minWidthPt: defaultMinWidthPt } : {}),
           allowedColors: [],
           aspectTolerance: 0.02,
         },
@@ -629,7 +653,9 @@ function TermList({
   onChange,
   addLabel,
   emptyLabel,
+  grounding,
 }: {
+  grounding?: DraftGroundingView;
   terms: BrandTerm[];
   onChange: (terms: BrandTerm[]) => void;
   addLabel: string;
@@ -643,70 +669,78 @@ function TermList({
       ) : (
         <ul className="space-y-2">
           {terms.map((term, index) => (
-            <li key={index} className="flex flex-wrap items-end gap-3">
-              <Field label={t('language.term')} className="w-44">
-                {(id) => (
-                  <input
-                    id={id}
-                    className={inputClass}
-                    value={term.term}
-                    maxLength={120}
-                    onChange={(event) =>
-                      onChange(
-                        replaced(terms, index, {
-                          ...term,
-                          term: event.target.value,
-                        }),
-                      )
-                    }
-                  />
-                )}
-              </Field>
-              <Field
-                label={t('language.alternatives')}
-                className="min-w-[10rem] flex-1"
-              >
-                {(id) => (
-                  <ListInput
-                    id={id}
-                    values={term.alternatives}
-                    onChange={(alternatives) =>
-                      onChange(
-                        replaced(terms, index, { ...term, alternatives }),
-                      )
-                    }
-                  />
-                )}
-              </Field>
-              <Field
-                label={t('language.note')}
-                className="min-w-[10rem] flex-1"
-              >
-                {(id) => (
-                  <input
-                    id={id}
-                    className={inputClass}
-                    value={term.note}
-                    maxLength={300}
-                    onChange={(event) =>
-                      onChange(
-                        replaced(terms, index, {
-                          ...term,
-                          note: event.target.value,
-                        }),
-                      )
-                    }
-                  />
-                )}
-              </Field>
-              <button
-                type="button"
-                className={removeButtonClass}
-                aria-label={t('removeNamed', { name: term.term || addLabel })}
-                onClick={() => onChange(without(terms, index))}
-              >
-                {t('remove')}
-              </button>
+            <li key={index}>
+              <div className="flex flex-wrap items-end gap-3">
+                <Field label={t('language.term')} className="w-44">
+                  {(id) => (
+                    <input
+                      id={id}
+                      className={inputClass}
+                      value={term.term}
+                      maxLength={120}
+                      onChange={(event) =>
+                        onChange(
+                          replaced(terms, index, {
+                            ...term,
+                            term: event.target.value,
+                          }),
+                        )
+                      }
+                    />
+                  )}
+                </Field>
+                <Field
+                  label={t('language.alternatives')}
+                  className="min-w-[10rem] flex-1"
+                >
+                  {(id) => (
+                    <ListInput
+                      id={id}
+                      values={term.alternatives}
+                      onChange={(alternatives) =>
+                        onChange(
+                          replaced(terms, index, { ...term, alternatives }),
+                        )
+                      }
+                    />
+                  )}
+                </Field>
+                <Field
+                  label={t('language.note')}
+                  className="min-w-[10rem] flex-1"
+                >
+                  {(id) => (
+                    <input
+                      id={id}
+                      className={inputClass}
+                      value={term.note}
+                      maxLength={300}
+                      onChange={(event) =>
+                        onChange(
+                          replaced(terms, index, {
+                            ...term,
+                            note: event.target.value,
+                          }),
+                        )
+                      }
+                    />
+                  )}
+                </Field>
+                <button
+                  type="button"
+                  className={removeButtonClass}
+                  aria-label={t('removeNamed', { name: term.term || addLabel })}
+                  onClick={() => onChange(without(terms, index))}
+                >
+                  {t('remove')}
+                </button>
+              </div>
+              <DraftGroundingLine
+                view={grounding}
+                list="terms"
+                value={term.term}
+                others={term.alternatives}
+              />
             </li>
           ))}
         </ul>
@@ -726,7 +760,7 @@ function TermList({
 }
 
 /** The languages, the words to use and avoid, and the voice. */
-export function LanguageSection({ book, onChange }: SectionProps) {
+export function LanguageSection({ book, onChange, grounding }: SectionProps) {
   const t = useTranslations('adminBrandBooks');
   const setLanguage = (changes: Partial<BrandBookBody['language']>) =>
     onChange({ ...book, language: { ...book.language, ...changes } });
@@ -757,6 +791,7 @@ export function LanguageSection({ book, onChange }: SectionProps) {
           <TermList
             terms={book.language.preferred}
             onChange={(preferred) => setLanguage({ preferred })}
+            grounding={grounding}
             addLabel={t('language.addPreferred')}
             emptyLabel={t('language.nonePreferred')}
           />
@@ -768,6 +803,7 @@ export function LanguageSection({ book, onChange }: SectionProps) {
           <TermList
             terms={book.language.banned}
             onChange={(banned) => setLanguage({ banned })}
+            grounding={grounding}
             addLabel={t('language.addBanned')}
             emptyLabel={t('language.noneBanned')}
           />
