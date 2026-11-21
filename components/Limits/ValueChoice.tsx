@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { LimitValue } from '@/lib/services/limits/types';
 
+import { ADMIN_FIELD } from '@/components/Admin/adminClasses';
 import { ValueChip } from '@/components/Limits/visualSyntax';
 
 import { LimitDefinition } from '@/config/limits';
@@ -155,7 +156,7 @@ export const ValueChoice: FC<ValueChoiceProps> = ({
 
       <div className="flex h-9 min-w-[13rem] items-center gap-2">
         {kind === 'limit' ? (
-          <label className="flex h-9 items-center overflow-hidden rounded-lg border border-gray-900 bg-white focus-within:ring-2 focus-within:ring-blue-500 dark:border-gray-300 dark:bg-gray-900">
+          <label className="flex h-9 items-center gap-2">
             <span className="sr-only">
               {t('console.valueFor', { limit: label })}
             </span>
@@ -165,7 +166,7 @@ export const ValueChoice: FC<ValueChoiceProps> = ({
               disabled={disabled}
               onCommit={onChange}
             />
-            <span className="whitespace-nowrap pr-3 text-xs text-gray-600 dark:text-gray-400">
+            <span className="whitespace-nowrap text-xs text-gray-600 dark:text-gray-400">
               {suffix}
             </span>
           </label>
@@ -219,7 +220,7 @@ const LimitNumberInput: FC<{
         onCommit(bounded);
       }}
       onBlur={() => setText(String(committed))}
-      className="h-full w-28 border-0 bg-transparent px-3 text-right text-sm font-semibold tabular-nums text-gray-900 focus:outline-none dark:text-white"
+      className={`h-9 w-28 text-right font-semibold tabular-nums ${ADMIN_FIELD}`}
     />
   );
 };
