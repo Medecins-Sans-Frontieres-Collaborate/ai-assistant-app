@@ -173,7 +173,7 @@ describe('Models grid facts', () => {
   it('keeps every cost figure out while cost insights are off', () => {
     renderTab();
     expect(
-      screen.queryByRole('columnheader', { name: 'Price' }),
+      screen.queryByRole('columnheader', { name: 'List price per 1M tokens' }),
     ).not.toBeInTheDocument();
     expect(screen.queryByText('Estimated spend')).not.toBeInTheDocument();
     expect(
@@ -191,7 +191,7 @@ describe('Models grid facts', () => {
     flags.limitsCostInsights = true;
     renderTab();
     expect(
-      screen.getByRole('columnheader', { name: 'Price' }),
+      screen.getByRole('columnheader', { name: 'List price per 1M tokens' }),
     ).toBeInTheDocument();
     const old = within(rowOf('Test Old'));
     expect(old.getByText('$2 in, $10 out')).toBeInTheDocument();

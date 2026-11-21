@@ -127,13 +127,12 @@ export const FactCells: FC<FactCellsProps> = ({
           <td className={CELL}>
             {facts.cost ? (
               <>
-                <span className="font-semibold">
+                <span className="whitespace-nowrap font-semibold">
                   {t('modelAccess.facts.priceValue', {
                     input: format.price(facts.cost.inputPer1M),
                     output: format.price(facts.cost.outputPer1M),
                   })}
                 </span>
-                <span className={SUB}>{t('modelAccess.facts.priceHint')}</span>
               </>
             ) : (
               <Muted>{t('modelAccess.facts.ceiling.unpriced')}</Muted>

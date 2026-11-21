@@ -351,7 +351,7 @@ const ReplayPanel: FC<{
               )}
             </tr>
           </thead>
-          <tbody className="tabular-nums">
+          <tbody className="tabular-nums text-gray-800 dark:text-gray-200">
             {rows.map((row) => {
               const current = row.cap === cap;
               return (
