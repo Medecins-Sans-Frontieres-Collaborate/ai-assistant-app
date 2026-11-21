@@ -1,4 +1,8 @@
-import { cleanDraft, guideEvidence } from '@/lib/services/brand/brandBookDraft';
+import {
+  cleanDraft,
+  guideEvidence,
+  settleDraft,
+} from '@/lib/services/brand/brandBookDraft';
 
 import { parseBrandBookBody } from '@/lib/utils/shared/brand/brandBook';
 import {
@@ -140,5 +144,51 @@ describe('cleanDraft', () => {
     expect(parsed.body.minTextSizePt).toBe(72);
     expect(parsed.body.language.locales).toEqual(['en']);
     expect(parsed.body.language.banned.map((t) => t.term)).toEqual(['cheap']);
+  });
+});
+
+describe('settleDraft', () => {
+  const longest = 'x'.repeat(120);
+  const draft = (alternatives: string[]) => ({
+    name: 'Northwind',
+    language: {
+      banned: [
+        { term: 'cheap', alternatives, note: '' },
+        { term: 'clients', alternatives: ['families'], note: '' },
+      ],
+    },
+  });
+
+  it('keeps an alternative exactly as long as a term may be', () => {
+    const settled = settleDraft(draft([longest]));
+    expect(settled.dropped).toBe(0);
+    expect(settled.book.language.banned[0].alternatives).toEqual([longest]);
+  });
+
+  it('drops an alternative one character too long, and only that', () => {
+    const settled = settleDraft(draft([`${longest}x`, 'affordable']));
+    expect(settled.dropped).toBe(1);
+    expect(settled.book.language.banned).toEqual([
+      { term: 'cheap', alternatives: ['affordable'], note: '' },
+      { term: 'clients', alternatives: ['families'], note: '' },
+    ]);
+  });
+
+  it('drops a colour named twice rather than refusing the draft', () => {
+    const settled = settleDraft({
+      name: 'Northwind',
+      palette: [
+        { name: 'Red', hex: '#ee0000' },
+        { name: 'red', hex: '#e00000' },
+      ],
+    });
+    expect(settled.dropped).toBe(1);
+    expect(settled.book.palette.map((color) => color.hex)).toEqual(['#ee0000']);
+  });
+
+  it('refuses a draft whose problem is not in a list', () => {
+    expect(() => settleDraft({ name: '' })).toThrow(
+      /could not be made into a brand book: name/,
+    );
   });
 });
