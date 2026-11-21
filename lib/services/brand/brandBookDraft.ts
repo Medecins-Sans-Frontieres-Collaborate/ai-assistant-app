@@ -20,8 +20,8 @@ import {
   BRAND_COLOR_ROLES,
   BRAND_FONT_ROLES,
   BrandBookBody,
+  BrandBookBodySchema,
   fontKey,
-  parseBrandBookBody,
 } from '@/lib/utils/shared/brand/brandBook';
 import { isHexColor, normalizeHex } from '@/lib/utils/shared/brand/brandColor';
 import { DocumentModel } from '@/lib/utils/shared/documents/documentModel';
@@ -276,13 +276,75 @@ export function cleanDraft(raw: RawDraft): unknown {
   };
 }
 
+/** Most entries dropped from one draft before it is given up on. */
+const MAX_DROPPED_ENTRIES = 50;
+
+/**
+ * Makes a cleaned draft into a brand book, dropping the list entries the
+ * book's schema refuses (a "word" that is a whole sentence, a locale that
+ * is not a tag) rather than losing the whole draft to one of them: the
+ * admin checks the result either way.
+ *
+ * @param draft - The cleaned draft, with its source.
+ * @returns The book and how many entries were dropped.
+ * @throws Error when the problem is not in a list entry (nothing to drop)
+ *   or more than {@link MAX_DROPPED_ENTRIES} entries are refused.
+ */
+export function settleDraft(draft: unknown): {
+  book: BrandBookBody;
+  dropped: number;
+} {
+  const working = structuredClone(draft);
+  for (let dropped = 0; dropped <= MAX_DROPPED_ENTRIES; dropped += 1) {
+    const parsed = BrandBookBodySchema.safeParse(working);
+    if (parsed.success) return { book: parsed.data, dropped };
+    const issue = parsed.error.issues[0];
+    if (!dropEntryAt(working, issue.path)) {
+      throw new Error(
+        `The guide could not be made into a brand book: ${issue.path.join('.') || 'body'}: ${issue.message}`,
+      );
+    }
+  }
+  throw new Error(
+    'The guide could not be made into a brand book: too much of the draft was unusable.',
+  );
+}
+
+/**
+ * Removes the list entry a schema issue points into: the entry of the
+ * DEEPEST list on the path, so a bad alternative costs that alternative,
+ * not its term.
+ *
+ * @returns Whether an entry was removed.
+ */
+function dropEntryAt(
+  root: unknown,
+  issuePath: readonly PropertyKey[],
+): boolean {
+  let holder: unknown = root;
+  let list: unknown[] | null = null;
+  let index = -1;
+  for (const key of issuePath) {
+    if (Array.isArray(holder) && typeof key === 'number') {
+      list = holder;
+      index = key;
+    }
+    if (holder === null || typeof holder !== 'object') break;
+    holder = (holder as Record<PropertyKey, unknown>)[key];
+  }
+  if (!list || index < 0 || index >= list.length) return false;
+  list.splice(index, 1);
+  return true;
+}
+
 /**
  * Drafts a brand book from a guide.
  *
  * @param guide - The guide's PDF.
  * @param source - The guide's upload reference and file name, kept as
  *   the book's source.
- * @returns The draft (not stored) and what was measured.
+ * @returns The draft (not stored), what was measured, and how many of the
+ *   model's entries were dropped as unusable.
  * @throws DocumentRefusedError when the PDF cannot be read; Error when the
  *   model's answer cannot be made into a book.
  */
@@ -292,7 +354,8 @@ export async function draftBrandBook(input: {
   usage: WorkflowUsageCollector;
   model: string;
   signal?: AbortSignal;
-}): Promise<{ book: BrandBookBody; evidence: GuideEvidence }> {
+}): Promise<{ book: BrandBookBody; evidence: GuideEvidence; dropped: number }> {
+  const started = Date.now();
   const workDir = await fs.promises.mkdtemp(
     path.join(os.tmpdir(), 'brand-draft-'),
   );
@@ -303,6 +366,7 @@ export async function draftBrandBook(input: {
       usage: input.usage,
       signal: input.signal,
     });
+    const readDone = Date.now();
     const evidence = guideEvidence(model);
     const text = model.units.map((unit) => unit.text).join('\n');
     const budgeted = await truncateToTokenBudget(text, GUIDE_TEXT_TOKENS);
@@ -324,16 +388,15 @@ export async function draftBrandBook(input: {
       usage: input.usage,
       usageLabel: 'brand-book-draft',
     });
-    const parsed = parseBrandBookBody({
+    const modelDone = Date.now();
+    const settled = settleDraft({
       ...(cleanDraft(raw) as object),
       source: input.source,
     });
-    if (!parsed.ok) {
-      throw new Error(
-        `The guide could not be made into a brand book: ${parsed.error}`,
-      );
-    }
-    return { book: parsed.body, evidence };
+    console.info(
+      `[brandDraft] ${evidence.pageCount} pages read in ${Math.round((readDone - started) / 1000)}s, drafted in ${Math.round((modelDone - readDone) / 1000)}s, ${settled.dropped} entries dropped`,
+    );
+    return { book: settled.book, evidence, dropped: settled.dropped };
   } finally {
     await fs.promises.rm(workDir, { recursive: true, force: true });
   }
