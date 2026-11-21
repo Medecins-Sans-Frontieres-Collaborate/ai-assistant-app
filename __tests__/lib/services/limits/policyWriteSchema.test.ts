@@ -83,6 +83,51 @@ describe('modelAccessRuleSchema', () => {
     ).toBe(false);
   });
 
+  it('canonicalises blocked groups and domains, drops empty lists, and refuses a target both granted and blocked', () => {
+    const GROUP = '11111111-2222-3333-4444-555555555555';
+    const base = {
+      series: 'claude',
+      groups: [],
+      domains: [],
+      allow: [],
+      deny: [],
+    };
+    const parsed = modelAccessRuleSchema.parse({
+      ...base,
+      denyGroups: [` ${GROUP.toUpperCase()} `, GROUP],
+      denyDomains: [],
+    });
+    expect(parsed.denyGroups).toEqual([GROUP]);
+    expect(parsed.denyDomains).toBeUndefined();
+    // Blocked and granted are different targets: fine.
+    expect(
+      modelAccessRuleSchema.safeParse({
+        ...base,
+        domains: [{ target: 'oca.msf.org', requests: null }],
+        denyDomains: ['ocp.msf.org'],
+      }).success,
+    ).toBe(true);
+    expect(
+      modelAccessRuleSchema.safeParse({
+        ...base,
+        domains: [{ target: 'ocp.msf.org', requests: null }],
+        denyDomains: ['OCP.msf.org'],
+      }).success,
+    ).toBe(false);
+    expect(
+      modelAccessRuleSchema.safeParse({
+        ...base,
+        groups: [{ target: GROUP, requests: 5 }],
+        denyGroups: [GROUP],
+      }).success,
+    ).toBe(false);
+    // A blocked group must be an Entra object id, like a granted one.
+    expect(
+      modelAccessRuleSchema.safeParse({ ...base, denyGroups: ['finance'] })
+        .success,
+    ).toBe(false);
+  });
+
   it('putBodySchema leaves modelAccess undefined when the key is absent (stale-client guard)', () => {
     const parsed = putBodySchema.parse({ defaults: [], overrides: [] });
     expect(parsed.modelAccess).toBeUndefined();

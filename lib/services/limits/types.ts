@@ -285,6 +285,15 @@ export const ModelAccessRuleSchema = z
     allow: z.array(ModelAccessGrantSchema).max(500).default([]),
     /** Block list: mails. Beats every grant for the same person. */
     deny: z.array(z.string().max(320)).max(500).default([]),
+    /**
+     * Blocked Entra group object ids / bare email domains. OPTIONAL (absent =
+     * none) so rules stored before these lists existed read unchanged. A
+     * block outranks a grant at the same layer, on this node or its family;
+     * a more specific layer still wins (a named person's grant beats a
+     * blocked group, a group's grant beats a blocked domain).
+     */
+    denyGroups: z.array(z.string().max(320)).max(500).optional(),
+    denyDomains: z.array(z.string().max(320)).max(500).optional(),
   })
   .passthrough();
 export type ModelAccessRule = z.infer<typeof ModelAccessRuleSchema>;

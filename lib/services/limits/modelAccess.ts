@@ -3,7 +3,7 @@
  * approval").
  *
  * The admin edits a tree (family → models) with, per node, a default for
- * everyone and four lists: groups, domains, an allow list and a block list.
+ * everyone and lists of groups, domains and people, each granted or blocked.
  * Rather than teaching the resolver a second vocabulary, each rule is
  * EXPANDED here into the entries and overrides it is equivalent to, and the
  * resolver reads `effectiveDefaults` / `effectiveOverrides` (resolver.ts)
@@ -14,7 +14,7 @@
  *  - each list becomes global-tier overrides at the list's layer (group,
  *    domain, user), one per distinct `requests` value so targets with the
  *    same terms share a record; grants set `model.allowed = true` and
- *    `model.requests`, the block list sets `model.allowed = false`.
+ *    `model.requests`, the block lists set `model.allowed = false`.
  *
  * Precedence then follows from the layers: a person on a list beats every
  * default; a model rule beats its family's at the same layer (qualifier
@@ -35,13 +35,24 @@ import type {
 /** Synthetic override ids — never stored, recognisable in provenance. */
 export const MODEL_ACCESS_OVERRIDE_PREFIX = 'model-access:';
 
-export type ModelAccessList = 'groups' | 'domains' | 'allow' | 'deny';
+export type ModelAccessList =
+  | 'groups'
+  | 'domains'
+  | 'allow'
+  | 'deny'
+  | 'denyGroups'
+  | 'denyDomains';
+
+/** The lists that block, each at the layer of the audience it names. */
+export type ModelAccessBlockList = 'deny' | 'denyGroups' | 'denyDomains';
 
 const LIST_SCOPE: Record<ModelAccessList, OverrideScope> = {
   groups: 'group',
   domains: 'domain',
   allow: 'user',
   deny: 'user',
+  denyGroups: 'group',
+  denyDomains: 'domain',
 };
 
 /** `model:<id>` | `family:<series>` — the node's identity across the UI and provenance. */
@@ -129,7 +140,7 @@ function syntheticOverride(
 /** Grants grouped by their terms: one override per distinct `requests`. */
 function grantOverrides(
   rule: ModelAccessRule,
-  list: Exclude<ModelAccessList, 'deny'>,
+  list: Exclude<ModelAccessList, ModelAccessBlockList>,
 ): LimitOverride[] {
   const dimension = modelAccessDimension(rule);
   const byTerms = new Map<
@@ -157,22 +168,30 @@ function grantOverrides(
   );
 }
 
-function denyOverride(rule: ModelAccessRule): LimitOverride[] {
+function denyOverride(
+  rule: ModelAccessRule,
+  list: ModelAccessBlockList,
+): LimitOverride[] {
   const targets = [
     ...new Set(
-      rule.deny.map((mail) => mail.trim().toLowerCase()).filter(Boolean),
+      (rule[list] ?? [])
+        .map((target) => target.trim().toLowerCase())
+        .filter(Boolean),
     ),
   ];
   if (targets.length === 0) return [];
-  // The block list outranks every grant for that person, whichever node
-  // either sits on: same user layer as an allow-list grant, but a higher
-  // priority — and priority ranks before qualifier specificity in the
-  // comparator — so "blocked on the family" is not undone by a model's own
-  // allow list. (A model-level block vs a family grant wins anyway.)
+  // A block outranks every grant AT ITS OWN LAYER, whichever node either
+  // sits on: same layer as the matching grant list, but a higher priority —
+  // and priority ranks before qualifier specificity in the comparator — so
+  // "blocked on the family" is not undone by a model's own grant. (A
+  // model-level block vs a family grant wins anyway.) Layers still rank
+  // first: a blocked person is blocked whatever their group or domain is
+  // granted, while a blocked group or domain yields to a more specific
+  // grant (a named person; for a domain, also a group).
   return [
     syntheticOverride(
-      `${MODEL_ACCESS_OVERRIDE_PREFIX}${modelAccessDimension(rule)}|deny|all`,
-      'user',
+      `${MODEL_ACCESS_OVERRIDE_PREFIX}${modelAccessDimension(rule)}|${list}|all`,
+      LIST_SCOPE[list],
       targets,
       [entry(rule, 'model.allowed', false)],
       DENY_PRIORITY,
@@ -198,7 +217,9 @@ export function expandModelAccess(
       ...grantOverrides(rule, 'groups'),
       ...grantOverrides(rule, 'domains'),
       ...grantOverrides(rule, 'allow'),
-      ...denyOverride(rule),
+      ...denyOverride(rule, 'denyGroups'),
+      ...denyOverride(rule, 'denyDomains'),
+      ...denyOverride(rule, 'deny'),
     );
   }
   return { defaults, overrides };
