@@ -94,9 +94,38 @@ export function termPattern(term: string): RegExp {
   return new RegExp(`(?<![\\p{L}\\p{N}])${words}(?![\\p{L}\\p{N}])`, 'giu');
 }
 
-/** How often a term occurs in a text. */
-function occurrences(text: string, pattern: RegExp): number {
-  return [...text.matchAll(pattern)].length;
+/**
+ * How often a term occurs in a text, not counting where it is part of one
+ * of the phrases written in its place: a book that avoids "homeless" in
+ * favour of "people who are homeless" must not report the second, and one
+ * that prefers "Médecins Sans Frontières (MSF)" to "MSF" must not report
+ * the preferred name itself.
+ *
+ * @param text - The text searched.
+ * @param term - The word or phrase counted.
+ * @param accepted - Phrases the book asks for where the term would be.
+ */
+export function termOccurrences(
+  text: string,
+  term: string,
+  accepted: readonly string[] = [],
+): number {
+  const spans = accepted
+    .filter((phrase) => phrase.trim())
+    .flatMap((phrase) =>
+      [...text.matchAll(termPattern(phrase))].map((match) => ({
+        start: match.index,
+        end: match.index + match[0].length,
+      })),
+    );
+  return [...text.matchAll(termPattern(term))].filter(
+    (match) =>
+      !spans.some(
+        (span) =>
+          match.index >= span.start &&
+          match.index + match[0].length <= span.end,
+      ),
+  ).length;
 }
 
 /**
@@ -191,7 +220,7 @@ function wordingFindings(
 ): BrandFinding[] {
   const findings: BrandFinding[] = [];
   for (const banned of book.language.banned) {
-    const count = occurrences(unit.text, termPattern(banned.term));
+    const count = termOccurrences(unit.text, banned.term, banned.alternatives);
     if (count > 0) {
       findings.push(
         unitFinding(unit, {
@@ -207,7 +236,7 @@ function wordingFindings(
   // A preferred term lists the words it should be used instead of.
   for (const preferred of book.language.preferred) {
     for (const instead of preferred.alternatives) {
-      const count = occurrences(unit.text, termPattern(instead));
+      const count = termOccurrences(unit.text, instead, [preferred.term]);
       if (count > 0) {
         findings.push(
           unitFinding(unit, {

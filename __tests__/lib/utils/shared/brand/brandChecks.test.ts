@@ -4,6 +4,7 @@ import {
   checkDocumentText,
   judgeColor,
   languageAllowed,
+  termOccurrences,
   termPattern,
 } from '@/lib/utils/shared/brand/brandChecks';
 import { colorDistance } from '@/lib/utils/shared/brand/brandColor';
@@ -265,5 +266,35 @@ describe('what is checked', () => {
       box: u.box,
       source: 'check',
     });
+  });
+});
+
+describe('termOccurrences', () => {
+  it('counts a word on its own and not inside the phrase asked for', () => {
+    const accepted = ['people who are homeless'];
+    expect(
+      termOccurrences('Care for the homeless.', 'homeless', accepted),
+    ).toBe(1);
+    expect(
+      termOccurrences(
+        'Care for people who are homeless.',
+        'homeless',
+        accepted,
+      ),
+    ).toBe(0);
+    // Both in one text: only the bare one counts.
+    expect(
+      termOccurrences(
+        'The homeless, and people who are homeless.',
+        'homeless',
+        accepted,
+      ),
+    ).toBe(1);
+  });
+
+  it('does not report a preferred name for holding the short form it replaces', () => {
+    const preferred = 'Médecins Sans Frontières (MSF)';
+    expect(termOccurrences(`We are ${preferred}.`, 'MSF', [preferred])).toBe(0);
+    expect(termOccurrences('We are MSF.', 'MSF', [preferred])).toBe(1);
   });
 });
