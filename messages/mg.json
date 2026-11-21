@@ -6871,7 +6871,6 @@
           "blocked": "Raha olona voatonona napetraka ho Off, tsy afaka mampiasa izany izy na inona na inona vondrona na domaina ananany.",
           "mostSpecific": "Raha tsy izany dia ilay fidirana manokana indrindra ahitana ilay olona no manapa-kevitra: olona voatonona, avy eo vondrona, avy eo domaina, avy eo izay sisa. Raha mitovy vondrona na domaina roa, Off no maharesy."
         },
-        "lead": "Iza no afaka mampiasa modely tsirairay, sy ny isan'ny fangatahana isan'andro. Fianakaviana na modely iray ny tsipika tsirairay; mpihaino ny tsanganana tsirairay. Safidio ny tsipika hanovana izay afaka mampiasa.",
         "peopleValue": "{allowed} azo atao, {blocked} voasakana",
         "bulk": {
           "open": "Manampy fidirana amin'ny modely maro",
@@ -6879,8 +6878,20 @@
           "models": "Amin'ireto modely ireto",
           "wholeFamily": "fianakaviana manontolo",
           "apply": "{count, plural, =0 {Safidio ny modely} one {Ampiharo amin'ny tsipika #} other {Ampiharo amin'ny tsipika #}}",
-          "note": "Soloiny izay efa ananan'ireo olona, vondrona sy domaina ireo amin'ny tsipika voafidy. Tsy voatahiry raha tsy mamonjy politikan'ny fidirana ianao."
-        }
+          "note": "Soloiny izay efa ananan'ireo olona, vondrona sy domaina ireo amin'ny tsipika voafidy. Tsy voatahiry raha tsy mamonjy politikan'ny fidirana ianao.",
+          "action": "Inona no hatao",
+          "set": "Omeo fidirana na vonoy",
+          "remove": "Esory amin'ireto laharana ireto",
+          "applyRemove": "{count, plural, =0 {Safidio ny modely} one {Esory amin'ny laharana #} other {Esory amin'ny laharana #}}",
+          "noteRemove": "Esorina amin'ireto laharana voafidy ireto ny olona, vondrona ary sehatra, dia mahazo izay omen'ny fianakaviana na ny Rehetra sisa. Tsy voatahiry raha tsy mamonjy politika.",
+          "filter": "Sivano ny modely",
+          "selectShown": "Safidio rehetra aseho",
+          "clear": "Diovy ny safidy",
+          "noMatch": "Tsy misy modely mifanaraka.",
+          "applied": "{entries, plural, one {fidirana #} other {fidirana #}} napetraka amin'ny {rows, plural, one {laharana #} other {laharana #}}. Tsy voatahiry hatreto.",
+          "removed": "{entries, plural, one {fidirana #} other {fidirana #}} nesorina tamin'ny {rows, plural, one {laharana #} other {laharana #}}. Tsy voatahiry hatreto."
+        },
+        "lead": "Iza no afaka mampiasa modely tsirairay, sy firy fanontaniana isan'andro. Isaky ny laharana dia fianakaviana na modely iray; isaky ny andalana dia mpihaino. Safidio ny modely iray, na sela iray, hanovana izay afaka mampiasa azy."
       },
       "audience": {
         "editorTitle": "Iza no afaka mampiasa an'i {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "avy amin'ny fianakaviana",
         "setHere": "Ovao ho an'ity modely ity",
         "setHereFor": "Ovao ny {target} ho an'ity modely ity",
-        "overruled": "Off amin'ny fianakaviana, izay maharesy"
+        "overruled": "Off amin'ny fianakaviana, izay maharesy",
+        "editRow": "Hanova olona afaka mampiasa an'i {model}",
+        "editRowHint": "ovay izay afaka mampiasa azy",
+        "replaces": "{count, plural, one {Efa ao amin'ity laharana ity: {names}. Raha manampy dia soloina izay azony.} other {Efa ao amin'ity laharana ity: {names}. Raha manampy dia soloina izay azony.}}",
+        "notAdded": "{count, plural, one {fidirana # ao anaty saha mbola tsy nampidirina.} other {fidirana # ao anaty saha mbola tsy nampidirina.}}",
+        "addAndClose": "Ampio ary hikatona",
+        "closeAnyway": "Akatona tsy nampiana",
+        "filter": "Sivano ity lisitra ity",
+        "filterCount": "Aseho {shown} amin'ny {total}"
+      },
+      "review": {
+        "none": "tsy misy fidirana",
+        "becomes": "lasa",
+        "removed": "nesorina"
       }
     },
     "previewSourceModelAccess": "Fanekena modely — {list}",

@@ -6871,7 +6871,6 @@
           "blocked": "Moto oyo abengamaki mpe atikali Off akozanga kokoka kosalela yango, ata groupe to domaine na ye ebongwani.",
           "mostSpecific": "Soki te, mokano ekeesaka moto ndenge oyo: liboso moto abengamaki, sima groupe, sima domaine, sima bato nyonso. Soki banigroupes mibale to bazone mibale, Off nde elongi."
         },
-        "lead": "Nani akoki kosalela chaque modèle, mpe taux ya ba demandes mokolo na mokolo. Nzela moko ezali famille to modèle; colonne moko ezali audience. Pona nzela moko mpo bo changer nani akoki kosalela.",
         "peopleValue": "{allowed} bapesami nzela, {blocked} ebomami",
         "bulk": {
           "open": "Tia nzela ya kosalela na ba modèles mingi",
@@ -6879,8 +6878,20 @@
           "models": "Na ba modèles oyo",
           "wholeFamily": "famille mobimba",
           "apply": "{count, plural, =0 {Pona modèles} one {Pesa na nzela #} other {Pesa na ba nzela #}}",
-          "note": "Ekokota na esika ya ndenge ezali na bantu, ba groupes mpe ba domaines oyo na ba lignes pona oyo boponi. Eloko moko ekobatelama te soki obateli mibeko te."
-        }
+          "note": "Ekokota na esika ya ndenge ezali na bantu, ba groupes mpe ba domaines oyo na ba lignes pona oyo boponi. Eloko moko ekobatelama te soki obateli mibeko te.",
+          "action": "Eloko esengeli kosala",
+          "set": "Pesa nzela ya kozwa accès to longwa",
+          "remove": "Longwa na ba ndakisa oyo",
+          "noteRemove": "Eko longwa ba bato, ba groupes mpe ba domaines na ba ndakisa ponami; bongo balongwa, bazo zwa oyo famille to 'Tous les autres' bazangi. Eloko moko elokaki te kino okotala politique.",
+          "filter": "Filtrer ba modèles",
+          "selectShown": "Pona nyonso oyo ewuti",
+          "clear": "Kolongwa sélection",
+          "noMatch": "Modèle moko te ekokani.",
+          "applied": "{entries, plural, one {Ndakisa moko} other {Ba ndakisa #}} epesi na {rows, plural, one {ndakisa moko} other {ba ndakisa #}}. Elokaki te.",
+          "removed": "{entries, plural, one {Ndakisa moko} other {Ba ndakisa #}} elongwe na {rows, plural, one {ndakisa moko} other {ba ndakisa #}}. Elokaki te.",
+          "applyRemove": "{count, plural, =0 {Pona ba model} one {Longwa na ndakisa moko} other {Longwa na ba ndakisa #} }"
+        },
+        "lead": "Nani akoki kosalela modèle mokomoko, mpe motolo ya ba demandes na mokolo. Ndakisa moko ezali famille to modèle; kolonne moko ezali audience. Pona modèle, to cellule moko, mpo obongola nani akoki kosalela yango."
       },
       "audience": {
         "editorTitle": "Nani akoki kosalela {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "epai ya famille",
         "setHere": "Bongisa pona modèle oyo",
         "setHereFor": "Bongisa {target} pona modèle oyo",
-        "overruled": "Off na famille, yango elongi"
+        "overruled": "Off na famille, yango elongi",
+        "editRow": "Bongola nani akoki kosalela {model}",
+        "editRowHint": "bongola nani akoki kosalela yango",
+        "replaces": "{count, plural, one {Eza na ndakisa oyo: {names}. Kotia ezali kobongisa oyo azwi.} other {Eza na ndakisa oyo: {names}. Kotia ezali kobongisa oyo bazwi.}}",
+        "notAdded": "{count, plural, one {Ndakisa moko na champ elongwe te.} other {Ba ndakisa # na champ elongwe te.}}",
+        "addAndClose": "Tia mpe longwa",
+        "closeAnyway": "Longwa ndenge ezali",
+        "filter": "Filtrer liste oyo",
+        "filterCount": "Ekomisi {shown} na {total}"
+      },
+      "review": {
+        "none": "ndakisa te",
+        "becomes": "ekoma",
+        "removed": "elongwe"
       }
     },
     "previewSourceModelAccess": "Ndongolá modelɛ — {list}",

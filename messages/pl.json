@@ -6887,7 +6887,6 @@
           "blocked": "Osoba imienna ustawiona na Wyłączone nie może korzystać, bez względu na uprawnienia grupy czy domeny.",
           "mostSpecific": "W przeciwnym razie decyduje najbardziej szczegółowy wpis obejmujący osobę: najpierw osoba imienna, potem grupa, potem domena, na końcu wszyscy inni. Między dwiema grupami lub dwiema domenami wygrywa Wyłączone."
         },
-        "lead": "Kto może korzystać z danego modelu i ile żądań dziennie. Każdy wiersz to rodzina lub model; każda kolumna to odbiorca. Wybierz wiersz, aby zmienić uprawnienia.",
         "peopleValue": "{allowed} dozwolone, {blocked} wyłączone",
         "bulk": {
           "open": "Dodaj dostęp do kilku modeli",
@@ -6895,8 +6894,20 @@
           "models": "W tych modelach",
           "wholeFamily": "cała rodzina",
           "apply": "{count, plural, =0 {Wybierz modele} one {Zastosuj do # wiersza} other {Zastosuj do # wierszy}}",
-          "note": "Zastępuje bieżące uprawnienia tych osób, grup i domen w wybranych wierszach. Nic nie zostanie zapisane, dopóki nie zapiszesz polityki."
-        }
+          "note": "Zastępuje bieżące uprawnienia tych osób, grup i domen w wybranych wierszach. Nic nie zostanie zapisane, dopóki nie zapiszesz polityki.",
+          "action": "Co zrobić",
+          "set": "Przyznaj dostęp lub wyłącz",
+          "remove": "Usuń z tych wierszy",
+          "applyRemove": "{count, plural, =0 {Wybierz modele} one {Usuń z # wiersza} other {Usuń z # wierszy}}",
+          "noteRemove": "Usuwa te osoby, grupy i domeny z wybranych wierszy; wtedy uzyskują to, co rodzina lub Wszyscy pozostali. Nic nie zostanie zapisane, dopóki nie zapiszesz polityki.",
+          "filter": "Filtruj modele",
+          "selectShown": "Zaznacz wszystkie widoczne",
+          "clear": "Wyczyść zaznaczenie",
+          "noMatch": "Brak pasujących modeli.",
+          "applied": "{entries, plural, one {# wpis ustawiony} other {# wpisów ustawionych}} w {rows, plural, one {# wierszu} other {# wierszach}}. Jeszcze nie zapisano.",
+          "removed": "{entries, plural, one {# wpis usunięty} other {# wpisów usuniętych}} z {rows, plural, one {# wiersza} other {# wierszy}}. Jeszcze nie zapisano."
+        },
+        "lead": "Kto może korzystać z każdego modelu oraz ile żądań dziennie. Każdy wiersz to rodzina lub model; każda kolumna to odbiorca. Wybierz model lub dowolną komórkę, aby zmienić, kto ma dostęp."
       },
       "audience": {
         "editorTitle": "Kto może korzystać z {model}",
@@ -6920,7 +6931,20 @@
         "fromFamily": "z rodziny",
         "setHere": "Zmień dla tego modelu",
         "setHereFor": "Zmień {target} dla tego modelu",
-        "overruled": "Wyłączone w rodzinie, co ma wyższy priorytet"
+        "overruled": "Wyłączone w rodzinie, co ma wyższy priorytet",
+        "editRow": "Edytuj, kto może korzystać z {model}",
+        "editRowHint": "edytuj kto może korzystać",
+        "replaces": "{count, plural, one {Już na tym wierszu: {names}. Dodanie zastąpi ustawienia.} other {Już na tym wierszu: {names}. Dodanie zastąpi ich ustawienia.}}",
+        "notAdded": "{count, plural, one {# wpis w polu nie został jeszcze dodany.} other {# wpisy w polu nie zostały jeszcze dodane.}}",
+        "addAndClose": "Dodaj i zamknij",
+        "closeAnyway": "Zamknij bez dodawania",
+        "filter": "Filtruj tę listę",
+        "filterCount": "Wyświetlono {shown} z {total}"
+      },
+      "review": {
+        "none": "brak wpisu",
+        "becomes": "staje się",
+        "removed": "usunięto"
       }
     },
     "previewSourceModelAccess": "Zatwierdzenie modelu — {list}",

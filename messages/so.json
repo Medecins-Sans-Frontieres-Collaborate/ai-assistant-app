@@ -6871,7 +6871,6 @@
           "blocked": "Qof la magacaabay oo loo dejiyay Off ma isticmaali karo, si kasta oo kooxdiisa ama domain-kiisa loo dejiyo.",
           "mostSpecific": "Hadii kale, waxa go'aamiya kii ugu gaar ah ee qofka ku jira: qof magaciisa leh, kadib koox, kadib domain, kadibna qof walba. Haddii uu jiro laba kooxood ama laba domains, Off baa guuleysta."
         },
-        "lead": "Yaa isticmaali kara model kasta, iyo inta codsi ee maalintii. Saf kasta waa qoys ama model; tiir kasta waa dad gaar ah. Xulo saf si aad u bedesho cidda isticmaali karta.",
         "peopleValue": "{allowed} la oggol yahay, {blocked} la xannibay",
         "bulk": {
           "open": "Kudar gelitaanka dhowr models",
@@ -6879,8 +6878,20 @@
           "models": "Models-kaan",
           "wholeFamily": "qoyska oo dhan",
           "apply": "{count, plural, =0 {Dooro models} one {Ku dabaq hal saf} other {Ku dabaq # saf}}",
-          "note": "Waxay bedeshay wixii ay horey u lahaayeen dadka, kooxaha iyo domains-ka safafka la doortay. Waxba laguma kaydiyo ilaa aad siyaasadda kaydiso."
-        }
+          "note": "Waxay bedeshay wixii ay horey u lahaayeen dadka, kooxaha iyo domains-ka safafka la doortay. Waxba laguma kaydiyo ilaa aad siyaasadda kaydiso.",
+          "action": "Waxa la qabanayo",
+          "set": "Sii ogolaansho ama dami",
+          "remove": "Ka saar safarradan",
+          "applyRemove": "{count, plural, =0 {Dooro models} one {Ka saar safkan} other {Ka saar safafkan}}",
+          "noteRemove": "Dadkan, kooxahan iyo domains-kan ayaa laga saaray safafka la doortay; markaas waxay helayaan waxa qoyska ama Dadka kale oo dhan la siiyo. Waxba lama kaydiyo ilaa aad kaydiso siyaasadda.",
+          "filter": "Shaandhee models",
+          "selectShown": "Xulo dhammaan la muujiyey",
+          "clear": "Tirtir xulashada",
+          "noMatch": "Model lama helin oo u dhigma.",
+          "applied": "{entries, plural, one {# gelin} other {# gelin}} ayaa lagu sameeyay {rows, plural, one {# saf} other {# safaf}}. Wali lama keydin.",
+          "removed": "{entries, plural, one {# gelin} other {# gelin}} ayaa laga saaray {rows, plural, one {# saf} other {# safaf}}. Wali lama keydin."
+        },
+        "lead": "Yaa isticmaali kara mid kasta oo model ah, iyo tirada codsiyada maalintii. Saf kasta waa qoys ama model; tiir walbana waa jamaaco. Door modelo, ama unug kasta, si aad u badasho cidda isticmaali karta."
       },
       "audience": {
         "editorTitle": "Yaa isticmaali kara {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "ka yimid qoyska",
         "setHere": "U bedel model-kan",
         "setHereFor": "U beddel {target} model-kan",
-        "overruled": "Off ayaa lagu dejiyay qoyska, taas ayaana guuleysata"
+        "overruled": "Off ayaa lagu dejiyay qoyska, taas ayaana guuleysata",
+        "editRow": "Wax ka beddel cidda isticmaali karta {model}",
+        "editRowHint": "wax ka beddel cidda isticmaali karta",
+        "replaces": "{count, plural, one {Horey loogu jiray safkan: {names}. Ku daridu waxay beddeshaa waxa ay helayaan.} other {Horey loogu jiray safkan: {names}. Ku daridu waxay beddeshaa waxa ay helayaan.}}",
+        "notAdded": "{count, plural, one {# gelin weli lama darin.} other {# gelin weli lama darin.}}",
+        "addAndClose": "Ku dar oo xidh",
+        "closeAnyway": "Xidh adoon darin",
+        "filter": "Shaandhee liiskan",
+        "filterCount": "Waxaa la soo bandhigay {shown} ee {total}"
+      },
+      "review": {
+        "none": "gelin ma jiro",
+        "becomes": "wuxuu isu beddelayaa",
+        "removed": "waa la saaray"
       }
     },
     "previewSourceModelAccess": "Oggolaanshaha model-ka — {list}",

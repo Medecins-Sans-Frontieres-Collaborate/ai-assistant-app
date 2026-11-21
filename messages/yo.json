@@ -6871,7 +6871,6 @@
           "blocked": "Eni tí a darukọ tí a ti yí sí Pipa kò le lò ó, láìka ohun tí ẹgbẹ́ tàbí domain rẹ̀ bá gba.",
           "mostSpecific": "Lẹ́yìn náà, àyípadà tí o dára jù lọ tí ó kà ènìyàn náà mọ̀ yọ: ẹni tí a darukọ, lẹ́yìn náà ẹgbẹ́, lẹ́yìn náà domain, lẹ́yìn náà gbogbo ènìyàn. Ní àárí ẹgbẹ́ méjì, tàbí domains méjì, Pipa ni ń ṣẹ̀gun."
         },
-        "lead": "Tálọ́ lè lò àpẹrẹ kọọkan, àti iye ìbéèrè tó jẹ́ ojoojúmọ́. Kọọkan ìtòsí jẹ́ idílé tàbí àpẹrẹ; kọọkan kolomu jẹ́ àgbọ́wọ̀n. Yan ìtòsí kan láti yí tálọ́ lè lò ó.",
         "peopleValue": "{allowed} gba laaye, {blocked} pipa",
         "bulk": {
           "open": "Fi àwọ̀n sí orí àpẹrẹ púpọ̀",
@@ -6879,8 +6878,20 @@
           "models": "Lórí àwọn àpẹrẹ wọ̀nyí",
           "wholeFamily": "gbogbo idílé",
           "apply": "{count, plural, =0 {Yan àwọn àpẹrẹ} one {Lo si ìtòsí #} other {Lo si àwọn ìtòsí #}}",
-          "note": "Yóò rọ́pò ohun tí àwọn ènìyàn, ẹgbẹ́ àti domain wọ̀nyí ní lórí àwọn ìtòsí tó ṣeé yàn. Kò sí ohun tí a fipamọ́ títí tí o fi pààṣẹ."
-        }
+          "note": "Yóò rọ́pò ohun tí àwọn ènìyàn, ẹgbẹ́ àti domain wọ̀nyí ní lórí àwọn ìtòsí tó ṣeé yàn. Kò sí ohun tí a fipamọ́ títí tí o fi pààṣẹ.",
+          "action": "Ohun ti a ṣe",
+          "set": "Fun ni iraye tabi pa a",
+          "remove": "Yọ kuro ninu awọn ila wọnyi",
+          "applyRemove": "{count, plural, =0 {Yan awoṣe} one {Yọ kuro lori ila # kan} other {Yọ kuro lori # awọn ila}}",
+          "noteRemove": "Yi awọn eniyan, ẹgbẹ ati ẹgbẹ-ašà wọnyi kuro lori awọn ila ti a yan; wọn yoo gba ohun ti idile tabi Gbogbo ẹlòmiran gba. Ko si nkan ti yoo tọju titi iwọ o fi tọju eto imulo naa.",
+          "filter": "Fọ awoṣe",
+          "selectShown": "Yan gbogbo ti o han",
+          "clear": "Nu yiyan kuro",
+          "noMatch": "Ko si awoṣe to baamu.",
+          "applied": "{entries, plural, one {# ohun fifi} other {# awọn ohun fifi}} ti ṣeto lori {rows, plural, one {ila # kan} other {# awọn ila}}. Ko tọju sibẹ.",
+          "removed": "{entries, plural, one {# ohun fifi} other {# awọn ohun fifi}} ti yọ kuro ninu {rows, plural, one {ila # kan} other {# awọn ila}}. Ko tọju sibẹ."
+        },
+        "lead": "Ta ni o le lo awoṣe kọọkan, ati iye awọn ibeere lọjọ kan. Gbogbo ila jẹ idile tabi awoṣe; gbogbo iwe-itẹsiwaju jẹ olugbo. Yan awoṣe kan, tabi kọọkan sẹli, lati yi ẹni ti o le lo o pada."
       },
       "audience": {
         "editorTitle": "Tálọ́ lè lò {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "látọ̀dọ̀ idílé",
         "setHere": "Yí padà fún àpẹrẹ yìí",
         "setHereFor": "Yí {target} padà fún àpẹrẹ yìí",
-        "overruled": "Pipa lórí idílé, tí ó ṣẹ̀gun"
+        "overruled": "Pipa lórí idílé, tí ó ṣẹ̀gun",
+        "editRow": "Ṣatunkọ ẹni ti o le lo {model}",
+        "editRowHint": "ṣatunkọ ẹni ti o le lo o",
+        "replaces": "{count, plural, one {Ti wa lori ila yii tẹlẹ: {names}. Fifi kun yìí yoo rọpo ohun ti o gba.} other {Ti wa lori ila yii tẹlẹ: {names}. Fifi kun yìí yoo rọpo ohun ti wọn gba.}}",
+        "notAdded": "{count, plural, one {# ohun ninu fidi ko ti fi kun sibẹ.} other {# awọn ohun ninu fidi ko ti fi kun sibẹ.}}",
+        "addAndClose": "Fi kun ki o pa",
+        "closeAnyway": "Pa laisi fifi kun",
+        "filter": "Fọ akojọ yii",
+        "filterCount": "Ifihan {shown} ninu {total}"
+      },
+      "review": {
+        "none": "ko si ohun fifi",
+        "becomes": "di",
+        "removed": "ti yọ kuro"
       }
     },
     "previewSourceModelAccess": "Ìfọwọ́si àyíkọ́ — {list}",

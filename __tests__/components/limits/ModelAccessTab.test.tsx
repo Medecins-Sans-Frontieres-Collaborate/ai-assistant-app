@@ -380,7 +380,7 @@ describe('ModelAccessTab grid', () => {
   it('opens the editor from the model name, with the keyboard in the add field, and Escape hands focus back', () => {
     renderTab();
     const name = screen.getByRole('button', {
-      name: 'Claude edit who can use it',
+      name: 'Claude, edit who can use it',
     });
     fireEvent.click(name);
     const editor = screen.getByRole('region', { name: 'Who can use Claude' });

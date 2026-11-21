@@ -6887,7 +6887,6 @@
           "blocked": "Pojmenovaná osoba, která má nastaveno Vypnuto, nemůže funkci používat, bez ohledu na svoji skupinu nebo doménu.",
           "mostSpecific": "Jinak rozhoduje nejkonkrétnější záznam, který zahrnuje osobu: nejprve pojmenovaná osoba, pak skupina, doména a nakonec ostatní. Mezi dvěma skupinami nebo doménami vítězí Vypnuto."
         },
-        "lead": "Kdo může používat jednotlivé modely a kolik žádostí denně. Každý řádek je rodina nebo model, každý sloupec je publikum. Vyberte řádek pro změnu oprávnění.",
         "peopleValue": "{allowed} povoleno, {blocked} vypnuto",
         "bulk": {
           "open": "Přidat přístup u více modelů",
@@ -6895,8 +6894,20 @@
           "models": "U těchto modelů",
           "wholeFamily": "celá rodina",
           "apply": "{count, plural, =0 {Vyberte modely} one {Použít na # řádek} other {Použít na # řádků}}",
-          "note": "Nahradí, co již tito lidé, skupiny a domény mají v označených řádcích. Změny se uloží až při uložení zásad."
-        }
+          "note": "Nahradí, co již tito lidé, skupiny a domény mají v označených řádcích. Změny se uloží až při uložení zásad.",
+          "action": "Co udělat",
+          "set": "Udělit přístup nebo jej vypnout",
+          "remove": "Odebrat z těchto řádků",
+          "applyRemove": "{count, plural, =0 {Vyberte modely} one {Odebrat z # řádku} other {Odebrat z # řádků}}",
+          "noteRemove": "Odebere tyto osoby, skupiny a domény z vybraných řádků; následně dostanou to, co mají rodina nebo Ostatní. Nic nebude uloženo, dokud neuložíte politiku.",
+          "filter": "Filtrovat modely",
+          "selectShown": "Vybrat vše zobrazené",
+          "clear": "Zrušit výběr",
+          "noMatch": "Žádný model nevyhovuje.",
+          "applied": "{entries, plural, one {# položka} other {# položek}} nastaveno na {rows, plural, one {# řádek} other {# řádků}}. Zatím neuloženo.",
+          "removed": "{entries, plural, one {# položka} other {# položek}} odebráno z {rows, plural, one {# řádku} other {# řádků}}. Zatím neuloženo."
+        },
+        "lead": "Kdo může používat jednotlivé modely a kolik požadavků za den. Každý řádek představuje rodinu nebo model, každý sloupec publikum. Vyberte model nebo buňku pro změnu oprávnění."
       },
       "audience": {
         "editorTitle": "Kdo může používat {model}",
@@ -6920,7 +6931,20 @@
         "fromFamily": "z rodiny",
         "setHere": "Změnit pro tento model",
         "setHereFor": "Změnit {target} pro tento model",
-        "overruled": "Vypnuto u rodiny, což platí"
+        "overruled": "Vypnuto u rodiny, což platí",
+        "editRow": "Upravit, kdo může používat {model}",
+        "editRowHint": "upravit, kdo jej může používat",
+        "replaces": "{count, plural, one {Již na tomto řádku: {names}. Přidáním nahradíte aktuální nastavení.} other {Již na tomto řádku: {names}. Přidáním nahradíte aktuální nastavení.}}",
+        "notAdded": "{count, plural, one {# položka v poli ještě nebyla přidána.} other {# položek v poli ještě nebylo přidáno.}}",
+        "addAndClose": "Přidat a zavřít",
+        "closeAnyway": "Zavřít bez přidání",
+        "filter": "Filtrovat tento seznam",
+        "filterCount": "Zobrazeno {shown} z {total}"
+      },
+      "review": {
+        "none": "žádná položka",
+        "becomes": "se mění na",
+        "removed": "odebráno"
       }
     },
     "previewSourceModelAccess": "Schválení modelu — {list}",

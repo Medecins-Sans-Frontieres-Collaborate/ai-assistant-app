@@ -6887,7 +6887,6 @@
           "blocked": "Una persona concreta amb accés desactivat no pot utilitzar-ho, independentment del grup o domini.",
           "mostSpecific": "En cas contrari, decideix l’entrada més específica que inclou la persona: primer persona concreta, després grup, després domini, després tothom. Entre dos grups o dos dominis, guanya 'Off'."
         },
-        "lead": "Qui pot utilitzar cada model i quantes sol·licituds al dia. Cada fila és una família o un model; cada columna és un públic. Seleccioneu una fila per canviar qui la pot utilitzar.",
         "peopleValue": "{allowed} amb accés, {blocked} sense accés",
         "bulk": {
           "open": "Afegir accés a diversos models",
@@ -6895,8 +6894,20 @@
           "models": "En aquests models",
           "wholeFamily": "tota la família",
           "apply": "{count, plural, =0 {Trieu models} one {Aplica a # fila} other {Aplica a # files}}",
-          "note": "Substitueix el que aquestes persones, grups i dominis ja tenen a les files triades. No es desarà res fins que no deseu la política."
-        }
+          "note": "Substitueix el que aquestes persones, grups i dominis ja tenen a les files triades. No es desarà res fins que no deseu la política.",
+          "action": "Què fer",
+          "set": "Donar accés o desactivar",
+          "remove": "Eliminar d'aquestes files",
+          "applyRemove": "{count, plural, =0 {Trieu models} one {Elimina d’# fila} other {Elimina d’# files}}",
+          "noteRemove": "Elimina aquestes persones, grups i dominis de les files triades; després reben el que la família o 'Tothom' rebi. No es desa res fins que no deseu la política.",
+          "filter": "Filtra models",
+          "selectShown": "Selecciona tot el que es mostra",
+          "clear": "Neteja la selecció",
+          "noMatch": "Cap model coincideix.",
+          "applied": "{entries, plural, one {# entrada} other {# entrades}} establertes a {rows, plural, one {# fila} other {# files}}. Encara no desa.",
+          "removed": "{entries, plural, one {# entrada} other {# entrades}} eliminades de {rows, plural, one {# fila} other {# files}}. Encara no desa."
+        },
+        "lead": "Qui pot utilitzar cada model i quantes sol·licituds al dia. Cada fila és una família o un model; cada columna és un públic. Seleccioneu un model o qualsevol cel·la per canviar qui el pot utilitzar."
       },
       "audience": {
         "editorTitle": "Qui pot utilitzar {model}",
@@ -6920,7 +6931,20 @@
         "fromFamily": "de la família",
         "setHere": "Canvia per aquest model",
         "setHereFor": "Canvia {target} per aquest model",
-        "overruled": "Desactivat a la família, la qual preval"
+        "overruled": "Desactivat a la família, la qual preval",
+        "editRow": "Editeu qui pot utilitzar {model}",
+        "editRowHint": "editeu qui el pot utilitzar",
+        "replaces": "{count, plural, one {Ja a aquesta fila: {names}. Afegir substitueix el que rep.} other {Ja a aquesta fila: {names}. Afegir substitueix el que reben.}}",
+        "notAdded": "{count, plural, one {# entrada al camp encara no s'ha afegit.} other {# entrades al camp encara no s'han afegit.}}",
+        "addAndClose": "Afegeix i tanca",
+        "closeAnyway": "Tanca sense afegir",
+        "filter": "Filtra aquesta llista",
+        "filterCount": "Mostrant {shown} de {total}"
+      },
+      "review": {
+        "none": "cap entrada",
+        "becomes": "es converteix en",
+        "removed": "eliminat"
       }
     },
     "previewSourceModelAccess": "Aprovació del model — {list}",

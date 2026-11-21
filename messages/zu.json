@@ -6871,7 +6871,6 @@
           "blocked": "Umuntu oqanjwe omiswe Off angeke ayisebenzise, noma ngabe iqembu lakhe noma i-domain yakhe ithini.",
           "mostSpecific": "Ngaphandle kwalokho, okuthintwa kakhulu okuphathelene nalowo muntu kuyakhetha: iqala ngomuntu oqanjwe, bese liqembu, bese i-domain, bese abanye bonke. Phakathi kwamaqembu amabili noma ama-domain amabili, Off iyahlula."
         },
-        "lead": "Ubani ongayisebenzisa imodeli ngayinye, nezicelo ezingaki ngosuku. Umugqa ngamunye umndeni noma imodeli; ikholomu ngamunye izethameli. Khetha umugqa ukuze ushintshe abakwazi ukuyisebenzisa.",
         "peopleValue": "{allowed} bavunyelwe, {blocked} bavaliwe",
         "bulk": {
           "open": "Engeza ukufinyelela kumamodeli amaningi",
@@ -6879,8 +6878,20 @@
           "models": "Kulawa mamodeli",
           "wholeFamily": "umndeni wonke",
           "apply": "{count, plural, =0 {Khetha imodeli} one {Sebenzisa kumugqa #} other {Sebenzisa kumigqa #}}",
-          "note": "Kufaka esikhundleni salokho abantu laba, amaqembu nama-domain abakutholile kumigqa ekhethiwe. Akukho okugcinawe kuze kube ugcine inqubomgomo."
-        }
+          "note": "Kufaka esikhundleni salokho abantu laba, amaqembu nama-domain abakutholile kumigqa ekhethiwe. Akukho okugcinawe kuze kube ugcine inqubomgomo.",
+          "action": "Okufanele kwenziwe",
+          "set": "Nikeza ukufinyelela noma ukucisha",
+          "remove": "Susa kule migqa",
+          "applyRemove": "{count, plural, =0 {Khetha izimodeli} one {Susa kumugqa ongu-#} other {Susa kumigqa engu-#}}",
+          "noteRemove": "Kususa laba bantu, amaqembu nama-domain emigqeni ekhethiwe; bazothola okuwuthola umndeni noma bonke abanye. Akugcinwa lutho kuze kube ugcina inqubomgomo.",
+          "filter": "Hlunga izimodeli",
+          "selectShown": "Khetha konke okukhonjisiwe",
+          "clear": "Sula ukukhetha",
+          "noMatch": "Ayikho imodeli efanelekayo.",
+          "applied": "{entries, plural, one {# okukhethiwe} other {# okukhethiwe}} kufakwe ku-{rows, plural, one {# umugqa} other {# imigqa}}. Akukagcinwa.",
+          "removed": "{entries, plural, one {# okukhethiwe} other {# okukhethiwe}} kususiwe ku-{rows, plural, one {# umugqa} other {# imigqa}}. Akukagcinwa."
+        },
+        "lead": "Ubani ongasebenzisa imodeli ngayinye, kanye nenani lezicelo ngosuku. Umugqa ngamunye uyimodeli noma umndeni; ikholomu ngayinye iyizithameli. Khetha imodeli, noma iseli, ukuze ushintshe abavumelekile ukuyisebenzisa."
       },
       "audience": {
         "editorTitle": "Ubani ongayisebenzisa i-{model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "kuvela emndenini",
         "setHere": "Shintsha kule modeli",
         "setHereFor": "Shintsha {target} kule modeli",
-        "overruled": "I-Off kumndeni, okuyinto ekhishwa phambili"
+        "overruled": "I-Off kumndeni, okuyinto ekhishwa phambili",
+        "editRow": "Hlela ukuthi ubani ongayisebenzisa i-{model}",
+        "editRowHint": "hlelela abavumelekile ukuyisebenzisa",
+        "replaces": "{count, plural, one {Sekukhona kulomugqa: {names}. Ukwengeza kushintsha okutholayo.} other {Sekukhona kulomugqa: {names}. Ukwengeza kushintsha abakutholayo.}}",
+        "notAdded": "{count, plural, one {# okukwi-field akukafakwa.} other {# okukwi-field akukafakwa.}}",
+        "addAndClose": "Faka bese uvala",
+        "closeAnyway": "Vala ungafaki",
+        "filter": "Hlunga lolu hlu",
+        "filterCount": "Kubukiswa u-{shown} kuka-{total}"
+      },
+      "review": {
+        "none": "akukho okufakiwe",
+        "becomes": "kuba",
+        "removed": "kususiwe"
       }
     },
     "previewSourceModelAccess": "Ukuvunywa kwemodeli — {list}",

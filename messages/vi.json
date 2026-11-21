@@ -6918,7 +6918,6 @@
           "blocked": "Người được chỉ định đặt Tắt sẽ không sử dụng được, bất kể nhóm hay miền của họ.",
           "mostSpecific": "Ngược lại, mục cụ thể nhất bao gồm người đó sẽ quyết định: người được chỉ định, sau đó là nhóm, sau đó là miền, rồi mọi người khác. Nếu có hai nhóm hoặc hai miền, Tắt sẽ được ưu tiên."
         },
-        "lead": "Ai có thể sử dụng từng mô hình và số lượng yêu cầu mỗi ngày. Mỗi dòng là một họ hoặc một mô hình; mỗi cột là một đối tượng. Chọn một dòng để thay đổi ai có thể sử dụng.",
         "peopleValue": "{allowed} cho phép, {blocked} tắt",
         "bulk": {
           "open": "Thêm quyền truy cập trên nhiều mô hình",
@@ -6926,8 +6925,20 @@
           "models": "Trên các mô hình này",
           "wholeFamily": "toàn bộ họ",
           "apply": "{count, plural, =0 {Chọn mô hình} one {Áp dụng cho # dòng} other {Áp dụng cho # dòng}}",
-          "note": "Sẽ thay thế quyền hiện có của những người, nhóm và miền này ở các dòng đã chọn. Chưa lưu gì cho đến khi bạn lưu chính sách."
-        }
+          "note": "Sẽ thay thế quyền hiện có của những người, nhóm và miền này ở các dòng đã chọn. Chưa lưu gì cho đến khi bạn lưu chính sách.",
+          "action": "Hành động",
+          "set": "Cấp quyền truy cập hoặc tắt",
+          "remove": "Xóa khỏi các dòng này",
+          "applyRemove": "{count, plural, =0 {Chọn mô hình} one {Xóa khỏi # dòng} other {Xóa khỏi # dòng}}",
+          "noteRemove": "Gỡ những người, nhóm và miền này khỏi các dòng đã chọn; sau đó họ sẽ nhận quyền của nhóm hoặc của Mọi người khác. Mọi thay đổi chỉ được lưu khi bạn lưu chính sách.",
+          "filter": "Lọc mô hình",
+          "selectShown": "Chọn tất cả hiển thị",
+          "clear": "Bỏ chọn",
+          "noMatch": "Không có mô hình phù hợp.",
+          "applied": "{entries, plural, one {# mục} other {# mục}} đã đặt trên {rows, plural, one {# dòng} other {# dòng}}. Chưa lưu.",
+          "removed": "{entries, plural, one {# mục} other {# mục}} đã xóa khỏi {rows, plural, one {# dòng} other {# dòng}}. Chưa lưu."
+        },
+        "lead": "Ai có thể sử dụng từng mô hình, và số lượt yêu cầu mỗi ngày. Mỗi dòng là một nhóm hoặc một mô hình; mỗi cột là một đối tượng người dùng. Chọn một mô hình, hoặc bất kỳ ô nào, để thay đổi ai được sử dụng."
       },
       "audience": {
         "editorTitle": "Ai có thể sử dụng {model}",
@@ -6951,7 +6962,20 @@
         "fromFamily": "từ họ",
         "setHere": "Thay đổi cho mô hình này",
         "setHereFor": "Thay đổi {target} cho mô hình này",
-        "overruled": "Tắt ở họ, sẽ được ưu tiên"
+        "overruled": "Tắt ở họ, sẽ được ưu tiên",
+        "editRow": "Chỉnh sửa ai có thể dùng {model}",
+        "editRowHint": "chỉnh sửa người được sử dụng",
+        "replaces": "{count, plural, one {Đã có trên dòng này: {names}. Thêm mới sẽ thay thế quyền hiện tại.} other {Đã có trên dòng này: {names}. Thêm mới sẽ thay thế quyền hiện tại của họ.}}",
+        "notAdded": "{count, plural, one {# mục trong trường vẫn chưa được thêm.} other {# mục trong trường vẫn chưa được thêm.}}",
+        "addAndClose": "Thêm và đóng",
+        "closeAnyway": "Đóng mà không thêm",
+        "filter": "Lọc danh sách này",
+        "filterCount": "Hiển thị {shown} trên tổng {total}"
+      },
+      "review": {
+        "none": "không có mục",
+        "becomes": "trở thành",
+        "removed": "đã xóa"
       }
     },
     "previewSourceModelAccess": "Phê duyệt mô hình — {list}",

@@ -6887,7 +6887,6 @@
           "blocked": "Mtu aliyebainishwa aliyewekwa kwenye Zima hawezi kutumia, bila kujali kundi au domain yake inapata nini.",
           "mostSpecific": "Vinginevyo, ingizo maalum zaidi linalomjumuisha mtu linaamua: mtu aliyebainishwa, kisha kundi, kisha domain, kisha wengine wote. Kati ya makundi mawili au domain mbili, Zima inashinda."
         },
-        "lead": "Nani anaweza kutumia kila mfano, na ni idadi gani ya maombi kwa siku. Kila mstari ni familia au mfano; kila safu wima ni hadhira. Chagua mstari kubadilisha nani anaweza kutumia.",
         "peopleValue": "{allowed} wamepewa ruhusa, {blocked} wamezuiwa",
         "bulk": {
           "open": "Ongeza ruhusa kwenye mifano kadhaa",
@@ -6895,8 +6894,20 @@
           "models": "Kwenye mifano hii",
           "wholeFamily": "familia nzima",
           "apply": "{count, plural, =0 {Chagua mifano} one {Tumia kwa mstari #} other {Tumia kwa mistari #}}",
-          "note": "Inabadilisha kile ambacho watu hawa, makundi na domain tayari wana kwenye mistari iliyoangazwa. Hakuna kinachohifadhiwa hadi uhifadhi sera."
-        }
+          "note": "Inabadilisha kile ambacho watu hawa, makundi na domain tayari wana kwenye mistari iliyoangazwa. Hakuna kinachohifadhiwa hadi uhifadhi sera.",
+          "action": "Nini cha kufanya",
+          "set": "Toa ruhusa au zima",
+          "remove": "Ondoa kutoka kwenye mistari hii",
+          "applyRemove": "{count, plural, =0 {Chagua mifano} one {Ondoa kutoka mstari #} other {Ondoa kutoka mistari #}}",
+          "noteRemove": "Inawaondoa watu hawa, vikundi na domains kwenye mistari uliochagua; watapata kile ambacho familia au Wengine wote wanapata. Hakuna kinachohifadhiwa mpaka uhifadhi sera.",
+          "filter": "Chuja mifano",
+          "selectShown": "Chagua zote zinazoonekana",
+          "clear": "Safi uteuzi",
+          "noMatch": "Hakuna mfano uliofanana.",
+          "applied": "{entries, plural, one {ingizo #} other {maingizo #}} imewekwa kwenye {rows, plural, one {mstari #} other {mistari #}}. Bado haijahifadhiwa.",
+          "removed": "{entries, plural, one {ingizo #} other {maingizo #}} imeondolewa kutoka {rows, plural, one {mstari #} other {mistari #}}. Bado haijahifadhiwa."
+        },
+        "lead": "Nani anaweza kutumia kila mfano, na ni maombi mangapi kwa siku. Kila mstari ni familia au mfano; kila safu wima ni hadhira. Chagua mfano, au seli yoyote, kubadilisha ni nani anaweza kuitumia."
       },
       "audience": {
         "editorTitle": "Nani anaweza kutumia {model}",
@@ -6920,7 +6931,20 @@
         "fromFamily": "kutoka kwenye familia",
         "setHere": "Badilisha kwa mfano huu",
         "setHereFor": "Badilisha {target} kwa mfano huu",
-        "overruled": "Imezimwa kwenye familia, ambayo inashinda"
+        "overruled": "Imezimwa kwenye familia, ambayo inashinda",
+        "editRow": "Hariri nani anaweza kutumia {model}",
+        "editRowHint": "hariri nani anaweza kutumia",
+        "replaces": "{count, plural, one {Tayari kwenye mstari huu: {names}. Kuongeza kunabadilisha wanachopata.} other {Tayari kwenye mstari huu: {names}. Kuongeza kunabadilisha wanachopata.}}",
+        "notAdded": "{count, plural, one {ingizo # kwenye fani bado halijaongezwa.} other {maingizo # kwenye fani bado hayajaongezwa.}}",
+        "addAndClose": "Ongeza na funga",
+        "closeAnyway": "Funga bila kuongeza",
+        "filter": "Chuja orodha hii",
+        "filterCount": "Inaonyesha {shown} kati ya {total}"
+      },
+      "review": {
+        "none": "hakuna ingizo",
+        "becomes": "inakuwa",
+        "removed": "imeondolewa"
       }
     },
     "previewSourceModelAccess": "Idhini ya muundo — {list}",

@@ -6871,7 +6871,6 @@
           "blocked": "Mo bara ti sango na mo na Off ape se yeke konyere na wa, nde zingo na domaine na wa ape se yeke konyere.",
           "mostSpecific": "Na sô to, mbi mo na to na wa ti yeke na mo ape se yeke la: bara ti mo sango, na zingo, na domaine, na mo nyenye na mo. Na nga zingo se, na domaine se, Off yeke la."
         },
-        "lead": "Mo ape se yeke konyere na modeli kû na na kîre na mo ape se yeke yeke demande na mbë ti yeke. Linjî na modele na modele, linjî na audience. Sélé linjî na mo se yeke konyere.",
         "peopleValue": "{allowed} yeke konyere, {blocked} off",
         "bulk": {
           "open": "Pâta konyere na modele mingi",
@@ -6879,8 +6878,20 @@
           "models": "Na modele na wa",
           "wholeFamily": "na famille nyenye",
           "apply": "{count, plural, =0 {Sélé modele} one {Pâta na linjî #} other {Pâta na linjî #}}",
-          "note": "Konyere se, mo, zingo na domaine ape se yeke na wa na linjî na yi. Kêkê ape yeke tî mbi na tu mbi policy."
-        }
+          "note": "Konyere se, mo, zingo na domaine ape se yeke na wa na linjî na yi. Kêkê ape yeke tî mbi na tu mbi policy.",
+          "action": "Lê tî bû",
+          "set": "Pêsé ti sâ na sâ ti la",
+          "remove": "Gbé na rows mo so",
+          "applyRemove": "{count, plural, =0 {Fôsê ti models} one {Gbé na row ti #} other {Gbé na rows ti #}}",
+          "noteRemove": "Mo yeke sâ ti ngâ ti people, groups na domain na row mo so; oko ti bâ sâ ti family na Everyone else yabê. Dû ti la ti âda ti policy oko kada dî.",
+          "filter": "Fôsê ti models",
+          "selectShown": "Kpâtî so ti yeke mbi so",
+          "clear": "Fâ ti kpâtî so",
+          "noMatch": "Model oko yeke na yê.",
+          "applied": "{entries, plural, one {Entry ti #} other {Entries ti #}} pêsé na {rows, plural, one {row ti #} other {rows ti #}}. Dû ti la kada dî.",
+          "removed": "{entries, plural, one {Entry ti #} other {Entries ti #}} gbé na {rows, plural, one {row ti #} other {rows ti #}}. Dû ti la kada dî."
+        },
+        "lead": "Ngâ nde ti mo na mo yeke sâ na model, na mo yeke sâ na tendeni ti la. Mo na mo da model, na or wa row ti family na model; or wa column ti audience. Sâ ti model na cell mo so, mo na mo yeke sâ ti la."
       },
       "audience": {
         "editorTitle": "Mo ape se yeke konyere na {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "na famille na wa",
         "setHere": "Konyere na modele na wa",
         "setHereFor": "Konyere {target} na modele na wa",
-        "overruled": "Off na famille, se yeke la"
+        "overruled": "Off na famille, se yeke la",
+        "editRow": "Komba ngâ nde ti mo na yeke sâ ti {model}",
+        "editRowHint": "Komba ngâ nde ti mo na yeke sâ ti la",
+        "replaces": "{count, plural, one {Kitini na row mo so: {names}. Kêtê pêsé ti yeke ti la.} other {Kitini na row mo so: {names}. Kêtê pêsé ti yeke ti la bâ.}}",
+        "notAdded": "{count, plural, one {Entry ti # na field oko pêsé kada dî.} other {Entries ti # na field oko pêsé kada dî.}}",
+        "addAndClose": "Pêsé na fâ",
+        "closeAnyway": "Fâ oko pêsé",
+        "filter": "Fôsê na list mo so",
+        "filterCount": "Ti yeke mbi: {shown} na {total}"
+      },
+      "review": {
+        "none": "Entry oko",
+        "becomes": "sô tî",
+        "removed": "gbé"
       }
     },
     "previewSourceModelAccess": "Model ti yame — {list}",

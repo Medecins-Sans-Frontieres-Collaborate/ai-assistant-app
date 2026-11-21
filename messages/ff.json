@@ -6871,7 +6871,6 @@
           "blocked": "So daggiɗoore moɓɓiɗo Off, mo waawaa huutora, dùuniya group walla domain makko.",
           "mostSpecific": "Ko faalaa, fayda juuti e mo piɗi daggiɗoore, woni group, domain, wala kala. So group’en walla domain’en ɗiɗi, Off moɗɗi jooɗi."
         },
-        "lead": "Mo waawaa huutora model kala, e yalɓe requestji lewru kala. Rigal kala ko family wala model; column kala ko audience. Soɓo rigal kadi so mo waawaani.",
         "peopleValue": "{allowed} waawaani, {blocked} off",
         "bulk": {
           "open": "Ɗaɓɓo access e model’en ɗiɗi",
@@ -6879,8 +6878,20 @@
           "models": "E model’en goɗɗi",
           "wholeFamily": "familii ɗoo",
           "apply": "{count, plural, =0 {Suɓo model’en} one {Naatu e # rigal} other {Naatu e # rigal'en}}",
-          "note": "Mo soodi ɗum ko ɗiigi daggiɗoore, group’en, domain’en e rigalji suɓa. Faa mo jaabi policy, ɗum soodi."
-        }
+          "note": "Mo soodi ɗum ko ɗiigi daggiɗoore, group’en, domain’en e rigalji suɓa. Faa mo jaabi policy, ɗum soodi.",
+          "action": "Ko ɗum woni wa?",
+          "set": "Hokke nder walla baɗi ɗum",
+          "remove": "Momtu e row ɗin",
+          "applyRemove": "{count, plural, =0 {Suɓo model} one {Momtu e # row} other {Momtu e # row-ɗi}}",
+          "noteRemove": "Momtu neɗɗo, group e domain ɗin e row suɓaɗi; ɓe njogi ko ɗum woni family walla ko neɗɗo fof. Jooɗaaka ɗum ndon ngañir, o jogaama hoore baɗnir policy.",
+          "filter": "Suɓo model",
+          "selectShown": "Suɓo ɗi neɓi",
+          "clear": "Momtu suɓaɗi",
+          "noMatch": "Model walaa fannu.",
+          "applied": "{entries, plural, one {# entry} other {# entry-ɗi}} hokki e {rows, plural, one {# row} other {# row-ɗi}}. O jogaama baɗnir.",
+          "removed": "{entries, plural, one {# entry} other {# entry-ɗi}} momti e {rows, plural, one {# row} other {# row-ɗi}}. O jogaama baɗnir."
+        },
+        "lead": "Ko homboɗon hokke model kala, e ko min njeeri ɗum so ɓadi e ñalngu. Row kala mo family walla model; column kala mo audience. Fann model, walla cell kala, ngam waañde homboɗon hokke ɗum."
       },
       "audience": {
         "editorTitle": "Mo waawaa huutora {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "e family",
         "setHere": "Waylu model ɗoo",
         "setHereFor": "Waylu {target} e model ɗoo",
-        "overruled": "Off e family, moɗɗi jooɗi"
+        "overruled": "Off e family, moɗɗi jooɗi",
+        "editRow": "Waannde homboɗon hokke {model}",
+        "editRowHint": "waannde homboɗon hokke ɗum",
+        "replaces": "{count, plural, one {Ɓe woni e row ɗin: {names}. Suɓde baɗni ɗum homboɗon.} other {Ɓe woni e row ɗin: {names}. Suɓde baɗni ɓe homboɗon.}}",
+        "notAdded": "{count, plural, one {# entry e field o jogaama baɗnir.} other {# entry-ɗi e field ɓe jogaama baɗnir.}}",
+        "addAndClose": "Hokke e uddita",
+        "closeAnyway": "Uddita walaa hokke",
+        "filter": "Suɓo list ngol",
+        "filterCount": "Neɓi {shown} e {total}"
+      },
+      "review": {
+        "none": "entry walaa",
+        "becomes": "ɗum jogi",
+        "removed": "momti"
       }
     },
     "previewSourceModelAccess": "Cuɓoraa model — {list}",

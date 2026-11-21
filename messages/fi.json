@@ -6887,7 +6887,6 @@
           "blocked": "Jos nimetylle henkilölle on asetettu Off, hän ei voi käyttää sitä riippumatta ryhmästä tai verkkotunnuksesta.",
           "mostSpecific": "Muuten henkilölle sopivin tarkin merkintä ratkaisee: ensin nimetty henkilö, sitten ryhmä, sitten verkkotunnus ja lopuksi kaikki muut. Kahden ryhmän tai kahden verkkotunnuksen välillä Off voittaa."
         },
-        "lead": "Kuka voi käyttää mitäkin mallia ja kuinka monta pyyntöä päivässä. Jokainen rivi on perhe tai malli; jokainen sarake on kohdeyleisö. Valitse rivi muuttaaksesi, kuka voi sitä käyttää.",
         "peopleValue": "{allowed} sallittu, {blocked} pois päältä",
         "bulk": {
           "open": "Lisää käyttöoikeuksia useaan malliin",
@@ -6895,8 +6894,20 @@
           "models": "Näissä malleissa",
           "wholeFamily": "koko perhe",
           "apply": "{count, plural, =0 {Valitse mallit} one {Käytä # riviin} other {Käytä # riviin}}",
-          "note": "Korvaa näille henkilöille, ryhmille ja verkkotunnuksille jo annetut oikeudet valituilla riveillä. Mikään ei tallennu ennen kuin tallennat käytäntön."
-        }
+          "note": "Korvaa näille henkilöille, ryhmille ja verkkotunnuksille jo annetut oikeudet valituilla riveillä. Mikään ei tallennu ennen kuin tallennat käytäntön.",
+          "action": "Toiminto",
+          "set": "Anna käyttöoikeus tai poista se",
+          "remove": "Poista näiltä riveiltä",
+          "applyRemove": "{count, plural, =0 {Valitse mallit} one {Poista yhdeltä riviltä} other {Poista # riviltä}}",
+          "noteRemove": "Poistaa nämä henkilöt, ryhmät ja domainit valituilta riveiltä; he saavat tämän jälkeen samat oikeudet kuin perhe tai Kaikki muut. Mitään ei tallenneta ennen kuin tallennat käytännön.",
+          "filter": "Suodata malleja",
+          "selectShown": "Valitse kaikki näkyvät",
+          "clear": "Tyhjennä valinnat",
+          "noMatch": "Yhtään mallia ei löytynyt.",
+          "applied": "{entries, plural, one {# merkintä} other {# merkintää}} asetettu {rows, plural, one {# riville} other {# riville}}. Ei vielä tallennettu.",
+          "removed": "{entries, plural, one {# merkintä} other {# merkintää}} poistettu {rows, plural, one {# riviltä} other {# riviltä}}. Ei vielä tallennettu."
+        },
+        "lead": "Kuka voi käyttää kutakin mallia ja montako pyyntöä päivässä. Jokainen rivi on perhe tai malli; jokainen sarake on kohderyhmä. Valitse malli tai solu muuttaaksesi käyttöoikeuksia."
       },
       "audience": {
         "editorTitle": "Kuka voi käyttää mallia {model}",
@@ -6920,7 +6931,20 @@
         "fromFamily": "perheestä",
         "setHere": "Muuta tälle mallille",
         "setHereFor": "Muuta {target} tälle mallille",
-        "overruled": "Pois päältä perheessä, joka voittaa"
+        "overruled": "Pois päältä perheessä, joka voittaa",
+        "editRow": "Muokkaa kuka voi käyttää mallia {model}",
+        "editRowHint": "muokkaa käyttäjiä",
+        "replaces": "{count, plural, one {Tällä rivillä jo: {names}. Lisääminen korvaa nykyisen oikeuden.} other {Tällä rivillä jo: {names}. Lisääminen korvaa nykyiset oikeudet.}}",
+        "notAdded": "{count, plural, one {# kentän merkintää ei ole vielä lisätty.} other {# kentän merkintää ei ole vielä lisätty.}}",
+        "addAndClose": "Lisää ja sulje",
+        "closeAnyway": "Sulje lisäämättä",
+        "filter": "Suodata tämä lista",
+        "filterCount": "Näytetään {shown} / {total}"
+      },
+      "review": {
+        "none": "ei merkintää",
+        "becomes": "muuttuu",
+        "removed": "poistettu"
       }
     },
     "previewSourceModelAccess": "Mallin hyväksyntä — {list}",

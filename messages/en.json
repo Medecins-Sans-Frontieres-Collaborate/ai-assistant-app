@@ -6530,7 +6530,7 @@
           "blocked": "A named person set to Off cannot use it, whatever their group or domain gets.",
           "mostSpecific": "Otherwise the most specific entry that includes the person decides: a named person, then a group, then a domain, then everyone else. Between two groups, or two domains, Off wins."
         },
-        "lead": "Who can use each model, and how many requests a day. Each row is a family or a model; each column is an audience. Select a row to change who can use it.",
+        "lead": "Who can use each model, and how many requests a day. Each row is a family or a model; each column is an audience. Select a model, or any cell, to change who can use it.",
         "peopleValue": "{allowed} allowed, {blocked} off",
         "bulk": {
           "open": "Add access on several models",
@@ -6538,7 +6538,18 @@
           "models": "On these models",
           "wholeFamily": "whole family",
           "apply": "{count, plural, =0 {Choose models} one {Apply to # row} other {Apply to # rows}}",
-          "note": "Replaces what these people, groups and domains already have on the chosen rows. Nothing is saved until you save the policy."
+          "note": "Replaces what these people, groups and domains already have on the chosen rows. Nothing is saved until you save the policy.",
+          "action": "What to do",
+          "set": "Give access or switch it off",
+          "remove": "Remove from these rows",
+          "applyRemove": "{count, plural, =0 {Choose models} one {Remove from # row} other {Remove from # rows}}",
+          "noteRemove": "Takes these people, groups and domains off the chosen rows; they then get what the family or Everyone else gets. Nothing is saved until you save the policy.",
+          "filter": "Filter models",
+          "selectShown": "Select all shown",
+          "clear": "Clear selection",
+          "noMatch": "No model matches.",
+          "applied": "{entries, plural, one {# entry} other {# entries}} set on {rows, plural, one {# row} other {# rows}}. Not saved yet.",
+          "removed": "{entries, plural, one {# entry} other {# entries}} removed from {rows, plural, one {# row} other {# rows}}. Not saved yet."
         }
       },
       "audience": {
@@ -6563,7 +6574,20 @@
         "fromFamily": "from the family",
         "setHere": "Change for this model",
         "setHereFor": "Change {target} for this model",
-        "overruled": "Off on the family, which wins"
+        "overruled": "Off on the family, which wins",
+        "editRow": "Edit who can use {model}",
+        "editRowHint": "edit who can use it",
+        "replaces": "{count, plural, one {Already on this row: {names}. Adding replaces what it gets.} other {Already on this row: {names}. Adding replaces what they get.}}",
+        "notAdded": "{count, plural, one {# entry in the field is not added yet.} other {# entries in the field are not added yet.}}",
+        "addAndClose": "Add and close",
+        "closeAnyway": "Close without adding",
+        "filter": "Filter this list",
+        "filterCount": "Showing {shown} of {total}"
+      },
+      "review": {
+        "none": "no entry",
+        "becomes": "becomes",
+        "removed": "removed"
       }
     },
     "tabsLabel": "Limits sections",

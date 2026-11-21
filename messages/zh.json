@@ -6918,7 +6918,6 @@
           "blocked": "被设为关闭（Off）的指定人员无法使用，无论其所属群组或域名的设置如何。",
           "mostSpecific": "否则，由包含该人员的最具体条目决定：先是指定人员，然后是群组，再是域名，最后是其他所有人。两个群组或两个域名之间，关闭（Off）优先。"
         },
-        "lead": "每个模型谁可以使用，以及每天的请求次数。每行代表一个系列或模型，每列为受众。选择某一行可更改谁可以使用。",
         "peopleValue": "{allowed}可用，{blocked}关闭",
         "bulk": {
           "open": "为多个模型添加访问权限",
@@ -6926,8 +6925,20 @@
           "models": "在这些模型上",
           "wholeFamily": "整个系列",
           "apply": "{count, plural, =0 {选择模型} one {应用于#行} other {应用于#行}}",
-          "note": "会替换这些人员、群组和域名在所选行上已有的设置。只有在保存策略后才会生效。"
-        }
+          "note": "会替换这些人员、群组和域名在所选行上已有的设置。只有在保存策略后才会生效。",
+          "action": "操作选择",
+          "set": "授予访问权限或关闭",
+          "remove": "从这些行中移除",
+          "applyRemove": "{count, plural, =0 {请选择模型} one {从 # 行移除} other {从 # 行移除}}",
+          "noteRemove": "将这些人员、群组和域从所选行移除；他们将获得该系列或“其他人”的权限。在保存策略前不会保存任何更改。",
+          "filter": "筛选模型",
+          "selectShown": "选择全部显示项",
+          "clear": "清除选择",
+          "noMatch": "无匹配的模型。",
+          "applied": "{entries, plural, one {# 项} other {# 项}} 已设置于 {rows, plural, one {# 行} other {# 行}}。尚未保存。",
+          "removed": "{entries, plural, one {# 项} other {# 项}} 已从 {rows, plural, one {# 行} other {# 行}} 移除。尚未保存。"
+        },
+        "lead": "每个模型谁可以使用，每天可请求次数。每行代表一个模型系列或模型，每列代表一个受众。选择某个模型或任意单元格，可更改其使用权限。"
       },
       "audience": {
         "editorTitle": "谁可以使用{model}",
@@ -6951,7 +6962,20 @@
         "fromFamily": "来自系列",
         "setHere": "仅更改此模型",
         "setHereFor": "更改{target}在此模型的权限",
-        "overruled": "系列设置为关闭（Off），已覆盖"
+        "overruled": "系列设置为关闭（Off），已覆盖",
+        "editRow": "编辑谁可以使用 {model}",
+        "editRowHint": "编辑使用权限",
+        "replaces": "{count, plural, one {本行已有：{names}。添加后会替换其权限。} other {本行已有：{names}。添加后会替换其权限。}}",
+        "notAdded": "{count, plural, one {字段内有 # 项尚未添加。} other {字段内有 # 项尚未添加。}}",
+        "addAndClose": "添加并关闭",
+        "closeAnyway": "不添加并关闭",
+        "filter": "筛选此列表",
+        "filterCount": "显示 {shown} / {total}"
+      },
+      "review": {
+        "none": "无条目",
+        "becomes": "变为",
+        "removed": "已移除"
       }
     },
     "previewSourceModelAccess": "模型审批 — {list}",

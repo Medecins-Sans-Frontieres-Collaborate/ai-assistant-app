@@ -6871,7 +6871,6 @@
           "blocked": "Munthu wotchedwa amene wayikidwa Off sangathe kugwiritsa ntchito, ngakhale gulu lake kapena domain yake yayikidwa bwanji.",
           "mostSpecific": "Kupanda apo, amene ali ndi zolemba zenizeni kwambiri zomwe zikuphatikiza munthuyo ndiye amasankha: choyamba munthu wotchedwa, kenako gulu, kenako domain, kenako aliyense wina. Pakati pa magulu awiri kapena ma domain awiri, Off imawina."
         },
-        "lead": "Ndani angagwiritse ntchito model iliyonse, komanso kuchuluka kwa mapempho tsiku lililonse. Mzere uliwonse ndi banja kapena model; mzati uliwonse ndi omvera ake. Sankhani mzere kuti musinthe amene angagwiritse ntchito.",
         "peopleValue": "{allowed} aloledwa, {blocked} zaletsedwa",
         "bulk": {
           "open": "Onjezani mwayi pa ma models angapo",
@@ -6879,8 +6878,20 @@
           "models": "Pa ma models awa",
           "wholeFamily": "banja lonse",
           "apply": "{count, plural, =0 {Sankhani ma models} one {Ikani pa mzere #} other {Ikani pa mizere #}}",
-          "note": "Izi zimalowetsa m'malo zomwe anthu, magulu ndi ma domain ali nazo pa mizere yosankhidwa. Palibe chomwe chisungidwa mpaka mutasunga ndondomekoyi."
-        }
+          "note": "Izi zimalowetsa m'malo zomwe anthu, magulu ndi ma domain ali nazo pa mizere yosankhidwa. Palibe chomwe chisungidwa mpaka mutasunga ndondomekoyi.",
+          "action": "Zomwe mungachite",
+          "set": "Patsani chilolezo kapena chotsani",
+          "remove": "Chotsani kuchokera mu mizere iyi",
+          "applyRemove": "{count, plural, =0 {Sankhani zitsanzo} one {Chotsani kuchokera mu mzere #} other {Chotsani kuchokera mu mizere #}}",
+          "noteRemove": "Anthuwa, magulu ndi ma domain achotsedwa mu mizere imeneyi; adzalandira zimene banja kapena Ena onse amalandira. Palibe chomwe chimasungidwa mpaka mutasunga ndondomeko.",
+          "filter": "Sefa zitsanzo",
+          "selectShown": "Sankhani zonse zikuonekazo",
+          "clear": "Chotsani zosankhidwa",
+          "noMatch": "Palibe chitsanzo chokwanira.",
+          "applied": "{entries, plural, one {# cholemba} other {# zolemba}} zasankhidwa pa {rows, plural, one {# mzere} other {# mizere}}. Sanasungidwebe.",
+          "removed": "{entries, plural, one {# cholemba} other {# zolemba}} zachotsedwa pa {rows, plural, one {# mzere} other {# mizere}}. Sanasungidwebe."
+        },
+        "lead": "Amene angagwiritse ntchito chitsanzo chilichonse, ndi kuchuluka kwa pempho patsiku. Mzere uliwonse ndi banja kapena chitsanzo; kolamu iliyonse ndi omvera. Sankhani chitsanzo kapena selo iliyonse kuti musinthe amene angagwiritse ntchito."
       },
       "audience": {
         "editorTitle": "Ndani angagwiritse ntchito {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "kuchokera ku banja",
         "setHere": "Sinthani pa model iyi",
         "setHereFor": "Sinthani {target} pa model iyi",
-        "overruled": "Zaletsedwa pa banja, ndipo izi ndizo zotsatira"
+        "overruled": "Zaletsedwa pa banja, ndipo izi ndizo zotsatira",
+        "editRow": "Sinthani amene angagwiritse ntchito {model}",
+        "editRowHint": "sintha amene angagwiritse ntchito",
+        "replaces": "{count, plural, one {Alipo kale pa mzere uwu: {names}. Kuwonjezera kusintha zomwe amapeza.} other {Alipo kale pa mzere uwu: {names}. Kuwonjezera kusintha zomwe amapeza.}}",
+        "notAdded": "{count, plural, one {# cholemba mu gawo la zomwe sizinawonjezedwebe.} other {# zolemba mu gawo la zomwe sizinawonjezedwebe.}}",
+        "addAndClose": "Onjezani ndi kutseka",
+        "closeAnyway": "Tsekani popanda kuonjezera",
+        "filter": "Sefa mndandanda uwu",
+        "filterCount": "Zikuoneka {shown} mwa {total}"
+      },
+      "review": {
+        "none": "palibe cholemba",
+        "becomes": "zasanduka",
+        "removed": "zachotsedwa"
       }
     },
     "previewSourceModelAccess": "Kuvomereza chitsanzo — {list}",

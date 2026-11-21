@@ -6871,7 +6871,6 @@
           "blocked": "Osoba kojoj je postavljeno na 'Isključeno' ne može koristiti, bez obzira na grupu ili domen.",
           "mostSpecific": "Inače odlučuje najprecizniji unos koji uključuje osobu: prvo imenovana osoba, zatim grupa, potom domen, pa svi ostali. Između dve grupe ili dva domena, 'Isključeno' je presudno."
         },
-        "lead": "Ko može koristiti svaki model i koliko zahteva dnevno. Svaki red je porodica ili model; svaka kolona je publika. Izaberite red za promenu dozvola korišćenja.",
         "peopleValue": "{allowed} dozvoljeno, {blocked} isključeno",
         "bulk": {
           "open": "Dodaj pristup na više modela",
@@ -6879,8 +6878,20 @@
           "models": "Na ovim modelima",
           "wholeFamily": "cela porodica",
           "apply": "{count, plural, =0 {Izaberite modele} one {Primeni na # red} other {Primeni na # redova}}",
-          "note": "Zamenjuje postojeće dozvole za ove osobe, grupe i domene na izabranim redovima. Ništa neće biti sačuvano dok ne sačuvate politiku."
-        }
+          "note": "Zamenjuje postojeće dozvole za ove osobe, grupe i domene na izabranim redovima. Ništa neće biti sačuvano dok ne sačuvate politiku.",
+          "action": "Šta uraditi",
+          "set": "Dodeli pristup ili isključi",
+          "remove": "Ukloni iz ovih redova",
+          "applyRemove": "{count, plural, =0 {Izaberite modele} one {Ukloni iz # reda} other {Ukloni iz # redova}}",
+          "noteRemove": "Uklanja ove osobe, grupe i domene iz izabranih redova; tada dobijaju ono što dobija porodica ili Svi ostali. Ništa nije sačuvano dok ne sačuvate politiku.",
+          "filter": "Filtriraj modele",
+          "selectShown": "Izaberi sve prikazane",
+          "clear": "Obriši izbor",
+          "noMatch": "Nijedan model ne odgovara.",
+          "applied": "{entries, plural, one {# unos} other {# unosa}} postavljeno na {rows, plural, one {# red} other {# redova}}. Nije još sačuvano.",
+          "removed": "{entries, plural, one {# unos} other {# unosa}} uklonjeno iz {rows, plural, one {# reda} other {# redova}}. Nije još sačuvano."
+        },
+        "lead": "Ko može da koristi svaki model i koliko zahteva dnevno. Svaki red predstavlja porodicu ili model; svaka kolona publiku. Izaberite model ili ćeliju da promenite ko može da ga koristi."
       },
       "audience": {
         "editorTitle": "Ko može koristiti {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "iz porodice",
         "setHere": "Promeni za ovaj model",
         "setHereFor": "Promeni {target} za ovaj model",
-        "overruled": "Isključeno na porodici – presudno"
+        "overruled": "Isključeno na porodici – presudno",
+        "editRow": "Uredi ko može da koristi {model}",
+        "editRowHint": "uredi ko može da koristi",
+        "replaces": "{count, plural, one {Već na ovom redu: {names}. Dodavanje zamenjuje ono što dobija.} other {Već na ovom redu: {names}. Dodavanje zamenjuje ono što dobijaju.}}",
+        "notAdded": "{count, plural, one {# unos u polju još nije dodat.} other {# unosa u polju još nisu dodata.}}",
+        "addAndClose": "Dodaj i zatvori",
+        "closeAnyway": "Zatvori bez dodavanja",
+        "filter": "Filtriraj ovu listu",
+        "filterCount": "Prikazano {shown} od {total}"
+      },
+      "review": {
+        "none": "nema unosa",
+        "becomes": "postaje",
+        "removed": "uklonjeno"
       }
     },
     "previewSourceModelAccess": "Odobrenje modela — {list}",

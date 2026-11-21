@@ -6871,7 +6871,6 @@
           "blocked": "Yon moun ki mete sou Off pa ka itilize li, kèlkeswa sa gwoup oswa domen yo jwenn.",
           "mostSpecific": "Sinon, antre ki pi espesifik la ki enkli moun nan ap deside : yon moun ki nonmen, answit yon gwoup, answit yon domen, epi tout lòt moun. Ant de gwoup oswa de domen, Off genyen."
         },
-        "lead": "Ki moun ki ka itilize chak modèl, ak konbyen demann pa jou. Chak liy se yon fanmi oswa yon modèl; chak kolòn se yon odyans. Chwazi yon liy pou chanje ki moun ki ka itilize li.",
         "peopleValue": "{allowed} pèmèt, {blocked} fèmen",
         "bulk": {
           "open": "Ajoute aksè sou plizyè modèl",
@@ -6879,8 +6878,20 @@
           "models": "Sou modèl sa yo",
           "wholeFamily": "tout fanmi an",
           "apply": "{count, plural, =0 {Chwazi modèl} one {Aplike sou # liy} other {Aplike sou # liy yo}}",
-          "note": "Sa ranplase sa moun sa yo, gwoup ak domen yo deja genyen sou liy yo chwazi yo. Anyen pap anrejistre jiskaske ou sove règleman an."
-        }
+          "note": "Sa ranplase sa moun sa yo, gwoup ak domen yo deja genyen sou liy yo chwazi yo. Anyen pap anrejistre jiskaske ou sove règleman an.",
+          "action": "Kisa pou fè",
+          "set": "Bay aksè oswa dezaktive",
+          "remove": "Retire nan liy sa yo",
+          "applyRemove": "{count, plural, =0 {Chwazi modèl yo} one {Retire nan # liy} other {Retire nan # liy}}",
+          "noteRemove": "Retire moun, gwoup ak domèn sa yo nan liy yo chwazi yo; apre sa yo pral resevwa sa fanmi an oswa Tout lòt moun resevwa. Anyen pap anrejistre si w pa sove règleman an.",
+          "filter": "Filtre modèl yo",
+          "selectShown": "Chwazi tout sa ki afiche",
+          "clear": "Efase seleksyon an",
+          "noMatch": "Pa gen okenn modèl ki koresponn.",
+          "applied": "{entries, plural, one {# antite} other {# antite}} mete sou {rows, plural, one {# liy} other {# liy}}. Pa ankò sove.",
+          "removed": "{entries, plural, one {# antite} other {# antite}} retire nan {rows, plural, one {# liy} other {# liy}}. Pa ankò sove."
+        },
+        "lead": "Ki moun ki ka sèvi ak chak modèl, ak konbyen demann pa jou. Chak liy se yon fanmi oswa yon modèl; chak kolòn se yon kategori itilizatè. Chwazi yon modèl oswa nenpòt selil pou chanje ki moun ki ka sèvi avè l."
       },
       "audience": {
         "editorTitle": "Ki moun ki ka itilize {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "soti nan fanmi an",
         "setHere": "Chanje pou modèl sa a",
         "setHereFor": "Chanje {target} pou modèl sa a",
-        "overruled": "Fèmen sou fanmi an, li genyen"
+        "overruled": "Fèmen sou fanmi an, li genyen",
+        "editRow": "Modifye ki moun ki ka itilize {model}",
+        "editRowHint": "modifye ki moun ki ka sèvi avè l",
+        "replaces": "{count, plural, one {Deja sou liy sa a: {names}. Ajoute ap ranplase sa l ap resevwa.} other {Deja sou liy sa a: {names}. Ajoute ap ranplase sa yo resevwa.}}",
+        "notAdded": "{count, plural, one {# antite nan chan sa a poko ajoute.} other {# antite nan chan sa a poko ajoute.}}",
+        "addAndClose": "Ajoute epi fèmen",
+        "closeAnyway": "Fèmen san ajoute",
+        "filter": "Filtre lis sa a",
+        "filterCount": "Montre {shown} sou {total}"
+      },
+      "review": {
+        "none": "pa gen antite",
+        "becomes": "vin",
+        "removed": "retire"
       }
     },
     "previewSourceModelAccess": "Apwobasyon modèl — {list}",

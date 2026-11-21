@@ -6887,7 +6887,6 @@
           "blocked": "O persoană numită setată pe Off nu poate folosi, indiferent de grupul sau domeniul său.",
           "mostSpecific": "În rest, cea mai specifică înscriere care include persoana decide: întâi persoana numită, apoi grupul, apoi domeniul, apoi restul. Între două grupuri sau două domenii, Off câștigă."
         },
-        "lead": "Cine poate folosi fiecare model și câte solicitări pe zi. Fiecare rând este o familie sau un model; fiecare coloană este un public. Selectați un rând pentru a modifica cine poate folosi.",
         "peopleValue": "{allowed} permise, {blocked} dezactivate",
         "bulk": {
           "open": "Adăugați acces pe mai multe modele",
@@ -6895,8 +6894,20 @@
           "models": "Pe aceste modele",
           "wholeFamily": "întreaga familie",
           "apply": "{count, plural, =0 {Alegeți modele} one {Aplică la # rând} other {Aplică la # rânduri}}",
-          "note": "Înlocuiește ce au deja aceste persoane, grupuri și domenii pe rândurile selectate. Nimic nu se salvează până nu salvați politica."
-        }
+          "note": "Înlocuiește ce au deja aceste persoane, grupuri și domenii pe rândurile selectate. Nimic nu se salvează până nu salvați politica.",
+          "action": "Ce trebuie făcut",
+          "set": "Oferă acces sau dezactivează",
+          "remove": "Elimină din aceste rânduri",
+          "applyRemove": "{count, plural, =0 {Selectați modele} one {Elimină din # rând} other {Elimină din # rânduri}}",
+          "noteRemove": "Elimină aceste persoane, grupuri și domenii din rândurile selectate; apoi vor primi ceea ce primește familia sau Restul utilizatorilor. Nimic nu se salvează până nu salvați politica.",
+          "filter": "Filtrează modele",
+          "selectShown": "Selectează toate afișate",
+          "clear": "Șterge selecția",
+          "noMatch": "Niciun model nu se potrivește.",
+          "applied": "{entries, plural, one {# intrare} other {# intrări}} setate pe {rows, plural, one {# rând} other {# rânduri}}. Încă nesalvate.",
+          "removed": "{entries, plural, one {# intrare} other {# intrări}} eliminate din {rows, plural, one {# rând} other {# rânduri}}. Încă nesalvate."
+        },
+        "lead": "Cine poate folosi fiecare model și câte cereri pe zi. Fiecare rând reprezintă o familie sau un model; fiecare coloană reprezintă un tip de audiență. Selectați un model sau orice celulă pentru a modifica cine îl poate utiliza."
       },
       "audience": {
         "editorTitle": "Cine poate folosi {model}",
@@ -6920,7 +6931,20 @@
         "fromFamily": "din familie",
         "setHere": "Schimbă pentru acest model",
         "setHereFor": "Schimbă {target} pentru acest model",
-        "overruled": "Dezactivat pe familie, care prevalează"
+        "overruled": "Dezactivat pe familie, care prevalează",
+        "editRow": "Editează cine poate folosi {model}",
+        "editRowHint": "editează cine îl poate folosi",
+        "replaces": "{count, plural, one {Deja pe acest rând: {names}. Adăugarea înlocuiește ceea ce primește.} other {Deja pe acest rând: {names}. Adăugarea înlocuiește ceea ce primesc.}}",
+        "notAdded": "{count, plural, one {# intrare din câmp nu este adăugată încă.} other {# intrări din câmp nu sunt adăugate încă.}}",
+        "addAndClose": "Adaugă și închide",
+        "closeAnyway": "Închide fără a adăuga",
+        "filter": "Filtrează această listă",
+        "filterCount": "Afișate {shown} din {total}"
+      },
+      "review": {
+        "none": "nici o intrare",
+        "becomes": "devine",
+        "removed": "eliminat"
       }
     },
     "previewSourceModelAccess": "Aprobare model — {list}",

@@ -752,6 +752,7 @@ const Row: FC<RowProps> = ({
                 origins.current.row = element;
               }}
               aria-expanded={selected !== null}
+              aria-label={`${row.label}, ${t('modelAccess.audience.editRowHint')}`}
               title={t('modelAccess.audience.editRow', { model: row.label })}
               onClick={() => onSelect('row')}
               className="group inline-flex items-center gap-1 rounded text-left font-[inherit] underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
@@ -762,10 +763,6 @@ const Row: FC<RowProps> = ({
                 aria-hidden="true"
                 className="shrink-0 text-gray-500 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
               />
-              <span className="sr-only">
-                {' '}
-                {t('modelAccess.audience.editRowHint')}
-              </span>
             </button>
             {!row.known && (
               <span className={ADMIN_MUTED} title={t('unknownQualifierHint')}>

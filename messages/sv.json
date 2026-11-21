@@ -6887,7 +6887,6 @@
           "blocked": "En namngiven person som är avstängd kan inte använda det, oavsett deras grupp eller domän.",
           "mostSpecific": "Annars bestämmer den mest specifika posten som inkluderar personen: först en namngiven person, sedan en grupp, sedan en domän, sedan alla andra. Mellan två grupper eller två domäner vinner Av."
         },
-        "lead": "Vem som kan använda varje modell och hur många förfrågningar per dag. Varje rad är en familj eller en modell; varje kolumn är en målgrupp. Välj en rad för att ändra vem som kan använda den.",
         "peopleValue": "{allowed} tillåtna, {blocked} avstängda",
         "bulk": {
           "open": "Lägg till åtkomst på flera modeller",
@@ -6895,8 +6894,20 @@
           "models": "På dessa modeller",
           "wholeFamily": "hela familjen",
           "apply": "{count, plural, =0 {Välj modeller} one {Tillämpa på # rad} other {Tillämpa på # rader}}",
-          "note": "Ersätter vad dessa personer, grupper och domäner redan har på de valda raderna. Inget sparas förrän du sparar policyn."
-        }
+          "note": "Ersätter vad dessa personer, grupper och domäner redan har på de valda raderna. Inget sparas förrän du sparar policyn.",
+          "action": "Vad ska göras",
+          "set": "Ge åtkomst eller stäng av den",
+          "remove": "Ta bort från dessa rader",
+          "applyRemove": "{count, plural, =0 {Välj modeller} one {Ta bort från # rad} other {Ta bort från # rader}}",
+          "noteRemove": "Tar bort dessa personer, grupper och domäner från de valda raderna; de får då det som familjen eller Alla andra får. Inget sparas förrän du sparar policyn.",
+          "filter": "Filtrera modeller",
+          "selectShown": "Välj alla som visas",
+          "clear": "Rensa urval",
+          "noMatch": "Ingen modell matchar.",
+          "applied": "{entries, plural, one {# post} other {# poster}} satt på {rows, plural, one {# rad} other {# rader}}. Inte sparat än.",
+          "removed": "{entries, plural, one {# post} other {# poster}} borttagna från {rows, plural, one {# rad} other {# rader}}. Inte sparat än."
+        },
+        "lead": "Vem kan använda varje modell och hur många förfrågningar per dag. Varje rad är en familj eller modell; varje kolumn är en målgrupp. Välj en modell, eller en cell, för att ändra åtkomst."
       },
       "audience": {
         "editorTitle": "Vem kan använda {model}",
@@ -6920,7 +6931,20 @@
         "fromFamily": "från familjen",
         "setHere": "Ändra för denna modell",
         "setHereFor": "Ändra {target} för denna modell",
-        "overruled": "Av i familjen, vilket gäller"
+        "overruled": "Av i familjen, vilket gäller",
+        "editRow": "Redigera vem som kan använda {model}",
+        "editRowHint": "redigera vem som kan använda den",
+        "replaces": "{count, plural, one {Redan på denna rad: {names}. Att lägga till ersätter vad den får.} other {Redan på denna rad: {names}. Att lägga till ersätter vad de får.}}",
+        "notAdded": "{count, plural, one {# post i fältet är ännu inte tillagd.} other {# poster i fältet är ännu inte tillagda.}}",
+        "addAndClose": "Lägg till och stäng",
+        "closeAnyway": "Stäng utan att lägga till",
+        "filter": "Filtrera denna lista",
+        "filterCount": "Visar {shown} av {total}"
+      },
+      "review": {
+        "none": "ingen post",
+        "becomes": "blir",
+        "removed": "borttagen"
       }
     },
     "previewSourceModelAccess": "Modelgodkännande — {list}",

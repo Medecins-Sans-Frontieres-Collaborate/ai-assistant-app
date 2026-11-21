@@ -6871,7 +6871,6 @@
           "blocked": "Idan an sa mutum Off, ba zai iya amfani da shi ba, komai rukuninsa ko yankinsa.",
           "mostSpecific": "Idan ba haka ba, abin da ya fi dacewa da mutum ne ke yanke hukunci: mutum da aka ambata, sannan rukuni, sannan yanki, sannan kowa. Idan rukuni biyu, ko yankuna biyu, Off ne ke nasara."
         },
-        "lead": "Wa zai iya amfani da kowanne samfur, da yadda yawan buƙata a rana. Kowanne layi dangin samfur ne ko samfur; kowanne ginshiƙi masu amfani ne. Zaɓi layi don canza wa zai iya amfani da shi.",
         "peopleValue": "{allowed} an amince, {blocked} an kashe",
         "bulk": {
           "open": "Ƙara damar amfani ga samfu da yawa",
@@ -6879,8 +6878,20 @@
           "models": "A waɗannan samfuran",
           "wholeFamily": "dukan dangi",
           "apply": "{count, plural, =0 {Zaɓi samfura} one {Aiwatar da layi # ɗaya} other {Aiwatar da layi #}}",
-          "note": "Zai maye gurbin abin da waɗannan mutanen, rukunoni da yankuna suka riga sun samu a layin da aka zaɓa. Babu abin da zai ajiye har sai ka ajiye manufar."
-        }
+          "note": "Zai maye gurbin abin da waɗannan mutanen, rukunoni da yankuna suka riga sun samu a layin da aka zaɓa. Babu abin da zai ajiye har sai ka ajiye manufar.",
+          "action": "Abin da za a yi",
+          "set": "Ba da damar amfani ko kashewa",
+          "remove": "Cire daga waɗannan layukan",
+          "applyRemove": "{count, plural, =0 {Zaɓi samfura} one {Cire daga layi #} other {Cire daga layi #}}",
+          "noteRemove": "Wannan zai cire waɗannan mutane, rukuni da yankuna daga layukan da aka zaɓa; sai su samu abin da dangi ko Kowa da kowa zai samu. Ba abin da za a adana sai an ajiye tsarin.",
+          "filter": "Tace samfura",
+          "selectShown": "Zaɓi duk abin da aka nuna",
+          "clear": "Share zaɓi",
+          "noMatch": "Ba a samu samfur da ya dace ba.",
+          "applied": "{entries, plural, one {shiga #} other {shiga #}} an sa a {rows, plural, one {layi #} other {layuka #}}. Ba a adana ba tukuna.",
+          "removed": "{entries, plural, one {shiga #} other {shiga #}} an cire daga {rows, plural, one {layi #} other {layuka #}}. Ba a adana ba tukuna."
+        },
+        "lead": "Wa zai iya amfani da kowanne samfur, da yawan buƙatun da za a yi a rana. Kowanne layi yana nuni da dangi ko samfur; kowanne ginshiƙi yana nuni da masu amfani. Zaɓi samfur, ko kowane sel, don canza wa zai iya amfani da shi."
       },
       "audience": {
         "editorTitle": "Wa zai iya amfani da {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "daga dangi",
         "setHere": "Canja don wannan samfur",
         "setHereFor": "Canja {target} don wannan samfur",
-        "overruled": "An kashe a dangi, wanda shine ke nasara"
+        "overruled": "An kashe a dangi, wanda shine ke nasara",
+        "editRow": "Shirya wa zai iya amfani da {model}",
+        "editRowHint": "shirya wa zai iya amfani da shi",
+        "replaces": "{count, plural, one {Tuni a wannan layi: {names}. Ƙara zai maye gurbin abin da ake samu.} other {Tuni a wannan layi: {names}. Ƙara zai maye gurbin abin da suke samu.}}",
+        "notAdded": "{count, plural, one {babu wani shigar da aka ƙara a cikin fili ba tukuna.} other {ba a ƙara shigar # a cikin fili ba tukuna.}}",
+        "addAndClose": "Ƙara kuma rufe",
+        "closeAnyway": "Rufe ba tare da ƙara ba",
+        "filter": "Tace wannan jerin",
+        "filterCount": "Ana nuna {shown} daga cikin {total}"
+      },
+      "review": {
+        "none": "ba shiga",
+        "becomes": "ya zama",
+        "removed": "an cire"
       }
     },
     "previewSourceModelAccess": "Amincewa da samfur — {list}",

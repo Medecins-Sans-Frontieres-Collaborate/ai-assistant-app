@@ -6887,7 +6887,6 @@
           "blocked": "Kapatılan belirli bir kişi, grubu veya alanı ne olursa olsun bunu kullanamaz.",
           "mostSpecific": "Aksi halde, kişiyi kapsayan en özel giriş belirler: önce belirli bir kişi, sonra grup, ardından alan, en sonunda diğer herkes. İki grup ya da iki alan arasında, Kapalı kazanır."
         },
-        "lead": "Her modeli kim kullanabilir ve günde kaç istek yapılabilir. Her satır bir aile veya model, her sütun bir hedef kitleyi temsil eder. Kullanıcıyı değiştirmek için bir satır seçin.",
         "peopleValue": "{allowed} izinli, {blocked} kapalı",
         "bulk": {
           "open": "Birden fazla modele erişim ekleyin",
@@ -6895,8 +6894,20 @@
           "models": "Bu modellerde",
           "wholeFamily": "tüm aile",
           "apply": "{count, plural, =0 {Modelleri seçin} one {# satıra uygula} other {# satıra uygula}}",
-          "note": "Seçilen satırlardaki bu kişi, grup ve alanların mevcut erişimlerini değiştirecektir. Politikayı kaydedene kadar hiçbir şey kaydedilmez."
-        }
+          "note": "Seçilen satırlardaki bu kişi, grup ve alanların mevcut erişimlerini değiştirecektir. Politikayı kaydedene kadar hiçbir şey kaydedilmez.",
+          "action": "Yapılacak işlem",
+          "set": "Erişim ver veya kapat",
+          "remove": "Bu satırlardan kaldır",
+          "applyRemove": "{count, plural, =0 {Modelleri seçin} one {# satırdan kaldır} other {# satırdan kaldır}}",
+          "noteRemove": "Seçilen satırlardan bu kişi, grup ve alan adlarını kaldırır; ardından aile veya Herkes için geçerli olan kuralları alırlar. Politikayı kaydedene kadar hiçbir değişiklik kaydedilmez.",
+          "filter": "Modelleri filtrele",
+          "selectShown": "Tüm gösterilenleri seç",
+          "clear": "Seçimi temizle",
+          "noMatch": "Eşleşen model yok.",
+          "applied": "{entries, plural, one {# giriş} other {# giriş}} {rows, plural, one {# satıra} other {# satıra}} ayarlandı. Henüz kaydedilmedi.",
+          "removed": "{entries, plural, one {# giriş} other {# giriş}} {rows, plural, one {# satırdan} other {# satırdan}} kaldırıldı. Henüz kaydedilmedi."
+        },
+        "lead": "Her bir modeli kim kullanabilir ve günde kaç istek yapılabilir. Her satır bir aile veya modeldir; her sütun bir kullanıcı kitlesidir. Kullanacak kişileri değiştirmek için bir model veya herhangi bir hücre seçin."
       },
       "audience": {
         "editorTitle": "{model} için kim kullanabilir",
@@ -6920,7 +6931,20 @@
         "fromFamily": "aileden",
         "setHere": "Bu model için değiştir",
         "setHereFor": "{target} için bu modelde değiştir",
-        "overruled": "Ailede kapalı, bu geçerli"
+        "overruled": "Ailede kapalı, bu geçerli",
+        "editRow": "Kimlerin {model} kullanabileceğini düzenle",
+        "editRowHint": "kimin kullanabileceğini düzenle",
+        "replaces": "{count, plural, one {Bu satırda zaten var: {names}. Eklemek, aldığı hakkı değiştirir.} other {Bu satırda zaten var: {names}. Eklemek, aldıkları hakları değiştirir.}}",
+        "notAdded": "{count, plural, one {Alana girilen # giriş henüz eklenmedi.} other {Alana girilen # giriş henüz eklenmedi.}}",
+        "addAndClose": "Ekle ve kapat",
+        "closeAnyway": "Eklemeyi kapat",
+        "filter": "Bu listeyi filtrele",
+        "filterCount": "{total} öğenin {shown} tanesi gösteriliyor"
+      },
+      "review": {
+        "none": "giriş yok",
+        "becomes": "olur",
+        "removed": "kaldırıldı"
       }
     },
     "previewSourceModelAccess": "Model onayı — {list}",

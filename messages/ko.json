@@ -6887,7 +6887,6 @@
           "blocked": "지정된 사람이 Off로 설정되면, 해당 그룹이나 도메인과 상관없이 사용할 수 없습니다.",
           "mostSpecific": "그 외에는 해당 사용자를 포함하는 가장 구체적인 항목이 결정합니다: 지정된 사람, 그 다음 그룹, 도메인, 기타 모두 순입니다. 두 그룹 또는 두 도메인 사이에서는 Off가 우선합니다."
         },
-        "lead": "각 모델을 누가 사용할 수 있는지와 일일 요청 수를 안내합니다. 각 행은 가족 또는 모델이며, 각 열은 대상자입니다. 사용 권한을 변경하려면 행을 선택하세요.",
         "peopleValue": "{allowed} 허용, {blocked} Off",
         "bulk": {
           "open": "여러 모델에 접근 추가",
@@ -6895,8 +6894,20 @@
           "models": "해당 모델에서",
           "wholeFamily": "전체 가족",
           "apply": "{count, plural, =0 {모델 선택} one {#행에 적용} other {#행에 적용}}",
-          "note": "선택한 행에 대해 사람, 그룹, 도메인이 이미 갖고 있는 권한을 대체합니다. 정책을 저장하기 전까지는 아무것도 저장되지 않습니다."
-        }
+          "note": "선택한 행에 대해 사람, 그룹, 도메인이 이미 갖고 있는 권한을 대체합니다. 정책을 저장하기 전까지는 아무것도 저장되지 않습니다.",
+          "action": "실행할 작업",
+          "set": "접근 권한 부여 또는 해제",
+          "remove": "이 행에서 제거",
+          "applyRemove": "{count, plural, =0 {모델을 선택하세요} one {#개의 행에서 제거} other {#개의 행에서 제거}}",
+          "noteRemove": "선택한 행에서 해당 사용자, 그룹 및 도메인을 제거합니다. 이후에는 그룹 또는 모든 사용자에게 적용되는 정책을 받게 됩니다. 정책을 저장하기 전까지는 아무 것도 저장되지 않습니다.",
+          "filter": "모델 필터",
+          "selectShown": "표시된 모두 선택",
+          "clear": "선택 해제",
+          "noMatch": "일치하는 모델이 없습니다.",
+          "applied": "{entries, plural, one {#개 항목} other {#개 항목}}이 {rows, plural, one {#개 행에} other {#개 행에}} 설정되었습니다. 아직 저장되지 않았습니다.",
+          "removed": "{entries, plural, one {#개 항목} other {#개 항목}}이 {rows, plural, one {#개 행에서} other {#개 행에서}} 제거되었습니다. 아직 저장되지 않았습니다."
+        },
+        "lead": "각 모델을 누가 사용할 수 있고, 하루에 몇 건의 요청이 가능한지 보여줍니다. 각 행은 모델 그룹 또는 모델을, 각 열은 사용자 그룹을 나타냅니다. 모델 또는 셀을 선택하여 사용 권한을 변경하세요."
       },
       "audience": {
         "editorTitle": "{model}을(를) 누가 사용할 수 있습니까",
@@ -6920,7 +6931,20 @@
         "fromFamily": "가족에서",
         "setHere": "이 모델에서 변경",
         "setHereFor": "이 모델에서 {target} 변경",
-        "overruled": "가족에서 Off이며, 이 설정이 우선함"
+        "overruled": "가족에서 Off이며, 이 설정이 우선함",
+        "editRow": "{model}의 사용 권한 수정",
+        "editRowHint": "사용 권한 수정",
+        "replaces": "{count, plural, one {이 행에 이미 있습니다: {names}. 추가하면 기존 권한이 교체됩니다.} other {이 행에 이미 있습니다: {names}. 추가하면 기존 권한이 교체됩니다.}}",
+        "notAdded": "{count, plural, one {필드에 입력된 1개 항목이 아직 추가되지 않았습니다.} other {필드에 입력된 #개 항목이 아직 추가되지 않았습니다.}}",
+        "addAndClose": "추가 후 닫기",
+        "closeAnyway": "추가하지 않고 닫기",
+        "filter": "목록 필터",
+        "filterCount": "{total} 중 {shown} 표시 중"
+      },
+      "review": {
+        "none": "항목 없음",
+        "becomes": "변경됨",
+        "removed": "제거됨"
       }
     },
     "previewSourceModelAccess": "모델 승인 — {list}",

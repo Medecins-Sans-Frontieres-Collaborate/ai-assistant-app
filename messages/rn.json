@@ -6871,7 +6871,6 @@
           "blocked": "Umuntu yahawe Off ntashobora kubikoresha, naho itsinda canke domain barimwo vyoba vyemerewe.",
           "mostSpecific": "Iyo bitagenze uko, entry irimwo umuntu cane cane niyo ifata: ubanza umuntu, hagakurikiraho itsinda, domain, hanyuma abandi bose. Mu matsinda abiri, canke uduhugu tubiri, Off niyo ifata."
         },
-        "lead": "Abo bemerewe gukoresha buri model na igitigiri c'ubusabe ku munsi. Umurongo umwe ni umuryango canke model; koloni imwe ni abasomyi. Hitamwo umurongo kugira uhindure abawukoresha.",
         "peopleValue": "{allowed} baremerewe, {blocked} babujijwe",
         "bulk": {
           "open": "Ongeramwo uburenganzira kuri model nyinshi",
@@ -6879,8 +6878,20 @@
           "models": "Kuri izi model",
           "wholeFamily": "umuryango wose",
           "apply": "{count, plural, =0 {Hitamwo model} one {Shira kuri umurongo #} other {Shira kuri imirongo #}}",
-          "note": "Ibisanzwe kuri aba bantu, matsinda n'uduhugu kuri iyi mirongo birasubirwamwo. Nta na kimwe kiba catanzwe mbere yo kuzigama iyi ngingo."
-        }
+          "note": "Ibisanzwe kuri aba bantu, matsinda n'uduhugu kuri iyi mirongo birasubirwamwo. Nta na kimwe kiba catanzwe mbere yo kuzigama iyi ngingo.",
+          "action": "Ivyo wokora",
+          "set": "Ha uburenganzira canke vyime",
+          "remove": "Kuraho kuri iyi mirongo",
+          "applyRemove": "{count, plural, =0 {Hitamwo models} one {Kuraho umurongo #} other {Kuraho imirongo #}}",
+          "noteRemove": "Bikurako aba bantu, amatsinda n'indome kuri iyi mirongo uhisemwo; baca bahabwa nk'ivyo umuryango canke Abandi bose bahawe. Ntaco bihindura gushika ubike amategeko mashasha.",
+          "filter": "Seba models",
+          "selectShown": "Hitamwo vyose biri ku rutonde",
+          "clear": "Siba ivyatowe",
+          "noMatch": "Nta modele ihuye n'ivyasabwe.",
+          "applied": "{entries, plural, one {# kinjira} other {# binjira}} vyashizwe kuri {rows, plural, one {umurongo #} other {imirongo #}}. Ntibirabikwa.",
+          "removed": "{entries, plural, one {# kinjira} other {# binjira}} vyakuwe kuri {rows, plural, one {umurongo #} other {imirongo #}}. Ntibirabikwa."
+        },
+        "lead": "Ninde ashobora gukoresha buri modele, n'ingene zingana n'inshuro zemewe ku munsi. Umurongo umwe uhuza umuryango canke modele; koloni imwe yerekeza ku bagenewe. Hitamwo modele, canke akayunguruzo, kugira uhindure uwemerewe kuyikoresha."
       },
       "audience": {
         "editorTitle": "Abemerewe gukoresha {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "kuva mu muryango",
         "setHere": "Hindura kuri iyi model",
         "setHereFor": "Hindura {target} kuri iyi model",
-        "overruled": "Off ku muryango, igiye imbere"
+        "overruled": "Off ku muryango, igiye imbere",
+        "editRow": "Hindura abemerewe gukoresha {model}",
+        "editRowHint": "hindura abemerewe kuyikoresha",
+        "replaces": "{count, plural, one {Harimwo uno: {names}. Kwongera bisimbura ivyo yahora ahabwa.} other {Harimwo aba: {names}. Kwongera bisimbura ivyo bahabwa.}}",
+        "notAdded": "{count, plural, one {# kinjira ntikirongerwa.} other {# binjira ntibirongerwa.}}",
+        "addAndClose": "Ongerako uce ufunga",
+        "closeAnyway": "Funga utabigizeho",
+        "filter": "Seba uru rutonde",
+        "filterCount": "Biriko birerekana {shown} kuri {total}"
+      },
+      "review": {
+        "none": "nta kinjira",
+        "becomes": "bihinduka",
+        "removed": "vyakuweko"
       }
     },
     "previewSourceModelAccess": "Kwemeza modele — {list}",

@@ -6887,7 +6887,6 @@
           "blocked": "Een genoemde persoon met Uit ingesteld, kan het niet gebruiken, ongeacht de groep of het domein.",
           "mostSpecific": "Anders beslist de meest specifieke vermelding die de persoon omvat: eerst een persoon, dan een groep, dan een domein, dan de rest. Tussen twee groepen of twee domeinen geldt: Uit wint."
         },
-        "lead": "Wie elk model kan gebruiken, en hoeveel verzoeken per dag. Elke rij is een familie of model; elke kolom is een doelgroep. Selecteer een rij om aan te passen wie het kan gebruiken.",
         "peopleValue": "{allowed} toegestaan, {blocked} uitgeschakeld",
         "bulk": {
           "open": "Toegang toevoegen aan meerdere modellen",
@@ -6895,8 +6894,20 @@
           "models": "Op deze modellen",
           "wholeFamily": "hele familie",
           "apply": "{count, plural, =0 {Modellen kiezen} one {Toepassen op # rij} other {Toepassen op # rijen}}",
-          "note": "Vervangt wat deze personen, groepen en domeinen al hebben op de gekozen rijen. Pas opgeslagen na het opslaan van het beleid."
-        }
+          "note": "Vervangt wat deze personen, groepen en domeinen al hebben op de gekozen rijen. Pas opgeslagen na het opslaan van het beleid.",
+          "action": "Actie",
+          "set": "Toegang geven of uitschakelen",
+          "remove": "Verwijderen uit deze rijen",
+          "applyRemove": "{count, plural, =0 {Kies modellen} one {Verwijder uit # rij} other {Verwijder uit # rijen}}",
+          "noteRemove": "Verwijdert deze personen, groepen en domeinen uit de geselecteerde rijen; ze krijgen daarna wat de familie of Iedereen krijgt. Niets wordt opgeslagen tot u het beleid opslaat.",
+          "filter": "Modellen filteren",
+          "selectShown": "Alles selecteren dat zichtbaar is",
+          "clear": "Selectie wissen",
+          "noMatch": "Geen overeenkomend model.",
+          "applied": "{entries, plural, one {# item} other {# items}} ingesteld op {rows, plural, one {# rij} other {# rijen}}. Nog niet opgeslagen.",
+          "removed": "{entries, plural, one {# item} other {# items}} verwijderd uit {rows, plural, one {# rij} other {# rijen}}. Nog niet opgeslagen."
+        },
+        "lead": "Wie elk model kan gebruiken, en hoeveel verzoeken per dag. Elke rij is een familie of een model; elke kolom is een doelgroep. Selecteer een model of een cel om te wijzigen wie het kan gebruiken."
       },
       "audience": {
         "editorTitle": "Wie kan {model} gebruiken",
@@ -6920,7 +6931,20 @@
         "fromFamily": "van de familie",
         "setHere": "Wijzig voor dit model",
         "setHereFor": "Wijzig {target} voor dit model",
-        "overruled": "Uit op de familie, dat geldt"
+        "overruled": "Uit op de familie, dat geldt",
+        "editRow": "Bewerk wie {model} kan gebruiken",
+        "editRowHint": "bewerk wie het kan gebruiken",
+        "replaces": "{count, plural, one {Al op deze rij: {names}. Toevoegen vervangt wat het krijgt.} other {Al op deze rij: {names}. Toevoegen vervangt wat ze krijgen.}}",
+        "notAdded": "{count, plural, one {# item in het veld is nog niet toegevoegd.} other {# items in het veld zijn nog niet toegevoegd.}}",
+        "addAndClose": "Toevoegen en sluiten",
+        "closeAnyway": "Sluiten zonder toe te voegen",
+        "filter": "Deze lijst filteren",
+        "filterCount": "Toont {shown} van {total}"
+      },
+      "review": {
+        "none": "geen item",
+        "becomes": "wordt",
+        "removed": "verwijderd"
       }
     },
     "previewSourceModelAccess": "Modelgoedkeuring — {list}",

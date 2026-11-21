@@ -6871,7 +6871,6 @@
           "blocked": "Umuntu uvugwa amazina washyizwe kuri Off ntiyemerewe gukoresha, icyo itsinda rye cyangwa domaine byaba byaramuhaye cyose.",
           "mostSpecific": "Ubundi, igisubizo kinonosoye cyane kiri kuri uwo muntu ni cyo gikoreshwa: umuntu uvugwa amazina, hanyuma itsinda, cyangwa domaine, hanyuma abandi bose. Hagati y’amatsinda abiri cyangwa domaine ebyiri, Off ni yo itsinda."
         },
-        "lead": "Uwemerewe gukoresha buri model, n’umubare w’ubusabe ku munsi. Umurongo umwe ni umuryango cyangwa model; inkingi imwe ni abemerewe ukoreshwa. Hitamo umurongo kugira ngo uhindure abemerewe.",
         "peopleValue": "{allowed} bemerewe, {blocked} barafunzwe",
         "bulk": {
           "open": "Ongeraho uburenganzira ku mamodel menshi",
@@ -6879,8 +6878,20 @@
           "models": "Ku mamodel aya",
           "wholeFamily": "umuryango wose",
           "apply": "{count, plural, =0 {Hitamo amamodel} one {Shyira kuri murongo 1} other {Shyira kuri mirongo #}}",
-          "note": "Bisimbura ibyo abantu, amatsinda na domaine bari bafite kuri iyi mirongo wahisemo. Nta gihinduka mbere yo kubika politique."
-        }
+          "note": "Bisimbura ibyo abantu, amatsinda na domaine bari bafite kuri iyi mirongo wahisemo. Nta gihinduka mbere yo kubika politique.",
+          "action": "Ibyo gukora",
+          "set": "Tanga uburenganzira cyangwa ubuhagarike",
+          "remove": "Kuramo kuri iyi mirongo",
+          "applyRemove": "{count, plural, =0 {Hitamo models} one {Kuramo umurongo 1} other {Kuramo imirongo #}}",
+          "noteRemove": "Bikuraho aba bantu, amatsinda n’uduce kuri iyi mirongo wahisemo; nyuma bazahabwa ibyo umuryango cyangwa abandi bose babona. Nta gihinduka kig保存bikijwe kugeza ubikije politiki.",
+          "filter": "Shungura models",
+          "selectShown": "Hitamo byose bigaragara",
+          "clear": "Kuraho ibyo wahisemo",
+          "noMatch": "Nta model ihuye.",
+          "applied": "{entries, plural, one {Igihe 1} other {Ibisohoka #}} byashyizwe kuri {rows, plural, one {umurongo 1} other {imirongo #}}. Ntabwo birabikwa.",
+          "removed": "{entries, plural, one {Igihe 1} other {Ibisohoka #}} byakuweho kuri {rows, plural, one {umurongo 1} other {imirongo #}}. Ntabwo birabikwa."
+        },
+        "lead": "Abemerewe gukoresha buri model na umubare w'ubusabe ku munsi. Umurongo buri umwe ni umuryango cyangwa model; inkingi buri imwe ni itsinda ry'abakoresha. Hitamo model, cyangwa akantu uko ari ko kose, uhindure uwemerewe kuyikoresha."
       },
       "audience": {
         "editorTitle": "Ni bande bemerewe gukoresha {model}",
@@ -6904,7 +6915,20 @@
         "fromFamily": "kuva mu muryango",
         "setHere": "Hindura kuri uyu model",
         "setHereFor": "Hindura {target} kuri uyu model",
-        "overruled": "Off kuri family, ni cyo gikoreshwa"
+        "overruled": "Off kuri family, ni cyo gikoreshwa",
+        "editRow": "Hindura abemerewe gukoresha {model}",
+        "editRowHint": "hindura abemerewe kuyikoresha",
+        "replaces": "{count, plural, one {Bisanzwe biri kuri uyu murongo: {names}. Kongeraho birasimbura ibyo yahawe.} other {Bisanzwe biri kuri uyu murongo: {names}. Kongeraho birasimbura ibyo bahawe.}}",
+        "notAdded": "{count, plural, one {Igihe 1 kiri mu kibuga ntikirongerwaho.} other {Ibisohoka # biri mu kibuga ntibirongerwaho.}}",
+        "addAndClose": "Ongeraho usoze",
+        "closeAnyway": "Funga utabongeyeho",
+        "filter": "Shungura urutonde",
+        "filterCount": "Igaragaza {shown} muri {total}"
+      },
+      "review": {
+        "none": "ntacyo winjije",
+        "becomes": "ihinduka",
+        "removed": "byakuweho"
       }
     },
     "previewSourceModelAccess": "Kwemeza model — {list}",

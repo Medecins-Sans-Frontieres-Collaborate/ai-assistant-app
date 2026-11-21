@@ -6887,7 +6887,6 @@
           "blocked": "Una persona nominata impostata su Off non può usarlo, indipendentemente dal gruppo o dal dominio.",
           "mostSpecific": "Altrimenti decide la voce più specifica che include la persona: prima la persona nominata, poi il gruppo, poi il dominio, poi tutti gli altri. Tra due gruppi o due domini, vince Off."
         },
-        "lead": "Chi può usare ciascun modello e quante richieste al giorno. Ogni riga è una famiglia o un modello; ogni colonna è un pubblico. Seleziona una riga per modificare chi può usarlo.",
         "peopleValue": "{allowed} consentito, {blocked} off",
         "bulk": {
           "open": "Aggiungi accesso su più modelli",
@@ -6895,8 +6894,20 @@
           "models": "Su questi modelli",
           "wholeFamily": "intera famiglia",
           "apply": "{count, plural, =0 {Scegli modelli} one {Applica a # riga} other {Applica a # righe}}",
-          "note": "Sostituisce ciò che queste persone, gruppi e domini hanno già sulle righe scelte. Nulla viene salvato finché non si salva la policy."
-        }
+          "note": "Sostituisce ciò che queste persone, gruppi e domini hanno già sulle righe scelte. Nulla viene salvato finché non si salva la policy.",
+          "action": "Cosa fare",
+          "set": "Concedi accesso o disattivalo",
+          "remove": "Rimuovi da queste righe",
+          "applyRemove": "{count, plural, =0 {Seleziona modelli} one {Rimuovi da # riga} other {Rimuovi da # righe}}",
+          "noteRemove": "Rimuove queste persone, gruppi e domini dalle righe selezionate; poi riceveranno ciò che ottiene la famiglia o chiunque altro. Nulla viene salvato finché non salvi la policy.",
+          "filter": "Filtra modelli",
+          "selectShown": "Seleziona tutti quelli mostrati",
+          "clear": "Cancella selezione",
+          "noMatch": "Nessun modello corrisponde.",
+          "applied": "{entries, plural, one {# voce} other {# voci}} impostate su {rows, plural, one {# riga} other {# righe}}. Non ancora salvato.",
+          "removed": "{entries, plural, one {# voce} other {# voci}} rimosse da {rows, plural, one {# riga} other {# righe}}. Non ancora salvato."
+        },
+        "lead": "Chi può usare ciascun modello e quante richieste al giorno. Ogni riga è una famiglia o un modello; ogni colonna è un pubblico. Seleziona un modello, o qualsiasi cella, per modificare chi può usarlo."
       },
       "audience": {
         "editorTitle": "Chi può usare {model}",
@@ -6920,7 +6931,20 @@
         "fromFamily": "dalla famiglia",
         "setHere": "Cambia per questo modello",
         "setHereFor": "Cambia {target} per questo modello",
-        "overruled": "Off sulla famiglia, che prevale"
+        "overruled": "Off sulla famiglia, che prevale",
+        "editRow": "Modifica chi può usare {model}",
+        "editRowHint": "modifica chi può usarlo",
+        "replaces": "{count, plural, one {Già presente in questa riga: {names}. L'aggiunta sostituisce ciò che riceve.} other {Già presenti in questa riga: {names}. L'aggiunta sostituisce ciò che ricevono.}}",
+        "notAdded": "{count, plural, one {# voce nel campo non è ancora stata aggiunta.} other {# voci nel campo non sono ancora state aggiunte.}}",
+        "addAndClose": "Aggiungi e chiudi",
+        "closeAnyway": "Chiudi senza aggiungere",
+        "filter": "Filtra questa lista",
+        "filterCount": "Mostrati {shown} su {total}"
+      },
+      "review": {
+        "none": "nessuna voce",
+        "becomes": "diventa",
+        "removed": "rimosso"
       }
     },
     "previewSourceModelAccess": "Approvazione modello — {list}",

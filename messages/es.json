@@ -6887,7 +6887,6 @@
           "blocked": "Una persona nombrada configurada en Off no puede usarlo, sin importar su grupo o dominio.",
           "mostSpecific": "De lo contrario, la entrada más específica que incluya a la persona decide: una persona nombrada, luego un grupo, luego un dominio, luego todos los demás. Entre dos grupos o dos dominios, Off tiene prioridad."
         },
-        "lead": "Quién puede usar cada modelo y cuántas solicitudes al día. Cada fila es una familia o un modelo; cada columna es un público. Seleccione una fila para cambiar quién puede usarla.",
         "peopleValue": "{allowed} permitido, {blocked} apagado",
         "bulk": {
           "open": "Agregar acceso en varios modelos",
@@ -6895,8 +6894,20 @@
           "models": "En estos modelos",
           "wholeFamily": "toda la familia",
           "apply": "{count, plural, =0 {Elegir modelos} one {Aplicar a # fila} other {Aplicar a # filas}}",
-          "note": "Reemplaza lo que ya tienen estas personas, grupos y dominios en las filas elegidas. Nada se guarda hasta que guarde la política."
-        }
+          "note": "Reemplaza lo que ya tienen estas personas, grupos y dominios en las filas elegidas. Nada se guarda hasta que guarde la política.",
+          "action": "Qué hacer",
+          "set": "Dar acceso o desactivar",
+          "remove": "Quitar de estas filas",
+          "applyRemove": "{count, plural, =0 {Elija modelos} one {Quitar de # fila} other {Quitar de # filas}}",
+          "noteRemove": "Quita a estas personas, grupos y dominios de las filas seleccionadas; luego recibirán lo que obtenga la familia o Todos los demás. Nada se guarda hasta que guarde la política.",
+          "filter": "Filtrar modelos",
+          "selectShown": "Seleccionar todo lo mostrado",
+          "clear": "Borrar selección",
+          "noMatch": "Ningún modelo coincide.",
+          "applied": "{entries, plural, one {# elemento} other {# elementos}} configurados en {rows, plural, one {# fila} other {# filas}}. Aún no guardado.",
+          "removed": "{entries, plural, one {# elemento} other {# elementos}} quitados de {rows, plural, one {# fila} other {# filas}}. Aún no guardado."
+        },
+        "lead": "Quién puede usar cada modelo y cuántas solicitudes al día. Cada fila es una familia o un modelo; cada columna es un público. Seleccione un modelo, o cualquier celda, para cambiar quién puede usarlo."
       },
       "audience": {
         "editorTitle": "Quién puede usar {model}",
@@ -6920,7 +6931,20 @@
         "fromFamily": "de la familia",
         "setHere": "Cambiar para este modelo",
         "setHereFor": "Cambiar {target} para este modelo",
-        "overruled": "Off en la familia, que tiene prioridad"
+        "overruled": "Off en la familia, que tiene prioridad",
+        "editRow": "Editar quién puede usar {model}",
+        "editRowHint": "editar quién puede usarlo",
+        "replaces": "{count, plural, one {Ya está en esta fila: {names}. Si añade, reemplaza lo que obtiene.} other {Ya están en esta fila: {names}. Si añade, reemplaza lo que obtienen.}}",
+        "notAdded": "{count, plural, one {# elemento del campo no se ha añadido aún.} other {# elementos del campo no se han añadido aún.}}",
+        "addAndClose": "Agregar y cerrar",
+        "closeAnyway": "Cerrar sin agregar",
+        "filter": "Filtrar esta lista",
+        "filterCount": "Mostrando {shown} de {total}"
+      },
+      "review": {
+        "none": "sin elemento",
+        "becomes": "se convierte en",
+        "removed": "eliminado"
       }
     },
     "previewSourceModelAccess": "Aprobación del modelo — {list}",

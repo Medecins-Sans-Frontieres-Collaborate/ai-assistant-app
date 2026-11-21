@@ -6887,7 +6887,6 @@
           "blocked": "Eine benannte Person mit Aus auf kann es nicht verwenden, egal was ihre Gruppe oder Domain erhält.",
           "mostSpecific": "Ansonsten entscheidet der spezifischste Eintrag, der die Person umfasst: zuerst eine benannte Person, dann eine Gruppe, dann eine Domain, dann alle anderen. Zwischen zwei Gruppen oder zwei Domains gewinnt Aus."
         },
-        "lead": "Wer jedes Modell nutzen kann und wie viele Anfragen pro Tag. Jede Zeile ist eine Familie oder ein Modell; jede Spalte eine Zielgruppe. Wählen Sie eine Zeile, um zu ändern, wer es verwenden darf.",
         "peopleValue": "{allowed} erlaubt, {blocked} Aus",
         "bulk": {
           "open": "Zugriff auf mehrere Modelle hinzufügen",
@@ -6895,8 +6894,20 @@
           "models": "Auf diesen Modellen",
           "wholeFamily": "gesamte Familie",
           "apply": "{count, plural, =0 {Modelle auswählen} one {Auf # Zeile anwenden} other {Auf # Zeilen anwenden}}",
-          "note": "Ersetzt bestehende Zugriffe dieser Personen, Gruppen und Domains auf den gewählten Zeilen. Es wird nichts gespeichert, bis Sie die Richtlinie speichern."
-        }
+          "note": "Ersetzt bestehende Zugriffe dieser Personen, Gruppen und Domains auf den gewählten Zeilen. Es wird nichts gespeichert, bis Sie die Richtlinie speichern.",
+          "action": "Auswahl",
+          "set": "Zugriff gewähren oder deaktivieren",
+          "remove": "Aus diesen Zeilen entfernen",
+          "applyRemove": "{count, plural, =0 {Modelle auswählen} one {Aus # Zeile entfernen} other {Aus # Zeilen entfernen}}",
+          "noteRemove": "Entfernt diese Personen, Gruppen und Domains aus den ausgewählten Zeilen; sie erhalten dann die Berechtigungen der Familie oder von \"Alle anderen\". Änderungen werden erst beim Speichern übernommen.",
+          "filter": "Modelle filtern",
+          "selectShown": "Alle sichtbaren auswählen",
+          "clear": "Auswahl aufheben",
+          "noMatch": "Kein Modell gefunden.",
+          "applied": "{entries, plural, one {# Eintrag} other {# Einträge}} in {rows, plural, one {# Zeile} other {# Zeilen}} gesetzt. Noch nicht gespeichert.",
+          "removed": "{entries, plural, one {# Eintrag} other {# Einträge}} aus {rows, plural, one {# Zeile} other {# Zeilen}} entfernt. Noch nicht gespeichert."
+        },
+        "lead": "Wer darf welches Modell wie oft am Tag verwenden. Jede Zeile ist eine Familie oder ein Modell; jede Spalte eine Zielgruppe. Wählen Sie ein Modell oder eine beliebige Zelle, um die Nutzungsberechtigung zu ändern."
       },
       "audience": {
         "editorTitle": "Wer kann {model} verwenden",
@@ -6920,7 +6931,20 @@
         "fromFamily": "aus der Familie",
         "setHere": "Für dieses Modell ändern",
         "setHereFor": "{target} für dieses Modell ändern",
-        "overruled": "Aus bei der Familie, was Vorrang hat"
+        "overruled": "Aus bei der Familie, was Vorrang hat",
+        "editRow": "Bearbeiten, wer {model} verwenden darf",
+        "editRowHint": "Zugriffsberechtigung bearbeiten",
+        "replaces": "{count, plural, one {Bereits in dieser Zeile: {names}. Hinzufügen ersetzt die aktuelle Berechtigung.} other {Bereits in dieser Zeile: {names}. Hinzufügen ersetzt deren aktuelle Berechtigungen.}}",
+        "notAdded": "{count, plural, one {# Eintrag im Feld wurde noch nicht hinzugefügt.} other {# Einträge im Feld wurden noch nicht hinzugefügt.}}",
+        "addAndClose": "Hinzufügen und schließen",
+        "closeAnyway": "Ohne Hinzufügen schließen",
+        "filter": "Liste filtern",
+        "filterCount": "{shown} von {total} angezeigt"
+      },
+      "review": {
+        "none": "kein Eintrag",
+        "becomes": "wird zu",
+        "removed": "entfernt"
       }
     },
     "previewSourceModelAccess": "Modellfreigabe — {list}",
