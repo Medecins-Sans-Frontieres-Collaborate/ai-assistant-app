@@ -340,7 +340,7 @@ export function TypographySection({ book, onChange, grounding }: SectionProps) {
                   {(id) => (
                     <select
                       id={id}
-                      className={inputClass}
+                      className={`${inputClass} m-0 block`}
                       value={font.role}
                       onChange={(event) =>
                         setFonts(
@@ -653,8 +653,14 @@ function TermList({
   onChange,
   addLabel,
   emptyLabel,
+  termLabel,
+  alternativesLabel,
   grounding,
 }: {
+  /** What the list's word is (a word to use, or one to avoid). */
+  termLabel: string;
+  /** What the words listed with it are (replaced by it, or its replacements). */
+  alternativesLabel: string;
   grounding?: DraftGroundingView;
   terms: BrandTerm[];
   onChange: (terms: BrandTerm[]) => void;
@@ -671,7 +677,7 @@ function TermList({
           {terms.map((term, index) => (
             <li key={index}>
               <div className="flex flex-wrap items-end gap-3">
-                <Field label={t('language.term')} className="w-44">
+                <Field label={termLabel} className="min-w-[12rem] flex-1">
                   {(id) => (
                     <input
                       id={id}
@@ -690,7 +696,7 @@ function TermList({
                   )}
                 </Field>
                 <Field
-                  label={t('language.alternatives')}
+                  label={alternativesLabel}
                   className="min-w-[10rem] flex-1"
                 >
                   {(id) => (
@@ -792,6 +798,8 @@ export function LanguageSection({ book, onChange, grounding }: SectionProps) {
             terms={book.language.preferred}
             onChange={(preferred) => setLanguage({ preferred })}
             grounding={grounding}
+            termLabel={t('language.preferredTerm')}
+            alternativesLabel={t('language.preferredAlternatives')}
             addLabel={t('language.addPreferred')}
             emptyLabel={t('language.nonePreferred')}
           />
@@ -804,6 +812,8 @@ export function LanguageSection({ book, onChange, grounding }: SectionProps) {
             terms={book.language.banned}
             onChange={(banned) => setLanguage({ banned })}
             grounding={grounding}
+            termLabel={t('language.bannedTerm')}
+            alternativesLabel={t('language.bannedAlternatives')}
             addLabel={t('language.addBanned')}
             emptyLabel={t('language.noneBanned')}
           />
