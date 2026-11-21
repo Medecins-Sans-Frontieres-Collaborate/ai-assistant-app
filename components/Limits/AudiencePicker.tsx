@@ -21,7 +21,7 @@ import {
   parseAudience,
 } from '@/lib/utils/app/modelAccessGrid';
 
-import { ADMIN_HINT } from '@/components/Admin/adminClasses';
+import { ADMIN_FIELD, ADMIN_HINT } from '@/components/Admin/adminClasses';
 import { AudienceShape } from '@/components/Limits/visualSyntax';
 
 interface AudiencePickerProps {
@@ -174,7 +174,9 @@ export const AudiencePicker: FC<AudiencePickerProps> = ({
   return (
     <div>
       <div
-        className={`relative flex min-h-9 flex-wrap items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-2 py-1.5 focus-within:ring-2 focus-within:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 ${
+        // The chips and the text field share one box, drawn as the shared
+        // admin field so it lines up with every other control on the page.
+        className={`relative flex min-h-9 flex-wrap items-center gap-1.5 focus-within:ring-2 focus-within:ring-blue-500 ${ADMIN_FIELD} ${
           disabled ? 'opacity-50' : ''
         }`}
       >
