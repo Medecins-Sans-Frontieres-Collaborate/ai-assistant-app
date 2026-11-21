@@ -14,6 +14,7 @@
  */
 import { ChatContext } from '@/lib/services/chat/pipeline/ChatContext';
 import { applyMode, meteredCells } from '@/lib/services/limits/enforcement';
+import { capOf } from '@/lib/services/limits/recordedCap';
 import { ResolvedLimit } from '@/lib/services/limits/resolver';
 import { reserve } from '@/lib/services/limits/usageStore';
 
@@ -57,6 +58,7 @@ export async function consumeToolBudget(
         limit: cell.value as number,
         limitKey: cell.limitKey,
         source: cell.source,
+        cap: capOf(cell),
       })),
       {
         timezone: policy?.timezone ?? 'UTC',
