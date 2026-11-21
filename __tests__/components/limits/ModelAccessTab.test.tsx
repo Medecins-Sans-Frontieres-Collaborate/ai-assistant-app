@@ -1,5 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import React from 'react';
 
 import { NextIntlClientProvider } from 'next-intl';
@@ -19,19 +25,19 @@ vi.mock('launchdarkly-react-client-sdk', () => ({ useFlags: () => ({}) }));
 vi.mock('@/client/hooks/useM365PeopleSuggest', () => ({
   useM365PeopleSuggest: () => undefined,
 }));
-vi.mock('@/client/services/m365/m365Client', () => ({
+const GROUP_ID = '11111111-2222-3333-4444-555555555555';
+vi.mock('@/client/services/m365/m365Client', async (importOriginal) => ({
+  ...(await importOriginal<object>()),
   lookupEntraGroups: vi.fn().mockResolvedValue([]),
+  searchEntraGroups: vi
+    .fn()
+    .mockResolvedValue([
+      { id: '11111111-2222-3333-4444-555555555555', name: 'Research pilot' },
+    ]),
 }));
-vi.mock('@/components/AgentAccess/GroupSearchPicker', () => ({
-  GroupSearchPicker: ({
-    onChange,
-  }: {
-    onChange: (values: string[]) => void;
-  }) => (
-    <button type="button" onClick={() => onChange(['g-research'])}>
-      add-group
-    </button>
-  ),
+// The group search is flag-gated (with a localhost hatch jsdom also takes).
+vi.mock('@/client/hooks/useAgentAccessGroupsEnabled', () => ({
+  useAgentAccessGroupsEnabled: () => true,
 }));
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -105,10 +111,13 @@ describe('ModelAccessTab grid', () => {
     expect(screen.queryByText(/Observe mode is on/)).not.toBeInTheDocument();
   });
 
-  it('edits a family default from its cell with the shared four-way control', () => {
+  it('edits a family default from its row with the shared four-way control', () => {
     const onChange = renderTab();
     fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
-    const control = screen.getByRole('radiogroup');
+    const editor = screen.getByRole('region', { name: 'Who can use Claude' });
+    const control = within(editor).getByRole('radiogroup', {
+      name: /^Claude, Everyone else/,
+    });
     expect(
       within(control)
         .getAllByRole('radio')
@@ -125,58 +134,199 @@ describe('ModelAccessTab grid', () => {
     ]);
   });
 
-  it('a model shows its family default as inherited; a new audience column grants per cell', () => {
-    const rules = [rule({ series: 'claude', defaultAccess: 50 })];
-    const onChange = renderTab(rules);
-    expect(
-      cell('Claude, Everyone else: Limited to 50 / day'),
-    ).toBeInTheDocument();
-    // The model has no default of its own: same answer, marked inherited.
-    expect(
-      cell('Claude Sonnet 5, Everyone else: Limited to 50 / day, inherited'),
-    ).toBeInTheDocument();
+  it('adds a person, a domain and a group in one go, on the same terms', async () => {
+    const onChange = renderTab();
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    const editor = screen.getByRole('region', { name: 'Who can use Claude' });
+    const field = within(editor).getByRole('combobox', {
+      name: 'People, groups or domains to add',
+    });
+    // Typed: a mail and a domain, pasted as one list.
+    fireEvent.change(field, { target: { value: 'ana@msf.org, oca.msf.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+    // Searched: a group from the directory.
+    fireEvent.change(field, { target: { value: 'research' } });
+    const option = await screen.findByRole('option', {
+      name: /Research pilot/,
+    });
+    fireEvent.mouseDown(option);
 
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Add an audience column' }),
-    );
-    fireEvent.click(screen.getByText('add-group'));
+    const terms = within(editor).getByRole('radiogroup', {
+      name: 'What the people, groups and domains being added get',
+    });
+    // The same three answers for every kind of audience.
     expect(
-      screen.getByRole('columnheader', { name: /g-research/ }),
-    ).toBeInTheDocument();
-
-    fireEvent.click(cell('Claude Sonnet 5, g-research: no terms of its own'));
-    const control = screen.getByRole('radiogroup');
-    // A grant cannot be Off: blocking is the block list's job.
-    expect(
-      within(control)
+      within(terms)
         .getAllByRole('radio')
         .map((radio) => radio.closest('label')?.textContent),
-    ).toEqual(['Inherit', 'Limit', 'Unlimited']);
-    fireEvent.click(within(control).getByLabelText('Unlimited'));
+    ).toEqual(['Limit', 'Unlimited', 'Off']);
+    fireEvent.click(within(terms).getByLabelText('Limit'));
+    fireEvent.click(
+      within(editor).getByRole('button', { name: 'Add 3 entries' }),
+    );
     expect(onChange).toHaveBeenLastCalledWith([
-      rules[0],
       rule({
-        modelId: 'claude-sonnet-5',
-        groups: [{ target: 'g-research', requests: null }],
+        series: 'claude',
+        groups: [{ target: GROUP_ID, requests: 100 }],
+        domains: [{ target: 'oca.msf.org', requests: 100 }],
+        allow: [{ target: 'ana@msf.org', requests: 100 }],
       }),
     ]);
   });
 
-  it('a model inherits its family grant, dashed, in that audience column', () => {
-    renderTab([
+  it('keeps text that is not a person, group or domain in the field and says why', () => {
+    const onChange = renderTab();
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    const field = screen.getByRole('combobox', {
+      name: 'People, groups or domains to add',
+    });
+    fireEvent.change(field, { target: { value: 'finance team' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Not recognised: finance, team.',
+    );
+    expect(field).toHaveValue('finance, team');
+    expect(screen.getByRole('button', { name: 'Add' })).toBeDisabled();
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('lists groups, domains and people together, each with the same control: cap, switch off, remove', () => {
+    const rules = [
+      rule({
+        series: 'claude',
+        defaultAccess: null,
+        groups: [{ target: 'g1', requests: 100 }],
+        domains: [{ target: 'oca.msf.org', requests: null }],
+        allow: [{ target: 'ana@msf.org', requests: 5 }],
+        deny: ['m@msf.org'],
+      }),
+    ];
+    const onChange = renderTab(rules);
+    fireEvent.click(cell('Claude, g1: Limited to 100 / day'));
+    const list = screen.getByRole('list', {
+      name: 'Groups, domains and people',
+    });
+    expect(
+      within(list)
+        .getAllByRole('radiogroup')
+        .map((group) => group.getAttribute('aria-label')),
+    ).toEqual([
+      'Terms for g1',
+      'Terms for oca.msf.org',
+      'Terms for ana@msf.org',
+      'Terms for m@msf.org',
+    ]);
+    // A blocked person reads as Off, like everything else that is off.
+    expect(
+      within(
+        within(list).getByRole('radiogroup', { name: 'Terms for m@msf.org' }),
+      ).getByLabelText('Off'),
+    ).toBeChecked();
+
+    // Switching a GROUP off moves it from the grants to the blocked groups.
+    fireEvent.click(
+      within(
+        within(list).getByRole('radiogroup', { name: 'Terms for g1' }),
+      ).getByLabelText('Off'),
+    );
+    expect(onChange).toHaveBeenLastCalledWith([
+      { ...rules[0], groups: [], denyGroups: ['g1'] },
+    ]);
+    // Removing a DOMAIN uses the same button a person has.
+    fireEvent.click(
+      within(list).getByRole('button', { name: 'Remove oca.msf.org' }),
+    );
+    expect(onChange).toHaveBeenLastCalledWith([{ ...rules[0], domains: [] }]);
+  });
+
+  it('a model shows its family terms as inherited, and can take its own', () => {
+    const rules = [
       rule({
         series: 'claude',
         defaultAccess: false,
         groups: [{ target: 'g1', requests: 100 }],
+        denyDomains: ['ext.org'],
       }),
-    ]);
+    ];
+    const onChange = renderTab(rules);
     expect(cell('Claude, g1: Limited to 100 / day')).toBeInTheDocument();
+    expect(cell('Claude, ext.org: Unavailable')).toBeInTheDocument();
     expect(
       cell('Claude Sonnet 5, g1: Limited to 100 / day, inherited'),
     ).toBeInTheDocument();
+    expect(
+      cell('Claude Sonnet 5, ext.org: Unavailable, inherited'),
+    ).toBeInTheDocument();
+
+    fireEvent.click(
+      cell('Claude Sonnet 5, g1: Limited to 100 / day, inherited'),
+    );
+    const editor = screen.getByRole('region', {
+      name: 'Who can use Claude Sonnet 5',
+    });
+    // Opened from a column the model says nothing in: g1 waits in the field.
+    expect(
+      within(editor).getByRole('button', { name: 'Add 1 entry' }),
+    ).toBeEnabled();
+    expect(within(editor).getAllByText('from the family')).toHaveLength(2);
+    fireEvent.click(
+      within(editor).getByRole('button', {
+        name: 'Change g1 for this model',
+      }),
+    );
+    expect(onChange).toHaveBeenLastCalledWith([
+      rules[0],
+      rule({
+        modelId: 'claude-sonnet-5',
+        groups: [{ target: 'g1', requests: 100 }],
+      }),
+    ]);
   });
 
-  it('counts the people lists, sums up who can use it, and flags a collision with Global defaults', () => {
+  it('gives a group the same access on several models in one step', async () => {
+    const rules = [rule({ series: 'claude', defaultAccess: false })];
+    const onChange = renderTab(rules);
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Add access on several models' }),
+    );
+    const form = screen.getByRole('region', {
+      name: 'Give the same access on several models',
+    });
+    const apply = within(form).getByRole('button', { name: 'Choose models' });
+    expect(apply).toBeDisabled();
+    const field = within(form).getByRole('combobox');
+    fireEvent.change(field, { target: { value: 'oca.msf.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+    fireEvent.click(
+      within(form).getByRole('checkbox', { name: /^Claude whole/ }),
+    );
+    fireEvent.click(
+      within(form).getByRole('checkbox', { name: 'Claude Sonnet 5' }),
+    );
+    fireEvent.click(
+      within(form).getByRole('button', { name: 'Apply to 2 rows' }),
+    );
+    expect(onChange).toHaveBeenLastCalledWith([
+      rule({
+        series: 'claude',
+        defaultAccess: false,
+        domains: [{ target: 'oca.msf.org', requests: null }],
+      }),
+      rule({
+        modelId: 'claude-sonnet-5',
+        domains: [{ target: 'oca.msf.org', requests: null }],
+      }),
+    ]);
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('region', {
+          name: 'Give the same access on several models',
+        }),
+      ).not.toBeInTheDocument(),
+    );
+  });
+
+  it('counts named people, sums up who can use it, and flags a collision with Global defaults', () => {
     renderTab(
       [
         rule({
@@ -200,8 +350,7 @@ describe('ModelAccessTab grid', () => {
         },
       ],
     );
-    expect(cell('Claude, Allowed people: 2')).toBeInTheDocument();
-    expect(cell('Claude, Blocked people: 1')).toBeInTheDocument();
+    expect(cell('Claude, Named people: 2 allowed, 1 off')).toBeInTheDocument();
     const row = screen
       .getByRole('rowheader', { name: /^Claude.*family: shared/ })
       .closest('tr') as HTMLElement;
@@ -209,9 +358,22 @@ describe('ModelAccessTab grid', () => {
     expect(
       within(row).getByText('Also in Global defaults'),
     ).toBeInTheDocument();
+  });
 
-    // The block list opens as a list of people, not a number.
-    fireEvent.click(cell('Claude, Blocked people: 1'));
-    expect(screen.getByText('m@msf.org')).toBeInTheDocument();
+  it('sums up an open model by who is shut out', () => {
+    renderTab([
+      rule({
+        series: 'claude',
+        defaultAccess: null,
+        denyDomains: ['ext.org'],
+        deny: ['m@msf.org'],
+      }),
+    ]);
+    const row = screen
+      .getByRole('rowheader', { name: /^Claude.*family: shared/ })
+      .closest('tr') as HTMLElement;
+    expect(
+      within(row).getByText('Everyone except 1 domain, 1 person'),
+    ).toBeInTheDocument();
   });
 });
