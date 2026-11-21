@@ -168,7 +168,8 @@ function visualFindings(
   const add = (finding: BrandFinding) => {
     if (!findings.has(finding.id)) findings.set(finding.id, finding);
   };
-  const expectedFonts = book.fonts.map((font) => font.family);
+  // A family set for two roles is named once.
+  const expectedFonts = [...new Set(book.fonts.map((font) => font.family))];
   for (const run of unit.runs) {
     if (!run.text.trim()) continue;
     if (families.size > 0 && run.font && !families.has(fontKey(run.font))) {
@@ -219,15 +220,19 @@ function wordingFindings(
   book: BrandBookBody,
 ): BrandFinding[] {
   const findings: BrandFinding[] = [];
-  const bannedTerms = book.language.banned.map((entry) => entry.term);
-  for (const banned of book.language.banned) {
-    // Words inside a longer banned phrase are that phrase's finding, not
-    // a second one ("the field" inside "in the field").
-    const longer = bannedTerms.filter(
-      (other) =>
-        other.length > banned.term.length &&
-        termOccurrences(other, banned.term) > 0,
+  // Every phrase the book reports, from either list. Words inside a longer
+  // reported phrase are that phrase's finding, not a second one ("the
+  // field" inside "in the field"), whichever list each is in.
+  const reported = [
+    ...book.language.banned.map((entry) => entry.term),
+    ...book.language.preferred.flatMap((entry) => entry.alternatives),
+  ];
+  const longerThan = (term: string) =>
+    reported.filter(
+      (other) => other.length > term.length && termOccurrences(other, term) > 0,
     );
+  for (const banned of book.language.banned) {
+    const longer = longerThan(banned.term);
     const count = termOccurrences(unit.text, banned.term, [
       ...banned.alternatives,
       ...longer,
@@ -252,7 +257,10 @@ function wordingFindings(
   >();
   for (const preferred of book.language.preferred) {
     for (const instead of preferred.alternatives) {
-      const count = termOccurrences(unit.text, instead, [preferred.term]);
+      const count = termOccurrences(unit.text, instead, [
+        preferred.term,
+        ...longerThan(instead),
+      ]);
       if (count === 0) continue;
       const key = instead.trim().toLowerCase();
       const held = replacements.get(key);
