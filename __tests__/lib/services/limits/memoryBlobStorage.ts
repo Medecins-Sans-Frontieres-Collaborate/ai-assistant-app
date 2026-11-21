@@ -54,6 +54,7 @@ export function memoryBlobStorage(): MemoryBlobStorage {
     getBlockBlobClient: (name: string) => client(name),
     listBlobs: async (prefix: string) =>
       [...blobs.keys()].filter((name) => name.startsWith(prefix)).sort(),
+    deleteIfExists: async (name: string) => blobs.delete(name),
   } as unknown as BlobStorage;
 
   return {

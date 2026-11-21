@@ -1,6 +1,8 @@
 import { subjectHash } from '@/lib/services/limits/decisionStats';
 import {
   MODEL_DAY_VERSION,
+  MODEL_USAGE_PRUNE_DAYS_PER_RUN,
+  MODEL_USAGE_RETAIN_DAYS,
   ModelDayDoc,
   __resetModelUsageInsightsForTests,
   aggregateOf,
@@ -8,6 +10,8 @@ import {
   combineModelDays,
   loadModelUsage,
   modelDayPath,
+  modelUsageExpiryDay,
+  pruneModelUsage,
 } from '@/lib/services/limits/modelUsageInsights';
 import {
   MAX_SUBJECTS_PER_MODEL,
@@ -20,6 +24,7 @@ import {
   recordModelUsage,
 } from '@/lib/services/limits/modelUsageTally';
 import {
+  INSIGHT_DAYS,
   __resetUsageInsightsForTests,
   loadUsageInsights,
 } from '@/lib/services/limits/usageInsights';
@@ -55,7 +60,7 @@ beforeEach(() => {
     },
     now: () => clock,
   });
-  __resetModelUsageInsightsForTests();
+  __resetModelUsageInsightsForTests({ now: () => clock });
   __resetUsageInsightsForTests();
 });
 
@@ -360,5 +365,118 @@ describe('model usage over a window', () => {
       requests: 3,
       peaks: [3],
     });
+  });
+});
+
+describe('retention of the per-replica files', () => {
+  const NOW = new Date('2026-07-23T15:00:00.000Z');
+  const EXPIRED = modelUsageExpiryDay(NOW);
+  const dayAfter = (day: string, days = 1): string =>
+    new Date(Date.parse(`${day}T00:00:00Z`) + days * 86_400_000)
+      .toISOString()
+      .slice(0, 10);
+  const KEPT = dayAfter(EXPIRED);
+  const usage = {
+    'gpt-5.4': { subjectsCapped: false, subjects: { a: [3, 3, 0, 0] } },
+  };
+  const putTally = (day: string, replica = 'r-1') =>
+    blobs.put(
+      modelUsagePath(day, replica),
+      tally(replica, usage as ModelUsageDoc['models'], day),
+    );
+  const prune = () => pruneModelUsage(blobs.storage, { now: NOW, force: true });
+
+  it('keeps every day the insights window can still need', () => {
+    expect(MODEL_USAGE_RETAIN_DAYS).toBeGreaterThan(INSIGHT_DAYS);
+    // The newest expired day is older than the whole retention period.
+    expect(
+      (NOW.getTime() - Date.parse(`${EXPIRED}T00:00:00Z`)) / 86_400_000,
+    ).toBeGreaterThan(MODEL_USAGE_RETAIN_DAYS);
+  });
+
+  it('removes files on the expiry day and keeps the day after it', async () => {
+    putTally(EXPIRED, 'r-1');
+    putTally(EXPIRED, 'r-2');
+    putTally(KEPT);
+    expect(await prune()).toBe(2);
+    expect(await blobs.storage.listBlobs(modelUsageDayPrefix(EXPIRED))).toEqual(
+      [],
+    );
+    expect(blobs.blobs.has(modelUsagePath(KEPT, 'r-1'))).toBe(true);
+  });
+
+  it('summarises a day nobody looked at before removing its files', async () => {
+    putTally(EXPIRED);
+    expect(blobs.blobs.has(modelDayPath(EXPIRED))).toBe(false);
+    await prune();
+    const summary = blobs.json(modelDayPath(EXPIRED)) as ModelDayDoc;
+    expect(summary.models['gpt-5.4'].aggregate.requests).toBe(3);
+    expect(blobs.blobs.has(modelUsagePath(EXPIRED, 'r-1'))).toBe(false);
+  });
+
+  it('leaves an existing summary alone', async () => {
+    putTally(EXPIRED);
+    const stored = await buildModelDay(blobs.storage, EXPIRED);
+    blobs.put(modelDayPath(EXPIRED), { ...stored, builtAt: 'earlier' });
+    await prune();
+    expect((blobs.json(modelDayPath(EXPIRED)) as ModelDayDoc).builtAt).toBe(
+      'earlier',
+    );
+  });
+
+  it('keeps the files when the summary cannot be stored, and does not throw', async () => {
+    putTally(EXPIRED);
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const failing = {
+      ...blobs.storage,
+      getBlockBlobClient: (name: string) => {
+        const client = blobs.storage.getBlockBlobClient(name);
+        return name === modelDayPath(EXPIRED)
+          ? {
+              ...client,
+              upload: async () => {
+                throw new Error('write refused');
+              },
+            }
+          : client;
+      },
+    } as typeof blobs.storage;
+    expect(await pruneModelUsage(failing, { now: NOW, force: true })).toBe(0);
+    expect(blobs.blobs.has(modelUsagePath(EXPIRED, 'r-1'))).toBe(true);
+
+    const broken = {
+      ...blobs.storage,
+      listBlobs: async () => {
+        throw new Error('storage down');
+      },
+    } as typeof blobs.storage;
+    await expect(
+      pruneModelUsage(broken, { now: NOW, force: true }),
+    ).resolves.toBe(0);
+  });
+
+  it('trims the oldest days first, a bounded number per run', async () => {
+    const days = Array.from(
+      { length: MODEL_USAGE_PRUNE_DAYS_PER_RUN + 1 },
+      (_, index) => dayAfter(EXPIRED, -index),
+    );
+    days.forEach((day) => putTally(day));
+    expect(await prune()).toBe(MODEL_USAGE_PRUNE_DAYS_PER_RUN);
+    // Only the newest expired day is left for the next run.
+    expect(await blobs.storage.listBlobs('')).toEqual(
+      expect.arrayContaining([modelUsagePath(EXPIRED, 'r-1')]),
+    );
+    expect(await prune()).toBe(1);
+  });
+
+  it('runs at most once per interval unless forced, and ignores stray names', async () => {
+    putTally(EXPIRED);
+    blobs.put(`${modelUsageDayPrefix('not-a-day')}r-1.json`, {});
+    expect(await pruneModelUsage(blobs.storage, { now: NOW })).toBe(1);
+    putTally(EXPIRED, 'r-2');
+    expect(await pruneModelUsage(blobs.storage, { now: NOW })).toBe(0);
+    expect(blobs.blobs.has(`${modelUsageDayPrefix('not-a-day')}r-1.json`)).toBe(
+      true,
+    );
   });
 });

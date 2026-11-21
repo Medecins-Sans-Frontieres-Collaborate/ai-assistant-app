@@ -33,6 +33,7 @@ import {
   TUPLE,
   flushModelUsage,
   modelUsageDayPrefix,
+  modelUsageRootPrefix,
 } from '@/lib/services/limits/modelUsageTally';
 import { LIMITS_STATS_PREFIX } from '@/lib/services/limits/types';
 import { ModelUsageInsight } from '@/lib/services/limits/wire';
@@ -420,6 +421,9 @@ export async function loadModelUsage(
       );
     }
   }
+  // Housekeeping rides on the read that every admin view makes; it never
+  // delays or fails it.
+  void pruneModelUsage(storage);
   return {
     models: combineModelDays(found),
     capturedDays: found
@@ -430,7 +434,98 @@ export async function loadModelUsage(
   };
 }
 
-/** Test hook. */
-export function __resetModelUsageInsightsForTests(): void {
+// ---------------------------------------------------------------------------
+// Retention of the per-replica files
+// ---------------------------------------------------------------------------
+
+/**
+ * Days a replica's usage file is kept after its day. The admin container has
+ * no lifecycle rule (by design: admin data must not expire silently), so the
+ * app trims these itself. Longer than the insights window on purpose: every
+ * day the page can show can still be rebuilt from its tallies (a late flush,
+ * a {@link MODEL_DAY_VERSION} bump).
+ */
+export const MODEL_USAGE_RETAIN_DAYS = 14;
+/** How often one process looks for files to trim, at most. */
+export const MODEL_USAGE_PRUNE_INTERVAL_MS = 6 * 60 * 60 * 1000;
+/** Days trimmed per run, oldest first, so one run stays small. */
+export const MODEL_USAGE_PRUNE_DAYS_PER_RUN = 10;
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+let lastPruneAt = 0;
+let pruneClock: () => Date = () => new Date();
+
+/**
+ * The last day whose replica files are due for removal: files for this day
+ * and earlier go, later days stay. UTC, while days are policy-timezone
+ * dates; the one-day slack that leaves is harmless at this length.
+ */
+export function modelUsageExpiryDay(now: Date): string {
+  return new Date(now.getTime() - (MODEL_USAGE_RETAIN_DAYS + 1) * DAY_MS)
+    .toISOString()
+    .slice(0, 10);
+}
+
+/**
+ * Removes the per-replica usage files of days past
+ * {@link MODEL_USAGE_RETAIN_DAYS}. Nothing is lost: a day's files are only
+ * removed once its summary is stored, and a day that never got one (nobody
+ * opened an admin view that week) is summarised first. A day whose summary
+ * cannot be built keeps its files for the next run.
+ *
+ * Best effort and throttled per process; never throws.
+ *
+ * @param options.force - Skip the throttle (tests, a manual run).
+ * @returns The number of files removed.
+ */
+export async function pruneModelUsage(
+  storage: BlobStorage,
+  options: { now?: Date; force?: boolean } = {},
+): Promise<number> {
+  const now = options.now ?? pruneClock();
+  if (
+    !options.force &&
+    now.getTime() - lastPruneAt < MODEL_USAGE_PRUNE_INTERVAL_MS
+  ) {
+    return 0;
+  }
+  lastPruneAt = now.getTime();
+  let removed = 0;
+  try {
+    const root = modelUsageRootPrefix();
+    const expiry = modelUsageExpiryDay(now);
+    const byDay = new Map<string, string[]>();
+    for (const name of await storage.listBlobs(root)) {
+      const day = name.slice(root.length).split('/')[0];
+      if (!DAY_RE.test(day) || day > expiry) continue;
+      byDay.set(day, [...(byDay.get(day) ?? []), name]);
+    }
+    const due = [...byDay.keys()]
+      .sort()
+      .slice(0, MODEL_USAGE_PRUNE_DAYS_PER_RUN);
+    for (const day of due) {
+      const summary =
+        (await readModelDay(storage, day)) ??
+        (await buildAndStore(storage, day));
+      if (!summary) continue;
+      for (const name of byDay.get(day) ?? []) {
+        if (await storage.deleteIfExists(name)) removed += 1;
+      }
+    }
+  } catch (error) {
+    console.warn(
+      `[limits] could not trim old model usage files: ${sanitizeForLog(error)}`,
+    );
+  }
+  return removed;
+}
+
+/** Test hook: forgets in-flight builds and the trim throttle; injects a clock. */
+export function __resetModelUsageInsightsForTests(
+  options: { now?: () => Date } = {},
+): void {
   building.clear();
+  lastPruneAt = 0;
+  pruneClock = options.now ?? (() => new Date());
 }

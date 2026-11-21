@@ -99,6 +99,11 @@ export function modelUsagePath(day: string, replica: string): string {
   return `${LIMITS_STATS_PREFIX}model-usage/${day}/${replica}.json`;
 }
 
+/** Prefix that lists every replica's model usage for every day. */
+export function modelUsageRootPrefix(): string {
+  return `${LIMITS_STATS_PREFIX}model-usage/`;
+}
+
 /** Prefix that lists every replica's model usage for a day. */
 export function modelUsageDayPrefix(day: string): string {
   return `${LIMITS_STATS_PREFIX}model-usage/${day}/`;

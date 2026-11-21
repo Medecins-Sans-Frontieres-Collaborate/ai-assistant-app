@@ -97,8 +97,29 @@ for capped models, says only capped people are counted, and shows totals as
 "Not yet known". Usage for everyone appears from the first finished day after
 deployment; there is no backfill.
 
-Cost figures follow the `limitsCostInsights` flag: off means none are
-computed or shown. Footprint, usage and retirement are always shown.
+List price and the cost estimates derived from it are shown to every limits
+admin on this page; they do not depend on the `limitsCostInsights` flag,
+which still gates the estimator and the per-rule cost hints elsewhere.
+
+Models whose retirement date has passed are left out of the grid until the
+admin asks for them ("Retired models"). The runway still lists them.
+
+### Retention of the per-replica files
+
+The admin container has no lifecycle rule (admin data must not expire
+silently), so the app trims these files itself: `pruneModelUsage` in
+`modelUsageInsights.ts`.
+
+- A replica file is removed once its day is more than
+  `MODEL_USAGE_RETAIN_DAYS` (14) old. That is longer than the 7-day window on
+  purpose: any day the page can show can still be rebuilt from its tallies.
+- Nothing is lost. A day's files go only once its summary is stored; a day
+  nobody looked at is summarised first, and a day whose summary cannot be
+  written keeps its files for the next run.
+- It runs behind the insights read every admin view makes, at most once every
+  6 hours per process, oldest days first, 10 days per run. It never delays or
+  fails the read.
+- Day summaries (`summary/model-day/`) are kept: one small file per day.
 
 ### Not built
 
@@ -112,9 +133,6 @@ computed or shown. Footprint, usage and retirement are always shown.
   hashed ids, which cannot be matched to the groups, domains and mails the
   rules name. The runway compares the RULES of the two models instead and
   offers to copy them across as a draft.
-- Retention. Replica files and day summaries are not deleted by the app; add
-  a lifecycle rule on `system/limits/stats*/model-usage/` (the replica files
-  are redundant once the day summary is written).
 
 ## 1. Decisions already taken
 
