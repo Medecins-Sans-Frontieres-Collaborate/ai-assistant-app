@@ -2,6 +2,7 @@ import { Session } from 'next-auth';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
+import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { env } from '@/config/environment';
@@ -225,11 +226,38 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
    * works over a private endpoint. Used as a self-healing backstop for
    * containers whose source of truth is Terraform (e.g. the admin
    * container), so a fresh environment works before the next infra apply.
+   *
+   * @param metadata - Stored on the container only when this call creates it.
+   * @returns True when this call created the container.
    */
-  async ensureContainerExists(): Promise<void> {
-    await this.blobServiceClient
+  async ensureContainerExists(
+    metadata?: Record<string, string>,
+  ): Promise<boolean> {
+    const response = await this.blobServiceClient
       .getContainerClient(this.containerName as string)
-      .createIfNotExists();
+      .createIfNotExists(metadata ? { metadata } : undefined);
+    // `succeeded` is true only when this call created it; an existing
+    // container is left exactly as it was, metadata included.
+    return response.succeeded;
+  }
+
+  /**
+   * This client's container's metadata.
+   *
+   * @returns The metadata (empty when it has none), or null when the
+   *   container does not exist.
+   * @throws The storage error for anything else (no access, network).
+   */
+  async getContainerMetadata(): Promise<Record<string, string> | null> {
+    try {
+      const properties = await this.blobServiceClient
+        .getContainerClient(this.containerName as string)
+        .getProperties();
+      return properties.metadata ?? {};
+    } catch (error) {
+      if (isBlobNotFoundError(error)) return null;
+      throw error;
+    }
   }
 
   async upload(
