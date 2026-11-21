@@ -26,6 +26,8 @@ const logTokenUsage = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
 const logToolCall = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
 const recordMetric = vi.hoisted(() => vi.fn());
 const debit = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
+const tally = vi.hoisted(() => vi.fn());
+const policyTimezone = vi.hoisted(() => ({ value: 'Europe/Paris' as string }));
 
 vi.mock('@/lib/services/observability/AzureMonitorLoggingService', () => ({
   getAzureMonitorLogger: () => ({ logTokenUsage, logToolCall }),
@@ -35,6 +37,20 @@ vi.mock('@/lib/services/observability/MetricsService', () => ({
 }));
 vi.mock('@/lib/services/limits/tokenDebit', () => ({
   debitTokenUsage: debit,
+}));
+vi.mock('@/lib/services/limits/modelUsageTally', () => ({
+  recordModelUsage: tally,
+}));
+vi.mock('@/lib/services/limits/LimitsService', () => ({
+  LimitsService: {
+    getInstance: () => ({
+      getSnapshot: () => ({
+        policy: policyTimezone.value
+          ? { timezone: policyTimezone.value }
+          : null,
+      }),
+    }),
+  },
 }));
 
 const user = { id: 'u1', mail: 'u1@example.com' } as Session['user'];
@@ -260,5 +276,47 @@ describe('recordToolCall', () => {
     );
     // Same pool as chat — the surface only makes the spend separable.
     expect(debit).toHaveBeenCalledWith(user, 15, 'workflow');
+  });
+});
+
+describe('recordTokenUsage — model usage tally', () => {
+  it('tallies one call with the real token counts under the SERVED catalog id', () => {
+    recordTokenUsage(
+      // The provider reported its own name for the deployment.
+      { ...usage, modelId: 'gpt-5.2-2025-12-11' },
+      model,
+      user,
+      true,
+    );
+    expect(tally).toHaveBeenCalledTimes(1);
+    expect(tally).toHaveBeenCalledWith(
+      'u1',
+      model.id,
+      { calls: 1, promptTokens: 10, completionTokens: 5 },
+      { series: model.series, timezone: 'Europe/Paris' },
+    );
+  });
+
+  it('tallies even when the quota debit is switched off, and falls back to UTC without a policy', () => {
+    policyTimezone.value = '';
+    recordTokenUsage(usage, model, user, false, undefined, { debit: false });
+    policyTimezone.value = 'Europe/Paris';
+    expect(debit).not.toHaveBeenCalled();
+    expect(tally).toHaveBeenCalledWith(
+      'u1',
+      model.id,
+      expect.objectContaining({ calls: 1 }),
+      expect.objectContaining({ timezone: 'UTC' }),
+    );
+  });
+
+  it("leaves out a model that runs on the user's own account", () => {
+    recordTokenUsage(
+      usage,
+      { ...model, id: 'byom-my-model' } as OpenAIModel,
+      user,
+      true,
+    );
+    expect(tally).not.toHaveBeenCalled();
   });
 });
