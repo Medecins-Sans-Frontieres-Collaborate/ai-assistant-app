@@ -150,6 +150,24 @@ export function createAdminBlobStorage(): BlobStorage {
   return storage;
 }
 
+/**
+ * Ensures the admin container exists now, instead of on first use. Shares
+ * the once-per-process attempt with {@link createAdminBlobStorage}, so the
+ * container is created at most once and never cleared.
+ *
+ * @returns True when the container exists (created now or already there);
+ *   false when the attempt failed, which has already been logged.
+ * @throws Error when no storage account is configured at all.
+ */
+export function ensureAdminContainer(): Promise<boolean> {
+  const { accountName, containerName } = resolveAdminStorageLocation();
+  createAdminBlobStorage();
+  return (
+    ensuredContainers.get(`${accountName}/${containerName}`) ??
+    Promise.resolve(true)
+  );
+}
+
 /** Test hook. */
 export function __resetAdminStorageStateForTests(): void {
   devLegacyFallbackAccount = null;
