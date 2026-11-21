@@ -568,6 +568,7 @@ export const GlobalLimitsPanel: FC = () => {
                 mode={draft.mode}
                 disabled={saving}
                 onLeaveGuard={registerModelsGuard}
+                insights={insightsQuery.data}
               />
             )}
             {tab === 'delegations' && (
