@@ -1,14 +1,120 @@
 # Models page: analytics data and pre-aggregations
 
-Status: proposal, nothing here is implemented. It accompanies the concept
-canvas for the Admin > Usage limits > Models page (grid with cost, footprint,
-usage and lifecycle columns; open row with a usage distribution and cap
-replay; retirement runway; spend and popularity map).
+Status: implemented in the app, except the items marked "not built" below.
+Sections 2 to 9 are the original design and are kept as the reasoning; where
+the build differs from them, "What is implemented" wins.
 
-This document says what data those views need, what the app already has, and
-which pre-aggregations would have to be added. It is written so the analytics
-side (the ETL that delivers report files, and the limits usage summaries the
-app builds itself) can be planned without reading the UI concepts.
+This document says what data the Admin > Usage limits > Models views need
+(grid with cost, footprint, usage and retirement columns; open row with a
+usage distribution and cap replay; retirement runway; spend and popularity
+map), what the app captures for them, and what still needs the analytics ETL.
+
+## What is implemented
+
+### The gap that had to be closed
+
+Before this work the app could not supply the page. The usage counters
+(`usageStore.ts`) exist only for cells that carry a cap: a request by a person
+with no cap on a model writes nothing (`meteredCells` drops unlimited cells).
+So the unlimited majority was invisible, and tokens were counted per person,
+never per model. Popularity, percentiles and spend for an uncapped model could
+not be derived from anything the app stored.
+
+### Capture (always on, capped or not)
+
+`lib/services/limits/modelUsageTally.ts`. The request path only increments an
+in-memory tally; a timer writes each replica's running totals for the day to
+one blob that only that process writes, so there is no per-request storage
+write and no contention:
+
+    <statsPrefix>model-usage/<day>/<replica>.json
+
+`<statsPrefix>` is the limits stats prefix in the admin container
+(`system/limits/stats/`, `.beta` in the beta ring). This is app-owned storage
+beside the limits day summaries. It is NOT the `ai-portal-analytics` delivery
+container, which the ETL writes and the app only reads.
+
+Per model, per hashed person, per day: `[requests, calls, promptTokens,
+completionTokens]`. Two measures, recorded at two points:
+
+| Measure                                     | Recorded in                                                                 | Counts                                                                                                                             |
+| ------------------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `requests`                                  | `createLimitsMiddleware` (`tallyChatRequest`), after every check has passed | One per admitted chat message, under the model asked for. A tool-loop continuation is the same message. This is what a cap counts. |
+| `calls`, `promptTokens`, `completionTokens` | `recordTokenUsage` (`tallyModelCall`)                                       | One per model call that reported usage, workflows included, under the model that served it.                                        |
+
+Bounds: 500 models a day, 20,000 named people per model per day (the rest
+share one overflow subject, so totals stay right and the people count becomes
+a lower bound), flush every 60 seconds.
+
+Not captured, by design: the user's own models (`byom-`), requests the limits
+check let through because it failed open, refused requests (those are in the
+decision tallies), and up to one flush interval if a replica dies.
+
+### Day summary (written once per finished day)
+
+`lib/services/limits/modelUsageInsights.ts`, `buildModelDay`:
+
+    <statsPrefix>summary/model-day/<day>.json
+
+Merges every replica's file for the day. Per model it keeps the hashed
+`subjects` (needed to merge one person's days across the window) and a
+person-free `aggregate`: people, totals, quantiles and the histogram over
+`REQUEST_BUCKET_EDGES`. It also stores a `catalog` snapshot (price, size
+class, lifecycle, retirement date as they stood that day) and the assumption
+versions, so a later price or size change does not rewrite history. This is
+sections 4.1 and 4.5.
+
+### Window aggregate (computed on read, not stored)
+
+`loadModelUsage` / `combineModelDays` merge the last `INSIGHT_DAYS` (7) day
+summaries per person and return, per model: distinct people, requests, calls,
+tokens, active person-days, each person's busiest day (`peaks`, ascending,
+largest 5,000 kept) and a per-day series. `GET /api/limits/insights` returns
+it as `models` with `modelDays` (the days the capture covers). This replaces
+the stored document of section 4.2: seven small files are cheap to merge and
+nothing has to be invalidated.
+
+Statistics (quantiles by nearest rank, histogram, cap replay) are computed
+from `peaks` by `lib/utils/shared/usageDistribution.ts`, the same code on the
+server and in the page.
+
+### What the page derives (`lib/utils/app/modelFacts.ts`)
+
+| Figure                                                | Source                                         | Kind          |
+| ----------------------------------------------------- | ---------------------------------------------- | ------------- |
+| People, requests, average, median, p75, p95, heaviest | window aggregate                               | counted       |
+| Reached a cap, refused requests                       | limits day summaries (`CellInsight`)           | counted       |
+| Cap replay ("if the cap were N")                      | `peaks` at or above N                          | counted       |
+| Cost of a typical and a long request                  | list price x assumed request                   | estimate      |
+| Most one person can cost in a month                   | cap x request cost x 30.4375                   | estimate      |
+| Spend over the window                                 | requests x typical request cost                | estimate      |
+| CO2e per request and over the window                  | size class x assumed request                   | estimate      |
+| Retirement date, notice and move dates, replacement   | model catalog and discovery (`retiresAt` wins) | configuration |
+| Access on the replacement                             | rule by rule comparison of the draft           | configuration |
+
+Until the first day summary exists the page falls back to the cap counters
+for capped models, says only capped people are counted, and shows totals as
+"Not yet known". Usage for everyone appears from the first finished day after
+deployment; there is no backfill.
+
+Cost figures follow the `limitsCostInsights` flag: off means none are
+computed or shown. Footprint, usage and retirement are always shown.
+
+### Not built
+
+- Section 4.3, the token aggregate from the ETL. Captured tokens are stored
+  per model and returned by the API, but the page still prices the ASSUMED
+  request, as decided. Measured cost per model can be built from the captured
+  tokens later without new capture. Splitting by surface (chat, workflow) is
+  not captured.
+- Section 4.4 at person level. "How many people on a retiring model are
+  blocked on its replacement" cannot be answered: usage is stored against
+  hashed ids, which cannot be matched to the groups, domains and mails the
+  rules name. The runway compares the RULES of the two models instead and
+  offers to copy them across as a draft.
+- Retention. Replica files and day summaries are not deleted by the app; add
+  a lifecycle rule on `system/limits/stats*/model-usage/` (the replica files
+  are redundant once the day summary is written).
 
 ## 1. Decisions already taken
 
@@ -401,16 +507,15 @@ happened.
 The day summaries themselves are kept as they are; the retention above is for
 the new, person-free aggregates, which are small (one row per model per day).
 
-## 9. Gaps to close before building
+## 9. Gaps (as found during design; see "Not built" for the current state)
 
 - Size class is missing for some live models, so their footprint cannot be
   estimated. Either set it in `config/models.json` or accept "Not set".
 - Some `retirementDate` values in `config/models.json` are in the past for
   models that are still served. The runway must read the date discovery
   reports (`retiresAt`), not the static value.
-- Models without a `model.requests` counter have no usage in the limits
-  summaries. Decide whether every served model gets a counter, or whether
-  popularity for those comes from the token aggregate.
+- Models without a `model.requests` counter had no usage in the limits
+  summaries. CLOSED: the per-model tally counts every model.
 - The prod log ingestion schema drops `Surface`, so chat and workflow calls
   cannot be separated in the token aggregate until it is reconciled.
 - Cached tokens are not captured, so list-price cost from token rows is an
