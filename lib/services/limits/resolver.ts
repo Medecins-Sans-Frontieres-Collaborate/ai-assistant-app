@@ -392,6 +392,123 @@ export function resolveLimit(
   series?: string,
   active: ReadonlySet<string> = activeDelegationIds(policy, principal),
 ): ResolvedLimit {
+  return resolveCell(def, policy, principal, modelId, series, active);
+}
+
+/** One record that spoke to a cell, as the admin explanation shows it. */
+export interface CandidateView {
+  value: LimitValue;
+  source: LimitSource;
+  tier: LimitTier;
+  /** Absent for the catalog and the global defaults. */
+  overrideId?: string;
+  /** A global-tier hard ceiling (a scoped record never is). */
+  ceiling: boolean;
+}
+
+/** The best record at one layer, and how many others there lost to it. */
+export interface LayerExplanation extends CandidateView {
+  /** Records at the same layer that lost the tie-break to this one. */
+  outranked: number;
+}
+
+/**
+ * Why a cell resolved as it did: every layer that has a say, least specific
+ * first, plus the result. Produced by the SAME loop as {@link resolveLimit},
+ * so the explanation and enforcement cannot disagree.
+ */
+export interface LimitExplanation {
+  resolved: ResolvedLimit;
+  /** Only layers with at least one record; ordered catalog → user. */
+  layers: LayerExplanation[];
+  /** The layer whose record won before any ceiling clamped it. */
+  winnerSource: LimitSource;
+  /** The record that pinned the value, when a ceiling clamped it. */
+  ceiling?: CandidateView;
+  /** Every record that spoke to the cell, in evaluation order. */
+  considered: CandidateView[];
+}
+
+/**
+ * Explains one cell for the admin views: the per-layer view behind
+ * {@link resolveLimit}. Same arguments, same answer in `resolved`.
+ *
+ * @example
+ *   const why = explainLimit(def, policy, principal);
+ *   why.layers.map((layer) => `${layer.source}: ${layer.value}`);
+ */
+export function explainLimit(
+  def: LimitDefinition,
+  policy: LimitsPolicy | null,
+  principal: Principal,
+  modelId?: string,
+  series?: string,
+  active: ReadonlySet<string> = activeDelegationIds(policy, principal),
+): LimitExplanation {
+  const seen: Candidate[] = [];
+  const trace: ResolveTrace = { seen };
+  const resolved = resolveCell(
+    def,
+    policy,
+    principal,
+    modelId,
+    series,
+    active,
+    trace,
+  );
+  const bestPerLayer = new Map<LimitSource, LayerExplanation>();
+  const bestCandidate = new Map<LimitSource, Candidate>();
+  for (const candidate of seen) {
+    const current = bestCandidate.get(candidate.source);
+    if (!current || beats(candidate, current)) {
+      bestCandidate.set(candidate.source, candidate);
+    }
+  }
+  for (const [source, best] of bestCandidate) {
+    bestPerLayer.set(source, {
+      ...candidateView(best),
+      outranked: seen.filter((c) => c.source === source).length - 1,
+    });
+  }
+  return {
+    resolved,
+    layers: [...bestPerLayer.values()].sort(
+      (a, b) => LAYER_RANK[a.source] - LAYER_RANK[b.source],
+    ),
+    winnerSource: trace.winner?.source ?? 'catalog',
+    considered: seen.map(candidateView),
+    ...(resolved.ceilingApplied && trace.ceilingWinner
+      ? { ceiling: candidateView(trace.ceilingWinner) }
+      : {}),
+  };
+}
+
+function candidateView(candidate: Candidate): CandidateView {
+  return {
+    value: candidate.value,
+    source: candidate.source,
+    tier: candidate.tier,
+    ceiling: candidate.ceiling,
+    ...(candidate.overrideId ? { overrideId: candidate.overrideId } : {}),
+  };
+}
+
+/** Filled by {@link resolveCell} only when an explanation is asked for. */
+interface ResolveTrace {
+  seen: Candidate[];
+  winner?: Candidate;
+  ceilingWinner?: Candidate;
+}
+
+function resolveCell(
+  def: LimitDefinition,
+  policy: LimitsPolicy | null,
+  principal: Principal,
+  modelId: string | undefined,
+  series: string | undefined,
+  active: ReadonlySet<string>,
+  trace?: ResolveTrace,
+): ResolvedLimit {
   // 1. Seed from the compiled catalog.
   let winner: Candidate = {
     value: def.defaultValue,
@@ -401,6 +518,7 @@ export function resolveLimit(
     specificity: 0,
     ceiling: false,
   };
+  trace?.seen.push(winner);
 
   // 1b. Model-qualified catalog defaults — external models are unavailable
   //     until granted (config/limits.ts CATALOG_MODEL_DEFAULTS). Same layer
@@ -417,6 +535,7 @@ export function resolveLimit(
       specificity: qualifierSpecificity(entry),
       ceiling: false,
     };
+    trace?.seen.push(candidate);
     if (beats(candidate, winner)) winner = candidate;
   }
 
@@ -440,6 +559,7 @@ export function resolveLimit(
         specificity: qualifierSpecificity(entry),
         ceiling: entry.ceiling,
       };
+      trace?.seen.push(candidate);
       if (beats(candidate, winner)) winner = candidate;
       if (
         candidate.ceiling &&
@@ -468,6 +588,7 @@ export function resolveLimit(
         ceiling: tier === 'global' && entry.ceiling,
         overrideId: override.id,
       };
+      trace?.seen.push(candidate);
       if (beats(candidate, winner)) winner = candidate;
       if (
         candidate.ceiling &&
@@ -476,6 +597,11 @@ export function resolveLimit(
         ceilingWinner = candidate;
       }
     }
+  }
+
+  if (trace) {
+    trace.winner = winner;
+    trace.ceilingWinner = ceilingWinner;
   }
 
   const resolved: ResolvedLimit = {
