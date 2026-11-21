@@ -35,6 +35,7 @@ import {
   ADMIN_BTN_RETRY,
   ADMIN_BTN_SECONDARY,
 } from '@/components/Admin/adminClasses';
+import { AccessLens } from '@/components/Limits/AccessLens';
 import { ChangeReview } from '@/components/Limits/ChangeReview';
 import { CostCalculatorLazy } from '@/components/Limits/CostCalculatorLazy';
 import { DelegationsTab } from '@/components/Limits/DelegationsTab';
@@ -42,7 +43,6 @@ import { useLimitsCost } from '@/components/Limits/LimitsCostContext';
 import { LimitsOverview } from '@/components/Limits/LimitsOverview';
 import { LimitsSettingsStrip } from '@/components/Limits/LimitsSettingsStrip';
 import { ModelAccessTab } from '@/components/Limits/ModelAccessTab';
-import { PersonLens } from '@/components/Limits/PersonLens';
 import { RuleEditor } from '@/components/Limits/RuleEditor';
 import {
   EMPTY_DRAFT,
@@ -366,7 +366,7 @@ export const GlobalLimitsPanel: FC = () => {
 
   const tabs = [
     { id: 'overview', label: t('console.tab.overview') },
-    { id: 'person', label: t('console.tab.person') },
+    { id: 'person', label: t('console.tab.check') },
     {
       id: 'review',
       label:
@@ -471,14 +471,18 @@ export const GlobalLimitsPanel: FC = () => {
           </>
         )}
         {tab === 'person' && (
-          <PersonLens
+          <AccessLens
             key={lensMail ?? ''}
             saved={savedPolicy}
             draft={policy}
             dirty={dirty}
             groupNames={groupNames}
             onEditRule={openRule}
-            initialMail={lensMail}
+            onOverridesChange={(overrides) => patch({ overrides })}
+            initialSubject={
+              lensMail ? { kind: 'user', target: lensMail } : undefined
+            }
+            disabled={saving}
           />
         )}
         {tab === 'review' && (
