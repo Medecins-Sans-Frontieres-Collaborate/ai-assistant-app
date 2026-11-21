@@ -102,3 +102,55 @@ export interface ScopedLimitsView {
    */
   groupLabels?: Record<string, string>;
 }
+
+// ---------------------------------------------------------------------------
+// GET /api/limits/insights (built in lib/services/limits/usageInsights.ts)
+// ---------------------------------------------------------------------------
+
+/** People per pressure band, against each person's own recorded cap. */
+export interface PressureBands {
+  underHalf: number;
+  toEighty: number;
+  nearCap: number;
+  atCap: number;
+}
+
+/** One cell's evidence as the admin views receive it. */
+export interface CellInsight {
+  limitKey: string;
+  modelId?: string;
+  series?: string;
+  /** Yesterday: people who used it, and their pressure bands. */
+  yesterday: {
+    people: number;
+    bands: PressureBands;
+    /** People whose usage carried no recorded cap (older counters). */
+    withoutCap: number;
+  };
+  /** Over the window: people (by the rule that set their cap) and at-cap people. */
+  byRule: Record<string, { people: number; atCap: number }>;
+  /** Over the window: times a cap was hit, by how many people, how many refused. */
+  events: number;
+  eventPeople: number;
+  blocked: number;
+  /**
+   * Each person's busiest day over the window, ascending; at most
+   * `MAX_PEAKS_PER_CELL` (usageInsights.ts) (the largest kept). Lets the browser answer
+   * "how many would be over a new cap of X" for any X.
+   */
+  peaks: number[];
+  /** True when `peaks` was truncated. */
+  peaksTruncated: boolean;
+}
+
+export interface UsageInsights {
+  /** 'building' while missing day summaries are still being made. */
+  status: 'ready' | 'building';
+  /** Most recent finished day, in the policy timezone. */
+  latestDay: string;
+  /** Days whose summary was available, newest first. */
+  days: string[];
+  /** Some day hit the document cap; counts are lower bounds. */
+  partial: boolean;
+  cells: Record<string, CellInsight>;
+}
