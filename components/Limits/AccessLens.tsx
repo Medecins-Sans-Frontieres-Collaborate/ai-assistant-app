@@ -10,7 +10,10 @@ import type { PreviewPrincipal } from '@/client/hooks/settings/useMyLimits';
 import { useGroupNames } from '@/client/hooks/useGroupNames';
 import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
-import { describeModelAccessOverrideId } from '@/lib/services/limits/modelAccess';
+import {
+  describeModelAccessOverrideId,
+  expandModelAccess,
+} from '@/lib/services/limits/modelAccess';
 import {
   LimitCell,
   RuleEffectStatus,
@@ -108,9 +111,15 @@ function cellsFor(
     ...group.memberKeys,
   ]).map((limitKey) => ({ limitKey }));
   const seen = new Set(cells.map(cellId));
+  // Model approval rules are stored apart from defaults and overrides; the
+  // resolver reads their expansion, so the rows shown here must too, or a
+  // family opened to this audience on the Models tab would have no row.
+  const approval = expandModelAccess(policy.modelAccess);
   const qualified = [
     ...policy.defaults,
     ...policy.overrides.flatMap((o) => o.entries),
+    ...approval.defaults,
+    ...approval.overrides.flatMap((o) => o.entries),
     ...extra,
   ].filter((cell) => cell.modelId || cell.series);
   for (const cell of qualified) {
