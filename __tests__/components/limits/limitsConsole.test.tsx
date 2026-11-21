@@ -169,6 +169,8 @@ function insights(cells: UsageInsights['cells']): UsageInsights {
     days: ['2026-07-23'],
     partial: false,
     cells,
+    models: {},
+    modelDays: [],
   };
 }
 

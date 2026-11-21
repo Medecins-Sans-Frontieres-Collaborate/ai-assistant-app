@@ -32,6 +32,7 @@ import {
   subjectHash,
 } from '@/lib/services/limits/decisionStats';
 import { createLimitsBlobStorage } from '@/lib/services/limits/limitsStore';
+import { loadModelUsage } from '@/lib/services/limits/modelUsageInsights';
 import { currentPeriod } from '@/lib/services/limits/periods';
 import {
   LIMITS_STATS_PREFIX,
@@ -437,12 +438,17 @@ export async function loadUsageInsights(
     }
   }
   found.sort((a, b) => b.day.localeCompare(a.day));
+  const modelUsage = await loadModelUsage(storage, days, {
+    wait: options.wait,
+  });
   return {
-    status: missing > 0 ? 'building' : 'ready',
+    status: missing + modelUsage.missing > 0 ? 'building' : 'ready',
     latestDay: days[0],
     days: found.map((s) => s.day),
     partial: found.some((s) => !s.complete),
     cells: combineSummaries(found),
+    models: modelUsage.models,
+    modelDays: modelUsage.capturedDays,
   };
 }
 

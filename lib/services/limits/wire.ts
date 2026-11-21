@@ -143,6 +143,38 @@ export interface CellInsight {
   peaksTruncated: boolean;
 }
 
+/**
+ * One model's usage over the window, from the per-model tallies
+ * (lib/services/limits/modelUsageInsights.ts). Counts and anonymous
+ * per-person peaks only; never who anyone is.
+ */
+export interface ModelUsageInsight {
+  /** Lowercased catalog id. */
+  modelId: string;
+  series?: string;
+  /** Distinct people with any usage in the window. */
+  people: number;
+  /** More people used it than could be told apart; `people` is a lower bound. */
+  peopleAreLowerBound: boolean;
+  /** Chat messages (what a cap counts). */
+  requests: number;
+  /** Model calls that reported usage: tool-loop rounds and workflows too. */
+  calls: number;
+  promptTokens: number;
+  completionTokens: number;
+  /** Person-days with at least one request; `requests / this` is the average. */
+  activePersonDays: number;
+  /**
+   * Each person's busiest day (requests) over the window, ascending; at most
+   * `MAX_PEAKS_PER_MODEL` (the largest kept). Answers "how many would a cap
+   * of X have stopped" for any X.
+   */
+  peaks: number[];
+  peaksTruncated: boolean;
+  /** Newest first. */
+  daily: Array<{ day: string; people: number; requests: number }>;
+}
+
 export interface UsageInsights {
   /** 'building' while missing day summaries are still being made. */
   status: 'ready' | 'building';
@@ -153,4 +185,12 @@ export interface UsageInsights {
   /** Some day hit the document cap; counts are lower bounds. */
   partial: boolean;
   cells: Record<string, CellInsight>;
+  /** Per-model usage for everyone, capped or not, by lowercased model id. */
+  models: Record<string, ModelUsageInsight>;
+  /**
+   * Days in the window on which per-model usage was captured, newest first.
+   * Empty until the capture has run for a finished day: `models` is then
+   * empty too, and only capped cells have evidence.
+   */
+  modelDays: string[];
 }
