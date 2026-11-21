@@ -15,9 +15,11 @@ import {
   listAdminBrandBooks,
   updateBrandBook,
   uploadBrandFile,
+  uploadBrandGuide,
 } from '@/client/services/brand/brandBookAdmin';
 
 import {
+  BRAND_FILE_MAX_BYTES,
   BrandBookBody,
   parseBrandBookBody,
 } from '@/lib/utils/shared/brand/brandBook';
@@ -80,7 +82,10 @@ export function BrandBookAdminEditor({ bookId }: { bookId: string }) {
   const [saving, setSaving] = useState(false);
   const [isConflict, setIsConflict] = useState(false);
   const [message, setMessage] = useState<Notice | null>(null);
-  const [drafting, setDrafting] = useState(false);
+  /** Where a draft from a guide has got to; null when none is being made. */
+  const [drafting, setDrafting] = useState<'uploading' | 'reading' | null>(
+    null,
+  );
   const [draft, setDraft] = useState<{
     evidence: BrandBookDraft['evidence'];
     before: BrandBookBody;
@@ -210,10 +215,20 @@ export function BrandBookAdminEditor({ bookId }: { bookId: string }) {
       showError(t('guide.notPdf'));
       return;
     }
-    setDrafting(true);
+    if (file.size > BRAND_FILE_MAX_BYTES.source) {
+      // Refused here, not after minutes of uploading.
+      showError(
+        t('guide.tooLarge', {
+          megabytes: Math.round(BRAND_FILE_MAX_BYTES.source / (1024 * 1024)),
+        }),
+      );
+      return;
+    }
+    setDrafting('uploading');
     setMessage(null);
     try {
-      const ref = await uploadBrandFile(file);
+      const ref = await uploadBrandGuide(file);
+      setDrafting('reading');
       const result = await draftBrandBookFromGuide(ref, file.name);
       // The guide's rules replace the book's; its files stay the admin's.
       setBook({
@@ -229,7 +244,7 @@ export function BrandBookAdminEditor({ bookId }: { bookId: string }) {
         fallback: 'guide.failed',
       });
     } finally {
-      setDrafting(false);
+      setDrafting(null);
     }
   };
 
@@ -322,7 +337,7 @@ export function BrandBookAdminEditor({ bookId }: { bookId: string }) {
           action={
             <UploadButton
               accept=".pdf"
-              label={drafting ? t('guide.reading') : t('guide.action')}
+              label={t('guide.action')}
               onFile={draftFromGuide}
             />
           }
@@ -358,6 +373,17 @@ export function BrandBookAdminEditor({ bookId }: { bookId: string }) {
           <p className="mt-3 max-w-2xl text-xs text-gray-500 dark:text-gray-400">
             {t('guide.hint')}
           </p>
+          {drafting && (
+            <p
+              className="mt-3 flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
+              role="status"
+            >
+              <IconLoader size={14} className="animate-spin" aria-hidden />
+              {t(
+                drafting === 'uploading' ? 'guide.uploading' : 'guide.reading',
+              )}
+            </p>
+          )}
           {book.source && (
             <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
               {t('guide.source')}{' '}
