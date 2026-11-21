@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "개요",
-        "review": "검토",
-        "reviewCount": "검토 ({count})",
         "check": "접근 확인"
       },
       "everyone": "모두",
@@ -7184,7 +7182,9 @@
           "outranked": "설정해도 영향 없음: 더 구체적이거나 우선순위가 높은 규칙이 대신 결정합니다 ({value}).",
           "inert": "적용되지 않음."
         }
-      }
+      },
+      "backToEditing": "편집으로 돌아가기",
+      "reviewRegion": "저장 전에 검토하기"
     }
   },
   "m365": {

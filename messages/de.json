@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Übersicht",
-        "review": "Überprüfen",
-        "reviewCount": "Überprüfen ({count})",
         "check": "Zugriff prüfen"
       },
       "everyone": "Alle",
@@ -7184,7 +7182,9 @@
           "outranked": "Keine Wirkung wie festgelegt: Eine spezifischere oder höher priorisierte Regel entscheidet stattdessen ({value}).",
           "inert": "Nicht wirksam."
         }
-      }
+      },
+      "backToEditing": "Zurück zur Bearbeitung",
+      "reviewRegion": "Vor dem Speichern überprüfen"
     }
   },
   "m365": {

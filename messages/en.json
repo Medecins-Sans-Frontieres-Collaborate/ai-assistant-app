@@ -7019,8 +7019,6 @@
     "console": {
       "tab": {
         "overview": "Overview",
-        "review": "Review",
-        "reviewCount": "Review ({count})",
         "check": "Check access"
       },
       "everyone": "Everyone",
@@ -7248,7 +7246,9 @@
           "outranked": "No effect as set: a more specific or higher-priority rule decides instead ({value}).",
           "inert": "Not in effect."
         }
-      }
+      },
+      "backToEditing": "Back to editing",
+      "reviewRegion": "Review before saving"
     }
   },
   "adminMapDatasets": {

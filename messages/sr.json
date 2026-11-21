@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Pregled",
-        "review": "Pregledaj",
-        "reviewCount": "Pregledaj ({count})",
         "check": "Proveri pristup"
       },
       "everyone": "Svi",
@@ -7168,7 +7166,9 @@
           "outranked": "Nema efekta kako je postavljeno: odlučuje konkretnije ili prioritetnije pravilo ({value}).",
           "inert": "Nije u efektu."
         }
-      }
+      },
+      "backToEditing": "Nazad na uređivanje",
+      "reviewRegion": "Pregledajte pre čuvanja"
     }
   },
   "m365": {

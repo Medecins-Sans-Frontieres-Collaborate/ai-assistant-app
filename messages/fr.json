@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Aperçu",
-        "review": "Revue",
-        "reviewCount": "Revue ({count})",
         "check": "Vérifier l'accès"
       },
       "everyone": "Tout le monde",
@@ -7184,7 +7182,9 @@
           "outranked": "Aucun effet dans l’état défini : une règle plus spécifique ou prioritaire le décide à la place ({value}).",
           "inert": "Non en vigueur."
         }
-      }
+      },
+      "backToEditing": "Retour à l’édition",
+      "reviewRegion": "Vérifier avant d’enregistrer"
     }
   },
   "m365": {

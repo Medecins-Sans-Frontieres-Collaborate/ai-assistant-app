@@ -6986,8 +6986,6 @@
     "console": {
       "tab": {
         "overview": "Tổng quan",
-        "review": "Xem lại",
-        "reviewCount": "Xem lại ({count})",
         "check": "Kiểm tra quyền truy cập"
       },
       "everyone": "Mọi người",
@@ -7215,7 +7213,9 @@
           "outranked": "Không có hiệu lực như đã đặt: một quy tắc cụ thể hoặc ưu tiên cao hơn đang quyết định ({value}).",
           "inert": "Không có hiệu lực."
         }
-      }
+      },
+      "backToEditing": "Quay lại chỉnh sửa",
+      "reviewRegion": "Xem lại trước khi lưu"
     }
   },
   "m365": {

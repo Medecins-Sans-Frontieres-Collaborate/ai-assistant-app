@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "ትንሳኤ",
-        "review": "ተደምሃሚ",
-        "reviewCount": "ተደምሃሚ ({count})",
         "check": "ተምርአን መድረኽ"
       },
       "everyone": "ኩሉ",
@@ -7168,7 +7166,9 @@
           "outranked": "ኣብ ዘይውሕድ ድሕሪ፡ ዝቐይሩ መስፈርት ዘይበረየ ይመው፡ ({value})",
           "inert": "ኣብ መስርሒ ኣይኮነን።"
         }
-      }
+      },
+      "backToEditing": "ናይ ምሕዝን ምልሳኽ ተመልሶ",
+      "reviewRegion": "ቅድሚ ምግባር ኣትኩሉ"
     }
   },
   "m365": {

@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Muhtasari",
-        "review": "Kagua",
-        "reviewCount": "Kagua ({count})",
         "check": "Angalia upatikanaji"
       },
       "everyone": "Kila mtu",
@@ -7184,7 +7182,9 @@
           "outranked": "Hakuna athari kama ilivyowekwa: sheria maalum zaidi au yenye kipaumbele zaidi inaamua badala yake ({value}).",
           "inert": "Haifanyi kazi."
         }
-      }
+      },
+      "backToEditing": "Rudi kwenye uhariri",
+      "reviewRegion": "Kagua kabla ya kuhifadhi"
     }
   },
   "m365": {

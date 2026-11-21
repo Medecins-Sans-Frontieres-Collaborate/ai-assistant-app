@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Overzicht",
-        "review": "Beoordelen",
-        "reviewCount": "Beoordelen ({count})",
         "check": "Toegang controleren"
       },
       "everyone": "Iedereen",
@@ -7184,7 +7182,9 @@
           "outranked": "Geen effect zoals ingesteld: een specifiekere of hogere regel beslist ({value}).",
           "inert": "Niet van kracht."
         }
-      }
+      },
+      "backToEditing": "Terug naar bewerken",
+      "reviewRegion": "Controleren voor opslaan"
     }
   },
   "m365": {

@@ -6986,8 +6986,6 @@
     "console": {
       "tab": {
         "overview": "概览",
-        "review": "复查",
-        "reviewCount": "复查（{count}）",
         "check": "检查访问"
       },
       "everyone": "所有人",
@@ -7215,7 +7213,9 @@
           "outranked": "按当前设置无效：被更具体或更高优先级规则决定（{value}）。",
           "inert": "未生效。"
         }
-      }
+      },
+      "backToEditing": "返回编辑",
+      "reviewRegion": "保存前请审核"
     }
   },
   "m365": {

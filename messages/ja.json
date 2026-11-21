@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "概要",
-        "review": "レビュー",
-        "reviewCount": "レビュー（{count}）",
         "check": "アクセス確認"
       },
       "everyone": "全員",
@@ -7184,7 +7182,9 @@
           "outranked": "設定内容は反映されません：より具体的または優先度の高いルールが決定しています（{value}）。",
           "inert": "無効です。"
         }
-      }
+      },
+      "backToEditing": "編集に戻る",
+      "reviewRegion": "保存前に確認"
     }
   },
   "m365": {

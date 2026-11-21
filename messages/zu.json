@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Uhlolojikelele",
-        "review": "Buyekeza",
-        "reviewCount": "Buyekeza ({count})",
         "check": "Hlola ukufinyelela"
       },
       "everyone": "Wonke umuntu",
@@ -7168,7 +7166,9 @@
           "outranked": "Akukho umthelela njengoba kusethwe: umthetho okhethekile noma onobala uphetha esikhundleni ({value}).",
           "inert": "Akusebenzi."
         }
-      }
+      },
+      "backToEditing": "Buyela ekuhlelweni",
+      "reviewRegion": "Bheka ngaphambi kokugcina"
     }
   },
   "m365": {

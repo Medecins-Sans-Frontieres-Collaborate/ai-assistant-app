@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Przegląd",
-        "review": "Przeglądaj",
-        "reviewCount": "Przeglądaj ({count})",
         "check": "Sprawdź dostęp"
       },
       "everyone": "Wszyscy",
@@ -7184,7 +7182,9 @@
           "outranked": "Bez efektu: ważniejsza lub bardziej szczegółowa reguła decyduje zamiast tej ({value}).",
           "inert": "Nie obowiązuje."
         }
-      }
+      },
+      "backToEditing": "Powrót do edycji",
+      "reviewRegion": "Sprawdź przed zapisaniem"
     }
   },
   "m365": {

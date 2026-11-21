@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Njaari",
-        "review": "Njaare",
-        "reviewCount": "Njaare ({count})",
         "check": "Ceŋal moƴƴi"
       },
       "everyone": "Fof",
@@ -7168,7 +7166,9 @@
           "outranked": "Ko boɗɗo ngol: tartol moƴƴi soɗɗii walla priority dow moƴƴi sosaani ({value}).",
           "inert": "Wala yeroya."
         }
-      }
+      },
+      "backToEditing": "Dawdi rewtii",
+      "reviewRegion": "Yeeso jokkondirde"
     }
   },
   "m365": {

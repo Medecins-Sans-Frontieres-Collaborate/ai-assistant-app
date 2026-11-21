@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Apèsi",
-        "review": "Revizyon",
-        "reviewCount": "Revizyon ({count})",
         "check": "Tcheke aksè"
       },
       "everyone": "Tout moun",
@@ -7168,7 +7166,9 @@
           "outranked": "Pa gen efè jan sa mete : yon règ ki pi espesifik oswa ki gen plis priyorite deside ({value}).",
           "inert": "Pa an aplikasyon."
         }
-      }
+      },
+      "backToEditing": "Retounen sou editaj",
+      "reviewRegion": "Revize anvan w sove"
     }
   },
   "m365": {

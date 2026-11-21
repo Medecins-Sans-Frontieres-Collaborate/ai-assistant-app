@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Přehled",
-        "review": "Revize",
-        "reviewCount": "Revize ({count})",
         "check": "Ověřit přístup"
       },
       "everyone": "Všichni",
@@ -7184,7 +7182,9 @@
           "outranked": "Bez efektu: rozhoduje konkrétnější nebo prioritnější pravidlo ({value}).",
           "inert": "Není v platnosti."
         }
-      }
+      },
+      "backToEditing": "Zpět k úpravám",
+      "reviewRegion": "Zkontrolujte před uložením"
     }
   },
   "m365": {

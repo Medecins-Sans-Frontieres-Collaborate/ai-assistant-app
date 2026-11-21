@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Resum",
-        "review": "Revisió",
-        "reviewCount": "Revisió ({count})",
         "check": "Comprova l'accés"
       },
       "everyone": "Tothom",
@@ -7184,7 +7182,9 @@
           "outranked": "Sense efecte tal com està: una regla més específica o de prioritat més alta ho decideix ({value}).",
           "inert": "Sense efecte."
         }
-      }
+      },
+      "backToEditing": "Torna a l'edició",
+      "reviewRegion": "Revisa abans de desar"
     }
   },
   "m365": {

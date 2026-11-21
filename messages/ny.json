@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Chidule",
-        "review": "Onanso",
-        "reviewCount": "Onanso ({count})",
         "check": "Yang'anani kuloledwa"
       },
       "everyone": "Aliyense",
@@ -7168,7 +7166,9 @@
           "outranked": "Palibe kusiyana monga zakhazikitsidwa: lamulo laikulu kapena lapadera limasankha ({value}).",
           "inert": "Sikugwira ntchito."
         }
-      }
+      },
+      "backToEditing": "Bwererani ku kusintha",
+      "reviewRegion": "Onani choyamba musanasunge"
     }
   },
   "m365": {

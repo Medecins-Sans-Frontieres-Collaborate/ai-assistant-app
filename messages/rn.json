@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Incamake",
-        "review": "Gusuzuma",
-        "reviewCount": "Gusuzuma ({count})",
         "check": "Raba uko vyifashe"
       },
       "everyone": "Bose",
@@ -7168,7 +7166,9 @@
           "outranked": "Ntaco uburyo bwahindutse: irigi yihariye canke ifise agaciro kari hejuru niyo ikora aho ({value}).",
           "inert": "Ntibikora."
         }
-      }
+      },
+      "backToEditing": "Subira ku guhindura",
+      "reviewRegion": "Raba neza imbere yo kuzigama"
     }
   },
   "m365": {

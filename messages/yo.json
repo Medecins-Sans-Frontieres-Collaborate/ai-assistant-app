@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Àkótán",
-        "review": "Atunyẹwo",
-        "reviewCount": "Atunyẹwo ({count})",
         "check": "Ṣàyẹ̀wò àwọlé"
       },
       "everyone": "Gbogbo ènìyàn",
@@ -7168,7 +7166,9 @@
           "outranked": "Ko ni ipa gege bi a ti ṣeto: ofin tó péye ju tàbí tó ní àkànṣe ju lo pinnu dipo rẹ ({value}).",
           "inert": "Ko ni ipa."
         }
-      }
+      },
+      "backToEditing": "Pada si iṣatunkọ",
+      "reviewRegion": "Ṣayẹwo ṣaaju fipamọ"
     }
   },
   "m365": {

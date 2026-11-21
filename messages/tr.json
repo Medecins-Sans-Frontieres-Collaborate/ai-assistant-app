@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Genel Bakış",
-        "review": "İnceleme",
-        "reviewCount": "İnceleme ({count})",
         "check": "Erişimi kontrol et"
       },
       "everyone": "Herkes",
@@ -7184,7 +7182,9 @@
           "outranked": "Belirlenen etkisi yok: daha özel veya öncelikli bir kural ({value}) karar verir.",
           "inert": "Etkin değil."
         }
-      }
+      },
+      "backToEditing": "Düzenlemeye geri dön",
+      "reviewRegion": "Kaydetmeden önce gözden geçir"
     }
   },
   "m365": {

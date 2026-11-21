@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Ringkasan",
-        "review": "Tinjau",
-        "reviewCount": "Tinjau ({count})",
         "check": "Cek akses"
       },
       "everyone": "Semua orang",
@@ -7184,7 +7182,9 @@
           "outranked": "Tidak berpengaruh sesuai pengaturan: aturan yang lebih spesifik atau prioritas lebih tinggi menentukan ({value}).",
           "inert": "Tidak berlaku."
         }
-      }
+      },
+      "backToEditing": "Kembali ke penyuntingan",
+      "reviewRegion": "Tinjau sebelum menyimpan"
     }
   },
   "m365": {

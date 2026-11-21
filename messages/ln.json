@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Lisolo mokuse",
-        "review": "Talela",
-        "reviewCount": "Talela ({count})",
         "check": "Kokanga accès"
       },
       "everyone": "Bato nyonso",
@@ -7168,7 +7166,9 @@
           "outranked": "Ezalaka te ndenge esalemi: règle ya spécificité to priorité ya likolo ekangaka ({value}).",
           "inert": "Ezalaka te."
         }
-      }
+      },
+      "backToEditing": "Zonga na kobongisa",
+      "reviewRegion": "Kokanga mbonge liboso ya kosala"
     }
   },
   "m365": {

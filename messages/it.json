@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Panoramica",
-        "review": "Verifica",
-        "reviewCount": "Verifica ({count})",
         "check": "Verifica accesso"
       },
       "everyone": "Tutti",
@@ -7184,7 +7182,9 @@
           "outranked": "Nessun effetto come impostato: una regola più specifica o prioritaria decide invece ({value}).",
           "inert": "Non in vigore."
         }
-      }
+      },
+      "backToEditing": "Torna alla modifica",
+      "reviewRegion": "Revisiona prima di salvare"
     }
   },
   "m365": {

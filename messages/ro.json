@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Prezentare generală",
-        "review": "Revizuire",
-        "reviewCount": "Revizuire ({count})",
         "check": "Verifică accesul"
       },
       "everyone": "Toată lumea",
@@ -7184,7 +7182,9 @@
           "outranked": "Fără efect după setare: o regulă mai specifică sau cu prioritate mai mare decide în schimb ({value}).",
           "inert": "Nu are efect."
         }
-      }
+      },
+      "backToEditing": "Înapoi la editare",
+      "reviewRegion": "Revizuire înainte de salvare"
     }
   },
   "m365": {

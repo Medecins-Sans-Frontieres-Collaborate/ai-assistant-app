@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Guudmar",
-        "review": "Dib-u-eegis",
-        "reviewCount": "Dib-u-eegis ({count})",
         "check": "Hubi helitaanka"
       },
       "everyone": "Dhammaan",
@@ -7168,7 +7166,9 @@
           "outranked": "Saameyn kuma leh sida la dejiyay: xeer gaar ah ama mid mudnaantiisu sarreyso ayaa go'aaminaya ({value}).",
           "inert": "Saameyn kuma jiro."
         }
-      }
+      },
+      "backToEditing": "Ku noqo sixitaanka",
+      "reviewRegion": "Dib u eeg kahor kaydinta"
     }
   },
   "m365": {

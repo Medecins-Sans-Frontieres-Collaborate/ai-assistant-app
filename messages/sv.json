@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Översikt",
-        "review": "Granska",
-        "reviewCount": "Granska ({count})",
         "check": "Kontrollera åtkomst"
       },
       "everyone": "Alla",
@@ -7184,7 +7182,9 @@
           "outranked": "Ingen effekt: en mer specifik eller prioriterad regel gäller istället ({value}).",
           "inert": "Gäller inte."
         }
-      }
+      },
+      "backToEditing": "Tillbaka till redigering",
+      "reviewRegion": "Granska innan du sparar"
     }
   },
   "m365": {

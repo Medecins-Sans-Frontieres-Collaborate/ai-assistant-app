@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "አጠቃላይ ጥናት",
-        "review": "ክርክር",
-        "reviewCount": "ክርክር ({count})",
         "check": "መዳረሻ ይፈትሹ"
       },
       "everyone": "ሁሉም",
@@ -7184,7 +7182,9 @@
           "inert": "አይገጥምም።",
           "applies": "{otherwise} የተፈጸመ ላይ {value} ይሰጣል።"
         }
-      }
+      },
+      "backToEditing": "ወደ ማረም ይመለሱ",
+      "reviewRegion": "ከመቀመጥ በፊት ይመርመሩ"
     }
   },
   "m365": {

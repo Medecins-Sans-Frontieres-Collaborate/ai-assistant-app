@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Dubawa",
-        "review": "Bita",
-        "reviewCount": "Bita ({count})",
         "check": "Duba izini"
       },
       "everyone": "Kowa",
@@ -7168,7 +7166,9 @@
           "outranked": "Babu tasiri kamar yadda aka saita: doka mafi ƙayyadaddiya ko mafi fifiko ta yanke a maimako ({value}).",
           "inert": "Ba a amfani da shi."
         }
-      }
+      },
+      "backToEditing": "Koma zuwa gyarawa",
+      "reviewRegion": "Duba kafin ajiye"
     }
   },
   "m365": {

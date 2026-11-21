@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Incamake",
-        "review": "Gusuzuma",
-        "reviewCount": "Gusuzuma ({count})",
         "check": "Kugenzura ukoresha"
       },
       "everyone": "Bose",
@@ -7168,7 +7166,9 @@
           "outranked": "Nta mpinduka nk'uko byashyizweho: itegeko rifatika cyangwa rifite agaciro kurusha abandi naryo niyo rifata umwanzuro ({value}).",
           "inert": "Ntibikoreshwa."
         }
-      }
+      },
+      "backToEditing": "Subira gusubiramo",
+      "reviewRegion": "Suzuma mbere yo kubika"
     }
   },
   "m365": {

@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Visão geral",
-        "review": "Revisar",
-        "reviewCount": "Revisar ({count})",
         "check": "Verificar acesso"
       },
       "everyone": "Todos",
@@ -7184,7 +7182,9 @@
           "outranked": "Sem efeito como definido: uma regra mais específica ou prioritária decide no lugar ({value}).",
           "inert": "Sem efeito."
         }
-      }
+      },
+      "backToEditing": "Voltar à edição",
+      "reviewRegion": "Revisar antes de salvar"
     }
   },
   "m365": {

@@ -6955,8 +6955,6 @@
     "console": {
       "tab": {
         "overview": "Yleiskatsaus",
-        "review": "Tarkista",
-        "reviewCount": "Tarkista ({count})",
         "check": "Tarkista käyttöoikeus"
       },
       "everyone": "Kaikki",
@@ -7184,7 +7182,9 @@
           "outranked": "Ei vaikutusta: tarkempi tai priorisoidumpi sääntö ratkaisee ({value}).",
           "inert": "Ei voimassa."
         }
-      }
+      },
+      "backToEditing": "Takaisin muokkaukseen",
+      "reviewRegion": "Tarkista ennen tallennusta"
     }
   },
   "m365": {

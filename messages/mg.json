@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Topimaso",
-        "review": "Famerenana",
-        "reviewCount": "Famerenana ({count})",
         "check": "Hamarinina ny fidirana"
       },
       "everyone": "Rehetra",
@@ -7168,7 +7166,9 @@
           "outranked": "Tsy misy fiantraikany aloha: fitsipika mazava kokoa na laharam-pahamehana ambony kokoa no mametraka ({value}).",
           "inert": "Tsy ampiharina."
         }
-      }
+      },
+      "backToEditing": "Miverina manova",
+      "reviewRegion": "Jereo aloha vao tehirizina"
     }
   },
   "m365": {

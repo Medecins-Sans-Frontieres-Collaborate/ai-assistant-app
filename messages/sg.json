@@ -6939,8 +6939,6 @@
     "console": {
       "tab": {
         "overview": "Nzoni",
-        "review": "Kuyeke",
-        "reviewCount": "Kuyeke ({count})",
         "check": "Kema lingbi"
       },
       "everyone": "Bângi bâso gbânzi",
@@ -7168,7 +7166,9 @@
           "outranked": "Tena effet: rule mingi to priority to yeke azo téréngö ({value}).",
           "inert": "Tena en action."
         }
-      }
+      },
+      "backToEditing": "Ködö ti gbäkö",
+      "reviewRegion": "Gbä ködö na sé ti só"
     }
   },
   "m365": {
