@@ -42,12 +42,12 @@ import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
-import { BrandBookBody } from '@/lib/utils/shared/brand/brandBook';
+import {
+  BRAND_FILE_MAX_BYTES,
+  BrandBookBody,
+} from '@/lib/utils/shared/brand/brandBook';
 
 import { createHash } from 'crypto';
-
-/** Largest file a brand book may hold. */
-export const MAX_BRAND_FILE_BYTES = 50 * 1024 * 1024;
 
 /** The types each place in a brand book takes (THE BRAND FILE CONVENTION). */
 export const BRAND_FILE_TYPES = {
@@ -57,6 +57,13 @@ export const BRAND_FILE_TYPES = {
 } as const;
 
 export type BrandFilePlace = keyof typeof BRAND_FILE_TYPES;
+
+/** What a file over its place's limit is refused with. */
+export function brandFileTooLarge(place: BrandFilePlace): BrandFileError {
+  return new BrandFileError(
+    `A ${BRAND_FILE_PLACE_NAMES[place]} can be at most ${Math.round(BRAND_FILE_MAX_BYTES[place] / (1024 * 1024))} MB.`,
+  );
+}
 
 /** Content types the file route serves. */
 export const BRAND_FILE_CONTENT_TYPES: Readonly<Record<string, string>> = {
@@ -75,6 +82,13 @@ const UPLOAD_REF = /^\/api\/file\/([a-f0-9]{64})\.([a-z0-9]{2,5})$/;
 const STORED_REF =
   /^admin:(brand-[a-f0-9]{12})\/([a-f0-9]{32}\.[a-z0-9]{2,5})$/;
 const STORED_NAME = /^[a-f0-9]{32}\.([a-z0-9]{2,5})$/;
+
+/** Each place as an error message names it. */
+const BRAND_FILE_PLACE_NAMES: Readonly<Record<BrandFilePlace, string>> = {
+  logo: 'logo',
+  template: 'template',
+  source: 'brand guide',
+};
 
 /** A file reference, read (THE BRAND FILE CONVENTION). */
 export type BrandFileRef =
@@ -134,7 +148,12 @@ export function brandBookFiles(
 
 /** What reading an admin's own upload needs; replaced in tests. */
 export interface BrandFileStore {
-  readUpload(session: Session, blobName: string): Promise<Buffer>;
+  /** @throws BrandFileError when it is larger than its place takes. */
+  readUpload(
+    session: Session,
+    blobName: string,
+    place: BrandFilePlace,
+  ): Promise<Buffer>;
   storedExists(bookId: string, name: string): Promise<boolean>;
   writeStored(bookId: string, name: string, data: Buffer): Promise<void>;
 }
@@ -146,23 +165,19 @@ export const uploadBytes = storedUploadBytes;
 const STORED_SIZE_ALLOWANCE = 1.4;
 
 const blobFileStore: BrandFileStore = {
-  async readUpload(session, blobName) {
+  async readUpload(session, blobName, place) {
     const storage = createBlobStorageClient(session);
     const path = `${getUserIdFromSession(session)}/uploads/files/${blobName}`;
-    const tooLarge = () =>
-      new BrandFileError('A file is larger than a brand book takes (50 MB).');
+    const limit = BRAND_FILE_MAX_BYTES[place];
     // Measured before reading, with room for an image's data URL; the
     // decoded size is checked exactly below.
-    if (
-      (await storage.getBlobSize(path)) >
-      MAX_BRAND_FILE_BYTES * STORED_SIZE_ALLOWANCE
-    ) {
-      throw tooLarge();
+    if ((await storage.getBlobSize(path)) > limit * STORED_SIZE_ALLOWANCE) {
+      throw brandFileTooLarge(place);
     }
     const data = uploadBytes(
       (await storage.get(path, BlobProperty.BLOB)) as Buffer,
     );
-    if (data.length > MAX_BRAND_FILE_BYTES) throw tooLarge();
+    if (data.length > limit) throw brandFileTooLarge(place);
     return data;
   },
   async storedExists(bookId, name) {
@@ -205,12 +220,8 @@ export async function readBrandUpload(
       `A ${place} must be ${allowed.map((ext) => `.${ext}`).join(', ')}; this one is .${parsed.ext}.`,
     );
   }
-  const data = await store.readUpload(session, parsed.blobName);
-  if (data.length > MAX_BRAND_FILE_BYTES) {
-    throw new BrandFileError(
-      'A file is larger than a brand book takes (50 MB).',
-    );
-  }
+  const data = await store.readUpload(session, parsed.blobName, place);
+  if (data.length > BRAND_FILE_MAX_BYTES[place]) throw brandFileTooLarge(place);
   return { data, ext: parsed.ext };
 }
 
@@ -252,11 +263,9 @@ export async function settleBrandBookFiles(
       settled.set(ref, ref);
       continue;
     }
-    const data = await store.readUpload(session, parsed.blobName);
-    if (data.length > MAX_BRAND_FILE_BYTES) {
-      throw new BrandFileError(
-        'A file is larger than a brand book takes (50 MB).',
-      );
+    const data = await store.readUpload(session, parsed.blobName, place);
+    if (data.length > BRAND_FILE_MAX_BYTES[place]) {
+      throw brandFileTooLarge(place);
     }
     const name = `${createHash('sha256').update(data).digest('hex').slice(0, 32)}.${parsed.ext}`;
     await store.writeStored(bookId, name, data);

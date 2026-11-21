@@ -37,6 +37,20 @@ export const BRAND_TEMPLATE_TYPES = ['potx', 'pptx', 'dotx', 'docx'] as const;
 /** Files a brand book may hold as logos. */
 export const BRAND_LOGO_TYPES = ['png', 'svg', 'jpg', 'jpeg'] as const;
 
+const MEGABYTE = 1024 * 1024;
+
+/**
+ * Largest file each place in a brand book takes, in bytes. A brand guide
+ * (`source`) is a designed, picture-heavy PDF and is routinely several
+ * times the size of an office document, so it has its own limit and its
+ * own upload route.
+ */
+export const BRAND_FILE_MAX_BYTES = {
+  logo: 50 * MEGABYTE,
+  template: 50 * MEGABYTE,
+  source: 250 * MEGABYTE,
+} as const;
+
 const hexColor = z
   .string()
   .trim()
