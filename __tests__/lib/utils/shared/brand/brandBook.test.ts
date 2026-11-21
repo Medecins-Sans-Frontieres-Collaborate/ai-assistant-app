@@ -55,11 +55,11 @@ describe('parseBrandBookBody', () => {
       'palette.0.tolerance',
     ],
     [
-      'a role named twice',
+      'a typeface twice in one role',
       {
         fonts: [
-          { role: 'body', family: 'A' },
-          { role: 'body', family: 'B' },
+          { role: 'body', family: 'Avenir Next' },
+          { role: 'body', family: 'AvenirNext-Bold' },
         ],
       },
       'fonts.1',
@@ -123,5 +123,19 @@ describe('brandItemId and templateTypeForFile', () => {
     expect(templateTypeForFile('letter.docx')).toBe('docx');
     expect(templateTypeForFile('guide.pdf')).toBeNull();
     expect(templateTypeForFile('noextension')).toBeNull();
+  });
+});
+
+describe('typefaces by role', () => {
+  it('takes several typefaces in a role, and one typeface in two roles', () => {
+    const parsed = parseBrandBookBody({
+      name: 'Northwind',
+      fonts: [
+        { role: 'heading', family: 'Avenir Next' },
+        { role: 'body', family: 'Avenir Next' },
+        { role: 'body', family: 'Bitter' },
+      ],
+    });
+    expect(parsed.ok).toBe(true);
   });
 });

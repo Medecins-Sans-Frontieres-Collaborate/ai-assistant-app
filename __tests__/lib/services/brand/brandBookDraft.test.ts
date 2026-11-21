@@ -107,12 +107,17 @@ describe('cleanDraft', () => {
     neutrals: ['#FFF', 'white', '#000000'],
     fonts: [
       { role: 'heading', family: 'Montserrat', substitutes: ['Arial', ' '] },
+      { role: 'heading', family: 'Montserrat Bold', substitutes: [] },
       { role: 'heading', family: 'Other', substitutes: [] },
       { role: 'body', family: 'Source Sans Pro', substitutes: [] },
     ],
     minTextSizePt: 120,
+    logoMinWidthPt: 0,
     locales: ['en', 'x'],
-    preferred: [{ term: 'families', alternatives: ['clients'] }],
+    preferred: [
+      { term: 'families', alternatives: ['clients', 'cheap', 'Northwind'] },
+      { term: 'Northwind', alternatives: [] },
+    ],
     banned: [
       { term: 'cheap', alternatives: ['affordable'], note: 'Off brand.' },
       { term: ' ', alternatives: [], note: '' },
@@ -138,9 +143,13 @@ describe('cleanDraft', () => {
     expect(
       parsed.body.fonts.map((f) => [f.role, f.family, f.substitutes]),
     ).toEqual([
+      // The same family twice in a role is kept once; a second family is kept.
       ['heading', 'Montserrat', ['Arial']],
+      ['heading', 'Other', []],
       ['body', 'Source Sans Pro', []],
     ]);
+    // A word the book bans, or asks for, is not also a word to replace.
+    expect(parsed.body.language.preferred[0].alternatives).toEqual(['clients']);
     expect(parsed.body.minTextSizePt).toBe(72);
     expect(parsed.body.language.locales).toEqual(['en']);
     expect(parsed.body.language.banned.map((t) => t.term)).toEqual(['cheap']);

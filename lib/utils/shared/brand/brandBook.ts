@@ -145,7 +145,7 @@ export const BrandBookBodySchema = z
       .optional(),
   })
   .superRefine((book, context) => {
-    const unique = (values: string[], path: string) => {
+    const unique = (values: string[], path: string, labels?: string[]) => {
       const seen = new Set<string>();
       values.forEach((value, index) => {
         const key = value.toLowerCase();
@@ -153,7 +153,7 @@ export const BrandBookBodySchema = z
           context.addIssue({
             code: 'custom',
             path: [path, index],
-            message: `"${value}" appears twice`,
+            message: `"${labels?.[index] ?? value}" appears twice`,
           });
         }
         seen.add(key);
@@ -171,9 +171,12 @@ export const BrandBookBodySchema = z
       book.templates.map((template) => template.id),
       'templates',
     );
+    // A role may have several typefaces (a guide's body text may be set
+    // in one of two); the same typeface twice in a role is a mistake.
     unique(
-      book.fonts.map((font) => font.role),
+      book.fonts.map((font) => `${font.role} ${fontKey(font.family)}`),
       'fonts',
+      book.fonts.map((font) => font.family),
     );
   });
 

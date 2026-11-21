@@ -3,6 +3,7 @@
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 
 import type { BrandBookBody } from '@/lib/utils/shared/brand/brandBook';
+import type { DraftGrounding } from '@/lib/utils/shared/brand/draftGrounding';
 
 import type {
   AdminBrandBookResponse,
@@ -170,6 +171,12 @@ export interface BrandBookDraft {
     smallestTextPt: number | null;
     pageCount: number;
   };
+  /** Where the guide's text states each drafted value. */
+  grounding: DraftGrounding;
+  /** The smallest logo width the guide sets, in points; 0 when none. */
+  logoMinWidthPt: number;
+  /** Entries of the model's answer dropped as unusable. */
+  dropped: number;
 }
 
 /** Drafts a book from an uploaded guide PDF; nothing is stored. */

@@ -24,6 +24,11 @@ import {
   fontKey,
 } from '@/lib/utils/shared/brand/brandBook';
 import { isHexColor, normalizeHex } from '@/lib/utils/shared/brand/brandColor';
+import {
+  DraftGrounding,
+  GuidePageText,
+  groundDraft,
+} from '@/lib/utils/shared/brand/draftGrounding';
 import { DocumentModel } from '@/lib/utils/shared/documents/documentModel';
 
 import fs from 'fs';
@@ -114,6 +119,7 @@ interface RawDraft {
   neutrals: string[];
   fonts: Array<{ role: string; family: string; substitutes: string[] }>;
   minTextSizePt: number;
+  logoMinWidthPt: number;
   locales: string[];
   preferred: Array<{ term: string; alternatives: string[] }>;
   banned: Array<{ term: string; alternatives: string[]; note: string }>;
@@ -132,6 +138,7 @@ const DRAFT_SCHEMA = {
     'neutrals',
     'fonts',
     'minTextSizePt',
+    'logoMinWidthPt',
     'locales',
     'preferred',
     'banned',
@@ -171,6 +178,7 @@ const DRAFT_SCHEMA = {
       },
     },
     minTextSizePt: { type: 'number' },
+    logoMinWidthPt: { type: 'number' },
     locales: stringArray,
     preferred: {
       type: 'array',
@@ -203,18 +211,24 @@ const SYSTEM_PROMPT = `You turn an organisation's brand guide into a brand book:
 Use only what the guide states or plainly shows. Do not invent colours, fonts or rules.
 - palette: every brand colour the guide defines, with the name the guide gives it and its hex value. When the guide gives only RGB or CMYK, convert to hex. Give roles only where the guide says what a colour is for (primary, secondary, accent, text, background, neutral).
 - neutrals: colours any document may use without being brand colours (usually white and black), as hex.
-- fonts: the typeface for headings, for body text and for accents, as the guide names them, with the substitutes it allows (for example a system font for documents shared outside). Leave a role out when the guide does not set it.
+- fonts: every typeface the guide lets documents use, as the guide names the family (without a weight such as Bold), each with the role it is used for: heading, body, or accent for display, numerals, callouts and handwriting. A role may have several typefaces: give each its own entry. Substitutes are the families the guide allows in a typeface's place (for example the version of it that ships with office software, or a system font for documents shared outside).
 - minTextSizePt: the smallest text size the guide allows, in points; 0 when it sets none.
 - locales: the languages the guide says documents are written in, as BCP 47 tags; empty when it does not say.
-- preferred: words or names the guide asks to use, each with the words it should be used instead of.
-- banned: words the guide asks to avoid, each with what to write instead and a short reason when it gives one.
+- logoMinWidthPt: the smallest width the guide allows the logo at, in points (1 inch is 72 points); 0 when it sets none.
+- preferred: words, names or spellings the guide asks for, each with the words it says NOT to write in its place. A short form or acronym the guide itself uses or allows is not one of those; when the guide names nothing to replace, give no alternatives.
+- banned: words or phrases the guide asks to avoid, each with what to write instead and a short reason when it gives one. Give the phrase as it would appear in a document, not a description of it. Do not also list a banned phrase under preferred.
 - tone: the guide's voice in at most five sentences, in its own terms.
 
 The measured fonts and colours of the guide's text are evidence of what the guide uses; prefer the guide's stated values, and use the measurements to confirm a value or read one the text does not spell out.`;
 
+/** A term compared without case or surrounding space. */
+function termKey(term: string): string {
+  return term.trim().toLowerCase();
+}
+
 /**
  * Keeps what can be a brand book of the model's answer: valid colours,
- * one font per role, sizes in range. Anything it cannot use is dropped
+ * each typeface once per role, sizes in range. Anything it cannot use is dropped
  * rather than failing the draft; the admin checks the result anyway.
  */
 export function cleanDraft(raw: RawDraft): unknown {
@@ -235,16 +249,18 @@ export function cleanDraft(raw: RawDraft): unknown {
       return true;
     })
     .slice(0, 60);
-  // One font per role: the first the model gives.
-  const seenRoles = new Set<string>();
+  // A typeface once per role; a role may have several.
+  const seenFonts = new Set<string>();
   const fonts: Array<{ role: string; family: string; substitutes: string[] }> =
     [];
   for (const font of raw.fonts) {
-    if (!font.family.trim() || seenRoles.has(font.role)) continue;
-    seenRoles.add(font.role);
+    const family = font.family.trim().slice(0, 80);
+    const key = `${font.role} ${fontKey(family)}`;
+    if (!family || seenFonts.has(key)) continue;
+    seenFonts.add(key);
     fonts.push({
       role: font.role,
-      family: font.family.trim().slice(0, 80),
+      family,
       substitutes: font.substitutes
         .map((substitute) => substitute.trim().slice(0, 80))
         .filter(Boolean)
@@ -253,6 +269,12 @@ export function cleanDraft(raw: RawDraft): unknown {
   }
   const terms = <T extends { term: string }>(list: T[]) =>
     list.filter((entry) => entry.term.trim()).slice(0, 500);
+  // A word the guide asks for, or one it bans outright, is not listed again
+  // as a word some preferred term replaces: it would be reported twice, or
+  // reported although the guide accepts it.
+  const settledTerms = new Set(
+    [...raw.preferred, ...raw.banned].map((entry) => termKey(entry.term)),
+  );
   return {
     name: raw.name.trim().slice(0, 100) || 'Brand book',
     description: raw.description.trim().slice(0, 1000),
@@ -264,7 +286,9 @@ export function cleanDraft(raw: RawDraft): unknown {
       locales: raw.locales.map((l) => l.trim()).filter((l) => l.length >= 2),
       preferred: terms(raw.preferred).map((entry) => ({
         term: entry.term.trim().slice(0, 120),
-        alternatives: entry.alternatives.filter(Boolean).slice(0, 10),
+        alternatives: entry.alternatives
+          .filter((word) => word.trim() && !settledTerms.has(termKey(word)))
+          .slice(0, 10),
       })),
       banned: terms(raw.banned).map((entry) => ({
         term: entry.term.trim().slice(0, 120),
@@ -274,6 +298,35 @@ export function cleanDraft(raw: RawDraft): unknown {
       tone: raw.tone.trim().slice(0, 2000),
     },
   };
+}
+
+/** What drafting a book from a guide gives. */
+export interface BrandBookDraftResult {
+  /** The draft; not stored. */
+  book: BrandBookBody;
+  /** What the guide's pages were measured to use. */
+  evidence: GuideEvidence;
+  /** Where the guide's text states each drafted value (draftGrounding.ts). */
+  grounding: DraftGrounding;
+  /** The smallest logo width the guide sets, in points; 0 when none. */
+  logoMinWidthPt: number;
+  /** Entries of the model's answer dropped as unusable. */
+  dropped: number;
+}
+
+/**
+ * A guide's text page by page, in page order, for looking drafted values
+ * up in.
+ */
+export function guidePages(model: DocumentModel): GuidePageText[] {
+  const pages = new Map<number, string[]>();
+  for (const unit of model.units) {
+    if (unit.page === null) continue;
+    pages.set(unit.page, [...(pages.get(unit.page) ?? []), unit.text]);
+  }
+  return [...pages.entries()]
+    .sort(([a], [b]) => a - b)
+    .map(([page, texts]) => ({ page, text: texts.join('\n') }));
 }
 
 /** Most entries dropped from one draft before it is given up on. */
@@ -343,8 +396,7 @@ function dropEntryAt(
  * @param guide - The guide's PDF.
  * @param source - The guide's upload reference and file name, kept as
  *   the book's source.
- * @returns The draft (not stored), what was measured, and how many of the
- *   model's entries were dropped as unusable.
+ * @returns The draft and what backs it; see {@link BrandBookDraftResult}.
  * @throws DocumentRefusedError when the PDF cannot be read; Error when the
  *   model's answer cannot be made into a book.
  */
@@ -354,7 +406,7 @@ export async function draftBrandBook(input: {
   usage: WorkflowUsageCollector;
   model: string;
   signal?: AbortSignal;
-}): Promise<{ book: BrandBookBody; evidence: GuideEvidence; dropped: number }> {
+}): Promise<BrandBookDraftResult> {
   const started = Date.now();
   const workDir = await fs.promises.mkdtemp(
     path.join(os.tmpdir(), 'brand-draft-'),
@@ -396,7 +448,16 @@ export async function draftBrandBook(input: {
     console.info(
       `[brandDraft] ${evidence.pageCount} pages read in ${Math.round((readDone - started) / 1000)}s, drafted in ${Math.round((modelDone - readDone) / 1000)}s, ${settled.dropped} entries dropped`,
     );
-    return { book: settled.book, evidence, dropped: settled.dropped };
+    return {
+      book: settled.book,
+      evidence,
+      grounding: groundDraft(settled.book, guidePages(model)),
+      logoMinWidthPt: Math.min(
+        2000,
+        Math.max(0, Math.round(raw.logoMinWidthPt || 0)),
+      ),
+      dropped: settled.dropped,
+    };
   } finally {
     await fs.promises.rm(workDir, { recursive: true, force: true });
   }
