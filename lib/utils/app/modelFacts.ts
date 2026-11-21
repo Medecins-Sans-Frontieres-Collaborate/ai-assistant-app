@@ -241,6 +241,14 @@ export function modelLifecycleFacts(
   };
 }
 
+/**
+ * True once a model's retirement date has passed (today counts), whatever
+ * else is said about it. A model with no date is never retired by this test.
+ */
+export function isRetired(lifecycle: ModelLifecycleFacts): boolean {
+  return lifecycle.daysLeft !== undefined && lifecycle.daysLeft <= 0;
+}
+
 /** True when the phase needs an admin's attention now. */
 export function isRetiringSoon(phase: RetirementPhase): boolean {
   return phase === 'forced' || phase === 'move' || phase === 'notice';

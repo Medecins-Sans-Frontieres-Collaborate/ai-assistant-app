@@ -14,7 +14,6 @@ import { DAYS_PER_MONTH } from '@/lib/utils/app/modelFacts';
 
 import type { OpenAIModel } from '@/types/openai';
 
-import { LimitsCostProvider } from '@/components/Limits/LimitsCostContext';
 import { ModelAccessTab } from '@/components/Limits/ModelAccessTab';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -24,8 +23,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // The real English messages: a missing key or bad ICU throws.
 vi.unmock('next-intl');
-const flags = vi.hoisted(() => ({ limitsCostInsights: false }));
-vi.mock('launchdarkly-react-client-sdk', () => ({ useFlags: () => flags }));
+// Every flag off: list prices and cost estimates are shown regardless.
+vi.mock('launchdarkly-react-client-sdk', () => ({ useFlags: () => ({}) }));
 vi.mock('@/client/hooks/useM365PeopleSuggest', () => ({
   useM365PeopleSuggest: () => undefined,
 }));
@@ -62,6 +61,17 @@ const NEW = {
   tokenLimit: 16000,
   modelType: 'omni',
   pricing: { inputPer1M: 2, outputPer1M: 10 },
+} as unknown as OpenAIModel;
+
+/** Its retirement date passed 30 days ago. */
+const GONE = {
+  id: 'test-gone',
+  name: 'Test Gone',
+  maxLength: 8000,
+  tokenLimit: 4000,
+  modelType: 'omni',
+  pricing: { inputPer1M: 1, outputPer1M: 2 },
+  retiresAt: new Date(Date.now() - 30 * DAY_MS).toISOString(),
 } as unknown as OpenAIModel;
 
 function usage(modelId: string, peaks: number[]): ModelUsageInsight {
@@ -115,15 +125,13 @@ function renderTab(
           throw error;
         }}
       >
-        <LimitsCostProvider>
-          <ModelAccessTab
-            rules={options.rules ?? RULES}
-            defaults={[]}
-            onChange={onChange}
-            mode="enforce"
-            insights={'insights' in options ? options.insights : INSIGHTS}
-          />
-        </LimitsCostProvider>
+        <ModelAccessTab
+          rules={options.rules ?? RULES}
+          defaults={[]}
+          onChange={onChange}
+          mode="enforce"
+          insights={'insights' in options ? options.insights : INSIGHTS}
+        />
       </NextIntlClientProvider>
     </QueryClientProvider>,
   );
@@ -147,8 +155,7 @@ const usd = (value: number) =>
   );
 
 beforeEach(() => {
-  flags.limitsCostInsights = false;
-  useSettingsStore.setState({ models: [OLD, NEW] });
+  useSettingsStore.setState({ models: [OLD, NEW, GONE] });
 });
 
 describe('Models grid facts', () => {
@@ -170,25 +177,7 @@ describe('Models grid facts', () => {
     expect(unused.getByText('No date published')).toBeInTheDocument();
   });
 
-  it('keeps every cost figure out while cost insights are off', () => {
-    renderTab();
-    expect(
-      screen.queryByRole('columnheader', { name: 'List price per 1M tokens' }),
-    ).not.toBeInTheDocument();
-    expect(screen.queryByText('Estimated spend')).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole('button', { name: 'Spend and popularity' }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole('button', { name: 'Cost' }),
-    ).not.toBeInTheDocument();
-    expect(screen.getByRole('note')).toHaveTextContent(
-      'CO2e is an estimate, not a measurement',
-    );
-  });
-
   it('turns a cap into the most one person can cost, and says when there is no ceiling', () => {
-    flags.limitsCostInsights = true;
     renderTab();
     expect(
       screen.getByRole('columnheader', { name: 'List price per 1M tokens' }),
@@ -236,12 +225,51 @@ describe('Models grid facts', () => {
       'Usage by everyone appears after the first full day of collection.',
     );
     const summary = screen.getByLabelText('Models at a glance');
-    expect(within(summary).getAllByText('Not yet known').length).toBe(2);
+    expect(within(summary).getAllByText('Not yet known').length).toBe(3);
   });
 
   it('renders with no insights at all', () => {
     renderTab({ insights: undefined });
     expect(within(rowOf('Test Old')).getAllByText('No usage').length).toBe(2);
+  });
+});
+
+describe('Retired models', () => {
+  const toggle = () =>
+    screen.getByRole('button', { name: /^Retired models \(\d+\)$/ });
+
+  it('are left out of the grid until asked for, and one retiring soon is not', () => {
+    renderTab();
+    expect(rowOf('Test Gone')).toBeUndefined();
+    expect(rowOf('Test Old')).toBeDefined();
+    expect(toggle()).toHaveAttribute('aria-pressed', 'false');
+
+    fireEvent.click(toggle());
+    expect(toggle()).toHaveAttribute('aria-pressed', 'true');
+    expect(
+      within(rowOf('Test Gone')).getByText('date has passed'),
+    ).toBeInTheDocument();
+
+    fireEvent.click(toggle());
+    expect(rowOf('Test Gone')).toBeUndefined();
+  });
+
+  it('leave the count of models in the strip while hidden', () => {
+    renderTab();
+    const summary = within(screen.getByLabelText('Models at a glance'));
+    const total = () =>
+      Number(summary.getByText(/^1 of \d+$/).textContent?.split(' of ')[1]);
+    const hidden = total();
+    fireEvent.click(toggle());
+    expect(total()).toBeGreaterThan(hidden);
+  });
+
+  it('are shown when opened from the runway', () => {
+    renderTab();
+    fireEvent.click(screen.getByRole('button', { name: 'Retirement runway' }));
+    expect(
+      screen.getByText('Past its date and still listed:').parentElement,
+    ).toHaveTextContent('Test Gone');
   });
 });
 
@@ -256,7 +284,6 @@ describe('Open row context', () => {
   };
 
   it('shows the distribution and what each cap would have done', () => {
-    flags.limitsCostInsights = true;
     renderTab();
     const context = open();
     expect(
@@ -275,14 +302,6 @@ describe('Open row context', () => {
     expect(cells[1]).toHaveTextContent(usd(30 * TYPICAL_USD * DAYS_PER_MONTH));
     expect(context.getByText('Estimated cost')).toBeInTheDocument();
     expect(context.getByText('128,000 tokens')).toBeInTheDocument();
-  });
-
-  it('leaves cost out of the open row while cost insights are off', () => {
-    renderTab();
-    const context = open();
-    expect(context.queryByText('Estimated cost')).not.toBeInTheDocument();
-    expect(context.getByText('Estimated footprint')).toBeInTheDocument();
-    expect(context.getByText('If the cap were different')).toBeInTheDocument();
   });
 
   it('says so when nobody used the model, and offers no replay', () => {
@@ -396,7 +415,6 @@ describe('Retirement runway', () => {
 
 describe('Spend and popularity map', () => {
   it('plots used, priced models and points out what stands out', () => {
-    flags.limitsCostInsights = true;
     renderTab({
       insights: {
         ...INSIGHTS,
@@ -451,7 +469,6 @@ describe('Spend and popularity map', () => {
   });
 
   it('says so when no priced model was used', () => {
-    flags.limitsCostInsights = true;
     renderTab({ insights: { ...INSIGHTS, models: {} } });
     fireEvent.click(
       screen.getByRole('button', { name: 'Spend and popularity' }),

@@ -25,6 +25,7 @@ import type {
 } from '@/lib/services/limits/types';
 import type { UsageInsights } from '@/lib/services/limits/wire';
 
+import { buildPricingIndex } from '@/lib/utils/app/limitsPricing';
 import {
   Audience,
   AudienceColumn,
@@ -59,6 +60,7 @@ import {
   ModelFacts,
   capCeiling,
   compareReplacementAccess,
+  isRetired,
   isRetiringSoon,
   modelFacts,
   termsOfState,
@@ -80,7 +82,6 @@ import {
   ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
 import { AudiencePicker } from '@/components/Limits/AudiencePicker';
-import { useLimitsCost } from '@/components/Limits/LimitsCostContext';
 import {
   FACT_GROUPS,
   FactCells,
@@ -255,19 +256,17 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
     () => buildModelAccessTree(catalog, rules),
     [catalog, rules],
   );
-  const cost = useLimitsCost();
-  // Cost figures follow the cost-insights flag: off means none are computed.
-  const pricing = cost.insights ? cost.pricing : null;
+  // List prices are catalog facts, like size and retirement date: shown to
+  // every limits admin, whatever the cost-insights flags say about the
+  // estimator and the per-rule cost hints.
+  const pricing = useMemo(() => buildPricingIndex(liveModels), [liveModels]);
   /** The moment retirement is judged at: fixed for the life of the tab. */
   const [now] = useState(() => Date.now());
   const [view, setView] = useState<ModelView>('grid');
   const [hiddenGroups, setHiddenGroups] = useState<readonly FactGroup[]>([]);
-  const availableGroups = FACT_GROUPS.filter(
-    (group) => group !== 'cost' || pricing !== null,
-  );
-  const groups = availableGroups.filter(
-    (group) => !hiddenGroups.includes(group),
-  );
+  const groups = FACT_GROUPS.filter((group) => !hiddenGroups.includes(group));
+  /** Models past their retirement date stay out of the grid until asked for. */
+  const [showRetired, setShowRetired] = useState(false);
   const catalogById = useMemo(
     () => new Map(catalog.map((model) => [model.id.toLowerCase(), model])),
     [catalog],
@@ -324,7 +323,11 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
       ? (groupNames[audience.target] ?? audience.target)
       : audience.target;
 
-  const sections: Array<{ key: string; heading?: string; rows: GridRow[] }> = [
+  const allSections: Array<{
+    key: string;
+    heading?: string;
+    rows: GridRow[];
+  }> = [
     ...tree.families.map((family) => ({
       key: `family:${family.series}`,
       rows: [
@@ -349,6 +352,24 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
         ]
       : []),
   ];
+  const retiredRow = (row: GridRow): boolean => {
+    const entry = row.isFamily
+      ? undefined
+      : factsByModel.get(row.dimension.modelId as string);
+    return entry !== undefined && isRetired(entry.facts.lifecycle);
+  };
+  const retiredCount = allSections
+    .flatMap((section) => section.rows)
+    .filter(retiredRow).length;
+  /** What the grid lists: everything, less retired models unless asked for. */
+  const sections = showRetired
+    ? allSections
+    : allSections
+        .map((section) => ({
+          ...section,
+          rows: section.rows.filter((row) => !retiredRow(row)),
+        }))
+        .filter((section) => section.rows.length > 0);
   const columnCount = columns.length + 4 + factColumnCount(groups);
 
   /**
@@ -410,11 +431,14 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
   };
   /** Shows one model's row in the grid with its editor open. */
   const openModel = (modelId: string) => {
+    const entry = factsByModel.get(modelId);
+    if (entry && isRetired(entry.facts.lifecycle)) setShowRetired(true);
     setView('grid');
     setSelected({ row: `model:${modelId}`, column: 'row' });
   };
 
-  const modelRows = sections.flatMap((section) =>
+  // The runway and the map look at every model, retired or not.
+  const modelRows = allSections.flatMap((section) =>
     section.rows.filter((row) => !row.isFamily),
   );
   const subjectOf = (row: GridRow) => ({
@@ -471,7 +495,11 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
     );
   };
 
-  const used = known.filter(({ facts }) => facts.usage.people > 0);
+  // The strip describes what the grid lists.
+  const listed = showRetired
+    ? known
+    : known.filter(({ facts }) => !isRetired(facts.lifecycle));
+  const used = listed.filter(({ facts }) => facts.usage.people > 0);
   const totalRequests = used.reduce(
     (sum, { facts }) => sum + (facts.usage.requests ?? 0),
     0,
@@ -480,10 +508,10 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
   const footprintKnown = used.filter(
     ({ facts }) => facts.footprintGrams !== null,
   );
-  const retiringSoon = known.filter(({ facts }) =>
+  const retiringSoon = listed.filter(({ facts }) =>
     isRetiringSoon(facts.lifecycle.phase),
   ).length;
-  const noCeiling = known.filter(({ row }) => termsOf(row) === null).length;
+  const noCeiling = listed.filter(({ row }) => termsOf(row) === null).length;
   const { promptTokens, completionTokens } =
     EMISSIONS_ASSUMPTIONS.typicalRequest;
   const toggle =
@@ -495,7 +523,7 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
 
   return (
     <div className="space-y-4">
-      {known.length > 0 && (
+      {listed.length > 0 && (
         <dl
           aria-label={t('modelAccess.facts.summary.label')}
           className="grid grid-cols-2 gap-x-6 gap-y-3 rounded-lg border border-gray-200 bg-white px-4 py-3 sm:grid-cols-3 xl:grid-cols-6 dark:border-gray-700 dark:bg-surface-dark"
@@ -505,7 +533,7 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
           >
             {t('modelAccess.facts.summary.usedValue', {
               used: used.length,
-              total: known.length,
+              total: listed.length,
             })}
           </SummaryFact>
           <SummaryFact label={t('modelAccess.facts.summary.requests')}>
@@ -513,18 +541,16 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
               ? format.count(totalRequests)
               : t('modelAccess.facts.summary.notYet')}
           </SummaryFact>
-          {pricing !== null && (
-            <SummaryFact label={t('modelAccess.facts.summary.spend')}>
-              {spendKnown.length > 0
-                ? format.usd(
-                    spendKnown.reduce(
-                      (sum, { facts }) => sum + (facts.spendUsd ?? 0),
-                      0,
-                    ),
-                  )
-                : t('modelAccess.facts.summary.notYet')}
-            </SummaryFact>
-          )}
+          <SummaryFact label={t('modelAccess.facts.summary.spend')}>
+            {capturedDays > 0 && spendKnown.length > 0
+              ? format.usd(
+                  spendKnown.reduce(
+                    (sum, { facts }) => sum + (facts.spendUsd ?? 0),
+                    0,
+                  ),
+                )
+              : t('modelAccess.facts.summary.notYet')}
+          </SummaryFact>
           <SummaryFact label={t('modelAccess.facts.summary.footprint')}>
             {footprintKnown.length > 0
               ? format.co2(
@@ -554,9 +580,7 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
           aria-label={t('modelAccess.view.label')}
           className="flex flex-wrap gap-2"
         >
-          {MODEL_VIEWS.filter(
-            (option) => option !== 'map' || pricing !== null,
-          ).map((option) => (
+          {MODEL_VIEWS.map((option) => (
             <button
               key={option}
               type="button"
@@ -577,7 +601,7 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
             <span className={ADMIN_MUTED}>
               {t('modelAccess.facts.columns.label')}
             </span>
-            {availableGroups.map((group) => (
+            {FACT_GROUPS.map((group) => (
               <button
                 key={group}
                 type="button"
@@ -594,16 +618,36 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
                 {t(`modelAccess.facts.columns.${group}` as never)}
               </button>
             ))}
+            {retiredCount > 0 && (
+              <button
+                type="button"
+                aria-pressed={showRetired}
+                onClick={() => {
+                  // Hiding the rows would take an open editor with them.
+                  if (showRetired && leaveGuard.current?.()) {
+                    queued.current = () => {
+                      setSelected(null);
+                      setShowRetired(false);
+                    };
+                    return;
+                  }
+                  if (showRetired) setSelected(null);
+                  setShowRetired((value) => !value);
+                }}
+                className={`ms-2 ${toggle} ${showRetired ? toggleOn : toggleOff}`}
+              >
+                {t('modelAccess.facts.showRetired', { count: retiredCount })}
+              </button>
+            )}
           </div>
         )}
       </div>
       <p className={ADMIN_MUTED} role="note">
-        {t(
-          pricing !== null
-            ? 'modelAccess.facts.estimateNote'
-            : 'modelAccess.facts.estimateNoteNoCost',
-          { promptTokens, completionTokens, days: windowDays },
-        )}{' '}
+        {t('modelAccess.facts.estimateNote', {
+          promptTokens,
+          completionTokens,
+          days: windowDays,
+        })}{' '}
         {insights && capturedDays === 0 && t('modelAccess.facts.captureNote')}
       </p>
       {view === 'runway' && (
