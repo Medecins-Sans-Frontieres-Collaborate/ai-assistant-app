@@ -78,6 +78,11 @@ interface ValueChoiceProps {
   label: string;
   /** Offer Inherit. False for the org default, where nothing sits below. */
   allowInherit?: boolean;
+  /**
+   * The kinds to offer, when the definition's own set does not fit (a grant
+   * cannot be Off). Defaults to `kindsFor(def, allowInherit)`.
+   */
+  kinds?: readonly ValueKind[];
   disabled?: boolean;
 }
 
@@ -95,12 +100,13 @@ export const ValueChoice: FC<ValueChoiceProps> = ({
   inherited,
   label,
   allowInherit = true,
+  kinds: offered,
   disabled = false,
 }) => {
   const t = useTranslations('limits');
   const name = useId();
   const kind = kindOf(value, def);
-  const kinds = kindsFor(def, allowInherit);
+  const kinds = offered ?? kindsFor(def, allowInherit);
   const unit = t(`unit.${def.unit}` as never);
   const suffix =
     def.window === 'day' || def.window === 'month'
