@@ -37,6 +37,7 @@ import {
 } from '@/lib/services/agentAccess/blobCas';
 import { createLimitsBlobStorage } from '@/lib/services/limits/limitsStore';
 import { currentPeriod, resetAt } from '@/lib/services/limits/periods';
+import { RecordedCap } from '@/lib/services/limits/recordedCap';
 import {
   LIMITS_USAGE_PREFIX,
   PeriodKind,
@@ -148,6 +149,12 @@ export interface CounterRequest {
   source?: string;
   modelId?: string;
   series?: string;
+  /**
+   * The person's real cap for this cell, recorded in the document for the
+   * usage summary. Separate from `limit` because some debits reserve against
+   * an effectively infinite limit and enforce the cap elsewhere.
+   */
+  cap?: RecordedCap;
 }
 
 export interface ReserveDenial {
@@ -291,6 +298,9 @@ export async function reserve(
       for (const counter of counters) {
         next.counters[counter.cell] =
           (next.counters[counter.cell] ?? 0) + counter.cost;
+        if (counter.cap) {
+          next.caps = { ...next.caps, [counter.cell]: counter.cap };
+        }
       }
 
       await uploadJson(
