@@ -30,6 +30,7 @@ import {
 import { isModelBlocked } from '@/lib/services/limits/modelAvailability';
 import { resetAt } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
+import { capOf } from '@/lib/services/limits/recordedCap';
 import {
   ResolvedLimit,
   activeDelegationIds,
@@ -1604,6 +1605,7 @@ export async function createLimitsMiddleware(
             limit: cell.value as number,
             limitKey: cell.limitKey,
             source: cell.source,
+            cap: capOf(cell),
             ...(cell.modelId ? { modelId: cell.modelId } : {}),
             ...(cell.series ? { series: cell.series } : {}),
           })),

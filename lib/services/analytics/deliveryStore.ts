@@ -7,9 +7,13 @@
  * by a path taken from a request: callers resolve a file by the id derived
  * from a path this module LISTED.
  *
- * The container is created by Terraform (docs/ANALYTICS_ADMIN_ASSESSMENT.md
- * §4.5), not by the app: an app that could create it would mask a missing
- * role assignment as an empty folder tree.
+ * The container's source of truth is Terraform. As a backstop the app creates
+ * it at startup when it is missing ({@link ensureDeliveryContainer}), so
+ * features reading it work in a fresh environment. A container the app made
+ * is stamped with {@link DELIVERY_CREATED_BY_KEY}, and the health view keeps
+ * warning about it until the first delivery arrives: an empty container the
+ * app made usually means the ETL has not been pointed at it or lacks write
+ * access, and that must not read as "no reports yet".
  */
 import { Session } from 'next-auth';
 
@@ -106,14 +110,71 @@ class AzureDeliveryStore implements DeliveryStore {
   }
 }
 
-export function createDeliveryStore(): DeliveryStore {
+/** Metadata key stamped on a delivery container the app had to create. */
+export const DELIVERY_CREATED_BY_KEY = 'createdby';
+/** Value of {@link DELIVERY_CREATED_BY_KEY} when the app created it. */
+export const DELIVERY_CREATED_BY_APP = 'ai-portal-app';
+
+/**
+ * Who made the delivery container: the infrastructure (or anything else that
+ * did not stamp it), the app's startup backstop, or nobody yet.
+ */
+export type DeliveryContainerOrigin = 'infrastructure' | 'app' | 'missing';
+
+/** The container-level operations the startup backstop and health need. */
+export interface DeliveryContainerAdmin {
+  ensureContainerExists(metadata?: Record<string, string>): Promise<boolean>;
+  getContainerMetadata(): Promise<Record<string, string> | null>;
+}
+
+/**
+ * The storage client for the delivery container.
+ *
+ * @throws Error when no storage account is configured.
+ */
+function createDeliveryContainerClient(): AzureBlobStorage {
   const { accountName, containerName } = resolveDeliveryLocation();
   if (!accountName) {
     throw new Error(
       'Analytics delivery storage requires a storage account (AZURE_BLOB_STORAGE_ADMIN_NAME, AZURE_BLOB_STORAGE_NAME_EU, or AZURE_BLOB_STORAGE_NAME)',
     );
   }
-  return new AzureDeliveryStore(
-    new AzureBlobStorage(accountName, containerName, SYSTEM_USER),
-  );
+  return new AzureBlobStorage(accountName, containerName, SYSTEM_USER);
+}
+
+/**
+ * Creates the delivery container when it does not exist. An existing
+ * container is never changed: not emptied, and its metadata is left alone.
+ *
+ * @param container - Defaults to the configured delivery container.
+ * @returns True when this call created it (stamped as made by the app).
+ * @throws The storage error when the container can neither be found nor
+ *   created (no account configured, no data role, network).
+ */
+export function ensureDeliveryContainer(
+  container: DeliveryContainerAdmin = createDeliveryContainerClient(),
+): Promise<boolean> {
+  return container.ensureContainerExists({
+    [DELIVERY_CREATED_BY_KEY]: DELIVERY_CREATED_BY_APP,
+  });
+}
+
+/**
+ * Reads who made the delivery container from its metadata.
+ *
+ * @param container - Defaults to the configured delivery container.
+ * @throws The storage error for anything but a missing container.
+ */
+export async function readDeliveryContainerOrigin(
+  container: DeliveryContainerAdmin = createDeliveryContainerClient(),
+): Promise<DeliveryContainerOrigin> {
+  const metadata = await container.getContainerMetadata();
+  if (metadata === null) return 'missing';
+  return metadata[DELIVERY_CREATED_BY_KEY] === DELIVERY_CREATED_BY_APP
+    ? 'app'
+    : 'infrastructure';
+}
+
+export function createDeliveryStore(): DeliveryStore {
+  return new AzureDeliveryStore(createDeliveryContainerClient());
 }

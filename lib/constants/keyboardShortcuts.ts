@@ -9,6 +9,7 @@
  */
 import {
   KeyboardShortcut,
+  ModifierKey,
   ShortcutAction,
   ShortcutContext,
   ShortcutContextState,
@@ -228,26 +229,38 @@ function isMacOS(): boolean {
  * @returns A human-readable string like "Ctrl+Shift+K" or "Cmd+Shift+K"
  */
 export function formatShortcut(shortcut: KeyboardShortcut): string {
+  return formatKeys(shortcut.modifiers, shortcut.key);
+}
+
+/**
+ * Formats a key with its modifiers for display, as formatShortcut does, for
+ * keys that belong to one screen rather than to the whole app.
+ *
+ * @param modifiers - Modifiers held down; 'ctrl' is Cmd on macOS.
+ * @param key - The key, as KeyboardEvent.key names it.
+ * @returns A human-readable string like "Ctrl+0" or "Cmd+0"
+ */
+export function formatKeys(modifiers: ModifierKey[], key: string): string {
   const parts: string[] = [];
   const mac = isMacOS();
 
   // Add modifiers in conventional order
-  if (shortcut.modifiers.includes('ctrl')) {
+  if (modifiers.includes('ctrl')) {
     parts.push(mac ? 'Cmd' : 'Ctrl');
   }
-  if (shortcut.modifiers.includes('alt')) {
+  if (modifiers.includes('alt')) {
     parts.push(mac ? 'Option' : 'Alt');
   }
-  if (shortcut.modifiers.includes('shift')) {
+  if (modifiers.includes('shift')) {
     parts.push('Shift');
   }
-  if (shortcut.modifiers.includes('meta')) {
+  if (modifiers.includes('meta')) {
     parts.push(mac ? 'Cmd' : 'Win');
   }
 
   // Format the key itself
-  let keyDisplay = shortcut.key;
-  switch (shortcut.key.toLowerCase()) {
+  let keyDisplay = key;
+  switch (key.toLowerCase()) {
     case 'escape':
       keyDisplay = 'Esc';
       break;

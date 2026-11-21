@@ -18,6 +18,7 @@ import {
   meteredCells,
 } from '@/lib/services/limits/enforcement';
 import { buildPrincipal } from '@/lib/services/limits/principal';
+import { capOf } from '@/lib/services/limits/recordedCap';
 import { ResolvedLimit } from '@/lib/services/limits/resolver';
 import { reserve } from '@/lib/services/limits/usageStore';
 
@@ -62,6 +63,7 @@ export async function guardTranscriptionMinutes(
         limit: cell.value as number,
         limitKey: cell.limitKey,
         source: cell.source,
+        cap: capOf(cell),
       })),
       {
         timezone: policy.timezone,

@@ -30,7 +30,9 @@ import {
   M365_ADD_SOURCES,
   acceptedExtensions,
   effectiveIntent,
+  filesForExtensions,
   filesForIntent,
+  hostedSources,
   initialSource,
   intentsForSelection,
   sourceServesIntent,
@@ -51,6 +53,28 @@ import Modal from '@/components/UI/Modal';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
+/**
+ * Runs the picker for another surface than the chat composer (a workflow's
+ * "Upload document", say). The host takes ONE file, from this device or
+ * from OneDrive / SharePoint, and decides itself what happens to it: the
+ * picker neither attaches anything to the chat nor offers the "Then"
+ * control.
+ */
+export interface AddToChatHost {
+  /** Dialog title, already translated. */
+  title: string;
+  /** The sources the host can take a file from. */
+  sources: readonly AddSourceId[];
+  /** Lowercase extensions, without the dot, the host takes. */
+  extensions: readonly string[];
+  /** Line under the device pane's button naming what can be chosen. */
+  deviceHint: string;
+  /** Label of the button that confirms a ticked file. */
+  confirmLabel: string;
+  /** Receives the chosen OneDrive / SharePoint file; the picker closes. */
+  onDriveItem: (entry: M365DriveEntry) => void;
+}
+
 interface AddToChatDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -67,15 +91,23 @@ interface AddToChatDialogProps {
   onBrowseDevice: (intent: AddIntent) => void;
   /** Files dropped or pasted into the picker, already narrowed to the intent. */
   onDeviceFiles: (files: File[], intent: AddIntent) => void;
-  /** Starts the camera capture flow. */
-  onOpenCamera: () => void;
-  /** Hands a OneDrive / SharePoint document to the translation form. */
-  onTranslateDriveItem: (entry: M365DriveEntry) => void;
-  /** Inserts an imported meeting transcript into the conversation. */
-  onImportTranscript: (
+  /** Starts the camera capture flow. Needed where the camera is offered. */
+  onOpenCamera?: () => void;
+  /**
+   * Hands a OneDrive / SharePoint document to the translation form. Needed
+   * where the translate intent is offered.
+   */
+  onTranslateDriveItem?: (entry: M365DriveEntry) => void;
+  /**
+   * Inserts an imported meeting transcript into the conversation. Needed
+   * where meetings are offered.
+   */
+  onImportTranscript?: (
     transcript: M365MeetingTranscript,
     meeting: M365MeetingEntry,
   ) => void;
+  /** Set when another surface than the chat composer opens the picker. */
+  host?: AddToChatHost;
 }
 
 const SOURCE_ICONS: Record<AddSourceId, typeof IconLink> = {
@@ -99,6 +131,9 @@ const PRIMARY_BUTTON_CLASSES =
 const QUIET_BUTTON_CLASSES =
   'min-h-[36px] rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-neutral-700';
 
+/** Stands in where no surface asked for meeting transcripts. */
+const ignoreTranscript = (): void => undefined;
+
 /** Whether a drag carries files (as opposed to text or a dragged element). */
 function dragCarriesFiles(event: DragEvent): boolean {
   return Array.from(event.dataTransfer?.types ?? []).includes('Files');
@@ -117,6 +152,7 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
   onOpenCamera,
   onTranslateDriveItem,
   onImportTranscript,
+  host,
 }) => {
   const t = useTranslations('addToChat');
   const tPicker = useTranslations('m365.picker');
@@ -127,13 +163,15 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
   );
 
   const [intent, setIntent] = useState<AddIntent>(initialIntent);
-  const [source, setSource] = useState<AddSourceId>(() =>
-    initialSource(
+  const [source, setSource] = useState<AddSourceId>(() => {
+    const landing = initialSource(
       useSettingsStore.getState().addToChatLastSource,
       initialIntent,
       capabilities,
-    ),
-  );
+    );
+    // A remembered source the host does not take is not a landing place.
+    return host && !host.sources.includes(landing) ? 'device' : landing;
+  });
   // OneDrive / SharePoint files ticked so far, keyed by `driveId/itemId`.
   // Owned here rather than by the file browser because this dialog decides
   // what happens to them.
@@ -150,7 +188,13 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
     node?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
   }, []);
 
-  const sources = useMemo(() => visibleSources(capabilities), [capabilities]);
+  const sources = useMemo(
+    () =>
+      host
+        ? hostedSources(capabilities, host.sources)
+        : visibleSources(capabilities),
+    [capabilities, host],
+  );
   const selectedEntries = useMemo(() => [...selected.values()], [selected]);
   const selectedNames = useMemo(
     () => selectedEntries.map((entry) => entry.name),
@@ -170,12 +214,15 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
       ),
     [capabilities],
   );
-  const extensions = useMemo(() => acceptedExtensions(intent), [intent]);
+  const extensions = useMemo(
+    () => host?.extensions ?? acceptedExtensions(intent),
+    [host, intent],
+  );
 
   const selectSource = (next: AddSourceId) => {
     if (next === 'camera') {
       // The camera is a capture flow of its own, not a pane.
-      onOpenCamera();
+      onOpenCamera?.();
       onClose();
       return;
     }
@@ -187,8 +234,10 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
   const actOnDriveItems = useCallback(
     (entries: M365DriveEntry[], chosen: AddIntent) => {
       if (entries.length === 0) return;
-      if (chosen === 'translate') {
-        onTranslateDriveItem(entries[0]);
+      if (host) {
+        host.onDriveItem(entries[0]);
+      } else if (chosen === 'translate') {
+        onTranslateDriveItem?.(entries[0]);
       } else {
         // Attaching audio or video IS how it gets transcribed (on send), so
         // both intents attach. Each file continues in the background on its
@@ -197,12 +246,13 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
       }
       onClose();
     },
-    [attachDriveItem, onTranslateDriveItem, onClose],
+    [attachDriveItem, host, onTranslateDriveItem, onClose],
   );
 
   const handleSelectionChange = (next: Map<string, M365DriveEntry>) => {
-    if (intent === 'translate' && next.size > 1) {
-      // Translation takes one document: a second tick replaces the first.
+    if ((host || intent === 'translate') && next.size > 1) {
+      // Translation, like a host, takes one document: a second tick
+      // replaces the first.
       const added = [...next.entries()].filter(([key]) => !selected.has(key));
       setSelected(new Map(added.slice(-1)));
       return;
@@ -211,13 +261,19 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
   };
 
   const handleActivate = (entry: M365DriveEntry) => {
+    if (host) {
+      actOnDriveItems([entry], intent);
+      return;
+    }
     const chosen = effectiveIntent(intent, [entry.name], capabilities);
     if (chosen) actOnDriveItems([entry], chosen);
   };
 
   const deliverDeviceFiles = (files: File[]) => {
     if (files.length === 0) return;
-    const usable = filesForIntent(files, intent);
+    const usable = host
+      ? filesForExtensions(files, host.extensions)
+      : filesForIntent(files, intent);
     if (usable.length === 0) {
       toast.error(t('device.rejected'));
       return;
@@ -311,7 +367,7 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
         return (
           <M365MeetingImportBody
             onClose={onClose}
-            onImportTranscript={onImportTranscript}
+            onImportTranscript={onImportTranscript ?? ignoreTranscript}
           />
         );
       case 'link':
@@ -340,7 +396,7 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
               {t('device.dropHint')}
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-500">
-              {t(`device.hint.${intent}`)}
+              {host?.deviceHint ?? t(`device.hint.${intent}`)}
             </p>
           </div>
         );
@@ -353,7 +409,7 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
     <Modal
       isOpen
       onClose={onClose}
-      title={t(TITLE_KEYS[intent])}
+      title={host?.title ?? t(TITLE_KEYS[intent])}
       size="xl"
       // The close control sits inside the header: the default one hangs off
       // the panel's corner, which is off-screen on a full-screen phone sheet.
@@ -410,7 +466,7 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
             >
               {tPicker('clearSelection')}
             </button>
-            {offeredIntents.length > 1 && (
+            {!host && offeredIntents.length > 1 && (
               <div className="flex items-center gap-2 max-sm:w-full max-sm:flex-col max-sm:items-stretch max-sm:gap-1">
                 <span
                   id="add-to-chat-then"
@@ -460,15 +516,18 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
               </button>
               <button
                 type="button"
-                disabled={!actingIntent}
+                disabled={!host && !actingIntent}
                 onClick={() => {
-                  if (actingIntent) {
+                  if (host) {
+                    actOnDriveItems(selectedEntries, intent);
+                  } else if (actingIntent) {
                     actOnDriveItems(selectedEntries, actingIntent);
                   }
                 }}
                 className={PRIMARY_BUTTON_CLASSES}
               >
-                {t(`selection.confirm.${actingIntent ?? 'attach'}`)}
+                {host?.confirmLabel ??
+                  t(`selection.confirm.${actingIntent ?? 'attach'}`)}
               </button>
             </div>
           </div>
@@ -489,6 +548,9 @@ const AddToChatSession: FC<Omit<AddToChatDialogProps, 'isOpen'>> = ({
  * The intent the picker was opened for (attach, translate, transcribe) sets
  * its title, which sources are usable and which files can be chosen. Ticking
  * OneDrive / SharePoint files reveals a "Then" control that can change it.
+ *
+ * Another surface can open the same picker for a file of its own by passing
+ * `host` (see {@link AddToChatHost}).
  */
 const AddToChatDialog: FC<AddToChatDialogProps> = ({ isOpen, ...session }) =>
   isOpen ? <AddToChatSession {...session} /> : null;

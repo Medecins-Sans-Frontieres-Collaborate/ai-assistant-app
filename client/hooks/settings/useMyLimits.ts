@@ -69,6 +69,19 @@ export interface MyLimitsResponse {
   scopedPreview?: boolean;
   /** Present when `usage=1` was asked for and the counters could be read. */
   usage?: Record<string, PreviewUsage>;
+  /**
+   * Global-admin previews only: what the policy matches this person on, so
+   * the admin view can resolve them against an unsaved draft.
+   */
+  principal?: PreviewPrincipal;
+}
+
+/** The matching facts of a previewed person (global admins only). */
+export interface PreviewPrincipal {
+  mail: string;
+  domain?: string;
+  attributes: string[];
+  groupIds: string[];
 }
 
 // ---------------------------------------------------------------------------

@@ -2,7 +2,7 @@ import {
   indexFolders,
   resolveFolderAccess,
 } from '@/lib/services/analytics/access';
-import { buildHealth } from '@/lib/services/analytics/health';
+import { HealthInput, buildHealth } from '@/lib/services/analytics/health';
 import {
   AnalyticsData,
   buildFileViews,
@@ -253,18 +253,53 @@ describe('buildFolderViews', () => {
 });
 
 describe('admin health', () => {
-  function health(who: ReturnType<typeof actor>, source = data()) {
+  function health(
+    who: ReturnType<typeof actor>,
+    source = data(),
+    delivery: Partial<
+      Pick<HealthInput, 'deliveryOrigin' | 'deliveryUnavailable'>
+    > = {},
+  ) {
     return buildHealth({
       data: source,
       files: buildFileViews(source, id, NOW),
       actor: who,
-      deliveryUnavailable: false,
+      deliveryUnavailable: delivery.deliveryUnavailable ?? false,
       foldersUnavailable: false,
+      deliveryOrigin: delivery.deliveryOrigin ?? 'infrastructure',
       container: 'ai-portal-analytics',
       deleteEnabled: true,
       now: NOW,
     });
   }
+
+  it('flags an app-made delivery container only while nothing has been delivered', () => {
+    const empty = data({ blobs: [] });
+    // Made by the app and still empty: the ETL is probably not writing to it.
+    expect(
+      health(global, empty, { deliveryOrigin: 'app' })
+        .deliveryContainerCreatedByApp,
+    ).toBe(true);
+    // Any delivery proves the ETL can write, even one this admin cannot see.
+    const onlyRaw = health(delegated, data({ blobs: [RAW] }), {
+      deliveryOrigin: 'app',
+    });
+    expect(onlyRaw.totals.files).toBe(0);
+    expect(onlyRaw.deliveryContainerCreatedByApp).toBe(false);
+    // Made by Terraform, or unknown: an empty container is just empty.
+    expect(health(global, empty).deliveryContainerCreatedByApp).toBe(false);
+    expect(
+      health(global, empty, { deliveryOrigin: null })
+        .deliveryContainerCreatedByApp,
+    ).toBe(false);
+    // Unreachable is its own, louder problem.
+    expect(
+      health(global, empty, {
+        deliveryOrigin: 'app',
+        deliveryUnavailable: true,
+      }).deliveryContainerCreatedByApp,
+    ).toBe(false);
+  });
 
   it('leaves raw out of a delegated admin’s view entirely', () => {
     const view = health(delegated);

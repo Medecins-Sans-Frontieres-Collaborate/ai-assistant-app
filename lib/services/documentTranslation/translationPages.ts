@@ -24,8 +24,12 @@ import {
   removeTempDir,
 } from '@/lib/utils/server/file/fileHandling';
 
-import { supportsPagedText } from '@/types/documentTranslation';
+import {
+  isPresentationExtension,
+  supportsPagedText,
+} from '@/types/documentTranslation';
 
+import { readDeckSlides } from './deck/deckText';
 import { TranslationJob } from './translationJobStore';
 
 import fs from 'fs';
@@ -33,7 +37,7 @@ import os from 'os';
 import path from 'path';
 
 /** Bumped when the cached shape changes; older caches are rebuilt. */
-const PAGES_RECORD_VERSION = 1;
+const PAGES_RECORD_VERSION = 2;
 const CORRECTIONS_RECORD_VERSION = 1;
 
 /** Largest correction accepted for one page, in characters. */
@@ -42,12 +46,29 @@ export const MAX_PAGE_CORRECTION_CHARS = 20_000;
 /** Largest number of pages one read may return. */
 export const MAX_PAGES_PER_READ = 25;
 
-/** Source and translated text of one page. */
+/**
+ * Source and translated text of one page. For a presentation a page is a
+ * slide, numbered as the presentation lists them (SLIDE NUMBER CONVENTION
+ * in deck/deckText), hidden slides included.
+ */
 export interface TranslationPageText {
   /** 1-based page number. */
   page: number;
   source: string;
   translation: string;
+  /** Presentations: the slide is hidden in a slide show. */
+  hidden?: boolean;
+  /** Presentations: the slide's speaker notes, when it has any. */
+  sourceNotes?: string;
+  /** Presentations: the notes as delivered (translated or kept). */
+  translationNotes?: string;
+}
+
+/** One page's text as a file gives it. */
+interface ExtractedPage {
+  text: string;
+  hidden?: boolean;
+  notes?: string;
 }
 
 /** Cached per-page text of a translation job. */
@@ -138,12 +159,21 @@ async function extractPages(
   workDir: string,
   name: string,
   options?: ExtractionOptions,
-): Promise<string[]> {
+): Promise<ExtractedPage[]> {
   // Fixed filename inside a private directory: nothing user-supplied reaches
   // the path or the converter's command line.
   const filePath = path.join(workDir, name);
   await fs.promises.writeFile(filePath, file);
-  return extractPdfPageTexts(filePath, options);
+  if (isPresentationExtension(path.extname(name).slice(1))) {
+    const slides = await readDeckSlides(filePath);
+    return slides.map((slide) => ({
+      text: slide.text,
+      hidden: slide.hidden,
+      notes: slide.notes,
+    }));
+  }
+  const pages = await extractPdfPageTexts(filePath, options);
+  return pages.map((text) => ({ text }));
 }
 
 /**
@@ -196,11 +226,18 @@ export async function getTranslationPages(
       jobId: job.jobId,
       pageCount,
       pagesAligned: sourcePages.length === translatedPages.length,
-      pages: Array.from({ length: pageCount }, (_, index) => ({
-        page: index + 1,
-        source: sourcePages[index] ?? '',
-        translation: translatedPages[index] ?? '',
-      })),
+      pages: Array.from({ length: pageCount }, (_, index) => {
+        const source = sourcePages[index];
+        const translated = translatedPages[index];
+        return {
+          page: index + 1,
+          source: source?.text ?? '',
+          translation: translated?.text ?? '',
+          ...(source?.hidden && { hidden: true }),
+          ...(source?.notes && { sourceNotes: source.notes }),
+          ...(translated?.notes && { translationNotes: translated.notes }),
+        };
+      }),
     };
     await storage.upload(cachePath, JSON.stringify(record), {
       blobHTTPHeaders: { blobContentType: 'application/json' },

@@ -136,8 +136,9 @@ const serverEnvSchema = z.object({
   /**
    * Analytics DELIVERY container: where the third-party ETL writes report
    * files (docs/ANALYTICS_DELIVERY_CONTRACT.md). Same account as the admin
-   * container; defaults to `ai-portal-analytics`. Created by Terraform, never
-   * by the app. See lib/services/analytics/deliveryStore.ts.
+   * container; defaults to `ai-portal-analytics`. Created by Terraform; the
+   * app creates it at startup only when missing, and flags that in the
+   * Deliveries health view. See lib/services/analytics/deliveryStore.ts.
    */
   AZURE_BLOB_STORAGE_ANALYTICS_CONTAINER: z.string().optional(),
   // Whether the app DELETES delivered analytics files once they are past
@@ -283,6 +284,35 @@ const serverEnvSchema = z.object({
   // Deployment that backs the interpreter sub-tool round-trip (must support
   // the Responses-API code_interpreter tool in the project's region).
   CODE_INTERPRETER_MODEL: z.string().default('gpt-5.4'),
+
+  // Document render service (lib/services/documents/render): every
+  // LibreOffice job on the server waits in one queue. Measured for a 60-slide
+  // deck: 6-8 s and about 260 MB each (docs/POWERPOINT_TRANSLATION.md).
+  // 'inprocess' runs LibreOffice on this server; 'http' sends every job to a
+  // separate service at RENDER_SERVICE_URL (contract: docs/RENDER_SERVICE.md).
+  RENDER_SERVICE: z.enum(['inprocess', 'http']).default('inprocess'),
+  // The separate service's address; required when RENDER_SERVICE is 'http'.
+  // Reached over the environment's internal network only.
+  RENDER_SERVICE_URL: z.string().url().optional(),
+  // Optional bearer token the separate service checks.
+  RENDER_SERVICE_TOKEN: z.string().optional(),
+  // Jobs running at once on this instance.
+  RENDER_MAX_CONCURRENT: z.coerce.number().int().min(1).max(16).default(1),
+  // Jobs waiting at once before new work is refused (503 RENDER_BUSY).
+  RENDER_MAX_QUEUED: z.coerce.number().int().min(0).max(10_000).default(200),
+  // Chat jobs run in a row while translation work waits.
+  RENDER_INTERACTIVE_BURST: z.coerce.number().int().min(1).max(100).default(3),
+  // Address-space cap per LibreOffice process (384 MB rendered the probe deck).
+  RENDER_MEMORY_LIMIT_MB: z.coerce
+    .number()
+    .int()
+    .min(256)
+    .max(16_384)
+    .default(2048),
+  // Time limit: a base, plus this much per megabyte of input, capped.
+  RENDER_TIMEOUT_BASE_MS: z.coerce.number().int().min(5_000).default(60_000),
+  RENDER_TIMEOUT_PER_MB_MS: z.coerce.number().int().min(0).default(2_000),
+  RENDER_TIMEOUT_MAX_MS: z.coerce.number().int().min(5_000).default(600_000),
 
   // Pins the deployment the Bing web search runs on (the Responses API
   // native web_search tool). UNSET = resolved per region from the served

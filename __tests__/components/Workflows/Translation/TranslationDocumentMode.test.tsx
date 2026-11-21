@@ -20,6 +20,7 @@ import { DocumentReaderBar } from '@/components/Workflows/Translation/DocumentRe
 import { TranslationWorkspace } from '@/components/Workflows/Translation/TranslationWorkspace';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/client/hooks/workflows/useWorkflowStream', () => ({
@@ -40,6 +41,8 @@ const PAGE_COUNT = 7;
 const JOB_ID = 'job-1';
 const fetchMock = vi.fn();
 let corrections: Record<number, string>;
+/** Extra fields a page carries (a presentation's hidden flag and notes). */
+let pageExtras: (page: number) => Record<string, unknown>;
 let submitResponse: () => Response;
 
 const envelope = (data: unknown, status = 200) =>
@@ -53,6 +56,7 @@ function pagesResponse(from: number, to: number) {
       page,
       source: `source page ${page}`,
       translation: `machine page ${page}`,
+      ...pageExtras(page),
       ...(corrections[page] !== undefined && {
         correction: { text: corrections[page], updatedAt: 'then' },
       }),
@@ -146,6 +150,7 @@ const putCalls = () =>
 beforeEach(() => {
   vi.clearAllMocks();
   corrections = {};
+  pageExtras = () => ({});
   submitResponse = () =>
     envelope(
       {
@@ -186,6 +191,9 @@ beforeEach(() => {
     if (url === '/api/file/manual.pdf') {
       return Promise.resolve(new Response('%PDF-1.4'));
     }
+    if (url.startsWith('/api/file/')) {
+      return Promise.resolve(new Response('PK'));
+    }
     return Promise.resolve(Response.json({ data: { guides: [] } }));
   });
   vi.stubGlobal('fetch', fetchMock);
@@ -197,15 +205,71 @@ afterEach(() => {
 });
 
 describe('whole-document mode: availability', () => {
-  it('offers the mode beside Quick and Reviewed', () => {
+  it('offers Text or Document, with Quick or Reviewed beneath Text', () => {
+    mountWorkspace({ mode: 'quick' });
+    const group = (name: string) =>
+      within(screen.getByRole('radiogroup', { name }))
+        .getAllByRole('radio')
+        .map((radio) => [
+          radio.textContent,
+          radio.getAttribute('aria-checked'),
+        ]);
+    expect(group('translation.kind')).toEqual([
+      ['translation.kindText', 'true'],
+      ['translation.modeDocument', 'false'],
+    ]);
+    expect(group('translation.formatted.optionsDepth')).toEqual([
+      ['translation.modeQuick', 'true'],
+      ['translation.modeAgentic', 'false'],
+    ]);
+  });
+
+  it('keeps the text depth while in Document and returns to it', () => {
+    mountWorkspace({ mode: 'quick' });
+    fireEvent.click(
+      screen.getByRole('radio', { name: 'translation.modeDocument' }),
+    );
+    expect(workflowState()).toMatchObject({
+      mode: 'document',
+      textMode: 'quick',
+    });
+    // A document read as text has no Quick / Reviewed choice.
+    expect(
+      screen.queryByRole('radiogroup', {
+        name: 'translation.formatted.optionsDepth',
+      }),
+    ).toBeNull();
+    fireEvent.click(
+      screen.getByRole('radio', { name: 'translation.kindText' }),
+    );
+    expect(workflowState().mode).toBe('quick');
+    fireEvent.click(
+      screen.getByRole('radio', { name: 'translation.modeAgentic' }),
+    );
+    expect(workflowState().mode).toBe('agentic');
+  });
+
+  it('offers to translate a PDF loaded as text as a document', () => {
     mountWorkspace({ mode: 'quick' });
     expect(
-      screen.getAllByRole('radio').map((radio) => radio.textContent),
-    ).toEqual([
-      'translation.modeQuick',
-      'translation.modeAgentic',
-      'translation.modeDocument',
-    ]);
+      screen.getByText(/^translation\.pdfAsTextOffer/),
+    ).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'translation.pdfAsTextKeep' }),
+    );
+    expect(screen.queryByText(/^translation\.pdfAsTextOffer/)).toBeNull();
+    expect(workflowState().mode).toBe('quick');
+  });
+
+  it('switches to Document from the offer', () => {
+    mountWorkspace({ mode: 'agentic' });
+    fireEvent.click(
+      screen.getByRole('button', { name: 'translation.pdfAsTextSwitch' }),
+    );
+    expect(workflowState()).toMatchObject({
+      mode: 'document',
+      textMode: 'agentic',
+    });
   });
 
   it.each([
@@ -379,11 +443,12 @@ describe('whole-document mode: reading', () => {
     await screen.findByText('machine page 3');
 
     fireEvent.click(
-      screen.getByRole('radio', { name: 'translation.modeQuick' }),
+      screen.getByRole('radio', { name: 'translation.kindText' }),
     );
     expect(await screen.findByText('text mode result')).toBeInTheDocument();
     expect(workflowState()).toMatchObject({
-      mode: 'quick',
+      // No text depth was remembered, so Text opens on its default.
+      mode: 'agentic',
       finalText: 'text mode result',
       documentJob: { page: 3 },
     });
@@ -549,12 +614,12 @@ describe('whole-document mode: leaving a page with suggestions pending', () => {
   it('gates leaving the mode the same way', async () => {
     await readerWithSuggestion();
     fireEvent.click(
-      screen.getByRole('radio', { name: 'translation.modeQuick' }),
+      screen.getByRole('radio', { name: 'translation.kindText' }),
     );
     expect(gate()).toBeInTheDocument();
     expect(workflowState().mode).toBe('document');
     fireEvent.click(screen.getByRole('button', { name: 'rejectAll' }));
-    await waitFor(() => expect(workflowState().mode).toBe('quick'));
+    await waitFor(() => expect(workflowState().mode).toBe('agentic'));
     expect(workflowState().finalText).toBe('text mode result');
   });
 });
@@ -621,5 +686,133 @@ describe('DocumentReaderBar', () => {
         /translation.documentAvailableUntil .*21/,
       ),
     ).toBeInTheDocument();
+  });
+});
+
+describe('whole-document mode: presentations', () => {
+  const deck = {
+    name: 'briefing.pptx',
+    url: '/api/file/briefing.pptx',
+    lastPage: PAGE_COUNT,
+    selectedPages: `1-${PAGE_COUNT}`,
+  };
+  const deckJob: TranslationDocumentJob = {
+    ...readyJob,
+    sourceName: 'briefing.pptx',
+    translatedFilename: 'briefing_es.pptx',
+    fileExtension: 'pptx',
+  };
+  const notesOption = () =>
+    screen.queryByRole('checkbox', {
+      name: 'translation.formatted.speakerNotes',
+    });
+
+  afterEach(() => {
+    useSettingsStore.getState().setTranslateSpeakerNotes(true);
+  });
+
+  it('offers to translate speaker notes for a presentation only', () => {
+    const { unmount } = mountWorkspace({});
+    expect(notesOption()).toBeNull();
+    unmount();
+    mountWorkspace({ sourceDocument: deck });
+    expect(notesOption()).toBeChecked();
+  });
+
+  it('remembers turning notes off and sends that choice', async () => {
+    mountWorkspace({ sourceDocument: deck });
+    fireEvent.click(notesOption()!);
+    expect(useSettingsStore.getState().translateSpeakerNotes).toBe(false);
+    fireEvent.click(
+      screen.getByRole('button', { name: 'translation.translateDocument' }),
+    );
+    await waitFor(() =>
+      expect(
+        fetchMock.mock.calls.some(
+          ([url]) => url === '/api/document-translation/translate',
+        ),
+      ).toBe(true),
+    );
+    const form = fetchMock.mock.calls.find(
+      ([url]) => url === '/api/document-translation/translate',
+    )![1].body as FormData;
+    expect((form.get('document') as File).name).toBe('briefing.pptx');
+    expect(form.get('translateNotes')).toBe('false');
+  });
+
+  it('sends no notes field when notes are translated, the default', async () => {
+    mountWorkspace({ sourceDocument: deck });
+    fireEvent.click(
+      screen.getByRole('button', { name: 'translation.translateDocument' }),
+    );
+    await waitFor(() =>
+      expect(
+        fetchMock.mock.calls.some(
+          ([url]) => url === '/api/document-translation/translate',
+        ),
+      ).toBe(true),
+    );
+    const form = fetchMock.mock.calls.find(
+      ([url]) => url === '/api/document-translation/translate',
+    )![1].body as FormData;
+    expect(form.get('translateNotes')).toBeNull();
+  });
+
+  it('reads slide by slide, marks a hidden slide and shows its notes', async () => {
+    pageExtras = (page) =>
+      page === 1
+        ? {
+            hidden: true,
+            sourceNotes: 'Thank the volunteers.',
+            translationNotes: 'Agradecer a los voluntarios.',
+          }
+        : {};
+    mountWorkspace({ sourceDocument: deck, documentJob: deckJob });
+    await screen.findByText('machine page 1');
+    expect(screen.getByText('translation.slides.label')).toBeVisible();
+    expect(
+      screen.getByRole('button', { name: 'translation.slides.next' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('translation.slides.hidden')).toBeVisible();
+    expect(screen.getByText('translation.slides.notes')).toBeVisible();
+    expect(
+      screen.getByText('Agradecer a los voluntarios.'),
+    ).toBeInTheDocument();
+  });
+
+  it('says notes were kept instead of showing them twice', async () => {
+    pageExtras = () => ({
+      sourceNotes: 'Thank the volunteers.',
+      translationNotes: 'Thank the volunteers.',
+    });
+    mountWorkspace({ sourceDocument: deck, documentJob: deckJob });
+    await screen.findByText('machine page 1');
+    expect(screen.getByText(/translation.slides.notesKept/)).toBeVisible();
+    expect(screen.getAllByText('Thank the volunteers.')).toHaveLength(1);
+    expect(screen.queryByText('translation.slides.hidden')).toBeNull();
+  });
+
+  it('says a .ppt was converted, and only then', async () => {
+    const { unmount } = mountWorkspace({
+      sourceDocument: deck,
+      documentJob: deckJob,
+    });
+    await screen.findByText('machine page 1');
+    expect(screen.queryByText('translation.slides.converted')).toBeNull();
+    unmount();
+    mountWorkspace({
+      sourceDocument: { ...deck, name: 'old.ppt', url: '/api/file/old.ppt' },
+      documentJob: { ...deckJob, sourceName: 'old.pptx' },
+    });
+    expect(
+      await screen.findByText('translation.slides.converted'),
+    ).toBeVisible();
+  });
+
+  it('keeps page wording and no notes for a PDF', async () => {
+    mountWorkspace({ documentJob: readyJob });
+    await screen.findByText('machine page 1');
+    expect(screen.getByText('translation.pageLabel')).toBeVisible();
+    expect(screen.queryByText('translation.slides.notes')).toBeNull();
   });
 });

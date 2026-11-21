@@ -7,6 +7,7 @@ import {
   indexFolders,
   resolveFolderAccess,
 } from '@/lib/services/analytics/access';
+import { DeliveryContainerOrigin } from '@/lib/services/analytics/deliveryStore';
 import {
   AnalyticsHealthResponse,
   AnalyticsProblemDto,
@@ -33,6 +34,8 @@ export interface HealthInput {
   actor: AnalyticsActor;
   deliveryUnavailable: boolean;
   foldersUnavailable: boolean;
+  /** Who made the delivery container; null when it could not be read. */
+  deliveryOrigin: DeliveryContainerOrigin | null;
   container: string;
   deleteEnabled: boolean;
   now: Date;
@@ -98,6 +101,12 @@ export function buildHealth(input: HealthInput): AnalyticsHealthResponse {
     deliveryUnavailable: input.deliveryUnavailable,
     foldersUnavailable: input.foldersUnavailable,
     policyUnavailable: data.policyUnavailable,
+    // Every delivered file counts, not just the ones this admin sees: any
+    // delivery at all proves the ETL can write to the container.
+    deliveryContainerCreatedByApp:
+      input.deliveryOrigin === 'app' &&
+      !input.deliveryUnavailable &&
+      input.files.length === 0,
     container: input.container,
     retentionDeletion: !input.deleteEnabled
       ? 'disabled'

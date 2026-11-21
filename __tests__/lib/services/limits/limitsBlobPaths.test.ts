@@ -33,6 +33,7 @@ describe('limitsBlobPaths', () => {
       policyPath: 'system/limits/policy.json',
       historyPrefix: 'system/limits/history/',
       usagePrefix: 'system/limits/usage/',
+      statsPrefix: 'system/limits/stats/',
     });
   });
 
@@ -41,6 +42,7 @@ describe('limitsBlobPaths', () => {
       policyPath: 'system/limits/policy.beta.json',
       historyPrefix: 'system/limits/history.beta/',
       usagePrefix: 'system/limits/usage.beta/',
+      statsPrefix: 'system/limits/stats.beta/',
     });
   });
 
@@ -53,6 +55,8 @@ describe('limitsBlobPaths', () => {
     expect(beta.usagePrefix.startsWith(prod.usagePrefix)).toBe(false);
     expect(prod.historyPrefix.startsWith(beta.historyPrefix)).toBe(false);
     expect(prod.usagePrefix.startsWith(beta.usagePrefix)).toBe(false);
+    expect(beta.statsPrefix.startsWith(prod.statsPrefix)).toBe(false);
+    expect(prod.statsPrefix.startsWith(beta.statsPrefix)).toBe(false);
   });
 
   it('exports the active constants from the same builder (test env is not beta)', () => {

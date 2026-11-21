@@ -7,6 +7,16 @@
  * standard chat. The type is fixed at creation time: it is only ever set on
  * an empty conversation and never changed afterward.
  */
+import type { DeckPlan } from '@/lib/utils/shared/documents/deckPlan';
+import {
+  FormattedDocumentOptions,
+  FormattedPendingJob,
+  TranslationDocumentLayout,
+} from '@/lib/utils/shared/translation/formattedDocument';
+import { NativePdfDepth } from '@/lib/utils/shared/translation/nativePdf';
+import { NativeRunRef } from '@/lib/utils/shared/translation/nativeRunStorage';
+import { StoredSourceTextRef } from '@/lib/utils/shared/translation/storedSourceText';
+
 import { ChannelDrafterWorkflowState } from './drafter';
 import { FormFillWorkflowState } from './formFill';
 import { TabularFieldType } from './structure';
@@ -19,6 +29,8 @@ export const CONVERSATION_WORKFLOW_TYPES = [
   'grants',
   'form-fill',
   'channel-drafter',
+  'brand-review',
+  'deck-builder',
 ] as const;
 
 export type ConversationWorkflowType =
@@ -277,6 +289,14 @@ export type TranslationMode = 'quick' | 'agentic' | 'document';
 export type TranslationTextMode = Exclude<TranslationMode, 'document'>;
 
 /**
+ * What the workspace translates, as the person chooses it: `text` is the
+ * source text (`quick` or `agentic` mode), `document` the uploaded file
+ * (`document` mode). Quick or Reviewed is a second, separate choice.
+ */
+export const TRANSLATION_KINDS = ['text', 'document'] as const;
+export type TranslationKind = (typeof TRANSLATION_KINDS)[number];
+
+/**
  * A whole-document translation the conversation refers to. A reference
  * only: the files, the per-page text and the corrections live on the
  * server, never in workflow state.
@@ -322,7 +342,14 @@ export interface TranslationTextResult {
 
 export interface TranslationWorkflowState {
   kind: 'translation';
+  /**
+   * The text to translate. Always the text itself in memory; a large one
+   * is kept in storage and left out of what the browser saves (see
+   * storedSourceText.ts).
+   */
   sourceText: string;
+  /** Where a large `sourceText` is stored. */
+  sourceTextRef?: StoredSourceTextRef;
   /**
    * Set while `sourceText` holds a selection of pages from a document too
    * large to translate in one batch.
@@ -336,6 +363,31 @@ export interface TranslationWorkflowState {
    * `document` mode.
    */
   textModeResult?: TranslationTextResult;
+  /**
+   * The text mode (`quick` or `agentic`) the workspace was in before
+   * `document` mode, which it returns to: Text and Document each keep
+   * their own Quick / Reviewed choice. Absent means `agentic`.
+   */
+  textMode?: TranslationTextMode;
+  /**
+   * How `document` mode produces its result; absent means `text` (see
+   * DEFAULT_DOCUMENT_LAYOUT).
+   */
+  documentLayout?: TranslationDocumentLayout;
+  /** Translation depth of the `formatted` layout; absent means `quick`. */
+  documentDepth?: NativePdfDepth;
+  /** The person's choices for the next `formatted` run. */
+  formattedOptions?: FormattedDocumentOptions;
+  /**
+   * Where the last `formatted` run of `sourceDocument` is stored. The run
+   * itself (blocks, edits, files) is never kept in the browser.
+   */
+  formattedRunRef?: NativeRunRef;
+  /**
+   * A presentation of `sourceDocument` being translated in the background:
+   * followed again after a reload, cleared once its batches are in the run.
+   */
+  formattedPendingJob?: FormattedPendingJob;
   sourceLang?: string;
   /** Legacy locale-code field; superseded by targetLanguage. */
   targetLang?: string;
@@ -362,8 +414,9 @@ export interface TranslationWorkflowState {
   glossaryGuideIds?: string[];
   /**
    * `quick` and `agentic` translate the source text with the language
-   * model. `document` sends the whole uploaded file through document
-   * translation (layout kept) and reads the result page by page.
+   * model. `document` works on the uploaded file itself: either through
+   * document translation, read page by page as text, or rebuilt page by
+   * page with its formatting kept (see `documentLayout`).
    */
   mode: TranslationMode;
   analysis?: TranslationAnalysis;
@@ -950,6 +1003,62 @@ export interface GrantsWorkflowState {
 }
 
 /* ------------------------------------------------------------------ */
+/* Brand review (docs/DOCUMENT_PLATFORM.md, phase F)                   */
+/* ------------------------------------------------------------------ */
+
+/**
+ * A brand review conversation: the book and document chosen, and the
+ * review run on them. The findings live with the review on the server
+ * (GET /api/brand-review/<id>), not here.
+ */
+export interface BrandReviewWorkflowState {
+  kind: 'brand-review';
+  bookId?: string;
+  /** The person's upload being reviewed. */
+  document?: { file: string; name: string; type: string };
+  /** Whether a model looks at each page (default true). */
+  modelReview: boolean;
+  /** The latest review of this document, while it is kept. */
+  reviewId?: string;
+  updatedAt: string;
+}
+
+/* ------------------------------------------------------------------ */
+/* Deck builder (docs/DOCUMENT_PLATFORM.md, phase G)                   */
+/* ------------------------------------------------------------------ */
+
+/** One of the person's uploads, by reference and name. */
+export interface DeckBuilderUpload {
+  /** `/api/file/<sha256>.<ext>`. */
+  file: string;
+  name: string;
+}
+
+/**
+ * A deck builder conversation: what the deck is built from, the outline
+ * as the person is editing it, and the latest build. The outline's layouts
+ * and the build's deck live with their jobs on the server
+ * (GET /api/deck-builder/<id>).
+ */
+export interface DeckBuilderWorkflowState {
+  kind: 'deck-builder';
+  /** The brand book the deck is for, if any. */
+  bookId?: string;
+  /** A book's deck template (`admin:<book>/<name>`) or the person's upload. */
+  template?: { file: string; name: string; type: string };
+  brief: string;
+  sources: DeckBuilderUpload[];
+  pictures: DeckBuilderUpload[];
+  /** BCP 47 tag the deck is written in (default: the interface's). */
+  language?: string;
+  outlineId?: string;
+  /** The outline being edited: bounded text (at most 40 slides). */
+  plan?: DeckPlan;
+  buildId?: string;
+  updatedAt: string;
+}
+
+/* ------------------------------------------------------------------ */
 /* Union                                                               */
 /* ------------------------------------------------------------------ */
 
@@ -966,4 +1075,6 @@ export type WorkflowState =
   | MapWorkflowState
   | GrantsWorkflowState
   | FormFillWorkflowState
-  | ChannelDrafterWorkflowState;
+  | ChannelDrafterWorkflowState
+  | BrandReviewWorkflowState
+  | DeckBuilderWorkflowState;

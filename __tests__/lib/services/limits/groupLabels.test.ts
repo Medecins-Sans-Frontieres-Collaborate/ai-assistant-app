@@ -47,6 +47,12 @@ describe('collectGroupIds', () => {
       }),
     ).toEqual([G1, G2, G3]);
   });
+
+  it('collects blocked groups of a model approval rule too', () => {
+    expect(
+      collectGroupIds({ modelAccess: [{ groups: [], denyGroups: [G2] }] }),
+    ).toEqual([G2]);
+  });
 });
 
 describe('pruneGroupLabels', () => {

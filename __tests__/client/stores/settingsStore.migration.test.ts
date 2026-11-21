@@ -1367,3 +1367,41 @@ describe('settingsStore migration (v74 → v75)', () => {
     expect(tooShort.translationAnalysisHeight).toBe(MIN_HEIGHT);
   });
 });
+
+/**
+ * v78 remembers whether a presentation's speaker notes are translated. On
+ * unless the person turned it off; a stored choice survives.
+ */
+describe('settingsStore migration (v77 → v78)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('translates speaker notes by default for stores from before v78', () => {
+    const result = migrate({}, 77) as Record<string, unknown>;
+    expect(result.translateSpeakerNotes).toBe(true);
+  });
+
+  it('keeps a choice the person made', () => {
+    const result = migrate({ translateSpeakerNotes: false }, 77) as Record<
+      string,
+      unknown
+    >;
+    expect(result.translateSpeakerNotes).toBe(false);
+  });
+
+  it('replaces a value that is not a choice', () => {
+    const result = migrate({ translateSpeakerNotes: 'no' }, 78) as Record<
+      string,
+      unknown
+    >;
+    expect(result.translateSpeakerNotes).toBe(true);
+  });
+
+  it('remembers the choice across reloads', () => {
+    useSettingsStore.getState().setTranslateSpeakerNotes(false);
+    const persisted = useSettingsStore.persist.getOptions().partialize!(
+      useSettingsStore.getState(),
+    ) as Record<string, unknown>;
+    expect(persisted.translateSpeakerNotes).toBe(false);
+    useSettingsStore.getState().setTranslateSpeakerNotes(true);
+  });
+});

@@ -12,13 +12,17 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 
-import { getEnvVariable } from '@/lib/utils/app/env';
+import {
+  translationOutputPath,
+  translationOutputStorage,
+} from '@/lib/services/documentTranslation/translationOutputs';
+
 import {
   errorResponse,
   notFoundResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
-import { AzureBlobStorage, BlobProperty } from '@/lib/utils/server/blob/blob';
+import { BlobProperty } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 import {
   isSafeBlobPathId,
@@ -28,7 +32,6 @@ import {
 import { getDocumentContentType } from '@/types/documentTranslation';
 
 import { auth } from '@/auth';
-import { env } from '@/config/environment';
 
 interface RouteParams {
   params: Promise<{ jobId: string }>;
@@ -60,24 +63,15 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
   try {
     // Initialize blob storage
-    const blobStorage = new AzureBlobStorage(
-      getEnvVariable({
-        name: 'AZURE_BLOB_STORAGE_NAME',
-        user: session.user,
-      }),
-      getEnvVariable({
-        name: 'AZURE_BLOB_STORAGE_CONTAINER',
-        throwErrorOnFail: false,
-        defaultValue: env.AZURE_BLOB_STORAGE_IMAGE_CONTAINER ?? '',
-        user: session.user,
-      }),
-      session.user,
-    );
+    const blobStorage = translationOutputStorage(session.user);
 
     // Build blob path (original or translated)
-    const blobPath = isOriginal
-      ? `${session.user.id}/translations/${jobId}_original.${ext}`
-      : `${session.user.id}/translations/${jobId}.${ext}`;
+    const blobPath = translationOutputPath(
+      session.user.id,
+      jobId,
+      ext,
+      isOriginal,
+    );
 
     // Check if blob exists
     const exists = await blobStorage.blobExists(blobPath);

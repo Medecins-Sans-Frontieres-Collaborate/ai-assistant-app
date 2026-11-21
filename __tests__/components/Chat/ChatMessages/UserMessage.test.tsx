@@ -16,8 +16,11 @@ vi.mock('@/components/Markdown/MathStreamdown', () => ({
   ),
 }));
 
+// One saved prompt, for messages sent with it.
 vi.mock('@/client/hooks/settings/useSettings', () => ({
-  useSettings: () => ({ prompts: [] }),
+  useSettings: () => ({
+    prompts: [{ id: 'formula', name: 'Explain a formula', content: '' }],
+  }),
 }));
 
 vi.mock('@/client/hooks/settings/useTones', () => ({
@@ -148,5 +151,34 @@ describe('UserMessage editing', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Save & Submit' }));
 
     expect(props.onEdit).not.toHaveBeenCalled();
+  });
+});
+
+describe('UserMessage sent with a saved prompt', () => {
+  const SENT =
+    'Explain the formula E = mc^2 step by step for a non-specialist.';
+  const withPrompt = (promptId: string): Message => ({
+    ...userMessage(SENT),
+    promptId,
+    // Empty values: the defaults stood in, and the text above says so.
+    promptVariables: { formula: 'E = mc^2', audience: '' },
+  });
+
+  it('shows the full text as sent, like any message, labelled with the prompt', () => {
+    renderMessage(withPrompt('formula'));
+    expect(screen.getByTestId('markdown').textContent).toBe(SENT);
+    expect(
+      screen.getByText('userMessage.fromPrompt', { exact: false }),
+    ).toBeInTheDocument();
+    // The old collapsed view hid the text behind a link.
+    expect(screen.queryByText(/show full message/i)).toBeNull();
+  });
+
+  it('is a plain message when the prompt no longer exists', () => {
+    renderMessage(withPrompt('deleted'));
+    expect(screen.getByTestId('markdown').textContent).toBe(SENT);
+    expect(
+      screen.queryByText('userMessage.fromPrompt', { exact: false }),
+    ).toBeNull();
   });
 });

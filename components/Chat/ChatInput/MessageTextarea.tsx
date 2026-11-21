@@ -18,6 +18,11 @@ interface MessageTextareaProps {
   onBlur: () => void;
   onCompositionStart: () => void;
   onCompositionEnd: () => void;
+  /**
+   * The prompt list this box drives, while it is open: screen readers then
+   * hear the box as a combobox and the highlighted prompt as it moves.
+   */
+  promptList?: { id: string; activeOptionId: string } | null;
 }
 
 /**
@@ -37,6 +42,7 @@ export const MessageTextarea: React.FC<MessageTextareaProps> = ({
   onBlur,
   onCompositionStart,
   onCompositionEnd,
+  promptList,
 }) => {
   return (
     <textarea
@@ -51,6 +57,9 @@ export const MessageTextarea: React.FC<MessageTextareaProps> = ({
         overflow: `${textareaScrollHeight > 400 ? 'auto' : 'hidden'}`,
       }}
       placeholder={placeholder}
+      aria-autocomplete="list"
+      aria-controls={promptList?.id}
+      aria-activedescendant={promptList?.activeOptionId}
       value={value}
       rows={1}
       onCompositionStart={onCompositionStart}

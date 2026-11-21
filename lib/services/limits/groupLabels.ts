@@ -29,7 +29,7 @@ export const MAX_GROUP_LABELS = 2000;
 export interface GroupBearingDocument {
   overrides?: readonly Pick<LimitOverride, 'scope' | 'targets'>[];
   delegations?: readonly Pick<LimitDelegation, 'jurisdiction'>[];
-  modelAccess?: readonly Pick<ModelAccessRule, 'groups'>[];
+  modelAccess?: readonly Pick<ModelAccessRule, 'groups' | 'denyGroups'>[];
 }
 
 /** Every distinct, well-formed group id the document targets, sorted. */
@@ -51,6 +51,7 @@ export function collectGroupIds(doc: GroupBearingDocument): string[] {
   }
   for (const rule of doc.modelAccess ?? []) {
     for (const grant of rule.groups ?? []) add(grant.target);
+    for (const target of rule.denyGroups ?? []) add(target);
   }
   return [...ids].sort();
 }

@@ -9,8 +9,16 @@ import type { Prompt } from '@/types/prompt';
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock the utility modules
-vi.mock('@/lib/utils/shared/chat/promptMatching');
+// Mock the trigger parsing the tests drive; the list's order and matching
+// (groupPromptsForList, promptMatchesQuery) stay real, as the hook relies on
+// them for which prompt a position means.
+vi.mock('@/lib/utils/shared/chat/promptMatching', async (importOriginal) => ({
+  ...(await importOriginal<
+    typeof import('@/lib/utils/shared/chat/promptMatching')
+  >()),
+  findPromptMatch: vi.fn(),
+  updatePromptListVisibility: vi.fn(),
+}));
 vi.mock('@/lib/utils/shared/chat/variables');
 
 describe('usePromptSelection', () => {
@@ -631,39 +639,73 @@ describe('usePromptSelection', () => {
     });
   });
 
-  describe('Scroll Behavior', () => {
-    it('updates scroll position when active index changes', () => {
+  describe('List order and visibility', () => {
+    const folders = [
+      { id: 'folder-b', name: 'B', type: 'prompt' as const },
+      { id: 'folder-a', name: 'A', type: 'prompt' as const },
+    ];
+    // Stored order differs from the order the list shows.
+    const filed: Prompt[] = [
+      { ...mockPrompts[0], folderId: null },
+      { ...mockPrompts[1], folderId: 'folder-a' },
+      { ...mockPrompts[2], folderId: 'folder-b' },
+      { ...mockPrompts[0], id: 'orphan', name: 'Orphan', folderId: 'gone' },
+    ];
+
+    it('lists prompts in the order shown: folders in order, then the rest', () => {
       const { result } = renderHook(() =>
-        usePromptSelection({ prompts: mockPrompts }),
+        usePromptSelection({ prompts: filed, folders }),
       );
-
-      // Create a mock element
-      const mockElement = {
-        scrollTop: 0,
-      };
-      result.current.promptListRef.current = mockElement as any;
-
-      act(() => {
-        result.current.setActivePromptIndex(2);
-      });
-
-      // Should scroll to index 2 * 30 = 60
-      expect(mockElement.scrollTop).toBe(60);
+      expect(result.current.filteredPrompts.map((p) => p.name)).toEqual([
+        'Meeting Notes', // folder B
+        'Code Review', // folder A
+        'Email Template', // no folder
+        'Orphan', // folder no longer exists: listed, not lost
+      ]);
     });
 
-    it('handles null promptListRef', () => {
+    it('uses the prompt shown at the highlighted position', () => {
+      const onPromptSelect = vi.fn();
+      const { result } = renderHook(() =>
+        usePromptSelection({ prompts: filed, folders, onPromptSelect }),
+      );
+      // Position 0 is "Meeting Notes" on screen but "Email Template" in
+      // storage order, which is what the old lookup used.
+      act(() => result.current.setActivePromptIndex(0));
+      act(() => result.current.handleInitModal());
+      expect(onPromptSelect.mock.calls[0][0].name).toBe('Meeting Notes');
+    });
+
+    it('uses the prompt clicked, whatever is highlighted', () => {
+      const onPromptSelect = vi.fn();
+      const { result } = renderHook(() =>
+        usePromptSelection({ prompts: filed, folders, onPromptSelect }),
+      );
+      act(() => result.current.setShowPromptList(true));
+      act(() => result.current.selectPromptAt(2));
+      expect(onPromptSelect.mock.calls[0][0].name).toBe('Email Template');
+      expect(result.current.showPromptList).toBe(false);
+    });
+
+    it('is visible only while open and something matches', () => {
       const { result } = renderHook(() =>
         usePromptSelection({ prompts: mockPrompts }),
       );
+      expect(result.current.isPromptListVisible).toBe(false);
+      act(() => result.current.setShowPromptList(true));
+      expect(result.current.isPromptListVisible).toBe(true);
+      act(() => result.current.setPromptInputValue('no such prompt'));
+      expect(result.current.isPromptListVisible).toBe(false);
+    });
 
-      // Ensure ref is null
-      result.current.promptListRef.current = null;
-
-      expect(() => {
-        act(() => {
-          result.current.setActivePromptIndex(1);
-        });
-      }).not.toThrow();
+    it('matches names regardless of accents and case', () => {
+      const { result } = renderHook(() =>
+        usePromptSelection({
+          prompts: [{ ...mockPrompts[0], name: 'Résumé review' }],
+        }),
+      );
+      act(() => result.current.setPromptInputValue('RESUME'));
+      expect(result.current.filteredPrompts).toHaveLength(1);
     });
   });
 

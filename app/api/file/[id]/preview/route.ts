@@ -2,6 +2,7 @@ import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import { renderErrorResponse } from '@/lib/services/documents/render/renderErrorResponse';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import {
@@ -94,6 +95,9 @@ export async function GET(
     return response;
   } catch (error) {
     console.error('[file preview] Conversion failed:', error);
-    return errorResponse('This file could not be previewed', 500);
+    return (
+      renderErrorResponse(error) ??
+      errorResponse('This file could not be previewed', 500)
+    );
   }
 }

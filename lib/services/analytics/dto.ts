@@ -93,6 +93,11 @@ export interface AnalyticsHealthResponse {
   deliveryUnavailable: boolean;
   foldersUnavailable: boolean;
   policyUnavailable: boolean;
+  /**
+   * The app created the delivery container at startup (it was missing) and
+   * nothing has been delivered since: the ETL is probably not writing to it.
+   */
+  deliveryContainerCreatedByApp: boolean;
   /** Storage container the app is reading, for the "not reachable" message. */
   container: string;
   /**

@@ -1282,14 +1282,17 @@ const mockMessages: Record<string, unknown> = {
     changePlaybackSpeed: 'Change playback speed',
   },
   variableModal: {
-    fillInstructions: 'Fill in the variables below to customize your prompt',
-    optional: 'Optional',
-    required: 'Required',
-    default: 'Default:',
     defaultPlaceholder: '{defaultValue} (default)',
-    enterValue: 'Enter value for {key}...',
     cancel: 'Cancel',
-    apply: 'Apply',
+    optionalSuffix: '(optional)',
+    missing: 'Fill this in to use the prompt.',
+    keysHint: 'Enter: next field · Shift+Enter: new line',
+    preview: 'Message preview',
+    insert: 'Insert into message',
+  },
+  promptList: {
+    asksFor: 'Asks for {fields}',
+    keysHint: '↑↓ to choose · Enter to use · Esc to close',
   },
 };
 

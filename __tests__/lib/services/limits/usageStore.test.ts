@@ -125,6 +125,31 @@ describe('reserve', () => {
     expect(written.counters['chat.messagesPerDay']).toBe(1);
   });
 
+  it('records the cap and its rule for cells that carry one, and only those', async () => {
+    client.download.mockResolvedValue(
+      downloadOf({
+        counters: { 'chat.messagesPerDay': 3 },
+        caps: { 'chat.messagesPerDay': { limit: 10, rule: 'global' } },
+      }),
+    );
+    client.upload.mockResolvedValue({ etag: '"e2"' });
+
+    await reserve(
+      'oid-1',
+      'day',
+      [
+        counter({ limit: 50, cap: { limit: 50, rule: 'lim-000000000001' } }),
+        counter({ cell: 'chat.messagesPerDay#workflow' }),
+      ],
+      { storage, now: NOW },
+    );
+
+    const written = JSON.parse(client.upload.mock.calls[0][0].toString('utf8'));
+    expect(written.caps).toEqual({
+      'chat.messagesPerDay': { limit: 50, rule: 'lim-000000000001' },
+    });
+  });
+
   it('NEVER calls AzureBlobStorage.upload (the dedupe trap)', async () => {
     client.download.mockResolvedValue(downloadOf({ counters: { a: 1 } }));
     client.upload.mockResolvedValue({ etag: '"e2"' });

@@ -2,6 +2,7 @@ import { Session } from 'next-auth';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
+import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { env } from '@/config/environment';
@@ -46,6 +47,8 @@ export interface UploadStreamAzureStorageArgs {
 }
 
 export interface BlobStorage {
+  /** Restarts a blob's lifecycle clock; false when it does not exist. */
+  touch(blobName: string): Promise<boolean>;
   upload(
     blobName: string,
     content: string | Buffer,
@@ -223,11 +226,38 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
    * works over a private endpoint. Used as a self-healing backstop for
    * containers whose source of truth is Terraform (e.g. the admin
    * container), so a fresh environment works before the next infra apply.
+   *
+   * @param metadata - Stored on the container only when this call creates it.
+   * @returns True when this call created the container.
    */
-  async ensureContainerExists(): Promise<void> {
-    await this.blobServiceClient
+  async ensureContainerExists(
+    metadata?: Record<string, string>,
+  ): Promise<boolean> {
+    const response = await this.blobServiceClient
       .getContainerClient(this.containerName as string)
-      .createIfNotExists();
+      .createIfNotExists(metadata ? { metadata } : undefined);
+    // `succeeded` is true only when this call created it; an existing
+    // container is left exactly as it was, metadata included.
+    return response.succeeded;
+  }
+
+  /**
+   * This client's container's metadata.
+   *
+   * @returns The metadata (empty when it has none), or null when the
+   *   container does not exist.
+   * @throws The storage error for anything else (no access, network).
+   */
+  async getContainerMetadata(): Promise<Record<string, string> | null> {
+    try {
+      const properties = await this.blobServiceClient
+        .getContainerClient(this.containerName as string)
+        .getProperties();
+      return properties.metadata ?? {};
+    } catch (error) {
+      if (isBlobNotFoundError(error)) return null;
+      throw error;
+    }
   }
 
   async upload(
@@ -391,6 +421,31 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       { label: 'blob.deleteIfExists' },
     );
     return result.succeeded;
+  }
+
+  /**
+   * Marks a blob as written now without changing its content, so a
+   * lifecycle rule counting days since the last modification starts over.
+   * (Setting a blob's metadata updates its Last-Modified time.)
+   *
+   * @param blobName - The blob.
+   * @returns False when the blob does not exist.
+   */
+  async touch(blobName: string): Promise<boolean> {
+    const blockBlobClient = this.blobServiceClient
+      .getContainerClient(this.containerName as string)
+      .getBlockBlobClient(blobName);
+    try {
+      await withAzureRetry(
+        () =>
+          blockBlobClient.setMetadata({ touched: new Date().toISOString() }),
+        { label: 'blob.touch' },
+      );
+      return true;
+    } catch (error) {
+      if ((error as { statusCode?: number }).statusCode === 404) return false;
+      throw error;
+    }
   }
 
   async listBlobs(prefix: string): Promise<string[]> {

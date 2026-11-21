@@ -4,7 +4,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 
-import { WorkflowPolicy } from '@/lib/services/workflows/policy/types';
+import {
+  WorkflowFeatureId,
+  WorkflowFeatureSetting,
+  WorkflowPolicy,
+} from '@/lib/services/workflows/policy/types';
 
 import { ConversationWorkflowType } from '@/types/workflow';
 
@@ -41,6 +45,7 @@ export function useWorkflowPolicyAdmin() {
   const save = useMutation({
     mutationFn: async (input: {
       workflows: Record<ConversationWorkflowType, { enabled: boolean }>;
+      features: Record<WorkflowFeatureId, WorkflowFeatureSetting>;
       etag: string | null;
     }) => {
       const response = await fetch('/api/workflows/policy', {
@@ -49,7 +54,10 @@ export function useWorkflowPolicyAdmin() {
           'content-type': 'application/json',
           ...(input.etag ? { 'if-match': input.etag } : {}),
         },
-        body: JSON.stringify({ workflows: input.workflows }),
+        body: JSON.stringify({
+          workflows: input.workflows,
+          features: input.features,
+        }),
       });
       if (response.status === 409) throw new WorkflowPolicyConflict();
       if (!response.ok) {

@@ -10,6 +10,7 @@ import { normalizeUserSkills } from '@/lib/services/skills/userSkills';
 import type { AddSourceId } from '@/lib/utils/app/addToChat';
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
+import { guardedLocalStorage } from '@/lib/utils/app/storage/guardedLocalStorage';
 import {
   DEFAULT_MODEL_TIMEOUT_SECONDS,
   clampModelTimeoutSeconds,
@@ -38,6 +39,10 @@ import {
   clampPasteAttachmentChars,
 } from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
+import {
+  NativePdfStepInstructions,
+  sanitizeStepInstructions,
+} from '@/lib/utils/shared/translation/nativePdf';
 import {
   ANALYSIS_STRIP_HEIGHT,
   clampAnalysisStripHeight,
@@ -895,6 +900,20 @@ interface SettingsStore {
   /** Height of the expanded analysis strip, in CSS pixels. */
   translationAnalysisHeight: number;
   setTranslationAnalysisHeight: (height: number) => void;
+  /**
+   * Instructions the person adds to the steps of a formatting-preserving
+   * document translation, remembered for their next documents.
+   */
+  formattedStepInstructions: NativePdfStepInstructions;
+  setFormattedStepInstructions: (
+    instructions: NativePdfStepInstructions,
+  ) => void;
+  /**
+   * Whether a presentation's speaker notes are translated with its slides.
+   * On by default; the person's last choice is remembered.
+   */
+  translateSpeakerNotes: boolean;
+  setTranslateSpeakerNotes: (translate: boolean) => void;
   setMapImportDefaultConfidence: (value: 'high' | 'medium' | 'low') => void;
   setSuggestRevisions: (enabled: boolean) => void;
   setSuggestRevisionsException: (
@@ -1195,6 +1214,8 @@ export const useSettingsStore = create<SettingsStore>()(
       reviewOverwriteAcknowledged: false,
       translationAnalysisHidden: false,
       translationAnalysisHeight: ANALYSIS_STRIP_HEIGHT.default,
+      formattedStepInstructions: {},
+      translateSpeakerNotes: true,
       mapImportDefaultConfidence: 'high',
       m365Connected: true,
       m365ConnectedUserSet: false,
@@ -2073,6 +2094,12 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ translationAnalysisHidden: hidden }),
       setTranslationAnalysisHeight: (height) =>
         set({ translationAnalysisHeight: clampAnalysisStripHeight(height) }),
+      setFormattedStepInstructions: (instructions) =>
+        set({
+          formattedStepInstructions: sanitizeStepInstructions(instructions),
+        }),
+      setTranslateSpeakerNotes: (translate) =>
+        set({ translateSpeakerNotes: translate }),
       setMapImportDefaultConfidence: (value) =>
         set({ mapImportDefaultConfidence: value }),
 
@@ -2221,6 +2248,8 @@ export const useSettingsStore = create<SettingsStore>()(
           reviewOverwriteAcknowledged: false,
           translationAnalysisHidden: false,
           translationAnalysisHeight: ANALYSIS_STRIP_HEIGHT.default,
+          formattedStepInstructions: {},
+          translateSpeakerNotes: true,
           mapImportDefaultConfidence: 'high',
           suggestRevisions: true,
           suggestRevisionsExceptions: {
@@ -2242,8 +2271,10 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 76, // v76: personal usage budgets + the daily usage ledger
-      storage: createJSONStorage(() => localStorage),
+      version: 78, // v78: remembered speaker-notes choice for presentations
+      // A full browser storage must not throw out of a settings change
+      // (saving a prompt left its dialog open): see guardedLocalStorage.
+      storage: createJSONStorage(() => guardedLocalStorage),
       partialize: (state) => ({
         temperature: state.temperature,
         systemPrompt: state.systemPrompt,
@@ -2353,6 +2384,8 @@ export const useSettingsStore = create<SettingsStore>()(
         reviewOverwriteAcknowledged: state.reviewOverwriteAcknowledged,
         translationAnalysisHidden: state.translationAnalysisHidden,
         translationAnalysisHeight: state.translationAnalysisHeight,
+        formattedStepInstructions: state.formattedStepInstructions,
+        translateSpeakerNotes: state.translateSpeakerNotes,
         mapImportDefaultConfidence: state.mapImportDefaultConfidence,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
@@ -3144,6 +3177,20 @@ export const useSettingsStore = create<SettingsStore>()(
           if (typeof state.usageBudgetAskSnoozedDay !== 'string') {
             state.usageBudgetAskSnoozedDay = null;
           }
+        }
+
+        // Version 76 → 77: remembered step instructions for formatted
+        // document translation. Sanitized, not trusted: they round-trip
+        // through localStorage and end up in prompts.
+        if (version < 77) {
+          state.formattedStepInstructions = sanitizeStepInstructions(
+            state.formattedStepInstructions,
+          );
+        }
+
+        // v78: notes are translated unless the person said otherwise.
+        if (typeof state.translateSpeakerNotes !== 'boolean') {
+          state.translateSpeakerNotes = true;
         }
 
         // Whatever version it came from, the per-set rows are only kept as

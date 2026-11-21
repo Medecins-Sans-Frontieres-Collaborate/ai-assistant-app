@@ -43,7 +43,13 @@ describe('useAutoFocusChatInput', () => {
   });
 
   it('appends a slash and focuses the textarea when typing unfocused', () => {
+    // The composer is on screen: keys are never sent to one that is not
+    // (composerHidden). jsdom lays nothing out, so its box is given.
     const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+    vi.spyOn(textarea, 'getClientRects').mockReturnValue([
+      new DOMRect(0, 0, 100, 20),
+    ] as unknown as DOMRectList);
     const focusSpy = vi.spyOn(textarea, 'focus');
     const textareaRef = { current: textarea };
 
@@ -65,6 +71,7 @@ describe('useAutoFocusChatInput', () => {
     expect(dispatchResult).toBe(false);
     expect(useChatInputStore.getState().textFieldValue).toBe('/');
     expect(focusSpy).toHaveBeenCalledTimes(1);
+    textarea.remove();
   });
 
   it('ignores typing when the event starts in an input', () => {

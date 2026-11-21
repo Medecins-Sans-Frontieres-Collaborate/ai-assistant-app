@@ -85,7 +85,7 @@ function writeBackupMeta(meta: BackupMeta): void {
  * Check if an error is a QuotaExceededError.
  * Browsers throw DOMException (not Error), so instanceof Error misses it.
  */
-function isQuotaError(e: unknown): boolean {
+export function isQuotaError(e: unknown): boolean {
   return (e as { name?: string })?.name === 'QuotaExceededError';
 }
 
@@ -103,7 +103,7 @@ export const STORAGE_QUOTA_EXCEEDED_EVENT =
  * `(e: CustomEvent<StorageQuotaExceededDetail>) => void`).
  */
 export interface StorageQuotaExceededDetail {
-  scope: 'conversation' | 'folder';
+  scope: 'conversation' | 'folder' | 'settings';
   id?: string;
 }
 
@@ -117,7 +117,7 @@ export interface StorageQuotaExceededDetail {
 let lastQuotaToastAt = 0;
 const QUOTA_TOAST_THROTTLE_MS = 30_000;
 
-function notifyQuotaExceeded(detail: StorageQuotaExceededDetail): void {
+export function notifyQuotaExceeded(detail: StorageQuotaExceededDetail): void {
   if (typeof window === 'undefined') return;
   const now = Date.now();
   if (now - lastQuotaToastAt < QUOTA_TOAST_THROTTLE_MS) return;

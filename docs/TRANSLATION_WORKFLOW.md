@@ -165,11 +165,58 @@ above its trigger but flips below when the space above can't fit it (the
 workspace trigger sits at the top of the window), clamps horizontally,
 and repositions on scroll/resize while open.
 
-## Whole-document mode
+## Text or Document, Quick or Reviewed
 
-A third mode beside Quick and Reviewed. It sends the uploaded PDF through
-document translation (`/api/document-translation/translate`), which keeps the
-layout, and then reads the result page by page.
+The toolbar offers two things to translate, and a row beneath it holds the
+choices that belong to each:
+
+| Choice      | Where         | Options                                                       |
+| ----------- | ------------- | ------------------------------------------------------------- |
+| What        | toolbar       | **Text** (the source pane) or **Document** (the uploaded PDF) |
+| Layout      | row, Document | **Text only** (default) or **Preserve formatting**            |
+| Translation | row           | **Quick** or **Reviewed**; not shown for Document > Text only |
+
+- **State**: `mode` is still `quick`, `agentic` or `document`. Text and
+  Document each keep their own depth: `textMode` remembers the text mode
+  while in Document (absent means `agentic`), and `documentDepth` is the
+  formatted layout's (absent means `quick`).
+- **Document > Text only** is translated by the document service in one
+  pass, so it has no Quick / Reviewed choice.
+- **A PDF uploaded into Text** is read as text. A strip then offers
+  "Translate as a document", which switches to Document with the file
+  kept; "Keep as text" dismisses it for that file.
+- **Upload document**: with OneDrive / SharePoint available to the person
+  (the Microsoft 365 files flag and their connect opt-in), the button
+  opens the chat's "Add to chat" picker, hosted (`AddToChatHost` in
+  `components/Chat/ChatInput/AddToChatDialog.tsx`) with two sources, this
+  device and OneDrive / SharePoint / Teams files, and the workspace's file
+  types. A picked file is downloaded and loaded exactly as a device upload
+  is. Without Microsoft 365 the button opens the system file dialog.
+- **No target language**: Translate is not disabled for that alone. The
+  language control is marked and says "Choose a target language to
+  translate" while it is the only thing missing, and pressing Translate
+  opens the picker (`languageMissing` / `askForLanguage` in the workspace).
+
+## Document mode
+
+For translating the uploaded PDF or presentation itself (presentations: see
+[PowerPoint presentations](#powerpoint-presentations)). It has two layouts, chosen in a row under the toolbar. The row
+appears while the "Preserve formatting for PDFs" feature is on in
+Admin > Workflows (under Translation; on by default). With the feature off
+there is one layout and no row, and the server refuses the pipeline's
+routes:
+
+| Layout              | Default | What it does                                                                                                                      |
+| ------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Text only           | yes     | Azure document translation of the whole file; read and corrected as text, page by page. Described in this section.                |
+| Preserve formatting | no      | Each page is rebuilt with the translation in place. See [Document mode: preserve formatting](#document-mode-preserve-formatting). |
+
+In the workspace code `documentMode` means the text layout and
+`formattedMode` the other; exactly one is true in Document mode.
+
+The text layout sends the PDF through document translation
+(`/api/document-translation/translate`) and then reads the result page by
+page.
 
 - **Availability** (`wholeDocumentEligibility`): a PDF kept on the server and a
   target language that document translation supports. Custom languages and
@@ -201,6 +248,429 @@ layout, and then reads the result page by page.
 - **Stated limits**: a line says attached glossaries are not applied, and the
   introduction, the progress pane and the translate-again dialog say a
   started document translation cannot be stopped.
+
+## Document mode: preserve formatting
+
+Rebuilds pages of a PDF with the translation laid out where the source text
+was, a batch of pages at a time. The rules live in
+`lib/utils/shared/translation/nativePdf.ts` (pipeline) and
+`formattedDocument.ts` (screen); the screens are in
+`components/Workflows/Translation/Formatted/`.
+
+- **Steps**: every run does the same six steps in the same order (extract,
+  analyze, translate, rebuild, verify, refit). Three accept an added
+  instruction (analyze, translate, verify), which is appended to the step's
+  rules and never replaces them. None can be skipped or reordered.
+- **Where a translation may go** (rules stated once at the top of
+  `browser-harness/scripts/pdf_native.py`, tested in `test_pdf_native.py`
+  beside it):
+  - _Text drawn as pictures_: PowerPoint, when it may not embed a font,
+    draws each run of text as a flat-coloured picture masked to the shape of
+    the letters, with the real text on top fully transparent in a stand-in
+    font. For such a run the picture is the source: colour and width come
+    from it, it is removed with the text, and lines, spaces and paragraphs
+    are put together from where the ink is, since the transparent text
+    follows the stand-in font's widths. The real font is not in the file, so
+    the translation is set in the usual fonts.
+  - _Left in place_: text that is not translated is never touched and no
+    room runs over it: amounts and page numbers, text at an angle that is
+    not a quarter turn, and the bullet a list item starts with. Each list
+    item is one block.
+  - _Cells_: a block with something drawn the same distance above and below
+    it (the rules of a table row, the edges of a box) is in the middle of a
+    cell. Its room is the cell's whole height and the width free beside it,
+    and its translation is centred in it, so shorter text does not rise to
+    the top and longer text is not shrunk while the cell has space. One-line
+    cells that share a centre with each other or with their column's heading
+    are centred, and neighbouring centred cells share the gap between them.
+  - _Direction_: text turned a quarter turn or upside down (a label running
+    up the side of a box) is translated and set turned the same way, along
+    the box it sits in.
+  - _One translation for the whole document_: pages are translated
+    separately, and a large document in several requests, so what must not
+    vary between them is settled once and passed along (the _document
+    brief_). The target language is pinned down first: a language from the
+    list by its code, one typed in by hand (Patwah, a regional variety) by
+    asking the model which language, variety and spelling it means, and
+    every page is then told to write in exactly that. Names and recurring
+    terms found on the pages (projects, programmes, organisations,
+    acronyms) each get one decision, kept as written or translated and
+    then always the same way, which every page and every later batch of
+    the document follows. A glossary entry outranks the brief, and an
+    earlier decision is never changed by a later batch. A unit that is
+    nothing but a decided term is given its decided wording outright; a
+    longer unit that contains one and does not use it is asked for again
+    once, and a shortening that would lose one is refused (the text is
+    set smaller instead). To steer the
+    decisions ("keep all project names in English"), add it to the
+    instructions for the analyze step.
+  - _Reading direction and scripts_: Arabic, Hebrew and other
+    right-to-left translations are set right to left, each block keeping
+    the left edge it had on the page (the page is not mirrored). Scripts
+    the document font lacks (Chinese, Japanese, Korean, Devanagari, Thai
+    and others) are drawn in the layout engine's own fonts, which have a
+    regular weight only, so bold text in those scripts comes out regular.
+  - _Hyphenation_: a word is divided only as a last resort: where a
+    translation would otherwise be set below 85% of its size and dividing
+    its words lets it be larger, by the hyphenation rules of the target
+    language.
+  - _Line breaks_: lines the author stacked on purpose (an amount, a
+    sponsor and a duration under one another) stay on lines of their own
+    in the translation. They are told from lines that only wrapped by how
+    the file was written, so this applies to files that record where a
+    line wrapped; in other files the lines of a block flow together.
+  - _Panels_: a block's room stays inside the filled or outlined shape it
+    sits in (a card, a table cell, a coloured box), and a paragraph in such
+    a shape may use the shape's width.
+  - _Clear space_: the page is drawn without its text and a room grows only
+    until it meets something drawn: a rule, a box's edge, a picture.
+  - _Alignment_: centred and right-aligned text is detected (stacked lines
+    sharing a centre or right edge, or one line in the middle of its panel)
+    and laid out the same way, in a room centred on the same axis.
+  - _Peers_: blocks of one page in the same style (list items, the headings
+    of a row of cards) are set at one size. When some must shrink, all take
+    the smallest size; a block that would need less than 85% is left out of
+    the group and reworded by the fix rounds instead.
+- **Fix rounds** (the refit step, 0 to `NATIVE_PDF_MAX_REFIT_ROUNDS`): the
+  visual check gets each page's picture plus its size and every block's
+  font size, shrink and area, and prescribes one fix per finding: a shorter
+  wording, a smaller font, or a move. `planLayoutFixes` holds them inside
+  the automatic limits (`AUTO_MIN_SIZE_RATIO`, `AUTO_MAX_SHIFT`), the pages
+  are laid out and checked again, and a page whose `layoutScore` got worse
+  is put back and left alone. A smaller font goes to the block's peers too.
+  Sizes and moves are returned as the run's
+  `styles`, so they show in a block's Appearance box (marked "Adjusted")
+  and can be changed or reset like a person's own.
+- **Translation**: Quick (default) is one pass per page. Reviewed adds up to
+  `NATIVE_PDF_MAX_REVIEW_ROUNDS` (3) rounds in which the draft is checked
+  against the source. Glossaries apply in both; any target language works,
+  custom ones included.
+- **Routes** (all under `/api/document-translation/native`; 403
+  `WORKFLOW_FEATURE_DISABLED` while the feature or the translation workflow
+  is off in Admin > Workflows): `GET` reports availability and limits; `POST` runs the pipeline and
+  streams one JSON line per step, then the result; `POST /render` lays the
+  pages out again from edited text without translating anything;
+  `POST /unit` rewrites one block (shorten, change as instructed, translate).
+- **Batches and limits**: a document is translated in batches. Three
+  numbers, set in Admin > Workflows under the feature, bound them: the
+  pages a batch takes by default, the largest batch a person may raise it
+  to (in the setup, "Pages per batch"), and the pages of one document that
+  may be translated in total. Overrides give other numbers to named
+  people, a mail domain or a directory attribute (person outranks
+  attribute outranks domain). Compiled bounds in `WORKFLOW_FEATURES`
+  (`lib/services/workflows/policy/types.ts`) hold whatever is saved.
+- **Page states** (`planBatch` / `batchPageState`): each preview is in this
+  batch, free to add, translated by an earlier batch, waiting for a later
+  batch (this one is full), or over the document limit. Only the first two
+  have a checkbox.
+- **Requests**: one request takes `NATIVE_PDF_MAX_PAGES` (6) pages. A
+  larger batch is sent as several requests in turn; what finished is kept
+  if a later one fails or the person stops.
+- **One result**: after a finished run the toolbar offers "Add pages". The
+  new batch is joined to the earlier ones by `POST /render` with every
+  batch's `unitsIds`, which returns one PDF of the whole document with the
+  translated pages replaced, and one extraction id for later re-renders.
+  A different target language starts over instead of adding.
+- **Page list of a finished translation**
+  (`Formatted/FormattedPageRail.tsx`): every page of the source, as the
+  download will hold it. Translated pages show their rebuilt image; pages
+  not translated are dimmed and marked, and open as their original; removed
+  pages are greyed out with a way back. Untranslated pages have a tick box:
+  "Select next N" ticks the next batch, and "Translate N pages" runs the
+  ticked pages with the run's own depth and adds them
+  (`planTickedBatch`; the same limits as the setup).
+- **Editable download (experimental)**: the review's "Download" button
+  opens a menu: the PDF, and PowerPoint, tagged _Experimental_. The
+  presentation is for refining by hand outside the app: one slide per page
+  of the PDF, the page without its translated text as the slide's
+  background, and every translated block as a text box of its own in the
+  place, size, colour, alignment and direction the layout gave it. Text can
+  be edited; shapes, pictures and table lines cannot, because they are the
+  background. Each slide's notes hold the page's source text. Fonts are
+  named (Arial, Times New Roman), not embedded, and line breaks can differ
+  slightly from the PDF, since the two programs measure text differently;
+  boxes are set to shrink their text when more is typed. Changes made in
+  the file do not come back into the app.
+  - _How it is built_: a render asked for it (`exports: ['pptx']` on
+    `POST /render`) writes it beside the PDF from the same text and looks
+    (`SLIDES` in the layout script), and the answer's `exportUrls` says
+    where it is. So `run.exportUrls` always describes the PDF at
+    `run.pdfUrl`: a later render that was not asked for the format leaves
+    the run without it, and it is built again on the next download. With
+    changes pending, choosing PowerPoint renders first, so the file is never
+    older than what is on screen.
+  - _File names_: every download is named after the source with the
+    language after it, `Report_fr.pdf` / `Report_fr.pptx`
+    (`translatedFileName` in `languages.ts`): a listed language gives its
+    code, a language typed in by hand a slug of its name
+    (`Report_patwah.pdf`).
+  - _Formats are a list_ (`NATIVE_PDF_EXPORT_FORMATS` in `nativePdf.ts`),
+    each with its extension, media type and whether it is experimental; the
+    route, the storage and the menu read it. A format that a source file is
+    translated in directly would join it without the tag.
+- **Removing pages from the download**: `run.removedPages` is what the
+  person wants left out, `run.pdfRemovedPages` what the stored PDF leaves
+  out (convention in `formattedDocument.ts`). A difference is a pending
+  change in the same banner as edits; "Update the download" renders with
+  `omitPages`, which the rebuild script applies last, so page numbers
+  always mean source pages. A removed page keeps its translation, is never
+  put in a batch, and the last page left cannot be removed (the render
+  route answers 400 `NO_PAGES_LEFT`).
+- **Enforcement**: the run route refuses more pages than a request or the
+  person's largest batch; the render route refuses a result with more
+  translated pages than the document limit (`DOCUMENT_PAGE_LIMIT`). The
+  server keeps no count per document, so the limit holds per result, not
+  across separate conversations.
+- **State**: workflow state holds only a reference to the run
+  (`formattedRunRef`: run id, where it is stored, the source it was made
+  from, when it expires). The run itself is kept in storage; see
+  "Where a formatted translation is kept" below.
+- **Editing convention** (stated once, in `formattedDocument.ts`):
+  `units[].translation` is what the last render shows; `edits[id]` is a
+  pending change (`null` = keep as written) and exists only while it differs.
+  Text is typed as plain text, on the page or in the block list; inline
+  formatting is put back where its words survive (`retagEditedText`).
+- **Line breaks**: a line break inside a block is one its author made
+  (BREAKS in the layout script) and is set as one. Enter in either editor
+  types one, and the field says so; the block list shows the original with
+  its breaks, so a person can see where the author broke the lines. A block
+  that is one of the brief's terms takes the brief's wording, which is
+  matched across breaks and so has none: it gets the block's breaks back
+  (`breakLike`), placed where that page's translator put them, else in
+  proportion to the source's lines, at a space or after a slash or hyphen.
+- **Zoom** (`usePageZoom`): the page view zooms from 50% to 250%; 100%
+  is the pane's width up to a normal page. The buttons and Ctrl/Cmd with
+  +, - and 0 step through `PAGE_ZOOM_LEVELS`; Ctrl+wheel and a trackpad
+  pinch over the page zoom smoothly between them. While the keyboard is in
+  the review (or on nothing), those keys zoom the page instead of the
+  browser; elsewhere in the app they are the browser's. Zooming keeps the
+  point under the pointer (or the middle of the view) where it is, as far
+  as the page can scroll. A page larger than its pane can be dragged with
+  the mouse (`usePagePan`); a click on the page outside a block closes the
+  open block. Translated page images are made at 144 dpi so they stay
+  readable zoomed in; the original is rendered again at the zoomed width.
+- **Keyboard**: the page list, the blocks of a page and the
+  Original/Translated switch are one Tab stop each, moved through with the
+  arrow keys, Home and End (`groupKeyTarget`); Enter or Space opens a page
+  or a block. A block opened on the page puts the caret in the field on the
+  page; one opened in the block list puts it in the list. Escape closes the
+  ask box first, then the block, and returns the keyboard to the block it
+  was opened from. With the page pane focused, PageDown and PageUp scroll
+  the page and, past its end, open the next or previous page at its top.
+  Letters typed and text pasted outside a field are never sent to the
+  hidden source-text field (`composerHidden`), and Space on a button stays
+  with the button (`isControlActivation`).
+- **A block's look** (`Formatted/FormattedBlockStyle.tsx`): font size,
+  position and text colour of the selected block, in small steps.
+  `run.styles[id]` is the look wanted, `run.pdfStyles[id]` the one on the
+  page; a difference is a pending change like a text edit, counted once per
+  block. The outline on the page moves at once; the page changes on
+  re-render. `NativePdfUnitStyle` (in `nativePdf.ts`) states the move
+  convention: points, +x right, +y down. The render route takes `styles`
+  and drops anything invalid (`sanitizeUnitStyles`). In the rebuild script
+  a size applies to the whole block (parts in another size keep their
+  proportion, and a larger size lets the text use the space below it); a
+  colour applies to the block's main text, while links and parts in their
+  own colour keep it; a move stops at the page's edge.
+- **Re-render**: edits wait in a banner until "Re-render pages". Every
+  render starts from the original PDF and returns images of the changed
+  pages only. The layout check afterwards is optional and covers only the
+  pages that changed.
+- **Broken character escapes**: a model now and then writes `\u0000e9`
+  for "é", which would cut a block off where it is drawn. `callStructured`
+  asks once more for such an answer and repairs what the second one still
+  holds; the rules are in `lib/services/workflows/shared/modelTextRepair.ts`.
+- **Layout check failures**: the check is advice about pages that are
+  already built. A page whose check fails (for example on a dropped
+  connection) is listed in `uncheckedPages` and the run still finishes.
+- **Limits**: scanned pages have no text to rebuild and are left out;
+  translated text is set in the closest installed font, not the document's
+  own; JPEG 2000 images are missing from the page previews (not from the
+  PDF); stopping keeps the requests of a batch that already finished and
+  discards the one in progress; text that is not horizontal is not handled.
+
+### Where a formatted translation is kept
+
+A run is expensive to hold: a source PDF, an extraction per batch, the
+translated PDF, two images per page and a record of every block. None of it
+is kept in the browser. The conventions are written once, in
+`lib/utils/shared/translation/nativeRunStorage.ts`.
+
+- **One folder per run, in one place.** Chosen when the run starts and never
+  changed:
+  - **OneDrive** (`Apps/AI Assistant/Translations/<deployment>/<run>/`) when
+    the person uses Microsoft 365 files (the same gate as the upload
+    picker). Files stay until the person deletes them.
+  - **App storage** (`<user>/translation-runs/<run>/` in the uploads
+    container) otherwise. Not using Microsoft 365 is a privacy choice and
+    this is what it costs: the container deletes a file
+    `RUN_RETENTION_DAYS` (5) days after it was last written.
+  - A new run that cannot reach OneDrive (no consent, not connected) goes to
+    app storage instead; the server opens storage before translating, so the
+    refused attempt costs nothing.
+- **Files** are named `<sha256>.<pdf|json|png>` and written only by the
+  server; `record.json` is the run's record (blocks, edits, findings, page
+  position), written only by the browser. All are read through
+  `GET /api/document-translation/native/file?run=&storage=&id=`, under the
+  signed-in person's own prefix or with their own Graph token.
+- **Opening a stored run** reads only what the first screen needs: the
+  record, then the image of the page on screen. Page images are named by
+  their content, so each is fetched once per session and kept
+  (`client/services/workflows/runImageLoader.ts`, PAGE IMAGES): the page on
+  screen first, then the pages either side and thumbnails near view, then
+  the rest in the background, at most `MAX_CONCURRENT_IMAGE_LOADS` at a
+  time and never all of them for background loads, so a page that is opened
+  is never queued behind them. The source PDF, several megabytes, loads only
+  when it is first needed (the Original view, an untranslated page or its
+  thumbnail; `usePdfPages` with `onDemand`); the setup still loads it at
+  once to show its pages. A OneDrive folder mints one Graph token for all
+  of a request's calls (`DriveRunFolder`).
+- **In memory once** (`client/services/workflows/nativeRunSession.ts`): the
+  workspace can be mounted more than once for a conversation, so the run
+  is held in one session per run that every mount subscribes to
+  (`useFormattedRunStorage`). A copy per mount had one reading the record
+  before the other had saved it.
+- **Saving**: the record is saved at once when the run's files changed (a
+  run or a re-render finished) and otherwise `RUN_SAVE_DELAY_MS` after the
+  last change, and when the page is left. A failed save shows "Changes not
+  saved yet" and is tried again up to `SAVE_ATTEMPTS` times, then with the
+  next change.
+- **Staying alive** (`POST .../native/run`): saving a change also touches
+  the run's files, at most every `RUN_KEEP_ALIVE_INTERVAL_MS`, and deletes
+  files an earlier render left behind. The server skips files written within
+  `RUN_TOUCH_INTERVAL_HOURS`. Opening a run only asks when it expires
+  (`touch: false`): looking is not working on it.
+- **Expiry**: `RUN_EXPIRY_WARNING_DAYS` (2) days or less before app storage
+  deletes a run, the review shows a warning with "Keep for 5 more days".
+  A run whose files are gone says so and offers to translate again. The
+  Original view and added batches read the run's own copy of the source, so
+  they outlive the upload, which expires on its own clock.
+- **Encryption**: a run started on a device holding the person's backup key
+  (Settings, the key that encrypts conversation backups) is encrypted at
+  rest, in either place. The run's key is derived from the backup key and
+  the run id (HKDF); each file is AES-256-GCM, bound to its run and name.
+  The browser encrypts the record itself and decrypts every file it reads.
+  The server has to read the source and extraction to lay pages out, so the
+  browser sends the run's key with those requests (`x-translation-run-key`);
+  the server uses it for that request and never stores it. This is
+  encryption at rest, not end-to-end: the backup key never leaves the
+  device, but page content passes through the server while it is being
+  translated, as it does without encryption. `keyId` on the reference names
+  the backup key, so a device without it, or with another, says which.
+- **Deleting**: a run replaced by a new one, or discarded after its files
+  expired, is deleted (`DELETE .../native/run`).
+
+## PowerPoint presentations
+
+`.pptx`, `.pptm`, `.ppsx`, `.potx` and `.ppt` go through both Document
+layouts. The plan, acceptance criteria and probe results are in
+[POWERPOINT_TRANSLATION.md](POWERPOINT_TRANSLATION.md); the conventions
+below are stated where the code keeps them, and only pointed to here.
+
+- **Words**: every screen says "slide" for a presentation and "page" for a
+  PDF. Text only reads `documentUnitOf` (`documentMode.ts`); Preserve
+  formatting reads the unit set by `FormattedUnitProvider`
+  (`Formatted/formattedWording.tsx`), whose `SLIDE_WORDED_KEYS` each have a
+  twin under `translation.formatted.slides` in every locale
+  (`messageSyntax.test.ts` checks it).
+- **Speaker notes**: "Translate speaker notes" shows in both layouts for a
+  presentation, ticked by default and remembered (`translateSpeakerNotes` in
+  the settings store). A formatted run records the choice
+  (`FormattedDocumentRun.translateNotes`).
+- **`.ppt`**: converted to `.pptx` by the render service before anything is
+  stored or charged; the translation is a `.pptx`.
+- **Render service**: every LibreOffice and `pdftoppm` job waits in one
+  queue with a strict concurrency limit. Contract and settings:
+  [RENDER_SERVICE.md](RENDER_SERVICE.md).
+
+### Text only
+
+The document translation service is sent a plain `.pptx` copy and its
+result is merged back into the person's own package (THE MERGE CONVENTION,
+`lib/services/documentTranslation/deck/deckMerge.ts`), so macros, a show's
+or template's type and untranslated parts survive. Text is read slide by
+slide from the deck's XML (`deckText.ts`), and the daily allowance counts
+slides.
+
+### Preserve formatting
+
+- **Format adapter**: the pipeline's format-specific steps sit behind
+  THE FORMAT ADAPTER (`native/formats/nativeFormat.ts`); a run's format is
+  the kind of its stored source (`<sha256>.<format>`). The deck adapter
+  (`deckFormat.ts`) reads and rewrites the deck with the documents
+  layer's presentation engine (`deck_engine.py` in the sandbox, kept in
+  `documents/model/deckEngineScript.ts`; how it finds units, sizes and
+  fits text is documented in the script).
+- **Background job**: a presentation is a job on the server (THE JOB
+  CONVENTION, `native/deckRunJob.ts`; route `POST|GET|DELETE
+/api/document-translation/native/job`). Starting answers at once; the
+  browser reads progress every 2 s (`useFormattedDocument`), including the
+  place in the render queue and an estimate ("Waiting for a slot: N ahead.
+  About M minutes.", from the queue's average run time). The job's location
+  is kept in workflow state (`formattedPendingJob`), so a reload follows it
+  again; a server restart resumes it from the last finished batch without
+  charging again. Stop asks the server; finished batches are kept.
+- **One at a time**: one presentation per person runs at once; another is
+  refused, naming the first.
+- **Setup and review**: slides are shown from a PDF of the uploaded deck
+  (`GET /api/documents/pdf`, hidden slides included so page n is slide
+  n); Original in the review shows the same render.
+- **Moves**: a move shifts the whole shape the paragraph is in, and the
+  Appearance box says so.
+- **Downloads**: the deck in its own format first, then the PDF. The
+  picture-backed PowerPoint export offered for PDFs is not offered.
+
+### Fallbacks
+
+| Problem                         | What happens                                                   | Where                         |
+| ------------------------------- | -------------------------------------------------------------- | ----------------------------- |
+| Encrypted deck (not a zip)      | Refused at upload, with the reason                             | `checkLibreOfficeInput`       |
+| Damaged package                 | Repaired by LibreOffice once and retried; else refused         | `deckRunJob.ts`, `repairDeck` |
+| A part that cannot be rewritten | Left as it was; its units listed as not translated             | `deck_engine.py`, pipeline    |
+| The deck as a whole fails       | The error offers Text only                                     | `TranslationWorkspace`        |
+| Text still does not fit         | Shrink-on-overflow and a flag in the review                    | `deck_engine.py`              |
+| Slides cannot be rendered       | Read from text alone; deck delivered without pictures or check | `deckFormat.ts`               |
+| Queue full                      | Refused ("busy, try again shortly") before anything is charged | `deckFormat.ts`, routes       |
+
+## Large source texts are kept in storage
+
+Conversations live in localStorage, about 5 million characters for the
+whole app. A translation keeps its source, a translation about as long
+again, and the review around both: roughly 2.5 characters per source
+character. From `STORED_SOURCE_TEXT_MIN_CHARS` (20,000 characters, about
+seven pages) one translation takes a hundredth of that quota, and its
+source text is kept in storage instead. The numbers and the conventions are
+in `lib/utils/shared/translation/storedSourceText.ts`.
+
+- **In memory nothing changes.** `sourceText` always holds the text; no
+  reader of workflow state knows about storage.
+- **What the browser keeps** (`conversationForBrowser` in
+  `conversationStore`): when `sourceTextRef` is current (its fingerprint is
+  that of `sourceText`), the conversation is written without the text and
+  the reference is marked `detached`. With a stale or absent reference the
+  text is written in full, so a text is never only in memory.
+- **Saving** (`useStoredSourceText`): a large text storage does not hold as
+  it now is gets saved `SOURCE_TEXT_STORE_DELAY_MS` after its last change,
+  over the previous copy. If storage refuses, the text stays in the browser
+  and the next change tries again. A text cut below the threshold goes back
+  to the browser and its stored copy is deleted.
+- **Opening**: a `detached` text is fetched and put back with
+  `hydrateWorkflowState`, which does not mark the conversation as edited.
+  Until it arrives the source pane says so and cannot be typed in.
+- **Where, how long, encrypted or not**: the rules of "Where a formatted
+  translation is kept". OneDrive (`Translations/<deployment>/Source
+texts/<id>/`) or app storage (`<user>/translation-texts/<id>/`); in app
+  storage the text is deleted 5 days after its last write, changes to the
+  conversation keep it alive, and a warning with "Keep for 5 more days"
+  shows in the source pane from 2 days before. A text that is gone says so;
+  the translation itself is still in the browser. With a backup key on the
+  device the text is encrypted in the browser before it is sent, and here
+  the server never holds a key: nothing on the server reads the text.
+- **Route**: `/api/workflows/translation/source-text?id=&storage=` (`PUT`
+  stores, `GET` reads, `POST` keeps alive or asks, `DELETE`).
+- **Not covered**: the translation (`finalText`) and other workflows stay
+  in the browser. A conversation exported or backed up before its text was
+  fetched in that session carries the reference, not the text.
 
 ## OCR for scanned PDFs
 

@@ -1,5 +1,6 @@
 import {
   NoExtractableTextError,
+  PPT_PDF_WITH_HIDDEN_SLIDES,
   PdfExtractionError,
   countPdfPages,
   loadDocumentFromPath,
@@ -16,6 +17,13 @@ const rmMock = vi.fn();
 const unlinkMock = vi.fn();
 const writeFileMock = vi.fn();
 const spawnMock = vi.fn();
+
+// LibreOffice is reached only through the render service (its own tests
+// cover the process); here it stands in, to check what is asked of it.
+const renderConvertMock = vi.fn();
+vi.mock('@/lib/services/documents/render/renderService', () => ({
+  getRenderService: () => ({ convert: renderConvertMock }),
+}));
 
 vi.mock('child_process', () => ({
   spawn: (cmd: string, args: readonly string[], opts: unknown) =>
@@ -94,6 +102,7 @@ const XLSX_MIME =
 beforeEach(() => {
   getDocumentMock.mockReset();
   execFileMock.mockReset();
+  renderConvertMock.mockReset();
   spawnMock.mockReset();
   readdirMock.mockReset();
   readFileMock.mockReset();
@@ -109,22 +118,15 @@ beforeEach(() => {
 describe('legacy Office / HTML routing via loadDocumentFromPath', () => {
   it('routes .doc through LibreOffice → docx → pandoc instead of raw UTF-8', async () => {
     mkdtempMock.mockResolvedValue('/tmp/doc-1');
+    renderConvertMock.mockResolvedValue('/tmp/doc-1/memo.docx');
     const calls: string[] = [];
     execFileMock.mockImplementation((cmd: string, args: readonly string[]) => {
       calls.push(cmd);
-      if (cmd === 'libreoffice') {
-        expect(args).toContain('--convert-to');
-        expect(args).toContain('docx');
-        expect(args.some((a) => a.startsWith('-env:UserInstallation='))).toBe(
-          true,
-        );
-      }
       if (cmd === 'pandoc') {
         expect(args[0]).toBe('/tmp/doc-1/memo.docx');
       }
       return Promise.resolve({ stdout: '', stderr: '' });
     });
-    readdirMock.mockResolvedValue(['memo.docx']);
     readFileMock.mockResolvedValue('# Memo\n\nBody text');
 
     const out = await loadDocumentFromPath(
@@ -132,7 +134,16 @@ describe('legacy Office / HTML routing via loadDocumentFromPath', () => {
       'application/msword',
       'memo.doc',
     );
-    expect(calls).toEqual(['libreoffice', 'pandoc']);
+    expect(renderConvertMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        inputPath: '/input/memo.doc',
+        type: 'doc',
+        convertTo: 'docx',
+        outputDir: '/tmp/doc-1',
+        lane: 'interactive',
+      }),
+    );
+    expect(calls).toEqual(['pandoc']);
     expect(out).toBe('# Memo\n\nBody text');
     expect(rmMock).toHaveBeenCalledWith(
       '/tmp/doc-1',
@@ -142,11 +153,43 @@ describe('legacy Office / HTML routing via loadDocumentFromPath', () => {
 
   it('fails loudly when LibreOffice produces nothing for a .doc', async () => {
     mkdtempMock.mockResolvedValue('/tmp/doc-2');
-    execFileMock.mockResolvedValue({ stdout: '', stderr: '' });
-    readdirMock.mockResolvedValue([]);
+    renderConvertMock.mockRejectedValue(
+      new Error('The document converter could not read this file.'),
+    );
     await expect(
       loadDocumentFromPath('/input/x.doc', 'application/msword', 'x.doc'),
-    ).rejects.toThrow(/did not produce x\.docx/);
+    ).rejects.toThrow(/could not read this file/);
+    expect(execFileMock).not.toHaveBeenCalled();
+  });
+
+  it('asks for the PowerPoint type the upload is, by name or MIME type', async () => {
+    mkdtempMock.mockResolvedValue('/tmp/ppt-1');
+    renderConvertMock.mockRejectedValue(new Error('stop after the call'));
+    const cases: Array<[string, string, string]> = [
+      [
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'deck.pptx',
+        'pptx',
+      ],
+      [
+        'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+        'upload-123',
+        'pptm',
+      ],
+      ['application/vnd.ms-powerpoint', 'old.ppt', 'ppt'],
+      ['application/vnd.ms-powerpoint', 'show.pps', 'pps'],
+    ];
+    for (const [mime, name, type] of cases) {
+      renderConvertMock.mockClear();
+      await loadDocumentFromPath('/input/file', mime, name).catch(
+        () => undefined,
+      );
+      // Hidden slides included, so page n of the text is slide n.
+      expect(renderConvertMock.mock.calls[0][0]).toMatchObject({
+        type,
+        convertTo: PPT_PDF_WITH_HIDDEN_SLIDES,
+      });
+    }
   });
 
   it('routes legacy .xls through ssconvert like .xlsx', async () => {

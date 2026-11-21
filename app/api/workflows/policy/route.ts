@@ -4,8 +4,12 @@ import { isGlobalAdmin } from '@/lib/services/agentAccess/adminAuth';
 import { STRONG_ETAG_REGEX } from '@/lib/services/agentAccess/adminRouteHelpers';
 import { WorkflowPolicyService } from '@/lib/services/workflows/policy/WorkflowPolicyService';
 import {
+  WORKFLOW_FEATURE_IDS,
+  WorkflowFeatureId,
+  WorkflowFeatureSettingSchema,
   WorkflowPolicy,
   WorkflowSettingSchema,
+  featureSettingProblem,
 } from '@/lib/services/workflows/policy/types';
 import {
   WorkflowPolicyConflictError,
@@ -48,6 +52,14 @@ const putBodySchema = z.object({
     z.enum(CONVERSATION_WORKFLOW_TYPES),
     WorkflowSettingSchema,
   ),
+  // Optional so a client that predates features still saves; the features
+  // it leaves out fall back to their defaults.
+  features: z
+    .partialRecord(
+      z.enum(WORKFLOW_FEATURE_IDS),
+      WorkflowFeatureSettingSchema.strict(),
+    )
+    .optional(),
 });
 
 export async function GET() {
@@ -99,6 +111,11 @@ export async function PUT(request: NextRequest) {
     );
   }
 
+  for (const [id, setting] of Object.entries(parsed.data.features ?? {})) {
+    const problem = featureSettingProblem(id as WorkflowFeatureId, setting);
+    if (problem) return badRequestResponse('Invalid workflow policy', problem);
+  }
+
   const ifMatchEtag = request.headers.get('if-match');
   if (ifMatchEtag !== null && !STRONG_ETAG_REGEX.test(ifMatchEtag)) {
     return badRequestResponse('If-Match must be a quoted strong ETag');
@@ -108,6 +125,7 @@ export async function PUT(request: NextRequest) {
   const policy: WorkflowPolicy = {
     version: 1,
     workflows: parsed.data.workflows,
+    ...(parsed.data.features ? { features: parsed.data.features } : {}),
     updatedBy: userMail,
     updatedAt: now,
   };
@@ -115,7 +133,10 @@ export async function PUT(request: NextRequest) {
   try {
     const storage = createWorkflowPolicyBlobStorage();
     const etag = await writeWorkflowPolicy(storage, policy, ifMatchEtag);
-    const summary = Object.entries(policy.workflows)
+    const summary = [
+      ...Object.entries(policy.workflows),
+      ...Object.entries(policy.features ?? {}),
+    ]
       .map(([k, v]) => `${k}=${v.enabled ? 'on' : 'off'}`)
       .join(',');
     console.log(

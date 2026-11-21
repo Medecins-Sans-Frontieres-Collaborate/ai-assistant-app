@@ -319,6 +319,101 @@ describe('resolver reads the effective policy', () => {
     expect(isModelBlocked(policy, dave, 'claude-opus-5', 'claude')).toBe(false);
   });
 
+  it('a blocked group or domain shuts its members out of an open model, and a more specific grant still wins', () => {
+    const carol: Principal = {
+      userId: 'oid-carol',
+      mail: 'carol@msf.org',
+      domain: 'msf.org',
+      attributes: [],
+      groupIds: ['g-research'],
+    };
+    const policy = policyWith([
+      rule({
+        series: 'claude',
+        defaultAccess: null,
+        denyGroups: ['g-research'],
+        denyDomains: ['ocp.msf.org'],
+        // A named person in the blocked group keeps access.
+        allow: [{ target: 'alice@msf.org', requests: 5 }],
+      }),
+    ]);
+    // carol: in the blocked group, not named.
+    expect(isModelBlocked(policy, carol, 'claude-sonnet-5', 'claude')).toBe(
+      true,
+    );
+    expect(
+      resolveModelGate(
+        MODEL_ALLOWED,
+        policy,
+        carol,
+        'claude-sonnet-5',
+        'claude',
+      ).overrideId,
+    ).toBe('model-access:family:claude|denyGroups|all');
+    // bob: in the blocked domain.
+    expect(isModelBlocked(policy, bob, 'claude-sonnet-5', 'claude')).toBe(true);
+    // alice: same blocked group, but named, and a person outranks a group.
+    expect(isModelBlocked(policy, alice, 'claude-sonnet-5', 'claude')).toBe(
+      false,
+    );
+    // Someone in neither keeps the open default.
+    const erin: Principal = {
+      userId: 'oid-erin',
+      mail: 'erin@oca.msf.org',
+      domain: 'oca.msf.org',
+      attributes: [],
+      groupIds: [],
+    };
+    expect(isModelBlocked(policy, erin, 'claude-sonnet-5', 'claude')).toBe(
+      false,
+    );
+  });
+
+  it("a group block beats another group's grant and a model-level grant for the same group; a group grant beats a domain block", () => {
+    const both: Principal = {
+      userId: 'oid-both',
+      mail: 'both@ocp.msf.org',
+      domain: 'ocp.msf.org',
+      attributes: [],
+      groupIds: ['g-research', 'g-pilot'],
+    };
+    const blockedGroup = policyWith([
+      rule({
+        series: 'claude',
+        groups: [{ target: 'g-pilot', requests: null }],
+        denyGroups: ['g-research'],
+      }),
+      rule({
+        modelId: 'claude-sonnet-5',
+        groups: [{ target: 'g-research', requests: null }],
+      }),
+    ]);
+    // Off wins between two groups, and the family block is not undone by
+    // the model's own grant (priority ranks before specificity).
+    expect(isModelBlocked(blockedGroup, both, 'claude-opus-5', 'claude')).toBe(
+      true,
+    );
+    expect(
+      isModelBlocked(blockedGroup, both, 'claude-sonnet-5', 'claude'),
+    ).toBe(true);
+
+    const blockedDomain = policyWith([
+      rule({
+        series: 'claude',
+        defaultAccess: null,
+        groups: [{ target: 'g-pilot', requests: 10 }],
+        denyDomains: ['ocp.msf.org'],
+      }),
+    ]);
+    // Layers rank first: the group grant outranks the domain block.
+    expect(
+      isModelBlocked(blockedDomain, both, 'claude-sonnet-5', 'claude'),
+    ).toBe(false);
+    expect(
+      isModelBlocked(blockedDomain, bob, 'claude-sonnet-5', 'claude'),
+    ).toBe(true);
+  });
+
   it('block beats allow for one person at equal rank (more restrictive wins), should both ever be stored', () => {
     const policy = policyWith([
       rule({
