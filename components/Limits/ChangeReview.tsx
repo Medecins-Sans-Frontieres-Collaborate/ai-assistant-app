@@ -579,7 +579,7 @@ const ModelAccessDifferences: FC<{
   const t = useTranslations('limits');
   const requestsDef = getLimitDefinition('model.requests');
   const find = (policy: LimitsPolicy | null) =>
-    policy?.modelAccess.find(
+    policy?.modelAccess?.find(
       (rule) => modelAccessDimension(rule) === dimension.toLowerCase(),
     );
   const differences = ruleDifferences(find(saved), find(draft));

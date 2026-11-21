@@ -402,7 +402,7 @@ export function revertChange(
   // Model access: restore the saved rule for this model or family.
   const key = (rule: ModelAccessRule) =>
     rule.modelId ? `model:${rule.modelId}` : `family:${rule.series ?? ''}`;
-  const was = saved?.modelAccess.find((rule) => key(rule) === change.subject);
+  const was = saved?.modelAccess?.find((rule) => key(rule) === change.subject);
   const rest = draft.modelAccess.filter((rule) => key(rule) !== change.subject);
   return { ...draft, modelAccess: was ? [...rest, was] : rest };
 }
