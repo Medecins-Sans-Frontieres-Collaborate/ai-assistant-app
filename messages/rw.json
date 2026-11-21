@@ -6838,7 +6838,9 @@
         "groups": "Amatsinda yemerewe",
         "domains": "Domains zemerewe",
         "allow": "Abantu bemerewe",
-        "deny": "Abantu babujijwe"
+        "deny": "Abantu babujijwe",
+        "denyGroups": "Amatsinda abujijwe",
+        "denyDomains": "Domaine zabujijwe"
       },
       "termsLabel": "Amabwiriza ya {target}",
       "removeGrant": "Kuraho {target}",
@@ -6850,7 +6852,8 @@
         "caption": "Gukoresha model bitewe n'abantu",
         "col": {
           "model": "Model",
-          "reach": "Ashobora kuyikoresha"
+          "reach": "Ashobora kuyikoresha",
+          "people": "Abantu bavuga amazina"
         },
         "familyNote": "umuryango: ingengo y'iminsi ikoreshwa hamwe",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Buri wese",
           "nobody": "Nta muntu",
-          "people": "{count, plural, one {umuntu #} other {abantu #}}"
+          "people": "{count, plural, one {umuntu #} other {abantu #}}",
+          "everyoneExcept": "Bose usibye {list}"
         },
         "howTitle": "Uko ubusabe bumwe bufatwa",
         "how": {
           "inherit": "Model itagira amategeko yayo bwite muri iyi nkingi ikoresha ay'umuryango (ikaba ifunze).",
-          "envelope": "Ubusabe bugomba kugendana n'ikigereranyo cya model, ingengo y'umuryango n'ikigereranyo cy'ibiganiro, byose uko ari bitatu."
+          "envelope": "Ubusabe bugomba kugendana n'ikigereranyo cya model, ingengo y'umuryango n'ikigereranyo cy'ibiganiro, byose uko ari bitatu.",
+          "blocked": "Umuntu uvugwa amazina washyizwe kuri Off ntiyemerewe gukoresha, icyo itsinda rye cyangwa domaine byaba byaramuhaye cyose.",
+          "mostSpecific": "Ubundi, igisubizo kinonosoye cyane kiri kuri uwo muntu ni cyo gikoreshwa: umuntu uvugwa amazina, hanyuma itsinda, cyangwa domaine, hanyuma abandi bose. Hagati y’amatsinda abiri cyangwa domaine ebyiri, Off ni yo itsinda."
+        },
+        "lead": "Uwemerewe gukoresha buri model, n’umubare w’ubusabe ku munsi. Umurongo umwe ni umuryango cyangwa model; inkingi imwe ni abemerewe ukoreshwa. Hitamo umurongo kugira ngo uhindure abemerewe.",
+        "peopleValue": "{allowed} bemerewe, {blocked} barafunzwe",
+        "bulk": {
+          "open": "Ongeraho uburenganzira ku mamodel menshi",
+          "title": "Tanga uburenganzira bumwe ku mamodel menshi",
+          "models": "Ku mamodel aya",
+          "wholeFamily": "umuryango wose",
+          "apply": "{count, plural, =0 {Hitamo amamodel} one {Shyira kuri murongo 1} other {Shyira kuri mirongo #}}",
+          "note": "Bisimbura ibyo abantu, amatsinda na domaine bari bafite kuri iyi mirongo wahisemo. Nta gihinduka mbere yo kubika politique."
         }
+      },
+      "audience": {
+        "editorTitle": "Ni bande bemerewe gukoresha {model}",
+        "heading": "Amatsinda, domaine n’abantu",
+        "hint": "Buri wese ahabwa igisubizo cye kuri uyu murongo, hatitawe ku bandi bose.",
+        "empty": "Nta muntu urashyirwa kuri uyu murongo.",
+        "who": "Ni bande",
+        "terms": "Bahabwa",
+        "newTerms": "Ibyo abantu, amatsinda na domaine biri kongerwa bizahabwa",
+        "add": "{count, plural, =0 {Ongeraho} one {Ongeraho inyandiko 1} other {Ongeraho inyandiko #}}",
+        "placeholder": "Shaka abantu n’amatsinda, cyangwa wandike domaine nka example.org",
+        "pickerLabel": "Abantu, amatsinda cyangwa domaine byo kongeraho",
+        "pickerHint": "Shinganya abantu, amatsinda na domaine. Ushobora gucomeka urutonde rutandukanyijwe n’ama comma.",
+        "pickerHintNoGroups": "Shinganya abantu na domaine. Ushobora gucomeka urutonde rutandukanyijwe n’ama comma. Gushakisha amatsinda ntabwo bihari hano.",
+        "invalid": "Ntibyemewe: {text}. Andika email cyangwa domaine, cyangwa hitamo itsinda muri search.",
+        "kind": {
+          "user": "umuntu",
+          "group": "itsinda",
+          "domain": "domaine"
+        },
+        "fromFamily": "kuva mu muryango",
+        "setHere": "Hindura kuri uyu model",
+        "setHereFor": "Hindura {target} kuri uyu model",
+        "overruled": "Off kuri family, ni cyo gikoreshwa"
       }
     },
     "previewSourceModelAccess": "Kwemeza model — {list}",

@@ -6854,7 +6854,9 @@
         "groups": "Skupiny s přístupem",
         "domains": "Domény s přístupem",
         "allow": "Povolené osoby",
-        "deny": "Blokované osoby"
+        "deny": "Blokované osoby",
+        "denyGroups": "Blokované skupiny",
+        "denyDomains": "Blokované domény"
       },
       "termsLabel": "Podmínky pro {target}",
       "removeGrant": "Odebrat {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Přístup k modelu podle publika",
         "col": {
           "model": "Model",
-          "reach": "Může použít"
+          "reach": "Může použít",
+          "people": "Pojmenované osoby"
         },
         "familyNote": "rodina: sdílený denní rozpočet",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Všichni",
           "nobody": "Nikdo",
-          "people": "{count, plural, one {# osoba} few {# osoby} other {# osob}}"
+          "people": "{count, plural, one {# osoba} few {# osoby} other {# osob}}",
+          "everyoneExcept": "Všichni kromě {list}"
         },
         "howTitle": "Jak se rozhoduje o jedné žádosti",
         "how": {
           "inherit": "Model bez vlastních podmínek ve sloupci použije podmínky své rodiny (přerušovaně).",
-          "envelope": "Žádost musí zapadat do limitu modelu, sdíleného rozpočtu rodiny i celkového limitu chatu, všechny tři."
+          "envelope": "Žádost musí zapadat do limitu modelu, sdíleného rozpočtu rodiny i celkového limitu chatu, všechny tři.",
+          "blocked": "Pojmenovaná osoba, která má nastaveno Vypnuto, nemůže funkci používat, bez ohledu na svoji skupinu nebo doménu.",
+          "mostSpecific": "Jinak rozhoduje nejkonkrétnější záznam, který zahrnuje osobu: nejprve pojmenovaná osoba, pak skupina, doména a nakonec ostatní. Mezi dvěma skupinami nebo doménami vítězí Vypnuto."
+        },
+        "lead": "Kdo může používat jednotlivé modely a kolik žádostí denně. Každý řádek je rodina nebo model, každý sloupec je publikum. Vyberte řádek pro změnu oprávnění.",
+        "peopleValue": "{allowed} povoleno, {blocked} vypnuto",
+        "bulk": {
+          "open": "Přidat přístup u více modelů",
+          "title": "Nastavit stejný přístup u více modelů",
+          "models": "U těchto modelů",
+          "wholeFamily": "celá rodina",
+          "apply": "{count, plural, =0 {Vyberte modely} one {Použít na # řádek} other {Použít na # řádků}}",
+          "note": "Nahradí, co již tito lidé, skupiny a domény mají v označených řádcích. Změny se uloží až při uložení zásad."
         }
+      },
+      "audience": {
+        "editorTitle": "Kdo může používat {model}",
+        "heading": "Skupiny, domény a osoby",
+        "hint": "Každý má v tomto řádku vlastní nastavení, bez ohledu na volbu Všichni ostatní.",
+        "empty": "V tomto řádku zatím není nikdo pojmenován.",
+        "who": "Kdo",
+        "terms": "Získají",
+        "newTerms": "Co dostanou přidávaní lidé, skupiny a domény",
+        "add": "{count, plural, =0 {Přidat} one {Přidat # položku} other {Přidat # položek}}",
+        "placeholder": "Hledejte osoby a skupiny nebo zadejte doménu, například example.org",
+        "pickerLabel": "Osoby, skupiny nebo domény k přidání",
+        "pickerHint": "Míchejte osoby, skupiny a domény. Vložte seznam oddělený čárkami.",
+        "pickerHintNoGroups": "Míchejte osoby a domény. Vložte seznam oddělený čárkami. Vyhledávání skupin je zde vypnuto.",
+        "invalid": "Nerozpoznáno: {text}. Zadejte e-mailovou adresu, doménu nebo vyberte skupinu z vyhledávání.",
+        "kind": {
+          "user": "osoba",
+          "group": "skupina",
+          "domain": "doména"
+        },
+        "fromFamily": "z rodiny",
+        "setHere": "Změnit pro tento model",
+        "setHereFor": "Změnit {target} pro tento model",
+        "overruled": "Vypnuto u rodiny, což platí"
       }
     },
     "previewSourceModelAccess": "Schválení modelu — {list}",

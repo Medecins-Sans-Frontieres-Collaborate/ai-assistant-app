@@ -6854,7 +6854,9 @@
         "groups": "Erişimi olan gruplar",
         "domains": "Erişimi olan alan adları",
         "allow": "İzin verilen kişiler",
-        "deny": "Engellenen kişiler"
+        "deny": "Engellenen kişiler",
+        "denyGroups": "Engellenen gruplar",
+        "denyDomains": "Engellenen alanlar"
       },
       "termsLabel": "{target} için koşullar",
       "removeGrant": "{target}'ı kaldır",
@@ -6866,7 +6868,8 @@
         "caption": "Hedef kitleye göre model erişimi",
         "col": {
           "model": "Model",
-          "reach": "Kullanabilir"
+          "reach": "Kullanabilir",
+          "people": "Belirli kişiler"
         },
         "familyNote": "aile: paylaşılan günlük bütçe",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Herkes",
           "nobody": "Hiç kimse",
-          "people": "{count, plural, one {# kişi} other {# kişi}}"
+          "people": "{count, plural, one {# kişi} other {# kişi}}",
+          "everyoneExcept": "{list} hariç herkes"
         },
         "howTitle": "Bir isteğe nasıl karar verilir",
         "how": {
           "inherit": "Bir sütunda kendi koşulları olmayan model, ailesinin (kesikli çizgili) koşullarını kullanır.",
-          "envelope": "İstek, modelin kotasına, ailenin paylaşılan bütçesine ve sohbet toplamına uymalı, üçü de geçerli olur."
+          "envelope": "İstek, modelin kotasına, ailenin paylaşılan bütçesine ve sohbet toplamına uymalı, üçü de geçerli olur.",
+          "blocked": "Kapatılan belirli bir kişi, grubu veya alanı ne olursa olsun bunu kullanamaz.",
+          "mostSpecific": "Aksi halde, kişiyi kapsayan en özel giriş belirler: önce belirli bir kişi, sonra grup, ardından alan, en sonunda diğer herkes. İki grup ya da iki alan arasında, Kapalı kazanır."
+        },
+        "lead": "Her modeli kim kullanabilir ve günde kaç istek yapılabilir. Her satır bir aile veya model, her sütun bir hedef kitleyi temsil eder. Kullanıcıyı değiştirmek için bir satır seçin.",
+        "peopleValue": "{allowed} izinli, {blocked} kapalı",
+        "bulk": {
+          "open": "Birden fazla modele erişim ekleyin",
+          "title": "Birden fazla modele aynı erişimi verin",
+          "models": "Bu modellerde",
+          "wholeFamily": "tüm aile",
+          "apply": "{count, plural, =0 {Modelleri seçin} one {# satıra uygula} other {# satıra uygula}}",
+          "note": "Seçilen satırlardaki bu kişi, grup ve alanların mevcut erişimlerini değiştirecektir. Politikayı kaydedene kadar hiçbir şey kaydedilmez."
         }
+      },
+      "audience": {
+        "editorTitle": "{model} için kim kullanabilir",
+        "heading": "Gruplar, alanlar ve kişiler",
+        "hint": "Bu satırda herkesin kendi çözümü vardır, Diğer herkes ne derse desin.",
+        "empty": "Bu satırda henüz kimse tanımlanmadı.",
+        "who": "Kim",
+        "terms": "Alınan haklar",
+        "newTerms": "Eklenen kişi, grup ve alanlara verilecek haklar",
+        "add": "{count, plural, =0 {Ekle} one {# girdiyi ekle} other {# girdiyi ekle}}",
+        "placeholder": "Kişi ve grup arayın veya example.org gibi bir alan yazın",
+        "pickerLabel": "Eklenecek kişi, grup veya alanlar",
+        "pickerHint": "Kişi, grup ve alanları karıştırın. Virgülle ayrılmış bir liste yapıştırın.",
+        "pickerHintNoGroups": "Kişiler ve alanları karıştırın. Virgülle ayrılmış bir liste yapıştırın. Grup arama burada kapalı.",
+        "invalid": "Tanımlanamadı: {text}. Bir e-posta adresi veya alan yazın ya da aramadan bir grup seçin.",
+        "kind": {
+          "user": "kişi",
+          "group": "grup",
+          "domain": "alan"
+        },
+        "fromFamily": "aileden",
+        "setHere": "Bu model için değiştir",
+        "setHereFor": "{target} için bu modelde değiştir",
+        "overruled": "Ailede kapalı, bu geçerli"
       }
     },
     "previewSourceModelAccess": "Model onayı — {list}",

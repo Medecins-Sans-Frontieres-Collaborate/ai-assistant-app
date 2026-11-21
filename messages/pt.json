@@ -6854,7 +6854,9 @@
         "groups": "Grupos com acesso",
         "domains": "Domínios com acesso",
         "allow": "Pessoas permitidas",
-        "deny": "Pessoas bloqueadas"
+        "deny": "Pessoas bloqueadas",
+        "denyGroups": "Grupos bloqueados",
+        "denyDomains": "Domínios bloqueados"
       },
       "termsLabel": "Termos para {target}",
       "removeGrant": "Remover {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Acesso ao modelo por público",
         "col": {
           "model": "Modelo",
-          "reach": "Pode usar"
+          "reach": "Pode usar",
+          "people": "Pessoas nomeadas"
         },
         "familyNote": "família: orçamento diário compartilhado",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Todos",
           "nobody": "Ninguém",
-          "people": "{count, plural, one {# pessoa} other {# pessoas}}"
+          "people": "{count, plural, one {# pessoa} other {# pessoas}}",
+          "everyoneExcept": "Todos, exceto {list}"
         },
         "howTitle": "Como uma solicitação é decidida",
         "how": {
           "inherit": "Um modelo sem condições próprias em uma coluna usa as da família (tracejado).",
-          "envelope": "A solicitação deve se encaixar no limite do modelo, no orçamento compartilhado da família e no total do chat, sempre nos três."
+          "envelope": "A solicitação deve se encaixar no limite do modelo, no orçamento compartilhado da família e no total do chat, sempre nos três.",
+          "blocked": "Uma pessoa nomeada definida como Off não pode usar, independentemente do seu grupo ou domínio.",
+          "mostSpecific": "Caso contrário, a entrada mais específica que inclui a pessoa decide: primeiro a pessoa nomeada, depois o grupo, depois o domínio, depois todos os outros. Entre dois grupos ou dois domínios, Off prevalece."
+        },
+        "lead": "Quem pode usar cada modelo e quantos pedidos por dia. Cada linha é uma família ou um modelo; cada coluna é um público. Selecione uma linha para alterar quem pode usá-la.",
+        "peopleValue": "{allowed} permitidos, {blocked} bloqueados",
+        "bulk": {
+          "open": "Adicionar acesso em vários modelos",
+          "title": "Dar o mesmo acesso em vários modelos",
+          "models": "Nestes modelos",
+          "wholeFamily": "toda a família",
+          "apply": "{count, plural, =0 {Escolha modelos} one {Aplicar a # linha} other {Aplicar a # linhas}}",
+          "note": "Substitui o que essas pessoas, grupos e domínios já têm nas linhas escolhidas. Nada será salvo até que você salve a política."
         }
+      },
+      "audience": {
+        "editorTitle": "Quem pode usar {model}",
+        "heading": "Grupos, domínios e pessoas",
+        "hint": "Cada um recebe sua própria resposta nesta linha, independentemente do que Todos os outros dizem.",
+        "empty": "Nenhuma pessoa nomeada nesta linha ainda.",
+        "who": "Quem",
+        "terms": "Direito de uso",
+        "newTerms": "O que as pessoas, grupos e domínios adicionados terão",
+        "add": "{count, plural, =0 {Adicionar} one {Adicionar # entrada} other {Adicionar # entradas}}",
+        "placeholder": "Pesquise pessoas e grupos ou digite um domínio como exemplo.org",
+        "pickerLabel": "Pessoas, grupos ou domínios para adicionar",
+        "pickerHint": "Misture pessoas, grupos e domínios. Cole uma lista separada por vírgulas.",
+        "pickerHintNoGroups": "Misture pessoas e domínios. Cole uma lista separada por vírgulas. A pesquisa de grupos está desativada aqui.",
+        "invalid": "Não reconhecido: {text}. Digite um endereço de e-mail, um domínio ou escolha um grupo na busca.",
+        "kind": {
+          "user": "pessoa",
+          "group": "grupo",
+          "domain": "domínio"
+        },
+        "fromFamily": "da família",
+        "setHere": "Alterar para este modelo",
+        "setHereFor": "Alterar {target} para este modelo",
+        "overruled": "Bloqueado na família, que prevalece"
       }
     },
     "previewSourceModelAccess": "Aprovação do modelo — {list}",

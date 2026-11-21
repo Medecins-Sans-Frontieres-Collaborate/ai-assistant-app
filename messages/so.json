@@ -6838,7 +6838,9 @@
         "groups": "Kooxo leh helitaan",
         "domains": "Domains leh helitaan",
         "allow": "Dadka la oggolyahay",
-        "deny": "Dadka la xayiray"
+        "deny": "Dadka la xayiray",
+        "denyGroups": "Kooxo la xannibay",
+        "denyDomains": "Domains la xannibay"
       },
       "termsLabel": "Shuruudaha {target}",
       "removeGrant": "Ka saar {target}",
@@ -6850,7 +6852,8 @@
         "caption": "Helitaanka moodelka ee dhagaystayaasha",
         "col": {
           "model": "Moodel",
-          "reach": "Waa la isticmaali karaa"
+          "reach": "Waa la isticmaali karaa",
+          "people": "Dadka la magacaabay"
         },
         "familyNote": "qoys: miisaaniyad maalinle ah oo la wadaago",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Qof walba",
           "nobody": "Qofna maaha",
-          "people": "{count, plural, one {# qof} other {# qof}}"
+          "people": "{count, plural, one {# qof} other {# qof}}",
+          "everyoneExcept": "Qof walba marka laga reebo {list}"
         },
         "howTitle": "Sida go'aan looga gaaro codsi",
         "how": {
           "inherit": "Moodel aan lahayn shuruudo u gaar ah tiirka wuxuu adeegsanayaa kuwa qoyska (xariiqan).",
-          "envelope": "Codsigu waa inuu la jaanqaadaa xadka moodelka, miisaaniyadda qoyska iyo wadarta sheekada, dhammaantood."
+          "envelope": "Codsigu waa inuu la jaanqaadaa xadka moodelka, miisaaniyadda qoyska iyo wadarta sheekada, dhammaantood.",
+          "blocked": "Qof la magacaabay oo loo dejiyay Off ma isticmaali karo, si kasta oo kooxdiisa ama domain-kiisa loo dejiyo.",
+          "mostSpecific": "Hadii kale, waxa go'aamiya kii ugu gaar ah ee qofka ku jira: qof magaciisa leh, kadib koox, kadib domain, kadibna qof walba. Haddii uu jiro laba kooxood ama laba domains, Off baa guuleysta."
+        },
+        "lead": "Yaa isticmaali kara model kasta, iyo inta codsi ee maalintii. Saf kasta waa qoys ama model; tiir kasta waa dad gaar ah. Xulo saf si aad u bedesho cidda isticmaali karta.",
+        "peopleValue": "{allowed} la oggol yahay, {blocked} la xannibay",
+        "bulk": {
+          "open": "Kudar gelitaanka dhowr models",
+          "title": "Si wadajir ah ugu oggolow dhowr models",
+          "models": "Models-kaan",
+          "wholeFamily": "qoyska oo dhan",
+          "apply": "{count, plural, =0 {Dooro models} one {Ku dabaq hal saf} other {Ku dabaq # saf}}",
+          "note": "Waxay bedeshay wixii ay horey u lahaayeen dadka, kooxaha iyo domains-ka safafka la doortay. Waxba laguma kaydiyo ilaa aad siyaasadda kaydiso."
         }
+      },
+      "audience": {
+        "editorTitle": "Yaa isticmaali kara {model}",
+        "heading": "Kooxo, domains iyo dad",
+        "hint": "Qof kasta wuxuu leeyahay jawaab gaar ah safkan, si kasta oo 'Qof walba' loo dejiyo.",
+        "empty": "Qof magaciisa lagu qoray safkan weli ma jiro.",
+        "who": "Yaa",
+        "terms": "Waxay helayaan",
+        "newTerms": "Waxa ay dadka, kooxaha iyo domains-ka la soo kordhiyay heli doonaan",
+        "add": "{count, plural, =0 {Kudar} one {Kudar hal xog} other {Kudar # xog}}",
+        "placeholder": "Raadi dad iyo kooxo, ama qor domain sida example.org",
+        "pickerLabel": "Dadka, kooxaha ama domains-ka la kordhinayo",
+        "pickerHint": "Isku dara dad, kooxo iyo domains. Ku dheji liis kala soocan faasaska.",
+        "pickerHintNoGroups": "Isku dara dad iyo domains. Ku dheji liis kala soocan faasaska. Koox raadintu waa dansan tahay halkan.",
+        "invalid": "Lama aqoonsan: {text}. Qor email ama domain, ama ka dooro koox raadinta.",
+        "kind": {
+          "user": "qof",
+          "group": "koox",
+          "domain": "domain"
+        },
+        "fromFamily": "ka yimid qoyska",
+        "setHere": "U bedel model-kan",
+        "setHereFor": "U beddel {target} model-kan",
+        "overruled": "Off ayaa lagu dejiyay qoyska, taas ayaana guuleysata"
       }
     },
     "previewSourceModelAccess": "Oggolaanshaha model-ka — {list}",

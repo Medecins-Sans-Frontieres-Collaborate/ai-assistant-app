@@ -6838,7 +6838,9 @@
         "groups": "Magulu omwe ali ndi ufulu",
         "domains": "Ma domain omwe ali ndi ufulu",
         "allow": "Anthu ovololeka",
-        "deny": "Anthu olephera"
+        "deny": "Anthu olephera",
+        "denyGroups": "Magulu olletsa",
+        "denyDomains": "Ma domain olletsa"
       },
       "termsLabel": "Malamulo a {target}",
       "removeGrant": "Chotsani {target}",
@@ -6850,7 +6852,8 @@
         "caption": "Kuloledwa kugwiritsa ntchito chitsanzo malinga ndi omvera",
         "col": {
           "model": "Chitsanzo",
-          "reach": "Angagwiritse ntchito"
+          "reach": "Angagwiritse ntchito",
+          "people": "Anthu otchedwa"
         },
         "familyNote": "banja: bajeti yagawidwa tsiku ndi tsiku",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Aliyense",
           "nobody": "Palibe",
-          "people": "{count, plural, one {munthu #} other {anthu #}}"
+          "people": "{count, plural, one {munthu #} other {anthu #}}",
+          "everyoneExcept": "Aliyense kupatula {list}"
         },
         "howTitle": "Momwe pempho limasankhidwira",
         "how": {
           "inherit": "Chitsanzo chopanda malamulo ake payekha m'kolamu chimatengera a banja (chowoneka ngati mzere wodulidwa).",
-          "envelope": "Pempho liyenera kukhala mkati mwa malire a chitsanzo, bajeti yagawidwa ya banja ndi chiyambi cha chat, zonse zitatu."
+          "envelope": "Pempho liyenera kukhala mkati mwa malire a chitsanzo, bajeti yagawidwa ya banja ndi chiyambi cha chat, zonse zitatu.",
+          "blocked": "Munthu wotchedwa amene wayikidwa Off sangathe kugwiritsa ntchito, ngakhale gulu lake kapena domain yake yayikidwa bwanji.",
+          "mostSpecific": "Kupanda apo, amene ali ndi zolemba zenizeni kwambiri zomwe zikuphatikiza munthuyo ndiye amasankha: choyamba munthu wotchedwa, kenako gulu, kenako domain, kenako aliyense wina. Pakati pa magulu awiri kapena ma domain awiri, Off imawina."
+        },
+        "lead": "Ndani angagwiritse ntchito model iliyonse, komanso kuchuluka kwa mapempho tsiku lililonse. Mzere uliwonse ndi banja kapena model; mzati uliwonse ndi omvera ake. Sankhani mzere kuti musinthe amene angagwiritse ntchito.",
+        "peopleValue": "{allowed} aloledwa, {blocked} zaletsedwa",
+        "bulk": {
+          "open": "Onjezani mwayi pa ma models angapo",
+          "title": "Perekani mwayi wofanana pa ma models angapo",
+          "models": "Pa ma models awa",
+          "wholeFamily": "banja lonse",
+          "apply": "{count, plural, =0 {Sankhani ma models} one {Ikani pa mzere #} other {Ikani pa mizere #}}",
+          "note": "Izi zimalowetsa m'malo zomwe anthu, magulu ndi ma domain ali nazo pa mizere yosankhidwa. Palibe chomwe chisungidwa mpaka mutasunga ndondomekoyi."
         }
+      },
+      "audience": {
+        "editorTitle": "Ndani angagwiritse ntchito {model}",
+        "heading": "Magulu, ma domains ndi anthu",
+        "hint": "Aliyense ali ndi yankho lake patsogolo pa mzerewu, mosasamala kuti Aliyense wina akunena chiyani.",
+        "empty": "Palibe amene wayikidwa pa mzerewu pano.",
+        "who": "Ndani",
+        "terms": "Alandira",
+        "newTerms": "Zimene anthu, magulu ndi ma domain akuwonjezedwa alandira",
+        "add": "{count, plural, =0 {Onjezani} one {Onjezani cholemba #} other {Onjezani zolemba #}}",
+        "placeholder": "Fufuzani anthu ndi magulu, kapena lembani domain monga example.org",
+        "pickerLabel": "Anthu, magulu kapena ma domain oti muonjeze",
+        "pickerHint": "Sakanizani anthu, magulu ndi ma domain. Matani mndandanda wosiyanitsidwa ndi ma comma.",
+        "pickerHintNoGroups": "Sakanizani anthu ndi ma domain. Matani mndandanda wosiyanitsidwa ndi ma comma. Kufufuza magulu kulibe pano.",
+        "invalid": "Sazindikiridwa: {text}. Lembani imelo kapena domain, kapena sankhani gulu kuchokera kufufuzako.",
+        "kind": {
+          "user": "munthu",
+          "group": "gulu",
+          "domain": "domain"
+        },
+        "fromFamily": "kuchokera ku banja",
+        "setHere": "Sinthani pa model iyi",
+        "setHereFor": "Sinthani {target} pa model iyi",
+        "overruled": "Zaletsedwa pa banja, ndipo izi ndizo zotsatira"
       }
     },
     "previewSourceModelAccess": "Kuvomereza chitsanzo — {list}",

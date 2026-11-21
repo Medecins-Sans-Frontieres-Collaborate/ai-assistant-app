@@ -6838,7 +6838,9 @@
         "groups": "Àwọn ẹgbẹ́ tó ní ààyè",
         "domains": "Àwọn agbègbè tó ní ààyè",
         "allow": "Àwọn ènìyàn tí wọ́n fọwọ́sowọ́pò",
-        "deny": "Àwọn ènìyàn tí a dè wọlé"
+        "deny": "Àwọn ènìyàn tí a dè wọlé",
+        "denyGroups": "Àwọn ẹgbẹ́ tí a dì",
+        "denyDomains": "Àwọn domain tí a dì"
       },
       "termsLabel": "Àlàyé fún {target}",
       "removeGrant": "Yọ {target} kúrò",
@@ -6850,7 +6852,8 @@
         "caption": "Ìwọlé awoṣe nipasẹ awujọ",
         "col": {
           "model": "Awoṣe",
-          "reach": "Le lò ó"
+          "reach": "Le lò ó",
+          "people": "Àwọn ènìyàn tí a darukọ"
         },
         "familyNote": "idile: isuna ojoojumọ ti o pin",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Gbogbo ènìyàn",
           "nobody": "Kò sí ènìyàn",
-          "people": "{count, plural, one {ènìyàn #} other {ènìyàn #}}"
+          "people": "{count, plural, one {ènìyàn #} other {ènìyàn #}}",
+          "everyoneExcept": "Gbogbo ènìyàn àfi {list}"
         },
         "howTitle": "Bá ìbéèrè kọọkan ṣe n jẹ́ àyẹ̀wò",
         "how": {
           "inherit": "Awoṣe tí ko ni ofurufu tirẹ̀ ninu kaarọ kan máa lo ti idile rẹ (ààmì gígún-gún).",
-          "envelope": "Ìbéèrè gbọ́dọ̀ fìt in in cap awoṣe, isuna ọjọ idile ati apapọ ìjíròrò, gbogbo mẹta."
+          "envelope": "Ìbéèrè gbọ́dọ̀ fìt in in cap awoṣe, isuna ọjọ idile ati apapọ ìjíròrò, gbogbo mẹta.",
+          "blocked": "Eni tí a darukọ tí a ti yí sí Pipa kò le lò ó, láìka ohun tí ẹgbẹ́ tàbí domain rẹ̀ bá gba.",
+          "mostSpecific": "Lẹ́yìn náà, àyípadà tí o dára jù lọ tí ó kà ènìyàn náà mọ̀ yọ: ẹni tí a darukọ, lẹ́yìn náà ẹgbẹ́, lẹ́yìn náà domain, lẹ́yìn náà gbogbo ènìyàn. Ní àárí ẹgbẹ́ méjì, tàbí domains méjì, Pipa ni ń ṣẹ̀gun."
+        },
+        "lead": "Tálọ́ lè lò àpẹrẹ kọọkan, àti iye ìbéèrè tó jẹ́ ojoojúmọ́. Kọọkan ìtòsí jẹ́ idílé tàbí àpẹrẹ; kọọkan kolomu jẹ́ àgbọ́wọ̀n. Yan ìtòsí kan láti yí tálọ́ lè lò ó.",
+        "peopleValue": "{allowed} gba laaye, {blocked} pipa",
+        "bulk": {
+          "open": "Fi àwọ̀n sí orí àpẹrẹ púpọ̀",
+          "title": "Fi àwọ̀n kan naa sí orí àpẹrẹ púpọ̀",
+          "models": "Lórí àwọn àpẹrẹ wọ̀nyí",
+          "wholeFamily": "gbogbo idílé",
+          "apply": "{count, plural, =0 {Yan àwọn àpẹrẹ} one {Lo si ìtòsí #} other {Lo si àwọn ìtòsí #}}",
+          "note": "Yóò rọ́pò ohun tí àwọn ènìyàn, ẹgbẹ́ àti domain wọ̀nyí ní lórí àwọn ìtòsí tó ṣeé yàn. Kò sí ohun tí a fipamọ́ títí tí o fi pààṣẹ."
         }
+      },
+      "audience": {
+        "editorTitle": "Tálọ́ lè lò {model}",
+        "heading": "Àwọn ẹgbẹ́, domain àti ènìyàn",
+        "hint": "Kọọkan ní ìdáhùn tirẹ lórí ìtòsí yìí, láìka ohun tí Gbogbo ènìyàn yòókù sọ.",
+        "empty": "Kò sẹni tí a darukọ lórí ìtòsí yìí sibẹ̀.",
+        "who": "Tálọ́",
+        "terms": "Wọ́n gba",
+        "newTerms": "Ohun tí àwọn ènìyàn, ẹgbẹ́ àti domain tí a fi kún gba",
+        "add": "{count, plural, =0 {Fi kún} one {Fi kún # ohun} other {Fi kún # àwọn ohun}}",
+        "placeholder": "Wá ẹni àti ẹgbẹ́, tàbí kọ domain gẹ́gẹ́ bí example.org",
+        "pickerLabel": "Àwọn ènìyàn, ẹgbẹ́ tàbí domain láti fi kún",
+        "pickerHint": "Darapọ ènìyàn, ẹgbẹ́ àti domain. Lè fi àkójọ tó pin pẹ̀lú àmi kọ̀má.",
+        "pickerHintNoGroups": "Darapọ ènìyàn àti domain. Lè fi àkójọ tó pin pẹ̀lú àmi kọ̀má. Àwárí ẹgbẹ́ ti wa ni pipa níbí.",
+        "invalid": "Kò ṣe idanimọ̀: {text}. Kọ àdírẹ́sì imeeli tàbí domain, tàbí yan ẹgbẹ́ ní àwárí.",
+        "kind": {
+          "user": "ènìyàn",
+          "group": "ẹgbẹ́",
+          "domain": "domain"
+        },
+        "fromFamily": "látọ̀dọ̀ idílé",
+        "setHere": "Yí padà fún àpẹrẹ yìí",
+        "setHereFor": "Yí {target} padà fún àpẹrẹ yìí",
+        "overruled": "Pipa lórí idílé, tí ó ṣẹ̀gun"
       }
     },
     "previewSourceModelAccess": "Ìfọwọ́si àyíkọ́ — {list}",

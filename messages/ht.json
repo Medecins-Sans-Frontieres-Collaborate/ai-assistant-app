@@ -6838,7 +6838,9 @@
         "groups": "Gwoup ki gen aksè",
         "domains": "Domèn ki gen aksè",
         "allow": "Moun otorize",
-        "deny": "Moun bloke"
+        "deny": "Moun bloke",
+        "denyGroups": "Gwoup ki bloke yo",
+        "denyDomains": "Domen ki bloke yo"
       },
       "termsLabel": "Tèm pou {target}",
       "removeGrant": "Retire {target}",
@@ -6850,7 +6852,8 @@
         "caption": "Aksè modèl pa odyans",
         "col": {
           "model": "Modèl",
-          "reach": "Ka itilize li"
+          "reach": "Ka itilize li",
+          "people": "Moun ki nonmen"
         },
         "familyNote": "fanmi : bidjè chak jou pataje",
         "cellLabel": "{model}, {audience} : {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Tout moun",
           "nobody": "Pèsonn",
-          "people": "{count, plural, one {# moun} other {# moun}}"
+          "people": "{count, plural, one {# moun} other {# moun}}",
+          "everyoneExcept": "Tout moun eksepte {list}"
         },
         "howTitle": "Ki jan yon demann deside",
         "how": {
           "inherit": "Yon modèl ki pa gen tèm pa li nan kolòn nan itilize sa fanmi an (li make ak trasye).",
-          "envelope": "Demann nan dwe respekte plafon modèl la, bidjè fanmi an ak kantite total pou chat la, tout twa ansanm."
+          "envelope": "Demann nan dwe respekte plafon modèl la, bidjè fanmi an ak kantite total pou chat la, tout twa ansanm.",
+          "blocked": "Yon moun ki mete sou Off pa ka itilize li, kèlkeswa sa gwoup oswa domen yo jwenn.",
+          "mostSpecific": "Sinon, antre ki pi espesifik la ki enkli moun nan ap deside : yon moun ki nonmen, answit yon gwoup, answit yon domen, epi tout lòt moun. Ant de gwoup oswa de domen, Off genyen."
+        },
+        "lead": "Ki moun ki ka itilize chak modèl, ak konbyen demann pa jou. Chak liy se yon fanmi oswa yon modèl; chak kolòn se yon odyans. Chwazi yon liy pou chanje ki moun ki ka itilize li.",
+        "peopleValue": "{allowed} pèmèt, {blocked} fèmen",
+        "bulk": {
+          "open": "Ajoute aksè sou plizyè modèl",
+          "title": "Bay menm aksè sou plizyè modèl",
+          "models": "Sou modèl sa yo",
+          "wholeFamily": "tout fanmi an",
+          "apply": "{count, plural, =0 {Chwazi modèl} one {Aplike sou # liy} other {Aplike sou # liy yo}}",
+          "note": "Sa ranplase sa moun sa yo, gwoup ak domen yo deja genyen sou liy yo chwazi yo. Anyen pap anrejistre jiskaske ou sove règleman an."
         }
+      },
+      "audience": {
+        "editorTitle": "Ki moun ki ka itilize {model}",
+        "heading": "Gwoup, domen ak moun",
+        "hint": "Chak resevwa pwòp repons pa yo sou liy sa a, kèlkeswa sa Tout lòt moun di.",
+        "empty": "Pa gen moun ki nonmen sou liy sa a pou kounye a.",
+        "who": "Kilès",
+        "terms": "Yo resevwa",
+        "newTerms": "Sa moun, gwoup ak domen ki ajoute yo ap resevwa",
+        "add": "{count, plural, =0 {Ajoute} one {Ajoute # antre} other {Ajoute # antre}}",
+        "placeholder": "Chèche moun ak gwoup, oswa tape yon domen tankou example.org",
+        "pickerLabel": "Moun, gwoup oswa domen pou ajoute",
+        "pickerHint": "Melanje moun, gwoup ak domen. Kole yon lis separe ak vigil.",
+        "pickerHintNoGroups": "Melanje moun ak domen. Kole yon lis separe ak vigil. Rechèch gwoup pa disponib isit la.",
+        "invalid": "Pa rekonèt: {text}. Tape yon adrès imel oswa yon domen, oswa chwazi yon gwoup nan rechèch la.",
+        "kind": {
+          "user": "moun",
+          "group": "gwoup",
+          "domain": "domen"
+        },
+        "fromFamily": "soti nan fanmi an",
+        "setHere": "Chanje pou modèl sa a",
+        "setHereFor": "Chanje {target} pou modèl sa a",
+        "overruled": "Fèmen sou fanmi an, li genyen"
       }
     },
     "previewSourceModelAccess": "Apwobasyon modèl — {list}",

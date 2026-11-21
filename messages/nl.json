@@ -6854,7 +6854,9 @@
         "groups": "Groepen met toegang",
         "domains": "Domeinen met toegang",
         "allow": "Toegestane personen",
-        "deny": "Geblokkeerde personen"
+        "deny": "Geblokkeerde personen",
+        "denyGroups": "Geblokkeerde groepen",
+        "denyDomains": "Geblokkeerde domeinen"
       },
       "termsLabel": "Voorwaarden voor {target}",
       "removeGrant": "{target} verwijderen",
@@ -6866,7 +6868,8 @@
         "caption": "Modeltoegang per doelgroep",
         "col": {
           "model": "Model",
-          "reach": "Kan gebruiken"
+          "reach": "Kan gebruiken",
+          "people": "Genoemde personen"
         },
         "familyNote": "familie: gedeeld dagbudget",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Iedereen",
           "nobody": "Niemand",
-          "people": "{count, plural, one {# persoon} other {# personen}}"
+          "people": "{count, plural, one {# persoon} other {# personen}}",
+          "everyoneExcept": "Iedereen behalve {list}"
         },
         "howTitle": "Hoe een verzoek wordt beslist",
         "how": {
           "inherit": "Een model zonder eigen voorwaarden in een kolom gebruikt die van de familie (stippellijn).",
-          "envelope": "Het verzoek moet voldoen aan het limiet van het model, het gedeelde familie-budget en het totaal voor het chatgesprek, alle drie."
+          "envelope": "Het verzoek moet voldoen aan het limiet van het model, het gedeelde familie-budget en het totaal voor het chatgesprek, alle drie.",
+          "blocked": "Een genoemde persoon met Uit ingesteld, kan het niet gebruiken, ongeacht de groep of het domein.",
+          "mostSpecific": "Anders beslist de meest specifieke vermelding die de persoon omvat: eerst een persoon, dan een groep, dan een domein, dan de rest. Tussen twee groepen of twee domeinen geldt: Uit wint."
+        },
+        "lead": "Wie elk model kan gebruiken, en hoeveel verzoeken per dag. Elke rij is een familie of model; elke kolom is een doelgroep. Selecteer een rij om aan te passen wie het kan gebruiken.",
+        "peopleValue": "{allowed} toegestaan, {blocked} uitgeschakeld",
+        "bulk": {
+          "open": "Toegang toevoegen aan meerdere modellen",
+          "title": "Geef dezelfde toegang aan meerdere modellen",
+          "models": "Op deze modellen",
+          "wholeFamily": "hele familie",
+          "apply": "{count, plural, =0 {Modellen kiezen} one {Toepassen op # rij} other {Toepassen op # rijen}}",
+          "note": "Vervangt wat deze personen, groepen en domeinen al hebben op de gekozen rijen. Pas opgeslagen na het opslaan van het beleid."
         }
+      },
+      "audience": {
+        "editorTitle": "Wie kan {model} gebruiken",
+        "heading": "Groepen, domeinen en personen",
+        "hint": "Iedereen krijgt zijn eigen antwoord op deze rij, ongeacht wat 'De rest' aangeeft.",
+        "empty": "Er zijn nog geen personen op deze rij genoemd.",
+        "who": "Wie",
+        "terms": "Zij krijgen",
+        "newTerms": "Wat de toegevoegde personen, groepen en domeinen krijgen",
+        "add": "{count, plural, =0 {Toevoegen} one {# item toevoegen} other {# items toevoegen}}",
+        "placeholder": "Zoek personen en groepen, of typ een domein zoals example.org",
+        "pickerLabel": "Personen, groepen of domeinen om toe te voegen",
+        "pickerHint": "Combineer personen, groepen en domeinen. Plak een door komma's gescheiden lijst.",
+        "pickerHintNoGroups": "Combineer personen en domeinen. Plak een door komma's gescheiden lijst. Groepszoek is hier uitgeschakeld.",
+        "invalid": "Niet herkend: {text}. Typ een e-mailadres of een domein, of kies een groep in de zoekfunctie.",
+        "kind": {
+          "user": "persoon",
+          "group": "groep",
+          "domain": "domein"
+        },
+        "fromFamily": "van de familie",
+        "setHere": "Wijzig voor dit model",
+        "setHereFor": "Wijzig {target} voor dit model",
+        "overruled": "Uit op de familie, dat geldt"
       }
     },
     "previewSourceModelAccess": "Modelgoedkeuring — {list}",

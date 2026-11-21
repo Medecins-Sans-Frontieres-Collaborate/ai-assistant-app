@@ -6854,7 +6854,9 @@
         "groups": "Makundi yenye upatikanaji",
         "domains": "Domains zenye upatikanaji",
         "allow": "Watu walioruhusiwa",
-        "deny": "Watu waliozuiwa"
+        "deny": "Watu waliozuiwa",
+        "denyGroups": "Makundi yaliyofungwa",
+        "denyDomains": "Domain zilizofungwa"
       },
       "termsLabel": "Masharti kwa {target}",
       "removeGrant": "Ondoa {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Upatikanaji wa modeli kwa hadhira",
         "col": {
           "model": "Modeli",
-          "reach": "Anaweza kutumia"
+          "reach": "Anaweza kutumia",
+          "people": "Watu waliotajwa"
         },
         "familyNote": "familia: bajeti ya kila siku inayoshirikiwa",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Wote",
           "nobody": "Hakuna",
-          "people": "{count, plural, one {mtu 1} other {watu #}}"
+          "people": "{count, plural, one {mtu 1} other {watu #}}",
+          "everyoneExcept": "Kila mtu isipokuwa {list}"
         },
         "howTitle": "Jinsi ombi moja linaamuliwa",
         "how": {
           "inherit": "Modeli bila masharti yake kwenye safu inatumia masharti ya familia yake (iliyo na mistari ya dashed).",
-          "envelope": "Ombi ni lazima liendane na kikomo cha modeli, bajeti ya familia na jumla ya chat, vyote vitatu."
+          "envelope": "Ombi ni lazima liendane na kikomo cha modeli, bajeti ya familia na jumla ya chat, vyote vitatu.",
+          "blocked": "Mtu aliyebainishwa aliyewekwa kwenye Zima hawezi kutumia, bila kujali kundi au domain yake inapata nini.",
+          "mostSpecific": "Vinginevyo, ingizo maalum zaidi linalomjumuisha mtu linaamua: mtu aliyebainishwa, kisha kundi, kisha domain, kisha wengine wote. Kati ya makundi mawili au domain mbili, Zima inashinda."
+        },
+        "lead": "Nani anaweza kutumia kila mfano, na ni idadi gani ya maombi kwa siku. Kila mstari ni familia au mfano; kila safu wima ni hadhira. Chagua mstari kubadilisha nani anaweza kutumia.",
+        "peopleValue": "{allowed} wamepewa ruhusa, {blocked} wamezuiwa",
+        "bulk": {
+          "open": "Ongeza ruhusa kwenye mifano kadhaa",
+          "title": "Toa ruhusa sawa kwenye mifano kadhaa",
+          "models": "Kwenye mifano hii",
+          "wholeFamily": "familia nzima",
+          "apply": "{count, plural, =0 {Chagua mifano} one {Tumia kwa mstari #} other {Tumia kwa mistari #}}",
+          "note": "Inabadilisha kile ambacho watu hawa, makundi na domain tayari wana kwenye mistari iliyoangazwa. Hakuna kinachohifadhiwa hadi uhifadhi sera."
         }
+      },
+      "audience": {
+        "editorTitle": "Nani anaweza kutumia {model}",
+        "heading": "Makundi, domain na watu",
+        "hint": "Kila moja inapewa majibu yake kwenye mstari huu, bila kujali Wengine wote wanasema nini.",
+        "empty": "Hakuna mtu aliyetajwa kwenye mstari huu bado.",
+        "who": "Nani",
+        "terms": "Wanapewa",
+        "newTerms": "Watu, makundi na domain zinazoongezwa watapata nini",
+        "add": "{count, plural, =0 {Ongeza} one {Ongeza ingizo #} other {Ongeza ingizo #}}",
+        "placeholder": "Tafuta watu na makundi, au andika domain kama vile example.org",
+        "pickerLabel": "Watu, makundi au domain za kuongeza",
+        "pickerHint": "Changanya watu, makundi na domain. Bandika orodha ukitenganisha kwa koma.",
+        "pickerHintNoGroups": "Changanya watu na domain. Bandika orodha ukitenganisha kwa koma. Utafutaji wa makundi umezimwa hapa.",
+        "invalid": "Haijatambuliwa: {text}. Andika anwani ya barua pepe au domain, au chagua kundi kutoka utafutaji.",
+        "kind": {
+          "user": "mtu",
+          "group": "kundi",
+          "domain": "domain"
+        },
+        "fromFamily": "kutoka kwenye familia",
+        "setHere": "Badilisha kwa mfano huu",
+        "setHereFor": "Badilisha {target} kwa mfano huu",
+        "overruled": "Imezimwa kwenye familia, ambayo inashinda"
       }
     },
     "previewSourceModelAccess": "Idhini ya muundo — {list}",

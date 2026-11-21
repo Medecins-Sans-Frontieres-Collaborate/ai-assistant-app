@@ -6885,7 +6885,9 @@
         "groups": "有访问权的群组",
         "domains": "有访问权的域名",
         "allow": "允许的个人",
-        "deny": "封锁的个人"
+        "deny": "封锁的个人",
+        "denyGroups": "已阻止的群组",
+        "denyDomains": "已阻止的域名"
       },
       "termsLabel": "{target} 的使用条件",
       "removeGrant": "移除 {target}",
@@ -6897,7 +6899,8 @@
         "caption": "按受众分配模型访问权限",
         "col": {
           "model": "模型",
-          "reach": "可用人员"
+          "reach": "可用人员",
+          "people": "指定人员"
         },
         "familyNote": "家族：共享每日配额",
         "cellLabel": "{model}，{audience}：{value}",
@@ -6905,13 +6908,50 @@
         "reach": {
           "everyone": "所有人",
           "nobody": "无任何人",
-          "people": "{count, plural, one {# 人} other {# 人}}"
+          "people": "{count, plural, one {# 人} other {# 人}}",
+          "everyoneExcept": "除{list}外的所有人"
         },
         "howTitle": "如何决定一次请求",
         "how": {
           "inherit": "如本列中未单独设置条款，则该模型继承家族（虚线）的条款。",
-          "envelope": "请求必须同时满足模型上限、家族共享配额与对话总量三者。"
+          "envelope": "请求必须同时满足模型上限、家族共享配额与对话总量三者。",
+          "blocked": "被设为关闭（Off）的指定人员无法使用，无论其所属群组或域名的设置如何。",
+          "mostSpecific": "否则，由包含该人员的最具体条目决定：先是指定人员，然后是群组，再是域名，最后是其他所有人。两个群组或两个域名之间，关闭（Off）优先。"
+        },
+        "lead": "每个模型谁可以使用，以及每天的请求次数。每行代表一个系列或模型，每列为受众。选择某一行可更改谁可以使用。",
+        "peopleValue": "{allowed}可用，{blocked}关闭",
+        "bulk": {
+          "open": "为多个模型添加访问权限",
+          "title": "为多个模型设置相同的访问权限",
+          "models": "在这些模型上",
+          "wholeFamily": "整个系列",
+          "apply": "{count, plural, =0 {选择模型} one {应用于#行} other {应用于#行}}",
+          "note": "会替换这些人员、群组和域名在所选行上已有的设置。只有在保存策略后才会生效。"
         }
+      },
+      "audience": {
+        "editorTitle": "谁可以使用{model}",
+        "heading": "群组、域名和人员",
+        "hint": "每项在本行上有自己独立的设置，不受其他人的影响。",
+        "empty": "本行尚未指定任何人员。",
+        "who": "对象",
+        "terms": "权限",
+        "newTerms": "新添加的人员、群组和域名将获得",
+        "add": "{count, plural, =0 {添加} one {添加#项} other {添加#项}}",
+        "placeholder": "搜索人员和群组，或输入域名，如 example.org",
+        "pickerLabel": "待添加的人员、群组或域名",
+        "pickerHint": "可混合添加人员、群组和域名。请粘贴用逗号分隔的列表。",
+        "pickerHintNoGroups": "可混合添加人员和域名。请粘贴用逗号分隔的列表。此处已关闭群组搜索。",
+        "invalid": "无法识别：{text}。请输入邮箱地址、域名，或从搜索中选择群组。",
+        "kind": {
+          "user": "人员",
+          "group": "群组",
+          "domain": "域名"
+        },
+        "fromFamily": "来自系列",
+        "setHere": "仅更改此模型",
+        "setHereFor": "更改{target}在此模型的权限",
+        "overruled": "系列设置为关闭（Off），已覆盖"
       }
     },
     "previewSourceModelAccess": "模型审批 — {list}",

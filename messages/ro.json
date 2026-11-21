@@ -6854,7 +6854,9 @@
         "groups": "Grupuri cu acces",
         "domains": "Domenii cu acces",
         "allow": "Persoane permise",
-        "deny": "Persoane blocate"
+        "deny": "Persoane blocate",
+        "denyGroups": "Grupuri blocate",
+        "denyDomains": "Domenii blocate"
       },
       "termsLabel": "Condiții pentru {target}",
       "removeGrant": "Eliminați {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Accesul la model după public",
         "col": {
           "model": "Model",
-          "reach": "Poate folosi"
+          "reach": "Poate folosi",
+          "people": "Persoane numite"
         },
         "familyNote": "familie: buget zilnic partajat",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Toți",
           "nobody": "Nimeni",
-          "people": "{count, plural, one {# persoană} other {# persoane}}"
+          "people": "{count, plural, one {# persoană} other {# persoane}}",
+          "everyoneExcept": "Toată lumea, cu excepția {list}"
         },
         "howTitle": "Cum se decide o solicitare",
         "how": {
           "inherit": "Un model fără termeni proprii într-o coloană folosește termenii familiei (linie punctată).",
-          "envelope": "Solicitarea trebuie să se încadreze în limita modelului, bugetul partajat al familiei și totalul chatului, toate trei."
+          "envelope": "Solicitarea trebuie să se încadreze în limita modelului, bugetul partajat al familiei și totalul chatului, toate trei.",
+          "blocked": "O persoană numită setată pe Off nu poate folosi, indiferent de grupul sau domeniul său.",
+          "mostSpecific": "În rest, cea mai specifică înscriere care include persoana decide: întâi persoana numită, apoi grupul, apoi domeniul, apoi restul. Între două grupuri sau două domenii, Off câștigă."
+        },
+        "lead": "Cine poate folosi fiecare model și câte solicitări pe zi. Fiecare rând este o familie sau un model; fiecare coloană este un public. Selectați un rând pentru a modifica cine poate folosi.",
+        "peopleValue": "{allowed} permise, {blocked} dezactivate",
+        "bulk": {
+          "open": "Adăugați acces pe mai multe modele",
+          "title": "Acordați același acces pe mai multe modele",
+          "models": "Pe aceste modele",
+          "wholeFamily": "întreaga familie",
+          "apply": "{count, plural, =0 {Alegeți modele} one {Aplică la # rând} other {Aplică la # rânduri}}",
+          "note": "Înlocuiește ce au deja aceste persoane, grupuri și domenii pe rândurile selectate. Nimic nu se salvează până nu salvați politica."
         }
+      },
+      "audience": {
+        "editorTitle": "Cine poate folosi {model}",
+        "heading": "Grupuri, domenii și persoane",
+        "hint": "Fiecare primește propriul răspuns pe acest rând, indiferent ce spune restul.",
+        "empty": "Nu există persoane numite pe acest rând încă.",
+        "who": "Cine",
+        "terms": "Primesc",
+        "newTerms": "Ce primesc persoanele, grupurile și domeniile adăugate",
+        "add": "{count, plural, =0 {Adaugă} one {Adaugă # înregistrare} other {Adaugă # înregistrări}}",
+        "placeholder": "Căutați persoane și grupuri sau introduceți un domeniu, de exemplu example.org",
+        "pickerLabel": "Persoane, grupuri sau domenii de adăugat",
+        "pickerHint": "Amestecați persoane, grupuri și domenii. Lipiți o listă separată prin virgule.",
+        "pickerHintNoGroups": "Amestecați persoane și domenii. Lipiți o listă separată prin virgule. Căutarea grupului este dezactivată aici.",
+        "invalid": "Nerecunoscut: {text}. Introduceți o adresă de email sau un domeniu, sau alegeți un grup din căutare.",
+        "kind": {
+          "user": "persoană",
+          "group": "grup",
+          "domain": "domeniu"
+        },
+        "fromFamily": "din familie",
+        "setHere": "Schimbă pentru acest model",
+        "setHereFor": "Schimbă {target} pentru acest model",
+        "overruled": "Dezactivat pe familie, care prevalează"
       }
     },
     "previewSourceModelAccess": "Aprobare model — {list}",

@@ -6838,7 +6838,9 @@
         "groups": "Rukunin da ke da damar shiga",
         "domains": "Yankuna da ke da damar shiga",
         "allow": "Mutanen da aka yarda",
-        "deny": "Mutanen da aka toshe"
+        "deny": "Mutanen da aka toshe",
+        "denyGroups": "Rukunoni da aka toshe",
+        "denyDomains": "Yankuna da aka toshe"
       },
       "termsLabel": "Sharudda ga {target}",
       "removeGrant": "Cire {target}",
@@ -6850,7 +6852,8 @@
         "caption": "Samun damar samfur bisa ga masu sauraro",
         "col": {
           "model": "Samfuri",
-          "reach": "Zai iya amfani"
+          "reach": "Zai iya amfani",
+          "people": "Mutanen da aka ambata"
         },
         "familyNote": "iyali: kasafin kuɗi na yau da kullum da ake raba",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Kowa",
           "nobody": "Babu kowa",
-          "people": "{count, plural, one {Mutum #} other {Mutane #}}"
+          "people": "{count, plural, one {Mutum #} other {Mutane #}}",
+          "everyoneExcept": "Kowa sai {list}"
         },
         "howTitle": "Yadda ake yanke shawara akan buƙata guda",
         "how": {
           "inherit": "Samfurin da ba shi da sharudda na kansa a wani ginshiƙi yana amfani da na iyalinsa (layi mai dashi).",
-          "envelope": "Buƙatar dole ta dace da iyakar samfurin, kasafin iyali da jimillar hira, duka uku."
+          "envelope": "Buƙatar dole ta dace da iyakar samfurin, kasafin iyali da jimillar hira, duka uku.",
+          "blocked": "Idan an sa mutum Off, ba zai iya amfani da shi ba, komai rukuninsa ko yankinsa.",
+          "mostSpecific": "Idan ba haka ba, abin da ya fi dacewa da mutum ne ke yanke hukunci: mutum da aka ambata, sannan rukuni, sannan yanki, sannan kowa. Idan rukuni biyu, ko yankuna biyu, Off ne ke nasara."
+        },
+        "lead": "Wa zai iya amfani da kowanne samfur, da yadda yawan buƙata a rana. Kowanne layi dangin samfur ne ko samfur; kowanne ginshiƙi masu amfani ne. Zaɓi layi don canza wa zai iya amfani da shi.",
+        "peopleValue": "{allowed} an amince, {blocked} an kashe",
+        "bulk": {
+          "open": "Ƙara damar amfani ga samfu da yawa",
+          "title": "Bada damar da iri ɗaya a samfu da yawa",
+          "models": "A waɗannan samfuran",
+          "wholeFamily": "dukan dangi",
+          "apply": "{count, plural, =0 {Zaɓi samfura} one {Aiwatar da layi # ɗaya} other {Aiwatar da layi #}}",
+          "note": "Zai maye gurbin abin da waɗannan mutanen, rukunoni da yankuna suka riga sun samu a layin da aka zaɓa. Babu abin da zai ajiye har sai ka ajiye manufar."
         }
+      },
+      "audience": {
+        "editorTitle": "Wa zai iya amfani da {model}",
+        "heading": "Rukunoni, yankuna da mutane",
+        "hint": "Kowane yana samun nasu martani a wannan layi, komai abinda 'kowa' ya ce.",
+        "empty": "Ba a saka kowa a wannan layin ba tukuna.",
+        "who": "Wa",
+        "terms": "Za su samu",
+        "newTerms": "Abin da mutanen, rukunoni da yankunan da aka ƙara za su samu",
+        "add": "{count, plural, =0 {Ƙara} one {Ƙara abu # daya} other {Ƙara abubuwa #}}",
+        "placeholder": "Nemo mutane da rukunoni, ko rubuta yanki irin su example.org",
+        "pickerLabel": "Mutane, rukunoni ko yankuna da za a ƙara",
+        "pickerHint": "Hada mutane, rukunoni da yankuna. Latsa jerin sunaye rababbu da alamar comma.",
+        "pickerHintNoGroups": "Hada mutane da yankuna. Latsa jerin sunaye rababbu da alamar comma. Binciken rukuni an kashe anan.",
+        "invalid": "Ba a gane ba: {text}. Rubuta adireshin imel ko yanki, ko zaɓi rukuni daga bincike.",
+        "kind": {
+          "user": "mutum",
+          "group": "rukuni",
+          "domain": "yanki"
+        },
+        "fromFamily": "daga dangi",
+        "setHere": "Canja don wannan samfur",
+        "setHereFor": "Canja {target} don wannan samfur",
+        "overruled": "An kashe a dangi, wanda shine ke nasara"
       }
     },
     "previewSourceModelAccess": "Amincewa da samfur — {list}",

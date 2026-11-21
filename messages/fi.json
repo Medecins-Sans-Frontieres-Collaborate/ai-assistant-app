@@ -6854,7 +6854,9 @@
         "groups": "Ryhmät joilla on käyttöoikeus",
         "domains": "Domainit joilla on käyttöoikeus",
         "allow": "Sallitut henkilöt",
-        "deny": "Estetyt henkilöt"
+        "deny": "Estetyt henkilöt",
+        "denyGroups": "Estetyt ryhmät",
+        "denyDomains": "Estetyt verkkotunnukset"
       },
       "termsLabel": "Ehdot kohteelle {target}",
       "removeGrant": "Poista kohde {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Mallin käyttöoikeus yleisöittäin",
         "col": {
           "model": "Malli",
-          "reach": "Voi käyttää"
+          "reach": "Voi käyttää",
+          "people": "Nimetyt henkilöt"
         },
         "familyNote": "perhe: yhteinen päiväbudjetti",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Kaikki",
           "nobody": "Ei kukaan",
-          "people": "{count, plural, one {# henkilö} other {# henkilöä}}"
+          "people": "{count, plural, one {# henkilö} other {# henkilöä}}",
+          "everyoneExcept": "Kaikki paitsi {list}"
         },
         "howTitle": "Miten yhdestä pyynnöstä päätetään",
         "how": {
           "inherit": "Mallissa, jolla ei ole omia ehtoja sarakkeessa, käytetään perheen ehtoja (katkiviivalla).",
-          "envelope": "Pyynnön on mahduttava mallin rajaan, perheen yhteiseen budjettiin ja keskustelun kokonaismäärään – kaikki kolme huomioidaan."
+          "envelope": "Pyynnön on mahduttava mallin rajaan, perheen yhteiseen budjettiin ja keskustelun kokonaismäärään – kaikki kolme huomioidaan.",
+          "blocked": "Jos nimetylle henkilölle on asetettu Off, hän ei voi käyttää sitä riippumatta ryhmästä tai verkkotunnuksesta.",
+          "mostSpecific": "Muuten henkilölle sopivin tarkin merkintä ratkaisee: ensin nimetty henkilö, sitten ryhmä, sitten verkkotunnus ja lopuksi kaikki muut. Kahden ryhmän tai kahden verkkotunnuksen välillä Off voittaa."
+        },
+        "lead": "Kuka voi käyttää mitäkin mallia ja kuinka monta pyyntöä päivässä. Jokainen rivi on perhe tai malli; jokainen sarake on kohdeyleisö. Valitse rivi muuttaaksesi, kuka voi sitä käyttää.",
+        "peopleValue": "{allowed} sallittu, {blocked} pois päältä",
+        "bulk": {
+          "open": "Lisää käyttöoikeuksia useaan malliin",
+          "title": "Anna sama käyttöoikeus useaan malliin",
+          "models": "Näissä malleissa",
+          "wholeFamily": "koko perhe",
+          "apply": "{count, plural, =0 {Valitse mallit} one {Käytä # riviin} other {Käytä # riviin}}",
+          "note": "Korvaa näille henkilöille, ryhmille ja verkkotunnuksille jo annetut oikeudet valituilla riveillä. Mikään ei tallennu ennen kuin tallennat käytäntön."
         }
+      },
+      "audience": {
+        "editorTitle": "Kuka voi käyttää mallia {model}",
+        "heading": "Ryhmät, verkkotunnukset ja henkilöt",
+        "hint": "Jokaiselle annetaan oma oikeus tällä rivillä riippumatta siitä, mitä Kaikki muut sanoo.",
+        "empty": "Ketään ei ole vielä nimetty tälle riville.",
+        "who": "Kuka",
+        "terms": "He saavat",
+        "newTerms": "Lisättävien henkilöiden, ryhmien ja verkkotunnusten oikeudet",
+        "add": "{count, plural, =0 {Lisää} one {Lisää # merkintä} other {Lisää # merkintää}}",
+        "placeholder": "Hae henkilöitä ja ryhmiä tai kirjoita verkkotunnus, esim. example.org",
+        "pickerLabel": "Lisättävät henkilöt, ryhmät tai verkkotunnukset",
+        "pickerHint": "Yhdistä henkilöitä, ryhmiä ja verkkotunnuksia. Liitä pilkuin eroteltu lista.",
+        "pickerHintNoGroups": "Yhdistä henkilöitä ja verkkotunnuksia. Liitä pilkuin eroteltu lista. Ryhmähaku on tässä pois käytöstä.",
+        "invalid": "Ei tunnistettu: {text}. Kirjoita sähköpostiosoite tai verkkotunnus, tai valitse ryhmä hausta.",
+        "kind": {
+          "user": "henkilö",
+          "group": "ryhmä",
+          "domain": "verkkotunnus"
+        },
+        "fromFamily": "perheestä",
+        "setHere": "Muuta tälle mallille",
+        "setHereFor": "Muuta {target} tälle mallille",
+        "overruled": "Pois päältä perheessä, joka voittaa"
       }
     },
     "previewSourceModelAccess": "Mallin hyväksyntä — {list}",

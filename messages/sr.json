@@ -6838,7 +6838,9 @@
         "groups": "Grupe sa pristupom",
         "domains": "Domeni sa pristupom",
         "allow": "Odobrene osobe",
-        "deny": "Blokirane osobe"
+        "deny": "Blokirane osobe",
+        "denyGroups": "Blokirane grupe",
+        "denyDomains": "Blokirani domeni"
       },
       "termsLabel": "Uslovi za {target}",
       "removeGrant": "Ukloni {target}",
@@ -6850,7 +6852,8 @@
         "caption": "Pristup modelu po publici",
         "col": {
           "model": "Model",
-          "reach": "Može da koristi"
+          "reach": "Može da koristi",
+          "people": "Imenovane osobe"
         },
         "familyNote": "porodica: zajednički dnevni budžet",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Svi",
           "nobody": "Niko",
-          "people": "{count, plural, one {# osoba} other {# osoba}}"
+          "people": "{count, plural, one {# osoba} other {# osoba}}",
+          "everyoneExcept": "Svi osim {list}"
         },
         "howTitle": "Kako se odlučuje jedan zahtev",
         "how": {
           "inherit": "Model bez sopstvenih termina u koloni koristi termine porodice (isprekidano).",
-          "envelope": "Zahtev mora odgovarati ograničenju modela, zajedničkom budžetu porodice i ukupnom broju čatova, sva tri."
+          "envelope": "Zahtev mora odgovarati ograničenju modela, zajedničkom budžetu porodice i ukupnom broju čatova, sva tri.",
+          "blocked": "Osoba kojoj je postavljeno na 'Isključeno' ne može koristiti, bez obzira na grupu ili domen.",
+          "mostSpecific": "Inače odlučuje najprecizniji unos koji uključuje osobu: prvo imenovana osoba, zatim grupa, potom domen, pa svi ostali. Između dve grupe ili dva domena, 'Isključeno' je presudno."
+        },
+        "lead": "Ko može koristiti svaki model i koliko zahteva dnevno. Svaki red je porodica ili model; svaka kolona je publika. Izaberite red za promenu dozvola korišćenja.",
+        "peopleValue": "{allowed} dozvoljeno, {blocked} isključeno",
+        "bulk": {
+          "open": "Dodaj pristup na više modela",
+          "title": "Dodeli isti pristup na više modela",
+          "models": "Na ovim modelima",
+          "wholeFamily": "cela porodica",
+          "apply": "{count, plural, =0 {Izaberite modele} one {Primeni na # red} other {Primeni na # redova}}",
+          "note": "Zamenjuje postojeće dozvole za ove osobe, grupe i domene na izabranim redovima. Ništa neće biti sačuvano dok ne sačuvate politiku."
         }
+      },
+      "audience": {
+        "editorTitle": "Ko može koristiti {model}",
+        "heading": "Grupe, domeni i osobe",
+        "hint": "Svaka dobija svoj odgovor u ovom redu, bez obzira na postavku 'Svi ostali'.",
+        "empty": "Na ovom redu još nije imenovana nijedna osoba.",
+        "who": "Ko",
+        "terms": "Oni dobijaju",
+        "newTerms": "Dozvole koje dobijaju dodate osobe, grupe i domeni",
+        "add": "{count, plural, =0 {Dodaj} one {Dodaj # stavku} other {Dodaj # stavki}}",
+        "placeholder": "Pretraži osobe i grupe ili unesi domen, na primer example.org",
+        "pickerLabel": "Osobe, grupe ili domeni za dodavanje",
+        "pickerHint": "Kombinujte osobe, grupe i domene. Nalepite listu razdvojenu zarezima.",
+        "pickerHintNoGroups": "Kombinujte osobe i domene. Nalepite listu razdvojenu zarezima. Pretraga grupa je ovde isključena.",
+        "invalid": "Nije prepoznato: {text}. Unesite email adresu ili domen, ili odaberite grupu iz pretrage.",
+        "kind": {
+          "user": "osoba",
+          "group": "grupa",
+          "domain": "domen"
+        },
+        "fromFamily": "iz porodice",
+        "setHere": "Promeni za ovaj model",
+        "setHereFor": "Promeni {target} za ovaj model",
+        "overruled": "Isključeno na porodici – presudno"
       }
     },
     "previewSourceModelAccess": "Odobrenje modela — {list}",

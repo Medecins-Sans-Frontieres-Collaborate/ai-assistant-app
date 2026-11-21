@@ -6838,7 +6838,9 @@
         "groups": "Group ti mbi na accès",
         "domains": "Domain ti mbi na accès",
         "allow": "Mo ti mbi na azoyé",
-        "deny": "Mo ti mbi na kangbi"
+        "deny": "Mo ti mbi na kangbi",
+        "denyGroups": "Gburu na mo na zingo",
+        "denyDomains": "Gburu na mo na domaine"
       },
       "termsLabel": "Règle ti {target}",
       "removeGrant": "Lé {target}",
@@ -6850,7 +6852,8 @@
         "caption": "Model lingbi na ndanga",
         "col": {
           "model": "Model",
-          "reach": "Azo lingbi"
+          "reach": "Azo lingbi",
+          "people": "Bara ti mo sango"
         },
         "familyNote": "group: budjo na singa na lo yeke",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Bïan ava",
           "nobody": "Tena n'dö",
-          "people": "{count, plural, one {# ngangu} other {# ngangu}}"
+          "people": "{count, plural, one {# ngangu} other {# ngangu}}",
+          "everyoneExcept": "Mo nyenye na mo, hété {list}"
         },
         "howTitle": "Ndenge yi lo request azo téréngö",
         "how": {
           "inherit": "Model ayeke na tena term mbï so kökö, lingbi term mbi na group (dashed).",
-          "envelope": "Request ayeke na yeke na cap mbi model, budjo group na budjo chat, tî lo tötö."
+          "envelope": "Request ayeke na yeke na cap mbi model, budjo group na budjo chat, tî lo tötö.",
+          "blocked": "Mo bara ti sango na mo na Off ape se yeke konyere na wa, nde zingo na domaine na wa ape se yeke konyere.",
+          "mostSpecific": "Na sô to, mbi mo na to na wa ti yeke na mo ape se yeke la: bara ti mo sango, na zingo, na domaine, na mo nyenye na mo. Na nga zingo se, na domaine se, Off yeke la."
+        },
+        "lead": "Mo ape se yeke konyere na modeli kû na na kîre na mo ape se yeke yeke demande na mbë ti yeke. Linjî na modele na modele, linjî na audience. Sélé linjî na mo se yeke konyere.",
+        "peopleValue": "{allowed} yeke konyere, {blocked} off",
+        "bulk": {
+          "open": "Pâta konyere na modele mingi",
+          "title": "Don konyere kû na na modele mingi",
+          "models": "Na modele na wa",
+          "wholeFamily": "na famille nyenye",
+          "apply": "{count, plural, =0 {Sélé modele} one {Pâta na linjî #} other {Pâta na linjî #}}",
+          "note": "Konyere se, mo, zingo na domaine ape se yeke na wa na linjî na yi. Kêkê ape yeke tî mbi na tu mbi policy."
         }
+      },
+      "audience": {
+        "editorTitle": "Mo ape se yeke konyere na {model}",
+        "heading": "Zingo, domaine na mo sango",
+        "hint": "Mo na wa ape se yeke la na linjî na wa, sô to mo nyenye na mo na wa ape yeke la.",
+        "empty": "Bara ti mo sango ape yeke linjî na wa na wa.",
+        "who": "Mo wa",
+        "terms": "Mo ape se yeke",
+        "newTerms": "Mo, zingo na domaine se yeke lâ na wa ape se yeke lâ",
+        "add": "{count, plural, =0 {Pâta} one {Pâta linjî #} other {Pâta linjî #}}",
+        "placeholder": "Kediri mo sango na zingo, sô to kula domaine na exemple.org",
+        "pickerLabel": "Mo sango, zingo na domaine se yeke pâta",
+        "pickerHint": "Gbê mo sango, zingo na domaine. Kula listi se, ayeke separere na ,.",
+        "pickerHintNoGroups": "Gbê mo sango na domaine. Kula listi se ayeke separere na ,. Zingo ape se yeke kediri na wa.",
+        "invalid": "Ape yeke la: {text}. Kula adrès email na domaine, sô to sélé zingo na search.",
+        "kind": {
+          "user": "mo sango",
+          "group": "zingo",
+          "domain": "domaine"
+        },
+        "fromFamily": "na famille na wa",
+        "setHere": "Konyere na modele na wa",
+        "setHereFor": "Konyere {target} na modele na wa",
+        "overruled": "Off na famille, se yeke la"
       }
     },
     "previewSourceModelAccess": "Model ti yame — {list}",

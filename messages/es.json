@@ -6854,7 +6854,9 @@
         "groups": "Grupos con acceso",
         "domains": "Dominios con acceso",
         "allow": "Personas permitidas",
-        "deny": "Personas bloqueadas"
+        "deny": "Personas bloqueadas",
+        "denyGroups": "Grupos bloqueados",
+        "denyDomains": "Dominios bloqueados"
       },
       "termsLabel": "Términos para {target}",
       "removeGrant": "Eliminar {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Acceso al modelo por audiencia",
         "col": {
           "model": "Modelo",
-          "reach": "Puede usarlo"
+          "reach": "Puede usarlo",
+          "people": "Personas nombradas"
         },
         "familyNote": "familia: presupuesto diario compartido",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Todos",
           "nobody": "Nadie",
-          "people": "{count, plural, one {# persona} other {# personas}}"
+          "people": "{count, plural, one {# persona} other {# personas}}",
+          "everyoneExcept": "Todos excepto {list}"
         },
         "howTitle": "Cómo se decide una solicitud",
         "how": {
           "inherit": "Un modelo sin condiciones propias en una columna usa las de su familia (en línea discontinua).",
-          "envelope": "La solicitud debe ajustarse al límite del modelo, el presupuesto compartido de la familia y el total del chat, los tres."
+          "envelope": "La solicitud debe ajustarse al límite del modelo, el presupuesto compartido de la familia y el total del chat, los tres.",
+          "blocked": "Una persona nombrada configurada en Off no puede usarlo, sin importar su grupo o dominio.",
+          "mostSpecific": "De lo contrario, la entrada más específica que incluya a la persona decide: una persona nombrada, luego un grupo, luego un dominio, luego todos los demás. Entre dos grupos o dos dominios, Off tiene prioridad."
+        },
+        "lead": "Quién puede usar cada modelo y cuántas solicitudes al día. Cada fila es una familia o un modelo; cada columna es un público. Seleccione una fila para cambiar quién puede usarla.",
+        "peopleValue": "{allowed} permitido, {blocked} apagado",
+        "bulk": {
+          "open": "Agregar acceso en varios modelos",
+          "title": "Otorgar el mismo acceso en varios modelos",
+          "models": "En estos modelos",
+          "wholeFamily": "toda la familia",
+          "apply": "{count, plural, =0 {Elegir modelos} one {Aplicar a # fila} other {Aplicar a # filas}}",
+          "note": "Reemplaza lo que ya tienen estas personas, grupos y dominios en las filas elegidas. Nada se guarda hasta que guarde la política."
         }
+      },
+      "audience": {
+        "editorTitle": "Quién puede usar {model}",
+        "heading": "Grupos, dominios y personas",
+        "hint": "Cada uno obtiene su propia respuesta en esta fila, independientemente de lo que diga el resto.",
+        "empty": "Todavía no se ha nombrado a nadie en esta fila.",
+        "who": "Quién",
+        "terms": "Obtienen",
+        "newTerms": "Lo que reciben las personas, grupos y dominios al ser agregados",
+        "add": "{count, plural, =0 {Agregar} one {Agregar # entrada} other {Agregar # entradas}}",
+        "placeholder": "Buscar personas y grupos, o escribir un dominio como example.org",
+        "pickerLabel": "Personas, grupos o dominios para agregar",
+        "pickerHint": "Mezcle personas, grupos y dominios. Pegue una lista separada por comas.",
+        "pickerHintNoGroups": "Mezcle personas y dominios. Pegue una lista separada por comas. La búsqueda de grupos está desactivada aquí.",
+        "invalid": "No reconocido: {text}. Escriba una dirección de correo electrónico o un dominio, o elija un grupo de la búsqueda.",
+        "kind": {
+          "user": "persona",
+          "group": "grupo",
+          "domain": "dominio"
+        },
+        "fromFamily": "de la familia",
+        "setHere": "Cambiar para este modelo",
+        "setHereFor": "Cambiar {target} para este modelo",
+        "overruled": "Off en la familia, que tiene prioridad"
       }
     },
     "previewSourceModelAccess": "Aprobación del modelo — {list}",

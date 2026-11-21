@@ -6854,7 +6854,9 @@
         "groups": "Groupes avec accès",
         "domains": "Domaines avec accès",
         "allow": "Personnes autorisées",
-        "deny": "Personnes bloquées"
+        "deny": "Personnes bloquées",
+        "denyGroups": "Groupes bloqués",
+        "denyDomains": "Domaines bloqués"
       },
       "termsLabel": "Conditions pour {target}",
       "removeGrant": "Retirer {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Accès au modèle par public",
         "col": {
           "model": "Modèle",
-          "reach": "Peut l'utiliser"
+          "reach": "Peut l'utiliser",
+          "people": "Personnes nommées"
         },
         "familyNote": "famille : budget quotidien partagé",
         "cellLabel": "{model}, {audience} : {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Tout le monde",
           "nobody": "Personne",
-          "people": "{count, plural, one {# personne} other {# personnes}}"
+          "people": "{count, plural, one {# personne} other {# personnes}}",
+          "everyoneExcept": "Tout le monde sauf {list}"
         },
         "howTitle": "Comment une requête est décidée",
         "how": {
           "inherit": "Un modèle sans conditions propres dans une colonne utilise celles de sa famille (en pointillé).",
-          "envelope": "La requête doit respecter le plafond du modèle, le budget partagé de la famille et le total du chat, les trois."
+          "envelope": "La requête doit respecter le plafond du modèle, le budget partagé de la famille et le total du chat, les trois.",
+          "blocked": "Une personne nommée réglée sur Off ne peut pas l'utiliser, peu importe son groupe ou domaine.",
+          "mostSpecific": "Sinon, l'entrée la plus spécifique qui inclut la personne décide : une personne nommée, puis un groupe, puis un domaine, puis le reste. Entre deux groupes, ou deux domaines, Off l’emporte."
+        },
+        "lead": "Qui peut utiliser chaque modèle, et combien de demandes par jour. Chaque ligne est une famille ou un modèle ; chaque colonne est un public. Sélectionnez une ligne pour changer qui peut l'utiliser.",
+        "peopleValue": "{allowed} autorisé, {blocked} désactivé",
+        "bulk": {
+          "open": "Ajouter l’accès sur plusieurs modèles",
+          "title": "Donner le même accès sur plusieurs modèles",
+          "models": "Sur ces modèles",
+          "wholeFamily": "toute la famille",
+          "apply": "{count, plural, =0 {Choisir des modèles} one {Appliquer à # ligne} other {Appliquer à # lignes}}",
+          "note": "Remplace ce que ces personnes, groupes et domaines ont déjà sur les lignes choisies. Rien n'est enregistré tant que vous n'avez pas sauvegardé la politique."
         }
+      },
+      "audience": {
+        "editorTitle": "Qui peut utiliser {model}",
+        "heading": "Groupes, domaines et personnes",
+        "hint": "Chacun reçoit sa propre réponse sur cette ligne, quel que soit ce que dit Tout le monde.",
+        "empty": "Personne n'est nommé sur cette ligne pour l'instant.",
+        "who": "Qui",
+        "terms": "Ils reçoivent",
+        "newTerms": "Ce que reçoivent les personnes, groupes et domaines ajoutés",
+        "add": "{count, plural, =0 {Ajouter} one {Ajouter # entrée} other {Ajouter # entrées}}",
+        "placeholder": "Rechercher des personnes et des groupes, ou saisir un domaine comme example.org",
+        "pickerLabel": "Personnes, groupes ou domaines à ajouter",
+        "pickerHint": "Mélangez personnes, groupes et domaines. Collez une liste séparée par des virgules.",
+        "pickerHintNoGroups": "Mélangez personnes et domaines. Collez une liste séparée par des virgules. La recherche de groupes est désactivée ici.",
+        "invalid": "Non reconnu : {text}. Saisissez une adresse e-mail ou un domaine, ou choisissez un groupe dans la recherche.",
+        "kind": {
+          "user": "personne",
+          "group": "groupe",
+          "domain": "domaine"
+        },
+        "fromFamily": "de la famille",
+        "setHere": "Changer pour ce modèle",
+        "setHereFor": "Changer {target} pour ce modèle",
+        "overruled": "Désactivé sur la famille, qui l’emporte"
       }
     },
     "previewSourceModelAccess": "Approbation du modèle — {list}",

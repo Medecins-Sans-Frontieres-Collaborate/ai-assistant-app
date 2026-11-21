@@ -6838,7 +6838,9 @@
         "groups": "Bato na groupe oyo bazwi accès",
         "domains": "Ba domaine oyo bazwi accès",
         "allow": "Bato oyo baponami",
-        "deny": "Bato oyo baboyami"
+        "deny": "Bato oyo baboyami",
+        "denyGroups": "Bato oyo baboyi na groupe",
+        "denyDomains": "Bazone oyo baboyi"
       },
       "termsLabel": "Mibeko ya {target}",
       "removeGrant": "Longola {target}",
@@ -6850,7 +6852,8 @@
         "caption": "Model ekoki kosalelama na audience",
         "col": {
           "model": "Model",
-          "reach": "Akoki kosalela"
+          "reach": "Akoki kosalela",
+          "people": "Bato babengamaki"
         },
         "familyNote": "libota: budget ya mokolo eyokanisi",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Batu nyonso",
           "nobody": "Moto moko te",
-          "people": "{count, plural, one {Moto moko} other {Bato #}}"
+          "people": "{count, plural, one {Moto moko} other {Bato #}}",
+          "everyoneExcept": "Bato nyonso longola {list}"
         },
         "howTitle": "Ndenge demande moko ekokisama",
         "how": {
           "inherit": "Model oyo ezali na termes na yango te na colonne, esaleli termes ya libota (traitillés).",
-          "envelope": "Demande esengeli ekokanisa cap ya model, budget ya libota mpe total ya chat, nyonso misato."
+          "envelope": "Demande esengeli ekokanisa cap ya model, budget ya libota mpe total ya chat, nyonso misato.",
+          "blocked": "Moto oyo abengamaki mpe atikali Off akozanga kokoka kosalela yango, ata groupe to domaine na ye ebongwani.",
+          "mostSpecific": "Soki te, mokano ekeesaka moto ndenge oyo: liboso moto abengamaki, sima groupe, sima domaine, sima bato nyonso. Soki banigroupes mibale to bazone mibale, Off nde elongi."
+        },
+        "lead": "Nani akoki kosalela chaque modèle, mpe taux ya ba demandes mokolo na mokolo. Nzela moko ezali famille to modèle; colonne moko ezali audience. Pona nzela moko mpo bo changer nani akoki kosalela.",
+        "peopleValue": "{allowed} bapesami nzela, {blocked} ebomami",
+        "bulk": {
+          "open": "Tia nzela ya kosalela na ba modèles mingi",
+          "title": "Pesa nzela moko na ba modèles mingi",
+          "models": "Na ba modèles oyo",
+          "wholeFamily": "famille mobimba",
+          "apply": "{count, plural, =0 {Pona modèles} one {Pesa na nzela #} other {Pesa na ba nzela #}}",
+          "note": "Ekokota na esika ya ndenge ezali na bantu, ba groupes mpe ba domaines oyo na ba lignes pona oyo boponi. Eloko moko ekobatelama te soki obateli mibeko te."
         }
+      },
+      "audience": {
+        "editorTitle": "Nani akoki kosalela {model}",
+        "heading": "Ba groupes, ba domaines mpe ba bato",
+        "hint": "Moko na moko azwi eyano na ligne oyo, ata bato nyonso balobi nini.",
+        "empty": "Moto moko te abengami na ligne oyo sik’oyo.",
+        "who": "Nani",
+        "terms": "Bazwi",
+        "newTerms": "Oyo bato, ba groupes mpe ba domaines babakami bakozwa",
+        "add": "{count, plural, =0 {Tia} one {Tia entrée #} other {Tia ba entrées #}}",
+        "placeholder": "Sosa bato to ba groupes, to kota domaine lokola exemple.org",
+        "pickerLabel": "Bato, groupes to domaines ya kotia",
+        "pickerHint": "Sanganisa bato, groupes mpe domaines. Kopesa liste ekabwani na ba virgule.",
+        "pickerHintNoGroups": "Sanganisa bato mpe domaines. Kopesa liste ekabwani na ba virgule. Kosolola groupe esili kokotama awa te.",
+        "invalid": "Eyebi te: {text}. Kota adresse email, domaine, to zwa groupe na recherche.",
+        "kind": {
+          "user": "moto",
+          "group": "groupe",
+          "domain": "domaine"
+        },
+        "fromFamily": "epai ya famille",
+        "setHere": "Bongisa pona modèle oyo",
+        "setHereFor": "Bongisa {target} pona modèle oyo",
+        "overruled": "Off na famille, yango elongi"
       }
     },
     "previewSourceModelAccess": "Ndongolá modelɛ — {list}",

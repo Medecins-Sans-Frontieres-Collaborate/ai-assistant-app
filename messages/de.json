@@ -6854,7 +6854,9 @@
         "groups": "Gruppen mit Zugriff",
         "domains": "Domains mit Zugriff",
         "allow": "Erlaubte Personen",
-        "deny": "Blockierte Personen"
+        "deny": "Blockierte Personen",
+        "denyGroups": "Blockierte Gruppen",
+        "denyDomains": "Blockierte Domains"
       },
       "termsLabel": "Bedingungen für {target}",
       "removeGrant": "{target} entfernen",
@@ -6866,7 +6868,8 @@
         "caption": "Modellzugriff nach Publikum",
         "col": {
           "model": "Modell",
-          "reach": "Kann nutzen"
+          "reach": "Kann nutzen",
+          "people": "Benannte Personen"
         },
         "familyNote": "Familie: gemeinsames Tagesbudget",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Alle",
           "nobody": "Niemand",
-          "people": "{count, plural, one {# Person} other {# Personen}}"
+          "people": "{count, plural, one {# Person} other {# Personen}}",
+          "everyoneExcept": "Alle außer {list}"
         },
         "howTitle": "Wie eine Anfrage entschieden wird",
         "how": {
           "inherit": "Ein Modell ohne eigene Bedingungen in einer Spalte übernimmt die der Familie (gestrichelt).",
-          "envelope": "Die Anfrage muss innerhalb des Modelllimits, des Familienbudgets und des Chat-Gesamts liegen – alle drei."
+          "envelope": "Die Anfrage muss innerhalb des Modelllimits, des Familienbudgets und des Chat-Gesamts liegen – alle drei.",
+          "blocked": "Eine benannte Person mit Aus auf kann es nicht verwenden, egal was ihre Gruppe oder Domain erhält.",
+          "mostSpecific": "Ansonsten entscheidet der spezifischste Eintrag, der die Person umfasst: zuerst eine benannte Person, dann eine Gruppe, dann eine Domain, dann alle anderen. Zwischen zwei Gruppen oder zwei Domains gewinnt Aus."
+        },
+        "lead": "Wer jedes Modell nutzen kann und wie viele Anfragen pro Tag. Jede Zeile ist eine Familie oder ein Modell; jede Spalte eine Zielgruppe. Wählen Sie eine Zeile, um zu ändern, wer es verwenden darf.",
+        "peopleValue": "{allowed} erlaubt, {blocked} Aus",
+        "bulk": {
+          "open": "Zugriff auf mehrere Modelle hinzufügen",
+          "title": "Gleichen Zugriff auf mehrere Modelle vergeben",
+          "models": "Auf diesen Modellen",
+          "wholeFamily": "gesamte Familie",
+          "apply": "{count, plural, =0 {Modelle auswählen} one {Auf # Zeile anwenden} other {Auf # Zeilen anwenden}}",
+          "note": "Ersetzt bestehende Zugriffe dieser Personen, Gruppen und Domains auf den gewählten Zeilen. Es wird nichts gespeichert, bis Sie die Richtlinie speichern."
         }
+      },
+      "audience": {
+        "editorTitle": "Wer kann {model} verwenden",
+        "heading": "Gruppen, Domains und Personen",
+        "hint": "Jede hat in dieser Zeile ihre eigene Regel, unabhängig von 'Alle anderen'.",
+        "empty": "In dieser Zeile ist noch niemand benannt.",
+        "who": "Wer",
+        "terms": "Sie erhalten",
+        "newTerms": "Was die hinzufügten Personen, Gruppen und Domains erhalten",
+        "add": "{count, plural, =0 {Hinzufügen} one {# Eintrag hinzufügen} other {# Einträge hinzufügen}}",
+        "placeholder": "Personen und Gruppen suchen oder eine Domain wie example.org eingeben",
+        "pickerLabel": "Personen, Gruppen oder Domains zum Hinzufügen",
+        "pickerHint": "Personen, Gruppen und Domains mischen. Liste per Komma getrennt einfügen.",
+        "pickerHintNoGroups": "Personen und Domains mischen. Liste per Komma getrennt einfügen. Gruppensuche ist hier deaktiviert.",
+        "invalid": "Nicht erkannt: {text}. Geben Sie eine E-Mail-Adresse oder eine Domain ein oder wählen Sie eine Gruppe aus der Suche.",
+        "kind": {
+          "user": "Person",
+          "group": "Gruppe",
+          "domain": "Domain"
+        },
+        "fromFamily": "aus der Familie",
+        "setHere": "Für dieses Modell ändern",
+        "setHereFor": "{target} für dieses Modell ändern",
+        "overruled": "Aus bei der Familie, was Vorrang hat"
       }
     },
     "previewSourceModelAccess": "Modellfreigabe — {list}",

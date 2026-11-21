@@ -6838,7 +6838,9 @@
         "groups": "Laaɓirɗe e keftingol",
         "domains": "Domains e keftingol",
         "allow": "Rewɓe juɗɗo",
-        "deny": "Rewɓe juɗɗiayi"
+        "deny": "Rewɓe juɗɗiayi",
+        "denyGroups": "Ɓikkol group’en",
+        "denyDomains": "Ɓikkol domain’en"
       },
       "termsLabel": "Keftingol e {target}",
       "removeGrant": "Momta {target}",
@@ -6850,7 +6852,8 @@
         "caption": "Model moƴƴi audience",
         "col": {
           "model": "Model",
-          "reach": "Moƴƴi heɓde"
+          "reach": "Moƴƴi heɓde",
+          "people": "Daggiɗoore"
         },
         "familyNote": "family: budget lajjo e ɓendu",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Jokkere ɓe",
           "nobody": "Wala",
-          "people": "{count, plural, one {# janngunde} other {# janngunde}}"
+          "people": "{count, plural, one {# janngunde} other {# janngunde}}",
+          "everyoneExcept": "Kala ba {list}"
         },
         "howTitle": "Ko honɗun raɓɓe moƴƴi sosaani",
         "how": {
           "inherit": "Model moƴƴi wala tartol makko e kolumn moƴƴi so tartol family makko.",
-          "envelope": "Raɓɓe moƴƴi waawani e cap model, budget lajjo family e suma chat, tati."
+          "envelope": "Raɓɓe moƴƴi waawani e cap model, budget lajjo family e suma chat, tati.",
+          "blocked": "So daggiɗoore moɓɓiɗo Off, mo waawaa huutora, dùuniya group walla domain makko.",
+          "mostSpecific": "Ko faalaa, fayda juuti e mo piɗi daggiɗoore, woni group, domain, wala kala. So group’en walla domain’en ɗiɗi, Off moɗɗi jooɗi."
+        },
+        "lead": "Mo waawaa huutora model kala, e yalɓe requestji lewru kala. Rigal kala ko family wala model; column kala ko audience. Soɓo rigal kadi so mo waawaani.",
+        "peopleValue": "{allowed} waawaani, {blocked} off",
+        "bulk": {
+          "open": "Ɗaɓɓo access e model’en ɗiɗi",
+          "title": "Naatu access tan e model’en ɗiɗi",
+          "models": "E model’en goɗɗi",
+          "wholeFamily": "familii ɗoo",
+          "apply": "{count, plural, =0 {Suɓo model’en} one {Naatu e # rigal} other {Naatu e # rigal'en}}",
+          "note": "Mo soodi ɗum ko ɗiigi daggiɗoore, group’en, domain’en e rigalji suɓa. Faa mo jaabi policy, ɗum soodi."
         }
+      },
+      "audience": {
+        "editorTitle": "Mo waawaa huutora {model}",
+        "heading": "Group’en, domain’en e daggiɗoore",
+        "hint": "Kala mo jooɗi jawdi makko e rigal ɗoo, faala ko kala moɗɗi.",
+        "empty": "Ko ɗum, daggiɗoore jooɗaani e rigal ɗoo.",
+        "who": "Ko mo",
+        "terms": "Mo jooɗi",
+        "newTerms": "Ko daggiɗoore, group’en e domain’en suɓa daɓɓi jooɗi",
+        "add": "{count, plural, =0 {Naatu} one {Naatu # jawdi} other {Naatu # jawdi'en}}",
+        "placeholder": "Yiil daggiɗoore e group’en, wala winndu domain e.g. example.org",
+        "pickerLabel": "Daggiɗoore, group’en wala domain’en ɗiɗi daɓɓi",
+        "pickerHint": "Ɓendu daggiɗoore, group’en e domain’en. Copy list ɗiɗi comma moŋir.",
+        "pickerHintNoGroups": "Ɓendu daggiɗoore e domain’en. Copy list ɗiɗi comma moŋir. Yiil group'en waawaani fii.",
+        "invalid": "Ngoodi: {text}. Winndu email address wala domain, wala suɓo group e yiil.",
+        "kind": {
+          "user": "daggiɗoore",
+          "group": "group",
+          "domain": "domain"
+        },
+        "fromFamily": "e family",
+        "setHere": "Waylu model ɗoo",
+        "setHereFor": "Waylu {target} e model ɗoo",
+        "overruled": "Off e family, moɗɗi jooɗi"
       }
     },
     "previewSourceModelAccess": "Cuɓoraa model — {list}",

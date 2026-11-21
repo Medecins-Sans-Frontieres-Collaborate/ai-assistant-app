@@ -6854,7 +6854,9 @@
         "groups": "Grupper med åtkomst",
         "domains": "Domäner med åtkomst",
         "allow": "Personer med tillåtelse",
-        "deny": "Blockerade personer"
+        "deny": "Blockerade personer",
+        "denyGroups": "Blockerade grupper",
+        "denyDomains": "Blockerade domäner"
       },
       "termsLabel": "Villkor för {target}",
       "removeGrant": "Ta bort {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Modellåtkomst per målgrupp",
         "col": {
           "model": "Modell",
-          "reach": "Kan använda"
+          "reach": "Kan använda",
+          "people": "Namngivna personer"
         },
         "familyNote": "familj: delad daglig budget",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Alla",
           "nobody": "Ingen",
-          "people": "{count, plural, one {# person} other {# personer}}"
+          "people": "{count, plural, one {# person} other {# personer}}",
+          "everyoneExcept": "Alla utom {list}"
         },
         "howTitle": "Hur en förfrågan avgörs",
         "how": {
           "inherit": "En modell utan egna villkor i en kolumn använder sin familjs (streckad).",
-          "envelope": "Förfrågan måste rymmas inom modellens gräns, familjens delade budget och chatgränsen — alla tre."
+          "envelope": "Förfrågan måste rymmas inom modellens gräns, familjens delade budget och chatgränsen — alla tre.",
+          "blocked": "En namngiven person som är avstängd kan inte använda det, oavsett deras grupp eller domän.",
+          "mostSpecific": "Annars bestämmer den mest specifika posten som inkluderar personen: först en namngiven person, sedan en grupp, sedan en domän, sedan alla andra. Mellan två grupper eller två domäner vinner Av."
+        },
+        "lead": "Vem som kan använda varje modell och hur många förfrågningar per dag. Varje rad är en familj eller en modell; varje kolumn är en målgrupp. Välj en rad för att ändra vem som kan använda den.",
+        "peopleValue": "{allowed} tillåtna, {blocked} avstängda",
+        "bulk": {
+          "open": "Lägg till åtkomst på flera modeller",
+          "title": "Ge samma åtkomst på flera modeller",
+          "models": "På dessa modeller",
+          "wholeFamily": "hela familjen",
+          "apply": "{count, plural, =0 {Välj modeller} one {Tillämpa på # rad} other {Tillämpa på # rader}}",
+          "note": "Ersätter vad dessa personer, grupper och domäner redan har på de valda raderna. Inget sparas förrän du sparar policyn."
         }
+      },
+      "audience": {
+        "editorTitle": "Vem kan använda {model}",
+        "heading": "Grupper, domäner och personer",
+        "hint": "Varje får sitt eget svar på denna rad, oavsett vad Alla andra anger.",
+        "empty": "Ingen är namngiven på denna rad än.",
+        "who": "Vem",
+        "terms": "De får",
+        "newTerms": "Vad de tillagda personerna, grupperna och domänerna får",
+        "add": "{count, plural, =0 {Lägg till} one {Lägg till # post} other {Lägg till # poster}}",
+        "placeholder": "Sök personer och grupper, eller skriv en domän som example.org",
+        "pickerLabel": "Personer, grupper eller domäner att lägga till",
+        "pickerHint": "Blanda personer, grupper och domäner. Klistra in en lista separerad med kommatecken.",
+        "pickerHintNoGroups": "Blanda personer och domäner. Klistra in en lista separerad med kommatecken. Grupp­sökning är avstängd här.",
+        "invalid": "Inte igenkänd: {text}. Skriv en e-postadress eller en domän, eller välj en grupp i sökningen.",
+        "kind": {
+          "user": "person",
+          "group": "grupp",
+          "domain": "domän"
+        },
+        "fromFamily": "från familjen",
+        "setHere": "Ändra för denna modell",
+        "setHereFor": "Ändra {target} för denna modell",
+        "overruled": "Av i familjen, vilket gäller"
       }
     },
     "previewSourceModelAccess": "Modelgodkännande — {list}",

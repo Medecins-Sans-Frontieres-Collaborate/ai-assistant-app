@@ -6838,7 +6838,9 @@
         "groups": "Vondrona mahazo miditra",
         "domains": "Domaina mahazo miditra",
         "allow": "Olona mahazo alalana",
-        "deny": "Olona voasakana"
+        "deny": "Olona voasakana",
+        "denyGroups": "Vondrona voasakana",
+        "denyDomains": "Domaina voasakana"
       },
       "termsLabel": "Fepetra ho an'i {target}",
       "removeGrant": "Esory i {target}",
@@ -6850,7 +6852,8 @@
         "caption": "Fidirana amin’ny modely isaky ny mpihaino",
         "col": {
           "model": "Modely",
-          "reach": "Afaka mampiasa"
+          "reach": "Afaka mampiasa",
+          "people": "Olona voatonona"
         },
         "familyNote": "fianakaviana: teti-bola iombonana isan’andro",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Olona rehetra",
           "nobody": "Tsy misy",
-          "people": "{count, plural, one {Olona #} other {Olona #}}"
+          "people": "{count, plural, one {Olona #} other {Olona #}}",
+          "everyoneExcept": "Olona rehetra afa-tsy {list}"
         },
         "howTitle": "Ahoana no andraisana fanapahan-kevitra amin’ny fangatahana iray",
         "how": {
           "inherit": "Ny modely tsy manana fepetra manokana amin’ny andalana iray dia mampiasa an’ny fianakaviana (mari-pamantaran-davitra).",
-          "envelope": "Tsy maintsy mifanaraka amin’ireo fetra napetraky ny modely, ny teti-bola iombonan’ny fianakaviana sy ny totalin’ny resaka ihany koa ny fangatahana."
+          "envelope": "Tsy maintsy mifanaraka amin’ireo fetra napetraky ny modely, ny teti-bola iombonan’ny fianakaviana sy ny totalin’ny resaka ihany koa ny fangatahana.",
+          "blocked": "Raha olona voatonona napetraka ho Off, tsy afaka mampiasa izany izy na inona na inona vondrona na domaina ananany.",
+          "mostSpecific": "Raha tsy izany dia ilay fidirana manokana indrindra ahitana ilay olona no manapa-kevitra: olona voatonona, avy eo vondrona, avy eo domaina, avy eo izay sisa. Raha mitovy vondrona na domaina roa, Off no maharesy."
+        },
+        "lead": "Iza no afaka mampiasa modely tsirairay, sy ny isan'ny fangatahana isan'andro. Fianakaviana na modely iray ny tsipika tsirairay; mpihaino ny tsanganana tsirairay. Safidio ny tsipika hanovana izay afaka mampiasa.",
+        "peopleValue": "{allowed} azo atao, {blocked} voasakana",
+        "bulk": {
+          "open": "Manampy fidirana amin'ny modely maro",
+          "title": "Omeo fidirana mitovy amin'ny modely maro",
+          "models": "Amin'ireto modely ireto",
+          "wholeFamily": "fianakaviana manontolo",
+          "apply": "{count, plural, =0 {Safidio ny modely} one {Ampiharo amin'ny tsipika #} other {Ampiharo amin'ny tsipika #}}",
+          "note": "Soloiny izay efa ananan'ireo olona, vondrona sy domaina ireo amin'ny tsipika voafidy. Tsy voatahiry raha tsy mamonjy politikan'ny fidirana ianao."
         }
+      },
+      "audience": {
+        "editorTitle": "Iza no afaka mampiasa an'i {model}",
+        "heading": "Vondrona, domaina sy olona",
+        "hint": "Samy mahazo fanapahan-kevitra manokana amin'ity tsipika ity, na inona na inona lazain'ny Olona rehetra sisa.",
+        "empty": "Tsy mbola misy olona voatonona amin'ity tsipika ity.",
+        "who": "Iza",
+        "terms": "Izay azony",
+        "newTerms": "Izay azona'ireo olona, vondrona sy domaina ampiana",
+        "add": "{count, plural, =0 {Ampio} one {Ampio fidirana #} other {Ampio fidirana #}}",
+        "placeholder": "Mitady olona sy vondrona, na manoratra domaina ohatra hoe example.org",
+        "pickerLabel": "Olona, vondrona na domaina ampiana",
+        "pickerHint": "Afaka mifangaro olona, vondrona ary domaina. Afaka mandika lisitra misaraka amin'ny comma.",
+        "pickerHintNoGroups": "Afaka mifangaro olona sy domaina. Afaka mandika lisitra misaraka amin'ny comma. Tapaka eto ny fitadiavana vondrona.",
+        "invalid": "Tsy fantatra: {text}. Soraty adiresy mailaka na domaina, na safidio vondrona amin'ny fitadiavana.",
+        "kind": {
+          "user": "olona",
+          "group": "vondrona",
+          "domain": "domaina"
+        },
+        "fromFamily": "avy amin'ny fianakaviana",
+        "setHere": "Ovao ho an'ity modely ity",
+        "setHereFor": "Ovao ny {target} ho an'ity modely ity",
+        "overruled": "Off amin'ny fianakaviana, izay maharesy"
       }
     },
     "previewSourceModelAccess": "Fanekena modely — {list}",

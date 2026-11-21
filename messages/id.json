@@ -6854,7 +6854,9 @@
         "groups": "Grup dengan akses",
         "domains": "Domain dengan akses",
         "allow": "Orang yang diizinkan",
-        "deny": "Orang yang diblokir"
+        "deny": "Orang yang diblokir",
+        "denyGroups": "Grup yang diblokir",
+        "denyDomains": "Domain yang diblokir"
       },
       "termsLabel": "Ketentuan untuk {target}",
       "removeGrant": "Hapus {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Akses model berdasarkan audiens",
         "col": {
           "model": "Model",
-          "reach": "Dapat digunakan"
+          "reach": "Dapat digunakan",
+          "people": "Orang yang disebutkan"
         },
         "familyNote": "keluarga: anggaran harian bersama",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Semua orang",
           "nobody": "Tidak ada",
-          "people": "{count, plural, one {# orang} other {# orang}}"
+          "people": "{count, plural, one {# orang} other {# orang}}",
+          "everyoneExcept": "Semua orang kecuali {list}"
         },
         "howTitle": "Cara satu permintaan diputuskan",
         "how": {
           "inherit": "Model tanpa ketentuan sendiri di kolom menggunakan ketentuan keluarga (bergaris putus-putus).",
-          "envelope": "Permintaan harus sesuai dengan batas model, anggaran bersama keluarga, dan total chat, ketiganya."
+          "envelope": "Permintaan harus sesuai dengan batas model, anggaran bersama keluarga, dan total chat, ketiganya.",
+          "blocked": "Orang yang disebutkan dan diatur ke Off tidak dapat menggunakannya, apa pun grup atau domain mereka.",
+          "mostSpecific": "Selain itu, entri paling spesifik yang memasukkan orang tersebut akan menentukan: orang yang disebutkan, kemudian grup, kemudian domain, lalu semua orang lainnya. Antara dua grup, atau dua domain, Off menang."
+        },
+        "lead": "Siapa yang dapat menggunakan setiap model, dan berapa banyak permintaan per hari. Setiap baris mewakili keluarga atau model; setiap kolom adalah audiens. Pilih baris untuk mengubah siapa yang dapat menggunakannya.",
+        "peopleValue": "{allowed} diizinkan, {blocked} off",
+        "bulk": {
+          "open": "Tambah akses pada beberapa model",
+          "title": "Beri akses yang sama pada beberapa model",
+          "models": "Pada model-model ini",
+          "wholeFamily": "seluruh keluarga",
+          "apply": "{count, plural, =0 {Pilih model} one {Terapkan pada # baris} other {Terapkan pada # baris}}",
+          "note": "Menggantikan apa yang sudah dimiliki orang, grup, dan domain pada baris yang dipilih. Tidak ada yang disimpan sampai Anda menyimpan kebijakan."
         }
+      },
+      "audience": {
+        "editorTitle": "Siapa yang dapat menggunakan {model}",
+        "heading": "Grup, domain, dan orang",
+        "hint": "Setiap mendapat jawaban sendiri di baris ini, apa pun yang dikatakan Semua orang lainnya.",
+        "empty": "Belum ada nama di baris ini.",
+        "who": "Siapa",
+        "terms": "Mereka mendapat",
+        "newTerms": "Apa yang didapat orang, grup, dan domain yang ditambahkan",
+        "add": "{count, plural, =0 {Tambah} one {Tambah # entri} other {Tambah # entri}}",
+        "placeholder": "Cari orang dan grup, atau ketik domain seperti example.org",
+        "pickerLabel": "Orang, grup, atau domain untuk ditambahkan",
+        "pickerHint": "Campur orang, grup, dan domain. Tempel daftar yang dipisahkan koma.",
+        "pickerHintNoGroups": "Campur orang dan domain. Tempel daftar yang dipisahkan koma. Pencarian grup dimatikan di sini.",
+        "invalid": "Tidak dikenali: {text}. Ketik alamat email atau domain, atau pilih grup dari hasil pencarian.",
+        "kind": {
+          "user": "orang",
+          "group": "grup",
+          "domain": "domain"
+        },
+        "fromFamily": "dari keluarga",
+        "setHere": "Ubah untuk model ini",
+        "setHereFor": "Ubah {target} untuk model ini",
+        "overruled": "Off pada keluarga, yang berlaku"
       }
     },
     "previewSourceModelAccess": "Persetujuan model — {list}",

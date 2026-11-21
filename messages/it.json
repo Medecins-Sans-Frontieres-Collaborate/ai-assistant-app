@@ -6854,7 +6854,9 @@
         "groups": "Gruppi con accesso",
         "domains": "Domini con accesso",
         "allow": "Persone autorizzate",
-        "deny": "Persone bloccate"
+        "deny": "Persone bloccate",
+        "denyGroups": "Gruppi bloccati",
+        "denyDomains": "Domini bloccati"
       },
       "termsLabel": "Termini per {target}",
       "removeGrant": "Rimuovi {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Accesso ai modelli per pubblico",
         "col": {
           "model": "Modello",
-          "reach": "Può usarlo"
+          "reach": "Può usarlo",
+          "people": "Persone nominate"
         },
         "familyNote": "famiglia: budget giornaliero condiviso",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Tutti",
           "nobody": "Nessuno",
-          "people": "{count, plural, one {# persona} other {# persone}}"
+          "people": "{count, plural, one {# persona} other {# persone}}",
+          "everyoneExcept": "Tutti eccetto {list}"
         },
         "howTitle": "Come viene decisa una richiesta",
         "how": {
           "inherit": "Un modello senza termini propri in una colonna usa quelli della famiglia (tratteggiati).",
-          "envelope": "La richiesta deve rispettare il limite del modello, il budget condiviso della famiglia e il totale della chat, tutti e tre."
+          "envelope": "La richiesta deve rispettare il limite del modello, il budget condiviso della famiglia e il totale della chat, tutti e tre.",
+          "blocked": "Una persona nominata impostata su Off non può usarlo, indipendentemente dal gruppo o dal dominio.",
+          "mostSpecific": "Altrimenti decide la voce più specifica che include la persona: prima la persona nominata, poi il gruppo, poi il dominio, poi tutti gli altri. Tra due gruppi o due domini, vince Off."
+        },
+        "lead": "Chi può usare ciascun modello e quante richieste al giorno. Ogni riga è una famiglia o un modello; ogni colonna è un pubblico. Seleziona una riga per modificare chi può usarlo.",
+        "peopleValue": "{allowed} consentito, {blocked} off",
+        "bulk": {
+          "open": "Aggiungi accesso su più modelli",
+          "title": "Concedi lo stesso accesso su più modelli",
+          "models": "Su questi modelli",
+          "wholeFamily": "intera famiglia",
+          "apply": "{count, plural, =0 {Scegli modelli} one {Applica a # riga} other {Applica a # righe}}",
+          "note": "Sostituisce ciò che queste persone, gruppi e domini hanno già sulle righe scelte. Nulla viene salvato finché non si salva la policy."
         }
+      },
+      "audience": {
+        "editorTitle": "Chi può usare {model}",
+        "heading": "Gruppi, domini e persone",
+        "hint": "Ognuno riceve la propria risposta su questa riga, indipendentemente da cosa dice Tutti gli altri.",
+        "empty": "Nessuno è ancora nominato su questa riga.",
+        "who": "Chi",
+        "terms": "Ricevono",
+        "newTerms": "Ciò che ricevono le persone, i gruppi e i domini aggiunti",
+        "add": "{count, plural, =0 {Aggiungi} one {Aggiungi # voce} other {Aggiungi # voci}}",
+        "placeholder": "Cerca persone e gruppi, o digita un dominio come example.org",
+        "pickerLabel": "Persone, gruppi o domini da aggiungere",
+        "pickerHint": "Mix di persone, gruppi e domini. Incolla un elenco separato da virgole.",
+        "pickerHintNoGroups": "Mix di persone e domini. Incolla un elenco separato da virgole. La ricerca dei gruppi è disattivata qui.",
+        "invalid": "Non riconosciuto: {text}. Digita un indirizzo email o un dominio, o seleziona un gruppo dalla ricerca.",
+        "kind": {
+          "user": "persona",
+          "group": "gruppo",
+          "domain": "dominio"
+        },
+        "fromFamily": "dalla famiglia",
+        "setHere": "Cambia per questo modello",
+        "setHereFor": "Cambia {target} per questo modello",
+        "overruled": "Off sulla famiglia, che prevale"
       }
     },
     "previewSourceModelAccess": "Approvazione modello — {list}",

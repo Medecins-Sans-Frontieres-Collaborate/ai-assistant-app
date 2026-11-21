@@ -6854,7 +6854,9 @@
         "groups": "Grups amb accés",
         "domains": "Dominis amb accés",
         "allow": "Persones autoritzades",
-        "deny": "Persones bloquejades"
+        "deny": "Persones bloquejades",
+        "denyGroups": "Grups bloquejats",
+        "denyDomains": "Dominis bloquejats"
       },
       "termsLabel": "Condicions per a {target}",
       "removeGrant": "Elimina {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Accés al model per públic",
         "col": {
           "model": "Model",
-          "reach": "Pot utilitzar-lo"
+          "reach": "Pot utilitzar-lo",
+          "people": "Persones concretes"
         },
         "familyNote": "família: pressupost diari compartit",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Tothom",
           "nobody": "Ningú",
-          "people": "{count, plural, one {# persona} other {# persones}}"
+          "people": "{count, plural, one {# persona} other {# persones}}",
+          "everyoneExcept": "Tothom excepte {list}"
         },
         "howTitle": "Com es decideix una sol·licitud",
         "how": {
           "inherit": "Un model sense condicions pròpies en una columna utilitza les de la seva família (ratllades).",
-          "envelope": "La sol·licitud ha d'ajustar-se al límit del model, al pressupost compartit de la família i al total del xat, tots tres."
+          "envelope": "La sol·licitud ha d'ajustar-se al límit del model, al pressupost compartit de la família i al total del xat, tots tres.",
+          "blocked": "Una persona concreta amb accés desactivat no pot utilitzar-ho, independentment del grup o domini.",
+          "mostSpecific": "En cas contrari, decideix l’entrada més específica que inclou la persona: primer persona concreta, després grup, després domini, després tothom. Entre dos grups o dos dominis, guanya 'Off'."
+        },
+        "lead": "Qui pot utilitzar cada model i quantes sol·licituds al dia. Cada fila és una família o un model; cada columna és un públic. Seleccioneu una fila per canviar qui la pot utilitzar.",
+        "peopleValue": "{allowed} amb accés, {blocked} sense accés",
+        "bulk": {
+          "open": "Afegir accés a diversos models",
+          "title": "Donar el mateix accés a diversos models",
+          "models": "En aquests models",
+          "wholeFamily": "tota la família",
+          "apply": "{count, plural, =0 {Trieu models} one {Aplica a # fila} other {Aplica a # files}}",
+          "note": "Substitueix el que aquestes persones, grups i dominis ja tenen a les files triades. No es desarà res fins que no deseu la política."
         }
+      },
+      "audience": {
+        "editorTitle": "Qui pot utilitzar {model}",
+        "heading": "Grups, dominis i persones",
+        "hint": "Cada un té la seva pròpia resposta en aquesta fila, independentment del que digui Tothom.",
+        "empty": "Encara no s’ha especificat cap persona en aquesta fila.",
+        "who": "Qui",
+        "terms": "Tindran",
+        "newTerms": "Quin accés tindran les persones, grups i dominis afegits",
+        "add": "{count, plural, =0 {Afegeix} one {Afegeix # entrada} other {Afegeix # entrades}}",
+        "placeholder": "Cerca persones i grups, o escriu un domini com ara example.org",
+        "pickerLabel": "Persones, grups o dominis a afegir",
+        "pickerHint": "Combina persones, grups i dominis. Enganxa una llista separada per comes.",
+        "pickerHintNoGroups": "Combina persones i dominis. Enganxa una llista separada per comes. Aquí la cerca de grups està desactivada.",
+        "invalid": "No reconegut: {text}. Escriviu una adreça de correu electrònic, un domini o escolliu un grup de la cerca.",
+        "kind": {
+          "user": "persona",
+          "group": "grup",
+          "domain": "domini"
+        },
+        "fromFamily": "de la família",
+        "setHere": "Canvia per aquest model",
+        "setHereFor": "Canvia {target} per aquest model",
+        "overruled": "Desactivat a la família, la qual preval"
       }
     },
     "previewSourceModelAccess": "Aprovació del model — {list}",

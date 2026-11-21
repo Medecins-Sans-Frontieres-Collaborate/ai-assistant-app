@@ -6885,7 +6885,9 @@
         "groups": "Nhóm có quyền truy cập",
         "domains": "Tên miền có quyền truy cập",
         "allow": "Người được phép",
-        "deny": "Người bị chặn"
+        "deny": "Người bị chặn",
+        "denyGroups": "Nhóm bị chặn",
+        "denyDomains": "Miền bị chặn"
       },
       "termsLabel": "Điều kiện cho {target}",
       "removeGrant": "Xóa {target}",
@@ -6897,7 +6899,8 @@
         "caption": "Quyền truy cập mô hình theo nhóm người dùng",
         "col": {
           "model": "Mô hình",
-          "reach": "Có thể sử dụng"
+          "reach": "Có thể sử dụng",
+          "people": "Người được chỉ định"
         },
         "familyNote": "nhóm: dùng chung ngân sách hàng ngày",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6905,13 +6908,50 @@
         "reach": {
           "everyone": "Mọi người",
           "nobody": "Không ai",
-          "people": "{count, plural, one {# người} other {# người}}"
+          "people": "{count, plural, one {# người} other {# người}}",
+          "everyoneExcept": "Mọi người ngoại trừ {list}"
         },
         "howTitle": "Cách quyết định một yêu cầu",
         "how": {
           "inherit": "Một mô hình không có điều kiện riêng ở cột sẽ dùng điều kiện của nhóm (nét đứt).",
-          "envelope": "Yêu cầu phải nằm trong giới hạn của mô hình, ngân sách chung của nhóm và tổng số trò chuyện, cả ba."
+          "envelope": "Yêu cầu phải nằm trong giới hạn của mô hình, ngân sách chung của nhóm và tổng số trò chuyện, cả ba.",
+          "blocked": "Người được chỉ định đặt Tắt sẽ không sử dụng được, bất kể nhóm hay miền của họ.",
+          "mostSpecific": "Ngược lại, mục cụ thể nhất bao gồm người đó sẽ quyết định: người được chỉ định, sau đó là nhóm, sau đó là miền, rồi mọi người khác. Nếu có hai nhóm hoặc hai miền, Tắt sẽ được ưu tiên."
+        },
+        "lead": "Ai có thể sử dụng từng mô hình và số lượng yêu cầu mỗi ngày. Mỗi dòng là một họ hoặc một mô hình; mỗi cột là một đối tượng. Chọn một dòng để thay đổi ai có thể sử dụng.",
+        "peopleValue": "{allowed} cho phép, {blocked} tắt",
+        "bulk": {
+          "open": "Thêm quyền truy cập trên nhiều mô hình",
+          "title": "Cấp cùng quyền truy cập trên nhiều mô hình",
+          "models": "Trên các mô hình này",
+          "wholeFamily": "toàn bộ họ",
+          "apply": "{count, plural, =0 {Chọn mô hình} one {Áp dụng cho # dòng} other {Áp dụng cho # dòng}}",
+          "note": "Sẽ thay thế quyền hiện có của những người, nhóm và miền này ở các dòng đã chọn. Chưa lưu gì cho đến khi bạn lưu chính sách."
         }
+      },
+      "audience": {
+        "editorTitle": "Ai có thể sử dụng {model}",
+        "heading": "Nhóm, miền và người",
+        "hint": "Mỗi mục sẽ có quyền riêng trên dòng này, dù mục Mọi người khác nói gì.",
+        "empty": "Chưa có ai được chỉ định trên dòng này.",
+        "who": "Ai",
+        "terms": "Họ nhận được",
+        "newTerms": "Người, nhóm và miền được thêm sẽ nhận được",
+        "add": "{count, plural, =0 {Thêm} one {Thêm # mục} other {Thêm # mục}}",
+        "placeholder": "Tìm kiếm người và nhóm, hoặc nhập miền như example.org",
+        "pickerLabel": "Người, nhóm hoặc miền cần thêm",
+        "pickerHint": "Kết hợp người, nhóm và miền. Dán danh sách cách nhau bằng dấu phẩy.",
+        "pickerHintNoGroups": "Kết hợp người và miền. Dán danh sách cách nhau bằng dấu phẩy. Tìm nhóm đã bị tắt ở đây.",
+        "invalid": "Không nhận diện được: {text}. Nhập địa chỉ email hoặc miền, hoặc chọn nhóm từ tìm kiếm.",
+        "kind": {
+          "user": "người",
+          "group": "nhóm",
+          "domain": "miền"
+        },
+        "fromFamily": "từ họ",
+        "setHere": "Thay đổi cho mô hình này",
+        "setHereFor": "Thay đổi {target} cho mô hình này",
+        "overruled": "Tắt ở họ, sẽ được ưu tiên"
       }
     },
     "previewSourceModelAccess": "Phê duyệt mô hình — {list}",

@@ -6854,7 +6854,9 @@
         "groups": "접근 가능한 그룹",
         "domains": "접근 가능한 도메인",
         "allow": "허용된 사용자",
-        "deny": "차단된 사용자"
+        "deny": "차단된 사용자",
+        "denyGroups": "차단된 그룹",
+        "denyDomains": "차단된 도메인"
       },
       "termsLabel": "{target}에 대한 조건",
       "removeGrant": "{target} 제거",
@@ -6866,7 +6868,8 @@
         "caption": "대상별 모델 접근 권한",
         "col": {
           "model": "모델",
-          "reach": "사용 가능"
+          "reach": "사용 가능",
+          "people": "지정된 사람"
         },
         "familyNote": "패밀리: 일일 예산 공유",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "모두",
           "nobody": "아무도 없음",
-          "people": "{count, plural, one {#명} other {#명}}"
+          "people": "{count, plural, one {#명} other {#명}}",
+          "everyoneExcept": "{list}을(를) 제외한 모두"
         },
         "howTitle": "요청 결정 방식",
         "how": {
           "inherit": "열에 자체 조건이 없는 모델은 해당 패밀리의 조건(점선)을 사용합니다.",
-          "envelope": "요청은 모델 한도, 패밀리의 공유 예산, 챗 전체 예산 모두를 충족해야 합니다."
+          "envelope": "요청은 모델 한도, 패밀리의 공유 예산, 챗 전체 예산 모두를 충족해야 합니다.",
+          "blocked": "지정된 사람이 Off로 설정되면, 해당 그룹이나 도메인과 상관없이 사용할 수 없습니다.",
+          "mostSpecific": "그 외에는 해당 사용자를 포함하는 가장 구체적인 항목이 결정합니다: 지정된 사람, 그 다음 그룹, 도메인, 기타 모두 순입니다. 두 그룹 또는 두 도메인 사이에서는 Off가 우선합니다."
+        },
+        "lead": "각 모델을 누가 사용할 수 있는지와 일일 요청 수를 안내합니다. 각 행은 가족 또는 모델이며, 각 열은 대상자입니다. 사용 권한을 변경하려면 행을 선택하세요.",
+        "peopleValue": "{allowed} 허용, {blocked} Off",
+        "bulk": {
+          "open": "여러 모델에 접근 추가",
+          "title": "여러 모델에 동일한 접근 권한 제공",
+          "models": "해당 모델에서",
+          "wholeFamily": "전체 가족",
+          "apply": "{count, plural, =0 {모델 선택} one {#행에 적용} other {#행에 적용}}",
+          "note": "선택한 행에 대해 사람, 그룹, 도메인이 이미 갖고 있는 권한을 대체합니다. 정책을 저장하기 전까지는 아무것도 저장되지 않습니다."
         }
+      },
+      "audience": {
+        "editorTitle": "{model}을(를) 누가 사용할 수 있습니까",
+        "heading": "그룹, 도메인, 사람",
+        "hint": "각 항목은 이 행에서 개별적으로 답변을 받으며, 기타 모두와 상관없이 적용됩니다.",
+        "empty": "이 행에 지정된 사람이 아직 없습니다.",
+        "who": "사용자",
+        "terms": "받는 권한",
+        "newTerms": "추가되는 사람, 그룹, 도메인이 받는 권한",
+        "add": "{count, plural, =0 {추가} one {#건 추가} other {#건 추가}}",
+        "placeholder": "사람과 그룹을 검색하거나 example.org 같은 도메인을 입력하세요.",
+        "pickerLabel": "추가할 사람, 그룹 또는 도메인",
+        "pickerHint": "사람, 그룹, 도메인을 혼합하여 입력하세요. 쉼표로 구분된 목록을 붙여넣을 수 있습니다.",
+        "pickerHintNoGroups": "사람과 도메인을 혼합해서 입력하세요. 쉼표로 구분된 목록을 붙여넣을 수 있습니다. 여기서는 그룹 검색이 비활성화되어 있습니다.",
+        "invalid": "인식되지 않음: {text}. 이메일 주소나 도메인을 입력하거나 검색에서 그룹을 선택하세요.",
+        "kind": {
+          "user": "사람",
+          "group": "그룹",
+          "domain": "도메인"
+        },
+        "fromFamily": "가족에서",
+        "setHere": "이 모델에서 변경",
+        "setHereFor": "이 모델에서 {target} 변경",
+        "overruled": "가족에서 Off이며, 이 설정이 우선함"
       }
     },
     "previewSourceModelAccess": "모델 승인 — {list}",

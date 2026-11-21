@@ -6854,7 +6854,9 @@
         "groups": "Grupy z dostępem",
         "domains": "Domeny z dostępem",
         "allow": "Osoby dozwolone",
-        "deny": "Osoby zablokowane"
+        "deny": "Osoby zablokowane",
+        "denyGroups": "Zablokowane grupy",
+        "denyDomains": "Zablokowane domeny"
       },
       "termsLabel": "Warunki dla {target}",
       "removeGrant": "Usuń {target}",
@@ -6866,7 +6868,8 @@
         "caption": "Dostęp do modelu według grupy odbiorców",
         "col": {
           "model": "Model",
-          "reach": "Może używać"
+          "reach": "Może używać",
+          "people": "Imienne osoby"
         },
         "familyNote": "rodzina: wspólny dzienny limit",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6874,13 +6877,50 @@
         "reach": {
           "everyone": "Wszyscy",
           "nobody": "Nikt",
-          "people": "{count, plural, one {# osoba} other {# osób}}"
+          "people": "{count, plural, one {# osoba} other {# osób}}",
+          "everyoneExcept": "Wszyscy oprócz {list}"
         },
         "howTitle": "Jak podejmowana jest decyzja o jednym żądaniu",
         "how": {
           "inherit": "Model bez własnych warunków w kolumnie korzysta z warunków rodziny (przerywana linia).",
-          "envelope": "Żądanie musi mieścić się w limicie modelu, wspólnym limicie rodziny i całkowitym limicie czatu – we wszystkich trzech jednocześnie."
+          "envelope": "Żądanie musi mieścić się w limicie modelu, wspólnym limicie rodziny i całkowitym limicie czatu – we wszystkich trzech jednocześnie.",
+          "blocked": "Osoba imienna ustawiona na Wyłączone nie może korzystać, bez względu na uprawnienia grupy czy domeny.",
+          "mostSpecific": "W przeciwnym razie decyduje najbardziej szczegółowy wpis obejmujący osobę: najpierw osoba imienna, potem grupa, potem domena, na końcu wszyscy inni. Między dwiema grupami lub dwiema domenami wygrywa Wyłączone."
+        },
+        "lead": "Kto może korzystać z danego modelu i ile żądań dziennie. Każdy wiersz to rodzina lub model; każda kolumna to odbiorca. Wybierz wiersz, aby zmienić uprawnienia.",
+        "peopleValue": "{allowed} dozwolone, {blocked} wyłączone",
+        "bulk": {
+          "open": "Dodaj dostęp do kilku modeli",
+          "title": "Nadaj te same uprawnienia dla kilku modeli",
+          "models": "W tych modelach",
+          "wholeFamily": "cała rodzina",
+          "apply": "{count, plural, =0 {Wybierz modele} one {Zastosuj do # wiersza} other {Zastosuj do # wierszy}}",
+          "note": "Zastępuje bieżące uprawnienia tych osób, grup i domen w wybranych wierszach. Nic nie zostanie zapisane, dopóki nie zapiszesz polityki."
         }
+      },
+      "audience": {
+        "editorTitle": "Kto może korzystać z {model}",
+        "heading": "Grupy, domeny i osoby",
+        "hint": "Każdy ma swoją własną odpowiedź w tym wierszu, niezależnie od ustawień „wszyscy inni”.",
+        "empty": "W tym wierszu nie wskazano jeszcze żadnej osoby.",
+        "who": "Kto",
+        "terms": "Otrzymują",
+        "newTerms": "Co otrzymają dodawane osoby, grupy i domeny",
+        "add": "{count, plural, =0 {Dodaj} one {Dodaj # wpis} other {Dodaj # wpisów}}",
+        "placeholder": "Wyszukaj osoby i grupy lub wpisz domenę, np. example.org",
+        "pickerLabel": "Osoby, grupy lub domeny do dodania",
+        "pickerHint": "Możesz mieszać osoby, grupy i domeny. Wklej listę rozdzieloną przecinkami.",
+        "pickerHintNoGroups": "Możesz mieszać osoby i domeny. Wklej listę rozdzieloną przecinkami. Wyszukiwanie grup jest tutaj wyłączone.",
+        "invalid": "Nie rozpoznano: {text}. Wpisz adres e-mail, domenę lub wybierz grupę z wyszukiwarki.",
+        "kind": {
+          "user": "osoba",
+          "group": "grupa",
+          "domain": "domena"
+        },
+        "fromFamily": "z rodziny",
+        "setHere": "Zmień dla tego modelu",
+        "setHereFor": "Zmień {target} dla tego modelu",
+        "overruled": "Wyłączone w rodzinie, co ma wyższy priorytet"
       }
     },
     "previewSourceModelAccess": "Zatwierdzenie modelu — {list}",

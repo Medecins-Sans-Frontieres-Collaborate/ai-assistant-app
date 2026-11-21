@@ -6838,7 +6838,9 @@
         "groups": "Amaqembu anegunya",
         "domains": "Izizinda ezinokufinyelela",
         "allow": "Abantu abavunyelwe",
-        "deny": "Abantu abavinjiwe"
+        "deny": "Abantu abavinjiwe",
+        "denyGroups": "Amaqembu avinjiwe",
+        "denyDomains": "Ama-domain avinjiwe"
       },
       "termsLabel": "Imigomo ye-{target}",
       "removeGrant": "Susa u-{target}",
@@ -6850,7 +6852,8 @@
         "caption": "Ukufinyelela kwemodeli ngokuya ngababukeli",
         "col": {
           "model": "Imodeli",
-          "reach": "Angakwazi ukuyisebenzisa"
+          "reach": "Angakwazi ukuyisebenzisa",
+          "people": "Abantu abaqanjwe"
         },
         "familyNote": "umndeni: isabelomali esihlanganyelwe nsuku zonke",
         "cellLabel": "{model}, {audience}: {value}",
@@ -6858,13 +6861,50 @@
         "reach": {
           "everyone": "Bonke",
           "nobody": "Akekho",
-          "people": "{count, plural, one {umuntu oyedwa} other {abantu abayi-#}}"
+          "people": "{count, plural, one {umuntu oyedwa} other {abantu abayi-#}}",
+          "everyoneExcept": "Wonke umuntu ngaphandle kuka-{list}"
         },
         "howTitle": "Indlela okukhethwa ngayo isicelo esisodwa",
         "how": {
           "inherit": "Imodeli engenayo imithetho yayo kule kholomu isebenzisa eyomndeni (evanayo).",
-          "envelope": "Isicelo kumele sibe ngaphakathi komkhawulo wemodeli, isabelomali somndeni esihlanganyelwe, kanye nesamba sokuxoxa, konke kuyadingeka."
+          "envelope": "Isicelo kumele sibe ngaphakathi komkhawulo wemodeli, isabelomali somndeni esihlanganyelwe, kanye nesamba sokuxoxa, konke kuyadingeka.",
+          "blocked": "Umuntu oqanjwe omiswe Off angeke ayisebenzise, noma ngabe iqembu lakhe noma i-domain yakhe ithini.",
+          "mostSpecific": "Ngaphandle kwalokho, okuthintwa kakhulu okuphathelene nalowo muntu kuyakhetha: iqala ngomuntu oqanjwe, bese liqembu, bese i-domain, bese abanye bonke. Phakathi kwamaqembu amabili noma ama-domain amabili, Off iyahlula."
+        },
+        "lead": "Ubani ongayisebenzisa imodeli ngayinye, nezicelo ezingaki ngosuku. Umugqa ngamunye umndeni noma imodeli; ikholomu ngamunye izethameli. Khetha umugqa ukuze ushintshe abakwazi ukuyisebenzisa.",
+        "peopleValue": "{allowed} bavunyelwe, {blocked} bavaliwe",
+        "bulk": {
+          "open": "Engeza ukufinyelela kumamodeli amaningi",
+          "title": "Nikeza ukufinyelela okufanayo kumamodeli amaningi",
+          "models": "Kulawa mamodeli",
+          "wholeFamily": "umndeni wonke",
+          "apply": "{count, plural, =0 {Khetha imodeli} one {Sebenzisa kumugqa #} other {Sebenzisa kumigqa #}}",
+          "note": "Kufaka esikhundleni salokho abantu laba, amaqembu nama-domain abakutholile kumigqa ekhethiwe. Akukho okugcinawe kuze kube ugcine inqubomgomo."
         }
+      },
+      "audience": {
+        "editorTitle": "Ubani ongayisebenzisa i-{model}",
+        "heading": "Amaqembu, ama-domain nabantu",
+        "hint": "Umuntu ngamunye uthola impendulo yakhe kulomugqa, noma ngabe abanye bathini.",
+        "empty": "Akekho obhaliwe kulomugqa okwamanje.",
+        "who": "Ubani",
+        "terms": "Bazothola",
+        "newTerms": "Lokho abantu, amaqembu nama-domain abengezwe abakutholayo",
+        "add": "{count, plural, =0 {Engeza} one {Engeza okungu-#} other {Engeza okungu-#}}",
+        "placeholder": "Sesha abantu namaqembu, noma bhala i-domain njengaku-example.org",
+        "pickerLabel": "Abantu, amaqembu noma ama-domain okufanele kwengezwe",
+        "pickerHint": "Hlanganisa abantu, amaqembu nama-domain. Namathisela uhlu uhlukanise ngamakhoma.",
+        "pickerHintNoGroups": "Hlanganisa abantu nama-domain. Namathisela uhlu uhlukanise ngamakhoma. Ukusesha amaqembu kukhishiwe lapha.",
+        "invalid": "Akwaziwa: {text}. Bhala ikheli le-imeyili noma i-domain, noma khetha iqembu okusesheni.",
+        "kind": {
+          "user": "umuntu",
+          "group": "iqembu",
+          "domain": "i-domain"
+        },
+        "fromFamily": "kuvela emndenini",
+        "setHere": "Shintsha kule modeli",
+        "setHereFor": "Shintsha {target} kule modeli",
+        "overruled": "I-Off kumndeni, okuyinto ekhishwa phambili"
       }
     },
     "previewSourceModelAccess": "Ukuvunywa kwemodeli — {list}",
