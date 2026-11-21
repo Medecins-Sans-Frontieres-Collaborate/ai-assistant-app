@@ -45,6 +45,12 @@ vi.mock('@/lib/services/adminBlobStorage', () => ({
     containerName: 'ai-portal-admin',
   }),
 }));
+vi.mock('@/lib/services/analytics/deliveryStore', async (importOriginal) => ({
+  ...(await importOriginal<
+    typeof import('@/lib/services/analytics/deliveryStore')
+  >()),
+  readDeliveryContainerOrigin: vi.fn(async () => world.deliveryOrigin),
+}));
 vi.mock('@/lib/services/agentAccess/blobCas', async (importOriginal) => {
   const actual =
     await importOriginal<typeof import('@/lib/services/agentAccess/blobCas')>();
