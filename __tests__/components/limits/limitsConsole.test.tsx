@@ -11,9 +11,9 @@ import {
 import { diffPolicies } from '@/lib/services/limits/policyChanges';
 import type { UsageInsights } from '@/lib/services/limits/wire';
 
+import { AccessLens } from '@/components/Limits/AccessLens';
 import { ChangeReview } from '@/components/Limits/ChangeReview';
 import { LimitsOverview } from '@/components/Limits/LimitsOverview';
-import { PersonLens } from '@/components/Limits/PersonLens';
 import { ValueChoice } from '@/components/Limits/ValueChoice';
 import { LimitsDraft, draftPolicy } from '@/components/Limits/limitsDraft';
 
@@ -45,6 +45,23 @@ vi.mock('@/client/hooks/settings/useLimitsAdmin', async (importOriginal) => ({
 }));
 vi.mock('@/client/hooks/useM365PeopleSuggest', () => ({
   useM365PeopleSuggest: () => undefined,
+}));
+vi.mock('@/client/hooks/useGroupNames', () => ({
+  useGroupNames: (ids: readonly string[]) =>
+    Object.fromEntries(
+      ids.filter((id) => id === 'g-1').map((id) => [id, 'Pharmacy']),
+    ),
+}));
+vi.mock('@/components/AgentAccess/GroupSearchPicker', () => ({
+  GroupSearchPicker: ({
+    onChange,
+  }: {
+    onChange: (values: string[]) => void;
+  }) => (
+    <button type="button" onClick={() => onChange(['g-1'])}>
+      pick-group
+    </button>
+  ),
 }));
 
 function renderWithMessages(ui: ReactElement) {
@@ -340,7 +357,7 @@ describe('ChangeReview, a rule nobody is in yet', () => {
   });
 });
 
-describe('PersonLens', () => {
+describe('AccessLens', () => {
   it('resolves the person against the draft and rings the deciding level', () => {
     const group = override('group', ['g-1'], [{ value: 500 }], {
       label: 'Field coordinators',
@@ -373,13 +390,14 @@ describe('PersonLens', () => {
       },
     };
     renderWithMessages(
-      <PersonLens
+      <AccessLens
         saved={saved}
         draft={draft}
         dirty
         groupNames={{}}
         onEditRule={vi.fn()}
-        initialMail="a.person@ocp.org"
+        onOverridesChange={vi.fn()}
+        initialSubject={{ kind: 'user', target: 'a.person@ocp.org' }}
       />,
     );
     const row = screen
@@ -404,5 +422,155 @@ describe('PersonLens', () => {
     expect(
       screen.getByText('With your changes; saved policy: 500.'),
     ).toBeInTheDocument();
+  });
+  const person = {
+    enabled: true,
+    preview: true,
+    subject: 'a.person@ocp.org',
+    directoryStatus: 'resolved',
+    limits: [],
+    principal: {
+      mail: 'a.person@ocp.org',
+      domain: 'ocp.org',
+      attributes: [],
+      groupIds: ['g-1'],
+    },
+  };
+
+  it('sets an exception for the person being checked, as their own rule', () => {
+    const group = override('group', ['g-1'], [{ value: 500 }]);
+    const saved = policy([{ value: 200 }], [group]);
+    preview.result = person;
+    const onOverridesChange = vi.fn();
+    renderWithMessages(
+      <AccessLens
+        saved={saved}
+        draft={saved}
+        dirty={false}
+        groupNames={{}}
+        onEditRule={vi.fn()}
+        onOverridesChange={onOverridesChange}
+        initialSubject={{ kind: 'user', target: 'a.person@ocp.org' }}
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Messages per day' }));
+    const editor = screen.getByRole('region', {
+      name: 'Exception for a.person@ocp.org',
+    });
+    expect(
+      within(editor).getByText(
+        'No exception: this person gets whatever the rules above give them.',
+      ),
+    ).toBeInTheDocument();
+    fireEvent.click(within(editor).getByLabelText('Unlimited'));
+
+    const next = onOverridesChange.mock.calls[0][0];
+    // The group rule is left alone; a new personal rule carries the value.
+    expect(next).toHaveLength(2);
+    expect(next[0]).toEqual(group);
+    expect(next[1]).toMatchObject({
+      scope: 'user',
+      targets: ['a.person@ocp.org'],
+      enabled: true,
+      entries: [
+        { limitKey: 'chat.messagesPerDay', value: null, ceiling: false },
+      ],
+    });
+    expect(next[1]).not.toHaveProperty('delegationId');
+  });
+
+  it('says when a hard ceiling keeps the exception from taking effect', () => {
+    const own = override('user', ['a.person@ocp.org'], [{ value: 900 }]);
+    const draft = policy([{ value: 200, ceiling: true }], [own]);
+    preview.result = person;
+    renderWithMessages(
+      <AccessLens
+        saved={policy([{ value: 200, ceiling: true }])}
+        draft={draft}
+        dirty
+        groupNames={{}}
+        onEditRule={vi.fn()}
+        onOverridesChange={vi.fn()}
+        initialSubject={{ kind: 'user', target: 'a.person@ocp.org' }}
+      />,
+    );
+    expect(
+      screen.getByText('1 exception is set for a.person@ocp.org alone.'),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Messages per day' }));
+    expect(
+      screen.getByText('No effect as set: a hard ceiling holds it at 200.'),
+    ).toBeInTheDocument();
+  });
+
+  it('checks a security group as a typical member, without usage, and edits its rule', () => {
+    const group = override('group', ['g-1'], [{ value: 500 }]);
+    const saved = policy([{ value: 200 }], [group]);
+    preview.result = null;
+    const onOverridesChange = vi.fn();
+    renderWithMessages(
+      <AccessLens
+        saved={saved}
+        draft={saved}
+        dirty={false}
+        groupNames={{}}
+        onEditRule={vi.fn()}
+        onOverridesChange={onOverridesChange}
+      />,
+    );
+    fireEvent.click(screen.getByRole('radio', { name: /Security group/ }));
+    fireEvent.click(screen.getByText('pick-group'));
+
+    expect(screen.getByText('Pharmacy')).toBeInTheDocument();
+    expect(
+      screen.getByText(/as a typical member: someone in this group/),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('columnheader', { name: 'Used today' }),
+    ).not.toBeInTheDocument();
+    const row = screen
+      .getByRole('button', { name: 'Messages per day' })
+      .closest('tr') as HTMLElement;
+    expect(within(row).getByTitle('500, decides')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Messages per day' }));
+    const editor = screen.getByRole('region', {
+      name: 'Exception for Pharmacy',
+    });
+    expect(
+      within(editor).getByText('Gives 500 instead of 200.'),
+    ).toBeInTheDocument();
+    // Inherit removes the entry; the stored rule itself stays.
+    fireEvent.click(within(editor).getByLabelText('Inherit'));
+    expect(onOverridesChange).toHaveBeenLastCalledWith([
+      { ...group, entries: [] },
+    ]);
+  });
+
+  it('checks a domain typed as an address, resolving the domain rule', () => {
+    const domain = override('domain', ['ocp.org'], [{ value: 50 }]);
+    const saved = policy([{ value: 200 }], [domain]);
+    preview.result = null;
+    renderWithMessages(
+      <AccessLens
+        saved={saved}
+        draft={saved}
+        dirty={false}
+        groupNames={{}}
+        onEditRule={vi.fn()}
+        onOverridesChange={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getByRole('radio', { name: /Domain/ }));
+    fireEvent.change(screen.getByLabelText('Email domain to check'), {
+      target: { value: 'Someone@OCP.org' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Check' }));
+    expect(screen.getByText('ocp.org')).toBeInTheDocument();
+    const row = screen
+      .getByRole('button', { name: 'Messages per day' })
+      .closest('tr') as HTMLElement;
+    expect(within(row).getByTitle('50, decides')).toBeInTheDocument();
+    expect(within(row).getByTitle('200, outranked')).toBeInTheDocument();
   });
 });
