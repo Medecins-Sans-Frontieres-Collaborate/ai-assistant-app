@@ -479,7 +479,7 @@ const Row: FC<RowProps> = ({
         onClick={() => onSelect(column)}
         className={`flex min-h-9 w-full items-center rounded-md px-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
           selected === column
-            ? 'bg-blue-50 ring-1 ring-blue-400 dark:bg-blue-950/50'
+            ? 'bg-blue-50 ring-1 ring-blue-500 dark:bg-blue-950/50 dark:ring-blue-400'
             : 'hover:bg-gray-50 dark:hover:bg-gray-800'
         }`}
       >
