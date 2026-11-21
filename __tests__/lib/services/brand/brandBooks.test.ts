@@ -34,7 +34,7 @@ function memoryStore(stored: string[] = []) {
   ]);
   const written = new Map<string, Buffer>();
   const store: BrandFileStore = {
-    readUpload: vi.fn(async (_session, blobName: string) => {
+    readUpload: vi.fn(async (_session, blobName: string, _place) => {
       const data = uploads.get(blobName);
       if (!data) throw new Error('not found');
       return data;
