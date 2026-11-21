@@ -67,7 +67,7 @@ export function resolveAdminStorageLocation(): {
  * role on the account) — distinct from transient/network errors, which
  * should NOT trigger the dev fallback below.
  */
-function isAuthorizationError(err: unknown): boolean {
+export function isAuthorizationError(err: unknown): boolean {
   if ((err as { statusCode?: number })?.statusCode === 403) return true;
   const message = err instanceof Error ? err.message : String(err);
   return message.includes('not authorized to perform this operation');
