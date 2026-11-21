@@ -792,6 +792,19 @@ export async function GET(request: NextRequest) {
         }),
         ...(usage ? { usage } : {}),
         ...(usageUnavailable ? { usageUnavailable } : {}),
+        // Global admins only: the facts the policy matches on, so the admin
+        // view can resolve this same person against an unsaved draft with
+        // the client-side resolver. A scoped admin's answer stays as it was.
+        ...(global
+          ? {
+              principal: {
+                mail,
+                domain: preview.domain,
+                attributes: preview.attributes,
+                groupIds: preview.groupIds,
+              },
+            }
+          : {}),
       });
     }
 
