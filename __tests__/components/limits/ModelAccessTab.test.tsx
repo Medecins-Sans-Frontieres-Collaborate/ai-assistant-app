@@ -376,4 +376,163 @@ describe('ModelAccessTab grid', () => {
       within(row).getByText('Everyone except 1 domain, 1 person'),
     ).toBeInTheDocument();
   });
+
+  it('opens the editor from the model name, with the keyboard in the add field, and Escape hands focus back', () => {
+    renderTab();
+    const name = screen.getByRole('button', {
+      name: 'Claude edit who can use it',
+    });
+    fireEvent.click(name);
+    const editor = screen.getByRole('region', { name: 'Who can use Claude' });
+    expect(within(editor).getByRole('combobox')).toHaveFocus();
+    fireEvent.keyDown(within(editor).getByRole('combobox'), { key: 'Escape' });
+    expect(
+      screen.queryByRole('region', { name: 'Who can use Claude' }),
+    ).not.toBeInTheDocument();
+    expect(name).toHaveFocus();
+  });
+
+  it('opened from Everyone else, focus starts on that control', () => {
+    renderTab();
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    expect(screen.getByRole('radio', { name: 'Inherit' })).toHaveFocus();
+  });
+
+  it('after Add the field has focus again and the terms start afresh', () => {
+    const rules: ModelAccessRule[] = [];
+    const onChange = renderTab(rules);
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    const editor = screen.getByRole('region', { name: 'Who can use Claude' });
+    const field = within(editor).getByRole('combobox');
+    const terms = within(editor).getByRole('radiogroup', {
+      name: 'What the people, groups and domains being added get',
+    });
+    fireEvent.change(field, { target: { value: 'oca.msf.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+    fireEvent.click(within(terms).getByLabelText('Off'));
+    fireEvent.click(
+      within(editor).getByRole('button', { name: 'Add 1 entry' }),
+    );
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(field).toHaveFocus();
+    // Off was for that entry only: the next one starts at Unlimited.
+    expect(within(terms).getByLabelText('Unlimited')).toBeChecked();
+  });
+
+  it('says so before replacing the terms of someone already on the row', () => {
+    renderTab([
+      rule({
+        series: 'claude',
+        domains: [{ target: 'oca.msf.org', requests: 50 }],
+      }),
+    ]);
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    const editor = screen.getByRole('region', { name: 'Who can use Claude' });
+    const field = within(editor).getByRole('combobox');
+    fireEvent.change(field, { target: { value: 'oca.msf.org, new.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+    expect(
+      within(editor).getByText(
+        'Already on this row: oca.msf.org. Adding replaces what it gets.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('does not drop entries waiting in the field when the editor is closed', () => {
+    const onChange = renderTab();
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    const editor = screen.getByRole('region', { name: 'Who can use Claude' });
+    const field = within(editor).getByRole('combobox');
+    fireEvent.change(field, { target: { value: 'oca.msf.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+    fireEvent.click(within(editor).getByRole('button', { name: 'Done' }));
+    // Still open, and it says why.
+    expect(within(editor).getByRole('alert')).toHaveTextContent(
+      '1 entry in the field is not added yet.',
+    );
+    expect(onChange).not.toHaveBeenCalled();
+    fireEvent.click(
+      within(editor).getByRole('button', { name: 'Add and close' }),
+    );
+    expect(onChange).toHaveBeenLastCalledWith([
+      rule({
+        series: 'claude',
+        domains: [{ target: 'oca.msf.org', requests: null }],
+      }),
+    ]);
+    expect(
+      screen.queryByRole('region', { name: 'Who can use Claude' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('filters a long list of entries, and not a short one', () => {
+    const people = Array.from({ length: 9 }, (_, n) => ({
+      target: `p${n}@msf.org`,
+      requests: null,
+    }));
+    renderTab([rule({ series: 'claude', allow: people })]);
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    const editor = screen.getByRole('region', { name: 'Who can use Claude' });
+    const filter = within(editor).getByRole('searchbox', {
+      name: 'Filter this list',
+    });
+    fireEvent.change(filter, { target: { value: 'p3@' } });
+    expect(within(editor).getByText('Showing 1 of 9')).toBeInTheDocument();
+    expect(
+      within(editor).getAllByRole('radiogroup', { name: /^Terms for/ }),
+    ).toHaveLength(1);
+    // The boundary: eight entries need no filter.
+    fireEvent.click(within(editor).getByRole('button', { name: 'Done' }));
+  });
+
+  it('shows no filter at eight entries', () => {
+    const people = Array.from({ length: 8 }, (_, n) => ({
+      target: `p${n}@msf.org`,
+      requests: null,
+    }));
+    renderTab([rule({ series: 'claude', allow: people })]);
+    fireEvent.click(cell('Claude, Everyone else: Unavailable, inherited'));
+    expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
+  });
+
+  it('takes an audience off several models in one step, and says what it did', () => {
+    const grant = { domains: [{ target: 'oca.msf.org', requests: null }] };
+    const rules = [
+      rule({ series: 'claude', defaultAccess: false, ...grant }),
+      rule({ modelId: 'claude-sonnet-5', ...grant }),
+    ];
+    const onChange = renderTab(rules);
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Add access on several models' }),
+    );
+    const form = screen.getByRole('region', {
+      name: 'Give the same access on several models',
+    });
+    fireEvent.click(
+      within(form).getByRole('radio', { name: 'Remove from these rows' }),
+    );
+    // Removing has no terms to choose.
+    expect(within(form).queryByRole('radiogroup')).not.toBeInTheDocument();
+    const field = within(form).getByRole('combobox');
+    fireEvent.change(field, { target: { value: 'oca.msf.org' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+    fireEvent.change(
+      within(form).getByRole('searchbox', { name: 'Filter models' }),
+      { target: { value: 'claude' } },
+    );
+    fireEvent.click(
+      within(form).getByRole('button', { name: 'Select all shown' }),
+    );
+    const apply = within(form).getByRole('button', {
+      name: /^Remove from \d+ rows$/,
+    });
+    fireEvent.click(apply);
+    // Only the family default is left; the model rule said nothing else.
+    expect(onChange).toHaveBeenLastCalledWith([
+      rule({ series: 'claude', defaultAccess: false }),
+    ]);
+    expect(screen.getByRole('status')).toHaveTextContent(
+      /^1 entry removed from \d+ rows\. Not saved yet\.$/,
+    );
+  });
 });

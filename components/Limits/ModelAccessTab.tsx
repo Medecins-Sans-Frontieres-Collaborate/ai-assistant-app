@@ -763,6 +763,7 @@ const Row: FC<RowProps> = ({
                 className="shrink-0 text-gray-500 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
               />
               <span className="sr-only">
+                {' '}
                 {t('modelAccess.audience.editRowHint')}
               </span>
             </button>
