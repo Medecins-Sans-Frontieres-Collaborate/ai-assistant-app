@@ -672,18 +672,25 @@ describe('LimitsPanel — global mode', () => {
     stored = policyResponse();
   });
 
-  it('renders the full panel with a Delegations tab', async () => {
+  it('opens on the Overview, with the mode, Person, Review and Delegations tabs', async () => {
     globalRouting();
     renderPanel();
 
     expect(await screen.findByRole('tablist')).toBeInTheDocument();
     expect(
-      screen.getByRole('tab', { name: 'tab.defaults' }),
-    ).toBeInTheDocument();
+      screen.getByRole('tab', { name: 'console.tab.overview' }),
+    ).toHaveAttribute('aria-selected', 'true');
+    for (const name of [
+      'console.tab.person',
+      'console.tab.review',
+      'tab.models',
+      'tab.delegations',
+    ]) {
+      expect(screen.getByRole('tab', { name })).toBeInTheDocument();
+    }
     expect(
-      screen.getByRole('tab', { name: 'tab.delegations' }),
+      screen.getByRole('radiogroup', { name: 'modeLabel' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('modeLabel')).toBeInTheDocument();
     expect(screen.getByText('description')).toBeInTheDocument();
   });
 
@@ -692,7 +699,7 @@ describe('LimitsPanel — global mode', () => {
     renderPanel();
 
     expect(await screen.findByRole('tablist')).toBeInTheDocument();
-    expect(screen.getAllByRole('tab')).toHaveLength(4);
+    expect(screen.getAllByRole('tab')).toHaveLength(5);
     expect(
       screen.queryByRole('tab', { name: 'cost.calculator.tab' }),
     ).not.toBeInTheDocument();
@@ -720,7 +727,7 @@ describe('LimitsPanel — global mode', () => {
     renderPanel();
 
     const tab = await screen.findByRole('tab', { name: 'cost.calculator.tab' });
-    expect(screen.getAllByRole('tab')).toHaveLength(5);
+    expect(screen.getAllByRole('tab')).toHaveLength(6);
     fireEvent.click(tab);
 
     const panel = screen.getByRole('tabpanel');
@@ -904,17 +911,20 @@ describe('LimitsPanel — global mode', () => {
     );
     renderPanel();
 
-    fireEvent.click(await screen.findByRole('tab', { name: 'tab.overrides' }));
-    fireEvent.click(screen.getByRole('button', { name: 'expandOverride' }));
+    // Rules are opened from the limit they set, on the Overview.
+    fireEvent.click(
+      await screen.findByRole('button', { name: /label\.chatMessagesPerDay/ }),
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'console.editRule' }));
+    expect(screen.getByLabelText('priorityLabel')).toHaveValue(5);
     const select = screen.getByLabelText('overrideDelegationLabel');
     expect(
       within(select).getByRole('option', { name: 'OCP' }),
     ).toBeInTheDocument();
     fireEvent.change(select, { target: { value: DEL_OCP } });
 
-    // Now a scoped record: the priority field disappears and the tier chip shows.
+    // Now a scoped record: it no longer holds the priority lever.
     expect(screen.queryByLabelText('priorityLabel')).not.toBeInTheDocument();
-    expect(screen.getByText(/tierScoped/)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'save' }));
     await waitFor(() => expect(putCalls()).toHaveLength(1));
@@ -934,7 +944,9 @@ describe('LimitsPanel — global mode', () => {
     globalRouting();
     renderPanel();
 
-    fireEvent.click(await screen.findByRole('tab', { name: 'tab.overrides' }));
+    fireEvent.click(
+      await screen.findByRole('button', { name: /label\.chatMessagesPerDay/ }),
+    );
     expect(screen.getByText('orphanedDelegationChip')).toBeInTheDocument();
   });
 });
