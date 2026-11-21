@@ -1,8 +1,8 @@
 'use client';
 
-import { IconAlertTriangle } from '@tabler/icons-react';
+import { IconAlertTriangle, IconArrowLeft } from '@tabler/icons-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { FC, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
@@ -42,7 +42,10 @@ import { DelegationsTab } from '@/components/Limits/DelegationsTab';
 import { useLimitsCost } from '@/components/Limits/LimitsCostContext';
 import { LimitsOverview } from '@/components/Limits/LimitsOverview';
 import { LimitsSettingsStrip } from '@/components/Limits/LimitsSettingsStrip';
-import { ModelAccessTab } from '@/components/Limits/ModelAccessTab';
+import {
+  ModelAccessLeaveGuard,
+  ModelAccessTab,
+} from '@/components/Limits/ModelAccessTab';
 import { RuleEditor } from '@/components/Limits/RuleEditor';
 import {
   EMPTY_DRAFT,
@@ -63,13 +66,7 @@ import { DirectionMark, SymbolLegend } from '@/components/Limits/visualSyntax';
 import { getLimitDefinition } from '@/config/limits';
 
 /** `cost` exists only while `useLimitsCost().calculator` is on. */
-type PanelTab =
-  | 'overview'
-  | 'person'
-  | 'review'
-  | 'models'
-  | 'delegations'
-  | 'cost';
+type PanelTab = 'overview' | 'person' | 'models' | 'delegations' | 'cost';
 
 /**
  * GLOBAL admin panel for org-wide usage limits.
@@ -104,6 +101,22 @@ export const GlobalLimitsPanel: FC = () => {
   const [draft, setDraft] = useState<LimitsDraft>(EMPTY_DRAFT);
   /** The rule open in the editor, under the Overview tab. */
   const [editingRule, setEditingRule] = useState<string | null>(null);
+  /** Set by the Models tab while it is shown; see {@link leavingModels}. */
+  const modelsLeaveGuard = useRef<ModelAccessLeaveGuard | null>(null);
+  /**
+   * Review is a STEP, not a tab: the tabs are places to edit, Review is the
+   * one screen between editing and saving. It replaces the editing surface,
+   * exists only while there is something to review, and leads back.
+   */
+  const registerModelsGuard = useCallback(
+    (guard: ModelAccessLeaveGuard | null) => {
+      modelsLeaveGuard.current = guard;
+    },
+    [],
+  );
+  const [reviewRequested, setReviewRequested] = useState(false);
+  const reviewRef = useRef<HTMLElement>(null);
+  const reviewButtonRef = useRef<HTMLButtonElement>(null);
   /** The person the Person tab should open on (set from Review). */
   const [lensMail, setLensMail] = useState<string | undefined>(undefined);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
@@ -303,13 +316,36 @@ export const GlobalLimitsPanel: FC = () => {
     [dirty, savedPolicy, policy],
   );
   const summary = summarizeChanges(changes);
+  /** Review exists only while there is something to review. */
+  const reviewing = reviewRequested && changes.length > 0;
+  // The last change was undone, discarded or saved: the request is spent,
+  // so a later edit does not jump back into Review by itself.
+  if (reviewRequested && !reviewing) setReviewRequested(false);
+  // Moving between the two screens moves the keyboard with it: to the
+  // review on entering, back to the button that opened it on leaving.
+  const wasReviewing = useRef(false);
+  useEffect(() => {
+    if (reviewing) reviewRef.current?.focus();
+    else if (wasReviewing.current) reviewButtonRef.current?.focus();
+    wasReviewing.current = reviewing;
+  }, [reviewing]);
   const editing = editingRule
     ? draft.overrides.find((override) => override.id === editingRule)
     : undefined;
 
+  /**
+   * Runs `proceed` unless the Models tab is holding entries nobody has
+   * added yet; then its editor asks first and runs `proceed` on the answer.
+   */
+  const leavingModels = (proceed: () => void) => {
+    if (tab === 'models' && modelsLeaveGuard.current?.(proceed)) return;
+    proceed();
+  };
+
   const openRule = (overrideId: string) => {
     setEditingRule(overrideId);
     setSelectedTab('overview');
+    setReviewRequested(false);
   };
 
   const addRule = (limitKey: string) => {
@@ -367,13 +403,6 @@ export const GlobalLimitsPanel: FC = () => {
   const tabs = [
     { id: 'overview', label: t('console.tab.overview') },
     { id: 'person', label: t('console.tab.check') },
-    {
-      id: 'review',
-      label:
-        summary.total > 0
-          ? t('console.tab.reviewCount', { count: summary.total })
-          : t('console.tab.review'),
-    },
     { id: 'models', label: t('tab.models') },
     { id: 'delegations', label: t('tab.delegations') },
     ...(calculator ? [{ id: 'cost', label: t('cost.calculator.tab') }] : []),
@@ -381,111 +410,21 @@ export const GlobalLimitsPanel: FC = () => {
 
   return (
     <>
-      <LimitsSettingsStrip
-        draft={draft}
-        onChange={patch}
-        insights={insightsQuery.data}
-        disabled={saving}
-        onOpenDelegations={() => setSelectedTab('delegations')}
-      />
-      {membershipWarning && policyQuery.data?.groupMembership && (
-        <p className={`mb-4 ${ADMIN_BANNER_WARN}`} role="alert">
-          {t(
-            membershipWarning === 'structural'
-              ? 'groupMembershipDegradedStructural'
-              : 'groupMembershipDegradedRetryable',
-            {
-              reason:
-                policyQuery.data.groupMembership.lastFailure?.reason ?? '',
-            },
-          )}
-          {policyQuery.data.groupMembership.degradedUsers > 0 && (
-            <>
-              {' '}
-              {t('groupMembershipDegradedUsers', {
-                count: policyQuery.data.groupMembership.degradedUsers,
-              })}
-            </>
-          )}
-        </p>
-      )}
-      {timezoneChanged && (
-        <p className={`mb-4 ${ADMIN_BANNER_WARN}`} role="note">
-          {t('timezoneChangeWarning', {
-            from: savedTimezone,
-            to: draft.timezone,
-          })}
-        </p>
-      )}
-
-      <AdminTabs
-        tabs={tabs}
-        activeTab={tab}
-        onChange={(id) => {
-          setSelectedTab(id as PanelTab);
-          if (id !== 'overview') setEditingRule(null);
-        }}
-        idPrefix="limits"
-        ariaLabel={t('tabsLabel')}
-      />
-
-      <div
-        role="tabpanel"
-        id={`limits-panel-${tab}`}
-        aria-labelledby={`limits-tab-${tab}`}
-        className="space-y-4"
-      >
-        {tab === 'overview' && editing && (
-          <RuleEditor
-            override={editing}
-            policy={policy}
-            onChange={(next) =>
-              patch({ overrides: withOverride(draft.overrides, next) })
-            }
-            onRemove={() => {
-              patch({
-                overrides: draft.overrides.filter((o) => o.id !== editing.id),
-              });
-              setEditingRule(null);
-            }}
-            onBack={() => setEditingRule(null)}
-            delegationOptions={delegationOptions}
-            groupNames={groupNames}
-            insights={insightsQuery.data}
-            disabled={saving}
-          />
-        )}
-        {tab === 'overview' && !editing && (
-          <>
-            <SymbolLegend />
-            <LimitsOverview
-              draft={draft}
-              policy={policy}
-              insights={insightsQuery.data}
-              groupNames={groupNames}
-              onDefaultsChange={(defaults) => patch({ defaults })}
-              onEditRule={openRule}
-              onAddRule={addRule}
-              disabled={saving}
-            />
-          </>
-        )}
-        {tab === 'person' && (
-          <AccessLens
-            key={lensMail ?? ''}
-            saved={savedPolicy}
-            draft={policy}
-            dirty={dirty}
-            groupNames={groupNames}
-            onEditRule={openRule}
-            onOverridesChange={(overrides) => patch({ overrides })}
-            initialSubject={
-              lensMail ? { kind: 'user', target: lensMail } : undefined
-            }
-            disabled={saving}
-          />
-        )}
-        {tab === 'review' && (
+      {reviewing && (
+        <section
+          ref={reviewRef}
+          tabIndex={-1}
+          aria-label={t('console.reviewRegion')}
+          className="space-y-4 focus:outline-none"
+        >
+          <button
+            type="button"
+            className={ADMIN_BTN_SECONDARY}
+            onClick={() => setReviewRequested(false)}
+          >
+            <IconArrowLeft size={16} aria-hidden="true" />
+            {t('console.backToEditing')}
+          </button>
           <ChangeReview
             changes={changes}
             saved={savedPolicy}
@@ -504,42 +443,159 @@ export const GlobalLimitsPanel: FC = () => {
             onCheckPerson={(mail) => {
               setLensMail(mail);
               setSelectedTab('person');
+              setReviewRequested(false);
             }}
           />
-        )}
-        {tab === 'models' && (
-          <ModelAccessTab
-            rules={draft.modelAccess}
-            defaults={draft.defaults}
-            onChange={(modelAccess) => patch({ modelAccess })}
-            mode={draft.mode}
+        </section>
+      )}
+      {!reviewing && (
+        <>
+          <LimitsSettingsStrip
+            draft={draft}
+            onChange={patch}
+            insights={insightsQuery.data}
             disabled={saving}
+            onOpenDelegations={() =>
+              leavingModels(() => setSelectedTab('delegations'))
+            }
           />
-        )}
-        {tab === 'delegations' && (
-          <DelegationsTab
-            delegations={draft.delegations}
-            overrides={draft.overrides}
-            defaults={draft.defaults}
-            newIds={newDelegationIds}
-            onChange={(next) => patch(next)}
-            onAdd={() => {
-              const created = emptyDelegation();
-              setNewDelegationIds((ids) => new Set([...ids, created.id]));
-              patch({ delegations: [...draft.delegations, created] });
-            }}
-            disabled={saving}
-            managedElsewhere
+          {membershipWarning && policyQuery.data?.groupMembership && (
+            <p className={`mb-4 ${ADMIN_BANNER_WARN}`} role="alert">
+              {t(
+                membershipWarning === 'structural'
+                  ? 'groupMembershipDegradedStructural'
+                  : 'groupMembershipDegradedRetryable',
+                {
+                  reason:
+                    policyQuery.data.groupMembership.lastFailure?.reason ?? '',
+                },
+              )}
+              {policyQuery.data.groupMembership.degradedUsers > 0 && (
+                <>
+                  {' '}
+                  {t('groupMembershipDegradedUsers', {
+                    count: policyQuery.data.groupMembership.degradedUsers,
+                  })}
+                </>
+              )}
+            </p>
+          )}
+          {timezoneChanged && (
+            <p className={`mb-4 ${ADMIN_BANNER_WARN}`} role="note">
+              {t('timezoneChangeWarning', {
+                from: savedTimezone,
+                to: draft.timezone,
+              })}
+            </p>
+          )}
+
+          <AdminTabs
+            tabs={tabs}
+            activeTab={tab}
+            onChange={(id) =>
+              leavingModels(() => {
+                setSelectedTab(id as PanelTab);
+                if (id !== 'overview') setEditingRule(null);
+              })
+            }
+            idPrefix="limits"
+            ariaLabel={t('tabsLabel')}
           />
-        )}
-        {tab === 'cost' && calculator && (
-          <CostCalculatorLazy
-            caps={draft.defaults}
-            modelAccess={draft.modelAccess}
-            mode="global"
-          />
-        )}
-      </div>
+
+          <div
+            role="tabpanel"
+            id={`limits-panel-${tab}`}
+            aria-labelledby={`limits-tab-${tab}`}
+            className="space-y-4"
+          >
+            {tab === 'overview' && editing && (
+              <RuleEditor
+                override={editing}
+                policy={policy}
+                onChange={(next) =>
+                  patch({ overrides: withOverride(draft.overrides, next) })
+                }
+                onRemove={() => {
+                  patch({
+                    overrides: draft.overrides.filter(
+                      (o) => o.id !== editing.id,
+                    ),
+                  });
+                  setEditingRule(null);
+                }}
+                onBack={() => setEditingRule(null)}
+                delegationOptions={delegationOptions}
+                groupNames={groupNames}
+                insights={insightsQuery.data}
+                disabled={saving}
+              />
+            )}
+            {tab === 'overview' && !editing && (
+              <>
+                <SymbolLegend />
+                <LimitsOverview
+                  draft={draft}
+                  policy={policy}
+                  insights={insightsQuery.data}
+                  groupNames={groupNames}
+                  onDefaultsChange={(defaults) => patch({ defaults })}
+                  onEditRule={openRule}
+                  onAddRule={addRule}
+                  disabled={saving}
+                />
+              </>
+            )}
+            {tab === 'person' && (
+              <AccessLens
+                key={lensMail ?? ''}
+                saved={savedPolicy}
+                draft={policy}
+                dirty={dirty}
+                groupNames={groupNames}
+                onEditRule={openRule}
+                onOverridesChange={(overrides) => patch({ overrides })}
+                initialSubject={
+                  lensMail ? { kind: 'user', target: lensMail } : undefined
+                }
+                disabled={saving}
+              />
+            )}
+            {tab === 'models' && (
+              <ModelAccessTab
+                rules={draft.modelAccess}
+                defaults={draft.defaults}
+                onChange={(modelAccess) => patch({ modelAccess })}
+                mode={draft.mode}
+                disabled={saving}
+                onLeaveGuard={registerModelsGuard}
+              />
+            )}
+            {tab === 'delegations' && (
+              <DelegationsTab
+                delegations={draft.delegations}
+                overrides={draft.overrides}
+                defaults={draft.defaults}
+                newIds={newDelegationIds}
+                onChange={(next) => patch(next)}
+                onAdd={() => {
+                  const created = emptyDelegation();
+                  setNewDelegationIds((ids) => new Set([...ids, created.id]));
+                  patch({ delegations: [...draft.delegations, created] });
+                }}
+                disabled={saving}
+                managedElsewhere
+              />
+            )}
+            {tab === 'cost' && calculator && (
+              <CostCalculatorLazy
+                caps={draft.defaults}
+                modelAccess={draft.modelAccess}
+                mode="global"
+              />
+            )}
+          </div>
+        </>
+      )}
 
       {conflict && (
         <div role="alert" className={`mt-6 ${ADMIN_BANNER_WARN}`}>
@@ -633,22 +689,43 @@ export const GlobalLimitsPanel: FC = () => {
               {t('discard')}
             </button>
           ))}
-        {dirty && tab !== 'review' && (
-          <button
-            type="button"
-            className={ADMIN_BTN_SECONDARY}
-            onClick={() => {
-              setEditingRule(null);
-              setSelectedTab('review');
-            }}
-          >
-            {t('console.reviewChanges')}
-          </button>
-        )}
+        {changes.length > 0 &&
+          (reviewing ? (
+            <button
+              type="button"
+              className={ADMIN_BTN_SECONDARY}
+              onClick={() => setReviewRequested(false)}
+            >
+              {t('console.backToEditing')}
+            </button>
+          ) : (
+            <button
+              type="button"
+              ref={reviewButtonRef}
+              className={ADMIN_BTN_SECONDARY}
+              onClick={() =>
+                leavingModels(() => {
+                  setEditingRule(null);
+                  setReviewRequested(true);
+                })
+              }
+            >
+              {t('console.reviewChanges')}
+            </button>
+          ))}
         <button
           type="button"
           className={ADMIN_BTN_PRIMARY}
-          onClick={save}
+          // Entries waiting in the Models add field are not in the draft:
+          // the editor asks about them first, and Save is pressed again
+          // afterwards (saving straight on would use the draft as it was
+          // before the answer).
+          onClick={() => {
+            if (tab === 'models' && modelsLeaveGuard.current?.(() => {})) {
+              return;
+            }
+            void save();
+          }}
           disabled={saving || adoptingEtag || !dirty}
         >
           {saving ? t('saving') : t('save')}
