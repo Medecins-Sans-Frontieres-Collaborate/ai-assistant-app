@@ -136,8 +136,9 @@ const serverEnvSchema = z.object({
   /**
    * Analytics DELIVERY container: where the third-party ETL writes report
    * files (docs/ANALYTICS_DELIVERY_CONTRACT.md). Same account as the admin
-   * container; defaults to `ai-portal-analytics`. Created by Terraform, never
-   * by the app. See lib/services/analytics/deliveryStore.ts.
+   * container; defaults to `ai-portal-analytics`. Created by Terraform; the
+   * app creates it at startup only when missing, and flags that in the
+   * Deliveries health view. See lib/services/analytics/deliveryStore.ts.
    */
   AZURE_BLOB_STORAGE_ANALYTICS_CONTAINER: z.string().optional(),
   // Whether the app DELETES delivered analytics files once they are past
