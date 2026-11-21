@@ -8591,7 +8591,9 @@
       "expiringHeading": "A expirar",
       "expiringBody": "Arquivos que excederam ou irão exceder a retenção em até 30 dias.",
       "expiresOn": "Expira em {date}",
-      "expiredOn": "Expirou em {date}"
+      "expiredOn": "Expirou em {date}",
+      "deliveryContainerCreatedTitle": "Nenhum relatório chegou ao novo armazenamento de relatórios",
+      "deliveryContainerCreatedBody": "O container \"{container}\" estava ausente, então o aplicativo o criou ao iniciar. Ele ainda está vazio. Verifique se o ETL de relatórios escreve em \"{container}\" e se tem permissão de escrita. Esta mensagem desaparece quando o primeiro relatório chegar."
     },
     "issue": {
       "name-mismatch": "O nome do arquivo não é o esperado para esta pasta (por exemplo {expected}).",

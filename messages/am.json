@@ -8591,7 +8591,9 @@
       "expiringHeading": "በሚያበቃ ሂደት",
       "expiringBody": "ፋይሎች ቆይታ ካልፉ ወይም በ30 ቀናት ውስጥ በቅርብ የሚያበቃሉ።",
       "expiresOn": "ይበቃል {date}",
-      "expiredOn": "በቃ፡ {date}"
+      "expiredOn": "በቃ፡ {date}",
+      "deliveryContainerCreatedTitle": "አዲሱ የሪፖርት ቤት ውስጥ ምንም ሪፖርቶች አልደረሱም",
+      "deliveryContainerCreatedBody": "\"{container}\" ብሎ የተጠራው ኮንቴይነር አልተገኘም ስለዚህ መተግበሪያው ሲጀምር ፈጠረው። አሁን ባዶ ነው። የሪፖርት ETL ወደ \"{container}\" እንዲጽፍ እና ጽሑፍ መብት እንዳለው ያረጋግጡ። የመጀመሪያው ሪፖርት ሲደርስ ይህ መልእክት ይጠፋል።"
     },
     "issue": {
       "name-mismatch": "የፋይሉ ስም ከፎልደሩ የሚያስፈልገው አይደለም (ለምሳሌ {expected})።",

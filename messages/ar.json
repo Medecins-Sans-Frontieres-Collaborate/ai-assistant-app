@@ -8607,7 +8607,9 @@
       "expiringHeading": "قيد الانتهاء",
       "expiringBody": "الملفات التي تجاوزت فترة الحفظ أو ستبلغها خلال 30 يومًا.",
       "expiresOn": "ينتهي في {date}",
-      "expiredOn": "انتهى في {date}"
+      "expiredOn": "انتهى في {date}",
+      "deliveryContainerCreatedTitle": "لم تصل أي تقارير إلى وحدة تخزين التقارير الجديدة",
+      "deliveryContainerCreatedBody": "لم يكن الحاوية \"{container}\" موجودة، لذا أنشأها التطبيق عند بدء التشغيل. لا تزال فارغة. تحقق من أن ETL التقارير يكتب إلى \"{container}\" ولديه صلاحية الكتابة فيها. تختفي هذه الرسالة عند وصول أول تقرير."
     },
     "issue": {
       "name-mismatch": "اسم الملف ليس ما يتوقعه هذا المجلد (مثلاً {expected}).",

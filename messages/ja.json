@@ -8591,7 +8591,9 @@
       "expiringHeading": "期限切れ間近",
       "expiringBody": "保持期間を過ぎたか、30日以内に期限切れとなるファイルです。",
       "expiresOn": "期限：{date}",
-      "expiredOn": "期限切れ：{date}"
+      "expiredOn": "期限切れ：{date}",
+      "deliveryContainerCreatedTitle": "新しいレポート保管先にはレポートが届いていません",
+      "deliveryContainerCreatedBody": "コンテナ「{container}」が存在しなかったため、アプリが起動時に作成しました。現在は空です。レポートのETLが「{container}」に書き込み、書き込み権限があることをご確認ください。最初のレポートが届くとこのメッセージは消えます。"
     },
     "issue": {
       "name-mismatch": "ファイル名がこのフォルダの指定と違います（例：{expected}）。",

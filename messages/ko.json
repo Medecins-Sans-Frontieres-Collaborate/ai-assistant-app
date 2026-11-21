@@ -8591,7 +8591,9 @@
       "expiringHeading": "만료 예정",
       "expiringBody": "보존 기간이 지났거나 30일 이내에 도래하는 파일입니다.",
       "expiresOn": "만료일: {date}",
-      "expiredOn": "만료됨: {date}"
+      "expiredOn": "만료됨: {date}",
+      "deliveryContainerCreatedTitle": "새 보고서 저장소에 도착한 보고서가 없습니다.",
+      "deliveryContainerCreatedBody": "\"{container}\" 컨테이너가 없어서 앱이 시작할 때 생성했습니다. 현재 비어 있습니다. 보고 ETL이 \"{container}\"에 작성하고, 해당 컨테이너에 쓰기 권한이 있는지 확인하세요. 첫 보고서가 도착하면 이 메시지는 사라집니다."
     },
     "issue": {
       "name-mismatch": "파일 이름이 이 폴더의 예상과 일치하지 않습니다 (예: {expected}).",

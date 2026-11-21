@@ -8591,7 +8591,9 @@
       "expiringHeading": "Vanhentumassa",
       "expiringBody": "Säilytysajan ylittäneet tiedostot tai jotka saavuttavat sen 30 päivän sisällä.",
       "expiresOn": "Vanhenee {date}",
-      "expiredOn": "Vanhentunut {date}"
+      "expiredOn": "Vanhentunut {date}",
+      "deliveryContainerCreatedTitle": "Uusia raportteja ei ole saapunut uuteen raporttisäilöön",
+      "deliveryContainerCreatedBody": "Säilö \"{container}\" puuttui, joten sovellus loi sen käynnistyksen yhteydessä. Se on edelleen tyhjä. Tarkista, että raportoinnin ETL kirjoittaa säilöön \"{container}\" ja että sillä on kirjoitusoikeudet sinne. Tämä viesti poistuu, kun ensimmäinen raportti saapuu."
     },
     "issue": {
       "name-mismatch": "Tiedoston nimi ei ole odotettu (esimerkiksi {expected}).",

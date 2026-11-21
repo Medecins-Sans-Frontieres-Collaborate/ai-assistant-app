@@ -8591,7 +8591,9 @@
       "expiringHeading": "သက်တောက်ကုန်/ကုန်သွားမည်",
       "expiringBody": "Retention ကျော်သွားသော၊ သို့မဟုတ် 30 ရက်အတွင်း သက်တောက်ကုန်သွားမည့် files များ။",
       "expiresOn": "{date} တွင် သက်တောက်ကုန်",
-      "expiredOn": "{date} တွင် သက်တောက်ကုန်ပြီး"
+      "expiredOn": "{date} တွင် သက်တောက်ကုန်ပြီး",
+      "deliveryContainerCreatedTitle": "အသစ်တင်သိုလှောင်သည့်နေရာတွင် အစီရင်ခံစာများ မရောက်သေးပါ",
+      "deliveryContainerCreatedBody": "\"{container}\" ကို မတွေ့သဖြင့်၊ application သည် စတင်သောအချိန်တွင် {container} ကို ဖန်တီးခဲ့ပါသည်။ ယခုထိ ဗလည်းအလျားရှိပါသည်။ reporting ETL သည် \"{container}\" သို့ ရေးသားနိုင်ပြီး ဝင်ရေးခွင့် ရှိသည်ကို စစ်ဆေးပါ။ ပထမအစီရင်ခံစာရောက်လာသည်နှင့် ဒီမက်ဆေ့ချ်သည် မပေါ်တော့ပါ။"
     },
     "issue": {
       "name-mismatch": "File အမည်သည် Folder ကိုမလိုသည် (ဦးကိန်း {expected})",

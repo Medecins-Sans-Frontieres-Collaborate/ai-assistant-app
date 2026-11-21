@@ -8607,7 +8607,9 @@
       "expiringHeading": "Ablaufend",
       "expiringBody": "Dateien nach oder innerhalb von 30 Tagen vor Ablauf der Aufbewahrungsfrist.",
       "expiresOn": "Läuft ab am {date}",
-      "expiredOn": "Abgelaufen am {date}"
+      "expiredOn": "Abgelaufen am {date}",
+      "deliveryContainerCreatedTitle": "Im neuen Berichtsspeicher sind keine Berichte eingegangen",
+      "deliveryContainerCreatedBody": "Der Container \"{container}\" fehlte, daher wurde er von der App beim Start erstellt. Er ist noch leer. Überprüfen Sie, ob das Reporting-ETL in \"{container}\" schreibt und Schreibzugriff hat. Diese Nachricht verschwindet, sobald der erste Bericht eingeht."
     },
     "issue": {
       "name-mismatch": "Der Dateiname entspricht nicht den Erwartungen dieses Ordners (z. B. {expected}).",

@@ -8622,7 +8622,9 @@
       "expiringHeading": "即将过期",
       "expiringBody": "已超出或将在 30 天内达保留期的文件。",
       "expiresOn": "过期时间 {date}",
-      "expiredOn": "已过期 {date}"
+      "expiredOn": "已过期 {date}",
+      "deliveryContainerCreatedTitle": "新报告存储中尚未收到任何报告",
+      "deliveryContainerCreatedBody": "容器“{container}”缺失，因此应用在启动时创建了它。它目前仍为空。请检查报告 ETL 是否写入“{container}”并具有写入权限。当第一份报告到达时，此消息将消失。"
     },
     "issue": {
       "name-mismatch": "文件名与本文件夹预期不符（例如 {expected}）。",

@@ -8575,7 +8575,9 @@
       "expiringHeading": "Ana ƙarewa",
       "expiringBody": "Fayiloli da suka wuce loko mai jiran lokaci ko waɗanda za su kai nan cikin kwanaki 30.",
       "expiresOn": "Zai ƙare {date}",
-      "expiredOn": "Ya ƙare {date}"
+      "expiredOn": "Ya ƙare {date}",
+      "deliveryContainerCreatedTitle": "Babu rahoton da ya iso cikin sabon wurin ajiye rahoto",
+      "deliveryContainerCreatedBody": "Ana samun akwati \"{container}\" baya nan, don haka manhaja ta ƙirƙira shi lokacin da ta fara. Har yanzu babu komai a ciki. Tabbatar cewa reporting ETL yana rubutawa zuwa \"{container}\" kuma yana da damar rubutawa a ciki. Wannan saƙon zai ɓace idan rahoto na farko ya iso."
     },
     "issue": {
       "name-mismatch": "Sunan fayil ba yadda wannan babban fayil ke bukata ba (misali {expected}).",

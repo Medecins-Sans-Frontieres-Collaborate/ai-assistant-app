@@ -8591,7 +8591,9 @@
       "expiringHeading": "A punt de caducar",
       "expiringBody": "Arxius caducats o que caduquen en 30 dies.",
       "expiresOn": "Caduca el {date}",
-      "expiredOn": "Caducat el {date}"
+      "expiredOn": "Caducat el {date}",
+      "deliveryContainerCreatedTitle": "No han arribat informes a l'emmagatzematge nou d'informes",
+      "deliveryContainerCreatedBody": "Faltava el contenidor \"{container}\", així que l'aplicació l'ha creat en iniciar-se. Encara és buit. Comproveu que l'ETL d'informes escriu a \"{container}\" i que té accés d'escriptura. Aquest missatge desapareixerà quan arribi el primer informe."
     },
     "issue": {
       "name-mismatch": "El nom de l'arxiu no és el que espera aquesta carpeta (per exemple {expected}).",

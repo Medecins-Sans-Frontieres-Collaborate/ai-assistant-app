@@ -8591,7 +8591,9 @@
       "expiringHeading": "Süresi dolmak üzere",
       "expiringBody": "Saklama süresini geçen ya da 30 gün içinde süresi dolacak dosyalar.",
       "expiresOn": "Süresi dolacak: {date}",
-      "expiredOn": "Süresi doldu: {date}"
+      "expiredOn": "Süresi doldu: {date}",
+      "deliveryContainerCreatedTitle": "Yeni rapor deposuna henüz rapor gelmedi",
+      "deliveryContainerCreatedBody": "\"{container}\" konteyneri eksikti, bu yüzden uygulama başlatılırken onu oluşturdu. Hâlâ boş. Raporlama ETL'sinin \"{container}\" konteynerine yazdığından ve yazma iznine sahip olduğundan emin olun. İlk rapor geldiğinde bu mesaj kaybolacaktır."
     },
     "issue": {
       "name-mismatch": "Dosya adı bu klasörün beklediğiyle uyuşmuyor (örneğin {expected}).",

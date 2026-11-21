@@ -8575,7 +8575,9 @@
       "expiringHeading": "ዝቕለበለ",
       "expiringBody": "ፋይላት ብምምሕባር ምውስዳፈ ወይ ኣብ 30 መዓልቲ ዝቕለበል።",
       "expiresOn": "ይቕለበል {date}",
-      "expiredOn": "ቕለበለ {date}"
+      "expiredOn": "ቕለበለ {date}",
+      "deliveryContainerCreatedTitle": "ኣብ ናይ ሓዲሽ ዝተዛረፈ ሪፖርት ቆታ ሪፖርት ኣይተምጸአን",
+      "deliveryContainerCreatedBody": "ቆታ \"{container}\" የቐረ እዩ፣ ንዚ እቲ መተግበሪት እዚ ኣብ መጀመርታ ጸዋሒ። ጌራ ትቕልል እዩ። ደሓን በሃላፍነት ኣይትፈፅም እንትደሓን ናይ reporting ETL ኣብ \"{container}\" ይፃውንን ዘለዎ ፅወታ ኣለዎ እሞ ተረኽቦ። ነዚ መልእኽቲ ኣብ መጀመርዩ ሪፖርት እዚ ምጸን ተሓጊዙ።"
     },
     "issue": {
       "name-mismatch": "ስም ፋይል ዝፈልጠ ቦታ ኣይዛረበን (ኣብሓና {expected})።",

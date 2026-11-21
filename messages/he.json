@@ -8591,7 +8591,9 @@
       "expiringHeading": "פגי תוקף",
       "expiringBody": "קבצים שפג תוקפם או שיגיעו לתום התקופה ב-30 הימים הקרובים.",
       "expiresOn": "פג תוקף ב-{date}",
-      "expiredOn": "פג תוקף ב-{date}"
+      "expiredOn": "פג תוקף ב-{date}",
+      "deliveryContainerCreatedTitle": "לא התקבלו דוחות באחסון הדוחות החדש",
+      "deliveryContainerCreatedBody": "המכולה \"{container}\" לא היתה קיימת, לכן האפליקציה יצרה אותה בעת ההפעלה. היא עדיין ריקה. יש לוודא שמערכת ה-ETL של הדיווח כותבת ל־\"{container}\" ויש לה הרשאות כתיבה עליה. הודעה זו תיעלם כאשר הדוח הראשון יתקבל."
     },
     "issue": {
       "name-mismatch": "שם הקובץ אינו תואם את הנדרש בתיקיה זו (לדוג' {expected}).",

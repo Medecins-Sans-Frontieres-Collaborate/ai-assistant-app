@@ -8591,7 +8591,9 @@
       "expiringHeading": "Brzy vyprší",
       "expiringBody": "Soubory po nebo blížící se k uplynutí retenční doby během 30 dní.",
       "expiresOn": "Vyprší {date}",
-      "expiredOn": "Vypršelo {date}"
+      "expiredOn": "Vypršelo {date}",
+      "deliveryContainerCreatedTitle": "Do nového úložiště reportů zatím nepřišly žádné reporty",
+      "deliveryContainerCreatedBody": "Kontejner „{container}“ chyběl, takže jej aplikace při spuštění vytvořila. Je stále prázdný. Zkontrolujte, že reporting ETL zapisuje do „{container}“ a má k němu práva zápisu. Tato zpráva zmizí, jakmile dorazí první report."
     },
     "issue": {
       "name-mismatch": "Název souboru neodpovídá očekávání této složky (například {expected}).",

@@ -8591,7 +8591,9 @@
       "expiringHeading": "In scadenza",
       "expiringBody": "File oltre la conservazione o che vi arriveranno entro 30 giorni.",
       "expiresOn": "Scade il {date}",
-      "expiredOn": "Scaduto il {date}"
+      "expiredOn": "Scaduto il {date}",
+      "deliveryContainerCreatedTitle": "Nessun report è arrivato nel nuovo archivio report",
+      "deliveryContainerCreatedBody": "Il container \"{container}\" mancava, quindi l'app lo ha creato all'avvio. È ancora vuoto. Verifica che l'ETL di reporting scriva su \"{container}\" e abbia i permessi di scrittura. Questo messaggio scomparirà all'arrivo del primo report."
     },
     "issue": {
       "name-mismatch": "Il nome del file non corrisponde a quanto previsto dalla cartella (ad esempio {expected}).",

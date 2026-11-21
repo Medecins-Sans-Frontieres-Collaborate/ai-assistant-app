@@ -8575,7 +8575,9 @@
       "expiringHeading": "Dhamaadayaan",
       "expiringBody": "Faylal dhaafay kaydka ama gaadhaya 30 maalmood gudahood.",
       "expiresOn": "Wuxuu dhacayaa {date}",
-      "expiredOn": "Waa dhacay {date}"
+      "expiredOn": "Waa dhacay {date}",
+      "deliveryContainerCreatedTitle": "Wax warbixin ah weli laguma keenin kaydka cusub ee warbixinnada",
+      "deliveryContainerCreatedBody": "Weelka \"{container}\" wuu maqnaa, sidaas darteed barnaamijku waxa uu abuuray marki uu bilowday. Weli waa madhan yahay. Hubi in ETL-ka warbixintu uu wax ku qorayo \"{container}\" sidoo kalena uu leeyahay oggolaansho qorista. Fariintan way dhammaanaysaa marka warbixinta ugu horreysa timaado."
     },
     "issue": {
       "name-mismatch": "Magaca faylka ma aha midka faylkan la filayo (tusaale ahaan {expected}).",

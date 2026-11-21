@@ -8591,7 +8591,9 @@
       "expiringHeading": "Förfaller",
       "expiringBody": "Filer som har eller når lagringstid inom 30 dagar.",
       "expiresOn": "Förfaller {date}",
-      "expiredOn": "Förföll {date}"
+      "expiredOn": "Förföll {date}",
+      "deliveryContainerCreatedTitle": "Inga rapporter har kommit till den nya rapportlagringen",
+      "deliveryContainerCreatedBody": "Behållaren \"{container}\" saknades, så appen skapade den vid uppstart. Den är fortfarande tom. Kontrollera att rapporterings-ETL:en skriver till \"{container}\" och har skrivrättigheter. Detta meddelande försvinner när första rapporten kommer."
     },
     "issue": {
       "name-mismatch": "Filnamnet är inte vad denna mapp förväntar sig (t.ex. {expected}).",

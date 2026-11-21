@@ -8575,7 +8575,9 @@
       "expiringHeading": "Ìparí àkókò tó súnmọ́",
       "expiringBody": "Àwọn fáìlì tó ti kọjá àkókò àpamọ́ tàbí tó máa de bẹ́ nínú 30 ọjọ́.",
       "expiresOn": "Ó máa parí {date}",
-      "expiredOn": "Ó ti parí {date}"
+      "expiredOn": "Ó ti parí {date}",
+      "deliveryContainerCreatedTitle": "Ko si ìròyìn tí tí dé nínú àpamọ́ ìròyìn tuntun",
+      "deliveryContainerCreatedBody": "Àpò \"{container}\" kò wà, nítorí náà, àpamọ́ náà dá a nígbà tó bẹ̀rẹ̀. Ó ṣi ṣiṣofo. Ṣàyẹ̀wò pé ETL ìròyìn ń kọ sí \"{container}\" àti pé ó ní àyè síi. Ìfẹ̀yà yìí máa parí nígbà tí ìròyìn àkọ́kọ́ bá dé."
     },
     "issue": {
       "name-mismatch": "Orúkọ fáìlì kì í bá a ṣe folder yìí (àpẹẹrẹ {expected}).",

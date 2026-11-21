@@ -8591,7 +8591,9 @@
       "expiringHeading": "Por expirar",
       "expiringBody": "Archivos que excedieron la retención o la alcanzarán en 30 días.",
       "expiresOn": "Expira {date}",
-      "expiredOn": "Expiró {date}"
+      "expiredOn": "Expiró {date}",
+      "deliveryContainerCreatedTitle": "No han llegado informes al nuevo almacenamiento de informes",
+      "deliveryContainerCreatedBody": "El contenedor \"{container}\" no existía, así que la aplicación lo creó al iniciar. Todavía está vacío. Verifique que el ETL de informes escriba en \"{container}\" y tenga acceso de escritura. Este mensaje desaparecerá cuando llegue el primer informe."
     },
     "issue": {
       "name-mismatch": "El nombre del archivo no es el esperado para esta carpeta (por ejemplo, {expected}).",

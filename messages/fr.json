@@ -8591,7 +8591,9 @@
       "expiringHeading": "Expiration",
       "expiringBody": "Fichiers ayant dépassé ou atteignant la durée de conservation dans les 30 jours.",
       "expiresOn": "Expire le {date}",
-      "expiredOn": "Expiré le {date}"
+      "expiredOn": "Expiré le {date}",
+      "deliveryContainerCreatedTitle": "Aucun rapport n’a été reçu dans le nouveau stockage de rapports",
+      "deliveryContainerCreatedBody": "Le conteneur \"{container}\" était absent, donc l’application l’a créé au démarrage. Il est toujours vide. Vérifiez que l’ETL de reporting écrit dans \"{container}\" et dispose de l’accès en écriture. Ce message disparaît dès que le premier rapport arrive."
     },
     "issue": {
       "name-mismatch": "Le nom du fichier n’est pas celui attendu pour ce dossier (par exemple : {expected}).",

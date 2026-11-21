@@ -8104,7 +8104,9 @@
       "expiresOn": "دەکەوێتە سەر {date}",
       "expiredOn": "سڕاوە {date}",
       "recheckQueued": "{count, plural, one {# فایل لە لیستی شیکردنەوەدا} other {# فایل لە لیستی شیکردنەوەدا}}",
-      "unclassifiedChip": "{column} · {count, plural, one {# فایل} other {# فایل}}"
+      "unclassifiedChip": "{column} · {count, plural, one {# فایل} other {# فایل}}",
+      "deliveryContainerCreatedTitle": "هیچ ڕاپۆرتێک نەتەوە بۆ پاشەکەوتی ڕاپۆرتی نوێ",
+      "deliveryContainerCreatedBody": "کۆنتەینەری \"{container}\" بوونی نەبوو، بۆیە ئەپ ئەو کۆنتەینەری دروست کرد کاتێک دەستی بە کار کرد. ئەم کۆنتەینەری هێشتا بەتالە. دڵنیابە کە ETL-ی ڕاپۆرتیان نووسین دەکات بۆ \"{container}\" و دەستنیشانی نووسین هەیە. ئەم پەیامە دەرچوو ئەگەر یەکەم ڕاپۆرت بگەیت."
     },
     "issue": {
       "name-mismatch": "ناوی پەڕگە وایە نیە کە فۆلدەرەکە دا چاوەڕێ دەکات (بۆ نموونە {expected}).",

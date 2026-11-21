@@ -8575,7 +8575,9 @@
       "expiringHeading": "Biriko birarangira igihe",
       "expiringBody": "Dosiye zirengeje igihe canke zizoziwugezako mu minsi 30.",
       "expiresOn": "Icendera {date}",
-      "expiredOn": "Cararangiye {date}"
+      "expiredOn": "Cararangiye {date}",
+      "deliveryContainerCreatedTitle": "Nta raporo iragera ahabikwa raporo nshasha",
+      "deliveryContainerCreatedBody": "Ikarato \"{container}\" ntiyari ihari, ni co gituma porogaramu yayiremye igihe yatangura. Iracyari umwina. Raba ko ETL y’iraporo yandikira kuri \"{container}\" kandi ko ifise uburenganzira bwo kwandika kuri yo. Ubutumwa buzoca bushira igihe raporo ya mbere igeze."
     },
     "issue": {
       "name-mismatch": "Izina rya dosiye ntirikwiye nk'ivyari vyitezwe kuri dosiye (nk'akarorero {expected}).",

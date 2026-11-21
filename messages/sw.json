@@ -8591,7 +8591,9 @@
       "expiringHeading": "Inaisha muda",
       "expiringBody": "Faili zilizopita au zinakaribia muda wa kuhifadhiwa ndani ya siku 30.",
       "expiresOn": "Inaisha {date}",
-      "expiredOn": "Iliisha {date}"
+      "expiredOn": "Iliisha {date}",
+      "deliveryContainerCreatedTitle": "Hakuna ripoti zilizofika kwenye hifadhi mpya ya ripoti",
+      "deliveryContainerCreatedBody": "Kontea ya \"{container}\" haikuwepo, hivyo programu iliunda ilipoanza. Bado iko tupu. Hakikisha kuwa ETL ya kuripoti inaandika kwenye \"{container}\" na ina ruhusa ya kuandika. Ujumbe huu utaondoka ripoti ya kwanza itakapoingia."
     },
     "issue": {
       "name-mismatch": "Jina la faili si lile linalotegemewa na folda hii (kwa mfano {expected}).",

@@ -8575,7 +8575,9 @@
       "expiringHeading": "Eo am-pahabetsahana",
       "expiringBody": "Rakitra nihoatra na hanatratra ny fe-potoana fitehirizana ao anatin'ny 30 andro.",
       "expiresOn": "Hifarana {date}",
-      "expiredOn": "Nifarana {date}"
+      "expiredOn": "Nifarana {date}",
+      "deliveryContainerCreatedTitle": "Tsy mbola nisy tatitra tonga tao amin'ny fitehirizam-tatitra vaovao",
+      "deliveryContainerCreatedBody": "Tsy hita ilay container \"{container}\", ka namorona azy ny app rehefa natomboka. Mbola foana izy io. Hamarino fa manoratra ao amin'ny \"{container}\" sy manana fahazoan-manoratra ao ny reporting ETL. Hanjavona ity hafatra ity rehefa tonga ny tatitra voalohany."
     },
     "issue": {
       "name-mismatch": "Tsy araka izay andrasan'ity lahatahiry ity ny anaran'ny rakitra (ohatra {expected}).",

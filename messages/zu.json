@@ -8575,7 +8575,9 @@
       "expiringHeading": "Kuphelelwa isikhathi",
       "expiringBody": "Amafayela adlule noma asondela ekupheleni kwesikhathi phakathi kwezinsuku ezingama-30.",
       "expiresOn": "Kuphelelwa {date}",
-      "expiredOn": "Kuphelelwe {date}"
+      "expiredOn": "Kuphelelwe {date}",
+      "deliveryContainerCreatedTitle": "Azikafiki izibiko esigcini esisha sezibiko",
+      "deliveryContainerCreatedBody": "Isiqukathi \"{container}\" besingekho, ngakho uhlelo lisiqhamukisile lapho liqala. Sisanele. Qinisekisa ukuthi i-ETL yezibiko ibhala ku-\"{container}\" futhi inokufinyelela kokubhala kukho. Lomlayezo uzosuka uma kufika isibiko sokuqala."
     },
     "issue": {
       "name-mismatch": "Igama lefayela alihlangabezani nalokho okudingwa yifolda (isb. {expected}).",

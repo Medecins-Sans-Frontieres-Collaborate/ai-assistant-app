@@ -8591,7 +8591,9 @@
       "expiringHeading": "Segera kedaluwarsa",
       "expiringBody": "File yang melewati masa retensi atau akan mencapainya dalam 30 hari.",
       "expiresOn": "Kedaluwarsa {date}",
-      "expiredOn": "Sudah kedaluwarsa {date}"
+      "expiredOn": "Sudah kedaluwarsa {date}",
+      "deliveryContainerCreatedTitle": "Belum ada laporan yang masuk ke penyimpanan laporan baru",
+      "deliveryContainerCreatedBody": "Kontainer \"{container}\" tidak ditemukan, jadi aplikasi membuatnya saat dimulai. Kontainer ini masih kosong. Pastikan ETL pelaporan menulis ke \"{container}\" dan memiliki akses tulis ke sana. Pesan ini akan hilang ketika laporan pertama tiba."
     },
     "issue": {
       "name-mismatch": "Nama file tidak sesuai dengan yang diharapkan folder ini (misalnya {expected}).",

@@ -8575,7 +8575,9 @@
       "expiringHeading": "Ap ekspire",
       "expiringBody": "Dosye ki depase oswa ap rive retansyon nan 30 jou.",
       "expiresOn": "Ekspire {date}",
-      "expiredOn": "Depi {date} li ekspire"
+      "expiredOn": "Depi {date} li ekspire",
+      "deliveryContainerCreatedTitle": "Pa gen okenn rapò ki rive nan nouvo depo rapò a",
+      "deliveryContainerCreatedBody": "Konteynè \"{container}\" pa t egziste, kidonk aplikasyon an kreye li lè li demare. Li toujou vid. Verifye si ETL rapò a ap ekri nan \"{container}\" epi si li gen dwa ekriti ladan l. Mesaj sa a ap disparèt lè premye rapò a rive."
     },
     "issue": {
       "name-mismatch": "Non dosye a pa sa katab sa a atann (pa egzanp {expected}).",

@@ -8575,7 +8575,9 @@
       "expiringHeading": "Ɓeydu",
       "expiringBody": "Files waɗi sawru retention walla waɗa nannde e 30 ɓeydu.",
       "expiresOn": "Ɓeyda {date}",
-      "expiredOn": "Ɓeydani {date}"
+      "expiredOn": "Ɓeydani {date}",
+      "deliveryContainerCreatedTitle": "Jeyaaɗi so tawii e moƴƴere jaytinooji",
+      "deliveryContainerCreatedBody": "Moƴƴere \"{container}\" oɓɗaani, kadi app ɗon o waawi iwde moƴƴere ɗum ka feere. Moƴƴere ɗum kadi yetti. Fii, sarrin e jamma gooto ETL jaytinooji o waawi iwde jaytinooji e \"{container}\" kadi o waawi iwde e ɗum. Ngal gannde waawii ndiyam so jaytinooje jeyaaɗi."
     },
     "issue": {
       "name-mismatch": "Innde file njoɓataa ko folder ndiyam ngon hokkanii (misal {expected}).",

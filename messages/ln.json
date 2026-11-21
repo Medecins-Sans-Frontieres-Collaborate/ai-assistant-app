@@ -8575,7 +8575,9 @@
       "expiringHeading": "Ekosila",
       "expiringBody": "Ba fichiers oyo eleki retention to ezali kokoma retention na mikolo 30.",
       "expiresOn": "Ekosila {date}",
-      "expiredOn": "Elekaki {date}"
+      "expiredOn": "Elekaki {date}",
+      "deliveryContainerCreatedTitle": "Rapport moko te ekomi na esika ya kobomba ba rapport",
+      "deliveryContainerCreatedBody": "Container \"{container}\" ezalaki te, yango wana application esalaki yango na koluka ebandi. Ezali naino mpanda. Mibale na ndakisa, tala soki reporting ETL ekomi na \"{container}\" mpe ezali na nzela ya kokoma kuna. Nsango oyo ekosila soki rapport ya liboso ekomi."
     },
     "issue": {
       "name-mismatch": "Kombo ya fichier ekoki te na oyo dossier ezali kozela (exemple {expected}).",

@@ -8591,7 +8591,9 @@
       "expiringHeading": "Verloopt binnenkort",
       "expiringBody": "Bestanden voorbij of bijna op de bewaartermijn (binnen 30 dagen).",
       "expiresOn": "Verloopt op {date}",
-      "expiredOn": "Verlopen op {date}"
+      "expiredOn": "Verlopen op {date}",
+      "deliveryContainerCreatedTitle": "Er zijn geen rapporten binnengekomen in de nieuwe rapportopslag",
+      "deliveryContainerCreatedBody": "De container \"{container}\" ontbrak, daarom heeft de app deze bij het opstarten aangemaakt. De container is nog leeg. Controleer of de reporting ETL naar \"{container}\" schrijft en schrijfrechten heeft. Dit bericht verdwijnt zodra het eerste rapport binnenkomt."
     },
     "issue": {
       "name-mismatch": "De bestandsnaam komt niet overeen met wat deze map verwacht (bijvoorbeeld {expected}).",

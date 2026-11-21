@@ -8575,7 +8575,9 @@
       "expiringHeading": "Akukutha",
       "expiringBody": "Mafayilo opitirira nthawi yokhazikika kapena ofika pa nthawi yake mkati mwa masiku 30.",
       "expiresOn": "Akutha {date}",
-      "expiredOn": "Anatha {date}"
+      "expiredOn": "Anatha {date}",
+      "deliveryContainerCreatedTitle": "Palibe malipoti amene afika mu kusungira malipoti yatsopano",
+      "deliveryContainerCreatedBody": "Chidebe cha \"{container}\" chinali kulibe, motero pulogalamuyi inapanga yomwe itayamba. Chapano chili chopanda kanthu. Onetsetsani kuti reporting ETL ikulemba ku \"{container}\" ndipo ili ndi mwayi wolembapo. Uthengawu udzachoka pamene lipoti loyamba lifika."
     },
     "issue": {
       "name-mismatch": "Dzina la fayilo silikugwirizana ndi lomwe fodayi ikuyembekezera (mwachitsanzo {expected}).",

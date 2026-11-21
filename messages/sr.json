@@ -8575,7 +8575,9 @@
       "expiringHeading": "Ističe",
       "expiringBody": "Datoteke koje su prošle čuvanje ili ga dostižu u narednih 30 dana.",
       "expiresOn": "Ističe {date}",
-      "expiredOn": "Isteklo {date}"
+      "expiredOn": "Isteklo {date}",
+      "deliveryContainerCreatedTitle": "Nijedan izveštaj nije stigao u novu skladišnu jedinicu za izveštaje",
+      "deliveryContainerCreatedBody": "Kontejner \"{container}\" nije postojao, pa ga je aplikacija kreirala pri pokretanju. Još uvek je prazan. Proverite da li ETL za izveštavanje piše u \"{container}\" i ima dozvolu za upisivanje. Ova poruka će nestati kada stigne prvi izveštaj."
     },
     "issue": {
       "name-mismatch": "Naziv datoteke nije onaj koji ovaj folder očekuje (na primer {expected}).",

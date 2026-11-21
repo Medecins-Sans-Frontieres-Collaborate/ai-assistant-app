@@ -8591,7 +8591,9 @@
       "expiringHeading": "Wygasa",
       "expiringBody": "Pliki po lub zbliżające się do końca okresu przechowywania w ciągu 30 dni.",
       "expiresOn": "Wygasa {date}",
-      "expiredOn": "Wygasł {date}"
+      "expiredOn": "Wygasł {date}",
+      "deliveryContainerCreatedTitle": "Nie otrzymano jeszcze żadnych raportów w nowej przestrzeni raportów",
+      "deliveryContainerCreatedBody": "Brakowało kontenera \"{container}\", więc aplikacja utworzyła go podczas uruchamiania. Kontener jest nadal pusty. Sprawdź, czy proces ETL raportowania zapisuje do \"{container}\" i ma do niego uprawnienia zapisu. Ta informacja zniknie, gdy pojawi się pierwszy raport."
     },
     "issue": {
       "name-mismatch": "Nazwa pliku nie jest zgodna z oczekiwaną dla tego folderu (na przykład {expected}).",

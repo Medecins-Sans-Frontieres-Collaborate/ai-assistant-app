@@ -8575,7 +8575,9 @@
       "expiringHeading": "Kötä",
       "expiringBody": "Fail so a tîte na retention va na 30 na ndö.",
       "expiresOn": "A tîke na {date}",
-      "expiredOn": "A kéta na {date}"
+      "expiredOn": "A kéta na {date}",
+      "deliveryContainerCreatedTitle": "Bala na ninga ti ndokisö pé oko na ndokisö tî mbëtï",
+      "deliveryContainerCreatedBody": "Ndokisö \"{container}\" ayé pé hâ, so app ala-yeke ti tî-mo na so bi kpë. Ndokisö ayé pé mbëtï. Yeke zarandë na ETL tî ndokisö peyâ na \"{container}\" na mo tî yeke na yeke na ndokisö ayé. Senga ayé tî gben yèkè na bala tî ndokisö ïlikë."
     },
     "issue": {
       "name-mismatch": "Dengö ti fail o ala pepe so folder loa yeke (tî â {expected}).",
