@@ -1,12 +1,11 @@
 'use client';
 
-import { IconPlus } from '@tabler/icons-react';
+import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { FC, Fragment, ReactNode, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import { useGroupNames } from '@/client/hooks/useGroupNames';
-import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
 import type {
   LimitEntry,
@@ -16,15 +15,22 @@ import type {
 } from '@/lib/services/limits/types';
 
 import {
+  Audience,
   AudienceColumn,
+  AudienceCounts,
+  AudienceEntry,
+  AudienceTerms,
   GridCell,
   Reach,
   audienceCell,
   audienceColumns,
+  audienceEntries,
+  audienceId,
   columnId,
-  peopleLists,
+  peopleCounts,
   reachOf,
-  withAudienceGrant,
+  withAudienceTerms,
+  withAudiencesTerms,
   withDefaultAccess,
 } from '@/lib/utils/app/modelAccessGrid';
 import {
@@ -35,24 +41,21 @@ import {
   catalogModelsForAdmin,
   collidesWithDefaults,
   effectiveAccessFor,
-  emptyRule,
   externalFamilyLabels,
   ruleFor,
-  upsertRule,
 } from '@/lib/utils/app/modelAccessTree';
 
 import {
   ADMIN_BANNER_WARN,
+  ADMIN_BTN_ICON_DANGER,
+  ADMIN_BTN_PRIMARY,
   ADMIN_BTN_SECONDARY,
+  ADMIN_CHECKBOX,
   ADMIN_CHIP_WARN,
-  ADMIN_FIELD,
   ADMIN_HINT,
   ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
-import { ChipListInput } from '@/components/AgentAccess/ChipListInput';
-import { GroupSearchPicker } from '@/components/AgentAccess/GroupSearchPicker';
-import { normalizeDomainEntry } from '@/components/AgentAccess/RuleEditor';
-import { ModelAccessGrantList } from '@/components/Limits/ModelAccessGrantList';
+import { AudiencePicker } from '@/components/Limits/AudiencePicker';
 import { ValueChoice, ValueKind } from '@/components/Limits/ValueChoice';
 import { AudienceShape, ValueChip } from '@/components/Limits/visualSyntax';
 
@@ -78,11 +81,22 @@ interface GridRow {
   isFamily: boolean;
 }
 
-/** The column of the selected cell: a fixed one, or an audience column id. */
-type ColumnKey = 'everyone' | 'allow' | 'deny' | string;
+/** The column a row was opened from: a fixed one, or an audience column id. */
+type ColumnKey = 'everyone' | 'people' | string;
 
-/** A grant has no "off": blocking is the block list's job. */
-const GRANT_KINDS: readonly ValueKind[] = ['inherit', 'limit', 'unlimited'];
+/** What a named audience can be given: a cap, no cap, or no access. */
+const TERMS_KINDS: readonly ValueKind[] = ['limit', 'unlimited', 'off'];
+
+/** Terms as the value the shared chips and control understand (0 = off). */
+function valueOfTerms(terms: AudienceTerms): LimitValue {
+  return terms === false ? 0 : terms;
+}
+
+/** The terms a value from the shared control stands for. */
+function termsOfValue(value: LimitValue | undefined): AudienceTerms {
+  if (value === null || value === true || value === undefined) return null;
+  return value === false || value === 0 ? false : value;
+}
 
 /** A state as the value the shared chips and control understand (0 = off). */
 function valueOfState(state: AccessState): LimitValue {
@@ -90,15 +104,24 @@ function valueOfState(state: AccessState): LimitValue {
   return state.kind === 'unlimited' ? null : state.requests;
 }
 
+type Translate = (
+  key: string,
+  values?: Record<string, string | number>,
+) => string;
+
 /** A state in words: "Unlimited", "Limited to 50 / day", "Unavailable". */
-function stateLabel(
-  t: (key: string, values?: Record<string, string | number>) => string,
-  state: AccessState,
-): string {
+function stateLabel(t: Translate, state: AccessState): string {
   if (state.kind === 'limited') {
     return t('modelAccess.state.limited', { requests: state.requests });
   }
   return t(`modelAccess.state.${state.kind}`);
+}
+
+/** Terms in the same words as {@link stateLabel}. */
+function termsLabel(t: Translate, terms: AudienceTerms): string {
+  if (terms === false) return t('modelAccess.state.unavailable');
+  if (terms === null) return t('modelAccess.state.unlimited');
+  return t('modelAccess.state.limited', { requests: terms });
 }
 
 function modelRow(model: ModelAccessModelNode): GridRow {
@@ -117,8 +140,14 @@ function modelRow(model: ModelAccessModelNode): GridRow {
  * family and model, a column per audience. Reading across a row says who
  * can use that model and on what terms; reading down a column says what one
  * audience gets. A model with nothing of its own in a column shows what its
- * family sets there, dashed. Selecting a cell opens the same Inherit / Limit
- * / Unlimited / Off control as every other limits screen.
+ * family sets there, dashed.
+ *
+ * EDITING is the same for every kind of audience. Selecting a row opens one
+ * editor: the answer for everyone else, then a single list of the groups,
+ * domains and people named on the row, each with the same Limit / Unlimited
+ * / Off control, and one field that adds any mix of the three at once. The
+ * same field, with a list of rows, gives one audience the same terms on
+ * several models in one step.
  *
  * The "everyone else" answer is resolved with the real resolver over the
  * draft, so what a cell says is what a send will do.
@@ -137,24 +166,22 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
     [liveModels, rules],
   );
   const external = externalFamilyLabels(tree);
-  /** Columns added this session that hold no grant yet. */
-  const [addedColumns, setAddedColumns] = useState<AudienceColumn[]>([]);
-  const [adding, setAdding] = useState(false);
+  const [bulkOpen, setBulkOpen] = useState(false);
   const [selected, setSelected] = useState<{
     row: string;
     column: ColumnKey;
   } | null>(null);
-  const columns = useMemo(
-    () => audienceColumns(rules, addedColumns),
-    [rules, addedColumns],
-  );
+  const columns = useMemo(() => audienceColumns(rules), [rules]);
   const groupNames = useGroupNames(
-    columns.filter((c) => c.scope === 'group').map((c) => c.target),
+    rules.flatMap((rule) => [
+      ...rule.groups.map((grant) => grant.target),
+      ...(rule.denyGroups ?? []),
+    ]),
   );
-  const columnLabel = (column: AudienceColumn): string =>
-    column.scope === 'group'
-      ? (groupNames[column.target] ?? column.target)
-      : column.target;
+  const audienceName = (audience: Audience): string =>
+    audience.scope === 'group'
+      ? (groupNames[audience.target] ?? audience.target)
+      : audience.target;
 
   const sections: Array<{ key: string; heading?: string; rows: GridRow[] }> = [
     ...tree.families.map((family) => ({
@@ -181,7 +208,7 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
         ]
       : []),
   ];
-  const columnCount = columns.length + 5;
+  const columnCount = columns.length + 4;
 
   const select = (row: string, column: ColumnKey) =>
     setSelected((current) =>
@@ -194,7 +221,7 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
     <div className="space-y-4">
       <div className="flex flex-wrap items-start gap-3">
         <div className="min-w-0 flex-[1_1_28rem] space-y-1">
-          <p className={ADMIN_MUTED}>{t('modelAccess.grid.intro')}</p>
+          <p className={ADMIN_MUTED}>{t('modelAccess.grid.lead')}</p>
           {external.length > 0 && (
             <p className={ADMIN_MUTED}>
               {t('modelAccess.externalNote', { families: external.join(', ') })}
@@ -204,20 +231,23 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
         <button
           type="button"
           className={ADMIN_BTN_SECONDARY}
-          onClick={() => setAdding((value) => !value)}
-          aria-expanded={adding}
-          disabled={disabled}
+          onClick={() => setBulkOpen((value) => !value)}
+          aria-expanded={bulkOpen}
+          disabled={disabled || sections.length === 0}
         >
           <IconPlus size={16} aria-hidden="true" />
-          {t('modelAccess.grid.addColumn')}
+          {t('modelAccess.grid.bulk.open')}
         </button>
       </div>
-      {adding && (
-        <AddColumnForm
-          onAdd={(column) => {
-            setAddedColumns((current) => [...current, column]);
-            setAdding(false);
+      {bulkOpen && (
+        <BulkAccessForm
+          sections={sections}
+          disabled={disabled}
+          onApply={(dims, audiences, terms) => {
+            onChange(withAudiencesTerms(rules, dims, audiences, terms));
+            setBulkOpen(false);
           }}
+          onCancel={() => setBulkOpen(false)}
         />
       )}
       {mode === 'observe' && (
@@ -247,13 +277,12 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
                 </ColumnHeading>
                 {columns.map((column) => (
                   <ColumnHeading key={columnId(column)} kind={column.scope}>
-                    {columnLabel(column)}
+                    {audienceName(column)}
                   </ColumnHeading>
                 ))}
                 <ColumnHeading kind="user">
-                  {t('modelAccess.list.allow')}
+                  {t('modelAccess.grid.col.people')}
                 </ColumnHeading>
-                <ColumnHeading>{t('modelAccess.list.deny')}</ColumnHeading>
                 <th
                   scope="col"
                   className="min-w-[9rem] px-2 py-2 font-semibold"
@@ -285,7 +314,7 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
                     rules={rules}
                     defaults={defaults}
                     columns={columns}
-                    columnLabel={columnLabel}
+                    audienceName={audienceName}
                     columnCount={columnCount}
                     selected={
                       selected?.row === row.key ? selected.column : null
@@ -316,8 +345,8 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
           {t('modelAccess.grid.howTitle')}
         </h3>
         <ol className="list-decimal space-y-1 ps-5">
-          <li>{t('modelAccess.grid.how.block')}</li>
-          <li>{t('modelAccess.grid.how.specific')}</li>
+          <li>{t('modelAccess.grid.how.blocked')}</li>
+          <li>{t('modelAccess.grid.how.mostSpecific')}</li>
           <li>{t('modelAccess.grid.how.inherit')}</li>
           <li>{t('modelAccess.grid.how.envelope')}</li>
         </ol>
@@ -327,90 +356,163 @@ export const ModelAccessTab: FC<ModelAccessTabProps> = ({
 };
 
 const ColumnHeading: FC<{
-  kind?: 'everyone' | 'group' | 'domain' | 'user';
+  kind: 'everyone' | 'group' | 'domain' | 'user';
   children: ReactNode;
 }> = ({ kind, children }) => (
   <th scope="col" className="min-w-[9rem] px-2 py-2 font-semibold">
     <span className="inline-flex items-center gap-1 [overflow-wrap:anywhere]">
-      {kind ? <AudienceShape kind={kind} /> : <span aria-hidden="true">⊘</span>}
+      <AudienceShape kind={kind} />
       {children}
     </span>
   </th>
 );
 
-/** Form for a new audience column: a security group or a domain. */
-const AddColumnForm: FC<{ onAdd: (column: AudienceColumn) => void }> = ({
-  onAdd,
-}) => {
+/**
+ * WHO and WHAT THEY GET, as one unit: the mixed people / groups / domains
+ * field beside the terms control. Shared by the row editor (add to this
+ * row) and the several-models form, so adding reads the same in both.
+ */
+const AudienceTermsFields: FC<{
+  audiences: Audience[];
+  onAudiencesChange: (audiences: Audience[]) => void;
+  terms: AudienceTerms;
+  onTermsChange: (terms: AudienceTerms) => void;
+  disabled: boolean;
+}> = ({ audiences, onAudiencesChange, terms, onTermsChange, disabled }) => {
   const t = useTranslations('limits');
-  const [scope, setScope] = useState<AudienceColumn['scope']>('group');
-  const [domain, setDomain] = useState('');
-  const addDomain = () => {
-    const target = normalizeDomainEntry(domain).toLowerCase();
-    if (target) onAdd({ scope: 'domain', target });
-  };
+  const requestsDef = getLimitDefinition('model.requests');
+  if (!requestsDef) return null;
   return (
-    <div className="space-y-2 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-surface-dark">
-      <div className="flex flex-wrap items-center gap-2">
-        <label className="flex items-center gap-2 text-sm text-gray-900 dark:text-white">
-          {t('modelAccess.grid.columnKind')}
-          <select
-            className={ADMIN_FIELD}
-            value={scope}
-            onChange={(event) =>
-              setScope(event.target.value as AudienceColumn['scope'])
-            }
-          >
-            <option value="group">{t('scope.group')}</option>
-            <option value="domain">{t('scope.domain')}</option>
-          </select>
-        </label>
-        {scope === 'domain' && (
-          <>
-            <input
-              type="text"
-              className={`min-w-[16rem] ${ADMIN_FIELD}`}
-              value={domain}
-              onChange={(event) => setDomain(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') addDomain();
-              }}
-              placeholder={t('targetsPlaceholder.domain')}
-              aria-label={t('targetsPlaceholder.domain')}
-            />
-            <button
-              type="button"
-              className={ADMIN_BTN_SECONDARY}
-              onClick={addDomain}
-              disabled={!normalizeDomainEntry(domain)}
-            >
-              {t('modelAccess.grid.addColumnConfirm')}
-            </button>
-          </>
-        )}
-      </div>
-      {scope === 'group' && (
-        <div className="max-w-xl">
-          <GroupSearchPicker
-            values={[]}
-            onChange={(added) => {
-              if (added[0]) onAdd({ scope: 'group', target: added[0] });
-            }}
-            labels={{
-              searchPlaceholder: t('groupSearchPlaceholder'),
-              searchHint: t('groupSearchHint'),
-              noResults: t('groupSearchNoResults'),
-              searchError: t('groupSearchError'),
-              chipPlaceholder: t('targetsPlaceholder.group'),
-              addHint: t('chipAddHint'),
-              removeLabel: t('removeChip'),
-              flagOffHint: t('groupsFlagOff'),
-            }}
-          />
+    <div className="grid gap-x-4 gap-y-3 lg:grid-cols-[minmax(0,1fr)_auto]">
+      <div>
+        <div className="mb-1 text-xs font-semibold text-gray-900 dark:text-white">
+          {t('modelAccess.audience.who')}
         </div>
-      )}
-      <p className={ADMIN_HINT}>{t('modelAccess.grid.addColumnHint')}</p>
+        <AudiencePicker
+          value={audiences}
+          onChange={onAudiencesChange}
+          label={t('modelAccess.audience.pickerLabel')}
+          disabled={disabled}
+        />
+      </div>
+      <div>
+        <div className="mb-1 text-xs font-semibold text-gray-900 dark:text-white">
+          {t('modelAccess.audience.terms')}
+        </div>
+        <ValueChoice
+          def={requestsDef}
+          kinds={TERMS_KINDS}
+          label={t('modelAccess.audience.newTerms')}
+          value={valueOfTerms(terms)}
+          inherited={null}
+          onChange={(value) => onTermsChange(termsOfValue(value))}
+          disabled={disabled}
+        />
+      </div>
     </div>
+  );
+};
+
+/** The same audiences and terms on several rows, applied in one step. */
+const BulkAccessForm: FC<{
+  sections: Array<{ key: string; heading?: string; rows: GridRow[] }>;
+  disabled: boolean;
+  onApply: (
+    dims: ModelAccessDimension[],
+    audiences: Audience[],
+    terms: AudienceTerms,
+  ) => void;
+  onCancel: () => void;
+}> = ({ sections, disabled, onApply, onCancel }) => {
+  const t = useTranslations('limits');
+  const [audiences, setAudiences] = useState<Audience[]>([]);
+  const [terms, setTerms] = useState<AudienceTerms>(null);
+  const [rowKeys, setRowKeys] = useState<Set<string>>(new Set());
+  const rows = sections.flatMap((section) => section.rows);
+  const chosen = rows.filter((row) => rowKeys.has(row.key));
+  const toggle = (key: string) =>
+    setRowKeys((current) => {
+      const next = new Set(current);
+      if (!next.delete(key)) next.add(key);
+      return next;
+    });
+  return (
+    <section
+      aria-labelledby="model-access-bulk"
+      className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-surface-dark"
+    >
+      <h3
+        id="model-access-bulk"
+        className="text-sm font-semibold text-gray-900 dark:text-white"
+      >
+        {t('modelAccess.grid.bulk.title')}
+      </h3>
+      <AudienceTermsFields
+        audiences={audiences}
+        onAudiencesChange={setAudiences}
+        terms={terms}
+        onTermsChange={setTerms}
+        disabled={disabled}
+      />
+      <fieldset>
+        <legend className="mb-1 text-xs font-semibold text-gray-900 dark:text-white">
+          {t('modelAccess.grid.bulk.models')}
+        </legend>
+        <div className="grid max-h-64 gap-x-6 gap-y-3 overflow-y-auto rounded-lg border border-gray-200 p-3 sm:grid-cols-2 xl:grid-cols-3 dark:border-gray-700">
+          {sections.map((section) => (
+            <ul key={section.key} className="space-y-1">
+              {section.rows.map((row) => (
+                <li key={row.key} className={row.isFamily ? '' : 'ps-6'}>
+                  <label className="flex items-center gap-2 text-sm text-gray-900 dark:text-white">
+                    <input
+                      type="checkbox"
+                      className={ADMIN_CHECKBOX}
+                      checked={rowKeys.has(row.key)}
+                      onChange={() => toggle(row.key)}
+                      disabled={disabled}
+                    />
+                    <span className={row.isFamily ? 'font-semibold' : ''}>
+                      {row.label}
+                    </span>{' '}
+                    {row.isFamily && (
+                      <span className={ADMIN_MUTED}>
+                        {t('modelAccess.grid.bulk.wholeFamily')}
+                      </span>
+                    )}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </fieldset>
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          className={ADMIN_BTN_PRIMARY}
+          disabled={disabled || audiences.length === 0 || chosen.length === 0}
+          onClick={() =>
+            onApply(
+              chosen.map((row) => row.dimension),
+              audiences,
+              terms,
+            )
+          }
+        >
+          {t('modelAccess.grid.bulk.apply', { count: chosen.length })}
+        </button>
+        <button
+          type="button"
+          className={ADMIN_BTN_SECONDARY}
+          onClick={onCancel}
+        >
+          {t('cancel')}
+        </button>
+        <p className="text-xs text-gray-600 dark:text-gray-400">
+          {t('modelAccess.grid.bulk.note')}
+        </p>
+      </div>
+    </section>
   );
 };
 
@@ -419,7 +521,7 @@ interface RowProps {
   rules: ModelAccessRule[];
   defaults: LimitEntry[];
   columns: AudienceColumn[];
-  columnLabel: (column: AudienceColumn) => string;
+  audienceName: (audience: Audience) => string;
   columnCount: number;
   selected: ColumnKey | null;
   onSelect: (column: ColumnKey) => void;
@@ -428,13 +530,13 @@ interface RowProps {
   disabled: boolean;
 }
 
-/** One family or model: its cells, and the editor for the selected one. */
+/** One family or model: its cells, and its editor when selected. */
 const Row: FC<RowProps> = ({
   row,
   rules,
   defaults,
   columns,
-  columnLabel,
+  audienceName,
   columnCount,
   selected,
   onSelect,
@@ -443,22 +545,13 @@ const Row: FC<RowProps> = ({
   disabled,
 }) => {
   const t = useTranslations('limits');
-  const tPeople = useTranslations('peopleSuggest');
-  const peopleSuggest = useM365PeopleSuggest();
   const requestsDef = getLimitDefinition('model.requests');
   const { dimension, series } = row;
   const rule = ruleFor(rules, dimension);
   const effective = effectiveAccessFor(dimension, series, defaults, rules);
   const collision = collidesWithDefaults(dimension, rule, defaults);
-  const lists = peopleLists(rules, dimension, series);
+  const people = peopleCounts(rules, dimension, series);
   const ownDefault = rule?.defaultAccess !== undefined;
-  /** What everyone else would get if this row set no default of its own. */
-  const inheritedDefault = effectiveAccessFor(
-    dimension,
-    series,
-    defaults,
-    withDefaultAccess(rules, dimension, undefined),
-  );
   const selectedColumn = columns.find((c) => columnId(c) === selected);
 
   const cellButton = (
@@ -494,10 +587,7 @@ const Row: FC<RowProps> = ({
     `${text}, ${t('console.sr.inherited')}`;
   const audienceText = (cell: GridCell): string => {
     if (cell.kind === 'empty') return t('modelAccess.grid.noGrant');
-    const text =
-      cell.requests === null
-        ? t('modelAccess.state.unlimited')
-        : t('modelAccess.state.limited', { requests: cell.requests });
+    const text = termsLabel(t, cell.terms);
     return cell.kind === 'inherited' ? inheritedText(text) : text;
   };
 
@@ -543,13 +633,13 @@ const Row: FC<RowProps> = ({
             <Fragment key={columnId(column)}>
               {cellButton(
                 columnId(column),
-                columnLabel(column),
+                audienceName(column),
                 audienceText(cell),
                 cell.kind === 'empty' ? (
                   <Empty />
                 ) : (
                   <ValueChip
-                    value={cell.requests}
+                    value={valueOfTerms(cell.terms)}
                     def={requestsDef}
                     inherited={cell.kind === 'inherited'}
                   />
@@ -559,20 +649,28 @@ const Row: FC<RowProps> = ({
           );
         })}
         {cellButton(
-          'allow',
-          t('modelAccess.list.allow'),
-          String(lists.allow + lists.inheritedAllow),
-          <PeopleCount own={lists.allow} inherited={lists.inheritedAllow} />,
-        )}
-        {cellButton(
-          'deny',
-          t('modelAccess.list.deny'),
-          String(lists.deny + lists.inheritedDeny),
-          <PeopleCount
-            own={lists.deny}
-            inherited={lists.inheritedDeny}
-            blocked
-          />,
+          'people',
+          t('modelAccess.grid.col.people'),
+          t('modelAccess.grid.peopleValue', {
+            allowed: people.allowed + people.inheritedAllowed,
+            blocked: people.blocked + people.inheritedBlocked,
+          }),
+          <span className="flex flex-wrap items-center gap-1">
+            <PeopleCount
+              own={people.allowed}
+              inherited={people.inheritedAllowed}
+            />
+            <PeopleCount
+              own={people.blocked}
+              inherited={people.inheritedBlocked}
+              blocked
+            />
+            {people.allowed +
+              people.inheritedAllowed +
+              people.blocked +
+              people.inheritedBlocked ===
+              0 && <Empty />}
+          </span>,
         )}
         <td className="px-2 py-2 text-xs text-gray-800 dark:text-gray-200">
           <ReachText reach={reachOf(rules, defaults, dimension, series)} />
@@ -582,150 +680,20 @@ const Row: FC<RowProps> = ({
         <tr>
           <td
             colSpan={columnCount}
-            className="space-y-3 bg-blue-50/60 px-4 py-3 dark:bg-blue-950/20"
+            className="bg-blue-50/60 px-4 py-3 dark:bg-blue-950/20"
           >
-            <div className="flex flex-wrap items-center gap-2">
-              <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-                {row.label}
-                {' · '}
-                {selected === 'everyone'
-                  ? t('modelAccess.defaultLabel')
-                  : selected === 'allow'
-                    ? t('modelAccess.list.allow')
-                    : selected === 'deny'
-                      ? t('modelAccess.list.deny')
-                      : selectedColumn
-                        ? columnLabel(selectedColumn)
-                        : ''}
-              </h4>
-              <button
-                type="button"
-                className={`ms-auto ${ADMIN_BTN_SECONDARY}`}
-                onClick={onClose}
-              >
-                {t('modelAccess.doneEditing')}
-              </button>
-            </div>
-
-            {selected === 'everyone' && requestsDef && (
-              <>
-                <ValueChoice
-                  def={requestsDef}
-                  label={t('modelAccess.grid.cellLabel', {
-                    model: row.label,
-                    audience: t('modelAccess.defaultLabel'),
-                    value: everyoneText,
-                  })}
-                  value={
-                    rule?.defaultAccess === undefined
-                      ? undefined
-                      : rule.defaultAccess === false
-                        ? 0
-                        : rule.defaultAccess
-                  }
-                  inherited={valueOfState(inheritedDefault.state)}
-                  onChange={(value) =>
-                    onChange(
-                      withDefaultAccess(
-                        rules,
-                        dimension,
-                        value === undefined
-                          ? undefined
-                          : value === null || value === true
-                            ? null
-                            : value === 0 || value === false
-                              ? false
-                              : value,
-                      ),
-                    )
-                  }
-                  disabled={disabled}
-                />
-                <p className={ADMIN_HINT}>
-                  {ownDefault
-                    ? t('modelAccess.effectiveLabel', { state: everyoneText })
-                    : t('modelAccess.inheritedFrom', {
-                        state: everyoneText,
-                        origin: t(
-                          `modelAccess.origin.${effective.origin}` as never,
-                        ),
-                      })}
-                </p>
-                {collision && (
-                  <p className={ADMIN_HINT} role="status">
-                    {t('modelAccess.collisionWarning')}
-                  </p>
-                )}
-              </>
-            )}
-
-            {selectedColumn && requestsDef && (
-              <AudienceEditor
-                row={row}
-                rules={rules}
-                column={selectedColumn}
-                columnLabel={columnLabel(selectedColumn)}
-                fallback={valueOfState(effective.state)}
-                onChange={onChange}
-                disabled={disabled}
-              />
-            )}
-
-            {selected === 'allow' && (
-              <>
-                <ModelAccessGrantList
-                  kind="allow"
-                  grants={rule?.allow ?? []}
-                  onChange={(allow) =>
-                    onChange(
-                      upsertRule(rules, dimension, {
-                        ...(rule ?? emptyRule(dimension)),
-                        allow,
-                      }),
-                    )
-                  }
-                  disabled={disabled}
-                />
-                {lists.inheritedAllow > 0 && (
-                  <p className={ADMIN_HINT}>
-                    {t('modelAccess.grid.inheritedPeople', {
-                      count: lists.inheritedAllow,
-                    })}
-                  </p>
-                )}
-              </>
-            )}
-
-            {selected === 'deny' && (
-              <>
-                <p className={ADMIN_HINT}>{t('modelAccess.listHint.deny')}</p>
-                <ChipListInput
-                  values={rule?.deny ?? []}
-                  onChange={(deny) =>
-                    onChange(
-                      upsertRule(rules, dimension, {
-                        ...(rule ?? emptyRule(dimension)),
-                        deny,
-                      }),
-                    )
-                  }
-                  placeholder={t('targetsPlaceholder.user')}
-                  addHint={t('chipAddHint')}
-                  removeLabel={t('removeChip')}
-                  disabled={disabled}
-                  suggest={peopleSuggest}
-                  suggestionsLabel={tPeople('listLabel')}
-                  chipTone={() => 'danger'}
-                />
-                {lists.inheritedDeny > 0 && (
-                  <p className={ADMIN_HINT}>
-                    {t('modelAccess.grid.inheritedPeople', {
-                      count: lists.inheritedDeny,
-                    })}
-                  </p>
-                )}
-              </>
-            )}
+            <RowEditor
+              // Reopening from another column starts the adder afresh.
+              key={selected}
+              row={row}
+              rules={rules}
+              defaults={defaults}
+              audienceName={audienceName}
+              opening={selectedColumn}
+              onClose={onClose}
+              onChange={onChange}
+              disabled={disabled}
+            />
           </td>
         </tr>
       )}
@@ -733,61 +701,253 @@ const Row: FC<RowProps> = ({
   );
 };
 
-/** The terms one group or domain gets on one row. */
-const AudienceEditor: FC<{
+/**
+ * Everything one row says, edited in one place: the answer for everyone
+ * else, then every group, domain and person the row names in a single list
+ * with one control each, and the field that adds more of any kind.
+ */
+const RowEditor: FC<{
   row: GridRow;
   rules: ModelAccessRule[];
-  column: AudienceColumn;
-  columnLabel: string;
-  /** What members get with no grant anywhere: the everyone-else answer. */
-  fallback: LimitValue;
+  defaults: LimitEntry[];
+  audienceName: (audience: Audience) => string;
+  /** The audience column the editor was opened from, if any. */
+  opening: AudienceColumn | undefined;
+  onClose: () => void;
   onChange: (rules: ModelAccessRule[]) => void;
   disabled: boolean;
-}> = ({ row, rules, column, columnLabel, fallback, onChange, disabled }) => {
+}> = ({
+  row,
+  rules,
+  defaults,
+  audienceName,
+  opening,
+  onClose,
+  onChange,
+  disabled,
+}) => {
+  const t = useTranslations('limits');
+  const requestsDef = getLimitDefinition('model.requests');
+  const { dimension, series } = row;
+  const rule = ruleFor(rules, dimension);
+  const entries = audienceEntries(rules, dimension, series);
+  // Opened from an audience column the row says nothing in: that audience
+  // is waiting in the field, so one choice of terms finishes the job.
+  const [pending, setPending] = useState<Audience[]>(() =>
+    opening &&
+    !entries.some(
+      (entry) =>
+        entry.origin === 'own' &&
+        audienceId(entry.audience) === audienceId(opening),
+    )
+      ? [opening]
+      : [],
+  );
+  const [pendingTerms, setPendingTerms] = useState<AudienceTerms>(null);
+  if (!requestsDef) return null;
+
+  const effective = effectiveAccessFor(dimension, series, defaults, rules);
+  const collision = collidesWithDefaults(dimension, rule, defaults);
+  const ownDefault = rule?.defaultAccess !== undefined;
+  /** What everyone else would get if this row set no default of its own. */
+  const inheritedDefault = effectiveAccessFor(
+    dimension,
+    series,
+    defaults,
+    withDefaultAccess(rules, dimension, undefined),
+  );
+  const everyoneText = stateLabel(t, effective.state);
+  const headingId = `model-access-editor-${row.key}`;
+
+  return (
+    <section aria-labelledby={headingId} className="space-y-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <h4
+          id={headingId}
+          className="text-sm font-semibold text-gray-900 dark:text-white"
+        >
+          {t('modelAccess.audience.editorTitle', { model: row.label })}
+        </h4>
+        <button
+          type="button"
+          className={`ms-auto ${ADMIN_BTN_SECONDARY}`}
+          onClick={onClose}
+        >
+          {t('modelAccess.doneEditing')}
+        </button>
+      </div>
+
+      <div className="space-y-1">
+        <div className="flex items-center gap-1 text-xs font-semibold text-gray-900 dark:text-white">
+          <AudienceShape kind="everyone" />
+          {t('modelAccess.defaultLabel')}
+        </div>
+        <ValueChoice
+          def={requestsDef}
+          label={t('modelAccess.grid.cellLabel', {
+            model: row.label,
+            audience: t('modelAccess.defaultLabel'),
+            value: everyoneText,
+          })}
+          value={
+            rule?.defaultAccess === undefined
+              ? undefined
+              : rule.defaultAccess === false
+                ? 0
+                : rule.defaultAccess
+          }
+          inherited={valueOfState(inheritedDefault.state)}
+          onChange={(value) =>
+            onChange(
+              withDefaultAccess(
+                rules,
+                dimension,
+                value === undefined ? undefined : termsOfValue(value),
+              ),
+            )
+          }
+          disabled={disabled}
+        />
+        <p className={ADMIN_HINT}>
+          {ownDefault
+            ? t('modelAccess.effectiveLabel', { state: everyoneText })
+            : t('modelAccess.inheritedFrom', {
+                state: everyoneText,
+                origin: t(`modelAccess.origin.${effective.origin}` as never),
+              })}
+        </p>
+        {collision && (
+          <p className={ADMIN_HINT} role="status">
+            {t('modelAccess.collisionWarning')}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <div>
+          <div className="text-xs font-semibold text-gray-900 dark:text-white">
+            {t('modelAccess.audience.heading')}
+          </div>
+          <p className={ADMIN_HINT}>{t('modelAccess.audience.hint')}</p>
+        </div>
+        {entries.length === 0 ? (
+          <p className={ADMIN_MUTED}>{t('modelAccess.audience.empty')}</p>
+        ) : (
+          <ul
+            aria-label={t('modelAccess.audience.heading')}
+            className="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white dark:divide-gray-700 dark:border-gray-700 dark:bg-surface-dark"
+          >
+            {entries.map((entry) => (
+              <AudienceEntryRow
+                key={`${entry.origin}:${audienceId(entry.audience)}`}
+                entry={entry}
+                name={audienceName(entry.audience)}
+                onTermsChange={(terms) =>
+                  onChange(
+                    withAudienceTerms(rules, dimension, entry.audience, terms),
+                  )
+                }
+                disabled={disabled}
+              />
+            ))}
+          </ul>
+        )}
+        <div className="space-y-3 rounded-lg border border-dashed border-gray-300 p-3 dark:border-gray-600">
+          <AudienceTermsFields
+            audiences={pending}
+            onAudiencesChange={setPending}
+            terms={pendingTerms}
+            onTermsChange={setPendingTerms}
+            disabled={disabled}
+          />
+          <button
+            type="button"
+            className={ADMIN_BTN_PRIMARY}
+            disabled={disabled || pending.length === 0}
+            onClick={() => {
+              onChange(
+                withAudiencesTerms(rules, [dimension], pending, pendingTerms),
+              );
+              setPending([]);
+            }}
+          >
+            {t('modelAccess.audience.add', { count: pending.length })}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/** One named audience on a row: who, what they get, and removing them. */
+const AudienceEntryRow: FC<{
+  entry: AudienceEntry;
+  name: string;
+  /** `undefined` removes the entry. */
+  onTermsChange: (terms: AudienceTerms | undefined) => void;
+  disabled: boolean;
+}> = ({ entry, name, onTermsChange, disabled }) => {
   const t = useTranslations('limits');
   const requestsDef = getLimitDefinition('model.requests');
   if (!requestsDef) return null;
-  const cell = audienceCell(rules, row.dimension, row.series, column);
-  const familyCell =
-    row.dimension.modelId && row.series
-      ? audienceCell(rules, { series: row.series }, undefined, column)
-      : { kind: 'empty' as const };
+  const own = entry.origin === 'own';
   return (
-    <>
-      <ValueChoice
-        def={requestsDef}
-        kinds={GRANT_KINDS}
-        label={t('modelAccess.grid.cellLabel', {
-          model: row.label,
-          audience: columnLabel,
-          value: '',
-        })}
-        value={cell.kind === 'set' ? cell.requests : undefined}
-        inherited={familyCell.kind === 'set' ? familyCell.requests : fallback}
-        onChange={(value) =>
-          onChange(
-            withAudienceGrant(
-              rules,
-              row.dimension,
-              column,
-              value === undefined
-                ? undefined
-                : typeof value === 'number'
-                  ? value
-                  : null,
-            ),
-          )
-        }
-        disabled={disabled}
-      />
-      <p className={ADMIN_HINT}>
-        {t(
-          familyCell.kind === 'set'
-            ? 'modelAccess.grid.grantHintFamily'
-            : 'modelAccess.grid.grantHint',
+    <li className="flex flex-wrap items-center gap-x-4 gap-y-2 px-3 py-2">
+      <div className="flex min-w-[14rem] flex-1 items-baseline gap-1.5 text-sm text-gray-900 dark:text-white">
+        <AudienceShape kind={entry.audience.scope} />
+        <span className="[overflow-wrap:anywhere]">{name}</span>
+        <span className={ADMIN_MUTED}>
+          {t(`modelAccess.audience.kind.${entry.audience.scope}`)}
+        </span>
+        {entry.overruled && (
+          <span className={ADMIN_CHIP_WARN}>
+            {t('modelAccess.audience.overruled')}
+          </span>
         )}
-      </p>
-    </>
+      </div>
+      {own ? (
+        <>
+          <ValueChoice
+            def={requestsDef}
+            kinds={TERMS_KINDS}
+            label={t('modelAccess.termsLabel', { target: name })}
+            value={valueOfTerms(entry.terms)}
+            inherited={null}
+            onChange={(value) => onTermsChange(termsOfValue(value))}
+            disabled={disabled}
+          />
+          <button
+            type="button"
+            className={ADMIN_BTN_ICON_DANGER}
+            onClick={() => onTermsChange(undefined)}
+            disabled={disabled}
+            aria-label={t('modelAccess.removeGrant', { target: name })}
+          >
+            <IconTrash size={16} aria-hidden="true" />
+          </button>
+        </>
+      ) : (
+        <div className="flex flex-wrap items-center gap-2">
+          <ValueChip
+            value={valueOfTerms(entry.terms)}
+            def={requestsDef}
+            inherited
+          />
+          <span className="text-xs text-gray-600 dark:text-gray-400">
+            {t('modelAccess.audience.fromFamily')}
+          </span>
+          <button
+            type="button"
+            className={ADMIN_BTN_SECONDARY}
+            onClick={() => onTermsChange(entry.terms)}
+            disabled={disabled}
+            aria-label={t('modelAccess.audience.setHereFor', { target: name })}
+          >
+            {t('modelAccess.audience.setHere')}
+          </button>
+        </div>
+      )}
+    </li>
   );
 };
 
@@ -803,11 +963,11 @@ const PeopleCount: FC<{
   inherited: number;
   blocked?: boolean;
 }> = ({ own, inherited, blocked = false }) => {
-  if (own === 0 && inherited === 0) return <Empty />;
+  if (own === 0 && inherited === 0) return null;
   const base =
     'inline-flex h-6 items-center gap-1 rounded-md px-2 text-xs font-semibold tabular-nums';
   return (
-    <span className="flex flex-wrap items-center gap-1">
+    <>
       {own > 0 && (
         <span
           className={`${base} ${
@@ -828,38 +988,36 @@ const PeopleCount: FC<{
           {inherited}
         </span>
       )}
-    </span>
+    </>
   );
 };
 
 const ReachText: FC<{ reach: Reach }> = ({ reach }) => {
   const t = useTranslations('limits');
+  const list = (counts: AudienceCounts): string =>
+    [
+      counts.groups > 0
+        ? t('modelAccess.groupsCount', { count: counts.groups })
+        : null,
+      counts.domains > 0
+        ? t('modelAccess.domainsCount', { count: counts.domains })
+        : null,
+      counts.people > 0
+        ? t('modelAccess.grid.reach.people', { count: counts.people })
+        : null,
+    ]
+      .filter((part): part is string => part !== null)
+      .join(', ');
   switch (reach.kind) {
     case 'everyone':
       return <>{t('modelAccess.grid.reach.everyone')}</>;
     case 'everyoneBut':
       return (
-        <>{t('modelAccess.grid.reach.everyoneBut', { count: reach.blocked })}</>
+        <>{t('modelAccess.grid.reach.everyoneExcept', { list: list(reach) })}</>
       );
     case 'nobody':
       return <>{t('modelAccess.grid.reach.nobody')}</>;
     case 'listed':
-      return (
-        <>
-          {[
-            reach.groups > 0
-              ? t('modelAccess.groupsCount', { count: reach.groups })
-              : null,
-            reach.domains > 0
-              ? t('modelAccess.domainsCount', { count: reach.domains })
-              : null,
-            reach.people > 0
-              ? t('modelAccess.grid.reach.people', { count: reach.people })
-              : null,
-          ]
-            .filter((part): part is string => part !== null)
-            .join(', ')}
-        </>
-      );
+      return <>{list(reach)}</>;
   }
 };
