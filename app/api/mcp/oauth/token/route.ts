@@ -17,6 +17,7 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { auth } from '@/auth';
 import type { AuthorizationServerMetadata } from '@modelcontextprotocol/sdk/shared/auth.js';
@@ -169,9 +170,14 @@ export async function POST(request: NextRequest) {
     // Log the failure class server-side. Provider error MESSAGES are safe
     // (our secrets ride in the request, not the response) but grant values
     // must never be interpolated here.
+    // A constant format string, and the provider's message sanitised: it
+    // comes from outside and could carry a line break that forges an entry.
     console.error(
-      `[mcp/oauth/token] ${grant.type} failed:`,
-      error instanceof Error ? `${error.name}: ${error.message}` : error,
+      '[mcp/oauth/token] %s failed: %s',
+      sanitizeForLog(grant.type),
+      sanitizeForLog(
+        error instanceof Error ? `${error.name}: ${error.message}` : error,
+      ),
     );
     // invalid_grant gets a stable code so the client wipes tokens + reauths.
     // bad_verification_code is GitHub's spelling of the same condition; its
