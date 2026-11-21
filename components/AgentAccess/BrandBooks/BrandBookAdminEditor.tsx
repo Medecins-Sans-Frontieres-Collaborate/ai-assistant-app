@@ -23,6 +23,7 @@ import {
   BrandBookBody,
   parseBrandBookBody,
 } from '@/lib/utils/shared/brand/brandBook';
+import { groundingCount } from '@/lib/utils/shared/brand/draftGrounding';
 
 import {
   BrandFileAccess,
@@ -62,9 +63,6 @@ type Notice =
       fallback: 'saveFailed' | 'guide.failed';
     };
 
-/** Most measured fonts and colours the draft note shows. */
-const EVIDENCE_SHOWN = 6;
-
 /**
  * Full-page editor for one brand book (docs/DOCUMENT_PLATFORM.md, phase E):
  * its colours, type, logos, language and templates, a draft from a brand
@@ -87,7 +85,8 @@ export function BrandBookAdminEditor({ bookId }: { bookId: string }) {
     null,
   );
   const [draft, setDraft] = useState<{
-    evidence: BrandBookDraft['evidence'];
+    result: Omit<BrandBookDraft, 'book'>;
+    /** The book before the draft replaced it, for undoing. */
     before: BrandBookBody;
   } | null>(null);
 
@@ -228,15 +227,25 @@ export function BrandBookAdminEditor({ bookId }: { bookId: string }) {
     setMessage(null);
     try {
       const ref = await uploadBrandGuide(file);
+      // Shown from the admin's own copy until a save stores it.
+      localPreviews.current.set(ref, URL.createObjectURL(file));
       setDrafting('reading');
-      const result = await draftBrandBookFromGuide(ref, file.name);
-      // The guide's rules replace the book's; its files stay the admin's.
+      const { book: drafted, ...result } = await draftBrandBookFromGuide(
+        ref,
+        file.name,
+      );
+      // The guide's rules replace the book's; its files stay the admin's,
+      // and its smallest logo width fills in where a logo has none.
       setBook({
-        ...result.book,
-        logos: book.logos,
+        ...drafted,
+        logos: book.logos.map((logo) =>
+          result.logoMinWidthPt > 0 && logo.minWidthPt === undefined
+            ? { ...logo, minWidthPt: result.logoMinWidthPt }
+            : logo,
+        ),
         templates: book.templates,
       });
-      setDraft({ evidence: result.evidence, before: book });
+      setDraft({ result, before: book });
     } catch (error) {
       setMessage({
         kind: 'error',
@@ -271,6 +280,16 @@ export function BrandBookAdminEditor({ bookId }: { bookId: string }) {
   }
 
   const sourceUrl = book.source ? files.previewUrl(book.source.file) : null;
+  const grounding = draft
+    ? { lookup: draft.result.grounding, guideUrl: sourceUrl }
+    : undefined;
+  const found = draft
+    ? {
+        colors: groundingCount(draft.result.grounding.colors),
+        fonts: groundingCount(draft.result.grounding.fonts),
+        terms: groundingCount(draft.result.grounding.terms),
+      }
+    : null;
 
   return (
     <div className="mx-auto max-w-5xl px-4 pb-16 sm:px-6">
@@ -401,39 +420,34 @@ export function BrandBookAdminEditor({ bookId }: { bookId: string }) {
               )}
             </p>
           )}
-          {draft && (
+          {draft && found && (
             <div
               className="mt-4 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-950 dark:border-blue-900 dark:bg-blue-950/30 dark:text-blue-100"
               role="status"
             >
               <p className="font-medium">
-                {t('guide.applied', { pages: draft.evidence.pageCount })}
+                {t('guide.applied', { pages: draft.result.evidence.pageCount })}
               </p>
-              {draft.evidence.fonts.length > 0 && (
+              <p className="mt-1">
+                {t('guide.grounded', {
+                  colors: found.colors.found,
+                  colorTotal: found.colors.total,
+                  fonts: found.fonts.found,
+                  fontTotal: found.fonts.total,
+                  terms: found.terms.found,
+                  termTotal: found.terms.total,
+                })}
+              </p>
+              {draft.result.logoMinWidthPt > 0 && (
                 <p className="mt-1">
-                  {t('guide.measuredFonts')}{' '}
-                  {draft.evidence.fonts
-                    .slice(0, EVIDENCE_SHOWN)
-                    .map((f) => `${f.family} ${Math.round(f.share * 100)}%`)
-                    .join(', ')}
+                  {t('guide.logoMinWidth', {
+                    points: draft.result.logoMinWidthPt,
+                  })}
                 </p>
               )}
-              {draft.evidence.colors.length > 0 && (
-                <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
-                  {t('guide.measuredColors')}
-                  {draft.evidence.colors.slice(0, EVIDENCE_SHOWN).map((c) => (
-                    <span
-                      key={c.hex}
-                      className="inline-flex items-center gap-1"
-                    >
-                      <span
-                        aria-hidden
-                        className="h-3 w-3 rounded-sm border border-blue-300"
-                        style={{ backgroundColor: c.hex }}
-                      />
-                      <span className="font-mono text-xs">{c.hex}</span>
-                    </span>
-                  ))}
+              {draft.result.dropped > 0 && (
+                <p className="mt-1">
+                  {t('guide.dropped', { count: draft.result.dropped })}
                 </p>
               )}
               <p className="mt-2 text-xs">{t('guide.check')}</p>
@@ -450,15 +464,20 @@ export function BrandBookAdminEditor({ bookId }: { bookId: string }) {
             </div>
           )}
         </EditorSection>
-        <PaletteSection book={book} onChange={change} />
-        <TypographySection book={book} onChange={change} />
+        <PaletteSection book={book} onChange={change} grounding={grounding} />
+        <TypographySection
+          book={book}
+          onChange={change}
+          grounding={grounding}
+        />
         <LogosSection
           book={book}
           onChange={change}
           files={files}
           onError={showError}
+          defaultMinWidthPt={draft?.result.logoMinWidthPt || undefined}
         />
-        <LanguageSection book={book} onChange={change} />
+        <LanguageSection book={book} onChange={change} grounding={grounding} />
         <TemplatesSection
           book={book}
           onChange={change}
