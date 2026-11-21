@@ -134,6 +134,33 @@ export async function uploadBrandFile(file: File): Promise<string> {
   return data.uri;
 }
 
+/**
+ * Uploads a brand guide PDF as its own bytes (the guide route, which takes
+ * a larger file than the general upload does).
+ *
+ * @returns Its reference (`/api/file/<sha256>.pdf`), which drafting reads
+ *   and a save copies into the book.
+ */
+export async function uploadBrandGuide(
+  file: File,
+  signal?: AbortSignal,
+): Promise<string> {
+  const response = await fetch(`${ROUTE}/guide`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/pdf' },
+    body: file,
+    signal,
+  });
+  const data = await dataOf<{ file?: unknown }>(
+    response,
+    'Could not upload the brand guide',
+  );
+  if (typeof data.file !== 'string') {
+    throw new Error('Upload failed: the server gave no file reference');
+  }
+  return data.file;
+}
+
 /** What drafting from a guide returns. */
 export interface BrandBookDraft {
   book: BrandBookBody;
