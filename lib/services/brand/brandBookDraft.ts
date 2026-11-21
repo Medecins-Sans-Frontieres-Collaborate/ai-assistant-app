@@ -212,8 +212,7 @@ Use only what the guide states or plainly shows. Do not invent colours, fonts or
 - palette: every brand colour the guide defines, with the name the guide gives it and its hex value. When the guide gives only RGB or CMYK, convert to hex. Give roles only where the guide says what a colour is for (primary, secondary, accent, text, background, neutral).
 - neutrals: colours any document may use without being brand colours (usually white and black), as hex.
 - fonts: every typeface the guide lets documents use, as the guide names the family (without a weight such as Bold), each with the role it is used for: heading, body, or accent for display, numerals, callouts and handwriting. A role may have several typefaces: give each its own entry. Substitutes are the families the guide allows in a typeface's place (for example the version of it that ships with office software, or a system font for documents shared outside).
-- minTextSizePt: the smallest text size the guide allows, in points; 0 when it sets none.
-- locales: the languages the guide says documents are written in, as BCP 47 tags; empty when it does not say.
+- minTextSizePt: the smallest text size the guide says documents may use, in points; 0 unless the guide states one in words. The sizes the guide's own pages happen to be set in are not a rule.
 - logoMinWidthPt: the smallest width the guide allows the logo at, in points (1 inch is 72 points); 0 when it sets none.
 - preferred: words, names or spellings the guide asks for, each with the words it says NOT to write in its place. A short form or acronym the guide itself uses or allows is not one of those; when the guide names nothing to replace, give no alternatives.
 - banned: words or phrases the guide asks to avoid, each with what to write instead and a short reason when it gives one. Give the phrase as it would appear in a document, not a description of it. Do not also list a banned phrase under preferred.
@@ -430,7 +429,6 @@ export async function draftBrandBook(input: {
         `Measured from the guide's ${evidence.pageCount} pages:`,
         `Fonts (share of text): ${evidence.fonts.map((f) => `${f.family} ${Math.round(f.share * 100)}%`).join(', ') || 'none'}`,
         `Text colours (share of text): ${evidence.colors.map((c) => `${c.hex} ${Math.round(c.share * 100)}%`).join(', ') || 'none'}`,
-        `Smallest text in use: ${evidence.smallestTextPt ?? 'unknown'} pt`,
         '',
         'The guide:',
         budgeted.text,
