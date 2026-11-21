@@ -83,3 +83,40 @@ export function countBySeverity(
   for (const finding of findings) counts[finding.severity] += 1;
   return counts;
 }
+
+/** One problem and every place it was found, in report order. */
+export interface BrandFindingGroup {
+  /** Stable within one review. */
+  key: string;
+  /** The places; never empty. The first stands for the group. */
+  findings: BrandFinding[];
+}
+
+/**
+ * Findings as problems: a check's findings of the same rule and values
+ * are one problem found in several places (a document set wholly in the
+ * wrong typeface is one problem, not one per paragraph). The model's
+ * findings each stay alone: their notes differ.
+ *
+ * @returns Groups in report order of their first place.
+ */
+export function groupFindings(
+  findings: readonly BrandFinding[],
+): BrandFindingGroup[] {
+  const groups = new Map<string, BrandFindingGroup>();
+  for (const finding of sortFindings(findings)) {
+    const key =
+      finding.source === 'model'
+        ? `model ${finding.id}`
+        : [
+            finding.rule,
+            finding.severity,
+            finding.found.toLowerCase(),
+            ...finding.expected,
+          ].join('\u0000');
+    const group = groups.get(key);
+    if (group) group.findings.push(finding);
+    else groups.set(key, { key, findings: [finding] });
+  }
+  return [...groups.values()];
+}

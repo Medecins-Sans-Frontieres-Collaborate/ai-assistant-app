@@ -1,5 +1,6 @@
 'use client';
 
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -8,7 +9,7 @@ import {
   BrandFinding,
   BrandFindingSeverity,
   countBySeverity,
-  sortFindings,
+  groupFindings,
 } from '@/lib/utils/shared/brand/brandFindings';
 import {
   describeFinding,
@@ -22,6 +23,9 @@ const SEVERITY_DOT: Record<BrandFindingSeverity, string> = {
   warning: 'bg-amber-400',
   info: 'bg-sky-400',
 };
+
+const stepClass =
+  'inline-flex h-6 w-6 items-center justify-center rounded hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600 dark:hover:bg-gray-700';
 
 /** A small colour square, for a value that is a colour. */
 function Swatch({ hex }: { hex: string }) {
@@ -37,8 +41,9 @@ function Swatch({ hex }: { hex: string }) {
 
 /**
  * The findings of a review beside the page: counts, a filter by severity,
- * and the list, where choosing a finding shows it on its page. The list is
- * in report order (page, rule, position).
+ * and the list of problems (groupFindings), in report order of where each
+ * is first found. Choosing a problem shows it on its page; one found in
+ * several places can be stepped through place by place.
  */
 export function BrandFindingsPanel({
   findings,
@@ -57,8 +62,10 @@ export function BrandFindingsPanel({
   const counts = countBySeverity(findings);
   const shown = useMemo(
     () =>
-      sortFindings(findings).filter(
-        (finding) => filter === 'all' || finding.severity === filter,
+      groupFindings(
+        findings.filter(
+          (finding) => filter === 'all' || finding.severity === filter,
+        ),
       ),
     [findings, filter],
   );
@@ -109,18 +116,29 @@ export function BrandFindingsPanel({
         </p>
       ) : (
         <ul className="min-h-0 flex-1 overflow-y-auto">
-          {shown.map((finding) => {
-            const selected = finding.id === selectedId;
+          {shown.map((group) => {
+            const at = group.findings.findIndex(
+              (place) => place.id === selectedId,
+            );
+            const selected = at >= 0;
+            // The place shown: the chosen one, else the first.
+            const finding = group.findings[Math.max(at, 0)];
+            const total = group.findings.length;
+            const step = (by: number) =>
+              onSelect(group.findings[(at + by + total) % total]);
             return (
-              <li key={finding.id}>
+              <li
+                key={group.key}
+                className={`border-b border-gray-100 dark:border-gray-800/70 ${
+                  selected ? 'bg-blue-50 dark:bg-blue-950/40' : ''
+                }`}
+              >
                 <button
                   type="button"
                   aria-current={selected ? 'true' : undefined}
                   onClick={() => onSelect(finding)}
-                  className={`flex w-full gap-2.5 border-b border-gray-100 px-3 py-2.5 text-start focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600 dark:border-gray-800/70 ${
-                    selected
-                      ? 'bg-blue-50 dark:bg-blue-950/40'
-                      : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                  className={`flex w-full gap-2.5 px-3 py-2.5 text-start focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600 ${
+                    selected ? '' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
                   }`}
                 >
                   <span
@@ -137,9 +155,11 @@ export function BrandFindingsPanel({
                         </span>
                       </span>
                       <span className="shrink-0 text-xs text-gray-500 dark:text-gray-400">
-                        {finding.page === null
-                          ? t('notes')
-                          : t('pageShort', { page: finding.page })}
+                        {total > 1
+                          ? t('places', { count: total })
+                          : finding.page === null
+                            ? t('notes')
+                            : t('pageShort', { page: finding.page })}
                       </span>
                     </span>
                     <span className="mt-0.5 block text-sm text-gray-700 dark:text-gray-300">
@@ -160,6 +180,33 @@ export function BrandFindingsPanel({
                     )}
                   </span>
                 </button>
+                {selected && total > 1 && (
+                  <div className="flex items-center gap-1 pb-2 pe-3 ps-[1.875rem] text-xs text-gray-700 dark:text-gray-300">
+                    <button
+                      type="button"
+                      aria-label={t('previousPlace')}
+                      onClick={() => step(-1)}
+                      className={stepClass}
+                    >
+                      <IconChevronLeft size={14} aria-hidden />
+                    </button>
+                    <span aria-live="polite" className="tabular-nums">
+                      {t('placeOf', { index: at + 1, total })}
+                      {' \u00b7 '}
+                      {finding.page === null
+                        ? t('notes')
+                        : t('pageShort', { page: finding.page })}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label={t('nextPlace')}
+                      onClick={() => step(1)}
+                      className={stepClass}
+                    >
+                      <IconChevronRight size={14} aria-hidden />
+                    </button>
+                  </div>
+                )}
               </li>
             );
           })}
