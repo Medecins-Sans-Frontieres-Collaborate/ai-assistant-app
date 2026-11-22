@@ -8,6 +8,7 @@ import {
   migrateLegacyMessages,
   needsMigration,
 } from '@/lib/utils/shared/chat/messageVersioning';
+import { detachSourceText } from '@/lib/utils/shared/translation/storedSourceText';
 
 import {
   ActiveFile,
@@ -112,6 +113,16 @@ interface ConversationStore {
   updateWorkflowState: (
     id: string,
     updater: (prev: WorkflowState | undefined) => WorkflowState,
+  ) => void;
+  /**
+   * Puts into a workflow's state something that was fetched rather than
+   * changed: content the browser does not keep (see storedSourceText.ts).
+   * Like updateWorkflowState, but the conversation is not marked as edited,
+   * so it is not reordered, re-saved or backed up for having been opened.
+   */
+  hydrateWorkflowState: (
+    id: string,
+    updater: (prev: WorkflowState) => WorkflowState,
   ) => void;
   /**
    * Appends one workflow run's token spend to the conversation's ledger
@@ -294,6 +305,30 @@ function applyMessageArtifacts(
   });
 }
 
+/** What each conversation was last written as, so the work is done once. */
+const browserForms = new WeakMap<Conversation, Conversation>();
+
+/**
+ * The conversation as the browser keeps it: a translation whose source text
+ * is in storage is written without the text (see storedSourceText.ts).
+ * Every other conversation is returned as it is.
+ */
+function conversationForBrowser(conversation: Conversation): Conversation {
+  const state = conversation.workflowState;
+  if (state?.kind !== 'translation' || !state.sourceTextRef) {
+    return conversation;
+  }
+  const known = browserForms.get(conversation);
+  if (known) return known;
+  const detached = detachSourceText(state);
+  const form =
+    detached === state
+      ? conversation
+      : { ...conversation, workflowState: detached };
+  browserForms.set(conversation, form);
+  return form;
+}
+
 export const useConversationStore = create<ConversationStore>()(
   persist(
     (set, get) => ({
@@ -365,6 +400,21 @@ export const useConversationStore = create<ConversationStore>()(
               // cost is bookkeeping about work already done, and must not
               // reorder the sidebar or look like a fresh edit.
             };
+          });
+          return changed ? { conversations } : state;
+        }),
+
+      hydrateWorkflowState: (id, updater) =>
+        set((state) => {
+          let changed = false;
+          const conversations = state.conversations.map((c) => {
+            if (c.id !== id || !c.workflowState) return c;
+            const next = updater(c.workflowState);
+            if (next === c.workflowState || next.kind !== c.conversationType) {
+              return c;
+            }
+            changed = true;
+            return { ...c, workflowState: next };
           });
           return changed ? { conversations } : state;
         }),
@@ -1009,7 +1059,7 @@ export const useConversationStore = create<ConversationStore>()(
       version: 8, // v8: clear stale bot mirrors (agent/model decoupling)
       storage: createJSONStorage(() => perConversationStorage),
       partialize: (state) => ({
-        conversations: state.conversations,
+        conversations: state.conversations.map(conversationForBrowser),
         selectedConversationId: state.selectedConversationId,
         folders: state.folders,
         deletedConversations: state.deletedConversations,

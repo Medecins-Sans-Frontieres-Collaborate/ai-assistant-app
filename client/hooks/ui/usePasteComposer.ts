@@ -2,6 +2,7 @@ import { RefObject, useEffect, useRef } from 'react';
 
 import {
   composerCaptureBlocked,
+  composerHidden,
   isForeignEditable,
 } from '@/client/hooks/ui/useAutoFocusComposer';
 
@@ -58,7 +59,7 @@ export function usePasteComposer({
       const textarea = textareaRef.current;
       if (!textarea) return;
 
-      if (composerCaptureBlocked()) return;
+      if (composerCaptureBlocked() || composerHidden(textarea)) return;
 
       // Never hijack pastes into other editable elements
       if (isForeignEditable(event.target, textarea)) return;

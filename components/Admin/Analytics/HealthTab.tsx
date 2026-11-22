@@ -84,6 +84,7 @@ export const HealthTab: FC<HealthTabProps> = ({ onOpenFields }) => {
   const health = query.data;
   const nothingWrong =
     !health.deliveryUnavailable &&
+    !health.deliveryContainerCreatedByApp &&
     health.problems.length === 0 &&
     health.unconfiguredFolders.length === 0 &&
     health.staleFolders.length === 0;
@@ -95,6 +96,18 @@ export const HealthTab: FC<HealthTabProps> = ({ onOpenFields }) => {
           <p className="font-medium">{t('health.deliveryUnavailableTitle')}</p>
           <p className="mt-1">
             {t('health.deliveryUnavailableBody', {
+              container: health.container,
+            })}
+          </p>
+        </div>
+      )}
+      {health.deliveryContainerCreatedByApp && (
+        <div className={ADMIN_BANNER_WARN} role="status">
+          <p className="font-medium">
+            {t('health.deliveryContainerCreatedTitle')}
+          </p>
+          <p className="mt-1">
+            {t('health.deliveryContainerCreatedBody', {
               container: health.container,
             })}
           </p>

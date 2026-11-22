@@ -67,7 +67,7 @@ export function resolveAdminStorageLocation(): {
  * role on the account) — distinct from transient/network errors, which
  * should NOT trigger the dev fallback below.
  */
-function isAuthorizationError(err: unknown): boolean {
+export function isAuthorizationError(err: unknown): boolean {
   if ((err as { statusCode?: number })?.statusCode === 403) return true;
   const message = err instanceof Error ? err.message : String(err);
   return message.includes('not authorized to perform this operation');
@@ -148,6 +148,24 @@ export function createAdminBlobStorage(): BlobStorage {
   const storage = new AzureBlobStorage(accountName, containerName, SYSTEM_USER);
   ensureOnce(storage, accountName, containerName);
   return storage;
+}
+
+/**
+ * Ensures the admin container exists now, instead of on first use. Shares
+ * the once-per-process attempt with {@link createAdminBlobStorage}, so the
+ * container is created at most once and never cleared.
+ *
+ * @returns True when the container exists (created now or already there);
+ *   false when the attempt failed, which has already been logged.
+ * @throws Error when no storage account is configured at all.
+ */
+export function ensureAdminContainer(): Promise<boolean> {
+  const { accountName, containerName } = resolveAdminStorageLocation();
+  createAdminBlobStorage();
+  return (
+    ensuredContainers.get(`${accountName}/${containerName}`) ??
+    Promise.resolve(true)
+  );
 }
 
 /** Test hook. */

@@ -12,10 +12,15 @@
  * fail-mode knob; a kill switch that fails open for the restricted workflow
  * would not be a kill switch.
  */
+import { Principal } from '@/lib/services/shared/principalMatching';
 import {
+  WorkflowFeatureId,
   WorkflowPolicy,
+  resolveAllWorkflowFeaturesEnabled,
   resolveAllWorkflowsEnabled,
   resolveWorkflowEnabled,
+  resolveWorkflowFeatureEnabled,
+  resolveWorkflowFeatureLimits,
 } from '@/lib/services/workflows/policy/types';
 import {
   createWorkflowPolicyBlobStorage,
@@ -107,6 +112,23 @@ export class WorkflowPolicyService {
 
   allEnabled(): Record<ConversationWorkflowType, boolean> {
     return resolveAllWorkflowsEnabled(this.policy);
+  }
+
+  /** Whether a feature is available: its switch and its workflow are on. */
+  isFeatureEnabled(id: WorkflowFeatureId): boolean {
+    return resolveWorkflowFeatureEnabled(this.policy, id);
+  }
+
+  /** A feature's limits for one person (see resolveWorkflowFeatureLimits). */
+  featureLimits(
+    id: WorkflowFeatureId,
+    principal?: Principal | null,
+  ): Record<string, number> {
+    return resolveWorkflowFeatureLimits(this.policy, id, principal);
+  }
+
+  allFeaturesEnabled(): Record<WorkflowFeatureId, boolean> {
+    return resolveAllWorkflowFeaturesEnabled(this.policy);
   }
 
   private getStorage(): BlobStorage {

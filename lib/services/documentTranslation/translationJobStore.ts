@@ -33,6 +33,17 @@ export interface TranslationJob {
   m365Source?: { driveId: string; parentItemId: string };
   targetLanguage: string;
   createdAt: number;
+  /**
+   * Presentations only: the extension of the copy the service is sent and
+   * returns (always `pptx`), when it differs from `ext` or a merge is due.
+   * Its presence marks a job whose result is merged into the original
+   * deck when it finishes (lib/services/documentTranslation/deck).
+   */
+  serviceExt?: string;
+  /** Presentations only: whether translated speaker notes are kept. */
+  translateNotes?: boolean;
+  /** Set when the upload was converted (a .ppt) before translating. */
+  convertedFrom?: 'ppt';
 }
 
 /** UUID job ids only — prevents path traversal into the jobs prefix. */

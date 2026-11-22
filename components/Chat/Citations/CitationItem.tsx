@@ -87,7 +87,7 @@ export const CitationItem: React.FC<CitationItemProps> = ({
               {citation.evidence!.map((entry) => (
                 <blockquote
                   key={entry.number}
-                  className="text-[11.5px] italic text-gray-600 dark:text-gray-300 border-s-2 border-gray-400 dark:border-gray-500 ps-2"
+                  className="text-[11.5px] italic text-gray-600 dark:text-gray-300"
                   title={entry.quote}
                 >
                   <span
@@ -108,7 +108,7 @@ export const CitationItem: React.FC<CitationItemProps> = ({
           ) : (
             citation.quote && (
               <blockquote
-                className="text-[11.5px] italic line-clamp-4 text-gray-600 dark:text-gray-300 border-s-2 border-gray-400 dark:border-gray-500 ps-2 mb-1"
+                className="text-[11.5px] italic line-clamp-4 text-gray-600 dark:text-gray-300 mb-1"
                 title={citation.quote}
               >
                 “{citation.quote}”

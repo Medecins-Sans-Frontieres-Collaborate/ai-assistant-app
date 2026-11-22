@@ -11,9 +11,10 @@ import { ADMIN_CHIP_WARN } from '@/components/Admin/adminClasses';
 export const LIMITS_CHIP_WARN = ADMIN_CHIP_WARN;
 
 /**
- * Informational card — the overlap hint and the "relevant rules" popover.
- * Same surface as ADMIN_CARD, distinguished only by a blue left rule so it
- * reads as a note rather than a record.
+ * Informational card: the overlap hint, the cost notes and the "relevant
+ * rules" popover. A blue tint and border all round set it apart from
+ * ADMIN_CARD so it reads as a note rather than a record. The background is
+ * opaque: the popover lies over other content.
  */
 export const LIMITS_NOTE_CARD =
-  'rounded-lg border border-gray-200 border-s-4 border-s-blue-400 bg-gray-50 p-3 text-sm text-gray-700 dark:border-gray-700 dark:border-s-blue-500 dark:bg-surface-dark dark:text-gray-300';
+  'rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-gray-700 dark:border-blue-900 dark:bg-blue-950 dark:text-gray-300';

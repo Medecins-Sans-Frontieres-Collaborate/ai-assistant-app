@@ -19,6 +19,7 @@ import {
 } from '@/lib/services/limits/enforcement';
 import { periodKindForWindow, resetAt } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
+import { capOf } from '@/lib/services/limits/recordedCap';
 import { ResolvedLimit } from '@/lib/services/limits/resolver';
 import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
 import {
@@ -118,6 +119,7 @@ export async function guardLimit(
       limit: cell.value as number,
       limitKey: cell.limitKey,
       source: cell.source,
+      cap: capOf(cell),
     }));
 
     const timezone = policy?.timezone ?? 'UTC';

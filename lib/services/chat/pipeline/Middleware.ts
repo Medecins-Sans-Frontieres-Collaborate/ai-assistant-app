@@ -28,8 +28,10 @@ import {
   meteredCells,
 } from '@/lib/services/limits/enforcement';
 import { isModelBlocked } from '@/lib/services/limits/modelAvailability';
+import { recordModelUsage } from '@/lib/services/limits/modelUsageTally';
 import { resetAt } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
+import { capOf } from '@/lib/services/limits/recordedCap';
 import {
   ResolvedLimit,
   activeDelegationIds,
@@ -1455,6 +1457,36 @@ export const createTelemetryMiddleware = async (
 };
 
 /**
+ * Counts one chat message against the per-model usage tally
+ * (lib/services/limits/modelUsageTally.ts). Storage-free and never throws.
+ *
+ * Follows the counters' own rules for what a message is: a verified
+ * tool-loop continuation is the same message as the turn that started it,
+ * and a byom model runs on the user's own account, so neither is counted.
+ */
+function tallyChatRequest(context: ChatContext, timezone: string): void {
+  const userId = context.user?.id;
+  if (!userId || !context.modelId) return;
+  if (context.modelId.startsWith('byom-')) return;
+  if (
+    isVerifiedContinuation(
+      userId,
+      context.mcpLoopRound,
+      context.mcpPendingToolCalls,
+      context.mcpServers?.length ?? 0,
+    )
+  ) {
+    return;
+  }
+  recordModelUsage(
+    userId,
+    context.modelId,
+    { requests: 1 },
+    { series: context.model?.series, timezone },
+  );
+}
+
+/**
  * Resolves admin-configured usage limits for this caller and REJECTS the
  * request when one is exceeded (docs/LIMITS.md).
  *
@@ -1484,6 +1516,7 @@ export async function createLimitsMiddleware(
     // No policy authored (or never loaded): everything resolves to the
     // compiled catalog defaults, i.e. unlimited — nothing to check or count.
     if (policy === null) {
+      tallyChatRequest(context, 'UTC');
       return {};
     }
 
@@ -1604,6 +1637,7 @@ export async function createLimitsMiddleware(
             limit: cell.value as number,
             limitKey: cell.limitKey,
             source: cell.source,
+            cap: capOf(cell),
             ...(cell.modelId ? { modelId: cell.modelId } : {}),
             ...(cell.series ? { series: cell.series } : {}),
           })),
@@ -1663,6 +1697,11 @@ export async function createLimitsMiddleware(
         );
       }
     }
+
+    // Every check passed (or was only observed): this message will be
+    // served. Tallied for everyone, capped or not, so the admin views can
+    // say how a model is used by the unlimited majority too.
+    tallyChatRequest(context, policy.timezone);
 
     // Ceilings downstream code CLAMPS to rather than rejecting on.
     const ceilings: Record<string, number> = {};

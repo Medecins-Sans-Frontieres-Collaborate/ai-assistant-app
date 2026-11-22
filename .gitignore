@@ -16,6 +16,9 @@
 
 # production
 /build
+# Source folders named "build" (app/api/deck-builder/build), which a
+# global `build/` ignore would otherwise hide from commits.
+!app/**/build/
 
 # misc
 .DS_Store

@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { formatBytes } from '@/lib/utils/app/storage/storageUtils';
+import { documentUnitOf } from '@/lib/utils/shared/translation/documentMode';
 
 import { TranslationSourceDocument } from '@/types/workflow';
 
@@ -34,7 +35,12 @@ export function SourceDocumentCard({
   const t = useTranslations('workflows');
   const details = [
     document.lastPage > 0 &&
-      t('translation.documentPageCount', { count: document.lastPage }),
+      t(
+        documentUnitOf(document.name) === 'slide'
+          ? 'translation.slides.count'
+          : 'translation.documentPageCount',
+        { count: document.lastPage },
+      ),
     document.size !== undefined && formatBytes(document.size),
   ].filter(Boolean);
 

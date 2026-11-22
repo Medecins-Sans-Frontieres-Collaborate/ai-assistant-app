@@ -253,6 +253,41 @@ export function acceptedExtensions(
 }
 
 /**
+ * Narrows files dropped or pasted into a hosted picker (one opened by
+ * another surface than the chat composer, which names its own file types)
+ * to the single file that surface takes.
+ *
+ * @param files - Files as dropped or pasted.
+ * @param extensions - Lowercase extensions, without the dot, the host takes.
+ * @returns The first file with one of the extensions, or none.
+ */
+export function filesForExtensions(
+  files: readonly File[],
+  extensions: readonly string[],
+): File[] {
+  return files
+    .filter((file) => extensions.includes(extensionOf(file.name)))
+    .slice(0, 1);
+}
+
+/**
+ * The sources a hosted picker lists: the ones this person has that the
+ * host also takes, in display order.
+ *
+ * @param capabilities - What this person can add from.
+ * @param hostSources - The sources the host can take content from.
+ * @returns Source ids in display order.
+ */
+export function hostedSources(
+  capabilities: AddToChatCapabilities,
+  hostSources: readonly AddSourceId[],
+): AddSourceId[] {
+  return visibleSources(capabilities).filter((source) =>
+    hostSources.includes(source),
+  );
+}
+
+/**
  * Narrows files dropped or pasted into the picker to the ones the intent can
  * take. The system file dialog filters by itself; a drop does not.
  *

@@ -137,7 +137,7 @@ export function AssessmentPanel({
         {/* Ratings */}
         <div className="border-b border-gray-100 px-3 py-2.5 dark:border-gray-800">
           {request && (
-            <blockquote className="mb-1.5 border-s-2 border-gray-300 ps-2 text-sm font-medium text-gray-900 dark:border-gray-600 dark:text-gray-100">
+            <blockquote className="mb-1.5 rounded-md bg-gray-50 px-2.5 py-1.5 text-sm font-medium text-gray-900 dark:bg-gray-800/60 dark:text-gray-100">
               {request.instruction}
               {request.selectedText && (
                 <span className="mt-1 block text-xs font-normal text-gray-500 dark:text-gray-400">

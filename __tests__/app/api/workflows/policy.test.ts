@@ -17,6 +17,7 @@ const mockAuth = vi.hoisted(() => vi.fn());
 const serviceInvalidate = vi.hoisted(() => vi.fn());
 const serviceEnsureFresh = vi.hoisted(() => vi.fn());
 const serviceAllEnabled = vi.hoisted(() => vi.fn());
+const serviceAllFeaturesEnabled = vi.hoisted(() => vi.fn());
 const serviceSnapshot = vi.hoisted(() => vi.fn());
 const mockEnv = vi.hoisted(() => ({
   AGENT_ACCESS_ADMINS: 'global@example.com',
@@ -30,6 +31,7 @@ vi.mock('@/lib/services/workflows/policy/WorkflowPolicyService', () => ({
       invalidate: serviceInvalidate,
       ensureFresh: serviceEnsureFresh,
       allEnabled: serviceAllEnabled,
+      allFeaturesEnabled: serviceAllFeaturesEnabled,
       getSnapshot: serviceSnapshot,
     }),
   },
@@ -81,6 +83,8 @@ const validBody = {
     grants: { enabled: true },
     'form-fill': { enabled: true },
     'channel-drafter': { enabled: true },
+    'brand-review': { enabled: true },
+    'deck-builder': { enabled: true },
   },
 };
 
@@ -146,6 +150,76 @@ describe('/api/workflows/policy', () => {
     expect(serviceInvalidate).toHaveBeenCalledTimes(1);
   });
 
+  it('PUT stores feature switches and rejects unknown features', async () => {
+    const features = { 'translation-preserve-formatting': { enabled: false } };
+    const response = await PUT(putRequest({ ...validBody, features }));
+    expect(response.status).toBe(200);
+    expect(vi.mocked(writeWorkflowPolicy).mock.calls[0][1].features).toEqual(
+      features,
+    );
+    expect(
+      (
+        await PUT(
+          putRequest({ ...validBody, features: { bogus: { enabled: true } } }),
+        )
+      ).status,
+    ).toBe(400);
+  });
+
+  it('PUT stores feature limits and overrides, and refuses ones out of range', async () => {
+    const setting = {
+      enabled: true,
+      limits: { defaultBatchPages: 4, maxBatchPages: 8, maxDocumentPages: 20 },
+      overrides: [
+        {
+          scope: 'user',
+          targets: ['lead@example.com'],
+          limits: { maxDocumentPages: 60 },
+        },
+      ],
+    };
+    const features = { 'translation-preserve-formatting': setting };
+    expect((await PUT(putRequest({ ...validBody, features }))).status).toBe(
+      200,
+    );
+    expect(vi.mocked(writeWorkflowPolicy).mock.calls[0][1].features).toEqual(
+      features,
+    );
+
+    const refused = async (change: Record<string, unknown>) =>
+      (
+        await PUT(
+          putRequest({
+            ...validBody,
+            features: {
+              'translation-preserve-formatting': { ...setting, ...change },
+            },
+          }),
+        )
+      ).status;
+    expect(await refused({ limits: { maxDocumentPages: 100000 } })).toBe(400);
+    expect(await refused({ limits: { unknownLimit: 3 } })).toBe(400);
+    expect(await refused({ somethingElse: true })).toBe(400);
+    expect(
+      await refused({
+        overrides: [{ scope: 'group', targets: ['x'], limits: {} }],
+      }),
+    ).toBe(400);
+    expect(
+      await refused({
+        overrides: [{ scope: 'user', targets: [], limits: {} }],
+      }),
+    ).toBe(400);
+    expect(writeWorkflowPolicy).toHaveBeenCalledTimes(1);
+  });
+
+  it('PUT without features leaves them to their defaults', async () => {
+    expect((await PUT(putRequest(validBody))).status).toBe(200);
+    expect(
+      vi.mocked(writeWorkflowPolicy).mock.calls[0][1].features,
+    ).toBeUndefined();
+  });
+
   it('maps a CAS conflict to 409', async () => {
     const { WorkflowPolicyConflictError } =
       await import('@/lib/services/workflows/policy/workflowPolicyStore');
@@ -165,6 +239,9 @@ describe('/api/workflows/policy/me', () => {
     vi.clearAllMocks();
     serviceEnsureFresh.mockResolvedValue(undefined);
     serviceAllEnabled.mockReturnValue({ grants: false, map: true });
+    serviceAllFeaturesEnabled.mockReturnValue({
+      'translation-preserve-formatting': false,
+    });
     serviceSnapshot.mockReturnValue({ policyUnavailable: false });
   });
 
@@ -177,6 +254,9 @@ describe('/api/workflows/policy/me', () => {
     mockAuth.mockResolvedValue(normalSession);
     const body = await parseJsonResponse(await GET_ME());
     expect(body.data.enabled).toEqual({ grants: false, map: true });
+    expect(body.data.features).toEqual({
+      'translation-preserve-formatting': false,
+    });
     expect(body.data.policyUnavailable).toBe(false);
     expect(serviceEnsureFresh).toHaveBeenCalled();
   });

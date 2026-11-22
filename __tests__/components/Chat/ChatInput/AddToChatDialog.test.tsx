@@ -406,4 +406,88 @@ describe('AddToChatDialog', () => {
       expect(handlers.onDeviceFiles).toHaveBeenCalledWith([image], 'attach');
     });
   });
+
+  describe('hosted by another surface', () => {
+    const onDriveItem = vi.fn();
+    const host = {
+      title: 'Upload a document',
+      sources: ['device', 'onedrive'] as const,
+      extensions: ['pdf', 'docx'],
+      deviceHint: 'PDF or Word',
+      confirmLabel: 'Use this document',
+      onDriveItem,
+    };
+    const openHosted = () =>
+      render(
+        <AddToChatDialog
+          isOpen
+          initialIntent="attach"
+          capabilities={EVERYTHING}
+          onClose={handlers.onClose}
+          onBrowseDevice={handlers.onBrowseDevice}
+          onDeviceFiles={handlers.onDeviceFiles}
+          host={host}
+        />,
+      );
+
+    it("shows the host's title, hint and sources only", () => {
+      openHosted();
+      expect(screen.getByText('Upload a document')).toBeInTheDocument();
+      expect(screen.getByText('PDF or Word')).toBeInTheDocument();
+      expect(sourceIds()).toEqual(['device', 'onedrive']);
+    });
+
+    it('does not land on a remembered source the host does not take', () => {
+      useSettingsStore.setState({ addToChatLastSource: 'mail' });
+      openHosted();
+      expect(screen.getByTestId('add-to-chat-device')).toBeInTheDocument();
+    });
+
+    it("lands on OneDrive when that was used last, showing the host's file types", () => {
+      useSettingsStore.setState({ addToChatLastSource: 'onedrive' });
+      openHosted();
+      expect(screen.getByTestId('onedrive-pane')).toHaveAttribute(
+        'data-accept',
+        'pdf,docx',
+      );
+    });
+
+    it('hands one ticked file to the host and attaches nothing to the chat', () => {
+      openHosted();
+      fireEvent.click(sourceButton('onedrive'));
+      fireEvent.click(screen.getByLabelText('tick notes.docx'));
+      // A second tick replaces the first: the host takes one file.
+      fireEvent.click(screen.getByLabelText('tick budget.docx'));
+      expect(screen.queryByRole('radiogroup')).not.toBeInTheDocument();
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Use this document' }),
+      );
+      expect(onDriveItem).toHaveBeenCalledTimes(1);
+      expect(onDriveItem).toHaveBeenCalledWith(SECOND_DOCUMENT);
+      expect(attachDriveItem).not.toHaveBeenCalled();
+      expect(handlers.onClose).toHaveBeenCalled();
+    });
+
+    it('hands an opened file straight to the host', () => {
+      openHosted();
+      fireEvent.click(sourceButton('onedrive'));
+      fireEvent.click(screen.getByRole('button', { name: 'open notes.docx' }));
+      expect(onDriveItem).toHaveBeenCalledWith(DOCUMENT);
+      expect(attachDriveItem).not.toHaveBeenCalled();
+    });
+
+    it("takes a dropped file of the host's types and refuses any other", () => {
+      openHosted();
+      const pdf = new File(['x'], 'a.pdf');
+      const drop = (files: File[]) =>
+        fireEvent.drop(screen.getByTestId('add-to-chat'), {
+          dataTransfer: { files, types: ['Files'] },
+        });
+      drop([new File(['x'], 'a.mp4')]);
+      expect(handlers.onDeviceFiles).not.toHaveBeenCalled();
+      expect(toastError).toHaveBeenCalledTimes(1);
+      drop([new File(['x'], 'b.mp4'), pdf, new File(['x'], 'c.docx')]);
+      expect(handlers.onDeviceFiles).toHaveBeenCalledWith([pdf], 'attach');
+    });
+  });
 });

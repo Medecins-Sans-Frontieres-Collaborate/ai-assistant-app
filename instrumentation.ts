@@ -62,6 +62,15 @@ export async function register() {
     await (
       await import('@/lib/services/limits/startupWarnings')
     ).logLimitsStartupWarnings();
+    // Create the analytics containers if missing (never clears existing
+    // ones). Not awaited: storage latency must not delay the server start.
+    try {
+      void (
+        await import('@/lib/services/analytics/startupStorage')
+      ).ensureAnalyticsStorage();
+    } catch (err) {
+      console.warn('[Instrumentation] Analytics storage check skipped:', err);
+    }
 
     // Announce environment-local auxiliary chain risks and start passive
     // readiness maintenance. No paid inference probes run implicitly at boot.

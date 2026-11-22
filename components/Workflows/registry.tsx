@@ -140,4 +140,27 @@ export const WORKFLOW_REGISTRY: Record<
       })),
     ),
   },
+  'brand-review': {
+    meta: WORKFLOW_META['brand-review'],
+    // Pick a brand book, add a document, review it (docs/DOCUMENT_PLATFORM.md,
+    // phase F). No rail chat: the findings are the conversation.
+    Workspace: lazy(() =>
+      import('./BrandReview/BrandReviewWorkspace').then((m) => ({
+        default: m.BrandReviewWorkspace,
+      })),
+    ),
+    createInitialState: () => createInitialWorkflowState('brand-review'),
+  },
+  'deck-builder': {
+    meta: WORKFLOW_META['deck-builder'],
+    // A brief, sources and a template become an editable outline, then a
+    // deck (docs/DOCUMENT_PLATFORM.md, phase G). No rail chat: the outline
+    // is edited in place.
+    Workspace: lazy(() =>
+      import('./DeckBuilder/DeckBuilderWorkspace').then((m) => ({
+        default: m.DeckBuilderWorkspace,
+      })),
+    ),
+    createInitialState: () => createInitialWorkflowState('deck-builder'),
+  },
 };

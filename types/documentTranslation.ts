@@ -16,6 +16,10 @@ export const DOCUMENT_TRANSLATION_FORMATS = [
   '.docx', // Word
   '.xlsx', // Excel
   '.pptx', // PowerPoint
+  '.pptm', // PowerPoint, macro-enabled (sent as a .pptx copy)
+  '.ppsx', // PowerPoint show (sent as a .pptx copy)
+  '.potx', // PowerPoint template (sent as a .pptx copy)
+  '.ppt', // PowerPoint 97 (converted to .pptx first)
   '.msg', // Outlook
   '.xlf',
   '.xliff', // XLIFF
@@ -30,13 +34,37 @@ export type DocumentTranslationFormat =
   (typeof DOCUMENT_TRANSLATION_FORMATS)[number];
 
 /**
+ * Presentations. They go through the batch API like PDFs (the synchronous
+ * endpoint's size limit is too small for decks with pictures), are read
+ * slide by slide, and come back as the person's own package with the
+ * translated text put in (lib/services/documentTranslation/deck).
+ */
+export const PRESENTATION_EXTENSIONS = [
+  'pptx',
+  'pptm',
+  'ppsx',
+  'potx',
+  'ppt',
+] as const;
+
+/** Whether an extension (no dot, any case) is a presentation. */
+export function isPresentationExtension(extension: string): boolean {
+  return (PRESENTATION_EXTENSIONS as readonly string[]).includes(
+    extension.toLowerCase(),
+  );
+}
+
+/**
  * Formats routed through the ASYNCHRONOUS (batch) Document Translation API.
  * The synchronous document:translate endpoint does not handle PDFs; the
  * batch API does. Batch translations upload the source, submit a
  * storageType:'File' batch targeting the standard translated-blob path, and
  * the client polls /api/document-translation/status/{jobId} until done.
  */
-export const ASYNC_DOCUMENT_TRANSLATION_FORMATS = ['.pdf'] as const;
+export const ASYNC_DOCUMENT_TRANSLATION_FORMATS = [
+  '.pdf',
+  ...PRESENTATION_EXTENSIONS.map((extension) => `.${extension}` as const),
+] as const;
 
 /** Whether a filename must take the async (batch) translation path. */
 export function requiresAsyncTranslation(filename: string): boolean {
@@ -63,6 +91,10 @@ export const DOCUMENT_CONTENT_TYPES: Record<string, string> = {
   docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  pptm: 'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+  ppsx: 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+  potx: 'application/vnd.openxmlformats-officedocument.presentationml.template',
+  ppt: 'application/vnd.ms-powerpoint',
   msg: 'application/vnd.ms-outlook',
   xlf: 'application/xliff+xml',
   xliff: 'application/xliff+xml',
@@ -88,7 +120,14 @@ export const GLOSSARY_CONTENT_TYPES: Record<string, string> = {
  * exported as a text version (DOCX). Shared by the server routes that build
  * the page text and the viewer that offers the download.
  */
-const PAGED_TEXT_EXTENSIONS: ReadonlySet<string> = new Set(['pdf']);
+const PAGED_TEXT_EXTENSIONS: ReadonlySet<string> = new Set([
+  'pdf',
+  // A translated presentation is never a .ppt: it is converted first.
+  'pptx',
+  'pptm',
+  'ppsx',
+  'potx',
+]);
 
 /**
  * Whether a translated file's format supports the page-level text view and
@@ -98,6 +137,16 @@ const PAGED_TEXT_EXTENSIONS: ReadonlySet<string> = new Set(['pdf']);
  */
 export function supportsPagedText(extension: string): boolean {
   return PAGED_TEXT_EXTENSIONS.has(extension.toLowerCase());
+}
+
+/**
+ * Whether an uploaded file can be translated as a whole document and read
+ * page by page: a paged format, or a .ppt (converted to .pptx first).
+ *
+ * @param extension - The upload's extension without the dot.
+ */
+export function supportsWholeDocument(extension: string): boolean {
+  return supportsPagedText(extension) || extension.toLowerCase() === 'ppt';
 }
 
 /**

@@ -26,6 +26,7 @@ import { Session } from 'next-auth';
 import { currentPolicy, meteredCells } from '@/lib/services/limits/enforcement';
 import { periodKindForWindow } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
+import { capOf } from '@/lib/services/limits/recordedCap';
 import { ResolvedLimit } from '@/lib/services/limits/resolver';
 import { reserve } from '@/lib/services/limits/usageStore';
 
@@ -101,12 +102,8 @@ export async function debitTokenUsage(
           source: cell.source,
         };
         const shadow = surfaceShadowCell(cell.limitKey, surface);
-        return shadow
-          ? [
-              { ...base, cell: cell.limitKey },
-              { ...base, cell: shadow },
-            ]
-          : [{ ...base, cell: cell.limitKey }];
+        const own = { ...base, cell: cell.limitKey, cap: capOf(cell) };
+        return shadow ? [own, { ...base, cell: shadow }] : [own];
       });
 
       await reserve(principal.userId, periodKind, counters, {

@@ -1,0 +1,229 @@
+"""Builds the brand fixtures: one small document per format, each with
+content that follows a brand and content that breaks it, and the brand's logo.
+
+  python make_brand_fixtures.py __tests__/fixtures/brand   (needs python-pptx,
+                                                            python-docx, pymupdf, pillow)
+
+The brand ("Northwind"):
+  palette  ink #1b2a41, teal #0f7c80, sand #f2e8d5 (white and black allowed)
+  fonts    Montserrat for headings, Source Sans Pro for text
+  logo     logo.png: a teal disc with an ink bar, 400 x 200 px
+
+Every document holds, so each check has both sides:
+  - a heading in Montserrat, ink (follows the brand)
+  - a paragraph in Source Sans Pro, teal (follows)
+  - a paragraph in Comic Sans MS, #ff00ff (breaks font and colour)
+  - a paragraph in 7 pt (below a 9 pt minimum)
+  - the word "cheap" (a banned term) in an otherwise compliant paragraph
+  - the logo at its own proportions, and the logo squashed to half its
+    height (distorted)
+In brand.pptx the logo also sits on the master (every slide shows it).
+locked.pdf is brand.pdf with a password.
+guide.pdf is the brand's guide, stating the rules above in words (what a
+brand book draft is made from).
+template.pptx is the brand's deck template: PowerPoint's own eleven layouts
+(python-pptx's default, made in PowerPoint) with the brand's typefaces and
+colours in its theme, and one sample slide a built deck must not keep. The
+sample has a picture only it uses, speaker notes and a section, so building
+from the template exercises removing all three. template.potx is the same
+template saved as a template (only its main part's content type differs).
+"""
+import copy
+import io
+import sys
+import zipfile
+from pathlib import Path
+
+import fitz
+from docx import Document
+from docx.shared import Pt as DocxPt, RGBColor as DocxColor, Inches as DocxInches
+from lxml import etree
+from PIL import Image, ImageDraw
+from pptx import Presentation
+from pptx.dml.color import RGBColor
+from pptx.util import Inches, Pt
+
+INK = (0x1b, 0x2a, 0x41)
+TEAL = (0x0f, 0x7c, 0x80)
+OFF = (0xff, 0x00, 0xff)
+SAND = (0xf2, 0xe8, 0xd5)
+
+TEXT = {
+    'heading': 'Northwind annual review',
+    'body': 'Our clinics served more families than ever.',
+    'offbrand': 'Join the celebration this weekend!',
+    'small': 'Terms apply to every programme.',
+    'banned': 'Care that is never cheap and always close.',
+}
+
+out = Path(sys.argv[1])
+out.mkdir(parents=True, exist_ok=True)
+
+
+def logo_png():
+    image = Image.new('RGBA', (400, 200), (255, 255, 255, 0))
+    draw = ImageDraw.Draw(image)
+    draw.ellipse((10, 10, 190, 190), fill=TEAL + (255,))
+    draw.rectangle((210, 80, 390, 120), fill=INK + (255,))
+    buffer = io.BytesIO()
+    image.save(buffer, 'PNG')
+    return buffer.getvalue()
+
+
+LOGO = logo_png()
+(out / 'logo.png').write_bytes(LOGO)
+
+
+def pptx():
+    prs = Presentation()
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    # python-pptx places no picture on a master: one placed on the slide is
+    # moved there, its image related from the master instead.
+    placed = slide.shapes.add_picture(io.BytesIO(LOGO), Inches(8.6), Inches(0.2), Inches(1.2), Inches(0.6))
+    master = prs.slide_master
+    _, rid = master.part.get_or_add_image_part(io.BytesIO(LOGO))
+    pic = copy.deepcopy(placed._element)
+    pic.xpath('.//a:blip')[0].set(
+        '{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed', rid)
+    master.shapes._spTree.append(pic)
+    placed._element.getparent().remove(placed._element)
+    rows = [('heading', 'Montserrat', 28, INK), ('body', 'Source Sans Pro', 18, TEAL),
+            ('offbrand', 'Comic Sans MS', 18, OFF), ('small', 'Source Sans Pro', 7, INK),
+            ('banned', 'Source Sans Pro', 18, INK)]
+    for index, (key, font, size, color) in enumerate(rows):
+        box = slide.shapes.add_textbox(Inches(0.5), Inches(0.4 + index * 0.8), Inches(7), Inches(0.6))
+        run = box.text_frame.paragraphs[0].add_run()
+        run.text = TEXT[key]
+        run.font.name = font
+        run.font.size = Pt(size)
+        run.font.color.rgb = RGBColor(*color)
+    slide.shapes.add_picture(io.BytesIO(LOGO), Inches(0.5), Inches(4.6), Inches(2), Inches(1))
+    group = slide.shapes.add_group_shape()
+    group.shapes.add_picture(io.BytesIO(LOGO), Inches(4), Inches(4.6), Inches(2), Inches(0.5))
+    prs.save(out / 'brand.pptx')
+
+
+def docx():
+    doc = Document()
+    rows = [('heading', 'Montserrat', 20, INK), ('body', 'Source Sans Pro', 11, TEAL),
+            ('offbrand', 'Comic Sans MS', 11, OFF), ('small', 'Source Sans Pro', 7, INK),
+            ('banned', 'Source Sans Pro', 11, INK)]
+    for key, font, size, color in rows:
+        run = doc.add_paragraph().add_run(TEXT[key])
+        run.font.name = font
+        run.font.size = DocxPt(size)
+        run.font.color.rgb = DocxColor(*color)
+    doc.add_picture(io.BytesIO(LOGO), width=DocxInches(2), height=DocxInches(1))
+    doc.add_picture(io.BytesIO(LOGO), width=DocxInches(2), height=DocxInches(0.5))
+    header = doc.sections[0].header.paragraphs[0].add_run('Northwind')
+    header.font.name = 'Montserrat'
+    doc.save(out / 'brand.docx')
+
+
+def pdf():
+    doc = fitz.open()
+    page = doc.new_page(width=595, height=842)
+    rows = [('heading', 'helv', 20, INK), ('body', 'helv', 11, TEAL),
+            ('offbrand', 'cour', 11, OFF), ('small', 'helv', 7, INK), ('banned', 'helv', 11, INK)]
+    for index, (key, font, size, color) in enumerate(rows):
+        page.insert_text((50, 80 + index * 40), TEXT[key], fontname=font, fontsize=size,
+                         color=tuple(c / 255 for c in color))
+    page.insert_image(fitz.Rect(50, 300, 250, 400), stream=LOGO)
+    page.insert_image(fitz.Rect(300, 300, 500, 350), stream=LOGO, keep_proportion=False)
+    doc.save(out / 'brand.pdf')
+    # The same, password protected: the reader must refuse it.
+    doc.save(out / 'locked.pdf', encryption=fitz.PDF_ENCRYPT_AES_256, owner_pw='owner', user_pw='user')
+
+
+def guide():
+    lines = [
+        (22, INK, 'Northwind brand guide'),
+        (13, INK, 'Colours'),
+        (11, INK, 'Primary: Teal, #0F7C80. Use for headings and highlights.'),
+        (11, INK, 'Text: Ink, #1B2A41. Use for all body text.'),
+        (11, INK, 'Background: Sand, #F2E8D5.'),
+        (11, INK, 'White and black may be used anywhere.'),
+        (13, INK, 'Typography'),
+        (11, INK, 'Headings are set in Montserrat. Body text is set in Source Sans Pro.'),
+        (11, INK, 'Where these are not available, use Arial.'),
+        (11, INK, 'Never set text smaller than 9 pt.'),
+        (13, INK, 'Wording'),
+        (11, INK, 'Write in English. Say "families", not "clients".'),
+        (11, INK, 'Avoid "cheap"; write "affordable" instead.'),
+        (11, INK, 'Our voice is warm, plain and direct.'),
+    ]
+    doc = fitz.open()
+    page = doc.new_page(width=595, height=842)
+    y = 70
+    for size, color, text in lines:
+        y += size * 2.2
+        page.insert_text((50, y), text, fontname='helv', fontsize=size,
+                         color=tuple(c / 255 for c in color))
+    doc.save(out / 'guide.pdf')
+
+
+THEME_NS = '{http://schemas.openxmlformats.org/drawingml/2006/main}'
+
+
+def template():
+    prs = Presentation()
+    master = prs.slide_master
+    theme_part = next(rel.target_part for rel in master.part.rels.values()
+                      if rel.reltype.endswith('/theme'))
+    theme = etree.fromstring(theme_part.blob)
+    scheme = theme.find('.//' + THEME_NS + 'clrScheme')
+    for name, rgb in (('dk1', INK), ('dk2', INK), ('accent1', TEAL), ('lt2', SAND)):
+        slot = scheme.find(THEME_NS + name)
+        for child in list(slot):
+            slot.remove(child)
+        etree.SubElement(slot, THEME_NS + 'srgbClr', val='%02X%02X%02X' % rgb)
+    fonts = theme.find('.//' + THEME_NS + 'fontScheme')
+    fonts.find(THEME_NS + 'majorFont/' + THEME_NS + 'latin').set('typeface', 'Montserrat')
+    fonts.find(THEME_NS + 'minorFont/' + THEME_NS + 'latin').set('typeface', 'Source Sans Pro')
+    theme_part._blob = etree.tostring(theme, xml_declaration=True, encoding='UTF-8', standalone=True)
+
+    sample = prs.slides.add_slide(prs.slide_layouts[1])
+    sample.shapes.title.text = 'Sample slide: replace me'
+    sample.placeholders[1].text = 'Template guidance that a built deck must not keep'
+    sample.shapes.add_picture(io.BytesIO(SAMPLE_PICTURE), Inches(7), Inches(5), Inches(1), Inches(1))
+    sample.notes_slide.notes_text_frame.text = 'Notes on the sample slide'
+    # A section naming the sample slide, as PowerPoint writes one.
+    p14 = 'http://schemas.microsoft.com/office/powerpoint/2010/main'
+    pres = prs.part._element
+    slide_id = pres.find('.//{http://schemas.openxmlformats.org/presentationml/2006/main}sldId').get('id')
+    ext_list = pres.find('{http://schemas.openxmlformats.org/presentationml/2006/main}extLst')
+    if ext_list is None:
+        ext_list = etree.SubElement(pres, '{http://schemas.openxmlformats.org/presentationml/2006/main}extLst')
+    ext = etree.SubElement(ext_list, '{http://schemas.openxmlformats.org/presentationml/2006/main}ext',
+                           uri='{521415D9-36F7-43E2-AB2F-B90AF26B5E84}')
+    section = etree.SubElement(etree.SubElement(ext, '{%s}sectionLst' % p14, nsmap={'p14': p14}),
+                               '{%s}section' % p14, name='Samples', id='{9B1A0AF3-4A0C-4E5B-9E25-0D6C1E2B3A41}')
+    etree.SubElement(etree.SubElement(section, '{%s}sldIdLst' % p14), '{%s}sldId' % p14, id=slide_id)
+    prs.save(out / 'template.pptx')
+
+    # The same template saved as a template: only the main part's type differs.
+    source = zipfile.ZipFile(out / 'template.pptx')
+    with zipfile.ZipFile(out / 'template.potx', 'w', zipfile.ZIP_DEFLATED) as potx:
+        for info in source.infolist():
+            data = source.read(info.filename)
+            if info.filename == '[Content_Types].xml':
+                data = data.replace(b'presentationml.presentation.main+xml',
+                                    b'presentationml.template.main+xml')
+            potx.writestr(info, data)
+
+
+def sample_picture():
+    image = Image.new('RGB', (120, 120), (200, 30, 30))
+    buffer = io.BytesIO()
+    image.save(buffer, 'PNG')
+    return buffer.getvalue()
+
+
+SAMPLE_PICTURE = sample_picture()
+
+pptx()
+template()
+docx()
+pdf()
+guide()
+print('wrote', ', '.join(sorted(p.name for p in out.iterdir() if p.suffix != '.py')))

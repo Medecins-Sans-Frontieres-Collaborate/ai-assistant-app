@@ -12,6 +12,12 @@ interface DashboardModalProps {
 }
 
 /**
+ * Marks an editor open over another dialog: the dialog underneath leaves
+ * Escape to it rather than closing both (see CustomizationsModal).
+ */
+export const NESTED_DIALOG_ATTRIBUTE = 'data-nested-dialog';
+
+/**
  * Reusable two-panel dashboard modal layout
  * Used by ToneDashboard and PromptDashboard
  */
@@ -44,6 +50,10 @@ export const DashboardModal: FC<DashboardModalProps> = ({
       onClick={handleOverlayClick}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        {...{ [NESTED_DIALOG_ATTRIBUTE]: '' }}
         className="relative w-full max-w-6xl h-[90vh] mx-4 bg-white dark:bg-surface-dark rounded-xl shadow-xl flex flex-col overflow-hidden animate-modal-in"
         onClick={handleContentClick}
       >

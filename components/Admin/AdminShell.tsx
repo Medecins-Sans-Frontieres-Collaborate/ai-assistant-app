@@ -92,7 +92,9 @@ export const AdminShell: FC<AdminShellProps> = ({ areas, children }) => {
 
       <div className="flex min-h-0 flex-1">
         <AdminAreaNav areas={visibleAreas} variant="rail" />
-        <main className="min-w-0 flex-1 overflow-y-auto">
+        {/* A size container, so a wide surface (ADMIN_BREAKOUT) can measure the
+            room beside the centred column. */}
+        <main className="min-w-0 flex-1 overflow-y-auto [container-type:inline-size]">
           <div className="mx-auto max-w-4xl p-6">{children}</div>
         </main>
       </div>

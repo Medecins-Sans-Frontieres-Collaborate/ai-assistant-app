@@ -14,6 +14,8 @@
  */
 import { Session } from 'next-auth';
 
+import { LimitsService } from '@/lib/services/limits/LimitsService';
+import { recordModelUsage } from '@/lib/services/limits/modelUsageTally';
 import { debitTokenUsage } from '@/lib/services/limits/tokenDebit';
 import { getAzureMonitorLogger } from '@/lib/services/observability/AzureMonitorLoggingService';
 import { MetricsService } from '@/lib/services/observability/MetricsService';
@@ -76,6 +78,45 @@ export function estimatedCostUsdFor(
       error instanceof Error ? error.message : error,
     );
     return undefined;
+  }
+}
+
+/**
+ * Adds this model call's real token counts to the per-model usage tally
+ * (lib/services/limits/modelUsageTally.ts), under the catalog id of the
+ * model that SERVED it: `usage.modelId` may be a provider-reported name the
+ * catalog does not know, and the admin views are keyed by catalog id.
+ *
+ * A byom model runs on the user's own account and is left out, as it is
+ * from the request tally. Storage-free; never throws.
+ */
+function tallyModelCall(
+  usage: TokenUsageMetadata,
+  servedConfig: OpenAIModel,
+  user: Session['user'],
+): void {
+  try {
+    if (!servedConfig.id || servedConfig.id.startsWith('byom-')) return;
+    recordModelUsage(
+      user?.id,
+      servedConfig.id,
+      {
+        calls: 1,
+        promptTokens: usage.promptTokens,
+        completionTokens: usage.completionTokens,
+      },
+      {
+        series: servedConfig.series,
+        // The cached policy only: a model call must never wait on storage.
+        timezone:
+          LimitsService.getInstance().getSnapshot().policy?.timezone ?? 'UTC',
+      },
+    );
+  } catch (error) {
+    console.warn(
+      '[tokenUsageRecorder] Model usage tally skipped:',
+      error instanceof Error ? error.message : error,
+    );
   }
 }
 
@@ -148,6 +189,7 @@ export function recordTokenUsage(
     if (options.debit !== false) {
       void debitTokenUsage(user, usage.totalTokens, surface);
     }
+    tallyModelCall(usage, servedConfig, user);
   } catch (error) {
     console.error('[tokenUsageRecorder] Failed to record token usage:', error);
   }

@@ -22,7 +22,10 @@ import {
   OverrideScope,
 } from '@/lib/services/limits/types';
 import { LIMITS_ERROR_CODES } from '@/lib/services/limits/wire';
-import type { ScopedLimitsView } from '@/lib/services/limits/wire';
+import type {
+  ScopedLimitsView,
+  UsageInsights,
+} from '@/lib/services/limits/wire';
 
 import type { TargetVerdict } from '@/components/Limits/jurisdiction';
 
@@ -413,4 +416,37 @@ export function toPolicyPutDelegation(
       .filter((predicate) => predicate.targets.length > 0),
     maxOverrides: delegation.maxOverrides,
   };
+}
+
+/** How often to ask again while the server is still building day summaries. */
+const INSIGHTS_BUILDING_POLL_MS = 5_000;
+
+/**
+ * Usage evidence for the global limits admin (GET /api/limits/insights):
+ * pressure against caps, would-block counts and per-person peaks over the
+ * last week. Asks again every few seconds while the server reports
+ * `building`, then settles. A failure is an empty state, never an error the
+ * editor depends on: the policy is editable without evidence.
+ *
+ * @param enabled - False for scoped admins, who cannot read it.
+ */
+export function useLimitsInsights(enabled = true) {
+  return useQuery<UsageInsights>({
+    queryKey: ['limits-insights'],
+    enabled,
+    queryFn: async () => {
+      const response = await fetch('/api/limits/insights');
+      if (!response.ok) {
+        throw new Error(`Failed to load usage insights: ${response.status}`);
+      }
+      return unwrapApiData<UsageInsights>(await response.json());
+    },
+    refetchInterval: (query) =>
+      query.state.data?.status === 'building'
+        ? INSIGHTS_BUILDING_POLL_MS
+        : false,
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
 }

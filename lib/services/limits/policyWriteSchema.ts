@@ -279,6 +279,25 @@ const grantList = z
   .default([])
   .transform(canonicalGrants);
 
+/** A block list of groups or domains: optional, absent when empty. */
+const blockList = z
+  .array(z.string().min(1).max(320))
+  .max(MAX_MODEL_ACCESS_TARGETS)
+  .optional()
+  .transform((values) => {
+    const canonical = canonicalList(values ?? []);
+    return canonical.length > 0 ? canonical : undefined;
+  });
+
+/** Whether any grant in `grants` names a target on `blocked`. */
+function grantsBlocked(
+  grants: readonly { target: string }[],
+  blocked: readonly string[] | undefined,
+): boolean {
+  const denied = new Set(blocked ?? []);
+  return grants.some((grant) => denied.has(grant.target));
+}
+
 export const modelAccessRuleSchema = z
   .object({
     modelId: dimension.optional(),
@@ -298,6 +317,8 @@ export const modelAccessRuleSchema = z
       .max(MAX_MODEL_ACCESS_TARGETS)
       .default([])
       .transform(canonicalList),
+    denyGroups: blockList,
+    denyDomains: blockList,
   })
   .strict()
   .refine((rule) => (rule.modelId ? 1 : 0) + (rule.series ? 1 : 0) === 1, {
@@ -310,6 +331,18 @@ export const modelAccessRuleSchema = z
     },
     { message: 'A person cannot be on both the allow and the block list' },
   )
+  .refine((rule) => !grantsBlocked(rule.groups, rule.denyGroups), {
+    message: 'A group cannot be both granted and blocked',
+    path: ['denyGroups'],
+  })
+  .refine((rule) => !grantsBlocked(rule.domains, rule.denyDomains), {
+    message: 'A domain cannot be both granted and blocked',
+    path: ['denyDomains'],
+  })
+  .refine((rule) => groupTargetsValid('group', rule.denyGroups ?? []), {
+    message: GROUP_TARGET_MESSAGE,
+    path: ['denyGroups'],
+  })
   .refine(
     (rule) =>
       groupTargetsValid(

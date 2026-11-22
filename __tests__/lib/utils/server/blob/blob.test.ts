@@ -14,8 +14,36 @@ const mockBlobClient = {
   deleteIfExists: vi.fn(),
 };
 
+/** One container's state, modelled like the service: create never overwrites. */
+const container = {
+  exists: true,
+  metadata: {} as Record<string, string>,
+  propertiesError: null as Error | null,
+};
+
 const mockContainerClient = {
   getBlockBlobClient: vi.fn(() => mockBlobClient),
+  createIfNotExists: vi.fn(
+    async (options?: { metadata?: Record<string, string> }) => {
+      if (container.exists) return { succeeded: false };
+      container.exists = true;
+      container.metadata = { ...(options?.metadata ?? {}) };
+      return { succeeded: true };
+    },
+  ),
+  getProperties: vi.fn(async () => {
+    if (container.propertiesError) throw container.propertiesError;
+    if (!container.exists) {
+      throw Object.assign(
+        new Error('The specified container does not exist.'),
+        {
+          statusCode: 404,
+          code: 'ContainerNotFound',
+        },
+      );
+    }
+    return { metadata: container.metadata };
+  }),
 };
 
 const mockBlobServiceClient = {
@@ -185,5 +213,45 @@ describe('AzureBlobStorage.upload', () => {
       mockBlobClient.stageBlock.mock.calls[0];
     expect(stagedContent).toBe(utf8);
     expect(stagedLength).toBe(5);
+  });
+});
+
+describe('AzureBlobStorage container backstop', () => {
+  const user = { id: 'u' } as Session['user'];
+  let storage: AzureBlobStorage;
+
+  beforeEach(() => {
+    container.exists = false;
+    container.metadata = {};
+    container.propertiesError = null;
+    storage = new AzureBlobStorage('acct', 'container', user);
+  });
+
+  it('creates a missing container with the given metadata and says so', async () => {
+    await expect(
+      storage.ensureContainerExists({ createdby: 'app' }),
+    ).resolves.toBe(true);
+    await expect(storage.getContainerMetadata()).resolves.toEqual({
+      createdby: 'app',
+    });
+  });
+
+  it('leaves an existing container and its metadata alone', async () => {
+    container.exists = true;
+    container.metadata = { owner: 'terraform' };
+    await expect(
+      storage.ensureContainerExists({ createdby: 'app' }),
+    ).resolves.toBe(false);
+    await expect(storage.getContainerMetadata()).resolves.toEqual({
+      owner: 'terraform',
+    });
+  });
+
+  it('reads a missing container as null and rethrows anything else', async () => {
+    await expect(storage.getContainerMetadata()).resolves.toBeNull();
+    container.propertiesError = Object.assign(new Error('denied'), {
+      statusCode: 403,
+    });
+    await expect(storage.getContainerMetadata()).rejects.toThrow('denied');
   });
 });

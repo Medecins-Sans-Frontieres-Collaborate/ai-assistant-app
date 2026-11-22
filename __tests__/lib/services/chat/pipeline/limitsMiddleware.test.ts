@@ -1,6 +1,11 @@
 import { createLimitsMiddleware } from '@/lib/services/chat/pipeline/Middleware';
 import { mintContinuationToken } from '@/lib/services/limits/continuationToken';
-import { checkGate, meteredCells } from '@/lib/services/limits/enforcement';
+import {
+  checkGate,
+  currentPolicy,
+  meteredCells,
+} from '@/lib/services/limits/enforcement';
+import { recordModelUsage } from '@/lib/services/limits/modelUsageTally';
 import { buildPrincipal } from '@/lib/services/limits/principal';
 import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
 import { reserve } from '@/lib/services/limits/usageStore';
@@ -54,6 +59,10 @@ vi.mock('@/lib/services/limits/enforcement', () => ({
   ),
   applyMode: vi.fn(() => ({ allowed: true })),
   effectiveCeiling: vi.fn(() => undefined),
+  denialMessage: vi.fn(() => 'denied'),
+}));
+vi.mock('@/lib/services/limits/modelUsageTally', () => ({
+  recordModelUsage: vi.fn(),
 }));
 vi.mock('@/lib/services/limits/modelAvailability', () => ({
   isModelBlocked: vi.fn(() => false),
@@ -215,5 +224,74 @@ describe('createLimitsMiddleware — one jurisdiction scan, one day-ledger read'
     for (const call of vi.mocked(meteredCells).mock.calls) {
       expect(call[5]).toBe(active);
     }
+  });
+});
+
+/**
+ * The per-model usage tally (modelUsageTally.ts) counts a message for
+ * EVERYONE, including the people no cap applies to, whose requests never
+ * reach the usage counters. It follows the counters' definition of a message.
+ */
+describe('createLimitsMiddleware — model usage tally', () => {
+  let previous: string | undefined;
+  beforeEach(() => {
+    vi.clearAllMocks();
+    previous = process.env.AUTH_SECRET;
+    process.env.AUTH_SECRET = 'test-secret';
+  });
+  afterEach(() => {
+    if (previous === undefined) delete process.env.AUTH_SECRET;
+    else process.env.AUTH_SECRET = previous;
+  });
+
+  it('tallies one request for a message nothing is metered for', async () => {
+    vi.mocked(meteredCells).mockReturnValue([]);
+    await createLimitsMiddleware(
+      context({ model: { id: 'gpt-5.2', series: 'gpt' } }),
+    );
+    expect(reserve).not.toHaveBeenCalled();
+    expect(recordModelUsage).toHaveBeenCalledTimes(1);
+    expect(recordModelUsage).toHaveBeenCalledWith(
+      'oid-1',
+      'gpt-5.2',
+      { requests: 1 },
+      { series: 'gpt', timezone: 'UTC' },
+    );
+  });
+
+  it('tallies when no policy has been authored at all', async () => {
+    vi.mocked(currentPolicy).mockResolvedValueOnce(null);
+    await createLimitsMiddleware(context({}));
+    expect(recordModelUsage).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not tally a signed tool-loop continuation, a byom model, or a refused message', async () => {
+    const pending = [{ id: 'call-1', name: 'search', arguments: '{}' }];
+    const signed = pending.map((call) => ({
+      ...call,
+      continuationToken: mintContinuationToken('oid-1', call.id),
+    }));
+    await createLimitsMiddleware(
+      context({
+        mcpLoopRound: 1,
+        mcpServers: servers,
+        mcpPendingToolCalls: signed,
+      }),
+    );
+    await createLimitsMiddleware(context({ modelId: 'byom-my-model' }));
+    expect(recordModelUsage).not.toHaveBeenCalled();
+
+    // Refused by the model gate: the message is never served.
+    vi.mocked(checkGate).mockReturnValueOnce({
+      allowed: false,
+      denial: {
+        limitKey: 'model.allowed',
+        limit: 0,
+        used: 0,
+        source: 'global',
+      },
+    } as never);
+    await expect(createLimitsMiddleware(context({}))).rejects.toBeDefined();
+    expect(recordModelUsage).not.toHaveBeenCalled();
   });
 });

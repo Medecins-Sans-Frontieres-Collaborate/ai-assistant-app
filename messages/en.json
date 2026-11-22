@@ -1636,6 +1636,14 @@
       "channelDrafter": {
         "label": "Channel drafter",
         "description": "Turn sources into posts for several channels, each in the right voice, with every quote traced to its source"
+      },
+      "brandReview": {
+        "label": "Brand review",
+        "description": "Check a PDF, Word document or presentation against a brand book: fonts, colours, wording, logos and tone"
+      },
+      "deckBuilder": {
+        "label": "Deck builder",
+        "description": "Plan a presentation from a brief and sources, then build it from a brand template."
       }
     },
     "tabs": {
@@ -1655,7 +1663,9 @@
       "newMap": "New map",
       "newGrants": "New grants processing",
       "newFormFill": "New document fill",
-      "newChannelDrafter": "New channel draft"
+      "newChannelDrafter": "New channel draft",
+      "newBrandReview": "New brand review",
+      "newDeckBuilder": "New deck"
     },
     "drafter": {
       "brief": "Brief",
@@ -2066,6 +2076,9 @@
       "sourcePlaceholder": "Paste or type the text to translate, or upload a document.",
       "targetEmpty": "The translation will appear here.",
       "uploadDocument": "Upload document",
+      "uploadPickerTitle": "Upload a document",
+      "uploadPickerHint": "PDF, Word, PowerPoint, text, Markdown or XML. One document at a time.",
+      "uploadPickerConfirm": "Use this document",
       "copy": "Copy",
       "copied": "Copied",
       "tooLong": "Text is longer than {max} characters. Split it into parts, or use document translation for whole files.",
@@ -2254,14 +2267,14 @@
       "suggestionDroppedMany": "{count} suggestions dropped — you edited their passages.",
       "pendingRunActionTranslate": "Translating again",
       "pendingRunActionAssess": "Re-assessing",
-      "modeDocument": "Whole document",
-      "modeDocumentHint": "Translates the uploaded PDF in full and keeps its layout. Read and correct the result page by page.",
+      "modeDocument": "Document",
+      "modeDocumentHint": "Translates the uploaded PDF itself. Read the result as text page by page, or keep the document's formatting.",
       "translateDocument": "Translate document",
       "documentSubmitting": "Sending…",
       "documentIntroTitle": "Translate the whole document",
       "documentIntro": "The uploaded PDF is translated in full, keeping its layout. When it is ready you can read it page by page beside the original, correct pages, check their quality, and download the result. Glossaries and review rounds do not apply in this mode. Once started, a document translation cannot be stopped and its pages count against today's allowance.",
       "documentNeedsFile": "Upload a PDF to translate a whole document.",
-      "documentNeedsPdf": "Whole-document translation with a page-by-page view works with PDF files only.",
+      "documentNeedsPdf": "Whole-document translation with a page-by-page view works with PDF and PowerPoint files only.",
       "documentNeedsLanguage": "Choose a target language to translate the document.",
       "documentLanguageUnsupported": "Whole-document translation is not available for this language. Use Quick or Reviewed instead.",
       "documentNoGlossaries": "Glossaries are not used for whole-document translation",
@@ -2333,7 +2346,324 @@
       "downloadTranslated": "Translated {format}",
       "downloadTranslatedHint": "Original layout. Does not include your corrections.",
       "downloadTextVersion": "Text version (DOCX)",
-      "downloadTextVersionHint": "Plain text, one page per page, with your corrections."
+      "downloadTextVersionHint": "Plain text, one page per page, with your corrections.",
+      "formatted": {
+        "optionsLayout": "Layout",
+        "layoutText": "Text only",
+        "layoutFormatted": "Preserve formatting",
+        "layoutTextHint": "Text only: the whole file is translated in one pass by the document service, any length. You read and correct the result as text, page by page.",
+        "layoutFormattedHint": "Preserve formatting: each page is rebuilt with the translation in place, up to a few pages at a time. Glossaries apply and every text block stays editable.",
+        "optionsDepth": "Translation",
+        "depthQuickHint": "One translation pass per page, fastest",
+        "depthReviewedHint": "Translates each page, then reviews the draft against the source for up to 3 rounds",
+        "needsFile": "Upload a PDF to translate it with its formatting kept.",
+        "needsSupportedFile": "Keeping the formatting works with PDF files and PowerPoint presentations (.pptx, .pptm, .ppsx, .potx, .ppt).",
+        "translatePages": "{count, plural, =0 {Translate} one {Translate # page} other {Translate # pages}}",
+        "translateAgain": "Translate again",
+        "sourcePages": "Source pages",
+        "pagesField": "Pages",
+        "pageLabel": "Page {page}",
+        "loadingPage": "Loading page {page}",
+        "pageEdits": "{count, plural, one {Page {page} · # edit} other {Page {page} · # edits}}",
+        "pages": "Pages",
+        "removeDocument": "Remove",
+        "previewsLoading": "Loading page previews…",
+        "previewsUnavailable": "Page previews are not available for this file. Type the pages to translate.",
+        "previewsFirst": "Previews are shown for the first {count} pages. Type other page numbers in the Pages field.",
+        "scannedNote": "Scanned pages have no text to rebuild and are left out. Use Text only for those.",
+        "whatHappensTitle": "What happens",
+        "whatHappens": "Each page is taken apart into text blocks, translated block by block and laid out again in the same places. Every run does all six steps in this order. You can add instructions to three of them; you cannot skip any.",
+        "backToResult": "Back to the translation",
+        "step": {
+          "extract": {
+            "title": "Read the pages",
+            "description": "Finds every text block, its position, font and links."
+          },
+          "analyze": {
+            "title": "Decide what to translate",
+            "description": "Looks at each page and keeps names, codes and figures as written."
+          },
+          "translate": {
+            "title": "Translate",
+            "description": "Translates each block with your glossaries, keeping bold, italics and links.",
+            "reviewed": "Translates each block with your glossaries, keeping bold, italics and links, then reviews the draft against the source for up to 3 rounds."
+          },
+          "rebuild": {
+            "title": "Rebuild the pages",
+            "description": "Removes the original text and sets the translation in its place."
+          },
+          "verify": {
+            "title": "Check the layout",
+            "description": "Compares each rebuilt page with the original and lists what looks wrong."
+          },
+          "refit": {
+            "title": "Fix what does not fit",
+            "description": "Shortens, shrinks or moves only the blocks the check flagged, then rebuilds and checks again. A page that came out worse is put back."
+          }
+        },
+        "alwaysSame": "Always the same",
+        "addInstruction": "Add an instruction",
+        "instructionLabel": "Your instruction for this step",
+        "instructionCount": "{count} of {max} characters",
+        "instructionNote": "Added to the step's rules, never replaces them",
+        "rounds": "Rounds",
+        "remember": "Remember these instructions for my next documents",
+        "fontsNote": "Fonts: the closest available match is used, not the document's own.",
+        "progressTitle": "{count, plural, one {Translating # page into {language}} other {Translating # pages into {language}}}",
+        "progressNote": "Stopping discards this translation.",
+        "progressLabel": "Translation steps",
+        "stepWaiting": "Waiting",
+        "stepRunning": "In progress…",
+        "seconds": "{seconds} s",
+        "runFailed": "The translation did not finish: {message}",
+        "summaryQuick": "Quick translation into {language}",
+        "summaryReviewed": "Reviewed translation into {language}",
+        "changeOptions": "Change options",
+        "pdfBehind": "The PDF is behind your changes",
+        "download": "Download PDF",
+        "viewLabel": "Page version",
+        "viewOriginal": "Original",
+        "viewTranslated": "Translated",
+        "outlines": "Block outlines",
+        "clickToEdit": "Click any text on the page to edit it",
+        "lastRender": "Showing the last render, without your edits",
+        "blockLabel": "Block {n}",
+        "wholePage": "Page",
+        "editOnPage": "Translation of block {n}, edited on the page",
+        "blocks": "Text blocks",
+        "filter": {
+          "all": "All {count}",
+          "shrunk": "Shrunk {count}",
+          "kept": "Kept {count}",
+          "edited": "Edited {count}"
+        },
+        "keptAsWritten": "Kept as written",
+        "sizeChip": "{percent}% size",
+        "edited": "Edited",
+        "original": "Original",
+        "translation": "Translation",
+        "fitOk": "{chars} characters · about {budget} fit at full size.",
+        "fitTight": "{chars} characters · about {budget} fit at full size. It will be set slightly smaller.",
+        "formattingDropped": "Bold, italics or a link in this block were removed because their words changed.",
+        "shorten": "Shorten to fit",
+        "ask": "Ask for a change",
+        "askPlaceholder": "What should change?",
+        "askApply": "Apply",
+        "keep": "Keep as written",
+        "translateBlock": "Translate this block",
+        "restore": "Restore",
+        "done": "Done",
+        "working": "Working…",
+        "unitFailed": "This block could not be changed: {message}",
+        "editsPending": "{count, plural, one {# change is not on the page yet} other {# changes are not on the page yet}}",
+        "rerenderNote": "Re-rendering takes about a minute. Nothing is translated again.",
+        "discard": "Discard changes",
+        "rerender": "Re-render pages",
+        "rerendering": "Re-rendering…",
+        "checkAfter": "Check the layout again after re-rendering",
+        "renderFailed": "The pages could not be re-rendered: {message}",
+        "findings": "{count, plural, one {Layout check: # finding} other {Layout check: # findings}}",
+        "showBlock": "Show block",
+        "dismiss": "Dismiss",
+        "issue": {
+          "overflow": "Text runs outside its area",
+          "overlap": "Text collides with something else",
+          "clipped": "Text is cut off",
+          "low_contrast": "Text is hard to read on its background",
+          "leftover_source": "Text was left in the source language",
+          "misplaced": "Text is in the wrong place",
+          "too_small": "Text is noticeably small",
+          "other": "Something looks wrong"
+        },
+        "role": {
+          "title": "Title",
+          "heading": "Heading",
+          "body": "Body",
+          "list_item": "List item",
+          "table_header": "Table header",
+          "table_cell": "Table cell",
+          "caption": "Caption",
+          "running_header": "Page header",
+          "running_footer": "Page footer",
+          "label": "Label",
+          "other": "Text"
+        },
+        "run": "Run",
+        "runSummary": "{seconds} s · {tokens} tokens · {font}",
+        "details": "Details",
+        "unchecked": "The layout check could not run for this page. Re-render with the check on to try again.",
+        "addPages": "Add pages",
+        "addPagesTitle": "Pages to add",
+        "batchSummary": "{selected} of {capacity} in this batch",
+        "documentSummary": "{used} of {max} document pages",
+        "pagesPlaceholder": "{from}-{to}",
+        "batchSize": "Pages per batch",
+        "batchSizeDefault": "{size} (default)",
+        "batchSizeRange": "You can raise it up to {max}.",
+        "batchSizeRaised": "{parts, plural, one {A larger batch takes longer and uses more of your budget.} other {A larger batch takes longer and uses more of your budget. This one runs in # parts.}}",
+        "pageState": {
+          "translated": "Translated",
+          "later": "Next batch",
+          "locked": "Over the limit",
+          "removed": "Removed"
+        },
+        "pageReason": {
+          "later": "This batch is full. These pages can go in the next batch.",
+          "laterRaise": "This batch is full. These pages can go in the next batch, or raise the pages per batch to include them now.",
+          "locked": "At most {max} pages of one document can be translated, and that limit is used up."
+        },
+        "pagesUnreadable": "Write pages as numbers and ranges, such as 1-3, 8.",
+        "pagesOverBatch": "That is {asked} pages; this batch takes {capacity}. Name fewer pages or raise the pages per batch.",
+        "pagesLimitReached": "The limit of {max} pages for one document is reached. No more pages can be translated.",
+        "pagesNoneLeft": "Every page named is already translated.",
+        "earlierAdding": "{count, plural, one {# page is} other {# pages are}} already translated into {language}. New pages are added to the same PDF.",
+        "earlierReplacing": "{count, plural, one {Starting over replaces the # translated page} other {Starting over replaces the # translated pages}} when the new translation finishes.",
+        "earlierOtherLanguage": "{count, plural, one {# page is} other {# pages are}} translated into {language}. Translating into {target} starts over and replaces them.",
+        "startOver": "Start over instead",
+        "keepAdding": "Add to the translated pages instead",
+        "progressNoteParts": "Stopping keeps the parts that have finished and discards the one in progress.",
+        "progressPart": "Part {part} of {parts}",
+        "progressAssembling": "Putting the pages into one document",
+        "pageUntranslated": "Not translated",
+        "pageUntranslatedNote": "This page is not translated. The download holds it as it is in the original.",
+        "pageRemovedNote": "This page is removed from the download.",
+        "removePage": "Remove page {page} from the download",
+        "restorePage": "Put page {page} back in the download",
+        "translateThisPage": "Translate this page",
+        "railSelectNext": "{count, plural, one {Select the next page} other {Select next # pages}}",
+        "railTickHint": "Or tick the pages to translate next.",
+        "railClear": "Clear selection",
+        "railOtherLanguage": "These pages are in {language}. Choose {language} again to add more pages.",
+        "pagesPending": "Your page changes are not in the download yet",
+        "undoPageChanges": "Undo page changes",
+        "updateDownload": "Update the download",
+        "pdfBehindPages": "The PDF is behind your page changes",
+        "zoom": "Zoom",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "zoomReset": "Back to normal size",
+        "zoomLevel": "{percent}%",
+        "styleTitle": "Appearance",
+        "styleSize": "Size",
+        "styleSizeValue": "{size} pt",
+        "styleSmaller": "Smaller text",
+        "styleLarger": "Larger text",
+        "styleMove": "Position",
+        "moveLeft": "Move left",
+        "moveRight": "Move right",
+        "moveUp": "Move up",
+        "moveDown": "Move down",
+        "styleOffset": "{x} across, {y} down",
+        "styleColor": "Color",
+        "styleColorOf": "Text color of block {n}",
+        "styleNote": "On the page after re-rendering",
+        "styleReset": "Reset appearance",
+        "adjusted": "Adjusted",
+        "adjustedHint": "Its size or position was changed to fit the page. Open the block to see or reset it.",
+        "downloadFailed": "The PDF could not be downloaded",
+        "storage": {
+          "loading": "Loading your translation…",
+          "missingTitle": "This translation is no longer stored",
+          "missingBody": "Its files were deleted after {days} days without changes. The document can be translated again.",
+          "noKeyTitle": "This translation is encrypted",
+          "noKeyBody": "It was encrypted with your backup key, which is not on this device. Add the key under Settings to open it here.",
+          "otherKeyTitle": "This translation is encrypted with another key",
+          "otherKeyBody": "The backup key on this device is not the one this translation was encrypted with.",
+          "failedTitle": "The translation could not be loaded",
+          "failedBody": "Its files could not be reached. Check your connection and try again.",
+          "retry": "Try again",
+          "startOver": "Translate again",
+          "inOneDrive": "Stored in your OneDrive",
+          "inApp": "Stored in the app",
+          "inAppUntil": "Stored in the app until {date}",
+          "encrypted": "Encrypted",
+          "saveFailed": "Changes not saved yet",
+          "expiresSoon": "{count, plural, one {The files of this translation will be deleted in # day.} other {The files of this translation will be deleted in # days.}}",
+          "keep": "Keep for {days} more days"
+        },
+        "downloadMenu": "Download",
+        "downloadPdf": "PDF",
+        "downloadPdfHint": "The translated pages as shown here.",
+        "downloadPptx": "PowerPoint",
+        "downloadPptxHint": "Editable text over a picture of each page. Check it before sharing.",
+        "experimental": "Experimental",
+        "downloadBuilding": "Preparing {format}…",
+        "downloadWithChanges": "Includes your latest changes.",
+        "lineBreakHint": "Press Enter to start a new line on the page.",
+        "speakerNotes": "Translate speaker notes",
+        "speakerNotesHint": "Speaker notes are translated with the slides. Turn this off to keep them in the original language.",
+        "progressQueue": "Waiting for a slot: {ahead} ahead.",
+        "progressQueueEstimate": "About {minutes, plural, one {# minute} other {# minutes}}.",
+        "deckRunActive": "\"{name}\" is still being translated. Wait for it to finish, or stop it, before starting another presentation.",
+        "downloadDeck": "PowerPoint (.{extension})",
+        "downloadDeckHint": "The translated presentation, editable, with its animations and speaker notes.",
+        "styleMoveShape": "Moves the whole text box, with every paragraph in it.",
+        "slides": {
+          "pageLabel": "Slide {page}",
+          "loadingPage": "Loading slide {page}",
+          "removePage": "Remove slide {page} from the download",
+          "restorePage": "Put slide {page} back in the download",
+          "translateThisPage": "Translate this slide",
+          "pageUntranslatedNote": "This slide is not translated. The download holds it as it is in the original.",
+          "pageRemovedNote": "This slide is removed from the download.",
+          "unchecked": "The layout check could not run for this slide. Re-render with the check on to try again.",
+          "wholePage": "Slide",
+          "translatePages": "{count, plural, =0 {Translate} one {Translate # slide} other {Translate # slides}}",
+          "sourcePages": "Source slides",
+          "pagesField": "Slides",
+          "previewsLoading": "Loading slide previews…",
+          "previewsUnavailable": "Slide previews are not available for this file. Type the slides to translate.",
+          "progressTitle": "{count, plural, one {Translating # slide into {language}} other {Translating # slides into {language}}}",
+          "progressAssembling": "Putting the slides into one presentation",
+          "useTextOnly": "Translate it with Text only instead",
+          "documentSummary": "{used} of {max} presentation slides",
+          "batchSize": "Slides per batch",
+          "previewsFirst": "Previews are shown for the first {count} slides. Type other slide numbers in the Slides field.",
+          "pageReason": {
+            "later": "This batch is full. These slides can go in the next batch.",
+            "laterRaise": "This batch is full. These slides can go in the next batch, or raise the slides per batch to include them now.",
+            "locked": "At most {max} slides of one presentation can be translated, and that limit is used up."
+          }
+        }
+      },
+      "kind": "What to translate",
+      "kindText": "Text",
+      "kindTextHint": "Translates the text in the source pane. A file you upload is read as text.",
+      "languageNeeded": "Choose a target language to translate",
+      "pdfAsTextOffer": "{name} was loaded as text. To translate the PDF itself, page by page, switch to Document.",
+      "pdfAsTextSwitch": "Translate as a document",
+      "pdfAsTextKeep": "Keep as text",
+      "sourceStorage": {
+        "loading": "Loading the source text…",
+        "expiresSoon": "{count, plural, one {The stored source text will be deleted in # day.} other {The stored source text will be deleted in # days.}}",
+        "missingTitle": "The source text is no longer stored",
+        "missingBody": "It was deleted after {days} days without changes. The translation is still here.",
+        "noKeyTitle": "The source text is encrypted",
+        "noKeyBody": "It was encrypted with your backup key, which is not on this device. Add the key under Settings to read it here.",
+        "otherKeyTitle": "The source text is encrypted with another key",
+        "otherKeyBody": "The backup key on this device is not the one this text was encrypted with.",
+        "failedTitle": "The source text could not be loaded",
+        "failedBody": "It could not be reached. Check your connection and try again.",
+        "forget": "Continue without it"
+      },
+      "slides": {
+        "label": "Slide",
+        "previous": "Previous slide",
+        "next": "Next slide",
+        "corrected": "Corrected slides:",
+        "count": "{count, plural, one {# slide} other {# slides}}",
+        "notAligned": "The translated file has a different number of slides, so a slide may not show the same content on both sides.",
+        "failed": "This slide could not be loaded: {message}",
+        "intro": "The uploaded presentation is translated in full, keeping its layout. When it is ready you can read it slide by slide beside the original, correct slides, check their quality, and download the result. Glossaries and review rounds do not apply in this mode. Once started, a translation cannot be stopped and each slide counts as a page against today's allowance.",
+        "limitReached": "This presentation has more slides than you have pages left today. Try again tomorrow, or translate selected slides with Quick or Reviewed.",
+        "retranslate": "This starts a new translation and counts its slides against today's allowance again. It cannot be stopped once started. The current translation and its corrections stay on the server until they expire, but will no longer be shown here.",
+        "hidden": "Hidden slide",
+        "notes": "Speaker notes",
+        "notesKept": "kept in the original language",
+        "notesOriginal": "Original",
+        "notesTranslation": "Translation",
+        "converted": "This .ppt file was converted to .pptx before translating, so the translation is a .pptx file. Very old effects may look different."
+      }
     },
     "document": {
       "emptyTitle": "Describe the document you want",
@@ -3262,6 +3592,233 @@
       "saveFailed": "Could not save to OneDrive",
       "editTemplate": "Edit template",
       "loadingTemplate": "Loading template…"
+    },
+    "brandReview": {
+      "setup": {
+        "title": "Brand review",
+        "intro": "Choose a brand book and a document. The review checks fonts, colours, text sizes, wording and logos, and can have a model look at each page for tone and visual rules.",
+        "book": "Brand book",
+        "booksLoading": "Loading brand books...",
+        "noBooks": "No brand books are available to you yet. An administrator adds them in Admin > Brand books.",
+        "document": "Document",
+        "chooseDocument": "Choose a document",
+        "replaceDocument": "Choose another document",
+        "documentTypes": "PDF, Word or PowerPoint",
+        "uploading": "Uploading...",
+        "uploadFailed": "The document could not be uploaded.",
+        "wrongType": "Choose a PDF, Word document or presentation.",
+        "modelReview": "Have a model look at each page",
+        "modelReviewHint": "Finds tone, visual and logo problems the checks cannot see. Uses tokens for every page, up to 40 pages.",
+        "start": "Start review"
+      },
+      "loading": "Loading the review...",
+      "booksFailed": "Brand books could not be loaded.",
+      "startFailed": "The review could not be started.",
+      "readFailed": "The review could not be read.",
+      "busy": "\"{name}\" is still being reviewed. Wait for it to finish, or stop it, before starting another.",
+      "failed": "The review failed.",
+      "against": "Against {book}",
+      "progress": {
+        "reading": "Reading the document...",
+        "checking": "Checking text and logos...",
+        "reviewing": "Reviewing pages...",
+        "pages": "Reviewed {done} of {total} pages"
+      },
+      "status": {
+        "done": "{errors, plural, one {# error} other {# errors}}, {warnings, plural, one {# warning} other {# warnings}}",
+        "stopped": "Stopped: {errors, plural, one {# error} other {# errors}} so far",
+        "failed": "Failed",
+        "running": "Running"
+      },
+      "stop": "Stop",
+      "download": "Download report",
+      "newReview": "New review",
+      "findings": "Findings",
+      "noFindings": "Nothing found yet.",
+      "noneFound": "No problems found.",
+      "noneOfSeverity": "No findings of this kind.",
+      "byModel": "Found by the model; check it.",
+      "notes": "Notes",
+      "pageShort": "p. {page}",
+      "filter": {
+        "label": "Show",
+        "all": "All {count}",
+        "error": "Errors {count}",
+        "warning": "Warnings {count}",
+        "info": "Notes {count}"
+      },
+      "severity": {
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Note"
+      },
+      "rule": {
+        "font": "Typeface",
+        "color": "Colour",
+        "size": "Text size",
+        "banned-term": "Word to avoid",
+        "preferred-term": "Preferred word",
+        "language": "Language",
+        "logo-distorted": "Logo proportions",
+        "logo-small": "Logo size",
+        "logo-background": "Logo background",
+        "logo-unknown": "Possible logo",
+        "visual": "Visual",
+        "tone": "Tone"
+      },
+      "message": {
+        "font": "Set in {found}; the brand's typefaces are {expected}.",
+        "font-alone": "Set in {found}, which is not a brand typeface.",
+        "color": "{found} is not a brand colour; the nearest is {first}.",
+        "size": "Text at {found} pt; the smallest allowed is {first} pt.",
+        "banned-term": "\"{found}\" is a word to avoid; write {expected} instead.",
+        "banned-term-alone": "\"{found}\" is a word to avoid.",
+        "preferred-term": "Write \"{first}\" instead of \"{found}\".",
+        "language": "Marked as {found}; the brand's languages are {expected}.",
+        "logo-distorted": "{name} is drawn at {found}; its own proportions are {first}.",
+        "logo-small": "{name} is {found} pt wide; it should be at least {first} pt.",
+        "logo-background": "{name} sits on {found}; it may be shown on {expected}.",
+        "logo-unknown": "A picture that may be a logo: {found}.",
+        "visual": "{found}",
+        "tone": "{found}"
+      },
+      "report": {
+        "title": "Brand review: {name}",
+        "meta": "Against {book}, {date}, {pages, plural, one {# page} other {# pages}}",
+        "errors": "{count, plural, one {# error} other {# errors}}",
+        "warnings": "{count, plural, one {# warning} other {# warnings}}",
+        "infos": "{count, plural, one {# note} other {# notes}}",
+        "partial": "The review did not finish; this report holds what it found before it ended.",
+        "skipped": "The model did not look at pages {pages}; they were checked without it.",
+        "none": "Nothing was found that departs from the brand book.",
+        "page": "Page",
+        "severity": "Severity",
+        "rule": "Check",
+        "finding": "Finding",
+        "found": "Found",
+        "notes": "Notes",
+        "fileSuffix": "brand review"
+      },
+      "places": "{count, plural, one {# place} other {# places}}",
+      "placeOf": "{index} of {total}",
+      "previousPlace": "Previous place",
+      "nextPlace": "Next place"
+    },
+    "deckBuilder": {
+      "loading": "Loading the deck…",
+      "busy": "You already have work running ({name}). Wait for it to finish or stop it.",
+      "booksFailed": "Could not load brand books.",
+      "readFailed": "Could not read the deck’s progress.",
+      "startFailed": "Could not start the outline.",
+      "buildFailed": "The deck could not be built.",
+      "outlineFailed": "The outline could not be made.",
+      "stop": "Stop",
+      "download": "Download .pptx",
+      "editOutline": "Edit outline",
+      "newDeck": "New deck",
+      "startOver": "Start over",
+      "built": "Built",
+      "forBook": "{template}, for {book}",
+      "fromTemplate": "From {template}",
+      "outlineTitle": "Outline",
+      "outlineReady": "{count, plural, one {# slide, ready to edit} other {# slides, ready to edit}}",
+      "repaired": "{count, plural, one {One thing in the plan was adjusted to fit the template.} other {# things in the plan were adjusted to fit the template.}}",
+      "unread": "Could not read {names}; the outline was made without them.",
+      "outlinePhase": {
+        "template": "Reading the template",
+        "reading": "Reading the sources",
+        "planning": "Planning the slides"
+      },
+      "buildPhase": {
+        "composing": "Building the slides",
+        "rendering": "Checking the slides render",
+        "storing": "Saving the deck",
+        "reviewing": "Checking against the brand book"
+      },
+      "status": {
+        "running": "Working",
+        "done": "Done",
+        "failed": "Failed",
+        "stopped": "Stopped"
+      },
+      "reviewed": "{errors, plural, =0 {No brand errors} one {# brand error} other {# brand errors}}, {warnings, plural, =0 {no warnings} one {# warning} other {# warnings}}",
+      "reviewGap": {
+        "busy": "Built; not checked against the brand book (your reviews were busy)",
+        "failed": "Built; the brand check could not run"
+      },
+      "overflows": "{count, plural, one {Text on slide {slides} still overflows after fitting.} other {Text on slides {slides} still overflows after fitting.}}",
+      "shrunk": "{count, plural, one {Text on one slide was set smaller to fit.} other {Text on # slides was set smaller to fit.}}",
+      "setup": {
+        "title": "Deck builder",
+        "intro": "Choose a template, say what the deck is for and add what it should draw on. A model drafts an outline you can edit before the deck is built from the template’s layouts.",
+        "template": "Template",
+        "booksLoading": "Loading brand templates…",
+        "fromBook": "From {book}",
+        "ownTemplate": "Use your own template",
+        "replaceTemplate": "Choose another file",
+        "templateTypes": "A PowerPoint presentation or template (.pptx, .potx)",
+        "checkAgainst": "Check against a brand book",
+        "noBook": "Don’t check",
+        "brief": "What is the deck for?",
+        "briefPlaceholder": "For example: a 10-minute update for the board on our clinics this year, with the three numbers that matter.",
+        "sources": "Sources",
+        "addSources": "Add documents to draw on",
+        "sourceTypes": "PDF, Word, PowerPoint, Excel or text; up to {max}",
+        "pictures": "Pictures",
+        "addPictures": "Add pictures the deck may use",
+        "pictureTypes": "PNG, JPEG or GIF; up to {max}",
+        "remove": "Remove {name}",
+        "language": "Language of the deck",
+        "start": "Draft outline",
+        "wrongType": "That kind of file cannot be used here.",
+        "uploadFailed": "The upload failed."
+      },
+      "outline": {
+        "role": {
+          "title": "Title",
+          "subtitle": "Subtitle",
+          "body": "Text",
+          "content": "Content",
+          "picture": "Picture"
+        },
+        "holds": "What {place} holds",
+        "kindText": "Text",
+        "kindPicture": "Picture",
+        "bullets": "Bullets",
+        "noPicture": "Choose a picture",
+        "alt": "Describe the picture",
+        "tooLong": "Too long: this holds about {lines, plural, one {# line} other {# lines}} of {chars} characters, even set smaller.",
+        "shrinks": "A little long: it will be set smaller to fit.",
+        "bulletsHint": "One bullet per line. Start a line with two spaces to indent it.",
+        "room": "Room for about {lines, plural, one {# line} other {# lines}} of {chars} characters.",
+        "slide": "Slide {number}",
+        "layoutOf": "Layout of slide {number}",
+        "moveUp": "Move slide {number} up",
+        "moveDown": "Move slide {number} down",
+        "remove": "Remove slide {number}",
+        "notesSome": "Speaker notes",
+        "notesNone": "Add speaker notes",
+        "notesOf": "Speaker notes for slide {number}",
+        "slides": "Slides",
+        "addSlide": "Add slide",
+        "blocked": "{count, plural, one {One thing stops the deck from being built:} other {# things stop the deck from being built:}}",
+        "problem": {
+          "no-slides": "The outline has no slides.",
+          "too-many-slides": "Only the first 40 slides are kept.",
+          "unknown-layout": "Slide {slide} uses a layout this template does not have.",
+          "vertical-layout": "Slide {slide} uses a layout with sideways text; choose another.",
+          "unknown-placeholder": "Slide {slide} had content for a place its layout does not have.",
+          "repeated-placeholder": "Slide {slide} filled one place twice.",
+          "kind-not-accepted": "Slide {slide} had content its layout cannot hold there.",
+          "empty-fill": "Slide {slide} has an empty field.",
+          "unknown-image": "Slide {slide} names a picture that was not added.",
+          "bullet-level": "Slide {slide} had bullets indented too deep.",
+          "too-long": "Slide {slide} has more text than fits, even set smaller. Shorten it or split the slide.",
+          "empty-slide": "Slide {slide} has nothing on it."
+        },
+        "build": "{count, plural, one {Build deck (# slide)} other {Build deck (# slides)}}",
+        "willShrink": "{count, plural, one {Text on one slide will be set smaller to fit.} other {Text on # slides will be set smaller to fit.}}"
+      }
     }
   },
   "emptyState": {
@@ -3969,11 +4526,10 @@
   },
   "userMessage": {
     "open": "Open",
-    "showFullMessage": "Show full message",
-    "collapse": "Collapse",
     "showMore": "Show more",
     "showLess": "Show less",
-    "customTone": "Custom Tone"
+    "customTone": "Custom Tone",
+    "fromPrompt": "Prompt: {name}"
   },
   "codeBlock": {
     "openInEditor": "Open in editor"
@@ -4252,6 +4808,9 @@
     "translatedTo": "Translated to {language}",
     "download": "Download",
     "downloading": "Downloading...",
+    "preview": "Preview",
+    "previewTranslated": "Translated",
+    "previewOriginal": "Original",
     "textVersion": "Text version (DOCX)",
     "textVersionHint": "An editable Word file with the translated text, one page per source page. The translated file itself keeps the original layout.",
     "expired": "This translation has expired and is no longer available",
@@ -4395,14 +4954,13 @@
     "contactUs": "Contact us immediately if you have privacy concerns:"
   },
   "variableModal": {
-    "fillInstructions": "Fill in the variables below to customize your prompt",
-    "optional": "Optional",
-    "required": "Required",
-    "default": "Default:",
     "defaultPlaceholder": "{defaultValue} (default)",
-    "enterValue": "Enter value for {key}...",
     "cancel": "Cancel",
-    "apply": "Apply"
+    "optionalSuffix": "(optional)",
+    "missing": "Fill this in to use the prompt.",
+    "keysHint": "Enter: next field · Shift+Enter: new line",
+    "preview": "Message preview",
+    "insert": "Insert into message"
   },
   "recentSources": {
     "title": "Latest Source Data",
@@ -4555,7 +5113,20 @@
         "transform": "Transform",
         "photo": "Photo extraction",
         "map_edit": "Map update",
-        "rail_chat": "Chat"
+        "rail_chat": "Chat",
+        "native-pdf-sandbox-extract": "Reading the pages",
+        "native-pdf-analyze": "Deciding what to translate",
+        "native-pdf-translate": "Document translation",
+        "native-deck-translate": "Presentation translation",
+        "native-pdf-review": "Translation review",
+        "native-pdf-sandbox-rebuild": "Rebuilding the pages",
+        "native-pdf-verify": "Layout check",
+        "native-pdf-refit": "Fitting text",
+        "native-pdf-render": "Re-rendering pages",
+        "native-pdf-unit": "Text block change",
+        "native-pdf-unit-shorten": "Shortening a text block",
+        "native-pdf-unit-change": "Changing a text block",
+        "native-pdf-unit-translate": "Translating a text block"
       },
       "estimate": "~{passes} passes · ~{grams} g CO₂e",
       "estimateTooltip": "Rough estimate for this run before it starts, from the length of the source, the selected model and how many passes the chosen settings make (assumptions v{version}). Each pass re-sends the source, so prompt tokens dominate. The actual figure appears after the run.",
@@ -5593,7 +6164,8 @@
       "delegations": "Who administers which users, and what each of them is allowed to do.",
       "analytics": "Delivered reports: what arrived, who may open each folder, and which fields may be shown.",
       "channelSets": "Each team's rules for writing on the platforms: guidance, voices, defaults, who may use the set and who may send.",
-      "skills": "Reusable instruction blocks the assistant applies when a conversation needs them."
+      "skills": "Reusable instruction blocks the assistant applies when a conversation needs them.",
+      "brandBooks": "Colours, type, logos, wording and templates that documents are checked against and built from."
     },
     "area": {
       "workflows": "Workflows",
@@ -5605,7 +6177,8 @@
       "announcements": "Announcements",
       "delegations": "Delegations",
       "analytics": "Analytics",
-      "skills": "Skills"
+      "skills": "Skills",
+      "brandBooks": "Brand books"
     }
   },
   "auxiliaryModels": {
@@ -5903,30 +6476,15 @@
       "delegations": "Delegations"
     },
     "modelAccess": {
-      "intro": "Decide who may use each model. A family's setting applies to its models unless a model sets its own; people on a list beat the default for everyone else; the block list beats every grant.",
       "externalNote": "Models hosted outside the Azure environment ({families}) are unavailable to everyone until you grant them here — to everyone via the default, or to groups, domains and people.",
       "envelopeNote": "A request limit on a family is a shared daily budget across its models; a limit on a model is a cap within it. Unlimited on a model does not lift a family budget.",
       "observeNote": "Observe mode is on: nothing here hides a model or stops a request yet. Switch to Enforce above once the rules are right.",
-      "familyChip": "Family",
-      "modelChip": "Model",
       "otherModels": "Models without a family",
-      "modelsInFamily": "{count, plural, one {# model in this family} other {# models in this family}}",
       "noModels": "No models in the catalog yet.",
-      "expand": "Show models",
-      "collapse": "Hide models",
-      "edit": "Edit",
       "doneEditing": "Done",
-      "editNode": "Edit access for {label}",
       "defaultLabel": "Everyone else",
-      "defaultInherit": "Inherit",
-      "defaultUnlimited": "Unlimited",
-      "defaultLimited": "Limited to",
-      "defaultUnavailable": "Unavailable",
-      "defaultRequestsLabel": "Requests per day for everyone else",
-      "requestsPerDay": "requests / day",
       "inheritedFrom": "Inherits {state} from {origin}.",
       "effectiveLabel": "Everyone not on a list gets: {state}.",
-      "inheritedChip": "inherited",
       "origin": {
         "model": "this setting",
         "family": "its family",
@@ -5943,25 +6501,315 @@
         "groups": "Groups with access",
         "domains": "Domains with access",
         "allow": "Allowed people",
-        "deny": "Blocked people"
+        "deny": "Blocked people",
+        "denyGroups": "Blocked groups",
+        "denyDomains": "Blocked domains"
       },
-      "listHint": {
-        "groups": "Members of these Entra groups may use it, on the terms set per group.",
-        "domains": "Everyone with an email address at these domains, on the terms set per domain.",
-        "allow": "Named people may use it whatever the default or their domain says.",
-        "deny": "Named people may never use it. This beats every grant above."
-      },
-      "grantUnlimited": "Unlimited",
-      "grantLimited": "Limited to",
       "termsLabel": "Terms for {target}",
-      "requestsLabel": "Requests per day for {target}",
       "removeGrant": "Remove {target}",
       "groupsCount": "{count, plural, one {# group} other {# groups}}",
       "domainsCount": "{count, plural, one {# domain} other {# domains}}",
-      "allowCount": "{count, plural, one {# person allowed} other {# people allowed}}",
-      "denyCount": "{count, plural, one {# person blocked} other {# people blocked}}",
       "collisionChip": "Also in Global defaults",
-      "collisionWarning": "This model or family is also configured under Global defaults. Saving will be refused until one of the two is cleared."
+      "collisionWarning": "This model or family is also configured under Global defaults. Saving will be refused until one of the two is cleared.",
+      "grid": {
+        "caption": "Model access by audience",
+        "col": {
+          "model": "Model",
+          "reach": "Can use it",
+          "people": "Named people"
+        },
+        "familyNote": "family: shared daily budget",
+        "cellLabel": "{model}, {audience}: {value}",
+        "noGrant": "no terms of its own",
+        "reach": {
+          "everyone": "Everyone",
+          "nobody": "Nobody",
+          "people": "{count, plural, one {# person} other {# people}}",
+          "everyoneExcept": "Everyone except {list}"
+        },
+        "howTitle": "How one request is decided",
+        "how": {
+          "inherit": "A model with no terms of its own in a column uses its family's (dashed).",
+          "envelope": "The request must fit the model's cap, the family's shared budget and the chat total, all three.",
+          "blocked": "A named person set to Off cannot use it, whatever their group or domain gets.",
+          "mostSpecific": "Otherwise the most specific entry that includes the person decides: a named person, then a group, then a domain, then everyone else. Between two groups, or two domains, Off wins."
+        },
+        "lead": "Who can use each model, and how many requests a day. Each row is a family or a model; each column is an audience. Select a model, or any cell, to change who can use it.",
+        "peopleValue": "{allowed} allowed, {blocked} off",
+        "bulk": {
+          "open": "Add access on several models",
+          "title": "Give the same access on several models",
+          "models": "On these models",
+          "wholeFamily": "whole family",
+          "apply": "{count, plural, =0 {Choose models} one {Apply to # row} other {Apply to # rows}}",
+          "note": "Replaces what these people, groups and domains already have on the chosen rows. Nothing is saved until you save the policy.",
+          "action": "What to do",
+          "set": "Give access or switch it off",
+          "remove": "Remove from these rows",
+          "applyRemove": "{count, plural, =0 {Choose models} one {Remove from # row} other {Remove from # rows}}",
+          "noteRemove": "Takes these people, groups and domains off the chosen rows; they then get what the family or Everyone else gets. Nothing is saved until you save the policy.",
+          "filter": "Filter models",
+          "selectShown": "Select all shown",
+          "clear": "Clear selection",
+          "noMatch": "No model matches.",
+          "applied": "{entries, plural, one {# entry} other {# entries}} set on {rows, plural, one {# row} other {# rows}}. Not saved yet.",
+          "removed": "{entries, plural, one {# entry} other {# entries}} removed from {rows, plural, one {# row} other {# rows}}. Not saved yet."
+        }
+      },
+      "audience": {
+        "editorTitle": "Who can use {model}",
+        "heading": "Groups, domains and people",
+        "hint": "Each gets its own answer on this row, whatever Everyone else says.",
+        "empty": "Nobody is named on this row yet.",
+        "who": "Who",
+        "terms": "They get",
+        "newTerms": "What the people, groups and domains being added get",
+        "add": "{count, plural, =0 {Add} one {Add # entry} other {Add # entries}}",
+        "placeholder": "Search people and groups, or type a domain such as example.org",
+        "pickerLabel": "People, groups or domains to add",
+        "pickerHint": "Mix people, groups and domains. Paste a list separated by commas.",
+        "pickerHintNoGroups": "Mix people and domains. Paste a list separated by commas. Group search is turned off here.",
+        "invalid": "Not recognised: {text}. Type an email address or a domain, or pick a group from the search.",
+        "kind": {
+          "user": "person",
+          "group": "group",
+          "domain": "domain"
+        },
+        "fromFamily": "from the family",
+        "setHere": "Change for this model",
+        "setHereFor": "Change {target} for this model",
+        "overruled": "Off on the family, which wins",
+        "editRow": "Edit who can use {model}",
+        "editRowHint": "edit who can use it",
+        "replaces": "{count, plural, one {Already on this row: {names}. Adding replaces what it gets.} other {Already on this row: {names}. Adding replaces what they get.}}",
+        "notAdded": "{count, plural, one {# entry in the field is not added yet.} other {# entries in the field are not added yet.}}",
+        "addAndClose": "Add and close",
+        "closeAnyway": "Close without adding",
+        "filter": "Filter this list",
+        "filterCount": "Showing {shown} of {total}"
+      },
+      "review": {
+        "none": "no entry",
+        "becomes": "becomes",
+        "removed": "removed"
+      },
+      "view": {
+        "label": "View",
+        "grid": "Access and facts",
+        "runway": "Retirement runway",
+        "map": "Spend and popularity"
+      },
+      "facts": {
+        "estimateNote": "Cost and CO2e are estimates, not measured spend: counted requests multiplied by a typical request ({promptTokens} tokens in, {completionTokens} out) at list price. Usage covers the last {days, plural, one {# day} other {# days}}.",
+        "captureNote": "Usage by everyone appears after the first full day of collection. Until then the figures cover only people who are under a cap.",
+        "co2Grams": "{value} g CO2e",
+        "co2Kilograms": "{value} kg CO2e",
+        "priceValue": "{input} in, {output} out",
+        "summary": {
+          "label": "Models at a glance",
+          "used": "Models used, last {days, plural, one {# day} other {# days}}",
+          "usedValue": "{used} of {total}",
+          "requests": "Requests",
+          "spend": "Estimated spend",
+          "footprint": "Estimated CO2e",
+          "retiring": "Retiring within {days} days",
+          "noCeiling": "Unlimited for everyone else",
+          "notYet": "Not yet known"
+        },
+        "columns": {
+          "label": "Columns",
+          "cost": "Cost",
+          "footprint": "Footprint",
+          "usage": "Usage",
+          "lifecycle": "Retirement"
+        },
+        "col": {
+          "price": "List price per 1M tokens",
+          "ceiling": "Most one person can cost, per month",
+          "footprint": "CO2e per typical request",
+          "people": "People using it",
+          "spread": "Requests on a person's busiest day",
+          "retires": "Retires"
+        },
+        "ceiling": {
+          "heavy": "up to {amount} with long requests",
+          "off": "Nothing: switched off",
+          "unbounded": "No ceiling",
+          "unpriced": "No list price"
+        },
+        "footprint": {
+          "notSet": "Size not set"
+        },
+        "size": {
+          "nano": "Nano",
+          "mini": "Mini",
+          "standard": "Standard",
+          "large": "Large",
+          "xl": "Extra large"
+        },
+        "usage": {
+          "none": "No usage",
+          "spend": "about {amount}",
+          "cappedOnly": "capped people only"
+        },
+        "spread": {
+          "caption": "median {median}, 75th {p75}, most {max}",
+          "label": "Requests on a person's busiest day: median {median}, 75th percentile {p75}, 95th percentile {p95}, most {max}.",
+          "labelCap": " The cap is {cap} a day.",
+          "legend": {
+            "p95": "up to the 95th percentile",
+            "box": "median to 75th percentile",
+            "max": "heaviest person",
+            "cap": "cap for everyone else"
+          }
+        },
+        "retires": {
+          "none": "No date published",
+          "forced": "Being moved off now",
+          "past": "date has passed",
+          "to": "to {model}"
+        },
+        "lifecycle": {
+          "preview": "Preview",
+          "ga": "Generally available",
+          "legacy": "Legacy",
+          "deprecated": "Deprecated",
+          "retired": "Retired"
+        },
+        "detail": {
+          "region": "How this model is used, and what it costs",
+          "usageTitle": "Requests on each person's busiest day",
+          "usageHint": "{people, plural, one {# person} other {# people}} used it in the last {days, plural, one {# day} other {# days}}. Each person is counted once, at their busiest day.",
+          "noUsage": "Nobody used this model in the last {days, plural, one {# day} other {# days}}.",
+          "bucketHeading": "Requests in a day",
+          "peopleHeading": "People",
+          "bucketRange": "{from}–{to}",
+          "bucketOpen": "{from}+",
+          "average": "Average per active day",
+          "median": "Median",
+          "p75": "75th percentile",
+          "p95": "95th percentile",
+          "max": "Heaviest person",
+          "reachedCap": "Reached a cap",
+          "cappedOnly": "Only people under a cap are counted here so far, so people with no cap are missing.",
+          "truncated": "Only the heaviest people are listed, so the median and percentiles read higher than they are.",
+          "replayTitle": "If the cap were different",
+          "replayHint": "How many of these people had a day at or above each cap. They would have been stopped that day.",
+          "replayCap": "Cap for everyone else",
+          "replayStopped": "People stopped",
+          "replayPerDay": "{cap} a day",
+          "replayNow": "{cap} a day (now)",
+          "replayUnlimitedNow": "Unlimited (now)",
+          "replayPeople": "{people} ({share})",
+          "costTitle": "Estimated cost",
+          "costHint": "List price for an assumed request. Not a bill: real requests vary in length.",
+          "typicalRequest": "One typical request",
+          "longRequest": "One long request",
+          "everyoneWindow": "Everyone, last {days, plural, one {# day} other {# days}}",
+          "atThisPace": "A month at this pace",
+          "footprintTitle": "Estimated footprint",
+          "footprintHint": "From the model's size class and an assumed request. An order of magnitude, not a measurement.",
+          "sizeClass": "Size class",
+          "noSizeClass": "This model has no size class, so its footprint cannot be estimated. Set one in the model catalog.",
+          "aboutTitle": "About this model",
+          "status": "Status",
+          "retiresOn": "{date}. Users see a notice from {notice} and are moved from {move}.",
+          "retiresForced": "People are being moved off this model now.",
+          "retiresUnknown": "No date published",
+          "replacement": "People land on",
+          "replacementNotSet": "Not set",
+          "knowledge": "Knowledge up to",
+          "context": "Context window",
+          "contextTokens": "{tokens} tokens",
+          "canDo": "Can",
+          "can": {
+            "images": "read images",
+            "tools": "use tools",
+            "codeInterpreter": "run code",
+            "reasoningEffort": "adjust reasoning effort"
+          },
+          "hosted": "Hosted",
+          "hosting": {
+            "azure": "In the organization's Azure tenant",
+            "external": "By an outside provider",
+            "local": "Locally"
+          }
+        },
+        "showRetired": "Retired models ({count})"
+      },
+      "runway": {
+        "lead": "When each model goes away, how many people are on it, and whether its access rules match the model people will land on.",
+        "caption": "Models with a retirement date, soonest first",
+        "empty": "No model has a retirement date.",
+        "today": "Today",
+        "col": {
+          "people": "People",
+          "landsOn": "People land on",
+          "access": "Access on the replacement"
+        },
+        "alert": "{model} retires in {days, plural, one {# day} other {# days}}. {people, plural, one {# person} other {# people}} used it recently.",
+        "alertForced": "{model} is being retired now. {people, plural, one {# person} other {# people}} used it recently.",
+        "alertTo": "They will be moved to {model}.",
+        "alertNoReplacement": "No replacement is set.",
+        "access": {
+          "same": "Same rules",
+          "unknown": "Cannot be checked until a replacement is set",
+          "everyone": "Everyone else gets different terms",
+          "audiences": "{count, plural, one {# group, domain or person has} other {# groups, domains or people have}} different terms",
+          "both": "Everyone else and {count, plural, one {# group, domain or person} other {# groups, domains or people}} get different terms"
+        },
+        "carryOver": "Copy these rules to {model}",
+        "carried": "Copied the rules of {from} to {to}. Review and save to apply.",
+        "legend": {
+          "service": "in service",
+          "notice": "notice shown to users, {days} days",
+          "move": "people moved, last {days} days"
+        },
+        "pastTitle": "Past its date and still listed:",
+        "pastItem": "{model} ({date}, {people, plural, one {# person} other {# people}})",
+        "undatedTitle": "No date published:",
+        "rulesNote": "Access is compared rule by rule. Usage is stored without names, so this cannot say how many of the people on a model would lose access."
+      },
+      "map": {
+        "lead": "Each circle is a model used in the last {days, plural, one {# day} other {# days}}. Further right costs more per request, higher has more people. Spend and CO2e are estimates from a typical request.",
+        "empty": "No priced model was used in the last {days, plural, one {# day} other {# days}}.",
+        "caption": "The same figures as a table, highest estimated spend first",
+        "sizeLabel": "Circle size",
+        "size": {
+          "spend": "Estimated spend",
+          "footprint": "Estimated CO2e",
+          "requests": "Requests"
+        },
+        "axisPeople": "People, last {days, plural, one {# day} other {# days}} (up)",
+        "axisCost": "Estimated cost of one typical request at list price (right)",
+        "dotLabel": "{model}: {people, plural, one {# person} other {# people}}, {cost} per typical request, {value}. Open its access rules.",
+        "legendTitle": "Size class:",
+        "legend": {
+          "mini": "nano or mini",
+          "standard": "standard",
+          "large": "large",
+          "xl": "extra large",
+          "unset": "not set"
+        },
+        "col": {
+          "requests": "Requests",
+          "perRequest": "Per typical request"
+        },
+        "unknown": "Not known",
+        "noFindings": "Nothing stands out yet.",
+        "findingTitle": {
+          "concentrated": "Concentrated spend",
+          "reached": "A cap people reach",
+          "unreached": "A cap nobody comes near",
+          "noCeiling": "No ceiling"
+        },
+        "finding": {
+          "concentrated": "{model} is {share} of estimated spend.",
+          "reached": "{model}: {people} of {of} people reached {cap} a day.",
+          "unreached": "{model} is capped at {cap} a day; the heaviest person made {max}.",
+          "noCeiling": "{models}: unlimited for everyone else. The heaviest person made {max, plural, one {# request} other {# requests}} in a day."
+        }
+      }
     },
     "tabsLabel": "Limits sections",
     "group": {
@@ -6388,7 +7236,241 @@
       "spentNotMetered": "Spent so far: not metered — no counted cell carries a price."
     },
     "delegationsManagedElsewhere": "Delegations are shown here read-only. Who is in a delegation, whose users it covers and what each admin may do are managed in the Delegations area.",
-    "delegationsManagedElsewhereLink": "Open Delegations"
+    "delegationsManagedElsewhereLink": "Open Delegations",
+    "console": {
+      "tab": {
+        "overview": "Overview",
+        "check": "Check access"
+      },
+      "everyone": "Everyone",
+      "off": "Off",
+      "none": "none",
+      "col": {
+        "limit": "Limit",
+        "exceptions": "Exceptions",
+        "pressure": "Yesterday, against each person's cap",
+        "theyGet": "They get",
+        "usedToday": "Used today"
+      },
+      "legendTitle": "What the marks mean",
+      "legend": {
+        "set": "set here",
+        "inherited": "inherited from below",
+        "unlimited": "unlimited",
+        "off": "off",
+        "ceiling": "hard ceiling: nobody above",
+        "delegated": "set by a delegated admin",
+        "shapes": "everyone, domain, attribute, group, person: more specific wins"
+      },
+      "sr": {
+        "inherited": "inherited",
+        "ceiling": "hard ceiling",
+        "delegated": "set by a delegated admin",
+        "lost": "outranked",
+        "winner": "decides"
+      },
+      "direction": {
+        "looser": "looser",
+        "stricter": "stricter",
+        "removes-cap": "removes a cap"
+      },
+      "band": {
+        "underHalf": "under half",
+        "toEighty": "half to 80%",
+        "nearCap": "80% to the cap",
+        "atCap": "hit the cap"
+      },
+      "pressureLegendTitle": "People who used it:",
+      "pressureLabel": "{underHalf} under half of their cap, {toEighty} from half to 80%, {nearCap} from 80% to the cap, {atCap} hit the cap",
+      "evidenceBuilding": "Usage evidence is still being gathered; this updates by itself.",
+      "evidenceWindow": "Usage evidence from the last {days, plural, one {# day} other {# days}}.",
+      "evidencePartial": "Some days had more people than the summary reads, so counts are lower bounds.",
+      "exceptionChip": "{count, plural, one {# rule} other {# rules}} for {scope}",
+      "exceptionChipDelegated": "{count, plural, one {# rule} other {# rules}} for {scope}, set by a delegated admin",
+      "perRequest": "per request",
+      "notMeasured": "not measured while unlimited",
+      "noUsage": "no usage",
+      "hitCap": "{count, plural, one {# person} other {# people}} hit their cap",
+      "nobodyAtCap": "nobody at their cap",
+      "everyoneLimit": "{limit} for everyone",
+      "ceilingToggle": "Hard ceiling: no exception may go above this",
+      "ruleCeilingToggle": "Hard ceiling: no more specific rule may go above this",
+      "ruleEvidence": "Last week {people, plural, one {# person} other {# people}} had their cap from this rule; {atCap} hit it.",
+      "exceptionsTitle": "Exceptions ({count})",
+      "noExceptions": "No rule changes this for anyone.",
+      "editRule": "Edit rule",
+      "addException": "Add an exception for this limit",
+      "kind": {
+        "inherit": "Inherit",
+        "limit": "Limit",
+        "unlimited": "Unlimited",
+        "on": "On",
+        "off": "Off"
+      },
+      "unitPerWindow": "{unit} a {window}",
+      "valueFor": "Limit for {limit}",
+      "fromBelow": "from below",
+      "effect": {
+        "inert": "Not in effect: the rule is off, or its delegated admin's access is off or does not reach these people.",
+        "noEffect": "No effect as set.",
+        "heldByCeiling": "A hard ceiling holds members at {value}.",
+        "outranked": "A more specific or higher-priority rule decides instead ({value}).",
+        "applies": "Members get {value} instead of {otherwise}.",
+        "same": "Members get {value}, the same as without this rule.",
+        "noTargets": "Covers nobody yet: add who it covers to see its effect."
+      },
+      "backToOverview": "All limits",
+      "ruleOn": "Rule is on",
+      "ruleIntro": "An exception for these people. It sets only the limits listed; everything else comes from the levels below.",
+      "whoItCovers": "Who it covers",
+      "rankNote": {
+        "domain": "A domain rule outranks Everyone, and loses to attribute, group and personal rules.",
+        "attribute": "An attribute rule outranks domains, and loses to group and personal rules.",
+        "group": "A group rule outranks domains and attributes, and loses to personal rules.",
+        "user": "A personal rule outranks every other level."
+      },
+      "othersTitle": "Other rules that cover the same people",
+      "othersNone": "No other rule covers these people.",
+      "othersRelation": {
+        "wins": "more specific, so it wins where both set a limit.",
+        "loses": "less specific, so this rule wins where both set a limit.",
+        "tie": "same level, so priority decides where both set a limit."
+      },
+      "advanced": "Advanced",
+      "whatItSets": "What this rule sets",
+      "setsNothing": "This rule sets nothing yet. Add a limit below.",
+      "otherwise": "Otherwise:",
+      "from": "from",
+      "source": {
+        "catalog": "built in",
+        "everyone": "Everyone",
+        "domain": "a domain rule",
+        "attribute": "an attribute rule",
+        "group": "a group rule",
+        "user": "a personal rule"
+      },
+      "unlimitedHint": "Unlimited replaces any cap below it. If you meant \"no special rule\", choose Inherit.",
+      "inheritHint": "Set to Inherit: this line leaves the rule when you save.",
+      "setAnother": "Set another limit",
+      "notListedInherit": "Limits not listed are inherited; that is the default, not a setting.",
+      "policyShown": "Policy shown",
+      "savedPolicy": "Saved",
+      "withDraft": "With your changes",
+      "lensCaption": "Limits for {mail}",
+      "layer": {
+        "catalog": "Built in",
+        "global": "Everyone",
+        "domain": "Domain",
+        "attribute": "Attribute",
+        "group": "Group",
+        "user": "Person"
+      },
+      "moreSpecificWins": "less specific to more specific: the more specific rule wins",
+      "usedOf": "{used} of {limit}",
+      "matchedAs": "Matched as",
+      "otherGroups": "and {count, plural, one {# other group} other {# other groups}} no rule mentions",
+      "lensLegend": "Each column is a level of rule. The ringed value decides; struck-through values were outranked or held down by a hard ceiling; dashed values come from a delegated admin.",
+      "why": {
+        "decidedBy": "decided by {rule}.",
+        "ceiling": "A hard ceiling held it there.",
+        "hardCeiling": "The app's own maximum applies.",
+        "draftChanged": "With your changes; saved policy: {saved}.",
+        "outranked": "{count, plural, one {# other rule here lost the tie-break} other {# other rules here lost the tie-break}}",
+        "envelope": "A request to this model must fit both this cap and its family's cap."
+      },
+      "noChanges": "Nothing to review: the draft matches the saved policy.",
+      "reviewTitle": "Review {count, plural, one {# change} other {# changes}}",
+      "countLooser": "{count} looser",
+      "countStricter": "{count} stricter",
+      "countRemovesCap": "{count, plural, one {# removes a cap} other {# remove a cap}}",
+      "reviewObserve": "Nothing has changed for anyone yet. Limits are in observe mode, so saving changes only what is measured and reported.",
+      "reviewEnforce": "Nothing has changed for anyone yet. Limits are enforced: saving changes what people can do within about a minute.",
+      "change": {
+        "everyoneGets": "Everyone without an exception gets {after} instead of {before}.",
+        "membersGet": "Members get {after} instead of {before}.",
+        "noEvidence": "No usage recorded for this limit last week.",
+        "ruleReach": "Last week {people, plural, one {# person} other {# people}} had their cap from here; {atCap} hit it.",
+        "overNewCap": "{people, plural, one {# person} other {# people}} had a day above {cap} last week.",
+        "events": "Caps on this limit were hit {events, plural, one {# time} other {# times}} by {people, plural, one {# person} other {# people}} last week.",
+        "noTargets": "Covers nobody yet, so it changes nothing until people are added.",
+        "peopleGet": "The people named get {after} instead of {before}."
+      },
+      "flag": {
+        "removes-cap": "Removes the cap: no limit applies to these people.",
+        "removes-ceiling": "Removes a hard ceiling: more specific rules may now go above it.",
+        "delegated-loosening": "A delegated admin's rule now grants more.",
+        "no-effect": "Set, but changes nothing for these people as the policy stands.",
+        "enforce": "Switching to enforce: from then on, limits stop people instead of only being measured."
+      },
+      "undo": "Undo",
+      "ruleChange": {
+        "added": "new rule",
+        "removed": "rule removed",
+        "enabled": "rule turned on",
+        "disabled": "rule turned off",
+        "audience": "who it covers changed",
+        "priority": "priority changed"
+      },
+      "otherChange": {
+        "setting": "Setting {subject}",
+        "delegation": "Delegated admins: {subject}",
+        "model-access": "Model access for {subject}"
+      },
+      "checkPerson": "Check anyone against this draft",
+      "checkPersonHint": "Opens Check access with your changes applied.",
+      "historyNote": "Saving writes one version to the change history.",
+      "histogramLabel": "{people} people by their busiest day last week; old cap {before}, new cap {after}",
+      "histogramCaption": "People by their busiest day last week. Orange: above the new cap.",
+      "oldCap": "old {value}",
+      "newCap": "new {value}",
+      "observeSentence": "Limits are measured; nobody is stopped.",
+      "enforceSentence": "Limits are enforced: people are stopped at their cap.",
+      "noHits": "No cap was hit in the last {days, plural, one {# day} other {# days}}.",
+      "wouldHaveStopped": "If enforced, the last {days, plural, one {# day} other {# days}} would have stopped {events, plural, one {# request} other {# requests}}, most on {limit}.",
+      "stopped": "The last {days, plural, one {# day} other {# days}} stopped {events, plural, one {# request} other {# requests}}, most on {limit}.",
+      "delegatedTitle": "Who else can change limits",
+      "delegatedHint": "Delegated admins and the people they can reach. Their rules are dashed and lose to yours at the same level.",
+      "delegatedNone": "Nobody: only global admins change limits.",
+      "delegatedLine": "{admins, plural, one {# admin} other {# admins}}, {used} of {budget} rules used",
+      "openDelegations": "Manage delegated admins",
+      "settingsTitle": "Other settings",
+      "unsavedCount": "{count, plural, one {# change not saved} other {# changes not saved}}",
+      "discardConfirm": "Discard every unsaved change?",
+      "discardYes": "Discard",
+      "reviewChanges": "Review changes",
+      "lens": {
+        "subjectKind": "What to check",
+        "kind": {
+          "user": "Person",
+          "group": "Security group",
+          "domain": "Domain"
+        },
+        "domainLabel": "Email domain to check",
+        "groupHint": "Search for a security group by name, or paste its object ID.",
+        "intro": "Pick a person, a security group or a domain to see what they get and which rule decided it. Open any limit to set an exception for them right there.",
+        "typicalMember": {
+          "group": "as a typical member: someone in this group and matched by no other rule. A member also covered by a personal rule or another group may get something different.",
+          "domain": "as a typical member: someone at this domain and matched by no other rule. Someone also covered by a group or personal rule may get something different."
+        },
+        "ownRule": "{count, plural, one {# exception is} other {# exceptions are}} set for {subject} alone.",
+        "exceptionFor": "Exception for {subject}",
+        "exceptionLabel": "{limit} for {subject}",
+        "noException": {
+          "user": "No exception: this person gets whatever the rules above give them.",
+          "group": "No exception: members get whatever the rules above give them.",
+          "domain": "No exception: people at this domain get whatever the rules above give them."
+        },
+        "effect": {
+          "applies": "Gives {value} instead of {otherwise}.",
+          "same": "Gives {value}, the same as without the exception.",
+          "held-by-ceiling": "No effect as set: a hard ceiling holds it at {value}.",
+          "outranked": "No effect as set: a more specific or higher-priority rule decides instead ({value}).",
+          "inert": "Not in effect."
+        }
+      },
+      "backToEditing": "Back to editing",
+      "reviewRegion": "Review before saving"
+    }
   },
   "adminMapDatasets": {
     "loading": "Loading dataset…",
@@ -7285,7 +8367,7 @@
   },
   "workflowsAdmin": {
     "title": "Workflows",
-    "description": "Enable or disable each workflow for the whole organization. A disabled workflow is hidden from menus and refused by the server, even for people who otherwise qualify for it.",
+    "description": "Enable or disable each workflow, and the optional features listed under it, for the whole organization. A disabled workflow is hidden from menus and refused by the server, even for people who otherwise qualify for it.",
     "layeredNote": "The LaunchDarkly conversationWorkflows flag still governs rollout: a workflow enabled here is only reachable where that flag is on. This page cannot make anything visible that the flag hides.",
     "loading": "Loading workflow policy…",
     "loadError": "The workflow policy could not be loaded.",
@@ -7305,7 +8387,44 @@
     "saveError": "The workflow policy could not be saved.",
     "conflictError": "Another administrator changed the policy first. It has been reloaded — please review and save again.",
     "updatedByLine": "Last saved by {by} on {at}.",
-    "neverSaved": "No policy has been saved yet; the defaults above apply."
+    "neverSaved": "No policy has been saved yet; the defaults above apply.",
+    "featureNeedsWorkflow": "Has no effect while this workflow is disabled.",
+    "features": {
+      "translation-preserve-formatting": {
+        "label": "Preserve formatting for PDFs",
+        "description": "Adds the \"Preserve formatting\" layout to Document mode, which rebuilds each PDF page with the translation in place. It uses the code interpreter and a vision model, so a page costs more than a text-only translation.",
+        "limits": {
+          "defaultBatchPages": "Pages per batch, by default",
+          "maxBatchPages": "Largest batch a person can choose",
+          "maxDocumentPages": "Pages per document, in total"
+        },
+        "limitsNote": "People translate a document a batch at a time and can raise the batch up to the largest one. Once the document total is reached, no more of its pages can be translated. A default above the largest batch, or a largest batch above the document total, is lowered to fit."
+      }
+    },
+    "limitsTitle": "Limits",
+    "limitRange": "{min} to {max}",
+    "limitsInvalid": "A limit is outside its allowed range. Check the highlighted ranges and try again.",
+    "overridesTitle": "Different limits for some people",
+    "overridesNote": "An override replaces these limits for the people it names. A field left empty keeps the value above. When several match, a person outranks a directory attribute, which outranks a mail domain.",
+    "overrideScope": "Applies to",
+    "overrideTargets": "Who (separate several with commas)",
+    "overrideInherit": "{value} (inherited)",
+    "overrideAdd": "Add an override",
+    "overrideRemove": "Remove",
+    "overrideScopes": {
+      "user": {
+        "label": "People",
+        "placeholder": "name@example.org"
+      },
+      "domain": {
+        "label": "Mail domain",
+        "placeholder": "example.org"
+      },
+      "attribute": {
+        "label": "Directory attribute",
+        "placeholder": "department:health"
+      }
+    }
   },
   "viewAs": {
     "title": "View as",
@@ -7616,6 +8735,137 @@
       "none": "Rendered only"
     },
     "leaveUnsaved": "You have unsaved changes. Leave without saving?"
+  },
+  "adminBrandBooks": {
+    "untitled": "Untitled brand book",
+    "intro": "A brand book holds an organisation's colours, type, logos, wording and templates, so documents can be checked against it and built from it. Who can use each book is set with its access rule.",
+    "unavailable": "Brand books could not be loaded from storage. Try again in a moment.",
+    "add": "Add brand book",
+    "none": "No brand books yet.",
+    "paletteSummary": "{count, plural, one {# brand colour} other {# brand colours}}",
+    "summary": "{fonts, plural, one {# typeface} other {# typefaces}}, {logos, plural, one {# logo} other {# logos}}",
+    "open": "Open",
+    "delete": "Delete",
+    "deleteConfirm": "Delete \"{name}\" and its files? Documents already checked keep their reports.",
+    "deleteConfirmButton": "Delete brand book",
+    "loading": "Loading brand book...",
+    "loadFailed": "The brand book could not be loaded.",
+    "missing": "This brand book does not exist, or you cannot edit it.",
+    "back": "Brand books",
+    "unsaved": "Unsaved changes",
+    "saved": "Saved",
+    "save": "Save",
+    "conflict": "Another admin saved this brand book after you opened it. Reload to see their version; your changes here will be lost.",
+    "reload": "Reload",
+    "invalid": "This brand book cannot be saved yet: {reason}",
+    "saveFailed": "The brand book could not be saved.",
+    "uploadFailed": "The file could not be uploaded.",
+    "remove": "Remove",
+    "removeNamed": "Remove {name}",
+    "basics": {
+      "title": "Brand book",
+      "name": "Name",
+      "description": "Description"
+    },
+    "guide": {
+      "action": "Draft from a brand guide",
+      "reading": "Reading the guide. A long guide can take a few minutes.",
+      "hint": "Upload the brand guide as a PDF to fill in the colours, type and wording it defines. Logos and templates are not taken from it; upload those below.",
+      "source": "Drafted from",
+      "notPdf": "A brand guide must be a PDF.",
+      "failed": "A draft could not be made from this guide.",
+      "applied": "{pages, plural, one {Drafted from a guide of # page.} other {Drafted from a guide of # pages.}}",
+      "check": "Each value below shows the page of the guide that states it. A value marked as not found is the model's reading of the guide: check those first.",
+      "undo": "Undo the draft",
+      "uploading": "Uploading the guide...",
+      "tooLarge": "A brand guide can be at most {megabytes} MB.",
+      "grounded": "Found in the guide's text: {colors} of {colorTotal} colours, {fonts} of {fontTotal} typefaces, {terms} of {termTotal} words.",
+      "stated": "Guide, page {page}",
+      "notStated": "Not found in the guide's text.",
+      "othersNotStated": "Not found in the guide's text: {values}",
+      "logoMinWidth": "The guide sets a smallest logo width of {points} pt. It is filled in for this book's logos.",
+      "dropped": "{count, plural, one {# entry could not be used and was left out.} other {# entries could not be used and were left out.}}"
+    },
+    "palette": {
+      "title": "Colours",
+      "description": "The brand colours. A colour in a document counts as one of these when it is within the colour's tolerance.",
+      "add": "Add colour",
+      "newName": "Colour {number}",
+      "none": "No brand colours yet.",
+      "hex": "Hex",
+      "pick": "Pick a colour for {name}",
+      "name": "Name",
+      "tolerance": "Tolerance",
+      "toleranceHint": "Colour difference (Delta E). 2 to 3 is barely visible.",
+      "roles": "Used for",
+      "neutrals": "Neutral colours",
+      "neutralsHint": "Colours any document may use without being brand colours, comma separated."
+    },
+    "colorRole": {
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "accent": "Accent",
+      "text": "Text",
+      "background": "Background",
+      "neutral": "Neutral"
+    },
+    "typography": {
+      "title": "Type",
+      "description": "The typefaces documents may use and what each is for. A role can have several. Substitutes are fonts allowed in a typeface's place, such as a system font for documents shared outside.",
+      "add": "Add typeface",
+      "none": "No typefaces yet.",
+      "role": "Role",
+      "family": "Typeface",
+      "substitutes": "Allowed substitutes",
+      "minSize": "Smallest text (pt)",
+      "minSizeHint": "0 sets no minimum."
+    },
+    "fontRole": {
+      "heading": "Headings",
+      "body": "Body text",
+      "accent": "Accent"
+    },
+    "logos": {
+      "title": "Logos",
+      "description": "The logo files documents should use, as PNG, SVG or JPEG.",
+      "add": "Upload logo",
+      "untitled": "Logo",
+      "none": "No logos yet.",
+      "noPreview": "No preview",
+      "name": "Name",
+      "minWidth": "Smallest width (pt)",
+      "aspect": "Stretch allowed (%)",
+      "aspectHint": "How far its proportions may differ.",
+      "colors": "Shown on",
+      "colorsHint": "Leave all unticked to allow any background."
+    },
+    "language": {
+      "title": "Wording",
+      "description": "The languages documents are written in, the words to use and avoid, and the voice.",
+      "locales": "Languages",
+      "localesHint": "Language tags such as en or fr-CA, comma separated.",
+      "preferred": "Words to use",
+      "banned": "Words to avoid",
+      "note": "Note",
+      "addPreferred": "Add a word to use",
+      "addBanned": "Add a word to avoid",
+      "nonePreferred": "No preferred words yet.",
+      "noneBanned": "No words to avoid yet.",
+      "tone": "Voice",
+      "preferredTerm": "Write",
+      "preferredAlternatives": "Instead of (comma separated)",
+      "bannedTerm": "Avoid",
+      "bannedAlternatives": "Write instead (comma separated)"
+    },
+    "templates": {
+      "title": "Templates",
+      "description": "PowerPoint and Word templates new documents are built from.",
+      "add": "Upload template",
+      "untitled": "Template",
+      "none": "No templates yet.",
+      "name": "Name",
+      "wrongType": "A template must be one of {types}."
+    }
   },
   "announcements": {
     "localTime": "{time} your time",
@@ -8253,6 +9503,8 @@
     "health": {
       "deliveryUnavailableTitle": "The report storage can't be reached",
       "deliveryUnavailableBody": "The app could not list the container \"{container}\". Check that it exists and that the app's identity has a data role on it. Until then no reports are shown to anyone.",
+      "deliveryContainerCreatedTitle": "No reports have arrived in the new report storage",
+      "deliveryContainerCreatedBody": "The container \"{container}\" was missing, so the app created it when it started. It is still empty. Check that the reporting ETL writes to \"{container}\" and has write access to it. This message goes away when the first report arrives.",
       "foldersUnavailable": "The folder settings couldn't be read, so users currently see no folders. Files are not being checked or expired until this recovers.",
       "policyUnavailable": "The field settings couldn't be read, so users can't download files right now.",
       "total": {
@@ -8376,6 +9628,26 @@
       "fromThisDevice": "From this device",
       "connect": "Connect Microsoft 365",
       "connectNote": "Add from OneDrive, email and meetings"
+    }
+  },
+  "promptList": {
+    "asksFor": "Asks for {fields}",
+    "keysHint": "↑↓ to choose · Enter to use · Esc to close"
+  },
+  "documents": {
+    "viewer": {
+      "pageLabel": "{unit, select, slide {Slide {page}} other {Page {page}}}",
+      "loadingPage": "{unit, select, slide {Loading slide {page}} other {Loading page {page}}}",
+      "pageList": "{unit, select, slide {Slides} other {Pages}}",
+      "position": "{unit, select, slide {Slide {page} of {count}} other {Page {page} of {count}}}",
+      "previous": "{unit, select, slide {Previous slide} other {Previous page}}",
+      "next": "{unit, select, slide {Next slide} other {Next page}}",
+      "showing": "Version shown",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "zoomReset": "Reset zoom (now {percent}%)",
+      "zoomLevel": "{percent}%",
+      "failed": "This document could not be shown. It may be too large, protected, or the converter may be busy; try again shortly."
     }
   }
 }

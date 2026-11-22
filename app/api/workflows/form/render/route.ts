@@ -105,8 +105,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Field id → anchor. Unanchored fields are simply not written.
-  const byAnchor: Record<string, string | boolean> = {};
+  // Field id → anchor. Unanchored fields are simply not written. Anchors
+  // are the document's own tag and field names, any string, so the map has
+  // no prototype: a field named "__proto__" is filled like any other.
+  const byAnchor: Record<string, string | boolean> = Object.create(null);
   const textFills: DocxTextFill[] = [];
   for (const field of template.fields) {
     if (!field.anchor) continue;

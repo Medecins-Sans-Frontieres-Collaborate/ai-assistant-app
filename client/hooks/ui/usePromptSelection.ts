@@ -1,18 +1,24 @@
-import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, useCallback, useMemo, useRef, useState } from 'react';
 
 import {
   findPromptMatch,
+  groupPromptsForList,
+  promptMatchesQuery,
   updatePromptListVisibility,
 } from '@/lib/utils/shared/chat/promptMatching';
 import { parseVariables } from '@/lib/utils/shared/chat/variables';
 
+import { FolderInterface } from '@/types/folder';
 import { Prompt } from '@/types/prompt';
 
 export interface UsePromptSelectionReturn {
   // State
   showPromptList: boolean;
+  /** The list is open and has something in it: keys go to it. */
+  isPromptListVisible: boolean;
   activePromptIndex: number;
   promptInputValue: string;
+  /** Prompts matching the search, in the order the list shows them. */
   filteredPrompts: Prompt[];
   promptListRef: React.MutableRefObject<HTMLUListElement | null>;
 
@@ -23,6 +29,8 @@ export interface UsePromptSelectionReturn {
 
   // Actions
   handlePromptSelect: (prompt: Prompt) => void;
+  /** Uses the prompt at a position of the list (a click). */
+  selectPromptAt: (index: number) => void;
   handleKeyDownPromptList: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
   handleInitModal: () => void;
   updatePromptListVisibilityCallback: (text: string) => void;
@@ -31,6 +39,8 @@ export interface UsePromptSelectionReturn {
 
 export interface UsePromptSelectionOptions {
   prompts: Prompt[];
+  /** Folders, for the list's order (groupPromptsForList). */
+  folders?: FolderInterface[];
   onPromptSelect?: (
     prompt: Prompt,
     variables: string[],
@@ -44,6 +54,7 @@ export interface UsePromptSelectionOptions {
  */
 export function usePromptSelection({
   prompts,
+  folders,
   onPromptSelect,
   onResetInputState,
 }: UsePromptSelectionOptions): UsePromptSelectionReturn {
@@ -52,10 +63,19 @@ export function usePromptSelection({
   const [promptInputValue, setPromptInputValue] = useState<string>('');
   const promptListRef = useRef<HTMLUListElement | null>(null);
 
-  // Filter prompts based on input
-  const filteredPrompts: Prompt[] = prompts.filter((prompt) =>
-    prompt.name.toLowerCase().includes(promptInputValue.toLowerCase()),
+  // Matching prompts, in the list's order: the index the keys move is a
+  // position in what the person sees.
+  const filteredPrompts: Prompt[] = useMemo(
+    () =>
+      groupPromptsForList(
+        prompts.filter((prompt) =>
+          promptMatchesQuery(prompt, promptInputValue),
+        ),
+        folders,
+      ).ordered,
+    [prompts, folders, promptInputValue],
   );
+  const isPromptListVisible = showPromptList && filteredPrompts.length > 0;
 
   /**
    * Handle selecting a prompt
@@ -81,6 +101,15 @@ export function usePromptSelection({
     }
     setShowPromptList(false);
   }, [filteredPrompts, activePromptIndex, handlePromptSelect]);
+
+  const selectPromptAt = useCallback(
+    (index: number) => {
+      const prompt = filteredPrompts[index];
+      if (prompt) handlePromptSelect(prompt);
+      setShowPromptList(false);
+    },
+    [filteredPrompts, handlePromptSelect],
+  );
 
   /**
    * Handle keyboard navigation in prompt list
@@ -153,16 +182,10 @@ export function usePromptSelection({
     [handlePromptSelect],
   );
 
-  // Sync scroll position with active prompt index
-  useEffect(() => {
-    if (promptListRef.current) {
-      promptListRef.current.scrollTop = activePromptIndex * 30;
-    }
-  }, [activePromptIndex]);
-
   return {
     // State
     showPromptList,
+    isPromptListVisible,
     activePromptIndex,
     promptInputValue,
     filteredPrompts,
@@ -175,6 +198,7 @@ export function usePromptSelection({
 
     // Actions
     handlePromptSelect,
+    selectPromptAt,
     handleKeyDownPromptList,
     handleInitModal,
     updatePromptListVisibilityCallback,

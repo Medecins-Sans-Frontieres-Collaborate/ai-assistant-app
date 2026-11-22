@@ -215,7 +215,9 @@ export function isEmptyRule(rule: ModelAccessRule): boolean {
     rule.groups.length === 0 &&
     rule.domains.length === 0 &&
     rule.allow.length === 0 &&
-    rule.deny.length === 0
+    rule.deny.length === 0 &&
+    (rule.denyGroups?.length ?? 0) === 0 &&
+    (rule.denyDomains?.length ?? 0) === 0
   );
 }
 

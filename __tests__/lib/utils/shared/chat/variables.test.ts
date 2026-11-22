@@ -1,10 +1,14 @@
 import {
+  PromptSegment,
   VariableDefinition,
   getVariableDefinitions,
+  humanizeVariableName,
   parseVariableDefinition,
   parseVariables,
+  promptSegments,
   replaceVariables,
   replaceVariablesWithMap,
+  variableContext,
 } from '@/lib/utils/shared/chat/variables';
 
 import { describe, expect, it } from 'vitest';
@@ -406,6 +410,107 @@ The Team`;
 
       const giftTypeVar = optionalVars.find((v) => v.name === 'giftType');
       expect(giftTypeVar?.defaultValue).toBe('one-time');
+    });
+  });
+});
+
+describe('prompt variables as a person fills them in', () => {
+  const FORMULA =
+    'Explain the formula {{formula}} step by step for {{audience:a non-specialist}}.\n\n' +
+    'Define every symbol, work one example using {{example_values:realistic values}}, ' +
+    'and finish with one sentence on when the formula does not apply.';
+  /** Segments as text, a variable as [name=text], `!` when missing. */
+  const read = (segments: PromptSegment[]) =>
+    segments
+      .map((segment) =>
+        segment.kind === 'text'
+          ? segment.text
+          : `[${segment.name}=${segment.text}${segment.missing ? '!' : ''}]`,
+      )
+      .join('');
+
+  describe('humanizeVariableName', () => {
+    it('reads snake, camel and kebab case as words', () => {
+      expect(humanizeVariableName('example_values')).toBe('Example values');
+      expect(humanizeVariableName('exampleValues')).toBe('Example values');
+      expect(humanizeVariableName('example-values')).toBe('Example values');
+      expect(humanizeVariableName('formula')).toBe('Formula');
+    });
+
+    it('keeps a name with nothing to split', () => {
+      expect(humanizeVariableName('x1')).toBe('X1');
+      expect(humanizeVariableName('__')).toBe('__');
+    });
+  });
+
+  describe('promptSegments', () => {
+    it('fills values, falls back to defaults and marks what is missing', () => {
+      const segments = promptSegments(FORMULA, { audience: 'nurses' });
+      expect(read(segments)).toContain('[formula=!]');
+      expect(read(segments)).toContain('[audience=nurses]');
+      expect(read(segments)).toContain('[example_values=realistic values]');
+      const example = segments.find(
+        (segment) =>
+          segment.kind === 'variable' && segment.name === 'example_values',
+      );
+      expect(example).toMatchObject({ usesDefault: true, missing: false });
+    });
+
+    it('joins to the message replaceVariablesWithMap makes', () => {
+      const values = { formula: 'E = mc^2', audience: '' };
+      expect(
+        promptSegments(FORMULA, values)
+          .map((segment) => segment.text)
+          .join(''),
+      ).toBe(replaceVariablesWithMap(FORMULA, values));
+    });
+  });
+
+  describe('variableContext', () => {
+    it('gives the sentence a variable sits in, spaces kept', () => {
+      expect(read(variableContext(FORMULA, 'formula', {}))).toBe(
+        'Explain the formula [formula=!] step by step for [audience=a non-specialist].',
+      );
+      expect(read(variableContext(FORMULA, 'audience', {}))).toBe(
+        'Explain the formula [formula=!] step by step for [audience=a non-specialist].',
+      );
+    });
+
+    it('starts at the sentence, not the start of the prompt', () => {
+      expect(
+        read(
+          variableContext(
+            'Hello there. Write to {{who}}. Be brief.',
+            'who',
+            {},
+          ),
+        ),
+      ).toBe('Write to [who=!].');
+    });
+
+    it('shortens a long side at a word, with an ellipsis', () => {
+      expect(read(variableContext(FORMULA, 'example_values', {}))).toBe(
+        'Define every symbol, work one example using [example_values=realistic values], ' +
+          'and finish with one sentence on when the formula does not…',
+      );
+      const long =
+        'This is a very long opening that goes on and on without any stop at all ' +
+        'for quite a while and then {{x}} appears and the text keeps going for a ' +
+        'long long time without stopping anywhere soon';
+      expect(read(variableContext(long, 'x', {}))).toBe(
+        '…and on without any stop at all for quite a while and then [x=!] ' +
+          'appears and the text keeps going for a long long time…',
+      );
+    });
+
+    it('shows what is typed for the other variables in reach', () => {
+      expect(
+        read(variableContext(FORMULA, 'audience', { formula: 'E = mc^2' })),
+      ).toContain('[formula=E = mc^2]');
+    });
+
+    it('is empty for a variable the prompt does not use', () => {
+      expect(variableContext(FORMULA, 'nothing', {})).toEqual([]);
     });
   });
 });

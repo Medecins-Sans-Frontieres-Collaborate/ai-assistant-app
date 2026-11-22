@@ -11,6 +11,7 @@
  * See docs/LIMITS.md.
  */
 import { LimitsService } from '@/lib/services/limits/LimitsService';
+import { recordDecision } from '@/lib/services/limits/decisionStats';
 import { periodKindForWindow, resetAt } from '@/lib/services/limits/periods';
 import { Principal } from '@/lib/services/limits/principal';
 import {
@@ -92,11 +93,14 @@ export function applyMode(
 ): LimitCheckResult {
   if (!denial) return ALLOWED;
   const mode = policy?.mode ?? 'observe';
+  const timezone = policy?.timezone ?? 'UTC';
   if (mode === 'observe') {
     emitLimitAudit('would-block', principal, denial);
+    recordDecision(denial, 'would-block', principal.userId, timezone);
     return { allowed: true, denial, observedOnly: true };
   }
   emitLimitAudit('block', principal, denial);
+  recordDecision(denial, 'block', principal.userId, timezone);
   return { allowed: false, denial };
 }
 
