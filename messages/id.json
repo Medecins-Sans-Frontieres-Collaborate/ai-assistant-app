@@ -4954,7 +4954,11 @@
         "notes": "Catatan",
         "fileSuffix": "review merek"
       },
-      "noneFound": "Tidak ada masalah yang ditemukan."
+      "noneFound": "Tidak ada masalah yang ditemukan.",
+      "places": "{count, plural, one {# tempat} other {# tempat}}",
+      "placeOf": "{index} dari {total}",
+      "previousPlace": "Tempat sebelumnya",
+      "nextPlace": "Tempat berikutnya"
     },
     "deckBuilder": {
       "loading": "Sedang memuat dek…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Draft dari panduan merek",
-      "reading": "Membaca panduan...",
+      "reading": "Membaca panduan. Panduan yang panjang dapat memakan waktu beberapa menit.",
       "hint": "Unggah panduan merek dalam bentuk PDF untuk mengisi warna, jenis huruf, dan kata-kata yang didefinisikan. Logo dan template tidak diambil dari panduan; unggah bagian tersebut di bawah.",
       "source": "Draft dari",
       "notPdf": "Panduan merek harus berupa PDF.",
       "failed": "Draft tidak dapat dibuat dari panduan ini.",
       "applied": "{pages, plural, one {Dibuat dari panduan dengan # halaman.} other {Dibuat dari panduan dengan # halaman.}}",
-      "measuredFonts": "Jenis huruf yang digunakan dalam teks:",
-      "measuredColors": "Warna yang digunakan teks:",
-      "check": "Periksa setiap nilai dengan panduan sebelum menyimpan.",
-      "undo": "Batalkan draft"
+      "check": "Setiap nilai di bawah ini menunjukkan halaman panduan yang menyatakannya. Nilai yang ditandai sebagai tidak ditemukan adalah hasil bacaan model terhadap panduan: periksa nilai-nilai tersebut terlebih dahulu.",
+      "undo": "Batalkan draft",
+      "uploading": "Mengunggah panduan...",
+      "tooLarge": "Panduan merek maksimal {megabytes} MB.",
+      "grounded": "Ditemukan dalam teks panduan: {colors} dari {colorTotal} warna, {fonts} dari {fontTotal} jenis huruf, {terms} dari {termTotal} kata.",
+      "stated": "Panduan, halaman {page}",
+      "notStated": "Tidak ditemukan dalam teks panduan.",
+      "othersNotStated": "Tidak ditemukan dalam teks panduan: {values}",
+      "logoMinWidth": "Panduan menetapkan lebar logo terkecil {points} pt. Informasi ini diisi untuk logo buku ini.",
+      "dropped": "{count, plural, one {# entri tidak dapat digunakan dan telah dihapus.} other {# entri tidak dapat digunakan dan telah dihapus.}}"
     },
     "palette": {
       "title": "Warna",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Jenis",
-      "description": "Jenis huruf berdasarkan peran, serta font yang diperbolehkan sebagai penggantinya, seperti font sistem untuk dokumen yang dibagikan ke luar.",
+      "description": "Jenis huruf yang dapat digunakan dalam dokumen dan kegunaan masing-masing. Satu peran dapat memiliki beberapa jenis. Pengganti adalah font yang diperbolehkan menggantikan suatu jenis huruf, seperti font sistem untuk dokumen yang dibagikan ke luar.",
       "add": "Tambah jenis huruf",
       "none": "Belum ada jenis huruf.",
       "role": "Peran",
@@ -9676,14 +9686,16 @@
       "localesHint": "Tag bahasa seperti en atau fr-CA, dipisahkan dengan koma.",
       "preferred": "Kata yang digunakan",
       "banned": "Kata yang dihindari",
-      "term": "Kata atau frasa",
-      "alternatives": "Gantikan / tulis sebagai",
       "note": "Catatan",
       "addPreferred": "Tambah kata yang digunakan",
       "addBanned": "Tambah kata yang dihindari",
       "nonePreferred": "Belum ada kata yang digunakan.",
       "noneBanned": "Belum ada kata yang dihindari.",
-      "tone": "Suara"
+      "tone": "Suara",
+      "preferredTerm": "Tulis",
+      "preferredAlternatives": "Alih-alih (pisahkan dengan koma)",
+      "bannedTerm": "Hindari",
+      "bannedAlternatives": "Tulis sebagai gantinya (pisahkan dengan koma)"
     },
     "templates": {
       "title": "Template",

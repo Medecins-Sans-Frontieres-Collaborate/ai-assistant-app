@@ -4938,7 +4938,11 @@
         "notes": "Utumenyeshanyo",
         "fileSuffix": "isuzuma ry'ikimenyetso"
       },
-      "noneFound": "Nta kibazo cabonetse."
+      "noneFound": "Nta kibazo cabonetse.",
+      "places": "{count, plural, one {# ahantu} other {# ahantu}}",
+      "placeOf": "{index} kuri {total}",
+      "previousPlace": "Ahantu haheze",
+      "nextPlace": "Ahantu hakurikira"
     },
     "deckBuilder": {
       "loading": "Biriko birashira deck...",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Tanga icitegererezo uhereye kuri guide y'ishirahamwe",
-      "reading": "Hariko harasomwa guide...",
+      "reading": "Turiko turasoma inyandiko. Inyandiko ndende irashobora gufata iminota mike.",
       "hint": "Shira guide y'ishirahamwe ya PDF kuraba amabara, uburyo na majambo bigaragara. Logos n'ivyitegererezo ntibivamwo, shira ivyo munsi.",
       "source": "Vyakuwe kuri",
       "notPdf": "Guide y'ishirahamwe igomba kuba PDF.",
       "failed": "Icitegererezo nticashoboye gushingirwa kuri iyi guide.",
-      "measuredFonts": "Inyandiko zakoreshwa muri iyi guide ni:",
-      "measuredColors": "Amabara akoreshwa muri iyi guide ni:",
-      "check": "Genzura agaciro kose na guide imbere yo kubika.",
+      "check": "Agaciro kose k'uru rutonde karerekana urupapuro ruvugwamwo mu nyandiko. Igaciro kitabonetse ni uko mudeli yasomye inyandiko: banza ubitunganye.",
       "undo": "Subira inyuma icitegererezo",
-      "applied": "{pages, plural, one {Vyakozwe hakurikijwe inyandiko ifise urupapuro 1.} other {Vyakozwe hakurikijwe inyandiko ifise impapuro #.}}"
+      "applied": "{pages, plural, one {Vyakozwe hakurikijwe inyandiko ifise urupapuro 1.} other {Vyakozwe hakurikijwe inyandiko ifise impapuro #.}}",
+      "uploading": "Turiko turaduga inyandiko...",
+      "tooLarge": "Inyandiko ishobora kuba ntirengeje {megabytes} MB.",
+      "grounded": "Vyabonetse mu nyandiko: amabara {colors} kuri {colorTotal}, ubwoko bw'inyandiko {fonts} kuri {fontTotal}, amajambo {terms} kuri {termTotal}.",
+      "stated": "Inyandiko, urupapuro {page}",
+      "notStated": "Ntivyabonetse mu nyandiko.",
+      "othersNotStated": "Ntivyabonetse mu nyandiko: {values}",
+      "logoMinWidth": "Inyandiko ishiraho ububanzi buto cane bwa logo bwa {points} pt. Vyashizwe kuri za logo z'iki gitabu.",
+      "dropped": "{count, plural, one {# ntivyashoboye gukoreshwa kandi vyararetse.} other {# ntivyashoboye gukoreshwa kandi vyararetse.}}"
     },
     "palette": {
       "title": "Amabara",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Ubwoko",
-      "description": "Inyandiko uko zikoreshwa, n'ibifashishwa bivanye n'ico zisubirizwa nka font ya sisiteme ku nyandiko zisangiye hanze.",
+      "description": "Ubwoko bw'inyandiko zemewe n'ikoreshwa ryazo. Umwanya ushobora kugira zitarenze rimwe. Ivyo gusubirwamwo ni fonts zemewe zisubirira iziri mu bwoko, nk'iyo mu gisata c'inyandiko zasangiwe hanze.",
       "add": "Ongeramwo inyandiko",
       "none": "Nta nyandiko ziraboneka.",
       "role": "Uko ikoreshwa",
@@ -9660,14 +9670,16 @@
       "localesHint": "Ibirango vy’indimi nka en canke fr-CA, bitandukanyijwe na koma.",
       "preferred": "Amajambo akoreshwa",
       "banned": "Amajambo atagomba gukoreshwa",
-      "term": "Ijambo canke interuro",
-      "alternatives": "Ahubwo / andika aho",
       "note": "Icitonderwa",
       "addPreferred": "Ongeramwo ijambo ryo gukoresha",
       "addBanned": "Ongeramwo ijambo ryo kwirinda",
       "nonePreferred": "Nta majambo yihitiyemwo araboneka.",
       "noneBanned": "Nta majambo yo kwirinda arashirwaho.",
-      "tone": "Ijwi"
+      "tone": "Ijwi",
+      "preferredTerm": "Andika",
+      "preferredAlternatives": "Ahubwo (tandukanya na koma)",
+      "bannedTerm": "Irinde",
+      "bannedAlternatives": "Andika ahubwo (tandukanya na koma)"
     },
     "templates": {
       "title": "Imbonerahamwe",

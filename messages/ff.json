@@ -4938,7 +4938,11 @@
         "notes": "Dokkal",
         "fileSuffix": "lewna brand"
       },
-      "noneFound": "Wone jam so tayan."
+      "noneFound": "Wone jam so tayan.",
+      "places": "{count, plural, one {# feewnde} other {# feewndee}}",
+      "placeOf": "{index} e {total}",
+      "previousPlace": "Feewnde ɗoo kala",
+      "nextPlace": "Feewnde ɗoo ɗiɗi"
     },
     "deckBuilder": {
       "loading": "Deck sedang ngarga…",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Daɗɗa e brand guide",
-      "reading": "Brand guide feccita e jangu...",
+      "reading": "Nanndugol fiɗɗo ngal. Fiɗɗo mawɗi so tawii faya.",
       "hint": "Senda brand guide e PDF so njoɓdi rangii, leydi e inyam. Logoji e templates waawii yantu e guide ngal; sendi ɗum hande.",
       "source": "Daɗɗi e",
       "notPdf": "Brand guide waawi PDF tan.",
       "failed": "Draft waawi daɗɗude e guide ngal.",
       "applied": "{pages, plural, one {Naatani e jaŋngol e # cuɓo.} other {Naatani e jaŋngol e # cuɓe.}}",
-      "measuredFonts": "Leydi noon e text makko:",
-      "measuredColors": "Rangii noon e text makko:",
-      "check": "Fuɗnoy e guide so a limtu.",
-      "undo": "Foyda draft"
+      "check": "Ko ɓuri gila ndaɗi e fiɗɗo ngal tawi. Ko gila e heɓaani gila model min ndi nanndii fiɗɗo: huytu ɓee daŋ.",
+      "undo": "Foyda draft",
+      "uploading": "Danndugol fiɗɗo ngal...",
+      "tooLarge": "Brand guide maa waawii ko {megabytes} MB tan.",
+      "grounded": "Nana heɓi e fiɗɗo: {colors} e {colorTotal} ɓeeri, {fonts} e {fontTotal} typeface, {terms} e {termTotal} ngol.",
+      "stated": "Fiɗɗo, gila {page}",
+      "notStated": "A heɓaani e fiɗɗo ngal.",
+      "othersNotStated": "A heɓaani e fiɗɗo ngal: {values}",
+      "logoMinWidth": "Fiɗɗo ngal ɗaɗi mo hakkunde logo minmum e {points} pt. O hokkanii e logo ɗiɗi book ngal.",
+      "dropped": "{count, plural, one {# entry waawaani ndee anndaa, woni aɗa don.} other {# entries waawaani ndee anndaa, woni aɗa don.}}"
     },
     "palette": {
       "title": "Rangii",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Type",
-      "description": "Nden typefaces ko ɗuɓɓe, e fontji waɗi waawde, fota ɗum ko system font dokummentji so ina sendi ɓe caaɗi.",
+      "description": "Typeface ɗiɗi o waawi wara e docu. Ko holli gila mo o iwti. Substitutes, font ɗi waawani e typeface, e.g. font system e docu waɗi.",
       "add": "Ɗaɗɗi typeface",
       "none": "Typefaces wala yet.",
       "role": "Role",
@@ -9660,14 +9670,16 @@
       "localesHint": "Tags hokkugo fota en walla fr-CA, separi ɗum ji comma.",
       "preferred": "Kala ena hokkani",
       "banned": "Kala fota kaɗaani",
-      "term": "Kala walla phrase",
-      "alternatives": "Fota / hokki fota",
       "note": "Note",
       "addPreferred": "Ɗaɗɗi kala ena hokkani",
       "addBanned": "Ɗaɗɗi kala fota kaɗaani",
       "nonePreferred": "Kala waawani hokkude wala yet.",
       "noneBanned": "Kala waawani kaɗude wala yet.",
-      "tone": "Voice"
+      "tone": "Voice",
+      "preferredTerm": "Windu",
+      "preferredAlternatives": "Hanyinnde e makko (feere e feere)",
+      "bannedTerm": "Yar",
+      "bannedAlternatives": "Windu e makko (feere e feere)"
     },
     "templates": {
       "title": "Templates",

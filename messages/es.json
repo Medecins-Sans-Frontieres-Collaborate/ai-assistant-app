@@ -4954,7 +4954,11 @@
         "notes": "Notas",
         "fileSuffix": "revisión de marca"
       },
-      "noneFound": "No se encontraron problemas."
+      "noneFound": "No se encontraron problemas.",
+      "places": "{count, plural, one {# lugar} other {# lugares}}",
+      "placeOf": "{index} de {total}",
+      "previousPlace": "Lugar anterior",
+      "nextPlace": "Siguiente lugar"
     },
     "deckBuilder": {
       "loading": "Cargando la presentación…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Crear borrador desde una guía de marca",
-      "reading": "Leyendo la guía...",
+      "reading": "Leyendo la guía. Una guía extensa puede tomar algunos minutos.",
       "hint": "Suba la guía de marca en PDF para llenar los colores, tipografía y redacción que define. Los logotipos y plantillas no se extraen de ella; súbalos abajo.",
       "source": "Borrador basado en",
       "notPdf": "La guía de marca debe ser un PDF.",
       "failed": "No se pudo crear un borrador desde esta guía.",
       "applied": "{pages, plural, one {Redactado a partir de una guía de # página.} other {Redactado a partir de una guía de # páginas.}}",
-      "measuredFonts": "Tipografías usadas en el texto:",
-      "measuredColors": "Colores usados en el texto:",
-      "check": "Verifique cada valor comparándolo con la guía antes de guardar.",
-      "undo": "Deshacer borrador"
+      "check": "Cada valor a continuación muestra la página de la guía donde se indica. Un valor marcado como 'no encontrado' es la interpretación del modelo de la guía: revise estos primero.",
+      "undo": "Deshacer borrador",
+      "uploading": "Subiendo la guía...",
+      "tooLarge": "La guía de marca puede tener como máximo {megabytes} MB.",
+      "grounded": "Encontrado en el texto de la guía: {colors} de {colorTotal} colores, {fonts} de {fontTotal} tipografías, {terms} de {termTotal} palabras.",
+      "stated": "Guía, página {page}",
+      "notStated": "No encontrado en el texto de la guía.",
+      "othersNotStated": "No encontrado en el texto de la guía: {values}",
+      "logoMinWidth": "La guía establece un ancho mínimo para el logo de {points} pt. Está completado para los logos de este libro.",
+      "dropped": "{count, plural, one {# entrada no pudo usarse y fue omitida.} other {# entradas no pudieron usarse y fueron omitidas.}}"
     },
     "palette": {
       "title": "Colores",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Tipo",
-      "description": "Las tipografías por rol y las fuentes permitidas en su lugar, como una fuente de sistema para documentos compartidos externamente.",
+      "description": "Las tipografías que pueden usar los documentos y para qué sirve cada una. Un rol puede tener varias. Los sustitutos son fuentes permitidas en lugar de una tipografía, como una fuente de sistema para documentos compartidos externamente.",
       "add": "Agregar tipografía",
       "none": "Aún no hay tipografías.",
       "role": "Rol",
@@ -9676,14 +9686,16 @@
       "localesHint": "Etiquetas de idioma como en o fr-CA, separadas por comas.",
       "preferred": "Palabras a usar",
       "banned": "Palabras a evitar",
-      "term": "Palabra o frase",
-      "alternatives": "En lugar de / escribir en su lugar",
       "note": "Nota",
       "addPreferred": "Agregar una palabra a usar",
       "addBanned": "Agregar una palabra a evitar",
       "nonePreferred": "Aún no hay palabras preferidas.",
       "noneBanned": "Aún no hay palabras a evitar.",
-      "tone": "Tono de voz"
+      "tone": "Tono de voz",
+      "preferredTerm": "Escriba",
+      "preferredAlternatives": "En lugar de (separado por comas)",
+      "bannedTerm": "Evite",
+      "bannedAlternatives": "Escriba en su lugar (separado por comas)"
     },
     "templates": {
       "title": "Plantillas",

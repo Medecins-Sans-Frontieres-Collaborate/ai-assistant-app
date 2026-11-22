@@ -4938,7 +4938,11 @@
         "notes": "Inyandiko",
         "fileSuffix": "isuzuma ry'ikimenyetso"
       },
-      "noneFound": "Nta kibazo cyabonetse."
+      "noneFound": "Nta kibazo cyabonetse.",
+      "places": "{count, plural, one {# ahantu} other {# ahantu}}",
+      "placeOf": "{index} mu {total}",
+      "previousPlace": "Ahantu habanje",
+      "nextPlace": "Ahantu gikurikiye"
     },
     "deckBuilder": {
       "loading": "Turimo gupakira deck...",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Gutangirira ku gitabo cy'amabwiriza y'ibirango",
-      "reading": "Birimo gusoma amabwiriza...",
+      "reading": "Turimo gusoma guide. Guide ndende ishobora gufata iminota mike.",
       "hint": "Ohereza amabwiriza y'ibirango nk'ifatizo ya PDF kugira ngo huzuzwe amabara, ubwoko bw'inyuguti n'amagambo yasobanuwe. Logos n'inyandiko-shusho ntabwo bifatwa kuri ayo mabwiriza; byoherereza hasi.",
       "source": "Byatangiriye kuri",
       "notPdf": "Amabwiriza y'ibirango agomba kuba ari PDF.",
       "failed": "Gutangirira kuri aya mabwiriza ntibyashobotse.",
       "applied": "{pages, plural, one {Byakozwe hifashishijwe igitabo gifite urupapuro 1.} other {Byakozwe hifashishijwe igitabo gifite impapuro #.}}",
-      "measuredFonts": "Ubwoko bw'inyuguti zakoreshwejwe muri ayo magambo:",
-      "measuredColors": "Amabara yakoreshejwe muri ayo magambo:",
-      "check": "Genzyura buri gaciro n'amabwiriza mbere yo kubika.",
-      "undo": "Subira inyuma umushinga watangijwe"
+      "check": "Agaciro kose kagaragara hasi kerekana ipaji guide ivuga kuri ko. Agaciro kabaye ntibonetse ni uko model yasomye guide: banza usuzume ibyo.",
+      "undo": "Subira inyuma umushinga watangijwe",
+      "uploading": "Turimo kohereza guide...",
+      "tooLarge": "Guide ya brand igomba kuba itarengeje {megabytes} MB.",
+      "grounded": "Habonetse muri guide: {colors} kuri {colorTotal} amabara, {fonts} kuri {fontTotal} fonts, {terms} kuri {termTotal} amagambo.",
+      "stated": "Guide, page {page}",
+      "notStated": "Ntabonetse muri guide.",
+      "othersNotStated": "Ntabonetse muri guide: {values}",
+      "logoMinWidth": "Guide yashyizeho ubugari buto bw'ikirango bwa {points} pt. Ibi byuzuzwa kuri logo z'iki gitabo.",
+      "dropped": "{count, plural, one {# item ntishoboye gukoreshwa kandi yarasizwe.} other {# items ntizishoboye gukoreshwa kandi zarasizwe.}}"
     },
     "palette": {
       "title": "Amabara",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Ubwoko",
-      "description": "Imyandikire hashingiwe ku ruhare, n'imyandikire yemerewe kuyisimbura, nk'urugero inyandiko zohererezwa hanze hifashishijwe fonts za system.",
+      "description": "Fonts zishobora gukoreshwa muri documents n'icyo buri imwe ishinzwe. Umwanya ushobora kugira nyinshi. Substitutes ni fonts zemerewe kuziba isimbuza font ya typeface, nko kuri system font ikoreshwa mu nyandiko zisangirwa hanze.",
       "add": "Ongeramo inyuguti",
       "none": "Nta nyuguti irashyirwaho.",
       "role": "Uruhare",
@@ -9660,14 +9670,16 @@
       "localesHint": "Ibiranga indimi nko kuri en cyangwa fr-CA, byatandukanijwe n'akadomo.",
       "preferred": "Amagambo akwiriye gukoreshwa",
       "banned": "Amagambo akwiriye kwirindwa",
-      "term": "Ijambo cyangwa interuro",
-      "alternatives": "Aho / andika ahubwo",
       "note": "Icyitonderwa",
       "addPreferred": "Ongeraho ijambo rikoreshwa",
       "addBanned": "Ongeraho ijambo ryo kwirinda",
       "nonePreferred": "Nta magambo akwiriye gukoreshwa arashyirwaho.",
       "noneBanned": "Nta magambo yo kwirinda arashyirwaho.",
-      "tone": "Ijwi"
+      "tone": "Ijwi",
+      "preferredTerm": "Andika",
+      "preferredAlternatives": "Aho gukoresha (tandukanya n'akarongo)",
+      "bannedTerm": "Irinde",
+      "bannedAlternatives": "Andika aho gukoresha (tandukanya n'akarongo)"
     },
     "templates": {
       "title": "Ibisekuru (Templates)",

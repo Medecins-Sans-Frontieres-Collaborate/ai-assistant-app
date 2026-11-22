@@ -4938,7 +4938,11 @@
         "notes": "Bayanan kula",
         "fileSuffix": "bitar alama"
       },
-      "noneFound": "Ba a samu wata matsala ba."
+      "noneFound": "Ba a samu wata matsala ba.",
+      "places": "{count, plural, one {wuri #} other {wuri #}}",
+      "placeOf": "{index} daga {total}",
+      "previousPlace": "Wurin baya",
+      "nextPlace": "Wuri na gaba"
     },
     "deckBuilder": {
       "loading": "Ana loda gabatarwar…",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Fara da jagorar alama",
-      "reading": "Ana karanta jagora...",
+      "reading": "Ana karanta jagorar. Idan jagorar ta yi tsawo, zai iya ɗaukar 'yan mintuna.",
       "hint": "Loda jagorar alama a matsayin PDF don cike launuka, nau'in rubutu da maganganu da ta bayyana. Ba a dauki tambura da samfuri daga ciki ba; loda wadannan a kasa.",
       "source": "An fara daga",
       "notPdf": "Jagorar alama dole ta zama PDF.",
       "failed": "Ba a iya samar da daftarin daga jagorar nan ba.",
       "applied": "{pages, plural, one {An zana daga jagora mai shafi #.} other {An zana daga jagora mai shafuka #.}}",
-      "measuredFonts": "Nau'ikan rubutun da aka yi amfani da su:",
-      "measuredColors": "Launukan da aka yi amfani da su a rubutu:",
-      "check": "Duba kowane abu da jagora kafin a ajiye.",
-      "undo": "A soke daftarin"
+      "check": "Kowane ƙima da ke ƙasa yana nuna shafin jagorar da ta bayyana hakan. Idan an saka ba a samu ba, wannan karatun samfur ne na jagorar: duba su da farko.",
+      "undo": "A soke daftarin",
+      "uploading": "Ana loda jagorar...",
+      "tooLarge": "Jagorar alama ba zai wuce {megabytes} MB ba.",
+      "grounded": "An samu a cikin rubutun jagora: launuka {colors} daga {colorTotal}, fonti {fonts} daga {fontTotal}, kalmomi {terms} daga {termTotal}.",
+      "stated": "Jagora, shafi na {page}",
+      "notStated": "Ba a samu ba a cikin rubutun jagora.",
+      "othersNotStated": "Ba a samu ba a cikin rubutun jagora: {values}",
+      "logoMinWidth": "Jagorar ta sa mafi ƙarancin fadin tambari {points} pt. An cika wannan ga tamburan wannan littafin.",
+      "dropped": "{count, plural, one {An kasa amfani da shigarwa # kuma an bari.} other {An kasa amfani da shigarwa # kuma an bari.}}"
     },
     "palette": {
       "title": "Launuka",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Iri",
-      "description": "Irin nau’in falsar da aka warewa kowane matsayi, da haruffan da aka amince a musanya su da su, kamar font ɗin tsarin kwamfuta don takardun da za a raba waje.",
+      "description": "Nau'in fonti da za a iya amfani da su a takardu da kuma manufarsu. Wani matsayi na iya da dama. Sauyawa sune fonti da aka amince a maye gurbin font na nau'i, misali font na tsarin kwamfuta don takardun da aka raba a waje.",
       "add": "Sanya nau’in haruffa",
       "none": "Ba a saka wani nau’in haruffa ba tukuna.",
       "role": "Matsayi",
@@ -9660,14 +9670,16 @@
       "localesHint": "Tag ɗin harshe kamar en ko fr-CA, an raba su da alama koma.",
       "preferred": "Kalmomin da za a yi amfani da su",
       "banned": "Kalmomin da za a guje su",
-      "term": "Kalmomi ko jumla",
-      "alternatives": "Maimakon / rubuta maimakon haka",
       "note": "Bayanan",
       "addPreferred": "Ƙara kalmar da za a yi amfani da ita",
       "addBanned": "Ƙara kalmar da za a guje wa",
       "nonePreferred": "Ba a saka tsarin kalmomi ba tukuna.",
       "noneBanned": "Ba a saka kalmomin da za a guje su ba tukuna.",
-      "tone": "Murya"
+      "tone": "Murya",
+      "preferredTerm": "Rubuta",
+      "preferredAlternatives": "Maimakon (a raba da koma)",
+      "bannedTerm": "Guje wa",
+      "bannedAlternatives": "Rubuta maimakon (a raba da koma)"
     },
     "templates": {
       "title": "Samfura",

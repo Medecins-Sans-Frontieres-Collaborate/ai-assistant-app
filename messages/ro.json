@@ -4954,7 +4954,11 @@
         "notes": "Note",
         "fileSuffix": "revizuire brand"
       },
-      "noneFound": "Nu au fost identificate probleme."
+      "noneFound": "Nu au fost identificate probleme.",
+      "places": "{count, plural, one {# loc} other {# locuri}}",
+      "placeOf": "{index} din {total}",
+      "previousPlace": "Locul anterior",
+      "nextPlace": "Locul următor"
     },
     "deckBuilder": {
       "loading": "Se încarcă prezentarea…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Elaborează din ghidul de brand",
-      "reading": "Se citește ghidul...",
+      "reading": "Se citește ghidul. Un ghid lung poate dura câteva minute.",
       "hint": "Încărcați ghidul de brand ca PDF pentru a completa culorile, fonturile și formulările definite în acesta. Siglele și șabloanele nu sunt extrase din el; încărcați-le mai jos.",
       "source": "Elaborat din",
       "notPdf": "Un ghid de brand trebuie să fie în format PDF.",
       "failed": "Nu s-a putut elabora un manual din acest ghid.",
       "applied": "{pages, plural, one {Creat de la un ghid de # pagină.} other {Creat de la un ghid de # pagini.}}",
-      "measuredFonts": "Fonturi folosite în text:",
-      "measuredColors": "Culori folosite în text:",
-      "check": "Verificați fiecare valoare cu ghidul înainte de salvare.",
-      "undo": "Anulează elaborarea"
+      "check": "Fiecare valoare de mai jos arată pagina ghidului care o menționează. O valoare marcată ca negăsită reflectă interpretarea modelului: verificați aceste valori mai întâi.",
+      "undo": "Anulează elaborarea",
+      "uploading": "Se încarcă ghidul...",
+      "tooLarge": "Un ghid de brand poate avea cel mult {megabytes} MB.",
+      "grounded": "Găsite în textul ghidului: {colors} din {colorTotal} culori, {fonts} din {fontTotal} fonturi, {terms} din {termTotal} cuvinte.",
+      "stated": "Ghid, pagina {page}",
+      "notStated": "Nu a fost găsit în textul ghidului.",
+      "othersNotStated": "Nu a fost găsit în textul ghidului: {values}",
+      "logoMinWidth": "Ghidul stabilește o lățime minimă a logo-ului de {points} pt. Aceasta este folosită pentru logo-urile acestei cărți.",
+      "dropped": "{count, plural, one {# element nu a putut fi utilizat și a fost omis.} other {# elemente nu au putut fi utilizate și au fost omise.}}"
     },
     "palette": {
       "title": "Culori",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Tip",
-      "description": "Familiile de fonturi pe roluri și fonturile permise în locul lor, cum ar fi un font de sistem pentru documentele distribuite extern.",
+      "description": "Fonturile permise pentru documente și scopul fiecăruia. Un rol poate avea mai multe. Substituții sunt fonturi permise în locul unui font, cum ar fi un font de sistem pentru documente distribuite extern.",
       "add": "Adaugă familie de font",
       "none": "Nicio familie de font momentan.",
       "role": "Rol",
@@ -9676,14 +9686,16 @@
       "localesHint": "Taguri de limbă precum en sau fr-CA, separate prin virgulă.",
       "preferred": "Cuvinte de folosit",
       "banned": "Cuvinte de evitat",
-      "term": "Cuvânt sau expresie",
-      "alternatives": "În loc de / scrieți în schimb",
       "note": "Notă",
       "addPreferred": "Adaugă cuvânt de folosit",
       "addBanned": "Adaugă cuvânt de evitat",
       "nonePreferred": "Nu există cuvinte de folosit momentan.",
       "noneBanned": "Nu există cuvinte de evitat momentan.",
-      "tone": "Ton"
+      "tone": "Ton",
+      "preferredTerm": "Scrie",
+      "preferredAlternatives": "În loc de (separat prin virgulă)",
+      "bannedTerm": "Evită",
+      "bannedAlternatives": "Scrie în loc (separat prin virgulă)"
     },
     "templates": {
       "title": "Șabloane",

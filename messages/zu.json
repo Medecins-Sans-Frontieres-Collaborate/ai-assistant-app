@@ -4938,7 +4938,11 @@
         "notes": "Amanothi",
         "fileSuffix": "ukubuyekezwa komkhiqizo"
       },
-      "noneFound": "Awekho amaphutha atholakele."
+      "noneFound": "Awekho amaphutha atholakele.",
+      "places": "{count, plural, one {# indawo} other {# izindawo}}",
+      "placeOf": "{index} ku-{total}",
+      "previousPlace": "Indawo edlule",
+      "nextPlace": "Indawo elandelayo"
     },
     "deckBuilder": {
       "loading": "Kulayishwa ikhadi...",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Dweba kusuka kumhlahlandlela womkhiqizo",
-      "reading": "Kufundwa umhlahlandlela...",
+      "reading": "Kufundwa umhlahlandlela. Uma umude kungathatha imizuzu embalwa.",
       "hint": "Layisha umhlahlandlela womkhiqizo njenge-PDF ukuze ugcwalise imibala, izinhlobo zonobumba nombhalo oqukethwe kuwo. Ama-logo namathempulethi awenziwa kusuka kuwo; lawa layisha ngezansi.",
       "source": "Kudwetshwe kusuka ku",
       "notPdf": "Umhlahlandlela womkhiqizo kufanele ube yi-PDF.",
       "failed": "Ihlu draft alikwazanga ukwenziwa kulo mhlahlandlela.",
       "applied": "{pages, plural, one {Kubhalwe kusetshenziswe incwadi yomhlahlandlela ye-# ikhasi.} other {Kubhalwe kusetshenziswe incwadi yomhlahlandlela yamakhasi angu-#.}}",
-      "measuredFonts": "Izinhlobo zonobumba ezisetshenziswe embhalweni:",
-      "measuredColors": "Imibala esetshenziswa embhalweni:",
-      "check": "Qinisekisa inani lilinye nomhlahlandlela ngaphambi kokugcina.",
-      "undo": "Hlehlisa idrafti"
+      "check": "Inani ngalinye elingezansi likhombisa ikhasi lomhlahlandlela elikuqinisekisa. Inani eliphawuliwe njenge lingalitholakalanga yindlela imodeli efunde ngayo umhlahlandlela: qala uhlola lawo.",
+      "undo": "Hlehlisa idrafti",
+      "uploading": "Kulayishwa umhlahlandlela...",
+      "tooLarge": "Umhlahlandlela womkhiqizo ungaba kakhulu {megabytes} MB.",
+      "grounded": "Kutholwe embhalweni womhlahlandlela: {colors} kwe-{colorTotal} imibala, {fonts} kwe-{fontTotal} ifonti, {terms} kwe-{termTotal} amagama.",
+      "stated": "Umhlahlandlela, ikhasi {page}",
+      "notStated": "Akutholakali embhalweni womhlahlandlela.",
+      "othersNotStated": "Akutholakali embhalweni womhlahlandlela: {values}",
+      "logoMinWidth": "Umhlahlandlela usetha ububanzi obuncane be-logo {points} pt. Isetshenziselwa ama-logo ale ncwadi.",
+      "dropped": "{count, plural, one {# lokungenisiwe alikwazanga ukusetshenziswa lashiywa ngaphandle.} other {# ezingeniswayo azikwazanga ukusetshenziswa zashiywa ngaphandle.}}"
     },
     "palette": {
       "title": "Imibala",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Uhlobo",
-      "description": "Izifakiwombhalo ngokwendima, kanye namafonti avumelekile endaweni yazo, njengefonti yesistimu yemibhalo ehanjiswa ngaphandle.",
+      "description": "Amafonti angasetshenziswa ezincwadiani nokuthi ngakunye kwenzelwe ini. Indima ingaba nawo amaningi. Okunye okungafakwa yifonti evunyelwe esimeni setypeface, njengofonti yesistimu yamadokhumenti abalekayo.",
       "add": "Engeza isifakiwombhalo",
       "none": "Azikabi bikho izifakiwombhalo.",
       "role": "Indima",
@@ -9660,14 +9670,16 @@
       "localesHint": "Omaka bolimi njengokuthi en noma fr-CA, uhlukaniswe ngamaphayiphi.",
       "preferred": "Amagama okufanele asetshenziswe",
       "banned": "Amagama okufanele agwemwe",
-      "term": "Igama noma ibinzana",
-      "alternatives": "Esikhundleni / bhala esikhundleni salokho",
       "note": "Inothi",
       "addPreferred": "Engeza igama elizosetshenziswa",
       "addBanned": "Engeza igama elizogwemeka",
       "nonePreferred": "Azikabi bikho amagama okufanele asetshenziswe.",
       "noneBanned": "Azikabi bikho amagama okufanele agwemwe.",
-      "tone": "Indlela yokukhuluma"
+      "tone": "Indlela yokukhuluma",
+      "preferredTerm": "Bhala",
+      "preferredAlternatives": "Esikhundleni (ahlukaniswe ngekhefu) ",
+      "bannedTerm": "Gwema",
+      "bannedAlternatives": "Bhala esikhundleni (ahlukaniswe ngekhefu)"
     },
     "templates": {
       "title": "Amathemplethi",

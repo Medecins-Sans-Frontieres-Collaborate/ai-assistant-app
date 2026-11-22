@@ -4954,7 +4954,11 @@
         "notes": "Notizen",
         "fileSuffix": "Markenprüfung"
       },
-      "noneFound": "Keine Probleme gefunden."
+      "noneFound": "Keine Probleme gefunden.",
+      "places": "{count, plural, one {# Ort} other {# Orte}}",
+      "placeOf": "{index} von {total}",
+      "previousPlace": "Vorheriger Ort",
+      "nextPlace": "Nächster Ort"
     },
     "deckBuilder": {
       "loading": "Deck wird geladen…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Aus Brand Guide entwerfen",
-      "reading": "Leitfaden wird gelesen...",
+      "reading": "Leitfaden wird gelesen. Ein längerer Leitfaden kann einige Minuten dauern.",
       "hint": "Laden Sie den Brand Guide als PDF hoch, um darin definierte Farben, Schriften und Formulierungen automatisch zu übernehmen. Logos und Vorlagen werden nicht übernommen; laden Sie diese unten separat hoch.",
       "source": "Entworfen aus",
       "notPdf": "Ein Brand Guide muss als PDF vorliegen.",
       "failed": "Aus diesem Leitfaden konnte kein Entwurf erstellt werden.",
       "applied": "{pages, plural, one {Entwurf basierend auf einem Leitfaden mit # Seite.} other {Entwurf basierend auf einem Leitfaden mit # Seiten.}}",
-      "measuredFonts": "Schriften, die im Text verwendet werden:",
-      "measuredColors": "Verwendete Farben im Text:",
-      "check": "Überprüfen Sie alle Werte vor dem Speichern mit dem Leitfaden.",
-      "undo": "Entwurf zurücksetzen"
+      "check": "Jeder Wert unten zeigt die Seite im Leitfaden, auf der er genannt wird. Ein als nicht gefunden markierter Wert ist die Einschätzung des Modells: Überprüfen Sie diese zuerst.",
+      "undo": "Entwurf zurücksetzen",
+      "uploading": "Leitfaden wird hochgeladen...",
+      "tooLarge": "Ein Markenleitfaden darf maximal {megabytes} MB groß sein.",
+      "grounded": "Im Leitfaden-Text gefunden: {colors} von {colorTotal} Farben, {fonts} von {fontTotal} Schriftarten, {terms} von {termTotal} Wörtern.",
+      "stated": "Leitfaden, Seite {page}",
+      "notStated": "Nicht im Leitfaden-Text gefunden.",
+      "othersNotStated": "Nicht im Leitfaden-Text gefunden: {values}",
+      "logoMinWidth": "Der Leitfaden gibt eine minimale Logobreite von {points} pt vor. Diese wird für die Logos dieses Buches verwendet.",
+      "dropped": "{count, plural, one {# Eintrag konnte nicht verwendet werden und wurde ausgelassen.} other {# Einträge konnten nicht verwendet werden und wurden ausgelassen.}}"
     },
     "palette": {
       "title": "Farben",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Typ",
-      "description": "Die Schriftarten nach Rolle sowie die erlaubten Ersatzschriften, etwa Systemschriften für extern geteilte Dokumente.",
+      "description": "Die Schriftarten, die in Dokumenten verwendet werden dürfen, und deren jeweiliger Verwendungszweck. Einer Rolle können mehrere Schriftarten zugeordnet sein. Ersatzschriften sind Schriftarten, die als Alternative zu einer bestimmten verwendet werden dürfen, etwa eine Systemschriftart für außerhalb geteilte Dokumente.",
       "add": "Schriftart hinzufügen",
       "none": "Noch keine Schriftarten.",
       "role": "Rolle",
@@ -9676,14 +9686,16 @@
       "localesHint": "Sprach-Tags wie en oder fr-CA, durch Kommas getrennt.",
       "preferred": "Zu verwendende Wörter",
       "banned": "Zu vermeidende Wörter",
-      "term": "Wort oder Ausdruck",
-      "alternatives": "Stattdessen / stattdessen schreiben",
       "note": "Hinweis",
       "addPreferred": "Wort zum Verwenden hinzufügen",
       "addBanned": "Wort zum Vermeiden hinzufügen",
       "nonePreferred": "Noch keine bevorzugten Wörter.",
       "noneBanned": "Noch keine zu vermeidenden Wörter.",
-      "tone": "Sprachstil"
+      "tone": "Sprachstil",
+      "preferredTerm": "Verwenden",
+      "preferredAlternatives": "Stattdessen (kommagetrennt)",
+      "bannedTerm": "Vermeiden",
+      "bannedAlternatives": "Stattdessen verwenden (kommagetrennt)"
     },
     "templates": {
       "title": "Vorlagen",

@@ -4938,7 +4938,11 @@
         "notes": "Nòt",
         "fileSuffix": "revizyon mak"
       },
-      "noneFound": "Pa gen okenn pwoblèm jwenn."
+      "noneFound": "Pa gen okenn pwoblèm jwenn.",
+      "places": "{count, plural, one {# kote} other {# kote yo}}",
+      "placeOf": "{index} sou {total}",
+      "previousPlace": "Kote anvan",
+      "nextPlace": "Kote apre"
     },
     "deckBuilder": {
       "loading": "Y ap chaje prezantasyon an…",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Bati yon bouyon soti nan gid mak",
-      "reading": "Y ap li gid la...",
+      "reading": "Y ap li gid la. Yon gid ki long ka pran kèk minit.",
       "hint": "Voye gid mak la kòm PDF pou konplete koulè, polis ak tèks li defini yo. Logo ak modèl yo pa pran nan li; telechaje yo anba a.",
       "source": "Bati depi",
       "notPdf": "Yon gid mak dwe yon PDF.",
       "failed": "Pa posib fè yon bouyon soti nan gid sa a.",
       "applied": "{pages, plural, one {Ekri soti nan yon gid ki gen # paj.} other {Ekri soti nan yon gid ki gen # paj.}}",
-      "measuredFonts": "Polis ki itilize nan tèks la:",
-      "measuredColors": "Koulè tèks la itilize:",
-      "check": "Verifye chak valè ak gid la anvan ou anrejistre.",
-      "undo": "Anile bouyon an"
+      "check": "Chak valè anba a montre sou ki paj li parèt nan gid la. Si yon valè make pa jwenn, se lekti modèl la fè nan gid la: verifye sa yo an premye.",
+      "undo": "Anile bouyon an",
+      "uploading": "Y ap telechaje gid la...",
+      "tooLarge": "Yon gid mak pa ka depase {megabytes} MB.",
+      "grounded": "Jwenn nan tèks gid la: {colors} sou {colorTotal} koulè, {fonts} sou {fontTotal} polis, {terms} sou {termTotal} mo.",
+      "stated": "Gid, paj {page}",
+      "notStated": "Pa jwenn nan tèks gid la.",
+      "othersNotStated": "Pa jwenn sa yo nan tèks gid la: {values}",
+      "logoMinWidth": "Gid la fikse yon lajè minimòm logo {points} pt. Li ranpli pou logo liv sa a.",
+      "dropped": "{count, plural, one {# antre pa t kapab itilize epi yo kite l deyo.} other {# antre pa t kapab itilize epi yo kite yo deyo.}}"
     },
     "palette": {
       "title": "Koulè",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Tip",
-      "description": "Tipgraf pa wòl, ak font ki gen dwa ranplase yo, tankou font sistèm pou dokiman pataje deyò.",
+      "description": "Polis dokiman yo ka itilize ak sa chak ap sèvi pouyo. Yon wòl ka gen plizyè. Ranplasman se polis ou ka itilize olye yon lòt, tankou yon polis sistèm pou dokiman w ap pataje deyò.",
       "add": "Ajoute tipgraf",
       "none": "Pa gen tipgraf ankò.",
       "role": "Wòl",
@@ -9660,14 +9670,16 @@
       "localesHint": "Tag lang tankou en oswa fr-CA, separe ak vigil.",
       "preferred": "Mo pou itilize",
       "banned": "Mo pou evite",
-      "term": "Mo oswa fraz",
-      "alternatives": "Olye de / ekri olye",
       "note": "Nòt",
       "addPreferred": "Ajoute yon mo pou itilize",
       "addBanned": "Ajoute yon mo pou evite",
       "nonePreferred": "Pa gen mo preferans ankò.",
       "noneBanned": "Pa gen mo pou evite ankò.",
-      "tone": "Ton"
+      "tone": "Ton",
+      "preferredTerm": "Ekri",
+      "preferredAlternatives": "Olye de (separe ak vigil)",
+      "bannedTerm": "Evite",
+      "bannedAlternatives": "Ekri olye de sa (separe ak vigil)"
     },
     "templates": {
       "title": "Modèl",

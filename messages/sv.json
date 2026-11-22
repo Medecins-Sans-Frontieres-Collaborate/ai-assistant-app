@@ -4954,7 +4954,11 @@
         "notes": "Noteringar",
         "fileSuffix": "varumärkesgranskning"
       },
-      "noneFound": "Inga problem hittades."
+      "noneFound": "Inga problem hittades.",
+      "places": "{count, plural, one {# plats} other {# platser}}",
+      "placeOf": "{index} av {total}",
+      "previousPlace": "Föregående plats",
+      "nextPlace": "Nästa plats"
     },
     "deckBuilder": {
       "loading": "Laddar presentationen…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Skapa utkast från varumärkesguide",
-      "reading": "Läser guiden...",
+      "reading": "Läser guiden. En lång guide kan ta några minuter.",
       "hint": "Ladda upp varumärkesguiden som PDF för att fylla i färger, typsnitt och formuleringar enligt guiden. Logotyper och mallar tas inte från guiden; ladda upp dem nedan.",
       "source": "Utkast från",
       "notPdf": "En varumärkesguide måste vara en PDF.",
       "failed": "Det gick inte att skapa utkast från denna guide.",
       "applied": "{pages, plural, one {Utformad från en guide på # sida.} other {Utformad från en guide på # sidor.}}",
-      "measuredFonts": "Typsnitten som dess text är satt i:",
-      "measuredColors": "Färger som används i dess text:",
-      "check": "Kontrollera varje värde mot guiden innan du sparar.",
-      "undo": "Ångra utkastet"
+      "check": "Varje värde nedan visar sidan i guiden där det anges. Ett värde markerat som ej hittat är modellens tolkning: kontrollera dessa först.",
+      "undo": "Ångra utkastet",
+      "uploading": "Laddar upp guiden...",
+      "tooLarge": "En varumärkesguide kan vara högst {megabytes} MB.",
+      "grounded": "Hittat i guidens text: {colors} av {colorTotal} färger, {fonts} av {fontTotal} typsnitt, {terms} av {termTotal} ord.",
+      "stated": "Guiden, sidan {page}",
+      "notStated": "Hittades inte i guidens text.",
+      "othersNotStated": "Hittades inte i guidens text: {values}",
+      "logoMinWidth": "Guiden anger en minsta logotypbredd på {points} pt. Detta är ifyllt för denna boks logotyper.",
+      "dropped": "{count, plural, one {# post kunde inte användas och utelämnades.} other {# poster kunde inte användas och utelämnades.}}"
     },
     "palette": {
       "title": "Färger",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Typ",
-      "description": "Typsnitt efter roll och de typsnitt som är tillåtna som ersättning, till exempel ett systemtypsnitt för dokument som delas externt.",
+      "description": "De typsnitt dokument kan använda och vad varje används till. En roll kan ha flera. Ersättningar är typsnitt som får användas i stället för ett annat, som ett systemtypsnitt för dokument som delas externt.",
       "add": "Lägg till typsnitt",
       "none": "Inga typsnitt ännu.",
       "role": "Roll",
@@ -9676,14 +9686,16 @@
       "localesHint": "Språkkoder som en eller fr-CA, separerade med kommatecken.",
       "preferred": "Rekommenderade ord",
       "banned": "Ord att undvika",
-      "term": "Ord eller fras",
-      "alternatives": "Istället för / Skriv istället",
       "note": "Notering",
       "addPreferred": "Lägg till rekommenderat ord",
       "addBanned": "Lägg till ord att undvika",
       "nonePreferred": "Inga rekommenderade ord ännu.",
       "noneBanned": "Inga ord att undvika ännu.",
-      "tone": "Ton"
+      "tone": "Ton",
+      "preferredTerm": "Skriv",
+      "preferredAlternatives": "Istället för (kommaavgränsade)",
+      "bannedTerm": "Undvik",
+      "bannedAlternatives": "Skriv istället (kommaavgränsade)"
     },
     "templates": {
       "title": "Mallar",

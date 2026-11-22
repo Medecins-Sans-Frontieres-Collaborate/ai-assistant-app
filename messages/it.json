@@ -4954,7 +4954,11 @@
         "notes": "Note",
         "fileSuffix": "revisione brand"
       },
-      "noneFound": "Nessun problema trovato."
+      "noneFound": "Nessun problema trovato.",
+      "places": "{count, plural, one {# luogo} other {# luoghi}}",
+      "placeOf": "{index} di {total}",
+      "previousPlace": "Luogo precedente",
+      "nextPlace": "Luogo successivo"
     },
     "deckBuilder": {
       "loading": "Caricamento della presentazione…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Bozza da una guida di brand",
-      "reading": "Lettura della guida...",
+      "reading": "Lettura della guida. Una guida lunga può richiedere alcuni minuti.",
       "hint": "Carica la guida di brand in PDF per compilare colori, font e testi che definisce. I loghi e i modelli non vengono estratti; caricali qui sotto.",
       "source": "Bozzato da",
       "notPdf": "La guida di brand deve essere un PDF.",
       "failed": "Non è stato possibile creare una bozza da questa guida.",
       "applied": "{pages, plural, one {Redatto da una guida di # pagina.} other {Redatto da una guida di # pagine.}}",
-      "measuredFonts": "Font utilizzati nel testo:",
-      "measuredColors": "Colori utilizzati nel testo:",
-      "check": "Verifica ogni valore rispetto alla guida prima di salvare.",
-      "undo": "Annulla la bozza"
+      "check": "Ogni valore sotto mostra la pagina della guida che lo indica. Un valore segnato come non trovato è il risultato della lettura della guida da parte del modello: verifica prima questi.",
+      "undo": "Annulla la bozza",
+      "uploading": "Caricamento della guida...",
+      "tooLarge": "Una guida di brand può essere al massimo {megabytes} MB.",
+      "grounded": "Trovato nel testo della guida: {colors} su {colorTotal} colori, {fonts} su {fontTotal} caratteri, {terms} su {termTotal} parole.",
+      "stated": "Guida, pagina {page}",
+      "notStated": "Non trovato nel testo della guida.",
+      "othersNotStated": "Non trovato nel testo della guida: {values}",
+      "logoMinWidth": "La guida fissa una larghezza minima del logo di {points} pt. È applicata ai loghi di questo libro.",
+      "dropped": "{count, plural, one {# voce non può essere utilizzata ed è stata esclusa.} other {# voci non possono essere utilizzate e sono state escluse.}}"
     },
     "palette": {
       "title": "Colori",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Tipo",
-      "description": "Le famiglie tipografiche per ruolo e i font consentiti al loro posto, come un font di sistema per documenti condivisi all'esterno.",
+      "description": "I caratteri tipografici che possono essere usati nei documenti e il loro scopo. Un ruolo può averne diversi. Le sostituzioni sono font consentiti al posto di un carattere, come un font di sistema per documenti condivisi esternamente.",
       "add": "Aggiungi famiglia tipografica",
       "none": "Nessuna famiglia tipografica al momento.",
       "role": "Ruolo",
@@ -9676,14 +9686,16 @@
       "localesHint": "Tag di lingua come en o fr-CA, separati da virgole.",
       "preferred": "Parole da utilizzare",
       "banned": "Parole da evitare",
-      "term": "Parola o frase",
-      "alternatives": "Al posto di / scrivere invece",
       "note": "Nota",
       "addPreferred": "Aggiungi una parola da utilizzare",
       "addBanned": "Aggiungi una parola da evitare",
       "nonePreferred": "Nessuna parola preferita al momento.",
       "noneBanned": "Nessuna parola da evitare al momento.",
-      "tone": "Voce"
+      "tone": "Voce",
+      "preferredTerm": "Scrivi",
+      "preferredAlternatives": "Invece di (separati da virgola)",
+      "bannedTerm": "Evita",
+      "bannedAlternatives": "Scrivi invece (separati da virgola)"
     },
     "templates": {
       "title": "Modelli",

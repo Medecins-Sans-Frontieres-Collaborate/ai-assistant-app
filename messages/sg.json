@@ -4938,7 +4938,11 @@
         "notes": "Note",
         "fileSuffix": "gbangu ti brand"
       },
-      "noneFound": "Gbangu sô ôko agbenza."
+      "noneFound": "Gbangu sô ôko agbenza.",
+      "places": "{count, plural, one {# kété} other {# kété}}",
+      "placeOf": "{index} na {total}",
+      "previousPlace": "Kété wa ngbangü",
+      "nextPlace": "Kété wa ködörö"
     },
     "deckBuilder": {
       "loading": "Mo yeke na mbênî presentation...",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Zia na kasa ti sädö logo sorti na guide",
-      "reading": "Köta guide...",
+      "reading": "Nga azandu guide. Guide wa lengbö ka sega na minu zî.",
       "hint": "Dîkö guide ti sädö logo sô na PDF so a sangö kodoro, ndörö na ngbangbo ti mbi yeke a. Logo na makanda ti pe so a hû na mbi; dîkö deren na kôdörö.",
       "source": "Nzönî na ti yeke a",
       "notPdf": "Guide ti sädö logo a yeke na PDF sô.",
       "failed": "Zia so na guide ti pe so a sâ.",
       "applied": "{pages, plural, one {Sîngö ti yeke azo ti gujere na # kété.} other {Sîngö ti yeke azo ti gujere na # pages.}}",
-      "measuredFonts": "Ndörö sô a gï na text ti mbi:",
-      "measuredColors": "Kodoro sô a gï na text ti mbi:",
-      "check": "Gäna ndö bâ na guide ködörö mbi yâ gbëlä.",
-      "undo": "Wälä zia ti guide"
+      "check": "Gbâgâ wa mbî a nî ka sîngi page na guide a sînga. Gbâgâ wa alî mîngi yè sînga ka model a zînga na guide: gbu nî wa mbî.",
+      "undo": "Wälä zia ti guide",
+      "uploading": "Bînda azandu na guide...",
+      "tooLarge": "Guide ya brand ala nî kö MB {megabytes} kangü.",
+      "grounded": "Mîngu na guide: {colors} na {colorTotal} coulour, {fonts} na {fontTotal} typeface, {terms} na {termTotal} mbeki.",
+      "stated": "Guide, page {page}",
+      "notStated": "Guide ala mîngi yè na guide.",
+      "othersNotStated": "Ala mîngi yè na guide: {values}",
+      "logoMinWidth": "Guide a sîngi largura wa logo na {points} pt. Logo wa buku tî yéni a sînga.",
+      "dropped": "{count, plural, one {# entry ala yeke zî a bu anï na gbgba.} other {# entries ala yeke zî a bu anï na gbgba.}}"
     },
     "palette": {
       "title": "Kodoro",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Type",
-      "description": "Typeface na hünde, na font ti yeke na la, mû font ti système na doküma ti yeke pânda sô.",
+      "description": "Typeface wa document ka sînga na gbû wa e. Rôle a sèka na kété gbû wa mbî. Substitute ka font wa yeke na gbû wa typeface, mo na font wa système na document ka bînda na dèra.",
       "add": "Gbé typeface",
       "none": "Typeface ti yeke kodê.",
       "role": "Hünde",
@@ -9660,14 +9670,16 @@
       "localesHint": "Tag ti langue lô en ou fr-CA, séka na coma.",
       "preferred": "Kölë ti yeke na",
       "banned": "Kölë ti yeke kodê",
-      "term": "Kölë ou phrase",
-      "alternatives": "Tî na / yeke na tî",
       "note": "Note",
       "addPreferred": "Gbämbeni kölë ti yeke na",
       "addBanned": "Gbämbeni kölë ti yeke kodê",
       "nonePreferred": "Kölë ti yeke na ti yeke kodê.",
       "noneBanned": "Kölë ti yeke kodê ti yeke kodê.",
-      "tone": "Voix"
+      "tone": "Voix",
+      "preferredTerm": "Sînga",
+      "preferredAlternatives": "Gbû nî (séla sînga na koma)",
+      "bannedTerm": "Gbâla",
+      "bannedAlternatives": "Sînga gbû nî (séla sînga na koma)"
     },
     "templates": {
       "title": "Templates",

@@ -4985,7 +4985,11 @@
         "notes": "Ghi chú",
         "fileSuffix": "đánh giá thương hiệu"
       },
-      "noneFound": "Không phát hiện vấn đề nào."
+      "noneFound": "Không phát hiện vấn đề nào.",
+      "places": "{count, plural, one {# địa điểm} other {# địa điểm}}",
+      "placeOf": "{index} của {total}",
+      "previousPlace": "Địa điểm trước",
+      "nextPlace": "Địa điểm tiếp theo"
     },
     "deckBuilder": {
       "loading": "Đang tải deck…",
@@ -9636,16 +9640,22 @@
     },
     "guide": {
       "action": "Soạn thảo từ hướng dẫn thương hiệu",
-      "reading": "Đang đọc hướng dẫn...",
+      "reading": "Đang đọc hướng dẫn. Hướng dẫn dài có thể mất vài phút.",
       "hint": "Tải lên file hướng dẫn thương hiệu dưới dạng PDF để tự động điền màu sắc, phông chữ và từ ngữ được định nghĩa. Logo và mẫu không được lấy từ đây; vui lòng tải lên bên dưới.",
       "source": "Soạn thảo từ",
       "notPdf": "Hướng dẫn thương hiệu phải là tệp PDF.",
       "failed": "Không thể soạn thảo từ hướng dẫn này.",
       "applied": "{pages, plural, one {Được soạn thảo từ một hướng dẫn gồm # trang.} other {Được soạn thảo từ một hướng dẫn gồm # trang.}}",
-      "measuredFonts": "Phông chữ trong văn bản:",
-      "measuredColors": "Màu sắc trong văn bản:",
-      "check": "Kiểm tra từng giá trị với hướng dẫn trước khi lưu.",
-      "undo": "Hoàn tác soạn thảo"
+      "check": "Mỗi giá trị bên dưới hiển thị trang trong hướng dẫn có đề cập. Giá trị đánh dấu không tìm thấy là phần AI phân tích từ hướng dẫn: hãy kiểm tra các mục này trước tiên.",
+      "undo": "Hoàn tác soạn thảo",
+      "uploading": "Đang tải hướng dẫn lên...",
+      "tooLarge": "Hướng dẫn thương hiệu chỉ được tối đa {megabytes} MB.",
+      "grounded": "Tìm thấy trong văn bản hướng dẫn: {colors} trên tổng {colorTotal} màu sắc, {fonts} trên tổng {fontTotal} kiểu chữ, {terms} trên tổng {termTotal} từ.",
+      "stated": "Hướng dẫn, trang {page}",
+      "notStated": "Không tìm thấy trong văn bản hướng dẫn.",
+      "othersNotStated": "Không tìm thấy trong văn bản hướng dẫn: {values}",
+      "logoMinWidth": "Hướng dẫn quy định chiều rộng tối thiểu của logo là {points} pt. Thông tin này đã được điền cho logo của sách này.",
+      "dropped": "{count, plural, one {# mục không sử dụng được và đã bị loại bỏ.} other {# mục không sử dụng được và đã bị loại bỏ.}}"
     },
     "palette": {
       "title": "Màu sắc",
@@ -9672,7 +9682,7 @@
     },
     "typography": {
       "title": "Loại",
-      "description": "Kiểu chữ theo vai trò và các font khác được phép thay thế, ví dụ như font hệ thống cho tài liệu chia sẻ bên ngoài.",
+      "description": "Các kiểu chữ tài liệu có thể sử dụng và công dụng của từng kiểu. Một vai trò có thể có nhiều kiểu. Phông thay thế là các phông cho phép sử dụng thay cho kiểu chữ, như phông hệ thống cho tài liệu chia sẻ ra ngoài.",
       "add": "Thêm kiểu chữ",
       "none": "Chưa có kiểu chữ nào.",
       "role": "Vai trò",
@@ -9707,14 +9717,16 @@
       "localesHint": "Mã ngôn ngữ như en hoặc fr-CA, ngăn cách bằng dấu phẩy.",
       "preferred": "Từ nên dùng",
       "banned": "Từ cần tránh",
-      "term": "Từ hoặc cụm từ",
-      "alternatives": "Thay vì / hãy viết",
       "note": "Ghi chú",
       "addPreferred": "Thêm từ nên dùng",
       "addBanned": "Thêm từ cần tránh",
       "nonePreferred": "Chưa có từ nên dùng.",
       "noneBanned": "Chưa có từ cần tránh.",
-      "tone": "Giọng điệu"
+      "tone": "Giọng điệu",
+      "preferredTerm": "Viết",
+      "preferredAlternatives": "Thay cho (phân cách bằng dấu phẩy)",
+      "bannedTerm": "Tránh dùng",
+      "bannedAlternatives": "Viết thay (phân cách bằng dấu phẩy)"
     },
     "templates": {
       "title": "Mẫu",

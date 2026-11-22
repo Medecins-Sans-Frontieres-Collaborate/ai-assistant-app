@@ -4954,7 +4954,11 @@
         "notes": "Poznámky",
         "fileSuffix": "brand review"
       },
-      "noneFound": "Nebyly nalezeny žádné problémy."
+      "noneFound": "Nebyly nalezeny žádné problémy.",
+      "places": "{count, plural, one {# místo} other {# míst}}",
+      "placeOf": "{index} z {total}",
+      "previousPlace": "Předchozí místo",
+      "nextPlace": "Další místo"
     },
     "deckBuilder": {
       "loading": "Načítání prezentace…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Vytvořit návrh z brand guide",
-      "reading": "Čtení průvodce...",
+      "reading": "Probíhá načítání příručky. Dlouhá příručka může trvat několik minut.",
       "hint": "Nasaďte brand guide jako PDF pro doplnění barev, písem a textů, které definuje. Loga a šablony nejsou převzaty; nahrajte je níže.",
       "source": "Vytvořeno z",
       "notPdf": "Brand guide musí být ve formátu PDF.",
       "failed": "Z tohoto průvodce nelze vytvořit návrh.",
       "applied": "{pages, plural, one {Vytvořeno podle návodu o # stránce.} other {Vytvořeno podle návodu o # stránkách.}}",
-      "measuredFonts": "Použitá písma:",
-      "measuredColors": "Použité barvy:",
-      "check": "Před uložením zkontrolujte každou hodnotu dle průvodce.",
-      "undo": "Vrátit návrh zpět"
+      "check": "Každá hodnota níže zobrazuje stránku příručky, která ji uvádí. Hodnota označená jako nenalezena je zjištění modelu z příručky: zkontrolujte je nejdříve.",
+      "undo": "Vrátit návrh zpět",
+      "uploading": "Nahrávání příručky...",
+      "tooLarge": "Příručka může mít maximálně {megabytes} MB.",
+      "grounded": "Nalezeno v textu příručky: {colors} z {colorTotal} barev, {fonts} z {fontTotal} písem, {terms} z {termTotal} slov.",
+      "stated": "Příručka, strana {page}",
+      "notStated": "V textu příručky nebylo nalezeno.",
+      "othersNotStated": "V textu příručky nebyly nalezeny: {values}",
+      "logoMinWidth": "Příručka stanovuje minimální šířku loga {points} pt. Je vyplněna pro loga této knihy.",
+      "dropped": "{count, plural, one {# položka nemohla být použita a byla vynechána.} other {# položek nemohlo být použito a bylo vynecháno.}}"
     },
     "palette": {
       "title": "Barvy",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Písmo",
-      "description": "Písma podle role a povolené alternativy, například systémové písmo pro sdílené dokumenty.",
+      "description": "Písma, která lze v dokumentech použít, a jejich účel. Každá role může mít více písem. Náhrady jsou písma povolená místo původního, například systémové písmo pro sdílení dokumentů mimo organizaci.",
       "add": "Přidat písmo",
       "none": "Zatím žádná písma.",
       "role": "Role",
@@ -9676,14 +9686,16 @@
       "localesHint": "Jazykové značky jako en nebo fr-CA, oddělené čárkami.",
       "preferred": "Doporučená slova",
       "banned": "Zakázaná slova",
-      "term": "Slovo nebo fráze",
-      "alternatives": "Místo toho / pište místo",
       "note": "Poznámka",
       "addPreferred": "Přidat doporučené slovo",
       "addBanned": "Přidat zakázané slovo",
       "nonePreferred": "Zatím žádná doporučená slova.",
       "noneBanned": "Zatím žádná slova k vyvarování.",
-      "tone": "Styl vyjadřování"
+      "tone": "Styl vyjadřování",
+      "preferredTerm": "Napsat",
+      "preferredAlternatives": "Namísto (odděleno čárkou)",
+      "bannedTerm": "Vyhnout se",
+      "bannedAlternatives": "Napsat místo toho (odděleno čárkou)"
     },
     "templates": {
       "title": "Šablony",

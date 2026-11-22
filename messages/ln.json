@@ -4938,7 +4938,11 @@
         "notes": "Noti",
         "fileSuffix": "boyekoli ya brand"
       },
-      "noneFound": "Mokwɛ́lɛ moko ezwámá te."
+      "noneFound": "Mokwɛ́lɛ moko ezwámá te.",
+      "places": "{count, plural, one {# esika} other {# bisika}}",
+      "placeOf": "{index} na {total}",
+      "previousPlace": "Esika eleki",
+      "nextPlace": "Esika elanda"
     },
     "deckBuilder": {
       "loading": "Ezo zwa deck…",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Ebongisa na guide ya brand",
-      "reading": "Ebandi kotanga guide...",
+      "reading": "Tokutali guide. Guide molai ezali kosenga miniti mingi.",
       "hint": "Kotisa guide ya brand lokola PDF mpo na kotia baakala, ndenge ya nkoma mpe maloba oyo guide esalaka. Logo mpe modèles ekosalama te awa; kotisa yango na suka.",
       "source": "Ebongisama na",
       "notPdf": "Guide ya brand esengeli kozala PDF.",
       "failed": "Ebongisama ekokaki te kosalema na guide oyo.",
       "applied": "{pages, plural, one {Ebandeli na elakiseli ya lokasa #.} other {Ebandeli na elakiseli ya bilakisa #.}}",
-      "measuredFonts": "Ndenge ya nkoma guide esalelaka:",
-      "measuredColors": "Ba kala guide esalelaka:",
-      "check": "Talela motuya na guide liboso bongisa.",
-      "undo": "Longwa ebongisama"
+      "check": "Valuers na se ezali komonisa page ya guide epesi yango. Valuer bapesi ete ekuti te, ezali ndenge model emonaka guide: talisa yango liboso.",
+      "undo": "Longwa ebongisama",
+      "uploading": "Toli kotia guide...",
+      "tooLarge": "Brand guide esengeli ezala te koleka {megabytes} MB.",
+      "grounded": "Ekomi na texte ya guide: {colors} ya {colorTotal} couleurs, {fonts} ya {fontTotal} typefaces, {terms} ya {termTotal} maloba.",
+      "stated": "Guide, page {page}",
+      "notStated": "Ekuti te na texte ya guide.",
+      "othersNotStated": "Ekuti te na texte ya guide: {values}",
+      "logoMinWidth": "Guide epesi largeur ya logo ya minene mingi {points} pt. Ezali nde ezali na logos ya buku oyo.",
+      "dropped": "{count, plural, one {# entrée ekokaki kozala te mpe ebandaki te.} other {# entrées ekokaki kozala te mpe ebandaki te.}}"
     },
     "palette": {
       "title": "Ba kala",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Tipo",
-      "description": "Ba typeface na mikumba, pe ba font oyo ekoki kosalema na esika na yango, lokola font ya system mpo na ba dokument oyo esolama na libanda.",
+      "description": "Typefaces bakomeli bakoki kosalela mpe likambo moko na moko ya typeface. Role ekoki kozala mingi. Substitutes ezali fonte ezali kokoka kosalela na esika ya typeface, lokola fonte ya système na babuku esalemi partage na libanda.",
       "add": "Kobakisa typeface",
       "none": "Typeface ezali te naino.",
       "role": "Mikumba",
@@ -9660,14 +9670,16 @@
       "localesHint": "Ba tag ya lokota lokola en to fr-CA, kotanga na koma.",
       "preferred": "Maloba ya kosalela",
       "banned": "Maloba ya kokima",
-      "term": "Liloba to phrase",
-      "alternatives": "Na esika ya / koya na esika",
       "note": "Noti",
       "addPreferred": "Kobakisa liloba ya kosalela",
       "addBanned": "Kobakisa liloba ya kokima",
       "nonePreferred": "Maloba ya kosalela ezali naino te.",
       "noneBanned": "Maloba ya kokima ezali naino te.",
-      "tone": "Ndenge ya maloba"
+      "tone": "Ndenge ya maloba",
+      "preferredTerm": "Koma",
+      "preferredAlternatives": "Na esika ya (sepela na koma)",
+      "bannedTerm": "Kima",
+      "bannedAlternatives": "Koma na esika (sepela na koma)"
     },
     "templates": {
       "title": "Ba template",

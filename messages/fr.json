@@ -4954,7 +4954,11 @@
         "notes": "Notes",
         "fileSuffix": "revue de marque"
       },
-      "noneFound": "Aucun problème détecté."
+      "noneFound": "Aucun problème détecté.",
+      "places": "{count, plural, one {# lieu} other {# lieux}}",
+      "placeOf": "{index} sur {total}",
+      "previousPlace": "Lieu précédent",
+      "nextPlace": "Lieu suivant"
     },
     "deckBuilder": {
       "loading": "Chargement de la présentation…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Créer un brouillon à partir d’un guide de marque",
-      "reading": "Lecture du guide...",
+      "reading": "Lecture du guide. Un guide long peut prendre quelques minutes.",
       "hint": "Téléchargez le guide de marque au format PDF pour renseigner les couleurs, typographies et formulations qu’il définit. Les logos et modèles ne sont pas extraits de celui-ci ; téléchargez-les ci-dessous.",
       "source": "Créé à partir de",
       "notPdf": "Un guide de marque doit être un PDF.",
       "failed": "Un brouillon n’a pas pu être créé à partir de ce guide.",
       "applied": "{pages, plural, one {Rédigé à partir d’un guide de # page.} other {Rédigé à partir d’un guide de # pages.}}",
-      "measuredFonts": "Polices utilisées dans le texte :",
-      "measuredColors": "Couleurs utilisées dans le texte :",
-      "check": "Vérifiez chaque valeur avec le guide avant d’enregistrer.",
-      "undo": "Annuler le brouillon"
+      "check": "Chaque valeur ci-dessous montre la page du guide qui la mentionne. Une valeur indiquée comme non trouvée est la lecture du guide par le modèle : vérifiez celles-ci en premier.",
+      "undo": "Annuler le brouillon",
+      "uploading": "Téléversement du guide...",
+      "tooLarge": "Un guide de marque peut avoir au maximum {megabytes} Mo.",
+      "grounded": "Trouvé dans le texte du guide : {colors} sur {colorTotal} couleurs, {fonts} sur {fontTotal} polices de caractères, {terms} sur {termTotal} mots.",
+      "stated": "Guide, page {page}",
+      "notStated": "Non trouvé dans le texte du guide.",
+      "othersNotStated": "Non trouvé dans le texte du guide : {values}",
+      "logoMinWidth": "Le guide fixe une largeur minimale de logo de {points} pt. Cette valeur est utilisée pour les logos de ce livre.",
+      "dropped": "{count, plural, one {# entrée n'a pas pu être utilisée et a été ignorée.} other {# entrées n'ont pas pu être utilisées et ont été ignorées.}}"
     },
     "palette": {
       "title": "Couleurs",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Type",
-      "description": "Les polices par rôle et les polices autorisées à les remplacer, comme une police système pour les documents partagés en externe.",
+      "description": "Les polices de caractères que les documents peuvent utiliser et à quoi chacune sert. Un rôle peut en avoir plusieurs. Les substituts sont des polices autorisées à la place, comme une police système pour des documents partagés en externe.",
       "add": "Ajouter une police",
       "none": "Aucune police pour l’instant.",
       "role": "Rôle",
@@ -9676,14 +9686,16 @@
       "localesHint": "Tags de langue comme en ou fr-CA, séparés par des virgules.",
       "preferred": "Mots à utiliser",
       "banned": "Mots à éviter",
-      "term": "Mot ou expression",
-      "alternatives": "Au lieu de / écrire plutôt",
       "note": "Note",
       "addPreferred": "Ajouter un mot à utiliser",
       "addBanned": "Ajouter un mot à éviter",
       "nonePreferred": "Aucun mot préféré pour l’instant.",
       "noneBanned": "Aucun mot à éviter pour l’instant.",
-      "tone": "Ton"
+      "tone": "Ton",
+      "preferredTerm": "Écrire",
+      "preferredAlternatives": "Au lieu de (séparés par des virgules)",
+      "bannedTerm": "Éviter",
+      "bannedAlternatives": "Écrire à la place (séparés par des virgules)"
     },
     "templates": {
       "title": "Modèles",

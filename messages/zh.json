@@ -4985,7 +4985,11 @@
         "notes": "备注",
         "fileSuffix": "品牌审核"
       },
-      "noneFound": "未发现问题。"
+      "noneFound": "未发现问题。",
+      "places": "{count, plural, one {# 个地点} other {# 个地点}}",
+      "placeOf": "第 {index} 个，共 {total} 个",
+      "previousPlace": "上一个地点",
+      "nextPlace": "下一个地点"
     },
     "deckBuilder": {
       "loading": "正在加载演示文稿…",
@@ -9636,16 +9640,22 @@
     },
     "guide": {
       "action": "根据品牌指南草拟",
-      "reading": "正在读取指南...",
+      "reading": "正在读取指南，较长的指南可能需要几分钟。",
       "hint": "上传品牌指南PDF文件，将自动填写所定义的颜色、字体和用词。标志和模板不会从中提取，请在下方单独上传。",
       "source": "草拟自",
       "notPdf": "品牌指南必须为PDF格式。",
       "failed": "无法根据该指南生成草稿。",
       "applied": "{pages, plural, one {根据 # 页的指南起草。} other {根据 # 页的指南起草。}}",
-      "measuredFonts": "文本所用字体：",
-      "measuredColors": "文本所用颜色：",
-      "check": "请在保存前根据指南核对每项数值。",
-      "undo": "撤销草稿"
+      "check": "下方每个值都显示其在指南中出现的页码。标记为未找到的值由模型阅读指南后得出：请优先检查这些值。",
+      "undo": "撤销草稿",
+      "uploading": "正在上传指南…",
+      "tooLarge": "品牌指南最大为 {megabytes} MB。",
+      "grounded": "在指南文本中发现：{colorTotal} 种颜色中的 {colors} 种，{fontTotal} 种字体中的 {fonts} 种，{termTotal} 个词语中的 {terms} 个。",
+      "stated": "指南，第 {page} 页",
+      "notStated": "未在指南文本中找到。",
+      "othersNotStated": "未在指南文本中找到：{values}",
+      "logoMinWidth": "指南设定了标志最小宽度为 {points} pt。本书的标志已填写。",
+      "dropped": "{count, plural, one {# 条目无法使用，已被省略。} other {# 条目无法使用，已被省略。}}"
     },
     "palette": {
       "title": "颜色",
@@ -9672,7 +9682,7 @@
     },
     "typography": {
       "title": "类别",
-      "description": "按角色分类的字体及其允许的替代字体，如外部共享文档时可用的系统字体。",
+      "description": "文档可使用的字体及其用途说明。每个角色可有多个字体。替代字体是在某类字体无法使用时允许使用的字体，例如对外共享文档时可用的系统字体。",
       "add": "添加字体",
       "none": "暂无字体。",
       "role": "角色",
@@ -9707,14 +9717,16 @@
       "localesHint": "语言标记，如 en 或 fr-CA，用逗号分隔。",
       "preferred": "建议用词",
       "banned": "避免用词",
-      "term": "词语或短语",
-      "alternatives": "代替 / 推荐用法",
       "note": "备注",
       "addPreferred": "添加建议用词",
       "addBanned": "添加避免用词",
       "nonePreferred": "暂无建议用词。",
       "noneBanned": "暂无避免用词。",
-      "tone": "语气"
+      "tone": "语气",
+      "preferredTerm": "推荐用词",
+      "preferredAlternatives": "替代用词（逗号分隔）",
+      "bannedTerm": "避免用词",
+      "bannedAlternatives": "推荐替代用词（逗号分隔）"
     },
     "templates": {
       "title": "模板",

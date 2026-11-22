@@ -4954,7 +4954,11 @@
         "notes": "노트",
         "fileSuffix": "브랜드 검토"
       },
-      "noneFound": "문제가 발견되지 않았습니다."
+      "noneFound": "문제가 발견되지 않았습니다.",
+      "places": "{count, plural, one {# 장소} other {# 장소들}}",
+      "placeOf": "{index} / {total}",
+      "previousPlace": "이전 장소",
+      "nextPlace": "다음 장소"
     },
     "deckBuilder": {
       "loading": "덱을 불러오는 중…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "브랜드 가이드로 초안 작성",
-      "reading": "가이드 읽는 중...",
+      "reading": "가이드를 읽는 중입니다. 긴 가이드는 몇 분이 소요될 수 있습니다.",
       "hint": "브랜드 가이드를 PDF로 업로드하면 정의된 색상, 서체, 워딩이 자동으로 입력됩니다. 로고와 템플릿은 포함되지 않으니 아래에서 별도로 업로드하세요.",
       "source": "초안 출처",
       "notPdf": "브랜드 가이드는 PDF이어야 합니다.",
       "failed": "이 가이드에서 초안을 만들 수 없습니다.",
       "applied": "{pages, plural, one {#페이지의 가이드에서 초안이 작성되었습니다.} other {#페이지의 가이드에서 초안이 작성되었습니다.}}",
-      "measuredFonts": "본문에 사용된 서체:",
-      "measuredColors": "본문에 사용된 색상:",
-      "check": "저장하기 전에 각 값을 가이드와 비교하세요.",
-      "undo": "초안 되돌리기"
+      "check": "아래의 각 값은 가이드의 해당 페이지를 보여줍니다. 찾지 못한 것으로 표시된 값은 모델이 가이드를 읽은 결과이므로 먼저 확인하시기 바랍니다.",
+      "undo": "초안 되돌리기",
+      "uploading": "가이드를 업로드하는 중...",
+      "tooLarge": "브랜드 가이드는 최대 {megabytes} MB까지 가능합니다.",
+      "grounded": "가이드 텍스트에서 발견됨: {colorTotal}가지 색상 중 {colors}개, {fontTotal}가지 글꼴 중 {fonts}개, {termTotal}개 단어 중 {terms}개.",
+      "stated": "가이드, {page} 페이지",
+      "notStated": "가이드 텍스트에서 찾을 수 없습니다.",
+      "othersNotStated": "가이드 텍스트에서 찾을 수 없는 값: {values}",
+      "logoMinWidth": "가이드에서 최소 로고 너비를 {points} pt로 지정했습니다. 이 책의 로고에 적용됩니다.",
+      "dropped": "{count, plural, one {#개의 항목을 사용할 수 없어 제외되었습니다.} other {#개의 항목을 사용할 수 없어 제외되었습니다.}}"
     },
     "palette": {
       "title": "색상",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "유형",
-      "description": "역할별 서체와 사용 가능한 대체 폰트(외부 공유 문서용 시스템 폰트 등).",
+      "description": "문서에서 사용할 수 있는 글꼴과 그 용도를 설명합니다. 하나의 역할에 여러 글꼴이 있을 수 있습니다. 대체 글꼴은 글꼴이 없을 때 사용할 수 있도록 허용된 글꼴이며, 예를 들어 외부 공유 문서에는 시스템 글꼴을 사용할 수 있습니다.",
       "add": "서체 추가",
       "none": "아직 서체가 없습니다.",
       "role": "역할",
@@ -9676,14 +9686,16 @@
       "localesHint": "언어 태그(예: en 또는 fr-CA, 쉼표로 구분).",
       "preferred": "사용할 단어",
       "banned": "피할 단어",
-      "term": "단어 또는 구",
-      "alternatives": "대신 / 이렇게 작성",
       "note": "참고",
       "addPreferred": "사용할 단어 추가",
       "addBanned": "피할 단어 추가",
       "nonePreferred": "아직 사용할 단어가 없습니다.",
       "noneBanned": "아직 피할 단어가 없습니다.",
-      "tone": "톤"
+      "tone": "톤",
+      "preferredTerm": "사용",
+      "preferredAlternatives": "대신 사용할 것 (쉼표로 구분)",
+      "bannedTerm": "사용 자제",
+      "bannedAlternatives": "대신 사용할 표현 (쉼표로 구분)"
     },
     "templates": {
       "title": "템플릿",

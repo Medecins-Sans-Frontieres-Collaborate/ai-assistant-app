@@ -4954,7 +4954,11 @@
         "notes": "Notes",
         "fileSuffix": "revisió de marca"
       },
-      "noneFound": "No s’ha detectat cap problema."
+      "noneFound": "No s’ha detectat cap problema.",
+      "places": "{count, plural, one {# lloc} other {# llocs}}",
+      "placeOf": "{index} de {total}",
+      "previousPlace": "Lloc anterior",
+      "nextPlace": "Lloc següent"
     },
     "deckBuilder": {
       "loading": "S’està carregant la presentació…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Esborrany a partir d'una guia de marca",
-      "reading": "S'està llegint la guia...",
+      "reading": "S'està llegint la guia. Si és llarga pot trigar uns minuts.",
       "hint": "Puja la guia de marca en PDF per omplir els colors, tipografies i redacció que defineix. Els logotips i les plantilles no s'importen automàticament; puja'ls a continuació.",
       "source": "Esborrany generat de",
       "notPdf": "La guia de marca ha de ser un PDF.",
       "failed": "No s'ha pogut generar un esborrany a partir d'aquesta guia.",
       "applied": "{pages, plural, one {Redactat a partir d’una guia d’# pàgina.} other {Redactat a partir d’una guia de # pàgines.}}",
-      "measuredFonts": "Tipografies del text:",
-      "measuredColors": "Colors utilitzats al text:",
-      "check": "Comprova cada valor amb la guia abans de desar.",
-      "undo": "Desfés l'esborrany"
+      "check": "Cada valor següent mostra la pàgina de la guia on s'indica. Un valor marcat com a no trobat és la lectura feta pel model: revisa aquests primer.",
+      "undo": "Desfés l'esborrany",
+      "uploading": "S'està pujant la guia...",
+      "tooLarge": "Una guia de marca pot tenir com a màxim {megabytes} MB.",
+      "grounded": "Trobat al text de la guia: {colors} de {colorTotal} colors, {fonts} de {fontTotal} tipografies, {terms} de {termTotal} paraules.",
+      "stated": "Guia, pàgina {page}",
+      "notStated": "No s'ha trobat al text de la guia.",
+      "othersNotStated": "No s'ha trobat al text de la guia: {values}",
+      "logoMinWidth": "La guia estableix una amplada mínima del logotip de {points} pt. Aquesta s'omple per als logotips d'aquest llibre.",
+      "dropped": "{count, plural, one {No s'ha pogut utilitzar # entrada i s'ha exclòs.} other {No s'han pogut utilitzar # entrades i s'han exclòs.}}"
     },
     "palette": {
       "title": "Colors",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Tipus",
-      "description": "Les tipografies per rol i les fonts permeses com a substitució, com ara una font de sistema per als documents compartits externament.",
+      "description": "Les tipografies que poden fer servir els documents i per a què serveix cadascuna. Un rol pot tenir-ne diverses. Els substituts són tipus de lletra permesos en lloc d'una tipografia, com ara una lletra del sistema per a documents compartits fora.",
       "add": "Afegeix tipografia",
       "none": "Encara no hi ha tipografies.",
       "role": "Rol",
@@ -9676,14 +9686,16 @@
       "localesHint": "Etiquetes d’idioma com en o fr-CA, separades per comes.",
       "preferred": "Paraules per utilitzar",
       "banned": "Paraules a evitar",
-      "term": "Paraula o expressió",
-      "alternatives": "En comptes de / escriu",
       "note": "Nota",
       "addPreferred": "Afegeix una paraula per utilitzar",
       "addBanned": "Afegeix una paraula a evitar",
       "nonePreferred": "Encara no hi ha paraules preferides.",
       "noneBanned": "Encara no hi ha paraules a evitar.",
-      "tone": "To de veu"
+      "tone": "To de veu",
+      "preferredTerm": "Escriu",
+      "preferredAlternatives": "En comptes de (separat per comes)",
+      "bannedTerm": "Evita",
+      "bannedAlternatives": "Escriu en lloc de (separat per comes)"
     },
     "templates": {
       "title": "Plantilles",

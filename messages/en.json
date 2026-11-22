@@ -3698,7 +3698,11 @@
         "found": "Found",
         "notes": "Notes",
         "fileSuffix": "brand review"
-      }
+      },
+      "places": "{count, plural, one {# place} other {# places}}",
+      "placeOf": "{index} of {total}",
+      "previousPlace": "Previous place",
+      "nextPlace": "Next place"
     },
     "deckBuilder": {
       "loading": "Loading the deck…",
@@ -8765,16 +8769,22 @@
     },
     "guide": {
       "action": "Draft from a brand guide",
-      "reading": "Reading the guide...",
+      "reading": "Reading the guide. A long guide can take a few minutes.",
       "hint": "Upload the brand guide as a PDF to fill in the colours, type and wording it defines. Logos and templates are not taken from it; upload those below.",
       "source": "Drafted from",
       "notPdf": "A brand guide must be a PDF.",
       "failed": "A draft could not be made from this guide.",
       "applied": "{pages, plural, one {Drafted from a guide of # page.} other {Drafted from a guide of # pages.}}",
-      "measuredFonts": "Fonts its text is set in:",
-      "measuredColors": "Colours its text uses:",
-      "check": "Check each value against the guide before saving.",
-      "undo": "Undo the draft"
+      "check": "Each value below shows the page of the guide that states it. A value marked as not found is the model's reading of the guide: check those first.",
+      "undo": "Undo the draft",
+      "uploading": "Uploading the guide...",
+      "tooLarge": "A brand guide can be at most {megabytes} MB.",
+      "grounded": "Found in the guide's text: {colors} of {colorTotal} colours, {fonts} of {fontTotal} typefaces, {terms} of {termTotal} words.",
+      "stated": "Guide, page {page}",
+      "notStated": "Not found in the guide's text.",
+      "othersNotStated": "Not found in the guide's text: {values}",
+      "logoMinWidth": "The guide sets a smallest logo width of {points} pt. It is filled in for this book's logos.",
+      "dropped": "{count, plural, one {# entry could not be used and was left out.} other {# entries could not be used and were left out.}}"
     },
     "palette": {
       "title": "Colours",
@@ -8801,7 +8811,7 @@
     },
     "typography": {
       "title": "Type",
-      "description": "The typefaces by role, and the fonts allowed in their place, such as a system font for documents shared outside.",
+      "description": "The typefaces documents may use and what each is for. A role can have several. Substitutes are fonts allowed in a typeface's place, such as a system font for documents shared outside.",
       "add": "Add typeface",
       "none": "No typefaces yet.",
       "role": "Role",
@@ -8836,14 +8846,16 @@
       "localesHint": "Language tags such as en or fr-CA, comma separated.",
       "preferred": "Words to use",
       "banned": "Words to avoid",
-      "term": "Word or phrase",
-      "alternatives": "Instead of / write instead",
       "note": "Note",
       "addPreferred": "Add a word to use",
       "addBanned": "Add a word to avoid",
       "nonePreferred": "No preferred words yet.",
       "noneBanned": "No words to avoid yet.",
-      "tone": "Voice"
+      "tone": "Voice",
+      "preferredTerm": "Write",
+      "preferredAlternatives": "Instead of (comma separated)",
+      "bannedTerm": "Avoid",
+      "bannedAlternatives": "Write instead (comma separated)"
     },
     "templates": {
       "title": "Templates",

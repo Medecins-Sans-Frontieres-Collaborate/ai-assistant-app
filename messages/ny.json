@@ -4938,7 +4938,11 @@
         "notes": "Zolemba",
         "fileSuffix": "kuwunika kwa brand"
       },
-      "noneFound": "Palibe mavuto apezeka."
+      "noneFound": "Palibe mavuto apezeka.",
+      "places": "{count, plural, one {# malo} other {# malo}}",
+      "placeOf": "{index} mwa {total}",
+      "previousPlace": "Malo apitawo",
+      "nextPlace": "Malo otsatira"
     },
     "deckBuilder": {
       "loading": "Ikutsegula deck...",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Pangani kuchokera pa bukhu la malangizo a mtundu",
-      "reading": "Kuwerenga malangizo...",
+      "reading": "Kuwerenga chikalata. Chikalata chautali chingatenge mphindi zingapo.",
       "hint": "Kwezani bukhu la malangizo a mtundu ngati PDF kuti mukwaniritse mitundu, zilembo ndi mawu omwe akufotokozedwa. Ma logo ndi matemplate sizimachotsedwa mmenemo; kwezani apa pansipa.",
       "source": "Zinatengedwa kuchokera",
       "notPdf": "Bukhu la malangizo liyenera kukhala PDF.",
       "failed": "Sikutha kupanga kuchokera pa bukhu ili la malangizo.",
       "applied": "{pages, plural, one {Yalembedwa kuchokera mu kalozera wa tsamba limodzi.} other {Yalembedwa kuchokera mu kalozera wa matsamba #.}}",
-      "measuredFonts": "Fonti zomwe zili m'bukhu:",
-      "measuredColors": "Mitundu yomwe imagwiritsidwa ntchito m'bukhu:",
-      "check": "Onetsetsani chilichonse motsatana ndi bukhu la malangizo musanasunge.",
-      "undo": "Bwezeretsani zomwe zapangidwa"
+      "check": "Mtengo uliwonse pansipa ukuwonetsa tsamba la chikalata lomwe layikidwa. Mtengo olemba kuti sizipezeka ndi zomwe model yawerenga: yang'anani zimenezi koyamba.",
+      "undo": "Bwezeretsani zomwe zapangidwa",
+      "uploading": "Kukweza chikalata... ",
+      "tooLarge": "Chikalata cha brand chikhala chachikulu kwambiri pa {megabytes} MB.",
+      "grounded": "Zapezeka m'chikalata: mitundu {colors} mwa {colorTotal}, zilembo {fonts} mwa {fontTotal}, mawu {terms} mwa {termTotal}.",
+      "stated": "Chikalata, tsamba {page}",
+      "notStated": "Sizipezeka m'chikalata.",
+      "othersNotStated": "Sizipezeka m'chikalata: {values}",
+      "logoMinWidth": "Chikalatacho chakhazikitsa m'lifupi laling'ono la logo la {points} pt. Zadzazidwa pa ma logo a bukuli.",
+      "dropped": "{count, plural, one {# cholakwika sichinagwiritsidwe ntchito ndipo chachotsedwa.} other {# zolakwika sizinagwiritsidwe ntchito ndipo zachotsedwa.}}"
     },
     "palette": {
       "title": "Mitundu",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Mtundu",
-      "description": "Zilembo zomwe zimagwiritsidwa ntchito molingana ndi ntchito, ndi zilembo zomwe zimaloledwa m'malo mwake, monga zilembo za makina a chikalata chimenechi chaperekedwa kunja.",
+      "description": "Zilembo zomwe zikalata zingagwiritse ntchito ndiponso ntchito za chilichonse. Udindo uliwonse ukhoza kukhala ndi zambiri. Zomwe zingasinthidwe ndi zilembo zomwe zilolezedwa m'malo mwa zinayi, monga zilembo za pa makina pazikalata zogawidwa kunja.",
       "add": "Onjezani zilembo",
       "none": "Palibe zilembo pano.",
       "role": "Ntchito",
@@ -9660,14 +9670,16 @@
       "localesHint": "Ma tag a chinenero monga en kapena fr-CA, kulekanitsidwa ndi mawu okoma.",
       "preferred": "Mawu ogwiritsidwa ntchito",
       "banned": "Mawu opewa",
-      "term": "Mawu kapena mawu apadera",
-      "alternatives": "M'malo mwa / lembani m'malo mwake",
       "note": "Zindikirani",
       "addPreferred": "Onjezani mawu ogwiritsidwa ntchito",
       "addBanned": "Onjezani mawu opewa",
       "nonePreferred": "Palibe mawu ogwiritsidwa ntchito pano.",
       "noneBanned": "Palibe mawu opewa pano.",
-      "tone": "Mawu"
+      "tone": "Mawu",
+      "preferredTerm": "Lembani",
+      "preferredAlternatives": "M'malo mwa (gawani ndi ma koma)",
+      "bannedTerm": "Pewani",
+      "bannedAlternatives": "Lembani m'malo mwake (gawani ndi ma koma)"
     },
     "templates": {
       "title": "Zitsanzo",

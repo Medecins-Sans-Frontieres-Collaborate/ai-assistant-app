@@ -4954,7 +4954,11 @@
         "notes": "Huomiot",
         "fileSuffix": "brändikatselmus"
       },
-      "noneFound": "Ongelmia ei löytynyt."
+      "noneFound": "Ongelmia ei löytynyt.",
+      "places": "{count, plural, one {# paikka} other {# paikkaa}}",
+      "placeOf": "{index}/{total}",
+      "previousPlace": "Edellinen paikka",
+      "nextPlace": "Seuraava paikka"
     },
     "deckBuilder": {
       "loading": "Ladataan esitystä…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Laadi luonnos brändioppaasta",
-      "reading": "Luetaan opasta...",
+      "reading": "Opasta luetaan. Pitkä opas voi kestää muutaman minuutin.",
       "hint": "Lataa brändiopas PDF-muodossa, jotta sen määrittelemät värit, fontit ja sanamuodot täytetään automaattisesti. Logoja ja pohjia ei tuoda; lisää ne alle.",
       "source": "Luonnosteltu lähteestä",
       "notPdf": "Brändioppaan on oltava PDF.",
       "failed": "Tästä oppaasta ei voitu tehdä luonnosta.",
       "applied": "{pages, plural, one {Luotu oppaasta, jossa on # sivu.} other {Luotu oppaasta, jossa on # sivua.}}",
-      "measuredFonts": "Oppaan teksti käyttää fontteja:",
-      "measuredColors": "Oppaan tekstin värit:",
-      "check": "Tarkista jokainen arvo oppaasta ennen tallennusta.",
-      "undo": "Kumoa luonnos"
+      "check": "Jokainen alla oleva arvo kertoo, millä sivulla opas sen mainitsee. Jos arvoa ei löytynyt, mallin tulkinta oppaasta näkyy: tarkista nämä ensin.",
+      "undo": "Kumoa luonnos",
+      "uploading": "Opasta ladataan...",
+      "tooLarge": "Brändioppaan koko voi olla enintään {megabytes} Mt.",
+      "grounded": "Oppaan tekstistä löytyi: {colors}/{colorTotal} väriä, {fonts}/{fontTotal} kirjasintyyppiä, {terms}/{termTotal} sanaa.",
+      "stated": "Opas, sivu {page}",
+      "notStated": "Ei löytynyt oppaan tekstistä.",
+      "othersNotStated": "Ei löytynyt oppaan tekstistä: {values}",
+      "logoMinWidth": "Opas määrittää logon minimileveydeksi {points} pt. Tämä on täytetty kirjan logoille.",
+      "dropped": "{count, plural, one {# merkintää ei voitu käyttää ja jätettiin pois.} other {# merkintää ei voitu käyttää ja jätettiin pois.}}"
     },
     "palette": {
       "title": "Värit",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Tyyppi",
-      "description": "Kirjasintyypit rooleittain sekä sallitut vaihtoehtoiset fontit, kuten järjestelmäfontti ulkopuolisiin jaettaviin asiakirjoihin.",
+      "description": "Kirjasintyypit, joita dokumenteissa saa käyttää, ja mihin kukin tarkoitettu. Roolilla voi olla useita. Korvaavat fontit ovat hyväksyttyjä yhden kirjasintyypin tilalla, kuten järjestelmän fontti jaettavissa dokumenteissa.",
       "add": "Lisää kirjasintyyppi",
       "none": "Ei kirjasintyyppejä vielä.",
       "role": "Rooli",
@@ -9676,14 +9686,16 @@
       "localesHint": "Kielitunnisteet, kuten en tai fr-CA, pilkulla eroteltuna.",
       "preferred": "Käytettävät sanat",
       "banned": "Vältettävät sanat",
-      "term": "Sana tai ilmaus",
-      "alternatives": "Sen sijaan / kirjoita tilalle",
       "note": "Huomio",
       "addPreferred": "Lisää käytettävä sana",
       "addBanned": "Lisää vältettävä sana",
       "nonePreferred": "Ei suositeltuja sanoja vielä.",
       "noneBanned": "Ei vältettäviä sanoja vielä.",
-      "tone": "Tyyli"
+      "tone": "Tyyli",
+      "preferredTerm": "Kirjoita",
+      "preferredAlternatives": "Sen sijaan (pilkulla erotettuna)",
+      "bannedTerm": "Vältä",
+      "bannedAlternatives": "Kirjoita tilalle (pilkulla erotettuna)"
     },
     "templates": {
       "title": "Pohjat",

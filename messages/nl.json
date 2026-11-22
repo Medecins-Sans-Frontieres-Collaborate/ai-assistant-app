@@ -4954,7 +4954,11 @@
         "notes": "Notities",
         "fileSuffix": "merkevaluatie"
       },
-      "noneFound": "Geen problemen gevonden."
+      "noneFound": "Geen problemen gevonden.",
+      "places": "{count, plural, one {# locatie} other {# locaties}}",
+      "placeOf": "{index} van {total}",
+      "previousPlace": "Vorige locatie",
+      "nextPlace": "Volgende locatie"
     },
     "deckBuilder": {
       "loading": "Presentatie wordt geladen…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Ontwerp vanuit een huisstijlgids",
-      "reading": "Huisstijlgids wordt gelezen...",
+      "reading": "Gids wordt gelezen. Een lange gids kan enkele minuten duren.",
       "hint": "Upload de huisstijlgids als PDF om de daarin vastgelegde kleuren, lettertypen en taalgebruik in te vullen. Logo's en sjablonen worden niet overgenomen; upload die hieronder.",
       "source": "Ontworpen op basis van",
       "notPdf": "Een huisstijlgids moet een PDF zijn.",
       "failed": "Van deze gids kon geen ontwerp worden gemaakt.",
       "applied": "{pages, plural, one {Opgesteld uit een gids van # pagina.} other {Opgesteld uit een gids van # pagina's.}}",
-      "measuredFonts": "Lettertypen in de tekst:",
-      "measuredColors": "Gebruikte kleuren in de tekst:",
-      "check": "Controleer iedere waarde met de gids voordat u opslaat.",
-      "undo": "Ontwerp ongedaan maken"
+      "check": "Elke waarde hieronder toont de pagina van de gids waarop deze vermeld staat. Een waarde als 'niet gevonden' is wat het model heeft gelezen uit de gids: controleer deze als eerste.",
+      "undo": "Ontwerp ongedaan maken",
+      "uploading": "Gids wordt geüpload...",
+      "tooLarge": "Een merk-gids mag maximaal {megabytes} MB zijn.",
+      "grounded": "Gevonden in de gids: {colors} van {colorTotal} kleuren, {fonts} van {fontTotal} lettertypen, {terms} van {termTotal} woorden.",
+      "stated": "Gids, pagina {page}",
+      "notStated": "Niet gevonden in de gids.",
+      "othersNotStated": "Niet gevonden in de gids: {values}",
+      "logoMinWidth": "De gids geeft een minimale logobreedte van {points} pt op. Dit is ingevuld voor de logo's van dit boek.",
+      "dropped": "{count, plural, one {# item kon niet worden gebruikt en is weggelaten.} other {# items konden niet worden gebruikt en zijn weggelaten.}}"
     },
     "palette": {
       "title": "Kleuren",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Type",
-      "description": "De lettertypen per rol en de toegestane alternatieven, zoals een systeemlettertype voor extern gedeelde documenten.",
+      "description": "De lettertypen die documenten mogen gebruiken en waarvoor elk bedoeld is. Een rol kan er meerdere hebben. Vervangingen zijn lettertypes die in plaats van het originele lettertype mogen, bijvoorbeeld een systeemlettertype voor extern gedeelde documenten.",
       "add": "Lettertype toevoegen",
       "none": "Nog geen lettertypen.",
       "role": "Rol",
@@ -9676,14 +9686,16 @@
       "localesHint": "Taalcodes zoals nl of fr-CA, komma-gescheiden.",
       "preferred": "Te gebruiken woorden",
       "banned": "Te vermijden woorden",
-      "term": "Woord of uitdrukking",
-      "alternatives": "In plaats van / schrijf",
       "note": "Opmerking",
       "addPreferred": "Voeg een te gebruiken woord toe",
       "addBanned": "Voeg een te vermijden woord toe",
       "nonePreferred": "Nog geen voorkeurwoorden.",
       "noneBanned": "Nog geen te vermijden woorden.",
-      "tone": "Toon"
+      "tone": "Toon",
+      "preferredTerm": "Schrijf",
+      "preferredAlternatives": "In plaats van (komma-gescheiden)",
+      "bannedTerm": "Vermijd",
+      "bannedAlternatives": "Schrijf in plaats daarvan (komma-gescheiden)"
     },
     "templates": {
       "title": "Sjablonen",

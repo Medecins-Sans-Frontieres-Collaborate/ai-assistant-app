@@ -4954,7 +4954,11 @@
         "notes": "Notas",
         "fileSuffix": "revisão de marca"
       },
-      "noneFound": "Nenhum problema encontrado."
+      "noneFound": "Nenhum problema encontrado.",
+      "places": "{count, plural, one {# local} other {# locais}}",
+      "placeOf": "{index} de {total}",
+      "previousPlace": "Local anterior",
+      "nextPlace": "Próximo local"
     },
     "deckBuilder": {
       "loading": "Carregando a apresentação…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Rascunhar a partir de um guia de marca",
-      "reading": "Lendo o guia...",
+      "reading": "Lendo o guia. Guias longos podem levar alguns minutos.",
       "hint": "Faça upload do guia de marca em PDF para preencher as cores, tipografia e redação definidas nele. Logos e modelos não são extraídos; envie-os abaixo.",
       "source": "Rascunhado a partir de",
       "notPdf": "Um guia de marca deve ser um PDF.",
       "failed": "Não foi possível criar rascunho a partir deste guia.",
       "applied": "{pages, plural, one {Baseado em um guia de # página.} other {Baseado em um guia de # páginas.}}",
-      "measuredFonts": "Fontes utilizadas no texto:",
-      "measuredColors": "Cores utilizadas no texto:",
-      "check": "Verifique cada valor no guia antes de salvar.",
-      "undo": "Desfazer rascunho"
+      "check": "Cada valor abaixo mostra a página do guia em que ele aparece. Um valor marcado como não encontrado é o que o modelo identificou ao ler o guia: confira esses primeiro.",
+      "undo": "Desfazer rascunho",
+      "uploading": "Carregando o guia...",
+      "tooLarge": "Um guia da marca pode ter no máximo {megabytes} MB.",
+      "grounded": "Encontrado no texto do guia: {colors} de {colorTotal} cores, {fonts} de {fontTotal} tipos de letra, {terms} de {termTotal} palavras.",
+      "stated": "Guia, página {page}",
+      "notStated": "Não encontrado no texto do guia.",
+      "othersNotStated": "Não encontrado no texto do guia: {values}",
+      "logoMinWidth": "O guia define uma largura mínima do logotipo de {points} pt. Essa informação é preenchida para os logotipos deste livro.",
+      "dropped": "{count, plural, one {# entrada não pôde ser usada e foi descartada.} other {# entradas não puderam ser usadas e foram descartadas.}}"
     },
     "palette": {
       "title": "Cores",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Tipo",
-      "description": "As fontes por função e as permitidas como substitutas, como uma fonte do sistema para documentos compartilhados externamente.",
+      "description": "As fontes que os documentos podem usar e para que serve cada uma. Uma função pode ter várias. Substitutas são fontes permitidas no lugar de uma tipografia, como uma fonte do sistema para documentos compartilhados externamente.",
       "add": "Adicionar tipo de letra",
       "none": "Ainda não há tipos de letra.",
       "role": "Função",
@@ -9676,14 +9686,16 @@
       "localesHint": "Etiquetas de idioma como en ou fr-CA, separadas por vírgula.",
       "preferred": "Palavras para usar",
       "banned": "Palavras para evitar",
-      "term": "Palavra ou frase",
-      "alternatives": "Em vez de / escreva",
       "note": "Observação",
       "addPreferred": "Adicionar palavra para usar",
       "addBanned": "Adicionar palavra para evitar",
       "nonePreferred": "Ainda não há palavras preferidas.",
       "noneBanned": "Ainda não há palavras para evitar.",
-      "tone": "Tom de voz"
+      "tone": "Tom de voz",
+      "preferredTerm": "Escrever",
+      "preferredAlternatives": "Em vez de (separado por vírgulas)",
+      "bannedTerm": "Evitar",
+      "bannedAlternatives": "Escrever em vez disso (separado por vírgulas)"
     },
     "templates": {
       "title": "Modelos",

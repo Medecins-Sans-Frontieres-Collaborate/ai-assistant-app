@@ -4938,7 +4938,11 @@
         "notes": "Àkọsilẹ̀",
         "fileSuffix": "àyẹ̀wò àmì"
       },
-      "noneFound": "Ko si wahala kankan ti a ri."
+      "noneFound": "Ko si wahala kankan ti a ri.",
+      "places": "{count, plural, one {# ibi} other {# ibi}}",
+      "placeOf": "{index} nínú {total}",
+      "previousPlace": "Ibi tó kọjá",
+      "nextPlace": "Ibi tó tẹ̀síwájú"
     },
     "deckBuilder": {
       "loading": "N gbígbógun agbóyè…",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Ṣẹdá àtẹ̀jáde láti ìtòsọ́nà ami orukọ",
-      "reading": "N ń ka ìtòsọ́nà...",
+      "reading": "N ka ìtókasí. Ìtókasí gígùn le gba ìsẹjú díẹ̀.",
       "hint": "Po ìtòsọ́nà ami orukọ bí PDF láti kún awọ, iru-fọọmu àti ọrọ tí o sọ. Awọn aami àti àwòrán amúlò kò ní wa lati inu rẹ; po wọ́n silẹ lókè.",
       "source": "Ṣẹdá láti",
       "notPdf": "Ìtòsọ́nà ami orukọ gbọ́dọ̀ jẹ́ PDF.",
       "failed": "A kò le dá àtẹ̀jáde yìí sílẹ̀ láti ìtòsọ́nà yìí.",
       "applied": "{pages, plural, one {A ti kọ́ láti ìtòsọ́nà tó ní ojúewé #.} other {A ti kọ́ láti ìtòsọ́nà tó ní ojúewé #.}}",
-      "measuredFonts": "Àwọn iru-fọọmu tí a fi kọ ọrọ rẹ:",
-      "measuredColors": "Àwọn awọ tí a lò ninu ọrọ rẹ:",
-      "check": "Ṣàyẹwo gbogbo iye pẹ̀lú ìtòsọ́nà ṣáájú fipamọ.",
-      "undo": "Fagìlì àtẹ̀jáde"
+      "check": "Gbogbo àníyàn ni isalẹ fihan ojúewé ìtókasí tí ó sọ. Àníyàn tí a fi àmì pé a kò rí ni ìtúka àwòrán ètò: ṣàyẹ̀wò wọ̀n ní kòkòrò.",
+      "undo": "Fagìlì àtẹ̀jáde",
+      "uploading": "Ngbélódì ìtókasí...",
+      "tooLarge": "Ìtókasí brand kì í ju {megabytes} MB lọ.",
+      "grounded": "A rí nínú ọ̀rọ̀ ìtókasí: {colors} nínú {colorTotal} àwọ̀, {fonts} nínú {fontTotal} irú-fọ́ǹtì, {terms} nínú {termTotal} ọ̀rọ̀.",
+      "stated": "Ìtókasí, ojúewé {page}",
+      "notStated": "Kò sí nínú ọ̀rọ̀ ìtókasí.",
+      "othersNotStated": "Kò sí nínú ọ̀rọ̀ ìtókasí: {values}",
+      "logoMinWidth": "Ìtókasí ṣètò ìwọn àmì lógó kékeré jùlọ sí {points} pt. A fi sílẹ̀ fún àwọn lógó ìwé yìí.",
+      "dropped": "{count, plural, one {# àkọọ́lẹ̀ kò leè lo, a fi sílẹ̀.} other {# àkọọ́lẹ̀ kò leè lo, a fi sílẹ̀.}}"
     },
     "palette": {
       "title": "Àwọ",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Iru",
-      "description": "Àwọn oriṣi fonti gẹ́gẹ́ bí ipa wọn, ati awọn fonti ti a le gba laaye lati lo dipo wọn, bíi fonti eto fun awọn iwe a pin síta.",
+      "description": "Irú-fọ́ǹtì tí àwọn àkọsílẹ̀ le lo àti ohun tí ọkọọkan rẹ jẹ́ fún. Ipa le ní ọ̀pọ̀. Àmúlò-mímúlò ni àwọn fọ́ǹtì tí ó wulẹ̀ ṣàpamọ́ yíi, bíi fọ́ǹtì eto fún àkọsílẹ̀ tí a pín lòde.",
       "add": "Fikun fonti",
       "none": "Ko sí fonti títí.",
       "role": "Ipa",
@@ -9660,14 +9670,16 @@
       "localesHint": "Àmi èdè bíi en tàbí fr-CA, pelu ami pipin kika.",
       "preferred": "Àwọn ọrọ tí a yẹ kí a lo",
       "banned": "Àwọn ọrọ tí a yẹ kí a yàgò fún",
-      "term": "Ọ̀rọ̀ tàbí gbolohun",
-      "alternatives": "Dipo / kọ dipo",
       "note": "Akiyesi",
       "addPreferred": "Fi ọrọ kan tí a yẹ kí a lo",
       "addBanned": "Fi ọrọ kan tí a yẹ kí a yàgò fún",
       "nonePreferred": "Kò sí ọrọ ti a fẹ́ lo títí.",
       "noneBanned": "Kò sí ọrọ lati yàgò fún títí.",
-      "tone": "Agbọrọsọ"
+      "tone": "Agbọrọsọ",
+      "preferredTerm": "Kọ",
+      "preferredAlternatives": "Dípò (pínpẹ̀lú káńmá)",
+      "bannedTerm": "Yẹra fún",
+      "bannedAlternatives": "Kọ dípò (pínpẹ̀lú káńmá)"
     },
     "templates": {
       "title": "Àwọn àpẹẹrẹ",

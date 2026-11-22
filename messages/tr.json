@@ -4954,7 +4954,11 @@
         "notes": "Notlar",
         "fileSuffix": "marka incelemesi"
       },
-      "noneFound": "Sorun bulunamadı."
+      "noneFound": "Sorun bulunamadı.",
+      "places": "{count, plural, one {# yer} other {# yer}}",
+      "placeOf": "{index} / {total}",
+      "previousPlace": "Önceki yer",
+      "nextPlace": "Sonraki yer"
     },
     "deckBuilder": {
       "loading": "Sunum yükleniyor…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Marka rehberinden taslak oluştur",
-      "reading": "Rehber okunuyor...",
+      "reading": "Kılavuz okunuyor. Uzun bir kılavuzda bu işlem birkaç dakika sürebilir.",
       "hint": "Tanımlanan renkler, yazı tipleri ve ifadelerle otomatik doldurmak için marka rehberini PDF olarak yükleyin. Logolar ve şablonlar alınmaz; bunları aşağıdan ekleyin.",
       "source": "Taslak oluşturulduğu kaynak",
       "notPdf": "Bir marka rehberi PDF olmalıdır.",
       "failed": "Bu rehberden taslak oluşturulamadı.",
       "applied": "{pages, plural, one {# sayfalık bir rehberden taslak hazırlandı.} other {# sayfalık bir rehberden taslak hazırlandı.}}",
-      "measuredFonts": "Metinlerde kullanılan yazı tipleri:",
-      "measuredColors": "Metinlerdeki renkler:",
-      "check": "Kaydetmeden önce her değeri rehberden kontrol edin.",
-      "undo": "Taslağı geri al"
+      "check": "Aşağıdaki her değer, kılavuzda belirtildiği sayfayı gösterir. Bulunamadı olarak işaretlenen değerler modelin kılavuzu okumasına dayanır: öncelikle bunları kontrol edin.",
+      "undo": "Taslağı geri al",
+      "uploading": "Kılavuz yükleniyor...",
+      "tooLarge": "Bir marka kılavuzu en fazla {megabytes} MB olabilir.",
+      "grounded": "Kılavuz metninde bulundu: {colorTotal} renkten {colors}, {fontTotal} yazı tipinden {fonts}, {termTotal} kelimeden {terms}.",
+      "stated": "Kılavuz, sayfa {page}",
+      "notStated": "Kılavuz metninde bulunamadı.",
+      "othersNotStated": "Kılavuz metninde bulunamayanlar: {values}",
+      "logoMinWidth": "Kılavuzda minimum logo genişliği {points} pt olarak belirlenmiştir. Bu kitapta logo alanı olarak kullanılmıştır.",
+      "dropped": "{count, plural, one {# kayıt kullanılamadı ve çıkarıldı.} other {# kayıt kullanılamadı ve çıkarıldı.}}"
     },
     "palette": {
       "title": "Renkler",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Tür",
-      "description": "Rol bazında yazı tipleri ve onların yerine kullanılabilecek fontlar, örneğin dışarıyla paylaşılan belgeler için sistem fontu.",
+      "description": "Belgelerde kullanılabilecek yazı tipleri ve her birinin amacı. Bir rol birden fazla yazı tipine sahip olabilir. Yedekler, bir yazı tipi yerine kullanılabilen yazı tipleridir, örneğin dışarıyla paylaşılan belgeler için bir sistem yazı tipi.",
       "add": "Yazı tipi ekle",
       "none": "Henüz yazı tipi yok.",
       "role": "Rol",
@@ -9676,14 +9686,16 @@
       "localesHint": "en veya fr-CA gibi dil etiketleri, virgülle ayrılmıştir.",
       "preferred": "Kullanılacak kelimeler",
       "banned": "Kaçınılacak kelimeler",
-      "term": "Kelime veya ifade",
-      "alternatives": "Bunun yerine / yerine bunu yazın",
       "note": "Not",
       "addPreferred": "Kullanılacak kelime ekle",
       "addBanned": "Kaçınılacak kelime ekle",
       "nonePreferred": "Henüz kullanılacak kelime yok.",
       "noneBanned": "Henüz kaçınılacak kelime yok.",
-      "tone": "Üslup"
+      "tone": "Üslup",
+      "preferredTerm": "Yazınız",
+      "preferredAlternatives": "Bunun yerine (virgülle ayrılmış)",
+      "bannedTerm": "Kaçının",
+      "bannedAlternatives": "Yerine yazın (virgülle ayrılmış)"
     },
     "templates": {
       "title": "Şablonlar",

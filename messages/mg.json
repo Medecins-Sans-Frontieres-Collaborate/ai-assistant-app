@@ -4938,7 +4938,11 @@
         "notes": "Fanamarihana",
         "fileSuffix": "fanamarinana marika"
       },
-      "noneFound": "Tsy nisy olana hita."
+      "noneFound": "Tsy nisy olana hita.",
+      "places": "{count, plural, one {# toerana} other {# toerana}}",
+      "placeOf": "{index} amin'ny {total}",
+      "previousPlace": "Toerana teo aloha",
+      "nextPlace": "Toerana manaraka"
     },
     "deckBuilder": {
       "loading": "Eo am-pitondrana ny deck…",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Dika avy amin'ny torolalana famantarana",
-      "reading": "Mamaky ny torolalana...",
+      "reading": "Mamaky ny torolalana. Afaka maharitra minitra vitsy ny torolalana lava.",
       "hint": "Akatrao amin'ny PDF ny torolalana famantarana hanamenoana ireo loko, soratra ary fehezanteny voafaritra ao aminy. Tsy raisina ao ny logo sy modely; akatry ny misy misaraka ambany.",
       "source": "Nodika avy amin'ny",
       "notPdf": "Tokony ho PDF ny torolalana famantarana.",
       "failed": "Tsy vita dika avy amin'ity torolalana ity.",
       "applied": "{pages, plural, one {Natao avy amin'ny torolàlana misy pejy #.} other {Natao avy amin'ny torolàlana misy pejy #.}}",
-      "measuredFonts": "Karazana soratra ampiasain'ny lahatsoratra:",
-      "measuredColors": "Loko ampiasain'ny lahatsoratra:",
-      "check": "Hamarino amin'ny torolalana ireo sanda tsirairay alohan'ny hitahirizana.",
-      "undo": "Avereno ny dika"
+      "check": "Ny sandan-tsoratra tsirairay etsy ambany dia mampiseho ny pejin'ny torolalana misy azy. Ny sandan-tsoratra voamarika hoe tsy hita dia vokatrin'ny famakian'ny modely ilay torolalana: biztosy aloha ireo.",
+      "undo": "Avereno ny dika",
+      "uploading": "Manakatra ny torolalana...",
+      "tooLarge": "Ny torolalana momba ny marika dia tsy tokony hihoatra ny {megabytes} MB.",
+      "grounded": "Hita ao amin'ny lahatsoratra: {colors} amin'ny {colorTotal} loko, {fonts} amin'ny {fontTotal} endri-tsoratra, {terms} amin'ny {termTotal} teny.",
+      "stated": "Torolalana, pejy {page}",
+      "notStated": "Tsy hita ao amin'ny lahatsoratra.",
+      "othersNotStated": "Tsy hita ao amin'ny lahatsoratra: {values}",
+      "logoMinWidth": "Nametra ny sakany kely indrindra ho an'ny mari-pamantarana ({points} pt) ny torolalana. Efa fenoina amin'ny mari-pamantarana amin'ity boky ity.",
+      "dropped": "{count, plural, one {Tsy afaka nampiasaina ary tsy nampidirina ny fidirana #.} other {Tsy afaka nampiasaina ary tsy nampidirina ireo fidirana #.}}"
     },
     "palette": {
       "title": "Loko",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Karazana",
-      "description": "Ny karazana endri-tsoratra arakaraka ny andraikitra, sy ireo endri-tsoratra azo ampiasaina amin'ny toerany, toy ny endri-tsoratra rafitra ho an'ny antontan-taratasy zaraina ivelany.",
+      "description": "Ny endri-tsoratra azo ampiasaina amin'ny antontan-taratasy sy ny anjara asany tsirairay. Mety hanana maromaro ny anjara asa iray. Ny solony dia endri-tsoratra azo ampiasaina raha tsy afaka amin'ilay endrika, toy ny endri-tsoratra an'ny rafitra amin'ny antontan-taratasy zaraina ivelany.",
       "add": "Ampio endri-tsoratra",
       "none": "Tsy mbola misy endri-tsoratra.",
       "role": "Andraikitra",
@@ -9660,14 +9670,16 @@
       "localesHint": "Tag fiteny toy ny en na fr-CA, misaraka amin'ny koma.",
       "preferred": "Teny tokony ampiasaina",
       "banned": "Teny tokony ialana",
-      "term": "Teny na andian-teny",
-      "alternatives": "Fa tsy / soraty avy hatrany",
       "note": "Fanamarihana",
       "addPreferred": "Ampio teny tokony ampiasaina",
       "addBanned": "Ampio teny tokony ialana",
       "nonePreferred": "Tsy mbola misy teny tiana ampiasaina.",
       "noneBanned": "Tsy mbola misy teny tokony ialana.",
-      "tone": "Feo"
+      "tone": "Feo",
+      "preferredTerm": "Soraty",
+      "preferredAlternatives": "Fa tsy (asarahana amin'ny koma)",
+      "bannedTerm": "Fadio",
+      "bannedAlternatives": "Soloy amin'ireto (asarahana amin'ny koma)"
     },
     "templates": {
       "title": "Santionany",

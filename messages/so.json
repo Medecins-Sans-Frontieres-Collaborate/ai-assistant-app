@@ -4938,7 +4938,11 @@
         "notes": "Xusuus-qor",
         "fileSuffix": "dib-u-eegista summad"
       },
-      "noneFound": "Dhibaato lama helin."
+      "noneFound": "Dhibaato lama helin.",
+      "places": "{count, plural, one {# goob} other {# goobo}}",
+      "placeOf": "{index} ee {total}",
+      "previousPlace": "Goobtii hore",
+      "nextPlace": "Goobta xigta"
     },
     "deckBuilder": {
       "loading": "Deck-ga waa la rarayaa…",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Ka samee qoraal hagaha astaanta",
-      "reading": "Hagaha waa la akhrinayaa...",
+      "reading": "Hagaha waa la akhrinayaa. Hage dheer waxay qaadan kartaa dhowr daqiiqo.",
       "hint": "Soo geli hagaha astaanta oo ah PDF si midabada, faraha iyo erayada uu qeexayo loo buuxiyo. Astaamaha iyo shaxmaha lagama heli doono; fadlan soo geli hoos.",
       "source": "Qoraal laga sameeyay",
       "notPdf": "Hagaha astaanta waa in uu noqdaa PDF.",
       "failed": "Qoraal lagama samayn karin hagahan.",
       "applied": "{pages, plural, one {Laga qoray hagaha oo ah # bog.} other {Laga qoray hagaha oo ah # bogag.}}",
-      "measuredFonts": "Faraha uu qoraalka haguhu isticmaalo:",
-      "measuredColors": "Midabada qoraalka haguhu isticmaalo:",
-      "check": "Hubi qiime kasta oo hagaha ah ka hor intaadan kaydin.",
-      "undo": "Ka noqo qoraalka"
+      "check": "Qiimaha kasta hoos ku xusan wuxuu muujinayaa bogga hagaha ee lagu cadeeyay. Qiime aan la helin wuxuu yahay fahanka moodeelka ee hagaha: hubi kuwaas marka hore.",
+      "undo": "Ka noqo qoraalka",
+      "uploading": "Hagaha waa la gelinayaa...",
+      "tooLarge": "Hagaha sumadda ugu badnaan waa {megabytes} MB.",
+      "grounded": "Waxa laga helay qoraalka hagaha: {colors} ee {colorTotal} midab, {fonts} ee {fontTotal} far, {terms} ee {termTotal} eray.",
+      "stated": "Hagaha, bogga {page}",
+      "notStated": "Qoraalka hagaha lagama helin.",
+      "othersNotStated": "Qoraalka hagaha lagama helin: {values}",
+      "logoMinWidth": "Haguhu wuxuu qeexayaa balaca ugu yaraan ee calaamada: {points} pt. Waa la buuxiyey calaamadahan buuggan.",
+      "dropped": "{count, plural, one {# gal lama adeegsan karin lagana saaray.} other {# gal lama adeegsan karin lagana saaray.}}"
     },
     "palette": {
       "title": "Midabada",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Nooca",
-      "description": "Noocyada farta ee loo adeegsado doorkooda, iyo xarfaha oggol ee lagu beddeli karo, sida xaraf nidaamka ee dukumentiyada la wadaago ee bannaanka.",
+      "description": "Farradaha laga adeegsan karo dokumintiyada iyo waxa mid walba loogu talagalay. Doorkasta waxaa yeelan kara dhowr farta. Badalayaashu waa farrada la oggol yahay in la isticmaalo bedelka far kale, sida farta nidaamka ee dokumintiyada la wadaago banaanka.",
       "add": "Ku dar nooca far",
       "none": "Nooc far looma darin wali.",
       "role": "Doorka",
@@ -9660,14 +9670,16 @@
       "localesHint": "Calaamadaha luuqadda sida en ama fr-CA, kala saarista waa faasiin.",
       "preferred": "Ereyada la isticmaalo",
       "banned": "Ereyada laga fogaado",
-      "term": "Erey ama oraah",
-      "alternatives": "Bedel / ku qor halkii laga isticmaali lahaa",
       "note": "Faallo",
       "addPreferred": "Ku dar erey la isticmaalo",
       "addBanned": "Ku dar erey laga fogaado",
       "nonePreferred": "Wali lama darin ereyo la doorbidayo.",
       "noneBanned": "Wali lama darin ereyo laga fogaado.",
-      "tone": "Cod"
+      "tone": "Cod",
+      "preferredTerm": "Qor",
+      "preferredAlternatives": "Bedel ahaan (ku kala saar faas)",
+      "bannedTerm": "Ka fogaaw",
+      "bannedAlternatives": "Qor bedelkeeda (ku kala saar faas)"
     },
     "templates": {
       "title": "Tusaalooyin",

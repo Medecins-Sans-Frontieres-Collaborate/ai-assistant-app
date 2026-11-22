@@ -4954,7 +4954,11 @@
         "notes": "Notatki",
         "fileSuffix": "przegląd marki"
       },
-      "noneFound": "Nie znaleziono problemów."
+      "noneFound": "Nie znaleziono problemów.",
+      "places": "{count, plural, one {# miejsce} other {# miejsc}}",
+      "placeOf": "{index} z {total}",
+      "previousPlace": "Poprzednie miejsce",
+      "nextPlace": "Następne miejsce"
     },
     "deckBuilder": {
       "loading": "Ładowanie prezentacji…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Szkic z przewodnika marki",
-      "reading": "Odczytywanie przewodnika...",
+      "reading": "Odczytywanie przewodnika. Dłuższy przewodnik może zająć kilka minut.",
       "hint": "Prześlij przewodnik marki w formacie PDF, aby automatycznie uzupełnić kolory, kroje pisma i sformułowania. Logotypy i szablony należy dodać osobno poniżej.",
       "source": "Sporządzono ze źródła",
       "notPdf": "Przewodnik marki musi być w formacie PDF.",
       "failed": "Nie udało się sporządzić szkicu z tego przewodnika.",
       "applied": "{pages, plural, one {Opracowano na podstawie przewodnika liczącego # stronę.} few {Opracowano na podstawie przewodnika liczącego # strony.} many {Opracowano na podstawie przewodnika liczącego # stron.} other {Opracowano na podstawie przewodnika liczącego # stron.}}",
-      "measuredFonts": "Czcionki użyte w tekście:",
-      "measuredColors": "Kolory użyte w tekście:",
-      "check": "Sprawdź każdą wartość względem przewodnika przed zapisaniem.",
-      "undo": "Cofnij szkic"
+      "check": "Każda poniższa wartość wskazuje stronę przewodnika, na której jest podana. Wartość oznaczona jako nieznaleziona to odczyt modelu z przewodnika: sprawdź je w pierwszej kolejności.",
+      "undo": "Cofnij szkic",
+      "uploading": "Przesyłanie przewodnika...",
+      "tooLarge": "Przewodnik marki może mieć maksymalnie {megabytes} MB.",
+      "grounded": "Znaleziono w tekście przewodnika: {colors} z {colorTotal} kolorów, {fonts} z {fontTotal} krojów pisma, {terms} z {termTotal} słów.",
+      "stated": "Przewodnik, strona {page}",
+      "notStated": "Nie znaleziono w tekście przewodnika.",
+      "othersNotStated": "Nie znaleziono w tekście przewodnika: {values}",
+      "logoMinWidth": "Przewodnik określa minimalną szerokość logo na {points} pt. Dotyczy to logo tej książki.",
+      "dropped": "{count, plural, one {# wpis nie mógł zostać użyty i został pominięty.} other {# wpisów nie mogło zostać użytych i zostały pominięte.}}"
     },
     "palette": {
       "title": "Kolory",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Rodzaj pisma",
-      "description": "Króje pisma według roli oraz dozwolone zamienniki, np. czcionka systemowa do dokumentów udostępnianych na zewnątrz.",
+      "description": "Kroje pisma, z których można korzystać w dokumentach, oraz ich przeznaczenie. Jedna rola może mieć kilka krojów. Zamienniki to czcionki dozwolone w miejsce danego kroju, np. czcionka systemowa w dokumentach udostępnianych na zewnątrz.",
       "add": "Dodaj krój pisma",
       "none": "Brak krojów pisma.",
       "role": "Rola",
@@ -9676,14 +9686,16 @@
       "localesHint": "Tagi językowe, np. en lub fr-CA, oddzielone przecinkami.",
       "preferred": "Zalecane słowa",
       "banned": "Unikać słów",
-      "term": "Słowo lub fraza",
-      "alternatives": "Zamiast / użyj",
       "note": "Notatka",
       "addPreferred": "Dodaj zalecane słowo",
       "addBanned": "Dodaj słowo do unikania",
       "nonePreferred": "Brak zalecanych słów.",
       "noneBanned": "Brak słów do unikania.",
-      "tone": "Styl wypowiedzi"
+      "tone": "Styl wypowiedzi",
+      "preferredTerm": "Napisz",
+      "preferredAlternatives": "Zamiast (oddzielone przecinkami)",
+      "bannedTerm": "Unikaj",
+      "bannedAlternatives": "Napisz zamiast (oddzielone przecinkami)"
     },
     "templates": {
       "title": "Szablony",

@@ -4938,7 +4938,11 @@
         "notes": "Beleške",
         "fileSuffix": "brend pregled"
       },
-      "noneFound": "Nisu pronađeni problemi."
+      "noneFound": "Nisu pronađeni problemi.",
+      "places": "{count, plural, one {# mesto} other {# mesta}}",
+      "placeOf": "{index} od {total}",
+      "previousPlace": "Prethodno mesto",
+      "nextPlace": "Sledeće mesto"
     },
     "deckBuilder": {
       "loading": "Učitavanje prezentacije…",
@@ -9589,16 +9593,22 @@
     },
     "guide": {
       "action": "Nacrt iz brend vodiča",
-      "reading": "Čitanje vodiča...",
+      "reading": "Čitanje vodiča. Dugačak vodič može potrajati nekoliko minuta.",
       "hint": "Otpremite brend vodič kao PDF kako biste popunili boje, tipografiju i tekst koje definiše. Logotipi i predlošci se ne preuzimaju iz njega; otpremite ih ispod.",
       "source": "Nacrt iz",
       "notPdf": "Brend vodič mora biti PDF.",
       "failed": "Nacrt nije mogao biti napravljen iz ovog vodiča.",
       "applied": "{pages, plural, one {Sastavljeno prema vodiču od # strane.} other {Sastavljeno prema vodiču od # strana.}}",
-      "measuredFonts": "Fontovi korišćeni u tekstu:",
-      "measuredColors": "Boje korišćene u tekstu:",
-      "check": "Proverite svaku vrednost prema vodiču pre čuvanja.",
-      "undo": "Poništi nacrt"
+      "check": "Svaka vrednost ispod pokazuje stranu vodiča na kojoj je navedena. Vrednost označena kao nije pronađena je modelovo čitanje vodiča: najpre proverite te vrednosti.",
+      "undo": "Poništi nacrt",
+      "uploading": "Otpremanje vodiča...",
+      "tooLarge": "Vodič može imati najviše {megabytes} MB.",
+      "grounded": "Pronađeno u tekstu vodiča: {colors} od {colorTotal} boja, {fonts} od {fontTotal} pisama, {terms} od {termTotal} reči.",
+      "stated": "Vodič, strana {page}",
+      "notStated": "Nije pronađeno u tekstu vodiča.",
+      "othersNotStated": "Nije pronađeno u tekstu vodiča: {values}",
+      "logoMinWidth": "Vodič određuje minimalnu širinu logotipa od {points} pt. Uneto je za logotipe ove knjige.",
+      "dropped": "{count, plural, one {# unos nije mogao biti iskorišćen i ostavljen je.} other {# unosa nije moglo biti iskorišćeno i ostavljeni su.}}"
     },
     "palette": {
       "title": "Boje",
@@ -9625,7 +9635,7 @@
     },
     "typography": {
       "title": "Tip",
-      "description": "Pisani fontovi po ulozi i dozvoljeni zamenski fontovi, kao što je sistemski font za dokumente deljene van organizacije.",
+      "description": "Pisama koja se mogu koristiti u dokumentima i njihova namena. Uloge mogu imati više pisama. Zamene su fontovi dozvoljeni umesto nekog pisma, na primer sistemski font za deljenje dokumenata van organizacije.",
       "add": "Dodaj font",
       "none": "Još nema fontova.",
       "role": "Uloga",
@@ -9660,14 +9670,16 @@
       "localesHint": "Oznake jezika kao en ili fr-CA, razdvojene zarezima.",
       "preferred": "Reči koje treba koristiti",
       "banned": "Reči koje treba izbegavati",
-      "term": "Reč ili fraza",
-      "alternatives": "Umesto / napiši umesto",
       "note": "Napomena",
       "addPreferred": "Dodaj reč za korišćenje",
       "addBanned": "Dodaj reč za izbegavanje",
       "nonePreferred": "Još nema preporučenih reči.",
       "noneBanned": "Još nema reči za izbegavanje.",
-      "tone": "Ton"
+      "tone": "Ton",
+      "preferredTerm": "Pišite",
+      "preferredAlternatives": "Umesto (odvojeno zarezom)",
+      "bannedTerm": "Izbegavati",
+      "bannedAlternatives": "Pišite umesto toga (odvojeno zarezom)"
     },
     "templates": {
       "title": "Šabloni",

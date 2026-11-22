@@ -4954,7 +4954,11 @@
         "notes": "Maelezo",
         "fileSuffix": "ukaguzi wa chapa"
       },
-      "noneFound": "Hakuna matatizo yaliyopatikana."
+      "noneFound": "Hakuna matatizo yaliyopatikana.",
+      "places": "{count, plural, one {# mahali} other {# mahali}}",
+      "placeOf": "{index} kati ya {total}",
+      "previousPlace": "Mahali iliyopita",
+      "nextPlace": "Mahali inayofuata"
     },
     "deckBuilder": {
       "loading": "Inapakia bwawa…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "Andika rasimu kutoka mwongozo wa chapa",
-      "reading": "Inasoma mwongozo...",
+      "reading": "Inasoma mwongozo. Mwongozo mrefu unaweza kuchukua dakika chache.",
       "hint": "Pakia mwongozo wa chapa kama PDF ili kujaza rangi, aina ya maandishi na maneno yaliyofafanuliwa. Nembo na violezo havichukuliwi kutoka kwenye mwongozo; pakia hivyo chini.",
       "source": "Rasimu kutoka",
       "notPdf": "Mwongozo wa chapa lazima uwe PDF.",
       "failed": "Rasimu imeshindwa kuandikwa kutoka mwongozo huu.",
       "applied": "{pages, plural, one {Imeandaliwa kutoka kwa mwongozo wa ukurasa #.} other {Imeandaliwa kutoka kwa mwongozo wa kurasa #.}}",
-      "measuredFonts": "Aina za maandishi kwenye maandishi yake:",
-      "measuredColors": "Rangi zilizotumika kwenye maandishi yake:",
-      "check": "Angalia kila thamani dhidi ya mwongozo kabla ya kuhifadhi.",
-      "undo": "Futa rasimu"
+      "check": "Kila thamani hapa chini inaonyesha ukurasa wa mwongozo unaoitaja. Thamani iliyowekwa kama haijapatikana ni matokeo ya usomaji wa mwongozo uliofanywa na modeli: angalia hizo kwanza.",
+      "undo": "Futa rasimu",
+      "uploading": "Inapakia mwongozo...",
+      "tooLarge": "Mwongozo wa chapa unaweza kuwa hadi {megabytes} MB.",
+      "grounded": "Imepatikana kwenye maandishi ya mwongozo: {colors} kati ya {colorTotal} rangi, {fonts} kati ya {fontTotal} aina za maandishi, {terms} kati ya {termTotal} maneno.",
+      "stated": "Mwongozo, ukurasa {page}",
+      "notStated": "Haijapatikana kwenye maandishi ya mwongozo.",
+      "othersNotStated": "Haijapatikana kwenye maandishi ya mwongozo: {values}",
+      "logoMinWidth": "Mwongozo umeweka upana mdogo wa nembo {points} pt. Imetumika kwa nembo za kitabu hiki.",
+      "dropped": "{count, plural, one {kitu kimoja hakikuweza kutumika na kimeachwa.} other {vitu # havikuweza kutumika na vimeachwa.}}"
     },
     "palette": {
       "title": "Rangi",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "Aina",
-      "description": "Aina za maandishi kulingana na jukumu, na fonti zinazokubalika badala yake, kama vile fonti ya mfumo kwa hati zinazoshirikiwa nje.",
+      "description": "Aina za maandishi ambazo hati zinaweza kutumia na kila moja inatumika kwa nini. Jukumu linaweza kuwa na kadhaa. Mbadala ni fonti zinazoruhusiwa kutumika badala ya aina ya maandishi, kama fonti ya mfumo kwa hati zinazopelekwa nje.",
       "add": "Ongeza aina ya maandishi",
       "none": "Hakuna aina za maandishi bado.",
       "role": "Jukumu",
@@ -9676,14 +9686,16 @@
       "localesHint": "Vitambulisho vya lugha kama en au fr-CA, zikitenganishwa kwa koma.",
       "preferred": "Maneno ya kutumia",
       "banned": "Maneno ya kuepuka",
-      "term": "Neno au kifungu",
-      "alternatives": "Badala ya / andika badala yake",
       "note": "Maelezo",
       "addPreferred": "Ongeza neno la kutumia",
       "addBanned": "Ongeza neno la kuepuka",
       "nonePreferred": "Hakuna maneno ya kupendekezwa bado.",
       "noneBanned": "Hakuna maneno ya kuepuka bado.",
-      "tone": "Sauti"
+      "tone": "Sauti",
+      "preferredTerm": "Andika",
+      "preferredAlternatives": "Badala ya (tenganisha kwa koma)",
+      "bannedTerm": "Epuka",
+      "bannedAlternatives": "Andika badala yake (tenganisha kwa koma)"
     },
     "templates": {
       "title": "Violezo",

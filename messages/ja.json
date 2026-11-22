@@ -4954,7 +4954,11 @@
         "notes": "備考",
         "fileSuffix": "ブランドレビュー"
       },
-      "noneFound": "問題は見つかりませんでした。"
+      "noneFound": "問題は見つかりませんでした。",
+      "places": "{count, plural, one {# 箇所} other {# 箇所}}",
+      "placeOf": "{index} / {total}",
+      "previousPlace": "前の箇所",
+      "nextPlace": "次の箇所"
     },
     "deckBuilder": {
       "loading": "デッキを読み込み中…",
@@ -9605,16 +9609,22 @@
     },
     "guide": {
       "action": "ブランドガイドから下書き作成",
-      "reading": "ガイドを読込中...",
+      "reading": "ガイドを読込中。長いガイドは数分かかる場合があります。",
       "hint": "ブランドガイドをPDFでアップロードすると、定義された色、書体、表記が入力されます。ロゴとテンプレートは取得されませんので、下部からアップロードしてください。",
       "source": "作成元",
       "notPdf": "ブランドガイドはPDF形式である必要があります。",
       "failed": "このガイドから下書きを作成できませんでした。",
       "applied": "{pages, plural, one {# ページのガイドから作成しました。} other {# ページのガイドから作成しました。}}",
-      "measuredFonts": "本文に使用されたフォント:",
-      "measuredColors": "本文に使用されたカラー:",
-      "check": "保存前に各値をガイドと照合してください。",
-      "undo": "下書きを元に戻す"
+      "check": "下記の各値は、ガイド内の該当ページを示しています。「見つかりませんでした」と表示される値はモデルの読込結果です: まずご確認ください。",
+      "undo": "下書きを元に戻す",
+      "uploading": "ガイドをアップロード中...",
+      "tooLarge": "ブランドガイドは最大で {megabytes} MB までです。",
+      "grounded": "ガイド内テキストで確認済み: 色は {colorTotal} 色中 {colors}、書体は {fontTotal} 種中 {fonts}、単語は {termTotal} 語中 {terms}。",
+      "stated": "ガイド、{page} ページ",
+      "notStated": "ガイド内テキストで見つかりませんでした。",
+      "othersNotStated": "ガイド内テキストで見つからなかった値: {values}",
+      "logoMinWidth": "ガイドで最小ロゴ幅 {points} pt が設定されています。本書のロゴにも適用されています。",
+      "dropped": "{count, plural, one {# 件のエントリーは使用できず除外されました。} other {# 件のエントリーは使用できず除外されました。}}"
     },
     "palette": {
       "title": "カラー",
@@ -9641,7 +9651,7 @@
     },
     "typography": {
       "title": "種類",
-      "description": "役割ごとの書体と、その代替許可フォント（外部共有用のシステムフォントなど）。",
+      "description": "ドキュメントで使用できる書体とその用途。ひとつの役割に複数の書体が設定できます。代替フォントは、例えば外部との共有時にシステムフォントなど、書体の代わりに許可されるものです。",
       "add": "書体を追加",
       "none": "書体はまだありません。",
       "role": "役割",
@@ -9676,14 +9686,16 @@
       "localesHint": "enやfr-CAなどの言語タグ。カンマ区切り。",
       "preferred": "使用する語句",
       "banned": "回避する語句",
-      "term": "語句・フレーズ",
-      "alternatives": "代わりに／置き換え",
       "note": "注記",
       "addPreferred": "使用する語句を追加",
       "addBanned": "回避する語句を追加",
       "nonePreferred": "使用語句はまだありません。",
       "noneBanned": "回避語句はまだありません。",
-      "tone": "語調"
+      "tone": "語調",
+      "preferredTerm": "使用",
+      "preferredAlternatives": "代替案（カンマ区切り）",
+      "bannedTerm": "避ける",
+      "bannedAlternatives": "代わりに使用（カンマ区切り）"
     },
     "templates": {
       "title": "テンプレート",
