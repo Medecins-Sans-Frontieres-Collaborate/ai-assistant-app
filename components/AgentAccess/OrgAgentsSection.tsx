@@ -818,7 +818,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
   onDataChanged,
 }) => {
   const t = useAdminAgentTranslations();
-  const tSearch = useTranslations('m365.files');
+  const tSearch = useTranslations('m365.picker');
   const queryClient = useQueryClient();
   const [isCreating, setIsCreating] = useState(false);
   /** Create flow seeded from a built-in agent (Override button). */

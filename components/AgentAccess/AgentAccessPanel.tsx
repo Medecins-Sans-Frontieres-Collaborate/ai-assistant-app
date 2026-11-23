@@ -129,7 +129,7 @@ interface AgentAccessPanelProps {
 export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
   const t = useAdminAgentTranslations();
   const tCommon = useTranslations('common');
-  const tSearch = useTranslations('m365.files');
+  const tSearch = useTranslations('m365.picker');
   const queryClient = useQueryClient();
   const {
     me,

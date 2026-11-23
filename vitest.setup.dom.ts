@@ -382,7 +382,7 @@ const mockMessages: Record<string, unknown> = {
     },
   },
   m365: {
-    files: { noResults: 'No matches for “{query}”' },
+    picker: { noResults: 'No matches for “{query}”' },
     tools: {
       alwaysConfirmNote:
         'This action always asks for confirmation — it can’t be auto-approved.',

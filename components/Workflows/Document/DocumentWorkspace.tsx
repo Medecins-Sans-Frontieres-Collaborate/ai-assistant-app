@@ -200,6 +200,7 @@ function reviewMarkdown(p: DocumentWorkflowState): string {
 
 export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const t = useTranslations('workflows');
+  const tCommon = useTranslations('common');
   const conversation = useConversationStore((s) =>
     s.conversations.find((c) => c.id === conversationId),
   );
@@ -1073,14 +1074,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               }}
               className="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
             >
-              {t('common.undo')}
+              {tCommon('undo')}
             </button>
           </div>
         ),
         { duration: 8000 },
       );
     },
-    [revertEdit, t],
+    [revertEdit, t, tCommon],
   );
 
   /**
